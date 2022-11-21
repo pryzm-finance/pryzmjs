@@ -1,0 +1,44 @@
+{
+  "name": "@prism-finance/prismjs",
+  "version": "0.0.1",
+  "description": "Javascript SDK for Prism",
+  "author": "amin <amin@prismprotocol.app>",
+  "homepage": "https://github.com/prism-finance/prismjs#readme",
+  "license": "Apache-2.0",
+  "scripts": {
+    "build": "tsc"
+  },
+  "licenses": [
+    {
+      "type": "Apache-2.0",
+      "url": "http://www.apache.org/licenses/LICENSE-2.0"
+    }
+  ],
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
+  "files": [
+    "lib/**/*"
+  ],
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com",
+    "access": "restricted"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/prism-finance/prismjs"
+  },
+  "dependencies": {
+    "@cosmjs/launchpad": "0.27.0",
+    "@cosmjs/proto-signing": "0.27.0",
+    "@cosmjs/stargate": "0.27.0",
+    "buffer": "^6.0.3"
+  },
+  "peerDependencies": {
+    "@cosmjs/launchpad": "0.27.0",
+    "@cosmjs/proto-signing": "0.27.0",
+    "@cosmjs/stargate": "0.27.0"
+  },
+  "devDependencies": {
+    "typescript": "^4.9.3"
+  }
+}
