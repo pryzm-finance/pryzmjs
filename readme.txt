@@ -19,5 +19,17 @@ import protobufjs from "protobufjs";
 protobufjs.util.Long = Long;
 protobufjs.configure();
 
+type NewReturnType<T extends {
+    new (...args: any[]): any
+}> = T extends  {
+    new (...args: any[]): infer R
+} ? R : never;
+type PrismClient = NewReturnType<typeof Client>
+
+export {
+    PrismClient
+}
+
 7- pnpm run build
+8- pnpm publish
 
