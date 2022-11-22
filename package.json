@@ -6,8 +6,7 @@
   "homepage": "https://github.com/prism-finance/prismjs#readme",
   "license": "Apache-2.0",
   "scripts": {
-    "build": "tsc",
-    "debug": "ts-node src/test.ts"
+    "build": "tsc"
   },
   "licenses": [
     {
