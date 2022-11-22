@@ -30,6 +30,10 @@ export {
     PrismClient
 }
 
+6.5- add types.ts
+
+
+
 7- pnpm run build
 8- pnpm publish
 

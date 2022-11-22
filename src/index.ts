@@ -58,8 +58,6 @@ import {
     Module as PrismfinancePrismcoreYstaking,
     msgTypes as PrismfinancePrismcoreYstakingMsgTypes
 } from './prismfinance.prismcore.ystaking'
-import Long from "long";
-import protobufjs from "protobufjs";
 
 
 const Client = IgniteClient.plugin([
@@ -99,19 +97,36 @@ const registry = new Registry([
 
 ])
 
-type NewReturnType<T extends {
-    new (...args: any[]): any
-}> = T extends  {
-    new (...args: any[]): infer R
-} ? R : never;
-type PrismClient = NewReturnType<typeof Client>
-
 export {
     Client,
     registry,
-    MissingWalletError,
-    PrismClient
+    MissingWalletError
 }
 
+
+// Modified
+
+import Long from "long";
+import protobufjs from "protobufjs";
 protobufjs.util.Long = Long;
 protobufjs.configure();
+
+import {
+    PrismWebsocketClient,
+    TendermintEventType,
+    TendermintQuery,
+    TendermintSubscriptionResponse
+} from './wsclient';
+type NewReturnType<T extends {
+    new(...args: any[]): any
+}> = T extends {
+    new(...args: any[]): infer R
+} ? R : never;
+export type PrismClient = NewReturnType<typeof Client>
+export const PrismClient = Client
+export {
+    PrismWebsocketClient,
+    TendermintEventType,
+    TendermintQuery,
+    TendermintSubscriptionResponse
+}
