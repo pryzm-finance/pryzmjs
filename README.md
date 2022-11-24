@@ -231,7 +231,7 @@ visit [here](https://docs.ignite.com/clients/typescript).
 
 ## **License**
 
-This software is licensed under the `?????` license.
-See[LICENSE](https://www.notion.so/BAD-UI-EXP-6ddfc01ebd394bdeaf471d9d052e0334)for full disclosure.
+This software is licensed under the `GPL Version 2.0 or a later version` license.
+See [LICENSE](https://github.com/prism-finance/prism-contracts/blob/main/LICENSE.md) for full disclosure.
 
-© 2022 PRISM, `PTE`.
+© 2022 PRISM Protocol.
