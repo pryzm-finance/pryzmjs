@@ -7,18 +7,12 @@ import { msgTypes } from './registry';
 import { IgniteClient } from "../client"
 import { MissingWalletError } from "../helpers"
 import { Api } from "./rest";
-import { MsgWhitelistAsset } from "./types/assets/tx";
 import { MsgUpdateMaturityParams } from "./types/assets/tx";
 import { MsgDelistAsset } from "./types/assets/tx";
+import { MsgWhitelistAsset } from "./types/assets/tx";
 
 
-export { MsgWhitelistAsset, MsgUpdateMaturityParams, MsgDelistAsset };
-
-type sendMsgWhitelistAssetParams = {
-  value: MsgWhitelistAsset,
-  fee?: StdFee,
-  memo?: string
-};
+export { MsgUpdateMaturityParams, MsgDelistAsset, MsgWhitelistAsset };
 
 type sendMsgUpdateMaturityParamsParams = {
   value: MsgUpdateMaturityParams,
@@ -32,10 +26,12 @@ type sendMsgDelistAssetParams = {
   memo?: string
 };
 
-
-type msgWhitelistAssetParams = {
+type sendMsgWhitelistAssetParams = {
   value: MsgWhitelistAsset,
+  fee?: StdFee,
+  memo?: string
 };
+
 
 type msgUpdateMaturityParamsParams = {
   value: MsgUpdateMaturityParams,
@@ -43,6 +39,10 @@ type msgUpdateMaturityParamsParams = {
 
 type msgDelistAssetParams = {
   value: MsgDelistAsset,
+};
+
+type msgWhitelistAssetParams = {
+  value: MsgWhitelistAsset,
 };
 
 
@@ -62,20 +62,6 @@ interface TxClientOptions {
 export const txClient = ({ signer, prefix, addr }: TxClientOptions = { addr: "http://localhost:26657", prefix: "cosmos" }) => {
 
   return {
-		
-		async sendMsgWhitelistAsset({ value, fee, memo }: sendMsgWhitelistAssetParams): Promise<DeliverTxResponse> {
-			if (!signer) {
-					throw new Error('TxClient:sendMsgWhitelistAsset: Unable to sign Tx. Signer is not present.')
-			}
-			try {			
-				const { address } = (await signer.getAccounts())[0]; 
-				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry, prefix});
-				let msg = this.msgWhitelistAsset({ value: MsgWhitelistAsset.fromPartial(value) })
-				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
-			} catch (e: any) {
-				throw new Error('TxClient:sendMsgWhitelistAsset: Could not broadcast Tx: '+ e.message)
-			}
-		},
 		
 		async sendMsgUpdateMaturityParams({ value, fee, memo }: sendMsgUpdateMaturityParamsParams): Promise<DeliverTxResponse> {
 			if (!signer) {
@@ -105,14 +91,20 @@ export const txClient = ({ signer, prefix, addr }: TxClientOptions = { addr: "ht
 			}
 		},
 		
-		
-		msgWhitelistAsset({ value }: msgWhitelistAssetParams): EncodeObject {
-			try {
-				return { typeUrl: "/prismfinance.prismcore.assets.MsgWhitelistAsset", value: MsgWhitelistAsset.fromPartial( value ) }  
+		async sendMsgWhitelistAsset({ value, fee, memo }: sendMsgWhitelistAssetParams): Promise<DeliverTxResponse> {
+			if (!signer) {
+					throw new Error('TxClient:sendMsgWhitelistAsset: Unable to sign Tx. Signer is not present.')
+			}
+			try {			
+				const { address } = (await signer.getAccounts())[0]; 
+				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry, prefix});
+				let msg = this.msgWhitelistAsset({ value: MsgWhitelistAsset.fromPartial(value) })
+				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
 			} catch (e: any) {
-				throw new Error('TxClient:MsgWhitelistAsset: Could not create message: ' + e.message)
+				throw new Error('TxClient:sendMsgWhitelistAsset: Could not broadcast Tx: '+ e.message)
 			}
 		},
+		
 		
 		msgUpdateMaturityParams({ value }: msgUpdateMaturityParamsParams): EncodeObject {
 			try {
@@ -127,6 +119,14 @@ export const txClient = ({ signer, prefix, addr }: TxClientOptions = { addr: "ht
 				return { typeUrl: "/prismfinance.prismcore.assets.MsgDelistAsset", value: MsgDelistAsset.fromPartial( value ) }  
 			} catch (e: any) {
 				throw new Error('TxClient:MsgDelistAsset: Could not create message: ' + e.message)
+			}
+		},
+		
+		msgWhitelistAsset({ value }: msgWhitelistAssetParams): EncodeObject {
+			try {
+				return { typeUrl: "/prismfinance.prismcore.assets.MsgWhitelistAsset", value: MsgWhitelistAsset.fromPartial( value ) }  
+			} catch (e: any) {
+				throw new Error('TxClient:MsgWhitelistAsset: Could not create message: ' + e.message)
 			}
 		},
 		

@@ -9,11 +9,11 @@ import { MissingWalletError } from "../helpers"
 import { Api } from "./rest";
 import { MsgBond } from "./types/ystaking/tx";
 import { MsgUnbond } from "./types/ystaking/tx";
-import { MsgClaimReward } from "./types/ystaking/tx";
 import { MsgExitPool } from "./types/ystaking/tx";
+import { MsgClaimReward } from "./types/ystaking/tx";
 
 
-export { MsgBond, MsgUnbond, MsgClaimReward, MsgExitPool };
+export { MsgBond, MsgUnbond, MsgExitPool, MsgClaimReward };
 
 type sendMsgBondParams = {
   value: MsgBond,
@@ -27,14 +27,14 @@ type sendMsgUnbondParams = {
   memo?: string
 };
 
-type sendMsgClaimRewardParams = {
-  value: MsgClaimReward,
+type sendMsgExitPoolParams = {
+  value: MsgExitPool,
   fee?: StdFee,
   memo?: string
 };
 
-type sendMsgExitPoolParams = {
-  value: MsgExitPool,
+type sendMsgClaimRewardParams = {
+  value: MsgClaimReward,
   fee?: StdFee,
   memo?: string
 };
@@ -48,12 +48,12 @@ type msgUnbondParams = {
   value: MsgUnbond,
 };
 
-type msgClaimRewardParams = {
-  value: MsgClaimReward,
-};
-
 type msgExitPoolParams = {
   value: MsgExitPool,
+};
+
+type msgClaimRewardParams = {
+  value: MsgClaimReward,
 };
 
 
@@ -102,20 +102,6 @@ export const txClient = ({ signer, prefix, addr }: TxClientOptions = { addr: "ht
 			}
 		},
 		
-		async sendMsgClaimReward({ value, fee, memo }: sendMsgClaimRewardParams): Promise<DeliverTxResponse> {
-			if (!signer) {
-					throw new Error('TxClient:sendMsgClaimReward: Unable to sign Tx. Signer is not present.')
-			}
-			try {			
-				const { address } = (await signer.getAccounts())[0]; 
-				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry, prefix});
-				let msg = this.msgClaimReward({ value: MsgClaimReward.fromPartial(value) })
-				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
-			} catch (e: any) {
-				throw new Error('TxClient:sendMsgClaimReward: Could not broadcast Tx: '+ e.message)
-			}
-		},
-		
 		async sendMsgExitPool({ value, fee, memo }: sendMsgExitPoolParams): Promise<DeliverTxResponse> {
 			if (!signer) {
 					throw new Error('TxClient:sendMsgExitPool: Unable to sign Tx. Signer is not present.')
@@ -127,6 +113,20 @@ export const txClient = ({ signer, prefix, addr }: TxClientOptions = { addr: "ht
 				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
 			} catch (e: any) {
 				throw new Error('TxClient:sendMsgExitPool: Could not broadcast Tx: '+ e.message)
+			}
+		},
+		
+		async sendMsgClaimReward({ value, fee, memo }: sendMsgClaimRewardParams): Promise<DeliverTxResponse> {
+			if (!signer) {
+					throw new Error('TxClient:sendMsgClaimReward: Unable to sign Tx. Signer is not present.')
+			}
+			try {			
+				const { address } = (await signer.getAccounts())[0]; 
+				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry, prefix});
+				let msg = this.msgClaimReward({ value: MsgClaimReward.fromPartial(value) })
+				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
+			} catch (e: any) {
+				throw new Error('TxClient:sendMsgClaimReward: Could not broadcast Tx: '+ e.message)
 			}
 		},
 		
@@ -147,19 +147,19 @@ export const txClient = ({ signer, prefix, addr }: TxClientOptions = { addr: "ht
 			}
 		},
 		
-		msgClaimReward({ value }: msgClaimRewardParams): EncodeObject {
-			try {
-				return { typeUrl: "/prismfinance.prismcore.ystaking.MsgClaimReward", value: MsgClaimReward.fromPartial( value ) }  
-			} catch (e: any) {
-				throw new Error('TxClient:MsgClaimReward: Could not create message: ' + e.message)
-			}
-		},
-		
 		msgExitPool({ value }: msgExitPoolParams): EncodeObject {
 			try {
 				return { typeUrl: "/prismfinance.prismcore.ystaking.MsgExitPool", value: MsgExitPool.fromPartial( value ) }  
 			} catch (e: any) {
 				throw new Error('TxClient:MsgExitPool: Could not create message: ' + e.message)
+			}
+		},
+		
+		msgClaimReward({ value }: msgClaimRewardParams): EncodeObject {
+			try {
+				return { typeUrl: "/prismfinance.prismcore.ystaking.MsgClaimReward", value: MsgClaimReward.fromPartial( value ) }  
+			} catch (e: any) {
+				throw new Error('TxClient:MsgClaimReward: Could not create message: ' + e.message)
 			}
 		},
 		
