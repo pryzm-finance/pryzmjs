@@ -26,7 +26,6 @@ PrismJs should always be adapted to the latest changes in [prism-core](https://g
     // @ts-ignore
     if (_m0.util.Long !== Long) {
     ```
-    
 
 1. Move all generated files into prismjs source directory.
     
@@ -41,6 +40,17 @@ PrismJs should always be adapted to the latest changes in [prism-core](https://g
     ```json
     cp ./patch/wsclient.ts ./src/
     cat ./patch/index-patch.ts >> src/index.ts
+    ```
+   Then, in `src/client.ts` search for
+
+   ```bash
+    AugmentedClient as typeof AugmentedClient
+    ```
+
+   and replace with the following:
+
+    ```bash
+    AugmentedClient as typeof IgniteClient
     ```
     
     **Attention:** 
