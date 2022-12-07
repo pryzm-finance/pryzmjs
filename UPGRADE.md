@@ -123,5 +123,8 @@ npm publish
 pnpm publish
 ```
 
-**Attention:** 
+**Attention:**
 You cannot publish prismjs with the same version twice. Consider removing the previously published package from [registry](https://github.com/prism-finance/prismjs/pkgs/npm/prismjs/versions).
+
+**Attention:**
+After publishing a new version, open [package settings]("https://github.com/orgs/prism-finance/packages/npm/prismjs/settings") and check option _**Inherit access from source repository**_ to grant access to all repository members.
