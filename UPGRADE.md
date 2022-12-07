@@ -17,14 +17,14 @@ PrismJs should always be adapted to the latest changes in [prism-core](https://g
 1. Now in are generated TS files, search for:
     
     ```bash
-    if (util.Long !== Long) {
+    if (_m0.util.Long !== Long) {
     ```
     
     and replace with the following:
     
     ```bash
     // @ts-ignore
-    if (util.Long !== Long) {
+    if (_m0.util.Long !== Long) {
     ```
     
 
@@ -93,7 +93,7 @@ PrismJs should always be adapted to the latest changes in [prism-core](https://g
 ```bash
 npm install
 # or
-pnpm install --shamefully-hoist
+pnpm install
 ```
 
 ## Build
