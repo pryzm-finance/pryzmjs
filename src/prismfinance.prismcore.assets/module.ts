@@ -7,12 +7,14 @@ import { msgTypes } from './registry';
 import { IgniteClient } from "../client"
 import { MissingWalletError } from "../helpers"
 import { Api } from "./rest";
-import { MsgUpdateMaturityParams } from "./types/assets/tx";
-import { MsgDelistAsset } from "./types/assets/tx";
-import { MsgWhitelistAsset } from "./types/assets/tx";
+import { MsgUpdateMaturityParams } from "./types/prismcore/assets/tx";
+import { MsgDelistAsset } from "./types/prismcore/assets/tx";
+import { MsgUpdateMessagePassingConnection } from "./types/prismcore/assets/tx";
+import { MsgUpdateFeeRatios } from "./types/prismcore/assets/tx";
+import { MsgWhitelistAsset } from "./types/prismcore/assets/tx";
 
 
-export { MsgUpdateMaturityParams, MsgDelistAsset, MsgWhitelistAsset };
+export { MsgUpdateMaturityParams, MsgDelistAsset, MsgUpdateMessagePassingConnection, MsgUpdateFeeRatios, MsgWhitelistAsset };
 
 type sendMsgUpdateMaturityParamsParams = {
   value: MsgUpdateMaturityParams,
@@ -22,6 +24,18 @@ type sendMsgUpdateMaturityParamsParams = {
 
 type sendMsgDelistAssetParams = {
   value: MsgDelistAsset,
+  fee?: StdFee,
+  memo?: string
+};
+
+type sendMsgUpdateMessagePassingConnectionParams = {
+  value: MsgUpdateMessagePassingConnection,
+  fee?: StdFee,
+  memo?: string
+};
+
+type sendMsgUpdateFeeRatiosParams = {
+  value: MsgUpdateFeeRatios,
   fee?: StdFee,
   memo?: string
 };
@@ -39,6 +53,14 @@ type msgUpdateMaturityParamsParams = {
 
 type msgDelistAssetParams = {
   value: MsgDelistAsset,
+};
+
+type msgUpdateMessagePassingConnectionParams = {
+  value: MsgUpdateMessagePassingConnection,
+};
+
+type msgUpdateFeeRatiosParams = {
+  value: MsgUpdateFeeRatios,
 };
 
 type msgWhitelistAssetParams = {
@@ -91,6 +113,34 @@ export const txClient = ({ signer, prefix, addr }: TxClientOptions = { addr: "ht
 			}
 		},
 		
+		async sendMsgUpdateMessagePassingConnection({ value, fee, memo }: sendMsgUpdateMessagePassingConnectionParams): Promise<DeliverTxResponse> {
+			if (!signer) {
+					throw new Error('TxClient:sendMsgUpdateMessagePassingConnection: Unable to sign Tx. Signer is not present.')
+			}
+			try {			
+				const { address } = (await signer.getAccounts())[0]; 
+				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry, prefix});
+				let msg = this.msgUpdateMessagePassingConnection({ value: MsgUpdateMessagePassingConnection.fromPartial(value) })
+				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
+			} catch (e: any) {
+				throw new Error('TxClient:sendMsgUpdateMessagePassingConnection: Could not broadcast Tx: '+ e.message)
+			}
+		},
+		
+		async sendMsgUpdateFeeRatios({ value, fee, memo }: sendMsgUpdateFeeRatiosParams): Promise<DeliverTxResponse> {
+			if (!signer) {
+					throw new Error('TxClient:sendMsgUpdateFeeRatios: Unable to sign Tx. Signer is not present.')
+			}
+			try {			
+				const { address } = (await signer.getAccounts())[0]; 
+				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry, prefix});
+				let msg = this.msgUpdateFeeRatios({ value: MsgUpdateFeeRatios.fromPartial(value) })
+				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
+			} catch (e: any) {
+				throw new Error('TxClient:sendMsgUpdateFeeRatios: Could not broadcast Tx: '+ e.message)
+			}
+		},
+		
 		async sendMsgWhitelistAsset({ value, fee, memo }: sendMsgWhitelistAssetParams): Promise<DeliverTxResponse> {
 			if (!signer) {
 					throw new Error('TxClient:sendMsgWhitelistAsset: Unable to sign Tx. Signer is not present.')
@@ -122,6 +172,22 @@ export const txClient = ({ signer, prefix, addr }: TxClientOptions = { addr: "ht
 			}
 		},
 		
+		msgUpdateMessagePassingConnection({ value }: msgUpdateMessagePassingConnectionParams): EncodeObject {
+			try {
+				return { typeUrl: "/prismfinance.prismcore.assets.MsgUpdateMessagePassingConnection", value: MsgUpdateMessagePassingConnection.fromPartial( value ) }  
+			} catch (e: any) {
+				throw new Error('TxClient:MsgUpdateMessagePassingConnection: Could not create message: ' + e.message)
+			}
+		},
+		
+		msgUpdateFeeRatios({ value }: msgUpdateFeeRatiosParams): EncodeObject {
+			try {
+				return { typeUrl: "/prismfinance.prismcore.assets.MsgUpdateFeeRatios", value: MsgUpdateFeeRatios.fromPartial( value ) }  
+			} catch (e: any) {
+				throw new Error('TxClient:MsgUpdateFeeRatios: Could not create message: ' + e.message)
+			}
+		},
+		
 		msgWhitelistAsset({ value }: msgWhitelistAssetParams): EncodeObject {
 			try {
 				return { typeUrl: "/prismfinance.prismcore.assets.MsgWhitelistAsset", value: MsgWhitelistAsset.fromPartial( value ) }  
@@ -138,19 +204,34 @@ interface QueryClientOptions {
 }
 
 export const queryClient = ({ addr: addr }: QueryClientOptions = { addr: "http://localhost:1317" }) => {
-  return new Api({ baseUrl: addr });
+  return new Api({ baseURL: addr });
 };
 
 class SDKModule {
 	public query: ReturnType<typeof queryClient>;
 	public tx: ReturnType<typeof txClient>;
 	
-	public registry: Array<[string, GeneratedType]>;
+	public registry: Array<[string, GeneratedType]> = [];
 
 	constructor(client: IgniteClient) {		
 	
-		this.query = queryClient({ addr: client.env.apiURL });
-		this.tx = txClient({ signer: client.signer, addr: client.env.rpcURL, prefix: client.env.prefix ?? "cosmos" });
+		this.query = queryClient({ addr: client.env.apiURL });		
+		this.updateTX(client);
+		client.on('signer-changed',(signer) => {			
+		 this.updateTX(client);
+		})
+	}
+	updateTX(client: IgniteClient) {
+    const methods = txClient({
+        signer: client.signer,
+        addr: client.env.rpcURL,
+        prefix: client.env.prefix ?? "cosmos",
+    })
+	
+    this.tx = methods;
+    for (let m in methods) {
+        this.tx[m] = methods[m].bind(this.tx);
+    }
 	}
 };
 

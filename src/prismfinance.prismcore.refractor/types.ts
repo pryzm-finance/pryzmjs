@@ -1,8 +1,8 @@
-import { AssetState } from "./types/refractor/asset_state"
-import { EventRefract } from "./types/refractor/event"
-import { EventRedeem } from "./types/refractor/event"
-import { EventRefractorYieldDistribution } from "./types/refractor/event"
-import { Params } from "./types/refractor/params"
+import { AssetState } from "./types/prismcore/refractor/asset_state"
+import { EventRefract } from "./types/prismcore/refractor/event"
+import { EventRedeem } from "./types/prismcore/refractor/event"
+import { EventRefractorYieldDistribution } from "./types/prismcore/refractor/event"
+import { Params } from "./types/prismcore/refractor/params"
 
 
 export {     

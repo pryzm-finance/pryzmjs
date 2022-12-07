@@ -30,11 +30,12 @@ import { Module as IbcCoreConnectionV1, msgTypes as IbcCoreConnectionV1MsgTypes 
 import { Module as PrismfinancePrismcoreAssets, msgTypes as PrismfinancePrismcoreAssetsMsgTypes } from './prismfinance.prismcore.assets'
 import { Module as PrismfinancePrismcoreOracle, msgTypes as PrismfinancePrismcoreOracleMsgTypes } from './prismfinance.prismcore.oracle'
 import { Module as PrismfinancePrismcoreRefractor, msgTypes as PrismfinancePrismcoreRefractorMsgTypes } from './prismfinance.prismcore.refractor'
+import { Module as PrismfinancePrismcoreTreasury, msgTypes as PrismfinancePrismcoreTreasuryMsgTypes } from './prismfinance.prismcore.treasury'
 import { Module as PrismfinancePrismcoreYstaking, msgTypes as PrismfinancePrismcoreYstakingMsgTypes } from './prismfinance.prismcore.ystaking'
 
 
 const Client = IgniteClient.plugin([
-    CosmosAuthV1Beta1, CosmosAuthzV1Beta1, CosmosBankV1Beta1, CosmosBaseTendermintV1Beta1, CosmosCrisisV1Beta1, CosmosDistributionV1Beta1, CosmosEvidenceV1Beta1, CosmosFeegrantV1Beta1, CosmosGovV1, CosmosGovV1Beta1, CosmosGroupV1, CosmosMintV1Beta1, CosmosNftV1Beta1, CosmosParamsV1Beta1, CosmosSlashingV1Beta1, CosmosStakingV1Beta1, CosmosTxV1Beta1, CosmosUpgradeV1Beta1, CosmosVestingV1Beta1, IbcApplicationsInterchainAccountsControllerV1, IbcApplicationsInterchainAccountsHostV1, IbcApplicationsTransferV1, IbcCoreChannelV1, IbcCoreClientV1, IbcCoreConnectionV1, PrismfinancePrismcoreAssets, PrismfinancePrismcoreOracle, PrismfinancePrismcoreRefractor, PrismfinancePrismcoreYstaking
+    CosmosAuthV1Beta1, CosmosAuthzV1Beta1, CosmosBankV1Beta1, CosmosBaseTendermintV1Beta1, CosmosCrisisV1Beta1, CosmosDistributionV1Beta1, CosmosEvidenceV1Beta1, CosmosFeegrantV1Beta1, CosmosGovV1, CosmosGovV1Beta1, CosmosGroupV1, CosmosMintV1Beta1, CosmosNftV1Beta1, CosmosParamsV1Beta1, CosmosSlashingV1Beta1, CosmosStakingV1Beta1, CosmosTxV1Beta1, CosmosUpgradeV1Beta1, CosmosVestingV1Beta1, IbcApplicationsInterchainAccountsControllerV1, IbcApplicationsInterchainAccountsHostV1, IbcApplicationsTransferV1, IbcCoreChannelV1, IbcCoreClientV1, IbcCoreConnectionV1, PrismfinancePrismcoreAssets, PrismfinancePrismcoreOracle, PrismfinancePrismcoreRefractor, PrismfinancePrismcoreTreasury, PrismfinancePrismcoreYstaking
 ]);
 
 const registry = new Registry([
@@ -66,6 +67,7 @@ const registry = new Registry([
   ...PrismfinancePrismcoreAssetsMsgTypes,
   ...PrismfinancePrismcoreOracleMsgTypes,
   ...PrismfinancePrismcoreRefractorMsgTypes,
+  ...PrismfinancePrismcoreTreasuryMsgTypes,
   ...PrismfinancePrismcoreYstakingMsgTypes,
   
 ])
