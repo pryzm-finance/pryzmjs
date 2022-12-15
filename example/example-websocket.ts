@@ -1,5 +1,5 @@
 // import {PrismWebsocketClient, TendermintQuery} from "@prism-finance/prismjs";
-import {PrismWebsocketClient, TendermintQuery} from "../src";
+import {PrismWebsocketClient, TendermintQuery} from "../lib";
 
 async function main() {
     const prismWebsocketClient = new PrismWebsocketClient("ws://0.0.0.0:26657", 2000);

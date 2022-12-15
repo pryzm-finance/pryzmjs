@@ -7,23 +7,17 @@ import { msgTypes } from './registry';
 import { IgniteClient } from "../client"
 import { MissingWalletError } from "../helpers"
 import { Api } from "./rest";
-import { MsgExchangeRateCombinedVote } from "./types/prismcore/oracle/tx";
-import { MsgExchangeRatePreVote } from "./types/prismcore/oracle/tx";
+import { MsgDelegateFeedConsent } from "./types/prismcore/oracle/tx";
 import { MsgUpdateParams } from "./types/prismcore/oracle/tx";
 import { MsgExchangeRateVote } from "./types/prismcore/oracle/tx";
-import { MsgDelegateFeedConsent } from "./types/prismcore/oracle/tx";
+import { MsgExchangeRatePreVote } from "./types/prismcore/oracle/tx";
+import { MsgExchangeRateCombinedVote } from "./types/prismcore/oracle/tx";
 
 
-export { MsgExchangeRateCombinedVote, MsgExchangeRatePreVote, MsgUpdateParams, MsgExchangeRateVote, MsgDelegateFeedConsent };
+export { MsgDelegateFeedConsent, MsgUpdateParams, MsgExchangeRateVote, MsgExchangeRatePreVote, MsgExchangeRateCombinedVote };
 
-type sendMsgExchangeRateCombinedVoteParams = {
-  value: MsgExchangeRateCombinedVote,
-  fee?: StdFee,
-  memo?: string
-};
-
-type sendMsgExchangeRatePreVoteParams = {
-  value: MsgExchangeRatePreVote,
+type sendMsgDelegateFeedConsentParams = {
+  value: MsgDelegateFeedConsent,
   fee?: StdFee,
   memo?: string
 };
@@ -40,19 +34,21 @@ type sendMsgExchangeRateVoteParams = {
   memo?: string
 };
 
-type sendMsgDelegateFeedConsentParams = {
-  value: MsgDelegateFeedConsent,
+type sendMsgExchangeRatePreVoteParams = {
+  value: MsgExchangeRatePreVote,
+  fee?: StdFee,
+  memo?: string
+};
+
+type sendMsgExchangeRateCombinedVoteParams = {
+  value: MsgExchangeRateCombinedVote,
   fee?: StdFee,
   memo?: string
 };
 
 
-type msgExchangeRateCombinedVoteParams = {
-  value: MsgExchangeRateCombinedVote,
-};
-
-type msgExchangeRatePreVoteParams = {
-  value: MsgExchangeRatePreVote,
+type msgDelegateFeedConsentParams = {
+  value: MsgDelegateFeedConsent,
 };
 
 type msgUpdateParamsParams = {
@@ -63,8 +59,12 @@ type msgExchangeRateVoteParams = {
   value: MsgExchangeRateVote,
 };
 
-type msgDelegateFeedConsentParams = {
-  value: MsgDelegateFeedConsent,
+type msgExchangeRatePreVoteParams = {
+  value: MsgExchangeRatePreVote,
+};
+
+type msgExchangeRateCombinedVoteParams = {
+  value: MsgExchangeRateCombinedVote,
 };
 
 
@@ -85,31 +85,17 @@ export const txClient = ({ signer, prefix, addr }: TxClientOptions = { addr: "ht
 
   return {
 		
-		async sendMsgExchangeRateCombinedVote({ value, fee, memo }: sendMsgExchangeRateCombinedVoteParams): Promise<DeliverTxResponse> {
+		async sendMsgDelegateFeedConsent({ value, fee, memo }: sendMsgDelegateFeedConsentParams): Promise<DeliverTxResponse> {
 			if (!signer) {
-					throw new Error('TxClient:sendMsgExchangeRateCombinedVote: Unable to sign Tx. Signer is not present.')
+					throw new Error('TxClient:sendMsgDelegateFeedConsent: Unable to sign Tx. Signer is not present.')
 			}
 			try {			
 				const { address } = (await signer.getAccounts())[0]; 
 				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry, prefix});
-				let msg = this.msgExchangeRateCombinedVote({ value: MsgExchangeRateCombinedVote.fromPartial(value) })
+				let msg = this.msgDelegateFeedConsent({ value: MsgDelegateFeedConsent.fromPartial(value) })
 				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
 			} catch (e: any) {
-				throw new Error('TxClient:sendMsgExchangeRateCombinedVote: Could not broadcast Tx: '+ e.message)
-			}
-		},
-		
-		async sendMsgExchangeRatePreVote({ value, fee, memo }: sendMsgExchangeRatePreVoteParams): Promise<DeliverTxResponse> {
-			if (!signer) {
-					throw new Error('TxClient:sendMsgExchangeRatePreVote: Unable to sign Tx. Signer is not present.')
-			}
-			try {			
-				const { address } = (await signer.getAccounts())[0]; 
-				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry, prefix});
-				let msg = this.msgExchangeRatePreVote({ value: MsgExchangeRatePreVote.fromPartial(value) })
-				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
-			} catch (e: any) {
-				throw new Error('TxClient:sendMsgExchangeRatePreVote: Could not broadcast Tx: '+ e.message)
+				throw new Error('TxClient:sendMsgDelegateFeedConsent: Could not broadcast Tx: '+ e.message)
 			}
 		},
 		
@@ -141,34 +127,40 @@ export const txClient = ({ signer, prefix, addr }: TxClientOptions = { addr: "ht
 			}
 		},
 		
-		async sendMsgDelegateFeedConsent({ value, fee, memo }: sendMsgDelegateFeedConsentParams): Promise<DeliverTxResponse> {
+		async sendMsgExchangeRatePreVote({ value, fee, memo }: sendMsgExchangeRatePreVoteParams): Promise<DeliverTxResponse> {
 			if (!signer) {
-					throw new Error('TxClient:sendMsgDelegateFeedConsent: Unable to sign Tx. Signer is not present.')
+					throw new Error('TxClient:sendMsgExchangeRatePreVote: Unable to sign Tx. Signer is not present.')
 			}
 			try {			
 				const { address } = (await signer.getAccounts())[0]; 
 				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry, prefix});
-				let msg = this.msgDelegateFeedConsent({ value: MsgDelegateFeedConsent.fromPartial(value) })
+				let msg = this.msgExchangeRatePreVote({ value: MsgExchangeRatePreVote.fromPartial(value) })
 				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
 			} catch (e: any) {
-				throw new Error('TxClient:sendMsgDelegateFeedConsent: Could not broadcast Tx: '+ e.message)
+				throw new Error('TxClient:sendMsgExchangeRatePreVote: Could not broadcast Tx: '+ e.message)
+			}
+		},
+		
+		async sendMsgExchangeRateCombinedVote({ value, fee, memo }: sendMsgExchangeRateCombinedVoteParams): Promise<DeliverTxResponse> {
+			if (!signer) {
+					throw new Error('TxClient:sendMsgExchangeRateCombinedVote: Unable to sign Tx. Signer is not present.')
+			}
+			try {			
+				const { address } = (await signer.getAccounts())[0]; 
+				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry, prefix});
+				let msg = this.msgExchangeRateCombinedVote({ value: MsgExchangeRateCombinedVote.fromPartial(value) })
+				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
+			} catch (e: any) {
+				throw new Error('TxClient:sendMsgExchangeRateCombinedVote: Could not broadcast Tx: '+ e.message)
 			}
 		},
 		
 		
-		msgExchangeRateCombinedVote({ value }: msgExchangeRateCombinedVoteParams): EncodeObject {
+		msgDelegateFeedConsent({ value }: msgDelegateFeedConsentParams): EncodeObject {
 			try {
-				return { typeUrl: "/prismfinance.prismcore.oracle.MsgExchangeRateCombinedVote", value: MsgExchangeRateCombinedVote.fromPartial( value ) }  
+				return { typeUrl: "/prismfinance.prismcore.oracle.MsgDelegateFeedConsent", value: MsgDelegateFeedConsent.fromPartial( value ) }  
 			} catch (e: any) {
-				throw new Error('TxClient:MsgExchangeRateCombinedVote: Could not create message: ' + e.message)
-			}
-		},
-		
-		msgExchangeRatePreVote({ value }: msgExchangeRatePreVoteParams): EncodeObject {
-			try {
-				return { typeUrl: "/prismfinance.prismcore.oracle.MsgExchangeRatePreVote", value: MsgExchangeRatePreVote.fromPartial( value ) }  
-			} catch (e: any) {
-				throw new Error('TxClient:MsgExchangeRatePreVote: Could not create message: ' + e.message)
+				throw new Error('TxClient:MsgDelegateFeedConsent: Could not create message: ' + e.message)
 			}
 		},
 		
@@ -188,11 +180,19 @@ export const txClient = ({ signer, prefix, addr }: TxClientOptions = { addr: "ht
 			}
 		},
 		
-		msgDelegateFeedConsent({ value }: msgDelegateFeedConsentParams): EncodeObject {
+		msgExchangeRatePreVote({ value }: msgExchangeRatePreVoteParams): EncodeObject {
 			try {
-				return { typeUrl: "/prismfinance.prismcore.oracle.MsgDelegateFeedConsent", value: MsgDelegateFeedConsent.fromPartial( value ) }  
+				return { typeUrl: "/prismfinance.prismcore.oracle.MsgExchangeRatePreVote", value: MsgExchangeRatePreVote.fromPartial( value ) }  
 			} catch (e: any) {
-				throw new Error('TxClient:MsgDelegateFeedConsent: Could not create message: ' + e.message)
+				throw new Error('TxClient:MsgExchangeRatePreVote: Could not create message: ' + e.message)
+			}
+		},
+		
+		msgExchangeRateCombinedVote({ value }: msgExchangeRateCombinedVoteParams): EncodeObject {
+			try {
+				return { typeUrl: "/prismfinance.prismcore.oracle.MsgExchangeRateCombinedVote", value: MsgExchangeRateCombinedVote.fromPartial( value ) }  
+			} catch (e: any) {
+				throw new Error('TxClient:MsgExchangeRateCombinedVote: Could not create message: ' + e.message)
 			}
 		},
 		

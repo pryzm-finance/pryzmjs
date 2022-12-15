@@ -4,6 +4,11 @@ import protobufjs from "protobufjs";
 import Long from "long";
 import {DirectSecp256k1HdWallet} from "@cosmjs/proto-signing";
 import {PrismWebsocketClient, TendermintEventType, TendermintQuery, TendermintSubscriptionResponse} from "./wsclient";
+import { Module as PrismfinancePrismatics, msgTypes as PrismfinancePrismaticsMsgTypes } from './prismfinance.prisma.tics' // TODO: PrismfinancePrismaticsMsgTypes
+
+PrismfinancePrismaticsMsgTypes.forEach(value => {
+    registry.register(value[0], value[1])
+})
 
 protobufjs.util.Long = Long;
 protobufjs.configure();
@@ -15,6 +20,12 @@ type NewReturnType<T extends {
 } ? R : never;
 export type PrismClient = NewReturnType<typeof Client>
 export const PrismClient = Client
+
+export const PrismaticsClient = IgniteClient.plugin([
+    PrismfinancePrismatics
+]);
+export type PrismaticsClient = NewReturnType<typeof PrismaticsClient>
+
 export {
     PrismWebsocketClient,
     TendermintEventType,
@@ -34,4 +45,11 @@ export function newPrismSigningClient(rpcURL: string, signer: DirectSecp256k1HdW
     return new PrismClient({
         apiURL: null!, rpcURL, prefix: "prism"
     }, signer)
+}
+
+/** Use this method if you want to use the prismatics client */
+export function newPrismaticsClient(apiURL: string): PrismaticsClient {
+    return new PrismaticsClient({
+        apiURL, rpcURL: null!
+    }, null!)
 }

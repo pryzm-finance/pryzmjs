@@ -1,5 +1,5 @@
 // import {newPrismQueryClient} from "@prism-finance/prismjs"
-import {newPrismQueryClient} from "../src"
+import {newPrismQueryClient} from "../lib"
 
 async function main() {
     const queryClient = newPrismQueryClient("http://0.0.0.0:1317")
