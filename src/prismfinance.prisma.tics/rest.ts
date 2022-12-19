@@ -206,11 +206,6 @@ export interface TicsMaturity {
   blockTime?: string;
 }
 
-/**
- * Params defines the parameters for the module.
- */
-export type TicsParams = object;
-
 export interface TicsQueryAllMaturitiesResponse {
   maturities?: TicsMaturity[];
 
@@ -224,14 +219,6 @@ export interface TicsQueryAllMaturitiesResponse {
    *  }
    */
   pagination?: V1Beta1PageResponse;
-}
-
-/**
- * QueryParamsResponse is response type for the Query/Params RPC method.
- */
-export interface TicsQueryParamsResponse {
-  /** params holds all the parameters of this module. */
-  params?: TicsParams;
 }
 
 export interface TypesBlock {
@@ -1158,22 +1145,6 @@ export class HttpClient<SecurityDataType = unknown> {
  * @version version not set
  */
 export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDataType> {
-  /**
-   * No description
-   *
-   * @tags Query
-   * @name QueryParams
-   * @summary Parameters queries the parameters of the module.
-   * @request GET:/prism-finance/prisma/tics/params
-   */
-  queryParams = (params: RequestParams = {}) =>
-    this.request<TicsQueryParamsResponse, RpcStatus>({
-      path: `/prism-finance/prisma/tics/params`,
-      method: "GET",
-      format: "json",
-      ...params,
-    });
-
   /**
    * No description
    *
