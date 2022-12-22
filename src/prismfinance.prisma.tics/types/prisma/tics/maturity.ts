@@ -13,6 +13,8 @@ export interface Maturity {
   maturityTime: Date | undefined;
   blockHeight: number;
   blockTime: Date | undefined;
+  roi: string;
+  cagr: string;
 }
 
 export interface QueryAllMaturitiesRequest {
@@ -26,7 +28,16 @@ export interface QueryAllMaturitiesResponse {
 }
 
 function createBaseMaturity(): Maturity {
-  return { asset: "", symbol: "", active: false, maturityTime: undefined, blockHeight: 0, blockTime: undefined };
+  return {
+    asset: "",
+    symbol: "",
+    active: false,
+    maturityTime: undefined,
+    blockHeight: 0,
+    blockTime: undefined,
+    roi: "",
+    cagr: "",
+  };
 }
 
 export const Maturity = {
@@ -48,6 +59,12 @@ export const Maturity = {
     }
     if (message.blockTime !== undefined) {
       Timestamp.encode(toTimestamp(message.blockTime), writer.uint32(50).fork()).ldelim();
+    }
+    if (message.roi !== "") {
+      writer.uint32(58).string(message.roi);
+    }
+    if (message.cagr !== "") {
+      writer.uint32(66).string(message.cagr);
     }
     return writer;
   },
@@ -77,6 +94,12 @@ export const Maturity = {
         case 6:
           message.blockTime = fromTimestamp(Timestamp.decode(reader, reader.uint32()));
           break;
+        case 7:
+          message.roi = reader.string();
+          break;
+        case 8:
+          message.cagr = reader.string();
+          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -93,6 +116,8 @@ export const Maturity = {
       maturityTime: isSet(object.maturityTime) ? fromJsonTimestamp(object.maturityTime) : undefined,
       blockHeight: isSet(object.blockHeight) ? Number(object.blockHeight) : 0,
       blockTime: isSet(object.blockTime) ? fromJsonTimestamp(object.blockTime) : undefined,
+      roi: isSet(object.roi) ? String(object.roi) : "",
+      cagr: isSet(object.cagr) ? String(object.cagr) : "",
     };
   },
 
@@ -104,6 +129,8 @@ export const Maturity = {
     message.maturityTime !== undefined && (obj.maturityTime = message.maturityTime.toISOString());
     message.blockHeight !== undefined && (obj.blockHeight = Math.round(message.blockHeight));
     message.blockTime !== undefined && (obj.blockTime = message.blockTime.toISOString());
+    message.roi !== undefined && (obj.roi = message.roi);
+    message.cagr !== undefined && (obj.cagr = message.cagr);
     return obj;
   },
 
@@ -115,6 +142,8 @@ export const Maturity = {
     message.maturityTime = object.maturityTime ?? undefined;
     message.blockHeight = object.blockHeight ?? 0;
     message.blockTime = object.blockTime ?? undefined;
+    message.roi = object.roi ?? "";
+    message.cagr = object.cagr ?? "";
     return message;
   },
 };

@@ -204,6 +204,8 @@ export interface TicsMaturity {
 
   /** @format date-time */
   blockTime?: string;
+  roi?: string;
+  cagr?: string;
 }
 
 export interface TicsQueryAllMaturitiesResponse {
