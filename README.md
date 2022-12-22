@@ -1,27 +1,69 @@
 # PrismJs: Javascript SDK for PRISM
 
-## Introduction
-
 PrismJs is a JavaScript SDK for writing applications that interact with the PRISM blockchain from either Node.js or the browser and provides simple abstractions over core data structures, serialization, and tendermint event subscription.
 
-## **Features**
+## How it works
+
+After installing PrismJs you can use `PrismClient` and `PrismWebsocketClient` to query or send messages to https://github.com/prism-finance/prism-core. Also, you can use `PrismaticsClient` to query ‣.
+
+### **Features**
 
 - **Written in TypeScript**, with type definitions
 - Works in Node.js and in the browser
-- Exposes the PRISM API through `PrismClient` and `PrismWebsocketClient`
-- Exposes prismatics API to `PrismaticsClient`
-- Parses responses into native JavaScript types
+- Exposes the https://github.com/prism-finance/prism-core API through `PrismClient` and `PrismWebsocketClient`
+- Exposes the ‣ API through `PrismaticsClient`
 
-## **Installation**
+## Modules
 
-**Note:** prismjs is a private package published to prism’s GitHub package registry.
-In order to have access to the library you need to follow the instructions [here](https://docs.github.com/en/packages/working-with-a-github-packages-registry/working-with-the-npm-registry#installing-a-package).
+This repo contains:
 
-Grab the latest version of [PrismJs](https://github.com/prism-finance/prismjs/pkgs/npm/prismjs):
+- badges
+- readme
+- contribution guide
+
+# Quick Start
+
+In order to use the library you first need to install the latest version of [PrismJs](https://github.com/prism-finance/prismjs/pkgs/npm/prismjs):
 
 ```bash
 npm install @prism-finance/prismjs
 ```
+
+# Build
+
+Alternatively, you can clone the repository and build it yourself. The build result is a directory named `lib` which contains a local version of PrismJs and is ready to use. See [examples](https://github.com/prism-finance/prismjs/tree/dev/example).
+
+## Build from source
+
+### Prerequisites
+
+- pnpm version 7.12.0+ (or npm version 8.19.1)
+- 8 GB of free RAM
+- Other prerequisites are already included in [package.json](https://github.com/prism-finance/prismjs/blob/main/package.json) as dev dependencies and will be installed automatically after building the project.
+
+### How to build
+
+```bash
+pnpm install
+pnpm build
+```
+
+# How to run tests
+
+This project does not contain tests since it is fully generated.
+
+# How to run
+
+In order to use the library you first need to install the latest version of [PrismJs](https://github.com/prism-finance/prismjs/pkgs/npm/prismjs):
+
+```bash
+npm install @prism-finance/prismjs
+```
+
+   **Note:** prismjs is a private package published to prism’s GitHub package registry. 
+   In order to have access to the library you need to follow the instructions [here](https://docs.github.com/en/packages/working-with-a-github-packages-registry/working-with-the-npm-registry#installing-a-package). 
+
+# Usage
 
 ## PrismClient
 
@@ -222,13 +264,22 @@ const client = new CustomClient({
 );
 ```
 
-## Using PrismJs inside the browser
+# Development and troubleshoot
 
-TODO
+This project contains a combination of generated typescript files from [prism-core](https://github.com/prism-finance/prism-core) and [prisma](https://github.com/prism-finance/prisma) using [ignite CLI](https://docs.ignite.com/clients/typescript). See [UPGRADE.md](http://UPGRADE.md) for more information.
 
-**Note:** PrismJs is generated using ignite CLI. For more information visit [here](https://docs.ignite.com/clients/typescript).
+The only file that is not among the generated files is [wsclient.ts](https://github.com/prism-finance/prismjs/blob/main/src/wsclient.ts). If this file is to be modified, the modification should be applied to the [wsclient.ts](https://github.com/prism-finance/prismjs/blob/main/patch/wsclient.ts) inside the [patch](https://github.com/prism-finance/prismjs/tree/main/patch) directory. The reason for doing so is that during the upgrade process we always replace the former [wsclient.ts](https://github.com/prism-finance/prismjs/blob/main/src/wsclient.ts) with the latter. 
 
-## **License**
+## Development
+
+TODO refer to the contribution guide.
+
+# TODO
+
+- Automate the upgrade process described in [UPGRADE.md](http://UPGRADE.md).
+- Add support for using PrismJs inside the browser.
+
+# Contribution guide and licensing
 
 This software is licensed under the `GPL Version 2.0 or a later version` license.
 See [LICENSE](https://github.com/prism-finance/prism-contracts/blob/main/LICENSE.md) for full disclosure.
