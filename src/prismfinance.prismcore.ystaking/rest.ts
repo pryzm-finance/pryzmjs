@@ -38,7 +38,7 @@ export interface YstakingMsgBondResponse {
    * NOTE: The amount field is an Int which implements the custom method
    * signatures required by gogoproto.
    */
-  totalBondedAmount?: V1Beta1Coin;
+  total_bonded_amount?: V1Beta1Coin;
 }
 
 export interface YstakingMsgClaimRewardResponse {
@@ -48,7 +48,7 @@ export interface YstakingMsgClaimRewardResponse {
    * NOTE: The amount field is an Int which implements the custom method
    * signatures required by gogoproto.
    */
-  accruedReward?: V1Beta1Coin;
+  accrued_reward?: V1Beta1Coin;
 
   /**
    * Coin defines a token with a denomination and an amount.
@@ -66,7 +66,7 @@ export interface YstakingMsgExitPoolResponse {
    * NOTE: The amount field is an Int which implements the custom method
    * signatures required by gogoproto.
    */
-  accruedReward?: V1Beta1Coin;
+  accrued_reward?: V1Beta1Coin;
 
   /**
    * Coin defines a token with a denomination and an amount.
@@ -84,7 +84,7 @@ export interface YstakingMsgUnbondResponse {
    * NOTE: The amount field is an Int which implements the custom method
    * signatures required by gogoproto.
    */
-  remainderBondedAmount?: V1Beta1Coin;
+  remainder_bonded_amount?: V1Beta1Coin;
 
   /**
    * Coin defines a token with a denomination and an amount.
@@ -92,7 +92,7 @@ export interface YstakingMsgUnbondResponse {
    * NOTE: The amount field is an Int which implements the custom method
    * signatures required by gogoproto.
    */
-  accruedReward?: V1Beta1Coin;
+  accrued_reward?: V1Beta1Coin;
 
   /**
    * Coin defines a token with a denomination and an amount.

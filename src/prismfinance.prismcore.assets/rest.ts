@@ -10,14 +10,14 @@
  */
 
 export interface AssetsAssetFeeRatios {
-  cAssetFeeRatio?: string;
-  yieldFeeRatio?: string;
-  mergeFeeRatio?: string;
-  redeemFeeRatio?: string;
-  refractFeeRatio?: string;
-  cAssetBondFeeRatio?: string;
-  cAssetRedeemFeeRatio?: string;
-  yStakingClaimRewardFeeRatio?: string;
+  c_asset_fee_ratio?: string;
+  yield_fee_ratio?: string;
+  merge_fee_ratio?: string;
+  redeem_fee_ratio?: string;
+  refract_fee_ratio?: string;
+  c_asset_bond_fee_ratio?: string;
+  c_asset_redeem_fee_ratio?: string;
+  y_staking_claim_reward_fee_ratio?: string;
 }
 
 export interface AssetsAssetIbcConnectionProperties {
@@ -27,7 +27,7 @@ export interface AssetsAssetIbcConnectionProperties {
 
 export interface AssetsAssetMaturityParameters {
   /** @format int32 */
-  levelsPerYear?: number;
+  levels_per_year?: number;
 
   /** @format int32 */
   years?: number;
@@ -55,7 +55,7 @@ export type AssetsMsgWhitelistAssetResponse = object;
 export type AssetsParams = object;
 
 export interface AssetsQueryAllMaturityLevelResponse {
-  maturityLevel?: AssetsMaturityLevel[];
+  maturity_level?: AssetsMaturityLevel[];
 
   /**
    * PageResponse is to be embedded in gRPC response messages where the
@@ -70,7 +70,7 @@ export interface AssetsQueryAllMaturityLevelResponse {
 }
 
 export interface AssetsQueryAllWhitelistedAssetResponse {
-  whitelistedAsset?: AssetsWhitelistedAsset[];
+  whitelisted_asset?: AssetsWhitelistedAsset[];
 
   /**
    * PageResponse is to be embedded in gRPC response messages where the
@@ -85,11 +85,11 @@ export interface AssetsQueryAllWhitelistedAssetResponse {
 }
 
 export interface AssetsQueryGetMaturityLevelResponse {
-  maturityLevel?: AssetsMaturityLevel;
+  maturity_level?: AssetsMaturityLevel;
 }
 
 export interface AssetsQueryGetWhitelistedAssetResponse {
-  whitelistedAsset?: AssetsWhitelistedAsset;
+  whitelisted_asset?: AssetsWhitelistedAsset;
 }
 
 /**
@@ -102,14 +102,14 @@ export interface AssetsQueryParamsResponse {
 
 export interface AssetsWhitelistedAsset {
   refractable?: boolean;
-  baseDenom?: string;
-  chainId?: string;
-  hubContractAddr?: string;
-  cAssetBaseDenom?: string;
-  maturityParameters?: AssetsAssetMaturityParameters;
-  tokenTransferConnection?: AssetsAssetIbcConnectionProperties;
-  messagePassingConnection?: AssetsAssetIbcConnectionProperties;
-  feeRatios?: AssetsAssetFeeRatios;
+  base_denom?: string;
+  chain_id?: string;
+  hub_contract_addr?: string;
+  c_asset_base_denom?: string;
+  maturity_parameters?: AssetsAssetMaturityParameters;
+  token_transfer_connection?: AssetsAssetIbcConnectionProperties;
+  message_passing_connection?: AssetsAssetIbcConnectionProperties;
+  fee_ratios?: AssetsAssetFeeRatios;
 }
 
 export interface ProtobufAny {
@@ -414,7 +414,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
    * @tags Query
    * @name QueryWhitelistedAsset
    * @summary Queries a WhitelistedAsset by index.
-   * @request GET:/prism-finance/prism-core/assets/whitelisted_asset/{baseDenom}
+   * @request GET:/prism-finance/prism-core/assets/whitelisted_asset/{base_denom}
    */
   queryWhitelistedAsset = (baseDenom: string, params: RequestParams = {}) =>
     this.request<AssetsQueryGetWhitelistedAssetResponse, RpcStatus>({

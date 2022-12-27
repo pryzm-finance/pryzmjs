@@ -10,7 +10,7 @@
  */
 
 export interface OracleAssetExchangeRate {
-  baseDenom?: string;
+  base_denom?: string;
   rate?: string;
 
   /** @format int64 */
@@ -22,7 +22,7 @@ export interface OracleExchangeRatePreVote {
   validator?: string;
 
   /** @format int64 */
-  submitBlock?: string;
+  submit_block?: string;
 }
 
 export interface OracleExchangeRateTuple {
@@ -31,7 +31,7 @@ export interface OracleExchangeRateTuple {
 }
 
 export interface OracleExchangeRateVote {
-  exchangeRateTuples?: OracleExchangeRateTuple[];
+  exchange_rate_tuples?: OracleExchangeRateTuple[];
   validator?: string;
 }
 
@@ -62,22 +62,22 @@ export type OracleMsgUpdateParamsResponse = object;
  */
 export interface OracleParams {
   /** @format int64 */
-  votePeriod?: string;
+  vote_period?: string;
   quorum?: string;
-  voteThreshold?: string;
+  vote_threshold?: string;
 
   /** @format int64 */
-  rewardDistributionWindow?: string;
-  slashFraction?: string;
+  reward_distribution_window?: string;
+  slash_fraction?: string;
 
   /** @format int64 */
-  slashWindow?: string;
-  maxMissRatePerSlashWindow?: string;
-  exchangeRateValidDuration?: string;
+  slash_window?: string;
+  max_miss_rate_per_slash_window?: string;
+  exchange_rate_valid_duration?: string;
 }
 
 export interface OracleQueryAllAssetExchangeRateResponse {
-  assetExchangeRate?: OracleAssetExchangeRate[];
+  asset_exchange_rate?: OracleAssetExchangeRate[];
 
   /**
    * PageResponse is to be embedded in gRPC response messages where the
@@ -92,7 +92,7 @@ export interface OracleQueryAllAssetExchangeRateResponse {
 }
 
 export interface OracleQueryAllExchangeRatePreVoteResponse {
-  exchangeRatePreVote?: OracleExchangeRatePreVote[];
+  exchange_rate_pre_vote?: OracleExchangeRatePreVote[];
 
   /**
    * PageResponse is to be embedded in gRPC response messages where the
@@ -107,7 +107,7 @@ export interface OracleQueryAllExchangeRatePreVoteResponse {
 }
 
 export interface OracleQueryAllExchangeRateVoteResponse {
-  exchangeRateVote?: OracleExchangeRateVote[];
+  exchange_rate_vote?: OracleExchangeRateVote[];
 
   /**
    * PageResponse is to be embedded in gRPC response messages where the
@@ -122,7 +122,7 @@ export interface OracleQueryAllExchangeRateVoteResponse {
 }
 
 export interface OracleQueryAllFeederDelegationResponse {
-  feederDelegation?: OracleFeederDelegation[];
+  feeder_delegation?: OracleFeederDelegation[];
 
   /**
    * PageResponse is to be embedded in gRPC response messages where the
@@ -137,7 +137,7 @@ export interface OracleQueryAllFeederDelegationResponse {
 }
 
 export interface OracleQueryAllMissCounterResponse {
-  missCounter?: OracleMissCounter[];
+  miss_counter?: OracleMissCounter[];
 
   /**
    * PageResponse is to be embedded in gRPC response messages where the
@@ -152,23 +152,23 @@ export interface OracleQueryAllMissCounterResponse {
 }
 
 export interface OracleQueryGetAssetExchangeRateResponse {
-  assetExchangeRate?: OracleAssetExchangeRate;
+  asset_exchange_rate?: OracleAssetExchangeRate;
 }
 
 export interface OracleQueryGetExchangeRatePreVoteResponse {
-  exchangeRatePreVote?: OracleExchangeRatePreVote;
+  exchange_rate_pre_vote?: OracleExchangeRatePreVote;
 }
 
 export interface OracleQueryGetExchangeRateVoteResponse {
-  exchangeRateVote?: OracleExchangeRateVote;
+  exchange_rate_vote?: OracleExchangeRateVote;
 }
 
 export interface OracleQueryGetFeederDelegationResponse {
-  feederDelegation?: OracleFeederDelegation;
+  feeder_delegation?: OracleFeederDelegation;
 }
 
 export interface OracleQueryGetMissCounterResponse {
-  missCounter?: OracleMissCounter;
+  miss_counter?: OracleMissCounter;
 }
 
 /**

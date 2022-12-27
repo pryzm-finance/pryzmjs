@@ -20,7 +20,7 @@ export interface RefractorMsgRedeemResponse {
    * NOTE: The amount field is an Int which implements the custom method
    * signatures required by gogoproto.
    */
-  cAmount?: V1Beta1Coin;
+  c_amount?: V1Beta1Coin;
 
   /**
    * Coin defines a token with a denomination and an amount.
@@ -38,7 +38,7 @@ export interface RefractorMsgRefractResponse {
    * NOTE: The amount field is an Int which implements the custom method
    * signatures required by gogoproto.
    */
-  pAmount?: V1Beta1Coin;
+  p_amount?: V1Beta1Coin;
 
   /**
    * Coin defines a token with a denomination and an amount.
@@ -46,7 +46,7 @@ export interface RefractorMsgRefractResponse {
    * NOTE: The amount field is an Int which implements the custom method
    * signatures required by gogoproto.
    */
-  yAmount?: V1Beta1Coin;
+  y_amount?: V1Beta1Coin;
 
   /**
    * Coin defines a token with a denomination and an amount.
