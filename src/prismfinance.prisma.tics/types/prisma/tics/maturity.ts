@@ -15,6 +15,9 @@ export interface Maturity {
   blockTime: Date | undefined;
   roi: string;
   cagr: string;
+  pApy: string;
+  yPrice: string;
+  pPrice: string;
 }
 
 export interface QueryAllMaturitiesRequest {
@@ -38,6 +41,9 @@ function createBaseMaturity(): Maturity {
     blockTime: undefined,
     roi: "",
     cagr: "",
+    pApy: "",
+    yPrice: "",
+    pPrice: "",
   };
 }
 
@@ -66,6 +72,15 @@ export const Maturity = {
     }
     if (message.cagr !== "") {
       writer.uint32(66).string(message.cagr);
+    }
+    if (message.pApy !== "") {
+      writer.uint32(74).string(message.pApy);
+    }
+    if (message.yPrice !== "") {
+      writer.uint32(82).string(message.yPrice);
+    }
+    if (message.pPrice !== "") {
+      writer.uint32(90).string(message.pPrice);
     }
     return writer;
   },
@@ -101,6 +116,15 @@ export const Maturity = {
         case 8:
           message.cagr = reader.string();
           break;
+        case 9:
+          message.pApy = reader.string();
+          break;
+        case 10:
+          message.yPrice = reader.string();
+          break;
+        case 11:
+          message.pPrice = reader.string();
+          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -119,6 +143,9 @@ export const Maturity = {
       blockTime: isSet(object.blockTime) ? fromJsonTimestamp(object.blockTime) : undefined,
       roi: isSet(object.roi) ? String(object.roi) : "",
       cagr: isSet(object.cagr) ? String(object.cagr) : "",
+      pApy: isSet(object.pApy) ? String(object.pApy) : "",
+      yPrice: isSet(object.yPrice) ? String(object.yPrice) : "",
+      pPrice: isSet(object.pPrice) ? String(object.pPrice) : "",
     };
   },
 
@@ -132,6 +159,9 @@ export const Maturity = {
     message.blockTime !== undefined && (obj.blockTime = message.blockTime.toISOString());
     message.roi !== undefined && (obj.roi = message.roi);
     message.cagr !== undefined && (obj.cagr = message.cagr);
+    message.pApy !== undefined && (obj.pApy = message.pApy);
+    message.yPrice !== undefined && (obj.yPrice = message.yPrice);
+    message.pPrice !== undefined && (obj.pPrice = message.pPrice);
     return obj;
   },
 
@@ -145,6 +175,9 @@ export const Maturity = {
     message.blockTime = object.blockTime ?? undefined;
     message.roi = object.roi ?? "";
     message.cagr = object.cagr ?? "";
+    message.pApy = object.pApy ?? "";
+    message.yPrice = object.yPrice ?? "";
+    message.pPrice = object.pPrice ?? "";
     return message;
   },
 };

@@ -197,15 +197,18 @@ export interface TicsMaturity {
   active?: boolean;
 
   /** @format date-time */
-  maturityTime?: string;
+  maturity_time?: string;
 
   /** @format int64 */
-  blockHeight?: string;
+  block_height?: string;
 
   /** @format date-time */
-  blockTime?: string;
+  block_time?: string;
   roi?: string;
   cagr?: string;
+  p_apy?: string;
+  y_price?: string;
+  p_price?: string;
 }
 
 export interface TicsQueryAllMaturitiesResponse {
