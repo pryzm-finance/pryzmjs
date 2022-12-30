@@ -22,7 +22,7 @@ export interface RpcStatus {
 
 export interface TreasuryAction {
   /** FeeType enumerates the valid types for feeType. */
-  actionType?: TreasuryActionType;
+  action_type?: TreasuryActionType;
 
   /** @format date-time */
   occurrence?: string;
@@ -47,8 +47,8 @@ export type TreasuryMsgSetActionResponse = object;
  * Params defines the parameters for the module.
  */
 export interface TreasuryParams {
-  swapFeeRatio?: string;
-  liquidityProvidingFeeRatio?: string;
+  swap_fee_ratio?: string;
+  liquidity_providing_fee_ratio?: string;
 }
 
 export interface TreasuryQueryGetActionResponse {

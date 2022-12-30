@@ -1172,6 +1172,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
   queryMaturityAll = (
     query?: {
       asset?: string;
+      active?: string;
       "pagination.key"?: string;
       "pagination.offset"?: string;
       "pagination.limit"?: string;

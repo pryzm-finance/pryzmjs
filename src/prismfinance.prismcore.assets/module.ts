@@ -7,17 +7,17 @@ import { msgTypes } from './registry';
 import { IgniteClient } from "../client"
 import { MissingWalletError } from "../helpers"
 import { Api } from "./rest";
-import { MsgUpdateMaturityParams } from "./types/prismcore/assets/tx";
-import { MsgWhitelistAsset } from "./types/prismcore/assets/tx";
 import { MsgUpdateMessagePassingConnection } from "./types/prismcore/assets/tx";
-import { MsgDelistAsset } from "./types/prismcore/assets/tx";
+import { MsgWhitelistAsset } from "./types/prismcore/assets/tx";
+import { MsgUpdateMaturityParams } from "./types/prismcore/assets/tx";
 import { MsgUpdateFeeRatios } from "./types/prismcore/assets/tx";
+import { MsgDelistAsset } from "./types/prismcore/assets/tx";
 
 
-export { MsgUpdateMaturityParams, MsgWhitelistAsset, MsgUpdateMessagePassingConnection, MsgDelistAsset, MsgUpdateFeeRatios };
+export { MsgUpdateMessagePassingConnection, MsgWhitelistAsset, MsgUpdateMaturityParams, MsgUpdateFeeRatios, MsgDelistAsset };
 
-type sendMsgUpdateMaturityParamsParams = {
-  value: MsgUpdateMaturityParams,
+type sendMsgUpdateMessagePassingConnectionParams = {
+  value: MsgUpdateMessagePassingConnection,
   fee?: StdFee,
   memo?: string
 };
@@ -28,14 +28,8 @@ type sendMsgWhitelistAssetParams = {
   memo?: string
 };
 
-type sendMsgUpdateMessagePassingConnectionParams = {
-  value: MsgUpdateMessagePassingConnection,
-  fee?: StdFee,
-  memo?: string
-};
-
-type sendMsgDelistAssetParams = {
-  value: MsgDelistAsset,
+type sendMsgUpdateMaturityParamsParams = {
+  value: MsgUpdateMaturityParams,
   fee?: StdFee,
   memo?: string
 };
@@ -46,25 +40,31 @@ type sendMsgUpdateFeeRatiosParams = {
   memo?: string
 };
 
+type sendMsgDelistAssetParams = {
+  value: MsgDelistAsset,
+  fee?: StdFee,
+  memo?: string
+};
 
-type msgUpdateMaturityParamsParams = {
-  value: MsgUpdateMaturityParams,
+
+type msgUpdateMessagePassingConnectionParams = {
+  value: MsgUpdateMessagePassingConnection,
 };
 
 type msgWhitelistAssetParams = {
   value: MsgWhitelistAsset,
 };
 
-type msgUpdateMessagePassingConnectionParams = {
-  value: MsgUpdateMessagePassingConnection,
-};
-
-type msgDelistAssetParams = {
-  value: MsgDelistAsset,
+type msgUpdateMaturityParamsParams = {
+  value: MsgUpdateMaturityParams,
 };
 
 type msgUpdateFeeRatiosParams = {
   value: MsgUpdateFeeRatios,
+};
+
+type msgDelistAssetParams = {
+  value: MsgDelistAsset,
 };
 
 
@@ -85,17 +85,17 @@ export const txClient = ({ signer, prefix, addr }: TxClientOptions = { addr: "ht
 
   return {
 		
-		async sendMsgUpdateMaturityParams({ value, fee, memo }: sendMsgUpdateMaturityParamsParams): Promise<DeliverTxResponse> {
+		async sendMsgUpdateMessagePassingConnection({ value, fee, memo }: sendMsgUpdateMessagePassingConnectionParams): Promise<DeliverTxResponse> {
 			if (!signer) {
-					throw new Error('TxClient:sendMsgUpdateMaturityParams: Unable to sign Tx. Signer is not present.')
+					throw new Error('TxClient:sendMsgUpdateMessagePassingConnection: Unable to sign Tx. Signer is not present.')
 			}
 			try {			
 				const { address } = (await signer.getAccounts())[0]; 
 				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry, prefix});
-				let msg = this.msgUpdateMaturityParams({ value: MsgUpdateMaturityParams.fromPartial(value) })
+				let msg = this.msgUpdateMessagePassingConnection({ value: MsgUpdateMessagePassingConnection.fromPartial(value) })
 				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
 			} catch (e: any) {
-				throw new Error('TxClient:sendMsgUpdateMaturityParams: Could not broadcast Tx: '+ e.message)
+				throw new Error('TxClient:sendMsgUpdateMessagePassingConnection: Could not broadcast Tx: '+ e.message)
 			}
 		},
 		
@@ -113,31 +113,17 @@ export const txClient = ({ signer, prefix, addr }: TxClientOptions = { addr: "ht
 			}
 		},
 		
-		async sendMsgUpdateMessagePassingConnection({ value, fee, memo }: sendMsgUpdateMessagePassingConnectionParams): Promise<DeliverTxResponse> {
+		async sendMsgUpdateMaturityParams({ value, fee, memo }: sendMsgUpdateMaturityParamsParams): Promise<DeliverTxResponse> {
 			if (!signer) {
-					throw new Error('TxClient:sendMsgUpdateMessagePassingConnection: Unable to sign Tx. Signer is not present.')
+					throw new Error('TxClient:sendMsgUpdateMaturityParams: Unable to sign Tx. Signer is not present.')
 			}
 			try {			
 				const { address } = (await signer.getAccounts())[0]; 
 				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry, prefix});
-				let msg = this.msgUpdateMessagePassingConnection({ value: MsgUpdateMessagePassingConnection.fromPartial(value) })
+				let msg = this.msgUpdateMaturityParams({ value: MsgUpdateMaturityParams.fromPartial(value) })
 				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
 			} catch (e: any) {
-				throw new Error('TxClient:sendMsgUpdateMessagePassingConnection: Could not broadcast Tx: '+ e.message)
-			}
-		},
-		
-		async sendMsgDelistAsset({ value, fee, memo }: sendMsgDelistAssetParams): Promise<DeliverTxResponse> {
-			if (!signer) {
-					throw new Error('TxClient:sendMsgDelistAsset: Unable to sign Tx. Signer is not present.')
-			}
-			try {			
-				const { address } = (await signer.getAccounts())[0]; 
-				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry, prefix});
-				let msg = this.msgDelistAsset({ value: MsgDelistAsset.fromPartial(value) })
-				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
-			} catch (e: any) {
-				throw new Error('TxClient:sendMsgDelistAsset: Could not broadcast Tx: '+ e.message)
+				throw new Error('TxClient:sendMsgUpdateMaturityParams: Could not broadcast Tx: '+ e.message)
 			}
 		},
 		
@@ -155,12 +141,26 @@ export const txClient = ({ signer, prefix, addr }: TxClientOptions = { addr: "ht
 			}
 		},
 		
-		
-		msgUpdateMaturityParams({ value }: msgUpdateMaturityParamsParams): EncodeObject {
-			try {
-				return { typeUrl: "/prismfinance.prismcore.assets.MsgUpdateMaturityParams", value: MsgUpdateMaturityParams.fromPartial( value ) }  
+		async sendMsgDelistAsset({ value, fee, memo }: sendMsgDelistAssetParams): Promise<DeliverTxResponse> {
+			if (!signer) {
+					throw new Error('TxClient:sendMsgDelistAsset: Unable to sign Tx. Signer is not present.')
+			}
+			try {			
+				const { address } = (await signer.getAccounts())[0]; 
+				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry, prefix});
+				let msg = this.msgDelistAsset({ value: MsgDelistAsset.fromPartial(value) })
+				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
 			} catch (e: any) {
-				throw new Error('TxClient:MsgUpdateMaturityParams: Could not create message: ' + e.message)
+				throw new Error('TxClient:sendMsgDelistAsset: Could not broadcast Tx: '+ e.message)
+			}
+		},
+		
+		
+		msgUpdateMessagePassingConnection({ value }: msgUpdateMessagePassingConnectionParams): EncodeObject {
+			try {
+				return { typeUrl: "/prismfinance.prismcore.assets.MsgUpdateMessagePassingConnection", value: MsgUpdateMessagePassingConnection.fromPartial( value ) }  
+			} catch (e: any) {
+				throw new Error('TxClient:MsgUpdateMessagePassingConnection: Could not create message: ' + e.message)
 			}
 		},
 		
@@ -172,19 +172,11 @@ export const txClient = ({ signer, prefix, addr }: TxClientOptions = { addr: "ht
 			}
 		},
 		
-		msgUpdateMessagePassingConnection({ value }: msgUpdateMessagePassingConnectionParams): EncodeObject {
+		msgUpdateMaturityParams({ value }: msgUpdateMaturityParamsParams): EncodeObject {
 			try {
-				return { typeUrl: "/prismfinance.prismcore.assets.MsgUpdateMessagePassingConnection", value: MsgUpdateMessagePassingConnection.fromPartial( value ) }  
+				return { typeUrl: "/prismfinance.prismcore.assets.MsgUpdateMaturityParams", value: MsgUpdateMaturityParams.fromPartial( value ) }  
 			} catch (e: any) {
-				throw new Error('TxClient:MsgUpdateMessagePassingConnection: Could not create message: ' + e.message)
-			}
-		},
-		
-		msgDelistAsset({ value }: msgDelistAssetParams): EncodeObject {
-			try {
-				return { typeUrl: "/prismfinance.prismcore.assets.MsgDelistAsset", value: MsgDelistAsset.fromPartial( value ) }  
-			} catch (e: any) {
-				throw new Error('TxClient:MsgDelistAsset: Could not create message: ' + e.message)
+				throw new Error('TxClient:MsgUpdateMaturityParams: Could not create message: ' + e.message)
 			}
 		},
 		
@@ -193,6 +185,14 @@ export const txClient = ({ signer, prefix, addr }: TxClientOptions = { addr: "ht
 				return { typeUrl: "/prismfinance.prismcore.assets.MsgUpdateFeeRatios", value: MsgUpdateFeeRatios.fromPartial( value ) }  
 			} catch (e: any) {
 				throw new Error('TxClient:MsgUpdateFeeRatios: Could not create message: ' + e.message)
+			}
+		},
+		
+		msgDelistAsset({ value }: msgDelistAssetParams): EncodeObject {
+			try {
+				return { typeUrl: "/prismfinance.prismcore.assets.MsgDelistAsset", value: MsgDelistAsset.fromPartial( value ) }  
+			} catch (e: any) {
+				throw new Error('TxClient:MsgDelistAsset: Could not create message: ' + e.message)
 			}
 		},
 		

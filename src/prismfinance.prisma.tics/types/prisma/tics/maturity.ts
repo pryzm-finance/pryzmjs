@@ -19,6 +19,7 @@ export interface Maturity {
 
 export interface QueryAllMaturitiesRequest {
   asset: string;
+  active: string;
   pagination: PageRequest | undefined;
 }
 
@@ -149,7 +150,7 @@ export const Maturity = {
 };
 
 function createBaseQueryAllMaturitiesRequest(): QueryAllMaturitiesRequest {
-  return { asset: "", pagination: undefined };
+  return { asset: "", active: "", pagination: undefined };
 }
 
 export const QueryAllMaturitiesRequest = {
@@ -157,8 +158,11 @@ export const QueryAllMaturitiesRequest = {
     if (message.asset !== "") {
       writer.uint32(10).string(message.asset);
     }
+    if (message.active !== "") {
+      writer.uint32(18).string(message.active);
+    }
     if (message.pagination !== undefined) {
-      PageRequest.encode(message.pagination, writer.uint32(18).fork()).ldelim();
+      PageRequest.encode(message.pagination, writer.uint32(26).fork()).ldelim();
     }
     return writer;
   },
@@ -174,6 +178,9 @@ export const QueryAllMaturitiesRequest = {
           message.asset = reader.string();
           break;
         case 2:
+          message.active = reader.string();
+          break;
+        case 3:
           message.pagination = PageRequest.decode(reader, reader.uint32());
           break;
         default:
@@ -187,6 +194,7 @@ export const QueryAllMaturitiesRequest = {
   fromJSON(object: any): QueryAllMaturitiesRequest {
     return {
       asset: isSet(object.asset) ? String(object.asset) : "",
+      active: isSet(object.active) ? String(object.active) : "",
       pagination: isSet(object.pagination) ? PageRequest.fromJSON(object.pagination) : undefined,
     };
   },
@@ -194,6 +202,7 @@ export const QueryAllMaturitiesRequest = {
   toJSON(message: QueryAllMaturitiesRequest): unknown {
     const obj: any = {};
     message.asset !== undefined && (obj.asset = message.asset);
+    message.active !== undefined && (obj.active = message.active);
     message.pagination !== undefined
       && (obj.pagination = message.pagination ? PageRequest.toJSON(message.pagination) : undefined);
     return obj;
@@ -202,6 +211,7 @@ export const QueryAllMaturitiesRequest = {
   fromPartial<I extends Exact<DeepPartial<QueryAllMaturitiesRequest>, I>>(object: I): QueryAllMaturitiesRequest {
     const message = createBaseQueryAllMaturitiesRequest();
     message.asset = object.asset ?? "";
+    message.active = object.active ?? "";
     message.pagination = (object.pagination !== undefined && object.pagination !== null)
       ? PageRequest.fromPartial(object.pagination)
       : undefined;
