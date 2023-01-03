@@ -134,7 +134,6 @@ pnpm build
 ## Publish
 
 ```bash
-
 npm publish
 # or
 pnpm publish
