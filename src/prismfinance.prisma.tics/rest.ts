@@ -205,7 +205,7 @@ export interface TicsMaturity {
   /** @format date-time */
   block_time?: string;
   roi?: string;
-  cagr?: string;
+  y_apy?: string;
   p_apy?: string;
   y_price?: string;
   p_price?: string;
