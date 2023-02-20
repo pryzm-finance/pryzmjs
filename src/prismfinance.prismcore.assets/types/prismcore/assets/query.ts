@@ -1,9 +1,10 @@
 /* eslint-disable */
 import _m0 from "protobufjs/minimal";
 import { PageRequest, PageResponse } from "../../cosmos/base/query/v1beta1/pagination";
+import { ExchangeRate } from "./exchange_rate";
 import { MaturityLevel } from "./maturity_level";
 import { Params } from "./params";
-import { WhitelistedAsset } from "./whitelisted_asset";
+import { RefractableAsset } from "./refractable_asset";
 
 export const protobufPackage = "prismfinance.prismcore.assets";
 
@@ -17,27 +18,27 @@ export interface QueryParamsResponse {
   params: Params | undefined;
 }
 
-export interface QueryGetWhitelistedAssetRequest {
-  baseDenom: string;
+export interface QueryGetRefractableAssetRequest {
+  assetId: string;
 }
 
-export interface QueryGetWhitelistedAssetResponse {
-  whitelistedAsset: WhitelistedAsset | undefined;
+export interface QueryGetRefractableAssetResponse {
+  asset: RefractableAsset | undefined;
 }
 
-export interface QueryAllWhitelistedAssetRequest {
-  refractable: string;
+export interface QueryAllRefractableAssetRequest {
+  enabled: string;
   pagination: PageRequest | undefined;
 }
 
-export interface QueryAllWhitelistedAssetResponse {
-  whitelistedAsset: WhitelistedAsset[];
+export interface QueryAllRefractableAssetResponse {
+  assets: RefractableAsset[];
   pagination: PageResponse | undefined;
 }
 
 export interface QueryGetMaturityLevelRequest {
   active: boolean;
-  asset: string;
+  assetId: string;
   symbol: string;
 }
 
@@ -46,14 +47,31 @@ export interface QueryGetMaturityLevelResponse {
 }
 
 export interface QueryAllMaturityLevelRequest {
-  refractable: string;
   active: boolean;
-  asset: string;
+  assetId: string;
+  assetEnabled: string;
   pagination: PageRequest | undefined;
 }
 
 export interface QueryAllMaturityLevelResponse {
   maturityLevel: MaturityLevel[];
+  pagination: PageResponse | undefined;
+}
+
+export interface QueryGetExchangeRateRequest {
+  assetId: string;
+}
+
+export interface QueryGetExchangeRateResponse {
+  exchangeRate: ExchangeRate | undefined;
+}
+
+export interface QueryAllExchangeRateRequest {
+  pagination: PageRequest | undefined;
+}
+
+export interface QueryAllExchangeRateResponse {
+  exchangeRate: ExchangeRate[];
   pagination: PageResponse | undefined;
 }
 
@@ -145,27 +163,27 @@ export const QueryParamsResponse = {
   },
 };
 
-function createBaseQueryGetWhitelistedAssetRequest(): QueryGetWhitelistedAssetRequest {
-  return { baseDenom: "" };
+function createBaseQueryGetRefractableAssetRequest(): QueryGetRefractableAssetRequest {
+  return { assetId: "" };
 }
 
-export const QueryGetWhitelistedAssetRequest = {
-  encode(message: QueryGetWhitelistedAssetRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (message.baseDenom !== "") {
-      writer.uint32(10).string(message.baseDenom);
+export const QueryGetRefractableAssetRequest = {
+  encode(message: QueryGetRefractableAssetRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.assetId !== "") {
+      writer.uint32(10).string(message.assetId);
     }
     return writer;
   },
 
-  decode(input: _m0.Reader | Uint8Array, length?: number): QueryGetWhitelistedAssetRequest {
+  decode(input: _m0.Reader | Uint8Array, length?: number): QueryGetRefractableAssetRequest {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseQueryGetWhitelistedAssetRequest();
+    const message = createBaseQueryGetRefractableAssetRequest();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.baseDenom = reader.string();
+          message.assetId = reader.string();
           break;
         default:
           reader.skipType(tag & 7);
@@ -175,46 +193,46 @@ export const QueryGetWhitelistedAssetRequest = {
     return message;
   },
 
-  fromJSON(object: any): QueryGetWhitelistedAssetRequest {
-    return { baseDenom: isSet(object.baseDenom) ? String(object.baseDenom) : "" };
+  fromJSON(object: any): QueryGetRefractableAssetRequest {
+    return { assetId: isSet(object.assetId) ? String(object.assetId) : "" };
   },
 
-  toJSON(message: QueryGetWhitelistedAssetRequest): unknown {
+  toJSON(message: QueryGetRefractableAssetRequest): unknown {
     const obj: any = {};
-    message.baseDenom !== undefined && (obj.baseDenom = message.baseDenom);
+    message.assetId !== undefined && (obj.assetId = message.assetId);
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<QueryGetWhitelistedAssetRequest>, I>>(
+  fromPartial<I extends Exact<DeepPartial<QueryGetRefractableAssetRequest>, I>>(
     object: I,
-  ): QueryGetWhitelistedAssetRequest {
-    const message = createBaseQueryGetWhitelistedAssetRequest();
-    message.baseDenom = object.baseDenom ?? "";
+  ): QueryGetRefractableAssetRequest {
+    const message = createBaseQueryGetRefractableAssetRequest();
+    message.assetId = object.assetId ?? "";
     return message;
   },
 };
 
-function createBaseQueryGetWhitelistedAssetResponse(): QueryGetWhitelistedAssetResponse {
-  return { whitelistedAsset: undefined };
+function createBaseQueryGetRefractableAssetResponse(): QueryGetRefractableAssetResponse {
+  return { asset: undefined };
 }
 
-export const QueryGetWhitelistedAssetResponse = {
-  encode(message: QueryGetWhitelistedAssetResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (message.whitelistedAsset !== undefined) {
-      WhitelistedAsset.encode(message.whitelistedAsset, writer.uint32(10).fork()).ldelim();
+export const QueryGetRefractableAssetResponse = {
+  encode(message: QueryGetRefractableAssetResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.asset !== undefined) {
+      RefractableAsset.encode(message.asset, writer.uint32(10).fork()).ldelim();
     }
     return writer;
   },
 
-  decode(input: _m0.Reader | Uint8Array, length?: number): QueryGetWhitelistedAssetResponse {
+  decode(input: _m0.Reader | Uint8Array, length?: number): QueryGetRefractableAssetResponse {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseQueryGetWhitelistedAssetResponse();
+    const message = createBaseQueryGetRefractableAssetResponse();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.whitelistedAsset = WhitelistedAsset.decode(reader, reader.uint32());
+          message.asset = RefractableAsset.decode(reader, reader.uint32());
           break;
         default:
           reader.skipType(tag & 7);
@@ -224,39 +242,35 @@ export const QueryGetWhitelistedAssetResponse = {
     return message;
   },
 
-  fromJSON(object: any): QueryGetWhitelistedAssetResponse {
-    return {
-      whitelistedAsset: isSet(object.whitelistedAsset) ? WhitelistedAsset.fromJSON(object.whitelistedAsset) : undefined,
-    };
+  fromJSON(object: any): QueryGetRefractableAssetResponse {
+    return { asset: isSet(object.asset) ? RefractableAsset.fromJSON(object.asset) : undefined };
   },
 
-  toJSON(message: QueryGetWhitelistedAssetResponse): unknown {
+  toJSON(message: QueryGetRefractableAssetResponse): unknown {
     const obj: any = {};
-    message.whitelistedAsset !== undefined && (obj.whitelistedAsset = message.whitelistedAsset
-      ? WhitelistedAsset.toJSON(message.whitelistedAsset)
-      : undefined);
+    message.asset !== undefined && (obj.asset = message.asset ? RefractableAsset.toJSON(message.asset) : undefined);
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<QueryGetWhitelistedAssetResponse>, I>>(
+  fromPartial<I extends Exact<DeepPartial<QueryGetRefractableAssetResponse>, I>>(
     object: I,
-  ): QueryGetWhitelistedAssetResponse {
-    const message = createBaseQueryGetWhitelistedAssetResponse();
-    message.whitelistedAsset = (object.whitelistedAsset !== undefined && object.whitelistedAsset !== null)
-      ? WhitelistedAsset.fromPartial(object.whitelistedAsset)
+  ): QueryGetRefractableAssetResponse {
+    const message = createBaseQueryGetRefractableAssetResponse();
+    message.asset = (object.asset !== undefined && object.asset !== null)
+      ? RefractableAsset.fromPartial(object.asset)
       : undefined;
     return message;
   },
 };
 
-function createBaseQueryAllWhitelistedAssetRequest(): QueryAllWhitelistedAssetRequest {
-  return { refractable: "", pagination: undefined };
+function createBaseQueryAllRefractableAssetRequest(): QueryAllRefractableAssetRequest {
+  return { enabled: "", pagination: undefined };
 }
 
-export const QueryAllWhitelistedAssetRequest = {
-  encode(message: QueryAllWhitelistedAssetRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (message.refractable !== "") {
-      writer.uint32(10).string(message.refractable);
+export const QueryAllRefractableAssetRequest = {
+  encode(message: QueryAllRefractableAssetRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.enabled !== "") {
+      writer.uint32(10).string(message.enabled);
     }
     if (message.pagination !== undefined) {
       PageRequest.encode(message.pagination, writer.uint32(18).fork()).ldelim();
@@ -264,15 +278,15 @@ export const QueryAllWhitelistedAssetRequest = {
     return writer;
   },
 
-  decode(input: _m0.Reader | Uint8Array, length?: number): QueryAllWhitelistedAssetRequest {
+  decode(input: _m0.Reader | Uint8Array, length?: number): QueryAllRefractableAssetRequest {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseQueryAllWhitelistedAssetRequest();
+    const message = createBaseQueryAllRefractableAssetRequest();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.refractable = reader.string();
+          message.enabled = reader.string();
           break;
         case 2:
           message.pagination = PageRequest.decode(reader, reader.uint32());
@@ -285,26 +299,26 @@ export const QueryAllWhitelistedAssetRequest = {
     return message;
   },
 
-  fromJSON(object: any): QueryAllWhitelistedAssetRequest {
+  fromJSON(object: any): QueryAllRefractableAssetRequest {
     return {
-      refractable: isSet(object.refractable) ? String(object.refractable) : "",
+      enabled: isSet(object.enabled) ? String(object.enabled) : "",
       pagination: isSet(object.pagination) ? PageRequest.fromJSON(object.pagination) : undefined,
     };
   },
 
-  toJSON(message: QueryAllWhitelistedAssetRequest): unknown {
+  toJSON(message: QueryAllRefractableAssetRequest): unknown {
     const obj: any = {};
-    message.refractable !== undefined && (obj.refractable = message.refractable);
+    message.enabled !== undefined && (obj.enabled = message.enabled);
     message.pagination !== undefined
       && (obj.pagination = message.pagination ? PageRequest.toJSON(message.pagination) : undefined);
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<QueryAllWhitelistedAssetRequest>, I>>(
+  fromPartial<I extends Exact<DeepPartial<QueryAllRefractableAssetRequest>, I>>(
     object: I,
-  ): QueryAllWhitelistedAssetRequest {
-    const message = createBaseQueryAllWhitelistedAssetRequest();
-    message.refractable = object.refractable ?? "";
+  ): QueryAllRefractableAssetRequest {
+    const message = createBaseQueryAllRefractableAssetRequest();
+    message.enabled = object.enabled ?? "";
     message.pagination = (object.pagination !== undefined && object.pagination !== null)
       ? PageRequest.fromPartial(object.pagination)
       : undefined;
@@ -312,14 +326,14 @@ export const QueryAllWhitelistedAssetRequest = {
   },
 };
 
-function createBaseQueryAllWhitelistedAssetResponse(): QueryAllWhitelistedAssetResponse {
-  return { whitelistedAsset: [], pagination: undefined };
+function createBaseQueryAllRefractableAssetResponse(): QueryAllRefractableAssetResponse {
+  return { assets: [], pagination: undefined };
 }
 
-export const QueryAllWhitelistedAssetResponse = {
-  encode(message: QueryAllWhitelistedAssetResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    for (const v of message.whitelistedAsset) {
-      WhitelistedAsset.encode(v!, writer.uint32(10).fork()).ldelim();
+export const QueryAllRefractableAssetResponse = {
+  encode(message: QueryAllRefractableAssetResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    for (const v of message.assets) {
+      RefractableAsset.encode(v!, writer.uint32(10).fork()).ldelim();
     }
     if (message.pagination !== undefined) {
       PageResponse.encode(message.pagination, writer.uint32(18).fork()).ldelim();
@@ -327,15 +341,15 @@ export const QueryAllWhitelistedAssetResponse = {
     return writer;
   },
 
-  decode(input: _m0.Reader | Uint8Array, length?: number): QueryAllWhitelistedAssetResponse {
+  decode(input: _m0.Reader | Uint8Array, length?: number): QueryAllRefractableAssetResponse {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseQueryAllWhitelistedAssetResponse();
+    const message = createBaseQueryAllRefractableAssetResponse();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.whitelistedAsset.push(WhitelistedAsset.decode(reader, reader.uint32()));
+          message.assets.push(RefractableAsset.decode(reader, reader.uint32()));
           break;
         case 2:
           message.pagination = PageResponse.decode(reader, reader.uint32());
@@ -348,32 +362,30 @@ export const QueryAllWhitelistedAssetResponse = {
     return message;
   },
 
-  fromJSON(object: any): QueryAllWhitelistedAssetResponse {
+  fromJSON(object: any): QueryAllRefractableAssetResponse {
     return {
-      whitelistedAsset: Array.isArray(object?.whitelistedAsset)
-        ? object.whitelistedAsset.map((e: any) => WhitelistedAsset.fromJSON(e))
-        : [],
+      assets: Array.isArray(object?.assets) ? object.assets.map((e: any) => RefractableAsset.fromJSON(e)) : [],
       pagination: isSet(object.pagination) ? PageResponse.fromJSON(object.pagination) : undefined,
     };
   },
 
-  toJSON(message: QueryAllWhitelistedAssetResponse): unknown {
+  toJSON(message: QueryAllRefractableAssetResponse): unknown {
     const obj: any = {};
-    if (message.whitelistedAsset) {
-      obj.whitelistedAsset = message.whitelistedAsset.map((e) => e ? WhitelistedAsset.toJSON(e) : undefined);
+    if (message.assets) {
+      obj.assets = message.assets.map((e) => e ? RefractableAsset.toJSON(e) : undefined);
     } else {
-      obj.whitelistedAsset = [];
+      obj.assets = [];
     }
     message.pagination !== undefined
       && (obj.pagination = message.pagination ? PageResponse.toJSON(message.pagination) : undefined);
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<QueryAllWhitelistedAssetResponse>, I>>(
+  fromPartial<I extends Exact<DeepPartial<QueryAllRefractableAssetResponse>, I>>(
     object: I,
-  ): QueryAllWhitelistedAssetResponse {
-    const message = createBaseQueryAllWhitelistedAssetResponse();
-    message.whitelistedAsset = object.whitelistedAsset?.map((e) => WhitelistedAsset.fromPartial(e)) || [];
+  ): QueryAllRefractableAssetResponse {
+    const message = createBaseQueryAllRefractableAssetResponse();
+    message.assets = object.assets?.map((e) => RefractableAsset.fromPartial(e)) || [];
     message.pagination = (object.pagination !== undefined && object.pagination !== null)
       ? PageResponse.fromPartial(object.pagination)
       : undefined;
@@ -382,7 +394,7 @@ export const QueryAllWhitelistedAssetResponse = {
 };
 
 function createBaseQueryGetMaturityLevelRequest(): QueryGetMaturityLevelRequest {
-  return { active: false, asset: "", symbol: "" };
+  return { active: false, assetId: "", symbol: "" };
 }
 
 export const QueryGetMaturityLevelRequest = {
@@ -390,8 +402,8 @@ export const QueryGetMaturityLevelRequest = {
     if (message.active === true) {
       writer.uint32(8).bool(message.active);
     }
-    if (message.asset !== "") {
-      writer.uint32(18).string(message.asset);
+    if (message.assetId !== "") {
+      writer.uint32(18).string(message.assetId);
     }
     if (message.symbol !== "") {
       writer.uint32(26).string(message.symbol);
@@ -410,7 +422,7 @@ export const QueryGetMaturityLevelRequest = {
           message.active = reader.bool();
           break;
         case 2:
-          message.asset = reader.string();
+          message.assetId = reader.string();
           break;
         case 3:
           message.symbol = reader.string();
@@ -426,7 +438,7 @@ export const QueryGetMaturityLevelRequest = {
   fromJSON(object: any): QueryGetMaturityLevelRequest {
     return {
       active: isSet(object.active) ? Boolean(object.active) : false,
-      asset: isSet(object.asset) ? String(object.asset) : "",
+      assetId: isSet(object.assetId) ? String(object.assetId) : "",
       symbol: isSet(object.symbol) ? String(object.symbol) : "",
     };
   },
@@ -434,7 +446,7 @@ export const QueryGetMaturityLevelRequest = {
   toJSON(message: QueryGetMaturityLevelRequest): unknown {
     const obj: any = {};
     message.active !== undefined && (obj.active = message.active);
-    message.asset !== undefined && (obj.asset = message.asset);
+    message.assetId !== undefined && (obj.assetId = message.assetId);
     message.symbol !== undefined && (obj.symbol = message.symbol);
     return obj;
   },
@@ -442,7 +454,7 @@ export const QueryGetMaturityLevelRequest = {
   fromPartial<I extends Exact<DeepPartial<QueryGetMaturityLevelRequest>, I>>(object: I): QueryGetMaturityLevelRequest {
     const message = createBaseQueryGetMaturityLevelRequest();
     message.active = object.active ?? false;
-    message.asset = object.asset ?? "";
+    message.assetId = object.assetId ?? "";
     message.symbol = object.symbol ?? "";
     return message;
   },
@@ -501,19 +513,19 @@ export const QueryGetMaturityLevelResponse = {
 };
 
 function createBaseQueryAllMaturityLevelRequest(): QueryAllMaturityLevelRequest {
-  return { refractable: "", active: false, asset: "", pagination: undefined };
+  return { active: false, assetId: "", assetEnabled: "", pagination: undefined };
 }
 
 export const QueryAllMaturityLevelRequest = {
   encode(message: QueryAllMaturityLevelRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (message.refractable !== "") {
-      writer.uint32(10).string(message.refractable);
-    }
     if (message.active === true) {
-      writer.uint32(16).bool(message.active);
+      writer.uint32(8).bool(message.active);
     }
-    if (message.asset !== "") {
-      writer.uint32(26).string(message.asset);
+    if (message.assetId !== "") {
+      writer.uint32(18).string(message.assetId);
+    }
+    if (message.assetEnabled !== "") {
+      writer.uint32(26).string(message.assetEnabled);
     }
     if (message.pagination !== undefined) {
       PageRequest.encode(message.pagination, writer.uint32(34).fork()).ldelim();
@@ -529,13 +541,13 @@ export const QueryAllMaturityLevelRequest = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.refractable = reader.string();
-          break;
-        case 2:
           message.active = reader.bool();
           break;
+        case 2:
+          message.assetId = reader.string();
+          break;
         case 3:
-          message.asset = reader.string();
+          message.assetEnabled = reader.string();
           break;
         case 4:
           message.pagination = PageRequest.decode(reader, reader.uint32());
@@ -550,18 +562,18 @@ export const QueryAllMaturityLevelRequest = {
 
   fromJSON(object: any): QueryAllMaturityLevelRequest {
     return {
-      refractable: isSet(object.refractable) ? String(object.refractable) : "",
       active: isSet(object.active) ? Boolean(object.active) : false,
-      asset: isSet(object.asset) ? String(object.asset) : "",
+      assetId: isSet(object.assetId) ? String(object.assetId) : "",
+      assetEnabled: isSet(object.assetEnabled) ? String(object.assetEnabled) : "",
       pagination: isSet(object.pagination) ? PageRequest.fromJSON(object.pagination) : undefined,
     };
   },
 
   toJSON(message: QueryAllMaturityLevelRequest): unknown {
     const obj: any = {};
-    message.refractable !== undefined && (obj.refractable = message.refractable);
     message.active !== undefined && (obj.active = message.active);
-    message.asset !== undefined && (obj.asset = message.asset);
+    message.assetId !== undefined && (obj.assetId = message.assetId);
+    message.assetEnabled !== undefined && (obj.assetEnabled = message.assetEnabled);
     message.pagination !== undefined
       && (obj.pagination = message.pagination ? PageRequest.toJSON(message.pagination) : undefined);
     return obj;
@@ -569,9 +581,9 @@ export const QueryAllMaturityLevelRequest = {
 
   fromPartial<I extends Exact<DeepPartial<QueryAllMaturityLevelRequest>, I>>(object: I): QueryAllMaturityLevelRequest {
     const message = createBaseQueryAllMaturityLevelRequest();
-    message.refractable = object.refractable ?? "";
     message.active = object.active ?? false;
-    message.asset = object.asset ?? "";
+    message.assetId = object.assetId ?? "";
+    message.assetEnabled = object.assetEnabled ?? "";
     message.pagination = (object.pagination !== undefined && object.pagination !== null)
       ? PageRequest.fromPartial(object.pagination)
       : undefined;
@@ -648,18 +660,236 @@ export const QueryAllMaturityLevelResponse = {
   },
 };
 
+function createBaseQueryGetExchangeRateRequest(): QueryGetExchangeRateRequest {
+  return { assetId: "" };
+}
+
+export const QueryGetExchangeRateRequest = {
+  encode(message: QueryGetExchangeRateRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.assetId !== "") {
+      writer.uint32(10).string(message.assetId);
+    }
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): QueryGetExchangeRateRequest {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseQueryGetExchangeRateRequest();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.assetId = reader.string();
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): QueryGetExchangeRateRequest {
+    return { assetId: isSet(object.assetId) ? String(object.assetId) : "" };
+  },
+
+  toJSON(message: QueryGetExchangeRateRequest): unknown {
+    const obj: any = {};
+    message.assetId !== undefined && (obj.assetId = message.assetId);
+    return obj;
+  },
+
+  fromPartial<I extends Exact<DeepPartial<QueryGetExchangeRateRequest>, I>>(object: I): QueryGetExchangeRateRequest {
+    const message = createBaseQueryGetExchangeRateRequest();
+    message.assetId = object.assetId ?? "";
+    return message;
+  },
+};
+
+function createBaseQueryGetExchangeRateResponse(): QueryGetExchangeRateResponse {
+  return { exchangeRate: undefined };
+}
+
+export const QueryGetExchangeRateResponse = {
+  encode(message: QueryGetExchangeRateResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.exchangeRate !== undefined) {
+      ExchangeRate.encode(message.exchangeRate, writer.uint32(10).fork()).ldelim();
+    }
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): QueryGetExchangeRateResponse {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseQueryGetExchangeRateResponse();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.exchangeRate = ExchangeRate.decode(reader, reader.uint32());
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): QueryGetExchangeRateResponse {
+    return { exchangeRate: isSet(object.exchangeRate) ? ExchangeRate.fromJSON(object.exchangeRate) : undefined };
+  },
+
+  toJSON(message: QueryGetExchangeRateResponse): unknown {
+    const obj: any = {};
+    message.exchangeRate !== undefined
+      && (obj.exchangeRate = message.exchangeRate ? ExchangeRate.toJSON(message.exchangeRate) : undefined);
+    return obj;
+  },
+
+  fromPartial<I extends Exact<DeepPartial<QueryGetExchangeRateResponse>, I>>(object: I): QueryGetExchangeRateResponse {
+    const message = createBaseQueryGetExchangeRateResponse();
+    message.exchangeRate = (object.exchangeRate !== undefined && object.exchangeRate !== null)
+      ? ExchangeRate.fromPartial(object.exchangeRate)
+      : undefined;
+    return message;
+  },
+};
+
+function createBaseQueryAllExchangeRateRequest(): QueryAllExchangeRateRequest {
+  return { pagination: undefined };
+}
+
+export const QueryAllExchangeRateRequest = {
+  encode(message: QueryAllExchangeRateRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.pagination !== undefined) {
+      PageRequest.encode(message.pagination, writer.uint32(10).fork()).ldelim();
+    }
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): QueryAllExchangeRateRequest {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseQueryAllExchangeRateRequest();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.pagination = PageRequest.decode(reader, reader.uint32());
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): QueryAllExchangeRateRequest {
+    return { pagination: isSet(object.pagination) ? PageRequest.fromJSON(object.pagination) : undefined };
+  },
+
+  toJSON(message: QueryAllExchangeRateRequest): unknown {
+    const obj: any = {};
+    message.pagination !== undefined
+      && (obj.pagination = message.pagination ? PageRequest.toJSON(message.pagination) : undefined);
+    return obj;
+  },
+
+  fromPartial<I extends Exact<DeepPartial<QueryAllExchangeRateRequest>, I>>(object: I): QueryAllExchangeRateRequest {
+    const message = createBaseQueryAllExchangeRateRequest();
+    message.pagination = (object.pagination !== undefined && object.pagination !== null)
+      ? PageRequest.fromPartial(object.pagination)
+      : undefined;
+    return message;
+  },
+};
+
+function createBaseQueryAllExchangeRateResponse(): QueryAllExchangeRateResponse {
+  return { exchangeRate: [], pagination: undefined };
+}
+
+export const QueryAllExchangeRateResponse = {
+  encode(message: QueryAllExchangeRateResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    for (const v of message.exchangeRate) {
+      ExchangeRate.encode(v!, writer.uint32(10).fork()).ldelim();
+    }
+    if (message.pagination !== undefined) {
+      PageResponse.encode(message.pagination, writer.uint32(18).fork()).ldelim();
+    }
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): QueryAllExchangeRateResponse {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseQueryAllExchangeRateResponse();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.exchangeRate.push(ExchangeRate.decode(reader, reader.uint32()));
+          break;
+        case 2:
+          message.pagination = PageResponse.decode(reader, reader.uint32());
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): QueryAllExchangeRateResponse {
+    return {
+      exchangeRate: Array.isArray(object?.exchangeRate)
+        ? object.exchangeRate.map((e: any) => ExchangeRate.fromJSON(e))
+        : [],
+      pagination: isSet(object.pagination) ? PageResponse.fromJSON(object.pagination) : undefined,
+    };
+  },
+
+  toJSON(message: QueryAllExchangeRateResponse): unknown {
+    const obj: any = {};
+    if (message.exchangeRate) {
+      obj.exchangeRate = message.exchangeRate.map((e) => e ? ExchangeRate.toJSON(e) : undefined);
+    } else {
+      obj.exchangeRate = [];
+    }
+    message.pagination !== undefined
+      && (obj.pagination = message.pagination ? PageResponse.toJSON(message.pagination) : undefined);
+    return obj;
+  },
+
+  fromPartial<I extends Exact<DeepPartial<QueryAllExchangeRateResponse>, I>>(object: I): QueryAllExchangeRateResponse {
+    const message = createBaseQueryAllExchangeRateResponse();
+    message.exchangeRate = object.exchangeRate?.map((e) => ExchangeRate.fromPartial(e)) || [];
+    message.pagination = (object.pagination !== undefined && object.pagination !== null)
+      ? PageResponse.fromPartial(object.pagination)
+      : undefined;
+    return message;
+  },
+};
+
 /** Query defines the gRPC querier service. */
 export interface Query {
   /** Parameters queries the parameters of the module. */
   Params(request: QueryParamsRequest): Promise<QueryParamsResponse>;
-  /** Queries a WhitelistedAsset by index. */
-  WhitelistedAsset(request: QueryGetWhitelistedAssetRequest): Promise<QueryGetWhitelistedAssetResponse>;
-  /** Queries a list of WhitelistedAsset items. */
-  WhitelistedAssetAll(request: QueryAllWhitelistedAssetRequest): Promise<QueryAllWhitelistedAssetResponse>;
+  /** Queries a RefractableAsset by index. */
+  RefractableAsset(request: QueryGetRefractableAssetRequest): Promise<QueryGetRefractableAssetResponse>;
+  /** Queries a list of RefractableAsset items. */
+  RefractableAssetAll(request: QueryAllRefractableAssetRequest): Promise<QueryAllRefractableAssetResponse>;
   /** Queries a MaturityLevel by index. */
   MaturityLevel(request: QueryGetMaturityLevelRequest): Promise<QueryGetMaturityLevelResponse>;
   /** Queries a list of MaturityLevel items. */
   MaturityLevelAll(request: QueryAllMaturityLevelRequest): Promise<QueryAllMaturityLevelResponse>;
+  /** Queries a AssetExchangeRate by index. */
+  ExchangeRate(request: QueryGetExchangeRateRequest): Promise<QueryGetExchangeRateResponse>;
+  /** Queries a list of ExchangeRate items. */
+  ExchangeRateAll(request: QueryAllExchangeRateRequest): Promise<QueryAllExchangeRateResponse>;
 }
 
 export class QueryClientImpl implements Query {
@@ -667,10 +897,12 @@ export class QueryClientImpl implements Query {
   constructor(rpc: Rpc) {
     this.rpc = rpc;
     this.Params = this.Params.bind(this);
-    this.WhitelistedAsset = this.WhitelistedAsset.bind(this);
-    this.WhitelistedAssetAll = this.WhitelistedAssetAll.bind(this);
+    this.RefractableAsset = this.RefractableAsset.bind(this);
+    this.RefractableAssetAll = this.RefractableAssetAll.bind(this);
     this.MaturityLevel = this.MaturityLevel.bind(this);
     this.MaturityLevelAll = this.MaturityLevelAll.bind(this);
+    this.ExchangeRate = this.ExchangeRate.bind(this);
+    this.ExchangeRateAll = this.ExchangeRateAll.bind(this);
   }
   Params(request: QueryParamsRequest): Promise<QueryParamsResponse> {
     const data = QueryParamsRequest.encode(request).finish();
@@ -678,16 +910,16 @@ export class QueryClientImpl implements Query {
     return promise.then((data) => QueryParamsResponse.decode(new _m0.Reader(data)));
   }
 
-  WhitelistedAsset(request: QueryGetWhitelistedAssetRequest): Promise<QueryGetWhitelistedAssetResponse> {
-    const data = QueryGetWhitelistedAssetRequest.encode(request).finish();
-    const promise = this.rpc.request("prismfinance.prismcore.assets.Query", "WhitelistedAsset", data);
-    return promise.then((data) => QueryGetWhitelistedAssetResponse.decode(new _m0.Reader(data)));
+  RefractableAsset(request: QueryGetRefractableAssetRequest): Promise<QueryGetRefractableAssetResponse> {
+    const data = QueryGetRefractableAssetRequest.encode(request).finish();
+    const promise = this.rpc.request("prismfinance.prismcore.assets.Query", "RefractableAsset", data);
+    return promise.then((data) => QueryGetRefractableAssetResponse.decode(new _m0.Reader(data)));
   }
 
-  WhitelistedAssetAll(request: QueryAllWhitelistedAssetRequest): Promise<QueryAllWhitelistedAssetResponse> {
-    const data = QueryAllWhitelistedAssetRequest.encode(request).finish();
-    const promise = this.rpc.request("prismfinance.prismcore.assets.Query", "WhitelistedAssetAll", data);
-    return promise.then((data) => QueryAllWhitelistedAssetResponse.decode(new _m0.Reader(data)));
+  RefractableAssetAll(request: QueryAllRefractableAssetRequest): Promise<QueryAllRefractableAssetResponse> {
+    const data = QueryAllRefractableAssetRequest.encode(request).finish();
+    const promise = this.rpc.request("prismfinance.prismcore.assets.Query", "RefractableAssetAll", data);
+    return promise.then((data) => QueryAllRefractableAssetResponse.decode(new _m0.Reader(data)));
   }
 
   MaturityLevel(request: QueryGetMaturityLevelRequest): Promise<QueryGetMaturityLevelResponse> {
@@ -700,6 +932,18 @@ export class QueryClientImpl implements Query {
     const data = QueryAllMaturityLevelRequest.encode(request).finish();
     const promise = this.rpc.request("prismfinance.prismcore.assets.Query", "MaturityLevelAll", data);
     return promise.then((data) => QueryAllMaturityLevelResponse.decode(new _m0.Reader(data)));
+  }
+
+  ExchangeRate(request: QueryGetExchangeRateRequest): Promise<QueryGetExchangeRateResponse> {
+    const data = QueryGetExchangeRateRequest.encode(request).finish();
+    const promise = this.rpc.request("prismfinance.prismcore.assets.Query", "ExchangeRate", data);
+    return promise.then((data) => QueryGetExchangeRateResponse.decode(new _m0.Reader(data)));
+  }
+
+  ExchangeRateAll(request: QueryAllExchangeRateRequest): Promise<QueryAllExchangeRateResponse> {
+    const data = QueryAllExchangeRateRequest.encode(request).finish();
+    const promise = this.rpc.request("prismfinance.prismcore.assets.Query", "ExchangeRateAll", data);
+    return promise.then((data) => QueryAllExchangeRateResponse.decode(new _m0.Reader(data)));
   }
 }
 

@@ -43,6 +43,8 @@ export enum TreasuryActionType {
 
 export type TreasuryMsgSetActionResponse = object;
 
+export type TreasuryMsgUpdateParamsResponse = object;
+
 /**
  * Params defines the parameters for the module.
  */

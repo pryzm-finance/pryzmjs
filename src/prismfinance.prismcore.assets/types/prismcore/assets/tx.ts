@@ -1,30 +1,29 @@
 /* eslint-disable */
 import _m0 from "protobufjs/minimal";
-import { WhitelistedAsset } from "./whitelisted_asset";
+import { FeeRatios, MaturityParams, RefractableAsset } from "./refractable_asset";
 
 export const protobufPackage = "prismfinance.prismcore.assets";
 
-export interface MsgWhitelistAsset {
+export interface MsgRegisterAsset {
   authority: string;
-  whitelistedAsset: WhitelistedAsset | undefined;
+  asset: RefractableAsset | undefined;
 }
 
-export interface MsgWhitelistAssetResponse {
+export interface MsgRegisterAssetResponse {
 }
 
-export interface MsgDelistAsset {
+export interface MsgDisableAsset {
   authority: string;
-  baseDenom: string;
+  assetId: string;
 }
 
-export interface MsgDelistAssetResponse {
+export interface MsgDisableAssetResponse {
 }
 
 export interface MsgUpdateMaturityParams {
   authority: string;
-  levelsPerYear: number;
-  years: number;
-  baseDenom: string;
+  assetId: string;
+  params: MaturityParams | undefined;
 }
 
 export interface MsgUpdateMaturityParamsResponse {
@@ -32,49 +31,32 @@ export interface MsgUpdateMaturityParamsResponse {
 
 export interface MsgUpdateFeeRatios {
   authority: string;
-  baseDenom: string;
-  cAssetFeeRatio: string;
-  yieldFeeRatio: string;
-  mergeFeeRatio: string;
-  redeemFeeRatio: string;
-  refractFeeRatio: string;
-  cAssetBondFeeRatio: string;
-  cAssetRedeemFeeRatio: string;
-  yStakingClaimRewardFeeRatio: string;
+  assetId: string;
+  feeRatios: FeeRatios | undefined;
 }
 
 export interface MsgUpdateFeeRatiosResponse {
 }
 
-export interface MsgUpdateMessagePassingConnection {
-  authority: string;
-  baseDenom: string;
-  port: string;
-  channel: string;
+function createBaseMsgRegisterAsset(): MsgRegisterAsset {
+  return { authority: "", asset: undefined };
 }
 
-export interface MsgUpdateMessagePassingConnectionResponse {
-}
-
-function createBaseMsgWhitelistAsset(): MsgWhitelistAsset {
-  return { authority: "", whitelistedAsset: undefined };
-}
-
-export const MsgWhitelistAsset = {
-  encode(message: MsgWhitelistAsset, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+export const MsgRegisterAsset = {
+  encode(message: MsgRegisterAsset, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.authority !== "") {
       writer.uint32(10).string(message.authority);
     }
-    if (message.whitelistedAsset !== undefined) {
-      WhitelistedAsset.encode(message.whitelistedAsset, writer.uint32(18).fork()).ldelim();
+    if (message.asset !== undefined) {
+      RefractableAsset.encode(message.asset, writer.uint32(18).fork()).ldelim();
     }
     return writer;
   },
 
-  decode(input: _m0.Reader | Uint8Array, length?: number): MsgWhitelistAsset {
+  decode(input: _m0.Reader | Uint8Array, length?: number): MsgRegisterAsset {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseMsgWhitelistAsset();
+    const message = createBaseMsgRegisterAsset();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -82,7 +64,7 @@ export const MsgWhitelistAsset = {
           message.authority = reader.string();
           break;
         case 2:
-          message.whitelistedAsset = WhitelistedAsset.decode(reader, reader.uint32());
+          message.asset = RefractableAsset.decode(reader, reader.uint32());
           break;
         default:
           reader.skipType(tag & 7);
@@ -92,45 +74,43 @@ export const MsgWhitelistAsset = {
     return message;
   },
 
-  fromJSON(object: any): MsgWhitelistAsset {
+  fromJSON(object: any): MsgRegisterAsset {
     return {
       authority: isSet(object.authority) ? String(object.authority) : "",
-      whitelistedAsset: isSet(object.whitelistedAsset) ? WhitelistedAsset.fromJSON(object.whitelistedAsset) : undefined,
+      asset: isSet(object.asset) ? RefractableAsset.fromJSON(object.asset) : undefined,
     };
   },
 
-  toJSON(message: MsgWhitelistAsset): unknown {
+  toJSON(message: MsgRegisterAsset): unknown {
     const obj: any = {};
     message.authority !== undefined && (obj.authority = message.authority);
-    message.whitelistedAsset !== undefined && (obj.whitelistedAsset = message.whitelistedAsset
-      ? WhitelistedAsset.toJSON(message.whitelistedAsset)
-      : undefined);
+    message.asset !== undefined && (obj.asset = message.asset ? RefractableAsset.toJSON(message.asset) : undefined);
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<MsgWhitelistAsset>, I>>(object: I): MsgWhitelistAsset {
-    const message = createBaseMsgWhitelistAsset();
+  fromPartial<I extends Exact<DeepPartial<MsgRegisterAsset>, I>>(object: I): MsgRegisterAsset {
+    const message = createBaseMsgRegisterAsset();
     message.authority = object.authority ?? "";
-    message.whitelistedAsset = (object.whitelistedAsset !== undefined && object.whitelistedAsset !== null)
-      ? WhitelistedAsset.fromPartial(object.whitelistedAsset)
+    message.asset = (object.asset !== undefined && object.asset !== null)
+      ? RefractableAsset.fromPartial(object.asset)
       : undefined;
     return message;
   },
 };
 
-function createBaseMsgWhitelistAssetResponse(): MsgWhitelistAssetResponse {
+function createBaseMsgRegisterAssetResponse(): MsgRegisterAssetResponse {
   return {};
 }
 
-export const MsgWhitelistAssetResponse = {
-  encode(_: MsgWhitelistAssetResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+export const MsgRegisterAssetResponse = {
+  encode(_: MsgRegisterAssetResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     return writer;
   },
 
-  decode(input: _m0.Reader | Uint8Array, length?: number): MsgWhitelistAssetResponse {
+  decode(input: _m0.Reader | Uint8Array, length?: number): MsgRegisterAssetResponse {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseMsgWhitelistAssetResponse();
+    const message = createBaseMsgRegisterAssetResponse();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -142,40 +122,40 @@ export const MsgWhitelistAssetResponse = {
     return message;
   },
 
-  fromJSON(_: any): MsgWhitelistAssetResponse {
+  fromJSON(_: any): MsgRegisterAssetResponse {
     return {};
   },
 
-  toJSON(_: MsgWhitelistAssetResponse): unknown {
+  toJSON(_: MsgRegisterAssetResponse): unknown {
     const obj: any = {};
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<MsgWhitelistAssetResponse>, I>>(_: I): MsgWhitelistAssetResponse {
-    const message = createBaseMsgWhitelistAssetResponse();
+  fromPartial<I extends Exact<DeepPartial<MsgRegisterAssetResponse>, I>>(_: I): MsgRegisterAssetResponse {
+    const message = createBaseMsgRegisterAssetResponse();
     return message;
   },
 };
 
-function createBaseMsgDelistAsset(): MsgDelistAsset {
-  return { authority: "", baseDenom: "" };
+function createBaseMsgDisableAsset(): MsgDisableAsset {
+  return { authority: "", assetId: "" };
 }
 
-export const MsgDelistAsset = {
-  encode(message: MsgDelistAsset, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+export const MsgDisableAsset = {
+  encode(message: MsgDisableAsset, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.authority !== "") {
       writer.uint32(10).string(message.authority);
     }
-    if (message.baseDenom !== "") {
-      writer.uint32(18).string(message.baseDenom);
+    if (message.assetId !== "") {
+      writer.uint32(18).string(message.assetId);
     }
     return writer;
   },
 
-  decode(input: _m0.Reader | Uint8Array, length?: number): MsgDelistAsset {
+  decode(input: _m0.Reader | Uint8Array, length?: number): MsgDisableAsset {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseMsgDelistAsset();
+    const message = createBaseMsgDisableAsset();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -183,7 +163,7 @@ export const MsgDelistAsset = {
           message.authority = reader.string();
           break;
         case 2:
-          message.baseDenom = reader.string();
+          message.assetId = reader.string();
           break;
         default:
           reader.skipType(tag & 7);
@@ -193,41 +173,41 @@ export const MsgDelistAsset = {
     return message;
   },
 
-  fromJSON(object: any): MsgDelistAsset {
+  fromJSON(object: any): MsgDisableAsset {
     return {
       authority: isSet(object.authority) ? String(object.authority) : "",
-      baseDenom: isSet(object.baseDenom) ? String(object.baseDenom) : "",
+      assetId: isSet(object.assetId) ? String(object.assetId) : "",
     };
   },
 
-  toJSON(message: MsgDelistAsset): unknown {
+  toJSON(message: MsgDisableAsset): unknown {
     const obj: any = {};
     message.authority !== undefined && (obj.authority = message.authority);
-    message.baseDenom !== undefined && (obj.baseDenom = message.baseDenom);
+    message.assetId !== undefined && (obj.assetId = message.assetId);
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<MsgDelistAsset>, I>>(object: I): MsgDelistAsset {
-    const message = createBaseMsgDelistAsset();
+  fromPartial<I extends Exact<DeepPartial<MsgDisableAsset>, I>>(object: I): MsgDisableAsset {
+    const message = createBaseMsgDisableAsset();
     message.authority = object.authority ?? "";
-    message.baseDenom = object.baseDenom ?? "";
+    message.assetId = object.assetId ?? "";
     return message;
   },
 };
 
-function createBaseMsgDelistAssetResponse(): MsgDelistAssetResponse {
+function createBaseMsgDisableAssetResponse(): MsgDisableAssetResponse {
   return {};
 }
 
-export const MsgDelistAssetResponse = {
-  encode(_: MsgDelistAssetResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+export const MsgDisableAssetResponse = {
+  encode(_: MsgDisableAssetResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     return writer;
   },
 
-  decode(input: _m0.Reader | Uint8Array, length?: number): MsgDelistAssetResponse {
+  decode(input: _m0.Reader | Uint8Array, length?: number): MsgDisableAssetResponse {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseMsgDelistAssetResponse();
+    const message = createBaseMsgDisableAssetResponse();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -239,23 +219,23 @@ export const MsgDelistAssetResponse = {
     return message;
   },
 
-  fromJSON(_: any): MsgDelistAssetResponse {
+  fromJSON(_: any): MsgDisableAssetResponse {
     return {};
   },
 
-  toJSON(_: MsgDelistAssetResponse): unknown {
+  toJSON(_: MsgDisableAssetResponse): unknown {
     const obj: any = {};
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<MsgDelistAssetResponse>, I>>(_: I): MsgDelistAssetResponse {
-    const message = createBaseMsgDelistAssetResponse();
+  fromPartial<I extends Exact<DeepPartial<MsgDisableAssetResponse>, I>>(_: I): MsgDisableAssetResponse {
+    const message = createBaseMsgDisableAssetResponse();
     return message;
   },
 };
 
 function createBaseMsgUpdateMaturityParams(): MsgUpdateMaturityParams {
-  return { authority: "", levelsPerYear: 0, years: 0, baseDenom: "" };
+  return { authority: "", assetId: "", params: undefined };
 }
 
 export const MsgUpdateMaturityParams = {
@@ -263,14 +243,11 @@ export const MsgUpdateMaturityParams = {
     if (message.authority !== "") {
       writer.uint32(10).string(message.authority);
     }
-    if (message.levelsPerYear !== 0) {
-      writer.uint32(16).int32(message.levelsPerYear);
+    if (message.assetId !== "") {
+      writer.uint32(18).string(message.assetId);
     }
-    if (message.years !== 0) {
-      writer.uint32(24).int32(message.years);
-    }
-    if (message.baseDenom !== "") {
-      writer.uint32(34).string(message.baseDenom);
+    if (message.params !== undefined) {
+      MaturityParams.encode(message.params, writer.uint32(26).fork()).ldelim();
     }
     return writer;
   },
@@ -286,13 +263,10 @@ export const MsgUpdateMaturityParams = {
           message.authority = reader.string();
           break;
         case 2:
-          message.levelsPerYear = reader.int32();
+          message.assetId = reader.string();
           break;
         case 3:
-          message.years = reader.int32();
-          break;
-        case 4:
-          message.baseDenom = reader.string();
+          message.params = MaturityParams.decode(reader, reader.uint32());
           break;
         default:
           reader.skipType(tag & 7);
@@ -305,27 +279,26 @@ export const MsgUpdateMaturityParams = {
   fromJSON(object: any): MsgUpdateMaturityParams {
     return {
       authority: isSet(object.authority) ? String(object.authority) : "",
-      levelsPerYear: isSet(object.levelsPerYear) ? Number(object.levelsPerYear) : 0,
-      years: isSet(object.years) ? Number(object.years) : 0,
-      baseDenom: isSet(object.baseDenom) ? String(object.baseDenom) : "",
+      assetId: isSet(object.assetId) ? String(object.assetId) : "",
+      params: isSet(object.params) ? MaturityParams.fromJSON(object.params) : undefined,
     };
   },
 
   toJSON(message: MsgUpdateMaturityParams): unknown {
     const obj: any = {};
     message.authority !== undefined && (obj.authority = message.authority);
-    message.levelsPerYear !== undefined && (obj.levelsPerYear = Math.round(message.levelsPerYear));
-    message.years !== undefined && (obj.years = Math.round(message.years));
-    message.baseDenom !== undefined && (obj.baseDenom = message.baseDenom);
+    message.assetId !== undefined && (obj.assetId = message.assetId);
+    message.params !== undefined && (obj.params = message.params ? MaturityParams.toJSON(message.params) : undefined);
     return obj;
   },
 
   fromPartial<I extends Exact<DeepPartial<MsgUpdateMaturityParams>, I>>(object: I): MsgUpdateMaturityParams {
     const message = createBaseMsgUpdateMaturityParams();
     message.authority = object.authority ?? "";
-    message.levelsPerYear = object.levelsPerYear ?? 0;
-    message.years = object.years ?? 0;
-    message.baseDenom = object.baseDenom ?? "";
+    message.assetId = object.assetId ?? "";
+    message.params = (object.params !== undefined && object.params !== null)
+      ? MaturityParams.fromPartial(object.params)
+      : undefined;
     return message;
   },
 };
@@ -370,18 +343,7 @@ export const MsgUpdateMaturityParamsResponse = {
 };
 
 function createBaseMsgUpdateFeeRatios(): MsgUpdateFeeRatios {
-  return {
-    authority: "",
-    baseDenom: "",
-    cAssetFeeRatio: "",
-    yieldFeeRatio: "",
-    mergeFeeRatio: "",
-    redeemFeeRatio: "",
-    refractFeeRatio: "",
-    cAssetBondFeeRatio: "",
-    cAssetRedeemFeeRatio: "",
-    yStakingClaimRewardFeeRatio: "",
-  };
+  return { authority: "", assetId: "", feeRatios: undefined };
 }
 
 export const MsgUpdateFeeRatios = {
@@ -389,32 +351,11 @@ export const MsgUpdateFeeRatios = {
     if (message.authority !== "") {
       writer.uint32(10).string(message.authority);
     }
-    if (message.baseDenom !== "") {
-      writer.uint32(18).string(message.baseDenom);
+    if (message.assetId !== "") {
+      writer.uint32(18).string(message.assetId);
     }
-    if (message.cAssetFeeRatio !== "") {
-      writer.uint32(26).string(message.cAssetFeeRatio);
-    }
-    if (message.yieldFeeRatio !== "") {
-      writer.uint32(34).string(message.yieldFeeRatio);
-    }
-    if (message.mergeFeeRatio !== "") {
-      writer.uint32(42).string(message.mergeFeeRatio);
-    }
-    if (message.redeemFeeRatio !== "") {
-      writer.uint32(50).string(message.redeemFeeRatio);
-    }
-    if (message.refractFeeRatio !== "") {
-      writer.uint32(58).string(message.refractFeeRatio);
-    }
-    if (message.cAssetBondFeeRatio !== "") {
-      writer.uint32(66).string(message.cAssetBondFeeRatio);
-    }
-    if (message.cAssetRedeemFeeRatio !== "") {
-      writer.uint32(74).string(message.cAssetRedeemFeeRatio);
-    }
-    if (message.yStakingClaimRewardFeeRatio !== "") {
-      writer.uint32(82).string(message.yStakingClaimRewardFeeRatio);
+    if (message.feeRatios !== undefined) {
+      FeeRatios.encode(message.feeRatios, writer.uint32(26).fork()).ldelim();
     }
     return writer;
   },
@@ -430,31 +371,10 @@ export const MsgUpdateFeeRatios = {
           message.authority = reader.string();
           break;
         case 2:
-          message.baseDenom = reader.string();
+          message.assetId = reader.string();
           break;
         case 3:
-          message.cAssetFeeRatio = reader.string();
-          break;
-        case 4:
-          message.yieldFeeRatio = reader.string();
-          break;
-        case 5:
-          message.mergeFeeRatio = reader.string();
-          break;
-        case 6:
-          message.redeemFeeRatio = reader.string();
-          break;
-        case 7:
-          message.refractFeeRatio = reader.string();
-          break;
-        case 8:
-          message.cAssetBondFeeRatio = reader.string();
-          break;
-        case 9:
-          message.cAssetRedeemFeeRatio = reader.string();
-          break;
-        case 10:
-          message.yStakingClaimRewardFeeRatio = reader.string();
+          message.feeRatios = FeeRatios.decode(reader, reader.uint32());
           break;
         default:
           reader.skipType(tag & 7);
@@ -467,48 +387,27 @@ export const MsgUpdateFeeRatios = {
   fromJSON(object: any): MsgUpdateFeeRatios {
     return {
       authority: isSet(object.authority) ? String(object.authority) : "",
-      baseDenom: isSet(object.baseDenom) ? String(object.baseDenom) : "",
-      cAssetFeeRatio: isSet(object.cAssetFeeRatio) ? String(object.cAssetFeeRatio) : "",
-      yieldFeeRatio: isSet(object.yieldFeeRatio) ? String(object.yieldFeeRatio) : "",
-      mergeFeeRatio: isSet(object.mergeFeeRatio) ? String(object.mergeFeeRatio) : "",
-      redeemFeeRatio: isSet(object.redeemFeeRatio) ? String(object.redeemFeeRatio) : "",
-      refractFeeRatio: isSet(object.refractFeeRatio) ? String(object.refractFeeRatio) : "",
-      cAssetBondFeeRatio: isSet(object.cAssetBondFeeRatio) ? String(object.cAssetBondFeeRatio) : "",
-      cAssetRedeemFeeRatio: isSet(object.cAssetRedeemFeeRatio) ? String(object.cAssetRedeemFeeRatio) : "",
-      yStakingClaimRewardFeeRatio: isSet(object.yStakingClaimRewardFeeRatio)
-        ? String(object.yStakingClaimRewardFeeRatio)
-        : "",
+      assetId: isSet(object.assetId) ? String(object.assetId) : "",
+      feeRatios: isSet(object.feeRatios) ? FeeRatios.fromJSON(object.feeRatios) : undefined,
     };
   },
 
   toJSON(message: MsgUpdateFeeRatios): unknown {
     const obj: any = {};
     message.authority !== undefined && (obj.authority = message.authority);
-    message.baseDenom !== undefined && (obj.baseDenom = message.baseDenom);
-    message.cAssetFeeRatio !== undefined && (obj.cAssetFeeRatio = message.cAssetFeeRatio);
-    message.yieldFeeRatio !== undefined && (obj.yieldFeeRatio = message.yieldFeeRatio);
-    message.mergeFeeRatio !== undefined && (obj.mergeFeeRatio = message.mergeFeeRatio);
-    message.redeemFeeRatio !== undefined && (obj.redeemFeeRatio = message.redeemFeeRatio);
-    message.refractFeeRatio !== undefined && (obj.refractFeeRatio = message.refractFeeRatio);
-    message.cAssetBondFeeRatio !== undefined && (obj.cAssetBondFeeRatio = message.cAssetBondFeeRatio);
-    message.cAssetRedeemFeeRatio !== undefined && (obj.cAssetRedeemFeeRatio = message.cAssetRedeemFeeRatio);
-    message.yStakingClaimRewardFeeRatio !== undefined
-      && (obj.yStakingClaimRewardFeeRatio = message.yStakingClaimRewardFeeRatio);
+    message.assetId !== undefined && (obj.assetId = message.assetId);
+    message.feeRatios !== undefined
+      && (obj.feeRatios = message.feeRatios ? FeeRatios.toJSON(message.feeRatios) : undefined);
     return obj;
   },
 
   fromPartial<I extends Exact<DeepPartial<MsgUpdateFeeRatios>, I>>(object: I): MsgUpdateFeeRatios {
     const message = createBaseMsgUpdateFeeRatios();
     message.authority = object.authority ?? "";
-    message.baseDenom = object.baseDenom ?? "";
-    message.cAssetFeeRatio = object.cAssetFeeRatio ?? "";
-    message.yieldFeeRatio = object.yieldFeeRatio ?? "";
-    message.mergeFeeRatio = object.mergeFeeRatio ?? "";
-    message.redeemFeeRatio = object.redeemFeeRatio ?? "";
-    message.refractFeeRatio = object.refractFeeRatio ?? "";
-    message.cAssetBondFeeRatio = object.cAssetBondFeeRatio ?? "";
-    message.cAssetRedeemFeeRatio = object.cAssetRedeemFeeRatio ?? "";
-    message.yStakingClaimRewardFeeRatio = object.yStakingClaimRewardFeeRatio ?? "";
+    message.assetId = object.assetId ?? "";
+    message.feeRatios = (object.feeRatios !== undefined && object.feeRatios !== null)
+      ? FeeRatios.fromPartial(object.feeRatios)
+      : undefined;
     return message;
   },
 };
@@ -552,157 +451,34 @@ export const MsgUpdateFeeRatiosResponse = {
   },
 };
 
-function createBaseMsgUpdateMessagePassingConnection(): MsgUpdateMessagePassingConnection {
-  return { authority: "", baseDenom: "", port: "", channel: "" };
-}
-
-export const MsgUpdateMessagePassingConnection = {
-  encode(message: MsgUpdateMessagePassingConnection, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (message.authority !== "") {
-      writer.uint32(10).string(message.authority);
-    }
-    if (message.baseDenom !== "") {
-      writer.uint32(18).string(message.baseDenom);
-    }
-    if (message.port !== "") {
-      writer.uint32(26).string(message.port);
-    }
-    if (message.channel !== "") {
-      writer.uint32(34).string(message.channel);
-    }
-    return writer;
-  },
-
-  decode(input: _m0.Reader | Uint8Array, length?: number): MsgUpdateMessagePassingConnection {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
-    let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseMsgUpdateMessagePassingConnection();
-    while (reader.pos < end) {
-      const tag = reader.uint32();
-      switch (tag >>> 3) {
-        case 1:
-          message.authority = reader.string();
-          break;
-        case 2:
-          message.baseDenom = reader.string();
-          break;
-        case 3:
-          message.port = reader.string();
-          break;
-        case 4:
-          message.channel = reader.string();
-          break;
-        default:
-          reader.skipType(tag & 7);
-          break;
-      }
-    }
-    return message;
-  },
-
-  fromJSON(object: any): MsgUpdateMessagePassingConnection {
-    return {
-      authority: isSet(object.authority) ? String(object.authority) : "",
-      baseDenom: isSet(object.baseDenom) ? String(object.baseDenom) : "",
-      port: isSet(object.port) ? String(object.port) : "",
-      channel: isSet(object.channel) ? String(object.channel) : "",
-    };
-  },
-
-  toJSON(message: MsgUpdateMessagePassingConnection): unknown {
-    const obj: any = {};
-    message.authority !== undefined && (obj.authority = message.authority);
-    message.baseDenom !== undefined && (obj.baseDenom = message.baseDenom);
-    message.port !== undefined && (obj.port = message.port);
-    message.channel !== undefined && (obj.channel = message.channel);
-    return obj;
-  },
-
-  fromPartial<I extends Exact<DeepPartial<MsgUpdateMessagePassingConnection>, I>>(
-    object: I,
-  ): MsgUpdateMessagePassingConnection {
-    const message = createBaseMsgUpdateMessagePassingConnection();
-    message.authority = object.authority ?? "";
-    message.baseDenom = object.baseDenom ?? "";
-    message.port = object.port ?? "";
-    message.channel = object.channel ?? "";
-    return message;
-  },
-};
-
-function createBaseMsgUpdateMessagePassingConnectionResponse(): MsgUpdateMessagePassingConnectionResponse {
-  return {};
-}
-
-export const MsgUpdateMessagePassingConnectionResponse = {
-  encode(_: MsgUpdateMessagePassingConnectionResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    return writer;
-  },
-
-  decode(input: _m0.Reader | Uint8Array, length?: number): MsgUpdateMessagePassingConnectionResponse {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
-    let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseMsgUpdateMessagePassingConnectionResponse();
-    while (reader.pos < end) {
-      const tag = reader.uint32();
-      switch (tag >>> 3) {
-        default:
-          reader.skipType(tag & 7);
-          break;
-      }
-    }
-    return message;
-  },
-
-  fromJSON(_: any): MsgUpdateMessagePassingConnectionResponse {
-    return {};
-  },
-
-  toJSON(_: MsgUpdateMessagePassingConnectionResponse): unknown {
-    const obj: any = {};
-    return obj;
-  },
-
-  fromPartial<I extends Exact<DeepPartial<MsgUpdateMessagePassingConnectionResponse>, I>>(
-    _: I,
-  ): MsgUpdateMessagePassingConnectionResponse {
-    const message = createBaseMsgUpdateMessagePassingConnectionResponse();
-    return message;
-  },
-};
-
 /** Msg defines the Msg service. */
 export interface Msg {
-  WhitelistAsset(request: MsgWhitelistAsset): Promise<MsgWhitelistAssetResponse>;
-  DelistAsset(request: MsgDelistAsset): Promise<MsgDelistAssetResponse>;
+  RegisterAsset(request: MsgRegisterAsset): Promise<MsgRegisterAssetResponse>;
+  DisableAsset(request: MsgDisableAsset): Promise<MsgDisableAssetResponse>;
   UpdateMaturityParams(request: MsgUpdateMaturityParams): Promise<MsgUpdateMaturityParamsResponse>;
-  UpdateFeeRatios(request: MsgUpdateFeeRatios): Promise<MsgUpdateFeeRatiosResponse>;
   /** this line is used by starport scaffolding # proto/tx/rpc */
-  UpdateMessagePassingConnection(
-    request: MsgUpdateMessagePassingConnection,
-  ): Promise<MsgUpdateMessagePassingConnectionResponse>;
+  UpdateFeeRatios(request: MsgUpdateFeeRatios): Promise<MsgUpdateFeeRatiosResponse>;
 }
 
 export class MsgClientImpl implements Msg {
   private readonly rpc: Rpc;
   constructor(rpc: Rpc) {
     this.rpc = rpc;
-    this.WhitelistAsset = this.WhitelistAsset.bind(this);
-    this.DelistAsset = this.DelistAsset.bind(this);
+    this.RegisterAsset = this.RegisterAsset.bind(this);
+    this.DisableAsset = this.DisableAsset.bind(this);
     this.UpdateMaturityParams = this.UpdateMaturityParams.bind(this);
     this.UpdateFeeRatios = this.UpdateFeeRatios.bind(this);
-    this.UpdateMessagePassingConnection = this.UpdateMessagePassingConnection.bind(this);
   }
-  WhitelistAsset(request: MsgWhitelistAsset): Promise<MsgWhitelistAssetResponse> {
-    const data = MsgWhitelistAsset.encode(request).finish();
-    const promise = this.rpc.request("prismfinance.prismcore.assets.Msg", "WhitelistAsset", data);
-    return promise.then((data) => MsgWhitelistAssetResponse.decode(new _m0.Reader(data)));
+  RegisterAsset(request: MsgRegisterAsset): Promise<MsgRegisterAssetResponse> {
+    const data = MsgRegisterAsset.encode(request).finish();
+    const promise = this.rpc.request("prismfinance.prismcore.assets.Msg", "RegisterAsset", data);
+    return promise.then((data) => MsgRegisterAssetResponse.decode(new _m0.Reader(data)));
   }
 
-  DelistAsset(request: MsgDelistAsset): Promise<MsgDelistAssetResponse> {
-    const data = MsgDelistAsset.encode(request).finish();
-    const promise = this.rpc.request("prismfinance.prismcore.assets.Msg", "DelistAsset", data);
-    return promise.then((data) => MsgDelistAssetResponse.decode(new _m0.Reader(data)));
+  DisableAsset(request: MsgDisableAsset): Promise<MsgDisableAssetResponse> {
+    const data = MsgDisableAsset.encode(request).finish();
+    const promise = this.rpc.request("prismfinance.prismcore.assets.Msg", "DisableAsset", data);
+    return promise.then((data) => MsgDisableAssetResponse.decode(new _m0.Reader(data)));
   }
 
   UpdateMaturityParams(request: MsgUpdateMaturityParams): Promise<MsgUpdateMaturityParamsResponse> {
@@ -715,14 +491,6 @@ export class MsgClientImpl implements Msg {
     const data = MsgUpdateFeeRatios.encode(request).finish();
     const promise = this.rpc.request("prismfinance.prismcore.assets.Msg", "UpdateFeeRatios", data);
     return promise.then((data) => MsgUpdateFeeRatiosResponse.decode(new _m0.Reader(data)));
-  }
-
-  UpdateMessagePassingConnection(
-    request: MsgUpdateMessagePassingConnection,
-  ): Promise<MsgUpdateMessagePassingConnectionResponse> {
-    const data = MsgUpdateMessagePassingConnection.encode(request).finish();
-    const promise = this.rpc.request("prismfinance.prismcore.assets.Msg", "UpdateMessagePassingConnection", data);
-    return promise.then((data) => MsgUpdateMessagePassingConnectionResponse.decode(new _m0.Reader(data)));
   }
 }
 

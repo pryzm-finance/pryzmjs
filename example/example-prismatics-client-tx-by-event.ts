@@ -1,5 +1,5 @@
-// import {newPrismaticsClient} from "@prism-finance/prismjs";
-import {newPrismaticsClient} from "../lib";
+import {newPrismaticsClient} from "@prism-finance/prismjs";
+// import {newPrismaticsClient} from "../lib";
 
 async function main() {
     const prismaticsClient = newPrismaticsClient("http://localhost:4444")

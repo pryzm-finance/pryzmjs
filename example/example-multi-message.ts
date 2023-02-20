@@ -1,5 +1,5 @@
-// import {newPrismSigningClient} from "@prism-finance/prismjs"
-import {newPrismSigningClient} from "../lib"
+import {newPrismSigningClient} from "@prism-finance/prismjs"
+// import {newPrismSigningClient} from "../lib"
 import {DirectSecp256k1HdWallet} from "@cosmjs/proto-signing";
 
 async function main() {
