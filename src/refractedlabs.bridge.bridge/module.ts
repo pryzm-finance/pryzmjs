@@ -8,23 +8,35 @@ import { IgniteClient } from "../client"
 import { MissingWalletError } from "../helpers"
 import { Api } from "./rest";
 import { MsgWhitelistProcessors } from "./types/bridge/bridge/tx";
-import { MsgWhitelistWatchers } from "./types/bridge/bridge/tx";
-import { MsgDelistRelayers } from "./types/bridge/bridge/tx";
-import { MsgRetryMessage } from "./types/bridge/bridge/tx";
-import { MsgDelegateProcessConsent } from "./types/bridge/bridge/tx";
 import { MsgDelistWatchers } from "./types/bridge/bridge/tx";
+import { MsgCreateConnection } from "./types/bridge/bridge/tx";
+import { MsgWhitelistWatchers } from "./types/bridge/bridge/tx";
+import { MsgWhitelistRelayers } from "./types/bridge/bridge/tx";
+import { MsgDelistRelayers } from "./types/bridge/bridge/tx";
+import { MsgDelegateRelayConsent } from "./types/bridge/bridge/tx";
+import { MsgDelegateProcessConsent } from "./types/bridge/bridge/tx";
+import { MsgRetryMessage } from "./types/bridge/bridge/tx";
 import { MsgCloseConnection } from "./types/bridge/bridge/tx";
 import { MsgDelistProcessors } from "./types/bridge/bridge/tx";
-import { MsgWhitelistRelayers } from "./types/bridge/bridge/tx";
 import { MsgDelegateWatchConsent } from "./types/bridge/bridge/tx";
-import { MsgCreateConnection } from "./types/bridge/bridge/tx";
-import { MsgDelegateRelayConsent } from "./types/bridge/bridge/tx";
 
 
-export { MsgWhitelistProcessors, MsgWhitelistWatchers, MsgDelistRelayers, MsgRetryMessage, MsgDelegateProcessConsent, MsgDelistWatchers, MsgCloseConnection, MsgDelistProcessors, MsgWhitelistRelayers, MsgDelegateWatchConsent, MsgCreateConnection, MsgDelegateRelayConsent };
+export { MsgWhitelistProcessors, MsgDelistWatchers, MsgCreateConnection, MsgWhitelistWatchers, MsgWhitelistRelayers, MsgDelistRelayers, MsgDelegateRelayConsent, MsgDelegateProcessConsent, MsgRetryMessage, MsgCloseConnection, MsgDelistProcessors, MsgDelegateWatchConsent };
 
 type sendMsgWhitelistProcessorsParams = {
   value: MsgWhitelistProcessors,
+  fee?: StdFee,
+  memo?: string
+};
+
+type sendMsgDelistWatchersParams = {
+  value: MsgDelistWatchers,
+  fee?: StdFee,
+  memo?: string
+};
+
+type sendMsgCreateConnectionParams = {
+  value: MsgCreateConnection,
   fee?: StdFee,
   memo?: string
 };
@@ -35,14 +47,20 @@ type sendMsgWhitelistWatchersParams = {
   memo?: string
 };
 
+type sendMsgWhitelistRelayersParams = {
+  value: MsgWhitelistRelayers,
+  fee?: StdFee,
+  memo?: string
+};
+
 type sendMsgDelistRelayersParams = {
   value: MsgDelistRelayers,
   fee?: StdFee,
   memo?: string
 };
 
-type sendMsgRetryMessageParams = {
-  value: MsgRetryMessage,
+type sendMsgDelegateRelayConsentParams = {
+  value: MsgDelegateRelayConsent,
   fee?: StdFee,
   memo?: string
 };
@@ -53,8 +71,8 @@ type sendMsgDelegateProcessConsentParams = {
   memo?: string
 };
 
-type sendMsgDelistWatchersParams = {
-  value: MsgDelistWatchers,
+type sendMsgRetryMessageParams = {
+  value: MsgRetryMessage,
   fee?: StdFee,
   memo?: string
 };
@@ -71,26 +89,8 @@ type sendMsgDelistProcessorsParams = {
   memo?: string
 };
 
-type sendMsgWhitelistRelayersParams = {
-  value: MsgWhitelistRelayers,
-  fee?: StdFee,
-  memo?: string
-};
-
 type sendMsgDelegateWatchConsentParams = {
   value: MsgDelegateWatchConsent,
-  fee?: StdFee,
-  memo?: string
-};
-
-type sendMsgCreateConnectionParams = {
-  value: MsgCreateConnection,
-  fee?: StdFee,
-  memo?: string
-};
-
-type sendMsgDelegateRelayConsentParams = {
-  value: MsgDelegateRelayConsent,
   fee?: StdFee,
   memo?: string
 };
@@ -100,24 +100,36 @@ type msgWhitelistProcessorsParams = {
   value: MsgWhitelistProcessors,
 };
 
+type msgDelistWatchersParams = {
+  value: MsgDelistWatchers,
+};
+
+type msgCreateConnectionParams = {
+  value: MsgCreateConnection,
+};
+
 type msgWhitelistWatchersParams = {
   value: MsgWhitelistWatchers,
+};
+
+type msgWhitelistRelayersParams = {
+  value: MsgWhitelistRelayers,
 };
 
 type msgDelistRelayersParams = {
   value: MsgDelistRelayers,
 };
 
-type msgRetryMessageParams = {
-  value: MsgRetryMessage,
+type msgDelegateRelayConsentParams = {
+  value: MsgDelegateRelayConsent,
 };
 
 type msgDelegateProcessConsentParams = {
   value: MsgDelegateProcessConsent,
 };
 
-type msgDelistWatchersParams = {
-  value: MsgDelistWatchers,
+type msgRetryMessageParams = {
+  value: MsgRetryMessage,
 };
 
 type msgCloseConnectionParams = {
@@ -128,20 +140,8 @@ type msgDelistProcessorsParams = {
   value: MsgDelistProcessors,
 };
 
-type msgWhitelistRelayersParams = {
-  value: MsgWhitelistRelayers,
-};
-
 type msgDelegateWatchConsentParams = {
   value: MsgDelegateWatchConsent,
-};
-
-type msgCreateConnectionParams = {
-  value: MsgCreateConnection,
-};
-
-type msgDelegateRelayConsentParams = {
-  value: MsgDelegateRelayConsent,
 };
 
 
@@ -176,6 +176,34 @@ export const txClient = ({ signer, prefix, addr }: TxClientOptions = { addr: "ht
 			}
 		},
 		
+		async sendMsgDelistWatchers({ value, fee, memo }: sendMsgDelistWatchersParams): Promise<DeliverTxResponse> {
+			if (!signer) {
+					throw new Error('TxClient:sendMsgDelistWatchers: Unable to sign Tx. Signer is not present.')
+			}
+			try {			
+				const { address } = (await signer.getAccounts())[0]; 
+				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry, prefix});
+				let msg = this.msgDelistWatchers({ value: MsgDelistWatchers.fromPartial(value) })
+				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
+			} catch (e: any) {
+				throw new Error('TxClient:sendMsgDelistWatchers: Could not broadcast Tx: '+ e.message)
+			}
+		},
+		
+		async sendMsgCreateConnection({ value, fee, memo }: sendMsgCreateConnectionParams): Promise<DeliverTxResponse> {
+			if (!signer) {
+					throw new Error('TxClient:sendMsgCreateConnection: Unable to sign Tx. Signer is not present.')
+			}
+			try {			
+				const { address } = (await signer.getAccounts())[0]; 
+				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry, prefix});
+				let msg = this.msgCreateConnection({ value: MsgCreateConnection.fromPartial(value) })
+				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
+			} catch (e: any) {
+				throw new Error('TxClient:sendMsgCreateConnection: Could not broadcast Tx: '+ e.message)
+			}
+		},
+		
 		async sendMsgWhitelistWatchers({ value, fee, memo }: sendMsgWhitelistWatchersParams): Promise<DeliverTxResponse> {
 			if (!signer) {
 					throw new Error('TxClient:sendMsgWhitelistWatchers: Unable to sign Tx. Signer is not present.')
@@ -187,6 +215,20 @@ export const txClient = ({ signer, prefix, addr }: TxClientOptions = { addr: "ht
 				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
 			} catch (e: any) {
 				throw new Error('TxClient:sendMsgWhitelistWatchers: Could not broadcast Tx: '+ e.message)
+			}
+		},
+		
+		async sendMsgWhitelistRelayers({ value, fee, memo }: sendMsgWhitelistRelayersParams): Promise<DeliverTxResponse> {
+			if (!signer) {
+					throw new Error('TxClient:sendMsgWhitelistRelayers: Unable to sign Tx. Signer is not present.')
+			}
+			try {			
+				const { address } = (await signer.getAccounts())[0]; 
+				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry, prefix});
+				let msg = this.msgWhitelistRelayers({ value: MsgWhitelistRelayers.fromPartial(value) })
+				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
+			} catch (e: any) {
+				throw new Error('TxClient:sendMsgWhitelistRelayers: Could not broadcast Tx: '+ e.message)
 			}
 		},
 		
@@ -204,17 +246,17 @@ export const txClient = ({ signer, prefix, addr }: TxClientOptions = { addr: "ht
 			}
 		},
 		
-		async sendMsgRetryMessage({ value, fee, memo }: sendMsgRetryMessageParams): Promise<DeliverTxResponse> {
+		async sendMsgDelegateRelayConsent({ value, fee, memo }: sendMsgDelegateRelayConsentParams): Promise<DeliverTxResponse> {
 			if (!signer) {
-					throw new Error('TxClient:sendMsgRetryMessage: Unable to sign Tx. Signer is not present.')
+					throw new Error('TxClient:sendMsgDelegateRelayConsent: Unable to sign Tx. Signer is not present.')
 			}
 			try {			
 				const { address } = (await signer.getAccounts())[0]; 
 				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry, prefix});
-				let msg = this.msgRetryMessage({ value: MsgRetryMessage.fromPartial(value) })
+				let msg = this.msgDelegateRelayConsent({ value: MsgDelegateRelayConsent.fromPartial(value) })
 				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
 			} catch (e: any) {
-				throw new Error('TxClient:sendMsgRetryMessage: Could not broadcast Tx: '+ e.message)
+				throw new Error('TxClient:sendMsgDelegateRelayConsent: Could not broadcast Tx: '+ e.message)
 			}
 		},
 		
@@ -232,17 +274,17 @@ export const txClient = ({ signer, prefix, addr }: TxClientOptions = { addr: "ht
 			}
 		},
 		
-		async sendMsgDelistWatchers({ value, fee, memo }: sendMsgDelistWatchersParams): Promise<DeliverTxResponse> {
+		async sendMsgRetryMessage({ value, fee, memo }: sendMsgRetryMessageParams): Promise<DeliverTxResponse> {
 			if (!signer) {
-					throw new Error('TxClient:sendMsgDelistWatchers: Unable to sign Tx. Signer is not present.')
+					throw new Error('TxClient:sendMsgRetryMessage: Unable to sign Tx. Signer is not present.')
 			}
 			try {			
 				const { address } = (await signer.getAccounts())[0]; 
 				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry, prefix});
-				let msg = this.msgDelistWatchers({ value: MsgDelistWatchers.fromPartial(value) })
+				let msg = this.msgRetryMessage({ value: MsgRetryMessage.fromPartial(value) })
 				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
 			} catch (e: any) {
-				throw new Error('TxClient:sendMsgDelistWatchers: Could not broadcast Tx: '+ e.message)
+				throw new Error('TxClient:sendMsgRetryMessage: Could not broadcast Tx: '+ e.message)
 			}
 		},
 		
@@ -274,20 +316,6 @@ export const txClient = ({ signer, prefix, addr }: TxClientOptions = { addr: "ht
 			}
 		},
 		
-		async sendMsgWhitelistRelayers({ value, fee, memo }: sendMsgWhitelistRelayersParams): Promise<DeliverTxResponse> {
-			if (!signer) {
-					throw new Error('TxClient:sendMsgWhitelistRelayers: Unable to sign Tx. Signer is not present.')
-			}
-			try {			
-				const { address } = (await signer.getAccounts())[0]; 
-				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry, prefix});
-				let msg = this.msgWhitelistRelayers({ value: MsgWhitelistRelayers.fromPartial(value) })
-				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
-			} catch (e: any) {
-				throw new Error('TxClient:sendMsgWhitelistRelayers: Could not broadcast Tx: '+ e.message)
-			}
-		},
-		
 		async sendMsgDelegateWatchConsent({ value, fee, memo }: sendMsgDelegateWatchConsentParams): Promise<DeliverTxResponse> {
 			if (!signer) {
 					throw new Error('TxClient:sendMsgDelegateWatchConsent: Unable to sign Tx. Signer is not present.')
@@ -302,40 +330,28 @@ export const txClient = ({ signer, prefix, addr }: TxClientOptions = { addr: "ht
 			}
 		},
 		
-		async sendMsgCreateConnection({ value, fee, memo }: sendMsgCreateConnectionParams): Promise<DeliverTxResponse> {
-			if (!signer) {
-					throw new Error('TxClient:sendMsgCreateConnection: Unable to sign Tx. Signer is not present.')
-			}
-			try {			
-				const { address } = (await signer.getAccounts())[0]; 
-				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry, prefix});
-				let msg = this.msgCreateConnection({ value: MsgCreateConnection.fromPartial(value) })
-				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
-			} catch (e: any) {
-				throw new Error('TxClient:sendMsgCreateConnection: Could not broadcast Tx: '+ e.message)
-			}
-		},
-		
-		async sendMsgDelegateRelayConsent({ value, fee, memo }: sendMsgDelegateRelayConsentParams): Promise<DeliverTxResponse> {
-			if (!signer) {
-					throw new Error('TxClient:sendMsgDelegateRelayConsent: Unable to sign Tx. Signer is not present.')
-			}
-			try {			
-				const { address } = (await signer.getAccounts())[0]; 
-				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry, prefix});
-				let msg = this.msgDelegateRelayConsent({ value: MsgDelegateRelayConsent.fromPartial(value) })
-				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
-			} catch (e: any) {
-				throw new Error('TxClient:sendMsgDelegateRelayConsent: Could not broadcast Tx: '+ e.message)
-			}
-		},
-		
 		
 		msgWhitelistProcessors({ value }: msgWhitelistProcessorsParams): EncodeObject {
 			try {
 				return { typeUrl: "/refractedlabs.bridge.bridge.MsgWhitelistProcessors", value: MsgWhitelistProcessors.fromPartial( value ) }  
 			} catch (e: any) {
 				throw new Error('TxClient:MsgWhitelistProcessors: Could not create message: ' + e.message)
+			}
+		},
+		
+		msgDelistWatchers({ value }: msgDelistWatchersParams): EncodeObject {
+			try {
+				return { typeUrl: "/refractedlabs.bridge.bridge.MsgDelistWatchers", value: MsgDelistWatchers.fromPartial( value ) }  
+			} catch (e: any) {
+				throw new Error('TxClient:MsgDelistWatchers: Could not create message: ' + e.message)
+			}
+		},
+		
+		msgCreateConnection({ value }: msgCreateConnectionParams): EncodeObject {
+			try {
+				return { typeUrl: "/refractedlabs.bridge.bridge.MsgCreateConnection", value: MsgCreateConnection.fromPartial( value ) }  
+			} catch (e: any) {
+				throw new Error('TxClient:MsgCreateConnection: Could not create message: ' + e.message)
 			}
 		},
 		
@@ -347,6 +363,14 @@ export const txClient = ({ signer, prefix, addr }: TxClientOptions = { addr: "ht
 			}
 		},
 		
+		msgWhitelistRelayers({ value }: msgWhitelistRelayersParams): EncodeObject {
+			try {
+				return { typeUrl: "/refractedlabs.bridge.bridge.MsgWhitelistRelayers", value: MsgWhitelistRelayers.fromPartial( value ) }  
+			} catch (e: any) {
+				throw new Error('TxClient:MsgWhitelistRelayers: Could not create message: ' + e.message)
+			}
+		},
+		
 		msgDelistRelayers({ value }: msgDelistRelayersParams): EncodeObject {
 			try {
 				return { typeUrl: "/refractedlabs.bridge.bridge.MsgDelistRelayers", value: MsgDelistRelayers.fromPartial( value ) }  
@@ -355,11 +379,11 @@ export const txClient = ({ signer, prefix, addr }: TxClientOptions = { addr: "ht
 			}
 		},
 		
-		msgRetryMessage({ value }: msgRetryMessageParams): EncodeObject {
+		msgDelegateRelayConsent({ value }: msgDelegateRelayConsentParams): EncodeObject {
 			try {
-				return { typeUrl: "/refractedlabs.bridge.bridge.MsgRetryMessage", value: MsgRetryMessage.fromPartial( value ) }  
+				return { typeUrl: "/refractedlabs.bridge.bridge.MsgDelegateRelayConsent", value: MsgDelegateRelayConsent.fromPartial( value ) }  
 			} catch (e: any) {
-				throw new Error('TxClient:MsgRetryMessage: Could not create message: ' + e.message)
+				throw new Error('TxClient:MsgDelegateRelayConsent: Could not create message: ' + e.message)
 			}
 		},
 		
@@ -371,11 +395,11 @@ export const txClient = ({ signer, prefix, addr }: TxClientOptions = { addr: "ht
 			}
 		},
 		
-		msgDelistWatchers({ value }: msgDelistWatchersParams): EncodeObject {
+		msgRetryMessage({ value }: msgRetryMessageParams): EncodeObject {
 			try {
-				return { typeUrl: "/refractedlabs.bridge.bridge.MsgDelistWatchers", value: MsgDelistWatchers.fromPartial( value ) }  
+				return { typeUrl: "/refractedlabs.bridge.bridge.MsgRetryMessage", value: MsgRetryMessage.fromPartial( value ) }  
 			} catch (e: any) {
-				throw new Error('TxClient:MsgDelistWatchers: Could not create message: ' + e.message)
+				throw new Error('TxClient:MsgRetryMessage: Could not create message: ' + e.message)
 			}
 		},
 		
@@ -395,35 +419,11 @@ export const txClient = ({ signer, prefix, addr }: TxClientOptions = { addr: "ht
 			}
 		},
 		
-		msgWhitelistRelayers({ value }: msgWhitelistRelayersParams): EncodeObject {
-			try {
-				return { typeUrl: "/refractedlabs.bridge.bridge.MsgWhitelistRelayers", value: MsgWhitelistRelayers.fromPartial( value ) }  
-			} catch (e: any) {
-				throw new Error('TxClient:MsgWhitelistRelayers: Could not create message: ' + e.message)
-			}
-		},
-		
 		msgDelegateWatchConsent({ value }: msgDelegateWatchConsentParams): EncodeObject {
 			try {
 				return { typeUrl: "/refractedlabs.bridge.bridge.MsgDelegateWatchConsent", value: MsgDelegateWatchConsent.fromPartial( value ) }  
 			} catch (e: any) {
 				throw new Error('TxClient:MsgDelegateWatchConsent: Could not create message: ' + e.message)
-			}
-		},
-		
-		msgCreateConnection({ value }: msgCreateConnectionParams): EncodeObject {
-			try {
-				return { typeUrl: "/refractedlabs.bridge.bridge.MsgCreateConnection", value: MsgCreateConnection.fromPartial( value ) }  
-			} catch (e: any) {
-				throw new Error('TxClient:MsgCreateConnection: Could not create message: ' + e.message)
-			}
-		},
-		
-		msgDelegateRelayConsent({ value }: msgDelegateRelayConsentParams): EncodeObject {
-			try {
-				return { typeUrl: "/refractedlabs.bridge.bridge.MsgDelegateRelayConsent", value: MsgDelegateRelayConsent.fromPartial( value ) }  
-			} catch (e: any) {
-				throw new Error('TxClient:MsgDelegateRelayConsent: Could not create message: ' + e.message)
 			}
 		},
 		

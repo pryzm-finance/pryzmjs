@@ -44,7 +44,7 @@ export function messageStateToJSON(object: MessageState): string {
 }
 
 export interface MessageMetadata {
-  hash: Uint8Array;
+  hash: string;
   type: string;
   /**
    * TODO? can we rely on feeders for detecting expiry or bridge needs an independent logic for detecting it (when the mojority of feeders do not inform the message expiration)
@@ -60,12 +60,12 @@ export interface MessageMetadata {
 }
 
 export interface MessageExecutionResult {
-  hash: Uint8Array;
+  hash: string;
   state: MessageState;
   processor: string;
   watcher: string;
   relayer: string;
-  result: Uint8Array;
+  result: string;
 }
 
 export interface MessageBatchResult {
@@ -76,7 +76,7 @@ export interface MessageBatchResult {
 
 function createBaseMessageMetadata(): MessageMetadata {
   return {
-    hash: new Uint8Array(),
+    hash: "",
     type: "",
     expirationTime: 0,
     connectionId: "",
@@ -89,8 +89,8 @@ function createBaseMessageMetadata(): MessageMetadata {
 
 export const MessageMetadata = {
   encode(message: MessageMetadata, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (message.hash.length !== 0) {
-      writer.uint32(10).bytes(message.hash);
+    if (message.hash !== "") {
+      writer.uint32(10).string(message.hash);
     }
     if (message.type !== "") {
       writer.uint32(18).string(message.type);
@@ -124,7 +124,7 @@ export const MessageMetadata = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.hash = reader.bytes();
+          message.hash = reader.string();
           break;
         case 2:
           message.type = reader.string();
@@ -157,7 +157,7 @@ export const MessageMetadata = {
 
   fromJSON(object: any): MessageMetadata {
     return {
-      hash: isSet(object.hash) ? bytesFromBase64(object.hash) : new Uint8Array(),
+      hash: isSet(object.hash) ? String(object.hash) : "",
       type: isSet(object.type) ? String(object.type) : "",
       expirationTime: isSet(object.expirationTime) ? Number(object.expirationTime) : 0,
       connectionId: isSet(object.connectionId) ? String(object.connectionId) : "",
@@ -170,8 +170,7 @@ export const MessageMetadata = {
 
   toJSON(message: MessageMetadata): unknown {
     const obj: any = {};
-    message.hash !== undefined
-      && (obj.hash = base64FromBytes(message.hash !== undefined ? message.hash : new Uint8Array()));
+    message.hash !== undefined && (obj.hash = message.hash);
     message.type !== undefined && (obj.type = message.type);
     message.expirationTime !== undefined && (obj.expirationTime = Math.round(message.expirationTime));
     message.connectionId !== undefined && (obj.connectionId = message.connectionId);
@@ -184,7 +183,7 @@ export const MessageMetadata = {
 
   fromPartial<I extends Exact<DeepPartial<MessageMetadata>, I>>(object: I): MessageMetadata {
     const message = createBaseMessageMetadata();
-    message.hash = object.hash ?? new Uint8Array();
+    message.hash = object.hash ?? "";
     message.type = object.type ?? "";
     message.expirationTime = object.expirationTime ?? 0;
     message.connectionId = object.connectionId ?? "";
@@ -197,13 +196,13 @@ export const MessageMetadata = {
 };
 
 function createBaseMessageExecutionResult(): MessageExecutionResult {
-  return { hash: new Uint8Array(), state: 0, processor: "", watcher: "", relayer: "", result: new Uint8Array() };
+  return { hash: "", state: 0, processor: "", watcher: "", relayer: "", result: "" };
 }
 
 export const MessageExecutionResult = {
   encode(message: MessageExecutionResult, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (message.hash.length !== 0) {
-      writer.uint32(10).bytes(message.hash);
+    if (message.hash !== "") {
+      writer.uint32(10).string(message.hash);
     }
     if (message.state !== 0) {
       writer.uint32(16).int32(message.state);
@@ -217,8 +216,8 @@ export const MessageExecutionResult = {
     if (message.relayer !== "") {
       writer.uint32(42).string(message.relayer);
     }
-    if (message.result.length !== 0) {
-      writer.uint32(50).bytes(message.result);
+    if (message.result !== "") {
+      writer.uint32(50).string(message.result);
     }
     return writer;
   },
@@ -231,7 +230,7 @@ export const MessageExecutionResult = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.hash = reader.bytes();
+          message.hash = reader.string();
           break;
         case 2:
           message.state = reader.int32() as any;
@@ -246,7 +245,7 @@ export const MessageExecutionResult = {
           message.relayer = reader.string();
           break;
         case 6:
-          message.result = reader.bytes();
+          message.result = reader.string();
           break;
         default:
           reader.skipType(tag & 7);
@@ -258,36 +257,34 @@ export const MessageExecutionResult = {
 
   fromJSON(object: any): MessageExecutionResult {
     return {
-      hash: isSet(object.hash) ? bytesFromBase64(object.hash) : new Uint8Array(),
+      hash: isSet(object.hash) ? String(object.hash) : "",
       state: isSet(object.state) ? messageStateFromJSON(object.state) : 0,
       processor: isSet(object.processor) ? String(object.processor) : "",
       watcher: isSet(object.watcher) ? String(object.watcher) : "",
       relayer: isSet(object.relayer) ? String(object.relayer) : "",
-      result: isSet(object.result) ? bytesFromBase64(object.result) : new Uint8Array(),
+      result: isSet(object.result) ? String(object.result) : "",
     };
   },
 
   toJSON(message: MessageExecutionResult): unknown {
     const obj: any = {};
-    message.hash !== undefined
-      && (obj.hash = base64FromBytes(message.hash !== undefined ? message.hash : new Uint8Array()));
+    message.hash !== undefined && (obj.hash = message.hash);
     message.state !== undefined && (obj.state = messageStateToJSON(message.state));
     message.processor !== undefined && (obj.processor = message.processor);
     message.watcher !== undefined && (obj.watcher = message.watcher);
     message.relayer !== undefined && (obj.relayer = message.relayer);
-    message.result !== undefined
-      && (obj.result = base64FromBytes(message.result !== undefined ? message.result : new Uint8Array()));
+    message.result !== undefined && (obj.result = message.result);
     return obj;
   },
 
   fromPartial<I extends Exact<DeepPartial<MessageExecutionResult>, I>>(object: I): MessageExecutionResult {
     const message = createBaseMessageExecutionResult();
-    message.hash = object.hash ?? new Uint8Array();
+    message.hash = object.hash ?? "";
     message.state = object.state ?? 0;
     message.processor = object.processor ?? "";
     message.watcher = object.watcher ?? "";
     message.relayer = object.relayer ?? "";
-    message.result = object.result ?? new Uint8Array();
+    message.result = object.result ?? "";
     return message;
   },
 };
@@ -383,31 +380,6 @@ var globalThis: any = (() => {
   }
   throw "Unable to locate global object";
 })();
-
-function bytesFromBase64(b64: string): Uint8Array {
-  if (globalThis.Buffer) {
-    return Uint8Array.from(globalThis.Buffer.from(b64, "base64"));
-  } else {
-    const bin = globalThis.atob(b64);
-    const arr = new Uint8Array(bin.length);
-    for (let i = 0; i < bin.length; ++i) {
-      arr[i] = bin.charCodeAt(i);
-    }
-    return arr;
-  }
-}
-
-function base64FromBytes(arr: Uint8Array): string {
-  if (globalThis.Buffer) {
-    return globalThis.Buffer.from(arr).toString("base64");
-  } else {
-    const bin: string[] = [];
-    arr.forEach((byte) => {
-      bin.push(String.fromCharCode(byte));
-    });
-    return globalThis.btoa(bin.join(""));
-  }
-}
 
 type Builtin = Date | Function | Uint8Array | string | number | boolean | undefined;
 

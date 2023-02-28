@@ -40,7 +40,7 @@ export interface QueryAllConnectionResponse {
 }
 
 export interface QueryGetMessageMetadataRequest {
-  hash: Uint8Array;
+  hash: string;
 }
 
 export interface QueryGetMessageMetadataResponse {
@@ -429,13 +429,13 @@ export const QueryAllConnectionResponse = {
 };
 
 function createBaseQueryGetMessageMetadataRequest(): QueryGetMessageMetadataRequest {
-  return { hash: new Uint8Array() };
+  return { hash: "" };
 }
 
 export const QueryGetMessageMetadataRequest = {
   encode(message: QueryGetMessageMetadataRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (message.hash.length !== 0) {
-      writer.uint32(10).bytes(message.hash);
+    if (message.hash !== "") {
+      writer.uint32(10).string(message.hash);
     }
     return writer;
   },
@@ -448,7 +448,7 @@ export const QueryGetMessageMetadataRequest = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.hash = reader.bytes();
+          message.hash = reader.string();
           break;
         default:
           reader.skipType(tag & 7);
@@ -459,13 +459,12 @@ export const QueryGetMessageMetadataRequest = {
   },
 
   fromJSON(object: any): QueryGetMessageMetadataRequest {
-    return { hash: isSet(object.hash) ? bytesFromBase64(object.hash) : new Uint8Array() };
+    return { hash: isSet(object.hash) ? String(object.hash) : "" };
   },
 
   toJSON(message: QueryGetMessageMetadataRequest): unknown {
     const obj: any = {};
-    message.hash !== undefined
-      && (obj.hash = base64FromBytes(message.hash !== undefined ? message.hash : new Uint8Array()));
+    message.hash !== undefined && (obj.hash = message.hash);
     return obj;
   },
 
@@ -473,7 +472,7 @@ export const QueryGetMessageMetadataRequest = {
     object: I,
   ): QueryGetMessageMetadataRequest {
     const message = createBaseQueryGetMessageMetadataRequest();
-    message.hash = object.hash ?? new Uint8Array();
+    message.hash = object.hash ?? "";
     return message;
   },
 };
@@ -1720,50 +1719,6 @@ export class QueryClientImpl implements Query {
 
 interface Rpc {
   request(service: string, method: string, data: Uint8Array): Promise<Uint8Array>;
-}
-
-declare var self: any | undefined;
-declare var window: any | undefined;
-declare var global: any | undefined;
-var globalThis: any = (() => {
-  if (typeof globalThis !== "undefined") {
-    return globalThis;
-  }
-  if (typeof self !== "undefined") {
-    return self;
-  }
-  if (typeof window !== "undefined") {
-    return window;
-  }
-  if (typeof global !== "undefined") {
-    return global;
-  }
-  throw "Unable to locate global object";
-})();
-
-function bytesFromBase64(b64: string): Uint8Array {
-  if (globalThis.Buffer) {
-    return Uint8Array.from(globalThis.Buffer.from(b64, "base64"));
-  } else {
-    const bin = globalThis.atob(b64);
-    const arr = new Uint8Array(bin.length);
-    for (let i = 0; i < bin.length; ++i) {
-      arr[i] = bin.charCodeAt(i);
-    }
-    return arr;
-  }
-}
-
-function base64FromBytes(arr: Uint8Array): string {
-  if (globalThis.Buffer) {
-    return globalThis.Buffer.from(arr).toString("base64");
-  } else {
-    const bin: string[] = [];
-    arr.forEach((byte) => {
-      bin.push(String.fromCharCode(byte));
-    });
-    return globalThis.btoa(bin.join(""));
-  }
 }
 
 type Builtin = Date | Function | Uint8Array | string | number | boolean | undefined;

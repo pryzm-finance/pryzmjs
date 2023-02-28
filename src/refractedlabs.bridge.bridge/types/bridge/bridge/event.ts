@@ -8,7 +8,7 @@ import { MessageExecutionResult, MessageMetadata } from "./message";
 export const protobufPackage = "refractedlabs.bridge.bridge";
 
 export interface EventMessageDispatched {
-  hash: Uint8Array;
+  hash: string;
   expirationTime: number;
   connectionId: string;
   chain: string;
@@ -49,7 +49,7 @@ export interface EventMessageFromUnknownActor {
 
 function createBaseEventMessageDispatched(): EventMessageDispatched {
   return {
-    hash: new Uint8Array(),
+    hash: "",
     expirationTime: 0,
     connectionId: "",
     chain: "",
@@ -61,8 +61,8 @@ function createBaseEventMessageDispatched(): EventMessageDispatched {
 
 export const EventMessageDispatched = {
   encode(message: EventMessageDispatched, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (message.hash.length !== 0) {
-      writer.uint32(10).bytes(message.hash);
+    if (message.hash !== "") {
+      writer.uint32(10).string(message.hash);
     }
     if (message.expirationTime !== 0) {
       writer.uint32(16).uint64(message.expirationTime);
@@ -93,7 +93,7 @@ export const EventMessageDispatched = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.hash = reader.bytes();
+          message.hash = reader.string();
           break;
         case 2:
           message.expirationTime = longToNumber(reader.uint64() as Long);
@@ -123,7 +123,7 @@ export const EventMessageDispatched = {
 
   fromJSON(object: any): EventMessageDispatched {
     return {
-      hash: isSet(object.hash) ? bytesFromBase64(object.hash) : new Uint8Array(),
+      hash: isSet(object.hash) ? String(object.hash) : "",
       expirationTime: isSet(object.expirationTime) ? Number(object.expirationTime) : 0,
       connectionId: isSet(object.connectionId) ? String(object.connectionId) : "",
       chain: isSet(object.chain) ? String(object.chain) : "",
@@ -135,8 +135,7 @@ export const EventMessageDispatched = {
 
   toJSON(message: EventMessageDispatched): unknown {
     const obj: any = {};
-    message.hash !== undefined
-      && (obj.hash = base64FromBytes(message.hash !== undefined ? message.hash : new Uint8Array()));
+    message.hash !== undefined && (obj.hash = message.hash);
     message.expirationTime !== undefined && (obj.expirationTime = Math.round(message.expirationTime));
     message.connectionId !== undefined && (obj.connectionId = message.connectionId);
     message.chain !== undefined && (obj.chain = message.chain);
@@ -149,7 +148,7 @@ export const EventMessageDispatched = {
 
   fromPartial<I extends Exact<DeepPartial<EventMessageDispatched>, I>>(object: I): EventMessageDispatched {
     const message = createBaseEventMessageDispatched();
-    message.hash = object.hash ?? new Uint8Array();
+    message.hash = object.hash ?? "";
     message.expirationTime = object.expirationTime ?? 0;
     message.connectionId = object.connectionId ?? "";
     message.chain = object.chain ?? "";
@@ -526,31 +525,6 @@ var globalThis: any = (() => {
   }
   throw "Unable to locate global object";
 })();
-
-function bytesFromBase64(b64: string): Uint8Array {
-  if (globalThis.Buffer) {
-    return Uint8Array.from(globalThis.Buffer.from(b64, "base64"));
-  } else {
-    const bin = globalThis.atob(b64);
-    const arr = new Uint8Array(bin.length);
-    for (let i = 0; i < bin.length; ++i) {
-      arr[i] = bin.charCodeAt(i);
-    }
-    return arr;
-  }
-}
-
-function base64FromBytes(arr: Uint8Array): string {
-  if (globalThis.Buffer) {
-    return globalThis.Buffer.from(arr).toString("base64");
-  } else {
-    const bin: string[] = [];
-    arr.forEach((byte) => {
-      bin.push(String.fromCharCode(byte));
-    });
-    return globalThis.btoa(bin.join(""));
-  }
-}
 
 type Builtin = Date | Function | Uint8Array | string | number | boolean | undefined;
 

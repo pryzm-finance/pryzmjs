@@ -67,7 +67,6 @@ export interface BridgeCrossChainMessage {
 }
 
 export interface BridgeMessageMetadata {
-  /** @format byte */
   hash?: string;
   type?: string;
 
