@@ -22,7 +22,7 @@ export interface EventRedeem {
 }
 
 export interface EventRefractorYieldDistribution {
-  assetBaseDenom: string;
+  assetId: string;
   totalYield: string;
   protocolFee: string;
   stakeYield: string;
@@ -218,13 +218,13 @@ export const EventRedeem = {
 };
 
 function createBaseEventRefractorYieldDistribution(): EventRefractorYieldDistribution {
-  return { assetBaseDenom: "", totalYield: "", protocolFee: "", stakeYield: "", excessYield: "" };
+  return { assetId: "", totalYield: "", protocolFee: "", stakeYield: "", excessYield: "" };
 }
 
 export const EventRefractorYieldDistribution = {
   encode(message: EventRefractorYieldDistribution, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (message.assetBaseDenom !== "") {
-      writer.uint32(10).string(message.assetBaseDenom);
+    if (message.assetId !== "") {
+      writer.uint32(10).string(message.assetId);
     }
     if (message.totalYield !== "") {
       writer.uint32(18).string(message.totalYield);
@@ -249,7 +249,7 @@ export const EventRefractorYieldDistribution = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.assetBaseDenom = reader.string();
+          message.assetId = reader.string();
           break;
         case 2:
           message.totalYield = reader.string();
@@ -273,7 +273,7 @@ export const EventRefractorYieldDistribution = {
 
   fromJSON(object: any): EventRefractorYieldDistribution {
     return {
-      assetBaseDenom: isSet(object.assetBaseDenom) ? String(object.assetBaseDenom) : "",
+      assetId: isSet(object.assetId) ? String(object.assetId) : "",
       totalYield: isSet(object.totalYield) ? String(object.totalYield) : "",
       protocolFee: isSet(object.protocolFee) ? String(object.protocolFee) : "",
       stakeYield: isSet(object.stakeYield) ? String(object.stakeYield) : "",
@@ -283,7 +283,7 @@ export const EventRefractorYieldDistribution = {
 
   toJSON(message: EventRefractorYieldDistribution): unknown {
     const obj: any = {};
-    message.assetBaseDenom !== undefined && (obj.assetBaseDenom = message.assetBaseDenom);
+    message.assetId !== undefined && (obj.assetId = message.assetId);
     message.totalYield !== undefined && (obj.totalYield = message.totalYield);
     message.protocolFee !== undefined && (obj.protocolFee = message.protocolFee);
     message.stakeYield !== undefined && (obj.stakeYield = message.stakeYield);
@@ -295,7 +295,7 @@ export const EventRefractorYieldDistribution = {
     object: I,
   ): EventRefractorYieldDistribution {
     const message = createBaseEventRefractorYieldDistribution();
-    message.assetBaseDenom = object.assetBaseDenom ?? "";
+    message.assetId = object.assetId ?? "";
     message.totalYield = object.totalYield ?? "";
     message.protocolFee = object.protocolFee ?? "";
     message.stakeYield = object.stakeYield ?? "";

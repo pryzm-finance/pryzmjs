@@ -7,10 +7,11 @@ import { Timestamp } from "../../google/protobuf/timestamp";
 export const protobufPackage = "prismfinance.prisma.tics";
 
 export interface Maturity {
-  asset: string;
+  assetId: string;
   symbol: string;
   active: boolean;
-  maturityTime: Date | undefined;
+  introductionTime: Date | undefined;
+  expirationTime: Date | undefined;
   blockHeight: number;
   blockTime: Date | undefined;
   roi: string;
@@ -21,7 +22,7 @@ export interface Maturity {
 }
 
 export interface QueryAllMaturitiesRequest {
-  asset: string;
+  assetId: string;
   active: string;
   pagination: PageRequest | undefined;
 }
@@ -33,10 +34,11 @@ export interface QueryAllMaturitiesResponse {
 
 function createBaseMaturity(): Maturity {
   return {
-    asset: "",
+    assetId: "",
     symbol: "",
     active: false,
-    maturityTime: undefined,
+    introductionTime: undefined,
+    expirationTime: undefined,
     blockHeight: 0,
     blockTime: undefined,
     roi: "",
@@ -49,8 +51,8 @@ function createBaseMaturity(): Maturity {
 
 export const Maturity = {
   encode(message: Maturity, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (message.asset !== "") {
-      writer.uint32(10).string(message.asset);
+    if (message.assetId !== "") {
+      writer.uint32(10).string(message.assetId);
     }
     if (message.symbol !== "") {
       writer.uint32(18).string(message.symbol);
@@ -58,29 +60,32 @@ export const Maturity = {
     if (message.active === true) {
       writer.uint32(24).bool(message.active);
     }
-    if (message.maturityTime !== undefined) {
-      Timestamp.encode(toTimestamp(message.maturityTime), writer.uint32(34).fork()).ldelim();
+    if (message.introductionTime !== undefined) {
+      Timestamp.encode(toTimestamp(message.introductionTime), writer.uint32(34).fork()).ldelim();
+    }
+    if (message.expirationTime !== undefined) {
+      Timestamp.encode(toTimestamp(message.expirationTime), writer.uint32(42).fork()).ldelim();
     }
     if (message.blockHeight !== 0) {
-      writer.uint32(40).int64(message.blockHeight);
+      writer.uint32(48).int64(message.blockHeight);
     }
     if (message.blockTime !== undefined) {
-      Timestamp.encode(toTimestamp(message.blockTime), writer.uint32(50).fork()).ldelim();
+      Timestamp.encode(toTimestamp(message.blockTime), writer.uint32(58).fork()).ldelim();
     }
     if (message.roi !== "") {
-      writer.uint32(58).string(message.roi);
+      writer.uint32(66).string(message.roi);
     }
     if (message.yApy !== "") {
-      writer.uint32(66).string(message.yApy);
+      writer.uint32(74).string(message.yApy);
     }
     if (message.pApy !== "") {
-      writer.uint32(74).string(message.pApy);
+      writer.uint32(82).string(message.pApy);
     }
     if (message.yPrice !== "") {
-      writer.uint32(82).string(message.yPrice);
+      writer.uint32(90).string(message.yPrice);
     }
     if (message.pPrice !== "") {
-      writer.uint32(90).string(message.pPrice);
+      writer.uint32(98).string(message.pPrice);
     }
     return writer;
   },
@@ -93,7 +98,7 @@ export const Maturity = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.asset = reader.string();
+          message.assetId = reader.string();
           break;
         case 2:
           message.symbol = reader.string();
@@ -102,27 +107,30 @@ export const Maturity = {
           message.active = reader.bool();
           break;
         case 4:
-          message.maturityTime = fromTimestamp(Timestamp.decode(reader, reader.uint32()));
+          message.introductionTime = fromTimestamp(Timestamp.decode(reader, reader.uint32()));
           break;
         case 5:
-          message.blockHeight = longToNumber(reader.int64() as Long);
+          message.expirationTime = fromTimestamp(Timestamp.decode(reader, reader.uint32()));
           break;
         case 6:
-          message.blockTime = fromTimestamp(Timestamp.decode(reader, reader.uint32()));
+          message.blockHeight = longToNumber(reader.int64() as Long);
           break;
         case 7:
-          message.roi = reader.string();
+          message.blockTime = fromTimestamp(Timestamp.decode(reader, reader.uint32()));
           break;
         case 8:
-          message.yApy = reader.string();
+          message.roi = reader.string();
           break;
         case 9:
-          message.pApy = reader.string();
+          message.yApy = reader.string();
           break;
         case 10:
-          message.yPrice = reader.string();
+          message.pApy = reader.string();
           break;
         case 11:
+          message.yPrice = reader.string();
+          break;
+        case 12:
           message.pPrice = reader.string();
           break;
         default:
@@ -135,10 +143,11 @@ export const Maturity = {
 
   fromJSON(object: any): Maturity {
     return {
-      asset: isSet(object.asset) ? String(object.asset) : "",
+      assetId: isSet(object.assetId) ? String(object.assetId) : "",
       symbol: isSet(object.symbol) ? String(object.symbol) : "",
       active: isSet(object.active) ? Boolean(object.active) : false,
-      maturityTime: isSet(object.maturityTime) ? fromJsonTimestamp(object.maturityTime) : undefined,
+      introductionTime: isSet(object.introductionTime) ? fromJsonTimestamp(object.introductionTime) : undefined,
+      expirationTime: isSet(object.expirationTime) ? fromJsonTimestamp(object.expirationTime) : undefined,
       blockHeight: isSet(object.blockHeight) ? Number(object.blockHeight) : 0,
       blockTime: isSet(object.blockTime) ? fromJsonTimestamp(object.blockTime) : undefined,
       roi: isSet(object.roi) ? String(object.roi) : "",
@@ -151,10 +160,11 @@ export const Maturity = {
 
   toJSON(message: Maturity): unknown {
     const obj: any = {};
-    message.asset !== undefined && (obj.asset = message.asset);
+    message.assetId !== undefined && (obj.assetId = message.assetId);
     message.symbol !== undefined && (obj.symbol = message.symbol);
     message.active !== undefined && (obj.active = message.active);
-    message.maturityTime !== undefined && (obj.maturityTime = message.maturityTime.toISOString());
+    message.introductionTime !== undefined && (obj.introductionTime = message.introductionTime.toISOString());
+    message.expirationTime !== undefined && (obj.expirationTime = message.expirationTime.toISOString());
     message.blockHeight !== undefined && (obj.blockHeight = Math.round(message.blockHeight));
     message.blockTime !== undefined && (obj.blockTime = message.blockTime.toISOString());
     message.roi !== undefined && (obj.roi = message.roi);
@@ -167,10 +177,11 @@ export const Maturity = {
 
   fromPartial<I extends Exact<DeepPartial<Maturity>, I>>(object: I): Maturity {
     const message = createBaseMaturity();
-    message.asset = object.asset ?? "";
+    message.assetId = object.assetId ?? "";
     message.symbol = object.symbol ?? "";
     message.active = object.active ?? false;
-    message.maturityTime = object.maturityTime ?? undefined;
+    message.introductionTime = object.introductionTime ?? undefined;
+    message.expirationTime = object.expirationTime ?? undefined;
     message.blockHeight = object.blockHeight ?? 0;
     message.blockTime = object.blockTime ?? undefined;
     message.roi = object.roi ?? "";
@@ -183,13 +194,13 @@ export const Maturity = {
 };
 
 function createBaseQueryAllMaturitiesRequest(): QueryAllMaturitiesRequest {
-  return { asset: "", active: "", pagination: undefined };
+  return { assetId: "", active: "", pagination: undefined };
 }
 
 export const QueryAllMaturitiesRequest = {
   encode(message: QueryAllMaturitiesRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (message.asset !== "") {
-      writer.uint32(10).string(message.asset);
+    if (message.assetId !== "") {
+      writer.uint32(10).string(message.assetId);
     }
     if (message.active !== "") {
       writer.uint32(18).string(message.active);
@@ -208,7 +219,7 @@ export const QueryAllMaturitiesRequest = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.asset = reader.string();
+          message.assetId = reader.string();
           break;
         case 2:
           message.active = reader.string();
@@ -226,7 +237,7 @@ export const QueryAllMaturitiesRequest = {
 
   fromJSON(object: any): QueryAllMaturitiesRequest {
     return {
-      asset: isSet(object.asset) ? String(object.asset) : "",
+      assetId: isSet(object.assetId) ? String(object.assetId) : "",
       active: isSet(object.active) ? String(object.active) : "",
       pagination: isSet(object.pagination) ? PageRequest.fromJSON(object.pagination) : undefined,
     };
@@ -234,7 +245,7 @@ export const QueryAllMaturitiesRequest = {
 
   toJSON(message: QueryAllMaturitiesRequest): unknown {
     const obj: any = {};
-    message.asset !== undefined && (obj.asset = message.asset);
+    message.assetId !== undefined && (obj.assetId = message.assetId);
     message.active !== undefined && (obj.active = message.active);
     message.pagination !== undefined
       && (obj.pagination = message.pagination ? PageRequest.toJSON(message.pagination) : undefined);
@@ -243,7 +254,7 @@ export const QueryAllMaturitiesRequest = {
 
   fromPartial<I extends Exact<DeepPartial<QueryAllMaturitiesRequest>, I>>(object: I): QueryAllMaturitiesRequest {
     const message = createBaseQueryAllMaturitiesRequest();
-    message.asset = object.asset ?? "";
+    message.assetId = object.assetId ?? "";
     message.active = object.active ?? "";
     message.pagination = (object.pagination !== undefined && object.pagination !== null)
       ? PageRequest.fromPartial(object.pagination)

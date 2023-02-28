@@ -1,31 +1,31 @@
-import { EventWhitelistAsset } from "./types/prismcore/assets/event"
+import { EventRegisterAsset } from "./types/prismcore/assets/event"
 import { EventAddMaturityLevel } from "./types/prismcore/assets/event"
 import { EventDeactivateMaturityLevel } from "./types/prismcore/assets/event"
 import { EventUpdateMaturityParams } from "./types/prismcore/assets/event"
 import { EventUpdateFeeRatios } from "./types/prismcore/assets/event"
-import { EventUpdateMessagePassingConnection } from "./types/prismcore/assets/event"
-import { EventDelistAsset } from "./types/prismcore/assets/event"
+import { EventDisableAsset } from "./types/prismcore/assets/event"
+import { EventExchangeRateUpdated } from "./types/prismcore/assets/event"
+import { ExchangeRate } from "./types/prismcore/assets/exchange_rate"
 import { MaturityLevel } from "./types/prismcore/assets/maturity_level"
 import { Params } from "./types/prismcore/assets/params"
-import { AssetIbcConnectionProperties } from "./types/prismcore/assets/whitelisted_asset"
-import { AssetFeeRatios } from "./types/prismcore/assets/whitelisted_asset"
-import { AssetMaturityParameters } from "./types/prismcore/assets/whitelisted_asset"
-import { WhitelistedAsset } from "./types/prismcore/assets/whitelisted_asset"
+import { RefractableAsset } from "./types/prismcore/assets/refractable_asset"
+import { MaturityParams } from "./types/prismcore/assets/refractable_asset"
+import { FeeRatios } from "./types/prismcore/assets/refractable_asset"
 
 
 export {     
-    EventWhitelistAsset,
+    EventRegisterAsset,
     EventAddMaturityLevel,
     EventDeactivateMaturityLevel,
     EventUpdateMaturityParams,
     EventUpdateFeeRatios,
-    EventUpdateMessagePassingConnection,
-    EventDelistAsset,
+    EventDisableAsset,
+    EventExchangeRateUpdated,
+    ExchangeRate,
     MaturityLevel,
     Params,
-    AssetIbcConnectionProperties,
-    AssetFeeRatios,
-    AssetMaturityParameters,
-    WhitelistedAsset,
+    RefractableAsset,
+    MaturityParams,
+    FeeRatios,
     
  }

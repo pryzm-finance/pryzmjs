@@ -261,11 +261,11 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
    * @tags Query
    * @name QueryBondedAmount
    * @summary Queries a list of BondedAmount items.
-   * @request GET:/prism-finance/prism-core/ystaking/bonded_amount/{asset}
+   * @request GET:/prism-finance/prism-core/ystaking/bonded_amount/{asset_id}
    */
-  queryBondedAmount = (asset: string, query?: { maturity?: string; address?: string }, params: RequestParams = {}) =>
+  queryBondedAmount = (assetId: string, query?: { maturity?: string; address?: string }, params: RequestParams = {}) =>
     this.request<YstakingQueryBondedAmountResponse, RpcStatus>({
-      path: `/prism-finance/prism-core/ystaking/bonded_amount/${asset}`,
+      path: `/prism-finance/prism-core/ystaking/bonded_amount/${assetId}`,
       method: "GET",
       query: query,
       format: "json",

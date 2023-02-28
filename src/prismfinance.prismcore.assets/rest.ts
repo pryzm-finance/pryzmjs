@@ -9,23 +9,35 @@
  * ---------------------------------------------------------------
  */
 
-export interface AssetsAssetFeeRatios {
-  c_asset_fee_ratio?: string;
-  yield_fee_ratio?: string;
-  merge_fee_ratio?: string;
-  redeem_fee_ratio?: string;
-  refract_fee_ratio?: string;
-  c_asset_bond_fee_ratio?: string;
-  c_asset_redeem_fee_ratio?: string;
-  y_staking_claim_reward_fee_ratio?: string;
+export interface AssetsExchangeRate {
+  asset_id?: string;
+  rate?: string;
+
+  /** @format int64 */
+  time?: string;
 }
 
-export interface AssetsAssetIbcConnectionProperties {
-  port?: string;
-  channel?: string;
+export interface AssetsFeeRatios {
+  yield?: string;
+  refractor_refract?: string;
+  refractor_merge?: string;
+  refractor_redeem?: string;
+  y_staking_claim_reward?: string;
 }
 
-export interface AssetsAssetMaturityParameters {
+export interface AssetsMaturityLevel {
+  active?: boolean;
+  asset_id?: string;
+  symbol?: string;
+
+  /** @format date-time */
+  introduction_time?: string;
+
+  /** @format date-time */
+  expiration_time?: string;
+}
+
+export interface AssetsMaturityParams {
   /** @format int32 */
   levels_per_year?: number;
 
@@ -33,26 +45,35 @@ export interface AssetsAssetMaturityParameters {
   years?: number;
 }
 
-export interface AssetsMaturityLevel {
-  active?: boolean;
-  asset?: string;
-  symbol?: string;
-}
+export type AssetsMsgDisableAssetResponse = object;
 
-export type AssetsMsgDelistAssetResponse = object;
+export type AssetsMsgRegisterAssetResponse = object;
 
 export type AssetsMsgUpdateFeeRatiosResponse = object;
 
 export type AssetsMsgUpdateMaturityParamsResponse = object;
 
-export type AssetsMsgUpdateMessagePassingConnectionResponse = object;
-
-export type AssetsMsgWhitelistAssetResponse = object;
-
 /**
  * Params defines the parameters for the module.
  */
-export type AssetsParams = object;
+export interface AssetsParams {
+  default_fee_ratios?: AssetsFeeRatios;
+}
+
+export interface AssetsQueryAllExchangeRateResponse {
+  exchange_rate?: AssetsExchangeRate[];
+
+  /**
+   * PageResponse is to be embedded in gRPC response messages where the
+   * corresponding request message has used PageRequest.
+   *
+   *  message SomeResponse {
+   *          repeated Bar results = 1;
+   *          PageResponse page = 2;
+   *  }
+   */
+  pagination?: V1Beta1PageResponse;
+}
 
 export interface AssetsQueryAllMaturityLevelResponse {
   maturity_level?: AssetsMaturityLevel[];
@@ -69,8 +90,8 @@ export interface AssetsQueryAllMaturityLevelResponse {
   pagination?: V1Beta1PageResponse;
 }
 
-export interface AssetsQueryAllWhitelistedAssetResponse {
-  whitelisted_asset?: AssetsWhitelistedAsset[];
+export interface AssetsQueryAllRefractableAssetResponse {
+  assets?: AssetsRefractableAsset[];
 
   /**
    * PageResponse is to be embedded in gRPC response messages where the
@@ -84,12 +105,16 @@ export interface AssetsQueryAllWhitelistedAssetResponse {
   pagination?: V1Beta1PageResponse;
 }
 
+export interface AssetsQueryGetExchangeRateResponse {
+  exchange_rate?: AssetsExchangeRate;
+}
+
 export interface AssetsQueryGetMaturityLevelResponse {
   maturity_level?: AssetsMaturityLevel;
 }
 
-export interface AssetsQueryGetWhitelistedAssetResponse {
-  whitelisted_asset?: AssetsWhitelistedAsset;
+export interface AssetsQueryGetRefractableAssetResponse {
+  asset?: AssetsRefractableAsset;
 }
 
 /**
@@ -100,16 +125,14 @@ export interface AssetsQueryParamsResponse {
   params?: AssetsParams;
 }
 
-export interface AssetsWhitelistedAsset {
-  refractable?: boolean;
+export interface AssetsRefractableAsset {
   base_denom?: string;
-  chain_id?: string;
-  hub_contract_addr?: string;
-  c_asset_base_denom?: string;
-  maturity_parameters?: AssetsAssetMaturityParameters;
-  token_transfer_connection?: AssetsAssetIbcConnectionProperties;
-  message_passing_connection?: AssetsAssetIbcConnectionProperties;
-  fee_ratios?: AssetsAssetFeeRatios;
+  transfer_channel?: string;
+  token_denom?: string;
+  icstaked?: boolean;
+  disabled?: boolean;
+  maturity_params?: AssetsMaturityParams;
+  fee_ratios?: AssetsFeeRatios;
 }
 
 export interface ProtobufAny {
@@ -324,6 +347,48 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
    * No description
    *
    * @tags Query
+   * @name QueryExchangeRateAll
+   * @summary Queries a list of ExchangeRate items.
+   * @request GET:/prism-finance/prism-core/assets/exchange_rate
+   */
+  queryExchangeRateAll = (
+    query?: {
+      "pagination.key"?: string;
+      "pagination.offset"?: string;
+      "pagination.limit"?: string;
+      "pagination.count_total"?: boolean;
+      "pagination.reverse"?: boolean;
+    },
+    params: RequestParams = {},
+  ) =>
+    this.request<AssetsQueryAllExchangeRateResponse, RpcStatus>({
+      path: `/prism-finance/prism-core/assets/exchange_rate`,
+      method: "GET",
+      query: query,
+      format: "json",
+      ...params,
+    });
+
+  /**
+   * No description
+   *
+   * @tags Query
+   * @name QueryExchangeRate
+   * @summary Queries a AssetExchangeRate by index.
+   * @request GET:/prism-finance/prism-core/assets/exchange_rate/{asset_id}
+   */
+  queryExchangeRate = (assetId: string, params: RequestParams = {}) =>
+    this.request<AssetsQueryGetExchangeRateResponse, RpcStatus>({
+      path: `/prism-finance/prism-core/assets/exchange_rate/${assetId}`,
+      method: "GET",
+      format: "json",
+      ...params,
+    });
+
+  /**
+   * No description
+   *
+   * @tags Query
    * @name QueryMaturityLevelAll
    * @summary Queries a list of MaturityLevel items.
    * @request GET:/prism-finance/prism-core/assets/maturity_level/{active}
@@ -331,8 +396,8 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
   queryMaturityLevelAll = (
     active: boolean,
     query?: {
-      refractable?: string;
-      asset?: string;
+      asset_id?: string;
+      asset_enabled?: string;
       "pagination.key"?: string;
       "pagination.offset"?: string;
       "pagination.limit"?: string;
@@ -355,11 +420,11 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
    * @tags Query
    * @name QueryMaturityLevel
    * @summary Queries a MaturityLevel by index.
-   * @request GET:/prism-finance/prism-core/assets/maturity_level/{active}/{asset}/{symbol}
+   * @request GET:/prism-finance/prism-core/assets/maturity_level/{active}/{asset_id}/{symbol}
    */
-  queryMaturityLevel = (active: boolean, asset: string, symbol: string, params: RequestParams = {}) =>
+  queryMaturityLevel = (active: boolean, assetId: string, symbol: string, params: RequestParams = {}) =>
     this.request<AssetsQueryGetMaturityLevelResponse, RpcStatus>({
-      path: `/prism-finance/prism-core/assets/maturity_level/${active}/${asset}/${symbol}`,
+      path: `/prism-finance/prism-core/assets/maturity_level/${active}/${assetId}/${symbol}`,
       method: "GET",
       format: "json",
       ...params,
@@ -385,13 +450,13 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
    * No description
    *
    * @tags Query
-   * @name QueryWhitelistedAssetAll
-   * @summary Queries a list of WhitelistedAsset items.
-   * @request GET:/prism-finance/prism-core/assets/whitelisted_asset
+   * @name QueryRefractableAssetAll
+   * @summary Queries a list of RefractableAsset items.
+   * @request GET:/prism-finance/prism-core/assets/refractable_asset
    */
-  queryWhitelistedAssetAll = (
+  queryRefractableAssetAll = (
     query?: {
-      refractable?: string;
+      enabled?: string;
       "pagination.key"?: string;
       "pagination.offset"?: string;
       "pagination.limit"?: string;
@@ -400,8 +465,8 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     },
     params: RequestParams = {},
   ) =>
-    this.request<AssetsQueryAllWhitelistedAssetResponse, RpcStatus>({
-      path: `/prism-finance/prism-core/assets/whitelisted_asset`,
+    this.request<AssetsQueryAllRefractableAssetResponse, RpcStatus>({
+      path: `/prism-finance/prism-core/assets/refractable_asset`,
       method: "GET",
       query: query,
       format: "json",
@@ -412,13 +477,13 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
    * No description
    *
    * @tags Query
-   * @name QueryWhitelistedAsset
-   * @summary Queries a WhitelistedAsset by index.
-   * @request GET:/prism-finance/prism-core/assets/whitelisted_asset/{base_denom}
+   * @name QueryRefractableAsset
+   * @summary Queries a RefractableAsset by index.
+   * @request GET:/prism-finance/prism-core/assets/refractable_asset/{asset_id}
    */
-  queryWhitelistedAsset = (baseDenom: string, params: RequestParams = {}) =>
-    this.request<AssetsQueryGetWhitelistedAssetResponse, RpcStatus>({
-      path: `/prism-finance/prism-core/assets/whitelisted_asset/${baseDenom}`,
+  queryRefractableAsset = (assetId: string, params: RequestParams = {}) =>
+    this.request<AssetsQueryGetRefractableAssetResponse, RpcStatus>({
+      path: `/prism-finance/prism-core/assets/refractable_asset/${assetId}`,
       method: "GET",
       format: "json",
       ...params,

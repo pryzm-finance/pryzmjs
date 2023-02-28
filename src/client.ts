@@ -31,7 +31,7 @@ export class IgniteClient extends EventEmitter {
 
     if (Array.isArray(plugin)) {
       type Extension = UnionToIntersection<Return<T>['module']>
-      return AugmentedClient as typeof IgniteClient & Constructor<Extension>;  
+      return AugmentedClient as typeof IgniteClient & Constructor<Extension>;
     }
 
     type Extension = Return<T>['module']

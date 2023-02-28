@@ -16,7 +16,7 @@ export interface QueryParamsResponse {
 }
 
 export interface QueryBondedAmountRequest {
-  asset: string;
+  assetId: string;
   maturity: string;
   address: string;
 }
@@ -123,13 +123,13 @@ export const QueryParamsResponse = {
 };
 
 function createBaseQueryBondedAmountRequest(): QueryBondedAmountRequest {
-  return { asset: "", maturity: "", address: "" };
+  return { assetId: "", maturity: "", address: "" };
 }
 
 export const QueryBondedAmountRequest = {
   encode(message: QueryBondedAmountRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (message.asset !== "") {
-      writer.uint32(10).string(message.asset);
+    if (message.assetId !== "") {
+      writer.uint32(10).string(message.assetId);
     }
     if (message.maturity !== "") {
       writer.uint32(18).string(message.maturity);
@@ -148,7 +148,7 @@ export const QueryBondedAmountRequest = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.asset = reader.string();
+          message.assetId = reader.string();
           break;
         case 2:
           message.maturity = reader.string();
@@ -166,7 +166,7 @@ export const QueryBondedAmountRequest = {
 
   fromJSON(object: any): QueryBondedAmountRequest {
     return {
-      asset: isSet(object.asset) ? String(object.asset) : "",
+      assetId: isSet(object.assetId) ? String(object.assetId) : "",
       maturity: isSet(object.maturity) ? String(object.maturity) : "",
       address: isSet(object.address) ? String(object.address) : "",
     };
@@ -174,7 +174,7 @@ export const QueryBondedAmountRequest = {
 
   toJSON(message: QueryBondedAmountRequest): unknown {
     const obj: any = {};
-    message.asset !== undefined && (obj.asset = message.asset);
+    message.assetId !== undefined && (obj.assetId = message.assetId);
     message.maturity !== undefined && (obj.maturity = message.maturity);
     message.address !== undefined && (obj.address = message.address);
     return obj;
@@ -182,7 +182,7 @@ export const QueryBondedAmountRequest = {
 
   fromPartial<I extends Exact<DeepPartial<QueryBondedAmountRequest>, I>>(object: I): QueryBondedAmountRequest {
     const message = createBaseQueryBondedAmountRequest();
-    message.asset = object.asset ?? "";
+    message.assetId = object.assetId ?? "";
     message.maturity = object.maturity ?? "";
     message.address = object.address ?? "";
     return message;

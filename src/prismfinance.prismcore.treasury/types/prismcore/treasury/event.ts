@@ -3,64 +3,6 @@ import _m0 from "protobufjs/minimal";
 
 export const protobufPackage = "prismfinance.prismcore.treasury";
 
-/** FeeType enumerates the valid types for feeType. */
-export enum FeeType {
-  FEE_TYPE_YIELD = 0,
-  FEE_TYPE_EXCESS_YIELD = 1,
-  FEE_TYPE_MERGE = 2,
-  FEE_TYPE_REDEEM = 3,
-  FEE_TYPE_REFRACT = 4,
-  FEE_TYPE_Y_STAKING_CLAIM_REWARD = 5,
-  UNRECOGNIZED = -1,
-}
-
-export function feeTypeFromJSON(object: any): FeeType {
-  switch (object) {
-    case 0:
-    case "FEE_TYPE_YIELD":
-      return FeeType.FEE_TYPE_YIELD;
-    case 1:
-    case "FEE_TYPE_EXCESS_YIELD":
-      return FeeType.FEE_TYPE_EXCESS_YIELD;
-    case 2:
-    case "FEE_TYPE_MERGE":
-      return FeeType.FEE_TYPE_MERGE;
-    case 3:
-    case "FEE_TYPE_REDEEM":
-      return FeeType.FEE_TYPE_REDEEM;
-    case 4:
-    case "FEE_TYPE_REFRACT":
-      return FeeType.FEE_TYPE_REFRACT;
-    case 5:
-    case "FEE_TYPE_Y_STAKING_CLAIM_REWARD":
-      return FeeType.FEE_TYPE_Y_STAKING_CLAIM_REWARD;
-    case -1:
-    case "UNRECOGNIZED":
-    default:
-      return FeeType.UNRECOGNIZED;
-  }
-}
-
-export function feeTypeToJSON(object: FeeType): string {
-  switch (object) {
-    case FeeType.FEE_TYPE_YIELD:
-      return "FEE_TYPE_YIELD";
-    case FeeType.FEE_TYPE_EXCESS_YIELD:
-      return "FEE_TYPE_EXCESS_YIELD";
-    case FeeType.FEE_TYPE_MERGE:
-      return "FEE_TYPE_MERGE";
-    case FeeType.FEE_TYPE_REDEEM:
-      return "FEE_TYPE_REDEEM";
-    case FeeType.FEE_TYPE_REFRACT:
-      return "FEE_TYPE_REFRACT";
-    case FeeType.FEE_TYPE_Y_STAKING_CLAIM_REWARD:
-      return "FEE_TYPE_Y_STAKING_CLAIM_REWARD";
-    case FeeType.UNRECOGNIZED:
-    default:
-      return "UNRECOGNIZED";
-  }
-}
-
 export interface EventTreasuryCollectFee {
   feeType: string;
   amount: string;
@@ -205,16 +147,16 @@ function createBaseEventSetAction(): EventSetAction {
 export const EventSetAction = {
   encode(message: EventSetAction, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.actionType !== "") {
-      writer.uint32(18).string(message.actionType);
+      writer.uint32(10).string(message.actionType);
     }
     if (message.occurrence !== "") {
-      writer.uint32(26).string(message.occurrence);
+      writer.uint32(18).string(message.occurrence);
     }
     if (message.duration !== "") {
-      writer.uint32(34).string(message.duration);
+      writer.uint32(26).string(message.duration);
     }
     if (message.period !== "") {
-      writer.uint32(42).string(message.period);
+      writer.uint32(34).string(message.period);
     }
     return writer;
   },
@@ -226,16 +168,16 @@ export const EventSetAction = {
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
-        case 2:
+        case 1:
           message.actionType = reader.string();
           break;
-        case 3:
+        case 2:
           message.occurrence = reader.string();
           break;
-        case 4:
+        case 3:
           message.duration = reader.string();
           break;
-        case 5:
+        case 4:
           message.period = reader.string();
           break;
         default:
@@ -281,7 +223,7 @@ function createBaseEventUpdateActionOccurrence(): EventUpdateActionOccurrence {
 export const EventUpdateActionOccurrence = {
   encode(message: EventUpdateActionOccurrence, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.occurrence !== "") {
-      writer.uint32(26).string(message.occurrence);
+      writer.uint32(42).string(message.occurrence);
     }
     return writer;
   },
@@ -293,7 +235,7 @@ export const EventUpdateActionOccurrence = {
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
-        case 3:
+        case 5:
           message.occurrence = reader.string();
           break;
         default:

@@ -192,12 +192,15 @@ export interface TenderminttypesValidator {
 }
 
 export interface TicsMaturity {
-  asset?: string;
+  asset_id?: string;
   symbol?: string;
   active?: boolean;
 
   /** @format date-time */
-  maturity_time?: string;
+  introduction_time?: string;
+
+  /** @format date-time */
+  expiration_time?: string;
 
   /** @format int64 */
   block_height?: string;
@@ -1174,7 +1177,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
    */
   queryMaturityAll = (
     query?: {
-      asset?: string;
+      asset_id?: string;
       active?: string;
       "pagination.key"?: string;
       "pagination.offset"?: string;

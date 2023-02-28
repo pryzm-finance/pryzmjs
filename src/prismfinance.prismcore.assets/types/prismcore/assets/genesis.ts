@@ -1,21 +1,21 @@
 /* eslint-disable */
 import _m0 from "protobufjs/minimal";
+import { ExchangeRate } from "./exchange_rate";
 import { Params } from "./params";
-import { WhitelistedAsset } from "./whitelisted_asset";
+import { RefractableAsset } from "./refractable_asset";
 
 export const protobufPackage = "prismfinance.prismcore.assets";
 
 /** GenesisState defines the assets module's genesis state. */
 export interface GenesisState {
-  params:
-    | Params
-    | undefined;
+  params: Params | undefined;
+  assets: RefractableAsset[];
   /** this line is used by starport scaffolding # genesis/proto/state */
-  whitelistedAssetList: WhitelistedAsset[];
+  exchangeRateList: ExchangeRate[];
 }
 
 function createBaseGenesisState(): GenesisState {
-  return { params: undefined, whitelistedAssetList: [] };
+  return { params: undefined, assets: [], exchangeRateList: [] };
 }
 
 export const GenesisState = {
@@ -23,8 +23,11 @@ export const GenesisState = {
     if (message.params !== undefined) {
       Params.encode(message.params, writer.uint32(10).fork()).ldelim();
     }
-    for (const v of message.whitelistedAssetList) {
-      WhitelistedAsset.encode(v!, writer.uint32(18).fork()).ldelim();
+    for (const v of message.assets) {
+      RefractableAsset.encode(v!, writer.uint32(18).fork()).ldelim();
+    }
+    for (const v of message.exchangeRateList) {
+      ExchangeRate.encode(v!, writer.uint32(26).fork()).ldelim();
     }
     return writer;
   },
@@ -40,7 +43,10 @@ export const GenesisState = {
           message.params = Params.decode(reader, reader.uint32());
           break;
         case 2:
-          message.whitelistedAssetList.push(WhitelistedAsset.decode(reader, reader.uint32()));
+          message.assets.push(RefractableAsset.decode(reader, reader.uint32()));
+          break;
+        case 3:
+          message.exchangeRateList.push(ExchangeRate.decode(reader, reader.uint32()));
           break;
         default:
           reader.skipType(tag & 7);
@@ -53,8 +59,9 @@ export const GenesisState = {
   fromJSON(object: any): GenesisState {
     return {
       params: isSet(object.params) ? Params.fromJSON(object.params) : undefined,
-      whitelistedAssetList: Array.isArray(object?.whitelistedAssetList)
-        ? object.whitelistedAssetList.map((e: any) => WhitelistedAsset.fromJSON(e))
+      assets: Array.isArray(object?.assets) ? object.assets.map((e: any) => RefractableAsset.fromJSON(e)) : [],
+      exchangeRateList: Array.isArray(object?.exchangeRateList)
+        ? object.exchangeRateList.map((e: any) => ExchangeRate.fromJSON(e))
         : [],
     };
   },
@@ -62,10 +69,15 @@ export const GenesisState = {
   toJSON(message: GenesisState): unknown {
     const obj: any = {};
     message.params !== undefined && (obj.params = message.params ? Params.toJSON(message.params) : undefined);
-    if (message.whitelistedAssetList) {
-      obj.whitelistedAssetList = message.whitelistedAssetList.map((e) => e ? WhitelistedAsset.toJSON(e) : undefined);
+    if (message.assets) {
+      obj.assets = message.assets.map((e) => e ? RefractableAsset.toJSON(e) : undefined);
     } else {
-      obj.whitelistedAssetList = [];
+      obj.assets = [];
+    }
+    if (message.exchangeRateList) {
+      obj.exchangeRateList = message.exchangeRateList.map((e) => e ? ExchangeRate.toJSON(e) : undefined);
+    } else {
+      obj.exchangeRateList = [];
     }
     return obj;
   },
@@ -75,7 +87,8 @@ export const GenesisState = {
     message.params = (object.params !== undefined && object.params !== null)
       ? Params.fromPartial(object.params)
       : undefined;
-    message.whitelistedAssetList = object.whitelistedAssetList?.map((e) => WhitelistedAsset.fromPartial(e)) || [];
+    message.assets = object.assets?.map((e) => RefractableAsset.fromPartial(e)) || [];
+    message.exchangeRateList = object.exchangeRateList?.map((e) => ExchangeRate.fromPartial(e)) || [];
     return message;
   },
 };

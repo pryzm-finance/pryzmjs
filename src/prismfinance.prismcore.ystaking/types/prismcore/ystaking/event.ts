@@ -29,7 +29,7 @@ export interface EventYStakingClaimReward {
 
 export interface EventDeactivateYStakingMaturityPool {
   burntBondedAmount: string;
-  assetBaseDenom: string;
+  assetId: string;
   maturitySymbol: string;
 }
 
@@ -302,7 +302,7 @@ export const EventYStakingClaimReward = {
 };
 
 function createBaseEventDeactivateYStakingMaturityPool(): EventDeactivateYStakingMaturityPool {
-  return { burntBondedAmount: "", assetBaseDenom: "", maturitySymbol: "" };
+  return { burntBondedAmount: "", assetId: "", maturitySymbol: "" };
 }
 
 export const EventDeactivateYStakingMaturityPool = {
@@ -310,8 +310,8 @@ export const EventDeactivateYStakingMaturityPool = {
     if (message.burntBondedAmount !== "") {
       writer.uint32(10).string(message.burntBondedAmount);
     }
-    if (message.assetBaseDenom !== "") {
-      writer.uint32(18).string(message.assetBaseDenom);
+    if (message.assetId !== "") {
+      writer.uint32(18).string(message.assetId);
     }
     if (message.maturitySymbol !== "") {
       writer.uint32(26).string(message.maturitySymbol);
@@ -330,7 +330,7 @@ export const EventDeactivateYStakingMaturityPool = {
           message.burntBondedAmount = reader.string();
           break;
         case 2:
-          message.assetBaseDenom = reader.string();
+          message.assetId = reader.string();
           break;
         case 3:
           message.maturitySymbol = reader.string();
@@ -346,7 +346,7 @@ export const EventDeactivateYStakingMaturityPool = {
   fromJSON(object: any): EventDeactivateYStakingMaturityPool {
     return {
       burntBondedAmount: isSet(object.burntBondedAmount) ? String(object.burntBondedAmount) : "",
-      assetBaseDenom: isSet(object.assetBaseDenom) ? String(object.assetBaseDenom) : "",
+      assetId: isSet(object.assetId) ? String(object.assetId) : "",
       maturitySymbol: isSet(object.maturitySymbol) ? String(object.maturitySymbol) : "",
     };
   },
@@ -354,7 +354,7 @@ export const EventDeactivateYStakingMaturityPool = {
   toJSON(message: EventDeactivateYStakingMaturityPool): unknown {
     const obj: any = {};
     message.burntBondedAmount !== undefined && (obj.burntBondedAmount = message.burntBondedAmount);
-    message.assetBaseDenom !== undefined && (obj.assetBaseDenom = message.assetBaseDenom);
+    message.assetId !== undefined && (obj.assetId = message.assetId);
     message.maturitySymbol !== undefined && (obj.maturitySymbol = message.maturitySymbol);
     return obj;
   },
@@ -364,7 +364,7 @@ export const EventDeactivateYStakingMaturityPool = {
   ): EventDeactivateYStakingMaturityPool {
     const message = createBaseEventDeactivateYStakingMaturityPool();
     message.burntBondedAmount = object.burntBondedAmount ?? "";
-    message.assetBaseDenom = object.assetBaseDenom ?? "";
+    message.assetId = object.assetId ?? "";
     message.maturitySymbol = object.maturitySymbol ?? "";
     return message;
   },
