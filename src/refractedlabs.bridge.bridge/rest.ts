@@ -62,14 +62,18 @@ export interface BridgeConsensusStatus {
 }
 
 export interface BridgeCrossChainMessage {
-  type?: string;
+  type?: BridgeCrossChainMessageType;
   body?: string;
 }
 
+export enum BridgeCrossChainMessageType {
+  CROSS_CHAIN_MESSAGE_TYPE_DELIST = "CROSS_CHAIN_MESSAGE_TYPE_DELIST",
+  CROSS_CHAIN_MESSAGE_TYPE_WHITELIST = "CROSS_CHAIN_MESSAGE_TYPE_WHITELIST",
+}
+
 export interface BridgeMessageMetadata {
-  /** @format byte */
   hash?: string;
-  type?: string;
+  type?: BridgeCrossChainMessageType;
 
   /**
    * TODO? can we rely on feeders for detecting expiry or bridge needs an independent logic for detecting it (when the mojority of feeders do not inform the message expiration)
