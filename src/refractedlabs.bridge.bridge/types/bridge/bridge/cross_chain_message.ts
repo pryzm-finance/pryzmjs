@@ -3,8 +3,41 @@ import _m0 from "protobufjs/minimal";
 
 export const protobufPackage = "refractedlabs.bridge.bridge";
 
+export enum CrossChainMessageType {
+  CROSS_CHAIN_MESSAGE_TYPE_DELIST = 0,
+  CROSS_CHAIN_MESSAGE_TYPE_WHITELIST = 1,
+  UNRECOGNIZED = -1,
+}
+
+export function crossChainMessageTypeFromJSON(object: any): CrossChainMessageType {
+  switch (object) {
+    case 0:
+    case "CROSS_CHAIN_MESSAGE_TYPE_DELIST":
+      return CrossChainMessageType.CROSS_CHAIN_MESSAGE_TYPE_DELIST;
+    case 1:
+    case "CROSS_CHAIN_MESSAGE_TYPE_WHITELIST":
+      return CrossChainMessageType.CROSS_CHAIN_MESSAGE_TYPE_WHITELIST;
+    case -1:
+    case "UNRECOGNIZED":
+    default:
+      return CrossChainMessageType.UNRECOGNIZED;
+  }
+}
+
+export function crossChainMessageTypeToJSON(object: CrossChainMessageType): string {
+  switch (object) {
+    case CrossChainMessageType.CROSS_CHAIN_MESSAGE_TYPE_DELIST:
+      return "CROSS_CHAIN_MESSAGE_TYPE_DELIST";
+    case CrossChainMessageType.CROSS_CHAIN_MESSAGE_TYPE_WHITELIST:
+      return "CROSS_CHAIN_MESSAGE_TYPE_WHITELIST";
+    case CrossChainMessageType.UNRECOGNIZED:
+    default:
+      return "UNRECOGNIZED";
+  }
+}
+
 export interface CrossChainMessage {
-  type: string;
+  type: CrossChainMessageType;
   body: string;
 }
 
@@ -33,13 +66,13 @@ export interface DelistActorsCrossChainMessageResult {
 }
 
 function createBaseCrossChainMessage(): CrossChainMessage {
-  return { type: "", body: "" };
+  return { type: 0, body: "" };
 }
 
 export const CrossChainMessage = {
   encode(message: CrossChainMessage, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (message.type !== "") {
-      writer.uint32(10).string(message.type);
+    if (message.type !== 0) {
+      writer.uint32(8).int32(message.type);
     }
     if (message.body !== "") {
       writer.uint32(18).string(message.body);
@@ -55,7 +88,7 @@ export const CrossChainMessage = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.type = reader.string();
+          message.type = reader.int32() as any;
           break;
         case 2:
           message.body = reader.string();
@@ -69,19 +102,22 @@ export const CrossChainMessage = {
   },
 
   fromJSON(object: any): CrossChainMessage {
-    return { type: isSet(object.type) ? String(object.type) : "", body: isSet(object.body) ? String(object.body) : "" };
+    return {
+      type: isSet(object.type) ? crossChainMessageTypeFromJSON(object.type) : 0,
+      body: isSet(object.body) ? String(object.body) : "",
+    };
   },
 
   toJSON(message: CrossChainMessage): unknown {
     const obj: any = {};
-    message.type !== undefined && (obj.type = message.type);
+    message.type !== undefined && (obj.type = crossChainMessageTypeToJSON(message.type));
     message.body !== undefined && (obj.body = message.body);
     return obj;
   },
 
   fromPartial<I extends Exact<DeepPartial<CrossChainMessage>, I>>(object: I): CrossChainMessage {
     const message = createBaseCrossChainMessage();
-    message.type = object.type ?? "";
+    message.type = object.type ?? 0;
     message.body = object.body ?? "";
     return message;
   },

@@ -1,6 +1,11 @@
 /* eslint-disable */
 import Long from "long";
 import _m0 from "protobufjs/minimal";
+import {
+  CrossChainMessageType,
+  crossChainMessageTypeFromJSON,
+  crossChainMessageTypeToJSON,
+} from "./cross_chain_message";
 
 export const protobufPackage = "refractedlabs.bridge.bridge";
 
@@ -45,7 +50,7 @@ export function messageStateToJSON(object: MessageState): string {
 
 export interface MessageMetadata {
   hash: string;
-  type: string;
+  type: CrossChainMessageType;
   /**
    * TODO? can we rely on feeders for detecting expiry or bridge needs an independent logic for detecting it (when the mojority of feeders do not inform the message expiration)
    * possible solution: 1) detect expiration in end-blocker 2) inform expiration to send-message caller 3) remove metadata
@@ -77,7 +82,7 @@ export interface MessageBatchResult {
 function createBaseMessageMetadata(): MessageMetadata {
   return {
     hash: "",
-    type: "",
+    type: 0,
     expirationTime: 0,
     connectionId: "",
     contractAddress: "",
@@ -92,8 +97,8 @@ export const MessageMetadata = {
     if (message.hash !== "") {
       writer.uint32(10).string(message.hash);
     }
-    if (message.type !== "") {
-      writer.uint32(18).string(message.type);
+    if (message.type !== 0) {
+      writer.uint32(16).int32(message.type);
     }
     if (message.expirationTime !== 0) {
       writer.uint32(24).uint64(message.expirationTime);
@@ -127,7 +132,7 @@ export const MessageMetadata = {
           message.hash = reader.string();
           break;
         case 2:
-          message.type = reader.string();
+          message.type = reader.int32() as any;
           break;
         case 3:
           message.expirationTime = longToNumber(reader.uint64() as Long);
@@ -158,7 +163,7 @@ export const MessageMetadata = {
   fromJSON(object: any): MessageMetadata {
     return {
       hash: isSet(object.hash) ? String(object.hash) : "",
-      type: isSet(object.type) ? String(object.type) : "",
+      type: isSet(object.type) ? crossChainMessageTypeFromJSON(object.type) : 0,
       expirationTime: isSet(object.expirationTime) ? Number(object.expirationTime) : 0,
       connectionId: isSet(object.connectionId) ? String(object.connectionId) : "",
       contractAddress: isSet(object.contractAddress) ? String(object.contractAddress) : "",
@@ -171,7 +176,7 @@ export const MessageMetadata = {
   toJSON(message: MessageMetadata): unknown {
     const obj: any = {};
     message.hash !== undefined && (obj.hash = message.hash);
-    message.type !== undefined && (obj.type = message.type);
+    message.type !== undefined && (obj.type = crossChainMessageTypeToJSON(message.type));
     message.expirationTime !== undefined && (obj.expirationTime = Math.round(message.expirationTime));
     message.connectionId !== undefined && (obj.connectionId = message.connectionId);
     message.contractAddress !== undefined && (obj.contractAddress = message.contractAddress);
@@ -184,7 +189,7 @@ export const MessageMetadata = {
   fromPartial<I extends Exact<DeepPartial<MessageMetadata>, I>>(object: I): MessageMetadata {
     const message = createBaseMessageMetadata();
     message.hash = object.hash ?? "";
-    message.type = object.type ?? "";
+    message.type = object.type ?? 0;
     message.expirationTime = object.expirationTime ?? 0;
     message.connectionId = object.connectionId ?? "";
     message.contractAddress = object.contractAddress ?? "";
