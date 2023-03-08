@@ -23,8 +23,6 @@ export interface OracleMissCounter {
 
 export interface OracleModuleVote {
   module?: string;
-
-  /** @format byte */
   payload?: string;
 }
 
@@ -43,7 +41,7 @@ export interface OracleNamespaceVote {
   module_votes?: OracleModuleVote[];
 }
 
-export interface OraclePreVote {
+export interface OracleOraclePreVote {
   validator?: string;
   hash?: string;
 
@@ -51,7 +49,7 @@ export interface OraclePreVote {
   submit_block?: string;
 }
 
-export interface OracleVote {
+export interface OracleOracleVote {
   validator?: string;
   namespace_votes?: OracleNamespaceVote[];
 }
@@ -108,7 +106,7 @@ export interface OracleQueryAllMissCounterResponse {
 }
 
 export interface OracleQueryAllOraclePreVoteResponse {
-  oracle_pre_vote?: OraclePreVote[];
+  oracle_pre_vote?: OracleOraclePreVote[];
 
   /**
    * PageResponse is to be embedded in gRPC response messages where the
@@ -123,7 +121,7 @@ export interface OracleQueryAllOraclePreVoteResponse {
 }
 
 export interface OracleQueryAllOracleVoteResponse {
-  oracle_vote?: OracleVote[];
+  oracle_vote?: OracleOracleVote[];
 
   /**
    * PageResponse is to be embedded in gRPC response messages where the
@@ -146,11 +144,11 @@ export interface OracleQueryGetMissCounterResponse {
 }
 
 export interface OracleQueryGetOraclePreVoteResponse {
-  oracle_pre_vote?: OraclePreVote;
+  oracle_pre_vote?: OracleOraclePreVote;
 }
 
 export interface OracleQueryGetOracleVoteResponse {
-  oracle_vote?: OracleVote;
+  oracle_vote?: OracleOracleVote;
 }
 
 /**

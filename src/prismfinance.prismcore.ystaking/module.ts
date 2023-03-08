@@ -9,11 +9,11 @@ import { MissingWalletError } from "../helpers"
 import { Api } from "./rest";
 import { MsgClaimReward } from "./types/prismcore/ystaking/tx";
 import { MsgExitPool } from "./types/prismcore/ystaking/tx";
-import { MsgBond } from "./types/prismcore/ystaking/tx";
 import { MsgUnbond } from "./types/prismcore/ystaking/tx";
+import { MsgBond } from "./types/prismcore/ystaking/tx";
 
 
-export { MsgClaimReward, MsgExitPool, MsgBond, MsgUnbond };
+export { MsgClaimReward, MsgExitPool, MsgUnbond, MsgBond };
 
 type sendMsgClaimRewardParams = {
   value: MsgClaimReward,
@@ -27,14 +27,14 @@ type sendMsgExitPoolParams = {
   memo?: string
 };
 
-type sendMsgBondParams = {
-  value: MsgBond,
+type sendMsgUnbondParams = {
+  value: MsgUnbond,
   fee?: StdFee,
   memo?: string
 };
 
-type sendMsgUnbondParams = {
-  value: MsgUnbond,
+type sendMsgBondParams = {
+  value: MsgBond,
   fee?: StdFee,
   memo?: string
 };
@@ -48,12 +48,12 @@ type msgExitPoolParams = {
   value: MsgExitPool,
 };
 
-type msgBondParams = {
-  value: MsgBond,
-};
-
 type msgUnbondParams = {
   value: MsgUnbond,
+};
+
+type msgBondParams = {
+  value: MsgBond,
 };
 
 
@@ -102,20 +102,6 @@ export const txClient = ({ signer, prefix, addr }: TxClientOptions = { addr: "ht
 			}
 		},
 		
-		async sendMsgBond({ value, fee, memo }: sendMsgBondParams): Promise<DeliverTxResponse> {
-			if (!signer) {
-					throw new Error('TxClient:sendMsgBond: Unable to sign Tx. Signer is not present.')
-			}
-			try {			
-				const { address } = (await signer.getAccounts())[0]; 
-				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry, prefix});
-				let msg = this.msgBond({ value: MsgBond.fromPartial(value) })
-				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
-			} catch (e: any) {
-				throw new Error('TxClient:sendMsgBond: Could not broadcast Tx: '+ e.message)
-			}
-		},
-		
 		async sendMsgUnbond({ value, fee, memo }: sendMsgUnbondParams): Promise<DeliverTxResponse> {
 			if (!signer) {
 					throw new Error('TxClient:sendMsgUnbond: Unable to sign Tx. Signer is not present.')
@@ -127,6 +113,20 @@ export const txClient = ({ signer, prefix, addr }: TxClientOptions = { addr: "ht
 				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
 			} catch (e: any) {
 				throw new Error('TxClient:sendMsgUnbond: Could not broadcast Tx: '+ e.message)
+			}
+		},
+		
+		async sendMsgBond({ value, fee, memo }: sendMsgBondParams): Promise<DeliverTxResponse> {
+			if (!signer) {
+					throw new Error('TxClient:sendMsgBond: Unable to sign Tx. Signer is not present.')
+			}
+			try {			
+				const { address } = (await signer.getAccounts())[0]; 
+				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry, prefix});
+				let msg = this.msgBond({ value: MsgBond.fromPartial(value) })
+				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
+			} catch (e: any) {
+				throw new Error('TxClient:sendMsgBond: Could not broadcast Tx: '+ e.message)
 			}
 		},
 		
@@ -147,19 +147,19 @@ export const txClient = ({ signer, prefix, addr }: TxClientOptions = { addr: "ht
 			}
 		},
 		
-		msgBond({ value }: msgBondParams): EncodeObject {
-			try {
-				return { typeUrl: "/prismfinance.prismcore.ystaking.MsgBond", value: MsgBond.fromPartial( value ) }  
-			} catch (e: any) {
-				throw new Error('TxClient:MsgBond: Could not create message: ' + e.message)
-			}
-		},
-		
 		msgUnbond({ value }: msgUnbondParams): EncodeObject {
 			try {
 				return { typeUrl: "/prismfinance.prismcore.ystaking.MsgUnbond", value: MsgUnbond.fromPartial( value ) }  
 			} catch (e: any) {
 				throw new Error('TxClient:MsgUnbond: Could not create message: ' + e.message)
+			}
+		},
+		
+		msgBond({ value }: msgBondParams): EncodeObject {
+			try {
+				return { typeUrl: "/prismfinance.prismcore.ystaking.MsgBond", value: MsgBond.fromPartial( value ) }  
+			} catch (e: any) {
+				throw new Error('TxClient:MsgBond: Could not create message: ' + e.message)
 			}
 		},
 		

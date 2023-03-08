@@ -5,7 +5,7 @@ export const protobufPackage = "refractedlabs.oracle.oracle";
 
 export interface ModuleVote {
   module: string;
-  payload: Uint8Array;
+  payload: string;
 }
 
 export interface NamespaceVote {
@@ -14,7 +14,7 @@ export interface NamespaceVote {
 }
 
 function createBaseModuleVote(): ModuleVote {
-  return { module: "", payload: new Uint8Array() };
+  return { module: "", payload: "" };
 }
 
 export const ModuleVote = {
@@ -22,8 +22,8 @@ export const ModuleVote = {
     if (message.module !== "") {
       writer.uint32(10).string(message.module);
     }
-    if (message.payload.length !== 0) {
-      writer.uint32(18).bytes(message.payload);
+    if (message.payload !== "") {
+      writer.uint32(18).string(message.payload);
     }
     return writer;
   },
@@ -39,7 +39,7 @@ export const ModuleVote = {
           message.module = reader.string();
           break;
         case 2:
-          message.payload = reader.bytes();
+          message.payload = reader.string();
           break;
         default:
           reader.skipType(tag & 7);
@@ -52,22 +52,21 @@ export const ModuleVote = {
   fromJSON(object: any): ModuleVote {
     return {
       module: isSet(object.module) ? String(object.module) : "",
-      payload: isSet(object.payload) ? bytesFromBase64(object.payload) : new Uint8Array(),
+      payload: isSet(object.payload) ? String(object.payload) : "",
     };
   },
 
   toJSON(message: ModuleVote): unknown {
     const obj: any = {};
     message.module !== undefined && (obj.module = message.module);
-    message.payload !== undefined
-      && (obj.payload = base64FromBytes(message.payload !== undefined ? message.payload : new Uint8Array()));
+    message.payload !== undefined && (obj.payload = message.payload);
     return obj;
   },
 
   fromPartial<I extends Exact<DeepPartial<ModuleVote>, I>>(object: I): ModuleVote {
     const message = createBaseModuleVote();
     message.module = object.module ?? "";
-    message.payload = object.payload ?? new Uint8Array();
+    message.payload = object.payload ?? "";
     return message;
   },
 };
@@ -133,50 +132,6 @@ export const NamespaceVote = {
     return message;
   },
 };
-
-declare var self: any | undefined;
-declare var window: any | undefined;
-declare var global: any | undefined;
-var globalThis: any = (() => {
-  if (typeof globalThis !== "undefined") {
-    return globalThis;
-  }
-  if (typeof self !== "undefined") {
-    return self;
-  }
-  if (typeof window !== "undefined") {
-    return window;
-  }
-  if (typeof global !== "undefined") {
-    return global;
-  }
-  throw "Unable to locate global object";
-})();
-
-function bytesFromBase64(b64: string): Uint8Array {
-  if (globalThis.Buffer) {
-    return Uint8Array.from(globalThis.Buffer.from(b64, "base64"));
-  } else {
-    const bin = globalThis.atob(b64);
-    const arr = new Uint8Array(bin.length);
-    for (let i = 0; i < bin.length; ++i) {
-      arr[i] = bin.charCodeAt(i);
-    }
-    return arr;
-  }
-}
-
-function base64FromBytes(arr: Uint8Array): string {
-  if (globalThis.Buffer) {
-    return globalThis.Buffer.from(arr).toString("base64");
-  } else {
-    const bin: string[] = [];
-    arr.forEach((byte) => {
-      bin.push(String.fromCharCode(byte));
-    });
-    return globalThis.btoa(bin.join(""));
-  }
-}
 
 type Builtin = Date | Function | Uint8Array | string | number | boolean | undefined;
 
