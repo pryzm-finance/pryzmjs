@@ -6,9 +6,9 @@ export const protobufPackage = "refractedlabs.bridge.bridge";
 
 /** Params defines the parameters for the module. */
 export interface Params {
-  /** in seconds */
+  /** in milliseconds */
   challengePeriod: number;
-  /** in seconds */
+  /** in milliseconds */
   expirationDuration: number;
   slashFraction: string;
   slashWindow: number;

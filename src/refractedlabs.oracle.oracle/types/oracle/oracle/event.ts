@@ -28,7 +28,7 @@ export interface EventVoteIntervalEnds {
 export interface EventInvalidMajorityVotePayload {
   namespace: string;
   module: string;
-  majorityVotePayload: Uint8Array;
+  majorityVotePayload: string;
   error: string;
 }
 
@@ -269,7 +269,7 @@ export const EventVoteIntervalEnds = {
 };
 
 function createBaseEventInvalidMajorityVotePayload(): EventInvalidMajorityVotePayload {
-  return { namespace: "", module: "", majorityVotePayload: new Uint8Array(), error: "" };
+  return { namespace: "", module: "", majorityVotePayload: "", error: "" };
 }
 
 export const EventInvalidMajorityVotePayload = {
@@ -280,8 +280,8 @@ export const EventInvalidMajorityVotePayload = {
     if (message.module !== "") {
       writer.uint32(18).string(message.module);
     }
-    if (message.majorityVotePayload.length !== 0) {
-      writer.uint32(26).bytes(message.majorityVotePayload);
+    if (message.majorityVotePayload !== "") {
+      writer.uint32(26).string(message.majorityVotePayload);
     }
     if (message.error !== "") {
       writer.uint32(34).string(message.error);
@@ -303,7 +303,7 @@ export const EventInvalidMajorityVotePayload = {
           message.module = reader.string();
           break;
         case 3:
-          message.majorityVotePayload = reader.bytes();
+          message.majorityVotePayload = reader.string();
           break;
         case 4:
           message.error = reader.string();
@@ -320,9 +320,7 @@ export const EventInvalidMajorityVotePayload = {
     return {
       namespace: isSet(object.namespace) ? String(object.namespace) : "",
       module: isSet(object.module) ? String(object.module) : "",
-      majorityVotePayload: isSet(object.majorityVotePayload)
-        ? bytesFromBase64(object.majorityVotePayload)
-        : new Uint8Array(),
+      majorityVotePayload: isSet(object.majorityVotePayload) ? String(object.majorityVotePayload) : "",
       error: isSet(object.error) ? String(object.error) : "",
     };
   },
@@ -331,10 +329,7 @@ export const EventInvalidMajorityVotePayload = {
     const obj: any = {};
     message.namespace !== undefined && (obj.namespace = message.namespace);
     message.module !== undefined && (obj.module = message.module);
-    message.majorityVotePayload !== undefined
-      && (obj.majorityVotePayload = base64FromBytes(
-        message.majorityVotePayload !== undefined ? message.majorityVotePayload : new Uint8Array(),
-      ));
+    message.majorityVotePayload !== undefined && (obj.majorityVotePayload = message.majorityVotePayload);
     message.error !== undefined && (obj.error = message.error);
     return obj;
   },
@@ -345,7 +340,7 @@ export const EventInvalidMajorityVotePayload = {
     const message = createBaseEventInvalidMajorityVotePayload();
     message.namespace = object.namespace ?? "";
     message.module = object.module ?? "";
-    message.majorityVotePayload = object.majorityVotePayload ?? new Uint8Array();
+    message.majorityVotePayload = object.majorityVotePayload ?? "";
     message.error = object.error ?? "";
     return message;
   },
@@ -369,31 +364,6 @@ var globalThis: any = (() => {
   }
   throw "Unable to locate global object";
 })();
-
-function bytesFromBase64(b64: string): Uint8Array {
-  if (globalThis.Buffer) {
-    return Uint8Array.from(globalThis.Buffer.from(b64, "base64"));
-  } else {
-    const bin = globalThis.atob(b64);
-    const arr = new Uint8Array(bin.length);
-    for (let i = 0; i < bin.length; ++i) {
-      arr[i] = bin.charCodeAt(i);
-    }
-    return arr;
-  }
-}
-
-function base64FromBytes(arr: Uint8Array): string {
-  if (globalThis.Buffer) {
-    return globalThis.Buffer.from(arr).toString("base64");
-  } else {
-    const bin: string[] = [];
-    arr.forEach((byte) => {
-      bin.push(String.fromCharCode(byte));
-    });
-    return globalThis.btoa(bin.join(""));
-  }
-}
 
 type Builtin = Date | Function | Uint8Array | string | number | boolean | undefined;
 

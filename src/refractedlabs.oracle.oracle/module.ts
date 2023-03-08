@@ -7,17 +7,17 @@ import { msgTypes } from './registry';
 import { IgniteClient } from "../client"
 import { MissingWalletError } from "../helpers"
 import { Api } from "./rest";
-import { MsgOracleCombinedVote } from "./types/oracle/oracle/tx";
-import { MsgDelegateFeedConsent } from "./types/oracle/oracle/tx";
-import { MsgUpdateParams } from "./types/oracle/oracle/tx";
 import { MsgOraclePreVote } from "./types/oracle/oracle/tx";
+import { MsgDelegateFeedConsent } from "./types/oracle/oracle/tx";
+import { MsgOracleCombinedVote } from "./types/oracle/oracle/tx";
 import { MsgOracleVote } from "./types/oracle/oracle/tx";
+import { MsgUpdateParams } from "./types/oracle/oracle/tx";
 
 
-export { MsgOracleCombinedVote, MsgDelegateFeedConsent, MsgUpdateParams, MsgOraclePreVote, MsgOracleVote };
+export { MsgOraclePreVote, MsgDelegateFeedConsent, MsgOracleCombinedVote, MsgOracleVote, MsgUpdateParams };
 
-type sendMsgOracleCombinedVoteParams = {
-  value: MsgOracleCombinedVote,
+type sendMsgOraclePreVoteParams = {
+  value: MsgOraclePreVote,
   fee?: StdFee,
   memo?: string
 };
@@ -28,14 +28,8 @@ type sendMsgDelegateFeedConsentParams = {
   memo?: string
 };
 
-type sendMsgUpdateParamsParams = {
-  value: MsgUpdateParams,
-  fee?: StdFee,
-  memo?: string
-};
-
-type sendMsgOraclePreVoteParams = {
-  value: MsgOraclePreVote,
+type sendMsgOracleCombinedVoteParams = {
+  value: MsgOracleCombinedVote,
   fee?: StdFee,
   memo?: string
 };
@@ -46,25 +40,31 @@ type sendMsgOracleVoteParams = {
   memo?: string
 };
 
+type sendMsgUpdateParamsParams = {
+  value: MsgUpdateParams,
+  fee?: StdFee,
+  memo?: string
+};
 
-type msgOracleCombinedVoteParams = {
-  value: MsgOracleCombinedVote,
+
+type msgOraclePreVoteParams = {
+  value: MsgOraclePreVote,
 };
 
 type msgDelegateFeedConsentParams = {
   value: MsgDelegateFeedConsent,
 };
 
-type msgUpdateParamsParams = {
-  value: MsgUpdateParams,
-};
-
-type msgOraclePreVoteParams = {
-  value: MsgOraclePreVote,
+type msgOracleCombinedVoteParams = {
+  value: MsgOracleCombinedVote,
 };
 
 type msgOracleVoteParams = {
   value: MsgOracleVote,
+};
+
+type msgUpdateParamsParams = {
+  value: MsgUpdateParams,
 };
 
 
@@ -85,17 +85,17 @@ export const txClient = ({ signer, prefix, addr }: TxClientOptions = { addr: "ht
 
   return {
 		
-		async sendMsgOracleCombinedVote({ value, fee, memo }: sendMsgOracleCombinedVoteParams): Promise<DeliverTxResponse> {
+		async sendMsgOraclePreVote({ value, fee, memo }: sendMsgOraclePreVoteParams): Promise<DeliverTxResponse> {
 			if (!signer) {
-					throw new Error('TxClient:sendMsgOracleCombinedVote: Unable to sign Tx. Signer is not present.')
+					throw new Error('TxClient:sendMsgOraclePreVote: Unable to sign Tx. Signer is not present.')
 			}
 			try {			
 				const { address } = (await signer.getAccounts())[0]; 
 				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry, prefix});
-				let msg = this.msgOracleCombinedVote({ value: MsgOracleCombinedVote.fromPartial(value) })
+				let msg = this.msgOraclePreVote({ value: MsgOraclePreVote.fromPartial(value) })
 				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
 			} catch (e: any) {
-				throw new Error('TxClient:sendMsgOracleCombinedVote: Could not broadcast Tx: '+ e.message)
+				throw new Error('TxClient:sendMsgOraclePreVote: Could not broadcast Tx: '+ e.message)
 			}
 		},
 		
@@ -113,31 +113,17 @@ export const txClient = ({ signer, prefix, addr }: TxClientOptions = { addr: "ht
 			}
 		},
 		
-		async sendMsgUpdateParams({ value, fee, memo }: sendMsgUpdateParamsParams): Promise<DeliverTxResponse> {
+		async sendMsgOracleCombinedVote({ value, fee, memo }: sendMsgOracleCombinedVoteParams): Promise<DeliverTxResponse> {
 			if (!signer) {
-					throw new Error('TxClient:sendMsgUpdateParams: Unable to sign Tx. Signer is not present.')
+					throw new Error('TxClient:sendMsgOracleCombinedVote: Unable to sign Tx. Signer is not present.')
 			}
 			try {			
 				const { address } = (await signer.getAccounts())[0]; 
 				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry, prefix});
-				let msg = this.msgUpdateParams({ value: MsgUpdateParams.fromPartial(value) })
+				let msg = this.msgOracleCombinedVote({ value: MsgOracleCombinedVote.fromPartial(value) })
 				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
 			} catch (e: any) {
-				throw new Error('TxClient:sendMsgUpdateParams: Could not broadcast Tx: '+ e.message)
-			}
-		},
-		
-		async sendMsgOraclePreVote({ value, fee, memo }: sendMsgOraclePreVoteParams): Promise<DeliverTxResponse> {
-			if (!signer) {
-					throw new Error('TxClient:sendMsgOraclePreVote: Unable to sign Tx. Signer is not present.')
-			}
-			try {			
-				const { address } = (await signer.getAccounts())[0]; 
-				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry, prefix});
-				let msg = this.msgOraclePreVote({ value: MsgOraclePreVote.fromPartial(value) })
-				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
-			} catch (e: any) {
-				throw new Error('TxClient:sendMsgOraclePreVote: Could not broadcast Tx: '+ e.message)
+				throw new Error('TxClient:sendMsgOracleCombinedVote: Could not broadcast Tx: '+ e.message)
 			}
 		},
 		
@@ -155,12 +141,26 @@ export const txClient = ({ signer, prefix, addr }: TxClientOptions = { addr: "ht
 			}
 		},
 		
-		
-		msgOracleCombinedVote({ value }: msgOracleCombinedVoteParams): EncodeObject {
-			try {
-				return { typeUrl: "/refractedlabs.oracle.oracle.MsgOracleCombinedVote", value: MsgOracleCombinedVote.fromPartial( value ) }  
+		async sendMsgUpdateParams({ value, fee, memo }: sendMsgUpdateParamsParams): Promise<DeliverTxResponse> {
+			if (!signer) {
+					throw new Error('TxClient:sendMsgUpdateParams: Unable to sign Tx. Signer is not present.')
+			}
+			try {			
+				const { address } = (await signer.getAccounts())[0]; 
+				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry, prefix});
+				let msg = this.msgUpdateParams({ value: MsgUpdateParams.fromPartial(value) })
+				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
 			} catch (e: any) {
-				throw new Error('TxClient:MsgOracleCombinedVote: Could not create message: ' + e.message)
+				throw new Error('TxClient:sendMsgUpdateParams: Could not broadcast Tx: '+ e.message)
+			}
+		},
+		
+		
+		msgOraclePreVote({ value }: msgOraclePreVoteParams): EncodeObject {
+			try {
+				return { typeUrl: "/refractedlabs.oracle.oracle.MsgOraclePreVote", value: MsgOraclePreVote.fromPartial( value ) }  
+			} catch (e: any) {
+				throw new Error('TxClient:MsgOraclePreVote: Could not create message: ' + e.message)
 			}
 		},
 		
@@ -172,19 +172,11 @@ export const txClient = ({ signer, prefix, addr }: TxClientOptions = { addr: "ht
 			}
 		},
 		
-		msgUpdateParams({ value }: msgUpdateParamsParams): EncodeObject {
+		msgOracleCombinedVote({ value }: msgOracleCombinedVoteParams): EncodeObject {
 			try {
-				return { typeUrl: "/refractedlabs.oracle.oracle.MsgUpdateParams", value: MsgUpdateParams.fromPartial( value ) }  
+				return { typeUrl: "/refractedlabs.oracle.oracle.MsgOracleCombinedVote", value: MsgOracleCombinedVote.fromPartial( value ) }  
 			} catch (e: any) {
-				throw new Error('TxClient:MsgUpdateParams: Could not create message: ' + e.message)
-			}
-		},
-		
-		msgOraclePreVote({ value }: msgOraclePreVoteParams): EncodeObject {
-			try {
-				return { typeUrl: "/refractedlabs.oracle.oracle.MsgOraclePreVote", value: MsgOraclePreVote.fromPartial( value ) }  
-			} catch (e: any) {
-				throw new Error('TxClient:MsgOraclePreVote: Could not create message: ' + e.message)
+				throw new Error('TxClient:MsgOracleCombinedVote: Could not create message: ' + e.message)
 			}
 		},
 		
@@ -193,6 +185,14 @@ export const txClient = ({ signer, prefix, addr }: TxClientOptions = { addr: "ht
 				return { typeUrl: "/refractedlabs.oracle.oracle.MsgOracleVote", value: MsgOracleVote.fromPartial( value ) }  
 			} catch (e: any) {
 				throw new Error('TxClient:MsgOracleVote: Could not create message: ' + e.message)
+			}
+		},
+		
+		msgUpdateParams({ value }: msgUpdateParamsParams): EncodeObject {
+			try {
+				return { typeUrl: "/refractedlabs.oracle.oracle.MsgUpdateParams", value: MsgUpdateParams.fromPartial( value ) }  
+			} catch (e: any) {
+				throw new Error('TxClient:MsgUpdateParams: Could not create message: ' + e.message)
 			}
 		},
 		

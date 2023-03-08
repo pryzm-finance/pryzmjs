@@ -119,6 +119,8 @@ export interface BridgeMsgRetryMessageResponse {
   message_hash?: string;
 }
 
+export type BridgeMsgUpdateParamsResponse = object;
+
 export interface BridgeMsgWhitelistProcessorsResponse {
   message_hash?: string;
 }
@@ -136,13 +138,13 @@ export interface BridgeMsgWhitelistWatchersResponse {
  */
 export interface BridgeParams {
   /**
-   * in seconds
+   * in milliseconds
    * @format uint64
    */
   challenge_period?: string;
 
   /**
-   * in seconds
+   * in milliseconds
    * @format uint64
    */
   expiration_duration?: string;
