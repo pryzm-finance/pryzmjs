@@ -65,28 +65,28 @@
     PrismfinancePrismatics: new SDKModule(test)
     ```
 
-5. In `src/refractedlabs.oracle.oracle/module.ts`, search for:
+5. In `src/refractedlabs.oracle.oracle/module.ts` and `src/index.ts`, search for:
 
     ```tsx
-    RefractedlabsOracleOracle: new SDKModule(test)
+    OracleOracle
     ```
 
    and replace with the following:
 
     ```tsx
-    RefractedlabsOracle: new SDKModule(test)
+    Oracle
     ```
 
-6. In `src/refractedlabs.bridge.bridge/module.ts`, search for:
+6. In `src/refractedlabs.bridge.bridge/module.ts` and `src/index.ts`, search for:
 
     ```tsx
-    RefractedlabsBridgeBridge: new SDKModule(test)
+    BridgeBridge
     ```
 
    and replace with the following:
 
     ```tsx
-    RefractedlabsBridge: new SDKModule(test)
+    Bridge
     ```
 
 7. Then patch the following to the `src` directory.

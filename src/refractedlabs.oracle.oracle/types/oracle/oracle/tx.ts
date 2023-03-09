@@ -13,7 +13,6 @@ export interface MsgUpdateParamsResponse {
 }
 
 export interface MsgDelegateFeedConsent {
-  authority: string;
   operator: string;
   delegate: string;
 }
@@ -151,19 +150,16 @@ export const MsgUpdateParamsResponse = {
 };
 
 function createBaseMsgDelegateFeedConsent(): MsgDelegateFeedConsent {
-  return { authority: "", operator: "", delegate: "" };
+  return { operator: "", delegate: "" };
 }
 
 export const MsgDelegateFeedConsent = {
   encode(message: MsgDelegateFeedConsent, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (message.authority !== "") {
-      writer.uint32(10).string(message.authority);
-    }
     if (message.operator !== "") {
-      writer.uint32(18).string(message.operator);
+      writer.uint32(10).string(message.operator);
     }
     if (message.delegate !== "") {
-      writer.uint32(26).string(message.delegate);
+      writer.uint32(18).string(message.delegate);
     }
     return writer;
   },
@@ -176,12 +172,9 @@ export const MsgDelegateFeedConsent = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.authority = reader.string();
-          break;
-        case 2:
           message.operator = reader.string();
           break;
-        case 3:
+        case 2:
           message.delegate = reader.string();
           break;
         default:
@@ -194,7 +187,6 @@ export const MsgDelegateFeedConsent = {
 
   fromJSON(object: any): MsgDelegateFeedConsent {
     return {
-      authority: isSet(object.authority) ? String(object.authority) : "",
       operator: isSet(object.operator) ? String(object.operator) : "",
       delegate: isSet(object.delegate) ? String(object.delegate) : "",
     };
@@ -202,7 +194,6 @@ export const MsgDelegateFeedConsent = {
 
   toJSON(message: MsgDelegateFeedConsent): unknown {
     const obj: any = {};
-    message.authority !== undefined && (obj.authority = message.authority);
     message.operator !== undefined && (obj.operator = message.operator);
     message.delegate !== undefined && (obj.delegate = message.delegate);
     return obj;
@@ -210,7 +201,6 @@ export const MsgDelegateFeedConsent = {
 
   fromPartial<I extends Exact<DeepPartial<MsgDelegateFeedConsent>, I>>(object: I): MsgDelegateFeedConsent {
     const message = createBaseMsgDelegateFeedConsent();
-    message.authority = object.authority ?? "";
     message.operator = object.operator ?? "";
     message.delegate = object.delegate ?? "";
     return message;

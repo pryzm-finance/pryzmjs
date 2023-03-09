@@ -42,8 +42,17 @@ export enum BridgeActorType {
 export interface BridgeConnection {
   connection_id?: string;
   contract_address?: string;
+
+  /** @format uint64 */
+  contract_creation_block?: string;
   state?: BridgeConnectionState;
   chain?: string;
+
+  /** @format int64 */
+  blocks_per_vote_period?: number;
+
+  /** @format int64 */
+  blocks_to_finality?: number;
 }
 
 export enum BridgeConnectionState {
