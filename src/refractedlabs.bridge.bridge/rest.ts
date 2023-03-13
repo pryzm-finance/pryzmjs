@@ -65,9 +65,6 @@ export interface BridgeConsensusStatus {
 
   /** @format uint64 */
   last_block_id?: string;
-
-  /** @format uint64 */
-  last_block_time?: string;
 }
 
 export interface BridgeCrossChainMessage {
