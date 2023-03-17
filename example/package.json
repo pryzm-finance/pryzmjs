@@ -10,6 +10,6 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@prism-finance/prismjs": "0.0.1-rc5"
+    "@prism-finance/prismjs": "0.1.6"
   }
 }

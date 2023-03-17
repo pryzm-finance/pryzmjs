@@ -1,12 +1,26 @@
 import {ReconnectingSocket} from "@cosmjs/socket"
 import {Stream} from "xstream";
 import {JsonRpcErrorResponse, JsonRpcSuccessResponse, parseJsonRpcResponse} from "@cosmjs/json-rpc";
+import {EventEmitter} from 'events'
+
+export interface ConnectionStatusListener {
+    onConnectionStatusUpdateEvent: (status: ConnectionStatus) => void
+}
+
+export enum ConnectionStatus {
+    Unconnected = 0,
+    Connecting = 1,
+    Connected = 2,
+    Disconnected = 3
+}
 
 export class PrismWebsocketClient {
     private reconnectingSocket: ReconnectingSocket;
     private jsonRpcResponseStream: Stream<JsonRpcSuccessResponse | JsonRpcErrorResponse>;
     private requests = new Map<number, string>()
     private static nextId: number = 1;
+    private reconnectTimeouts: any[] = [];
+    private connectionStatusEventEmitter: EventEmitter;
 
     constructor(private wsEndpoint: string, timeoutMillis: number = 1000) {
         const path = wsEndpoint.endsWith("/") ? "websocket" : "/websocket";
@@ -22,7 +36,24 @@ export class PrismWebsocketClient {
             }
             return parseJsonRpcResponse(JSON.parse(message.data));
         });
+        this.connectionStatusEventEmitter = new EventEmitter()
+        this.reconnectingSocket.connectionStatus.updates.subscribe({
+            next: (status) => {
+                // collect all this.reconnectingSocket.reconnectTimeout instances
+                // clear them when disconnected
+                // a workaround for ReconnectingSocket.disconnect function bug
+                if ((this.reconnectingSocket as any).reconnectTimeout) {
+                    this.reconnectTimeouts.push((this.reconnectingSocket as any).reconnectTimeout)
+                }
+                // @ts-ignore
+                this.connectionStatusEventEmitter.emit("ConnectionStatusUpdateEvent", ConnectionStatus[ConnectionStatus[Number(status)]])
+            },
+        });
         this.reconnectingSocket.connect()
+    }
+
+    addListener(listener: ConnectionStatusListener): void {
+        this.connectionStatusEventEmitter.on("ConnectionStatusUpdateEvent", listener.onConnectionStatusUpdateEvent)
     }
 
     getEventStream(eventType: TendermintEventType, query: TendermintQuery): Stream<any> {
@@ -47,6 +78,12 @@ export class PrismWebsocketClient {
         })
         return stream.map(result => (result as any)?.result?.events)
             .filter(events => events != undefined)//filter out the very first result events since it is undefined
+    }
+
+    destroy() {
+        this.reconnectingSocket.disconnect()
+        this.reconnectTimeouts.forEach(t => clearTimeout(t))
+        this.reconnectTimeouts = []
     }
 }
 
