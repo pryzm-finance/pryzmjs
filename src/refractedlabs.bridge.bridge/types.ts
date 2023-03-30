@@ -3,6 +3,8 @@ import { ActorMissCounter } from "./types/bridge/bridge/actor_miss_counter"
 import { Connection } from "./types/bridge/bridge/connection"
 import { ConsensusStatus } from "./types/bridge/bridge/consensus_status"
 import { CrossChainMessage } from "./types/bridge/bridge/cross_chain_message"
+import { PingCrossChainMessage } from "./types/bridge/bridge/cross_chain_message"
+import { PingCrossChainMessageResult } from "./types/bridge/bridge/cross_chain_message"
 import { WhitelistActorsCrossChainMessage } from "./types/bridge/bridge/cross_chain_message"
 import { WhitelistActorsCrossChainMessageResult } from "./types/bridge/bridge/cross_chain_message"
 import { DelistActorsCrossChainMessage } from "./types/bridge/bridge/cross_chain_message"
@@ -17,6 +19,7 @@ import { MessageMetadata } from "./types/bridge/bridge/message"
 import { MessageExecutionResult } from "./types/bridge/bridge/message"
 import { MessageBatchResult } from "./types/bridge/bridge/message"
 import { Params } from "./types/bridge/bridge/params"
+import { Ping } from "./types/bridge/bridge/ping"
 import { RetriableMessage } from "./types/bridge/bridge/retriable_message"
 
 
@@ -26,6 +29,8 @@ export {
     Connection,
     ConsensusStatus,
     CrossChainMessage,
+    PingCrossChainMessage,
+    PingCrossChainMessageResult,
     WhitelistActorsCrossChainMessage,
     WhitelistActorsCrossChainMessageResult,
     DelistActorsCrossChainMessage,
@@ -40,6 +45,7 @@ export {
     MessageExecutionResult,
     MessageBatchResult,
     Params,
+    Ping,
     RetriableMessage,
     
  }

@@ -6,6 +6,7 @@ import { Connection } from "./connection";
 import { ConsensusStatus } from "./consensus_status";
 import { MessageMetadata } from "./message";
 import { Params } from "./params";
+import { Ping } from "./ping";
 import { RetriableMessage } from "./retriable_message";
 
 export const protobufPackage = "refractedlabs.bridge.bridge";
@@ -18,8 +19,9 @@ export interface GenesisState {
   consensusStatusList: ConsensusStatus[];
   actorMissCounterList: ActorMissCounter[];
   actorDelegationList: ActorDelegation[];
-  /** this line is used by starport scaffolding # genesis/proto/state */
   retriableMessageList: RetriableMessage[];
+  /** this line is used by starport scaffolding # genesis/proto/state */
+  pingList: Ping[];
 }
 
 function createBaseGenesisState(): GenesisState {
@@ -31,6 +33,7 @@ function createBaseGenesisState(): GenesisState {
     actorMissCounterList: [],
     actorDelegationList: [],
     retriableMessageList: [],
+    pingList: [],
   };
 }
 
@@ -56,6 +59,9 @@ export const GenesisState = {
     }
     for (const v of message.retriableMessageList) {
       RetriableMessage.encode(v!, writer.uint32(58).fork()).ldelim();
+    }
+    for (const v of message.pingList) {
+      Ping.encode(v!, writer.uint32(66).fork()).ldelim();
     }
     return writer;
   },
@@ -88,6 +94,9 @@ export const GenesisState = {
         case 7:
           message.retriableMessageList.push(RetriableMessage.decode(reader, reader.uint32()));
           break;
+        case 8:
+          message.pingList.push(Ping.decode(reader, reader.uint32()));
+          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -117,6 +126,7 @@ export const GenesisState = {
       retriableMessageList: Array.isArray(object?.retriableMessageList)
         ? object.retriableMessageList.map((e: any) => RetriableMessage.fromJSON(e))
         : [],
+      pingList: Array.isArray(object?.pingList) ? object.pingList.map((e: any) => Ping.fromJSON(e)) : [],
     };
   },
 
@@ -153,6 +163,11 @@ export const GenesisState = {
     } else {
       obj.retriableMessageList = [];
     }
+    if (message.pingList) {
+      obj.pingList = message.pingList.map((e) => e ? Ping.toJSON(e) : undefined);
+    } else {
+      obj.pingList = [];
+    }
     return obj;
   },
 
@@ -167,6 +182,7 @@ export const GenesisState = {
     message.actorMissCounterList = object.actorMissCounterList?.map((e) => ActorMissCounter.fromPartial(e)) || [];
     message.actorDelegationList = object.actorDelegationList?.map((e) => ActorDelegation.fromPartial(e)) || [];
     message.retriableMessageList = object.retriableMessageList?.map((e) => RetriableMessage.fromPartial(e)) || [];
+    message.pingList = object.pingList?.map((e) => Ping.fromPartial(e)) || [];
     return message;
   },
 };

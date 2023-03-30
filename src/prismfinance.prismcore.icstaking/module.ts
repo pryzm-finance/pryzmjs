@@ -7,63 +7,21 @@ import { msgTypes } from './registry';
 import { IgniteClient } from "../client"
 import { MissingWalletError } from "../helpers"
 import { Api } from "./rest";
-import { MsgUnstake } from "./types/prismcore/icstaking/tx";
-import { MsgUpdateHostChain } from "./types/prismcore/icstaking/tx";
-import { MsgRedeemUnstaked } from "./types/prismcore/icstaking/tx";
-import { MsgRegisterHostChain } from "./types/prismcore/icstaking/tx";
 import { MsgStake } from "./types/prismcore/icstaking/tx";
-import { MsgUpdateParams } from "./types/prismcore/icstaking/tx";
-import { MsgInstantUnstake } from "./types/prismcore/icstaking/tx";
-import { MsgRedeemInterchainAccount } from "./types/prismcore/icstaking/tx";
 import { MsgRebalanceDelegations } from "./types/prismcore/icstaking/tx";
+import { MsgRedeemInterchainAccount } from "./types/prismcore/icstaking/tx";
+import { MsgRedeemUnstaked } from "./types/prismcore/icstaking/tx";
+import { MsgUnstake } from "./types/prismcore/icstaking/tx";
+import { MsgRegisterHostChain } from "./types/prismcore/icstaking/tx";
+import { MsgInstantUnstake } from "./types/prismcore/icstaking/tx";
+import { MsgUpdateParams } from "./types/prismcore/icstaking/tx";
+import { MsgUpdateHostChain } from "./types/prismcore/icstaking/tx";
 
 
-export { MsgUnstake, MsgUpdateHostChain, MsgRedeemUnstaked, MsgRegisterHostChain, MsgStake, MsgUpdateParams, MsgInstantUnstake, MsgRedeemInterchainAccount, MsgRebalanceDelegations };
-
-type sendMsgUnstakeParams = {
-  value: MsgUnstake,
-  fee?: StdFee,
-  memo?: string
-};
-
-type sendMsgUpdateHostChainParams = {
-  value: MsgUpdateHostChain,
-  fee?: StdFee,
-  memo?: string
-};
-
-type sendMsgRedeemUnstakedParams = {
-  value: MsgRedeemUnstaked,
-  fee?: StdFee,
-  memo?: string
-};
-
-type sendMsgRegisterHostChainParams = {
-  value: MsgRegisterHostChain,
-  fee?: StdFee,
-  memo?: string
-};
+export { MsgStake, MsgRebalanceDelegations, MsgRedeemInterchainAccount, MsgRedeemUnstaked, MsgUnstake, MsgRegisterHostChain, MsgInstantUnstake, MsgUpdateParams, MsgUpdateHostChain };
 
 type sendMsgStakeParams = {
   value: MsgStake,
-  fee?: StdFee,
-  memo?: string
-};
-
-type sendMsgUpdateParamsParams = {
-  value: MsgUpdateParams,
-  fee?: StdFee,
-  memo?: string
-};
-
-type sendMsgInstantUnstakeParams = {
-  value: MsgInstantUnstake,
-  fee?: StdFee,
-  memo?: string
-};
-
-type sendMsgRedeemInterchainAccountParams = {
-  value: MsgRedeemInterchainAccount,
   fee?: StdFee,
   memo?: string
 };
@@ -74,41 +32,83 @@ type sendMsgRebalanceDelegationsParams = {
   memo?: string
 };
 
-
-type msgUnstakeParams = {
-  value: MsgUnstake,
+type sendMsgRedeemInterchainAccountParams = {
+  value: MsgRedeemInterchainAccount,
+  fee?: StdFee,
+  memo?: string
 };
 
-type msgUpdateHostChainParams = {
-  value: MsgUpdateHostChain,
-};
-
-type msgRedeemUnstakedParams = {
+type sendMsgRedeemUnstakedParams = {
   value: MsgRedeemUnstaked,
+  fee?: StdFee,
+  memo?: string
 };
 
-type msgRegisterHostChainParams = {
-  value: MsgRegisterHostChain,
+type sendMsgUnstakeParams = {
+  value: MsgUnstake,
+  fee?: StdFee,
+  memo?: string
 };
+
+type sendMsgRegisterHostChainParams = {
+  value: MsgRegisterHostChain,
+  fee?: StdFee,
+  memo?: string
+};
+
+type sendMsgInstantUnstakeParams = {
+  value: MsgInstantUnstake,
+  fee?: StdFee,
+  memo?: string
+};
+
+type sendMsgUpdateParamsParams = {
+  value: MsgUpdateParams,
+  fee?: StdFee,
+  memo?: string
+};
+
+type sendMsgUpdateHostChainParams = {
+  value: MsgUpdateHostChain,
+  fee?: StdFee,
+  memo?: string
+};
+
 
 type msgStakeParams = {
   value: MsgStake,
 };
 
-type msgUpdateParamsParams = {
-  value: MsgUpdateParams,
-};
-
-type msgInstantUnstakeParams = {
-  value: MsgInstantUnstake,
+type msgRebalanceDelegationsParams = {
+  value: MsgRebalanceDelegations,
 };
 
 type msgRedeemInterchainAccountParams = {
   value: MsgRedeemInterchainAccount,
 };
 
-type msgRebalanceDelegationsParams = {
-  value: MsgRebalanceDelegations,
+type msgRedeemUnstakedParams = {
+  value: MsgRedeemUnstaked,
+};
+
+type msgUnstakeParams = {
+  value: MsgUnstake,
+};
+
+type msgRegisterHostChainParams = {
+  value: MsgRegisterHostChain,
+};
+
+type msgInstantUnstakeParams = {
+  value: MsgInstantUnstake,
+};
+
+type msgUpdateParamsParams = {
+  value: MsgUpdateParams,
+};
+
+type msgUpdateHostChainParams = {
+  value: MsgUpdateHostChain,
 };
 
 
@@ -129,62 +129,6 @@ export const txClient = ({ signer, prefix, addr }: TxClientOptions = { addr: "ht
 
   return {
 		
-		async sendMsgUnstake({ value, fee, memo }: sendMsgUnstakeParams): Promise<DeliverTxResponse> {
-			if (!signer) {
-					throw new Error('TxClient:sendMsgUnstake: Unable to sign Tx. Signer is not present.')
-			}
-			try {			
-				const { address } = (await signer.getAccounts())[0]; 
-				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry, prefix});
-				let msg = this.msgUnstake({ value: MsgUnstake.fromPartial(value) })
-				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
-			} catch (e: any) {
-				throw new Error('TxClient:sendMsgUnstake: Could not broadcast Tx: '+ e.message)
-			}
-		},
-		
-		async sendMsgUpdateHostChain({ value, fee, memo }: sendMsgUpdateHostChainParams): Promise<DeliverTxResponse> {
-			if (!signer) {
-					throw new Error('TxClient:sendMsgUpdateHostChain: Unable to sign Tx. Signer is not present.')
-			}
-			try {			
-				const { address } = (await signer.getAccounts())[0]; 
-				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry, prefix});
-				let msg = this.msgUpdateHostChain({ value: MsgUpdateHostChain.fromPartial(value) })
-				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
-			} catch (e: any) {
-				throw new Error('TxClient:sendMsgUpdateHostChain: Could not broadcast Tx: '+ e.message)
-			}
-		},
-		
-		async sendMsgRedeemUnstaked({ value, fee, memo }: sendMsgRedeemUnstakedParams): Promise<DeliverTxResponse> {
-			if (!signer) {
-					throw new Error('TxClient:sendMsgRedeemUnstaked: Unable to sign Tx. Signer is not present.')
-			}
-			try {			
-				const { address } = (await signer.getAccounts())[0]; 
-				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry, prefix});
-				let msg = this.msgRedeemUnstaked({ value: MsgRedeemUnstaked.fromPartial(value) })
-				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
-			} catch (e: any) {
-				throw new Error('TxClient:sendMsgRedeemUnstaked: Could not broadcast Tx: '+ e.message)
-			}
-		},
-		
-		async sendMsgRegisterHostChain({ value, fee, memo }: sendMsgRegisterHostChainParams): Promise<DeliverTxResponse> {
-			if (!signer) {
-					throw new Error('TxClient:sendMsgRegisterHostChain: Unable to sign Tx. Signer is not present.')
-			}
-			try {			
-				const { address } = (await signer.getAccounts())[0]; 
-				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry, prefix});
-				let msg = this.msgRegisterHostChain({ value: MsgRegisterHostChain.fromPartial(value) })
-				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
-			} catch (e: any) {
-				throw new Error('TxClient:sendMsgRegisterHostChain: Could not broadcast Tx: '+ e.message)
-			}
-		},
-		
 		async sendMsgStake({ value, fee, memo }: sendMsgStakeParams): Promise<DeliverTxResponse> {
 			if (!signer) {
 					throw new Error('TxClient:sendMsgStake: Unable to sign Tx. Signer is not present.')
@@ -196,48 +140,6 @@ export const txClient = ({ signer, prefix, addr }: TxClientOptions = { addr: "ht
 				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
 			} catch (e: any) {
 				throw new Error('TxClient:sendMsgStake: Could not broadcast Tx: '+ e.message)
-			}
-		},
-		
-		async sendMsgUpdateParams({ value, fee, memo }: sendMsgUpdateParamsParams): Promise<DeliverTxResponse> {
-			if (!signer) {
-					throw new Error('TxClient:sendMsgUpdateParams: Unable to sign Tx. Signer is not present.')
-			}
-			try {			
-				const { address } = (await signer.getAccounts())[0]; 
-				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry, prefix});
-				let msg = this.msgUpdateParams({ value: MsgUpdateParams.fromPartial(value) })
-				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
-			} catch (e: any) {
-				throw new Error('TxClient:sendMsgUpdateParams: Could not broadcast Tx: '+ e.message)
-			}
-		},
-		
-		async sendMsgInstantUnstake({ value, fee, memo }: sendMsgInstantUnstakeParams): Promise<DeliverTxResponse> {
-			if (!signer) {
-					throw new Error('TxClient:sendMsgInstantUnstake: Unable to sign Tx. Signer is not present.')
-			}
-			try {			
-				const { address } = (await signer.getAccounts())[0]; 
-				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry, prefix});
-				let msg = this.msgInstantUnstake({ value: MsgInstantUnstake.fromPartial(value) })
-				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
-			} catch (e: any) {
-				throw new Error('TxClient:sendMsgInstantUnstake: Could not broadcast Tx: '+ e.message)
-			}
-		},
-		
-		async sendMsgRedeemInterchainAccount({ value, fee, memo }: sendMsgRedeemInterchainAccountParams): Promise<DeliverTxResponse> {
-			if (!signer) {
-					throw new Error('TxClient:sendMsgRedeemInterchainAccount: Unable to sign Tx. Signer is not present.')
-			}
-			try {			
-				const { address } = (await signer.getAccounts())[0]; 
-				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry, prefix});
-				let msg = this.msgRedeemInterchainAccount({ value: MsgRedeemInterchainAccount.fromPartial(value) })
-				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
-			} catch (e: any) {
-				throw new Error('TxClient:sendMsgRedeemInterchainAccount: Could not broadcast Tx: '+ e.message)
 			}
 		},
 		
@@ -255,38 +157,104 @@ export const txClient = ({ signer, prefix, addr }: TxClientOptions = { addr: "ht
 			}
 		},
 		
-		
-		msgUnstake({ value }: msgUnstakeParams): EncodeObject {
-			try {
-				return { typeUrl: "/prismfinance.prismcore.icstaking.MsgUnstake", value: MsgUnstake.fromPartial( value ) }  
+		async sendMsgRedeemInterchainAccount({ value, fee, memo }: sendMsgRedeemInterchainAccountParams): Promise<DeliverTxResponse> {
+			if (!signer) {
+					throw new Error('TxClient:sendMsgRedeemInterchainAccount: Unable to sign Tx. Signer is not present.')
+			}
+			try {			
+				const { address } = (await signer.getAccounts())[0]; 
+				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry, prefix});
+				let msg = this.msgRedeemInterchainAccount({ value: MsgRedeemInterchainAccount.fromPartial(value) })
+				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
 			} catch (e: any) {
-				throw new Error('TxClient:MsgUnstake: Could not create message: ' + e.message)
+				throw new Error('TxClient:sendMsgRedeemInterchainAccount: Could not broadcast Tx: '+ e.message)
 			}
 		},
 		
-		msgUpdateHostChain({ value }: msgUpdateHostChainParams): EncodeObject {
-			try {
-				return { typeUrl: "/prismfinance.prismcore.icstaking.MsgUpdateHostChain", value: MsgUpdateHostChain.fromPartial( value ) }  
+		async sendMsgRedeemUnstaked({ value, fee, memo }: sendMsgRedeemUnstakedParams): Promise<DeliverTxResponse> {
+			if (!signer) {
+					throw new Error('TxClient:sendMsgRedeemUnstaked: Unable to sign Tx. Signer is not present.')
+			}
+			try {			
+				const { address } = (await signer.getAccounts())[0]; 
+				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry, prefix});
+				let msg = this.msgRedeemUnstaked({ value: MsgRedeemUnstaked.fromPartial(value) })
+				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
 			} catch (e: any) {
-				throw new Error('TxClient:MsgUpdateHostChain: Could not create message: ' + e.message)
+				throw new Error('TxClient:sendMsgRedeemUnstaked: Could not broadcast Tx: '+ e.message)
 			}
 		},
 		
-		msgRedeemUnstaked({ value }: msgRedeemUnstakedParams): EncodeObject {
-			try {
-				return { typeUrl: "/prismfinance.prismcore.icstaking.MsgRedeemUnstaked", value: MsgRedeemUnstaked.fromPartial( value ) }  
+		async sendMsgUnstake({ value, fee, memo }: sendMsgUnstakeParams): Promise<DeliverTxResponse> {
+			if (!signer) {
+					throw new Error('TxClient:sendMsgUnstake: Unable to sign Tx. Signer is not present.')
+			}
+			try {			
+				const { address } = (await signer.getAccounts())[0]; 
+				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry, prefix});
+				let msg = this.msgUnstake({ value: MsgUnstake.fromPartial(value) })
+				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
 			} catch (e: any) {
-				throw new Error('TxClient:MsgRedeemUnstaked: Could not create message: ' + e.message)
+				throw new Error('TxClient:sendMsgUnstake: Could not broadcast Tx: '+ e.message)
 			}
 		},
 		
-		msgRegisterHostChain({ value }: msgRegisterHostChainParams): EncodeObject {
-			try {
-				return { typeUrl: "/prismfinance.prismcore.icstaking.MsgRegisterHostChain", value: MsgRegisterHostChain.fromPartial( value ) }  
+		async sendMsgRegisterHostChain({ value, fee, memo }: sendMsgRegisterHostChainParams): Promise<DeliverTxResponse> {
+			if (!signer) {
+					throw new Error('TxClient:sendMsgRegisterHostChain: Unable to sign Tx. Signer is not present.')
+			}
+			try {			
+				const { address } = (await signer.getAccounts())[0]; 
+				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry, prefix});
+				let msg = this.msgRegisterHostChain({ value: MsgRegisterHostChain.fromPartial(value) })
+				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
 			} catch (e: any) {
-				throw new Error('TxClient:MsgRegisterHostChain: Could not create message: ' + e.message)
+				throw new Error('TxClient:sendMsgRegisterHostChain: Could not broadcast Tx: '+ e.message)
 			}
 		},
+		
+		async sendMsgInstantUnstake({ value, fee, memo }: sendMsgInstantUnstakeParams): Promise<DeliverTxResponse> {
+			if (!signer) {
+					throw new Error('TxClient:sendMsgInstantUnstake: Unable to sign Tx. Signer is not present.')
+			}
+			try {			
+				const { address } = (await signer.getAccounts())[0]; 
+				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry, prefix});
+				let msg = this.msgInstantUnstake({ value: MsgInstantUnstake.fromPartial(value) })
+				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
+			} catch (e: any) {
+				throw new Error('TxClient:sendMsgInstantUnstake: Could not broadcast Tx: '+ e.message)
+			}
+		},
+		
+		async sendMsgUpdateParams({ value, fee, memo }: sendMsgUpdateParamsParams): Promise<DeliverTxResponse> {
+			if (!signer) {
+					throw new Error('TxClient:sendMsgUpdateParams: Unable to sign Tx. Signer is not present.')
+			}
+			try {			
+				const { address } = (await signer.getAccounts())[0]; 
+				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry, prefix});
+				let msg = this.msgUpdateParams({ value: MsgUpdateParams.fromPartial(value) })
+				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
+			} catch (e: any) {
+				throw new Error('TxClient:sendMsgUpdateParams: Could not broadcast Tx: '+ e.message)
+			}
+		},
+		
+		async sendMsgUpdateHostChain({ value, fee, memo }: sendMsgUpdateHostChainParams): Promise<DeliverTxResponse> {
+			if (!signer) {
+					throw new Error('TxClient:sendMsgUpdateHostChain: Unable to sign Tx. Signer is not present.')
+			}
+			try {			
+				const { address } = (await signer.getAccounts())[0]; 
+				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry, prefix});
+				let msg = this.msgUpdateHostChain({ value: MsgUpdateHostChain.fromPartial(value) })
+				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
+			} catch (e: any) {
+				throw new Error('TxClient:sendMsgUpdateHostChain: Could not broadcast Tx: '+ e.message)
+			}
+		},
+		
 		
 		msgStake({ value }: msgStakeParams): EncodeObject {
 			try {
@@ -296,19 +264,11 @@ export const txClient = ({ signer, prefix, addr }: TxClientOptions = { addr: "ht
 			}
 		},
 		
-		msgUpdateParams({ value }: msgUpdateParamsParams): EncodeObject {
+		msgRebalanceDelegations({ value }: msgRebalanceDelegationsParams): EncodeObject {
 			try {
-				return { typeUrl: "/prismfinance.prismcore.icstaking.MsgUpdateParams", value: MsgUpdateParams.fromPartial( value ) }  
+				return { typeUrl: "/prismfinance.prismcore.icstaking.MsgRebalanceDelegations", value: MsgRebalanceDelegations.fromPartial( value ) }  
 			} catch (e: any) {
-				throw new Error('TxClient:MsgUpdateParams: Could not create message: ' + e.message)
-			}
-		},
-		
-		msgInstantUnstake({ value }: msgInstantUnstakeParams): EncodeObject {
-			try {
-				return { typeUrl: "/prismfinance.prismcore.icstaking.MsgInstantUnstake", value: MsgInstantUnstake.fromPartial( value ) }  
-			} catch (e: any) {
-				throw new Error('TxClient:MsgInstantUnstake: Could not create message: ' + e.message)
+				throw new Error('TxClient:MsgRebalanceDelegations: Could not create message: ' + e.message)
 			}
 		},
 		
@@ -320,11 +280,51 @@ export const txClient = ({ signer, prefix, addr }: TxClientOptions = { addr: "ht
 			}
 		},
 		
-		msgRebalanceDelegations({ value }: msgRebalanceDelegationsParams): EncodeObject {
+		msgRedeemUnstaked({ value }: msgRedeemUnstakedParams): EncodeObject {
 			try {
-				return { typeUrl: "/prismfinance.prismcore.icstaking.MsgRebalanceDelegations", value: MsgRebalanceDelegations.fromPartial( value ) }  
+				return { typeUrl: "/prismfinance.prismcore.icstaking.MsgRedeemUnstaked", value: MsgRedeemUnstaked.fromPartial( value ) }  
 			} catch (e: any) {
-				throw new Error('TxClient:MsgRebalanceDelegations: Could not create message: ' + e.message)
+				throw new Error('TxClient:MsgRedeemUnstaked: Could not create message: ' + e.message)
+			}
+		},
+		
+		msgUnstake({ value }: msgUnstakeParams): EncodeObject {
+			try {
+				return { typeUrl: "/prismfinance.prismcore.icstaking.MsgUnstake", value: MsgUnstake.fromPartial( value ) }  
+			} catch (e: any) {
+				throw new Error('TxClient:MsgUnstake: Could not create message: ' + e.message)
+			}
+		},
+		
+		msgRegisterHostChain({ value }: msgRegisterHostChainParams): EncodeObject {
+			try {
+				return { typeUrl: "/prismfinance.prismcore.icstaking.MsgRegisterHostChain", value: MsgRegisterHostChain.fromPartial( value ) }  
+			} catch (e: any) {
+				throw new Error('TxClient:MsgRegisterHostChain: Could not create message: ' + e.message)
+			}
+		},
+		
+		msgInstantUnstake({ value }: msgInstantUnstakeParams): EncodeObject {
+			try {
+				return { typeUrl: "/prismfinance.prismcore.icstaking.MsgInstantUnstake", value: MsgInstantUnstake.fromPartial( value ) }  
+			} catch (e: any) {
+				throw new Error('TxClient:MsgInstantUnstake: Could not create message: ' + e.message)
+			}
+		},
+		
+		msgUpdateParams({ value }: msgUpdateParamsParams): EncodeObject {
+			try {
+				return { typeUrl: "/prismfinance.prismcore.icstaking.MsgUpdateParams", value: MsgUpdateParams.fromPartial( value ) }  
+			} catch (e: any) {
+				throw new Error('TxClient:MsgUpdateParams: Could not create message: ' + e.message)
+			}
+		},
+		
+		msgUpdateHostChain({ value }: msgUpdateHostChainParams): EncodeObject {
+			try {
+				return { typeUrl: "/prismfinance.prismcore.icstaking.MsgUpdateHostChain", value: MsgUpdateHostChain.fromPartial( value ) }  
+			} catch (e: any) {
+				throw new Error('TxClient:MsgUpdateHostChain: Could not create message: ' + e.message)
 			}
 		},
 		

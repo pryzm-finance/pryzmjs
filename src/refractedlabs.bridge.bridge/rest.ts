@@ -65,6 +65,9 @@ export interface BridgeConsensusStatus {
 
   /** @format uint64 */
   last_block_id?: string;
+
+  /** @format uint64 */
+  last_block_time?: string;
 }
 
 export interface BridgeCrossChainMessage {
@@ -75,6 +78,7 @@ export interface BridgeCrossChainMessage {
 export enum BridgeCrossChainMessageType {
   CROSS_CHAIN_MESSAGE_TYPE_DELIST = "CROSS_CHAIN_MESSAGE_TYPE_DELIST",
   CROSS_CHAIN_MESSAGE_TYPE_WHITELIST = "CROSS_CHAIN_MESSAGE_TYPE_WHITELIST",
+  CROSS_CHAIN_MESSAGE_TYPE_PING = "CROSS_CHAIN_MESSAGE_TYPE_PING",
 }
 
 export interface BridgeMessageMetadata {
@@ -121,6 +125,10 @@ export interface BridgeMsgDelistWatchersResponse {
   message_hash?: string;
 }
 
+export interface BridgeMsgPingResponse {
+  messageHash?: string;
+}
+
 export interface BridgeMsgRetryMessageResponse {
   message_hash?: string;
 }
@@ -159,6 +167,58 @@ export interface BridgeParams {
   /** @format int64 */
   slash_window?: string;
   max_miss_rate_per_slash_window?: string;
+
+  /**
+   * TODO rename to ping_queue_max_size
+   * @format int64
+   */
+  ping_queue_size?: number;
+
+  /** list of authorities */
+  ping_authorities?: string[];
+}
+
+export interface BridgePing {
+  msg_hash?: string;
+  from?: string;
+
+  /** @format uint64 */
+  timestamp?: string;
+  state?: BridgePingState;
+  processor?: string;
+
+  /** @format uint64 */
+  executed_block_id?: string;
+
+  /** @format uint64 */
+  executed_block_time?: string;
+  watcher?: string;
+
+  /** @format uint64 */
+  cancelled_block_id?: string;
+
+  /** @format uint64 */
+  cancelled_block_time?: string;
+  relayer?: string;
+
+  /** @format uint64 */
+  enqueued_block_id?: string;
+
+  /** @format uint64 */
+  enqueued_block_time?: string;
+
+  /** @format uint64 */
+  expired_block_id?: string;
+
+  /** @format uint64 */
+  expired_block_time?: string;
+}
+
+export enum BridgePingState {
+  PING_STATE_EXECUTING = "PING_STATE_EXECUTING",
+  PING_STATE_EXECUTED = "PING_STATE_EXECUTED",
+  PING_STATE_CANCELED = "PING_STATE_CANCELED",
+  PING_STATE_EXPIRED = "PING_STATE_EXPIRED",
 }
 
 export interface BridgeQueryAllActorDelegationResponse {
@@ -236,6 +296,21 @@ export interface BridgeQueryAllMessageMetadataResponse {
   pagination?: V1Beta1PageResponse;
 }
 
+export interface BridgeQueryAllPingResponse {
+  ping?: BridgePing[];
+
+  /**
+   * PageResponse is to be embedded in gRPC response messages where the
+   * corresponding request message has used PageRequest.
+   *
+   *  message SomeResponse {
+   *          repeated Bar results = 1;
+   *          PageResponse page = 2;
+   *  }
+   */
+  pagination?: V1Beta1PageResponse;
+}
+
 export interface BridgeQueryAllRetriableMessageResponse {
   retriable_message?: BridgeRetriableMessage[];
 
@@ -269,6 +344,10 @@ export interface BridgeQueryGetConsensusStatusResponse {
 
 export interface BridgeQueryGetMessageMetadataResponse {
   message_metadata?: BridgeMessageMetadata;
+}
+
+export interface BridgeQueryGetPingResponse {
+  ping?: BridgePing;
 }
 
 export interface BridgeQueryGetRetriableMessageResponse {
@@ -775,6 +854,48 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
   queryRetriableMessage = (msgHash: string, params: RequestParams = {}) =>
     this.request<BridgeQueryGetRetriableMessageResponse, RpcStatus>({
       path: `/prism-finance/prism-core/bridge/retriable_message/${msgHash}`,
+      method: "GET",
+      format: "json",
+      ...params,
+    });
+
+  /**
+   * No description
+   *
+   * @tags Query
+   * @name QueryPingAll
+   * @summary Queries a list of Ping items.
+   * @request GET:/refractedlabs/bridge/bridge/ping
+   */
+  queryPingAll = (
+    query?: {
+      "pagination.key"?: string;
+      "pagination.offset"?: string;
+      "pagination.limit"?: string;
+      "pagination.count_total"?: boolean;
+      "pagination.reverse"?: boolean;
+    },
+    params: RequestParams = {},
+  ) =>
+    this.request<BridgeQueryAllPingResponse, RpcStatus>({
+      path: `/refractedlabs/bridge/bridge/ping`,
+      method: "GET",
+      query: query,
+      format: "json",
+      ...params,
+    });
+
+  /**
+   * No description
+   *
+   * @tags Query
+   * @name QueryPing
+   * @summary Queries a Ping by index.
+   * @request GET:/refractedlabs/bridge/bridge/ping/{msg_hash}
+   */
+  queryPing = (msgHash: string, params: RequestParams = {}) =>
+    this.request<BridgeQueryGetPingResponse, RpcStatus>({
+      path: `/refractedlabs/bridge/bridge/ping/${msgHash}`,
       method: "GET",
       format: "json",
       ...params,

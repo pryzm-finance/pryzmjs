@@ -8,6 +8,7 @@ import { Connection } from "./connection";
 import { ConsensusStatus } from "./consensus_status";
 import { MessageMetadata } from "./message";
 import { Params } from "./params";
+import { Ping } from "./ping";
 import { RetriableMessage } from "./retriable_message";
 
 export const protobufPackage = "refractedlabs.bridge.bridge";
@@ -125,6 +126,23 @@ export interface QueryAllRetriableMessageRequest {
 
 export interface QueryAllRetriableMessageResponse {
   retriableMessage: RetriableMessage[];
+  pagination: PageResponse | undefined;
+}
+
+export interface QueryGetPingRequest {
+  msgHash: string;
+}
+
+export interface QueryGetPingResponse {
+  ping: Ping | undefined;
+}
+
+export interface QueryAllPingRequest {
+  pagination: PageRequest | undefined;
+}
+
+export interface QueryAllPingResponse {
+  ping: Ping[];
   pagination: PageResponse | undefined;
 }
 
@@ -1590,6 +1608,215 @@ export const QueryAllRetriableMessageResponse = {
   },
 };
 
+function createBaseQueryGetPingRequest(): QueryGetPingRequest {
+  return { msgHash: "" };
+}
+
+export const QueryGetPingRequest = {
+  encode(message: QueryGetPingRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.msgHash !== "") {
+      writer.uint32(10).string(message.msgHash);
+    }
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): QueryGetPingRequest {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseQueryGetPingRequest();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.msgHash = reader.string();
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): QueryGetPingRequest {
+    return { msgHash: isSet(object.msgHash) ? String(object.msgHash) : "" };
+  },
+
+  toJSON(message: QueryGetPingRequest): unknown {
+    const obj: any = {};
+    message.msgHash !== undefined && (obj.msgHash = message.msgHash);
+    return obj;
+  },
+
+  fromPartial<I extends Exact<DeepPartial<QueryGetPingRequest>, I>>(object: I): QueryGetPingRequest {
+    const message = createBaseQueryGetPingRequest();
+    message.msgHash = object.msgHash ?? "";
+    return message;
+  },
+};
+
+function createBaseQueryGetPingResponse(): QueryGetPingResponse {
+  return { ping: undefined };
+}
+
+export const QueryGetPingResponse = {
+  encode(message: QueryGetPingResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.ping !== undefined) {
+      Ping.encode(message.ping, writer.uint32(10).fork()).ldelim();
+    }
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): QueryGetPingResponse {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseQueryGetPingResponse();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.ping = Ping.decode(reader, reader.uint32());
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): QueryGetPingResponse {
+    return { ping: isSet(object.ping) ? Ping.fromJSON(object.ping) : undefined };
+  },
+
+  toJSON(message: QueryGetPingResponse): unknown {
+    const obj: any = {};
+    message.ping !== undefined && (obj.ping = message.ping ? Ping.toJSON(message.ping) : undefined);
+    return obj;
+  },
+
+  fromPartial<I extends Exact<DeepPartial<QueryGetPingResponse>, I>>(object: I): QueryGetPingResponse {
+    const message = createBaseQueryGetPingResponse();
+    message.ping = (object.ping !== undefined && object.ping !== null) ? Ping.fromPartial(object.ping) : undefined;
+    return message;
+  },
+};
+
+function createBaseQueryAllPingRequest(): QueryAllPingRequest {
+  return { pagination: undefined };
+}
+
+export const QueryAllPingRequest = {
+  encode(message: QueryAllPingRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.pagination !== undefined) {
+      PageRequest.encode(message.pagination, writer.uint32(10).fork()).ldelim();
+    }
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): QueryAllPingRequest {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseQueryAllPingRequest();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.pagination = PageRequest.decode(reader, reader.uint32());
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): QueryAllPingRequest {
+    return { pagination: isSet(object.pagination) ? PageRequest.fromJSON(object.pagination) : undefined };
+  },
+
+  toJSON(message: QueryAllPingRequest): unknown {
+    const obj: any = {};
+    message.pagination !== undefined
+      && (obj.pagination = message.pagination ? PageRequest.toJSON(message.pagination) : undefined);
+    return obj;
+  },
+
+  fromPartial<I extends Exact<DeepPartial<QueryAllPingRequest>, I>>(object: I): QueryAllPingRequest {
+    const message = createBaseQueryAllPingRequest();
+    message.pagination = (object.pagination !== undefined && object.pagination !== null)
+      ? PageRequest.fromPartial(object.pagination)
+      : undefined;
+    return message;
+  },
+};
+
+function createBaseQueryAllPingResponse(): QueryAllPingResponse {
+  return { ping: [], pagination: undefined };
+}
+
+export const QueryAllPingResponse = {
+  encode(message: QueryAllPingResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    for (const v of message.ping) {
+      Ping.encode(v!, writer.uint32(10).fork()).ldelim();
+    }
+    if (message.pagination !== undefined) {
+      PageResponse.encode(message.pagination, writer.uint32(18).fork()).ldelim();
+    }
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): QueryAllPingResponse {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseQueryAllPingResponse();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.ping.push(Ping.decode(reader, reader.uint32()));
+          break;
+        case 2:
+          message.pagination = PageResponse.decode(reader, reader.uint32());
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): QueryAllPingResponse {
+    return {
+      ping: Array.isArray(object?.ping) ? object.ping.map((e: any) => Ping.fromJSON(e)) : [],
+      pagination: isSet(object.pagination) ? PageResponse.fromJSON(object.pagination) : undefined,
+    };
+  },
+
+  toJSON(message: QueryAllPingResponse): unknown {
+    const obj: any = {};
+    if (message.ping) {
+      obj.ping = message.ping.map((e) => e ? Ping.toJSON(e) : undefined);
+    } else {
+      obj.ping = [];
+    }
+    message.pagination !== undefined
+      && (obj.pagination = message.pagination ? PageResponse.toJSON(message.pagination) : undefined);
+    return obj;
+  },
+
+  fromPartial<I extends Exact<DeepPartial<QueryAllPingResponse>, I>>(object: I): QueryAllPingResponse {
+    const message = createBaseQueryAllPingResponse();
+    message.ping = object.ping?.map((e) => Ping.fromPartial(e)) || [];
+    message.pagination = (object.pagination !== undefined && object.pagination !== null)
+      ? PageResponse.fromPartial(object.pagination)
+      : undefined;
+    return message;
+  },
+};
+
 /** Query defines the gRPC querier service. */
 export interface Query {
   /** Parameters queries the parameters of the module. */
@@ -1618,6 +1845,10 @@ export interface Query {
   RetriableMessage(request: QueryGetRetriableMessageRequest): Promise<QueryGetRetriableMessageResponse>;
   /** Queries a list of RetriableMessage items. */
   RetriableMessageAll(request: QueryAllRetriableMessageRequest): Promise<QueryAllRetriableMessageResponse>;
+  /** Queries a Ping by index. */
+  Ping(request: QueryGetPingRequest): Promise<QueryGetPingResponse>;
+  /** Queries a list of Ping items. */
+  PingAll(request: QueryAllPingRequest): Promise<QueryAllPingResponse>;
 }
 
 export class QueryClientImpl implements Query {
@@ -1637,6 +1868,8 @@ export class QueryClientImpl implements Query {
     this.ActorDelegationAll = this.ActorDelegationAll.bind(this);
     this.RetriableMessage = this.RetriableMessage.bind(this);
     this.RetriableMessageAll = this.RetriableMessageAll.bind(this);
+    this.Ping = this.Ping.bind(this);
+    this.PingAll = this.PingAll.bind(this);
   }
   Params(request: QueryParamsRequest): Promise<QueryParamsResponse> {
     const data = QueryParamsRequest.encode(request).finish();
@@ -1714,6 +1947,18 @@ export class QueryClientImpl implements Query {
     const data = QueryAllRetriableMessageRequest.encode(request).finish();
     const promise = this.rpc.request("refractedlabs.bridge.bridge.Query", "RetriableMessageAll", data);
     return promise.then((data) => QueryAllRetriableMessageResponse.decode(new _m0.Reader(data)));
+  }
+
+  Ping(request: QueryGetPingRequest): Promise<QueryGetPingResponse> {
+    const data = QueryGetPingRequest.encode(request).finish();
+    const promise = this.rpc.request("refractedlabs.bridge.bridge.Query", "Ping", data);
+    return promise.then((data) => QueryGetPingResponse.decode(new _m0.Reader(data)));
+  }
+
+  PingAll(request: QueryAllPingRequest): Promise<QueryAllPingResponse> {
+    const data = QueryAllPingRequest.encode(request).finish();
+    const promise = this.rpc.request("refractedlabs.bridge.bridge.Query", "PingAll", data);
+    return promise.then((data) => QueryAllPingResponse.decode(new _m0.Reader(data)));
   }
 }
 

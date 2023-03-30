@@ -125,6 +125,15 @@ export interface MsgUpdateParams {
 export interface MsgUpdateParamsResponse {
 }
 
+export interface MsgPing {
+  authority: string;
+  connectionId: string;
+}
+
+export interface MsgPingResponse {
+  messageHash: string;
+}
+
 function createBaseMsgCreateConnection(): MsgCreateConnection {
   return { authority: "", connection: undefined };
 }
@@ -1556,6 +1565,111 @@ export const MsgUpdateParamsResponse = {
   },
 };
 
+function createBaseMsgPing(): MsgPing {
+  return { authority: "", connectionId: "" };
+}
+
+export const MsgPing = {
+  encode(message: MsgPing, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.authority !== "") {
+      writer.uint32(10).string(message.authority);
+    }
+    if (message.connectionId !== "") {
+      writer.uint32(18).string(message.connectionId);
+    }
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): MsgPing {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseMsgPing();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.authority = reader.string();
+          break;
+        case 2:
+          message.connectionId = reader.string();
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): MsgPing {
+    return {
+      authority: isSet(object.authority) ? String(object.authority) : "",
+      connectionId: isSet(object.connectionId) ? String(object.connectionId) : "",
+    };
+  },
+
+  toJSON(message: MsgPing): unknown {
+    const obj: any = {};
+    message.authority !== undefined && (obj.authority = message.authority);
+    message.connectionId !== undefined && (obj.connectionId = message.connectionId);
+    return obj;
+  },
+
+  fromPartial<I extends Exact<DeepPartial<MsgPing>, I>>(object: I): MsgPing {
+    const message = createBaseMsgPing();
+    message.authority = object.authority ?? "";
+    message.connectionId = object.connectionId ?? "";
+    return message;
+  },
+};
+
+function createBaseMsgPingResponse(): MsgPingResponse {
+  return { messageHash: "" };
+}
+
+export const MsgPingResponse = {
+  encode(message: MsgPingResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.messageHash !== "") {
+      writer.uint32(10).string(message.messageHash);
+    }
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): MsgPingResponse {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseMsgPingResponse();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.messageHash = reader.string();
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): MsgPingResponse {
+    return { messageHash: isSet(object.messageHash) ? String(object.messageHash) : "" };
+  },
+
+  toJSON(message: MsgPingResponse): unknown {
+    const obj: any = {};
+    message.messageHash !== undefined && (obj.messageHash = message.messageHash);
+    return obj;
+  },
+
+  fromPartial<I extends Exact<DeepPartial<MsgPingResponse>, I>>(object: I): MsgPingResponse {
+    const message = createBaseMsgPingResponse();
+    message.messageHash = object.messageHash ?? "";
+    return message;
+  },
+};
+
 /** Msg defines the Msg service. */
 export interface Msg {
   CreateConnection(request: MsgCreateConnection): Promise<MsgCreateConnectionResponse>;
@@ -1570,8 +1684,9 @@ export interface Msg {
   DelistRelayers(request: MsgDelistRelayers): Promise<MsgDelistRelayersResponse>;
   DelistProcessors(request: MsgDelistProcessors): Promise<MsgDelistProcessorsResponse>;
   RetryMessage(request: MsgRetryMessage): Promise<MsgRetryMessageResponse>;
-  /** this line is used by starport scaffolding # proto/tx/rpc */
   UpdateParams(request: MsgUpdateParams): Promise<MsgUpdateParamsResponse>;
+  /** this line is used by starport scaffolding # proto/tx/rpc */
+  Ping(request: MsgPing): Promise<MsgPingResponse>;
 }
 
 export class MsgClientImpl implements Msg {
@@ -1591,6 +1706,7 @@ export class MsgClientImpl implements Msg {
     this.DelistProcessors = this.DelistProcessors.bind(this);
     this.RetryMessage = this.RetryMessage.bind(this);
     this.UpdateParams = this.UpdateParams.bind(this);
+    this.Ping = this.Ping.bind(this);
   }
   CreateConnection(request: MsgCreateConnection): Promise<MsgCreateConnectionResponse> {
     const data = MsgCreateConnection.encode(request).finish();
@@ -1668,6 +1784,12 @@ export class MsgClientImpl implements Msg {
     const data = MsgUpdateParams.encode(request).finish();
     const promise = this.rpc.request("refractedlabs.bridge.bridge.Msg", "UpdateParams", data);
     return promise.then((data) => MsgUpdateParamsResponse.decode(new _m0.Reader(data)));
+  }
+
+  Ping(request: MsgPing): Promise<MsgPingResponse> {
+    const data = MsgPing.encode(request).finish();
+    const promise = this.rpc.request("refractedlabs.bridge.bridge.Msg", "Ping", data);
+    return promise.then((data) => MsgPingResponse.decode(new _m0.Reader(data)));
   }
 }
 

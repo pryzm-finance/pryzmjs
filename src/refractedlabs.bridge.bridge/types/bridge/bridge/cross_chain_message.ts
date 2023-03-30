@@ -1,4 +1,5 @@
 /* eslint-disable */
+import Long from "long";
 import _m0 from "protobufjs/minimal";
 
 export const protobufPackage = "refractedlabs.bridge.bridge";
@@ -6,6 +7,7 @@ export const protobufPackage = "refractedlabs.bridge.bridge";
 export enum CrossChainMessageType {
   CROSS_CHAIN_MESSAGE_TYPE_DELIST = 0,
   CROSS_CHAIN_MESSAGE_TYPE_WHITELIST = 1,
+  CROSS_CHAIN_MESSAGE_TYPE_PING = 2,
   UNRECOGNIZED = -1,
 }
 
@@ -17,6 +19,9 @@ export function crossChainMessageTypeFromJSON(object: any): CrossChainMessageTyp
     case 1:
     case "CROSS_CHAIN_MESSAGE_TYPE_WHITELIST":
       return CrossChainMessageType.CROSS_CHAIN_MESSAGE_TYPE_WHITELIST;
+    case 2:
+    case "CROSS_CHAIN_MESSAGE_TYPE_PING":
+      return CrossChainMessageType.CROSS_CHAIN_MESSAGE_TYPE_PING;
     case -1:
     case "UNRECOGNIZED":
     default:
@@ -30,6 +35,8 @@ export function crossChainMessageTypeToJSON(object: CrossChainMessageType): stri
       return "CROSS_CHAIN_MESSAGE_TYPE_DELIST";
     case CrossChainMessageType.CROSS_CHAIN_MESSAGE_TYPE_WHITELIST:
       return "CROSS_CHAIN_MESSAGE_TYPE_WHITELIST";
+    case CrossChainMessageType.CROSS_CHAIN_MESSAGE_TYPE_PING:
+      return "CROSS_CHAIN_MESSAGE_TYPE_PING";
     case CrossChainMessageType.UNRECOGNIZED:
     default:
       return "UNRECOGNIZED";
@@ -41,27 +48,35 @@ export interface CrossChainMessage {
   body: string;
 }
 
+export interface PingCrossChainMessage {
+  from: string;
+  timestamp: number;
+}
+
+export interface PingCrossChainMessageResult {
+}
+
 export interface WhitelistActorsCrossChainMessage {
-  watchers: string[];
   relayers: string[];
+  watchers: string[];
   processors: string[];
 }
 
 export interface WhitelistActorsCrossChainMessageResult {
-  watchers: string[];
   relayers: string[];
+  watchers: string[];
   processors: string[];
 }
 
 export interface DelistActorsCrossChainMessage {
-  watchers: string[];
   relayers: string[];
+  watchers: string[];
   processors: string[];
 }
 
 export interface DelistActorsCrossChainMessageResult {
-  watchers: string[];
   relayers: string[];
+  watchers: string[];
   processors: string[];
 }
 
@@ -123,16 +138,113 @@ export const CrossChainMessage = {
   },
 };
 
+function createBasePingCrossChainMessage(): PingCrossChainMessage {
+  return { from: "", timestamp: 0 };
+}
+
+export const PingCrossChainMessage = {
+  encode(message: PingCrossChainMessage, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.from !== "") {
+      writer.uint32(10).string(message.from);
+    }
+    if (message.timestamp !== 0) {
+      writer.uint32(16).uint64(message.timestamp);
+    }
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): PingCrossChainMessage {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBasePingCrossChainMessage();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.from = reader.string();
+          break;
+        case 2:
+          message.timestamp = longToNumber(reader.uint64() as Long);
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): PingCrossChainMessage {
+    return {
+      from: isSet(object.from) ? String(object.from) : "",
+      timestamp: isSet(object.timestamp) ? Number(object.timestamp) : 0,
+    };
+  },
+
+  toJSON(message: PingCrossChainMessage): unknown {
+    const obj: any = {};
+    message.from !== undefined && (obj.from = message.from);
+    message.timestamp !== undefined && (obj.timestamp = Math.round(message.timestamp));
+    return obj;
+  },
+
+  fromPartial<I extends Exact<DeepPartial<PingCrossChainMessage>, I>>(object: I): PingCrossChainMessage {
+    const message = createBasePingCrossChainMessage();
+    message.from = object.from ?? "";
+    message.timestamp = object.timestamp ?? 0;
+    return message;
+  },
+};
+
+function createBasePingCrossChainMessageResult(): PingCrossChainMessageResult {
+  return {};
+}
+
+export const PingCrossChainMessageResult = {
+  encode(_: PingCrossChainMessageResult, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): PingCrossChainMessageResult {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBasePingCrossChainMessageResult();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(_: any): PingCrossChainMessageResult {
+    return {};
+  },
+
+  toJSON(_: PingCrossChainMessageResult): unknown {
+    const obj: any = {};
+    return obj;
+  },
+
+  fromPartial<I extends Exact<DeepPartial<PingCrossChainMessageResult>, I>>(_: I): PingCrossChainMessageResult {
+    const message = createBasePingCrossChainMessageResult();
+    return message;
+  },
+};
+
 function createBaseWhitelistActorsCrossChainMessage(): WhitelistActorsCrossChainMessage {
-  return { watchers: [], relayers: [], processors: [] };
+  return { relayers: [], watchers: [], processors: [] };
 }
 
 export const WhitelistActorsCrossChainMessage = {
   encode(message: WhitelistActorsCrossChainMessage, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    for (const v of message.watchers) {
+    for (const v of message.relayers) {
       writer.uint32(10).string(v!);
     }
-    for (const v of message.relayers) {
+    for (const v of message.watchers) {
       writer.uint32(18).string(v!);
     }
     for (const v of message.processors) {
@@ -149,10 +261,10 @@ export const WhitelistActorsCrossChainMessage = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.watchers.push(reader.string());
+          message.relayers.push(reader.string());
           break;
         case 2:
-          message.relayers.push(reader.string());
+          message.watchers.push(reader.string());
           break;
         case 3:
           message.processors.push(reader.string());
@@ -167,23 +279,23 @@ export const WhitelistActorsCrossChainMessage = {
 
   fromJSON(object: any): WhitelistActorsCrossChainMessage {
     return {
-      watchers: Array.isArray(object?.watchers) ? object.watchers.map((e: any) => String(e)) : [],
       relayers: Array.isArray(object?.relayers) ? object.relayers.map((e: any) => String(e)) : [],
+      watchers: Array.isArray(object?.watchers) ? object.watchers.map((e: any) => String(e)) : [],
       processors: Array.isArray(object?.processors) ? object.processors.map((e: any) => String(e)) : [],
     };
   },
 
   toJSON(message: WhitelistActorsCrossChainMessage): unknown {
     const obj: any = {};
-    if (message.watchers) {
-      obj.watchers = message.watchers.map((e) => e);
-    } else {
-      obj.watchers = [];
-    }
     if (message.relayers) {
       obj.relayers = message.relayers.map((e) => e);
     } else {
       obj.relayers = [];
+    }
+    if (message.watchers) {
+      obj.watchers = message.watchers.map((e) => e);
+    } else {
+      obj.watchers = [];
     }
     if (message.processors) {
       obj.processors = message.processors.map((e) => e);
@@ -197,23 +309,23 @@ export const WhitelistActorsCrossChainMessage = {
     object: I,
   ): WhitelistActorsCrossChainMessage {
     const message = createBaseWhitelistActorsCrossChainMessage();
-    message.watchers = object.watchers?.map((e) => e) || [];
     message.relayers = object.relayers?.map((e) => e) || [];
+    message.watchers = object.watchers?.map((e) => e) || [];
     message.processors = object.processors?.map((e) => e) || [];
     return message;
   },
 };
 
 function createBaseWhitelistActorsCrossChainMessageResult(): WhitelistActorsCrossChainMessageResult {
-  return { watchers: [], relayers: [], processors: [] };
+  return { relayers: [], watchers: [], processors: [] };
 }
 
 export const WhitelistActorsCrossChainMessageResult = {
   encode(message: WhitelistActorsCrossChainMessageResult, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    for (const v of message.watchers) {
+    for (const v of message.relayers) {
       writer.uint32(10).string(v!);
     }
-    for (const v of message.relayers) {
+    for (const v of message.watchers) {
       writer.uint32(18).string(v!);
     }
     for (const v of message.processors) {
@@ -230,10 +342,10 @@ export const WhitelistActorsCrossChainMessageResult = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.watchers.push(reader.string());
+          message.relayers.push(reader.string());
           break;
         case 2:
-          message.relayers.push(reader.string());
+          message.watchers.push(reader.string());
           break;
         case 3:
           message.processors.push(reader.string());
@@ -248,23 +360,23 @@ export const WhitelistActorsCrossChainMessageResult = {
 
   fromJSON(object: any): WhitelistActorsCrossChainMessageResult {
     return {
-      watchers: Array.isArray(object?.watchers) ? object.watchers.map((e: any) => String(e)) : [],
       relayers: Array.isArray(object?.relayers) ? object.relayers.map((e: any) => String(e)) : [],
+      watchers: Array.isArray(object?.watchers) ? object.watchers.map((e: any) => String(e)) : [],
       processors: Array.isArray(object?.processors) ? object.processors.map((e: any) => String(e)) : [],
     };
   },
 
   toJSON(message: WhitelistActorsCrossChainMessageResult): unknown {
     const obj: any = {};
-    if (message.watchers) {
-      obj.watchers = message.watchers.map((e) => e);
-    } else {
-      obj.watchers = [];
-    }
     if (message.relayers) {
       obj.relayers = message.relayers.map((e) => e);
     } else {
       obj.relayers = [];
+    }
+    if (message.watchers) {
+      obj.watchers = message.watchers.map((e) => e);
+    } else {
+      obj.watchers = [];
     }
     if (message.processors) {
       obj.processors = message.processors.map((e) => e);
@@ -278,23 +390,23 @@ export const WhitelistActorsCrossChainMessageResult = {
     object: I,
   ): WhitelistActorsCrossChainMessageResult {
     const message = createBaseWhitelistActorsCrossChainMessageResult();
-    message.watchers = object.watchers?.map((e) => e) || [];
     message.relayers = object.relayers?.map((e) => e) || [];
+    message.watchers = object.watchers?.map((e) => e) || [];
     message.processors = object.processors?.map((e) => e) || [];
     return message;
   },
 };
 
 function createBaseDelistActorsCrossChainMessage(): DelistActorsCrossChainMessage {
-  return { watchers: [], relayers: [], processors: [] };
+  return { relayers: [], watchers: [], processors: [] };
 }
 
 export const DelistActorsCrossChainMessage = {
   encode(message: DelistActorsCrossChainMessage, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    for (const v of message.watchers) {
+    for (const v of message.relayers) {
       writer.uint32(10).string(v!);
     }
-    for (const v of message.relayers) {
+    for (const v of message.watchers) {
       writer.uint32(18).string(v!);
     }
     for (const v of message.processors) {
@@ -311,10 +423,10 @@ export const DelistActorsCrossChainMessage = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.watchers.push(reader.string());
+          message.relayers.push(reader.string());
           break;
         case 2:
-          message.relayers.push(reader.string());
+          message.watchers.push(reader.string());
           break;
         case 3:
           message.processors.push(reader.string());
@@ -329,23 +441,23 @@ export const DelistActorsCrossChainMessage = {
 
   fromJSON(object: any): DelistActorsCrossChainMessage {
     return {
-      watchers: Array.isArray(object?.watchers) ? object.watchers.map((e: any) => String(e)) : [],
       relayers: Array.isArray(object?.relayers) ? object.relayers.map((e: any) => String(e)) : [],
+      watchers: Array.isArray(object?.watchers) ? object.watchers.map((e: any) => String(e)) : [],
       processors: Array.isArray(object?.processors) ? object.processors.map((e: any) => String(e)) : [],
     };
   },
 
   toJSON(message: DelistActorsCrossChainMessage): unknown {
     const obj: any = {};
-    if (message.watchers) {
-      obj.watchers = message.watchers.map((e) => e);
-    } else {
-      obj.watchers = [];
-    }
     if (message.relayers) {
       obj.relayers = message.relayers.map((e) => e);
     } else {
       obj.relayers = [];
+    }
+    if (message.watchers) {
+      obj.watchers = message.watchers.map((e) => e);
+    } else {
+      obj.watchers = [];
     }
     if (message.processors) {
       obj.processors = message.processors.map((e) => e);
@@ -359,23 +471,23 @@ export const DelistActorsCrossChainMessage = {
     object: I,
   ): DelistActorsCrossChainMessage {
     const message = createBaseDelistActorsCrossChainMessage();
-    message.watchers = object.watchers?.map((e) => e) || [];
     message.relayers = object.relayers?.map((e) => e) || [];
+    message.watchers = object.watchers?.map((e) => e) || [];
     message.processors = object.processors?.map((e) => e) || [];
     return message;
   },
 };
 
 function createBaseDelistActorsCrossChainMessageResult(): DelistActorsCrossChainMessageResult {
-  return { watchers: [], relayers: [], processors: [] };
+  return { relayers: [], watchers: [], processors: [] };
 }
 
 export const DelistActorsCrossChainMessageResult = {
   encode(message: DelistActorsCrossChainMessageResult, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    for (const v of message.watchers) {
+    for (const v of message.relayers) {
       writer.uint32(10).string(v!);
     }
-    for (const v of message.relayers) {
+    for (const v of message.watchers) {
       writer.uint32(18).string(v!);
     }
     for (const v of message.processors) {
@@ -392,10 +504,10 @@ export const DelistActorsCrossChainMessageResult = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.watchers.push(reader.string());
+          message.relayers.push(reader.string());
           break;
         case 2:
-          message.relayers.push(reader.string());
+          message.watchers.push(reader.string());
           break;
         case 3:
           message.processors.push(reader.string());
@@ -410,23 +522,23 @@ export const DelistActorsCrossChainMessageResult = {
 
   fromJSON(object: any): DelistActorsCrossChainMessageResult {
     return {
-      watchers: Array.isArray(object?.watchers) ? object.watchers.map((e: any) => String(e)) : [],
       relayers: Array.isArray(object?.relayers) ? object.relayers.map((e: any) => String(e)) : [],
+      watchers: Array.isArray(object?.watchers) ? object.watchers.map((e: any) => String(e)) : [],
       processors: Array.isArray(object?.processors) ? object.processors.map((e: any) => String(e)) : [],
     };
   },
 
   toJSON(message: DelistActorsCrossChainMessageResult): unknown {
     const obj: any = {};
-    if (message.watchers) {
-      obj.watchers = message.watchers.map((e) => e);
-    } else {
-      obj.watchers = [];
-    }
     if (message.relayers) {
       obj.relayers = message.relayers.map((e) => e);
     } else {
       obj.relayers = [];
+    }
+    if (message.watchers) {
+      obj.watchers = message.watchers.map((e) => e);
+    } else {
+      obj.watchers = [];
     }
     if (message.processors) {
       obj.processors = message.processors.map((e) => e);
@@ -440,12 +552,31 @@ export const DelistActorsCrossChainMessageResult = {
     object: I,
   ): DelistActorsCrossChainMessageResult {
     const message = createBaseDelistActorsCrossChainMessageResult();
-    message.watchers = object.watchers?.map((e) => e) || [];
     message.relayers = object.relayers?.map((e) => e) || [];
+    message.watchers = object.watchers?.map((e) => e) || [];
     message.processors = object.processors?.map((e) => e) || [];
     return message;
   },
 };
+
+declare var self: any | undefined;
+declare var window: any | undefined;
+declare var global: any | undefined;
+var globalThis: any = (() => {
+  if (typeof globalThis !== "undefined") {
+    return globalThis;
+  }
+  if (typeof self !== "undefined") {
+    return self;
+  }
+  if (typeof window !== "undefined") {
+    return window;
+  }
+  if (typeof global !== "undefined") {
+    return global;
+  }
+  throw "Unable to locate global object";
+})();
 
 type Builtin = Date | Function | Uint8Array | string | number | boolean | undefined;
 
@@ -457,6 +588,19 @@ export type DeepPartial<T> = T extends Builtin ? T
 type KeysOfUnion<T> = T extends T ? keyof T : never;
 export type Exact<P, I extends P> = P extends Builtin ? P
   : P & { [K in keyof P]: Exact<P[K], I[K]> } & { [K in Exclude<keyof I, KeysOfUnion<P>>]: never };
+
+function longToNumber(long: Long): number {
+  if (long.gt(Number.MAX_SAFE_INTEGER)) {
+    throw new globalThis.Error("Value is larger than Number.MAX_SAFE_INTEGER");
+  }
+  return long.toNumber();
+}
+
+// @ts-ignore
+if (_m0.util.Long !== Long) {
+  _m0.util.Long = Long as any;
+  _m0.configure();
+}
 
 function isSet(value: any): boolean {
   return value !== null && value !== undefined;

@@ -52,22 +52,6 @@ export class PrismWebsocketClient {
         this.reconnectingSocket.connect()
     }
 
-    //TODO add connect async method which returns when connected
-    // async connect(): Promise<void> {
-    //     this.reconnectingSocket.connect()
-    //     let resolve: () => void
-    //     const p = new Promise<void>((r) => {
-    //         resolve = r
-    //     })
-    //     this.prismWebsocketClient.addListener({
-    //         onConnectionStatusUpdateEvent: status => {
-    //             if (status == ConnectionStatus.Connected)
-    //                 resolve()
-    //         }
-    //     })
-    //     await p
-    // }
-
     addListener(listener: ConnectionStatusListener): void {
         this.connectionStatusEventEmitter.on("ConnectionStatusUpdateEvent", listener.onConnectionStatusUpdateEvent)
     }
