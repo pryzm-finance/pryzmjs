@@ -56,15 +56,11 @@ export interface Ping {
   state: PingState;
   processor: string;
   executedBlockId: number;
-  executedBlockTime: number;
   watcher: string;
   cancelledBlockId: number;
-  cancelledBlockTime: number;
   relayer: string;
   enqueuedBlockId: number;
-  enqueuedBlockTime: number;
   expiredBlockId: number;
-  expiredBlockTime: number;
 }
 
 function createBasePing(): Ping {
@@ -75,15 +71,11 @@ function createBasePing(): Ping {
     state: 0,
     processor: "",
     executedBlockId: 0,
-    executedBlockTime: 0,
     watcher: "",
     cancelledBlockId: 0,
-    cancelledBlockTime: 0,
     relayer: "",
     enqueuedBlockId: 0,
-    enqueuedBlockTime: 0,
     expiredBlockId: 0,
-    expiredBlockTime: 0,
   };
 }
 
@@ -107,32 +99,20 @@ export const Ping = {
     if (message.executedBlockId !== 0) {
       writer.uint32(48).uint64(message.executedBlockId);
     }
-    if (message.executedBlockTime !== 0) {
-      writer.uint32(56).uint64(message.executedBlockTime);
-    }
     if (message.watcher !== "") {
-      writer.uint32(66).string(message.watcher);
+      writer.uint32(58).string(message.watcher);
     }
     if (message.cancelledBlockId !== 0) {
-      writer.uint32(72).uint64(message.cancelledBlockId);
-    }
-    if (message.cancelledBlockTime !== 0) {
-      writer.uint32(80).uint64(message.cancelledBlockTime);
+      writer.uint32(64).uint64(message.cancelledBlockId);
     }
     if (message.relayer !== "") {
-      writer.uint32(90).string(message.relayer);
+      writer.uint32(74).string(message.relayer);
     }
     if (message.enqueuedBlockId !== 0) {
-      writer.uint32(96).uint64(message.enqueuedBlockId);
-    }
-    if (message.enqueuedBlockTime !== 0) {
-      writer.uint32(104).uint64(message.enqueuedBlockTime);
+      writer.uint32(80).uint64(message.enqueuedBlockId);
     }
     if (message.expiredBlockId !== 0) {
-      writer.uint32(112).uint64(message.expiredBlockId);
-    }
-    if (message.expiredBlockTime !== 0) {
-      writer.uint32(120).uint64(message.expiredBlockTime);
+      writer.uint32(88).uint64(message.expiredBlockId);
     }
     return writer;
   },
@@ -163,31 +143,19 @@ export const Ping = {
           message.executedBlockId = longToNumber(reader.uint64() as Long);
           break;
         case 7:
-          message.executedBlockTime = longToNumber(reader.uint64() as Long);
-          break;
-        case 8:
           message.watcher = reader.string();
           break;
-        case 9:
+        case 8:
           message.cancelledBlockId = longToNumber(reader.uint64() as Long);
           break;
-        case 10:
-          message.cancelledBlockTime = longToNumber(reader.uint64() as Long);
-          break;
-        case 11:
+        case 9:
           message.relayer = reader.string();
           break;
-        case 12:
+        case 10:
           message.enqueuedBlockId = longToNumber(reader.uint64() as Long);
           break;
-        case 13:
-          message.enqueuedBlockTime = longToNumber(reader.uint64() as Long);
-          break;
-        case 14:
+        case 11:
           message.expiredBlockId = longToNumber(reader.uint64() as Long);
-          break;
-        case 15:
-          message.expiredBlockTime = longToNumber(reader.uint64() as Long);
           break;
         default:
           reader.skipType(tag & 7);
@@ -205,15 +173,11 @@ export const Ping = {
       state: isSet(object.state) ? pingStateFromJSON(object.state) : 0,
       processor: isSet(object.processor) ? String(object.processor) : "",
       executedBlockId: isSet(object.executedBlockId) ? Number(object.executedBlockId) : 0,
-      executedBlockTime: isSet(object.executedBlockTime) ? Number(object.executedBlockTime) : 0,
       watcher: isSet(object.watcher) ? String(object.watcher) : "",
       cancelledBlockId: isSet(object.cancelledBlockId) ? Number(object.cancelledBlockId) : 0,
-      cancelledBlockTime: isSet(object.cancelledBlockTime) ? Number(object.cancelledBlockTime) : 0,
       relayer: isSet(object.relayer) ? String(object.relayer) : "",
       enqueuedBlockId: isSet(object.enqueuedBlockId) ? Number(object.enqueuedBlockId) : 0,
-      enqueuedBlockTime: isSet(object.enqueuedBlockTime) ? Number(object.enqueuedBlockTime) : 0,
       expiredBlockId: isSet(object.expiredBlockId) ? Number(object.expiredBlockId) : 0,
-      expiredBlockTime: isSet(object.expiredBlockTime) ? Number(object.expiredBlockTime) : 0,
     };
   },
 
@@ -225,15 +189,11 @@ export const Ping = {
     message.state !== undefined && (obj.state = pingStateToJSON(message.state));
     message.processor !== undefined && (obj.processor = message.processor);
     message.executedBlockId !== undefined && (obj.executedBlockId = Math.round(message.executedBlockId));
-    message.executedBlockTime !== undefined && (obj.executedBlockTime = Math.round(message.executedBlockTime));
     message.watcher !== undefined && (obj.watcher = message.watcher);
     message.cancelledBlockId !== undefined && (obj.cancelledBlockId = Math.round(message.cancelledBlockId));
-    message.cancelledBlockTime !== undefined && (obj.cancelledBlockTime = Math.round(message.cancelledBlockTime));
     message.relayer !== undefined && (obj.relayer = message.relayer);
     message.enqueuedBlockId !== undefined && (obj.enqueuedBlockId = Math.round(message.enqueuedBlockId));
-    message.enqueuedBlockTime !== undefined && (obj.enqueuedBlockTime = Math.round(message.enqueuedBlockTime));
     message.expiredBlockId !== undefined && (obj.expiredBlockId = Math.round(message.expiredBlockId));
-    message.expiredBlockTime !== undefined && (obj.expiredBlockTime = Math.round(message.expiredBlockTime));
     return obj;
   },
 
@@ -245,15 +205,11 @@ export const Ping = {
     message.state = object.state ?? 0;
     message.processor = object.processor ?? "";
     message.executedBlockId = object.executedBlockId ?? 0;
-    message.executedBlockTime = object.executedBlockTime ?? 0;
     message.watcher = object.watcher ?? "";
     message.cancelledBlockId = object.cancelledBlockId ?? 0;
-    message.cancelledBlockTime = object.cancelledBlockTime ?? 0;
     message.relayer = object.relayer ?? "";
     message.enqueuedBlockId = object.enqueuedBlockId ?? 0;
-    message.enqueuedBlockTime = object.enqueuedBlockTime ?? 0;
     message.expiredBlockId = object.expiredBlockId ?? 0;
-    message.expiredBlockTime = object.expiredBlockTime ?? 0;
     return message;
   },
 };

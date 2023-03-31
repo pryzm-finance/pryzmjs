@@ -13,8 +13,7 @@ export interface Params {
   slashFraction: string;
   slashWindow: number;
   maxMissRatePerSlashWindow: string;
-  /** TODO rename to ping_queue_max_size */
-  pingQueueSize: number;
+  pingQueueMaxSize: number;
   /** list of authorities */
   pingAuthorities: string[];
 }
@@ -26,7 +25,7 @@ function createBaseParams(): Params {
     slashFraction: "",
     slashWindow: 0,
     maxMissRatePerSlashWindow: "",
-    pingQueueSize: 0,
+    pingQueueMaxSize: 0,
     pingAuthorities: [],
   };
 }
@@ -48,8 +47,8 @@ export const Params = {
     if (message.maxMissRatePerSlashWindow !== "") {
       writer.uint32(42).string(message.maxMissRatePerSlashWindow);
     }
-    if (message.pingQueueSize !== 0) {
-      writer.uint32(48).uint32(message.pingQueueSize);
+    if (message.pingQueueMaxSize !== 0) {
+      writer.uint32(48).uint32(message.pingQueueMaxSize);
     }
     for (const v of message.pingAuthorities) {
       writer.uint32(58).string(v!);
@@ -80,7 +79,7 @@ export const Params = {
           message.maxMissRatePerSlashWindow = reader.string();
           break;
         case 6:
-          message.pingQueueSize = reader.uint32();
+          message.pingQueueMaxSize = reader.uint32();
           break;
         case 7:
           message.pingAuthorities.push(reader.string());
@@ -102,7 +101,7 @@ export const Params = {
       maxMissRatePerSlashWindow: isSet(object.maxMissRatePerSlashWindow)
         ? String(object.maxMissRatePerSlashWindow)
         : "",
-      pingQueueSize: isSet(object.pingQueueSize) ? Number(object.pingQueueSize) : 0,
+      pingQueueMaxSize: isSet(object.pingQueueMaxSize) ? Number(object.pingQueueMaxSize) : 0,
       pingAuthorities: Array.isArray(object?.pingAuthorities) ? object.pingAuthorities.map((e: any) => String(e)) : [],
     };
   },
@@ -115,7 +114,7 @@ export const Params = {
     message.slashWindow !== undefined && (obj.slashWindow = Math.round(message.slashWindow));
     message.maxMissRatePerSlashWindow !== undefined
       && (obj.maxMissRatePerSlashWindow = message.maxMissRatePerSlashWindow);
-    message.pingQueueSize !== undefined && (obj.pingQueueSize = Math.round(message.pingQueueSize));
+    message.pingQueueMaxSize !== undefined && (obj.pingQueueMaxSize = Math.round(message.pingQueueMaxSize));
     if (message.pingAuthorities) {
       obj.pingAuthorities = message.pingAuthorities.map((e) => e);
     } else {
@@ -131,7 +130,7 @@ export const Params = {
     message.slashFraction = object.slashFraction ?? "";
     message.slashWindow = object.slashWindow ?? 0;
     message.maxMissRatePerSlashWindow = object.maxMissRatePerSlashWindow ?? "";
-    message.pingQueueSize = object.pingQueueSize ?? 0;
+    message.pingQueueMaxSize = object.pingQueueMaxSize ?? 0;
     message.pingAuthorities = object.pingAuthorities?.map((e) => e) || [];
     return message;
   },

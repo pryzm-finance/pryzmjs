@@ -52,8 +52,8 @@ export interface MessageMetadata {
   hash: string;
   type: CrossChainMessageType;
   /**
-   * TODO? can we rely on feeders for detecting expiry or bridge needs an independent logic for detecting it (when the mojority of feeders do not inform the message expiration)
-   * possible solution: 1) detect expiration in end-blocker 2) inform expiration to send-message caller 3) remove metadata
+   * we rely on feeders for detecting expiry
+   * other possible solution: 1) detect expiration in end-blocker 2) inform expiration to send-message caller 3) remove metadata
    * best solution: rely on feeders, since if majority is able to create such a situation, they can do even other bad stuff to Prism
    */
   expirationTime: number;
@@ -69,19 +69,15 @@ export interface MessageExecutionResult {
   state: MessageState;
   processor: string;
   executedBlockId: number;
-  executedBlockTime: number;
   watcher: string;
   cancelledBlockId: number;
-  cancelledBlockTime: number;
   relayer: string;
   enqueuedBlockId: number;
-  enqueuedBlockTime: number;
   result: string;
 }
 
 export interface MessageBatchResult {
   lastBlockId: number;
-  lastBlockTime: number;
   messages: MessageExecutionResult[];
 }
 
@@ -212,13 +208,10 @@ function createBaseMessageExecutionResult(): MessageExecutionResult {
     state: 0,
     processor: "",
     executedBlockId: 0,
-    executedBlockTime: 0,
     watcher: "",
     cancelledBlockId: 0,
-    cancelledBlockTime: 0,
     relayer: "",
     enqueuedBlockId: 0,
-    enqueuedBlockTime: 0,
     result: "",
   };
 }
@@ -237,29 +230,20 @@ export const MessageExecutionResult = {
     if (message.executedBlockId !== 0) {
       writer.uint32(32).uint64(message.executedBlockId);
     }
-    if (message.executedBlockTime !== 0) {
-      writer.uint32(40).uint64(message.executedBlockTime);
-    }
     if (message.watcher !== "") {
-      writer.uint32(50).string(message.watcher);
+      writer.uint32(42).string(message.watcher);
     }
     if (message.cancelledBlockId !== 0) {
-      writer.uint32(56).uint64(message.cancelledBlockId);
-    }
-    if (message.cancelledBlockTime !== 0) {
-      writer.uint32(64).uint64(message.cancelledBlockTime);
+      writer.uint32(48).uint64(message.cancelledBlockId);
     }
     if (message.relayer !== "") {
-      writer.uint32(74).string(message.relayer);
+      writer.uint32(58).string(message.relayer);
     }
     if (message.enqueuedBlockId !== 0) {
-      writer.uint32(80).uint64(message.enqueuedBlockId);
-    }
-    if (message.enqueuedBlockTime !== 0) {
-      writer.uint32(88).uint64(message.enqueuedBlockTime);
+      writer.uint32(64).uint64(message.enqueuedBlockId);
     }
     if (message.result !== "") {
-      writer.uint32(98).string(message.result);
+      writer.uint32(74).string(message.result);
     }
     return writer;
   },
@@ -284,27 +268,18 @@ export const MessageExecutionResult = {
           message.executedBlockId = longToNumber(reader.uint64() as Long);
           break;
         case 5:
-          message.executedBlockTime = longToNumber(reader.uint64() as Long);
-          break;
-        case 6:
           message.watcher = reader.string();
           break;
-        case 7:
+        case 6:
           message.cancelledBlockId = longToNumber(reader.uint64() as Long);
           break;
-        case 8:
-          message.cancelledBlockTime = longToNumber(reader.uint64() as Long);
-          break;
-        case 9:
+        case 7:
           message.relayer = reader.string();
           break;
-        case 10:
+        case 8:
           message.enqueuedBlockId = longToNumber(reader.uint64() as Long);
           break;
-        case 11:
-          message.enqueuedBlockTime = longToNumber(reader.uint64() as Long);
-          break;
-        case 12:
+        case 9:
           message.result = reader.string();
           break;
         default:
@@ -321,13 +296,10 @@ export const MessageExecutionResult = {
       state: isSet(object.state) ? messageStateFromJSON(object.state) : 0,
       processor: isSet(object.processor) ? String(object.processor) : "",
       executedBlockId: isSet(object.executedBlockId) ? Number(object.executedBlockId) : 0,
-      executedBlockTime: isSet(object.executedBlockTime) ? Number(object.executedBlockTime) : 0,
       watcher: isSet(object.watcher) ? String(object.watcher) : "",
       cancelledBlockId: isSet(object.cancelledBlockId) ? Number(object.cancelledBlockId) : 0,
-      cancelledBlockTime: isSet(object.cancelledBlockTime) ? Number(object.cancelledBlockTime) : 0,
       relayer: isSet(object.relayer) ? String(object.relayer) : "",
       enqueuedBlockId: isSet(object.enqueuedBlockId) ? Number(object.enqueuedBlockId) : 0,
-      enqueuedBlockTime: isSet(object.enqueuedBlockTime) ? Number(object.enqueuedBlockTime) : 0,
       result: isSet(object.result) ? String(object.result) : "",
     };
   },
@@ -338,13 +310,10 @@ export const MessageExecutionResult = {
     message.state !== undefined && (obj.state = messageStateToJSON(message.state));
     message.processor !== undefined && (obj.processor = message.processor);
     message.executedBlockId !== undefined && (obj.executedBlockId = Math.round(message.executedBlockId));
-    message.executedBlockTime !== undefined && (obj.executedBlockTime = Math.round(message.executedBlockTime));
     message.watcher !== undefined && (obj.watcher = message.watcher);
     message.cancelledBlockId !== undefined && (obj.cancelledBlockId = Math.round(message.cancelledBlockId));
-    message.cancelledBlockTime !== undefined && (obj.cancelledBlockTime = Math.round(message.cancelledBlockTime));
     message.relayer !== undefined && (obj.relayer = message.relayer);
     message.enqueuedBlockId !== undefined && (obj.enqueuedBlockId = Math.round(message.enqueuedBlockId));
-    message.enqueuedBlockTime !== undefined && (obj.enqueuedBlockTime = Math.round(message.enqueuedBlockTime));
     message.result !== undefined && (obj.result = message.result);
     return obj;
   },
@@ -355,20 +324,17 @@ export const MessageExecutionResult = {
     message.state = object.state ?? 0;
     message.processor = object.processor ?? "";
     message.executedBlockId = object.executedBlockId ?? 0;
-    message.executedBlockTime = object.executedBlockTime ?? 0;
     message.watcher = object.watcher ?? "";
     message.cancelledBlockId = object.cancelledBlockId ?? 0;
-    message.cancelledBlockTime = object.cancelledBlockTime ?? 0;
     message.relayer = object.relayer ?? "";
     message.enqueuedBlockId = object.enqueuedBlockId ?? 0;
-    message.enqueuedBlockTime = object.enqueuedBlockTime ?? 0;
     message.result = object.result ?? "";
     return message;
   },
 };
 
 function createBaseMessageBatchResult(): MessageBatchResult {
-  return { lastBlockId: 0, lastBlockTime: 0, messages: [] };
+  return { lastBlockId: 0, messages: [] };
 }
 
 export const MessageBatchResult = {
@@ -376,11 +342,8 @@ export const MessageBatchResult = {
     if (message.lastBlockId !== 0) {
       writer.uint32(8).uint64(message.lastBlockId);
     }
-    if (message.lastBlockTime !== 0) {
-      writer.uint32(16).uint64(message.lastBlockTime);
-    }
     for (const v of message.messages) {
-      MessageExecutionResult.encode(v!, writer.uint32(26).fork()).ldelim();
+      MessageExecutionResult.encode(v!, writer.uint32(18).fork()).ldelim();
     }
     return writer;
   },
@@ -396,9 +359,6 @@ export const MessageBatchResult = {
           message.lastBlockId = longToNumber(reader.uint64() as Long);
           break;
         case 2:
-          message.lastBlockTime = longToNumber(reader.uint64() as Long);
-          break;
-        case 3:
           message.messages.push(MessageExecutionResult.decode(reader, reader.uint32()));
           break;
         default:
@@ -412,7 +372,6 @@ export const MessageBatchResult = {
   fromJSON(object: any): MessageBatchResult {
     return {
       lastBlockId: isSet(object.lastBlockId) ? Number(object.lastBlockId) : 0,
-      lastBlockTime: isSet(object.lastBlockTime) ? Number(object.lastBlockTime) : 0,
       messages: Array.isArray(object?.messages)
         ? object.messages.map((e: any) => MessageExecutionResult.fromJSON(e))
         : [],
@@ -422,7 +381,6 @@ export const MessageBatchResult = {
   toJSON(message: MessageBatchResult): unknown {
     const obj: any = {};
     message.lastBlockId !== undefined && (obj.lastBlockId = Math.round(message.lastBlockId));
-    message.lastBlockTime !== undefined && (obj.lastBlockTime = Math.round(message.lastBlockTime));
     if (message.messages) {
       obj.messages = message.messages.map((e) => e ? MessageExecutionResult.toJSON(e) : undefined);
     } else {
@@ -434,7 +392,6 @@ export const MessageBatchResult = {
   fromPartial<I extends Exact<DeepPartial<MessageBatchResult>, I>>(object: I): MessageBatchResult {
     const message = createBaseMessageBatchResult();
     message.lastBlockId = object.lastBlockId ?? 0;
-    message.lastBlockTime = object.lastBlockTime ?? 0;
     message.messages = object.messages?.map((e) => MessageExecutionResult.fromPartial(e)) || [];
     return message;
   },

@@ -48,11 +48,17 @@ export interface BridgeConnection {
   state?: BridgeConnectionState;
   chain?: string;
 
-  /** @format int64 */
-  blocks_per_vote_period?: number;
-
-  /** @format int64 */
+  /**
+   * number of blocks after which a block is considered final
+   * @format int64
+   */
   blocks_to_finality?: number;
+
+  /**
+   * the average time in millis needed to mine a new block
+   * @format int64
+   */
+  block_generation_time?: number;
 }
 
 export enum BridgeConnectionState {
@@ -65,9 +71,6 @@ export interface BridgeConsensusStatus {
 
   /** @format uint64 */
   last_block_id?: string;
-
-  /** @format uint64 */
-  last_block_time?: string;
 }
 
 export interface BridgeCrossChainMessage {
@@ -86,8 +89,8 @@ export interface BridgeMessageMetadata {
   type?: BridgeCrossChainMessageType;
 
   /**
-   * TODO? can we rely on feeders for detecting expiry or bridge needs an independent logic for detecting it (when the mojority of feeders do not inform the message expiration)
-   * possible solution: 1) detect expiration in end-blocker 2) inform expiration to send-message caller 3) remove metadata
+   * we rely on feeders for detecting expiry
+   * other possible solution: 1) detect expiration in end-blocker 2) inform expiration to send-message caller 3) remove metadata
    * best solution: rely on feeders, since if majority is able to create such a situation, they can do even other bad stuff to Prism
    * @format uint64
    */
@@ -168,11 +171,8 @@ export interface BridgeParams {
   slash_window?: string;
   max_miss_rate_per_slash_window?: string;
 
-  /**
-   * TODO rename to ping_queue_max_size
-   * @format int64
-   */
-  ping_queue_size?: number;
+  /** @format int64 */
+  ping_queue_max_size?: number;
 
   /** list of authorities */
   ping_authorities?: string[];
@@ -189,29 +189,17 @@ export interface BridgePing {
 
   /** @format uint64 */
   executed_block_id?: string;
-
-  /** @format uint64 */
-  executed_block_time?: string;
   watcher?: string;
 
   /** @format uint64 */
   cancelled_block_id?: string;
-
-  /** @format uint64 */
-  cancelled_block_time?: string;
   relayer?: string;
 
   /** @format uint64 */
   enqueued_block_id?: string;
 
   /** @format uint64 */
-  enqueued_block_time?: string;
-
-  /** @format uint64 */
   expired_block_id?: string;
-
-  /** @format uint64 */
-  expired_block_time?: string;
 }
 
 export enum BridgePingState {

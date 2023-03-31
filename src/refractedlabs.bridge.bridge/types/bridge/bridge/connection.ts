@@ -43,8 +43,10 @@ export interface Connection {
   contractCreationBlock: number;
   state: ConnectionState;
   chain: string;
-  blocksPerVotePeriod: number;
+  /** number of blocks after which a block is considered final */
   blocksToFinality: number;
+  /** the average time in millis needed to mine a new block */
+  blockGenerationTime: number;
 }
 
 function createBaseConnection(): Connection {
@@ -54,8 +56,8 @@ function createBaseConnection(): Connection {
     contractCreationBlock: 0,
     state: 0,
     chain: "",
-    blocksPerVotePeriod: 0,
     blocksToFinality: 0,
+    blockGenerationTime: 0,
   };
 }
 
@@ -76,11 +78,11 @@ export const Connection = {
     if (message.chain !== "") {
       writer.uint32(42).string(message.chain);
     }
-    if (message.blocksPerVotePeriod !== 0) {
-      writer.uint32(48).uint32(message.blocksPerVotePeriod);
-    }
     if (message.blocksToFinality !== 0) {
-      writer.uint32(56).uint32(message.blocksToFinality);
+      writer.uint32(48).uint32(message.blocksToFinality);
+    }
+    if (message.blockGenerationTime !== 0) {
+      writer.uint32(56).uint32(message.blockGenerationTime);
     }
     return writer;
   },
@@ -108,10 +110,10 @@ export const Connection = {
           message.chain = reader.string();
           break;
         case 6:
-          message.blocksPerVotePeriod = reader.uint32();
+          message.blocksToFinality = reader.uint32();
           break;
         case 7:
-          message.blocksToFinality = reader.uint32();
+          message.blockGenerationTime = reader.uint32();
           break;
         default:
           reader.skipType(tag & 7);
@@ -128,8 +130,8 @@ export const Connection = {
       contractCreationBlock: isSet(object.contractCreationBlock) ? Number(object.contractCreationBlock) : 0,
       state: isSet(object.state) ? connectionStateFromJSON(object.state) : 0,
       chain: isSet(object.chain) ? String(object.chain) : "",
-      blocksPerVotePeriod: isSet(object.blocksPerVotePeriod) ? Number(object.blocksPerVotePeriod) : 0,
       blocksToFinality: isSet(object.blocksToFinality) ? Number(object.blocksToFinality) : 0,
+      blockGenerationTime: isSet(object.blockGenerationTime) ? Number(object.blockGenerationTime) : 0,
     };
   },
 
@@ -141,8 +143,8 @@ export const Connection = {
       && (obj.contractCreationBlock = Math.round(message.contractCreationBlock));
     message.state !== undefined && (obj.state = connectionStateToJSON(message.state));
     message.chain !== undefined && (obj.chain = message.chain);
-    message.blocksPerVotePeriod !== undefined && (obj.blocksPerVotePeriod = Math.round(message.blocksPerVotePeriod));
     message.blocksToFinality !== undefined && (obj.blocksToFinality = Math.round(message.blocksToFinality));
+    message.blockGenerationTime !== undefined && (obj.blockGenerationTime = Math.round(message.blockGenerationTime));
     return obj;
   },
 
@@ -153,8 +155,8 @@ export const Connection = {
     message.contractCreationBlock = object.contractCreationBlock ?? 0;
     message.state = object.state ?? 0;
     message.chain = object.chain ?? "";
-    message.blocksPerVotePeriod = object.blocksPerVotePeriod ?? 0;
     message.blocksToFinality = object.blocksToFinality ?? 0;
+    message.blockGenerationTime = object.blockGenerationTime ?? 0;
     return message;
   },
 };
