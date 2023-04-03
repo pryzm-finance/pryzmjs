@@ -45,6 +45,12 @@ export interface BridgeConnection {
 
   /** @format uint64 */
   contract_creation_block?: string;
+
+  /**
+   * milliseconds
+   * @format uint64
+   */
+  contract_creation_time?: string;
   state?: BridgeConnectionState;
   chain?: string;
 
@@ -71,6 +77,12 @@ export interface BridgeConsensusStatus {
 
   /** @format uint64 */
   last_block_id?: string;
+
+  /**
+   * milliseconds
+   * @format uint64
+   */
+  last_block_time?: string;
 }
 
 export interface BridgeCrossChainMessage {
@@ -189,17 +201,41 @@ export interface BridgePing {
 
   /** @format uint64 */
   executed_block_id?: string;
+
+  /**
+   * milliseconds
+   * @format uint64
+   */
+  executed_block_time?: string;
   watcher?: string;
 
   /** @format uint64 */
   cancelled_block_id?: string;
+
+  /**
+   * milliseconds
+   * @format uint64
+   */
+  cancelled_block_time?: string;
   relayer?: string;
 
   /** @format uint64 */
   enqueued_block_id?: string;
 
+  /**
+   * milliseconds
+   * @format uint64
+   */
+  enqueued_block_time?: string;
+
   /** @format uint64 */
   expired_block_id?: string;
+
+  /**
+   * milliseconds
+   * @format uint64
+   */
+  expired_block_time?: string;
 }
 
 export enum BridgePingState {

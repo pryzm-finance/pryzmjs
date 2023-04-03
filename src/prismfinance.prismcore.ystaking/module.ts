@@ -7,16 +7,16 @@ import { msgTypes } from './registry';
 import { IgniteClient } from "../client"
 import { MissingWalletError } from "../helpers"
 import { Api } from "./rest";
-import { MsgUnbond } from "./types/prismcore/ystaking/tx";
+import { MsgClaimReward } from "./types/prismcore/ystaking/tx";
 import { MsgBond } from "./types/prismcore/ystaking/tx";
 import { MsgExitPool } from "./types/prismcore/ystaking/tx";
-import { MsgClaimReward } from "./types/prismcore/ystaking/tx";
+import { MsgUnbond } from "./types/prismcore/ystaking/tx";
 
 
-export { MsgUnbond, MsgBond, MsgExitPool, MsgClaimReward };
+export { MsgClaimReward, MsgBond, MsgExitPool, MsgUnbond };
 
-type sendMsgUnbondParams = {
-  value: MsgUnbond,
+type sendMsgClaimRewardParams = {
+  value: MsgClaimReward,
   fee?: StdFee,
   memo?: string
 };
@@ -33,15 +33,15 @@ type sendMsgExitPoolParams = {
   memo?: string
 };
 
-type sendMsgClaimRewardParams = {
-  value: MsgClaimReward,
+type sendMsgUnbondParams = {
+  value: MsgUnbond,
   fee?: StdFee,
   memo?: string
 };
 
 
-type msgUnbondParams = {
-  value: MsgUnbond,
+type msgClaimRewardParams = {
+  value: MsgClaimReward,
 };
 
 type msgBondParams = {
@@ -52,8 +52,8 @@ type msgExitPoolParams = {
   value: MsgExitPool,
 };
 
-type msgClaimRewardParams = {
-  value: MsgClaimReward,
+type msgUnbondParams = {
+  value: MsgUnbond,
 };
 
 
@@ -74,17 +74,17 @@ export const txClient = ({ signer, prefix, addr }: TxClientOptions = { addr: "ht
 
   return {
 		
-		async sendMsgUnbond({ value, fee, memo }: sendMsgUnbondParams): Promise<DeliverTxResponse> {
+		async sendMsgClaimReward({ value, fee, memo }: sendMsgClaimRewardParams): Promise<DeliverTxResponse> {
 			if (!signer) {
-					throw new Error('TxClient:sendMsgUnbond: Unable to sign Tx. Signer is not present.')
+					throw new Error('TxClient:sendMsgClaimReward: Unable to sign Tx. Signer is not present.')
 			}
 			try {			
 				const { address } = (await signer.getAccounts())[0]; 
 				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry, prefix});
-				let msg = this.msgUnbond({ value: MsgUnbond.fromPartial(value) })
+				let msg = this.msgClaimReward({ value: MsgClaimReward.fromPartial(value) })
 				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
 			} catch (e: any) {
-				throw new Error('TxClient:sendMsgUnbond: Could not broadcast Tx: '+ e.message)
+				throw new Error('TxClient:sendMsgClaimReward: Could not broadcast Tx: '+ e.message)
 			}
 		},
 		
@@ -116,26 +116,26 @@ export const txClient = ({ signer, prefix, addr }: TxClientOptions = { addr: "ht
 			}
 		},
 		
-		async sendMsgClaimReward({ value, fee, memo }: sendMsgClaimRewardParams): Promise<DeliverTxResponse> {
+		async sendMsgUnbond({ value, fee, memo }: sendMsgUnbondParams): Promise<DeliverTxResponse> {
 			if (!signer) {
-					throw new Error('TxClient:sendMsgClaimReward: Unable to sign Tx. Signer is not present.')
+					throw new Error('TxClient:sendMsgUnbond: Unable to sign Tx. Signer is not present.')
 			}
 			try {			
 				const { address } = (await signer.getAccounts())[0]; 
 				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry, prefix});
-				let msg = this.msgClaimReward({ value: MsgClaimReward.fromPartial(value) })
+				let msg = this.msgUnbond({ value: MsgUnbond.fromPartial(value) })
 				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
 			} catch (e: any) {
-				throw new Error('TxClient:sendMsgClaimReward: Could not broadcast Tx: '+ e.message)
+				throw new Error('TxClient:sendMsgUnbond: Could not broadcast Tx: '+ e.message)
 			}
 		},
 		
 		
-		msgUnbond({ value }: msgUnbondParams): EncodeObject {
+		msgClaimReward({ value }: msgClaimRewardParams): EncodeObject {
 			try {
-				return { typeUrl: "/prismfinance.prismcore.ystaking.MsgUnbond", value: MsgUnbond.fromPartial( value ) }  
+				return { typeUrl: "/prismfinance.prismcore.ystaking.MsgClaimReward", value: MsgClaimReward.fromPartial( value ) }  
 			} catch (e: any) {
-				throw new Error('TxClient:MsgUnbond: Could not create message: ' + e.message)
+				throw new Error('TxClient:MsgClaimReward: Could not create message: ' + e.message)
 			}
 		},
 		
@@ -155,11 +155,11 @@ export const txClient = ({ signer, prefix, addr }: TxClientOptions = { addr: "ht
 			}
 		},
 		
-		msgClaimReward({ value }: msgClaimRewardParams): EncodeObject {
+		msgUnbond({ value }: msgUnbondParams): EncodeObject {
 			try {
-				return { typeUrl: "/prismfinance.prismcore.ystaking.MsgClaimReward", value: MsgClaimReward.fromPartial( value ) }  
+				return { typeUrl: "/prismfinance.prismcore.ystaking.MsgUnbond", value: MsgUnbond.fromPartial( value ) }  
 			} catch (e: any) {
-				throw new Error('TxClient:MsgClaimReward: Could not create message: ' + e.message)
+				throw new Error('TxClient:MsgUnbond: Could not create message: ' + e.message)
 			}
 		},
 		

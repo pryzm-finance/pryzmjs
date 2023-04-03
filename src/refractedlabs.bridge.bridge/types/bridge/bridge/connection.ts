@@ -41,6 +41,8 @@ export interface Connection {
   connectionId: string;
   contractAddress: string;
   contractCreationBlock: number;
+  /** milliseconds */
+  contractCreationTime: number;
   state: ConnectionState;
   chain: string;
   /** number of blocks after which a block is considered final */
@@ -54,6 +56,7 @@ function createBaseConnection(): Connection {
     connectionId: "",
     contractAddress: "",
     contractCreationBlock: 0,
+    contractCreationTime: 0,
     state: 0,
     chain: "",
     blocksToFinality: 0,
@@ -72,17 +75,20 @@ export const Connection = {
     if (message.contractCreationBlock !== 0) {
       writer.uint32(24).uint64(message.contractCreationBlock);
     }
+    if (message.contractCreationTime !== 0) {
+      writer.uint32(32).uint64(message.contractCreationTime);
+    }
     if (message.state !== 0) {
-      writer.uint32(32).int32(message.state);
+      writer.uint32(40).int32(message.state);
     }
     if (message.chain !== "") {
-      writer.uint32(42).string(message.chain);
+      writer.uint32(50).string(message.chain);
     }
     if (message.blocksToFinality !== 0) {
-      writer.uint32(48).uint32(message.blocksToFinality);
+      writer.uint32(56).uint32(message.blocksToFinality);
     }
     if (message.blockGenerationTime !== 0) {
-      writer.uint32(56).uint32(message.blockGenerationTime);
+      writer.uint32(64).uint32(message.blockGenerationTime);
     }
     return writer;
   },
@@ -104,15 +110,18 @@ export const Connection = {
           message.contractCreationBlock = longToNumber(reader.uint64() as Long);
           break;
         case 4:
-          message.state = reader.int32() as any;
+          message.contractCreationTime = longToNumber(reader.uint64() as Long);
           break;
         case 5:
-          message.chain = reader.string();
+          message.state = reader.int32() as any;
           break;
         case 6:
-          message.blocksToFinality = reader.uint32();
+          message.chain = reader.string();
           break;
         case 7:
+          message.blocksToFinality = reader.uint32();
+          break;
+        case 8:
           message.blockGenerationTime = reader.uint32();
           break;
         default:
@@ -128,6 +137,7 @@ export const Connection = {
       connectionId: isSet(object.connectionId) ? String(object.connectionId) : "",
       contractAddress: isSet(object.contractAddress) ? String(object.contractAddress) : "",
       contractCreationBlock: isSet(object.contractCreationBlock) ? Number(object.contractCreationBlock) : 0,
+      contractCreationTime: isSet(object.contractCreationTime) ? Number(object.contractCreationTime) : 0,
       state: isSet(object.state) ? connectionStateFromJSON(object.state) : 0,
       chain: isSet(object.chain) ? String(object.chain) : "",
       blocksToFinality: isSet(object.blocksToFinality) ? Number(object.blocksToFinality) : 0,
@@ -141,6 +151,7 @@ export const Connection = {
     message.contractAddress !== undefined && (obj.contractAddress = message.contractAddress);
     message.contractCreationBlock !== undefined
       && (obj.contractCreationBlock = Math.round(message.contractCreationBlock));
+    message.contractCreationTime !== undefined && (obj.contractCreationTime = Math.round(message.contractCreationTime));
     message.state !== undefined && (obj.state = connectionStateToJSON(message.state));
     message.chain !== undefined && (obj.chain = message.chain);
     message.blocksToFinality !== undefined && (obj.blocksToFinality = Math.round(message.blocksToFinality));
@@ -153,6 +164,7 @@ export const Connection = {
     message.connectionId = object.connectionId ?? "";
     message.contractAddress = object.contractAddress ?? "";
     message.contractCreationBlock = object.contractCreationBlock ?? 0;
+    message.contractCreationTime = object.contractCreationTime ?? 0;
     message.state = object.state ?? 0;
     message.chain = object.chain ?? "";
     message.blocksToFinality = object.blocksToFinality ?? 0;
