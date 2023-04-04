@@ -1,10 +1,10 @@
 lockfileVersion: 5.4
 
 specifiers:
-  '@prism-finance/prismjs': 0.1.6
+  '@prism-finance/prismjs': ^0.1.9
 
 dependencies:
-  '@prism-finance/prismjs': 0.1.6
+  '@prism-finance/prismjs': 0.1.9
 
 packages:
 
@@ -146,8 +146,8 @@ packages:
     resolution: {integrity: sha512-UC1eWY9isDQm6POy6GaTmYtbPVY5dkywdjW8Qzj+JNMhbhMM0KHuI4pHwjv5TPXSO/Ba2z10MTnD9nUlZtDwtA==}
     dev: false
 
-  /@keplr-wallet/types/0.11.47:
-    resolution: {integrity: sha512-BbD5XI36CAsqWJgYyFh7GtGdxlNLJ4FMHO6r500xvBZzBPZID8izqKTr+n4yYA8/LMG89dHgnduA2w9mkXgTow==}
+  /@keplr-wallet/types/0.11.52:
+    resolution: {integrity: sha512-2LyOnaZpyjw5DiyJIG/L73PD/n284GrvhGjAkaTKantx70VGNgH/3x0DwjKpevRRxcuJ+2+A0LkHgkXIpD7YhQ==}
     dependencies:
       axios: 0.27.2
       long: 4.0.0
@@ -159,13 +159,13 @@ packages:
     resolution: {integrity: sha512-ilHEACi9DwqJB0pw7kv+Apvh50jiiSyR/cQ3y4W7lOR5mhvn/50FLUfsnfJz0BDZtl/RR16kXvptiv6q1msYZg==}
     dev: false
 
-  /@prism-finance/prismjs/0.1.6:
-    resolution: {integrity: sha512-r7tlHTwIBvLI954ZxWXHWiH4DmrQsJtBbB3njaLYLvp/mgdKKPGbfaMUZ0Uj7x89Jo9v3UN2Y7ZySQmy3M/TbQ==, tarball: download/@prism-finance/prismjs/0.1.6/e8f17bd3e3d8f225dd37f36c9db8bbdbbeee6174}
+  /@prism-finance/prismjs/0.1.9:
+    resolution: {integrity: sha512-EGse+Ck34qIfBE8NoRUrC660Hy5MqyLoJMXjMUrJlKrwddU5W6x9Pi3iZI++omLM/6Th70u0TnDinLEb86O5Tw==, tarball: download/@prism-finance/prismjs/0.1.9/bb50f6303b5e41204fbab23a97ebbc1a55d40155}
     dependencies:
       '@cosmjs/launchpad': 0.27.0
       '@cosmjs/proto-signing': 0.27.0
       '@cosmjs/stargate': 0.27.0
-      '@keplr-wallet/types': 0.11.47
+      '@keplr-wallet/types': 0.11.52
       axios: 0.21.4
       buffer: 6.0.3
       events: 3.3.0
@@ -226,8 +226,8 @@ packages:
     resolution: {integrity: sha512-s3nugnZumCC//n4moGGe6tkNMyYEdaDBitVjwPxXmR5lnMG5dHePinH2EdxkG3Rh1ghFHHixAG4NJhpJW1rthQ==}
     dev: false
 
-  /@types/node/18.15.3:
-    resolution: {integrity: sha512-p6ua9zBxz5otCmbpb5D3U4B5Nanw6Pk3PPyX05xnxbB/fRv71N7CPmORg7uAD5P70T0xmx1pzAx/FUfa5X+3cw==}
+  /@types/node/18.15.11:
+    resolution: {integrity: sha512-E5Kwq2n4SbMzQOn6wnmBjuK9ouqlURrcZDVfbo9ftDDTFt3nk7ZKK4GMOzoYgnpQJKcxwQw+lGaBvvlMo0qN/Q==}
     dev: false
 
   /asynckit/0.4.0:
@@ -507,7 +507,7 @@ packages:
       '@protobufjs/pool': 1.1.0
       '@protobufjs/utf8': 1.1.0
       '@types/long': 4.0.2
-      '@types/node': 18.15.3
+      '@types/node': 18.15.11
       long: 4.0.0
     dev: false
 

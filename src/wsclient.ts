@@ -49,6 +49,9 @@ export class PrismWebsocketClient {
                 this.connectionStatusEventEmitter.emit("ConnectionStatusUpdateEvent", ConnectionStatus[ConnectionStatus[Number(status)]])
             },
         });
+    }
+
+    connect() {
         this.reconnectingSocket.connect()
     }
 
