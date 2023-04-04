@@ -83,9 +83,8 @@ export interface MessageExecutionResult {
 }
 
 export interface MessageBatchResult {
-  lastBlockId: number;
   /** milliseconds */
-  lastBlockTime: number;
+  lastTime: number;
   messages: MessageExecutionResult[];
 }
 
@@ -372,19 +371,16 @@ export const MessageExecutionResult = {
 };
 
 function createBaseMessageBatchResult(): MessageBatchResult {
-  return { lastBlockId: 0, lastBlockTime: 0, messages: [] };
+  return { lastTime: 0, messages: [] };
 }
 
 export const MessageBatchResult = {
   encode(message: MessageBatchResult, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (message.lastBlockId !== 0) {
-      writer.uint32(8).uint64(message.lastBlockId);
-    }
-    if (message.lastBlockTime !== 0) {
-      writer.uint32(16).uint64(message.lastBlockTime);
+    if (message.lastTime !== 0) {
+      writer.uint32(8).uint64(message.lastTime);
     }
     for (const v of message.messages) {
-      MessageExecutionResult.encode(v!, writer.uint32(26).fork()).ldelim();
+      MessageExecutionResult.encode(v!, writer.uint32(18).fork()).ldelim();
     }
     return writer;
   },
@@ -397,12 +393,9 @@ export const MessageBatchResult = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.lastBlockId = longToNumber(reader.uint64() as Long);
+          message.lastTime = longToNumber(reader.uint64() as Long);
           break;
         case 2:
-          message.lastBlockTime = longToNumber(reader.uint64() as Long);
-          break;
-        case 3:
           message.messages.push(MessageExecutionResult.decode(reader, reader.uint32()));
           break;
         default:
@@ -415,8 +408,7 @@ export const MessageBatchResult = {
 
   fromJSON(object: any): MessageBatchResult {
     return {
-      lastBlockId: isSet(object.lastBlockId) ? Number(object.lastBlockId) : 0,
-      lastBlockTime: isSet(object.lastBlockTime) ? Number(object.lastBlockTime) : 0,
+      lastTime: isSet(object.lastTime) ? Number(object.lastTime) : 0,
       messages: Array.isArray(object?.messages)
         ? object.messages.map((e: any) => MessageExecutionResult.fromJSON(e))
         : [],
@@ -425,8 +417,7 @@ export const MessageBatchResult = {
 
   toJSON(message: MessageBatchResult): unknown {
     const obj: any = {};
-    message.lastBlockId !== undefined && (obj.lastBlockId = Math.round(message.lastBlockId));
-    message.lastBlockTime !== undefined && (obj.lastBlockTime = Math.round(message.lastBlockTime));
+    message.lastTime !== undefined && (obj.lastTime = Math.round(message.lastTime));
     if (message.messages) {
       obj.messages = message.messages.map((e) => e ? MessageExecutionResult.toJSON(e) : undefined);
     } else {
@@ -437,8 +428,7 @@ export const MessageBatchResult = {
 
   fromPartial<I extends Exact<DeepPartial<MessageBatchResult>, I>>(object: I): MessageBatchResult {
     const message = createBaseMessageBatchResult();
-    message.lastBlockId = object.lastBlockId ?? 0;
-    message.lastBlockTime = object.lastBlockTime ?? 0;
+    message.lastTime = object.lastTime ?? 0;
     message.messages = object.messages?.map((e) => MessageExecutionResult.fromPartial(e)) || [];
     return message;
   },

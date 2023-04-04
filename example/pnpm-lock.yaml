@@ -1,10 +1,10 @@
 lockfileVersion: 5.4
 
 specifiers:
-  '@prism-finance/prismjs': ^0.1.9
+  '@prism-finance/prismjs': ^0.2.0
 
 dependencies:
-  '@prism-finance/prismjs': 0.1.9
+  '@prism-finance/prismjs': 0.2.0
 
 packages:
 
@@ -159,8 +159,8 @@ packages:
     resolution: {integrity: sha512-ilHEACi9DwqJB0pw7kv+Apvh50jiiSyR/cQ3y4W7lOR5mhvn/50FLUfsnfJz0BDZtl/RR16kXvptiv6q1msYZg==}
     dev: false
 
-  /@prism-finance/prismjs/0.1.9:
-    resolution: {integrity: sha512-EGse+Ck34qIfBE8NoRUrC660Hy5MqyLoJMXjMUrJlKrwddU5W6x9Pi3iZI++omLM/6Th70u0TnDinLEb86O5Tw==, tarball: download/@prism-finance/prismjs/0.1.9/bb50f6303b5e41204fbab23a97ebbc1a55d40155}
+  /@prism-finance/prismjs/0.2.0:
+    resolution: {integrity: sha512-yqmfoogbzPADo6ebxbLmTcFYYP204OB0aON8GZdL4NomaYlF4ASqysDlXw3FBrNV78ywY+5Qe0mLsv26LoprsA==, tarball: download/@prism-finance/prismjs/0.2.0/8306a0abbfe910cff3370fe94e2eddb73d80da3f}
     dependencies:
       '@cosmjs/launchpad': 0.27.0
       '@cosmjs/proto-signing': 0.27.0

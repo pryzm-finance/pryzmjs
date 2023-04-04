@@ -75,14 +75,11 @@ export enum BridgeConnectionState {
 export interface BridgeConsensusStatus {
   connection_id?: string;
 
-  /** @format uint64 */
-  last_block_id?: string;
-
   /**
    * milliseconds
    * @format uint64
    */
-  last_block_time?: string;
+  last_time?: string;
 }
 
 export interface BridgeCrossChainMessage {
@@ -228,14 +225,11 @@ export interface BridgePing {
    */
   enqueued_block_time?: string;
 
-  /** @format uint64 */
-  expired_block_id?: string;
-
   /**
    * milliseconds
    * @format uint64
    */
-  expired_block_time?: string;
+  expired_time?: string;
 }
 
 export enum BridgePingState {

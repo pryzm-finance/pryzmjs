@@ -66,9 +66,8 @@ export interface Ping {
   enqueuedBlockId: number;
   /** milliseconds */
   enqueuedBlockTime: number;
-  expiredBlockId: number;
   /** milliseconds */
-  expiredBlockTime: number;
+  expiredTime: number;
 }
 
 function createBasePing(): Ping {
@@ -86,8 +85,7 @@ function createBasePing(): Ping {
     relayer: "",
     enqueuedBlockId: 0,
     enqueuedBlockTime: 0,
-    expiredBlockId: 0,
-    expiredBlockTime: 0,
+    expiredTime: 0,
   };
 }
 
@@ -132,11 +130,8 @@ export const Ping = {
     if (message.enqueuedBlockTime !== 0) {
       writer.uint32(104).uint64(message.enqueuedBlockTime);
     }
-    if (message.expiredBlockId !== 0) {
-      writer.uint32(112).uint64(message.expiredBlockId);
-    }
-    if (message.expiredBlockTime !== 0) {
-      writer.uint32(120).uint64(message.expiredBlockTime);
+    if (message.expiredTime !== 0) {
+      writer.uint32(112).uint64(message.expiredTime);
     }
     return writer;
   },
@@ -188,10 +183,7 @@ export const Ping = {
           message.enqueuedBlockTime = longToNumber(reader.uint64() as Long);
           break;
         case 14:
-          message.expiredBlockId = longToNumber(reader.uint64() as Long);
-          break;
-        case 15:
-          message.expiredBlockTime = longToNumber(reader.uint64() as Long);
+          message.expiredTime = longToNumber(reader.uint64() as Long);
           break;
         default:
           reader.skipType(tag & 7);
@@ -216,8 +208,7 @@ export const Ping = {
       relayer: isSet(object.relayer) ? String(object.relayer) : "",
       enqueuedBlockId: isSet(object.enqueuedBlockId) ? Number(object.enqueuedBlockId) : 0,
       enqueuedBlockTime: isSet(object.enqueuedBlockTime) ? Number(object.enqueuedBlockTime) : 0,
-      expiredBlockId: isSet(object.expiredBlockId) ? Number(object.expiredBlockId) : 0,
-      expiredBlockTime: isSet(object.expiredBlockTime) ? Number(object.expiredBlockTime) : 0,
+      expiredTime: isSet(object.expiredTime) ? Number(object.expiredTime) : 0,
     };
   },
 
@@ -236,8 +227,7 @@ export const Ping = {
     message.relayer !== undefined && (obj.relayer = message.relayer);
     message.enqueuedBlockId !== undefined && (obj.enqueuedBlockId = Math.round(message.enqueuedBlockId));
     message.enqueuedBlockTime !== undefined && (obj.enqueuedBlockTime = Math.round(message.enqueuedBlockTime));
-    message.expiredBlockId !== undefined && (obj.expiredBlockId = Math.round(message.expiredBlockId));
-    message.expiredBlockTime !== undefined && (obj.expiredBlockTime = Math.round(message.expiredBlockTime));
+    message.expiredTime !== undefined && (obj.expiredTime = Math.round(message.expiredTime));
     return obj;
   },
 
@@ -256,8 +246,7 @@ export const Ping = {
     message.relayer = object.relayer ?? "";
     message.enqueuedBlockId = object.enqueuedBlockId ?? 0;
     message.enqueuedBlockTime = object.enqueuedBlockTime ?? 0;
-    message.expiredBlockId = object.expiredBlockId ?? 0;
-    message.expiredBlockTime = object.expiredBlockTime ?? 0;
+    message.expiredTime = object.expiredTime ?? 0;
     return message;
   },
 };

@@ -6,13 +6,12 @@ export const protobufPackage = "refractedlabs.bridge.bridge";
 
 export interface ConsensusStatus {
   connectionId: string;
-  lastBlockId: number;
   /** milliseconds */
-  lastBlockTime: number;
+  lastTime: number;
 }
 
 function createBaseConsensusStatus(): ConsensusStatus {
-  return { connectionId: "", lastBlockId: 0, lastBlockTime: 0 };
+  return { connectionId: "", lastTime: 0 };
 }
 
 export const ConsensusStatus = {
@@ -20,11 +19,8 @@ export const ConsensusStatus = {
     if (message.connectionId !== "") {
       writer.uint32(10).string(message.connectionId);
     }
-    if (message.lastBlockId !== 0) {
-      writer.uint32(16).uint64(message.lastBlockId);
-    }
-    if (message.lastBlockTime !== 0) {
-      writer.uint32(24).uint64(message.lastBlockTime);
+    if (message.lastTime !== 0) {
+      writer.uint32(16).uint64(message.lastTime);
     }
     return writer;
   },
@@ -40,10 +36,7 @@ export const ConsensusStatus = {
           message.connectionId = reader.string();
           break;
         case 2:
-          message.lastBlockId = longToNumber(reader.uint64() as Long);
-          break;
-        case 3:
-          message.lastBlockTime = longToNumber(reader.uint64() as Long);
+          message.lastTime = longToNumber(reader.uint64() as Long);
           break;
         default:
           reader.skipType(tag & 7);
@@ -56,24 +49,21 @@ export const ConsensusStatus = {
   fromJSON(object: any): ConsensusStatus {
     return {
       connectionId: isSet(object.connectionId) ? String(object.connectionId) : "",
-      lastBlockId: isSet(object.lastBlockId) ? Number(object.lastBlockId) : 0,
-      lastBlockTime: isSet(object.lastBlockTime) ? Number(object.lastBlockTime) : 0,
+      lastTime: isSet(object.lastTime) ? Number(object.lastTime) : 0,
     };
   },
 
   toJSON(message: ConsensusStatus): unknown {
     const obj: any = {};
     message.connectionId !== undefined && (obj.connectionId = message.connectionId);
-    message.lastBlockId !== undefined && (obj.lastBlockId = Math.round(message.lastBlockId));
-    message.lastBlockTime !== undefined && (obj.lastBlockTime = Math.round(message.lastBlockTime));
+    message.lastTime !== undefined && (obj.lastTime = Math.round(message.lastTime));
     return obj;
   },
 
   fromPartial<I extends Exact<DeepPartial<ConsensusStatus>, I>>(object: I): ConsensusStatus {
     const message = createBaseConsensusStatus();
     message.connectionId = object.connectionId ?? "";
-    message.lastBlockId = object.lastBlockId ?? 0;
-    message.lastBlockTime = object.lastBlockTime ?? 0;
+    message.lastTime = object.lastTime ?? 0;
     return message;
   },
 };
