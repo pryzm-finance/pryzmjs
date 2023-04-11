@@ -144,3 +144,27 @@ export function newPrismaticsClient(apiURL: string): PrismaticsClient {
         apiURL, rpcURL: null!
     }, null!)
 }
+
+/**
+ * example:
+ * ```ts
+ * async function fetchAllConnection(client: PrismClient): Promise<BridgeConnection[]> {
+ *    const result = await PrismHelper.fetchAll(client, async (client, query) => {
+ *        const response = await client.RefractedlabsBridge.query.queryConnectionAll(query);
+ *        return [response.data.pagination.next_key, response.data.connection]
+ *    });
+ *    commonLogger.debug(`${result.length} connection fetched`)
+ *    return result;
+ * }
+ * ```
+ */
+export async function fetchAll<Type>(client: PrismClient, fetch: (client: PrismClient, query: any) => Promise<[string | null, Type[]]>, pageSize = 50): Promise<Type[]> {
+    const result: Type[] = []
+    const query: any = {"pagination.limit": `${pageSize}`}
+    do {
+        const [nextKey, r] = await fetch(client, query);
+        result.push(...r)
+        query["pagination.key"] = nextKey
+    } while (query["pagination.key"] != null)
+    return result;
+}
