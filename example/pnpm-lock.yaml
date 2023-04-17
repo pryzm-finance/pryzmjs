@@ -1,10 +1,10 @@
 lockfileVersion: 5.4
 
 specifiers:
-  '@prism-finance/prismjs': ^0.2.0
+  '@prism-finance/prismjs': 0.3.0-rc1
 
 dependencies:
-  '@prism-finance/prismjs': 0.2.0
+  '@prism-finance/prismjs': 0.3.0-rc1
 
 packages:
 
@@ -146,8 +146,8 @@ packages:
     resolution: {integrity: sha512-UC1eWY9isDQm6POy6GaTmYtbPVY5dkywdjW8Qzj+JNMhbhMM0KHuI4pHwjv5TPXSO/Ba2z10MTnD9nUlZtDwtA==}
     dev: false
 
-  /@keplr-wallet/types/0.11.52:
-    resolution: {integrity: sha512-2LyOnaZpyjw5DiyJIG/L73PD/n284GrvhGjAkaTKantx70VGNgH/3x0DwjKpevRRxcuJ+2+A0LkHgkXIpD7YhQ==}
+  /@keplr-wallet/types/0.11.56:
+    resolution: {integrity: sha512-NPqzuRLKQRXgCkA5pLi566wW54a/i1mqC23Dx9YQkBbY1EJW4rJlKzGXNnTqSwbJ4Gr1JDr6+rtkcyzoM5s2Uw==}
     dependencies:
       axios: 0.27.2
       long: 4.0.0
@@ -159,13 +159,13 @@ packages:
     resolution: {integrity: sha512-ilHEACi9DwqJB0pw7kv+Apvh50jiiSyR/cQ3y4W7lOR5mhvn/50FLUfsnfJz0BDZtl/RR16kXvptiv6q1msYZg==}
     dev: false
 
-  /@prism-finance/prismjs/0.2.0:
-    resolution: {integrity: sha512-yqmfoogbzPADo6ebxbLmTcFYYP204OB0aON8GZdL4NomaYlF4ASqysDlXw3FBrNV78ywY+5Qe0mLsv26LoprsA==, tarball: download/@prism-finance/prismjs/0.2.0/8306a0abbfe910cff3370fe94e2eddb73d80da3f}
+  /@prism-finance/prismjs/0.3.0-rc1:
+    resolution: {integrity: sha512-dkEyweejYsm5vLGr32lBHMvNdlYKznHs8etyDujQEZ/aZoaMQCI8gjWZv+oeFDc8e6v9q+LJPcRgFJI3yPIIyQ==, tarball: download/@prism-finance/prismjs/0.3.0-rc1/5f9d4327435052898738a28cf7fac381f4774267}
     dependencies:
       '@cosmjs/launchpad': 0.27.0
       '@cosmjs/proto-signing': 0.27.0
       '@cosmjs/stargate': 0.27.0
-      '@keplr-wallet/types': 0.11.52
+      '@keplr-wallet/types': 0.11.56
       axios: 0.21.4
       buffer: 6.0.3
       events: 3.3.0

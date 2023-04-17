@@ -28,6 +28,7 @@ import { Module as IbcApplicationsTransferV1, msgTypes as IbcApplicationsTransfe
 import { Module as IbcCoreChannelV1, msgTypes as IbcCoreChannelV1MsgTypes } from './ibc.core.channel.v1'
 import { Module as IbcCoreClientV1, msgTypes as IbcCoreClientV1MsgTypes } from './ibc.core.client.v1'
 import { Module as IbcCoreConnectionV1, msgTypes as IbcCoreConnectionV1MsgTypes } from './ibc.core.connection.v1'
+import { Module as PrismfinancePrismcoreAmm, msgTypes as PrismfinancePrismcoreAmmMsgTypes } from './prismfinance.prismcore.amm'
 import { Module as PrismfinancePrismcoreAssets, msgTypes as PrismfinancePrismcoreAssetsMsgTypes } from './prismfinance.prismcore.assets'
 import { Module as PrismfinancePrismcoreEpochs, msgTypes as PrismfinancePrismcoreEpochsMsgTypes } from './prismfinance.prismcore.epochs'
 import { Module as PrismfinancePrismcoreIcq, msgTypes as PrismfinancePrismcoreIcqMsgTypes } from './prismfinance.prismcore.icq'
@@ -36,12 +37,11 @@ import { Module as PrismfinancePrismcorePgov, msgTypes as PrismfinancePrismcoreP
 import { Module as PrismfinancePrismcoreRefractor, msgTypes as PrismfinancePrismcoreRefractorMsgTypes } from './prismfinance.prismcore.refractor'
 import { Module as PrismfinancePrismcoreTreasury, msgTypes as PrismfinancePrismcoreTreasuryMsgTypes } from './prismfinance.prismcore.treasury'
 import { Module as PrismfinancePrismcoreYstaking, msgTypes as PrismfinancePrismcoreYstakingMsgTypes } from './prismfinance.prismcore.ystaking'
-import { Module as RefractedlabsBridge, msgTypes as RefractedlabsBridgeMsgTypes } from './refractedlabs.bridge.bridge'
 import { Module as RefractedlabsOracle, msgTypes as RefractedlabsOracleMsgTypes } from './refractedlabs.oracle.oracle'
 
 
 const Client = IgniteClient.plugin([
-    CosmosAuthV1Beta1, CosmosAuthzV1Beta1, CosmosBankV1Beta1, CosmosBaseTendermintV1Beta1, CosmosCrisisV1Beta1, CosmosDistributionV1Beta1, CosmosEvidenceV1Beta1, CosmosFeegrantV1Beta1, CosmosGovV1, CosmosGovV1Beta1, CosmosGroupV1, CosmosMintV1Beta1, CosmosNftV1Beta1, CosmosParamsV1Beta1, CosmosSlashingV1Beta1, CosmosStakingV1Beta1, CosmosTxV1Beta1, CosmosUpgradeV1Beta1, CosmosVestingV1Beta1, CosmwasmWasmV1, IbcApplicationsInterchainAccountsControllerV1, IbcApplicationsInterchainAccountsHostV1, IbcApplicationsTransferV1, IbcCoreChannelV1, IbcCoreClientV1, IbcCoreConnectionV1, PrismfinancePrismcoreAssets, PrismfinancePrismcoreEpochs, PrismfinancePrismcoreIcq, PrismfinancePrismcoreIcstaking, PrismfinancePrismcorePgov, PrismfinancePrismcoreRefractor, PrismfinancePrismcoreTreasury, PrismfinancePrismcoreYstaking, RefractedlabsBridge, RefractedlabsOracle
+    CosmosAuthV1Beta1, CosmosAuthzV1Beta1, CosmosBankV1Beta1, CosmosBaseTendermintV1Beta1, CosmosCrisisV1Beta1, CosmosDistributionV1Beta1, CosmosEvidenceV1Beta1, CosmosFeegrantV1Beta1, CosmosGovV1, CosmosGovV1Beta1, CosmosGroupV1, CosmosMintV1Beta1, CosmosNftV1Beta1, CosmosParamsV1Beta1, CosmosSlashingV1Beta1, CosmosStakingV1Beta1, CosmosTxV1Beta1, CosmosUpgradeV1Beta1, CosmosVestingV1Beta1, CosmwasmWasmV1, IbcApplicationsInterchainAccountsControllerV1, IbcApplicationsInterchainAccountsHostV1, IbcApplicationsTransferV1, IbcCoreChannelV1, IbcCoreClientV1, IbcCoreConnectionV1, PrismfinancePrismcoreAmm, PrismfinancePrismcoreAssets, PrismfinancePrismcoreEpochs, PrismfinancePrismcoreIcq, PrismfinancePrismcoreIcstaking, PrismfinancePrismcorePgov, PrismfinancePrismcoreRefractor, PrismfinancePrismcoreTreasury, PrismfinancePrismcoreYstaking, RefractedlabsOracle
 ]);
 
 const registry = new Registry([
@@ -71,6 +71,7 @@ const registry = new Registry([
   ...IbcCoreChannelV1MsgTypes,
   ...IbcCoreClientV1MsgTypes,
   ...IbcCoreConnectionV1MsgTypes,
+  ...PrismfinancePrismcoreAmmMsgTypes,
   ...PrismfinancePrismcoreAssetsMsgTypes,
   ...PrismfinancePrismcoreEpochsMsgTypes,
   ...PrismfinancePrismcoreIcqMsgTypes,
@@ -79,7 +80,6 @@ const registry = new Registry([
   ...PrismfinancePrismcoreRefractorMsgTypes,
   ...PrismfinancePrismcoreTreasuryMsgTypes,
   ...PrismfinancePrismcoreYstakingMsgTypes,
-  ...RefractedlabsBridgeMsgTypes,
   ...RefractedlabsOracleMsgTypes,
   
 ])

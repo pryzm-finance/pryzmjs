@@ -7,17 +7,11 @@ import { msgTypes } from './registry';
 import { IgniteClient } from "../client"
 import { MissingWalletError } from "../helpers"
 import { Api } from "./rest";
-import { MsgSetAction } from "./types/prismcore/treasury/tx";
 import { MsgUpdateParams } from "./types/prismcore/treasury/tx";
+import { MsgSetAction } from "./types/prismcore/treasury/tx";
 
 
-export { MsgSetAction, MsgUpdateParams };
-
-type sendMsgSetActionParams = {
-  value: MsgSetAction,
-  fee?: StdFee,
-  memo?: string
-};
+export { MsgUpdateParams, MsgSetAction };
 
 type sendMsgUpdateParamsParams = {
   value: MsgUpdateParams,
@@ -25,13 +19,19 @@ type sendMsgUpdateParamsParams = {
   memo?: string
 };
 
-
-type msgSetActionParams = {
+type sendMsgSetActionParams = {
   value: MsgSetAction,
+  fee?: StdFee,
+  memo?: string
 };
+
 
 type msgUpdateParamsParams = {
   value: MsgUpdateParams,
+};
+
+type msgSetActionParams = {
+  value: MsgSetAction,
 };
 
 
@@ -52,20 +52,6 @@ export const txClient = ({ signer, prefix, addr }: TxClientOptions = { addr: "ht
 
   return {
 		
-		async sendMsgSetAction({ value, fee, memo }: sendMsgSetActionParams): Promise<DeliverTxResponse> {
-			if (!signer) {
-					throw new Error('TxClient:sendMsgSetAction: Unable to sign Tx. Signer is not present.')
-			}
-			try {			
-				const { address } = (await signer.getAccounts())[0]; 
-				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry, prefix});
-				let msg = this.msgSetAction({ value: MsgSetAction.fromPartial(value) })
-				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
-			} catch (e: any) {
-				throw new Error('TxClient:sendMsgSetAction: Could not broadcast Tx: '+ e.message)
-			}
-		},
-		
 		async sendMsgUpdateParams({ value, fee, memo }: sendMsgUpdateParamsParams): Promise<DeliverTxResponse> {
 			if (!signer) {
 					throw new Error('TxClient:sendMsgUpdateParams: Unable to sign Tx. Signer is not present.')
@@ -80,20 +66,34 @@ export const txClient = ({ signer, prefix, addr }: TxClientOptions = { addr: "ht
 			}
 		},
 		
-		
-		msgSetAction({ value }: msgSetActionParams): EncodeObject {
-			try {
-				return { typeUrl: "/prismfinance.prismcore.treasury.MsgSetAction", value: MsgSetAction.fromPartial( value ) }  
+		async sendMsgSetAction({ value, fee, memo }: sendMsgSetActionParams): Promise<DeliverTxResponse> {
+			if (!signer) {
+					throw new Error('TxClient:sendMsgSetAction: Unable to sign Tx. Signer is not present.')
+			}
+			try {			
+				const { address } = (await signer.getAccounts())[0]; 
+				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry, prefix});
+				let msg = this.msgSetAction({ value: MsgSetAction.fromPartial(value) })
+				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
 			} catch (e: any) {
-				throw new Error('TxClient:MsgSetAction: Could not create message: ' + e.message)
+				throw new Error('TxClient:sendMsgSetAction: Could not broadcast Tx: '+ e.message)
 			}
 		},
+		
 		
 		msgUpdateParams({ value }: msgUpdateParamsParams): EncodeObject {
 			try {
 				return { typeUrl: "/prismfinance.prismcore.treasury.MsgUpdateParams", value: MsgUpdateParams.fromPartial( value ) }  
 			} catch (e: any) {
 				throw new Error('TxClient:MsgUpdateParams: Could not create message: ' + e.message)
+			}
+		},
+		
+		msgSetAction({ value }: msgSetActionParams): EncodeObject {
+			try {
+				return { typeUrl: "/prismfinance.prismcore.treasury.MsgSetAction", value: MsgSetAction.fromPartial( value ) }  
+			} catch (e: any) {
+				throw new Error('TxClient:MsgSetAction: Could not create message: ' + e.message)
 			}
 		},
 		

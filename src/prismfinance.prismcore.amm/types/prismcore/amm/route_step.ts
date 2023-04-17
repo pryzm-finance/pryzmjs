@@ -2,41 +2,47 @@
 import Long from "long";
 import _m0 from "protobufjs/minimal";
 
-export const protobufPackage = "refractedlabs.bridge.bridge";
+export const protobufPackage = "prismfinance.prismcore.amm";
 
-export interface ConsensusStatus {
-  connectionId: string;
-  /** milliseconds */
-  lastTime: number;
+export interface RouteStep {
+  poolId: number;
+  tokenIn: string;
+  tokenOut: string;
 }
 
-function createBaseConsensusStatus(): ConsensusStatus {
-  return { connectionId: "", lastTime: 0 };
+function createBaseRouteStep(): RouteStep {
+  return { poolId: 0, tokenIn: "", tokenOut: "" };
 }
 
-export const ConsensusStatus = {
-  encode(message: ConsensusStatus, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (message.connectionId !== "") {
-      writer.uint32(10).string(message.connectionId);
+export const RouteStep = {
+  encode(message: RouteStep, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.poolId !== 0) {
+      writer.uint32(8).uint64(message.poolId);
     }
-    if (message.lastTime !== 0) {
-      writer.uint32(16).uint64(message.lastTime);
+    if (message.tokenIn !== "") {
+      writer.uint32(18).string(message.tokenIn);
+    }
+    if (message.tokenOut !== "") {
+      writer.uint32(26).string(message.tokenOut);
     }
     return writer;
   },
 
-  decode(input: _m0.Reader | Uint8Array, length?: number): ConsensusStatus {
+  decode(input: _m0.Reader | Uint8Array, length?: number): RouteStep {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseConsensusStatus();
+    const message = createBaseRouteStep();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.connectionId = reader.string();
+          message.poolId = longToNumber(reader.uint64() as Long);
           break;
         case 2:
-          message.lastTime = longToNumber(reader.uint64() as Long);
+          message.tokenIn = reader.string();
+          break;
+        case 3:
+          message.tokenOut = reader.string();
           break;
         default:
           reader.skipType(tag & 7);
@@ -46,24 +52,27 @@ export const ConsensusStatus = {
     return message;
   },
 
-  fromJSON(object: any): ConsensusStatus {
+  fromJSON(object: any): RouteStep {
     return {
-      connectionId: isSet(object.connectionId) ? String(object.connectionId) : "",
-      lastTime: isSet(object.lastTime) ? Number(object.lastTime) : 0,
+      poolId: isSet(object.poolId) ? Number(object.poolId) : 0,
+      tokenIn: isSet(object.tokenIn) ? String(object.tokenIn) : "",
+      tokenOut: isSet(object.tokenOut) ? String(object.tokenOut) : "",
     };
   },
 
-  toJSON(message: ConsensusStatus): unknown {
+  toJSON(message: RouteStep): unknown {
     const obj: any = {};
-    message.connectionId !== undefined && (obj.connectionId = message.connectionId);
-    message.lastTime !== undefined && (obj.lastTime = Math.round(message.lastTime));
+    message.poolId !== undefined && (obj.poolId = Math.round(message.poolId));
+    message.tokenIn !== undefined && (obj.tokenIn = message.tokenIn);
+    message.tokenOut !== undefined && (obj.tokenOut = message.tokenOut);
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<ConsensusStatus>, I>>(object: I): ConsensusStatus {
-    const message = createBaseConsensusStatus();
-    message.connectionId = object.connectionId ?? "";
-    message.lastTime = object.lastTime ?? 0;
+  fromPartial<I extends Exact<DeepPartial<RouteStep>, I>>(object: I): RouteStep {
+    const message = createBaseRouteStep();
+    message.poolId = object.poolId ?? 0;
+    message.tokenIn = object.tokenIn ?? "";
+    message.tokenOut = object.tokenOut ?? "";
     return message;
   },
 };
