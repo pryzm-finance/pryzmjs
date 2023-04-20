@@ -4,6 +4,7 @@ import _m0 from "protobufjs/minimal";
 import { PageRequest, PageResponse } from "../../cosmos/base/query/v1beta1/pagination";
 import { Coin } from "../../cosmos/base/v1beta1/coin";
 import { Swap, SwapType, swapTypeFromJSON, swapTypeToJSON } from "./operations";
+import { OraclePriceDataSource } from "./oracle_price_data_source";
 import { OraclePricePair } from "./oracle_price_pair";
 import { Order } from "./order";
 import { Params } from "./params";
@@ -346,6 +347,23 @@ export interface QueryAllOraclePricePairRequest {
 
 export interface QueryAllOraclePricePairResponse {
   oraclePricePair: OraclePricePair[];
+  pagination: PageResponse | undefined;
+}
+
+export interface QueryGetOraclePriceDataSourceRequest {
+  name: string;
+}
+
+export interface QueryGetOraclePriceDataSourceResponse {
+  oraclePriceDataSource: OraclePriceDataSource | undefined;
+}
+
+export interface QueryAllOraclePriceDataSourceRequest {
+  pagination: PageRequest | undefined;
+}
+
+export interface QueryAllOraclePriceDataSourceResponse {
+  oraclePriceDataSource: OraclePriceDataSource[];
   pagination: PageResponse | undefined;
 }
 
@@ -4517,6 +4535,237 @@ export const QueryAllOraclePricePairResponse = {
   },
 };
 
+function createBaseQueryGetOraclePriceDataSourceRequest(): QueryGetOraclePriceDataSourceRequest {
+  return { name: "" };
+}
+
+export const QueryGetOraclePriceDataSourceRequest = {
+  encode(message: QueryGetOraclePriceDataSourceRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.name !== "") {
+      writer.uint32(10).string(message.name);
+    }
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): QueryGetOraclePriceDataSourceRequest {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseQueryGetOraclePriceDataSourceRequest();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.name = reader.string();
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): QueryGetOraclePriceDataSourceRequest {
+    return { name: isSet(object.name) ? String(object.name) : "" };
+  },
+
+  toJSON(message: QueryGetOraclePriceDataSourceRequest): unknown {
+    const obj: any = {};
+    message.name !== undefined && (obj.name = message.name);
+    return obj;
+  },
+
+  fromPartial<I extends Exact<DeepPartial<QueryGetOraclePriceDataSourceRequest>, I>>(
+    object: I,
+  ): QueryGetOraclePriceDataSourceRequest {
+    const message = createBaseQueryGetOraclePriceDataSourceRequest();
+    message.name = object.name ?? "";
+    return message;
+  },
+};
+
+function createBaseQueryGetOraclePriceDataSourceResponse(): QueryGetOraclePriceDataSourceResponse {
+  return { oraclePriceDataSource: undefined };
+}
+
+export const QueryGetOraclePriceDataSourceResponse = {
+  encode(message: QueryGetOraclePriceDataSourceResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.oraclePriceDataSource !== undefined) {
+      OraclePriceDataSource.encode(message.oraclePriceDataSource, writer.uint32(10).fork()).ldelim();
+    }
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): QueryGetOraclePriceDataSourceResponse {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseQueryGetOraclePriceDataSourceResponse();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.oraclePriceDataSource = OraclePriceDataSource.decode(reader, reader.uint32());
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): QueryGetOraclePriceDataSourceResponse {
+    return {
+      oraclePriceDataSource: isSet(object.oraclePriceDataSource)
+        ? OraclePriceDataSource.fromJSON(object.oraclePriceDataSource)
+        : undefined,
+    };
+  },
+
+  toJSON(message: QueryGetOraclePriceDataSourceResponse): unknown {
+    const obj: any = {};
+    message.oraclePriceDataSource !== undefined && (obj.oraclePriceDataSource = message.oraclePriceDataSource
+      ? OraclePriceDataSource.toJSON(message.oraclePriceDataSource)
+      : undefined);
+    return obj;
+  },
+
+  fromPartial<I extends Exact<DeepPartial<QueryGetOraclePriceDataSourceResponse>, I>>(
+    object: I,
+  ): QueryGetOraclePriceDataSourceResponse {
+    const message = createBaseQueryGetOraclePriceDataSourceResponse();
+    message.oraclePriceDataSource =
+      (object.oraclePriceDataSource !== undefined && object.oraclePriceDataSource !== null)
+        ? OraclePriceDataSource.fromPartial(object.oraclePriceDataSource)
+        : undefined;
+    return message;
+  },
+};
+
+function createBaseQueryAllOraclePriceDataSourceRequest(): QueryAllOraclePriceDataSourceRequest {
+  return { pagination: undefined };
+}
+
+export const QueryAllOraclePriceDataSourceRequest = {
+  encode(message: QueryAllOraclePriceDataSourceRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.pagination !== undefined) {
+      PageRequest.encode(message.pagination, writer.uint32(10).fork()).ldelim();
+    }
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): QueryAllOraclePriceDataSourceRequest {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseQueryAllOraclePriceDataSourceRequest();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.pagination = PageRequest.decode(reader, reader.uint32());
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): QueryAllOraclePriceDataSourceRequest {
+    return { pagination: isSet(object.pagination) ? PageRequest.fromJSON(object.pagination) : undefined };
+  },
+
+  toJSON(message: QueryAllOraclePriceDataSourceRequest): unknown {
+    const obj: any = {};
+    message.pagination !== undefined
+      && (obj.pagination = message.pagination ? PageRequest.toJSON(message.pagination) : undefined);
+    return obj;
+  },
+
+  fromPartial<I extends Exact<DeepPartial<QueryAllOraclePriceDataSourceRequest>, I>>(
+    object: I,
+  ): QueryAllOraclePriceDataSourceRequest {
+    const message = createBaseQueryAllOraclePriceDataSourceRequest();
+    message.pagination = (object.pagination !== undefined && object.pagination !== null)
+      ? PageRequest.fromPartial(object.pagination)
+      : undefined;
+    return message;
+  },
+};
+
+function createBaseQueryAllOraclePriceDataSourceResponse(): QueryAllOraclePriceDataSourceResponse {
+  return { oraclePriceDataSource: [], pagination: undefined };
+}
+
+export const QueryAllOraclePriceDataSourceResponse = {
+  encode(message: QueryAllOraclePriceDataSourceResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    for (const v of message.oraclePriceDataSource) {
+      OraclePriceDataSource.encode(v!, writer.uint32(10).fork()).ldelim();
+    }
+    if (message.pagination !== undefined) {
+      PageResponse.encode(message.pagination, writer.uint32(18).fork()).ldelim();
+    }
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): QueryAllOraclePriceDataSourceResponse {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseQueryAllOraclePriceDataSourceResponse();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.oraclePriceDataSource.push(OraclePriceDataSource.decode(reader, reader.uint32()));
+          break;
+        case 2:
+          message.pagination = PageResponse.decode(reader, reader.uint32());
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): QueryAllOraclePriceDataSourceResponse {
+    return {
+      oraclePriceDataSource: Array.isArray(object?.oraclePriceDataSource)
+        ? object.oraclePriceDataSource.map((e: any) => OraclePriceDataSource.fromJSON(e))
+        : [],
+      pagination: isSet(object.pagination) ? PageResponse.fromJSON(object.pagination) : undefined,
+    };
+  },
+
+  toJSON(message: QueryAllOraclePriceDataSourceResponse): unknown {
+    const obj: any = {};
+    if (message.oraclePriceDataSource) {
+      obj.oraclePriceDataSource = message.oraclePriceDataSource.map((e) =>
+        e ? OraclePriceDataSource.toJSON(e) : undefined
+      );
+    } else {
+      obj.oraclePriceDataSource = [];
+    }
+    message.pagination !== undefined
+      && (obj.pagination = message.pagination ? PageResponse.toJSON(message.pagination) : undefined);
+    return obj;
+  },
+
+  fromPartial<I extends Exact<DeepPartial<QueryAllOraclePriceDataSourceResponse>, I>>(
+    object: I,
+  ): QueryAllOraclePriceDataSourceResponse {
+    const message = createBaseQueryAllOraclePriceDataSourceResponse();
+    message.oraclePriceDataSource = object.oraclePriceDataSource?.map((e) => OraclePriceDataSource.fromPartial(e))
+      || [];
+    message.pagination = (object.pagination !== undefined && object.pagination !== null)
+      ? PageResponse.fromPartial(object.pagination)
+      : undefined;
+    return message;
+  },
+};
+
 /** Query defines the gRPC querier service. */
 export interface Query {
   /** Parameters queries the parameters of the module. */
@@ -4599,6 +4848,12 @@ export interface Query {
   OraclePricePair(request: QueryGetOraclePricePairRequest): Promise<QueryGetOraclePricePairResponse>;
   /** Queries a list of OraclePricePair items. */
   OraclePricePairAll(request: QueryAllOraclePricePairRequest): Promise<QueryAllOraclePricePairResponse>;
+  /** Queries a OraclePriceDataSource by index. */
+  OraclePriceDataSource(request: QueryGetOraclePriceDataSourceRequest): Promise<QueryGetOraclePriceDataSourceResponse>;
+  /** Queries a list of OraclePriceDataSource items. */
+  OraclePriceDataSourceAll(
+    request: QueryAllOraclePriceDataSourceRequest,
+  ): Promise<QueryAllOraclePriceDataSourceResponse>;
 }
 
 export class QueryClientImpl implements Query {
@@ -4641,6 +4896,8 @@ export class QueryClientImpl implements Query {
     this.ScheduleOrderAll = this.ScheduleOrderAll.bind(this);
     this.OraclePricePair = this.OraclePricePair.bind(this);
     this.OraclePricePairAll = this.OraclePricePairAll.bind(this);
+    this.OraclePriceDataSource = this.OraclePriceDataSource.bind(this);
+    this.OraclePriceDataSourceAll = this.OraclePriceDataSourceAll.bind(this);
   }
   Params(request: QueryParamsRequest): Promise<QueryParamsResponse> {
     const data = QueryParamsRequest.encode(request).finish();
@@ -4864,6 +5121,20 @@ export class QueryClientImpl implements Query {
     const data = QueryAllOraclePricePairRequest.encode(request).finish();
     const promise = this.rpc.request("prismfinance.prismcore.amm.Query", "OraclePricePairAll", data);
     return promise.then((data) => QueryAllOraclePricePairResponse.decode(new _m0.Reader(data)));
+  }
+
+  OraclePriceDataSource(request: QueryGetOraclePriceDataSourceRequest): Promise<QueryGetOraclePriceDataSourceResponse> {
+    const data = QueryGetOraclePriceDataSourceRequest.encode(request).finish();
+    const promise = this.rpc.request("prismfinance.prismcore.amm.Query", "OraclePriceDataSource", data);
+    return promise.then((data) => QueryGetOraclePriceDataSourceResponse.decode(new _m0.Reader(data)));
+  }
+
+  OraclePriceDataSourceAll(
+    request: QueryAllOraclePriceDataSourceRequest,
+  ): Promise<QueryAllOraclePriceDataSourceResponse> {
+    const data = QueryAllOraclePriceDataSourceRequest.encode(request).finish();
+    const promise = this.rpc.request("prismfinance.prismcore.amm.Query", "OraclePriceDataSourceAll", data);
+    return promise.then((data) => QueryAllOraclePriceDataSourceResponse.decode(new _m0.Reader(data)));
   }
 }
 

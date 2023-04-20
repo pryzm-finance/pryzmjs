@@ -1,6 +1,7 @@
 /* eslint-disable */
 import Long from "long";
 import _m0 from "protobufjs/minimal";
+import { OraclePriceDataSource } from "./oracle_price_data_source";
 import { OraclePricePair } from "./oracle_price_pair";
 import { Order } from "./order";
 import { Params } from "./params";
@@ -34,8 +35,9 @@ export interface GenesisState {
   orderCount: number;
   executableOrderList: number[];
   scheduleOrderList: ScheduleOrder[];
-  /** this line is used by starport scaffolding # genesis/proto/state */
   oraclePricePairList: OraclePricePair[];
+  /** this line is used by starport scaffolding # genesis/proto/state */
+  oraclePriceDataSourceList: OraclePriceDataSource[];
 }
 
 export interface GenesisState_YammPoolAssetIdEntry {
@@ -131,6 +133,7 @@ function createBaseGenesisState(): GenesisState {
     executableOrderList: [],
     scheduleOrderList: [],
     oraclePricePairList: [],
+    oraclePriceDataSourceList: [],
   };
 }
 
@@ -176,6 +179,9 @@ export const GenesisState = {
     }
     for (const v of message.oraclePricePairList) {
       OraclePricePair.encode(v!, writer.uint32(106).fork()).ldelim();
+    }
+    for (const v of message.oraclePriceDataSourceList) {
+      OraclePriceDataSource.encode(v!, writer.uint32(114).fork()).ldelim();
     }
     return writer;
   },
@@ -236,6 +242,9 @@ export const GenesisState = {
         case 13:
           message.oraclePricePairList.push(OraclePricePair.decode(reader, reader.uint32()));
           break;
+        case 14:
+          message.oraclePriceDataSourceList.push(OraclePriceDataSource.decode(reader, reader.uint32()));
+          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -279,6 +288,9 @@ export const GenesisState = {
         : [],
       oraclePricePairList: Array.isArray(object?.oraclePricePairList)
         ? object.oraclePricePairList.map((e: any) => OraclePricePair.fromJSON(e))
+        : [],
+      oraclePriceDataSourceList: Array.isArray(object?.oraclePriceDataSourceList)
+        ? object.oraclePriceDataSourceList.map((e: any) => OraclePriceDataSource.fromJSON(e))
         : [],
     };
   },
@@ -349,6 +361,13 @@ export const GenesisState = {
     } else {
       obj.oraclePricePairList = [];
     }
+    if (message.oraclePriceDataSourceList) {
+      obj.oraclePriceDataSourceList = message.oraclePriceDataSourceList.map((e) =>
+        e ? OraclePriceDataSource.toJSON(e) : undefined
+      );
+    } else {
+      obj.oraclePriceDataSourceList = [];
+    }
     return obj;
   },
 
@@ -380,6 +399,8 @@ export const GenesisState = {
     message.executableOrderList = object.executableOrderList?.map((e) => e) || [];
     message.scheduleOrderList = object.scheduleOrderList?.map((e) => ScheduleOrder.fromPartial(e)) || [];
     message.oraclePricePairList = object.oraclePricePairList?.map((e) => OraclePricePair.fromPartial(e)) || [];
+    message.oraclePriceDataSourceList =
+      object.oraclePriceDataSourceList?.map((e) => OraclePriceDataSource.fromPartial(e)) || [];
     return message;
   },
 };

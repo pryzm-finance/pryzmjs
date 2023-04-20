@@ -8,6 +8,8 @@ async function main() {
     console.log(balancesResult.data.balances)
     const ammParams = await queryClient.PrismfinancePrismcoreAmm.query.queryParams();
     console.log(ammParams.data)
+    const ammPriceSources = await queryClient.PrismfinancePrismcoreAmm.query.queryOraclePriceDataSourceAll()
+    console.log(ammPriceSources.data)
     const oracleParams = await queryClient.RefractedlabsOracle.query.queryParams();
     console.log(oracleParams.data)
 }

@@ -3,6 +3,7 @@ import { Swap } from "./types/prismcore/amm/operations"
 import { SwapSummary } from "./types/prismcore/amm/operations"
 import { JoinSummary } from "./types/prismcore/amm/operations"
 import { ExitSummary } from "./types/prismcore/amm/operations"
+import { OraclePriceDataSource } from "./types/prismcore/amm/oracle_price_data_source"
 import { Pair } from "./types/prismcore/amm/oracle_price_pair"
 import { OraclePricePair } from "./types/prismcore/amm/oracle_price_pair"
 import { Order } from "./types/prismcore/amm/order"
@@ -32,6 +33,7 @@ export {
     SwapSummary,
     JoinSummary,
     ExitSummary,
+    OraclePriceDataSource,
     Pair,
     OraclePricePair,
     Order,

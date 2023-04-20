@@ -260,6 +260,34 @@ export interface MsgDeleteOraclePricePair {
 export interface MsgDeleteOraclePricePairResponse {
 }
 
+export interface MsgCreateOraclePriceDataSource {
+  authority: string;
+  name: string;
+  displayName: string;
+  voteLatency: number;
+}
+
+export interface MsgCreateOraclePriceDataSourceResponse {
+}
+
+export interface MsgUpdateOraclePriceDataSource {
+  authority: string;
+  name: string;
+  displayName: string;
+  voteLatency: number;
+}
+
+export interface MsgUpdateOraclePriceDataSourceResponse {
+}
+
+export interface MsgDeleteOraclePriceDataSource {
+  authority: string;
+  name: string;
+}
+
+export interface MsgDeleteOraclePriceDataSourceResponse {
+}
+
 function createBaseMsgSingleSwap(): MsgSingleSwap {
   return { creator: "", swap: undefined, maxAmountIn: "", minAmountOut: "" };
 }
@@ -3191,6 +3219,345 @@ export const MsgDeleteOraclePricePairResponse = {
   },
 };
 
+function createBaseMsgCreateOraclePriceDataSource(): MsgCreateOraclePriceDataSource {
+  return { authority: "", name: "", displayName: "", voteLatency: 0 };
+}
+
+export const MsgCreateOraclePriceDataSource = {
+  encode(message: MsgCreateOraclePriceDataSource, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.authority !== "") {
+      writer.uint32(10).string(message.authority);
+    }
+    if (message.name !== "") {
+      writer.uint32(18).string(message.name);
+    }
+    if (message.displayName !== "") {
+      writer.uint32(26).string(message.displayName);
+    }
+    if (message.voteLatency !== 0) {
+      writer.uint32(32).uint64(message.voteLatency);
+    }
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): MsgCreateOraclePriceDataSource {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseMsgCreateOraclePriceDataSource();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.authority = reader.string();
+          break;
+        case 2:
+          message.name = reader.string();
+          break;
+        case 3:
+          message.displayName = reader.string();
+          break;
+        case 4:
+          message.voteLatency = longToNumber(reader.uint64() as Long);
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): MsgCreateOraclePriceDataSource {
+    return {
+      authority: isSet(object.authority) ? String(object.authority) : "",
+      name: isSet(object.name) ? String(object.name) : "",
+      displayName: isSet(object.displayName) ? String(object.displayName) : "",
+      voteLatency: isSet(object.voteLatency) ? Number(object.voteLatency) : 0,
+    };
+  },
+
+  toJSON(message: MsgCreateOraclePriceDataSource): unknown {
+    const obj: any = {};
+    message.authority !== undefined && (obj.authority = message.authority);
+    message.name !== undefined && (obj.name = message.name);
+    message.displayName !== undefined && (obj.displayName = message.displayName);
+    message.voteLatency !== undefined && (obj.voteLatency = Math.round(message.voteLatency));
+    return obj;
+  },
+
+  fromPartial<I extends Exact<DeepPartial<MsgCreateOraclePriceDataSource>, I>>(
+    object: I,
+  ): MsgCreateOraclePriceDataSource {
+    const message = createBaseMsgCreateOraclePriceDataSource();
+    message.authority = object.authority ?? "";
+    message.name = object.name ?? "";
+    message.displayName = object.displayName ?? "";
+    message.voteLatency = object.voteLatency ?? 0;
+    return message;
+  },
+};
+
+function createBaseMsgCreateOraclePriceDataSourceResponse(): MsgCreateOraclePriceDataSourceResponse {
+  return {};
+}
+
+export const MsgCreateOraclePriceDataSourceResponse = {
+  encode(_: MsgCreateOraclePriceDataSourceResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): MsgCreateOraclePriceDataSourceResponse {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseMsgCreateOraclePriceDataSourceResponse();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(_: any): MsgCreateOraclePriceDataSourceResponse {
+    return {};
+  },
+
+  toJSON(_: MsgCreateOraclePriceDataSourceResponse): unknown {
+    const obj: any = {};
+    return obj;
+  },
+
+  fromPartial<I extends Exact<DeepPartial<MsgCreateOraclePriceDataSourceResponse>, I>>(
+    _: I,
+  ): MsgCreateOraclePriceDataSourceResponse {
+    const message = createBaseMsgCreateOraclePriceDataSourceResponse();
+    return message;
+  },
+};
+
+function createBaseMsgUpdateOraclePriceDataSource(): MsgUpdateOraclePriceDataSource {
+  return { authority: "", name: "", displayName: "", voteLatency: 0 };
+}
+
+export const MsgUpdateOraclePriceDataSource = {
+  encode(message: MsgUpdateOraclePriceDataSource, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.authority !== "") {
+      writer.uint32(10).string(message.authority);
+    }
+    if (message.name !== "") {
+      writer.uint32(18).string(message.name);
+    }
+    if (message.displayName !== "") {
+      writer.uint32(26).string(message.displayName);
+    }
+    if (message.voteLatency !== 0) {
+      writer.uint32(32).uint64(message.voteLatency);
+    }
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): MsgUpdateOraclePriceDataSource {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseMsgUpdateOraclePriceDataSource();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.authority = reader.string();
+          break;
+        case 2:
+          message.name = reader.string();
+          break;
+        case 3:
+          message.displayName = reader.string();
+          break;
+        case 4:
+          message.voteLatency = longToNumber(reader.uint64() as Long);
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): MsgUpdateOraclePriceDataSource {
+    return {
+      authority: isSet(object.authority) ? String(object.authority) : "",
+      name: isSet(object.name) ? String(object.name) : "",
+      displayName: isSet(object.displayName) ? String(object.displayName) : "",
+      voteLatency: isSet(object.voteLatency) ? Number(object.voteLatency) : 0,
+    };
+  },
+
+  toJSON(message: MsgUpdateOraclePriceDataSource): unknown {
+    const obj: any = {};
+    message.authority !== undefined && (obj.authority = message.authority);
+    message.name !== undefined && (obj.name = message.name);
+    message.displayName !== undefined && (obj.displayName = message.displayName);
+    message.voteLatency !== undefined && (obj.voteLatency = Math.round(message.voteLatency));
+    return obj;
+  },
+
+  fromPartial<I extends Exact<DeepPartial<MsgUpdateOraclePriceDataSource>, I>>(
+    object: I,
+  ): MsgUpdateOraclePriceDataSource {
+    const message = createBaseMsgUpdateOraclePriceDataSource();
+    message.authority = object.authority ?? "";
+    message.name = object.name ?? "";
+    message.displayName = object.displayName ?? "";
+    message.voteLatency = object.voteLatency ?? 0;
+    return message;
+  },
+};
+
+function createBaseMsgUpdateOraclePriceDataSourceResponse(): MsgUpdateOraclePriceDataSourceResponse {
+  return {};
+}
+
+export const MsgUpdateOraclePriceDataSourceResponse = {
+  encode(_: MsgUpdateOraclePriceDataSourceResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): MsgUpdateOraclePriceDataSourceResponse {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseMsgUpdateOraclePriceDataSourceResponse();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(_: any): MsgUpdateOraclePriceDataSourceResponse {
+    return {};
+  },
+
+  toJSON(_: MsgUpdateOraclePriceDataSourceResponse): unknown {
+    const obj: any = {};
+    return obj;
+  },
+
+  fromPartial<I extends Exact<DeepPartial<MsgUpdateOraclePriceDataSourceResponse>, I>>(
+    _: I,
+  ): MsgUpdateOraclePriceDataSourceResponse {
+    const message = createBaseMsgUpdateOraclePriceDataSourceResponse();
+    return message;
+  },
+};
+
+function createBaseMsgDeleteOraclePriceDataSource(): MsgDeleteOraclePriceDataSource {
+  return { authority: "", name: "" };
+}
+
+export const MsgDeleteOraclePriceDataSource = {
+  encode(message: MsgDeleteOraclePriceDataSource, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.authority !== "") {
+      writer.uint32(10).string(message.authority);
+    }
+    if (message.name !== "") {
+      writer.uint32(18).string(message.name);
+    }
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): MsgDeleteOraclePriceDataSource {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseMsgDeleteOraclePriceDataSource();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.authority = reader.string();
+          break;
+        case 2:
+          message.name = reader.string();
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): MsgDeleteOraclePriceDataSource {
+    return {
+      authority: isSet(object.authority) ? String(object.authority) : "",
+      name: isSet(object.name) ? String(object.name) : "",
+    };
+  },
+
+  toJSON(message: MsgDeleteOraclePriceDataSource): unknown {
+    const obj: any = {};
+    message.authority !== undefined && (obj.authority = message.authority);
+    message.name !== undefined && (obj.name = message.name);
+    return obj;
+  },
+
+  fromPartial<I extends Exact<DeepPartial<MsgDeleteOraclePriceDataSource>, I>>(
+    object: I,
+  ): MsgDeleteOraclePriceDataSource {
+    const message = createBaseMsgDeleteOraclePriceDataSource();
+    message.authority = object.authority ?? "";
+    message.name = object.name ?? "";
+    return message;
+  },
+};
+
+function createBaseMsgDeleteOraclePriceDataSourceResponse(): MsgDeleteOraclePriceDataSourceResponse {
+  return {};
+}
+
+export const MsgDeleteOraclePriceDataSourceResponse = {
+  encode(_: MsgDeleteOraclePriceDataSourceResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): MsgDeleteOraclePriceDataSourceResponse {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseMsgDeleteOraclePriceDataSourceResponse();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(_: any): MsgDeleteOraclePriceDataSourceResponse {
+    return {};
+  },
+
+  toJSON(_: MsgDeleteOraclePriceDataSourceResponse): unknown {
+    const obj: any = {};
+    return obj;
+  },
+
+  fromPartial<I extends Exact<DeepPartial<MsgDeleteOraclePriceDataSourceResponse>, I>>(
+    _: I,
+  ): MsgDeleteOraclePriceDataSourceResponse {
+    const message = createBaseMsgDeleteOraclePriceDataSourceResponse();
+    return message;
+  },
+};
+
 /** Msg defines the Msg service. */
 export interface Msg {
   SingleSwap(request: MsgSingleSwap): Promise<MsgSingleSwapResponse>;
@@ -3213,8 +3580,11 @@ export interface Msg {
   ProposeMatch(request: MsgProposeMatch): Promise<MsgProposeMatchResponse>;
   CreateOraclePricePair(request: MsgCreateOraclePricePair): Promise<MsgCreateOraclePricePairResponse>;
   UpdateOraclePricePair(request: MsgUpdateOraclePricePair): Promise<MsgUpdateOraclePricePairResponse>;
-  /** this line is used by starport scaffolding # proto/tx/rpc */
   DeleteOraclePricePair(request: MsgDeleteOraclePricePair): Promise<MsgDeleteOraclePricePairResponse>;
+  CreateOraclePriceDataSource(request: MsgCreateOraclePriceDataSource): Promise<MsgCreateOraclePriceDataSourceResponse>;
+  UpdateOraclePriceDataSource(request: MsgUpdateOraclePriceDataSource): Promise<MsgUpdateOraclePriceDataSourceResponse>;
+  /** this line is used by starport scaffolding # proto/tx/rpc */
+  DeleteOraclePriceDataSource(request: MsgDeleteOraclePriceDataSource): Promise<MsgDeleteOraclePriceDataSourceResponse>;
 }
 
 export class MsgClientImpl implements Msg {
@@ -3242,6 +3612,9 @@ export class MsgClientImpl implements Msg {
     this.CreateOraclePricePair = this.CreateOraclePricePair.bind(this);
     this.UpdateOraclePricePair = this.UpdateOraclePricePair.bind(this);
     this.DeleteOraclePricePair = this.DeleteOraclePricePair.bind(this);
+    this.CreateOraclePriceDataSource = this.CreateOraclePriceDataSource.bind(this);
+    this.UpdateOraclePriceDataSource = this.UpdateOraclePriceDataSource.bind(this);
+    this.DeleteOraclePriceDataSource = this.DeleteOraclePriceDataSource.bind(this);
   }
   SingleSwap(request: MsgSingleSwap): Promise<MsgSingleSwapResponse> {
     const data = MsgSingleSwap.encode(request).finish();
@@ -3367,6 +3740,30 @@ export class MsgClientImpl implements Msg {
     const data = MsgDeleteOraclePricePair.encode(request).finish();
     const promise = this.rpc.request("prismfinance.prismcore.amm.Msg", "DeleteOraclePricePair", data);
     return promise.then((data) => MsgDeleteOraclePricePairResponse.decode(new _m0.Reader(data)));
+  }
+
+  CreateOraclePriceDataSource(
+    request: MsgCreateOraclePriceDataSource,
+  ): Promise<MsgCreateOraclePriceDataSourceResponse> {
+    const data = MsgCreateOraclePriceDataSource.encode(request).finish();
+    const promise = this.rpc.request("prismfinance.prismcore.amm.Msg", "CreateOraclePriceDataSource", data);
+    return promise.then((data) => MsgCreateOraclePriceDataSourceResponse.decode(new _m0.Reader(data)));
+  }
+
+  UpdateOraclePriceDataSource(
+    request: MsgUpdateOraclePriceDataSource,
+  ): Promise<MsgUpdateOraclePriceDataSourceResponse> {
+    const data = MsgUpdateOraclePriceDataSource.encode(request).finish();
+    const promise = this.rpc.request("prismfinance.prismcore.amm.Msg", "UpdateOraclePriceDataSource", data);
+    return promise.then((data) => MsgUpdateOraclePriceDataSourceResponse.decode(new _m0.Reader(data)));
+  }
+
+  DeleteOraclePriceDataSource(
+    request: MsgDeleteOraclePriceDataSource,
+  ): Promise<MsgDeleteOraclePriceDataSourceResponse> {
+    const data = MsgDeleteOraclePriceDataSource.encode(request).finish();
+    const promise = this.rpc.request("prismfinance.prismcore.amm.Msg", "DeleteOraclePriceDataSource", data);
+    return promise.then((data) => MsgDeleteOraclePriceDataSourceResponse.decode(new _m0.Reader(data)));
   }
 }
 
