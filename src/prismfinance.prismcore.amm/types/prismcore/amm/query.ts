@@ -367,6 +367,13 @@ export interface QueryAllOraclePriceDataSourceResponse {
   pagination: PageResponse | undefined;
 }
 
+export interface QueryVaultPauseModeRequest {
+}
+
+export interface QueryVaultPauseModeResponse {
+  paused: boolean;
+}
+
 function createBaseQueryParamsRequest(): QueryParamsRequest {
   return {};
 }
@@ -4766,6 +4773,92 @@ export const QueryAllOraclePriceDataSourceResponse = {
   },
 };
 
+function createBaseQueryVaultPauseModeRequest(): QueryVaultPauseModeRequest {
+  return {};
+}
+
+export const QueryVaultPauseModeRequest = {
+  encode(_: QueryVaultPauseModeRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): QueryVaultPauseModeRequest {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseQueryVaultPauseModeRequest();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(_: any): QueryVaultPauseModeRequest {
+    return {};
+  },
+
+  toJSON(_: QueryVaultPauseModeRequest): unknown {
+    const obj: any = {};
+    return obj;
+  },
+
+  fromPartial<I extends Exact<DeepPartial<QueryVaultPauseModeRequest>, I>>(_: I): QueryVaultPauseModeRequest {
+    const message = createBaseQueryVaultPauseModeRequest();
+    return message;
+  },
+};
+
+function createBaseQueryVaultPauseModeResponse(): QueryVaultPauseModeResponse {
+  return { paused: false };
+}
+
+export const QueryVaultPauseModeResponse = {
+  encode(message: QueryVaultPauseModeResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.paused === true) {
+      writer.uint32(8).bool(message.paused);
+    }
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): QueryVaultPauseModeResponse {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseQueryVaultPauseModeResponse();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.paused = reader.bool();
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): QueryVaultPauseModeResponse {
+    return { paused: isSet(object.paused) ? Boolean(object.paused) : false };
+  },
+
+  toJSON(message: QueryVaultPauseModeResponse): unknown {
+    const obj: any = {};
+    message.paused !== undefined && (obj.paused = message.paused);
+    return obj;
+  },
+
+  fromPartial<I extends Exact<DeepPartial<QueryVaultPauseModeResponse>, I>>(object: I): QueryVaultPauseModeResponse {
+    const message = createBaseQueryVaultPauseModeResponse();
+    message.paused = object.paused ?? false;
+    return message;
+  },
+};
+
 /** Query defines the gRPC querier service. */
 export interface Query {
   /** Parameters queries the parameters of the module. */
@@ -4854,6 +4947,8 @@ export interface Query {
   OraclePriceDataSourceAll(
     request: QueryAllOraclePriceDataSourceRequest,
   ): Promise<QueryAllOraclePriceDataSourceResponse>;
+  /** Queries a list of VaultPauseMode items. */
+  VaultPauseMode(request: QueryVaultPauseModeRequest): Promise<QueryVaultPauseModeResponse>;
 }
 
 export class QueryClientImpl implements Query {
@@ -4898,6 +4993,7 @@ export class QueryClientImpl implements Query {
     this.OraclePricePairAll = this.OraclePricePairAll.bind(this);
     this.OraclePriceDataSource = this.OraclePriceDataSource.bind(this);
     this.OraclePriceDataSourceAll = this.OraclePriceDataSourceAll.bind(this);
+    this.VaultPauseMode = this.VaultPauseMode.bind(this);
   }
   Params(request: QueryParamsRequest): Promise<QueryParamsResponse> {
     const data = QueryParamsRequest.encode(request).finish();
@@ -5135,6 +5231,12 @@ export class QueryClientImpl implements Query {
     const data = QueryAllOraclePriceDataSourceRequest.encode(request).finish();
     const promise = this.rpc.request("prismfinance.prismcore.amm.Query", "OraclePriceDataSourceAll", data);
     return promise.then((data) => QueryAllOraclePriceDataSourceResponse.decode(new _m0.Reader(data)));
+  }
+
+  VaultPauseMode(request: QueryVaultPauseModeRequest): Promise<QueryVaultPauseModeResponse> {
+    const data = QueryVaultPauseModeRequest.encode(request).finish();
+    const promise = this.rpc.request("prismfinance.prismcore.amm.Query", "VaultPauseMode", data);
+    return promise.then((data) => QueryVaultPauseModeResponse.decode(new _m0.Reader(data)));
   }
 }
 

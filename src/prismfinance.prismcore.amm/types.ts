@@ -10,12 +10,16 @@ import { Order } from "./types/prismcore/amm/order"
 import { PairMatchProposal } from "./types/prismcore/amm/pair_match_proposal"
 import { OrderControlParameters } from "./types/prismcore/amm/params"
 import { Params } from "./types/prismcore/amm/params"
+import { PoolPauseWindow } from "./types/prismcore/amm/pool"
 import { Pool } from "./types/prismcore/amm/pool"
+import { CircuitBreaker } from "./types/prismcore/amm/pool_token"
 import { PoolToken } from "./types/prismcore/amm/pool_token"
 import { TokenAmount } from "./types/prismcore/amm/pool_token"
 import { RouteStep } from "./types/prismcore/amm/route_step"
 import { ScheduleOrder } from "./types/prismcore/amm/schedule_order"
 import { ExecutableOrderCount } from "./types/prismcore/amm/schedule_order_count"
+import { TokenCircuitBreakerSettings } from "./types/prismcore/amm/token_circuit_breaker_settings"
+import { CircuitBreakerSettings } from "./types/prismcore/amm/token_circuit_breaker_settings"
 import { TokenWeight } from "./types/prismcore/amm/token_weight"
 import { CreateWeightedPoolToken } from "./types/prismcore/amm/tx"
 import { SwapStep } from "./types/prismcore/amm/tx"
@@ -40,12 +44,16 @@ export {
     PairMatchProposal,
     OrderControlParameters,
     Params,
+    PoolPauseWindow,
     Pool,
+    CircuitBreaker,
     PoolToken,
     TokenAmount,
     RouteStep,
     ScheduleOrder,
     ExecutableOrderCount,
+    TokenCircuitBreakerSettings,
+    CircuitBreakerSettings,
     TokenWeight,
     CreateWeightedPoolToken,
     SwapStep,

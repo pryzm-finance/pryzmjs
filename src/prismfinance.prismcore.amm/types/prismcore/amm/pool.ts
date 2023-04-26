@@ -38,16 +38,95 @@ export function poolTypeToJSON(object: PoolType): string {
   }
 }
 
+export interface PoolPauseWindow {
+  pauseWindowEndUnixMillis: number;
+  bufferPeriodEndUnixMillis: number;
+}
+
 export interface Pool {
   id: number;
   name: string;
   swapFeeRatio: string;
   poolType: PoolType;
   creator: string;
+  recoveryMode: boolean;
+  pausedByGov: boolean;
+  pausedByOwner: boolean;
+  ownerPauseWindowTiming: PoolPauseWindow | undefined;
 }
 
+function createBasePoolPauseWindow(): PoolPauseWindow {
+  return { pauseWindowEndUnixMillis: 0, bufferPeriodEndUnixMillis: 0 };
+}
+
+export const PoolPauseWindow = {
+  encode(message: PoolPauseWindow, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.pauseWindowEndUnixMillis !== 0) {
+      writer.uint32(8).int64(message.pauseWindowEndUnixMillis);
+    }
+    if (message.bufferPeriodEndUnixMillis !== 0) {
+      writer.uint32(16).int64(message.bufferPeriodEndUnixMillis);
+    }
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): PoolPauseWindow {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBasePoolPauseWindow();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.pauseWindowEndUnixMillis = longToNumber(reader.int64() as Long);
+          break;
+        case 2:
+          message.bufferPeriodEndUnixMillis = longToNumber(reader.int64() as Long);
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): PoolPauseWindow {
+    return {
+      pauseWindowEndUnixMillis: isSet(object.pauseWindowEndUnixMillis) ? Number(object.pauseWindowEndUnixMillis) : 0,
+      bufferPeriodEndUnixMillis: isSet(object.bufferPeriodEndUnixMillis) ? Number(object.bufferPeriodEndUnixMillis) : 0,
+    };
+  },
+
+  toJSON(message: PoolPauseWindow): unknown {
+    const obj: any = {};
+    message.pauseWindowEndUnixMillis !== undefined
+      && (obj.pauseWindowEndUnixMillis = Math.round(message.pauseWindowEndUnixMillis));
+    message.bufferPeriodEndUnixMillis !== undefined
+      && (obj.bufferPeriodEndUnixMillis = Math.round(message.bufferPeriodEndUnixMillis));
+    return obj;
+  },
+
+  fromPartial<I extends Exact<DeepPartial<PoolPauseWindow>, I>>(object: I): PoolPauseWindow {
+    const message = createBasePoolPauseWindow();
+    message.pauseWindowEndUnixMillis = object.pauseWindowEndUnixMillis ?? 0;
+    message.bufferPeriodEndUnixMillis = object.bufferPeriodEndUnixMillis ?? 0;
+    return message;
+  },
+};
+
 function createBasePool(): Pool {
-  return { id: 0, name: "", swapFeeRatio: "", poolType: 0, creator: "" };
+  return {
+    id: 0,
+    name: "",
+    swapFeeRatio: "",
+    poolType: 0,
+    creator: "",
+    recoveryMode: false,
+    pausedByGov: false,
+    pausedByOwner: false,
+    ownerPauseWindowTiming: undefined,
+  };
 }
 
 export const Pool = {
@@ -66,6 +145,18 @@ export const Pool = {
     }
     if (message.creator !== "") {
       writer.uint32(42).string(message.creator);
+    }
+    if (message.recoveryMode === true) {
+      writer.uint32(48).bool(message.recoveryMode);
+    }
+    if (message.pausedByGov === true) {
+      writer.uint32(56).bool(message.pausedByGov);
+    }
+    if (message.pausedByOwner === true) {
+      writer.uint32(64).bool(message.pausedByOwner);
+    }
+    if (message.ownerPauseWindowTiming !== undefined) {
+      PoolPauseWindow.encode(message.ownerPauseWindowTiming, writer.uint32(74).fork()).ldelim();
     }
     return writer;
   },
@@ -92,6 +183,18 @@ export const Pool = {
         case 5:
           message.creator = reader.string();
           break;
+        case 6:
+          message.recoveryMode = reader.bool();
+          break;
+        case 7:
+          message.pausedByGov = reader.bool();
+          break;
+        case 8:
+          message.pausedByOwner = reader.bool();
+          break;
+        case 9:
+          message.ownerPauseWindowTiming = PoolPauseWindow.decode(reader, reader.uint32());
+          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -107,6 +210,12 @@ export const Pool = {
       swapFeeRatio: isSet(object.swapFeeRatio) ? String(object.swapFeeRatio) : "",
       poolType: isSet(object.poolType) ? poolTypeFromJSON(object.poolType) : 0,
       creator: isSet(object.creator) ? String(object.creator) : "",
+      recoveryMode: isSet(object.recoveryMode) ? Boolean(object.recoveryMode) : false,
+      pausedByGov: isSet(object.pausedByGov) ? Boolean(object.pausedByGov) : false,
+      pausedByOwner: isSet(object.pausedByOwner) ? Boolean(object.pausedByOwner) : false,
+      ownerPauseWindowTiming: isSet(object.ownerPauseWindowTiming)
+        ? PoolPauseWindow.fromJSON(object.ownerPauseWindowTiming)
+        : undefined,
     };
   },
 
@@ -117,6 +226,12 @@ export const Pool = {
     message.swapFeeRatio !== undefined && (obj.swapFeeRatio = message.swapFeeRatio);
     message.poolType !== undefined && (obj.poolType = poolTypeToJSON(message.poolType));
     message.creator !== undefined && (obj.creator = message.creator);
+    message.recoveryMode !== undefined && (obj.recoveryMode = message.recoveryMode);
+    message.pausedByGov !== undefined && (obj.pausedByGov = message.pausedByGov);
+    message.pausedByOwner !== undefined && (obj.pausedByOwner = message.pausedByOwner);
+    message.ownerPauseWindowTiming !== undefined && (obj.ownerPauseWindowTiming = message.ownerPauseWindowTiming
+      ? PoolPauseWindow.toJSON(message.ownerPauseWindowTiming)
+      : undefined);
     return obj;
   },
 
@@ -127,6 +242,13 @@ export const Pool = {
     message.swapFeeRatio = object.swapFeeRatio ?? "";
     message.poolType = object.poolType ?? 0;
     message.creator = object.creator ?? "";
+    message.recoveryMode = object.recoveryMode ?? false;
+    message.pausedByGov = object.pausedByGov ?? false;
+    message.pausedByOwner = object.pausedByOwner ?? false;
+    message.ownerPauseWindowTiming =
+      (object.ownerPauseWindowTiming !== undefined && object.ownerPauseWindowTiming !== null)
+        ? PoolPauseWindow.fromPartial(object.ownerPauseWindowTiming)
+        : undefined;
     return message;
   },
 };

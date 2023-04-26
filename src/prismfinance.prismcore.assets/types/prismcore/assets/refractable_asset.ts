@@ -3,21 +3,32 @@ import _m0 from "protobufjs/minimal";
 
 export const protobufPackage = "prismfinance.prismcore.assets";
 
+/** The properties of a supported asset */
 export interface RefractableAsset {
-  baseDenom: string;
-  transferChannel: string;
+  /** A unique user-provided identifier. Is used in the p/y token denom */
+  id: string;
+  /** The denomination of the token on Prism. This may be an icstaking cToken or an IBC transferred token denom for external assets. */
   tokenDenom: string;
-  icstaked: boolean;
+  /** The id for the host chain on which the asset is staked. This is empty if the asset is external. */
+  hostChainId: string;
+  /** Disabled assets cannot be refracted, but can still be redeemed. */
   disabled: boolean;
-  maturityParams: MaturityParams | undefined;
+  maturityParams:
+    | MaturityParams
+    | undefined;
+  /** The amount of fee for each operation on the asset. */
   feeRatios: FeeRatios | undefined;
 }
 
+/** The parameters based on which new maturities are introduced */
 export interface MaturityParams {
+  /** The number of maturities per year: can be 1, 2, 4, 12 */
   levelsPerYear: number;
+  /** The number of years in advance that maturities are made available for */
   years: number;
 }
 
+/** Fee ratio per each operation */
 export interface FeeRatios {
   yield: string;
   refractorRefract: string;
@@ -27,39 +38,28 @@ export interface FeeRatios {
 }
 
 function createBaseRefractableAsset(): RefractableAsset {
-  return {
-    baseDenom: "",
-    transferChannel: "",
-    tokenDenom: "",
-    icstaked: false,
-    disabled: false,
-    maturityParams: undefined,
-    feeRatios: undefined,
-  };
+  return { id: "", tokenDenom: "", hostChainId: "", disabled: false, maturityParams: undefined, feeRatios: undefined };
 }
 
 export const RefractableAsset = {
   encode(message: RefractableAsset, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (message.baseDenom !== "") {
-      writer.uint32(10).string(message.baseDenom);
-    }
-    if (message.transferChannel !== "") {
-      writer.uint32(18).string(message.transferChannel);
+    if (message.id !== "") {
+      writer.uint32(10).string(message.id);
     }
     if (message.tokenDenom !== "") {
-      writer.uint32(26).string(message.tokenDenom);
+      writer.uint32(18).string(message.tokenDenom);
     }
-    if (message.icstaked === true) {
-      writer.uint32(32).bool(message.icstaked);
+    if (message.hostChainId !== "") {
+      writer.uint32(26).string(message.hostChainId);
     }
     if (message.disabled === true) {
-      writer.uint32(40).bool(message.disabled);
+      writer.uint32(32).bool(message.disabled);
     }
     if (message.maturityParams !== undefined) {
-      MaturityParams.encode(message.maturityParams, writer.uint32(50).fork()).ldelim();
+      MaturityParams.encode(message.maturityParams, writer.uint32(42).fork()).ldelim();
     }
     if (message.feeRatios !== undefined) {
-      FeeRatios.encode(message.feeRatios, writer.uint32(58).fork()).ldelim();
+      FeeRatios.encode(message.feeRatios, writer.uint32(50).fork()).ldelim();
     }
     return writer;
   },
@@ -72,24 +72,21 @@ export const RefractableAsset = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.baseDenom = reader.string();
+          message.id = reader.string();
           break;
         case 2:
-          message.transferChannel = reader.string();
-          break;
-        case 3:
           message.tokenDenom = reader.string();
           break;
-        case 4:
-          message.icstaked = reader.bool();
+        case 3:
+          message.hostChainId = reader.string();
           break;
-        case 5:
+        case 4:
           message.disabled = reader.bool();
           break;
-        case 6:
+        case 5:
           message.maturityParams = MaturityParams.decode(reader, reader.uint32());
           break;
-        case 7:
+        case 6:
           message.feeRatios = FeeRatios.decode(reader, reader.uint32());
           break;
         default:
@@ -102,10 +99,9 @@ export const RefractableAsset = {
 
   fromJSON(object: any): RefractableAsset {
     return {
-      baseDenom: isSet(object.baseDenom) ? String(object.baseDenom) : "",
-      transferChannel: isSet(object.transferChannel) ? String(object.transferChannel) : "",
+      id: isSet(object.id) ? String(object.id) : "",
       tokenDenom: isSet(object.tokenDenom) ? String(object.tokenDenom) : "",
-      icstaked: isSet(object.icstaked) ? Boolean(object.icstaked) : false,
+      hostChainId: isSet(object.hostChainId) ? String(object.hostChainId) : "",
       disabled: isSet(object.disabled) ? Boolean(object.disabled) : false,
       maturityParams: isSet(object.maturityParams) ? MaturityParams.fromJSON(object.maturityParams) : undefined,
       feeRatios: isSet(object.feeRatios) ? FeeRatios.fromJSON(object.feeRatios) : undefined,
@@ -114,10 +110,9 @@ export const RefractableAsset = {
 
   toJSON(message: RefractableAsset): unknown {
     const obj: any = {};
-    message.baseDenom !== undefined && (obj.baseDenom = message.baseDenom);
-    message.transferChannel !== undefined && (obj.transferChannel = message.transferChannel);
+    message.id !== undefined && (obj.id = message.id);
     message.tokenDenom !== undefined && (obj.tokenDenom = message.tokenDenom);
-    message.icstaked !== undefined && (obj.icstaked = message.icstaked);
+    message.hostChainId !== undefined && (obj.hostChainId = message.hostChainId);
     message.disabled !== undefined && (obj.disabled = message.disabled);
     message.maturityParams !== undefined
       && (obj.maturityParams = message.maturityParams ? MaturityParams.toJSON(message.maturityParams) : undefined);
@@ -128,10 +123,9 @@ export const RefractableAsset = {
 
   fromPartial<I extends Exact<DeepPartial<RefractableAsset>, I>>(object: I): RefractableAsset {
     const message = createBaseRefractableAsset();
-    message.baseDenom = object.baseDenom ?? "";
-    message.transferChannel = object.transferChannel ?? "";
+    message.id = object.id ?? "";
     message.tokenDenom = object.tokenDenom ?? "";
-    message.icstaked = object.icstaked ?? false;
+    message.hostChainId = object.hostChainId ?? "";
     message.disabled = object.disabled ?? false;
     message.maturityParams = (object.maturityParams !== undefined && object.maturityParams !== null)
       ? MaturityParams.fromPartial(object.maturityParams)

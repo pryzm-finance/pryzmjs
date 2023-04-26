@@ -38,10 +38,16 @@ export interface AssetsMaturityLevel {
 }
 
 export interface AssetsMaturityParams {
-  /** @format int32 */
+  /**
+   * The number of maturities per year: can be 1, 2, 4, 12
+   * @format int32
+   */
   levels_per_year?: number;
 
-  /** @format int32 */
+  /**
+   * The number of years in advance that maturities are made available for
+   * @format int32
+   */
   years?: number;
 }
 
@@ -126,12 +132,20 @@ export interface AssetsQueryParamsResponse {
 }
 
 export interface AssetsRefractableAsset {
-  base_denom?: string;
-  transfer_channel?: string;
+  /** A unique user-provided identifier. Is used in the p/y token denom */
+  id?: string;
+
+  /** The denomination of the token on Prism. This may be an icstaking cToken or an IBC transferred token denom for external assets. */
   token_denom?: string;
-  icstaked?: boolean;
+
+  /** The id for the host chain on which the asset is staked. This is empty if the asset is external. */
+  host_chain_id?: string;
+
+  /** Disabled assets cannot be refracted, but can still be redeemed. */
   disabled?: boolean;
   maturity_params?: AssetsMaturityParams;
+
+  /** The amount of fee for each operation on the asset. */
   fee_ratios?: AssetsFeeRatios;
 }
 

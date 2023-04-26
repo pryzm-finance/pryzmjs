@@ -5,66 +5,315 @@ import { StakingParams } from "./params";
 
 export const protobufPackage = "prismfinance.prismcore.icstaking";
 
+/** The types of available connection protocols */
+export enum ConnectionType {
+  /** ICA - interchain account connection using ibc-go ICS-27 */
+  ICA = 0,
+  UNRECOGNIZED = -1,
+}
+
+export function connectionTypeFromJSON(object: any): ConnectionType {
+  switch (object) {
+    case 0:
+    case "ICA":
+      return ConnectionType.ICA;
+    case -1:
+    case "UNRECOGNIZED":
+    default:
+      return ConnectionType.UNRECOGNIZED;
+  }
+}
+
+export function connectionTypeToJSON(object: ConnectionType): string {
+  switch (object) {
+    case ConnectionType.ICA:
+      return "ICA";
+    case ConnectionType.UNRECOGNIZED:
+    default:
+      return "UNRECOGNIZED";
+  }
+}
+
+/**
+ * Types of transfer channels
+ * For now it only supports ibc transfer, but transfer bridges support (Axelar, Wormhole, ...) can be added.
+ */
+export enum TransferChannelType {
+  IBC = 0,
+  UNRECOGNIZED = -1,
+}
+
+export function transferChannelTypeFromJSON(object: any): TransferChannelType {
+  switch (object) {
+    case 0:
+    case "IBC":
+      return TransferChannelType.IBC;
+    case -1:
+    case "UNRECOGNIZED":
+    default:
+      return TransferChannelType.UNRECOGNIZED;
+  }
+}
+
+export function transferChannelTypeToJSON(object: TransferChannelType): string {
+  switch (object) {
+    case TransferChannelType.IBC:
+      return "IBC";
+    case TransferChannelType.UNRECOGNIZED:
+    default:
+      return "UNRECOGNIZED";
+  }
+}
+
+export enum AccountState {
+  NOT_REGISTERED = 0,
+  REGISTERING = 1,
+  REGISTERED = 2,
+  UNRECOGNIZED = -1,
+}
+
+export function accountStateFromJSON(object: any): AccountState {
+  switch (object) {
+    case 0:
+    case "NOT_REGISTERED":
+      return AccountState.NOT_REGISTERED;
+    case 1:
+    case "REGISTERING":
+      return AccountState.REGISTERING;
+    case 2:
+    case "REGISTERED":
+      return AccountState.REGISTERED;
+    case -1:
+    case "UNRECOGNIZED":
+    default:
+      return AccountState.UNRECOGNIZED;
+  }
+}
+
+export function accountStateToJSON(object: AccountState): string {
+  switch (object) {
+    case AccountState.NOT_REGISTERED:
+      return "NOT_REGISTERED";
+    case AccountState.REGISTERING:
+      return "REGISTERING";
+    case AccountState.REGISTERED:
+      return "REGISTERED";
+    case AccountState.UNRECOGNIZED:
+    default:
+      return "UNRECOGNIZED";
+  }
+}
+
+export enum State {
+  INITIALIZING = 0,
+  IDLE = 1,
+  TRANSFERRING = 2,
+  DELEGATING = 3,
+  UNDELEGATING = 4,
+  REDELEGATING = 5,
+  COMPOUNDING = 6,
+  SWEEPING = 7,
+  UNRECOGNIZED = -1,
+}
+
+export function stateFromJSON(object: any): State {
+  switch (object) {
+    case 0:
+    case "INITIALIZING":
+      return State.INITIALIZING;
+    case 1:
+    case "IDLE":
+      return State.IDLE;
+    case 2:
+    case "TRANSFERRING":
+      return State.TRANSFERRING;
+    case 3:
+    case "DELEGATING":
+      return State.DELEGATING;
+    case 4:
+    case "UNDELEGATING":
+      return State.UNDELEGATING;
+    case 5:
+    case "REDELEGATING":
+      return State.REDELEGATING;
+    case 6:
+    case "COMPOUNDING":
+      return State.COMPOUNDING;
+    case 7:
+    case "SWEEPING":
+      return State.SWEEPING;
+    case -1:
+    case "UNRECOGNIZED":
+    default:
+      return State.UNRECOGNIZED;
+  }
+}
+
+export function stateToJSON(object: State): string {
+  switch (object) {
+    case State.INITIALIZING:
+      return "INITIALIZING";
+    case State.IDLE:
+      return "IDLE";
+    case State.TRANSFERRING:
+      return "TRANSFERRING";
+    case State.DELEGATING:
+      return "DELEGATING";
+    case State.UNDELEGATING:
+      return "UNDELEGATING";
+    case State.REDELEGATING:
+      return "REDELEGATING";
+    case State.COMPOUNDING:
+      return "COMPOUNDING";
+    case State.SWEEPING:
+      return "SWEEPING";
+    case State.UNRECOGNIZED:
+    default:
+      return "UNRECOGNIZED";
+  }
+}
+
+/** The properties of the target chain for staking */
 export interface HostChain {
+  /** A unique user-provided identifier. Is used in the cToken denom */
+  id: string;
+  /** connection type. connection type and connection id are unique together */
+  connectionType: ConnectionType;
+  /** the identifier for connection. connection id and connection type are unique together */
   connectionId: string;
+  /** the base denom of the token to be staked on the target chain */
   baseDenom: string;
-  transferChannel: string;
-  params: StakingParams | undefined;
+  /** list of supported transfer channels for transferring the base_denom tokens between the host chain and Prism */
+  transferChannels: TransferChannel[];
+  /** Parameters for staking/unstaking on the host chain */
+  params:
+    | StakingParams
+    | undefined;
+  /** list of whitelisted validators to which Prism sends the staked funds. */
   validators: Validator[];
 }
 
+/** Properties of a transfer channel */
+export interface TransferChannel {
+  /** the type of the channel */
+  type: TransferChannelType;
+  /** the id of the channel. in the case of IBC channel type, this is the channel name. */
+  id: string;
+  /**
+   * Optional. This is the name of the token on the receiving chain.
+   * This is useful when a bridge is being used and the underlying asset is wrapped on the bridge, like axlWETH.
+   */
+  wrappedDenom: string;
+  /**
+   * Optional. This is the name of the target chain.
+   * This is useful when a bridge is being used and the host chain is different with the receiving chain.
+   */
+  destinationChain: string;
+}
+
 export interface Validator {
+  /** validator's address on the host chain */
   address: string;
+  /** The weight of delegation to the validator. Total weight of all validators per host chain must be equal to 1. */
   weight: string;
 }
 
+/** A subset of state on the host chain needed by Prism */
 export interface HostChainState {
-  connectionId: string;
-  ica: ICAInfo | undefined;
-  validators: { [key: string]: ValidatorInfo };
+  /** The id of the chain */
+  hostChainId: string;
+  /** Information about the interchain accounts */
+  hostAccounts:
+    | HostAccounts
+    | undefined;
+  /** Mapping of validators address to their state */
+  validators: { [key: string]: ValidatorState };
+  /**
+   * The summation of amount delegated to each validator
+   * FIXME remove if not needed
+   */
+  totalDelegatedAmount: string;
+  /** The amount of assets that are in the delegation account and ready to be delegated */
+  amountToBeDelegated: string;
+  /** The amount of assets that are in the reward account and ready to be transferred to the delegation account */
+  amountToBeCompounded: string;
+  /** The current exchange rate of cToken to the host chain staking token */
   exchangeRate: string;
+  /** The current state of interchain operations state machine */
+  state: State;
+  /**
+   * The last host chain's block height in which PRISM's state is changed to IDLE
+   * setting state to IDLE happens when an ack/timeout received for an interchain operation,
+   * so this is the height of the last received ack from host chain
+   */
+  lastIdleStateHostHeight: number;
 }
 
 export interface HostChainState_ValidatorsEntry {
   key: string;
-  value: ValidatorInfo | undefined;
+  value: ValidatorState | undefined;
 }
 
-export interface ICAInfo {
-  delegationAccount: string;
-  withdrawAccount: string;
-  feeAccount: string;
-  withdrawAddressSet: boolean;
-  delegationAccountBalance: string;
-  withdrawAccountBalance: string;
-  feeAccountBalance: string;
+/** The interchain accounts */
+export interface HostAccounts {
+  delegation: HostAccount | undefined;
+  reward: HostAccount | undefined;
+  fee: HostAccount | undefined;
+  sweep:
+    | HostAccount
+    | undefined;
+  /**
+   * This is the state of setting the reward account as the account which receives the staking rewards on host chain.
+   * On cosmos based chains, the reward account is registered using MsgSetWithdrawAddress in distribution module.
+   */
+  rewardAccountClaimingState: AccountState;
 }
 
-export interface ValidatorInfo {
-  delegationAmount: string;
-  commissionRate: number;
+export interface HostAccount {
+  address: string;
+  balance: string;
+  state: AccountState;
+}
+
+/** TODO add undelegating and redelegating amount? */
+export interface ValidatorState {
+  delegatedAmount: string;
 }
 
 function createBaseHostChain(): HostChain {
-  return { connectionId: "", baseDenom: "", transferChannel: "", params: undefined, validators: [] };
+  return {
+    id: "",
+    connectionType: 0,
+    connectionId: "",
+    baseDenom: "",
+    transferChannels: [],
+    params: undefined,
+    validators: [],
+  };
 }
 
 export const HostChain = {
   encode(message: HostChain, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.id !== "") {
+      writer.uint32(10).string(message.id);
+    }
+    if (message.connectionType !== 0) {
+      writer.uint32(16).int32(message.connectionType);
+    }
     if (message.connectionId !== "") {
-      writer.uint32(10).string(message.connectionId);
+      writer.uint32(26).string(message.connectionId);
     }
     if (message.baseDenom !== "") {
-      writer.uint32(18).string(message.baseDenom);
+      writer.uint32(34).string(message.baseDenom);
     }
-    if (message.transferChannel !== "") {
-      writer.uint32(26).string(message.transferChannel);
+    for (const v of message.transferChannels) {
+      TransferChannel.encode(v!, writer.uint32(42).fork()).ldelim();
     }
     if (message.params !== undefined) {
-      StakingParams.encode(message.params, writer.uint32(34).fork()).ldelim();
+      StakingParams.encode(message.params, writer.uint32(50).fork()).ldelim();
     }
     for (const v of message.validators) {
-      Validator.encode(v!, writer.uint32(42).fork()).ldelim();
+      Validator.encode(v!, writer.uint32(58).fork()).ldelim();
     }
     return writer;
   },
@@ -77,18 +326,24 @@ export const HostChain = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.connectionId = reader.string();
+          message.id = reader.string();
           break;
         case 2:
-          message.baseDenom = reader.string();
+          message.connectionType = reader.int32() as any;
           break;
         case 3:
-          message.transferChannel = reader.string();
+          message.connectionId = reader.string();
           break;
         case 4:
-          message.params = StakingParams.decode(reader, reader.uint32());
+          message.baseDenom = reader.string();
           break;
         case 5:
+          message.transferChannels.push(TransferChannel.decode(reader, reader.uint32()));
+          break;
+        case 6:
+          message.params = StakingParams.decode(reader, reader.uint32());
+          break;
+        case 7:
           message.validators.push(Validator.decode(reader, reader.uint32()));
           break;
         default:
@@ -101,9 +356,13 @@ export const HostChain = {
 
   fromJSON(object: any): HostChain {
     return {
+      id: isSet(object.id) ? String(object.id) : "",
+      connectionType: isSet(object.connectionType) ? connectionTypeFromJSON(object.connectionType) : 0,
       connectionId: isSet(object.connectionId) ? String(object.connectionId) : "",
       baseDenom: isSet(object.baseDenom) ? String(object.baseDenom) : "",
-      transferChannel: isSet(object.transferChannel) ? String(object.transferChannel) : "",
+      transferChannels: Array.isArray(object?.transferChannels)
+        ? object.transferChannels.map((e: any) => TransferChannel.fromJSON(e))
+        : [],
       params: isSet(object.params) ? StakingParams.fromJSON(object.params) : undefined,
       validators: Array.isArray(object?.validators) ? object.validators.map((e: any) => Validator.fromJSON(e)) : [],
     };
@@ -111,9 +370,15 @@ export const HostChain = {
 
   toJSON(message: HostChain): unknown {
     const obj: any = {};
+    message.id !== undefined && (obj.id = message.id);
+    message.connectionType !== undefined && (obj.connectionType = connectionTypeToJSON(message.connectionType));
     message.connectionId !== undefined && (obj.connectionId = message.connectionId);
     message.baseDenom !== undefined && (obj.baseDenom = message.baseDenom);
-    message.transferChannel !== undefined && (obj.transferChannel = message.transferChannel);
+    if (message.transferChannels) {
+      obj.transferChannels = message.transferChannels.map((e) => e ? TransferChannel.toJSON(e) : undefined);
+    } else {
+      obj.transferChannels = [];
+    }
     message.params !== undefined && (obj.params = message.params ? StakingParams.toJSON(message.params) : undefined);
     if (message.validators) {
       obj.validators = message.validators.map((e) => e ? Validator.toJSON(e) : undefined);
@@ -125,13 +390,91 @@ export const HostChain = {
 
   fromPartial<I extends Exact<DeepPartial<HostChain>, I>>(object: I): HostChain {
     const message = createBaseHostChain();
+    message.id = object.id ?? "";
+    message.connectionType = object.connectionType ?? 0;
     message.connectionId = object.connectionId ?? "";
     message.baseDenom = object.baseDenom ?? "";
-    message.transferChannel = object.transferChannel ?? "";
+    message.transferChannels = object.transferChannels?.map((e) => TransferChannel.fromPartial(e)) || [];
     message.params = (object.params !== undefined && object.params !== null)
       ? StakingParams.fromPartial(object.params)
       : undefined;
     message.validators = object.validators?.map((e) => Validator.fromPartial(e)) || [];
+    return message;
+  },
+};
+
+function createBaseTransferChannel(): TransferChannel {
+  return { type: 0, id: "", wrappedDenom: "", destinationChain: "" };
+}
+
+export const TransferChannel = {
+  encode(message: TransferChannel, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.type !== 0) {
+      writer.uint32(8).int32(message.type);
+    }
+    if (message.id !== "") {
+      writer.uint32(18).string(message.id);
+    }
+    if (message.wrappedDenom !== "") {
+      writer.uint32(26).string(message.wrappedDenom);
+    }
+    if (message.destinationChain !== "") {
+      writer.uint32(34).string(message.destinationChain);
+    }
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): TransferChannel {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseTransferChannel();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.type = reader.int32() as any;
+          break;
+        case 2:
+          message.id = reader.string();
+          break;
+        case 3:
+          message.wrappedDenom = reader.string();
+          break;
+        case 4:
+          message.destinationChain = reader.string();
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): TransferChannel {
+    return {
+      type: isSet(object.type) ? transferChannelTypeFromJSON(object.type) : 0,
+      id: isSet(object.id) ? String(object.id) : "",
+      wrappedDenom: isSet(object.wrappedDenom) ? String(object.wrappedDenom) : "",
+      destinationChain: isSet(object.destinationChain) ? String(object.destinationChain) : "",
+    };
+  },
+
+  toJSON(message: TransferChannel): unknown {
+    const obj: any = {};
+    message.type !== undefined && (obj.type = transferChannelTypeToJSON(message.type));
+    message.id !== undefined && (obj.id = message.id);
+    message.wrappedDenom !== undefined && (obj.wrappedDenom = message.wrappedDenom);
+    message.destinationChain !== undefined && (obj.destinationChain = message.destinationChain);
+    return obj;
+  },
+
+  fromPartial<I extends Exact<DeepPartial<TransferChannel>, I>>(object: I): TransferChannel {
+    const message = createBaseTransferChannel();
+    message.type = object.type ?? 0;
+    message.id = object.id ?? "";
+    message.wrappedDenom = object.wrappedDenom ?? "";
+    message.destinationChain = object.destinationChain ?? "";
     return message;
   },
 };
@@ -195,22 +538,47 @@ export const Validator = {
 };
 
 function createBaseHostChainState(): HostChainState {
-  return { connectionId: "", ica: undefined, validators: {}, exchangeRate: "" };
+  return {
+    hostChainId: "",
+    hostAccounts: undefined,
+    validators: {},
+    totalDelegatedAmount: "",
+    amountToBeDelegated: "",
+    amountToBeCompounded: "",
+    exchangeRate: "",
+    state: 0,
+    lastIdleStateHostHeight: 0,
+  };
 }
 
 export const HostChainState = {
   encode(message: HostChainState, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (message.connectionId !== "") {
-      writer.uint32(10).string(message.connectionId);
+    if (message.hostChainId !== "") {
+      writer.uint32(10).string(message.hostChainId);
     }
-    if (message.ica !== undefined) {
-      ICAInfo.encode(message.ica, writer.uint32(18).fork()).ldelim();
+    if (message.hostAccounts !== undefined) {
+      HostAccounts.encode(message.hostAccounts, writer.uint32(18).fork()).ldelim();
     }
     Object.entries(message.validators).forEach(([key, value]) => {
       HostChainState_ValidatorsEntry.encode({ key: key as any, value }, writer.uint32(26).fork()).ldelim();
     });
+    if (message.totalDelegatedAmount !== "") {
+      writer.uint32(34).string(message.totalDelegatedAmount);
+    }
+    if (message.amountToBeDelegated !== "") {
+      writer.uint32(42).string(message.amountToBeDelegated);
+    }
+    if (message.amountToBeCompounded !== "") {
+      writer.uint32(50).string(message.amountToBeCompounded);
+    }
     if (message.exchangeRate !== "") {
-      writer.uint32(34).string(message.exchangeRate);
+      writer.uint32(58).string(message.exchangeRate);
+    }
+    if (message.state !== 0) {
+      writer.uint32(64).int32(message.state);
+    }
+    if (message.lastIdleStateHostHeight !== 0) {
+      writer.uint32(72).uint64(message.lastIdleStateHostHeight);
     }
     return writer;
   },
@@ -223,10 +591,10 @@ export const HostChainState = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.connectionId = reader.string();
+          message.hostChainId = reader.string();
           break;
         case 2:
-          message.ica = ICAInfo.decode(reader, reader.uint32());
+          message.hostAccounts = HostAccounts.decode(reader, reader.uint32());
           break;
         case 3:
           const entry3 = HostChainState_ValidatorsEntry.decode(reader, reader.uint32());
@@ -235,7 +603,22 @@ export const HostChainState = {
           }
           break;
         case 4:
+          message.totalDelegatedAmount = reader.string();
+          break;
+        case 5:
+          message.amountToBeDelegated = reader.string();
+          break;
+        case 6:
+          message.amountToBeCompounded = reader.string();
+          break;
+        case 7:
           message.exchangeRate = reader.string();
+          break;
+        case 8:
+          message.state = reader.int32() as any;
+          break;
+        case 9:
+          message.lastIdleStateHostHeight = longToNumber(reader.uint64() as Long);
           break;
         default:
           reader.skipType(tag & 7);
@@ -247,46 +630,65 @@ export const HostChainState = {
 
   fromJSON(object: any): HostChainState {
     return {
-      connectionId: isSet(object.connectionId) ? String(object.connectionId) : "",
-      ica: isSet(object.ica) ? ICAInfo.fromJSON(object.ica) : undefined,
+      hostChainId: isSet(object.hostChainId) ? String(object.hostChainId) : "",
+      hostAccounts: isSet(object.hostAccounts) ? HostAccounts.fromJSON(object.hostAccounts) : undefined,
       validators: isObject(object.validators)
-        ? Object.entries(object.validators).reduce<{ [key: string]: ValidatorInfo }>((acc, [key, value]) => {
-          acc[key] = ValidatorInfo.fromJSON(value);
+        ? Object.entries(object.validators).reduce<{ [key: string]: ValidatorState }>((acc, [key, value]) => {
+          acc[key] = ValidatorState.fromJSON(value);
           return acc;
         }, {})
         : {},
+      totalDelegatedAmount: isSet(object.totalDelegatedAmount) ? String(object.totalDelegatedAmount) : "",
+      amountToBeDelegated: isSet(object.amountToBeDelegated) ? String(object.amountToBeDelegated) : "",
+      amountToBeCompounded: isSet(object.amountToBeCompounded) ? String(object.amountToBeCompounded) : "",
       exchangeRate: isSet(object.exchangeRate) ? String(object.exchangeRate) : "",
+      state: isSet(object.state) ? stateFromJSON(object.state) : 0,
+      lastIdleStateHostHeight: isSet(object.lastIdleStateHostHeight) ? Number(object.lastIdleStateHostHeight) : 0,
     };
   },
 
   toJSON(message: HostChainState): unknown {
     const obj: any = {};
-    message.connectionId !== undefined && (obj.connectionId = message.connectionId);
-    message.ica !== undefined && (obj.ica = message.ica ? ICAInfo.toJSON(message.ica) : undefined);
+    message.hostChainId !== undefined && (obj.hostChainId = message.hostChainId);
+    message.hostAccounts !== undefined
+      && (obj.hostAccounts = message.hostAccounts ? HostAccounts.toJSON(message.hostAccounts) : undefined);
     obj.validators = {};
     if (message.validators) {
       Object.entries(message.validators).forEach(([k, v]) => {
-        obj.validators[k] = ValidatorInfo.toJSON(v);
+        obj.validators[k] = ValidatorState.toJSON(v);
       });
     }
+    message.totalDelegatedAmount !== undefined && (obj.totalDelegatedAmount = message.totalDelegatedAmount);
+    message.amountToBeDelegated !== undefined && (obj.amountToBeDelegated = message.amountToBeDelegated);
+    message.amountToBeCompounded !== undefined && (obj.amountToBeCompounded = message.amountToBeCompounded);
     message.exchangeRate !== undefined && (obj.exchangeRate = message.exchangeRate);
+    message.state !== undefined && (obj.state = stateToJSON(message.state));
+    message.lastIdleStateHostHeight !== undefined
+      && (obj.lastIdleStateHostHeight = Math.round(message.lastIdleStateHostHeight));
     return obj;
   },
 
   fromPartial<I extends Exact<DeepPartial<HostChainState>, I>>(object: I): HostChainState {
     const message = createBaseHostChainState();
-    message.connectionId = object.connectionId ?? "";
-    message.ica = (object.ica !== undefined && object.ica !== null) ? ICAInfo.fromPartial(object.ica) : undefined;
-    message.validators = Object.entries(object.validators ?? {}).reduce<{ [key: string]: ValidatorInfo }>(
+    message.hostChainId = object.hostChainId ?? "";
+    message.hostAccounts = (object.hostAccounts !== undefined && object.hostAccounts !== null)
+      ? HostAccounts.fromPartial(object.hostAccounts)
+      : undefined;
+    message.validators = Object.entries(object.validators ?? {}).reduce<{ [key: string]: ValidatorState }>(
       (acc, [key, value]) => {
         if (value !== undefined) {
-          acc[key] = ValidatorInfo.fromPartial(value);
+          acc[key] = ValidatorState.fromPartial(value);
         }
         return acc;
       },
       {},
     );
+    message.totalDelegatedAmount = object.totalDelegatedAmount ?? "";
+    message.amountToBeDelegated = object.amountToBeDelegated ?? "";
+    message.amountToBeCompounded = object.amountToBeCompounded ?? "";
     message.exchangeRate = object.exchangeRate ?? "";
+    message.state = object.state ?? 0;
+    message.lastIdleStateHostHeight = object.lastIdleStateHostHeight ?? 0;
     return message;
   },
 };
@@ -301,7 +703,7 @@ export const HostChainState_ValidatorsEntry = {
       writer.uint32(10).string(message.key);
     }
     if (message.value !== undefined) {
-      ValidatorInfo.encode(message.value, writer.uint32(18).fork()).ldelim();
+      ValidatorState.encode(message.value, writer.uint32(18).fork()).ldelim();
     }
     return writer;
   },
@@ -317,7 +719,7 @@ export const HostChainState_ValidatorsEntry = {
           message.key = reader.string();
           break;
         case 2:
-          message.value = ValidatorInfo.decode(reader, reader.uint32());
+          message.value = ValidatorState.decode(reader, reader.uint32());
           break;
         default:
           reader.skipType(tag & 7);
@@ -330,14 +732,14 @@ export const HostChainState_ValidatorsEntry = {
   fromJSON(object: any): HostChainState_ValidatorsEntry {
     return {
       key: isSet(object.key) ? String(object.key) : "",
-      value: isSet(object.value) ? ValidatorInfo.fromJSON(object.value) : undefined,
+      value: isSet(object.value) ? ValidatorState.fromJSON(object.value) : undefined,
     };
   },
 
   toJSON(message: HostChainState_ValidatorsEntry): unknown {
     const obj: any = {};
     message.key !== undefined && (obj.key = message.key);
-    message.value !== undefined && (obj.value = message.value ? ValidatorInfo.toJSON(message.value) : undefined);
+    message.value !== undefined && (obj.value = message.value ? ValidatorState.toJSON(message.value) : undefined);
     return obj;
   },
 
@@ -347,77 +749,57 @@ export const HostChainState_ValidatorsEntry = {
     const message = createBaseHostChainState_ValidatorsEntry();
     message.key = object.key ?? "";
     message.value = (object.value !== undefined && object.value !== null)
-      ? ValidatorInfo.fromPartial(object.value)
+      ? ValidatorState.fromPartial(object.value)
       : undefined;
     return message;
   },
 };
 
-function createBaseICAInfo(): ICAInfo {
-  return {
-    delegationAccount: "",
-    withdrawAccount: "",
-    feeAccount: "",
-    withdrawAddressSet: false,
-    delegationAccountBalance: "",
-    withdrawAccountBalance: "",
-    feeAccountBalance: "",
-  };
+function createBaseHostAccounts(): HostAccounts {
+  return { delegation: undefined, reward: undefined, fee: undefined, sweep: undefined, rewardAccountClaimingState: 0 };
 }
 
-export const ICAInfo = {
-  encode(message: ICAInfo, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (message.delegationAccount !== "") {
-      writer.uint32(10).string(message.delegationAccount);
+export const HostAccounts = {
+  encode(message: HostAccounts, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.delegation !== undefined) {
+      HostAccount.encode(message.delegation, writer.uint32(10).fork()).ldelim();
     }
-    if (message.withdrawAccount !== "") {
-      writer.uint32(18).string(message.withdrawAccount);
+    if (message.reward !== undefined) {
+      HostAccount.encode(message.reward, writer.uint32(18).fork()).ldelim();
     }
-    if (message.feeAccount !== "") {
-      writer.uint32(26).string(message.feeAccount);
+    if (message.fee !== undefined) {
+      HostAccount.encode(message.fee, writer.uint32(26).fork()).ldelim();
     }
-    if (message.withdrawAddressSet === true) {
-      writer.uint32(32).bool(message.withdrawAddressSet);
+    if (message.sweep !== undefined) {
+      HostAccount.encode(message.sweep, writer.uint32(34).fork()).ldelim();
     }
-    if (message.delegationAccountBalance !== "") {
-      writer.uint32(42).string(message.delegationAccountBalance);
-    }
-    if (message.withdrawAccountBalance !== "") {
-      writer.uint32(50).string(message.withdrawAccountBalance);
-    }
-    if (message.feeAccountBalance !== "") {
-      writer.uint32(58).string(message.feeAccountBalance);
+    if (message.rewardAccountClaimingState !== 0) {
+      writer.uint32(40).int32(message.rewardAccountClaimingState);
     }
     return writer;
   },
 
-  decode(input: _m0.Reader | Uint8Array, length?: number): ICAInfo {
+  decode(input: _m0.Reader | Uint8Array, length?: number): HostAccounts {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseICAInfo();
+    const message = createBaseHostAccounts();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.delegationAccount = reader.string();
+          message.delegation = HostAccount.decode(reader, reader.uint32());
           break;
         case 2:
-          message.withdrawAccount = reader.string();
+          message.reward = HostAccount.decode(reader, reader.uint32());
           break;
         case 3:
-          message.feeAccount = reader.string();
+          message.fee = HostAccount.decode(reader, reader.uint32());
           break;
         case 4:
-          message.withdrawAddressSet = reader.bool();
+          message.sweep = HostAccount.decode(reader, reader.uint32());
           break;
         case 5:
-          message.delegationAccountBalance = reader.string();
-          break;
-        case 6:
-          message.withdrawAccountBalance = reader.string();
-          break;
-        case 7:
-          message.feeAccountBalance = reader.string();
+          message.rewardAccountClaimingState = reader.int32() as any;
           break;
         default:
           reader.skipType(tag & 7);
@@ -427,70 +809,80 @@ export const ICAInfo = {
     return message;
   },
 
-  fromJSON(object: any): ICAInfo {
+  fromJSON(object: any): HostAccounts {
     return {
-      delegationAccount: isSet(object.delegationAccount) ? String(object.delegationAccount) : "",
-      withdrawAccount: isSet(object.withdrawAccount) ? String(object.withdrawAccount) : "",
-      feeAccount: isSet(object.feeAccount) ? String(object.feeAccount) : "",
-      withdrawAddressSet: isSet(object.withdrawAddressSet) ? Boolean(object.withdrawAddressSet) : false,
-      delegationAccountBalance: isSet(object.delegationAccountBalance) ? String(object.delegationAccountBalance) : "",
-      withdrawAccountBalance: isSet(object.withdrawAccountBalance) ? String(object.withdrawAccountBalance) : "",
-      feeAccountBalance: isSet(object.feeAccountBalance) ? String(object.feeAccountBalance) : "",
+      delegation: isSet(object.delegation) ? HostAccount.fromJSON(object.delegation) : undefined,
+      reward: isSet(object.reward) ? HostAccount.fromJSON(object.reward) : undefined,
+      fee: isSet(object.fee) ? HostAccount.fromJSON(object.fee) : undefined,
+      sweep: isSet(object.sweep) ? HostAccount.fromJSON(object.sweep) : undefined,
+      rewardAccountClaimingState: isSet(object.rewardAccountClaimingState)
+        ? accountStateFromJSON(object.rewardAccountClaimingState)
+        : 0,
     };
   },
 
-  toJSON(message: ICAInfo): unknown {
+  toJSON(message: HostAccounts): unknown {
     const obj: any = {};
-    message.delegationAccount !== undefined && (obj.delegationAccount = message.delegationAccount);
-    message.withdrawAccount !== undefined && (obj.withdrawAccount = message.withdrawAccount);
-    message.feeAccount !== undefined && (obj.feeAccount = message.feeAccount);
-    message.withdrawAddressSet !== undefined && (obj.withdrawAddressSet = message.withdrawAddressSet);
-    message.delegationAccountBalance !== undefined && (obj.delegationAccountBalance = message.delegationAccountBalance);
-    message.withdrawAccountBalance !== undefined && (obj.withdrawAccountBalance = message.withdrawAccountBalance);
-    message.feeAccountBalance !== undefined && (obj.feeAccountBalance = message.feeAccountBalance);
+    message.delegation !== undefined
+      && (obj.delegation = message.delegation ? HostAccount.toJSON(message.delegation) : undefined);
+    message.reward !== undefined && (obj.reward = message.reward ? HostAccount.toJSON(message.reward) : undefined);
+    message.fee !== undefined && (obj.fee = message.fee ? HostAccount.toJSON(message.fee) : undefined);
+    message.sweep !== undefined && (obj.sweep = message.sweep ? HostAccount.toJSON(message.sweep) : undefined);
+    message.rewardAccountClaimingState !== undefined
+      && (obj.rewardAccountClaimingState = accountStateToJSON(message.rewardAccountClaimingState));
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<ICAInfo>, I>>(object: I): ICAInfo {
-    const message = createBaseICAInfo();
-    message.delegationAccount = object.delegationAccount ?? "";
-    message.withdrawAccount = object.withdrawAccount ?? "";
-    message.feeAccount = object.feeAccount ?? "";
-    message.withdrawAddressSet = object.withdrawAddressSet ?? false;
-    message.delegationAccountBalance = object.delegationAccountBalance ?? "";
-    message.withdrawAccountBalance = object.withdrawAccountBalance ?? "";
-    message.feeAccountBalance = object.feeAccountBalance ?? "";
+  fromPartial<I extends Exact<DeepPartial<HostAccounts>, I>>(object: I): HostAccounts {
+    const message = createBaseHostAccounts();
+    message.delegation = (object.delegation !== undefined && object.delegation !== null)
+      ? HostAccount.fromPartial(object.delegation)
+      : undefined;
+    message.reward = (object.reward !== undefined && object.reward !== null)
+      ? HostAccount.fromPartial(object.reward)
+      : undefined;
+    message.fee = (object.fee !== undefined && object.fee !== null) ? HostAccount.fromPartial(object.fee) : undefined;
+    message.sweep = (object.sweep !== undefined && object.sweep !== null)
+      ? HostAccount.fromPartial(object.sweep)
+      : undefined;
+    message.rewardAccountClaimingState = object.rewardAccountClaimingState ?? 0;
     return message;
   },
 };
 
-function createBaseValidatorInfo(): ValidatorInfo {
-  return { delegationAmount: "", commissionRate: 0 };
+function createBaseHostAccount(): HostAccount {
+  return { address: "", balance: "", state: 0 };
 }
 
-export const ValidatorInfo = {
-  encode(message: ValidatorInfo, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (message.delegationAmount !== "") {
-      writer.uint32(10).string(message.delegationAmount);
+export const HostAccount = {
+  encode(message: HostAccount, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.address !== "") {
+      writer.uint32(10).string(message.address);
     }
-    if (message.commissionRate !== 0) {
-      writer.uint32(16).uint64(message.commissionRate);
+    if (message.balance !== "") {
+      writer.uint32(18).string(message.balance);
+    }
+    if (message.state !== 0) {
+      writer.uint32(24).int32(message.state);
     }
     return writer;
   },
 
-  decode(input: _m0.Reader | Uint8Array, length?: number): ValidatorInfo {
+  decode(input: _m0.Reader | Uint8Array, length?: number): HostAccount {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseValidatorInfo();
+    const message = createBaseHostAccount();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.delegationAmount = reader.string();
+          message.address = reader.string();
           break;
         case 2:
-          message.commissionRate = longToNumber(reader.uint64() as Long);
+          message.balance = reader.string();
+          break;
+        case 3:
+          message.state = reader.int32() as any;
           break;
         default:
           reader.skipType(tag & 7);
@@ -500,24 +892,74 @@ export const ValidatorInfo = {
     return message;
   },
 
-  fromJSON(object: any): ValidatorInfo {
+  fromJSON(object: any): HostAccount {
     return {
-      delegationAmount: isSet(object.delegationAmount) ? String(object.delegationAmount) : "",
-      commissionRate: isSet(object.commissionRate) ? Number(object.commissionRate) : 0,
+      address: isSet(object.address) ? String(object.address) : "",
+      balance: isSet(object.balance) ? String(object.balance) : "",
+      state: isSet(object.state) ? accountStateFromJSON(object.state) : 0,
     };
   },
 
-  toJSON(message: ValidatorInfo): unknown {
+  toJSON(message: HostAccount): unknown {
     const obj: any = {};
-    message.delegationAmount !== undefined && (obj.delegationAmount = message.delegationAmount);
-    message.commissionRate !== undefined && (obj.commissionRate = Math.round(message.commissionRate));
+    message.address !== undefined && (obj.address = message.address);
+    message.balance !== undefined && (obj.balance = message.balance);
+    message.state !== undefined && (obj.state = accountStateToJSON(message.state));
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<ValidatorInfo>, I>>(object: I): ValidatorInfo {
-    const message = createBaseValidatorInfo();
-    message.delegationAmount = object.delegationAmount ?? "";
-    message.commissionRate = object.commissionRate ?? 0;
+  fromPartial<I extends Exact<DeepPartial<HostAccount>, I>>(object: I): HostAccount {
+    const message = createBaseHostAccount();
+    message.address = object.address ?? "";
+    message.balance = object.balance ?? "";
+    message.state = object.state ?? 0;
+    return message;
+  },
+};
+
+function createBaseValidatorState(): ValidatorState {
+  return { delegatedAmount: "" };
+}
+
+export const ValidatorState = {
+  encode(message: ValidatorState, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.delegatedAmount !== "") {
+      writer.uint32(10).string(message.delegatedAmount);
+    }
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): ValidatorState {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseValidatorState();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.delegatedAmount = reader.string();
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): ValidatorState {
+    return { delegatedAmount: isSet(object.delegatedAmount) ? String(object.delegatedAmount) : "" };
+  },
+
+  toJSON(message: ValidatorState): unknown {
+    const obj: any = {};
+    message.delegatedAmount !== undefined && (obj.delegatedAmount = message.delegatedAmount);
+    return obj;
+  },
+
+  fromPartial<I extends Exact<DeepPartial<ValidatorState>, I>>(object: I): ValidatorState {
+    const message = createBaseValidatorState();
+    message.delegatedAmount = object.delegatedAmount ?? "";
     return message;
   },
 };

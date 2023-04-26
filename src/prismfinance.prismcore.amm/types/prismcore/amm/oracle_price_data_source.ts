@@ -7,7 +7,7 @@ export const protobufPackage = "prismfinance.prismcore.amm";
 export interface OraclePriceDataSource {
   name: string;
   displayName: string;
-  /** this field is used by feeders to determine the vote interval, i.e., upperbound = votePeriodEndTime - ds.vote_latency ; lowerbound = upperbound - opp.twap_duration */
+  /** a duration in milliseconds used by feeders to determine the vote interval, i.e., upperbound = votePeriodEndTime - ds.vote_latency ; lowerbound = upperbound - opp.twap_duration */
   voteLatency: number;
 }
 

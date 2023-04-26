@@ -1,21 +1,19 @@
-import {PrismWebsocketClient, TendermintQuery} from "@prism-finance/prismjs/lib";
-
-// import {PrismWebsocketClient, TendermintQuery} from "../lib";
+import {TendermintQuery, TendermintWebsocketClient} from "@refractedlabs/utils/lib/wsclient";
 
 function delay(ms: number) {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
 
 async function main() {
-    const prismWebsocketClient = new PrismWebsocketClient("ws://0.0.0.0:26657", 2000);
+    const prismWebsocketClient = new TendermintWebsocketClient("ws://0.0.0.0:26657", 2000);
 
     const query: TendermintQuery = {}
     const attr = "refractedlabs.oracle.oracle.EventVoteIntervalEnds.time_millis"
     query[attr] = ["EXISTS"]
 
     prismWebsocketClient.getEventStream("NewBlock", query).subscribe({
-        next: events => {
-            const epochMillis = JSON.parse(events[`${attr}`][0]);
+        next: result => {
+            const epochMillis = JSON.parse(result.events[`${attr}`][0]);
             console.log(epochMillis)
         },
         error: err => console.error(err),

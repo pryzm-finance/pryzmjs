@@ -7,21 +7,21 @@ import { msgTypes } from './registry';
 import { IgniteClient } from "../client"
 import { MissingWalletError } from "../helpers"
 import { Api } from "./rest";
-import { MsgRevoke } from "./types/cosmos/authz/v1beta1/tx";
 import { MsgExec } from "./types/cosmos/authz/v1beta1/tx";
+import { MsgRevoke } from "./types/cosmos/authz/v1beta1/tx";
 import { MsgGrant } from "./types/cosmos/authz/v1beta1/tx";
 
 
-export { MsgRevoke, MsgExec, MsgGrant };
+export { MsgExec, MsgRevoke, MsgGrant };
 
-type sendMsgRevokeParams = {
-  value: MsgRevoke,
+type sendMsgExecParams = {
+  value: MsgExec,
   fee?: StdFee,
   memo?: string
 };
 
-type sendMsgExecParams = {
-  value: MsgExec,
+type sendMsgRevokeParams = {
+  value: MsgRevoke,
   fee?: StdFee,
   memo?: string
 };
@@ -33,12 +33,12 @@ type sendMsgGrantParams = {
 };
 
 
-type msgRevokeParams = {
-  value: MsgRevoke,
-};
-
 type msgExecParams = {
   value: MsgExec,
+};
+
+type msgRevokeParams = {
+  value: MsgRevoke,
 };
 
 type msgGrantParams = {
@@ -63,20 +63,6 @@ export const txClient = ({ signer, prefix, addr }: TxClientOptions = { addr: "ht
 
   return {
 		
-		async sendMsgRevoke({ value, fee, memo }: sendMsgRevokeParams): Promise<DeliverTxResponse> {
-			if (!signer) {
-					throw new Error('TxClient:sendMsgRevoke: Unable to sign Tx. Signer is not present.')
-			}
-			try {			
-				const { address } = (await signer.getAccounts())[0]; 
-				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry, prefix});
-				let msg = this.msgRevoke({ value: MsgRevoke.fromPartial(value) })
-				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
-			} catch (e: any) {
-				throw new Error('TxClient:sendMsgRevoke: Could not broadcast Tx: '+ e.message)
-			}
-		},
-		
 		async sendMsgExec({ value, fee, memo }: sendMsgExecParams): Promise<DeliverTxResponse> {
 			if (!signer) {
 					throw new Error('TxClient:sendMsgExec: Unable to sign Tx. Signer is not present.')
@@ -88,6 +74,20 @@ export const txClient = ({ signer, prefix, addr }: TxClientOptions = { addr: "ht
 				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
 			} catch (e: any) {
 				throw new Error('TxClient:sendMsgExec: Could not broadcast Tx: '+ e.message)
+			}
+		},
+		
+		async sendMsgRevoke({ value, fee, memo }: sendMsgRevokeParams): Promise<DeliverTxResponse> {
+			if (!signer) {
+					throw new Error('TxClient:sendMsgRevoke: Unable to sign Tx. Signer is not present.')
+			}
+			try {			
+				const { address } = (await signer.getAccounts())[0]; 
+				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry, prefix});
+				let msg = this.msgRevoke({ value: MsgRevoke.fromPartial(value) })
+				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
+			} catch (e: any) {
+				throw new Error('TxClient:sendMsgRevoke: Could not broadcast Tx: '+ e.message)
 			}
 		},
 		
@@ -106,19 +106,19 @@ export const txClient = ({ signer, prefix, addr }: TxClientOptions = { addr: "ht
 		},
 		
 		
-		msgRevoke({ value }: msgRevokeParams): EncodeObject {
-			try {
-				return { typeUrl: "/cosmos.authz.v1beta1.MsgRevoke", value: MsgRevoke.fromPartial( value ) }  
-			} catch (e: any) {
-				throw new Error('TxClient:MsgRevoke: Could not create message: ' + e.message)
-			}
-		},
-		
 		msgExec({ value }: msgExecParams): EncodeObject {
 			try {
 				return { typeUrl: "/cosmos.authz.v1beta1.MsgExec", value: MsgExec.fromPartial( value ) }  
 			} catch (e: any) {
 				throw new Error('TxClient:MsgExec: Could not create message: ' + e.message)
+			}
+		},
+		
+		msgRevoke({ value }: msgRevokeParams): EncodeObject {
+			try {
+				return { typeUrl: "/cosmos.authz.v1beta1.MsgRevoke", value: MsgRevoke.fromPartial( value ) }  
+			} catch (e: any) {
+				throw new Error('TxClient:MsgRevoke: Could not create message: ' + e.message)
 			}
 		},
 		

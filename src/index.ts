@@ -94,7 +94,6 @@ export {
 import protobufjs from "protobufjs";
 import Long from "long";
 import {DirectSecp256k1HdWallet} from "@cosmjs/proto-signing";
-import {PrismWebsocketClient, TendermintEventType, TendermintQuery, TendermintSubscriptionResponse} from "./wsclient";
 import { Module as PrismfinancePrismatics, msgTypes as PrismfinancePrismaticsMsgTypes } from './prismfinance.prisma.tics' // TODO: PrismfinancePrismaticsMsgTypes
 
 PrismfinancePrismaticsMsgTypes.forEach(value => {
@@ -116,13 +115,6 @@ export const PrismaticsClient = IgniteClient.plugin([
     PrismfinancePrismatics
 ]);
 export type PrismaticsClient = NewReturnType<typeof PrismaticsClient>
-
-export {
-    PrismWebsocketClient,
-    TendermintEventType,
-    TendermintQuery,
-    TendermintSubscriptionResponse
-}
 
 /** Use this method if you want to use the returned prism client only as query client. this does not work as signing client */
 export function newPrismQueryClient(apiURL: string): PrismClient {

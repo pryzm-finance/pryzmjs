@@ -7,19 +7,13 @@ import { msgTypes } from './registry';
 import { IgniteClient } from "../client"
 import { MissingWalletError } from "../helpers"
 import { Api } from "./rest";
-import { MsgUpdateFeeRatios } from "./types/prismcore/assets/tx";
 import { MsgUpdateMaturityParams } from "./types/prismcore/assets/tx";
 import { MsgRegisterAsset } from "./types/prismcore/assets/tx";
 import { MsgDisableAsset } from "./types/prismcore/assets/tx";
+import { MsgUpdateFeeRatios } from "./types/prismcore/assets/tx";
 
 
-export { MsgUpdateFeeRatios, MsgUpdateMaturityParams, MsgRegisterAsset, MsgDisableAsset };
-
-type sendMsgUpdateFeeRatiosParams = {
-  value: MsgUpdateFeeRatios,
-  fee?: StdFee,
-  memo?: string
-};
+export { MsgUpdateMaturityParams, MsgRegisterAsset, MsgDisableAsset, MsgUpdateFeeRatios };
 
 type sendMsgUpdateMaturityParamsParams = {
   value: MsgUpdateMaturityParams,
@@ -39,10 +33,12 @@ type sendMsgDisableAssetParams = {
   memo?: string
 };
 
-
-type msgUpdateFeeRatiosParams = {
+type sendMsgUpdateFeeRatiosParams = {
   value: MsgUpdateFeeRatios,
+  fee?: StdFee,
+  memo?: string
 };
+
 
 type msgUpdateMaturityParamsParams = {
   value: MsgUpdateMaturityParams,
@@ -54,6 +50,10 @@ type msgRegisterAssetParams = {
 
 type msgDisableAssetParams = {
   value: MsgDisableAsset,
+};
+
+type msgUpdateFeeRatiosParams = {
+  value: MsgUpdateFeeRatios,
 };
 
 
@@ -73,20 +73,6 @@ interface TxClientOptions {
 export const txClient = ({ signer, prefix, addr }: TxClientOptions = { addr: "http://localhost:26657", prefix: "cosmos" }) => {
 
   return {
-		
-		async sendMsgUpdateFeeRatios({ value, fee, memo }: sendMsgUpdateFeeRatiosParams): Promise<DeliverTxResponse> {
-			if (!signer) {
-					throw new Error('TxClient:sendMsgUpdateFeeRatios: Unable to sign Tx. Signer is not present.')
-			}
-			try {			
-				const { address } = (await signer.getAccounts())[0]; 
-				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry, prefix});
-				let msg = this.msgUpdateFeeRatios({ value: MsgUpdateFeeRatios.fromPartial(value) })
-				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
-			} catch (e: any) {
-				throw new Error('TxClient:sendMsgUpdateFeeRatios: Could not broadcast Tx: '+ e.message)
-			}
-		},
 		
 		async sendMsgUpdateMaturityParams({ value, fee, memo }: sendMsgUpdateMaturityParamsParams): Promise<DeliverTxResponse> {
 			if (!signer) {
@@ -130,14 +116,20 @@ export const txClient = ({ signer, prefix, addr }: TxClientOptions = { addr: "ht
 			}
 		},
 		
-		
-		msgUpdateFeeRatios({ value }: msgUpdateFeeRatiosParams): EncodeObject {
-			try {
-				return { typeUrl: "/prismfinance.prismcore.assets.MsgUpdateFeeRatios", value: MsgUpdateFeeRatios.fromPartial( value ) }  
+		async sendMsgUpdateFeeRatios({ value, fee, memo }: sendMsgUpdateFeeRatiosParams): Promise<DeliverTxResponse> {
+			if (!signer) {
+					throw new Error('TxClient:sendMsgUpdateFeeRatios: Unable to sign Tx. Signer is not present.')
+			}
+			try {			
+				const { address } = (await signer.getAccounts())[0]; 
+				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry, prefix});
+				let msg = this.msgUpdateFeeRatios({ value: MsgUpdateFeeRatios.fromPartial(value) })
+				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
 			} catch (e: any) {
-				throw new Error('TxClient:MsgUpdateFeeRatios: Could not create message: ' + e.message)
+				throw new Error('TxClient:sendMsgUpdateFeeRatios: Could not broadcast Tx: '+ e.message)
 			}
 		},
+		
 		
 		msgUpdateMaturityParams({ value }: msgUpdateMaturityParamsParams): EncodeObject {
 			try {
@@ -160,6 +152,14 @@ export const txClient = ({ signer, prefix, addr }: TxClientOptions = { addr: "ht
 				return { typeUrl: "/prismfinance.prismcore.assets.MsgDisableAsset", value: MsgDisableAsset.fromPartial( value ) }  
 			} catch (e: any) {
 				throw new Error('TxClient:MsgDisableAsset: Could not create message: ' + e.message)
+			}
+		},
+		
+		msgUpdateFeeRatios({ value }: msgUpdateFeeRatiosParams): EncodeObject {
+			try {
+				return { typeUrl: "/prismfinance.prismcore.assets.MsgUpdateFeeRatios", value: MsgUpdateFeeRatios.fromPartial( value ) }  
+			} catch (e: any) {
+				throw new Error('TxClient:MsgUpdateFeeRatios: Could not create message: ' + e.message)
 			}
 		},
 		

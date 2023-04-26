@@ -18,8 +18,7 @@
     ignite generate ts-client
     ```
 
-
-1. Move all generated files into prismjs source directory.
+2. Move all generated files into prismjs source directory.
 
     ```bash
     cd prismjs
@@ -28,7 +27,7 @@
     mv ../prisma/ts-client/prismfinance.prisma.tics ./src/
     ```
 
-2. Now in `src` directory, search for:
+3. Now in `src` directory, search for:
 
     ```tsx
     if (_m0.util.Long !== Long) {
@@ -41,7 +40,7 @@
     if (_m0.util.Long !== Long) {
     ```
 
-3. In `src/client.ts`, search for:
+4. In `src/client.ts`, search for:
 
     ```tsx
     AugmentedClient as typeof AugmentedClient
@@ -53,7 +52,7 @@
     AugmentedClient as typeof IgniteClient
     ```
 
-4. In `src/prismfinance.prisma.tics/module.ts`, search for:
+5. In `src/prismfinance.prisma.tics/module.ts`, search for:
 
     ```tsx
     PrismfinancePrismaTics: new SDKModule(test)
@@ -65,7 +64,7 @@
     PrismfinancePrismatics: new SDKModule(test)
     ```
 
-5. In `src/refractedlabs.oracle.oracle/module.ts` and `src/index.ts`, search for:
+6. In `src/refractedlabs.oracle.oracle/module.ts` and `src/index.ts`, search for:
 
     ```tsx
     OracleOracle
@@ -77,7 +76,7 @@
     Oracle
     ```
 
-6. In `src/refractedlabs.bridge.bridge/module.ts` and `src/index.ts`, search for:
+7. In `src/refractedlabs.bridge.bridge/module.ts` and `src/index.ts`, search for:
 
     ```tsx
     BridgeBridge
@@ -89,14 +88,13 @@
     Bridge
     ```
 
-7. Then patch the following to the `src` directory.
+8. Then patch the following to the `src` directory.
 
     ```json
-    cp ./patch/wsclient.ts ./src/
     cat ./patch/index-patch.ts >> src/index.ts
     ```
 
-8. `prismjs/package.json` should be adapted to the generated `package.json` which is now under `prismjs/src/package.json`. This operation should always be done manually.
+9. `prismjs/package.json` should be adapted to the generated `package.json` which is now under `prismjs/src/package.json`. This operation should always be done manually.
 
    **Suggestion:**
    Move `prismjs/src/package.json` to `prismjs/package.json` and adapt the content to reflect the following:

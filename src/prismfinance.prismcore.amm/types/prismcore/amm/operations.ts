@@ -81,6 +81,7 @@ export enum ExitType {
   EXIT_TYPE_GIVEN_TOKENS_IN = 0,
   EXIT_TYPE_TOKEN_GIVEN_LPT_OUT = 1,
   EXIT_TYPE_ALL_TOKENS_GIVEN_LPT_OUT = 2,
+  EXIT_TYPE_ALL_TOKENS_RECOVERY_MODE = 3,
   UNRECOGNIZED = -1,
 }
 
@@ -95,6 +96,9 @@ export function exitTypeFromJSON(object: any): ExitType {
     case 2:
     case "EXIT_TYPE_ALL_TOKENS_GIVEN_LPT_OUT":
       return ExitType.EXIT_TYPE_ALL_TOKENS_GIVEN_LPT_OUT;
+    case 3:
+    case "EXIT_TYPE_ALL_TOKENS_RECOVERY_MODE":
+      return ExitType.EXIT_TYPE_ALL_TOKENS_RECOVERY_MODE;
     case -1:
     case "UNRECOGNIZED":
     default:
@@ -110,6 +114,8 @@ export function exitTypeToJSON(object: ExitType): string {
       return "EXIT_TYPE_TOKEN_GIVEN_LPT_OUT";
     case ExitType.EXIT_TYPE_ALL_TOKENS_GIVEN_LPT_OUT:
       return "EXIT_TYPE_ALL_TOKENS_GIVEN_LPT_OUT";
+    case ExitType.EXIT_TYPE_ALL_TOKENS_RECOVERY_MODE:
+      return "EXIT_TYPE_ALL_TOKENS_RECOVERY_MODE";
     case ExitType.UNRECOGNIZED:
     default:
       return "UNRECOGNIZED";

@@ -35,6 +35,7 @@ export interface GenesisState {
   orderCount: number;
   executableOrderList: number[];
   scheduleOrderList: ScheduleOrder[];
+  vaultPaused: boolean;
   oraclePricePairList: OraclePricePair[];
   /** this line is used by starport scaffolding # genesis/proto/state */
   oraclePriceDataSourceList: OraclePriceDataSource[];
@@ -132,6 +133,7 @@ function createBaseGenesisState(): GenesisState {
     orderCount: 0,
     executableOrderList: [],
     scheduleOrderList: [],
+    vaultPaused: false,
     oraclePricePairList: [],
     oraclePriceDataSourceList: [],
   };
@@ -177,11 +179,14 @@ export const GenesisState = {
     for (const v of message.scheduleOrderList) {
       ScheduleOrder.encode(v!, writer.uint32(98).fork()).ldelim();
     }
+    if (message.vaultPaused === true) {
+      writer.uint32(104).bool(message.vaultPaused);
+    }
     for (const v of message.oraclePricePairList) {
-      OraclePricePair.encode(v!, writer.uint32(106).fork()).ldelim();
+      OraclePricePair.encode(v!, writer.uint32(114).fork()).ldelim();
     }
     for (const v of message.oraclePriceDataSourceList) {
-      OraclePriceDataSource.encode(v!, writer.uint32(114).fork()).ldelim();
+      OraclePriceDataSource.encode(v!, writer.uint32(122).fork()).ldelim();
     }
     return writer;
   },
@@ -240,9 +245,12 @@ export const GenesisState = {
           message.scheduleOrderList.push(ScheduleOrder.decode(reader, reader.uint32()));
           break;
         case 13:
-          message.oraclePricePairList.push(OraclePricePair.decode(reader, reader.uint32()));
+          message.vaultPaused = reader.bool();
           break;
         case 14:
+          message.oraclePricePairList.push(OraclePricePair.decode(reader, reader.uint32()));
+          break;
+        case 15:
           message.oraclePriceDataSourceList.push(OraclePriceDataSource.decode(reader, reader.uint32()));
           break;
         default:
@@ -286,6 +294,7 @@ export const GenesisState = {
       scheduleOrderList: Array.isArray(object?.scheduleOrderList)
         ? object.scheduleOrderList.map((e: any) => ScheduleOrder.fromJSON(e))
         : [],
+      vaultPaused: isSet(object.vaultPaused) ? Boolean(object.vaultPaused) : false,
       oraclePricePairList: Array.isArray(object?.oraclePricePairList)
         ? object.oraclePricePairList.map((e: any) => OraclePricePair.fromJSON(e))
         : [],
@@ -356,6 +365,7 @@ export const GenesisState = {
     } else {
       obj.scheduleOrderList = [];
     }
+    message.vaultPaused !== undefined && (obj.vaultPaused = message.vaultPaused);
     if (message.oraclePricePairList) {
       obj.oraclePricePairList = message.oraclePricePairList.map((e) => e ? OraclePricePair.toJSON(e) : undefined);
     } else {
@@ -398,6 +408,7 @@ export const GenesisState = {
     message.orderCount = object.orderCount ?? 0;
     message.executableOrderList = object.executableOrderList?.map((e) => e) || [];
     message.scheduleOrderList = object.scheduleOrderList?.map((e) => ScheduleOrder.fromPartial(e)) || [];
+    message.vaultPaused = object.vaultPaused ?? false;
     message.oraclePricePairList = object.oraclePricePairList?.map((e) => OraclePricePair.fromPartial(e)) || [];
     message.oraclePriceDataSourceList =
       object.oraclePriceDataSourceList?.map((e) => OraclePriceDataSource.fromPartial(e)) || [];

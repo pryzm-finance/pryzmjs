@@ -1,16 +1,14 @@
-import {ConnectionStatus, PrismWebsocketClient} from "@prism-finance/prismjs/lib/wsclient";
-
-// import {ConnectionStatus, PrismWebsocketClient} from "../lib/wsclient";
+import {ConnectionStatus, TendermintWebsocketClient} from "@refractedlabs/utils/lib/wsclient";
 
 async function subscribeEventVoteIntervalEnds() {
     const query: any = {};
     const attr = "refractedlabs.oracle.oracle.EventVoteIntervalEnds.time_millis";
     query[attr] = ["EXISTS"];
-    const prismWebsocketClient = new PrismWebsocketClient("ws://0.0.0.0:26657", 2000);
+    const prismWebsocketClient = new TendermintWebsocketClient("ws://0.0.0.0:26657", 2000);
     prismWebsocketClient
         .getEventStream("NewBlock", query)
-        .map((events) => {
-            const epochMillis = JSON.parse(events[`${attr}`][0]);
+        .map((result) => {
+            const epochMillis = JSON.parse(result.events[`${attr}`][0]);
             return Number(epochMillis).valueOf();
         }).subscribe({
         next: endTime => {

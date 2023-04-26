@@ -9,6 +9,38 @@
  * ---------------------------------------------------------------
  */
 
+export enum IcstakingAccountState {
+  NOT_REGISTERED = "NOT_REGISTERED",
+  REGISTERING = "REGISTERING",
+  REGISTERED = "REGISTERED",
+}
+
+export interface IcstakingChannelUndelegation {
+  c_amount?: string;
+
+  /** Whether the undelegated amount is un-bonded and swept back to PRISM */
+  received?: boolean;
+
+  /** the amount of assets received after the undelegation is completed */
+  received_amount?: string;
+
+  /** received_amount / c_amount. This is used as the exchange rate of uToken:Token when users redeem their assets */
+  redemption_rate?: string;
+
+  /**
+   * the amount of assets that are received but not redeemed by users.
+   * a received undelegation record is deleted when this amount is set to zero
+   */
+  unclaimed_amount?: string;
+}
+
+/**
+ * - ICA: interchain account connection using ibc-go ICS-27
+ */
+export enum IcstakingConnectionType {
+  ICA = "ICA",
+}
+
 export interface IcstakingFeeRatios {
   yield?: string;
   staking?: string;
@@ -16,35 +48,94 @@ export interface IcstakingFeeRatios {
   instant_unstaking?: string;
 }
 
+export interface IcstakingHostAccount {
+  address?: string;
+  balance?: string;
+  state?: IcstakingAccountState;
+}
+
+export interface IcstakingHostAccounts {
+  delegation?: IcstakingHostAccount;
+  reward?: IcstakingHostAccount;
+  fee?: IcstakingHostAccount;
+  sweep?: IcstakingHostAccount;
+
+  /**
+   * This is the state of setting the reward account as the account which receives the staking rewards on host chain.
+   * On cosmos based chains, the reward account is registered using MsgSetWithdrawAddress in distribution module.
+   */
+  reward_account_claiming_state?: IcstakingAccountState;
+}
+
 export interface IcstakingHostChain {
+  /** A unique user-provided identifier. Is used in the cToken denom */
+  id?: string;
+
+  /**
+   * connection type. connection type and connection id are unique together
+   * - ICA: interchain account connection using ibc-go ICS-27
+   */
+  connection_type?: IcstakingConnectionType;
+
+  /** the identifier for connection. connection id and connection type are unique together */
   connection_id?: string;
+
+  /** the base denom of the token to be staked on the target chain */
   base_denom?: string;
-  transfer_channel?: string;
+
+  /** list of supported transfer channels for transferring the base_denom tokens between the host chain and Prism */
+  transfer_channels?: IcstakingTransferChannel[];
+
+  /** Parameters for staking/unstaking on the host chain */
   params?: IcstakingStakingParams;
+
+  /** list of whitelisted validators to which Prism sends the staked funds. */
   validators?: IcstakingValidator[];
 }
 
 export interface IcstakingHostChainState {
-  connection_id?: string;
-  ica?: IcstakingICAInfo;
-  validators?: Record<string, IcstakingValidatorInfo>;
-  exchange_rate?: string;
-}
+  /** The id of the chain */
+  host_chain_id?: string;
 
-export interface IcstakingICAInfo {
-  delegation_account?: string;
-  withdraw_account?: string;
-  fee_account?: string;
-  withdraw_address_set?: boolean;
-  delegation_account_balance?: string;
-  withdraw_account_balance?: string;
-  fee_account_balance?: string;
+  /** Information about the interchain accounts */
+  host_accounts?: IcstakingHostAccounts;
+
+  /** Mapping of validators address to their state */
+  validators?: Record<string, IcstakingValidatorState>;
+
+  /**
+   * The summation of amount delegated to each validator
+   * FIXME remove if not needed
+   */
+  total_delegated_amount?: string;
+
+  /** The amount of assets that are in the delegation account and ready to be delegated */
+  amount_to_be_delegated?: string;
+
+  /** The amount of assets that are in the reward account and ready to be transferred to the delegation account */
+  amount_to_be_compounded?: string;
+
+  /** The current exchange rate of cToken to the host chain staking token */
+  exchange_rate?: string;
+
+  /** The current state of interchain operations state machine */
+  state?: IcstakingState;
+
+  /**
+   * The last host chain's block height in which PRISM's state is changed to IDLE
+   * setting state to IDLE happens when an ack/timeout received for an interchain operation,
+   * so this is the height of the last received ack from host chain
+   * FIXME change type to height
+   * @format uint64
+   */
+  last_idle_state_host_height?: string;
 }
 
 export enum IcstakingICAType {
   DELEGATION = "DELEGATION",
-  WITHDRAW = "WITHDRAW",
+  REWARD = "REWARD",
   FEE = "FEE",
+  SWEEP = "SWEEP",
 }
 
 export interface IcstakingMsgInstantUnstakeResponse {
@@ -158,12 +249,46 @@ export interface IcstakingQueryAllHostChainStateResponse {
   pagination?: V1Beta1PageResponse;
 }
 
+export interface IcstakingQueryAllUndelegationResponse {
+  undelegation?: IcstakingUndelegation[];
+
+  /**
+   * PageResponse is to be embedded in gRPC response messages where the
+   * corresponding request message has used PageRequest.
+   *
+   *  message SomeResponse {
+   *          repeated Bar results = 1;
+   *          PageResponse page = 2;
+   *  }
+   */
+  pagination?: V1Beta1PageResponse;
+}
+
 export interface IcstakingQueryGetHostChainResponse {
   host_chain?: IcstakingHostChain;
 }
 
 export interface IcstakingQueryGetHostChainStateResponse {
   host_chain_state?: IcstakingHostChainState;
+}
+
+export interface IcstakingQueryGetUndelegationResponse {
+  undelegation?: IcstakingUndelegation;
+}
+
+export interface IcstakingQueryIncompleteUndelegationResponse {
+  undelegation?: IcstakingUndelegation[];
+
+  /**
+   * PageResponse is to be embedded in gRPC response messages where the
+   * corresponding request message has used PageRequest.
+   *
+   *  message SomeResponse {
+   *          repeated Bar results = 1;
+   *          PageResponse page = 2;
+   *  }
+   */
+  pagination?: V1Beta1PageResponse;
 }
 
 /**
@@ -204,16 +329,96 @@ export interface IcstakingStakingParams {
   min_rebalance_interval?: string;
 }
 
+export enum IcstakingState {
+  INITIALIZING = "INITIALIZING",
+  IDLE = "IDLE",
+  TRANSFERRING = "TRANSFERRING",
+  DELEGATING = "DELEGATING",
+  UNDELEGATING = "UNDELEGATING",
+  REDELEGATING = "REDELEGATING",
+  COMPOUNDING = "COMPOUNDING",
+  SWEEPING = "SWEEPING",
+}
+
+export interface IcstakingTransferChannel {
+  /**
+   * the type of the channel
+   * Types of transfer channels
+   * For now it only supports ibc transfer, but transfer bridges support (Axelar, Wormhole, ...) can be added.
+   */
+  type?: IcstakingTransferChannelType;
+
+  /** the id of the channel. in the case of IBC channel type, this is the channel name. */
+  id?: string;
+
+  /**
+   * Optional. This is the name of the token on the receiving chain.
+   * This is useful when a bridge is being used and the underlying asset is wrapped on the bridge, like axlWETH.
+   */
+  wrapped_denom?: string;
+
+  /**
+   * Optional. This is the name of the target chain.
+   * This is useful when a bridge is being used and the host chain is different with the receiving chain.
+   */
+  destination_chain?: string;
+}
+
+/**
+* Types of transfer channels
+For now it only supports ibc transfer, but transfer bridges support (Axelar, Wormhole, ...) can be added.
+*/
+export enum IcstakingTransferChannelType {
+  IBC = "IBC",
+}
+
+export interface IcstakingUndelegation {
+  host_chain?: string;
+
+  /**
+   * the number of epoch in which the delegation is requested
+   * @format uint64
+   */
+  epoch?: string;
+
+  /**
+   * the amount of cTokens requested to be undelegated.
+   * This is the summation of c_amount for every channel FIXME remove if not used
+   */
+  c_amount?: string;
+
+  /** the exchange rate of cToken:Token in the undelegation epoch */
+  exchange_rate?: string;
+
+  /** Whether the undelegation request is sent and has started on host chain */
+  started?: boolean;
+
+  /** Whether the undelegation un-bonding period is passed and undelegated assets are available */
+  completed?: boolean;
+
+  /**
+   * The time in which the undelegation will be completed and the assets are transferred to delegation account
+   * @format date-time
+   */
+  completion_time?: string;
+
+  /** Whether the ibc transfer messages for sweeping assets to PRISM are sent successfully */
+  swept?: boolean;
+
+  /** map of transfer channels to the state and amount of received undelegated assets */
+  channel_undelegations?: Record<string, IcstakingChannelUndelegation>;
+}
+
 export interface IcstakingValidator {
+  /** validator's address on the host chain */
   address?: string;
+
+  /** The weight of delegation to the validator. Total weight of all validators per host chain must be equal to 1. */
   weight?: string;
 }
 
-export interface IcstakingValidatorInfo {
-  delegation_amount?: string;
-
-  /** @format uint64 */
-  commission_rate?: string;
+export interface IcstakingValidatorState {
+  delegated_amount?: string;
 }
 
 export interface ProtobufAny {
@@ -467,11 +672,11 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
    * @tags Query
    * @name QueryHostChain
    * @summary Queries a HostChain by index.
-   * @request GET:/prism-finance/prism-core/icstaking/host_chain/{connection_id}
+   * @request GET:/prism-finance/prism-core/icstaking/host_chain/{host_chain_id}
    */
-  queryHostChain = (connectionId: string, params: RequestParams = {}) =>
+  queryHostChain = (hostChainId: string, params: RequestParams = {}) =>
     this.request<IcstakingQueryGetHostChainResponse, RpcStatus>({
-      path: `/prism-finance/prism-core/icstaking/host_chain/${connectionId}`,
+      path: `/prism-finance/prism-core/icstaking/host_chain/${hostChainId}`,
       method: "GET",
       format: "json",
       ...params,
@@ -509,11 +714,11 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
    * @tags Query
    * @name QueryHostChainState
    * @summary Queries a HostChainState by index.
-   * @request GET:/prism-finance/prism-core/icstaking/host_chain_state/{connection_id}
+   * @request GET:/prism-finance/prism-core/icstaking/host_chain_state/{host_chain_id}
    */
-  queryHostChainState = (connectionId: string, params: RequestParams = {}) =>
+  queryHostChainState = (hostChainId: string, params: RequestParams = {}) =>
     this.request<IcstakingQueryGetHostChainStateResponse, RpcStatus>({
-      path: `/prism-finance/prism-core/icstaking/host_chain_state/${connectionId}`,
+      path: `/prism-finance/prism-core/icstaking/host_chain_state/${hostChainId}`,
       method: "GET",
       format: "json",
       ...params,
@@ -530,6 +735,75 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
   queryParams = (params: RequestParams = {}) =>
     this.request<IcstakingQueryParamsResponse, RpcStatus>({
       path: `/prism-finance/prism-core/icstaking/params`,
+      method: "GET",
+      format: "json",
+      ...params,
+    });
+
+  /**
+   * No description
+   *
+   * @tags Query
+   * @name QueryUndelegationAll
+   * @summary Queries a list of Undelegation items.
+   * @request GET:/prism-finance/prism-core/icstaking/undelegation
+   */
+  queryUndelegationAll = (
+    query?: {
+      "pagination.key"?: string;
+      "pagination.offset"?: string;
+      "pagination.limit"?: string;
+      "pagination.count_total"?: boolean;
+      "pagination.reverse"?: boolean;
+    },
+    params: RequestParams = {},
+  ) =>
+    this.request<IcstakingQueryAllUndelegationResponse, RpcStatus>({
+      path: `/prism-finance/prism-core/icstaking/undelegation`,
+      method: "GET",
+      query: query,
+      format: "json",
+      ...params,
+    });
+
+  /**
+   * No description
+   *
+   * @tags Query
+   * @name QueryIncompleteUndelegationAll
+   * @summary Queries a list of incomplete undelegations sorted by completion time.
+   * @request GET:/prism-finance/prism-core/icstaking/undelegation/{host_chain}
+   */
+  queryIncompleteUndelegationAll = (
+    hostChain: string,
+    query?: {
+      "pagination.key"?: string;
+      "pagination.offset"?: string;
+      "pagination.limit"?: string;
+      "pagination.count_total"?: boolean;
+      "pagination.reverse"?: boolean;
+    },
+    params: RequestParams = {},
+  ) =>
+    this.request<IcstakingQueryIncompleteUndelegationResponse, RpcStatus>({
+      path: `/prism-finance/prism-core/icstaking/undelegation/${hostChain}`,
+      method: "GET",
+      query: query,
+      format: "json",
+      ...params,
+    });
+
+  /**
+   * No description
+   *
+   * @tags Query
+   * @name QueryUndelegation
+   * @summary Queries a Undelegation by index.
+   * @request GET:/prism-finance/prism-core/icstaking/undelegation/{host_chain}/{epoch}
+   */
+  queryUndelegation = (hostChain: string, epoch: string, params: RequestParams = {}) =>
+    this.request<IcstakingQueryGetUndelegationResponse, RpcStatus>({
+      path: `/prism-finance/prism-core/icstaking/undelegation/${hostChain}/${epoch}`,
       method: "GET",
       format: "json",
       ...params,

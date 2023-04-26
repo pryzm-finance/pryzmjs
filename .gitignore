@@ -56,3 +56,4 @@ yarn.lock
 packages/**/build
 packages/**/main
 packages/**/module
+.local

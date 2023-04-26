@@ -4,10 +4,20 @@ import _m0 from "protobufjs/minimal";
 
 export const protobufPackage = "prismfinance.prismcore.amm";
 
+export interface CircuitBreaker {
+  referenceLptPrice: string;
+  lowerBound: string;
+  upperBound: string;
+  referenceNormalizedWeight: string;
+  adjustedUpperBound: string;
+  adjustedLowerBound: string;
+}
+
 export interface PoolToken {
   poolId: number;
   denom: string;
   balance: string;
+  circuitBreaker: CircuitBreaker | undefined;
 }
 
 export interface TokenAmount {
@@ -15,8 +25,112 @@ export interface TokenAmount {
   amount: string;
 }
 
+function createBaseCircuitBreaker(): CircuitBreaker {
+  return {
+    referenceLptPrice: "",
+    lowerBound: "",
+    upperBound: "",
+    referenceNormalizedWeight: "",
+    adjustedUpperBound: "",
+    adjustedLowerBound: "",
+  };
+}
+
+export const CircuitBreaker = {
+  encode(message: CircuitBreaker, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.referenceLptPrice !== "") {
+      writer.uint32(10).string(message.referenceLptPrice);
+    }
+    if (message.lowerBound !== "") {
+      writer.uint32(18).string(message.lowerBound);
+    }
+    if (message.upperBound !== "") {
+      writer.uint32(26).string(message.upperBound);
+    }
+    if (message.referenceNormalizedWeight !== "") {
+      writer.uint32(34).string(message.referenceNormalizedWeight);
+    }
+    if (message.adjustedUpperBound !== "") {
+      writer.uint32(42).string(message.adjustedUpperBound);
+    }
+    if (message.adjustedLowerBound !== "") {
+      writer.uint32(50).string(message.adjustedLowerBound);
+    }
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): CircuitBreaker {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseCircuitBreaker();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.referenceLptPrice = reader.string();
+          break;
+        case 2:
+          message.lowerBound = reader.string();
+          break;
+        case 3:
+          message.upperBound = reader.string();
+          break;
+        case 4:
+          message.referenceNormalizedWeight = reader.string();
+          break;
+        case 5:
+          message.adjustedUpperBound = reader.string();
+          break;
+        case 6:
+          message.adjustedLowerBound = reader.string();
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): CircuitBreaker {
+    return {
+      referenceLptPrice: isSet(object.referenceLptPrice) ? String(object.referenceLptPrice) : "",
+      lowerBound: isSet(object.lowerBound) ? String(object.lowerBound) : "",
+      upperBound: isSet(object.upperBound) ? String(object.upperBound) : "",
+      referenceNormalizedWeight: isSet(object.referenceNormalizedWeight)
+        ? String(object.referenceNormalizedWeight)
+        : "",
+      adjustedUpperBound: isSet(object.adjustedUpperBound) ? String(object.adjustedUpperBound) : "",
+      adjustedLowerBound: isSet(object.adjustedLowerBound) ? String(object.adjustedLowerBound) : "",
+    };
+  },
+
+  toJSON(message: CircuitBreaker): unknown {
+    const obj: any = {};
+    message.referenceLptPrice !== undefined && (obj.referenceLptPrice = message.referenceLptPrice);
+    message.lowerBound !== undefined && (obj.lowerBound = message.lowerBound);
+    message.upperBound !== undefined && (obj.upperBound = message.upperBound);
+    message.referenceNormalizedWeight !== undefined
+      && (obj.referenceNormalizedWeight = message.referenceNormalizedWeight);
+    message.adjustedUpperBound !== undefined && (obj.adjustedUpperBound = message.adjustedUpperBound);
+    message.adjustedLowerBound !== undefined && (obj.adjustedLowerBound = message.adjustedLowerBound);
+    return obj;
+  },
+
+  fromPartial<I extends Exact<DeepPartial<CircuitBreaker>, I>>(object: I): CircuitBreaker {
+    const message = createBaseCircuitBreaker();
+    message.referenceLptPrice = object.referenceLptPrice ?? "";
+    message.lowerBound = object.lowerBound ?? "";
+    message.upperBound = object.upperBound ?? "";
+    message.referenceNormalizedWeight = object.referenceNormalizedWeight ?? "";
+    message.adjustedUpperBound = object.adjustedUpperBound ?? "";
+    message.adjustedLowerBound = object.adjustedLowerBound ?? "";
+    return message;
+  },
+};
+
 function createBasePoolToken(): PoolToken {
-  return { poolId: 0, denom: "", balance: "" };
+  return { poolId: 0, denom: "", balance: "", circuitBreaker: undefined };
 }
 
 export const PoolToken = {
@@ -29,6 +143,9 @@ export const PoolToken = {
     }
     if (message.balance !== "") {
       writer.uint32(26).string(message.balance);
+    }
+    if (message.circuitBreaker !== undefined) {
+      CircuitBreaker.encode(message.circuitBreaker, writer.uint32(34).fork()).ldelim();
     }
     return writer;
   },
@@ -49,6 +166,9 @@ export const PoolToken = {
         case 3:
           message.balance = reader.string();
           break;
+        case 4:
+          message.circuitBreaker = CircuitBreaker.decode(reader, reader.uint32());
+          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -62,6 +182,7 @@ export const PoolToken = {
       poolId: isSet(object.poolId) ? Number(object.poolId) : 0,
       denom: isSet(object.denom) ? String(object.denom) : "",
       balance: isSet(object.balance) ? String(object.balance) : "",
+      circuitBreaker: isSet(object.circuitBreaker) ? CircuitBreaker.fromJSON(object.circuitBreaker) : undefined,
     };
   },
 
@@ -70,6 +191,8 @@ export const PoolToken = {
     message.poolId !== undefined && (obj.poolId = Math.round(message.poolId));
     message.denom !== undefined && (obj.denom = message.denom);
     message.balance !== undefined && (obj.balance = message.balance);
+    message.circuitBreaker !== undefined
+      && (obj.circuitBreaker = message.circuitBreaker ? CircuitBreaker.toJSON(message.circuitBreaker) : undefined);
     return obj;
   },
 
@@ -78,6 +201,9 @@ export const PoolToken = {
     message.poolId = object.poolId ?? 0;
     message.denom = object.denom ?? "";
     message.balance = object.balance ?? "";
+    message.circuitBreaker = (object.circuitBreaker !== undefined && object.circuitBreaker !== null)
+      ? CircuitBreaker.fromPartial(object.circuitBreaker)
+      : undefined;
     return message;
   },
 };

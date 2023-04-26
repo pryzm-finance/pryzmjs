@@ -9,6 +9,21 @@
  * ---------------------------------------------------------------
  */
 
+export interface AmmCircuitBreaker {
+  reference_lpt_price?: string;
+  lower_bound?: string;
+  upper_bound?: string;
+  reference_normalized_weight?: string;
+  adjusted_upper_bound?: string;
+  adjusted_lower_bound?: string;
+}
+
+export interface AmmCircuitBreakerSettings {
+  reference_lpt_price?: string;
+  lower_bound?: string;
+  upper_bound?: string;
+}
+
 export interface AmmCreateWeightedPoolToken {
   denom?: string;
   normalized_weight?: string;
@@ -137,6 +152,25 @@ export interface AmmMsgProposeMatchResponse {
   proposer_reward?: V1Beta1Coin[];
 }
 
+export interface AmmMsgRecoveryExitResponse {
+  /**
+   * Coin defines a token with a denomination and an amount.
+   *
+   * NOTE: The amount field is an Int which implements the custom method
+   * signatures required by gogoproto.
+   */
+  lpt_in?: V1Beta1Coin;
+  amounts_out?: V1Beta1Coin[];
+}
+
+export type AmmMsgSetCircuitBreakersResponse = object;
+
+export type AmmMsgSetPauseModeResponse = object;
+
+export type AmmMsgSetRecoveryModeResponse = object;
+
+export type AmmMsgSetVaultPauseModeResponse = object;
+
 export type AmmMsgSetWhitelistedRouteEnabledResponse = object;
 
 export type AmmMsgSetYammConfigurationResponse = object;
@@ -178,7 +212,7 @@ export interface AmmOraclePriceDataSource {
   display_name?: string;
 
   /**
-   * this field is used by feeders to determine the vote interval, i.e., upperbound = votePeriodEndTime - ds.vote_latency ; lowerbound = upperbound - opp.twap_duration
+   * a duration in milliseconds used by feeders to determine the vote interval, i.e., upperbound = votePeriodEndTime - ds.vote_latency ; lowerbound = upperbound - opp.twap_duration
    * @format uint64
    */
   vote_latency?: string;
@@ -278,6 +312,18 @@ export interface AmmPool {
   /** PoolType enumerates the valid types for pool_type. */
   pool_type?: AmmPoolType;
   creator?: string;
+  recovery_mode?: boolean;
+  paused_by_gov?: boolean;
+  paused_by_owner?: boolean;
+  owner_pause_window_timing?: AmmPoolPauseWindow;
+}
+
+export interface AmmPoolPauseWindow {
+  /** @format int64 */
+  pause_window_end_unix_millis?: string;
+
+  /** @format int64 */
+  buffer_period_end_unix_millis?: string;
 }
 
 export interface AmmPoolToken {
@@ -285,6 +331,7 @@ export interface AmmPoolToken {
   pool_id?: string;
   denom?: string;
   balance?: string;
+  circuit_breaker?: AmmCircuitBreaker;
 }
 
 /**
@@ -672,6 +719,10 @@ export interface AmmQuerySpotPriceResponse {
   spot_price?: string;
 }
 
+export interface AmmQueryVaultPauseModeResponse {
+  paused?: boolean;
+}
+
 export interface AmmRouteStep {
   /** @format uint64 */
   pool_id?: string;
@@ -707,6 +758,11 @@ export interface AmmSwapStep {
 export enum AmmSwapType {
   SWAP_TYPE_GIVEN_IN = "SWAP_TYPE_GIVEN_IN",
   SWAP_TYPE_GIVEN_OUT = "SWAP_TYPE_GIVEN_OUT",
+}
+
+export interface AmmTokenCircuitBreakerSettings {
+  denom?: string;
+  circuit_breaker?: AmmCircuitBreakerSettings;
 }
 
 export interface AmmTokenWeight {
@@ -1576,6 +1632,22 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
   querySpotPrice = (poolId: string, tokenIn: string, tokenOut: string, applyFee: boolean, params: RequestParams = {}) =>
     this.request<AmmQuerySpotPriceResponse, RpcStatus>({
       path: `/prism-finance/prism-core/amm/spot_price/${poolId}/${tokenIn}/${tokenOut}/${applyFee}`,
+      method: "GET",
+      format: "json",
+      ...params,
+    });
+
+  /**
+   * No description
+   *
+   * @tags Query
+   * @name QueryVaultPauseMode
+   * @summary Queries a list of VaultPauseMode items.
+   * @request GET:/prism-finance/prism-core/amm/vault_pause_mode
+   */
+  queryVaultPauseMode = (params: RequestParams = {}) =>
+    this.request<AmmQueryVaultPauseModeResponse, RpcStatus>({
+      path: `/prism-finance/prism-core/amm/vault_pause_mode`,
       method: "GET",
       format: "json",
       ...params,

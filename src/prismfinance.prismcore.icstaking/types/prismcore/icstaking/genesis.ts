@@ -2,6 +2,7 @@
 import _m0 from "protobufjs/minimal";
 import { HostChain, HostChainState } from "./host_chain";
 import { Params } from "./params";
+import { Undelegation } from "./undelegation";
 
 export const protobufPackage = "prismfinance.prismcore.icstaking";
 
@@ -10,12 +11,13 @@ export interface GenesisState {
   params: Params | undefined;
   portId: string;
   hostChainList: HostChain[];
-  /** this line is used by starport scaffolding # genesis/proto/state */
   hostChainStateList: HostChainState[];
+  /** this line is used by starport scaffolding # genesis/proto/state */
+  undelegationList: Undelegation[];
 }
 
 function createBaseGenesisState(): GenesisState {
-  return { params: undefined, portId: "", hostChainList: [], hostChainStateList: [] };
+  return { params: undefined, portId: "", hostChainList: [], hostChainStateList: [], undelegationList: [] };
 }
 
 export const GenesisState = {
@@ -31,6 +33,9 @@ export const GenesisState = {
     }
     for (const v of message.hostChainStateList) {
       HostChainState.encode(v!, writer.uint32(34).fork()).ldelim();
+    }
+    for (const v of message.undelegationList) {
+      Undelegation.encode(v!, writer.uint32(42).fork()).ldelim();
     }
     return writer;
   },
@@ -54,6 +59,9 @@ export const GenesisState = {
         case 4:
           message.hostChainStateList.push(HostChainState.decode(reader, reader.uint32()));
           break;
+        case 5:
+          message.undelegationList.push(Undelegation.decode(reader, reader.uint32()));
+          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -72,6 +80,9 @@ export const GenesisState = {
       hostChainStateList: Array.isArray(object?.hostChainStateList)
         ? object.hostChainStateList.map((e: any) => HostChainState.fromJSON(e))
         : [],
+      undelegationList: Array.isArray(object?.undelegationList)
+        ? object.undelegationList.map((e: any) => Undelegation.fromJSON(e))
+        : [],
     };
   },
 
@@ -89,6 +100,11 @@ export const GenesisState = {
     } else {
       obj.hostChainStateList = [];
     }
+    if (message.undelegationList) {
+      obj.undelegationList = message.undelegationList.map((e) => e ? Undelegation.toJSON(e) : undefined);
+    } else {
+      obj.undelegationList = [];
+    }
     return obj;
   },
 
@@ -100,6 +116,7 @@ export const GenesisState = {
     message.portId = object.portId ?? "";
     message.hostChainList = object.hostChainList?.map((e) => HostChain.fromPartial(e)) || [];
     message.hostChainStateList = object.hostChainStateList?.map((e) => HostChainState.fromPartial(e)) || [];
+    message.undelegationList = object.undelegationList?.map((e) => Undelegation.fromPartial(e)) || [];
     return message;
   },
 };

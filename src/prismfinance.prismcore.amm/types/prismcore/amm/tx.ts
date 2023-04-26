@@ -6,6 +6,7 @@ import { Swap, SwapType, swapTypeFromJSON, swapTypeToJSON } from "./operations";
 import { Pair, TwapAlgorithm, twapAlgorithmFromJSON, twapAlgorithmToJSON } from "./oracle_price_pair";
 import { Order } from "./order";
 import { PairMatchProposal } from "./pair_match_proposal";
+import { TokenCircuitBreakerSettings } from "./token_circuit_breaker_settings";
 import { TokenWeight } from "./token_weight";
 import { WhitelistedRoute } from "./whitelisted_route";
 import { YammConfiguration } from "./yamm_configuration";
@@ -107,6 +108,8 @@ export interface MsgCreateWeightedPool {
   creator: string;
   name: string;
   swapFeeRatio: string;
+  pauseWindowDurationMillis: number;
+  pauseBufferDurationMillis: number;
   tokens: CreateWeightedPoolToken[];
 }
 
@@ -224,6 +227,53 @@ export interface MsgProposeMatch {
 
 export interface MsgProposeMatchResponse {
   proposerReward: Coin[];
+}
+
+export interface MsgSetCircuitBreakers {
+  creator: string;
+  poolId: number;
+  tokenCircuitBreakers: TokenCircuitBreakerSettings[];
+}
+
+export interface MsgSetCircuitBreakersResponse {
+}
+
+export interface MsgSetRecoveryMode {
+  authority: string;
+  poolId: number;
+  recoveryMode: boolean;
+}
+
+export interface MsgSetRecoveryModeResponse {
+}
+
+export interface MsgRecoveryExit {
+  creator: string;
+  poolId: number;
+  lptIn: string;
+  minAmountsOut: Coin[];
+}
+
+export interface MsgRecoveryExitResponse {
+  lptIn: Coin | undefined;
+  amountsOut: Coin[];
+}
+
+export interface MsgSetPauseMode {
+  creator: string;
+  poolId: number;
+  pauseMode: boolean;
+}
+
+export interface MsgSetPauseModeResponse {
+}
+
+export interface MsgSetVaultPauseMode {
+  authority: string;
+  pauseMode: boolean;
+}
+
+export interface MsgSetVaultPauseModeResponse {
 }
 
 export interface MsgCreateOraclePricePair {
@@ -1353,7 +1403,14 @@ export const CreateWeightedPoolToken = {
 };
 
 function createBaseMsgCreateWeightedPool(): MsgCreateWeightedPool {
-  return { creator: "", name: "", swapFeeRatio: "", tokens: [] };
+  return {
+    creator: "",
+    name: "",
+    swapFeeRatio: "",
+    pauseWindowDurationMillis: 0,
+    pauseBufferDurationMillis: 0,
+    tokens: [],
+  };
 }
 
 export const MsgCreateWeightedPool = {
@@ -1367,8 +1424,14 @@ export const MsgCreateWeightedPool = {
     if (message.swapFeeRatio !== "") {
       writer.uint32(26).string(message.swapFeeRatio);
     }
+    if (message.pauseWindowDurationMillis !== 0) {
+      writer.uint32(32).int64(message.pauseWindowDurationMillis);
+    }
+    if (message.pauseBufferDurationMillis !== 0) {
+      writer.uint32(40).int64(message.pauseBufferDurationMillis);
+    }
     for (const v of message.tokens) {
-      CreateWeightedPoolToken.encode(v!, writer.uint32(34).fork()).ldelim();
+      CreateWeightedPoolToken.encode(v!, writer.uint32(50).fork()).ldelim();
     }
     return writer;
   },
@@ -1390,6 +1453,12 @@ export const MsgCreateWeightedPool = {
           message.swapFeeRatio = reader.string();
           break;
         case 4:
+          message.pauseWindowDurationMillis = longToNumber(reader.int64() as Long);
+          break;
+        case 5:
+          message.pauseBufferDurationMillis = longToNumber(reader.int64() as Long);
+          break;
+        case 6:
           message.tokens.push(CreateWeightedPoolToken.decode(reader, reader.uint32()));
           break;
         default:
@@ -1405,6 +1474,8 @@ export const MsgCreateWeightedPool = {
       creator: isSet(object.creator) ? String(object.creator) : "",
       name: isSet(object.name) ? String(object.name) : "",
       swapFeeRatio: isSet(object.swapFeeRatio) ? String(object.swapFeeRatio) : "",
+      pauseWindowDurationMillis: isSet(object.pauseWindowDurationMillis) ? Number(object.pauseWindowDurationMillis) : 0,
+      pauseBufferDurationMillis: isSet(object.pauseBufferDurationMillis) ? Number(object.pauseBufferDurationMillis) : 0,
       tokens: Array.isArray(object?.tokens) ? object.tokens.map((e: any) => CreateWeightedPoolToken.fromJSON(e)) : [],
     };
   },
@@ -1414,6 +1485,10 @@ export const MsgCreateWeightedPool = {
     message.creator !== undefined && (obj.creator = message.creator);
     message.name !== undefined && (obj.name = message.name);
     message.swapFeeRatio !== undefined && (obj.swapFeeRatio = message.swapFeeRatio);
+    message.pauseWindowDurationMillis !== undefined
+      && (obj.pauseWindowDurationMillis = Math.round(message.pauseWindowDurationMillis));
+    message.pauseBufferDurationMillis !== undefined
+      && (obj.pauseBufferDurationMillis = Math.round(message.pauseBufferDurationMillis));
     if (message.tokens) {
       obj.tokens = message.tokens.map((e) => e ? CreateWeightedPoolToken.toJSON(e) : undefined);
     } else {
@@ -1427,6 +1502,8 @@ export const MsgCreateWeightedPool = {
     message.creator = object.creator ?? "";
     message.name = object.name ?? "";
     message.swapFeeRatio = object.swapFeeRatio ?? "";
+    message.pauseWindowDurationMillis = object.pauseWindowDurationMillis ?? 0;
+    message.pauseBufferDurationMillis = object.pauseBufferDurationMillis ?? 0;
     message.tokens = object.tokens?.map((e) => CreateWeightedPoolToken.fromPartial(e)) || [];
     return message;
   },
@@ -2824,6 +2901,572 @@ export const MsgProposeMatchResponse = {
   },
 };
 
+function createBaseMsgSetCircuitBreakers(): MsgSetCircuitBreakers {
+  return { creator: "", poolId: 0, tokenCircuitBreakers: [] };
+}
+
+export const MsgSetCircuitBreakers = {
+  encode(message: MsgSetCircuitBreakers, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.creator !== "") {
+      writer.uint32(10).string(message.creator);
+    }
+    if (message.poolId !== 0) {
+      writer.uint32(16).uint64(message.poolId);
+    }
+    for (const v of message.tokenCircuitBreakers) {
+      TokenCircuitBreakerSettings.encode(v!, writer.uint32(26).fork()).ldelim();
+    }
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): MsgSetCircuitBreakers {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseMsgSetCircuitBreakers();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.creator = reader.string();
+          break;
+        case 2:
+          message.poolId = longToNumber(reader.uint64() as Long);
+          break;
+        case 3:
+          message.tokenCircuitBreakers.push(TokenCircuitBreakerSettings.decode(reader, reader.uint32()));
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): MsgSetCircuitBreakers {
+    return {
+      creator: isSet(object.creator) ? String(object.creator) : "",
+      poolId: isSet(object.poolId) ? Number(object.poolId) : 0,
+      tokenCircuitBreakers: Array.isArray(object?.tokenCircuitBreakers)
+        ? object.tokenCircuitBreakers.map((e: any) => TokenCircuitBreakerSettings.fromJSON(e))
+        : [],
+    };
+  },
+
+  toJSON(message: MsgSetCircuitBreakers): unknown {
+    const obj: any = {};
+    message.creator !== undefined && (obj.creator = message.creator);
+    message.poolId !== undefined && (obj.poolId = Math.round(message.poolId));
+    if (message.tokenCircuitBreakers) {
+      obj.tokenCircuitBreakers = message.tokenCircuitBreakers.map((e) =>
+        e ? TokenCircuitBreakerSettings.toJSON(e) : undefined
+      );
+    } else {
+      obj.tokenCircuitBreakers = [];
+    }
+    return obj;
+  },
+
+  fromPartial<I extends Exact<DeepPartial<MsgSetCircuitBreakers>, I>>(object: I): MsgSetCircuitBreakers {
+    const message = createBaseMsgSetCircuitBreakers();
+    message.creator = object.creator ?? "";
+    message.poolId = object.poolId ?? 0;
+    message.tokenCircuitBreakers = object.tokenCircuitBreakers?.map((e) => TokenCircuitBreakerSettings.fromPartial(e))
+      || [];
+    return message;
+  },
+};
+
+function createBaseMsgSetCircuitBreakersResponse(): MsgSetCircuitBreakersResponse {
+  return {};
+}
+
+export const MsgSetCircuitBreakersResponse = {
+  encode(_: MsgSetCircuitBreakersResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): MsgSetCircuitBreakersResponse {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseMsgSetCircuitBreakersResponse();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(_: any): MsgSetCircuitBreakersResponse {
+    return {};
+  },
+
+  toJSON(_: MsgSetCircuitBreakersResponse): unknown {
+    const obj: any = {};
+    return obj;
+  },
+
+  fromPartial<I extends Exact<DeepPartial<MsgSetCircuitBreakersResponse>, I>>(_: I): MsgSetCircuitBreakersResponse {
+    const message = createBaseMsgSetCircuitBreakersResponse();
+    return message;
+  },
+};
+
+function createBaseMsgSetRecoveryMode(): MsgSetRecoveryMode {
+  return { authority: "", poolId: 0, recoveryMode: false };
+}
+
+export const MsgSetRecoveryMode = {
+  encode(message: MsgSetRecoveryMode, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.authority !== "") {
+      writer.uint32(10).string(message.authority);
+    }
+    if (message.poolId !== 0) {
+      writer.uint32(16).uint64(message.poolId);
+    }
+    if (message.recoveryMode === true) {
+      writer.uint32(24).bool(message.recoveryMode);
+    }
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): MsgSetRecoveryMode {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseMsgSetRecoveryMode();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.authority = reader.string();
+          break;
+        case 2:
+          message.poolId = longToNumber(reader.uint64() as Long);
+          break;
+        case 3:
+          message.recoveryMode = reader.bool();
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): MsgSetRecoveryMode {
+    return {
+      authority: isSet(object.authority) ? String(object.authority) : "",
+      poolId: isSet(object.poolId) ? Number(object.poolId) : 0,
+      recoveryMode: isSet(object.recoveryMode) ? Boolean(object.recoveryMode) : false,
+    };
+  },
+
+  toJSON(message: MsgSetRecoveryMode): unknown {
+    const obj: any = {};
+    message.authority !== undefined && (obj.authority = message.authority);
+    message.poolId !== undefined && (obj.poolId = Math.round(message.poolId));
+    message.recoveryMode !== undefined && (obj.recoveryMode = message.recoveryMode);
+    return obj;
+  },
+
+  fromPartial<I extends Exact<DeepPartial<MsgSetRecoveryMode>, I>>(object: I): MsgSetRecoveryMode {
+    const message = createBaseMsgSetRecoveryMode();
+    message.authority = object.authority ?? "";
+    message.poolId = object.poolId ?? 0;
+    message.recoveryMode = object.recoveryMode ?? false;
+    return message;
+  },
+};
+
+function createBaseMsgSetRecoveryModeResponse(): MsgSetRecoveryModeResponse {
+  return {};
+}
+
+export const MsgSetRecoveryModeResponse = {
+  encode(_: MsgSetRecoveryModeResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): MsgSetRecoveryModeResponse {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseMsgSetRecoveryModeResponse();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(_: any): MsgSetRecoveryModeResponse {
+    return {};
+  },
+
+  toJSON(_: MsgSetRecoveryModeResponse): unknown {
+    const obj: any = {};
+    return obj;
+  },
+
+  fromPartial<I extends Exact<DeepPartial<MsgSetRecoveryModeResponse>, I>>(_: I): MsgSetRecoveryModeResponse {
+    const message = createBaseMsgSetRecoveryModeResponse();
+    return message;
+  },
+};
+
+function createBaseMsgRecoveryExit(): MsgRecoveryExit {
+  return { creator: "", poolId: 0, lptIn: "", minAmountsOut: [] };
+}
+
+export const MsgRecoveryExit = {
+  encode(message: MsgRecoveryExit, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.creator !== "") {
+      writer.uint32(10).string(message.creator);
+    }
+    if (message.poolId !== 0) {
+      writer.uint32(16).uint64(message.poolId);
+    }
+    if (message.lptIn !== "") {
+      writer.uint32(26).string(message.lptIn);
+    }
+    for (const v of message.minAmountsOut) {
+      Coin.encode(v!, writer.uint32(34).fork()).ldelim();
+    }
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): MsgRecoveryExit {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseMsgRecoveryExit();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.creator = reader.string();
+          break;
+        case 2:
+          message.poolId = longToNumber(reader.uint64() as Long);
+          break;
+        case 3:
+          message.lptIn = reader.string();
+          break;
+        case 4:
+          message.minAmountsOut.push(Coin.decode(reader, reader.uint32()));
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): MsgRecoveryExit {
+    return {
+      creator: isSet(object.creator) ? String(object.creator) : "",
+      poolId: isSet(object.poolId) ? Number(object.poolId) : 0,
+      lptIn: isSet(object.lptIn) ? String(object.lptIn) : "",
+      minAmountsOut: Array.isArray(object?.minAmountsOut) ? object.minAmountsOut.map((e: any) => Coin.fromJSON(e)) : [],
+    };
+  },
+
+  toJSON(message: MsgRecoveryExit): unknown {
+    const obj: any = {};
+    message.creator !== undefined && (obj.creator = message.creator);
+    message.poolId !== undefined && (obj.poolId = Math.round(message.poolId));
+    message.lptIn !== undefined && (obj.lptIn = message.lptIn);
+    if (message.minAmountsOut) {
+      obj.minAmountsOut = message.minAmountsOut.map((e) => e ? Coin.toJSON(e) : undefined);
+    } else {
+      obj.minAmountsOut = [];
+    }
+    return obj;
+  },
+
+  fromPartial<I extends Exact<DeepPartial<MsgRecoveryExit>, I>>(object: I): MsgRecoveryExit {
+    const message = createBaseMsgRecoveryExit();
+    message.creator = object.creator ?? "";
+    message.poolId = object.poolId ?? 0;
+    message.lptIn = object.lptIn ?? "";
+    message.minAmountsOut = object.minAmountsOut?.map((e) => Coin.fromPartial(e)) || [];
+    return message;
+  },
+};
+
+function createBaseMsgRecoveryExitResponse(): MsgRecoveryExitResponse {
+  return { lptIn: undefined, amountsOut: [] };
+}
+
+export const MsgRecoveryExitResponse = {
+  encode(message: MsgRecoveryExitResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.lptIn !== undefined) {
+      Coin.encode(message.lptIn, writer.uint32(10).fork()).ldelim();
+    }
+    for (const v of message.amountsOut) {
+      Coin.encode(v!, writer.uint32(18).fork()).ldelim();
+    }
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): MsgRecoveryExitResponse {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseMsgRecoveryExitResponse();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.lptIn = Coin.decode(reader, reader.uint32());
+          break;
+        case 2:
+          message.amountsOut.push(Coin.decode(reader, reader.uint32()));
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): MsgRecoveryExitResponse {
+    return {
+      lptIn: isSet(object.lptIn) ? Coin.fromJSON(object.lptIn) : undefined,
+      amountsOut: Array.isArray(object?.amountsOut) ? object.amountsOut.map((e: any) => Coin.fromJSON(e)) : [],
+    };
+  },
+
+  toJSON(message: MsgRecoveryExitResponse): unknown {
+    const obj: any = {};
+    message.lptIn !== undefined && (obj.lptIn = message.lptIn ? Coin.toJSON(message.lptIn) : undefined);
+    if (message.amountsOut) {
+      obj.amountsOut = message.amountsOut.map((e) => e ? Coin.toJSON(e) : undefined);
+    } else {
+      obj.amountsOut = [];
+    }
+    return obj;
+  },
+
+  fromPartial<I extends Exact<DeepPartial<MsgRecoveryExitResponse>, I>>(object: I): MsgRecoveryExitResponse {
+    const message = createBaseMsgRecoveryExitResponse();
+    message.lptIn = (object.lptIn !== undefined && object.lptIn !== null) ? Coin.fromPartial(object.lptIn) : undefined;
+    message.amountsOut = object.amountsOut?.map((e) => Coin.fromPartial(e)) || [];
+    return message;
+  },
+};
+
+function createBaseMsgSetPauseMode(): MsgSetPauseMode {
+  return { creator: "", poolId: 0, pauseMode: false };
+}
+
+export const MsgSetPauseMode = {
+  encode(message: MsgSetPauseMode, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.creator !== "") {
+      writer.uint32(10).string(message.creator);
+    }
+    if (message.poolId !== 0) {
+      writer.uint32(16).uint64(message.poolId);
+    }
+    if (message.pauseMode === true) {
+      writer.uint32(24).bool(message.pauseMode);
+    }
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): MsgSetPauseMode {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseMsgSetPauseMode();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.creator = reader.string();
+          break;
+        case 2:
+          message.poolId = longToNumber(reader.uint64() as Long);
+          break;
+        case 3:
+          message.pauseMode = reader.bool();
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): MsgSetPauseMode {
+    return {
+      creator: isSet(object.creator) ? String(object.creator) : "",
+      poolId: isSet(object.poolId) ? Number(object.poolId) : 0,
+      pauseMode: isSet(object.pauseMode) ? Boolean(object.pauseMode) : false,
+    };
+  },
+
+  toJSON(message: MsgSetPauseMode): unknown {
+    const obj: any = {};
+    message.creator !== undefined && (obj.creator = message.creator);
+    message.poolId !== undefined && (obj.poolId = Math.round(message.poolId));
+    message.pauseMode !== undefined && (obj.pauseMode = message.pauseMode);
+    return obj;
+  },
+
+  fromPartial<I extends Exact<DeepPartial<MsgSetPauseMode>, I>>(object: I): MsgSetPauseMode {
+    const message = createBaseMsgSetPauseMode();
+    message.creator = object.creator ?? "";
+    message.poolId = object.poolId ?? 0;
+    message.pauseMode = object.pauseMode ?? false;
+    return message;
+  },
+};
+
+function createBaseMsgSetPauseModeResponse(): MsgSetPauseModeResponse {
+  return {};
+}
+
+export const MsgSetPauseModeResponse = {
+  encode(_: MsgSetPauseModeResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): MsgSetPauseModeResponse {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseMsgSetPauseModeResponse();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(_: any): MsgSetPauseModeResponse {
+    return {};
+  },
+
+  toJSON(_: MsgSetPauseModeResponse): unknown {
+    const obj: any = {};
+    return obj;
+  },
+
+  fromPartial<I extends Exact<DeepPartial<MsgSetPauseModeResponse>, I>>(_: I): MsgSetPauseModeResponse {
+    const message = createBaseMsgSetPauseModeResponse();
+    return message;
+  },
+};
+
+function createBaseMsgSetVaultPauseMode(): MsgSetVaultPauseMode {
+  return { authority: "", pauseMode: false };
+}
+
+export const MsgSetVaultPauseMode = {
+  encode(message: MsgSetVaultPauseMode, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.authority !== "") {
+      writer.uint32(10).string(message.authority);
+    }
+    if (message.pauseMode === true) {
+      writer.uint32(16).bool(message.pauseMode);
+    }
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): MsgSetVaultPauseMode {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseMsgSetVaultPauseMode();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.authority = reader.string();
+          break;
+        case 2:
+          message.pauseMode = reader.bool();
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): MsgSetVaultPauseMode {
+    return {
+      authority: isSet(object.authority) ? String(object.authority) : "",
+      pauseMode: isSet(object.pauseMode) ? Boolean(object.pauseMode) : false,
+    };
+  },
+
+  toJSON(message: MsgSetVaultPauseMode): unknown {
+    const obj: any = {};
+    message.authority !== undefined && (obj.authority = message.authority);
+    message.pauseMode !== undefined && (obj.pauseMode = message.pauseMode);
+    return obj;
+  },
+
+  fromPartial<I extends Exact<DeepPartial<MsgSetVaultPauseMode>, I>>(object: I): MsgSetVaultPauseMode {
+    const message = createBaseMsgSetVaultPauseMode();
+    message.authority = object.authority ?? "";
+    message.pauseMode = object.pauseMode ?? false;
+    return message;
+  },
+};
+
+function createBaseMsgSetVaultPauseModeResponse(): MsgSetVaultPauseModeResponse {
+  return {};
+}
+
+export const MsgSetVaultPauseModeResponse = {
+  encode(_: MsgSetVaultPauseModeResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): MsgSetVaultPauseModeResponse {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseMsgSetVaultPauseModeResponse();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(_: any): MsgSetVaultPauseModeResponse {
+    return {};
+  },
+
+  toJSON(_: MsgSetVaultPauseModeResponse): unknown {
+    const obj: any = {};
+    return obj;
+  },
+
+  fromPartial<I extends Exact<DeepPartial<MsgSetVaultPauseModeResponse>, I>>(_: I): MsgSetVaultPauseModeResponse {
+    const message = createBaseMsgSetVaultPauseModeResponse();
+    return message;
+  },
+};
+
 function createBaseMsgCreateOraclePricePair(): MsgCreateOraclePricePair {
   return { authority: "", assetId: "", dataSource: "", twapDuration: 0, twapAlgorithm: 0, disabled: false, pairs: [] };
 }
@@ -3578,6 +4221,11 @@ export interface Msg {
   SubmitOrder(request: MsgSubmitOrder): Promise<MsgSubmitOrderResponse>;
   CancelOrder(request: MsgCancelOrder): Promise<MsgCancelOrderResponse>;
   ProposeMatch(request: MsgProposeMatch): Promise<MsgProposeMatchResponse>;
+  SetCircuitBreakers(request: MsgSetCircuitBreakers): Promise<MsgSetCircuitBreakersResponse>;
+  SetRecoveryMode(request: MsgSetRecoveryMode): Promise<MsgSetRecoveryModeResponse>;
+  RecoveryExit(request: MsgRecoveryExit): Promise<MsgRecoveryExitResponse>;
+  SetPauseMode(request: MsgSetPauseMode): Promise<MsgSetPauseModeResponse>;
+  SetVaultPauseMode(request: MsgSetVaultPauseMode): Promise<MsgSetVaultPauseModeResponse>;
   CreateOraclePricePair(request: MsgCreateOraclePricePair): Promise<MsgCreateOraclePricePairResponse>;
   UpdateOraclePricePair(request: MsgUpdateOraclePricePair): Promise<MsgUpdateOraclePricePairResponse>;
   DeleteOraclePricePair(request: MsgDeleteOraclePricePair): Promise<MsgDeleteOraclePricePairResponse>;
@@ -3609,6 +4257,11 @@ export class MsgClientImpl implements Msg {
     this.SubmitOrder = this.SubmitOrder.bind(this);
     this.CancelOrder = this.CancelOrder.bind(this);
     this.ProposeMatch = this.ProposeMatch.bind(this);
+    this.SetCircuitBreakers = this.SetCircuitBreakers.bind(this);
+    this.SetRecoveryMode = this.SetRecoveryMode.bind(this);
+    this.RecoveryExit = this.RecoveryExit.bind(this);
+    this.SetPauseMode = this.SetPauseMode.bind(this);
+    this.SetVaultPauseMode = this.SetVaultPauseMode.bind(this);
     this.CreateOraclePricePair = this.CreateOraclePricePair.bind(this);
     this.UpdateOraclePricePair = this.UpdateOraclePricePair.bind(this);
     this.DeleteOraclePricePair = this.DeleteOraclePricePair.bind(this);
@@ -3722,6 +4375,36 @@ export class MsgClientImpl implements Msg {
     const data = MsgProposeMatch.encode(request).finish();
     const promise = this.rpc.request("prismfinance.prismcore.amm.Msg", "ProposeMatch", data);
     return promise.then((data) => MsgProposeMatchResponse.decode(new _m0.Reader(data)));
+  }
+
+  SetCircuitBreakers(request: MsgSetCircuitBreakers): Promise<MsgSetCircuitBreakersResponse> {
+    const data = MsgSetCircuitBreakers.encode(request).finish();
+    const promise = this.rpc.request("prismfinance.prismcore.amm.Msg", "SetCircuitBreakers", data);
+    return promise.then((data) => MsgSetCircuitBreakersResponse.decode(new _m0.Reader(data)));
+  }
+
+  SetRecoveryMode(request: MsgSetRecoveryMode): Promise<MsgSetRecoveryModeResponse> {
+    const data = MsgSetRecoveryMode.encode(request).finish();
+    const promise = this.rpc.request("prismfinance.prismcore.amm.Msg", "SetRecoveryMode", data);
+    return promise.then((data) => MsgSetRecoveryModeResponse.decode(new _m0.Reader(data)));
+  }
+
+  RecoveryExit(request: MsgRecoveryExit): Promise<MsgRecoveryExitResponse> {
+    const data = MsgRecoveryExit.encode(request).finish();
+    const promise = this.rpc.request("prismfinance.prismcore.amm.Msg", "RecoveryExit", data);
+    return promise.then((data) => MsgRecoveryExitResponse.decode(new _m0.Reader(data)));
+  }
+
+  SetPauseMode(request: MsgSetPauseMode): Promise<MsgSetPauseModeResponse> {
+    const data = MsgSetPauseMode.encode(request).finish();
+    const promise = this.rpc.request("prismfinance.prismcore.amm.Msg", "SetPauseMode", data);
+    return promise.then((data) => MsgSetPauseModeResponse.decode(new _m0.Reader(data)));
+  }
+
+  SetVaultPauseMode(request: MsgSetVaultPauseMode): Promise<MsgSetVaultPauseModeResponse> {
+    const data = MsgSetVaultPauseMode.encode(request).finish();
+    const promise = this.rpc.request("prismfinance.prismcore.amm.Msg", "SetVaultPauseMode", data);
+    return promise.then((data) => MsgSetVaultPauseModeResponse.decode(new _m0.Reader(data)));
   }
 
   CreateOraclePricePair(request: MsgCreateOraclePricePair): Promise<MsgCreateOraclePricePairResponse> {

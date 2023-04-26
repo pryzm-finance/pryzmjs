@@ -9,8 +9,9 @@ export const protobufPackage = "prismfinance.prismcore.icstaking";
 
 export enum ICAType {
   DELEGATION = 0,
-  WITHDRAW = 1,
+  REWARD = 1,
   FEE = 2,
+  SWEEP = 3,
   UNRECOGNIZED = -1,
 }
 
@@ -20,11 +21,14 @@ export function iCATypeFromJSON(object: any): ICAType {
     case "DELEGATION":
       return ICAType.DELEGATION;
     case 1:
-    case "WITHDRAW":
-      return ICAType.WITHDRAW;
+    case "REWARD":
+      return ICAType.REWARD;
     case 2:
     case "FEE":
       return ICAType.FEE;
+    case 3:
+    case "SWEEP":
+      return ICAType.SWEEP;
     case -1:
     case "UNRECOGNIZED":
     default:
@@ -36,10 +40,12 @@ export function iCATypeToJSON(object: ICAType): string {
   switch (object) {
     case ICAType.DELEGATION:
       return "DELEGATION";
-    case ICAType.WITHDRAW:
-      return "WITHDRAW";
+    case ICAType.REWARD:
+      return "REWARD";
     case ICAType.FEE:
       return "FEE";
+    case ICAType.SWEEP:
+      return "SWEEP";
     case ICAType.UNRECOGNIZED:
     default:
       return "UNRECOGNIZED";
@@ -64,7 +70,7 @@ export interface MsgRegisterHostChainResponse {
 
 export interface MsgUpdateHostChain {
   authority: string;
-  connectionId: string;
+  hostChainId: string;
   validators: Validator[];
   params: StakingParams | undefined;
 }
@@ -74,8 +80,8 @@ export interface MsgUpdateHostChainResponse {
 
 export interface MsgStake {
   creator: string;
-  /** the index key for the HostChain which is the connection id */
   hostChain: string;
+  transferChannel: string;
   amount: string;
 }
 
@@ -86,8 +92,8 @@ export interface MsgStakeResponse {
 
 export interface MsgUnstake {
   creator: string;
-  /** the index key for the HostChain which is the connection id */
   hostChain: string;
+  transferChannel: string;
   cAmount: string;
 }
 
@@ -98,6 +104,7 @@ export interface MsgUnstakeResponse {
 export interface MsgRedeemUnstaked {
   creator: string;
   hostChain: string;
+  transferChannel: string;
   uAmount: string;
   epoch: number;
 }
@@ -110,6 +117,7 @@ export interface MsgRedeemUnstakedResponse {
 export interface MsgInstantUnstake {
   creator: string;
   hostChain: string;
+  transferChannel: string;
   minCAmount: string;
   maxCAmount: string;
 }
@@ -336,7 +344,7 @@ export const MsgRegisterHostChainResponse = {
 };
 
 function createBaseMsgUpdateHostChain(): MsgUpdateHostChain {
-  return { authority: "", connectionId: "", validators: [], params: undefined };
+  return { authority: "", hostChainId: "", validators: [], params: undefined };
 }
 
 export const MsgUpdateHostChain = {
@@ -344,8 +352,8 @@ export const MsgUpdateHostChain = {
     if (message.authority !== "") {
       writer.uint32(10).string(message.authority);
     }
-    if (message.connectionId !== "") {
-      writer.uint32(18).string(message.connectionId);
+    if (message.hostChainId !== "") {
+      writer.uint32(18).string(message.hostChainId);
     }
     for (const v of message.validators) {
       Validator.encode(v!, writer.uint32(26).fork()).ldelim();
@@ -367,7 +375,7 @@ export const MsgUpdateHostChain = {
           message.authority = reader.string();
           break;
         case 2:
-          message.connectionId = reader.string();
+          message.hostChainId = reader.string();
           break;
         case 3:
           message.validators.push(Validator.decode(reader, reader.uint32()));
@@ -386,7 +394,7 @@ export const MsgUpdateHostChain = {
   fromJSON(object: any): MsgUpdateHostChain {
     return {
       authority: isSet(object.authority) ? String(object.authority) : "",
-      connectionId: isSet(object.connectionId) ? String(object.connectionId) : "",
+      hostChainId: isSet(object.hostChainId) ? String(object.hostChainId) : "",
       validators: Array.isArray(object?.validators) ? object.validators.map((e: any) => Validator.fromJSON(e)) : [],
       params: isSet(object.params) ? StakingParams.fromJSON(object.params) : undefined,
     };
@@ -395,7 +403,7 @@ export const MsgUpdateHostChain = {
   toJSON(message: MsgUpdateHostChain): unknown {
     const obj: any = {};
     message.authority !== undefined && (obj.authority = message.authority);
-    message.connectionId !== undefined && (obj.connectionId = message.connectionId);
+    message.hostChainId !== undefined && (obj.hostChainId = message.hostChainId);
     if (message.validators) {
       obj.validators = message.validators.map((e) => e ? Validator.toJSON(e) : undefined);
     } else {
@@ -408,7 +416,7 @@ export const MsgUpdateHostChain = {
   fromPartial<I extends Exact<DeepPartial<MsgUpdateHostChain>, I>>(object: I): MsgUpdateHostChain {
     const message = createBaseMsgUpdateHostChain();
     message.authority = object.authority ?? "";
-    message.connectionId = object.connectionId ?? "";
+    message.hostChainId = object.hostChainId ?? "";
     message.validators = object.validators?.map((e) => Validator.fromPartial(e)) || [];
     message.params = (object.params !== undefined && object.params !== null)
       ? StakingParams.fromPartial(object.params)
@@ -457,7 +465,7 @@ export const MsgUpdateHostChainResponse = {
 };
 
 function createBaseMsgStake(): MsgStake {
-  return { creator: "", hostChain: "", amount: "" };
+  return { creator: "", hostChain: "", transferChannel: "", amount: "" };
 }
 
 export const MsgStake = {
@@ -468,8 +476,11 @@ export const MsgStake = {
     if (message.hostChain !== "") {
       writer.uint32(18).string(message.hostChain);
     }
+    if (message.transferChannel !== "") {
+      writer.uint32(26).string(message.transferChannel);
+    }
     if (message.amount !== "") {
-      writer.uint32(26).string(message.amount);
+      writer.uint32(34).string(message.amount);
     }
     return writer;
   },
@@ -488,6 +499,9 @@ export const MsgStake = {
           message.hostChain = reader.string();
           break;
         case 3:
+          message.transferChannel = reader.string();
+          break;
+        case 4:
           message.amount = reader.string();
           break;
         default:
@@ -502,6 +516,7 @@ export const MsgStake = {
     return {
       creator: isSet(object.creator) ? String(object.creator) : "",
       hostChain: isSet(object.hostChain) ? String(object.hostChain) : "",
+      transferChannel: isSet(object.transferChannel) ? String(object.transferChannel) : "",
       amount: isSet(object.amount) ? String(object.amount) : "",
     };
   },
@@ -510,6 +525,7 @@ export const MsgStake = {
     const obj: any = {};
     message.creator !== undefined && (obj.creator = message.creator);
     message.hostChain !== undefined && (obj.hostChain = message.hostChain);
+    message.transferChannel !== undefined && (obj.transferChannel = message.transferChannel);
     message.amount !== undefined && (obj.amount = message.amount);
     return obj;
   },
@@ -518,6 +534,7 @@ export const MsgStake = {
     const message = createBaseMsgStake();
     message.creator = object.creator ?? "";
     message.hostChain = object.hostChain ?? "";
+    message.transferChannel = object.transferChannel ?? "";
     message.amount = object.amount ?? "";
     return message;
   },
@@ -584,7 +601,7 @@ export const MsgStakeResponse = {
 };
 
 function createBaseMsgUnstake(): MsgUnstake {
-  return { creator: "", hostChain: "", cAmount: "" };
+  return { creator: "", hostChain: "", transferChannel: "", cAmount: "" };
 }
 
 export const MsgUnstake = {
@@ -595,8 +612,11 @@ export const MsgUnstake = {
     if (message.hostChain !== "") {
       writer.uint32(18).string(message.hostChain);
     }
+    if (message.transferChannel !== "") {
+      writer.uint32(26).string(message.transferChannel);
+    }
     if (message.cAmount !== "") {
-      writer.uint32(26).string(message.cAmount);
+      writer.uint32(34).string(message.cAmount);
     }
     return writer;
   },
@@ -615,6 +635,9 @@ export const MsgUnstake = {
           message.hostChain = reader.string();
           break;
         case 3:
+          message.transferChannel = reader.string();
+          break;
+        case 4:
           message.cAmount = reader.string();
           break;
         default:
@@ -629,6 +652,7 @@ export const MsgUnstake = {
     return {
       creator: isSet(object.creator) ? String(object.creator) : "",
       hostChain: isSet(object.hostChain) ? String(object.hostChain) : "",
+      transferChannel: isSet(object.transferChannel) ? String(object.transferChannel) : "",
       cAmount: isSet(object.cAmount) ? String(object.cAmount) : "",
     };
   },
@@ -637,6 +661,7 @@ export const MsgUnstake = {
     const obj: any = {};
     message.creator !== undefined && (obj.creator = message.creator);
     message.hostChain !== undefined && (obj.hostChain = message.hostChain);
+    message.transferChannel !== undefined && (obj.transferChannel = message.transferChannel);
     message.cAmount !== undefined && (obj.cAmount = message.cAmount);
     return obj;
   },
@@ -645,6 +670,7 @@ export const MsgUnstake = {
     const message = createBaseMsgUnstake();
     message.creator = object.creator ?? "";
     message.hostChain = object.hostChain ?? "";
+    message.transferChannel = object.transferChannel ?? "";
     message.cAmount = object.cAmount ?? "";
     return message;
   },
@@ -700,7 +726,7 @@ export const MsgUnstakeResponse = {
 };
 
 function createBaseMsgRedeemUnstaked(): MsgRedeemUnstaked {
-  return { creator: "", hostChain: "", uAmount: "", epoch: 0 };
+  return { creator: "", hostChain: "", transferChannel: "", uAmount: "", epoch: 0 };
 }
 
 export const MsgRedeemUnstaked = {
@@ -711,11 +737,14 @@ export const MsgRedeemUnstaked = {
     if (message.hostChain !== "") {
       writer.uint32(18).string(message.hostChain);
     }
+    if (message.transferChannel !== "") {
+      writer.uint32(26).string(message.transferChannel);
+    }
     if (message.uAmount !== "") {
-      writer.uint32(26).string(message.uAmount);
+      writer.uint32(34).string(message.uAmount);
     }
     if (message.epoch !== 0) {
-      writer.uint32(32).uint64(message.epoch);
+      writer.uint32(40).uint64(message.epoch);
     }
     return writer;
   },
@@ -734,9 +763,12 @@ export const MsgRedeemUnstaked = {
           message.hostChain = reader.string();
           break;
         case 3:
-          message.uAmount = reader.string();
+          message.transferChannel = reader.string();
           break;
         case 4:
+          message.uAmount = reader.string();
+          break;
+        case 5:
           message.epoch = longToNumber(reader.uint64() as Long);
           break;
         default:
@@ -751,6 +783,7 @@ export const MsgRedeemUnstaked = {
     return {
       creator: isSet(object.creator) ? String(object.creator) : "",
       hostChain: isSet(object.hostChain) ? String(object.hostChain) : "",
+      transferChannel: isSet(object.transferChannel) ? String(object.transferChannel) : "",
       uAmount: isSet(object.uAmount) ? String(object.uAmount) : "",
       epoch: isSet(object.epoch) ? Number(object.epoch) : 0,
     };
@@ -760,6 +793,7 @@ export const MsgRedeemUnstaked = {
     const obj: any = {};
     message.creator !== undefined && (obj.creator = message.creator);
     message.hostChain !== undefined && (obj.hostChain = message.hostChain);
+    message.transferChannel !== undefined && (obj.transferChannel = message.transferChannel);
     message.uAmount !== undefined && (obj.uAmount = message.uAmount);
     message.epoch !== undefined && (obj.epoch = Math.round(message.epoch));
     return obj;
@@ -769,6 +803,7 @@ export const MsgRedeemUnstaked = {
     const message = createBaseMsgRedeemUnstaked();
     message.creator = object.creator ?? "";
     message.hostChain = object.hostChain ?? "";
+    message.transferChannel = object.transferChannel ?? "";
     message.uAmount = object.uAmount ?? "";
     message.epoch = object.epoch ?? 0;
     return message;
@@ -836,7 +871,7 @@ export const MsgRedeemUnstakedResponse = {
 };
 
 function createBaseMsgInstantUnstake(): MsgInstantUnstake {
-  return { creator: "", hostChain: "", minCAmount: "", maxCAmount: "" };
+  return { creator: "", hostChain: "", transferChannel: "", minCAmount: "", maxCAmount: "" };
 }
 
 export const MsgInstantUnstake = {
@@ -847,11 +882,14 @@ export const MsgInstantUnstake = {
     if (message.hostChain !== "") {
       writer.uint32(18).string(message.hostChain);
     }
+    if (message.transferChannel !== "") {
+      writer.uint32(26).string(message.transferChannel);
+    }
     if (message.minCAmount !== "") {
-      writer.uint32(26).string(message.minCAmount);
+      writer.uint32(34).string(message.minCAmount);
     }
     if (message.maxCAmount !== "") {
-      writer.uint32(34).string(message.maxCAmount);
+      writer.uint32(42).string(message.maxCAmount);
     }
     return writer;
   },
@@ -870,9 +908,12 @@ export const MsgInstantUnstake = {
           message.hostChain = reader.string();
           break;
         case 3:
-          message.minCAmount = reader.string();
+          message.transferChannel = reader.string();
           break;
         case 4:
+          message.minCAmount = reader.string();
+          break;
+        case 5:
           message.maxCAmount = reader.string();
           break;
         default:
@@ -887,6 +928,7 @@ export const MsgInstantUnstake = {
     return {
       creator: isSet(object.creator) ? String(object.creator) : "",
       hostChain: isSet(object.hostChain) ? String(object.hostChain) : "",
+      transferChannel: isSet(object.transferChannel) ? String(object.transferChannel) : "",
       minCAmount: isSet(object.minCAmount) ? String(object.minCAmount) : "",
       maxCAmount: isSet(object.maxCAmount) ? String(object.maxCAmount) : "",
     };
@@ -896,6 +938,7 @@ export const MsgInstantUnstake = {
     const obj: any = {};
     message.creator !== undefined && (obj.creator = message.creator);
     message.hostChain !== undefined && (obj.hostChain = message.hostChain);
+    message.transferChannel !== undefined && (obj.transferChannel = message.transferChannel);
     message.minCAmount !== undefined && (obj.minCAmount = message.minCAmount);
     message.maxCAmount !== undefined && (obj.maxCAmount = message.maxCAmount);
     return obj;
@@ -905,6 +948,7 @@ export const MsgInstantUnstake = {
     const message = createBaseMsgInstantUnstake();
     message.creator = object.creator ?? "";
     message.hostChain = object.hostChain ?? "";
+    message.transferChannel = object.transferChannel ?? "";
     message.minCAmount = object.minCAmount ?? "";
     message.maxCAmount = object.maxCAmount ?? "";
     return message;

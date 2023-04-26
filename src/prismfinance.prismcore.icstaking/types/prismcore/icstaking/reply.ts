@@ -9,6 +9,11 @@ export interface ReplyData {
   data: Uint8Array;
 }
 
+export interface CompoundData {
+  feeAmount: string;
+  compoundAmount: string;
+}
+
 function createBaseReplyData(): ReplyData {
   return { id: "", hostChainId: "", data: new Uint8Array() };
 }
@@ -73,6 +78,64 @@ export const ReplyData = {
     message.id = object.id ?? "";
     message.hostChainId = object.hostChainId ?? "";
     message.data = object.data ?? new Uint8Array();
+    return message;
+  },
+};
+
+function createBaseCompoundData(): CompoundData {
+  return { feeAmount: "", compoundAmount: "" };
+}
+
+export const CompoundData = {
+  encode(message: CompoundData, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.feeAmount !== "") {
+      writer.uint32(10).string(message.feeAmount);
+    }
+    if (message.compoundAmount !== "") {
+      writer.uint32(18).string(message.compoundAmount);
+    }
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): CompoundData {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseCompoundData();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.feeAmount = reader.string();
+          break;
+        case 2:
+          message.compoundAmount = reader.string();
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): CompoundData {
+    return {
+      feeAmount: isSet(object.feeAmount) ? String(object.feeAmount) : "",
+      compoundAmount: isSet(object.compoundAmount) ? String(object.compoundAmount) : "",
+    };
+  },
+
+  toJSON(message: CompoundData): unknown {
+    const obj: any = {};
+    message.feeAmount !== undefined && (obj.feeAmount = message.feeAmount);
+    message.compoundAmount !== undefined && (obj.compoundAmount = message.compoundAmount);
+    return obj;
+  },
+
+  fromPartial<I extends Exact<DeepPartial<CompoundData>, I>>(object: I): CompoundData {
+    const message = createBaseCompoundData();
+    message.feeAmount = object.feeAmount ?? "";
+    message.compoundAmount = object.compoundAmount ?? "";
     return message;
   },
 };
