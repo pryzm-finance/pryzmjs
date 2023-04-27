@@ -1,4 +1,5 @@
 import {TendermintQuery, TendermintWebsocketClient} from "@refractedlabs/utils/lib/wsclient";
+import {EventVoteIntervalEnds} from "@prism-finance/prismjs/lib/refractedlabs.oracle.oracle/types"
 
 function delay(ms: number) {
     return new Promise(resolve => setTimeout(resolve, ms));
@@ -13,8 +14,11 @@ async function main() {
 
     prismWebsocketClient.getEventStream("NewBlock", query).subscribe({
         next: result => {
-            const epochMillis = JSON.parse(result.events[`${attr}`][0]);
-            console.log(epochMillis)
+            console.log({
+                timeMillis: Number(JSON.parse(result.events[`refractedlabs.oracle.oracle.EventVoteIntervalEnds.time_millis`][0])),
+                blockHeight: Number(JSON.parse(result.events[`refractedlabs.oracle.oracle.EventVoteIntervalEnds.block_height`][0])),
+                votePeriod: Number(JSON.parse(result.events[`refractedlabs.oracle.oracle.EventVoteIntervalEnds.vote_period`][0]))
+            } as EventVoteIntervalEnds)
         },
         error: err => console.error(err),
         complete: () => {
@@ -27,7 +31,7 @@ async function main() {
         }
     })
     prismWebsocketClient.connect()
-    await delay(5000)
+    await delay(50000)
     prismWebsocketClient.destroy()
 }
 

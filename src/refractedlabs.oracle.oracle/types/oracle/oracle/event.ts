@@ -23,6 +23,8 @@ export interface EventOracleVote {
 
 export interface EventVoteIntervalEnds {
   timeMillis: number;
+  blockHeight: number;
+  votePeriod: number;
 }
 
 export interface EventInvalidMajorityVotePayload {
@@ -222,13 +224,19 @@ export const EventOracleVote = {
 };
 
 function createBaseEventVoteIntervalEnds(): EventVoteIntervalEnds {
-  return { timeMillis: 0 };
+  return { timeMillis: 0, blockHeight: 0, votePeriod: 0 };
 }
 
 export const EventVoteIntervalEnds = {
   encode(message: EventVoteIntervalEnds, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.timeMillis !== 0) {
       writer.uint32(8).int64(message.timeMillis);
+    }
+    if (message.blockHeight !== 0) {
+      writer.uint32(16).int64(message.blockHeight);
+    }
+    if (message.votePeriod !== 0) {
+      writer.uint32(24).int64(message.votePeriod);
     }
     return writer;
   },
@@ -243,6 +251,12 @@ export const EventVoteIntervalEnds = {
         case 1:
           message.timeMillis = longToNumber(reader.int64() as Long);
           break;
+        case 2:
+          message.blockHeight = longToNumber(reader.int64() as Long);
+          break;
+        case 3:
+          message.votePeriod = longToNumber(reader.int64() as Long);
+          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -252,18 +266,26 @@ export const EventVoteIntervalEnds = {
   },
 
   fromJSON(object: any): EventVoteIntervalEnds {
-    return { timeMillis: isSet(object.timeMillis) ? Number(object.timeMillis) : 0 };
+    return {
+      timeMillis: isSet(object.timeMillis) ? Number(object.timeMillis) : 0,
+      blockHeight: isSet(object.blockHeight) ? Number(object.blockHeight) : 0,
+      votePeriod: isSet(object.votePeriod) ? Number(object.votePeriod) : 0,
+    };
   },
 
   toJSON(message: EventVoteIntervalEnds): unknown {
     const obj: any = {};
     message.timeMillis !== undefined && (obj.timeMillis = Math.round(message.timeMillis));
+    message.blockHeight !== undefined && (obj.blockHeight = Math.round(message.blockHeight));
+    message.votePeriod !== undefined && (obj.votePeriod = Math.round(message.votePeriod));
     return obj;
   },
 
   fromPartial<I extends Exact<DeepPartial<EventVoteIntervalEnds>, I>>(object: I): EventVoteIntervalEnds {
     const message = createBaseEventVoteIntervalEnds();
     message.timeMillis = object.timeMillis ?? 0;
+    message.blockHeight = object.blockHeight ?? 0;
+    message.votePeriod = object.votePeriod ?? 0;
     return message;
   },
 };
