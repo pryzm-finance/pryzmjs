@@ -7,17 +7,11 @@ import { msgTypes } from './registry';
 import { IgniteClient } from "../client"
 import { MissingWalletError } from "../helpers"
 import { Api } from "./rest";
-import { MsgRedeem } from "./types/prismcore/refractor/tx";
 import { MsgRefract } from "./types/prismcore/refractor/tx";
+import { MsgRedeem } from "./types/prismcore/refractor/tx";
 
 
-export { MsgRedeem, MsgRefract };
-
-type sendMsgRedeemParams = {
-  value: MsgRedeem,
-  fee?: StdFee,
-  memo?: string
-};
+export { MsgRefract, MsgRedeem };
 
 type sendMsgRefractParams = {
   value: MsgRefract,
@@ -25,13 +19,19 @@ type sendMsgRefractParams = {
   memo?: string
 };
 
-
-type msgRedeemParams = {
+type sendMsgRedeemParams = {
   value: MsgRedeem,
+  fee?: StdFee,
+  memo?: string
 };
+
 
 type msgRefractParams = {
   value: MsgRefract,
+};
+
+type msgRedeemParams = {
+  value: MsgRedeem,
 };
 
 
@@ -52,20 +52,6 @@ export const txClient = ({ signer, prefix, addr }: TxClientOptions = { addr: "ht
 
   return {
 		
-		async sendMsgRedeem({ value, fee, memo }: sendMsgRedeemParams): Promise<DeliverTxResponse> {
-			if (!signer) {
-					throw new Error('TxClient:sendMsgRedeem: Unable to sign Tx. Signer is not present.')
-			}
-			try {			
-				const { address } = (await signer.getAccounts())[0]; 
-				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry, prefix});
-				let msg = this.msgRedeem({ value: MsgRedeem.fromPartial(value) })
-				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
-			} catch (e: any) {
-				throw new Error('TxClient:sendMsgRedeem: Could not broadcast Tx: '+ e.message)
-			}
-		},
-		
 		async sendMsgRefract({ value, fee, memo }: sendMsgRefractParams): Promise<DeliverTxResponse> {
 			if (!signer) {
 					throw new Error('TxClient:sendMsgRefract: Unable to sign Tx. Signer is not present.')
@@ -80,20 +66,34 @@ export const txClient = ({ signer, prefix, addr }: TxClientOptions = { addr: "ht
 			}
 		},
 		
-		
-		msgRedeem({ value }: msgRedeemParams): EncodeObject {
-			try {
-				return { typeUrl: "/prismfinance.prismcore.refractor.MsgRedeem", value: MsgRedeem.fromPartial( value ) }  
+		async sendMsgRedeem({ value, fee, memo }: sendMsgRedeemParams): Promise<DeliverTxResponse> {
+			if (!signer) {
+					throw new Error('TxClient:sendMsgRedeem: Unable to sign Tx. Signer is not present.')
+			}
+			try {			
+				const { address } = (await signer.getAccounts())[0]; 
+				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry, prefix});
+				let msg = this.msgRedeem({ value: MsgRedeem.fromPartial(value) })
+				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
 			} catch (e: any) {
-				throw new Error('TxClient:MsgRedeem: Could not create message: ' + e.message)
+				throw new Error('TxClient:sendMsgRedeem: Could not broadcast Tx: '+ e.message)
 			}
 		},
+		
 		
 		msgRefract({ value }: msgRefractParams): EncodeObject {
 			try {
 				return { typeUrl: "/prismfinance.prismcore.refractor.MsgRefract", value: MsgRefract.fromPartial( value ) }  
 			} catch (e: any) {
 				throw new Error('TxClient:MsgRefract: Could not create message: ' + e.message)
+			}
+		},
+		
+		msgRedeem({ value }: msgRedeemParams): EncodeObject {
+			try {
+				return { typeUrl: "/prismfinance.prismcore.refractor.MsgRedeem", value: MsgRedeem.fromPartial( value ) }  
+			} catch (e: any) {
+				throw new Error('TxClient:MsgRedeem: Could not create message: ' + e.message)
 			}
 		},
 		

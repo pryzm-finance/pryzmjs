@@ -1,6 +1,7 @@
 /* eslint-disable */
 import Long from "long";
 import _m0 from "protobufjs/minimal";
+import { Coin } from "../../cosmos/base/v1beta1/coin";
 import { TokenAmount } from "./pool_token";
 
 export const protobufPackage = "prismfinance.prismcore.amm";
@@ -134,18 +135,21 @@ export interface SwapSummary {
   tokenIn: TokenAmount | undefined;
   tokenOut: TokenAmount | undefined;
   swapType: SwapType;
+  protocolFee: Coin | undefined;
 }
 
 export interface JoinSummary {
-  lptToken: TokenAmount | undefined;
+  lpToken: TokenAmount | undefined;
   tokensIn: TokenAmount[];
   joinType: JoinType;
+  protocolFee: Coin[];
 }
 
 export interface ExitSummary {
-  lptToken: TokenAmount | undefined;
+  lpToken: TokenAmount | undefined;
   tokensOut: TokenAmount[];
   exitType: ExitType;
+  protocolFee: Coin | undefined;
 }
 
 function createBaseSwap(): Swap {
@@ -234,7 +238,7 @@ export const Swap = {
 };
 
 function createBaseSwapSummary(): SwapSummary {
-  return { tokenIn: undefined, tokenOut: undefined, swapType: 0 };
+  return { tokenIn: undefined, tokenOut: undefined, swapType: 0, protocolFee: undefined };
 }
 
 export const SwapSummary = {
@@ -247,6 +251,9 @@ export const SwapSummary = {
     }
     if (message.swapType !== 0) {
       writer.uint32(24).int32(message.swapType);
+    }
+    if (message.protocolFee !== undefined) {
+      Coin.encode(message.protocolFee, writer.uint32(34).fork()).ldelim();
     }
     return writer;
   },
@@ -267,6 +274,9 @@ export const SwapSummary = {
         case 3:
           message.swapType = reader.int32() as any;
           break;
+        case 4:
+          message.protocolFee = Coin.decode(reader, reader.uint32());
+          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -280,6 +290,7 @@ export const SwapSummary = {
       tokenIn: isSet(object.tokenIn) ? TokenAmount.fromJSON(object.tokenIn) : undefined,
       tokenOut: isSet(object.tokenOut) ? TokenAmount.fromJSON(object.tokenOut) : undefined,
       swapType: isSet(object.swapType) ? swapTypeFromJSON(object.swapType) : 0,
+      protocolFee: isSet(object.protocolFee) ? Coin.fromJSON(object.protocolFee) : undefined,
     };
   },
 
@@ -289,6 +300,8 @@ export const SwapSummary = {
     message.tokenOut !== undefined
       && (obj.tokenOut = message.tokenOut ? TokenAmount.toJSON(message.tokenOut) : undefined);
     message.swapType !== undefined && (obj.swapType = swapTypeToJSON(message.swapType));
+    message.protocolFee !== undefined
+      && (obj.protocolFee = message.protocolFee ? Coin.toJSON(message.protocolFee) : undefined);
     return obj;
   },
 
@@ -301,24 +314,30 @@ export const SwapSummary = {
       ? TokenAmount.fromPartial(object.tokenOut)
       : undefined;
     message.swapType = object.swapType ?? 0;
+    message.protocolFee = (object.protocolFee !== undefined && object.protocolFee !== null)
+      ? Coin.fromPartial(object.protocolFee)
+      : undefined;
     return message;
   },
 };
 
 function createBaseJoinSummary(): JoinSummary {
-  return { lptToken: undefined, tokensIn: [], joinType: 0 };
+  return { lpToken: undefined, tokensIn: [], joinType: 0, protocolFee: [] };
 }
 
 export const JoinSummary = {
   encode(message: JoinSummary, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (message.lptToken !== undefined) {
-      TokenAmount.encode(message.lptToken, writer.uint32(10).fork()).ldelim();
+    if (message.lpToken !== undefined) {
+      TokenAmount.encode(message.lpToken, writer.uint32(10).fork()).ldelim();
     }
     for (const v of message.tokensIn) {
       TokenAmount.encode(v!, writer.uint32(18).fork()).ldelim();
     }
     if (message.joinType !== 0) {
       writer.uint32(24).int32(message.joinType);
+    }
+    for (const v of message.protocolFee) {
+      Coin.encode(v!, writer.uint32(34).fork()).ldelim();
     }
     return writer;
   },
@@ -331,13 +350,16 @@ export const JoinSummary = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.lptToken = TokenAmount.decode(reader, reader.uint32());
+          message.lpToken = TokenAmount.decode(reader, reader.uint32());
           break;
         case 2:
           message.tokensIn.push(TokenAmount.decode(reader, reader.uint32()));
           break;
         case 3:
           message.joinType = reader.int32() as any;
+          break;
+        case 4:
+          message.protocolFee.push(Coin.decode(reader, reader.uint32()));
           break;
         default:
           reader.skipType(tag & 7);
@@ -349,50 +371,59 @@ export const JoinSummary = {
 
   fromJSON(object: any): JoinSummary {
     return {
-      lptToken: isSet(object.lptToken) ? TokenAmount.fromJSON(object.lptToken) : undefined,
+      lpToken: isSet(object.lpToken) ? TokenAmount.fromJSON(object.lpToken) : undefined,
       tokensIn: Array.isArray(object?.tokensIn) ? object.tokensIn.map((e: any) => TokenAmount.fromJSON(e)) : [],
       joinType: isSet(object.joinType) ? joinTypeFromJSON(object.joinType) : 0,
+      protocolFee: Array.isArray(object?.protocolFee) ? object.protocolFee.map((e: any) => Coin.fromJSON(e)) : [],
     };
   },
 
   toJSON(message: JoinSummary): unknown {
     const obj: any = {};
-    message.lptToken !== undefined
-      && (obj.lptToken = message.lptToken ? TokenAmount.toJSON(message.lptToken) : undefined);
+    message.lpToken !== undefined && (obj.lpToken = message.lpToken ? TokenAmount.toJSON(message.lpToken) : undefined);
     if (message.tokensIn) {
       obj.tokensIn = message.tokensIn.map((e) => e ? TokenAmount.toJSON(e) : undefined);
     } else {
       obj.tokensIn = [];
     }
     message.joinType !== undefined && (obj.joinType = joinTypeToJSON(message.joinType));
+    if (message.protocolFee) {
+      obj.protocolFee = message.protocolFee.map((e) => e ? Coin.toJSON(e) : undefined);
+    } else {
+      obj.protocolFee = [];
+    }
     return obj;
   },
 
   fromPartial<I extends Exact<DeepPartial<JoinSummary>, I>>(object: I): JoinSummary {
     const message = createBaseJoinSummary();
-    message.lptToken = (object.lptToken !== undefined && object.lptToken !== null)
-      ? TokenAmount.fromPartial(object.lptToken)
+    message.lpToken = (object.lpToken !== undefined && object.lpToken !== null)
+      ? TokenAmount.fromPartial(object.lpToken)
       : undefined;
     message.tokensIn = object.tokensIn?.map((e) => TokenAmount.fromPartial(e)) || [];
     message.joinType = object.joinType ?? 0;
+    message.protocolFee = object.protocolFee?.map((e) => Coin.fromPartial(e)) || [];
     return message;
   },
 };
 
 function createBaseExitSummary(): ExitSummary {
-  return { lptToken: undefined, tokensOut: [], exitType: 0 };
+  return { lpToken: undefined, tokensOut: [], exitType: 0, protocolFee: undefined };
 }
 
 export const ExitSummary = {
   encode(message: ExitSummary, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (message.lptToken !== undefined) {
-      TokenAmount.encode(message.lptToken, writer.uint32(10).fork()).ldelim();
+    if (message.lpToken !== undefined) {
+      TokenAmount.encode(message.lpToken, writer.uint32(10).fork()).ldelim();
     }
     for (const v of message.tokensOut) {
       TokenAmount.encode(v!, writer.uint32(18).fork()).ldelim();
     }
     if (message.exitType !== 0) {
       writer.uint32(24).int32(message.exitType);
+    }
+    if (message.protocolFee !== undefined) {
+      Coin.encode(message.protocolFee, writer.uint32(34).fork()).ldelim();
     }
     return writer;
   },
@@ -405,13 +436,16 @@ export const ExitSummary = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.lptToken = TokenAmount.decode(reader, reader.uint32());
+          message.lpToken = TokenAmount.decode(reader, reader.uint32());
           break;
         case 2:
           message.tokensOut.push(TokenAmount.decode(reader, reader.uint32()));
           break;
         case 3:
           message.exitType = reader.int32() as any;
+          break;
+        case 4:
+          message.protocolFee = Coin.decode(reader, reader.uint32());
           break;
         default:
           reader.skipType(tag & 7);
@@ -423,32 +457,37 @@ export const ExitSummary = {
 
   fromJSON(object: any): ExitSummary {
     return {
-      lptToken: isSet(object.lptToken) ? TokenAmount.fromJSON(object.lptToken) : undefined,
+      lpToken: isSet(object.lpToken) ? TokenAmount.fromJSON(object.lpToken) : undefined,
       tokensOut: Array.isArray(object?.tokensOut) ? object.tokensOut.map((e: any) => TokenAmount.fromJSON(e)) : [],
       exitType: isSet(object.exitType) ? exitTypeFromJSON(object.exitType) : 0,
+      protocolFee: isSet(object.protocolFee) ? Coin.fromJSON(object.protocolFee) : undefined,
     };
   },
 
   toJSON(message: ExitSummary): unknown {
     const obj: any = {};
-    message.lptToken !== undefined
-      && (obj.lptToken = message.lptToken ? TokenAmount.toJSON(message.lptToken) : undefined);
+    message.lpToken !== undefined && (obj.lpToken = message.lpToken ? TokenAmount.toJSON(message.lpToken) : undefined);
     if (message.tokensOut) {
       obj.tokensOut = message.tokensOut.map((e) => e ? TokenAmount.toJSON(e) : undefined);
     } else {
       obj.tokensOut = [];
     }
     message.exitType !== undefined && (obj.exitType = exitTypeToJSON(message.exitType));
+    message.protocolFee !== undefined
+      && (obj.protocolFee = message.protocolFee ? Coin.toJSON(message.protocolFee) : undefined);
     return obj;
   },
 
   fromPartial<I extends Exact<DeepPartial<ExitSummary>, I>>(object: I): ExitSummary {
     const message = createBaseExitSummary();
-    message.lptToken = (object.lptToken !== undefined && object.lptToken !== null)
-      ? TokenAmount.fromPartial(object.lptToken)
+    message.lpToken = (object.lpToken !== undefined && object.lpToken !== null)
+      ? TokenAmount.fromPartial(object.lpToken)
       : undefined;
     message.tokensOut = object.tokensOut?.map((e) => TokenAmount.fromPartial(e)) || [];
     message.exitType = object.exitType ?? 0;
+    message.protocolFee = (object.protocolFee !== undefined && object.protocolFee !== null)
+      ? Coin.fromPartial(object.protocolFee)
+      : undefined;
     return message;
   },
 };

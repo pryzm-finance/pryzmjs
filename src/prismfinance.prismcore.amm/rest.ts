@@ -165,9 +165,13 @@ export interface AmmMsgRecoveryExitResponse {
 
 export type AmmMsgSetCircuitBreakersResponse = object;
 
+export type AmmMsgSetJoinExitProtocolFeeResponse = object;
+
 export type AmmMsgSetPauseModeResponse = object;
 
 export type AmmMsgSetRecoveryModeResponse = object;
+
+export type AmmMsgSetSwapProtocolFeeResponse = object;
 
 export type AmmMsgSetVaultPauseModeResponse = object;
 
@@ -300,6 +304,7 @@ export interface AmmParams {
   yamm_expired_asset_discount_ratio?: string;
   yamm_buy_y_given_in_default_loan_fee_ratio?: string;
   yamm_sell_y_given_out_default_fee_ratio?: string;
+  yamm_default_swap_yield_fee_ratio?: string;
   order_control_params?: AmmOrderControlParameters;
 }
 
@@ -307,6 +312,11 @@ export interface AmmPool {
   /** @format uint64 */
   id?: string;
   name?: string;
+
+  /**
+   * this is the constant swap fee ratio, for dynamic swap fees other pools might have other parameters.
+   * for example, check yamm configuration
+   */
   swap_fee_ratio?: string;
 
   /** PoolType enumerates the valid types for pool_type. */
@@ -316,6 +326,10 @@ export interface AmmPool {
   paused_by_gov?: boolean;
   paused_by_owner?: boolean;
   owner_pause_window_timing?: AmmPoolPauseWindow;
+
+  /** if protocol fee parameters are nil, then the values are read from treasury module parameters */
+  swap_protocol_fee_ratio?: string;
+  join_exit_protocol_fee_ratio?: string;
 }
 
 export interface AmmPoolPauseWindow {
@@ -818,8 +832,15 @@ export interface AmmWhitelistedRoute {
 export interface AmmYammConfiguration {
   /** @format uint64 */
   pool_id?: string;
+
+  /** if the value is not set, will be read from module parameters */
   buy_y_given_in_loan_fee_ratio?: string;
+
+  /** if the value is not set, will be read from module parameters */
   sell_y_given_out_fee_ratio?: string;
+
+  /** if the value is not set, will be read from module parameters */
+  swap_yield_fee_ratio?: string;
 }
 
 export interface ProtobufAny {

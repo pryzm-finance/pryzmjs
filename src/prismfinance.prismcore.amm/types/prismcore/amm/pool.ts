@@ -46,13 +46,22 @@ export interface PoolPauseWindow {
 export interface Pool {
   id: number;
   name: string;
+  /**
+   * this is the constant swap fee ratio, for dynamic swap fees other pools might have other parameters.
+   * for example, check yamm configuration
+   */
   swapFeeRatio: string;
   poolType: PoolType;
   creator: string;
   recoveryMode: boolean;
   pausedByGov: boolean;
   pausedByOwner: boolean;
-  ownerPauseWindowTiming: PoolPauseWindow | undefined;
+  ownerPauseWindowTiming:
+    | PoolPauseWindow
+    | undefined;
+  /** if protocol fee parameters are nil, then the values are read from treasury module parameters */
+  swapProtocolFeeRatio: string;
+  joinExitProtocolFeeRatio: string;
 }
 
 function createBasePoolPauseWindow(): PoolPauseWindow {
@@ -126,6 +135,8 @@ function createBasePool(): Pool {
     pausedByGov: false,
     pausedByOwner: false,
     ownerPauseWindowTiming: undefined,
+    swapProtocolFeeRatio: "",
+    joinExitProtocolFeeRatio: "",
   };
 }
 
@@ -157,6 +168,12 @@ export const Pool = {
     }
     if (message.ownerPauseWindowTiming !== undefined) {
       PoolPauseWindow.encode(message.ownerPauseWindowTiming, writer.uint32(74).fork()).ldelim();
+    }
+    if (message.swapProtocolFeeRatio !== "") {
+      writer.uint32(82).string(message.swapProtocolFeeRatio);
+    }
+    if (message.joinExitProtocolFeeRatio !== "") {
+      writer.uint32(90).string(message.joinExitProtocolFeeRatio);
     }
     return writer;
   },
@@ -195,6 +212,12 @@ export const Pool = {
         case 9:
           message.ownerPauseWindowTiming = PoolPauseWindow.decode(reader, reader.uint32());
           break;
+        case 10:
+          message.swapProtocolFeeRatio = reader.string();
+          break;
+        case 11:
+          message.joinExitProtocolFeeRatio = reader.string();
+          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -216,6 +239,8 @@ export const Pool = {
       ownerPauseWindowTiming: isSet(object.ownerPauseWindowTiming)
         ? PoolPauseWindow.fromJSON(object.ownerPauseWindowTiming)
         : undefined,
+      swapProtocolFeeRatio: isSet(object.swapProtocolFeeRatio) ? String(object.swapProtocolFeeRatio) : "",
+      joinExitProtocolFeeRatio: isSet(object.joinExitProtocolFeeRatio) ? String(object.joinExitProtocolFeeRatio) : "",
     };
   },
 
@@ -232,6 +257,8 @@ export const Pool = {
     message.ownerPauseWindowTiming !== undefined && (obj.ownerPauseWindowTiming = message.ownerPauseWindowTiming
       ? PoolPauseWindow.toJSON(message.ownerPauseWindowTiming)
       : undefined);
+    message.swapProtocolFeeRatio !== undefined && (obj.swapProtocolFeeRatio = message.swapProtocolFeeRatio);
+    message.joinExitProtocolFeeRatio !== undefined && (obj.joinExitProtocolFeeRatio = message.joinExitProtocolFeeRatio);
     return obj;
   },
 
@@ -249,6 +276,8 @@ export const Pool = {
       (object.ownerPauseWindowTiming !== undefined && object.ownerPauseWindowTiming !== null)
         ? PoolPauseWindow.fromPartial(object.ownerPauseWindowTiming)
         : undefined;
+    message.swapProtocolFeeRatio = object.swapProtocolFeeRatio ?? "";
+    message.joinExitProtocolFeeRatio = object.joinExitProtocolFeeRatio ?? "";
     return message;
   },
 };

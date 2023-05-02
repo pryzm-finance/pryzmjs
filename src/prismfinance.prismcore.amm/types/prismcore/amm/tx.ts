@@ -338,6 +338,26 @@ export interface MsgDeleteOraclePriceDataSource {
 export interface MsgDeleteOraclePriceDataSourceResponse {
 }
 
+export interface MsgSetSwapProtocolFee {
+  authority: string;
+  poolId: number;
+  /** if protocol fee parameters are nil, then the values are read from treasury module parameters */
+  swapProtocolFee: string;
+}
+
+export interface MsgSetSwapProtocolFeeResponse {
+}
+
+export interface MsgSetJoinExitProtocolFee {
+  authority: string;
+  poolId: number;
+  /** if protocol fee parameters are nil, then the values are read from treasury module parameters */
+  joinExitProtocolFee: string;
+}
+
+export interface MsgSetJoinExitProtocolFeeResponse {
+}
+
 function createBaseMsgSingleSwap(): MsgSingleSwap {
   return { creator: "", swap: undefined, maxAmountIn: "", minAmountOut: "" };
 }
@@ -4201,6 +4221,220 @@ export const MsgDeleteOraclePriceDataSourceResponse = {
   },
 };
 
+function createBaseMsgSetSwapProtocolFee(): MsgSetSwapProtocolFee {
+  return { authority: "", poolId: 0, swapProtocolFee: "" };
+}
+
+export const MsgSetSwapProtocolFee = {
+  encode(message: MsgSetSwapProtocolFee, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.authority !== "") {
+      writer.uint32(10).string(message.authority);
+    }
+    if (message.poolId !== 0) {
+      writer.uint32(16).uint64(message.poolId);
+    }
+    if (message.swapProtocolFee !== "") {
+      writer.uint32(26).string(message.swapProtocolFee);
+    }
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): MsgSetSwapProtocolFee {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseMsgSetSwapProtocolFee();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.authority = reader.string();
+          break;
+        case 2:
+          message.poolId = longToNumber(reader.uint64() as Long);
+          break;
+        case 3:
+          message.swapProtocolFee = reader.string();
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): MsgSetSwapProtocolFee {
+    return {
+      authority: isSet(object.authority) ? String(object.authority) : "",
+      poolId: isSet(object.poolId) ? Number(object.poolId) : 0,
+      swapProtocolFee: isSet(object.swapProtocolFee) ? String(object.swapProtocolFee) : "",
+    };
+  },
+
+  toJSON(message: MsgSetSwapProtocolFee): unknown {
+    const obj: any = {};
+    message.authority !== undefined && (obj.authority = message.authority);
+    message.poolId !== undefined && (obj.poolId = Math.round(message.poolId));
+    message.swapProtocolFee !== undefined && (obj.swapProtocolFee = message.swapProtocolFee);
+    return obj;
+  },
+
+  fromPartial<I extends Exact<DeepPartial<MsgSetSwapProtocolFee>, I>>(object: I): MsgSetSwapProtocolFee {
+    const message = createBaseMsgSetSwapProtocolFee();
+    message.authority = object.authority ?? "";
+    message.poolId = object.poolId ?? 0;
+    message.swapProtocolFee = object.swapProtocolFee ?? "";
+    return message;
+  },
+};
+
+function createBaseMsgSetSwapProtocolFeeResponse(): MsgSetSwapProtocolFeeResponse {
+  return {};
+}
+
+export const MsgSetSwapProtocolFeeResponse = {
+  encode(_: MsgSetSwapProtocolFeeResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): MsgSetSwapProtocolFeeResponse {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseMsgSetSwapProtocolFeeResponse();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(_: any): MsgSetSwapProtocolFeeResponse {
+    return {};
+  },
+
+  toJSON(_: MsgSetSwapProtocolFeeResponse): unknown {
+    const obj: any = {};
+    return obj;
+  },
+
+  fromPartial<I extends Exact<DeepPartial<MsgSetSwapProtocolFeeResponse>, I>>(_: I): MsgSetSwapProtocolFeeResponse {
+    const message = createBaseMsgSetSwapProtocolFeeResponse();
+    return message;
+  },
+};
+
+function createBaseMsgSetJoinExitProtocolFee(): MsgSetJoinExitProtocolFee {
+  return { authority: "", poolId: 0, joinExitProtocolFee: "" };
+}
+
+export const MsgSetJoinExitProtocolFee = {
+  encode(message: MsgSetJoinExitProtocolFee, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.authority !== "") {
+      writer.uint32(10).string(message.authority);
+    }
+    if (message.poolId !== 0) {
+      writer.uint32(16).uint64(message.poolId);
+    }
+    if (message.joinExitProtocolFee !== "") {
+      writer.uint32(26).string(message.joinExitProtocolFee);
+    }
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): MsgSetJoinExitProtocolFee {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseMsgSetJoinExitProtocolFee();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.authority = reader.string();
+          break;
+        case 2:
+          message.poolId = longToNumber(reader.uint64() as Long);
+          break;
+        case 3:
+          message.joinExitProtocolFee = reader.string();
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): MsgSetJoinExitProtocolFee {
+    return {
+      authority: isSet(object.authority) ? String(object.authority) : "",
+      poolId: isSet(object.poolId) ? Number(object.poolId) : 0,
+      joinExitProtocolFee: isSet(object.joinExitProtocolFee) ? String(object.joinExitProtocolFee) : "",
+    };
+  },
+
+  toJSON(message: MsgSetJoinExitProtocolFee): unknown {
+    const obj: any = {};
+    message.authority !== undefined && (obj.authority = message.authority);
+    message.poolId !== undefined && (obj.poolId = Math.round(message.poolId));
+    message.joinExitProtocolFee !== undefined && (obj.joinExitProtocolFee = message.joinExitProtocolFee);
+    return obj;
+  },
+
+  fromPartial<I extends Exact<DeepPartial<MsgSetJoinExitProtocolFee>, I>>(object: I): MsgSetJoinExitProtocolFee {
+    const message = createBaseMsgSetJoinExitProtocolFee();
+    message.authority = object.authority ?? "";
+    message.poolId = object.poolId ?? 0;
+    message.joinExitProtocolFee = object.joinExitProtocolFee ?? "";
+    return message;
+  },
+};
+
+function createBaseMsgSetJoinExitProtocolFeeResponse(): MsgSetJoinExitProtocolFeeResponse {
+  return {};
+}
+
+export const MsgSetJoinExitProtocolFeeResponse = {
+  encode(_: MsgSetJoinExitProtocolFeeResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): MsgSetJoinExitProtocolFeeResponse {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseMsgSetJoinExitProtocolFeeResponse();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(_: any): MsgSetJoinExitProtocolFeeResponse {
+    return {};
+  },
+
+  toJSON(_: MsgSetJoinExitProtocolFeeResponse): unknown {
+    const obj: any = {};
+    return obj;
+  },
+
+  fromPartial<I extends Exact<DeepPartial<MsgSetJoinExitProtocolFeeResponse>, I>>(
+    _: I,
+  ): MsgSetJoinExitProtocolFeeResponse {
+    const message = createBaseMsgSetJoinExitProtocolFeeResponse();
+    return message;
+  },
+};
+
 /** Msg defines the Msg service. */
 export interface Msg {
   SingleSwap(request: MsgSingleSwap): Promise<MsgSingleSwapResponse>;
@@ -4231,8 +4465,10 @@ export interface Msg {
   DeleteOraclePricePair(request: MsgDeleteOraclePricePair): Promise<MsgDeleteOraclePricePairResponse>;
   CreateOraclePriceDataSource(request: MsgCreateOraclePriceDataSource): Promise<MsgCreateOraclePriceDataSourceResponse>;
   UpdateOraclePriceDataSource(request: MsgUpdateOraclePriceDataSource): Promise<MsgUpdateOraclePriceDataSourceResponse>;
-  /** this line is used by starport scaffolding # proto/tx/rpc */
   DeleteOraclePriceDataSource(request: MsgDeleteOraclePriceDataSource): Promise<MsgDeleteOraclePriceDataSourceResponse>;
+  SetSwapProtocolFee(request: MsgSetSwapProtocolFee): Promise<MsgSetSwapProtocolFeeResponse>;
+  /** this line is used by starport scaffolding # proto/tx/rpc */
+  SetJoinExitProtocolFee(request: MsgSetJoinExitProtocolFee): Promise<MsgSetJoinExitProtocolFeeResponse>;
 }
 
 export class MsgClientImpl implements Msg {
@@ -4268,6 +4504,8 @@ export class MsgClientImpl implements Msg {
     this.CreateOraclePriceDataSource = this.CreateOraclePriceDataSource.bind(this);
     this.UpdateOraclePriceDataSource = this.UpdateOraclePriceDataSource.bind(this);
     this.DeleteOraclePriceDataSource = this.DeleteOraclePriceDataSource.bind(this);
+    this.SetSwapProtocolFee = this.SetSwapProtocolFee.bind(this);
+    this.SetJoinExitProtocolFee = this.SetJoinExitProtocolFee.bind(this);
   }
   SingleSwap(request: MsgSingleSwap): Promise<MsgSingleSwapResponse> {
     const data = MsgSingleSwap.encode(request).finish();
@@ -4447,6 +4685,18 @@ export class MsgClientImpl implements Msg {
     const data = MsgDeleteOraclePriceDataSource.encode(request).finish();
     const promise = this.rpc.request("prismfinance.prismcore.amm.Msg", "DeleteOraclePriceDataSource", data);
     return promise.then((data) => MsgDeleteOraclePriceDataSourceResponse.decode(new _m0.Reader(data)));
+  }
+
+  SetSwapProtocolFee(request: MsgSetSwapProtocolFee): Promise<MsgSetSwapProtocolFeeResponse> {
+    const data = MsgSetSwapProtocolFee.encode(request).finish();
+    const promise = this.rpc.request("prismfinance.prismcore.amm.Msg", "SetSwapProtocolFee", data);
+    return promise.then((data) => MsgSetSwapProtocolFeeResponse.decode(new _m0.Reader(data)));
+  }
+
+  SetJoinExitProtocolFee(request: MsgSetJoinExitProtocolFee): Promise<MsgSetJoinExitProtocolFeeResponse> {
+    const data = MsgSetJoinExitProtocolFee.encode(request).finish();
+    const promise = this.rpc.request("prismfinance.prismcore.amm.Msg", "SetJoinExitProtocolFee", data);
+    return promise.then((data) => MsgSetJoinExitProtocolFeeResponse.decode(new _m0.Reader(data)));
   }
 }
 

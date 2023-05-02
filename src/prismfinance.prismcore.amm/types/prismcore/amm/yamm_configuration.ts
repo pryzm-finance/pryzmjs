@@ -6,12 +6,16 @@ export const protobufPackage = "prismfinance.prismcore.amm";
 
 export interface YammConfiguration {
   poolId: number;
+  /** if the value is not set, will be read from module parameters */
   buyYGivenInLoanFeeRatio: string;
+  /** if the value is not set, will be read from module parameters */
   sellYGivenOutFeeRatio: string;
+  /** if the value is not set, will be read from module parameters */
+  swapYieldFeeRatio: string;
 }
 
 function createBaseYammConfiguration(): YammConfiguration {
-  return { poolId: 0, buyYGivenInLoanFeeRatio: "", sellYGivenOutFeeRatio: "" };
+  return { poolId: 0, buyYGivenInLoanFeeRatio: "", sellYGivenOutFeeRatio: "", swapYieldFeeRatio: "" };
 }
 
 export const YammConfiguration = {
@@ -24,6 +28,9 @@ export const YammConfiguration = {
     }
     if (message.sellYGivenOutFeeRatio !== "") {
       writer.uint32(26).string(message.sellYGivenOutFeeRatio);
+    }
+    if (message.swapYieldFeeRatio !== "") {
+      writer.uint32(34).string(message.swapYieldFeeRatio);
     }
     return writer;
   },
@@ -44,6 +51,9 @@ export const YammConfiguration = {
         case 3:
           message.sellYGivenOutFeeRatio = reader.string();
           break;
+        case 4:
+          message.swapYieldFeeRatio = reader.string();
+          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -57,6 +67,7 @@ export const YammConfiguration = {
       poolId: isSet(object.poolId) ? Number(object.poolId) : 0,
       buyYGivenInLoanFeeRatio: isSet(object.buyYGivenInLoanFeeRatio) ? String(object.buyYGivenInLoanFeeRatio) : "",
       sellYGivenOutFeeRatio: isSet(object.sellYGivenOutFeeRatio) ? String(object.sellYGivenOutFeeRatio) : "",
+      swapYieldFeeRatio: isSet(object.swapYieldFeeRatio) ? String(object.swapYieldFeeRatio) : "",
     };
   },
 
@@ -65,6 +76,7 @@ export const YammConfiguration = {
     message.poolId !== undefined && (obj.poolId = Math.round(message.poolId));
     message.buyYGivenInLoanFeeRatio !== undefined && (obj.buyYGivenInLoanFeeRatio = message.buyYGivenInLoanFeeRatio);
     message.sellYGivenOutFeeRatio !== undefined && (obj.sellYGivenOutFeeRatio = message.sellYGivenOutFeeRatio);
+    message.swapYieldFeeRatio !== undefined && (obj.swapYieldFeeRatio = message.swapYieldFeeRatio);
     return obj;
   },
 
@@ -73,6 +85,7 @@ export const YammConfiguration = {
     message.poolId = object.poolId ?? 0;
     message.buyYGivenInLoanFeeRatio = object.buyYGivenInLoanFeeRatio ?? "";
     message.sellYGivenOutFeeRatio = object.sellYGivenOutFeeRatio ?? "";
+    message.swapYieldFeeRatio = object.swapYieldFeeRatio ?? "";
     return message;
   },
 };

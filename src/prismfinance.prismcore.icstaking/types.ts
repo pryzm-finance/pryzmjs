@@ -5,6 +5,7 @@ import { HostChainState } from "./types/prismcore/icstaking/host_chain"
 import { HostAccounts } from "./types/prismcore/icstaking/host_chain"
 import { HostAccount } from "./types/prismcore/icstaking/host_chain"
 import { ValidatorState } from "./types/prismcore/icstaking/host_chain"
+import { HostChainHeight } from "./types/prismcore/icstaking/host_chain"
 import { OraclePayload } from "./types/prismcore/icstaking/oracle_payload"
 import { Params } from "./types/prismcore/icstaking/params"
 import { StakingParams } from "./types/prismcore/icstaking/params"
@@ -23,6 +24,7 @@ export {
     HostAccounts,
     HostAccount,
     ValidatorState,
+    HostChainHeight,
     OraclePayload,
     Params,
     StakingParams,

@@ -93,6 +93,20 @@ export interface IcstakingHostChain {
   validators?: IcstakingValidator[];
 }
 
+export interface IcstakingHostChainHeight {
+  /**
+   * the revision that the client is currently on
+   * @format uint64
+   */
+  revision_number?: string;
+
+  /**
+   * the height within the given revision
+   * @format uint64
+   */
+  revision_height?: string;
+}
+
 export interface IcstakingHostChainState {
   /** The id of the chain */
   host_chain_id?: string;
@@ -125,10 +139,8 @@ export interface IcstakingHostChainState {
    * The last host chain's block height in which PRISM's state is changed to IDLE
    * setting state to IDLE happens when an ack/timeout received for an interchain operation,
    * so this is the height of the last received ack from host chain
-   * FIXME change type to height
-   * @format uint64
    */
-  last_idle_state_host_height?: string;
+  last_idle_state_host_height?: IcstakingHostChainHeight;
 }
 
 export enum IcstakingICAType {

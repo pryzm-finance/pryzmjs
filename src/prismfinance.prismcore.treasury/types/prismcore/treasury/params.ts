@@ -5,21 +5,21 @@ export const protobufPackage = "prismfinance.prismcore.treasury";
 
 /** Params defines the parameters for the module. */
 export interface Params {
-  swapFeeRatio: string;
-  liquidityProvidingFeeRatio: string;
+  ammSwapFeeRatio: string;
+  ammJoinExitFeeRatio: string;
 }
 
 function createBaseParams(): Params {
-  return { swapFeeRatio: "", liquidityProvidingFeeRatio: "" };
+  return { ammSwapFeeRatio: "", ammJoinExitFeeRatio: "" };
 }
 
 export const Params = {
   encode(message: Params, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (message.swapFeeRatio !== "") {
-      writer.uint32(10).string(message.swapFeeRatio);
+    if (message.ammSwapFeeRatio !== "") {
+      writer.uint32(10).string(message.ammSwapFeeRatio);
     }
-    if (message.liquidityProvidingFeeRatio !== "") {
-      writer.uint32(18).string(message.liquidityProvidingFeeRatio);
+    if (message.ammJoinExitFeeRatio !== "") {
+      writer.uint32(18).string(message.ammJoinExitFeeRatio);
     }
     return writer;
   },
@@ -32,10 +32,10 @@ export const Params = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.swapFeeRatio = reader.string();
+          message.ammSwapFeeRatio = reader.string();
           break;
         case 2:
-          message.liquidityProvidingFeeRatio = reader.string();
+          message.ammJoinExitFeeRatio = reader.string();
           break;
         default:
           reader.skipType(tag & 7);
@@ -47,25 +47,22 @@ export const Params = {
 
   fromJSON(object: any): Params {
     return {
-      swapFeeRatio: isSet(object.swapFeeRatio) ? String(object.swapFeeRatio) : "",
-      liquidityProvidingFeeRatio: isSet(object.liquidityProvidingFeeRatio)
-        ? String(object.liquidityProvidingFeeRatio)
-        : "",
+      ammSwapFeeRatio: isSet(object.ammSwapFeeRatio) ? String(object.ammSwapFeeRatio) : "",
+      ammJoinExitFeeRatio: isSet(object.ammJoinExitFeeRatio) ? String(object.ammJoinExitFeeRatio) : "",
     };
   },
 
   toJSON(message: Params): unknown {
     const obj: any = {};
-    message.swapFeeRatio !== undefined && (obj.swapFeeRatio = message.swapFeeRatio);
-    message.liquidityProvidingFeeRatio !== undefined
-      && (obj.liquidityProvidingFeeRatio = message.liquidityProvidingFeeRatio);
+    message.ammSwapFeeRatio !== undefined && (obj.ammSwapFeeRatio = message.ammSwapFeeRatio);
+    message.ammJoinExitFeeRatio !== undefined && (obj.ammJoinExitFeeRatio = message.ammJoinExitFeeRatio);
     return obj;
   },
 
   fromPartial<I extends Exact<DeepPartial<Params>, I>>(object: I): Params {
     const message = createBaseParams();
-    message.swapFeeRatio = object.swapFeeRatio ?? "";
-    message.liquidityProvidingFeeRatio = object.liquidityProvidingFeeRatio ?? "";
+    message.ammSwapFeeRatio = object.ammSwapFeeRatio ?? "";
+    message.ammJoinExitFeeRatio = object.ammJoinExitFeeRatio ?? "";
     return message;
   },
 };

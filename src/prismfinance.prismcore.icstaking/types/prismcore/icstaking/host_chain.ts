@@ -246,7 +246,7 @@ export interface HostChainState {
    * setting state to IDLE happens when an ack/timeout received for an interchain operation,
    * so this is the height of the last received ack from host chain
    */
-  lastIdleStateHostHeight: number;
+  lastIdleStateHostHeight: HostChainHeight | undefined;
 }
 
 export interface HostChainState_ValidatorsEntry {
@@ -278,6 +278,13 @@ export interface HostAccount {
 /** TODO add undelegating and redelegating amount? */
 export interface ValidatorState {
   delegatedAmount: string;
+}
+
+export interface HostChainHeight {
+  /** the revision that the client is currently on */
+  revisionNumber: number;
+  /** the height within the given revision */
+  revisionHeight: number;
 }
 
 function createBaseHostChain(): HostChain {
@@ -547,7 +554,7 @@ function createBaseHostChainState(): HostChainState {
     amountToBeCompounded: "",
     exchangeRate: "",
     state: 0,
-    lastIdleStateHostHeight: 0,
+    lastIdleStateHostHeight: undefined,
   };
 }
 
@@ -577,8 +584,8 @@ export const HostChainState = {
     if (message.state !== 0) {
       writer.uint32(64).int32(message.state);
     }
-    if (message.lastIdleStateHostHeight !== 0) {
-      writer.uint32(72).uint64(message.lastIdleStateHostHeight);
+    if (message.lastIdleStateHostHeight !== undefined) {
+      HostChainHeight.encode(message.lastIdleStateHostHeight, writer.uint32(74).fork()).ldelim();
     }
     return writer;
   },
@@ -618,7 +625,7 @@ export const HostChainState = {
           message.state = reader.int32() as any;
           break;
         case 9:
-          message.lastIdleStateHostHeight = longToNumber(reader.uint64() as Long);
+          message.lastIdleStateHostHeight = HostChainHeight.decode(reader, reader.uint32());
           break;
         default:
           reader.skipType(tag & 7);
@@ -643,7 +650,9 @@ export const HostChainState = {
       amountToBeCompounded: isSet(object.amountToBeCompounded) ? String(object.amountToBeCompounded) : "",
       exchangeRate: isSet(object.exchangeRate) ? String(object.exchangeRate) : "",
       state: isSet(object.state) ? stateFromJSON(object.state) : 0,
-      lastIdleStateHostHeight: isSet(object.lastIdleStateHostHeight) ? Number(object.lastIdleStateHostHeight) : 0,
+      lastIdleStateHostHeight: isSet(object.lastIdleStateHostHeight)
+        ? HostChainHeight.fromJSON(object.lastIdleStateHostHeight)
+        : undefined,
     };
   },
 
@@ -663,8 +672,9 @@ export const HostChainState = {
     message.amountToBeCompounded !== undefined && (obj.amountToBeCompounded = message.amountToBeCompounded);
     message.exchangeRate !== undefined && (obj.exchangeRate = message.exchangeRate);
     message.state !== undefined && (obj.state = stateToJSON(message.state));
-    message.lastIdleStateHostHeight !== undefined
-      && (obj.lastIdleStateHostHeight = Math.round(message.lastIdleStateHostHeight));
+    message.lastIdleStateHostHeight !== undefined && (obj.lastIdleStateHostHeight = message.lastIdleStateHostHeight
+      ? HostChainHeight.toJSON(message.lastIdleStateHostHeight)
+      : undefined);
     return obj;
   },
 
@@ -688,7 +698,10 @@ export const HostChainState = {
     message.amountToBeCompounded = object.amountToBeCompounded ?? "";
     message.exchangeRate = object.exchangeRate ?? "";
     message.state = object.state ?? 0;
-    message.lastIdleStateHostHeight = object.lastIdleStateHostHeight ?? 0;
+    message.lastIdleStateHostHeight =
+      (object.lastIdleStateHostHeight !== undefined && object.lastIdleStateHostHeight !== null)
+        ? HostChainHeight.fromPartial(object.lastIdleStateHostHeight)
+        : undefined;
     return message;
   },
 };
@@ -960,6 +973,64 @@ export const ValidatorState = {
   fromPartial<I extends Exact<DeepPartial<ValidatorState>, I>>(object: I): ValidatorState {
     const message = createBaseValidatorState();
     message.delegatedAmount = object.delegatedAmount ?? "";
+    return message;
+  },
+};
+
+function createBaseHostChainHeight(): HostChainHeight {
+  return { revisionNumber: 0, revisionHeight: 0 };
+}
+
+export const HostChainHeight = {
+  encode(message: HostChainHeight, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.revisionNumber !== 0) {
+      writer.uint32(8).uint64(message.revisionNumber);
+    }
+    if (message.revisionHeight !== 0) {
+      writer.uint32(16).uint64(message.revisionHeight);
+    }
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): HostChainHeight {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseHostChainHeight();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.revisionNumber = longToNumber(reader.uint64() as Long);
+          break;
+        case 2:
+          message.revisionHeight = longToNumber(reader.uint64() as Long);
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): HostChainHeight {
+    return {
+      revisionNumber: isSet(object.revisionNumber) ? Number(object.revisionNumber) : 0,
+      revisionHeight: isSet(object.revisionHeight) ? Number(object.revisionHeight) : 0,
+    };
+  },
+
+  toJSON(message: HostChainHeight): unknown {
+    const obj: any = {};
+    message.revisionNumber !== undefined && (obj.revisionNumber = Math.round(message.revisionNumber));
+    message.revisionHeight !== undefined && (obj.revisionHeight = Math.round(message.revisionHeight));
+    return obj;
+  },
+
+  fromPartial<I extends Exact<DeepPartial<HostChainHeight>, I>>(object: I): HostChainHeight {
+    const message = createBaseHostChainHeight();
+    message.revisionNumber = object.revisionNumber ?? 0;
+    message.revisionHeight = object.revisionHeight ?? 0;
     return message;
   },
 };

@@ -49,8 +49,8 @@ export type TreasuryMsgUpdateParamsResponse = object;
  * Params defines the parameters for the module.
  */
 export interface TreasuryParams {
-  swap_fee_ratio?: string;
-  liquidity_providing_fee_ratio?: string;
+  amm_swap_fee_ratio?: string;
+  amm_join_exit_fee_ratio?: string;
 }
 
 export interface TreasuryQueryGetActionResponse {

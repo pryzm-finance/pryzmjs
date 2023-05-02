@@ -1,11 +1,11 @@
 lockfileVersion: 5.4
 
 specifiers:
-  '@prism-finance/prismjs': 0.3.1
+  '@prism-finance/prismjs': 0.3.2
   '@refractedlabs/utils': 0.1.4
 
 dependencies:
-  '@prism-finance/prismjs': 0.3.1
+  '@prism-finance/prismjs': 0.3.2
   '@refractedlabs/utils': 0.1.4
 
 packages:
@@ -174,8 +174,8 @@ packages:
     resolution: {integrity: sha512-ilHEACi9DwqJB0pw7kv+Apvh50jiiSyR/cQ3y4W7lOR5mhvn/50FLUfsnfJz0BDZtl/RR16kXvptiv6q1msYZg==}
     dev: false
 
-  /@prism-finance/prismjs/0.3.1:
-    resolution: {integrity: sha512-6JEP9OmcsFpR0TdfXtYNMrcgtI9XDygHM0nXgYtElUS+1B9hejCx12tP8R023sKq4J30kJ6+XDIdeJ+5fRSQXw==, tarball: download/@prism-finance/prismjs/0.3.1/bfe87aade0b0486a0c8921d3c8b03b570774310d}
+  /@prism-finance/prismjs/0.3.2:
+    resolution: {integrity: sha512-x8T74Z8CAyYV1s4/VWnoVpwdLUMv2UmIFp8b/jSveSzQ6WDaaPa39WJz2cEOpXtX6mQzDso02PLuDkcGehziag==, tarball: download/@prism-finance/prismjs/0.3.2/fd198d955e98e7f352b1678c328ae2b50d4f7988}
     dependencies:
       '@cosmjs/launchpad': 0.27.0
       '@cosmjs/proto-signing': 0.27.0
@@ -260,8 +260,8 @@ packages:
     resolution: {integrity: sha512-s3nugnZumCC//n4moGGe6tkNMyYEdaDBitVjwPxXmR5lnMG5dHePinH2EdxkG3Rh1ghFHHixAG4NJhpJW1rthQ==}
     dev: false
 
-  /@types/node/18.16.1:
-    resolution: {integrity: sha512-DZxSZWXxFfOlx7k7Rv4LAyiMroaxa3Ly/7OOzZO8cBNho0YzAi4qlbrx8W27JGqG57IgR/6J7r+nOJWw6kcvZA==}
+  /@types/node/18.16.3:
+    resolution: {integrity: sha512-OPs5WnnT1xkCBiuQrZA4+YAV4HEJejmHneyraIaxsbev5yCEr6KMwINNFP9wQeFIw8FWcoTqF3vQsa5CDaI+8Q==}
     dev: false
 
   /@types/triple-beam/1.3.2:
@@ -678,7 +678,7 @@ packages:
       '@protobufjs/pool': 1.1.0
       '@protobufjs/utf8': 1.1.0
       '@types/long': 4.0.2
-      '@types/node': 18.16.1
+      '@types/node': 18.16.3
       long: 4.0.0
     dev: false
 

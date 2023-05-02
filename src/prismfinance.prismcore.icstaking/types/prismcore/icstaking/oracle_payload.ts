@@ -1,7 +1,7 @@
 /* eslint-disable */
 import Long from "long";
 import _m0 from "protobufjs/minimal";
-import { ValidatorState } from "./host_chain";
+import { HostChainHeight, ValidatorState } from "./host_chain";
 
 export const protobufPackage = "prismfinance.prismcore.icstaking";
 
@@ -10,10 +10,11 @@ export interface OraclePayload {
   /**
    * Oracle is reporting the data based on the host chain’s time which may have a time difference with Prism.
    * In order to be accurate, we use a reference of host chain’s latest block in which Prism's state has changed to idle,
-   * and oracle feeders should report if their reported data is after that specific block
+   * and oracle feeders' reported block height is checked to be after that specific block
    */
-  lastIdleStateHostHeight: number;
-  isAfterLastIdleState: boolean;
+  blockHeight:
+    | HostChainHeight
+    | undefined;
   /** map of validator addresses to the amount delegated to that validator */
   validators: { [key: string]: ValidatorState };
   /** balance of delegation interchain account */
@@ -38,8 +39,7 @@ export interface OraclePayload_ValidatorsEntry {
 
 function createBaseOraclePayload(): OraclePayload {
   return {
-    lastIdleStateHostHeight: 0,
-    isAfterLastIdleState: false,
+    blockHeight: undefined,
     validators: {},
     delegationAccountBalance: "",
     rewardAccountBalance: "",
@@ -51,11 +51,8 @@ function createBaseOraclePayload(): OraclePayload {
 
 export const OraclePayload = {
   encode(message: OraclePayload, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (message.lastIdleStateHostHeight !== 0) {
-      writer.uint32(8).uint64(message.lastIdleStateHostHeight);
-    }
-    if (message.isAfterLastIdleState === true) {
-      writer.uint32(16).bool(message.isAfterLastIdleState);
+    if (message.blockHeight !== undefined) {
+      HostChainHeight.encode(message.blockHeight, writer.uint32(10).fork()).ldelim();
     }
     Object.entries(message.validators).forEach(([key, value]) => {
       OraclePayload_ValidatorsEntry.encode({ key: key as any, value }, writer.uint32(26).fork()).ldelim();
@@ -86,10 +83,7 @@ export const OraclePayload = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.lastIdleStateHostHeight = longToNumber(reader.uint64() as Long);
-          break;
-        case 2:
-          message.isAfterLastIdleState = reader.bool();
+          message.blockHeight = HostChainHeight.decode(reader, reader.uint32());
           break;
         case 3:
           const entry3 = OraclePayload_ValidatorsEntry.decode(reader, reader.uint32());
@@ -122,8 +116,7 @@ export const OraclePayload = {
 
   fromJSON(object: any): OraclePayload {
     return {
-      lastIdleStateHostHeight: isSet(object.lastIdleStateHostHeight) ? Number(object.lastIdleStateHostHeight) : 0,
-      isAfterLastIdleState: isSet(object.isAfterLastIdleState) ? Boolean(object.isAfterLastIdleState) : false,
+      blockHeight: isSet(object.blockHeight) ? HostChainHeight.fromJSON(object.blockHeight) : undefined,
       validators: isObject(object.validators)
         ? Object.entries(object.validators).reduce<{ [key: string]: ValidatorState }>((acc, [key, value]) => {
           acc[key] = ValidatorState.fromJSON(value);
@@ -142,9 +135,8 @@ export const OraclePayload = {
 
   toJSON(message: OraclePayload): unknown {
     const obj: any = {};
-    message.lastIdleStateHostHeight !== undefined
-      && (obj.lastIdleStateHostHeight = Math.round(message.lastIdleStateHostHeight));
-    message.isAfterLastIdleState !== undefined && (obj.isAfterLastIdleState = message.isAfterLastIdleState);
+    message.blockHeight !== undefined
+      && (obj.blockHeight = message.blockHeight ? HostChainHeight.toJSON(message.blockHeight) : undefined);
     obj.validators = {};
     if (message.validators) {
       Object.entries(message.validators).forEach(([k, v]) => {
@@ -162,8 +154,9 @@ export const OraclePayload = {
 
   fromPartial<I extends Exact<DeepPartial<OraclePayload>, I>>(object: I): OraclePayload {
     const message = createBaseOraclePayload();
-    message.lastIdleStateHostHeight = object.lastIdleStateHostHeight ?? 0;
-    message.isAfterLastIdleState = object.isAfterLastIdleState ?? false;
+    message.blockHeight = (object.blockHeight !== undefined && object.blockHeight !== null)
+      ? HostChainHeight.fromPartial(object.blockHeight)
+      : undefined;
     message.validators = Object.entries(object.validators ?? {}).reduce<{ [key: string]: ValidatorState }>(
       (acc, [key, value]) => {
         if (value !== undefined) {

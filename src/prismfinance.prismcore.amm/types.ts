@@ -3,6 +3,8 @@ import { Swap } from "./types/prismcore/amm/operations"
 import { SwapSummary } from "./types/prismcore/amm/operations"
 import { JoinSummary } from "./types/prismcore/amm/operations"
 import { ExitSummary } from "./types/prismcore/amm/operations"
+import { HostChainHeight } from "./types/prismcore/amm/oracle_payload"
+import { OraclePayload } from "./types/prismcore/amm/oracle_payload"
 import { OraclePriceDataSource } from "./types/prismcore/amm/oracle_price_data_source"
 import { Pair } from "./types/prismcore/amm/oracle_price_pair"
 import { OraclePricePair } from "./types/prismcore/amm/oracle_price_pair"
@@ -37,6 +39,8 @@ export {
     SwapSummary,
     JoinSummary,
     ExitSummary,
+    HostChainHeight,
+    OraclePayload,
     OraclePriceDataSource,
     Pair,
     OraclePricePair,

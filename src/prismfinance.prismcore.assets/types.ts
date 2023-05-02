@@ -7,6 +7,8 @@ import { EventDisableAsset } from "./types/prismcore/assets/event"
 import { EventExchangeRateUpdated } from "./types/prismcore/assets/event"
 import { ExchangeRate } from "./types/prismcore/assets/exchange_rate"
 import { MaturityLevel } from "./types/prismcore/assets/maturity_level"
+import { HostChainHeight } from "./types/prismcore/assets/oracle_payload"
+import { OraclePayload } from "./types/prismcore/assets/oracle_payload"
 import { Params } from "./types/prismcore/assets/params"
 import { RefractableAsset } from "./types/prismcore/assets/refractable_asset"
 import { MaturityParams } from "./types/prismcore/assets/refractable_asset"
@@ -23,6 +25,8 @@ export {
     EventExchangeRateUpdated,
     ExchangeRate,
     MaturityLevel,
+    HostChainHeight,
+    OraclePayload,
     Params,
     RefractableAsset,
     MaturityParams,

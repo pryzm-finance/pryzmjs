@@ -26,6 +26,7 @@ export interface Params {
   yammExpiredAssetDiscountRatio: string;
   yammBuyYGivenInDefaultLoanFeeRatio: string;
   yammSellYGivenOutDefaultFeeRatio: string;
+  yammDefaultSwapYieldFeeRatio: string;
   orderControlParams: OrderControlParameters | undefined;
 }
 
@@ -115,6 +116,7 @@ function createBaseParams(): Params {
     yammExpiredAssetDiscountRatio: "",
     yammBuyYGivenInDefaultLoanFeeRatio: "",
     yammSellYGivenOutDefaultFeeRatio: "",
+    yammDefaultSwapYieldFeeRatio: "",
     orderControlParams: undefined,
   };
 }
@@ -145,8 +147,11 @@ export const Params = {
     if (message.yammSellYGivenOutDefaultFeeRatio !== "") {
       writer.uint32(66).string(message.yammSellYGivenOutDefaultFeeRatio);
     }
+    if (message.yammDefaultSwapYieldFeeRatio !== "") {
+      writer.uint32(74).string(message.yammDefaultSwapYieldFeeRatio);
+    }
     if (message.orderControlParams !== undefined) {
-      OrderControlParameters.encode(message.orderControlParams, writer.uint32(74).fork()).ldelim();
+      OrderControlParameters.encode(message.orderControlParams, writer.uint32(82).fork()).ldelim();
     }
     return writer;
   },
@@ -183,6 +188,9 @@ export const Params = {
           message.yammSellYGivenOutDefaultFeeRatio = reader.string();
           break;
         case 9:
+          message.yammDefaultSwapYieldFeeRatio = reader.string();
+          break;
+        case 10:
           message.orderControlParams = OrderControlParameters.decode(reader, reader.uint32());
           break;
         default:
@@ -215,6 +223,9 @@ export const Params = {
       yammSellYGivenOutDefaultFeeRatio: isSet(object.yammSellYGivenOutDefaultFeeRatio)
         ? String(object.yammSellYGivenOutDefaultFeeRatio)
         : "",
+      yammDefaultSwapYieldFeeRatio: isSet(object.yammDefaultSwapYieldFeeRatio)
+        ? String(object.yammDefaultSwapYieldFeeRatio)
+        : "",
       orderControlParams: isSet(object.orderControlParams)
         ? OrderControlParameters.fromJSON(object.orderControlParams)
         : undefined,
@@ -237,6 +248,8 @@ export const Params = {
       && (obj.yammBuyYGivenInDefaultLoanFeeRatio = message.yammBuyYGivenInDefaultLoanFeeRatio);
     message.yammSellYGivenOutDefaultFeeRatio !== undefined
       && (obj.yammSellYGivenOutDefaultFeeRatio = message.yammSellYGivenOutDefaultFeeRatio);
+    message.yammDefaultSwapYieldFeeRatio !== undefined
+      && (obj.yammDefaultSwapYieldFeeRatio = message.yammDefaultSwapYieldFeeRatio);
     message.orderControlParams !== undefined && (obj.orderControlParams = message.orderControlParams
       ? OrderControlParameters.toJSON(message.orderControlParams)
       : undefined);
@@ -253,6 +266,7 @@ export const Params = {
     message.yammExpiredAssetDiscountRatio = object.yammExpiredAssetDiscountRatio ?? "";
     message.yammBuyYGivenInDefaultLoanFeeRatio = object.yammBuyYGivenInDefaultLoanFeeRatio ?? "";
     message.yammSellYGivenOutDefaultFeeRatio = object.yammSellYGivenOutDefaultFeeRatio ?? "";
+    message.yammDefaultSwapYieldFeeRatio = object.yammDefaultSwapYieldFeeRatio ?? "";
     message.orderControlParams = (object.orderControlParams !== undefined && object.orderControlParams !== null)
       ? OrderControlParameters.fromPartial(object.orderControlParams)
       : undefined;
