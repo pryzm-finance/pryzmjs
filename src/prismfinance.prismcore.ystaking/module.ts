@@ -9,11 +9,11 @@ import { MissingWalletError } from "../helpers"
 import { Api } from "./rest";
 import { MsgClaimReward } from "./types/prismcore/ystaking/tx";
 import { MsgBond } from "./types/prismcore/ystaking/tx";
-import { MsgExitPool } from "./types/prismcore/ystaking/tx";
 import { MsgUnbond } from "./types/prismcore/ystaking/tx";
+import { MsgExitPool } from "./types/prismcore/ystaking/tx";
 
 
-export { MsgClaimReward, MsgBond, MsgExitPool, MsgUnbond };
+export { MsgClaimReward, MsgBond, MsgUnbond, MsgExitPool };
 
 type sendMsgClaimRewardParams = {
   value: MsgClaimReward,
@@ -27,14 +27,14 @@ type sendMsgBondParams = {
   memo?: string
 };
 
-type sendMsgExitPoolParams = {
-  value: MsgExitPool,
+type sendMsgUnbondParams = {
+  value: MsgUnbond,
   fee?: StdFee,
   memo?: string
 };
 
-type sendMsgUnbondParams = {
-  value: MsgUnbond,
+type sendMsgExitPoolParams = {
+  value: MsgExitPool,
   fee?: StdFee,
   memo?: string
 };
@@ -48,12 +48,12 @@ type msgBondParams = {
   value: MsgBond,
 };
 
-type msgExitPoolParams = {
-  value: MsgExitPool,
-};
-
 type msgUnbondParams = {
   value: MsgUnbond,
+};
+
+type msgExitPoolParams = {
+  value: MsgExitPool,
 };
 
 
@@ -102,20 +102,6 @@ export const txClient = ({ signer, prefix, addr }: TxClientOptions = { addr: "ht
 			}
 		},
 		
-		async sendMsgExitPool({ value, fee, memo }: sendMsgExitPoolParams): Promise<DeliverTxResponse> {
-			if (!signer) {
-					throw new Error('TxClient:sendMsgExitPool: Unable to sign Tx. Signer is not present.')
-			}
-			try {			
-				const { address } = (await signer.getAccounts())[0]; 
-				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry, prefix});
-				let msg = this.msgExitPool({ value: MsgExitPool.fromPartial(value) })
-				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
-			} catch (e: any) {
-				throw new Error('TxClient:sendMsgExitPool: Could not broadcast Tx: '+ e.message)
-			}
-		},
-		
 		async sendMsgUnbond({ value, fee, memo }: sendMsgUnbondParams): Promise<DeliverTxResponse> {
 			if (!signer) {
 					throw new Error('TxClient:sendMsgUnbond: Unable to sign Tx. Signer is not present.')
@@ -127,6 +113,20 @@ export const txClient = ({ signer, prefix, addr }: TxClientOptions = { addr: "ht
 				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
 			} catch (e: any) {
 				throw new Error('TxClient:sendMsgUnbond: Could not broadcast Tx: '+ e.message)
+			}
+		},
+		
+		async sendMsgExitPool({ value, fee, memo }: sendMsgExitPoolParams): Promise<DeliverTxResponse> {
+			if (!signer) {
+					throw new Error('TxClient:sendMsgExitPool: Unable to sign Tx. Signer is not present.')
+			}
+			try {			
+				const { address } = (await signer.getAccounts())[0]; 
+				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry, prefix});
+				let msg = this.msgExitPool({ value: MsgExitPool.fromPartial(value) })
+				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
+			} catch (e: any) {
+				throw new Error('TxClient:sendMsgExitPool: Could not broadcast Tx: '+ e.message)
 			}
 		},
 		
@@ -147,19 +147,19 @@ export const txClient = ({ signer, prefix, addr }: TxClientOptions = { addr: "ht
 			}
 		},
 		
-		msgExitPool({ value }: msgExitPoolParams): EncodeObject {
-			try {
-				return { typeUrl: "/prismfinance.prismcore.ystaking.MsgExitPool", value: MsgExitPool.fromPartial( value ) }  
-			} catch (e: any) {
-				throw new Error('TxClient:MsgExitPool: Could not create message: ' + e.message)
-			}
-		},
-		
 		msgUnbond({ value }: msgUnbondParams): EncodeObject {
 			try {
 				return { typeUrl: "/prismfinance.prismcore.ystaking.MsgUnbond", value: MsgUnbond.fromPartial( value ) }  
 			} catch (e: any) {
 				throw new Error('TxClient:MsgUnbond: Could not create message: ' + e.message)
+			}
+		},
+		
+		msgExitPool({ value }: msgExitPoolParams): EncodeObject {
+			try {
+				return { typeUrl: "/prismfinance.prismcore.ystaking.MsgExitPool", value: MsgExitPool.fromPartial( value ) }  
+			} catch (e: any) {
+				throw new Error('TxClient:MsgExitPool: Could not create message: ' + e.message)
 			}
 		},
 		

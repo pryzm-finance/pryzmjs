@@ -7,22 +7,22 @@ import { msgTypes } from './registry';
 import { IgniteClient } from "../client"
 import { MissingWalletError } from "../helpers"
 import { Api } from "./rest";
-import { MsgRegisterAsset } from "./types/prismcore/assets/tx";
 import { MsgDisableAsset } from "./types/prismcore/assets/tx";
+import { MsgRegisterAsset } from "./types/prismcore/assets/tx";
 import { MsgUpdateFeeRatios } from "./types/prismcore/assets/tx";
 import { MsgUpdateMaturityParams } from "./types/prismcore/assets/tx";
 
 
-export { MsgRegisterAsset, MsgDisableAsset, MsgUpdateFeeRatios, MsgUpdateMaturityParams };
+export { MsgDisableAsset, MsgRegisterAsset, MsgUpdateFeeRatios, MsgUpdateMaturityParams };
 
-type sendMsgRegisterAssetParams = {
-  value: MsgRegisterAsset,
+type sendMsgDisableAssetParams = {
+  value: MsgDisableAsset,
   fee?: StdFee,
   memo?: string
 };
 
-type sendMsgDisableAssetParams = {
-  value: MsgDisableAsset,
+type sendMsgRegisterAssetParams = {
+  value: MsgRegisterAsset,
   fee?: StdFee,
   memo?: string
 };
@@ -40,12 +40,12 @@ type sendMsgUpdateMaturityParamsParams = {
 };
 
 
-type msgRegisterAssetParams = {
-  value: MsgRegisterAsset,
-};
-
 type msgDisableAssetParams = {
   value: MsgDisableAsset,
+};
+
+type msgRegisterAssetParams = {
+  value: MsgRegisterAsset,
 };
 
 type msgUpdateFeeRatiosParams = {
@@ -74,20 +74,6 @@ export const txClient = ({ signer, prefix, addr }: TxClientOptions = { addr: "ht
 
   return {
 		
-		async sendMsgRegisterAsset({ value, fee, memo }: sendMsgRegisterAssetParams): Promise<DeliverTxResponse> {
-			if (!signer) {
-					throw new Error('TxClient:sendMsgRegisterAsset: Unable to sign Tx. Signer is not present.')
-			}
-			try {			
-				const { address } = (await signer.getAccounts())[0]; 
-				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry, prefix});
-				let msg = this.msgRegisterAsset({ value: MsgRegisterAsset.fromPartial(value) })
-				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
-			} catch (e: any) {
-				throw new Error('TxClient:sendMsgRegisterAsset: Could not broadcast Tx: '+ e.message)
-			}
-		},
-		
 		async sendMsgDisableAsset({ value, fee, memo }: sendMsgDisableAssetParams): Promise<DeliverTxResponse> {
 			if (!signer) {
 					throw new Error('TxClient:sendMsgDisableAsset: Unable to sign Tx. Signer is not present.')
@@ -99,6 +85,20 @@ export const txClient = ({ signer, prefix, addr }: TxClientOptions = { addr: "ht
 				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
 			} catch (e: any) {
 				throw new Error('TxClient:sendMsgDisableAsset: Could not broadcast Tx: '+ e.message)
+			}
+		},
+		
+		async sendMsgRegisterAsset({ value, fee, memo }: sendMsgRegisterAssetParams): Promise<DeliverTxResponse> {
+			if (!signer) {
+					throw new Error('TxClient:sendMsgRegisterAsset: Unable to sign Tx. Signer is not present.')
+			}
+			try {			
+				const { address } = (await signer.getAccounts())[0]; 
+				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry, prefix});
+				let msg = this.msgRegisterAsset({ value: MsgRegisterAsset.fromPartial(value) })
+				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
+			} catch (e: any) {
+				throw new Error('TxClient:sendMsgRegisterAsset: Could not broadcast Tx: '+ e.message)
 			}
 		},
 		
@@ -131,19 +131,19 @@ export const txClient = ({ signer, prefix, addr }: TxClientOptions = { addr: "ht
 		},
 		
 		
-		msgRegisterAsset({ value }: msgRegisterAssetParams): EncodeObject {
-			try {
-				return { typeUrl: "/prismfinance.prismcore.assets.MsgRegisterAsset", value: MsgRegisterAsset.fromPartial( value ) }  
-			} catch (e: any) {
-				throw new Error('TxClient:MsgRegisterAsset: Could not create message: ' + e.message)
-			}
-		},
-		
 		msgDisableAsset({ value }: msgDisableAssetParams): EncodeObject {
 			try {
 				return { typeUrl: "/prismfinance.prismcore.assets.MsgDisableAsset", value: MsgDisableAsset.fromPartial( value ) }  
 			} catch (e: any) {
 				throw new Error('TxClient:MsgDisableAsset: Could not create message: ' + e.message)
+			}
+		},
+		
+		msgRegisterAsset({ value }: msgRegisterAssetParams): EncodeObject {
+			try {
+				return { typeUrl: "/prismfinance.prismcore.assets.MsgRegisterAsset", value: MsgRegisterAsset.fromPartial( value ) }  
+			} catch (e: any) {
+				throw new Error('TxClient:MsgRegisterAsset: Could not create message: ' + e.message)
 			}
 		},
 		

@@ -1,6 +1,7 @@
 /* eslint-disable */
 import Long from "long";
 import _m0 from "protobufjs/minimal";
+import { Pair } from "./oracle_price_pair";
 
 export const protobufPackage = "prismfinance.prismcore.amm";
 
@@ -15,6 +16,7 @@ export interface HostChainHeight {
 export interface OraclePayload {
   blockHeight: HostChainHeight | undefined;
   price: string;
+  pairs: Pair[];
 }
 
 function createBaseHostChainHeight(): HostChainHeight {
@@ -76,7 +78,7 @@ export const HostChainHeight = {
 };
 
 function createBaseOraclePayload(): OraclePayload {
-  return { blockHeight: undefined, price: "" };
+  return { blockHeight: undefined, price: "", pairs: [] };
 }
 
 export const OraclePayload = {
@@ -86,6 +88,9 @@ export const OraclePayload = {
     }
     if (message.price !== "") {
       writer.uint32(18).string(message.price);
+    }
+    for (const v of message.pairs) {
+      Pair.encode(v!, writer.uint32(26).fork()).ldelim();
     }
     return writer;
   },
@@ -103,6 +108,9 @@ export const OraclePayload = {
         case 2:
           message.price = reader.string();
           break;
+        case 3:
+          message.pairs.push(Pair.decode(reader, reader.uint32()));
+          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -115,6 +123,7 @@ export const OraclePayload = {
     return {
       blockHeight: isSet(object.blockHeight) ? HostChainHeight.fromJSON(object.blockHeight) : undefined,
       price: isSet(object.price) ? String(object.price) : "",
+      pairs: Array.isArray(object?.pairs) ? object.pairs.map((e: any) => Pair.fromJSON(e)) : [],
     };
   },
 
@@ -123,6 +132,11 @@ export const OraclePayload = {
     message.blockHeight !== undefined
       && (obj.blockHeight = message.blockHeight ? HostChainHeight.toJSON(message.blockHeight) : undefined);
     message.price !== undefined && (obj.price = message.price);
+    if (message.pairs) {
+      obj.pairs = message.pairs.map((e) => e ? Pair.toJSON(e) : undefined);
+    } else {
+      obj.pairs = [];
+    }
     return obj;
   },
 
@@ -132,6 +146,7 @@ export const OraclePayload = {
       ? HostChainHeight.fromPartial(object.blockHeight)
       : undefined;
     message.price = object.price ?? "";
+    message.pairs = object.pairs?.map((e) => Pair.fromPartial(e)) || [];
     return message;
   },
 };
