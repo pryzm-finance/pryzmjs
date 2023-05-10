@@ -256,13 +256,7 @@ export interface V1ContractInfo {
   /** Label is optional metadata to be stored with a contract instance. */
   label?: string;
 
-  /**
-   * Created Tx position when the contract was instantiated.
-   * This data should kept internal and not be exposed via query results. Just
-   * use for sorting
-   * AbsoluteTxPosition is a unique transaction position that allows for global
-   * ordering of transactions.
-   */
+  /** Created Tx position when the contract was instantiated. */
   created?: V1AbsoluteTxPosition;
   ibc_port_id?: string;
 
@@ -352,6 +346,8 @@ export interface V1MsgStoreCodeResponse {
 }
 
 export type V1MsgUpdateAdminResponse = object;
+
+export type V1MsgUpdateInstantiateConfigResponse = object;
 
 /**
  * Params defines the set of wasm parameters.
@@ -660,7 +656,7 @@ export class HttpClient<SecurityDataType = unknown> {
 }
 
 /**
- * @title cosmwasm/wasm/v1/genesis.proto
+ * @title cosmwasm/wasm/v1/authz.proto
  * @version version not set
  */
 export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDataType> {

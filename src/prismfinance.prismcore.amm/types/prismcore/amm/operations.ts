@@ -43,6 +43,7 @@ export enum JoinType {
   JOIN_TYPE_GIVEN_TOKENS_IN = 0,
   JOIN_TYPE_TOKEN_GIVEN_LPT_OUT = 1,
   JOIN_TYPE_ALL_TOKENS_GIVEN_LPT_OUT = 2,
+  JOIN_TYPE_INITIALIZE_POOL = 3,
   UNRECOGNIZED = -1,
 }
 
@@ -57,6 +58,9 @@ export function joinTypeFromJSON(object: any): JoinType {
     case 2:
     case "JOIN_TYPE_ALL_TOKENS_GIVEN_LPT_OUT":
       return JoinType.JOIN_TYPE_ALL_TOKENS_GIVEN_LPT_OUT;
+    case 3:
+    case "JOIN_TYPE_INITIALIZE_POOL":
+      return JoinType.JOIN_TYPE_INITIALIZE_POOL;
     case -1:
     case "UNRECOGNIZED":
     default:
@@ -72,6 +76,8 @@ export function joinTypeToJSON(object: JoinType): string {
       return "JOIN_TYPE_TOKEN_GIVEN_LPT_OUT";
     case JoinType.JOIN_TYPE_ALL_TOKENS_GIVEN_LPT_OUT:
       return "JOIN_TYPE_ALL_TOKENS_GIVEN_LPT_OUT";
+    case JoinType.JOIN_TYPE_INITIALIZE_POOL:
+      return "JOIN_TYPE_INITIALIZE_POOL";
     case JoinType.UNRECOGNIZED:
     default:
       return "UNRECOGNIZED";

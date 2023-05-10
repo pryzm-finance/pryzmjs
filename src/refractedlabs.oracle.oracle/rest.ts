@@ -22,8 +22,7 @@ export interface OracleMissCounter {
 }
 
 export interface OracleModuleVote {
-  module?: string;
-  payload?: string;
+  namespace_votes?: Record<string, OracleNamespaceVote>;
 }
 
 export type OracleMsgDelegateFeedConsentResponse = object;
@@ -37,8 +36,7 @@ export type OracleMsgOracleVoteResponse = object;
 export type OracleMsgUpdateParamsResponse = object;
 
 export interface OracleNamespaceVote {
-  namespace?: string;
-  module_votes?: OracleModuleVote[];
+  payload?: string;
 }
 
 export interface OracleOraclePreVote {
@@ -51,7 +49,7 @@ export interface OracleOraclePreVote {
 
 export interface OracleOracleVote {
   validator?: string;
-  namespace_votes?: OracleNamespaceVote[];
+  module_votes?: Record<string, OracleModuleVote>;
 }
 
 /**
@@ -70,9 +68,7 @@ export interface OracleParams {
   /** @format int64 */
   slash_window?: string;
   max_miss_rate_per_slash_window?: string;
-
-  /** TODO? move to assets, TODO? why this is not used */
-  exchange_rate_valid_duration?: string;
+  max_miss_rate_per_vote_period?: string;
 }
 
 export interface OracleQueryAllFeederDelegationResponse {

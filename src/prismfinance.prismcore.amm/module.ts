@@ -7,199 +7,43 @@ import { msgTypes } from './registry';
 import { IgniteClient } from "../client"
 import { MissingWalletError } from "../helpers"
 import { Api } from "./rest";
-import { MsgJoinAllTokensExactLpt } from "./types/prismcore/amm/tx";
-import { MsgSetCircuitBreakers } from "./types/prismcore/amm/tx";
-import { MsgExitTokenExactLpt } from "./types/prismcore/amm/tx";
-import { MsgSetWhitelistedRouteEnabled } from "./types/prismcore/amm/tx";
-import { MsgUpdateOraclePriceDataSource } from "./types/prismcore/amm/tx";
-import { MsgCancelOrder } from "./types/prismcore/amm/tx";
-import { MsgUpdateWeights } from "./types/prismcore/amm/tx";
-import { MsgDeleteOraclePriceDataSource } from "./types/prismcore/amm/tx";
-import { MsgUpdateSwapFee } from "./types/prismcore/amm/tx";
-import { MsgWhitelistRoute } from "./types/prismcore/amm/tx";
-import { MsgSetPauseMode } from "./types/prismcore/amm/tx";
-import { MsgSetVaultPauseMode } from "./types/prismcore/amm/tx";
-import { MsgInitializePool } from "./types/prismcore/amm/tx";
-import { MsgCreateOraclePricePair } from "./types/prismcore/amm/tx";
-import { MsgJoinTokenExactLpt } from "./types/prismcore/amm/tx";
-import { MsgSetRecoveryMode } from "./types/prismcore/amm/tx";
-import { MsgExitAllTokensExactLpt } from "./types/prismcore/amm/tx";
-import { MsgDeleteOraclePricePair } from "./types/prismcore/amm/tx";
-import { MsgBatchSwap } from "./types/prismcore/amm/tx";
-import { MsgSingleSwap } from "./types/prismcore/amm/tx";
-import { MsgJoinExactTokens } from "./types/prismcore/amm/tx";
-import { MsgUpdateOraclePricePair } from "./types/prismcore/amm/tx";
 import { MsgRecoveryExit } from "./types/prismcore/amm/tx";
-import { MsgExitExactTokens } from "./types/prismcore/amm/tx";
-import { MsgSetYammConfiguration } from "./types/prismcore/amm/tx";
-import { MsgSetJoinExitProtocolFee } from "./types/prismcore/amm/tx";
-import { MsgSetSwapProtocolFee } from "./types/prismcore/amm/tx";
 import { MsgProposeMatch } from "./types/prismcore/amm/tx";
-import { MsgSubmitOrder } from "./types/prismcore/amm/tx";
-import { MsgCreateOraclePriceDataSource } from "./types/prismcore/amm/tx";
 import { MsgCreateWeightedPool } from "./types/prismcore/amm/tx";
+import { MsgSetCircuitBreakers } from "./types/prismcore/amm/tx";
+import { MsgSingleSwap } from "./types/prismcore/amm/tx";
+import { MsgSetVaultPauseMode } from "./types/prismcore/amm/tx";
+import { MsgUpdateOraclePricePair } from "./types/prismcore/amm/tx";
+import { MsgSetJoinExitProtocolFee } from "./types/prismcore/amm/tx";
+import { MsgJoinTokenExactLpt } from "./types/prismcore/amm/tx";
+import { MsgUpdateSwapFee } from "./types/prismcore/amm/tx";
+import { MsgExitExactTokens } from "./types/prismcore/amm/tx";
+import { MsgSetRecoveryMode } from "./types/prismcore/amm/tx";
+import { MsgDeleteOraclePricePair } from "./types/prismcore/amm/tx";
+import { MsgIntroduceYammLpToWeightedPool } from "./types/prismcore/amm/tx";
+import { MsgSetYammConfiguration } from "./types/prismcore/amm/tx";
+import { MsgJoinAllTokensExactLpt } from "./types/prismcore/amm/tx";
+import { MsgSetPauseMode } from "./types/prismcore/amm/tx";
+import { MsgCancelPendingTokenIntroduction } from "./types/prismcore/amm/tx";
+import { MsgSubmitOrder } from "./types/prismcore/amm/tx";
+import { MsgWhitelistRoute } from "./types/prismcore/amm/tx";
+import { MsgRemoveTokenFromWeightedPool } from "./types/prismcore/amm/tx";
+import { MsgCreateOraclePricePair } from "./types/prismcore/amm/tx";
+import { MsgBatchSwap } from "./types/prismcore/amm/tx";
+import { MsgSetSwapProtocolFee } from "./types/prismcore/amm/tx";
+import { MsgCancelOrder } from "./types/prismcore/amm/tx";
+import { MsgExitTokenExactLpt } from "./types/prismcore/amm/tx";
+import { MsgJoinExactTokens } from "./types/prismcore/amm/tx";
+import { MsgInitializePool } from "./types/prismcore/amm/tx";
+import { MsgSetWhitelistedRouteEnabled } from "./types/prismcore/amm/tx";
+import { MsgExitAllTokensExactLpt } from "./types/prismcore/amm/tx";
+import { MsgUpdateWeights } from "./types/prismcore/amm/tx";
 
 
-export { MsgJoinAllTokensExactLpt, MsgSetCircuitBreakers, MsgExitTokenExactLpt, MsgSetWhitelistedRouteEnabled, MsgUpdateOraclePriceDataSource, MsgCancelOrder, MsgUpdateWeights, MsgDeleteOraclePriceDataSource, MsgUpdateSwapFee, MsgWhitelistRoute, MsgSetPauseMode, MsgSetVaultPauseMode, MsgInitializePool, MsgCreateOraclePricePair, MsgJoinTokenExactLpt, MsgSetRecoveryMode, MsgExitAllTokensExactLpt, MsgDeleteOraclePricePair, MsgBatchSwap, MsgSingleSwap, MsgJoinExactTokens, MsgUpdateOraclePricePair, MsgRecoveryExit, MsgExitExactTokens, MsgSetYammConfiguration, MsgSetJoinExitProtocolFee, MsgSetSwapProtocolFee, MsgProposeMatch, MsgSubmitOrder, MsgCreateOraclePriceDataSource, MsgCreateWeightedPool };
-
-type sendMsgJoinAllTokensExactLptParams = {
-  value: MsgJoinAllTokensExactLpt,
-  fee?: StdFee,
-  memo?: string
-};
-
-type sendMsgSetCircuitBreakersParams = {
-  value: MsgSetCircuitBreakers,
-  fee?: StdFee,
-  memo?: string
-};
-
-type sendMsgExitTokenExactLptParams = {
-  value: MsgExitTokenExactLpt,
-  fee?: StdFee,
-  memo?: string
-};
-
-type sendMsgSetWhitelistedRouteEnabledParams = {
-  value: MsgSetWhitelistedRouteEnabled,
-  fee?: StdFee,
-  memo?: string
-};
-
-type sendMsgUpdateOraclePriceDataSourceParams = {
-  value: MsgUpdateOraclePriceDataSource,
-  fee?: StdFee,
-  memo?: string
-};
-
-type sendMsgCancelOrderParams = {
-  value: MsgCancelOrder,
-  fee?: StdFee,
-  memo?: string
-};
-
-type sendMsgUpdateWeightsParams = {
-  value: MsgUpdateWeights,
-  fee?: StdFee,
-  memo?: string
-};
-
-type sendMsgDeleteOraclePriceDataSourceParams = {
-  value: MsgDeleteOraclePriceDataSource,
-  fee?: StdFee,
-  memo?: string
-};
-
-type sendMsgUpdateSwapFeeParams = {
-  value: MsgUpdateSwapFee,
-  fee?: StdFee,
-  memo?: string
-};
-
-type sendMsgWhitelistRouteParams = {
-  value: MsgWhitelistRoute,
-  fee?: StdFee,
-  memo?: string
-};
-
-type sendMsgSetPauseModeParams = {
-  value: MsgSetPauseMode,
-  fee?: StdFee,
-  memo?: string
-};
-
-type sendMsgSetVaultPauseModeParams = {
-  value: MsgSetVaultPauseMode,
-  fee?: StdFee,
-  memo?: string
-};
-
-type sendMsgInitializePoolParams = {
-  value: MsgInitializePool,
-  fee?: StdFee,
-  memo?: string
-};
-
-type sendMsgCreateOraclePricePairParams = {
-  value: MsgCreateOraclePricePair,
-  fee?: StdFee,
-  memo?: string
-};
-
-type sendMsgJoinTokenExactLptParams = {
-  value: MsgJoinTokenExactLpt,
-  fee?: StdFee,
-  memo?: string
-};
-
-type sendMsgSetRecoveryModeParams = {
-  value: MsgSetRecoveryMode,
-  fee?: StdFee,
-  memo?: string
-};
-
-type sendMsgExitAllTokensExactLptParams = {
-  value: MsgExitAllTokensExactLpt,
-  fee?: StdFee,
-  memo?: string
-};
-
-type sendMsgDeleteOraclePricePairParams = {
-  value: MsgDeleteOraclePricePair,
-  fee?: StdFee,
-  memo?: string
-};
-
-type sendMsgBatchSwapParams = {
-  value: MsgBatchSwap,
-  fee?: StdFee,
-  memo?: string
-};
-
-type sendMsgSingleSwapParams = {
-  value: MsgSingleSwap,
-  fee?: StdFee,
-  memo?: string
-};
-
-type sendMsgJoinExactTokensParams = {
-  value: MsgJoinExactTokens,
-  fee?: StdFee,
-  memo?: string
-};
-
-type sendMsgUpdateOraclePricePairParams = {
-  value: MsgUpdateOraclePricePair,
-  fee?: StdFee,
-  memo?: string
-};
+export { MsgRecoveryExit, MsgProposeMatch, MsgCreateWeightedPool, MsgSetCircuitBreakers, MsgSingleSwap, MsgSetVaultPauseMode, MsgUpdateOraclePricePair, MsgSetJoinExitProtocolFee, MsgJoinTokenExactLpt, MsgUpdateSwapFee, MsgExitExactTokens, MsgSetRecoveryMode, MsgDeleteOraclePricePair, MsgIntroduceYammLpToWeightedPool, MsgSetYammConfiguration, MsgJoinAllTokensExactLpt, MsgSetPauseMode, MsgCancelPendingTokenIntroduction, MsgSubmitOrder, MsgWhitelistRoute, MsgRemoveTokenFromWeightedPool, MsgCreateOraclePricePair, MsgBatchSwap, MsgSetSwapProtocolFee, MsgCancelOrder, MsgExitTokenExactLpt, MsgJoinExactTokens, MsgInitializePool, MsgSetWhitelistedRouteEnabled, MsgExitAllTokensExactLpt, MsgUpdateWeights };
 
 type sendMsgRecoveryExitParams = {
   value: MsgRecoveryExit,
-  fee?: StdFee,
-  memo?: string
-};
-
-type sendMsgExitExactTokensParams = {
-  value: MsgExitExactTokens,
-  fee?: StdFee,
-  memo?: string
-};
-
-type sendMsgSetYammConfigurationParams = {
-  value: MsgSetYammConfiguration,
-  fee?: StdFee,
-  memo?: string
-};
-
-type sendMsgSetJoinExitProtocolFeeParams = {
-  value: MsgSetJoinExitProtocolFee,
-  fee?: StdFee,
-  memo?: string
-};
-
-type sendMsgSetSwapProtocolFeeParams = {
-  value: MsgSetSwapProtocolFee,
   fee?: StdFee,
   memo?: string
 };
@@ -210,147 +54,303 @@ type sendMsgProposeMatchParams = {
   memo?: string
 };
 
-type sendMsgSubmitOrderParams = {
-  value: MsgSubmitOrder,
-  fee?: StdFee,
-  memo?: string
-};
-
-type sendMsgCreateOraclePriceDataSourceParams = {
-  value: MsgCreateOraclePriceDataSource,
-  fee?: StdFee,
-  memo?: string
-};
-
 type sendMsgCreateWeightedPoolParams = {
   value: MsgCreateWeightedPool,
   fee?: StdFee,
   memo?: string
 };
 
-
-type msgJoinAllTokensExactLptParams = {
-  value: MsgJoinAllTokensExactLpt,
-};
-
-type msgSetCircuitBreakersParams = {
+type sendMsgSetCircuitBreakersParams = {
   value: MsgSetCircuitBreakers,
+  fee?: StdFee,
+  memo?: string
 };
 
-type msgExitTokenExactLptParams = {
-  value: MsgExitTokenExactLpt,
-};
-
-type msgSetWhitelistedRouteEnabledParams = {
-  value: MsgSetWhitelistedRouteEnabled,
-};
-
-type msgUpdateOraclePriceDataSourceParams = {
-  value: MsgUpdateOraclePriceDataSource,
-};
-
-type msgCancelOrderParams = {
-  value: MsgCancelOrder,
-};
-
-type msgUpdateWeightsParams = {
-  value: MsgUpdateWeights,
-};
-
-type msgDeleteOraclePriceDataSourceParams = {
-  value: MsgDeleteOraclePriceDataSource,
-};
-
-type msgUpdateSwapFeeParams = {
-  value: MsgUpdateSwapFee,
-};
-
-type msgWhitelistRouteParams = {
-  value: MsgWhitelistRoute,
-};
-
-type msgSetPauseModeParams = {
-  value: MsgSetPauseMode,
-};
-
-type msgSetVaultPauseModeParams = {
-  value: MsgSetVaultPauseMode,
-};
-
-type msgInitializePoolParams = {
-  value: MsgInitializePool,
-};
-
-type msgCreateOraclePricePairParams = {
-  value: MsgCreateOraclePricePair,
-};
-
-type msgJoinTokenExactLptParams = {
-  value: MsgJoinTokenExactLpt,
-};
-
-type msgSetRecoveryModeParams = {
-  value: MsgSetRecoveryMode,
-};
-
-type msgExitAllTokensExactLptParams = {
-  value: MsgExitAllTokensExactLpt,
-};
-
-type msgDeleteOraclePricePairParams = {
-  value: MsgDeleteOraclePricePair,
-};
-
-type msgBatchSwapParams = {
-  value: MsgBatchSwap,
-};
-
-type msgSingleSwapParams = {
+type sendMsgSingleSwapParams = {
   value: MsgSingleSwap,
+  fee?: StdFee,
+  memo?: string
 };
 
-type msgJoinExactTokensParams = {
-  value: MsgJoinExactTokens,
+type sendMsgSetVaultPauseModeParams = {
+  value: MsgSetVaultPauseMode,
+  fee?: StdFee,
+  memo?: string
 };
 
-type msgUpdateOraclePricePairParams = {
+type sendMsgUpdateOraclePricePairParams = {
   value: MsgUpdateOraclePricePair,
+  fee?: StdFee,
+  memo?: string
 };
+
+type sendMsgSetJoinExitProtocolFeeParams = {
+  value: MsgSetJoinExitProtocolFee,
+  fee?: StdFee,
+  memo?: string
+};
+
+type sendMsgJoinTokenExactLptParams = {
+  value: MsgJoinTokenExactLpt,
+  fee?: StdFee,
+  memo?: string
+};
+
+type sendMsgUpdateSwapFeeParams = {
+  value: MsgUpdateSwapFee,
+  fee?: StdFee,
+  memo?: string
+};
+
+type sendMsgExitExactTokensParams = {
+  value: MsgExitExactTokens,
+  fee?: StdFee,
+  memo?: string
+};
+
+type sendMsgSetRecoveryModeParams = {
+  value: MsgSetRecoveryMode,
+  fee?: StdFee,
+  memo?: string
+};
+
+type sendMsgDeleteOraclePricePairParams = {
+  value: MsgDeleteOraclePricePair,
+  fee?: StdFee,
+  memo?: string
+};
+
+type sendMsgIntroduceYammLpToWeightedPoolParams = {
+  value: MsgIntroduceYammLpToWeightedPool,
+  fee?: StdFee,
+  memo?: string
+};
+
+type sendMsgSetYammConfigurationParams = {
+  value: MsgSetYammConfiguration,
+  fee?: StdFee,
+  memo?: string
+};
+
+type sendMsgJoinAllTokensExactLptParams = {
+  value: MsgJoinAllTokensExactLpt,
+  fee?: StdFee,
+  memo?: string
+};
+
+type sendMsgSetPauseModeParams = {
+  value: MsgSetPauseMode,
+  fee?: StdFee,
+  memo?: string
+};
+
+type sendMsgCancelPendingTokenIntroductionParams = {
+  value: MsgCancelPendingTokenIntroduction,
+  fee?: StdFee,
+  memo?: string
+};
+
+type sendMsgSubmitOrderParams = {
+  value: MsgSubmitOrder,
+  fee?: StdFee,
+  memo?: string
+};
+
+type sendMsgWhitelistRouteParams = {
+  value: MsgWhitelistRoute,
+  fee?: StdFee,
+  memo?: string
+};
+
+type sendMsgRemoveTokenFromWeightedPoolParams = {
+  value: MsgRemoveTokenFromWeightedPool,
+  fee?: StdFee,
+  memo?: string
+};
+
+type sendMsgCreateOraclePricePairParams = {
+  value: MsgCreateOraclePricePair,
+  fee?: StdFee,
+  memo?: string
+};
+
+type sendMsgBatchSwapParams = {
+  value: MsgBatchSwap,
+  fee?: StdFee,
+  memo?: string
+};
+
+type sendMsgSetSwapProtocolFeeParams = {
+  value: MsgSetSwapProtocolFee,
+  fee?: StdFee,
+  memo?: string
+};
+
+type sendMsgCancelOrderParams = {
+  value: MsgCancelOrder,
+  fee?: StdFee,
+  memo?: string
+};
+
+type sendMsgExitTokenExactLptParams = {
+  value: MsgExitTokenExactLpt,
+  fee?: StdFee,
+  memo?: string
+};
+
+type sendMsgJoinExactTokensParams = {
+  value: MsgJoinExactTokens,
+  fee?: StdFee,
+  memo?: string
+};
+
+type sendMsgInitializePoolParams = {
+  value: MsgInitializePool,
+  fee?: StdFee,
+  memo?: string
+};
+
+type sendMsgSetWhitelistedRouteEnabledParams = {
+  value: MsgSetWhitelistedRouteEnabled,
+  fee?: StdFee,
+  memo?: string
+};
+
+type sendMsgExitAllTokensExactLptParams = {
+  value: MsgExitAllTokensExactLpt,
+  fee?: StdFee,
+  memo?: string
+};
+
+type sendMsgUpdateWeightsParams = {
+  value: MsgUpdateWeights,
+  fee?: StdFee,
+  memo?: string
+};
+
 
 type msgRecoveryExitParams = {
   value: MsgRecoveryExit,
-};
-
-type msgExitExactTokensParams = {
-  value: MsgExitExactTokens,
-};
-
-type msgSetYammConfigurationParams = {
-  value: MsgSetYammConfiguration,
-};
-
-type msgSetJoinExitProtocolFeeParams = {
-  value: MsgSetJoinExitProtocolFee,
-};
-
-type msgSetSwapProtocolFeeParams = {
-  value: MsgSetSwapProtocolFee,
 };
 
 type msgProposeMatchParams = {
   value: MsgProposeMatch,
 };
 
+type msgCreateWeightedPoolParams = {
+  value: MsgCreateWeightedPool,
+};
+
+type msgSetCircuitBreakersParams = {
+  value: MsgSetCircuitBreakers,
+};
+
+type msgSingleSwapParams = {
+  value: MsgSingleSwap,
+};
+
+type msgSetVaultPauseModeParams = {
+  value: MsgSetVaultPauseMode,
+};
+
+type msgUpdateOraclePricePairParams = {
+  value: MsgUpdateOraclePricePair,
+};
+
+type msgSetJoinExitProtocolFeeParams = {
+  value: MsgSetJoinExitProtocolFee,
+};
+
+type msgJoinTokenExactLptParams = {
+  value: MsgJoinTokenExactLpt,
+};
+
+type msgUpdateSwapFeeParams = {
+  value: MsgUpdateSwapFee,
+};
+
+type msgExitExactTokensParams = {
+  value: MsgExitExactTokens,
+};
+
+type msgSetRecoveryModeParams = {
+  value: MsgSetRecoveryMode,
+};
+
+type msgDeleteOraclePricePairParams = {
+  value: MsgDeleteOraclePricePair,
+};
+
+type msgIntroduceYammLpToWeightedPoolParams = {
+  value: MsgIntroduceYammLpToWeightedPool,
+};
+
+type msgSetYammConfigurationParams = {
+  value: MsgSetYammConfiguration,
+};
+
+type msgJoinAllTokensExactLptParams = {
+  value: MsgJoinAllTokensExactLpt,
+};
+
+type msgSetPauseModeParams = {
+  value: MsgSetPauseMode,
+};
+
+type msgCancelPendingTokenIntroductionParams = {
+  value: MsgCancelPendingTokenIntroduction,
+};
+
 type msgSubmitOrderParams = {
   value: MsgSubmitOrder,
 };
 
-type msgCreateOraclePriceDataSourceParams = {
-  value: MsgCreateOraclePriceDataSource,
+type msgWhitelistRouteParams = {
+  value: MsgWhitelistRoute,
 };
 
-type msgCreateWeightedPoolParams = {
-  value: MsgCreateWeightedPool,
+type msgRemoveTokenFromWeightedPoolParams = {
+  value: MsgRemoveTokenFromWeightedPool,
+};
+
+type msgCreateOraclePricePairParams = {
+  value: MsgCreateOraclePricePair,
+};
+
+type msgBatchSwapParams = {
+  value: MsgBatchSwap,
+};
+
+type msgSetSwapProtocolFeeParams = {
+  value: MsgSetSwapProtocolFee,
+};
+
+type msgCancelOrderParams = {
+  value: MsgCancelOrder,
+};
+
+type msgExitTokenExactLptParams = {
+  value: MsgExitTokenExactLpt,
+};
+
+type msgJoinExactTokensParams = {
+  value: MsgJoinExactTokens,
+};
+
+type msgInitializePoolParams = {
+  value: MsgInitializePool,
+};
+
+type msgSetWhitelistedRouteEnabledParams = {
+  value: MsgSetWhitelistedRouteEnabled,
+};
+
+type msgExitAllTokensExactLptParams = {
+  value: MsgExitAllTokensExactLpt,
+};
+
+type msgUpdateWeightsParams = {
+  value: MsgUpdateWeights,
 };
 
 
@@ -371,314 +371,6 @@ export const txClient = ({ signer, prefix, addr }: TxClientOptions = { addr: "ht
 
   return {
 		
-		async sendMsgJoinAllTokensExactLpt({ value, fee, memo }: sendMsgJoinAllTokensExactLptParams): Promise<DeliverTxResponse> {
-			if (!signer) {
-					throw new Error('TxClient:sendMsgJoinAllTokensExactLpt: Unable to sign Tx. Signer is not present.')
-			}
-			try {			
-				const { address } = (await signer.getAccounts())[0]; 
-				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry, prefix});
-				let msg = this.msgJoinAllTokensExactLpt({ value: MsgJoinAllTokensExactLpt.fromPartial(value) })
-				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
-			} catch (e: any) {
-				throw new Error('TxClient:sendMsgJoinAllTokensExactLpt: Could not broadcast Tx: '+ e.message)
-			}
-		},
-		
-		async sendMsgSetCircuitBreakers({ value, fee, memo }: sendMsgSetCircuitBreakersParams): Promise<DeliverTxResponse> {
-			if (!signer) {
-					throw new Error('TxClient:sendMsgSetCircuitBreakers: Unable to sign Tx. Signer is not present.')
-			}
-			try {			
-				const { address } = (await signer.getAccounts())[0]; 
-				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry, prefix});
-				let msg = this.msgSetCircuitBreakers({ value: MsgSetCircuitBreakers.fromPartial(value) })
-				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
-			} catch (e: any) {
-				throw new Error('TxClient:sendMsgSetCircuitBreakers: Could not broadcast Tx: '+ e.message)
-			}
-		},
-		
-		async sendMsgExitTokenExactLpt({ value, fee, memo }: sendMsgExitTokenExactLptParams): Promise<DeliverTxResponse> {
-			if (!signer) {
-					throw new Error('TxClient:sendMsgExitTokenExactLpt: Unable to sign Tx. Signer is not present.')
-			}
-			try {			
-				const { address } = (await signer.getAccounts())[0]; 
-				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry, prefix});
-				let msg = this.msgExitTokenExactLpt({ value: MsgExitTokenExactLpt.fromPartial(value) })
-				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
-			} catch (e: any) {
-				throw new Error('TxClient:sendMsgExitTokenExactLpt: Could not broadcast Tx: '+ e.message)
-			}
-		},
-		
-		async sendMsgSetWhitelistedRouteEnabled({ value, fee, memo }: sendMsgSetWhitelistedRouteEnabledParams): Promise<DeliverTxResponse> {
-			if (!signer) {
-					throw new Error('TxClient:sendMsgSetWhitelistedRouteEnabled: Unable to sign Tx. Signer is not present.')
-			}
-			try {			
-				const { address } = (await signer.getAccounts())[0]; 
-				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry, prefix});
-				let msg = this.msgSetWhitelistedRouteEnabled({ value: MsgSetWhitelistedRouteEnabled.fromPartial(value) })
-				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
-			} catch (e: any) {
-				throw new Error('TxClient:sendMsgSetWhitelistedRouteEnabled: Could not broadcast Tx: '+ e.message)
-			}
-		},
-		
-		async sendMsgUpdateOraclePriceDataSource({ value, fee, memo }: sendMsgUpdateOraclePriceDataSourceParams): Promise<DeliverTxResponse> {
-			if (!signer) {
-					throw new Error('TxClient:sendMsgUpdateOraclePriceDataSource: Unable to sign Tx. Signer is not present.')
-			}
-			try {			
-				const { address } = (await signer.getAccounts())[0]; 
-				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry, prefix});
-				let msg = this.msgUpdateOraclePriceDataSource({ value: MsgUpdateOraclePriceDataSource.fromPartial(value) })
-				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
-			} catch (e: any) {
-				throw new Error('TxClient:sendMsgUpdateOraclePriceDataSource: Could not broadcast Tx: '+ e.message)
-			}
-		},
-		
-		async sendMsgCancelOrder({ value, fee, memo }: sendMsgCancelOrderParams): Promise<DeliverTxResponse> {
-			if (!signer) {
-					throw new Error('TxClient:sendMsgCancelOrder: Unable to sign Tx. Signer is not present.')
-			}
-			try {			
-				const { address } = (await signer.getAccounts())[0]; 
-				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry, prefix});
-				let msg = this.msgCancelOrder({ value: MsgCancelOrder.fromPartial(value) })
-				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
-			} catch (e: any) {
-				throw new Error('TxClient:sendMsgCancelOrder: Could not broadcast Tx: '+ e.message)
-			}
-		},
-		
-		async sendMsgUpdateWeights({ value, fee, memo }: sendMsgUpdateWeightsParams): Promise<DeliverTxResponse> {
-			if (!signer) {
-					throw new Error('TxClient:sendMsgUpdateWeights: Unable to sign Tx. Signer is not present.')
-			}
-			try {			
-				const { address } = (await signer.getAccounts())[0]; 
-				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry, prefix});
-				let msg = this.msgUpdateWeights({ value: MsgUpdateWeights.fromPartial(value) })
-				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
-			} catch (e: any) {
-				throw new Error('TxClient:sendMsgUpdateWeights: Could not broadcast Tx: '+ e.message)
-			}
-		},
-		
-		async sendMsgDeleteOraclePriceDataSource({ value, fee, memo }: sendMsgDeleteOraclePriceDataSourceParams): Promise<DeliverTxResponse> {
-			if (!signer) {
-					throw new Error('TxClient:sendMsgDeleteOraclePriceDataSource: Unable to sign Tx. Signer is not present.')
-			}
-			try {			
-				const { address } = (await signer.getAccounts())[0]; 
-				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry, prefix});
-				let msg = this.msgDeleteOraclePriceDataSource({ value: MsgDeleteOraclePriceDataSource.fromPartial(value) })
-				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
-			} catch (e: any) {
-				throw new Error('TxClient:sendMsgDeleteOraclePriceDataSource: Could not broadcast Tx: '+ e.message)
-			}
-		},
-		
-		async sendMsgUpdateSwapFee({ value, fee, memo }: sendMsgUpdateSwapFeeParams): Promise<DeliverTxResponse> {
-			if (!signer) {
-					throw new Error('TxClient:sendMsgUpdateSwapFee: Unable to sign Tx. Signer is not present.')
-			}
-			try {			
-				const { address } = (await signer.getAccounts())[0]; 
-				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry, prefix});
-				let msg = this.msgUpdateSwapFee({ value: MsgUpdateSwapFee.fromPartial(value) })
-				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
-			} catch (e: any) {
-				throw new Error('TxClient:sendMsgUpdateSwapFee: Could not broadcast Tx: '+ e.message)
-			}
-		},
-		
-		async sendMsgWhitelistRoute({ value, fee, memo }: sendMsgWhitelistRouteParams): Promise<DeliverTxResponse> {
-			if (!signer) {
-					throw new Error('TxClient:sendMsgWhitelistRoute: Unable to sign Tx. Signer is not present.')
-			}
-			try {			
-				const { address } = (await signer.getAccounts())[0]; 
-				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry, prefix});
-				let msg = this.msgWhitelistRoute({ value: MsgWhitelistRoute.fromPartial(value) })
-				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
-			} catch (e: any) {
-				throw new Error('TxClient:sendMsgWhitelistRoute: Could not broadcast Tx: '+ e.message)
-			}
-		},
-		
-		async sendMsgSetPauseMode({ value, fee, memo }: sendMsgSetPauseModeParams): Promise<DeliverTxResponse> {
-			if (!signer) {
-					throw new Error('TxClient:sendMsgSetPauseMode: Unable to sign Tx. Signer is not present.')
-			}
-			try {			
-				const { address } = (await signer.getAccounts())[0]; 
-				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry, prefix});
-				let msg = this.msgSetPauseMode({ value: MsgSetPauseMode.fromPartial(value) })
-				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
-			} catch (e: any) {
-				throw new Error('TxClient:sendMsgSetPauseMode: Could not broadcast Tx: '+ e.message)
-			}
-		},
-		
-		async sendMsgSetVaultPauseMode({ value, fee, memo }: sendMsgSetVaultPauseModeParams): Promise<DeliverTxResponse> {
-			if (!signer) {
-					throw new Error('TxClient:sendMsgSetVaultPauseMode: Unable to sign Tx. Signer is not present.')
-			}
-			try {			
-				const { address } = (await signer.getAccounts())[0]; 
-				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry, prefix});
-				let msg = this.msgSetVaultPauseMode({ value: MsgSetVaultPauseMode.fromPartial(value) })
-				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
-			} catch (e: any) {
-				throw new Error('TxClient:sendMsgSetVaultPauseMode: Could not broadcast Tx: '+ e.message)
-			}
-		},
-		
-		async sendMsgInitializePool({ value, fee, memo }: sendMsgInitializePoolParams): Promise<DeliverTxResponse> {
-			if (!signer) {
-					throw new Error('TxClient:sendMsgInitializePool: Unable to sign Tx. Signer is not present.')
-			}
-			try {			
-				const { address } = (await signer.getAccounts())[0]; 
-				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry, prefix});
-				let msg = this.msgInitializePool({ value: MsgInitializePool.fromPartial(value) })
-				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
-			} catch (e: any) {
-				throw new Error('TxClient:sendMsgInitializePool: Could not broadcast Tx: '+ e.message)
-			}
-		},
-		
-		async sendMsgCreateOraclePricePair({ value, fee, memo }: sendMsgCreateOraclePricePairParams): Promise<DeliverTxResponse> {
-			if (!signer) {
-					throw new Error('TxClient:sendMsgCreateOraclePricePair: Unable to sign Tx. Signer is not present.')
-			}
-			try {			
-				const { address } = (await signer.getAccounts())[0]; 
-				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry, prefix});
-				let msg = this.msgCreateOraclePricePair({ value: MsgCreateOraclePricePair.fromPartial(value) })
-				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
-			} catch (e: any) {
-				throw new Error('TxClient:sendMsgCreateOraclePricePair: Could not broadcast Tx: '+ e.message)
-			}
-		},
-		
-		async sendMsgJoinTokenExactLpt({ value, fee, memo }: sendMsgJoinTokenExactLptParams): Promise<DeliverTxResponse> {
-			if (!signer) {
-					throw new Error('TxClient:sendMsgJoinTokenExactLpt: Unable to sign Tx. Signer is not present.')
-			}
-			try {			
-				const { address } = (await signer.getAccounts())[0]; 
-				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry, prefix});
-				let msg = this.msgJoinTokenExactLpt({ value: MsgJoinTokenExactLpt.fromPartial(value) })
-				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
-			} catch (e: any) {
-				throw new Error('TxClient:sendMsgJoinTokenExactLpt: Could not broadcast Tx: '+ e.message)
-			}
-		},
-		
-		async sendMsgSetRecoveryMode({ value, fee, memo }: sendMsgSetRecoveryModeParams): Promise<DeliverTxResponse> {
-			if (!signer) {
-					throw new Error('TxClient:sendMsgSetRecoveryMode: Unable to sign Tx. Signer is not present.')
-			}
-			try {			
-				const { address } = (await signer.getAccounts())[0]; 
-				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry, prefix});
-				let msg = this.msgSetRecoveryMode({ value: MsgSetRecoveryMode.fromPartial(value) })
-				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
-			} catch (e: any) {
-				throw new Error('TxClient:sendMsgSetRecoveryMode: Could not broadcast Tx: '+ e.message)
-			}
-		},
-		
-		async sendMsgExitAllTokensExactLpt({ value, fee, memo }: sendMsgExitAllTokensExactLptParams): Promise<DeliverTxResponse> {
-			if (!signer) {
-					throw new Error('TxClient:sendMsgExitAllTokensExactLpt: Unable to sign Tx. Signer is not present.')
-			}
-			try {			
-				const { address } = (await signer.getAccounts())[0]; 
-				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry, prefix});
-				let msg = this.msgExitAllTokensExactLpt({ value: MsgExitAllTokensExactLpt.fromPartial(value) })
-				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
-			} catch (e: any) {
-				throw new Error('TxClient:sendMsgExitAllTokensExactLpt: Could not broadcast Tx: '+ e.message)
-			}
-		},
-		
-		async sendMsgDeleteOraclePricePair({ value, fee, memo }: sendMsgDeleteOraclePricePairParams): Promise<DeliverTxResponse> {
-			if (!signer) {
-					throw new Error('TxClient:sendMsgDeleteOraclePricePair: Unable to sign Tx. Signer is not present.')
-			}
-			try {			
-				const { address } = (await signer.getAccounts())[0]; 
-				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry, prefix});
-				let msg = this.msgDeleteOraclePricePair({ value: MsgDeleteOraclePricePair.fromPartial(value) })
-				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
-			} catch (e: any) {
-				throw new Error('TxClient:sendMsgDeleteOraclePricePair: Could not broadcast Tx: '+ e.message)
-			}
-		},
-		
-		async sendMsgBatchSwap({ value, fee, memo }: sendMsgBatchSwapParams): Promise<DeliverTxResponse> {
-			if (!signer) {
-					throw new Error('TxClient:sendMsgBatchSwap: Unable to sign Tx. Signer is not present.')
-			}
-			try {			
-				const { address } = (await signer.getAccounts())[0]; 
-				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry, prefix});
-				let msg = this.msgBatchSwap({ value: MsgBatchSwap.fromPartial(value) })
-				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
-			} catch (e: any) {
-				throw new Error('TxClient:sendMsgBatchSwap: Could not broadcast Tx: '+ e.message)
-			}
-		},
-		
-		async sendMsgSingleSwap({ value, fee, memo }: sendMsgSingleSwapParams): Promise<DeliverTxResponse> {
-			if (!signer) {
-					throw new Error('TxClient:sendMsgSingleSwap: Unable to sign Tx. Signer is not present.')
-			}
-			try {			
-				const { address } = (await signer.getAccounts())[0]; 
-				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry, prefix});
-				let msg = this.msgSingleSwap({ value: MsgSingleSwap.fromPartial(value) })
-				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
-			} catch (e: any) {
-				throw new Error('TxClient:sendMsgSingleSwap: Could not broadcast Tx: '+ e.message)
-			}
-		},
-		
-		async sendMsgJoinExactTokens({ value, fee, memo }: sendMsgJoinExactTokensParams): Promise<DeliverTxResponse> {
-			if (!signer) {
-					throw new Error('TxClient:sendMsgJoinExactTokens: Unable to sign Tx. Signer is not present.')
-			}
-			try {			
-				const { address } = (await signer.getAccounts())[0]; 
-				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry, prefix});
-				let msg = this.msgJoinExactTokens({ value: MsgJoinExactTokens.fromPartial(value) })
-				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
-			} catch (e: any) {
-				throw new Error('TxClient:sendMsgJoinExactTokens: Could not broadcast Tx: '+ e.message)
-			}
-		},
-		
-		async sendMsgUpdateOraclePricePair({ value, fee, memo }: sendMsgUpdateOraclePricePairParams): Promise<DeliverTxResponse> {
-			if (!signer) {
-					throw new Error('TxClient:sendMsgUpdateOraclePricePair: Unable to sign Tx. Signer is not present.')
-			}
-			try {			
-				const { address } = (await signer.getAccounts())[0]; 
-				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry, prefix});
-				let msg = this.msgUpdateOraclePricePair({ value: MsgUpdateOraclePricePair.fromPartial(value) })
-				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
-			} catch (e: any) {
-				throw new Error('TxClient:sendMsgUpdateOraclePricePair: Could not broadcast Tx: '+ e.message)
-			}
-		},
-		
 		async sendMsgRecoveryExit({ value, fee, memo }: sendMsgRecoveryExitParams): Promise<DeliverTxResponse> {
 			if (!signer) {
 					throw new Error('TxClient:sendMsgRecoveryExit: Unable to sign Tx. Signer is not present.')
@@ -690,62 +382,6 @@ export const txClient = ({ signer, prefix, addr }: TxClientOptions = { addr: "ht
 				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
 			} catch (e: any) {
 				throw new Error('TxClient:sendMsgRecoveryExit: Could not broadcast Tx: '+ e.message)
-			}
-		},
-		
-		async sendMsgExitExactTokens({ value, fee, memo }: sendMsgExitExactTokensParams): Promise<DeliverTxResponse> {
-			if (!signer) {
-					throw new Error('TxClient:sendMsgExitExactTokens: Unable to sign Tx. Signer is not present.')
-			}
-			try {			
-				const { address } = (await signer.getAccounts())[0]; 
-				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry, prefix});
-				let msg = this.msgExitExactTokens({ value: MsgExitExactTokens.fromPartial(value) })
-				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
-			} catch (e: any) {
-				throw new Error('TxClient:sendMsgExitExactTokens: Could not broadcast Tx: '+ e.message)
-			}
-		},
-		
-		async sendMsgSetYammConfiguration({ value, fee, memo }: sendMsgSetYammConfigurationParams): Promise<DeliverTxResponse> {
-			if (!signer) {
-					throw new Error('TxClient:sendMsgSetYammConfiguration: Unable to sign Tx. Signer is not present.')
-			}
-			try {			
-				const { address } = (await signer.getAccounts())[0]; 
-				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry, prefix});
-				let msg = this.msgSetYammConfiguration({ value: MsgSetYammConfiguration.fromPartial(value) })
-				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
-			} catch (e: any) {
-				throw new Error('TxClient:sendMsgSetYammConfiguration: Could not broadcast Tx: '+ e.message)
-			}
-		},
-		
-		async sendMsgSetJoinExitProtocolFee({ value, fee, memo }: sendMsgSetJoinExitProtocolFeeParams): Promise<DeliverTxResponse> {
-			if (!signer) {
-					throw new Error('TxClient:sendMsgSetJoinExitProtocolFee: Unable to sign Tx. Signer is not present.')
-			}
-			try {			
-				const { address } = (await signer.getAccounts())[0]; 
-				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry, prefix});
-				let msg = this.msgSetJoinExitProtocolFee({ value: MsgSetJoinExitProtocolFee.fromPartial(value) })
-				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
-			} catch (e: any) {
-				throw new Error('TxClient:sendMsgSetJoinExitProtocolFee: Could not broadcast Tx: '+ e.message)
-			}
-		},
-		
-		async sendMsgSetSwapProtocolFee({ value, fee, memo }: sendMsgSetSwapProtocolFeeParams): Promise<DeliverTxResponse> {
-			if (!signer) {
-					throw new Error('TxClient:sendMsgSetSwapProtocolFee: Unable to sign Tx. Signer is not present.')
-			}
-			try {			
-				const { address } = (await signer.getAccounts())[0]; 
-				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry, prefix});
-				let msg = this.msgSetSwapProtocolFee({ value: MsgSetSwapProtocolFee.fromPartial(value) })
-				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
-			} catch (e: any) {
-				throw new Error('TxClient:sendMsgSetSwapProtocolFee: Could not broadcast Tx: '+ e.message)
 			}
 		},
 		
@@ -763,34 +399,6 @@ export const txClient = ({ signer, prefix, addr }: TxClientOptions = { addr: "ht
 			}
 		},
 		
-		async sendMsgSubmitOrder({ value, fee, memo }: sendMsgSubmitOrderParams): Promise<DeliverTxResponse> {
-			if (!signer) {
-					throw new Error('TxClient:sendMsgSubmitOrder: Unable to sign Tx. Signer is not present.')
-			}
-			try {			
-				const { address } = (await signer.getAccounts())[0]; 
-				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry, prefix});
-				let msg = this.msgSubmitOrder({ value: MsgSubmitOrder.fromPartial(value) })
-				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
-			} catch (e: any) {
-				throw new Error('TxClient:sendMsgSubmitOrder: Could not broadcast Tx: '+ e.message)
-			}
-		},
-		
-		async sendMsgCreateOraclePriceDataSource({ value, fee, memo }: sendMsgCreateOraclePriceDataSourceParams): Promise<DeliverTxResponse> {
-			if (!signer) {
-					throw new Error('TxClient:sendMsgCreateOraclePriceDataSource: Unable to sign Tx. Signer is not present.')
-			}
-			try {			
-				const { address } = (await signer.getAccounts())[0]; 
-				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry, prefix});
-				let msg = this.msgCreateOraclePriceDataSource({ value: MsgCreateOraclePriceDataSource.fromPartial(value) })
-				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
-			} catch (e: any) {
-				throw new Error('TxClient:sendMsgCreateOraclePriceDataSource: Could not broadcast Tx: '+ e.message)
-			}
-		},
-		
 		async sendMsgCreateWeightedPool({ value, fee, memo }: sendMsgCreateWeightedPoolParams): Promise<DeliverTxResponse> {
 			if (!signer) {
 					throw new Error('TxClient:sendMsgCreateWeightedPool: Unable to sign Tx. Signer is not present.')
@@ -805,220 +413,404 @@ export const txClient = ({ signer, prefix, addr }: TxClientOptions = { addr: "ht
 			}
 		},
 		
-		
-		msgJoinAllTokensExactLpt({ value }: msgJoinAllTokensExactLptParams): EncodeObject {
-			try {
-				return { typeUrl: "/prismfinance.prismcore.amm.MsgJoinAllTokensExactLpt", value: MsgJoinAllTokensExactLpt.fromPartial( value ) }  
+		async sendMsgSetCircuitBreakers({ value, fee, memo }: sendMsgSetCircuitBreakersParams): Promise<DeliverTxResponse> {
+			if (!signer) {
+					throw new Error('TxClient:sendMsgSetCircuitBreakers: Unable to sign Tx. Signer is not present.')
+			}
+			try {			
+				const { address } = (await signer.getAccounts())[0]; 
+				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry, prefix});
+				let msg = this.msgSetCircuitBreakers({ value: MsgSetCircuitBreakers.fromPartial(value) })
+				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
 			} catch (e: any) {
-				throw new Error('TxClient:MsgJoinAllTokensExactLpt: Could not create message: ' + e.message)
+				throw new Error('TxClient:sendMsgSetCircuitBreakers: Could not broadcast Tx: '+ e.message)
 			}
 		},
 		
-		msgSetCircuitBreakers({ value }: msgSetCircuitBreakersParams): EncodeObject {
-			try {
-				return { typeUrl: "/prismfinance.prismcore.amm.MsgSetCircuitBreakers", value: MsgSetCircuitBreakers.fromPartial( value ) }  
+		async sendMsgSingleSwap({ value, fee, memo }: sendMsgSingleSwapParams): Promise<DeliverTxResponse> {
+			if (!signer) {
+					throw new Error('TxClient:sendMsgSingleSwap: Unable to sign Tx. Signer is not present.')
+			}
+			try {			
+				const { address } = (await signer.getAccounts())[0]; 
+				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry, prefix});
+				let msg = this.msgSingleSwap({ value: MsgSingleSwap.fromPartial(value) })
+				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
 			} catch (e: any) {
-				throw new Error('TxClient:MsgSetCircuitBreakers: Could not create message: ' + e.message)
+				throw new Error('TxClient:sendMsgSingleSwap: Could not broadcast Tx: '+ e.message)
 			}
 		},
 		
-		msgExitTokenExactLpt({ value }: msgExitTokenExactLptParams): EncodeObject {
-			try {
-				return { typeUrl: "/prismfinance.prismcore.amm.MsgExitTokenExactLpt", value: MsgExitTokenExactLpt.fromPartial( value ) }  
+		async sendMsgSetVaultPauseMode({ value, fee, memo }: sendMsgSetVaultPauseModeParams): Promise<DeliverTxResponse> {
+			if (!signer) {
+					throw new Error('TxClient:sendMsgSetVaultPauseMode: Unable to sign Tx. Signer is not present.')
+			}
+			try {			
+				const { address } = (await signer.getAccounts())[0]; 
+				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry, prefix});
+				let msg = this.msgSetVaultPauseMode({ value: MsgSetVaultPauseMode.fromPartial(value) })
+				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
 			} catch (e: any) {
-				throw new Error('TxClient:MsgExitTokenExactLpt: Could not create message: ' + e.message)
+				throw new Error('TxClient:sendMsgSetVaultPauseMode: Could not broadcast Tx: '+ e.message)
 			}
 		},
 		
-		msgSetWhitelistedRouteEnabled({ value }: msgSetWhitelistedRouteEnabledParams): EncodeObject {
-			try {
-				return { typeUrl: "/prismfinance.prismcore.amm.MsgSetWhitelistedRouteEnabled", value: MsgSetWhitelistedRouteEnabled.fromPartial( value ) }  
+		async sendMsgUpdateOraclePricePair({ value, fee, memo }: sendMsgUpdateOraclePricePairParams): Promise<DeliverTxResponse> {
+			if (!signer) {
+					throw new Error('TxClient:sendMsgUpdateOraclePricePair: Unable to sign Tx. Signer is not present.')
+			}
+			try {			
+				const { address } = (await signer.getAccounts())[0]; 
+				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry, prefix});
+				let msg = this.msgUpdateOraclePricePair({ value: MsgUpdateOraclePricePair.fromPartial(value) })
+				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
 			} catch (e: any) {
-				throw new Error('TxClient:MsgSetWhitelistedRouteEnabled: Could not create message: ' + e.message)
+				throw new Error('TxClient:sendMsgUpdateOraclePricePair: Could not broadcast Tx: '+ e.message)
 			}
 		},
 		
-		msgUpdateOraclePriceDataSource({ value }: msgUpdateOraclePriceDataSourceParams): EncodeObject {
-			try {
-				return { typeUrl: "/prismfinance.prismcore.amm.MsgUpdateOraclePriceDataSource", value: MsgUpdateOraclePriceDataSource.fromPartial( value ) }  
+		async sendMsgSetJoinExitProtocolFee({ value, fee, memo }: sendMsgSetJoinExitProtocolFeeParams): Promise<DeliverTxResponse> {
+			if (!signer) {
+					throw new Error('TxClient:sendMsgSetJoinExitProtocolFee: Unable to sign Tx. Signer is not present.')
+			}
+			try {			
+				const { address } = (await signer.getAccounts())[0]; 
+				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry, prefix});
+				let msg = this.msgSetJoinExitProtocolFee({ value: MsgSetJoinExitProtocolFee.fromPartial(value) })
+				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
 			} catch (e: any) {
-				throw new Error('TxClient:MsgUpdateOraclePriceDataSource: Could not create message: ' + e.message)
+				throw new Error('TxClient:sendMsgSetJoinExitProtocolFee: Could not broadcast Tx: '+ e.message)
 			}
 		},
 		
-		msgCancelOrder({ value }: msgCancelOrderParams): EncodeObject {
-			try {
-				return { typeUrl: "/prismfinance.prismcore.amm.MsgCancelOrder", value: MsgCancelOrder.fromPartial( value ) }  
+		async sendMsgJoinTokenExactLpt({ value, fee, memo }: sendMsgJoinTokenExactLptParams): Promise<DeliverTxResponse> {
+			if (!signer) {
+					throw new Error('TxClient:sendMsgJoinTokenExactLpt: Unable to sign Tx. Signer is not present.')
+			}
+			try {			
+				const { address } = (await signer.getAccounts())[0]; 
+				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry, prefix});
+				let msg = this.msgJoinTokenExactLpt({ value: MsgJoinTokenExactLpt.fromPartial(value) })
+				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
 			} catch (e: any) {
-				throw new Error('TxClient:MsgCancelOrder: Could not create message: ' + e.message)
+				throw new Error('TxClient:sendMsgJoinTokenExactLpt: Could not broadcast Tx: '+ e.message)
 			}
 		},
 		
-		msgUpdateWeights({ value }: msgUpdateWeightsParams): EncodeObject {
-			try {
-				return { typeUrl: "/prismfinance.prismcore.amm.MsgUpdateWeights", value: MsgUpdateWeights.fromPartial( value ) }  
+		async sendMsgUpdateSwapFee({ value, fee, memo }: sendMsgUpdateSwapFeeParams): Promise<DeliverTxResponse> {
+			if (!signer) {
+					throw new Error('TxClient:sendMsgUpdateSwapFee: Unable to sign Tx. Signer is not present.')
+			}
+			try {			
+				const { address } = (await signer.getAccounts())[0]; 
+				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry, prefix});
+				let msg = this.msgUpdateSwapFee({ value: MsgUpdateSwapFee.fromPartial(value) })
+				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
 			} catch (e: any) {
-				throw new Error('TxClient:MsgUpdateWeights: Could not create message: ' + e.message)
+				throw new Error('TxClient:sendMsgUpdateSwapFee: Could not broadcast Tx: '+ e.message)
 			}
 		},
 		
-		msgDeleteOraclePriceDataSource({ value }: msgDeleteOraclePriceDataSourceParams): EncodeObject {
-			try {
-				return { typeUrl: "/prismfinance.prismcore.amm.MsgDeleteOraclePriceDataSource", value: MsgDeleteOraclePriceDataSource.fromPartial( value ) }  
+		async sendMsgExitExactTokens({ value, fee, memo }: sendMsgExitExactTokensParams): Promise<DeliverTxResponse> {
+			if (!signer) {
+					throw new Error('TxClient:sendMsgExitExactTokens: Unable to sign Tx. Signer is not present.')
+			}
+			try {			
+				const { address } = (await signer.getAccounts())[0]; 
+				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry, prefix});
+				let msg = this.msgExitExactTokens({ value: MsgExitExactTokens.fromPartial(value) })
+				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
 			} catch (e: any) {
-				throw new Error('TxClient:MsgDeleteOraclePriceDataSource: Could not create message: ' + e.message)
+				throw new Error('TxClient:sendMsgExitExactTokens: Could not broadcast Tx: '+ e.message)
 			}
 		},
 		
-		msgUpdateSwapFee({ value }: msgUpdateSwapFeeParams): EncodeObject {
-			try {
-				return { typeUrl: "/prismfinance.prismcore.amm.MsgUpdateSwapFee", value: MsgUpdateSwapFee.fromPartial( value ) }  
+		async sendMsgSetRecoveryMode({ value, fee, memo }: sendMsgSetRecoveryModeParams): Promise<DeliverTxResponse> {
+			if (!signer) {
+					throw new Error('TxClient:sendMsgSetRecoveryMode: Unable to sign Tx. Signer is not present.')
+			}
+			try {			
+				const { address } = (await signer.getAccounts())[0]; 
+				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry, prefix});
+				let msg = this.msgSetRecoveryMode({ value: MsgSetRecoveryMode.fromPartial(value) })
+				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
 			} catch (e: any) {
-				throw new Error('TxClient:MsgUpdateSwapFee: Could not create message: ' + e.message)
+				throw new Error('TxClient:sendMsgSetRecoveryMode: Could not broadcast Tx: '+ e.message)
 			}
 		},
 		
-		msgWhitelistRoute({ value }: msgWhitelistRouteParams): EncodeObject {
-			try {
-				return { typeUrl: "/prismfinance.prismcore.amm.MsgWhitelistRoute", value: MsgWhitelistRoute.fromPartial( value ) }  
+		async sendMsgDeleteOraclePricePair({ value, fee, memo }: sendMsgDeleteOraclePricePairParams): Promise<DeliverTxResponse> {
+			if (!signer) {
+					throw new Error('TxClient:sendMsgDeleteOraclePricePair: Unable to sign Tx. Signer is not present.')
+			}
+			try {			
+				const { address } = (await signer.getAccounts())[0]; 
+				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry, prefix});
+				let msg = this.msgDeleteOraclePricePair({ value: MsgDeleteOraclePricePair.fromPartial(value) })
+				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
 			} catch (e: any) {
-				throw new Error('TxClient:MsgWhitelistRoute: Could not create message: ' + e.message)
+				throw new Error('TxClient:sendMsgDeleteOraclePricePair: Could not broadcast Tx: '+ e.message)
 			}
 		},
 		
-		msgSetPauseMode({ value }: msgSetPauseModeParams): EncodeObject {
-			try {
-				return { typeUrl: "/prismfinance.prismcore.amm.MsgSetPauseMode", value: MsgSetPauseMode.fromPartial( value ) }  
+		async sendMsgIntroduceYammLpToWeightedPool({ value, fee, memo }: sendMsgIntroduceYammLpToWeightedPoolParams): Promise<DeliverTxResponse> {
+			if (!signer) {
+					throw new Error('TxClient:sendMsgIntroduceYammLpToWeightedPool: Unable to sign Tx. Signer is not present.')
+			}
+			try {			
+				const { address } = (await signer.getAccounts())[0]; 
+				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry, prefix});
+				let msg = this.msgIntroduceYammLpToWeightedPool({ value: MsgIntroduceYammLpToWeightedPool.fromPartial(value) })
+				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
 			} catch (e: any) {
-				throw new Error('TxClient:MsgSetPauseMode: Could not create message: ' + e.message)
+				throw new Error('TxClient:sendMsgIntroduceYammLpToWeightedPool: Could not broadcast Tx: '+ e.message)
 			}
 		},
 		
-		msgSetVaultPauseMode({ value }: msgSetVaultPauseModeParams): EncodeObject {
-			try {
-				return { typeUrl: "/prismfinance.prismcore.amm.MsgSetVaultPauseMode", value: MsgSetVaultPauseMode.fromPartial( value ) }  
+		async sendMsgSetYammConfiguration({ value, fee, memo }: sendMsgSetYammConfigurationParams): Promise<DeliverTxResponse> {
+			if (!signer) {
+					throw new Error('TxClient:sendMsgSetYammConfiguration: Unable to sign Tx. Signer is not present.')
+			}
+			try {			
+				const { address } = (await signer.getAccounts())[0]; 
+				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry, prefix});
+				let msg = this.msgSetYammConfiguration({ value: MsgSetYammConfiguration.fromPartial(value) })
+				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
 			} catch (e: any) {
-				throw new Error('TxClient:MsgSetVaultPauseMode: Could not create message: ' + e.message)
+				throw new Error('TxClient:sendMsgSetYammConfiguration: Could not broadcast Tx: '+ e.message)
 			}
 		},
 		
-		msgInitializePool({ value }: msgInitializePoolParams): EncodeObject {
-			try {
-				return { typeUrl: "/prismfinance.prismcore.amm.MsgInitializePool", value: MsgInitializePool.fromPartial( value ) }  
+		async sendMsgJoinAllTokensExactLpt({ value, fee, memo }: sendMsgJoinAllTokensExactLptParams): Promise<DeliverTxResponse> {
+			if (!signer) {
+					throw new Error('TxClient:sendMsgJoinAllTokensExactLpt: Unable to sign Tx. Signer is not present.')
+			}
+			try {			
+				const { address } = (await signer.getAccounts())[0]; 
+				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry, prefix});
+				let msg = this.msgJoinAllTokensExactLpt({ value: MsgJoinAllTokensExactLpt.fromPartial(value) })
+				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
 			} catch (e: any) {
-				throw new Error('TxClient:MsgInitializePool: Could not create message: ' + e.message)
+				throw new Error('TxClient:sendMsgJoinAllTokensExactLpt: Could not broadcast Tx: '+ e.message)
 			}
 		},
 		
-		msgCreateOraclePricePair({ value }: msgCreateOraclePricePairParams): EncodeObject {
-			try {
-				return { typeUrl: "/prismfinance.prismcore.amm.MsgCreateOraclePricePair", value: MsgCreateOraclePricePair.fromPartial( value ) }  
+		async sendMsgSetPauseMode({ value, fee, memo }: sendMsgSetPauseModeParams): Promise<DeliverTxResponse> {
+			if (!signer) {
+					throw new Error('TxClient:sendMsgSetPauseMode: Unable to sign Tx. Signer is not present.')
+			}
+			try {			
+				const { address } = (await signer.getAccounts())[0]; 
+				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry, prefix});
+				let msg = this.msgSetPauseMode({ value: MsgSetPauseMode.fromPartial(value) })
+				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
 			} catch (e: any) {
-				throw new Error('TxClient:MsgCreateOraclePricePair: Could not create message: ' + e.message)
+				throw new Error('TxClient:sendMsgSetPauseMode: Could not broadcast Tx: '+ e.message)
 			}
 		},
 		
-		msgJoinTokenExactLpt({ value }: msgJoinTokenExactLptParams): EncodeObject {
-			try {
-				return { typeUrl: "/prismfinance.prismcore.amm.MsgJoinTokenExactLpt", value: MsgJoinTokenExactLpt.fromPartial( value ) }  
+		async sendMsgCancelPendingTokenIntroduction({ value, fee, memo }: sendMsgCancelPendingTokenIntroductionParams): Promise<DeliverTxResponse> {
+			if (!signer) {
+					throw new Error('TxClient:sendMsgCancelPendingTokenIntroduction: Unable to sign Tx. Signer is not present.')
+			}
+			try {			
+				const { address } = (await signer.getAccounts())[0]; 
+				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry, prefix});
+				let msg = this.msgCancelPendingTokenIntroduction({ value: MsgCancelPendingTokenIntroduction.fromPartial(value) })
+				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
 			} catch (e: any) {
-				throw new Error('TxClient:MsgJoinTokenExactLpt: Could not create message: ' + e.message)
+				throw new Error('TxClient:sendMsgCancelPendingTokenIntroduction: Could not broadcast Tx: '+ e.message)
 			}
 		},
 		
-		msgSetRecoveryMode({ value }: msgSetRecoveryModeParams): EncodeObject {
-			try {
-				return { typeUrl: "/prismfinance.prismcore.amm.MsgSetRecoveryMode", value: MsgSetRecoveryMode.fromPartial( value ) }  
+		async sendMsgSubmitOrder({ value, fee, memo }: sendMsgSubmitOrderParams): Promise<DeliverTxResponse> {
+			if (!signer) {
+					throw new Error('TxClient:sendMsgSubmitOrder: Unable to sign Tx. Signer is not present.')
+			}
+			try {			
+				const { address } = (await signer.getAccounts())[0]; 
+				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry, prefix});
+				let msg = this.msgSubmitOrder({ value: MsgSubmitOrder.fromPartial(value) })
+				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
 			} catch (e: any) {
-				throw new Error('TxClient:MsgSetRecoveryMode: Could not create message: ' + e.message)
+				throw new Error('TxClient:sendMsgSubmitOrder: Could not broadcast Tx: '+ e.message)
 			}
 		},
 		
-		msgExitAllTokensExactLpt({ value }: msgExitAllTokensExactLptParams): EncodeObject {
-			try {
-				return { typeUrl: "/prismfinance.prismcore.amm.MsgExitAllTokensExactLpt", value: MsgExitAllTokensExactLpt.fromPartial( value ) }  
+		async sendMsgWhitelistRoute({ value, fee, memo }: sendMsgWhitelistRouteParams): Promise<DeliverTxResponse> {
+			if (!signer) {
+					throw new Error('TxClient:sendMsgWhitelistRoute: Unable to sign Tx. Signer is not present.')
+			}
+			try {			
+				const { address } = (await signer.getAccounts())[0]; 
+				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry, prefix});
+				let msg = this.msgWhitelistRoute({ value: MsgWhitelistRoute.fromPartial(value) })
+				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
 			} catch (e: any) {
-				throw new Error('TxClient:MsgExitAllTokensExactLpt: Could not create message: ' + e.message)
+				throw new Error('TxClient:sendMsgWhitelistRoute: Could not broadcast Tx: '+ e.message)
 			}
 		},
 		
-		msgDeleteOraclePricePair({ value }: msgDeleteOraclePricePairParams): EncodeObject {
-			try {
-				return { typeUrl: "/prismfinance.prismcore.amm.MsgDeleteOraclePricePair", value: MsgDeleteOraclePricePair.fromPartial( value ) }  
+		async sendMsgRemoveTokenFromWeightedPool({ value, fee, memo }: sendMsgRemoveTokenFromWeightedPoolParams): Promise<DeliverTxResponse> {
+			if (!signer) {
+					throw new Error('TxClient:sendMsgRemoveTokenFromWeightedPool: Unable to sign Tx. Signer is not present.')
+			}
+			try {			
+				const { address } = (await signer.getAccounts())[0]; 
+				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry, prefix});
+				let msg = this.msgRemoveTokenFromWeightedPool({ value: MsgRemoveTokenFromWeightedPool.fromPartial(value) })
+				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
 			} catch (e: any) {
-				throw new Error('TxClient:MsgDeleteOraclePricePair: Could not create message: ' + e.message)
+				throw new Error('TxClient:sendMsgRemoveTokenFromWeightedPool: Could not broadcast Tx: '+ e.message)
 			}
 		},
 		
-		msgBatchSwap({ value }: msgBatchSwapParams): EncodeObject {
-			try {
-				return { typeUrl: "/prismfinance.prismcore.amm.MsgBatchSwap", value: MsgBatchSwap.fromPartial( value ) }  
+		async sendMsgCreateOraclePricePair({ value, fee, memo }: sendMsgCreateOraclePricePairParams): Promise<DeliverTxResponse> {
+			if (!signer) {
+					throw new Error('TxClient:sendMsgCreateOraclePricePair: Unable to sign Tx. Signer is not present.')
+			}
+			try {			
+				const { address } = (await signer.getAccounts())[0]; 
+				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry, prefix});
+				let msg = this.msgCreateOraclePricePair({ value: MsgCreateOraclePricePair.fromPartial(value) })
+				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
 			} catch (e: any) {
-				throw new Error('TxClient:MsgBatchSwap: Could not create message: ' + e.message)
+				throw new Error('TxClient:sendMsgCreateOraclePricePair: Could not broadcast Tx: '+ e.message)
 			}
 		},
 		
-		msgSingleSwap({ value }: msgSingleSwapParams): EncodeObject {
-			try {
-				return { typeUrl: "/prismfinance.prismcore.amm.MsgSingleSwap", value: MsgSingleSwap.fromPartial( value ) }  
+		async sendMsgBatchSwap({ value, fee, memo }: sendMsgBatchSwapParams): Promise<DeliverTxResponse> {
+			if (!signer) {
+					throw new Error('TxClient:sendMsgBatchSwap: Unable to sign Tx. Signer is not present.')
+			}
+			try {			
+				const { address } = (await signer.getAccounts())[0]; 
+				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry, prefix});
+				let msg = this.msgBatchSwap({ value: MsgBatchSwap.fromPartial(value) })
+				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
 			} catch (e: any) {
-				throw new Error('TxClient:MsgSingleSwap: Could not create message: ' + e.message)
+				throw new Error('TxClient:sendMsgBatchSwap: Could not broadcast Tx: '+ e.message)
 			}
 		},
 		
-		msgJoinExactTokens({ value }: msgJoinExactTokensParams): EncodeObject {
-			try {
-				return { typeUrl: "/prismfinance.prismcore.amm.MsgJoinExactTokens", value: MsgJoinExactTokens.fromPartial( value ) }  
+		async sendMsgSetSwapProtocolFee({ value, fee, memo }: sendMsgSetSwapProtocolFeeParams): Promise<DeliverTxResponse> {
+			if (!signer) {
+					throw new Error('TxClient:sendMsgSetSwapProtocolFee: Unable to sign Tx. Signer is not present.')
+			}
+			try {			
+				const { address } = (await signer.getAccounts())[0]; 
+				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry, prefix});
+				let msg = this.msgSetSwapProtocolFee({ value: MsgSetSwapProtocolFee.fromPartial(value) })
+				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
 			} catch (e: any) {
-				throw new Error('TxClient:MsgJoinExactTokens: Could not create message: ' + e.message)
+				throw new Error('TxClient:sendMsgSetSwapProtocolFee: Could not broadcast Tx: '+ e.message)
 			}
 		},
 		
-		msgUpdateOraclePricePair({ value }: msgUpdateOraclePricePairParams): EncodeObject {
-			try {
-				return { typeUrl: "/prismfinance.prismcore.amm.MsgUpdateOraclePricePair", value: MsgUpdateOraclePricePair.fromPartial( value ) }  
+		async sendMsgCancelOrder({ value, fee, memo }: sendMsgCancelOrderParams): Promise<DeliverTxResponse> {
+			if (!signer) {
+					throw new Error('TxClient:sendMsgCancelOrder: Unable to sign Tx. Signer is not present.')
+			}
+			try {			
+				const { address } = (await signer.getAccounts())[0]; 
+				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry, prefix});
+				let msg = this.msgCancelOrder({ value: MsgCancelOrder.fromPartial(value) })
+				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
 			} catch (e: any) {
-				throw new Error('TxClient:MsgUpdateOraclePricePair: Could not create message: ' + e.message)
+				throw new Error('TxClient:sendMsgCancelOrder: Could not broadcast Tx: '+ e.message)
 			}
 		},
+		
+		async sendMsgExitTokenExactLpt({ value, fee, memo }: sendMsgExitTokenExactLptParams): Promise<DeliverTxResponse> {
+			if (!signer) {
+					throw new Error('TxClient:sendMsgExitTokenExactLpt: Unable to sign Tx. Signer is not present.')
+			}
+			try {			
+				const { address } = (await signer.getAccounts())[0]; 
+				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry, prefix});
+				let msg = this.msgExitTokenExactLpt({ value: MsgExitTokenExactLpt.fromPartial(value) })
+				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
+			} catch (e: any) {
+				throw new Error('TxClient:sendMsgExitTokenExactLpt: Could not broadcast Tx: '+ e.message)
+			}
+		},
+		
+		async sendMsgJoinExactTokens({ value, fee, memo }: sendMsgJoinExactTokensParams): Promise<DeliverTxResponse> {
+			if (!signer) {
+					throw new Error('TxClient:sendMsgJoinExactTokens: Unable to sign Tx. Signer is not present.')
+			}
+			try {			
+				const { address } = (await signer.getAccounts())[0]; 
+				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry, prefix});
+				let msg = this.msgJoinExactTokens({ value: MsgJoinExactTokens.fromPartial(value) })
+				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
+			} catch (e: any) {
+				throw new Error('TxClient:sendMsgJoinExactTokens: Could not broadcast Tx: '+ e.message)
+			}
+		},
+		
+		async sendMsgInitializePool({ value, fee, memo }: sendMsgInitializePoolParams): Promise<DeliverTxResponse> {
+			if (!signer) {
+					throw new Error('TxClient:sendMsgInitializePool: Unable to sign Tx. Signer is not present.')
+			}
+			try {			
+				const { address } = (await signer.getAccounts())[0]; 
+				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry, prefix});
+				let msg = this.msgInitializePool({ value: MsgInitializePool.fromPartial(value) })
+				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
+			} catch (e: any) {
+				throw new Error('TxClient:sendMsgInitializePool: Could not broadcast Tx: '+ e.message)
+			}
+		},
+		
+		async sendMsgSetWhitelistedRouteEnabled({ value, fee, memo }: sendMsgSetWhitelistedRouteEnabledParams): Promise<DeliverTxResponse> {
+			if (!signer) {
+					throw new Error('TxClient:sendMsgSetWhitelistedRouteEnabled: Unable to sign Tx. Signer is not present.')
+			}
+			try {			
+				const { address } = (await signer.getAccounts())[0]; 
+				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry, prefix});
+				let msg = this.msgSetWhitelistedRouteEnabled({ value: MsgSetWhitelistedRouteEnabled.fromPartial(value) })
+				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
+			} catch (e: any) {
+				throw new Error('TxClient:sendMsgSetWhitelistedRouteEnabled: Could not broadcast Tx: '+ e.message)
+			}
+		},
+		
+		async sendMsgExitAllTokensExactLpt({ value, fee, memo }: sendMsgExitAllTokensExactLptParams): Promise<DeliverTxResponse> {
+			if (!signer) {
+					throw new Error('TxClient:sendMsgExitAllTokensExactLpt: Unable to sign Tx. Signer is not present.')
+			}
+			try {			
+				const { address } = (await signer.getAccounts())[0]; 
+				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry, prefix});
+				let msg = this.msgExitAllTokensExactLpt({ value: MsgExitAllTokensExactLpt.fromPartial(value) })
+				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
+			} catch (e: any) {
+				throw new Error('TxClient:sendMsgExitAllTokensExactLpt: Could not broadcast Tx: '+ e.message)
+			}
+		},
+		
+		async sendMsgUpdateWeights({ value, fee, memo }: sendMsgUpdateWeightsParams): Promise<DeliverTxResponse> {
+			if (!signer) {
+					throw new Error('TxClient:sendMsgUpdateWeights: Unable to sign Tx. Signer is not present.')
+			}
+			try {			
+				const { address } = (await signer.getAccounts())[0]; 
+				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry, prefix});
+				let msg = this.msgUpdateWeights({ value: MsgUpdateWeights.fromPartial(value) })
+				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
+			} catch (e: any) {
+				throw new Error('TxClient:sendMsgUpdateWeights: Could not broadcast Tx: '+ e.message)
+			}
+		},
+		
 		
 		msgRecoveryExit({ value }: msgRecoveryExitParams): EncodeObject {
 			try {
 				return { typeUrl: "/prismfinance.prismcore.amm.MsgRecoveryExit", value: MsgRecoveryExit.fromPartial( value ) }  
 			} catch (e: any) {
 				throw new Error('TxClient:MsgRecoveryExit: Could not create message: ' + e.message)
-			}
-		},
-		
-		msgExitExactTokens({ value }: msgExitExactTokensParams): EncodeObject {
-			try {
-				return { typeUrl: "/prismfinance.prismcore.amm.MsgExitExactTokens", value: MsgExitExactTokens.fromPartial( value ) }  
-			} catch (e: any) {
-				throw new Error('TxClient:MsgExitExactTokens: Could not create message: ' + e.message)
-			}
-		},
-		
-		msgSetYammConfiguration({ value }: msgSetYammConfigurationParams): EncodeObject {
-			try {
-				return { typeUrl: "/prismfinance.prismcore.amm.MsgSetYammConfiguration", value: MsgSetYammConfiguration.fromPartial( value ) }  
-			} catch (e: any) {
-				throw new Error('TxClient:MsgSetYammConfiguration: Could not create message: ' + e.message)
-			}
-		},
-		
-		msgSetJoinExitProtocolFee({ value }: msgSetJoinExitProtocolFeeParams): EncodeObject {
-			try {
-				return { typeUrl: "/prismfinance.prismcore.amm.MsgSetJoinExitProtocolFee", value: MsgSetJoinExitProtocolFee.fromPartial( value ) }  
-			} catch (e: any) {
-				throw new Error('TxClient:MsgSetJoinExitProtocolFee: Could not create message: ' + e.message)
-			}
-		},
-		
-		msgSetSwapProtocolFee({ value }: msgSetSwapProtocolFeeParams): EncodeObject {
-			try {
-				return { typeUrl: "/prismfinance.prismcore.amm.MsgSetSwapProtocolFee", value: MsgSetSwapProtocolFee.fromPartial( value ) }  
-			} catch (e: any) {
-				throw new Error('TxClient:MsgSetSwapProtocolFee: Could not create message: ' + e.message)
 			}
 		},
 		
@@ -1030,6 +822,134 @@ export const txClient = ({ signer, prefix, addr }: TxClientOptions = { addr: "ht
 			}
 		},
 		
+		msgCreateWeightedPool({ value }: msgCreateWeightedPoolParams): EncodeObject {
+			try {
+				return { typeUrl: "/prismfinance.prismcore.amm.MsgCreateWeightedPool", value: MsgCreateWeightedPool.fromPartial( value ) }  
+			} catch (e: any) {
+				throw new Error('TxClient:MsgCreateWeightedPool: Could not create message: ' + e.message)
+			}
+		},
+		
+		msgSetCircuitBreakers({ value }: msgSetCircuitBreakersParams): EncodeObject {
+			try {
+				return { typeUrl: "/prismfinance.prismcore.amm.MsgSetCircuitBreakers", value: MsgSetCircuitBreakers.fromPartial( value ) }  
+			} catch (e: any) {
+				throw new Error('TxClient:MsgSetCircuitBreakers: Could not create message: ' + e.message)
+			}
+		},
+		
+		msgSingleSwap({ value }: msgSingleSwapParams): EncodeObject {
+			try {
+				return { typeUrl: "/prismfinance.prismcore.amm.MsgSingleSwap", value: MsgSingleSwap.fromPartial( value ) }  
+			} catch (e: any) {
+				throw new Error('TxClient:MsgSingleSwap: Could not create message: ' + e.message)
+			}
+		},
+		
+		msgSetVaultPauseMode({ value }: msgSetVaultPauseModeParams): EncodeObject {
+			try {
+				return { typeUrl: "/prismfinance.prismcore.amm.MsgSetVaultPauseMode", value: MsgSetVaultPauseMode.fromPartial( value ) }  
+			} catch (e: any) {
+				throw new Error('TxClient:MsgSetVaultPauseMode: Could not create message: ' + e.message)
+			}
+		},
+		
+		msgUpdateOraclePricePair({ value }: msgUpdateOraclePricePairParams): EncodeObject {
+			try {
+				return { typeUrl: "/prismfinance.prismcore.amm.MsgUpdateOraclePricePair", value: MsgUpdateOraclePricePair.fromPartial( value ) }  
+			} catch (e: any) {
+				throw new Error('TxClient:MsgUpdateOraclePricePair: Could not create message: ' + e.message)
+			}
+		},
+		
+		msgSetJoinExitProtocolFee({ value }: msgSetJoinExitProtocolFeeParams): EncodeObject {
+			try {
+				return { typeUrl: "/prismfinance.prismcore.amm.MsgSetJoinExitProtocolFee", value: MsgSetJoinExitProtocolFee.fromPartial( value ) }  
+			} catch (e: any) {
+				throw new Error('TxClient:MsgSetJoinExitProtocolFee: Could not create message: ' + e.message)
+			}
+		},
+		
+		msgJoinTokenExactLpt({ value }: msgJoinTokenExactLptParams): EncodeObject {
+			try {
+				return { typeUrl: "/prismfinance.prismcore.amm.MsgJoinTokenExactLpt", value: MsgJoinTokenExactLpt.fromPartial( value ) }  
+			} catch (e: any) {
+				throw new Error('TxClient:MsgJoinTokenExactLpt: Could not create message: ' + e.message)
+			}
+		},
+		
+		msgUpdateSwapFee({ value }: msgUpdateSwapFeeParams): EncodeObject {
+			try {
+				return { typeUrl: "/prismfinance.prismcore.amm.MsgUpdateSwapFee", value: MsgUpdateSwapFee.fromPartial( value ) }  
+			} catch (e: any) {
+				throw new Error('TxClient:MsgUpdateSwapFee: Could not create message: ' + e.message)
+			}
+		},
+		
+		msgExitExactTokens({ value }: msgExitExactTokensParams): EncodeObject {
+			try {
+				return { typeUrl: "/prismfinance.prismcore.amm.MsgExitExactTokens", value: MsgExitExactTokens.fromPartial( value ) }  
+			} catch (e: any) {
+				throw new Error('TxClient:MsgExitExactTokens: Could not create message: ' + e.message)
+			}
+		},
+		
+		msgSetRecoveryMode({ value }: msgSetRecoveryModeParams): EncodeObject {
+			try {
+				return { typeUrl: "/prismfinance.prismcore.amm.MsgSetRecoveryMode", value: MsgSetRecoveryMode.fromPartial( value ) }  
+			} catch (e: any) {
+				throw new Error('TxClient:MsgSetRecoveryMode: Could not create message: ' + e.message)
+			}
+		},
+		
+		msgDeleteOraclePricePair({ value }: msgDeleteOraclePricePairParams): EncodeObject {
+			try {
+				return { typeUrl: "/prismfinance.prismcore.amm.MsgDeleteOraclePricePair", value: MsgDeleteOraclePricePair.fromPartial( value ) }  
+			} catch (e: any) {
+				throw new Error('TxClient:MsgDeleteOraclePricePair: Could not create message: ' + e.message)
+			}
+		},
+		
+		msgIntroduceYammLpToWeightedPool({ value }: msgIntroduceYammLpToWeightedPoolParams): EncodeObject {
+			try {
+				return { typeUrl: "/prismfinance.prismcore.amm.MsgIntroduceYammLpToWeightedPool", value: MsgIntroduceYammLpToWeightedPool.fromPartial( value ) }  
+			} catch (e: any) {
+				throw new Error('TxClient:MsgIntroduceYammLpToWeightedPool: Could not create message: ' + e.message)
+			}
+		},
+		
+		msgSetYammConfiguration({ value }: msgSetYammConfigurationParams): EncodeObject {
+			try {
+				return { typeUrl: "/prismfinance.prismcore.amm.MsgSetYammConfiguration", value: MsgSetYammConfiguration.fromPartial( value ) }  
+			} catch (e: any) {
+				throw new Error('TxClient:MsgSetYammConfiguration: Could not create message: ' + e.message)
+			}
+		},
+		
+		msgJoinAllTokensExactLpt({ value }: msgJoinAllTokensExactLptParams): EncodeObject {
+			try {
+				return { typeUrl: "/prismfinance.prismcore.amm.MsgJoinAllTokensExactLpt", value: MsgJoinAllTokensExactLpt.fromPartial( value ) }  
+			} catch (e: any) {
+				throw new Error('TxClient:MsgJoinAllTokensExactLpt: Could not create message: ' + e.message)
+			}
+		},
+		
+		msgSetPauseMode({ value }: msgSetPauseModeParams): EncodeObject {
+			try {
+				return { typeUrl: "/prismfinance.prismcore.amm.MsgSetPauseMode", value: MsgSetPauseMode.fromPartial( value ) }  
+			} catch (e: any) {
+				throw new Error('TxClient:MsgSetPauseMode: Could not create message: ' + e.message)
+			}
+		},
+		
+		msgCancelPendingTokenIntroduction({ value }: msgCancelPendingTokenIntroductionParams): EncodeObject {
+			try {
+				return { typeUrl: "/prismfinance.prismcore.amm.MsgCancelPendingTokenIntroduction", value: MsgCancelPendingTokenIntroduction.fromPartial( value ) }  
+			} catch (e: any) {
+				throw new Error('TxClient:MsgCancelPendingTokenIntroduction: Could not create message: ' + e.message)
+			}
+		},
+		
 		msgSubmitOrder({ value }: msgSubmitOrderParams): EncodeObject {
 			try {
 				return { typeUrl: "/prismfinance.prismcore.amm.MsgSubmitOrder", value: MsgSubmitOrder.fromPartial( value ) }  
@@ -1038,19 +958,99 @@ export const txClient = ({ signer, prefix, addr }: TxClientOptions = { addr: "ht
 			}
 		},
 		
-		msgCreateOraclePriceDataSource({ value }: msgCreateOraclePriceDataSourceParams): EncodeObject {
+		msgWhitelistRoute({ value }: msgWhitelistRouteParams): EncodeObject {
 			try {
-				return { typeUrl: "/prismfinance.prismcore.amm.MsgCreateOraclePriceDataSource", value: MsgCreateOraclePriceDataSource.fromPartial( value ) }  
+				return { typeUrl: "/prismfinance.prismcore.amm.MsgWhitelistRoute", value: MsgWhitelistRoute.fromPartial( value ) }  
 			} catch (e: any) {
-				throw new Error('TxClient:MsgCreateOraclePriceDataSource: Could not create message: ' + e.message)
+				throw new Error('TxClient:MsgWhitelistRoute: Could not create message: ' + e.message)
 			}
 		},
 		
-		msgCreateWeightedPool({ value }: msgCreateWeightedPoolParams): EncodeObject {
+		msgRemoveTokenFromWeightedPool({ value }: msgRemoveTokenFromWeightedPoolParams): EncodeObject {
 			try {
-				return { typeUrl: "/prismfinance.prismcore.amm.MsgCreateWeightedPool", value: MsgCreateWeightedPool.fromPartial( value ) }  
+				return { typeUrl: "/prismfinance.prismcore.amm.MsgRemoveTokenFromWeightedPool", value: MsgRemoveTokenFromWeightedPool.fromPartial( value ) }  
 			} catch (e: any) {
-				throw new Error('TxClient:MsgCreateWeightedPool: Could not create message: ' + e.message)
+				throw new Error('TxClient:MsgRemoveTokenFromWeightedPool: Could not create message: ' + e.message)
+			}
+		},
+		
+		msgCreateOraclePricePair({ value }: msgCreateOraclePricePairParams): EncodeObject {
+			try {
+				return { typeUrl: "/prismfinance.prismcore.amm.MsgCreateOraclePricePair", value: MsgCreateOraclePricePair.fromPartial( value ) }  
+			} catch (e: any) {
+				throw new Error('TxClient:MsgCreateOraclePricePair: Could not create message: ' + e.message)
+			}
+		},
+		
+		msgBatchSwap({ value }: msgBatchSwapParams): EncodeObject {
+			try {
+				return { typeUrl: "/prismfinance.prismcore.amm.MsgBatchSwap", value: MsgBatchSwap.fromPartial( value ) }  
+			} catch (e: any) {
+				throw new Error('TxClient:MsgBatchSwap: Could not create message: ' + e.message)
+			}
+		},
+		
+		msgSetSwapProtocolFee({ value }: msgSetSwapProtocolFeeParams): EncodeObject {
+			try {
+				return { typeUrl: "/prismfinance.prismcore.amm.MsgSetSwapProtocolFee", value: MsgSetSwapProtocolFee.fromPartial( value ) }  
+			} catch (e: any) {
+				throw new Error('TxClient:MsgSetSwapProtocolFee: Could not create message: ' + e.message)
+			}
+		},
+		
+		msgCancelOrder({ value }: msgCancelOrderParams): EncodeObject {
+			try {
+				return { typeUrl: "/prismfinance.prismcore.amm.MsgCancelOrder", value: MsgCancelOrder.fromPartial( value ) }  
+			} catch (e: any) {
+				throw new Error('TxClient:MsgCancelOrder: Could not create message: ' + e.message)
+			}
+		},
+		
+		msgExitTokenExactLpt({ value }: msgExitTokenExactLptParams): EncodeObject {
+			try {
+				return { typeUrl: "/prismfinance.prismcore.amm.MsgExitTokenExactLpt", value: MsgExitTokenExactLpt.fromPartial( value ) }  
+			} catch (e: any) {
+				throw new Error('TxClient:MsgExitTokenExactLpt: Could not create message: ' + e.message)
+			}
+		},
+		
+		msgJoinExactTokens({ value }: msgJoinExactTokensParams): EncodeObject {
+			try {
+				return { typeUrl: "/prismfinance.prismcore.amm.MsgJoinExactTokens", value: MsgJoinExactTokens.fromPartial( value ) }  
+			} catch (e: any) {
+				throw new Error('TxClient:MsgJoinExactTokens: Could not create message: ' + e.message)
+			}
+		},
+		
+		msgInitializePool({ value }: msgInitializePoolParams): EncodeObject {
+			try {
+				return { typeUrl: "/prismfinance.prismcore.amm.MsgInitializePool", value: MsgInitializePool.fromPartial( value ) }  
+			} catch (e: any) {
+				throw new Error('TxClient:MsgInitializePool: Could not create message: ' + e.message)
+			}
+		},
+		
+		msgSetWhitelistedRouteEnabled({ value }: msgSetWhitelistedRouteEnabledParams): EncodeObject {
+			try {
+				return { typeUrl: "/prismfinance.prismcore.amm.MsgSetWhitelistedRouteEnabled", value: MsgSetWhitelistedRouteEnabled.fromPartial( value ) }  
+			} catch (e: any) {
+				throw new Error('TxClient:MsgSetWhitelistedRouteEnabled: Could not create message: ' + e.message)
+			}
+		},
+		
+		msgExitAllTokensExactLpt({ value }: msgExitAllTokensExactLptParams): EncodeObject {
+			try {
+				return { typeUrl: "/prismfinance.prismcore.amm.MsgExitAllTokensExactLpt", value: MsgExitAllTokensExactLpt.fromPartial( value ) }  
+			} catch (e: any) {
+				throw new Error('TxClient:MsgExitAllTokensExactLpt: Could not create message: ' + e.message)
+			}
+		},
+		
+		msgUpdateWeights({ value }: msgUpdateWeightsParams): EncodeObject {
+			try {
+				return { typeUrl: "/prismfinance.prismcore.amm.MsgUpdateWeights", value: MsgUpdateWeights.fromPartial( value ) }  
+			} catch (e: any) {
+				throw new Error('TxClient:MsgUpdateWeights: Could not create message: ' + e.message)
 			}
 		},
 		

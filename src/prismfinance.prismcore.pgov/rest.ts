@@ -29,7 +29,9 @@ export interface PgovMsgStakePAssetsResponse {
   total_staked_p_assets?: string;
 }
 
-export type PgovMsgSubmitProposalResponse = object;
+export interface PgovMsgSubmitProposalResponse {
+  proposal?: PrismcorepgovProposal;
+}
 
 export type PgovMsgSubmitVoteResponse = object;
 

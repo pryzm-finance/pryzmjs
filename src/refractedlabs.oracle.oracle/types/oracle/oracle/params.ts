@@ -1,7 +1,6 @@
 /* eslint-disable */
 import Long from "long";
 import _m0 from "protobufjs/minimal";
-import { Duration } from "../../google/protobuf/duration";
 
 export const protobufPackage = "refractedlabs.oracle.oracle";
 
@@ -14,8 +13,7 @@ export interface Params {
   slashFraction: string;
   slashWindow: number;
   maxMissRatePerSlashWindow: string;
-  /** TODO? move to assets, TODO? why this is not used */
-  exchangeRateValidDuration: Duration | undefined;
+  maxMissRatePerVotePeriod: string;
 }
 
 function createBaseParams(): Params {
@@ -27,7 +25,7 @@ function createBaseParams(): Params {
     slashFraction: "",
     slashWindow: 0,
     maxMissRatePerSlashWindow: "",
-    exchangeRateValidDuration: undefined,
+    maxMissRatePerVotePeriod: "",
   };
 }
 
@@ -54,8 +52,8 @@ export const Params = {
     if (message.maxMissRatePerSlashWindow !== "") {
       writer.uint32(58).string(message.maxMissRatePerSlashWindow);
     }
-    if (message.exchangeRateValidDuration !== undefined) {
-      Duration.encode(message.exchangeRateValidDuration, writer.uint32(66).fork()).ldelim();
+    if (message.maxMissRatePerVotePeriod !== "") {
+      writer.uint32(66).string(message.maxMissRatePerVotePeriod);
     }
     return writer;
   },
@@ -89,7 +87,7 @@ export const Params = {
           message.maxMissRatePerSlashWindow = reader.string();
           break;
         case 8:
-          message.exchangeRateValidDuration = Duration.decode(reader, reader.uint32());
+          message.maxMissRatePerVotePeriod = reader.string();
           break;
         default:
           reader.skipType(tag & 7);
@@ -110,9 +108,7 @@ export const Params = {
       maxMissRatePerSlashWindow: isSet(object.maxMissRatePerSlashWindow)
         ? String(object.maxMissRatePerSlashWindow)
         : "",
-      exchangeRateValidDuration: isSet(object.exchangeRateValidDuration)
-        ? Duration.fromJSON(object.exchangeRateValidDuration)
-        : undefined,
+      maxMissRatePerVotePeriod: isSet(object.maxMissRatePerVotePeriod) ? String(object.maxMissRatePerVotePeriod) : "",
     };
   },
 
@@ -127,10 +123,7 @@ export const Params = {
     message.slashWindow !== undefined && (obj.slashWindow = Math.round(message.slashWindow));
     message.maxMissRatePerSlashWindow !== undefined
       && (obj.maxMissRatePerSlashWindow = message.maxMissRatePerSlashWindow);
-    message.exchangeRateValidDuration !== undefined
-      && (obj.exchangeRateValidDuration = message.exchangeRateValidDuration
-        ? Duration.toJSON(message.exchangeRateValidDuration)
-        : undefined);
+    message.maxMissRatePerVotePeriod !== undefined && (obj.maxMissRatePerVotePeriod = message.maxMissRatePerVotePeriod);
     return obj;
   },
 
@@ -143,10 +136,7 @@ export const Params = {
     message.slashFraction = object.slashFraction ?? "";
     message.slashWindow = object.slashWindow ?? 0;
     message.maxMissRatePerSlashWindow = object.maxMissRatePerSlashWindow ?? "";
-    message.exchangeRateValidDuration =
-      (object.exchangeRateValidDuration !== undefined && object.exchangeRateValidDuration !== null)
-        ? Duration.fromPartial(object.exchangeRateValidDuration)
-        : undefined;
+    message.maxMissRatePerVotePeriod = object.maxMissRatePerVotePeriod ?? "";
     return message;
   },
 };

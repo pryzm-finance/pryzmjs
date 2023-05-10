@@ -33,7 +33,7 @@ export interface MsgOracleVote {
   feeder: string;
   validator: string;
   salt: string;
-  namespaceVotes: string;
+  moduleVotes: string;
 }
 
 export interface MsgOracleVoteResponse {
@@ -44,7 +44,7 @@ export interface MsgOracleCombinedVote {
   validator: string;
   preVoteHash: string;
   voteSalt: string;
-  voteNamespaceVotes: string;
+  voteModuleVotes: string;
 }
 
 export interface MsgOracleCombinedVoteResponse {
@@ -353,7 +353,7 @@ export const MsgOraclePreVoteResponse = {
 };
 
 function createBaseMsgOracleVote(): MsgOracleVote {
-  return { feeder: "", validator: "", salt: "", namespaceVotes: "" };
+  return { feeder: "", validator: "", salt: "", moduleVotes: "" };
 }
 
 export const MsgOracleVote = {
@@ -367,8 +367,8 @@ export const MsgOracleVote = {
     if (message.salt !== "") {
       writer.uint32(26).string(message.salt);
     }
-    if (message.namespaceVotes !== "") {
-      writer.uint32(34).string(message.namespaceVotes);
+    if (message.moduleVotes !== "") {
+      writer.uint32(34).string(message.moduleVotes);
     }
     return writer;
   },
@@ -390,7 +390,7 @@ export const MsgOracleVote = {
           message.salt = reader.string();
           break;
         case 4:
-          message.namespaceVotes = reader.string();
+          message.moduleVotes = reader.string();
           break;
         default:
           reader.skipType(tag & 7);
@@ -405,7 +405,7 @@ export const MsgOracleVote = {
       feeder: isSet(object.feeder) ? String(object.feeder) : "",
       validator: isSet(object.validator) ? String(object.validator) : "",
       salt: isSet(object.salt) ? String(object.salt) : "",
-      namespaceVotes: isSet(object.namespaceVotes) ? String(object.namespaceVotes) : "",
+      moduleVotes: isSet(object.moduleVotes) ? String(object.moduleVotes) : "",
     };
   },
 
@@ -414,7 +414,7 @@ export const MsgOracleVote = {
     message.feeder !== undefined && (obj.feeder = message.feeder);
     message.validator !== undefined && (obj.validator = message.validator);
     message.salt !== undefined && (obj.salt = message.salt);
-    message.namespaceVotes !== undefined && (obj.namespaceVotes = message.namespaceVotes);
+    message.moduleVotes !== undefined && (obj.moduleVotes = message.moduleVotes);
     return obj;
   },
 
@@ -423,7 +423,7 @@ export const MsgOracleVote = {
     message.feeder = object.feeder ?? "";
     message.validator = object.validator ?? "";
     message.salt = object.salt ?? "";
-    message.namespaceVotes = object.namespaceVotes ?? "";
+    message.moduleVotes = object.moduleVotes ?? "";
     return message;
   },
 };
@@ -468,7 +468,7 @@ export const MsgOracleVoteResponse = {
 };
 
 function createBaseMsgOracleCombinedVote(): MsgOracleCombinedVote {
-  return { feeder: "", validator: "", preVoteHash: "", voteSalt: "", voteNamespaceVotes: "" };
+  return { feeder: "", validator: "", preVoteHash: "", voteSalt: "", voteModuleVotes: "" };
 }
 
 export const MsgOracleCombinedVote = {
@@ -485,8 +485,8 @@ export const MsgOracleCombinedVote = {
     if (message.voteSalt !== "") {
       writer.uint32(34).string(message.voteSalt);
     }
-    if (message.voteNamespaceVotes !== "") {
-      writer.uint32(42).string(message.voteNamespaceVotes);
+    if (message.voteModuleVotes !== "") {
+      writer.uint32(42).string(message.voteModuleVotes);
     }
     return writer;
   },
@@ -511,7 +511,7 @@ export const MsgOracleCombinedVote = {
           message.voteSalt = reader.string();
           break;
         case 5:
-          message.voteNamespaceVotes = reader.string();
+          message.voteModuleVotes = reader.string();
           break;
         default:
           reader.skipType(tag & 7);
@@ -527,7 +527,7 @@ export const MsgOracleCombinedVote = {
       validator: isSet(object.validator) ? String(object.validator) : "",
       preVoteHash: isSet(object.preVoteHash) ? String(object.preVoteHash) : "",
       voteSalt: isSet(object.voteSalt) ? String(object.voteSalt) : "",
-      voteNamespaceVotes: isSet(object.voteNamespaceVotes) ? String(object.voteNamespaceVotes) : "",
+      voteModuleVotes: isSet(object.voteModuleVotes) ? String(object.voteModuleVotes) : "",
     };
   },
 
@@ -537,7 +537,7 @@ export const MsgOracleCombinedVote = {
     message.validator !== undefined && (obj.validator = message.validator);
     message.preVoteHash !== undefined && (obj.preVoteHash = message.preVoteHash);
     message.voteSalt !== undefined && (obj.voteSalt = message.voteSalt);
-    message.voteNamespaceVotes !== undefined && (obj.voteNamespaceVotes = message.voteNamespaceVotes);
+    message.voteModuleVotes !== undefined && (obj.voteModuleVotes = message.voteModuleVotes);
     return obj;
   },
 
@@ -547,7 +547,7 @@ export const MsgOracleCombinedVote = {
     message.validator = object.validator ?? "";
     message.preVoteHash = object.preVoteHash ?? "";
     message.voteSalt = object.voteSalt ?? "";
-    message.voteNamespaceVotes = object.voteNamespaceVotes ?? "";
+    message.voteModuleVotes = object.voteModuleVotes ?? "";
     return message;
   },
 };

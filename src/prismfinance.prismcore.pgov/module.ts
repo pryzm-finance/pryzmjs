@@ -7,21 +7,15 @@ import { msgTypes } from './registry';
 import { IgniteClient } from "../client"
 import { MissingWalletError } from "../helpers"
 import { Api } from "./rest";
-import { MsgRetryVoteTransmit } from "./types/prismcore/pgov/tx";
 import { MsgStakePAssets } from "./types/prismcore/pgov/tx";
-import { MsgSubmitVote } from "./types/prismcore/pgov/tx";
-import { MsgUnstakePAssets } from "./types/prismcore/pgov/tx";
 import { MsgSubmitProposal } from "./types/prismcore/pgov/tx";
+import { MsgUnstakePAssets } from "./types/prismcore/pgov/tx";
+import { MsgSubmitVote } from "./types/prismcore/pgov/tx";
+import { MsgRetryVoteTransmit } from "./types/prismcore/pgov/tx";
 import { MsgUpdateParams } from "./types/prismcore/pgov/tx";
 
 
-export { MsgRetryVoteTransmit, MsgStakePAssets, MsgSubmitVote, MsgUnstakePAssets, MsgSubmitProposal, MsgUpdateParams };
-
-type sendMsgRetryVoteTransmitParams = {
-  value: MsgRetryVoteTransmit,
-  fee?: StdFee,
-  memo?: string
-};
+export { MsgStakePAssets, MsgSubmitProposal, MsgUnstakePAssets, MsgSubmitVote, MsgRetryVoteTransmit, MsgUpdateParams };
 
 type sendMsgStakePAssetsParams = {
   value: MsgStakePAssets,
@@ -29,8 +23,8 @@ type sendMsgStakePAssetsParams = {
   memo?: string
 };
 
-type sendMsgSubmitVoteParams = {
-  value: MsgSubmitVote,
+type sendMsgSubmitProposalParams = {
+  value: MsgSubmitProposal,
   fee?: StdFee,
   memo?: string
 };
@@ -41,8 +35,14 @@ type sendMsgUnstakePAssetsParams = {
   memo?: string
 };
 
-type sendMsgSubmitProposalParams = {
-  value: MsgSubmitProposal,
+type sendMsgSubmitVoteParams = {
+  value: MsgSubmitVote,
+  fee?: StdFee,
+  memo?: string
+};
+
+type sendMsgRetryVoteTransmitParams = {
+  value: MsgRetryVoteTransmit,
   fee?: StdFee,
   memo?: string
 };
@@ -54,24 +54,24 @@ type sendMsgUpdateParamsParams = {
 };
 
 
-type msgRetryVoteTransmitParams = {
-  value: MsgRetryVoteTransmit,
-};
-
 type msgStakePAssetsParams = {
   value: MsgStakePAssets,
 };
 
-type msgSubmitVoteParams = {
-  value: MsgSubmitVote,
+type msgSubmitProposalParams = {
+  value: MsgSubmitProposal,
 };
 
 type msgUnstakePAssetsParams = {
   value: MsgUnstakePAssets,
 };
 
-type msgSubmitProposalParams = {
-  value: MsgSubmitProposal,
+type msgSubmitVoteParams = {
+  value: MsgSubmitVote,
+};
+
+type msgRetryVoteTransmitParams = {
+  value: MsgRetryVoteTransmit,
 };
 
 type msgUpdateParamsParams = {
@@ -96,20 +96,6 @@ export const txClient = ({ signer, prefix, addr }: TxClientOptions = { addr: "ht
 
   return {
 		
-		async sendMsgRetryVoteTransmit({ value, fee, memo }: sendMsgRetryVoteTransmitParams): Promise<DeliverTxResponse> {
-			if (!signer) {
-					throw new Error('TxClient:sendMsgRetryVoteTransmit: Unable to sign Tx. Signer is not present.')
-			}
-			try {			
-				const { address } = (await signer.getAccounts())[0]; 
-				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry, prefix});
-				let msg = this.msgRetryVoteTransmit({ value: MsgRetryVoteTransmit.fromPartial(value) })
-				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
-			} catch (e: any) {
-				throw new Error('TxClient:sendMsgRetryVoteTransmit: Could not broadcast Tx: '+ e.message)
-			}
-		},
-		
 		async sendMsgStakePAssets({ value, fee, memo }: sendMsgStakePAssetsParams): Promise<DeliverTxResponse> {
 			if (!signer) {
 					throw new Error('TxClient:sendMsgStakePAssets: Unable to sign Tx. Signer is not present.')
@@ -124,17 +110,17 @@ export const txClient = ({ signer, prefix, addr }: TxClientOptions = { addr: "ht
 			}
 		},
 		
-		async sendMsgSubmitVote({ value, fee, memo }: sendMsgSubmitVoteParams): Promise<DeliverTxResponse> {
+		async sendMsgSubmitProposal({ value, fee, memo }: sendMsgSubmitProposalParams): Promise<DeliverTxResponse> {
 			if (!signer) {
-					throw new Error('TxClient:sendMsgSubmitVote: Unable to sign Tx. Signer is not present.')
+					throw new Error('TxClient:sendMsgSubmitProposal: Unable to sign Tx. Signer is not present.')
 			}
 			try {			
 				const { address } = (await signer.getAccounts())[0]; 
 				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry, prefix});
-				let msg = this.msgSubmitVote({ value: MsgSubmitVote.fromPartial(value) })
+				let msg = this.msgSubmitProposal({ value: MsgSubmitProposal.fromPartial(value) })
 				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
 			} catch (e: any) {
-				throw new Error('TxClient:sendMsgSubmitVote: Could not broadcast Tx: '+ e.message)
+				throw new Error('TxClient:sendMsgSubmitProposal: Could not broadcast Tx: '+ e.message)
 			}
 		},
 		
@@ -152,17 +138,31 @@ export const txClient = ({ signer, prefix, addr }: TxClientOptions = { addr: "ht
 			}
 		},
 		
-		async sendMsgSubmitProposal({ value, fee, memo }: sendMsgSubmitProposalParams): Promise<DeliverTxResponse> {
+		async sendMsgSubmitVote({ value, fee, memo }: sendMsgSubmitVoteParams): Promise<DeliverTxResponse> {
 			if (!signer) {
-					throw new Error('TxClient:sendMsgSubmitProposal: Unable to sign Tx. Signer is not present.')
+					throw new Error('TxClient:sendMsgSubmitVote: Unable to sign Tx. Signer is not present.')
 			}
 			try {			
 				const { address } = (await signer.getAccounts())[0]; 
 				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry, prefix});
-				let msg = this.msgSubmitProposal({ value: MsgSubmitProposal.fromPartial(value) })
+				let msg = this.msgSubmitVote({ value: MsgSubmitVote.fromPartial(value) })
 				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
 			} catch (e: any) {
-				throw new Error('TxClient:sendMsgSubmitProposal: Could not broadcast Tx: '+ e.message)
+				throw new Error('TxClient:sendMsgSubmitVote: Could not broadcast Tx: '+ e.message)
+			}
+		},
+		
+		async sendMsgRetryVoteTransmit({ value, fee, memo }: sendMsgRetryVoteTransmitParams): Promise<DeliverTxResponse> {
+			if (!signer) {
+					throw new Error('TxClient:sendMsgRetryVoteTransmit: Unable to sign Tx. Signer is not present.')
+			}
+			try {			
+				const { address } = (await signer.getAccounts())[0]; 
+				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry, prefix});
+				let msg = this.msgRetryVoteTransmit({ value: MsgRetryVoteTransmit.fromPartial(value) })
+				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
+			} catch (e: any) {
+				throw new Error('TxClient:sendMsgRetryVoteTransmit: Could not broadcast Tx: '+ e.message)
 			}
 		},
 		
@@ -181,14 +181,6 @@ export const txClient = ({ signer, prefix, addr }: TxClientOptions = { addr: "ht
 		},
 		
 		
-		msgRetryVoteTransmit({ value }: msgRetryVoteTransmitParams): EncodeObject {
-			try {
-				return { typeUrl: "/prismfinance.prismcore.pgov.MsgRetryVoteTransmit", value: MsgRetryVoteTransmit.fromPartial( value ) }  
-			} catch (e: any) {
-				throw new Error('TxClient:MsgRetryVoteTransmit: Could not create message: ' + e.message)
-			}
-		},
-		
 		msgStakePAssets({ value }: msgStakePAssetsParams): EncodeObject {
 			try {
 				return { typeUrl: "/prismfinance.prismcore.pgov.MsgStakePAssets", value: MsgStakePAssets.fromPartial( value ) }  
@@ -197,11 +189,11 @@ export const txClient = ({ signer, prefix, addr }: TxClientOptions = { addr: "ht
 			}
 		},
 		
-		msgSubmitVote({ value }: msgSubmitVoteParams): EncodeObject {
+		msgSubmitProposal({ value }: msgSubmitProposalParams): EncodeObject {
 			try {
-				return { typeUrl: "/prismfinance.prismcore.pgov.MsgSubmitVote", value: MsgSubmitVote.fromPartial( value ) }  
+				return { typeUrl: "/prismfinance.prismcore.pgov.MsgSubmitProposal", value: MsgSubmitProposal.fromPartial( value ) }  
 			} catch (e: any) {
-				throw new Error('TxClient:MsgSubmitVote: Could not create message: ' + e.message)
+				throw new Error('TxClient:MsgSubmitProposal: Could not create message: ' + e.message)
 			}
 		},
 		
@@ -213,11 +205,19 @@ export const txClient = ({ signer, prefix, addr }: TxClientOptions = { addr: "ht
 			}
 		},
 		
-		msgSubmitProposal({ value }: msgSubmitProposalParams): EncodeObject {
+		msgSubmitVote({ value }: msgSubmitVoteParams): EncodeObject {
 			try {
-				return { typeUrl: "/prismfinance.prismcore.pgov.MsgSubmitProposal", value: MsgSubmitProposal.fromPartial( value ) }  
+				return { typeUrl: "/prismfinance.prismcore.pgov.MsgSubmitVote", value: MsgSubmitVote.fromPartial( value ) }  
 			} catch (e: any) {
-				throw new Error('TxClient:MsgSubmitProposal: Could not create message: ' + e.message)
+				throw new Error('TxClient:MsgSubmitVote: Could not create message: ' + e.message)
+			}
+		},
+		
+		msgRetryVoteTransmit({ value }: msgRetryVoteTransmitParams): EncodeObject {
+			try {
+				return { typeUrl: "/prismfinance.prismcore.pgov.MsgRetryVoteTransmit", value: MsgRetryVoteTransmit.fromPartial( value ) }  
+			} catch (e: any) {
+				throw new Error('TxClient:MsgRetryVoteTransmit: Could not create message: ' + e.message)
 			}
 		},
 		

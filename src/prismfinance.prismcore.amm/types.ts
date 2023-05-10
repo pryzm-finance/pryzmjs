@@ -1,3 +1,43 @@
+import { EventSetPool } from "./types/prismcore/amm/event"
+import { EventAppendPool } from "./types/prismcore/amm/event"
+import { EventSetPoolCount } from "./types/prismcore/amm/event"
+import { EventSetLpTokenSupply } from "./types/prismcore/amm/event"
+import { EventSetPoolToken } from "./types/prismcore/amm/event"
+import { EventRemovePoolToken } from "./types/prismcore/amm/event"
+import { EventSetWeightedToken } from "./types/prismcore/amm/event"
+import { EventRemoveWeightedToken } from "./types/prismcore/amm/event"
+import { EventSetWeightUpdateTiming } from "./types/prismcore/amm/event"
+import { EventSetWhitelistedRoute } from "./types/prismcore/amm/event"
+import { EventSetYammConfiguration } from "./types/prismcore/amm/event"
+import { EventSetOrder } from "./types/prismcore/amm/event"
+import { EventAppendOrder } from "./types/prismcore/amm/event"
+import { EventSetOrderCount } from "./types/prismcore/amm/event"
+import { EventRemoveOrder } from "./types/prismcore/amm/event"
+import { EventCancelOrder } from "./types/prismcore/amm/event"
+import { EventSetScheduleOrder } from "./types/prismcore/amm/event"
+import { EventRemoveScheduleOrder } from "./types/prismcore/amm/event"
+import { EventSetExecutableOrder } from "./types/prismcore/amm/event"
+import { EventRemoveExecutableOrder } from "./types/prismcore/amm/event"
+import { EventSetIntroducingPoolToken } from "./types/prismcore/amm/event"
+import { EventRemoveIntroducingPoolToken } from "./types/prismcore/amm/event"
+import { EventSetExpiringPoolToken } from "./types/prismcore/amm/event"
+import { EventRemoveExpiringPoolToken } from "./types/prismcore/amm/event"
+import { EventSetYammPoolForAssetId } from "./types/prismcore/amm/event"
+import { EventSetVaultPaused } from "./types/prismcore/amm/event"
+import { EventExecuteOrder } from "./types/prismcore/amm/event"
+import { EventExecuteOrdersForPair } from "./types/prismcore/amm/event"
+import { EventExecuteMatchProposalOrder } from "./types/prismcore/amm/event"
+import { EventExecuteMatchProposalPair } from "./types/prismcore/amm/event"
+import { EventExecuteMatchProposal } from "./types/prismcore/amm/event"
+import { EventExitPool } from "./types/prismcore/amm/event"
+import { EventJoinPool } from "./types/prismcore/amm/event"
+import { EventSwap } from "./types/prismcore/amm/event"
+import { EventYAssetSwapRefractorAction } from "./types/prismcore/amm/event"
+import { EventYAssetSwap } from "./types/prismcore/amm/event"
+import { EventSetOraclePricePair } from "./types/prismcore/amm/event"
+import { EventRemoveOraclePricePair } from "./types/prismcore/amm/event"
+import { EventSetPendingTokenIntroduction } from "./types/prismcore/amm/event"
+import { EventRemovePendingTokenIntroduction } from "./types/prismcore/amm/event"
 import { GenesisPoolData } from "./types/prismcore/amm/genesis"
 import { Swap } from "./types/prismcore/amm/operations"
 import { SwapSummary } from "./types/prismcore/amm/operations"
@@ -5,13 +45,13 @@ import { JoinSummary } from "./types/prismcore/amm/operations"
 import { ExitSummary } from "./types/prismcore/amm/operations"
 import { HostChainHeight } from "./types/prismcore/amm/oracle_payload"
 import { OraclePayload } from "./types/prismcore/amm/oracle_payload"
-import { OraclePriceDataSource } from "./types/prismcore/amm/oracle_price_data_source"
 import { Pair } from "./types/prismcore/amm/oracle_price_pair"
 import { OraclePricePair } from "./types/prismcore/amm/oracle_price_pair"
 import { Order } from "./types/prismcore/amm/order"
 import { PairMatchProposal } from "./types/prismcore/amm/pair_match_proposal"
 import { OrderControlParameters } from "./types/prismcore/amm/params"
 import { Params } from "./types/prismcore/amm/params"
+import { PendingTokenIntroduction } from "./types/prismcore/amm/pending_token_introduction"
 import { PoolPauseWindow } from "./types/prismcore/amm/pool"
 import { Pool } from "./types/prismcore/amm/pool"
 import { CircuitBreaker } from "./types/prismcore/amm/pool_token"
@@ -34,6 +74,46 @@ import { YammConfiguration } from "./types/prismcore/amm/yamm_configuration"
 
 
 export {     
+    EventSetPool,
+    EventAppendPool,
+    EventSetPoolCount,
+    EventSetLpTokenSupply,
+    EventSetPoolToken,
+    EventRemovePoolToken,
+    EventSetWeightedToken,
+    EventRemoveWeightedToken,
+    EventSetWeightUpdateTiming,
+    EventSetWhitelistedRoute,
+    EventSetYammConfiguration,
+    EventSetOrder,
+    EventAppendOrder,
+    EventSetOrderCount,
+    EventRemoveOrder,
+    EventCancelOrder,
+    EventSetScheduleOrder,
+    EventRemoveScheduleOrder,
+    EventSetExecutableOrder,
+    EventRemoveExecutableOrder,
+    EventSetIntroducingPoolToken,
+    EventRemoveIntroducingPoolToken,
+    EventSetExpiringPoolToken,
+    EventRemoveExpiringPoolToken,
+    EventSetYammPoolForAssetId,
+    EventSetVaultPaused,
+    EventExecuteOrder,
+    EventExecuteOrdersForPair,
+    EventExecuteMatchProposalOrder,
+    EventExecuteMatchProposalPair,
+    EventExecuteMatchProposal,
+    EventExitPool,
+    EventJoinPool,
+    EventSwap,
+    EventYAssetSwapRefractorAction,
+    EventYAssetSwap,
+    EventSetOraclePricePair,
+    EventRemoveOraclePricePair,
+    EventSetPendingTokenIntroduction,
+    EventRemovePendingTokenIntroduction,
     GenesisPoolData,
     Swap,
     SwapSummary,
@@ -41,13 +121,13 @@ export {
     ExitSummary,
     HostChainHeight,
     OraclePayload,
-    OraclePriceDataSource,
     Pair,
     OraclePricePair,
     Order,
     PairMatchProposal,
     OrderControlParameters,
     Params,
+    PendingTokenIntroduction,
     PoolPauseWindow,
     Pool,
     CircuitBreaker,

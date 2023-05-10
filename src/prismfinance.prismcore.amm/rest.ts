@@ -44,7 +44,7 @@ export interface AmmMsgCancelOrderResponse {
   withdrawn_deposit?: V1Beta1Coin;
 }
 
-export type AmmMsgCreateOraclePriceDataSourceResponse = object;
+export type AmmMsgCancelPendingTokenIntroductionResponse = object;
 
 export type AmmMsgCreateOraclePricePairResponse = object;
 
@@ -52,8 +52,6 @@ export interface AmmMsgCreateWeightedPoolResponse {
   /** @format uint64 */
   pool_id?: string;
 }
-
-export type AmmMsgDeleteOraclePriceDataSourceResponse = object;
 
 export type AmmMsgDeleteOraclePricePairResponse = object;
 
@@ -107,6 +105,8 @@ export interface AmmMsgInitializePoolResponse {
   lpt_out?: V1Beta1Coin;
   amounts_in?: V1Beta1Coin[];
 }
+
+export type AmmMsgIntroduceYammLpToWeightedPoolResponse = object;
 
 export interface AmmMsgJoinAllTokensExactLptResponse {
   /**
@@ -163,6 +163,8 @@ export interface AmmMsgRecoveryExitResponse {
   amounts_out?: V1Beta1Coin[];
 }
 
+export type AmmMsgRemoveTokenFromWeightedPoolResponse = object;
+
 export type AmmMsgSetCircuitBreakersResponse = object;
 
 export type AmmMsgSetJoinExitProtocolFeeResponse = object;
@@ -201,8 +203,6 @@ export interface AmmMsgSubmitOrderResponse {
   order?: AmmOrder;
 }
 
-export type AmmMsgUpdateOraclePriceDataSourceResponse = object;
-
 export type AmmMsgUpdateOraclePricePairResponse = object;
 
 export type AmmMsgUpdateSwapFeeResponse = object;
@@ -210,17 +210,6 @@ export type AmmMsgUpdateSwapFeeResponse = object;
 export type AmmMsgUpdateWeightsResponse = object;
 
 export type AmmMsgWhitelistRouteResponse = object;
-
-export interface AmmOraclePriceDataSource {
-  name?: string;
-  display_name?: string;
-
-  /**
-   * a duration in milliseconds used by feeders to determine the vote interval, i.e., upperbound = votePeriodEndTime - ds.vote_latency ; lowerbound = upperbound - opp.twap_duration
-   * @format uint64
-   */
-  vote_latency?: string;
-}
 
 export interface AmmOraclePricePair {
   asset_id?: string;
@@ -306,6 +295,23 @@ export interface AmmParams {
   yamm_sell_y_given_out_default_fee_ratio?: string;
   yamm_default_swap_yield_fee_ratio?: string;
   order_control_params?: AmmOrderControlParameters;
+
+  /** @format int64 */
+  weighted_token_introduction_interval_millis?: string;
+
+  /** @format int64 */
+  weighted_token_expiration_interval_millis?: string;
+}
+
+export interface AmmPendingTokenIntroduction {
+  asset_id?: string;
+
+  /** @format uint64 */
+  target_pool_id?: string;
+
+  /** @format uint64 */
+  yamm_pool_id?: string;
+  token_normalized_weight?: string;
 }
 
 export interface AmmPool {
@@ -401,21 +407,6 @@ export interface AmmQueryAllIntroducingPoolTokenResponse {
   pagination?: V1Beta1PageResponse;
 }
 
-export interface AmmQueryAllOraclePriceDataSourceResponse {
-  oracle_price_data_source?: AmmOraclePriceDataSource[];
-
-  /**
-   * PageResponse is to be embedded in gRPC response messages where the
-   * corresponding request message has used PageRequest.
-   *
-   *  message SomeResponse {
-   *          repeated Bar results = 1;
-   *          PageResponse page = 2;
-   *  }
-   */
-  pagination?: V1Beta1PageResponse;
-}
-
 export interface AmmQueryAllOraclePricePairResponse {
   oracle_price_pair?: AmmOraclePricePair[];
 
@@ -433,6 +424,21 @@ export interface AmmQueryAllOraclePricePairResponse {
 
 export interface AmmQueryAllOrderResponse {
   order?: AmmOrder[];
+
+  /**
+   * PageResponse is to be embedded in gRPC response messages where the
+   * corresponding request message has used PageRequest.
+   *
+   *  message SomeResponse {
+   *          repeated Bar results = 1;
+   *          PageResponse page = 2;
+   *  }
+   */
+  pagination?: V1Beta1PageResponse;
+}
+
+export interface AmmQueryAllPendingTokenIntroductionResponse {
+  pending_token_introduction?: AmmPendingTokenIntroduction[];
 
   /**
    * PageResponse is to be embedded in gRPC response messages where the
@@ -563,16 +569,16 @@ export interface AmmQueryGetIntroducingPoolTokenResponse {
   introducing_pool_token?: AmmVirtualBalancePoolToken;
 }
 
-export interface AmmQueryGetOraclePriceDataSourceResponse {
-  oracle_price_data_source?: AmmOraclePriceDataSource;
-}
-
 export interface AmmQueryGetOraclePricePairResponse {
   oracle_price_pair?: AmmOraclePricePair;
 }
 
 export interface AmmQueryGetOrderResponse {
   order?: AmmOrder;
+}
+
+export interface AmmQueryGetPendingTokenIntroductionResponse {
+  pending_token_introduction?: AmmPendingTokenIntroduction;
 }
 
 export interface AmmQueryGetPoolResponse {
@@ -1058,7 +1064,7 @@ export class HttpClient<SecurityDataType = unknown> {
 }
 
 /**
- * @title prismcore/amm/genesis.proto
+ * @title prismcore/amm/event.proto
  * @version version not set
  */
 export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDataType> {
@@ -1208,48 +1214,6 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
    * No description
    *
    * @tags Query
-   * @name QueryOraclePriceDataSourceAll
-   * @summary Queries a list of OraclePriceDataSource items.
-   * @request GET:/prism-finance/prism-core/amm/oracle_price_data_source
-   */
-  queryOraclePriceDataSourceAll = (
-    query?: {
-      "pagination.key"?: string;
-      "pagination.offset"?: string;
-      "pagination.limit"?: string;
-      "pagination.count_total"?: boolean;
-      "pagination.reverse"?: boolean;
-    },
-    params: RequestParams = {},
-  ) =>
-    this.request<AmmQueryAllOraclePriceDataSourceResponse, RpcStatus>({
-      path: `/prism-finance/prism-core/amm/oracle_price_data_source`,
-      method: "GET",
-      query: query,
-      format: "json",
-      ...params,
-    });
-
-  /**
-   * No description
-   *
-   * @tags Query
-   * @name QueryOraclePriceDataSource
-   * @summary Queries a OraclePriceDataSource by index.
-   * @request GET:/prism-finance/prism-core/amm/oracle_price_data_source/{name}
-   */
-  queryOraclePriceDataSource = (name: string, params: RequestParams = {}) =>
-    this.request<AmmQueryGetOraclePriceDataSourceResponse, RpcStatus>({
-      path: `/prism-finance/prism-core/amm/oracle_price_data_source/${name}`,
-      method: "GET",
-      format: "json",
-      ...params,
-    });
-
-  /**
-   * No description
-   *
-   * @tags Query
    * @name QueryOraclePricePairAll
    * @summary Queries a list of OraclePricePair items.
    * @request GET:/prism-finance/prism-core/amm/oracle_price_pair
@@ -1341,6 +1305,48 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
   queryParams = (params: RequestParams = {}) =>
     this.request<AmmQueryParamsResponse, RpcStatus>({
       path: `/prism-finance/prism-core/amm/params`,
+      method: "GET",
+      format: "json",
+      ...params,
+    });
+
+  /**
+   * No description
+   *
+   * @tags Query
+   * @name QueryPendingTokenIntroductionAll
+   * @summary Queries a list of PendingTokenIntroduction items.
+   * @request GET:/prism-finance/prism-core/amm/pending_token_introduction
+   */
+  queryPendingTokenIntroductionAll = (
+    query?: {
+      "pagination.key"?: string;
+      "pagination.offset"?: string;
+      "pagination.limit"?: string;
+      "pagination.count_total"?: boolean;
+      "pagination.reverse"?: boolean;
+    },
+    params: RequestParams = {},
+  ) =>
+    this.request<AmmQueryAllPendingTokenIntroductionResponse, RpcStatus>({
+      path: `/prism-finance/prism-core/amm/pending_token_introduction`,
+      method: "GET",
+      query: query,
+      format: "json",
+      ...params,
+    });
+
+  /**
+   * No description
+   *
+   * @tags Query
+   * @name QueryPendingTokenIntroduction
+   * @summary Queries a PendingTokenIntroduction by index.
+   * @request GET:/prism-finance/prism-core/amm/pending_token_introduction/{asset_id}/{target_pool_id}
+   */
+  queryPendingTokenIntroduction = (assetId: string, targetPoolId: string, params: RequestParams = {}) =>
+    this.request<AmmQueryGetPendingTokenIntroductionResponse, RpcStatus>({
+      path: `/prism-finance/prism-core/amm/pending_token_introduction/${assetId}/${targetPoolId}`,
       method: "GET",
       format: "json",
       ...params,

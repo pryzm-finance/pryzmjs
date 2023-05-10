@@ -5,6 +5,7 @@ import { Coin } from "../../cosmos/base/v1beta1/coin";
 import { WeightedVoteOption } from "../../cosmos/gov/v1/gov";
 import { ProofOps } from "../../tendermint/crypto/proof";
 import { Params } from "./params";
+import { Proposal } from "./proposal";
 
 export const protobufPackage = "prismfinance.prismcore.pgov";
 
@@ -53,6 +54,7 @@ export interface MsgSubmitProposal {
 }
 
 export interface MsgSubmitProposalResponse {
+  proposal: Proposal | undefined;
 }
 
 export interface MsgRetryVoteTransmit {
@@ -589,11 +591,14 @@ export const MsgSubmitProposal = {
 };
 
 function createBaseMsgSubmitProposalResponse(): MsgSubmitProposalResponse {
-  return {};
+  return { proposal: undefined };
 }
 
 export const MsgSubmitProposalResponse = {
-  encode(_: MsgSubmitProposalResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: MsgSubmitProposalResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.proposal !== undefined) {
+      Proposal.encode(message.proposal, writer.uint32(10).fork()).ldelim();
+    }
     return writer;
   },
 
@@ -604,6 +609,9 @@ export const MsgSubmitProposalResponse = {
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
+        case 1:
+          message.proposal = Proposal.decode(reader, reader.uint32());
+          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -612,17 +620,21 @@ export const MsgSubmitProposalResponse = {
     return message;
   },
 
-  fromJSON(_: any): MsgSubmitProposalResponse {
-    return {};
+  fromJSON(object: any): MsgSubmitProposalResponse {
+    return { proposal: isSet(object.proposal) ? Proposal.fromJSON(object.proposal) : undefined };
   },
 
-  toJSON(_: MsgSubmitProposalResponse): unknown {
+  toJSON(message: MsgSubmitProposalResponse): unknown {
     const obj: any = {};
+    message.proposal !== undefined && (obj.proposal = message.proposal ? Proposal.toJSON(message.proposal) : undefined);
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<MsgSubmitProposalResponse>, I>>(_: I): MsgSubmitProposalResponse {
+  fromPartial<I extends Exact<DeepPartial<MsgSubmitProposalResponse>, I>>(object: I): MsgSubmitProposalResponse {
     const message = createBaseMsgSubmitProposalResponse();
+    message.proposal = (object.proposal !== undefined && object.proposal !== null)
+      ? Proposal.fromPartial(object.proposal)
+      : undefined;
     return message;
   },
 };

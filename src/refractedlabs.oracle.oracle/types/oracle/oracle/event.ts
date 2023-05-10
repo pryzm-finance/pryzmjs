@@ -1,7 +1,7 @@
 /* eslint-disable */
 import Long from "long";
 import _m0 from "protobufjs/minimal";
-import { NamespaceVote } from "./namespace_vote";
+import { OracleVote } from "./oracle_vote";
 
 export const protobufPackage = "refractedlabs.oracle.oracle";
 
@@ -16,9 +16,8 @@ export interface EventOraclePreVote {
 }
 
 export interface EventOracleVote {
-  validator: string;
   feeder: string;
-  namespaceVotes: NamespaceVote[];
+  oracleVote: OracleVote | undefined;
 }
 
 export interface EventVoteIntervalEnds {
@@ -28,8 +27,8 @@ export interface EventVoteIntervalEnds {
 }
 
 export interface EventInvalidMajorityVotePayload {
-  namespace: string;
   module: string;
+  namespace: string;
   majorityVotePayload: string;
   error: string;
 }
@@ -151,19 +150,16 @@ export const EventOraclePreVote = {
 };
 
 function createBaseEventOracleVote(): EventOracleVote {
-  return { validator: "", feeder: "", namespaceVotes: [] };
+  return { feeder: "", oracleVote: undefined };
 }
 
 export const EventOracleVote = {
   encode(message: EventOracleVote, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (message.validator !== "") {
-      writer.uint32(10).string(message.validator);
-    }
     if (message.feeder !== "") {
-      writer.uint32(18).string(message.feeder);
+      writer.uint32(10).string(message.feeder);
     }
-    for (const v of message.namespaceVotes) {
-      NamespaceVote.encode(v!, writer.uint32(26).fork()).ldelim();
+    if (message.oracleVote !== undefined) {
+      OracleVote.encode(message.oracleVote, writer.uint32(18).fork()).ldelim();
     }
     return writer;
   },
@@ -176,13 +172,10 @@ export const EventOracleVote = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.validator = reader.string();
-          break;
-        case 2:
           message.feeder = reader.string();
           break;
-        case 3:
-          message.namespaceVotes.push(NamespaceVote.decode(reader, reader.uint32()));
+        case 2:
+          message.oracleVote = OracleVote.decode(reader, reader.uint32());
           break;
         default:
           reader.skipType(tag & 7);
@@ -194,31 +187,25 @@ export const EventOracleVote = {
 
   fromJSON(object: any): EventOracleVote {
     return {
-      validator: isSet(object.validator) ? String(object.validator) : "",
       feeder: isSet(object.feeder) ? String(object.feeder) : "",
-      namespaceVotes: Array.isArray(object?.namespaceVotes)
-        ? object.namespaceVotes.map((e: any) => NamespaceVote.fromJSON(e))
-        : [],
+      oracleVote: isSet(object.oracleVote) ? OracleVote.fromJSON(object.oracleVote) : undefined,
     };
   },
 
   toJSON(message: EventOracleVote): unknown {
     const obj: any = {};
-    message.validator !== undefined && (obj.validator = message.validator);
     message.feeder !== undefined && (obj.feeder = message.feeder);
-    if (message.namespaceVotes) {
-      obj.namespaceVotes = message.namespaceVotes.map((e) => e ? NamespaceVote.toJSON(e) : undefined);
-    } else {
-      obj.namespaceVotes = [];
-    }
+    message.oracleVote !== undefined
+      && (obj.oracleVote = message.oracleVote ? OracleVote.toJSON(message.oracleVote) : undefined);
     return obj;
   },
 
   fromPartial<I extends Exact<DeepPartial<EventOracleVote>, I>>(object: I): EventOracleVote {
     const message = createBaseEventOracleVote();
-    message.validator = object.validator ?? "";
     message.feeder = object.feeder ?? "";
-    message.namespaceVotes = object.namespaceVotes?.map((e) => NamespaceVote.fromPartial(e)) || [];
+    message.oracleVote = (object.oracleVote !== undefined && object.oracleVote !== null)
+      ? OracleVote.fromPartial(object.oracleVote)
+      : undefined;
     return message;
   },
 };
@@ -291,16 +278,16 @@ export const EventVoteIntervalEnds = {
 };
 
 function createBaseEventInvalidMajorityVotePayload(): EventInvalidMajorityVotePayload {
-  return { namespace: "", module: "", majorityVotePayload: "", error: "" };
+  return { module: "", namespace: "", majorityVotePayload: "", error: "" };
 }
 
 export const EventInvalidMajorityVotePayload = {
   encode(message: EventInvalidMajorityVotePayload, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (message.namespace !== "") {
-      writer.uint32(10).string(message.namespace);
-    }
     if (message.module !== "") {
-      writer.uint32(18).string(message.module);
+      writer.uint32(10).string(message.module);
+    }
+    if (message.namespace !== "") {
+      writer.uint32(18).string(message.namespace);
     }
     if (message.majorityVotePayload !== "") {
       writer.uint32(26).string(message.majorityVotePayload);
@@ -319,10 +306,10 @@ export const EventInvalidMajorityVotePayload = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.namespace = reader.string();
+          message.module = reader.string();
           break;
         case 2:
-          message.module = reader.string();
+          message.namespace = reader.string();
           break;
         case 3:
           message.majorityVotePayload = reader.string();
@@ -340,8 +327,8 @@ export const EventInvalidMajorityVotePayload = {
 
   fromJSON(object: any): EventInvalidMajorityVotePayload {
     return {
-      namespace: isSet(object.namespace) ? String(object.namespace) : "",
       module: isSet(object.module) ? String(object.module) : "",
+      namespace: isSet(object.namespace) ? String(object.namespace) : "",
       majorityVotePayload: isSet(object.majorityVotePayload) ? String(object.majorityVotePayload) : "",
       error: isSet(object.error) ? String(object.error) : "",
     };
@@ -349,8 +336,8 @@ export const EventInvalidMajorityVotePayload = {
 
   toJSON(message: EventInvalidMajorityVotePayload): unknown {
     const obj: any = {};
-    message.namespace !== undefined && (obj.namespace = message.namespace);
     message.module !== undefined && (obj.module = message.module);
+    message.namespace !== undefined && (obj.namespace = message.namespace);
     message.majorityVotePayload !== undefined && (obj.majorityVotePayload = message.majorityVotePayload);
     message.error !== undefined && (obj.error = message.error);
     return obj;
@@ -360,8 +347,8 @@ export const EventInvalidMajorityVotePayload = {
     object: I,
   ): EventInvalidMajorityVotePayload {
     const message = createBaseEventInvalidMajorityVotePayload();
-    message.namespace = object.namespace ?? "";
     message.module = object.module ?? "";
+    message.namespace = object.namespace ?? "";
     message.majorityVotePayload = object.majorityVotePayload ?? "";
     message.error = object.error ?? "";
     return message;

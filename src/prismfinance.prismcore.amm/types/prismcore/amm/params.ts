@@ -28,6 +28,8 @@ export interface Params {
   yammSellYGivenOutDefaultFeeRatio: string;
   yammDefaultSwapYieldFeeRatio: string;
   orderControlParams: OrderControlParameters | undefined;
+  weightedTokenIntroductionIntervalMillis: number;
+  weightedTokenExpirationIntervalMillis: number;
 }
 
 function createBaseOrderControlParameters(): OrderControlParameters {
@@ -118,6 +120,8 @@ function createBaseParams(): Params {
     yammSellYGivenOutDefaultFeeRatio: "",
     yammDefaultSwapYieldFeeRatio: "",
     orderControlParams: undefined,
+    weightedTokenIntroductionIntervalMillis: 0,
+    weightedTokenExpirationIntervalMillis: 0,
   };
 }
 
@@ -152,6 +156,12 @@ export const Params = {
     }
     if (message.orderControlParams !== undefined) {
       OrderControlParameters.encode(message.orderControlParams, writer.uint32(82).fork()).ldelim();
+    }
+    if (message.weightedTokenIntroductionIntervalMillis !== 0) {
+      writer.uint32(88).int64(message.weightedTokenIntroductionIntervalMillis);
+    }
+    if (message.weightedTokenExpirationIntervalMillis !== 0) {
+      writer.uint32(96).int64(message.weightedTokenExpirationIntervalMillis);
     }
     return writer;
   },
@@ -193,6 +203,12 @@ export const Params = {
         case 10:
           message.orderControlParams = OrderControlParameters.decode(reader, reader.uint32());
           break;
+        case 11:
+          message.weightedTokenIntroductionIntervalMillis = longToNumber(reader.int64() as Long);
+          break;
+        case 12:
+          message.weightedTokenExpirationIntervalMillis = longToNumber(reader.int64() as Long);
+          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -229,6 +245,12 @@ export const Params = {
       orderControlParams: isSet(object.orderControlParams)
         ? OrderControlParameters.fromJSON(object.orderControlParams)
         : undefined,
+      weightedTokenIntroductionIntervalMillis: isSet(object.weightedTokenIntroductionIntervalMillis)
+        ? Number(object.weightedTokenIntroductionIntervalMillis)
+        : 0,
+      weightedTokenExpirationIntervalMillis: isSet(object.weightedTokenExpirationIntervalMillis)
+        ? Number(object.weightedTokenExpirationIntervalMillis)
+        : 0,
     };
   },
 
@@ -253,6 +275,10 @@ export const Params = {
     message.orderControlParams !== undefined && (obj.orderControlParams = message.orderControlParams
       ? OrderControlParameters.toJSON(message.orderControlParams)
       : undefined);
+    message.weightedTokenIntroductionIntervalMillis !== undefined
+      && (obj.weightedTokenIntroductionIntervalMillis = Math.round(message.weightedTokenIntroductionIntervalMillis));
+    message.weightedTokenExpirationIntervalMillis !== undefined
+      && (obj.weightedTokenExpirationIntervalMillis = Math.round(message.weightedTokenExpirationIntervalMillis));
     return obj;
   },
 
@@ -270,6 +296,8 @@ export const Params = {
     message.orderControlParams = (object.orderControlParams !== undefined && object.orderControlParams !== null)
       ? OrderControlParameters.fromPartial(object.orderControlParams)
       : undefined;
+    message.weightedTokenIntroductionIntervalMillis = object.weightedTokenIntroductionIntervalMillis ?? 0;
+    message.weightedTokenExpirationIntervalMillis = object.weightedTokenExpirationIntervalMillis ?? 0;
     return message;
   },
 };
