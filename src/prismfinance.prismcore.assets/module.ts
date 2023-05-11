@@ -8,15 +8,21 @@ import { IgniteClient } from "../client"
 import { MissingWalletError } from "../helpers"
 import { Api } from "./rest";
 import { MsgUpdateFeeRatios } from "./types/prismcore/assets/tx";
+import { MsgUpdateMaturityParams } from "./types/prismcore/assets/tx";
 import { MsgRegisterAsset } from "./types/prismcore/assets/tx";
 import { MsgDisableAsset } from "./types/prismcore/assets/tx";
-import { MsgUpdateMaturityParams } from "./types/prismcore/assets/tx";
 
 
-export { MsgUpdateFeeRatios, MsgRegisterAsset, MsgDisableAsset, MsgUpdateMaturityParams };
+export { MsgUpdateFeeRatios, MsgUpdateMaturityParams, MsgRegisterAsset, MsgDisableAsset };
 
 type sendMsgUpdateFeeRatiosParams = {
   value: MsgUpdateFeeRatios,
+  fee?: StdFee,
+  memo?: string
+};
+
+type sendMsgUpdateMaturityParamsParams = {
+  value: MsgUpdateMaturityParams,
   fee?: StdFee,
   memo?: string
 };
@@ -33,15 +39,13 @@ type sendMsgDisableAssetParams = {
   memo?: string
 };
 
-type sendMsgUpdateMaturityParamsParams = {
-  value: MsgUpdateMaturityParams,
-  fee?: StdFee,
-  memo?: string
-};
-
 
 type msgUpdateFeeRatiosParams = {
   value: MsgUpdateFeeRatios,
+};
+
+type msgUpdateMaturityParamsParams = {
+  value: MsgUpdateMaturityParams,
 };
 
 type msgRegisterAssetParams = {
@@ -50,10 +54,6 @@ type msgRegisterAssetParams = {
 
 type msgDisableAssetParams = {
   value: MsgDisableAsset,
-};
-
-type msgUpdateMaturityParamsParams = {
-  value: MsgUpdateMaturityParams,
 };
 
 
@@ -88,6 +88,20 @@ export const txClient = ({ signer, prefix, addr }: TxClientOptions = { addr: "ht
 			}
 		},
 		
+		async sendMsgUpdateMaturityParams({ value, fee, memo }: sendMsgUpdateMaturityParamsParams): Promise<DeliverTxResponse> {
+			if (!signer) {
+					throw new Error('TxClient:sendMsgUpdateMaturityParams: Unable to sign Tx. Signer is not present.')
+			}
+			try {			
+				const { address } = (await signer.getAccounts())[0]; 
+				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry, prefix});
+				let msg = this.msgUpdateMaturityParams({ value: MsgUpdateMaturityParams.fromPartial(value) })
+				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
+			} catch (e: any) {
+				throw new Error('TxClient:sendMsgUpdateMaturityParams: Could not broadcast Tx: '+ e.message)
+			}
+		},
+		
 		async sendMsgRegisterAsset({ value, fee, memo }: sendMsgRegisterAssetParams): Promise<DeliverTxResponse> {
 			if (!signer) {
 					throw new Error('TxClient:sendMsgRegisterAsset: Unable to sign Tx. Signer is not present.')
@@ -116,26 +130,20 @@ export const txClient = ({ signer, prefix, addr }: TxClientOptions = { addr: "ht
 			}
 		},
 		
-		async sendMsgUpdateMaturityParams({ value, fee, memo }: sendMsgUpdateMaturityParamsParams): Promise<DeliverTxResponse> {
-			if (!signer) {
-					throw new Error('TxClient:sendMsgUpdateMaturityParams: Unable to sign Tx. Signer is not present.')
-			}
-			try {			
-				const { address } = (await signer.getAccounts())[0]; 
-				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry, prefix});
-				let msg = this.msgUpdateMaturityParams({ value: MsgUpdateMaturityParams.fromPartial(value) })
-				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
-			} catch (e: any) {
-				throw new Error('TxClient:sendMsgUpdateMaturityParams: Could not broadcast Tx: '+ e.message)
-			}
-		},
-		
 		
 		msgUpdateFeeRatios({ value }: msgUpdateFeeRatiosParams): EncodeObject {
 			try {
 				return { typeUrl: "/prismfinance.prismcore.assets.MsgUpdateFeeRatios", value: MsgUpdateFeeRatios.fromPartial( value ) }  
 			} catch (e: any) {
 				throw new Error('TxClient:MsgUpdateFeeRatios: Could not create message: ' + e.message)
+			}
+		},
+		
+		msgUpdateMaturityParams({ value }: msgUpdateMaturityParamsParams): EncodeObject {
+			try {
+				return { typeUrl: "/prismfinance.prismcore.assets.MsgUpdateMaturityParams", value: MsgUpdateMaturityParams.fromPartial( value ) }  
+			} catch (e: any) {
+				throw new Error('TxClient:MsgUpdateMaturityParams: Could not create message: ' + e.message)
 			}
 		},
 		
@@ -152,14 +160,6 @@ export const txClient = ({ signer, prefix, addr }: TxClientOptions = { addr: "ht
 				return { typeUrl: "/prismfinance.prismcore.assets.MsgDisableAsset", value: MsgDisableAsset.fromPartial( value ) }  
 			} catch (e: any) {
 				throw new Error('TxClient:MsgDisableAsset: Could not create message: ' + e.message)
-			}
-		},
-		
-		msgUpdateMaturityParams({ value }: msgUpdateMaturityParamsParams): EncodeObject {
-			try {
-				return { typeUrl: "/prismfinance.prismcore.assets.MsgUpdateMaturityParams", value: MsgUpdateMaturityParams.fromPartial( value ) }  
-			} catch (e: any) {
-				throw new Error('TxClient:MsgUpdateMaturityParams: Could not create message: ' + e.message)
 			}
 		},
 		

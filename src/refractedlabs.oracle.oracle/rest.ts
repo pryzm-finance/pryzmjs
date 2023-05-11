@@ -22,6 +22,7 @@ export interface OracleMissCounter {
 }
 
 export interface OracleModuleVote {
+  /** needed for correct unmarshalling into map[string]types.ModuleVote */
   namespace_votes?: Record<string, OracleNamespaceVote>;
 }
 

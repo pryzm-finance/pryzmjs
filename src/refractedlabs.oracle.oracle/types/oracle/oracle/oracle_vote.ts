@@ -8,6 +8,7 @@ export interface NamespaceVote {
 }
 
 export interface ModuleVote {
+  /** needed for correct unmarshalling into map[string]types.ModuleVote */
   namespaceVotes: { [key: string]: NamespaceVote };
 }
 
@@ -108,8 +109,8 @@ export const ModuleVote = {
 
   fromJSON(object: any): ModuleVote {
     return {
-      namespaceVotes: isObject(object.namespaceVotes)
-        ? Object.entries(object.namespaceVotes).reduce<{ [key: string]: NamespaceVote }>((acc, [key, value]) => {
+      namespaceVotes: isObject(object.namespace_votes)
+        ? Object.entries(object.namespace_votes).reduce<{ [key: string]: NamespaceVote }>((acc, [key, value]) => {
           acc[key] = NamespaceVote.fromJSON(value);
           return acc;
         }, {})
@@ -119,10 +120,10 @@ export const ModuleVote = {
 
   toJSON(message: ModuleVote): unknown {
     const obj: any = {};
-    obj.namespaceVotes = {};
+    obj.namespace_votes = {};
     if (message.namespaceVotes) {
       Object.entries(message.namespaceVotes).forEach(([k, v]) => {
-        obj.namespaceVotes[k] = NamespaceVote.toJSON(v);
+        obj.namespace_votes[k] = NamespaceVote.toJSON(v);
       });
     }
     return obj;
@@ -247,8 +248,8 @@ export const OracleVote = {
   fromJSON(object: any): OracleVote {
     return {
       validator: isSet(object.validator) ? String(object.validator) : "",
-      moduleVotes: isObject(object.moduleVotes)
-        ? Object.entries(object.moduleVotes).reduce<{ [key: string]: ModuleVote }>((acc, [key, value]) => {
+      moduleVotes: isObject(object.module_votes)
+        ? Object.entries(object.module_votes).reduce<{ [key: string]: ModuleVote }>((acc, [key, value]) => {
           acc[key] = ModuleVote.fromJSON(value);
           return acc;
         }, {})
@@ -259,10 +260,10 @@ export const OracleVote = {
   toJSON(message: OracleVote): unknown {
     const obj: any = {};
     message.validator !== undefined && (obj.validator = message.validator);
-    obj.moduleVotes = {};
+    obj.module_votes = {};
     if (message.moduleVotes) {
       Object.entries(message.moduleVotes).forEach(([k, v]) => {
-        obj.moduleVotes[k] = ModuleVote.toJSON(v);
+        obj.module_votes[k] = ModuleVote.toJSON(v);
       });
     }
     return obj;
