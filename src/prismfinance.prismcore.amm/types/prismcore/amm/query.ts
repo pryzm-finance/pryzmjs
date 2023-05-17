@@ -41,6 +41,7 @@ export interface QueryGetPoolTokenResponse {
 
 export interface QueryAllPoolTokenRequest {
   pagination: PageRequest | undefined;
+  poolId: string;
 }
 
 export interface QueryAllPoolTokenResponse {
@@ -316,7 +317,6 @@ export interface QueryAllExecutableOrderResponse {
 }
 
 export interface QueryGetScheduleOrderRequest {
-  blockHeight: number;
   orderId: number;
 }
 
@@ -373,6 +373,14 @@ export interface QueryAllPendingTokenIntroductionRequest {
 export interface QueryAllPendingTokenIntroductionResponse {
   pendingTokenIntroduction: PendingTokenIntroduction[];
   pagination: PageResponse | undefined;
+}
+
+export interface QueryYammPoolIdRequest {
+  assetId: string;
+}
+
+export interface QueryYammPoolIdResponse {
+  poolId: number;
 }
 
 function createBaseQueryParamsRequest(): QueryParamsRequest {
@@ -572,13 +580,16 @@ export const QueryGetPoolTokenResponse = {
 };
 
 function createBaseQueryAllPoolTokenRequest(): QueryAllPoolTokenRequest {
-  return { pagination: undefined };
+  return { pagination: undefined, poolId: "" };
 }
 
 export const QueryAllPoolTokenRequest = {
   encode(message: QueryAllPoolTokenRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.pagination !== undefined) {
       PageRequest.encode(message.pagination, writer.uint32(10).fork()).ldelim();
+    }
+    if (message.poolId !== "") {
+      writer.uint32(18).string(message.poolId);
     }
     return writer;
   },
@@ -593,6 +604,9 @@ export const QueryAllPoolTokenRequest = {
         case 1:
           message.pagination = PageRequest.decode(reader, reader.uint32());
           break;
+        case 2:
+          message.poolId = reader.string();
+          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -602,13 +616,17 @@ export const QueryAllPoolTokenRequest = {
   },
 
   fromJSON(object: any): QueryAllPoolTokenRequest {
-    return { pagination: isSet(object.pagination) ? PageRequest.fromJSON(object.pagination) : undefined };
+    return {
+      pagination: isSet(object.pagination) ? PageRequest.fromJSON(object.pagination) : undefined,
+      poolId: isSet(object.poolId) ? String(object.poolId) : "",
+    };
   },
 
   toJSON(message: QueryAllPoolTokenRequest): unknown {
     const obj: any = {};
     message.pagination !== undefined
       && (obj.pagination = message.pagination ? PageRequest.toJSON(message.pagination) : undefined);
+    message.poolId !== undefined && (obj.poolId = message.poolId);
     return obj;
   },
 
@@ -617,6 +635,7 @@ export const QueryAllPoolTokenRequest = {
     message.pagination = (object.pagination !== undefined && object.pagination !== null)
       ? PageRequest.fromPartial(object.pagination)
       : undefined;
+    message.poolId = object.poolId ?? "";
     return message;
   },
 };
@@ -4091,16 +4110,13 @@ export const QueryAllExecutableOrderResponse = {
 };
 
 function createBaseQueryGetScheduleOrderRequest(): QueryGetScheduleOrderRequest {
-  return { blockHeight: 0, orderId: 0 };
+  return { orderId: 0 };
 }
 
 export const QueryGetScheduleOrderRequest = {
   encode(message: QueryGetScheduleOrderRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (message.blockHeight !== 0) {
-      writer.uint32(8).int64(message.blockHeight);
-    }
     if (message.orderId !== 0) {
-      writer.uint32(16).uint64(message.orderId);
+      writer.uint32(8).uint64(message.orderId);
     }
     return writer;
   },
@@ -4113,9 +4129,6 @@ export const QueryGetScheduleOrderRequest = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.blockHeight = longToNumber(reader.int64() as Long);
-          break;
-        case 2:
           message.orderId = longToNumber(reader.uint64() as Long);
           break;
         default:
@@ -4127,22 +4140,17 @@ export const QueryGetScheduleOrderRequest = {
   },
 
   fromJSON(object: any): QueryGetScheduleOrderRequest {
-    return {
-      blockHeight: isSet(object.blockHeight) ? Number(object.blockHeight) : 0,
-      orderId: isSet(object.orderId) ? Number(object.orderId) : 0,
-    };
+    return { orderId: isSet(object.orderId) ? Number(object.orderId) : 0 };
   },
 
   toJSON(message: QueryGetScheduleOrderRequest): unknown {
     const obj: any = {};
-    message.blockHeight !== undefined && (obj.blockHeight = Math.round(message.blockHeight));
     message.orderId !== undefined && (obj.orderId = Math.round(message.orderId));
     return obj;
   },
 
   fromPartial<I extends Exact<DeepPartial<QueryGetScheduleOrderRequest>, I>>(object: I): QueryGetScheduleOrderRequest {
     const message = createBaseQueryGetScheduleOrderRequest();
-    message.blockHeight = object.blockHeight ?? 0;
     message.orderId = object.orderId ?? 0;
     return message;
   },
@@ -4871,6 +4879,100 @@ export const QueryAllPendingTokenIntroductionResponse = {
   },
 };
 
+function createBaseQueryYammPoolIdRequest(): QueryYammPoolIdRequest {
+  return { assetId: "" };
+}
+
+export const QueryYammPoolIdRequest = {
+  encode(message: QueryYammPoolIdRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.assetId !== "") {
+      writer.uint32(10).string(message.assetId);
+    }
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): QueryYammPoolIdRequest {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseQueryYammPoolIdRequest();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.assetId = reader.string();
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): QueryYammPoolIdRequest {
+    return { assetId: isSet(object.assetId) ? String(object.assetId) : "" };
+  },
+
+  toJSON(message: QueryYammPoolIdRequest): unknown {
+    const obj: any = {};
+    message.assetId !== undefined && (obj.assetId = message.assetId);
+    return obj;
+  },
+
+  fromPartial<I extends Exact<DeepPartial<QueryYammPoolIdRequest>, I>>(object: I): QueryYammPoolIdRequest {
+    const message = createBaseQueryYammPoolIdRequest();
+    message.assetId = object.assetId ?? "";
+    return message;
+  },
+};
+
+function createBaseQueryYammPoolIdResponse(): QueryYammPoolIdResponse {
+  return { poolId: 0 };
+}
+
+export const QueryYammPoolIdResponse = {
+  encode(message: QueryYammPoolIdResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.poolId !== 0) {
+      writer.uint32(8).uint64(message.poolId);
+    }
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): QueryYammPoolIdResponse {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseQueryYammPoolIdResponse();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.poolId = longToNumber(reader.uint64() as Long);
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): QueryYammPoolIdResponse {
+    return { poolId: isSet(object.poolId) ? Number(object.poolId) : 0 };
+  },
+
+  toJSON(message: QueryYammPoolIdResponse): unknown {
+    const obj: any = {};
+    message.poolId !== undefined && (obj.poolId = Math.round(message.poolId));
+    return obj;
+  },
+
+  fromPartial<I extends Exact<DeepPartial<QueryYammPoolIdResponse>, I>>(object: I): QueryYammPoolIdResponse {
+    const message = createBaseQueryYammPoolIdResponse();
+    message.poolId = object.poolId ?? 0;
+    return message;
+  },
+};
+
 /** Query defines the gRPC querier service. */
 export interface Query {
   /** Parameters queries the parameters of the module. */
@@ -4963,6 +5065,8 @@ export interface Query {
   PendingTokenIntroductionAll(
     request: QueryAllPendingTokenIntroductionRequest,
   ): Promise<QueryAllPendingTokenIntroductionResponse>;
+  /** Queries a list of YammPoolId items. */
+  YammPoolId(request: QueryYammPoolIdRequest): Promise<QueryYammPoolIdResponse>;
 }
 
 export class QueryClientImpl implements Query {
@@ -5008,6 +5112,7 @@ export class QueryClientImpl implements Query {
     this.VaultPauseMode = this.VaultPauseMode.bind(this);
     this.PendingTokenIntroduction = this.PendingTokenIntroduction.bind(this);
     this.PendingTokenIntroductionAll = this.PendingTokenIntroductionAll.bind(this);
+    this.YammPoolId = this.YammPoolId.bind(this);
   }
   Params(request: QueryParamsRequest): Promise<QueryParamsResponse> {
     const data = QueryParamsRequest.encode(request).finish();
@@ -5253,6 +5358,12 @@ export class QueryClientImpl implements Query {
     const data = QueryAllPendingTokenIntroductionRequest.encode(request).finish();
     const promise = this.rpc.request("prismfinance.prismcore.amm.Query", "PendingTokenIntroductionAll", data);
     return promise.then((data) => QueryAllPendingTokenIntroductionResponse.decode(new _m0.Reader(data)));
+  }
+
+  YammPoolId(request: QueryYammPoolIdRequest): Promise<QueryYammPoolIdResponse> {
+    const data = QueryYammPoolIdRequest.encode(request).finish();
+    const promise = this.rpc.request("prismfinance.prismcore.amm.Query", "YammPoolId", data);
+    return promise.then((data) => QueryYammPoolIdResponse.decode(new _m0.Reader(data)));
   }
 }
 

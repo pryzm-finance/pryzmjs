@@ -38,6 +38,7 @@ import { EventSetOraclePricePair } from "./types/prismcore/amm/event"
 import { EventRemoveOraclePricePair } from "./types/prismcore/amm/event"
 import { EventSetPendingTokenIntroduction } from "./types/prismcore/amm/event"
 import { EventRemovePendingTokenIntroduction } from "./types/prismcore/amm/event"
+import { EventSetParams } from "./types/prismcore/amm/event"
 import { GenesisPoolData } from "./types/prismcore/amm/genesis"
 import { Swap } from "./types/prismcore/amm/operations"
 import { SwapSummary } from "./types/prismcore/amm/operations"
@@ -49,7 +50,9 @@ import { Pair } from "./types/prismcore/amm/oracle_price_pair"
 import { OraclePricePair } from "./types/prismcore/amm/oracle_price_pair"
 import { Order } from "./types/prismcore/amm/order"
 import { PairMatchProposal } from "./types/prismcore/amm/pair_match_proposal"
-import { OrderControlParameters } from "./types/prismcore/amm/params"
+import { OrderParameters } from "./types/prismcore/amm/params"
+import { YammParameters } from "./types/prismcore/amm/params"
+import { GeneralPoolParameters } from "./types/prismcore/amm/params"
 import { Params } from "./types/prismcore/amm/params"
 import { PendingTokenIntroduction } from "./types/prismcore/amm/pending_token_introduction"
 import { PoolPauseWindow } from "./types/prismcore/amm/pool"
@@ -114,6 +117,7 @@ export {
     EventRemoveOraclePricePair,
     EventSetPendingTokenIntroduction,
     EventRemovePendingTokenIntroduction,
+    EventSetParams,
     GenesisPoolData,
     Swap,
     SwapSummary,
@@ -125,7 +129,9 @@ export {
     OraclePricePair,
     Order,
     PairMatchProposal,
-    OrderControlParameters,
+    OrderParameters,
+    YammParameters,
+    GeneralPoolParameters,
     Params,
     PendingTokenIntroduction,
     PoolPauseWindow,

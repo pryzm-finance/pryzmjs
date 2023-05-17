@@ -29,6 +29,15 @@ export interface AmmCreateWeightedPoolToken {
   normalized_weight?: string;
 }
 
+export interface AmmGeneralPoolParameters {
+  allow_public_pool_creation?: boolean;
+  default_swap_fee_ratio?: string;
+  swap_protocol_fee_ratio?: string;
+  join_exit_protocol_fee_ratio?: string;
+}
+
+export type AmmMsgAddMaturityToYammResponse = object;
+
 export interface AmmMsgBatchSwapResponse {
   amounts_in?: V1Beta1Coin[];
   amounts_out?: V1Beta1Coin[];
@@ -205,6 +214,8 @@ export interface AmmMsgSubmitOrderResponse {
 
 export type AmmMsgUpdateOraclePricePairResponse = object;
 
+export type AmmMsgUpdateParamsResponse = object;
+
 export type AmmMsgUpdateSwapFeeResponse = object;
 
 export type AmmMsgUpdateWeightsResponse = object;
@@ -216,7 +227,7 @@ export interface AmmOraclePricePair {
   data_source?: string;
 
   /** @format uint64 */
-  twap_duration?: string;
+  twap_duration_millis?: string;
 
   /** TwapAlgorithm enumerates the valid algorithms for twap_algorithm. */
   twap_algorithm?: AmmTwapAlgorithm;
@@ -239,16 +250,26 @@ export interface AmmOrder {
   remaining_amount?: string;
   deposited_amount?: string;
 
-  /** @format int32 */
-  min_blocks_interval?: number;
-  max_spot_price?: string;
+  /** @format int64 */
+  min_millis_interval?: string;
+  max_step_spot_price?: string;
+  max_matching_spot_price?: string;
 }
 
-export interface AmmOrderControlParameters {
+export interface AmmOrderParameters {
   step_matching_fee_ratio?: string;
   step_swap_fee_ratio?: string;
   matching_protocol_fee_ratio?: string;
   matching_solver_fee_ratio?: string;
+
+  /** @format int32 */
+  max_orders_per_block?: number;
+
+  /** @format int32 */
+  max_schedule_per_block?: number;
+  max_exec_order_trade_ratio?: string;
+  max_order_step_ratio?: string;
+  min_order_step_ratio?: string;
 }
 
 export interface AmmPair {
@@ -273,34 +294,9 @@ export interface AmmPairMatchProposal {
  * Params defines the parameters for the module.
  */
 export interface AmmParams {
-  allow_public_pool_creation?: boolean;
-  default_swap_fee_ratio?: string;
-
-  /**
-   * duration (milliseconds) for virtual balance when adding new pAssets to yamm pools
-   * @format int64
-   */
-  yamm_maturity_introduction_interval_millis?: string;
-
-  /** @format int64 */
-  yamm_maturity_expiration_interval_millis?: string;
-  yamm_expiration_virtual_balance_scaler?: string;
-
-  /**
-   * discount ratio applied to constant sum equations for trading cAsset-pAsset where pAsset is expired or close
-   * to expiry
-   */
-  yamm_expired_asset_discount_ratio?: string;
-  yamm_buy_y_given_in_default_loan_fee_ratio?: string;
-  yamm_sell_y_given_out_default_fee_ratio?: string;
-  yamm_default_swap_yield_fee_ratio?: string;
-  order_control_params?: AmmOrderControlParameters;
-
-  /** @format int64 */
-  weighted_token_introduction_interval_millis?: string;
-
-  /** @format int64 */
-  weighted_token_expiration_interval_millis?: string;
+  general_pool_parameters?: AmmGeneralPoolParameters;
+  yamm_parameters?: AmmYammParameters;
+  order_parameters?: AmmOrderParameters;
 }
 
 export interface AmmPendingTokenIntroduction {
@@ -312,6 +308,9 @@ export interface AmmPendingTokenIntroduction {
   /** @format uint64 */
   yamm_pool_id?: string;
   token_normalized_weight?: string;
+
+  /** @format int64 */
+  virtual_balance_interval_millis?: string;
 }
 
 export interface AmmPool {
@@ -743,6 +742,11 @@ export interface AmmQueryVaultPauseModeResponse {
   paused?: boolean;
 }
 
+export interface AmmQueryYammPoolIdResponse {
+  /** @format uint64 */
+  pool_id?: string;
+}
+
 export interface AmmRouteStep {
   /** @format uint64 */
   pool_id?: string;
@@ -752,7 +756,7 @@ export interface AmmRouteStep {
 
 export interface AmmScheduleOrder {
   /** @format int64 */
-  block_height?: string;
+  time_millis?: string;
 
   /** @format uint64 */
   order_id?: string;
@@ -839,6 +843,18 @@ export interface AmmYammConfiguration {
   /** @format uint64 */
   pool_id?: string;
 
+  /** duration (milliseconds) for virtual balance when adding new pAssets to yamm pools */
+  maturity_introduction_interval_millis?: string;
+  maturity_expiration_interval_millis?: string;
+  expiration_virtual_balance_scaler?: string;
+
+  /**
+   * if the value is not set, will be read from module parameters
+   * discount ratio applied to constant sum equations for trading cAsset-pAsset where pAsset is expired or close
+   * to expiry
+   */
+  expired_asset_discount_ratio?: string;
+
   /** if the value is not set, will be read from module parameters */
   buy_y_given_in_loan_fee_ratio?: string;
 
@@ -847,6 +863,31 @@ export interface AmmYammConfiguration {
 
   /** if the value is not set, will be read from module parameters */
   swap_yield_fee_ratio?: string;
+
+  /** if the value is not set, will be read from module parameters */
+  leverage_scaler?: string;
+}
+
+export interface AmmYammParameters {
+  /**
+   * duration (milliseconds) for virtual balance when adding new pAssets to yamm pools
+   * @format int64
+   */
+  maturity_introduction_interval_millis?: string;
+
+  /** @format int64 */
+  maturity_expiration_interval_millis?: string;
+  expiration_virtual_balance_scaler?: string;
+
+  /**
+   * discount ratio applied to constant sum equations for trading cAsset-pAsset where pAsset is expired or close
+   * to expiry
+   */
+  expired_asset_discount_ratio?: string;
+  buy_y_given_in_loan_fee_ratio?: string;
+  sell_y_given_out_fee_ratio?: string;
+  swap_yield_fee_ratio?: string;
+  leverage_scaler?: string;
 }
 
 export interface ProtobufAny {
@@ -1409,6 +1450,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
       "pagination.limit"?: string;
       "pagination.count_total"?: boolean;
       "pagination.reverse"?: boolean;
+      pool_id?: string;
     },
     params: RequestParams = {},
   ) =>
@@ -1468,11 +1510,11 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
    * @tags Query
    * @name QueryScheduleOrder
    * @summary Queries a ScheduleOrder by index.
-   * @request GET:/prism-finance/prism-core/amm/schedule_order/{block_height}/{order_id}
+   * @request GET:/prism-finance/prism-core/amm/schedule_order/{order_id}
    */
-  queryScheduleOrder = (blockHeight: string, orderId: string, params: RequestParams = {}) =>
+  queryScheduleOrder = (orderId: string, params: RequestParams = {}) =>
     this.request<AmmQueryGetScheduleOrderResponse, RpcStatus>({
-      path: `/prism-finance/prism-core/amm/schedule_order/${blockHeight}/${orderId}`,
+      path: `/prism-finance/prism-core/amm/schedule_order/${orderId}`,
       method: "GET",
       format: "json",
       ...params,
@@ -1843,6 +1885,22 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
   queryYammConfiguration = (poolId: string, params: RequestParams = {}) =>
     this.request<AmmQueryGetYammConfigurationResponse, RpcStatus>({
       path: `/prism-finance/prism-core/amm/yamm_configuration/${poolId}`,
+      method: "GET",
+      format: "json",
+      ...params,
+    });
+
+  /**
+   * No description
+   *
+   * @tags Query
+   * @name QueryYammPoolId
+   * @summary Queries a list of YammPoolId items.
+   * @request GET:/prism-finance/prism-core/amm/yamm_pool_id/{asset_id}
+   */
+  queryYammPoolId = (assetId: string, params: RequestParams = {}) =>
+    this.request<AmmQueryYammPoolIdResponse, RpcStatus>({
+      path: `/prism-finance/prism-core/amm/yamm_pool_id/${assetId}`,
       method: "GET",
       format: "json",
       ...params,

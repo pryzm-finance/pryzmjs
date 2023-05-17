@@ -1,11 +1,11 @@
 lockfileVersion: 5.4
 
 specifiers:
-  '@prism-finance/prismjs': 0.3.5
+  '@prism-finance/prismjs': 0.3.6
   '@refractedlabs/utils': 0.1.4
 
 dependencies:
-  '@prism-finance/prismjs': 0.3.5
+  '@prism-finance/prismjs': 0.3.6
   '@refractedlabs/utils': 0.1.4
 
 packages:
@@ -161,8 +161,8 @@ packages:
       kuler: 2.0.0
     dev: false
 
-  /@keplr-wallet/types/0.11.62:
-    resolution: {integrity: sha512-u8K0jYqWFwZdPoHlgTx28F1QqSlYDIT2GoDJYfr0B3apq98WNBIAMbNwQhDtqvuBoM1yLlCmhEN+YEtygHj6XA==}
+  /@keplr-wallet/types/0.11.63:
+    resolution: {integrity: sha512-uzGrE6Dk9rzDyzM5IcOSJcyOePNZUEZSM3SkRTgK1mmJ2UkaVI2A6DTIT1/lpbS6GnYVnf/UophH0DzWL2wzoQ==}
     dependencies:
       axios: 0.27.2
       long: 4.0.0
@@ -174,13 +174,13 @@ packages:
     resolution: {integrity: sha512-ilHEACi9DwqJB0pw7kv+Apvh50jiiSyR/cQ3y4W7lOR5mhvn/50FLUfsnfJz0BDZtl/RR16kXvptiv6q1msYZg==}
     dev: false
 
-  /@prism-finance/prismjs/0.3.5:
-    resolution: {integrity: sha512-76XNQscpL2/BykTMJM/1Xtf2SLw3vloVwWRMq+K88RXwDtbqz46iya2FZSPIsfw58/6FBLjXdaBOomUsFFD1ow==, tarball: download/@prism-finance/prismjs/0.3.5/edd3759508cec6bd358d8ce002ce41c50498b499}
+  /@prism-finance/prismjs/0.3.6:
+    resolution: {integrity: sha512-iA9JsLzMMObyoBhlJBSiFfL8S3ee1gtq/n9ME06R+HrcP2ODoEv6IkUUib9QQsI3gb82Z3ZvCbyWEkTxZKb2yA==, tarball: download/@prism-finance/prismjs/0.3.6/b8d3dcdd30f140a29b7bd7544423de1a005755af}
     dependencies:
       '@cosmjs/launchpad': 0.27.0
       '@cosmjs/proto-signing': 0.27.0
       '@cosmjs/stargate': 0.27.0
-      '@keplr-wallet/types': 0.11.62
+      '@keplr-wallet/types': 0.11.63
       axios: 0.21.4
       buffer: 6.0.3
       events: 3.3.0
@@ -260,8 +260,8 @@ packages:
     resolution: {integrity: sha512-s3nugnZumCC//n4moGGe6tkNMyYEdaDBitVjwPxXmR5lnMG5dHePinH2EdxkG3Rh1ghFHHixAG4NJhpJW1rthQ==}
     dev: false
 
-  /@types/node/20.1.2:
-    resolution: {integrity: sha512-CTO/wa8x+rZU626cL2BlbCDzydgnFNgc19h4YvizpTO88MFQxab8wqisxaofQJ/9bLGugRdWIuX/TbIs6VVF6g==}
+  /@types/node/20.1.7:
+    resolution: {integrity: sha512-WCuw/o4GSwDGMoonES8rcvwsig77dGCMbZDrZr2x4ZZiNW4P/gcoZXe/0twgtobcTkmg9TuKflxYL/DuwDyJzg==}
     dev: false
 
   /@types/triple-beam/1.3.2:
@@ -678,7 +678,7 @@ packages:
       '@protobufjs/pool': 1.1.0
       '@protobufjs/utf8': 1.1.0
       '@types/long': 4.0.2
-      '@types/node': 20.1.2
+      '@types/node': 20.1.7
       long: 4.0.0
     dev: false
 

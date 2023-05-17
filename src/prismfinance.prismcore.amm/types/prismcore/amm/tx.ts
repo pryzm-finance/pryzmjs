@@ -3,9 +3,10 @@ import Long from "long";
 import _m0 from "protobufjs/minimal";
 import { Coin } from "../../cosmos/base/v1beta1/coin";
 import { Swap, SwapType, swapTypeFromJSON, swapTypeToJSON } from "./operations";
-import { Pair, TwapAlgorithm, twapAlgorithmFromJSON, twapAlgorithmToJSON } from "./oracle_price_pair";
+import { OraclePricePair } from "./oracle_price_pair";
 import { Order } from "./order";
 import { PairMatchProposal } from "./pair_match_proposal";
+import { GeneralPoolParameters, OrderParameters, YammParameters } from "./params";
 import { TokenCircuitBreakerSettings } from "./token_circuit_breaker_settings";
 import { TokenWeight } from "./token_weight";
 import { WhitelistedRoute } from "./whitelisted_route";
@@ -203,8 +204,9 @@ export interface MsgSubmitOrder {
   allowMatching: boolean;
   amountPerStep: string;
   totalAmount: string;
-  blockInterval: number;
-  maxSpotPrice: string;
+  millisInterval: number;
+  maxStepSpotPrice: string;
+  maxMatchingSpotPrice: string;
 }
 
 export interface MsgSubmitOrderResponse {
@@ -278,12 +280,7 @@ export interface MsgSetVaultPauseModeResponse {
 
 export interface MsgCreateOraclePricePair {
   authority: string;
-  assetId: string;
-  dataSource: string;
-  twapDuration: number;
-  twapAlgorithm: TwapAlgorithm;
-  disabled: boolean;
-  pairs: Pair[];
+  oraclePricePair: OraclePricePair | undefined;
 }
 
 export interface MsgCreateOraclePricePairResponse {
@@ -291,12 +288,7 @@ export interface MsgCreateOraclePricePairResponse {
 
 export interface MsgUpdateOraclePricePair {
   authority: string;
-  assetId: string;
-  dataSource: string;
-  twapDuration: number;
-  twapAlgorithm: TwapAlgorithm;
-  disabled: boolean;
-  pairs: Pair[];
+  oraclePricePair: OraclePricePair | undefined;
 }
 
 export interface MsgUpdateOraclePricePairResponse {
@@ -335,6 +327,7 @@ export interface MsgIntroduceYammLpToWeightedPool {
   weightedPoolId: number;
   yammPoolId: number;
   tokenNormalizedWeight: string;
+  virtualBalanceIntervalMillis: number;
 }
 
 export interface MsgIntroduceYammLpToWeightedPoolResponse {
@@ -353,9 +346,29 @@ export interface MsgRemoveTokenFromWeightedPool {
   creator: string;
   poolId: number;
   tokenDenom: string;
+  virtualBalanceIntervalMillis: number;
 }
 
 export interface MsgRemoveTokenFromWeightedPoolResponse {
+}
+
+export interface MsgUpdateParams {
+  authority: string;
+  generalPoolParameters: GeneralPoolParameters | undefined;
+  yammParameters: YammParameters | undefined;
+  orderParameters: OrderParameters | undefined;
+}
+
+export interface MsgUpdateParamsResponse {
+}
+
+export interface MsgAddMaturityToYamm {
+  authority: string;
+  assetId: string;
+  maturitySymbol: string;
+}
+
+export interface MsgAddMaturityToYammResponse {
 }
 
 function createBaseMsgSingleSwap(): MsgSingleSwap {
@@ -2518,8 +2531,9 @@ function createBaseMsgSubmitOrder(): MsgSubmitOrder {
     allowMatching: false,
     amountPerStep: "",
     totalAmount: "",
-    blockInterval: 0,
-    maxSpotPrice: "",
+    millisInterval: 0,
+    maxStepSpotPrice: "",
+    maxMatchingSpotPrice: "",
   };
 }
 
@@ -2549,11 +2563,14 @@ export const MsgSubmitOrder = {
     if (message.totalAmount !== "") {
       writer.uint32(66).string(message.totalAmount);
     }
-    if (message.blockInterval !== 0) {
-      writer.uint32(72).int32(message.blockInterval);
+    if (message.millisInterval !== 0) {
+      writer.uint32(72).int64(message.millisInterval);
     }
-    if (message.maxSpotPrice !== "") {
-      writer.uint32(82).string(message.maxSpotPrice);
+    if (message.maxStepSpotPrice !== "") {
+      writer.uint32(82).string(message.maxStepSpotPrice);
+    }
+    if (message.maxMatchingSpotPrice !== "") {
+      writer.uint32(90).string(message.maxMatchingSpotPrice);
     }
     return writer;
   },
@@ -2590,10 +2607,13 @@ export const MsgSubmitOrder = {
           message.totalAmount = reader.string();
           break;
         case 9:
-          message.blockInterval = reader.int32();
+          message.millisInterval = longToNumber(reader.int64() as Long);
           break;
         case 10:
-          message.maxSpotPrice = reader.string();
+          message.maxStepSpotPrice = reader.string();
+          break;
+        case 11:
+          message.maxMatchingSpotPrice = reader.string();
           break;
         default:
           reader.skipType(tag & 7);
@@ -2613,8 +2633,9 @@ export const MsgSubmitOrder = {
       allowMatching: isSet(object.allowMatching) ? Boolean(object.allowMatching) : false,
       amountPerStep: isSet(object.amountPerStep) ? String(object.amountPerStep) : "",
       totalAmount: isSet(object.totalAmount) ? String(object.totalAmount) : "",
-      blockInterval: isSet(object.blockInterval) ? Number(object.blockInterval) : 0,
-      maxSpotPrice: isSet(object.maxSpotPrice) ? String(object.maxSpotPrice) : "",
+      millisInterval: isSet(object.millisInterval) ? Number(object.millisInterval) : 0,
+      maxStepSpotPrice: isSet(object.maxStepSpotPrice) ? String(object.maxStepSpotPrice) : "",
+      maxMatchingSpotPrice: isSet(object.maxMatchingSpotPrice) ? String(object.maxMatchingSpotPrice) : "",
     };
   },
 
@@ -2628,8 +2649,9 @@ export const MsgSubmitOrder = {
     message.allowMatching !== undefined && (obj.allowMatching = message.allowMatching);
     message.amountPerStep !== undefined && (obj.amountPerStep = message.amountPerStep);
     message.totalAmount !== undefined && (obj.totalAmount = message.totalAmount);
-    message.blockInterval !== undefined && (obj.blockInterval = Math.round(message.blockInterval));
-    message.maxSpotPrice !== undefined && (obj.maxSpotPrice = message.maxSpotPrice);
+    message.millisInterval !== undefined && (obj.millisInterval = Math.round(message.millisInterval));
+    message.maxStepSpotPrice !== undefined && (obj.maxStepSpotPrice = message.maxStepSpotPrice);
+    message.maxMatchingSpotPrice !== undefined && (obj.maxMatchingSpotPrice = message.maxMatchingSpotPrice);
     return obj;
   },
 
@@ -2643,8 +2665,9 @@ export const MsgSubmitOrder = {
     message.allowMatching = object.allowMatching ?? false;
     message.amountPerStep = object.amountPerStep ?? "";
     message.totalAmount = object.totalAmount ?? "";
-    message.blockInterval = object.blockInterval ?? 0;
-    message.maxSpotPrice = object.maxSpotPrice ?? "";
+    message.millisInterval = object.millisInterval ?? 0;
+    message.maxStepSpotPrice = object.maxStepSpotPrice ?? "";
+    message.maxMatchingSpotPrice = object.maxMatchingSpotPrice ?? "";
     return message;
   },
 };
@@ -3488,7 +3511,7 @@ export const MsgSetVaultPauseModeResponse = {
 };
 
 function createBaseMsgCreateOraclePricePair(): MsgCreateOraclePricePair {
-  return { authority: "", assetId: "", dataSource: "", twapDuration: 0, twapAlgorithm: 0, disabled: false, pairs: [] };
+  return { authority: "", oraclePricePair: undefined };
 }
 
 export const MsgCreateOraclePricePair = {
@@ -3496,23 +3519,8 @@ export const MsgCreateOraclePricePair = {
     if (message.authority !== "") {
       writer.uint32(10).string(message.authority);
     }
-    if (message.assetId !== "") {
-      writer.uint32(18).string(message.assetId);
-    }
-    if (message.dataSource !== "") {
-      writer.uint32(26).string(message.dataSource);
-    }
-    if (message.twapDuration !== 0) {
-      writer.uint32(32).uint64(message.twapDuration);
-    }
-    if (message.twapAlgorithm !== 0) {
-      writer.uint32(40).int32(message.twapAlgorithm);
-    }
-    if (message.disabled === true) {
-      writer.uint32(48).bool(message.disabled);
-    }
-    for (const v of message.pairs) {
-      Pair.encode(v!, writer.uint32(58).fork()).ldelim();
+    if (message.oraclePricePair !== undefined) {
+      OraclePricePair.encode(message.oraclePricePair, writer.uint32(18).fork()).ldelim();
     }
     return writer;
   },
@@ -3528,22 +3536,7 @@ export const MsgCreateOraclePricePair = {
           message.authority = reader.string();
           break;
         case 2:
-          message.assetId = reader.string();
-          break;
-        case 3:
-          message.dataSource = reader.string();
-          break;
-        case 4:
-          message.twapDuration = longToNumber(reader.uint64() as Long);
-          break;
-        case 5:
-          message.twapAlgorithm = reader.int32() as any;
-          break;
-        case 6:
-          message.disabled = reader.bool();
-          break;
-        case 7:
-          message.pairs.push(Pair.decode(reader, reader.uint32()));
+          message.oraclePricePair = OraclePricePair.decode(reader, reader.uint32());
           break;
         default:
           reader.skipType(tag & 7);
@@ -3556,40 +3549,24 @@ export const MsgCreateOraclePricePair = {
   fromJSON(object: any): MsgCreateOraclePricePair {
     return {
       authority: isSet(object.authority) ? String(object.authority) : "",
-      assetId: isSet(object.assetId) ? String(object.assetId) : "",
-      dataSource: isSet(object.dataSource) ? String(object.dataSource) : "",
-      twapDuration: isSet(object.twapDuration) ? Number(object.twapDuration) : 0,
-      twapAlgorithm: isSet(object.twapAlgorithm) ? twapAlgorithmFromJSON(object.twapAlgorithm) : 0,
-      disabled: isSet(object.disabled) ? Boolean(object.disabled) : false,
-      pairs: Array.isArray(object?.pairs) ? object.pairs.map((e: any) => Pair.fromJSON(e)) : [],
+      oraclePricePair: isSet(object.oraclePricePair) ? OraclePricePair.fromJSON(object.oraclePricePair) : undefined,
     };
   },
 
   toJSON(message: MsgCreateOraclePricePair): unknown {
     const obj: any = {};
     message.authority !== undefined && (obj.authority = message.authority);
-    message.assetId !== undefined && (obj.assetId = message.assetId);
-    message.dataSource !== undefined && (obj.dataSource = message.dataSource);
-    message.twapDuration !== undefined && (obj.twapDuration = Math.round(message.twapDuration));
-    message.twapAlgorithm !== undefined && (obj.twapAlgorithm = twapAlgorithmToJSON(message.twapAlgorithm));
-    message.disabled !== undefined && (obj.disabled = message.disabled);
-    if (message.pairs) {
-      obj.pairs = message.pairs.map((e) => e ? Pair.toJSON(e) : undefined);
-    } else {
-      obj.pairs = [];
-    }
+    message.oraclePricePair !== undefined
+      && (obj.oraclePricePair = message.oraclePricePair ? OraclePricePair.toJSON(message.oraclePricePair) : undefined);
     return obj;
   },
 
   fromPartial<I extends Exact<DeepPartial<MsgCreateOraclePricePair>, I>>(object: I): MsgCreateOraclePricePair {
     const message = createBaseMsgCreateOraclePricePair();
     message.authority = object.authority ?? "";
-    message.assetId = object.assetId ?? "";
-    message.dataSource = object.dataSource ?? "";
-    message.twapDuration = object.twapDuration ?? 0;
-    message.twapAlgorithm = object.twapAlgorithm ?? 0;
-    message.disabled = object.disabled ?? false;
-    message.pairs = object.pairs?.map((e) => Pair.fromPartial(e)) || [];
+    message.oraclePricePair = (object.oraclePricePair !== undefined && object.oraclePricePair !== null)
+      ? OraclePricePair.fromPartial(object.oraclePricePair)
+      : undefined;
     return message;
   },
 };
@@ -3636,7 +3613,7 @@ export const MsgCreateOraclePricePairResponse = {
 };
 
 function createBaseMsgUpdateOraclePricePair(): MsgUpdateOraclePricePair {
-  return { authority: "", assetId: "", dataSource: "", twapDuration: 0, twapAlgorithm: 0, disabled: false, pairs: [] };
+  return { authority: "", oraclePricePair: undefined };
 }
 
 export const MsgUpdateOraclePricePair = {
@@ -3644,23 +3621,8 @@ export const MsgUpdateOraclePricePair = {
     if (message.authority !== "") {
       writer.uint32(10).string(message.authority);
     }
-    if (message.assetId !== "") {
-      writer.uint32(18).string(message.assetId);
-    }
-    if (message.dataSource !== "") {
-      writer.uint32(26).string(message.dataSource);
-    }
-    if (message.twapDuration !== 0) {
-      writer.uint32(32).uint64(message.twapDuration);
-    }
-    if (message.twapAlgorithm !== 0) {
-      writer.uint32(40).int32(message.twapAlgorithm);
-    }
-    if (message.disabled === true) {
-      writer.uint32(48).bool(message.disabled);
-    }
-    for (const v of message.pairs) {
-      Pair.encode(v!, writer.uint32(58).fork()).ldelim();
+    if (message.oraclePricePair !== undefined) {
+      OraclePricePair.encode(message.oraclePricePair, writer.uint32(18).fork()).ldelim();
     }
     return writer;
   },
@@ -3676,22 +3638,7 @@ export const MsgUpdateOraclePricePair = {
           message.authority = reader.string();
           break;
         case 2:
-          message.assetId = reader.string();
-          break;
-        case 3:
-          message.dataSource = reader.string();
-          break;
-        case 4:
-          message.twapDuration = longToNumber(reader.uint64() as Long);
-          break;
-        case 5:
-          message.twapAlgorithm = reader.int32() as any;
-          break;
-        case 6:
-          message.disabled = reader.bool();
-          break;
-        case 7:
-          message.pairs.push(Pair.decode(reader, reader.uint32()));
+          message.oraclePricePair = OraclePricePair.decode(reader, reader.uint32());
           break;
         default:
           reader.skipType(tag & 7);
@@ -3704,40 +3651,24 @@ export const MsgUpdateOraclePricePair = {
   fromJSON(object: any): MsgUpdateOraclePricePair {
     return {
       authority: isSet(object.authority) ? String(object.authority) : "",
-      assetId: isSet(object.assetId) ? String(object.assetId) : "",
-      dataSource: isSet(object.dataSource) ? String(object.dataSource) : "",
-      twapDuration: isSet(object.twapDuration) ? Number(object.twapDuration) : 0,
-      twapAlgorithm: isSet(object.twapAlgorithm) ? twapAlgorithmFromJSON(object.twapAlgorithm) : 0,
-      disabled: isSet(object.disabled) ? Boolean(object.disabled) : false,
-      pairs: Array.isArray(object?.pairs) ? object.pairs.map((e: any) => Pair.fromJSON(e)) : [],
+      oraclePricePair: isSet(object.oraclePricePair) ? OraclePricePair.fromJSON(object.oraclePricePair) : undefined,
     };
   },
 
   toJSON(message: MsgUpdateOraclePricePair): unknown {
     const obj: any = {};
     message.authority !== undefined && (obj.authority = message.authority);
-    message.assetId !== undefined && (obj.assetId = message.assetId);
-    message.dataSource !== undefined && (obj.dataSource = message.dataSource);
-    message.twapDuration !== undefined && (obj.twapDuration = Math.round(message.twapDuration));
-    message.twapAlgorithm !== undefined && (obj.twapAlgorithm = twapAlgorithmToJSON(message.twapAlgorithm));
-    message.disabled !== undefined && (obj.disabled = message.disabled);
-    if (message.pairs) {
-      obj.pairs = message.pairs.map((e) => e ? Pair.toJSON(e) : undefined);
-    } else {
-      obj.pairs = [];
-    }
+    message.oraclePricePair !== undefined
+      && (obj.oraclePricePair = message.oraclePricePair ? OraclePricePair.toJSON(message.oraclePricePair) : undefined);
     return obj;
   },
 
   fromPartial<I extends Exact<DeepPartial<MsgUpdateOraclePricePair>, I>>(object: I): MsgUpdateOraclePricePair {
     const message = createBaseMsgUpdateOraclePricePair();
     message.authority = object.authority ?? "";
-    message.assetId = object.assetId ?? "";
-    message.dataSource = object.dataSource ?? "";
-    message.twapDuration = object.twapDuration ?? 0;
-    message.twapAlgorithm = object.twapAlgorithm ?? 0;
-    message.disabled = object.disabled ?? false;
-    message.pairs = object.pairs?.map((e) => Pair.fromPartial(e)) || [];
+    message.oraclePricePair = (object.oraclePricePair !== undefined && object.oraclePricePair !== null)
+      ? OraclePricePair.fromPartial(object.oraclePricePair)
+      : undefined;
     return message;
   },
 };
@@ -4097,7 +4028,13 @@ export const MsgSetJoinExitProtocolFeeResponse = {
 };
 
 function createBaseMsgIntroduceYammLpToWeightedPool(): MsgIntroduceYammLpToWeightedPool {
-  return { authority: "", weightedPoolId: 0, yammPoolId: 0, tokenNormalizedWeight: "" };
+  return {
+    authority: "",
+    weightedPoolId: 0,
+    yammPoolId: 0,
+    tokenNormalizedWeight: "",
+    virtualBalanceIntervalMillis: 0,
+  };
 }
 
 export const MsgIntroduceYammLpToWeightedPool = {
@@ -4113,6 +4050,9 @@ export const MsgIntroduceYammLpToWeightedPool = {
     }
     if (message.tokenNormalizedWeight !== "") {
       writer.uint32(34).string(message.tokenNormalizedWeight);
+    }
+    if (message.virtualBalanceIntervalMillis !== 0) {
+      writer.uint32(40).int64(message.virtualBalanceIntervalMillis);
     }
     return writer;
   },
@@ -4136,6 +4076,9 @@ export const MsgIntroduceYammLpToWeightedPool = {
         case 4:
           message.tokenNormalizedWeight = reader.string();
           break;
+        case 5:
+          message.virtualBalanceIntervalMillis = longToNumber(reader.int64() as Long);
+          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -4150,6 +4093,9 @@ export const MsgIntroduceYammLpToWeightedPool = {
       weightedPoolId: isSet(object.weightedPoolId) ? Number(object.weightedPoolId) : 0,
       yammPoolId: isSet(object.yammPoolId) ? Number(object.yammPoolId) : 0,
       tokenNormalizedWeight: isSet(object.tokenNormalizedWeight) ? String(object.tokenNormalizedWeight) : "",
+      virtualBalanceIntervalMillis: isSet(object.virtualBalanceIntervalMillis)
+        ? Number(object.virtualBalanceIntervalMillis)
+        : 0,
     };
   },
 
@@ -4159,6 +4105,8 @@ export const MsgIntroduceYammLpToWeightedPool = {
     message.weightedPoolId !== undefined && (obj.weightedPoolId = Math.round(message.weightedPoolId));
     message.yammPoolId !== undefined && (obj.yammPoolId = Math.round(message.yammPoolId));
     message.tokenNormalizedWeight !== undefined && (obj.tokenNormalizedWeight = message.tokenNormalizedWeight);
+    message.virtualBalanceIntervalMillis !== undefined
+      && (obj.virtualBalanceIntervalMillis = Math.round(message.virtualBalanceIntervalMillis));
     return obj;
   },
 
@@ -4170,6 +4118,7 @@ export const MsgIntroduceYammLpToWeightedPool = {
     message.weightedPoolId = object.weightedPoolId ?? 0;
     message.yammPoolId = object.yammPoolId ?? 0;
     message.tokenNormalizedWeight = object.tokenNormalizedWeight ?? "";
+    message.virtualBalanceIntervalMillis = object.virtualBalanceIntervalMillis ?? 0;
     return message;
   },
 };
@@ -4326,7 +4275,7 @@ export const MsgCancelPendingTokenIntroductionResponse = {
 };
 
 function createBaseMsgRemoveTokenFromWeightedPool(): MsgRemoveTokenFromWeightedPool {
-  return { creator: "", poolId: 0, tokenDenom: "" };
+  return { creator: "", poolId: 0, tokenDenom: "", virtualBalanceIntervalMillis: 0 };
 }
 
 export const MsgRemoveTokenFromWeightedPool = {
@@ -4339,6 +4288,9 @@ export const MsgRemoveTokenFromWeightedPool = {
     }
     if (message.tokenDenom !== "") {
       writer.uint32(26).string(message.tokenDenom);
+    }
+    if (message.virtualBalanceIntervalMillis !== 0) {
+      writer.uint32(32).int64(message.virtualBalanceIntervalMillis);
     }
     return writer;
   },
@@ -4359,6 +4311,9 @@ export const MsgRemoveTokenFromWeightedPool = {
         case 3:
           message.tokenDenom = reader.string();
           break;
+        case 4:
+          message.virtualBalanceIntervalMillis = longToNumber(reader.int64() as Long);
+          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -4372,6 +4327,9 @@ export const MsgRemoveTokenFromWeightedPool = {
       creator: isSet(object.creator) ? String(object.creator) : "",
       poolId: isSet(object.poolId) ? Number(object.poolId) : 0,
       tokenDenom: isSet(object.tokenDenom) ? String(object.tokenDenom) : "",
+      virtualBalanceIntervalMillis: isSet(object.virtualBalanceIntervalMillis)
+        ? Number(object.virtualBalanceIntervalMillis)
+        : 0,
     };
   },
 
@@ -4380,6 +4338,8 @@ export const MsgRemoveTokenFromWeightedPool = {
     message.creator !== undefined && (obj.creator = message.creator);
     message.poolId !== undefined && (obj.poolId = Math.round(message.poolId));
     message.tokenDenom !== undefined && (obj.tokenDenom = message.tokenDenom);
+    message.virtualBalanceIntervalMillis !== undefined
+      && (obj.virtualBalanceIntervalMillis = Math.round(message.virtualBalanceIntervalMillis));
     return obj;
   },
 
@@ -4390,6 +4350,7 @@ export const MsgRemoveTokenFromWeightedPool = {
     message.creator = object.creator ?? "";
     message.poolId = object.poolId ?? 0;
     message.tokenDenom = object.tokenDenom ?? "";
+    message.virtualBalanceIntervalMillis = object.virtualBalanceIntervalMillis ?? 0;
     return message;
   },
 };
@@ -4435,6 +4396,240 @@ export const MsgRemoveTokenFromWeightedPoolResponse = {
   },
 };
 
+function createBaseMsgUpdateParams(): MsgUpdateParams {
+  return { authority: "", generalPoolParameters: undefined, yammParameters: undefined, orderParameters: undefined };
+}
+
+export const MsgUpdateParams = {
+  encode(message: MsgUpdateParams, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.authority !== "") {
+      writer.uint32(10).string(message.authority);
+    }
+    if (message.generalPoolParameters !== undefined) {
+      GeneralPoolParameters.encode(message.generalPoolParameters, writer.uint32(18).fork()).ldelim();
+    }
+    if (message.yammParameters !== undefined) {
+      YammParameters.encode(message.yammParameters, writer.uint32(26).fork()).ldelim();
+    }
+    if (message.orderParameters !== undefined) {
+      OrderParameters.encode(message.orderParameters, writer.uint32(34).fork()).ldelim();
+    }
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): MsgUpdateParams {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseMsgUpdateParams();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.authority = reader.string();
+          break;
+        case 2:
+          message.generalPoolParameters = GeneralPoolParameters.decode(reader, reader.uint32());
+          break;
+        case 3:
+          message.yammParameters = YammParameters.decode(reader, reader.uint32());
+          break;
+        case 4:
+          message.orderParameters = OrderParameters.decode(reader, reader.uint32());
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): MsgUpdateParams {
+    return {
+      authority: isSet(object.authority) ? String(object.authority) : "",
+      generalPoolParameters: isSet(object.generalPoolParameters)
+        ? GeneralPoolParameters.fromJSON(object.generalPoolParameters)
+        : undefined,
+      yammParameters: isSet(object.yammParameters) ? YammParameters.fromJSON(object.yammParameters) : undefined,
+      orderParameters: isSet(object.orderParameters) ? OrderParameters.fromJSON(object.orderParameters) : undefined,
+    };
+  },
+
+  toJSON(message: MsgUpdateParams): unknown {
+    const obj: any = {};
+    message.authority !== undefined && (obj.authority = message.authority);
+    message.generalPoolParameters !== undefined && (obj.generalPoolParameters = message.generalPoolParameters
+      ? GeneralPoolParameters.toJSON(message.generalPoolParameters)
+      : undefined);
+    message.yammParameters !== undefined
+      && (obj.yammParameters = message.yammParameters ? YammParameters.toJSON(message.yammParameters) : undefined);
+    message.orderParameters !== undefined
+      && (obj.orderParameters = message.orderParameters ? OrderParameters.toJSON(message.orderParameters) : undefined);
+    return obj;
+  },
+
+  fromPartial<I extends Exact<DeepPartial<MsgUpdateParams>, I>>(object: I): MsgUpdateParams {
+    const message = createBaseMsgUpdateParams();
+    message.authority = object.authority ?? "";
+    message.generalPoolParameters =
+      (object.generalPoolParameters !== undefined && object.generalPoolParameters !== null)
+        ? GeneralPoolParameters.fromPartial(object.generalPoolParameters)
+        : undefined;
+    message.yammParameters = (object.yammParameters !== undefined && object.yammParameters !== null)
+      ? YammParameters.fromPartial(object.yammParameters)
+      : undefined;
+    message.orderParameters = (object.orderParameters !== undefined && object.orderParameters !== null)
+      ? OrderParameters.fromPartial(object.orderParameters)
+      : undefined;
+    return message;
+  },
+};
+
+function createBaseMsgUpdateParamsResponse(): MsgUpdateParamsResponse {
+  return {};
+}
+
+export const MsgUpdateParamsResponse = {
+  encode(_: MsgUpdateParamsResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): MsgUpdateParamsResponse {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseMsgUpdateParamsResponse();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(_: any): MsgUpdateParamsResponse {
+    return {};
+  },
+
+  toJSON(_: MsgUpdateParamsResponse): unknown {
+    const obj: any = {};
+    return obj;
+  },
+
+  fromPartial<I extends Exact<DeepPartial<MsgUpdateParamsResponse>, I>>(_: I): MsgUpdateParamsResponse {
+    const message = createBaseMsgUpdateParamsResponse();
+    return message;
+  },
+};
+
+function createBaseMsgAddMaturityToYamm(): MsgAddMaturityToYamm {
+  return { authority: "", assetId: "", maturitySymbol: "" };
+}
+
+export const MsgAddMaturityToYamm = {
+  encode(message: MsgAddMaturityToYamm, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.authority !== "") {
+      writer.uint32(10).string(message.authority);
+    }
+    if (message.assetId !== "") {
+      writer.uint32(18).string(message.assetId);
+    }
+    if (message.maturitySymbol !== "") {
+      writer.uint32(26).string(message.maturitySymbol);
+    }
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): MsgAddMaturityToYamm {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseMsgAddMaturityToYamm();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.authority = reader.string();
+          break;
+        case 2:
+          message.assetId = reader.string();
+          break;
+        case 3:
+          message.maturitySymbol = reader.string();
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): MsgAddMaturityToYamm {
+    return {
+      authority: isSet(object.authority) ? String(object.authority) : "",
+      assetId: isSet(object.assetId) ? String(object.assetId) : "",
+      maturitySymbol: isSet(object.maturitySymbol) ? String(object.maturitySymbol) : "",
+    };
+  },
+
+  toJSON(message: MsgAddMaturityToYamm): unknown {
+    const obj: any = {};
+    message.authority !== undefined && (obj.authority = message.authority);
+    message.assetId !== undefined && (obj.assetId = message.assetId);
+    message.maturitySymbol !== undefined && (obj.maturitySymbol = message.maturitySymbol);
+    return obj;
+  },
+
+  fromPartial<I extends Exact<DeepPartial<MsgAddMaturityToYamm>, I>>(object: I): MsgAddMaturityToYamm {
+    const message = createBaseMsgAddMaturityToYamm();
+    message.authority = object.authority ?? "";
+    message.assetId = object.assetId ?? "";
+    message.maturitySymbol = object.maturitySymbol ?? "";
+    return message;
+  },
+};
+
+function createBaseMsgAddMaturityToYammResponse(): MsgAddMaturityToYammResponse {
+  return {};
+}
+
+export const MsgAddMaturityToYammResponse = {
+  encode(_: MsgAddMaturityToYammResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): MsgAddMaturityToYammResponse {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseMsgAddMaturityToYammResponse();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(_: any): MsgAddMaturityToYammResponse {
+    return {};
+  },
+
+  toJSON(_: MsgAddMaturityToYammResponse): unknown {
+    const obj: any = {};
+    return obj;
+  },
+
+  fromPartial<I extends Exact<DeepPartial<MsgAddMaturityToYammResponse>, I>>(_: I): MsgAddMaturityToYammResponse {
+    const message = createBaseMsgAddMaturityToYammResponse();
+    return message;
+  },
+};
+
 /** Msg defines the Msg service. */
 export interface Msg {
   SingleSwap(request: MsgSingleSwap): Promise<MsgSingleSwapResponse>;
@@ -4471,8 +4666,10 @@ export interface Msg {
   CancelPendingTokenIntroduction(
     request: MsgCancelPendingTokenIntroduction,
   ): Promise<MsgCancelPendingTokenIntroductionResponse>;
-  /** this line is used by starport scaffolding # proto/tx/rpc */
   RemoveTokenFromWeightedPool(request: MsgRemoveTokenFromWeightedPool): Promise<MsgRemoveTokenFromWeightedPoolResponse>;
+  UpdateParams(request: MsgUpdateParams): Promise<MsgUpdateParamsResponse>;
+  /** this line is used by starport scaffolding # proto/tx/rpc */
+  AddMaturityToYamm(request: MsgAddMaturityToYamm): Promise<MsgAddMaturityToYammResponse>;
 }
 
 export class MsgClientImpl implements Msg {
@@ -4510,6 +4707,8 @@ export class MsgClientImpl implements Msg {
     this.IntroduceYammLpToWeightedPool = this.IntroduceYammLpToWeightedPool.bind(this);
     this.CancelPendingTokenIntroduction = this.CancelPendingTokenIntroduction.bind(this);
     this.RemoveTokenFromWeightedPool = this.RemoveTokenFromWeightedPool.bind(this);
+    this.UpdateParams = this.UpdateParams.bind(this);
+    this.AddMaturityToYamm = this.AddMaturityToYamm.bind(this);
   }
   SingleSwap(request: MsgSingleSwap): Promise<MsgSingleSwapResponse> {
     const data = MsgSingleSwap.encode(request).finish();
@@ -4701,6 +4900,18 @@ export class MsgClientImpl implements Msg {
     const data = MsgRemoveTokenFromWeightedPool.encode(request).finish();
     const promise = this.rpc.request("prismfinance.prismcore.amm.Msg", "RemoveTokenFromWeightedPool", data);
     return promise.then((data) => MsgRemoveTokenFromWeightedPoolResponse.decode(new _m0.Reader(data)));
+  }
+
+  UpdateParams(request: MsgUpdateParams): Promise<MsgUpdateParamsResponse> {
+    const data = MsgUpdateParams.encode(request).finish();
+    const promise = this.rpc.request("prismfinance.prismcore.amm.Msg", "UpdateParams", data);
+    return promise.then((data) => MsgUpdateParamsResponse.decode(new _m0.Reader(data)));
+  }
+
+  AddMaturityToYamm(request: MsgAddMaturityToYamm): Promise<MsgAddMaturityToYammResponse> {
+    const data = MsgAddMaturityToYamm.encode(request).finish();
+    const promise = this.rpc.request("prismfinance.prismcore.amm.Msg", "AddMaturityToYamm", data);
+    return promise.then((data) => MsgAddMaturityToYammResponse.decode(new _m0.Reader(data)));
   }
 }
 

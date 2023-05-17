@@ -15,8 +15,9 @@ export interface Order {
   amountPerStep: string;
   remainingAmount: string;
   depositedAmount: string;
-  minBlocksInterval: number;
-  maxSpotPrice: string;
+  minMillisInterval: number;
+  maxStepSpotPrice: string;
+  maxMatchingSpotPrice: string;
 }
 
 function createBaseOrder(): Order {
@@ -31,8 +32,9 @@ function createBaseOrder(): Order {
     amountPerStep: "",
     remainingAmount: "",
     depositedAmount: "",
-    minBlocksInterval: 0,
-    maxSpotPrice: "",
+    minMillisInterval: 0,
+    maxStepSpotPrice: "",
+    maxMatchingSpotPrice: "",
   };
 }
 
@@ -68,11 +70,14 @@ export const Order = {
     if (message.depositedAmount !== "") {
       writer.uint32(82).string(message.depositedAmount);
     }
-    if (message.minBlocksInterval !== 0) {
-      writer.uint32(88).int32(message.minBlocksInterval);
+    if (message.minMillisInterval !== 0) {
+      writer.uint32(88).int64(message.minMillisInterval);
     }
-    if (message.maxSpotPrice !== "") {
-      writer.uint32(98).string(message.maxSpotPrice);
+    if (message.maxStepSpotPrice !== "") {
+      writer.uint32(98).string(message.maxStepSpotPrice);
+    }
+    if (message.maxMatchingSpotPrice !== "") {
+      writer.uint32(106).string(message.maxMatchingSpotPrice);
     }
     return writer;
   },
@@ -115,10 +120,13 @@ export const Order = {
           message.depositedAmount = reader.string();
           break;
         case 11:
-          message.minBlocksInterval = reader.int32();
+          message.minMillisInterval = longToNumber(reader.int64() as Long);
           break;
         case 12:
-          message.maxSpotPrice = reader.string();
+          message.maxStepSpotPrice = reader.string();
+          break;
+        case 13:
+          message.maxMatchingSpotPrice = reader.string();
           break;
         default:
           reader.skipType(tag & 7);
@@ -140,8 +148,9 @@ export const Order = {
       amountPerStep: isSet(object.amountPerStep) ? String(object.amountPerStep) : "",
       remainingAmount: isSet(object.remainingAmount) ? String(object.remainingAmount) : "",
       depositedAmount: isSet(object.depositedAmount) ? String(object.depositedAmount) : "",
-      minBlocksInterval: isSet(object.minBlocksInterval) ? Number(object.minBlocksInterval) : 0,
-      maxSpotPrice: isSet(object.maxSpotPrice) ? String(object.maxSpotPrice) : "",
+      minMillisInterval: isSet(object.minMillisInterval) ? Number(object.minMillisInterval) : 0,
+      maxStepSpotPrice: isSet(object.maxStepSpotPrice) ? String(object.maxStepSpotPrice) : "",
+      maxMatchingSpotPrice: isSet(object.maxMatchingSpotPrice) ? String(object.maxMatchingSpotPrice) : "",
     };
   },
 
@@ -157,8 +166,9 @@ export const Order = {
     message.amountPerStep !== undefined && (obj.amountPerStep = message.amountPerStep);
     message.remainingAmount !== undefined && (obj.remainingAmount = message.remainingAmount);
     message.depositedAmount !== undefined && (obj.depositedAmount = message.depositedAmount);
-    message.minBlocksInterval !== undefined && (obj.minBlocksInterval = Math.round(message.minBlocksInterval));
-    message.maxSpotPrice !== undefined && (obj.maxSpotPrice = message.maxSpotPrice);
+    message.minMillisInterval !== undefined && (obj.minMillisInterval = Math.round(message.minMillisInterval));
+    message.maxStepSpotPrice !== undefined && (obj.maxStepSpotPrice = message.maxStepSpotPrice);
+    message.maxMatchingSpotPrice !== undefined && (obj.maxMatchingSpotPrice = message.maxMatchingSpotPrice);
     return obj;
   },
 
@@ -174,8 +184,9 @@ export const Order = {
     message.amountPerStep = object.amountPerStep ?? "";
     message.remainingAmount = object.remainingAmount ?? "";
     message.depositedAmount = object.depositedAmount ?? "";
-    message.minBlocksInterval = object.minBlocksInterval ?? 0;
-    message.maxSpotPrice = object.maxSpotPrice ?? "";
+    message.minMillisInterval = object.minMillisInterval ?? 0;
+    message.maxStepSpotPrice = object.maxStepSpotPrice ?? "";
+    message.maxMatchingSpotPrice = object.maxMatchingSpotPrice ?? "";
     return message;
   },
 };

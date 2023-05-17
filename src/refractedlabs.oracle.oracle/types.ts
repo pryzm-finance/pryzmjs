@@ -3,6 +3,8 @@ import { EventOraclePreVote } from "./types/oracle/oracle/event"
 import { EventOracleVote } from "./types/oracle/oracle/event"
 import { EventVoteIntervalEnds } from "./types/oracle/oracle/event"
 import { EventInvalidMajorityVotePayload } from "./types/oracle/oracle/event"
+import { EventQuorumNotReached } from "./types/oracle/oracle/event"
+import { EventMajorityNotAchieved } from "./types/oracle/oracle/event"
 import { FeederDelegation } from "./types/oracle/oracle/feeder_delegation"
 import { MissCounter } from "./types/oracle/oracle/miss_counter"
 import { OraclePreVote } from "./types/oracle/oracle/oracle_pre_vote"
@@ -18,6 +20,8 @@ export {
     EventOracleVote,
     EventVoteIntervalEnds,
     EventInvalidMajorityVotePayload,
+    EventQuorumNotReached,
+    EventMajorityNotAchieved,
     FeederDelegation,
     MissCounter,
     OraclePreVote,

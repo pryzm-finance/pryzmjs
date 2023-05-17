@@ -48,7 +48,7 @@ export interface Pair {
 export interface OraclePricePair {
   assetId: string;
   dataSource: string;
-  twapDuration: number;
+  twapDurationMillis: number;
   twapAlgorithm: TwapAlgorithm;
   disabled: boolean;
   pairs: Pair[];
@@ -122,7 +122,7 @@ export const Pair = {
 };
 
 function createBaseOraclePricePair(): OraclePricePair {
-  return { assetId: "", dataSource: "", twapDuration: 0, twapAlgorithm: 0, disabled: false, pairs: [] };
+  return { assetId: "", dataSource: "", twapDurationMillis: 0, twapAlgorithm: 0, disabled: false, pairs: [] };
 }
 
 export const OraclePricePair = {
@@ -133,8 +133,8 @@ export const OraclePricePair = {
     if (message.dataSource !== "") {
       writer.uint32(18).string(message.dataSource);
     }
-    if (message.twapDuration !== 0) {
-      writer.uint32(24).uint64(message.twapDuration);
+    if (message.twapDurationMillis !== 0) {
+      writer.uint32(24).uint64(message.twapDurationMillis);
     }
     if (message.twapAlgorithm !== 0) {
       writer.uint32(32).int32(message.twapAlgorithm);
@@ -162,7 +162,7 @@ export const OraclePricePair = {
           message.dataSource = reader.string();
           break;
         case 3:
-          message.twapDuration = longToNumber(reader.uint64() as Long);
+          message.twapDurationMillis = longToNumber(reader.uint64() as Long);
           break;
         case 4:
           message.twapAlgorithm = reader.int32() as any;
@@ -185,7 +185,7 @@ export const OraclePricePair = {
     return {
       assetId: isSet(object.assetId) ? String(object.assetId) : "",
       dataSource: isSet(object.dataSource) ? String(object.dataSource) : "",
-      twapDuration: isSet(object.twapDuration) ? Number(object.twapDuration) : 0,
+      twapDurationMillis: isSet(object.twapDurationMillis) ? Number(object.twapDurationMillis) : 0,
       twapAlgorithm: isSet(object.twapAlgorithm) ? twapAlgorithmFromJSON(object.twapAlgorithm) : 0,
       disabled: isSet(object.disabled) ? Boolean(object.disabled) : false,
       pairs: Array.isArray(object?.pairs) ? object.pairs.map((e: any) => Pair.fromJSON(e)) : [],
@@ -196,7 +196,7 @@ export const OraclePricePair = {
     const obj: any = {};
     message.assetId !== undefined && (obj.assetId = message.assetId);
     message.dataSource !== undefined && (obj.dataSource = message.dataSource);
-    message.twapDuration !== undefined && (obj.twapDuration = Math.round(message.twapDuration));
+    message.twapDurationMillis !== undefined && (obj.twapDurationMillis = Math.round(message.twapDurationMillis));
     message.twapAlgorithm !== undefined && (obj.twapAlgorithm = twapAlgorithmToJSON(message.twapAlgorithm));
     message.disabled !== undefined && (obj.disabled = message.disabled);
     if (message.pairs) {
@@ -211,7 +211,7 @@ export const OraclePricePair = {
     const message = createBaseOraclePricePair();
     message.assetId = object.assetId ?? "";
     message.dataSource = object.dataSource ?? "";
-    message.twapDuration = object.twapDuration ?? 0;
+    message.twapDurationMillis = object.twapDurationMillis ?? 0;
     message.twapAlgorithm = object.twapAlgorithm ?? 0;
     message.disabled = object.disabled ?? false;
     message.pairs = object.pairs?.map((e) => Pair.fromPartial(e)) || [];

@@ -33,6 +33,17 @@ export interface EventInvalidMajorityVotePayload {
   error: string;
 }
 
+export interface EventQuorumNotReached {
+  module: string;
+  namespace: string;
+  ballotPower: string;
+}
+
+export interface EventMajorityNotAchieved {
+  module: string;
+  namespace: string;
+}
+
 function createBaseEventDelegateFeedConsent(): EventDelegateFeedConsent {
   return { validator: "", feeder: "" };
 }
@@ -351,6 +362,131 @@ export const EventInvalidMajorityVotePayload = {
     message.namespace = object.namespace ?? "";
     message.majorityVotePayload = object.majorityVotePayload ?? "";
     message.error = object.error ?? "";
+    return message;
+  },
+};
+
+function createBaseEventQuorumNotReached(): EventQuorumNotReached {
+  return { module: "", namespace: "", ballotPower: "" };
+}
+
+export const EventQuorumNotReached = {
+  encode(message: EventQuorumNotReached, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.module !== "") {
+      writer.uint32(10).string(message.module);
+    }
+    if (message.namespace !== "") {
+      writer.uint32(18).string(message.namespace);
+    }
+    if (message.ballotPower !== "") {
+      writer.uint32(26).string(message.ballotPower);
+    }
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): EventQuorumNotReached {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseEventQuorumNotReached();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.module = reader.string();
+          break;
+        case 2:
+          message.namespace = reader.string();
+          break;
+        case 3:
+          message.ballotPower = reader.string();
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): EventQuorumNotReached {
+    return {
+      module: isSet(object.module) ? String(object.module) : "",
+      namespace: isSet(object.namespace) ? String(object.namespace) : "",
+      ballotPower: isSet(object.ballotPower) ? String(object.ballotPower) : "",
+    };
+  },
+
+  toJSON(message: EventQuorumNotReached): unknown {
+    const obj: any = {};
+    message.module !== undefined && (obj.module = message.module);
+    message.namespace !== undefined && (obj.namespace = message.namespace);
+    message.ballotPower !== undefined && (obj.ballotPower = message.ballotPower);
+    return obj;
+  },
+
+  fromPartial<I extends Exact<DeepPartial<EventQuorumNotReached>, I>>(object: I): EventQuorumNotReached {
+    const message = createBaseEventQuorumNotReached();
+    message.module = object.module ?? "";
+    message.namespace = object.namespace ?? "";
+    message.ballotPower = object.ballotPower ?? "";
+    return message;
+  },
+};
+
+function createBaseEventMajorityNotAchieved(): EventMajorityNotAchieved {
+  return { module: "", namespace: "" };
+}
+
+export const EventMajorityNotAchieved = {
+  encode(message: EventMajorityNotAchieved, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.module !== "") {
+      writer.uint32(10).string(message.module);
+    }
+    if (message.namespace !== "") {
+      writer.uint32(18).string(message.namespace);
+    }
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): EventMajorityNotAchieved {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseEventMajorityNotAchieved();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.module = reader.string();
+          break;
+        case 2:
+          message.namespace = reader.string();
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): EventMajorityNotAchieved {
+    return {
+      module: isSet(object.module) ? String(object.module) : "",
+      namespace: isSet(object.namespace) ? String(object.namespace) : "",
+    };
+  },
+
+  toJSON(message: EventMajorityNotAchieved): unknown {
+    const obj: any = {};
+    message.module !== undefined && (obj.module = message.module);
+    message.namespace !== undefined && (obj.namespace = message.namespace);
+    return obj;
+  },
+
+  fromPartial<I extends Exact<DeepPartial<EventMajorityNotAchieved>, I>>(object: I): EventMajorityNotAchieved {
+    const message = createBaseEventMajorityNotAchieved();
+    message.module = object.module ?? "";
+    message.namespace = object.namespace ?? "";
     return message;
   },
 };

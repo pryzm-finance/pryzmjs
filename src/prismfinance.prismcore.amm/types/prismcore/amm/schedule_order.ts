@@ -5,18 +5,18 @@ import _m0 from "protobufjs/minimal";
 export const protobufPackage = "prismfinance.prismcore.amm";
 
 export interface ScheduleOrder {
-  blockHeight: number;
+  timeMillis: number;
   orderId: number;
 }
 
 function createBaseScheduleOrder(): ScheduleOrder {
-  return { blockHeight: 0, orderId: 0 };
+  return { timeMillis: 0, orderId: 0 };
 }
 
 export const ScheduleOrder = {
   encode(message: ScheduleOrder, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (message.blockHeight !== 0) {
-      writer.uint32(8).int64(message.blockHeight);
+    if (message.timeMillis !== 0) {
+      writer.uint32(8).int64(message.timeMillis);
     }
     if (message.orderId !== 0) {
       writer.uint32(16).uint64(message.orderId);
@@ -32,7 +32,7 @@ export const ScheduleOrder = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.blockHeight = longToNumber(reader.int64() as Long);
+          message.timeMillis = longToNumber(reader.int64() as Long);
           break;
         case 2:
           message.orderId = longToNumber(reader.uint64() as Long);
@@ -47,21 +47,21 @@ export const ScheduleOrder = {
 
   fromJSON(object: any): ScheduleOrder {
     return {
-      blockHeight: isSet(object.blockHeight) ? Number(object.blockHeight) : 0,
+      timeMillis: isSet(object.timeMillis) ? Number(object.timeMillis) : 0,
       orderId: isSet(object.orderId) ? Number(object.orderId) : 0,
     };
   },
 
   toJSON(message: ScheduleOrder): unknown {
     const obj: any = {};
-    message.blockHeight !== undefined && (obj.blockHeight = Math.round(message.blockHeight));
+    message.timeMillis !== undefined && (obj.timeMillis = Math.round(message.timeMillis));
     message.orderId !== undefined && (obj.orderId = Math.round(message.orderId));
     return obj;
   },
 
   fromPartial<I extends Exact<DeepPartial<ScheduleOrder>, I>>(object: I): ScheduleOrder {
     const message = createBaseScheduleOrder();
-    message.blockHeight = object.blockHeight ?? 0;
+    message.timeMillis = object.timeMillis ?? 0;
     message.orderId = object.orderId ?? 0;
     return message;
   },

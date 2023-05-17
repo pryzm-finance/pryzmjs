@@ -9,10 +9,11 @@ export interface PendingTokenIntroduction {
   targetPoolId: number;
   yammPoolId: number;
   tokenNormalizedWeight: string;
+  virtualBalanceIntervalMillis: number;
 }
 
 function createBasePendingTokenIntroduction(): PendingTokenIntroduction {
-  return { assetId: "", targetPoolId: 0, yammPoolId: 0, tokenNormalizedWeight: "" };
+  return { assetId: "", targetPoolId: 0, yammPoolId: 0, tokenNormalizedWeight: "", virtualBalanceIntervalMillis: 0 };
 }
 
 export const PendingTokenIntroduction = {
@@ -28,6 +29,9 @@ export const PendingTokenIntroduction = {
     }
     if (message.tokenNormalizedWeight !== "") {
       writer.uint32(34).string(message.tokenNormalizedWeight);
+    }
+    if (message.virtualBalanceIntervalMillis !== 0) {
+      writer.uint32(40).int64(message.virtualBalanceIntervalMillis);
     }
     return writer;
   },
@@ -51,6 +55,9 @@ export const PendingTokenIntroduction = {
         case 4:
           message.tokenNormalizedWeight = reader.string();
           break;
+        case 5:
+          message.virtualBalanceIntervalMillis = longToNumber(reader.int64() as Long);
+          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -65,6 +72,9 @@ export const PendingTokenIntroduction = {
       targetPoolId: isSet(object.targetPoolId) ? Number(object.targetPoolId) : 0,
       yammPoolId: isSet(object.yammPoolId) ? Number(object.yammPoolId) : 0,
       tokenNormalizedWeight: isSet(object.tokenNormalizedWeight) ? String(object.tokenNormalizedWeight) : "",
+      virtualBalanceIntervalMillis: isSet(object.virtualBalanceIntervalMillis)
+        ? Number(object.virtualBalanceIntervalMillis)
+        : 0,
     };
   },
 
@@ -74,6 +84,8 @@ export const PendingTokenIntroduction = {
     message.targetPoolId !== undefined && (obj.targetPoolId = Math.round(message.targetPoolId));
     message.yammPoolId !== undefined && (obj.yammPoolId = Math.round(message.yammPoolId));
     message.tokenNormalizedWeight !== undefined && (obj.tokenNormalizedWeight = message.tokenNormalizedWeight);
+    message.virtualBalanceIntervalMillis !== undefined
+      && (obj.virtualBalanceIntervalMillis = Math.round(message.virtualBalanceIntervalMillis));
     return obj;
   },
 
@@ -83,6 +95,7 @@ export const PendingTokenIntroduction = {
     message.targetPoolId = object.targetPoolId ?? 0;
     message.yammPoolId = object.yammPoolId ?? 0;
     message.tokenNormalizedWeight = object.tokenNormalizedWeight ?? "";
+    message.virtualBalanceIntervalMillis = object.virtualBalanceIntervalMillis ?? 0;
     return message;
   },
 };

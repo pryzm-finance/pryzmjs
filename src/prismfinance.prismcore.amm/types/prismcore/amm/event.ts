@@ -5,6 +5,7 @@ import { Coin } from "../../cosmos/base/v1beta1/coin";
 import { ExitSummary, JoinSummary, SwapSummary } from "./operations";
 import { OraclePricePair } from "./oracle_price_pair";
 import { Order } from "./order";
+import { Params } from "./params";
 import { PendingTokenIntroduction } from "./pending_token_introduction";
 import { Pool } from "./pool";
 import { PoolToken } from "./pool_token";
@@ -91,7 +92,7 @@ export interface EventSetScheduleOrder {
 
 export interface EventRemoveScheduleOrder {
   orderId: number;
-  blockHeight: number;
+  timeMillis: number;
 }
 
 export interface EventSetExecutableOrder {
@@ -219,6 +220,10 @@ export interface EventSetPendingTokenIntroduction {
 export interface EventRemovePendingTokenIntroduction {
   assetId: string;
   targetPoolId: number;
+}
+
+export interface EventSetParams {
+  params: Params | undefined;
 }
 
 function createBaseEventSetPool(): EventSetPool {
@@ -1099,7 +1104,7 @@ export const EventSetScheduleOrder = {
 };
 
 function createBaseEventRemoveScheduleOrder(): EventRemoveScheduleOrder {
-  return { orderId: 0, blockHeight: 0 };
+  return { orderId: 0, timeMillis: 0 };
 }
 
 export const EventRemoveScheduleOrder = {
@@ -1107,8 +1112,8 @@ export const EventRemoveScheduleOrder = {
     if (message.orderId !== 0) {
       writer.uint32(8).uint64(message.orderId);
     }
-    if (message.blockHeight !== 0) {
-      writer.uint32(16).int64(message.blockHeight);
+    if (message.timeMillis !== 0) {
+      writer.uint32(16).int64(message.timeMillis);
     }
     return writer;
   },
@@ -1124,7 +1129,7 @@ export const EventRemoveScheduleOrder = {
           message.orderId = longToNumber(reader.uint64() as Long);
           break;
         case 2:
-          message.blockHeight = longToNumber(reader.int64() as Long);
+          message.timeMillis = longToNumber(reader.int64() as Long);
           break;
         default:
           reader.skipType(tag & 7);
@@ -1137,21 +1142,21 @@ export const EventRemoveScheduleOrder = {
   fromJSON(object: any): EventRemoveScheduleOrder {
     return {
       orderId: isSet(object.orderId) ? Number(object.orderId) : 0,
-      blockHeight: isSet(object.blockHeight) ? Number(object.blockHeight) : 0,
+      timeMillis: isSet(object.timeMillis) ? Number(object.timeMillis) : 0,
     };
   },
 
   toJSON(message: EventRemoveScheduleOrder): unknown {
     const obj: any = {};
     message.orderId !== undefined && (obj.orderId = Math.round(message.orderId));
-    message.blockHeight !== undefined && (obj.blockHeight = Math.round(message.blockHeight));
+    message.timeMillis !== undefined && (obj.timeMillis = Math.round(message.timeMillis));
     return obj;
   },
 
   fromPartial<I extends Exact<DeepPartial<EventRemoveScheduleOrder>, I>>(object: I): EventRemoveScheduleOrder {
     const message = createBaseEventRemoveScheduleOrder();
     message.orderId = object.orderId ?? 0;
-    message.blockHeight = object.blockHeight ?? 0;
+    message.timeMillis = object.timeMillis ?? 0;
     return message;
   },
 };
@@ -2683,6 +2688,55 @@ export const EventRemovePendingTokenIntroduction = {
     const message = createBaseEventRemovePendingTokenIntroduction();
     message.assetId = object.assetId ?? "";
     message.targetPoolId = object.targetPoolId ?? 0;
+    return message;
+  },
+};
+
+function createBaseEventSetParams(): EventSetParams {
+  return { params: undefined };
+}
+
+export const EventSetParams = {
+  encode(message: EventSetParams, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.params !== undefined) {
+      Params.encode(message.params, writer.uint32(10).fork()).ldelim();
+    }
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): EventSetParams {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseEventSetParams();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.params = Params.decode(reader, reader.uint32());
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): EventSetParams {
+    return { params: isSet(object.params) ? Params.fromJSON(object.params) : undefined };
+  },
+
+  toJSON(message: EventSetParams): unknown {
+    const obj: any = {};
+    message.params !== undefined && (obj.params = message.params ? Params.toJSON(message.params) : undefined);
+    return obj;
+  },
+
+  fromPartial<I extends Exact<DeepPartial<EventSetParams>, I>>(object: I): EventSetParams {
+    const message = createBaseEventSetParams();
+    message.params = (object.params !== undefined && object.params !== null)
+      ? Params.fromPartial(object.params)
+      : undefined;
     return message;
   },
 };

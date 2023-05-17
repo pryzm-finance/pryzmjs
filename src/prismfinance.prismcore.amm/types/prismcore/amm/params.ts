@@ -4,40 +4,64 @@ import _m0 from "protobufjs/minimal";
 
 export const protobufPackage = "prismfinance.prismcore.amm";
 
-export interface OrderControlParameters {
+export interface OrderParameters {
   stepMatchingFeeRatio: string;
   stepSwapFeeRatio: string;
   matchingProtocolFeeRatio: string;
   matchingSolverFeeRatio: string;
+  maxOrdersPerBlock: number;
+  maxSchedulePerBlock: number;
+  maxExecOrderTradeRatio: string;
+  maxOrderStepRatio: string;
+  minOrderStepRatio: string;
 }
 
-/** Params defines the parameters for the module. */
-export interface Params {
-  allowPublicPoolCreation: boolean;
-  defaultSwapFeeRatio: string;
+export interface YammParameters {
   /** duration (milliseconds) for virtual balance when adding new pAssets to yamm pools */
-  yammMaturityIntroductionIntervalMillis: number;
-  yammMaturityExpirationIntervalMillis: number;
-  yammExpirationVirtualBalanceScaler: string;
+  maturityIntroductionIntervalMillis: number;
+  maturityExpirationIntervalMillis: number;
+  expirationVirtualBalanceScaler: string;
   /**
    * discount ratio applied to constant sum equations for trading cAsset-pAsset where pAsset is expired or close
    * to expiry
    */
-  yammExpiredAssetDiscountRatio: string;
-  yammBuyYGivenInDefaultLoanFeeRatio: string;
-  yammSellYGivenOutDefaultFeeRatio: string;
-  yammDefaultSwapYieldFeeRatio: string;
-  orderControlParams: OrderControlParameters | undefined;
-  weightedTokenIntroductionIntervalMillis: number;
-  weightedTokenExpirationIntervalMillis: number;
+  expiredAssetDiscountRatio: string;
+  buyYGivenInLoanFeeRatio: string;
+  sellYGivenOutFeeRatio: string;
+  swapYieldFeeRatio: string;
+  leverageScaler: string;
 }
 
-function createBaseOrderControlParameters(): OrderControlParameters {
-  return { stepMatchingFeeRatio: "", stepSwapFeeRatio: "", matchingProtocolFeeRatio: "", matchingSolverFeeRatio: "" };
+export interface GeneralPoolParameters {
+  allowPublicPoolCreation: boolean;
+  defaultSwapFeeRatio: string;
+  swapProtocolFeeRatio: string;
+  joinExitProtocolFeeRatio: string;
 }
 
-export const OrderControlParameters = {
-  encode(message: OrderControlParameters, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+/** Params defines the parameters for the module. */
+export interface Params {
+  generalPoolParameters: GeneralPoolParameters | undefined;
+  yammParameters: YammParameters | undefined;
+  orderParameters: OrderParameters | undefined;
+}
+
+function createBaseOrderParameters(): OrderParameters {
+  return {
+    stepMatchingFeeRatio: "",
+    stepSwapFeeRatio: "",
+    matchingProtocolFeeRatio: "",
+    matchingSolverFeeRatio: "",
+    maxOrdersPerBlock: 0,
+    maxSchedulePerBlock: 0,
+    maxExecOrderTradeRatio: "",
+    maxOrderStepRatio: "",
+    minOrderStepRatio: "",
+  };
+}
+
+export const OrderParameters = {
+  encode(message: OrderParameters, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.stepMatchingFeeRatio !== "") {
       writer.uint32(10).string(message.stepMatchingFeeRatio);
     }
@@ -50,13 +74,28 @@ export const OrderControlParameters = {
     if (message.matchingSolverFeeRatio !== "") {
       writer.uint32(34).string(message.matchingSolverFeeRatio);
     }
+    if (message.maxOrdersPerBlock !== 0) {
+      writer.uint32(40).int32(message.maxOrdersPerBlock);
+    }
+    if (message.maxSchedulePerBlock !== 0) {
+      writer.uint32(48).int32(message.maxSchedulePerBlock);
+    }
+    if (message.maxExecOrderTradeRatio !== "") {
+      writer.uint32(58).string(message.maxExecOrderTradeRatio);
+    }
+    if (message.maxOrderStepRatio !== "") {
+      writer.uint32(66).string(message.maxOrderStepRatio);
+    }
+    if (message.minOrderStepRatio !== "") {
+      writer.uint32(74).string(message.minOrderStepRatio);
+    }
     return writer;
   },
 
-  decode(input: _m0.Reader | Uint8Array, length?: number): OrderControlParameters {
+  decode(input: _m0.Reader | Uint8Array, length?: number): OrderParameters {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseOrderControlParameters();
+    const message = createBaseOrderParameters();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -72,6 +111,21 @@ export const OrderControlParameters = {
         case 4:
           message.matchingSolverFeeRatio = reader.string();
           break;
+        case 5:
+          message.maxOrdersPerBlock = reader.int32();
+          break;
+        case 6:
+          message.maxSchedulePerBlock = reader.int32();
+          break;
+        case 7:
+          message.maxExecOrderTradeRatio = reader.string();
+          break;
+        case 8:
+          message.maxOrderStepRatio = reader.string();
+          break;
+        case 9:
+          message.minOrderStepRatio = reader.string();
+          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -80,88 +134,277 @@ export const OrderControlParameters = {
     return message;
   },
 
-  fromJSON(object: any): OrderControlParameters {
+  fromJSON(object: any): OrderParameters {
     return {
       stepMatchingFeeRatio: isSet(object.stepMatchingFeeRatio) ? String(object.stepMatchingFeeRatio) : "",
       stepSwapFeeRatio: isSet(object.stepSwapFeeRatio) ? String(object.stepSwapFeeRatio) : "",
       matchingProtocolFeeRatio: isSet(object.matchingProtocolFeeRatio) ? String(object.matchingProtocolFeeRatio) : "",
       matchingSolverFeeRatio: isSet(object.matchingSolverFeeRatio) ? String(object.matchingSolverFeeRatio) : "",
+      maxOrdersPerBlock: isSet(object.maxOrdersPerBlock) ? Number(object.maxOrdersPerBlock) : 0,
+      maxSchedulePerBlock: isSet(object.maxSchedulePerBlock) ? Number(object.maxSchedulePerBlock) : 0,
+      maxExecOrderTradeRatio: isSet(object.maxExecOrderTradeRatio) ? String(object.maxExecOrderTradeRatio) : "",
+      maxOrderStepRatio: isSet(object.maxOrderStepRatio) ? String(object.maxOrderStepRatio) : "",
+      minOrderStepRatio: isSet(object.minOrderStepRatio) ? String(object.minOrderStepRatio) : "",
     };
   },
 
-  toJSON(message: OrderControlParameters): unknown {
+  toJSON(message: OrderParameters): unknown {
     const obj: any = {};
     message.stepMatchingFeeRatio !== undefined && (obj.stepMatchingFeeRatio = message.stepMatchingFeeRatio);
     message.stepSwapFeeRatio !== undefined && (obj.stepSwapFeeRatio = message.stepSwapFeeRatio);
     message.matchingProtocolFeeRatio !== undefined && (obj.matchingProtocolFeeRatio = message.matchingProtocolFeeRatio);
     message.matchingSolverFeeRatio !== undefined && (obj.matchingSolverFeeRatio = message.matchingSolverFeeRatio);
+    message.maxOrdersPerBlock !== undefined && (obj.maxOrdersPerBlock = Math.round(message.maxOrdersPerBlock));
+    message.maxSchedulePerBlock !== undefined && (obj.maxSchedulePerBlock = Math.round(message.maxSchedulePerBlock));
+    message.maxExecOrderTradeRatio !== undefined && (obj.maxExecOrderTradeRatio = message.maxExecOrderTradeRatio);
+    message.maxOrderStepRatio !== undefined && (obj.maxOrderStepRatio = message.maxOrderStepRatio);
+    message.minOrderStepRatio !== undefined && (obj.minOrderStepRatio = message.minOrderStepRatio);
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<OrderControlParameters>, I>>(object: I): OrderControlParameters {
-    const message = createBaseOrderControlParameters();
+  fromPartial<I extends Exact<DeepPartial<OrderParameters>, I>>(object: I): OrderParameters {
+    const message = createBaseOrderParameters();
     message.stepMatchingFeeRatio = object.stepMatchingFeeRatio ?? "";
     message.stepSwapFeeRatio = object.stepSwapFeeRatio ?? "";
     message.matchingProtocolFeeRatio = object.matchingProtocolFeeRatio ?? "";
     message.matchingSolverFeeRatio = object.matchingSolverFeeRatio ?? "";
+    message.maxOrdersPerBlock = object.maxOrdersPerBlock ?? 0;
+    message.maxSchedulePerBlock = object.maxSchedulePerBlock ?? 0;
+    message.maxExecOrderTradeRatio = object.maxExecOrderTradeRatio ?? "";
+    message.maxOrderStepRatio = object.maxOrderStepRatio ?? "";
+    message.minOrderStepRatio = object.minOrderStepRatio ?? "";
     return message;
   },
 };
 
-function createBaseParams(): Params {
+function createBaseYammParameters(): YammParameters {
   return {
-    allowPublicPoolCreation: false,
-    defaultSwapFeeRatio: "",
-    yammMaturityIntroductionIntervalMillis: 0,
-    yammMaturityExpirationIntervalMillis: 0,
-    yammExpirationVirtualBalanceScaler: "",
-    yammExpiredAssetDiscountRatio: "",
-    yammBuyYGivenInDefaultLoanFeeRatio: "",
-    yammSellYGivenOutDefaultFeeRatio: "",
-    yammDefaultSwapYieldFeeRatio: "",
-    orderControlParams: undefined,
-    weightedTokenIntroductionIntervalMillis: 0,
-    weightedTokenExpirationIntervalMillis: 0,
+    maturityIntroductionIntervalMillis: 0,
+    maturityExpirationIntervalMillis: 0,
+    expirationVirtualBalanceScaler: "",
+    expiredAssetDiscountRatio: "",
+    buyYGivenInLoanFeeRatio: "",
+    sellYGivenOutFeeRatio: "",
+    swapYieldFeeRatio: "",
+    leverageScaler: "",
   };
 }
 
-export const Params = {
-  encode(message: Params, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+export const YammParameters = {
+  encode(message: YammParameters, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.maturityIntroductionIntervalMillis !== 0) {
+      writer.uint32(8).int64(message.maturityIntroductionIntervalMillis);
+    }
+    if (message.maturityExpirationIntervalMillis !== 0) {
+      writer.uint32(16).int64(message.maturityExpirationIntervalMillis);
+    }
+    if (message.expirationVirtualBalanceScaler !== "") {
+      writer.uint32(26).string(message.expirationVirtualBalanceScaler);
+    }
+    if (message.expiredAssetDiscountRatio !== "") {
+      writer.uint32(34).string(message.expiredAssetDiscountRatio);
+    }
+    if (message.buyYGivenInLoanFeeRatio !== "") {
+      writer.uint32(42).string(message.buyYGivenInLoanFeeRatio);
+    }
+    if (message.sellYGivenOutFeeRatio !== "") {
+      writer.uint32(50).string(message.sellYGivenOutFeeRatio);
+    }
+    if (message.swapYieldFeeRatio !== "") {
+      writer.uint32(58).string(message.swapYieldFeeRatio);
+    }
+    if (message.leverageScaler !== "") {
+      writer.uint32(66).string(message.leverageScaler);
+    }
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): YammParameters {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseYammParameters();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.maturityIntroductionIntervalMillis = longToNumber(reader.int64() as Long);
+          break;
+        case 2:
+          message.maturityExpirationIntervalMillis = longToNumber(reader.int64() as Long);
+          break;
+        case 3:
+          message.expirationVirtualBalanceScaler = reader.string();
+          break;
+        case 4:
+          message.expiredAssetDiscountRatio = reader.string();
+          break;
+        case 5:
+          message.buyYGivenInLoanFeeRatio = reader.string();
+          break;
+        case 6:
+          message.sellYGivenOutFeeRatio = reader.string();
+          break;
+        case 7:
+          message.swapYieldFeeRatio = reader.string();
+          break;
+        case 8:
+          message.leverageScaler = reader.string();
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): YammParameters {
+    return {
+      maturityIntroductionIntervalMillis: isSet(object.maturityIntroductionIntervalMillis)
+        ? Number(object.maturityIntroductionIntervalMillis)
+        : 0,
+      maturityExpirationIntervalMillis: isSet(object.maturityExpirationIntervalMillis)
+        ? Number(object.maturityExpirationIntervalMillis)
+        : 0,
+      expirationVirtualBalanceScaler: isSet(object.expirationVirtualBalanceScaler)
+        ? String(object.expirationVirtualBalanceScaler)
+        : "",
+      expiredAssetDiscountRatio: isSet(object.expiredAssetDiscountRatio)
+        ? String(object.expiredAssetDiscountRatio)
+        : "",
+      buyYGivenInLoanFeeRatio: isSet(object.buyYGivenInLoanFeeRatio) ? String(object.buyYGivenInLoanFeeRatio) : "",
+      sellYGivenOutFeeRatio: isSet(object.sellYGivenOutFeeRatio) ? String(object.sellYGivenOutFeeRatio) : "",
+      swapYieldFeeRatio: isSet(object.swapYieldFeeRatio) ? String(object.swapYieldFeeRatio) : "",
+      leverageScaler: isSet(object.leverageScaler) ? String(object.leverageScaler) : "",
+    };
+  },
+
+  toJSON(message: YammParameters): unknown {
+    const obj: any = {};
+    message.maturityIntroductionIntervalMillis !== undefined
+      && (obj.maturityIntroductionIntervalMillis = Math.round(message.maturityIntroductionIntervalMillis));
+    message.maturityExpirationIntervalMillis !== undefined
+      && (obj.maturityExpirationIntervalMillis = Math.round(message.maturityExpirationIntervalMillis));
+    message.expirationVirtualBalanceScaler !== undefined
+      && (obj.expirationVirtualBalanceScaler = message.expirationVirtualBalanceScaler);
+    message.expiredAssetDiscountRatio !== undefined
+      && (obj.expiredAssetDiscountRatio = message.expiredAssetDiscountRatio);
+    message.buyYGivenInLoanFeeRatio !== undefined && (obj.buyYGivenInLoanFeeRatio = message.buyYGivenInLoanFeeRatio);
+    message.sellYGivenOutFeeRatio !== undefined && (obj.sellYGivenOutFeeRatio = message.sellYGivenOutFeeRatio);
+    message.swapYieldFeeRatio !== undefined && (obj.swapYieldFeeRatio = message.swapYieldFeeRatio);
+    message.leverageScaler !== undefined && (obj.leverageScaler = message.leverageScaler);
+    return obj;
+  },
+
+  fromPartial<I extends Exact<DeepPartial<YammParameters>, I>>(object: I): YammParameters {
+    const message = createBaseYammParameters();
+    message.maturityIntroductionIntervalMillis = object.maturityIntroductionIntervalMillis ?? 0;
+    message.maturityExpirationIntervalMillis = object.maturityExpirationIntervalMillis ?? 0;
+    message.expirationVirtualBalanceScaler = object.expirationVirtualBalanceScaler ?? "";
+    message.expiredAssetDiscountRatio = object.expiredAssetDiscountRatio ?? "";
+    message.buyYGivenInLoanFeeRatio = object.buyYGivenInLoanFeeRatio ?? "";
+    message.sellYGivenOutFeeRatio = object.sellYGivenOutFeeRatio ?? "";
+    message.swapYieldFeeRatio = object.swapYieldFeeRatio ?? "";
+    message.leverageScaler = object.leverageScaler ?? "";
+    return message;
+  },
+};
+
+function createBaseGeneralPoolParameters(): GeneralPoolParameters {
+  return {
+    allowPublicPoolCreation: false,
+    defaultSwapFeeRatio: "",
+    swapProtocolFeeRatio: "",
+    joinExitProtocolFeeRatio: "",
+  };
+}
+
+export const GeneralPoolParameters = {
+  encode(message: GeneralPoolParameters, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.allowPublicPoolCreation === true) {
       writer.uint32(8).bool(message.allowPublicPoolCreation);
     }
     if (message.defaultSwapFeeRatio !== "") {
       writer.uint32(18).string(message.defaultSwapFeeRatio);
     }
-    if (message.yammMaturityIntroductionIntervalMillis !== 0) {
-      writer.uint32(24).int64(message.yammMaturityIntroductionIntervalMillis);
+    if (message.swapProtocolFeeRatio !== "") {
+      writer.uint32(26).string(message.swapProtocolFeeRatio);
     }
-    if (message.yammMaturityExpirationIntervalMillis !== 0) {
-      writer.uint32(32).int64(message.yammMaturityExpirationIntervalMillis);
+    if (message.joinExitProtocolFeeRatio !== "") {
+      writer.uint32(34).string(message.joinExitProtocolFeeRatio);
     }
-    if (message.yammExpirationVirtualBalanceScaler !== "") {
-      writer.uint32(42).string(message.yammExpirationVirtualBalanceScaler);
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): GeneralPoolParameters {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseGeneralPoolParameters();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.allowPublicPoolCreation = reader.bool();
+          break;
+        case 2:
+          message.defaultSwapFeeRatio = reader.string();
+          break;
+        case 3:
+          message.swapProtocolFeeRatio = reader.string();
+          break;
+        case 4:
+          message.joinExitProtocolFeeRatio = reader.string();
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
     }
-    if (message.yammExpiredAssetDiscountRatio !== "") {
-      writer.uint32(50).string(message.yammExpiredAssetDiscountRatio);
+    return message;
+  },
+
+  fromJSON(object: any): GeneralPoolParameters {
+    return {
+      allowPublicPoolCreation: isSet(object.allowPublicPoolCreation) ? Boolean(object.allowPublicPoolCreation) : false,
+      defaultSwapFeeRatio: isSet(object.defaultSwapFeeRatio) ? String(object.defaultSwapFeeRatio) : "",
+      swapProtocolFeeRatio: isSet(object.swapProtocolFeeRatio) ? String(object.swapProtocolFeeRatio) : "",
+      joinExitProtocolFeeRatio: isSet(object.joinExitProtocolFeeRatio) ? String(object.joinExitProtocolFeeRatio) : "",
+    };
+  },
+
+  toJSON(message: GeneralPoolParameters): unknown {
+    const obj: any = {};
+    message.allowPublicPoolCreation !== undefined && (obj.allowPublicPoolCreation = message.allowPublicPoolCreation);
+    message.defaultSwapFeeRatio !== undefined && (obj.defaultSwapFeeRatio = message.defaultSwapFeeRatio);
+    message.swapProtocolFeeRatio !== undefined && (obj.swapProtocolFeeRatio = message.swapProtocolFeeRatio);
+    message.joinExitProtocolFeeRatio !== undefined && (obj.joinExitProtocolFeeRatio = message.joinExitProtocolFeeRatio);
+    return obj;
+  },
+
+  fromPartial<I extends Exact<DeepPartial<GeneralPoolParameters>, I>>(object: I): GeneralPoolParameters {
+    const message = createBaseGeneralPoolParameters();
+    message.allowPublicPoolCreation = object.allowPublicPoolCreation ?? false;
+    message.defaultSwapFeeRatio = object.defaultSwapFeeRatio ?? "";
+    message.swapProtocolFeeRatio = object.swapProtocolFeeRatio ?? "";
+    message.joinExitProtocolFeeRatio = object.joinExitProtocolFeeRatio ?? "";
+    return message;
+  },
+};
+
+function createBaseParams(): Params {
+  return { generalPoolParameters: undefined, yammParameters: undefined, orderParameters: undefined };
+}
+
+export const Params = {
+  encode(message: Params, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.generalPoolParameters !== undefined) {
+      GeneralPoolParameters.encode(message.generalPoolParameters, writer.uint32(10).fork()).ldelim();
     }
-    if (message.yammBuyYGivenInDefaultLoanFeeRatio !== "") {
-      writer.uint32(58).string(message.yammBuyYGivenInDefaultLoanFeeRatio);
+    if (message.yammParameters !== undefined) {
+      YammParameters.encode(message.yammParameters, writer.uint32(18).fork()).ldelim();
     }
-    if (message.yammSellYGivenOutDefaultFeeRatio !== "") {
-      writer.uint32(66).string(message.yammSellYGivenOutDefaultFeeRatio);
-    }
-    if (message.yammDefaultSwapYieldFeeRatio !== "") {
-      writer.uint32(74).string(message.yammDefaultSwapYieldFeeRatio);
-    }
-    if (message.orderControlParams !== undefined) {
-      OrderControlParameters.encode(message.orderControlParams, writer.uint32(82).fork()).ldelim();
-    }
-    if (message.weightedTokenIntroductionIntervalMillis !== 0) {
-      writer.uint32(88).int64(message.weightedTokenIntroductionIntervalMillis);
-    }
-    if (message.weightedTokenExpirationIntervalMillis !== 0) {
-      writer.uint32(96).int64(message.weightedTokenExpirationIntervalMillis);
+    if (message.orderParameters !== undefined) {
+      OrderParameters.encode(message.orderParameters, writer.uint32(26).fork()).ldelim();
     }
     return writer;
   },
@@ -174,40 +417,13 @@ export const Params = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.allowPublicPoolCreation = reader.bool();
+          message.generalPoolParameters = GeneralPoolParameters.decode(reader, reader.uint32());
           break;
         case 2:
-          message.defaultSwapFeeRatio = reader.string();
+          message.yammParameters = YammParameters.decode(reader, reader.uint32());
           break;
         case 3:
-          message.yammMaturityIntroductionIntervalMillis = longToNumber(reader.int64() as Long);
-          break;
-        case 4:
-          message.yammMaturityExpirationIntervalMillis = longToNumber(reader.int64() as Long);
-          break;
-        case 5:
-          message.yammExpirationVirtualBalanceScaler = reader.string();
-          break;
-        case 6:
-          message.yammExpiredAssetDiscountRatio = reader.string();
-          break;
-        case 7:
-          message.yammBuyYGivenInDefaultLoanFeeRatio = reader.string();
-          break;
-        case 8:
-          message.yammSellYGivenOutDefaultFeeRatio = reader.string();
-          break;
-        case 9:
-          message.yammDefaultSwapYieldFeeRatio = reader.string();
-          break;
-        case 10:
-          message.orderControlParams = OrderControlParameters.decode(reader, reader.uint32());
-          break;
-        case 11:
-          message.weightedTokenIntroductionIntervalMillis = longToNumber(reader.int64() as Long);
-          break;
-        case 12:
-          message.weightedTokenExpirationIntervalMillis = longToNumber(reader.int64() as Long);
+          message.orderParameters = OrderParameters.decode(reader, reader.uint32());
           break;
         default:
           reader.skipType(tag & 7);
@@ -219,85 +435,38 @@ export const Params = {
 
   fromJSON(object: any): Params {
     return {
-      allowPublicPoolCreation: isSet(object.allowPublicPoolCreation) ? Boolean(object.allowPublicPoolCreation) : false,
-      defaultSwapFeeRatio: isSet(object.defaultSwapFeeRatio) ? String(object.defaultSwapFeeRatio) : "",
-      yammMaturityIntroductionIntervalMillis: isSet(object.yammMaturityIntroductionIntervalMillis)
-        ? Number(object.yammMaturityIntroductionIntervalMillis)
-        : 0,
-      yammMaturityExpirationIntervalMillis: isSet(object.yammMaturityExpirationIntervalMillis)
-        ? Number(object.yammMaturityExpirationIntervalMillis)
-        : 0,
-      yammExpirationVirtualBalanceScaler: isSet(object.yammExpirationVirtualBalanceScaler)
-        ? String(object.yammExpirationVirtualBalanceScaler)
-        : "",
-      yammExpiredAssetDiscountRatio: isSet(object.yammExpiredAssetDiscountRatio)
-        ? String(object.yammExpiredAssetDiscountRatio)
-        : "",
-      yammBuyYGivenInDefaultLoanFeeRatio: isSet(object.yammBuyYGivenInDefaultLoanFeeRatio)
-        ? String(object.yammBuyYGivenInDefaultLoanFeeRatio)
-        : "",
-      yammSellYGivenOutDefaultFeeRatio: isSet(object.yammSellYGivenOutDefaultFeeRatio)
-        ? String(object.yammSellYGivenOutDefaultFeeRatio)
-        : "",
-      yammDefaultSwapYieldFeeRatio: isSet(object.yammDefaultSwapYieldFeeRatio)
-        ? String(object.yammDefaultSwapYieldFeeRatio)
-        : "",
-      orderControlParams: isSet(object.orderControlParams)
-        ? OrderControlParameters.fromJSON(object.orderControlParams)
+      generalPoolParameters: isSet(object.generalPoolParameters)
+        ? GeneralPoolParameters.fromJSON(object.generalPoolParameters)
         : undefined,
-      weightedTokenIntroductionIntervalMillis: isSet(object.weightedTokenIntroductionIntervalMillis)
-        ? Number(object.weightedTokenIntroductionIntervalMillis)
-        : 0,
-      weightedTokenExpirationIntervalMillis: isSet(object.weightedTokenExpirationIntervalMillis)
-        ? Number(object.weightedTokenExpirationIntervalMillis)
-        : 0,
+      yammParameters: isSet(object.yammParameters) ? YammParameters.fromJSON(object.yammParameters) : undefined,
+      orderParameters: isSet(object.orderParameters) ? OrderParameters.fromJSON(object.orderParameters) : undefined,
     };
   },
 
   toJSON(message: Params): unknown {
     const obj: any = {};
-    message.allowPublicPoolCreation !== undefined && (obj.allowPublicPoolCreation = message.allowPublicPoolCreation);
-    message.defaultSwapFeeRatio !== undefined && (obj.defaultSwapFeeRatio = message.defaultSwapFeeRatio);
-    message.yammMaturityIntroductionIntervalMillis !== undefined
-      && (obj.yammMaturityIntroductionIntervalMillis = Math.round(message.yammMaturityIntroductionIntervalMillis));
-    message.yammMaturityExpirationIntervalMillis !== undefined
-      && (obj.yammMaturityExpirationIntervalMillis = Math.round(message.yammMaturityExpirationIntervalMillis));
-    message.yammExpirationVirtualBalanceScaler !== undefined
-      && (obj.yammExpirationVirtualBalanceScaler = message.yammExpirationVirtualBalanceScaler);
-    message.yammExpiredAssetDiscountRatio !== undefined
-      && (obj.yammExpiredAssetDiscountRatio = message.yammExpiredAssetDiscountRatio);
-    message.yammBuyYGivenInDefaultLoanFeeRatio !== undefined
-      && (obj.yammBuyYGivenInDefaultLoanFeeRatio = message.yammBuyYGivenInDefaultLoanFeeRatio);
-    message.yammSellYGivenOutDefaultFeeRatio !== undefined
-      && (obj.yammSellYGivenOutDefaultFeeRatio = message.yammSellYGivenOutDefaultFeeRatio);
-    message.yammDefaultSwapYieldFeeRatio !== undefined
-      && (obj.yammDefaultSwapYieldFeeRatio = message.yammDefaultSwapYieldFeeRatio);
-    message.orderControlParams !== undefined && (obj.orderControlParams = message.orderControlParams
-      ? OrderControlParameters.toJSON(message.orderControlParams)
+    message.generalPoolParameters !== undefined && (obj.generalPoolParameters = message.generalPoolParameters
+      ? GeneralPoolParameters.toJSON(message.generalPoolParameters)
       : undefined);
-    message.weightedTokenIntroductionIntervalMillis !== undefined
-      && (obj.weightedTokenIntroductionIntervalMillis = Math.round(message.weightedTokenIntroductionIntervalMillis));
-    message.weightedTokenExpirationIntervalMillis !== undefined
-      && (obj.weightedTokenExpirationIntervalMillis = Math.round(message.weightedTokenExpirationIntervalMillis));
+    message.yammParameters !== undefined
+      && (obj.yammParameters = message.yammParameters ? YammParameters.toJSON(message.yammParameters) : undefined);
+    message.orderParameters !== undefined
+      && (obj.orderParameters = message.orderParameters ? OrderParameters.toJSON(message.orderParameters) : undefined);
     return obj;
   },
 
   fromPartial<I extends Exact<DeepPartial<Params>, I>>(object: I): Params {
     const message = createBaseParams();
-    message.allowPublicPoolCreation = object.allowPublicPoolCreation ?? false;
-    message.defaultSwapFeeRatio = object.defaultSwapFeeRatio ?? "";
-    message.yammMaturityIntroductionIntervalMillis = object.yammMaturityIntroductionIntervalMillis ?? 0;
-    message.yammMaturityExpirationIntervalMillis = object.yammMaturityExpirationIntervalMillis ?? 0;
-    message.yammExpirationVirtualBalanceScaler = object.yammExpirationVirtualBalanceScaler ?? "";
-    message.yammExpiredAssetDiscountRatio = object.yammExpiredAssetDiscountRatio ?? "";
-    message.yammBuyYGivenInDefaultLoanFeeRatio = object.yammBuyYGivenInDefaultLoanFeeRatio ?? "";
-    message.yammSellYGivenOutDefaultFeeRatio = object.yammSellYGivenOutDefaultFeeRatio ?? "";
-    message.yammDefaultSwapYieldFeeRatio = object.yammDefaultSwapYieldFeeRatio ?? "";
-    message.orderControlParams = (object.orderControlParams !== undefined && object.orderControlParams !== null)
-      ? OrderControlParameters.fromPartial(object.orderControlParams)
+    message.generalPoolParameters =
+      (object.generalPoolParameters !== undefined && object.generalPoolParameters !== null)
+        ? GeneralPoolParameters.fromPartial(object.generalPoolParameters)
+        : undefined;
+    message.yammParameters = (object.yammParameters !== undefined && object.yammParameters !== null)
+      ? YammParameters.fromPartial(object.yammParameters)
       : undefined;
-    message.weightedTokenIntroductionIntervalMillis = object.weightedTokenIntroductionIntervalMillis ?? 0;
-    message.weightedTokenExpirationIntervalMillis = object.weightedTokenExpirationIntervalMillis ?? 0;
+    message.orderParameters = (object.orderParameters !== undefined && object.orderParameters !== null)
+      ? OrderParameters.fromPartial(object.orderParameters)
+      : undefined;
     return message;
   },
 };

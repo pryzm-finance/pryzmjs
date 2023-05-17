@@ -6,16 +6,38 @@ export const protobufPackage = "prismfinance.prismcore.amm";
 
 export interface YammConfiguration {
   poolId: number;
+  /** duration (milliseconds) for virtual balance when adding new pAssets to yamm pools */
+  maturityIntroductionIntervalMillis: string;
+  maturityExpirationIntervalMillis: string;
+  expirationVirtualBalanceScaler: string;
+  /**
+   * if the value is not set, will be read from module parameters
+   * discount ratio applied to constant sum equations for trading cAsset-pAsset where pAsset is expired or close
+   * to expiry
+   */
+  expiredAssetDiscountRatio: string;
   /** if the value is not set, will be read from module parameters */
   buyYGivenInLoanFeeRatio: string;
   /** if the value is not set, will be read from module parameters */
   sellYGivenOutFeeRatio: string;
   /** if the value is not set, will be read from module parameters */
   swapYieldFeeRatio: string;
+  /** if the value is not set, will be read from module parameters */
+  leverageScaler: string;
 }
 
 function createBaseYammConfiguration(): YammConfiguration {
-  return { poolId: 0, buyYGivenInLoanFeeRatio: "", sellYGivenOutFeeRatio: "", swapYieldFeeRatio: "" };
+  return {
+    poolId: 0,
+    maturityIntroductionIntervalMillis: "",
+    maturityExpirationIntervalMillis: "",
+    expirationVirtualBalanceScaler: "",
+    expiredAssetDiscountRatio: "",
+    buyYGivenInLoanFeeRatio: "",
+    sellYGivenOutFeeRatio: "",
+    swapYieldFeeRatio: "",
+    leverageScaler: "",
+  };
 }
 
 export const YammConfiguration = {
@@ -23,14 +45,29 @@ export const YammConfiguration = {
     if (message.poolId !== 0) {
       writer.uint32(8).uint64(message.poolId);
     }
+    if (message.maturityIntroductionIntervalMillis !== "") {
+      writer.uint32(18).string(message.maturityIntroductionIntervalMillis);
+    }
+    if (message.maturityExpirationIntervalMillis !== "") {
+      writer.uint32(26).string(message.maturityExpirationIntervalMillis);
+    }
+    if (message.expirationVirtualBalanceScaler !== "") {
+      writer.uint32(34).string(message.expirationVirtualBalanceScaler);
+    }
+    if (message.expiredAssetDiscountRatio !== "") {
+      writer.uint32(42).string(message.expiredAssetDiscountRatio);
+    }
     if (message.buyYGivenInLoanFeeRatio !== "") {
-      writer.uint32(18).string(message.buyYGivenInLoanFeeRatio);
+      writer.uint32(50).string(message.buyYGivenInLoanFeeRatio);
     }
     if (message.sellYGivenOutFeeRatio !== "") {
-      writer.uint32(26).string(message.sellYGivenOutFeeRatio);
+      writer.uint32(58).string(message.sellYGivenOutFeeRatio);
     }
     if (message.swapYieldFeeRatio !== "") {
-      writer.uint32(34).string(message.swapYieldFeeRatio);
+      writer.uint32(66).string(message.swapYieldFeeRatio);
+    }
+    if (message.leverageScaler !== "") {
+      writer.uint32(74).string(message.leverageScaler);
     }
     return writer;
   },
@@ -46,13 +83,28 @@ export const YammConfiguration = {
           message.poolId = longToNumber(reader.uint64() as Long);
           break;
         case 2:
-          message.buyYGivenInLoanFeeRatio = reader.string();
+          message.maturityIntroductionIntervalMillis = reader.string();
           break;
         case 3:
-          message.sellYGivenOutFeeRatio = reader.string();
+          message.maturityExpirationIntervalMillis = reader.string();
           break;
         case 4:
+          message.expirationVirtualBalanceScaler = reader.string();
+          break;
+        case 5:
+          message.expiredAssetDiscountRatio = reader.string();
+          break;
+        case 6:
+          message.buyYGivenInLoanFeeRatio = reader.string();
+          break;
+        case 7:
+          message.sellYGivenOutFeeRatio = reader.string();
+          break;
+        case 8:
           message.swapYieldFeeRatio = reader.string();
+          break;
+        case 9:
+          message.leverageScaler = reader.string();
           break;
         default:
           reader.skipType(tag & 7);
@@ -65,27 +117,54 @@ export const YammConfiguration = {
   fromJSON(object: any): YammConfiguration {
     return {
       poolId: isSet(object.poolId) ? Number(object.poolId) : 0,
+      maturityIntroductionIntervalMillis: isSet(object.maturityIntroductionIntervalMillis)
+        ? String(object.maturityIntroductionIntervalMillis)
+        : "",
+      maturityExpirationIntervalMillis: isSet(object.maturityExpirationIntervalMillis)
+        ? String(object.maturityExpirationIntervalMillis)
+        : "",
+      expirationVirtualBalanceScaler: isSet(object.expirationVirtualBalanceScaler)
+        ? String(object.expirationVirtualBalanceScaler)
+        : "",
+      expiredAssetDiscountRatio: isSet(object.expiredAssetDiscountRatio)
+        ? String(object.expiredAssetDiscountRatio)
+        : "",
       buyYGivenInLoanFeeRatio: isSet(object.buyYGivenInLoanFeeRatio) ? String(object.buyYGivenInLoanFeeRatio) : "",
       sellYGivenOutFeeRatio: isSet(object.sellYGivenOutFeeRatio) ? String(object.sellYGivenOutFeeRatio) : "",
       swapYieldFeeRatio: isSet(object.swapYieldFeeRatio) ? String(object.swapYieldFeeRatio) : "",
+      leverageScaler: isSet(object.leverageScaler) ? String(object.leverageScaler) : "",
     };
   },
 
   toJSON(message: YammConfiguration): unknown {
     const obj: any = {};
     message.poolId !== undefined && (obj.poolId = Math.round(message.poolId));
+    message.maturityIntroductionIntervalMillis !== undefined
+      && (obj.maturityIntroductionIntervalMillis = message.maturityIntroductionIntervalMillis);
+    message.maturityExpirationIntervalMillis !== undefined
+      && (obj.maturityExpirationIntervalMillis = message.maturityExpirationIntervalMillis);
+    message.expirationVirtualBalanceScaler !== undefined
+      && (obj.expirationVirtualBalanceScaler = message.expirationVirtualBalanceScaler);
+    message.expiredAssetDiscountRatio !== undefined
+      && (obj.expiredAssetDiscountRatio = message.expiredAssetDiscountRatio);
     message.buyYGivenInLoanFeeRatio !== undefined && (obj.buyYGivenInLoanFeeRatio = message.buyYGivenInLoanFeeRatio);
     message.sellYGivenOutFeeRatio !== undefined && (obj.sellYGivenOutFeeRatio = message.sellYGivenOutFeeRatio);
     message.swapYieldFeeRatio !== undefined && (obj.swapYieldFeeRatio = message.swapYieldFeeRatio);
+    message.leverageScaler !== undefined && (obj.leverageScaler = message.leverageScaler);
     return obj;
   },
 
   fromPartial<I extends Exact<DeepPartial<YammConfiguration>, I>>(object: I): YammConfiguration {
     const message = createBaseYammConfiguration();
     message.poolId = object.poolId ?? 0;
+    message.maturityIntroductionIntervalMillis = object.maturityIntroductionIntervalMillis ?? "";
+    message.maturityExpirationIntervalMillis = object.maturityExpirationIntervalMillis ?? "";
+    message.expirationVirtualBalanceScaler = object.expirationVirtualBalanceScaler ?? "";
+    message.expiredAssetDiscountRatio = object.expiredAssetDiscountRatio ?? "";
     message.buyYGivenInLoanFeeRatio = object.buyYGivenInLoanFeeRatio ?? "";
     message.sellYGivenOutFeeRatio = object.sellYGivenOutFeeRatio ?? "";
     message.swapYieldFeeRatio = object.swapYieldFeeRatio ?? "";
+    message.leverageScaler = object.leverageScaler ?? "";
     return message;
   },
 };

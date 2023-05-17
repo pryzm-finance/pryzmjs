@@ -5,22 +5,14 @@ export const protobufPackage = "prismfinance.prismcore.treasury";
 
 /** Params defines the parameters for the module. */
 export interface Params {
-  ammSwapFeeRatio: string;
-  ammJoinExitFeeRatio: string;
 }
 
 function createBaseParams(): Params {
-  return { ammSwapFeeRatio: "", ammJoinExitFeeRatio: "" };
+  return {};
 }
 
 export const Params = {
-  encode(message: Params, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (message.ammSwapFeeRatio !== "") {
-      writer.uint32(10).string(message.ammSwapFeeRatio);
-    }
-    if (message.ammJoinExitFeeRatio !== "") {
-      writer.uint32(18).string(message.ammJoinExitFeeRatio);
-    }
+  encode(_: Params, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     return writer;
   },
 
@@ -31,12 +23,6 @@ export const Params = {
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
-        case 1:
-          message.ammSwapFeeRatio = reader.string();
-          break;
-        case 2:
-          message.ammJoinExitFeeRatio = reader.string();
-          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -45,24 +31,17 @@ export const Params = {
     return message;
   },
 
-  fromJSON(object: any): Params {
-    return {
-      ammSwapFeeRatio: isSet(object.ammSwapFeeRatio) ? String(object.ammSwapFeeRatio) : "",
-      ammJoinExitFeeRatio: isSet(object.ammJoinExitFeeRatio) ? String(object.ammJoinExitFeeRatio) : "",
-    };
+  fromJSON(_: any): Params {
+    return {};
   },
 
-  toJSON(message: Params): unknown {
+  toJSON(_: Params): unknown {
     const obj: any = {};
-    message.ammSwapFeeRatio !== undefined && (obj.ammSwapFeeRatio = message.ammSwapFeeRatio);
-    message.ammJoinExitFeeRatio !== undefined && (obj.ammJoinExitFeeRatio = message.ammJoinExitFeeRatio);
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<Params>, I>>(object: I): Params {
+  fromPartial<I extends Exact<DeepPartial<Params>, I>>(_: I): Params {
     const message = createBaseParams();
-    message.ammSwapFeeRatio = object.ammSwapFeeRatio ?? "";
-    message.ammJoinExitFeeRatio = object.ammJoinExitFeeRatio ?? "";
     return message;
   },
 };
@@ -77,7 +56,3 @@ export type DeepPartial<T> = T extends Builtin ? T
 type KeysOfUnion<T> = T extends T ? keyof T : never;
 export type Exact<P, I extends P> = P extends Builtin ? P
   : P & { [K in keyof P]: Exact<P[K], I[K]> } & { [K in Exclude<keyof I, KeysOfUnion<P>>]: never };
-
-function isSet(value: any): boolean {
-  return value !== null && value !== undefined;
-}

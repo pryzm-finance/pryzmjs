@@ -9,11 +9,12 @@ export interface Params {
   votePeriod: number;
   quorum: string;
   voteThreshold: string;
-  rewardDistributionWindow: number;
   slashFraction: string;
   slashWindow: number;
   maxMissRatePerSlashWindow: string;
   maxMissRatePerVotePeriod: string;
+  /** ratio in range [0, 1] which determines the amount of collected fees that is supposed to be distributed among validators as oracle reward */
+  feeCollectorRewardRatio: string;
 }
 
 function createBaseParams(): Params {
@@ -21,11 +22,11 @@ function createBaseParams(): Params {
     votePeriod: 0,
     quorum: "",
     voteThreshold: "",
-    rewardDistributionWindow: 0,
     slashFraction: "",
     slashWindow: 0,
     maxMissRatePerSlashWindow: "",
     maxMissRatePerVotePeriod: "",
+    feeCollectorRewardRatio: "",
   };
 }
 
@@ -40,20 +41,20 @@ export const Params = {
     if (message.voteThreshold !== "") {
       writer.uint32(26).string(message.voteThreshold);
     }
-    if (message.rewardDistributionWindow !== 0) {
-      writer.uint32(32).int64(message.rewardDistributionWindow);
-    }
     if (message.slashFraction !== "") {
-      writer.uint32(42).string(message.slashFraction);
+      writer.uint32(34).string(message.slashFraction);
     }
     if (message.slashWindow !== 0) {
-      writer.uint32(48).int64(message.slashWindow);
+      writer.uint32(40).int64(message.slashWindow);
     }
     if (message.maxMissRatePerSlashWindow !== "") {
-      writer.uint32(58).string(message.maxMissRatePerSlashWindow);
+      writer.uint32(50).string(message.maxMissRatePerSlashWindow);
     }
     if (message.maxMissRatePerVotePeriod !== "") {
-      writer.uint32(66).string(message.maxMissRatePerVotePeriod);
+      writer.uint32(58).string(message.maxMissRatePerVotePeriod);
+    }
+    if (message.feeCollectorRewardRatio !== "") {
+      writer.uint32(66).string(message.feeCollectorRewardRatio);
     }
     return writer;
   },
@@ -75,19 +76,19 @@ export const Params = {
           message.voteThreshold = reader.string();
           break;
         case 4:
-          message.rewardDistributionWindow = longToNumber(reader.int64() as Long);
-          break;
-        case 5:
           message.slashFraction = reader.string();
           break;
-        case 6:
+        case 5:
           message.slashWindow = longToNumber(reader.int64() as Long);
           break;
-        case 7:
+        case 6:
           message.maxMissRatePerSlashWindow = reader.string();
           break;
-        case 8:
+        case 7:
           message.maxMissRatePerVotePeriod = reader.string();
+          break;
+        case 8:
+          message.feeCollectorRewardRatio = reader.string();
           break;
         default:
           reader.skipType(tag & 7);
@@ -102,13 +103,13 @@ export const Params = {
       votePeriod: isSet(object.votePeriod) ? Number(object.votePeriod) : 0,
       quorum: isSet(object.quorum) ? String(object.quorum) : "",
       voteThreshold: isSet(object.voteThreshold) ? String(object.voteThreshold) : "",
-      rewardDistributionWindow: isSet(object.rewardDistributionWindow) ? Number(object.rewardDistributionWindow) : 0,
       slashFraction: isSet(object.slashFraction) ? String(object.slashFraction) : "",
       slashWindow: isSet(object.slashWindow) ? Number(object.slashWindow) : 0,
       maxMissRatePerSlashWindow: isSet(object.maxMissRatePerSlashWindow)
         ? String(object.maxMissRatePerSlashWindow)
         : "",
       maxMissRatePerVotePeriod: isSet(object.maxMissRatePerVotePeriod) ? String(object.maxMissRatePerVotePeriod) : "",
+      feeCollectorRewardRatio: isSet(object.feeCollectorRewardRatio) ? String(object.feeCollectorRewardRatio) : "",
     };
   },
 
@@ -117,13 +118,12 @@ export const Params = {
     message.votePeriod !== undefined && (obj.votePeriod = Math.round(message.votePeriod));
     message.quorum !== undefined && (obj.quorum = message.quorum);
     message.voteThreshold !== undefined && (obj.voteThreshold = message.voteThreshold);
-    message.rewardDistributionWindow !== undefined
-      && (obj.rewardDistributionWindow = Math.round(message.rewardDistributionWindow));
     message.slashFraction !== undefined && (obj.slashFraction = message.slashFraction);
     message.slashWindow !== undefined && (obj.slashWindow = Math.round(message.slashWindow));
     message.maxMissRatePerSlashWindow !== undefined
       && (obj.maxMissRatePerSlashWindow = message.maxMissRatePerSlashWindow);
     message.maxMissRatePerVotePeriod !== undefined && (obj.maxMissRatePerVotePeriod = message.maxMissRatePerVotePeriod);
+    message.feeCollectorRewardRatio !== undefined && (obj.feeCollectorRewardRatio = message.feeCollectorRewardRatio);
     return obj;
   },
 
@@ -132,11 +132,11 @@ export const Params = {
     message.votePeriod = object.votePeriod ?? 0;
     message.quorum = object.quorum ?? "";
     message.voteThreshold = object.voteThreshold ?? "";
-    message.rewardDistributionWindow = object.rewardDistributionWindow ?? 0;
     message.slashFraction = object.slashFraction ?? "";
     message.slashWindow = object.slashWindow ?? 0;
     message.maxMissRatePerSlashWindow = object.maxMissRatePerSlashWindow ?? "";
     message.maxMissRatePerVotePeriod = object.maxMissRatePerVotePeriod ?? "";
+    message.feeCollectorRewardRatio = object.feeCollectorRewardRatio ?? "";
     return message;
   },
 };
