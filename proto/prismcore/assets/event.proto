@@ -1,0 +1,39 @@
+syntax = "proto3";
+package prismfinance.prismcore.assets;
+
+import "gogoproto/gogo.proto";
+import "prismcore/assets/refractable_asset.proto";
+import "prismcore/assets/exchange_rate.proto";
+import "prismcore/assets/maturity_level.proto";
+
+option go_package = "github.com/prism-finance/prism-core/x/assets/types";
+
+message EventRegisterAsset {
+  RefractableAsset asset = 1 [(gogoproto.nullable) = false];
+}
+
+message EventAddMaturityLevel {
+  MaturityLevel maturity_level = 1 [(gogoproto.nullable) = false];
+}
+
+message EventDeactivateMaturityLevel {
+  MaturityLevel maturity_level = 1 [(gogoproto.nullable) = false];
+}
+
+message EventUpdateMaturityParams {
+  string asset_id = 1;
+  MaturityParams params = 2 [(gogoproto.nullable) = false];
+}
+
+message EventUpdateFeeRatios {
+  string asset_id = 1;
+  FeeRatios fee_ratios = 2 [(gogoproto.nullable) = false];
+}
+
+message EventDisableAsset {
+  string asset_id = 1;
+}
+
+message EventExchangeRateUpdated {
+  ExchangeRate rate = 1;
+}

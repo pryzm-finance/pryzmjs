@@ -1,0 +1,16 @@
+syntax = "proto3";
+package prismfinance.prismcore.assets;
+
+import "google/protobuf/timestamp.proto";
+import "gogoproto/gogo.proto";
+
+option go_package = "github.com/prism-finance/prism-core/x/assets/types";
+
+message MaturityLevel {
+  bool active = 1;
+  string asset_id = 2;
+  string symbol = 3;
+  google.protobuf.Timestamp introduction_time = 4 [(gogoproto.stdtime) = true, (gogoproto.nullable) = false];
+  google.protobuf.Timestamp expiration_time = 5 [(gogoproto.stdtime) = true, (gogoproto.nullable) = false];
+}
+

@@ -1,0 +1,14 @@
+syntax = "proto3";
+package prismfinance.prismcore.refractor;
+
+import "gogoproto/gogo.proto";
+import "prismcore/refractor/params.proto";
+// this line is used by starport scaffolding # genesis/proto/import
+
+option go_package = "github.com/prism-finance/prism-core/x/refractor/types";
+
+// GenesisState defines the refractor module's genesis state.
+message GenesisState {
+  Params params = 1 [(gogoproto.nullable) = false];
+  // this line is used by starport scaffolding # genesis/proto/state
+}

@@ -1,0 +1,18 @@
+syntax = "proto3";
+package prismfinance.prismcore.assets;
+
+import "gogoproto/gogo.proto";
+import "prismcore/assets/params.proto";
+import "prismcore/assets/refractable_asset.proto";
+import "prismcore/assets/exchange_rate.proto";
+// this line is used by starport scaffolding # genesis/proto/import
+
+option go_package = "github.com/prism-finance/prism-core/x/assets/types";
+
+// GenesisState defines the assets module's genesis state.
+message GenesisState {
+  Params params = 1 [(gogoproto.nullable) = false];
+  repeated RefractableAsset assets = 2 [(gogoproto.nullable) = false];
+  repeated ExchangeRate exchange_rate_list = 3 [(gogoproto.nullable) = false];
+  // this line is used by starport scaffolding # genesis/proto/state
+}

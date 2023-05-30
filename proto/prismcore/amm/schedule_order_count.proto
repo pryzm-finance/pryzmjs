@@ -1,0 +1,13 @@
+syntax = "proto3";
+package prismfinance.prismcore.amm;
+
+option go_package = "github.com/prism-finance/prism-core/x/amm/types";
+
+message ExecutableOrderCount {
+  uint64 pool_id = 1;
+  string token_in = 2;
+  string token_out = 3;
+  bool whitelisted_route = 4;
+  uint64 count = 5;
+}
+

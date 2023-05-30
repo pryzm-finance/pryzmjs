@@ -1,0 +1,17 @@
+syntax = "proto3";
+package prismfinance.prismcore.pgov;
+
+import "gogoproto/gogo.proto";
+import "cosmos_proto/cosmos.proto";
+
+option go_package = "github.com/prism-finance/prism-core/x/pgov/types";
+
+message StakedPAsset {
+  string account = 1;
+  string p_asset = 2;
+  string amount = 3 [
+    (cosmos_proto.scalar) = "cosmos.Int",
+    (gogoproto.customtype) = "cosmossdk.io/math.Int",
+    (gogoproto.nullable) = false
+  ];
+}

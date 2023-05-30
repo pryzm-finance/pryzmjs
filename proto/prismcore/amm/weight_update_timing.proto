@@ -1,0 +1,11 @@
+syntax = "proto3";
+package prismfinance.prismcore.amm;
+
+option go_package = "github.com/prism-finance/prism-core/x/amm/types";
+
+message WeightUpdateTiming {
+  uint64 pool_id = 1;
+  int64 start_unix_millis = 2;
+  int64 end_unix_millis = 3;
+}
+

@@ -1,0 +1,120 @@
+syntax = "proto3";
+package prismfinance.prismcore.assets;
+
+import "gogoproto/gogo.proto";
+import "google/api/annotations.proto";
+import "cosmos/base/query/v1beta1/pagination.proto";
+import "prismcore/assets/params.proto";
+import "prismcore/assets/refractable_asset.proto";
+import "prismcore/assets/exchange_rate.proto";
+import "prismcore/assets/maturity_level.proto";
+// this line is used by starport scaffolding # 1
+
+
+option go_package = "github.com/prism-finance/prism-core/x/assets/types";
+
+// Query defines the gRPC querier service.
+service Query {
+  // Parameters queries the parameters of the module.
+  rpc Params(QueryParamsRequest) returns (QueryParamsResponse) {
+    option (google.api.http).get = "/prism-finance/prism-core/assets/params";
+  }
+  // Queries a RefractableAsset by index.
+  rpc RefractableAsset(QueryGetRefractableAssetRequest) returns (QueryGetRefractableAssetResponse) {
+    option (google.api.http).get = "/prism-finance/prism-core/assets/refractable_asset/{asset_id}";
+  }
+
+  // Queries a list of RefractableAsset items.
+  rpc RefractableAssetAll(QueryAllRefractableAssetRequest) returns (QueryAllRefractableAssetResponse) {
+    option (google.api.http).get = "/prism-finance/prism-core/assets/refractable_asset";
+  }
+
+  // Queries a MaturityLevel by index.
+  rpc MaturityLevel(QueryGetMaturityLevelRequest) returns (QueryGetMaturityLevelResponse) {
+    option (google.api.http).get = "/prism-finance/prism-core/assets/maturity_level/{active}/{asset_id}/{symbol}";
+  }
+
+  // Queries a list of MaturityLevel items.
+  rpc MaturityLevelAll(QueryAllMaturityLevelRequest) returns (QueryAllMaturityLevelResponse) {
+    option (google.api.http).get = "/prism-finance/prism-core/assets/maturity_level/{active}";
+  }
+
+  // Queries a AssetExchangeRate by index.
+  rpc ExchangeRate(QueryGetExchangeRateRequest) returns (QueryGetExchangeRateResponse) {
+    option (google.api.http).get = "/prism-finance/prism-core/assets/exchange_rate/{asset_id}";
+  }
+
+  // Queries a list of ExchangeRate items.
+  rpc ExchangeRateAll(QueryAllExchangeRateRequest) returns (QueryAllExchangeRateResponse) {
+    option (google.api.http).get = "/prism-finance/prism-core/assets/exchange_rate";
+  }
+
+  // this line is used by starport scaffolding # 2
+}
+
+// QueryParamsRequest is request type for the Query/Params RPC method.
+message QueryParamsRequest {}
+
+// QueryParamsResponse is response type for the Query/Params RPC method.
+message QueryParamsResponse {
+  // params holds all the parameters of this module.
+  Params params = 1 [(gogoproto.nullable) = false];
+}
+
+message QueryGetRefractableAssetRequest {
+  string asset_id = 1;
+}
+
+message QueryGetRefractableAssetResponse {
+  RefractableAsset asset = 1 [(gogoproto.nullable) = false];
+}
+
+message QueryAllRefractableAssetRequest {
+  string enabled = 1;
+  cosmos.base.query.v1beta1.PageRequest pagination = 2;
+}
+
+message QueryAllRefractableAssetResponse {
+  repeated RefractableAsset assets = 1 [(gogoproto.nullable) = false];
+  cosmos.base.query.v1beta1.PageResponse pagination = 2;
+}
+
+message QueryGetMaturityLevelRequest {
+  bool active = 1;
+  string asset_id = 2;
+  string symbol = 3;
+}
+
+message QueryGetMaturityLevelResponse {
+  MaturityLevel maturity_level = 1 [(gogoproto.nullable) = false];
+}
+
+message QueryAllMaturityLevelRequest {
+  bool active = 1;
+  string asset_id = 2;
+  string asset_enabled = 3;
+  cosmos.base.query.v1beta1.PageRequest pagination = 4;
+}
+
+message QueryAllMaturityLevelResponse {
+  repeated MaturityLevel maturity_level = 1 [(gogoproto.nullable) = false];
+  cosmos.base.query.v1beta1.PageResponse pagination = 2;
+}
+
+message QueryGetExchangeRateRequest {
+  string asset_id = 1;
+}
+
+message QueryGetExchangeRateResponse {
+  ExchangeRate exchange_rate = 1 [(gogoproto.nullable) = false];
+}
+
+message QueryAllExchangeRateRequest {
+  cosmos.base.query.v1beta1.PageRequest pagination = 1;
+}
+
+message QueryAllExchangeRateResponse {
+  repeated ExchangeRate exchange_rate = 1 [(gogoproto.nullable) = false];
+  cosmos.base.query.v1beta1.PageResponse pagination = 2;
+}
+// this line is used by starport scaffolding # 3

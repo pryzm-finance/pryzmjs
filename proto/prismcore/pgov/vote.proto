@@ -1,0 +1,13 @@
+syntax = "proto3";
+package prismfinance.prismcore.pgov;
+
+import "cosmos/gov/v1/gov.proto";
+
+option go_package = "github.com/prism-finance/prism-core/x/pgov/types";
+
+message Vote {
+  string asset = 1;
+  uint64 proposal = 2;
+  string voter = 3;
+  repeated cosmos.gov.v1.WeightedVoteOption options = 4;
+}

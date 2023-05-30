@@ -1,0 +1,61 @@
+syntax = "proto3";
+package prismfinance.prismcore.ystaking;
+
+import "google/api/annotations.proto";
+import "cosmos/base/query/v1beta1/pagination.proto";
+import "prismcore/ystaking/params.proto";
+import "cosmos_proto/cosmos.proto";
+// this line is used by starport scaffolding # 1
+import "cosmos/base/v1beta1/coin.proto";
+import "gogoproto/gogo.proto";
+
+option go_package = "github.com/prism-finance/prism-core/x/ystaking/types";
+
+// Query defines the gRPC querier service.
+service Query {
+  // Parameters queries the parameters of the module.
+  rpc Params(QueryParamsRequest) returns (QueryParamsResponse) {
+    option (google.api.http).get = "/prism-finance/prism-core/ystaking/params";
+  }
+  // Queries a list of BondedAmount items.
+	rpc BondedAmount(QueryBondedAmountRequest) returns (QueryBondedAmountResponse) {
+		option (google.api.http).get = "/prism-finance/prism-core/ystaking/bonded_amount/{asset_id}";
+	}
+
+// Queries a list of Reward items.
+	rpc Reward(QueryRewardRequest) returns (QueryRewardResponse) {
+		option (google.api.http).get = "/prism-finance/prism-core/ystaking/reward/{denom}/{address}";
+	}
+
+// this line is used by starport scaffolding # 2
+}
+
+// QueryParamsRequest is request type for the Query/Params RPC method.
+message QueryParamsRequest {}
+
+// QueryParamsResponse is response type for the Query/Params RPC method.
+message QueryParamsResponse {
+  // params holds all the parameters of this module.
+  Params params = 1 [(gogoproto.nullable) = false];
+}
+
+message QueryBondedAmountRequest {
+  string asset_id = 1;
+  string maturity = 2;
+  string address = 3;
+}
+
+message QueryBondedAmountResponse {
+  string amount = 1 [(cosmos_proto.scalar) = "cosmos.Int", (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Int", (gogoproto.nullable) = false];
+}
+
+message QueryRewardRequest {
+  string denom = 1;
+  string address = 2;
+}
+
+message QueryRewardResponse {
+  cosmos.base.v1beta1.Coin amount = 1 [(gogoproto.nullable) = false];
+}
+
+// this line is used by starport scaffolding # 3

@@ -1,0 +1,604 @@
+syntax = "proto3";
+package prismfinance.prismcore.amm;
+
+import "google/api/annotations.proto";
+import "cosmos/base/query/v1beta1/pagination.proto";
+import "prismcore/amm/params.proto";
+import "prismcore/amm/pool.proto";
+import "prismcore/amm/weighted_token.proto";
+import "prismcore/amm/operations.proto";
+import "prismcore/amm/weight_update_timing.proto";
+import "prismcore/amm/virtual_balance_pool_token.proto";
+import "prismcore/amm/yamm_configuration.proto";
+import "prismcore/amm/whitelisted_route.proto";
+import "prismcore/amm/order.proto";
+import "prismcore/amm/schedule_order.proto";
+import "prismcore/amm/oracle_price_pair.proto";
+import "prismcore/amm/pending_token_introduction.proto";
+// this line is used by starport scaffolding # 1
+import "prismcore/amm/route_step.proto";
+import "cosmos/base/v1beta1/coin.proto";
+import "gogoproto/gogo.proto";
+import "prismcore/amm/pool_token.proto";
+import "prismcore/amm/tx.proto";
+import "cosmos_proto/cosmos.proto";
+
+option go_package = "github.com/prism-finance/prism-core/x/amm/types";
+
+// Query defines the gRPC querier service.
+service Query {
+  // Parameters queries the parameters of the module.
+  rpc Params(QueryParamsRequest) returns (QueryParamsResponse) {
+    option (google.api.http).get = "/prism-finance/prism-core/amm/params";
+  }
+  // Queries a PoolToken by index.
+  rpc PoolToken(QueryGetPoolTokenRequest) returns (QueryGetPoolTokenResponse) {
+    option (google.api.http).get = "/prism-finance/prism-core/amm/pool_token/{pool_id}/{denom}";
+  }
+
+  // Queries a list of PoolToken items.
+  rpc PoolTokenAll(QueryAllPoolTokenRequest) returns (QueryAllPoolTokenResponse) {
+    option (google.api.http).get = "/prism-finance/prism-core/amm/pool_token";
+  }
+
+  // Queries a Pool by id.
+  rpc Pool(QueryGetPoolRequest) returns (QueryGetPoolResponse) {
+    option (google.api.http).get = "/prism-finance/prism-core/amm/pool/{id}";
+  }
+
+  // Queries a list of Pool items.
+  rpc PoolAll(QueryAllPoolRequest) returns (QueryAllPoolResponse) {
+    option (google.api.http).get = "/prism-finance/prism-core/amm/pool";
+  }
+
+  // Queries a WeightedToken by index.
+  rpc WeightedToken(QueryGetWeightedTokenRequest) returns (QueryGetWeightedTokenResponse) {
+    option (google.api.http).get = "/prism-finance/prism-core/amm/weighted_token/{pool_id}/{denom}";
+  }
+
+  // Queries a list of WeightedToken items.
+  rpc WeightedTokenAll(QueryAllWeightedTokenRequest) returns (QueryAllWeightedTokenResponse) {
+    option (google.api.http).get = "/prism-finance/prism-core/amm/weighted_token";
+  }
+
+  // Queries a WeightUpdateTiming by index.
+  rpc WeightUpdateTiming(QueryGetWeightUpdateTimingRequest) returns (QueryGetWeightUpdateTimingResponse) {
+    option (google.api.http).get = "/prism-finance/prism-core/amm/weight_update_timing/{pool_id}";
+  }
+
+  // Queries a list of WeightUpdateTiming items.
+  rpc WeightUpdateTimingAll(QueryAllWeightUpdateTimingRequest) returns (QueryAllWeightUpdateTimingResponse) {
+    option (google.api.http).get = "/prism-finance/prism-core/amm/weight_update_timing";
+  }
+
+  // Simulates a single swap action and returns the result
+  rpc SimulateSingleSwap(QuerySimulateSingleSwapRequest) returns (QuerySimulateSingleSwapResponse) {
+    option (google.api.http).get = "/prism-finance/prism-core/amm/simulate_single_swap";
+  }
+
+  // Queries a list of SimulateInitializePool items.
+	rpc SimulateInitializePool(QuerySimulateInitializePoolRequest) returns (QuerySimulateInitializePoolResponse) {
+		option (google.api.http).get = "/prism-finance/prism-core/amm/simulate_initialize_pool/{pool_id}";
+	}
+
+// Queries a list of SimulateJoinAllTokensExactLpt items.
+	rpc SimulateJoinAllTokensExactLpt(QuerySimulateJoinAllTokensExactLptRequest) returns (QuerySimulateJoinAllTokensExactLptResponse) {
+		option (google.api.http).get = "/prism-finance/prism-core/amm/simulate_join_all_tokens_exact_lpt/{pool_id}";
+	}
+
+// Queries a list of SimulateJoinExactTokens items.
+	rpc SimulateJoinExactTokens(QuerySimulateJoinExactTokensRequest) returns (QuerySimulateJoinExactTokensResponse) {
+		option (google.api.http).get = "/prism-finance/prism-core/amm/simulate_join_exact_tokens/{pool_id}";
+	}
+
+// Queries a list of SimulateJoinTokenExactLpt items.
+	rpc SimulateJoinTokenExactLpt(QuerySimulateJoinTokenExactLptRequest) returns (QuerySimulateJoinTokenExactLptResponse) {
+		option (google.api.http).get = "/prism-finance/prism-core/amm/simulate_join_token_exact_lpt/{pool_id}";
+	}
+
+// Queries a list of SimulateExitTokenExactLpt items.
+	rpc SimulateExitTokenExactLpt(QuerySimulateExitTokenExactLptRequest) returns (QuerySimulateExitTokenExactLptResponse) {
+		option (google.api.http).get = "/prism-finance/prism-core/amm/simulate_exit_token_exact_lpt/{pool_id}";
+	}
+
+// Queries a list of SimulateExitExactTokens items.
+	rpc SimulateExitExactTokens(QuerySimulateExitExactTokensRequest) returns (QuerySimulateExitExactTokensResponse) {
+		option (google.api.http).get = "/prism-finance/prism-core/amm/simulate_exit_exact_tokens/{pool_id}";
+	}
+
+// Queries a list of SimulateExitAllTokensExactLpt items.
+	rpc SimulateExitAllTokensExactLpt(QuerySimulateExitAllTokensExactLptRequest) returns (QuerySimulateExitAllTokensExactLptResponse) {
+		option (google.api.http).get = "/prism-finance/prism-core/amm/simulate_exit_all_tokens_exact_lpt/{pool_id}";
+	}
+
+// Queries a list of SpotPrice items.
+	rpc SpotPrice(QuerySpotPriceRequest) returns (QuerySpotPriceResponse) {
+		option (google.api.http).get = "/prism-finance/prism-core/amm/spot_price/{pool_id}/{token_in}/{token_out}/{apply_fee}";
+	}
+
+// Queries a IntroducingPoolToken by index.
+	rpc IntroducingPoolToken(QueryGetIntroducingPoolTokenRequest) returns (QueryGetIntroducingPoolTokenResponse) {
+		option (google.api.http).get = "/prism-finance/prism-core/amm/introducing_pool_token/{pool_id}/{denom}";
+	}
+
+	// Queries a list of IntroducingPoolToken items.
+	rpc IntroducingPoolTokenAll(QueryAllIntroducingPoolTokenRequest) returns (QueryAllIntroducingPoolTokenResponse) {
+		option (google.api.http).get = "/prism-finance/prism-core/amm/introducing_pool_token";
+	}
+
+  // Queries a ExpiringPoolToken by index.
+  rpc ExpiringPoolToken(QueryGetExpiringPoolTokenRequest) returns (QueryGetExpiringPoolTokenResponse) {
+    option (google.api.http).get = "/prism-finance/prism-core/amm/expiring_pool_token/{pool_id}/{denom}";
+  }
+
+  // Queries a list of ExpiringPoolToken items.
+  rpc ExpiringPoolTokenAll(QueryAllExpiringPoolTokenRequest) returns (QueryAllExpiringPoolTokenResponse) {
+    option (google.api.http).get = "/prism-finance/prism-core/amm/expiring_pool_token";
+  }
+// Queries a list of LpToken items.
+	rpc LpToken(QueryLpTokenRequest) returns (QueryLpTokenResponse) {
+		option (google.api.http).get = "/prism-finance/prism-core/amm/lp_token/{pool_id}";
+	}
+
+// Queries a list of SimulateBatchSwap items.
+	rpc SimulateBatchSwap(QuerySimulateBatchSwapRequest) returns (QuerySimulateBatchSwapResponse) {
+		option (google.api.http).get = "/prism-finance/prism-core/amm/simulate_batch_swap";
+	}
+
+// Queries a YammConfiguration by index.
+	rpc YammConfiguration(QueryGetYammConfigurationRequest) returns (QueryGetYammConfigurationResponse) {
+		option (google.api.http).get = "/prism-finance/prism-core/amm/yamm_configuration/{pool_id}";
+	}
+
+	// Queries a list of YammConfiguration items.
+	rpc YammConfigurationAll(QueryAllYammConfigurationRequest) returns (QueryAllYammConfigurationResponse) {
+		option (google.api.http).get = "/prism-finance/prism-core/amm/yamm_configuration";
+	}
+
+// Queries a WhitelistedRoute by index.
+	rpc WhitelistedRoute(QueryGetWhitelistedRouteRequest) returns (QueryGetWhitelistedRouteResponse) {
+		option (google.api.http).get = "/prism-finance/prism-core/amm/whitelisted_route/{token_in}/{token_out}";
+	}
+
+	// Queries a list of WhitelistedRoute items.
+	rpc WhitelistedRouteAll(QueryAllWhitelistedRouteRequest) returns (QueryAllWhitelistedRouteResponse) {
+		option (google.api.http).get = "/prism-finance/prism-core/amm/whitelisted_route";
+	}
+
+// Queries a Order by id.
+  rpc Order(QueryGetOrderRequest) returns (QueryGetOrderResponse) {
+    option (google.api.http).get = "/prism-finance/prism-core/amm/order/{id}";
+  }
+
+  // Queries a list of Order items.
+  rpc OrderAll(QueryAllOrderRequest) returns (QueryAllOrderResponse) {
+    option (google.api.http).get = "/prism-finance/prism-core/amm/order";
+  }
+
+  // Queries a ExecutableOrder by index.
+  rpc ExecutableOrder(QueryGetExecutableOrderRequest) returns (QueryGetExecutableOrderResponse) {
+    option (google.api.http).get = "/prism-finance/prism-core/amm/executable_order/{order_id}";
+  }
+
+  // Queries a list of ExecutableOrder items.
+  rpc ExecutableOrderAll(QueryAllExecutableOrderRequest) returns (QueryAllExecutableOrderResponse) {
+    option (google.api.http).get = "/prism-finance/prism-core/amm/executable_order";
+  }
+
+  // Queries a ScheduleOrder by index.
+  rpc ScheduleOrder(QueryGetScheduleOrderRequest) returns (QueryGetScheduleOrderResponse) {
+    option (google.api.http).get = "/prism-finance/prism-core/amm/schedule_order/{order_id}";
+  }
+
+  // Queries a list of ScheduleOrder items.
+  rpc ScheduleOrderAll(QueryAllScheduleOrderRequest) returns (QueryAllScheduleOrderResponse) {
+    option (google.api.http).get = "/prism-finance/prism-core/amm/schedule_order";
+  }
+
+  // Queries a OraclePricePair by index.
+  rpc OraclePricePair(QueryGetOraclePricePairRequest) returns (QueryGetOraclePricePairResponse) {
+    option (google.api.http).get = "/prism-finance/prism-core/amm/oracle_price_pair/{asset_id}";
+  }
+
+  // Queries a list of OraclePricePair items.
+  rpc OraclePricePairAll(QueryAllOraclePricePairRequest) returns (QueryAllOraclePricePairResponse) {
+    option (google.api.http).get = "/prism-finance/prism-core/amm/oracle_price_pair";
+  }
+
+// Queries a list of VaultPauseMode items.
+	rpc VaultPauseMode(QueryVaultPauseModeRequest) returns (QueryVaultPauseModeResponse) {
+		option (google.api.http).get = "/prism-finance/prism-core/amm/vault_pause_mode";
+	}
+
+  // Queries a PendingTokenIntroduction by index.
+  rpc PendingTokenIntroduction(QueryGetPendingTokenIntroductionRequest) returns (QueryGetPendingTokenIntroductionResponse) {
+    option (google.api.http).get = "/prism-finance/prism-core/amm/pending_token_introduction/{asset_id}/{target_pool_id}";
+  }
+
+  // Queries a list of PendingTokenIntroduction items.
+  rpc PendingTokenIntroductionAll(QueryAllPendingTokenIntroductionRequest) returns (QueryAllPendingTokenIntroductionResponse) {
+    option (google.api.http).get = "/prism-finance/prism-core/amm/pending_token_introduction";
+  }
+
+  // Queries a list of YammPoolId items.
+	rpc YammPoolId(QueryYammPoolIdRequest) returns (QueryYammPoolIdResponse) {
+		option (google.api.http).get = "/prism-finance/prism-core/amm/yamm_pool_id/{asset_id}";
+	}
+
+// this line is used by starport scaffolding # 2
+}
+
+// QueryParamsRequest is request type for the Query/Params RPC method.
+message QueryParamsRequest {}
+
+// QueryParamsResponse is response type for the Query/Params RPC method.
+message QueryParamsResponse {
+  // params holds all the parameters of this module.
+  Params params = 1 [(gogoproto.nullable) = false];
+}
+
+message QueryGetPoolTokenRequest {
+  uint64 pool_id = 1;
+  string denom = 2;
+
+}
+
+message QueryGetPoolTokenResponse {
+  PoolToken pool_token = 1 [(gogoproto.nullable) = false];
+}
+
+message QueryAllPoolTokenRequest {
+  cosmos.base.query.v1beta1.PageRequest pagination = 1;
+  string pool_id = 2;
+}
+
+message QueryAllPoolTokenResponse {
+  repeated PoolToken pool_token = 1 [(gogoproto.nullable) = false];
+  cosmos.base.query.v1beta1.PageResponse pagination = 2;
+}
+
+message QueryGetPoolRequest {
+  uint64 id = 1;
+}
+
+message QueryGetPoolResponse {
+  Pool pool = 1 [(gogoproto.nullable) = false];
+}
+
+message QueryAllPoolRequest {
+  cosmos.base.query.v1beta1.PageRequest pagination = 1;
+}
+
+message QueryAllPoolResponse {
+  repeated Pool pool = 1 [(gogoproto.nullable) = false];
+  cosmos.base.query.v1beta1.PageResponse pagination = 2;
+}
+
+message QueryGetWeightedTokenRequest {
+  uint64 pool_id = 1;
+  string denom = 2;
+
+}
+
+message QueryGetWeightedTokenResponse {
+  WeightedToken weighted_token = 1 [(gogoproto.nullable) = false];
+}
+
+message QueryAllWeightedTokenRequest {
+  cosmos.base.query.v1beta1.PageRequest pagination = 1;
+}
+
+message QueryAllWeightedTokenResponse {
+  repeated WeightedToken weighted_token = 1 [(gogoproto.nullable) = false];
+  cosmos.base.query.v1beta1.PageResponse pagination = 2;
+}
+
+message QueryGetWeightUpdateTimingRequest {
+  uint64 pool_id = 1;
+
+}
+
+message QueryGetWeightUpdateTimingResponse {
+  WeightUpdateTiming weight_update_timing = 1 [(gogoproto.nullable) = false];
+}
+
+message QueryAllWeightUpdateTimingRequest {
+  cosmos.base.query.v1beta1.PageRequest pagination = 1;
+}
+
+message QueryAllWeightUpdateTimingResponse {
+  repeated WeightUpdateTiming weight_update_timing = 1 [(gogoproto.nullable) = false];
+  cosmos.base.query.v1beta1.PageResponse pagination = 2;
+}
+
+message QuerySimulateSingleSwapRequest {
+  Swap swap = 1 [(gogoproto.nullable) = false];
+}
+
+message QuerySimulateSingleSwapResponse {
+  cosmos.base.v1beta1.Coin amount_out = 1 [(gogoproto.nullable) = false];
+  cosmos.base.v1beta1.Coin amount_in = 2 [(gogoproto.nullable) = false];
+}
+
+message QuerySimulateInitializePoolRequest {
+  uint64 pool_id = 1;
+  repeated cosmos.base.v1beta1.Coin amounts_in = 2 [(gogoproto.nullable) = false, (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins"];
+}
+
+message QuerySimulateInitializePoolResponse {
+  cosmos.base.v1beta1.Coin lpt_out = 1 [(gogoproto.nullable) = false];
+  repeated cosmos.base.v1beta1.Coin amounts_in = 2 [(gogoproto.nullable) = false, (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins"];
+}
+
+message QuerySimulateJoinAllTokensExactLptRequest {
+  uint64 pool_id = 1;
+  string lpt_out = 2 [(cosmos_proto.scalar) = "cosmos.Int", (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Int", (gogoproto.nullable) = false];
+}
+
+message QuerySimulateJoinAllTokensExactLptResponse {
+  cosmos.base.v1beta1.Coin lpt_out = 1 [(gogoproto.nullable) = false];
+  repeated cosmos.base.v1beta1.Coin amounts_in = 2 [(gogoproto.nullable) = false, (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins"];
+}
+
+message QuerySimulateJoinExactTokensRequest {
+  uint64 pool_id = 1;
+  repeated cosmos.base.v1beta1.Coin amounts_in = 2 [(gogoproto.nullable) = false, (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins"];
+}
+
+message QuerySimulateJoinExactTokensResponse {
+  cosmos.base.v1beta1.Coin lpt_out = 1 [(gogoproto.nullable) = false];
+  repeated cosmos.base.v1beta1.Coin amounts_in = 2 [(gogoproto.nullable) = false, (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins"];
+}
+
+message QuerySimulateJoinTokenExactLptRequest {
+  uint64 pool_id = 1;
+  string lpt_out = 2 [(cosmos_proto.scalar) = "cosmos.Int", (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Int", (gogoproto.nullable) = false];
+  string token_in = 3;
+}
+
+message QuerySimulateJoinTokenExactLptResponse {
+  cosmos.base.v1beta1.Coin lpt_out = 1 [(gogoproto.nullable) = false];
+  cosmos.base.v1beta1.Coin amount_in = 2 [(gogoproto.nullable) = false];
+}
+
+message QuerySimulateExitTokenExactLptRequest {
+  uint64 pool_id = 1;
+  string lpt_in = 2 [(cosmos_proto.scalar) = "cosmos.Int", (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Int", (gogoproto.nullable) = false];
+  string token_out = 3;
+}
+
+message QuerySimulateExitTokenExactLptResponse {
+  cosmos.base.v1beta1.Coin lpt_in = 1 [(gogoproto.nullable) = false];
+  cosmos.base.v1beta1.Coin amount_out = 2 [(gogoproto.nullable) = false, (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins"];
+}
+
+message QuerySimulateExitExactTokensRequest {
+  uint64 pool_id = 1;
+  repeated cosmos.base.v1beta1.Coin amounts_out = 2 [(gogoproto.nullable) = false, (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins"];
+}
+
+message QuerySimulateExitExactTokensResponse {
+  cosmos.base.v1beta1.Coin lpt_in = 1 [(gogoproto.nullable) = false];
+  repeated cosmos.base.v1beta1.Coin amounts_out = 2 [(gogoproto.nullable) = false, (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins"];
+}
+
+message QuerySimulateExitAllTokensExactLptRequest {
+  uint64 pool_id = 1;
+  string lpt_in = 2 [(cosmos_proto.scalar) = "cosmos.Int", (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Int", (gogoproto.nullable) = false];
+}
+
+message QuerySimulateExitAllTokensExactLptResponse {
+  cosmos.base.v1beta1.Coin lpt_in = 1 [(gogoproto.nullable) = false];
+  repeated cosmos.base.v1beta1.Coin amounts_out = 2 [(gogoproto.nullable) = false, (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins"];
+}
+
+message QuerySpotPriceRequest {
+  uint64 pool_id = 1;
+  string token_in = 2;
+  string token_out = 3;
+  bool apply_fee = 4;
+}
+
+message QuerySpotPriceResponse {
+  string spot_price = 1 [(cosmos_proto.scalar) = "cosmos.Dec", (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Dec", (gogoproto.nullable) = false];
+}
+
+message QueryGetIntroducingPoolTokenRequest {
+	  uint64 pool_id = 1;
+  string denom = 2;
+
+}
+
+message QueryGetIntroducingPoolTokenResponse {
+	VirtualBalancePoolToken introducing_pool_token = 1 [(gogoproto.nullable) = false];
+}
+
+message QueryAllIntroducingPoolTokenRequest {
+	cosmos.base.query.v1beta1.PageRequest pagination = 1;
+}
+
+message QueryAllIntroducingPoolTokenResponse {
+	repeated VirtualBalancePoolToken introducing_pool_token = 1 [(gogoproto.nullable) = false];
+	cosmos.base.query.v1beta1.PageResponse pagination = 2;
+}
+
+
+message QueryGetExpiringPoolTokenRequest {
+  uint64 pool_id = 1;
+  string denom = 2;
+
+}
+
+message QueryGetExpiringPoolTokenResponse {
+  VirtualBalancePoolToken expiring_pool_token = 1 [(gogoproto.nullable) = false];
+}
+
+message QueryAllExpiringPoolTokenRequest {
+  cosmos.base.query.v1beta1.PageRequest pagination = 1;
+}
+
+message QueryAllExpiringPoolTokenResponse {
+  repeated VirtualBalancePoolToken expiring_pool_token = 1 [(gogoproto.nullable) = false];
+  cosmos.base.query.v1beta1.PageResponse pagination = 2;
+}
+message QueryLpTokenRequest {
+  uint64 pool_id = 1;
+}
+
+message QueryLpTokenResponse {
+  PoolToken lp_token = 1 [(gogoproto.nullable) = false];
+}
+
+message QuerySimulateBatchSwapRequest {
+  SwapType swap_type = 1;
+  repeated SwapStep steps = 2 [(gogoproto.nullable) = false];
+}
+
+message QuerySimulateBatchSwapResponse {
+  repeated cosmos.base.v1beta1.Coin amounts_in = 1 [(gogoproto.nullable) = false, (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins"];
+  repeated cosmos.base.v1beta1.Coin amounts_out = 2 [(gogoproto.nullable) = false, (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins"];
+}
+
+message QueryGetYammConfigurationRequest {
+	  uint64 pool_id = 1;
+
+}
+
+message QueryGetYammConfigurationResponse {
+	YammConfiguration yamm_configuration = 1 [(gogoproto.nullable) = false];
+}
+
+message QueryAllYammConfigurationRequest {
+	cosmos.base.query.v1beta1.PageRequest pagination = 1;
+}
+
+message QueryAllYammConfigurationResponse {
+	repeated YammConfiguration yamm_configuration = 1 [(gogoproto.nullable) = false];
+	cosmos.base.query.v1beta1.PageResponse pagination = 2;
+}
+
+message QueryGetWhitelistedRouteRequest {
+	  string token_in = 1;
+  string token_out = 2;
+
+}
+
+message QueryGetWhitelistedRouteResponse {
+	WhitelistedRoute whitelisted_route = 1 [(gogoproto.nullable) = false];
+}
+
+message QueryAllWhitelistedRouteRequest {
+	cosmos.base.query.v1beta1.PageRequest pagination = 1;
+}
+
+message QueryAllWhitelistedRouteResponse {
+	repeated WhitelistedRoute whitelisted_route = 1 [(gogoproto.nullable) = false];
+	cosmos.base.query.v1beta1.PageResponse pagination = 2;
+}
+
+message QueryGetOrderRequest {
+	uint64 id = 1;
+}
+
+message QueryGetOrderResponse {
+  Order order = 1 [(gogoproto.nullable) = false];
+}
+
+message QueryAllOrderRequest {
+  cosmos.base.query.v1beta1.PageRequest pagination = 1;
+}
+
+message QueryAllOrderResponse {
+  repeated Order order = 1 [(gogoproto.nullable) = false];
+  cosmos.base.query.v1beta1.PageResponse pagination = 2;
+}
+
+message QueryGetExecutableOrderRequest {
+  uint64 order_id = 1;
+
+}
+
+message QueryGetExecutableOrderResponse {
+  Order executable_order = 1 [(gogoproto.nullable) = false];
+}
+
+message QueryAllExecutableOrderRequest {
+  cosmos.base.query.v1beta1.PageRequest pagination = 1;
+}
+
+message QueryAllExecutableOrderResponse {
+  repeated Order executable_order = 1 [(gogoproto.nullable) = false];
+  cosmos.base.query.v1beta1.PageResponse pagination = 2;
+}
+
+message QueryGetScheduleOrderRequest {
+  uint64 order_id = 1;
+
+}
+
+message QueryGetScheduleOrderResponse {
+	ScheduleOrder schedule_order = 1 [(gogoproto.nullable) = false];
+}
+
+message QueryAllScheduleOrderRequest {
+  cosmos.base.query.v1beta1.PageRequest pagination = 1;
+}
+
+message QueryAllScheduleOrderResponse {
+  repeated ScheduleOrder schedule_order = 1 [(gogoproto.nullable) = false];
+  cosmos.base.query.v1beta1.PageResponse pagination = 2;
+}
+
+message QueryGetOraclePricePairRequest {
+  string asset_id = 1;
+
+}
+
+message QueryGetOraclePricePairResponse {
+  OraclePricePair oracle_price_pair = 1 [(gogoproto.nullable) = false];
+}
+
+message QueryAllOraclePricePairRequest {
+  cosmos.base.query.v1beta1.PageRequest pagination = 1;
+}
+
+message QueryAllOraclePricePairResponse {
+  repeated OraclePricePair oracle_price_pair = 1 [(gogoproto.nullable) = false];
+  cosmos.base.query.v1beta1.PageResponse pagination = 2;
+}
+
+message QueryVaultPauseModeRequest {
+}
+
+message QueryVaultPauseModeResponse {
+  bool paused = 1;
+}
+
+message QueryGetPendingTokenIntroductionRequest {
+  string asset_id = 1;
+  uint64 target_pool_id = 2;
+
+}
+
+message QueryGetPendingTokenIntroductionResponse {
+  PendingTokenIntroduction pending_token_introduction = 1 [(gogoproto.nullable) = false];
+}
+
+message QueryAllPendingTokenIntroductionRequest {
+  cosmos.base.query.v1beta1.PageRequest pagination = 1;
+}
+
+message QueryAllPendingTokenIntroductionResponse {
+  repeated PendingTokenIntroduction pending_token_introduction = 1 [(gogoproto.nullable) = false];
+  cosmos.base.query.v1beta1.PageResponse pagination = 2;
+}
+
+message QueryYammPoolIdRequest {
+  string asset_id = 1;
+}
+
+message QueryYammPoolIdResponse {
+  uint64 pool_id = 1;
+}
+
+// this line is used by starport scaffolding # 3

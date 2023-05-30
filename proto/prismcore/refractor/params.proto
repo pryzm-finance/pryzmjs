@@ -1,0 +1,12 @@
+syntax = "proto3";
+package prismfinance.prismcore.refractor;
+
+import "gogoproto/gogo.proto";
+import "cosmos_proto/cosmos.proto";
+
+option go_package = "github.com/prism-finance/prism-core/x/refractor/types";
+
+// Params defines the parameters for the module.
+message Params {
+  option (gogoproto.goproto_stringer) = false;
+}

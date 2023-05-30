@@ -1,0 +1,35 @@
+syntax = "proto3";
+package prismfinance.prismcore.treasury;
+
+import "gogoproto/gogo.proto";
+import "google/protobuf/duration.proto";
+import "google/protobuf/timestamp.proto";
+
+option go_package = "github.com/prism-finance/prism-core/x/treasury/types";
+
+// FeeType enumerates the valid types for feeType.
+enum ActionType {
+  option (gogoproto.goproto_enum_prefix) = false;
+  ACTION_TYPE_HOLD = 0 [(gogoproto.enumvalue_customname) = "HoldActionType"];
+  ACTION_TYPE_BUY_BACK = 1 [(gogoproto.enumvalue_customname) = "BuyBackActionType"];
+  ACTION_TYPE_BURN = 2 [(gogoproto.enumvalue_customname) = "BurnActionType"];
+  ACTION_TYPE_DISTRIBUTE_TO_STAKERS = 3 [(gogoproto.enumvalue_customname) = "DistributeToStakersActionType"];
+  ACTION_TYPE_DISTRIBUTE_TO_COMMUNITY_POOL = 4 [(gogoproto.enumvalue_customname) = "DistributeToCommunityPooleActionType"];
+}
+
+message Action {
+  ActionType action_type = 1;
+  google.protobuf.Timestamp occurrence = 2 [
+    (gogoproto.stdtime) = true,
+    (gogoproto.nullable) = true
+  ];
+  google.protobuf.Duration duration = 3 [
+    (gogoproto.nullable) = true,
+    (gogoproto.stdduration) = true
+  ];
+  google.protobuf.Duration period = 4 [
+    (gogoproto.nullable) = true,
+    (gogoproto.stdduration) = true
+  ];
+}
+

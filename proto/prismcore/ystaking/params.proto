@@ -1,0 +1,12 @@
+syntax = "proto3";
+package prismfinance.prismcore.ystaking;
+
+import "gogoproto/gogo.proto";
+
+option go_package = "github.com/prism-finance/prism-core/x/ystaking/types";
+
+// Params defines the parameters for the module.
+message Params {
+  option (gogoproto.goproto_stringer) = false;
+  
+}

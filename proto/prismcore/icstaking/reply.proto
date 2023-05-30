@@ -1,0 +1,24 @@
+syntax = "proto3";
+package prismfinance.prismcore.icstaking;
+
+import "gogoproto/gogo.proto";
+import "cosmos_proto/cosmos.proto";
+
+option go_package = "github.com/prism-finance/prism-core/x/icstaking/types";
+
+message ReplyData {
+  string id = 1;
+  string host_chain_id = 2;
+  bytes data = 3;
+}
+
+message CompoundData {
+  string fee_amount = 1 [
+    (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Int",
+    (gogoproto.nullable) = false
+  ];
+  string compound_amount = 2 [
+    (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Int",
+    (gogoproto.nullable) = false
+  ];
+}

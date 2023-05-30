@@ -1,0 +1,27 @@
+syntax = "proto3";
+package prismfinance.prismcore.mint;
+
+// this line is used by starport scaffolding # proto/tx/import
+import "cosmos_proto/cosmos.proto";
+import "gogoproto/gogo.proto";
+
+option go_package = "github.com/prism-finance/prism-core/x/mint/types";
+
+// Msg defines the Msg service.
+service Msg {
+  rpc DappAccountSpend(MsgDappAccountSpend) returns (MsgDappAccountSpendResponse);
+  // this line is used by starport scaffolding # proto/tx/rpc
+}
+
+message MsgDappAccountSpend {
+  string authority = 1;
+  string title = 2;
+  string description = 3;
+  string recipient = 4;
+  string amount = 5 [(cosmos_proto.scalar) = "cosmos.Int", (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Int", (gogoproto.nullable) = false];
+}
+
+message MsgDappAccountSpendResponse {
+}
+
+// this line is used by starport scaffolding # proto/tx/message

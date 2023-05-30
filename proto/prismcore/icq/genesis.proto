@@ -1,0 +1,12 @@
+syntax = "proto3";
+package prismfinance.prismcore.icq;
+
+import "gogoproto/gogo.proto";
+import "prismcore/icq/interchain_query.proto";
+
+option go_package = "github.com/prism-finance/prism-core/x/icq/types";
+
+// GenesisState defines the epochs module's genesis state.
+message GenesisState {
+  repeated InterchainQuery queries = 1 [(gogoproto.nullable) = false];
+}

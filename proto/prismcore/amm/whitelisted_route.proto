@@ -1,0 +1,14 @@
+syntax = "proto3";
+package prismfinance.prismcore.amm;
+
+option go_package = "github.com/prism-finance/prism-core/x/amm/types";
+import "prismcore/amm/route_step.proto";
+import "gogoproto/gogo.proto";
+
+
+message WhitelistedRoute {
+  repeated RouteStep steps = 1 [(gogoproto.nullable) = false];
+  bool enabled = 2;
+  
+}
+

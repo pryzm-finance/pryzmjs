@@ -1,0 +1,30 @@
+syntax = "proto3";
+package prismfinance.prismcore.amm;
+
+import "gogoproto/gogo.proto";
+import "cosmos_proto/cosmos.proto";
+import "prismcore/amm/oracle_price_pair.proto";
+
+option go_package = "github.com/prism-finance/prism-core/x/amm/types";
+
+message HostChainHeight {
+  // the revision that the client is currently on
+  uint64 revision_number = 1;
+  // the height within the given revision
+  uint64 revision_height = 2;
+}
+
+// OraclePayload defines the structure of oracle vote payload
+message OraclePayload {
+  HostChainHeight block_height = 1 [(gogoproto.nullable) = false];
+  string price = 2 [
+    (cosmos_proto.scalar) = "cosmos.Dec",
+    (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Dec",
+    (gogoproto.nullable) = false
+  ];
+  repeated Pair pairs = 3 [
+    (gogoproto.castrepeated) = "Pairs",
+    (gogoproto.nullable) = false
+  ];
+}
+

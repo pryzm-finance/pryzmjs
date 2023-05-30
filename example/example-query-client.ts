@@ -1,18 +1,14 @@
-import {newPrismQueryClient} from "@prism-finance/prismjs"
-
-// import {newPrismQueryClient} from "../lib"
+import {prismfinance} from "@prism-finance/prismjs"
+import * as console from "console";
 
 async function main() {
-    const queryClient = newPrismQueryClient("http://0.0.0.0:1317")
-    let balancesResult = await queryClient.CosmosBankV1Beta1.query.queryAllBalances("prism156pcgs3faegfte0vuaykr9az3hh9kx2e2qfwvu");
-    console.log(balancesResult.data.balances)
-    balancesResult = await queryClient.CosmosBankV1Beta1.query.queryAllBalances("prism156pcgs3faegfte0vuaykr9az3hh9kx2e2qfwvu",
-        undefined, {headers: {"x-cosmos-block-height": "1"}}); //balances for height 1
-    console.log(balancesResult.data.balances)
-    const ammParams = await queryClient.PrismfinancePrismcoreAmm.query.queryParams();
-    console.log(ammParams.data)
-    const oracleParams = await queryClient.RefractedlabsOracle.query.queryParams();
-    console.log(oracleParams.data)
+    const client = await prismfinance.ClientFactory.createLCDClient({restEndpoint: "http://0.0.0.0:1317"})
+    let balances = (await client.cosmos.bank.v1beta1.allBalances({address: "prism156pcgs3faegfte0vuaykr9az3hh9kx2e2qfwvu"})).balances
+    console.log(balances)
+    balances = (await client.cosmos.bank.v1beta1.allBalances({address: "prism156pcgs3faegfte0vuaykr9az3hh9kx2e2qfwvu"}, {headers: {"x-cosmos-block-height": `100`}})).balances
+    console.log(balances)
+    const ammParams = (await client.prismfinance.prismcore.amm.params()).params;
+    console.log(ammParams)
 }
 
 main().catch(console.error)
