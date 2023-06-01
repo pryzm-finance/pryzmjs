@@ -8,7 +8,10 @@ export interface MsgDappAccountSpendAminoType extends AminoMsg {
     title: string;
     description: string;
     recipient: string;
-    amount: string;
+    amount: {
+      denom: string;
+      amount: string;
+    }[];
   };
 }
 export const AminoConverter = {
@@ -26,7 +29,10 @@ export const AminoConverter = {
         title,
         description,
         recipient,
-        amount
+        amount: amount.map(el0 => ({
+          denom: el0.denom,
+          amount: el0.amount
+        }))
       };
     },
     fromAmino: ({
@@ -41,7 +47,10 @@ export const AminoConverter = {
         title,
         description,
         recipient,
-        amount
+        amount: amount.map(el0 => ({
+          denom: el0.denom,
+          amount: el0.amount
+        }))
       };
     }
   }

@@ -102,26 +102,32 @@ message HostChainState {
     (gogoproto.nullable) = false
   ];
 
+  // The amount of assets for which undelegation message must be sent
+  string amount_to_be_undelegated = 6 [
+    (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Int",
+    (gogoproto.nullable) = false
+  ];
+
   // The amount of assets that are in the reward account and ready to be transferred to the delegation account
-  string amount_to_be_compounded = 6 [
+  string amount_to_be_compounded = 7 [
     (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Int",
     (gogoproto.nullable) = false
   ];
 
   // The current exchange rate of cToken to the host chain staking token
-  string exchange_rate = 7 [
+  string exchange_rate = 8 [
     (cosmos_proto.scalar) = "cosmos.Dec",
     (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Dec",
     (gogoproto.nullable) = false
   ];
 
   // The current state of interchain operations state machine
-  State state = 8;
+  State state = 9;
 
   // The last host chain's block height in which PRISM's state is changed to IDLE
   // setting state to IDLE happens when an ack/timeout received for an interchain operation,
   // so this is the height of the last received ack from host chain
-  HostChainHeight last_idle_state_host_height = 9 [(gogoproto.nullable) = false];
+  HostChainHeight last_idle_state_host_height = 10 [(gogoproto.nullable) = false];
 }
 
 // The interchain accounts

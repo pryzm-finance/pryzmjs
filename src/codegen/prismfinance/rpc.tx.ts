@@ -52,6 +52,7 @@ export const createRPCMsgClient = async ({
       assets: new (await import("../prismcore/assets/tx.rpc.msg")).MsgClientImpl(rpc),
       icq: new (await import("../prismcore/icq/tx.rpc.msg")).MsgClientImpl(rpc),
       icstaking: new (await import("../prismcore/icstaking/tx.rpc.msg")).MsgClientImpl(rpc),
+      incentives: new (await import("../prismcore/incentives/tx.rpc.msg")).MsgClientImpl(rpc),
       mint: new (await import("../prismcore/mint/tx.rpc.msg")).MsgClientImpl(rpc),
       pgov: new (await import("../prismcore/pgov/tx.rpc.msg")).MsgClientImpl(rpc),
       refractor: new (await import("../prismcore/refractor/tx.rpc.msg")).MsgClientImpl(rpc),

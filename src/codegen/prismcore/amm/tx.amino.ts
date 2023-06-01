@@ -289,7 +289,7 @@ export interface MsgCreateOraclePricePairAminoType extends AminoMsg {
     authority: string;
     oracle_price_pair: {
       asset_id: string;
-      data_source: string;
+      quote_token: string;
       twap_duration_millis: string;
       twap_algorithm: number;
       disabled: boolean;
@@ -297,6 +297,7 @@ export interface MsgCreateOraclePricePairAminoType extends AminoMsg {
         base: string;
         quote: string;
         pool_id: string;
+        data_source: string;
       }[];
     };
   };
@@ -307,7 +308,7 @@ export interface MsgUpdateOraclePricePairAminoType extends AminoMsg {
     authority: string;
     oracle_price_pair: {
       asset_id: string;
-      data_source: string;
+      quote_token: string;
       twap_duration_millis: string;
       twap_algorithm: number;
       disabled: boolean;
@@ -315,6 +316,7 @@ export interface MsgUpdateOraclePricePairAminoType extends AminoMsg {
         base: string;
         quote: string;
         pool_id: string;
+        data_source: string;
       }[];
     };
   };
@@ -1239,14 +1241,15 @@ export const AminoConverter = {
         authority,
         oracle_price_pair: {
           asset_id: oraclePricePair.assetId,
-          data_source: oraclePricePair.dataSource,
+          quote_token: oraclePricePair.quoteToken,
           twap_duration_millis: oraclePricePair.twapDurationMillis.toString(),
           twap_algorithm: oraclePricePair.twapAlgorithm,
           disabled: oraclePricePair.disabled,
           pairs: oraclePricePair.pairs.map(el0 => ({
             base: el0.base,
             quote: el0.quote,
-            pool_id: el0.poolId
+            pool_id: el0.poolId,
+            data_source: el0.dataSource
           }))
         }
       };
@@ -1259,14 +1262,15 @@ export const AminoConverter = {
         authority,
         oraclePricePair: {
           assetId: oracle_price_pair.asset_id,
-          dataSource: oracle_price_pair.data_source,
+          quoteToken: oracle_price_pair.quote_token,
           twapDurationMillis: Long.fromString(oracle_price_pair.twap_duration_millis),
           twapAlgorithm: twapAlgorithmFromJSON(oracle_price_pair.twap_algorithm),
           disabled: oracle_price_pair.disabled,
           pairs: oracle_price_pair.pairs.map(el1 => ({
             base: el1.base,
             quote: el1.quote,
-            poolId: el1.pool_id
+            poolId: el1.pool_id,
+            dataSource: el1.data_source
           }))
         }
       };
@@ -1282,14 +1286,15 @@ export const AminoConverter = {
         authority,
         oracle_price_pair: {
           asset_id: oraclePricePair.assetId,
-          data_source: oraclePricePair.dataSource,
+          quote_token: oraclePricePair.quoteToken,
           twap_duration_millis: oraclePricePair.twapDurationMillis.toString(),
           twap_algorithm: oraclePricePair.twapAlgorithm,
           disabled: oraclePricePair.disabled,
           pairs: oraclePricePair.pairs.map(el0 => ({
             base: el0.base,
             quote: el0.quote,
-            pool_id: el0.poolId
+            pool_id: el0.poolId,
+            data_source: el0.dataSource
           }))
         }
       };
@@ -1302,14 +1307,15 @@ export const AminoConverter = {
         authority,
         oraclePricePair: {
           assetId: oracle_price_pair.asset_id,
-          dataSource: oracle_price_pair.data_source,
+          quoteToken: oracle_price_pair.quote_token,
           twapDurationMillis: Long.fromString(oracle_price_pair.twap_duration_millis),
           twapAlgorithm: twapAlgorithmFromJSON(oracle_price_pair.twap_algorithm),
           disabled: oracle_price_pair.disabled,
           pairs: oracle_price_pair.pairs.map(el1 => ({
             base: el1.base,
             quote: el1.quote,
-            poolId: el1.pool_id
+            poolId: el1.pool_id,
+            dataSource: el1.data_source
           }))
         }
       };

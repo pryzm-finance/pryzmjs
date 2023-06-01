@@ -1,0 +1,18 @@
+syntax = "proto3";
+package prismfinance.prismcore.treasury;
+
+import "gogoproto/gogo.proto";
+import "prismcore/treasury/action.proto";
+import "google/protobuf/timestamp.proto";
+
+option go_package = "github.com/prism-finance/prism-core/x/treasury/types";
+
+message StreamSwap {
+  google.protobuf.Timestamp end_time = 1 [
+    (gogoproto.stdtime) = true,
+    (gogoproto.nullable) = false
+  ];
+  uint64 stream_id = 2;
+  ActionType action_type = 3;
+}
+

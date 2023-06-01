@@ -37,15 +37,22 @@ export interface Pair {
   quote: string;
   /** refers to the data source pool (e.g. osmosis gamm pool) */
   poolId: string;
+  dataSource: string;
 }
 export interface PairSDKType {
   base: string;
   quote: string;
   pool_id: string;
+  data_source: string;
 }
 export interface OraclePricePair {
   assetId: string;
-  dataSource: string;
+  /**
+   * this is the token denom which should exist in the target weighted pool in prism chain
+   * the reason for adding this property and not using the pairs, is that the token denom in various chains might be different
+   * for example usdc token might have contract or ibc denom on different chains with different channel and ids
+   */
+  quoteToken: string;
   twapDurationMillis: Long;
   twapAlgorithm: TwapAlgorithm;
   disabled: boolean;
@@ -53,7 +60,7 @@ export interface OraclePricePair {
 }
 export interface OraclePricePairSDKType {
   asset_id: string;
-  data_source: string;
+  quote_token: string;
   twap_duration_millis: Long;
   twap_algorithm: TwapAlgorithm;
   disabled: boolean;
@@ -63,7 +70,8 @@ function createBasePair(): Pair {
   return {
     base: "",
     quote: "",
-    poolId: ""
+    poolId: "",
+    dataSource: ""
   };
 }
 export const Pair = {
@@ -76,6 +84,9 @@ export const Pair = {
     }
     if (message.poolId !== "") {
       writer.uint32(26).string(message.poolId);
+    }
+    if (message.dataSource !== "") {
+      writer.uint32(34).string(message.dataSource);
     }
     return writer;
   },
@@ -95,6 +106,9 @@ export const Pair = {
         case 3:
           message.poolId = reader.string();
           break;
+        case 4:
+          message.dataSource = reader.string();
+          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -106,7 +120,8 @@ export const Pair = {
     return {
       base: isSet(object.base) ? String(object.base) : "",
       quote: isSet(object.quote) ? String(object.quote) : "",
-      poolId: isSet(object.poolId) ? String(object.poolId) : ""
+      poolId: isSet(object.poolId) ? String(object.poolId) : "",
+      dataSource: isSet(object.dataSource) ? String(object.dataSource) : ""
     };
   },
   toJSON(message: Pair): unknown {
@@ -114,6 +129,7 @@ export const Pair = {
     message.base !== undefined && (obj.base = message.base);
     message.quote !== undefined && (obj.quote = message.quote);
     message.poolId !== undefined && (obj.poolId = message.poolId);
+    message.dataSource !== undefined && (obj.dataSource = message.dataSource);
     return obj;
   },
   fromPartial(object: Partial<Pair>): Pair {
@@ -121,13 +137,14 @@ export const Pair = {
     message.base = object.base ?? "";
     message.quote = object.quote ?? "";
     message.poolId = object.poolId ?? "";
+    message.dataSource = object.dataSource ?? "";
     return message;
   }
 };
 function createBaseOraclePricePair(): OraclePricePair {
   return {
     assetId: "",
-    dataSource: "",
+    quoteToken: "",
     twapDurationMillis: Long.UZERO,
     twapAlgorithm: 0,
     disabled: false,
@@ -139,8 +156,8 @@ export const OraclePricePair = {
     if (message.assetId !== "") {
       writer.uint32(10).string(message.assetId);
     }
-    if (message.dataSource !== "") {
-      writer.uint32(18).string(message.dataSource);
+    if (message.quoteToken !== "") {
+      writer.uint32(18).string(message.quoteToken);
     }
     if (!message.twapDurationMillis.isZero()) {
       writer.uint32(24).uint64(message.twapDurationMillis);
@@ -167,7 +184,7 @@ export const OraclePricePair = {
           message.assetId = reader.string();
           break;
         case 2:
-          message.dataSource = reader.string();
+          message.quoteToken = reader.string();
           break;
         case 3:
           message.twapDurationMillis = (reader.uint64() as Long);
@@ -191,7 +208,7 @@ export const OraclePricePair = {
   fromJSON(object: any): OraclePricePair {
     return {
       assetId: isSet(object.assetId) ? String(object.assetId) : "",
-      dataSource: isSet(object.dataSource) ? String(object.dataSource) : "",
+      quoteToken: isSet(object.quoteToken) ? String(object.quoteToken) : "",
       twapDurationMillis: isSet(object.twapDurationMillis) ? Long.fromValue(object.twapDurationMillis) : Long.UZERO,
       twapAlgorithm: isSet(object.twapAlgorithm) ? twapAlgorithmFromJSON(object.twapAlgorithm) : 0,
       disabled: isSet(object.disabled) ? Boolean(object.disabled) : false,
@@ -201,7 +218,7 @@ export const OraclePricePair = {
   toJSON(message: OraclePricePair): unknown {
     const obj: any = {};
     message.assetId !== undefined && (obj.assetId = message.assetId);
-    message.dataSource !== undefined && (obj.dataSource = message.dataSource);
+    message.quoteToken !== undefined && (obj.quoteToken = message.quoteToken);
     message.twapDurationMillis !== undefined && (obj.twapDurationMillis = (message.twapDurationMillis || Long.UZERO).toString());
     message.twapAlgorithm !== undefined && (obj.twapAlgorithm = twapAlgorithmToJSON(message.twapAlgorithm));
     message.disabled !== undefined && (obj.disabled = message.disabled);
@@ -215,7 +232,7 @@ export const OraclePricePair = {
   fromPartial(object: Partial<OraclePricePair>): OraclePricePair {
     const message = createBaseOraclePricePair();
     message.assetId = object.assetId ?? "";
-    message.dataSource = object.dataSource ?? "";
+    message.quoteToken = object.quoteToken ?? "";
     message.twapDurationMillis = object.twapDurationMillis !== undefined && object.twapDurationMillis !== null ? Long.fromValue(object.twapDurationMillis) : Long.UZERO;
     message.twapAlgorithm = object.twapAlgorithm ?? 0;
     message.disabled = object.disabled ?? false;

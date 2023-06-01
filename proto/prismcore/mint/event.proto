@@ -13,7 +13,10 @@ message EventMint {
     (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Dec",
     (gogoproto.nullable) = false
   ];
-  string total_minted = 3;
+  string total_minted = 3 [
+    (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Int",
+    (gogoproto.nullable) = false
+  ];
   DistributionProportions distributed_amounts = 4  [(gogoproto.nullable) = false];
   int64 epoch_number = 5;
 }

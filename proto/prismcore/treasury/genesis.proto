@@ -4,6 +4,7 @@ package prismfinance.prismcore.treasury;
 import "gogoproto/gogo.proto";
 import "prismcore/treasury/params.proto";
 import "prismcore/treasury/action.proto";
+import "prismcore/treasury/stream_swap.proto";
 // this line is used by starport scaffolding # genesis/proto/import
 
 option go_package = "github.com/prism-finance/prism-core/x/treasury/types";
@@ -12,5 +13,6 @@ option go_package = "github.com/prism-finance/prism-core/x/treasury/types";
 message GenesisState {
   Params params = 1 [(gogoproto.nullable) = false];
   Action action = 2 [(gogoproto.nullable) = false];
+  repeated StreamSwap stream_swap_list = 3 [(gogoproto.nullable) = false];
   // this line is used by starport scaffolding # genesis/proto/state
 }

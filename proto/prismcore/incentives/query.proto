@@ -1,0 +1,117 @@
+syntax = "proto3";
+package prismfinance.prismcore.incentives;
+
+import "google/api/annotations.proto";
+import "cosmos/base/query/v1beta1/pagination.proto";
+import "prismcore/incentives/params.proto";
+import "prismcore/incentives/pool.proto";
+import "prismcore/incentives/bond.proto";
+import "prismcore/incentives/unbonding.proto";
+// this line is used by starport scaffolding # 1
+import "cosmos/base/v1beta1/coin.proto";
+import "gogoproto/gogo.proto";
+
+option go_package = "github.com/prism-finance/prism-core/x/incentives/types";
+
+// Query defines the gRPC querier service.
+service Query {
+  // Parameters queries the parameters of the module.
+  rpc Params(QueryParamsRequest) returns (QueryParamsResponse) {
+    option (google.api.http).get = "/prism-finance/prism-core/incentives/params";
+  }
+  // Queries a Pool by index.
+	rpc Pool(QueryGetPoolRequest) returns (QueryGetPoolResponse) {
+		option (google.api.http).get = "/prism-finance/prism-core/incentives/pool/{bond_denom}";
+	}
+
+	// Queries a list of Pool items.
+	rpc PoolAll(QueryAllPoolRequest) returns (QueryAllPoolResponse) {
+		option (google.api.http).get = "/prism-finance/prism-core/incentives/pool";
+	}
+
+// Queries a Bond by index.
+	rpc Bond(QueryGetBondRequest) returns (QueryGetBondResponse) {
+		option (google.api.http).get = "/prism-finance/prism-core/incentives/bond/{address}/{bond_denom}";
+	}
+
+	// Queries a list of Bond items.
+	rpc BondAll(QueryAllBondRequest) returns (QueryAllBondResponse) {
+		option (google.api.http).get = "/prism-finance/prism-core/incentives/bond";
+	}
+
+// Queries a Unbonding by id.
+	rpc Unbonding(QueryGetUnbondingRequest) returns (QueryGetUnbondingResponse) {
+		option (google.api.http).get = "/prism-finance/prism-core/incentives/unbonding/{id}";
+	}
+
+	// Queries a list of Unbonding items.
+	rpc UnbondingAll(QueryAllUnbondingRequest) returns (QueryAllUnbondingResponse) {
+		option (google.api.http).get = "/prism-finance/prism-core/incentives/unbonding";
+	}
+
+// this line is used by starport scaffolding # 2
+}
+
+// QueryParamsRequest is request type for the Query/Params RPC method.
+message QueryParamsRequest {}
+
+// QueryParamsResponse is response type for the Query/Params RPC method.
+message QueryParamsResponse {
+  // params holds all the parameters of this module.
+  Params params = 1 [(gogoproto.nullable) = false];
+}
+
+message QueryGetPoolRequest {
+	  string bond_denom = 1;
+
+}
+
+message QueryGetPoolResponse {
+	Pool pool = 1 [(gogoproto.nullable) = false];
+}
+
+message QueryAllPoolRequest {
+	cosmos.base.query.v1beta1.PageRequest pagination = 1;
+}
+
+message QueryAllPoolResponse {
+	repeated Pool pool = 1 [(gogoproto.nullable) = false];
+	cosmos.base.query.v1beta1.PageResponse pagination = 2;
+}
+
+message QueryGetBondRequest {
+	  string address = 1;
+  string bond_denom = 2;
+}
+
+message QueryGetBondResponse {
+	Bond bond = 1 [(gogoproto.nullable) = false];
+}
+
+message QueryAllBondRequest {
+	cosmos.base.query.v1beta1.PageRequest pagination = 1;
+}
+
+message QueryAllBondResponse {
+	repeated Bond bond = 1 [(gogoproto.nullable) = false];
+	cosmos.base.query.v1beta1.PageResponse pagination = 2;
+}
+
+message QueryGetUnbondingRequest {
+	uint64 id = 1;
+}
+
+message QueryGetUnbondingResponse {
+	Unbonding unbonding = 1 [(gogoproto.nullable) = false];
+}
+
+message QueryAllUnbondingRequest {
+	cosmos.base.query.v1beta1.PageRequest pagination = 1;
+}
+
+message QueryAllUnbondingResponse {
+	repeated Unbonding unbonding = 1 [(gogoproto.nullable) = false];
+	cosmos.base.query.v1beta1.PageResponse pagination = 2;
+}
+
+// this line is used by starport scaffolding # 3

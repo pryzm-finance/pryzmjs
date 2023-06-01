@@ -9,20 +9,25 @@ option go_package = "github.com/prism-finance/prism-core/x/icstaking/types";
 
 // Params defines the parameters for the module.
 message Params {
-  option (gogoproto.goproto_stringer) = false;
-
+  // the default staking parameters. properties of HostChain.staking_params are overridden to this default params if provided
   StakingParams staking_params = 1 [(gogoproto.nullable) = false];
 }
 
+// StakingParams defines the parameters related to staking on each host chain
 message StakingParams {
+  // the amount of operation fees
   FeeRatios fee_ratios = 1 [(gogoproto.nullable) = false];
 
-  // in hours
-  uint64 delegation_interval = 2;
-  // in hours
-  uint64 undelegation_interval = 3;
+  // the interval in which PRISM sends delegation messages to the host chain
+  google.protobuf.Duration delegation_interval = 2 [(gogoproto.stdduration) = true];
 
+  // the interval in which PRISM sends undelegation messages to the host chain
+  // host chain's (UnbondingTime / MaxEntries) must be considered as the max value when setting this field
+  google.protobuf.Duration undelegation_interval = 3 [(gogoproto.stdduration) = true];
+
+  // the time-out value being set on ibc transfer messages
   google.protobuf.Duration ibc_transfer_timeout = 4 [(gogoproto.stdduration) = true];
+  // the time-out value being set on ica messages
   google.protobuf.Duration ica_timeout = 5 [(gogoproto.stdduration) = true];
 
   int32 max_delegation_msgs = 6;
@@ -40,19 +45,27 @@ message StakingParams {
   google.protobuf.Duration min_rebalance_interval = 11 [(gogoproto.stdduration) = true];
 }
 
+// FeeRatios defines the fee ratio operations supported by icstaking
 message FeeRatios {
+  // the ratio of fee reduced from yield of staking on the host chain
   string yield = 1 [
     (cosmos_proto.scalar) = "cosmos.Dec",
     (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Dec"
   ];
+
+  // the ratio of fee reduced from the amount of assets being staked on PRISM
   string staking = 2 [
     (cosmos_proto.scalar) = "cosmos.Dec",
     (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Dec"
   ];
+
+  // the ratio of fee reduced from the amount of assets being unstaked from PRISM
   string unstaking = 3 [
     (cosmos_proto.scalar) = "cosmos.Dec",
     (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Dec"
   ];
+
+  // the ratio of fee reduced from the amount of assets being instantly unstaked from PRISM
   string instant_unstaking = 4 [
     (cosmos_proto.scalar) = "cosmos.Dec",
     (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Dec"

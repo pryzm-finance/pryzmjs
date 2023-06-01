@@ -247,6 +247,8 @@ export interface HostChainState {
   totalDelegatedAmount: string;
   /** The amount of assets that are in the delegation account and ready to be delegated */
   amountToBeDelegated: string;
+  /** The amount of assets for which undelegation message must be sent */
+  amountToBeUndelegated: string;
   /** The amount of assets that are in the reward account and ready to be transferred to the delegation account */
   amountToBeCompounded: string;
   /** The current exchange rate of cToken to the host chain staking token */
@@ -269,6 +271,7 @@ export interface HostChainStateSDKType {
   };
   total_delegated_amount: string;
   amount_to_be_delegated: string;
+  amount_to_be_undelegated: string;
   amount_to_be_compounded: string;
   exchange_rate: string;
   state: State;
@@ -627,6 +630,7 @@ function createBaseHostChainState(): HostChainState {
     validators: {},
     totalDelegatedAmount: "",
     amountToBeDelegated: "",
+    amountToBeUndelegated: "",
     amountToBeCompounded: "",
     exchangeRate: "",
     state: 0,
@@ -653,17 +657,20 @@ export const HostChainState = {
     if (message.amountToBeDelegated !== "") {
       writer.uint32(42).string(message.amountToBeDelegated);
     }
+    if (message.amountToBeUndelegated !== "") {
+      writer.uint32(50).string(message.amountToBeUndelegated);
+    }
     if (message.amountToBeCompounded !== "") {
-      writer.uint32(50).string(message.amountToBeCompounded);
+      writer.uint32(58).string(message.amountToBeCompounded);
     }
     if (message.exchangeRate !== "") {
-      writer.uint32(58).string(message.exchangeRate);
+      writer.uint32(66).string(message.exchangeRate);
     }
     if (message.state !== 0) {
-      writer.uint32(64).int32(message.state);
+      writer.uint32(72).int32(message.state);
     }
     if (message.lastIdleStateHostHeight !== undefined) {
-      HostChainHeight.encode(message.lastIdleStateHostHeight, writer.uint32(74).fork()).ldelim();
+      HostChainHeight.encode(message.lastIdleStateHostHeight, writer.uint32(82).fork()).ldelim();
     }
     return writer;
   },
@@ -693,15 +700,18 @@ export const HostChainState = {
           message.amountToBeDelegated = reader.string();
           break;
         case 6:
-          message.amountToBeCompounded = reader.string();
+          message.amountToBeUndelegated = reader.string();
           break;
         case 7:
-          message.exchangeRate = reader.string();
+          message.amountToBeCompounded = reader.string();
           break;
         case 8:
-          message.state = (reader.int32() as any);
+          message.exchangeRate = reader.string();
           break;
         case 9:
+          message.state = (reader.int32() as any);
+          break;
+        case 10:
           message.lastIdleStateHostHeight = HostChainHeight.decode(reader, reader.uint32());
           break;
         default:
@@ -723,6 +733,7 @@ export const HostChainState = {
       }, {}) : {},
       totalDelegatedAmount: isSet(object.totalDelegatedAmount) ? String(object.totalDelegatedAmount) : "",
       amountToBeDelegated: isSet(object.amountToBeDelegated) ? String(object.amountToBeDelegated) : "",
+      amountToBeUndelegated: isSet(object.amountToBeUndelegated) ? String(object.amountToBeUndelegated) : "",
       amountToBeCompounded: isSet(object.amountToBeCompounded) ? String(object.amountToBeCompounded) : "",
       exchangeRate: isSet(object.exchangeRate) ? String(object.exchangeRate) : "",
       state: isSet(object.state) ? stateFromJSON(object.state) : 0,
@@ -741,6 +752,7 @@ export const HostChainState = {
     }
     message.totalDelegatedAmount !== undefined && (obj.totalDelegatedAmount = message.totalDelegatedAmount);
     message.amountToBeDelegated !== undefined && (obj.amountToBeDelegated = message.amountToBeDelegated);
+    message.amountToBeUndelegated !== undefined && (obj.amountToBeUndelegated = message.amountToBeUndelegated);
     message.amountToBeCompounded !== undefined && (obj.amountToBeCompounded = message.amountToBeCompounded);
     message.exchangeRate !== undefined && (obj.exchangeRate = message.exchangeRate);
     message.state !== undefined && (obj.state = stateToJSON(message.state));
@@ -761,6 +773,7 @@ export const HostChainState = {
     }, {});
     message.totalDelegatedAmount = object.totalDelegatedAmount ?? "";
     message.amountToBeDelegated = object.amountToBeDelegated ?? "";
+    message.amountToBeUndelegated = object.amountToBeUndelegated ?? "";
     message.amountToBeCompounded = object.amountToBeCompounded ?? "";
     message.exchangeRate = object.exchangeRate ?? "";
     message.state = object.state ?? 0;

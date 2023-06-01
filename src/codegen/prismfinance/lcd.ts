@@ -109,6 +109,9 @@ export const createLCDClient = async ({
         icstaking: new (await import("../prismcore/icstaking/query.lcd")).LCDQueryClient({
           requestClient
         }),
+        incentives: new (await import("../prismcore/incentives/query.lcd")).LCDQueryClient({
+          requestClient
+        }),
         mint: new (await import("../prismcore/mint/query.lcd")).LCDQueryClient({
           requestClient
         }),

@@ -16,7 +16,7 @@ message HostChainHeight {
 
 // OraclePayload defines the structure of oracle vote payload
 message OraclePayload {
-  HostChainHeight block_height = 1 [(gogoproto.nullable) = false];
+  map<string, HostChainHeight> data_source_block_heights = 1 [(gogoproto.nullable) = false];
   string price = 2 [
     (cosmos_proto.scalar) = "cosmos.Dec",
     (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Dec",
@@ -26,5 +26,6 @@ message OraclePayload {
     (gogoproto.castrepeated) = "Pairs",
     (gogoproto.nullable) = false
   ];
+  string quote_token = 4;
 }
 

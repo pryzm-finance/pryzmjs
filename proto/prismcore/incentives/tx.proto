@@ -1,0 +1,137 @@
+syntax = "proto3";
+package prismfinance.prismcore.incentives;
+
+// this line is used by starport scaffolding # proto/tx/import
+import "cosmos/base/v1beta1/coin.proto";
+import "gogoproto/gogo.proto";
+import "prismcore/incentives/bond.proto";
+import "prismcore/incentives/params.proto";
+import "cosmos_proto/cosmos.proto";
+import "prismcore/incentives/unbonding.proto";
+
+option go_package = "github.com/prism-finance/prism-core/x/incentives/types";
+
+// Msg defines the Msg service.
+service Msg {
+      rpc UpdateParams(MsgUpdateParams) returns (MsgUpdateParamsResponse);
+  rpc CreatePool(MsgCreatePool) returns (MsgCreatePoolResponse);
+  rpc UpdateRewardTokenWeight(MsgUpdateRewardTokenWeight) returns (MsgUpdateRewardTokenWeightResponse);
+  rpc AddRewardTokenToPool(MsgAddRewardTokenToPool) returns (MsgAddRewardTokenToPoolResponse);
+  rpc Bond(MsgBond) returns (MsgBondResponse);
+  rpc Unbond(MsgUnbond) returns (MsgUnbondResponse);
+  rpc ClaimReward(MsgClaimReward) returns (MsgClaimRewardResponse);
+  rpc ClaimUnbonding(MsgClaimUnbonding) returns (MsgClaimUnbondingResponse);
+  rpc CancelUnbonding(MsgCancelUnbonding) returns (MsgCancelUnbondingResponse);
+  rpc IncentivizePool(MsgIncentivizePool) returns (MsgIncentivizePoolResponse);
+// this line is used by starport scaffolding # proto/tx/rpc
+}
+
+message MsgUpdateParams {
+  string authority = 1;
+  Params params = 2 [(gogoproto.nullable) = false];
+}
+
+message MsgUpdateParamsResponse {
+}
+
+message WeightedRewardToken{
+  string denom = 1;
+  // weight is used for reward portion for each pool, when a reward is
+  // accrued from dist module, it will be distributed to each pool according to the weights
+  string weight = 2 [(cosmos_proto.scalar) = "cosmos.Dec", (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Dec", (gogoproto.nullable) = false];
+}
+
+message MsgCreatePool {
+  string authority = 1;
+  string bond_denom = 2;
+  repeated WeightedRewardToken reward_tokens = 3 [(gogoproto.nullable) = false];
+}
+
+message MsgCreatePoolResponse {
+}
+
+message MsgUpdateRewardTokenWeight {
+  string authority = 1;
+  string bond_denom = 2;
+  WeightedRewardToken reward_token = 3 [(gogoproto.nullable) = false];
+}
+
+message MsgUpdateRewardTokenWeightResponse {
+}
+
+message MsgAddRewardTokenToPool {
+  string authority = 1;
+  string bond_denom = 2;
+  WeightedRewardToken reward_token = 3 [(gogoproto.nullable) = false];
+}
+
+message MsgAddRewardTokenToPoolResponse {
+}
+
+message MsgBond {
+  string creator = 1;
+  cosmos.base.v1beta1.Coin amount = 2 [(gogoproto.nullable) = false];
+}
+
+message MsgBondResponse {
+  Bond bond = 1 [(gogoproto.nullable) = false];
+}
+
+message MsgUnbond {
+  string creator = 1;
+  cosmos.base.v1beta1.Coin amount = 2 [(gogoproto.nullable) = false];
+  string unbond_treasury = 3;
+  string reward_treasury = 4;
+  bool auto_claim = 5;
+}
+
+message MsgUnbondResponse {
+  Unbonding unbonding = 1;
+  repeated cosmos.base.v1beta1.Coin rewards = 2 [
+    (gogoproto.nullable) = false,
+    (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins"
+  ];
+}
+
+message MsgClaimReward {
+  string creator = 1;
+  string bond_denom = 2;
+  string treasury = 3;
+}
+
+message MsgClaimRewardResponse {
+  repeated cosmos.base.v1beta1.Coin rewards = 1 [(gogoproto.nullable) = false];
+}
+
+message MsgClaimUnbonding {
+  string creator = 1;
+  uint64 unbonding_id = 2;
+}
+
+message MsgClaimUnbondingResponse {
+  cosmos.base.v1beta1.Coin amount = 1 [(gogoproto.nullable) = false];
+}
+
+message MsgCancelUnbonding {
+  string creator = 1;
+  uint64 unbonding_id = 2;
+  cosmos.base.v1beta1.Coin amount = 3 [(gogoproto.nullable) = false];
+}
+
+message MsgCancelUnbondingResponse {
+  Bond bond = 1 [(gogoproto.nullable) = false];
+}
+
+message MsgIncentivizePool {
+  string creator = 1;
+  string bond_denom = 2;
+  repeated cosmos.base.v1beta1.Coin amount = 3 [
+    (gogoproto.nullable) = false,
+    (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins"
+  ];
+}
+
+message MsgIncentivizePoolResponse {
+}
+
+// this line is used by starport scaffolding # proto/tx/message

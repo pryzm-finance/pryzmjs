@@ -1,11 +1,11 @@
 lockfileVersion: 5.4
 
 specifiers:
-  '@prism-finance/prismjs': 0.4.2
+  '@prism-finance/prismjs': 0.4.6
   '@refractedlabs/utils': 0.1.5
 
 dependencies:
-  '@prism-finance/prismjs': 0.4.2
+  '@prism-finance/prismjs': 0.4.6
   '@refractedlabs/utils': 0.1.5
 
 packages:
@@ -182,8 +182,8 @@ packages:
     resolution: {integrity: sha512-ilHEACi9DwqJB0pw7kv+Apvh50jiiSyR/cQ3y4W7lOR5mhvn/50FLUfsnfJz0BDZtl/RR16kXvptiv6q1msYZg==}
     dev: false
 
-  /@osmonauts/lcd/0.11.1:
-    resolution: {integrity: sha512-mri4GnyLfLnT7VLXk6Z53IOd3a7VCQTuMSYGAK042IRgEZXLzjUYDOOTbCTsuJgncAAf51yDBNPOLqw/26jjsg==}
+  /@osmonauts/lcd/0.10.0:
+    resolution: {integrity: sha512-PzmXk9x9MHyLn2fUztpAqWqvDmMiEJaQv/JcAoAOE8VdHrD9Hf/KWnE1RZtamuS2ngQRqvQPD0xotCGXW7eTxA==}
     dependencies:
       '@babel/runtime': 7.22.3
       axios: 0.27.2
@@ -191,15 +191,15 @@ packages:
       - debug
     dev: false
 
-  /@prism-finance/prismjs/0.4.2:
-    resolution: {integrity: sha512-Ipf7UufT21UdXdfR40rouvG3PifQseQ/WM9aM2YUP+hidL9zbDdm3JSwk15gfTIN+WpzmD+B87f0eW51NnjuFw==, tarball: download/@prism-finance/prismjs/0.4.2/1278934349289ed4b3b2898e0f34e930f51cb923}
+  /@prism-finance/prismjs/0.4.6:
+    resolution: {integrity: sha512-CidoV3gHD7HlYj6sV2TXL7qHHHhwaB4r3wIZStMZuD1naB6aaAyJONwp6yfNU7wDlm395tOHKrvv3fJASNvpVw==, tarball: download/@prism-finance/prismjs/0.4.6/974b5b403ead6a0b93663806fca84e67cfcd5379}
     dependencies:
       '@babel/runtime': 7.22.3
       '@cosmjs/amino': 0.29.4
       '@cosmjs/proto-signing': 0.29.4
       '@cosmjs/stargate': 0.29.4
       '@cosmjs/tendermint-rpc': 0.29.5
-      '@osmonauts/lcd': 0.11.1
+      '@osmonauts/lcd': 0.10.0
       protobufjs: 6.11.3
     transitivePeerDependencies:
       - bufferutil

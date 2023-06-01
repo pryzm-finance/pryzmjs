@@ -9,6 +9,7 @@ message Pair {
   string base = 1;
   string quote = 2;
   string pool_id = 3; //refers to the data source pool (e.g. osmosis gamm pool)
+  string data_source = 4;
 }
 
 // TwapAlgorithm enumerates the valid algorithms for twap_algorithm.
@@ -20,7 +21,10 @@ enum TwapAlgorithm {
 
 message OraclePricePair {
   string asset_id = 1;
-  string data_source = 2;
+  // this is the token denom which should exist in the target weighted pool in prism chain
+  // the reason for adding this property and not using the pairs, is that the token denom in various chains might be different
+  // for example usdc token might have contract or ibc denom on different chains with different channel and ids
+  string quote_token = 2;
   uint64 twap_duration_millis = 3;
   TwapAlgorithm twap_algorithm = 4;
   bool disabled = 5;

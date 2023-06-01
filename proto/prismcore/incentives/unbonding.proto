@@ -1,0 +1,18 @@
+syntax = "proto3";
+package prismfinance.prismcore.incentives;
+
+option go_package = "github.com/prism-finance/prism-core/x/incentives/types";
+import "gogoproto/gogo.proto"; 
+import "cosmos/base/v1beta1/coin.proto";
+import "google/protobuf/timestamp.proto";
+
+message Unbonding {
+  uint64 id = 1;
+  google.protobuf.Timestamp completion_time = 2 [
+    (gogoproto.nullable) = false,
+    (gogoproto.stdtime) = true
+  ];
+  string address = 3;
+  string treasury_address = 4;
+  cosmos.base.v1beta1.Coin amount = 5 [(gogoproto.nullable) = false];
+}

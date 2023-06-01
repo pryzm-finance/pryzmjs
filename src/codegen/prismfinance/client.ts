@@ -5,6 +5,7 @@ import * as prismcoreAmmTxRegistry from "../prismcore/amm/tx.registry";
 import * as prismcoreAssetsTxRegistry from "../prismcore/assets/tx.registry";
 import * as prismcoreIcqTxRegistry from "../prismcore/icq/tx.registry";
 import * as prismcoreIcstakingTxRegistry from "../prismcore/icstaking/tx.registry";
+import * as prismcoreIncentivesTxRegistry from "../prismcore/incentives/tx.registry";
 import * as prismcoreMintTxRegistry from "../prismcore/mint/tx.registry";
 import * as prismcorePgovTxRegistry from "../prismcore/pgov/tx.registry";
 import * as prismcoreRefractorTxRegistry from "../prismcore/refractor/tx.registry";
@@ -14,6 +15,7 @@ import * as prismcoreAmmTxAmino from "../prismcore/amm/tx.amino";
 import * as prismcoreAssetsTxAmino from "../prismcore/assets/tx.amino";
 import * as prismcoreIcqTxAmino from "../prismcore/icq/tx.amino";
 import * as prismcoreIcstakingTxAmino from "../prismcore/icstaking/tx.amino";
+import * as prismcoreIncentivesTxAmino from "../prismcore/incentives/tx.amino";
 import * as prismcoreMintTxAmino from "../prismcore/mint/tx.amino";
 import * as prismcorePgovTxAmino from "../prismcore/pgov/tx.amino";
 import * as prismcoreRefractorTxAmino from "../prismcore/refractor/tx.amino";
@@ -24,13 +26,14 @@ export const prismfinanceAminoConverters = {
   ...prismcoreAssetsTxAmino.AminoConverter,
   ...prismcoreIcqTxAmino.AminoConverter,
   ...prismcoreIcstakingTxAmino.AminoConverter,
+  ...prismcoreIncentivesTxAmino.AminoConverter,
   ...prismcoreMintTxAmino.AminoConverter,
   ...prismcorePgovTxAmino.AminoConverter,
   ...prismcoreRefractorTxAmino.AminoConverter,
   ...prismcoreTreasuryTxAmino.AminoConverter,
   ...prismcoreYstakingTxAmino.AminoConverter
 };
-export const prismfinanceProtoRegistry: ReadonlyArray<[string, GeneratedType]> = [...prismcoreAmmTxRegistry.registry, ...prismcoreAssetsTxRegistry.registry, ...prismcoreIcqTxRegistry.registry, ...prismcoreIcstakingTxRegistry.registry, ...prismcoreMintTxRegistry.registry, ...prismcorePgovTxRegistry.registry, ...prismcoreRefractorTxRegistry.registry, ...prismcoreTreasuryTxRegistry.registry, ...prismcoreYstakingTxRegistry.registry];
+export const prismfinanceProtoRegistry: ReadonlyArray<[string, GeneratedType]> = [...prismcoreAmmTxRegistry.registry, ...prismcoreAssetsTxRegistry.registry, ...prismcoreIcqTxRegistry.registry, ...prismcoreIcstakingTxRegistry.registry, ...prismcoreIncentivesTxRegistry.registry, ...prismcoreMintTxRegistry.registry, ...prismcorePgovTxRegistry.registry, ...prismcoreRefractorTxRegistry.registry, ...prismcoreTreasuryTxRegistry.registry, ...prismcoreYstakingTxRegistry.registry];
 export const getSigningPrismfinanceClientOptions = ({
   defaultTypes = defaultRegistryTypes
 }: {

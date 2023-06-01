@@ -9,70 +9,78 @@ option go_package = "github.com/prism-finance/prism-core/x/icstaking/types";
 
 // Information about an undelegation in a specific epoch
 message Undelegation {
+  // host chain id
   string host_chain = 1;
 
-  // the number of epoch in which the delegation is requested
+  // the undelegation epoch id
   uint64 epoch = 2;
 
-  // the amount of cTokens requested to be undelegated.
-  // This is the summation of c_amount for every channel FIXME remove if not used
-  string c_amount = 3 [
-    (cosmos_proto.scalar) = "cosmos.Int",
-    (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Int",
-    (gogoproto.nullable) = false
-  ];
-
-  // the exchange rate of cToken:Token in the undelegation epoch
-  string exchange_rate = 4 [
+  // the exchange rate of cToken:Token at the end of undelegation epoch
+  string exchange_rate = 3 [
     (cosmos_proto.scalar) = "cosmos.Dec",
     (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Dec",
     (gogoproto.nullable) = false
   ];
 
-  // Whether the undelegation request is sent and has started on host chain
-  bool started = 5;
+  // whether the undelegation request is sent and has started on host chain
+  bool started = 4;
 
-  // Whether the undelegation un-bonding period is passed and undelegated assets are available
-  bool completed = 6;
+  // whether the undelegation un-bonding period is passed and undelegated assets are available
+  bool completed = 5;
 
-  // The time in which the undelegation will be completed and the assets are transferred to delegation account
-  google.protobuf.Timestamp completion_time = 7 [(gogoproto.nullable) = false, (gogoproto.stdtime) = true];
+  // the time in which the undelegation will be completed and the assets are transferred to delegation account
+  google.protobuf.Timestamp completion_time = 6 [(gogoproto.nullable) = false, (gogoproto.stdtime) = true];
 
-  // Whether the ibc transfer messages for sweeping assets to PRISM are sent successfully
-  bool swept = 8;
-
-  // map of transfer channels to the state and amount of received undelegated assets
-  map<string, ChannelUndelegation> channel_undelegations = 9 [(gogoproto.nullable) = false];
+  // whether the ibc transfer messages for sweeping assets to PRISM are sent successfully
+  bool swept = 7;
 }
 
-// Information about the reception status and the redeemed undelegation amount
+// ChannelUndelegation contains information about an undelegation epoch for a specific transfer channel
 message ChannelUndelegation {
-  string c_amount = 1 [
+  // host chain id
+  string host_chain = 1;
+
+  // the undelegation epoch id
+  uint64 epoch = 2;
+
+  // the transfer channel on which the undelegated assets must be received
+  string transfer_channel = 3;
+
+  // the total amount of cTokens requested to be undelegated
+  string total_c_amount = 4 [
     (cosmos_proto.scalar) = "cosmos.Int",
     (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Int",
     (gogoproto.nullable) = false
   ];
 
-  // Whether the undelegated amount is un-bonded and swept back to PRISM
-  bool received = 2;
-
-  // the amount of assets received after the undelegation is completed
-  string received_amount = 3 [
+  // the total amount of cTokens for which the undelegation message has been sent
+  string undelegated_c_amount = 5 [
     (cosmos_proto.scalar) = "cosmos.Int",
     (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Int",
     (gogoproto.nullable) = false
   ];
 
-  // received_amount / c_amount. This is used as the exchange rate of uToken:Token when users redeem their assets
-  string redemption_rate = 4 [
-    (cosmos_proto.scalar) = "cosmos.Dec",
-    (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Dec",
+  // the amount of assets already undelegated
+  string received_amount = 6 [
+    (cosmos_proto.scalar) = "cosmos.Int",
+    (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Int",
     (gogoproto.nullable) = false
   ];
 
-  // the amount of assets that are received but not redeemed by users.
-  // a received undelegation record is deleted when this amount is set to zero
-  string unclaimed_amount = 5 [
+  // the amount of assets waiting to be received
+  string pending_amount = 7 [
+    (cosmos_proto.scalar) = "cosmos.Int",
+    (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Int",
+    (gogoproto.nullable) = false
+  ];
+
+  // whether all the undelegation are completely received
+  // if received is true, transferring_amount must be zero
+  bool received = 8;
+
+  // the amount of assets that are redeemed by users.
+  // a channel undelegation record is deleted when received is true and this amount is equal the received_amount
+  string claimed_amount = 9 [
     (cosmos_proto.scalar) = "cosmos.Int",
     (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Int",
     (gogoproto.nullable) = false

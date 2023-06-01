@@ -1,3 +1,4 @@
+import { Coin, CoinSDKType } from "../../cosmos/base/v1beta1/coin";
 import * as _m0 from "protobufjs/minimal";
 import { isSet } from "../../helpers";
 export interface MsgDappAccountSpend {
@@ -5,14 +6,14 @@ export interface MsgDappAccountSpend {
   title: string;
   description: string;
   recipient: string;
-  amount: string;
+  amount: Coin[];
 }
 export interface MsgDappAccountSpendSDKType {
   authority: string;
   title: string;
   description: string;
   recipient: string;
-  amount: string;
+  amount: CoinSDKType[];
 }
 export interface MsgDappAccountSpendResponse {}
 export interface MsgDappAccountSpendResponseSDKType {}
@@ -22,7 +23,7 @@ function createBaseMsgDappAccountSpend(): MsgDappAccountSpend {
     title: "",
     description: "",
     recipient: "",
-    amount: ""
+    amount: []
   };
 }
 export const MsgDappAccountSpend = {
@@ -39,8 +40,8 @@ export const MsgDappAccountSpend = {
     if (message.recipient !== "") {
       writer.uint32(34).string(message.recipient);
     }
-    if (message.amount !== "") {
-      writer.uint32(42).string(message.amount);
+    for (const v of message.amount) {
+      Coin.encode(v!, writer.uint32(42).fork()).ldelim();
     }
     return writer;
   },
@@ -64,7 +65,7 @@ export const MsgDappAccountSpend = {
           message.recipient = reader.string();
           break;
         case 5:
-          message.amount = reader.string();
+          message.amount.push(Coin.decode(reader, reader.uint32()));
           break;
         default:
           reader.skipType(tag & 7);
@@ -79,7 +80,7 @@ export const MsgDappAccountSpend = {
       title: isSet(object.title) ? String(object.title) : "",
       description: isSet(object.description) ? String(object.description) : "",
       recipient: isSet(object.recipient) ? String(object.recipient) : "",
-      amount: isSet(object.amount) ? String(object.amount) : ""
+      amount: Array.isArray(object?.amount) ? object.amount.map((e: any) => Coin.fromJSON(e)) : []
     };
   },
   toJSON(message: MsgDappAccountSpend): unknown {
@@ -88,7 +89,11 @@ export const MsgDappAccountSpend = {
     message.title !== undefined && (obj.title = message.title);
     message.description !== undefined && (obj.description = message.description);
     message.recipient !== undefined && (obj.recipient = message.recipient);
-    message.amount !== undefined && (obj.amount = message.amount);
+    if (message.amount) {
+      obj.amount = message.amount.map(e => e ? Coin.toJSON(e) : undefined);
+    } else {
+      obj.amount = [];
+    }
     return obj;
   },
   fromPartial(object: Partial<MsgDappAccountSpend>): MsgDappAccountSpend {
@@ -97,7 +102,7 @@ export const MsgDappAccountSpend = {
     message.title = object.title ?? "";
     message.description = object.description ?? "";
     message.recipient = object.recipient ?? "";
-    message.amount = object.amount ?? "";
+    message.amount = object.amount?.map(e => Coin.fromPartial(e)) || [];
     return message;
   }
 };

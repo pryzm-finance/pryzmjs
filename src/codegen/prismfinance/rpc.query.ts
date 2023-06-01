@@ -70,6 +70,7 @@ export const createRPCQueryClient = async ({
         assets: (await import("../prismcore/assets/query.rpc.Query")).createRpcQueryExtension(client),
         icq: (await import("../prismcore/icq/query.rpc.Query")).createRpcQueryExtension(client),
         icstaking: (await import("../prismcore/icstaking/query.rpc.Query")).createRpcQueryExtension(client),
+        incentives: (await import("../prismcore/incentives/query.rpc.Query")).createRpcQueryExtension(client),
         mint: (await import("../prismcore/mint/query.rpc.Query")).createRpcQueryExtension(client),
         pgov: (await import("../prismcore/pgov/query.rpc.Query")).createRpcQueryExtension(client),
         refractor: (await import("../prismcore/refractor/query.rpc.Query")).createRpcQueryExtension(client),

@@ -15,8 +15,14 @@ export interface MsgUpdateParamsAminoType extends AminoMsg {
           unstaking: string;
           instant_unstaking: string;
         };
-        delegation_interval: string;
-        undelegation_interval: string;
+        delegation_interval: {
+          seconds: string;
+          nanos: number;
+        };
+        undelegation_interval: {
+          seconds: string;
+          nanos: number;
+        };
         ibc_transfer_timeout: {
           seconds: string;
           nanos: number;
@@ -60,8 +66,14 @@ export interface MsgRegisterHostChainAminoType extends AminoMsg {
           unstaking: string;
           instant_unstaking: string;
         };
-        delegation_interval: string;
-        undelegation_interval: string;
+        delegation_interval: {
+          seconds: string;
+          nanos: number;
+        };
+        undelegation_interval: {
+          seconds: string;
+          nanos: number;
+        };
         ibc_transfer_timeout: {
           seconds: string;
           nanos: number;
@@ -103,8 +115,14 @@ export interface MsgUpdateHostChainAminoType extends AminoMsg {
         unstaking: string;
         instant_unstaking: string;
       };
-      delegation_interval: string;
-      undelegation_interval: string;
+      delegation_interval: {
+        seconds: string;
+        nanos: number;
+      };
+      undelegation_interval: {
+        seconds: string;
+        nanos: number;
+      };
       ibc_transfer_timeout: {
         seconds: string;
         nanos: number;
@@ -195,8 +213,8 @@ export const AminoConverter = {
               unstaking: params.stakingParams.feeRatios.unstaking,
               instant_unstaking: params.stakingParams.feeRatios.instantUnstaking
             },
-            delegation_interval: params.stakingParams.delegationInterval.toString(),
-            undelegation_interval: params.stakingParams.undelegationInterval.toString(),
+            delegation_interval: (params.stakingParams.delegationInterval * 1_000_000_000).toString(),
+            undelegation_interval: (params.stakingParams.undelegationInterval * 1_000_000_000).toString(),
             ibc_transfer_timeout: (params.stakingParams.ibcTransferTimeout * 1_000_000_000).toString(),
             ica_timeout: (params.stakingParams.icaTimeout * 1_000_000_000).toString(),
             max_delegation_msgs: params.stakingParams.maxDelegationMsgs,
@@ -223,8 +241,14 @@ export const AminoConverter = {
               unstaking: params.staking_params.fee_ratios.unstaking,
               instantUnstaking: params.staking_params.fee_ratios.instant_unstaking
             },
-            delegationInterval: Long.fromString(params.staking_params.delegation_interval),
-            undelegationInterval: Long.fromString(params.staking_params.undelegation_interval),
+            delegationInterval: {
+              seconds: Long.fromNumber(Math.floor(parseInt(params.staking_params.delegation_interval) / 1_000_000_000)),
+              nanos: parseInt(params.staking_params.delegation_interval) % 1_000_000_000
+            },
+            undelegationInterval: {
+              seconds: Long.fromNumber(Math.floor(parseInt(params.staking_params.undelegation_interval) / 1_000_000_000)),
+              nanos: parseInt(params.staking_params.undelegation_interval) % 1_000_000_000
+            },
             ibcTransferTimeout: {
               seconds: Long.fromNumber(Math.floor(parseInt(params.staking_params.ibc_transfer_timeout) / 1_000_000_000)),
               nanos: parseInt(params.staking_params.ibc_transfer_timeout) % 1_000_000_000
@@ -273,8 +297,8 @@ export const AminoConverter = {
               unstaking: hostChain.params.feeRatios.unstaking,
               instant_unstaking: hostChain.params.feeRatios.instantUnstaking
             },
-            delegation_interval: hostChain.params.delegationInterval.toString(),
-            undelegation_interval: hostChain.params.undelegationInterval.toString(),
+            delegation_interval: (hostChain.params.delegationInterval * 1_000_000_000).toString(),
+            undelegation_interval: (hostChain.params.undelegationInterval * 1_000_000_000).toString(),
             ibc_transfer_timeout: (hostChain.params.ibcTransferTimeout * 1_000_000_000).toString(),
             ica_timeout: (hostChain.params.icaTimeout * 1_000_000_000).toString(),
             max_delegation_msgs: hostChain.params.maxDelegationMsgs,
@@ -315,8 +339,14 @@ export const AminoConverter = {
               unstaking: host_chain.params.fee_ratios.unstaking,
               instantUnstaking: host_chain.params.fee_ratios.instant_unstaking
             },
-            delegationInterval: Long.fromString(host_chain.params.delegation_interval),
-            undelegationInterval: Long.fromString(host_chain.params.undelegation_interval),
+            delegationInterval: {
+              seconds: Long.fromNumber(Math.floor(parseInt(host_chain.params.delegation_interval) / 1_000_000_000)),
+              nanos: parseInt(host_chain.params.delegation_interval) % 1_000_000_000
+            },
+            undelegationInterval: {
+              seconds: Long.fromNumber(Math.floor(parseInt(host_chain.params.undelegation_interval) / 1_000_000_000)),
+              nanos: parseInt(host_chain.params.undelegation_interval) % 1_000_000_000
+            },
             ibcTransferTimeout: {
               seconds: Long.fromNumber(Math.floor(parseInt(host_chain.params.ibc_transfer_timeout) / 1_000_000_000)),
               nanos: parseInt(host_chain.params.ibc_transfer_timeout) % 1_000_000_000
@@ -365,8 +395,8 @@ export const AminoConverter = {
             unstaking: params.feeRatios.unstaking,
             instant_unstaking: params.feeRatios.instantUnstaking
           },
-          delegation_interval: params.delegationInterval.toString(),
-          undelegation_interval: params.undelegationInterval.toString(),
+          delegation_interval: (params.delegationInterval * 1_000_000_000).toString(),
+          undelegation_interval: (params.undelegationInterval * 1_000_000_000).toString(),
           ibc_transfer_timeout: (params.ibcTransferTimeout * 1_000_000_000).toString(),
           ica_timeout: (params.icaTimeout * 1_000_000_000).toString(),
           max_delegation_msgs: params.maxDelegationMsgs,
@@ -398,8 +428,14 @@ export const AminoConverter = {
             unstaking: params.fee_ratios.unstaking,
             instantUnstaking: params.fee_ratios.instant_unstaking
           },
-          delegationInterval: Long.fromString(params.delegation_interval),
-          undelegationInterval: Long.fromString(params.undelegation_interval),
+          delegationInterval: {
+            seconds: Long.fromNumber(Math.floor(parseInt(params.delegation_interval) / 1_000_000_000)),
+            nanos: parseInt(params.delegation_interval) % 1_000_000_000
+          },
+          undelegationInterval: {
+            seconds: Long.fromNumber(Math.floor(parseInt(params.undelegation_interval) / 1_000_000_000)),
+            nanos: parseInt(params.undelegation_interval) % 1_000_000_000
+          },
           ibcTransferTimeout: {
             seconds: Long.fromNumber(Math.floor(parseInt(params.ibc_transfer_timeout) / 1_000_000_000)),
             nanos: parseInt(params.ibc_transfer_timeout) % 1_000_000_000

@@ -1,7 +1,9 @@
+import { PageRequest, PageRequestSDKType, PageResponse, PageResponseSDKType } from "../../cosmos/base/query/v1beta1/pagination";
 import { Params, ParamsSDKType } from "./params";
 import { Action, ActionSDKType } from "./action";
+import { StreamSwap, StreamSwapSDKType } from "./stream_swap";
+import { Long, isSet } from "../../helpers";
 import * as _m0 from "protobufjs/minimal";
-import { isSet } from "../../helpers";
 /** QueryParamsRequest is request type for the Query/Params RPC method. */
 export interface QueryParamsRequest {}
 /** QueryParamsRequest is request type for the Query/Params RPC method. */
@@ -22,6 +24,32 @@ export interface QueryGetActionResponse {
 }
 export interface QueryGetActionResponseSDKType {
   action?: ActionSDKType;
+}
+export interface QueryGetStreamSwapRequest {
+  streamId: Long;
+}
+export interface QueryGetStreamSwapRequestSDKType {
+  stream_id: Long;
+}
+export interface QueryGetStreamSwapResponse {
+  streamSwap?: StreamSwap;
+}
+export interface QueryGetStreamSwapResponseSDKType {
+  stream_swap?: StreamSwapSDKType;
+}
+export interface QueryAllStreamSwapRequest {
+  pagination?: PageRequest;
+}
+export interface QueryAllStreamSwapRequestSDKType {
+  pagination?: PageRequestSDKType;
+}
+export interface QueryAllStreamSwapResponse {
+  streamSwap: StreamSwap[];
+  pagination?: PageResponse;
+}
+export interface QueryAllStreamSwapResponseSDKType {
+  stream_swap: StreamSwapSDKType[];
+  pagination?: PageResponseSDKType;
 }
 function createBaseQueryParamsRequest(): QueryParamsRequest {
   return {};
@@ -176,6 +204,200 @@ export const QueryGetActionResponse = {
   fromPartial(object: Partial<QueryGetActionResponse>): QueryGetActionResponse {
     const message = createBaseQueryGetActionResponse();
     message.action = object.action !== undefined && object.action !== null ? Action.fromPartial(object.action) : undefined;
+    return message;
+  }
+};
+function createBaseQueryGetStreamSwapRequest(): QueryGetStreamSwapRequest {
+  return {
+    streamId: Long.UZERO
+  };
+}
+export const QueryGetStreamSwapRequest = {
+  encode(message: QueryGetStreamSwapRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (!message.streamId.isZero()) {
+      writer.uint32(8).uint64(message.streamId);
+    }
+    return writer;
+  },
+  decode(input: _m0.Reader | Uint8Array, length?: number): QueryGetStreamSwapRequest {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseQueryGetStreamSwapRequest();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.streamId = (reader.uint64() as Long);
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromJSON(object: any): QueryGetStreamSwapRequest {
+    return {
+      streamId: isSet(object.streamId) ? Long.fromValue(object.streamId) : Long.UZERO
+    };
+  },
+  toJSON(message: QueryGetStreamSwapRequest): unknown {
+    const obj: any = {};
+    message.streamId !== undefined && (obj.streamId = (message.streamId || Long.UZERO).toString());
+    return obj;
+  },
+  fromPartial(object: Partial<QueryGetStreamSwapRequest>): QueryGetStreamSwapRequest {
+    const message = createBaseQueryGetStreamSwapRequest();
+    message.streamId = object.streamId !== undefined && object.streamId !== null ? Long.fromValue(object.streamId) : Long.UZERO;
+    return message;
+  }
+};
+function createBaseQueryGetStreamSwapResponse(): QueryGetStreamSwapResponse {
+  return {
+    streamSwap: undefined
+  };
+}
+export const QueryGetStreamSwapResponse = {
+  encode(message: QueryGetStreamSwapResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.streamSwap !== undefined) {
+      StreamSwap.encode(message.streamSwap, writer.uint32(10).fork()).ldelim();
+    }
+    return writer;
+  },
+  decode(input: _m0.Reader | Uint8Array, length?: number): QueryGetStreamSwapResponse {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseQueryGetStreamSwapResponse();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.streamSwap = StreamSwap.decode(reader, reader.uint32());
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromJSON(object: any): QueryGetStreamSwapResponse {
+    return {
+      streamSwap: isSet(object.streamSwap) ? StreamSwap.fromJSON(object.streamSwap) : undefined
+    };
+  },
+  toJSON(message: QueryGetStreamSwapResponse): unknown {
+    const obj: any = {};
+    message.streamSwap !== undefined && (obj.streamSwap = message.streamSwap ? StreamSwap.toJSON(message.streamSwap) : undefined);
+    return obj;
+  },
+  fromPartial(object: Partial<QueryGetStreamSwapResponse>): QueryGetStreamSwapResponse {
+    const message = createBaseQueryGetStreamSwapResponse();
+    message.streamSwap = object.streamSwap !== undefined && object.streamSwap !== null ? StreamSwap.fromPartial(object.streamSwap) : undefined;
+    return message;
+  }
+};
+function createBaseQueryAllStreamSwapRequest(): QueryAllStreamSwapRequest {
+  return {
+    pagination: undefined
+  };
+}
+export const QueryAllStreamSwapRequest = {
+  encode(message: QueryAllStreamSwapRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.pagination !== undefined) {
+      PageRequest.encode(message.pagination, writer.uint32(10).fork()).ldelim();
+    }
+    return writer;
+  },
+  decode(input: _m0.Reader | Uint8Array, length?: number): QueryAllStreamSwapRequest {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseQueryAllStreamSwapRequest();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.pagination = PageRequest.decode(reader, reader.uint32());
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromJSON(object: any): QueryAllStreamSwapRequest {
+    return {
+      pagination: isSet(object.pagination) ? PageRequest.fromJSON(object.pagination) : undefined
+    };
+  },
+  toJSON(message: QueryAllStreamSwapRequest): unknown {
+    const obj: any = {};
+    message.pagination !== undefined && (obj.pagination = message.pagination ? PageRequest.toJSON(message.pagination) : undefined);
+    return obj;
+  },
+  fromPartial(object: Partial<QueryAllStreamSwapRequest>): QueryAllStreamSwapRequest {
+    const message = createBaseQueryAllStreamSwapRequest();
+    message.pagination = object.pagination !== undefined && object.pagination !== null ? PageRequest.fromPartial(object.pagination) : undefined;
+    return message;
+  }
+};
+function createBaseQueryAllStreamSwapResponse(): QueryAllStreamSwapResponse {
+  return {
+    streamSwap: [],
+    pagination: undefined
+  };
+}
+export const QueryAllStreamSwapResponse = {
+  encode(message: QueryAllStreamSwapResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    for (const v of message.streamSwap) {
+      StreamSwap.encode(v!, writer.uint32(10).fork()).ldelim();
+    }
+    if (message.pagination !== undefined) {
+      PageResponse.encode(message.pagination, writer.uint32(18).fork()).ldelim();
+    }
+    return writer;
+  },
+  decode(input: _m0.Reader | Uint8Array, length?: number): QueryAllStreamSwapResponse {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseQueryAllStreamSwapResponse();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.streamSwap.push(StreamSwap.decode(reader, reader.uint32()));
+          break;
+        case 2:
+          message.pagination = PageResponse.decode(reader, reader.uint32());
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromJSON(object: any): QueryAllStreamSwapResponse {
+    return {
+      streamSwap: Array.isArray(object?.streamSwap) ? object.streamSwap.map((e: any) => StreamSwap.fromJSON(e)) : [],
+      pagination: isSet(object.pagination) ? PageResponse.fromJSON(object.pagination) : undefined
+    };
+  },
+  toJSON(message: QueryAllStreamSwapResponse): unknown {
+    const obj: any = {};
+    if (message.streamSwap) {
+      obj.streamSwap = message.streamSwap.map(e => e ? StreamSwap.toJSON(e) : undefined);
+    } else {
+      obj.streamSwap = [];
+    }
+    message.pagination !== undefined && (obj.pagination = message.pagination ? PageResponse.toJSON(message.pagination) : undefined);
+    return obj;
+  },
+  fromPartial(object: Partial<QueryAllStreamSwapResponse>): QueryAllStreamSwapResponse {
+    const message = createBaseQueryAllStreamSwapResponse();
+    message.streamSwap = object.streamSwap?.map(e => StreamSwap.fromPartial(e)) || [];
+    message.pagination = object.pagination !== undefined && object.pagination !== null ? PageResponse.fromPartial(object.pagination) : undefined;
     return message;
   }
 };

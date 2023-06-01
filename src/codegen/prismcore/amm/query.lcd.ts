@@ -188,9 +188,9 @@ export class LCDQueryClient {
     return await this.req.get<QuerySimulateExitAllTokensExactLptResponseSDKType>(endpoint, options);
   }
   /* Queries a list of SpotPrice items. */
-  async spotPrice(params: QuerySpotPriceRequest): Promise<QuerySpotPriceResponseSDKType> {
+  async spotPrice(params: QuerySpotPriceRequest, options: any = {params: {}}): Promise<QuerySpotPriceResponseSDKType> {
     const endpoint = `prism-finance/prism-core/amm/spot_price/${params.poolId}/${params.tokenIn}/${params.tokenOut}/${params.applyFee}`;
-    return await this.req.get<QuerySpotPriceResponseSDKType>(endpoint);
+    return await this.req.get<QuerySpotPriceResponseSDKType>(endpoint, options);
   }
   /* Queries a IntroducingPoolToken by index. */
   async introducingPoolToken(params: QueryGetIntroducingPoolTokenRequest): Promise<QueryGetIntroducingPoolTokenResponseSDKType> {

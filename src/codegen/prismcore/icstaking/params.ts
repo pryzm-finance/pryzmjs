@@ -1,21 +1,29 @@
 import { Duration, DurationSDKType } from "../../google/protobuf/duration";
-import { Long, isSet } from "../../helpers";
 import * as _m0 from "protobufjs/minimal";
+import { isSet } from "../../helpers";
 /** Params defines the parameters for the module. */
 export interface Params {
+  /** the default staking parameters. properties of HostChain.staking_params are overridden to this default params if provided */
   stakingParams?: StakingParams;
 }
 /** Params defines the parameters for the module. */
 export interface ParamsSDKType {
   staking_params?: StakingParamsSDKType;
 }
+/** StakingParams defines the parameters related to staking on each host chain */
 export interface StakingParams {
+  /** the amount of operation fees */
   feeRatios?: FeeRatios;
-  /** in hours */
-  delegationInterval: Long;
-  /** in hours */
-  undelegationInterval: Long;
+  /** the interval in which PRISM sends delegation messages to the host chain */
+  delegationInterval?: Duration;
+  /**
+   * the interval in which PRISM sends undelegation messages to the host chain
+   * host chain's (UnbondingTime / MaxEntries) must be considered as the max value when setting this field
+   */
+  undelegationInterval?: Duration;
+  /** the time-out value being set on ibc transfer messages */
   ibcTransferTimeout?: Duration;
+  /** the time-out value being set on ica messages */
   icaTimeout?: Duration;
   maxDelegationMsgs: number;
   maxUndelegationMsgs: number;
@@ -24,10 +32,11 @@ export interface StakingParams {
   minRebalanceAmount: string;
   minRebalanceInterval?: Duration;
 }
+/** StakingParams defines the parameters related to staking on each host chain */
 export interface StakingParamsSDKType {
   fee_ratios?: FeeRatiosSDKType;
-  delegation_interval: Long;
-  undelegation_interval: Long;
+  delegation_interval?: DurationSDKType;
+  undelegation_interval?: DurationSDKType;
   ibc_transfer_timeout?: DurationSDKType;
   ica_timeout?: DurationSDKType;
   max_delegation_msgs: number;
@@ -37,12 +46,18 @@ export interface StakingParamsSDKType {
   min_rebalance_amount: string;
   min_rebalance_interval?: DurationSDKType;
 }
+/** FeeRatios defines the fee ratio operations supported by icstaking */
 export interface FeeRatios {
+  /** the ratio of fee reduced from yield of staking on the host chain */
   yield: string;
+  /** the ratio of fee reduced from the amount of assets being staked on PRISM */
   staking: string;
+  /** the ratio of fee reduced from the amount of assets being unstaked from PRISM */
   unstaking: string;
+  /** the ratio of fee reduced from the amount of assets being instantly unstaked from PRISM */
   instantUnstaking: string;
 }
+/** FeeRatios defines the fee ratio operations supported by icstaking */
 export interface FeeRatiosSDKType {
   yield: string;
   staking: string;
@@ -97,8 +112,8 @@ export const Params = {
 function createBaseStakingParams(): StakingParams {
   return {
     feeRatios: undefined,
-    delegationInterval: Long.UZERO,
-    undelegationInterval: Long.UZERO,
+    delegationInterval: undefined,
+    undelegationInterval: undefined,
     ibcTransferTimeout: undefined,
     icaTimeout: undefined,
     maxDelegationMsgs: 0,
@@ -114,11 +129,11 @@ export const StakingParams = {
     if (message.feeRatios !== undefined) {
       FeeRatios.encode(message.feeRatios, writer.uint32(10).fork()).ldelim();
     }
-    if (!message.delegationInterval.isZero()) {
-      writer.uint32(16).uint64(message.delegationInterval);
+    if (message.delegationInterval !== undefined) {
+      Duration.encode(message.delegationInterval, writer.uint32(18).fork()).ldelim();
     }
-    if (!message.undelegationInterval.isZero()) {
-      writer.uint32(24).uint64(message.undelegationInterval);
+    if (message.undelegationInterval !== undefined) {
+      Duration.encode(message.undelegationInterval, writer.uint32(26).fork()).ldelim();
     }
     if (message.ibcTransferTimeout !== undefined) {
       Duration.encode(message.ibcTransferTimeout, writer.uint32(34).fork()).ldelim();
@@ -157,10 +172,10 @@ export const StakingParams = {
           message.feeRatios = FeeRatios.decode(reader, reader.uint32());
           break;
         case 2:
-          message.delegationInterval = (reader.uint64() as Long);
+          message.delegationInterval = Duration.decode(reader, reader.uint32());
           break;
         case 3:
-          message.undelegationInterval = (reader.uint64() as Long);
+          message.undelegationInterval = Duration.decode(reader, reader.uint32());
           break;
         case 4:
           message.ibcTransferTimeout = Duration.decode(reader, reader.uint32());
@@ -196,8 +211,8 @@ export const StakingParams = {
   fromJSON(object: any): StakingParams {
     return {
       feeRatios: isSet(object.feeRatios) ? FeeRatios.fromJSON(object.feeRatios) : undefined,
-      delegationInterval: isSet(object.delegationInterval) ? Long.fromValue(object.delegationInterval) : Long.UZERO,
-      undelegationInterval: isSet(object.undelegationInterval) ? Long.fromValue(object.undelegationInterval) : Long.UZERO,
+      delegationInterval: isSet(object.delegationInterval) ? Duration.fromJSON(object.delegationInterval) : undefined,
+      undelegationInterval: isSet(object.undelegationInterval) ? Duration.fromJSON(object.undelegationInterval) : undefined,
       ibcTransferTimeout: isSet(object.ibcTransferTimeout) ? Duration.fromJSON(object.ibcTransferTimeout) : undefined,
       icaTimeout: isSet(object.icaTimeout) ? Duration.fromJSON(object.icaTimeout) : undefined,
       maxDelegationMsgs: isSet(object.maxDelegationMsgs) ? Number(object.maxDelegationMsgs) : 0,
@@ -211,8 +226,8 @@ export const StakingParams = {
   toJSON(message: StakingParams): unknown {
     const obj: any = {};
     message.feeRatios !== undefined && (obj.feeRatios = message.feeRatios ? FeeRatios.toJSON(message.feeRatios) : undefined);
-    message.delegationInterval !== undefined && (obj.delegationInterval = (message.delegationInterval || Long.UZERO).toString());
-    message.undelegationInterval !== undefined && (obj.undelegationInterval = (message.undelegationInterval || Long.UZERO).toString());
+    message.delegationInterval !== undefined && (obj.delegationInterval = message.delegationInterval ? Duration.toJSON(message.delegationInterval) : undefined);
+    message.undelegationInterval !== undefined && (obj.undelegationInterval = message.undelegationInterval ? Duration.toJSON(message.undelegationInterval) : undefined);
     message.ibcTransferTimeout !== undefined && (obj.ibcTransferTimeout = message.ibcTransferTimeout ? Duration.toJSON(message.ibcTransferTimeout) : undefined);
     message.icaTimeout !== undefined && (obj.icaTimeout = message.icaTimeout ? Duration.toJSON(message.icaTimeout) : undefined);
     message.maxDelegationMsgs !== undefined && (obj.maxDelegationMsgs = Math.round(message.maxDelegationMsgs));
@@ -226,8 +241,8 @@ export const StakingParams = {
   fromPartial(object: Partial<StakingParams>): StakingParams {
     const message = createBaseStakingParams();
     message.feeRatios = object.feeRatios !== undefined && object.feeRatios !== null ? FeeRatios.fromPartial(object.feeRatios) : undefined;
-    message.delegationInterval = object.delegationInterval !== undefined && object.delegationInterval !== null ? Long.fromValue(object.delegationInterval) : Long.UZERO;
-    message.undelegationInterval = object.undelegationInterval !== undefined && object.undelegationInterval !== null ? Long.fromValue(object.undelegationInterval) : Long.UZERO;
+    message.delegationInterval = object.delegationInterval !== undefined && object.delegationInterval !== null ? Duration.fromPartial(object.delegationInterval) : undefined;
+    message.undelegationInterval = object.undelegationInterval !== undefined && object.undelegationInterval !== null ? Duration.fromPartial(object.undelegationInterval) : undefined;
     message.ibcTransferTimeout = object.ibcTransferTimeout !== undefined && object.ibcTransferTimeout !== null ? Duration.fromPartial(object.ibcTransferTimeout) : undefined;
     message.icaTimeout = object.icaTimeout !== undefined && object.icaTimeout !== null ? Duration.fromPartial(object.icaTimeout) : undefined;
     message.maxDelegationMsgs = object.maxDelegationMsgs ?? 0;

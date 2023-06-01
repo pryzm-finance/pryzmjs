@@ -1,0 +1,22 @@
+syntax = "proto3";
+package prismfinance.prismcore.incentives;
+
+import "gogoproto/gogo.proto";
+import "prismcore/incentives/params.proto";
+import "prismcore/incentives/pool.proto";
+import "prismcore/incentives/bond.proto";
+import "prismcore/incentives/unbonding.proto";
+// this line is used by starport scaffolding # genesis/proto/import
+
+option go_package = "github.com/prism-finance/prism-core/x/incentives/types";
+
+// GenesisState defines the incentives module's genesis state.
+message GenesisState {
+  Params params = 1 [(gogoproto.nullable) = false];
+  repeated Pool pool_list = 2 [(gogoproto.nullable) = false];
+  repeated Bond bond_list = 3 [(gogoproto.nullable) = false];
+  repeated Unbonding unbonding_list = 4 [(gogoproto.nullable) = false];
+  uint64 unbonding_count = 5;
+  repeated uint64 auto_unbonding_list = 6;
+  // this line is used by starport scaffolding # genesis/proto/state
+}
