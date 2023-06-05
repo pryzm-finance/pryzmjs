@@ -25,7 +25,10 @@ export class LCDQueryClient {
     this.pool = this.pool.bind(this);
     this.params = this.params.bind(this);
   }
-  /* Validators queries all validators that match the given status. */
+  /* Validators queries all validators that match the given status.
+  
+   When called from another module, this query might consume a high amount of
+   gas if the pagination field is incorrectly set. */
   async validators(params: QueryValidatorsRequest, options: any = {params: {}}): Promise<QueryValidatorsResponseSDKType> {
     if (typeof params?.status !== "undefined") {
       options.params.status = params.status;
@@ -41,7 +44,10 @@ export class LCDQueryClient {
     const endpoint = `cosmos/staking/v1beta1/validators/${params.validatorAddr}`;
     return await this.req.get<QueryValidatorResponseSDKType>(endpoint);
   }
-  /* ValidatorDelegations queries delegate info for given validator. */
+  /* ValidatorDelegations queries delegate info for given validator.
+  
+   When called from another module, this query might consume a high amount of
+   gas if the pagination field is incorrectly set. */
   async validatorDelegations(params: QueryValidatorDelegationsRequest, options: any = {params: {}}): Promise<QueryValidatorDelegationsResponseSDKType> {
     if (typeof params?.pagination !== "undefined") {
       setPaginationParams(options, params.pagination);
@@ -49,7 +55,10 @@ export class LCDQueryClient {
     const endpoint = `cosmos/staking/v1beta1/validators/${params.validatorAddr}/delegations`;
     return await this.req.get<QueryValidatorDelegationsResponseSDKType>(endpoint, options);
   }
-  /* ValidatorUnbondingDelegations queries unbonding delegations of a validator. */
+  /* ValidatorUnbondingDelegations queries unbonding delegations of a validator.
+  
+   When called from another module, this query might consume a high amount of
+   gas if the pagination field is incorrectly set. */
   async validatorUnbondingDelegations(params: QueryValidatorUnbondingDelegationsRequest, options: any = {params: {}}): Promise<QueryValidatorUnbondingDelegationsResponseSDKType> {
     if (typeof params?.pagination !== "undefined") {
       setPaginationParams(options, params.pagination);
@@ -68,7 +77,10 @@ export class LCDQueryClient {
     const endpoint = `cosmos/staking/v1beta1/validators/${params.validatorAddr}/delegations/${params.delegatorAddr}/unbonding_delegation`;
     return await this.req.get<QueryUnbondingDelegationResponseSDKType>(endpoint);
   }
-  /* DelegatorDelegations queries all delegations of a given delegator address. */
+  /* DelegatorDelegations queries all delegations of a given delegator address.
+  
+   When called from another module, this query might consume a high amount of
+   gas if the pagination field is incorrectly set. */
   async delegatorDelegations(params: QueryDelegatorDelegationsRequest, options: any = {params: {}}): Promise<QueryDelegatorDelegationsResponseSDKType> {
     if (typeof params?.pagination !== "undefined") {
       setPaginationParams(options, params.pagination);
@@ -77,7 +89,10 @@ export class LCDQueryClient {
     return await this.req.get<QueryDelegatorDelegationsResponseSDKType>(endpoint, options);
   }
   /* DelegatorUnbondingDelegations queries all unbonding delegations of a given
-   delegator address. */
+   delegator address.
+  
+   When called from another module, this query might consume a high amount of
+   gas if the pagination field is incorrectly set. */
   async delegatorUnbondingDelegations(params: QueryDelegatorUnbondingDelegationsRequest, options: any = {params: {}}): Promise<QueryDelegatorUnbondingDelegationsResponseSDKType> {
     if (typeof params?.pagination !== "undefined") {
       setPaginationParams(options, params.pagination);
@@ -85,7 +100,10 @@ export class LCDQueryClient {
     const endpoint = `cosmos/staking/v1beta1/delegators/${params.delegatorAddr}/unbonding_delegations`;
     return await this.req.get<QueryDelegatorUnbondingDelegationsResponseSDKType>(endpoint, options);
   }
-  /* Redelegations queries redelegations of given address. */
+  /* Redelegations queries redelegations of given address.
+  
+   When called from another module, this query might consume a high amount of
+   gas if the pagination field is incorrectly set. */
   async redelegations(params: QueryRedelegationsRequest, options: any = {params: {}}): Promise<QueryRedelegationsResponseSDKType> {
     if (typeof params?.srcValidatorAddr !== "undefined") {
       options.params.src_validator_addr = params.srcValidatorAddr;
@@ -100,7 +118,10 @@ export class LCDQueryClient {
     return await this.req.get<QueryRedelegationsResponseSDKType>(endpoint, options);
   }
   /* DelegatorValidators queries all validators info for given delegator
-   address. */
+   address.
+  
+   When called from another module, this query might consume a high amount of
+   gas if the pagination field is incorrectly set. */
   async delegatorValidators(params: QueryDelegatorValidatorsRequest, options: any = {params: {}}): Promise<QueryDelegatorValidatorsResponseSDKType> {
     if (typeof params?.pagination !== "undefined") {
       setPaginationParams(options, params.pagination);

@@ -1,0 +1,94 @@
+syntax = "proto3";
+package prism.pgov;
+
+import "cosmos/base/v1beta1/coin.proto";
+import "cosmos/gov/v1/gov.proto";
+import "cosmos_proto/cosmos.proto";
+import "gogoproto/gogo.proto";
+import "prism/pgov/params.proto";
+import "prism/pgov/proposal.proto";
+// this line is used by starport scaffolding # proto/tx/import
+import "tendermint/crypto/proof.proto";
+
+option go_package = "github.com/prism-finance/prism-core/x/pgov/types";
+
+// Msg defines the Msg service.
+service Msg {
+  rpc UpdateParams(MsgUpdateParams) returns (MsgUpdateParamsResponse);
+  rpc StakePAssets(MsgStakePAssets) returns (MsgStakePAssetsResponse);
+  rpc UnstakePAssets(MsgUnstakePAssets) returns (MsgUnstakePAssetsResponse);
+  rpc SubmitVote(MsgSubmitVote) returns (MsgSubmitVoteResponse);
+  rpc SubmitProposal(MsgSubmitProposal) returns (MsgSubmitProposalResponse);
+  rpc RetryVoteTransmit(MsgRetryVoteTransmit) returns (MsgRetryVoteTransmitResponse);
+  // this line is used by starport scaffolding # proto/tx/rpc
+}
+
+message MsgUpdateParams {
+  string authority = 1;
+  Params params = 2 [(gogoproto.nullable) = false];
+}
+
+message MsgUpdateParamsResponse {}
+
+message MsgStakePAssets {
+  string creator = 1;
+  repeated cosmos.base.v1beta1.Coin amount = 2 [
+    (gogoproto.nullable) = false,
+    (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins"
+  ];
+}
+
+message MsgStakePAssetsResponse {
+  string total_staked_p_assets = 1 [
+    (cosmos_proto.scalar) = "cosmos.Int",
+    (gogoproto.customtype) = "cosmossdk.io/math.Int",
+    (gogoproto.nullable) = false
+  ];
+}
+
+message MsgUnstakePAssets {
+  string creator = 1;
+  repeated cosmos.base.v1beta1.Coin amount = 2 [
+    (gogoproto.nullable) = false,
+    (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins"
+  ];
+}
+
+message MsgUnstakePAssetsResponse {
+  string total_staked_p_assets = 1 [
+    (cosmos_proto.scalar) = "cosmos.Int",
+    (gogoproto.customtype) = "cosmossdk.io/math.Int",
+    (gogoproto.nullable) = false
+  ];
+}
+
+message MsgSubmitVote {
+  string voter = 1;
+  string asset = 2;
+  uint64 proposal = 3;
+  repeated cosmos.gov.v1.WeightedVoteOption options = 4;
+}
+
+message MsgSubmitVoteResponse {}
+
+message MsgSubmitProposal {
+  string creator = 1;
+  string asset = 2;
+  bytes proposal = 3;
+  uint64 height = 4;
+  tendermint.crypto.ProofOps proof = 5;
+}
+
+message MsgSubmitProposalResponse {
+  Proposal proposal = 1 [(gogoproto.nullable) = false];
+}
+
+message MsgRetryVoteTransmit {
+  string creator = 1;
+  string asset = 2;
+  uint64 proposal = 3;
+}
+
+message MsgRetryVoteTransmitResponse {}
+
+// this line is used by starport scaffolding # proto/tx/message

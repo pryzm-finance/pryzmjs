@@ -70,11 +70,14 @@ export interface EventExec {
   proposalId: Long;
   /** result is the proposal execution result. */
   result: ProposalExecutorResult;
+  /** logs contains error logs in case the execution result is FAILURE. */
+  logs: string;
 }
 /** EventExec is an event emitted when a proposal is executed. */
 export interface EventExecSDKType {
   proposal_id: Long;
   result: ProposalExecutorResult;
+  logs: string;
 }
 /** EventLeaveGroup is an event emitted when group member leaves the group. */
 export interface EventLeaveGroup {
@@ -406,7 +409,8 @@ export const EventVote = {
 function createBaseEventExec(): EventExec {
   return {
     proposalId: Long.UZERO,
-    result: 0
+    result: 0,
+    logs: ""
   };
 }
 export const EventExec = {
@@ -416,6 +420,9 @@ export const EventExec = {
     }
     if (message.result !== 0) {
       writer.uint32(16).int32(message.result);
+    }
+    if (message.logs !== "") {
+      writer.uint32(26).string(message.logs);
     }
     return writer;
   },
@@ -432,6 +439,9 @@ export const EventExec = {
         case 2:
           message.result = (reader.int32() as any);
           break;
+        case 3:
+          message.logs = reader.string();
+          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -442,19 +452,22 @@ export const EventExec = {
   fromJSON(object: any): EventExec {
     return {
       proposalId: isSet(object.proposalId) ? Long.fromValue(object.proposalId) : Long.UZERO,
-      result: isSet(object.result) ? proposalExecutorResultFromJSON(object.result) : 0
+      result: isSet(object.result) ? proposalExecutorResultFromJSON(object.result) : 0,
+      logs: isSet(object.logs) ? String(object.logs) : ""
     };
   },
   toJSON(message: EventExec): unknown {
     const obj: any = {};
     message.proposalId !== undefined && (obj.proposalId = (message.proposalId || Long.UZERO).toString());
     message.result !== undefined && (obj.result = proposalExecutorResultToJSON(message.result));
+    message.logs !== undefined && (obj.logs = message.logs);
     return obj;
   },
   fromPartial(object: Partial<EventExec>): EventExec {
     const message = createBaseEventExec();
     message.proposalId = object.proposalId !== undefined && object.proposalId !== null ? Long.fromValue(object.proposalId) : Long.UZERO;
     message.result = object.result ?? 0;
+    message.logs = object.logs ?? "";
     return message;
   }
 };

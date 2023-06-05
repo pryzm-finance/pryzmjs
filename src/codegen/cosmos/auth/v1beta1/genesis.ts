@@ -4,7 +4,7 @@ import * as _m0 from "protobufjs/minimal";
 import { isSet } from "../../../helpers";
 /** GenesisState defines the auth module's genesis state. */
 export interface GenesisState {
-  /** params defines all the paramaters of the module. */
+  /** params defines all the parameters of the module. */
   params?: Params;
   /** accounts are the accounts present at genesis. */
   accounts: Any[];

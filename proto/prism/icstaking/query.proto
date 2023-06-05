@@ -1,0 +1,129 @@
+syntax = "proto3";
+package prism.icstaking;
+
+import "cosmos/base/query/v1beta1/pagination.proto";
+import "gogoproto/gogo.proto";
+import "google/api/annotations.proto";
+import "prism/icstaking/host_chain.proto";
+import "prism/icstaking/params.proto";
+import "prism/icstaking/undelegation.proto";
+// this line is used by starport scaffolding # 1
+
+option go_package = "github.com/prism-finance/prism-core/x/icstaking/types";
+
+// Query defines the gRPC querier service.
+service Query {
+  // Parameters queries the parameters of the module.
+  rpc Params(QueryParamsRequest) returns (QueryParamsResponse) {
+    option (google.api.http).get = "/prism-finance/prism-core/icstaking/params";
+  }
+  // Queries a HostChain by index.
+  rpc HostChain(QueryGetHostChainRequest) returns (QueryGetHostChainResponse) {
+    option (google.api.http).get = "/prism-finance/prism-core/icstaking/host_chain/{host_chain_id}";
+  }
+
+  // Queries a list of HostChain items.
+  rpc HostChainAll(QueryAllHostChainRequest) returns (QueryAllHostChainResponse) {
+    option (google.api.http).get = "/prism-finance/prism-core/icstaking/host_chain";
+  }
+
+  // Queries a HostChainState by index.
+  rpc HostChainState(QueryGetHostChainStateRequest) returns (QueryGetHostChainStateResponse) {
+    option (google.api.http).get = "/prism-finance/prism-core/icstaking/host_chain_state/{host_chain_id}";
+  }
+
+  // Queries a list of HostChainState items.
+  rpc HostChainStateAll(QueryAllHostChainStateRequest) returns (QueryAllHostChainStateResponse) {
+    option (google.api.http).get = "/prism-finance/prism-core/icstaking/host_chain_state";
+  }
+
+  // Queries a Undelegation by index.
+  rpc Undelegation(QueryGetUndelegationRequest) returns (QueryGetUndelegationResponse) {
+    option (google.api.http).get = "/prism-finance/prism-core/icstaking/undelegation/{host_chain}/{epoch}";
+  }
+
+  // Queries a list of Undelegation items.
+  rpc UndelegationAll(QueryAllUndelegationRequest) returns (QueryAllUndelegationResponse) {
+    option (google.api.http).get = "/prism-finance/prism-core/icstaking/undelegation";
+  }
+
+  // Queries a list of incomplete undelegations sorted by completion time.
+  rpc IncompleteUndelegationAll(QueryIncompleteUndelegationRequest) returns (QueryIncompleteUndelegationResponse) {
+    option (google.api.http).get = "/prism-finance/prism-core/icstaking/undelegation/{host_chain}";
+  }
+
+  // this line is used by starport scaffolding # 2
+}
+
+// QueryParamsRequest is request type for the Query/Params RPC method.
+message QueryParamsRequest {}
+
+// QueryParamsResponse is response type for the Query/Params RPC method.
+message QueryParamsResponse {
+  // params holds all the parameters of this module.
+  Params params = 1 [(gogoproto.nullable) = false];
+}
+
+message QueryGetHostChainRequest {
+  string host_chain_id = 1;
+}
+
+message QueryGetHostChainResponse {
+  HostChain host_chain = 1 [(gogoproto.nullable) = false];
+}
+
+message QueryAllHostChainRequest {
+  cosmos.base.query.v1beta1.PageRequest pagination = 1;
+}
+
+message QueryAllHostChainResponse {
+  repeated HostChain host_chain = 1 [(gogoproto.nullable) = false];
+  cosmos.base.query.v1beta1.PageResponse pagination = 2;
+}
+
+message QueryGetHostChainStateRequest {
+  string host_chain_id = 1;
+}
+
+message QueryGetHostChainStateResponse {
+  HostChainState host_chain_state = 1 [(gogoproto.nullable) = false];
+}
+
+message QueryAllHostChainStateRequest {
+  cosmos.base.query.v1beta1.PageRequest pagination = 1;
+}
+
+message QueryAllHostChainStateResponse {
+  repeated HostChainState host_chain_state = 1 [(gogoproto.nullable) = false];
+  cosmos.base.query.v1beta1.PageResponse pagination = 2;
+}
+
+message QueryGetUndelegationRequest {
+  string host_chain = 1;
+  uint64 epoch = 2;
+}
+
+message QueryGetUndelegationResponse {
+  Undelegation undelegation = 1 [(gogoproto.nullable) = false];
+}
+
+message QueryAllUndelegationRequest {
+  cosmos.base.query.v1beta1.PageRequest pagination = 1;
+}
+
+message QueryAllUndelegationResponse {
+  repeated Undelegation undelegation = 1 [(gogoproto.nullable) = false];
+  cosmos.base.query.v1beta1.PageResponse pagination = 2;
+}
+
+message QueryIncompleteUndelegationRequest {
+  string host_chain = 1;
+  cosmos.base.query.v1beta1.PageRequest pagination = 2;
+}
+
+message QueryIncompleteUndelegationResponse {
+  repeated Undelegation undelegation = 1 [(gogoproto.nullable) = false];
+  cosmos.base.query.v1beta1.PageResponse pagination = 2;
+}
+
+// this line is used by starport scaffolding # 3

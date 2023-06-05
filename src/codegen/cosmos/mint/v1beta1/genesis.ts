@@ -5,7 +5,7 @@ import { isSet } from "../../../helpers";
 export interface GenesisState {
   /** minter is a space for holding current inflation information. */
   minter?: Minter;
-  /** params defines all the paramaters of the module. */
+  /** params defines all the parameters of the module. */
   params?: Params;
 }
 /** GenesisState defines the mint module's genesis state. */

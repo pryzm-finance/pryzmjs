@@ -1,0 +1,23 @@
+syntax = "proto3";
+package prism.pgov;
+
+import "cosmos_proto/cosmos.proto";
+import "gogoproto/gogo.proto";
+
+option go_package = "github.com/prism-finance/prism-core/x/pgov/types";
+
+// StakedPAsset stores the amount of pAssets staked for an account
+message StakedPAsset {
+  // the address of owner
+  string account = 1;
+
+  // pAsset denom
+  string p_asset = 2;
+
+  // staked amount
+  string amount = 3 [
+    (cosmos_proto.scalar) = "cosmos.Int",
+    (gogoproto.customtype) = "cosmossdk.io/math.Int",
+    (gogoproto.nullable) = false
+  ];
+}

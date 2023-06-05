@@ -1,8 +1,8 @@
-import {prismfinance} from "./codegen"
+import {prism} from "./codegen"
 import {Long, PageRequest} from "./codegen/helpers";
 
-export type PrismLCDClient = Awaited<ReturnType<typeof prismfinance.ClientFactory.createLCDClient>>
-export type PrismRPCQueryClient = Awaited<ReturnType<typeof prismfinance.ClientFactory.createRPCQueryClient>>
+export type PrismLCDClient = Awaited<ReturnType<typeof prism.ClientFactory.createLCDClient>>
+export type PrismRPCQueryClient = Awaited<ReturnType<typeof prism.ClientFactory.createRPCQueryClient>>
 
 export * from './codegen';
 

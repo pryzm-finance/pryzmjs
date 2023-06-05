@@ -1,4 +1,5 @@
-import { Long, isSet, bytesFromBase64, base64FromBytes } from "../../../../helpers";
+import { Timestamp, TimestampSDKType } from "../../../../google/protobuf/timestamp";
+import { Long, isSet, fromJsonTimestamp, fromTimestamp, bytesFromBase64, base64FromBytes } from "../../../../helpers";
 import * as _m0 from "protobufjs/minimal";
 /**
  * CommitInfo defines commit information used by the multi-store when committing
@@ -7,6 +8,7 @@ import * as _m0 from "protobufjs/minimal";
 export interface CommitInfo {
   version: Long;
   storeInfos: StoreInfo[];
+  timestamp?: Timestamp;
 }
 /**
  * CommitInfo defines commit information used by the multi-store when committing
@@ -15,6 +17,7 @@ export interface CommitInfo {
 export interface CommitInfoSDKType {
   version: Long;
   store_infos: StoreInfoSDKType[];
+  timestamp?: TimestampSDKType;
 }
 /**
  * StoreInfo defines store-specific commit information. It contains a reference
@@ -33,7 +36,7 @@ export interface StoreInfoSDKType {
   commit_id?: CommitIDSDKType;
 }
 /**
- * CommitID defines the committment information when a specific store is
+ * CommitID defines the commitment information when a specific store is
  * committed.
  */
 export interface CommitID {
@@ -41,7 +44,7 @@ export interface CommitID {
   hash: Uint8Array;
 }
 /**
- * CommitID defines the committment information when a specific store is
+ * CommitID defines the commitment information when a specific store is
  * committed.
  */
 export interface CommitIDSDKType {
@@ -51,7 +54,8 @@ export interface CommitIDSDKType {
 function createBaseCommitInfo(): CommitInfo {
   return {
     version: Long.ZERO,
-    storeInfos: []
+    storeInfos: [],
+    timestamp: undefined
   };
 }
 export const CommitInfo = {
@@ -61,6 +65,9 @@ export const CommitInfo = {
     }
     for (const v of message.storeInfos) {
       StoreInfo.encode(v!, writer.uint32(18).fork()).ldelim();
+    }
+    if (message.timestamp !== undefined) {
+      Timestamp.encode(message.timestamp, writer.uint32(26).fork()).ldelim();
     }
     return writer;
   },
@@ -77,6 +84,9 @@ export const CommitInfo = {
         case 2:
           message.storeInfos.push(StoreInfo.decode(reader, reader.uint32()));
           break;
+        case 3:
+          message.timestamp = Timestamp.decode(reader, reader.uint32());
+          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -87,7 +97,8 @@ export const CommitInfo = {
   fromJSON(object: any): CommitInfo {
     return {
       version: isSet(object.version) ? Long.fromValue(object.version) : Long.ZERO,
-      storeInfos: Array.isArray(object?.storeInfos) ? object.storeInfos.map((e: any) => StoreInfo.fromJSON(e)) : []
+      storeInfos: Array.isArray(object?.storeInfos) ? object.storeInfos.map((e: any) => StoreInfo.fromJSON(e)) : [],
+      timestamp: isSet(object.timestamp) ? fromJsonTimestamp(object.timestamp) : undefined
     };
   },
   toJSON(message: CommitInfo): unknown {
@@ -98,12 +109,14 @@ export const CommitInfo = {
     } else {
       obj.storeInfos = [];
     }
+    message.timestamp !== undefined && (obj.timestamp = fromTimestamp(message.timestamp).toISOString());
     return obj;
   },
   fromPartial(object: Partial<CommitInfo>): CommitInfo {
     const message = createBaseCommitInfo();
     message.version = object.version !== undefined && object.version !== null ? Long.fromValue(object.version) : Long.ZERO;
     message.storeInfos = object.storeInfos?.map(e => StoreInfo.fromPartial(e)) || [];
+    message.timestamp = object.timestamp !== undefined && object.timestamp !== null ? Timestamp.fromPartial(object.timestamp) : undefined;
     return message;
   }
 };

@@ -1,4 +1,5 @@
 import { Coin, CoinSDKType } from "../../base/v1beta1/coin";
+import { Params, ParamsSDKType } from "./distribution";
 import * as _m0 from "protobufjs/minimal";
 import { isSet } from "../../../helpers";
 /**
@@ -17,9 +18,15 @@ export interface MsgSetWithdrawAddressSDKType {
   delegator_address: string;
   withdraw_address: string;
 }
-/** MsgSetWithdrawAddressResponse defines the Msg/SetWithdrawAddress response type. */
+/**
+ * MsgSetWithdrawAddressResponse defines the Msg/SetWithdrawAddress response
+ * type.
+ */
 export interface MsgSetWithdrawAddressResponse {}
-/** MsgSetWithdrawAddressResponse defines the Msg/SetWithdrawAddress response type. */
+/**
+ * MsgSetWithdrawAddressResponse defines the Msg/SetWithdrawAddress response
+ * type.
+ */
 export interface MsgSetWithdrawAddressResponseSDKType {}
 /**
  * MsgWithdrawDelegatorReward represents delegation withdrawal to a delegator
@@ -37,11 +44,18 @@ export interface MsgWithdrawDelegatorRewardSDKType {
   delegator_address: string;
   validator_address: string;
 }
-/** MsgWithdrawDelegatorRewardResponse defines the Msg/WithdrawDelegatorReward response type. */
+/**
+ * MsgWithdrawDelegatorRewardResponse defines the Msg/WithdrawDelegatorReward
+ * response type.
+ */
 export interface MsgWithdrawDelegatorRewardResponse {
+  /** Since: cosmos-sdk 0.46 */
   amount: Coin[];
 }
-/** MsgWithdrawDelegatorRewardResponse defines the Msg/WithdrawDelegatorReward response type. */
+/**
+ * MsgWithdrawDelegatorRewardResponse defines the Msg/WithdrawDelegatorReward
+ * response type.
+ */
 export interface MsgWithdrawDelegatorRewardResponseSDKType {
   amount: CoinSDKType[];
 }
@@ -59,11 +73,18 @@ export interface MsgWithdrawValidatorCommission {
 export interface MsgWithdrawValidatorCommissionSDKType {
   validator_address: string;
 }
-/** MsgWithdrawValidatorCommissionResponse defines the Msg/WithdrawValidatorCommission response type. */
+/**
+ * MsgWithdrawValidatorCommissionResponse defines the
+ * Msg/WithdrawValidatorCommission response type.
+ */
 export interface MsgWithdrawValidatorCommissionResponse {
+  /** Since: cosmos-sdk 0.46 */
   amount: Coin[];
 }
-/** MsgWithdrawValidatorCommissionResponse defines the Msg/WithdrawValidatorCommission response type. */
+/**
+ * MsgWithdrawValidatorCommissionResponse defines the
+ * Msg/WithdrawValidatorCommission response type.
+ */
 export interface MsgWithdrawValidatorCommissionResponseSDKType {
   amount: CoinSDKType[];
 }
@@ -87,6 +108,83 @@ export interface MsgFundCommunityPoolSDKType {
 export interface MsgFundCommunityPoolResponse {}
 /** MsgFundCommunityPoolResponse defines the Msg/FundCommunityPool response type. */
 export interface MsgFundCommunityPoolResponseSDKType {}
+/**
+ * MsgUpdateParams is the Msg/UpdateParams request type.
+ * 
+ * Since: cosmos-sdk 0.47
+ */
+export interface MsgUpdateParams {
+  /** authority is the address that controls the module (defaults to x/gov unless overwritten). */
+  authority: string;
+  /**
+   * params defines the x/distribution parameters to update.
+   * 
+   * NOTE: All parameters must be supplied.
+   */
+  params?: Params;
+}
+/**
+ * MsgUpdateParams is the Msg/UpdateParams request type.
+ * 
+ * Since: cosmos-sdk 0.47
+ */
+export interface MsgUpdateParamsSDKType {
+  authority: string;
+  params?: ParamsSDKType;
+}
+/**
+ * MsgUpdateParamsResponse defines the response structure for executing a
+ * MsgUpdateParams message.
+ * 
+ * Since: cosmos-sdk 0.47
+ */
+export interface MsgUpdateParamsResponse {}
+/**
+ * MsgUpdateParamsResponse defines the response structure for executing a
+ * MsgUpdateParams message.
+ * 
+ * Since: cosmos-sdk 0.47
+ */
+export interface MsgUpdateParamsResponseSDKType {}
+/**
+ * MsgCommunityPoolSpend defines a message for sending tokens from the community
+ * pool to another account. This message is typically executed via a governance
+ * proposal with the governance module being the executing authority.
+ * 
+ * Since: cosmos-sdk 0.47
+ */
+export interface MsgCommunityPoolSpend {
+  /** authority is the address that controls the module (defaults to x/gov unless overwritten). */
+  authority: string;
+  recipient: string;
+  amount: Coin[];
+}
+/**
+ * MsgCommunityPoolSpend defines a message for sending tokens from the community
+ * pool to another account. This message is typically executed via a governance
+ * proposal with the governance module being the executing authority.
+ * 
+ * Since: cosmos-sdk 0.47
+ */
+export interface MsgCommunityPoolSpendSDKType {
+  authority: string;
+  recipient: string;
+  amount: CoinSDKType[];
+}
+/**
+ * MsgCommunityPoolSpendResponse defines the response to executing a
+ * MsgCommunityPoolSpend message.
+ * 
+ * Since: cosmos-sdk 0.47
+ */
+export interface MsgCommunityPoolSpendResponse {}
+/**
+ * MsgCommunityPoolSpendResponse defines the response to executing a
+ * MsgCommunityPoolSpend message.
+ * 
+ * Since: cosmos-sdk 0.47
+ */
+export interface MsgCommunityPoolSpendResponseSDKType {}
 function createBaseMsgSetWithdrawAddress(): MsgSetWithdrawAddress {
   return {
     delegatorAddress: "",
@@ -462,6 +560,196 @@ export const MsgFundCommunityPoolResponse = {
   },
   fromPartial(_: Partial<MsgFundCommunityPoolResponse>): MsgFundCommunityPoolResponse {
     const message = createBaseMsgFundCommunityPoolResponse();
+    return message;
+  }
+};
+function createBaseMsgUpdateParams(): MsgUpdateParams {
+  return {
+    authority: "",
+    params: undefined
+  };
+}
+export const MsgUpdateParams = {
+  encode(message: MsgUpdateParams, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.authority !== "") {
+      writer.uint32(10).string(message.authority);
+    }
+    if (message.params !== undefined) {
+      Params.encode(message.params, writer.uint32(18).fork()).ldelim();
+    }
+    return writer;
+  },
+  decode(input: _m0.Reader | Uint8Array, length?: number): MsgUpdateParams {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseMsgUpdateParams();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.authority = reader.string();
+          break;
+        case 2:
+          message.params = Params.decode(reader, reader.uint32());
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromJSON(object: any): MsgUpdateParams {
+    return {
+      authority: isSet(object.authority) ? String(object.authority) : "",
+      params: isSet(object.params) ? Params.fromJSON(object.params) : undefined
+    };
+  },
+  toJSON(message: MsgUpdateParams): unknown {
+    const obj: any = {};
+    message.authority !== undefined && (obj.authority = message.authority);
+    message.params !== undefined && (obj.params = message.params ? Params.toJSON(message.params) : undefined);
+    return obj;
+  },
+  fromPartial(object: Partial<MsgUpdateParams>): MsgUpdateParams {
+    const message = createBaseMsgUpdateParams();
+    message.authority = object.authority ?? "";
+    message.params = object.params !== undefined && object.params !== null ? Params.fromPartial(object.params) : undefined;
+    return message;
+  }
+};
+function createBaseMsgUpdateParamsResponse(): MsgUpdateParamsResponse {
+  return {};
+}
+export const MsgUpdateParamsResponse = {
+  encode(_: MsgUpdateParamsResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    return writer;
+  },
+  decode(input: _m0.Reader | Uint8Array, length?: number): MsgUpdateParamsResponse {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseMsgUpdateParamsResponse();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromJSON(_: any): MsgUpdateParamsResponse {
+    return {};
+  },
+  toJSON(_: MsgUpdateParamsResponse): unknown {
+    const obj: any = {};
+    return obj;
+  },
+  fromPartial(_: Partial<MsgUpdateParamsResponse>): MsgUpdateParamsResponse {
+    const message = createBaseMsgUpdateParamsResponse();
+    return message;
+  }
+};
+function createBaseMsgCommunityPoolSpend(): MsgCommunityPoolSpend {
+  return {
+    authority: "",
+    recipient: "",
+    amount: []
+  };
+}
+export const MsgCommunityPoolSpend = {
+  encode(message: MsgCommunityPoolSpend, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.authority !== "") {
+      writer.uint32(10).string(message.authority);
+    }
+    if (message.recipient !== "") {
+      writer.uint32(18).string(message.recipient);
+    }
+    for (const v of message.amount) {
+      Coin.encode(v!, writer.uint32(26).fork()).ldelim();
+    }
+    return writer;
+  },
+  decode(input: _m0.Reader | Uint8Array, length?: number): MsgCommunityPoolSpend {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseMsgCommunityPoolSpend();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.authority = reader.string();
+          break;
+        case 2:
+          message.recipient = reader.string();
+          break;
+        case 3:
+          message.amount.push(Coin.decode(reader, reader.uint32()));
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromJSON(object: any): MsgCommunityPoolSpend {
+    return {
+      authority: isSet(object.authority) ? String(object.authority) : "",
+      recipient: isSet(object.recipient) ? String(object.recipient) : "",
+      amount: Array.isArray(object?.amount) ? object.amount.map((e: any) => Coin.fromJSON(e)) : []
+    };
+  },
+  toJSON(message: MsgCommunityPoolSpend): unknown {
+    const obj: any = {};
+    message.authority !== undefined && (obj.authority = message.authority);
+    message.recipient !== undefined && (obj.recipient = message.recipient);
+    if (message.amount) {
+      obj.amount = message.amount.map(e => e ? Coin.toJSON(e) : undefined);
+    } else {
+      obj.amount = [];
+    }
+    return obj;
+  },
+  fromPartial(object: Partial<MsgCommunityPoolSpend>): MsgCommunityPoolSpend {
+    const message = createBaseMsgCommunityPoolSpend();
+    message.authority = object.authority ?? "";
+    message.recipient = object.recipient ?? "";
+    message.amount = object.amount?.map(e => Coin.fromPartial(e)) || [];
+    return message;
+  }
+};
+function createBaseMsgCommunityPoolSpendResponse(): MsgCommunityPoolSpendResponse {
+  return {};
+}
+export const MsgCommunityPoolSpendResponse = {
+  encode(_: MsgCommunityPoolSpendResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    return writer;
+  },
+  decode(input: _m0.Reader | Uint8Array, length?: number): MsgCommunityPoolSpendResponse {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseMsgCommunityPoolSpendResponse();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromJSON(_: any): MsgCommunityPoolSpendResponse {
+    return {};
+  },
+  toJSON(_: MsgCommunityPoolSpendResponse): unknown {
+    const obj: any = {};
+    return obj;
+  },
+  fromPartial(_: Partial<MsgCommunityPoolSpendResponse>): MsgCommunityPoolSpendResponse {
+    const message = createBaseMsgCommunityPoolSpendResponse();
     return message;
   }
 };

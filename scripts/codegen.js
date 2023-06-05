@@ -16,7 +16,7 @@ telescope({
                 'cosmos/authz/v1beta1/tx.amino.ts',
                 'cosmos/staking/v1beta1/tx.amino.ts',
                 'google/protobuf/descriptor.ts',
-                'prismcore/amm/genesis.ts',
+                'prism/amm/genesis.ts',
             ],
             patterns: [
                 '**/*.amino.ts',

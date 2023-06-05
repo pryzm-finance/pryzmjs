@@ -1,0 +1,22 @@
+syntax = "proto3";
+package prism.pgov;
+
+import "gogoproto/gogo.proto";
+import "google/protobuf/duration.proto";
+
+option go_package = "github.com/prism-finance/prism-core/x/pgov/types";
+
+// Params defines the parameters for the module.
+message Params {
+  // (Host chain proposal end time) - (Prism proposal end time)
+  google.protobuf.Duration voting_result_submission_window = 1 [
+    (gogoproto.stdduration) = true,
+    (gogoproto.nullable) = false
+  ];
+
+  // Zero value means default timeout
+  google.protobuf.Duration voting_result_submission_timeout = 2 [
+    (gogoproto.stdduration) = true,
+    (gogoproto.nullable) = false
+  ];
+}

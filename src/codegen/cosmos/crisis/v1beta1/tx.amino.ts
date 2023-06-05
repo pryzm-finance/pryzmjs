@@ -1,12 +1,23 @@
 //@ts-nocheck
 import { AminoMsg } from "@cosmjs/amino";
-import { MsgVerifyInvariant } from "./tx";
+import { Long } from "../../../helpers";
+import { MsgVerifyInvariant, MsgUpdateParams } from "./tx";
 export interface MsgVerifyInvariantAminoType extends AminoMsg {
   type: "cosmos-sdk/MsgVerifyInvariant";
   value: {
     sender: string;
     invariant_module_name: string;
     invariant_route: string;
+  };
+}
+export interface MsgUpdateParamsAminoType extends AminoMsg {
+  type: "cosmos-sdk/x/crisis/MsgUpdateParams";
+  value: {
+    authority: string;
+    constant_fee: {
+      denom: string;
+      amount: string;
+    };
   };
 }
 export const AminoConverter = {
@@ -32,6 +43,33 @@ export const AminoConverter = {
         sender,
         invariantModuleName: invariant_module_name,
         invariantRoute: invariant_route
+      };
+    }
+  },
+  "/cosmos.crisis.v1beta1.MsgUpdateParams": {
+    aminoType: "cosmos-sdk/x/crisis/MsgUpdateParams",
+    toAmino: ({
+      authority,
+      constantFee
+    }: MsgUpdateParams): MsgUpdateParamsAminoType["value"] => {
+      return {
+        authority,
+        constant_fee: {
+          denom: constantFee.denom,
+          amount: Long.fromValue(constantFee.amount).toString()
+        }
+      };
+    },
+    fromAmino: ({
+      authority,
+      constant_fee
+    }: MsgUpdateParamsAminoType["value"]): MsgUpdateParams => {
+      return {
+        authority,
+        constantFee: {
+          denom: constant_fee.denom,
+          amount: constant_fee.amount
+        }
       };
     }
   }

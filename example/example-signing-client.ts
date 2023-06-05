@@ -1,10 +1,10 @@
-import {cosmos, getSigningPrismfinanceClient} from "@prism-finance/prismjs"
+import {cosmos, getSigningPrismClient} from "@prism-finance/prismjs"
 import {DirectSecp256k1HdWallet} from "@cosmjs/proto-signing";
 
 async function main() {
     const mnemonic = "short ocean antique emerge glory lock army wine guard sketch hotel remove music demand romance raven roof survey tired thank vessel cliff choose apology";
     const signer = await DirectSecp256k1HdWallet.fromMnemonic(mnemonic, {prefix: "prism"});
-    const signingClient = await getSigningPrismfinanceClient({
+    const signingClient = await getSigningPrismClient({
         rpcEndpoint: "http://0.0.0.0:26657",
         signer
     })
@@ -14,7 +14,7 @@ async function main() {
             amount: "10",
             denom: "uprism"
         }],
-        toAddress: "prism1u5pnr446txcfzlq42v3h7j4p6232hgem7rdz0f",
+        toAddress: "prism1026zkhvcla5a7t9alwenzaarhcwtgk8z6c8yra",
         fromAddress: "prism156pcgs3faegfte0vuaykr9az3hh9kx2e2qfwvu"
     })
 
