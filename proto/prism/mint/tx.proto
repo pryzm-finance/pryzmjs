@@ -1,0 +1,39 @@
+syntax = "proto3";
+package prism.mint;
+
+// this line is used by starport scaffolding # proto/tx/import
+import "cosmos/base/v1beta1/coin.proto";
+import "cosmos_proto/cosmos.proto";
+import "gogoproto/gogo.proto";
+import "prism/mint/params.proto";
+
+option go_package = "github.com/prism-finance/prism-core/x/mint/types";
+
+// Msg defines the Msg service.
+service Msg {
+  rpc UpdateParams(MsgUpdateParams) returns (MsgUpdateParamsResponse);
+  rpc DappAccountSpend(MsgDappAccountSpend) returns (MsgDappAccountSpendResponse);
+  // this line is used by starport scaffolding # proto/tx/rpc
+}
+
+message MsgUpdateParams {
+  string authority = 1;
+  Params params = 2 [(gogoproto.nullable) = false];
+}
+
+message MsgUpdateParamsResponse {}
+
+message MsgDappAccountSpend {
+  string authority = 1;
+  string title = 2;
+  string description = 3;
+  string recipient = 4;
+  repeated cosmos.base.v1beta1.Coin amount = 5 [
+    (gogoproto.nullable) = false,
+    (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins"
+  ];
+}
+
+message MsgDappAccountSpendResponse {}
+
+// this line is used by starport scaffolding # proto/tx/message

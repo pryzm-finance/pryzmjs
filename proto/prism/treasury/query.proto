@@ -1,0 +1,56 @@
+syntax = "proto3";
+package prism.treasury;
+
+import "cosmos/base/query/v1beta1/pagination.proto";
+import "gogoproto/gogo.proto";
+import "google/api/annotations.proto";
+import "prism/treasury/action.proto";
+import "prism/treasury/stream_swap.proto";
+// this line is used by starport scaffolding # 1
+
+option go_package = "github.com/prism-finance/prism-core/x/treasury/types";
+
+// Query defines the gRPC querier service.
+service Query {
+  // Queries a Action by index.
+  rpc Action(QueryGetActionRequest) returns (QueryGetActionResponse) {
+    option (google.api.http).get = "/prism-finance/prism-core/treasury/action";
+  }
+
+  // Queries a StreamSwap by index.
+  rpc StreamSwap(QueryGetStreamSwapRequest) returns (QueryGetStreamSwapResponse) {
+    option (google.api.http).get = "/prism-finance/prism-core/treasury/stream_swap/{stream_id}";
+  }
+
+  // Queries a list of StreamSwap items.
+  rpc StreamSwapAll(QueryAllStreamSwapRequest) returns (QueryAllStreamSwapResponse) {
+    option (google.api.http).get = "/prism-finance/prism-core/treasury/stream_swap";
+  }
+
+  // this line is used by starport scaffolding # 2
+}
+
+message QueryGetActionRequest {}
+
+message QueryGetActionResponse {
+  Action action = 1 [(gogoproto.nullable) = false];
+}
+
+message QueryGetStreamSwapRequest {
+  uint64 stream_id = 1;
+}
+
+message QueryGetStreamSwapResponse {
+  StreamSwap stream_swap = 1 [(gogoproto.nullable) = false];
+}
+
+message QueryAllStreamSwapRequest {
+  cosmos.base.query.v1beta1.PageRequest pagination = 1;
+}
+
+message QueryAllStreamSwapResponse {
+  repeated StreamSwap stream_swap = 1 [(gogoproto.nullable) = false];
+  cosmos.base.query.v1beta1.PageResponse pagination = 2;
+}
+
+// this line is used by starport scaffolding # 3

@@ -1,0 +1,55 @@
+syntax = "proto3";
+package prism.icstaking;
+
+import "cosmos/base/v1beta1/coin.proto";
+import "cosmos_proto/cosmos.proto";
+import "gogoproto/gogo.proto";
+
+option go_package = "github.com/prism-finance/prism-core/x/icstaking/types";
+
+// the stored data for handling the reply of a sent ibc packet
+message ReplyData {
+  string bridge_id = 1;
+  PacketId packet_id = 2 [(gogoproto.nullable) = false];
+  string host_chain_id = 3;
+  bytes data = 4;
+}
+
+// the id for a sent ibc packet
+message PacketId {
+  option (gogoproto.goproto_stringer) = false;
+
+  string port_id = 1;
+  string channel_id = 2;
+  uint64 sequence = 3;
+}
+
+message DelegateTransferReplyData {
+  string transfer_session = 1;
+  cosmos.base.v1beta1.Coin amount = 2 [(gogoproto.nullable) = false];
+}
+
+message DelegateTransferSession {
+  string id = 1;
+  map<string, bool> packet_finalized = 2;
+}
+
+message DelegateReplyData {
+  map<string, string> delegations = 1;
+}
+
+message UndelegateReplyData {
+  map<string, string> undelegations = 1;
+  repeated uint64 epochs = 2;
+}
+
+message CompoundData {
+  string fee_amount = 1 [
+    (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Int",
+    (gogoproto.nullable) = false
+  ];
+  string compound_amount = 2 [
+    (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Int",
+    (gogoproto.nullable) = false
+  ];
+}

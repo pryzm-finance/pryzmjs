@@ -1,0 +1,61 @@
+syntax = "proto3";
+package prism.treasury;
+
+import "gogoproto/gogo.proto";
+import "google/protobuf/duration.proto";
+import "google/protobuf/timestamp.proto";
+
+option go_package = "github.com/prism-finance/prism-core/x/treasury/types";
+
+// FeeType enumerates the valid types for feeType.
+enum ActionType {
+  option (gogoproto.goproto_enum_prefix) = false;
+  ACTION_TYPE_HOLD = 0 [(gogoproto.enumvalue_customname) = "HoldActionType"];
+  ACTION_TYPE_BURN = 1 [(gogoproto.enumvalue_customname) = "BurnActionType"];
+  ACTION_TYPE_DISTRIBUTE_TO_STAKERS = 2 [(gogoproto.enumvalue_customname) = "DistributeToStakersActionType"];
+  ACTION_TYPE_DISTRIBUTE_TO_COMMUNITY_POOL = 3 [(gogoproto.enumvalue_customname) = "DistributeToCommunityPoolActionType"];
+}
+
+message ActionStreamSwapSettings {
+  // given the occurrence of an action, this is used to compute the start of the stream
+  // NOTE: the stream-swap library has a parameter for minimum start delay
+  google.protobuf.Duration start_delay = 1 [
+    (gogoproto.nullable) = false,
+    (gogoproto.stdduration) = true
+  ];
+
+  // given the start of the stream, this is used to compute the end of the stream
+  google.protobuf.Duration duration = 2 [
+    (gogoproto.nullable) = false,
+    (gogoproto.stdduration) = true
+  ];
+
+  // the interval in which the distribution index is updated and hence tokens are swapped
+  // if dist_interval is 0, the stream is updated every time in or out tokens are increased or decreased
+  // if dist_interval is equal to the duration of stream, it means that all of the tokens are swapped once after the stream ends
+  google.protobuf.Duration dist_interval = 3 [
+    (gogoproto.stdduration) = true,
+    (gogoproto.nullable) = false
+  ];
+}
+
+message Action {
+  ActionType action_type = 1;
+  google.protobuf.Timestamp occurrence = 2 [
+    (gogoproto.stdtime) = true,
+    (gogoproto.nullable) = true
+  ];
+  // if expiration is not set, then the action will never expire and is executed forever unless gov decides to set another action.
+  google.protobuf.Timestamp expiration = 3 [
+    (gogoproto.nullable) = true,
+    (gogoproto.stdtime) = true
+  ];
+  // if period is nil, then the action is only executed at the first occurrence and then replaced with a HOLD/NOOP action.
+  google.protobuf.Duration period = 4 [
+    (gogoproto.nullable) = true,
+    (gogoproto.stdduration) = true
+  ];
+
+  // this is nil if the action is of type HOLD
+  ActionStreamSwapSettings stream_swap_settings = 5 [(gogoproto.nullable) = true];
+}

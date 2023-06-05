@@ -1,0 +1,23 @@
+syntax = "proto3";
+package prism.treasury;
+
+import "gogoproto/gogo.proto";
+// this line is used by starport scaffolding # proto/tx/import
+import "prism/treasury/action.proto";
+
+option go_package = "github.com/prism-finance/prism-core/x/treasury/types";
+
+// Msg defines the Msg service.
+service Msg {
+  rpc SetAction(MsgSetAction) returns (MsgSetActionResponse);
+  // this line is used by starport scaffolding # proto/tx/rpc
+}
+
+message MsgSetAction {
+  string authority = 1;
+  Action action = 2 [(gogoproto.nullable) = false];
+}
+
+message MsgSetActionResponse {}
+
+// this line is used by starport scaffolding # proto/tx/message

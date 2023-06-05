@@ -1,0 +1,13 @@
+syntax = "proto3";
+package prism.amm;
+
+option go_package = "github.com/prism-finance/prism-core/x/amm/types";
+
+message PairMatchProposal {
+  uint64 pool_id = 1;
+  bool whitelisted_route = 2;
+  string token_in = 3;
+  string token_out = 4;
+  repeated uint64 buy_orders = 5;
+  repeated uint64 sell_orders = 6;
+}
