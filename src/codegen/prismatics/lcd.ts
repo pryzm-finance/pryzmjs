@@ -1,5 +1,5 @@
 import { LCDClient } from "@osmonauts/lcd";
-export const createLCDClient = async ({
+export const createClient = async ({
   restEndpoint
 }: {
   restEndpoint: string;

@@ -1,25 +1,24 @@
-import {prismatics} from "@prism-finance/prismjs/lib";
-import * as console from "console";
+import {fetchAll, prismatics} from "@prism-finance/prismjs/lib";
 import {Long} from "@prism-finance/prismjs/lib/codegen/helpers";
-import {lcdFetchAll} from "@prism-finance/prismjs";
 
 async function main() {
-    const prismaticsClient = await prismatics.ClientFactory.createLCDClient({restEndpoint: "http://localhost:4444"})
+    const prismaticsClient = await prismatics.ClientFactory.createClient({restEndpoint: "http://localhost:4444"})
 
-    const allMaturities = await lcdFetchAll(prismaticsClient as any, async (client, pageRequest) => {
+    const allMaturities = await fetchAll(prismaticsClient, async (client, pageRequest) => {
         const result = (await prismaticsClient.prismatics.maturityAll({
-            assetId: "Luna",
+            assetId: "Lunaaa",
             active: "true",
             pagination: pageRequest
         }))
+        console.log(result)
         return [result.pagination.next_key, result.maturities]
-    }, {
+    }/*, {
         countTotal: false,
         key: new Uint8Array(),
         offset: Long.ZERO,
         reverse: false,
-        limit: Long.fromNumber(5)
-    })
+        limit: Long.fromNumber(12)
+    }*/)
     console.log(allMaturities.length)
 
 

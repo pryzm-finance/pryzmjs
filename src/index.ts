@@ -1,7 +1,9 @@
-import {prism} from "./codegen"
+import {prism, prismatics} from "./codegen"
 import {Long, PageRequest} from "./codegen/helpers";
+import console from "console";
 
 export type PrismLCDClient = Awaited<ReturnType<typeof prism.ClientFactory.createLCDClient>>
+export type PrismaticsClient = Awaited<ReturnType<typeof prismatics.ClientFactory.createClient>>
 export type PrismRPCQueryClient = Awaited<ReturnType<typeof prism.ClientFactory.createRPCQueryClient>>
 
 export * from './codegen';
@@ -33,7 +35,7 @@ export async function lcdFetchAll<Type>(client: PrismLCDClient, fetch: (client: 
     const result: Type[] = []
     do {
         const [nextKey, r] = await fetch(client, pageRequest);
-        result.push(...r)
+        if (r) result.push(...r)
         pageRequest.key = nextKey ? new Uint8Array(Buffer.from(nextKey as any, 'base64')) : null
     } while (pageRequest.key)
     return result;
@@ -56,8 +58,34 @@ export async function rpcFetchAll<Type>(client: PrismRPCQueryClient, fetch: (cli
     const result: Type[] = []
     do {
         const [nextKey, r] = await fetch(client, pageRequest);
-        result.push(...r)
+        if (r) result.push(...r)
         pageRequest.key = nextKey
     } while (pageRequest.key && pageRequest.key.length != 0)
+    return result;
+}
+
+
+
+/**
+ * ```ts
+ * example:
+ *     const allMaturities = await fetchAll(prismaticsClient, async (client, pageRequest) => {
+ *         const result = (await prismaticsClient.prismatics.maturityAll({
+ *             assetId: "Luna",
+ *             active: "true",
+ *             pagination: pageRequest
+ *         }))
+ *         return [result.pagination.next_key, result.maturities]
+ *     })
+ * ```
+ */
+export async function fetchAll<Type>(client: PrismaticsClient, fetch: (client: PrismaticsClient, request: PageRequest) =>
+    Promise<[Uint8Array, Type[]]>, pageRequest = defaultPageRequestProvider()): Promise<Type[]> {
+    const result: Type[] = []
+    do {
+        const [nextKey, r] = await fetch(client, pageRequest);
+        if (r) result.push(...r)
+        pageRequest.key = nextKey ? new Uint8Array(Buffer.from(nextKey as any, 'base64')) : null
+    } while (pageRequest.key)
     return result;
 }
