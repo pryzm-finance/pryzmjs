@@ -1,6 +1,6 @@
 import { Params, ParamsSDKType } from "./params";
 import { HostChain, HostChainSDKType, HostChainState, HostChainStateSDKType } from "./host_chain";
-import { Undelegation, UndelegationSDKType } from "./undelegation";
+import { Undelegation, UndelegationSDKType, ChannelUndelegation, ChannelUndelegationSDKType } from "./undelegation";
 import * as _m0 from "protobufjs/minimal";
 import { isSet } from "../../helpers";
 /** GenesisState defines the icstaking module's genesis state. */
@@ -10,6 +10,7 @@ export interface GenesisState {
   hostChainList: HostChain[];
   hostChainStateList: HostChainState[];
   undelegationList: Undelegation[];
+  channelUndelegationList: ChannelUndelegation[];
 }
 /** GenesisState defines the icstaking module's genesis state. */
 export interface GenesisStateSDKType {
@@ -18,6 +19,7 @@ export interface GenesisStateSDKType {
   host_chain_list: HostChainSDKType[];
   host_chain_state_list: HostChainStateSDKType[];
   undelegation_list: UndelegationSDKType[];
+  channel_undelegation_list: ChannelUndelegationSDKType[];
 }
 function createBaseGenesisState(): GenesisState {
   return {
@@ -25,7 +27,8 @@ function createBaseGenesisState(): GenesisState {
     portId: "",
     hostChainList: [],
     hostChainStateList: [],
-    undelegationList: []
+    undelegationList: [],
+    channelUndelegationList: []
   };
 }
 export const GenesisState = {
@@ -44,6 +47,9 @@ export const GenesisState = {
     }
     for (const v of message.undelegationList) {
       Undelegation.encode(v!, writer.uint32(42).fork()).ldelim();
+    }
+    for (const v of message.channelUndelegationList) {
+      ChannelUndelegation.encode(v!, writer.uint32(50).fork()).ldelim();
     }
     return writer;
   },
@@ -69,6 +75,9 @@ export const GenesisState = {
         case 5:
           message.undelegationList.push(Undelegation.decode(reader, reader.uint32()));
           break;
+        case 6:
+          message.channelUndelegationList.push(ChannelUndelegation.decode(reader, reader.uint32()));
+          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -82,7 +91,8 @@ export const GenesisState = {
       portId: isSet(object.portId) ? String(object.portId) : "",
       hostChainList: Array.isArray(object?.hostChainList) ? object.hostChainList.map((e: any) => HostChain.fromJSON(e)) : [],
       hostChainStateList: Array.isArray(object?.hostChainStateList) ? object.hostChainStateList.map((e: any) => HostChainState.fromJSON(e)) : [],
-      undelegationList: Array.isArray(object?.undelegationList) ? object.undelegationList.map((e: any) => Undelegation.fromJSON(e)) : []
+      undelegationList: Array.isArray(object?.undelegationList) ? object.undelegationList.map((e: any) => Undelegation.fromJSON(e)) : [],
+      channelUndelegationList: Array.isArray(object?.channelUndelegationList) ? object.channelUndelegationList.map((e: any) => ChannelUndelegation.fromJSON(e)) : []
     };
   },
   toJSON(message: GenesisState): unknown {
@@ -104,6 +114,11 @@ export const GenesisState = {
     } else {
       obj.undelegationList = [];
     }
+    if (message.channelUndelegationList) {
+      obj.channelUndelegationList = message.channelUndelegationList.map(e => e ? ChannelUndelegation.toJSON(e) : undefined);
+    } else {
+      obj.channelUndelegationList = [];
+    }
     return obj;
   },
   fromPartial(object: Partial<GenesisState>): GenesisState {
@@ -113,6 +128,7 @@ export const GenesisState = {
     message.hostChainList = object.hostChainList?.map(e => HostChain.fromPartial(e)) || [];
     message.hostChainStateList = object.hostChainStateList?.map(e => HostChainState.fromPartial(e)) || [];
     message.undelegationList = object.undelegationList?.map(e => Undelegation.fromPartial(e)) || [];
+    message.channelUndelegationList = object.channelUndelegationList?.map(e => ChannelUndelegation.fromPartial(e)) || [];
     return message;
   }
 };

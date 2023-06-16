@@ -82,12 +82,14 @@ export interface UndelegateReplyData_UndelegationsEntrySDKType {
   value: string;
 }
 export interface UndelegateReplyData {
+  totalCAmount: string;
   undelegations: {
     [key: string]: string;
   };
   epochs: Long[];
 }
 export interface UndelegateReplyDataSDKType {
+  total_c_amount: string;
   undelegations: {
     [key: string]: string;
   };
@@ -609,19 +611,23 @@ export const UndelegateReplyData_UndelegationsEntry = {
 };
 function createBaseUndelegateReplyData(): UndelegateReplyData {
   return {
+    totalCAmount: "",
     undelegations: {},
     epochs: []
   };
 }
 export const UndelegateReplyData = {
   encode(message: UndelegateReplyData, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.totalCAmount !== "") {
+      writer.uint32(10).string(message.totalCAmount);
+    }
     Object.entries(message.undelegations).forEach(([key, value]) => {
       UndelegateReplyData_UndelegationsEntry.encode({
         key: (key as any),
         value
-      }, writer.uint32(10).fork()).ldelim();
+      }, writer.uint32(18).fork()).ldelim();
     });
-    writer.uint32(18).fork();
+    writer.uint32(26).fork();
     for (const v of message.epochs) {
       writer.uint64(v);
     }
@@ -636,12 +642,15 @@ export const UndelegateReplyData = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          const entry1 = UndelegateReplyData_UndelegationsEntry.decode(reader, reader.uint32());
-          if (entry1.value !== undefined) {
-            message.undelegations[entry1.key] = entry1.value;
-          }
+          message.totalCAmount = reader.string();
           break;
         case 2:
+          const entry2 = UndelegateReplyData_UndelegationsEntry.decode(reader, reader.uint32());
+          if (entry2.value !== undefined) {
+            message.undelegations[entry2.key] = entry2.value;
+          }
+          break;
+        case 3:
           if ((tag & 7) === 2) {
             const end2 = reader.uint32() + reader.pos;
             while (reader.pos < end2) {
@@ -660,6 +669,7 @@ export const UndelegateReplyData = {
   },
   fromJSON(object: any): UndelegateReplyData {
     return {
+      totalCAmount: isSet(object.totalCAmount) ? String(object.totalCAmount) : "",
       undelegations: isObject(object.undelegations) ? Object.entries(object.undelegations).reduce<{
         [key: string]: string;
       }>((acc, [key, value]) => {
@@ -671,6 +681,7 @@ export const UndelegateReplyData = {
   },
   toJSON(message: UndelegateReplyData): unknown {
     const obj: any = {};
+    message.totalCAmount !== undefined && (obj.totalCAmount = message.totalCAmount);
     obj.undelegations = {};
     if (message.undelegations) {
       Object.entries(message.undelegations).forEach(([k, v]) => {
@@ -686,6 +697,7 @@ export const UndelegateReplyData = {
   },
   fromPartial(object: Partial<UndelegateReplyData>): UndelegateReplyData {
     const message = createBaseUndelegateReplyData();
+    message.totalCAmount = object.totalCAmount ?? "";
     message.undelegations = Object.entries(object.undelegations ?? {}).reduce<{
       [key: string]: string;
     }>((acc, [key, value]) => {

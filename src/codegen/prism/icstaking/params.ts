@@ -25,7 +25,6 @@ export interface StakingParams {
   ibcTransferTimeout?: Duration;
   /** the time-out value being set on ica messages */
   icaTimeout?: Duration;
-  maxDelegationMsgs: number;
   maxUndelegationMsgs: number;
   maxRedelegationMsgs: number;
   rebalanceThreshold: string;
@@ -39,7 +38,6 @@ export interface StakingParamsSDKType {
   undelegation_interval?: DurationSDKType;
   ibc_transfer_timeout?: DurationSDKType;
   ica_timeout?: DurationSDKType;
-  max_delegation_msgs: number;
   max_undelegation_msgs: number;
   max_redelegation_msgs: number;
   rebalance_threshold: string;
@@ -116,7 +114,6 @@ function createBaseStakingParams(): StakingParams {
     undelegationInterval: undefined,
     ibcTransferTimeout: undefined,
     icaTimeout: undefined,
-    maxDelegationMsgs: 0,
     maxUndelegationMsgs: 0,
     maxRedelegationMsgs: 0,
     rebalanceThreshold: "",
@@ -141,23 +138,20 @@ export const StakingParams = {
     if (message.icaTimeout !== undefined) {
       Duration.encode(message.icaTimeout, writer.uint32(42).fork()).ldelim();
     }
-    if (message.maxDelegationMsgs !== 0) {
-      writer.uint32(48).int32(message.maxDelegationMsgs);
-    }
     if (message.maxUndelegationMsgs !== 0) {
-      writer.uint32(56).int32(message.maxUndelegationMsgs);
+      writer.uint32(48).int32(message.maxUndelegationMsgs);
     }
     if (message.maxRedelegationMsgs !== 0) {
-      writer.uint32(64).int32(message.maxRedelegationMsgs);
+      writer.uint32(56).int32(message.maxRedelegationMsgs);
     }
     if (message.rebalanceThreshold !== "") {
-      writer.uint32(74).string(message.rebalanceThreshold);
+      writer.uint32(66).string(message.rebalanceThreshold);
     }
     if (message.minRebalanceAmount !== "") {
-      writer.uint32(82).string(message.minRebalanceAmount);
+      writer.uint32(74).string(message.minRebalanceAmount);
     }
     if (message.minRebalanceInterval !== undefined) {
-      Duration.encode(message.minRebalanceInterval, writer.uint32(90).fork()).ldelim();
+      Duration.encode(message.minRebalanceInterval, writer.uint32(82).fork()).ldelim();
     }
     return writer;
   },
@@ -184,21 +178,18 @@ export const StakingParams = {
           message.icaTimeout = Duration.decode(reader, reader.uint32());
           break;
         case 6:
-          message.maxDelegationMsgs = reader.int32();
-          break;
-        case 7:
           message.maxUndelegationMsgs = reader.int32();
           break;
-        case 8:
+        case 7:
           message.maxRedelegationMsgs = reader.int32();
           break;
-        case 9:
+        case 8:
           message.rebalanceThreshold = reader.string();
           break;
-        case 10:
+        case 9:
           message.minRebalanceAmount = reader.string();
           break;
-        case 11:
+        case 10:
           message.minRebalanceInterval = Duration.decode(reader, reader.uint32());
           break;
         default:
@@ -215,7 +206,6 @@ export const StakingParams = {
       undelegationInterval: isSet(object.undelegationInterval) ? Duration.fromJSON(object.undelegationInterval) : undefined,
       ibcTransferTimeout: isSet(object.ibcTransferTimeout) ? Duration.fromJSON(object.ibcTransferTimeout) : undefined,
       icaTimeout: isSet(object.icaTimeout) ? Duration.fromJSON(object.icaTimeout) : undefined,
-      maxDelegationMsgs: isSet(object.maxDelegationMsgs) ? Number(object.maxDelegationMsgs) : 0,
       maxUndelegationMsgs: isSet(object.maxUndelegationMsgs) ? Number(object.maxUndelegationMsgs) : 0,
       maxRedelegationMsgs: isSet(object.maxRedelegationMsgs) ? Number(object.maxRedelegationMsgs) : 0,
       rebalanceThreshold: isSet(object.rebalanceThreshold) ? String(object.rebalanceThreshold) : "",
@@ -230,7 +220,6 @@ export const StakingParams = {
     message.undelegationInterval !== undefined && (obj.undelegationInterval = message.undelegationInterval ? Duration.toJSON(message.undelegationInterval) : undefined);
     message.ibcTransferTimeout !== undefined && (obj.ibcTransferTimeout = message.ibcTransferTimeout ? Duration.toJSON(message.ibcTransferTimeout) : undefined);
     message.icaTimeout !== undefined && (obj.icaTimeout = message.icaTimeout ? Duration.toJSON(message.icaTimeout) : undefined);
-    message.maxDelegationMsgs !== undefined && (obj.maxDelegationMsgs = Math.round(message.maxDelegationMsgs));
     message.maxUndelegationMsgs !== undefined && (obj.maxUndelegationMsgs = Math.round(message.maxUndelegationMsgs));
     message.maxRedelegationMsgs !== undefined && (obj.maxRedelegationMsgs = Math.round(message.maxRedelegationMsgs));
     message.rebalanceThreshold !== undefined && (obj.rebalanceThreshold = message.rebalanceThreshold);
@@ -245,7 +234,6 @@ export const StakingParams = {
     message.undelegationInterval = object.undelegationInterval !== undefined && object.undelegationInterval !== null ? Duration.fromPartial(object.undelegationInterval) : undefined;
     message.ibcTransferTimeout = object.ibcTransferTimeout !== undefined && object.ibcTransferTimeout !== null ? Duration.fromPartial(object.ibcTransferTimeout) : undefined;
     message.icaTimeout = object.icaTimeout !== undefined && object.icaTimeout !== null ? Duration.fromPartial(object.icaTimeout) : undefined;
-    message.maxDelegationMsgs = object.maxDelegationMsgs ?? 0;
     message.maxUndelegationMsgs = object.maxUndelegationMsgs ?? 0;
     message.maxRedelegationMsgs = object.maxRedelegationMsgs ?? 0;
     message.rebalanceThreshold = object.rebalanceThreshold ?? "";

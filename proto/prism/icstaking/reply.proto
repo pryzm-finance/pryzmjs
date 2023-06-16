@@ -39,8 +39,12 @@ message DelegateReplyData {
 }
 
 message UndelegateReplyData {
-  map<string, string> undelegations = 1;
-  repeated uint64 epochs = 2;
+  string total_c_amount = 1 [
+    (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Int",
+    (gogoproto.nullable) = false
+  ];
+  map<string, string> undelegations = 2;
+  repeated uint64 epochs = 3;
 }
 
 message CompoundData {

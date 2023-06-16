@@ -46,22 +46,22 @@ export function actionTypeToJSON(object: ActionType): string {
       return "UNRECOGNIZED";
   }
 }
-export interface ActionStreamSwapSettings {
+export interface ActionFlowTradeSettings {
   /**
-   * given the occurrence of an action, this is used to compute the start of the stream
-   * NOTE: the stream-swap library has a parameter for minimum start delay
+   * given the occurrence of an action, this is used to compute the start of the flow
+   * NOTE: the flowtrade library has a parameter for minimum start delay
    */
   startDelay?: Duration;
-  /** given the start of the stream, this is used to compute the end of the stream */
+  /** given the start of the flow, this is used to compute the end of the flow */
   duration?: Duration;
   /**
    * the interval in which the distribution index is updated and hence tokens are swapped
-   * if dist_interval is 0, the stream is updated every time in or out tokens are increased or decreased
-   * if dist_interval is equal to the duration of stream, it means that all of the tokens are swapped once after the stream ends
+   * if dist_interval is 0, the flow is updated every time in or out tokens are increased or decreased
+   * if dist_interval is equal to the duration of flow, it means that all of the tokens are swapped once after the flow ends
    */
   distInterval?: Duration;
 }
-export interface ActionStreamSwapSettingsSDKType {
+export interface ActionFlowTradeSettingsSDKType {
   start_delay?: DurationSDKType;
   duration?: DurationSDKType;
   dist_interval?: DurationSDKType;
@@ -74,24 +74,24 @@ export interface Action {
   /** if period is nil, then the action is only executed at the first occurrence and then replaced with a HOLD/NOOP action. */
   period?: Duration;
   /** this is nil if the action is of type HOLD */
-  streamSwapSettings?: ActionStreamSwapSettings;
+  flowTradeSettings?: ActionFlowTradeSettings;
 }
 export interface ActionSDKType {
   action_type: ActionType;
   occurrence?: TimestampSDKType;
   expiration?: TimestampSDKType;
   period?: DurationSDKType;
-  stream_swap_settings?: ActionStreamSwapSettingsSDKType;
+  flow_trade_settings?: ActionFlowTradeSettingsSDKType;
 }
-function createBaseActionStreamSwapSettings(): ActionStreamSwapSettings {
+function createBaseActionFlowTradeSettings(): ActionFlowTradeSettings {
   return {
     startDelay: undefined,
     duration: undefined,
     distInterval: undefined
   };
 }
-export const ActionStreamSwapSettings = {
-  encode(message: ActionStreamSwapSettings, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+export const ActionFlowTradeSettings = {
+  encode(message: ActionFlowTradeSettings, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.startDelay !== undefined) {
       Duration.encode(message.startDelay, writer.uint32(10).fork()).ldelim();
     }
@@ -103,10 +103,10 @@ export const ActionStreamSwapSettings = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): ActionStreamSwapSettings {
+  decode(input: _m0.Reader | Uint8Array, length?: number): ActionFlowTradeSettings {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseActionStreamSwapSettings();
+    const message = createBaseActionFlowTradeSettings();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -126,22 +126,22 @@ export const ActionStreamSwapSettings = {
     }
     return message;
   },
-  fromJSON(object: any): ActionStreamSwapSettings {
+  fromJSON(object: any): ActionFlowTradeSettings {
     return {
       startDelay: isSet(object.startDelay) ? Duration.fromJSON(object.startDelay) : undefined,
       duration: isSet(object.duration) ? Duration.fromJSON(object.duration) : undefined,
       distInterval: isSet(object.distInterval) ? Duration.fromJSON(object.distInterval) : undefined
     };
   },
-  toJSON(message: ActionStreamSwapSettings): unknown {
+  toJSON(message: ActionFlowTradeSettings): unknown {
     const obj: any = {};
     message.startDelay !== undefined && (obj.startDelay = message.startDelay ? Duration.toJSON(message.startDelay) : undefined);
     message.duration !== undefined && (obj.duration = message.duration ? Duration.toJSON(message.duration) : undefined);
     message.distInterval !== undefined && (obj.distInterval = message.distInterval ? Duration.toJSON(message.distInterval) : undefined);
     return obj;
   },
-  fromPartial(object: Partial<ActionStreamSwapSettings>): ActionStreamSwapSettings {
-    const message = createBaseActionStreamSwapSettings();
+  fromPartial(object: Partial<ActionFlowTradeSettings>): ActionFlowTradeSettings {
+    const message = createBaseActionFlowTradeSettings();
     message.startDelay = object.startDelay !== undefined && object.startDelay !== null ? Duration.fromPartial(object.startDelay) : undefined;
     message.duration = object.duration !== undefined && object.duration !== null ? Duration.fromPartial(object.duration) : undefined;
     message.distInterval = object.distInterval !== undefined && object.distInterval !== null ? Duration.fromPartial(object.distInterval) : undefined;
@@ -154,7 +154,7 @@ function createBaseAction(): Action {
     occurrence: undefined,
     expiration: undefined,
     period: undefined,
-    streamSwapSettings: undefined
+    flowTradeSettings: undefined
   };
 }
 export const Action = {
@@ -171,8 +171,8 @@ export const Action = {
     if (message.period !== undefined) {
       Duration.encode(message.period, writer.uint32(34).fork()).ldelim();
     }
-    if (message.streamSwapSettings !== undefined) {
-      ActionStreamSwapSettings.encode(message.streamSwapSettings, writer.uint32(42).fork()).ldelim();
+    if (message.flowTradeSettings !== undefined) {
+      ActionFlowTradeSettings.encode(message.flowTradeSettings, writer.uint32(42).fork()).ldelim();
     }
     return writer;
   },
@@ -196,7 +196,7 @@ export const Action = {
           message.period = Duration.decode(reader, reader.uint32());
           break;
         case 5:
-          message.streamSwapSettings = ActionStreamSwapSettings.decode(reader, reader.uint32());
+          message.flowTradeSettings = ActionFlowTradeSettings.decode(reader, reader.uint32());
           break;
         default:
           reader.skipType(tag & 7);
@@ -211,7 +211,7 @@ export const Action = {
       occurrence: isSet(object.occurrence) ? fromJsonTimestamp(object.occurrence) : undefined,
       expiration: isSet(object.expiration) ? fromJsonTimestamp(object.expiration) : undefined,
       period: isSet(object.period) ? Duration.fromJSON(object.period) : undefined,
-      streamSwapSettings: isSet(object.streamSwapSettings) ? ActionStreamSwapSettings.fromJSON(object.streamSwapSettings) : undefined
+      flowTradeSettings: isSet(object.flowTradeSettings) ? ActionFlowTradeSettings.fromJSON(object.flowTradeSettings) : undefined
     };
   },
   toJSON(message: Action): unknown {
@@ -220,7 +220,7 @@ export const Action = {
     message.occurrence !== undefined && (obj.occurrence = fromTimestamp(message.occurrence).toISOString());
     message.expiration !== undefined && (obj.expiration = fromTimestamp(message.expiration).toISOString());
     message.period !== undefined && (obj.period = message.period ? Duration.toJSON(message.period) : undefined);
-    message.streamSwapSettings !== undefined && (obj.streamSwapSettings = message.streamSwapSettings ? ActionStreamSwapSettings.toJSON(message.streamSwapSettings) : undefined);
+    message.flowTradeSettings !== undefined && (obj.flowTradeSettings = message.flowTradeSettings ? ActionFlowTradeSettings.toJSON(message.flowTradeSettings) : undefined);
     return obj;
   },
   fromPartial(object: Partial<Action>): Action {
@@ -229,7 +229,7 @@ export const Action = {
     message.occurrence = object.occurrence !== undefined && object.occurrence !== null ? Timestamp.fromPartial(object.occurrence) : undefined;
     message.expiration = object.expiration !== undefined && object.expiration !== null ? Timestamp.fromPartial(object.expiration) : undefined;
     message.period = object.period !== undefined && object.period !== null ? Duration.fromPartial(object.period) : undefined;
-    message.streamSwapSettings = object.streamSwapSettings !== undefined && object.streamSwapSettings !== null ? ActionStreamSwapSettings.fromPartial(object.streamSwapSettings) : undefined;
+    message.flowTradeSettings = object.flowTradeSettings !== undefined && object.flowTradeSettings !== null ? ActionFlowTradeSettings.fromPartial(object.flowTradeSettings) : undefined;
     return message;
   }
 };

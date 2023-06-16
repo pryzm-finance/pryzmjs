@@ -31,7 +31,6 @@ export interface MsgUpdateParamsAminoType extends AminoMsg {
           seconds: string;
           nanos: number;
         };
-        max_delegation_msgs: number;
         max_undelegation_msgs: number;
         max_redelegation_msgs: number;
         rebalance_threshold: string;
@@ -82,7 +81,6 @@ export interface MsgRegisterHostChainAminoType extends AminoMsg {
           seconds: string;
           nanos: number;
         };
-        max_delegation_msgs: number;
         max_undelegation_msgs: number;
         max_redelegation_msgs: number;
         rebalance_threshold: string;
@@ -131,7 +129,6 @@ export interface MsgUpdateHostChainAminoType extends AminoMsg {
         seconds: string;
         nanos: number;
       };
-      max_delegation_msgs: number;
       max_undelegation_msgs: number;
       max_redelegation_msgs: number;
       rebalance_threshold: string;
@@ -217,7 +214,6 @@ export const AminoConverter = {
             undelegation_interval: (params.stakingParams.undelegationInterval * 1_000_000_000).toString(),
             ibc_transfer_timeout: (params.stakingParams.ibcTransferTimeout * 1_000_000_000).toString(),
             ica_timeout: (params.stakingParams.icaTimeout * 1_000_000_000).toString(),
-            max_delegation_msgs: params.stakingParams.maxDelegationMsgs,
             max_undelegation_msgs: params.stakingParams.maxUndelegationMsgs,
             max_redelegation_msgs: params.stakingParams.maxRedelegationMsgs,
             rebalance_threshold: params.stakingParams.rebalanceThreshold,
@@ -257,7 +253,6 @@ export const AminoConverter = {
               seconds: Long.fromNumber(Math.floor(parseInt(params.staking_params.ica_timeout) / 1_000_000_000)),
               nanos: parseInt(params.staking_params.ica_timeout) % 1_000_000_000
             },
-            maxDelegationMsgs: params.staking_params.max_delegation_msgs,
             maxUndelegationMsgs: params.staking_params.max_undelegation_msgs,
             maxRedelegationMsgs: params.staking_params.max_redelegation_msgs,
             rebalanceThreshold: params.staking_params.rebalance_threshold,
@@ -301,7 +296,6 @@ export const AminoConverter = {
             undelegation_interval: (hostChain.params.undelegationInterval * 1_000_000_000).toString(),
             ibc_transfer_timeout: (hostChain.params.ibcTransferTimeout * 1_000_000_000).toString(),
             ica_timeout: (hostChain.params.icaTimeout * 1_000_000_000).toString(),
-            max_delegation_msgs: hostChain.params.maxDelegationMsgs,
             max_undelegation_msgs: hostChain.params.maxUndelegationMsgs,
             max_redelegation_msgs: hostChain.params.maxRedelegationMsgs,
             rebalance_threshold: hostChain.params.rebalanceThreshold,
@@ -355,7 +349,6 @@ export const AminoConverter = {
               seconds: Long.fromNumber(Math.floor(parseInt(host_chain.params.ica_timeout) / 1_000_000_000)),
               nanos: parseInt(host_chain.params.ica_timeout) % 1_000_000_000
             },
-            maxDelegationMsgs: host_chain.params.max_delegation_msgs,
             maxUndelegationMsgs: host_chain.params.max_undelegation_msgs,
             maxRedelegationMsgs: host_chain.params.max_redelegation_msgs,
             rebalanceThreshold: host_chain.params.rebalance_threshold,
@@ -399,7 +392,6 @@ export const AminoConverter = {
           undelegation_interval: (params.undelegationInterval * 1_000_000_000).toString(),
           ibc_transfer_timeout: (params.ibcTransferTimeout * 1_000_000_000).toString(),
           ica_timeout: (params.icaTimeout * 1_000_000_000).toString(),
-          max_delegation_msgs: params.maxDelegationMsgs,
           max_undelegation_msgs: params.maxUndelegationMsgs,
           max_redelegation_msgs: params.maxRedelegationMsgs,
           rebalance_threshold: params.rebalanceThreshold,
@@ -444,7 +436,6 @@ export const AminoConverter = {
             seconds: Long.fromNumber(Math.floor(parseInt(params.ica_timeout) / 1_000_000_000)),
             nanos: parseInt(params.ica_timeout) % 1_000_000_000
           },
-          maxDelegationMsgs: params.max_delegation_msgs,
           maxUndelegationMsgs: params.max_undelegation_msgs,
           maxRedelegationMsgs: params.max_redelegation_msgs,
           rebalanceThreshold: params.rebalance_threshold,

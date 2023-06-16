@@ -21,7 +21,7 @@ export interface MsgSetActionAminoType extends AminoMsg {
         seconds: string;
         nanos: number;
       };
-      stream_swap_settings: {
+      flow_trade_settings: {
         start_delay: {
           seconds: string;
           nanos: number;
@@ -52,10 +52,10 @@ export const AminoConverter = {
           occurrence: action.occurrence,
           expiration: action.expiration,
           period: (action.period * 1_000_000_000).toString(),
-          stream_swap_settings: {
-            start_delay: (action.streamSwapSettings.startDelay * 1_000_000_000).toString(),
-            duration: (action.streamSwapSettings.duration * 1_000_000_000).toString(),
-            dist_interval: (action.streamSwapSettings.distInterval * 1_000_000_000).toString()
+          flow_trade_settings: {
+            start_delay: (action.flowTradeSettings.startDelay * 1_000_000_000).toString(),
+            duration: (action.flowTradeSettings.duration * 1_000_000_000).toString(),
+            dist_interval: (action.flowTradeSettings.distInterval * 1_000_000_000).toString()
           }
         }
       };
@@ -74,18 +74,18 @@ export const AminoConverter = {
             seconds: Long.fromNumber(Math.floor(parseInt(action.period) / 1_000_000_000)),
             nanos: parseInt(action.period) % 1_000_000_000
           },
-          streamSwapSettings: {
+          flowTradeSettings: {
             startDelay: {
-              seconds: Long.fromNumber(Math.floor(parseInt(action.stream_swap_settings.start_delay) / 1_000_000_000)),
-              nanos: parseInt(action.stream_swap_settings.start_delay) % 1_000_000_000
+              seconds: Long.fromNumber(Math.floor(parseInt(action.flow_trade_settings.start_delay) / 1_000_000_000)),
+              nanos: parseInt(action.flow_trade_settings.start_delay) % 1_000_000_000
             },
             duration: {
-              seconds: Long.fromNumber(Math.floor(parseInt(action.stream_swap_settings.duration) / 1_000_000_000)),
-              nanos: parseInt(action.stream_swap_settings.duration) % 1_000_000_000
+              seconds: Long.fromNumber(Math.floor(parseInt(action.flow_trade_settings.duration) / 1_000_000_000)),
+              nanos: parseInt(action.flow_trade_settings.duration) % 1_000_000_000
             },
             distInterval: {
-              seconds: Long.fromNumber(Math.floor(parseInt(action.stream_swap_settings.dist_interval) / 1_000_000_000)),
-              nanos: parseInt(action.stream_swap_settings.dist_interval) % 1_000_000_000
+              seconds: Long.fromNumber(Math.floor(parseInt(action.flow_trade_settings.dist_interval) / 1_000_000_000)),
+              nanos: parseInt(action.flow_trade_settings.dist_interval) % 1_000_000_000
             }
           }
         }
