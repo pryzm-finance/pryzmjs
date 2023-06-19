@@ -1,21 +1,21 @@
 import { Action, ActionSDKType } from "./action";
-import { StreamSwap, StreamSwapSDKType } from "./stream_swap";
+import { FlowTrade, FlowTradeSDKType } from "./flow_trade";
 import * as _m0 from "protobufjs/minimal";
 import { isSet } from "../../helpers";
 /** GenesisState defines the treasury module's genesis state. */
 export interface GenesisState {
   action?: Action;
-  streamSwapList: StreamSwap[];
+  flowTradeList: FlowTrade[];
 }
 /** GenesisState defines the treasury module's genesis state. */
 export interface GenesisStateSDKType {
   action?: ActionSDKType;
-  stream_swap_list: StreamSwapSDKType[];
+  flow_trade_list: FlowTradeSDKType[];
 }
 function createBaseGenesisState(): GenesisState {
   return {
     action: undefined,
-    streamSwapList: []
+    flowTradeList: []
   };
 }
 export const GenesisState = {
@@ -23,8 +23,8 @@ export const GenesisState = {
     if (message.action !== undefined) {
       Action.encode(message.action, writer.uint32(10).fork()).ldelim();
     }
-    for (const v of message.streamSwapList) {
-      StreamSwap.encode(v!, writer.uint32(18).fork()).ldelim();
+    for (const v of message.flowTradeList) {
+      FlowTrade.encode(v!, writer.uint32(18).fork()).ldelim();
     }
     return writer;
   },
@@ -39,7 +39,7 @@ export const GenesisState = {
           message.action = Action.decode(reader, reader.uint32());
           break;
         case 2:
-          message.streamSwapList.push(StreamSwap.decode(reader, reader.uint32()));
+          message.flowTradeList.push(FlowTrade.decode(reader, reader.uint32()));
           break;
         default:
           reader.skipType(tag & 7);
@@ -51,23 +51,23 @@ export const GenesisState = {
   fromJSON(object: any): GenesisState {
     return {
       action: isSet(object.action) ? Action.fromJSON(object.action) : undefined,
-      streamSwapList: Array.isArray(object?.streamSwapList) ? object.streamSwapList.map((e: any) => StreamSwap.fromJSON(e)) : []
+      flowTradeList: Array.isArray(object?.flowTradeList) ? object.flowTradeList.map((e: any) => FlowTrade.fromJSON(e)) : []
     };
   },
   toJSON(message: GenesisState): unknown {
     const obj: any = {};
     message.action !== undefined && (obj.action = message.action ? Action.toJSON(message.action) : undefined);
-    if (message.streamSwapList) {
-      obj.streamSwapList = message.streamSwapList.map(e => e ? StreamSwap.toJSON(e) : undefined);
+    if (message.flowTradeList) {
+      obj.flowTradeList = message.flowTradeList.map(e => e ? FlowTrade.toJSON(e) : undefined);
     } else {
-      obj.streamSwapList = [];
+      obj.flowTradeList = [];
     }
     return obj;
   },
   fromPartial(object: Partial<GenesisState>): GenesisState {
     const message = createBaseGenesisState();
     message.action = object.action !== undefined && object.action !== null ? Action.fromPartial(object.action) : undefined;
-    message.streamSwapList = object.streamSwapList?.map(e => StreamSwap.fromPartial(e)) || [];
+    message.flowTradeList = object.flowTradeList?.map(e => FlowTrade.fromPartial(e)) || [];
     return message;
   }
 };

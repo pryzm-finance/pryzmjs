@@ -10,7 +10,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@prism-finance/prismjs": "0.5.4",
+    "@prism-finance/prismjs": "0.6.0",
     "@refractedlabs/utils": "0.1.5"
   }
 }

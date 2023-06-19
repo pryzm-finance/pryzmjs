@@ -16,5 +16,6 @@ message GenesisState {
   repeated HostChain host_chain_list = 3 [(gogoproto.nullable) = false];
   repeated HostChainState host_chain_state_list = 4 [(gogoproto.nullable) = false];
   repeated Undelegation undelegation_list = 5 [(gogoproto.nullable) = false];
+  repeated ChannelUndelegation channel_undelegation_list = 6 [(gogoproto.nullable) = false];
   // this line is used by starport scaffolding # genesis/proto/state
 }

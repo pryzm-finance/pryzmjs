@@ -1,7 +1,7 @@
 //@ts-nocheck
 import { setPaginationParams } from "../../helpers";
 import { LCDClient } from "@osmonauts/lcd";
-import { QueryGetActionRequest, QueryGetActionResponseSDKType, QueryGetStreamSwapRequest, QueryGetStreamSwapResponseSDKType, QueryAllStreamSwapRequest, QueryAllStreamSwapResponseSDKType } from "./query";
+import { QueryGetActionRequest, QueryGetActionResponseSDKType, QueryGetFlowTradeRequest, QueryGetFlowTradeResponseSDKType, QueryAllFlowTradeRequest, QueryAllFlowTradeResponseSDKType } from "./query";
 export class LCDQueryClient {
   req: LCDClient;
   constructor({
@@ -11,27 +11,27 @@ export class LCDQueryClient {
   }) {
     this.req = requestClient;
     this.action = this.action.bind(this);
-    this.streamSwap = this.streamSwap.bind(this);
-    this.streamSwapAll = this.streamSwapAll.bind(this);
+    this.flowTrade = this.flowTrade.bind(this);
+    this.flowTradeAll = this.flowTradeAll.bind(this);
   }
   /* Queries a Action by index. */
   async action(_params: QueryGetActionRequest = {}): Promise<QueryGetActionResponseSDKType> {
     const endpoint = `prism-finance/prism-core/treasury/action`;
     return await this.req.get<QueryGetActionResponseSDKType>(endpoint);
   }
-  /* Queries a StreamSwap by index. */
-  async streamSwap(params: QueryGetStreamSwapRequest): Promise<QueryGetStreamSwapResponseSDKType> {
-    const endpoint = `prism-finance/prism-core/treasury/stream_swap/${params.streamId}`;
-    return await this.req.get<QueryGetStreamSwapResponseSDKType>(endpoint);
+  /* Queries a FlowTrade by index. */
+  async flowTrade(params: QueryGetFlowTradeRequest): Promise<QueryGetFlowTradeResponseSDKType> {
+    const endpoint = `prism-finance/prism-core/treasury/flow_trade/${params.flowId}`;
+    return await this.req.get<QueryGetFlowTradeResponseSDKType>(endpoint);
   }
-  /* Queries a list of StreamSwap items. */
-  async streamSwapAll(params: QueryAllStreamSwapRequest = {
+  /* Queries a list of FlowTrade items. */
+  async flowTradeAll(params: QueryAllFlowTradeRequest = {
     pagination: undefined
-  }, options: any = {params: {}}): Promise<QueryAllStreamSwapResponseSDKType> {
+  }, options: any = {params: {}}): Promise<QueryAllFlowTradeResponseSDKType> {
     if (typeof params?.pagination !== "undefined") {
       setPaginationParams(options, params.pagination);
     }
-    const endpoint = `prism-finance/prism-core/treasury/stream_swap`;
-    return await this.req.get<QueryAllStreamSwapResponseSDKType>(endpoint, options);
+    const endpoint = `prism-finance/prism-core/treasury/flow_trade`;
+    return await this.req.get<QueryAllFlowTradeResponseSDKType>(endpoint, options);
   }
 }

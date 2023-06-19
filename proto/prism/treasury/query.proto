@@ -5,7 +5,7 @@ import "cosmos/base/query/v1beta1/pagination.proto";
 import "gogoproto/gogo.proto";
 import "google/api/annotations.proto";
 import "prism/treasury/action.proto";
-import "prism/treasury/stream_swap.proto";
+import "prism/treasury/flow_trade.proto";
 // this line is used by starport scaffolding # 1
 
 option go_package = "github.com/prism-finance/prism-core/x/treasury/types";
@@ -17,14 +17,14 @@ service Query {
     option (google.api.http).get = "/prism-finance/prism-core/treasury/action";
   }
 
-  // Queries a StreamSwap by index.
-  rpc StreamSwap(QueryGetStreamSwapRequest) returns (QueryGetStreamSwapResponse) {
-    option (google.api.http).get = "/prism-finance/prism-core/treasury/stream_swap/{stream_id}";
+  // Queries a FlowTrade by index.
+  rpc FlowTrade(QueryGetFlowTradeRequest) returns (QueryGetFlowTradeResponse) {
+    option (google.api.http).get = "/prism-finance/prism-core/treasury/flow_trade/{flow_id}";
   }
 
-  // Queries a list of StreamSwap items.
-  rpc StreamSwapAll(QueryAllStreamSwapRequest) returns (QueryAllStreamSwapResponse) {
-    option (google.api.http).get = "/prism-finance/prism-core/treasury/stream_swap";
+  // Queries a list of FlowTrade items.
+  rpc FlowTradeAll(QueryAllFlowTradeRequest) returns (QueryAllFlowTradeResponse) {
+    option (google.api.http).get = "/prism-finance/prism-core/treasury/flow_trade";
   }
 
   // this line is used by starport scaffolding # 2
@@ -36,20 +36,20 @@ message QueryGetActionResponse {
   Action action = 1 [(gogoproto.nullable) = false];
 }
 
-message QueryGetStreamSwapRequest {
-  uint64 stream_id = 1;
+message QueryGetFlowTradeRequest {
+  uint64 flow_id = 1;
 }
 
-message QueryGetStreamSwapResponse {
-  StreamSwap stream_swap = 1 [(gogoproto.nullable) = false];
+message QueryGetFlowTradeResponse {
+  FlowTrade flow_trade = 1 [(gogoproto.nullable) = false];
 }
 
-message QueryAllStreamSwapRequest {
+message QueryAllFlowTradeRequest {
   cosmos.base.query.v1beta1.PageRequest pagination = 1;
 }
 
-message QueryAllStreamSwapResponse {
-  repeated StreamSwap stream_swap = 1 [(gogoproto.nullable) = false];
+message QueryAllFlowTradeResponse {
+  repeated FlowTrade flow_trade = 1 [(gogoproto.nullable) = false];
   cosmos.base.query.v1beta1.PageResponse pagination = 2;
 }
 

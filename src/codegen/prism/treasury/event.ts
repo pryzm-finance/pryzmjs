@@ -1,6 +1,6 @@
 import { ActionType, Action, ActionSDKType, actionTypeFromJSON, actionTypeToJSON } from "./action";
 import { Coin, CoinSDKType } from "../../cosmos/base/v1beta1/coin";
-import { StreamSwap, StreamSwapSDKType } from "./stream_swap";
+import { FlowTrade, FlowTradeSDKType } from "./flow_trade";
 import { Timestamp, TimestampSDKType } from "../../google/protobuf/timestamp";
 import { Long, isSet, fromJsonTimestamp, fromTimestamp } from "../../helpers";
 import * as _m0 from "protobufjs/minimal";
@@ -14,13 +14,13 @@ export interface EventTreasuryCollectFeeSDKType {
   amount: string;
   from: string;
 }
-export interface EventCreateStreamForAmount {
-  streamId: Long;
+export interface EventCreateFlowForAmount {
+  flowId: Long;
   actionType: ActionType;
   amount?: Coin;
 }
-export interface EventCreateStreamForAmountSDKType {
-  stream_id: Long;
+export interface EventCreateFlowForAmountSDKType {
+  flow_id: Long;
   action_type: ActionType;
   amount?: CoinSDKType;
 }
@@ -38,19 +38,19 @@ export interface EventSetAction {
 export interface EventSetActionSDKType {
   action?: ActionSDKType;
 }
-export interface EventSetStreamSwap {
-  streamSwap?: StreamSwap;
+export interface EventSetFlowTrade {
+  flowTrade?: FlowTrade;
 }
-export interface EventSetStreamSwapSDKType {
-  stream_swap?: StreamSwapSDKType;
+export interface EventSetFlowTradeSDKType {
+  flow_trade?: FlowTradeSDKType;
 }
-export interface EventRemoveStreamSwap {
+export interface EventRemoveFlowTrade {
   endTime?: Timestamp;
-  streamId: Long;
+  flowId: Long;
 }
-export interface EventRemoveStreamSwapSDKType {
+export interface EventRemoveFlowTradeSDKType {
   end_time?: TimestampSDKType;
-  stream_id: Long;
+  flow_id: Long;
 }
 function createBaseEventTreasuryCollectFee(): EventTreasuryCollectFee {
   return {
@@ -117,17 +117,17 @@ export const EventTreasuryCollectFee = {
     return message;
   }
 };
-function createBaseEventCreateStreamForAmount(): EventCreateStreamForAmount {
+function createBaseEventCreateFlowForAmount(): EventCreateFlowForAmount {
   return {
-    streamId: Long.UZERO,
+    flowId: Long.UZERO,
     actionType: 0,
     amount: undefined
   };
 }
-export const EventCreateStreamForAmount = {
-  encode(message: EventCreateStreamForAmount, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (!message.streamId.isZero()) {
-      writer.uint32(8).uint64(message.streamId);
+export const EventCreateFlowForAmount = {
+  encode(message: EventCreateFlowForAmount, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (!message.flowId.isZero()) {
+      writer.uint32(8).uint64(message.flowId);
     }
     if (message.actionType !== 0) {
       writer.uint32(16).int32(message.actionType);
@@ -137,15 +137,15 @@ export const EventCreateStreamForAmount = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): EventCreateStreamForAmount {
+  decode(input: _m0.Reader | Uint8Array, length?: number): EventCreateFlowForAmount {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseEventCreateStreamForAmount();
+    const message = createBaseEventCreateFlowForAmount();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.streamId = (reader.uint64() as Long);
+          message.flowId = (reader.uint64() as Long);
           break;
         case 2:
           message.actionType = (reader.int32() as any);
@@ -160,23 +160,23 @@ export const EventCreateStreamForAmount = {
     }
     return message;
   },
-  fromJSON(object: any): EventCreateStreamForAmount {
+  fromJSON(object: any): EventCreateFlowForAmount {
     return {
-      streamId: isSet(object.streamId) ? Long.fromValue(object.streamId) : Long.UZERO,
+      flowId: isSet(object.flowId) ? Long.fromValue(object.flowId) : Long.UZERO,
       actionType: isSet(object.actionType) ? actionTypeFromJSON(object.actionType) : 0,
       amount: isSet(object.amount) ? Coin.fromJSON(object.amount) : undefined
     };
   },
-  toJSON(message: EventCreateStreamForAmount): unknown {
+  toJSON(message: EventCreateFlowForAmount): unknown {
     const obj: any = {};
-    message.streamId !== undefined && (obj.streamId = (message.streamId || Long.UZERO).toString());
+    message.flowId !== undefined && (obj.flowId = (message.flowId || Long.UZERO).toString());
     message.actionType !== undefined && (obj.actionType = actionTypeToJSON(message.actionType));
     message.amount !== undefined && (obj.amount = message.amount ? Coin.toJSON(message.amount) : undefined);
     return obj;
   },
-  fromPartial(object: Partial<EventCreateStreamForAmount>): EventCreateStreamForAmount {
-    const message = createBaseEventCreateStreamForAmount();
-    message.streamId = object.streamId !== undefined && object.streamId !== null ? Long.fromValue(object.streamId) : Long.UZERO;
+  fromPartial(object: Partial<EventCreateFlowForAmount>): EventCreateFlowForAmount {
+    const message = createBaseEventCreateFlowForAmount();
+    message.flowId = object.flowId !== undefined && object.flowId !== null ? Long.fromValue(object.flowId) : Long.UZERO;
     message.actionType = object.actionType ?? 0;
     message.amount = object.amount !== undefined && object.amount !== null ? Coin.fromPartial(object.amount) : undefined;
     return message;
@@ -282,27 +282,27 @@ export const EventSetAction = {
     return message;
   }
 };
-function createBaseEventSetStreamSwap(): EventSetStreamSwap {
+function createBaseEventSetFlowTrade(): EventSetFlowTrade {
   return {
-    streamSwap: undefined
+    flowTrade: undefined
   };
 }
-export const EventSetStreamSwap = {
-  encode(message: EventSetStreamSwap, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (message.streamSwap !== undefined) {
-      StreamSwap.encode(message.streamSwap, writer.uint32(10).fork()).ldelim();
+export const EventSetFlowTrade = {
+  encode(message: EventSetFlowTrade, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.flowTrade !== undefined) {
+      FlowTrade.encode(message.flowTrade, writer.uint32(10).fork()).ldelim();
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): EventSetStreamSwap {
+  decode(input: _m0.Reader | Uint8Array, length?: number): EventSetFlowTrade {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseEventSetStreamSwap();
+    const message = createBaseEventSetFlowTrade();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.streamSwap = StreamSwap.decode(reader, reader.uint32());
+          message.flowTrade = FlowTrade.decode(reader, reader.uint32());
           break;
         default:
           reader.skipType(tag & 7);
@@ -311,42 +311,42 @@ export const EventSetStreamSwap = {
     }
     return message;
   },
-  fromJSON(object: any): EventSetStreamSwap {
+  fromJSON(object: any): EventSetFlowTrade {
     return {
-      streamSwap: isSet(object.streamSwap) ? StreamSwap.fromJSON(object.streamSwap) : undefined
+      flowTrade: isSet(object.flowTrade) ? FlowTrade.fromJSON(object.flowTrade) : undefined
     };
   },
-  toJSON(message: EventSetStreamSwap): unknown {
+  toJSON(message: EventSetFlowTrade): unknown {
     const obj: any = {};
-    message.streamSwap !== undefined && (obj.streamSwap = message.streamSwap ? StreamSwap.toJSON(message.streamSwap) : undefined);
+    message.flowTrade !== undefined && (obj.flowTrade = message.flowTrade ? FlowTrade.toJSON(message.flowTrade) : undefined);
     return obj;
   },
-  fromPartial(object: Partial<EventSetStreamSwap>): EventSetStreamSwap {
-    const message = createBaseEventSetStreamSwap();
-    message.streamSwap = object.streamSwap !== undefined && object.streamSwap !== null ? StreamSwap.fromPartial(object.streamSwap) : undefined;
+  fromPartial(object: Partial<EventSetFlowTrade>): EventSetFlowTrade {
+    const message = createBaseEventSetFlowTrade();
+    message.flowTrade = object.flowTrade !== undefined && object.flowTrade !== null ? FlowTrade.fromPartial(object.flowTrade) : undefined;
     return message;
   }
 };
-function createBaseEventRemoveStreamSwap(): EventRemoveStreamSwap {
+function createBaseEventRemoveFlowTrade(): EventRemoveFlowTrade {
   return {
     endTime: undefined,
-    streamId: Long.UZERO
+    flowId: Long.UZERO
   };
 }
-export const EventRemoveStreamSwap = {
-  encode(message: EventRemoveStreamSwap, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+export const EventRemoveFlowTrade = {
+  encode(message: EventRemoveFlowTrade, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.endTime !== undefined) {
       Timestamp.encode(message.endTime, writer.uint32(10).fork()).ldelim();
     }
-    if (!message.streamId.isZero()) {
-      writer.uint32(16).uint64(message.streamId);
+    if (!message.flowId.isZero()) {
+      writer.uint32(16).uint64(message.flowId);
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): EventRemoveStreamSwap {
+  decode(input: _m0.Reader | Uint8Array, length?: number): EventRemoveFlowTrade {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseEventRemoveStreamSwap();
+    const message = createBaseEventRemoveFlowTrade();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -354,7 +354,7 @@ export const EventRemoveStreamSwap = {
           message.endTime = Timestamp.decode(reader, reader.uint32());
           break;
         case 2:
-          message.streamId = (reader.uint64() as Long);
+          message.flowId = (reader.uint64() as Long);
           break;
         default:
           reader.skipType(tag & 7);
@@ -363,22 +363,22 @@ export const EventRemoveStreamSwap = {
     }
     return message;
   },
-  fromJSON(object: any): EventRemoveStreamSwap {
+  fromJSON(object: any): EventRemoveFlowTrade {
     return {
       endTime: isSet(object.endTime) ? fromJsonTimestamp(object.endTime) : undefined,
-      streamId: isSet(object.streamId) ? Long.fromValue(object.streamId) : Long.UZERO
+      flowId: isSet(object.flowId) ? Long.fromValue(object.flowId) : Long.UZERO
     };
   },
-  toJSON(message: EventRemoveStreamSwap): unknown {
+  toJSON(message: EventRemoveFlowTrade): unknown {
     const obj: any = {};
     message.endTime !== undefined && (obj.endTime = fromTimestamp(message.endTime).toISOString());
-    message.streamId !== undefined && (obj.streamId = (message.streamId || Long.UZERO).toString());
+    message.flowId !== undefined && (obj.flowId = (message.flowId || Long.UZERO).toString());
     return obj;
   },
-  fromPartial(object: Partial<EventRemoveStreamSwap>): EventRemoveStreamSwap {
-    const message = createBaseEventRemoveStreamSwap();
+  fromPartial(object: Partial<EventRemoveFlowTrade>): EventRemoveFlowTrade {
+    const message = createBaseEventRemoveFlowTrade();
     message.endTime = object.endTime !== undefined && object.endTime !== null ? Timestamp.fromPartial(object.endTime) : undefined;
-    message.streamId = object.streamId !== undefined && object.streamId !== null ? Long.fromValue(object.streamId) : Long.UZERO;
+    message.flowId = object.flowId !== undefined && object.flowId !== null ? Long.fromValue(object.flowId) : Long.UZERO;
     return message;
   }
 };
