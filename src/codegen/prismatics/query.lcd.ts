@@ -2,6 +2,7 @@
 import { GetTxRequest, GetTxResponseSDKType, GetTxsEventRequest, GetTxsEventResponseSDKType } from "../cosmos/tx/v1beta1/service";
 import { setPaginationParams } from "../helpers";
 import { LCDClient } from "@osmonauts/lcd";
+import { QuerySyncInfoRequest, QuerySyncInfoResponseSDKType } from "./sync_info";
 import { QueryAllMaturitiesRequest, QueryAllMaturitiesResponseSDKType } from "./maturity";
 import { BlockRequest } from "../tendermint/blocksync/types";
 import { BlockSDKType } from "../tendermint/types/block";
@@ -13,10 +14,16 @@ export class LCDQueryClient {
     requestClient: LCDClient;
   }) {
     this.req = requestClient;
+    this.syncInfo = this.syncInfo.bind(this);
     this.maturityAll = this.maturityAll.bind(this);
     this.block = this.block.bind(this);
     this.transaction = this.transaction.bind(this);
     this.transactionByEvent = this.transactionByEvent.bind(this);
+  }
+  /* SyncInfo */
+  async syncInfo(_params: QuerySyncInfoRequest = {}): Promise<QuerySyncInfoResponseSDKType> {
+    const endpoint = `prismatics/sync_info`;
+    return await this.req.get<QuerySyncInfoResponseSDKType>(endpoint);
   }
   /* MaturityAll */
   async maturityAll(params: QueryAllMaturitiesRequest, options: any = {params: {}}): Promise<QueryAllMaturitiesResponseSDKType> {
