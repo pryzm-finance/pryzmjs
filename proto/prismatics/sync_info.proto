@@ -1,0 +1,20 @@
+syntax = "proto3";
+package prismatics;
+
+import "gogoproto/gogo.proto";
+import "google/protobuf/timestamp.proto";
+
+option go_package = "github.com/prism-finance/prismatics/types";
+
+
+message SyncInfo {
+  int64 block_height = 1;
+  google.protobuf.Timestamp block_time = 2 [(gogoproto.stdtime) = true, (gogoproto.nullable) = false];
+}
+
+message QuerySyncInfoRequest {
+}
+
+message QuerySyncInfoResponse {
+  SyncInfo sync_info = 1 [(gogoproto.nullable) = false];
+}

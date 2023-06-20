@@ -1,8 +1,12 @@
 import {fetchAll, prismatics} from "@prism-finance/prismjs/lib";
 import {Long} from "@prism-finance/prismjs/lib/codegen/helpers";
+import * as console from "console";
 
 async function main() {
     const prismaticsClient = await prismatics.ClientFactory.createClient({restEndpoint: "http://localhost:4444"})
+
+    const syncInfo = (await prismaticsClient.prismatics.syncInfo()).sync_info
+    console.log(syncInfo)
 
     const allMaturities = await fetchAll(prismaticsClient, async (client, pageRequest) => {
         const result = (await prismaticsClient.prismatics.maturityAll({
