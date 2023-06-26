@@ -1,25 +1,27 @@
-import { Rpc } from "../../helpers";
-import * as _m0 from "protobufjs/minimal";
-import { QueryClient, createProtobufRpcClient } from "@cosmjs/stargate";
+//@ts-nocheck
+import { grpc } from "@improbable-eng/grpc-web";
+import { UnaryMethodDefinitionish } from "../../grpc-web";
+import { DeepPartial } from "../../helpers";
+import { BrowserHeaders } from "browser-headers";
 import { QueryParamsRequest, QueryParamsResponse, QueryGetHostChainRequest, QueryGetHostChainResponse, QueryAllHostChainRequest, QueryAllHostChainResponse, QueryGetHostChainStateRequest, QueryGetHostChainStateResponse, QueryAllHostChainStateRequest, QueryAllHostChainStateResponse, QueryGetUndelegationRequest, QueryGetUndelegationResponse, QueryAllUndelegationRequest, QueryAllUndelegationResponse, QueryIncompleteUndelegationRequest, QueryIncompleteUndelegationResponse } from "./query";
 /** Query defines the gRPC querier service. */
 export interface Query {
   /** Parameters queries the parameters of the module. */
-  params(request?: QueryParamsRequest): Promise<QueryParamsResponse>;
+  params(request?: DeepPartial<QueryParamsRequest>, metadata?: grpc.Metadata): Promise<QueryParamsResponse>;
   /** Queries a HostChain by index. */
-  hostChain(request: QueryGetHostChainRequest): Promise<QueryGetHostChainResponse>;
+  hostChain(request: DeepPartial<QueryGetHostChainRequest>, metadata?: grpc.Metadata): Promise<QueryGetHostChainResponse>;
   /** Queries a list of HostChain items. */
-  hostChainAll(request?: QueryAllHostChainRequest): Promise<QueryAllHostChainResponse>;
+  hostChainAll(request?: DeepPartial<QueryAllHostChainRequest>, metadata?: grpc.Metadata): Promise<QueryAllHostChainResponse>;
   /** Queries a HostChainState by index. */
-  hostChainState(request: QueryGetHostChainStateRequest): Promise<QueryGetHostChainStateResponse>;
+  hostChainState(request: DeepPartial<QueryGetHostChainStateRequest>, metadata?: grpc.Metadata): Promise<QueryGetHostChainStateResponse>;
   /** Queries a list of HostChainState items. */
-  hostChainStateAll(request?: QueryAllHostChainStateRequest): Promise<QueryAllHostChainStateResponse>;
+  hostChainStateAll(request?: DeepPartial<QueryAllHostChainStateRequest>, metadata?: grpc.Metadata): Promise<QueryAllHostChainStateResponse>;
   /** Queries a Undelegation by index. */
-  undelegation(request: QueryGetUndelegationRequest): Promise<QueryGetUndelegationResponse>;
+  undelegation(request: DeepPartial<QueryGetUndelegationRequest>, metadata?: grpc.Metadata): Promise<QueryGetUndelegationResponse>;
   /** Queries a list of Undelegation items. */
-  undelegationAll(request?: QueryAllUndelegationRequest): Promise<QueryAllUndelegationResponse>;
+  undelegationAll(request?: DeepPartial<QueryAllUndelegationRequest>, metadata?: grpc.Metadata): Promise<QueryAllUndelegationResponse>;
   /** Queries a list of incomplete undelegations sorted by completion time. */
-  incompleteUndelegationAll(request: QueryIncompleteUndelegationRequest): Promise<QueryIncompleteUndelegationResponse>;
+  incompleteUndelegationAll(request: DeepPartial<QueryIncompleteUndelegationRequest>, metadata?: grpc.Metadata): Promise<QueryIncompleteUndelegationResponse>;
 }
 export class QueryClientImpl implements Query {
   private readonly rpc: Rpc;
@@ -34,80 +36,253 @@ export class QueryClientImpl implements Query {
     this.undelegationAll = this.undelegationAll.bind(this);
     this.incompleteUndelegationAll = this.incompleteUndelegationAll.bind(this);
   }
-  params(request: QueryParamsRequest = {}): Promise<QueryParamsResponse> {
-    const data = QueryParamsRequest.encode(request).finish();
-    const promise = this.rpc.request("prism.icstaking.Query", "Params", data);
-    return promise.then(data => QueryParamsResponse.decode(new _m0.Reader(data)));
+  params(request: DeepPartial<QueryParamsRequest> = {}, metadata?: grpc.Metadata): Promise<QueryParamsResponse> {
+    return this.rpc.unary(QueryParamsDesc, QueryParamsRequest.fromPartial(request), metadata);
   }
-  hostChain(request: QueryGetHostChainRequest): Promise<QueryGetHostChainResponse> {
-    const data = QueryGetHostChainRequest.encode(request).finish();
-    const promise = this.rpc.request("prism.icstaking.Query", "HostChain", data);
-    return promise.then(data => QueryGetHostChainResponse.decode(new _m0.Reader(data)));
+  hostChain(request: DeepPartial<QueryGetHostChainRequest>, metadata?: grpc.Metadata): Promise<QueryGetHostChainResponse> {
+    return this.rpc.unary(QueryGetHostChainDesc, QueryGetHostChainRequest.fromPartial(request), metadata);
   }
-  hostChainAll(request: QueryAllHostChainRequest = {
+  hostChainAll(request: DeepPartial<QueryAllHostChainRequest> = {
     pagination: undefined
-  }): Promise<QueryAllHostChainResponse> {
-    const data = QueryAllHostChainRequest.encode(request).finish();
-    const promise = this.rpc.request("prism.icstaking.Query", "HostChainAll", data);
-    return promise.then(data => QueryAllHostChainResponse.decode(new _m0.Reader(data)));
+  }, metadata?: grpc.Metadata): Promise<QueryAllHostChainResponse> {
+    return this.rpc.unary(QueryAllHostChainDesc, QueryAllHostChainRequest.fromPartial(request), metadata);
   }
-  hostChainState(request: QueryGetHostChainStateRequest): Promise<QueryGetHostChainStateResponse> {
-    const data = QueryGetHostChainStateRequest.encode(request).finish();
-    const promise = this.rpc.request("prism.icstaking.Query", "HostChainState", data);
-    return promise.then(data => QueryGetHostChainStateResponse.decode(new _m0.Reader(data)));
+  hostChainState(request: DeepPartial<QueryGetHostChainStateRequest>, metadata?: grpc.Metadata): Promise<QueryGetHostChainStateResponse> {
+    return this.rpc.unary(QueryGetHostChainStateDesc, QueryGetHostChainStateRequest.fromPartial(request), metadata);
   }
-  hostChainStateAll(request: QueryAllHostChainStateRequest = {
+  hostChainStateAll(request: DeepPartial<QueryAllHostChainStateRequest> = {
     pagination: undefined
-  }): Promise<QueryAllHostChainStateResponse> {
-    const data = QueryAllHostChainStateRequest.encode(request).finish();
-    const promise = this.rpc.request("prism.icstaking.Query", "HostChainStateAll", data);
-    return promise.then(data => QueryAllHostChainStateResponse.decode(new _m0.Reader(data)));
+  }, metadata?: grpc.Metadata): Promise<QueryAllHostChainStateResponse> {
+    return this.rpc.unary(QueryAllHostChainStateDesc, QueryAllHostChainStateRequest.fromPartial(request), metadata);
   }
-  undelegation(request: QueryGetUndelegationRequest): Promise<QueryGetUndelegationResponse> {
-    const data = QueryGetUndelegationRequest.encode(request).finish();
-    const promise = this.rpc.request("prism.icstaking.Query", "Undelegation", data);
-    return promise.then(data => QueryGetUndelegationResponse.decode(new _m0.Reader(data)));
+  undelegation(request: DeepPartial<QueryGetUndelegationRequest>, metadata?: grpc.Metadata): Promise<QueryGetUndelegationResponse> {
+    return this.rpc.unary(QueryGetUndelegationDesc, QueryGetUndelegationRequest.fromPartial(request), metadata);
   }
-  undelegationAll(request: QueryAllUndelegationRequest = {
+  undelegationAll(request: DeepPartial<QueryAllUndelegationRequest> = {
     pagination: undefined
-  }): Promise<QueryAllUndelegationResponse> {
-    const data = QueryAllUndelegationRequest.encode(request).finish();
-    const promise = this.rpc.request("prism.icstaking.Query", "UndelegationAll", data);
-    return promise.then(data => QueryAllUndelegationResponse.decode(new _m0.Reader(data)));
+  }, metadata?: grpc.Metadata): Promise<QueryAllUndelegationResponse> {
+    return this.rpc.unary(QueryAllUndelegationDesc, QueryAllUndelegationRequest.fromPartial(request), metadata);
   }
-  incompleteUndelegationAll(request: QueryIncompleteUndelegationRequest): Promise<QueryIncompleteUndelegationResponse> {
-    const data = QueryIncompleteUndelegationRequest.encode(request).finish();
-    const promise = this.rpc.request("prism.icstaking.Query", "IncompleteUndelegationAll", data);
-    return promise.then(data => QueryIncompleteUndelegationResponse.decode(new _m0.Reader(data)));
+  incompleteUndelegationAll(request: DeepPartial<QueryIncompleteUndelegationRequest>, metadata?: grpc.Metadata): Promise<QueryIncompleteUndelegationResponse> {
+    return this.rpc.unary(QueryIncompleteUndelegationDesc, QueryIncompleteUndelegationRequest.fromPartial(request), metadata);
   }
 }
-export const createRpcQueryExtension = (base: QueryClient) => {
-  const rpc = createProtobufRpcClient(base);
-  const queryService = new QueryClientImpl(rpc);
-  return {
-    params(request?: QueryParamsRequest): Promise<QueryParamsResponse> {
-      return queryService.params(request);
-    },
-    hostChain(request: QueryGetHostChainRequest): Promise<QueryGetHostChainResponse> {
-      return queryService.hostChain(request);
-    },
-    hostChainAll(request?: QueryAllHostChainRequest): Promise<QueryAllHostChainResponse> {
-      return queryService.hostChainAll(request);
-    },
-    hostChainState(request: QueryGetHostChainStateRequest): Promise<QueryGetHostChainStateResponse> {
-      return queryService.hostChainState(request);
-    },
-    hostChainStateAll(request?: QueryAllHostChainStateRequest): Promise<QueryAllHostChainStateResponse> {
-      return queryService.hostChainStateAll(request);
-    },
-    undelegation(request: QueryGetUndelegationRequest): Promise<QueryGetUndelegationResponse> {
-      return queryService.undelegation(request);
-    },
-    undelegationAll(request?: QueryAllUndelegationRequest): Promise<QueryAllUndelegationResponse> {
-      return queryService.undelegationAll(request);
-    },
-    incompleteUndelegationAll(request: QueryIncompleteUndelegationRequest): Promise<QueryIncompleteUndelegationResponse> {
-      return queryService.incompleteUndelegationAll(request);
-    }
-  };
+export const QueryDesc = {
+  serviceName: "prism.icstaking.Query"
 };
+export const QueryParamsDesc: UnaryMethodDefinitionish = {
+  methodName: "Params",
+  service: QueryDesc,
+  requestStream: false,
+  responseStream: false,
+  requestType: ({
+    serializeBinary() {
+      return QueryParamsRequest.encode(this).finish();
+    }
+  } as any),
+  responseType: ({
+    deserializeBinary(data: Uint8Array) {
+      return {
+        ...QueryParamsResponse.decode(data),
+        toObject() {
+          return this;
+        }
+      };
+    }
+  } as any)
+};
+export const QueryGetHostChainDesc: UnaryMethodDefinitionish = {
+  methodName: "HostChain",
+  service: QueryDesc,
+  requestStream: false,
+  responseStream: false,
+  requestType: ({
+    serializeBinary() {
+      return QueryGetHostChainRequest.encode(this).finish();
+    }
+  } as any),
+  responseType: ({
+    deserializeBinary(data: Uint8Array) {
+      return {
+        ...QueryGetHostChainResponse.decode(data),
+        toObject() {
+          return this;
+        }
+      };
+    }
+  } as any)
+};
+export const QueryAllHostChainDesc: UnaryMethodDefinitionish = {
+  methodName: "HostChainAll",
+  service: QueryDesc,
+  requestStream: false,
+  responseStream: false,
+  requestType: ({
+    serializeBinary() {
+      return QueryAllHostChainRequest.encode(this).finish();
+    }
+  } as any),
+  responseType: ({
+    deserializeBinary(data: Uint8Array) {
+      return {
+        ...QueryAllHostChainResponse.decode(data),
+        toObject() {
+          return this;
+        }
+      };
+    }
+  } as any)
+};
+export const QueryGetHostChainStateDesc: UnaryMethodDefinitionish = {
+  methodName: "HostChainState",
+  service: QueryDesc,
+  requestStream: false,
+  responseStream: false,
+  requestType: ({
+    serializeBinary() {
+      return QueryGetHostChainStateRequest.encode(this).finish();
+    }
+  } as any),
+  responseType: ({
+    deserializeBinary(data: Uint8Array) {
+      return {
+        ...QueryGetHostChainStateResponse.decode(data),
+        toObject() {
+          return this;
+        }
+      };
+    }
+  } as any)
+};
+export const QueryAllHostChainStateDesc: UnaryMethodDefinitionish = {
+  methodName: "HostChainStateAll",
+  service: QueryDesc,
+  requestStream: false,
+  responseStream: false,
+  requestType: ({
+    serializeBinary() {
+      return QueryAllHostChainStateRequest.encode(this).finish();
+    }
+  } as any),
+  responseType: ({
+    deserializeBinary(data: Uint8Array) {
+      return {
+        ...QueryAllHostChainStateResponse.decode(data),
+        toObject() {
+          return this;
+        }
+      };
+    }
+  } as any)
+};
+export const QueryGetUndelegationDesc: UnaryMethodDefinitionish = {
+  methodName: "Undelegation",
+  service: QueryDesc,
+  requestStream: false,
+  responseStream: false,
+  requestType: ({
+    serializeBinary() {
+      return QueryGetUndelegationRequest.encode(this).finish();
+    }
+  } as any),
+  responseType: ({
+    deserializeBinary(data: Uint8Array) {
+      return {
+        ...QueryGetUndelegationResponse.decode(data),
+        toObject() {
+          return this;
+        }
+      };
+    }
+  } as any)
+};
+export const QueryAllUndelegationDesc: UnaryMethodDefinitionish = {
+  methodName: "UndelegationAll",
+  service: QueryDesc,
+  requestStream: false,
+  responseStream: false,
+  requestType: ({
+    serializeBinary() {
+      return QueryAllUndelegationRequest.encode(this).finish();
+    }
+  } as any),
+  responseType: ({
+    deserializeBinary(data: Uint8Array) {
+      return {
+        ...QueryAllUndelegationResponse.decode(data),
+        toObject() {
+          return this;
+        }
+      };
+    }
+  } as any)
+};
+export const QueryIncompleteUndelegationDesc: UnaryMethodDefinitionish = {
+  methodName: "IncompleteUndelegationAll",
+  service: QueryDesc,
+  requestStream: false,
+  responseStream: false,
+  requestType: ({
+    serializeBinary() {
+      return QueryIncompleteUndelegationRequest.encode(this).finish();
+    }
+  } as any),
+  responseType: ({
+    deserializeBinary(data: Uint8Array) {
+      return {
+        ...QueryIncompleteUndelegationResponse.decode(data),
+        toObject() {
+          return this;
+        }
+      };
+    }
+  } as any)
+};
+export interface Rpc {
+  unary<T extends UnaryMethodDefinitionish>(methodDesc: T, request: any, metadata: grpc.Metadata | undefined): Promise<any>;
+}
+export class GrpcWebImpl {
+  host: string;
+  options: {
+    transport?: grpc.TransportFactory;
+    debug?: boolean;
+    metadata?: grpc.Metadata;
+  };
+  constructor(host: string, options: {
+    transport?: grpc.TransportFactory;
+    debug?: boolean;
+    metadata?: grpc.Metadata;
+  }) {
+    this.host = host;
+    this.options = options;
+  }
+  unary<T extends UnaryMethodDefinitionish>(methodDesc: T, _request: any, metadata: grpc.Metadata | undefined) {
+    const request = {
+      ..._request,
+      ...methodDesc.requestType
+    };
+    const maybeCombinedMetadata = metadata && this.options.metadata ? new BrowserHeaders({
+      ...this.options?.metadata.headersMap,
+      ...metadata?.headersMap
+    }) : metadata || this.options.metadata;
+    return new Promise((resolve, reject) => {
+      grpc.unary(methodDesc, {
+        request,
+        host: this.host,
+        metadata: maybeCombinedMetadata,
+        transport: this.options.transport,
+        debug: this.options.debug,
+        onEnd: function (response) {
+          if (response.status === grpc.Code.OK) {
+            resolve(response.message);
+          } else {
+            const err = (new Error(response.statusMessage) as any);
+            err.code = response.status;
+            err.metadata = response.trailers;
+            reject(err);
+          }
+        }
+      });
+    });
+  }
+}

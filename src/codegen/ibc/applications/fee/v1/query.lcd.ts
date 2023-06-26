@@ -22,7 +22,10 @@ export class LCDQueryClient {
     this.feeEnabledChannel = this.feeEnabledChannel.bind(this);
   }
   /* IncentivizedPackets returns all incentivized packets and their associated fees */
-  async incentivizedPackets(params: QueryIncentivizedPacketsRequest, options: any = {params: {}}): Promise<QueryIncentivizedPacketsResponseSDKType> {
+  async incentivizedPackets(params: QueryIncentivizedPacketsRequest): Promise<QueryIncentivizedPacketsResponseSDKType> {
+    const options: any = {
+      params: {}
+    };
     if (typeof params?.pagination !== "undefined") {
       setPaginationParams(options, params.pagination);
     }
@@ -33,7 +36,10 @@ export class LCDQueryClient {
     return await this.req.get<QueryIncentivizedPacketsResponseSDKType>(endpoint, options);
   }
   /* IncentivizedPacket returns all packet fees for a packet given its identifier */
-  async incentivizedPacket(params: QueryIncentivizedPacketRequest, options: any = {params: {}}): Promise<QueryIncentivizedPacketResponseSDKType> {
+  async incentivizedPacket(params: QueryIncentivizedPacketRequest): Promise<QueryIncentivizedPacketResponseSDKType> {
+    const options: any = {
+      params: {}
+    };
     if (typeof params?.packetId !== "undefined") {
       options.params.packet_id = params.packetId;
     }
@@ -44,7 +50,10 @@ export class LCDQueryClient {
     return await this.req.get<QueryIncentivizedPacketResponseSDKType>(endpoint, options);
   }
   /* Gets all incentivized packets for a specific channel */
-  async incentivizedPacketsForChannel(params: QueryIncentivizedPacketsForChannelRequest, options: any = {params: {}}): Promise<QueryIncentivizedPacketsForChannelResponseSDKType> {
+  async incentivizedPacketsForChannel(params: QueryIncentivizedPacketsForChannelRequest): Promise<QueryIncentivizedPacketsForChannelResponseSDKType> {
+    const options: any = {
+      params: {}
+    };
     if (typeof params?.pagination !== "undefined") {
       setPaginationParams(options, params.pagination);
     }
@@ -55,7 +64,10 @@ export class LCDQueryClient {
     return await this.req.get<QueryIncentivizedPacketsForChannelResponseSDKType>(endpoint, options);
   }
   /* TotalRecvFees returns the total receive fees for a packet given its identifier */
-  async totalRecvFees(params: QueryTotalRecvFeesRequest, options: any = {params: {}}): Promise<QueryTotalRecvFeesResponseSDKType> {
+  async totalRecvFees(params: QueryTotalRecvFeesRequest): Promise<QueryTotalRecvFeesResponseSDKType> {
+    const options: any = {
+      params: {}
+    };
     if (typeof params?.packetId !== "undefined") {
       options.params.packet_id = params.packetId;
     }
@@ -63,7 +75,10 @@ export class LCDQueryClient {
     return await this.req.get<QueryTotalRecvFeesResponseSDKType>(endpoint, options);
   }
   /* TotalAckFees returns the total acknowledgement fees for a packet given its identifier */
-  async totalAckFees(params: QueryTotalAckFeesRequest, options: any = {params: {}}): Promise<QueryTotalAckFeesResponseSDKType> {
+  async totalAckFees(params: QueryTotalAckFeesRequest): Promise<QueryTotalAckFeesResponseSDKType> {
+    const options: any = {
+      params: {}
+    };
     if (typeof params?.packetId !== "undefined") {
       options.params.packet_id = params.packetId;
     }
@@ -71,7 +86,10 @@ export class LCDQueryClient {
     return await this.req.get<QueryTotalAckFeesResponseSDKType>(endpoint, options);
   }
   /* TotalTimeoutFees returns the total timeout fees for a packet given its identifier */
-  async totalTimeoutFees(params: QueryTotalTimeoutFeesRequest, options: any = {params: {}}): Promise<QueryTotalTimeoutFeesResponseSDKType> {
+  async totalTimeoutFees(params: QueryTotalTimeoutFeesRequest): Promise<QueryTotalTimeoutFeesResponseSDKType> {
+    const options: any = {
+      params: {}
+    };
     if (typeof params?.packetId !== "undefined") {
       options.params.packet_id = params.packetId;
     }
@@ -89,7 +107,10 @@ export class LCDQueryClient {
     return await this.req.get<QueryCounterpartyPayeeResponseSDKType>(endpoint);
   }
   /* FeeEnabledChannels returns a list of all fee enabled channels */
-  async feeEnabledChannels(params: QueryFeeEnabledChannelsRequest, options: any = {params: {}}): Promise<QueryFeeEnabledChannelsResponseSDKType> {
+  async feeEnabledChannels(params: QueryFeeEnabledChannelsRequest): Promise<QueryFeeEnabledChannelsResponseSDKType> {
+    const options: any = {
+      params: {}
+    };
     if (typeof params?.pagination !== "undefined") {
       setPaginationParams(options, params.pagination);
     }

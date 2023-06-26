@@ -17,7 +17,10 @@ export class LCDQueryClient {
     this.escrowAddress = this.escrowAddress.bind(this);
   }
   /* DenomTrace queries a denomination trace information. */
-  async denomTrace(params: QueryDenomTraceRequest, options: any = {params: {}}): Promise<QueryDenomTraceResponseSDKType> {
+  async denomTrace(params: QueryDenomTraceRequest): Promise<QueryDenomTraceResponseSDKType> {
+    const options: any = {
+      params: {}
+    };
     if (typeof params?.hash !== "undefined") {
       options.params.hash = params.hash;
     }
@@ -27,7 +30,10 @@ export class LCDQueryClient {
   /* DenomTraces queries all denomination traces. */
   async denomTraces(params: QueryDenomTracesRequest = {
     pagination: undefined
-  }, options: any = {params: {}}): Promise<QueryDenomTracesResponseSDKType> {
+  }): Promise<QueryDenomTracesResponseSDKType> {
+    const options: any = {
+      params: {}
+    };
     if (typeof params?.pagination !== "undefined") {
       setPaginationParams(options, params.pagination);
     }
@@ -40,7 +46,10 @@ export class LCDQueryClient {
     return await this.req.get<QueryParamsResponseSDKType>(endpoint);
   }
   /* DenomHash queries a denomination hash information. */
-  async denomHash(params: QueryDenomHashRequest, options: any = {params: {}}): Promise<QueryDenomHashResponseSDKType> {
+  async denomHash(params: QueryDenomHashRequest): Promise<QueryDenomHashResponseSDKType> {
+    const options: any = {
+      params: {}
+    };
     if (typeof params?.trace !== "undefined") {
       options.params.trace = params.trace;
     }

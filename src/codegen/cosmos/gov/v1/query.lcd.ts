@@ -25,7 +25,10 @@ export class LCDQueryClient {
     return await this.req.get<QueryProposalResponseSDKType>(endpoint);
   }
   /* Proposals queries all proposals based on given status. */
-  async proposals(params: QueryProposalsRequest, options: any = {params: {}}): Promise<QueryProposalsResponseSDKType> {
+  async proposals(params: QueryProposalsRequest): Promise<QueryProposalsResponseSDKType> {
+    const options: any = {
+      params: {}
+    };
     if (typeof params?.proposalStatus !== "undefined") {
       options.params.proposal_status = params.proposalStatus;
     }
@@ -47,7 +50,10 @@ export class LCDQueryClient {
     return await this.req.get<QueryVoteResponseSDKType>(endpoint);
   }
   /* Votes queries votes of a given proposal. */
-  async votes(params: QueryVotesRequest, options: any = {params: {}}): Promise<QueryVotesResponseSDKType> {
+  async votes(params: QueryVotesRequest): Promise<QueryVotesResponseSDKType> {
+    const options: any = {
+      params: {}
+    };
     if (typeof params?.pagination !== "undefined") {
       setPaginationParams(options, params.pagination);
     }
@@ -65,7 +71,10 @@ export class LCDQueryClient {
     return await this.req.get<QueryDepositResponseSDKType>(endpoint);
   }
   /* Deposits queries all deposits of a single proposal. */
-  async deposits(params: QueryDepositsRequest, options: any = {params: {}}): Promise<QueryDepositsResponseSDKType> {
+  async deposits(params: QueryDepositsRequest): Promise<QueryDepositsResponseSDKType> {
+    const options: any = {
+      params: {}
+    };
     if (typeof params?.pagination !== "undefined") {
       setPaginationParams(options, params.pagination);
     }

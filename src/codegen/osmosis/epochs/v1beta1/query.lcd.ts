@@ -18,7 +18,10 @@ export class LCDQueryClient {
     return await this.req.get<QueryEpochsInfoResponseSDKType>(endpoint);
   }
   /* CurrentEpoch provide current epoch of specified identifier */
-  async currentEpoch(params: QueryCurrentEpochRequest, options: any = {params: {}}): Promise<QueryCurrentEpochResponseSDKType> {
+  async currentEpoch(params: QueryCurrentEpochRequest): Promise<QueryCurrentEpochResponseSDKType> {
+    const options: any = {
+      params: {}
+    };
     if (typeof params?.identifier !== "undefined") {
       options.params.identifier = params.identifier;
     }

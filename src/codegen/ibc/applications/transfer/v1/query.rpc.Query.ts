@@ -1,19 +1,21 @@
-import { Rpc } from "../../../../helpers";
-import * as _m0 from "protobufjs/minimal";
-import { QueryClient, createProtobufRpcClient } from "@cosmjs/stargate";
+//@ts-nocheck
+import { grpc } from "@improbable-eng/grpc-web";
+import { UnaryMethodDefinitionish } from "../../../../grpc-web";
+import { DeepPartial } from "../../../../helpers";
+import { BrowserHeaders } from "browser-headers";
 import { QueryDenomTraceRequest, QueryDenomTraceResponse, QueryDenomTracesRequest, QueryDenomTracesResponse, QueryParamsRequest, QueryParamsResponse, QueryDenomHashRequest, QueryDenomHashResponse, QueryEscrowAddressRequest, QueryEscrowAddressResponse } from "./query";
 /** Query provides defines the gRPC querier service. */
 export interface Query {
   /** DenomTrace queries a denomination trace information. */
-  denomTrace(request: QueryDenomTraceRequest): Promise<QueryDenomTraceResponse>;
+  denomTrace(request: DeepPartial<QueryDenomTraceRequest>, metadata?: grpc.Metadata): Promise<QueryDenomTraceResponse>;
   /** DenomTraces queries all denomination traces. */
-  denomTraces(request?: QueryDenomTracesRequest): Promise<QueryDenomTracesResponse>;
+  denomTraces(request?: DeepPartial<QueryDenomTracesRequest>, metadata?: grpc.Metadata): Promise<QueryDenomTracesResponse>;
   /** Params queries all parameters of the ibc-transfer module. */
-  params(request?: QueryParamsRequest): Promise<QueryParamsResponse>;
+  params(request?: DeepPartial<QueryParamsRequest>, metadata?: grpc.Metadata): Promise<QueryParamsResponse>;
   /** DenomHash queries a denomination hash information. */
-  denomHash(request: QueryDenomHashRequest): Promise<QueryDenomHashResponse>;
+  denomHash(request: DeepPartial<QueryDenomHashRequest>, metadata?: grpc.Metadata): Promise<QueryDenomHashResponse>;
   /** EscrowAddress returns the escrow address for a particular port and channel id. */
-  escrowAddress(request: QueryEscrowAddressRequest): Promise<QueryEscrowAddressResponse>;
+  escrowAddress(request: DeepPartial<QueryEscrowAddressRequest>, metadata?: grpc.Metadata): Promise<QueryEscrowAddressResponse>;
 }
 export class QueryClientImpl implements Query {
   private readonly rpc: Rpc;
@@ -25,52 +27,177 @@ export class QueryClientImpl implements Query {
     this.denomHash = this.denomHash.bind(this);
     this.escrowAddress = this.escrowAddress.bind(this);
   }
-  denomTrace(request: QueryDenomTraceRequest): Promise<QueryDenomTraceResponse> {
-    const data = QueryDenomTraceRequest.encode(request).finish();
-    const promise = this.rpc.request("ibc.applications.transfer.v1.Query", "DenomTrace", data);
-    return promise.then(data => QueryDenomTraceResponse.decode(new _m0.Reader(data)));
+  denomTrace(request: DeepPartial<QueryDenomTraceRequest>, metadata?: grpc.Metadata): Promise<QueryDenomTraceResponse> {
+    return this.rpc.unary(QueryDenomTraceDesc, QueryDenomTraceRequest.fromPartial(request), metadata);
   }
-  denomTraces(request: QueryDenomTracesRequest = {
+  denomTraces(request: DeepPartial<QueryDenomTracesRequest> = {
     pagination: undefined
-  }): Promise<QueryDenomTracesResponse> {
-    const data = QueryDenomTracesRequest.encode(request).finish();
-    const promise = this.rpc.request("ibc.applications.transfer.v1.Query", "DenomTraces", data);
-    return promise.then(data => QueryDenomTracesResponse.decode(new _m0.Reader(data)));
+  }, metadata?: grpc.Metadata): Promise<QueryDenomTracesResponse> {
+    return this.rpc.unary(QueryDenomTracesDesc, QueryDenomTracesRequest.fromPartial(request), metadata);
   }
-  params(request: QueryParamsRequest = {}): Promise<QueryParamsResponse> {
-    const data = QueryParamsRequest.encode(request).finish();
-    const promise = this.rpc.request("ibc.applications.transfer.v1.Query", "Params", data);
-    return promise.then(data => QueryParamsResponse.decode(new _m0.Reader(data)));
+  params(request: DeepPartial<QueryParamsRequest> = {}, metadata?: grpc.Metadata): Promise<QueryParamsResponse> {
+    return this.rpc.unary(QueryParamsDesc, QueryParamsRequest.fromPartial(request), metadata);
   }
-  denomHash(request: QueryDenomHashRequest): Promise<QueryDenomHashResponse> {
-    const data = QueryDenomHashRequest.encode(request).finish();
-    const promise = this.rpc.request("ibc.applications.transfer.v1.Query", "DenomHash", data);
-    return promise.then(data => QueryDenomHashResponse.decode(new _m0.Reader(data)));
+  denomHash(request: DeepPartial<QueryDenomHashRequest>, metadata?: grpc.Metadata): Promise<QueryDenomHashResponse> {
+    return this.rpc.unary(QueryDenomHashDesc, QueryDenomHashRequest.fromPartial(request), metadata);
   }
-  escrowAddress(request: QueryEscrowAddressRequest): Promise<QueryEscrowAddressResponse> {
-    const data = QueryEscrowAddressRequest.encode(request).finish();
-    const promise = this.rpc.request("ibc.applications.transfer.v1.Query", "EscrowAddress", data);
-    return promise.then(data => QueryEscrowAddressResponse.decode(new _m0.Reader(data)));
+  escrowAddress(request: DeepPartial<QueryEscrowAddressRequest>, metadata?: grpc.Metadata): Promise<QueryEscrowAddressResponse> {
+    return this.rpc.unary(QueryEscrowAddressDesc, QueryEscrowAddressRequest.fromPartial(request), metadata);
   }
 }
-export const createRpcQueryExtension = (base: QueryClient) => {
-  const rpc = createProtobufRpcClient(base);
-  const queryService = new QueryClientImpl(rpc);
-  return {
-    denomTrace(request: QueryDenomTraceRequest): Promise<QueryDenomTraceResponse> {
-      return queryService.denomTrace(request);
-    },
-    denomTraces(request?: QueryDenomTracesRequest): Promise<QueryDenomTracesResponse> {
-      return queryService.denomTraces(request);
-    },
-    params(request?: QueryParamsRequest): Promise<QueryParamsResponse> {
-      return queryService.params(request);
-    },
-    denomHash(request: QueryDenomHashRequest): Promise<QueryDenomHashResponse> {
-      return queryService.denomHash(request);
-    },
-    escrowAddress(request: QueryEscrowAddressRequest): Promise<QueryEscrowAddressResponse> {
-      return queryService.escrowAddress(request);
-    }
-  };
+export const QueryDesc = {
+  serviceName: "ibc.applications.transfer.v1.Query"
 };
+export const QueryDenomTraceDesc: UnaryMethodDefinitionish = {
+  methodName: "DenomTrace",
+  service: QueryDesc,
+  requestStream: false,
+  responseStream: false,
+  requestType: ({
+    serializeBinary() {
+      return QueryDenomTraceRequest.encode(this).finish();
+    }
+  } as any),
+  responseType: ({
+    deserializeBinary(data: Uint8Array) {
+      return {
+        ...QueryDenomTraceResponse.decode(data),
+        toObject() {
+          return this;
+        }
+      };
+    }
+  } as any)
+};
+export const QueryDenomTracesDesc: UnaryMethodDefinitionish = {
+  methodName: "DenomTraces",
+  service: QueryDesc,
+  requestStream: false,
+  responseStream: false,
+  requestType: ({
+    serializeBinary() {
+      return QueryDenomTracesRequest.encode(this).finish();
+    }
+  } as any),
+  responseType: ({
+    deserializeBinary(data: Uint8Array) {
+      return {
+        ...QueryDenomTracesResponse.decode(data),
+        toObject() {
+          return this;
+        }
+      };
+    }
+  } as any)
+};
+export const QueryParamsDesc: UnaryMethodDefinitionish = {
+  methodName: "Params",
+  service: QueryDesc,
+  requestStream: false,
+  responseStream: false,
+  requestType: ({
+    serializeBinary() {
+      return QueryParamsRequest.encode(this).finish();
+    }
+  } as any),
+  responseType: ({
+    deserializeBinary(data: Uint8Array) {
+      return {
+        ...QueryParamsResponse.decode(data),
+        toObject() {
+          return this;
+        }
+      };
+    }
+  } as any)
+};
+export const QueryDenomHashDesc: UnaryMethodDefinitionish = {
+  methodName: "DenomHash",
+  service: QueryDesc,
+  requestStream: false,
+  responseStream: false,
+  requestType: ({
+    serializeBinary() {
+      return QueryDenomHashRequest.encode(this).finish();
+    }
+  } as any),
+  responseType: ({
+    deserializeBinary(data: Uint8Array) {
+      return {
+        ...QueryDenomHashResponse.decode(data),
+        toObject() {
+          return this;
+        }
+      };
+    }
+  } as any)
+};
+export const QueryEscrowAddressDesc: UnaryMethodDefinitionish = {
+  methodName: "EscrowAddress",
+  service: QueryDesc,
+  requestStream: false,
+  responseStream: false,
+  requestType: ({
+    serializeBinary() {
+      return QueryEscrowAddressRequest.encode(this).finish();
+    }
+  } as any),
+  responseType: ({
+    deserializeBinary(data: Uint8Array) {
+      return {
+        ...QueryEscrowAddressResponse.decode(data),
+        toObject() {
+          return this;
+        }
+      };
+    }
+  } as any)
+};
+export interface Rpc {
+  unary<T extends UnaryMethodDefinitionish>(methodDesc: T, request: any, metadata: grpc.Metadata | undefined): Promise<any>;
+}
+export class GrpcWebImpl {
+  host: string;
+  options: {
+    transport?: grpc.TransportFactory;
+    debug?: boolean;
+    metadata?: grpc.Metadata;
+  };
+  constructor(host: string, options: {
+    transport?: grpc.TransportFactory;
+    debug?: boolean;
+    metadata?: grpc.Metadata;
+  }) {
+    this.host = host;
+    this.options = options;
+  }
+  unary<T extends UnaryMethodDefinitionish>(methodDesc: T, _request: any, metadata: grpc.Metadata | undefined) {
+    const request = {
+      ..._request,
+      ...methodDesc.requestType
+    };
+    const maybeCombinedMetadata = metadata && this.options.metadata ? new BrowserHeaders({
+      ...this.options?.metadata.headersMap,
+      ...metadata?.headersMap
+    }) : metadata || this.options.metadata;
+    return new Promise((resolve, reject) => {
+      grpc.unary(methodDesc, {
+        request,
+        host: this.host,
+        metadata: maybeCombinedMetadata,
+        transport: this.options.transport,
+        debug: this.options.debug,
+        onEnd: function (response) {
+          if (response.status === grpc.Code.OK) {
+            resolve(response.message);
+          } else {
+            const err = (new Error(response.statusMessage) as any);
+            err.code = response.status;
+            err.metadata = response.trailers;
+            reject(err);
+          }
+        }
+      });
+    });
+  }
+}

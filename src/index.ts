@@ -1,10 +1,10 @@
 import {prism, prismatics} from "./codegen"
 import {Long, PageRequest} from "./codegen/helpers";
-import console from "console";
+import {BrowserHeaders} from "browser-headers";
 
 export type PrismLCDClient = Awaited<ReturnType<typeof prism.ClientFactory.createLCDClient>>
 export type PrismaticsClient = Awaited<ReturnType<typeof prismatics.ClientFactory.createClient>>
-export type PrismRPCQueryClient = Awaited<ReturnType<typeof prism.ClientFactory.createRPCQueryClient>>
+export type PrismGrpcWebClient = Awaited<ReturnType<typeof prism.ClientFactory.createGrpcWebClient>>
 
 export * from './codegen';
 
@@ -44,7 +44,7 @@ export async function lcdFetchAll<Type>(client: PrismLCDClient, fetch: (client: 
 /**
  * ```ts
  * example:
- *     const balances = await rpcFetchAll(rpcClient, async (client, pageRequest) => {
+ *     const balances = await grpcFetchAll(grpcClient, async (client, pageRequest) => {
  *         const result = await client.cosmos.bank.v1beta1.allBalances({
  *             address: "prism156pcgs3faegfte0vuaykr9az3hh9kx2e2qfwvu",
  *             pagination: pageRequest
@@ -53,7 +53,7 @@ export async function lcdFetchAll<Type>(client: PrismLCDClient, fetch: (client: 
  *     })
  * ```
  */
-export async function rpcFetchAll<Type>(client: PrismRPCQueryClient, fetch: (client: PrismRPCQueryClient, request: PageRequest) =>
+export async function grpcFetchAll<Type>(client: PrismGrpcWebClient, fetch: (client: PrismGrpcWebClient, request: PageRequest) =>
     Promise<[Uint8Array, Type[]]>, pageRequest = defaultPageRequestProvider()): Promise<Type[]> {
     const result: Type[] = []
     do {
@@ -63,7 +63,6 @@ export async function rpcFetchAll<Type>(client: PrismRPCQueryClient, fetch: (cli
     } while (pageRequest.key && pageRequest.key.length != 0)
     return result;
 }
-
 
 
 /**
@@ -88,4 +87,10 @@ export async function fetchAll<Type>(client: PrismaticsClient, fetch: (client: P
         pageRequest.key = nextKey ? new Uint8Array(Buffer.from(nextKey as any, 'base64')) : null
     } while (pageRequest.key)
     return result;
+}
+
+export function getBrowsersHeadersForBlockHeight(height: number): BrowserHeaders {
+    const headers = new BrowserHeaders()
+    headers.set("x-cosmos-block-height", `${height}`)
+    return headers
 }

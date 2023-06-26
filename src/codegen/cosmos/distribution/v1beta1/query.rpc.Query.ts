@@ -1,32 +1,34 @@
-import { Rpc } from "../../../helpers";
-import * as _m0 from "protobufjs/minimal";
-import { QueryClient, createProtobufRpcClient } from "@cosmjs/stargate";
+//@ts-nocheck
+import { grpc } from "@improbable-eng/grpc-web";
+import { UnaryMethodDefinitionish } from "../../../grpc-web";
+import { DeepPartial } from "../../../helpers";
+import { BrowserHeaders } from "browser-headers";
 import { QueryParamsRequest, QueryParamsResponse, QueryValidatorDistributionInfoRequest, QueryValidatorDistributionInfoResponse, QueryValidatorOutstandingRewardsRequest, QueryValidatorOutstandingRewardsResponse, QueryValidatorCommissionRequest, QueryValidatorCommissionResponse, QueryValidatorSlashesRequest, QueryValidatorSlashesResponse, QueryDelegationRewardsRequest, QueryDelegationRewardsResponse, QueryDelegationTotalRewardsRequest, QueryDelegationTotalRewardsResponse, QueryDelegatorValidatorsRequest, QueryDelegatorValidatorsResponse, QueryDelegatorWithdrawAddressRequest, QueryDelegatorWithdrawAddressResponse, QueryCommunityPoolRequest, QueryCommunityPoolResponse } from "./query";
 /** Query defines the gRPC querier service for distribution module. */
 export interface Query {
   /** Params queries params of the distribution module. */
-  params(request?: QueryParamsRequest): Promise<QueryParamsResponse>;
+  params(request?: DeepPartial<QueryParamsRequest>, metadata?: grpc.Metadata): Promise<QueryParamsResponse>;
   /** ValidatorDistributionInfo queries validator commission and self-delegation rewards for validator */
-  validatorDistributionInfo(request: QueryValidatorDistributionInfoRequest): Promise<QueryValidatorDistributionInfoResponse>;
+  validatorDistributionInfo(request: DeepPartial<QueryValidatorDistributionInfoRequest>, metadata?: grpc.Metadata): Promise<QueryValidatorDistributionInfoResponse>;
   /** ValidatorOutstandingRewards queries rewards of a validator address. */
-  validatorOutstandingRewards(request: QueryValidatorOutstandingRewardsRequest): Promise<QueryValidatorOutstandingRewardsResponse>;
+  validatorOutstandingRewards(request: DeepPartial<QueryValidatorOutstandingRewardsRequest>, metadata?: grpc.Metadata): Promise<QueryValidatorOutstandingRewardsResponse>;
   /** ValidatorCommission queries accumulated commission for a validator. */
-  validatorCommission(request: QueryValidatorCommissionRequest): Promise<QueryValidatorCommissionResponse>;
+  validatorCommission(request: DeepPartial<QueryValidatorCommissionRequest>, metadata?: grpc.Metadata): Promise<QueryValidatorCommissionResponse>;
   /** ValidatorSlashes queries slash events of a validator. */
-  validatorSlashes(request: QueryValidatorSlashesRequest): Promise<QueryValidatorSlashesResponse>;
+  validatorSlashes(request: DeepPartial<QueryValidatorSlashesRequest>, metadata?: grpc.Metadata): Promise<QueryValidatorSlashesResponse>;
   /** DelegationRewards queries the total rewards accrued by a delegation. */
-  delegationRewards(request: QueryDelegationRewardsRequest): Promise<QueryDelegationRewardsResponse>;
+  delegationRewards(request: DeepPartial<QueryDelegationRewardsRequest>, metadata?: grpc.Metadata): Promise<QueryDelegationRewardsResponse>;
   /**
    * DelegationTotalRewards queries the total rewards accrued by a each
    * validator.
    */
-  delegationTotalRewards(request: QueryDelegationTotalRewardsRequest): Promise<QueryDelegationTotalRewardsResponse>;
+  delegationTotalRewards(request: DeepPartial<QueryDelegationTotalRewardsRequest>, metadata?: grpc.Metadata): Promise<QueryDelegationTotalRewardsResponse>;
   /** DelegatorValidators queries the validators of a delegator. */
-  delegatorValidators(request: QueryDelegatorValidatorsRequest): Promise<QueryDelegatorValidatorsResponse>;
+  delegatorValidators(request: DeepPartial<QueryDelegatorValidatorsRequest>, metadata?: grpc.Metadata): Promise<QueryDelegatorValidatorsResponse>;
   /** DelegatorWithdrawAddress queries withdraw address of a delegator. */
-  delegatorWithdrawAddress(request: QueryDelegatorWithdrawAddressRequest): Promise<QueryDelegatorWithdrawAddressResponse>;
+  delegatorWithdrawAddress(request: DeepPartial<QueryDelegatorWithdrawAddressRequest>, metadata?: grpc.Metadata): Promise<QueryDelegatorWithdrawAddressResponse>;
   /** CommunityPool queries the community pool coins. */
-  communityPool(request?: QueryCommunityPoolRequest): Promise<QueryCommunityPoolResponse>;
+  communityPool(request?: DeepPartial<QueryCommunityPoolRequest>, metadata?: grpc.Metadata): Promise<QueryCommunityPoolResponse>;
 }
 export class QueryClientImpl implements Query {
   private readonly rpc: Rpc;
@@ -43,90 +45,295 @@ export class QueryClientImpl implements Query {
     this.delegatorWithdrawAddress = this.delegatorWithdrawAddress.bind(this);
     this.communityPool = this.communityPool.bind(this);
   }
-  params(request: QueryParamsRequest = {}): Promise<QueryParamsResponse> {
-    const data = QueryParamsRequest.encode(request).finish();
-    const promise = this.rpc.request("cosmos.distribution.v1beta1.Query", "Params", data);
-    return promise.then(data => QueryParamsResponse.decode(new _m0.Reader(data)));
+  params(request: DeepPartial<QueryParamsRequest> = {}, metadata?: grpc.Metadata): Promise<QueryParamsResponse> {
+    return this.rpc.unary(QueryParamsDesc, QueryParamsRequest.fromPartial(request), metadata);
   }
-  validatorDistributionInfo(request: QueryValidatorDistributionInfoRequest): Promise<QueryValidatorDistributionInfoResponse> {
-    const data = QueryValidatorDistributionInfoRequest.encode(request).finish();
-    const promise = this.rpc.request("cosmos.distribution.v1beta1.Query", "ValidatorDistributionInfo", data);
-    return promise.then(data => QueryValidatorDistributionInfoResponse.decode(new _m0.Reader(data)));
+  validatorDistributionInfo(request: DeepPartial<QueryValidatorDistributionInfoRequest>, metadata?: grpc.Metadata): Promise<QueryValidatorDistributionInfoResponse> {
+    return this.rpc.unary(QueryValidatorDistributionInfoDesc, QueryValidatorDistributionInfoRequest.fromPartial(request), metadata);
   }
-  validatorOutstandingRewards(request: QueryValidatorOutstandingRewardsRequest): Promise<QueryValidatorOutstandingRewardsResponse> {
-    const data = QueryValidatorOutstandingRewardsRequest.encode(request).finish();
-    const promise = this.rpc.request("cosmos.distribution.v1beta1.Query", "ValidatorOutstandingRewards", data);
-    return promise.then(data => QueryValidatorOutstandingRewardsResponse.decode(new _m0.Reader(data)));
+  validatorOutstandingRewards(request: DeepPartial<QueryValidatorOutstandingRewardsRequest>, metadata?: grpc.Metadata): Promise<QueryValidatorOutstandingRewardsResponse> {
+    return this.rpc.unary(QueryValidatorOutstandingRewardsDesc, QueryValidatorOutstandingRewardsRequest.fromPartial(request), metadata);
   }
-  validatorCommission(request: QueryValidatorCommissionRequest): Promise<QueryValidatorCommissionResponse> {
-    const data = QueryValidatorCommissionRequest.encode(request).finish();
-    const promise = this.rpc.request("cosmos.distribution.v1beta1.Query", "ValidatorCommission", data);
-    return promise.then(data => QueryValidatorCommissionResponse.decode(new _m0.Reader(data)));
+  validatorCommission(request: DeepPartial<QueryValidatorCommissionRequest>, metadata?: grpc.Metadata): Promise<QueryValidatorCommissionResponse> {
+    return this.rpc.unary(QueryValidatorCommissionDesc, QueryValidatorCommissionRequest.fromPartial(request), metadata);
   }
-  validatorSlashes(request: QueryValidatorSlashesRequest): Promise<QueryValidatorSlashesResponse> {
-    const data = QueryValidatorSlashesRequest.encode(request).finish();
-    const promise = this.rpc.request("cosmos.distribution.v1beta1.Query", "ValidatorSlashes", data);
-    return promise.then(data => QueryValidatorSlashesResponse.decode(new _m0.Reader(data)));
+  validatorSlashes(request: DeepPartial<QueryValidatorSlashesRequest>, metadata?: grpc.Metadata): Promise<QueryValidatorSlashesResponse> {
+    return this.rpc.unary(QueryValidatorSlashesDesc, QueryValidatorSlashesRequest.fromPartial(request), metadata);
   }
-  delegationRewards(request: QueryDelegationRewardsRequest): Promise<QueryDelegationRewardsResponse> {
-    const data = QueryDelegationRewardsRequest.encode(request).finish();
-    const promise = this.rpc.request("cosmos.distribution.v1beta1.Query", "DelegationRewards", data);
-    return promise.then(data => QueryDelegationRewardsResponse.decode(new _m0.Reader(data)));
+  delegationRewards(request: DeepPartial<QueryDelegationRewardsRequest>, metadata?: grpc.Metadata): Promise<QueryDelegationRewardsResponse> {
+    return this.rpc.unary(QueryDelegationRewardsDesc, QueryDelegationRewardsRequest.fromPartial(request), metadata);
   }
-  delegationTotalRewards(request: QueryDelegationTotalRewardsRequest): Promise<QueryDelegationTotalRewardsResponse> {
-    const data = QueryDelegationTotalRewardsRequest.encode(request).finish();
-    const promise = this.rpc.request("cosmos.distribution.v1beta1.Query", "DelegationTotalRewards", data);
-    return promise.then(data => QueryDelegationTotalRewardsResponse.decode(new _m0.Reader(data)));
+  delegationTotalRewards(request: DeepPartial<QueryDelegationTotalRewardsRequest>, metadata?: grpc.Metadata): Promise<QueryDelegationTotalRewardsResponse> {
+    return this.rpc.unary(QueryDelegationTotalRewardsDesc, QueryDelegationTotalRewardsRequest.fromPartial(request), metadata);
   }
-  delegatorValidators(request: QueryDelegatorValidatorsRequest): Promise<QueryDelegatorValidatorsResponse> {
-    const data = QueryDelegatorValidatorsRequest.encode(request).finish();
-    const promise = this.rpc.request("cosmos.distribution.v1beta1.Query", "DelegatorValidators", data);
-    return promise.then(data => QueryDelegatorValidatorsResponse.decode(new _m0.Reader(data)));
+  delegatorValidators(request: DeepPartial<QueryDelegatorValidatorsRequest>, metadata?: grpc.Metadata): Promise<QueryDelegatorValidatorsResponse> {
+    return this.rpc.unary(QueryDelegatorValidatorsDesc, QueryDelegatorValidatorsRequest.fromPartial(request), metadata);
   }
-  delegatorWithdrawAddress(request: QueryDelegatorWithdrawAddressRequest): Promise<QueryDelegatorWithdrawAddressResponse> {
-    const data = QueryDelegatorWithdrawAddressRequest.encode(request).finish();
-    const promise = this.rpc.request("cosmos.distribution.v1beta1.Query", "DelegatorWithdrawAddress", data);
-    return promise.then(data => QueryDelegatorWithdrawAddressResponse.decode(new _m0.Reader(data)));
+  delegatorWithdrawAddress(request: DeepPartial<QueryDelegatorWithdrawAddressRequest>, metadata?: grpc.Metadata): Promise<QueryDelegatorWithdrawAddressResponse> {
+    return this.rpc.unary(QueryDelegatorWithdrawAddressDesc, QueryDelegatorWithdrawAddressRequest.fromPartial(request), metadata);
   }
-  communityPool(request: QueryCommunityPoolRequest = {}): Promise<QueryCommunityPoolResponse> {
-    const data = QueryCommunityPoolRequest.encode(request).finish();
-    const promise = this.rpc.request("cosmos.distribution.v1beta1.Query", "CommunityPool", data);
-    return promise.then(data => QueryCommunityPoolResponse.decode(new _m0.Reader(data)));
+  communityPool(request: DeepPartial<QueryCommunityPoolRequest> = {}, metadata?: grpc.Metadata): Promise<QueryCommunityPoolResponse> {
+    return this.rpc.unary(QueryCommunityPoolDesc, QueryCommunityPoolRequest.fromPartial(request), metadata);
   }
 }
-export const createRpcQueryExtension = (base: QueryClient) => {
-  const rpc = createProtobufRpcClient(base);
-  const queryService = new QueryClientImpl(rpc);
-  return {
-    params(request?: QueryParamsRequest): Promise<QueryParamsResponse> {
-      return queryService.params(request);
-    },
-    validatorDistributionInfo(request: QueryValidatorDistributionInfoRequest): Promise<QueryValidatorDistributionInfoResponse> {
-      return queryService.validatorDistributionInfo(request);
-    },
-    validatorOutstandingRewards(request: QueryValidatorOutstandingRewardsRequest): Promise<QueryValidatorOutstandingRewardsResponse> {
-      return queryService.validatorOutstandingRewards(request);
-    },
-    validatorCommission(request: QueryValidatorCommissionRequest): Promise<QueryValidatorCommissionResponse> {
-      return queryService.validatorCommission(request);
-    },
-    validatorSlashes(request: QueryValidatorSlashesRequest): Promise<QueryValidatorSlashesResponse> {
-      return queryService.validatorSlashes(request);
-    },
-    delegationRewards(request: QueryDelegationRewardsRequest): Promise<QueryDelegationRewardsResponse> {
-      return queryService.delegationRewards(request);
-    },
-    delegationTotalRewards(request: QueryDelegationTotalRewardsRequest): Promise<QueryDelegationTotalRewardsResponse> {
-      return queryService.delegationTotalRewards(request);
-    },
-    delegatorValidators(request: QueryDelegatorValidatorsRequest): Promise<QueryDelegatorValidatorsResponse> {
-      return queryService.delegatorValidators(request);
-    },
-    delegatorWithdrawAddress(request: QueryDelegatorWithdrawAddressRequest): Promise<QueryDelegatorWithdrawAddressResponse> {
-      return queryService.delegatorWithdrawAddress(request);
-    },
-    communityPool(request?: QueryCommunityPoolRequest): Promise<QueryCommunityPoolResponse> {
-      return queryService.communityPool(request);
-    }
-  };
+export const QueryDesc = {
+  serviceName: "cosmos.distribution.v1beta1.Query"
 };
+export const QueryParamsDesc: UnaryMethodDefinitionish = {
+  methodName: "Params",
+  service: QueryDesc,
+  requestStream: false,
+  responseStream: false,
+  requestType: ({
+    serializeBinary() {
+      return QueryParamsRequest.encode(this).finish();
+    }
+  } as any),
+  responseType: ({
+    deserializeBinary(data: Uint8Array) {
+      return {
+        ...QueryParamsResponse.decode(data),
+        toObject() {
+          return this;
+        }
+      };
+    }
+  } as any)
+};
+export const QueryValidatorDistributionInfoDesc: UnaryMethodDefinitionish = {
+  methodName: "ValidatorDistributionInfo",
+  service: QueryDesc,
+  requestStream: false,
+  responseStream: false,
+  requestType: ({
+    serializeBinary() {
+      return QueryValidatorDistributionInfoRequest.encode(this).finish();
+    }
+  } as any),
+  responseType: ({
+    deserializeBinary(data: Uint8Array) {
+      return {
+        ...QueryValidatorDistributionInfoResponse.decode(data),
+        toObject() {
+          return this;
+        }
+      };
+    }
+  } as any)
+};
+export const QueryValidatorOutstandingRewardsDesc: UnaryMethodDefinitionish = {
+  methodName: "ValidatorOutstandingRewards",
+  service: QueryDesc,
+  requestStream: false,
+  responseStream: false,
+  requestType: ({
+    serializeBinary() {
+      return QueryValidatorOutstandingRewardsRequest.encode(this).finish();
+    }
+  } as any),
+  responseType: ({
+    deserializeBinary(data: Uint8Array) {
+      return {
+        ...QueryValidatorOutstandingRewardsResponse.decode(data),
+        toObject() {
+          return this;
+        }
+      };
+    }
+  } as any)
+};
+export const QueryValidatorCommissionDesc: UnaryMethodDefinitionish = {
+  methodName: "ValidatorCommission",
+  service: QueryDesc,
+  requestStream: false,
+  responseStream: false,
+  requestType: ({
+    serializeBinary() {
+      return QueryValidatorCommissionRequest.encode(this).finish();
+    }
+  } as any),
+  responseType: ({
+    deserializeBinary(data: Uint8Array) {
+      return {
+        ...QueryValidatorCommissionResponse.decode(data),
+        toObject() {
+          return this;
+        }
+      };
+    }
+  } as any)
+};
+export const QueryValidatorSlashesDesc: UnaryMethodDefinitionish = {
+  methodName: "ValidatorSlashes",
+  service: QueryDesc,
+  requestStream: false,
+  responseStream: false,
+  requestType: ({
+    serializeBinary() {
+      return QueryValidatorSlashesRequest.encode(this).finish();
+    }
+  } as any),
+  responseType: ({
+    deserializeBinary(data: Uint8Array) {
+      return {
+        ...QueryValidatorSlashesResponse.decode(data),
+        toObject() {
+          return this;
+        }
+      };
+    }
+  } as any)
+};
+export const QueryDelegationRewardsDesc: UnaryMethodDefinitionish = {
+  methodName: "DelegationRewards",
+  service: QueryDesc,
+  requestStream: false,
+  responseStream: false,
+  requestType: ({
+    serializeBinary() {
+      return QueryDelegationRewardsRequest.encode(this).finish();
+    }
+  } as any),
+  responseType: ({
+    deserializeBinary(data: Uint8Array) {
+      return {
+        ...QueryDelegationRewardsResponse.decode(data),
+        toObject() {
+          return this;
+        }
+      };
+    }
+  } as any)
+};
+export const QueryDelegationTotalRewardsDesc: UnaryMethodDefinitionish = {
+  methodName: "DelegationTotalRewards",
+  service: QueryDesc,
+  requestStream: false,
+  responseStream: false,
+  requestType: ({
+    serializeBinary() {
+      return QueryDelegationTotalRewardsRequest.encode(this).finish();
+    }
+  } as any),
+  responseType: ({
+    deserializeBinary(data: Uint8Array) {
+      return {
+        ...QueryDelegationTotalRewardsResponse.decode(data),
+        toObject() {
+          return this;
+        }
+      };
+    }
+  } as any)
+};
+export const QueryDelegatorValidatorsDesc: UnaryMethodDefinitionish = {
+  methodName: "DelegatorValidators",
+  service: QueryDesc,
+  requestStream: false,
+  responseStream: false,
+  requestType: ({
+    serializeBinary() {
+      return QueryDelegatorValidatorsRequest.encode(this).finish();
+    }
+  } as any),
+  responseType: ({
+    deserializeBinary(data: Uint8Array) {
+      return {
+        ...QueryDelegatorValidatorsResponse.decode(data),
+        toObject() {
+          return this;
+        }
+      };
+    }
+  } as any)
+};
+export const QueryDelegatorWithdrawAddressDesc: UnaryMethodDefinitionish = {
+  methodName: "DelegatorWithdrawAddress",
+  service: QueryDesc,
+  requestStream: false,
+  responseStream: false,
+  requestType: ({
+    serializeBinary() {
+      return QueryDelegatorWithdrawAddressRequest.encode(this).finish();
+    }
+  } as any),
+  responseType: ({
+    deserializeBinary(data: Uint8Array) {
+      return {
+        ...QueryDelegatorWithdrawAddressResponse.decode(data),
+        toObject() {
+          return this;
+        }
+      };
+    }
+  } as any)
+};
+export const QueryCommunityPoolDesc: UnaryMethodDefinitionish = {
+  methodName: "CommunityPool",
+  service: QueryDesc,
+  requestStream: false,
+  responseStream: false,
+  requestType: ({
+    serializeBinary() {
+      return QueryCommunityPoolRequest.encode(this).finish();
+    }
+  } as any),
+  responseType: ({
+    deserializeBinary(data: Uint8Array) {
+      return {
+        ...QueryCommunityPoolResponse.decode(data),
+        toObject() {
+          return this;
+        }
+      };
+    }
+  } as any)
+};
+export interface Rpc {
+  unary<T extends UnaryMethodDefinitionish>(methodDesc: T, request: any, metadata: grpc.Metadata | undefined): Promise<any>;
+}
+export class GrpcWebImpl {
+  host: string;
+  options: {
+    transport?: grpc.TransportFactory;
+    debug?: boolean;
+    metadata?: grpc.Metadata;
+  };
+  constructor(host: string, options: {
+    transport?: grpc.TransportFactory;
+    debug?: boolean;
+    metadata?: grpc.Metadata;
+  }) {
+    this.host = host;
+    this.options = options;
+  }
+  unary<T extends UnaryMethodDefinitionish>(methodDesc: T, _request: any, metadata: grpc.Metadata | undefined) {
+    const request = {
+      ..._request,
+      ...methodDesc.requestType
+    };
+    const maybeCombinedMetadata = metadata && this.options.metadata ? new BrowserHeaders({
+      ...this.options?.metadata.headersMap,
+      ...metadata?.headersMap
+    }) : metadata || this.options.metadata;
+    return new Promise((resolve, reject) => {
+      grpc.unary(methodDesc, {
+        request,
+        host: this.host,
+        metadata: maybeCombinedMetadata,
+        transport: this.options.transport,
+        debug: this.options.debug,
+        onEnd: function (response) {
+          if (response.status === grpc.Code.OK) {
+            resolve(response.message);
+          } else {
+            const err = (new Error(response.statusMessage) as any);
+            err.code = response.status;
+            err.metadata = response.trailers;
+            reject(err);
+          }
+        }
+      });
+    });
+  }
+}

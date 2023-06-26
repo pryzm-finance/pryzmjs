@@ -29,7 +29,10 @@ export class LCDQueryClient {
    Since: cosmos-sdk 0.43 */
   async accounts(params: QueryAccountsRequest = {
     pagination: undefined
-  }, options: any = {params: {}}): Promise<QueryAccountsResponseSDKType> {
+  }): Promise<QueryAccountsResponseSDKType> {
+    const options: any = {
+      params: {}
+    };
     if (typeof params?.pagination !== "undefined") {
       setPaginationParams(options, params.pagination);
     }
@@ -44,7 +47,10 @@ export class LCDQueryClient {
   /* AccountAddressByID returns account address based on account number.
   
    Since: cosmos-sdk 0.46.2 */
-  async accountAddressByID(params: QueryAccountAddressByIDRequest, options: any = {params: {}}): Promise<QueryAccountAddressByIDResponseSDKType> {
+  async accountAddressByID(params: QueryAccountAddressByIDRequest): Promise<QueryAccountAddressByIDResponseSDKType> {
+    const options: any = {
+      params: {}
+    };
     if (typeof params?.accountId !== "undefined") {
       options.params.account_id = params.accountId;
     }

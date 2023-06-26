@@ -1,13 +1,13 @@
 {
   "name": "@prism-finance/prismjs",
-  "version": "0.6.1",
+  "version": "0.7.0",
   "description": "Javascript SDK for Prism",
   "author": "amin <amin@prismprotocol.app>",
   "homepage": "https://github.com/prism-finance/prismjs#readme",
   "license": "GPL Version 2.0 or a later version",
   "scripts": {
     "compile": "rm -rf lib && tsc",
-    "codegen": "cross-env NODE_ENV=development babel-node scripts/codegen.js && cross-env NODE_ENV=development babel-node scripts/add-options-to-queries.js"
+    "codegen": "cross-env NODE_ENV=development babel-node scripts/codegen.js"
   },
   "licenses": [
     {
@@ -70,7 +70,10 @@
     "@cosmjs/proto-signing": "0.31.0-alpha.1",
     "@cosmjs/stargate": "0.31.0-alpha.1",
     "@cosmjs/tendermint-rpc": "0.31.0-alpha.1",
+    "@improbable-eng/grpc-web": "^0.15.0",
+    "@improbable-eng/grpc-web-node-http-transport": "^0.15.0",
     "@osmonauts/lcd": "0.10.0",
+    "browser-headers": "^0.4.1",
     "protobufjs": "^6.11.2"
   }
 }

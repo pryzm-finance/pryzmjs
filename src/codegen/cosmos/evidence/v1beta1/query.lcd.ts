@@ -14,7 +14,10 @@ export class LCDQueryClient {
     this.allEvidence = this.allEvidence.bind(this);
   }
   /* Evidence queries evidence based on evidence hash. */
-  async evidence(params: QueryEvidenceRequest, options: any = {params: {}}): Promise<QueryEvidenceResponseSDKType> {
+  async evidence(params: QueryEvidenceRequest): Promise<QueryEvidenceResponseSDKType> {
+    const options: any = {
+      params: {}
+    };
     if (typeof params?.evidenceHash !== "undefined") {
       options.params.evidence_hash = params.evidenceHash;
     }
@@ -24,7 +27,10 @@ export class LCDQueryClient {
   /* AllEvidence queries all evidence. */
   async allEvidence(params: QueryAllEvidenceRequest = {
     pagination: undefined
-  }, options: any = {params: {}}): Promise<QueryAllEvidenceResponseSDKType> {
+  }): Promise<QueryAllEvidenceResponseSDKType> {
+    const options: any = {
+      params: {}
+    };
     if (typeof params?.pagination !== "undefined") {
       setPaginationParams(options, params.pagination);
     }

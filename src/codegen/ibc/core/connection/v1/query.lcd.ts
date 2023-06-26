@@ -25,7 +25,10 @@ export class LCDQueryClient {
   /* Connections queries all the IBC connections of a chain. */
   async connections(params: QueryConnectionsRequest = {
     pagination: undefined
-  }, options: any = {params: {}}): Promise<QueryConnectionsResponseSDKType> {
+  }): Promise<QueryConnectionsResponseSDKType> {
+    const options: any = {
+      params: {}
+    };
     if (typeof params?.pagination !== "undefined") {
       setPaginationParams(options, params.pagination);
     }

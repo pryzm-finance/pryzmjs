@@ -15,7 +15,10 @@ export class LCDQueryClient {
     this.granteeGrants = this.granteeGrants.bind(this);
   }
   /* Returns list of `Authorization`, granted to the grantee by the granter. */
-  async grants(params: QueryGrantsRequest, options: any = {params: {}}): Promise<QueryGrantsResponseSDKType> {
+  async grants(params: QueryGrantsRequest): Promise<QueryGrantsResponseSDKType> {
+    const options: any = {
+      params: {}
+    };
     if (typeof params?.granter !== "undefined") {
       options.params.granter = params.granter;
     }
@@ -34,7 +37,10 @@ export class LCDQueryClient {
   /* GranterGrants returns list of `GrantAuthorization`, granted by granter.
   
    Since: cosmos-sdk 0.46 */
-  async granterGrants(params: QueryGranterGrantsRequest, options: any = {params: {}}): Promise<QueryGranterGrantsResponseSDKType> {
+  async granterGrants(params: QueryGranterGrantsRequest): Promise<QueryGranterGrantsResponseSDKType> {
+    const options: any = {
+      params: {}
+    };
     if (typeof params?.pagination !== "undefined") {
       setPaginationParams(options, params.pagination);
     }
@@ -44,7 +50,10 @@ export class LCDQueryClient {
   /* GranteeGrants returns a list of `GrantAuthorization` by grantee.
   
    Since: cosmos-sdk 0.46 */
-  async granteeGrants(params: QueryGranteeGrantsRequest, options: any = {params: {}}): Promise<QueryGranteeGrantsResponseSDKType> {
+  async granteeGrants(params: QueryGranteeGrantsRequest): Promise<QueryGranteeGrantsResponseSDKType> {
+    const options: any = {
+      params: {}
+    };
     if (typeof params?.pagination !== "undefined") {
       setPaginationParams(options, params.pagination);
     }

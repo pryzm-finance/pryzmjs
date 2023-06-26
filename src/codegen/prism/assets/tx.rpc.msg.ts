@@ -1,12 +1,15 @@
-import { Rpc } from "../../helpers";
-import * as _m0 from "protobufjs/minimal";
+//@ts-nocheck
+import { UnaryMethodDefinitionish } from "../../grpc-web";
+import { DeepPartial } from "../../helpers";
+import { grpc } from "@improbable-eng/grpc-web";
+import { BrowserHeaders } from "browser-headers";
 import { MsgRegisterAsset, MsgRegisterAssetResponse, MsgDisableAsset, MsgDisableAssetResponse, MsgUpdateMaturityParams, MsgUpdateMaturityParamsResponse, MsgUpdateFeeRatios, MsgUpdateFeeRatiosResponse } from "./tx";
 /** Msg defines the Msg service. */
 export interface Msg {
-  registerAsset(request: MsgRegisterAsset): Promise<MsgRegisterAssetResponse>;
-  disableAsset(request: MsgDisableAsset): Promise<MsgDisableAssetResponse>;
-  updateMaturityParams(request: MsgUpdateMaturityParams): Promise<MsgUpdateMaturityParamsResponse>;
-  updateFeeRatios(request: MsgUpdateFeeRatios): Promise<MsgUpdateFeeRatiosResponse>;
+  registerAsset(request: DeepPartial<MsgRegisterAsset>, metadata?: grpc.Metadata): Promise<MsgRegisterAssetResponse>;
+  disableAsset(request: DeepPartial<MsgDisableAsset>, metadata?: grpc.Metadata): Promise<MsgDisableAssetResponse>;
+  updateMaturityParams(request: DeepPartial<MsgUpdateMaturityParams>, metadata?: grpc.Metadata): Promise<MsgUpdateMaturityParamsResponse>;
+  updateFeeRatios(request: DeepPartial<MsgUpdateFeeRatios>, metadata?: grpc.Metadata): Promise<MsgUpdateFeeRatiosResponse>;
 }
 export class MsgClientImpl implements Msg {
   private readonly rpc: Rpc;
@@ -17,24 +20,151 @@ export class MsgClientImpl implements Msg {
     this.updateMaturityParams = this.updateMaturityParams.bind(this);
     this.updateFeeRatios = this.updateFeeRatios.bind(this);
   }
-  registerAsset(request: MsgRegisterAsset): Promise<MsgRegisterAssetResponse> {
-    const data = MsgRegisterAsset.encode(request).finish();
-    const promise = this.rpc.request("prism.assets.Msg", "RegisterAsset", data);
-    return promise.then(data => MsgRegisterAssetResponse.decode(new _m0.Reader(data)));
+  registerAsset(request: DeepPartial<MsgRegisterAsset>, metadata?: grpc.Metadata): Promise<MsgRegisterAssetResponse> {
+    return this.rpc.unary(MsgRegisterAssetDesc, MsgRegisterAsset.fromPartial(request), metadata);
   }
-  disableAsset(request: MsgDisableAsset): Promise<MsgDisableAssetResponse> {
-    const data = MsgDisableAsset.encode(request).finish();
-    const promise = this.rpc.request("prism.assets.Msg", "DisableAsset", data);
-    return promise.then(data => MsgDisableAssetResponse.decode(new _m0.Reader(data)));
+  disableAsset(request: DeepPartial<MsgDisableAsset>, metadata?: grpc.Metadata): Promise<MsgDisableAssetResponse> {
+    return this.rpc.unary(MsgDisableAssetDesc, MsgDisableAsset.fromPartial(request), metadata);
   }
-  updateMaturityParams(request: MsgUpdateMaturityParams): Promise<MsgUpdateMaturityParamsResponse> {
-    const data = MsgUpdateMaturityParams.encode(request).finish();
-    const promise = this.rpc.request("prism.assets.Msg", "UpdateMaturityParams", data);
-    return promise.then(data => MsgUpdateMaturityParamsResponse.decode(new _m0.Reader(data)));
+  updateMaturityParams(request: DeepPartial<MsgUpdateMaturityParams>, metadata?: grpc.Metadata): Promise<MsgUpdateMaturityParamsResponse> {
+    return this.rpc.unary(MsgUpdateMaturityParamsDesc, MsgUpdateMaturityParams.fromPartial(request), metadata);
   }
-  updateFeeRatios(request: MsgUpdateFeeRatios): Promise<MsgUpdateFeeRatiosResponse> {
-    const data = MsgUpdateFeeRatios.encode(request).finish();
-    const promise = this.rpc.request("prism.assets.Msg", "UpdateFeeRatios", data);
-    return promise.then(data => MsgUpdateFeeRatiosResponse.decode(new _m0.Reader(data)));
+  updateFeeRatios(request: DeepPartial<MsgUpdateFeeRatios>, metadata?: grpc.Metadata): Promise<MsgUpdateFeeRatiosResponse> {
+    return this.rpc.unary(MsgUpdateFeeRatiosDesc, MsgUpdateFeeRatios.fromPartial(request), metadata);
+  }
+}
+export const MsgDesc = {
+  serviceName: "prism.assets.Msg"
+};
+export const MsgRegisterAssetDesc: UnaryMethodDefinitionish = {
+  methodName: "RegisterAsset",
+  service: MsgDesc,
+  requestStream: false,
+  responseStream: false,
+  requestType: ({
+    serializeBinary() {
+      return MsgRegisterAsset.encode(this).finish();
+    }
+  } as any),
+  responseType: ({
+    deserializeBinary(data: Uint8Array) {
+      return {
+        ...MsgRegisterAssetResponse.decode(data),
+        toObject() {
+          return this;
+        }
+      };
+    }
+  } as any)
+};
+export const MsgDisableAssetDesc: UnaryMethodDefinitionish = {
+  methodName: "DisableAsset",
+  service: MsgDesc,
+  requestStream: false,
+  responseStream: false,
+  requestType: ({
+    serializeBinary() {
+      return MsgDisableAsset.encode(this).finish();
+    }
+  } as any),
+  responseType: ({
+    deserializeBinary(data: Uint8Array) {
+      return {
+        ...MsgDisableAssetResponse.decode(data),
+        toObject() {
+          return this;
+        }
+      };
+    }
+  } as any)
+};
+export const MsgUpdateMaturityParamsDesc: UnaryMethodDefinitionish = {
+  methodName: "UpdateMaturityParams",
+  service: MsgDesc,
+  requestStream: false,
+  responseStream: false,
+  requestType: ({
+    serializeBinary() {
+      return MsgUpdateMaturityParams.encode(this).finish();
+    }
+  } as any),
+  responseType: ({
+    deserializeBinary(data: Uint8Array) {
+      return {
+        ...MsgUpdateMaturityParamsResponse.decode(data),
+        toObject() {
+          return this;
+        }
+      };
+    }
+  } as any)
+};
+export const MsgUpdateFeeRatiosDesc: UnaryMethodDefinitionish = {
+  methodName: "UpdateFeeRatios",
+  service: MsgDesc,
+  requestStream: false,
+  responseStream: false,
+  requestType: ({
+    serializeBinary() {
+      return MsgUpdateFeeRatios.encode(this).finish();
+    }
+  } as any),
+  responseType: ({
+    deserializeBinary(data: Uint8Array) {
+      return {
+        ...MsgUpdateFeeRatiosResponse.decode(data),
+        toObject() {
+          return this;
+        }
+      };
+    }
+  } as any)
+};
+export interface Rpc {
+  unary<T extends UnaryMethodDefinitionish>(methodDesc: T, request: any, metadata: grpc.Metadata | undefined): Promise<any>;
+}
+export class GrpcWebImpl {
+  host: string;
+  options: {
+    transport?: grpc.TransportFactory;
+    debug?: boolean;
+    metadata?: grpc.Metadata;
+  };
+  constructor(host: string, options: {
+    transport?: grpc.TransportFactory;
+    debug?: boolean;
+    metadata?: grpc.Metadata;
+  }) {
+    this.host = host;
+    this.options = options;
+  }
+  unary<T extends UnaryMethodDefinitionish>(methodDesc: T, _request: any, metadata: grpc.Metadata | undefined) {
+    const request = {
+      ..._request,
+      ...methodDesc.requestType
+    };
+    const maybeCombinedMetadata = metadata && this.options.metadata ? new BrowserHeaders({
+      ...this.options?.metadata.headersMap,
+      ...metadata?.headersMap
+    }) : metadata || this.options.metadata;
+    return new Promise((resolve, reject) => {
+      grpc.unary(methodDesc, {
+        request,
+        host: this.host,
+        metadata: maybeCombinedMetadata,
+        transport: this.options.transport,
+        debug: this.options.debug,
+        onEnd: function (response) {
+          if (response.status === grpc.Code.OK) {
+            resolve(response.message);
+          } else {
+            const err = (new Error(response.statusMessage) as any);
+            err.code = response.status;
+            err.metadata = response.trailers;
+            reject(err);
+          }
+        }
+      });
+    });
   }
 }

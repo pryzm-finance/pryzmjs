@@ -13,7 +13,10 @@ export class LCDQueryClient {
     this.reward = this.reward.bind(this);
   }
   /* Queries a list of BondedAmount items. */
-  async bondedAmount(params: QueryBondedAmountRequest, options: any = {params: {}}): Promise<QueryBondedAmountResponseSDKType> {
+  async bondedAmount(params: QueryBondedAmountRequest): Promise<QueryBondedAmountResponseSDKType> {
+    const options: any = {
+      params: {}
+    };
     if (typeof params?.maturity !== "undefined") {
       options.params.maturity = params.maturity;
     }

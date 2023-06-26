@@ -27,7 +27,10 @@ export class LCDQueryClient {
   /* SigningInfos queries signing info of all validators */
   async signingInfos(params: QuerySigningInfosRequest = {
     pagination: undefined
-  }, options: any = {params: {}}): Promise<QuerySigningInfosResponseSDKType> {
+  }): Promise<QuerySigningInfosResponseSDKType> {
+    const options: any = {
+      params: {}
+    };
     if (typeof params?.pagination !== "undefined") {
       setPaginationParams(options, params.pagination);
     }

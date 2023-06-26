@@ -32,7 +32,10 @@ export class LCDQueryClient {
   /* Channels queries all the IBC channels of a chain. */
   async channels(params: QueryChannelsRequest = {
     pagination: undefined
-  }, options: any = {params: {}}): Promise<QueryChannelsResponseSDKType> {
+  }): Promise<QueryChannelsResponseSDKType> {
+    const options: any = {
+      params: {}
+    };
     if (typeof params?.pagination !== "undefined") {
       setPaginationParams(options, params.pagination);
     }
@@ -41,7 +44,10 @@ export class LCDQueryClient {
   }
   /* ConnectionChannels queries all the channels associated with a connection
    end. */
-  async connectionChannels(params: QueryConnectionChannelsRequest, options: any = {params: {}}): Promise<QueryConnectionChannelsResponseSDKType> {
+  async connectionChannels(params: QueryConnectionChannelsRequest): Promise<QueryConnectionChannelsResponseSDKType> {
+    const options: any = {
+      params: {}
+    };
     if (typeof params?.pagination !== "undefined") {
       setPaginationParams(options, params.pagination);
     }
@@ -67,7 +73,10 @@ export class LCDQueryClient {
   }
   /* PacketCommitments returns all the packet commitments hashes associated
    with a channel. */
-  async packetCommitments(params: QueryPacketCommitmentsRequest, options: any = {params: {}}): Promise<QueryPacketCommitmentsResponseSDKType> {
+  async packetCommitments(params: QueryPacketCommitmentsRequest): Promise<QueryPacketCommitmentsResponseSDKType> {
+    const options: any = {
+      params: {}
+    };
     if (typeof params?.pagination !== "undefined") {
       setPaginationParams(options, params.pagination);
     }
@@ -87,7 +96,10 @@ export class LCDQueryClient {
   }
   /* PacketAcknowledgements returns all the packet acknowledgements associated
    with a channel. */
-  async packetAcknowledgements(params: QueryPacketAcknowledgementsRequest, options: any = {params: {}}): Promise<QueryPacketAcknowledgementsResponseSDKType> {
+  async packetAcknowledgements(params: QueryPacketAcknowledgementsRequest): Promise<QueryPacketAcknowledgementsResponseSDKType> {
+    const options: any = {
+      params: {}
+    };
     if (typeof params?.pagination !== "undefined") {
       setPaginationParams(options, params.pagination);
     }

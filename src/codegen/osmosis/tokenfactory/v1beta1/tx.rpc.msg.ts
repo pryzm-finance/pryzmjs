@@ -1,14 +1,18 @@
-import { Rpc } from "../../../helpers";
-import * as _m0 from "protobufjs/minimal";
+//@ts-nocheck
+import { Metadata } from "../../../cosmos/bank/v1beta1/bank";
+import { UnaryMethodDefinitionish } from "../../../grpc-web";
+import { DeepPartial } from "../../../helpers";
+import { grpc } from "@improbable-eng/grpc-web";
+import { BrowserHeaders } from "browser-headers";
 import { MsgCreateDenom, MsgCreateDenomResponse, MsgMint, MsgMintResponse, MsgBurn, MsgBurnResponse, MsgChangeAdmin, MsgChangeAdminResponse, MsgSetDenomMetadata, MsgSetDenomMetadataResponse, MsgForceTransfer, MsgForceTransferResponse } from "./tx";
 /** Msg defines the tokefactory module's gRPC message service. */
 export interface Msg {
-  createDenom(request: MsgCreateDenom): Promise<MsgCreateDenomResponse>;
-  mint(request: MsgMint): Promise<MsgMintResponse>;
-  burn(request: MsgBurn): Promise<MsgBurnResponse>;
-  changeAdmin(request: MsgChangeAdmin): Promise<MsgChangeAdminResponse>;
-  setDenomMetadata(request: MsgSetDenomMetadata): Promise<MsgSetDenomMetadataResponse>;
-  forceTransfer(request: MsgForceTransfer): Promise<MsgForceTransferResponse>;
+  createDenom(request: DeepPartial<MsgCreateDenom>, metadata?: grpc.Metadata): Promise<MsgCreateDenomResponse>;
+  mint(request: DeepPartial<MsgMint>, metadata?: grpc.Metadata): Promise<MsgMintResponse>;
+  burn(request: DeepPartial<MsgBurn>, metadata?: grpc.Metadata): Promise<MsgBurnResponse>;
+  changeAdmin(request: DeepPartial<MsgChangeAdmin>, metadata?: grpc.Metadata): Promise<MsgChangeAdminResponse>;
+  setDenomMetadata(request: DeepPartial<MsgSetDenomMetadata>, metadata?: grpc.Metadata): Promise<MsgSetDenomMetadataResponse>;
+  forceTransfer(request: DeepPartial<MsgForceTransfer>, metadata?: grpc.Metadata): Promise<MsgForceTransferResponse>;
 }
 export class MsgClientImpl implements Msg {
   private readonly rpc: Rpc;
@@ -21,34 +25,199 @@ export class MsgClientImpl implements Msg {
     this.setDenomMetadata = this.setDenomMetadata.bind(this);
     this.forceTransfer = this.forceTransfer.bind(this);
   }
-  createDenom(request: MsgCreateDenom): Promise<MsgCreateDenomResponse> {
-    const data = MsgCreateDenom.encode(request).finish();
-    const promise = this.rpc.request("osmosis.tokenfactory.v1beta1.Msg", "CreateDenom", data);
-    return promise.then(data => MsgCreateDenomResponse.decode(new _m0.Reader(data)));
+  createDenom(request: DeepPartial<MsgCreateDenom>, metadata?: grpc.Metadata): Promise<MsgCreateDenomResponse> {
+    return this.rpc.unary(MsgCreateDenomDesc, MsgCreateDenom.fromPartial(request), metadata);
   }
-  mint(request: MsgMint): Promise<MsgMintResponse> {
-    const data = MsgMint.encode(request).finish();
-    const promise = this.rpc.request("osmosis.tokenfactory.v1beta1.Msg", "Mint", data);
-    return promise.then(data => MsgMintResponse.decode(new _m0.Reader(data)));
+  mint(request: DeepPartial<MsgMint>, metadata?: grpc.Metadata): Promise<MsgMintResponse> {
+    return this.rpc.unary(MsgMintDesc, MsgMint.fromPartial(request), metadata);
   }
-  burn(request: MsgBurn): Promise<MsgBurnResponse> {
-    const data = MsgBurn.encode(request).finish();
-    const promise = this.rpc.request("osmosis.tokenfactory.v1beta1.Msg", "Burn", data);
-    return promise.then(data => MsgBurnResponse.decode(new _m0.Reader(data)));
+  burn(request: DeepPartial<MsgBurn>, metadata?: grpc.Metadata): Promise<MsgBurnResponse> {
+    return this.rpc.unary(MsgBurnDesc, MsgBurn.fromPartial(request), metadata);
   }
-  changeAdmin(request: MsgChangeAdmin): Promise<MsgChangeAdminResponse> {
-    const data = MsgChangeAdmin.encode(request).finish();
-    const promise = this.rpc.request("osmosis.tokenfactory.v1beta1.Msg", "ChangeAdmin", data);
-    return promise.then(data => MsgChangeAdminResponse.decode(new _m0.Reader(data)));
+  changeAdmin(request: DeepPartial<MsgChangeAdmin>, metadata?: grpc.Metadata): Promise<MsgChangeAdminResponse> {
+    return this.rpc.unary(MsgChangeAdminDesc, MsgChangeAdmin.fromPartial(request), metadata);
   }
-  setDenomMetadata(request: MsgSetDenomMetadata): Promise<MsgSetDenomMetadataResponse> {
-    const data = MsgSetDenomMetadata.encode(request).finish();
-    const promise = this.rpc.request("osmosis.tokenfactory.v1beta1.Msg", "SetDenomMetadata", data);
-    return promise.then(data => MsgSetDenomMetadataResponse.decode(new _m0.Reader(data)));
+  setDenomMetadata(request: DeepPartial<MsgSetDenomMetadata>, metadata?: grpc.Metadata): Promise<MsgSetDenomMetadataResponse> {
+    return this.rpc.unary(MsgSetDenomMetadataDesc, MsgSetDenomMetadata.fromPartial(request), metadata);
   }
-  forceTransfer(request: MsgForceTransfer): Promise<MsgForceTransferResponse> {
-    const data = MsgForceTransfer.encode(request).finish();
-    const promise = this.rpc.request("osmosis.tokenfactory.v1beta1.Msg", "ForceTransfer", data);
-    return promise.then(data => MsgForceTransferResponse.decode(new _m0.Reader(data)));
+  forceTransfer(request: DeepPartial<MsgForceTransfer>, metadata?: grpc.Metadata): Promise<MsgForceTransferResponse> {
+    return this.rpc.unary(MsgForceTransferDesc, MsgForceTransfer.fromPartial(request), metadata);
+  }
+}
+export const MsgDesc = {
+  serviceName: "osmosis.tokenfactory.v1beta1.Msg"
+};
+export const MsgCreateDenomDesc: UnaryMethodDefinitionish = {
+  methodName: "CreateDenom",
+  service: MsgDesc,
+  requestStream: false,
+  responseStream: false,
+  requestType: ({
+    serializeBinary() {
+      return MsgCreateDenom.encode(this).finish();
+    }
+  } as any),
+  responseType: ({
+    deserializeBinary(data: Uint8Array) {
+      return {
+        ...MsgCreateDenomResponse.decode(data),
+        toObject() {
+          return this;
+        }
+      };
+    }
+  } as any)
+};
+export const MsgMintDesc: UnaryMethodDefinitionish = {
+  methodName: "Mint",
+  service: MsgDesc,
+  requestStream: false,
+  responseStream: false,
+  requestType: ({
+    serializeBinary() {
+      return MsgMint.encode(this).finish();
+    }
+  } as any),
+  responseType: ({
+    deserializeBinary(data: Uint8Array) {
+      return {
+        ...MsgMintResponse.decode(data),
+        toObject() {
+          return this;
+        }
+      };
+    }
+  } as any)
+};
+export const MsgBurnDesc: UnaryMethodDefinitionish = {
+  methodName: "Burn",
+  service: MsgDesc,
+  requestStream: false,
+  responseStream: false,
+  requestType: ({
+    serializeBinary() {
+      return MsgBurn.encode(this).finish();
+    }
+  } as any),
+  responseType: ({
+    deserializeBinary(data: Uint8Array) {
+      return {
+        ...MsgBurnResponse.decode(data),
+        toObject() {
+          return this;
+        }
+      };
+    }
+  } as any)
+};
+export const MsgChangeAdminDesc: UnaryMethodDefinitionish = {
+  methodName: "ChangeAdmin",
+  service: MsgDesc,
+  requestStream: false,
+  responseStream: false,
+  requestType: ({
+    serializeBinary() {
+      return MsgChangeAdmin.encode(this).finish();
+    }
+  } as any),
+  responseType: ({
+    deserializeBinary(data: Uint8Array) {
+      return {
+        ...MsgChangeAdminResponse.decode(data),
+        toObject() {
+          return this;
+        }
+      };
+    }
+  } as any)
+};
+export const MsgSetDenomMetadataDesc: UnaryMethodDefinitionish = {
+  methodName: "SetDenomMetadata",
+  service: MsgDesc,
+  requestStream: false,
+  responseStream: false,
+  requestType: ({
+    serializeBinary() {
+      return MsgSetDenomMetadata.encode(this).finish();
+    }
+  } as any),
+  responseType: ({
+    deserializeBinary(data: Uint8Array) {
+      return {
+        ...MsgSetDenomMetadataResponse.decode(data),
+        toObject() {
+          return this;
+        }
+      };
+    }
+  } as any)
+};
+export const MsgForceTransferDesc: UnaryMethodDefinitionish = {
+  methodName: "ForceTransfer",
+  service: MsgDesc,
+  requestStream: false,
+  responseStream: false,
+  requestType: ({
+    serializeBinary() {
+      return MsgForceTransfer.encode(this).finish();
+    }
+  } as any),
+  responseType: ({
+    deserializeBinary(data: Uint8Array) {
+      return {
+        ...MsgForceTransferResponse.decode(data),
+        toObject() {
+          return this;
+        }
+      };
+    }
+  } as any)
+};
+export interface Rpc {
+  unary<T extends UnaryMethodDefinitionish>(methodDesc: T, request: any, metadata: grpc.Metadata | undefined): Promise<any>;
+}
+export class GrpcWebImpl {
+  host: string;
+  options: {
+    transport?: grpc.TransportFactory;
+    debug?: boolean;
+    metadata?: grpc.Metadata;
+  };
+  constructor(host: string, options: {
+    transport?: grpc.TransportFactory;
+    debug?: boolean;
+    metadata?: grpc.Metadata;
+  }) {
+    this.host = host;
+    this.options = options;
+  }
+  unary<T extends UnaryMethodDefinitionish>(methodDesc: T, _request: any, metadata: grpc.Metadata | undefined) {
+    const request = {
+      ..._request,
+      ...methodDesc.requestType
+    };
+    const maybeCombinedMetadata = metadata && this.options.metadata ? new BrowserHeaders({
+      ...this.options?.metadata.headersMap,
+      ...metadata?.headersMap
+    }) : metadata || this.options.metadata;
+    return new Promise((resolve, reject) => {
+      grpc.unary(methodDesc, {
+        request,
+        host: this.host,
+        metadata: maybeCombinedMetadata,
+        transport: this.options.transport,
+        debug: this.options.debug,
+        onEnd: function (response) {
+          if (response.status === grpc.Code.OK) {
+            resolve(response.message);
+          } else {
+            const err = (new Error(response.statusMessage) as any);
+            err.code = response.status;
+            err.metadata = response.trailers;
+            reject(err);
+          }
+        }
+      });
+    });
   }
 }

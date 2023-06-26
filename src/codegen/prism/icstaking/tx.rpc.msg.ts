@@ -1,17 +1,20 @@
-import { Rpc } from "../../helpers";
-import * as _m0 from "protobufjs/minimal";
+//@ts-nocheck
+import { UnaryMethodDefinitionish } from "../../grpc-web";
+import { DeepPartial } from "../../helpers";
+import { grpc } from "@improbable-eng/grpc-web";
+import { BrowserHeaders } from "browser-headers";
 import { MsgUpdateParams, MsgUpdateParamsResponse, MsgRegisterHostChain, MsgRegisterHostChainResponse, MsgUpdateHostChain, MsgUpdateHostChainResponse, MsgStake, MsgStakeResponse, MsgUnstake, MsgUnstakeResponse, MsgRedeemUnstaked, MsgRedeemUnstakedResponse, MsgInstantUnstake, MsgInstantUnstakeResponse, MsgRebalanceDelegations, MsgRebalanceDelegationsResponse, MsgRedeemInterchainAccount, MsgRedeemInterchainAccountResponse } from "./tx";
 /** Msg defines the Msg service. */
 export interface Msg {
-  updateParams(request: MsgUpdateParams): Promise<MsgUpdateParamsResponse>;
-  registerHostChain(request: MsgRegisterHostChain): Promise<MsgRegisterHostChainResponse>;
-  updateHostChain(request: MsgUpdateHostChain): Promise<MsgUpdateHostChainResponse>;
-  stake(request: MsgStake): Promise<MsgStakeResponse>;
-  unstake(request: MsgUnstake): Promise<MsgUnstakeResponse>;
-  redeemUnstaked(request: MsgRedeemUnstaked): Promise<MsgRedeemUnstakedResponse>;
-  instantUnstake(request: MsgInstantUnstake): Promise<MsgInstantUnstakeResponse>;
-  rebalanceDelegations(request: MsgRebalanceDelegations): Promise<MsgRebalanceDelegationsResponse>;
-  redeemInterchainAccount(request: MsgRedeemInterchainAccount): Promise<MsgRedeemInterchainAccountResponse>;
+  updateParams(request: DeepPartial<MsgUpdateParams>, metadata?: grpc.Metadata): Promise<MsgUpdateParamsResponse>;
+  registerHostChain(request: DeepPartial<MsgRegisterHostChain>, metadata?: grpc.Metadata): Promise<MsgRegisterHostChainResponse>;
+  updateHostChain(request: DeepPartial<MsgUpdateHostChain>, metadata?: grpc.Metadata): Promise<MsgUpdateHostChainResponse>;
+  stake(request: DeepPartial<MsgStake>, metadata?: grpc.Metadata): Promise<MsgStakeResponse>;
+  unstake(request: DeepPartial<MsgUnstake>, metadata?: grpc.Metadata): Promise<MsgUnstakeResponse>;
+  redeemUnstaked(request: DeepPartial<MsgRedeemUnstaked>, metadata?: grpc.Metadata): Promise<MsgRedeemUnstakedResponse>;
+  instantUnstake(request: DeepPartial<MsgInstantUnstake>, metadata?: grpc.Metadata): Promise<MsgInstantUnstakeResponse>;
+  rebalanceDelegations(request: DeepPartial<MsgRebalanceDelegations>, metadata?: grpc.Metadata): Promise<MsgRebalanceDelegationsResponse>;
+  redeemInterchainAccount(request: DeepPartial<MsgRedeemInterchainAccount>, metadata?: grpc.Metadata): Promise<MsgRedeemInterchainAccountResponse>;
 }
 export class MsgClientImpl implements Msg {
   private readonly rpc: Rpc;
@@ -27,49 +30,271 @@ export class MsgClientImpl implements Msg {
     this.rebalanceDelegations = this.rebalanceDelegations.bind(this);
     this.redeemInterchainAccount = this.redeemInterchainAccount.bind(this);
   }
-  updateParams(request: MsgUpdateParams): Promise<MsgUpdateParamsResponse> {
-    const data = MsgUpdateParams.encode(request).finish();
-    const promise = this.rpc.request("prism.icstaking.Msg", "UpdateParams", data);
-    return promise.then(data => MsgUpdateParamsResponse.decode(new _m0.Reader(data)));
+  updateParams(request: DeepPartial<MsgUpdateParams>, metadata?: grpc.Metadata): Promise<MsgUpdateParamsResponse> {
+    return this.rpc.unary(MsgUpdateParamsDesc, MsgUpdateParams.fromPartial(request), metadata);
   }
-  registerHostChain(request: MsgRegisterHostChain): Promise<MsgRegisterHostChainResponse> {
-    const data = MsgRegisterHostChain.encode(request).finish();
-    const promise = this.rpc.request("prism.icstaking.Msg", "RegisterHostChain", data);
-    return promise.then(data => MsgRegisterHostChainResponse.decode(new _m0.Reader(data)));
+  registerHostChain(request: DeepPartial<MsgRegisterHostChain>, metadata?: grpc.Metadata): Promise<MsgRegisterHostChainResponse> {
+    return this.rpc.unary(MsgRegisterHostChainDesc, MsgRegisterHostChain.fromPartial(request), metadata);
   }
-  updateHostChain(request: MsgUpdateHostChain): Promise<MsgUpdateHostChainResponse> {
-    const data = MsgUpdateHostChain.encode(request).finish();
-    const promise = this.rpc.request("prism.icstaking.Msg", "UpdateHostChain", data);
-    return promise.then(data => MsgUpdateHostChainResponse.decode(new _m0.Reader(data)));
+  updateHostChain(request: DeepPartial<MsgUpdateHostChain>, metadata?: grpc.Metadata): Promise<MsgUpdateHostChainResponse> {
+    return this.rpc.unary(MsgUpdateHostChainDesc, MsgUpdateHostChain.fromPartial(request), metadata);
   }
-  stake(request: MsgStake): Promise<MsgStakeResponse> {
-    const data = MsgStake.encode(request).finish();
-    const promise = this.rpc.request("prism.icstaking.Msg", "Stake", data);
-    return promise.then(data => MsgStakeResponse.decode(new _m0.Reader(data)));
+  stake(request: DeepPartial<MsgStake>, metadata?: grpc.Metadata): Promise<MsgStakeResponse> {
+    return this.rpc.unary(MsgStakeDesc, MsgStake.fromPartial(request), metadata);
   }
-  unstake(request: MsgUnstake): Promise<MsgUnstakeResponse> {
-    const data = MsgUnstake.encode(request).finish();
-    const promise = this.rpc.request("prism.icstaking.Msg", "Unstake", data);
-    return promise.then(data => MsgUnstakeResponse.decode(new _m0.Reader(data)));
+  unstake(request: DeepPartial<MsgUnstake>, metadata?: grpc.Metadata): Promise<MsgUnstakeResponse> {
+    return this.rpc.unary(MsgUnstakeDesc, MsgUnstake.fromPartial(request), metadata);
   }
-  redeemUnstaked(request: MsgRedeemUnstaked): Promise<MsgRedeemUnstakedResponse> {
-    const data = MsgRedeemUnstaked.encode(request).finish();
-    const promise = this.rpc.request("prism.icstaking.Msg", "RedeemUnstaked", data);
-    return promise.then(data => MsgRedeemUnstakedResponse.decode(new _m0.Reader(data)));
+  redeemUnstaked(request: DeepPartial<MsgRedeemUnstaked>, metadata?: grpc.Metadata): Promise<MsgRedeemUnstakedResponse> {
+    return this.rpc.unary(MsgRedeemUnstakedDesc, MsgRedeemUnstaked.fromPartial(request), metadata);
   }
-  instantUnstake(request: MsgInstantUnstake): Promise<MsgInstantUnstakeResponse> {
-    const data = MsgInstantUnstake.encode(request).finish();
-    const promise = this.rpc.request("prism.icstaking.Msg", "InstantUnstake", data);
-    return promise.then(data => MsgInstantUnstakeResponse.decode(new _m0.Reader(data)));
+  instantUnstake(request: DeepPartial<MsgInstantUnstake>, metadata?: grpc.Metadata): Promise<MsgInstantUnstakeResponse> {
+    return this.rpc.unary(MsgInstantUnstakeDesc, MsgInstantUnstake.fromPartial(request), metadata);
   }
-  rebalanceDelegations(request: MsgRebalanceDelegations): Promise<MsgRebalanceDelegationsResponse> {
-    const data = MsgRebalanceDelegations.encode(request).finish();
-    const promise = this.rpc.request("prism.icstaking.Msg", "RebalanceDelegations", data);
-    return promise.then(data => MsgRebalanceDelegationsResponse.decode(new _m0.Reader(data)));
+  rebalanceDelegations(request: DeepPartial<MsgRebalanceDelegations>, metadata?: grpc.Metadata): Promise<MsgRebalanceDelegationsResponse> {
+    return this.rpc.unary(MsgRebalanceDelegationsDesc, MsgRebalanceDelegations.fromPartial(request), metadata);
   }
-  redeemInterchainAccount(request: MsgRedeemInterchainAccount): Promise<MsgRedeemInterchainAccountResponse> {
-    const data = MsgRedeemInterchainAccount.encode(request).finish();
-    const promise = this.rpc.request("prism.icstaking.Msg", "RedeemInterchainAccount", data);
-    return promise.then(data => MsgRedeemInterchainAccountResponse.decode(new _m0.Reader(data)));
+  redeemInterchainAccount(request: DeepPartial<MsgRedeemInterchainAccount>, metadata?: grpc.Metadata): Promise<MsgRedeemInterchainAccountResponse> {
+    return this.rpc.unary(MsgRedeemInterchainAccountDesc, MsgRedeemInterchainAccount.fromPartial(request), metadata);
+  }
+}
+export const MsgDesc = {
+  serviceName: "prism.icstaking.Msg"
+};
+export const MsgUpdateParamsDesc: UnaryMethodDefinitionish = {
+  methodName: "UpdateParams",
+  service: MsgDesc,
+  requestStream: false,
+  responseStream: false,
+  requestType: ({
+    serializeBinary() {
+      return MsgUpdateParams.encode(this).finish();
+    }
+  } as any),
+  responseType: ({
+    deserializeBinary(data: Uint8Array) {
+      return {
+        ...MsgUpdateParamsResponse.decode(data),
+        toObject() {
+          return this;
+        }
+      };
+    }
+  } as any)
+};
+export const MsgRegisterHostChainDesc: UnaryMethodDefinitionish = {
+  methodName: "RegisterHostChain",
+  service: MsgDesc,
+  requestStream: false,
+  responseStream: false,
+  requestType: ({
+    serializeBinary() {
+      return MsgRegisterHostChain.encode(this).finish();
+    }
+  } as any),
+  responseType: ({
+    deserializeBinary(data: Uint8Array) {
+      return {
+        ...MsgRegisterHostChainResponse.decode(data),
+        toObject() {
+          return this;
+        }
+      };
+    }
+  } as any)
+};
+export const MsgUpdateHostChainDesc: UnaryMethodDefinitionish = {
+  methodName: "UpdateHostChain",
+  service: MsgDesc,
+  requestStream: false,
+  responseStream: false,
+  requestType: ({
+    serializeBinary() {
+      return MsgUpdateHostChain.encode(this).finish();
+    }
+  } as any),
+  responseType: ({
+    deserializeBinary(data: Uint8Array) {
+      return {
+        ...MsgUpdateHostChainResponse.decode(data),
+        toObject() {
+          return this;
+        }
+      };
+    }
+  } as any)
+};
+export const MsgStakeDesc: UnaryMethodDefinitionish = {
+  methodName: "Stake",
+  service: MsgDesc,
+  requestStream: false,
+  responseStream: false,
+  requestType: ({
+    serializeBinary() {
+      return MsgStake.encode(this).finish();
+    }
+  } as any),
+  responseType: ({
+    deserializeBinary(data: Uint8Array) {
+      return {
+        ...MsgStakeResponse.decode(data),
+        toObject() {
+          return this;
+        }
+      };
+    }
+  } as any)
+};
+export const MsgUnstakeDesc: UnaryMethodDefinitionish = {
+  methodName: "Unstake",
+  service: MsgDesc,
+  requestStream: false,
+  responseStream: false,
+  requestType: ({
+    serializeBinary() {
+      return MsgUnstake.encode(this).finish();
+    }
+  } as any),
+  responseType: ({
+    deserializeBinary(data: Uint8Array) {
+      return {
+        ...MsgUnstakeResponse.decode(data),
+        toObject() {
+          return this;
+        }
+      };
+    }
+  } as any)
+};
+export const MsgRedeemUnstakedDesc: UnaryMethodDefinitionish = {
+  methodName: "RedeemUnstaked",
+  service: MsgDesc,
+  requestStream: false,
+  responseStream: false,
+  requestType: ({
+    serializeBinary() {
+      return MsgRedeemUnstaked.encode(this).finish();
+    }
+  } as any),
+  responseType: ({
+    deserializeBinary(data: Uint8Array) {
+      return {
+        ...MsgRedeemUnstakedResponse.decode(data),
+        toObject() {
+          return this;
+        }
+      };
+    }
+  } as any)
+};
+export const MsgInstantUnstakeDesc: UnaryMethodDefinitionish = {
+  methodName: "InstantUnstake",
+  service: MsgDesc,
+  requestStream: false,
+  responseStream: false,
+  requestType: ({
+    serializeBinary() {
+      return MsgInstantUnstake.encode(this).finish();
+    }
+  } as any),
+  responseType: ({
+    deserializeBinary(data: Uint8Array) {
+      return {
+        ...MsgInstantUnstakeResponse.decode(data),
+        toObject() {
+          return this;
+        }
+      };
+    }
+  } as any)
+};
+export const MsgRebalanceDelegationsDesc: UnaryMethodDefinitionish = {
+  methodName: "RebalanceDelegations",
+  service: MsgDesc,
+  requestStream: false,
+  responseStream: false,
+  requestType: ({
+    serializeBinary() {
+      return MsgRebalanceDelegations.encode(this).finish();
+    }
+  } as any),
+  responseType: ({
+    deserializeBinary(data: Uint8Array) {
+      return {
+        ...MsgRebalanceDelegationsResponse.decode(data),
+        toObject() {
+          return this;
+        }
+      };
+    }
+  } as any)
+};
+export const MsgRedeemInterchainAccountDesc: UnaryMethodDefinitionish = {
+  methodName: "RedeemInterchainAccount",
+  service: MsgDesc,
+  requestStream: false,
+  responseStream: false,
+  requestType: ({
+    serializeBinary() {
+      return MsgRedeemInterchainAccount.encode(this).finish();
+    }
+  } as any),
+  responseType: ({
+    deserializeBinary(data: Uint8Array) {
+      return {
+        ...MsgRedeemInterchainAccountResponse.decode(data),
+        toObject() {
+          return this;
+        }
+      };
+    }
+  } as any)
+};
+export interface Rpc {
+  unary<T extends UnaryMethodDefinitionish>(methodDesc: T, request: any, metadata: grpc.Metadata | undefined): Promise<any>;
+}
+export class GrpcWebImpl {
+  host: string;
+  options: {
+    transport?: grpc.TransportFactory;
+    debug?: boolean;
+    metadata?: grpc.Metadata;
+  };
+  constructor(host: string, options: {
+    transport?: grpc.TransportFactory;
+    debug?: boolean;
+    metadata?: grpc.Metadata;
+  }) {
+    this.host = host;
+    this.options = options;
+  }
+  unary<T extends UnaryMethodDefinitionish>(methodDesc: T, _request: any, metadata: grpc.Metadata | undefined) {
+    const request = {
+      ..._request,
+      ...methodDesc.requestType
+    };
+    const maybeCombinedMetadata = metadata && this.options.metadata ? new BrowserHeaders({
+      ...this.options?.metadata.headersMap,
+      ...metadata?.headersMap
+    }) : metadata || this.options.metadata;
+    return new Promise((resolve, reject) => {
+      grpc.unary(methodDesc, {
+        request,
+        host: this.host,
+        metadata: maybeCombinedMetadata,
+        transport: this.options.transport,
+        debug: this.options.debug,
+        onEnd: function (response) {
+          if (response.status === grpc.Code.OK) {
+            resolve(response.message);
+          } else {
+            const err = (new Error(response.statusMessage) as any);
+            err.code = response.status;
+            err.metadata = response.trailers;
+            reject(err);
+          }
+        }
+      });
+    });
   }
 }

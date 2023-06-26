@@ -29,7 +29,10 @@ export class LCDQueryClient {
     return await this.req.get<QueryGetRefractableAssetResponseSDKType>(endpoint);
   }
   /* Queries a list of RefractableAsset items. */
-  async refractableAssetAll(params: QueryAllRefractableAssetRequest, options: any = {params: {}}): Promise<QueryAllRefractableAssetResponseSDKType> {
+  async refractableAssetAll(params: QueryAllRefractableAssetRequest): Promise<QueryAllRefractableAssetResponseSDKType> {
+    const options: any = {
+      params: {}
+    };
     if (typeof params?.enabled !== "undefined") {
       options.params.enabled = params.enabled;
     }
@@ -45,7 +48,10 @@ export class LCDQueryClient {
     return await this.req.get<QueryGetMaturityLevelResponseSDKType>(endpoint);
   }
   /* Queries a list of MaturityLevel items. */
-  async maturityLevelAll(params: QueryAllMaturityLevelRequest, options: any = {params: {}}): Promise<QueryAllMaturityLevelResponseSDKType> {
+  async maturityLevelAll(params: QueryAllMaturityLevelRequest): Promise<QueryAllMaturityLevelResponseSDKType> {
+    const options: any = {
+      params: {}
+    };
     if (typeof params?.assetId !== "undefined") {
       options.params.asset_id = params.assetId;
     }
@@ -66,7 +72,10 @@ export class LCDQueryClient {
   /* Queries a list of ExchangeRate items. */
   async exchangeRateAll(params: QueryAllExchangeRateRequest = {
     pagination: undefined
-  }, options: any = {params: {}}): Promise<QueryAllExchangeRateResponseSDKType> {
+  }): Promise<QueryAllExchangeRateResponseSDKType> {
+    const options: any = {
+      params: {}
+    };
     if (typeof params?.pagination !== "undefined") {
       setPaginationParams(options, params.pagination);
     }

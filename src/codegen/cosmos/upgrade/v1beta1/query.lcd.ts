@@ -38,7 +38,10 @@ export class LCDQueryClient {
   /* ModuleVersions queries the list of module versions from state.
   
    Since: cosmos-sdk 0.43 */
-  async moduleVersions(params: QueryModuleVersionsRequest, options: any = {params: {}}): Promise<QueryModuleVersionsResponseSDKType> {
+  async moduleVersions(params: QueryModuleVersionsRequest): Promise<QueryModuleVersionsResponseSDKType> {
+    const options: any = {
+      params: {}
+    };
     if (typeof params?.moduleName !== "undefined") {
       options.params.module_name = params.moduleName;
     }

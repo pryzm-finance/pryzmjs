@@ -32,7 +32,10 @@ export class LCDQueryClient {
   /* Queries a list of HostChain items. */
   async hostChainAll(params: QueryAllHostChainRequest = {
     pagination: undefined
-  }, options: any = {params: {}}): Promise<QueryAllHostChainResponseSDKType> {
+  }): Promise<QueryAllHostChainResponseSDKType> {
+    const options: any = {
+      params: {}
+    };
     if (typeof params?.pagination !== "undefined") {
       setPaginationParams(options, params.pagination);
     }
@@ -47,7 +50,10 @@ export class LCDQueryClient {
   /* Queries a list of HostChainState items. */
   async hostChainStateAll(params: QueryAllHostChainStateRequest = {
     pagination: undefined
-  }, options: any = {params: {}}): Promise<QueryAllHostChainStateResponseSDKType> {
+  }): Promise<QueryAllHostChainStateResponseSDKType> {
+    const options: any = {
+      params: {}
+    };
     if (typeof params?.pagination !== "undefined") {
       setPaginationParams(options, params.pagination);
     }
@@ -62,7 +68,10 @@ export class LCDQueryClient {
   /* Queries a list of Undelegation items. */
   async undelegationAll(params: QueryAllUndelegationRequest = {
     pagination: undefined
-  }, options: any = {params: {}}): Promise<QueryAllUndelegationResponseSDKType> {
+  }): Promise<QueryAllUndelegationResponseSDKType> {
+    const options: any = {
+      params: {}
+    };
     if (typeof params?.pagination !== "undefined") {
       setPaginationParams(options, params.pagination);
     }
@@ -70,7 +79,10 @@ export class LCDQueryClient {
     return await this.req.get<QueryAllUndelegationResponseSDKType>(endpoint, options);
   }
   /* Queries a list of incomplete undelegations sorted by completion time. */
-  async incompleteUndelegationAll(params: QueryIncompleteUndelegationRequest, options: any = {params: {}}): Promise<QueryIncompleteUndelegationResponseSDKType> {
+  async incompleteUndelegationAll(params: QueryIncompleteUndelegationRequest): Promise<QueryIncompleteUndelegationResponseSDKType> {
+    const options: any = {
+      params: {}
+    };
     if (typeof params?.pagination !== "undefined") {
       setPaginationParams(options, params.pagination);
     }

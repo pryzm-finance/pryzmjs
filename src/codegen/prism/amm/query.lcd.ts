@@ -62,7 +62,10 @@ export class LCDQueryClient {
     return await this.req.get<QueryGetPoolTokenResponseSDKType>(endpoint);
   }
   /* Queries a list of PoolToken items. */
-  async poolTokenAll(params: QueryAllPoolTokenRequest, options: any = {params: {}}): Promise<QueryAllPoolTokenResponseSDKType> {
+  async poolTokenAll(params: QueryAllPoolTokenRequest): Promise<QueryAllPoolTokenResponseSDKType> {
+    const options: any = {
+      params: {}
+    };
     if (typeof params?.pagination !== "undefined") {
       setPaginationParams(options, params.pagination);
     }
@@ -80,7 +83,10 @@ export class LCDQueryClient {
   /* Queries a list of Pool items. */
   async poolAll(params: QueryAllPoolRequest = {
     pagination: undefined
-  }, options: any = {params: {}}): Promise<QueryAllPoolResponseSDKType> {
+  }): Promise<QueryAllPoolResponseSDKType> {
+    const options: any = {
+      params: {}
+    };
     if (typeof params?.pagination !== "undefined") {
       setPaginationParams(options, params.pagination);
     }
@@ -95,7 +101,10 @@ export class LCDQueryClient {
   /* Queries a list of WeightedToken items. */
   async weightedTokenAll(params: QueryAllWeightedTokenRequest = {
     pagination: undefined
-  }, options: any = {params: {}}): Promise<QueryAllWeightedTokenResponseSDKType> {
+  }): Promise<QueryAllWeightedTokenResponseSDKType> {
+    const options: any = {
+      params: {}
+    };
     if (typeof params?.pagination !== "undefined") {
       setPaginationParams(options, params.pagination);
     }
@@ -110,7 +119,10 @@ export class LCDQueryClient {
   /* Queries a list of WeightUpdateTiming items. */
   async weightUpdateTimingAll(params: QueryAllWeightUpdateTimingRequest = {
     pagination: undefined
-  }, options: any = {params: {}}): Promise<QueryAllWeightUpdateTimingResponseSDKType> {
+  }): Promise<QueryAllWeightUpdateTimingResponseSDKType> {
+    const options: any = {
+      params: {}
+    };
     if (typeof params?.pagination !== "undefined") {
       setPaginationParams(options, params.pagination);
     }
@@ -118,7 +130,10 @@ export class LCDQueryClient {
     return await this.req.get<QueryAllWeightUpdateTimingResponseSDKType>(endpoint, options);
   }
   /* Simulates a single swap action and returns the result */
-  async simulateSingleSwap(params: QuerySimulateSingleSwapRequest, options: any = {params: {}}): Promise<QuerySimulateSingleSwapResponseSDKType> {
+  async simulateSingleSwap(params: QuerySimulateSingleSwapRequest): Promise<QuerySimulateSingleSwapResponseSDKType> {
+    const options: any = {
+      params: {}
+    };
     if (typeof params?.swap !== "undefined") {
       options.params.swap = params.swap;
     }
@@ -126,7 +141,10 @@ export class LCDQueryClient {
     return await this.req.get<QuerySimulateSingleSwapResponseSDKType>(endpoint, options);
   }
   /* Queries a list of SimulateInitializePool items. */
-  async simulateInitializePool(params: QuerySimulateInitializePoolRequest, options: any = {params: {}}): Promise<QuerySimulateInitializePoolResponseSDKType> {
+  async simulateInitializePool(params: QuerySimulateInitializePoolRequest): Promise<QuerySimulateInitializePoolResponseSDKType> {
+    const options: any = {
+      params: {}
+    };
     if (typeof params?.amountsIn !== "undefined") {
       options.params.amounts_in = params.amountsIn;
     }
@@ -134,7 +152,10 @@ export class LCDQueryClient {
     return await this.req.get<QuerySimulateInitializePoolResponseSDKType>(endpoint, options);
   }
   /* Queries a list of SimulateJoinAllTokensExactLpt items. */
-  async simulateJoinAllTokensExactLpt(params: QuerySimulateJoinAllTokensExactLptRequest, options: any = {params: {}}): Promise<QuerySimulateJoinAllTokensExactLptResponseSDKType> {
+  async simulateJoinAllTokensExactLpt(params: QuerySimulateJoinAllTokensExactLptRequest): Promise<QuerySimulateJoinAllTokensExactLptResponseSDKType> {
+    const options: any = {
+      params: {}
+    };
     if (typeof params?.lptOut !== "undefined") {
       options.params.lpt_out = params.lptOut;
     }
@@ -142,7 +163,10 @@ export class LCDQueryClient {
     return await this.req.get<QuerySimulateJoinAllTokensExactLptResponseSDKType>(endpoint, options);
   }
   /* Queries a list of SimulateJoinExactTokens items. */
-  async simulateJoinExactTokens(params: QuerySimulateJoinExactTokensRequest, options: any = {params: {}}): Promise<QuerySimulateJoinExactTokensResponseSDKType> {
+  async simulateJoinExactTokens(params: QuerySimulateJoinExactTokensRequest): Promise<QuerySimulateJoinExactTokensResponseSDKType> {
+    const options: any = {
+      params: {}
+    };
     if (typeof params?.amountsIn !== "undefined") {
       options.params.amounts_in = params.amountsIn;
     }
@@ -150,7 +174,10 @@ export class LCDQueryClient {
     return await this.req.get<QuerySimulateJoinExactTokensResponseSDKType>(endpoint, options);
   }
   /* Queries a list of SimulateJoinTokenExactLpt items. */
-  async simulateJoinTokenExactLpt(params: QuerySimulateJoinTokenExactLptRequest, options: any = {params: {}}): Promise<QuerySimulateJoinTokenExactLptResponseSDKType> {
+  async simulateJoinTokenExactLpt(params: QuerySimulateJoinTokenExactLptRequest): Promise<QuerySimulateJoinTokenExactLptResponseSDKType> {
+    const options: any = {
+      params: {}
+    };
     if (typeof params?.lptOut !== "undefined") {
       options.params.lpt_out = params.lptOut;
     }
@@ -161,7 +188,10 @@ export class LCDQueryClient {
     return await this.req.get<QuerySimulateJoinTokenExactLptResponseSDKType>(endpoint, options);
   }
   /* Queries a list of SimulateExitTokenExactLpt items. */
-  async simulateExitTokenExactLpt(params: QuerySimulateExitTokenExactLptRequest, options: any = {params: {}}): Promise<QuerySimulateExitTokenExactLptResponseSDKType> {
+  async simulateExitTokenExactLpt(params: QuerySimulateExitTokenExactLptRequest): Promise<QuerySimulateExitTokenExactLptResponseSDKType> {
+    const options: any = {
+      params: {}
+    };
     if (typeof params?.lptIn !== "undefined") {
       options.params.lpt_in = params.lptIn;
     }
@@ -172,7 +202,10 @@ export class LCDQueryClient {
     return await this.req.get<QuerySimulateExitTokenExactLptResponseSDKType>(endpoint, options);
   }
   /* Queries a list of SimulateExitExactTokens items. */
-  async simulateExitExactTokens(params: QuerySimulateExitExactTokensRequest, options: any = {params: {}}): Promise<QuerySimulateExitExactTokensResponseSDKType> {
+  async simulateExitExactTokens(params: QuerySimulateExitExactTokensRequest): Promise<QuerySimulateExitExactTokensResponseSDKType> {
+    const options: any = {
+      params: {}
+    };
     if (typeof params?.amountsOut !== "undefined") {
       options.params.amounts_out = params.amountsOut;
     }
@@ -180,7 +213,10 @@ export class LCDQueryClient {
     return await this.req.get<QuerySimulateExitExactTokensResponseSDKType>(endpoint, options);
   }
   /* Queries a list of SimulateExitAllTokensExactLpt items. */
-  async simulateExitAllTokensExactLpt(params: QuerySimulateExitAllTokensExactLptRequest, options: any = {params: {}}): Promise<QuerySimulateExitAllTokensExactLptResponseSDKType> {
+  async simulateExitAllTokensExactLpt(params: QuerySimulateExitAllTokensExactLptRequest): Promise<QuerySimulateExitAllTokensExactLptResponseSDKType> {
+    const options: any = {
+      params: {}
+    };
     if (typeof params?.lptIn !== "undefined") {
       options.params.lpt_in = params.lptIn;
     }
@@ -188,9 +224,9 @@ export class LCDQueryClient {
     return await this.req.get<QuerySimulateExitAllTokensExactLptResponseSDKType>(endpoint, options);
   }
   /* Queries a list of SpotPrice items. */
-  async spotPrice(params: QuerySpotPriceRequest, options: any = {params: {}}): Promise<QuerySpotPriceResponseSDKType> {
+  async spotPrice(params: QuerySpotPriceRequest): Promise<QuerySpotPriceResponseSDKType> {
     const endpoint = `prism-finance/prism-core/amm/spot_price/${params.poolId}/${params.tokenIn}/${params.tokenOut}/${params.applyFee}`;
-    return await this.req.get<QuerySpotPriceResponseSDKType>(endpoint, options);
+    return await this.req.get<QuerySpotPriceResponseSDKType>(endpoint);
   }
   /* Queries a IntroducingPoolToken by index. */
   async introducingPoolToken(params: QueryGetIntroducingPoolTokenRequest): Promise<QueryGetIntroducingPoolTokenResponseSDKType> {
@@ -200,7 +236,10 @@ export class LCDQueryClient {
   /* Queries a list of IntroducingPoolToken items. */
   async introducingPoolTokenAll(params: QueryAllIntroducingPoolTokenRequest = {
     pagination: undefined
-  }, options: any = {params: {}}): Promise<QueryAllIntroducingPoolTokenResponseSDKType> {
+  }): Promise<QueryAllIntroducingPoolTokenResponseSDKType> {
+    const options: any = {
+      params: {}
+    };
     if (typeof params?.pagination !== "undefined") {
       setPaginationParams(options, params.pagination);
     }
@@ -215,7 +254,10 @@ export class LCDQueryClient {
   /* Queries a list of ExpiringPoolToken items. */
   async expiringPoolTokenAll(params: QueryAllExpiringPoolTokenRequest = {
     pagination: undefined
-  }, options: any = {params: {}}): Promise<QueryAllExpiringPoolTokenResponseSDKType> {
+  }): Promise<QueryAllExpiringPoolTokenResponseSDKType> {
+    const options: any = {
+      params: {}
+    };
     if (typeof params?.pagination !== "undefined") {
       setPaginationParams(options, params.pagination);
     }
@@ -228,7 +270,10 @@ export class LCDQueryClient {
     return await this.req.get<QueryLpTokenResponseSDKType>(endpoint);
   }
   /* Queries a list of SimulateBatchSwap items. */
-  async simulateBatchSwap(params: QuerySimulateBatchSwapRequest, options: any = {params: {}}): Promise<QuerySimulateBatchSwapResponseSDKType> {
+  async simulateBatchSwap(params: QuerySimulateBatchSwapRequest): Promise<QuerySimulateBatchSwapResponseSDKType> {
+    const options: any = {
+      params: {}
+    };
     if (typeof params?.swapType !== "undefined") {
       options.params.swap_type = params.swapType;
     }
@@ -246,7 +291,10 @@ export class LCDQueryClient {
   /* Queries a list of YammConfiguration items. */
   async yammConfigurationAll(params: QueryAllYammConfigurationRequest = {
     pagination: undefined
-  }, options: any = {params: {}}): Promise<QueryAllYammConfigurationResponseSDKType> {
+  }): Promise<QueryAllYammConfigurationResponseSDKType> {
+    const options: any = {
+      params: {}
+    };
     if (typeof params?.pagination !== "undefined") {
       setPaginationParams(options, params.pagination);
     }
@@ -261,7 +309,10 @@ export class LCDQueryClient {
   /* Queries a list of WhitelistedRoute items. */
   async whitelistedRouteAll(params: QueryAllWhitelistedRouteRequest = {
     pagination: undefined
-  }, options: any = {params: {}}): Promise<QueryAllWhitelistedRouteResponseSDKType> {
+  }): Promise<QueryAllWhitelistedRouteResponseSDKType> {
+    const options: any = {
+      params: {}
+    };
     if (typeof params?.pagination !== "undefined") {
       setPaginationParams(options, params.pagination);
     }
@@ -276,7 +327,10 @@ export class LCDQueryClient {
   /* Queries a list of Order items. */
   async orderAll(params: QueryAllOrderRequest = {
     pagination: undefined
-  }, options: any = {params: {}}): Promise<QueryAllOrderResponseSDKType> {
+  }): Promise<QueryAllOrderResponseSDKType> {
+    const options: any = {
+      params: {}
+    };
     if (typeof params?.pagination !== "undefined") {
       setPaginationParams(options, params.pagination);
     }
@@ -291,7 +345,10 @@ export class LCDQueryClient {
   /* Queries a list of ExecutableOrder items. */
   async executableOrderAll(params: QueryAllExecutableOrderRequest = {
     pagination: undefined
-  }, options: any = {params: {}}): Promise<QueryAllExecutableOrderResponseSDKType> {
+  }): Promise<QueryAllExecutableOrderResponseSDKType> {
+    const options: any = {
+      params: {}
+    };
     if (typeof params?.pagination !== "undefined") {
       setPaginationParams(options, params.pagination);
     }
@@ -306,7 +363,10 @@ export class LCDQueryClient {
   /* Queries a list of ScheduleOrder items. */
   async scheduleOrderAll(params: QueryAllScheduleOrderRequest = {
     pagination: undefined
-  }, options: any = {params: {}}): Promise<QueryAllScheduleOrderResponseSDKType> {
+  }): Promise<QueryAllScheduleOrderResponseSDKType> {
+    const options: any = {
+      params: {}
+    };
     if (typeof params?.pagination !== "undefined") {
       setPaginationParams(options, params.pagination);
     }
@@ -321,7 +381,10 @@ export class LCDQueryClient {
   /* Queries a list of OraclePricePair items. */
   async oraclePricePairAll(params: QueryAllOraclePricePairRequest = {
     pagination: undefined
-  }, options: any = {params: {}}): Promise<QueryAllOraclePricePairResponseSDKType> {
+  }): Promise<QueryAllOraclePricePairResponseSDKType> {
+    const options: any = {
+      params: {}
+    };
     if (typeof params?.pagination !== "undefined") {
       setPaginationParams(options, params.pagination);
     }
@@ -341,7 +404,10 @@ export class LCDQueryClient {
   /* Queries a list of PendingTokenIntroduction items. */
   async pendingTokenIntroductionAll(params: QueryAllPendingTokenIntroductionRequest = {
     pagination: undefined
-  }, options: any = {params: {}}): Promise<QueryAllPendingTokenIntroductionResponseSDKType> {
+  }): Promise<QueryAllPendingTokenIntroductionResponseSDKType> {
+    const options: any = {
+      params: {}
+    };
     if (typeof params?.pagination !== "undefined") {
       setPaginationParams(options, params.pagination);
     }
