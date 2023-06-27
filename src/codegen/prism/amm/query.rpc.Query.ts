@@ -1,89 +1,91 @@
-import { Rpc } from "../../helpers";
-import * as _m0 from "protobufjs/minimal";
-import { QueryClient, createProtobufRpcClient } from "@cosmjs/stargate";
+//@ts-nocheck
+import { grpc } from "@improbable-eng/grpc-web";
+import { UnaryMethodDefinitionish } from "../../grpc-web";
+import { DeepPartial } from "../../helpers";
+import { BrowserHeaders } from "browser-headers";
 import { QueryParamsRequest, QueryParamsResponse, QueryGetPoolTokenRequest, QueryGetPoolTokenResponse, QueryAllPoolTokenRequest, QueryAllPoolTokenResponse, QueryGetPoolRequest, QueryGetPoolResponse, QueryAllPoolRequest, QueryAllPoolResponse, QueryGetWeightedTokenRequest, QueryGetWeightedTokenResponse, QueryAllWeightedTokenRequest, QueryAllWeightedTokenResponse, QueryGetWeightUpdateTimingRequest, QueryGetWeightUpdateTimingResponse, QueryAllWeightUpdateTimingRequest, QueryAllWeightUpdateTimingResponse, QuerySimulateSingleSwapRequest, QuerySimulateSingleSwapResponse, QuerySimulateInitializePoolRequest, QuerySimulateInitializePoolResponse, QuerySimulateJoinAllTokensExactLptRequest, QuerySimulateJoinAllTokensExactLptResponse, QuerySimulateJoinExactTokensRequest, QuerySimulateJoinExactTokensResponse, QuerySimulateJoinTokenExactLptRequest, QuerySimulateJoinTokenExactLptResponse, QuerySimulateExitTokenExactLptRequest, QuerySimulateExitTokenExactLptResponse, QuerySimulateExitExactTokensRequest, QuerySimulateExitExactTokensResponse, QuerySimulateExitAllTokensExactLptRequest, QuerySimulateExitAllTokensExactLptResponse, QuerySpotPriceRequest, QuerySpotPriceResponse, QueryGetIntroducingPoolTokenRequest, QueryGetIntroducingPoolTokenResponse, QueryAllIntroducingPoolTokenRequest, QueryAllIntroducingPoolTokenResponse, QueryGetExpiringPoolTokenRequest, QueryGetExpiringPoolTokenResponse, QueryAllExpiringPoolTokenRequest, QueryAllExpiringPoolTokenResponse, QueryLpTokenRequest, QueryLpTokenResponse, QuerySimulateBatchSwapRequest, QuerySimulateBatchSwapResponse, QueryGetYammConfigurationRequest, QueryGetYammConfigurationResponse, QueryAllYammConfigurationRequest, QueryAllYammConfigurationResponse, QueryGetWhitelistedRouteRequest, QueryGetWhitelistedRouteResponse, QueryAllWhitelistedRouteRequest, QueryAllWhitelistedRouteResponse, QueryGetOrderRequest, QueryGetOrderResponse, QueryAllOrderRequest, QueryAllOrderResponse, QueryGetExecutableOrderRequest, QueryGetExecutableOrderResponse, QueryAllExecutableOrderRequest, QueryAllExecutableOrderResponse, QueryGetScheduleOrderRequest, QueryGetScheduleOrderResponse, QueryAllScheduleOrderRequest, QueryAllScheduleOrderResponse, QueryGetOraclePricePairRequest, QueryGetOraclePricePairResponse, QueryAllOraclePricePairRequest, QueryAllOraclePricePairResponse, QueryVaultPauseModeRequest, QueryVaultPauseModeResponse, QueryGetPendingTokenIntroductionRequest, QueryGetPendingTokenIntroductionResponse, QueryAllPendingTokenIntroductionRequest, QueryAllPendingTokenIntroductionResponse, QueryYammPoolIdRequest, QueryYammPoolIdResponse } from "./query";
 /** Query defines the gRPC querier service. */
 export interface Query {
   /** Parameters queries the parameters of the module. */
-  params(request?: QueryParamsRequest): Promise<QueryParamsResponse>;
+  params(request?: DeepPartial<QueryParamsRequest>, metadata?: grpc.Metadata): Promise<QueryParamsResponse>;
   /** Queries a PoolToken by index. */
-  poolToken(request: QueryGetPoolTokenRequest): Promise<QueryGetPoolTokenResponse>;
+  poolToken(request: DeepPartial<QueryGetPoolTokenRequest>, metadata?: grpc.Metadata): Promise<QueryGetPoolTokenResponse>;
   /** Queries a list of PoolToken items. */
-  poolTokenAll(request: QueryAllPoolTokenRequest): Promise<QueryAllPoolTokenResponse>;
+  poolTokenAll(request: DeepPartial<QueryAllPoolTokenRequest>, metadata?: grpc.Metadata): Promise<QueryAllPoolTokenResponse>;
   /** Queries a Pool by id. */
-  pool(request: QueryGetPoolRequest): Promise<QueryGetPoolResponse>;
+  pool(request: DeepPartial<QueryGetPoolRequest>, metadata?: grpc.Metadata): Promise<QueryGetPoolResponse>;
   /** Queries a list of Pool items. */
-  poolAll(request?: QueryAllPoolRequest): Promise<QueryAllPoolResponse>;
+  poolAll(request?: DeepPartial<QueryAllPoolRequest>, metadata?: grpc.Metadata): Promise<QueryAllPoolResponse>;
   /** Queries a WeightedToken by index. */
-  weightedToken(request: QueryGetWeightedTokenRequest): Promise<QueryGetWeightedTokenResponse>;
+  weightedToken(request: DeepPartial<QueryGetWeightedTokenRequest>, metadata?: grpc.Metadata): Promise<QueryGetWeightedTokenResponse>;
   /** Queries a list of WeightedToken items. */
-  weightedTokenAll(request?: QueryAllWeightedTokenRequest): Promise<QueryAllWeightedTokenResponse>;
+  weightedTokenAll(request?: DeepPartial<QueryAllWeightedTokenRequest>, metadata?: grpc.Metadata): Promise<QueryAllWeightedTokenResponse>;
   /** Queries a WeightUpdateTiming by index. */
-  weightUpdateTiming(request: QueryGetWeightUpdateTimingRequest): Promise<QueryGetWeightUpdateTimingResponse>;
+  weightUpdateTiming(request: DeepPartial<QueryGetWeightUpdateTimingRequest>, metadata?: grpc.Metadata): Promise<QueryGetWeightUpdateTimingResponse>;
   /** Queries a list of WeightUpdateTiming items. */
-  weightUpdateTimingAll(request?: QueryAllWeightUpdateTimingRequest): Promise<QueryAllWeightUpdateTimingResponse>;
+  weightUpdateTimingAll(request?: DeepPartial<QueryAllWeightUpdateTimingRequest>, metadata?: grpc.Metadata): Promise<QueryAllWeightUpdateTimingResponse>;
   /** Simulates a single swap action and returns the result */
-  simulateSingleSwap(request: QuerySimulateSingleSwapRequest): Promise<QuerySimulateSingleSwapResponse>;
+  simulateSingleSwap(request: DeepPartial<QuerySimulateSingleSwapRequest>, metadata?: grpc.Metadata): Promise<QuerySimulateSingleSwapResponse>;
   /** Queries a list of SimulateInitializePool items. */
-  simulateInitializePool(request: QuerySimulateInitializePoolRequest): Promise<QuerySimulateInitializePoolResponse>;
+  simulateInitializePool(request: DeepPartial<QuerySimulateInitializePoolRequest>, metadata?: grpc.Metadata): Promise<QuerySimulateInitializePoolResponse>;
   /** Queries a list of SimulateJoinAllTokensExactLpt items. */
-  simulateJoinAllTokensExactLpt(request: QuerySimulateJoinAllTokensExactLptRequest): Promise<QuerySimulateJoinAllTokensExactLptResponse>;
+  simulateJoinAllTokensExactLpt(request: DeepPartial<QuerySimulateJoinAllTokensExactLptRequest>, metadata?: grpc.Metadata): Promise<QuerySimulateJoinAllTokensExactLptResponse>;
   /** Queries a list of SimulateJoinExactTokens items. */
-  simulateJoinExactTokens(request: QuerySimulateJoinExactTokensRequest): Promise<QuerySimulateJoinExactTokensResponse>;
+  simulateJoinExactTokens(request: DeepPartial<QuerySimulateJoinExactTokensRequest>, metadata?: grpc.Metadata): Promise<QuerySimulateJoinExactTokensResponse>;
   /** Queries a list of SimulateJoinTokenExactLpt items. */
-  simulateJoinTokenExactLpt(request: QuerySimulateJoinTokenExactLptRequest): Promise<QuerySimulateJoinTokenExactLptResponse>;
+  simulateJoinTokenExactLpt(request: DeepPartial<QuerySimulateJoinTokenExactLptRequest>, metadata?: grpc.Metadata): Promise<QuerySimulateJoinTokenExactLptResponse>;
   /** Queries a list of SimulateExitTokenExactLpt items. */
-  simulateExitTokenExactLpt(request: QuerySimulateExitTokenExactLptRequest): Promise<QuerySimulateExitTokenExactLptResponse>;
+  simulateExitTokenExactLpt(request: DeepPartial<QuerySimulateExitTokenExactLptRequest>, metadata?: grpc.Metadata): Promise<QuerySimulateExitTokenExactLptResponse>;
   /** Queries a list of SimulateExitExactTokens items. */
-  simulateExitExactTokens(request: QuerySimulateExitExactTokensRequest): Promise<QuerySimulateExitExactTokensResponse>;
+  simulateExitExactTokens(request: DeepPartial<QuerySimulateExitExactTokensRequest>, metadata?: grpc.Metadata): Promise<QuerySimulateExitExactTokensResponse>;
   /** Queries a list of SimulateExitAllTokensExactLpt items. */
-  simulateExitAllTokensExactLpt(request: QuerySimulateExitAllTokensExactLptRequest): Promise<QuerySimulateExitAllTokensExactLptResponse>;
+  simulateExitAllTokensExactLpt(request: DeepPartial<QuerySimulateExitAllTokensExactLptRequest>, metadata?: grpc.Metadata): Promise<QuerySimulateExitAllTokensExactLptResponse>;
   /** Queries a list of SpotPrice items. */
-  spotPrice(request: QuerySpotPriceRequest): Promise<QuerySpotPriceResponse>;
+  spotPrice(request: DeepPartial<QuerySpotPriceRequest>, metadata?: grpc.Metadata): Promise<QuerySpotPriceResponse>;
   /** Queries a IntroducingPoolToken by index. */
-  introducingPoolToken(request: QueryGetIntroducingPoolTokenRequest): Promise<QueryGetIntroducingPoolTokenResponse>;
+  introducingPoolToken(request: DeepPartial<QueryGetIntroducingPoolTokenRequest>, metadata?: grpc.Metadata): Promise<QueryGetIntroducingPoolTokenResponse>;
   /** Queries a list of IntroducingPoolToken items. */
-  introducingPoolTokenAll(request?: QueryAllIntroducingPoolTokenRequest): Promise<QueryAllIntroducingPoolTokenResponse>;
+  introducingPoolTokenAll(request?: DeepPartial<QueryAllIntroducingPoolTokenRequest>, metadata?: grpc.Metadata): Promise<QueryAllIntroducingPoolTokenResponse>;
   /** Queries a ExpiringPoolToken by index. */
-  expiringPoolToken(request: QueryGetExpiringPoolTokenRequest): Promise<QueryGetExpiringPoolTokenResponse>;
+  expiringPoolToken(request: DeepPartial<QueryGetExpiringPoolTokenRequest>, metadata?: grpc.Metadata): Promise<QueryGetExpiringPoolTokenResponse>;
   /** Queries a list of ExpiringPoolToken items. */
-  expiringPoolTokenAll(request?: QueryAllExpiringPoolTokenRequest): Promise<QueryAllExpiringPoolTokenResponse>;
+  expiringPoolTokenAll(request?: DeepPartial<QueryAllExpiringPoolTokenRequest>, metadata?: grpc.Metadata): Promise<QueryAllExpiringPoolTokenResponse>;
   /** Queries a list of LpToken items. */
-  lpToken(request: QueryLpTokenRequest): Promise<QueryLpTokenResponse>;
+  lpToken(request: DeepPartial<QueryLpTokenRequest>, metadata?: grpc.Metadata): Promise<QueryLpTokenResponse>;
   /** Queries a list of SimulateBatchSwap items. */
-  simulateBatchSwap(request: QuerySimulateBatchSwapRequest): Promise<QuerySimulateBatchSwapResponse>;
+  simulateBatchSwap(request: DeepPartial<QuerySimulateBatchSwapRequest>, metadata?: grpc.Metadata): Promise<QuerySimulateBatchSwapResponse>;
   /** Queries a YammConfiguration by index. */
-  yammConfiguration(request: QueryGetYammConfigurationRequest): Promise<QueryGetYammConfigurationResponse>;
+  yammConfiguration(request: DeepPartial<QueryGetYammConfigurationRequest>, metadata?: grpc.Metadata): Promise<QueryGetYammConfigurationResponse>;
   /** Queries a list of YammConfiguration items. */
-  yammConfigurationAll(request?: QueryAllYammConfigurationRequest): Promise<QueryAllYammConfigurationResponse>;
+  yammConfigurationAll(request?: DeepPartial<QueryAllYammConfigurationRequest>, metadata?: grpc.Metadata): Promise<QueryAllYammConfigurationResponse>;
   /** Queries a WhitelistedRoute by index. */
-  whitelistedRoute(request: QueryGetWhitelistedRouteRequest): Promise<QueryGetWhitelistedRouteResponse>;
+  whitelistedRoute(request: DeepPartial<QueryGetWhitelistedRouteRequest>, metadata?: grpc.Metadata): Promise<QueryGetWhitelistedRouteResponse>;
   /** Queries a list of WhitelistedRoute items. */
-  whitelistedRouteAll(request?: QueryAllWhitelistedRouteRequest): Promise<QueryAllWhitelistedRouteResponse>;
+  whitelistedRouteAll(request?: DeepPartial<QueryAllWhitelistedRouteRequest>, metadata?: grpc.Metadata): Promise<QueryAllWhitelistedRouteResponse>;
   /** Queries a Order by id. */
-  order(request: QueryGetOrderRequest): Promise<QueryGetOrderResponse>;
+  order(request: DeepPartial<QueryGetOrderRequest>, metadata?: grpc.Metadata): Promise<QueryGetOrderResponse>;
   /** Queries a list of Order items. */
-  orderAll(request?: QueryAllOrderRequest): Promise<QueryAllOrderResponse>;
+  orderAll(request?: DeepPartial<QueryAllOrderRequest>, metadata?: grpc.Metadata): Promise<QueryAllOrderResponse>;
   /** Queries a ExecutableOrder by index. */
-  executableOrder(request: QueryGetExecutableOrderRequest): Promise<QueryGetExecutableOrderResponse>;
+  executableOrder(request: DeepPartial<QueryGetExecutableOrderRequest>, metadata?: grpc.Metadata): Promise<QueryGetExecutableOrderResponse>;
   /** Queries a list of ExecutableOrder items. */
-  executableOrderAll(request?: QueryAllExecutableOrderRequest): Promise<QueryAllExecutableOrderResponse>;
+  executableOrderAll(request?: DeepPartial<QueryAllExecutableOrderRequest>, metadata?: grpc.Metadata): Promise<QueryAllExecutableOrderResponse>;
   /** Queries a ScheduleOrder by index. */
-  scheduleOrder(request: QueryGetScheduleOrderRequest): Promise<QueryGetScheduleOrderResponse>;
+  scheduleOrder(request: DeepPartial<QueryGetScheduleOrderRequest>, metadata?: grpc.Metadata): Promise<QueryGetScheduleOrderResponse>;
   /** Queries a list of ScheduleOrder items. */
-  scheduleOrderAll(request?: QueryAllScheduleOrderRequest): Promise<QueryAllScheduleOrderResponse>;
+  scheduleOrderAll(request?: DeepPartial<QueryAllScheduleOrderRequest>, metadata?: grpc.Metadata): Promise<QueryAllScheduleOrderResponse>;
   /** Queries a OraclePricePair by index. */
-  oraclePricePair(request: QueryGetOraclePricePairRequest): Promise<QueryGetOraclePricePairResponse>;
+  oraclePricePair(request: DeepPartial<QueryGetOraclePricePairRequest>, metadata?: grpc.Metadata): Promise<QueryGetOraclePricePairResponse>;
   /** Queries a list of OraclePricePair items. */
-  oraclePricePairAll(request?: QueryAllOraclePricePairRequest): Promise<QueryAllOraclePricePairResponse>;
+  oraclePricePairAll(request?: DeepPartial<QueryAllOraclePricePairRequest>, metadata?: grpc.Metadata): Promise<QueryAllOraclePricePairResponse>;
   /** Queries a list of VaultPauseMode items. */
-  vaultPauseMode(request?: QueryVaultPauseModeRequest): Promise<QueryVaultPauseModeResponse>;
+  vaultPauseMode(request?: DeepPartial<QueryVaultPauseModeRequest>, metadata?: grpc.Metadata): Promise<QueryVaultPauseModeResponse>;
   /** Queries a PendingTokenIntroduction by index. */
-  pendingTokenIntroduction(request: QueryGetPendingTokenIntroductionRequest): Promise<QueryGetPendingTokenIntroductionResponse>;
+  pendingTokenIntroduction(request: DeepPartial<QueryGetPendingTokenIntroductionRequest>, metadata?: grpc.Metadata): Promise<QueryGetPendingTokenIntroductionResponse>;
   /** Queries a list of PendingTokenIntroduction items. */
-  pendingTokenIntroductionAll(request?: QueryAllPendingTokenIntroductionRequest): Promise<QueryAllPendingTokenIntroductionResponse>;
+  pendingTokenIntroductionAll(request?: DeepPartial<QueryAllPendingTokenIntroductionRequest>, metadata?: grpc.Metadata): Promise<QueryAllPendingTokenIntroductionResponse>;
   /** Queries a YammPoolId item. */
-  yammPoolId(request: QueryYammPoolIdRequest): Promise<QueryYammPoolIdResponse>;
+  yammPoolId(request: DeepPartial<QueryYammPoolIdRequest>, metadata?: grpc.Metadata): Promise<QueryYammPoolIdResponse>;
 }
 export class QueryClientImpl implements Query {
   private readonly rpc: Rpc;
@@ -130,354 +132,1039 @@ export class QueryClientImpl implements Query {
     this.pendingTokenIntroductionAll = this.pendingTokenIntroductionAll.bind(this);
     this.yammPoolId = this.yammPoolId.bind(this);
   }
-  params(request: QueryParamsRequest = {}): Promise<QueryParamsResponse> {
-    const data = QueryParamsRequest.encode(request).finish();
-    const promise = this.rpc.request("prism.amm.Query", "Params", data);
-    return promise.then(data => QueryParamsResponse.decode(new _m0.Reader(data)));
+  params(request: DeepPartial<QueryParamsRequest> = {}, metadata?: grpc.Metadata): Promise<QueryParamsResponse> {
+    return this.rpc.unary(QueryParamsDesc, QueryParamsRequest.fromPartial(request), metadata);
   }
-  poolToken(request: QueryGetPoolTokenRequest): Promise<QueryGetPoolTokenResponse> {
-    const data = QueryGetPoolTokenRequest.encode(request).finish();
-    const promise = this.rpc.request("prism.amm.Query", "PoolToken", data);
-    return promise.then(data => QueryGetPoolTokenResponse.decode(new _m0.Reader(data)));
+  poolToken(request: DeepPartial<QueryGetPoolTokenRequest>, metadata?: grpc.Metadata): Promise<QueryGetPoolTokenResponse> {
+    return this.rpc.unary(QueryGetPoolTokenDesc, QueryGetPoolTokenRequest.fromPartial(request), metadata);
   }
-  poolTokenAll(request: QueryAllPoolTokenRequest): Promise<QueryAllPoolTokenResponse> {
-    const data = QueryAllPoolTokenRequest.encode(request).finish();
-    const promise = this.rpc.request("prism.amm.Query", "PoolTokenAll", data);
-    return promise.then(data => QueryAllPoolTokenResponse.decode(new _m0.Reader(data)));
+  poolTokenAll(request: DeepPartial<QueryAllPoolTokenRequest>, metadata?: grpc.Metadata): Promise<QueryAllPoolTokenResponse> {
+    return this.rpc.unary(QueryAllPoolTokenDesc, QueryAllPoolTokenRequest.fromPartial(request), metadata);
   }
-  pool(request: QueryGetPoolRequest): Promise<QueryGetPoolResponse> {
-    const data = QueryGetPoolRequest.encode(request).finish();
-    const promise = this.rpc.request("prism.amm.Query", "Pool", data);
-    return promise.then(data => QueryGetPoolResponse.decode(new _m0.Reader(data)));
+  pool(request: DeepPartial<QueryGetPoolRequest>, metadata?: grpc.Metadata): Promise<QueryGetPoolResponse> {
+    return this.rpc.unary(QueryGetPoolDesc, QueryGetPoolRequest.fromPartial(request), metadata);
   }
-  poolAll(request: QueryAllPoolRequest = {
+  poolAll(request: DeepPartial<QueryAllPoolRequest> = {
     pagination: undefined
-  }): Promise<QueryAllPoolResponse> {
-    const data = QueryAllPoolRequest.encode(request).finish();
-    const promise = this.rpc.request("prism.amm.Query", "PoolAll", data);
-    return promise.then(data => QueryAllPoolResponse.decode(new _m0.Reader(data)));
+  }, metadata?: grpc.Metadata): Promise<QueryAllPoolResponse> {
+    return this.rpc.unary(QueryAllPoolDesc, QueryAllPoolRequest.fromPartial(request), metadata);
   }
-  weightedToken(request: QueryGetWeightedTokenRequest): Promise<QueryGetWeightedTokenResponse> {
-    const data = QueryGetWeightedTokenRequest.encode(request).finish();
-    const promise = this.rpc.request("prism.amm.Query", "WeightedToken", data);
-    return promise.then(data => QueryGetWeightedTokenResponse.decode(new _m0.Reader(data)));
+  weightedToken(request: DeepPartial<QueryGetWeightedTokenRequest>, metadata?: grpc.Metadata): Promise<QueryGetWeightedTokenResponse> {
+    return this.rpc.unary(QueryGetWeightedTokenDesc, QueryGetWeightedTokenRequest.fromPartial(request), metadata);
   }
-  weightedTokenAll(request: QueryAllWeightedTokenRequest = {
+  weightedTokenAll(request: DeepPartial<QueryAllWeightedTokenRequest> = {
     pagination: undefined
-  }): Promise<QueryAllWeightedTokenResponse> {
-    const data = QueryAllWeightedTokenRequest.encode(request).finish();
-    const promise = this.rpc.request("prism.amm.Query", "WeightedTokenAll", data);
-    return promise.then(data => QueryAllWeightedTokenResponse.decode(new _m0.Reader(data)));
+  }, metadata?: grpc.Metadata): Promise<QueryAllWeightedTokenResponse> {
+    return this.rpc.unary(QueryAllWeightedTokenDesc, QueryAllWeightedTokenRequest.fromPartial(request), metadata);
   }
-  weightUpdateTiming(request: QueryGetWeightUpdateTimingRequest): Promise<QueryGetWeightUpdateTimingResponse> {
-    const data = QueryGetWeightUpdateTimingRequest.encode(request).finish();
-    const promise = this.rpc.request("prism.amm.Query", "WeightUpdateTiming", data);
-    return promise.then(data => QueryGetWeightUpdateTimingResponse.decode(new _m0.Reader(data)));
+  weightUpdateTiming(request: DeepPartial<QueryGetWeightUpdateTimingRequest>, metadata?: grpc.Metadata): Promise<QueryGetWeightUpdateTimingResponse> {
+    return this.rpc.unary(QueryGetWeightUpdateTimingDesc, QueryGetWeightUpdateTimingRequest.fromPartial(request), metadata);
   }
-  weightUpdateTimingAll(request: QueryAllWeightUpdateTimingRequest = {
+  weightUpdateTimingAll(request: DeepPartial<QueryAllWeightUpdateTimingRequest> = {
     pagination: undefined
-  }): Promise<QueryAllWeightUpdateTimingResponse> {
-    const data = QueryAllWeightUpdateTimingRequest.encode(request).finish();
-    const promise = this.rpc.request("prism.amm.Query", "WeightUpdateTimingAll", data);
-    return promise.then(data => QueryAllWeightUpdateTimingResponse.decode(new _m0.Reader(data)));
+  }, metadata?: grpc.Metadata): Promise<QueryAllWeightUpdateTimingResponse> {
+    return this.rpc.unary(QueryAllWeightUpdateTimingDesc, QueryAllWeightUpdateTimingRequest.fromPartial(request), metadata);
   }
-  simulateSingleSwap(request: QuerySimulateSingleSwapRequest): Promise<QuerySimulateSingleSwapResponse> {
-    const data = QuerySimulateSingleSwapRequest.encode(request).finish();
-    const promise = this.rpc.request("prism.amm.Query", "SimulateSingleSwap", data);
-    return promise.then(data => QuerySimulateSingleSwapResponse.decode(new _m0.Reader(data)));
+  simulateSingleSwap(request: DeepPartial<QuerySimulateSingleSwapRequest>, metadata?: grpc.Metadata): Promise<QuerySimulateSingleSwapResponse> {
+    return this.rpc.unary(QuerySimulateSingleSwapDesc, QuerySimulateSingleSwapRequest.fromPartial(request), metadata);
   }
-  simulateInitializePool(request: QuerySimulateInitializePoolRequest): Promise<QuerySimulateInitializePoolResponse> {
-    const data = QuerySimulateInitializePoolRequest.encode(request).finish();
-    const promise = this.rpc.request("prism.amm.Query", "SimulateInitializePool", data);
-    return promise.then(data => QuerySimulateInitializePoolResponse.decode(new _m0.Reader(data)));
+  simulateInitializePool(request: DeepPartial<QuerySimulateInitializePoolRequest>, metadata?: grpc.Metadata): Promise<QuerySimulateInitializePoolResponse> {
+    return this.rpc.unary(QuerySimulateInitializePoolDesc, QuerySimulateInitializePoolRequest.fromPartial(request), metadata);
   }
-  simulateJoinAllTokensExactLpt(request: QuerySimulateJoinAllTokensExactLptRequest): Promise<QuerySimulateJoinAllTokensExactLptResponse> {
-    const data = QuerySimulateJoinAllTokensExactLptRequest.encode(request).finish();
-    const promise = this.rpc.request("prism.amm.Query", "SimulateJoinAllTokensExactLpt", data);
-    return promise.then(data => QuerySimulateJoinAllTokensExactLptResponse.decode(new _m0.Reader(data)));
+  simulateJoinAllTokensExactLpt(request: DeepPartial<QuerySimulateJoinAllTokensExactLptRequest>, metadata?: grpc.Metadata): Promise<QuerySimulateJoinAllTokensExactLptResponse> {
+    return this.rpc.unary(QuerySimulateJoinAllTokensExactLptDesc, QuerySimulateJoinAllTokensExactLptRequest.fromPartial(request), metadata);
   }
-  simulateJoinExactTokens(request: QuerySimulateJoinExactTokensRequest): Promise<QuerySimulateJoinExactTokensResponse> {
-    const data = QuerySimulateJoinExactTokensRequest.encode(request).finish();
-    const promise = this.rpc.request("prism.amm.Query", "SimulateJoinExactTokens", data);
-    return promise.then(data => QuerySimulateJoinExactTokensResponse.decode(new _m0.Reader(data)));
+  simulateJoinExactTokens(request: DeepPartial<QuerySimulateJoinExactTokensRequest>, metadata?: grpc.Metadata): Promise<QuerySimulateJoinExactTokensResponse> {
+    return this.rpc.unary(QuerySimulateJoinExactTokensDesc, QuerySimulateJoinExactTokensRequest.fromPartial(request), metadata);
   }
-  simulateJoinTokenExactLpt(request: QuerySimulateJoinTokenExactLptRequest): Promise<QuerySimulateJoinTokenExactLptResponse> {
-    const data = QuerySimulateJoinTokenExactLptRequest.encode(request).finish();
-    const promise = this.rpc.request("prism.amm.Query", "SimulateJoinTokenExactLpt", data);
-    return promise.then(data => QuerySimulateJoinTokenExactLptResponse.decode(new _m0.Reader(data)));
+  simulateJoinTokenExactLpt(request: DeepPartial<QuerySimulateJoinTokenExactLptRequest>, metadata?: grpc.Metadata): Promise<QuerySimulateJoinTokenExactLptResponse> {
+    return this.rpc.unary(QuerySimulateJoinTokenExactLptDesc, QuerySimulateJoinTokenExactLptRequest.fromPartial(request), metadata);
   }
-  simulateExitTokenExactLpt(request: QuerySimulateExitTokenExactLptRequest): Promise<QuerySimulateExitTokenExactLptResponse> {
-    const data = QuerySimulateExitTokenExactLptRequest.encode(request).finish();
-    const promise = this.rpc.request("prism.amm.Query", "SimulateExitTokenExactLpt", data);
-    return promise.then(data => QuerySimulateExitTokenExactLptResponse.decode(new _m0.Reader(data)));
+  simulateExitTokenExactLpt(request: DeepPartial<QuerySimulateExitTokenExactLptRequest>, metadata?: grpc.Metadata): Promise<QuerySimulateExitTokenExactLptResponse> {
+    return this.rpc.unary(QuerySimulateExitTokenExactLptDesc, QuerySimulateExitTokenExactLptRequest.fromPartial(request), metadata);
   }
-  simulateExitExactTokens(request: QuerySimulateExitExactTokensRequest): Promise<QuerySimulateExitExactTokensResponse> {
-    const data = QuerySimulateExitExactTokensRequest.encode(request).finish();
-    const promise = this.rpc.request("prism.amm.Query", "SimulateExitExactTokens", data);
-    return promise.then(data => QuerySimulateExitExactTokensResponse.decode(new _m0.Reader(data)));
+  simulateExitExactTokens(request: DeepPartial<QuerySimulateExitExactTokensRequest>, metadata?: grpc.Metadata): Promise<QuerySimulateExitExactTokensResponse> {
+    return this.rpc.unary(QuerySimulateExitExactTokensDesc, QuerySimulateExitExactTokensRequest.fromPartial(request), metadata);
   }
-  simulateExitAllTokensExactLpt(request: QuerySimulateExitAllTokensExactLptRequest): Promise<QuerySimulateExitAllTokensExactLptResponse> {
-    const data = QuerySimulateExitAllTokensExactLptRequest.encode(request).finish();
-    const promise = this.rpc.request("prism.amm.Query", "SimulateExitAllTokensExactLpt", data);
-    return promise.then(data => QuerySimulateExitAllTokensExactLptResponse.decode(new _m0.Reader(data)));
+  simulateExitAllTokensExactLpt(request: DeepPartial<QuerySimulateExitAllTokensExactLptRequest>, metadata?: grpc.Metadata): Promise<QuerySimulateExitAllTokensExactLptResponse> {
+    return this.rpc.unary(QuerySimulateExitAllTokensExactLptDesc, QuerySimulateExitAllTokensExactLptRequest.fromPartial(request), metadata);
   }
-  spotPrice(request: QuerySpotPriceRequest): Promise<QuerySpotPriceResponse> {
-    const data = QuerySpotPriceRequest.encode(request).finish();
-    const promise = this.rpc.request("prism.amm.Query", "SpotPrice", data);
-    return promise.then(data => QuerySpotPriceResponse.decode(new _m0.Reader(data)));
+  spotPrice(request: DeepPartial<QuerySpotPriceRequest>, metadata?: grpc.Metadata): Promise<QuerySpotPriceResponse> {
+    return this.rpc.unary(QuerySpotPriceDesc, QuerySpotPriceRequest.fromPartial(request), metadata);
   }
-  introducingPoolToken(request: QueryGetIntroducingPoolTokenRequest): Promise<QueryGetIntroducingPoolTokenResponse> {
-    const data = QueryGetIntroducingPoolTokenRequest.encode(request).finish();
-    const promise = this.rpc.request("prism.amm.Query", "IntroducingPoolToken", data);
-    return promise.then(data => QueryGetIntroducingPoolTokenResponse.decode(new _m0.Reader(data)));
+  introducingPoolToken(request: DeepPartial<QueryGetIntroducingPoolTokenRequest>, metadata?: grpc.Metadata): Promise<QueryGetIntroducingPoolTokenResponse> {
+    return this.rpc.unary(QueryGetIntroducingPoolTokenDesc, QueryGetIntroducingPoolTokenRequest.fromPartial(request), metadata);
   }
-  introducingPoolTokenAll(request: QueryAllIntroducingPoolTokenRequest = {
+  introducingPoolTokenAll(request: DeepPartial<QueryAllIntroducingPoolTokenRequest> = {
     pagination: undefined
-  }): Promise<QueryAllIntroducingPoolTokenResponse> {
-    const data = QueryAllIntroducingPoolTokenRequest.encode(request).finish();
-    const promise = this.rpc.request("prism.amm.Query", "IntroducingPoolTokenAll", data);
-    return promise.then(data => QueryAllIntroducingPoolTokenResponse.decode(new _m0.Reader(data)));
+  }, metadata?: grpc.Metadata): Promise<QueryAllIntroducingPoolTokenResponse> {
+    return this.rpc.unary(QueryAllIntroducingPoolTokenDesc, QueryAllIntroducingPoolTokenRequest.fromPartial(request), metadata);
   }
-  expiringPoolToken(request: QueryGetExpiringPoolTokenRequest): Promise<QueryGetExpiringPoolTokenResponse> {
-    const data = QueryGetExpiringPoolTokenRequest.encode(request).finish();
-    const promise = this.rpc.request("prism.amm.Query", "ExpiringPoolToken", data);
-    return promise.then(data => QueryGetExpiringPoolTokenResponse.decode(new _m0.Reader(data)));
+  expiringPoolToken(request: DeepPartial<QueryGetExpiringPoolTokenRequest>, metadata?: grpc.Metadata): Promise<QueryGetExpiringPoolTokenResponse> {
+    return this.rpc.unary(QueryGetExpiringPoolTokenDesc, QueryGetExpiringPoolTokenRequest.fromPartial(request), metadata);
   }
-  expiringPoolTokenAll(request: QueryAllExpiringPoolTokenRequest = {
+  expiringPoolTokenAll(request: DeepPartial<QueryAllExpiringPoolTokenRequest> = {
     pagination: undefined
-  }): Promise<QueryAllExpiringPoolTokenResponse> {
-    const data = QueryAllExpiringPoolTokenRequest.encode(request).finish();
-    const promise = this.rpc.request("prism.amm.Query", "ExpiringPoolTokenAll", data);
-    return promise.then(data => QueryAllExpiringPoolTokenResponse.decode(new _m0.Reader(data)));
+  }, metadata?: grpc.Metadata): Promise<QueryAllExpiringPoolTokenResponse> {
+    return this.rpc.unary(QueryAllExpiringPoolTokenDesc, QueryAllExpiringPoolTokenRequest.fromPartial(request), metadata);
   }
-  lpToken(request: QueryLpTokenRequest): Promise<QueryLpTokenResponse> {
-    const data = QueryLpTokenRequest.encode(request).finish();
-    const promise = this.rpc.request("prism.amm.Query", "LpToken", data);
-    return promise.then(data => QueryLpTokenResponse.decode(new _m0.Reader(data)));
+  lpToken(request: DeepPartial<QueryLpTokenRequest>, metadata?: grpc.Metadata): Promise<QueryLpTokenResponse> {
+    return this.rpc.unary(QueryLpTokenDesc, QueryLpTokenRequest.fromPartial(request), metadata);
   }
-  simulateBatchSwap(request: QuerySimulateBatchSwapRequest): Promise<QuerySimulateBatchSwapResponse> {
-    const data = QuerySimulateBatchSwapRequest.encode(request).finish();
-    const promise = this.rpc.request("prism.amm.Query", "SimulateBatchSwap", data);
-    return promise.then(data => QuerySimulateBatchSwapResponse.decode(new _m0.Reader(data)));
+  simulateBatchSwap(request: DeepPartial<QuerySimulateBatchSwapRequest>, metadata?: grpc.Metadata): Promise<QuerySimulateBatchSwapResponse> {
+    return this.rpc.unary(QuerySimulateBatchSwapDesc, QuerySimulateBatchSwapRequest.fromPartial(request), metadata);
   }
-  yammConfiguration(request: QueryGetYammConfigurationRequest): Promise<QueryGetYammConfigurationResponse> {
-    const data = QueryGetYammConfigurationRequest.encode(request).finish();
-    const promise = this.rpc.request("prism.amm.Query", "YammConfiguration", data);
-    return promise.then(data => QueryGetYammConfigurationResponse.decode(new _m0.Reader(data)));
+  yammConfiguration(request: DeepPartial<QueryGetYammConfigurationRequest>, metadata?: grpc.Metadata): Promise<QueryGetYammConfigurationResponse> {
+    return this.rpc.unary(QueryGetYammConfigurationDesc, QueryGetYammConfigurationRequest.fromPartial(request), metadata);
   }
-  yammConfigurationAll(request: QueryAllYammConfigurationRequest = {
+  yammConfigurationAll(request: DeepPartial<QueryAllYammConfigurationRequest> = {
     pagination: undefined
-  }): Promise<QueryAllYammConfigurationResponse> {
-    const data = QueryAllYammConfigurationRequest.encode(request).finish();
-    const promise = this.rpc.request("prism.amm.Query", "YammConfigurationAll", data);
-    return promise.then(data => QueryAllYammConfigurationResponse.decode(new _m0.Reader(data)));
+  }, metadata?: grpc.Metadata): Promise<QueryAllYammConfigurationResponse> {
+    return this.rpc.unary(QueryAllYammConfigurationDesc, QueryAllYammConfigurationRequest.fromPartial(request), metadata);
   }
-  whitelistedRoute(request: QueryGetWhitelistedRouteRequest): Promise<QueryGetWhitelistedRouteResponse> {
-    const data = QueryGetWhitelistedRouteRequest.encode(request).finish();
-    const promise = this.rpc.request("prism.amm.Query", "WhitelistedRoute", data);
-    return promise.then(data => QueryGetWhitelistedRouteResponse.decode(new _m0.Reader(data)));
+  whitelistedRoute(request: DeepPartial<QueryGetWhitelistedRouteRequest>, metadata?: grpc.Metadata): Promise<QueryGetWhitelistedRouteResponse> {
+    return this.rpc.unary(QueryGetWhitelistedRouteDesc, QueryGetWhitelistedRouteRequest.fromPartial(request), metadata);
   }
-  whitelistedRouteAll(request: QueryAllWhitelistedRouteRequest = {
+  whitelistedRouteAll(request: DeepPartial<QueryAllWhitelistedRouteRequest> = {
     pagination: undefined
-  }): Promise<QueryAllWhitelistedRouteResponse> {
-    const data = QueryAllWhitelistedRouteRequest.encode(request).finish();
-    const promise = this.rpc.request("prism.amm.Query", "WhitelistedRouteAll", data);
-    return promise.then(data => QueryAllWhitelistedRouteResponse.decode(new _m0.Reader(data)));
+  }, metadata?: grpc.Metadata): Promise<QueryAllWhitelistedRouteResponse> {
+    return this.rpc.unary(QueryAllWhitelistedRouteDesc, QueryAllWhitelistedRouteRequest.fromPartial(request), metadata);
   }
-  order(request: QueryGetOrderRequest): Promise<QueryGetOrderResponse> {
-    const data = QueryGetOrderRequest.encode(request).finish();
-    const promise = this.rpc.request("prism.amm.Query", "Order", data);
-    return promise.then(data => QueryGetOrderResponse.decode(new _m0.Reader(data)));
+  order(request: DeepPartial<QueryGetOrderRequest>, metadata?: grpc.Metadata): Promise<QueryGetOrderResponse> {
+    return this.rpc.unary(QueryGetOrderDesc, QueryGetOrderRequest.fromPartial(request), metadata);
   }
-  orderAll(request: QueryAllOrderRequest = {
+  orderAll(request: DeepPartial<QueryAllOrderRequest> = {
     pagination: undefined
-  }): Promise<QueryAllOrderResponse> {
-    const data = QueryAllOrderRequest.encode(request).finish();
-    const promise = this.rpc.request("prism.amm.Query", "OrderAll", data);
-    return promise.then(data => QueryAllOrderResponse.decode(new _m0.Reader(data)));
+  }, metadata?: grpc.Metadata): Promise<QueryAllOrderResponse> {
+    return this.rpc.unary(QueryAllOrderDesc, QueryAllOrderRequest.fromPartial(request), metadata);
   }
-  executableOrder(request: QueryGetExecutableOrderRequest): Promise<QueryGetExecutableOrderResponse> {
-    const data = QueryGetExecutableOrderRequest.encode(request).finish();
-    const promise = this.rpc.request("prism.amm.Query", "ExecutableOrder", data);
-    return promise.then(data => QueryGetExecutableOrderResponse.decode(new _m0.Reader(data)));
+  executableOrder(request: DeepPartial<QueryGetExecutableOrderRequest>, metadata?: grpc.Metadata): Promise<QueryGetExecutableOrderResponse> {
+    return this.rpc.unary(QueryGetExecutableOrderDesc, QueryGetExecutableOrderRequest.fromPartial(request), metadata);
   }
-  executableOrderAll(request: QueryAllExecutableOrderRequest = {
+  executableOrderAll(request: DeepPartial<QueryAllExecutableOrderRequest> = {
     pagination: undefined
-  }): Promise<QueryAllExecutableOrderResponse> {
-    const data = QueryAllExecutableOrderRequest.encode(request).finish();
-    const promise = this.rpc.request("prism.amm.Query", "ExecutableOrderAll", data);
-    return promise.then(data => QueryAllExecutableOrderResponse.decode(new _m0.Reader(data)));
+  }, metadata?: grpc.Metadata): Promise<QueryAllExecutableOrderResponse> {
+    return this.rpc.unary(QueryAllExecutableOrderDesc, QueryAllExecutableOrderRequest.fromPartial(request), metadata);
   }
-  scheduleOrder(request: QueryGetScheduleOrderRequest): Promise<QueryGetScheduleOrderResponse> {
-    const data = QueryGetScheduleOrderRequest.encode(request).finish();
-    const promise = this.rpc.request("prism.amm.Query", "ScheduleOrder", data);
-    return promise.then(data => QueryGetScheduleOrderResponse.decode(new _m0.Reader(data)));
+  scheduleOrder(request: DeepPartial<QueryGetScheduleOrderRequest>, metadata?: grpc.Metadata): Promise<QueryGetScheduleOrderResponse> {
+    return this.rpc.unary(QueryGetScheduleOrderDesc, QueryGetScheduleOrderRequest.fromPartial(request), metadata);
   }
-  scheduleOrderAll(request: QueryAllScheduleOrderRequest = {
+  scheduleOrderAll(request: DeepPartial<QueryAllScheduleOrderRequest> = {
     pagination: undefined
-  }): Promise<QueryAllScheduleOrderResponse> {
-    const data = QueryAllScheduleOrderRequest.encode(request).finish();
-    const promise = this.rpc.request("prism.amm.Query", "ScheduleOrderAll", data);
-    return promise.then(data => QueryAllScheduleOrderResponse.decode(new _m0.Reader(data)));
+  }, metadata?: grpc.Metadata): Promise<QueryAllScheduleOrderResponse> {
+    return this.rpc.unary(QueryAllScheduleOrderDesc, QueryAllScheduleOrderRequest.fromPartial(request), metadata);
   }
-  oraclePricePair(request: QueryGetOraclePricePairRequest): Promise<QueryGetOraclePricePairResponse> {
-    const data = QueryGetOraclePricePairRequest.encode(request).finish();
-    const promise = this.rpc.request("prism.amm.Query", "OraclePricePair", data);
-    return promise.then(data => QueryGetOraclePricePairResponse.decode(new _m0.Reader(data)));
+  oraclePricePair(request: DeepPartial<QueryGetOraclePricePairRequest>, metadata?: grpc.Metadata): Promise<QueryGetOraclePricePairResponse> {
+    return this.rpc.unary(QueryGetOraclePricePairDesc, QueryGetOraclePricePairRequest.fromPartial(request), metadata);
   }
-  oraclePricePairAll(request: QueryAllOraclePricePairRequest = {
+  oraclePricePairAll(request: DeepPartial<QueryAllOraclePricePairRequest> = {
     pagination: undefined
-  }): Promise<QueryAllOraclePricePairResponse> {
-    const data = QueryAllOraclePricePairRequest.encode(request).finish();
-    const promise = this.rpc.request("prism.amm.Query", "OraclePricePairAll", data);
-    return promise.then(data => QueryAllOraclePricePairResponse.decode(new _m0.Reader(data)));
+  }, metadata?: grpc.Metadata): Promise<QueryAllOraclePricePairResponse> {
+    return this.rpc.unary(QueryAllOraclePricePairDesc, QueryAllOraclePricePairRequest.fromPartial(request), metadata);
   }
-  vaultPauseMode(request: QueryVaultPauseModeRequest = {}): Promise<QueryVaultPauseModeResponse> {
-    const data = QueryVaultPauseModeRequest.encode(request).finish();
-    const promise = this.rpc.request("prism.amm.Query", "VaultPauseMode", data);
-    return promise.then(data => QueryVaultPauseModeResponse.decode(new _m0.Reader(data)));
+  vaultPauseMode(request: DeepPartial<QueryVaultPauseModeRequest> = {}, metadata?: grpc.Metadata): Promise<QueryVaultPauseModeResponse> {
+    return this.rpc.unary(QueryVaultPauseModeDesc, QueryVaultPauseModeRequest.fromPartial(request), metadata);
   }
-  pendingTokenIntroduction(request: QueryGetPendingTokenIntroductionRequest): Promise<QueryGetPendingTokenIntroductionResponse> {
-    const data = QueryGetPendingTokenIntroductionRequest.encode(request).finish();
-    const promise = this.rpc.request("prism.amm.Query", "PendingTokenIntroduction", data);
-    return promise.then(data => QueryGetPendingTokenIntroductionResponse.decode(new _m0.Reader(data)));
+  pendingTokenIntroduction(request: DeepPartial<QueryGetPendingTokenIntroductionRequest>, metadata?: grpc.Metadata): Promise<QueryGetPendingTokenIntroductionResponse> {
+    return this.rpc.unary(QueryGetPendingTokenIntroductionDesc, QueryGetPendingTokenIntroductionRequest.fromPartial(request), metadata);
   }
-  pendingTokenIntroductionAll(request: QueryAllPendingTokenIntroductionRequest = {
+  pendingTokenIntroductionAll(request: DeepPartial<QueryAllPendingTokenIntroductionRequest> = {
     pagination: undefined
-  }): Promise<QueryAllPendingTokenIntroductionResponse> {
-    const data = QueryAllPendingTokenIntroductionRequest.encode(request).finish();
-    const promise = this.rpc.request("prism.amm.Query", "PendingTokenIntroductionAll", data);
-    return promise.then(data => QueryAllPendingTokenIntroductionResponse.decode(new _m0.Reader(data)));
+  }, metadata?: grpc.Metadata): Promise<QueryAllPendingTokenIntroductionResponse> {
+    return this.rpc.unary(QueryAllPendingTokenIntroductionDesc, QueryAllPendingTokenIntroductionRequest.fromPartial(request), metadata);
   }
-  yammPoolId(request: QueryYammPoolIdRequest): Promise<QueryYammPoolIdResponse> {
-    const data = QueryYammPoolIdRequest.encode(request).finish();
-    const promise = this.rpc.request("prism.amm.Query", "YammPoolId", data);
-    return promise.then(data => QueryYammPoolIdResponse.decode(new _m0.Reader(data)));
+  yammPoolId(request: DeepPartial<QueryYammPoolIdRequest>, metadata?: grpc.Metadata): Promise<QueryYammPoolIdResponse> {
+    return this.rpc.unary(QueryYammPoolIdDesc, QueryYammPoolIdRequest.fromPartial(request), metadata);
   }
 }
-export const createRpcQueryExtension = (base: QueryClient) => {
-  const rpc = createProtobufRpcClient(base);
-  const queryService = new QueryClientImpl(rpc);
-  return {
-    params(request?: QueryParamsRequest): Promise<QueryParamsResponse> {
-      return queryService.params(request);
-    },
-    poolToken(request: QueryGetPoolTokenRequest): Promise<QueryGetPoolTokenResponse> {
-      return queryService.poolToken(request);
-    },
-    poolTokenAll(request: QueryAllPoolTokenRequest): Promise<QueryAllPoolTokenResponse> {
-      return queryService.poolTokenAll(request);
-    },
-    pool(request: QueryGetPoolRequest): Promise<QueryGetPoolResponse> {
-      return queryService.pool(request);
-    },
-    poolAll(request?: QueryAllPoolRequest): Promise<QueryAllPoolResponse> {
-      return queryService.poolAll(request);
-    },
-    weightedToken(request: QueryGetWeightedTokenRequest): Promise<QueryGetWeightedTokenResponse> {
-      return queryService.weightedToken(request);
-    },
-    weightedTokenAll(request?: QueryAllWeightedTokenRequest): Promise<QueryAllWeightedTokenResponse> {
-      return queryService.weightedTokenAll(request);
-    },
-    weightUpdateTiming(request: QueryGetWeightUpdateTimingRequest): Promise<QueryGetWeightUpdateTimingResponse> {
-      return queryService.weightUpdateTiming(request);
-    },
-    weightUpdateTimingAll(request?: QueryAllWeightUpdateTimingRequest): Promise<QueryAllWeightUpdateTimingResponse> {
-      return queryService.weightUpdateTimingAll(request);
-    },
-    simulateSingleSwap(request: QuerySimulateSingleSwapRequest): Promise<QuerySimulateSingleSwapResponse> {
-      return queryService.simulateSingleSwap(request);
-    },
-    simulateInitializePool(request: QuerySimulateInitializePoolRequest): Promise<QuerySimulateInitializePoolResponse> {
-      return queryService.simulateInitializePool(request);
-    },
-    simulateJoinAllTokensExactLpt(request: QuerySimulateJoinAllTokensExactLptRequest): Promise<QuerySimulateJoinAllTokensExactLptResponse> {
-      return queryService.simulateJoinAllTokensExactLpt(request);
-    },
-    simulateJoinExactTokens(request: QuerySimulateJoinExactTokensRequest): Promise<QuerySimulateJoinExactTokensResponse> {
-      return queryService.simulateJoinExactTokens(request);
-    },
-    simulateJoinTokenExactLpt(request: QuerySimulateJoinTokenExactLptRequest): Promise<QuerySimulateJoinTokenExactLptResponse> {
-      return queryService.simulateJoinTokenExactLpt(request);
-    },
-    simulateExitTokenExactLpt(request: QuerySimulateExitTokenExactLptRequest): Promise<QuerySimulateExitTokenExactLptResponse> {
-      return queryService.simulateExitTokenExactLpt(request);
-    },
-    simulateExitExactTokens(request: QuerySimulateExitExactTokensRequest): Promise<QuerySimulateExitExactTokensResponse> {
-      return queryService.simulateExitExactTokens(request);
-    },
-    simulateExitAllTokensExactLpt(request: QuerySimulateExitAllTokensExactLptRequest): Promise<QuerySimulateExitAllTokensExactLptResponse> {
-      return queryService.simulateExitAllTokensExactLpt(request);
-    },
-    spotPrice(request: QuerySpotPriceRequest): Promise<QuerySpotPriceResponse> {
-      return queryService.spotPrice(request);
-    },
-    introducingPoolToken(request: QueryGetIntroducingPoolTokenRequest): Promise<QueryGetIntroducingPoolTokenResponse> {
-      return queryService.introducingPoolToken(request);
-    },
-    introducingPoolTokenAll(request?: QueryAllIntroducingPoolTokenRequest): Promise<QueryAllIntroducingPoolTokenResponse> {
-      return queryService.introducingPoolTokenAll(request);
-    },
-    expiringPoolToken(request: QueryGetExpiringPoolTokenRequest): Promise<QueryGetExpiringPoolTokenResponse> {
-      return queryService.expiringPoolToken(request);
-    },
-    expiringPoolTokenAll(request?: QueryAllExpiringPoolTokenRequest): Promise<QueryAllExpiringPoolTokenResponse> {
-      return queryService.expiringPoolTokenAll(request);
-    },
-    lpToken(request: QueryLpTokenRequest): Promise<QueryLpTokenResponse> {
-      return queryService.lpToken(request);
-    },
-    simulateBatchSwap(request: QuerySimulateBatchSwapRequest): Promise<QuerySimulateBatchSwapResponse> {
-      return queryService.simulateBatchSwap(request);
-    },
-    yammConfiguration(request: QueryGetYammConfigurationRequest): Promise<QueryGetYammConfigurationResponse> {
-      return queryService.yammConfiguration(request);
-    },
-    yammConfigurationAll(request?: QueryAllYammConfigurationRequest): Promise<QueryAllYammConfigurationResponse> {
-      return queryService.yammConfigurationAll(request);
-    },
-    whitelistedRoute(request: QueryGetWhitelistedRouteRequest): Promise<QueryGetWhitelistedRouteResponse> {
-      return queryService.whitelistedRoute(request);
-    },
-    whitelistedRouteAll(request?: QueryAllWhitelistedRouteRequest): Promise<QueryAllWhitelistedRouteResponse> {
-      return queryService.whitelistedRouteAll(request);
-    },
-    order(request: QueryGetOrderRequest): Promise<QueryGetOrderResponse> {
-      return queryService.order(request);
-    },
-    orderAll(request?: QueryAllOrderRequest): Promise<QueryAllOrderResponse> {
-      return queryService.orderAll(request);
-    },
-    executableOrder(request: QueryGetExecutableOrderRequest): Promise<QueryGetExecutableOrderResponse> {
-      return queryService.executableOrder(request);
-    },
-    executableOrderAll(request?: QueryAllExecutableOrderRequest): Promise<QueryAllExecutableOrderResponse> {
-      return queryService.executableOrderAll(request);
-    },
-    scheduleOrder(request: QueryGetScheduleOrderRequest): Promise<QueryGetScheduleOrderResponse> {
-      return queryService.scheduleOrder(request);
-    },
-    scheduleOrderAll(request?: QueryAllScheduleOrderRequest): Promise<QueryAllScheduleOrderResponse> {
-      return queryService.scheduleOrderAll(request);
-    },
-    oraclePricePair(request: QueryGetOraclePricePairRequest): Promise<QueryGetOraclePricePairResponse> {
-      return queryService.oraclePricePair(request);
-    },
-    oraclePricePairAll(request?: QueryAllOraclePricePairRequest): Promise<QueryAllOraclePricePairResponse> {
-      return queryService.oraclePricePairAll(request);
-    },
-    vaultPauseMode(request?: QueryVaultPauseModeRequest): Promise<QueryVaultPauseModeResponse> {
-      return queryService.vaultPauseMode(request);
-    },
-    pendingTokenIntroduction(request: QueryGetPendingTokenIntroductionRequest): Promise<QueryGetPendingTokenIntroductionResponse> {
-      return queryService.pendingTokenIntroduction(request);
-    },
-    pendingTokenIntroductionAll(request?: QueryAllPendingTokenIntroductionRequest): Promise<QueryAllPendingTokenIntroductionResponse> {
-      return queryService.pendingTokenIntroductionAll(request);
-    },
-    yammPoolId(request: QueryYammPoolIdRequest): Promise<QueryYammPoolIdResponse> {
-      return queryService.yammPoolId(request);
-    }
-  };
+export const QueryDesc = {
+  serviceName: "prism.amm.Query"
 };
+export const QueryParamsDesc: UnaryMethodDefinitionish = {
+  methodName: "Params",
+  service: QueryDesc,
+  requestStream: false,
+  responseStream: false,
+  requestType: ({
+    serializeBinary() {
+      return QueryParamsRequest.encode(this).finish();
+    }
+  } as any),
+  responseType: ({
+    deserializeBinary(data: Uint8Array) {
+      return {
+        ...QueryParamsResponse.decode(data),
+        toObject() {
+          return this;
+        }
+      };
+    }
+  } as any)
+};
+export const QueryGetPoolTokenDesc: UnaryMethodDefinitionish = {
+  methodName: "PoolToken",
+  service: QueryDesc,
+  requestStream: false,
+  responseStream: false,
+  requestType: ({
+    serializeBinary() {
+      return QueryGetPoolTokenRequest.encode(this).finish();
+    }
+  } as any),
+  responseType: ({
+    deserializeBinary(data: Uint8Array) {
+      return {
+        ...QueryGetPoolTokenResponse.decode(data),
+        toObject() {
+          return this;
+        }
+      };
+    }
+  } as any)
+};
+export const QueryAllPoolTokenDesc: UnaryMethodDefinitionish = {
+  methodName: "PoolTokenAll",
+  service: QueryDesc,
+  requestStream: false,
+  responseStream: false,
+  requestType: ({
+    serializeBinary() {
+      return QueryAllPoolTokenRequest.encode(this).finish();
+    }
+  } as any),
+  responseType: ({
+    deserializeBinary(data: Uint8Array) {
+      return {
+        ...QueryAllPoolTokenResponse.decode(data),
+        toObject() {
+          return this;
+        }
+      };
+    }
+  } as any)
+};
+export const QueryGetPoolDesc: UnaryMethodDefinitionish = {
+  methodName: "Pool",
+  service: QueryDesc,
+  requestStream: false,
+  responseStream: false,
+  requestType: ({
+    serializeBinary() {
+      return QueryGetPoolRequest.encode(this).finish();
+    }
+  } as any),
+  responseType: ({
+    deserializeBinary(data: Uint8Array) {
+      return {
+        ...QueryGetPoolResponse.decode(data),
+        toObject() {
+          return this;
+        }
+      };
+    }
+  } as any)
+};
+export const QueryAllPoolDesc: UnaryMethodDefinitionish = {
+  methodName: "PoolAll",
+  service: QueryDesc,
+  requestStream: false,
+  responseStream: false,
+  requestType: ({
+    serializeBinary() {
+      return QueryAllPoolRequest.encode(this).finish();
+    }
+  } as any),
+  responseType: ({
+    deserializeBinary(data: Uint8Array) {
+      return {
+        ...QueryAllPoolResponse.decode(data),
+        toObject() {
+          return this;
+        }
+      };
+    }
+  } as any)
+};
+export const QueryGetWeightedTokenDesc: UnaryMethodDefinitionish = {
+  methodName: "WeightedToken",
+  service: QueryDesc,
+  requestStream: false,
+  responseStream: false,
+  requestType: ({
+    serializeBinary() {
+      return QueryGetWeightedTokenRequest.encode(this).finish();
+    }
+  } as any),
+  responseType: ({
+    deserializeBinary(data: Uint8Array) {
+      return {
+        ...QueryGetWeightedTokenResponse.decode(data),
+        toObject() {
+          return this;
+        }
+      };
+    }
+  } as any)
+};
+export const QueryAllWeightedTokenDesc: UnaryMethodDefinitionish = {
+  methodName: "WeightedTokenAll",
+  service: QueryDesc,
+  requestStream: false,
+  responseStream: false,
+  requestType: ({
+    serializeBinary() {
+      return QueryAllWeightedTokenRequest.encode(this).finish();
+    }
+  } as any),
+  responseType: ({
+    deserializeBinary(data: Uint8Array) {
+      return {
+        ...QueryAllWeightedTokenResponse.decode(data),
+        toObject() {
+          return this;
+        }
+      };
+    }
+  } as any)
+};
+export const QueryGetWeightUpdateTimingDesc: UnaryMethodDefinitionish = {
+  methodName: "WeightUpdateTiming",
+  service: QueryDesc,
+  requestStream: false,
+  responseStream: false,
+  requestType: ({
+    serializeBinary() {
+      return QueryGetWeightUpdateTimingRequest.encode(this).finish();
+    }
+  } as any),
+  responseType: ({
+    deserializeBinary(data: Uint8Array) {
+      return {
+        ...QueryGetWeightUpdateTimingResponse.decode(data),
+        toObject() {
+          return this;
+        }
+      };
+    }
+  } as any)
+};
+export const QueryAllWeightUpdateTimingDesc: UnaryMethodDefinitionish = {
+  methodName: "WeightUpdateTimingAll",
+  service: QueryDesc,
+  requestStream: false,
+  responseStream: false,
+  requestType: ({
+    serializeBinary() {
+      return QueryAllWeightUpdateTimingRequest.encode(this).finish();
+    }
+  } as any),
+  responseType: ({
+    deserializeBinary(data: Uint8Array) {
+      return {
+        ...QueryAllWeightUpdateTimingResponse.decode(data),
+        toObject() {
+          return this;
+        }
+      };
+    }
+  } as any)
+};
+export const QuerySimulateSingleSwapDesc: UnaryMethodDefinitionish = {
+  methodName: "SimulateSingleSwap",
+  service: QueryDesc,
+  requestStream: false,
+  responseStream: false,
+  requestType: ({
+    serializeBinary() {
+      return QuerySimulateSingleSwapRequest.encode(this).finish();
+    }
+  } as any),
+  responseType: ({
+    deserializeBinary(data: Uint8Array) {
+      return {
+        ...QuerySimulateSingleSwapResponse.decode(data),
+        toObject() {
+          return this;
+        }
+      };
+    }
+  } as any)
+};
+export const QuerySimulateInitializePoolDesc: UnaryMethodDefinitionish = {
+  methodName: "SimulateInitializePool",
+  service: QueryDesc,
+  requestStream: false,
+  responseStream: false,
+  requestType: ({
+    serializeBinary() {
+      return QuerySimulateInitializePoolRequest.encode(this).finish();
+    }
+  } as any),
+  responseType: ({
+    deserializeBinary(data: Uint8Array) {
+      return {
+        ...QuerySimulateInitializePoolResponse.decode(data),
+        toObject() {
+          return this;
+        }
+      };
+    }
+  } as any)
+};
+export const QuerySimulateJoinAllTokensExactLptDesc: UnaryMethodDefinitionish = {
+  methodName: "SimulateJoinAllTokensExactLpt",
+  service: QueryDesc,
+  requestStream: false,
+  responseStream: false,
+  requestType: ({
+    serializeBinary() {
+      return QuerySimulateJoinAllTokensExactLptRequest.encode(this).finish();
+    }
+  } as any),
+  responseType: ({
+    deserializeBinary(data: Uint8Array) {
+      return {
+        ...QuerySimulateJoinAllTokensExactLptResponse.decode(data),
+        toObject() {
+          return this;
+        }
+      };
+    }
+  } as any)
+};
+export const QuerySimulateJoinExactTokensDesc: UnaryMethodDefinitionish = {
+  methodName: "SimulateJoinExactTokens",
+  service: QueryDesc,
+  requestStream: false,
+  responseStream: false,
+  requestType: ({
+    serializeBinary() {
+      return QuerySimulateJoinExactTokensRequest.encode(this).finish();
+    }
+  } as any),
+  responseType: ({
+    deserializeBinary(data: Uint8Array) {
+      return {
+        ...QuerySimulateJoinExactTokensResponse.decode(data),
+        toObject() {
+          return this;
+        }
+      };
+    }
+  } as any)
+};
+export const QuerySimulateJoinTokenExactLptDesc: UnaryMethodDefinitionish = {
+  methodName: "SimulateJoinTokenExactLpt",
+  service: QueryDesc,
+  requestStream: false,
+  responseStream: false,
+  requestType: ({
+    serializeBinary() {
+      return QuerySimulateJoinTokenExactLptRequest.encode(this).finish();
+    }
+  } as any),
+  responseType: ({
+    deserializeBinary(data: Uint8Array) {
+      return {
+        ...QuerySimulateJoinTokenExactLptResponse.decode(data),
+        toObject() {
+          return this;
+        }
+      };
+    }
+  } as any)
+};
+export const QuerySimulateExitTokenExactLptDesc: UnaryMethodDefinitionish = {
+  methodName: "SimulateExitTokenExactLpt",
+  service: QueryDesc,
+  requestStream: false,
+  responseStream: false,
+  requestType: ({
+    serializeBinary() {
+      return QuerySimulateExitTokenExactLptRequest.encode(this).finish();
+    }
+  } as any),
+  responseType: ({
+    deserializeBinary(data: Uint8Array) {
+      return {
+        ...QuerySimulateExitTokenExactLptResponse.decode(data),
+        toObject() {
+          return this;
+        }
+      };
+    }
+  } as any)
+};
+export const QuerySimulateExitExactTokensDesc: UnaryMethodDefinitionish = {
+  methodName: "SimulateExitExactTokens",
+  service: QueryDesc,
+  requestStream: false,
+  responseStream: false,
+  requestType: ({
+    serializeBinary() {
+      return QuerySimulateExitExactTokensRequest.encode(this).finish();
+    }
+  } as any),
+  responseType: ({
+    deserializeBinary(data: Uint8Array) {
+      return {
+        ...QuerySimulateExitExactTokensResponse.decode(data),
+        toObject() {
+          return this;
+        }
+      };
+    }
+  } as any)
+};
+export const QuerySimulateExitAllTokensExactLptDesc: UnaryMethodDefinitionish = {
+  methodName: "SimulateExitAllTokensExactLpt",
+  service: QueryDesc,
+  requestStream: false,
+  responseStream: false,
+  requestType: ({
+    serializeBinary() {
+      return QuerySimulateExitAllTokensExactLptRequest.encode(this).finish();
+    }
+  } as any),
+  responseType: ({
+    deserializeBinary(data: Uint8Array) {
+      return {
+        ...QuerySimulateExitAllTokensExactLptResponse.decode(data),
+        toObject() {
+          return this;
+        }
+      };
+    }
+  } as any)
+};
+export const QuerySpotPriceDesc: UnaryMethodDefinitionish = {
+  methodName: "SpotPrice",
+  service: QueryDesc,
+  requestStream: false,
+  responseStream: false,
+  requestType: ({
+    serializeBinary() {
+      return QuerySpotPriceRequest.encode(this).finish();
+    }
+  } as any),
+  responseType: ({
+    deserializeBinary(data: Uint8Array) {
+      return {
+        ...QuerySpotPriceResponse.decode(data),
+        toObject() {
+          return this;
+        }
+      };
+    }
+  } as any)
+};
+export const QueryGetIntroducingPoolTokenDesc: UnaryMethodDefinitionish = {
+  methodName: "IntroducingPoolToken",
+  service: QueryDesc,
+  requestStream: false,
+  responseStream: false,
+  requestType: ({
+    serializeBinary() {
+      return QueryGetIntroducingPoolTokenRequest.encode(this).finish();
+    }
+  } as any),
+  responseType: ({
+    deserializeBinary(data: Uint8Array) {
+      return {
+        ...QueryGetIntroducingPoolTokenResponse.decode(data),
+        toObject() {
+          return this;
+        }
+      };
+    }
+  } as any)
+};
+export const QueryAllIntroducingPoolTokenDesc: UnaryMethodDefinitionish = {
+  methodName: "IntroducingPoolTokenAll",
+  service: QueryDesc,
+  requestStream: false,
+  responseStream: false,
+  requestType: ({
+    serializeBinary() {
+      return QueryAllIntroducingPoolTokenRequest.encode(this).finish();
+    }
+  } as any),
+  responseType: ({
+    deserializeBinary(data: Uint8Array) {
+      return {
+        ...QueryAllIntroducingPoolTokenResponse.decode(data),
+        toObject() {
+          return this;
+        }
+      };
+    }
+  } as any)
+};
+export const QueryGetExpiringPoolTokenDesc: UnaryMethodDefinitionish = {
+  methodName: "ExpiringPoolToken",
+  service: QueryDesc,
+  requestStream: false,
+  responseStream: false,
+  requestType: ({
+    serializeBinary() {
+      return QueryGetExpiringPoolTokenRequest.encode(this).finish();
+    }
+  } as any),
+  responseType: ({
+    deserializeBinary(data: Uint8Array) {
+      return {
+        ...QueryGetExpiringPoolTokenResponse.decode(data),
+        toObject() {
+          return this;
+        }
+      };
+    }
+  } as any)
+};
+export const QueryAllExpiringPoolTokenDesc: UnaryMethodDefinitionish = {
+  methodName: "ExpiringPoolTokenAll",
+  service: QueryDesc,
+  requestStream: false,
+  responseStream: false,
+  requestType: ({
+    serializeBinary() {
+      return QueryAllExpiringPoolTokenRequest.encode(this).finish();
+    }
+  } as any),
+  responseType: ({
+    deserializeBinary(data: Uint8Array) {
+      return {
+        ...QueryAllExpiringPoolTokenResponse.decode(data),
+        toObject() {
+          return this;
+        }
+      };
+    }
+  } as any)
+};
+export const QueryLpTokenDesc: UnaryMethodDefinitionish = {
+  methodName: "LpToken",
+  service: QueryDesc,
+  requestStream: false,
+  responseStream: false,
+  requestType: ({
+    serializeBinary() {
+      return QueryLpTokenRequest.encode(this).finish();
+    }
+  } as any),
+  responseType: ({
+    deserializeBinary(data: Uint8Array) {
+      return {
+        ...QueryLpTokenResponse.decode(data),
+        toObject() {
+          return this;
+        }
+      };
+    }
+  } as any)
+};
+export const QuerySimulateBatchSwapDesc: UnaryMethodDefinitionish = {
+  methodName: "SimulateBatchSwap",
+  service: QueryDesc,
+  requestStream: false,
+  responseStream: false,
+  requestType: ({
+    serializeBinary() {
+      return QuerySimulateBatchSwapRequest.encode(this).finish();
+    }
+  } as any),
+  responseType: ({
+    deserializeBinary(data: Uint8Array) {
+      return {
+        ...QuerySimulateBatchSwapResponse.decode(data),
+        toObject() {
+          return this;
+        }
+      };
+    }
+  } as any)
+};
+export const QueryGetYammConfigurationDesc: UnaryMethodDefinitionish = {
+  methodName: "YammConfiguration",
+  service: QueryDesc,
+  requestStream: false,
+  responseStream: false,
+  requestType: ({
+    serializeBinary() {
+      return QueryGetYammConfigurationRequest.encode(this).finish();
+    }
+  } as any),
+  responseType: ({
+    deserializeBinary(data: Uint8Array) {
+      return {
+        ...QueryGetYammConfigurationResponse.decode(data),
+        toObject() {
+          return this;
+        }
+      };
+    }
+  } as any)
+};
+export const QueryAllYammConfigurationDesc: UnaryMethodDefinitionish = {
+  methodName: "YammConfigurationAll",
+  service: QueryDesc,
+  requestStream: false,
+  responseStream: false,
+  requestType: ({
+    serializeBinary() {
+      return QueryAllYammConfigurationRequest.encode(this).finish();
+    }
+  } as any),
+  responseType: ({
+    deserializeBinary(data: Uint8Array) {
+      return {
+        ...QueryAllYammConfigurationResponse.decode(data),
+        toObject() {
+          return this;
+        }
+      };
+    }
+  } as any)
+};
+export const QueryGetWhitelistedRouteDesc: UnaryMethodDefinitionish = {
+  methodName: "WhitelistedRoute",
+  service: QueryDesc,
+  requestStream: false,
+  responseStream: false,
+  requestType: ({
+    serializeBinary() {
+      return QueryGetWhitelistedRouteRequest.encode(this).finish();
+    }
+  } as any),
+  responseType: ({
+    deserializeBinary(data: Uint8Array) {
+      return {
+        ...QueryGetWhitelistedRouteResponse.decode(data),
+        toObject() {
+          return this;
+        }
+      };
+    }
+  } as any)
+};
+export const QueryAllWhitelistedRouteDesc: UnaryMethodDefinitionish = {
+  methodName: "WhitelistedRouteAll",
+  service: QueryDesc,
+  requestStream: false,
+  responseStream: false,
+  requestType: ({
+    serializeBinary() {
+      return QueryAllWhitelistedRouteRequest.encode(this).finish();
+    }
+  } as any),
+  responseType: ({
+    deserializeBinary(data: Uint8Array) {
+      return {
+        ...QueryAllWhitelistedRouteResponse.decode(data),
+        toObject() {
+          return this;
+        }
+      };
+    }
+  } as any)
+};
+export const QueryGetOrderDesc: UnaryMethodDefinitionish = {
+  methodName: "Order",
+  service: QueryDesc,
+  requestStream: false,
+  responseStream: false,
+  requestType: ({
+    serializeBinary() {
+      return QueryGetOrderRequest.encode(this).finish();
+    }
+  } as any),
+  responseType: ({
+    deserializeBinary(data: Uint8Array) {
+      return {
+        ...QueryGetOrderResponse.decode(data),
+        toObject() {
+          return this;
+        }
+      };
+    }
+  } as any)
+};
+export const QueryAllOrderDesc: UnaryMethodDefinitionish = {
+  methodName: "OrderAll",
+  service: QueryDesc,
+  requestStream: false,
+  responseStream: false,
+  requestType: ({
+    serializeBinary() {
+      return QueryAllOrderRequest.encode(this).finish();
+    }
+  } as any),
+  responseType: ({
+    deserializeBinary(data: Uint8Array) {
+      return {
+        ...QueryAllOrderResponse.decode(data),
+        toObject() {
+          return this;
+        }
+      };
+    }
+  } as any)
+};
+export const QueryGetExecutableOrderDesc: UnaryMethodDefinitionish = {
+  methodName: "ExecutableOrder",
+  service: QueryDesc,
+  requestStream: false,
+  responseStream: false,
+  requestType: ({
+    serializeBinary() {
+      return QueryGetExecutableOrderRequest.encode(this).finish();
+    }
+  } as any),
+  responseType: ({
+    deserializeBinary(data: Uint8Array) {
+      return {
+        ...QueryGetExecutableOrderResponse.decode(data),
+        toObject() {
+          return this;
+        }
+      };
+    }
+  } as any)
+};
+export const QueryAllExecutableOrderDesc: UnaryMethodDefinitionish = {
+  methodName: "ExecutableOrderAll",
+  service: QueryDesc,
+  requestStream: false,
+  responseStream: false,
+  requestType: ({
+    serializeBinary() {
+      return QueryAllExecutableOrderRequest.encode(this).finish();
+    }
+  } as any),
+  responseType: ({
+    deserializeBinary(data: Uint8Array) {
+      return {
+        ...QueryAllExecutableOrderResponse.decode(data),
+        toObject() {
+          return this;
+        }
+      };
+    }
+  } as any)
+};
+export const QueryGetScheduleOrderDesc: UnaryMethodDefinitionish = {
+  methodName: "ScheduleOrder",
+  service: QueryDesc,
+  requestStream: false,
+  responseStream: false,
+  requestType: ({
+    serializeBinary() {
+      return QueryGetScheduleOrderRequest.encode(this).finish();
+    }
+  } as any),
+  responseType: ({
+    deserializeBinary(data: Uint8Array) {
+      return {
+        ...QueryGetScheduleOrderResponse.decode(data),
+        toObject() {
+          return this;
+        }
+      };
+    }
+  } as any)
+};
+export const QueryAllScheduleOrderDesc: UnaryMethodDefinitionish = {
+  methodName: "ScheduleOrderAll",
+  service: QueryDesc,
+  requestStream: false,
+  responseStream: false,
+  requestType: ({
+    serializeBinary() {
+      return QueryAllScheduleOrderRequest.encode(this).finish();
+    }
+  } as any),
+  responseType: ({
+    deserializeBinary(data: Uint8Array) {
+      return {
+        ...QueryAllScheduleOrderResponse.decode(data),
+        toObject() {
+          return this;
+        }
+      };
+    }
+  } as any)
+};
+export const QueryGetOraclePricePairDesc: UnaryMethodDefinitionish = {
+  methodName: "OraclePricePair",
+  service: QueryDesc,
+  requestStream: false,
+  responseStream: false,
+  requestType: ({
+    serializeBinary() {
+      return QueryGetOraclePricePairRequest.encode(this).finish();
+    }
+  } as any),
+  responseType: ({
+    deserializeBinary(data: Uint8Array) {
+      return {
+        ...QueryGetOraclePricePairResponse.decode(data),
+        toObject() {
+          return this;
+        }
+      };
+    }
+  } as any)
+};
+export const QueryAllOraclePricePairDesc: UnaryMethodDefinitionish = {
+  methodName: "OraclePricePairAll",
+  service: QueryDesc,
+  requestStream: false,
+  responseStream: false,
+  requestType: ({
+    serializeBinary() {
+      return QueryAllOraclePricePairRequest.encode(this).finish();
+    }
+  } as any),
+  responseType: ({
+    deserializeBinary(data: Uint8Array) {
+      return {
+        ...QueryAllOraclePricePairResponse.decode(data),
+        toObject() {
+          return this;
+        }
+      };
+    }
+  } as any)
+};
+export const QueryVaultPauseModeDesc: UnaryMethodDefinitionish = {
+  methodName: "VaultPauseMode",
+  service: QueryDesc,
+  requestStream: false,
+  responseStream: false,
+  requestType: ({
+    serializeBinary() {
+      return QueryVaultPauseModeRequest.encode(this).finish();
+    }
+  } as any),
+  responseType: ({
+    deserializeBinary(data: Uint8Array) {
+      return {
+        ...QueryVaultPauseModeResponse.decode(data),
+        toObject() {
+          return this;
+        }
+      };
+    }
+  } as any)
+};
+export const QueryGetPendingTokenIntroductionDesc: UnaryMethodDefinitionish = {
+  methodName: "PendingTokenIntroduction",
+  service: QueryDesc,
+  requestStream: false,
+  responseStream: false,
+  requestType: ({
+    serializeBinary() {
+      return QueryGetPendingTokenIntroductionRequest.encode(this).finish();
+    }
+  } as any),
+  responseType: ({
+    deserializeBinary(data: Uint8Array) {
+      return {
+        ...QueryGetPendingTokenIntroductionResponse.decode(data),
+        toObject() {
+          return this;
+        }
+      };
+    }
+  } as any)
+};
+export const QueryAllPendingTokenIntroductionDesc: UnaryMethodDefinitionish = {
+  methodName: "PendingTokenIntroductionAll",
+  service: QueryDesc,
+  requestStream: false,
+  responseStream: false,
+  requestType: ({
+    serializeBinary() {
+      return QueryAllPendingTokenIntroductionRequest.encode(this).finish();
+    }
+  } as any),
+  responseType: ({
+    deserializeBinary(data: Uint8Array) {
+      return {
+        ...QueryAllPendingTokenIntroductionResponse.decode(data),
+        toObject() {
+          return this;
+        }
+      };
+    }
+  } as any)
+};
+export const QueryYammPoolIdDesc: UnaryMethodDefinitionish = {
+  methodName: "YammPoolId",
+  service: QueryDesc,
+  requestStream: false,
+  responseStream: false,
+  requestType: ({
+    serializeBinary() {
+      return QueryYammPoolIdRequest.encode(this).finish();
+    }
+  } as any),
+  responseType: ({
+    deserializeBinary(data: Uint8Array) {
+      return {
+        ...QueryYammPoolIdResponse.decode(data),
+        toObject() {
+          return this;
+        }
+      };
+    }
+  } as any)
+};
+export interface Rpc {
+  unary<T extends UnaryMethodDefinitionish>(methodDesc: T, request: any, metadata: grpc.Metadata | undefined): Promise<any>;
+}
+export class GrpcWebImpl {
+  host: string;
+  options: {
+    transport?: grpc.TransportFactory;
+    debug?: boolean;
+    metadata?: grpc.Metadata;
+  };
+  constructor(host: string, options: {
+    transport?: grpc.TransportFactory;
+    debug?: boolean;
+    metadata?: grpc.Metadata;
+  }) {
+    this.host = host;
+    this.options = options;
+  }
+  unary<T extends UnaryMethodDefinitionish>(methodDesc: T, _request: any, metadata: grpc.Metadata | undefined) {
+    const request = {
+      ..._request,
+      ...methodDesc.requestType
+    };
+    const maybeCombinedMetadata = metadata && this.options.metadata ? new BrowserHeaders({
+      ...this.options?.metadata.headersMap,
+      ...metadata?.headersMap
+    }) : metadata || this.options.metadata;
+    return new Promise((resolve, reject) => {
+      grpc.unary(methodDesc, {
+        request,
+        host: this.host,
+        metadata: maybeCombinedMetadata,
+        transport: this.options.transport,
+        debug: this.options.debug,
+        onEnd: function (response) {
+          if (response.status === grpc.Code.OK) {
+            resolve(response.message);
+          } else {
+            const err = (new Error(response.statusMessage) as any);
+            err.code = response.status;
+            err.metadata = response.trailers;
+            reject(err);
+          }
+        }
+      });
+    });
+  }
+}

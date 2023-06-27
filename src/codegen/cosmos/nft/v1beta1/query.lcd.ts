@@ -35,7 +35,10 @@ export class LCDQueryClient {
   }
   /* NFTs queries all NFTs of a given class or owner,choose at least one of the two, similar to tokenByIndex in
    ERC721Enumerable */
-  async nFTs(params: QueryNFTsRequest, options: any = {params: {}}): Promise<QueryNFTsResponseSDKType> {
+  async nFTs(params: QueryNFTsRequest): Promise<QueryNFTsResponseSDKType> {
+    const options: any = {
+      params: {}
+    };
     if (typeof params?.classId !== "undefined") {
       options.params.class_id = params.classId;
     }
@@ -61,7 +64,10 @@ export class LCDQueryClient {
   /* Classes queries all NFT classes */
   async classes(params: QueryClassesRequest = {
     pagination: undefined
-  }, options: any = {params: {}}): Promise<QueryClassesResponseSDKType> {
+  }): Promise<QueryClassesResponseSDKType> {
+    const options: any = {
+      params: {}
+    };
     if (typeof params?.pagination !== "undefined") {
       setPaginationParams(options, params.pagination);
     }

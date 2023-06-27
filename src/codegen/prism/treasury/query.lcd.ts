@@ -27,7 +27,10 @@ export class LCDQueryClient {
   /* Queries a list of FlowTrade items. */
   async flowTradeAll(params: QueryAllFlowTradeRequest = {
     pagination: undefined
-  }, options: any = {params: {}}): Promise<QueryAllFlowTradeResponseSDKType> {
+  }): Promise<QueryAllFlowTradeResponseSDKType> {
+    const options: any = {
+      params: {}
+    };
     if (typeof params?.pagination !== "undefined") {
       setPaginationParams(options, params.pagination);
     }

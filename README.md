@@ -1,130 +1,76 @@
-# @prism-finance/prismjs
+# PrismJs: Javascript SDK for prism-finance/prism-core
 
-<p align="center">
-  <img src="https://user-images.githubusercontent.com/545047/188804067-28e67e5e-0214-4449-ab04-2e0c564a6885.svg" width="80"><br />
-    Javascript SDK for Prism
-</p>
+PrismJs is a JavaScript software development kit (SDK) that enables the development of applications that interact with the Prism blockchain from both Node.js and web browsers. It offers straightforward abstractions over fundamental data structures and serialization, simplifying the process of building applications that utilize the Prism blockchain.
 
+# Install
 
-## install
-
-```sh
+```bash
 pnpm install @prism-finance/prismjs
 ```
-## Table of contents
 
-- [@prism-finance/prismjs](#@prism-finance/prismjs)
-  - [Install](#install)
-  - [Table of contents](#table-of-contents)
-- [Usage](#usage)
-    - [RPC Clients](#rpc-clients)
-    - [Composing Messages](#composing-messages)
-        - Cosmos, CosmWasm, and IBC
-            - [CosmWasm](#cosmwasm-messages)
-            - [IBC](#ibc-messages)
-            - [Cosmos](#cosmos-messages)
-    - [More](#more)
-        - [Example Project](#example-project)
-- [Wallets and Signers](#connecting-with-wallets-and-signing-messages)
-    - [Stargate Client](#initializing-the-stargate-client)
-    - [Creating Signers](#creating-signers)
-    - [Broadcasting Messages](#broadcasting-messages)
-- [Advanced Usage](#advanced-usage)
-- [Developing](#developing)
-- [Credits](#credits)
+# Usage
 
-## Usage
-### RPC Clients
+## gRPC-web Clients
 
-```js
+Import the `prism-finance` object from `@prism-finance/prismjs`.
+
+```tsx
 import { prism } from '@prism-finance/prismjs';
 
-const { createRPCQueryClient } = prism.ClientFactory; 
-const client = await createRPCQueryClient({ rpcEndpoint: RPC_ENDPOINT });
+const client = await prism.ClientFactory.createGrpcWebClient({endpoint: GRPC_ENDPOINT});
 
-// now you can query the cosmos modules
-const balance = await client.cosmos.bank.v1beta1
-    .allBalances({ address: 'prism1addresshere' });
+// now you can query the prism modules
+const params = await client.prism.amm.params();
 
-// you can also query the prism modules
-const balances = await client.prism.exchange.v1beta1
-    .exchangeBalances()
+// you can also query the cosmos modules
+const balance = await client.cosmos.bank.v1beta1.allBalances({ address: 'prism1addresshere' });
 ```
 
-### Composing Messages
+## LCD Clients
 
-Import the `prism` object from `@prism-finance/prismjs`. 
-
-```js
+```tsx
 import { prism } from '@prism-finance/prismjs';
 
-const {
-    createSpotLimitOrder,
-    createSpotMarketOrder,
-    deposit
-} = prism.exchange.v1beta1.MessageComposer.withTypeUrl;
+const client = await prism.ClientFactory.createLCDClient({restEndpoint: LCD_ENDPOINT})
+
+// now you can query the prism modules
+const params = await client.prism.amm.params();
+
+// you can also query the cosmos modules
+const balance = await client.cosmos.bank.v1beta1.allBalances({ address: 'prism1addresshere' });
 ```
 
-#### CosmWasm Messages
+## PrismaticsClient
 
-```js
-import { cosmwasm } from "@prism-finance/prismjs";
+```tsx
+import { prismatics } from "@prism-finance/prismjs";
 
-const {
-    clearAdmin,
-    executeContract,
-    instantiateContract,
-    migrateContract,
-    storeCode,
-    updateAdmin
-} = cosmwasm.wasm.v1.MessageComposer.withTypeUrl;
+const prismaticsClient = await prismatics.ClientFactory.createClient({restEndpoint: PRISMATICS_ENDPOINT})
+
+const syncInfo = (await prismaticsClient.prismatics.syncInfo()).sync_info
 ```
 
-#### IBC Messages
+## Composing Messages
 
-```js
-import { ibc } from '@prism-finance/prismjs';
+```tsx
+import { prism } from '@prism-finance/prismjs';
 
+// sample messages from refactor module
 const {
-    transfer
-} = ibc.applications.transfer.v1.MessageComposer.withTypeUrl
+    refract,
+    redeem
+} = prism.refractor.MessageComposer.withTypeUrl
+
+// sample messages from amm module
+const {
+    singleSwap,
+    initializePool
+} = prism.amm.MessageComposer.withTypeUrl
 ```
 
-#### Cosmos Messages
+## Example Project
 
-```js
-import { cosmos } from '@prism-finance/prismjs';
-
-const {
-    fundCommunityPool,
-    setWithdrawAddress,
-    withdrawDelegatorReward,
-    withdrawValidatorCommission
-} = cosmos.distribution.v1beta1.MessageComposer.fromPartial;
-
-const {
-    multiSend,
-    send
-} = cosmos.bank.v1beta1.MessageComposer.fromPartial;
-
-const {
-    beginRedelegate,
-    createValidator,
-    delegate,
-    editValidator,
-    undelegate
-} = cosmos.staking.v1beta1.MessageComposer.fromPartial;
-
-const {
-    deposit,
-    submitProposal,
-    vote,
-    voteWeighted
-} = cosmos.gov.v1beta1.MessageComposer.fromPartial;
-```
-### More
-#### Example Project
-`example` is a sample project that depends to `@prism-finance/prismjs` and contains example on how to query data or sign and send messages.  
+[example](/example) is a sample project that depends on `@prism-finance/prismjs` and contains example on how to query data or sign and send messages.
 
 ## Connecting with Wallets and Signing Messages
 
@@ -136,7 +82,7 @@ Here are the docs on [creating signers](https://github.com/cosmology-tech/cosmos
 
 Use `getSigningPrismClient` to get your `SigningStargateClient`, with the proto/amino messages full-loaded. No need to manually add amino types, just require and initialize the client:
 
-```js
+```tsx
 import { getSigningPrismClient } from '@prism-finance/prismjs';
 
 const stargateClient = await getSigningPrismClient({
@@ -144,56 +90,59 @@ const stargateClient = await getSigningPrismClient({
   signer // OfflineSigner
 });
 ```
+
 ### Creating Signers
 
 To broadcast messages, you can create signers with a variety of options:
 
-* [cosmos-kit](https://github.com/cosmology-tech/cosmos-kit/tree/main/packages/react#signing-clients) (recommended)
-* [keplr](https://docs.keplr.app/api/cosmjs.html)
-* [cosmjs](https://gist.github.com/webmaster128/8444d42a7eceeda2544c8a59fbd7e1d9)
-### Amino Signer
+- [cosmos-kit](https://github.com/cosmology-tech/cosmos-kit/tree/main/packages/react#signing-clients) (recommended)
+- [keplr](https://docs.keplr.app/api/cosmjs.html)
+- [cosmjs](https://gist.github.com/webmaster128/8444d42a7eceeda2544c8a59fbd7e1d9)
+
+**Amino Signer**
 
 Likely you'll want to use the Amino, so unless you need proto, you should use this one:
 
-```js
+```tsx
 import { getOfflineSignerAmino as getOfflineSigner } from 'cosmjs-utils';
 ```
-### Proto Signer
 
-```js
+**Proto Signer**
+
+```tsx
 import { getOfflineSignerProto as getOfflineSigner } from 'cosmjs-utils';
 ```
 
 WARNING: NOT RECOMMENDED TO USE PLAIN-TEXT MNEMONICS. Please take care of your security and use best practices such as AES encryption and/or methods from 12factor applications.
 
-```js
+```tsx
 import { chains } from 'chain-registry';
 
-const mnemonic =
-  'unfold client turtle either pilot stock floor glow toward bullet car science';
-  const chain = chains.find(({ chain_name }) => chain_name === 'prism');
-  const signer = await getOfflineSigner({
-    mnemonic,
-    chain
-  });
+const mnemonic = 'unfold client turtle either pilot stock floor glow toward bullet car science';
+const chain = chains.find(({ chain_name }) => chain_name === 'prism');
+const signer = await getOfflineSigner({
+  mnemonic,
+  chain
+});
 ```
+
 ### Broadcasting Messages
 
 Now that you have your `stargateClient`, you can broadcast messages:
 
-```js
-const { send } = cosmos.bank.v1beta1.MessageComposer.withTypeUrl;
+```tsx
+import { prism } from '@prism-finance/prismjs';
 
-const msg = send({
-    amount: [
-    {
-        denom: 'coin',
-        amount: '1000'
+const { refract } = prism.refractor.MessageComposer.withTypeUrl
+
+const msg = refract({
+    creator: "signer",
+    maturity: "31Jan2025",
+    amount: {
+        amount: "10",
+        denom: "c:luna"
     }
-    ],
-    toAddress: address,
-    fromAddress: address
-});
+})
 
 const fee: StdFee = {
     amount: [
@@ -207,16 +156,15 @@ const fee: StdFee = {
 const response = await stargateClient.signAndBroadcast(address, [msg], fee);
 ```
 
-## Advanced Usage
-
+### Advanced Usage
 
 If you want to manually construct a stargate client
 
-```js
+```tsx
 import { OfflineSigner, GeneratedType, Registry } from "@cosmjs/proto-signing";
 import { AminoTypes, SigningStargateClient } from "@cosmjs/stargate";
 
-import { 
+import {
     cosmosAminoConverters,
     cosmosProtoRegistry,
     cosmwasmAminoConverters,
@@ -228,7 +176,7 @@ import {
 } from '@prism-finance/prismjs';
 
 const signer: OfflineSigner = /* create your signer (see above)  */
-const rpcEndpint = 'https://rpc.cosmos.directory/prism'; // or another URL
+const rpcEndpint = '<https://rpc.cosmos.directory/prism>'; // or another URL
 
 const protoRegistry: ReadonlyArray<[string, GeneratedType]> = [
     ...cosmosProtoRegistry,
@@ -253,23 +201,23 @@ const stargateClient = await SigningStargateClient.connectWithSigner(rpcEndpoint
 });
 ```
 
-## Developing
+# Developing
 
 When first cloning the repo:
 
-```
+```bash
 pnpm install
 ```
 
-### Codegen
+## Codegen
 
 Contract schemas live in `./contracts`, and protos in `./proto`. Look inside of `scripts/codegen.js` and configure the settings for bundling your SDK and contracts into `@prism-finance/prismjs`:
 
-```
+```bash
 pnpm codegen
 ```
 
-### Publishing
+## Publishing
 
 Build the types and then publish:
 
@@ -277,12 +225,13 @@ Build the types and then publish:
 pnpm compile
 pnpm publish
 ```
-## Credits
+
+# Credits
 
 🛠 Built by Cosmology — if you like our tools, please consider delegating to [our validator ⚛️](https://cosmology.tech/validator)
 
 Code built with the help of these related projects:
 
-* [@cosmwasm/ts-codegen](https://github.com/CosmWasm/ts-codegen) for generated CosmWasm contract Typescript classes
-* [@osmonauts/telescope](https://github.com/osmosis-labs/telescope) a "babel for the Cosmos", Telescope is a TypeScript Transpiler for Cosmos Protobufs.
-* [cosmos-kit](https://github.com/cosmology-tech/cosmos-kit) A wallet connector for the Cosmos ⚛️
+- [@cosmwasm/ts-codegen](https://github.com/CosmWasm/ts-codegen) for generated CosmWasm contract Typescript classes
+- [@osmonauts/telescope](https://github.com/osmosis-labs/telescope) a "babel for the Cosmos", Telescope is a TypeScript Transpiler for Cosmos Protobufs.
+- [cosmos-kit](https://github.com/cosmology-tech/cosmos-kit) A wallet connector for the Cosmos ⚛️

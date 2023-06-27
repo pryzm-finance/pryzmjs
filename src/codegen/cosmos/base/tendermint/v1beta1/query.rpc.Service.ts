@@ -1,21 +1,23 @@
-import { Rpc } from "../../../../helpers";
-import * as _m0 from "protobufjs/minimal";
-import { QueryClient, createProtobufRpcClient } from "@cosmjs/stargate";
+//@ts-nocheck
+import { grpc } from "@improbable-eng/grpc-web";
+import { UnaryMethodDefinitionish } from "../../../../grpc-web";
+import { DeepPartial } from "../../../../helpers";
+import { BrowserHeaders } from "browser-headers";
 import { GetNodeInfoRequest, GetNodeInfoResponse, GetSyncingRequest, GetSyncingResponse, GetLatestBlockRequest, GetLatestBlockResponse, GetBlockByHeightRequest, GetBlockByHeightResponse, GetLatestValidatorSetRequest, GetLatestValidatorSetResponse, GetValidatorSetByHeightRequest, GetValidatorSetByHeightResponse, ABCIQueryRequest, ABCIQueryResponse } from "./query";
 /** Service defines the gRPC querier service for tendermint queries. */
 export interface Service {
   /** GetNodeInfo queries the current node info. */
-  getNodeInfo(request?: GetNodeInfoRequest): Promise<GetNodeInfoResponse>;
+  getNodeInfo(request?: DeepPartial<GetNodeInfoRequest>, metadata?: grpc.Metadata): Promise<GetNodeInfoResponse>;
   /** GetSyncing queries node syncing. */
-  getSyncing(request?: GetSyncingRequest): Promise<GetSyncingResponse>;
+  getSyncing(request?: DeepPartial<GetSyncingRequest>, metadata?: grpc.Metadata): Promise<GetSyncingResponse>;
   /** GetLatestBlock returns the latest block. */
-  getLatestBlock(request?: GetLatestBlockRequest): Promise<GetLatestBlockResponse>;
+  getLatestBlock(request?: DeepPartial<GetLatestBlockRequest>, metadata?: grpc.Metadata): Promise<GetLatestBlockResponse>;
   /** GetBlockByHeight queries block for given height. */
-  getBlockByHeight(request: GetBlockByHeightRequest): Promise<GetBlockByHeightResponse>;
+  getBlockByHeight(request: DeepPartial<GetBlockByHeightRequest>, metadata?: grpc.Metadata): Promise<GetBlockByHeightResponse>;
   /** GetLatestValidatorSet queries latest validator-set. */
-  getLatestValidatorSet(request?: GetLatestValidatorSetRequest): Promise<GetLatestValidatorSetResponse>;
+  getLatestValidatorSet(request?: DeepPartial<GetLatestValidatorSetRequest>, metadata?: grpc.Metadata): Promise<GetLatestValidatorSetResponse>;
   /** GetValidatorSetByHeight queries validator-set at a given height. */
-  getValidatorSetByHeight(request: GetValidatorSetByHeightRequest): Promise<GetValidatorSetByHeightResponse>;
+  getValidatorSetByHeight(request: DeepPartial<GetValidatorSetByHeightRequest>, metadata?: grpc.Metadata): Promise<GetValidatorSetByHeightResponse>;
   /**
    * ABCIQuery defines a query handler that supports ABCI queries directly to the
    * application, bypassing Tendermint completely. The ABCI query must contain
@@ -23,7 +25,7 @@ export interface Service {
    * 
    * Since: cosmos-sdk 0.46
    */
-  aBCIQuery(request: ABCIQueryRequest): Promise<ABCIQueryResponse>;
+  aBCIQuery(request: DeepPartial<ABCIQueryRequest>, metadata?: grpc.Metadata): Promise<ABCIQueryResponse>;
 }
 export class ServiceClientImpl implements Service {
   private readonly rpc: Rpc;
@@ -37,68 +39,225 @@ export class ServiceClientImpl implements Service {
     this.getValidatorSetByHeight = this.getValidatorSetByHeight.bind(this);
     this.aBCIQuery = this.aBCIQuery.bind(this);
   }
-  getNodeInfo(request: GetNodeInfoRequest = {}): Promise<GetNodeInfoResponse> {
-    const data = GetNodeInfoRequest.encode(request).finish();
-    const promise = this.rpc.request("cosmos.base.tendermint.v1beta1.Service", "GetNodeInfo", data);
-    return promise.then(data => GetNodeInfoResponse.decode(new _m0.Reader(data)));
+  getNodeInfo(request: DeepPartial<GetNodeInfoRequest> = {}, metadata?: grpc.Metadata): Promise<GetNodeInfoResponse> {
+    return this.rpc.unary(GetNodeInfoDesc, GetNodeInfoRequest.fromPartial(request), metadata);
   }
-  getSyncing(request: GetSyncingRequest = {}): Promise<GetSyncingResponse> {
-    const data = GetSyncingRequest.encode(request).finish();
-    const promise = this.rpc.request("cosmos.base.tendermint.v1beta1.Service", "GetSyncing", data);
-    return promise.then(data => GetSyncingResponse.decode(new _m0.Reader(data)));
+  getSyncing(request: DeepPartial<GetSyncingRequest> = {}, metadata?: grpc.Metadata): Promise<GetSyncingResponse> {
+    return this.rpc.unary(GetSyncingDesc, GetSyncingRequest.fromPartial(request), metadata);
   }
-  getLatestBlock(request: GetLatestBlockRequest = {}): Promise<GetLatestBlockResponse> {
-    const data = GetLatestBlockRequest.encode(request).finish();
-    const promise = this.rpc.request("cosmos.base.tendermint.v1beta1.Service", "GetLatestBlock", data);
-    return promise.then(data => GetLatestBlockResponse.decode(new _m0.Reader(data)));
+  getLatestBlock(request: DeepPartial<GetLatestBlockRequest> = {}, metadata?: grpc.Metadata): Promise<GetLatestBlockResponse> {
+    return this.rpc.unary(GetLatestBlockDesc, GetLatestBlockRequest.fromPartial(request), metadata);
   }
-  getBlockByHeight(request: GetBlockByHeightRequest): Promise<GetBlockByHeightResponse> {
-    const data = GetBlockByHeightRequest.encode(request).finish();
-    const promise = this.rpc.request("cosmos.base.tendermint.v1beta1.Service", "GetBlockByHeight", data);
-    return promise.then(data => GetBlockByHeightResponse.decode(new _m0.Reader(data)));
+  getBlockByHeight(request: DeepPartial<GetBlockByHeightRequest>, metadata?: grpc.Metadata): Promise<GetBlockByHeightResponse> {
+    return this.rpc.unary(GetBlockByHeightDesc, GetBlockByHeightRequest.fromPartial(request), metadata);
   }
-  getLatestValidatorSet(request: GetLatestValidatorSetRequest = {
+  getLatestValidatorSet(request: DeepPartial<GetLatestValidatorSetRequest> = {
     pagination: undefined
-  }): Promise<GetLatestValidatorSetResponse> {
-    const data = GetLatestValidatorSetRequest.encode(request).finish();
-    const promise = this.rpc.request("cosmos.base.tendermint.v1beta1.Service", "GetLatestValidatorSet", data);
-    return promise.then(data => GetLatestValidatorSetResponse.decode(new _m0.Reader(data)));
+  }, metadata?: grpc.Metadata): Promise<GetLatestValidatorSetResponse> {
+    return this.rpc.unary(GetLatestValidatorSetDesc, GetLatestValidatorSetRequest.fromPartial(request), metadata);
   }
-  getValidatorSetByHeight(request: GetValidatorSetByHeightRequest): Promise<GetValidatorSetByHeightResponse> {
-    const data = GetValidatorSetByHeightRequest.encode(request).finish();
-    const promise = this.rpc.request("cosmos.base.tendermint.v1beta1.Service", "GetValidatorSetByHeight", data);
-    return promise.then(data => GetValidatorSetByHeightResponse.decode(new _m0.Reader(data)));
+  getValidatorSetByHeight(request: DeepPartial<GetValidatorSetByHeightRequest>, metadata?: grpc.Metadata): Promise<GetValidatorSetByHeightResponse> {
+    return this.rpc.unary(GetValidatorSetByHeightDesc, GetValidatorSetByHeightRequest.fromPartial(request), metadata);
   }
-  aBCIQuery(request: ABCIQueryRequest): Promise<ABCIQueryResponse> {
-    const data = ABCIQueryRequest.encode(request).finish();
-    const promise = this.rpc.request("cosmos.base.tendermint.v1beta1.Service", "ABCIQuery", data);
-    return promise.then(data => ABCIQueryResponse.decode(new _m0.Reader(data)));
+  aBCIQuery(request: DeepPartial<ABCIQueryRequest>, metadata?: grpc.Metadata): Promise<ABCIQueryResponse> {
+    return this.rpc.unary(ABCIQueryDesc, ABCIQueryRequest.fromPartial(request), metadata);
   }
 }
-export const createRpcQueryExtension = (base: QueryClient) => {
-  const rpc = createProtobufRpcClient(base);
-  const queryService = new ServiceClientImpl(rpc);
-  return {
-    getNodeInfo(request?: GetNodeInfoRequest): Promise<GetNodeInfoResponse> {
-      return queryService.getNodeInfo(request);
-    },
-    getSyncing(request?: GetSyncingRequest): Promise<GetSyncingResponse> {
-      return queryService.getSyncing(request);
-    },
-    getLatestBlock(request?: GetLatestBlockRequest): Promise<GetLatestBlockResponse> {
-      return queryService.getLatestBlock(request);
-    },
-    getBlockByHeight(request: GetBlockByHeightRequest): Promise<GetBlockByHeightResponse> {
-      return queryService.getBlockByHeight(request);
-    },
-    getLatestValidatorSet(request?: GetLatestValidatorSetRequest): Promise<GetLatestValidatorSetResponse> {
-      return queryService.getLatestValidatorSet(request);
-    },
-    getValidatorSetByHeight(request: GetValidatorSetByHeightRequest): Promise<GetValidatorSetByHeightResponse> {
-      return queryService.getValidatorSetByHeight(request);
-    },
-    aBCIQuery(request: ABCIQueryRequest): Promise<ABCIQueryResponse> {
-      return queryService.aBCIQuery(request);
-    }
-  };
+export const ServiceDesc = {
+  serviceName: "cosmos.base.tendermint.v1beta1.Service"
 };
+export const GetNodeInfoDesc: UnaryMethodDefinitionish = {
+  methodName: "GetNodeInfo",
+  service: ServiceDesc,
+  requestStream: false,
+  responseStream: false,
+  requestType: ({
+    serializeBinary() {
+      return GetNodeInfoRequest.encode(this).finish();
+    }
+  } as any),
+  responseType: ({
+    deserializeBinary(data: Uint8Array) {
+      return {
+        ...GetNodeInfoResponse.decode(data),
+        toObject() {
+          return this;
+        }
+      };
+    }
+  } as any)
+};
+export const GetSyncingDesc: UnaryMethodDefinitionish = {
+  methodName: "GetSyncing",
+  service: ServiceDesc,
+  requestStream: false,
+  responseStream: false,
+  requestType: ({
+    serializeBinary() {
+      return GetSyncingRequest.encode(this).finish();
+    }
+  } as any),
+  responseType: ({
+    deserializeBinary(data: Uint8Array) {
+      return {
+        ...GetSyncingResponse.decode(data),
+        toObject() {
+          return this;
+        }
+      };
+    }
+  } as any)
+};
+export const GetLatestBlockDesc: UnaryMethodDefinitionish = {
+  methodName: "GetLatestBlock",
+  service: ServiceDesc,
+  requestStream: false,
+  responseStream: false,
+  requestType: ({
+    serializeBinary() {
+      return GetLatestBlockRequest.encode(this).finish();
+    }
+  } as any),
+  responseType: ({
+    deserializeBinary(data: Uint8Array) {
+      return {
+        ...GetLatestBlockResponse.decode(data),
+        toObject() {
+          return this;
+        }
+      };
+    }
+  } as any)
+};
+export const GetBlockByHeightDesc: UnaryMethodDefinitionish = {
+  methodName: "GetBlockByHeight",
+  service: ServiceDesc,
+  requestStream: false,
+  responseStream: false,
+  requestType: ({
+    serializeBinary() {
+      return GetBlockByHeightRequest.encode(this).finish();
+    }
+  } as any),
+  responseType: ({
+    deserializeBinary(data: Uint8Array) {
+      return {
+        ...GetBlockByHeightResponse.decode(data),
+        toObject() {
+          return this;
+        }
+      };
+    }
+  } as any)
+};
+export const GetLatestValidatorSetDesc: UnaryMethodDefinitionish = {
+  methodName: "GetLatestValidatorSet",
+  service: ServiceDesc,
+  requestStream: false,
+  responseStream: false,
+  requestType: ({
+    serializeBinary() {
+      return GetLatestValidatorSetRequest.encode(this).finish();
+    }
+  } as any),
+  responseType: ({
+    deserializeBinary(data: Uint8Array) {
+      return {
+        ...GetLatestValidatorSetResponse.decode(data),
+        toObject() {
+          return this;
+        }
+      };
+    }
+  } as any)
+};
+export const GetValidatorSetByHeightDesc: UnaryMethodDefinitionish = {
+  methodName: "GetValidatorSetByHeight",
+  service: ServiceDesc,
+  requestStream: false,
+  responseStream: false,
+  requestType: ({
+    serializeBinary() {
+      return GetValidatorSetByHeightRequest.encode(this).finish();
+    }
+  } as any),
+  responseType: ({
+    deserializeBinary(data: Uint8Array) {
+      return {
+        ...GetValidatorSetByHeightResponse.decode(data),
+        toObject() {
+          return this;
+        }
+      };
+    }
+  } as any)
+};
+export const ABCIQueryDesc: UnaryMethodDefinitionish = {
+  methodName: "ABCIQuery",
+  service: ServiceDesc,
+  requestStream: false,
+  responseStream: false,
+  requestType: ({
+    serializeBinary() {
+      return ABCIQueryRequest.encode(this).finish();
+    }
+  } as any),
+  responseType: ({
+    deserializeBinary(data: Uint8Array) {
+      return {
+        ...ABCIQueryResponse.decode(data),
+        toObject() {
+          return this;
+        }
+      };
+    }
+  } as any)
+};
+export interface Rpc {
+  unary<T extends UnaryMethodDefinitionish>(methodDesc: T, request: any, metadata: grpc.Metadata | undefined): Promise<any>;
+}
+export class GrpcWebImpl {
+  host: string;
+  options: {
+    transport?: grpc.TransportFactory;
+    debug?: boolean;
+    metadata?: grpc.Metadata;
+  };
+  constructor(host: string, options: {
+    transport?: grpc.TransportFactory;
+    debug?: boolean;
+    metadata?: grpc.Metadata;
+  }) {
+    this.host = host;
+    this.options = options;
+  }
+  unary<T extends UnaryMethodDefinitionish>(methodDesc: T, _request: any, metadata: grpc.Metadata | undefined) {
+    const request = {
+      ..._request,
+      ...methodDesc.requestType
+    };
+    const maybeCombinedMetadata = metadata && this.options.metadata ? new BrowserHeaders({
+      ...this.options?.metadata.headersMap,
+      ...metadata?.headersMap
+    }) : metadata || this.options.metadata;
+    return new Promise((resolve, reject) => {
+      grpc.unary(methodDesc, {
+        request,
+        host: this.host,
+        metadata: maybeCombinedMetadata,
+        transport: this.options.transport,
+        debug: this.options.debug,
+        onEnd: function (response) {
+          if (response.status === grpc.Code.OK) {
+            resolve(response.message);
+          } else {
+            const err = (new Error(response.statusMessage) as any);
+            err.code = response.status;
+            err.metadata = response.trailers;
+            reject(err);
+          }
+        }
+      });
+    });
+  }
+}

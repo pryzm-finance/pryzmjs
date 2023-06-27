@@ -1,29 +1,31 @@
-import { Rpc } from "../../../../helpers";
-import * as _m0 from "protobufjs/minimal";
-import { QueryClient, createProtobufRpcClient } from "@cosmjs/stargate";
+//@ts-nocheck
+import { grpc } from "@improbable-eng/grpc-web";
+import { UnaryMethodDefinitionish } from "../../../../grpc-web";
+import { DeepPartial } from "../../../../helpers";
+import { BrowserHeaders } from "browser-headers";
 import { QueryIncentivizedPacketsRequest, QueryIncentivizedPacketsResponse, QueryIncentivizedPacketRequest, QueryIncentivizedPacketResponse, QueryIncentivizedPacketsForChannelRequest, QueryIncentivizedPacketsForChannelResponse, QueryTotalRecvFeesRequest, QueryTotalRecvFeesResponse, QueryTotalAckFeesRequest, QueryTotalAckFeesResponse, QueryTotalTimeoutFeesRequest, QueryTotalTimeoutFeesResponse, QueryPayeeRequest, QueryPayeeResponse, QueryCounterpartyPayeeRequest, QueryCounterpartyPayeeResponse, QueryFeeEnabledChannelsRequest, QueryFeeEnabledChannelsResponse, QueryFeeEnabledChannelRequest, QueryFeeEnabledChannelResponse } from "./query";
 /** Query defines the ICS29 gRPC querier service. */
 export interface Query {
   /** IncentivizedPackets returns all incentivized packets and their associated fees */
-  incentivizedPackets(request: QueryIncentivizedPacketsRequest): Promise<QueryIncentivizedPacketsResponse>;
+  incentivizedPackets(request: DeepPartial<QueryIncentivizedPacketsRequest>, metadata?: grpc.Metadata): Promise<QueryIncentivizedPacketsResponse>;
   /** IncentivizedPacket returns all packet fees for a packet given its identifier */
-  incentivizedPacket(request: QueryIncentivizedPacketRequest): Promise<QueryIncentivizedPacketResponse>;
+  incentivizedPacket(request: DeepPartial<QueryIncentivizedPacketRequest>, metadata?: grpc.Metadata): Promise<QueryIncentivizedPacketResponse>;
   /** Gets all incentivized packets for a specific channel */
-  incentivizedPacketsForChannel(request: QueryIncentivizedPacketsForChannelRequest): Promise<QueryIncentivizedPacketsForChannelResponse>;
+  incentivizedPacketsForChannel(request: DeepPartial<QueryIncentivizedPacketsForChannelRequest>, metadata?: grpc.Metadata): Promise<QueryIncentivizedPacketsForChannelResponse>;
   /** TotalRecvFees returns the total receive fees for a packet given its identifier */
-  totalRecvFees(request: QueryTotalRecvFeesRequest): Promise<QueryTotalRecvFeesResponse>;
+  totalRecvFees(request: DeepPartial<QueryTotalRecvFeesRequest>, metadata?: grpc.Metadata): Promise<QueryTotalRecvFeesResponse>;
   /** TotalAckFees returns the total acknowledgement fees for a packet given its identifier */
-  totalAckFees(request: QueryTotalAckFeesRequest): Promise<QueryTotalAckFeesResponse>;
+  totalAckFees(request: DeepPartial<QueryTotalAckFeesRequest>, metadata?: grpc.Metadata): Promise<QueryTotalAckFeesResponse>;
   /** TotalTimeoutFees returns the total timeout fees for a packet given its identifier */
-  totalTimeoutFees(request: QueryTotalTimeoutFeesRequest): Promise<QueryTotalTimeoutFeesResponse>;
+  totalTimeoutFees(request: DeepPartial<QueryTotalTimeoutFeesRequest>, metadata?: grpc.Metadata): Promise<QueryTotalTimeoutFeesResponse>;
   /** Payee returns the registered payee address for a specific channel given the relayer address */
-  payee(request: QueryPayeeRequest): Promise<QueryPayeeResponse>;
+  payee(request: DeepPartial<QueryPayeeRequest>, metadata?: grpc.Metadata): Promise<QueryPayeeResponse>;
   /** CounterpartyPayee returns the registered counterparty payee for forward relaying */
-  counterpartyPayee(request: QueryCounterpartyPayeeRequest): Promise<QueryCounterpartyPayeeResponse>;
+  counterpartyPayee(request: DeepPartial<QueryCounterpartyPayeeRequest>, metadata?: grpc.Metadata): Promise<QueryCounterpartyPayeeResponse>;
   /** FeeEnabledChannels returns a list of all fee enabled channels */
-  feeEnabledChannels(request: QueryFeeEnabledChannelsRequest): Promise<QueryFeeEnabledChannelsResponse>;
+  feeEnabledChannels(request: DeepPartial<QueryFeeEnabledChannelsRequest>, metadata?: grpc.Metadata): Promise<QueryFeeEnabledChannelsResponse>;
   /** FeeEnabledChannel returns true if the provided port and channel identifiers belong to a fee enabled channel */
-  feeEnabledChannel(request: QueryFeeEnabledChannelRequest): Promise<QueryFeeEnabledChannelResponse>;
+  feeEnabledChannel(request: DeepPartial<QueryFeeEnabledChannelRequest>, metadata?: grpc.Metadata): Promise<QueryFeeEnabledChannelResponse>;
 }
 export class QueryClientImpl implements Query {
   private readonly rpc: Rpc;
@@ -40,90 +42,295 @@ export class QueryClientImpl implements Query {
     this.feeEnabledChannels = this.feeEnabledChannels.bind(this);
     this.feeEnabledChannel = this.feeEnabledChannel.bind(this);
   }
-  incentivizedPackets(request: QueryIncentivizedPacketsRequest): Promise<QueryIncentivizedPacketsResponse> {
-    const data = QueryIncentivizedPacketsRequest.encode(request).finish();
-    const promise = this.rpc.request("ibc.applications.fee.v1.Query", "IncentivizedPackets", data);
-    return promise.then(data => QueryIncentivizedPacketsResponse.decode(new _m0.Reader(data)));
+  incentivizedPackets(request: DeepPartial<QueryIncentivizedPacketsRequest>, metadata?: grpc.Metadata): Promise<QueryIncentivizedPacketsResponse> {
+    return this.rpc.unary(QueryIncentivizedPacketsDesc, QueryIncentivizedPacketsRequest.fromPartial(request), metadata);
   }
-  incentivizedPacket(request: QueryIncentivizedPacketRequest): Promise<QueryIncentivizedPacketResponse> {
-    const data = QueryIncentivizedPacketRequest.encode(request).finish();
-    const promise = this.rpc.request("ibc.applications.fee.v1.Query", "IncentivizedPacket", data);
-    return promise.then(data => QueryIncentivizedPacketResponse.decode(new _m0.Reader(data)));
+  incentivizedPacket(request: DeepPartial<QueryIncentivizedPacketRequest>, metadata?: grpc.Metadata): Promise<QueryIncentivizedPacketResponse> {
+    return this.rpc.unary(QueryIncentivizedPacketDesc, QueryIncentivizedPacketRequest.fromPartial(request), metadata);
   }
-  incentivizedPacketsForChannel(request: QueryIncentivizedPacketsForChannelRequest): Promise<QueryIncentivizedPacketsForChannelResponse> {
-    const data = QueryIncentivizedPacketsForChannelRequest.encode(request).finish();
-    const promise = this.rpc.request("ibc.applications.fee.v1.Query", "IncentivizedPacketsForChannel", data);
-    return promise.then(data => QueryIncentivizedPacketsForChannelResponse.decode(new _m0.Reader(data)));
+  incentivizedPacketsForChannel(request: DeepPartial<QueryIncentivizedPacketsForChannelRequest>, metadata?: grpc.Metadata): Promise<QueryIncentivizedPacketsForChannelResponse> {
+    return this.rpc.unary(QueryIncentivizedPacketsForChannelDesc, QueryIncentivizedPacketsForChannelRequest.fromPartial(request), metadata);
   }
-  totalRecvFees(request: QueryTotalRecvFeesRequest): Promise<QueryTotalRecvFeesResponse> {
-    const data = QueryTotalRecvFeesRequest.encode(request).finish();
-    const promise = this.rpc.request("ibc.applications.fee.v1.Query", "TotalRecvFees", data);
-    return promise.then(data => QueryTotalRecvFeesResponse.decode(new _m0.Reader(data)));
+  totalRecvFees(request: DeepPartial<QueryTotalRecvFeesRequest>, metadata?: grpc.Metadata): Promise<QueryTotalRecvFeesResponse> {
+    return this.rpc.unary(QueryTotalRecvFeesDesc, QueryTotalRecvFeesRequest.fromPartial(request), metadata);
   }
-  totalAckFees(request: QueryTotalAckFeesRequest): Promise<QueryTotalAckFeesResponse> {
-    const data = QueryTotalAckFeesRequest.encode(request).finish();
-    const promise = this.rpc.request("ibc.applications.fee.v1.Query", "TotalAckFees", data);
-    return promise.then(data => QueryTotalAckFeesResponse.decode(new _m0.Reader(data)));
+  totalAckFees(request: DeepPartial<QueryTotalAckFeesRequest>, metadata?: grpc.Metadata): Promise<QueryTotalAckFeesResponse> {
+    return this.rpc.unary(QueryTotalAckFeesDesc, QueryTotalAckFeesRequest.fromPartial(request), metadata);
   }
-  totalTimeoutFees(request: QueryTotalTimeoutFeesRequest): Promise<QueryTotalTimeoutFeesResponse> {
-    const data = QueryTotalTimeoutFeesRequest.encode(request).finish();
-    const promise = this.rpc.request("ibc.applications.fee.v1.Query", "TotalTimeoutFees", data);
-    return promise.then(data => QueryTotalTimeoutFeesResponse.decode(new _m0.Reader(data)));
+  totalTimeoutFees(request: DeepPartial<QueryTotalTimeoutFeesRequest>, metadata?: grpc.Metadata): Promise<QueryTotalTimeoutFeesResponse> {
+    return this.rpc.unary(QueryTotalTimeoutFeesDesc, QueryTotalTimeoutFeesRequest.fromPartial(request), metadata);
   }
-  payee(request: QueryPayeeRequest): Promise<QueryPayeeResponse> {
-    const data = QueryPayeeRequest.encode(request).finish();
-    const promise = this.rpc.request("ibc.applications.fee.v1.Query", "Payee", data);
-    return promise.then(data => QueryPayeeResponse.decode(new _m0.Reader(data)));
+  payee(request: DeepPartial<QueryPayeeRequest>, metadata?: grpc.Metadata): Promise<QueryPayeeResponse> {
+    return this.rpc.unary(QueryPayeeDesc, QueryPayeeRequest.fromPartial(request), metadata);
   }
-  counterpartyPayee(request: QueryCounterpartyPayeeRequest): Promise<QueryCounterpartyPayeeResponse> {
-    const data = QueryCounterpartyPayeeRequest.encode(request).finish();
-    const promise = this.rpc.request("ibc.applications.fee.v1.Query", "CounterpartyPayee", data);
-    return promise.then(data => QueryCounterpartyPayeeResponse.decode(new _m0.Reader(data)));
+  counterpartyPayee(request: DeepPartial<QueryCounterpartyPayeeRequest>, metadata?: grpc.Metadata): Promise<QueryCounterpartyPayeeResponse> {
+    return this.rpc.unary(QueryCounterpartyPayeeDesc, QueryCounterpartyPayeeRequest.fromPartial(request), metadata);
   }
-  feeEnabledChannels(request: QueryFeeEnabledChannelsRequest): Promise<QueryFeeEnabledChannelsResponse> {
-    const data = QueryFeeEnabledChannelsRequest.encode(request).finish();
-    const promise = this.rpc.request("ibc.applications.fee.v1.Query", "FeeEnabledChannels", data);
-    return promise.then(data => QueryFeeEnabledChannelsResponse.decode(new _m0.Reader(data)));
+  feeEnabledChannels(request: DeepPartial<QueryFeeEnabledChannelsRequest>, metadata?: grpc.Metadata): Promise<QueryFeeEnabledChannelsResponse> {
+    return this.rpc.unary(QueryFeeEnabledChannelsDesc, QueryFeeEnabledChannelsRequest.fromPartial(request), metadata);
   }
-  feeEnabledChannel(request: QueryFeeEnabledChannelRequest): Promise<QueryFeeEnabledChannelResponse> {
-    const data = QueryFeeEnabledChannelRequest.encode(request).finish();
-    const promise = this.rpc.request("ibc.applications.fee.v1.Query", "FeeEnabledChannel", data);
-    return promise.then(data => QueryFeeEnabledChannelResponse.decode(new _m0.Reader(data)));
+  feeEnabledChannel(request: DeepPartial<QueryFeeEnabledChannelRequest>, metadata?: grpc.Metadata): Promise<QueryFeeEnabledChannelResponse> {
+    return this.rpc.unary(QueryFeeEnabledChannelDesc, QueryFeeEnabledChannelRequest.fromPartial(request), metadata);
   }
 }
-export const createRpcQueryExtension = (base: QueryClient) => {
-  const rpc = createProtobufRpcClient(base);
-  const queryService = new QueryClientImpl(rpc);
-  return {
-    incentivizedPackets(request: QueryIncentivizedPacketsRequest): Promise<QueryIncentivizedPacketsResponse> {
-      return queryService.incentivizedPackets(request);
-    },
-    incentivizedPacket(request: QueryIncentivizedPacketRequest): Promise<QueryIncentivizedPacketResponse> {
-      return queryService.incentivizedPacket(request);
-    },
-    incentivizedPacketsForChannel(request: QueryIncentivizedPacketsForChannelRequest): Promise<QueryIncentivizedPacketsForChannelResponse> {
-      return queryService.incentivizedPacketsForChannel(request);
-    },
-    totalRecvFees(request: QueryTotalRecvFeesRequest): Promise<QueryTotalRecvFeesResponse> {
-      return queryService.totalRecvFees(request);
-    },
-    totalAckFees(request: QueryTotalAckFeesRequest): Promise<QueryTotalAckFeesResponse> {
-      return queryService.totalAckFees(request);
-    },
-    totalTimeoutFees(request: QueryTotalTimeoutFeesRequest): Promise<QueryTotalTimeoutFeesResponse> {
-      return queryService.totalTimeoutFees(request);
-    },
-    payee(request: QueryPayeeRequest): Promise<QueryPayeeResponse> {
-      return queryService.payee(request);
-    },
-    counterpartyPayee(request: QueryCounterpartyPayeeRequest): Promise<QueryCounterpartyPayeeResponse> {
-      return queryService.counterpartyPayee(request);
-    },
-    feeEnabledChannels(request: QueryFeeEnabledChannelsRequest): Promise<QueryFeeEnabledChannelsResponse> {
-      return queryService.feeEnabledChannels(request);
-    },
-    feeEnabledChannel(request: QueryFeeEnabledChannelRequest): Promise<QueryFeeEnabledChannelResponse> {
-      return queryService.feeEnabledChannel(request);
-    }
-  };
+export const QueryDesc = {
+  serviceName: "ibc.applications.fee.v1.Query"
 };
+export const QueryIncentivizedPacketsDesc: UnaryMethodDefinitionish = {
+  methodName: "IncentivizedPackets",
+  service: QueryDesc,
+  requestStream: false,
+  responseStream: false,
+  requestType: ({
+    serializeBinary() {
+      return QueryIncentivizedPacketsRequest.encode(this).finish();
+    }
+  } as any),
+  responseType: ({
+    deserializeBinary(data: Uint8Array) {
+      return {
+        ...QueryIncentivizedPacketsResponse.decode(data),
+        toObject() {
+          return this;
+        }
+      };
+    }
+  } as any)
+};
+export const QueryIncentivizedPacketDesc: UnaryMethodDefinitionish = {
+  methodName: "IncentivizedPacket",
+  service: QueryDesc,
+  requestStream: false,
+  responseStream: false,
+  requestType: ({
+    serializeBinary() {
+      return QueryIncentivizedPacketRequest.encode(this).finish();
+    }
+  } as any),
+  responseType: ({
+    deserializeBinary(data: Uint8Array) {
+      return {
+        ...QueryIncentivizedPacketResponse.decode(data),
+        toObject() {
+          return this;
+        }
+      };
+    }
+  } as any)
+};
+export const QueryIncentivizedPacketsForChannelDesc: UnaryMethodDefinitionish = {
+  methodName: "IncentivizedPacketsForChannel",
+  service: QueryDesc,
+  requestStream: false,
+  responseStream: false,
+  requestType: ({
+    serializeBinary() {
+      return QueryIncentivizedPacketsForChannelRequest.encode(this).finish();
+    }
+  } as any),
+  responseType: ({
+    deserializeBinary(data: Uint8Array) {
+      return {
+        ...QueryIncentivizedPacketsForChannelResponse.decode(data),
+        toObject() {
+          return this;
+        }
+      };
+    }
+  } as any)
+};
+export const QueryTotalRecvFeesDesc: UnaryMethodDefinitionish = {
+  methodName: "TotalRecvFees",
+  service: QueryDesc,
+  requestStream: false,
+  responseStream: false,
+  requestType: ({
+    serializeBinary() {
+      return QueryTotalRecvFeesRequest.encode(this).finish();
+    }
+  } as any),
+  responseType: ({
+    deserializeBinary(data: Uint8Array) {
+      return {
+        ...QueryTotalRecvFeesResponse.decode(data),
+        toObject() {
+          return this;
+        }
+      };
+    }
+  } as any)
+};
+export const QueryTotalAckFeesDesc: UnaryMethodDefinitionish = {
+  methodName: "TotalAckFees",
+  service: QueryDesc,
+  requestStream: false,
+  responseStream: false,
+  requestType: ({
+    serializeBinary() {
+      return QueryTotalAckFeesRequest.encode(this).finish();
+    }
+  } as any),
+  responseType: ({
+    deserializeBinary(data: Uint8Array) {
+      return {
+        ...QueryTotalAckFeesResponse.decode(data),
+        toObject() {
+          return this;
+        }
+      };
+    }
+  } as any)
+};
+export const QueryTotalTimeoutFeesDesc: UnaryMethodDefinitionish = {
+  methodName: "TotalTimeoutFees",
+  service: QueryDesc,
+  requestStream: false,
+  responseStream: false,
+  requestType: ({
+    serializeBinary() {
+      return QueryTotalTimeoutFeesRequest.encode(this).finish();
+    }
+  } as any),
+  responseType: ({
+    deserializeBinary(data: Uint8Array) {
+      return {
+        ...QueryTotalTimeoutFeesResponse.decode(data),
+        toObject() {
+          return this;
+        }
+      };
+    }
+  } as any)
+};
+export const QueryPayeeDesc: UnaryMethodDefinitionish = {
+  methodName: "Payee",
+  service: QueryDesc,
+  requestStream: false,
+  responseStream: false,
+  requestType: ({
+    serializeBinary() {
+      return QueryPayeeRequest.encode(this).finish();
+    }
+  } as any),
+  responseType: ({
+    deserializeBinary(data: Uint8Array) {
+      return {
+        ...QueryPayeeResponse.decode(data),
+        toObject() {
+          return this;
+        }
+      };
+    }
+  } as any)
+};
+export const QueryCounterpartyPayeeDesc: UnaryMethodDefinitionish = {
+  methodName: "CounterpartyPayee",
+  service: QueryDesc,
+  requestStream: false,
+  responseStream: false,
+  requestType: ({
+    serializeBinary() {
+      return QueryCounterpartyPayeeRequest.encode(this).finish();
+    }
+  } as any),
+  responseType: ({
+    deserializeBinary(data: Uint8Array) {
+      return {
+        ...QueryCounterpartyPayeeResponse.decode(data),
+        toObject() {
+          return this;
+        }
+      };
+    }
+  } as any)
+};
+export const QueryFeeEnabledChannelsDesc: UnaryMethodDefinitionish = {
+  methodName: "FeeEnabledChannels",
+  service: QueryDesc,
+  requestStream: false,
+  responseStream: false,
+  requestType: ({
+    serializeBinary() {
+      return QueryFeeEnabledChannelsRequest.encode(this).finish();
+    }
+  } as any),
+  responseType: ({
+    deserializeBinary(data: Uint8Array) {
+      return {
+        ...QueryFeeEnabledChannelsResponse.decode(data),
+        toObject() {
+          return this;
+        }
+      };
+    }
+  } as any)
+};
+export const QueryFeeEnabledChannelDesc: UnaryMethodDefinitionish = {
+  methodName: "FeeEnabledChannel",
+  service: QueryDesc,
+  requestStream: false,
+  responseStream: false,
+  requestType: ({
+    serializeBinary() {
+      return QueryFeeEnabledChannelRequest.encode(this).finish();
+    }
+  } as any),
+  responseType: ({
+    deserializeBinary(data: Uint8Array) {
+      return {
+        ...QueryFeeEnabledChannelResponse.decode(data),
+        toObject() {
+          return this;
+        }
+      };
+    }
+  } as any)
+};
+export interface Rpc {
+  unary<T extends UnaryMethodDefinitionish>(methodDesc: T, request: any, metadata: grpc.Metadata | undefined): Promise<any>;
+}
+export class GrpcWebImpl {
+  host: string;
+  options: {
+    transport?: grpc.TransportFactory;
+    debug?: boolean;
+    metadata?: grpc.Metadata;
+  };
+  constructor(host: string, options: {
+    transport?: grpc.TransportFactory;
+    debug?: boolean;
+    metadata?: grpc.Metadata;
+  }) {
+    this.host = host;
+    this.options = options;
+  }
+  unary<T extends UnaryMethodDefinitionish>(methodDesc: T, _request: any, metadata: grpc.Metadata | undefined) {
+    const request = {
+      ..._request,
+      ...methodDesc.requestType
+    };
+    const maybeCombinedMetadata = metadata && this.options.metadata ? new BrowserHeaders({
+      ...this.options?.metadata.headersMap,
+      ...metadata?.headersMap
+    }) : metadata || this.options.metadata;
+    return new Promise((resolve, reject) => {
+      grpc.unary(methodDesc, {
+        request,
+        host: this.host,
+        metadata: maybeCombinedMetadata,
+        transport: this.options.transport,
+        debug: this.options.debug,
+        onEnd: function (response) {
+          if (response.status === grpc.Code.OK) {
+            resolve(response.message);
+          } else {
+            const err = (new Error(response.statusMessage) as any);
+            err.code = response.status;
+            err.metadata = response.trailers;
+            reject(err);
+          }
+        }
+      });
+    });
+  }
+}

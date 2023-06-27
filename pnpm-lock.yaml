@@ -19,6 +19,8 @@ specifiers:
   '@cosmjs/proto-signing': 0.31.0-alpha.1
   '@cosmjs/stargate': 0.31.0-alpha.1
   '@cosmjs/tendermint-rpc': 0.31.0-alpha.1
+  '@improbable-eng/grpc-web': ^0.15.0
+  '@improbable-eng/grpc-web-node-http-transport': ^0.15.0
   '@osmonauts/lcd': 0.10.0
   '@osmonauts/telescope': ^0.96.0
   '@protobufs/cosmos': ^0.1.0
@@ -28,6 +30,7 @@ specifiers:
   babel-core: 7.0.0-bridge.0
   babel-jest: 29.5.0
   babel-watch: ^7.7.2
+  browser-headers: ^0.4.1
   cross-env: ^7.0.2
   eslint: 8.38.0
   eslint-config-prettier: ^8.8.0
@@ -49,7 +52,10 @@ dependencies:
   '@cosmjs/proto-signing': 0.31.0-alpha.1
   '@cosmjs/stargate': 0.31.0-alpha.1
   '@cosmjs/tendermint-rpc': 0.31.0-alpha.1
+  '@improbable-eng/grpc-web': 0.15.0_google-protobuf@3.21.2
+  '@improbable-eng/grpc-web-node-http-transport': 0.15.0_fng5pv4qmdetiqq66m6yjkaacu
   '@osmonauts/lcd': 0.10.0
+  browser-headers: 0.4.1
   protobufjs: 6.11.3
 
 devDependencies:
@@ -2747,6 +2753,23 @@ packages:
     resolution: {integrity: sha512-ZnQMnLV4e7hDlUvw8H+U8ASL02SS2Gn6+9Ac3wGGLIe7+je2AeAOxPY+izIPJDfFDb7eDjev0Us8MO1iFRN8hA==}
     dev: true
 
+  /@improbable-eng/grpc-web-node-http-transport/0.15.0_fng5pv4qmdetiqq66m6yjkaacu:
+    resolution: {integrity: sha512-HLgJfVolGGpjc9DWPhmMmXJx8YGzkek7jcCFO1YYkSOoO81MWRZentPOd/JiKiZuU08wtc4BG+WNuGzsQB5jZA==}
+    peerDependencies:
+      '@improbable-eng/grpc-web': '>=0.13.0'
+    dependencies:
+      '@improbable-eng/grpc-web': 0.15.0_google-protobuf@3.21.2
+    dev: false
+
+  /@improbable-eng/grpc-web/0.15.0_google-protobuf@3.21.2:
+    resolution: {integrity: sha512-ERft9/0/8CmYalqOVnJnpdDry28q+j+nAlFFARdjyxXDJ+Mhgv9+F600QC8BR9ygOfrXRlAk6CvST2j+JCpQPg==}
+    peerDependencies:
+      google-protobuf: ^3.14.0
+    dependencies:
+      browser-headers: 0.4.1
+      google-protobuf: 3.21.2
+    dev: false
+
   /@isaacs/cliui/8.0.2:
     resolution: {integrity: sha512-O8jcjabXaleOG9DQ0+ARXWZBTfnP4WNAqzuiJK7ll44AmxGKv/J2M4TPjxjY3znBCfvBXFzucm1twdyFybFqEA==}
     engines: {node: '>=12'}
@@ -3873,6 +3896,10 @@ packages:
     resolution: {integrity: sha512-cKV8tMCEpQs4hK/ik71d6LrPOnpkpGBR0wzxqr68g2m/LB2GxVYQroAjMJZRVM1Y4BCjCKc3vAamxSzOY2RP+w==}
     dev: false
 
+  /browser-headers/0.4.1:
+    resolution: {integrity: sha512-CA9hsySZVo9371qEHjHZtYxV2cFtVj5Wj/ZHi8ooEsrtm4vOnl9Y9HmyYWk9q+05d7K3rdoAE0j3MVEFVvtQtg==}
+    dev: false
+
   /browserslist/4.21.7:
     resolution: {integrity: sha512-BauCXrQ7I2ftSqd2mvKHGo85XR0u7Ru3C/Hxsy/0TkfCtjrmAbPdzLGasmoiBxplpDXlPvdjX9u7srIMfgasNA==}
     engines: {node: ^6 || ^7 || ^8 || ^9 || ^10 || ^11 || ^12 || >=13.7}
@@ -4870,6 +4897,10 @@ packages:
     engines: {node: '>= 0.4'}
     dependencies:
       define-properties: 1.2.0
+
+  /google-protobuf/3.21.2:
+    resolution: {integrity: sha512-3MSOYFO5U9mPGikIYCzK0SaThypfGgS6bHqrUGXG3DPHCrb+txNqeEcns1W0lkGfk0rCyNXm7xB9rMxnCiZOoA==}
+    dev: false
 
   /gopd/1.0.1:
     resolution: {integrity: sha512-d65bNlIadxvpb/A2abVdlqKqV563juRnZ1Wtk6s1sIR8uNsXR70xqIzVqxVf1eTqDunwT2MkczEeaezCKTZhwA==}

@@ -18,3 +18,4 @@ export * from "./prism/bundle";
 export * from "./prism/client";
 export * from "./prismatics/bundle";
 export * from "./tendermint/bundle";
+export * from "./grpc-web";

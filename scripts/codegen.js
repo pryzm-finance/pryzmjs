@@ -17,10 +17,14 @@ telescope({
                 'cosmos/staking/v1beta1/tx.amino.ts',
                 'google/protobuf/descriptor.ts',
                 'prism/amm/genesis.ts',
+                'cosmos/base/tendermint/v1beta1/query.rpc.Service.ts',
+                'cosmos/tx/v1beta1/service.rpc.Service.ts'
             ],
             patterns: [
                 '**/*.amino.ts',
                 '**/*.lcd.ts',
+                '**/tx.rpc.msg.ts',
+                '**/query.rpc.Query.ts',
             ]
         },
         prototypes: {
@@ -47,11 +51,13 @@ telescope({
         },
         rpcClients: {
             enabled: true,
-            camelCase: true
+            camelCase: true,
+            type: "grpc-web"
         }
     }
 })
     .then(() => {
+        require("./fix-grpc-queries").correctDir('./src/codegen', /query.rpc.Query.ts/gm);
         console.log('✨ all done!');
     })
     .catch((e) => {

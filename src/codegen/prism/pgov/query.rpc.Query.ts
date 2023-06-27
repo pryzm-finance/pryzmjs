@@ -1,24 +1,26 @@
-import { Rpc } from "../../helpers";
-import * as _m0 from "protobufjs/minimal";
-import { QueryClient, createProtobufRpcClient } from "@cosmjs/stargate";
+//@ts-nocheck
+import { grpc } from "@improbable-eng/grpc-web";
+import { UnaryMethodDefinitionish } from "../../grpc-web";
+import { DeepPartial } from "../../helpers";
+import { BrowserHeaders } from "browser-headers";
 import { QueryParamsRequest, QueryParamsResponse, QueryGetStakedPAssetRequest, QueryGetStakedPAssetResponse, QueryAllStakedPAssetRequest, QueryAllStakedPAssetResponse, QueryGetTotalStakedPAssetRequest, QueryGetTotalStakedPAssetResponse, QueryGetVoteRequest, QueryGetVoteResponse, QueryAllVoteRequest, QueryAllVoteResponse, QueryGetProposalRequest, QueryGetProposalResponse, QueryAllProposalRequest, QueryAllProposalResponse } from "./query";
 /** Query defines the gRPC querier service. */
 export interface Query {
   /** Parameters queries the parameters of the module. */
-  params(request?: QueryParamsRequest): Promise<QueryParamsResponse>;
+  params(request?: DeepPartial<QueryParamsRequest>, metadata?: grpc.Metadata): Promise<QueryParamsResponse>;
   /** Queries a StakedPAsset by index. */
-  stakedPAsset(request: QueryGetStakedPAssetRequest): Promise<QueryGetStakedPAssetResponse>;
+  stakedPAsset(request: DeepPartial<QueryGetStakedPAssetRequest>, metadata?: grpc.Metadata): Promise<QueryGetStakedPAssetResponse>;
   /** Queries a list of StakedPAsset items. */
-  stakedPAssetAll(request?: QueryAllStakedPAssetRequest): Promise<QueryAllStakedPAssetResponse>;
-  totalStakedPAsset(request: QueryGetTotalStakedPAssetRequest): Promise<QueryGetTotalStakedPAssetResponse>;
+  stakedPAssetAll(request?: DeepPartial<QueryAllStakedPAssetRequest>, metadata?: grpc.Metadata): Promise<QueryAllStakedPAssetResponse>;
+  totalStakedPAsset(request: DeepPartial<QueryGetTotalStakedPAssetRequest>, metadata?: grpc.Metadata): Promise<QueryGetTotalStakedPAssetResponse>;
   /** Queries a Vote by index. */
-  vote(request: QueryGetVoteRequest): Promise<QueryGetVoteResponse>;
+  vote(request: DeepPartial<QueryGetVoteRequest>, metadata?: grpc.Metadata): Promise<QueryGetVoteResponse>;
   /** Queries a list of Vote items. */
-  voteAll(request?: QueryAllVoteRequest): Promise<QueryAllVoteResponse>;
+  voteAll(request?: DeepPartial<QueryAllVoteRequest>, metadata?: grpc.Metadata): Promise<QueryAllVoteResponse>;
   /** Queries a Proposal by index. */
-  proposal(request: QueryGetProposalRequest): Promise<QueryGetProposalResponse>;
+  proposal(request: DeepPartial<QueryGetProposalRequest>, metadata?: grpc.Metadata): Promise<QueryGetProposalResponse>;
   /** Queries a list of Proposal items. */
-  proposalAll(request?: QueryAllProposalRequest): Promise<QueryAllProposalResponse>;
+  proposalAll(request?: DeepPartial<QueryAllProposalRequest>, metadata?: grpc.Metadata): Promise<QueryAllProposalResponse>;
 }
 export class QueryClientImpl implements Query {
   private readonly rpc: Rpc;
@@ -33,80 +35,253 @@ export class QueryClientImpl implements Query {
     this.proposal = this.proposal.bind(this);
     this.proposalAll = this.proposalAll.bind(this);
   }
-  params(request: QueryParamsRequest = {}): Promise<QueryParamsResponse> {
-    const data = QueryParamsRequest.encode(request).finish();
-    const promise = this.rpc.request("prism.pgov.Query", "Params", data);
-    return promise.then(data => QueryParamsResponse.decode(new _m0.Reader(data)));
+  params(request: DeepPartial<QueryParamsRequest> = {}, metadata?: grpc.Metadata): Promise<QueryParamsResponse> {
+    return this.rpc.unary(QueryParamsDesc, QueryParamsRequest.fromPartial(request), metadata);
   }
-  stakedPAsset(request: QueryGetStakedPAssetRequest): Promise<QueryGetStakedPAssetResponse> {
-    const data = QueryGetStakedPAssetRequest.encode(request).finish();
-    const promise = this.rpc.request("prism.pgov.Query", "StakedPAsset", data);
-    return promise.then(data => QueryGetStakedPAssetResponse.decode(new _m0.Reader(data)));
+  stakedPAsset(request: DeepPartial<QueryGetStakedPAssetRequest>, metadata?: grpc.Metadata): Promise<QueryGetStakedPAssetResponse> {
+    return this.rpc.unary(QueryGetStakedPAssetDesc, QueryGetStakedPAssetRequest.fromPartial(request), metadata);
   }
-  stakedPAssetAll(request: QueryAllStakedPAssetRequest = {
+  stakedPAssetAll(request: DeepPartial<QueryAllStakedPAssetRequest> = {
     pagination: undefined
-  }): Promise<QueryAllStakedPAssetResponse> {
-    const data = QueryAllStakedPAssetRequest.encode(request).finish();
-    const promise = this.rpc.request("prism.pgov.Query", "StakedPAssetAll", data);
-    return promise.then(data => QueryAllStakedPAssetResponse.decode(new _m0.Reader(data)));
+  }, metadata?: grpc.Metadata): Promise<QueryAllStakedPAssetResponse> {
+    return this.rpc.unary(QueryAllStakedPAssetDesc, QueryAllStakedPAssetRequest.fromPartial(request), metadata);
   }
-  totalStakedPAsset(request: QueryGetTotalStakedPAssetRequest): Promise<QueryGetTotalStakedPAssetResponse> {
-    const data = QueryGetTotalStakedPAssetRequest.encode(request).finish();
-    const promise = this.rpc.request("prism.pgov.Query", "TotalStakedPAsset", data);
-    return promise.then(data => QueryGetTotalStakedPAssetResponse.decode(new _m0.Reader(data)));
+  totalStakedPAsset(request: DeepPartial<QueryGetTotalStakedPAssetRequest>, metadata?: grpc.Metadata): Promise<QueryGetTotalStakedPAssetResponse> {
+    return this.rpc.unary(QueryGetTotalStakedPAssetDesc, QueryGetTotalStakedPAssetRequest.fromPartial(request), metadata);
   }
-  vote(request: QueryGetVoteRequest): Promise<QueryGetVoteResponse> {
-    const data = QueryGetVoteRequest.encode(request).finish();
-    const promise = this.rpc.request("prism.pgov.Query", "Vote", data);
-    return promise.then(data => QueryGetVoteResponse.decode(new _m0.Reader(data)));
+  vote(request: DeepPartial<QueryGetVoteRequest>, metadata?: grpc.Metadata): Promise<QueryGetVoteResponse> {
+    return this.rpc.unary(QueryGetVoteDesc, QueryGetVoteRequest.fromPartial(request), metadata);
   }
-  voteAll(request: QueryAllVoteRequest = {
+  voteAll(request: DeepPartial<QueryAllVoteRequest> = {
     pagination: undefined
-  }): Promise<QueryAllVoteResponse> {
-    const data = QueryAllVoteRequest.encode(request).finish();
-    const promise = this.rpc.request("prism.pgov.Query", "VoteAll", data);
-    return promise.then(data => QueryAllVoteResponse.decode(new _m0.Reader(data)));
+  }, metadata?: grpc.Metadata): Promise<QueryAllVoteResponse> {
+    return this.rpc.unary(QueryAllVoteDesc, QueryAllVoteRequest.fromPartial(request), metadata);
   }
-  proposal(request: QueryGetProposalRequest): Promise<QueryGetProposalResponse> {
-    const data = QueryGetProposalRequest.encode(request).finish();
-    const promise = this.rpc.request("prism.pgov.Query", "Proposal", data);
-    return promise.then(data => QueryGetProposalResponse.decode(new _m0.Reader(data)));
+  proposal(request: DeepPartial<QueryGetProposalRequest>, metadata?: grpc.Metadata): Promise<QueryGetProposalResponse> {
+    return this.rpc.unary(QueryGetProposalDesc, QueryGetProposalRequest.fromPartial(request), metadata);
   }
-  proposalAll(request: QueryAllProposalRequest = {
+  proposalAll(request: DeepPartial<QueryAllProposalRequest> = {
     pagination: undefined
-  }): Promise<QueryAllProposalResponse> {
-    const data = QueryAllProposalRequest.encode(request).finish();
-    const promise = this.rpc.request("prism.pgov.Query", "ProposalAll", data);
-    return promise.then(data => QueryAllProposalResponse.decode(new _m0.Reader(data)));
+  }, metadata?: grpc.Metadata): Promise<QueryAllProposalResponse> {
+    return this.rpc.unary(QueryAllProposalDesc, QueryAllProposalRequest.fromPartial(request), metadata);
   }
 }
-export const createRpcQueryExtension = (base: QueryClient) => {
-  const rpc = createProtobufRpcClient(base);
-  const queryService = new QueryClientImpl(rpc);
-  return {
-    params(request?: QueryParamsRequest): Promise<QueryParamsResponse> {
-      return queryService.params(request);
-    },
-    stakedPAsset(request: QueryGetStakedPAssetRequest): Promise<QueryGetStakedPAssetResponse> {
-      return queryService.stakedPAsset(request);
-    },
-    stakedPAssetAll(request?: QueryAllStakedPAssetRequest): Promise<QueryAllStakedPAssetResponse> {
-      return queryService.stakedPAssetAll(request);
-    },
-    totalStakedPAsset(request: QueryGetTotalStakedPAssetRequest): Promise<QueryGetTotalStakedPAssetResponse> {
-      return queryService.totalStakedPAsset(request);
-    },
-    vote(request: QueryGetVoteRequest): Promise<QueryGetVoteResponse> {
-      return queryService.vote(request);
-    },
-    voteAll(request?: QueryAllVoteRequest): Promise<QueryAllVoteResponse> {
-      return queryService.voteAll(request);
-    },
-    proposal(request: QueryGetProposalRequest): Promise<QueryGetProposalResponse> {
-      return queryService.proposal(request);
-    },
-    proposalAll(request?: QueryAllProposalRequest): Promise<QueryAllProposalResponse> {
-      return queryService.proposalAll(request);
-    }
-  };
+export const QueryDesc = {
+  serviceName: "prism.pgov.Query"
 };
+export const QueryParamsDesc: UnaryMethodDefinitionish = {
+  methodName: "Params",
+  service: QueryDesc,
+  requestStream: false,
+  responseStream: false,
+  requestType: ({
+    serializeBinary() {
+      return QueryParamsRequest.encode(this).finish();
+    }
+  } as any),
+  responseType: ({
+    deserializeBinary(data: Uint8Array) {
+      return {
+        ...QueryParamsResponse.decode(data),
+        toObject() {
+          return this;
+        }
+      };
+    }
+  } as any)
+};
+export const QueryGetStakedPAssetDesc: UnaryMethodDefinitionish = {
+  methodName: "StakedPAsset",
+  service: QueryDesc,
+  requestStream: false,
+  responseStream: false,
+  requestType: ({
+    serializeBinary() {
+      return QueryGetStakedPAssetRequest.encode(this).finish();
+    }
+  } as any),
+  responseType: ({
+    deserializeBinary(data: Uint8Array) {
+      return {
+        ...QueryGetStakedPAssetResponse.decode(data),
+        toObject() {
+          return this;
+        }
+      };
+    }
+  } as any)
+};
+export const QueryAllStakedPAssetDesc: UnaryMethodDefinitionish = {
+  methodName: "StakedPAssetAll",
+  service: QueryDesc,
+  requestStream: false,
+  responseStream: false,
+  requestType: ({
+    serializeBinary() {
+      return QueryAllStakedPAssetRequest.encode(this).finish();
+    }
+  } as any),
+  responseType: ({
+    deserializeBinary(data: Uint8Array) {
+      return {
+        ...QueryAllStakedPAssetResponse.decode(data),
+        toObject() {
+          return this;
+        }
+      };
+    }
+  } as any)
+};
+export const QueryGetTotalStakedPAssetDesc: UnaryMethodDefinitionish = {
+  methodName: "TotalStakedPAsset",
+  service: QueryDesc,
+  requestStream: false,
+  responseStream: false,
+  requestType: ({
+    serializeBinary() {
+      return QueryGetTotalStakedPAssetRequest.encode(this).finish();
+    }
+  } as any),
+  responseType: ({
+    deserializeBinary(data: Uint8Array) {
+      return {
+        ...QueryGetTotalStakedPAssetResponse.decode(data),
+        toObject() {
+          return this;
+        }
+      };
+    }
+  } as any)
+};
+export const QueryGetVoteDesc: UnaryMethodDefinitionish = {
+  methodName: "Vote",
+  service: QueryDesc,
+  requestStream: false,
+  responseStream: false,
+  requestType: ({
+    serializeBinary() {
+      return QueryGetVoteRequest.encode(this).finish();
+    }
+  } as any),
+  responseType: ({
+    deserializeBinary(data: Uint8Array) {
+      return {
+        ...QueryGetVoteResponse.decode(data),
+        toObject() {
+          return this;
+        }
+      };
+    }
+  } as any)
+};
+export const QueryAllVoteDesc: UnaryMethodDefinitionish = {
+  methodName: "VoteAll",
+  service: QueryDesc,
+  requestStream: false,
+  responseStream: false,
+  requestType: ({
+    serializeBinary() {
+      return QueryAllVoteRequest.encode(this).finish();
+    }
+  } as any),
+  responseType: ({
+    deserializeBinary(data: Uint8Array) {
+      return {
+        ...QueryAllVoteResponse.decode(data),
+        toObject() {
+          return this;
+        }
+      };
+    }
+  } as any)
+};
+export const QueryGetProposalDesc: UnaryMethodDefinitionish = {
+  methodName: "Proposal",
+  service: QueryDesc,
+  requestStream: false,
+  responseStream: false,
+  requestType: ({
+    serializeBinary() {
+      return QueryGetProposalRequest.encode(this).finish();
+    }
+  } as any),
+  responseType: ({
+    deserializeBinary(data: Uint8Array) {
+      return {
+        ...QueryGetProposalResponse.decode(data),
+        toObject() {
+          return this;
+        }
+      };
+    }
+  } as any)
+};
+export const QueryAllProposalDesc: UnaryMethodDefinitionish = {
+  methodName: "ProposalAll",
+  service: QueryDesc,
+  requestStream: false,
+  responseStream: false,
+  requestType: ({
+    serializeBinary() {
+      return QueryAllProposalRequest.encode(this).finish();
+    }
+  } as any),
+  responseType: ({
+    deserializeBinary(data: Uint8Array) {
+      return {
+        ...QueryAllProposalResponse.decode(data),
+        toObject() {
+          return this;
+        }
+      };
+    }
+  } as any)
+};
+export interface Rpc {
+  unary<T extends UnaryMethodDefinitionish>(methodDesc: T, request: any, metadata: grpc.Metadata | undefined): Promise<any>;
+}
+export class GrpcWebImpl {
+  host: string;
+  options: {
+    transport?: grpc.TransportFactory;
+    debug?: boolean;
+    metadata?: grpc.Metadata;
+  };
+  constructor(host: string, options: {
+    transport?: grpc.TransportFactory;
+    debug?: boolean;
+    metadata?: grpc.Metadata;
+  }) {
+    this.host = host;
+    this.options = options;
+  }
+  unary<T extends UnaryMethodDefinitionish>(methodDesc: T, _request: any, metadata: grpc.Metadata | undefined) {
+    const request = {
+      ..._request,
+      ...methodDesc.requestType
+    };
+    const maybeCombinedMetadata = metadata && this.options.metadata ? new BrowserHeaders({
+      ...this.options?.metadata.headersMap,
+      ...metadata?.headersMap
+    }) : metadata || this.options.metadata;
+    return new Promise((resolve, reject) => {
+      grpc.unary(methodDesc, {
+        request,
+        host: this.host,
+        metadata: maybeCombinedMetadata,
+        transport: this.options.transport,
+        debug: this.options.debug,
+        onEnd: function (response) {
+          if (response.status === grpc.Code.OK) {
+            resolve(response.message);
+          } else {
+            const err = (new Error(response.statusMessage) as any);
+            err.code = response.status;
+            err.metadata = response.trailers;
+            reject(err);
+          }
+        }
+      });
+    });
+  }
+}

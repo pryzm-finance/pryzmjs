@@ -1,33 +1,35 @@
-import { Rpc } from "../../../helpers";
-import * as _m0 from "protobufjs/minimal";
-import { QueryClient, createProtobufRpcClient } from "@cosmjs/stargate";
+//@ts-nocheck
+import { grpc } from "@improbable-eng/grpc-web";
+import { UnaryMethodDefinitionish } from "../../../grpc-web";
+import { DeepPartial } from "../../../helpers";
+import { BrowserHeaders } from "browser-headers";
 import { QueryGroupInfoRequest, QueryGroupInfoResponse, QueryGroupPolicyInfoRequest, QueryGroupPolicyInfoResponse, QueryGroupMembersRequest, QueryGroupMembersResponse, QueryGroupsByAdminRequest, QueryGroupsByAdminResponse, QueryGroupPoliciesByGroupRequest, QueryGroupPoliciesByGroupResponse, QueryGroupPoliciesByAdminRequest, QueryGroupPoliciesByAdminResponse, QueryProposalRequest, QueryProposalResponse, QueryProposalsByGroupPolicyRequest, QueryProposalsByGroupPolicyResponse, QueryVoteByProposalVoterRequest, QueryVoteByProposalVoterResponse, QueryVotesByProposalRequest, QueryVotesByProposalResponse, QueryVotesByVoterRequest, QueryVotesByVoterResponse, QueryGroupsByMemberRequest, QueryGroupsByMemberResponse, QueryTallyResultRequest, QueryTallyResultResponse, QueryGroupsRequest, QueryGroupsResponse } from "./query";
 /** Query is the cosmos.group.v1 Query service. */
 export interface Query {
   /** GroupInfo queries group info based on group id. */
-  groupInfo(request: QueryGroupInfoRequest): Promise<QueryGroupInfoResponse>;
+  groupInfo(request: DeepPartial<QueryGroupInfoRequest>, metadata?: grpc.Metadata): Promise<QueryGroupInfoResponse>;
   /** GroupPolicyInfo queries group policy info based on account address of group policy. */
-  groupPolicyInfo(request: QueryGroupPolicyInfoRequest): Promise<QueryGroupPolicyInfoResponse>;
+  groupPolicyInfo(request: DeepPartial<QueryGroupPolicyInfoRequest>, metadata?: grpc.Metadata): Promise<QueryGroupPolicyInfoResponse>;
   /** GroupMembers queries members of a group by group id. */
-  groupMembers(request: QueryGroupMembersRequest): Promise<QueryGroupMembersResponse>;
+  groupMembers(request: DeepPartial<QueryGroupMembersRequest>, metadata?: grpc.Metadata): Promise<QueryGroupMembersResponse>;
   /** GroupsByAdmin queries groups by admin address. */
-  groupsByAdmin(request: QueryGroupsByAdminRequest): Promise<QueryGroupsByAdminResponse>;
+  groupsByAdmin(request: DeepPartial<QueryGroupsByAdminRequest>, metadata?: grpc.Metadata): Promise<QueryGroupsByAdminResponse>;
   /** GroupPoliciesByGroup queries group policies by group id. */
-  groupPoliciesByGroup(request: QueryGroupPoliciesByGroupRequest): Promise<QueryGroupPoliciesByGroupResponse>;
+  groupPoliciesByGroup(request: DeepPartial<QueryGroupPoliciesByGroupRequest>, metadata?: grpc.Metadata): Promise<QueryGroupPoliciesByGroupResponse>;
   /** GroupPoliciesByAdmin queries group policies by admin address. */
-  groupPoliciesByAdmin(request: QueryGroupPoliciesByAdminRequest): Promise<QueryGroupPoliciesByAdminResponse>;
+  groupPoliciesByAdmin(request: DeepPartial<QueryGroupPoliciesByAdminRequest>, metadata?: grpc.Metadata): Promise<QueryGroupPoliciesByAdminResponse>;
   /** Proposal queries a proposal based on proposal id. */
-  proposal(request: QueryProposalRequest): Promise<QueryProposalResponse>;
+  proposal(request: DeepPartial<QueryProposalRequest>, metadata?: grpc.Metadata): Promise<QueryProposalResponse>;
   /** ProposalsByGroupPolicy queries proposals based on account address of group policy. */
-  proposalsByGroupPolicy(request: QueryProposalsByGroupPolicyRequest): Promise<QueryProposalsByGroupPolicyResponse>;
+  proposalsByGroupPolicy(request: DeepPartial<QueryProposalsByGroupPolicyRequest>, metadata?: grpc.Metadata): Promise<QueryProposalsByGroupPolicyResponse>;
   /** VoteByProposalVoter queries a vote by proposal id and voter. */
-  voteByProposalVoter(request: QueryVoteByProposalVoterRequest): Promise<QueryVoteByProposalVoterResponse>;
+  voteByProposalVoter(request: DeepPartial<QueryVoteByProposalVoterRequest>, metadata?: grpc.Metadata): Promise<QueryVoteByProposalVoterResponse>;
   /** VotesByProposal queries a vote by proposal id. */
-  votesByProposal(request: QueryVotesByProposalRequest): Promise<QueryVotesByProposalResponse>;
+  votesByProposal(request: DeepPartial<QueryVotesByProposalRequest>, metadata?: grpc.Metadata): Promise<QueryVotesByProposalResponse>;
   /** VotesByVoter queries a vote by voter. */
-  votesByVoter(request: QueryVotesByVoterRequest): Promise<QueryVotesByVoterResponse>;
+  votesByVoter(request: DeepPartial<QueryVotesByVoterRequest>, metadata?: grpc.Metadata): Promise<QueryVotesByVoterResponse>;
   /** GroupsByMember queries groups by member address. */
-  groupsByMember(request: QueryGroupsByMemberRequest): Promise<QueryGroupsByMemberResponse>;
+  groupsByMember(request: DeepPartial<QueryGroupsByMemberRequest>, metadata?: grpc.Metadata): Promise<QueryGroupsByMemberResponse>;
   /**
    * TallyResult returns the tally result of a proposal. If the proposal is
    * still in voting period, then this query computes the current tally state,
@@ -35,13 +37,13 @@ export interface Query {
    * then it simply returns the `final_tally_result` state stored in the
    * proposal itself.
    */
-  tallyResult(request: QueryTallyResultRequest): Promise<QueryTallyResultResponse>;
+  tallyResult(request: DeepPartial<QueryTallyResultRequest>, metadata?: grpc.Metadata): Promise<QueryTallyResultResponse>;
   /**
    * Groups queries all groups in state.
    * 
    * Since: cosmos-sdk 0.47.1
    */
-  groups(request?: QueryGroupsRequest): Promise<QueryGroupsResponse>;
+  groups(request?: DeepPartial<QueryGroupsRequest>, metadata?: grpc.Metadata): Promise<QueryGroupsResponse>;
 }
 export class QueryClientImpl implements Query {
   private readonly rpc: Rpc;
@@ -62,124 +64,393 @@ export class QueryClientImpl implements Query {
     this.tallyResult = this.tallyResult.bind(this);
     this.groups = this.groups.bind(this);
   }
-  groupInfo(request: QueryGroupInfoRequest): Promise<QueryGroupInfoResponse> {
-    const data = QueryGroupInfoRequest.encode(request).finish();
-    const promise = this.rpc.request("cosmos.group.v1.Query", "GroupInfo", data);
-    return promise.then(data => QueryGroupInfoResponse.decode(new _m0.Reader(data)));
+  groupInfo(request: DeepPartial<QueryGroupInfoRequest>, metadata?: grpc.Metadata): Promise<QueryGroupInfoResponse> {
+    return this.rpc.unary(QueryGroupInfoDesc, QueryGroupInfoRequest.fromPartial(request), metadata);
   }
-  groupPolicyInfo(request: QueryGroupPolicyInfoRequest): Promise<QueryGroupPolicyInfoResponse> {
-    const data = QueryGroupPolicyInfoRequest.encode(request).finish();
-    const promise = this.rpc.request("cosmos.group.v1.Query", "GroupPolicyInfo", data);
-    return promise.then(data => QueryGroupPolicyInfoResponse.decode(new _m0.Reader(data)));
+  groupPolicyInfo(request: DeepPartial<QueryGroupPolicyInfoRequest>, metadata?: grpc.Metadata): Promise<QueryGroupPolicyInfoResponse> {
+    return this.rpc.unary(QueryGroupPolicyInfoDesc, QueryGroupPolicyInfoRequest.fromPartial(request), metadata);
   }
-  groupMembers(request: QueryGroupMembersRequest): Promise<QueryGroupMembersResponse> {
-    const data = QueryGroupMembersRequest.encode(request).finish();
-    const promise = this.rpc.request("cosmos.group.v1.Query", "GroupMembers", data);
-    return promise.then(data => QueryGroupMembersResponse.decode(new _m0.Reader(data)));
+  groupMembers(request: DeepPartial<QueryGroupMembersRequest>, metadata?: grpc.Metadata): Promise<QueryGroupMembersResponse> {
+    return this.rpc.unary(QueryGroupMembersDesc, QueryGroupMembersRequest.fromPartial(request), metadata);
   }
-  groupsByAdmin(request: QueryGroupsByAdminRequest): Promise<QueryGroupsByAdminResponse> {
-    const data = QueryGroupsByAdminRequest.encode(request).finish();
-    const promise = this.rpc.request("cosmos.group.v1.Query", "GroupsByAdmin", data);
-    return promise.then(data => QueryGroupsByAdminResponse.decode(new _m0.Reader(data)));
+  groupsByAdmin(request: DeepPartial<QueryGroupsByAdminRequest>, metadata?: grpc.Metadata): Promise<QueryGroupsByAdminResponse> {
+    return this.rpc.unary(QueryGroupsByAdminDesc, QueryGroupsByAdminRequest.fromPartial(request), metadata);
   }
-  groupPoliciesByGroup(request: QueryGroupPoliciesByGroupRequest): Promise<QueryGroupPoliciesByGroupResponse> {
-    const data = QueryGroupPoliciesByGroupRequest.encode(request).finish();
-    const promise = this.rpc.request("cosmos.group.v1.Query", "GroupPoliciesByGroup", data);
-    return promise.then(data => QueryGroupPoliciesByGroupResponse.decode(new _m0.Reader(data)));
+  groupPoliciesByGroup(request: DeepPartial<QueryGroupPoliciesByGroupRequest>, metadata?: grpc.Metadata): Promise<QueryGroupPoliciesByGroupResponse> {
+    return this.rpc.unary(QueryGroupPoliciesByGroupDesc, QueryGroupPoliciesByGroupRequest.fromPartial(request), metadata);
   }
-  groupPoliciesByAdmin(request: QueryGroupPoliciesByAdminRequest): Promise<QueryGroupPoliciesByAdminResponse> {
-    const data = QueryGroupPoliciesByAdminRequest.encode(request).finish();
-    const promise = this.rpc.request("cosmos.group.v1.Query", "GroupPoliciesByAdmin", data);
-    return promise.then(data => QueryGroupPoliciesByAdminResponse.decode(new _m0.Reader(data)));
+  groupPoliciesByAdmin(request: DeepPartial<QueryGroupPoliciesByAdminRequest>, metadata?: grpc.Metadata): Promise<QueryGroupPoliciesByAdminResponse> {
+    return this.rpc.unary(QueryGroupPoliciesByAdminDesc, QueryGroupPoliciesByAdminRequest.fromPartial(request), metadata);
   }
-  proposal(request: QueryProposalRequest): Promise<QueryProposalResponse> {
-    const data = QueryProposalRequest.encode(request).finish();
-    const promise = this.rpc.request("cosmos.group.v1.Query", "Proposal", data);
-    return promise.then(data => QueryProposalResponse.decode(new _m0.Reader(data)));
+  proposal(request: DeepPartial<QueryProposalRequest>, metadata?: grpc.Metadata): Promise<QueryProposalResponse> {
+    return this.rpc.unary(QueryProposalDesc, QueryProposalRequest.fromPartial(request), metadata);
   }
-  proposalsByGroupPolicy(request: QueryProposalsByGroupPolicyRequest): Promise<QueryProposalsByGroupPolicyResponse> {
-    const data = QueryProposalsByGroupPolicyRequest.encode(request).finish();
-    const promise = this.rpc.request("cosmos.group.v1.Query", "ProposalsByGroupPolicy", data);
-    return promise.then(data => QueryProposalsByGroupPolicyResponse.decode(new _m0.Reader(data)));
+  proposalsByGroupPolicy(request: DeepPartial<QueryProposalsByGroupPolicyRequest>, metadata?: grpc.Metadata): Promise<QueryProposalsByGroupPolicyResponse> {
+    return this.rpc.unary(QueryProposalsByGroupPolicyDesc, QueryProposalsByGroupPolicyRequest.fromPartial(request), metadata);
   }
-  voteByProposalVoter(request: QueryVoteByProposalVoterRequest): Promise<QueryVoteByProposalVoterResponse> {
-    const data = QueryVoteByProposalVoterRequest.encode(request).finish();
-    const promise = this.rpc.request("cosmos.group.v1.Query", "VoteByProposalVoter", data);
-    return promise.then(data => QueryVoteByProposalVoterResponse.decode(new _m0.Reader(data)));
+  voteByProposalVoter(request: DeepPartial<QueryVoteByProposalVoterRequest>, metadata?: grpc.Metadata): Promise<QueryVoteByProposalVoterResponse> {
+    return this.rpc.unary(QueryVoteByProposalVoterDesc, QueryVoteByProposalVoterRequest.fromPartial(request), metadata);
   }
-  votesByProposal(request: QueryVotesByProposalRequest): Promise<QueryVotesByProposalResponse> {
-    const data = QueryVotesByProposalRequest.encode(request).finish();
-    const promise = this.rpc.request("cosmos.group.v1.Query", "VotesByProposal", data);
-    return promise.then(data => QueryVotesByProposalResponse.decode(new _m0.Reader(data)));
+  votesByProposal(request: DeepPartial<QueryVotesByProposalRequest>, metadata?: grpc.Metadata): Promise<QueryVotesByProposalResponse> {
+    return this.rpc.unary(QueryVotesByProposalDesc, QueryVotesByProposalRequest.fromPartial(request), metadata);
   }
-  votesByVoter(request: QueryVotesByVoterRequest): Promise<QueryVotesByVoterResponse> {
-    const data = QueryVotesByVoterRequest.encode(request).finish();
-    const promise = this.rpc.request("cosmos.group.v1.Query", "VotesByVoter", data);
-    return promise.then(data => QueryVotesByVoterResponse.decode(new _m0.Reader(data)));
+  votesByVoter(request: DeepPartial<QueryVotesByVoterRequest>, metadata?: grpc.Metadata): Promise<QueryVotesByVoterResponse> {
+    return this.rpc.unary(QueryVotesByVoterDesc, QueryVotesByVoterRequest.fromPartial(request), metadata);
   }
-  groupsByMember(request: QueryGroupsByMemberRequest): Promise<QueryGroupsByMemberResponse> {
-    const data = QueryGroupsByMemberRequest.encode(request).finish();
-    const promise = this.rpc.request("cosmos.group.v1.Query", "GroupsByMember", data);
-    return promise.then(data => QueryGroupsByMemberResponse.decode(new _m0.Reader(data)));
+  groupsByMember(request: DeepPartial<QueryGroupsByMemberRequest>, metadata?: grpc.Metadata): Promise<QueryGroupsByMemberResponse> {
+    return this.rpc.unary(QueryGroupsByMemberDesc, QueryGroupsByMemberRequest.fromPartial(request), metadata);
   }
-  tallyResult(request: QueryTallyResultRequest): Promise<QueryTallyResultResponse> {
-    const data = QueryTallyResultRequest.encode(request).finish();
-    const promise = this.rpc.request("cosmos.group.v1.Query", "TallyResult", data);
-    return promise.then(data => QueryTallyResultResponse.decode(new _m0.Reader(data)));
+  tallyResult(request: DeepPartial<QueryTallyResultRequest>, metadata?: grpc.Metadata): Promise<QueryTallyResultResponse> {
+    return this.rpc.unary(QueryTallyResultDesc, QueryTallyResultRequest.fromPartial(request), metadata);
   }
-  groups(request: QueryGroupsRequest = {
+  groups(request: DeepPartial<QueryGroupsRequest> = {
     pagination: undefined
-  }): Promise<QueryGroupsResponse> {
-    const data = QueryGroupsRequest.encode(request).finish();
-    const promise = this.rpc.request("cosmos.group.v1.Query", "Groups", data);
-    return promise.then(data => QueryGroupsResponse.decode(new _m0.Reader(data)));
+  }, metadata?: grpc.Metadata): Promise<QueryGroupsResponse> {
+    return this.rpc.unary(QueryGroupsDesc, QueryGroupsRequest.fromPartial(request), metadata);
   }
 }
-export const createRpcQueryExtension = (base: QueryClient) => {
-  const rpc = createProtobufRpcClient(base);
-  const queryService = new QueryClientImpl(rpc);
-  return {
-    groupInfo(request: QueryGroupInfoRequest): Promise<QueryGroupInfoResponse> {
-      return queryService.groupInfo(request);
-    },
-    groupPolicyInfo(request: QueryGroupPolicyInfoRequest): Promise<QueryGroupPolicyInfoResponse> {
-      return queryService.groupPolicyInfo(request);
-    },
-    groupMembers(request: QueryGroupMembersRequest): Promise<QueryGroupMembersResponse> {
-      return queryService.groupMembers(request);
-    },
-    groupsByAdmin(request: QueryGroupsByAdminRequest): Promise<QueryGroupsByAdminResponse> {
-      return queryService.groupsByAdmin(request);
-    },
-    groupPoliciesByGroup(request: QueryGroupPoliciesByGroupRequest): Promise<QueryGroupPoliciesByGroupResponse> {
-      return queryService.groupPoliciesByGroup(request);
-    },
-    groupPoliciesByAdmin(request: QueryGroupPoliciesByAdminRequest): Promise<QueryGroupPoliciesByAdminResponse> {
-      return queryService.groupPoliciesByAdmin(request);
-    },
-    proposal(request: QueryProposalRequest): Promise<QueryProposalResponse> {
-      return queryService.proposal(request);
-    },
-    proposalsByGroupPolicy(request: QueryProposalsByGroupPolicyRequest): Promise<QueryProposalsByGroupPolicyResponse> {
-      return queryService.proposalsByGroupPolicy(request);
-    },
-    voteByProposalVoter(request: QueryVoteByProposalVoterRequest): Promise<QueryVoteByProposalVoterResponse> {
-      return queryService.voteByProposalVoter(request);
-    },
-    votesByProposal(request: QueryVotesByProposalRequest): Promise<QueryVotesByProposalResponse> {
-      return queryService.votesByProposal(request);
-    },
-    votesByVoter(request: QueryVotesByVoterRequest): Promise<QueryVotesByVoterResponse> {
-      return queryService.votesByVoter(request);
-    },
-    groupsByMember(request: QueryGroupsByMemberRequest): Promise<QueryGroupsByMemberResponse> {
-      return queryService.groupsByMember(request);
-    },
-    tallyResult(request: QueryTallyResultRequest): Promise<QueryTallyResultResponse> {
-      return queryService.tallyResult(request);
-    },
-    groups(request?: QueryGroupsRequest): Promise<QueryGroupsResponse> {
-      return queryService.groups(request);
-    }
-  };
+export const QueryDesc = {
+  serviceName: "cosmos.group.v1.Query"
 };
+export const QueryGroupInfoDesc: UnaryMethodDefinitionish = {
+  methodName: "GroupInfo",
+  service: QueryDesc,
+  requestStream: false,
+  responseStream: false,
+  requestType: ({
+    serializeBinary() {
+      return QueryGroupInfoRequest.encode(this).finish();
+    }
+  } as any),
+  responseType: ({
+    deserializeBinary(data: Uint8Array) {
+      return {
+        ...QueryGroupInfoResponse.decode(data),
+        toObject() {
+          return this;
+        }
+      };
+    }
+  } as any)
+};
+export const QueryGroupPolicyInfoDesc: UnaryMethodDefinitionish = {
+  methodName: "GroupPolicyInfo",
+  service: QueryDesc,
+  requestStream: false,
+  responseStream: false,
+  requestType: ({
+    serializeBinary() {
+      return QueryGroupPolicyInfoRequest.encode(this).finish();
+    }
+  } as any),
+  responseType: ({
+    deserializeBinary(data: Uint8Array) {
+      return {
+        ...QueryGroupPolicyInfoResponse.decode(data),
+        toObject() {
+          return this;
+        }
+      };
+    }
+  } as any)
+};
+export const QueryGroupMembersDesc: UnaryMethodDefinitionish = {
+  methodName: "GroupMembers",
+  service: QueryDesc,
+  requestStream: false,
+  responseStream: false,
+  requestType: ({
+    serializeBinary() {
+      return QueryGroupMembersRequest.encode(this).finish();
+    }
+  } as any),
+  responseType: ({
+    deserializeBinary(data: Uint8Array) {
+      return {
+        ...QueryGroupMembersResponse.decode(data),
+        toObject() {
+          return this;
+        }
+      };
+    }
+  } as any)
+};
+export const QueryGroupsByAdminDesc: UnaryMethodDefinitionish = {
+  methodName: "GroupsByAdmin",
+  service: QueryDesc,
+  requestStream: false,
+  responseStream: false,
+  requestType: ({
+    serializeBinary() {
+      return QueryGroupsByAdminRequest.encode(this).finish();
+    }
+  } as any),
+  responseType: ({
+    deserializeBinary(data: Uint8Array) {
+      return {
+        ...QueryGroupsByAdminResponse.decode(data),
+        toObject() {
+          return this;
+        }
+      };
+    }
+  } as any)
+};
+export const QueryGroupPoliciesByGroupDesc: UnaryMethodDefinitionish = {
+  methodName: "GroupPoliciesByGroup",
+  service: QueryDesc,
+  requestStream: false,
+  responseStream: false,
+  requestType: ({
+    serializeBinary() {
+      return QueryGroupPoliciesByGroupRequest.encode(this).finish();
+    }
+  } as any),
+  responseType: ({
+    deserializeBinary(data: Uint8Array) {
+      return {
+        ...QueryGroupPoliciesByGroupResponse.decode(data),
+        toObject() {
+          return this;
+        }
+      };
+    }
+  } as any)
+};
+export const QueryGroupPoliciesByAdminDesc: UnaryMethodDefinitionish = {
+  methodName: "GroupPoliciesByAdmin",
+  service: QueryDesc,
+  requestStream: false,
+  responseStream: false,
+  requestType: ({
+    serializeBinary() {
+      return QueryGroupPoliciesByAdminRequest.encode(this).finish();
+    }
+  } as any),
+  responseType: ({
+    deserializeBinary(data: Uint8Array) {
+      return {
+        ...QueryGroupPoliciesByAdminResponse.decode(data),
+        toObject() {
+          return this;
+        }
+      };
+    }
+  } as any)
+};
+export const QueryProposalDesc: UnaryMethodDefinitionish = {
+  methodName: "Proposal",
+  service: QueryDesc,
+  requestStream: false,
+  responseStream: false,
+  requestType: ({
+    serializeBinary() {
+      return QueryProposalRequest.encode(this).finish();
+    }
+  } as any),
+  responseType: ({
+    deserializeBinary(data: Uint8Array) {
+      return {
+        ...QueryProposalResponse.decode(data),
+        toObject() {
+          return this;
+        }
+      };
+    }
+  } as any)
+};
+export const QueryProposalsByGroupPolicyDesc: UnaryMethodDefinitionish = {
+  methodName: "ProposalsByGroupPolicy",
+  service: QueryDesc,
+  requestStream: false,
+  responseStream: false,
+  requestType: ({
+    serializeBinary() {
+      return QueryProposalsByGroupPolicyRequest.encode(this).finish();
+    }
+  } as any),
+  responseType: ({
+    deserializeBinary(data: Uint8Array) {
+      return {
+        ...QueryProposalsByGroupPolicyResponse.decode(data),
+        toObject() {
+          return this;
+        }
+      };
+    }
+  } as any)
+};
+export const QueryVoteByProposalVoterDesc: UnaryMethodDefinitionish = {
+  methodName: "VoteByProposalVoter",
+  service: QueryDesc,
+  requestStream: false,
+  responseStream: false,
+  requestType: ({
+    serializeBinary() {
+      return QueryVoteByProposalVoterRequest.encode(this).finish();
+    }
+  } as any),
+  responseType: ({
+    deserializeBinary(data: Uint8Array) {
+      return {
+        ...QueryVoteByProposalVoterResponse.decode(data),
+        toObject() {
+          return this;
+        }
+      };
+    }
+  } as any)
+};
+export const QueryVotesByProposalDesc: UnaryMethodDefinitionish = {
+  methodName: "VotesByProposal",
+  service: QueryDesc,
+  requestStream: false,
+  responseStream: false,
+  requestType: ({
+    serializeBinary() {
+      return QueryVotesByProposalRequest.encode(this).finish();
+    }
+  } as any),
+  responseType: ({
+    deserializeBinary(data: Uint8Array) {
+      return {
+        ...QueryVotesByProposalResponse.decode(data),
+        toObject() {
+          return this;
+        }
+      };
+    }
+  } as any)
+};
+export const QueryVotesByVoterDesc: UnaryMethodDefinitionish = {
+  methodName: "VotesByVoter",
+  service: QueryDesc,
+  requestStream: false,
+  responseStream: false,
+  requestType: ({
+    serializeBinary() {
+      return QueryVotesByVoterRequest.encode(this).finish();
+    }
+  } as any),
+  responseType: ({
+    deserializeBinary(data: Uint8Array) {
+      return {
+        ...QueryVotesByVoterResponse.decode(data),
+        toObject() {
+          return this;
+        }
+      };
+    }
+  } as any)
+};
+export const QueryGroupsByMemberDesc: UnaryMethodDefinitionish = {
+  methodName: "GroupsByMember",
+  service: QueryDesc,
+  requestStream: false,
+  responseStream: false,
+  requestType: ({
+    serializeBinary() {
+      return QueryGroupsByMemberRequest.encode(this).finish();
+    }
+  } as any),
+  responseType: ({
+    deserializeBinary(data: Uint8Array) {
+      return {
+        ...QueryGroupsByMemberResponse.decode(data),
+        toObject() {
+          return this;
+        }
+      };
+    }
+  } as any)
+};
+export const QueryTallyResultDesc: UnaryMethodDefinitionish = {
+  methodName: "TallyResult",
+  service: QueryDesc,
+  requestStream: false,
+  responseStream: false,
+  requestType: ({
+    serializeBinary() {
+      return QueryTallyResultRequest.encode(this).finish();
+    }
+  } as any),
+  responseType: ({
+    deserializeBinary(data: Uint8Array) {
+      return {
+        ...QueryTallyResultResponse.decode(data),
+        toObject() {
+          return this;
+        }
+      };
+    }
+  } as any)
+};
+export const QueryGroupsDesc: UnaryMethodDefinitionish = {
+  methodName: "Groups",
+  service: QueryDesc,
+  requestStream: false,
+  responseStream: false,
+  requestType: ({
+    serializeBinary() {
+      return QueryGroupsRequest.encode(this).finish();
+    }
+  } as any),
+  responseType: ({
+    deserializeBinary(data: Uint8Array) {
+      return {
+        ...QueryGroupsResponse.decode(data),
+        toObject() {
+          return this;
+        }
+      };
+    }
+  } as any)
+};
+export interface Rpc {
+  unary<T extends UnaryMethodDefinitionish>(methodDesc: T, request: any, metadata: grpc.Metadata | undefined): Promise<any>;
+}
+export class GrpcWebImpl {
+  host: string;
+  options: {
+    transport?: grpc.TransportFactory;
+    debug?: boolean;
+    metadata?: grpc.Metadata;
+  };
+  constructor(host: string, options: {
+    transport?: grpc.TransportFactory;
+    debug?: boolean;
+    metadata?: grpc.Metadata;
+  }) {
+    this.host = host;
+    this.options = options;
+  }
+  unary<T extends UnaryMethodDefinitionish>(methodDesc: T, _request: any, metadata: grpc.Metadata | undefined) {
+    const request = {
+      ..._request,
+      ...methodDesc.requestType
+    };
+    const maybeCombinedMetadata = metadata && this.options.metadata ? new BrowserHeaders({
+      ...this.options?.metadata.headersMap,
+      ...metadata?.headersMap
+    }) : metadata || this.options.metadata;
+    return new Promise((resolve, reject) => {
+      grpc.unary(methodDesc, {
+        request,
+        host: this.host,
+        metadata: maybeCombinedMetadata,
+        transport: this.options.transport,
+        debug: this.options.debug,
+        onEnd: function (response) {
+          if (response.status === grpc.Code.OK) {
+            resolve(response.message);
+          } else {
+            const err = (new Error(response.statusMessage) as any);
+            err.code = response.status;
+            err.metadata = response.trailers;
+            reject(err);
+          }
+        }
+      });
+    });
+  }
+}

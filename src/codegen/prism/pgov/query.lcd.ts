@@ -32,7 +32,10 @@ export class LCDQueryClient {
   /* Queries a list of StakedPAsset items. */
   async stakedPAssetAll(params: QueryAllStakedPAssetRequest = {
     pagination: undefined
-  }, options: any = {params: {}}): Promise<QueryAllStakedPAssetResponseSDKType> {
+  }): Promise<QueryAllStakedPAssetResponseSDKType> {
+    const options: any = {
+      params: {}
+    };
     if (typeof params?.pagination !== "undefined") {
       setPaginationParams(options, params.pagination);
     }
@@ -52,7 +55,10 @@ export class LCDQueryClient {
   /* Queries a list of Vote items. */
   async voteAll(params: QueryAllVoteRequest = {
     pagination: undefined
-  }, options: any = {params: {}}): Promise<QueryAllVoteResponseSDKType> {
+  }): Promise<QueryAllVoteResponseSDKType> {
+    const options: any = {
+      params: {}
+    };
     if (typeof params?.pagination !== "undefined") {
       setPaginationParams(options, params.pagination);
     }
@@ -67,7 +73,10 @@ export class LCDQueryClient {
   /* Queries a list of Proposal items. */
   async proposalAll(params: QueryAllProposalRequest = {
     pagination: undefined
-  }, options: any = {params: {}}): Promise<QueryAllProposalResponseSDKType> {
+  }): Promise<QueryAllProposalResponseSDKType> {
+    const options: any = {
+      params: {}
+    };
     if (typeof params?.pagination !== "undefined") {
       setPaginationParams(options, params.pagination);
     }

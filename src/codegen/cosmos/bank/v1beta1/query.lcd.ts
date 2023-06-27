@@ -23,7 +23,10 @@ export class LCDQueryClient {
     this.sendEnabled = this.sendEnabled.bind(this);
   }
   /* Balance queries the balance of a single coin for a single account. */
-  async balance(params: QueryBalanceRequest, options: any = {params: {}}): Promise<QueryBalanceResponseSDKType> {
+  async balance(params: QueryBalanceRequest): Promise<QueryBalanceResponseSDKType> {
+    const options: any = {
+      params: {}
+    };
     if (typeof params?.denom !== "undefined") {
       options.params.denom = params.denom;
     }
@@ -34,7 +37,10 @@ export class LCDQueryClient {
   
    When called from another module, this query might consume a high amount of
    gas if the pagination field is incorrectly set. */
-  async allBalances(params: QueryAllBalancesRequest, options: any = {params: {}}): Promise<QueryAllBalancesResponseSDKType> {
+  async allBalances(params: QueryAllBalancesRequest): Promise<QueryAllBalancesResponseSDKType> {
+    const options: any = {
+      params: {}
+    };
     if (typeof params?.pagination !== "undefined") {
       setPaginationParams(options, params.pagination);
     }
@@ -48,7 +54,10 @@ export class LCDQueryClient {
    gas if the pagination field is incorrectly set.
   
    Since: cosmos-sdk 0.46 */
-  async spendableBalances(params: QuerySpendableBalancesRequest, options: any = {params: {}}): Promise<QuerySpendableBalancesResponseSDKType> {
+  async spendableBalances(params: QuerySpendableBalancesRequest): Promise<QuerySpendableBalancesResponseSDKType> {
+    const options: any = {
+      params: {}
+    };
     if (typeof params?.pagination !== "undefined") {
       setPaginationParams(options, params.pagination);
     }
@@ -62,7 +71,10 @@ export class LCDQueryClient {
    gas if the pagination field is incorrectly set.
   
    Since: cosmos-sdk 0.47 */
-  async spendableBalanceByDenom(params: QuerySpendableBalanceByDenomRequest, options: any = {params: {}}): Promise<QuerySpendableBalanceByDenomResponseSDKType> {
+  async spendableBalanceByDenom(params: QuerySpendableBalanceByDenomRequest): Promise<QuerySpendableBalanceByDenomResponseSDKType> {
+    const options: any = {
+      params: {}
+    };
     if (typeof params?.denom !== "undefined") {
       options.params.denom = params.denom;
     }
@@ -75,7 +87,10 @@ export class LCDQueryClient {
    gas if the pagination field is incorrectly set. */
   async totalSupply(params: QueryTotalSupplyRequest = {
     pagination: undefined
-  }, options: any = {params: {}}): Promise<QueryTotalSupplyResponseSDKType> {
+  }): Promise<QueryTotalSupplyResponseSDKType> {
+    const options: any = {
+      params: {}
+    };
     if (typeof params?.pagination !== "undefined") {
       setPaginationParams(options, params.pagination);
     }
@@ -86,7 +101,10 @@ export class LCDQueryClient {
   
    When called from another module, this query might consume a high amount of
    gas if the pagination field is incorrectly set. */
-  async supplyOf(params: QuerySupplyOfRequest, options: any = {params: {}}): Promise<QuerySupplyOfResponseSDKType> {
+  async supplyOf(params: QuerySupplyOfRequest): Promise<QuerySupplyOfResponseSDKType> {
+    const options: any = {
+      params: {}
+    };
     if (typeof params?.denom !== "undefined") {
       options.params.denom = params.denom;
     }
@@ -107,7 +125,10 @@ export class LCDQueryClient {
    denominations. */
   async denomsMetadata(params: QueryDenomsMetadataRequest = {
     pagination: undefined
-  }, options: any = {params: {}}): Promise<QueryDenomsMetadataResponseSDKType> {
+  }): Promise<QueryDenomsMetadataResponseSDKType> {
+    const options: any = {
+      params: {}
+    };
     if (typeof params?.pagination !== "undefined") {
       setPaginationParams(options, params.pagination);
     }
@@ -121,7 +142,10 @@ export class LCDQueryClient {
    gas if the pagination field is incorrectly set.
   
    Since: cosmos-sdk 0.46 */
-  async denomOwners(params: QueryDenomOwnersRequest, options: any = {params: {}}): Promise<QueryDenomOwnersResponseSDKType> {
+  async denomOwners(params: QueryDenomOwnersRequest): Promise<QueryDenomOwnersResponseSDKType> {
+    const options: any = {
+      params: {}
+    };
     if (typeof params?.pagination !== "undefined") {
       setPaginationParams(options, params.pagination);
     }
@@ -135,7 +159,10 @@ export class LCDQueryClient {
    params.default_send_enabled, and will not be returned by this query.
   
    Since: cosmos-sdk 0.47 */
-  async sendEnabled(params: QuerySendEnabledRequest, options: any = {params: {}}): Promise<QuerySendEnabledResponseSDKType> {
+  async sendEnabled(params: QuerySendEnabledRequest): Promise<QuerySendEnabledResponseSDKType> {
+    const options: any = {
+      params: {}
+    };
     if (typeof params?.denoms !== "undefined") {
       options.params.denoms = params.denoms;
     }

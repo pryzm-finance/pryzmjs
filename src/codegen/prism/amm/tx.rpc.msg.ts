@@ -1,42 +1,45 @@
-import { Rpc } from "../../helpers";
-import * as _m0 from "protobufjs/minimal";
+//@ts-nocheck
+import { UnaryMethodDefinitionish } from "../../grpc-web";
+import { DeepPartial } from "../../helpers";
+import { grpc } from "@improbable-eng/grpc-web";
+import { BrowserHeaders } from "browser-headers";
 import { MsgSingleSwap, MsgSingleSwapResponse, MsgJoinAllTokensExactLpt, MsgJoinAllTokensExactLptResponse, MsgJoinTokenExactLpt, MsgJoinTokenExactLptResponse, MsgJoinExactTokens, MsgJoinExactTokensResponse, MsgExitExactTokens, MsgExitExactTokensResponse, MsgExitTokenExactLpt, MsgExitTokenExactLptResponse, MsgExitAllTokensExactLpt, MsgExitAllTokensExactLptResponse, MsgCreateWeightedPool, MsgCreateWeightedPoolResponse, MsgUpdateSwapFee, MsgUpdateSwapFeeResponse, MsgInitializePool, MsgInitializePoolResponse, MsgUpdateWeights, MsgUpdateWeightsResponse, MsgBatchSwap, MsgBatchSwapResponse, MsgSetYammConfiguration, MsgSetYammConfigurationResponse, MsgWhitelistRoute, MsgWhitelistRouteResponse, MsgSetWhitelistedRouteEnabled, MsgSetWhitelistedRouteEnabledResponse, MsgSubmitOrder, MsgSubmitOrderResponse, MsgCancelOrder, MsgCancelOrderResponse, MsgProposeMatch, MsgProposeMatchResponse, MsgSetCircuitBreakers, MsgSetCircuitBreakersResponse, MsgSetRecoveryMode, MsgSetRecoveryModeResponse, MsgRecoveryExit, MsgRecoveryExitResponse, MsgSetPauseMode, MsgSetPauseModeResponse, MsgSetVaultPauseMode, MsgSetVaultPauseModeResponse, MsgCreateOraclePricePair, MsgCreateOraclePricePairResponse, MsgUpdateOraclePricePair, MsgUpdateOraclePricePairResponse, MsgDeleteOraclePricePair, MsgDeleteOraclePricePairResponse, MsgSetSwapProtocolFee, MsgSetSwapProtocolFeeResponse, MsgSetJoinExitProtocolFee, MsgSetJoinExitProtocolFeeResponse, MsgIntroduceYammLpToWeightedPool, MsgIntroduceYammLpToWeightedPoolResponse, MsgCancelPendingTokenIntroduction, MsgCancelPendingTokenIntroductionResponse, MsgRemoveTokenFromWeightedPool, MsgRemoveTokenFromWeightedPoolResponse, MsgUpdateParams, MsgUpdateParamsResponse, MsgAddMaturityToYamm, MsgAddMaturityToYammResponse, MsgSetInitializationAllowList, MsgSetInitializationAllowListResponse } from "./tx";
 /** Msg defines the Msg service. */
 export interface Msg {
-  singleSwap(request: MsgSingleSwap): Promise<MsgSingleSwapResponse>;
-  joinAllTokensExactLpt(request: MsgJoinAllTokensExactLpt): Promise<MsgJoinAllTokensExactLptResponse>;
-  joinTokenExactLpt(request: MsgJoinTokenExactLpt): Promise<MsgJoinTokenExactLptResponse>;
-  joinExactTokens(request: MsgJoinExactTokens): Promise<MsgJoinExactTokensResponse>;
-  exitExactTokens(request: MsgExitExactTokens): Promise<MsgExitExactTokensResponse>;
-  exitTokenExactLpt(request: MsgExitTokenExactLpt): Promise<MsgExitTokenExactLptResponse>;
-  exitAllTokensExactLpt(request: MsgExitAllTokensExactLpt): Promise<MsgExitAllTokensExactLptResponse>;
-  createWeightedPool(request: MsgCreateWeightedPool): Promise<MsgCreateWeightedPoolResponse>;
-  updateSwapFee(request: MsgUpdateSwapFee): Promise<MsgUpdateSwapFeeResponse>;
-  initializePool(request: MsgInitializePool): Promise<MsgInitializePoolResponse>;
-  updateWeights(request: MsgUpdateWeights): Promise<MsgUpdateWeightsResponse>;
-  batchSwap(request: MsgBatchSwap): Promise<MsgBatchSwapResponse>;
-  setYammConfiguration(request: MsgSetYammConfiguration): Promise<MsgSetYammConfigurationResponse>;
-  whitelistRoute(request: MsgWhitelistRoute): Promise<MsgWhitelistRouteResponse>;
-  setWhitelistedRouteEnabled(request: MsgSetWhitelistedRouteEnabled): Promise<MsgSetWhitelistedRouteEnabledResponse>;
-  submitOrder(request: MsgSubmitOrder): Promise<MsgSubmitOrderResponse>;
-  cancelOrder(request: MsgCancelOrder): Promise<MsgCancelOrderResponse>;
-  proposeMatch(request: MsgProposeMatch): Promise<MsgProposeMatchResponse>;
-  setCircuitBreakers(request: MsgSetCircuitBreakers): Promise<MsgSetCircuitBreakersResponse>;
-  setRecoveryMode(request: MsgSetRecoveryMode): Promise<MsgSetRecoveryModeResponse>;
-  recoveryExit(request: MsgRecoveryExit): Promise<MsgRecoveryExitResponse>;
-  setPauseMode(request: MsgSetPauseMode): Promise<MsgSetPauseModeResponse>;
-  setVaultPauseMode(request: MsgSetVaultPauseMode): Promise<MsgSetVaultPauseModeResponse>;
-  createOraclePricePair(request: MsgCreateOraclePricePair): Promise<MsgCreateOraclePricePairResponse>;
-  updateOraclePricePair(request: MsgUpdateOraclePricePair): Promise<MsgUpdateOraclePricePairResponse>;
-  deleteOraclePricePair(request: MsgDeleteOraclePricePair): Promise<MsgDeleteOraclePricePairResponse>;
-  setSwapProtocolFee(request: MsgSetSwapProtocolFee): Promise<MsgSetSwapProtocolFeeResponse>;
-  setJoinExitProtocolFee(request: MsgSetJoinExitProtocolFee): Promise<MsgSetJoinExitProtocolFeeResponse>;
-  introduceYammLpToWeightedPool(request: MsgIntroduceYammLpToWeightedPool): Promise<MsgIntroduceYammLpToWeightedPoolResponse>;
-  cancelPendingTokenIntroduction(request: MsgCancelPendingTokenIntroduction): Promise<MsgCancelPendingTokenIntroductionResponse>;
-  removeTokenFromWeightedPool(request: MsgRemoveTokenFromWeightedPool): Promise<MsgRemoveTokenFromWeightedPoolResponse>;
-  updateParams(request: MsgUpdateParams): Promise<MsgUpdateParamsResponse>;
-  addMaturityToYamm(request: MsgAddMaturityToYamm): Promise<MsgAddMaturityToYammResponse>;
-  setInitializationAllowList(request: MsgSetInitializationAllowList): Promise<MsgSetInitializationAllowListResponse>;
+  singleSwap(request: DeepPartial<MsgSingleSwap>, metadata?: grpc.Metadata): Promise<MsgSingleSwapResponse>;
+  joinAllTokensExactLpt(request: DeepPartial<MsgJoinAllTokensExactLpt>, metadata?: grpc.Metadata): Promise<MsgJoinAllTokensExactLptResponse>;
+  joinTokenExactLpt(request: DeepPartial<MsgJoinTokenExactLpt>, metadata?: grpc.Metadata): Promise<MsgJoinTokenExactLptResponse>;
+  joinExactTokens(request: DeepPartial<MsgJoinExactTokens>, metadata?: grpc.Metadata): Promise<MsgJoinExactTokensResponse>;
+  exitExactTokens(request: DeepPartial<MsgExitExactTokens>, metadata?: grpc.Metadata): Promise<MsgExitExactTokensResponse>;
+  exitTokenExactLpt(request: DeepPartial<MsgExitTokenExactLpt>, metadata?: grpc.Metadata): Promise<MsgExitTokenExactLptResponse>;
+  exitAllTokensExactLpt(request: DeepPartial<MsgExitAllTokensExactLpt>, metadata?: grpc.Metadata): Promise<MsgExitAllTokensExactLptResponse>;
+  createWeightedPool(request: DeepPartial<MsgCreateWeightedPool>, metadata?: grpc.Metadata): Promise<MsgCreateWeightedPoolResponse>;
+  updateSwapFee(request: DeepPartial<MsgUpdateSwapFee>, metadata?: grpc.Metadata): Promise<MsgUpdateSwapFeeResponse>;
+  initializePool(request: DeepPartial<MsgInitializePool>, metadata?: grpc.Metadata): Promise<MsgInitializePoolResponse>;
+  updateWeights(request: DeepPartial<MsgUpdateWeights>, metadata?: grpc.Metadata): Promise<MsgUpdateWeightsResponse>;
+  batchSwap(request: DeepPartial<MsgBatchSwap>, metadata?: grpc.Metadata): Promise<MsgBatchSwapResponse>;
+  setYammConfiguration(request: DeepPartial<MsgSetYammConfiguration>, metadata?: grpc.Metadata): Promise<MsgSetYammConfigurationResponse>;
+  whitelistRoute(request: DeepPartial<MsgWhitelistRoute>, metadata?: grpc.Metadata): Promise<MsgWhitelistRouteResponse>;
+  setWhitelistedRouteEnabled(request: DeepPartial<MsgSetWhitelistedRouteEnabled>, metadata?: grpc.Metadata): Promise<MsgSetWhitelistedRouteEnabledResponse>;
+  submitOrder(request: DeepPartial<MsgSubmitOrder>, metadata?: grpc.Metadata): Promise<MsgSubmitOrderResponse>;
+  cancelOrder(request: DeepPartial<MsgCancelOrder>, metadata?: grpc.Metadata): Promise<MsgCancelOrderResponse>;
+  proposeMatch(request: DeepPartial<MsgProposeMatch>, metadata?: grpc.Metadata): Promise<MsgProposeMatchResponse>;
+  setCircuitBreakers(request: DeepPartial<MsgSetCircuitBreakers>, metadata?: grpc.Metadata): Promise<MsgSetCircuitBreakersResponse>;
+  setRecoveryMode(request: DeepPartial<MsgSetRecoveryMode>, metadata?: grpc.Metadata): Promise<MsgSetRecoveryModeResponse>;
+  recoveryExit(request: DeepPartial<MsgRecoveryExit>, metadata?: grpc.Metadata): Promise<MsgRecoveryExitResponse>;
+  setPauseMode(request: DeepPartial<MsgSetPauseMode>, metadata?: grpc.Metadata): Promise<MsgSetPauseModeResponse>;
+  setVaultPauseMode(request: DeepPartial<MsgSetVaultPauseMode>, metadata?: grpc.Metadata): Promise<MsgSetVaultPauseModeResponse>;
+  createOraclePricePair(request: DeepPartial<MsgCreateOraclePricePair>, metadata?: grpc.Metadata): Promise<MsgCreateOraclePricePairResponse>;
+  updateOraclePricePair(request: DeepPartial<MsgUpdateOraclePricePair>, metadata?: grpc.Metadata): Promise<MsgUpdateOraclePricePairResponse>;
+  deleteOraclePricePair(request: DeepPartial<MsgDeleteOraclePricePair>, metadata?: grpc.Metadata): Promise<MsgDeleteOraclePricePairResponse>;
+  setSwapProtocolFee(request: DeepPartial<MsgSetSwapProtocolFee>, metadata?: grpc.Metadata): Promise<MsgSetSwapProtocolFeeResponse>;
+  setJoinExitProtocolFee(request: DeepPartial<MsgSetJoinExitProtocolFee>, metadata?: grpc.Metadata): Promise<MsgSetJoinExitProtocolFeeResponse>;
+  introduceYammLpToWeightedPool(request: DeepPartial<MsgIntroduceYammLpToWeightedPool>, metadata?: grpc.Metadata): Promise<MsgIntroduceYammLpToWeightedPoolResponse>;
+  cancelPendingTokenIntroduction(request: DeepPartial<MsgCancelPendingTokenIntroduction>, metadata?: grpc.Metadata): Promise<MsgCancelPendingTokenIntroductionResponse>;
+  removeTokenFromWeightedPool(request: DeepPartial<MsgRemoveTokenFromWeightedPool>, metadata?: grpc.Metadata): Promise<MsgRemoveTokenFromWeightedPoolResponse>;
+  updateParams(request: DeepPartial<MsgUpdateParams>, metadata?: grpc.Metadata): Promise<MsgUpdateParamsResponse>;
+  addMaturityToYamm(request: DeepPartial<MsgAddMaturityToYamm>, metadata?: grpc.Metadata): Promise<MsgAddMaturityToYammResponse>;
+  setInitializationAllowList(request: DeepPartial<MsgSetInitializationAllowList>, metadata?: grpc.Metadata): Promise<MsgSetInitializationAllowListResponse>;
 }
 export class MsgClientImpl implements Msg {
   private readonly rpc: Rpc;
@@ -77,174 +80,871 @@ export class MsgClientImpl implements Msg {
     this.addMaturityToYamm = this.addMaturityToYamm.bind(this);
     this.setInitializationAllowList = this.setInitializationAllowList.bind(this);
   }
-  singleSwap(request: MsgSingleSwap): Promise<MsgSingleSwapResponse> {
-    const data = MsgSingleSwap.encode(request).finish();
-    const promise = this.rpc.request("prism.amm.Msg", "SingleSwap", data);
-    return promise.then(data => MsgSingleSwapResponse.decode(new _m0.Reader(data)));
+  singleSwap(request: DeepPartial<MsgSingleSwap>, metadata?: grpc.Metadata): Promise<MsgSingleSwapResponse> {
+    return this.rpc.unary(MsgSingleSwapDesc, MsgSingleSwap.fromPartial(request), metadata);
   }
-  joinAllTokensExactLpt(request: MsgJoinAllTokensExactLpt): Promise<MsgJoinAllTokensExactLptResponse> {
-    const data = MsgJoinAllTokensExactLpt.encode(request).finish();
-    const promise = this.rpc.request("prism.amm.Msg", "JoinAllTokensExactLpt", data);
-    return promise.then(data => MsgJoinAllTokensExactLptResponse.decode(new _m0.Reader(data)));
+  joinAllTokensExactLpt(request: DeepPartial<MsgJoinAllTokensExactLpt>, metadata?: grpc.Metadata): Promise<MsgJoinAllTokensExactLptResponse> {
+    return this.rpc.unary(MsgJoinAllTokensExactLptDesc, MsgJoinAllTokensExactLpt.fromPartial(request), metadata);
   }
-  joinTokenExactLpt(request: MsgJoinTokenExactLpt): Promise<MsgJoinTokenExactLptResponse> {
-    const data = MsgJoinTokenExactLpt.encode(request).finish();
-    const promise = this.rpc.request("prism.amm.Msg", "JoinTokenExactLpt", data);
-    return promise.then(data => MsgJoinTokenExactLptResponse.decode(new _m0.Reader(data)));
+  joinTokenExactLpt(request: DeepPartial<MsgJoinTokenExactLpt>, metadata?: grpc.Metadata): Promise<MsgJoinTokenExactLptResponse> {
+    return this.rpc.unary(MsgJoinTokenExactLptDesc, MsgJoinTokenExactLpt.fromPartial(request), metadata);
   }
-  joinExactTokens(request: MsgJoinExactTokens): Promise<MsgJoinExactTokensResponse> {
-    const data = MsgJoinExactTokens.encode(request).finish();
-    const promise = this.rpc.request("prism.amm.Msg", "JoinExactTokens", data);
-    return promise.then(data => MsgJoinExactTokensResponse.decode(new _m0.Reader(data)));
+  joinExactTokens(request: DeepPartial<MsgJoinExactTokens>, metadata?: grpc.Metadata): Promise<MsgJoinExactTokensResponse> {
+    return this.rpc.unary(MsgJoinExactTokensDesc, MsgJoinExactTokens.fromPartial(request), metadata);
   }
-  exitExactTokens(request: MsgExitExactTokens): Promise<MsgExitExactTokensResponse> {
-    const data = MsgExitExactTokens.encode(request).finish();
-    const promise = this.rpc.request("prism.amm.Msg", "ExitExactTokens", data);
-    return promise.then(data => MsgExitExactTokensResponse.decode(new _m0.Reader(data)));
+  exitExactTokens(request: DeepPartial<MsgExitExactTokens>, metadata?: grpc.Metadata): Promise<MsgExitExactTokensResponse> {
+    return this.rpc.unary(MsgExitExactTokensDesc, MsgExitExactTokens.fromPartial(request), metadata);
   }
-  exitTokenExactLpt(request: MsgExitTokenExactLpt): Promise<MsgExitTokenExactLptResponse> {
-    const data = MsgExitTokenExactLpt.encode(request).finish();
-    const promise = this.rpc.request("prism.amm.Msg", "ExitTokenExactLpt", data);
-    return promise.then(data => MsgExitTokenExactLptResponse.decode(new _m0.Reader(data)));
+  exitTokenExactLpt(request: DeepPartial<MsgExitTokenExactLpt>, metadata?: grpc.Metadata): Promise<MsgExitTokenExactLptResponse> {
+    return this.rpc.unary(MsgExitTokenExactLptDesc, MsgExitTokenExactLpt.fromPartial(request), metadata);
   }
-  exitAllTokensExactLpt(request: MsgExitAllTokensExactLpt): Promise<MsgExitAllTokensExactLptResponse> {
-    const data = MsgExitAllTokensExactLpt.encode(request).finish();
-    const promise = this.rpc.request("prism.amm.Msg", "ExitAllTokensExactLpt", data);
-    return promise.then(data => MsgExitAllTokensExactLptResponse.decode(new _m0.Reader(data)));
+  exitAllTokensExactLpt(request: DeepPartial<MsgExitAllTokensExactLpt>, metadata?: grpc.Metadata): Promise<MsgExitAllTokensExactLptResponse> {
+    return this.rpc.unary(MsgExitAllTokensExactLptDesc, MsgExitAllTokensExactLpt.fromPartial(request), metadata);
   }
-  createWeightedPool(request: MsgCreateWeightedPool): Promise<MsgCreateWeightedPoolResponse> {
-    const data = MsgCreateWeightedPool.encode(request).finish();
-    const promise = this.rpc.request("prism.amm.Msg", "CreateWeightedPool", data);
-    return promise.then(data => MsgCreateWeightedPoolResponse.decode(new _m0.Reader(data)));
+  createWeightedPool(request: DeepPartial<MsgCreateWeightedPool>, metadata?: grpc.Metadata): Promise<MsgCreateWeightedPoolResponse> {
+    return this.rpc.unary(MsgCreateWeightedPoolDesc, MsgCreateWeightedPool.fromPartial(request), metadata);
   }
-  updateSwapFee(request: MsgUpdateSwapFee): Promise<MsgUpdateSwapFeeResponse> {
-    const data = MsgUpdateSwapFee.encode(request).finish();
-    const promise = this.rpc.request("prism.amm.Msg", "UpdateSwapFee", data);
-    return promise.then(data => MsgUpdateSwapFeeResponse.decode(new _m0.Reader(data)));
+  updateSwapFee(request: DeepPartial<MsgUpdateSwapFee>, metadata?: grpc.Metadata): Promise<MsgUpdateSwapFeeResponse> {
+    return this.rpc.unary(MsgUpdateSwapFeeDesc, MsgUpdateSwapFee.fromPartial(request), metadata);
   }
-  initializePool(request: MsgInitializePool): Promise<MsgInitializePoolResponse> {
-    const data = MsgInitializePool.encode(request).finish();
-    const promise = this.rpc.request("prism.amm.Msg", "InitializePool", data);
-    return promise.then(data => MsgInitializePoolResponse.decode(new _m0.Reader(data)));
+  initializePool(request: DeepPartial<MsgInitializePool>, metadata?: grpc.Metadata): Promise<MsgInitializePoolResponse> {
+    return this.rpc.unary(MsgInitializePoolDesc, MsgInitializePool.fromPartial(request), metadata);
   }
-  updateWeights(request: MsgUpdateWeights): Promise<MsgUpdateWeightsResponse> {
-    const data = MsgUpdateWeights.encode(request).finish();
-    const promise = this.rpc.request("prism.amm.Msg", "UpdateWeights", data);
-    return promise.then(data => MsgUpdateWeightsResponse.decode(new _m0.Reader(data)));
+  updateWeights(request: DeepPartial<MsgUpdateWeights>, metadata?: grpc.Metadata): Promise<MsgUpdateWeightsResponse> {
+    return this.rpc.unary(MsgUpdateWeightsDesc, MsgUpdateWeights.fromPartial(request), metadata);
   }
-  batchSwap(request: MsgBatchSwap): Promise<MsgBatchSwapResponse> {
-    const data = MsgBatchSwap.encode(request).finish();
-    const promise = this.rpc.request("prism.amm.Msg", "BatchSwap", data);
-    return promise.then(data => MsgBatchSwapResponse.decode(new _m0.Reader(data)));
+  batchSwap(request: DeepPartial<MsgBatchSwap>, metadata?: grpc.Metadata): Promise<MsgBatchSwapResponse> {
+    return this.rpc.unary(MsgBatchSwapDesc, MsgBatchSwap.fromPartial(request), metadata);
   }
-  setYammConfiguration(request: MsgSetYammConfiguration): Promise<MsgSetYammConfigurationResponse> {
-    const data = MsgSetYammConfiguration.encode(request).finish();
-    const promise = this.rpc.request("prism.amm.Msg", "SetYammConfiguration", data);
-    return promise.then(data => MsgSetYammConfigurationResponse.decode(new _m0.Reader(data)));
+  setYammConfiguration(request: DeepPartial<MsgSetYammConfiguration>, metadata?: grpc.Metadata): Promise<MsgSetYammConfigurationResponse> {
+    return this.rpc.unary(MsgSetYammConfigurationDesc, MsgSetYammConfiguration.fromPartial(request), metadata);
   }
-  whitelistRoute(request: MsgWhitelistRoute): Promise<MsgWhitelistRouteResponse> {
-    const data = MsgWhitelistRoute.encode(request).finish();
-    const promise = this.rpc.request("prism.amm.Msg", "WhitelistRoute", data);
-    return promise.then(data => MsgWhitelistRouteResponse.decode(new _m0.Reader(data)));
+  whitelistRoute(request: DeepPartial<MsgWhitelistRoute>, metadata?: grpc.Metadata): Promise<MsgWhitelistRouteResponse> {
+    return this.rpc.unary(MsgWhitelistRouteDesc, MsgWhitelistRoute.fromPartial(request), metadata);
   }
-  setWhitelistedRouteEnabled(request: MsgSetWhitelistedRouteEnabled): Promise<MsgSetWhitelistedRouteEnabledResponse> {
-    const data = MsgSetWhitelistedRouteEnabled.encode(request).finish();
-    const promise = this.rpc.request("prism.amm.Msg", "SetWhitelistedRouteEnabled", data);
-    return promise.then(data => MsgSetWhitelistedRouteEnabledResponse.decode(new _m0.Reader(data)));
+  setWhitelistedRouteEnabled(request: DeepPartial<MsgSetWhitelistedRouteEnabled>, metadata?: grpc.Metadata): Promise<MsgSetWhitelistedRouteEnabledResponse> {
+    return this.rpc.unary(MsgSetWhitelistedRouteEnabledDesc, MsgSetWhitelistedRouteEnabled.fromPartial(request), metadata);
   }
-  submitOrder(request: MsgSubmitOrder): Promise<MsgSubmitOrderResponse> {
-    const data = MsgSubmitOrder.encode(request).finish();
-    const promise = this.rpc.request("prism.amm.Msg", "SubmitOrder", data);
-    return promise.then(data => MsgSubmitOrderResponse.decode(new _m0.Reader(data)));
+  submitOrder(request: DeepPartial<MsgSubmitOrder>, metadata?: grpc.Metadata): Promise<MsgSubmitOrderResponse> {
+    return this.rpc.unary(MsgSubmitOrderDesc, MsgSubmitOrder.fromPartial(request), metadata);
   }
-  cancelOrder(request: MsgCancelOrder): Promise<MsgCancelOrderResponse> {
-    const data = MsgCancelOrder.encode(request).finish();
-    const promise = this.rpc.request("prism.amm.Msg", "CancelOrder", data);
-    return promise.then(data => MsgCancelOrderResponse.decode(new _m0.Reader(data)));
+  cancelOrder(request: DeepPartial<MsgCancelOrder>, metadata?: grpc.Metadata): Promise<MsgCancelOrderResponse> {
+    return this.rpc.unary(MsgCancelOrderDesc, MsgCancelOrder.fromPartial(request), metadata);
   }
-  proposeMatch(request: MsgProposeMatch): Promise<MsgProposeMatchResponse> {
-    const data = MsgProposeMatch.encode(request).finish();
-    const promise = this.rpc.request("prism.amm.Msg", "ProposeMatch", data);
-    return promise.then(data => MsgProposeMatchResponse.decode(new _m0.Reader(data)));
+  proposeMatch(request: DeepPartial<MsgProposeMatch>, metadata?: grpc.Metadata): Promise<MsgProposeMatchResponse> {
+    return this.rpc.unary(MsgProposeMatchDesc, MsgProposeMatch.fromPartial(request), metadata);
   }
-  setCircuitBreakers(request: MsgSetCircuitBreakers): Promise<MsgSetCircuitBreakersResponse> {
-    const data = MsgSetCircuitBreakers.encode(request).finish();
-    const promise = this.rpc.request("prism.amm.Msg", "SetCircuitBreakers", data);
-    return promise.then(data => MsgSetCircuitBreakersResponse.decode(new _m0.Reader(data)));
+  setCircuitBreakers(request: DeepPartial<MsgSetCircuitBreakers>, metadata?: grpc.Metadata): Promise<MsgSetCircuitBreakersResponse> {
+    return this.rpc.unary(MsgSetCircuitBreakersDesc, MsgSetCircuitBreakers.fromPartial(request), metadata);
   }
-  setRecoveryMode(request: MsgSetRecoveryMode): Promise<MsgSetRecoveryModeResponse> {
-    const data = MsgSetRecoveryMode.encode(request).finish();
-    const promise = this.rpc.request("prism.amm.Msg", "SetRecoveryMode", data);
-    return promise.then(data => MsgSetRecoveryModeResponse.decode(new _m0.Reader(data)));
+  setRecoveryMode(request: DeepPartial<MsgSetRecoveryMode>, metadata?: grpc.Metadata): Promise<MsgSetRecoveryModeResponse> {
+    return this.rpc.unary(MsgSetRecoveryModeDesc, MsgSetRecoveryMode.fromPartial(request), metadata);
   }
-  recoveryExit(request: MsgRecoveryExit): Promise<MsgRecoveryExitResponse> {
-    const data = MsgRecoveryExit.encode(request).finish();
-    const promise = this.rpc.request("prism.amm.Msg", "RecoveryExit", data);
-    return promise.then(data => MsgRecoveryExitResponse.decode(new _m0.Reader(data)));
+  recoveryExit(request: DeepPartial<MsgRecoveryExit>, metadata?: grpc.Metadata): Promise<MsgRecoveryExitResponse> {
+    return this.rpc.unary(MsgRecoveryExitDesc, MsgRecoveryExit.fromPartial(request), metadata);
   }
-  setPauseMode(request: MsgSetPauseMode): Promise<MsgSetPauseModeResponse> {
-    const data = MsgSetPauseMode.encode(request).finish();
-    const promise = this.rpc.request("prism.amm.Msg", "SetPauseMode", data);
-    return promise.then(data => MsgSetPauseModeResponse.decode(new _m0.Reader(data)));
+  setPauseMode(request: DeepPartial<MsgSetPauseMode>, metadata?: grpc.Metadata): Promise<MsgSetPauseModeResponse> {
+    return this.rpc.unary(MsgSetPauseModeDesc, MsgSetPauseMode.fromPartial(request), metadata);
   }
-  setVaultPauseMode(request: MsgSetVaultPauseMode): Promise<MsgSetVaultPauseModeResponse> {
-    const data = MsgSetVaultPauseMode.encode(request).finish();
-    const promise = this.rpc.request("prism.amm.Msg", "SetVaultPauseMode", data);
-    return promise.then(data => MsgSetVaultPauseModeResponse.decode(new _m0.Reader(data)));
+  setVaultPauseMode(request: DeepPartial<MsgSetVaultPauseMode>, metadata?: grpc.Metadata): Promise<MsgSetVaultPauseModeResponse> {
+    return this.rpc.unary(MsgSetVaultPauseModeDesc, MsgSetVaultPauseMode.fromPartial(request), metadata);
   }
-  createOraclePricePair(request: MsgCreateOraclePricePair): Promise<MsgCreateOraclePricePairResponse> {
-    const data = MsgCreateOraclePricePair.encode(request).finish();
-    const promise = this.rpc.request("prism.amm.Msg", "CreateOraclePricePair", data);
-    return promise.then(data => MsgCreateOraclePricePairResponse.decode(new _m0.Reader(data)));
+  createOraclePricePair(request: DeepPartial<MsgCreateOraclePricePair>, metadata?: grpc.Metadata): Promise<MsgCreateOraclePricePairResponse> {
+    return this.rpc.unary(MsgCreateOraclePricePairDesc, MsgCreateOraclePricePair.fromPartial(request), metadata);
   }
-  updateOraclePricePair(request: MsgUpdateOraclePricePair): Promise<MsgUpdateOraclePricePairResponse> {
-    const data = MsgUpdateOraclePricePair.encode(request).finish();
-    const promise = this.rpc.request("prism.amm.Msg", "UpdateOraclePricePair", data);
-    return promise.then(data => MsgUpdateOraclePricePairResponse.decode(new _m0.Reader(data)));
+  updateOraclePricePair(request: DeepPartial<MsgUpdateOraclePricePair>, metadata?: grpc.Metadata): Promise<MsgUpdateOraclePricePairResponse> {
+    return this.rpc.unary(MsgUpdateOraclePricePairDesc, MsgUpdateOraclePricePair.fromPartial(request), metadata);
   }
-  deleteOraclePricePair(request: MsgDeleteOraclePricePair): Promise<MsgDeleteOraclePricePairResponse> {
-    const data = MsgDeleteOraclePricePair.encode(request).finish();
-    const promise = this.rpc.request("prism.amm.Msg", "DeleteOraclePricePair", data);
-    return promise.then(data => MsgDeleteOraclePricePairResponse.decode(new _m0.Reader(data)));
+  deleteOraclePricePair(request: DeepPartial<MsgDeleteOraclePricePair>, metadata?: grpc.Metadata): Promise<MsgDeleteOraclePricePairResponse> {
+    return this.rpc.unary(MsgDeleteOraclePricePairDesc, MsgDeleteOraclePricePair.fromPartial(request), metadata);
   }
-  setSwapProtocolFee(request: MsgSetSwapProtocolFee): Promise<MsgSetSwapProtocolFeeResponse> {
-    const data = MsgSetSwapProtocolFee.encode(request).finish();
-    const promise = this.rpc.request("prism.amm.Msg", "SetSwapProtocolFee", data);
-    return promise.then(data => MsgSetSwapProtocolFeeResponse.decode(new _m0.Reader(data)));
+  setSwapProtocolFee(request: DeepPartial<MsgSetSwapProtocolFee>, metadata?: grpc.Metadata): Promise<MsgSetSwapProtocolFeeResponse> {
+    return this.rpc.unary(MsgSetSwapProtocolFeeDesc, MsgSetSwapProtocolFee.fromPartial(request), metadata);
   }
-  setJoinExitProtocolFee(request: MsgSetJoinExitProtocolFee): Promise<MsgSetJoinExitProtocolFeeResponse> {
-    const data = MsgSetJoinExitProtocolFee.encode(request).finish();
-    const promise = this.rpc.request("prism.amm.Msg", "SetJoinExitProtocolFee", data);
-    return promise.then(data => MsgSetJoinExitProtocolFeeResponse.decode(new _m0.Reader(data)));
+  setJoinExitProtocolFee(request: DeepPartial<MsgSetJoinExitProtocolFee>, metadata?: grpc.Metadata): Promise<MsgSetJoinExitProtocolFeeResponse> {
+    return this.rpc.unary(MsgSetJoinExitProtocolFeeDesc, MsgSetJoinExitProtocolFee.fromPartial(request), metadata);
   }
-  introduceYammLpToWeightedPool(request: MsgIntroduceYammLpToWeightedPool): Promise<MsgIntroduceYammLpToWeightedPoolResponse> {
-    const data = MsgIntroduceYammLpToWeightedPool.encode(request).finish();
-    const promise = this.rpc.request("prism.amm.Msg", "IntroduceYammLpToWeightedPool", data);
-    return promise.then(data => MsgIntroduceYammLpToWeightedPoolResponse.decode(new _m0.Reader(data)));
+  introduceYammLpToWeightedPool(request: DeepPartial<MsgIntroduceYammLpToWeightedPool>, metadata?: grpc.Metadata): Promise<MsgIntroduceYammLpToWeightedPoolResponse> {
+    return this.rpc.unary(MsgIntroduceYammLpToWeightedPoolDesc, MsgIntroduceYammLpToWeightedPool.fromPartial(request), metadata);
   }
-  cancelPendingTokenIntroduction(request: MsgCancelPendingTokenIntroduction): Promise<MsgCancelPendingTokenIntroductionResponse> {
-    const data = MsgCancelPendingTokenIntroduction.encode(request).finish();
-    const promise = this.rpc.request("prism.amm.Msg", "CancelPendingTokenIntroduction", data);
-    return promise.then(data => MsgCancelPendingTokenIntroductionResponse.decode(new _m0.Reader(data)));
+  cancelPendingTokenIntroduction(request: DeepPartial<MsgCancelPendingTokenIntroduction>, metadata?: grpc.Metadata): Promise<MsgCancelPendingTokenIntroductionResponse> {
+    return this.rpc.unary(MsgCancelPendingTokenIntroductionDesc, MsgCancelPendingTokenIntroduction.fromPartial(request), metadata);
   }
-  removeTokenFromWeightedPool(request: MsgRemoveTokenFromWeightedPool): Promise<MsgRemoveTokenFromWeightedPoolResponse> {
-    const data = MsgRemoveTokenFromWeightedPool.encode(request).finish();
-    const promise = this.rpc.request("prism.amm.Msg", "RemoveTokenFromWeightedPool", data);
-    return promise.then(data => MsgRemoveTokenFromWeightedPoolResponse.decode(new _m0.Reader(data)));
+  removeTokenFromWeightedPool(request: DeepPartial<MsgRemoveTokenFromWeightedPool>, metadata?: grpc.Metadata): Promise<MsgRemoveTokenFromWeightedPoolResponse> {
+    return this.rpc.unary(MsgRemoveTokenFromWeightedPoolDesc, MsgRemoveTokenFromWeightedPool.fromPartial(request), metadata);
   }
-  updateParams(request: MsgUpdateParams): Promise<MsgUpdateParamsResponse> {
-    const data = MsgUpdateParams.encode(request).finish();
-    const promise = this.rpc.request("prism.amm.Msg", "UpdateParams", data);
-    return promise.then(data => MsgUpdateParamsResponse.decode(new _m0.Reader(data)));
+  updateParams(request: DeepPartial<MsgUpdateParams>, metadata?: grpc.Metadata): Promise<MsgUpdateParamsResponse> {
+    return this.rpc.unary(MsgUpdateParamsDesc, MsgUpdateParams.fromPartial(request), metadata);
   }
-  addMaturityToYamm(request: MsgAddMaturityToYamm): Promise<MsgAddMaturityToYammResponse> {
-    const data = MsgAddMaturityToYamm.encode(request).finish();
-    const promise = this.rpc.request("prism.amm.Msg", "AddMaturityToYamm", data);
-    return promise.then(data => MsgAddMaturityToYammResponse.decode(new _m0.Reader(data)));
+  addMaturityToYamm(request: DeepPartial<MsgAddMaturityToYamm>, metadata?: grpc.Metadata): Promise<MsgAddMaturityToYammResponse> {
+    return this.rpc.unary(MsgAddMaturityToYammDesc, MsgAddMaturityToYamm.fromPartial(request), metadata);
   }
-  setInitializationAllowList(request: MsgSetInitializationAllowList): Promise<MsgSetInitializationAllowListResponse> {
-    const data = MsgSetInitializationAllowList.encode(request).finish();
-    const promise = this.rpc.request("prism.amm.Msg", "SetInitializationAllowList", data);
-    return promise.then(data => MsgSetInitializationAllowListResponse.decode(new _m0.Reader(data)));
+  setInitializationAllowList(request: DeepPartial<MsgSetInitializationAllowList>, metadata?: grpc.Metadata): Promise<MsgSetInitializationAllowListResponse> {
+    return this.rpc.unary(MsgSetInitializationAllowListDesc, MsgSetInitializationAllowList.fromPartial(request), metadata);
+  }
+}
+export const MsgDesc = {
+  serviceName: "prism.amm.Msg"
+};
+export const MsgSingleSwapDesc: UnaryMethodDefinitionish = {
+  methodName: "SingleSwap",
+  service: MsgDesc,
+  requestStream: false,
+  responseStream: false,
+  requestType: ({
+    serializeBinary() {
+      return MsgSingleSwap.encode(this).finish();
+    }
+  } as any),
+  responseType: ({
+    deserializeBinary(data: Uint8Array) {
+      return {
+        ...MsgSingleSwapResponse.decode(data),
+        toObject() {
+          return this;
+        }
+      };
+    }
+  } as any)
+};
+export const MsgJoinAllTokensExactLptDesc: UnaryMethodDefinitionish = {
+  methodName: "JoinAllTokensExactLpt",
+  service: MsgDesc,
+  requestStream: false,
+  responseStream: false,
+  requestType: ({
+    serializeBinary() {
+      return MsgJoinAllTokensExactLpt.encode(this).finish();
+    }
+  } as any),
+  responseType: ({
+    deserializeBinary(data: Uint8Array) {
+      return {
+        ...MsgJoinAllTokensExactLptResponse.decode(data),
+        toObject() {
+          return this;
+        }
+      };
+    }
+  } as any)
+};
+export const MsgJoinTokenExactLptDesc: UnaryMethodDefinitionish = {
+  methodName: "JoinTokenExactLpt",
+  service: MsgDesc,
+  requestStream: false,
+  responseStream: false,
+  requestType: ({
+    serializeBinary() {
+      return MsgJoinTokenExactLpt.encode(this).finish();
+    }
+  } as any),
+  responseType: ({
+    deserializeBinary(data: Uint8Array) {
+      return {
+        ...MsgJoinTokenExactLptResponse.decode(data),
+        toObject() {
+          return this;
+        }
+      };
+    }
+  } as any)
+};
+export const MsgJoinExactTokensDesc: UnaryMethodDefinitionish = {
+  methodName: "JoinExactTokens",
+  service: MsgDesc,
+  requestStream: false,
+  responseStream: false,
+  requestType: ({
+    serializeBinary() {
+      return MsgJoinExactTokens.encode(this).finish();
+    }
+  } as any),
+  responseType: ({
+    deserializeBinary(data: Uint8Array) {
+      return {
+        ...MsgJoinExactTokensResponse.decode(data),
+        toObject() {
+          return this;
+        }
+      };
+    }
+  } as any)
+};
+export const MsgExitExactTokensDesc: UnaryMethodDefinitionish = {
+  methodName: "ExitExactTokens",
+  service: MsgDesc,
+  requestStream: false,
+  responseStream: false,
+  requestType: ({
+    serializeBinary() {
+      return MsgExitExactTokens.encode(this).finish();
+    }
+  } as any),
+  responseType: ({
+    deserializeBinary(data: Uint8Array) {
+      return {
+        ...MsgExitExactTokensResponse.decode(data),
+        toObject() {
+          return this;
+        }
+      };
+    }
+  } as any)
+};
+export const MsgExitTokenExactLptDesc: UnaryMethodDefinitionish = {
+  methodName: "ExitTokenExactLpt",
+  service: MsgDesc,
+  requestStream: false,
+  responseStream: false,
+  requestType: ({
+    serializeBinary() {
+      return MsgExitTokenExactLpt.encode(this).finish();
+    }
+  } as any),
+  responseType: ({
+    deserializeBinary(data: Uint8Array) {
+      return {
+        ...MsgExitTokenExactLptResponse.decode(data),
+        toObject() {
+          return this;
+        }
+      };
+    }
+  } as any)
+};
+export const MsgExitAllTokensExactLptDesc: UnaryMethodDefinitionish = {
+  methodName: "ExitAllTokensExactLpt",
+  service: MsgDesc,
+  requestStream: false,
+  responseStream: false,
+  requestType: ({
+    serializeBinary() {
+      return MsgExitAllTokensExactLpt.encode(this).finish();
+    }
+  } as any),
+  responseType: ({
+    deserializeBinary(data: Uint8Array) {
+      return {
+        ...MsgExitAllTokensExactLptResponse.decode(data),
+        toObject() {
+          return this;
+        }
+      };
+    }
+  } as any)
+};
+export const MsgCreateWeightedPoolDesc: UnaryMethodDefinitionish = {
+  methodName: "CreateWeightedPool",
+  service: MsgDesc,
+  requestStream: false,
+  responseStream: false,
+  requestType: ({
+    serializeBinary() {
+      return MsgCreateWeightedPool.encode(this).finish();
+    }
+  } as any),
+  responseType: ({
+    deserializeBinary(data: Uint8Array) {
+      return {
+        ...MsgCreateWeightedPoolResponse.decode(data),
+        toObject() {
+          return this;
+        }
+      };
+    }
+  } as any)
+};
+export const MsgUpdateSwapFeeDesc: UnaryMethodDefinitionish = {
+  methodName: "UpdateSwapFee",
+  service: MsgDesc,
+  requestStream: false,
+  responseStream: false,
+  requestType: ({
+    serializeBinary() {
+      return MsgUpdateSwapFee.encode(this).finish();
+    }
+  } as any),
+  responseType: ({
+    deserializeBinary(data: Uint8Array) {
+      return {
+        ...MsgUpdateSwapFeeResponse.decode(data),
+        toObject() {
+          return this;
+        }
+      };
+    }
+  } as any)
+};
+export const MsgInitializePoolDesc: UnaryMethodDefinitionish = {
+  methodName: "InitializePool",
+  service: MsgDesc,
+  requestStream: false,
+  responseStream: false,
+  requestType: ({
+    serializeBinary() {
+      return MsgInitializePool.encode(this).finish();
+    }
+  } as any),
+  responseType: ({
+    deserializeBinary(data: Uint8Array) {
+      return {
+        ...MsgInitializePoolResponse.decode(data),
+        toObject() {
+          return this;
+        }
+      };
+    }
+  } as any)
+};
+export const MsgUpdateWeightsDesc: UnaryMethodDefinitionish = {
+  methodName: "UpdateWeights",
+  service: MsgDesc,
+  requestStream: false,
+  responseStream: false,
+  requestType: ({
+    serializeBinary() {
+      return MsgUpdateWeights.encode(this).finish();
+    }
+  } as any),
+  responseType: ({
+    deserializeBinary(data: Uint8Array) {
+      return {
+        ...MsgUpdateWeightsResponse.decode(data),
+        toObject() {
+          return this;
+        }
+      };
+    }
+  } as any)
+};
+export const MsgBatchSwapDesc: UnaryMethodDefinitionish = {
+  methodName: "BatchSwap",
+  service: MsgDesc,
+  requestStream: false,
+  responseStream: false,
+  requestType: ({
+    serializeBinary() {
+      return MsgBatchSwap.encode(this).finish();
+    }
+  } as any),
+  responseType: ({
+    deserializeBinary(data: Uint8Array) {
+      return {
+        ...MsgBatchSwapResponse.decode(data),
+        toObject() {
+          return this;
+        }
+      };
+    }
+  } as any)
+};
+export const MsgSetYammConfigurationDesc: UnaryMethodDefinitionish = {
+  methodName: "SetYammConfiguration",
+  service: MsgDesc,
+  requestStream: false,
+  responseStream: false,
+  requestType: ({
+    serializeBinary() {
+      return MsgSetYammConfiguration.encode(this).finish();
+    }
+  } as any),
+  responseType: ({
+    deserializeBinary(data: Uint8Array) {
+      return {
+        ...MsgSetYammConfigurationResponse.decode(data),
+        toObject() {
+          return this;
+        }
+      };
+    }
+  } as any)
+};
+export const MsgWhitelistRouteDesc: UnaryMethodDefinitionish = {
+  methodName: "WhitelistRoute",
+  service: MsgDesc,
+  requestStream: false,
+  responseStream: false,
+  requestType: ({
+    serializeBinary() {
+      return MsgWhitelistRoute.encode(this).finish();
+    }
+  } as any),
+  responseType: ({
+    deserializeBinary(data: Uint8Array) {
+      return {
+        ...MsgWhitelistRouteResponse.decode(data),
+        toObject() {
+          return this;
+        }
+      };
+    }
+  } as any)
+};
+export const MsgSetWhitelistedRouteEnabledDesc: UnaryMethodDefinitionish = {
+  methodName: "SetWhitelistedRouteEnabled",
+  service: MsgDesc,
+  requestStream: false,
+  responseStream: false,
+  requestType: ({
+    serializeBinary() {
+      return MsgSetWhitelistedRouteEnabled.encode(this).finish();
+    }
+  } as any),
+  responseType: ({
+    deserializeBinary(data: Uint8Array) {
+      return {
+        ...MsgSetWhitelistedRouteEnabledResponse.decode(data),
+        toObject() {
+          return this;
+        }
+      };
+    }
+  } as any)
+};
+export const MsgSubmitOrderDesc: UnaryMethodDefinitionish = {
+  methodName: "SubmitOrder",
+  service: MsgDesc,
+  requestStream: false,
+  responseStream: false,
+  requestType: ({
+    serializeBinary() {
+      return MsgSubmitOrder.encode(this).finish();
+    }
+  } as any),
+  responseType: ({
+    deserializeBinary(data: Uint8Array) {
+      return {
+        ...MsgSubmitOrderResponse.decode(data),
+        toObject() {
+          return this;
+        }
+      };
+    }
+  } as any)
+};
+export const MsgCancelOrderDesc: UnaryMethodDefinitionish = {
+  methodName: "CancelOrder",
+  service: MsgDesc,
+  requestStream: false,
+  responseStream: false,
+  requestType: ({
+    serializeBinary() {
+      return MsgCancelOrder.encode(this).finish();
+    }
+  } as any),
+  responseType: ({
+    deserializeBinary(data: Uint8Array) {
+      return {
+        ...MsgCancelOrderResponse.decode(data),
+        toObject() {
+          return this;
+        }
+      };
+    }
+  } as any)
+};
+export const MsgProposeMatchDesc: UnaryMethodDefinitionish = {
+  methodName: "ProposeMatch",
+  service: MsgDesc,
+  requestStream: false,
+  responseStream: false,
+  requestType: ({
+    serializeBinary() {
+      return MsgProposeMatch.encode(this).finish();
+    }
+  } as any),
+  responseType: ({
+    deserializeBinary(data: Uint8Array) {
+      return {
+        ...MsgProposeMatchResponse.decode(data),
+        toObject() {
+          return this;
+        }
+      };
+    }
+  } as any)
+};
+export const MsgSetCircuitBreakersDesc: UnaryMethodDefinitionish = {
+  methodName: "SetCircuitBreakers",
+  service: MsgDesc,
+  requestStream: false,
+  responseStream: false,
+  requestType: ({
+    serializeBinary() {
+      return MsgSetCircuitBreakers.encode(this).finish();
+    }
+  } as any),
+  responseType: ({
+    deserializeBinary(data: Uint8Array) {
+      return {
+        ...MsgSetCircuitBreakersResponse.decode(data),
+        toObject() {
+          return this;
+        }
+      };
+    }
+  } as any)
+};
+export const MsgSetRecoveryModeDesc: UnaryMethodDefinitionish = {
+  methodName: "SetRecoveryMode",
+  service: MsgDesc,
+  requestStream: false,
+  responseStream: false,
+  requestType: ({
+    serializeBinary() {
+      return MsgSetRecoveryMode.encode(this).finish();
+    }
+  } as any),
+  responseType: ({
+    deserializeBinary(data: Uint8Array) {
+      return {
+        ...MsgSetRecoveryModeResponse.decode(data),
+        toObject() {
+          return this;
+        }
+      };
+    }
+  } as any)
+};
+export const MsgRecoveryExitDesc: UnaryMethodDefinitionish = {
+  methodName: "RecoveryExit",
+  service: MsgDesc,
+  requestStream: false,
+  responseStream: false,
+  requestType: ({
+    serializeBinary() {
+      return MsgRecoveryExit.encode(this).finish();
+    }
+  } as any),
+  responseType: ({
+    deserializeBinary(data: Uint8Array) {
+      return {
+        ...MsgRecoveryExitResponse.decode(data),
+        toObject() {
+          return this;
+        }
+      };
+    }
+  } as any)
+};
+export const MsgSetPauseModeDesc: UnaryMethodDefinitionish = {
+  methodName: "SetPauseMode",
+  service: MsgDesc,
+  requestStream: false,
+  responseStream: false,
+  requestType: ({
+    serializeBinary() {
+      return MsgSetPauseMode.encode(this).finish();
+    }
+  } as any),
+  responseType: ({
+    deserializeBinary(data: Uint8Array) {
+      return {
+        ...MsgSetPauseModeResponse.decode(data),
+        toObject() {
+          return this;
+        }
+      };
+    }
+  } as any)
+};
+export const MsgSetVaultPauseModeDesc: UnaryMethodDefinitionish = {
+  methodName: "SetVaultPauseMode",
+  service: MsgDesc,
+  requestStream: false,
+  responseStream: false,
+  requestType: ({
+    serializeBinary() {
+      return MsgSetVaultPauseMode.encode(this).finish();
+    }
+  } as any),
+  responseType: ({
+    deserializeBinary(data: Uint8Array) {
+      return {
+        ...MsgSetVaultPauseModeResponse.decode(data),
+        toObject() {
+          return this;
+        }
+      };
+    }
+  } as any)
+};
+export const MsgCreateOraclePricePairDesc: UnaryMethodDefinitionish = {
+  methodName: "CreateOraclePricePair",
+  service: MsgDesc,
+  requestStream: false,
+  responseStream: false,
+  requestType: ({
+    serializeBinary() {
+      return MsgCreateOraclePricePair.encode(this).finish();
+    }
+  } as any),
+  responseType: ({
+    deserializeBinary(data: Uint8Array) {
+      return {
+        ...MsgCreateOraclePricePairResponse.decode(data),
+        toObject() {
+          return this;
+        }
+      };
+    }
+  } as any)
+};
+export const MsgUpdateOraclePricePairDesc: UnaryMethodDefinitionish = {
+  methodName: "UpdateOraclePricePair",
+  service: MsgDesc,
+  requestStream: false,
+  responseStream: false,
+  requestType: ({
+    serializeBinary() {
+      return MsgUpdateOraclePricePair.encode(this).finish();
+    }
+  } as any),
+  responseType: ({
+    deserializeBinary(data: Uint8Array) {
+      return {
+        ...MsgUpdateOraclePricePairResponse.decode(data),
+        toObject() {
+          return this;
+        }
+      };
+    }
+  } as any)
+};
+export const MsgDeleteOraclePricePairDesc: UnaryMethodDefinitionish = {
+  methodName: "DeleteOraclePricePair",
+  service: MsgDesc,
+  requestStream: false,
+  responseStream: false,
+  requestType: ({
+    serializeBinary() {
+      return MsgDeleteOraclePricePair.encode(this).finish();
+    }
+  } as any),
+  responseType: ({
+    deserializeBinary(data: Uint8Array) {
+      return {
+        ...MsgDeleteOraclePricePairResponse.decode(data),
+        toObject() {
+          return this;
+        }
+      };
+    }
+  } as any)
+};
+export const MsgSetSwapProtocolFeeDesc: UnaryMethodDefinitionish = {
+  methodName: "SetSwapProtocolFee",
+  service: MsgDesc,
+  requestStream: false,
+  responseStream: false,
+  requestType: ({
+    serializeBinary() {
+      return MsgSetSwapProtocolFee.encode(this).finish();
+    }
+  } as any),
+  responseType: ({
+    deserializeBinary(data: Uint8Array) {
+      return {
+        ...MsgSetSwapProtocolFeeResponse.decode(data),
+        toObject() {
+          return this;
+        }
+      };
+    }
+  } as any)
+};
+export const MsgSetJoinExitProtocolFeeDesc: UnaryMethodDefinitionish = {
+  methodName: "SetJoinExitProtocolFee",
+  service: MsgDesc,
+  requestStream: false,
+  responseStream: false,
+  requestType: ({
+    serializeBinary() {
+      return MsgSetJoinExitProtocolFee.encode(this).finish();
+    }
+  } as any),
+  responseType: ({
+    deserializeBinary(data: Uint8Array) {
+      return {
+        ...MsgSetJoinExitProtocolFeeResponse.decode(data),
+        toObject() {
+          return this;
+        }
+      };
+    }
+  } as any)
+};
+export const MsgIntroduceYammLpToWeightedPoolDesc: UnaryMethodDefinitionish = {
+  methodName: "IntroduceYammLpToWeightedPool",
+  service: MsgDesc,
+  requestStream: false,
+  responseStream: false,
+  requestType: ({
+    serializeBinary() {
+      return MsgIntroduceYammLpToWeightedPool.encode(this).finish();
+    }
+  } as any),
+  responseType: ({
+    deserializeBinary(data: Uint8Array) {
+      return {
+        ...MsgIntroduceYammLpToWeightedPoolResponse.decode(data),
+        toObject() {
+          return this;
+        }
+      };
+    }
+  } as any)
+};
+export const MsgCancelPendingTokenIntroductionDesc: UnaryMethodDefinitionish = {
+  methodName: "CancelPendingTokenIntroduction",
+  service: MsgDesc,
+  requestStream: false,
+  responseStream: false,
+  requestType: ({
+    serializeBinary() {
+      return MsgCancelPendingTokenIntroduction.encode(this).finish();
+    }
+  } as any),
+  responseType: ({
+    deserializeBinary(data: Uint8Array) {
+      return {
+        ...MsgCancelPendingTokenIntroductionResponse.decode(data),
+        toObject() {
+          return this;
+        }
+      };
+    }
+  } as any)
+};
+export const MsgRemoveTokenFromWeightedPoolDesc: UnaryMethodDefinitionish = {
+  methodName: "RemoveTokenFromWeightedPool",
+  service: MsgDesc,
+  requestStream: false,
+  responseStream: false,
+  requestType: ({
+    serializeBinary() {
+      return MsgRemoveTokenFromWeightedPool.encode(this).finish();
+    }
+  } as any),
+  responseType: ({
+    deserializeBinary(data: Uint8Array) {
+      return {
+        ...MsgRemoveTokenFromWeightedPoolResponse.decode(data),
+        toObject() {
+          return this;
+        }
+      };
+    }
+  } as any)
+};
+export const MsgUpdateParamsDesc: UnaryMethodDefinitionish = {
+  methodName: "UpdateParams",
+  service: MsgDesc,
+  requestStream: false,
+  responseStream: false,
+  requestType: ({
+    serializeBinary() {
+      return MsgUpdateParams.encode(this).finish();
+    }
+  } as any),
+  responseType: ({
+    deserializeBinary(data: Uint8Array) {
+      return {
+        ...MsgUpdateParamsResponse.decode(data),
+        toObject() {
+          return this;
+        }
+      };
+    }
+  } as any)
+};
+export const MsgAddMaturityToYammDesc: UnaryMethodDefinitionish = {
+  methodName: "AddMaturityToYamm",
+  service: MsgDesc,
+  requestStream: false,
+  responseStream: false,
+  requestType: ({
+    serializeBinary() {
+      return MsgAddMaturityToYamm.encode(this).finish();
+    }
+  } as any),
+  responseType: ({
+    deserializeBinary(data: Uint8Array) {
+      return {
+        ...MsgAddMaturityToYammResponse.decode(data),
+        toObject() {
+          return this;
+        }
+      };
+    }
+  } as any)
+};
+export const MsgSetInitializationAllowListDesc: UnaryMethodDefinitionish = {
+  methodName: "SetInitializationAllowList",
+  service: MsgDesc,
+  requestStream: false,
+  responseStream: false,
+  requestType: ({
+    serializeBinary() {
+      return MsgSetInitializationAllowList.encode(this).finish();
+    }
+  } as any),
+  responseType: ({
+    deserializeBinary(data: Uint8Array) {
+      return {
+        ...MsgSetInitializationAllowListResponse.decode(data),
+        toObject() {
+          return this;
+        }
+      };
+    }
+  } as any)
+};
+export interface Rpc {
+  unary<T extends UnaryMethodDefinitionish>(methodDesc: T, request: any, metadata: grpc.Metadata | undefined): Promise<any>;
+}
+export class GrpcWebImpl {
+  host: string;
+  options: {
+    transport?: grpc.TransportFactory;
+    debug?: boolean;
+    metadata?: grpc.Metadata;
+  };
+  constructor(host: string, options: {
+    transport?: grpc.TransportFactory;
+    debug?: boolean;
+    metadata?: grpc.Metadata;
+  }) {
+    this.host = host;
+    this.options = options;
+  }
+  unary<T extends UnaryMethodDefinitionish>(methodDesc: T, _request: any, metadata: grpc.Metadata | undefined) {
+    const request = {
+      ..._request,
+      ...methodDesc.requestType
+    };
+    const maybeCombinedMetadata = metadata && this.options.metadata ? new BrowserHeaders({
+      ...this.options?.metadata.headersMap,
+      ...metadata?.headersMap
+    }) : metadata || this.options.metadata;
+    return new Promise((resolve, reject) => {
+      grpc.unary(methodDesc, {
+        request,
+        host: this.host,
+        metadata: maybeCombinedMetadata,
+        transport: this.options.transport,
+        debug: this.options.debug,
+        onEnd: function (response) {
+          if (response.status === grpc.Code.OK) {
+            resolve(response.message);
+          } else {
+            const err = (new Error(response.statusMessage) as any);
+            err.code = response.status;
+            err.metadata = response.trailers;
+            reject(err);
+          }
+        }
+      });
+    });
   }
 }

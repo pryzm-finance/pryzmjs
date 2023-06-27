@@ -1,23 +1,25 @@
-import { Rpc } from "../../helpers";
-import * as _m0 from "protobufjs/minimal";
-import { QueryClient, createProtobufRpcClient } from "@cosmjs/stargate";
+//@ts-nocheck
+import { grpc } from "@improbable-eng/grpc-web";
+import { UnaryMethodDefinitionish } from "../../grpc-web";
+import { DeepPartial } from "../../helpers";
+import { BrowserHeaders } from "browser-headers";
 import { QueryParamsRequest, QueryParamsResponse, QueryGetRefractableAssetRequest, QueryGetRefractableAssetResponse, QueryAllRefractableAssetRequest, QueryAllRefractableAssetResponse, QueryGetMaturityLevelRequest, QueryGetMaturityLevelResponse, QueryAllMaturityLevelRequest, QueryAllMaturityLevelResponse, QueryGetExchangeRateRequest, QueryGetExchangeRateResponse, QueryAllExchangeRateRequest, QueryAllExchangeRateResponse } from "./query";
 /** Query defines the gRPC querier service. */
 export interface Query {
   /** Parameters queries the parameters of the module. */
-  params(request?: QueryParamsRequest): Promise<QueryParamsResponse>;
+  params(request?: DeepPartial<QueryParamsRequest>, metadata?: grpc.Metadata): Promise<QueryParamsResponse>;
   /** Queries a RefractableAsset by index. */
-  refractableAsset(request: QueryGetRefractableAssetRequest): Promise<QueryGetRefractableAssetResponse>;
+  refractableAsset(request: DeepPartial<QueryGetRefractableAssetRequest>, metadata?: grpc.Metadata): Promise<QueryGetRefractableAssetResponse>;
   /** Queries a list of RefractableAsset items. */
-  refractableAssetAll(request: QueryAllRefractableAssetRequest): Promise<QueryAllRefractableAssetResponse>;
+  refractableAssetAll(request: DeepPartial<QueryAllRefractableAssetRequest>, metadata?: grpc.Metadata): Promise<QueryAllRefractableAssetResponse>;
   /** Queries a MaturityLevel by index. */
-  maturityLevel(request: QueryGetMaturityLevelRequest): Promise<QueryGetMaturityLevelResponse>;
+  maturityLevel(request: DeepPartial<QueryGetMaturityLevelRequest>, metadata?: grpc.Metadata): Promise<QueryGetMaturityLevelResponse>;
   /** Queries a list of MaturityLevel items. */
-  maturityLevelAll(request: QueryAllMaturityLevelRequest): Promise<QueryAllMaturityLevelResponse>;
+  maturityLevelAll(request: DeepPartial<QueryAllMaturityLevelRequest>, metadata?: grpc.Metadata): Promise<QueryAllMaturityLevelResponse>;
   /** Queries a AssetExchangeRate by index. */
-  exchangeRate(request: QueryGetExchangeRateRequest): Promise<QueryGetExchangeRateResponse>;
+  exchangeRate(request: DeepPartial<QueryGetExchangeRateRequest>, metadata?: grpc.Metadata): Promise<QueryGetExchangeRateResponse>;
   /** Queries a list of ExchangeRate items. */
-  exchangeRateAll(request?: QueryAllExchangeRateRequest): Promise<QueryAllExchangeRateResponse>;
+  exchangeRateAll(request?: DeepPartial<QueryAllExchangeRateRequest>, metadata?: grpc.Metadata): Promise<QueryAllExchangeRateResponse>;
 }
 export class QueryClientImpl implements Query {
   private readonly rpc: Rpc;
@@ -31,68 +33,225 @@ export class QueryClientImpl implements Query {
     this.exchangeRate = this.exchangeRate.bind(this);
     this.exchangeRateAll = this.exchangeRateAll.bind(this);
   }
-  params(request: QueryParamsRequest = {}): Promise<QueryParamsResponse> {
-    const data = QueryParamsRequest.encode(request).finish();
-    const promise = this.rpc.request("prism.assets.Query", "Params", data);
-    return promise.then(data => QueryParamsResponse.decode(new _m0.Reader(data)));
+  params(request: DeepPartial<QueryParamsRequest> = {}, metadata?: grpc.Metadata): Promise<QueryParamsResponse> {
+    return this.rpc.unary(QueryParamsDesc, QueryParamsRequest.fromPartial(request), metadata);
   }
-  refractableAsset(request: QueryGetRefractableAssetRequest): Promise<QueryGetRefractableAssetResponse> {
-    const data = QueryGetRefractableAssetRequest.encode(request).finish();
-    const promise = this.rpc.request("prism.assets.Query", "RefractableAsset", data);
-    return promise.then(data => QueryGetRefractableAssetResponse.decode(new _m0.Reader(data)));
+  refractableAsset(request: DeepPartial<QueryGetRefractableAssetRequest>, metadata?: grpc.Metadata): Promise<QueryGetRefractableAssetResponse> {
+    return this.rpc.unary(QueryGetRefractableAssetDesc, QueryGetRefractableAssetRequest.fromPartial(request), metadata);
   }
-  refractableAssetAll(request: QueryAllRefractableAssetRequest): Promise<QueryAllRefractableAssetResponse> {
-    const data = QueryAllRefractableAssetRequest.encode(request).finish();
-    const promise = this.rpc.request("prism.assets.Query", "RefractableAssetAll", data);
-    return promise.then(data => QueryAllRefractableAssetResponse.decode(new _m0.Reader(data)));
+  refractableAssetAll(request: DeepPartial<QueryAllRefractableAssetRequest>, metadata?: grpc.Metadata): Promise<QueryAllRefractableAssetResponse> {
+    return this.rpc.unary(QueryAllRefractableAssetDesc, QueryAllRefractableAssetRequest.fromPartial(request), metadata);
   }
-  maturityLevel(request: QueryGetMaturityLevelRequest): Promise<QueryGetMaturityLevelResponse> {
-    const data = QueryGetMaturityLevelRequest.encode(request).finish();
-    const promise = this.rpc.request("prism.assets.Query", "MaturityLevel", data);
-    return promise.then(data => QueryGetMaturityLevelResponse.decode(new _m0.Reader(data)));
+  maturityLevel(request: DeepPartial<QueryGetMaturityLevelRequest>, metadata?: grpc.Metadata): Promise<QueryGetMaturityLevelResponse> {
+    return this.rpc.unary(QueryGetMaturityLevelDesc, QueryGetMaturityLevelRequest.fromPartial(request), metadata);
   }
-  maturityLevelAll(request: QueryAllMaturityLevelRequest): Promise<QueryAllMaturityLevelResponse> {
-    const data = QueryAllMaturityLevelRequest.encode(request).finish();
-    const promise = this.rpc.request("prism.assets.Query", "MaturityLevelAll", data);
-    return promise.then(data => QueryAllMaturityLevelResponse.decode(new _m0.Reader(data)));
+  maturityLevelAll(request: DeepPartial<QueryAllMaturityLevelRequest>, metadata?: grpc.Metadata): Promise<QueryAllMaturityLevelResponse> {
+    return this.rpc.unary(QueryAllMaturityLevelDesc, QueryAllMaturityLevelRequest.fromPartial(request), metadata);
   }
-  exchangeRate(request: QueryGetExchangeRateRequest): Promise<QueryGetExchangeRateResponse> {
-    const data = QueryGetExchangeRateRequest.encode(request).finish();
-    const promise = this.rpc.request("prism.assets.Query", "ExchangeRate", data);
-    return promise.then(data => QueryGetExchangeRateResponse.decode(new _m0.Reader(data)));
+  exchangeRate(request: DeepPartial<QueryGetExchangeRateRequest>, metadata?: grpc.Metadata): Promise<QueryGetExchangeRateResponse> {
+    return this.rpc.unary(QueryGetExchangeRateDesc, QueryGetExchangeRateRequest.fromPartial(request), metadata);
   }
-  exchangeRateAll(request: QueryAllExchangeRateRequest = {
+  exchangeRateAll(request: DeepPartial<QueryAllExchangeRateRequest> = {
     pagination: undefined
-  }): Promise<QueryAllExchangeRateResponse> {
-    const data = QueryAllExchangeRateRequest.encode(request).finish();
-    const promise = this.rpc.request("prism.assets.Query", "ExchangeRateAll", data);
-    return promise.then(data => QueryAllExchangeRateResponse.decode(new _m0.Reader(data)));
+  }, metadata?: grpc.Metadata): Promise<QueryAllExchangeRateResponse> {
+    return this.rpc.unary(QueryAllExchangeRateDesc, QueryAllExchangeRateRequest.fromPartial(request), metadata);
   }
 }
-export const createRpcQueryExtension = (base: QueryClient) => {
-  const rpc = createProtobufRpcClient(base);
-  const queryService = new QueryClientImpl(rpc);
-  return {
-    params(request?: QueryParamsRequest): Promise<QueryParamsResponse> {
-      return queryService.params(request);
-    },
-    refractableAsset(request: QueryGetRefractableAssetRequest): Promise<QueryGetRefractableAssetResponse> {
-      return queryService.refractableAsset(request);
-    },
-    refractableAssetAll(request: QueryAllRefractableAssetRequest): Promise<QueryAllRefractableAssetResponse> {
-      return queryService.refractableAssetAll(request);
-    },
-    maturityLevel(request: QueryGetMaturityLevelRequest): Promise<QueryGetMaturityLevelResponse> {
-      return queryService.maturityLevel(request);
-    },
-    maturityLevelAll(request: QueryAllMaturityLevelRequest): Promise<QueryAllMaturityLevelResponse> {
-      return queryService.maturityLevelAll(request);
-    },
-    exchangeRate(request: QueryGetExchangeRateRequest): Promise<QueryGetExchangeRateResponse> {
-      return queryService.exchangeRate(request);
-    },
-    exchangeRateAll(request?: QueryAllExchangeRateRequest): Promise<QueryAllExchangeRateResponse> {
-      return queryService.exchangeRateAll(request);
-    }
-  };
+export const QueryDesc = {
+  serviceName: "prism.assets.Query"
 };
+export const QueryParamsDesc: UnaryMethodDefinitionish = {
+  methodName: "Params",
+  service: QueryDesc,
+  requestStream: false,
+  responseStream: false,
+  requestType: ({
+    serializeBinary() {
+      return QueryParamsRequest.encode(this).finish();
+    }
+  } as any),
+  responseType: ({
+    deserializeBinary(data: Uint8Array) {
+      return {
+        ...QueryParamsResponse.decode(data),
+        toObject() {
+          return this;
+        }
+      };
+    }
+  } as any)
+};
+export const QueryGetRefractableAssetDesc: UnaryMethodDefinitionish = {
+  methodName: "RefractableAsset",
+  service: QueryDesc,
+  requestStream: false,
+  responseStream: false,
+  requestType: ({
+    serializeBinary() {
+      return QueryGetRefractableAssetRequest.encode(this).finish();
+    }
+  } as any),
+  responseType: ({
+    deserializeBinary(data: Uint8Array) {
+      return {
+        ...QueryGetRefractableAssetResponse.decode(data),
+        toObject() {
+          return this;
+        }
+      };
+    }
+  } as any)
+};
+export const QueryAllRefractableAssetDesc: UnaryMethodDefinitionish = {
+  methodName: "RefractableAssetAll",
+  service: QueryDesc,
+  requestStream: false,
+  responseStream: false,
+  requestType: ({
+    serializeBinary() {
+      return QueryAllRefractableAssetRequest.encode(this).finish();
+    }
+  } as any),
+  responseType: ({
+    deserializeBinary(data: Uint8Array) {
+      return {
+        ...QueryAllRefractableAssetResponse.decode(data),
+        toObject() {
+          return this;
+        }
+      };
+    }
+  } as any)
+};
+export const QueryGetMaturityLevelDesc: UnaryMethodDefinitionish = {
+  methodName: "MaturityLevel",
+  service: QueryDesc,
+  requestStream: false,
+  responseStream: false,
+  requestType: ({
+    serializeBinary() {
+      return QueryGetMaturityLevelRequest.encode(this).finish();
+    }
+  } as any),
+  responseType: ({
+    deserializeBinary(data: Uint8Array) {
+      return {
+        ...QueryGetMaturityLevelResponse.decode(data),
+        toObject() {
+          return this;
+        }
+      };
+    }
+  } as any)
+};
+export const QueryAllMaturityLevelDesc: UnaryMethodDefinitionish = {
+  methodName: "MaturityLevelAll",
+  service: QueryDesc,
+  requestStream: false,
+  responseStream: false,
+  requestType: ({
+    serializeBinary() {
+      return QueryAllMaturityLevelRequest.encode(this).finish();
+    }
+  } as any),
+  responseType: ({
+    deserializeBinary(data: Uint8Array) {
+      return {
+        ...QueryAllMaturityLevelResponse.decode(data),
+        toObject() {
+          return this;
+        }
+      };
+    }
+  } as any)
+};
+export const QueryGetExchangeRateDesc: UnaryMethodDefinitionish = {
+  methodName: "ExchangeRate",
+  service: QueryDesc,
+  requestStream: false,
+  responseStream: false,
+  requestType: ({
+    serializeBinary() {
+      return QueryGetExchangeRateRequest.encode(this).finish();
+    }
+  } as any),
+  responseType: ({
+    deserializeBinary(data: Uint8Array) {
+      return {
+        ...QueryGetExchangeRateResponse.decode(data),
+        toObject() {
+          return this;
+        }
+      };
+    }
+  } as any)
+};
+export const QueryAllExchangeRateDesc: UnaryMethodDefinitionish = {
+  methodName: "ExchangeRateAll",
+  service: QueryDesc,
+  requestStream: false,
+  responseStream: false,
+  requestType: ({
+    serializeBinary() {
+      return QueryAllExchangeRateRequest.encode(this).finish();
+    }
+  } as any),
+  responseType: ({
+    deserializeBinary(data: Uint8Array) {
+      return {
+        ...QueryAllExchangeRateResponse.decode(data),
+        toObject() {
+          return this;
+        }
+      };
+    }
+  } as any)
+};
+export interface Rpc {
+  unary<T extends UnaryMethodDefinitionish>(methodDesc: T, request: any, metadata: grpc.Metadata | undefined): Promise<any>;
+}
+export class GrpcWebImpl {
+  host: string;
+  options: {
+    transport?: grpc.TransportFactory;
+    debug?: boolean;
+    metadata?: grpc.Metadata;
+  };
+  constructor(host: string, options: {
+    transport?: grpc.TransportFactory;
+    debug?: boolean;
+    metadata?: grpc.Metadata;
+  }) {
+    this.host = host;
+    this.options = options;
+  }
+  unary<T extends UnaryMethodDefinitionish>(methodDesc: T, _request: any, metadata: grpc.Metadata | undefined) {
+    const request = {
+      ..._request,
+      ...methodDesc.requestType
+    };
+    const maybeCombinedMetadata = metadata && this.options.metadata ? new BrowserHeaders({
+      ...this.options?.metadata.headersMap,
+      ...metadata?.headersMap
+    }) : metadata || this.options.metadata;
+    return new Promise((resolve, reject) => {
+      grpc.unary(methodDesc, {
+        request,
+        host: this.host,
+        metadata: maybeCombinedMetadata,
+        transport: this.options.transport,
+        debug: this.options.debug,
+        onEnd: function (response) {
+          if (response.status === grpc.Code.OK) {
+            resolve(response.message);
+          } else {
+            const err = (new Error(response.statusMessage) as any);
+            err.code = response.status;
+            err.metadata = response.trailers;
+            reject(err);
+          }
+        }
+      });
+    });
+  }
+}

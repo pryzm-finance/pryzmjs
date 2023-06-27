@@ -26,7 +26,10 @@ export class LCDQueryClient {
     return await this.req.get<QuerySyncInfoResponseSDKType>(endpoint);
   }
   /* MaturityAll */
-  async maturityAll(params: QueryAllMaturitiesRequest, options: any = {params: {}}): Promise<QueryAllMaturitiesResponseSDKType> {
+  async maturityAll(params: QueryAllMaturitiesRequest): Promise<QueryAllMaturitiesResponseSDKType> {
+    const options: any = {
+      params: {}
+    };
     if (typeof params?.assetId !== "undefined") {
       options.params.asset_id = params.assetId;
     }

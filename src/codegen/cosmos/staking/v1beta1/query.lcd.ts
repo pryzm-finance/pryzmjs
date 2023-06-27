@@ -29,7 +29,10 @@ export class LCDQueryClient {
   
    When called from another module, this query might consume a high amount of
    gas if the pagination field is incorrectly set. */
-  async validators(params: QueryValidatorsRequest, options: any = {params: {}}): Promise<QueryValidatorsResponseSDKType> {
+  async validators(params: QueryValidatorsRequest): Promise<QueryValidatorsResponseSDKType> {
+    const options: any = {
+      params: {}
+    };
     if (typeof params?.status !== "undefined") {
       options.params.status = params.status;
     }
@@ -48,7 +51,10 @@ export class LCDQueryClient {
   
    When called from another module, this query might consume a high amount of
    gas if the pagination field is incorrectly set. */
-  async validatorDelegations(params: QueryValidatorDelegationsRequest, options: any = {params: {}}): Promise<QueryValidatorDelegationsResponseSDKType> {
+  async validatorDelegations(params: QueryValidatorDelegationsRequest): Promise<QueryValidatorDelegationsResponseSDKType> {
+    const options: any = {
+      params: {}
+    };
     if (typeof params?.pagination !== "undefined") {
       setPaginationParams(options, params.pagination);
     }
@@ -59,7 +65,10 @@ export class LCDQueryClient {
   
    When called from another module, this query might consume a high amount of
    gas if the pagination field is incorrectly set. */
-  async validatorUnbondingDelegations(params: QueryValidatorUnbondingDelegationsRequest, options: any = {params: {}}): Promise<QueryValidatorUnbondingDelegationsResponseSDKType> {
+  async validatorUnbondingDelegations(params: QueryValidatorUnbondingDelegationsRequest): Promise<QueryValidatorUnbondingDelegationsResponseSDKType> {
+    const options: any = {
+      params: {}
+    };
     if (typeof params?.pagination !== "undefined") {
       setPaginationParams(options, params.pagination);
     }
@@ -81,7 +90,10 @@ export class LCDQueryClient {
   
    When called from another module, this query might consume a high amount of
    gas if the pagination field is incorrectly set. */
-  async delegatorDelegations(params: QueryDelegatorDelegationsRequest, options: any = {params: {}}): Promise<QueryDelegatorDelegationsResponseSDKType> {
+  async delegatorDelegations(params: QueryDelegatorDelegationsRequest): Promise<QueryDelegatorDelegationsResponseSDKType> {
+    const options: any = {
+      params: {}
+    };
     if (typeof params?.pagination !== "undefined") {
       setPaginationParams(options, params.pagination);
     }
@@ -93,7 +105,10 @@ export class LCDQueryClient {
   
    When called from another module, this query might consume a high amount of
    gas if the pagination field is incorrectly set. */
-  async delegatorUnbondingDelegations(params: QueryDelegatorUnbondingDelegationsRequest, options: any = {params: {}}): Promise<QueryDelegatorUnbondingDelegationsResponseSDKType> {
+  async delegatorUnbondingDelegations(params: QueryDelegatorUnbondingDelegationsRequest): Promise<QueryDelegatorUnbondingDelegationsResponseSDKType> {
+    const options: any = {
+      params: {}
+    };
     if (typeof params?.pagination !== "undefined") {
       setPaginationParams(options, params.pagination);
     }
@@ -104,7 +119,10 @@ export class LCDQueryClient {
   
    When called from another module, this query might consume a high amount of
    gas if the pagination field is incorrectly set. */
-  async redelegations(params: QueryRedelegationsRequest, options: any = {params: {}}): Promise<QueryRedelegationsResponseSDKType> {
+  async redelegations(params: QueryRedelegationsRequest): Promise<QueryRedelegationsResponseSDKType> {
+    const options: any = {
+      params: {}
+    };
     if (typeof params?.srcValidatorAddr !== "undefined") {
       options.params.src_validator_addr = params.srcValidatorAddr;
     }
@@ -122,7 +140,10 @@ export class LCDQueryClient {
   
    When called from another module, this query might consume a high amount of
    gas if the pagination field is incorrectly set. */
-  async delegatorValidators(params: QueryDelegatorValidatorsRequest, options: any = {params: {}}): Promise<QueryDelegatorValidatorsResponseSDKType> {
+  async delegatorValidators(params: QueryDelegatorValidatorsRequest): Promise<QueryDelegatorValidatorsResponseSDKType> {
+    const options: any = {
+      params: {}
+    };
     if (typeof params?.pagination !== "undefined") {
       setPaginationParams(options, params.pagination);
     }

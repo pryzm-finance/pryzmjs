@@ -1,23 +1,25 @@
-import { Rpc } from "../../helpers";
-import * as _m0 from "protobufjs/minimal";
-import { QueryClient, createProtobufRpcClient } from "@cosmjs/stargate";
+//@ts-nocheck
+import { grpc } from "@improbable-eng/grpc-web";
+import { UnaryMethodDefinitionish } from "../../grpc-web";
+import { DeepPartial } from "../../helpers";
+import { BrowserHeaders } from "browser-headers";
 import { QueryParamsRequest, QueryParamsResponse, QueryGetPoolRequest, QueryGetPoolResponse, QueryAllPoolRequest, QueryAllPoolResponse, QueryGetBondRequest, QueryGetBondResponse, QueryAllBondRequest, QueryAllBondResponse, QueryGetUnbondingRequest, QueryGetUnbondingResponse, QueryAllUnbondingRequest, QueryAllUnbondingResponse } from "./query";
 /** Query defines the gRPC querier service. */
 export interface Query {
   /** Parameters queries the parameters of the module. */
-  params(request?: QueryParamsRequest): Promise<QueryParamsResponse>;
+  params(request?: DeepPartial<QueryParamsRequest>, metadata?: grpc.Metadata): Promise<QueryParamsResponse>;
   /** Queries a Pool by index. */
-  pool(request: QueryGetPoolRequest): Promise<QueryGetPoolResponse>;
+  pool(request: DeepPartial<QueryGetPoolRequest>, metadata?: grpc.Metadata): Promise<QueryGetPoolResponse>;
   /** Queries a list of Pool items. */
-  poolAll(request?: QueryAllPoolRequest): Promise<QueryAllPoolResponse>;
+  poolAll(request?: DeepPartial<QueryAllPoolRequest>, metadata?: grpc.Metadata): Promise<QueryAllPoolResponse>;
   /** Queries a Bond by index. */
-  bond(request: QueryGetBondRequest): Promise<QueryGetBondResponse>;
+  bond(request: DeepPartial<QueryGetBondRequest>, metadata?: grpc.Metadata): Promise<QueryGetBondResponse>;
   /** Queries a list of Bond items. */
-  bondAll(request?: QueryAllBondRequest): Promise<QueryAllBondResponse>;
+  bondAll(request?: DeepPartial<QueryAllBondRequest>, metadata?: grpc.Metadata): Promise<QueryAllBondResponse>;
   /** Queries a Unbonding by id. */
-  unbonding(request: QueryGetUnbondingRequest): Promise<QueryGetUnbondingResponse>;
+  unbonding(request: DeepPartial<QueryGetUnbondingRequest>, metadata?: grpc.Metadata): Promise<QueryGetUnbondingResponse>;
   /** Queries a list of Unbonding items. */
-  unbondingAll(request?: QueryAllUnbondingRequest): Promise<QueryAllUnbondingResponse>;
+  unbondingAll(request?: DeepPartial<QueryAllUnbondingRequest>, metadata?: grpc.Metadata): Promise<QueryAllUnbondingResponse>;
 }
 export class QueryClientImpl implements Query {
   private readonly rpc: Rpc;
@@ -31,72 +33,229 @@ export class QueryClientImpl implements Query {
     this.unbonding = this.unbonding.bind(this);
     this.unbondingAll = this.unbondingAll.bind(this);
   }
-  params(request: QueryParamsRequest = {}): Promise<QueryParamsResponse> {
-    const data = QueryParamsRequest.encode(request).finish();
-    const promise = this.rpc.request("prism.incentives.Query", "Params", data);
-    return promise.then(data => QueryParamsResponse.decode(new _m0.Reader(data)));
+  params(request: DeepPartial<QueryParamsRequest> = {}, metadata?: grpc.Metadata): Promise<QueryParamsResponse> {
+    return this.rpc.unary(QueryParamsDesc, QueryParamsRequest.fromPartial(request), metadata);
   }
-  pool(request: QueryGetPoolRequest): Promise<QueryGetPoolResponse> {
-    const data = QueryGetPoolRequest.encode(request).finish();
-    const promise = this.rpc.request("prism.incentives.Query", "Pool", data);
-    return promise.then(data => QueryGetPoolResponse.decode(new _m0.Reader(data)));
+  pool(request: DeepPartial<QueryGetPoolRequest>, metadata?: grpc.Metadata): Promise<QueryGetPoolResponse> {
+    return this.rpc.unary(QueryGetPoolDesc, QueryGetPoolRequest.fromPartial(request), metadata);
   }
-  poolAll(request: QueryAllPoolRequest = {
+  poolAll(request: DeepPartial<QueryAllPoolRequest> = {
     pagination: undefined
-  }): Promise<QueryAllPoolResponse> {
-    const data = QueryAllPoolRequest.encode(request).finish();
-    const promise = this.rpc.request("prism.incentives.Query", "PoolAll", data);
-    return promise.then(data => QueryAllPoolResponse.decode(new _m0.Reader(data)));
+  }, metadata?: grpc.Metadata): Promise<QueryAllPoolResponse> {
+    return this.rpc.unary(QueryAllPoolDesc, QueryAllPoolRequest.fromPartial(request), metadata);
   }
-  bond(request: QueryGetBondRequest): Promise<QueryGetBondResponse> {
-    const data = QueryGetBondRequest.encode(request).finish();
-    const promise = this.rpc.request("prism.incentives.Query", "Bond", data);
-    return promise.then(data => QueryGetBondResponse.decode(new _m0.Reader(data)));
+  bond(request: DeepPartial<QueryGetBondRequest>, metadata?: grpc.Metadata): Promise<QueryGetBondResponse> {
+    return this.rpc.unary(QueryGetBondDesc, QueryGetBondRequest.fromPartial(request), metadata);
   }
-  bondAll(request: QueryAllBondRequest = {
+  bondAll(request: DeepPartial<QueryAllBondRequest> = {
     pagination: undefined
-  }): Promise<QueryAllBondResponse> {
-    const data = QueryAllBondRequest.encode(request).finish();
-    const promise = this.rpc.request("prism.incentives.Query", "BondAll", data);
-    return promise.then(data => QueryAllBondResponse.decode(new _m0.Reader(data)));
+  }, metadata?: grpc.Metadata): Promise<QueryAllBondResponse> {
+    return this.rpc.unary(QueryAllBondDesc, QueryAllBondRequest.fromPartial(request), metadata);
   }
-  unbonding(request: QueryGetUnbondingRequest): Promise<QueryGetUnbondingResponse> {
-    const data = QueryGetUnbondingRequest.encode(request).finish();
-    const promise = this.rpc.request("prism.incentives.Query", "Unbonding", data);
-    return promise.then(data => QueryGetUnbondingResponse.decode(new _m0.Reader(data)));
+  unbonding(request: DeepPartial<QueryGetUnbondingRequest>, metadata?: grpc.Metadata): Promise<QueryGetUnbondingResponse> {
+    return this.rpc.unary(QueryGetUnbondingDesc, QueryGetUnbondingRequest.fromPartial(request), metadata);
   }
-  unbondingAll(request: QueryAllUnbondingRequest = {
+  unbondingAll(request: DeepPartial<QueryAllUnbondingRequest> = {
     pagination: undefined
-  }): Promise<QueryAllUnbondingResponse> {
-    const data = QueryAllUnbondingRequest.encode(request).finish();
-    const promise = this.rpc.request("prism.incentives.Query", "UnbondingAll", data);
-    return promise.then(data => QueryAllUnbondingResponse.decode(new _m0.Reader(data)));
+  }, metadata?: grpc.Metadata): Promise<QueryAllUnbondingResponse> {
+    return this.rpc.unary(QueryAllUnbondingDesc, QueryAllUnbondingRequest.fromPartial(request), metadata);
   }
 }
-export const createRpcQueryExtension = (base: QueryClient) => {
-  const rpc = createProtobufRpcClient(base);
-  const queryService = new QueryClientImpl(rpc);
-  return {
-    params(request?: QueryParamsRequest): Promise<QueryParamsResponse> {
-      return queryService.params(request);
-    },
-    pool(request: QueryGetPoolRequest): Promise<QueryGetPoolResponse> {
-      return queryService.pool(request);
-    },
-    poolAll(request?: QueryAllPoolRequest): Promise<QueryAllPoolResponse> {
-      return queryService.poolAll(request);
-    },
-    bond(request: QueryGetBondRequest): Promise<QueryGetBondResponse> {
-      return queryService.bond(request);
-    },
-    bondAll(request?: QueryAllBondRequest): Promise<QueryAllBondResponse> {
-      return queryService.bondAll(request);
-    },
-    unbonding(request: QueryGetUnbondingRequest): Promise<QueryGetUnbondingResponse> {
-      return queryService.unbonding(request);
-    },
-    unbondingAll(request?: QueryAllUnbondingRequest): Promise<QueryAllUnbondingResponse> {
-      return queryService.unbondingAll(request);
-    }
-  };
+export const QueryDesc = {
+  serviceName: "prism.incentives.Query"
 };
+export const QueryParamsDesc: UnaryMethodDefinitionish = {
+  methodName: "Params",
+  service: QueryDesc,
+  requestStream: false,
+  responseStream: false,
+  requestType: ({
+    serializeBinary() {
+      return QueryParamsRequest.encode(this).finish();
+    }
+  } as any),
+  responseType: ({
+    deserializeBinary(data: Uint8Array) {
+      return {
+        ...QueryParamsResponse.decode(data),
+        toObject() {
+          return this;
+        }
+      };
+    }
+  } as any)
+};
+export const QueryGetPoolDesc: UnaryMethodDefinitionish = {
+  methodName: "Pool",
+  service: QueryDesc,
+  requestStream: false,
+  responseStream: false,
+  requestType: ({
+    serializeBinary() {
+      return QueryGetPoolRequest.encode(this).finish();
+    }
+  } as any),
+  responseType: ({
+    deserializeBinary(data: Uint8Array) {
+      return {
+        ...QueryGetPoolResponse.decode(data),
+        toObject() {
+          return this;
+        }
+      };
+    }
+  } as any)
+};
+export const QueryAllPoolDesc: UnaryMethodDefinitionish = {
+  methodName: "PoolAll",
+  service: QueryDesc,
+  requestStream: false,
+  responseStream: false,
+  requestType: ({
+    serializeBinary() {
+      return QueryAllPoolRequest.encode(this).finish();
+    }
+  } as any),
+  responseType: ({
+    deserializeBinary(data: Uint8Array) {
+      return {
+        ...QueryAllPoolResponse.decode(data),
+        toObject() {
+          return this;
+        }
+      };
+    }
+  } as any)
+};
+export const QueryGetBondDesc: UnaryMethodDefinitionish = {
+  methodName: "Bond",
+  service: QueryDesc,
+  requestStream: false,
+  responseStream: false,
+  requestType: ({
+    serializeBinary() {
+      return QueryGetBondRequest.encode(this).finish();
+    }
+  } as any),
+  responseType: ({
+    deserializeBinary(data: Uint8Array) {
+      return {
+        ...QueryGetBondResponse.decode(data),
+        toObject() {
+          return this;
+        }
+      };
+    }
+  } as any)
+};
+export const QueryAllBondDesc: UnaryMethodDefinitionish = {
+  methodName: "BondAll",
+  service: QueryDesc,
+  requestStream: false,
+  responseStream: false,
+  requestType: ({
+    serializeBinary() {
+      return QueryAllBondRequest.encode(this).finish();
+    }
+  } as any),
+  responseType: ({
+    deserializeBinary(data: Uint8Array) {
+      return {
+        ...QueryAllBondResponse.decode(data),
+        toObject() {
+          return this;
+        }
+      };
+    }
+  } as any)
+};
+export const QueryGetUnbondingDesc: UnaryMethodDefinitionish = {
+  methodName: "Unbonding",
+  service: QueryDesc,
+  requestStream: false,
+  responseStream: false,
+  requestType: ({
+    serializeBinary() {
+      return QueryGetUnbondingRequest.encode(this).finish();
+    }
+  } as any),
+  responseType: ({
+    deserializeBinary(data: Uint8Array) {
+      return {
+        ...QueryGetUnbondingResponse.decode(data),
+        toObject() {
+          return this;
+        }
+      };
+    }
+  } as any)
+};
+export const QueryAllUnbondingDesc: UnaryMethodDefinitionish = {
+  methodName: "UnbondingAll",
+  service: QueryDesc,
+  requestStream: false,
+  responseStream: false,
+  requestType: ({
+    serializeBinary() {
+      return QueryAllUnbondingRequest.encode(this).finish();
+    }
+  } as any),
+  responseType: ({
+    deserializeBinary(data: Uint8Array) {
+      return {
+        ...QueryAllUnbondingResponse.decode(data),
+        toObject() {
+          return this;
+        }
+      };
+    }
+  } as any)
+};
+export interface Rpc {
+  unary<T extends UnaryMethodDefinitionish>(methodDesc: T, request: any, metadata: grpc.Metadata | undefined): Promise<any>;
+}
+export class GrpcWebImpl {
+  host: string;
+  options: {
+    transport?: grpc.TransportFactory;
+    debug?: boolean;
+    metadata?: grpc.Metadata;
+  };
+  constructor(host: string, options: {
+    transport?: grpc.TransportFactory;
+    debug?: boolean;
+    metadata?: grpc.Metadata;
+  }) {
+    this.host = host;
+    this.options = options;
+  }
+  unary<T extends UnaryMethodDefinitionish>(methodDesc: T, _request: any, metadata: grpc.Metadata | undefined) {
+    const request = {
+      ..._request,
+      ...methodDesc.requestType
+    };
+    const maybeCombinedMetadata = metadata && this.options.metadata ? new BrowserHeaders({
+      ...this.options?.metadata.headersMap,
+      ...metadata?.headersMap
+    }) : metadata || this.options.metadata;
+    return new Promise((resolve, reject) => {
+      grpc.unary(methodDesc, {
+        request,
+        host: this.host,
+        metadata: maybeCombinedMetadata,
+        transport: this.options.transport,
+        debug: this.options.debug,
+        onEnd: function (response) {
+          if (response.status === grpc.Code.OK) {
+            resolve(response.message);
+          } else {
+            const err = (new Error(response.statusMessage) as any);
+            err.code = response.status;
+            err.metadata = response.trailers;
+            reject(err);
+          }
+        }
+      });
+    });
+  }
+}

@@ -1,18 +1,21 @@
-import { Rpc } from "../../helpers";
-import * as _m0 from "protobufjs/minimal";
+//@ts-nocheck
+import { UnaryMethodDefinitionish } from "../../grpc-web";
+import { DeepPartial } from "../../helpers";
+import { grpc } from "@improbable-eng/grpc-web";
+import { BrowserHeaders } from "browser-headers";
 import { MsgUpdateParams, MsgUpdateParamsResponse, MsgCreatePool, MsgCreatePoolResponse, MsgUpdateRewardTokenWeight, MsgUpdateRewardTokenWeightResponse, MsgAddRewardTokenToPool, MsgAddRewardTokenToPoolResponse, MsgBond, MsgBondResponse, MsgUnbond, MsgUnbondResponse, MsgClaimReward, MsgClaimRewardResponse, MsgClaimUnbonding, MsgClaimUnbondingResponse, MsgCancelUnbonding, MsgCancelUnbondingResponse, MsgIncentivizePool, MsgIncentivizePoolResponse } from "./tx";
 /** Msg defines the Msg service. */
 export interface Msg {
-  updateParams(request: MsgUpdateParams): Promise<MsgUpdateParamsResponse>;
-  createPool(request: MsgCreatePool): Promise<MsgCreatePoolResponse>;
-  updateRewardTokenWeight(request: MsgUpdateRewardTokenWeight): Promise<MsgUpdateRewardTokenWeightResponse>;
-  addRewardTokenToPool(request: MsgAddRewardTokenToPool): Promise<MsgAddRewardTokenToPoolResponse>;
-  bond(request: MsgBond): Promise<MsgBondResponse>;
-  unbond(request: MsgUnbond): Promise<MsgUnbondResponse>;
-  claimReward(request: MsgClaimReward): Promise<MsgClaimRewardResponse>;
-  claimUnbonding(request: MsgClaimUnbonding): Promise<MsgClaimUnbondingResponse>;
-  cancelUnbonding(request: MsgCancelUnbonding): Promise<MsgCancelUnbondingResponse>;
-  incentivizePool(request: MsgIncentivizePool): Promise<MsgIncentivizePoolResponse>;
+  updateParams(request: DeepPartial<MsgUpdateParams>, metadata?: grpc.Metadata): Promise<MsgUpdateParamsResponse>;
+  createPool(request: DeepPartial<MsgCreatePool>, metadata?: grpc.Metadata): Promise<MsgCreatePoolResponse>;
+  updateRewardTokenWeight(request: DeepPartial<MsgUpdateRewardTokenWeight>, metadata?: grpc.Metadata): Promise<MsgUpdateRewardTokenWeightResponse>;
+  addRewardTokenToPool(request: DeepPartial<MsgAddRewardTokenToPool>, metadata?: grpc.Metadata): Promise<MsgAddRewardTokenToPoolResponse>;
+  bond(request: DeepPartial<MsgBond>, metadata?: grpc.Metadata): Promise<MsgBondResponse>;
+  unbond(request: DeepPartial<MsgUnbond>, metadata?: grpc.Metadata): Promise<MsgUnbondResponse>;
+  claimReward(request: DeepPartial<MsgClaimReward>, metadata?: grpc.Metadata): Promise<MsgClaimRewardResponse>;
+  claimUnbonding(request: DeepPartial<MsgClaimUnbonding>, metadata?: grpc.Metadata): Promise<MsgClaimUnbondingResponse>;
+  cancelUnbonding(request: DeepPartial<MsgCancelUnbonding>, metadata?: grpc.Metadata): Promise<MsgCancelUnbondingResponse>;
+  incentivizePool(request: DeepPartial<MsgIncentivizePool>, metadata?: grpc.Metadata): Promise<MsgIncentivizePoolResponse>;
 }
 export class MsgClientImpl implements Msg {
   private readonly rpc: Rpc;
@@ -29,54 +32,295 @@ export class MsgClientImpl implements Msg {
     this.cancelUnbonding = this.cancelUnbonding.bind(this);
     this.incentivizePool = this.incentivizePool.bind(this);
   }
-  updateParams(request: MsgUpdateParams): Promise<MsgUpdateParamsResponse> {
-    const data = MsgUpdateParams.encode(request).finish();
-    const promise = this.rpc.request("prism.incentives.Msg", "UpdateParams", data);
-    return promise.then(data => MsgUpdateParamsResponse.decode(new _m0.Reader(data)));
+  updateParams(request: DeepPartial<MsgUpdateParams>, metadata?: grpc.Metadata): Promise<MsgUpdateParamsResponse> {
+    return this.rpc.unary(MsgUpdateParamsDesc, MsgUpdateParams.fromPartial(request), metadata);
   }
-  createPool(request: MsgCreatePool): Promise<MsgCreatePoolResponse> {
-    const data = MsgCreatePool.encode(request).finish();
-    const promise = this.rpc.request("prism.incentives.Msg", "CreatePool", data);
-    return promise.then(data => MsgCreatePoolResponse.decode(new _m0.Reader(data)));
+  createPool(request: DeepPartial<MsgCreatePool>, metadata?: grpc.Metadata): Promise<MsgCreatePoolResponse> {
+    return this.rpc.unary(MsgCreatePoolDesc, MsgCreatePool.fromPartial(request), metadata);
   }
-  updateRewardTokenWeight(request: MsgUpdateRewardTokenWeight): Promise<MsgUpdateRewardTokenWeightResponse> {
-    const data = MsgUpdateRewardTokenWeight.encode(request).finish();
-    const promise = this.rpc.request("prism.incentives.Msg", "UpdateRewardTokenWeight", data);
-    return promise.then(data => MsgUpdateRewardTokenWeightResponse.decode(new _m0.Reader(data)));
+  updateRewardTokenWeight(request: DeepPartial<MsgUpdateRewardTokenWeight>, metadata?: grpc.Metadata): Promise<MsgUpdateRewardTokenWeightResponse> {
+    return this.rpc.unary(MsgUpdateRewardTokenWeightDesc, MsgUpdateRewardTokenWeight.fromPartial(request), metadata);
   }
-  addRewardTokenToPool(request: MsgAddRewardTokenToPool): Promise<MsgAddRewardTokenToPoolResponse> {
-    const data = MsgAddRewardTokenToPool.encode(request).finish();
-    const promise = this.rpc.request("prism.incentives.Msg", "AddRewardTokenToPool", data);
-    return promise.then(data => MsgAddRewardTokenToPoolResponse.decode(new _m0.Reader(data)));
+  addRewardTokenToPool(request: DeepPartial<MsgAddRewardTokenToPool>, metadata?: grpc.Metadata): Promise<MsgAddRewardTokenToPoolResponse> {
+    return this.rpc.unary(MsgAddRewardTokenToPoolDesc, MsgAddRewardTokenToPool.fromPartial(request), metadata);
   }
-  bond(request: MsgBond): Promise<MsgBondResponse> {
-    const data = MsgBond.encode(request).finish();
-    const promise = this.rpc.request("prism.incentives.Msg", "Bond", data);
-    return promise.then(data => MsgBondResponse.decode(new _m0.Reader(data)));
+  bond(request: DeepPartial<MsgBond>, metadata?: grpc.Metadata): Promise<MsgBondResponse> {
+    return this.rpc.unary(MsgBondDesc, MsgBond.fromPartial(request), metadata);
   }
-  unbond(request: MsgUnbond): Promise<MsgUnbondResponse> {
-    const data = MsgUnbond.encode(request).finish();
-    const promise = this.rpc.request("prism.incentives.Msg", "Unbond", data);
-    return promise.then(data => MsgUnbondResponse.decode(new _m0.Reader(data)));
+  unbond(request: DeepPartial<MsgUnbond>, metadata?: grpc.Metadata): Promise<MsgUnbondResponse> {
+    return this.rpc.unary(MsgUnbondDesc, MsgUnbond.fromPartial(request), metadata);
   }
-  claimReward(request: MsgClaimReward): Promise<MsgClaimRewardResponse> {
-    const data = MsgClaimReward.encode(request).finish();
-    const promise = this.rpc.request("prism.incentives.Msg", "ClaimReward", data);
-    return promise.then(data => MsgClaimRewardResponse.decode(new _m0.Reader(data)));
+  claimReward(request: DeepPartial<MsgClaimReward>, metadata?: grpc.Metadata): Promise<MsgClaimRewardResponse> {
+    return this.rpc.unary(MsgClaimRewardDesc, MsgClaimReward.fromPartial(request), metadata);
   }
-  claimUnbonding(request: MsgClaimUnbonding): Promise<MsgClaimUnbondingResponse> {
-    const data = MsgClaimUnbonding.encode(request).finish();
-    const promise = this.rpc.request("prism.incentives.Msg", "ClaimUnbonding", data);
-    return promise.then(data => MsgClaimUnbondingResponse.decode(new _m0.Reader(data)));
+  claimUnbonding(request: DeepPartial<MsgClaimUnbonding>, metadata?: grpc.Metadata): Promise<MsgClaimUnbondingResponse> {
+    return this.rpc.unary(MsgClaimUnbondingDesc, MsgClaimUnbonding.fromPartial(request), metadata);
   }
-  cancelUnbonding(request: MsgCancelUnbonding): Promise<MsgCancelUnbondingResponse> {
-    const data = MsgCancelUnbonding.encode(request).finish();
-    const promise = this.rpc.request("prism.incentives.Msg", "CancelUnbonding", data);
-    return promise.then(data => MsgCancelUnbondingResponse.decode(new _m0.Reader(data)));
+  cancelUnbonding(request: DeepPartial<MsgCancelUnbonding>, metadata?: grpc.Metadata): Promise<MsgCancelUnbondingResponse> {
+    return this.rpc.unary(MsgCancelUnbondingDesc, MsgCancelUnbonding.fromPartial(request), metadata);
   }
-  incentivizePool(request: MsgIncentivizePool): Promise<MsgIncentivizePoolResponse> {
-    const data = MsgIncentivizePool.encode(request).finish();
-    const promise = this.rpc.request("prism.incentives.Msg", "IncentivizePool", data);
-    return promise.then(data => MsgIncentivizePoolResponse.decode(new _m0.Reader(data)));
+  incentivizePool(request: DeepPartial<MsgIncentivizePool>, metadata?: grpc.Metadata): Promise<MsgIncentivizePoolResponse> {
+    return this.rpc.unary(MsgIncentivizePoolDesc, MsgIncentivizePool.fromPartial(request), metadata);
+  }
+}
+export const MsgDesc = {
+  serviceName: "prism.incentives.Msg"
+};
+export const MsgUpdateParamsDesc: UnaryMethodDefinitionish = {
+  methodName: "UpdateParams",
+  service: MsgDesc,
+  requestStream: false,
+  responseStream: false,
+  requestType: ({
+    serializeBinary() {
+      return MsgUpdateParams.encode(this).finish();
+    }
+  } as any),
+  responseType: ({
+    deserializeBinary(data: Uint8Array) {
+      return {
+        ...MsgUpdateParamsResponse.decode(data),
+        toObject() {
+          return this;
+        }
+      };
+    }
+  } as any)
+};
+export const MsgCreatePoolDesc: UnaryMethodDefinitionish = {
+  methodName: "CreatePool",
+  service: MsgDesc,
+  requestStream: false,
+  responseStream: false,
+  requestType: ({
+    serializeBinary() {
+      return MsgCreatePool.encode(this).finish();
+    }
+  } as any),
+  responseType: ({
+    deserializeBinary(data: Uint8Array) {
+      return {
+        ...MsgCreatePoolResponse.decode(data),
+        toObject() {
+          return this;
+        }
+      };
+    }
+  } as any)
+};
+export const MsgUpdateRewardTokenWeightDesc: UnaryMethodDefinitionish = {
+  methodName: "UpdateRewardTokenWeight",
+  service: MsgDesc,
+  requestStream: false,
+  responseStream: false,
+  requestType: ({
+    serializeBinary() {
+      return MsgUpdateRewardTokenWeight.encode(this).finish();
+    }
+  } as any),
+  responseType: ({
+    deserializeBinary(data: Uint8Array) {
+      return {
+        ...MsgUpdateRewardTokenWeightResponse.decode(data),
+        toObject() {
+          return this;
+        }
+      };
+    }
+  } as any)
+};
+export const MsgAddRewardTokenToPoolDesc: UnaryMethodDefinitionish = {
+  methodName: "AddRewardTokenToPool",
+  service: MsgDesc,
+  requestStream: false,
+  responseStream: false,
+  requestType: ({
+    serializeBinary() {
+      return MsgAddRewardTokenToPool.encode(this).finish();
+    }
+  } as any),
+  responseType: ({
+    deserializeBinary(data: Uint8Array) {
+      return {
+        ...MsgAddRewardTokenToPoolResponse.decode(data),
+        toObject() {
+          return this;
+        }
+      };
+    }
+  } as any)
+};
+export const MsgBondDesc: UnaryMethodDefinitionish = {
+  methodName: "Bond",
+  service: MsgDesc,
+  requestStream: false,
+  responseStream: false,
+  requestType: ({
+    serializeBinary() {
+      return MsgBond.encode(this).finish();
+    }
+  } as any),
+  responseType: ({
+    deserializeBinary(data: Uint8Array) {
+      return {
+        ...MsgBondResponse.decode(data),
+        toObject() {
+          return this;
+        }
+      };
+    }
+  } as any)
+};
+export const MsgUnbondDesc: UnaryMethodDefinitionish = {
+  methodName: "Unbond",
+  service: MsgDesc,
+  requestStream: false,
+  responseStream: false,
+  requestType: ({
+    serializeBinary() {
+      return MsgUnbond.encode(this).finish();
+    }
+  } as any),
+  responseType: ({
+    deserializeBinary(data: Uint8Array) {
+      return {
+        ...MsgUnbondResponse.decode(data),
+        toObject() {
+          return this;
+        }
+      };
+    }
+  } as any)
+};
+export const MsgClaimRewardDesc: UnaryMethodDefinitionish = {
+  methodName: "ClaimReward",
+  service: MsgDesc,
+  requestStream: false,
+  responseStream: false,
+  requestType: ({
+    serializeBinary() {
+      return MsgClaimReward.encode(this).finish();
+    }
+  } as any),
+  responseType: ({
+    deserializeBinary(data: Uint8Array) {
+      return {
+        ...MsgClaimRewardResponse.decode(data),
+        toObject() {
+          return this;
+        }
+      };
+    }
+  } as any)
+};
+export const MsgClaimUnbondingDesc: UnaryMethodDefinitionish = {
+  methodName: "ClaimUnbonding",
+  service: MsgDesc,
+  requestStream: false,
+  responseStream: false,
+  requestType: ({
+    serializeBinary() {
+      return MsgClaimUnbonding.encode(this).finish();
+    }
+  } as any),
+  responseType: ({
+    deserializeBinary(data: Uint8Array) {
+      return {
+        ...MsgClaimUnbondingResponse.decode(data),
+        toObject() {
+          return this;
+        }
+      };
+    }
+  } as any)
+};
+export const MsgCancelUnbondingDesc: UnaryMethodDefinitionish = {
+  methodName: "CancelUnbonding",
+  service: MsgDesc,
+  requestStream: false,
+  responseStream: false,
+  requestType: ({
+    serializeBinary() {
+      return MsgCancelUnbonding.encode(this).finish();
+    }
+  } as any),
+  responseType: ({
+    deserializeBinary(data: Uint8Array) {
+      return {
+        ...MsgCancelUnbondingResponse.decode(data),
+        toObject() {
+          return this;
+        }
+      };
+    }
+  } as any)
+};
+export const MsgIncentivizePoolDesc: UnaryMethodDefinitionish = {
+  methodName: "IncentivizePool",
+  service: MsgDesc,
+  requestStream: false,
+  responseStream: false,
+  requestType: ({
+    serializeBinary() {
+      return MsgIncentivizePool.encode(this).finish();
+    }
+  } as any),
+  responseType: ({
+    deserializeBinary(data: Uint8Array) {
+      return {
+        ...MsgIncentivizePoolResponse.decode(data),
+        toObject() {
+          return this;
+        }
+      };
+    }
+  } as any)
+};
+export interface Rpc {
+  unary<T extends UnaryMethodDefinitionish>(methodDesc: T, request: any, metadata: grpc.Metadata | undefined): Promise<any>;
+}
+export class GrpcWebImpl {
+  host: string;
+  options: {
+    transport?: grpc.TransportFactory;
+    debug?: boolean;
+    metadata?: grpc.Metadata;
+  };
+  constructor(host: string, options: {
+    transport?: grpc.TransportFactory;
+    debug?: boolean;
+    metadata?: grpc.Metadata;
+  }) {
+    this.host = host;
+    this.options = options;
+  }
+  unary<T extends UnaryMethodDefinitionish>(methodDesc: T, _request: any, metadata: grpc.Metadata | undefined) {
+    const request = {
+      ..._request,
+      ...methodDesc.requestType
+    };
+    const maybeCombinedMetadata = metadata && this.options.metadata ? new BrowserHeaders({
+      ...this.options?.metadata.headersMap,
+      ...metadata?.headersMap
+    }) : metadata || this.options.metadata;
+    return new Promise((resolve, reject) => {
+      grpc.unary(methodDesc, {
+        request,
+        host: this.host,
+        metadata: maybeCombinedMetadata,
+        transport: this.options.transport,
+        debug: this.options.debug,
+        onEnd: function (response) {
+          if (response.status === grpc.Code.OK) {
+            resolve(response.message);
+          } else {
+            const err = (new Error(response.statusMessage) as any);
+            err.code = response.status;
+            err.metadata = response.trailers;
+            reject(err);
+          }
+        }
+      });
+    });
   }
 }

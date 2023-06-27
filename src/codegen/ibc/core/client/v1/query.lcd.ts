@@ -28,7 +28,10 @@ export class LCDQueryClient {
   /* ClientStates queries all the IBC light clients of a chain. */
   async clientStates(params: QueryClientStatesRequest = {
     pagination: undefined
-  }, options: any = {params: {}}): Promise<QueryClientStatesResponseSDKType> {
+  }): Promise<QueryClientStatesResponseSDKType> {
+    const options: any = {
+      params: {}
+    };
     if (typeof params?.pagination !== "undefined") {
       setPaginationParams(options, params.pagination);
     }
@@ -37,7 +40,10 @@ export class LCDQueryClient {
   }
   /* ConsensusState queries a consensus state associated with a client state at
    a given height. */
-  async consensusState(params: QueryConsensusStateRequest, options: any = {params: {}}): Promise<QueryConsensusStateResponseSDKType> {
+  async consensusState(params: QueryConsensusStateRequest): Promise<QueryConsensusStateResponseSDKType> {
+    const options: any = {
+      params: {}
+    };
     if (typeof params?.latestHeight !== "undefined") {
       options.params.latest_height = params.latestHeight;
     }
@@ -46,7 +52,10 @@ export class LCDQueryClient {
   }
   /* ConsensusStates queries all the consensus state associated with a given
    client. */
-  async consensusStates(params: QueryConsensusStatesRequest, options: any = {params: {}}): Promise<QueryConsensusStatesResponseSDKType> {
+  async consensusStates(params: QueryConsensusStatesRequest): Promise<QueryConsensusStatesResponseSDKType> {
+    const options: any = {
+      params: {}
+    };
     if (typeof params?.pagination !== "undefined") {
       setPaginationParams(options, params.pagination);
     }
@@ -54,7 +63,10 @@ export class LCDQueryClient {
     return await this.req.get<QueryConsensusStatesResponseSDKType>(endpoint, options);
   }
   /* ConsensusStateHeights queries the height of every consensus states associated with a given client. */
-  async consensusStateHeights(params: QueryConsensusStateHeightsRequest, options: any = {params: {}}): Promise<QueryConsensusStateHeightsResponseSDKType> {
+  async consensusStateHeights(params: QueryConsensusStateHeightsRequest): Promise<QueryConsensusStateHeightsResponseSDKType> {
+    const options: any = {
+      params: {}
+    };
     if (typeof params?.pagination !== "undefined") {
       setPaginationParams(options, params.pagination);
     }

@@ -20,7 +20,10 @@ export class LCDQueryClient {
     return await this.req.get<QueryAllowanceResponseSDKType>(endpoint);
   }
   /* Allowances returns all the grants for address. */
-  async allowances(params: QueryAllowancesRequest, options: any = {params: {}}): Promise<QueryAllowancesResponseSDKType> {
+  async allowances(params: QueryAllowancesRequest): Promise<QueryAllowancesResponseSDKType> {
+    const options: any = {
+      params: {}
+    };
     if (typeof params?.pagination !== "undefined") {
       setPaginationParams(options, params.pagination);
     }
@@ -30,7 +33,10 @@ export class LCDQueryClient {
   /* AllowancesByGranter returns all the grants given by an address
   
    Since: cosmos-sdk 0.46 */
-  async allowancesByGranter(params: QueryAllowancesByGranterRequest, options: any = {params: {}}): Promise<QueryAllowancesByGranterResponseSDKType> {
+  async allowancesByGranter(params: QueryAllowancesByGranterRequest): Promise<QueryAllowancesByGranterResponseSDKType> {
+    const options: any = {
+      params: {}
+    };
     if (typeof params?.pagination !== "undefined") {
       setPaginationParams(options, params.pagination);
     }

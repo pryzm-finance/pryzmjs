@@ -42,7 +42,10 @@ export class LCDQueryClient {
     return await this.req.get<QueryValidatorCommissionResponseSDKType>(endpoint);
   }
   /* ValidatorSlashes queries slash events of a validator. */
-  async validatorSlashes(params: QueryValidatorSlashesRequest, options: any = {params: {}}): Promise<QueryValidatorSlashesResponseSDKType> {
+  async validatorSlashes(params: QueryValidatorSlashesRequest): Promise<QueryValidatorSlashesResponseSDKType> {
+    const options: any = {
+      params: {}
+    };
     if (typeof params?.startingHeight !== "undefined") {
       options.params.starting_height = params.startingHeight;
     }

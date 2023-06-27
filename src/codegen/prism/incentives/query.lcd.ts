@@ -31,7 +31,10 @@ export class LCDQueryClient {
   /* Queries a list of Pool items. */
   async poolAll(params: QueryAllPoolRequest = {
     pagination: undefined
-  }, options: any = {params: {}}): Promise<QueryAllPoolResponseSDKType> {
+  }): Promise<QueryAllPoolResponseSDKType> {
+    const options: any = {
+      params: {}
+    };
     if (typeof params?.pagination !== "undefined") {
       setPaginationParams(options, params.pagination);
     }
@@ -46,7 +49,10 @@ export class LCDQueryClient {
   /* Queries a list of Bond items. */
   async bondAll(params: QueryAllBondRequest = {
     pagination: undefined
-  }, options: any = {params: {}}): Promise<QueryAllBondResponseSDKType> {
+  }): Promise<QueryAllBondResponseSDKType> {
+    const options: any = {
+      params: {}
+    };
     if (typeof params?.pagination !== "undefined") {
       setPaginationParams(options, params.pagination);
     }
@@ -61,7 +67,10 @@ export class LCDQueryClient {
   /* Queries a list of Unbonding items. */
   async unbondingAll(params: QueryAllUnbondingRequest = {
     pagination: undefined
-  }, options: any = {params: {}}): Promise<QueryAllUnbondingResponseSDKType> {
+  }): Promise<QueryAllUnbondingResponseSDKType> {
+    const options: any = {
+      params: {}
+    };
     if (typeof params?.pagination !== "undefined") {
       setPaginationParams(options, params.pagination);
     }

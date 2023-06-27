@@ -41,7 +41,10 @@ export class LCDQueryClient {
   /* GetLatestValidatorSet queries latest validator-set. */
   async getLatestValidatorSet(params: GetLatestValidatorSetRequest = {
     pagination: undefined
-  }, options: any = {params: {}}): Promise<GetLatestValidatorSetResponseSDKType> {
+  }): Promise<GetLatestValidatorSetResponseSDKType> {
+    const options: any = {
+      params: {}
+    };
     if (typeof params?.pagination !== "undefined") {
       setPaginationParams(options, params.pagination);
     }
@@ -49,7 +52,10 @@ export class LCDQueryClient {
     return await this.req.get<GetLatestValidatorSetResponseSDKType>(endpoint, options);
   }
   /* GetValidatorSetByHeight queries validator-set at a given height. */
-  async getValidatorSetByHeight(params: GetValidatorSetByHeightRequest, options: any = {params: {}}): Promise<GetValidatorSetByHeightResponseSDKType> {
+  async getValidatorSetByHeight(params: GetValidatorSetByHeightRequest): Promise<GetValidatorSetByHeightResponseSDKType> {
+    const options: any = {
+      params: {}
+    };
     if (typeof params?.pagination !== "undefined") {
       setPaginationParams(options, params.pagination);
     }
@@ -61,7 +67,10 @@ export class LCDQueryClient {
    a valid and supported path, including app, custom, p2p, and store.
   
    Since: cosmos-sdk 0.46 */
-  async aBCIQuery(params: ABCIQueryRequest, options: any = {params: {}}): Promise<ABCIQueryResponseSDKType> {
+  async aBCIQuery(params: ABCIQueryRequest): Promise<ABCIQueryResponseSDKType> {
+    const options: any = {
+      params: {}
+    };
     if (typeof params?.data !== "undefined") {
       options.params.data = params.data;
     }

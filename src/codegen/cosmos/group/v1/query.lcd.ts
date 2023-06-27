@@ -36,7 +36,10 @@ export class LCDQueryClient {
     return await this.req.get<QueryGroupPolicyInfoResponseSDKType>(endpoint);
   }
   /* GroupMembers queries members of a group by group id. */
-  async groupMembers(params: QueryGroupMembersRequest, options: any = {params: {}}): Promise<QueryGroupMembersResponseSDKType> {
+  async groupMembers(params: QueryGroupMembersRequest): Promise<QueryGroupMembersResponseSDKType> {
+    const options: any = {
+      params: {}
+    };
     if (typeof params?.pagination !== "undefined") {
       setPaginationParams(options, params.pagination);
     }
@@ -44,7 +47,10 @@ export class LCDQueryClient {
     return await this.req.get<QueryGroupMembersResponseSDKType>(endpoint, options);
   }
   /* GroupsByAdmin queries groups by admin address. */
-  async groupsByAdmin(params: QueryGroupsByAdminRequest, options: any = {params: {}}): Promise<QueryGroupsByAdminResponseSDKType> {
+  async groupsByAdmin(params: QueryGroupsByAdminRequest): Promise<QueryGroupsByAdminResponseSDKType> {
+    const options: any = {
+      params: {}
+    };
     if (typeof params?.pagination !== "undefined") {
       setPaginationParams(options, params.pagination);
     }
@@ -52,7 +58,10 @@ export class LCDQueryClient {
     return await this.req.get<QueryGroupsByAdminResponseSDKType>(endpoint, options);
   }
   /* GroupPoliciesByGroup queries group policies by group id. */
-  async groupPoliciesByGroup(params: QueryGroupPoliciesByGroupRequest, options: any = {params: {}}): Promise<QueryGroupPoliciesByGroupResponseSDKType> {
+  async groupPoliciesByGroup(params: QueryGroupPoliciesByGroupRequest): Promise<QueryGroupPoliciesByGroupResponseSDKType> {
+    const options: any = {
+      params: {}
+    };
     if (typeof params?.pagination !== "undefined") {
       setPaginationParams(options, params.pagination);
     }
@@ -60,7 +69,10 @@ export class LCDQueryClient {
     return await this.req.get<QueryGroupPoliciesByGroupResponseSDKType>(endpoint, options);
   }
   /* GroupPoliciesByAdmin queries group policies by admin address. */
-  async groupPoliciesByAdmin(params: QueryGroupPoliciesByAdminRequest, options: any = {params: {}}): Promise<QueryGroupPoliciesByAdminResponseSDKType> {
+  async groupPoliciesByAdmin(params: QueryGroupPoliciesByAdminRequest): Promise<QueryGroupPoliciesByAdminResponseSDKType> {
+    const options: any = {
+      params: {}
+    };
     if (typeof params?.pagination !== "undefined") {
       setPaginationParams(options, params.pagination);
     }
@@ -73,7 +85,10 @@ export class LCDQueryClient {
     return await this.req.get<QueryProposalResponseSDKType>(endpoint);
   }
   /* ProposalsByGroupPolicy queries proposals based on account address of group policy. */
-  async proposalsByGroupPolicy(params: QueryProposalsByGroupPolicyRequest, options: any = {params: {}}): Promise<QueryProposalsByGroupPolicyResponseSDKType> {
+  async proposalsByGroupPolicy(params: QueryProposalsByGroupPolicyRequest): Promise<QueryProposalsByGroupPolicyResponseSDKType> {
+    const options: any = {
+      params: {}
+    };
     if (typeof params?.pagination !== "undefined") {
       setPaginationParams(options, params.pagination);
     }
@@ -86,7 +101,10 @@ export class LCDQueryClient {
     return await this.req.get<QueryVoteByProposalVoterResponseSDKType>(endpoint);
   }
   /* VotesByProposal queries a vote by proposal id. */
-  async votesByProposal(params: QueryVotesByProposalRequest, options: any = {params: {}}): Promise<QueryVotesByProposalResponseSDKType> {
+  async votesByProposal(params: QueryVotesByProposalRequest): Promise<QueryVotesByProposalResponseSDKType> {
+    const options: any = {
+      params: {}
+    };
     if (typeof params?.pagination !== "undefined") {
       setPaginationParams(options, params.pagination);
     }
@@ -94,7 +112,10 @@ export class LCDQueryClient {
     return await this.req.get<QueryVotesByProposalResponseSDKType>(endpoint, options);
   }
   /* VotesByVoter queries a vote by voter. */
-  async votesByVoter(params: QueryVotesByVoterRequest, options: any = {params: {}}): Promise<QueryVotesByVoterResponseSDKType> {
+  async votesByVoter(params: QueryVotesByVoterRequest): Promise<QueryVotesByVoterResponseSDKType> {
+    const options: any = {
+      params: {}
+    };
     if (typeof params?.pagination !== "undefined") {
       setPaginationParams(options, params.pagination);
     }
@@ -102,7 +123,10 @@ export class LCDQueryClient {
     return await this.req.get<QueryVotesByVoterResponseSDKType>(endpoint, options);
   }
   /* GroupsByMember queries groups by member address. */
-  async groupsByMember(params: QueryGroupsByMemberRequest, options: any = {params: {}}): Promise<QueryGroupsByMemberResponseSDKType> {
+  async groupsByMember(params: QueryGroupsByMemberRequest): Promise<QueryGroupsByMemberResponseSDKType> {
+    const options: any = {
+      params: {}
+    };
     if (typeof params?.pagination !== "undefined") {
       setPaginationParams(options, params.pagination);
     }
@@ -123,7 +147,10 @@ export class LCDQueryClient {
    Since: cosmos-sdk 0.47.1 */
   async groups(params: QueryGroupsRequest = {
     pagination: undefined
-  }, options: any = {params: {}}): Promise<QueryGroupsResponseSDKType> {
+  }): Promise<QueryGroupsResponseSDKType> {
+    const options: any = {
+      params: {}
+    };
     if (typeof params?.pagination !== "undefined") {
       setPaginationParams(options, params.pagination);
     }
