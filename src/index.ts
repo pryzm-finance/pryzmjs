@@ -1,9 +1,10 @@
-import {prism, prismatics} from "./codegen"
+import {prism, prismatics, cosmatics} from "./codegen"
 import {Long, PageRequest} from "./codegen/helpers";
 import {BrowserHeaders} from "browser-headers";
 
 export type PrismLCDClient = Awaited<ReturnType<typeof prism.ClientFactory.createLCDClient>>
 export type PrismaticsClient = Awaited<ReturnType<typeof prismatics.ClientFactory.createClient>>
+export type CosmaticsClient = Awaited<ReturnType<typeof cosmatics.ClientFactory.createClient>>
 export type PrismGrpcWebClient = Awaited<ReturnType<typeof prism.ClientFactory.createGrpcWebClient>>
 
 export * from './codegen';

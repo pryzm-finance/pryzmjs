@@ -1,11 +1,11 @@
 lockfileVersion: 5.4
 
 specifiers:
-  '@prism-finance/prismjs': 0.7.0
+  '@prism-finance/prismjs': 0.7.3
   '@refractedlabs/utils': 0.1.5
 
 dependencies:
-  '@prism-finance/prismjs': 0.7.0_google-protobuf@3.21.2
+  '@prism-finance/prismjs': 0.7.3_google-protobuf@3.21.2
   '@refractedlabs/utils': 0.1.5
 
 packages:
@@ -209,8 +209,8 @@ packages:
       - debug
     dev: false
 
-  /@prism-finance/prismjs/0.7.0_google-protobuf@3.21.2:
-    resolution: {integrity: sha512-faikhgPW6iJkE5QS/FvS1ZGwIjPODSBEMcej8SCdp8Saai9MCokNnZGB41Sz6XkruAi6gmUazS1mtvvatfdJ3g==, tarball: download/@prism-finance/prismjs/0.7.0/f9ae080cbc1e1adf9863a70159e177f282b3e439}
+  /@prism-finance/prismjs/0.7.3_google-protobuf@3.21.2:
+    resolution: {integrity: sha512-moZ2epg7nWW+JbzBAyp9Xkv80FbMwyYGCkeCdHGpbB+s4bwX8CIXFjrE8anF9hVEoEsOtrkLR0XTzjDSSOzI7Q==, tarball: download/@prism-finance/prismjs/0.7.3/f98b82dcb1959a846cd3c22299166e349c002c5d}
     dependencies:
       '@babel/runtime': 7.22.5
       '@cosmjs/amino': 0.31.0-alpha.1
@@ -295,8 +295,8 @@ packages:
     resolution: {integrity: sha512-MqTGEo5bj5t157U6fA/BiDynNkn0YknVdh48CMPkTSpFTVmvao5UQmm7uEF6xBEo7qIMAlY/JSleYaE6VOdpaA==}
     dev: false
 
-  /@types/node/20.3.1:
-    resolution: {integrity: sha512-EhcH/wvidPy1WeML3TtYFGR83UzjxeWRen9V402T8aUGYsCHOmfoisV3ZSg03gAFIbLq8TnWOJ0f4cALtnSEUg==}
+  /@types/node/20.3.2:
+    resolution: {integrity: sha512-vOBLVQeCQfIcF/2Y7eKFTqrMnizK5lRNQ7ykML/5RuwVXVWxYkgwS7xbt4B6fKCUPgbSL5FSsjHQpaGQP/dQmw==}
     dev: false
 
   /@types/triple-beam/1.3.2:
@@ -668,7 +668,7 @@ packages:
       '@protobufjs/pool': 1.1.0
       '@protobufjs/utf8': 1.1.0
       '@types/long': 4.0.2
-      '@types/node': 20.3.1
+      '@types/node': 20.3.2
       long: 4.0.0
     dev: false
 
