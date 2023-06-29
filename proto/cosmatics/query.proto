@@ -1,0 +1,30 @@
+syntax = "proto3";
+package cosmatics;
+
+import "gogoproto/gogo.proto";
+import "google/api/annotations.proto";
+import "cosmatics/sync_info.proto";
+import "tendermint/types/block.proto";
+import "tendermint/blocksync/types.proto";
+import "cosmos/tx/v1beta1/service.proto";
+
+
+option go_package = "github.com/refractedlabs/cosmatics/types";
+
+service Query {
+  rpc SyncInfo(QuerySyncInfoRequest) returns (QuerySyncInfoResponse) {
+    option (google.api.http).get = "/cosmatics/sync_info";
+  }
+
+  rpc Block(tendermint.blocksync.BlockRequest) returns (tendermint.types.Block) {
+    option (google.api.http).get = "/cosmatics/block/{height}";
+  }
+
+  rpc Transaction(cosmos.tx.v1beta1.GetTxRequest) returns (cosmos.tx.v1beta1.GetTxResponse) {
+    option (google.api.http).get = "/cosmatics/transaction/{hash}";
+  }
+
+  rpc TransactionByEvent(cosmos.tx.v1beta1.GetTxsEventRequest) returns (cosmos.tx.v1beta1.GetTxsEventResponse) {
+    option (google.api.http).get = "/cosmatics/transaction";
+  }
+}

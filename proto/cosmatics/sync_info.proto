@@ -1,10 +1,10 @@
 syntax = "proto3";
-package prismatics;
+package cosmatics;
 
 import "gogoproto/gogo.proto";
 import "google/protobuf/timestamp.proto";
 
-option go_package = "github.com/prism-finance/prismatics/types";
+option go_package = "github.com/refractedlabs/cosmatics/types";
 
 
 message SyncInfo {
