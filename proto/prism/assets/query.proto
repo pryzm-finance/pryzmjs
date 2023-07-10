@@ -4,7 +4,6 @@ package prism.assets;
 import "cosmos/base/query/v1beta1/pagination.proto";
 import "gogoproto/gogo.proto";
 import "google/api/annotations.proto";
-import "prism/assets/exchange_rate.proto";
 import "prism/assets/maturity_level.proto";
 import "prism/assets/params.proto";
 import "prism/assets/refractable_asset.proto";
@@ -36,16 +35,6 @@ service Query {
   // Queries a list of MaturityLevel items.
   rpc MaturityLevelAll(QueryAllMaturityLevelRequest) returns (QueryAllMaturityLevelResponse) {
     option (google.api.http).get = "/prism-finance/prism-core/assets/maturity_level/{active}";
-  }
-
-  // Queries a AssetExchangeRate by index.
-  rpc ExchangeRate(QueryGetExchangeRateRequest) returns (QueryGetExchangeRateResponse) {
-    option (google.api.http).get = "/prism-finance/prism-core/assets/exchange_rate/{asset_id}";
-  }
-
-  // Queries a list of ExchangeRate items.
-  rpc ExchangeRateAll(QueryAllExchangeRateRequest) returns (QueryAllExchangeRateResponse) {
-    option (google.api.http).get = "/prism-finance/prism-core/assets/exchange_rate";
   }
 
   // this line is used by starport scaffolding # 2
@@ -100,20 +89,4 @@ message QueryAllMaturityLevelResponse {
   cosmos.base.query.v1beta1.PageResponse pagination = 2;
 }
 
-message QueryGetExchangeRateRequest {
-  string asset_id = 1;
-}
-
-message QueryGetExchangeRateResponse {
-  ExchangeRate exchange_rate = 1 [(gogoproto.nullable) = false];
-}
-
-message QueryAllExchangeRateRequest {
-  cosmos.base.query.v1beta1.PageRequest pagination = 1;
-}
-
-message QueryAllExchangeRateResponse {
-  repeated ExchangeRate exchange_rate = 1 [(gogoproto.nullable) = false];
-  cosmos.base.query.v1beta1.PageResponse pagination = 2;
-}
 // this line is used by starport scaffolding # 3

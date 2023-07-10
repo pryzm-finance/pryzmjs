@@ -1,3 +1,4 @@
+import { AssetState, AssetStateSDKType } from "./asset_state";
 import * as _m0 from "protobufjs/minimal";
 import { isSet } from "../../helpers";
 export interface EventRefract {
@@ -45,6 +46,12 @@ export interface EventRefractorYieldDistributionSDKType {
   protocol_fee: string;
   stake_yield: string;
   excess_yield: string;
+}
+export interface EventSetAssetState {
+  assetState?: AssetState;
+}
+export interface EventSetAssetStateSDKType {
+  asset_state?: AssetStateSDKType;
 }
 function createBaseEventRefract(): EventRefract {
   return {
@@ -318,6 +325,51 @@ export const EventRefractorYieldDistribution = {
     message.protocolFee = object.protocolFee ?? "";
     message.stakeYield = object.stakeYield ?? "";
     message.excessYield = object.excessYield ?? "";
+    return message;
+  }
+};
+function createBaseEventSetAssetState(): EventSetAssetState {
+  return {
+    assetState: undefined
+  };
+}
+export const EventSetAssetState = {
+  encode(message: EventSetAssetState, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.assetState !== undefined) {
+      AssetState.encode(message.assetState, writer.uint32(10).fork()).ldelim();
+    }
+    return writer;
+  },
+  decode(input: _m0.Reader | Uint8Array, length?: number): EventSetAssetState {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseEventSetAssetState();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.assetState = AssetState.decode(reader, reader.uint32());
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromJSON(object: any): EventSetAssetState {
+    return {
+      assetState: isSet(object.assetState) ? AssetState.fromJSON(object.assetState) : undefined
+    };
+  },
+  toJSON(message: EventSetAssetState): unknown {
+    const obj: any = {};
+    message.assetState !== undefined && (obj.assetState = message.assetState ? AssetState.toJSON(message.assetState) : undefined);
+    return obj;
+  },
+  fromPartial(object: Partial<EventSetAssetState>): EventSetAssetState {
+    const message = createBaseEventSetAssetState();
+    message.assetState = object.assetState !== undefined && object.assetState !== null ? AssetState.fromPartial(object.assetState) : undefined;
     return message;
   }
 };

@@ -1,7 +1,7 @@
 //@ts-nocheck
 import { setPaginationParams } from "../../helpers";
 import { LCDClient } from "@osmonauts/lcd";
-import { QueryParamsRequest, QueryParamsResponseSDKType, QueryGetRefractableAssetRequest, QueryGetRefractableAssetResponseSDKType, QueryAllRefractableAssetRequest, QueryAllRefractableAssetResponseSDKType, QueryGetMaturityLevelRequest, QueryGetMaturityLevelResponseSDKType, QueryAllMaturityLevelRequest, QueryAllMaturityLevelResponseSDKType, QueryGetExchangeRateRequest, QueryGetExchangeRateResponseSDKType, QueryAllExchangeRateRequest, QueryAllExchangeRateResponseSDKType } from "./query";
+import { QueryParamsRequest, QueryParamsResponseSDKType, QueryGetRefractableAssetRequest, QueryGetRefractableAssetResponseSDKType, QueryAllRefractableAssetRequest, QueryAllRefractableAssetResponseSDKType, QueryGetMaturityLevelRequest, QueryGetMaturityLevelResponseSDKType, QueryAllMaturityLevelRequest, QueryAllMaturityLevelResponseSDKType } from "./query";
 export class LCDQueryClient {
   req: LCDClient;
   constructor({
@@ -15,8 +15,6 @@ export class LCDQueryClient {
     this.refractableAssetAll = this.refractableAssetAll.bind(this);
     this.maturityLevel = this.maturityLevel.bind(this);
     this.maturityLevelAll = this.maturityLevelAll.bind(this);
-    this.exchangeRate = this.exchangeRate.bind(this);
-    this.exchangeRateAll = this.exchangeRateAll.bind(this);
   }
   /* Parameters queries the parameters of the module. */
   async params(_params: QueryParamsRequest = {}): Promise<QueryParamsResponseSDKType> {
@@ -63,23 +61,5 @@ export class LCDQueryClient {
     }
     const endpoint = `prism-finance/prism-core/assets/maturity_level/${params.active}`;
     return await this.req.get<QueryAllMaturityLevelResponseSDKType>(endpoint, options);
-  }
-  /* Queries a AssetExchangeRate by index. */
-  async exchangeRate(params: QueryGetExchangeRateRequest): Promise<QueryGetExchangeRateResponseSDKType> {
-    const endpoint = `prism-finance/prism-core/assets/exchange_rate/${params.assetId}`;
-    return await this.req.get<QueryGetExchangeRateResponseSDKType>(endpoint);
-  }
-  /* Queries a list of ExchangeRate items. */
-  async exchangeRateAll(params: QueryAllExchangeRateRequest = {
-    pagination: undefined
-  }): Promise<QueryAllExchangeRateResponseSDKType> {
-    const options: any = {
-      params: {}
-    };
-    if (typeof params?.pagination !== "undefined") {
-      setPaginationParams(options, params.pagination);
-    }
-    const endpoint = `prism-finance/prism-core/assets/exchange_rate`;
-    return await this.req.get<QueryAllExchangeRateResponseSDKType>(endpoint, options);
   }
 }

@@ -3,6 +3,7 @@ package prism.assets;
 
 import "cosmos_proto/cosmos.proto";
 import "gogoproto/gogo.proto";
+import "prism/assets/params.proto";
 // this line is used by starport scaffolding # proto/tx/import
 import "prism/assets/refractable_asset.proto";
 
@@ -10,6 +11,7 @@ option go_package = "github.com/prism-finance/prism-core/x/assets/types";
 
 // Msg defines the Msg service.
 service Msg {
+  rpc UpdateParams(MsgUpdateParams) returns (MsgUpdateParamsResponse);
   rpc RegisterAsset(MsgRegisterAsset) returns (MsgRegisterAssetResponse);
   rpc DisableAsset(MsgDisableAsset) returns (MsgDisableAssetResponse);
   rpc UpdateMaturityParams(MsgUpdateMaturityParams) returns (MsgUpdateMaturityParamsResponse);
@@ -47,4 +49,10 @@ message MsgUpdateFeeRatios {
 
 message MsgUpdateFeeRatiosResponse {}
 
+message MsgUpdateParams {
+  string authority = 1;
+  Params params = 2 [(gogoproto.nullable) = false];
+}
+
+message MsgUpdateParamsResponse {}
 // this line is used by starport scaffolding # proto/tx/message

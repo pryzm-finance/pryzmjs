@@ -1,6 +1,5 @@
 import { Params, ParamsSDKType } from "./params";
 import { RefractableAsset, RefractableAssetSDKType } from "./refractable_asset";
-import { ExchangeRate, ExchangeRateSDKType } from "./exchange_rate";
 import { MaturityLevel, MaturityLevelSDKType } from "./maturity_level";
 import * as _m0 from "protobufjs/minimal";
 import { isSet } from "../../helpers";
@@ -8,21 +7,18 @@ import { isSet } from "../../helpers";
 export interface GenesisState {
   params?: Params;
   assets: RefractableAsset[];
-  exchangeRateList: ExchangeRate[];
   maturityLevelList: MaturityLevel[];
 }
 /** GenesisState defines the assets module's genesis state. */
 export interface GenesisStateSDKType {
   params?: ParamsSDKType;
   assets: RefractableAssetSDKType[];
-  exchange_rate_list: ExchangeRateSDKType[];
   maturity_level_list: MaturityLevelSDKType[];
 }
 function createBaseGenesisState(): GenesisState {
   return {
     params: undefined,
     assets: [],
-    exchangeRateList: [],
     maturityLevelList: []
   };
 }
@@ -33,9 +29,6 @@ export const GenesisState = {
     }
     for (const v of message.assets) {
       RefractableAsset.encode(v!, writer.uint32(18).fork()).ldelim();
-    }
-    for (const v of message.exchangeRateList) {
-      ExchangeRate.encode(v!, writer.uint32(26).fork()).ldelim();
     }
     for (const v of message.maturityLevelList) {
       MaturityLevel.encode(v!, writer.uint32(34).fork()).ldelim();
@@ -55,9 +48,6 @@ export const GenesisState = {
         case 2:
           message.assets.push(RefractableAsset.decode(reader, reader.uint32()));
           break;
-        case 3:
-          message.exchangeRateList.push(ExchangeRate.decode(reader, reader.uint32()));
-          break;
         case 4:
           message.maturityLevelList.push(MaturityLevel.decode(reader, reader.uint32()));
           break;
@@ -72,7 +62,6 @@ export const GenesisState = {
     return {
       params: isSet(object.params) ? Params.fromJSON(object.params) : undefined,
       assets: Array.isArray(object?.assets) ? object.assets.map((e: any) => RefractableAsset.fromJSON(e)) : [],
-      exchangeRateList: Array.isArray(object?.exchangeRateList) ? object.exchangeRateList.map((e: any) => ExchangeRate.fromJSON(e)) : [],
       maturityLevelList: Array.isArray(object?.maturityLevelList) ? object.maturityLevelList.map((e: any) => MaturityLevel.fromJSON(e)) : []
     };
   },
@@ -83,11 +72,6 @@ export const GenesisState = {
       obj.assets = message.assets.map(e => e ? RefractableAsset.toJSON(e) : undefined);
     } else {
       obj.assets = [];
-    }
-    if (message.exchangeRateList) {
-      obj.exchangeRateList = message.exchangeRateList.map(e => e ? ExchangeRate.toJSON(e) : undefined);
-    } else {
-      obj.exchangeRateList = [];
     }
     if (message.maturityLevelList) {
       obj.maturityLevelList = message.maturityLevelList.map(e => e ? MaturityLevel.toJSON(e) : undefined);
@@ -100,7 +84,6 @@ export const GenesisState = {
     const message = createBaseGenesisState();
     message.params = object.params !== undefined && object.params !== null ? Params.fromPartial(object.params) : undefined;
     message.assets = object.assets?.map(e => RefractableAsset.fromPartial(e)) || [];
-    message.exchangeRateList = object.exchangeRateList?.map(e => ExchangeRate.fromPartial(e)) || [];
     message.maturityLevelList = object.maturityLevelList?.map(e => MaturityLevel.fromPartial(e)) || [];
     return message;
   }

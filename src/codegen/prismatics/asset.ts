@@ -11,7 +11,7 @@ export interface Asset {
   exchangeRate: string;
   firstExchangeRateTime?: Timestamp;
   lastExchangeRateTime?: Timestamp;
-  pCAssetExchangeRate: string;
+  cPAssetExchangeRate: string;
 }
 export interface AssetSDKType {
   id: string;
@@ -23,7 +23,7 @@ export interface AssetSDKType {
   exchange_rate: string;
   first_exchange_rate_time?: TimestampSDKType;
   last_exchange_rate_time?: TimestampSDKType;
-  p_c_asset_exchange_rate: string;
+  c_p_asset_exchange_rate: string;
 }
 export interface QueryAssetRequest {
   assetId: string;
@@ -48,7 +48,7 @@ function createBaseAsset(): Asset {
     exchangeRate: "",
     firstExchangeRateTime: undefined,
     lastExchangeRateTime: undefined,
-    pCAssetExchangeRate: ""
+    cPAssetExchangeRate: ""
   };
 }
 export const Asset = {
@@ -80,8 +80,8 @@ export const Asset = {
     if (message.lastExchangeRateTime !== undefined) {
       Timestamp.encode(message.lastExchangeRateTime, writer.uint32(74).fork()).ldelim();
     }
-    if (message.pCAssetExchangeRate !== "") {
-      writer.uint32(82).string(message.pCAssetExchangeRate);
+    if (message.cPAssetExchangeRate !== "") {
+      writer.uint32(82).string(message.cPAssetExchangeRate);
     }
     return writer;
   },
@@ -120,7 +120,7 @@ export const Asset = {
           message.lastExchangeRateTime = Timestamp.decode(reader, reader.uint32());
           break;
         case 10:
-          message.pCAssetExchangeRate = reader.string();
+          message.cPAssetExchangeRate = reader.string();
           break;
         default:
           reader.skipType(tag & 7);
@@ -140,7 +140,7 @@ export const Asset = {
       exchangeRate: isSet(object.exchangeRate) ? String(object.exchangeRate) : "",
       firstExchangeRateTime: isSet(object.firstExchangeRateTime) ? fromJsonTimestamp(object.firstExchangeRateTime) : undefined,
       lastExchangeRateTime: isSet(object.lastExchangeRateTime) ? fromJsonTimestamp(object.lastExchangeRateTime) : undefined,
-      pCAssetExchangeRate: isSet(object.pCAssetExchangeRate) ? String(object.pCAssetExchangeRate) : ""
+      cPAssetExchangeRate: isSet(object.cPAssetExchangeRate) ? String(object.cPAssetExchangeRate) : ""
     };
   },
   toJSON(message: Asset): unknown {
@@ -154,7 +154,7 @@ export const Asset = {
     message.exchangeRate !== undefined && (obj.exchangeRate = message.exchangeRate);
     message.firstExchangeRateTime !== undefined && (obj.firstExchangeRateTime = fromTimestamp(message.firstExchangeRateTime).toISOString());
     message.lastExchangeRateTime !== undefined && (obj.lastExchangeRateTime = fromTimestamp(message.lastExchangeRateTime).toISOString());
-    message.pCAssetExchangeRate !== undefined && (obj.pCAssetExchangeRate = message.pCAssetExchangeRate);
+    message.cPAssetExchangeRate !== undefined && (obj.cPAssetExchangeRate = message.cPAssetExchangeRate);
     return obj;
   },
   fromPartial(object: Partial<Asset>): Asset {
@@ -168,7 +168,7 @@ export const Asset = {
     message.exchangeRate = object.exchangeRate ?? "";
     message.firstExchangeRateTime = object.firstExchangeRateTime !== undefined && object.firstExchangeRateTime !== null ? Timestamp.fromPartial(object.firstExchangeRateTime) : undefined;
     message.lastExchangeRateTime = object.lastExchangeRateTime !== undefined && object.lastExchangeRateTime !== null ? Timestamp.fromPartial(object.lastExchangeRateTime) : undefined;
-    message.pCAssetExchangeRate = object.pCAssetExchangeRate ?? "";
+    message.cPAssetExchangeRate = object.cPAssetExchangeRate ?? "";
     return message;
   }
 };

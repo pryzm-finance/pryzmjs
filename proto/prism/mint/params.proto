@@ -5,35 +5,32 @@ import "gogoproto/gogo.proto";
 
 option go_package = "github.com/prism-finance/prism-core/x/mint/types";
 
-// DistributionProportions defines the distribution proportions of the minted
-// denom. In other words, defines which stakeholders will receive the minted
-// denoms and how much.
 message DistributionProportions {
-  // staking defines the proportion of the minted mint_denom that is to be
+  // defines the proportion of the minted mint_denom that is to be
   // allocated as staking rewards.
   string staking = 1 [
     (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Dec",
     (gogoproto.nullable) = false
   ];
-  // pool_incentives defines the proportion of the minted mint_denom that is
+  // defines the proportion of the minted mint_denom that is
   // to be allocated as pool incentives.
   string pool_incentives = 2 [
     (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Dec",
     (gogoproto.nullable) = false
   ];
-  // developer_rewards defines the proportion of the minted mint_denom that is
+  // defines the proportion of the minted mint_denom that is
   // to be allocated to developer rewards address.
   string development = 3 [
     (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Dec",
     (gogoproto.nullable) = false
   ];
-  // dapp_fund defines the proportion of the minted mint_denom that is
+  // defines the proportion of the minted mint_denom that is
   // to be allocated to the dapp developers.
   string dapp = 4 [
     (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Dec",
     (gogoproto.nullable) = false
   ];
-  // oracle_rewards defines the proportion of the minted mint_denom that is
+  // defines the proportion of the minted mint_denom that is
   // to be allocated to the oracle feeders.
   string oracle = 5 [
     (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Dec",
@@ -64,24 +61,24 @@ message Params {
     (gogoproto.nullable) = false
   ];
 
-  // goal of percent bonded atoms
+  // goal of percent bonded uprisms
   string goal_bonded = 5 [
     (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Dec",
     (gogoproto.nullable) = false
   ];
 
-  // epoch_identifier mint epoch identifier e.g. (day, week).
+  // mint epoch identifier e.g. (day, week).
   string epoch_identifier = 6;
 
-  // minting_rewards_distribution_start_epoch start epoch to distribute minting rewards
+  // start epoch to distribute minting rewards
   int64 minting_rewards_distribution_start_epoch = 7;
 
-  // distribution_proportions defines the distribution proportions of the minted
-  // denom. In other words, defines which stakeholders will receive the minted
+  // defines the distribution proportions of the minted
+  // denom, i.e, which stakeholders will receive the minted
   // denoms and how much.
   DistributionProportions distribution_proportions = 8 [(gogoproto.nullable) = false];
 
-  // genesis_epoch_provisions epoch provisions from the first epoch.
+  // epoch provisions from the first epoch.
   string genesis_epoch_provisions = 9 [
     (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Dec",
     (gogoproto.nullable) = false

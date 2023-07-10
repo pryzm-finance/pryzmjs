@@ -1,8 +1,10 @@
 //@ts-nocheck
+import { QueryHistoricalPriceRequest, QueryHistoricalPriceResponseSDKType } from "./historical_price";
 import { setPaginationParams } from "../helpers";
 import { LCDClient } from "@osmonauts/lcd";
 import { QueryAssetRequest, QueryAssetResponseSDKType } from "./asset";
 import { QueryAllMaturitiesRequest, QueryAllMaturitiesResponseSDKType } from "./maturity";
+import { QueryPriceRequest, QueryPriceResponseSDKType } from "./price";
 export class LCDQueryClient {
   req: LCDClient;
   constructor({
@@ -13,6 +15,8 @@ export class LCDQueryClient {
     this.req = requestClient;
     this.asset = this.asset.bind(this);
     this.maturityAll = this.maturityAll.bind(this);
+    this.tokenPrice = this.tokenPrice.bind(this);
+    this.historicalPrice = this.historicalPrice.bind(this);
   }
   /* Asset */
   async asset(params: QueryAssetRequest): Promise<QueryAssetResponseSDKType> {
@@ -35,5 +39,27 @@ export class LCDQueryClient {
     }
     const endpoint = `prismatics/maturity`;
     return await this.req.get<QueryAllMaturitiesResponseSDKType>(endpoint, options);
+  }
+  /* TokenPrice */
+  async tokenPrice(params: QueryPriceRequest): Promise<QueryPriceResponseSDKType> {
+    const endpoint = `prismatics/price/${params.tokenIn}/${params.tokenOut}`;
+    return await this.req.get<QueryPriceResponseSDKType>(endpoint);
+  }
+  /* HistoricalPrice */
+  async historicalPrice(params: QueryHistoricalPriceRequest): Promise<QueryHistoricalPriceResponseSDKType> {
+    const options: any = {
+      params: {}
+    };
+    if (typeof params?.timeResolution !== "undefined") {
+      options.params.time_resolution = params.timeResolution;
+    }
+    if (typeof params?.from !== "undefined") {
+      options.params.from = params.from;
+    }
+    if (typeof params?.to !== "undefined") {
+      options.params.to = params.to;
+    }
+    const endpoint = `prismatics/historical_price/${params.denom}`;
+    return await this.req.get<QueryHistoricalPriceResponseSDKType>(endpoint, options);
   }
 }

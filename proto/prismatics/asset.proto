@@ -17,7 +17,7 @@ message Asset {
   string exchange_rate = 7 [(cosmos_proto.scalar) = "cosmos.Dec", (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Dec"];
   google.protobuf.Timestamp first_exchange_rate_time = 8 [(gogoproto.stdtime) = true, (gogoproto.nullable) = false];
   google.protobuf.Timestamp last_exchange_rate_time = 9 [(gogoproto.stdtime) = true, (gogoproto.nullable) = false];
-  string p_c_asset_exchange_rate = 10 [(cosmos_proto.scalar) = "cosmos.Dec", (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Dec"];
+  string c_p_asset_exchange_rate = 10 [(cosmos_proto.scalar) = "cosmos.Dec", (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Dec"];
 }
 
 message QueryAssetRequest {

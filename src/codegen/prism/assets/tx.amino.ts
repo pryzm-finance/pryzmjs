@@ -1,6 +1,21 @@
 //@ts-nocheck
 import { AminoMsg } from "@cosmjs/amino";
-import { MsgRegisterAsset, MsgDisableAsset, MsgUpdateMaturityParams, MsgUpdateFeeRatios } from "./tx";
+import { MsgUpdateParams, MsgRegisterAsset, MsgDisableAsset, MsgUpdateMaturityParams, MsgUpdateFeeRatios } from "./tx";
+export interface MsgUpdateParamsAminoType extends AminoMsg {
+  type: "/prism.assets.MsgUpdateParams";
+  value: {
+    authority: string;
+    params: {
+      default_fee_ratios: {
+        yield: string;
+        refractor_refract: string;
+        refractor_merge: string;
+        refractor_redeem: string;
+        y_staking_claim_reward: string;
+      };
+    };
+  };
+}
 export interface MsgRegisterAssetAminoType extends AminoMsg {
   type: "/prism.assets.MsgRegisterAsset";
   value: {
@@ -57,6 +72,43 @@ export interface MsgUpdateFeeRatiosAminoType extends AminoMsg {
   };
 }
 export const AminoConverter = {
+  "/prism.assets.MsgUpdateParams": {
+    aminoType: "/prism.assets.MsgUpdateParams",
+    toAmino: ({
+      authority,
+      params
+    }: MsgUpdateParams): MsgUpdateParamsAminoType["value"] => {
+      return {
+        authority,
+        params: {
+          default_fee_ratios: {
+            yield: params.defaultFeeRatios.yield,
+            refractor_refract: params.defaultFeeRatios.refractorRefract,
+            refractor_merge: params.defaultFeeRatios.refractorMerge,
+            refractor_redeem: params.defaultFeeRatios.refractorRedeem,
+            y_staking_claim_reward: params.defaultFeeRatios.yStakingClaimReward
+          }
+        }
+      };
+    },
+    fromAmino: ({
+      authority,
+      params
+    }: MsgUpdateParamsAminoType["value"]): MsgUpdateParams => {
+      return {
+        authority,
+        params: {
+          defaultFeeRatios: {
+            yield: params.default_fee_ratios.yield,
+            refractorRefract: params.default_fee_ratios.refractor_refract,
+            refractorMerge: params.default_fee_ratios.refractor_merge,
+            refractorRedeem: params.default_fee_ratios.refractor_redeem,
+            yStakingClaimReward: params.default_fee_ratios.y_staking_claim_reward
+          }
+        }
+      };
+    }
+  },
   "/prism.assets.MsgRegisterAsset": {
     aminoType: "/prism.assets.MsgRegisterAsset",
     toAmino: ({

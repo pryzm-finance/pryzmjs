@@ -5,6 +5,8 @@ import "gogoproto/gogo.proto";
 import "google/api/annotations.proto";
 import "prismatics/asset.proto";
 import "prismatics/maturity.proto";
+import "prismatics/price.proto";
+import "prismatics/historical_price.proto";
 import "cosmos/tx/v1beta1/service.proto";
 
 
@@ -18,5 +20,13 @@ service Query {
 
   rpc MaturityAll(QueryAllMaturitiesRequest) returns (QueryAllMaturitiesResponse) {
     option (google.api.http).get = "/prismatics/maturity";
+  }
+
+  rpc TokenPrice(QueryPriceRequest) returns (QueryPriceResponse) {
+    option (google.api.http).get = "/prismatics/price/{token_in}/{token_out}";
+  }
+
+  rpc HistoricalPrice(QueryHistoricalPriceRequest) returns (QueryHistoricalPriceResponse) {
+    option (google.api.http).get = "/prismatics/historical_price/{denom}";
   }
 }

@@ -3,7 +3,7 @@ import { swapTypeFromJSON } from "./operations";
 import { twapAlgorithmFromJSON } from "./oracle_price_pair";
 import { AminoMsg } from "@cosmjs/amino";
 import { Long } from "../../helpers";
-import { MsgSingleSwap, MsgJoinAllTokensExactLpt, MsgJoinTokenExactLpt, MsgJoinExactTokens, MsgExitExactTokens, MsgExitTokenExactLpt, MsgExitAllTokensExactLpt, MsgCreateWeightedPool, MsgUpdateSwapFee, MsgInitializePool, MsgUpdateWeights, MsgBatchSwap, MsgSetYammConfiguration, MsgWhitelistRoute, MsgSetWhitelistedRouteEnabled, MsgSubmitOrder, MsgCancelOrder, MsgProposeMatch, MsgSetCircuitBreakers, MsgSetRecoveryMode, MsgRecoveryExit, MsgSetPauseMode, MsgSetVaultPauseMode, MsgCreateOraclePricePair, MsgUpdateOraclePricePair, MsgDeleteOraclePricePair, MsgSetSwapProtocolFee, MsgSetJoinExitProtocolFee, MsgIntroduceYammLpToWeightedPool, MsgCancelPendingTokenIntroduction, MsgRemoveTokenFromWeightedPool, MsgUpdateParams, MsgAddMaturityToYamm, MsgSetInitializationAllowList } from "./tx";
+import { MsgSingleSwap, MsgJoinAllTokensExactLpt, MsgJoinTokenExactLpt, MsgJoinExactTokens, MsgExitExactTokens, MsgExitTokenExactLpt, MsgExitAllTokensExactLpt, MsgCreateWeightedPool, MsgUpdateSwapFee, MsgInitializePool, MsgUpdateWeights, MsgBatchSwap, MsgSetYammConfiguration, MsgWhitelistRoute, MsgSetWhitelistedRouteEnabled, MsgSubmitOrder, MsgCancelOrder, MsgProposeMatch, MsgSetCircuitBreakers, MsgSetRecoveryMode, MsgRecoveryExit, MsgSetPauseMode, MsgSetVaultPauseMode, MsgCreateOraclePricePair, MsgUpdateOraclePricePair, MsgDeleteOraclePricePair, MsgSetSwapProtocolFee, MsgSetJoinExitProtocolFee, MsgIntroduceYammLpToWeightedPool, MsgIntroduceAssetBaseTokenToWeightedPool, MsgCancelPendingTokenIntroduction, MsgRemoveTokenFromWeightedPool, MsgUpdateParams, MsgAddMaturityToYamm, MsgSetInitializationAllowList } from "./tx";
 export interface MsgSingleSwapAminoType extends AminoMsg {
   type: "/prism.amm.MsgSingleSwap";
   value: {
@@ -350,6 +350,17 @@ export interface MsgIntroduceYammLpToWeightedPoolAminoType extends AminoMsg {
     authority: string;
     weighted_pool_id: string;
     yamm_pool_id: string;
+    token_normalized_weight: string;
+    virtual_balance_interval_millis: string;
+  };
+}
+export interface MsgIntroduceAssetBaseTokenToWeightedPoolAminoType extends AminoMsg {
+  type: "/prism.amm.MsgIntroduceAssetBaseTokenToWeightedPool";
+  value: {
+    authority: string;
+    weighted_pool_id: string;
+    token_denom: string;
+    asset_id: string;
     token_normalized_weight: string;
     virtual_balance_interval_millis: string;
   };
@@ -1420,6 +1431,43 @@ export const AminoConverter = {
         authority,
         weightedPoolId: Long.fromString(weighted_pool_id),
         yammPoolId: Long.fromString(yamm_pool_id),
+        tokenNormalizedWeight: token_normalized_weight,
+        virtualBalanceIntervalMillis: Long.fromString(virtual_balance_interval_millis)
+      };
+    }
+  },
+  "/prism.amm.MsgIntroduceAssetBaseTokenToWeightedPool": {
+    aminoType: "/prism.amm.MsgIntroduceAssetBaseTokenToWeightedPool",
+    toAmino: ({
+      authority,
+      weightedPoolId,
+      tokenDenom,
+      assetId,
+      tokenNormalizedWeight,
+      virtualBalanceIntervalMillis
+    }: MsgIntroduceAssetBaseTokenToWeightedPool): MsgIntroduceAssetBaseTokenToWeightedPoolAminoType["value"] => {
+      return {
+        authority,
+        weighted_pool_id: weightedPoolId.toString(),
+        token_denom: tokenDenom,
+        asset_id: assetId,
+        token_normalized_weight: tokenNormalizedWeight,
+        virtual_balance_interval_millis: virtualBalanceIntervalMillis.toString()
+      };
+    },
+    fromAmino: ({
+      authority,
+      weighted_pool_id,
+      token_denom,
+      asset_id,
+      token_normalized_weight,
+      virtual_balance_interval_millis
+    }: MsgIntroduceAssetBaseTokenToWeightedPoolAminoType["value"]): MsgIntroduceAssetBaseTokenToWeightedPool => {
+      return {
+        authority,
+        weightedPoolId: Long.fromString(weighted_pool_id),
+        tokenDenom: token_denom,
+        assetId: asset_id,
         tokenNormalizedWeight: token_normalized_weight,
         virtualBalanceIntervalMillis: Long.fromString(virtual_balance_interval_millis)
       };

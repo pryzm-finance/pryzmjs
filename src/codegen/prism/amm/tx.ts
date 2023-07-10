@@ -1,4 +1,4 @@
-import { Swap, SwapSDKType, SwapType, swapTypeFromJSON, swapTypeToJSON } from "./operations";
+import { Swap, SwapSDKType, SwapType, SwapStep, SwapStepSDKType, swapTypeFromJSON, swapTypeToJSON } from "./operations";
 import { Coin, CoinSDKType } from "../../cosmos/base/v1beta1/coin";
 import { TokenWeight, TokenWeightSDKType } from "./token_weight";
 import { YammConfiguration, YammConfigurationSDKType } from "./yamm_configuration";
@@ -25,10 +25,18 @@ export interface MsgSingleSwapSDKType {
 export interface MsgSingleSwapResponse {
   amountOut?: Coin;
   amountIn?: Coin;
+  /**
+   * protocol fee does not contain the y_trade fee and refractor fee
+   * which is paid in case of a yAsset trade
+   */
+  protocolFee?: Coin;
+  swapFee?: Coin;
 }
 export interface MsgSingleSwapResponseSDKType {
   amount_out?: CoinSDKType;
   amount_in?: CoinSDKType;
+  protocol_fee?: CoinSDKType;
+  swap_fee?: CoinSDKType;
 }
 export interface MsgJoinAllTokensExactLpt {
   creator: string;
@@ -45,10 +53,12 @@ export interface MsgJoinAllTokensExactLptSDKType {
 export interface MsgJoinAllTokensExactLptResponse {
   lptOut?: Coin;
   amountsIn: Coin[];
+  protocolFee: Coin[];
 }
 export interface MsgJoinAllTokensExactLptResponseSDKType {
   lpt_out?: CoinSDKType;
   amounts_in: CoinSDKType[];
+  protocol_fee: CoinSDKType[];
 }
 export interface MsgJoinTokenExactLpt {
   creator: string;
@@ -67,10 +77,14 @@ export interface MsgJoinTokenExactLptSDKType {
 export interface MsgJoinTokenExactLptResponse {
   lptOut?: Coin;
   amountIn?: Coin;
+  protocolFee?: Coin;
+  swapFee?: Coin;
 }
 export interface MsgJoinTokenExactLptResponseSDKType {
   lpt_out?: CoinSDKType;
   amount_in?: CoinSDKType;
+  protocol_fee?: CoinSDKType;
+  swap_fee?: CoinSDKType;
 }
 export interface MsgJoinExactTokens {
   creator: string;
@@ -87,10 +101,14 @@ export interface MsgJoinExactTokensSDKType {
 export interface MsgJoinExactTokensResponse {
   lptOut?: Coin;
   amountsIn: Coin[];
+  protocolFee: Coin[];
+  swapFee: Coin[];
 }
 export interface MsgJoinExactTokensResponseSDKType {
   lpt_out?: CoinSDKType;
   amounts_in: CoinSDKType[];
+  protocol_fee: CoinSDKType[];
+  swap_fee: CoinSDKType[];
 }
 export interface MsgExitExactTokens {
   creator: string;
@@ -107,10 +125,14 @@ export interface MsgExitExactTokensSDKType {
 export interface MsgExitExactTokensResponse {
   lptIn?: Coin;
   amountsOut: Coin[];
+  protocolFee?: Coin;
+  swapFee: Coin[];
 }
 export interface MsgExitExactTokensResponseSDKType {
   lpt_in?: CoinSDKType;
   amounts_out: CoinSDKType[];
+  protocol_fee?: CoinSDKType;
+  swap_fee: CoinSDKType[];
 }
 export interface MsgExitTokenExactLpt {
   creator: string;
@@ -129,10 +151,14 @@ export interface MsgExitTokenExactLptSDKType {
 export interface MsgExitTokenExactLptResponse {
   lptIn?: Coin;
   amountOut?: Coin;
+  protocolFee?: Coin;
+  swapFee?: Coin;
 }
 export interface MsgExitTokenExactLptResponseSDKType {
   lpt_in?: CoinSDKType;
   amount_out?: CoinSDKType;
+  protocol_fee?: CoinSDKType;
+  swap_fee?: CoinSDKType;
 }
 export interface MsgExitAllTokensExactLpt {
   creator: string;
@@ -149,10 +175,12 @@ export interface MsgExitAllTokensExactLptSDKType {
 export interface MsgExitAllTokensExactLptResponse {
   lptIn?: Coin;
   amountsOut: Coin[];
+  protocolFee?: Coin;
 }
 export interface MsgExitAllTokensExactLptResponseSDKType {
   lpt_in?: CoinSDKType;
   amounts_out: CoinSDKType[];
+  protocol_fee?: CoinSDKType;
 }
 export interface CreateWeightedPoolToken {
   denom: string;
@@ -212,10 +240,12 @@ export interface MsgInitializePoolSDKType {
 export interface MsgInitializePoolResponse {
   lptOut?: Coin;
   amountsIn: Coin[];
+  protocolFee: Coin[];
 }
 export interface MsgInitializePoolResponseSDKType {
   lpt_out?: CoinSDKType;
   amounts_in: CoinSDKType[];
+  protocol_fee: CoinSDKType[];
 }
 export interface MsgUpdateWeights {
   creator: string;
@@ -233,18 +263,6 @@ export interface MsgUpdateWeightsSDKType {
 }
 export interface MsgUpdateWeightsResponse {}
 export interface MsgUpdateWeightsResponseSDKType {}
-export interface SwapStep {
-  poolId: Long;
-  amount: string;
-  tokenIn: string;
-  tokenOut: string;
-}
-export interface SwapStepSDKType {
-  pool_id: Long;
-  amount: string;
-  token_in: string;
-  token_out: string;
-}
 export interface MsgBatchSwap {
   creator: string;
   swapType: SwapType;
@@ -262,10 +280,18 @@ export interface MsgBatchSwapSDKType {
 export interface MsgBatchSwapResponse {
   amountsIn: Coin[];
   amountsOut: Coin[];
+  /**
+   * protocol fee does not contain the y_trade fee and refractor fee
+   * which is paid in case of a yAsset trade
+   */
+  protocolFee: Coin[];
+  swapFee: Coin[];
 }
 export interface MsgBatchSwapResponseSDKType {
   amounts_in: CoinSDKType[];
   amounts_out: CoinSDKType[];
+  protocol_fee: CoinSDKType[];
+  swap_fee: CoinSDKType[];
 }
 export interface MsgSetYammConfiguration {
   creator: string;
@@ -499,6 +525,24 @@ export interface MsgIntroduceYammLpToWeightedPoolSDKType {
 }
 export interface MsgIntroduceYammLpToWeightedPoolResponse {}
 export interface MsgIntroduceYammLpToWeightedPoolResponseSDKType {}
+export interface MsgIntroduceAssetBaseTokenToWeightedPool {
+  authority: string;
+  weightedPoolId: Long;
+  tokenDenom: string;
+  assetId: string;
+  tokenNormalizedWeight: string;
+  virtualBalanceIntervalMillis: Long;
+}
+export interface MsgIntroduceAssetBaseTokenToWeightedPoolSDKType {
+  authority: string;
+  weighted_pool_id: Long;
+  token_denom: string;
+  asset_id: string;
+  token_normalized_weight: string;
+  virtual_balance_interval_millis: Long;
+}
+export interface MsgIntroduceAssetBaseTokenToWeightedPoolResponse {}
+export interface MsgIntroduceAssetBaseTokenToWeightedPoolResponseSDKType {}
 export interface MsgCancelPendingTokenIntroduction {
   authority: string;
   assetId: string;
@@ -641,7 +685,9 @@ export const MsgSingleSwap = {
 function createBaseMsgSingleSwapResponse(): MsgSingleSwapResponse {
   return {
     amountOut: undefined,
-    amountIn: undefined
+    amountIn: undefined,
+    protocolFee: undefined,
+    swapFee: undefined
   };
 }
 export const MsgSingleSwapResponse = {
@@ -651,6 +697,12 @@ export const MsgSingleSwapResponse = {
     }
     if (message.amountIn !== undefined) {
       Coin.encode(message.amountIn, writer.uint32(18).fork()).ldelim();
+    }
+    if (message.protocolFee !== undefined) {
+      Coin.encode(message.protocolFee, writer.uint32(26).fork()).ldelim();
+    }
+    if (message.swapFee !== undefined) {
+      Coin.encode(message.swapFee, writer.uint32(34).fork()).ldelim();
     }
     return writer;
   },
@@ -667,6 +719,12 @@ export const MsgSingleSwapResponse = {
         case 2:
           message.amountIn = Coin.decode(reader, reader.uint32());
           break;
+        case 3:
+          message.protocolFee = Coin.decode(reader, reader.uint32());
+          break;
+        case 4:
+          message.swapFee = Coin.decode(reader, reader.uint32());
+          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -677,19 +735,25 @@ export const MsgSingleSwapResponse = {
   fromJSON(object: any): MsgSingleSwapResponse {
     return {
       amountOut: isSet(object.amountOut) ? Coin.fromJSON(object.amountOut) : undefined,
-      amountIn: isSet(object.amountIn) ? Coin.fromJSON(object.amountIn) : undefined
+      amountIn: isSet(object.amountIn) ? Coin.fromJSON(object.amountIn) : undefined,
+      protocolFee: isSet(object.protocolFee) ? Coin.fromJSON(object.protocolFee) : undefined,
+      swapFee: isSet(object.swapFee) ? Coin.fromJSON(object.swapFee) : undefined
     };
   },
   toJSON(message: MsgSingleSwapResponse): unknown {
     const obj: any = {};
     message.amountOut !== undefined && (obj.amountOut = message.amountOut ? Coin.toJSON(message.amountOut) : undefined);
     message.amountIn !== undefined && (obj.amountIn = message.amountIn ? Coin.toJSON(message.amountIn) : undefined);
+    message.protocolFee !== undefined && (obj.protocolFee = message.protocolFee ? Coin.toJSON(message.protocolFee) : undefined);
+    message.swapFee !== undefined && (obj.swapFee = message.swapFee ? Coin.toJSON(message.swapFee) : undefined);
     return obj;
   },
   fromPartial(object: Partial<MsgSingleSwapResponse>): MsgSingleSwapResponse {
     const message = createBaseMsgSingleSwapResponse();
     message.amountOut = object.amountOut !== undefined && object.amountOut !== null ? Coin.fromPartial(object.amountOut) : undefined;
     message.amountIn = object.amountIn !== undefined && object.amountIn !== null ? Coin.fromPartial(object.amountIn) : undefined;
+    message.protocolFee = object.protocolFee !== undefined && object.protocolFee !== null ? Coin.fromPartial(object.protocolFee) : undefined;
+    message.swapFee = object.swapFee !== undefined && object.swapFee !== null ? Coin.fromPartial(object.swapFee) : undefined;
     return message;
   }
 };
@@ -775,16 +839,20 @@ export const MsgJoinAllTokensExactLpt = {
 function createBaseMsgJoinAllTokensExactLptResponse(): MsgJoinAllTokensExactLptResponse {
   return {
     lptOut: undefined,
-    amountsIn: []
+    amountsIn: [],
+    protocolFee: []
   };
 }
 export const MsgJoinAllTokensExactLptResponse = {
   encode(message: MsgJoinAllTokensExactLptResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.lptOut !== undefined) {
-      Coin.encode(message.lptOut, writer.uint32(26).fork()).ldelim();
+      Coin.encode(message.lptOut, writer.uint32(10).fork()).ldelim();
     }
     for (const v of message.amountsIn) {
-      Coin.encode(v!, writer.uint32(34).fork()).ldelim();
+      Coin.encode(v!, writer.uint32(18).fork()).ldelim();
+    }
+    for (const v of message.protocolFee) {
+      Coin.encode(v!, writer.uint32(26).fork()).ldelim();
     }
     return writer;
   },
@@ -795,11 +863,14 @@ export const MsgJoinAllTokensExactLptResponse = {
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
-        case 3:
+        case 1:
           message.lptOut = Coin.decode(reader, reader.uint32());
           break;
-        case 4:
+        case 2:
           message.amountsIn.push(Coin.decode(reader, reader.uint32()));
+          break;
+        case 3:
+          message.protocolFee.push(Coin.decode(reader, reader.uint32()));
           break;
         default:
           reader.skipType(tag & 7);
@@ -811,7 +882,8 @@ export const MsgJoinAllTokensExactLptResponse = {
   fromJSON(object: any): MsgJoinAllTokensExactLptResponse {
     return {
       lptOut: isSet(object.lptOut) ? Coin.fromJSON(object.lptOut) : undefined,
-      amountsIn: Array.isArray(object?.amountsIn) ? object.amountsIn.map((e: any) => Coin.fromJSON(e)) : []
+      amountsIn: Array.isArray(object?.amountsIn) ? object.amountsIn.map((e: any) => Coin.fromJSON(e)) : [],
+      protocolFee: Array.isArray(object?.protocolFee) ? object.protocolFee.map((e: any) => Coin.fromJSON(e)) : []
     };
   },
   toJSON(message: MsgJoinAllTokensExactLptResponse): unknown {
@@ -822,12 +894,18 @@ export const MsgJoinAllTokensExactLptResponse = {
     } else {
       obj.amountsIn = [];
     }
+    if (message.protocolFee) {
+      obj.protocolFee = message.protocolFee.map(e => e ? Coin.toJSON(e) : undefined);
+    } else {
+      obj.protocolFee = [];
+    }
     return obj;
   },
   fromPartial(object: Partial<MsgJoinAllTokensExactLptResponse>): MsgJoinAllTokensExactLptResponse {
     const message = createBaseMsgJoinAllTokensExactLptResponse();
     message.lptOut = object.lptOut !== undefined && object.lptOut !== null ? Coin.fromPartial(object.lptOut) : undefined;
     message.amountsIn = object.amountsIn?.map(e => Coin.fromPartial(e)) || [];
+    message.protocolFee = object.protocolFee?.map(e => Coin.fromPartial(e)) || [];
     return message;
   }
 };
@@ -919,7 +997,9 @@ export const MsgJoinTokenExactLpt = {
 function createBaseMsgJoinTokenExactLptResponse(): MsgJoinTokenExactLptResponse {
   return {
     lptOut: undefined,
-    amountIn: undefined
+    amountIn: undefined,
+    protocolFee: undefined,
+    swapFee: undefined
   };
 }
 export const MsgJoinTokenExactLptResponse = {
@@ -929,6 +1009,12 @@ export const MsgJoinTokenExactLptResponse = {
     }
     if (message.amountIn !== undefined) {
       Coin.encode(message.amountIn, writer.uint32(18).fork()).ldelim();
+    }
+    if (message.protocolFee !== undefined) {
+      Coin.encode(message.protocolFee, writer.uint32(26).fork()).ldelim();
+    }
+    if (message.swapFee !== undefined) {
+      Coin.encode(message.swapFee, writer.uint32(34).fork()).ldelim();
     }
     return writer;
   },
@@ -945,6 +1031,12 @@ export const MsgJoinTokenExactLptResponse = {
         case 2:
           message.amountIn = Coin.decode(reader, reader.uint32());
           break;
+        case 3:
+          message.protocolFee = Coin.decode(reader, reader.uint32());
+          break;
+        case 4:
+          message.swapFee = Coin.decode(reader, reader.uint32());
+          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -955,19 +1047,25 @@ export const MsgJoinTokenExactLptResponse = {
   fromJSON(object: any): MsgJoinTokenExactLptResponse {
     return {
       lptOut: isSet(object.lptOut) ? Coin.fromJSON(object.lptOut) : undefined,
-      amountIn: isSet(object.amountIn) ? Coin.fromJSON(object.amountIn) : undefined
+      amountIn: isSet(object.amountIn) ? Coin.fromJSON(object.amountIn) : undefined,
+      protocolFee: isSet(object.protocolFee) ? Coin.fromJSON(object.protocolFee) : undefined,
+      swapFee: isSet(object.swapFee) ? Coin.fromJSON(object.swapFee) : undefined
     };
   },
   toJSON(message: MsgJoinTokenExactLptResponse): unknown {
     const obj: any = {};
     message.lptOut !== undefined && (obj.lptOut = message.lptOut ? Coin.toJSON(message.lptOut) : undefined);
     message.amountIn !== undefined && (obj.amountIn = message.amountIn ? Coin.toJSON(message.amountIn) : undefined);
+    message.protocolFee !== undefined && (obj.protocolFee = message.protocolFee ? Coin.toJSON(message.protocolFee) : undefined);
+    message.swapFee !== undefined && (obj.swapFee = message.swapFee ? Coin.toJSON(message.swapFee) : undefined);
     return obj;
   },
   fromPartial(object: Partial<MsgJoinTokenExactLptResponse>): MsgJoinTokenExactLptResponse {
     const message = createBaseMsgJoinTokenExactLptResponse();
     message.lptOut = object.lptOut !== undefined && object.lptOut !== null ? Coin.fromPartial(object.lptOut) : undefined;
     message.amountIn = object.amountIn !== undefined && object.amountIn !== null ? Coin.fromPartial(object.amountIn) : undefined;
+    message.protocolFee = object.protocolFee !== undefined && object.protocolFee !== null ? Coin.fromPartial(object.protocolFee) : undefined;
+    message.swapFee = object.swapFee !== undefined && object.swapFee !== null ? Coin.fromPartial(object.swapFee) : undefined;
     return message;
   }
 };
@@ -1053,7 +1151,9 @@ export const MsgJoinExactTokens = {
 function createBaseMsgJoinExactTokensResponse(): MsgJoinExactTokensResponse {
   return {
     lptOut: undefined,
-    amountsIn: []
+    amountsIn: [],
+    protocolFee: [],
+    swapFee: []
   };
 }
 export const MsgJoinExactTokensResponse = {
@@ -1063,6 +1163,12 @@ export const MsgJoinExactTokensResponse = {
     }
     for (const v of message.amountsIn) {
       Coin.encode(v!, writer.uint32(18).fork()).ldelim();
+    }
+    for (const v of message.protocolFee) {
+      Coin.encode(v!, writer.uint32(26).fork()).ldelim();
+    }
+    for (const v of message.swapFee) {
+      Coin.encode(v!, writer.uint32(34).fork()).ldelim();
     }
     return writer;
   },
@@ -1079,6 +1185,12 @@ export const MsgJoinExactTokensResponse = {
         case 2:
           message.amountsIn.push(Coin.decode(reader, reader.uint32()));
           break;
+        case 3:
+          message.protocolFee.push(Coin.decode(reader, reader.uint32()));
+          break;
+        case 4:
+          message.swapFee.push(Coin.decode(reader, reader.uint32()));
+          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -1089,7 +1201,9 @@ export const MsgJoinExactTokensResponse = {
   fromJSON(object: any): MsgJoinExactTokensResponse {
     return {
       lptOut: isSet(object.lptOut) ? Coin.fromJSON(object.lptOut) : undefined,
-      amountsIn: Array.isArray(object?.amountsIn) ? object.amountsIn.map((e: any) => Coin.fromJSON(e)) : []
+      amountsIn: Array.isArray(object?.amountsIn) ? object.amountsIn.map((e: any) => Coin.fromJSON(e)) : [],
+      protocolFee: Array.isArray(object?.protocolFee) ? object.protocolFee.map((e: any) => Coin.fromJSON(e)) : [],
+      swapFee: Array.isArray(object?.swapFee) ? object.swapFee.map((e: any) => Coin.fromJSON(e)) : []
     };
   },
   toJSON(message: MsgJoinExactTokensResponse): unknown {
@@ -1100,12 +1214,24 @@ export const MsgJoinExactTokensResponse = {
     } else {
       obj.amountsIn = [];
     }
+    if (message.protocolFee) {
+      obj.protocolFee = message.protocolFee.map(e => e ? Coin.toJSON(e) : undefined);
+    } else {
+      obj.protocolFee = [];
+    }
+    if (message.swapFee) {
+      obj.swapFee = message.swapFee.map(e => e ? Coin.toJSON(e) : undefined);
+    } else {
+      obj.swapFee = [];
+    }
     return obj;
   },
   fromPartial(object: Partial<MsgJoinExactTokensResponse>): MsgJoinExactTokensResponse {
     const message = createBaseMsgJoinExactTokensResponse();
     message.lptOut = object.lptOut !== undefined && object.lptOut !== null ? Coin.fromPartial(object.lptOut) : undefined;
     message.amountsIn = object.amountsIn?.map(e => Coin.fromPartial(e)) || [];
+    message.protocolFee = object.protocolFee?.map(e => Coin.fromPartial(e)) || [];
+    message.swapFee = object.swapFee?.map(e => Coin.fromPartial(e)) || [];
     return message;
   }
 };
@@ -1191,7 +1317,9 @@ export const MsgExitExactTokens = {
 function createBaseMsgExitExactTokensResponse(): MsgExitExactTokensResponse {
   return {
     lptIn: undefined,
-    amountsOut: []
+    amountsOut: [],
+    protocolFee: undefined,
+    swapFee: []
   };
 }
 export const MsgExitExactTokensResponse = {
@@ -1201,6 +1329,12 @@ export const MsgExitExactTokensResponse = {
     }
     for (const v of message.amountsOut) {
       Coin.encode(v!, writer.uint32(18).fork()).ldelim();
+    }
+    if (message.protocolFee !== undefined) {
+      Coin.encode(message.protocolFee, writer.uint32(26).fork()).ldelim();
+    }
+    for (const v of message.swapFee) {
+      Coin.encode(v!, writer.uint32(34).fork()).ldelim();
     }
     return writer;
   },
@@ -1217,6 +1351,12 @@ export const MsgExitExactTokensResponse = {
         case 2:
           message.amountsOut.push(Coin.decode(reader, reader.uint32()));
           break;
+        case 3:
+          message.protocolFee = Coin.decode(reader, reader.uint32());
+          break;
+        case 4:
+          message.swapFee.push(Coin.decode(reader, reader.uint32()));
+          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -1227,7 +1367,9 @@ export const MsgExitExactTokensResponse = {
   fromJSON(object: any): MsgExitExactTokensResponse {
     return {
       lptIn: isSet(object.lptIn) ? Coin.fromJSON(object.lptIn) : undefined,
-      amountsOut: Array.isArray(object?.amountsOut) ? object.amountsOut.map((e: any) => Coin.fromJSON(e)) : []
+      amountsOut: Array.isArray(object?.amountsOut) ? object.amountsOut.map((e: any) => Coin.fromJSON(e)) : [],
+      protocolFee: isSet(object.protocolFee) ? Coin.fromJSON(object.protocolFee) : undefined,
+      swapFee: Array.isArray(object?.swapFee) ? object.swapFee.map((e: any) => Coin.fromJSON(e)) : []
     };
   },
   toJSON(message: MsgExitExactTokensResponse): unknown {
@@ -1238,12 +1380,20 @@ export const MsgExitExactTokensResponse = {
     } else {
       obj.amountsOut = [];
     }
+    message.protocolFee !== undefined && (obj.protocolFee = message.protocolFee ? Coin.toJSON(message.protocolFee) : undefined);
+    if (message.swapFee) {
+      obj.swapFee = message.swapFee.map(e => e ? Coin.toJSON(e) : undefined);
+    } else {
+      obj.swapFee = [];
+    }
     return obj;
   },
   fromPartial(object: Partial<MsgExitExactTokensResponse>): MsgExitExactTokensResponse {
     const message = createBaseMsgExitExactTokensResponse();
     message.lptIn = object.lptIn !== undefined && object.lptIn !== null ? Coin.fromPartial(object.lptIn) : undefined;
     message.amountsOut = object.amountsOut?.map(e => Coin.fromPartial(e)) || [];
+    message.protocolFee = object.protocolFee !== undefined && object.protocolFee !== null ? Coin.fromPartial(object.protocolFee) : undefined;
+    message.swapFee = object.swapFee?.map(e => Coin.fromPartial(e)) || [];
     return message;
   }
 };
@@ -1335,7 +1485,9 @@ export const MsgExitTokenExactLpt = {
 function createBaseMsgExitTokenExactLptResponse(): MsgExitTokenExactLptResponse {
   return {
     lptIn: undefined,
-    amountOut: undefined
+    amountOut: undefined,
+    protocolFee: undefined,
+    swapFee: undefined
   };
 }
 export const MsgExitTokenExactLptResponse = {
@@ -1345,6 +1497,12 @@ export const MsgExitTokenExactLptResponse = {
     }
     if (message.amountOut !== undefined) {
       Coin.encode(message.amountOut, writer.uint32(18).fork()).ldelim();
+    }
+    if (message.protocolFee !== undefined) {
+      Coin.encode(message.protocolFee, writer.uint32(26).fork()).ldelim();
+    }
+    if (message.swapFee !== undefined) {
+      Coin.encode(message.swapFee, writer.uint32(34).fork()).ldelim();
     }
     return writer;
   },
@@ -1361,6 +1519,12 @@ export const MsgExitTokenExactLptResponse = {
         case 2:
           message.amountOut = Coin.decode(reader, reader.uint32());
           break;
+        case 3:
+          message.protocolFee = Coin.decode(reader, reader.uint32());
+          break;
+        case 4:
+          message.swapFee = Coin.decode(reader, reader.uint32());
+          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -1371,19 +1535,25 @@ export const MsgExitTokenExactLptResponse = {
   fromJSON(object: any): MsgExitTokenExactLptResponse {
     return {
       lptIn: isSet(object.lptIn) ? Coin.fromJSON(object.lptIn) : undefined,
-      amountOut: isSet(object.amountOut) ? Coin.fromJSON(object.amountOut) : undefined
+      amountOut: isSet(object.amountOut) ? Coin.fromJSON(object.amountOut) : undefined,
+      protocolFee: isSet(object.protocolFee) ? Coin.fromJSON(object.protocolFee) : undefined,
+      swapFee: isSet(object.swapFee) ? Coin.fromJSON(object.swapFee) : undefined
     };
   },
   toJSON(message: MsgExitTokenExactLptResponse): unknown {
     const obj: any = {};
     message.lptIn !== undefined && (obj.lptIn = message.lptIn ? Coin.toJSON(message.lptIn) : undefined);
     message.amountOut !== undefined && (obj.amountOut = message.amountOut ? Coin.toJSON(message.amountOut) : undefined);
+    message.protocolFee !== undefined && (obj.protocolFee = message.protocolFee ? Coin.toJSON(message.protocolFee) : undefined);
+    message.swapFee !== undefined && (obj.swapFee = message.swapFee ? Coin.toJSON(message.swapFee) : undefined);
     return obj;
   },
   fromPartial(object: Partial<MsgExitTokenExactLptResponse>): MsgExitTokenExactLptResponse {
     const message = createBaseMsgExitTokenExactLptResponse();
     message.lptIn = object.lptIn !== undefined && object.lptIn !== null ? Coin.fromPartial(object.lptIn) : undefined;
     message.amountOut = object.amountOut !== undefined && object.amountOut !== null ? Coin.fromPartial(object.amountOut) : undefined;
+    message.protocolFee = object.protocolFee !== undefined && object.protocolFee !== null ? Coin.fromPartial(object.protocolFee) : undefined;
+    message.swapFee = object.swapFee !== undefined && object.swapFee !== null ? Coin.fromPartial(object.swapFee) : undefined;
     return message;
   }
 };
@@ -1469,7 +1639,8 @@ export const MsgExitAllTokensExactLpt = {
 function createBaseMsgExitAllTokensExactLptResponse(): MsgExitAllTokensExactLptResponse {
   return {
     lptIn: undefined,
-    amountsOut: []
+    amountsOut: [],
+    protocolFee: undefined
   };
 }
 export const MsgExitAllTokensExactLptResponse = {
@@ -1479,6 +1650,9 @@ export const MsgExitAllTokensExactLptResponse = {
     }
     for (const v of message.amountsOut) {
       Coin.encode(v!, writer.uint32(18).fork()).ldelim();
+    }
+    if (message.protocolFee !== undefined) {
+      Coin.encode(message.protocolFee, writer.uint32(26).fork()).ldelim();
     }
     return writer;
   },
@@ -1495,6 +1669,9 @@ export const MsgExitAllTokensExactLptResponse = {
         case 2:
           message.amountsOut.push(Coin.decode(reader, reader.uint32()));
           break;
+        case 3:
+          message.protocolFee = Coin.decode(reader, reader.uint32());
+          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -1505,7 +1682,8 @@ export const MsgExitAllTokensExactLptResponse = {
   fromJSON(object: any): MsgExitAllTokensExactLptResponse {
     return {
       lptIn: isSet(object.lptIn) ? Coin.fromJSON(object.lptIn) : undefined,
-      amountsOut: Array.isArray(object?.amountsOut) ? object.amountsOut.map((e: any) => Coin.fromJSON(e)) : []
+      amountsOut: Array.isArray(object?.amountsOut) ? object.amountsOut.map((e: any) => Coin.fromJSON(e)) : [],
+      protocolFee: isSet(object.protocolFee) ? Coin.fromJSON(object.protocolFee) : undefined
     };
   },
   toJSON(message: MsgExitAllTokensExactLptResponse): unknown {
@@ -1516,12 +1694,14 @@ export const MsgExitAllTokensExactLptResponse = {
     } else {
       obj.amountsOut = [];
     }
+    message.protocolFee !== undefined && (obj.protocolFee = message.protocolFee ? Coin.toJSON(message.protocolFee) : undefined);
     return obj;
   },
   fromPartial(object: Partial<MsgExitAllTokensExactLptResponse>): MsgExitAllTokensExactLptResponse {
     const message = createBaseMsgExitAllTokensExactLptResponse();
     message.lptIn = object.lptIn !== undefined && object.lptIn !== null ? Coin.fromPartial(object.lptIn) : undefined;
     message.amountsOut = object.amountsOut?.map(e => Coin.fromPartial(e)) || [];
+    message.protocolFee = object.protocolFee !== undefined && object.protocolFee !== null ? Coin.fromPartial(object.protocolFee) : undefined;
     return message;
   }
 };
@@ -1908,7 +2088,8 @@ export const MsgInitializePool = {
 function createBaseMsgInitializePoolResponse(): MsgInitializePoolResponse {
   return {
     lptOut: undefined,
-    amountsIn: []
+    amountsIn: [],
+    protocolFee: []
   };
 }
 export const MsgInitializePoolResponse = {
@@ -1918,6 +2099,9 @@ export const MsgInitializePoolResponse = {
     }
     for (const v of message.amountsIn) {
       Coin.encode(v!, writer.uint32(18).fork()).ldelim();
+    }
+    for (const v of message.protocolFee) {
+      Coin.encode(v!, writer.uint32(26).fork()).ldelim();
     }
     return writer;
   },
@@ -1934,6 +2118,9 @@ export const MsgInitializePoolResponse = {
         case 2:
           message.amountsIn.push(Coin.decode(reader, reader.uint32()));
           break;
+        case 3:
+          message.protocolFee.push(Coin.decode(reader, reader.uint32()));
+          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -1944,7 +2131,8 @@ export const MsgInitializePoolResponse = {
   fromJSON(object: any): MsgInitializePoolResponse {
     return {
       lptOut: isSet(object.lptOut) ? Coin.fromJSON(object.lptOut) : undefined,
-      amountsIn: Array.isArray(object?.amountsIn) ? object.amountsIn.map((e: any) => Coin.fromJSON(e)) : []
+      amountsIn: Array.isArray(object?.amountsIn) ? object.amountsIn.map((e: any) => Coin.fromJSON(e)) : [],
+      protocolFee: Array.isArray(object?.protocolFee) ? object.protocolFee.map((e: any) => Coin.fromJSON(e)) : []
     };
   },
   toJSON(message: MsgInitializePoolResponse): unknown {
@@ -1955,12 +2143,18 @@ export const MsgInitializePoolResponse = {
     } else {
       obj.amountsIn = [];
     }
+    if (message.protocolFee) {
+      obj.protocolFee = message.protocolFee.map(e => e ? Coin.toJSON(e) : undefined);
+    } else {
+      obj.protocolFee = [];
+    }
     return obj;
   },
   fromPartial(object: Partial<MsgInitializePoolResponse>): MsgInitializePoolResponse {
     const message = createBaseMsgInitializePoolResponse();
     message.lptOut = object.lptOut !== undefined && object.lptOut !== null ? Coin.fromPartial(object.lptOut) : undefined;
     message.amountsIn = object.amountsIn?.map(e => Coin.fromPartial(e)) || [];
+    message.protocolFee = object.protocolFee?.map(e => Coin.fromPartial(e)) || [];
     return message;
   }
 };
@@ -2086,81 +2280,6 @@ export const MsgUpdateWeightsResponse = {
     return message;
   }
 };
-function createBaseSwapStep(): SwapStep {
-  return {
-    poolId: Long.UZERO,
-    amount: undefined,
-    tokenIn: "",
-    tokenOut: ""
-  };
-}
-export const SwapStep = {
-  encode(message: SwapStep, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (!message.poolId.isZero()) {
-      writer.uint32(8).uint64(message.poolId);
-    }
-    if (message.amount !== undefined) {
-      writer.uint32(18).string(message.amount);
-    }
-    if (message.tokenIn !== "") {
-      writer.uint32(34).string(message.tokenIn);
-    }
-    if (message.tokenOut !== "") {
-      writer.uint32(42).string(message.tokenOut);
-    }
-    return writer;
-  },
-  decode(input: _m0.Reader | Uint8Array, length?: number): SwapStep {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
-    let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseSwapStep();
-    while (reader.pos < end) {
-      const tag = reader.uint32();
-      switch (tag >>> 3) {
-        case 1:
-          message.poolId = (reader.uint64() as Long);
-          break;
-        case 2:
-          message.amount = reader.string();
-          break;
-        case 4:
-          message.tokenIn = reader.string();
-          break;
-        case 5:
-          message.tokenOut = reader.string();
-          break;
-        default:
-          reader.skipType(tag & 7);
-          break;
-      }
-    }
-    return message;
-  },
-  fromJSON(object: any): SwapStep {
-    return {
-      poolId: isSet(object.poolId) ? Long.fromValue(object.poolId) : Long.UZERO,
-      amount: isSet(object.amount) ? String(object.amount) : undefined,
-      tokenIn: isSet(object.tokenIn) ? String(object.tokenIn) : "",
-      tokenOut: isSet(object.tokenOut) ? String(object.tokenOut) : ""
-    };
-  },
-  toJSON(message: SwapStep): unknown {
-    const obj: any = {};
-    message.poolId !== undefined && (obj.poolId = (message.poolId || Long.UZERO).toString());
-    message.amount !== undefined && (obj.amount = message.amount);
-    message.tokenIn !== undefined && (obj.tokenIn = message.tokenIn);
-    message.tokenOut !== undefined && (obj.tokenOut = message.tokenOut);
-    return obj;
-  },
-  fromPartial(object: Partial<SwapStep>): SwapStep {
-    const message = createBaseSwapStep();
-    message.poolId = object.poolId !== undefined && object.poolId !== null ? Long.fromValue(object.poolId) : Long.UZERO;
-    message.amount = object.amount ?? undefined;
-    message.tokenIn = object.tokenIn ?? "";
-    message.tokenOut = object.tokenOut ?? "";
-    return message;
-  }
-};
 function createBaseMsgBatchSwap(): MsgBatchSwap {
   return {
     creator: "",
@@ -2261,7 +2380,9 @@ export const MsgBatchSwap = {
 function createBaseMsgBatchSwapResponse(): MsgBatchSwapResponse {
   return {
     amountsIn: [],
-    amountsOut: []
+    amountsOut: [],
+    protocolFee: [],
+    swapFee: []
   };
 }
 export const MsgBatchSwapResponse = {
@@ -2271,6 +2392,12 @@ export const MsgBatchSwapResponse = {
     }
     for (const v of message.amountsOut) {
       Coin.encode(v!, writer.uint32(18).fork()).ldelim();
+    }
+    for (const v of message.protocolFee) {
+      Coin.encode(v!, writer.uint32(26).fork()).ldelim();
+    }
+    for (const v of message.swapFee) {
+      Coin.encode(v!, writer.uint32(34).fork()).ldelim();
     }
     return writer;
   },
@@ -2287,6 +2414,12 @@ export const MsgBatchSwapResponse = {
         case 2:
           message.amountsOut.push(Coin.decode(reader, reader.uint32()));
           break;
+        case 3:
+          message.protocolFee.push(Coin.decode(reader, reader.uint32()));
+          break;
+        case 4:
+          message.swapFee.push(Coin.decode(reader, reader.uint32()));
+          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -2297,7 +2430,9 @@ export const MsgBatchSwapResponse = {
   fromJSON(object: any): MsgBatchSwapResponse {
     return {
       amountsIn: Array.isArray(object?.amountsIn) ? object.amountsIn.map((e: any) => Coin.fromJSON(e)) : [],
-      amountsOut: Array.isArray(object?.amountsOut) ? object.amountsOut.map((e: any) => Coin.fromJSON(e)) : []
+      amountsOut: Array.isArray(object?.amountsOut) ? object.amountsOut.map((e: any) => Coin.fromJSON(e)) : [],
+      protocolFee: Array.isArray(object?.protocolFee) ? object.protocolFee.map((e: any) => Coin.fromJSON(e)) : [],
+      swapFee: Array.isArray(object?.swapFee) ? object.swapFee.map((e: any) => Coin.fromJSON(e)) : []
     };
   },
   toJSON(message: MsgBatchSwapResponse): unknown {
@@ -2312,12 +2447,24 @@ export const MsgBatchSwapResponse = {
     } else {
       obj.amountsOut = [];
     }
+    if (message.protocolFee) {
+      obj.protocolFee = message.protocolFee.map(e => e ? Coin.toJSON(e) : undefined);
+    } else {
+      obj.protocolFee = [];
+    }
+    if (message.swapFee) {
+      obj.swapFee = message.swapFee.map(e => e ? Coin.toJSON(e) : undefined);
+    } else {
+      obj.swapFee = [];
+    }
     return obj;
   },
   fromPartial(object: Partial<MsgBatchSwapResponse>): MsgBatchSwapResponse {
     const message = createBaseMsgBatchSwapResponse();
     message.amountsIn = object.amountsIn?.map(e => Coin.fromPartial(e)) || [];
     message.amountsOut = object.amountsOut?.map(e => Coin.fromPartial(e)) || [];
+    message.protocolFee = object.protocolFee?.map(e => Coin.fromPartial(e)) || [];
+    message.swapFee = object.swapFee?.map(e => Coin.fromPartial(e)) || [];
     return message;
   }
 };
@@ -4102,6 +4249,134 @@ export const MsgIntroduceYammLpToWeightedPoolResponse = {
   },
   fromPartial(_: Partial<MsgIntroduceYammLpToWeightedPoolResponse>): MsgIntroduceYammLpToWeightedPoolResponse {
     const message = createBaseMsgIntroduceYammLpToWeightedPoolResponse();
+    return message;
+  }
+};
+function createBaseMsgIntroduceAssetBaseTokenToWeightedPool(): MsgIntroduceAssetBaseTokenToWeightedPool {
+  return {
+    authority: "",
+    weightedPoolId: Long.UZERO,
+    tokenDenom: "",
+    assetId: "",
+    tokenNormalizedWeight: "",
+    virtualBalanceIntervalMillis: Long.ZERO
+  };
+}
+export const MsgIntroduceAssetBaseTokenToWeightedPool = {
+  encode(message: MsgIntroduceAssetBaseTokenToWeightedPool, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.authority !== "") {
+      writer.uint32(10).string(message.authority);
+    }
+    if (!message.weightedPoolId.isZero()) {
+      writer.uint32(16).uint64(message.weightedPoolId);
+    }
+    if (message.tokenDenom !== "") {
+      writer.uint32(26).string(message.tokenDenom);
+    }
+    if (message.assetId !== "") {
+      writer.uint32(34).string(message.assetId);
+    }
+    if (message.tokenNormalizedWeight !== "") {
+      writer.uint32(42).string(message.tokenNormalizedWeight);
+    }
+    if (!message.virtualBalanceIntervalMillis.isZero()) {
+      writer.uint32(48).int64(message.virtualBalanceIntervalMillis);
+    }
+    return writer;
+  },
+  decode(input: _m0.Reader | Uint8Array, length?: number): MsgIntroduceAssetBaseTokenToWeightedPool {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseMsgIntroduceAssetBaseTokenToWeightedPool();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.authority = reader.string();
+          break;
+        case 2:
+          message.weightedPoolId = (reader.uint64() as Long);
+          break;
+        case 3:
+          message.tokenDenom = reader.string();
+          break;
+        case 4:
+          message.assetId = reader.string();
+          break;
+        case 5:
+          message.tokenNormalizedWeight = reader.string();
+          break;
+        case 6:
+          message.virtualBalanceIntervalMillis = (reader.int64() as Long);
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromJSON(object: any): MsgIntroduceAssetBaseTokenToWeightedPool {
+    return {
+      authority: isSet(object.authority) ? String(object.authority) : "",
+      weightedPoolId: isSet(object.weightedPoolId) ? Long.fromValue(object.weightedPoolId) : Long.UZERO,
+      tokenDenom: isSet(object.tokenDenom) ? String(object.tokenDenom) : "",
+      assetId: isSet(object.assetId) ? String(object.assetId) : "",
+      tokenNormalizedWeight: isSet(object.tokenNormalizedWeight) ? String(object.tokenNormalizedWeight) : "",
+      virtualBalanceIntervalMillis: isSet(object.virtualBalanceIntervalMillis) ? Long.fromValue(object.virtualBalanceIntervalMillis) : Long.ZERO
+    };
+  },
+  toJSON(message: MsgIntroduceAssetBaseTokenToWeightedPool): unknown {
+    const obj: any = {};
+    message.authority !== undefined && (obj.authority = message.authority);
+    message.weightedPoolId !== undefined && (obj.weightedPoolId = (message.weightedPoolId || Long.UZERO).toString());
+    message.tokenDenom !== undefined && (obj.tokenDenom = message.tokenDenom);
+    message.assetId !== undefined && (obj.assetId = message.assetId);
+    message.tokenNormalizedWeight !== undefined && (obj.tokenNormalizedWeight = message.tokenNormalizedWeight);
+    message.virtualBalanceIntervalMillis !== undefined && (obj.virtualBalanceIntervalMillis = (message.virtualBalanceIntervalMillis || Long.ZERO).toString());
+    return obj;
+  },
+  fromPartial(object: Partial<MsgIntroduceAssetBaseTokenToWeightedPool>): MsgIntroduceAssetBaseTokenToWeightedPool {
+    const message = createBaseMsgIntroduceAssetBaseTokenToWeightedPool();
+    message.authority = object.authority ?? "";
+    message.weightedPoolId = object.weightedPoolId !== undefined && object.weightedPoolId !== null ? Long.fromValue(object.weightedPoolId) : Long.UZERO;
+    message.tokenDenom = object.tokenDenom ?? "";
+    message.assetId = object.assetId ?? "";
+    message.tokenNormalizedWeight = object.tokenNormalizedWeight ?? "";
+    message.virtualBalanceIntervalMillis = object.virtualBalanceIntervalMillis !== undefined && object.virtualBalanceIntervalMillis !== null ? Long.fromValue(object.virtualBalanceIntervalMillis) : Long.ZERO;
+    return message;
+  }
+};
+function createBaseMsgIntroduceAssetBaseTokenToWeightedPoolResponse(): MsgIntroduceAssetBaseTokenToWeightedPoolResponse {
+  return {};
+}
+export const MsgIntroduceAssetBaseTokenToWeightedPoolResponse = {
+  encode(_: MsgIntroduceAssetBaseTokenToWeightedPoolResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    return writer;
+  },
+  decode(input: _m0.Reader | Uint8Array, length?: number): MsgIntroduceAssetBaseTokenToWeightedPoolResponse {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseMsgIntroduceAssetBaseTokenToWeightedPoolResponse();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromJSON(_: any): MsgIntroduceAssetBaseTokenToWeightedPoolResponse {
+    return {};
+  },
+  toJSON(_: MsgIntroduceAssetBaseTokenToWeightedPoolResponse): unknown {
+    const obj: any = {};
+    return obj;
+  },
+  fromPartial(_: Partial<MsgIntroduceAssetBaseTokenToWeightedPoolResponse>): MsgIntroduceAssetBaseTokenToWeightedPoolResponse {
+    const message = createBaseMsgIntroduceAssetBaseTokenToWeightedPoolResponse();
     return message;
   }
 };

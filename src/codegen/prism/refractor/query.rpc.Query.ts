@@ -1,17 +1,72 @@
 //@ts-nocheck
 import { grpc } from "@improbable-eng/grpc-web";
 import { UnaryMethodDefinitionish } from "../../grpc-web";
+import { DeepPartial } from "../../helpers";
 import { BrowserHeaders } from "browser-headers";
+import { QueryGetAssetStateRequest, QueryGetAssetStateResponse, QueryGetCPExchangeRateRequest, QueryGetCPExchangeRateResponse } from "./query";
 /** Query defines the gRPC querier service. */
-export interface Query {}
+export interface Query {
+  assetState(request: DeepPartial<QueryGetAssetStateRequest>, metadata?: grpc.Metadata): Promise<QueryGetAssetStateResponse>;
+  cPExchangeRate(request: DeepPartial<QueryGetCPExchangeRateRequest>, metadata?: grpc.Metadata): Promise<QueryGetCPExchangeRateResponse>;
+}
 export class QueryClientImpl implements Query {
   private readonly rpc: Rpc;
   constructor(rpc: Rpc) {
     this.rpc = rpc;
+    this.assetState = this.assetState.bind(this);
+    this.cPExchangeRate = this.cPExchangeRate.bind(this);
+  }
+  assetState(request: DeepPartial<QueryGetAssetStateRequest>, metadata?: grpc.Metadata): Promise<QueryGetAssetStateResponse> {
+    return this.rpc.unary(QueryGetAssetStateDesc, QueryGetAssetStateRequest.fromPartial(request), metadata);
+  }
+  cPExchangeRate(request: DeepPartial<QueryGetCPExchangeRateRequest>, metadata?: grpc.Metadata): Promise<QueryGetCPExchangeRateResponse> {
+    return this.rpc.unary(QueryGetCPExchangeRateDesc, QueryGetCPExchangeRateRequest.fromPartial(request), metadata);
   }
 }
 export const QueryDesc = {
   serviceName: "prism.refractor.Query"
+};
+export const QueryGetAssetStateDesc: UnaryMethodDefinitionish = {
+  methodName: "AssetState",
+  service: QueryDesc,
+  requestStream: false,
+  responseStream: false,
+  requestType: ({
+    serializeBinary() {
+      return QueryGetAssetStateRequest.encode(this).finish();
+    }
+  } as any),
+  responseType: ({
+    deserializeBinary(data: Uint8Array) {
+      return {
+        ...QueryGetAssetStateResponse.decode(data),
+        toObject() {
+          return this;
+        }
+      };
+    }
+  } as any)
+};
+export const QueryGetCPExchangeRateDesc: UnaryMethodDefinitionish = {
+  methodName: "CPExchangeRate",
+  service: QueryDesc,
+  requestStream: false,
+  responseStream: false,
+  requestType: ({
+    serializeBinary() {
+      return QueryGetCPExchangeRateRequest.encode(this).finish();
+    }
+  } as any),
+  responseType: ({
+    deserializeBinary(data: Uint8Array) {
+      return {
+        ...QueryGetCPExchangeRateResponse.decode(data),
+        toObject() {
+          return this;
+        }
+      };
+    }
+  } as any)
 };
 export interface Rpc {
   unary<T extends UnaryMethodDefinitionish>(methodDesc: T, request: any, metadata: grpc.Metadata | undefined): Promise<any>;

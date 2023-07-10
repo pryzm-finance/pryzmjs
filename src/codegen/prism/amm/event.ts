@@ -8,7 +8,7 @@ import { Order, OrderSDKType } from "./order";
 import { Coin, CoinSDKType } from "../../cosmos/base/v1beta1/coin";
 import { ScheduleOrder, ScheduleOrderSDKType } from "./schedule_order";
 import { VirtualBalancePoolToken, VirtualBalancePoolTokenSDKType } from "./virtual_balance_pool_token";
-import { ExitSummary, ExitSummarySDKType, JoinSummary, JoinSummarySDKType, SwapSummary, SwapSummarySDKType } from "./operations";
+import { ExitSummary, ExitSummarySDKType, JoinSummary, JoinSummarySDKType, SwapSummary, SwapSummarySDKType, ExitType, JoinType, SwapType, SwapStep, SwapStepSDKType, exitTypeFromJSON, exitTypeToJSON, joinTypeFromJSON, joinTypeToJSON, swapTypeFromJSON, swapTypeToJSON } from "./operations";
 import { OraclePricePair, OraclePricePairSDKType } from "./oracle_price_pair";
 import { PendingTokenIntroduction, PendingTokenIntroductionSDKType } from "./pending_token_introduction";
 import { Params, ParamsSDKType } from "./params";
@@ -18,12 +18,6 @@ export interface EventSetPool {
   pool?: Pool;
 }
 export interface EventSetPoolSDKType {
-  pool?: PoolSDKType;
-}
-export interface EventAppendPool {
-  pool?: Pool;
-}
-export interface EventAppendPoolSDKType {
   pool?: PoolSDKType;
 }
 export interface EventSetPoolCount {
@@ -90,12 +84,6 @@ export interface EventSetOrder {
   order?: Order;
 }
 export interface EventSetOrderSDKType {
-  order?: OrderSDKType;
-}
-export interface EventAppendOrder {
-  order?: Order;
-}
-export interface EventAppendOrderSDKType {
   order?: OrderSDKType;
 }
 export interface EventSetOrderCount {
@@ -294,6 +282,78 @@ export interface EventSwapSDKType {
   pool_id: Long;
   summary?: SwapSummarySDKType;
 }
+export interface EventExitPoolRequest {
+  creator: string;
+  poolId: Long;
+  lptIn?: Coin;
+  amountsOut: Coin[];
+  protocolFee?: Coin;
+  swapFee: Coin[];
+  exitType: ExitType;
+}
+export interface EventExitPoolRequestSDKType {
+  creator: string;
+  pool_id: Long;
+  lpt_in?: CoinSDKType;
+  amounts_out: CoinSDKType[];
+  protocol_fee?: CoinSDKType;
+  swap_fee: CoinSDKType[];
+  exit_type: ExitType;
+}
+export interface EventJoinPoolRequest {
+  creator: string;
+  poolId: Long;
+  lptOut?: Coin;
+  amountsIn: Coin[];
+  protocolFee: Coin[];
+  swapFee: Coin[];
+  joinType: JoinType;
+}
+export interface EventJoinPoolRequestSDKType {
+  creator: string;
+  pool_id: Long;
+  lpt_out?: CoinSDKType;
+  amounts_in: CoinSDKType[];
+  protocol_fee: CoinSDKType[];
+  swap_fee: CoinSDKType[];
+  join_type: JoinType;
+}
+export interface EventSingleSwapRequest {
+  creator: string;
+  poolId: Long;
+  amountOut?: Coin;
+  amountIn?: Coin;
+  protocolFee?: Coin;
+  swapFee?: Coin;
+  swapType: SwapType;
+}
+export interface EventSingleSwapRequestSDKType {
+  creator: string;
+  pool_id: Long;
+  amount_out?: CoinSDKType;
+  amount_in?: CoinSDKType;
+  protocol_fee?: CoinSDKType;
+  swap_fee?: CoinSDKType;
+  swap_type: SwapType;
+}
+export interface EventBatchSwapRequest {
+  creator: string;
+  steps: SwapStep[];
+  amountsIn: Coin[];
+  amountsOut: Coin[];
+  protocolFee: Coin[];
+  swapFee: Coin[];
+  swapType: SwapType;
+}
+export interface EventBatchSwapRequestSDKType {
+  creator: string;
+  steps: SwapStepSDKType[];
+  amounts_in: CoinSDKType[];
+  amounts_out: CoinSDKType[];
+  protocol_fee: CoinSDKType[];
+  swap_fee: CoinSDKType[];
+  swap_type: SwapType;
+}
 export interface EventYAssetSwapRefractorAction {
   yAmount: string;
   cAmountAfterFee: string;
@@ -389,51 +449,6 @@ export const EventSetPool = {
   },
   fromPartial(object: Partial<EventSetPool>): EventSetPool {
     const message = createBaseEventSetPool();
-    message.pool = object.pool !== undefined && object.pool !== null ? Pool.fromPartial(object.pool) : undefined;
-    return message;
-  }
-};
-function createBaseEventAppendPool(): EventAppendPool {
-  return {
-    pool: undefined
-  };
-}
-export const EventAppendPool = {
-  encode(message: EventAppendPool, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (message.pool !== undefined) {
-      Pool.encode(message.pool, writer.uint32(10).fork()).ldelim();
-    }
-    return writer;
-  },
-  decode(input: _m0.Reader | Uint8Array, length?: number): EventAppendPool {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
-    let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseEventAppendPool();
-    while (reader.pos < end) {
-      const tag = reader.uint32();
-      switch (tag >>> 3) {
-        case 1:
-          message.pool = Pool.decode(reader, reader.uint32());
-          break;
-        default:
-          reader.skipType(tag & 7);
-          break;
-      }
-    }
-    return message;
-  },
-  fromJSON(object: any): EventAppendPool {
-    return {
-      pool: isSet(object.pool) ? Pool.fromJSON(object.pool) : undefined
-    };
-  },
-  toJSON(message: EventAppendPool): unknown {
-    const obj: any = {};
-    message.pool !== undefined && (obj.pool = message.pool ? Pool.toJSON(message.pool) : undefined);
-    return obj;
-  },
-  fromPartial(object: Partial<EventAppendPool>): EventAppendPool {
-    const message = createBaseEventAppendPool();
     message.pool = object.pool !== undefined && object.pool !== null ? Pool.fromPartial(object.pool) : undefined;
     return message;
   }
@@ -914,51 +929,6 @@ export const EventSetOrder = {
   },
   fromPartial(object: Partial<EventSetOrder>): EventSetOrder {
     const message = createBaseEventSetOrder();
-    message.order = object.order !== undefined && object.order !== null ? Order.fromPartial(object.order) : undefined;
-    return message;
-  }
-};
-function createBaseEventAppendOrder(): EventAppendOrder {
-  return {
-    order: undefined
-  };
-}
-export const EventAppendOrder = {
-  encode(message: EventAppendOrder, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (message.order !== undefined) {
-      Order.encode(message.order, writer.uint32(10).fork()).ldelim();
-    }
-    return writer;
-  },
-  decode(input: _m0.Reader | Uint8Array, length?: number): EventAppendOrder {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
-    let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseEventAppendOrder();
-    while (reader.pos < end) {
-      const tag = reader.uint32();
-      switch (tag >>> 3) {
-        case 1:
-          message.order = Order.decode(reader, reader.uint32());
-          break;
-        default:
-          reader.skipType(tag & 7);
-          break;
-      }
-    }
-    return message;
-  },
-  fromJSON(object: any): EventAppendOrder {
-    return {
-      order: isSet(object.order) ? Order.fromJSON(object.order) : undefined
-    };
-  },
-  toJSON(message: EventAppendOrder): unknown {
-    const obj: any = {};
-    message.order !== undefined && (obj.order = message.order ? Order.toJSON(message.order) : undefined);
-    return obj;
-  },
-  fromPartial(object: Partial<EventAppendOrder>): EventAppendOrder {
-    const message = createBaseEventAppendOrder();
     message.order = object.order !== undefined && object.order !== null ? Order.fromPartial(object.order) : undefined;
     return message;
   }
@@ -2279,6 +2249,466 @@ export const EventSwap = {
     const message = createBaseEventSwap();
     message.poolId = object.poolId !== undefined && object.poolId !== null ? Long.fromValue(object.poolId) : Long.UZERO;
     message.summary = object.summary !== undefined && object.summary !== null ? SwapSummary.fromPartial(object.summary) : undefined;
+    return message;
+  }
+};
+function createBaseEventExitPoolRequest(): EventExitPoolRequest {
+  return {
+    creator: "",
+    poolId: Long.UZERO,
+    lptIn: undefined,
+    amountsOut: [],
+    protocolFee: undefined,
+    swapFee: [],
+    exitType: 0
+  };
+}
+export const EventExitPoolRequest = {
+  encode(message: EventExitPoolRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.creator !== "") {
+      writer.uint32(10).string(message.creator);
+    }
+    if (!message.poolId.isZero()) {
+      writer.uint32(16).uint64(message.poolId);
+    }
+    if (message.lptIn !== undefined) {
+      Coin.encode(message.lptIn, writer.uint32(26).fork()).ldelim();
+    }
+    for (const v of message.amountsOut) {
+      Coin.encode(v!, writer.uint32(34).fork()).ldelim();
+    }
+    if (message.protocolFee !== undefined) {
+      Coin.encode(message.protocolFee, writer.uint32(42).fork()).ldelim();
+    }
+    for (const v of message.swapFee) {
+      Coin.encode(v!, writer.uint32(50).fork()).ldelim();
+    }
+    if (message.exitType !== 0) {
+      writer.uint32(56).int32(message.exitType);
+    }
+    return writer;
+  },
+  decode(input: _m0.Reader | Uint8Array, length?: number): EventExitPoolRequest {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseEventExitPoolRequest();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.creator = reader.string();
+          break;
+        case 2:
+          message.poolId = (reader.uint64() as Long);
+          break;
+        case 3:
+          message.lptIn = Coin.decode(reader, reader.uint32());
+          break;
+        case 4:
+          message.amountsOut.push(Coin.decode(reader, reader.uint32()));
+          break;
+        case 5:
+          message.protocolFee = Coin.decode(reader, reader.uint32());
+          break;
+        case 6:
+          message.swapFee.push(Coin.decode(reader, reader.uint32()));
+          break;
+        case 7:
+          message.exitType = (reader.int32() as any);
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromJSON(object: any): EventExitPoolRequest {
+    return {
+      creator: isSet(object.creator) ? String(object.creator) : "",
+      poolId: isSet(object.poolId) ? Long.fromValue(object.poolId) : Long.UZERO,
+      lptIn: isSet(object.lptIn) ? Coin.fromJSON(object.lptIn) : undefined,
+      amountsOut: Array.isArray(object?.amountsOut) ? object.amountsOut.map((e: any) => Coin.fromJSON(e)) : [],
+      protocolFee: isSet(object.protocolFee) ? Coin.fromJSON(object.protocolFee) : undefined,
+      swapFee: Array.isArray(object?.swapFee) ? object.swapFee.map((e: any) => Coin.fromJSON(e)) : [],
+      exitType: isSet(object.exitType) ? exitTypeFromJSON(object.exitType) : 0
+    };
+  },
+  toJSON(message: EventExitPoolRequest): unknown {
+    const obj: any = {};
+    message.creator !== undefined && (obj.creator = message.creator);
+    message.poolId !== undefined && (obj.poolId = (message.poolId || Long.UZERO).toString());
+    message.lptIn !== undefined && (obj.lptIn = message.lptIn ? Coin.toJSON(message.lptIn) : undefined);
+    if (message.amountsOut) {
+      obj.amountsOut = message.amountsOut.map(e => e ? Coin.toJSON(e) : undefined);
+    } else {
+      obj.amountsOut = [];
+    }
+    message.protocolFee !== undefined && (obj.protocolFee = message.protocolFee ? Coin.toJSON(message.protocolFee) : undefined);
+    if (message.swapFee) {
+      obj.swapFee = message.swapFee.map(e => e ? Coin.toJSON(e) : undefined);
+    } else {
+      obj.swapFee = [];
+    }
+    message.exitType !== undefined && (obj.exitType = exitTypeToJSON(message.exitType));
+    return obj;
+  },
+  fromPartial(object: Partial<EventExitPoolRequest>): EventExitPoolRequest {
+    const message = createBaseEventExitPoolRequest();
+    message.creator = object.creator ?? "";
+    message.poolId = object.poolId !== undefined && object.poolId !== null ? Long.fromValue(object.poolId) : Long.UZERO;
+    message.lptIn = object.lptIn !== undefined && object.lptIn !== null ? Coin.fromPartial(object.lptIn) : undefined;
+    message.amountsOut = object.amountsOut?.map(e => Coin.fromPartial(e)) || [];
+    message.protocolFee = object.protocolFee !== undefined && object.protocolFee !== null ? Coin.fromPartial(object.protocolFee) : undefined;
+    message.swapFee = object.swapFee?.map(e => Coin.fromPartial(e)) || [];
+    message.exitType = object.exitType ?? 0;
+    return message;
+  }
+};
+function createBaseEventJoinPoolRequest(): EventJoinPoolRequest {
+  return {
+    creator: "",
+    poolId: Long.UZERO,
+    lptOut: undefined,
+    amountsIn: [],
+    protocolFee: [],
+    swapFee: [],
+    joinType: 0
+  };
+}
+export const EventJoinPoolRequest = {
+  encode(message: EventJoinPoolRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.creator !== "") {
+      writer.uint32(10).string(message.creator);
+    }
+    if (!message.poolId.isZero()) {
+      writer.uint32(16).uint64(message.poolId);
+    }
+    if (message.lptOut !== undefined) {
+      Coin.encode(message.lptOut, writer.uint32(26).fork()).ldelim();
+    }
+    for (const v of message.amountsIn) {
+      Coin.encode(v!, writer.uint32(34).fork()).ldelim();
+    }
+    for (const v of message.protocolFee) {
+      Coin.encode(v!, writer.uint32(42).fork()).ldelim();
+    }
+    for (const v of message.swapFee) {
+      Coin.encode(v!, writer.uint32(50).fork()).ldelim();
+    }
+    if (message.joinType !== 0) {
+      writer.uint32(56).int32(message.joinType);
+    }
+    return writer;
+  },
+  decode(input: _m0.Reader | Uint8Array, length?: number): EventJoinPoolRequest {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseEventJoinPoolRequest();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.creator = reader.string();
+          break;
+        case 2:
+          message.poolId = (reader.uint64() as Long);
+          break;
+        case 3:
+          message.lptOut = Coin.decode(reader, reader.uint32());
+          break;
+        case 4:
+          message.amountsIn.push(Coin.decode(reader, reader.uint32()));
+          break;
+        case 5:
+          message.protocolFee.push(Coin.decode(reader, reader.uint32()));
+          break;
+        case 6:
+          message.swapFee.push(Coin.decode(reader, reader.uint32()));
+          break;
+        case 7:
+          message.joinType = (reader.int32() as any);
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromJSON(object: any): EventJoinPoolRequest {
+    return {
+      creator: isSet(object.creator) ? String(object.creator) : "",
+      poolId: isSet(object.poolId) ? Long.fromValue(object.poolId) : Long.UZERO,
+      lptOut: isSet(object.lptOut) ? Coin.fromJSON(object.lptOut) : undefined,
+      amountsIn: Array.isArray(object?.amountsIn) ? object.amountsIn.map((e: any) => Coin.fromJSON(e)) : [],
+      protocolFee: Array.isArray(object?.protocolFee) ? object.protocolFee.map((e: any) => Coin.fromJSON(e)) : [],
+      swapFee: Array.isArray(object?.swapFee) ? object.swapFee.map((e: any) => Coin.fromJSON(e)) : [],
+      joinType: isSet(object.joinType) ? joinTypeFromJSON(object.joinType) : 0
+    };
+  },
+  toJSON(message: EventJoinPoolRequest): unknown {
+    const obj: any = {};
+    message.creator !== undefined && (obj.creator = message.creator);
+    message.poolId !== undefined && (obj.poolId = (message.poolId || Long.UZERO).toString());
+    message.lptOut !== undefined && (obj.lptOut = message.lptOut ? Coin.toJSON(message.lptOut) : undefined);
+    if (message.amountsIn) {
+      obj.amountsIn = message.amountsIn.map(e => e ? Coin.toJSON(e) : undefined);
+    } else {
+      obj.amountsIn = [];
+    }
+    if (message.protocolFee) {
+      obj.protocolFee = message.protocolFee.map(e => e ? Coin.toJSON(e) : undefined);
+    } else {
+      obj.protocolFee = [];
+    }
+    if (message.swapFee) {
+      obj.swapFee = message.swapFee.map(e => e ? Coin.toJSON(e) : undefined);
+    } else {
+      obj.swapFee = [];
+    }
+    message.joinType !== undefined && (obj.joinType = joinTypeToJSON(message.joinType));
+    return obj;
+  },
+  fromPartial(object: Partial<EventJoinPoolRequest>): EventJoinPoolRequest {
+    const message = createBaseEventJoinPoolRequest();
+    message.creator = object.creator ?? "";
+    message.poolId = object.poolId !== undefined && object.poolId !== null ? Long.fromValue(object.poolId) : Long.UZERO;
+    message.lptOut = object.lptOut !== undefined && object.lptOut !== null ? Coin.fromPartial(object.lptOut) : undefined;
+    message.amountsIn = object.amountsIn?.map(e => Coin.fromPartial(e)) || [];
+    message.protocolFee = object.protocolFee?.map(e => Coin.fromPartial(e)) || [];
+    message.swapFee = object.swapFee?.map(e => Coin.fromPartial(e)) || [];
+    message.joinType = object.joinType ?? 0;
+    return message;
+  }
+};
+function createBaseEventSingleSwapRequest(): EventSingleSwapRequest {
+  return {
+    creator: "",
+    poolId: Long.UZERO,
+    amountOut: undefined,
+    amountIn: undefined,
+    protocolFee: undefined,
+    swapFee: undefined,
+    swapType: 0
+  };
+}
+export const EventSingleSwapRequest = {
+  encode(message: EventSingleSwapRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.creator !== "") {
+      writer.uint32(10).string(message.creator);
+    }
+    if (!message.poolId.isZero()) {
+      writer.uint32(16).uint64(message.poolId);
+    }
+    if (message.amountOut !== undefined) {
+      Coin.encode(message.amountOut, writer.uint32(26).fork()).ldelim();
+    }
+    if (message.amountIn !== undefined) {
+      Coin.encode(message.amountIn, writer.uint32(34).fork()).ldelim();
+    }
+    if (message.protocolFee !== undefined) {
+      Coin.encode(message.protocolFee, writer.uint32(42).fork()).ldelim();
+    }
+    if (message.swapFee !== undefined) {
+      Coin.encode(message.swapFee, writer.uint32(50).fork()).ldelim();
+    }
+    if (message.swapType !== 0) {
+      writer.uint32(56).int32(message.swapType);
+    }
+    return writer;
+  },
+  decode(input: _m0.Reader | Uint8Array, length?: number): EventSingleSwapRequest {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseEventSingleSwapRequest();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.creator = reader.string();
+          break;
+        case 2:
+          message.poolId = (reader.uint64() as Long);
+          break;
+        case 3:
+          message.amountOut = Coin.decode(reader, reader.uint32());
+          break;
+        case 4:
+          message.amountIn = Coin.decode(reader, reader.uint32());
+          break;
+        case 5:
+          message.protocolFee = Coin.decode(reader, reader.uint32());
+          break;
+        case 6:
+          message.swapFee = Coin.decode(reader, reader.uint32());
+          break;
+        case 7:
+          message.swapType = (reader.int32() as any);
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromJSON(object: any): EventSingleSwapRequest {
+    return {
+      creator: isSet(object.creator) ? String(object.creator) : "",
+      poolId: isSet(object.poolId) ? Long.fromValue(object.poolId) : Long.UZERO,
+      amountOut: isSet(object.amountOut) ? Coin.fromJSON(object.amountOut) : undefined,
+      amountIn: isSet(object.amountIn) ? Coin.fromJSON(object.amountIn) : undefined,
+      protocolFee: isSet(object.protocolFee) ? Coin.fromJSON(object.protocolFee) : undefined,
+      swapFee: isSet(object.swapFee) ? Coin.fromJSON(object.swapFee) : undefined,
+      swapType: isSet(object.swapType) ? swapTypeFromJSON(object.swapType) : 0
+    };
+  },
+  toJSON(message: EventSingleSwapRequest): unknown {
+    const obj: any = {};
+    message.creator !== undefined && (obj.creator = message.creator);
+    message.poolId !== undefined && (obj.poolId = (message.poolId || Long.UZERO).toString());
+    message.amountOut !== undefined && (obj.amountOut = message.amountOut ? Coin.toJSON(message.amountOut) : undefined);
+    message.amountIn !== undefined && (obj.amountIn = message.amountIn ? Coin.toJSON(message.amountIn) : undefined);
+    message.protocolFee !== undefined && (obj.protocolFee = message.protocolFee ? Coin.toJSON(message.protocolFee) : undefined);
+    message.swapFee !== undefined && (obj.swapFee = message.swapFee ? Coin.toJSON(message.swapFee) : undefined);
+    message.swapType !== undefined && (obj.swapType = swapTypeToJSON(message.swapType));
+    return obj;
+  },
+  fromPartial(object: Partial<EventSingleSwapRequest>): EventSingleSwapRequest {
+    const message = createBaseEventSingleSwapRequest();
+    message.creator = object.creator ?? "";
+    message.poolId = object.poolId !== undefined && object.poolId !== null ? Long.fromValue(object.poolId) : Long.UZERO;
+    message.amountOut = object.amountOut !== undefined && object.amountOut !== null ? Coin.fromPartial(object.amountOut) : undefined;
+    message.amountIn = object.amountIn !== undefined && object.amountIn !== null ? Coin.fromPartial(object.amountIn) : undefined;
+    message.protocolFee = object.protocolFee !== undefined && object.protocolFee !== null ? Coin.fromPartial(object.protocolFee) : undefined;
+    message.swapFee = object.swapFee !== undefined && object.swapFee !== null ? Coin.fromPartial(object.swapFee) : undefined;
+    message.swapType = object.swapType ?? 0;
+    return message;
+  }
+};
+function createBaseEventBatchSwapRequest(): EventBatchSwapRequest {
+  return {
+    creator: "",
+    steps: [],
+    amountsIn: [],
+    amountsOut: [],
+    protocolFee: [],
+    swapFee: [],
+    swapType: 0
+  };
+}
+export const EventBatchSwapRequest = {
+  encode(message: EventBatchSwapRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.creator !== "") {
+      writer.uint32(10).string(message.creator);
+    }
+    for (const v of message.steps) {
+      SwapStep.encode(v!, writer.uint32(18).fork()).ldelim();
+    }
+    for (const v of message.amountsIn) {
+      Coin.encode(v!, writer.uint32(26).fork()).ldelim();
+    }
+    for (const v of message.amountsOut) {
+      Coin.encode(v!, writer.uint32(34).fork()).ldelim();
+    }
+    for (const v of message.protocolFee) {
+      Coin.encode(v!, writer.uint32(42).fork()).ldelim();
+    }
+    for (const v of message.swapFee) {
+      Coin.encode(v!, writer.uint32(50).fork()).ldelim();
+    }
+    if (message.swapType !== 0) {
+      writer.uint32(64).int32(message.swapType);
+    }
+    return writer;
+  },
+  decode(input: _m0.Reader | Uint8Array, length?: number): EventBatchSwapRequest {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseEventBatchSwapRequest();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.creator = reader.string();
+          break;
+        case 2:
+          message.steps.push(SwapStep.decode(reader, reader.uint32()));
+          break;
+        case 3:
+          message.amountsIn.push(Coin.decode(reader, reader.uint32()));
+          break;
+        case 4:
+          message.amountsOut.push(Coin.decode(reader, reader.uint32()));
+          break;
+        case 5:
+          message.protocolFee.push(Coin.decode(reader, reader.uint32()));
+          break;
+        case 6:
+          message.swapFee.push(Coin.decode(reader, reader.uint32()));
+          break;
+        case 8:
+          message.swapType = (reader.int32() as any);
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromJSON(object: any): EventBatchSwapRequest {
+    return {
+      creator: isSet(object.creator) ? String(object.creator) : "",
+      steps: Array.isArray(object?.steps) ? object.steps.map((e: any) => SwapStep.fromJSON(e)) : [],
+      amountsIn: Array.isArray(object?.amountsIn) ? object.amountsIn.map((e: any) => Coin.fromJSON(e)) : [],
+      amountsOut: Array.isArray(object?.amountsOut) ? object.amountsOut.map((e: any) => Coin.fromJSON(e)) : [],
+      protocolFee: Array.isArray(object?.protocolFee) ? object.protocolFee.map((e: any) => Coin.fromJSON(e)) : [],
+      swapFee: Array.isArray(object?.swapFee) ? object.swapFee.map((e: any) => Coin.fromJSON(e)) : [],
+      swapType: isSet(object.swapType) ? swapTypeFromJSON(object.swapType) : 0
+    };
+  },
+  toJSON(message: EventBatchSwapRequest): unknown {
+    const obj: any = {};
+    message.creator !== undefined && (obj.creator = message.creator);
+    if (message.steps) {
+      obj.steps = message.steps.map(e => e ? SwapStep.toJSON(e) : undefined);
+    } else {
+      obj.steps = [];
+    }
+    if (message.amountsIn) {
+      obj.amountsIn = message.amountsIn.map(e => e ? Coin.toJSON(e) : undefined);
+    } else {
+      obj.amountsIn = [];
+    }
+    if (message.amountsOut) {
+      obj.amountsOut = message.amountsOut.map(e => e ? Coin.toJSON(e) : undefined);
+    } else {
+      obj.amountsOut = [];
+    }
+    if (message.protocolFee) {
+      obj.protocolFee = message.protocolFee.map(e => e ? Coin.toJSON(e) : undefined);
+    } else {
+      obj.protocolFee = [];
+    }
+    if (message.swapFee) {
+      obj.swapFee = message.swapFee.map(e => e ? Coin.toJSON(e) : undefined);
+    } else {
+      obj.swapFee = [];
+    }
+    message.swapType !== undefined && (obj.swapType = swapTypeToJSON(message.swapType));
+    return obj;
+  },
+  fromPartial(object: Partial<EventBatchSwapRequest>): EventBatchSwapRequest {
+    const message = createBaseEventBatchSwapRequest();
+    message.creator = object.creator ?? "";
+    message.steps = object.steps?.map(e => SwapStep.fromPartial(e)) || [];
+    message.amountsIn = object.amountsIn?.map(e => Coin.fromPartial(e)) || [];
+    message.amountsOut = object.amountsOut?.map(e => Coin.fromPartial(e)) || [];
+    message.protocolFee = object.protocolFee?.map(e => Coin.fromPartial(e)) || [];
+    message.swapFee = object.swapFee?.map(e => Coin.fromPartial(e)) || [];
+    message.swapType = object.swapType ?? 0;
     return message;
   }
 };

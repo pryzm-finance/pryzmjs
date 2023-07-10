@@ -1,7 +1,7 @@
 //@ts-nocheck
 import { setPaginationParams } from "../../helpers";
 import { LCDClient } from "@osmonauts/lcd";
-import { QueryParamsRequest, QueryParamsResponseSDKType, QueryGetPoolTokenRequest, QueryGetPoolTokenResponseSDKType, QueryAllPoolTokenRequest, QueryAllPoolTokenResponseSDKType, QueryGetPoolRequest, QueryGetPoolResponseSDKType, QueryAllPoolRequest, QueryAllPoolResponseSDKType, QueryGetWeightedTokenRequest, QueryGetWeightedTokenResponseSDKType, QueryAllWeightedTokenRequest, QueryAllWeightedTokenResponseSDKType, QueryGetWeightUpdateTimingRequest, QueryGetWeightUpdateTimingResponseSDKType, QueryAllWeightUpdateTimingRequest, QueryAllWeightUpdateTimingResponseSDKType, QuerySimulateSingleSwapRequest, QuerySimulateSingleSwapResponseSDKType, QuerySimulateInitializePoolRequest, QuerySimulateInitializePoolResponseSDKType, QuerySimulateJoinAllTokensExactLptRequest, QuerySimulateJoinAllTokensExactLptResponseSDKType, QuerySimulateJoinExactTokensRequest, QuerySimulateJoinExactTokensResponseSDKType, QuerySimulateJoinTokenExactLptRequest, QuerySimulateJoinTokenExactLptResponseSDKType, QuerySimulateExitTokenExactLptRequest, QuerySimulateExitTokenExactLptResponseSDKType, QuerySimulateExitExactTokensRequest, QuerySimulateExitExactTokensResponseSDKType, QuerySimulateExitAllTokensExactLptRequest, QuerySimulateExitAllTokensExactLptResponseSDKType, QuerySpotPriceRequest, QuerySpotPriceResponseSDKType, QueryGetIntroducingPoolTokenRequest, QueryGetIntroducingPoolTokenResponseSDKType, QueryAllIntroducingPoolTokenRequest, QueryAllIntroducingPoolTokenResponseSDKType, QueryGetExpiringPoolTokenRequest, QueryGetExpiringPoolTokenResponseSDKType, QueryAllExpiringPoolTokenRequest, QueryAllExpiringPoolTokenResponseSDKType, QueryLpTokenRequest, QueryLpTokenResponseSDKType, QuerySimulateBatchSwapRequest, QuerySimulateBatchSwapResponseSDKType, QueryGetYammConfigurationRequest, QueryGetYammConfigurationResponseSDKType, QueryAllYammConfigurationRequest, QueryAllYammConfigurationResponseSDKType, QueryGetWhitelistedRouteRequest, QueryGetWhitelistedRouteResponseSDKType, QueryAllWhitelistedRouteRequest, QueryAllWhitelistedRouteResponseSDKType, QueryGetOrderRequest, QueryGetOrderResponseSDKType, QueryAllOrderRequest, QueryAllOrderResponseSDKType, QueryGetExecutableOrderRequest, QueryGetExecutableOrderResponseSDKType, QueryAllExecutableOrderRequest, QueryAllExecutableOrderResponseSDKType, QueryGetScheduleOrderRequest, QueryGetScheduleOrderResponseSDKType, QueryAllScheduleOrderRequest, QueryAllScheduleOrderResponseSDKType, QueryGetOraclePricePairRequest, QueryGetOraclePricePairResponseSDKType, QueryAllOraclePricePairRequest, QueryAllOraclePricePairResponseSDKType, QueryVaultPauseModeRequest, QueryVaultPauseModeResponseSDKType, QueryGetPendingTokenIntroductionRequest, QueryGetPendingTokenIntroductionResponseSDKType, QueryAllPendingTokenIntroductionRequest, QueryAllPendingTokenIntroductionResponseSDKType, QueryYammPoolIdRequest, QueryYammPoolIdResponseSDKType } from "./query";
+import { QueryParamsRequest, QueryParamsResponseSDKType, QueryGetPoolTokenRequest, QueryGetPoolTokenResponseSDKType, QueryAllPoolTokenRequest, QueryAllPoolTokenResponseSDKType, QueryAllPoolTokenWeightRequest, QueryAllPoolTokenWeightResponseSDKType, QueryGetPoolTokenWeightRequest, QueryGetPoolTokenWeightResponseSDKType, QueryGetPoolRequest, QueryGetPoolResponseSDKType, QueryAllPoolRequest, QueryAllPoolResponseSDKType, QueryGetWeightedTokenRequest, QueryGetWeightedTokenResponseSDKType, QueryAllWeightedTokenRequest, QueryAllWeightedTokenResponseSDKType, QueryGetWeightUpdateTimingRequest, QueryGetWeightUpdateTimingResponseSDKType, QueryAllWeightUpdateTimingRequest, QueryAllWeightUpdateTimingResponseSDKType, QuerySimulateSingleSwapRequest, QuerySimulateSingleSwapResponseSDKType, QuerySimulateInitializePoolRequest, QuerySimulateInitializePoolResponseSDKType, QuerySimulateJoinAllTokensExactLptRequest, QuerySimulateJoinAllTokensExactLptResponseSDKType, QuerySimulateJoinExactTokensRequest, QuerySimulateJoinExactTokensResponseSDKType, QuerySimulateJoinTokenExactLptRequest, QuerySimulateJoinTokenExactLptResponseSDKType, QuerySimulateExitTokenExactLptRequest, QuerySimulateExitTokenExactLptResponseSDKType, QuerySimulateExitExactTokensRequest, QuerySimulateExitExactTokensResponseSDKType, QuerySimulateExitAllTokensExactLptRequest, QuerySimulateExitAllTokensExactLptResponseSDKType, QuerySpotPriceRequest, QuerySpotPriceResponseSDKType, QueryGetIntroducingPoolTokenRequest, QueryGetIntroducingPoolTokenResponseSDKType, QueryAllIntroducingPoolTokenRequest, QueryAllIntroducingPoolTokenResponseSDKType, QueryGetExpiringPoolTokenRequest, QueryGetExpiringPoolTokenResponseSDKType, QueryAllExpiringPoolTokenRequest, QueryAllExpiringPoolTokenResponseSDKType, QueryLpTokenRequest, QueryLpTokenResponseSDKType, QuerySimulateBatchSwapRequest, QuerySimulateBatchSwapResponseSDKType, QueryGetYammConfigurationRequest, QueryGetYammConfigurationResponseSDKType, QueryAllYammConfigurationRequest, QueryAllYammConfigurationResponseSDKType, QueryGetWhitelistedRouteRequest, QueryGetWhitelistedRouteResponseSDKType, QueryAllWhitelistedRouteRequest, QueryAllWhitelistedRouteResponseSDKType, QueryGetOrderRequest, QueryGetOrderResponseSDKType, QueryAllOrderRequest, QueryAllOrderResponseSDKType, QueryGetExecutableOrderRequest, QueryGetExecutableOrderResponseSDKType, QueryAllExecutableOrderRequest, QueryAllExecutableOrderResponseSDKType, QueryGetScheduleOrderRequest, QueryGetScheduleOrderResponseSDKType, QueryAllScheduleOrderRequest, QueryAllScheduleOrderResponseSDKType, QueryGetOraclePricePairRequest, QueryGetOraclePricePairResponseSDKType, QueryAllOraclePricePairRequest, QueryAllOraclePricePairResponseSDKType, QueryVaultPauseModeRequest, QueryVaultPauseModeResponseSDKType, QueryGetPendingTokenIntroductionRequest, QueryGetPendingTokenIntroductionResponseSDKType, QueryAllPendingTokenIntroductionRequest, QueryAllPendingTokenIntroductionResponseSDKType, QueryYammPoolIdRequest, QueryYammPoolIdResponseSDKType } from "./query";
 export class LCDQueryClient {
   req: LCDClient;
   constructor({
@@ -13,6 +13,8 @@ export class LCDQueryClient {
     this.params = this.params.bind(this);
     this.poolToken = this.poolToken.bind(this);
     this.poolTokenAll = this.poolTokenAll.bind(this);
+    this.poolTokenWeightAll = this.poolTokenWeightAll.bind(this);
+    this.poolTokenWeight = this.poolTokenWeight.bind(this);
     this.pool = this.pool.bind(this);
     this.poolAll = this.poolAll.bind(this);
     this.weightedToken = this.weightedToken.bind(this);
@@ -74,6 +76,20 @@ export class LCDQueryClient {
     }
     const endpoint = `prism-finance/prism-core/amm/pool_token`;
     return await this.req.get<QueryAllPoolTokenResponseSDKType>(endpoint, options);
+  }
+  /* Queries a list of TokenWeights
+   computing normalized weights requires reading all tokens from the context
+   and computing weight for all of them. And the number of tokens in a pool is not expected to
+   be high.
+   therefore, this query is not paginated */
+  async poolTokenWeightAll(params: QueryAllPoolTokenWeightRequest): Promise<QueryAllPoolTokenWeightResponseSDKType> {
+    const endpoint = `prism-finance/prism-core/amm/pool_token_weight/${params.poolId}`;
+    return await this.req.get<QueryAllPoolTokenWeightResponseSDKType>(endpoint);
+  }
+  /* Queries a TokenWeight */
+  async poolTokenWeight(params: QueryGetPoolTokenWeightRequest): Promise<QueryGetPoolTokenWeightResponseSDKType> {
+    const endpoint = `prism-finance/prism-core/amm/pool_token_weight/${params.poolId}/${params.denom}`;
+    return await this.req.get<QueryGetPoolTokenWeightResponseSDKType>(endpoint);
   }
   /* Queries a Pool by id. */
   async pool(params: QueryGetPoolRequest): Promise<QueryGetPoolResponseSDKType> {

@@ -24,10 +24,6 @@ message EventSetPool {
   Pool pool = 1 [(gogoproto.nullable) = false];
 }
 
-message EventAppendPool {
-  Pool pool = 1 [(gogoproto.nullable) = false];
-}
-
 message EventSetPoolCount {
   uint64 pool_count = 1;
 }
@@ -72,10 +68,6 @@ message EventSetYammConfiguration {
 }
 
 message EventSetOrder {
-  Order order = 1 [(gogoproto.nullable) = false];
-}
-
-message EventAppendOrder {
   Order order = 1 [(gogoproto.nullable) = false];
 }
 
@@ -267,6 +259,73 @@ message EventJoinPool {
 message EventSwap {
   uint64 pool_id = 1;
   SwapSummary summary = 2 [(gogoproto.nullable) = false];
+}
+
+message EventExitPoolRequest {
+  string creator = 1;
+  uint64 pool_id = 2;
+  cosmos.base.v1beta1.Coin lpt_in = 3 [(gogoproto.nullable) = false];
+  repeated cosmos.base.v1beta1.Coin amounts_out = 4 [
+    (gogoproto.nullable) = false,
+    (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins"
+  ];
+  cosmos.base.v1beta1.Coin protocol_fee = 5 [(gogoproto.nullable) = false];
+  repeated cosmos.base.v1beta1.Coin swap_fee = 6 [
+    (gogoproto.nullable) = false,
+    (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins"
+  ];
+  ExitType exit_type = 7;
+}
+
+message EventJoinPoolRequest {
+  string creator = 1;
+  uint64 pool_id = 2;
+  cosmos.base.v1beta1.Coin lpt_out = 3 [(gogoproto.nullable) = false];
+  repeated cosmos.base.v1beta1.Coin amounts_in = 4 [
+    (gogoproto.nullable) = false,
+    (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins"
+  ];
+  repeated cosmos.base.v1beta1.Coin protocol_fee = 5 [
+    (gogoproto.nullable) = false,
+    (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins"
+  ];
+  repeated cosmos.base.v1beta1.Coin swap_fee = 6 [
+    (gogoproto.nullable) = false,
+    (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins"
+  ];
+  JoinType join_type = 7;
+}
+
+message EventSingleSwapRequest {
+  string creator = 1;
+  uint64 pool_id = 2;
+  cosmos.base.v1beta1.Coin amount_out = 3 [(gogoproto.nullable) = false];
+  cosmos.base.v1beta1.Coin amount_in = 4 [(gogoproto.nullable) = false];
+  cosmos.base.v1beta1.Coin protocol_fee = 5 [(gogoproto.nullable) = false];
+  cosmos.base.v1beta1.Coin swap_fee = 6 [(gogoproto.nullable) = false];
+  SwapType swap_type = 7;
+}
+
+message EventBatchSwapRequest {
+  string creator = 1;
+  repeated SwapStep steps = 2 [(gogoproto.nullable) = false];
+  repeated cosmos.base.v1beta1.Coin amounts_in = 3 [
+    (gogoproto.nullable) = false,
+    (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins"
+  ];
+  repeated cosmos.base.v1beta1.Coin amounts_out = 4 [
+    (gogoproto.nullable) = false,
+    (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins"
+  ];
+  repeated cosmos.base.v1beta1.Coin protocol_fee = 5 [
+    (gogoproto.nullable) = false,
+    (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins"
+  ];
+  repeated cosmos.base.v1beta1.Coin swap_fee = 6 [
+    (gogoproto.nullable) = false,
+    (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins"
+  ];
+  SwapType swap_type = 8;
 }
 
 message EventYAssetSwapRefractorAction {

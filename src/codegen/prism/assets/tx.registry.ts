@@ -1,6 +1,6 @@
 import { GeneratedType, Registry } from "@cosmjs/proto-signing";
-import { MsgRegisterAsset, MsgDisableAsset, MsgUpdateMaturityParams, MsgUpdateFeeRatios } from "./tx";
-export const registry: ReadonlyArray<[string, GeneratedType]> = [["/prism.assets.MsgRegisterAsset", MsgRegisterAsset], ["/prism.assets.MsgDisableAsset", MsgDisableAsset], ["/prism.assets.MsgUpdateMaturityParams", MsgUpdateMaturityParams], ["/prism.assets.MsgUpdateFeeRatios", MsgUpdateFeeRatios]];
+import { MsgUpdateParams, MsgRegisterAsset, MsgDisableAsset, MsgUpdateMaturityParams, MsgUpdateFeeRatios } from "./tx";
+export const registry: ReadonlyArray<[string, GeneratedType]> = [["/prism.assets.MsgUpdateParams", MsgUpdateParams], ["/prism.assets.MsgRegisterAsset", MsgRegisterAsset], ["/prism.assets.MsgDisableAsset", MsgDisableAsset], ["/prism.assets.MsgUpdateMaturityParams", MsgUpdateMaturityParams], ["/prism.assets.MsgUpdateFeeRatios", MsgUpdateFeeRatios]];
 export const load = (protoRegistry: Registry) => {
   registry.forEach(([typeUrl, mod]) => {
     protoRegistry.register(typeUrl, mod);
@@ -8,6 +8,12 @@ export const load = (protoRegistry: Registry) => {
 };
 export const MessageComposer = {
   encoded: {
+    updateParams(value: MsgUpdateParams) {
+      return {
+        typeUrl: "/prism.assets.MsgUpdateParams",
+        value: MsgUpdateParams.encode(value).finish()
+      };
+    },
     registerAsset(value: MsgRegisterAsset) {
       return {
         typeUrl: "/prism.assets.MsgRegisterAsset",
@@ -34,6 +40,12 @@ export const MessageComposer = {
     }
   },
   withTypeUrl: {
+    updateParams(value: MsgUpdateParams) {
+      return {
+        typeUrl: "/prism.assets.MsgUpdateParams",
+        value
+      };
+    },
     registerAsset(value: MsgRegisterAsset) {
       return {
         typeUrl: "/prism.assets.MsgRegisterAsset",
@@ -60,6 +72,12 @@ export const MessageComposer = {
     }
   },
   toJSON: {
+    updateParams(value: MsgUpdateParams) {
+      return {
+        typeUrl: "/prism.assets.MsgUpdateParams",
+        value: MsgUpdateParams.toJSON(value)
+      };
+    },
     registerAsset(value: MsgRegisterAsset) {
       return {
         typeUrl: "/prism.assets.MsgRegisterAsset",
@@ -86,6 +104,12 @@ export const MessageComposer = {
     }
   },
   fromJSON: {
+    updateParams(value: any) {
+      return {
+        typeUrl: "/prism.assets.MsgUpdateParams",
+        value: MsgUpdateParams.fromJSON(value)
+      };
+    },
     registerAsset(value: any) {
       return {
         typeUrl: "/prism.assets.MsgRegisterAsset",
@@ -112,6 +136,12 @@ export const MessageComposer = {
     }
   },
   fromPartial: {
+    updateParams(value: MsgUpdateParams) {
+      return {
+        typeUrl: "/prism.assets.MsgUpdateParams",
+        value: MsgUpdateParams.fromPartial(value)
+      };
+    },
     registerAsset(value: MsgRegisterAsset) {
       return {
         typeUrl: "/prism.assets.MsgRegisterAsset",
