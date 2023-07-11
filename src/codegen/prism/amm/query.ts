@@ -1,9 +1,9 @@
 import { PageRequest, PageRequestSDKType, PageResponse, PageResponseSDKType } from "../../cosmos/base/query/v1beta1/pagination";
-import { Swap, SwapSDKType, SwapType, swapTypeFromJSON, swapTypeToJSON } from "./operations";
+import { Swap, SwapSDKType, SwapType, SwapStep, SwapStepSDKType, swapTypeFromJSON, swapTypeToJSON } from "./operations";
 import { Coin, CoinSDKType } from "../../cosmos/base/v1beta1/coin";
-import { SwapStep, SwapStepSDKType } from "./tx";
 import { Params, ParamsSDKType } from "./params";
 import { PoolToken, PoolTokenSDKType } from "./pool_token";
+import { TokenWeight, TokenWeightSDKType } from "./token_weight";
 import { Pool, PoolSDKType } from "./pool";
 import { WeightedToken, WeightedTokenSDKType } from "./weighted_token";
 import { WeightUpdateTiming, WeightUpdateTimingSDKType } from "./weight_update_timing";
@@ -58,6 +58,52 @@ export interface QueryAllPoolTokenResponse {
 export interface QueryAllPoolTokenResponseSDKType {
   pool_token: PoolTokenSDKType[];
   pagination?: PageResponseSDKType;
+}
+/**
+ * computing normalized weights requires reading all tokens from the context
+ * and computing weight for all of them
+ * therefore, this query is not paginated
+ */
+export interface QueryAllPoolTokenWeightRequest {
+  poolId: Long;
+}
+/**
+ * computing normalized weights requires reading all tokens from the context
+ * and computing weight for all of them
+ * therefore, this query is not paginated
+ */
+export interface QueryAllPoolTokenWeightRequestSDKType {
+  pool_id: Long;
+}
+/**
+ * computing normalized weights requires reading all tokens from the context
+ * and computing weight for all of them
+ * therefore, this query is not paginated
+ */
+export interface QueryAllPoolTokenWeightResponse {
+  tokenWeight: TokenWeight[];
+}
+/**
+ * computing normalized weights requires reading all tokens from the context
+ * and computing weight for all of them
+ * therefore, this query is not paginated
+ */
+export interface QueryAllPoolTokenWeightResponseSDKType {
+  token_weight: TokenWeightSDKType[];
+}
+export interface QueryGetPoolTokenWeightRequest {
+  poolId: Long;
+  denom: string;
+}
+export interface QueryGetPoolTokenWeightRequestSDKType {
+  pool_id: Long;
+  denom: string;
+}
+export interface QueryGetPoolTokenWeightResponse {
+  tokenWeight?: TokenWeight;
+}
+export interface QueryGetPoolTokenWeightResponseSDKType {
+  token_weight?: TokenWeightSDKType;
 }
 export interface QueryGetPoolRequest {
   id: Long;
@@ -148,10 +194,18 @@ export interface QuerySimulateSingleSwapRequestSDKType {
 export interface QuerySimulateSingleSwapResponse {
   amountOut?: Coin;
   amountIn?: Coin;
+  /**
+   * protocol fee does not contain the y_trade fee and refractor fee
+   * which is paid in case of a yAsset trade
+   */
+  protocolFee?: Coin;
+  swapFee?: Coin;
 }
 export interface QuerySimulateSingleSwapResponseSDKType {
   amount_out?: CoinSDKType;
   amount_in?: CoinSDKType;
+  protocol_fee?: CoinSDKType;
+  swap_fee?: CoinSDKType;
 }
 export interface QuerySimulateInitializePoolRequest {
   poolId: Long;
@@ -164,10 +218,12 @@ export interface QuerySimulateInitializePoolRequestSDKType {
 export interface QuerySimulateInitializePoolResponse {
   lptOut?: Coin;
   amountsIn: Coin[];
+  protocolFee: Coin[];
 }
 export interface QuerySimulateInitializePoolResponseSDKType {
   lpt_out?: CoinSDKType;
   amounts_in: CoinSDKType[];
+  protocol_fee: CoinSDKType[];
 }
 export interface QuerySimulateJoinAllTokensExactLptRequest {
   poolId: Long;
@@ -180,10 +236,12 @@ export interface QuerySimulateJoinAllTokensExactLptRequestSDKType {
 export interface QuerySimulateJoinAllTokensExactLptResponse {
   lptOut?: Coin;
   amountsIn: Coin[];
+  protocolFee: Coin[];
 }
 export interface QuerySimulateJoinAllTokensExactLptResponseSDKType {
   lpt_out?: CoinSDKType;
   amounts_in: CoinSDKType[];
+  protocol_fee: CoinSDKType[];
 }
 export interface QuerySimulateJoinExactTokensRequest {
   poolId: Long;
@@ -196,10 +254,14 @@ export interface QuerySimulateJoinExactTokensRequestSDKType {
 export interface QuerySimulateJoinExactTokensResponse {
   lptOut?: Coin;
   amountsIn: Coin[];
+  protocolFee: Coin[];
+  swapFee: Coin[];
 }
 export interface QuerySimulateJoinExactTokensResponseSDKType {
   lpt_out?: CoinSDKType;
   amounts_in: CoinSDKType[];
+  protocol_fee: CoinSDKType[];
+  swap_fee: CoinSDKType[];
 }
 export interface QuerySimulateJoinTokenExactLptRequest {
   poolId: Long;
@@ -214,10 +276,14 @@ export interface QuerySimulateJoinTokenExactLptRequestSDKType {
 export interface QuerySimulateJoinTokenExactLptResponse {
   lptOut?: Coin;
   amountIn?: Coin;
+  protocolFee?: Coin;
+  swapFee?: Coin;
 }
 export interface QuerySimulateJoinTokenExactLptResponseSDKType {
   lpt_out?: CoinSDKType;
   amount_in?: CoinSDKType;
+  protocol_fee?: CoinSDKType;
+  swap_fee?: CoinSDKType;
 }
 export interface QuerySimulateExitTokenExactLptRequest {
   poolId: Long;
@@ -232,10 +298,14 @@ export interface QuerySimulateExitTokenExactLptRequestSDKType {
 export interface QuerySimulateExitTokenExactLptResponse {
   lptIn?: Coin;
   amountOut?: Coin;
+  protocolFee?: Coin;
+  swapFee?: Coin;
 }
 export interface QuerySimulateExitTokenExactLptResponseSDKType {
   lpt_in?: CoinSDKType;
   amount_out?: CoinSDKType;
+  protocol_fee?: CoinSDKType;
+  swap_fee?: CoinSDKType;
 }
 export interface QuerySimulateExitExactTokensRequest {
   poolId: Long;
@@ -248,10 +318,14 @@ export interface QuerySimulateExitExactTokensRequestSDKType {
 export interface QuerySimulateExitExactTokensResponse {
   lptIn?: Coin;
   amountsOut: Coin[];
+  protocolFee?: Coin;
+  swapFee: Coin[];
 }
 export interface QuerySimulateExitExactTokensResponseSDKType {
   lpt_in?: CoinSDKType;
   amounts_out: CoinSDKType[];
+  protocol_fee?: CoinSDKType;
+  swap_fee: CoinSDKType[];
 }
 export interface QuerySimulateExitAllTokensExactLptRequest {
   poolId: Long;
@@ -264,10 +338,12 @@ export interface QuerySimulateExitAllTokensExactLptRequestSDKType {
 export interface QuerySimulateExitAllTokensExactLptResponse {
   lptIn?: Coin;
   amountsOut: Coin[];
+  protocolFee?: Coin;
 }
 export interface QuerySimulateExitAllTokensExactLptResponseSDKType {
   lpt_in?: CoinSDKType;
   amounts_out: CoinSDKType[];
+  protocol_fee?: CoinSDKType;
 }
 export interface QuerySpotPriceRequest {
   poolId: Long;
@@ -366,10 +442,18 @@ export interface QuerySimulateBatchSwapRequestSDKType {
 export interface QuerySimulateBatchSwapResponse {
   amountsIn: Coin[];
   amountsOut: Coin[];
+  /**
+   * protocol fee does not contain the y_trade fee and refractor fee
+   * which is paid in case of a yAsset trade
+   */
+  protocolFee: Coin[];
+  swapFee: Coin[];
 }
 export interface QuerySimulateBatchSwapResponseSDKType {
   amounts_in: CoinSDKType[];
   amounts_out: CoinSDKType[];
+  protocol_fee: CoinSDKType[];
+  swap_fee: CoinSDKType[];
 }
 export interface QueryGetYammConfigurationRequest {
   poolId: Long;
@@ -866,6 +950,200 @@ export const QueryAllPoolTokenResponse = {
     const message = createBaseQueryAllPoolTokenResponse();
     message.poolToken = object.poolToken?.map(e => PoolToken.fromPartial(e)) || [];
     message.pagination = object.pagination !== undefined && object.pagination !== null ? PageResponse.fromPartial(object.pagination) : undefined;
+    return message;
+  }
+};
+function createBaseQueryAllPoolTokenWeightRequest(): QueryAllPoolTokenWeightRequest {
+  return {
+    poolId: Long.UZERO
+  };
+}
+export const QueryAllPoolTokenWeightRequest = {
+  encode(message: QueryAllPoolTokenWeightRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (!message.poolId.isZero()) {
+      writer.uint32(8).uint64(message.poolId);
+    }
+    return writer;
+  },
+  decode(input: _m0.Reader | Uint8Array, length?: number): QueryAllPoolTokenWeightRequest {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseQueryAllPoolTokenWeightRequest();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.poolId = (reader.uint64() as Long);
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromJSON(object: any): QueryAllPoolTokenWeightRequest {
+    return {
+      poolId: isSet(object.poolId) ? Long.fromValue(object.poolId) : Long.UZERO
+    };
+  },
+  toJSON(message: QueryAllPoolTokenWeightRequest): unknown {
+    const obj: any = {};
+    message.poolId !== undefined && (obj.poolId = (message.poolId || Long.UZERO).toString());
+    return obj;
+  },
+  fromPartial(object: Partial<QueryAllPoolTokenWeightRequest>): QueryAllPoolTokenWeightRequest {
+    const message = createBaseQueryAllPoolTokenWeightRequest();
+    message.poolId = object.poolId !== undefined && object.poolId !== null ? Long.fromValue(object.poolId) : Long.UZERO;
+    return message;
+  }
+};
+function createBaseQueryAllPoolTokenWeightResponse(): QueryAllPoolTokenWeightResponse {
+  return {
+    tokenWeight: []
+  };
+}
+export const QueryAllPoolTokenWeightResponse = {
+  encode(message: QueryAllPoolTokenWeightResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    for (const v of message.tokenWeight) {
+      TokenWeight.encode(v!, writer.uint32(10).fork()).ldelim();
+    }
+    return writer;
+  },
+  decode(input: _m0.Reader | Uint8Array, length?: number): QueryAllPoolTokenWeightResponse {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseQueryAllPoolTokenWeightResponse();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.tokenWeight.push(TokenWeight.decode(reader, reader.uint32()));
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromJSON(object: any): QueryAllPoolTokenWeightResponse {
+    return {
+      tokenWeight: Array.isArray(object?.tokenWeight) ? object.tokenWeight.map((e: any) => TokenWeight.fromJSON(e)) : []
+    };
+  },
+  toJSON(message: QueryAllPoolTokenWeightResponse): unknown {
+    const obj: any = {};
+    if (message.tokenWeight) {
+      obj.tokenWeight = message.tokenWeight.map(e => e ? TokenWeight.toJSON(e) : undefined);
+    } else {
+      obj.tokenWeight = [];
+    }
+    return obj;
+  },
+  fromPartial(object: Partial<QueryAllPoolTokenWeightResponse>): QueryAllPoolTokenWeightResponse {
+    const message = createBaseQueryAllPoolTokenWeightResponse();
+    message.tokenWeight = object.tokenWeight?.map(e => TokenWeight.fromPartial(e)) || [];
+    return message;
+  }
+};
+function createBaseQueryGetPoolTokenWeightRequest(): QueryGetPoolTokenWeightRequest {
+  return {
+    poolId: Long.UZERO,
+    denom: ""
+  };
+}
+export const QueryGetPoolTokenWeightRequest = {
+  encode(message: QueryGetPoolTokenWeightRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (!message.poolId.isZero()) {
+      writer.uint32(8).uint64(message.poolId);
+    }
+    if (message.denom !== "") {
+      writer.uint32(18).string(message.denom);
+    }
+    return writer;
+  },
+  decode(input: _m0.Reader | Uint8Array, length?: number): QueryGetPoolTokenWeightRequest {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseQueryGetPoolTokenWeightRequest();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.poolId = (reader.uint64() as Long);
+          break;
+        case 2:
+          message.denom = reader.string();
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromJSON(object: any): QueryGetPoolTokenWeightRequest {
+    return {
+      poolId: isSet(object.poolId) ? Long.fromValue(object.poolId) : Long.UZERO,
+      denom: isSet(object.denom) ? String(object.denom) : ""
+    };
+  },
+  toJSON(message: QueryGetPoolTokenWeightRequest): unknown {
+    const obj: any = {};
+    message.poolId !== undefined && (obj.poolId = (message.poolId || Long.UZERO).toString());
+    message.denom !== undefined && (obj.denom = message.denom);
+    return obj;
+  },
+  fromPartial(object: Partial<QueryGetPoolTokenWeightRequest>): QueryGetPoolTokenWeightRequest {
+    const message = createBaseQueryGetPoolTokenWeightRequest();
+    message.poolId = object.poolId !== undefined && object.poolId !== null ? Long.fromValue(object.poolId) : Long.UZERO;
+    message.denom = object.denom ?? "";
+    return message;
+  }
+};
+function createBaseQueryGetPoolTokenWeightResponse(): QueryGetPoolTokenWeightResponse {
+  return {
+    tokenWeight: undefined
+  };
+}
+export const QueryGetPoolTokenWeightResponse = {
+  encode(message: QueryGetPoolTokenWeightResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.tokenWeight !== undefined) {
+      TokenWeight.encode(message.tokenWeight, writer.uint32(10).fork()).ldelim();
+    }
+    return writer;
+  },
+  decode(input: _m0.Reader | Uint8Array, length?: number): QueryGetPoolTokenWeightResponse {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseQueryGetPoolTokenWeightResponse();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.tokenWeight = TokenWeight.decode(reader, reader.uint32());
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromJSON(object: any): QueryGetPoolTokenWeightResponse {
+    return {
+      tokenWeight: isSet(object.tokenWeight) ? TokenWeight.fromJSON(object.tokenWeight) : undefined
+    };
+  },
+  toJSON(message: QueryGetPoolTokenWeightResponse): unknown {
+    const obj: any = {};
+    message.tokenWeight !== undefined && (obj.tokenWeight = message.tokenWeight ? TokenWeight.toJSON(message.tokenWeight) : undefined);
+    return obj;
+  },
+  fromPartial(object: Partial<QueryGetPoolTokenWeightResponse>): QueryGetPoolTokenWeightResponse {
+    const message = createBaseQueryGetPoolTokenWeightResponse();
+    message.tokenWeight = object.tokenWeight !== undefined && object.tokenWeight !== null ? TokenWeight.fromPartial(object.tokenWeight) : undefined;
     return message;
   }
 };
@@ -1509,7 +1787,9 @@ export const QuerySimulateSingleSwapRequest = {
 function createBaseQuerySimulateSingleSwapResponse(): QuerySimulateSingleSwapResponse {
   return {
     amountOut: undefined,
-    amountIn: undefined
+    amountIn: undefined,
+    protocolFee: undefined,
+    swapFee: undefined
   };
 }
 export const QuerySimulateSingleSwapResponse = {
@@ -1519,6 +1799,12 @@ export const QuerySimulateSingleSwapResponse = {
     }
     if (message.amountIn !== undefined) {
       Coin.encode(message.amountIn, writer.uint32(18).fork()).ldelim();
+    }
+    if (message.protocolFee !== undefined) {
+      Coin.encode(message.protocolFee, writer.uint32(26).fork()).ldelim();
+    }
+    if (message.swapFee !== undefined) {
+      Coin.encode(message.swapFee, writer.uint32(34).fork()).ldelim();
     }
     return writer;
   },
@@ -1535,6 +1821,12 @@ export const QuerySimulateSingleSwapResponse = {
         case 2:
           message.amountIn = Coin.decode(reader, reader.uint32());
           break;
+        case 3:
+          message.protocolFee = Coin.decode(reader, reader.uint32());
+          break;
+        case 4:
+          message.swapFee = Coin.decode(reader, reader.uint32());
+          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -1545,19 +1837,25 @@ export const QuerySimulateSingleSwapResponse = {
   fromJSON(object: any): QuerySimulateSingleSwapResponse {
     return {
       amountOut: isSet(object.amountOut) ? Coin.fromJSON(object.amountOut) : undefined,
-      amountIn: isSet(object.amountIn) ? Coin.fromJSON(object.amountIn) : undefined
+      amountIn: isSet(object.amountIn) ? Coin.fromJSON(object.amountIn) : undefined,
+      protocolFee: isSet(object.protocolFee) ? Coin.fromJSON(object.protocolFee) : undefined,
+      swapFee: isSet(object.swapFee) ? Coin.fromJSON(object.swapFee) : undefined
     };
   },
   toJSON(message: QuerySimulateSingleSwapResponse): unknown {
     const obj: any = {};
     message.amountOut !== undefined && (obj.amountOut = message.amountOut ? Coin.toJSON(message.amountOut) : undefined);
     message.amountIn !== undefined && (obj.amountIn = message.amountIn ? Coin.toJSON(message.amountIn) : undefined);
+    message.protocolFee !== undefined && (obj.protocolFee = message.protocolFee ? Coin.toJSON(message.protocolFee) : undefined);
+    message.swapFee !== undefined && (obj.swapFee = message.swapFee ? Coin.toJSON(message.swapFee) : undefined);
     return obj;
   },
   fromPartial(object: Partial<QuerySimulateSingleSwapResponse>): QuerySimulateSingleSwapResponse {
     const message = createBaseQuerySimulateSingleSwapResponse();
     message.amountOut = object.amountOut !== undefined && object.amountOut !== null ? Coin.fromPartial(object.amountOut) : undefined;
     message.amountIn = object.amountIn !== undefined && object.amountIn !== null ? Coin.fromPartial(object.amountIn) : undefined;
+    message.protocolFee = object.protocolFee !== undefined && object.protocolFee !== null ? Coin.fromPartial(object.protocolFee) : undefined;
+    message.swapFee = object.swapFee !== undefined && object.swapFee !== null ? Coin.fromPartial(object.swapFee) : undefined;
     return message;
   }
 };
@@ -1623,7 +1921,8 @@ export const QuerySimulateInitializePoolRequest = {
 function createBaseQuerySimulateInitializePoolResponse(): QuerySimulateInitializePoolResponse {
   return {
     lptOut: undefined,
-    amountsIn: []
+    amountsIn: [],
+    protocolFee: []
   };
 }
 export const QuerySimulateInitializePoolResponse = {
@@ -1633,6 +1932,9 @@ export const QuerySimulateInitializePoolResponse = {
     }
     for (const v of message.amountsIn) {
       Coin.encode(v!, writer.uint32(18).fork()).ldelim();
+    }
+    for (const v of message.protocolFee) {
+      Coin.encode(v!, writer.uint32(26).fork()).ldelim();
     }
     return writer;
   },
@@ -1649,6 +1951,9 @@ export const QuerySimulateInitializePoolResponse = {
         case 2:
           message.amountsIn.push(Coin.decode(reader, reader.uint32()));
           break;
+        case 3:
+          message.protocolFee.push(Coin.decode(reader, reader.uint32()));
+          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -1659,7 +1964,8 @@ export const QuerySimulateInitializePoolResponse = {
   fromJSON(object: any): QuerySimulateInitializePoolResponse {
     return {
       lptOut: isSet(object.lptOut) ? Coin.fromJSON(object.lptOut) : undefined,
-      amountsIn: Array.isArray(object?.amountsIn) ? object.amountsIn.map((e: any) => Coin.fromJSON(e)) : []
+      amountsIn: Array.isArray(object?.amountsIn) ? object.amountsIn.map((e: any) => Coin.fromJSON(e)) : [],
+      protocolFee: Array.isArray(object?.protocolFee) ? object.protocolFee.map((e: any) => Coin.fromJSON(e)) : []
     };
   },
   toJSON(message: QuerySimulateInitializePoolResponse): unknown {
@@ -1670,12 +1976,18 @@ export const QuerySimulateInitializePoolResponse = {
     } else {
       obj.amountsIn = [];
     }
+    if (message.protocolFee) {
+      obj.protocolFee = message.protocolFee.map(e => e ? Coin.toJSON(e) : undefined);
+    } else {
+      obj.protocolFee = [];
+    }
     return obj;
   },
   fromPartial(object: Partial<QuerySimulateInitializePoolResponse>): QuerySimulateInitializePoolResponse {
     const message = createBaseQuerySimulateInitializePoolResponse();
     message.lptOut = object.lptOut !== undefined && object.lptOut !== null ? Coin.fromPartial(object.lptOut) : undefined;
     message.amountsIn = object.amountsIn?.map(e => Coin.fromPartial(e)) || [];
+    message.protocolFee = object.protocolFee?.map(e => Coin.fromPartial(e)) || [];
     return message;
   }
 };
@@ -1737,7 +2049,8 @@ export const QuerySimulateJoinAllTokensExactLptRequest = {
 function createBaseQuerySimulateJoinAllTokensExactLptResponse(): QuerySimulateJoinAllTokensExactLptResponse {
   return {
     lptOut: undefined,
-    amountsIn: []
+    amountsIn: [],
+    protocolFee: []
   };
 }
 export const QuerySimulateJoinAllTokensExactLptResponse = {
@@ -1747,6 +2060,9 @@ export const QuerySimulateJoinAllTokensExactLptResponse = {
     }
     for (const v of message.amountsIn) {
       Coin.encode(v!, writer.uint32(18).fork()).ldelim();
+    }
+    for (const v of message.protocolFee) {
+      Coin.encode(v!, writer.uint32(26).fork()).ldelim();
     }
     return writer;
   },
@@ -1763,6 +2079,9 @@ export const QuerySimulateJoinAllTokensExactLptResponse = {
         case 2:
           message.amountsIn.push(Coin.decode(reader, reader.uint32()));
           break;
+        case 3:
+          message.protocolFee.push(Coin.decode(reader, reader.uint32()));
+          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -1773,7 +2092,8 @@ export const QuerySimulateJoinAllTokensExactLptResponse = {
   fromJSON(object: any): QuerySimulateJoinAllTokensExactLptResponse {
     return {
       lptOut: isSet(object.lptOut) ? Coin.fromJSON(object.lptOut) : undefined,
-      amountsIn: Array.isArray(object?.amountsIn) ? object.amountsIn.map((e: any) => Coin.fromJSON(e)) : []
+      amountsIn: Array.isArray(object?.amountsIn) ? object.amountsIn.map((e: any) => Coin.fromJSON(e)) : [],
+      protocolFee: Array.isArray(object?.protocolFee) ? object.protocolFee.map((e: any) => Coin.fromJSON(e)) : []
     };
   },
   toJSON(message: QuerySimulateJoinAllTokensExactLptResponse): unknown {
@@ -1784,12 +2104,18 @@ export const QuerySimulateJoinAllTokensExactLptResponse = {
     } else {
       obj.amountsIn = [];
     }
+    if (message.protocolFee) {
+      obj.protocolFee = message.protocolFee.map(e => e ? Coin.toJSON(e) : undefined);
+    } else {
+      obj.protocolFee = [];
+    }
     return obj;
   },
   fromPartial(object: Partial<QuerySimulateJoinAllTokensExactLptResponse>): QuerySimulateJoinAllTokensExactLptResponse {
     const message = createBaseQuerySimulateJoinAllTokensExactLptResponse();
     message.lptOut = object.lptOut !== undefined && object.lptOut !== null ? Coin.fromPartial(object.lptOut) : undefined;
     message.amountsIn = object.amountsIn?.map(e => Coin.fromPartial(e)) || [];
+    message.protocolFee = object.protocolFee?.map(e => Coin.fromPartial(e)) || [];
     return message;
   }
 };
@@ -1855,7 +2181,9 @@ export const QuerySimulateJoinExactTokensRequest = {
 function createBaseQuerySimulateJoinExactTokensResponse(): QuerySimulateJoinExactTokensResponse {
   return {
     lptOut: undefined,
-    amountsIn: []
+    amountsIn: [],
+    protocolFee: [],
+    swapFee: []
   };
 }
 export const QuerySimulateJoinExactTokensResponse = {
@@ -1865,6 +2193,12 @@ export const QuerySimulateJoinExactTokensResponse = {
     }
     for (const v of message.amountsIn) {
       Coin.encode(v!, writer.uint32(18).fork()).ldelim();
+    }
+    for (const v of message.protocolFee) {
+      Coin.encode(v!, writer.uint32(26).fork()).ldelim();
+    }
+    for (const v of message.swapFee) {
+      Coin.encode(v!, writer.uint32(34).fork()).ldelim();
     }
     return writer;
   },
@@ -1881,6 +2215,12 @@ export const QuerySimulateJoinExactTokensResponse = {
         case 2:
           message.amountsIn.push(Coin.decode(reader, reader.uint32()));
           break;
+        case 3:
+          message.protocolFee.push(Coin.decode(reader, reader.uint32()));
+          break;
+        case 4:
+          message.swapFee.push(Coin.decode(reader, reader.uint32()));
+          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -1891,7 +2231,9 @@ export const QuerySimulateJoinExactTokensResponse = {
   fromJSON(object: any): QuerySimulateJoinExactTokensResponse {
     return {
       lptOut: isSet(object.lptOut) ? Coin.fromJSON(object.lptOut) : undefined,
-      amountsIn: Array.isArray(object?.amountsIn) ? object.amountsIn.map((e: any) => Coin.fromJSON(e)) : []
+      amountsIn: Array.isArray(object?.amountsIn) ? object.amountsIn.map((e: any) => Coin.fromJSON(e)) : [],
+      protocolFee: Array.isArray(object?.protocolFee) ? object.protocolFee.map((e: any) => Coin.fromJSON(e)) : [],
+      swapFee: Array.isArray(object?.swapFee) ? object.swapFee.map((e: any) => Coin.fromJSON(e)) : []
     };
   },
   toJSON(message: QuerySimulateJoinExactTokensResponse): unknown {
@@ -1902,12 +2244,24 @@ export const QuerySimulateJoinExactTokensResponse = {
     } else {
       obj.amountsIn = [];
     }
+    if (message.protocolFee) {
+      obj.protocolFee = message.protocolFee.map(e => e ? Coin.toJSON(e) : undefined);
+    } else {
+      obj.protocolFee = [];
+    }
+    if (message.swapFee) {
+      obj.swapFee = message.swapFee.map(e => e ? Coin.toJSON(e) : undefined);
+    } else {
+      obj.swapFee = [];
+    }
     return obj;
   },
   fromPartial(object: Partial<QuerySimulateJoinExactTokensResponse>): QuerySimulateJoinExactTokensResponse {
     const message = createBaseQuerySimulateJoinExactTokensResponse();
     message.lptOut = object.lptOut !== undefined && object.lptOut !== null ? Coin.fromPartial(object.lptOut) : undefined;
     message.amountsIn = object.amountsIn?.map(e => Coin.fromPartial(e)) || [];
+    message.protocolFee = object.protocolFee?.map(e => Coin.fromPartial(e)) || [];
+    message.swapFee = object.swapFee?.map(e => Coin.fromPartial(e)) || [];
     return message;
   }
 };
@@ -1979,7 +2333,9 @@ export const QuerySimulateJoinTokenExactLptRequest = {
 function createBaseQuerySimulateJoinTokenExactLptResponse(): QuerySimulateJoinTokenExactLptResponse {
   return {
     lptOut: undefined,
-    amountIn: undefined
+    amountIn: undefined,
+    protocolFee: undefined,
+    swapFee: undefined
   };
 }
 export const QuerySimulateJoinTokenExactLptResponse = {
@@ -1989,6 +2345,12 @@ export const QuerySimulateJoinTokenExactLptResponse = {
     }
     if (message.amountIn !== undefined) {
       Coin.encode(message.amountIn, writer.uint32(18).fork()).ldelim();
+    }
+    if (message.protocolFee !== undefined) {
+      Coin.encode(message.protocolFee, writer.uint32(26).fork()).ldelim();
+    }
+    if (message.swapFee !== undefined) {
+      Coin.encode(message.swapFee, writer.uint32(34).fork()).ldelim();
     }
     return writer;
   },
@@ -2005,6 +2367,12 @@ export const QuerySimulateJoinTokenExactLptResponse = {
         case 2:
           message.amountIn = Coin.decode(reader, reader.uint32());
           break;
+        case 3:
+          message.protocolFee = Coin.decode(reader, reader.uint32());
+          break;
+        case 4:
+          message.swapFee = Coin.decode(reader, reader.uint32());
+          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -2015,19 +2383,25 @@ export const QuerySimulateJoinTokenExactLptResponse = {
   fromJSON(object: any): QuerySimulateJoinTokenExactLptResponse {
     return {
       lptOut: isSet(object.lptOut) ? Coin.fromJSON(object.lptOut) : undefined,
-      amountIn: isSet(object.amountIn) ? Coin.fromJSON(object.amountIn) : undefined
+      amountIn: isSet(object.amountIn) ? Coin.fromJSON(object.amountIn) : undefined,
+      protocolFee: isSet(object.protocolFee) ? Coin.fromJSON(object.protocolFee) : undefined,
+      swapFee: isSet(object.swapFee) ? Coin.fromJSON(object.swapFee) : undefined
     };
   },
   toJSON(message: QuerySimulateJoinTokenExactLptResponse): unknown {
     const obj: any = {};
     message.lptOut !== undefined && (obj.lptOut = message.lptOut ? Coin.toJSON(message.lptOut) : undefined);
     message.amountIn !== undefined && (obj.amountIn = message.amountIn ? Coin.toJSON(message.amountIn) : undefined);
+    message.protocolFee !== undefined && (obj.protocolFee = message.protocolFee ? Coin.toJSON(message.protocolFee) : undefined);
+    message.swapFee !== undefined && (obj.swapFee = message.swapFee ? Coin.toJSON(message.swapFee) : undefined);
     return obj;
   },
   fromPartial(object: Partial<QuerySimulateJoinTokenExactLptResponse>): QuerySimulateJoinTokenExactLptResponse {
     const message = createBaseQuerySimulateJoinTokenExactLptResponse();
     message.lptOut = object.lptOut !== undefined && object.lptOut !== null ? Coin.fromPartial(object.lptOut) : undefined;
     message.amountIn = object.amountIn !== undefined && object.amountIn !== null ? Coin.fromPartial(object.amountIn) : undefined;
+    message.protocolFee = object.protocolFee !== undefined && object.protocolFee !== null ? Coin.fromPartial(object.protocolFee) : undefined;
+    message.swapFee = object.swapFee !== undefined && object.swapFee !== null ? Coin.fromPartial(object.swapFee) : undefined;
     return message;
   }
 };
@@ -2099,7 +2473,9 @@ export const QuerySimulateExitTokenExactLptRequest = {
 function createBaseQuerySimulateExitTokenExactLptResponse(): QuerySimulateExitTokenExactLptResponse {
   return {
     lptIn: undefined,
-    amountOut: undefined
+    amountOut: undefined,
+    protocolFee: undefined,
+    swapFee: undefined
   };
 }
 export const QuerySimulateExitTokenExactLptResponse = {
@@ -2109,6 +2485,12 @@ export const QuerySimulateExitTokenExactLptResponse = {
     }
     if (message.amountOut !== undefined) {
       Coin.encode(message.amountOut, writer.uint32(18).fork()).ldelim();
+    }
+    if (message.protocolFee !== undefined) {
+      Coin.encode(message.protocolFee, writer.uint32(26).fork()).ldelim();
+    }
+    if (message.swapFee !== undefined) {
+      Coin.encode(message.swapFee, writer.uint32(34).fork()).ldelim();
     }
     return writer;
   },
@@ -2125,6 +2507,12 @@ export const QuerySimulateExitTokenExactLptResponse = {
         case 2:
           message.amountOut = Coin.decode(reader, reader.uint32());
           break;
+        case 3:
+          message.protocolFee = Coin.decode(reader, reader.uint32());
+          break;
+        case 4:
+          message.swapFee = Coin.decode(reader, reader.uint32());
+          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -2135,19 +2523,25 @@ export const QuerySimulateExitTokenExactLptResponse = {
   fromJSON(object: any): QuerySimulateExitTokenExactLptResponse {
     return {
       lptIn: isSet(object.lptIn) ? Coin.fromJSON(object.lptIn) : undefined,
-      amountOut: isSet(object.amountOut) ? Coin.fromJSON(object.amountOut) : undefined
+      amountOut: isSet(object.amountOut) ? Coin.fromJSON(object.amountOut) : undefined,
+      protocolFee: isSet(object.protocolFee) ? Coin.fromJSON(object.protocolFee) : undefined,
+      swapFee: isSet(object.swapFee) ? Coin.fromJSON(object.swapFee) : undefined
     };
   },
   toJSON(message: QuerySimulateExitTokenExactLptResponse): unknown {
     const obj: any = {};
     message.lptIn !== undefined && (obj.lptIn = message.lptIn ? Coin.toJSON(message.lptIn) : undefined);
     message.amountOut !== undefined && (obj.amountOut = message.amountOut ? Coin.toJSON(message.amountOut) : undefined);
+    message.protocolFee !== undefined && (obj.protocolFee = message.protocolFee ? Coin.toJSON(message.protocolFee) : undefined);
+    message.swapFee !== undefined && (obj.swapFee = message.swapFee ? Coin.toJSON(message.swapFee) : undefined);
     return obj;
   },
   fromPartial(object: Partial<QuerySimulateExitTokenExactLptResponse>): QuerySimulateExitTokenExactLptResponse {
     const message = createBaseQuerySimulateExitTokenExactLptResponse();
     message.lptIn = object.lptIn !== undefined && object.lptIn !== null ? Coin.fromPartial(object.lptIn) : undefined;
     message.amountOut = object.amountOut !== undefined && object.amountOut !== null ? Coin.fromPartial(object.amountOut) : undefined;
+    message.protocolFee = object.protocolFee !== undefined && object.protocolFee !== null ? Coin.fromPartial(object.protocolFee) : undefined;
+    message.swapFee = object.swapFee !== undefined && object.swapFee !== null ? Coin.fromPartial(object.swapFee) : undefined;
     return message;
   }
 };
@@ -2213,7 +2607,9 @@ export const QuerySimulateExitExactTokensRequest = {
 function createBaseQuerySimulateExitExactTokensResponse(): QuerySimulateExitExactTokensResponse {
   return {
     lptIn: undefined,
-    amountsOut: []
+    amountsOut: [],
+    protocolFee: undefined,
+    swapFee: []
   };
 }
 export const QuerySimulateExitExactTokensResponse = {
@@ -2223,6 +2619,12 @@ export const QuerySimulateExitExactTokensResponse = {
     }
     for (const v of message.amountsOut) {
       Coin.encode(v!, writer.uint32(18).fork()).ldelim();
+    }
+    if (message.protocolFee !== undefined) {
+      Coin.encode(message.protocolFee, writer.uint32(26).fork()).ldelim();
+    }
+    for (const v of message.swapFee) {
+      Coin.encode(v!, writer.uint32(34).fork()).ldelim();
     }
     return writer;
   },
@@ -2239,6 +2641,12 @@ export const QuerySimulateExitExactTokensResponse = {
         case 2:
           message.amountsOut.push(Coin.decode(reader, reader.uint32()));
           break;
+        case 3:
+          message.protocolFee = Coin.decode(reader, reader.uint32());
+          break;
+        case 4:
+          message.swapFee.push(Coin.decode(reader, reader.uint32()));
+          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -2249,7 +2657,9 @@ export const QuerySimulateExitExactTokensResponse = {
   fromJSON(object: any): QuerySimulateExitExactTokensResponse {
     return {
       lptIn: isSet(object.lptIn) ? Coin.fromJSON(object.lptIn) : undefined,
-      amountsOut: Array.isArray(object?.amountsOut) ? object.amountsOut.map((e: any) => Coin.fromJSON(e)) : []
+      amountsOut: Array.isArray(object?.amountsOut) ? object.amountsOut.map((e: any) => Coin.fromJSON(e)) : [],
+      protocolFee: isSet(object.protocolFee) ? Coin.fromJSON(object.protocolFee) : undefined,
+      swapFee: Array.isArray(object?.swapFee) ? object.swapFee.map((e: any) => Coin.fromJSON(e)) : []
     };
   },
   toJSON(message: QuerySimulateExitExactTokensResponse): unknown {
@@ -2260,12 +2670,20 @@ export const QuerySimulateExitExactTokensResponse = {
     } else {
       obj.amountsOut = [];
     }
+    message.protocolFee !== undefined && (obj.protocolFee = message.protocolFee ? Coin.toJSON(message.protocolFee) : undefined);
+    if (message.swapFee) {
+      obj.swapFee = message.swapFee.map(e => e ? Coin.toJSON(e) : undefined);
+    } else {
+      obj.swapFee = [];
+    }
     return obj;
   },
   fromPartial(object: Partial<QuerySimulateExitExactTokensResponse>): QuerySimulateExitExactTokensResponse {
     const message = createBaseQuerySimulateExitExactTokensResponse();
     message.lptIn = object.lptIn !== undefined && object.lptIn !== null ? Coin.fromPartial(object.lptIn) : undefined;
     message.amountsOut = object.amountsOut?.map(e => Coin.fromPartial(e)) || [];
+    message.protocolFee = object.protocolFee !== undefined && object.protocolFee !== null ? Coin.fromPartial(object.protocolFee) : undefined;
+    message.swapFee = object.swapFee?.map(e => Coin.fromPartial(e)) || [];
     return message;
   }
 };
@@ -2327,7 +2745,8 @@ export const QuerySimulateExitAllTokensExactLptRequest = {
 function createBaseQuerySimulateExitAllTokensExactLptResponse(): QuerySimulateExitAllTokensExactLptResponse {
   return {
     lptIn: undefined,
-    amountsOut: []
+    amountsOut: [],
+    protocolFee: undefined
   };
 }
 export const QuerySimulateExitAllTokensExactLptResponse = {
@@ -2337,6 +2756,9 @@ export const QuerySimulateExitAllTokensExactLptResponse = {
     }
     for (const v of message.amountsOut) {
       Coin.encode(v!, writer.uint32(18).fork()).ldelim();
+    }
+    if (message.protocolFee !== undefined) {
+      Coin.encode(message.protocolFee, writer.uint32(26).fork()).ldelim();
     }
     return writer;
   },
@@ -2353,6 +2775,9 @@ export const QuerySimulateExitAllTokensExactLptResponse = {
         case 2:
           message.amountsOut.push(Coin.decode(reader, reader.uint32()));
           break;
+        case 3:
+          message.protocolFee = Coin.decode(reader, reader.uint32());
+          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -2363,7 +2788,8 @@ export const QuerySimulateExitAllTokensExactLptResponse = {
   fromJSON(object: any): QuerySimulateExitAllTokensExactLptResponse {
     return {
       lptIn: isSet(object.lptIn) ? Coin.fromJSON(object.lptIn) : undefined,
-      amountsOut: Array.isArray(object?.amountsOut) ? object.amountsOut.map((e: any) => Coin.fromJSON(e)) : []
+      amountsOut: Array.isArray(object?.amountsOut) ? object.amountsOut.map((e: any) => Coin.fromJSON(e)) : [],
+      protocolFee: isSet(object.protocolFee) ? Coin.fromJSON(object.protocolFee) : undefined
     };
   },
   toJSON(message: QuerySimulateExitAllTokensExactLptResponse): unknown {
@@ -2374,12 +2800,14 @@ export const QuerySimulateExitAllTokensExactLptResponse = {
     } else {
       obj.amountsOut = [];
     }
+    message.protocolFee !== undefined && (obj.protocolFee = message.protocolFee ? Coin.toJSON(message.protocolFee) : undefined);
     return obj;
   },
   fromPartial(object: Partial<QuerySimulateExitAllTokensExactLptResponse>): QuerySimulateExitAllTokensExactLptResponse {
     const message = createBaseQuerySimulateExitAllTokensExactLptResponse();
     message.lptIn = object.lptIn !== undefined && object.lptIn !== null ? Coin.fromPartial(object.lptIn) : undefined;
     message.amountsOut = object.amountsOut?.map(e => Coin.fromPartial(e)) || [];
+    message.protocolFee = object.protocolFee !== undefined && object.protocolFee !== null ? Coin.fromPartial(object.protocolFee) : undefined;
     return message;
   }
 };
@@ -3063,7 +3491,9 @@ export const QuerySimulateBatchSwapRequest = {
 function createBaseQuerySimulateBatchSwapResponse(): QuerySimulateBatchSwapResponse {
   return {
     amountsIn: [],
-    amountsOut: []
+    amountsOut: [],
+    protocolFee: [],
+    swapFee: []
   };
 }
 export const QuerySimulateBatchSwapResponse = {
@@ -3073,6 +3503,12 @@ export const QuerySimulateBatchSwapResponse = {
     }
     for (const v of message.amountsOut) {
       Coin.encode(v!, writer.uint32(18).fork()).ldelim();
+    }
+    for (const v of message.protocolFee) {
+      Coin.encode(v!, writer.uint32(26).fork()).ldelim();
+    }
+    for (const v of message.swapFee) {
+      Coin.encode(v!, writer.uint32(34).fork()).ldelim();
     }
     return writer;
   },
@@ -3089,6 +3525,12 @@ export const QuerySimulateBatchSwapResponse = {
         case 2:
           message.amountsOut.push(Coin.decode(reader, reader.uint32()));
           break;
+        case 3:
+          message.protocolFee.push(Coin.decode(reader, reader.uint32()));
+          break;
+        case 4:
+          message.swapFee.push(Coin.decode(reader, reader.uint32()));
+          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -3099,7 +3541,9 @@ export const QuerySimulateBatchSwapResponse = {
   fromJSON(object: any): QuerySimulateBatchSwapResponse {
     return {
       amountsIn: Array.isArray(object?.amountsIn) ? object.amountsIn.map((e: any) => Coin.fromJSON(e)) : [],
-      amountsOut: Array.isArray(object?.amountsOut) ? object.amountsOut.map((e: any) => Coin.fromJSON(e)) : []
+      amountsOut: Array.isArray(object?.amountsOut) ? object.amountsOut.map((e: any) => Coin.fromJSON(e)) : [],
+      protocolFee: Array.isArray(object?.protocolFee) ? object.protocolFee.map((e: any) => Coin.fromJSON(e)) : [],
+      swapFee: Array.isArray(object?.swapFee) ? object.swapFee.map((e: any) => Coin.fromJSON(e)) : []
     };
   },
   toJSON(message: QuerySimulateBatchSwapResponse): unknown {
@@ -3114,12 +3558,24 @@ export const QuerySimulateBatchSwapResponse = {
     } else {
       obj.amountsOut = [];
     }
+    if (message.protocolFee) {
+      obj.protocolFee = message.protocolFee.map(e => e ? Coin.toJSON(e) : undefined);
+    } else {
+      obj.protocolFee = [];
+    }
+    if (message.swapFee) {
+      obj.swapFee = message.swapFee.map(e => e ? Coin.toJSON(e) : undefined);
+    } else {
+      obj.swapFee = [];
+    }
     return obj;
   },
   fromPartial(object: Partial<QuerySimulateBatchSwapResponse>): QuerySimulateBatchSwapResponse {
     const message = createBaseQuerySimulateBatchSwapResponse();
     message.amountsIn = object.amountsIn?.map(e => Coin.fromPartial(e)) || [];
     message.amountsOut = object.amountsOut?.map(e => Coin.fromPartial(e)) || [];
+    message.protocolFee = object.protocolFee?.map(e => Coin.fromPartial(e)) || [];
+    message.swapFee = object.swapFee?.map(e => Coin.fromPartial(e)) || [];
     return message;
   }
 };

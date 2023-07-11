@@ -1,42 +1,32 @@
 import { Long, isSet } from "../../helpers";
 import * as _m0 from "protobufjs/minimal";
-/**
- * DistributionProportions defines the distribution proportions of the minted
- * denom. In other words, defines which stakeholders will receive the minted
- * denoms and how much.
- */
 export interface DistributionProportions {
   /**
-   * staking defines the proportion of the minted mint_denom that is to be
+   * defines the proportion of the minted mint_denom that is to be
    * allocated as staking rewards.
    */
   staking: string;
   /**
-   * pool_incentives defines the proportion of the minted mint_denom that is
+   * defines the proportion of the minted mint_denom that is
    * to be allocated as pool incentives.
    */
   poolIncentives: string;
   /**
-   * developer_rewards defines the proportion of the minted mint_denom that is
+   * defines the proportion of the minted mint_denom that is
    * to be allocated to developer rewards address.
    */
   development: string;
   /**
-   * dapp_fund defines the proportion of the minted mint_denom that is
+   * defines the proportion of the minted mint_denom that is
    * to be allocated to the dapp developers.
    */
   dapp: string;
   /**
-   * oracle_rewards defines the proportion of the minted mint_denom that is
+   * defines the proportion of the minted mint_denom that is
    * to be allocated to the oracle feeders.
    */
   oracle: string;
 }
-/**
- * DistributionProportions defines the distribution proportions of the minted
- * denom. In other words, defines which stakeholders will receive the minted
- * denoms and how much.
- */
 export interface DistributionProportionsSDKType {
   staking: string;
   pool_incentives: string;
@@ -54,19 +44,19 @@ export interface Params {
   inflationMax: string;
   /** minimum inflation rate */
   inflationMin: string;
-  /** goal of percent bonded atoms */
+  /** goal of percent bonded uprisms */
   goalBonded: string;
-  /** epoch_identifier mint epoch identifier e.g. (day, week). */
+  /** mint epoch identifier e.g. (day, week). */
   epochIdentifier: string;
-  /** minting_rewards_distribution_start_epoch start epoch to distribute minting rewards */
+  /** start epoch to distribute minting rewards */
   mintingRewardsDistributionStartEpoch: Long;
   /**
-   * distribution_proportions defines the distribution proportions of the minted
-   * denom. In other words, defines which stakeholders will receive the minted
+   * defines the distribution proportions of the minted
+   * denom, i.e, which stakeholders will receive the minted
    * denoms and how much.
    */
   distributionProportions?: DistributionProportions;
-  /** genesis_epoch_provisions epoch provisions from the first epoch. */
+  /** epoch provisions from the first epoch. */
   genesisEpochProvisions: string;
   developmentAccountAddress: string;
 }

@@ -133,41 +133,59 @@ export interface SwapSDKType {
   token_in: string;
   token_out: string;
 }
+export interface SwapStep {
+  poolId: Long;
+  amount: string;
+  tokenIn: string;
+  tokenOut: string;
+}
+export interface SwapStepSDKType {
+  pool_id: Long;
+  amount: string;
+  token_in: string;
+  token_out: string;
+}
 export interface SwapSummary {
   tokenIn?: TokenAmount;
   tokenOut?: TokenAmount;
   swapType: SwapType;
   protocolFee?: Coin;
+  swapFee?: Coin;
 }
 export interface SwapSummarySDKType {
   token_in?: TokenAmountSDKType;
   token_out?: TokenAmountSDKType;
   swap_type: SwapType;
   protocol_fee?: CoinSDKType;
+  swap_fee?: CoinSDKType;
 }
 export interface JoinSummary {
   lpToken?: TokenAmount;
   tokensIn: TokenAmount[];
   joinType: JoinType;
   protocolFee: Coin[];
+  swapFee: Coin[];
 }
 export interface JoinSummarySDKType {
   lp_token?: TokenAmountSDKType;
   tokens_in: TokenAmountSDKType[];
   join_type: JoinType;
   protocol_fee: CoinSDKType[];
+  swap_fee: CoinSDKType[];
 }
 export interface ExitSummary {
   lpToken?: TokenAmount;
   tokensOut: TokenAmount[];
   exitType: ExitType;
   protocolFee?: Coin;
+  swapFee: Coin[];
 }
 export interface ExitSummarySDKType {
   lp_token?: TokenAmountSDKType;
   tokens_out: TokenAmountSDKType[];
   exit_type: ExitType;
   protocol_fee?: CoinSDKType;
+  swap_fee: CoinSDKType[];
 }
 function createBaseSwap(): Swap {
   return {
@@ -254,12 +272,88 @@ export const Swap = {
     return message;
   }
 };
+function createBaseSwapStep(): SwapStep {
+  return {
+    poolId: Long.UZERO,
+    amount: undefined,
+    tokenIn: "",
+    tokenOut: ""
+  };
+}
+export const SwapStep = {
+  encode(message: SwapStep, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (!message.poolId.isZero()) {
+      writer.uint32(8).uint64(message.poolId);
+    }
+    if (message.amount !== undefined) {
+      writer.uint32(18).string(message.amount);
+    }
+    if (message.tokenIn !== "") {
+      writer.uint32(34).string(message.tokenIn);
+    }
+    if (message.tokenOut !== "") {
+      writer.uint32(42).string(message.tokenOut);
+    }
+    return writer;
+  },
+  decode(input: _m0.Reader | Uint8Array, length?: number): SwapStep {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseSwapStep();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.poolId = (reader.uint64() as Long);
+          break;
+        case 2:
+          message.amount = reader.string();
+          break;
+        case 4:
+          message.tokenIn = reader.string();
+          break;
+        case 5:
+          message.tokenOut = reader.string();
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromJSON(object: any): SwapStep {
+    return {
+      poolId: isSet(object.poolId) ? Long.fromValue(object.poolId) : Long.UZERO,
+      amount: isSet(object.amount) ? String(object.amount) : undefined,
+      tokenIn: isSet(object.tokenIn) ? String(object.tokenIn) : "",
+      tokenOut: isSet(object.tokenOut) ? String(object.tokenOut) : ""
+    };
+  },
+  toJSON(message: SwapStep): unknown {
+    const obj: any = {};
+    message.poolId !== undefined && (obj.poolId = (message.poolId || Long.UZERO).toString());
+    message.amount !== undefined && (obj.amount = message.amount);
+    message.tokenIn !== undefined && (obj.tokenIn = message.tokenIn);
+    message.tokenOut !== undefined && (obj.tokenOut = message.tokenOut);
+    return obj;
+  },
+  fromPartial(object: Partial<SwapStep>): SwapStep {
+    const message = createBaseSwapStep();
+    message.poolId = object.poolId !== undefined && object.poolId !== null ? Long.fromValue(object.poolId) : Long.UZERO;
+    message.amount = object.amount ?? undefined;
+    message.tokenIn = object.tokenIn ?? "";
+    message.tokenOut = object.tokenOut ?? "";
+    return message;
+  }
+};
 function createBaseSwapSummary(): SwapSummary {
   return {
     tokenIn: undefined,
     tokenOut: undefined,
     swapType: 0,
-    protocolFee: undefined
+    protocolFee: undefined,
+    swapFee: undefined
   };
 }
 export const SwapSummary = {
@@ -275,6 +369,9 @@ export const SwapSummary = {
     }
     if (message.protocolFee !== undefined) {
       Coin.encode(message.protocolFee, writer.uint32(34).fork()).ldelim();
+    }
+    if (message.swapFee !== undefined) {
+      Coin.encode(message.swapFee, writer.uint32(42).fork()).ldelim();
     }
     return writer;
   },
@@ -297,6 +394,9 @@ export const SwapSummary = {
         case 4:
           message.protocolFee = Coin.decode(reader, reader.uint32());
           break;
+        case 5:
+          message.swapFee = Coin.decode(reader, reader.uint32());
+          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -309,7 +409,8 @@ export const SwapSummary = {
       tokenIn: isSet(object.tokenIn) ? TokenAmount.fromJSON(object.tokenIn) : undefined,
       tokenOut: isSet(object.tokenOut) ? TokenAmount.fromJSON(object.tokenOut) : undefined,
       swapType: isSet(object.swapType) ? swapTypeFromJSON(object.swapType) : 0,
-      protocolFee: isSet(object.protocolFee) ? Coin.fromJSON(object.protocolFee) : undefined
+      protocolFee: isSet(object.protocolFee) ? Coin.fromJSON(object.protocolFee) : undefined,
+      swapFee: isSet(object.swapFee) ? Coin.fromJSON(object.swapFee) : undefined
     };
   },
   toJSON(message: SwapSummary): unknown {
@@ -318,6 +419,7 @@ export const SwapSummary = {
     message.tokenOut !== undefined && (obj.tokenOut = message.tokenOut ? TokenAmount.toJSON(message.tokenOut) : undefined);
     message.swapType !== undefined && (obj.swapType = swapTypeToJSON(message.swapType));
     message.protocolFee !== undefined && (obj.protocolFee = message.protocolFee ? Coin.toJSON(message.protocolFee) : undefined);
+    message.swapFee !== undefined && (obj.swapFee = message.swapFee ? Coin.toJSON(message.swapFee) : undefined);
     return obj;
   },
   fromPartial(object: Partial<SwapSummary>): SwapSummary {
@@ -326,6 +428,7 @@ export const SwapSummary = {
     message.tokenOut = object.tokenOut !== undefined && object.tokenOut !== null ? TokenAmount.fromPartial(object.tokenOut) : undefined;
     message.swapType = object.swapType ?? 0;
     message.protocolFee = object.protocolFee !== undefined && object.protocolFee !== null ? Coin.fromPartial(object.protocolFee) : undefined;
+    message.swapFee = object.swapFee !== undefined && object.swapFee !== null ? Coin.fromPartial(object.swapFee) : undefined;
     return message;
   }
 };
@@ -334,7 +437,8 @@ function createBaseJoinSummary(): JoinSummary {
     lpToken: undefined,
     tokensIn: [],
     joinType: 0,
-    protocolFee: []
+    protocolFee: [],
+    swapFee: []
   };
 }
 export const JoinSummary = {
@@ -350,6 +454,9 @@ export const JoinSummary = {
     }
     for (const v of message.protocolFee) {
       Coin.encode(v!, writer.uint32(34).fork()).ldelim();
+    }
+    for (const v of message.swapFee) {
+      Coin.encode(v!, writer.uint32(42).fork()).ldelim();
     }
     return writer;
   },
@@ -372,6 +479,9 @@ export const JoinSummary = {
         case 4:
           message.protocolFee.push(Coin.decode(reader, reader.uint32()));
           break;
+        case 5:
+          message.swapFee.push(Coin.decode(reader, reader.uint32()));
+          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -384,7 +494,8 @@ export const JoinSummary = {
       lpToken: isSet(object.lpToken) ? TokenAmount.fromJSON(object.lpToken) : undefined,
       tokensIn: Array.isArray(object?.tokensIn) ? object.tokensIn.map((e: any) => TokenAmount.fromJSON(e)) : [],
       joinType: isSet(object.joinType) ? joinTypeFromJSON(object.joinType) : 0,
-      protocolFee: Array.isArray(object?.protocolFee) ? object.protocolFee.map((e: any) => Coin.fromJSON(e)) : []
+      protocolFee: Array.isArray(object?.protocolFee) ? object.protocolFee.map((e: any) => Coin.fromJSON(e)) : [],
+      swapFee: Array.isArray(object?.swapFee) ? object.swapFee.map((e: any) => Coin.fromJSON(e)) : []
     };
   },
   toJSON(message: JoinSummary): unknown {
@@ -401,6 +512,11 @@ export const JoinSummary = {
     } else {
       obj.protocolFee = [];
     }
+    if (message.swapFee) {
+      obj.swapFee = message.swapFee.map(e => e ? Coin.toJSON(e) : undefined);
+    } else {
+      obj.swapFee = [];
+    }
     return obj;
   },
   fromPartial(object: Partial<JoinSummary>): JoinSummary {
@@ -409,6 +525,7 @@ export const JoinSummary = {
     message.tokensIn = object.tokensIn?.map(e => TokenAmount.fromPartial(e)) || [];
     message.joinType = object.joinType ?? 0;
     message.protocolFee = object.protocolFee?.map(e => Coin.fromPartial(e)) || [];
+    message.swapFee = object.swapFee?.map(e => Coin.fromPartial(e)) || [];
     return message;
   }
 };
@@ -417,7 +534,8 @@ function createBaseExitSummary(): ExitSummary {
     lpToken: undefined,
     tokensOut: [],
     exitType: 0,
-    protocolFee: undefined
+    protocolFee: undefined,
+    swapFee: []
   };
 }
 export const ExitSummary = {
@@ -433,6 +551,9 @@ export const ExitSummary = {
     }
     if (message.protocolFee !== undefined) {
       Coin.encode(message.protocolFee, writer.uint32(34).fork()).ldelim();
+    }
+    for (const v of message.swapFee) {
+      Coin.encode(v!, writer.uint32(42).fork()).ldelim();
     }
     return writer;
   },
@@ -455,6 +576,9 @@ export const ExitSummary = {
         case 4:
           message.protocolFee = Coin.decode(reader, reader.uint32());
           break;
+        case 5:
+          message.swapFee.push(Coin.decode(reader, reader.uint32()));
+          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -467,7 +591,8 @@ export const ExitSummary = {
       lpToken: isSet(object.lpToken) ? TokenAmount.fromJSON(object.lpToken) : undefined,
       tokensOut: Array.isArray(object?.tokensOut) ? object.tokensOut.map((e: any) => TokenAmount.fromJSON(e)) : [],
       exitType: isSet(object.exitType) ? exitTypeFromJSON(object.exitType) : 0,
-      protocolFee: isSet(object.protocolFee) ? Coin.fromJSON(object.protocolFee) : undefined
+      protocolFee: isSet(object.protocolFee) ? Coin.fromJSON(object.protocolFee) : undefined,
+      swapFee: Array.isArray(object?.swapFee) ? object.swapFee.map((e: any) => Coin.fromJSON(e)) : []
     };
   },
   toJSON(message: ExitSummary): unknown {
@@ -480,6 +605,11 @@ export const ExitSummary = {
     }
     message.exitType !== undefined && (obj.exitType = exitTypeToJSON(message.exitType));
     message.protocolFee !== undefined && (obj.protocolFee = message.protocolFee ? Coin.toJSON(message.protocolFee) : undefined);
+    if (message.swapFee) {
+      obj.swapFee = message.swapFee.map(e => e ? Coin.toJSON(e) : undefined);
+    } else {
+      obj.swapFee = [];
+    }
     return obj;
   },
   fromPartial(object: Partial<ExitSummary>): ExitSummary {
@@ -488,6 +618,7 @@ export const ExitSummary = {
     message.tokensOut = object.tokensOut?.map(e => TokenAmount.fromPartial(e)) || [];
     message.exitType = object.exitType ?? 0;
     message.protocolFee = object.protocolFee !== undefined && object.protocolFee !== null ? Coin.fromPartial(object.protocolFee) : undefined;
+    message.swapFee = object.swapFee?.map(e => Coin.fromPartial(e)) || [];
     return message;
   }
 };

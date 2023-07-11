@@ -3,9 +3,10 @@ import { UnaryMethodDefinitionish } from "../../grpc-web";
 import { DeepPartial } from "../../helpers";
 import { grpc } from "@improbable-eng/grpc-web";
 import { BrowserHeaders } from "browser-headers";
-import { MsgRegisterAsset, MsgRegisterAssetResponse, MsgDisableAsset, MsgDisableAssetResponse, MsgUpdateMaturityParams, MsgUpdateMaturityParamsResponse, MsgUpdateFeeRatios, MsgUpdateFeeRatiosResponse } from "./tx";
+import { MsgUpdateParams, MsgUpdateParamsResponse, MsgRegisterAsset, MsgRegisterAssetResponse, MsgDisableAsset, MsgDisableAssetResponse, MsgUpdateMaturityParams, MsgUpdateMaturityParamsResponse, MsgUpdateFeeRatios, MsgUpdateFeeRatiosResponse } from "./tx";
 /** Msg defines the Msg service. */
 export interface Msg {
+  updateParams(request: DeepPartial<MsgUpdateParams>, metadata?: grpc.Metadata): Promise<MsgUpdateParamsResponse>;
   registerAsset(request: DeepPartial<MsgRegisterAsset>, metadata?: grpc.Metadata): Promise<MsgRegisterAssetResponse>;
   disableAsset(request: DeepPartial<MsgDisableAsset>, metadata?: grpc.Metadata): Promise<MsgDisableAssetResponse>;
   updateMaturityParams(request: DeepPartial<MsgUpdateMaturityParams>, metadata?: grpc.Metadata): Promise<MsgUpdateMaturityParamsResponse>;
@@ -15,10 +16,14 @@ export class MsgClientImpl implements Msg {
   private readonly rpc: Rpc;
   constructor(rpc: Rpc) {
     this.rpc = rpc;
+    this.updateParams = this.updateParams.bind(this);
     this.registerAsset = this.registerAsset.bind(this);
     this.disableAsset = this.disableAsset.bind(this);
     this.updateMaturityParams = this.updateMaturityParams.bind(this);
     this.updateFeeRatios = this.updateFeeRatios.bind(this);
+  }
+  updateParams(request: DeepPartial<MsgUpdateParams>, metadata?: grpc.Metadata): Promise<MsgUpdateParamsResponse> {
+    return this.rpc.unary(MsgUpdateParamsDesc, MsgUpdateParams.fromPartial(request), metadata);
   }
   registerAsset(request: DeepPartial<MsgRegisterAsset>, metadata?: grpc.Metadata): Promise<MsgRegisterAssetResponse> {
     return this.rpc.unary(MsgRegisterAssetDesc, MsgRegisterAsset.fromPartial(request), metadata);
@@ -35,6 +40,27 @@ export class MsgClientImpl implements Msg {
 }
 export const MsgDesc = {
   serviceName: "prism.assets.Msg"
+};
+export const MsgUpdateParamsDesc: UnaryMethodDefinitionish = {
+  methodName: "UpdateParams",
+  service: MsgDesc,
+  requestStream: false,
+  responseStream: false,
+  requestType: ({
+    serializeBinary() {
+      return MsgUpdateParams.encode(this).finish();
+    }
+  } as any),
+  responseType: ({
+    deserializeBinary(data: Uint8Array) {
+      return {
+        ...MsgUpdateParamsResponse.decode(data),
+        toObject() {
+          return this;
+        }
+      };
+    }
+  } as any)
 };
 export const MsgRegisterAssetDesc: UnaryMethodDefinitionish = {
   methodName: "RegisterAsset",

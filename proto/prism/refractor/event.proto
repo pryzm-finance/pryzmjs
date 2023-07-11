@@ -1,6 +1,9 @@
 syntax = "proto3";
 package prism.refractor;
 
+import "gogoproto/gogo.proto";
+import "prism/refractor/asset_state.proto";
+
 option go_package = "github.com/prism-finance/prism-core/x/refractor/types";
 
 message EventRefract {
@@ -27,4 +30,8 @@ message EventRefractorYieldDistribution {
   string protocol_fee = 3;
   string stake_yield = 4;
   string excess_yield = 5;
+}
+
+message EventSetAssetState {
+  AssetState asset_state = 1 [(gogoproto.nullable) = false];
 }

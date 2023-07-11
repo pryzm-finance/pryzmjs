@@ -1,6 +1,6 @@
 import { GeneratedType, Registry } from "@cosmjs/proto-signing";
-import { MsgSingleSwap, MsgJoinAllTokensExactLpt, MsgJoinTokenExactLpt, MsgJoinExactTokens, MsgExitExactTokens, MsgExitTokenExactLpt, MsgExitAllTokensExactLpt, MsgCreateWeightedPool, MsgUpdateSwapFee, MsgInitializePool, MsgUpdateWeights, MsgBatchSwap, MsgSetYammConfiguration, MsgWhitelistRoute, MsgSetWhitelistedRouteEnabled, MsgSubmitOrder, MsgCancelOrder, MsgProposeMatch, MsgSetCircuitBreakers, MsgSetRecoveryMode, MsgRecoveryExit, MsgSetPauseMode, MsgSetVaultPauseMode, MsgCreateOraclePricePair, MsgUpdateOraclePricePair, MsgDeleteOraclePricePair, MsgSetSwapProtocolFee, MsgSetJoinExitProtocolFee, MsgIntroduceYammLpToWeightedPool, MsgCancelPendingTokenIntroduction, MsgRemoveTokenFromWeightedPool, MsgUpdateParams, MsgAddMaturityToYamm, MsgSetInitializationAllowList } from "./tx";
-export const registry: ReadonlyArray<[string, GeneratedType]> = [["/prism.amm.MsgSingleSwap", MsgSingleSwap], ["/prism.amm.MsgJoinAllTokensExactLpt", MsgJoinAllTokensExactLpt], ["/prism.amm.MsgJoinTokenExactLpt", MsgJoinTokenExactLpt], ["/prism.amm.MsgJoinExactTokens", MsgJoinExactTokens], ["/prism.amm.MsgExitExactTokens", MsgExitExactTokens], ["/prism.amm.MsgExitTokenExactLpt", MsgExitTokenExactLpt], ["/prism.amm.MsgExitAllTokensExactLpt", MsgExitAllTokensExactLpt], ["/prism.amm.MsgCreateWeightedPool", MsgCreateWeightedPool], ["/prism.amm.MsgUpdateSwapFee", MsgUpdateSwapFee], ["/prism.amm.MsgInitializePool", MsgInitializePool], ["/prism.amm.MsgUpdateWeights", MsgUpdateWeights], ["/prism.amm.MsgBatchSwap", MsgBatchSwap], ["/prism.amm.MsgSetYammConfiguration", MsgSetYammConfiguration], ["/prism.amm.MsgWhitelistRoute", MsgWhitelistRoute], ["/prism.amm.MsgSetWhitelistedRouteEnabled", MsgSetWhitelistedRouteEnabled], ["/prism.amm.MsgSubmitOrder", MsgSubmitOrder], ["/prism.amm.MsgCancelOrder", MsgCancelOrder], ["/prism.amm.MsgProposeMatch", MsgProposeMatch], ["/prism.amm.MsgSetCircuitBreakers", MsgSetCircuitBreakers], ["/prism.amm.MsgSetRecoveryMode", MsgSetRecoveryMode], ["/prism.amm.MsgRecoveryExit", MsgRecoveryExit], ["/prism.amm.MsgSetPauseMode", MsgSetPauseMode], ["/prism.amm.MsgSetVaultPauseMode", MsgSetVaultPauseMode], ["/prism.amm.MsgCreateOraclePricePair", MsgCreateOraclePricePair], ["/prism.amm.MsgUpdateOraclePricePair", MsgUpdateOraclePricePair], ["/prism.amm.MsgDeleteOraclePricePair", MsgDeleteOraclePricePair], ["/prism.amm.MsgSetSwapProtocolFee", MsgSetSwapProtocolFee], ["/prism.amm.MsgSetJoinExitProtocolFee", MsgSetJoinExitProtocolFee], ["/prism.amm.MsgIntroduceYammLpToWeightedPool", MsgIntroduceYammLpToWeightedPool], ["/prism.amm.MsgCancelPendingTokenIntroduction", MsgCancelPendingTokenIntroduction], ["/prism.amm.MsgRemoveTokenFromWeightedPool", MsgRemoveTokenFromWeightedPool], ["/prism.amm.MsgUpdateParams", MsgUpdateParams], ["/prism.amm.MsgAddMaturityToYamm", MsgAddMaturityToYamm], ["/prism.amm.MsgSetInitializationAllowList", MsgSetInitializationAllowList]];
+import { MsgSingleSwap, MsgJoinAllTokensExactLpt, MsgJoinTokenExactLpt, MsgJoinExactTokens, MsgExitExactTokens, MsgExitTokenExactLpt, MsgExitAllTokensExactLpt, MsgCreateWeightedPool, MsgUpdateSwapFee, MsgInitializePool, MsgUpdateWeights, MsgBatchSwap, MsgSetYammConfiguration, MsgWhitelistRoute, MsgSetWhitelistedRouteEnabled, MsgSubmitOrder, MsgCancelOrder, MsgProposeMatch, MsgSetCircuitBreakers, MsgSetRecoveryMode, MsgRecoveryExit, MsgSetPauseMode, MsgSetVaultPauseMode, MsgCreateOraclePricePair, MsgUpdateOraclePricePair, MsgDeleteOraclePricePair, MsgSetSwapProtocolFee, MsgSetJoinExitProtocolFee, MsgIntroduceYammLpToWeightedPool, MsgIntroduceAssetBaseTokenToWeightedPool, MsgCancelPendingTokenIntroduction, MsgRemoveTokenFromWeightedPool, MsgUpdateParams, MsgAddMaturityToYamm, MsgSetInitializationAllowList } from "./tx";
+export const registry: ReadonlyArray<[string, GeneratedType]> = [["/prism.amm.MsgSingleSwap", MsgSingleSwap], ["/prism.amm.MsgJoinAllTokensExactLpt", MsgJoinAllTokensExactLpt], ["/prism.amm.MsgJoinTokenExactLpt", MsgJoinTokenExactLpt], ["/prism.amm.MsgJoinExactTokens", MsgJoinExactTokens], ["/prism.amm.MsgExitExactTokens", MsgExitExactTokens], ["/prism.amm.MsgExitTokenExactLpt", MsgExitTokenExactLpt], ["/prism.amm.MsgExitAllTokensExactLpt", MsgExitAllTokensExactLpt], ["/prism.amm.MsgCreateWeightedPool", MsgCreateWeightedPool], ["/prism.amm.MsgUpdateSwapFee", MsgUpdateSwapFee], ["/prism.amm.MsgInitializePool", MsgInitializePool], ["/prism.amm.MsgUpdateWeights", MsgUpdateWeights], ["/prism.amm.MsgBatchSwap", MsgBatchSwap], ["/prism.amm.MsgSetYammConfiguration", MsgSetYammConfiguration], ["/prism.amm.MsgWhitelistRoute", MsgWhitelistRoute], ["/prism.amm.MsgSetWhitelistedRouteEnabled", MsgSetWhitelistedRouteEnabled], ["/prism.amm.MsgSubmitOrder", MsgSubmitOrder], ["/prism.amm.MsgCancelOrder", MsgCancelOrder], ["/prism.amm.MsgProposeMatch", MsgProposeMatch], ["/prism.amm.MsgSetCircuitBreakers", MsgSetCircuitBreakers], ["/prism.amm.MsgSetRecoveryMode", MsgSetRecoveryMode], ["/prism.amm.MsgRecoveryExit", MsgRecoveryExit], ["/prism.amm.MsgSetPauseMode", MsgSetPauseMode], ["/prism.amm.MsgSetVaultPauseMode", MsgSetVaultPauseMode], ["/prism.amm.MsgCreateOraclePricePair", MsgCreateOraclePricePair], ["/prism.amm.MsgUpdateOraclePricePair", MsgUpdateOraclePricePair], ["/prism.amm.MsgDeleteOraclePricePair", MsgDeleteOraclePricePair], ["/prism.amm.MsgSetSwapProtocolFee", MsgSetSwapProtocolFee], ["/prism.amm.MsgSetJoinExitProtocolFee", MsgSetJoinExitProtocolFee], ["/prism.amm.MsgIntroduceYammLpToWeightedPool", MsgIntroduceYammLpToWeightedPool], ["/prism.amm.MsgIntroduceAssetBaseTokenToWeightedPool", MsgIntroduceAssetBaseTokenToWeightedPool], ["/prism.amm.MsgCancelPendingTokenIntroduction", MsgCancelPendingTokenIntroduction], ["/prism.amm.MsgRemoveTokenFromWeightedPool", MsgRemoveTokenFromWeightedPool], ["/prism.amm.MsgUpdateParams", MsgUpdateParams], ["/prism.amm.MsgAddMaturityToYamm", MsgAddMaturityToYamm], ["/prism.amm.MsgSetInitializationAllowList", MsgSetInitializationAllowList]];
 export const load = (protoRegistry: Registry) => {
   registry.forEach(([typeUrl, mod]) => {
     protoRegistry.register(typeUrl, mod);
@@ -180,6 +180,12 @@ export const MessageComposer = {
       return {
         typeUrl: "/prism.amm.MsgIntroduceYammLpToWeightedPool",
         value: MsgIntroduceYammLpToWeightedPool.encode(value).finish()
+      };
+    },
+    introduceAssetBaseTokenToWeightedPool(value: MsgIntroduceAssetBaseTokenToWeightedPool) {
+      return {
+        typeUrl: "/prism.amm.MsgIntroduceAssetBaseTokenToWeightedPool",
+        value: MsgIntroduceAssetBaseTokenToWeightedPool.encode(value).finish()
       };
     },
     cancelPendingTokenIntroduction(value: MsgCancelPendingTokenIntroduction) {
@@ -385,6 +391,12 @@ export const MessageComposer = {
     introduceYammLpToWeightedPool(value: MsgIntroduceYammLpToWeightedPool) {
       return {
         typeUrl: "/prism.amm.MsgIntroduceYammLpToWeightedPool",
+        value
+      };
+    },
+    introduceAssetBaseTokenToWeightedPool(value: MsgIntroduceAssetBaseTokenToWeightedPool) {
+      return {
+        typeUrl: "/prism.amm.MsgIntroduceAssetBaseTokenToWeightedPool",
         value
       };
     },
@@ -594,6 +606,12 @@ export const MessageComposer = {
         value: MsgIntroduceYammLpToWeightedPool.toJSON(value)
       };
     },
+    introduceAssetBaseTokenToWeightedPool(value: MsgIntroduceAssetBaseTokenToWeightedPool) {
+      return {
+        typeUrl: "/prism.amm.MsgIntroduceAssetBaseTokenToWeightedPool",
+        value: MsgIntroduceAssetBaseTokenToWeightedPool.toJSON(value)
+      };
+    },
     cancelPendingTokenIntroduction(value: MsgCancelPendingTokenIntroduction) {
       return {
         typeUrl: "/prism.amm.MsgCancelPendingTokenIntroduction",
@@ -800,6 +818,12 @@ export const MessageComposer = {
         value: MsgIntroduceYammLpToWeightedPool.fromJSON(value)
       };
     },
+    introduceAssetBaseTokenToWeightedPool(value: any) {
+      return {
+        typeUrl: "/prism.amm.MsgIntroduceAssetBaseTokenToWeightedPool",
+        value: MsgIntroduceAssetBaseTokenToWeightedPool.fromJSON(value)
+      };
+    },
     cancelPendingTokenIntroduction(value: any) {
       return {
         typeUrl: "/prism.amm.MsgCancelPendingTokenIntroduction",
@@ -1004,6 +1028,12 @@ export const MessageComposer = {
       return {
         typeUrl: "/prism.amm.MsgIntroduceYammLpToWeightedPool",
         value: MsgIntroduceYammLpToWeightedPool.fromPartial(value)
+      };
+    },
+    introduceAssetBaseTokenToWeightedPool(value: MsgIntroduceAssetBaseTokenToWeightedPool) {
+      return {
+        typeUrl: "/prism.amm.MsgIntroduceAssetBaseTokenToWeightedPool",
+        value: MsgIntroduceAssetBaseTokenToWeightedPool.fromPartial(value)
       };
     },
     cancelPendingTokenIntroduction(value: MsgCancelPendingTokenIntroduction) {

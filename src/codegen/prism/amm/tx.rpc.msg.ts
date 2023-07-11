@@ -3,7 +3,7 @@ import { UnaryMethodDefinitionish } from "../../grpc-web";
 import { DeepPartial } from "../../helpers";
 import { grpc } from "@improbable-eng/grpc-web";
 import { BrowserHeaders } from "browser-headers";
-import { MsgSingleSwap, MsgSingleSwapResponse, MsgJoinAllTokensExactLpt, MsgJoinAllTokensExactLptResponse, MsgJoinTokenExactLpt, MsgJoinTokenExactLptResponse, MsgJoinExactTokens, MsgJoinExactTokensResponse, MsgExitExactTokens, MsgExitExactTokensResponse, MsgExitTokenExactLpt, MsgExitTokenExactLptResponse, MsgExitAllTokensExactLpt, MsgExitAllTokensExactLptResponse, MsgCreateWeightedPool, MsgCreateWeightedPoolResponse, MsgUpdateSwapFee, MsgUpdateSwapFeeResponse, MsgInitializePool, MsgInitializePoolResponse, MsgUpdateWeights, MsgUpdateWeightsResponse, MsgBatchSwap, MsgBatchSwapResponse, MsgSetYammConfiguration, MsgSetYammConfigurationResponse, MsgWhitelistRoute, MsgWhitelistRouteResponse, MsgSetWhitelistedRouteEnabled, MsgSetWhitelistedRouteEnabledResponse, MsgSubmitOrder, MsgSubmitOrderResponse, MsgCancelOrder, MsgCancelOrderResponse, MsgProposeMatch, MsgProposeMatchResponse, MsgSetCircuitBreakers, MsgSetCircuitBreakersResponse, MsgSetRecoveryMode, MsgSetRecoveryModeResponse, MsgRecoveryExit, MsgRecoveryExitResponse, MsgSetPauseMode, MsgSetPauseModeResponse, MsgSetVaultPauseMode, MsgSetVaultPauseModeResponse, MsgCreateOraclePricePair, MsgCreateOraclePricePairResponse, MsgUpdateOraclePricePair, MsgUpdateOraclePricePairResponse, MsgDeleteOraclePricePair, MsgDeleteOraclePricePairResponse, MsgSetSwapProtocolFee, MsgSetSwapProtocolFeeResponse, MsgSetJoinExitProtocolFee, MsgSetJoinExitProtocolFeeResponse, MsgIntroduceYammLpToWeightedPool, MsgIntroduceYammLpToWeightedPoolResponse, MsgCancelPendingTokenIntroduction, MsgCancelPendingTokenIntroductionResponse, MsgRemoveTokenFromWeightedPool, MsgRemoveTokenFromWeightedPoolResponse, MsgUpdateParams, MsgUpdateParamsResponse, MsgAddMaturityToYamm, MsgAddMaturityToYammResponse, MsgSetInitializationAllowList, MsgSetInitializationAllowListResponse } from "./tx";
+import { MsgSingleSwap, MsgSingleSwapResponse, MsgJoinAllTokensExactLpt, MsgJoinAllTokensExactLptResponse, MsgJoinTokenExactLpt, MsgJoinTokenExactLptResponse, MsgJoinExactTokens, MsgJoinExactTokensResponse, MsgExitExactTokens, MsgExitExactTokensResponse, MsgExitTokenExactLpt, MsgExitTokenExactLptResponse, MsgExitAllTokensExactLpt, MsgExitAllTokensExactLptResponse, MsgCreateWeightedPool, MsgCreateWeightedPoolResponse, MsgUpdateSwapFee, MsgUpdateSwapFeeResponse, MsgInitializePool, MsgInitializePoolResponse, MsgUpdateWeights, MsgUpdateWeightsResponse, MsgBatchSwap, MsgBatchSwapResponse, MsgSetYammConfiguration, MsgSetYammConfigurationResponse, MsgWhitelistRoute, MsgWhitelistRouteResponse, MsgSetWhitelistedRouteEnabled, MsgSetWhitelistedRouteEnabledResponse, MsgSubmitOrder, MsgSubmitOrderResponse, MsgCancelOrder, MsgCancelOrderResponse, MsgProposeMatch, MsgProposeMatchResponse, MsgSetCircuitBreakers, MsgSetCircuitBreakersResponse, MsgSetRecoveryMode, MsgSetRecoveryModeResponse, MsgRecoveryExit, MsgRecoveryExitResponse, MsgSetPauseMode, MsgSetPauseModeResponse, MsgSetVaultPauseMode, MsgSetVaultPauseModeResponse, MsgCreateOraclePricePair, MsgCreateOraclePricePairResponse, MsgUpdateOraclePricePair, MsgUpdateOraclePricePairResponse, MsgDeleteOraclePricePair, MsgDeleteOraclePricePairResponse, MsgSetSwapProtocolFee, MsgSetSwapProtocolFeeResponse, MsgSetJoinExitProtocolFee, MsgSetJoinExitProtocolFeeResponse, MsgIntroduceYammLpToWeightedPool, MsgIntroduceYammLpToWeightedPoolResponse, MsgIntroduceAssetBaseTokenToWeightedPool, MsgIntroduceAssetBaseTokenToWeightedPoolResponse, MsgCancelPendingTokenIntroduction, MsgCancelPendingTokenIntroductionResponse, MsgRemoveTokenFromWeightedPool, MsgRemoveTokenFromWeightedPoolResponse, MsgUpdateParams, MsgUpdateParamsResponse, MsgAddMaturityToYamm, MsgAddMaturityToYammResponse, MsgSetInitializationAllowList, MsgSetInitializationAllowListResponse } from "./tx";
 /** Msg defines the Msg service. */
 export interface Msg {
   singleSwap(request: DeepPartial<MsgSingleSwap>, metadata?: grpc.Metadata): Promise<MsgSingleSwapResponse>;
@@ -35,6 +35,7 @@ export interface Msg {
   setSwapProtocolFee(request: DeepPartial<MsgSetSwapProtocolFee>, metadata?: grpc.Metadata): Promise<MsgSetSwapProtocolFeeResponse>;
   setJoinExitProtocolFee(request: DeepPartial<MsgSetJoinExitProtocolFee>, metadata?: grpc.Metadata): Promise<MsgSetJoinExitProtocolFeeResponse>;
   introduceYammLpToWeightedPool(request: DeepPartial<MsgIntroduceYammLpToWeightedPool>, metadata?: grpc.Metadata): Promise<MsgIntroduceYammLpToWeightedPoolResponse>;
+  introduceAssetBaseTokenToWeightedPool(request: DeepPartial<MsgIntroduceAssetBaseTokenToWeightedPool>, metadata?: grpc.Metadata): Promise<MsgIntroduceAssetBaseTokenToWeightedPoolResponse>;
   cancelPendingTokenIntroduction(request: DeepPartial<MsgCancelPendingTokenIntroduction>, metadata?: grpc.Metadata): Promise<MsgCancelPendingTokenIntroductionResponse>;
   removeTokenFromWeightedPool(request: DeepPartial<MsgRemoveTokenFromWeightedPool>, metadata?: grpc.Metadata): Promise<MsgRemoveTokenFromWeightedPoolResponse>;
   updateParams(request: DeepPartial<MsgUpdateParams>, metadata?: grpc.Metadata): Promise<MsgUpdateParamsResponse>;
@@ -74,6 +75,7 @@ export class MsgClientImpl implements Msg {
     this.setSwapProtocolFee = this.setSwapProtocolFee.bind(this);
     this.setJoinExitProtocolFee = this.setJoinExitProtocolFee.bind(this);
     this.introduceYammLpToWeightedPool = this.introduceYammLpToWeightedPool.bind(this);
+    this.introduceAssetBaseTokenToWeightedPool = this.introduceAssetBaseTokenToWeightedPool.bind(this);
     this.cancelPendingTokenIntroduction = this.cancelPendingTokenIntroduction.bind(this);
     this.removeTokenFromWeightedPool = this.removeTokenFromWeightedPool.bind(this);
     this.updateParams = this.updateParams.bind(this);
@@ -166,6 +168,9 @@ export class MsgClientImpl implements Msg {
   }
   introduceYammLpToWeightedPool(request: DeepPartial<MsgIntroduceYammLpToWeightedPool>, metadata?: grpc.Metadata): Promise<MsgIntroduceYammLpToWeightedPoolResponse> {
     return this.rpc.unary(MsgIntroduceYammLpToWeightedPoolDesc, MsgIntroduceYammLpToWeightedPool.fromPartial(request), metadata);
+  }
+  introduceAssetBaseTokenToWeightedPool(request: DeepPartial<MsgIntroduceAssetBaseTokenToWeightedPool>, metadata?: grpc.Metadata): Promise<MsgIntroduceAssetBaseTokenToWeightedPoolResponse> {
+    return this.rpc.unary(MsgIntroduceAssetBaseTokenToWeightedPoolDesc, MsgIntroduceAssetBaseTokenToWeightedPool.fromPartial(request), metadata);
   }
   cancelPendingTokenIntroduction(request: DeepPartial<MsgCancelPendingTokenIntroduction>, metadata?: grpc.Metadata): Promise<MsgCancelPendingTokenIntroductionResponse> {
     return this.rpc.unary(MsgCancelPendingTokenIntroductionDesc, MsgCancelPendingTokenIntroduction.fromPartial(request), metadata);
@@ -788,6 +793,27 @@ export const MsgIntroduceYammLpToWeightedPoolDesc: UnaryMethodDefinitionish = {
     deserializeBinary(data: Uint8Array) {
       return {
         ...MsgIntroduceYammLpToWeightedPoolResponse.decode(data),
+        toObject() {
+          return this;
+        }
+      };
+    }
+  } as any)
+};
+export const MsgIntroduceAssetBaseTokenToWeightedPoolDesc: UnaryMethodDefinitionish = {
+  methodName: "IntroduceAssetBaseTokenToWeightedPool",
+  service: MsgDesc,
+  requestStream: false,
+  responseStream: false,
+  requestType: ({
+    serializeBinary() {
+      return MsgIntroduceAssetBaseTokenToWeightedPool.encode(this).finish();
+    }
+  } as any),
+  responseType: ({
+    deserializeBinary(data: Uint8Array) {
+      return {
+        ...MsgIntroduceAssetBaseTokenToWeightedPoolResponse.decode(data),
         toObject() {
           return this;
         }

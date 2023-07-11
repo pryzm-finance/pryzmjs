@@ -3,14 +3,14 @@ import * as _m0 from "protobufjs/minimal";
 export interface PendingTokenIntroduction {
   assetId: string;
   targetPoolId: Long;
-  yammPoolId: Long;
+  tokenDenom: string;
   tokenNormalizedWeight: string;
   virtualBalanceIntervalMillis: Long;
 }
 export interface PendingTokenIntroductionSDKType {
   asset_id: string;
   target_pool_id: Long;
-  yamm_pool_id: Long;
+  token_denom: string;
   token_normalized_weight: string;
   virtual_balance_interval_millis: Long;
 }
@@ -18,7 +18,7 @@ function createBasePendingTokenIntroduction(): PendingTokenIntroduction {
   return {
     assetId: "",
     targetPoolId: Long.UZERO,
-    yammPoolId: Long.UZERO,
+    tokenDenom: "",
     tokenNormalizedWeight: "",
     virtualBalanceIntervalMillis: Long.ZERO
   };
@@ -31,8 +31,8 @@ export const PendingTokenIntroduction = {
     if (!message.targetPoolId.isZero()) {
       writer.uint32(16).uint64(message.targetPoolId);
     }
-    if (!message.yammPoolId.isZero()) {
-      writer.uint32(24).uint64(message.yammPoolId);
+    if (message.tokenDenom !== "") {
+      writer.uint32(26).string(message.tokenDenom);
     }
     if (message.tokenNormalizedWeight !== "") {
       writer.uint32(34).string(message.tokenNormalizedWeight);
@@ -56,7 +56,7 @@ export const PendingTokenIntroduction = {
           message.targetPoolId = (reader.uint64() as Long);
           break;
         case 3:
-          message.yammPoolId = (reader.uint64() as Long);
+          message.tokenDenom = reader.string();
           break;
         case 4:
           message.tokenNormalizedWeight = reader.string();
@@ -75,7 +75,7 @@ export const PendingTokenIntroduction = {
     return {
       assetId: isSet(object.assetId) ? String(object.assetId) : "",
       targetPoolId: isSet(object.targetPoolId) ? Long.fromValue(object.targetPoolId) : Long.UZERO,
-      yammPoolId: isSet(object.yammPoolId) ? Long.fromValue(object.yammPoolId) : Long.UZERO,
+      tokenDenom: isSet(object.tokenDenom) ? String(object.tokenDenom) : "",
       tokenNormalizedWeight: isSet(object.tokenNormalizedWeight) ? String(object.tokenNormalizedWeight) : "",
       virtualBalanceIntervalMillis: isSet(object.virtualBalanceIntervalMillis) ? Long.fromValue(object.virtualBalanceIntervalMillis) : Long.ZERO
     };
@@ -84,7 +84,7 @@ export const PendingTokenIntroduction = {
     const obj: any = {};
     message.assetId !== undefined && (obj.assetId = message.assetId);
     message.targetPoolId !== undefined && (obj.targetPoolId = (message.targetPoolId || Long.UZERO).toString());
-    message.yammPoolId !== undefined && (obj.yammPoolId = (message.yammPoolId || Long.UZERO).toString());
+    message.tokenDenom !== undefined && (obj.tokenDenom = message.tokenDenom);
     message.tokenNormalizedWeight !== undefined && (obj.tokenNormalizedWeight = message.tokenNormalizedWeight);
     message.virtualBalanceIntervalMillis !== undefined && (obj.virtualBalanceIntervalMillis = (message.virtualBalanceIntervalMillis || Long.ZERO).toString());
     return obj;
@@ -93,7 +93,7 @@ export const PendingTokenIntroduction = {
     const message = createBasePendingTokenIntroduction();
     message.assetId = object.assetId ?? "";
     message.targetPoolId = object.targetPoolId !== undefined && object.targetPoolId !== null ? Long.fromValue(object.targetPoolId) : Long.UZERO;
-    message.yammPoolId = object.yammPoolId !== undefined && object.yammPoolId !== null ? Long.fromValue(object.yammPoolId) : Long.UZERO;
+    message.tokenDenom = object.tokenDenom ?? "";
     message.tokenNormalizedWeight = object.tokenNormalizedWeight ?? "";
     message.virtualBalanceIntervalMillis = object.virtualBalanceIntervalMillis !== undefined && object.virtualBalanceIntervalMillis !== null ? Long.fromValue(object.virtualBalanceIntervalMillis) : Long.ZERO;
     return message;

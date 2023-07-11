@@ -124,6 +124,9 @@ export const createLCDClient = async ({
       pgov: new (await import("./pgov/query.lcd")).LCDQueryClient({
         requestClient
       }),
+      refractor: new (await import("./refractor/query.lcd")).LCDQueryClient({
+        requestClient
+      }),
       treasury: new (await import("./treasury/query.lcd")).LCDQueryClient({
         requestClient
       }),

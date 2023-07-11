@@ -16,6 +16,7 @@ import "prism/amm/pool_token.proto";
 // this line is used by starport scaffolding # 1
 import "prism/amm/route_step.proto";
 import "prism/amm/schedule_order.proto";
+import "prism/amm/token_weight.proto";
 import "prism/amm/tx.proto";
 import "prism/amm/virtual_balance_pool_token.proto";
 import "prism/amm/weight_update_timing.proto";
@@ -39,6 +40,20 @@ service Query {
   // Queries a list of PoolToken items.
   rpc PoolTokenAll(QueryAllPoolTokenRequest) returns (QueryAllPoolTokenResponse) {
     option (google.api.http).get = "/prism-finance/prism-core/amm/pool_token";
+  }
+
+  // Queries a list of TokenWeights
+  // computing normalized weights requires reading all tokens from the context
+  // and computing weight for all of them. And the number of tokens in a pool is not expected to
+  // be high.
+  // therefore, this query is not paginated
+  rpc PoolTokenWeightAll(QueryAllPoolTokenWeightRequest) returns (QueryAllPoolTokenWeightResponse) {
+    option (google.api.http).get = "/prism-finance/prism-core/amm/pool_token_weight/{pool_id}";
+  }
+
+  // Queries a TokenWeight
+  rpc PoolTokenWeight(QueryGetPoolTokenWeightRequest) returns (QueryGetPoolTokenWeightResponse) {
+    option (google.api.http).get = "/prism-finance/prism-core/amm/pool_token_weight/{pool_id}/{denom}";
   }
 
   // Queries a Pool by id.
@@ -256,6 +271,29 @@ message QueryAllPoolTokenResponse {
   cosmos.base.query.v1beta1.PageResponse pagination = 2;
 }
 
+// computing normalized weights requires reading all tokens from the context
+// and computing weight for all of them
+// therefore, this query is not paginated
+message QueryAllPoolTokenWeightRequest {
+  uint64 pool_id = 1;
+}
+
+// computing normalized weights requires reading all tokens from the context
+// and computing weight for all of them
+// therefore, this query is not paginated
+message QueryAllPoolTokenWeightResponse {
+  repeated TokenWeight token_weight = 1 [(gogoproto.nullable) = false];
+}
+
+message QueryGetPoolTokenWeightRequest {
+  uint64 pool_id = 1;
+  string denom = 2;
+}
+
+message QueryGetPoolTokenWeightResponse {
+  TokenWeight token_weight = 1 [(gogoproto.nullable) = false];
+}
+
 message QueryGetPoolRequest {
   uint64 id = 1;
 }
@@ -315,6 +353,10 @@ message QuerySimulateSingleSwapRequest {
 message QuerySimulateSingleSwapResponse {
   cosmos.base.v1beta1.Coin amount_out = 1 [(gogoproto.nullable) = false];
   cosmos.base.v1beta1.Coin amount_in = 2 [(gogoproto.nullable) = false];
+  // protocol fee does not contain the y_trade fee and refractor fee
+  // which is paid in case of a yAsset trade
+  cosmos.base.v1beta1.Coin protocol_fee = 3 [(gogoproto.nullable) = false];
+  cosmos.base.v1beta1.Coin swap_fee = 4 [(gogoproto.nullable) = false];
 }
 
 message QuerySimulateInitializePoolRequest {
@@ -328,6 +370,10 @@ message QuerySimulateInitializePoolRequest {
 message QuerySimulateInitializePoolResponse {
   cosmos.base.v1beta1.Coin lpt_out = 1 [(gogoproto.nullable) = false];
   repeated cosmos.base.v1beta1.Coin amounts_in = 2 [
+    (gogoproto.nullable) = false,
+    (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins"
+  ];
+  repeated cosmos.base.v1beta1.Coin protocol_fee = 3 [
     (gogoproto.nullable) = false,
     (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins"
   ];
@@ -348,6 +394,10 @@ message QuerySimulateJoinAllTokensExactLptResponse {
     (gogoproto.nullable) = false,
     (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins"
   ];
+  repeated cosmos.base.v1beta1.Coin protocol_fee = 3 [
+    (gogoproto.nullable) = false,
+    (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins"
+  ];
 }
 
 message QuerySimulateJoinExactTokensRequest {
@@ -361,6 +411,14 @@ message QuerySimulateJoinExactTokensRequest {
 message QuerySimulateJoinExactTokensResponse {
   cosmos.base.v1beta1.Coin lpt_out = 1 [(gogoproto.nullable) = false];
   repeated cosmos.base.v1beta1.Coin amounts_in = 2 [
+    (gogoproto.nullable) = false,
+    (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins"
+  ];
+  repeated cosmos.base.v1beta1.Coin protocol_fee = 3 [
+    (gogoproto.nullable) = false,
+    (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins"
+  ];
+  repeated cosmos.base.v1beta1.Coin swap_fee = 4 [
     (gogoproto.nullable) = false,
     (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins"
   ];
@@ -379,6 +437,8 @@ message QuerySimulateJoinTokenExactLptRequest {
 message QuerySimulateJoinTokenExactLptResponse {
   cosmos.base.v1beta1.Coin lpt_out = 1 [(gogoproto.nullable) = false];
   cosmos.base.v1beta1.Coin amount_in = 2 [(gogoproto.nullable) = false];
+  cosmos.base.v1beta1.Coin protocol_fee = 3 [(gogoproto.nullable) = false];
+  cosmos.base.v1beta1.Coin swap_fee = 4 [(gogoproto.nullable) = false];
 }
 
 message QuerySimulateExitTokenExactLptRequest {
@@ -397,6 +457,8 @@ message QuerySimulateExitTokenExactLptResponse {
     (gogoproto.nullable) = false,
     (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins"
   ];
+  cosmos.base.v1beta1.Coin protocol_fee = 3 [(gogoproto.nullable) = false];
+  cosmos.base.v1beta1.Coin swap_fee = 4 [(gogoproto.nullable) = false];
 }
 
 message QuerySimulateExitExactTokensRequest {
@@ -410,6 +472,11 @@ message QuerySimulateExitExactTokensRequest {
 message QuerySimulateExitExactTokensResponse {
   cosmos.base.v1beta1.Coin lpt_in = 1 [(gogoproto.nullable) = false];
   repeated cosmos.base.v1beta1.Coin amounts_out = 2 [
+    (gogoproto.nullable) = false,
+    (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins"
+  ];
+  cosmos.base.v1beta1.Coin protocol_fee = 3 [(gogoproto.nullable) = false];
+  repeated cosmos.base.v1beta1.Coin swap_fee = 4 [
     (gogoproto.nullable) = false,
     (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins"
   ];
@@ -430,6 +497,7 @@ message QuerySimulateExitAllTokensExactLptResponse {
     (gogoproto.nullable) = false,
     (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins"
   ];
+  cosmos.base.v1beta1.Coin protocol_fee = 3 [(gogoproto.nullable) = false];
 }
 
 message QuerySpotPriceRequest {
@@ -501,6 +569,16 @@ message QuerySimulateBatchSwapResponse {
     (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins"
   ];
   repeated cosmos.base.v1beta1.Coin amounts_out = 2 [
+    (gogoproto.nullable) = false,
+    (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins"
+  ];
+  // protocol fee does not contain the y_trade fee and refractor fee
+  // which is paid in case of a yAsset trade
+  repeated cosmos.base.v1beta1.Coin protocol_fee = 3 [
+    (gogoproto.nullable) = false,
+    (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins"
+  ];
+  repeated cosmos.base.v1beta1.Coin swap_fee = 4 [
     (gogoproto.nullable) = false,
     (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins"
   ];

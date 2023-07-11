@@ -3,7 +3,7 @@ import { grpc } from "@improbable-eng/grpc-web";
 import { UnaryMethodDefinitionish } from "../../grpc-web";
 import { DeepPartial } from "../../helpers";
 import { BrowserHeaders } from "browser-headers";
-import { QueryParamsRequest, QueryParamsResponse, QueryGetRefractableAssetRequest, QueryGetRefractableAssetResponse, QueryAllRefractableAssetRequest, QueryAllRefractableAssetResponse, QueryGetMaturityLevelRequest, QueryGetMaturityLevelResponse, QueryAllMaturityLevelRequest, QueryAllMaturityLevelResponse, QueryGetExchangeRateRequest, QueryGetExchangeRateResponse, QueryAllExchangeRateRequest, QueryAllExchangeRateResponse } from "./query";
+import { QueryParamsRequest, QueryParamsResponse, QueryGetRefractableAssetRequest, QueryGetRefractableAssetResponse, QueryAllRefractableAssetRequest, QueryAllRefractableAssetResponse, QueryGetMaturityLevelRequest, QueryGetMaturityLevelResponse, QueryAllMaturityLevelRequest, QueryAllMaturityLevelResponse } from "./query";
 /** Query defines the gRPC querier service. */
 export interface Query {
   /** Parameters queries the parameters of the module. */
@@ -16,10 +16,6 @@ export interface Query {
   maturityLevel(request: DeepPartial<QueryGetMaturityLevelRequest>, metadata?: grpc.Metadata): Promise<QueryGetMaturityLevelResponse>;
   /** Queries a list of MaturityLevel items. */
   maturityLevelAll(request: DeepPartial<QueryAllMaturityLevelRequest>, metadata?: grpc.Metadata): Promise<QueryAllMaturityLevelResponse>;
-  /** Queries a AssetExchangeRate by index. */
-  exchangeRate(request: DeepPartial<QueryGetExchangeRateRequest>, metadata?: grpc.Metadata): Promise<QueryGetExchangeRateResponse>;
-  /** Queries a list of ExchangeRate items. */
-  exchangeRateAll(request?: DeepPartial<QueryAllExchangeRateRequest>, metadata?: grpc.Metadata): Promise<QueryAllExchangeRateResponse>;
 }
 export class QueryClientImpl implements Query {
   private readonly rpc: Rpc;
@@ -30,8 +26,6 @@ export class QueryClientImpl implements Query {
     this.refractableAssetAll = this.refractableAssetAll.bind(this);
     this.maturityLevel = this.maturityLevel.bind(this);
     this.maturityLevelAll = this.maturityLevelAll.bind(this);
-    this.exchangeRate = this.exchangeRate.bind(this);
-    this.exchangeRateAll = this.exchangeRateAll.bind(this);
   }
   params(request: DeepPartial<QueryParamsRequest> = {}, metadata?: grpc.Metadata): Promise<QueryParamsResponse> {
     return this.rpc.unary(QueryParamsDesc, QueryParamsRequest.fromPartial(request), metadata);
@@ -47,14 +41,6 @@ export class QueryClientImpl implements Query {
   }
   maturityLevelAll(request: DeepPartial<QueryAllMaturityLevelRequest>, metadata?: grpc.Metadata): Promise<QueryAllMaturityLevelResponse> {
     return this.rpc.unary(QueryAllMaturityLevelDesc, QueryAllMaturityLevelRequest.fromPartial(request), metadata);
-  }
-  exchangeRate(request: DeepPartial<QueryGetExchangeRateRequest>, metadata?: grpc.Metadata): Promise<QueryGetExchangeRateResponse> {
-    return this.rpc.unary(QueryGetExchangeRateDesc, QueryGetExchangeRateRequest.fromPartial(request), metadata);
-  }
-  exchangeRateAll(request: DeepPartial<QueryAllExchangeRateRequest> = {
-    pagination: undefined
-  }, metadata?: grpc.Metadata): Promise<QueryAllExchangeRateResponse> {
-    return this.rpc.unary(QueryAllExchangeRateDesc, QueryAllExchangeRateRequest.fromPartial(request), metadata);
   }
 }
 export const QueryDesc = {
@@ -158,48 +144,6 @@ export const QueryAllMaturityLevelDesc: UnaryMethodDefinitionish = {
     deserializeBinary(data: Uint8Array) {
       return {
         ...QueryAllMaturityLevelResponse.decode(data),
-        toObject() {
-          return this;
-        }
-      };
-    }
-  } as any)
-};
-export const QueryGetExchangeRateDesc: UnaryMethodDefinitionish = {
-  methodName: "ExchangeRate",
-  service: QueryDesc,
-  requestStream: false,
-  responseStream: false,
-  requestType: ({
-    serializeBinary() {
-      return QueryGetExchangeRateRequest.encode(this).finish();
-    }
-  } as any),
-  responseType: ({
-    deserializeBinary(data: Uint8Array) {
-      return {
-        ...QueryGetExchangeRateResponse.decode(data),
-        toObject() {
-          return this;
-        }
-      };
-    }
-  } as any)
-};
-export const QueryAllExchangeRateDesc: UnaryMethodDefinitionish = {
-  methodName: "ExchangeRateAll",
-  service: QueryDesc,
-  requestStream: false,
-  responseStream: false,
-  requestType: ({
-    serializeBinary() {
-      return QueryAllExchangeRateRequest.encode(this).finish();
-    }
-  } as any),
-  responseType: ({
-    deserializeBinary(data: Uint8Array) {
-      return {
-        ...QueryAllExchangeRateResponse.decode(data),
         toObject() {
           return this;
         }
