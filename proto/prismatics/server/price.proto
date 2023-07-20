@@ -1,11 +1,10 @@
 syntax = "proto3";
-package prismatics;
+package prismatics.server;
 
 import "gogoproto/gogo.proto";
-import "google/protobuf/timestamp.proto";
 import "cosmos_proto/cosmos.proto";
 
-option go_package = "github.com/prism-finance/prismatics/types";
+option go_package = "github.com/prism-finance/prismatics/server";
 
 message QueryPriceRequest {
   string token_in = 1;

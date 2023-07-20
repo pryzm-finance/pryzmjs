@@ -7,6 +7,7 @@ export interface PoolToken {
   poolType: PoolType;
   poolLpDenom: string;
   balance: string;
+  weight: string;
   priceLpTerms: string;
 }
 export interface PoolTokenSDKType {
@@ -15,6 +16,7 @@ export interface PoolTokenSDKType {
   pool_type: PoolType;
   pool_lp_denom: string;
   balance: string;
+  weight: string;
   price_lp_terms: string;
 }
 function createBasePoolToken(): PoolToken {
@@ -24,6 +26,7 @@ function createBasePoolToken(): PoolToken {
     poolType: 0,
     poolLpDenom: "",
     balance: "",
+    weight: "",
     priceLpTerms: ""
   };
 }
@@ -44,8 +47,11 @@ export const PoolToken = {
     if (message.balance !== "") {
       writer.uint32(42).string(message.balance);
     }
+    if (message.weight !== "") {
+      writer.uint32(50).string(message.weight);
+    }
     if (message.priceLpTerms !== "") {
-      writer.uint32(50).string(message.priceLpTerms);
+      writer.uint32(58).string(message.priceLpTerms);
     }
     return writer;
   },
@@ -72,6 +78,9 @@ export const PoolToken = {
           message.balance = reader.string();
           break;
         case 6:
+          message.weight = reader.string();
+          break;
+        case 7:
           message.priceLpTerms = reader.string();
           break;
         default:
@@ -88,6 +97,7 @@ export const PoolToken = {
       poolType: isSet(object.poolType) ? poolTypeFromJSON(object.poolType) : 0,
       poolLpDenom: isSet(object.poolLpDenom) ? String(object.poolLpDenom) : "",
       balance: isSet(object.balance) ? String(object.balance) : "",
+      weight: isSet(object.weight) ? String(object.weight) : "",
       priceLpTerms: isSet(object.priceLpTerms) ? String(object.priceLpTerms) : ""
     };
   },
@@ -98,6 +108,7 @@ export const PoolToken = {
     message.poolType !== undefined && (obj.poolType = poolTypeToJSON(message.poolType));
     message.poolLpDenom !== undefined && (obj.poolLpDenom = message.poolLpDenom);
     message.balance !== undefined && (obj.balance = message.balance);
+    message.weight !== undefined && (obj.weight = message.weight);
     message.priceLpTerms !== undefined && (obj.priceLpTerms = message.priceLpTerms);
     return obj;
   },
@@ -108,6 +119,7 @@ export const PoolToken = {
     message.poolType = object.poolType ?? 0;
     message.poolLpDenom = object.poolLpDenom ?? "";
     message.balance = object.balance ?? "";
+    message.weight = object.weight ?? "";
     message.priceLpTerms = object.priceLpTerms ?? "";
     return message;
   }

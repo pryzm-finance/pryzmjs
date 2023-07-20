@@ -40,22 +40,3 @@ message TimeResolution {
   TimeResolutionType type = 1;
   uint32 value = 2;
 }
-
-message QueryHistoricalPriceRequest {
-  string denom = 1;
-  TimeResolution time_resolution = 2 [(gogoproto.nullable) = false];
-  string from = 3 [
-    (cosmos_proto.scalar) = "cosmos.Int",
-    (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Int",
-    (gogoproto.nullable) = false
-  ];
-  string to = 4 [
-    (cosmos_proto.scalar) = "cosmos.Int",
-    (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Int",
-    (gogoproto.nullable) = false
-  ];
-}
-
-message QueryHistoricalPriceResponse {
-  repeated HistoricalPrice historical_prices = 1 [(gogoproto.nullable) = false];
-}

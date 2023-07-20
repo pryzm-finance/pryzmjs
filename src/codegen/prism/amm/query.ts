@@ -45,11 +45,11 @@ export interface QueryGetPoolTokenResponseSDKType {
 }
 export interface QueryAllPoolTokenRequest {
   pagination?: PageRequest;
-  poolId?: string;
+  poolId: string;
 }
 export interface QueryAllPoolTokenRequestSDKType {
   pagination?: PageRequestSDKType;
-  pool_id?: string;
+  pool_id: string;
 }
 export interface QueryAllPoolTokenResponse {
   poolToken: PoolToken[];
