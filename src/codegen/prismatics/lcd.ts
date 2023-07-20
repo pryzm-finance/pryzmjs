@@ -8,7 +8,7 @@ export const createClient = async ({
     restEndpoint
   });
   return {
-    prismatics: new (await import("./query.lcd")).LCDQueryClient({
+    prismatics: new (await import("./server/query.lcd")).LCDQueryClient({
       requestClient
     })
   };

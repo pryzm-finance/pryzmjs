@@ -19,11 +19,3 @@ message Asset {
   google.protobuf.Timestamp last_exchange_rate_time = 9 [(gogoproto.stdtime) = true, (gogoproto.nullable) = false];
   string c_p_asset_exchange_rate = 10 [(cosmos_proto.scalar) = "cosmos.Dec", (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Dec"];
 }
-
-message QueryAssetRequest {
-  string asset_id = 1;
-}
-
-message QueryAssetResponse {
-  Asset asset = 1 [(gogoproto.nullable) = false];
-}

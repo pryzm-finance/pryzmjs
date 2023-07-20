@@ -24,14 +24,3 @@ message Maturity {
   string p_price = 12 [(cosmos_proto.scalar) = "cosmos.Dec", (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Dec", (gogoproto.nullable) = true];
   string error = 13;
 }
-
-message QueryAllMaturitiesRequest {
-  string asset_id = 1;
-  string active = 2;
-  cosmos.base.query.v1beta1.PageRequest pagination = 3;
-}
-
-message QueryAllMaturitiesResponse {
-  repeated Maturity maturities = 1 [(gogoproto.nullable) = false];
-  cosmos.base.query.v1beta1.PageResponse pagination = 2;
-}

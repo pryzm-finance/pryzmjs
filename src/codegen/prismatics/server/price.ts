@@ -1,5 +1,5 @@
 import * as _m0 from "protobufjs/minimal";
-import { isSet } from "../helpers";
+import { isSet } from "../../helpers";
 export interface QueryPriceRequest {
   tokenIn: string;
   tokenOut: string;

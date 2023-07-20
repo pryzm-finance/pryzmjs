@@ -1,0 +1,46 @@
+syntax = "proto3";
+package prismatics.server;
+
+import "gogoproto/gogo.proto";
+import "google/api/annotations.proto";
+import "prismatics/server/asset.proto";
+import "prismatics/server/maturity.proto";
+import "prismatics/server/price.proto";
+import "prismatics/server/historical_price.proto";
+import "prismatics/server/trade_simulation.proto";
+import "prismatics/server/pool_token.proto";
+import "cosmos/tx/v1beta1/service.proto";
+
+
+option go_package = "github.com/prism-finance/prismatics/server";
+
+service Query {
+
+  rpc Asset(QueryAssetRequest) returns (QueryAssetResponse) {
+    option (google.api.http).get = "/prismatics/asset/{asset_id}";
+  }
+
+  rpc MaturityAll(QueryAllMaturitiesRequest) returns (QueryAllMaturitiesResponse) {
+    option (google.api.http).get = "/prismatics/maturity";
+  }
+
+  rpc TokenPrice(QueryPriceRequest) returns (QueryPriceResponse) {
+    option (google.api.http).get = "/prismatics/price/{token_in}/{token_out}";
+  }
+
+  rpc HistoricalPrice(QueryHistoricalPriceRequest) returns (QueryHistoricalPriceResponse) {
+    option (google.api.http).get = "/prismatics/historical_price/{denom}";
+  }
+
+  rpc TradeSimulation(QueryTradeSimulationRequest) returns (QueryTradeSimulationResponse) {
+    option (google.api.http).get = "/prismatics/trade_simulation";
+  }
+
+  rpc PoolToken(QueryPoolTokenRequest) returns (QueryPoolTokenResponse) {
+    option (google.api.http).get = "/prismatics/pool_token/{pool_id}/{denom}";
+  }
+
+  rpc PoolTokens(QueryAllPoolTokenRequest) returns (QueryAllPoolTokenResponse) {
+    option (google.api.http).get = "/prismatics/pool_token/{pool_id}";
+  }
+}
