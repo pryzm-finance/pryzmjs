@@ -1,17 +1,17 @@
 lockfileVersion: 5.4
 
 specifiers:
-  '@prism-finance/prismjs': 0.7.3
+  '@prism-finance/prismjs': 0.7.8
   '@refractedlabs/utils': 0.1.5
 
 dependencies:
-  '@prism-finance/prismjs': 0.7.3_google-protobuf@3.21.2
+  '@prism-finance/prismjs': 0.7.8_google-protobuf@3.21.2
   '@refractedlabs/utils': 0.1.5
 
 packages:
 
-  /@babel/runtime/7.22.5:
-    resolution: {integrity: sha512-ecjvYlnAaZ/KVneE/OdKYBYfgXV3Ptu6zQWmgEF7vwKhQnvVS6bjMD2XYgj+SNvQ1GfK/pjgokfPkC/2CO8CuA==}
+  /@babel/runtime/7.22.6:
+    resolution: {integrity: sha512-wDb5pWm4WDdF6LFUde3Jl8WzPA+3ZbxYqkC6xAXuD3irdEHN1k0NfTRrJD8ZD378SJ61miMLCqIOXYhd8x+AJQ==}
     engines: {node: '>=6.9.0'}
     dependencies:
       regenerator-runtime: 0.13.11
@@ -203,16 +203,16 @@ packages:
   /@osmonauts/lcd/0.10.0:
     resolution: {integrity: sha512-PzmXk9x9MHyLn2fUztpAqWqvDmMiEJaQv/JcAoAOE8VdHrD9Hf/KWnE1RZtamuS2ngQRqvQPD0xotCGXW7eTxA==}
     dependencies:
-      '@babel/runtime': 7.22.5
+      '@babel/runtime': 7.22.6
       axios: 0.27.2
     transitivePeerDependencies:
       - debug
     dev: false
 
-  /@prism-finance/prismjs/0.7.3_google-protobuf@3.21.2:
-    resolution: {integrity: sha512-moZ2epg7nWW+JbzBAyp9Xkv80FbMwyYGCkeCdHGpbB+s4bwX8CIXFjrE8anF9hVEoEsOtrkLR0XTzjDSSOzI7Q==, tarball: download/@prism-finance/prismjs/0.7.3/f98b82dcb1959a846cd3c22299166e349c002c5d}
+  /@prism-finance/prismjs/0.7.8_google-protobuf@3.21.2:
+    resolution: {integrity: sha512-7+MAnnQaoOJEf8X8MuSBBR18CwmfeGjzSJEekBBnOVtIefmtcXlj6v/y22ohqT7VtR07YbY5Rs7bggFsvNly5A==, tarball: download/@prism-finance/prismjs/0.7.8/d15eec1ccbb633d7cdd80acb02a8370633d4598c}
     dependencies:
-      '@babel/runtime': 7.22.5
+      '@babel/runtime': 7.22.6
       '@cosmjs/amino': 0.31.0-alpha.1
       '@cosmjs/proto-signing': 0.31.0-alpha.1
       '@cosmjs/stargate': 0.31.0-alpha.1
@@ -295,8 +295,8 @@ packages:
     resolution: {integrity: sha512-MqTGEo5bj5t157U6fA/BiDynNkn0YknVdh48CMPkTSpFTVmvao5UQmm7uEF6xBEo7qIMAlY/JSleYaE6VOdpaA==}
     dev: false
 
-  /@types/node/20.3.2:
-    resolution: {integrity: sha512-vOBLVQeCQfIcF/2Y7eKFTqrMnizK5lRNQ7ykML/5RuwVXVWxYkgwS7xbt4B6fKCUPgbSL5FSsjHQpaGQP/dQmw==}
+  /@types/node/20.4.2:
+    resolution: {integrity: sha512-Dd0BYtWgnWJKwO1jkmTrzofjK2QXXcai0dmtzvIBhcA+RsG5h8R3xlyta0kGOZRNfL9GuRtb1knmPEhQrePCEw==}
     dev: false
 
   /@types/triple-beam/1.3.2:
@@ -668,7 +668,7 @@ packages:
       '@protobufjs/pool': 1.1.0
       '@protobufjs/utf8': 1.1.0
       '@types/long': 4.0.2
-      '@types/node': 20.3.2
+      '@types/node': 20.4.2
       long: 4.0.0
     dev: false
 

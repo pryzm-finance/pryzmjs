@@ -9,6 +9,7 @@ import "prismatics/server/price.proto";
 import "prismatics/server/historical_price.proto";
 import "prismatics/server/trade_simulation.proto";
 import "prismatics/server/pool_token.proto";
+import "prismatics/server/pgov.proto";
 import "cosmos/tx/v1beta1/service.proto";
 
 
@@ -42,5 +43,13 @@ service Query {
 
   rpc PoolTokens(QueryAllPoolTokenRequest) returns (QueryAllPoolTokenResponse) {
     option (google.api.http).get = "/prismatics/pool_token/{pool_id}";
+  }
+
+  rpc AssetProposals(QueryAssetProposalRequest) returns (QueryAssetProposalResponse) {
+    option (google.api.http).get = "/prismatics/asset_proposal/{asset_id}";
+  }
+
+  rpc SubmitProposalMsgs(QuerySubmitProposalMsgsRequest) returns (QuerySubmitProposalMsgsResponse) {
+    option (google.api.http).get = "/prismatics/submit_proposal_msgs/{asset_id}/{proposal_id}";
   }
 }
