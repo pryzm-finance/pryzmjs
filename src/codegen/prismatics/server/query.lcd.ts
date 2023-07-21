@@ -7,6 +7,7 @@ import { QueryPriceRequest, QueryPriceResponseSDKType } from "./price";
 import { QueryHistoricalPriceRequest, QueryHistoricalPriceResponseSDKType } from "./historical_price";
 import { QueryTradeSimulationRequest, QueryTradeSimulationResponseSDKType } from "./trade_simulation";
 import { QueryPoolTokenRequest, QueryPoolTokenResponseSDKType, QueryAllPoolTokenRequest, QueryAllPoolTokenResponseSDKType } from "./pool_token";
+import { QueryAssetProposalRequest, QueryAssetProposalResponseSDKType, QuerySubmitProposalMsgsRequest, QuerySubmitProposalMsgsResponseSDKType } from "./pgov";
 export class LCDQueryClient {
   req: LCDClient;
   constructor({
@@ -22,6 +23,8 @@ export class LCDQueryClient {
     this.tradeSimulation = this.tradeSimulation.bind(this);
     this.poolToken = this.poolToken.bind(this);
     this.poolTokens = this.poolTokens.bind(this);
+    this.assetProposals = this.assetProposals.bind(this);
+    this.submitProposalMsgs = this.submitProposalMsgs.bind(this);
   }
   /* Asset */
   async asset(params: QueryAssetRequest): Promise<QueryAssetResponseSDKType> {
@@ -99,5 +102,15 @@ export class LCDQueryClient {
   async poolTokens(params: QueryAllPoolTokenRequest): Promise<QueryAllPoolTokenResponseSDKType> {
     const endpoint = `prismatics/pool_token/${params.poolId}`;
     return await this.req.get<QueryAllPoolTokenResponseSDKType>(endpoint);
+  }
+  /* AssetProposals */
+  async assetProposals(params: QueryAssetProposalRequest): Promise<QueryAssetProposalResponseSDKType> {
+    const endpoint = `prismatics/asset_proposal/${params.assetId}`;
+    return await this.req.get<QueryAssetProposalResponseSDKType>(endpoint);
+  }
+  /* SubmitProposalMsgs */
+  async submitProposalMsgs(params: QuerySubmitProposalMsgsRequest): Promise<QuerySubmitProposalMsgsResponseSDKType> {
+    const endpoint = `prismatics/submit_proposal_msgs/${params.assetId}/${params.proposalId}`;
+    return await this.req.get<QuerySubmitProposalMsgsResponseSDKType>(endpoint);
   }
 }
