@@ -79,9 +79,9 @@ export interface TimeResolutionSDKType {
 function createBaseHistoricalPrice(): HistoricalPrice {
   return {
     time: undefined,
-    min: "",
-    max: "",
-    avg: ""
+    min: undefined,
+    max: undefined,
+    avg: undefined
   };
 }
 export const HistoricalPrice = {
@@ -89,13 +89,13 @@ export const HistoricalPrice = {
     if (message.time !== undefined) {
       Timestamp.encode(message.time, writer.uint32(10).fork()).ldelim();
     }
-    if (message.min !== "") {
+    if (message.min !== undefined) {
       writer.uint32(18).string(message.min);
     }
-    if (message.max !== "") {
+    if (message.max !== undefined) {
       writer.uint32(26).string(message.max);
     }
-    if (message.avg !== "") {
+    if (message.avg !== undefined) {
       writer.uint32(34).string(message.avg);
     }
     return writer;
@@ -129,9 +129,9 @@ export const HistoricalPrice = {
   fromJSON(object: any): HistoricalPrice {
     return {
       time: isSet(object.time) ? fromJsonTimestamp(object.time) : undefined,
-      min: isSet(object.min) ? String(object.min) : "",
-      max: isSet(object.max) ? String(object.max) : "",
-      avg: isSet(object.avg) ? String(object.avg) : ""
+      min: isSet(object.min) ? String(object.min) : undefined,
+      max: isSet(object.max) ? String(object.max) : undefined,
+      avg: isSet(object.avg) ? String(object.avg) : undefined
     };
   },
   toJSON(message: HistoricalPrice): unknown {
@@ -145,9 +145,9 @@ export const HistoricalPrice = {
   fromPartial(object: Partial<HistoricalPrice>): HistoricalPrice {
     const message = createBaseHistoricalPrice();
     message.time = object.time !== undefined && object.time !== null ? Timestamp.fromPartial(object.time) : undefined;
-    message.min = object.min ?? "";
-    message.max = object.max ?? "";
-    message.avg = object.avg ?? "";
+    message.min = object.min ?? undefined;
+    message.max = object.max ?? undefined;
+    message.avg = object.avg ?? undefined;
     return message;
   }
 };

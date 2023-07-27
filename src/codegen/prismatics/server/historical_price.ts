@@ -3,12 +3,14 @@ import * as _m0 from "protobufjs/minimal";
 import { isSet } from "../../helpers";
 export interface QueryHistoricalPriceRequest {
   denom: string;
+  quote?: string;
   timeResolution?: TimeResolution;
   from?: string;
   to?: string;
 }
 export interface QueryHistoricalPriceRequestSDKType {
   denom: string;
+  quote?: string;
   time_resolution?: TimeResolutionSDKType;
   from?: string;
   to?: string;
@@ -22,6 +24,7 @@ export interface QueryHistoricalPriceResponseSDKType {
 function createBaseQueryHistoricalPriceRequest(): QueryHistoricalPriceRequest {
   return {
     denom: "",
+    quote: "",
     timeResolution: undefined,
     from: "",
     to: ""
@@ -32,14 +35,17 @@ export const QueryHistoricalPriceRequest = {
     if (message.denom !== "") {
       writer.uint32(10).string(message.denom);
     }
+    if (message.quote !== "") {
+      writer.uint32(18).string(message.quote);
+    }
     if (message.timeResolution !== undefined) {
-      TimeResolution.encode(message.timeResolution, writer.uint32(18).fork()).ldelim();
+      TimeResolution.encode(message.timeResolution, writer.uint32(26).fork()).ldelim();
     }
     if (message.from !== "") {
-      writer.uint32(26).string(message.from);
+      writer.uint32(34).string(message.from);
     }
     if (message.to !== "") {
-      writer.uint32(34).string(message.to);
+      writer.uint32(42).string(message.to);
     }
     return writer;
   },
@@ -54,12 +60,15 @@ export const QueryHistoricalPriceRequest = {
           message.denom = reader.string();
           break;
         case 2:
-          message.timeResolution = TimeResolution.decode(reader, reader.uint32());
+          message.quote = reader.string();
           break;
         case 3:
-          message.from = reader.string();
+          message.timeResolution = TimeResolution.decode(reader, reader.uint32());
           break;
         case 4:
+          message.from = reader.string();
+          break;
+        case 5:
           message.to = reader.string();
           break;
         default:
@@ -72,6 +81,7 @@ export const QueryHistoricalPriceRequest = {
   fromJSON(object: any): QueryHistoricalPriceRequest {
     return {
       denom: isSet(object.denom) ? String(object.denom) : "",
+      quote: isSet(object.quote) ? String(object.quote) : "",
       timeResolution: isSet(object.timeResolution) ? TimeResolution.fromJSON(object.timeResolution) : undefined,
       from: isSet(object.from) ? String(object.from) : "",
       to: isSet(object.to) ? String(object.to) : ""
@@ -80,6 +90,7 @@ export const QueryHistoricalPriceRequest = {
   toJSON(message: QueryHistoricalPriceRequest): unknown {
     const obj: any = {};
     message.denom !== undefined && (obj.denom = message.denom);
+    message.quote !== undefined && (obj.quote = message.quote);
     message.timeResolution !== undefined && (obj.timeResolution = message.timeResolution ? TimeResolution.toJSON(message.timeResolution) : undefined);
     message.from !== undefined && (obj.from = message.from);
     message.to !== undefined && (obj.to = message.to);
@@ -88,6 +99,7 @@ export const QueryHistoricalPriceRequest = {
   fromPartial(object: Partial<QueryHistoricalPriceRequest>): QueryHistoricalPriceRequest {
     const message = createBaseQueryHistoricalPriceRequest();
     message.denom = object.denom ?? "";
+    message.quote = object.quote ?? "";
     message.timeResolution = object.timeResolution !== undefined && object.timeResolution !== null ? TimeResolution.fromPartial(object.timeResolution) : undefined;
     message.from = object.from ?? "";
     message.to = object.to ?? "";

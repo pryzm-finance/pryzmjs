@@ -10,6 +10,8 @@ import "prismatics/server/historical_price.proto";
 import "prismatics/server/trade_simulation.proto";
 import "prismatics/server/pool_token.proto";
 import "prismatics/server/pgov.proto";
+import "prismatics/server/user_trade_history.proto";
+import "prismatics/server/pool_trade_history.proto";
 import "cosmos/tx/v1beta1/service.proto";
 
 
@@ -43,6 +45,14 @@ service Query {
 
   rpc PoolTokens(QueryAllPoolTokenRequest) returns (QueryAllPoolTokenResponse) {
     option (google.api.http).get = "/prismatics/pool_token/{pool_id}";
+  }
+
+  rpc UserTradeHistory(QueryUserTradeHistoryRequest) returns (QueryUserTradeHistoryResponse) {
+    option (google.api.http).get = "/prismatics/user_trade_history";
+  }
+
+  rpc PoolTradeHistory(QueryPoolTradeHistoryRequest) returns (QueryPoolTradeHistoryResponse) {
+    option (google.api.http).get = "/prismatics/pool_trade_history";
   }
 
   rpc AssetProposals(QueryAssetProposalRequest) returns (QueryAssetProposalResponse) {

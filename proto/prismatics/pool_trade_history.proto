@@ -1,0 +1,38 @@
+syntax = "proto3";
+package prismatics;
+
+import "cosmos/base/v1beta1/coin.proto";
+import "gogoproto/gogo.proto";
+import "google/protobuf/timestamp.proto";
+import "prism/amm/pool_token.proto";
+
+
+option go_package = "github.com/prism-finance/prismatics/types";
+
+enum PoolOperationType {
+  option (gogoproto.goproto_enum_prefix) = false;
+  POOL_OPERATION_TYPE_ANY = 0 [(gogoproto.enumvalue_customname) = "POOL_OPERATION_ANY"];
+  POOL_OPERATION_TYPE_SWAP = 1 [(gogoproto.enumvalue_customname) = "POOL_OPERATION_SWAP"];
+  POOL_OPERATION_TYPE_Y_ASSET_SWAP = 2 [(gogoproto.enumvalue_customname) = "POOL_OPERATION_Y_ASSET_SWAP"];
+  POOL_OPERATION_TYPE_JOIN_POOL = 3 [(gogoproto.enumvalue_customname) = "POOL_OPERATION_JOIN_POOL"];
+  POOL_OPERATION_TYPE_EXIT_POOL = 4 [(gogoproto.enumvalue_customname) = "POOL_OPERATION_EXIT_POOL"];
+}
+
+message PoolTradeHistory {
+  repeated prism.amm.TokenAmount tokens_in = 1 [(gogoproto.nullable) = false];
+  repeated prism.amm.TokenAmount tokens_out = 2 [(gogoproto.nullable) = false];
+  uint64 pool_id = 3;
+  PoolOperationType operation_type = 4;
+  repeated cosmos.base.v1beta1.Coin swap_fee = 5 [
+    (gogoproto.nullable) = false,
+    (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins"
+  ];
+  repeated cosmos.base.v1beta1.Coin protocol_fee = 6 [
+    (gogoproto.nullable) = false,
+    (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins"
+  ];
+  google.protobuf.Timestamp block_time = 7 [
+    (gogoproto.stdtime) = true,
+    (gogoproto.nullable) = false
+  ];
+}

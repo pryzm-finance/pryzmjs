@@ -7,6 +7,8 @@ import { QueryPriceRequest, QueryPriceResponseSDKType } from "./price";
 import { QueryHistoricalPriceRequest, QueryHistoricalPriceResponseSDKType } from "./historical_price";
 import { QueryTradeSimulationRequest, QueryTradeSimulationResponseSDKType } from "./trade_simulation";
 import { QueryPoolTokenRequest, QueryPoolTokenResponseSDKType, QueryAllPoolTokenRequest, QueryAllPoolTokenResponseSDKType } from "./pool_token";
+import { QueryUserTradeHistoryRequest, QueryUserTradeHistoryResponseSDKType } from "./user_trade_history";
+import { QueryPoolTradeHistoryRequest, QueryPoolTradeHistoryResponseSDKType } from "./pool_trade_history";
 import { QueryAssetProposalRequest, QueryAssetProposalResponseSDKType, QuerySubmitProposalMsgsRequest, QuerySubmitProposalMsgsResponseSDKType } from "./pgov";
 export class LCDQueryClient {
   req: LCDClient;
@@ -23,6 +25,8 @@ export class LCDQueryClient {
     this.tradeSimulation = this.tradeSimulation.bind(this);
     this.poolToken = this.poolToken.bind(this);
     this.poolTokens = this.poolTokens.bind(this);
+    this.userTradeHistory = this.userTradeHistory.bind(this);
+    this.poolTradeHistory = this.poolTradeHistory.bind(this);
     this.assetProposals = this.assetProposals.bind(this);
     this.submitProposalMsgs = this.submitProposalMsgs.bind(this);
   }
@@ -58,6 +62,9 @@ export class LCDQueryClient {
     const options: any = {
       params: {}
     };
+    if (typeof params?.quote !== "undefined") {
+      options.params.quote = params.quote;
+    }
     if (typeof params?.timeResolution !== "undefined") {
       options.params.time_resolution = params.timeResolution;
     }
@@ -102,6 +109,46 @@ export class LCDQueryClient {
   async poolTokens(params: QueryAllPoolTokenRequest): Promise<QueryAllPoolTokenResponseSDKType> {
     const endpoint = `prismatics/pool_token/${params.poolId}`;
     return await this.req.get<QueryAllPoolTokenResponseSDKType>(endpoint);
+  }
+  /* UserTradeHistory */
+  async userTradeHistory(params: QueryUserTradeHistoryRequest): Promise<QueryUserTradeHistoryResponseSDKType> {
+    const options: any = {
+      params: {}
+    };
+    if (typeof params?.tokenIn !== "undefined") {
+      options.params.token_in = params.tokenIn;
+    }
+    if (typeof params?.tokenOut !== "undefined") {
+      options.params.token_out = params.tokenOut;
+    }
+    if (typeof params?.address !== "undefined") {
+      options.params.address = params.address;
+    }
+    if (typeof params?.operationType !== "undefined") {
+      options.params.operation_type = params.operationType;
+    }
+    const endpoint = `prismatics/user_trade_history`;
+    return await this.req.get<QueryUserTradeHistoryResponseSDKType>(endpoint, options);
+  }
+  /* PoolTradeHistory */
+  async poolTradeHistory(params: QueryPoolTradeHistoryRequest): Promise<QueryPoolTradeHistoryResponseSDKType> {
+    const options: any = {
+      params: {}
+    };
+    if (typeof params?.poolId !== "undefined") {
+      options.params.pool_id = params.poolId;
+    }
+    if (typeof params?.tokenIn !== "undefined") {
+      options.params.token_in = params.tokenIn;
+    }
+    if (typeof params?.tokenOut !== "undefined") {
+      options.params.token_out = params.tokenOut;
+    }
+    if (typeof params?.operationType !== "undefined") {
+      options.params.operation_type = params.operationType;
+    }
+    const endpoint = `prismatics/pool_trade_history`;
+    return await this.req.get<QueryPoolTradeHistoryResponseSDKType>(endpoint, options);
   }
   /* AssetProposals */
   async assetProposals(params: QueryAssetProposalRequest): Promise<QueryAssetProposalResponseSDKType> {

@@ -1,0 +1,18 @@
+syntax = "proto3";
+package prismatics.server;
+
+import "gogoproto/gogo.proto";
+import "prismatics/user_trade_history.proto";
+
+option go_package = "github.com/prism-finance/prismatics/server";
+
+message QueryUserTradeHistoryRequest {
+  string token_in = 1;
+  string token_out = 2;
+  string address = 3;
+  OperationType operation_type = 4;
+}
+
+message QueryUserTradeHistoryResponse {
+  repeated UserTradeHistory user_trade_history_records = 1 [(gogoproto.nullable) = false];
+}

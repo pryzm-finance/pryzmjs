@@ -3,10 +3,12 @@ import * as _242 from "./historical_price";
 import * as _243 from "./maturity";
 import * as _244 from "./pgov";
 import * as _245 from "./pool_token";
-import * as _246 from "./server/pgov";
-import * as _247 from "./token_price";
-import * as _438 from "./server/query.lcd";
-import * as _454 from "./lcd";
+import * as _246 from "./pool_trade_history";
+import * as _247 from "./server/pgov";
+import * as _248 from "./token_price";
+import * as _249 from "./user_trade_history";
+import * as _440 from "./server/query.lcd";
+import * as _456 from "./lcd";
 export const prismatics = {
   ..._241,
   ..._242,
@@ -15,10 +17,12 @@ export const prismatics = {
   ..._245,
   ..._246,
   ..._247,
+  ..._248,
+  ..._249,
   server: {
-    ..._438,
+    ..._440,
   },
   ClientFactory: {
-    ..._454,
+    ..._456,
   }
 };

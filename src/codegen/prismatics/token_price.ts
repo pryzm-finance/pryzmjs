@@ -3,19 +3,22 @@ import * as _m0 from "protobufjs/minimal";
 import { isSet, fromJsonTimestamp, fromTimestamp } from "../helpers";
 export interface TokenPrice {
   denom: string;
+  quote: string;
   blockTime?: Timestamp;
-  pricePrismTerms: string;
+  price: string;
 }
 export interface TokenPriceSDKType {
   denom: string;
+  quote: string;
   block_time?: TimestampSDKType;
-  price_prism_terms: string;
+  price: string;
 }
 function createBaseTokenPrice(): TokenPrice {
   return {
     denom: "",
+    quote: "",
     blockTime: undefined,
-    pricePrismTerms: ""
+    price: ""
   };
 }
 export const TokenPrice = {
@@ -23,11 +26,14 @@ export const TokenPrice = {
     if (message.denom !== "") {
       writer.uint32(10).string(message.denom);
     }
-    if (message.blockTime !== undefined) {
-      Timestamp.encode(message.blockTime, writer.uint32(18).fork()).ldelim();
+    if (message.quote !== "") {
+      writer.uint32(18).string(message.quote);
     }
-    if (message.pricePrismTerms !== "") {
-      writer.uint32(26).string(message.pricePrismTerms);
+    if (message.blockTime !== undefined) {
+      Timestamp.encode(message.blockTime, writer.uint32(26).fork()).ldelim();
+    }
+    if (message.price !== "") {
+      writer.uint32(34).string(message.price);
     }
     return writer;
   },
@@ -42,10 +48,13 @@ export const TokenPrice = {
           message.denom = reader.string();
           break;
         case 2:
-          message.blockTime = Timestamp.decode(reader, reader.uint32());
+          message.quote = reader.string();
           break;
         case 3:
-          message.pricePrismTerms = reader.string();
+          message.blockTime = Timestamp.decode(reader, reader.uint32());
+          break;
+        case 4:
+          message.price = reader.string();
           break;
         default:
           reader.skipType(tag & 7);
@@ -57,22 +66,25 @@ export const TokenPrice = {
   fromJSON(object: any): TokenPrice {
     return {
       denom: isSet(object.denom) ? String(object.denom) : "",
+      quote: isSet(object.quote) ? String(object.quote) : "",
       blockTime: isSet(object.blockTime) ? fromJsonTimestamp(object.blockTime) : undefined,
-      pricePrismTerms: isSet(object.pricePrismTerms) ? String(object.pricePrismTerms) : ""
+      price: isSet(object.price) ? String(object.price) : ""
     };
   },
   toJSON(message: TokenPrice): unknown {
     const obj: any = {};
     message.denom !== undefined && (obj.denom = message.denom);
+    message.quote !== undefined && (obj.quote = message.quote);
     message.blockTime !== undefined && (obj.blockTime = fromTimestamp(message.blockTime).toISOString());
-    message.pricePrismTerms !== undefined && (obj.pricePrismTerms = message.pricePrismTerms);
+    message.price !== undefined && (obj.price = message.price);
     return obj;
   },
   fromPartial(object: Partial<TokenPrice>): TokenPrice {
     const message = createBaseTokenPrice();
     message.denom = object.denom ?? "";
+    message.quote = object.quote ?? "";
     message.blockTime = object.blockTime !== undefined && object.blockTime !== null ? Timestamp.fromPartial(object.blockTime) : undefined;
-    message.pricePrismTerms = object.pricePrismTerms ?? "";
+    message.price = object.price ?? "";
     return message;
   }
 };
