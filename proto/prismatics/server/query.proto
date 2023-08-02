@@ -12,6 +12,7 @@ import "prismatics/server/pool_token.proto";
 import "prismatics/server/pgov.proto";
 import "prismatics/server/user_trade_history.proto";
 import "prismatics/server/pool_trade_history.proto";
+import "prismatics/server/trade_volume.proto";
 import "cosmos/tx/v1beta1/service.proto";
 
 
@@ -61,5 +62,13 @@ service Query {
 
   rpc SubmitProposalMsgs(QuerySubmitProposalMsgsRequest) returns (QuerySubmitProposalMsgsResponse) {
     option (google.api.http).get = "/prismatics/submit_proposal_msgs/{asset_id}/{proposal_id}";
+  }
+
+  rpc PoolTradeVolume(QueryPoolTradeVolumeRequest) returns (QueryPoolTradeVolumeResponse) {
+    option (google.api.http).get = "/prismatics/trade_volume/pool/{pool_id}";
+  }
+
+  rpc TokenTradeVolume(QueryTokenTradeVolumeRequest) returns (QueryTokenTradeVolumeResponse) {
+    option (google.api.http).get = "/prismatics/trade_volume/token/{denom}";
   }
 }

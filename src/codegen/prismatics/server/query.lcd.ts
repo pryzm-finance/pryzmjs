@@ -10,6 +10,7 @@ import { QueryPoolTokenRequest, QueryPoolTokenResponseSDKType, QueryAllPoolToken
 import { QueryUserTradeHistoryRequest, QueryUserTradeHistoryResponseSDKType } from "./user_trade_history";
 import { QueryPoolTradeHistoryRequest, QueryPoolTradeHistoryResponseSDKType } from "./pool_trade_history";
 import { QueryAssetProposalRequest, QueryAssetProposalResponseSDKType, QuerySubmitProposalMsgsRequest, QuerySubmitProposalMsgsResponseSDKType } from "./pgov";
+import { QueryPoolTradeVolumeRequest, QueryPoolTradeVolumeResponseSDKType, QueryTokenTradeVolumeRequest, QueryTokenTradeVolumeResponseSDKType } from "./trade_volume";
 export class LCDQueryClient {
   req: LCDClient;
   constructor({
@@ -29,6 +30,8 @@ export class LCDQueryClient {
     this.poolTradeHistory = this.poolTradeHistory.bind(this);
     this.assetProposals = this.assetProposals.bind(this);
     this.submitProposalMsgs = this.submitProposalMsgs.bind(this);
+    this.poolTradeVolume = this.poolTradeVolume.bind(this);
+    this.tokenTradeVolume = this.tokenTradeVolume.bind(this);
   }
   /* Asset */
   async asset(params: QueryAssetRequest): Promise<QueryAssetResponseSDKType> {
@@ -159,5 +162,36 @@ export class LCDQueryClient {
   async submitProposalMsgs(params: QuerySubmitProposalMsgsRequest): Promise<QuerySubmitProposalMsgsResponseSDKType> {
     const endpoint = `prismatics/submit_proposal_msgs/${params.assetId}/${params.proposalId}`;
     return await this.req.get<QuerySubmitProposalMsgsResponseSDKType>(endpoint);
+  }
+  /* PoolTradeVolume */
+  async poolTradeVolume(params: QueryPoolTradeVolumeRequest): Promise<QueryPoolTradeVolumeResponseSDKType> {
+    const options: any = {
+      params: {}
+    };
+    if (typeof params?.from !== "undefined") {
+      options.params.from = params.from;
+    }
+    if (typeof params?.to !== "undefined") {
+      options.params.to = params.to;
+    }
+    const endpoint = `prismatics/trade_volume/pool/${params.poolId}`;
+    return await this.req.get<QueryPoolTradeVolumeResponseSDKType>(endpoint, options);
+  }
+  /* TokenTradeVolume */
+  async tokenTradeVolume(params: QueryTokenTradeVolumeRequest): Promise<QueryTokenTradeVolumeResponseSDKType> {
+    const options: any = {
+      params: {}
+    };
+    if (typeof params?.poolId !== "undefined") {
+      options.params.pool_id = params.poolId;
+    }
+    if (typeof params?.from !== "undefined") {
+      options.params.from = params.from;
+    }
+    if (typeof params?.to !== "undefined") {
+      options.params.to = params.to;
+    }
+    const endpoint = `prismatics/trade_volume/token/${params.denom}`;
+    return await this.req.get<QueryTokenTradeVolumeResponseSDKType>(endpoint, options);
   }
 }
