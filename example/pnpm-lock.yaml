@@ -2,10 +2,12 @@ lockfileVersion: 5.4
 
 specifiers:
   '@prism-finance/prismjs': 0.8.1
+  '@refractedlabs/oraclejs': ^0.3.0
   '@refractedlabs/utils': 0.1.5
 
 dependencies:
   '@prism-finance/prismjs': 0.8.1_google-protobuf@3.21.2
+  '@refractedlabs/oraclejs': 0.3.0_google-protobuf@3.21.2
   '@refractedlabs/utils': 0.1.5
 
 packages:
@@ -270,6 +272,26 @@ packages:
 
   /@protobufjs/utf8/1.1.0:
     resolution: {integrity: sha512-Vvn3zZrhQZkkBE8LSuW3em98c0FwgO4nxzv6OdSxPKJIEKY2bGbHn+mhGIPerzI4twdxaP8/0+06HBpwf345Lw==}
+    dev: false
+
+  /@refractedlabs/oraclejs/0.3.0_google-protobuf@3.21.2:
+    resolution: {integrity: sha512-C0nL5YeZl+vQ7yFYegeF26CD+4W2vRGW6Z2XkJKHbdLaOa1Eta803dnkpblUN+hMfDoRgpHG4mFGWEaMBsqzDQ==, tarball: download/@refractedlabs/oraclejs/0.3.0/de2406f32aa8315e659cae0e0d1df2ff3466a074}
+    dependencies:
+      '@babel/runtime': 7.22.6
+      '@cosmjs/amino': 0.31.0-alpha.1
+      '@cosmjs/proto-signing': 0.31.0-alpha.1
+      '@cosmjs/stargate': 0.31.0-alpha.1
+      '@cosmjs/tendermint-rpc': 0.31.0-alpha.1
+      '@improbable-eng/grpc-web': 0.15.0_google-protobuf@3.21.2
+      '@improbable-eng/grpc-web-node-http-transport': 0.15.0_fng5pv4qmdetiqq66m6yjkaacu
+      '@osmonauts/lcd': 0.10.0
+      browser-headers: 0.4.1
+      protobufjs: 6.11.3
+    transitivePeerDependencies:
+      - bufferutil
+      - debug
+      - google-protobuf
+      - utf-8-validate
     dev: false
 
   /@refractedlabs/utils/0.1.5:
