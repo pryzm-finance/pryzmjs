@@ -1,6 +1,11 @@
-import {prism, prismatics, cosmatics} from "./codegen"
+import {cosmatics, getSigningPrismClientOptions, prism, prismatics} from "./codegen"
 import {Long, PageRequest} from "./codegen/helpers";
 import {BrowserHeaders} from "browser-headers";
+import {OfflineSigner} from "@cosmjs/proto-signing";
+import {defaultRegistryTypes, SigningStargateClient} from "@cosmjs/stargate";
+import {MsgSubmitProposal, MsgVote} from "./codegen/cosmos/gov/v1/tx";
+import {HttpEndpoint} from "@cosmjs/tendermint-rpc";
+import {GasPrice} from "@cosmjs/stargate/build/fee";
 
 export type PrismLCDClient = Awaited<ReturnType<typeof prism.ClientFactory.createLCDClient>>
 export type PrismaticsClient = Awaited<ReturnType<typeof prismatics.ClientFactory.createClient>>
@@ -94,4 +99,25 @@ export function getBrowsersHeadersForBlockHeight(height: number): BrowserHeaders
     const headers = new BrowserHeaders()
     headers.set("x-cosmos-block-height", `${height}`)
     return headers
+}
+
+export async function connectWithSigner(endpoint: string | HttpEndpoint, signer: OfflineSigner, broadcastTimeoutMs?: number, gasPrice?: GasPrice, broadcastPollIntervalMs?: number): Promise<SigningStargateClient> {
+    const {
+        registry,
+        aminoTypes
+    } = getSigningPrismClientOptions({
+        defaultTypes: [...defaultRegistryTypes,
+            // needed to be able to submit proposals using a signing client since they are not included in the default registry types
+            ["/cosmos.gov.v1.MsgSubmitProposal", MsgSubmitProposal],
+            ["/cosmos.gov.v1.MsgVote", MsgVote],
+        ]
+    });
+
+    return SigningStargateClient.connectWithSigner(endpoint, signer, {
+        registry,
+        aminoTypes,
+        broadcastTimeoutMs,
+        gasPrice,
+        broadcastPollIntervalMs,
+    });
 }
