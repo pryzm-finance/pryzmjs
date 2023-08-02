@@ -29,19 +29,13 @@ message OraclePayload {
     (gogoproto.nullable) = false
   ];
 
-  // balance of fee interchain account
-  string fee_account_balance = 6 [
-    (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Int",
-    (gogoproto.nullable) = false
-  ];
-
   // balance of sweep interchain account
-  string sweep_account_balance = 7 [
+  string sweep_account_balance = 6 [
     (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Int",
     (gogoproto.nullable) = false
   ];
 
   // the largest undelegation epoch number for which the undelegation is completed and is ready to be swept to PRISM
   // reporting this with zero means that none of incomplete undelegations are completed.
-  uint64 last_completed_undelegation_epoch = 8;
+  uint64 last_completed_undelegation_epoch = 7;
 }

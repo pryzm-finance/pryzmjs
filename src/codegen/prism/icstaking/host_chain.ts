@@ -273,7 +273,6 @@ export interface HostChainStateSDKType {
 export interface HostAccounts {
   delegation?: HostAccount;
   reward?: HostAccount;
-  fee?: HostAccount;
   sweep?: HostAccount;
   /**
    * This is the state of setting the reward account as the account which receives the staking rewards on host chain.
@@ -285,7 +284,6 @@ export interface HostAccounts {
 export interface HostAccountsSDKType {
   delegation?: HostAccountSDKType;
   reward?: HostAccountSDKType;
-  fee?: HostAccountSDKType;
   sweep?: HostAccountSDKType;
   reward_account_claiming_state: AccountState;
 }
@@ -745,7 +743,6 @@ function createBaseHostAccounts(): HostAccounts {
   return {
     delegation: undefined,
     reward: undefined,
-    fee: undefined,
     sweep: undefined,
     rewardAccountClaimingState: 0
   };
@@ -758,14 +755,11 @@ export const HostAccounts = {
     if (message.reward !== undefined) {
       HostAccount.encode(message.reward, writer.uint32(18).fork()).ldelim();
     }
-    if (message.fee !== undefined) {
-      HostAccount.encode(message.fee, writer.uint32(26).fork()).ldelim();
-    }
     if (message.sweep !== undefined) {
-      HostAccount.encode(message.sweep, writer.uint32(34).fork()).ldelim();
+      HostAccount.encode(message.sweep, writer.uint32(26).fork()).ldelim();
     }
     if (message.rewardAccountClaimingState !== 0) {
-      writer.uint32(40).int32(message.rewardAccountClaimingState);
+      writer.uint32(32).int32(message.rewardAccountClaimingState);
     }
     return writer;
   },
@@ -783,12 +777,9 @@ export const HostAccounts = {
           message.reward = HostAccount.decode(reader, reader.uint32());
           break;
         case 3:
-          message.fee = HostAccount.decode(reader, reader.uint32());
-          break;
-        case 4:
           message.sweep = HostAccount.decode(reader, reader.uint32());
           break;
-        case 5:
+        case 4:
           message.rewardAccountClaimingState = (reader.int32() as any);
           break;
         default:
@@ -802,7 +793,6 @@ export const HostAccounts = {
     return {
       delegation: isSet(object.delegation) ? HostAccount.fromJSON(object.delegation) : undefined,
       reward: isSet(object.reward) ? HostAccount.fromJSON(object.reward) : undefined,
-      fee: isSet(object.fee) ? HostAccount.fromJSON(object.fee) : undefined,
       sweep: isSet(object.sweep) ? HostAccount.fromJSON(object.sweep) : undefined,
       rewardAccountClaimingState: isSet(object.rewardAccountClaimingState) ? accountStateFromJSON(object.rewardAccountClaimingState) : 0
     };
@@ -811,7 +801,6 @@ export const HostAccounts = {
     const obj: any = {};
     message.delegation !== undefined && (obj.delegation = message.delegation ? HostAccount.toJSON(message.delegation) : undefined);
     message.reward !== undefined && (obj.reward = message.reward ? HostAccount.toJSON(message.reward) : undefined);
-    message.fee !== undefined && (obj.fee = message.fee ? HostAccount.toJSON(message.fee) : undefined);
     message.sweep !== undefined && (obj.sweep = message.sweep ? HostAccount.toJSON(message.sweep) : undefined);
     message.rewardAccountClaimingState !== undefined && (obj.rewardAccountClaimingState = accountStateToJSON(message.rewardAccountClaimingState));
     return obj;
@@ -820,7 +809,6 @@ export const HostAccounts = {
     const message = createBaseHostAccounts();
     message.delegation = object.delegation !== undefined && object.delegation !== null ? HostAccount.fromPartial(object.delegation) : undefined;
     message.reward = object.reward !== undefined && object.reward !== null ? HostAccount.fromPartial(object.reward) : undefined;
-    message.fee = object.fee !== undefined && object.fee !== null ? HostAccount.fromPartial(object.fee) : undefined;
     message.sweep = object.sweep !== undefined && object.sweep !== null ? HostAccount.fromPartial(object.sweep) : undefined;
     message.rewardAccountClaimingState = object.rewardAccountClaimingState ?? 0;
     return message;

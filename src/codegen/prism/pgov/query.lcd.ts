@@ -71,12 +71,13 @@ export class LCDQueryClient {
     return await this.req.get<QueryGetProposalResponseSDKType>(endpoint);
   }
   /* Queries a list of Proposal items. */
-  async proposalAll(params: QueryAllProposalRequest = {
-    pagination: undefined
-  }): Promise<QueryAllProposalResponseSDKType> {
+  async proposalAll(params: QueryAllProposalRequest): Promise<QueryAllProposalResponseSDKType> {
     const options: any = {
       params: {}
     };
+    if (typeof params?.asset !== "undefined") {
+      options.params.asset = params.asset;
+    }
     if (typeof params?.pagination !== "undefined") {
       setPaginationParams(options, params.pagination);
     }

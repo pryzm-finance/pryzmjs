@@ -26,8 +26,6 @@ export interface OraclePayload {
   delegationAccountBalance: string;
   /** balance of reward interchain account */
   rewardAccountBalance: string;
-  /** balance of fee interchain account */
-  feeAccountBalance: string;
   /** balance of sweep interchain account */
   sweepAccountBalance: string;
   /**
@@ -44,7 +42,6 @@ export interface OraclePayloadSDKType {
   };
   delegation_account_balance: string;
   reward_account_balance: string;
-  fee_account_balance: string;
   sweep_account_balance: string;
   last_completed_undelegation_epoch: Long;
 }
@@ -109,7 +106,6 @@ function createBaseOraclePayload(): OraclePayload {
     validators: {},
     delegationAccountBalance: "",
     rewardAccountBalance: "",
-    feeAccountBalance: "",
     sweepAccountBalance: "",
     lastCompletedUndelegationEpoch: Long.UZERO
   };
@@ -131,14 +127,11 @@ export const OraclePayload = {
     if (message.rewardAccountBalance !== "") {
       writer.uint32(42).string(message.rewardAccountBalance);
     }
-    if (message.feeAccountBalance !== "") {
-      writer.uint32(50).string(message.feeAccountBalance);
-    }
     if (message.sweepAccountBalance !== "") {
-      writer.uint32(58).string(message.sweepAccountBalance);
+      writer.uint32(50).string(message.sweepAccountBalance);
     }
     if (!message.lastCompletedUndelegationEpoch.isZero()) {
-      writer.uint32(64).uint64(message.lastCompletedUndelegationEpoch);
+      writer.uint32(56).uint64(message.lastCompletedUndelegationEpoch);
     }
     return writer;
   },
@@ -165,12 +158,9 @@ export const OraclePayload = {
           message.rewardAccountBalance = reader.string();
           break;
         case 6:
-          message.feeAccountBalance = reader.string();
-          break;
-        case 7:
           message.sweepAccountBalance = reader.string();
           break;
-        case 8:
+        case 7:
           message.lastCompletedUndelegationEpoch = (reader.uint64() as Long);
           break;
         default:
@@ -191,7 +181,6 @@ export const OraclePayload = {
       }, {}) : {},
       delegationAccountBalance: isSet(object.delegationAccountBalance) ? String(object.delegationAccountBalance) : "",
       rewardAccountBalance: isSet(object.rewardAccountBalance) ? String(object.rewardAccountBalance) : "",
-      feeAccountBalance: isSet(object.feeAccountBalance) ? String(object.feeAccountBalance) : "",
       sweepAccountBalance: isSet(object.sweepAccountBalance) ? String(object.sweepAccountBalance) : "",
       lastCompletedUndelegationEpoch: isSet(object.lastCompletedUndelegationEpoch) ? Long.fromValue(object.lastCompletedUndelegationEpoch) : Long.UZERO
     };
@@ -207,7 +196,6 @@ export const OraclePayload = {
     }
     message.delegationAccountBalance !== undefined && (obj.delegationAccountBalance = message.delegationAccountBalance);
     message.rewardAccountBalance !== undefined && (obj.rewardAccountBalance = message.rewardAccountBalance);
-    message.feeAccountBalance !== undefined && (obj.feeAccountBalance = message.feeAccountBalance);
     message.sweepAccountBalance !== undefined && (obj.sweepAccountBalance = message.sweepAccountBalance);
     message.lastCompletedUndelegationEpoch !== undefined && (obj.lastCompletedUndelegationEpoch = (message.lastCompletedUndelegationEpoch || Long.UZERO).toString());
     return obj;
@@ -225,7 +213,6 @@ export const OraclePayload = {
     }, {});
     message.delegationAccountBalance = object.delegationAccountBalance ?? "";
     message.rewardAccountBalance = object.rewardAccountBalance ?? "";
-    message.feeAccountBalance = object.feeAccountBalance ?? "";
     message.sweepAccountBalance = object.sweepAccountBalance ?? "";
     message.lastCompletedUndelegationEpoch = object.lastCompletedUndelegationEpoch !== undefined && object.lastCompletedUndelegationEpoch !== null ? Long.fromValue(object.lastCompletedUndelegationEpoch) : Long.UZERO;
     return message;

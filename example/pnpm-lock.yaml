@@ -1,12 +1,12 @@
 lockfileVersion: 5.4
 
 specifiers:
-  '@prism-finance/prismjs': 0.8.2
+  '@prism-finance/prismjs': 0.8.3
   '@refractedlabs/oraclejs': ^0.3.0
   '@refractedlabs/utils': 0.1.5
 
 dependencies:
-  '@prism-finance/prismjs': 0.8.2_google-protobuf@3.21.2
+  '@prism-finance/prismjs': 0.8.3_google-protobuf@3.21.2
   '@refractedlabs/oraclejs': 0.3.0_google-protobuf@3.21.2
   '@refractedlabs/utils': 0.1.5
 
@@ -211,8 +211,8 @@ packages:
       - debug
     dev: false
 
-  /@prism-finance/prismjs/0.8.2_google-protobuf@3.21.2:
-    resolution: {integrity: sha512-w3SFREqvDFTUwo45DiHPt9n99i/IN2jgNgZslB+Irnw4q/59pPSm3+SZBwaUtjkf1Q2wU6wM9FA43TKCIgdXdg==, tarball: download/@prism-finance/prismjs/0.8.2/9ec41e5e27dd8666a5d38d5297f190152a865573}
+  /@prism-finance/prismjs/0.8.3_google-protobuf@3.21.2:
+    resolution: {integrity: sha512-JiCGKe11aigOSss9zlLJrpz+5AZgML9Dta+H9biEMQc9vxUcSk3Qonw5TSSCX/oVMGhL4qVesR9FXjZdbaeU+A==, tarball: download/@prism-finance/prismjs/0.8.3/43ea3650664615535039751c1157dc24dc959cc9}
     dependencies:
       '@babel/runtime': 7.22.6
       '@cosmjs/amino': 0.31.0-alpha.1

@@ -20,7 +20,7 @@ export interface Query {
   /** Queries a Proposal by index. */
   proposal(request: DeepPartial<QueryGetProposalRequest>, metadata?: grpc.Metadata): Promise<QueryGetProposalResponse>;
   /** Queries a list of Proposal items. */
-  proposalAll(request?: DeepPartial<QueryAllProposalRequest>, metadata?: grpc.Metadata): Promise<QueryAllProposalResponse>;
+  proposalAll(request: DeepPartial<QueryAllProposalRequest>, metadata?: grpc.Metadata): Promise<QueryAllProposalResponse>;
 }
 export class QueryClientImpl implements Query {
   private readonly rpc: Rpc;
@@ -60,9 +60,7 @@ export class QueryClientImpl implements Query {
   proposal(request: DeepPartial<QueryGetProposalRequest>, metadata?: grpc.Metadata): Promise<QueryGetProposalResponse> {
     return this.rpc.unary(QueryGetProposalDesc, QueryGetProposalRequest.fromPartial(request), metadata);
   }
-  proposalAll(request: DeepPartial<QueryAllProposalRequest> = {
-    pagination: undefined
-  }, metadata?: grpc.Metadata): Promise<QueryAllProposalResponse> {
+  proposalAll(request: DeepPartial<QueryAllProposalRequest>, metadata?: grpc.Metadata): Promise<QueryAllProposalResponse> {
     return this.rpc.unary(QueryAllProposalDesc, QueryAllProposalRequest.fromPartial(request), metadata);
   }
 }

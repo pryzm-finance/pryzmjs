@@ -124,8 +124,7 @@ message MsgRebalanceDelegationsResponse {}
 enum ICAType {
   DELEGATION = 0;
   REWARD = 1;
-  FEE = 2;
-  SWEEP = 3;
+  SWEEP = 2;
 }
 
 message MsgRedeemInterchainAccount {

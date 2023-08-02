@@ -6,8 +6,7 @@ import * as _m0 from "protobufjs/minimal";
 export enum ICAType {
   DELEGATION = 0,
   REWARD = 1,
-  FEE = 2,
-  SWEEP = 3,
+  SWEEP = 2,
   UNRECOGNIZED = -1,
 }
 export const ICATypeSDKType = ICAType;
@@ -20,9 +19,6 @@ export function iCATypeFromJSON(object: any): ICAType {
     case "REWARD":
       return ICAType.REWARD;
     case 2:
-    case "FEE":
-      return ICAType.FEE;
-    case 3:
     case "SWEEP":
       return ICAType.SWEEP;
     case -1:
@@ -37,8 +33,6 @@ export function iCATypeToJSON(object: ICAType): string {
       return "DELEGATION";
     case ICAType.REWARD:
       return "REWARD";
-    case ICAType.FEE:
-      return "FEE";
     case ICAType.SWEEP:
       return "SWEEP";
     case ICAType.UNRECOGNIZED:
