@@ -105,9 +105,11 @@ export interface QueryGetProposalResponseSDKType {
   proposal?: ProposalSDKType;
 }
 export interface QueryAllProposalRequest {
+  asset?: string;
   pagination?: PageRequest;
 }
 export interface QueryAllProposalRequestSDKType {
+  asset?: string;
   pagination?: PageRequestSDKType;
 }
 export interface QueryAllProposalResponse {
@@ -816,13 +818,17 @@ export const QueryGetProposalResponse = {
 };
 function createBaseQueryAllProposalRequest(): QueryAllProposalRequest {
   return {
+    asset: "",
     pagination: undefined
   };
 }
 export const QueryAllProposalRequest = {
   encode(message: QueryAllProposalRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.asset !== "") {
+      writer.uint32(10).string(message.asset);
+    }
     if (message.pagination !== undefined) {
-      PageRequest.encode(message.pagination, writer.uint32(10).fork()).ldelim();
+      PageRequest.encode(message.pagination, writer.uint32(18).fork()).ldelim();
     }
     return writer;
   },
@@ -834,6 +840,9 @@ export const QueryAllProposalRequest = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
+          message.asset = reader.string();
+          break;
+        case 2:
           message.pagination = PageRequest.decode(reader, reader.uint32());
           break;
         default:
@@ -845,16 +854,19 @@ export const QueryAllProposalRequest = {
   },
   fromJSON(object: any): QueryAllProposalRequest {
     return {
+      asset: isSet(object.asset) ? String(object.asset) : "",
       pagination: isSet(object.pagination) ? PageRequest.fromJSON(object.pagination) : undefined
     };
   },
   toJSON(message: QueryAllProposalRequest): unknown {
     const obj: any = {};
+    message.asset !== undefined && (obj.asset = message.asset);
     message.pagination !== undefined && (obj.pagination = message.pagination ? PageRequest.toJSON(message.pagination) : undefined);
     return obj;
   },
   fromPartial(object: Partial<QueryAllProposalRequest>): QueryAllProposalRequest {
     const message = createBaseQueryAllProposalRequest();
+    message.asset = object.asset ?? "";
     message.pagination = object.pagination !== undefined && object.pagination !== null ? PageRequest.fromPartial(object.pagination) : undefined;
     return message;
   }

@@ -4,9 +4,8 @@ import {PRISMATICS_ENDPOINT} from "./config";
 
 async function main() {
     const cosmaticsClient = await cosmatics.ClientFactory.createClient({restEndpoint: PRISMATICS_ENDPOINT})
-
-    const syncInfo = (await cosmaticsClient.cosmatics.syncInfo()).sync_info
-    console.log(syncInfo)
+    const syncState = (await cosmaticsClient.cosmatics.syncState()).sync_state
+    console.log(syncState)
 }
 
 main().catch(console.error)

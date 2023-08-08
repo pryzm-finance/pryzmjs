@@ -10,7 +10,8 @@ import { QueryPoolTokenRequest, QueryPoolTokenResponseSDKType, QueryAllPoolToken
 import { QueryUserTradeHistoryRequest, QueryUserTradeHistoryResponseSDKType } from "./user_trade_history";
 import { QueryPoolTradeHistoryRequest, QueryPoolTradeHistoryResponseSDKType } from "./pool_trade_history";
 import { QueryAssetProposalRequest, QueryAssetProposalResponseSDKType, QuerySubmitProposalMsgsRequest, QuerySubmitProposalMsgsResponseSDKType } from "./pgov";
-import { QueryPoolTradeVolumeRequest, QueryPoolTradeVolumeResponseSDKType, QueryTokenTradeVolumeRequest, QueryTokenTradeVolumeResponseSDKType } from "./trade_volume";
+import { QueryPoolTradeVolumeRequest, QueryPoolTradeVolumeResponseSDKType, QueryTokenTradeVolumeRequest, QueryTokenTradeVolumeResponseSDKType, QueryFavoritePairsRequest, QueryFavoritePairsResponseSDKType } from "./trade_volume";
+import { QuerySwappableTokensRequest, QuerySwappableTokensResponseSDKType } from "./swappable_tokens";
 export class LCDQueryClient {
   req: LCDClient;
   constructor({
@@ -32,6 +33,8 @@ export class LCDQueryClient {
     this.submitProposalMsgs = this.submitProposalMsgs.bind(this);
     this.poolTradeVolume = this.poolTradeVolume.bind(this);
     this.tokenTradeVolume = this.tokenTradeVolume.bind(this);
+    this.favoritePairs = this.favoritePairs.bind(this);
+    this.swappableTokens = this.swappableTokens.bind(this);
   }
   /* Asset */
   async asset(params: QueryAssetRequest): Promise<QueryAssetResponseSDKType> {
@@ -193,5 +196,24 @@ export class LCDQueryClient {
     }
     const endpoint = `prismatics/trade_volume/token/${params.denom}`;
     return await this.req.get<QueryTokenTradeVolumeResponseSDKType>(endpoint, options);
+  }
+  /* FavoritePairs */
+  async favoritePairs(params: QueryFavoritePairsRequest): Promise<QueryFavoritePairsResponseSDKType> {
+    const options: any = {
+      params: {}
+    };
+    if (typeof params?.from !== "undefined") {
+      options.params.from = params.from;
+    }
+    if (typeof params?.to !== "undefined") {
+      options.params.to = params.to;
+    }
+    const endpoint = `prismatics/trade_volume/favorite_pairs`;
+    return await this.req.get<QueryFavoritePairsResponseSDKType>(endpoint, options);
+  }
+  /* SwappableTokens */
+  async swappableTokens(_params: QuerySwappableTokensRequest = {}): Promise<QuerySwappableTokensResponseSDKType> {
+    const endpoint = `prismatics/swappable_tokens`;
+    return await this.req.get<QuerySwappableTokensResponseSDKType>(endpoint);
   }
 }

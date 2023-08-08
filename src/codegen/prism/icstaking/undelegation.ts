@@ -47,7 +47,7 @@ export interface ChannelUndelegation {
   swept: boolean;
   /**
    * whether all the undelegation are completely received
-   * if received is true, transferring_amount must be zero
+   * if received is true, pending_amount must be zero
    */
   received: boolean;
   /**

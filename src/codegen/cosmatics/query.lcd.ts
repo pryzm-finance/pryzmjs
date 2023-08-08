@@ -2,7 +2,7 @@
 import { GetTxRequest, GetTxResponseSDKType, GetTxsEventRequest, GetTxsEventResponseSDKType } from "../cosmos/tx/v1beta1/service";
 import { setPaginationParams } from "../helpers";
 import { LCDClient } from "@osmonauts/lcd";
-import { QuerySyncInfoRequest, QuerySyncInfoResponseSDKType } from "./sync_info";
+import { QuerySyncStateRequest, QuerySyncStateResponseSDKType } from "./sync_state";
 import { BlockRequest } from "../tendermint/blocksync/types";
 import { BlockSDKType } from "../tendermint/types/block";
 export class LCDQueryClient {
@@ -13,15 +13,15 @@ export class LCDQueryClient {
     requestClient: LCDClient;
   }) {
     this.req = requestClient;
-    this.syncInfo = this.syncInfo.bind(this);
+    this.syncState = this.syncState.bind(this);
     this.block = this.block.bind(this);
     this.transaction = this.transaction.bind(this);
     this.transactionByEvent = this.transactionByEvent.bind(this);
   }
-  /* SyncInfo */
-  async syncInfo(_params: QuerySyncInfoRequest = {}): Promise<QuerySyncInfoResponseSDKType> {
-    const endpoint = `cosmatics/sync_info`;
-    return await this.req.get<QuerySyncInfoResponseSDKType>(endpoint);
+  /* SyncState */
+  async syncState(_params: QuerySyncStateRequest = {}): Promise<QuerySyncStateResponseSDKType> {
+    const endpoint = `cosmatics/sync_state`;
+    return await this.req.get<QuerySyncStateResponseSDKType>(endpoint);
   }
   /* Block */
   async block(params: BlockRequest): Promise<BlockSDKType> {

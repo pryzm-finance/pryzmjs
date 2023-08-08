@@ -3,6 +3,7 @@ package prismatics.server;
 
 import "gogoproto/gogo.proto";
 import "cosmos_proto/cosmos.proto";
+import "prismatics/trade_volume.proto";
 
 
 option go_package = "github.com/prism-finance/prismatics/server";
@@ -54,4 +55,21 @@ message QueryTokenTradeVolumeResponse {
     (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Dec",
     (gogoproto.nullable) = false
   ];
+}
+
+message QueryFavoritePairsRequest {
+  string from = 1 [
+    (cosmos_proto.scalar) = "cosmos.Int",
+    (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Int",
+    (gogoproto.nullable) = false
+  ];
+  string to = 2 [
+    (cosmos_proto.scalar) = "cosmos.Int",
+    (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Int",
+    (gogoproto.nullable) = false
+  ];
+}
+
+message QueryFavoritePairsResponse {
+  repeated FavoritePair pairs = 1 [(gogoproto.nullable) = false];
 }

@@ -123,7 +123,8 @@ message QueryGetProposalResponse {
 }
 
 message QueryAllProposalRequest {
-  cosmos.base.query.v1beta1.PageRequest pagination = 1;
+  string asset = 1;
+  cosmos.base.query.v1beta1.PageRequest pagination = 2;
 }
 
 message QueryAllProposalResponse {

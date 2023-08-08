@@ -85,7 +85,7 @@ message ChannelUndelegation {
   bool swept = 9;
 
   // whether all the undelegation are completely received
-  // if received is true, transferring_amount must be zero
+  // if received is true, pending_amount must be zero
   bool received = 10;
 
   // the amount of assets that are redeemed by users.

@@ -122,12 +122,11 @@ message HostChainState {
 message HostAccounts {
   HostAccount delegation = 1 [(gogoproto.nullable) = false];
   HostAccount reward = 2 [(gogoproto.nullable) = false];
-  HostAccount fee = 3 [(gogoproto.nullable) = false];
-  HostAccount sweep = 4 [(gogoproto.nullable) = false];
+  HostAccount sweep = 3 [(gogoproto.nullable) = false];
 
   // This is the state of setting the reward account as the account which receives the staking rewards on host chain.
   // On cosmos based chains, the reward account is registered using MsgSetWithdrawAddress in distribution module.
-  AccountState reward_account_claiming_state = 5;
+  AccountState reward_account_claiming_state = 4;
 }
 
 message HostAccount {

@@ -1,16 +1,23 @@
 lockfileVersion: 5.4
 
 specifiers:
-  '@prism-finance/prismjs': 0.8.2
+  '@prism-finance/prismjs': 0.8.6
   '@refractedlabs/oraclejs': ^0.3.0
   '@refractedlabs/utils': 0.1.5
 
 dependencies:
-  '@prism-finance/prismjs': 0.8.2_google-protobuf@3.21.2
+  '@prism-finance/prismjs': 0.8.6_google-protobuf@3.21.2
   '@refractedlabs/oraclejs': 0.3.0_google-protobuf@3.21.2
   '@refractedlabs/utils': 0.1.5
 
 packages:
+
+  /@babel/runtime/7.22.10:
+    resolution: {integrity: sha512-21t/fkKLMZI4pqP2wlmsQAWnYW1PDyKyyUV4vCi+B25ydmdaYTKXPwCj0BzSUnZf4seIiYvSA3jcZ3gdsMFkLQ==}
+    engines: {node: '>=6.9.0'}
+    dependencies:
+      regenerator-runtime: 0.14.0
+    dev: false
 
   /@babel/runtime/7.22.6:
     resolution: {integrity: sha512-wDb5pWm4WDdF6LFUde3Jl8WzPA+3ZbxYqkC6xAXuD3irdEHN1k0NfTRrJD8ZD378SJ61miMLCqIOXYhd8x+AJQ==}
@@ -205,16 +212,16 @@ packages:
   /@osmonauts/lcd/0.10.0:
     resolution: {integrity: sha512-PzmXk9x9MHyLn2fUztpAqWqvDmMiEJaQv/JcAoAOE8VdHrD9Hf/KWnE1RZtamuS2ngQRqvQPD0xotCGXW7eTxA==}
     dependencies:
-      '@babel/runtime': 7.22.6
+      '@babel/runtime': 7.22.10
       axios: 0.27.2
     transitivePeerDependencies:
       - debug
     dev: false
 
-  /@prism-finance/prismjs/0.8.2_google-protobuf@3.21.2:
-    resolution: {integrity: sha512-w3SFREqvDFTUwo45DiHPt9n99i/IN2jgNgZslB+Irnw4q/59pPSm3+SZBwaUtjkf1Q2wU6wM9FA43TKCIgdXdg==, tarball: download/@prism-finance/prismjs/0.8.2/9ec41e5e27dd8666a5d38d5297f190152a865573}
+  /@prism-finance/prismjs/0.8.6_google-protobuf@3.21.2:
+    resolution: {integrity: sha512-kb5OEg8oemuQdcIBSQLnNxzJIHFD5OAWMkM8ImI3YeGHSn4lSyd7og3+XPsL45dcjoQSxtHNDchEiImjtzA2xg==, tarball: download/@prism-finance/prismjs/0.8.6/ce67daf0e8887ca2e056244fcc46c586a4ccd385}
     dependencies:
-      '@babel/runtime': 7.22.6
+      '@babel/runtime': 7.22.10
       '@cosmjs/amino': 0.31.0-alpha.1
       '@cosmjs/proto-signing': 0.31.0-alpha.1
       '@cosmjs/stargate': 0.31.0-alpha.1
@@ -709,6 +716,10 @@ packages:
 
   /regenerator-runtime/0.13.11:
     resolution: {integrity: sha512-kY1AZVr2Ra+t+piVaJ4gxaFaReZVH40AKNo7UCX6W+dEwBo/2oZJzqfuN1qLq1oL45o56cPaTXELwrTh8Fpggg==}
+    dev: false
+
+  /regenerator-runtime/0.14.0:
+    resolution: {integrity: sha512-srw17NI0TUWHuGa5CFGGmhfNIeja30WMBfbslPNhf6JrqQlLN5gcrvig1oqPxiVaXb0oW0XRKtH6Nngs5lKCIA==}
     dev: false
 
   /safe-buffer/5.2.1:
