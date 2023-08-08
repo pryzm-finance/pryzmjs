@@ -7,14 +7,14 @@ import "google/protobuf/timestamp.proto";
 option go_package = "github.com/refractedlabs/cosmatics/types";
 
 
-message SyncInfo {
+message SyncState {
   int64 block_height = 1;
   google.protobuf.Timestamp block_time = 2 [(gogoproto.stdtime) = true, (gogoproto.nullable) = false];
 }
 
-message QuerySyncInfoRequest {
+message QuerySyncStateRequest {
 }
 
-message QuerySyncInfoResponse {
-  SyncInfo sync_info = 1 [(gogoproto.nullable) = false];
+message QuerySyncStateResponse {
+  SyncState sync_state = 1 [(gogoproto.nullable) = false];
 }

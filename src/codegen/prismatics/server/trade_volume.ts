@@ -1,3 +1,4 @@
+import { FavoritePair, FavoritePairSDKType } from "../trade_volume";
 import { Long, isSet } from "../../helpers";
 import * as _m0 from "protobufjs/minimal";
 export interface QueryPoolTradeVolumeRequest {
@@ -33,6 +34,20 @@ export interface QueryTokenTradeVolumeResponse {
 }
 export interface QueryTokenTradeVolumeResponseSDKType {
   volume: string;
+}
+export interface QueryFavoritePairsRequest {
+  from?: string;
+  to?: string;
+}
+export interface QueryFavoritePairsRequestSDKType {
+  from?: string;
+  to?: string;
+}
+export interface QueryFavoritePairsResponse {
+  pairs: FavoritePair[];
+}
+export interface QueryFavoritePairsResponseSDKType {
+  pairs: FavoritePairSDKType[];
 }
 function createBaseQueryPoolTradeVolumeRequest(): QueryPoolTradeVolumeRequest {
   return {
@@ -261,6 +276,110 @@ export const QueryTokenTradeVolumeResponse = {
   fromPartial(object: Partial<QueryTokenTradeVolumeResponse>): QueryTokenTradeVolumeResponse {
     const message = createBaseQueryTokenTradeVolumeResponse();
     message.volume = object.volume ?? "";
+    return message;
+  }
+};
+function createBaseQueryFavoritePairsRequest(): QueryFavoritePairsRequest {
+  return {
+    from: "",
+    to: ""
+  };
+}
+export const QueryFavoritePairsRequest = {
+  encode(message: QueryFavoritePairsRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.from !== "") {
+      writer.uint32(10).string(message.from);
+    }
+    if (message.to !== "") {
+      writer.uint32(18).string(message.to);
+    }
+    return writer;
+  },
+  decode(input: _m0.Reader | Uint8Array, length?: number): QueryFavoritePairsRequest {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseQueryFavoritePairsRequest();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.from = reader.string();
+          break;
+        case 2:
+          message.to = reader.string();
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromJSON(object: any): QueryFavoritePairsRequest {
+    return {
+      from: isSet(object.from) ? String(object.from) : "",
+      to: isSet(object.to) ? String(object.to) : ""
+    };
+  },
+  toJSON(message: QueryFavoritePairsRequest): unknown {
+    const obj: any = {};
+    message.from !== undefined && (obj.from = message.from);
+    message.to !== undefined && (obj.to = message.to);
+    return obj;
+  },
+  fromPartial(object: Partial<QueryFavoritePairsRequest>): QueryFavoritePairsRequest {
+    const message = createBaseQueryFavoritePairsRequest();
+    message.from = object.from ?? "";
+    message.to = object.to ?? "";
+    return message;
+  }
+};
+function createBaseQueryFavoritePairsResponse(): QueryFavoritePairsResponse {
+  return {
+    pairs: []
+  };
+}
+export const QueryFavoritePairsResponse = {
+  encode(message: QueryFavoritePairsResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    for (const v of message.pairs) {
+      FavoritePair.encode(v!, writer.uint32(10).fork()).ldelim();
+    }
+    return writer;
+  },
+  decode(input: _m0.Reader | Uint8Array, length?: number): QueryFavoritePairsResponse {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseQueryFavoritePairsResponse();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.pairs.push(FavoritePair.decode(reader, reader.uint32()));
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromJSON(object: any): QueryFavoritePairsResponse {
+    return {
+      pairs: Array.isArray(object?.pairs) ? object.pairs.map((e: any) => FavoritePair.fromJSON(e)) : []
+    };
+  },
+  toJSON(message: QueryFavoritePairsResponse): unknown {
+    const obj: any = {};
+    if (message.pairs) {
+      obj.pairs = message.pairs.map(e => e ? FavoritePair.toJSON(e) : undefined);
+    } else {
+      obj.pairs = [];
+    }
+    return obj;
+  },
+  fromPartial(object: Partial<QueryFavoritePairsResponse>): QueryFavoritePairsResponse {
+    const message = createBaseQueryFavoritePairsResponse();
+    message.pairs = object.pairs?.map(e => FavoritePair.fromPartial(e)) || [];
     return message;
   }
 };

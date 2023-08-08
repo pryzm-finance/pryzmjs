@@ -13,6 +13,7 @@ import "prismatics/server/pgov.proto";
 import "prismatics/server/user_trade_history.proto";
 import "prismatics/server/pool_trade_history.proto";
 import "prismatics/server/trade_volume.proto";
+import "prismatics/server/swappable_tokens.proto";
 import "cosmos/tx/v1beta1/service.proto";
 
 
@@ -70,5 +71,13 @@ service Query {
 
   rpc TokenTradeVolume(QueryTokenTradeVolumeRequest) returns (QueryTokenTradeVolumeResponse) {
     option (google.api.http).get = "/prismatics/trade_volume/token/{denom}";
+  }
+
+  rpc FavoritePairs(QueryFavoritePairsRequest) returns (QueryFavoritePairsResponse) {
+    option (google.api.http).get = "/prismatics/trade_volume/favorite_pairs";
+  }
+
+  rpc SwappableTokens(QuerySwappableTokensRequest) returns (QuerySwappableTokensResponse) {
+    option (google.api.http).get = "/prismatics/swappable_tokens";
   }
 }

@@ -1,30 +1,30 @@
 import { Timestamp, TimestampSDKType } from "../google/protobuf/timestamp";
 import { Long, isSet, fromJsonTimestamp, fromTimestamp } from "../helpers";
 import * as _m0 from "protobufjs/minimal";
-export interface SyncInfo {
+export interface SyncState {
   blockHeight: Long;
   blockTime?: Timestamp;
 }
-export interface SyncInfoSDKType {
+export interface SyncStateSDKType {
   block_height: Long;
   block_time?: TimestampSDKType;
 }
-export interface QuerySyncInfoRequest {}
-export interface QuerySyncInfoRequestSDKType {}
-export interface QuerySyncInfoResponse {
-  syncInfo?: SyncInfo;
+export interface QuerySyncStateRequest {}
+export interface QuerySyncStateRequestSDKType {}
+export interface QuerySyncStateResponse {
+  syncState?: SyncState;
 }
-export interface QuerySyncInfoResponseSDKType {
-  sync_info?: SyncInfoSDKType;
+export interface QuerySyncStateResponseSDKType {
+  sync_state?: SyncStateSDKType;
 }
-function createBaseSyncInfo(): SyncInfo {
+function createBaseSyncState(): SyncState {
   return {
     blockHeight: Long.ZERO,
     blockTime: undefined
   };
 }
-export const SyncInfo = {
-  encode(message: SyncInfo, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+export const SyncState = {
+  encode(message: SyncState, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (!message.blockHeight.isZero()) {
       writer.uint32(8).int64(message.blockHeight);
     }
@@ -33,10 +33,10 @@ export const SyncInfo = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): SyncInfo {
+  decode(input: _m0.Reader | Uint8Array, length?: number): SyncState {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseSyncInfo();
+    const message = createBaseSyncState();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -53,36 +53,36 @@ export const SyncInfo = {
     }
     return message;
   },
-  fromJSON(object: any): SyncInfo {
+  fromJSON(object: any): SyncState {
     return {
       blockHeight: isSet(object.blockHeight) ? Long.fromValue(object.blockHeight) : Long.ZERO,
       blockTime: isSet(object.blockTime) ? fromJsonTimestamp(object.blockTime) : undefined
     };
   },
-  toJSON(message: SyncInfo): unknown {
+  toJSON(message: SyncState): unknown {
     const obj: any = {};
     message.blockHeight !== undefined && (obj.blockHeight = (message.blockHeight || Long.ZERO).toString());
     message.blockTime !== undefined && (obj.blockTime = fromTimestamp(message.blockTime).toISOString());
     return obj;
   },
-  fromPartial(object: Partial<SyncInfo>): SyncInfo {
-    const message = createBaseSyncInfo();
+  fromPartial(object: Partial<SyncState>): SyncState {
+    const message = createBaseSyncState();
     message.blockHeight = object.blockHeight !== undefined && object.blockHeight !== null ? Long.fromValue(object.blockHeight) : Long.ZERO;
     message.blockTime = object.blockTime !== undefined && object.blockTime !== null ? Timestamp.fromPartial(object.blockTime) : undefined;
     return message;
   }
 };
-function createBaseQuerySyncInfoRequest(): QuerySyncInfoRequest {
+function createBaseQuerySyncStateRequest(): QuerySyncStateRequest {
   return {};
 }
-export const QuerySyncInfoRequest = {
-  encode(_: QuerySyncInfoRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+export const QuerySyncStateRequest = {
+  encode(_: QuerySyncStateRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): QuerySyncInfoRequest {
+  decode(input: _m0.Reader | Uint8Array, length?: number): QuerySyncStateRequest {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseQuerySyncInfoRequest();
+    const message = createBaseQuerySyncStateRequest();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -93,39 +93,39 @@ export const QuerySyncInfoRequest = {
     }
     return message;
   },
-  fromJSON(_: any): QuerySyncInfoRequest {
+  fromJSON(_: any): QuerySyncStateRequest {
     return {};
   },
-  toJSON(_: QuerySyncInfoRequest): unknown {
+  toJSON(_: QuerySyncStateRequest): unknown {
     const obj: any = {};
     return obj;
   },
-  fromPartial(_: Partial<QuerySyncInfoRequest>): QuerySyncInfoRequest {
-    const message = createBaseQuerySyncInfoRequest();
+  fromPartial(_: Partial<QuerySyncStateRequest>): QuerySyncStateRequest {
+    const message = createBaseQuerySyncStateRequest();
     return message;
   }
 };
-function createBaseQuerySyncInfoResponse(): QuerySyncInfoResponse {
+function createBaseQuerySyncStateResponse(): QuerySyncStateResponse {
   return {
-    syncInfo: undefined
+    syncState: undefined
   };
 }
-export const QuerySyncInfoResponse = {
-  encode(message: QuerySyncInfoResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (message.syncInfo !== undefined) {
-      SyncInfo.encode(message.syncInfo, writer.uint32(10).fork()).ldelim();
+export const QuerySyncStateResponse = {
+  encode(message: QuerySyncStateResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.syncState !== undefined) {
+      SyncState.encode(message.syncState, writer.uint32(10).fork()).ldelim();
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): QuerySyncInfoResponse {
+  decode(input: _m0.Reader | Uint8Array, length?: number): QuerySyncStateResponse {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseQuerySyncInfoResponse();
+    const message = createBaseQuerySyncStateResponse();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.syncInfo = SyncInfo.decode(reader, reader.uint32());
+          message.syncState = SyncState.decode(reader, reader.uint32());
           break;
         default:
           reader.skipType(tag & 7);
@@ -134,19 +134,19 @@ export const QuerySyncInfoResponse = {
     }
     return message;
   },
-  fromJSON(object: any): QuerySyncInfoResponse {
+  fromJSON(object: any): QuerySyncStateResponse {
     return {
-      syncInfo: isSet(object.syncInfo) ? SyncInfo.fromJSON(object.syncInfo) : undefined
+      syncState: isSet(object.syncState) ? SyncState.fromJSON(object.syncState) : undefined
     };
   },
-  toJSON(message: QuerySyncInfoResponse): unknown {
+  toJSON(message: QuerySyncStateResponse): unknown {
     const obj: any = {};
-    message.syncInfo !== undefined && (obj.syncInfo = message.syncInfo ? SyncInfo.toJSON(message.syncInfo) : undefined);
+    message.syncState !== undefined && (obj.syncState = message.syncState ? SyncState.toJSON(message.syncState) : undefined);
     return obj;
   },
-  fromPartial(object: Partial<QuerySyncInfoResponse>): QuerySyncInfoResponse {
-    const message = createBaseQuerySyncInfoResponse();
-    message.syncInfo = object.syncInfo !== undefined && object.syncInfo !== null ? SyncInfo.fromPartial(object.syncInfo) : undefined;
+  fromPartial(object: Partial<QuerySyncStateResponse>): QuerySyncStateResponse {
+    const message = createBaseQuerySyncStateResponse();
+    message.syncState = object.syncState !== undefined && object.syncState !== null ? SyncState.fromPartial(object.syncState) : undefined;
     return message;
   }
 };

@@ -1,10 +1,10 @@
-import * as _2 from "./sync_info";
-import * as _263 from "./query.lcd";
-import * as _443 from "./lcd";
+import * as _2 from "./sync_state";
+import * as _264 from "./query.lcd";
+import * as _444 from "./lcd";
 export const cosmatics = {
   ..._2,
-  ..._263,
+  ..._264,
   ClientFactory: {
-    ..._443,
+    ..._444,
   }
 };
