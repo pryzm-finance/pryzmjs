@@ -14,6 +14,8 @@ import "prismatics/server/user_trade_history.proto";
 import "prismatics/server/pool_trade_history.proto";
 import "prismatics/server/trade_volume.proto";
 import "prismatics/server/swappable_tokens.proto";
+import "prismatics/server/price_change.proto";
+import "prismatics/server/price_bounds.proto";
 import "cosmos/tx/v1beta1/service.proto";
 
 
@@ -79,5 +81,13 @@ service Query {
 
   rpc SwappableTokens(QuerySwappableTokensRequest) returns (QuerySwappableTokensResponse) {
     option (google.api.http).get = "/prismatics/swappable_tokens";
+  }
+
+  rpc PriceBounds(QueryPriceBoundsRequest) returns (QueryPriceBoundsResponse) {
+    option (google.api.http).get = "/prismatics/price_bounds/{denom}";
+  }
+
+  rpc PriceChange(QueryPriceChangeRequest) returns (QueryPriceChangeResponse) {
+    option (google.api.http).get = "/prismatics/price_change/{denom}";
   }
 }

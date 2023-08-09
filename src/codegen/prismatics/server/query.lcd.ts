@@ -12,6 +12,8 @@ import { QueryPoolTradeHistoryRequest, QueryPoolTradeHistoryResponseSDKType } fr
 import { QueryAssetProposalRequest, QueryAssetProposalResponseSDKType, QuerySubmitProposalMsgsRequest, QuerySubmitProposalMsgsResponseSDKType } from "./pgov";
 import { QueryPoolTradeVolumeRequest, QueryPoolTradeVolumeResponseSDKType, QueryTokenTradeVolumeRequest, QueryTokenTradeVolumeResponseSDKType, QueryFavoritePairsRequest, QueryFavoritePairsResponseSDKType } from "./trade_volume";
 import { QuerySwappableTokensRequest, QuerySwappableTokensResponseSDKType } from "./swappable_tokens";
+import { QueryPriceBoundsRequest, QueryPriceBoundsResponseSDKType } from "./price_bounds";
+import { QueryPriceChangeRequest, QueryPriceChangeResponseSDKType } from "./price_change";
 export class LCDQueryClient {
   req: LCDClient;
   constructor({
@@ -35,6 +37,8 @@ export class LCDQueryClient {
     this.tokenTradeVolume = this.tokenTradeVolume.bind(this);
     this.favoritePairs = this.favoritePairs.bind(this);
     this.swappableTokens = this.swappableTokens.bind(this);
+    this.priceBounds = this.priceBounds.bind(this);
+    this.priceChange = this.priceChange.bind(this);
   }
   /* Asset */
   async asset(params: QueryAssetRequest): Promise<QueryAssetResponseSDKType> {
@@ -215,5 +219,33 @@ export class LCDQueryClient {
   async swappableTokens(_params: QuerySwappableTokensRequest = {}): Promise<QuerySwappableTokensResponseSDKType> {
     const endpoint = `prismatics/swappable_tokens`;
     return await this.req.get<QuerySwappableTokensResponseSDKType>(endpoint);
+  }
+  /* PriceBounds */
+  async priceBounds(params: QueryPriceBoundsRequest): Promise<QueryPriceBoundsResponseSDKType> {
+    const options: any = {
+      params: {}
+    };
+    if (typeof params?.from !== "undefined") {
+      options.params.from = params.from;
+    }
+    if (typeof params?.to !== "undefined") {
+      options.params.to = params.to;
+    }
+    const endpoint = `prismatics/price_bounds/${params.denom}`;
+    return await this.req.get<QueryPriceBoundsResponseSDKType>(endpoint, options);
+  }
+  /* PriceChange */
+  async priceChange(params: QueryPriceChangeRequest): Promise<QueryPriceChangeResponseSDKType> {
+    const options: any = {
+      params: {}
+    };
+    if (typeof params?.from !== "undefined") {
+      options.params.from = params.from;
+    }
+    if (typeof params?.to !== "undefined") {
+      options.params.to = params.to;
+    }
+    const endpoint = `prismatics/price_change/${params.denom}`;
+    return await this.req.get<QueryPriceChangeResponseSDKType>(endpoint, options);
   }
 }
