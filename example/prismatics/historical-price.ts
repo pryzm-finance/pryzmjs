@@ -8,8 +8,8 @@ async function main() {
 
     let prices = (await prismaticsClient.prismatics.historicalPrice({
         denom: `cluna`,
-        from: `${Date.parse('2023-07-27 11:59:33.619564 GMT')}`,
-        to: `${Date.parse('2023-07-27 12:10:04.045069 GMT')}`,
+        from: `${Date.parse('2023-07-27 11:59:33.619 GMT')}`,
+        to: `${Date.parse('2023-07-27 12:10:04.045 GMT')}`,
         timeResolution: {
             type: TimeResolutionType.TIME_RESOLUTION_TYPE_MINUTE,
             value: 1
@@ -20,8 +20,8 @@ async function main() {
     prices = (await prismaticsClient.prismatics.historicalPrice({
         denom: `cluna`,
         quote: 'catom',
-        from: `${Date.parse('2023-07-27 11:59:33.619564 GMT')}`,
-        to: `${Date.parse('2023-07-27 12:10:04.045069 GMT')}`,
+        from: `${Date.parse('2023-07-27 11:59:33.619 GMT')}`,
+        to: `${Date.parse('2023-07-27 12:10:04.045 GMT')}`,
         timeResolution: {
             type: TimeResolutionType.TIME_RESOLUTION_TYPE_MINUTE,
             value: 1
