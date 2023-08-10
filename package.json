@@ -1,6 +1,6 @@
 {
   "name": "@prism-finance/prismjs",
-  "version": "0.8.8",
+  "version": "0.8.9",
   "description": "Javascript SDK for Prism",
   "author": "amin <amin@prismprotocol.app>",
   "homepage": "https://github.com/prism-finance/prismjs#readme",
@@ -66,10 +66,10 @@
   },
   "dependencies": {
     "@babel/runtime": "^7.21.0",
-    "@cosmjs/amino": "0.31.0-alpha.1",
-    "@cosmjs/proto-signing": "0.31.0-alpha.1",
-    "@cosmjs/stargate": "0.31.0-alpha.1",
-    "@cosmjs/tendermint-rpc": "0.31.0-alpha.1",
+    "@cosmjs/amino": "0.31.0",
+    "@cosmjs/proto-signing": "0.31.0",
+    "@cosmjs/stargate": "0.31.0",
+    "@cosmjs/tendermint-rpc": "0.31.0",
     "@improbable-eng/grpc-web": "^0.15.0",
     "@improbable-eng/grpc-web-node-http-transport": "^0.15.0",
     "@osmonauts/lcd": "0.10.0",
