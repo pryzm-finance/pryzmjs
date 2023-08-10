@@ -10,7 +10,7 @@ async function main() {
         from: `${Date.parse('2023-07-27 11:59:33.619 GMT')}`,
         to: `${Date.parse('2023-07-27 12:10:04.045 GMT')}`,
         poolId: Long.ZERO,
-    })).volume
+    }))
 
     console.log(vol)
 }

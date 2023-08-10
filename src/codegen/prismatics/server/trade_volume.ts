@@ -13,9 +13,13 @@ export interface QueryPoolTradeVolumeRequestSDKType {
 }
 export interface QueryPoolTradeVolumeResponse {
   volume: string;
+  swapFeeVolume: string;
+  joinExitSwapFeeVolume: string;
 }
 export interface QueryPoolTradeVolumeResponseSDKType {
   volume: string;
+  swap_fee_volume: string;
+  join_exit_swap_fee_volume: string;
 }
 export interface QueryTokenTradeVolumeRequest {
   denom: string;
@@ -116,13 +120,21 @@ export const QueryPoolTradeVolumeRequest = {
 };
 function createBaseQueryPoolTradeVolumeResponse(): QueryPoolTradeVolumeResponse {
   return {
-    volume: ""
+    volume: "",
+    swapFeeVolume: "",
+    joinExitSwapFeeVolume: ""
   };
 }
 export const QueryPoolTradeVolumeResponse = {
   encode(message: QueryPoolTradeVolumeResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.volume !== "") {
       writer.uint32(10).string(message.volume);
+    }
+    if (message.swapFeeVolume !== "") {
+      writer.uint32(18).string(message.swapFeeVolume);
+    }
+    if (message.joinExitSwapFeeVolume !== "") {
+      writer.uint32(26).string(message.joinExitSwapFeeVolume);
     }
     return writer;
   },
@@ -136,6 +148,12 @@ export const QueryPoolTradeVolumeResponse = {
         case 1:
           message.volume = reader.string();
           break;
+        case 2:
+          message.swapFeeVolume = reader.string();
+          break;
+        case 3:
+          message.joinExitSwapFeeVolume = reader.string();
+          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -145,17 +163,23 @@ export const QueryPoolTradeVolumeResponse = {
   },
   fromJSON(object: any): QueryPoolTradeVolumeResponse {
     return {
-      volume: isSet(object.volume) ? String(object.volume) : ""
+      volume: isSet(object.volume) ? String(object.volume) : "",
+      swapFeeVolume: isSet(object.swapFeeVolume) ? String(object.swapFeeVolume) : "",
+      joinExitSwapFeeVolume: isSet(object.joinExitSwapFeeVolume) ? String(object.joinExitSwapFeeVolume) : ""
     };
   },
   toJSON(message: QueryPoolTradeVolumeResponse): unknown {
     const obj: any = {};
     message.volume !== undefined && (obj.volume = message.volume);
+    message.swapFeeVolume !== undefined && (obj.swapFeeVolume = message.swapFeeVolume);
+    message.joinExitSwapFeeVolume !== undefined && (obj.joinExitSwapFeeVolume = message.joinExitSwapFeeVolume);
     return obj;
   },
   fromPartial(object: Partial<QueryPoolTradeVolumeResponse>): QueryPoolTradeVolumeResponse {
     const message = createBaseQueryPoolTradeVolumeResponse();
     message.volume = object.volume ?? "";
+    message.swapFeeVolume = object.swapFeeVolume ?? "";
+    message.joinExitSwapFeeVolume = object.joinExitSwapFeeVolume ?? "";
     return message;
   }
 };
