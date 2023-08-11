@@ -1,12 +1,12 @@
 lockfileVersion: 5.4
 
 specifiers:
-  '@prism-finance/prismjs': 0.8.8
+  '@prism-finance/prismjs': 0.9.0
   '@refractedlabs/oraclejs': ^0.3.0
   '@refractedlabs/utils': 0.1.5
 
 dependencies:
-  '@prism-finance/prismjs': 0.8.8_google-protobuf@3.21.2
+  '@prism-finance/prismjs': 0.9.0_google-protobuf@3.21.2
   '@refractedlabs/oraclejs': 0.3.0_google-protobuf@3.21.2
   '@refractedlabs/utils': 0.1.5
 
@@ -36,6 +36,15 @@ packages:
     dependencies:
       '@noble/hashes': 1.3.1
       protobufjs: 6.11.3
+    dev: false
+
+  /@cosmjs/amino/0.31.0:
+    resolution: {integrity: sha512-xJ5CCEK7H79FTpOuEmlpSzVI+ZeYESTVvO3wHDgbnceIyAne3C68SvyaKqLUR4uJB0Z4q4+DZHbqW6itUiv4lA==}
+    dependencies:
+      '@cosmjs/crypto': 0.31.0
+      '@cosmjs/encoding': 0.31.0
+      '@cosmjs/math': 0.31.0
+      '@cosmjs/utils': 0.31.0
     dev: false
 
   /@cosmjs/amino/0.31.0-alpha.1:
@@ -87,6 +96,18 @@ packages:
       bn.js: 5.2.1
     dev: false
 
+  /@cosmjs/proto-signing/0.31.0:
+    resolution: {integrity: sha512-JNlyOJRkn8EKB9mCthkjr6lVX6eyVQ09PFdmB4/DR874E62dFTvQ+YvyKMAgN7K7Dcjj26dVlAD3f6Xs7YOGDg==}
+    dependencies:
+      '@cosmjs/amino': 0.31.0
+      '@cosmjs/crypto': 0.31.0
+      '@cosmjs/encoding': 0.31.0
+      '@cosmjs/math': 0.31.0
+      '@cosmjs/utils': 0.31.0
+      cosmjs-types: 0.8.0
+      long: 4.0.0
+    dev: false
+
   /@cosmjs/proto-signing/0.31.0-alpha.1:
     resolution: {integrity: sha512-SImp6QcFFwQEuApiUI8yC2uwRQyE+SPSZWRmAfpIVm31nNc15gBOwFlbqQxYYCZ/wg4JRHOow7y/NYN1Cfu8Ig==}
     dependencies:
@@ -123,6 +144,27 @@ packages:
       - utf-8-validate
     dev: false
 
+  /@cosmjs/stargate/0.31.0:
+    resolution: {integrity: sha512-GYhk9lzZPj/QmYHC0VV/4AMoRzVcOP+EnB1YZCoWlBdLuVmpBYKRagJqWIrIwdk1E0gF2ZoESd2TYfdh1fqIpg==}
+    dependencies:
+      '@confio/ics23': 0.6.8
+      '@cosmjs/amino': 0.31.0
+      '@cosmjs/encoding': 0.31.0
+      '@cosmjs/math': 0.31.0
+      '@cosmjs/proto-signing': 0.31.0
+      '@cosmjs/stream': 0.31.0
+      '@cosmjs/tendermint-rpc': 0.31.0
+      '@cosmjs/utils': 0.31.0
+      cosmjs-types: 0.8.0
+      long: 4.0.0
+      protobufjs: 6.11.3
+      xstream: 11.14.0
+    transitivePeerDependencies:
+      - bufferutil
+      - debug
+      - utf-8-validate
+    dev: false
+
   /@cosmjs/stargate/0.31.0-alpha.1:
     resolution: {integrity: sha512-kCTUT3niB2hvcHjhlxpM8cNw1KOVmgZROdJUQaO8Ts4j22OyRZRFdwRPrOIuAKpqhVW2I1vI2HQL9Bg7pk9Glw==}
     dependencies:
@@ -154,6 +196,25 @@ packages:
     resolution: {integrity: sha512-Y+aSHwhHkLGIaQOdqRob+yga2zr9ifl9gZDKD+B7+R5pdWN5f2TTDhYWxA6YZcZ6xRmfr7u8a7tDh7iYLC/zKA==}
     dependencies:
       xstream: 11.14.0
+    dev: false
+
+  /@cosmjs/tendermint-rpc/0.31.0:
+    resolution: {integrity: sha512-yo9xbeuI6UoEKIhFZ9g0dvUKLqnBzwdpEc/uldQygQc51j38gQVwFko+6sjmhieJqRYYvrYumcbJMiV6GFM9aA==}
+    dependencies:
+      '@cosmjs/crypto': 0.31.0
+      '@cosmjs/encoding': 0.31.0
+      '@cosmjs/json-rpc': 0.31.0
+      '@cosmjs/math': 0.31.0
+      '@cosmjs/socket': 0.31.0
+      '@cosmjs/stream': 0.31.0
+      '@cosmjs/utils': 0.31.0
+      axios: 0.21.4
+      readonly-date: 1.0.0
+      xstream: 11.14.0
+    transitivePeerDependencies:
+      - bufferutil
+      - debug
+      - utf-8-validate
     dev: false
 
   /@cosmjs/tendermint-rpc/0.31.0-alpha.1:
@@ -218,14 +279,14 @@ packages:
       - debug
     dev: false
 
-  /@prism-finance/prismjs/0.8.8_google-protobuf@3.21.2:
-    resolution: {integrity: sha512-N2KHKGdJvncJmTOQYP7geOXJtsahmU1TsWPdeJrqfAtG+cGOBhnsvu01loajK0J0jzXRl1EGYKiTKS3UMCvZeQ==, tarball: download/@prism-finance/prismjs/0.8.8/e0434a1f3f76bf66e02bdbf01e4ba838eedc157e}
+  /@prism-finance/prismjs/0.9.0_google-protobuf@3.21.2:
+    resolution: {integrity: sha512-MFOFIEG+05VDZ61qShBxkYZE9rBgz+nNpOFLl4AUfNL5IroeGw9sSLyUE3qC3SAVqqw9Ko7TFlqNy4PLZlSGmA==, tarball: download/@prism-finance/prismjs/0.9.0/ffb5f661b27cf4923868c8d14cc2a89362ece586}
     dependencies:
       '@babel/runtime': 7.22.10
-      '@cosmjs/amino': 0.31.0-alpha.1
-      '@cosmjs/proto-signing': 0.31.0-alpha.1
-      '@cosmjs/stargate': 0.31.0-alpha.1
-      '@cosmjs/tendermint-rpc': 0.31.0-alpha.1
+      '@cosmjs/amino': 0.31.0
+      '@cosmjs/proto-signing': 0.31.0
+      '@cosmjs/stargate': 0.31.0
+      '@cosmjs/tendermint-rpc': 0.31.0
       '@improbable-eng/grpc-web': 0.15.0_google-protobuf@3.21.2
       '@improbable-eng/grpc-web-node-http-transport': 0.15.0_fng5pv4qmdetiqq66m6yjkaacu
       '@osmonauts/lcd': 0.10.0

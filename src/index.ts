@@ -105,13 +105,7 @@ export async function connectWithSigner(endpoint: string | HttpEndpoint, signer:
     const {
         registry,
         aminoTypes
-    } = getSigningPrismClientOptions({
-        defaultTypes: [...defaultRegistryTypes,
-            // needed to be able to submit proposals using a signing client since they are not included in the default registry types
-            ["/cosmos.gov.v1.MsgSubmitProposal", MsgSubmitProposal],
-            ["/cosmos.gov.v1.MsgVote", MsgVote],
-        ]
-    });
+    } = getSigningPrismClientOptions();
 
     return SigningStargateClient.connectWithSigner(endpoint, signer, {
         registry,
