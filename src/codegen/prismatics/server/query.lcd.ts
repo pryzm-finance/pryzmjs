@@ -14,6 +14,7 @@ import { QueryPoolTradeVolumeRequest, QueryPoolTradeVolumeResponseSDKType, Query
 import { QuerySwappableTokensRequest, QuerySwappableTokensResponseSDKType } from "./swappable_tokens";
 import { QueryPriceBoundsRequest, QueryPriceBoundsResponseSDKType } from "./price_bounds";
 import { QueryPriceChangeRequest, QueryPriceChangeResponseSDKType } from "./price_change";
+import { QueryPulseTradablePairsRequest, QueryPulseTradablePairsResponseSDKType } from "./pulse_tradable_pairs";
 export class LCDQueryClient {
   req: LCDClient;
   constructor({
@@ -39,6 +40,7 @@ export class LCDQueryClient {
     this.swappableTokens = this.swappableTokens.bind(this);
     this.priceBounds = this.priceBounds.bind(this);
     this.priceChange = this.priceChange.bind(this);
+    this.pulseTradablePairs = this.pulseTradablePairs.bind(this);
   }
   /* Asset */
   async asset(params: QueryAssetRequest): Promise<QueryAssetResponseSDKType> {
@@ -247,5 +249,16 @@ export class LCDQueryClient {
     }
     const endpoint = `prismatics/price_change/${params.denom}`;
     return await this.req.get<QueryPriceChangeResponseSDKType>(endpoint, options);
+  }
+  /* PulseTradablePairs */
+  async pulseTradablePairs(params: QueryPulseTradablePairsRequest): Promise<QueryPulseTradablePairsResponseSDKType> {
+    const options: any = {
+      params: {}
+    };
+    if (typeof params?.tokenIn !== "undefined") {
+      options.params.token_in = params.tokenIn;
+    }
+    const endpoint = `prismatics/pulse_tradable_pairs/${params.denom}`;
+    return await this.req.get<QueryPulseTradablePairsResponseSDKType>(endpoint, options);
   }
 }
