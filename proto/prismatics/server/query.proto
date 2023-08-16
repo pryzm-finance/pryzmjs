@@ -3,96 +3,117 @@ package prismatics.server;
 
 import "gogoproto/gogo.proto";
 import "google/api/annotations.proto";
-import "prismatics/server/asset.proto";
-import "prismatics/server/maturity.proto";
-import "prismatics/server/price.proto";
-import "prismatics/server/historical_price.proto";
-import "prismatics/server/trade_simulation.proto";
-import "prismatics/server/pool_token.proto";
-import "prismatics/server/pgov.proto";
-import "prismatics/server/user_trade_history.proto";
-import "prismatics/server/pool_trade_history.proto";
-import "prismatics/server/trade_volume.proto";
-import "prismatics/server/swappable_tokens.proto";
-import "prismatics/server/price_change.proto";
-import "prismatics/server/price_bounds.proto";
-import "prismatics/server/pulse_tradable_pairs.proto";
 import "cosmos/tx/v1beta1/service.proto";
+
+import "prismatics/server/asset/asset.proto";
+
+import "prismatics/server/maturity/maturity.proto";
+
+import "prismatics/server/pgov/pgov.proto";
+
+import "prismatics/server/pool/pool_token.proto";
+
+import "prismatics/server/price/historical_price.proto";
+import "prismatics/server/price/price.proto";
+import "prismatics/server/price/price_bounds.proto";
+import "prismatics/server/price/price_change.proto";
+import "prismatics/server/price/swappable_tokens.proto";
+
+import "prismatics/server/trade/pool_trade_history.proto";
+import "prismatics/server/trade/pulse_tradable_pairs.proto";
+import "prismatics/server/trade/trade_simulation.proto";
+import "prismatics/server/trade/trade_volume.proto";
+import "prismatics/server/trade/user_trade_history.proto";
+import "prismatics/server/trade/order.proto";
+
+import "prismatics/server/incentives/incentives.proto";
 
 
 option go_package = "github.com/prism-finance/prismatics/server";
 
 service Query {
 
-  rpc Asset(QueryAssetRequest) returns (QueryAssetResponse) {
+  rpc Asset(prismatics.server.asset.QueryAssetRequest) returns (prismatics.server.asset.QueryAssetResponse) {
     option (google.api.http).get = "/prismatics/asset/{asset_id}";
   }
 
-  rpc MaturityAll(QueryAllMaturitiesRequest) returns (QueryAllMaturitiesResponse) {
+  rpc MaturityAll(prismatics.server.maturity.QueryAllMaturitiesRequest) returns (prismatics.server.maturity.QueryAllMaturitiesResponse) {
     option (google.api.http).get = "/prismatics/maturity";
   }
 
-  rpc TokenPrice(QueryPriceRequest) returns (QueryPriceResponse) {
+  rpc SubmitProposalMsgs(prismatics.server.pgov.QuerySubmitProposalMsgsRequest) returns (prismatics.server.pgov.QuerySubmitProposalMsgsResponse) {
+    option (google.api.http).get = "/prismatics/pgov/submit_proposal_msgs/{asset_id}/{proposal_id}";
+  }
+
+  rpc AssetProposals(prismatics.server.pgov.QueryAssetProposalRequest) returns (prismatics.server.pgov.QueryAssetProposalResponse) {
+    option (google.api.http).get = "/prismatics/pgov/asset_proposal/{asset_id}";
+  }
+
+  rpc PoolToken(prismatics.server.pool.QueryPoolTokenRequest) returns (prismatics.server.pool.QueryPoolTokenResponse) {
+    option (google.api.http).get = "/prismatics/pool/token/{pool_id}/{denom}";
+  }
+
+  rpc PoolTokens(prismatics.server.pool.QueryAllPoolTokenRequest) returns (prismatics.server.pool.QueryAllPoolTokenResponse) {
+    option (google.api.http).get = "/prismatics/pool/token/{pool_id}";
+  }
+
+  rpc TokenPrice(prismatics.server.price.QueryPriceRequest) returns (prismatics.server.price.QueryPriceResponse) {
     option (google.api.http).get = "/prismatics/price/{token_in}/{token_out}";
   }
 
-  rpc HistoricalPrice(QueryHistoricalPriceRequest) returns (QueryHistoricalPriceResponse) {
-    option (google.api.http).get = "/prismatics/historical_price/{denom}";
+  rpc HistoricalPrice(prismatics.server.price.QueryHistoricalPriceRequest) returns (prismatics.server.price.QueryHistoricalPriceResponse) {
+    option (google.api.http).get = "/prismatics/price/historical/{denom}";
   }
 
-  rpc TradeSimulation(QueryTradeSimulationRequest) returns (QueryTradeSimulationResponse) {
-    option (google.api.http).get = "/prismatics/trade_simulation";
+  rpc SwappableTokens(prismatics.server.price.QuerySwappableTokensRequest) returns (prismatics.server.price.QuerySwappableTokensResponse) {
+    option (google.api.http).get = "/prismatics/price/swappable_tokens";
   }
 
-  rpc PoolToken(QueryPoolTokenRequest) returns (QueryPoolTokenResponse) {
-    option (google.api.http).get = "/prismatics/pool_token/{pool_id}/{denom}";
+  rpc PriceBounds(prismatics.server.price.QueryPriceBoundsRequest) returns (prismatics.server.price.QueryPriceBoundsResponse) {
+    option (google.api.http).get = "/prismatics/price/bounds/{denom}";
   }
 
-  rpc PoolTokens(QueryAllPoolTokenRequest) returns (QueryAllPoolTokenResponse) {
-    option (google.api.http).get = "/prismatics/pool_token/{pool_id}";
+  rpc PriceChange(prismatics.server.price.QueryPriceChangeRequest) returns (prismatics.server.price.QueryPriceChangeResponse) {
+    option (google.api.http).get = "/prismatics/price/change/{denom}";
   }
 
-  rpc UserTradeHistory(QueryUserTradeHistoryRequest) returns (QueryUserTradeHistoryResponse) {
-    option (google.api.http).get = "/prismatics/user_trade_history";
+  rpc TradeSimulation(prismatics.server.trade.QueryTradeSimulationRequest) returns (prismatics.server.trade.QueryTradeSimulationResponse) {
+    option (google.api.http).get = "/prismatics/trade/simulation";
   }
 
-  rpc PoolTradeHistory(QueryPoolTradeHistoryRequest) returns (QueryPoolTradeHistoryResponse) {
-    option (google.api.http).get = "/prismatics/pool_trade_history";
+  rpc UserTradeHistory(prismatics.server.trade.QueryUserTradeHistoryRequest) returns (prismatics.server.trade.QueryUserTradeHistoryResponse) {
+    option (google.api.http).get = "/prismatics/trade/user_trade_history";
   }
 
-  rpc AssetProposals(QueryAssetProposalRequest) returns (QueryAssetProposalResponse) {
-    option (google.api.http).get = "/prismatics/asset_proposal/{asset_id}";
+  rpc PoolTradeHistory(prismatics.server.trade.QueryPoolTradeHistoryRequest) returns (prismatics.server.trade.QueryPoolTradeHistoryResponse) {
+    option (google.api.http).get = "/prismatics/trade/pool_trade_history";
   }
 
-  rpc SubmitProposalMsgs(QuerySubmitProposalMsgsRequest) returns (QuerySubmitProposalMsgsResponse) {
-    option (google.api.http).get = "/prismatics/submit_proposal_msgs/{asset_id}/{proposal_id}";
+  rpc TokenTradeVolume(prismatics.server.trade.QueryTokenTradeVolumeRequest) returns (prismatics.server.trade.QueryTokenTradeVolumeResponse) {
+    option (google.api.http).get = "/prismatics/trade/volume/token/{denom}";
   }
 
-  rpc PoolTradeVolume(QueryPoolTradeVolumeRequest) returns (QueryPoolTradeVolumeResponse) {
-    option (google.api.http).get = "/prismatics/trade_volume/pool/{pool_id}";
+  rpc PoolTradeVolume(prismatics.server.trade.QueryPoolTradeVolumeRequest) returns (prismatics.server.trade.QueryPoolTradeVolumeResponse) {
+    option (google.api.http).get = "/prismatics/trade/volume/pool/{pool_id}";
   }
 
-  rpc TokenTradeVolume(QueryTokenTradeVolumeRequest) returns (QueryTokenTradeVolumeResponse) {
-    option (google.api.http).get = "/prismatics/trade_volume/token/{denom}";
+  rpc FavoritePairs(prismatics.server.trade.QueryFavoritePairsRequest) returns (prismatics.server.trade.QueryFavoritePairsResponse) {
+    option (google.api.http).get = "/prismatics/trade/volume/favorite_pairs";
   }
 
-  rpc FavoritePairs(QueryFavoritePairsRequest) returns (QueryFavoritePairsResponse) {
-    option (google.api.http).get = "/prismatics/trade_volume/favorite_pairs";
+  rpc PulseTradablePairs(prismatics.server.trade.QueryPulseTradablePairsRequest) returns (prismatics.server.trade.QueryPulseTradablePairsResponse) {
+    option (google.api.http).get = "/prismatics/trade/pulse_tradable_pairs/{denom}";
   }
 
-  rpc SwappableTokens(QuerySwappableTokensRequest) returns (QuerySwappableTokensResponse) {
-    option (google.api.http).get = "/prismatics/swappable_tokens";
+  rpc Order(prismatics.server.trade.QueryOrderRequest) returns (prismatics.server.trade.QueryOrderResponse) {
+    option (google.api.http).get = "/prismatics/trade/order/{id}";
   }
 
-  rpc PriceBounds(QueryPriceBoundsRequest) returns (QueryPriceBoundsResponse) {
-    option (google.api.http).get = "/prismatics/price_bounds/{denom}";
+  rpc Orders(prismatics.server.trade.QueryOrdersRequest) returns (prismatics.server.trade.QueryOrdersResponse) {
+    option (google.api.http).get = "/prismatics/trade/order";
   }
 
-  rpc PriceChange(QueryPriceChangeRequest) returns (QueryPriceChangeResponse) {
-    option (google.api.http).get = "/prismatics/price_change/{denom}";
-  }
-
-  rpc PulseTradablePairs(QueryPulseTradablePairsRequest) returns (QueryPulseTradablePairsResponse) {
-    option (google.api.http).get = "/prismatics/pulse_tradable_pairs/{denom}";
+  rpc IncentivesApr(prismatics.server.incentives.QueryIncentivesAprRequest) returns (prismatics.server.incentives.QueryIncentivesAprResponse) {
+    option (google.api.http).get = "/prismatics/incentives/apr/{denom}";
   }
 }

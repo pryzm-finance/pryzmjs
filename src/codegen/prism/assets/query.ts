@@ -11,11 +11,11 @@ export interface QueryParamsRequestSDKType {}
 /** QueryParamsResponse is response type for the Query/Params RPC method. */
 export interface QueryParamsResponse {
   /** params holds all the parameters of this module. */
-  params?: Params;
+  params: Params;
 }
 /** QueryParamsResponse is response type for the Query/Params RPC method. */
 export interface QueryParamsResponseSDKType {
-  params?: ParamsSDKType;
+  params: ParamsSDKType;
 }
 export interface QueryGetRefractableAssetRequest {
   assetId: string;
@@ -24,26 +24,26 @@ export interface QueryGetRefractableAssetRequestSDKType {
   asset_id: string;
 }
 export interface QueryGetRefractableAssetResponse {
-  asset?: RefractableAsset;
+  asset: RefractableAsset;
 }
 export interface QueryGetRefractableAssetResponseSDKType {
-  asset?: RefractableAssetSDKType;
+  asset: RefractableAssetSDKType;
 }
 export interface QueryAllRefractableAssetRequest {
-  enabled?: string;
-  pagination?: PageRequest;
+  enabled: string;
+  pagination: PageRequest;
 }
 export interface QueryAllRefractableAssetRequestSDKType {
-  enabled?: string;
-  pagination?: PageRequestSDKType;
+  enabled: string;
+  pagination: PageRequestSDKType;
 }
 export interface QueryAllRefractableAssetResponse {
   assets: RefractableAsset[];
-  pagination?: PageResponse;
+  pagination: PageResponse;
 }
 export interface QueryAllRefractableAssetResponseSDKType {
   assets: RefractableAssetSDKType[];
-  pagination?: PageResponseSDKType;
+  pagination: PageResponseSDKType;
 }
 export interface QueryGetMaturityLevelRequest {
   active: boolean;
@@ -56,30 +56,30 @@ export interface QueryGetMaturityLevelRequestSDKType {
   symbol: string;
 }
 export interface QueryGetMaturityLevelResponse {
-  maturityLevel?: MaturityLevel;
+  maturityLevel: MaturityLevel;
 }
 export interface QueryGetMaturityLevelResponseSDKType {
-  maturity_level?: MaturityLevelSDKType;
+  maturity_level: MaturityLevelSDKType;
 }
 export interface QueryAllMaturityLevelRequest {
   active: boolean;
-  assetId?: string;
-  assetEnabled?: string;
-  pagination?: PageRequest;
+  assetId: string;
+  assetEnabled: string;
+  pagination: PageRequest;
 }
 export interface QueryAllMaturityLevelRequestSDKType {
   active: boolean;
-  asset_id?: string;
-  asset_enabled?: string;
-  pagination?: PageRequestSDKType;
+  asset_id: string;
+  asset_enabled: string;
+  pagination: PageRequestSDKType;
 }
 export interface QueryAllMaturityLevelResponse {
   maturityLevel: MaturityLevel[];
-  pagination?: PageResponse;
+  pagination: PageResponse;
 }
 export interface QueryAllMaturityLevelResponseSDKType {
   maturity_level: MaturityLevelSDKType[];
-  pagination?: PageResponseSDKType;
+  pagination: PageResponseSDKType;
 }
 function createBaseQueryParamsRequest(): QueryParamsRequest {
   return {};
@@ -116,7 +116,7 @@ export const QueryParamsRequest = {
 };
 function createBaseQueryParamsResponse(): QueryParamsResponse {
   return {
-    params: undefined
+    params: Params.fromPartial({})
   };
 }
 export const QueryParamsResponse = {
@@ -206,7 +206,7 @@ export const QueryGetRefractableAssetRequest = {
 };
 function createBaseQueryGetRefractableAssetResponse(): QueryGetRefractableAssetResponse {
   return {
-    asset: undefined
+    asset: RefractableAsset.fromPartial({})
   };
 }
 export const QueryGetRefractableAssetResponse = {
@@ -252,7 +252,7 @@ export const QueryGetRefractableAssetResponse = {
 function createBaseQueryAllRefractableAssetRequest(): QueryAllRefractableAssetRequest {
   return {
     enabled: "",
-    pagination: undefined
+    pagination: PageRequest.fromPartial({})
   };
 }
 export const QueryAllRefractableAssetRequest = {
@@ -307,7 +307,7 @@ export const QueryAllRefractableAssetRequest = {
 function createBaseQueryAllRefractableAssetResponse(): QueryAllRefractableAssetResponse {
   return {
     assets: [],
-    pagination: undefined
+    pagination: PageResponse.fromPartial({})
   };
 }
 export const QueryAllRefractableAssetResponse = {
@@ -430,7 +430,7 @@ export const QueryGetMaturityLevelRequest = {
 };
 function createBaseQueryGetMaturityLevelResponse(): QueryGetMaturityLevelResponse {
   return {
-    maturityLevel: undefined
+    maturityLevel: MaturityLevel.fromPartial({})
   };
 }
 export const QueryGetMaturityLevelResponse = {
@@ -478,7 +478,7 @@ function createBaseQueryAllMaturityLevelRequest(): QueryAllMaturityLevelRequest 
     active: false,
     assetId: "",
     assetEnabled: "",
-    pagination: undefined
+    pagination: PageRequest.fromPartial({})
   };
 }
 export const QueryAllMaturityLevelRequest = {
@@ -551,7 +551,7 @@ export const QueryAllMaturityLevelRequest = {
 function createBaseQueryAllMaturityLevelResponse(): QueryAllMaturityLevelResponse {
   return {
     maturityLevel: [],
-    pagination: undefined
+    pagination: PageResponse.fromPartial({})
   };
 }
 export const QueryAllMaturityLevelResponse = {

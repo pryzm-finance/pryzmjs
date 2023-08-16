@@ -88,7 +88,7 @@ export const QueryParamsDesc: UnaryMethodDefinitionish = {
     }
   } as any)
 };
-export const QueryGetStakedPAssetDesc: UnaryMethodDefinitionish = {
+export const QueryStakedPAssetDesc: UnaryMethodDefinitionish = {
   methodName: "StakedPAsset",
   service: QueryDesc,
   requestStream: false,
@@ -109,7 +109,7 @@ export const QueryGetStakedPAssetDesc: UnaryMethodDefinitionish = {
     }
   } as any)
 };
-export const QueryAllStakedPAssetDesc: UnaryMethodDefinitionish = {
+export const QueryStakedPAssetAllDesc: UnaryMethodDefinitionish = {
   methodName: "StakedPAssetAll",
   service: QueryDesc,
   requestStream: false,
@@ -130,7 +130,7 @@ export const QueryAllStakedPAssetDesc: UnaryMethodDefinitionish = {
     }
   } as any)
 };
-export const QueryGetTotalStakedPAssetDesc: UnaryMethodDefinitionish = {
+export const QueryTotalStakedPAssetDesc: UnaryMethodDefinitionish = {
   methodName: "TotalStakedPAsset",
   service: QueryDesc,
   requestStream: false,
@@ -151,7 +151,7 @@ export const QueryGetTotalStakedPAssetDesc: UnaryMethodDefinitionish = {
     }
   } as any)
 };
-export const QueryGetVoteDesc: UnaryMethodDefinitionish = {
+export const QueryVoteDesc: UnaryMethodDefinitionish = {
   methodName: "Vote",
   service: QueryDesc,
   requestStream: false,
@@ -172,7 +172,7 @@ export const QueryGetVoteDesc: UnaryMethodDefinitionish = {
     }
   } as any)
 };
-export const QueryAllVoteDesc: UnaryMethodDefinitionish = {
+export const QueryVoteAllDesc: UnaryMethodDefinitionish = {
   methodName: "VoteAll",
   service: QueryDesc,
   requestStream: false,
@@ -193,7 +193,7 @@ export const QueryAllVoteDesc: UnaryMethodDefinitionish = {
     }
   } as any)
 };
-export const QueryGetProposalDesc: UnaryMethodDefinitionish = {
+export const QueryProposalDesc: UnaryMethodDefinitionish = {
   methodName: "Proposal",
   service: QueryDesc,
   requestStream: false,
@@ -214,7 +214,7 @@ export const QueryGetProposalDesc: UnaryMethodDefinitionish = {
     }
   } as any)
 };
-export const QueryAllProposalDesc: UnaryMethodDefinitionish = {
+export const QueryProposalAllDesc: UnaryMethodDefinitionish = {
   methodName: "ProposalAll",
   service: QueryDesc,
   requestStream: false,

@@ -29,11 +29,11 @@ export interface PoolTokenSDKType {
   circuit_breaker?: CircuitBreakerSDKType;
 }
 export interface TokenAmount {
-  token?: PoolToken;
+  token: PoolToken;
   amount: string;
 }
 export interface TokenAmountSDKType {
-  token?: PoolTokenSDKType;
+  token: PoolTokenSDKType;
   amount: string;
 }
 function createBaseCircuitBreaker(): CircuitBreaker {
@@ -208,7 +208,7 @@ export const PoolToken = {
 };
 function createBaseTokenAmount(): TokenAmount {
   return {
-    token: undefined,
+    token: PoolToken.fromPartial({}),
     amount: ""
   };
 }

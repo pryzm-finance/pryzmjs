@@ -10,11 +10,11 @@ export interface QueryParamsRequestSDKType {}
 /** QueryParamsResponse is the response type for the Query/Params RPC method. */
 export interface QueryParamsResponse {
   /** params defines the parameters of the module. */
-  params?: Params;
+  params: Params;
 }
 /** QueryParamsResponse is the response type for the Query/Params RPC method. */
 export interface QueryParamsResponseSDKType {
-  params?: ParamsSDKType;
+  params: ParamsSDKType;
 }
 /** QueryValidatorDistributionInfoRequest is the request type for the Query/ValidatorDistributionInfo RPC method. */
 export interface QueryValidatorDistributionInfoRequest {
@@ -60,14 +60,14 @@ export interface QueryValidatorOutstandingRewardsRequestSDKType {
  * Query/ValidatorOutstandingRewards RPC method.
  */
 export interface QueryValidatorOutstandingRewardsResponse {
-  rewards?: ValidatorOutstandingRewards;
+  rewards: ValidatorOutstandingRewards;
 }
 /**
  * QueryValidatorOutstandingRewardsResponse is the response type for the
  * Query/ValidatorOutstandingRewards RPC method.
  */
 export interface QueryValidatorOutstandingRewardsResponseSDKType {
-  rewards?: ValidatorOutstandingRewardsSDKType;
+  rewards: ValidatorOutstandingRewardsSDKType;
 }
 /**
  * QueryValidatorCommissionRequest is the request type for the
@@ -90,14 +90,14 @@ export interface QueryValidatorCommissionRequestSDKType {
  */
 export interface QueryValidatorCommissionResponse {
   /** commission defines the commission the validator received. */
-  commission?: ValidatorAccumulatedCommission;
+  commission: ValidatorAccumulatedCommission;
 }
 /**
  * QueryValidatorCommissionResponse is the response type for the
  * Query/ValidatorCommission RPC method
  */
 export interface QueryValidatorCommissionResponseSDKType {
-  commission?: ValidatorAccumulatedCommissionSDKType;
+  commission: ValidatorAccumulatedCommissionSDKType;
 }
 /**
  * QueryValidatorSlashesRequest is the request type for the
@@ -107,11 +107,11 @@ export interface QueryValidatorSlashesRequest {
   /** validator_address defines the validator address to query for. */
   validatorAddress: string;
   /** starting_height defines the optional starting height to query the slashes. */
-  startingHeight?: Long;
+  startingHeight: Long;
   /** starting_height defines the optional ending height to query the slashes. */
-  endingHeight?: Long;
+  endingHeight: Long;
   /** pagination defines an optional pagination for the request. */
-  pagination?: PageRequest;
+  pagination: PageRequest;
 }
 /**
  * QueryValidatorSlashesRequest is the request type for the
@@ -119,9 +119,9 @@ export interface QueryValidatorSlashesRequest {
  */
 export interface QueryValidatorSlashesRequestSDKType {
   validator_address: string;
-  starting_height?: Long;
-  ending_height?: Long;
-  pagination?: PageRequestSDKType;
+  starting_height: Long;
+  ending_height: Long;
+  pagination: PageRequestSDKType;
 }
 /**
  * QueryValidatorSlashesResponse is the response type for the
@@ -131,7 +131,7 @@ export interface QueryValidatorSlashesResponse {
   /** slashes defines the slashes the validator received. */
   slashes: ValidatorSlashEvent[];
   /** pagination defines the pagination in the response. */
-  pagination?: PageResponse;
+  pagination: PageResponse;
 }
 /**
  * QueryValidatorSlashesResponse is the response type for the
@@ -139,7 +139,7 @@ export interface QueryValidatorSlashesResponse {
  */
 export interface QueryValidatorSlashesResponseSDKType {
   slashes: ValidatorSlashEventSDKType[];
-  pagination?: PageResponseSDKType;
+  pagination: PageResponseSDKType;
 }
 /**
  * QueryDelegationRewardsRequest is the request type for the
@@ -327,7 +327,7 @@ export const QueryParamsRequest = {
 };
 function createBaseQueryParamsResponse(): QueryParamsResponse {
   return {
-    params: undefined
+    params: Params.fromPartial({})
   };
 }
 export const QueryParamsResponse = {
@@ -535,7 +535,7 @@ export const QueryValidatorOutstandingRewardsRequest = {
 };
 function createBaseQueryValidatorOutstandingRewardsResponse(): QueryValidatorOutstandingRewardsResponse {
   return {
-    rewards: undefined
+    rewards: ValidatorOutstandingRewards.fromPartial({})
   };
 }
 export const QueryValidatorOutstandingRewardsResponse = {
@@ -625,7 +625,7 @@ export const QueryValidatorCommissionRequest = {
 };
 function createBaseQueryValidatorCommissionResponse(): QueryValidatorCommissionResponse {
   return {
-    commission: undefined
+    commission: ValidatorAccumulatedCommission.fromPartial({})
   };
 }
 export const QueryValidatorCommissionResponse = {
@@ -673,7 +673,7 @@ function createBaseQueryValidatorSlashesRequest(): QueryValidatorSlashesRequest 
     validatorAddress: "",
     startingHeight: Long.UZERO,
     endingHeight: Long.UZERO,
-    pagination: undefined
+    pagination: PageRequest.fromPartial({})
   };
 }
 export const QueryValidatorSlashesRequest = {
@@ -746,7 +746,7 @@ export const QueryValidatorSlashesRequest = {
 function createBaseQueryValidatorSlashesResponse(): QueryValidatorSlashesResponse {
   return {
     slashes: [],
-    pagination: undefined
+    pagination: PageResponse.fromPartial({})
   };
 }
 export const QueryValidatorSlashesResponse = {

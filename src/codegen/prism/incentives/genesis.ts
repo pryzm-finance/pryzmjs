@@ -6,7 +6,7 @@ import { Long, isSet } from "../../helpers";
 import * as _m0 from "protobufjs/minimal";
 /** GenesisState defines the incentives module's genesis state. */
 export interface GenesisState {
-  params?: Params;
+  params: Params;
   poolList: Pool[];
   bondList: Bond[];
   unbondingList: Unbonding[];
@@ -14,7 +14,7 @@ export interface GenesisState {
 }
 /** GenesisState defines the incentives module's genesis state. */
 export interface GenesisStateSDKType {
-  params?: ParamsSDKType;
+  params: ParamsSDKType;
   pool_list: PoolSDKType[];
   bond_list: BondSDKType[];
   unbonding_list: UnbondingSDKType[];
@@ -22,7 +22,7 @@ export interface GenesisStateSDKType {
 }
 function createBaseGenesisState(): GenesisState {
   return {
-    params: undefined,
+    params: Params.fromPartial({}),
     poolList: [],
     bondList: [],
     unbondingList: [],

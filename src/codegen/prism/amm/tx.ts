@@ -12,31 +12,31 @@ import { Long, isSet } from "../../helpers";
 import * as _m0 from "protobufjs/minimal";
 export interface MsgSingleSwap {
   creator: string;
-  swap?: Swap;
-  maxAmountIn: string;
-  minAmountOut: string;
+  swap: Swap;
+  maxAmountIn?: string;
+  minAmountOut?: string;
 }
 export interface MsgSingleSwapSDKType {
   creator: string;
-  swap?: SwapSDKType;
-  max_amount_in: string;
-  min_amount_out: string;
+  swap: SwapSDKType;
+  max_amount_in?: string;
+  min_amount_out?: string;
 }
 export interface MsgSingleSwapResponse {
-  amountOut?: Coin;
-  amountIn?: Coin;
+  amountOut: Coin;
+  amountIn: Coin;
   /**
    * protocol fee does not contain the y_trade fee and refractor fee
    * which is paid in case of a yAsset trade
    */
-  protocolFee?: Coin;
-  swapFee?: Coin;
+  protocolFee: Coin;
+  swapFee: Coin;
 }
 export interface MsgSingleSwapResponseSDKType {
-  amount_out?: CoinSDKType;
-  amount_in?: CoinSDKType;
-  protocol_fee?: CoinSDKType;
-  swap_fee?: CoinSDKType;
+  amount_out: CoinSDKType;
+  amount_in: CoinSDKType;
+  protocol_fee: CoinSDKType;
+  swap_fee: CoinSDKType;
 }
 export interface MsgJoinAllTokensExactLpt {
   creator: string;
@@ -51,12 +51,12 @@ export interface MsgJoinAllTokensExactLptSDKType {
   max_amounts_in: CoinSDKType[];
 }
 export interface MsgJoinAllTokensExactLptResponse {
-  lptOut?: Coin;
+  lptOut: Coin;
   amountsIn: Coin[];
   protocolFee: Coin[];
 }
 export interface MsgJoinAllTokensExactLptResponseSDKType {
-  lpt_out?: CoinSDKType;
+  lpt_out: CoinSDKType;
   amounts_in: CoinSDKType[];
   protocol_fee: CoinSDKType[];
 }
@@ -65,47 +65,47 @@ export interface MsgJoinTokenExactLpt {
   poolId: Long;
   lptOut: string;
   tokenIn: string;
-  maxAmountIn: string;
+  maxAmountIn?: string;
 }
 export interface MsgJoinTokenExactLptSDKType {
   creator: string;
   pool_id: Long;
   lpt_out: string;
   token_in: string;
-  max_amount_in: string;
+  max_amount_in?: string;
 }
 export interface MsgJoinTokenExactLptResponse {
-  lptOut?: Coin;
-  amountIn?: Coin;
-  protocolFee?: Coin;
-  swapFee?: Coin;
+  lptOut: Coin;
+  amountIn: Coin;
+  protocolFee: Coin;
+  swapFee: Coin;
 }
 export interface MsgJoinTokenExactLptResponseSDKType {
-  lpt_out?: CoinSDKType;
-  amount_in?: CoinSDKType;
-  protocol_fee?: CoinSDKType;
-  swap_fee?: CoinSDKType;
+  lpt_out: CoinSDKType;
+  amount_in: CoinSDKType;
+  protocol_fee: CoinSDKType;
+  swap_fee: CoinSDKType;
 }
 export interface MsgJoinExactTokens {
   creator: string;
   poolId: Long;
   amountsIn: Coin[];
-  minLptOut: string;
+  minLptOut?: string;
 }
 export interface MsgJoinExactTokensSDKType {
   creator: string;
   pool_id: Long;
   amounts_in: CoinSDKType[];
-  min_lpt_out: string;
+  min_lpt_out?: string;
 }
 export interface MsgJoinExactTokensResponse {
-  lptOut?: Coin;
+  lptOut: Coin;
   amountsIn: Coin[];
   protocolFee: Coin[];
   swapFee: Coin[];
 }
 export interface MsgJoinExactTokensResponseSDKType {
-  lpt_out?: CoinSDKType;
+  lpt_out: CoinSDKType;
   amounts_in: CoinSDKType[];
   protocol_fee: CoinSDKType[];
   swap_fee: CoinSDKType[];
@@ -114,24 +114,24 @@ export interface MsgExitExactTokens {
   creator: string;
   poolId: Long;
   amountsOut: Coin[];
-  maxLptIn: string;
+  maxLptIn?: string;
 }
 export interface MsgExitExactTokensSDKType {
   creator: string;
   pool_id: Long;
   amounts_out: CoinSDKType[];
-  max_lpt_in: string;
+  max_lpt_in?: string;
 }
 export interface MsgExitExactTokensResponse {
-  lptIn?: Coin;
+  lptIn: Coin;
   amountsOut: Coin[];
-  protocolFee?: Coin;
+  protocolFee: Coin;
   swapFee: Coin[];
 }
 export interface MsgExitExactTokensResponseSDKType {
-  lpt_in?: CoinSDKType;
+  lpt_in: CoinSDKType;
   amounts_out: CoinSDKType[];
-  protocol_fee?: CoinSDKType;
+  protocol_fee: CoinSDKType;
   swap_fee: CoinSDKType[];
 }
 export interface MsgExitTokenExactLpt {
@@ -139,26 +139,26 @@ export interface MsgExitTokenExactLpt {
   poolId: Long;
   lptIn: string;
   tokenOut: string;
-  minAmountOut: string;
+  minAmountOut?: string;
 }
 export interface MsgExitTokenExactLptSDKType {
   creator: string;
   pool_id: Long;
   lpt_in: string;
   token_out: string;
-  min_amount_out: string;
+  min_amount_out?: string;
 }
 export interface MsgExitTokenExactLptResponse {
-  lptIn?: Coin;
-  amountOut?: Coin;
-  protocolFee?: Coin;
-  swapFee?: Coin;
+  lptIn: Coin;
+  amountOut: Coin;
+  protocolFee: Coin;
+  swapFee: Coin;
 }
 export interface MsgExitTokenExactLptResponseSDKType {
-  lpt_in?: CoinSDKType;
-  amount_out?: CoinSDKType;
-  protocol_fee?: CoinSDKType;
-  swap_fee?: CoinSDKType;
+  lpt_in: CoinSDKType;
+  amount_out: CoinSDKType;
+  protocol_fee: CoinSDKType;
+  swap_fee: CoinSDKType;
 }
 export interface MsgExitAllTokensExactLpt {
   creator: string;
@@ -173,14 +173,14 @@ export interface MsgExitAllTokensExactLptSDKType {
   min_amounts_out: CoinSDKType[];
 }
 export interface MsgExitAllTokensExactLptResponse {
-  lptIn?: Coin;
+  lptIn: Coin;
   amountsOut: Coin[];
-  protocolFee?: Coin;
+  protocolFee: Coin;
 }
 export interface MsgExitAllTokensExactLptResponseSDKType {
-  lpt_in?: CoinSDKType;
+  lpt_in: CoinSDKType;
   amounts_out: CoinSDKType[];
-  protocol_fee?: CoinSDKType;
+  protocol_fee: CoinSDKType;
 }
 export interface CreateWeightedPoolToken {
   denom: string;
@@ -238,12 +238,12 @@ export interface MsgInitializePoolSDKType {
   amounts_in: CoinSDKType[];
 }
 export interface MsgInitializePoolResponse {
-  lptOut?: Coin;
+  lptOut: Coin;
   amountsIn: Coin[];
   protocolFee: Coin[];
 }
 export interface MsgInitializePoolResponseSDKType {
-  lpt_out?: CoinSDKType;
+  lpt_out: CoinSDKType;
   amounts_in: CoinSDKType[];
   protocol_fee: CoinSDKType[];
 }
@@ -295,21 +295,21 @@ export interface MsgBatchSwapResponseSDKType {
 }
 export interface MsgSetYammConfiguration {
   creator: string;
-  configuration?: YammConfiguration;
+  configuration: YammConfiguration;
 }
 export interface MsgSetYammConfigurationSDKType {
   creator: string;
-  configuration?: YammConfigurationSDKType;
+  configuration: YammConfigurationSDKType;
 }
 export interface MsgSetYammConfigurationResponse {}
 export interface MsgSetYammConfigurationResponseSDKType {}
 export interface MsgWhitelistRoute {
   authority: string;
-  whitelistedRoute?: WhitelistedRoute;
+  whitelistedRoute: WhitelistedRoute;
 }
 export interface MsgWhitelistRouteSDKType {
   authority: string;
-  whitelisted_route?: WhitelistedRouteSDKType;
+  whitelisted_route: WhitelistedRouteSDKType;
 }
 export interface MsgWhitelistRouteResponse {}
 export interface MsgWhitelistRouteResponseSDKType {}
@@ -338,7 +338,7 @@ export interface MsgSubmitOrder {
   totalAmount: string;
   millisInterval: Long;
   maxStepSpotPrice: string;
-  maxMatchingSpotPrice: string;
+  maxMatchingSpotPrice?: string;
 }
 export interface MsgSubmitOrderSDKType {
   creator: string;
@@ -351,13 +351,13 @@ export interface MsgSubmitOrderSDKType {
   total_amount: string;
   millis_interval: Long;
   max_step_spot_price: string;
-  max_matching_spot_price: string;
+  max_matching_spot_price?: string;
 }
 export interface MsgSubmitOrderResponse {
-  order?: Order;
+  order: Order;
 }
 export interface MsgSubmitOrderResponseSDKType {
-  order?: OrderSDKType;
+  order: OrderSDKType;
 }
 export interface MsgCancelOrder {
   creator: string;
@@ -368,10 +368,10 @@ export interface MsgCancelOrderSDKType {
   id: Long;
 }
 export interface MsgCancelOrderResponse {
-  withdrawnDeposit?: Coin;
+  withdrawnDeposit: Coin;
 }
 export interface MsgCancelOrderResponseSDKType {
-  withdrawn_deposit?: CoinSDKType;
+  withdrawn_deposit: CoinSDKType;
 }
 export interface MsgProposeMatch {
   creator: string;
@@ -424,11 +424,11 @@ export interface MsgRecoveryExitSDKType {
   min_amounts_out: CoinSDKType[];
 }
 export interface MsgRecoveryExitResponse {
-  lptIn?: Coin;
+  lptIn: Coin;
   amountsOut: Coin[];
 }
 export interface MsgRecoveryExitResponseSDKType {
-  lpt_in?: CoinSDKType;
+  lpt_in: CoinSDKType;
   amounts_out: CoinSDKType[];
 }
 export interface MsgSetPauseMode {
@@ -455,21 +455,21 @@ export interface MsgSetVaultPauseModeResponse {}
 export interface MsgSetVaultPauseModeResponseSDKType {}
 export interface MsgCreateOraclePricePair {
   authority: string;
-  oraclePricePair?: OraclePricePair;
+  oraclePricePair: OraclePricePair;
 }
 export interface MsgCreateOraclePricePairSDKType {
   authority: string;
-  oracle_price_pair?: OraclePricePairSDKType;
+  oracle_price_pair: OraclePricePairSDKType;
 }
 export interface MsgCreateOraclePricePairResponse {}
 export interface MsgCreateOraclePricePairResponseSDKType {}
 export interface MsgUpdateOraclePricePair {
   authority: string;
-  oraclePricePair?: OraclePricePair;
+  oraclePricePair: OraclePricePair;
 }
 export interface MsgUpdateOraclePricePairSDKType {
   authority: string;
-  oracle_price_pair?: OraclePricePairSDKType;
+  oracle_price_pair: OraclePricePairSDKType;
 }
 export interface MsgUpdateOraclePricePairResponse {}
 export interface MsgUpdateOraclePricePairResponseSDKType {}
@@ -487,12 +487,12 @@ export interface MsgSetSwapProtocolFee {
   authority: string;
   poolId: Long;
   /** if protocol fee parameters are nil, then the values are read from treasury module parameters */
-  swapProtocolFee: string;
+  swapProtocolFee?: string;
 }
 export interface MsgSetSwapProtocolFeeSDKType {
   authority: string;
   pool_id: Long;
-  swap_protocol_fee: string;
+  swap_protocol_fee?: string;
 }
 export interface MsgSetSwapProtocolFeeResponse {}
 export interface MsgSetSwapProtocolFeeResponseSDKType {}
@@ -500,12 +500,12 @@ export interface MsgSetJoinExitProtocolFee {
   authority: string;
   poolId: Long;
   /** if protocol fee parameters are nil, then the values are read from treasury module parameters */
-  joinExitProtocolFee: string;
+  joinExitProtocolFee?: string;
 }
 export interface MsgSetJoinExitProtocolFeeSDKType {
   authority: string;
   pool_id: Long;
-  join_exit_protocol_fee: string;
+  join_exit_protocol_fee?: string;
 }
 export interface MsgSetJoinExitProtocolFeeResponse {}
 export interface MsgSetJoinExitProtocolFeeResponseSDKType {}
@@ -610,7 +610,7 @@ export interface MsgSetInitializationAllowListResponseSDKType {}
 function createBaseMsgSingleSwap(): MsgSingleSwap {
   return {
     creator: "",
-    swap: undefined,
+    swap: Swap.fromPartial({}),
     maxAmountIn: undefined,
     minAmountOut: undefined
   };
@@ -684,10 +684,10 @@ export const MsgSingleSwap = {
 };
 function createBaseMsgSingleSwapResponse(): MsgSingleSwapResponse {
   return {
-    amountOut: undefined,
-    amountIn: undefined,
-    protocolFee: undefined,
-    swapFee: undefined
+    amountOut: Coin.fromPartial({}),
+    amountIn: Coin.fromPartial({}),
+    protocolFee: Coin.fromPartial({}),
+    swapFee: Coin.fromPartial({})
   };
 }
 export const MsgSingleSwapResponse = {
@@ -838,7 +838,7 @@ export const MsgJoinAllTokensExactLpt = {
 };
 function createBaseMsgJoinAllTokensExactLptResponse(): MsgJoinAllTokensExactLptResponse {
   return {
-    lptOut: undefined,
+    lptOut: Coin.fromPartial({}),
     amountsIn: [],
     protocolFee: []
   };
@@ -996,10 +996,10 @@ export const MsgJoinTokenExactLpt = {
 };
 function createBaseMsgJoinTokenExactLptResponse(): MsgJoinTokenExactLptResponse {
   return {
-    lptOut: undefined,
-    amountIn: undefined,
-    protocolFee: undefined,
-    swapFee: undefined
+    lptOut: Coin.fromPartial({}),
+    amountIn: Coin.fromPartial({}),
+    protocolFee: Coin.fromPartial({}),
+    swapFee: Coin.fromPartial({})
   };
 }
 export const MsgJoinTokenExactLptResponse = {
@@ -1150,7 +1150,7 @@ export const MsgJoinExactTokens = {
 };
 function createBaseMsgJoinExactTokensResponse(): MsgJoinExactTokensResponse {
   return {
-    lptOut: undefined,
+    lptOut: Coin.fromPartial({}),
     amountsIn: [],
     protocolFee: [],
     swapFee: []
@@ -1316,9 +1316,9 @@ export const MsgExitExactTokens = {
 };
 function createBaseMsgExitExactTokensResponse(): MsgExitExactTokensResponse {
   return {
-    lptIn: undefined,
+    lptIn: Coin.fromPartial({}),
     amountsOut: [],
-    protocolFee: undefined,
+    protocolFee: Coin.fromPartial({}),
     swapFee: []
   };
 }
@@ -1484,10 +1484,10 @@ export const MsgExitTokenExactLpt = {
 };
 function createBaseMsgExitTokenExactLptResponse(): MsgExitTokenExactLptResponse {
   return {
-    lptIn: undefined,
-    amountOut: undefined,
-    protocolFee: undefined,
-    swapFee: undefined
+    lptIn: Coin.fromPartial({}),
+    amountOut: Coin.fromPartial({}),
+    protocolFee: Coin.fromPartial({}),
+    swapFee: Coin.fromPartial({})
   };
 }
 export const MsgExitTokenExactLptResponse = {
@@ -1638,9 +1638,9 @@ export const MsgExitAllTokensExactLpt = {
 };
 function createBaseMsgExitAllTokensExactLptResponse(): MsgExitAllTokensExactLptResponse {
   return {
-    lptIn: undefined,
+    lptIn: Coin.fromPartial({}),
     amountsOut: [],
-    protocolFee: undefined
+    protocolFee: Coin.fromPartial({})
   };
 }
 export const MsgExitAllTokensExactLptResponse = {
@@ -2087,7 +2087,7 @@ export const MsgInitializePool = {
 };
 function createBaseMsgInitializePoolResponse(): MsgInitializePoolResponse {
   return {
-    lptOut: undefined,
+    lptOut: Coin.fromPartial({}),
     amountsIn: [],
     protocolFee: []
   };
@@ -2340,7 +2340,7 @@ export const MsgBatchSwap = {
   fromJSON(object: any): MsgBatchSwap {
     return {
       creator: isSet(object.creator) ? String(object.creator) : "",
-      swapType: isSet(object.swapType) ? swapTypeFromJSON(object.swapType) : 0,
+      swapType: isSet(object.swapType) ? swapTypeFromJSON(object.swapType) : -1,
       steps: Array.isArray(object?.steps) ? object.steps.map((e: any) => SwapStep.fromJSON(e)) : [],
       minAmountsOut: Array.isArray(object?.minAmountsOut) ? object.minAmountsOut.map((e: any) => Coin.fromJSON(e)) : [],
       maxAmountsIn: Array.isArray(object?.maxAmountsIn) ? object.maxAmountsIn.map((e: any) => Coin.fromJSON(e)) : []
@@ -2471,7 +2471,7 @@ export const MsgBatchSwapResponse = {
 function createBaseMsgSetYammConfiguration(): MsgSetYammConfiguration {
   return {
     creator: "",
-    configuration: undefined
+    configuration: YammConfiguration.fromPartial({})
   };
 }
 export const MsgSetYammConfiguration = {
@@ -2559,7 +2559,7 @@ export const MsgSetYammConfigurationResponse = {
 function createBaseMsgWhitelistRoute(): MsgWhitelistRoute {
   return {
     authority: "",
-    whitelistedRoute: undefined
+    whitelistedRoute: WhitelistedRoute.fromPartial({})
   };
 }
 export const MsgWhitelistRoute = {
@@ -2899,7 +2899,7 @@ export const MsgSubmitOrder = {
 };
 function createBaseMsgSubmitOrderResponse(): MsgSubmitOrderResponse {
   return {
-    order: undefined
+    order: Order.fromPartial({})
   };
 }
 export const MsgSubmitOrderResponse = {
@@ -2999,7 +2999,7 @@ export const MsgCancelOrder = {
 };
 function createBaseMsgCancelOrderResponse(): MsgCancelOrderResponse {
   return {
-    withdrawnDeposit: undefined
+    withdrawnDeposit: Coin.fromPartial({})
   };
 }
 export const MsgCancelOrderResponse = {
@@ -3431,7 +3431,7 @@ export const MsgRecoveryExit = {
 };
 function createBaseMsgRecoveryExitResponse(): MsgRecoveryExitResponse {
   return {
-    lptIn: undefined,
+    lptIn: Coin.fromPartial({}),
     amountsOut: []
   };
 }
@@ -3677,7 +3677,7 @@ export const MsgSetVaultPauseModeResponse = {
 function createBaseMsgCreateOraclePricePair(): MsgCreateOraclePricePair {
   return {
     authority: "",
-    oraclePricePair: undefined
+    oraclePricePair: OraclePricePair.fromPartial({})
   };
 }
 export const MsgCreateOraclePricePair = {
@@ -3765,7 +3765,7 @@ export const MsgCreateOraclePricePairResponse = {
 function createBaseMsgUpdateOraclePricePair(): MsgUpdateOraclePricePair {
   return {
     authority: "",
-    oraclePricePair: undefined
+    oraclePricePair: OraclePricePair.fromPartial({})
   };
 }
 export const MsgUpdateOraclePricePair = {

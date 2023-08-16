@@ -9,7 +9,7 @@ export interface Equivocation {
   /** height is the equivocation height. */
   height: Long;
   /** time is the equivocation time. */
-  time?: Timestamp;
+  time: Timestamp;
   /** power is the equivocation validator power. */
   power: Long;
   /** consensus_address is the equivocation validator consensus address. */
@@ -21,14 +21,14 @@ export interface Equivocation {
  */
 export interface EquivocationSDKType {
   height: Long;
-  time?: TimestampSDKType;
+  time: TimestampSDKType;
   power: Long;
   consensus_address: string;
 }
 function createBaseEquivocation(): Equivocation {
   return {
     height: Long.ZERO,
-    time: undefined,
+    time: Timestamp.fromPartial({}),
     power: Long.ZERO,
     consensusAddress: ""
   };

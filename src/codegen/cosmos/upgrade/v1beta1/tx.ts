@@ -10,7 +10,7 @@ export interface MsgSoftwareUpgrade {
   /** authority is the address that controls the module (defaults to x/gov unless overwritten). */
   authority: string;
   /** plan is the upgrade plan. */
-  plan?: Plan;
+  plan: Plan;
 }
 /**
  * MsgSoftwareUpgrade is the Msg/SoftwareUpgrade request type.
@@ -19,7 +19,7 @@ export interface MsgSoftwareUpgrade {
  */
 export interface MsgSoftwareUpgradeSDKType {
   authority: string;
-  plan?: PlanSDKType;
+  plan: PlanSDKType;
 }
 /**
  * MsgSoftwareUpgradeResponse is the Msg/SoftwareUpgrade response type.
@@ -65,7 +65,7 @@ export interface MsgCancelUpgradeResponseSDKType {}
 function createBaseMsgSoftwareUpgrade(): MsgSoftwareUpgrade {
   return {
     authority: "",
-    plan: undefined
+    plan: Plan.fromPartial({})
   };
 }
 export const MsgSoftwareUpgrade = {

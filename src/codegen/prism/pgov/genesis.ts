@@ -6,21 +6,21 @@ import * as _m0 from "protobufjs/minimal";
 import { isSet } from "../../helpers";
 /** GenesisState defines the pgov module's genesis state. */
 export interface GenesisState {
-  params?: Params;
+  params: Params;
   stakedPAssetList: StakedPAsset[];
   proposalList: Proposal[];
   voteList: Vote[];
 }
 /** GenesisState defines the pgov module's genesis state. */
 export interface GenesisStateSDKType {
-  params?: ParamsSDKType;
+  params: ParamsSDKType;
   staked_p_asset_list: StakedPAssetSDKType[];
   proposal_list: ProposalSDKType[];
   vote_list: VoteSDKType[];
 }
 function createBaseGenesisState(): GenesisState {
   return {
-    params: undefined,
+    params: Params.fromPartial({}),
     stakedPAssetList: [],
     proposalList: [],
     voteList: []

@@ -17,39 +17,39 @@ export interface EventTreasuryCollectFeeSDKType {
 export interface EventCreateFlowForAmount {
   flowId: Long;
   actionType: ActionType;
-  amount?: Coin;
+  amount: Coin;
 }
 export interface EventCreateFlowForAmountSDKType {
   flow_id: Long;
   action_type: ActionType;
-  amount?: CoinSDKType;
+  amount: CoinSDKType;
 }
 export interface EventExecuteActionForAmount {
   actionType: ActionType;
-  amount?: Coin;
+  amount: Coin;
 }
 export interface EventExecuteActionForAmountSDKType {
   action_type: ActionType;
-  amount?: CoinSDKType;
+  amount: CoinSDKType;
 }
 export interface EventSetAction {
-  action?: Action;
+  action: Action;
 }
 export interface EventSetActionSDKType {
-  action?: ActionSDKType;
+  action: ActionSDKType;
 }
 export interface EventSetFlowTrade {
-  flowTrade?: FlowTrade;
+  flowTrade: FlowTrade;
 }
 export interface EventSetFlowTradeSDKType {
-  flow_trade?: FlowTradeSDKType;
+  flow_trade: FlowTradeSDKType;
 }
 export interface EventRemoveFlowTrade {
-  endTime?: Timestamp;
+  endTime: Timestamp;
   flowId: Long;
 }
 export interface EventRemoveFlowTradeSDKType {
-  end_time?: TimestampSDKType;
+  end_time: TimestampSDKType;
   flow_id: Long;
 }
 function createBaseEventTreasuryCollectFee(): EventTreasuryCollectFee {
@@ -121,7 +121,7 @@ function createBaseEventCreateFlowForAmount(): EventCreateFlowForAmount {
   return {
     flowId: Long.UZERO,
     actionType: 0,
-    amount: undefined
+    amount: Coin.fromPartial({})
   };
 }
 export const EventCreateFlowForAmount = {
@@ -163,7 +163,7 @@ export const EventCreateFlowForAmount = {
   fromJSON(object: any): EventCreateFlowForAmount {
     return {
       flowId: isSet(object.flowId) ? Long.fromValue(object.flowId) : Long.UZERO,
-      actionType: isSet(object.actionType) ? actionTypeFromJSON(object.actionType) : 0,
+      actionType: isSet(object.actionType) ? actionTypeFromJSON(object.actionType) : -1,
       amount: isSet(object.amount) ? Coin.fromJSON(object.amount) : undefined
     };
   },
@@ -185,7 +185,7 @@ export const EventCreateFlowForAmount = {
 function createBaseEventExecuteActionForAmount(): EventExecuteActionForAmount {
   return {
     actionType: 0,
-    amount: undefined
+    amount: Coin.fromPartial({})
   };
 }
 export const EventExecuteActionForAmount = {
@@ -220,7 +220,7 @@ export const EventExecuteActionForAmount = {
   },
   fromJSON(object: any): EventExecuteActionForAmount {
     return {
-      actionType: isSet(object.actionType) ? actionTypeFromJSON(object.actionType) : 0,
+      actionType: isSet(object.actionType) ? actionTypeFromJSON(object.actionType) : -1,
       amount: isSet(object.amount) ? Coin.fromJSON(object.amount) : undefined
     };
   },
@@ -239,7 +239,7 @@ export const EventExecuteActionForAmount = {
 };
 function createBaseEventSetAction(): EventSetAction {
   return {
-    action: undefined
+    action: Action.fromPartial({})
   };
 }
 export const EventSetAction = {
@@ -284,7 +284,7 @@ export const EventSetAction = {
 };
 function createBaseEventSetFlowTrade(): EventSetFlowTrade {
   return {
-    flowTrade: undefined
+    flowTrade: FlowTrade.fromPartial({})
   };
 }
 export const EventSetFlowTrade = {
@@ -329,7 +329,7 @@ export const EventSetFlowTrade = {
 };
 function createBaseEventRemoveFlowTrade(): EventRemoveFlowTrade {
   return {
-    endTime: undefined,
+    endTime: Timestamp.fromPartial({}),
     flowId: Long.UZERO
   };
 }

@@ -1,12 +1,12 @@
-import {cosmatics} from "@prism-finance/prismjs/lib";
-import {Long} from "@prism-finance/prismjs/lib/codegen/helpers";
+import { cosmatics } from "@prism-finance/prismjs/lib";
+import { Long } from "@prism-finance/prismjs/lib/codegen/helpers";
 import * as console from "console";
 
 async function main() {
-    const cosmaticsClient = await cosmatics.ClientFactory.createClient({restEndpoint: "http://localhost:4444"})
+    const cosmaticsClient = await cosmatics.ClientFactory.createClient({ restEndpoint: "http://localhost:4444" })
 
-    const syncInfo = (await cosmaticsClient.cosmatics.syncInfo()).sync_info
-    console.log(syncInfo)
+    const syncState = (await cosmaticsClient.cosmatics.syncState()).sync_state
+    console.log(syncState)
 
     const block = (await cosmaticsClient.cosmatics.block({
         height: Long.fromNumber(100)
@@ -22,7 +22,7 @@ async function main() {
         events: [
             "transfer.sender=prism156pcgs3faegfte0vuaykr9az3hh9kx2e2qfwvu",
             "tx.signature=P2a2BwreLnfo9BXsxujVswxmCdLp96EcRzxj5l+yVaQn+aaTtFgCIHyVG5LP+8ZQWGLtkjWG1wEeixkWSfdeZA==",
-        ]
+        ], limit: undefined, orderBy: undefined, page: undefined, pagination: undefined
     }))
     console.log(txs)
 }

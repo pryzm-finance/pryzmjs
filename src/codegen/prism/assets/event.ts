@@ -4,38 +4,38 @@ import { RefractableAsset, RefractableAssetSDKType } from "./refractable_asset";
 import * as _m0 from "protobufjs/minimal";
 import { isSet } from "../../helpers";
 export interface EventSetParams {
-  params?: Params;
+  params: Params;
 }
 export interface EventSetParamsSDKType {
-  params?: ParamsSDKType;
+  params: ParamsSDKType;
 }
 export interface EventAddMaturityLevel {
-  maturityLevel?: MaturityLevel;
+  maturityLevel: MaturityLevel;
 }
 export interface EventAddMaturityLevelSDKType {
-  maturity_level?: MaturityLevelSDKType;
+  maturity_level: MaturityLevelSDKType;
 }
 export interface EventDeactivateMaturityLevel {
-  maturityLevel?: MaturityLevel;
+  maturityLevel: MaturityLevel;
 }
 export interface EventDeactivateMaturityLevelSDKType {
-  maturity_level?: MaturityLevelSDKType;
+  maturity_level: MaturityLevelSDKType;
 }
 export interface EventSetRefractableAsset {
-  refractableAsset?: RefractableAsset;
+  refractableAsset: RefractableAsset;
 }
 export interface EventSetRefractableAssetSDKType {
-  refractable_asset?: RefractableAssetSDKType;
+  refractable_asset: RefractableAssetSDKType;
 }
 export interface EventSetMaturityLevel {
-  maturityLevel?: MaturityLevel;
+  maturityLevel: MaturityLevel;
 }
 export interface EventSetMaturityLevelSDKType {
-  maturity_level?: MaturityLevelSDKType;
+  maturity_level: MaturityLevelSDKType;
 }
 function createBaseEventSetParams(): EventSetParams {
   return {
-    params: undefined
+    params: Params.fromPartial({})
   };
 }
 export const EventSetParams = {
@@ -80,7 +80,7 @@ export const EventSetParams = {
 };
 function createBaseEventAddMaturityLevel(): EventAddMaturityLevel {
   return {
-    maturityLevel: undefined
+    maturityLevel: MaturityLevel.fromPartial({})
   };
 }
 export const EventAddMaturityLevel = {
@@ -125,7 +125,7 @@ export const EventAddMaturityLevel = {
 };
 function createBaseEventDeactivateMaturityLevel(): EventDeactivateMaturityLevel {
   return {
-    maturityLevel: undefined
+    maturityLevel: MaturityLevel.fromPartial({})
   };
 }
 export const EventDeactivateMaturityLevel = {
@@ -170,7 +170,7 @@ export const EventDeactivateMaturityLevel = {
 };
 function createBaseEventSetRefractableAsset(): EventSetRefractableAsset {
   return {
-    refractableAsset: undefined
+    refractableAsset: RefractableAsset.fromPartial({})
   };
 }
 export const EventSetRefractableAsset = {
@@ -215,7 +215,7 @@ export const EventSetRefractableAsset = {
 };
 function createBaseEventSetMaturityLevel(): EventSetMaturityLevel {
   return {
-    maturityLevel: undefined
+    maturityLevel: MaturityLevel.fromPartial({})
   };
 }
 export const EventSetMaturityLevel = {

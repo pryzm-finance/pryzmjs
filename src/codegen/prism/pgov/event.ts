@@ -5,16 +5,16 @@ import { Vote, VoteSDKType } from "./vote";
 import { Long, isSet } from "../../helpers";
 import * as _m0 from "protobufjs/minimal";
 export interface EventSetParams {
-  params?: Params;
+  params: Params;
 }
 export interface EventSetParamsSDKType {
-  params?: ParamsSDKType;
+  params: ParamsSDKType;
 }
 export interface EventSetProposal {
-  proposal?: Proposal;
+  proposal: Proposal;
 }
 export interface EventSetProposalSDKType {
-  proposal?: ProposalSDKType;
+  proposal: ProposalSDKType;
 }
 export interface EventPAssetStake {
   address: string;
@@ -41,16 +41,16 @@ export interface EventPAssetUnstakeSDKType {
   total_staked_p_asset: string;
 }
 export interface EventVoteSubmit {
-  vote?: Vote;
+  vote: Vote;
 }
 export interface EventVoteSubmitSDKType {
-  vote?: VoteSDKType;
+  vote: VoteSDKType;
 }
 export interface EventProposalEnd {
-  proposal?: Proposal;
+  proposal: Proposal;
 }
 export interface EventProposalEndSDKType {
-  proposal?: ProposalSDKType;
+  proposal: ProposalSDKType;
 }
 export interface EventVoteTransmit {
   proposalId: Long;
@@ -98,7 +98,7 @@ export interface EventVoteTimeoutSDKType {
 }
 function createBaseEventSetParams(): EventSetParams {
   return {
-    params: undefined
+    params: Params.fromPartial({})
   };
 }
 export const EventSetParams = {
@@ -143,7 +143,7 @@ export const EventSetParams = {
 };
 function createBaseEventSetProposal(): EventSetProposal {
   return {
-    proposal: undefined
+    proposal: Proposal.fromPartial({})
   };
 }
 export const EventSetProposal = {
@@ -346,7 +346,7 @@ export const EventPAssetUnstake = {
 };
 function createBaseEventVoteSubmit(): EventVoteSubmit {
   return {
-    vote: undefined
+    vote: Vote.fromPartial({})
   };
 }
 export const EventVoteSubmit = {
@@ -391,7 +391,7 @@ export const EventVoteSubmit = {
 };
 function createBaseEventProposalEnd(): EventProposalEnd {
   return {
-    proposal: undefined
+    proposal: Proposal.fromPartial({})
   };
 }
 export const EventProposalEnd = {

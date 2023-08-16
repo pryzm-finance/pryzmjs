@@ -1,5 +1,5 @@
 //@ts-nocheck
-import { LCDClient } from "@osmonauts/lcd";
+import { LCDClient } from "@cosmology/lcd";
 import { QueryInterchainAccountRequest, QueryInterchainAccountResponseSDKType, QueryParamsRequest, QueryParamsResponseSDKType } from "./query";
 export class LCDQueryClient {
   req: LCDClient;

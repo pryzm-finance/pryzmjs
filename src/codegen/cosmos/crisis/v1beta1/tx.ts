@@ -29,7 +29,7 @@ export interface MsgUpdateParams {
   /** authority is the address that controls the module (defaults to x/gov unless overwritten). */
   authority: string;
   /** constant_fee defines the x/crisis parameter. */
-  constantFee?: Coin;
+  constantFee: Coin;
 }
 /**
  * MsgUpdateParams is the Msg/UpdateParams request type.
@@ -38,7 +38,7 @@ export interface MsgUpdateParams {
  */
 export interface MsgUpdateParamsSDKType {
   authority: string;
-  constant_fee?: CoinSDKType;
+  constant_fee: CoinSDKType;
 }
 /**
  * MsgUpdateParamsResponse defines the response structure for executing a
@@ -155,7 +155,7 @@ export const MsgVerifyInvariantResponse = {
 function createBaseMsgUpdateParams(): MsgUpdateParams {
   return {
     authority: "",
-    constantFee: undefined
+    constantFee: Coin.fromPartial({})
   };
 }
 export const MsgUpdateParams = {

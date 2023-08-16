@@ -67,7 +67,7 @@ export const QueryParamsDesc: UnaryMethodDefinitionish = {
     }
   } as any)
 };
-export const QueryGetRefractableAssetDesc: UnaryMethodDefinitionish = {
+export const QueryRefractableAssetDesc: UnaryMethodDefinitionish = {
   methodName: "RefractableAsset",
   service: QueryDesc,
   requestStream: false,
@@ -88,7 +88,7 @@ export const QueryGetRefractableAssetDesc: UnaryMethodDefinitionish = {
     }
   } as any)
 };
-export const QueryAllRefractableAssetDesc: UnaryMethodDefinitionish = {
+export const QueryRefractableAssetAllDesc: UnaryMethodDefinitionish = {
   methodName: "RefractableAssetAll",
   service: QueryDesc,
   requestStream: false,
@@ -109,7 +109,7 @@ export const QueryAllRefractableAssetDesc: UnaryMethodDefinitionish = {
     }
   } as any)
 };
-export const QueryGetMaturityLevelDesc: UnaryMethodDefinitionish = {
+export const QueryMaturityLevelDesc: UnaryMethodDefinitionish = {
   methodName: "MaturityLevel",
   service: QueryDesc,
   requestStream: false,
@@ -130,7 +130,7 @@ export const QueryGetMaturityLevelDesc: UnaryMethodDefinitionish = {
     }
   } as any)
 };
-export const QueryAllMaturityLevelDesc: UnaryMethodDefinitionish = {
+export const QueryMaturityLevelAllDesc: UnaryMethodDefinitionish = {
   methodName: "MaturityLevelAll",
   service: QueryDesc,
   requestStream: false,

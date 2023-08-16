@@ -4,45 +4,45 @@ import { isSet } from "../../helpers";
 /** Params defines the parameters for the module. */
 export interface Params {
   /** the default staking parameters. properties of HostChain.staking_params are overridden to this default params if provided */
-  stakingParams?: StakingParams;
+  stakingParams: StakingParams;
 }
 /** Params defines the parameters for the module. */
 export interface ParamsSDKType {
-  staking_params?: StakingParamsSDKType;
+  staking_params: StakingParamsSDKType;
 }
 /** StakingParams defines the parameters related to staking on each host chain */
 export interface StakingParams {
   /** the amount of operation fees */
-  feeRatios?: FeeRatios;
+  feeRatios: FeeRatios;
   /** the interval in which PRISM sends delegation messages to the host chain */
-  delegationInterval?: Duration;
+  delegationInterval: Duration;
   /**
    * the interval in which PRISM sends undelegation messages to the host chain
    * host chain's (UnbondingTime / MaxEntries) must be considered as the max value when setting this field
    */
-  undelegationInterval?: Duration;
+  undelegationInterval: Duration;
   /** the time-out value being set on ibc transfer messages */
-  ibcTransferTimeout?: Duration;
+  ibcTransferTimeout: Duration;
   /** the time-out value being set on ica messages */
-  icaTimeout?: Duration;
+  icaTimeout: Duration;
   maxUndelegationMsgs: number;
   maxRedelegationMsgs: number;
   rebalanceThreshold: string;
   minRebalanceAmount: string;
-  minRebalanceInterval?: Duration;
+  minRebalanceInterval: Duration;
 }
 /** StakingParams defines the parameters related to staking on each host chain */
 export interface StakingParamsSDKType {
-  fee_ratios?: FeeRatiosSDKType;
-  delegation_interval?: DurationSDKType;
-  undelegation_interval?: DurationSDKType;
-  ibc_transfer_timeout?: DurationSDKType;
-  ica_timeout?: DurationSDKType;
+  fee_ratios: FeeRatiosSDKType;
+  delegation_interval: DurationSDKType;
+  undelegation_interval: DurationSDKType;
+  ibc_transfer_timeout: DurationSDKType;
+  ica_timeout: DurationSDKType;
   max_undelegation_msgs: number;
   max_redelegation_msgs: number;
   rebalance_threshold: string;
   min_rebalance_amount: string;
-  min_rebalance_interval?: DurationSDKType;
+  min_rebalance_interval: DurationSDKType;
 }
 /** FeeRatios defines the fee ratio operations supported by icstaking */
 export interface FeeRatios {
@@ -64,7 +64,7 @@ export interface FeeRatiosSDKType {
 }
 function createBaseParams(): Params {
   return {
-    stakingParams: undefined
+    stakingParams: StakingParams.fromPartial({})
   };
 }
 export const Params = {
@@ -109,16 +109,16 @@ export const Params = {
 };
 function createBaseStakingParams(): StakingParams {
   return {
-    feeRatios: undefined,
-    delegationInterval: undefined,
-    undelegationInterval: undefined,
-    ibcTransferTimeout: undefined,
-    icaTimeout: undefined,
+    feeRatios: FeeRatios.fromPartial({}),
+    delegationInterval: Duration.fromPartial({}),
+    undelegationInterval: Duration.fromPartial({}),
+    ibcTransferTimeout: Duration.fromPartial({}),
+    icaTimeout: Duration.fromPartial({}),
     maxUndelegationMsgs: 0,
     maxRedelegationMsgs: 0,
     rebalanceThreshold: "",
     minRebalanceAmount: "",
-    minRebalanceInterval: undefined
+    minRebalanceInterval: Duration.fromPartial({})
   };
 }
 export const StakingParams = {

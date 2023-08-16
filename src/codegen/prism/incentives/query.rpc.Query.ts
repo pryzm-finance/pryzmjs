@@ -85,7 +85,7 @@ export const QueryParamsDesc: UnaryMethodDefinitionish = {
     }
   } as any)
 };
-export const QueryGetPoolDesc: UnaryMethodDefinitionish = {
+export const QueryPoolDesc: UnaryMethodDefinitionish = {
   methodName: "Pool",
   service: QueryDesc,
   requestStream: false,
@@ -106,7 +106,7 @@ export const QueryGetPoolDesc: UnaryMethodDefinitionish = {
     }
   } as any)
 };
-export const QueryAllPoolDesc: UnaryMethodDefinitionish = {
+export const QueryPoolAllDesc: UnaryMethodDefinitionish = {
   methodName: "PoolAll",
   service: QueryDesc,
   requestStream: false,
@@ -127,7 +127,7 @@ export const QueryAllPoolDesc: UnaryMethodDefinitionish = {
     }
   } as any)
 };
-export const QueryGetBondDesc: UnaryMethodDefinitionish = {
+export const QueryBondDesc: UnaryMethodDefinitionish = {
   methodName: "Bond",
   service: QueryDesc,
   requestStream: false,
@@ -148,7 +148,7 @@ export const QueryGetBondDesc: UnaryMethodDefinitionish = {
     }
   } as any)
 };
-export const QueryAllBondDesc: UnaryMethodDefinitionish = {
+export const QueryBondAllDesc: UnaryMethodDefinitionish = {
   methodName: "BondAll",
   service: QueryDesc,
   requestStream: false,
@@ -169,7 +169,7 @@ export const QueryAllBondDesc: UnaryMethodDefinitionish = {
     }
   } as any)
 };
-export const QueryGetUnbondingDesc: UnaryMethodDefinitionish = {
+export const QueryUnbondingDesc: UnaryMethodDefinitionish = {
   methodName: "Unbonding",
   service: QueryDesc,
   requestStream: false,
@@ -190,7 +190,7 @@ export const QueryGetUnbondingDesc: UnaryMethodDefinitionish = {
     }
   } as any)
 };
-export const QueryAllUnbondingDesc: UnaryMethodDefinitionish = {
+export const QueryUnbondingAllDesc: UnaryMethodDefinitionish = {
   methodName: "UnbondingAll",
   service: QueryDesc,
   requestStream: false,

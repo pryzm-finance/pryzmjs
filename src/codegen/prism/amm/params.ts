@@ -64,15 +64,15 @@ export interface GeneralPoolParametersSDKType {
 }
 /** Params defines the parameters for the module. */
 export interface Params {
-  generalPoolParameters?: GeneralPoolParameters;
-  yammParameters?: YammParameters;
-  orderParameters?: OrderParameters;
+  generalPoolParameters: GeneralPoolParameters;
+  yammParameters: YammParameters;
+  orderParameters: OrderParameters;
 }
 /** Params defines the parameters for the module. */
 export interface ParamsSDKType {
-  general_pool_parameters?: GeneralPoolParametersSDKType;
-  yamm_parameters?: YammParametersSDKType;
-  order_parameters?: OrderParametersSDKType;
+  general_pool_parameters: GeneralPoolParametersSDKType;
+  yamm_parameters: YammParametersSDKType;
+  order_parameters: OrderParametersSDKType;
 }
 function createBaseOrderParameters(): OrderParameters {
   return {
@@ -401,9 +401,9 @@ export const GeneralPoolParameters = {
 };
 function createBaseParams(): Params {
   return {
-    generalPoolParameters: undefined,
-    yammParameters: undefined,
-    orderParameters: undefined
+    generalPoolParameters: GeneralPoolParameters.fromPartial({}),
+    yammParameters: YammParameters.fromPartial({}),
+    orderParameters: OrderParameters.fromPartial({})
   };
 }
 export const Params = {

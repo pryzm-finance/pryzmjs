@@ -1,14 +1,18 @@
 lockfileVersion: 5.4
 
 specifiers:
-  '@prism-finance/prismjs': 0.9.0
+  '@prism-finance/prismjs': 0.9.1
   '@refractedlabs/oraclejs': ^0.3.0
   '@refractedlabs/utils': 0.1.5
+  typescript: ^5.1.6
 
 dependencies:
-  '@prism-finance/prismjs': 0.9.0_google-protobuf@3.21.2
+  '@prism-finance/prismjs': 0.9.1_google-protobuf@3.21.2
   '@refractedlabs/oraclejs': 0.3.0_google-protobuf@3.21.2
   '@refractedlabs/utils': 0.1.5
+
+devDependencies:
+  typescript: 5.1.6
 
 packages:
 
@@ -157,7 +161,7 @@ packages:
       '@cosmjs/utils': 0.31.0
       cosmjs-types: 0.8.0
       long: 4.0.0
-      protobufjs: 6.11.3
+      protobufjs: 6.11.4
       xstream: 11.14.0
     transitivePeerDependencies:
       - bufferutil
@@ -240,6 +244,15 @@ packages:
     resolution: {integrity: sha512-nNcycZWUYLNJlrIXgpcgVRqdl6BXjF4YlXdxobQWpW9Tikk61bEGeAFhDYtC0PwHlokCNw0KxWiHGJL4nL7Q5A==}
     dev: false
 
+  /@cosmology/lcd/0.12.0:
+    resolution: {integrity: sha512-f2mcySYO1xdislAhuWtNFmg4q/bzY3Aem2UkDzYzI0ZELVev5i2Pi0bQrYUNTeNg1isAo0Kyrdqj/4YPqEwjGA==}
+    dependencies:
+      '@babel/runtime': 7.22.10
+      axios: 0.27.2
+    transitivePeerDependencies:
+      - debug
+    dev: false
+
   /@dabh/diagnostics/2.0.3:
     resolution: {integrity: sha512-hrlQOIi7hAfzsMqlGSFyVucrx38O+j6wiGOf//H2ecvIEqYN4ADBSS2iLMh5UFyDunCNniUIPk/q3riFv45xRA==}
     dependencies:
@@ -279,19 +292,19 @@ packages:
       - debug
     dev: false
 
-  /@prism-finance/prismjs/0.9.0_google-protobuf@3.21.2:
-    resolution: {integrity: sha512-MFOFIEG+05VDZ61qShBxkYZE9rBgz+nNpOFLl4AUfNL5IroeGw9sSLyUE3qC3SAVqqw9Ko7TFlqNy4PLZlSGmA==, tarball: download/@prism-finance/prismjs/0.9.0/ffb5f661b27cf4923868c8d14cc2a89362ece586}
+  /@prism-finance/prismjs/0.9.1_google-protobuf@3.21.2:
+    resolution: {integrity: sha512-zFYbAGJntX+UKgOCObDrHeEiWbaWU0Mfbh7YU9pSlsqj3qtapStA1fpWkY+nqVdbS1eKisDz9K8ccqOsPiR1+w==, tarball: download/@prism-finance/prismjs/0.9.1/fe882c8bb8762f9fdf29bfc732974d163b8288aa}
     dependencies:
       '@babel/runtime': 7.22.10
       '@cosmjs/amino': 0.31.0
       '@cosmjs/proto-signing': 0.31.0
       '@cosmjs/stargate': 0.31.0
       '@cosmjs/tendermint-rpc': 0.31.0
+      '@cosmology/lcd': 0.12.0
       '@improbable-eng/grpc-web': 0.15.0_google-protobuf@3.21.2
       '@improbable-eng/grpc-web-node-http-transport': 0.15.0_fng5pv4qmdetiqq66m6yjkaacu
-      '@osmonauts/lcd': 0.10.0
       browser-headers: 0.4.1
-      protobufjs: 6.11.3
+      protobufjs: 6.11.4
     transitivePeerDependencies:
       - bufferutil
       - debug
@@ -387,6 +400,10 @@ packages:
 
   /@types/node/20.4.5:
     resolution: {integrity: sha512-rt40Nk13II9JwQBdeYqmbn2Q6IVTA5uPhvSO+JVqdXw/6/4glI6oR9ezty/A9Hg5u7JH4OmYmuQ+XvjKm0Datg==}
+    dev: false
+
+  /@types/node/20.5.0:
+    resolution: {integrity: sha512-Mgq7eCtoTjT89FqNoTzzXg2XvCi5VMhRV6+I2aYanc6kQCBImeNaAYRs/DyoVqk1YEUJK5gN9VO7HRIdz4Wo3Q==}
     dev: false
 
   /@types/triple-beam/1.3.2:
@@ -762,6 +779,26 @@ packages:
       long: 4.0.0
     dev: false
 
+  /protobufjs/6.11.4:
+    resolution: {integrity: sha512-5kQWPaJHi1WoCpjTGszzQ32PG2F4+wRY6BmAT4Vfw56Q2FZ4YZzK20xUYQH4YkfehY1e6QSICrJquM6xXZNcrw==}
+    hasBin: true
+    requiresBuild: true
+    dependencies:
+      '@protobufjs/aspromise': 1.1.2
+      '@protobufjs/base64': 1.1.2
+      '@protobufjs/codegen': 2.0.4
+      '@protobufjs/eventemitter': 1.1.0
+      '@protobufjs/fetch': 1.1.0
+      '@protobufjs/float': 1.0.2
+      '@protobufjs/inquire': 1.1.0
+      '@protobufjs/path': 1.1.2
+      '@protobufjs/pool': 1.1.0
+      '@protobufjs/utf8': 1.1.0
+      '@types/long': 4.0.2
+      '@types/node': 20.5.0
+      long: 4.0.0
+    dev: false
+
   /readable-stream/3.6.2:
     resolution: {integrity: sha512-9u/sniCrY3D5WdsERHzHE4G2YCXqoG5FTHUiCC4SIbr6XcLZBY05ya9EKjYek9O5xOAwjGq+1JdGBAS7Q9ScoA==}
     engines: {node: '>= 6'}
@@ -820,6 +857,12 @@ packages:
   /triple-beam/1.3.0:
     resolution: {integrity: sha512-XrHUvV5HpdLmIj4uVMxHggLbFSZYIn7HEWsqePZcI50pco+MPqJ50wMGY794X7AOOhxOBAjbkqfAbEe/QMp2Lw==}
     dev: false
+
+  /typescript/5.1.6:
+    resolution: {integrity: sha512-zaWCozRZ6DLEWAWFrVDz1H6FVXzUSfTy5FUMWsQlU8Ym5JP9eO4xkTIROFCQvhQf61z6O/G6ugw3SgAnvvm+HA==}
+    engines: {node: '>=14.17'}
+    hasBin: true
+    dev: true
 
   /unix-dgram/2.0.6:
     resolution: {integrity: sha512-AURroAsb73BZ6CdAyMrTk/hYKNj3DuYYEuOaB8bYMOHGKupRNScw90Q5C71tWJc3uE7dIeXRyuwN0xLLq3vDTg==}

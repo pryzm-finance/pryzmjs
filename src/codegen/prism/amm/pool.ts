@@ -55,8 +55,8 @@ export interface Pool {
   pausedByOwner: boolean;
   ownerPauseWindowTiming?: PoolPauseWindow;
   /** if protocol fee parameters are nil, then the values are read from treasury module parameters */
-  swapProtocolFeeRatio: string;
-  joinExitProtocolFeeRatio: string;
+  swapProtocolFeeRatio?: string;
+  joinExitProtocolFeeRatio?: string;
   /** if not empty, only these addresses can initialize the pool */
   initializationAllowList: string[];
 }
@@ -70,8 +70,8 @@ export interface PoolSDKType {
   paused_by_gov: boolean;
   paused_by_owner: boolean;
   owner_pause_window_timing?: PoolPauseWindowSDKType;
-  swap_protocol_fee_ratio: string;
-  join_exit_protocol_fee_ratio: string;
+  swap_protocol_fee_ratio?: string;
+  join_exit_protocol_fee_ratio?: string;
   initialization_allow_list: string[];
 }
 function createBasePoolPauseWindow(): PoolPauseWindow {
@@ -240,7 +240,7 @@ export const Pool = {
       id: isSet(object.id) ? Long.fromValue(object.id) : Long.UZERO,
       name: isSet(object.name) ? String(object.name) : "",
       swapFeeRatio: isSet(object.swapFeeRatio) ? String(object.swapFeeRatio) : "",
-      poolType: isSet(object.poolType) ? poolTypeFromJSON(object.poolType) : 0,
+      poolType: isSet(object.poolType) ? poolTypeFromJSON(object.poolType) : -1,
       creator: isSet(object.creator) ? String(object.creator) : "",
       recoveryMode: isSet(object.recoveryMode) ? Boolean(object.recoveryMode) : false,
       pausedByGov: isSet(object.pausedByGov) ? Boolean(object.pausedByGov) : false,

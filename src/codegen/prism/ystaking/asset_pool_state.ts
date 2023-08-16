@@ -15,14 +15,14 @@ export interface AssetMaturityPoolState {
   maturitySymbol: string;
   active: boolean;
   bondedAmount: string;
-  globalIndex: string;
+  globalIndex?: string;
 }
 export interface AssetMaturityPoolStateSDKType {
   asset_id: string;
   maturity_symbol: string;
   active: boolean;
   bonded_amount: string;
-  global_index: string;
+  global_index?: string;
 }
 function createBaseAssetPoolState(): AssetPoolState {
   return {

@@ -36,7 +36,7 @@ export class QueryClientImpl implements Query {
 export const QueryDesc = {
   serviceName: "prism.treasury.Query"
 };
-export const QueryGetActionDesc: UnaryMethodDefinitionish = {
+export const QueryActionDesc: UnaryMethodDefinitionish = {
   methodName: "Action",
   service: QueryDesc,
   requestStream: false,
@@ -57,7 +57,7 @@ export const QueryGetActionDesc: UnaryMethodDefinitionish = {
     }
   } as any)
 };
-export const QueryGetFlowTradeDesc: UnaryMethodDefinitionish = {
+export const QueryFlowTradeDesc: UnaryMethodDefinitionish = {
   methodName: "FlowTrade",
   service: QueryDesc,
   requestStream: false,
@@ -78,7 +78,7 @@ export const QueryGetFlowTradeDesc: UnaryMethodDefinitionish = {
     }
   } as any)
 };
-export const QueryAllFlowTradeDesc: UnaryMethodDefinitionish = {
+export const QueryFlowTradeAllDesc: UnaryMethodDefinitionish = {
   methodName: "FlowTradeAll",
   service: QueryDesc,
   requestStream: false,

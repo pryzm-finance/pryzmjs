@@ -4,11 +4,11 @@ import * as _m0 from "protobufjs/minimal";
 import { isSet } from "../../helpers";
 export interface MsgUpdateParams {
   authority: string;
-  params?: Params;
+  params: Params;
 }
 export interface MsgUpdateParamsSDKType {
   authority: string;
-  params?: ParamsSDKType;
+  params: ParamsSDKType;
 }
 export interface MsgUpdateParamsResponse {}
 export interface MsgUpdateParamsResponseSDKType {}
@@ -31,7 +31,7 @@ export interface MsgDappAccountSpendResponseSDKType {}
 function createBaseMsgUpdateParams(): MsgUpdateParams {
   return {
     authority: "",
-    params: undefined
+    params: Params.fromPartial({})
   };
 }
 export const MsgUpdateParams = {

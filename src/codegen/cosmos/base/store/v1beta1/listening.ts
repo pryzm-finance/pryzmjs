@@ -34,34 +34,34 @@ export interface StoreKVPairSDKType {
  * the file streamer dump them into files together with the state changes.
  */
 export interface BlockMetadata {
-  requestBeginBlock?: RequestBeginBlock;
-  responseBeginBlock?: ResponseBeginBlock;
+  requestBeginBlock: RequestBeginBlock;
+  responseBeginBlock: ResponseBeginBlock;
   deliverTxs: BlockMetadata_DeliverTx[];
-  requestEndBlock?: RequestEndBlock;
-  responseEndBlock?: ResponseEndBlock;
-  responseCommit?: ResponseCommit;
+  requestEndBlock: RequestEndBlock;
+  responseEndBlock: ResponseEndBlock;
+  responseCommit: ResponseCommit;
 }
 /**
  * BlockMetadata contains all the abci event data of a block
  * the file streamer dump them into files together with the state changes.
  */
 export interface BlockMetadataSDKType {
-  request_begin_block?: RequestBeginBlockSDKType;
-  response_begin_block?: ResponseBeginBlockSDKType;
+  request_begin_block: RequestBeginBlockSDKType;
+  response_begin_block: ResponseBeginBlockSDKType;
   deliver_txs: BlockMetadata_DeliverTxSDKType[];
-  request_end_block?: RequestEndBlockSDKType;
-  response_end_block?: ResponseEndBlockSDKType;
-  response_commit?: ResponseCommitSDKType;
+  request_end_block: RequestEndBlockSDKType;
+  response_end_block: ResponseEndBlockSDKType;
+  response_commit: ResponseCommitSDKType;
 }
 /** DeliverTx encapulate deliver tx request and response. */
 export interface BlockMetadata_DeliverTx {
-  request?: RequestDeliverTx;
-  response?: ResponseDeliverTx;
+  request: RequestDeliverTx;
+  response: ResponseDeliverTx;
 }
 /** DeliverTx encapulate deliver tx request and response. */
 export interface BlockMetadata_DeliverTxSDKType {
-  request?: RequestDeliverTxSDKType;
-  response?: ResponseDeliverTxSDKType;
+  request: RequestDeliverTxSDKType;
+  response: ResponseDeliverTxSDKType;
 }
 function createBaseStoreKVPair(): StoreKVPair {
   return {
@@ -140,12 +140,12 @@ export const StoreKVPair = {
 };
 function createBaseBlockMetadata(): BlockMetadata {
   return {
-    requestBeginBlock: undefined,
-    responseBeginBlock: undefined,
+    requestBeginBlock: RequestBeginBlock.fromPartial({}),
+    responseBeginBlock: ResponseBeginBlock.fromPartial({}),
     deliverTxs: [],
-    requestEndBlock: undefined,
-    responseEndBlock: undefined,
-    responseCommit: undefined
+    requestEndBlock: RequestEndBlock.fromPartial({}),
+    responseEndBlock: ResponseEndBlock.fromPartial({}),
+    responseCommit: ResponseCommit.fromPartial({})
   };
 }
 export const BlockMetadata = {
@@ -239,8 +239,8 @@ export const BlockMetadata = {
 };
 function createBaseBlockMetadata_DeliverTx(): BlockMetadata_DeliverTx {
   return {
-    request: undefined,
-    response: undefined
+    request: RequestDeliverTx.fromPartial({}),
+    response: ResponseDeliverTx.fromPartial({})
   };
 }
 export const BlockMetadata_DeliverTx = {

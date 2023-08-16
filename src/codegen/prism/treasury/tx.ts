@@ -3,18 +3,18 @@ import * as _m0 from "protobufjs/minimal";
 import { isSet } from "../../helpers";
 export interface MsgSetAction {
   authority: string;
-  action?: Action;
+  action: Action;
 }
 export interface MsgSetActionSDKType {
   authority: string;
-  action?: ActionSDKType;
+  action: ActionSDKType;
 }
 export interface MsgSetActionResponse {}
 export interface MsgSetActionResponseSDKType {}
 function createBaseMsgSetAction(): MsgSetAction {
   return {
     authority: "",
-    action: undefined
+    action: Action.fromPartial({})
   };
 }
 export const MsgSetAction = {

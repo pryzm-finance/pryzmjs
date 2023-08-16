@@ -8,10 +8,10 @@ export interface QueryGetAssetStateRequestSDKType {
   asset_id: string;
 }
 export interface QueryGetAssetStateResponse {
-  assetState?: AssetState;
+  assetState: AssetState;
 }
 export interface QueryGetAssetStateResponseSDKType {
-  asset_state?: AssetStateSDKType;
+  asset_state: AssetStateSDKType;
 }
 export interface QueryGetCPExchangeRateRequest {
   assetId: string;
@@ -72,7 +72,7 @@ export const QueryGetAssetStateRequest = {
 };
 function createBaseQueryGetAssetStateResponse(): QueryGetAssetStateResponse {
   return {
-    assetState: undefined
+    assetState: AssetState.fromPartial({})
   };
 }
 export const QueryGetAssetStateResponse = {

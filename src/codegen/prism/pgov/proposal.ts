@@ -54,7 +54,7 @@ export interface Proposal {
   /** the time when the proposal has been started */
   startTime?: Timestamp;
   /** the time of proposal ending on PRISM, this time is sooner than the real end time of proposal on the host chain */
-  endTime?: Timestamp;
+  endTime: Timestamp;
   /** the final aggregation of votes on PRISM, which is submitted to the host chain */
   finalVote: WeightedVoteOption[];
   /** the state of the proposal */
@@ -65,7 +65,7 @@ export interface ProposalSDKType {
   proposal_id: Long;
   asset: string;
   start_time?: TimestampSDKType;
-  end_time?: TimestampSDKType;
+  end_time: TimestampSDKType;
   final_vote: WeightedVoteOptionSDKType[];
   status: ProposalStatus;
 }
@@ -74,7 +74,7 @@ function createBaseProposal(): Proposal {
     proposalId: Long.UZERO,
     asset: "",
     startTime: undefined,
-    endTime: undefined,
+    endTime: Timestamp.fromPartial({}),
     finalVote: [],
     status: 0
   };
@@ -140,7 +140,7 @@ export const Proposal = {
       startTime: isSet(object.startTime) ? fromJsonTimestamp(object.startTime) : undefined,
       endTime: isSet(object.endTime) ? fromJsonTimestamp(object.endTime) : undefined,
       finalVote: Array.isArray(object?.finalVote) ? object.finalVote.map((e: any) => WeightedVoteOption.fromJSON(e)) : [],
-      status: isSet(object.status) ? proposalStatusFromJSON(object.status) : 0
+      status: isSet(object.status) ? proposalStatusFromJSON(object.status) : -1
     };
   },
   toJSON(message: Proposal): unknown {

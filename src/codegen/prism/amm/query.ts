@@ -23,11 +23,11 @@ export interface QueryParamsRequestSDKType {}
 /** QueryParamsResponse is response type for the Query/Params RPC method. */
 export interface QueryParamsResponse {
   /** params holds all the parameters of this module. */
-  params?: Params;
+  params: Params;
 }
 /** QueryParamsResponse is response type for the Query/Params RPC method. */
 export interface QueryParamsResponseSDKType {
-  params?: ParamsSDKType;
+  params: ParamsSDKType;
 }
 export interface QueryGetPoolTokenRequest {
   poolId: Long;
@@ -38,26 +38,26 @@ export interface QueryGetPoolTokenRequestSDKType {
   denom: string;
 }
 export interface QueryGetPoolTokenResponse {
-  poolToken?: PoolToken;
+  poolToken: PoolToken;
 }
 export interface QueryGetPoolTokenResponseSDKType {
-  pool_token?: PoolTokenSDKType;
+  pool_token: PoolTokenSDKType;
 }
 export interface QueryAllPoolTokenRequest {
-  pagination?: PageRequest;
+  pagination: PageRequest;
   poolId: string;
 }
 export interface QueryAllPoolTokenRequestSDKType {
-  pagination?: PageRequestSDKType;
+  pagination: PageRequestSDKType;
   pool_id: string;
 }
 export interface QueryAllPoolTokenResponse {
   poolToken: PoolToken[];
-  pagination?: PageResponse;
+  pagination: PageResponse;
 }
 export interface QueryAllPoolTokenResponseSDKType {
   pool_token: PoolTokenSDKType[];
-  pagination?: PageResponseSDKType;
+  pagination: PageResponseSDKType;
 }
 /**
  * computing normalized weights requires reading all tokens from the context
@@ -100,10 +100,10 @@ export interface QueryGetPoolTokenWeightRequestSDKType {
   denom: string;
 }
 export interface QueryGetPoolTokenWeightResponse {
-  tokenWeight?: TokenWeight;
+  tokenWeight: TokenWeight;
 }
 export interface QueryGetPoolTokenWeightResponseSDKType {
-  token_weight?: TokenWeightSDKType;
+  token_weight: TokenWeightSDKType;
 }
 export interface QueryGetPoolRequest {
   id: Long;
@@ -112,24 +112,24 @@ export interface QueryGetPoolRequestSDKType {
   id: Long;
 }
 export interface QueryGetPoolResponse {
-  pool?: Pool;
+  pool: Pool;
 }
 export interface QueryGetPoolResponseSDKType {
-  pool?: PoolSDKType;
+  pool: PoolSDKType;
 }
 export interface QueryAllPoolRequest {
-  pagination?: PageRequest;
+  pagination: PageRequest;
 }
 export interface QueryAllPoolRequestSDKType {
-  pagination?: PageRequestSDKType;
+  pagination: PageRequestSDKType;
 }
 export interface QueryAllPoolResponse {
   pool: Pool[];
-  pagination?: PageResponse;
+  pagination: PageResponse;
 }
 export interface QueryAllPoolResponseSDKType {
   pool: PoolSDKType[];
-  pagination?: PageResponseSDKType;
+  pagination: PageResponseSDKType;
 }
 export interface QueryGetWeightedTokenRequest {
   poolId: Long;
@@ -140,24 +140,24 @@ export interface QueryGetWeightedTokenRequestSDKType {
   denom: string;
 }
 export interface QueryGetWeightedTokenResponse {
-  weightedToken?: WeightedToken;
+  weightedToken: WeightedToken;
 }
 export interface QueryGetWeightedTokenResponseSDKType {
-  weighted_token?: WeightedTokenSDKType;
+  weighted_token: WeightedTokenSDKType;
 }
 export interface QueryAllWeightedTokenRequest {
-  pagination?: PageRequest;
+  pagination: PageRequest;
 }
 export interface QueryAllWeightedTokenRequestSDKType {
-  pagination?: PageRequestSDKType;
+  pagination: PageRequestSDKType;
 }
 export interface QueryAllWeightedTokenResponse {
   weightedToken: WeightedToken[];
-  pagination?: PageResponse;
+  pagination: PageResponse;
 }
 export interface QueryAllWeightedTokenResponseSDKType {
   weighted_token: WeightedTokenSDKType[];
-  pagination?: PageResponseSDKType;
+  pagination: PageResponseSDKType;
 }
 export interface QueryGetWeightUpdateTimingRequest {
   poolId: Long;
@@ -166,184 +166,184 @@ export interface QueryGetWeightUpdateTimingRequestSDKType {
   pool_id: Long;
 }
 export interface QueryGetWeightUpdateTimingResponse {
-  weightUpdateTiming?: WeightUpdateTiming;
+  weightUpdateTiming: WeightUpdateTiming;
 }
 export interface QueryGetWeightUpdateTimingResponseSDKType {
-  weight_update_timing?: WeightUpdateTimingSDKType;
+  weight_update_timing: WeightUpdateTimingSDKType;
 }
 export interface QueryAllWeightUpdateTimingRequest {
-  pagination?: PageRequest;
+  pagination: PageRequest;
 }
 export interface QueryAllWeightUpdateTimingRequestSDKType {
-  pagination?: PageRequestSDKType;
+  pagination: PageRequestSDKType;
 }
 export interface QueryAllWeightUpdateTimingResponse {
   weightUpdateTiming: WeightUpdateTiming[];
-  pagination?: PageResponse;
+  pagination: PageResponse;
 }
 export interface QueryAllWeightUpdateTimingResponseSDKType {
   weight_update_timing: WeightUpdateTimingSDKType[];
-  pagination?: PageResponseSDKType;
+  pagination: PageResponseSDKType;
 }
 export interface QuerySimulateSingleSwapRequest {
-  swap?: Swap;
+  swap: Swap;
 }
 export interface QuerySimulateSingleSwapRequestSDKType {
-  swap?: SwapSDKType;
+  swap: SwapSDKType;
 }
 export interface QuerySimulateSingleSwapResponse {
-  amountOut?: Coin;
-  amountIn?: Coin;
+  amountOut: Coin;
+  amountIn: Coin;
   /**
    * protocol fee does not contain the y_trade fee and refractor fee
    * which is paid in case of a yAsset trade
    */
-  protocolFee?: Coin;
-  swapFee?: Coin;
+  protocolFee: Coin;
+  swapFee: Coin;
 }
 export interface QuerySimulateSingleSwapResponseSDKType {
-  amount_out?: CoinSDKType;
-  amount_in?: CoinSDKType;
-  protocol_fee?: CoinSDKType;
-  swap_fee?: CoinSDKType;
+  amount_out: CoinSDKType;
+  amount_in: CoinSDKType;
+  protocol_fee: CoinSDKType;
+  swap_fee: CoinSDKType;
 }
 export interface QuerySimulateInitializePoolRequest {
   poolId: Long;
-  amountsIn?: Coin[];
+  amountsIn: Coin[];
 }
 export interface QuerySimulateInitializePoolRequestSDKType {
   pool_id: Long;
-  amounts_in?: CoinSDKType[];
+  amounts_in: CoinSDKType[];
 }
 export interface QuerySimulateInitializePoolResponse {
-  lptOut?: Coin;
+  lptOut: Coin;
   amountsIn: Coin[];
   protocolFee: Coin[];
 }
 export interface QuerySimulateInitializePoolResponseSDKType {
-  lpt_out?: CoinSDKType;
+  lpt_out: CoinSDKType;
   amounts_in: CoinSDKType[];
   protocol_fee: CoinSDKType[];
 }
 export interface QuerySimulateJoinAllTokensExactLptRequest {
   poolId: Long;
-  lptOut?: string;
+  lptOut: string;
 }
 export interface QuerySimulateJoinAllTokensExactLptRequestSDKType {
   pool_id: Long;
-  lpt_out?: string;
+  lpt_out: string;
 }
 export interface QuerySimulateJoinAllTokensExactLptResponse {
-  lptOut?: Coin;
+  lptOut: Coin;
   amountsIn: Coin[];
   protocolFee: Coin[];
 }
 export interface QuerySimulateJoinAllTokensExactLptResponseSDKType {
-  lpt_out?: CoinSDKType;
+  lpt_out: CoinSDKType;
   amounts_in: CoinSDKType[];
   protocol_fee: CoinSDKType[];
 }
 export interface QuerySimulateJoinExactTokensRequest {
   poolId: Long;
-  amountsIn?: Coin[];
+  amountsIn: Coin[];
 }
 export interface QuerySimulateJoinExactTokensRequestSDKType {
   pool_id: Long;
-  amounts_in?: CoinSDKType[];
+  amounts_in: CoinSDKType[];
 }
 export interface QuerySimulateJoinExactTokensResponse {
-  lptOut?: Coin;
+  lptOut: Coin;
   amountsIn: Coin[];
   protocolFee: Coin[];
   swapFee: Coin[];
 }
 export interface QuerySimulateJoinExactTokensResponseSDKType {
-  lpt_out?: CoinSDKType;
+  lpt_out: CoinSDKType;
   amounts_in: CoinSDKType[];
   protocol_fee: CoinSDKType[];
   swap_fee: CoinSDKType[];
 }
 export interface QuerySimulateJoinTokenExactLptRequest {
   poolId: Long;
-  lptOut?: string;
-  tokenIn?: string;
+  lptOut: string;
+  tokenIn: string;
 }
 export interface QuerySimulateJoinTokenExactLptRequestSDKType {
   pool_id: Long;
-  lpt_out?: string;
-  token_in?: string;
+  lpt_out: string;
+  token_in: string;
 }
 export interface QuerySimulateJoinTokenExactLptResponse {
-  lptOut?: Coin;
-  amountIn?: Coin;
-  protocolFee?: Coin;
-  swapFee?: Coin;
+  lptOut: Coin;
+  amountIn: Coin;
+  protocolFee: Coin;
+  swapFee: Coin;
 }
 export interface QuerySimulateJoinTokenExactLptResponseSDKType {
-  lpt_out?: CoinSDKType;
-  amount_in?: CoinSDKType;
-  protocol_fee?: CoinSDKType;
-  swap_fee?: CoinSDKType;
+  lpt_out: CoinSDKType;
+  amount_in: CoinSDKType;
+  protocol_fee: CoinSDKType;
+  swap_fee: CoinSDKType;
 }
 export interface QuerySimulateExitTokenExactLptRequest {
   poolId: Long;
-  lptIn?: string;
-  tokenOut?: string;
+  lptIn: string;
+  tokenOut: string;
 }
 export interface QuerySimulateExitTokenExactLptRequestSDKType {
   pool_id: Long;
-  lpt_in?: string;
-  token_out?: string;
+  lpt_in: string;
+  token_out: string;
 }
 export interface QuerySimulateExitTokenExactLptResponse {
-  lptIn?: Coin;
-  amountOut?: Coin;
-  protocolFee?: Coin;
-  swapFee?: Coin;
+  lptIn: Coin;
+  amountOut: Coin;
+  protocolFee: Coin;
+  swapFee: Coin;
 }
 export interface QuerySimulateExitTokenExactLptResponseSDKType {
-  lpt_in?: CoinSDKType;
-  amount_out?: CoinSDKType;
-  protocol_fee?: CoinSDKType;
-  swap_fee?: CoinSDKType;
+  lpt_in: CoinSDKType;
+  amount_out: CoinSDKType;
+  protocol_fee: CoinSDKType;
+  swap_fee: CoinSDKType;
 }
 export interface QuerySimulateExitExactTokensRequest {
   poolId: Long;
-  amountsOut?: Coin[];
+  amountsOut: Coin[];
 }
 export interface QuerySimulateExitExactTokensRequestSDKType {
   pool_id: Long;
-  amounts_out?: CoinSDKType[];
+  amounts_out: CoinSDKType[];
 }
 export interface QuerySimulateExitExactTokensResponse {
-  lptIn?: Coin;
+  lptIn: Coin;
   amountsOut: Coin[];
-  protocolFee?: Coin;
+  protocolFee: Coin;
   swapFee: Coin[];
 }
 export interface QuerySimulateExitExactTokensResponseSDKType {
-  lpt_in?: CoinSDKType;
+  lpt_in: CoinSDKType;
   amounts_out: CoinSDKType[];
-  protocol_fee?: CoinSDKType;
+  protocol_fee: CoinSDKType;
   swap_fee: CoinSDKType[];
 }
 export interface QuerySimulateExitAllTokensExactLptRequest {
   poolId: Long;
-  lptIn?: string;
+  lptIn: string;
 }
 export interface QuerySimulateExitAllTokensExactLptRequestSDKType {
   pool_id: Long;
-  lpt_in?: string;
+  lpt_in: string;
 }
 export interface QuerySimulateExitAllTokensExactLptResponse {
-  lptIn?: Coin;
+  lptIn: Coin;
   amountsOut: Coin[];
-  protocolFee?: Coin;
+  protocolFee: Coin;
 }
 export interface QuerySimulateExitAllTokensExactLptResponseSDKType {
-  lpt_in?: CoinSDKType;
+  lpt_in: CoinSDKType;
   amounts_out: CoinSDKType[];
-  protocol_fee?: CoinSDKType;
+  protocol_fee: CoinSDKType;
 }
 export interface QuerySpotPriceRequest {
   poolId: Long;
@@ -372,24 +372,24 @@ export interface QueryGetIntroducingPoolTokenRequestSDKType {
   denom: string;
 }
 export interface QueryGetIntroducingPoolTokenResponse {
-  introducingPoolToken?: VirtualBalancePoolToken;
+  introducingPoolToken: VirtualBalancePoolToken;
 }
 export interface QueryGetIntroducingPoolTokenResponseSDKType {
-  introducing_pool_token?: VirtualBalancePoolTokenSDKType;
+  introducing_pool_token: VirtualBalancePoolTokenSDKType;
 }
 export interface QueryAllIntroducingPoolTokenRequest {
-  pagination?: PageRequest;
+  pagination: PageRequest;
 }
 export interface QueryAllIntroducingPoolTokenRequestSDKType {
-  pagination?: PageRequestSDKType;
+  pagination: PageRequestSDKType;
 }
 export interface QueryAllIntroducingPoolTokenResponse {
   introducingPoolToken: VirtualBalancePoolToken[];
-  pagination?: PageResponse;
+  pagination: PageResponse;
 }
 export interface QueryAllIntroducingPoolTokenResponseSDKType {
   introducing_pool_token: VirtualBalancePoolTokenSDKType[];
-  pagination?: PageResponseSDKType;
+  pagination: PageResponseSDKType;
 }
 export interface QueryGetExpiringPoolTokenRequest {
   poolId: Long;
@@ -400,24 +400,24 @@ export interface QueryGetExpiringPoolTokenRequestSDKType {
   denom: string;
 }
 export interface QueryGetExpiringPoolTokenResponse {
-  expiringPoolToken?: VirtualBalancePoolToken;
+  expiringPoolToken: VirtualBalancePoolToken;
 }
 export interface QueryGetExpiringPoolTokenResponseSDKType {
-  expiring_pool_token?: VirtualBalancePoolTokenSDKType;
+  expiring_pool_token: VirtualBalancePoolTokenSDKType;
 }
 export interface QueryAllExpiringPoolTokenRequest {
-  pagination?: PageRequest;
+  pagination: PageRequest;
 }
 export interface QueryAllExpiringPoolTokenRequestSDKType {
-  pagination?: PageRequestSDKType;
+  pagination: PageRequestSDKType;
 }
 export interface QueryAllExpiringPoolTokenResponse {
   expiringPoolToken: VirtualBalancePoolToken[];
-  pagination?: PageResponse;
+  pagination: PageResponse;
 }
 export interface QueryAllExpiringPoolTokenResponseSDKType {
   expiring_pool_token: VirtualBalancePoolTokenSDKType[];
-  pagination?: PageResponseSDKType;
+  pagination: PageResponseSDKType;
 }
 export interface QueryLpTokenRequest {
   poolId: Long;
@@ -426,18 +426,18 @@ export interface QueryLpTokenRequestSDKType {
   pool_id: Long;
 }
 export interface QueryLpTokenResponse {
-  lpToken?: PoolToken;
+  lpToken: PoolToken;
 }
 export interface QueryLpTokenResponseSDKType {
-  lp_token?: PoolTokenSDKType;
+  lp_token: PoolTokenSDKType;
 }
 export interface QuerySimulateBatchSwapRequest {
-  swapType?: SwapType;
-  steps?: SwapStep[];
+  swapType: SwapType;
+  steps: SwapStep[];
 }
 export interface QuerySimulateBatchSwapRequestSDKType {
-  swap_type?: SwapType;
-  steps?: SwapStepSDKType[];
+  swap_type: SwapType;
+  steps: SwapStepSDKType[];
 }
 export interface QuerySimulateBatchSwapResponse {
   amountsIn: Coin[];
@@ -462,24 +462,24 @@ export interface QueryGetYammConfigurationRequestSDKType {
   pool_id: Long;
 }
 export interface QueryGetYammConfigurationResponse {
-  yammConfiguration?: YammConfiguration;
+  yammConfiguration: YammConfiguration;
 }
 export interface QueryGetYammConfigurationResponseSDKType {
-  yamm_configuration?: YammConfigurationSDKType;
+  yamm_configuration: YammConfigurationSDKType;
 }
 export interface QueryAllYammConfigurationRequest {
-  pagination?: PageRequest;
+  pagination: PageRequest;
 }
 export interface QueryAllYammConfigurationRequestSDKType {
-  pagination?: PageRequestSDKType;
+  pagination: PageRequestSDKType;
 }
 export interface QueryAllYammConfigurationResponse {
   yammConfiguration: YammConfiguration[];
-  pagination?: PageResponse;
+  pagination: PageResponse;
 }
 export interface QueryAllYammConfigurationResponseSDKType {
   yamm_configuration: YammConfigurationSDKType[];
-  pagination?: PageResponseSDKType;
+  pagination: PageResponseSDKType;
 }
 export interface QueryGetWhitelistedRouteRequest {
   tokenIn: string;
@@ -490,24 +490,24 @@ export interface QueryGetWhitelistedRouteRequestSDKType {
   token_out: string;
 }
 export interface QueryGetWhitelistedRouteResponse {
-  whitelistedRoute?: WhitelistedRoute;
+  whitelistedRoute: WhitelistedRoute;
 }
 export interface QueryGetWhitelistedRouteResponseSDKType {
-  whitelisted_route?: WhitelistedRouteSDKType;
+  whitelisted_route: WhitelistedRouteSDKType;
 }
 export interface QueryAllWhitelistedRouteRequest {
-  pagination?: PageRequest;
+  pagination: PageRequest;
 }
 export interface QueryAllWhitelistedRouteRequestSDKType {
-  pagination?: PageRequestSDKType;
+  pagination: PageRequestSDKType;
 }
 export interface QueryAllWhitelistedRouteResponse {
   whitelistedRoute: WhitelistedRoute[];
-  pagination?: PageResponse;
+  pagination: PageResponse;
 }
 export interface QueryAllWhitelistedRouteResponseSDKType {
   whitelisted_route: WhitelistedRouteSDKType[];
-  pagination?: PageResponseSDKType;
+  pagination: PageResponseSDKType;
 }
 export interface QueryGetOrderRequest {
   id: Long;
@@ -516,24 +516,24 @@ export interface QueryGetOrderRequestSDKType {
   id: Long;
 }
 export interface QueryGetOrderResponse {
-  order?: Order;
+  order: Order;
 }
 export interface QueryGetOrderResponseSDKType {
-  order?: OrderSDKType;
+  order: OrderSDKType;
 }
 export interface QueryAllOrderRequest {
-  pagination?: PageRequest;
+  pagination: PageRequest;
 }
 export interface QueryAllOrderRequestSDKType {
-  pagination?: PageRequestSDKType;
+  pagination: PageRequestSDKType;
 }
 export interface QueryAllOrderResponse {
   order: Order[];
-  pagination?: PageResponse;
+  pagination: PageResponse;
 }
 export interface QueryAllOrderResponseSDKType {
   order: OrderSDKType[];
-  pagination?: PageResponseSDKType;
+  pagination: PageResponseSDKType;
 }
 export interface QueryGetExecutableOrderRequest {
   orderId: Long;
@@ -542,24 +542,24 @@ export interface QueryGetExecutableOrderRequestSDKType {
   order_id: Long;
 }
 export interface QueryGetExecutableOrderResponse {
-  executableOrder?: Order;
+  executableOrder: Order;
 }
 export interface QueryGetExecutableOrderResponseSDKType {
-  executable_order?: OrderSDKType;
+  executable_order: OrderSDKType;
 }
 export interface QueryAllExecutableOrderRequest {
-  pagination?: PageRequest;
+  pagination: PageRequest;
 }
 export interface QueryAllExecutableOrderRequestSDKType {
-  pagination?: PageRequestSDKType;
+  pagination: PageRequestSDKType;
 }
 export interface QueryAllExecutableOrderResponse {
   executableOrder: Order[];
-  pagination?: PageResponse;
+  pagination: PageResponse;
 }
 export interface QueryAllExecutableOrderResponseSDKType {
   executable_order: OrderSDKType[];
-  pagination?: PageResponseSDKType;
+  pagination: PageResponseSDKType;
 }
 export interface QueryGetScheduleOrderRequest {
   orderId: Long;
@@ -568,24 +568,24 @@ export interface QueryGetScheduleOrderRequestSDKType {
   order_id: Long;
 }
 export interface QueryGetScheduleOrderResponse {
-  scheduleOrder?: ScheduleOrder;
+  scheduleOrder: ScheduleOrder;
 }
 export interface QueryGetScheduleOrderResponseSDKType {
-  schedule_order?: ScheduleOrderSDKType;
+  schedule_order: ScheduleOrderSDKType;
 }
 export interface QueryAllScheduleOrderRequest {
-  pagination?: PageRequest;
+  pagination: PageRequest;
 }
 export interface QueryAllScheduleOrderRequestSDKType {
-  pagination?: PageRequestSDKType;
+  pagination: PageRequestSDKType;
 }
 export interface QueryAllScheduleOrderResponse {
   scheduleOrder: ScheduleOrder[];
-  pagination?: PageResponse;
+  pagination: PageResponse;
 }
 export interface QueryAllScheduleOrderResponseSDKType {
   schedule_order: ScheduleOrderSDKType[];
-  pagination?: PageResponseSDKType;
+  pagination: PageResponseSDKType;
 }
 export interface QueryGetOraclePricePairRequest {
   assetId: string;
@@ -594,24 +594,24 @@ export interface QueryGetOraclePricePairRequestSDKType {
   asset_id: string;
 }
 export interface QueryGetOraclePricePairResponse {
-  oraclePricePair?: OraclePricePair;
+  oraclePricePair: OraclePricePair;
 }
 export interface QueryGetOraclePricePairResponseSDKType {
-  oracle_price_pair?: OraclePricePairSDKType;
+  oracle_price_pair: OraclePricePairSDKType;
 }
 export interface QueryAllOraclePricePairRequest {
-  pagination?: PageRequest;
+  pagination: PageRequest;
 }
 export interface QueryAllOraclePricePairRequestSDKType {
-  pagination?: PageRequestSDKType;
+  pagination: PageRequestSDKType;
 }
 export interface QueryAllOraclePricePairResponse {
   oraclePricePair: OraclePricePair[];
-  pagination?: PageResponse;
+  pagination: PageResponse;
 }
 export interface QueryAllOraclePricePairResponseSDKType {
   oracle_price_pair: OraclePricePairSDKType[];
-  pagination?: PageResponseSDKType;
+  pagination: PageResponseSDKType;
 }
 export interface QueryVaultPauseModeRequest {}
 export interface QueryVaultPauseModeRequestSDKType {}
@@ -630,24 +630,24 @@ export interface QueryGetPendingTokenIntroductionRequestSDKType {
   target_pool_id: Long;
 }
 export interface QueryGetPendingTokenIntroductionResponse {
-  pendingTokenIntroduction?: PendingTokenIntroduction;
+  pendingTokenIntroduction: PendingTokenIntroduction;
 }
 export interface QueryGetPendingTokenIntroductionResponseSDKType {
-  pending_token_introduction?: PendingTokenIntroductionSDKType;
+  pending_token_introduction: PendingTokenIntroductionSDKType;
 }
 export interface QueryAllPendingTokenIntroductionRequest {
-  pagination?: PageRequest;
+  pagination: PageRequest;
 }
 export interface QueryAllPendingTokenIntroductionRequestSDKType {
-  pagination?: PageRequestSDKType;
+  pagination: PageRequestSDKType;
 }
 export interface QueryAllPendingTokenIntroductionResponse {
   pendingTokenIntroduction: PendingTokenIntroduction[];
-  pagination?: PageResponse;
+  pagination: PageResponse;
 }
 export interface QueryAllPendingTokenIntroductionResponseSDKType {
   pending_token_introduction: PendingTokenIntroductionSDKType[];
-  pagination?: PageResponseSDKType;
+  pagination: PageResponseSDKType;
 }
 export interface QueryYammPoolIdRequest {
   assetId: string;
@@ -696,7 +696,7 @@ export const QueryParamsRequest = {
 };
 function createBaseQueryParamsResponse(): QueryParamsResponse {
   return {
-    params: undefined
+    params: Params.fromPartial({})
   };
 }
 export const QueryParamsResponse = {
@@ -796,7 +796,7 @@ export const QueryGetPoolTokenRequest = {
 };
 function createBaseQueryGetPoolTokenResponse(): QueryGetPoolTokenResponse {
   return {
-    poolToken: undefined
+    poolToken: PoolToken.fromPartial({})
   };
 }
 export const QueryGetPoolTokenResponse = {
@@ -841,7 +841,7 @@ export const QueryGetPoolTokenResponse = {
 };
 function createBaseQueryAllPoolTokenRequest(): QueryAllPoolTokenRequest {
   return {
-    pagination: undefined,
+    pagination: PageRequest.fromPartial({}),
     poolId: ""
   };
 }
@@ -897,7 +897,7 @@ export const QueryAllPoolTokenRequest = {
 function createBaseQueryAllPoolTokenResponse(): QueryAllPoolTokenResponse {
   return {
     poolToken: [],
-    pagination: undefined
+    pagination: PageResponse.fromPartial({})
   };
 }
 export const QueryAllPoolTokenResponse = {
@@ -1104,7 +1104,7 @@ export const QueryGetPoolTokenWeightRequest = {
 };
 function createBaseQueryGetPoolTokenWeightResponse(): QueryGetPoolTokenWeightResponse {
   return {
-    tokenWeight: undefined
+    tokenWeight: TokenWeight.fromPartial({})
   };
 }
 export const QueryGetPoolTokenWeightResponse = {
@@ -1194,7 +1194,7 @@ export const QueryGetPoolRequest = {
 };
 function createBaseQueryGetPoolResponse(): QueryGetPoolResponse {
   return {
-    pool: undefined
+    pool: Pool.fromPartial({})
   };
 }
 export const QueryGetPoolResponse = {
@@ -1239,7 +1239,7 @@ export const QueryGetPoolResponse = {
 };
 function createBaseQueryAllPoolRequest(): QueryAllPoolRequest {
   return {
-    pagination: undefined
+    pagination: PageRequest.fromPartial({})
   };
 }
 export const QueryAllPoolRequest = {
@@ -1285,7 +1285,7 @@ export const QueryAllPoolRequest = {
 function createBaseQueryAllPoolResponse(): QueryAllPoolResponse {
   return {
     pool: [],
-    pagination: undefined
+    pagination: PageResponse.fromPartial({})
   };
 }
 export const QueryAllPoolResponse = {
@@ -1398,7 +1398,7 @@ export const QueryGetWeightedTokenRequest = {
 };
 function createBaseQueryGetWeightedTokenResponse(): QueryGetWeightedTokenResponse {
   return {
-    weightedToken: undefined
+    weightedToken: WeightedToken.fromPartial({})
   };
 }
 export const QueryGetWeightedTokenResponse = {
@@ -1443,7 +1443,7 @@ export const QueryGetWeightedTokenResponse = {
 };
 function createBaseQueryAllWeightedTokenRequest(): QueryAllWeightedTokenRequest {
   return {
-    pagination: undefined
+    pagination: PageRequest.fromPartial({})
   };
 }
 export const QueryAllWeightedTokenRequest = {
@@ -1489,7 +1489,7 @@ export const QueryAllWeightedTokenRequest = {
 function createBaseQueryAllWeightedTokenResponse(): QueryAllWeightedTokenResponse {
   return {
     weightedToken: [],
-    pagination: undefined
+    pagination: PageResponse.fromPartial({})
   };
 }
 export const QueryAllWeightedTokenResponse = {
@@ -1592,7 +1592,7 @@ export const QueryGetWeightUpdateTimingRequest = {
 };
 function createBaseQueryGetWeightUpdateTimingResponse(): QueryGetWeightUpdateTimingResponse {
   return {
-    weightUpdateTiming: undefined
+    weightUpdateTiming: WeightUpdateTiming.fromPartial({})
   };
 }
 export const QueryGetWeightUpdateTimingResponse = {
@@ -1637,7 +1637,7 @@ export const QueryGetWeightUpdateTimingResponse = {
 };
 function createBaseQueryAllWeightUpdateTimingRequest(): QueryAllWeightUpdateTimingRequest {
   return {
-    pagination: undefined
+    pagination: PageRequest.fromPartial({})
   };
 }
 export const QueryAllWeightUpdateTimingRequest = {
@@ -1683,7 +1683,7 @@ export const QueryAllWeightUpdateTimingRequest = {
 function createBaseQueryAllWeightUpdateTimingResponse(): QueryAllWeightUpdateTimingResponse {
   return {
     weightUpdateTiming: [],
-    pagination: undefined
+    pagination: PageResponse.fromPartial({})
   };
 }
 export const QueryAllWeightUpdateTimingResponse = {
@@ -1741,7 +1741,7 @@ export const QueryAllWeightUpdateTimingResponse = {
 };
 function createBaseQuerySimulateSingleSwapRequest(): QuerySimulateSingleSwapRequest {
   return {
-    swap: undefined
+    swap: Swap.fromPartial({})
   };
 }
 export const QuerySimulateSingleSwapRequest = {
@@ -1786,10 +1786,10 @@ export const QuerySimulateSingleSwapRequest = {
 };
 function createBaseQuerySimulateSingleSwapResponse(): QuerySimulateSingleSwapResponse {
   return {
-    amountOut: undefined,
-    amountIn: undefined,
-    protocolFee: undefined,
-    swapFee: undefined
+    amountOut: Coin.fromPartial({}),
+    amountIn: Coin.fromPartial({}),
+    protocolFee: Coin.fromPartial({}),
+    swapFee: Coin.fromPartial({})
   };
 }
 export const QuerySimulateSingleSwapResponse = {
@@ -1920,7 +1920,7 @@ export const QuerySimulateInitializePoolRequest = {
 };
 function createBaseQuerySimulateInitializePoolResponse(): QuerySimulateInitializePoolResponse {
   return {
-    lptOut: undefined,
+    lptOut: Coin.fromPartial({}),
     amountsIn: [],
     protocolFee: []
   };
@@ -2048,7 +2048,7 @@ export const QuerySimulateJoinAllTokensExactLptRequest = {
 };
 function createBaseQuerySimulateJoinAllTokensExactLptResponse(): QuerySimulateJoinAllTokensExactLptResponse {
   return {
-    lptOut: undefined,
+    lptOut: Coin.fromPartial({}),
     amountsIn: [],
     protocolFee: []
   };
@@ -2180,7 +2180,7 @@ export const QuerySimulateJoinExactTokensRequest = {
 };
 function createBaseQuerySimulateJoinExactTokensResponse(): QuerySimulateJoinExactTokensResponse {
   return {
-    lptOut: undefined,
+    lptOut: Coin.fromPartial({}),
     amountsIn: [],
     protocolFee: [],
     swapFee: []
@@ -2332,10 +2332,10 @@ export const QuerySimulateJoinTokenExactLptRequest = {
 };
 function createBaseQuerySimulateJoinTokenExactLptResponse(): QuerySimulateJoinTokenExactLptResponse {
   return {
-    lptOut: undefined,
-    amountIn: undefined,
-    protocolFee: undefined,
-    swapFee: undefined
+    lptOut: Coin.fromPartial({}),
+    amountIn: Coin.fromPartial({}),
+    protocolFee: Coin.fromPartial({}),
+    swapFee: Coin.fromPartial({})
   };
 }
 export const QuerySimulateJoinTokenExactLptResponse = {
@@ -2472,10 +2472,10 @@ export const QuerySimulateExitTokenExactLptRequest = {
 };
 function createBaseQuerySimulateExitTokenExactLptResponse(): QuerySimulateExitTokenExactLptResponse {
   return {
-    lptIn: undefined,
-    amountOut: undefined,
-    protocolFee: undefined,
-    swapFee: undefined
+    lptIn: Coin.fromPartial({}),
+    amountOut: Coin.fromPartial({}),
+    protocolFee: Coin.fromPartial({}),
+    swapFee: Coin.fromPartial({})
   };
 }
 export const QuerySimulateExitTokenExactLptResponse = {
@@ -2606,9 +2606,9 @@ export const QuerySimulateExitExactTokensRequest = {
 };
 function createBaseQuerySimulateExitExactTokensResponse(): QuerySimulateExitExactTokensResponse {
   return {
-    lptIn: undefined,
+    lptIn: Coin.fromPartial({}),
     amountsOut: [],
-    protocolFee: undefined,
+    protocolFee: Coin.fromPartial({}),
     swapFee: []
   };
 }
@@ -2744,9 +2744,9 @@ export const QuerySimulateExitAllTokensExactLptRequest = {
 };
 function createBaseQuerySimulateExitAllTokensExactLptResponse(): QuerySimulateExitAllTokensExactLptResponse {
   return {
-    lptIn: undefined,
+    lptIn: Coin.fromPartial({}),
     amountsOut: [],
-    protocolFee: undefined
+    protocolFee: Coin.fromPartial({})
   };
 }
 export const QuerySimulateExitAllTokensExactLptResponse = {
@@ -2988,7 +2988,7 @@ export const QueryGetIntroducingPoolTokenRequest = {
 };
 function createBaseQueryGetIntroducingPoolTokenResponse(): QueryGetIntroducingPoolTokenResponse {
   return {
-    introducingPoolToken: undefined
+    introducingPoolToken: VirtualBalancePoolToken.fromPartial({})
   };
 }
 export const QueryGetIntroducingPoolTokenResponse = {
@@ -3033,7 +3033,7 @@ export const QueryGetIntroducingPoolTokenResponse = {
 };
 function createBaseQueryAllIntroducingPoolTokenRequest(): QueryAllIntroducingPoolTokenRequest {
   return {
-    pagination: undefined
+    pagination: PageRequest.fromPartial({})
   };
 }
 export const QueryAllIntroducingPoolTokenRequest = {
@@ -3079,7 +3079,7 @@ export const QueryAllIntroducingPoolTokenRequest = {
 function createBaseQueryAllIntroducingPoolTokenResponse(): QueryAllIntroducingPoolTokenResponse {
   return {
     introducingPoolToken: [],
-    pagination: undefined
+    pagination: PageResponse.fromPartial({})
   };
 }
 export const QueryAllIntroducingPoolTokenResponse = {
@@ -3192,7 +3192,7 @@ export const QueryGetExpiringPoolTokenRequest = {
 };
 function createBaseQueryGetExpiringPoolTokenResponse(): QueryGetExpiringPoolTokenResponse {
   return {
-    expiringPoolToken: undefined
+    expiringPoolToken: VirtualBalancePoolToken.fromPartial({})
   };
 }
 export const QueryGetExpiringPoolTokenResponse = {
@@ -3237,7 +3237,7 @@ export const QueryGetExpiringPoolTokenResponse = {
 };
 function createBaseQueryAllExpiringPoolTokenRequest(): QueryAllExpiringPoolTokenRequest {
   return {
-    pagination: undefined
+    pagination: PageRequest.fromPartial({})
   };
 }
 export const QueryAllExpiringPoolTokenRequest = {
@@ -3283,7 +3283,7 @@ export const QueryAllExpiringPoolTokenRequest = {
 function createBaseQueryAllExpiringPoolTokenResponse(): QueryAllExpiringPoolTokenResponse {
   return {
     expiringPoolToken: [],
-    pagination: undefined
+    pagination: PageResponse.fromPartial({})
   };
 }
 export const QueryAllExpiringPoolTokenResponse = {
@@ -3386,7 +3386,7 @@ export const QueryLpTokenRequest = {
 };
 function createBaseQueryLpTokenResponse(): QueryLpTokenResponse {
   return {
-    lpToken: undefined
+    lpToken: PoolToken.fromPartial({})
   };
 }
 export const QueryLpTokenResponse = {
@@ -3467,7 +3467,7 @@ export const QuerySimulateBatchSwapRequest = {
   },
   fromJSON(object: any): QuerySimulateBatchSwapRequest {
     return {
-      swapType: isSet(object.swapType) ? swapTypeFromJSON(object.swapType) : 0,
+      swapType: isSet(object.swapType) ? swapTypeFromJSON(object.swapType) : -1,
       steps: Array.isArray(object?.steps) ? object.steps.map((e: any) => SwapStep.fromJSON(e)) : []
     };
   },
@@ -3626,7 +3626,7 @@ export const QueryGetYammConfigurationRequest = {
 };
 function createBaseQueryGetYammConfigurationResponse(): QueryGetYammConfigurationResponse {
   return {
-    yammConfiguration: undefined
+    yammConfiguration: YammConfiguration.fromPartial({})
   };
 }
 export const QueryGetYammConfigurationResponse = {
@@ -3671,7 +3671,7 @@ export const QueryGetYammConfigurationResponse = {
 };
 function createBaseQueryAllYammConfigurationRequest(): QueryAllYammConfigurationRequest {
   return {
-    pagination: undefined
+    pagination: PageRequest.fromPartial({})
   };
 }
 export const QueryAllYammConfigurationRequest = {
@@ -3717,7 +3717,7 @@ export const QueryAllYammConfigurationRequest = {
 function createBaseQueryAllYammConfigurationResponse(): QueryAllYammConfigurationResponse {
   return {
     yammConfiguration: [],
-    pagination: undefined
+    pagination: PageResponse.fromPartial({})
   };
 }
 export const QueryAllYammConfigurationResponse = {
@@ -3830,7 +3830,7 @@ export const QueryGetWhitelistedRouteRequest = {
 };
 function createBaseQueryGetWhitelistedRouteResponse(): QueryGetWhitelistedRouteResponse {
   return {
-    whitelistedRoute: undefined
+    whitelistedRoute: WhitelistedRoute.fromPartial({})
   };
 }
 export const QueryGetWhitelistedRouteResponse = {
@@ -3875,7 +3875,7 @@ export const QueryGetWhitelistedRouteResponse = {
 };
 function createBaseQueryAllWhitelistedRouteRequest(): QueryAllWhitelistedRouteRequest {
   return {
-    pagination: undefined
+    pagination: PageRequest.fromPartial({})
   };
 }
 export const QueryAllWhitelistedRouteRequest = {
@@ -3921,7 +3921,7 @@ export const QueryAllWhitelistedRouteRequest = {
 function createBaseQueryAllWhitelistedRouteResponse(): QueryAllWhitelistedRouteResponse {
   return {
     whitelistedRoute: [],
-    pagination: undefined
+    pagination: PageResponse.fromPartial({})
   };
 }
 export const QueryAllWhitelistedRouteResponse = {
@@ -4024,7 +4024,7 @@ export const QueryGetOrderRequest = {
 };
 function createBaseQueryGetOrderResponse(): QueryGetOrderResponse {
   return {
-    order: undefined
+    order: Order.fromPartial({})
   };
 }
 export const QueryGetOrderResponse = {
@@ -4069,7 +4069,7 @@ export const QueryGetOrderResponse = {
 };
 function createBaseQueryAllOrderRequest(): QueryAllOrderRequest {
   return {
-    pagination: undefined
+    pagination: PageRequest.fromPartial({})
   };
 }
 export const QueryAllOrderRequest = {
@@ -4115,7 +4115,7 @@ export const QueryAllOrderRequest = {
 function createBaseQueryAllOrderResponse(): QueryAllOrderResponse {
   return {
     order: [],
-    pagination: undefined
+    pagination: PageResponse.fromPartial({})
   };
 }
 export const QueryAllOrderResponse = {
@@ -4218,7 +4218,7 @@ export const QueryGetExecutableOrderRequest = {
 };
 function createBaseQueryGetExecutableOrderResponse(): QueryGetExecutableOrderResponse {
   return {
-    executableOrder: undefined
+    executableOrder: Order.fromPartial({})
   };
 }
 export const QueryGetExecutableOrderResponse = {
@@ -4263,7 +4263,7 @@ export const QueryGetExecutableOrderResponse = {
 };
 function createBaseQueryAllExecutableOrderRequest(): QueryAllExecutableOrderRequest {
   return {
-    pagination: undefined
+    pagination: PageRequest.fromPartial({})
   };
 }
 export const QueryAllExecutableOrderRequest = {
@@ -4309,7 +4309,7 @@ export const QueryAllExecutableOrderRequest = {
 function createBaseQueryAllExecutableOrderResponse(): QueryAllExecutableOrderResponse {
   return {
     executableOrder: [],
-    pagination: undefined
+    pagination: PageResponse.fromPartial({})
   };
 }
 export const QueryAllExecutableOrderResponse = {
@@ -4412,7 +4412,7 @@ export const QueryGetScheduleOrderRequest = {
 };
 function createBaseQueryGetScheduleOrderResponse(): QueryGetScheduleOrderResponse {
   return {
-    scheduleOrder: undefined
+    scheduleOrder: ScheduleOrder.fromPartial({})
   };
 }
 export const QueryGetScheduleOrderResponse = {
@@ -4457,7 +4457,7 @@ export const QueryGetScheduleOrderResponse = {
 };
 function createBaseQueryAllScheduleOrderRequest(): QueryAllScheduleOrderRequest {
   return {
-    pagination: undefined
+    pagination: PageRequest.fromPartial({})
   };
 }
 export const QueryAllScheduleOrderRequest = {
@@ -4503,7 +4503,7 @@ export const QueryAllScheduleOrderRequest = {
 function createBaseQueryAllScheduleOrderResponse(): QueryAllScheduleOrderResponse {
   return {
     scheduleOrder: [],
-    pagination: undefined
+    pagination: PageResponse.fromPartial({})
   };
 }
 export const QueryAllScheduleOrderResponse = {
@@ -4606,7 +4606,7 @@ export const QueryGetOraclePricePairRequest = {
 };
 function createBaseQueryGetOraclePricePairResponse(): QueryGetOraclePricePairResponse {
   return {
-    oraclePricePair: undefined
+    oraclePricePair: OraclePricePair.fromPartial({})
   };
 }
 export const QueryGetOraclePricePairResponse = {
@@ -4651,7 +4651,7 @@ export const QueryGetOraclePricePairResponse = {
 };
 function createBaseQueryAllOraclePricePairRequest(): QueryAllOraclePricePairRequest {
   return {
-    pagination: undefined
+    pagination: PageRequest.fromPartial({})
   };
 }
 export const QueryAllOraclePricePairRequest = {
@@ -4697,7 +4697,7 @@ export const QueryAllOraclePricePairRequest = {
 function createBaseQueryAllOraclePricePairResponse(): QueryAllOraclePricePairResponse {
   return {
     oraclePricePair: [],
-    pagination: undefined
+    pagination: PageResponse.fromPartial({})
   };
 }
 export const QueryAllOraclePricePairResponse = {
@@ -4888,7 +4888,7 @@ export const QueryGetPendingTokenIntroductionRequest = {
 };
 function createBaseQueryGetPendingTokenIntroductionResponse(): QueryGetPendingTokenIntroductionResponse {
   return {
-    pendingTokenIntroduction: undefined
+    pendingTokenIntroduction: PendingTokenIntroduction.fromPartial({})
   };
 }
 export const QueryGetPendingTokenIntroductionResponse = {
@@ -4933,7 +4933,7 @@ export const QueryGetPendingTokenIntroductionResponse = {
 };
 function createBaseQueryAllPendingTokenIntroductionRequest(): QueryAllPendingTokenIntroductionRequest {
   return {
-    pagination: undefined
+    pagination: PageRequest.fromPartial({})
   };
 }
 export const QueryAllPendingTokenIntroductionRequest = {
@@ -4979,7 +4979,7 @@ export const QueryAllPendingTokenIntroductionRequest = {
 function createBaseQueryAllPendingTokenIntroductionResponse(): QueryAllPendingTokenIntroductionResponse {
   return {
     pendingTokenIntroduction: [],
-    pagination: undefined
+    pagination: PageResponse.fromPartial({})
   };
 }
 export const QueryAllPendingTokenIntroductionResponse = {

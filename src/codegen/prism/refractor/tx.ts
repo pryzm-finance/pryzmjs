@@ -3,46 +3,46 @@ import * as _m0 from "protobufjs/minimal";
 import { isSet } from "../../helpers";
 export interface MsgRefract {
   creator: string;
-  amount?: Coin;
+  amount: Coin;
   maturity: string;
 }
 export interface MsgRefractSDKType {
   creator: string;
-  amount?: CoinSDKType;
+  amount: CoinSDKType;
   maturity: string;
 }
 export interface MsgRefractResponse {
-  pAmount?: Coin;
-  yAmount?: Coin;
-  fee?: Coin;
+  pAmount: Coin;
+  yAmount: Coin;
+  fee: Coin;
 }
 export interface MsgRefractResponseSDKType {
-  p_amount?: CoinSDKType;
-  y_amount?: CoinSDKType;
-  fee?: CoinSDKType;
+  p_amount: CoinSDKType;
+  y_amount: CoinSDKType;
+  fee: CoinSDKType;
 }
 export interface MsgRedeem {
   creator: string;
-  pAmount?: Coin;
-  yAmount?: Coin;
+  pAmount: Coin;
+  yAmount: Coin;
 }
 export interface MsgRedeemSDKType {
   creator: string;
-  p_amount?: CoinSDKType;
-  y_amount?: CoinSDKType;
+  p_amount: CoinSDKType;
+  y_amount: CoinSDKType;
 }
 export interface MsgRedeemResponse {
-  cAmount?: Coin;
-  fee?: Coin;
+  cAmount: Coin;
+  fee: Coin;
 }
 export interface MsgRedeemResponseSDKType {
-  c_amount?: CoinSDKType;
-  fee?: CoinSDKType;
+  c_amount: CoinSDKType;
+  fee: CoinSDKType;
 }
 function createBaseMsgRefract(): MsgRefract {
   return {
     creator: "",
-    amount: undefined,
+    amount: Coin.fromPartial({}),
     maturity: ""
   };
 }
@@ -106,9 +106,9 @@ export const MsgRefract = {
 };
 function createBaseMsgRefractResponse(): MsgRefractResponse {
   return {
-    pAmount: undefined,
-    yAmount: undefined,
-    fee: undefined
+    pAmount: Coin.fromPartial({}),
+    yAmount: Coin.fromPartial({}),
+    fee: Coin.fromPartial({})
   };
 }
 export const MsgRefractResponse = {
@@ -172,8 +172,8 @@ export const MsgRefractResponse = {
 function createBaseMsgRedeem(): MsgRedeem {
   return {
     creator: "",
-    pAmount: undefined,
-    yAmount: undefined
+    pAmount: Coin.fromPartial({}),
+    yAmount: Coin.fromPartial({})
   };
 }
 export const MsgRedeem = {
@@ -236,8 +236,8 @@ export const MsgRedeem = {
 };
 function createBaseMsgRedeemResponse(): MsgRedeemResponse {
   return {
-    cAmount: undefined,
-    fee: undefined
+    cAmount: Coin.fromPartial({}),
+    fee: Coin.fromPartial({})
   };
 }
 export const MsgRedeemResponse = {

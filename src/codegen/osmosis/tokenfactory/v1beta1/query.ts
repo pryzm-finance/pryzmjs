@@ -9,11 +9,11 @@ export interface QueryParamsRequestSDKType {}
 /** QueryParamsResponse is the response type for the Query/Params RPC method. */
 export interface QueryParamsResponse {
   /** params defines the parameters of the module. */
-  params?: Params;
+  params: Params;
 }
 /** QueryParamsResponse is the response type for the Query/Params RPC method. */
 export interface QueryParamsResponseSDKType {
-  params?: ParamsSDKType;
+  params: ParamsSDKType;
 }
 /**
  * QueryDenomAuthorityMetadataRequest defines the request structure for the
@@ -34,14 +34,14 @@ export interface QueryDenomAuthorityMetadataRequestSDKType {
  * DenomAuthorityMetadata gRPC query.
  */
 export interface QueryDenomAuthorityMetadataResponse {
-  authorityMetadata?: DenomAuthorityMetadata;
+  authorityMetadata: DenomAuthorityMetadata;
 }
 /**
  * QueryDenomAuthorityMetadataResponse defines the response structure for the
  * DenomAuthorityMetadata gRPC query.
  */
 export interface QueryDenomAuthorityMetadataResponseSDKType {
-  authority_metadata?: DenomAuthorityMetadataSDKType;
+  authority_metadata: DenomAuthorityMetadataSDKType;
 }
 /**
  * QueryDenomsFromCreatorRequest defines the request structure for the
@@ -106,7 +106,7 @@ export const QueryParamsRequest = {
 };
 function createBaseQueryParamsResponse(): QueryParamsResponse {
   return {
-    params: undefined
+    params: Params.fromPartial({})
   };
 }
 export const QueryParamsResponse = {
@@ -196,7 +196,7 @@ export const QueryDenomAuthorityMetadataRequest = {
 };
 function createBaseQueryDenomAuthorityMetadataResponse(): QueryDenomAuthorityMetadataResponse {
   return {
-    authorityMetadata: undefined
+    authorityMetadata: DenomAuthorityMetadata.fromPartial({})
   };
 }
 export const QueryDenomAuthorityMetadataResponse = {

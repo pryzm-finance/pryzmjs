@@ -3,25 +3,25 @@ import { DistributionProportions, DistributionProportionsSDKType } from "./param
 import { Long, isSet } from "../../helpers";
 import * as _m0 from "protobufjs/minimal";
 export interface EventMint {
-  minter?: Minter;
+  minter: Minter;
   bondedRatio: string;
   totalMinted: string;
-  distributedAmounts?: DistributionProportions;
+  distributedAmounts: DistributionProportions;
   epochNumber: Long;
 }
 export interface EventMintSDKType {
-  minter?: MinterSDKType;
+  minter: MinterSDKType;
   bonded_ratio: string;
   total_minted: string;
-  distributed_amounts?: DistributionProportionsSDKType;
+  distributed_amounts: DistributionProportionsSDKType;
   epoch_number: Long;
 }
 function createBaseEventMint(): EventMint {
   return {
-    minter: undefined,
+    minter: Minter.fromPartial({}),
     bondedRatio: "",
     totalMinted: "",
-    distributedAmounts: undefined,
+    distributedAmounts: DistributionProportions.fromPartial({}),
     epochNumber: Long.ZERO
   };
 }

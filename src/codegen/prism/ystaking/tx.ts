@@ -3,35 +3,35 @@ import * as _m0 from "protobufjs/minimal";
 import { isSet } from "../../helpers";
 export interface MsgBond {
   creator: string;
-  amount?: Coin;
+  amount: Coin;
 }
 export interface MsgBondSDKType {
   creator: string;
-  amount?: CoinSDKType;
+  amount: CoinSDKType;
 }
 export interface MsgBondResponse {
-  totalBondedAmount?: Coin;
+  totalBondedAmount: Coin;
 }
 export interface MsgBondResponseSDKType {
-  total_bonded_amount?: CoinSDKType;
+  total_bonded_amount: CoinSDKType;
 }
 export interface MsgUnbond {
   creator: string;
-  amount?: Coin;
+  amount: Coin;
 }
 export interface MsgUnbondSDKType {
   creator: string;
-  amount?: CoinSDKType;
+  amount: CoinSDKType;
 }
 export interface MsgUnbondResponse {
-  remainderBondedAmount?: Coin;
-  accruedReward?: Coin;
-  fee?: Coin;
+  remainderBondedAmount: Coin;
+  accruedReward: Coin;
+  fee: Coin;
 }
 export interface MsgUnbondResponseSDKType {
-  remainder_bonded_amount?: CoinSDKType;
-  accrued_reward?: CoinSDKType;
-  fee?: CoinSDKType;
+  remainder_bonded_amount: CoinSDKType;
+  accrued_reward: CoinSDKType;
+  fee: CoinSDKType;
 }
 export interface MsgClaimReward {
   creator: string;
@@ -42,12 +42,12 @@ export interface MsgClaimRewardSDKType {
   denom: string;
 }
 export interface MsgClaimRewardResponse {
-  accruedReward?: Coin;
-  fee?: Coin;
+  accruedReward: Coin;
+  fee: Coin;
 }
 export interface MsgClaimRewardResponseSDKType {
-  accrued_reward?: CoinSDKType;
-  fee?: CoinSDKType;
+  accrued_reward: CoinSDKType;
+  fee: CoinSDKType;
 }
 export interface MsgExitPool {
   creator: string;
@@ -58,17 +58,17 @@ export interface MsgExitPoolSDKType {
   denom: string;
 }
 export interface MsgExitPoolResponse {
-  accruedReward?: Coin;
-  fee?: Coin;
+  accruedReward: Coin;
+  fee: Coin;
 }
 export interface MsgExitPoolResponseSDKType {
-  accrued_reward?: CoinSDKType;
-  fee?: CoinSDKType;
+  accrued_reward: CoinSDKType;
+  fee: CoinSDKType;
 }
 function createBaseMsgBond(): MsgBond {
   return {
     creator: "",
-    amount: undefined
+    amount: Coin.fromPartial({})
   };
 }
 export const MsgBond = {
@@ -122,7 +122,7 @@ export const MsgBond = {
 };
 function createBaseMsgBondResponse(): MsgBondResponse {
   return {
-    totalBondedAmount: undefined
+    totalBondedAmount: Coin.fromPartial({})
   };
 }
 export const MsgBondResponse = {
@@ -168,7 +168,7 @@ export const MsgBondResponse = {
 function createBaseMsgUnbond(): MsgUnbond {
   return {
     creator: "",
-    amount: undefined
+    amount: Coin.fromPartial({})
   };
 }
 export const MsgUnbond = {
@@ -222,9 +222,9 @@ export const MsgUnbond = {
 };
 function createBaseMsgUnbondResponse(): MsgUnbondResponse {
   return {
-    remainderBondedAmount: undefined,
-    accruedReward: undefined,
-    fee: undefined
+    remainderBondedAmount: Coin.fromPartial({}),
+    accruedReward: Coin.fromPartial({}),
+    fee: Coin.fromPartial({})
   };
 }
 export const MsgUnbondResponse = {
@@ -342,8 +342,8 @@ export const MsgClaimReward = {
 };
 function createBaseMsgClaimRewardResponse(): MsgClaimRewardResponse {
   return {
-    accruedReward: undefined,
-    fee: undefined
+    accruedReward: Coin.fromPartial({}),
+    fee: Coin.fromPartial({})
   };
 }
 export const MsgClaimRewardResponse = {
@@ -452,8 +452,8 @@ export const MsgExitPool = {
 };
 function createBaseMsgExitPoolResponse(): MsgExitPoolResponse {
   return {
-    accruedReward: undefined,
-    fee: undefined
+    accruedReward: Coin.fromPartial({}),
+    fee: Coin.fromPartial({})
   };
 }
 export const MsgExitPoolResponse = {

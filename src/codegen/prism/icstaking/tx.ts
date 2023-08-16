@@ -42,21 +42,21 @@ export function iCATypeToJSON(object: ICAType): string {
 }
 export interface MsgUpdateParams {
   authority: string;
-  params?: Params;
+  params: Params;
 }
 export interface MsgUpdateParamsSDKType {
   authority: string;
-  params?: ParamsSDKType;
+  params: ParamsSDKType;
 }
 export interface MsgUpdateParamsResponse {}
 export interface MsgUpdateParamsResponseSDKType {}
 export interface MsgRegisterHostChain {
   authority: string;
-  hostChain?: HostChain;
+  hostChain: HostChain;
 }
 export interface MsgRegisterHostChainSDKType {
   authority: string;
-  host_chain?: HostChainSDKType;
+  host_chain: HostChainSDKType;
 }
 export interface MsgRegisterHostChainResponse {}
 export interface MsgRegisterHostChainResponseSDKType {}
@@ -64,13 +64,13 @@ export interface MsgUpdateHostChain {
   authority: string;
   hostChainId: string;
   validators: Validator[];
-  params?: StakingParams;
+  params: StakingParams;
 }
 export interface MsgUpdateHostChainSDKType {
   authority: string;
   host_chain_id: string;
   validators: ValidatorSDKType[];
-  params?: StakingParamsSDKType;
+  params: StakingParamsSDKType;
 }
 export interface MsgUpdateHostChainResponse {}
 export interface MsgUpdateHostChainResponseSDKType {}
@@ -87,12 +87,12 @@ export interface MsgStakeSDKType {
   amount: string;
 }
 export interface MsgStakeResponse {
-  cAmount?: Coin;
-  fee?: Coin;
+  cAmount: Coin;
+  fee: Coin;
 }
 export interface MsgStakeResponseSDKType {
-  c_amount?: CoinSDKType;
-  fee?: CoinSDKType;
+  c_amount: CoinSDKType;
+  fee: CoinSDKType;
 }
 export interface MsgUnstake {
   creator: string;
@@ -107,10 +107,10 @@ export interface MsgUnstakeSDKType {
   c_amount: string;
 }
 export interface MsgUnstakeResponse {
-  uAmount?: Coin;
+  uAmount: Coin;
 }
 export interface MsgUnstakeResponseSDKType {
-  u_amount?: CoinSDKType;
+  u_amount: CoinSDKType;
 }
 export interface MsgRedeemUnstaked {
   creator: string;
@@ -127,12 +127,12 @@ export interface MsgRedeemUnstakedSDKType {
   epoch: Long;
 }
 export interface MsgRedeemUnstakedResponse {
-  amount?: Coin;
-  fee?: Coin;
+  amount: Coin;
+  fee: Coin;
 }
 export interface MsgRedeemUnstakedResponseSDKType {
-  amount?: CoinSDKType;
-  fee?: CoinSDKType;
+  amount: CoinSDKType;
+  fee: CoinSDKType;
 }
 export interface MsgInstantUnstake {
   creator: string;
@@ -149,12 +149,12 @@ export interface MsgInstantUnstakeSDKType {
   max_c_amount: string;
 }
 export interface MsgInstantUnstakeResponse {
-  amount?: Coin;
-  fee?: Coin;
+  amount: Coin;
+  fee: Coin;
 }
 export interface MsgInstantUnstakeResponseSDKType {
-  amount?: CoinSDKType;
-  fee?: CoinSDKType;
+  amount: CoinSDKType;
+  fee: CoinSDKType;
 }
 export interface MsgRebalanceDelegations {
   creator: string;
@@ -181,7 +181,7 @@ export interface MsgRedeemInterchainAccountResponseSDKType {}
 function createBaseMsgUpdateParams(): MsgUpdateParams {
   return {
     authority: "",
-    params: undefined
+    params: Params.fromPartial({})
   };
 }
 export const MsgUpdateParams = {
@@ -269,7 +269,7 @@ export const MsgUpdateParamsResponse = {
 function createBaseMsgRegisterHostChain(): MsgRegisterHostChain {
   return {
     authority: "",
-    hostChain: undefined
+    hostChain: HostChain.fromPartial({})
   };
 }
 export const MsgRegisterHostChain = {
@@ -359,7 +359,7 @@ function createBaseMsgUpdateHostChain(): MsgUpdateHostChain {
     authority: "",
     hostChainId: "",
     validators: [],
-    params: undefined
+    params: StakingParams.fromPartial({})
   };
 }
 export const MsgUpdateHostChain = {
@@ -543,8 +543,8 @@ export const MsgStake = {
 };
 function createBaseMsgStakeResponse(): MsgStakeResponse {
   return {
-    cAmount: undefined,
-    fee: undefined
+    cAmount: Coin.fromPartial({}),
+    fee: Coin.fromPartial({})
   };
 }
 export const MsgStakeResponse = {
@@ -673,7 +673,7 @@ export const MsgUnstake = {
 };
 function createBaseMsgUnstakeResponse(): MsgUnstakeResponse {
   return {
-    uAmount: undefined
+    uAmount: Coin.fromPartial({})
   };
 }
 export const MsgUnstakeResponse = {
@@ -803,8 +803,8 @@ export const MsgRedeemUnstaked = {
 };
 function createBaseMsgRedeemUnstakedResponse(): MsgRedeemUnstakedResponse {
   return {
-    amount: undefined,
-    fee: undefined
+    amount: Coin.fromPartial({}),
+    fee: Coin.fromPartial({})
   };
 }
 export const MsgRedeemUnstakedResponse = {
@@ -943,8 +943,8 @@ export const MsgInstantUnstake = {
 };
 function createBaseMsgInstantUnstakeResponse(): MsgInstantUnstakeResponse {
   return {
-    amount: undefined,
-    fee: undefined
+    amount: Coin.fromPartial({}),
+    fee: Coin.fromPartial({})
   };
 }
 export const MsgInstantUnstakeResponse = {
@@ -1131,7 +1131,7 @@ export const MsgRedeemInterchainAccount = {
     return {
       creator: isSet(object.creator) ? String(object.creator) : "",
       hostChain: isSet(object.hostChain) ? String(object.hostChain) : "",
-      accountType: isSet(object.accountType) ? iCATypeFromJSON(object.accountType) : 0
+      accountType: isSet(object.accountType) ? iCATypeFromJSON(object.accountType) : -1
     };
   },
   toJSON(message: MsgRedeemInterchainAccount): unknown {

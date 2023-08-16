@@ -1,0 +1,45 @@
+syntax = "proto3";
+package prismatics.server.trade;
+
+import "gogoproto/gogo.proto";
+import "cosmos_proto/cosmos.proto";
+import "prism/amm/operations.proto";
+import "cosmos/base/v1beta1/coin.proto";
+
+
+option go_package = "github.com/prism-finance/prismatics/server/trade";
+
+message QueryTradeSimulationRequest {
+  prism.amm.SwapType swap_type = 1;
+  string token_in = 2;
+  string token_out = 3;
+  string amount = 4 [
+    (cosmos_proto.scalar) = "cosmos.Int",
+    (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Int",
+    (gogoproto.nullable) = false
+  ];
+  repeated prism.amm.SwapStep swap_steps = 5 [(gogoproto.nullable) = false];
+}
+
+message QueryTradeSimulationResponse {
+  string price_token_out_in_token_in_terms = 1 [
+    (cosmos_proto.scalar) = "cosmos.Dec",
+    (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Dec",
+    (gogoproto.nullable) = false
+  ];
+  cosmos.base.v1beta1.Coin amount_in = 2 [(gogoproto.nullable) = false];
+  cosmos.base.v1beta1.Coin amount_out = 3 [(gogoproto.nullable) = false];
+  repeated cosmos.base.v1beta1.Coin swapFee = 4 [(gogoproto.nullable) = false];
+  cosmos.base.v1beta1.Coin swapFeeTokenInTerms = 5 [(gogoproto.nullable) = false];
+  string effective_price = 6 [
+    (cosmos_proto.scalar) = "cosmos.Dec",
+    (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Dec",
+    (gogoproto.nullable) = false
+  ];
+  string price_impact = 7 [
+    (cosmos_proto.scalar) = "cosmos.Dec",
+    (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Dec",
+    (gogoproto.nullable) = false
+  ];
+  repeated prism.amm.SwapStep swap_steps = 8 [(gogoproto.nullable) = false];
+}

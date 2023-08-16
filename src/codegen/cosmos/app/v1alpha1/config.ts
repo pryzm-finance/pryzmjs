@@ -52,7 +52,7 @@ export interface ModuleConfig {
    * config is the config object for the module. Module config messages should
    * define a ModuleDescriptor using the cosmos.app.v1alpha1.is_module extension.
    */
-  config?: Any;
+  config: Any;
   /**
    * golang_bindings specifies explicit interface to implementation type bindings which
    * depinject uses to resolve interface inputs to provider functions.  The scope of this
@@ -63,7 +63,7 @@ export interface ModuleConfig {
 /** ModuleConfig is a module configuration for an app. */
 export interface ModuleConfigSDKType {
   name: string;
-  config?: AnySDKType;
+  config: AnySDKType;
   golang_bindings: GolangBindingSDKType[];
 }
 /** GolangBinding is an explicit interface type to implementing type binding for dependency injection. */
@@ -144,7 +144,7 @@ export const Config = {
 function createBaseModuleConfig(): ModuleConfig {
   return {
     name: "",
-    config: undefined,
+    config: Any.fromPartial({}),
     golangBindings: []
   };
 }

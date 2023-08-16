@@ -6,16 +6,16 @@ import { Coin, CoinSDKType } from "../../cosmos/base/v1beta1/coin";
 import { Long, isSet } from "../../helpers";
 import * as _m0 from "protobufjs/minimal";
 export interface EventSetParams {
-  params?: Params;
+  params: Params;
 }
 export interface EventSetParamsSDKType {
-  params?: ParamsSDKType;
+  params: ParamsSDKType;
 }
 export interface EventSetBond {
-  bond?: Bond;
+  bond: Bond;
 }
 export interface EventSetBondSDKType {
-  bond?: BondSDKType;
+  bond: BondSDKType;
 }
 export interface EventRemoveBond {
   address: string;
@@ -26,16 +26,16 @@ export interface EventRemoveBondSDKType {
   denom: string;
 }
 export interface EventSetPool {
-  pool?: Pool;
+  pool: Pool;
 }
 export interface EventSetPoolSDKType {
-  pool?: PoolSDKType;
+  pool: PoolSDKType;
 }
 export interface EventSetUnbonding {
-  unbonding?: Unbonding;
+  unbonding: Unbonding;
 }
 export interface EventSetUnbondingSDKType {
-  unbonding?: UnbondingSDKType;
+  unbonding: UnbondingSDKType;
 }
 export interface EventRemoveUnbonding {
   id: Long;
@@ -57,15 +57,15 @@ export interface EventClaimRewardSDKType {
 }
 export interface EventBond {
   address: string;
-  amount?: Coin;
+  amount: Coin;
 }
 export interface EventBondSDKType {
   address: string;
-  amount?: CoinSDKType;
+  amount: CoinSDKType;
 }
 export interface EventUnbond {
   address: string;
-  amount?: Coin;
+  amount: Coin;
   rewards: Coin[];
   unbonding?: Unbonding;
   rewardTreasury: string;
@@ -73,7 +73,7 @@ export interface EventUnbond {
 }
 export interface EventUnbondSDKType {
   address: string;
-  amount?: CoinSDKType;
+  amount: CoinSDKType;
   rewards: CoinSDKType[];
   unbonding?: UnbondingSDKType;
   reward_treasury: string;
@@ -87,11 +87,11 @@ export interface EventClaimUnbondingSDKType {
 }
 export interface EventCancelUnbonding {
   id: Long;
-  amount?: Coin;
+  amount: Coin;
 }
 export interface EventCancelUnbondingSDKType {
   id: Long;
-  amount?: CoinSDKType;
+  amount: CoinSDKType;
 }
 export interface EventIncentivizePool {
   bondDenom: string;
@@ -103,7 +103,7 @@ export interface EventIncentivizePoolSDKType {
 }
 function createBaseEventSetParams(): EventSetParams {
   return {
-    params: undefined
+    params: Params.fromPartial({})
   };
 }
 export const EventSetParams = {
@@ -148,7 +148,7 @@ export const EventSetParams = {
 };
 function createBaseEventSetBond(): EventSetBond {
   return {
-    bond: undefined
+    bond: Bond.fromPartial({})
   };
 }
 export const EventSetBond = {
@@ -248,7 +248,7 @@ export const EventRemoveBond = {
 };
 function createBaseEventSetPool(): EventSetPool {
   return {
-    pool: undefined
+    pool: Pool.fromPartial({})
   };
 }
 export const EventSetPool = {
@@ -293,7 +293,7 @@ export const EventSetPool = {
 };
 function createBaseEventSetUnbonding(): EventSetUnbonding {
   return {
-    unbonding: undefined
+    unbonding: Unbonding.fromPartial({})
   };
 }
 export const EventSetUnbonding = {
@@ -463,7 +463,7 @@ export const EventClaimReward = {
 function createBaseEventBond(): EventBond {
   return {
     address: "",
-    amount: undefined
+    amount: Coin.fromPartial({})
   };
 }
 export const EventBond = {
@@ -518,7 +518,7 @@ export const EventBond = {
 function createBaseEventUnbond(): EventUnbond {
   return {
     address: "",
-    amount: undefined,
+    amount: Coin.fromPartial({}),
     rewards: [],
     unbonding: undefined,
     rewardTreasury: "",
@@ -662,7 +662,7 @@ export const EventClaimUnbonding = {
 function createBaseEventCancelUnbonding(): EventCancelUnbonding {
   return {
     id: Long.UZERO,
-    amount: undefined
+    amount: Coin.fromPartial({})
   };
 }
 export const EventCancelUnbonding = {

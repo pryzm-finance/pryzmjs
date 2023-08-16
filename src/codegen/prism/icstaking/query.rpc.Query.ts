@@ -91,7 +91,7 @@ export const QueryParamsDesc: UnaryMethodDefinitionish = {
     }
   } as any)
 };
-export const QueryGetHostChainDesc: UnaryMethodDefinitionish = {
+export const QueryHostChainDesc: UnaryMethodDefinitionish = {
   methodName: "HostChain",
   service: QueryDesc,
   requestStream: false,
@@ -112,7 +112,7 @@ export const QueryGetHostChainDesc: UnaryMethodDefinitionish = {
     }
   } as any)
 };
-export const QueryAllHostChainDesc: UnaryMethodDefinitionish = {
+export const QueryHostChainAllDesc: UnaryMethodDefinitionish = {
   methodName: "HostChainAll",
   service: QueryDesc,
   requestStream: false,
@@ -133,7 +133,7 @@ export const QueryAllHostChainDesc: UnaryMethodDefinitionish = {
     }
   } as any)
 };
-export const QueryGetHostChainStateDesc: UnaryMethodDefinitionish = {
+export const QueryHostChainStateDesc: UnaryMethodDefinitionish = {
   methodName: "HostChainState",
   service: QueryDesc,
   requestStream: false,
@@ -154,7 +154,7 @@ export const QueryGetHostChainStateDesc: UnaryMethodDefinitionish = {
     }
   } as any)
 };
-export const QueryAllHostChainStateDesc: UnaryMethodDefinitionish = {
+export const QueryHostChainStateAllDesc: UnaryMethodDefinitionish = {
   methodName: "HostChainStateAll",
   service: QueryDesc,
   requestStream: false,
@@ -175,7 +175,7 @@ export const QueryAllHostChainStateDesc: UnaryMethodDefinitionish = {
     }
   } as any)
 };
-export const QueryGetUndelegationDesc: UnaryMethodDefinitionish = {
+export const QueryUndelegationDesc: UnaryMethodDefinitionish = {
   methodName: "Undelegation",
   service: QueryDesc,
   requestStream: false,
@@ -196,7 +196,7 @@ export const QueryGetUndelegationDesc: UnaryMethodDefinitionish = {
     }
   } as any)
 };
-export const QueryAllUndelegationDesc: UnaryMethodDefinitionish = {
+export const QueryUndelegationAllDesc: UnaryMethodDefinitionish = {
   methodName: "UndelegationAll",
   service: QueryDesc,
   requestStream: false,
@@ -217,7 +217,7 @@ export const QueryAllUndelegationDesc: UnaryMethodDefinitionish = {
     }
   } as any)
 };
-export const QueryIncompleteUndelegationDesc: UnaryMethodDefinitionish = {
+export const QueryIncompleteUndelegationAllDesc: UnaryMethodDefinitionish = {
   methodName: "IncompleteUndelegationAll",
   service: QueryDesc,
   requestStream: false,

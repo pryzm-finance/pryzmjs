@@ -19,10 +19,10 @@ specifiers:
   '@cosmjs/proto-signing': 0.31.0
   '@cosmjs/stargate': 0.31.0
   '@cosmjs/tendermint-rpc': 0.31.0
+  '@cosmology/lcd': ^0.12.0
+  '@cosmology/telescope': ^0.104.0
   '@improbable-eng/grpc-web': ^0.15.0
   '@improbable-eng/grpc-web-node-http-transport': ^0.15.0
-  '@osmonauts/lcd': 0.10.0
-  '@osmonauts/telescope': ^0.96.0
   '@protobufs/cosmos': ^0.1.0
   '@protobufs/gogoproto': ^0.0.10
   '@types/jest': ^29.5.0
@@ -52,9 +52,9 @@ dependencies:
   '@cosmjs/proto-signing': 0.31.0
   '@cosmjs/stargate': 0.31.0
   '@cosmjs/tendermint-rpc': 0.31.0
+  '@cosmology/lcd': 0.12.0
   '@improbable-eng/grpc-web': 0.15.0_google-protobuf@3.21.2
   '@improbable-eng/grpc-web-node-http-transport': 0.15.0_fng5pv4qmdetiqq66m6yjkaacu
-  '@osmonauts/lcd': 0.10.0
   browser-headers: 0.4.1
   protobufjs: 6.11.3
 
@@ -72,7 +72,7 @@ devDependencies:
   '@babel/plugin-transform-runtime': 7.21.4_@babel+core@7.21.4
   '@babel/preset-env': 7.21.4_@babel+core@7.21.4
   '@babel/preset-typescript': 7.21.5_@babel+core@7.21.4
-  '@osmonauts/telescope': 0.96.0
+  '@cosmology/telescope': 0.104.0
   '@protobufs/cosmos': 0.1.0
   '@protobufs/gogoproto': 0.0.10
   '@types/jest': 29.5.2
@@ -142,14 +142,14 @@ packages:
     dependencies:
       '@ampproject/remapping': 2.2.1
       '@babel/code-frame': 7.21.4
-      '@babel/generator': 7.21.4
+      '@babel/generator': 7.22.3
       '@babel/helper-compilation-targets': 7.22.1_@babel+core@7.18.10
       '@babel/helper-module-transforms': 7.22.1
       '@babel/helpers': 7.22.3
       '@babel/parser': 7.22.4
       '@babel/template': 7.21.9
-      '@babel/traverse': 7.21.4
-      '@babel/types': 7.21.4
+      '@babel/traverse': 7.22.4
+      '@babel/types': 7.22.4
       convert-source-map: 1.9.0
       debug: 4.3.4
       gensync: 1.0.0-beta.2
@@ -200,7 +200,7 @@ packages:
     resolution: {integrity: sha512-dfQ8ebCN98SvyL7IxNMCUtZQSq5R7kxgN+r8qYTGDmmSion1hX2C0zq2yo1bsCDhXixokv1SAWTZUMYbO/V5zg==}
     engines: {node: '>=6.9.0'}
     dependencies:
-      '@babel/types': 7.21.4
+      '@babel/types': 7.22.4
       '@jridgewell/gen-mapping': 0.3.3
       jsesc: 2.5.2
     dev: true
@@ -209,7 +209,7 @@ packages:
     resolution: {integrity: sha512-NieM3pVIYW2SwGzKoqfPrQsf4xGs9M9AIG3ThppsSRmO+m7eQhmI6amajKMUeIO37wFfsvnvcxQFx6x6iqxDnA==}
     engines: {node: '>=6.9.0'}
     dependencies:
-      '@babel/types': 7.21.4
+      '@babel/types': 7.22.4
       '@jridgewell/gen-mapping': 0.3.3
       '@jridgewell/trace-mapping': 0.3.18
       jsesc: 2.5.2
@@ -558,7 +558,7 @@ packages:
     engines: {node: '>=6.0.0'}
     hasBin: true
     dependencies:
-      '@babel/types': 7.21.4
+      '@babel/types': 7.22.4
     dev: true
 
   /@babel/parser/7.22.4:
@@ -2259,7 +2259,7 @@ packages:
       '@babel/plugin-transform-unicode-escapes': 7.21.5_@babel+core@7.18.10
       '@babel/plugin-transform-unicode-regex': 7.18.6_@babel+core@7.18.10
       '@babel/preset-modules': 0.1.5_@babel+core@7.18.10
-      '@babel/types': 7.21.4
+      '@babel/types': 7.22.4
       babel-plugin-polyfill-corejs2: 0.3.3_@babel+core@7.18.10
       babel-plugin-polyfill-corejs3: 0.5.3_@babel+core@7.18.10
       babel-plugin-polyfill-regenerator: 0.4.1_@babel+core@7.18.10
@@ -2451,13 +2451,13 @@ packages:
     engines: {node: '>=6.9.0'}
     dependencies:
       '@babel/code-frame': 7.21.4
-      '@babel/generator': 7.21.4
+      '@babel/generator': 7.22.3
       '@babel/helper-environment-visitor': 7.22.1
       '@babel/helper-function-name': 7.21.0
       '@babel/helper-hoist-variables': 7.18.6
       '@babel/helper-split-export-declaration': 7.18.6
       '@babel/parser': 7.22.4
-      '@babel/types': 7.21.4
+      '@babel/types': 7.22.4
       debug: 4.3.4
       globals: 11.12.0
     transitivePeerDependencies:
@@ -2469,13 +2469,13 @@ packages:
     engines: {node: '>=6.9.0'}
     dependencies:
       '@babel/code-frame': 7.21.4
-      '@babel/generator': 7.21.4
+      '@babel/generator': 7.22.3
       '@babel/helper-environment-visitor': 7.22.1
       '@babel/helper-function-name': 7.21.0
       '@babel/helper-hoist-variables': 7.18.6
       '@babel/helper-split-export-declaration': 7.18.6
       '@babel/parser': 7.22.4
-      '@babel/types': 7.21.4
+      '@babel/types': 7.22.4
       debug: 4.3.4
       globals: 11.12.0
     transitivePeerDependencies:
@@ -2654,8 +2654,117 @@ packages:
     resolution: {integrity: sha512-nNcycZWUYLNJlrIXgpcgVRqdl6BXjF4YlXdxobQWpW9Tikk61bEGeAFhDYtC0PwHlokCNw0KxWiHGJL4nL7Q5A==}
     dev: false
 
-  /@cosmwasm/ts-codegen/0.26.0:
-    resolution: {integrity: sha512-bALTObAlsPBNZHvCGBdYH7RUu+v563fvbbVgwN/WTok5tFnvB9klEQa3DtEZUOuczD20rqfsDxAC8Q17v2hhlw==}
+  /@cosmology/ast/0.91.0:
+    resolution: {integrity: sha512-9mKak4brufPO9oN6TjsZeLqut6TQkhqZfnvv710aDFZzCE3ICm6aBo5pikWAQbCe1MB0c1Kp/GbdFh+MbEG9wg==}
+    dependencies:
+      '@babel/parser': 7.22.4
+      '@babel/runtime': 7.22.3
+      '@babel/types': 7.21.4
+      '@cosmology/types': 0.39.0
+      '@cosmology/utils': 0.14.0
+      case: 1.6.3
+      dotty: 0.1.2
+    dev: true
+
+  /@cosmology/lcd/0.12.0:
+    resolution: {integrity: sha512-f2mcySYO1xdislAhuWtNFmg4q/bzY3Aem2UkDzYzI0ZELVev5i2Pi0bQrYUNTeNg1isAo0Kyrdqj/4YPqEwjGA==}
+    dependencies:
+      '@babel/runtime': 7.22.3
+      axios: 0.27.2
+    transitivePeerDependencies:
+      - debug
+    dev: false
+
+  /@cosmology/proto-parser/0.48.0:
+    resolution: {integrity: sha512-GjK/WGY6wXHeiTBG41e+Tam77ieAuUj58XEqr6cJ/Dcjo1dQiQmyZnWPTx7zFva/oTYJagIi4zfdTJ8bM9Msxg==}
+    dependencies:
+      '@babel/runtime': 7.22.3
+      '@cosmology/protobufjs': 6.11.6
+      '@cosmology/types': 0.39.0
+      '@cosmology/utils': 0.14.0
+      dotty: 0.1.2
+      glob: 8.0.3
+      minimatch: 5.1.0
+      mkdirp: 3.0.0
+    dev: true
+
+  /@cosmology/protobufjs/6.11.6:
+    resolution: {integrity: sha512-k1opGC9CTX5vD2447pUqLmleVv0Kb8RasBUxkZHudVOvuXs2qAAGONmMIEGRCROKTodhTY9fdTnGU2lCZqAwNw==}
+    hasBin: true
+    requiresBuild: true
+    dependencies:
+      '@protobufjs/aspromise': 1.1.2
+      '@protobufjs/base64': 1.1.2
+      '@protobufjs/codegen': 2.0.4
+      '@protobufjs/eventemitter': 1.1.0
+      '@protobufjs/fetch': 1.1.0
+      '@protobufjs/float': 1.0.2
+      '@protobufjs/inquire': 1.1.0
+      '@protobufjs/path': 1.1.2
+      '@protobufjs/pool': 1.1.0
+      '@protobufjs/utf8': 1.1.0
+      '@types/long': 4.0.2
+      '@types/node': 20.2.5
+      long: 4.0.0
+    dev: true
+
+  /@cosmology/telescope/0.104.0:
+    resolution: {integrity: sha512-Y2Ina4pUHDZFT9105KumgeIaGKrk/CAn6Myt2t5Mi7gsDTawWq98zUBLRUrWyhtF3vNni8NvnBc8b3Yl/4SwBw==}
+    hasBin: true
+    dependencies:
+      '@babel/core': 7.21.4
+      '@babel/generator': 7.21.4
+      '@babel/parser': 7.22.4
+      '@babel/plugin-proposal-class-properties': 7.18.6_@babel+core@7.21.4
+      '@babel/plugin-proposal-export-default-from': 7.18.10_@babel+core@7.21.4
+      '@babel/plugin-proposal-object-rest-spread': 7.20.7_@babel+core@7.21.4
+      '@babel/plugin-transform-runtime': 7.21.4_@babel+core@7.21.4
+      '@babel/preset-env': 7.21.4_@babel+core@7.21.4
+      '@babel/preset-typescript': 7.21.5_@babel+core@7.21.4
+      '@babel/runtime': 7.22.3
+      '@babel/traverse': 7.21.4
+      '@babel/types': 7.21.4
+      '@cosmology/ast': 0.91.0
+      '@cosmology/proto-parser': 0.48.0
+      '@cosmology/types': 0.39.0
+      '@cosmology/utils': 0.14.0
+      '@cosmwasm/ts-codegen': 0.34.0
+      '@types/parse-package-name': 0.1.0
+      case: 1.6.3
+      dargs: 7.0.0
+      deepmerge: 4.3.1
+      dotty: 0.1.2
+      fuzzy: 0.1.3
+      glob: 8.0.3
+      inquirerer: 0.1.3
+      long: 5.2.3
+      minimatch: 5.1.0
+      minimist: 1.2.8
+      mkdirp: 3.0.0
+      parse-package-name: 1.0.0
+      rimraf: 5.0.0
+      shelljs: 0.8.5
+    transitivePeerDependencies:
+      - supports-color
+    dev: true
+
+  /@cosmology/types/0.39.0:
+    resolution: {integrity: sha512-0CXcWcAxV12fYBkj0DWtpKf6WhYnp3UDw2v1EtBCdEZSRTfXahjqopvtc8pejbfqId52+/y745xKy/FKYJqJTg==}
+    dependencies:
+      '@babel/runtime': 7.22.3
+      case: 1.6.3
+    dev: true
+
+  /@cosmology/utils/0.14.0:
+    resolution: {integrity: sha512-UsAtzxJgCqp2uGwUNItEdFgSdkKLsQ/RBIrGx0vphpalPMg7a917I/o6AJA+UBgzIpfXpxVk4D6JIA/SEMWawQ==}
+    dependencies:
+      '@babel/runtime': 7.22.3
+      '@cosmology/types': 0.39.0
+      dotty: 0.1.2
+    dev: true
+
+  /@cosmwasm/ts-codegen/0.34.0:
+    resolution: {integrity: sha512-Mt/aYj0be9GnA51Arysqr9L8KQNWUJJHoJvtru7hkHmukPSewZDilwHCOJAaehk5gjsP7LFey2o2KEdfzkANhA==}
     hasBin: true
     dependencies:
       '@babel/core': 7.18.10
@@ -2684,7 +2793,7 @@ packages:
       parse-package-name: 1.0.0
       rimraf: 3.0.2
       shelljs: 0.8.5
-      wasm-ast-types: 0.19.0
+      wasm-ast-types: 0.25.0
     transitivePeerDependencies:
       - supports-color
     dev: true
@@ -3141,94 +3250,6 @@ packages:
       fastq: 1.15.0
     dev: true
 
-  /@osmonauts/ast/0.82.0:
-    resolution: {integrity: sha512-WgtjVYej6cuEA1Ur9n2NwO4wj45yI2UPxHY61RZIbTqDSwQWQA9OFRsvuYsA/F/ohLoQhvz+kBPSDflPSM7uTw==}
-    dependencies:
-      '@babel/parser': 7.22.4
-      '@babel/runtime': 7.22.3
-      '@babel/types': 7.21.4
-      '@osmonauts/proto-parser': 0.43.0
-      '@osmonauts/types': 0.35.0
-      '@osmonauts/utils': 0.11.1
-      case: 1.6.3
-      dotty: 0.1.2
-    dev: true
-
-  /@osmonauts/lcd/0.10.0:
-    resolution: {integrity: sha512-PzmXk9x9MHyLn2fUztpAqWqvDmMiEJaQv/JcAoAOE8VdHrD9Hf/KWnE1RZtamuS2ngQRqvQPD0xotCGXW7eTxA==}
-    dependencies:
-      '@babel/runtime': 7.22.3
-      axios: 0.27.2
-    transitivePeerDependencies:
-      - debug
-    dev: false
-
-  /@osmonauts/proto-parser/0.43.0:
-    resolution: {integrity: sha512-TJZaAEsFreRAbGoaBpRlK5nzFS5Hyglb4xypX1lMP1M9KkTMK64BMGofK44keQFjSfzm7+jmBJw20U35fpFb6g==}
-    dependencies:
-      '@babel/runtime': 7.22.3
-      '@osmonauts/types': 0.35.0
-      '@pyramation/protobufjs': 6.11.5
-      dotty: 0.1.2
-      glob: 8.0.3
-      minimatch: 5.1.0
-      mkdirp: 3.0.0
-    dev: true
-
-  /@osmonauts/telescope/0.96.0:
-    resolution: {integrity: sha512-00vaRkVThxky+6EvDmNOZpsqqB1OJmHouDpQevKtUPP0gL+Z6oX/lo6JupJVXaNcLX+l0v2o1K8W2iLfGxf5vQ==}
-    hasBin: true
-    dependencies:
-      '@babel/core': 7.21.4
-      '@babel/generator': 7.21.4
-      '@babel/parser': 7.22.4
-      '@babel/plugin-proposal-class-properties': 7.18.6_@babel+core@7.21.4
-      '@babel/plugin-proposal-export-default-from': 7.18.10_@babel+core@7.21.4
-      '@babel/plugin-proposal-object-rest-spread': 7.20.7_@babel+core@7.21.4
-      '@babel/plugin-transform-runtime': 7.21.4_@babel+core@7.21.4
-      '@babel/preset-env': 7.21.4_@babel+core@7.21.4
-      '@babel/preset-typescript': 7.21.5_@babel+core@7.21.4
-      '@babel/runtime': 7.22.3
-      '@babel/traverse': 7.21.4
-      '@babel/types': 7.21.4
-      '@cosmwasm/ts-codegen': 0.26.0
-      '@osmonauts/ast': 0.82.0
-      '@osmonauts/proto-parser': 0.43.0
-      '@osmonauts/types': 0.35.0
-      '@osmonauts/utils': 0.11.1
-      '@types/parse-package-name': 0.1.0
-      case: 1.6.3
-      dargs: 7.0.0
-      deepmerge: 4.3.1
-      dotty: 0.1.2
-      fuzzy: 0.1.3
-      glob: 8.0.3
-      inquirerer: 0.1.3
-      long: 5.2.3
-      minimatch: 5.1.0
-      minimist: 1.2.8
-      mkdirp: 3.0.0
-      parse-package-name: 1.0.0
-      rimraf: 5.0.0
-      shelljs: 0.8.5
-    transitivePeerDependencies:
-      - supports-color
-    dev: true
-
-  /@osmonauts/types/0.35.0:
-    resolution: {integrity: sha512-RHjc/hGpZ9Q0okWiRMO98V8NduFAB4YQIb0BwP9jQJC39R6uSBtYUGKuk6CxnMyitmA6JeMV0EslOoh/OX0Dyg==}
-    dependencies:
-      '@babel/runtime': 7.22.3
-      '@osmonauts/utils': 0.11.1
-      case: 1.6.3
-    dev: true
-
-  /@osmonauts/utils/0.11.1:
-    resolution: {integrity: sha512-N2tVi+nnFy7vI+wEPLOryhKgbakBYkpo8TD37NcCs99+VliwXQGz+3L6BCtWGhDI32Ongu37PVks5tqRCgb+kQ==}
-    dependencies:
-      '@babel/runtime': 7.22.3
-    dev: true
-
   /@pkgjs/parseargs/0.11.0:
     resolution: {integrity: sha512-+1VkjdD0QBLPodGrJUeqarH8VAIvQODIbwh9XpP5Syisf7YoQgsJKPNFoqqLQlu+VQ/tVSshMR6loPMn8U+dPg==}
     engines: {node: '>=14'}
@@ -3323,7 +3344,7 @@ packages:
     dependencies:
       '@pyramation/json-schema-ref-parser': 9.0.6
       '@types/json-schema': 7.0.12
-      '@types/lodash': 4.14.195
+      '@types/lodash': 4.14.197
       '@types/prettier': 2.7.3
       cli-color: 2.0.3
       get-stdin: 8.0.0
@@ -3335,26 +3356,6 @@ packages:
       mkdirp: 1.0.4
       mz: 2.7.0
       prettier: 2.8.8
-    dev: true
-
-  /@pyramation/protobufjs/6.11.5:
-    resolution: {integrity: sha512-gr+Iv6d7Iwq3PmNsTeQtL6TUONJs0WqbHFikett4zLquRK7egWuifZSKsqV8+o1UBNZcv52Z1HhgwTqNJe75Ag==}
-    hasBin: true
-    requiresBuild: true
-    dependencies:
-      '@protobufjs/aspromise': 1.1.2
-      '@protobufjs/base64': 1.1.2
-      '@protobufjs/codegen': 2.0.4
-      '@protobufjs/eventemitter': 1.1.0
-      '@protobufjs/fetch': 1.1.0
-      '@protobufjs/float': 1.0.2
-      '@protobufjs/inquire': 1.1.0
-      '@protobufjs/path': 1.1.2
-      '@protobufjs/pool': 1.1.0
-      '@protobufjs/utf8': 1.1.0
-      '@types/long': 4.0.2
-      '@types/node': 20.2.5
-      long: 4.0.0
     dev: true
 
   /@sinclair/typebox/0.24.51:
@@ -3462,8 +3463,8 @@ packages:
     resolution: {integrity: sha512-Hr5Jfhc9eYOQNPYO5WLDq/n4jqijdHNlDXjuAQkkt+mWdQR+XJToOHrsD4cPaMXpn6KO7y2+wM8AZEs8VpBLVA==}
     dev: true
 
-  /@types/lodash/4.14.195:
-    resolution: {integrity: sha512-Hwx9EUgdwf2GLarOjQp5ZH8ZmblzcbTBC2wtQWNKARBSxM9ezRIAUpeDTgoQRAFB0+8CNWXVA9+MaSOzOF3nPg==}
+  /@types/lodash/4.14.197:
+    resolution: {integrity: sha512-BMVOiWs0uNxHVlHBgzTIqJYmj+PgCo4euloGF+5m4okL3rEYzM2EEv78mw8zWSMM57dM7kVIgJ2QDvwHSoCI5g==}
     dev: true
 
   /@types/long/4.0.2:
@@ -7128,8 +7129,8 @@ packages:
       makeerror: 1.0.12
     dev: true
 
-  /wasm-ast-types/0.19.0:
-    resolution: {integrity: sha512-SELRqjXMi7U3pB0jslvP0IrafJS9iN/VvySriiBITptBstwuzglhDTj3KFRpb/8LI4mG2ewC4a0/HxSQewQ/3g==}
+  /wasm-ast-types/0.25.0:
+    resolution: {integrity: sha512-ZTjXuBqRf3ntxXmskO1TyTTr8UbmAZGr72JGGctizzpdokMtuLsk5q8jHaFUv/qgQni1KuBxZnHIyaj1lnZegQ==}
     dependencies:
       '@babel/runtime': 7.22.3
       '@babel/types': 7.18.10

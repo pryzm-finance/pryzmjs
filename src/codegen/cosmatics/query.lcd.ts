@@ -1,7 +1,7 @@
 //@ts-nocheck
 import { GetTxRequest, GetTxResponseSDKType, GetTxsEventRequest, GetTxsEventResponseSDKType } from "../cosmos/tx/v1beta1/service";
 import { setPaginationParams } from "../helpers";
-import { LCDClient } from "@osmonauts/lcd";
+import { LCDClient } from "@cosmology/lcd";
 import { QuerySyncStateRequest, QuerySyncStateResponseSDKType } from "./sync_state";
 import { BlockRequest } from "../tendermint/blocksync/types";
 import { BlockSDKType } from "../tendermint/types/block";

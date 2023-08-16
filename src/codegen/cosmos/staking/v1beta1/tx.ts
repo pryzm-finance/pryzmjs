@@ -6,23 +6,23 @@ import { Long, isSet, fromJsonTimestamp, fromTimestamp } from "../../../helpers"
 import * as _m0 from "protobufjs/minimal";
 /** MsgCreateValidator defines a SDK message for creating a new validator. */
 export interface MsgCreateValidator {
-  description?: Description;
-  commission?: CommissionRates;
+  description: Description;
+  commission: CommissionRates;
   minSelfDelegation: string;
   delegatorAddress: string;
   validatorAddress: string;
-  pubkey?: Any;
-  value?: Coin;
+  pubkey: Any;
+  value: Coin;
 }
 /** MsgCreateValidator defines a SDK message for creating a new validator. */
 export interface MsgCreateValidatorSDKType {
-  description?: DescriptionSDKType;
-  commission?: CommissionRatesSDKType;
+  description: DescriptionSDKType;
+  commission: CommissionRatesSDKType;
   min_self_delegation: string;
   delegator_address: string;
   validator_address: string;
-  pubkey?: AnySDKType;
-  value?: CoinSDKType;
+  pubkey: AnySDKType;
+  value: CoinSDKType;
 }
 /** MsgCreateValidatorResponse defines the Msg/CreateValidator response type. */
 export interface MsgCreateValidatorResponse {}
@@ -30,7 +30,7 @@ export interface MsgCreateValidatorResponse {}
 export interface MsgCreateValidatorResponseSDKType {}
 /** MsgEditValidator defines a SDK message for editing an existing validator. */
 export interface MsgEditValidator {
-  description?: Description;
+  description: Description;
   validatorAddress: string;
   /**
    * We pass a reference to the new commission rate and min self delegation as
@@ -43,7 +43,7 @@ export interface MsgEditValidator {
 }
 /** MsgEditValidator defines a SDK message for editing an existing validator. */
 export interface MsgEditValidatorSDKType {
-  description?: DescriptionSDKType;
+  description: DescriptionSDKType;
   validator_address: string;
   commission_rate: string;
   min_self_delegation: string;
@@ -59,7 +59,7 @@ export interface MsgEditValidatorResponseSDKType {}
 export interface MsgDelegate {
   delegatorAddress: string;
   validatorAddress: string;
-  amount?: Coin;
+  amount: Coin;
 }
 /**
  * MsgDelegate defines a SDK message for performing a delegation of coins
@@ -68,7 +68,7 @@ export interface MsgDelegate {
 export interface MsgDelegateSDKType {
   delegator_address: string;
   validator_address: string;
-  amount?: CoinSDKType;
+  amount: CoinSDKType;
 }
 /** MsgDelegateResponse defines the Msg/Delegate response type. */
 export interface MsgDelegateResponse {}
@@ -82,7 +82,7 @@ export interface MsgBeginRedelegate {
   delegatorAddress: string;
   validatorSrcAddress: string;
   validatorDstAddress: string;
-  amount?: Coin;
+  amount: Coin;
 }
 /**
  * MsgBeginRedelegate defines a SDK message for performing a redelegation
@@ -92,15 +92,15 @@ export interface MsgBeginRedelegateSDKType {
   delegator_address: string;
   validator_src_address: string;
   validator_dst_address: string;
-  amount?: CoinSDKType;
+  amount: CoinSDKType;
 }
 /** MsgBeginRedelegateResponse defines the Msg/BeginRedelegate response type. */
 export interface MsgBeginRedelegateResponse {
-  completionTime?: Timestamp;
+  completionTime: Timestamp;
 }
 /** MsgBeginRedelegateResponse defines the Msg/BeginRedelegate response type. */
 export interface MsgBeginRedelegateResponseSDKType {
-  completion_time?: TimestampSDKType;
+  completion_time: TimestampSDKType;
 }
 /**
  * MsgUndelegate defines a SDK message for performing an undelegation from a
@@ -109,7 +109,7 @@ export interface MsgBeginRedelegateResponseSDKType {
 export interface MsgUndelegate {
   delegatorAddress: string;
   validatorAddress: string;
-  amount?: Coin;
+  amount: Coin;
 }
 /**
  * MsgUndelegate defines a SDK message for performing an undelegation from a
@@ -118,15 +118,15 @@ export interface MsgUndelegate {
 export interface MsgUndelegateSDKType {
   delegator_address: string;
   validator_address: string;
-  amount?: CoinSDKType;
+  amount: CoinSDKType;
 }
 /** MsgUndelegateResponse defines the Msg/Undelegate response type. */
 export interface MsgUndelegateResponse {
-  completionTime?: Timestamp;
+  completionTime: Timestamp;
 }
 /** MsgUndelegateResponse defines the Msg/Undelegate response type. */
 export interface MsgUndelegateResponseSDKType {
-  completion_time?: TimestampSDKType;
+  completion_time: TimestampSDKType;
 }
 /**
  * MsgCancelUnbondingDelegation defines the SDK message for performing a cancel unbonding delegation for delegator
@@ -137,7 +137,7 @@ export interface MsgCancelUnbondingDelegation {
   delegatorAddress: string;
   validatorAddress: string;
   /** amount is always less than or equal to unbonding delegation entry balance */
-  amount?: Coin;
+  amount: Coin;
   /** creation_height is the height which the unbonding took place. */
   creationHeight: Long;
 }
@@ -149,7 +149,7 @@ export interface MsgCancelUnbondingDelegation {
 export interface MsgCancelUnbondingDelegationSDKType {
   delegator_address: string;
   validator_address: string;
-  amount?: CoinSDKType;
+  amount: CoinSDKType;
   creation_height: Long;
 }
 /**
@@ -177,7 +177,7 @@ export interface MsgUpdateParams {
    * 
    * NOTE: All parameters must be supplied.
    */
-  params?: Params;
+  params: Params;
 }
 /**
  * MsgUpdateParams is the Msg/UpdateParams request type.
@@ -186,7 +186,7 @@ export interface MsgUpdateParams {
  */
 export interface MsgUpdateParamsSDKType {
   authority: string;
-  params?: ParamsSDKType;
+  params: ParamsSDKType;
 }
 /**
  * MsgUpdateParamsResponse defines the response structure for executing a
@@ -204,13 +204,13 @@ export interface MsgUpdateParamsResponse {}
 export interface MsgUpdateParamsResponseSDKType {}
 function createBaseMsgCreateValidator(): MsgCreateValidator {
   return {
-    description: undefined,
-    commission: undefined,
+    description: Description.fromPartial({}),
+    commission: CommissionRates.fromPartial({}),
     minSelfDelegation: "",
     delegatorAddress: "",
     validatorAddress: "",
-    pubkey: undefined,
-    value: undefined
+    pubkey: Any.fromPartial({}),
+    value: Coin.fromPartial({})
   };
 }
 export const MsgCreateValidator = {
@@ -342,7 +342,7 @@ export const MsgCreateValidatorResponse = {
 };
 function createBaseMsgEditValidator(): MsgEditValidator {
   return {
-    description: undefined,
+    description: Description.fromPartial({}),
     validatorAddress: "",
     commissionRate: "",
     minSelfDelegation: ""
@@ -452,7 +452,7 @@ function createBaseMsgDelegate(): MsgDelegate {
   return {
     delegatorAddress: "",
     validatorAddress: "",
-    amount: undefined
+    amount: Coin.fromPartial({})
   };
 }
 export const MsgDelegate = {
@@ -551,7 +551,7 @@ function createBaseMsgBeginRedelegate(): MsgBeginRedelegate {
     delegatorAddress: "",
     validatorSrcAddress: "",
     validatorDstAddress: "",
-    amount: undefined
+    amount: Coin.fromPartial({})
   };
 }
 export const MsgBeginRedelegate = {
@@ -623,7 +623,7 @@ export const MsgBeginRedelegate = {
 };
 function createBaseMsgBeginRedelegateResponse(): MsgBeginRedelegateResponse {
   return {
-    completionTime: undefined
+    completionTime: Timestamp.fromPartial({})
   };
 }
 export const MsgBeginRedelegateResponse = {
@@ -670,7 +670,7 @@ function createBaseMsgUndelegate(): MsgUndelegate {
   return {
     delegatorAddress: "",
     validatorAddress: "",
-    amount: undefined
+    amount: Coin.fromPartial({})
   };
 }
 export const MsgUndelegate = {
@@ -733,7 +733,7 @@ export const MsgUndelegate = {
 };
 function createBaseMsgUndelegateResponse(): MsgUndelegateResponse {
   return {
-    completionTime: undefined
+    completionTime: Timestamp.fromPartial({})
   };
 }
 export const MsgUndelegateResponse = {
@@ -780,7 +780,7 @@ function createBaseMsgCancelUnbondingDelegation(): MsgCancelUnbondingDelegation 
   return {
     delegatorAddress: "",
     validatorAddress: "",
-    amount: undefined,
+    amount: Coin.fromPartial({}),
     creationHeight: Long.ZERO
   };
 }
@@ -887,7 +887,7 @@ export const MsgCancelUnbondingDelegationResponse = {
 function createBaseMsgUpdateParams(): MsgUpdateParams {
   return {
     authority: "",
-    params: undefined
+    params: Params.fromPartial({})
   };
 }
 export const MsgUpdateParams = {

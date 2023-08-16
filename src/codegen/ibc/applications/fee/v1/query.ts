@@ -8,14 +8,14 @@ import * as _m0 from "protobufjs/minimal";
 /** QueryIncentivizedPacketsRequest defines the request type for the IncentivizedPackets rpc */
 export interface QueryIncentivizedPacketsRequest {
   /** pagination defines an optional pagination for the request. */
-  pagination?: PageRequest;
+  pagination: PageRequest;
   /** block height at which to query */
-  queryHeight?: Long;
+  queryHeight: Long;
 }
 /** QueryIncentivizedPacketsRequest defines the request type for the IncentivizedPackets rpc */
 export interface QueryIncentivizedPacketsRequestSDKType {
-  pagination?: PageRequestSDKType;
-  query_height?: Long;
+  pagination: PageRequestSDKType;
+  query_height: Long;
 }
 /** QueryIncentivizedPacketsResponse defines the response type for the IncentivizedPackets rpc */
 export interface QueryIncentivizedPacketsResponse {
@@ -29,23 +29,23 @@ export interface QueryIncentivizedPacketsResponseSDKType {
 /** QueryIncentivizedPacketRequest defines the request type for the IncentivizedPacket rpc */
 export interface QueryIncentivizedPacketRequest {
   /** unique packet identifier comprised of channel ID, port ID and sequence */
-  packetId?: PacketId;
+  packetId: PacketId;
   /** block height at which to query */
-  queryHeight?: Long;
+  queryHeight: Long;
 }
 /** QueryIncentivizedPacketRequest defines the request type for the IncentivizedPacket rpc */
 export interface QueryIncentivizedPacketRequestSDKType {
-  packet_id?: PacketIdSDKType;
-  query_height?: Long;
+  packet_id: PacketIdSDKType;
+  query_height: Long;
 }
 /** QueryIncentivizedPacketsResponse defines the response type for the IncentivizedPacket rpc */
 export interface QueryIncentivizedPacketResponse {
   /** the identified fees for the incentivized packet */
-  incentivizedPacket?: IdentifiedPacketFees;
+  incentivizedPacket: IdentifiedPacketFees;
 }
 /** QueryIncentivizedPacketsResponse defines the response type for the IncentivizedPacket rpc */
 export interface QueryIncentivizedPacketResponseSDKType {
-  incentivized_packet?: IdentifiedPacketFeesSDKType;
+  incentivized_packet: IdentifiedPacketFeesSDKType;
 }
 /**
  * QueryIncentivizedPacketsForChannelRequest defines the request type for querying for all incentivized packets
@@ -53,21 +53,21 @@ export interface QueryIncentivizedPacketResponseSDKType {
  */
 export interface QueryIncentivizedPacketsForChannelRequest {
   /** pagination defines an optional pagination for the request. */
-  pagination?: PageRequest;
+  pagination: PageRequest;
   portId: string;
   channelId: string;
   /** Height to query at */
-  queryHeight?: Long;
+  queryHeight: Long;
 }
 /**
  * QueryIncentivizedPacketsForChannelRequest defines the request type for querying for all incentivized packets
  * for a specific channel
  */
 export interface QueryIncentivizedPacketsForChannelRequestSDKType {
-  pagination?: PageRequestSDKType;
+  pagination: PageRequestSDKType;
   port_id: string;
   channel_id: string;
-  query_height?: Long;
+  query_height: Long;
 }
 /** QueryIncentivizedPacketsResponse defines the response type for the incentivized packets RPC */
 export interface QueryIncentivizedPacketsForChannelResponse {
@@ -81,11 +81,11 @@ export interface QueryIncentivizedPacketsForChannelResponseSDKType {
 /** QueryTotalRecvFeesRequest defines the request type for the TotalRecvFees rpc */
 export interface QueryTotalRecvFeesRequest {
   /** the packet identifier for the associated fees */
-  packetId?: PacketId;
+  packetId: PacketId;
 }
 /** QueryTotalRecvFeesRequest defines the request type for the TotalRecvFees rpc */
 export interface QueryTotalRecvFeesRequestSDKType {
-  packet_id?: PacketIdSDKType;
+  packet_id: PacketIdSDKType;
 }
 /** QueryTotalRecvFeesResponse defines the response type for the TotalRecvFees rpc */
 export interface QueryTotalRecvFeesResponse {
@@ -99,11 +99,11 @@ export interface QueryTotalRecvFeesResponseSDKType {
 /** QueryTotalAckFeesRequest defines the request type for the TotalAckFees rpc */
 export interface QueryTotalAckFeesRequest {
   /** the packet identifier for the associated fees */
-  packetId?: PacketId;
+  packetId: PacketId;
 }
 /** QueryTotalAckFeesRequest defines the request type for the TotalAckFees rpc */
 export interface QueryTotalAckFeesRequestSDKType {
-  packet_id?: PacketIdSDKType;
+  packet_id: PacketIdSDKType;
 }
 /** QueryTotalAckFeesResponse defines the response type for the TotalAckFees rpc */
 export interface QueryTotalAckFeesResponse {
@@ -117,11 +117,11 @@ export interface QueryTotalAckFeesResponseSDKType {
 /** QueryTotalTimeoutFeesRequest defines the request type for the TotalTimeoutFees rpc */
 export interface QueryTotalTimeoutFeesRequest {
   /** the packet identifier for the associated fees */
-  packetId?: PacketId;
+  packetId: PacketId;
 }
 /** QueryTotalTimeoutFeesRequest defines the request type for the TotalTimeoutFees rpc */
 export interface QueryTotalTimeoutFeesRequestSDKType {
-  packet_id?: PacketIdSDKType;
+  packet_id: PacketIdSDKType;
 }
 /** QueryTotalTimeoutFeesResponse defines the response type for the TotalTimeoutFees rpc */
 export interface QueryTotalTimeoutFeesResponse {
@@ -177,14 +177,14 @@ export interface QueryCounterpartyPayeeResponseSDKType {
 /** QueryFeeEnabledChannelsRequest defines the request type for the FeeEnabledChannels rpc */
 export interface QueryFeeEnabledChannelsRequest {
   /** pagination defines an optional pagination for the request. */
-  pagination?: PageRequest;
+  pagination: PageRequest;
   /** block height at which to query */
-  queryHeight?: Long;
+  queryHeight: Long;
 }
 /** QueryFeeEnabledChannelsRequest defines the request type for the FeeEnabledChannels rpc */
 export interface QueryFeeEnabledChannelsRequestSDKType {
-  pagination?: PageRequestSDKType;
-  query_height?: Long;
+  pagination: PageRequestSDKType;
+  query_height: Long;
 }
 /** QueryFeeEnabledChannelsResponse defines the response type for the FeeEnabledChannels rpc */
 export interface QueryFeeEnabledChannelsResponse {
@@ -218,7 +218,7 @@ export interface QueryFeeEnabledChannelResponseSDKType {
 }
 function createBaseQueryIncentivizedPacketsRequest(): QueryIncentivizedPacketsRequest {
   return {
-    pagination: undefined,
+    pagination: PageRequest.fromPartial({}),
     queryHeight: Long.UZERO
   };
 }
@@ -322,7 +322,7 @@ export const QueryIncentivizedPacketsResponse = {
 };
 function createBaseQueryIncentivizedPacketRequest(): QueryIncentivizedPacketRequest {
   return {
-    packetId: undefined,
+    packetId: PacketId.fromPartial({}),
     queryHeight: Long.UZERO
   };
 }
@@ -377,7 +377,7 @@ export const QueryIncentivizedPacketRequest = {
 };
 function createBaseQueryIncentivizedPacketResponse(): QueryIncentivizedPacketResponse {
   return {
-    incentivizedPacket: undefined
+    incentivizedPacket: IdentifiedPacketFees.fromPartial({})
   };
 }
 export const QueryIncentivizedPacketResponse = {
@@ -422,7 +422,7 @@ export const QueryIncentivizedPacketResponse = {
 };
 function createBaseQueryIncentivizedPacketsForChannelRequest(): QueryIncentivizedPacketsForChannelRequest {
   return {
-    pagination: undefined,
+    pagination: PageRequest.fromPartial({}),
     portId: "",
     channelId: "",
     queryHeight: Long.UZERO
@@ -546,7 +546,7 @@ export const QueryIncentivizedPacketsForChannelResponse = {
 };
 function createBaseQueryTotalRecvFeesRequest(): QueryTotalRecvFeesRequest {
   return {
-    packetId: undefined
+    packetId: PacketId.fromPartial({})
   };
 }
 export const QueryTotalRecvFeesRequest = {
@@ -640,7 +640,7 @@ export const QueryTotalRecvFeesResponse = {
 };
 function createBaseQueryTotalAckFeesRequest(): QueryTotalAckFeesRequest {
   return {
-    packetId: undefined
+    packetId: PacketId.fromPartial({})
   };
 }
 export const QueryTotalAckFeesRequest = {
@@ -734,7 +734,7 @@ export const QueryTotalAckFeesResponse = {
 };
 function createBaseQueryTotalTimeoutFeesRequest(): QueryTotalTimeoutFeesRequest {
   return {
-    packetId: undefined
+    packetId: PacketId.fromPartial({})
   };
 }
 export const QueryTotalTimeoutFeesRequest = {
@@ -1028,7 +1028,7 @@ export const QueryCounterpartyPayeeResponse = {
 };
 function createBaseQueryFeeEnabledChannelsRequest(): QueryFeeEnabledChannelsRequest {
   return {
-    pagination: undefined,
+    pagination: PageRequest.fromPartial({}),
     queryHeight: Long.UZERO
   };
 }

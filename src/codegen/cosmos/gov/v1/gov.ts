@@ -182,17 +182,17 @@ export interface Proposal {
    * querying a proposal via gRPC, this field is not populated until the
    * proposal's voting period has ended.
    */
-  finalTallyResult?: TallyResult;
+  finalTallyResult: TallyResult;
   /** submit_time is the time of proposal submission. */
-  submitTime?: Timestamp;
+  submitTime: Timestamp;
   /** deposit_end_time is the end time for deposition. */
-  depositEndTime?: Timestamp;
+  depositEndTime: Timestamp;
   /** total_deposit is the total deposit on the proposal. */
   totalDeposit: Coin[];
   /** voting_start_time is the starting time to vote on a proposal. */
-  votingStartTime?: Timestamp;
+  votingStartTime: Timestamp;
   /** voting_end_time is the end time of voting on a proposal. */
-  votingEndTime?: Timestamp;
+  votingEndTime: Timestamp;
   /** metadata is any arbitrary metadata attached to the proposal. */
   metadata: string;
   /**
@@ -219,12 +219,12 @@ export interface ProposalSDKType {
   id: Long;
   messages: AnySDKType[];
   status: ProposalStatus;
-  final_tally_result?: TallyResultSDKType;
-  submit_time?: TimestampSDKType;
-  deposit_end_time?: TimestampSDKType;
+  final_tally_result: TallyResultSDKType;
+  submit_time: TimestampSDKType;
+  deposit_end_time: TimestampSDKType;
   total_deposit: CoinSDKType[];
-  voting_start_time?: TimestampSDKType;
-  voting_end_time?: TimestampSDKType;
+  voting_start_time: TimestampSDKType;
+  voting_end_time: TimestampSDKType;
   metadata: string;
   title: string;
   summary: string;
@@ -280,21 +280,21 @@ export interface DepositParams {
    * Maximum period for Atom holders to deposit on a proposal. Initial value: 2
    * months.
    */
-  maxDepositPeriod?: Duration;
+  maxDepositPeriod: Duration;
 }
 /** DepositParams defines the params for deposits on governance proposals. */
 export interface DepositParamsSDKType {
   min_deposit: CoinSDKType[];
-  max_deposit_period?: DurationSDKType;
+  max_deposit_period: DurationSDKType;
 }
 /** VotingParams defines the params for voting on governance proposals. */
 export interface VotingParams {
   /** Duration of the voting period. */
-  votingPeriod?: Duration;
+  votingPeriod: Duration;
 }
 /** VotingParams defines the params for voting on governance proposals. */
 export interface VotingParamsSDKType {
-  voting_period?: DurationSDKType;
+  voting_period: DurationSDKType;
 }
 /** TallyParams defines the params for tallying votes on governance proposals. */
 export interface TallyParams {
@@ -329,9 +329,9 @@ export interface Params {
    * Maximum period for Atom holders to deposit on a proposal. Initial value: 2
    * months.
    */
-  maxDepositPeriod?: Duration;
+  maxDepositPeriod: Duration;
   /** Duration of the voting period. */
-  votingPeriod?: Duration;
+  votingPeriod: Duration;
   /**
    * Minimum percentage of total stake needed to vote for a result to be
    *  considered valid.
@@ -360,8 +360,8 @@ export interface Params {
  */
 export interface ParamsSDKType {
   min_deposit: CoinSDKType[];
-  max_deposit_period?: DurationSDKType;
-  voting_period?: DurationSDKType;
+  max_deposit_period: DurationSDKType;
+  voting_period: DurationSDKType;
   quorum: string;
   threshold: string;
   veto_threshold: string;
@@ -408,7 +408,7 @@ export const WeightedVoteOption = {
   },
   fromJSON(object: any): WeightedVoteOption {
     return {
-      option: isSet(object.option) ? voteOptionFromJSON(object.option) : 0,
+      option: isSet(object.option) ? voteOptionFromJSON(object.option) : -1,
       weight: isSet(object.weight) ? String(object.weight) : ""
     };
   },
@@ -499,12 +499,12 @@ function createBaseProposal(): Proposal {
     id: Long.UZERO,
     messages: [],
     status: 0,
-    finalTallyResult: undefined,
-    submitTime: undefined,
-    depositEndTime: undefined,
+    finalTallyResult: TallyResult.fromPartial({}),
+    submitTime: Timestamp.fromPartial({}),
+    depositEndTime: Timestamp.fromPartial({}),
     totalDeposit: [],
-    votingStartTime: undefined,
-    votingEndTime: undefined,
+    votingStartTime: Timestamp.fromPartial({}),
+    votingEndTime: Timestamp.fromPartial({}),
     metadata: "",
     title: "",
     summary: "",
@@ -611,7 +611,7 @@ export const Proposal = {
     return {
       id: isSet(object.id) ? Long.fromValue(object.id) : Long.UZERO,
       messages: Array.isArray(object?.messages) ? object.messages.map((e: any) => Any.fromJSON(e)) : [],
-      status: isSet(object.status) ? proposalStatusFromJSON(object.status) : 0,
+      status: isSet(object.status) ? proposalStatusFromJSON(object.status) : -1,
       finalTallyResult: isSet(object.finalTallyResult) ? TallyResult.fromJSON(object.finalTallyResult) : undefined,
       submitTime: isSet(object.submitTime) ? fromJsonTimestamp(object.submitTime) : undefined,
       depositEndTime: isSet(object.depositEndTime) ? fromJsonTimestamp(object.depositEndTime) : undefined,
@@ -824,7 +824,7 @@ export const Vote = {
 function createBaseDepositParams(): DepositParams {
   return {
     minDeposit: [],
-    maxDepositPeriod: undefined
+    maxDepositPeriod: Duration.fromPartial({})
   };
 }
 export const DepositParams = {
@@ -882,7 +882,7 @@ export const DepositParams = {
 };
 function createBaseVotingParams(): VotingParams {
   return {
-    votingPeriod: undefined
+    votingPeriod: Duration.fromPartial({})
   };
 }
 export const VotingParams = {
@@ -993,8 +993,8 @@ export const TallyParams = {
 function createBaseParams(): Params {
   return {
     minDeposit: [],
-    maxDepositPeriod: undefined,
-    votingPeriod: undefined,
+    maxDepositPeriod: Duration.fromPartial({}),
+    votingPeriod: Duration.fromPartial({}),
     quorum: "",
     threshold: "",
     vetoThreshold: "",

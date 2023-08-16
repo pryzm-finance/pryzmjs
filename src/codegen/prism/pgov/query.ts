@@ -12,11 +12,11 @@ export interface QueryParamsRequestSDKType {}
 /** QueryParamsResponse is response type for the Query/Params RPC method. */
 export interface QueryParamsResponse {
   /** params holds all the parameters of this module. */
-  params?: Params;
+  params: Params;
 }
 /** QueryParamsResponse is response type for the Query/Params RPC method. */
 export interface QueryParamsResponseSDKType {
-  params?: ParamsSDKType;
+  params: ParamsSDKType;
 }
 export interface QueryGetStakedPAssetRequest {
   account: string;
@@ -27,24 +27,24 @@ export interface QueryGetStakedPAssetRequestSDKType {
   p_asset: string;
 }
 export interface QueryGetStakedPAssetResponse {
-  stakedPAsset?: StakedPAsset;
+  stakedPAsset: StakedPAsset;
 }
 export interface QueryGetStakedPAssetResponseSDKType {
-  staked_p_asset?: StakedPAssetSDKType;
+  staked_p_asset: StakedPAssetSDKType;
 }
 export interface QueryAllStakedPAssetRequest {
-  pagination?: PageRequest;
+  pagination: PageRequest;
 }
 export interface QueryAllStakedPAssetRequestSDKType {
-  pagination?: PageRequestSDKType;
+  pagination: PageRequestSDKType;
 }
 export interface QueryAllStakedPAssetResponse {
   stakedPAsset: StakedPAsset[];
-  pagination?: PageResponse;
+  pagination: PageResponse;
 }
 export interface QueryAllStakedPAssetResponseSDKType {
   staked_p_asset: StakedPAssetSDKType[];
-  pagination?: PageResponseSDKType;
+  pagination: PageResponseSDKType;
 }
 export interface QueryGetTotalStakedPAssetRequest {
   account: string;
@@ -71,24 +71,24 @@ export interface QueryGetVoteRequestSDKType {
   voter: string;
 }
 export interface QueryGetVoteResponse {
-  vote?: Vote;
+  vote: Vote;
 }
 export interface QueryGetVoteResponseSDKType {
-  vote?: VoteSDKType;
+  vote: VoteSDKType;
 }
 export interface QueryAllVoteRequest {
-  pagination?: PageRequest;
+  pagination: PageRequest;
 }
 export interface QueryAllVoteRequestSDKType {
-  pagination?: PageRequestSDKType;
+  pagination: PageRequestSDKType;
 }
 export interface QueryAllVoteResponse {
   vote: Vote[];
-  pagination?: PageResponse;
+  pagination: PageResponse;
 }
 export interface QueryAllVoteResponseSDKType {
   vote: VoteSDKType[];
-  pagination?: PageResponseSDKType;
+  pagination: PageResponseSDKType;
 }
 export interface QueryGetProposalRequest {
   asset: string;
@@ -99,26 +99,26 @@ export interface QueryGetProposalRequestSDKType {
   proposal_id: Long;
 }
 export interface QueryGetProposalResponse {
-  proposal?: Proposal;
+  proposal: Proposal;
 }
 export interface QueryGetProposalResponseSDKType {
-  proposal?: ProposalSDKType;
+  proposal: ProposalSDKType;
 }
 export interface QueryAllProposalRequest {
-  asset?: string;
-  pagination?: PageRequest;
+  asset: string;
+  pagination: PageRequest;
 }
 export interface QueryAllProposalRequestSDKType {
-  asset?: string;
-  pagination?: PageRequestSDKType;
+  asset: string;
+  pagination: PageRequestSDKType;
 }
 export interface QueryAllProposalResponse {
   proposal: Proposal[];
-  pagination?: PageResponse;
+  pagination: PageResponse;
 }
 export interface QueryAllProposalResponseSDKType {
   proposal: ProposalSDKType[];
-  pagination?: PageResponseSDKType;
+  pagination: PageResponseSDKType;
 }
 function createBaseQueryParamsRequest(): QueryParamsRequest {
   return {};
@@ -155,7 +155,7 @@ export const QueryParamsRequest = {
 };
 function createBaseQueryParamsResponse(): QueryParamsResponse {
   return {
-    params: undefined
+    params: Params.fromPartial({})
   };
 }
 export const QueryParamsResponse = {
@@ -255,7 +255,7 @@ export const QueryGetStakedPAssetRequest = {
 };
 function createBaseQueryGetStakedPAssetResponse(): QueryGetStakedPAssetResponse {
   return {
-    stakedPAsset: undefined
+    stakedPAsset: StakedPAsset.fromPartial({})
   };
 }
 export const QueryGetStakedPAssetResponse = {
@@ -300,7 +300,7 @@ export const QueryGetStakedPAssetResponse = {
 };
 function createBaseQueryAllStakedPAssetRequest(): QueryAllStakedPAssetRequest {
   return {
-    pagination: undefined
+    pagination: PageRequest.fromPartial({})
   };
 }
 export const QueryAllStakedPAssetRequest = {
@@ -346,7 +346,7 @@ export const QueryAllStakedPAssetRequest = {
 function createBaseQueryAllStakedPAssetResponse(): QueryAllStakedPAssetResponse {
   return {
     stakedPAsset: [],
-    pagination: undefined
+    pagination: PageResponse.fromPartial({})
   };
 }
 export const QueryAllStakedPAssetResponse = {
@@ -569,7 +569,7 @@ export const QueryGetVoteRequest = {
 };
 function createBaseQueryGetVoteResponse(): QueryGetVoteResponse {
   return {
-    vote: undefined
+    vote: Vote.fromPartial({})
   };
 }
 export const QueryGetVoteResponse = {
@@ -614,7 +614,7 @@ export const QueryGetVoteResponse = {
 };
 function createBaseQueryAllVoteRequest(): QueryAllVoteRequest {
   return {
-    pagination: undefined
+    pagination: PageRequest.fromPartial({})
   };
 }
 export const QueryAllVoteRequest = {
@@ -660,7 +660,7 @@ export const QueryAllVoteRequest = {
 function createBaseQueryAllVoteResponse(): QueryAllVoteResponse {
   return {
     vote: [],
-    pagination: undefined
+    pagination: PageResponse.fromPartial({})
   };
 }
 export const QueryAllVoteResponse = {
@@ -773,7 +773,7 @@ export const QueryGetProposalRequest = {
 };
 function createBaseQueryGetProposalResponse(): QueryGetProposalResponse {
   return {
-    proposal: undefined
+    proposal: Proposal.fromPartial({})
   };
 }
 export const QueryGetProposalResponse = {
@@ -819,7 +819,7 @@ export const QueryGetProposalResponse = {
 function createBaseQueryAllProposalRequest(): QueryAllProposalRequest {
   return {
     asset: "",
-    pagination: undefined
+    pagination: PageRequest.fromPartial({})
   };
 }
 export const QueryAllProposalRequest = {
@@ -874,7 +874,7 @@ export const QueryAllProposalRequest = {
 function createBaseQueryAllProposalResponse(): QueryAllProposalResponse {
   return {
     proposal: [],
-    pagination: undefined
+    pagination: PageResponse.fromPartial({})
   };
 }
 export const QueryAllProposalResponse = {

@@ -4,17 +4,17 @@ import * as _m0 from "protobufjs/minimal";
 import { isSet } from "../../helpers";
 /** GenesisState defines the treasury module's genesis state. */
 export interface GenesisState {
-  action?: Action;
+  action: Action;
   flowTradeList: FlowTrade[];
 }
 /** GenesisState defines the treasury module's genesis state. */
 export interface GenesisStateSDKType {
-  action?: ActionSDKType;
+  action: ActionSDKType;
   flow_trade_list: FlowTradeSDKType[];
 }
 function createBaseGenesisState(): GenesisState {
   return {
-    action: undefined,
+    action: Action.fromPartial({}),
     flowTradeList: []
   };
 }

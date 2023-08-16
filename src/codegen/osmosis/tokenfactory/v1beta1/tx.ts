@@ -53,7 +53,7 @@ export interface MsgCreateDenomResponseSDKType {
  */
 export interface MsgMint {
   sender: string;
-  amount?: Coin;
+  amount: Coin;
   mintToAddress: string;
 }
 /**
@@ -62,7 +62,7 @@ export interface MsgMint {
  */
 export interface MsgMintSDKType {
   sender: string;
-  amount?: CoinSDKType;
+  amount: CoinSDKType;
   mintToAddress: string;
 }
 export interface MsgMintResponse {}
@@ -73,7 +73,7 @@ export interface MsgMintResponseSDKType {}
  */
 export interface MsgBurn {
   sender: string;
-  amount?: Coin;
+  amount: Coin;
   burnFromAddress: string;
 }
 /**
@@ -82,7 +82,7 @@ export interface MsgBurn {
  */
 export interface MsgBurnSDKType {
   sender: string;
-  amount?: CoinSDKType;
+  amount: CoinSDKType;
   burnFromAddress: string;
 }
 export interface MsgBurnResponse {}
@@ -121,7 +121,7 @@ export interface MsgChangeAdminResponseSDKType {}
  */
 export interface MsgSetDenomMetadata {
   sender: string;
-  metadata?: Metadata;
+  metadata: Metadata;
 }
 /**
  * MsgSetDenomMetadata is the sdk.Msg type for allowing an admin account to set
@@ -129,7 +129,7 @@ export interface MsgSetDenomMetadata {
  */
 export interface MsgSetDenomMetadataSDKType {
   sender: string;
-  metadata?: MetadataSDKType;
+  metadata: MetadataSDKType;
 }
 /**
  * MsgSetDenomMetadataResponse defines the response structure for an executed
@@ -143,13 +143,13 @@ export interface MsgSetDenomMetadataResponse {}
 export interface MsgSetDenomMetadataResponseSDKType {}
 export interface MsgForceTransfer {
   sender: string;
-  amount?: Coin;
+  amount: Coin;
   transferFromAddress: string;
   transferToAddress: string;
 }
 export interface MsgForceTransferSDKType {
   sender: string;
-  amount?: CoinSDKType;
+  amount: CoinSDKType;
   transferFromAddress: string;
   transferToAddress: string;
 }
@@ -258,7 +258,7 @@ export const MsgCreateDenomResponse = {
 function createBaseMsgMint(): MsgMint {
   return {
     sender: "",
-    amount: undefined,
+    amount: Coin.fromPartial({}),
     mintToAddress: ""
   };
 }
@@ -356,7 +356,7 @@ export const MsgMintResponse = {
 function createBaseMsgBurn(): MsgBurn {
   return {
     sender: "",
-    amount: undefined,
+    amount: Coin.fromPartial({}),
     burnFromAddress: ""
   };
 }
@@ -552,7 +552,7 @@ export const MsgChangeAdminResponse = {
 function createBaseMsgSetDenomMetadata(): MsgSetDenomMetadata {
   return {
     sender: "",
-    metadata: undefined
+    metadata: Metadata.fromPartial({})
   };
 }
 export const MsgSetDenomMetadata = {
@@ -640,7 +640,7 @@ export const MsgSetDenomMetadataResponse = {
 function createBaseMsgForceTransfer(): MsgForceTransfer {
   return {
     sender: "",
-    amount: undefined,
+    amount: Coin.fromPartial({}),
     transferFromAddress: "",
     transferToAddress: ""
   };

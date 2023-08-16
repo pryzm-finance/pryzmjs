@@ -17,14 +17,14 @@ export interface QueryCurrentPlanRequestSDKType {}
  */
 export interface QueryCurrentPlanResponse {
   /** plan is the current upgrade plan. */
-  plan?: Plan;
+  plan: Plan;
 }
 /**
  * QueryCurrentPlanResponse is the response type for the Query/CurrentPlan RPC
  * method.
  */
 export interface QueryCurrentPlanResponseSDKType {
-  plan?: PlanSDKType;
+  plan: PlanSDKType;
 }
 /**
  * QueryCurrentPlanRequest is the request type for the Query/AppliedPlan RPC
@@ -105,7 +105,7 @@ export interface QueryModuleVersionsRequest {
    * consensus version from state. Leaving this empty will
    * fetch the full list of module versions from state
    */
-  moduleName?: string;
+  moduleName: string;
 }
 /**
  * QueryModuleVersionsRequest is the request type for the Query/ModuleVersions
@@ -114,7 +114,7 @@ export interface QueryModuleVersionsRequest {
  * Since: cosmos-sdk 0.43
  */
 export interface QueryModuleVersionsRequestSDKType {
-  module_name?: string;
+  module_name: string;
 }
 /**
  * QueryModuleVersionsResponse is the response type for the Query/ModuleVersions
@@ -198,7 +198,7 @@ export const QueryCurrentPlanRequest = {
 };
 function createBaseQueryCurrentPlanResponse(): QueryCurrentPlanResponse {
   return {
-    plan: undefined
+    plan: Plan.fromPartial({})
   };
 }
 export const QueryCurrentPlanResponse = {

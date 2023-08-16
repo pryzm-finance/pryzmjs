@@ -28,7 +28,7 @@ export class QueryClientImpl implements Query {
 export const QueryDesc = {
   serviceName: "osmosis.epochs.v1beta1.Query"
 };
-export const QueryEpochsInfoDesc: UnaryMethodDefinitionish = {
+export const QueryEpochInfosDesc: UnaryMethodDefinitionish = {
   methodName: "EpochInfos",
   service: QueryDesc,
   requestStream: false,

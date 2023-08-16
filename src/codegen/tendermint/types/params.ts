@@ -6,20 +6,20 @@ import * as _m0 from "protobufjs/minimal";
  * validity of blocks.
  */
 export interface ConsensusParams {
-  block?: BlockParams;
-  evidence?: EvidenceParams;
-  validator?: ValidatorParams;
-  version?: VersionParams;
+  block: BlockParams;
+  evidence: EvidenceParams;
+  validator: ValidatorParams;
+  version: VersionParams;
 }
 /**
  * ConsensusParams contains consensus critical parameters that determine the
  * validity of blocks.
  */
 export interface ConsensusParamsSDKType {
-  block?: BlockParamsSDKType;
-  evidence?: EvidenceParamsSDKType;
-  validator?: ValidatorParamsSDKType;
-  version?: VersionParamsSDKType;
+  block: BlockParamsSDKType;
+  evidence: EvidenceParamsSDKType;
+  validator: ValidatorParamsSDKType;
+  version: VersionParamsSDKType;
 }
 /** BlockParams contains limits on the block size. */
 export interface BlockParams {
@@ -55,7 +55,7 @@ export interface EvidenceParams {
    * mechanism for handling [Nothing-At-Stake
    * attacks](https://github.com/ethereum/wiki/wiki/Proof-of-Stake-FAQ#what-is-the-nothing-at-stake-problem-and-how-can-it-be-fixed).
    */
-  maxAgeDuration?: Duration;
+  maxAgeDuration: Duration;
   /**
    * This sets the maximum size of total evidence in bytes that can be committed in a single block.
    * and should fall comfortably under the max block bytes.
@@ -66,7 +66,7 @@ export interface EvidenceParams {
 /** EvidenceParams determine how we handle evidence of malfeasance. */
 export interface EvidenceParamsSDKType {
   max_age_num_blocks: Long;
-  max_age_duration?: DurationSDKType;
+  max_age_duration: DurationSDKType;
   max_bytes: Long;
 }
 /**
@@ -111,10 +111,10 @@ export interface HashedParamsSDKType {
 }
 function createBaseConsensusParams(): ConsensusParams {
   return {
-    block: undefined,
-    evidence: undefined,
-    validator: undefined,
-    version: undefined
+    block: BlockParams.fromPartial({}),
+    evidence: EvidenceParams.fromPartial({}),
+    validator: ValidatorParams.fromPartial({}),
+    version: VersionParams.fromPartial({})
   };
 }
 export const ConsensusParams = {
@@ -242,7 +242,7 @@ export const BlockParams = {
 function createBaseEvidenceParams(): EvidenceParams {
   return {
     maxAgeNumBlocks: Long.ZERO,
-    maxAgeDuration: undefined,
+    maxAgeDuration: Duration.fromPartial({}),
     maxBytes: Long.ZERO
   };
 }

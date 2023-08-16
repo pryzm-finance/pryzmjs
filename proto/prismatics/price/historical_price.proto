@@ -1,0 +1,42 @@
+syntax = "proto3";
+package prismatics.price;
+
+import "gogoproto/gogo.proto";
+import "google/protobuf/timestamp.proto";
+import "cosmos_proto/cosmos.proto";
+
+option go_package = "github.com/prism-finance/prismatics/types/price";
+
+message HistoricalPrice {
+  google.protobuf.Timestamp time = 1 [(gogoproto.stdtime) = true, (gogoproto.nullable) = false];
+  string min = 2 [
+    (cosmos_proto.scalar) = "cosmos.Dec",
+    (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Dec",
+    (gogoproto.nullable) = true
+  ];
+  string max = 3 [
+    (cosmos_proto.scalar) = "cosmos.Dec",
+    (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Dec",
+    (gogoproto.nullable) = true
+  ];
+  string avg = 4 [
+    (cosmos_proto.scalar) = "cosmos.Dec",
+    (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Dec",
+    (gogoproto.nullable) = true
+  ];
+}
+
+enum TimeResolutionType {
+  option (gogoproto.goproto_enum_prefix) = false;
+  TIME_RESOLUTION_TYPE_MINUTE = 0 [(gogoproto.enumvalue_customname) = "MinuteTimeResolutionType"];
+  TIME_RESOLUTION_TYPE_HOUR = 1 [(gogoproto.enumvalue_customname) = "HourTimeResolutionType"];
+  TIME_RESOLUTION_TYPE_DAY = 2 [(gogoproto.enumvalue_customname) = "DayTimeResolutionType"];
+  TIME_RESOLUTION_TYPE_WEEK = 3 [(gogoproto.enumvalue_customname) = "WeekTimeResolutionType"];
+  TIME_RESOLUTION_TYPE_MONTH = 4 [(gogoproto.enumvalue_customname) = "MonthTimeResolutionType"];
+  TIME_RESOLUTION_TYPE_YEAR = 5 [(gogoproto.enumvalue_customname) = "YearTimeResolutionType"];
+}
+
+message TimeResolution {
+  TimeResolutionType type = 1;
+  uint32 value = 2;
+}

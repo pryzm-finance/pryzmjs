@@ -13,21 +13,21 @@ export interface PoolRewardTokenSDKType {
 }
 export interface Pool_RewardsEntry {
   key: string;
-  value?: PoolRewardToken;
+  value: PoolRewardToken;
 }
 export interface Pool_RewardsEntrySDKType {
   key: string;
-  value?: PoolRewardTokenSDKType;
+  value: PoolRewardTokenSDKType;
 }
 export interface Pool {
-  bondedToken?: Coin;
-  rewards?: {
+  bondedToken: Coin;
+  rewards: {
     [key: string]: PoolRewardToken;
   };
 }
 export interface PoolSDKType {
-  bonded_token?: CoinSDKType;
-  rewards?: {
+  bonded_token: CoinSDKType;
+  rewards: {
     [key: string]: PoolRewardTokenSDKType;
   };
 }
@@ -99,7 +99,7 @@ export const PoolRewardToken = {
 function createBasePool_RewardsEntry(): Pool_RewardsEntry {
   return {
     key: "",
-    value: undefined
+    value: PoolRewardToken.fromPartial({})
   };
 }
 export const Pool_RewardsEntry = {
@@ -153,7 +153,7 @@ export const Pool_RewardsEntry = {
 };
 function createBasePool(): Pool {
   return {
-    bondedToken: undefined,
+    bondedToken: Coin.fromPartial({}),
     rewards: {}
   };
 }

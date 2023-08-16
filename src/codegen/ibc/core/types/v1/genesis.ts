@@ -9,23 +9,23 @@ import { isSet } from "../../../../helpers";
 /** GenesisState defines the ibc module's genesis state. */
 export interface GenesisState {
   /** ICS002 - Clients genesis state */
-  clientGenesis?: GenesisState1;
+  clientGenesis: GenesisState1;
   /** ICS003 - Connections genesis state */
-  connectionGenesis?: GenesisState2;
+  connectionGenesis: GenesisState2;
   /** ICS004 - Channel genesis state */
-  channelGenesis?: GenesisState3;
+  channelGenesis: GenesisState3;
 }
 /** GenesisState defines the ibc module's genesis state. */
 export interface GenesisStateSDKType {
-  client_genesis?: GenesisState1SDKType;
-  connection_genesis?: GenesisState2SDKType;
-  channel_genesis?: GenesisState3SDKType;
+  client_genesis: GenesisState1SDKType;
+  connection_genesis: GenesisState2SDKType;
+  channel_genesis: GenesisState3SDKType;
 }
 function createBaseGenesisState(): GenesisState {
   return {
-    clientGenesis: undefined,
-    connectionGenesis: undefined,
-    channelGenesis: undefined
+    clientGenesis: GenesisState1.fromPartial({}),
+    connectionGenesis: GenesisState2.fromPartial({}),
+    channelGenesis: GenesisState3.fromPartial({})
   };
 }
 export const GenesisState = {

@@ -1,6 +1,6 @@
 {
   "name": "@prism-finance/prismjs",
-  "version": "0.9.0",
+  "version": "0.9.1",
   "description": "Javascript SDK for Prism",
   "author": "amin <amin@prismprotocol.app>",
   "homepage": "https://github.com/prism-finance/prismjs#readme",
@@ -42,7 +42,7 @@
     "@babel/plugin-transform-runtime": "7.21.4",
     "@babel/preset-env": "7.21.4",
     "@babel/preset-typescript": "^7.21.4",
-    "@osmonauts/telescope": "^0.96.0",
+    "@cosmology/telescope": "^0.104.0",
     "@protobufs/cosmos": "^0.1.0",
     "@protobufs/gogoproto": "^0.0.10",
     "@types/jest": "^29.5.0",
@@ -70,9 +70,9 @@
     "@cosmjs/proto-signing": "0.31.0",
     "@cosmjs/stargate": "0.31.0",
     "@cosmjs/tendermint-rpc": "0.31.0",
+    "@cosmology/lcd": "^0.12.0",
     "@improbable-eng/grpc-web": "^0.15.0",
     "@improbable-eng/grpc-web-node-http-transport": "^0.15.0",
-    "@osmonauts/lcd": "0.10.0",
     "browser-headers": "^0.4.1",
     "protobufjs": "^6.11.2"
   }

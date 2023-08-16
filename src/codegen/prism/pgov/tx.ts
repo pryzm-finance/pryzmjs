@@ -5,11 +5,11 @@ import { Long, isSet, bytesFromBase64, base64FromBytes } from "../../helpers";
 import * as _m0 from "protobufjs/minimal";
 export interface MsgUpdateParams {
   authority: string;
-  params?: Params;
+  params: Params;
 }
 export interface MsgUpdateParamsSDKType {
   authority: string;
-  params?: ParamsSDKType;
+  params: ParamsSDKType;
 }
 export interface MsgUpdateParamsResponse {}
 export interface MsgUpdateParamsResponseSDKType {}
@@ -60,20 +60,20 @@ export interface MsgSubmitProposal {
   asset: string;
   proposal: Uint8Array;
   height: Long;
-  proof?: ProofOps;
+  proof: ProofOps;
 }
 export interface MsgSubmitProposalSDKType {
   creator: string;
   asset: string;
   proposal: Uint8Array;
   height: Long;
-  proof?: ProofOpsSDKType;
+  proof: ProofOpsSDKType;
 }
 export interface MsgSubmitProposalResponse {
-  proposal?: Proposal;
+  proposal: Proposal;
 }
 export interface MsgSubmitProposalResponseSDKType {
-  proposal?: ProposalSDKType;
+  proposal: ProposalSDKType;
 }
 export interface MsgRetryVoteTransmit {
   creator: string;
@@ -90,7 +90,7 @@ export interface MsgRetryVoteTransmitResponseSDKType {}
 function createBaseMsgUpdateParams(): MsgUpdateParams {
   return {
     authority: "",
-    params: undefined
+    params: Params.fromPartial({})
   };
 }
 export const MsgUpdateParams = {
@@ -501,7 +501,7 @@ function createBaseMsgSubmitProposal(): MsgSubmitProposal {
     asset: "",
     proposal: new Uint8Array(),
     height: Long.UZERO,
-    proof: undefined
+    proof: ProofOps.fromPartial({})
   };
 }
 export const MsgSubmitProposal = {
@@ -582,7 +582,7 @@ export const MsgSubmitProposal = {
 };
 function createBaseMsgSubmitProposalResponse(): MsgSubmitProposalResponse {
   return {
-    proposal: undefined
+    proposal: Proposal.fromPartial({})
   };
 }
 export const MsgSubmitProposalResponse = {

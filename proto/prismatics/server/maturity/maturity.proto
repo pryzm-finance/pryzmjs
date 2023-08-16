@@ -1,0 +1,20 @@
+syntax = "proto3";
+package prismatics.server.maturity;
+
+import "gogoproto/gogo.proto";
+import "cosmos/base/query/v1beta1/pagination.proto";
+import "prismatics/maturity/maturity.proto";
+
+option go_package = "github.com/prism-finance/prismatics/server/maturity";
+
+
+message QueryAllMaturitiesRequest {
+  string asset_id = 1;
+  string active = 2;
+  cosmos.base.query.v1beta1.PageRequest pagination = 3;
+}
+
+message QueryAllMaturitiesResponse {
+  repeated prismatics.maturity.Maturity maturities = 1 [(gogoproto.nullable) = false];
+  cosmos.base.query.v1beta1.PageResponse pagination = 2;
+}

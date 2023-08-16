@@ -13,7 +13,7 @@ export interface Order {
   depositedAmount: string;
   minMillisInterval: Long;
   maxStepSpotPrice: string;
-  maxMatchingSpotPrice: string;
+  maxMatchingSpotPrice?: string;
 }
 export interface OrderSDKType {
   id: Long;
@@ -28,7 +28,7 @@ export interface OrderSDKType {
   deposited_amount: string;
   min_millis_interval: Long;
   max_step_spot_price: string;
-  max_matching_spot_price: string;
+  max_matching_spot_price?: string;
 }
 function createBaseOrder(): Order {
   return {

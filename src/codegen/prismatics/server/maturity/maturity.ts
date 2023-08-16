@@ -1,0 +1,146 @@
+import { PageRequest, PageRequestSDKType, PageResponse, PageResponseSDKType } from "../../../cosmos/base/query/v1beta1/pagination";
+import { Maturity, MaturitySDKType } from "../../maturity/maturity";
+import * as _m0 from "protobufjs/minimal";
+import { isSet } from "../../../helpers";
+export interface QueryAllMaturitiesRequest {
+  assetId: string;
+  active: string;
+  pagination: PageRequest;
+}
+export interface QueryAllMaturitiesRequestSDKType {
+  asset_id: string;
+  active: string;
+  pagination: PageRequestSDKType;
+}
+export interface QueryAllMaturitiesResponse {
+  maturities: Maturity[];
+  pagination: PageResponse;
+}
+export interface QueryAllMaturitiesResponseSDKType {
+  maturities: MaturitySDKType[];
+  pagination: PageResponseSDKType;
+}
+function createBaseQueryAllMaturitiesRequest(): QueryAllMaturitiesRequest {
+  return {
+    assetId: "",
+    active: "",
+    pagination: PageRequest.fromPartial({})
+  };
+}
+export const QueryAllMaturitiesRequest = {
+  encode(message: QueryAllMaturitiesRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.assetId !== "") {
+      writer.uint32(10).string(message.assetId);
+    }
+    if (message.active !== "") {
+      writer.uint32(18).string(message.active);
+    }
+    if (message.pagination !== undefined) {
+      PageRequest.encode(message.pagination, writer.uint32(26).fork()).ldelim();
+    }
+    return writer;
+  },
+  decode(input: _m0.Reader | Uint8Array, length?: number): QueryAllMaturitiesRequest {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseQueryAllMaturitiesRequest();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.assetId = reader.string();
+          break;
+        case 2:
+          message.active = reader.string();
+          break;
+        case 3:
+          message.pagination = PageRequest.decode(reader, reader.uint32());
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromJSON(object: any): QueryAllMaturitiesRequest {
+    return {
+      assetId: isSet(object.assetId) ? String(object.assetId) : "",
+      active: isSet(object.active) ? String(object.active) : "",
+      pagination: isSet(object.pagination) ? PageRequest.fromJSON(object.pagination) : undefined
+    };
+  },
+  toJSON(message: QueryAllMaturitiesRequest): unknown {
+    const obj: any = {};
+    message.assetId !== undefined && (obj.assetId = message.assetId);
+    message.active !== undefined && (obj.active = message.active);
+    message.pagination !== undefined && (obj.pagination = message.pagination ? PageRequest.toJSON(message.pagination) : undefined);
+    return obj;
+  },
+  fromPartial(object: Partial<QueryAllMaturitiesRequest>): QueryAllMaturitiesRequest {
+    const message = createBaseQueryAllMaturitiesRequest();
+    message.assetId = object.assetId ?? "";
+    message.active = object.active ?? "";
+    message.pagination = object.pagination !== undefined && object.pagination !== null ? PageRequest.fromPartial(object.pagination) : undefined;
+    return message;
+  }
+};
+function createBaseQueryAllMaturitiesResponse(): QueryAllMaturitiesResponse {
+  return {
+    maturities: [],
+    pagination: PageResponse.fromPartial({})
+  };
+}
+export const QueryAllMaturitiesResponse = {
+  encode(message: QueryAllMaturitiesResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    for (const v of message.maturities) {
+      Maturity.encode(v!, writer.uint32(10).fork()).ldelim();
+    }
+    if (message.pagination !== undefined) {
+      PageResponse.encode(message.pagination, writer.uint32(18).fork()).ldelim();
+    }
+    return writer;
+  },
+  decode(input: _m0.Reader | Uint8Array, length?: number): QueryAllMaturitiesResponse {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseQueryAllMaturitiesResponse();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.maturities.push(Maturity.decode(reader, reader.uint32()));
+          break;
+        case 2:
+          message.pagination = PageResponse.decode(reader, reader.uint32());
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromJSON(object: any): QueryAllMaturitiesResponse {
+    return {
+      maturities: Array.isArray(object?.maturities) ? object.maturities.map((e: any) => Maturity.fromJSON(e)) : [],
+      pagination: isSet(object.pagination) ? PageResponse.fromJSON(object.pagination) : undefined
+    };
+  },
+  toJSON(message: QueryAllMaturitiesResponse): unknown {
+    const obj: any = {};
+    if (message.maturities) {
+      obj.maturities = message.maturities.map(e => e ? Maturity.toJSON(e) : undefined);
+    } else {
+      obj.maturities = [];
+    }
+    message.pagination !== undefined && (obj.pagination = message.pagination ? PageResponse.toJSON(message.pagination) : undefined);
+    return obj;
+  },
+  fromPartial(object: Partial<QueryAllMaturitiesResponse>): QueryAllMaturitiesResponse {
+    const message = createBaseQueryAllMaturitiesResponse();
+    message.maturities = object.maturities?.map(e => Maturity.fromPartial(e)) || [];
+    message.pagination = object.pagination !== undefined && object.pagination !== null ? PageResponse.fromPartial(object.pagination) : undefined;
+    return message;
+  }
+};

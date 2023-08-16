@@ -3,13 +3,13 @@ import * as _m0 from "protobufjs/minimal";
 import { isSet } from "../../helpers";
 export interface QueryBondedAmountRequest {
   assetId: string;
-  maturity?: string;
-  address?: string;
+  maturity: string;
+  address: string;
 }
 export interface QueryBondedAmountRequestSDKType {
   asset_id: string;
-  maturity?: string;
-  address?: string;
+  maturity: string;
+  address: string;
 }
 export interface QueryBondedAmountResponse {
   amount: string;
@@ -26,10 +26,10 @@ export interface QueryRewardRequestSDKType {
   address: string;
 }
 export interface QueryRewardResponse {
-  amount?: Coin;
+  amount: Coin;
 }
 export interface QueryRewardResponseSDKType {
-  amount?: CoinSDKType;
+  amount: CoinSDKType;
 }
 function createBaseQueryBondedAmountRequest(): QueryBondedAmountRequest {
   return {
@@ -198,7 +198,7 @@ export const QueryRewardRequest = {
 };
 function createBaseQueryRewardResponse(): QueryRewardResponse {
   return {
-    amount: undefined
+    amount: Coin.fromPartial({})
   };
 }
 export const QueryRewardResponse = {

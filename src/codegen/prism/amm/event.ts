@@ -15,10 +15,10 @@ import { Params, ParamsSDKType } from "./params";
 import { Long, isSet } from "../../helpers";
 import * as _m0 from "protobufjs/minimal";
 export interface EventSetPool {
-  pool?: Pool;
+  pool: Pool;
 }
 export interface EventSetPoolSDKType {
-  pool?: PoolSDKType;
+  pool: PoolSDKType;
 }
 export interface EventSetPoolCount {
   poolCount: Long;
@@ -35,10 +35,10 @@ export interface EventSetLpTokenSupplySDKType {
   supply: string;
 }
 export interface EventSetPoolToken {
-  poolToken?: PoolToken;
+  poolToken: PoolToken;
 }
 export interface EventSetPoolTokenSDKType {
-  pool_token?: PoolTokenSDKType;
+  pool_token: PoolTokenSDKType;
 }
 export interface EventRemovePoolToken {
   poolId: Long;
@@ -49,10 +49,10 @@ export interface EventRemovePoolTokenSDKType {
   denom: string;
 }
 export interface EventSetWeightedToken {
-  weightedToken?: WeightedToken;
+  weightedToken: WeightedToken;
 }
 export interface EventSetWeightedTokenSDKType {
-  weighted_token?: WeightedTokenSDKType;
+  weighted_token: WeightedTokenSDKType;
 }
 export interface EventRemoveWeightedToken {
   poolId: Long;
@@ -63,28 +63,28 @@ export interface EventRemoveWeightedTokenSDKType {
   denom: string;
 }
 export interface EventSetWeightUpdateTiming {
-  weightUpdateTiming?: WeightUpdateTiming;
+  weightUpdateTiming: WeightUpdateTiming;
 }
 export interface EventSetWeightUpdateTimingSDKType {
-  weight_update_timing?: WeightUpdateTimingSDKType;
+  weight_update_timing: WeightUpdateTimingSDKType;
 }
 export interface EventSetWhitelistedRoute {
-  whitelistedRoute?: WhitelistedRoute;
+  whitelistedRoute: WhitelistedRoute;
 }
 export interface EventSetWhitelistedRouteSDKType {
-  whitelisted_route?: WhitelistedRouteSDKType;
+  whitelisted_route: WhitelistedRouteSDKType;
 }
 export interface EventSetYammConfiguration {
-  yammConfiguration?: YammConfiguration;
+  yammConfiguration: YammConfiguration;
 }
 export interface EventSetYammConfigurationSDKType {
-  yamm_configuration?: YammConfigurationSDKType;
+  yamm_configuration: YammConfigurationSDKType;
 }
 export interface EventSetOrder {
-  order?: Order;
+  order: Order;
 }
 export interface EventSetOrderSDKType {
-  order?: OrderSDKType;
+  order: OrderSDKType;
 }
 export interface EventSetOrderCount {
   orderCount: Long;
@@ -100,17 +100,17 @@ export interface EventRemoveOrderSDKType {
 }
 export interface EventCancelOrder {
   id: Long;
-  withdrawnAmount?: Coin;
+  withdrawnAmount: Coin;
 }
 export interface EventCancelOrderSDKType {
   id: Long;
-  withdrawn_amount?: CoinSDKType;
+  withdrawn_amount: CoinSDKType;
 }
 export interface EventSetScheduleOrder {
-  scheduleOrder?: ScheduleOrder;
+  scheduleOrder: ScheduleOrder;
 }
 export interface EventSetScheduleOrderSDKType {
-  schedule_order?: ScheduleOrderSDKType;
+  schedule_order: ScheduleOrderSDKType;
 }
 export interface EventRemoveScheduleOrder {
   orderId: Long;
@@ -133,10 +133,10 @@ export interface EventRemoveExecutableOrderSDKType {
   order_id: Long;
 }
 export interface EventSetIntroducingPoolToken {
-  virtualBalanceToken?: VirtualBalancePoolToken;
+  virtualBalanceToken: VirtualBalancePoolToken;
 }
 export interface EventSetIntroducingPoolTokenSDKType {
-  virtual_balance_token?: VirtualBalancePoolTokenSDKType;
+  virtual_balance_token: VirtualBalancePoolTokenSDKType;
 }
 export interface EventRemoveIntroducingPoolToken {
   poolId: Long;
@@ -147,10 +147,10 @@ export interface EventRemoveIntroducingPoolTokenSDKType {
   denom: string;
 }
 export interface EventSetExpiringPoolToken {
-  virtualBalanceToken?: VirtualBalancePoolToken;
+  virtualBalanceToken: VirtualBalancePoolToken;
 }
 export interface EventSetExpiringPoolTokenSDKType {
-  virtual_balance_token?: VirtualBalancePoolTokenSDKType;
+  virtual_balance_token: VirtualBalancePoolTokenSDKType;
 }
 export interface EventRemoveExpiringPoolToken {
   poolId: Long;
@@ -260,50 +260,50 @@ export interface EventExecuteMatchProposalSDKType {
 }
 export interface EventExitPool {
   poolId: Long;
-  summary?: ExitSummary;
+  summary: ExitSummary;
 }
 export interface EventExitPoolSDKType {
   pool_id: Long;
-  summary?: ExitSummarySDKType;
+  summary: ExitSummarySDKType;
 }
 export interface EventJoinPool {
   poolId: Long;
-  summary?: JoinSummary;
+  summary: JoinSummary;
 }
 export interface EventJoinPoolSDKType {
   pool_id: Long;
-  summary?: JoinSummarySDKType;
+  summary: JoinSummarySDKType;
 }
 export interface EventSwap {
   poolId: Long;
-  summary?: SwapSummary;
+  summary: SwapSummary;
 }
 export interface EventSwapSDKType {
   pool_id: Long;
-  summary?: SwapSummarySDKType;
+  summary: SwapSummarySDKType;
 }
 export interface EventExitPoolRequest {
   creator: string;
   poolId: Long;
-  lptIn?: Coin;
+  lptIn: Coin;
   amountsOut: Coin[];
-  protocolFee?: Coin;
+  protocolFee: Coin;
   swapFee: Coin[];
   exitType: ExitType;
 }
 export interface EventExitPoolRequestSDKType {
   creator: string;
   pool_id: Long;
-  lpt_in?: CoinSDKType;
+  lpt_in: CoinSDKType;
   amounts_out: CoinSDKType[];
-  protocol_fee?: CoinSDKType;
+  protocol_fee: CoinSDKType;
   swap_fee: CoinSDKType[];
   exit_type: ExitType;
 }
 export interface EventJoinPoolRequest {
   creator: string;
   poolId: Long;
-  lptOut?: Coin;
+  lptOut: Coin;
   amountsIn: Coin[];
   protocolFee: Coin[];
   swapFee: Coin[];
@@ -312,7 +312,7 @@ export interface EventJoinPoolRequest {
 export interface EventJoinPoolRequestSDKType {
   creator: string;
   pool_id: Long;
-  lpt_out?: CoinSDKType;
+  lpt_out: CoinSDKType;
   amounts_in: CoinSDKType[];
   protocol_fee: CoinSDKType[];
   swap_fee: CoinSDKType[];
@@ -321,19 +321,19 @@ export interface EventJoinPoolRequestSDKType {
 export interface EventSingleSwapRequest {
   creator: string;
   poolId: Long;
-  amountOut?: Coin;
-  amountIn?: Coin;
-  protocolFee?: Coin;
-  swapFee?: Coin;
+  amountOut: Coin;
+  amountIn: Coin;
+  protocolFee: Coin;
+  swapFee: Coin;
   swapType: SwapType;
 }
 export interface EventSingleSwapRequestSDKType {
   creator: string;
   pool_id: Long;
-  amount_out?: CoinSDKType;
-  amount_in?: CoinSDKType;
-  protocol_fee?: CoinSDKType;
-  swap_fee?: CoinSDKType;
+  amount_out: CoinSDKType;
+  amount_in: CoinSDKType;
+  protocol_fee: CoinSDKType;
+  swap_fee: CoinSDKType;
   swap_type: SwapType;
 }
 export interface EventBatchSwapRequest {
@@ -366,21 +366,21 @@ export interface EventYAssetSwapRefractorActionSDKType {
 }
 export interface EventYAssetSwap {
   poolId: Long;
-  summary?: SwapSummary;
-  refractorAction?: EventYAssetSwapRefractorAction;
+  summary: SwapSummary;
+  refractorAction: EventYAssetSwapRefractorAction;
   fee?: Coin;
 }
 export interface EventYAssetSwapSDKType {
   pool_id: Long;
-  summary?: SwapSummarySDKType;
-  refractor_action?: EventYAssetSwapRefractorActionSDKType;
+  summary: SwapSummarySDKType;
+  refractor_action: EventYAssetSwapRefractorActionSDKType;
   fee?: CoinSDKType;
 }
 export interface EventSetOraclePricePair {
-  oraclePricePair?: OraclePricePair;
+  oraclePricePair: OraclePricePair;
 }
 export interface EventSetOraclePricePairSDKType {
-  oracle_price_pair?: OraclePricePairSDKType;
+  oracle_price_pair: OraclePricePairSDKType;
 }
 export interface EventRemoveOraclePricePair {
   assetId: string;
@@ -389,10 +389,10 @@ export interface EventRemoveOraclePricePairSDKType {
   asset_id: string;
 }
 export interface EventSetPendingTokenIntroduction {
-  pendingTokenIntroduction?: PendingTokenIntroduction;
+  pendingTokenIntroduction: PendingTokenIntroduction;
 }
 export interface EventSetPendingTokenIntroductionSDKType {
-  pending_token_introduction?: PendingTokenIntroductionSDKType;
+  pending_token_introduction: PendingTokenIntroductionSDKType;
 }
 export interface EventRemovePendingTokenIntroduction {
   assetId: string;
@@ -403,14 +403,14 @@ export interface EventRemovePendingTokenIntroductionSDKType {
   target_pool_id: Long;
 }
 export interface EventSetParams {
-  params?: Params;
+  params: Params;
 }
 export interface EventSetParamsSDKType {
-  params?: ParamsSDKType;
+  params: ParamsSDKType;
 }
 function createBaseEventSetPool(): EventSetPool {
   return {
-    pool: undefined
+    pool: Pool.fromPartial({})
   };
 }
 export const EventSetPool = {
@@ -555,7 +555,7 @@ export const EventSetLpTokenSupply = {
 };
 function createBaseEventSetPoolToken(): EventSetPoolToken {
   return {
-    poolToken: undefined
+    poolToken: PoolToken.fromPartial({})
   };
 }
 export const EventSetPoolToken = {
@@ -655,7 +655,7 @@ export const EventRemovePoolToken = {
 };
 function createBaseEventSetWeightedToken(): EventSetWeightedToken {
   return {
-    weightedToken: undefined
+    weightedToken: WeightedToken.fromPartial({})
   };
 }
 export const EventSetWeightedToken = {
@@ -755,7 +755,7 @@ export const EventRemoveWeightedToken = {
 };
 function createBaseEventSetWeightUpdateTiming(): EventSetWeightUpdateTiming {
   return {
-    weightUpdateTiming: undefined
+    weightUpdateTiming: WeightUpdateTiming.fromPartial({})
   };
 }
 export const EventSetWeightUpdateTiming = {
@@ -800,7 +800,7 @@ export const EventSetWeightUpdateTiming = {
 };
 function createBaseEventSetWhitelistedRoute(): EventSetWhitelistedRoute {
   return {
-    whitelistedRoute: undefined
+    whitelistedRoute: WhitelistedRoute.fromPartial({})
   };
 }
 export const EventSetWhitelistedRoute = {
@@ -845,7 +845,7 @@ export const EventSetWhitelistedRoute = {
 };
 function createBaseEventSetYammConfiguration(): EventSetYammConfiguration {
   return {
-    yammConfiguration: undefined
+    yammConfiguration: YammConfiguration.fromPartial({})
   };
 }
 export const EventSetYammConfiguration = {
@@ -890,7 +890,7 @@ export const EventSetYammConfiguration = {
 };
 function createBaseEventSetOrder(): EventSetOrder {
   return {
-    order: undefined
+    order: Order.fromPartial({})
   };
 }
 export const EventSetOrder = {
@@ -1026,7 +1026,7 @@ export const EventRemoveOrder = {
 function createBaseEventCancelOrder(): EventCancelOrder {
   return {
     id: Long.UZERO,
-    withdrawnAmount: undefined
+    withdrawnAmount: Coin.fromPartial({})
   };
 }
 export const EventCancelOrder = {
@@ -1080,7 +1080,7 @@ export const EventCancelOrder = {
 };
 function createBaseEventSetScheduleOrder(): EventSetScheduleOrder {
   return {
-    scheduleOrder: undefined
+    scheduleOrder: ScheduleOrder.fromPartial({})
   };
 }
 export const EventSetScheduleOrder = {
@@ -1270,7 +1270,7 @@ export const EventRemoveExecutableOrder = {
 };
 function createBaseEventSetIntroducingPoolToken(): EventSetIntroducingPoolToken {
   return {
-    virtualBalanceToken: undefined
+    virtualBalanceToken: VirtualBalancePoolToken.fromPartial({})
   };
 }
 export const EventSetIntroducingPoolToken = {
@@ -1370,7 +1370,7 @@ export const EventRemoveIntroducingPoolToken = {
 };
 function createBaseEventSetExpiringPoolToken(): EventSetExpiringPoolToken {
   return {
-    virtualBalanceToken: undefined
+    virtualBalanceToken: VirtualBalancePoolToken.fromPartial({})
   };
 }
 export const EventSetExpiringPoolToken = {
@@ -2090,7 +2090,7 @@ export const EventExecuteMatchProposal = {
 function createBaseEventExitPool(): EventExitPool {
   return {
     poolId: Long.UZERO,
-    summary: undefined
+    summary: ExitSummary.fromPartial({})
   };
 }
 export const EventExitPool = {
@@ -2145,7 +2145,7 @@ export const EventExitPool = {
 function createBaseEventJoinPool(): EventJoinPool {
   return {
     poolId: Long.UZERO,
-    summary: undefined
+    summary: JoinSummary.fromPartial({})
   };
 }
 export const EventJoinPool = {
@@ -2200,7 +2200,7 @@ export const EventJoinPool = {
 function createBaseEventSwap(): EventSwap {
   return {
     poolId: Long.UZERO,
-    summary: undefined
+    summary: SwapSummary.fromPartial({})
   };
 }
 export const EventSwap = {
@@ -2256,9 +2256,9 @@ function createBaseEventExitPoolRequest(): EventExitPoolRequest {
   return {
     creator: "",
     poolId: Long.UZERO,
-    lptIn: undefined,
+    lptIn: Coin.fromPartial({}),
     amountsOut: [],
-    protocolFee: undefined,
+    protocolFee: Coin.fromPartial({}),
     swapFee: [],
     exitType: 0
   };
@@ -2331,7 +2331,7 @@ export const EventExitPoolRequest = {
       amountsOut: Array.isArray(object?.amountsOut) ? object.amountsOut.map((e: any) => Coin.fromJSON(e)) : [],
       protocolFee: isSet(object.protocolFee) ? Coin.fromJSON(object.protocolFee) : undefined,
       swapFee: Array.isArray(object?.swapFee) ? object.swapFee.map((e: any) => Coin.fromJSON(e)) : [],
-      exitType: isSet(object.exitType) ? exitTypeFromJSON(object.exitType) : 0
+      exitType: isSet(object.exitType) ? exitTypeFromJSON(object.exitType) : -1
     };
   },
   toJSON(message: EventExitPoolRequest): unknown {
@@ -2369,7 +2369,7 @@ function createBaseEventJoinPoolRequest(): EventJoinPoolRequest {
   return {
     creator: "",
     poolId: Long.UZERO,
-    lptOut: undefined,
+    lptOut: Coin.fromPartial({}),
     amountsIn: [],
     protocolFee: [],
     swapFee: [],
@@ -2444,7 +2444,7 @@ export const EventJoinPoolRequest = {
       amountsIn: Array.isArray(object?.amountsIn) ? object.amountsIn.map((e: any) => Coin.fromJSON(e)) : [],
       protocolFee: Array.isArray(object?.protocolFee) ? object.protocolFee.map((e: any) => Coin.fromJSON(e)) : [],
       swapFee: Array.isArray(object?.swapFee) ? object.swapFee.map((e: any) => Coin.fromJSON(e)) : [],
-      joinType: isSet(object.joinType) ? joinTypeFromJSON(object.joinType) : 0
+      joinType: isSet(object.joinType) ? joinTypeFromJSON(object.joinType) : -1
     };
   },
   toJSON(message: EventJoinPoolRequest): unknown {
@@ -2486,10 +2486,10 @@ function createBaseEventSingleSwapRequest(): EventSingleSwapRequest {
   return {
     creator: "",
     poolId: Long.UZERO,
-    amountOut: undefined,
-    amountIn: undefined,
-    protocolFee: undefined,
-    swapFee: undefined,
+    amountOut: Coin.fromPartial({}),
+    amountIn: Coin.fromPartial({}),
+    protocolFee: Coin.fromPartial({}),
+    swapFee: Coin.fromPartial({}),
     swapType: 0
   };
 }
@@ -2561,7 +2561,7 @@ export const EventSingleSwapRequest = {
       amountIn: isSet(object.amountIn) ? Coin.fromJSON(object.amountIn) : undefined,
       protocolFee: isSet(object.protocolFee) ? Coin.fromJSON(object.protocolFee) : undefined,
       swapFee: isSet(object.swapFee) ? Coin.fromJSON(object.swapFee) : undefined,
-      swapType: isSet(object.swapType) ? swapTypeFromJSON(object.swapType) : 0
+      swapType: isSet(object.swapType) ? swapTypeFromJSON(object.swapType) : -1
     };
   },
   toJSON(message: EventSingleSwapRequest): unknown {
@@ -2666,7 +2666,7 @@ export const EventBatchSwapRequest = {
       amountsOut: Array.isArray(object?.amountsOut) ? object.amountsOut.map((e: any) => Coin.fromJSON(e)) : [],
       protocolFee: Array.isArray(object?.protocolFee) ? object.protocolFee.map((e: any) => Coin.fromJSON(e)) : [],
       swapFee: Array.isArray(object?.swapFee) ? object.swapFee.map((e: any) => Coin.fromJSON(e)) : [],
-      swapType: isSet(object.swapType) ? swapTypeFromJSON(object.swapType) : 0
+      swapType: isSet(object.swapType) ? swapTypeFromJSON(object.swapType) : -1
     };
   },
   toJSON(message: EventBatchSwapRequest): unknown {
@@ -2780,8 +2780,8 @@ export const EventYAssetSwapRefractorAction = {
 function createBaseEventYAssetSwap(): EventYAssetSwap {
   return {
     poolId: Long.UZERO,
-    summary: undefined,
-    refractorAction: undefined,
+    summary: SwapSummary.fromPartial({}),
+    refractorAction: EventYAssetSwapRefractorAction.fromPartial({}),
     fee: undefined
   };
 }
@@ -2854,7 +2854,7 @@ export const EventYAssetSwap = {
 };
 function createBaseEventSetOraclePricePair(): EventSetOraclePricePair {
   return {
-    oraclePricePair: undefined
+    oraclePricePair: OraclePricePair.fromPartial({})
   };
 }
 export const EventSetOraclePricePair = {
@@ -2944,7 +2944,7 @@ export const EventRemoveOraclePricePair = {
 };
 function createBaseEventSetPendingTokenIntroduction(): EventSetPendingTokenIntroduction {
   return {
-    pendingTokenIntroduction: undefined
+    pendingTokenIntroduction: PendingTokenIntroduction.fromPartial({})
   };
 }
 export const EventSetPendingTokenIntroduction = {
@@ -3044,7 +3044,7 @@ export const EventRemovePendingTokenIntroduction = {
 };
 function createBaseEventSetParams(): EventSetParams {
   return {
-    params: undefined
+    params: Params.fromPartial({})
   };
 }
 export const EventSetParams = {

@@ -23,11 +23,11 @@ export interface QueryChannelRequestSDKType {
  */
 export interface QueryChannelResponse {
   /** channel associated with the request identifiers */
-  channel?: Channel;
+  channel: Channel;
   /** merkle proof of existence */
   proof: Uint8Array;
   /** height at which the proof was retrieved */
-  proofHeight?: Height;
+  proofHeight: Height;
 }
 /**
  * QueryChannelResponse is the response type for the Query/Channel RPC method.
@@ -35,33 +35,33 @@ export interface QueryChannelResponse {
  * proof was retrieved.
  */
 export interface QueryChannelResponseSDKType {
-  channel?: ChannelSDKType;
+  channel: ChannelSDKType;
   proof: Uint8Array;
-  proof_height?: HeightSDKType;
+  proof_height: HeightSDKType;
 }
 /** QueryChannelsRequest is the request type for the Query/Channels RPC method */
 export interface QueryChannelsRequest {
   /** pagination request */
-  pagination?: PageRequest;
+  pagination: PageRequest;
 }
 /** QueryChannelsRequest is the request type for the Query/Channels RPC method */
 export interface QueryChannelsRequestSDKType {
-  pagination?: PageRequestSDKType;
+  pagination: PageRequestSDKType;
 }
 /** QueryChannelsResponse is the response type for the Query/Channels RPC method. */
 export interface QueryChannelsResponse {
   /** list of stored channels of the chain. */
   channels: IdentifiedChannel[];
   /** pagination response */
-  pagination?: PageResponse;
+  pagination: PageResponse;
   /** query block height */
-  height?: Height;
+  height: Height;
 }
 /** QueryChannelsResponse is the response type for the Query/Channels RPC method. */
 export interface QueryChannelsResponseSDKType {
   channels: IdentifiedChannelSDKType[];
-  pagination?: PageResponseSDKType;
-  height?: HeightSDKType;
+  pagination: PageResponseSDKType;
+  height: HeightSDKType;
 }
 /**
  * QueryConnectionChannelsRequest is the request type for the
@@ -71,7 +71,7 @@ export interface QueryConnectionChannelsRequest {
   /** connection unique identifier */
   connection: string;
   /** pagination request */
-  pagination?: PageRequest;
+  pagination: PageRequest;
 }
 /**
  * QueryConnectionChannelsRequest is the request type for the
@@ -79,7 +79,7 @@ export interface QueryConnectionChannelsRequest {
  */
 export interface QueryConnectionChannelsRequestSDKType {
   connection: string;
-  pagination?: PageRequestSDKType;
+  pagination: PageRequestSDKType;
 }
 /**
  * QueryConnectionChannelsResponse is the Response type for the
@@ -89,9 +89,9 @@ export interface QueryConnectionChannelsResponse {
   /** list of channels associated with a connection. */
   channels: IdentifiedChannel[];
   /** pagination response */
-  pagination?: PageResponse;
+  pagination: PageResponse;
   /** query block height */
-  height?: Height;
+  height: Height;
 }
 /**
  * QueryConnectionChannelsResponse is the Response type for the
@@ -99,8 +99,8 @@ export interface QueryConnectionChannelsResponse {
  */
 export interface QueryConnectionChannelsResponseSDKType {
   channels: IdentifiedChannelSDKType[];
-  pagination?: PageResponseSDKType;
-  height?: HeightSDKType;
+  pagination: PageResponseSDKType;
+  height: HeightSDKType;
 }
 /**
  * QueryChannelClientStateRequest is the request type for the Query/ClientState
@@ -126,20 +126,20 @@ export interface QueryChannelClientStateRequestSDKType {
  */
 export interface QueryChannelClientStateResponse {
   /** client state associated with the channel */
-  identifiedClientState?: IdentifiedClientState;
+  identifiedClientState: IdentifiedClientState;
   /** merkle proof of existence */
   proof: Uint8Array;
   /** height at which the proof was retrieved */
-  proofHeight?: Height;
+  proofHeight: Height;
 }
 /**
  * QueryChannelClientStateResponse is the Response type for the
  * Query/QueryChannelClientState RPC method
  */
 export interface QueryChannelClientStateResponseSDKType {
-  identified_client_state?: IdentifiedClientStateSDKType;
+  identified_client_state: IdentifiedClientStateSDKType;
   proof: Uint8Array;
-  proof_height?: HeightSDKType;
+  proof_height: HeightSDKType;
 }
 /**
  * QueryChannelConsensusStateRequest is the request type for the
@@ -171,23 +171,23 @@ export interface QueryChannelConsensusStateRequestSDKType {
  */
 export interface QueryChannelConsensusStateResponse {
   /** consensus state associated with the channel */
-  consensusState?: Any;
+  consensusState: Any;
   /** client ID associated with the consensus state */
   clientId: string;
   /** merkle proof of existence */
   proof: Uint8Array;
   /** height at which the proof was retrieved */
-  proofHeight?: Height;
+  proofHeight: Height;
 }
 /**
  * QueryChannelClientStateResponse is the Response type for the
  * Query/QueryChannelClientState RPC method
  */
 export interface QueryChannelConsensusStateResponseSDKType {
-  consensus_state?: AnySDKType;
+  consensus_state: AnySDKType;
   client_id: string;
   proof: Uint8Array;
-  proof_height?: HeightSDKType;
+  proof_height: HeightSDKType;
 }
 /**
  * QueryPacketCommitmentRequest is the request type for the
@@ -221,7 +221,7 @@ export interface QueryPacketCommitmentResponse {
   /** merkle proof of existence */
   proof: Uint8Array;
   /** height at which the proof was retrieved */
-  proofHeight?: Height;
+  proofHeight: Height;
 }
 /**
  * QueryPacketCommitmentResponse defines the client query response for a packet
@@ -231,7 +231,7 @@ export interface QueryPacketCommitmentResponse {
 export interface QueryPacketCommitmentResponseSDKType {
   commitment: Uint8Array;
   proof: Uint8Array;
-  proof_height?: HeightSDKType;
+  proof_height: HeightSDKType;
 }
 /**
  * QueryPacketCommitmentsRequest is the request type for the
@@ -243,7 +243,7 @@ export interface QueryPacketCommitmentsRequest {
   /** channel unique identifier */
   channelId: string;
   /** pagination request */
-  pagination?: PageRequest;
+  pagination: PageRequest;
 }
 /**
  * QueryPacketCommitmentsRequest is the request type for the
@@ -252,7 +252,7 @@ export interface QueryPacketCommitmentsRequest {
 export interface QueryPacketCommitmentsRequestSDKType {
   port_id: string;
   channel_id: string;
-  pagination?: PageRequestSDKType;
+  pagination: PageRequestSDKType;
 }
 /**
  * QueryPacketCommitmentsResponse is the request type for the
@@ -261,9 +261,9 @@ export interface QueryPacketCommitmentsRequestSDKType {
 export interface QueryPacketCommitmentsResponse {
   commitments: PacketState[];
   /** pagination response */
-  pagination?: PageResponse;
+  pagination: PageResponse;
   /** query block height */
-  height?: Height;
+  height: Height;
 }
 /**
  * QueryPacketCommitmentsResponse is the request type for the
@@ -271,8 +271,8 @@ export interface QueryPacketCommitmentsResponse {
  */
 export interface QueryPacketCommitmentsResponseSDKType {
   commitments: PacketStateSDKType[];
-  pagination?: PageResponseSDKType;
-  height?: HeightSDKType;
+  pagination: PageResponseSDKType;
+  height: HeightSDKType;
 }
 /**
  * QueryPacketReceiptRequest is the request type for the
@@ -306,7 +306,7 @@ export interface QueryPacketReceiptResponse {
   /** merkle proof of existence */
   proof: Uint8Array;
   /** height at which the proof was retrieved */
-  proofHeight?: Height;
+  proofHeight: Height;
 }
 /**
  * QueryPacketReceiptResponse defines the client query response for a packet
@@ -316,7 +316,7 @@ export interface QueryPacketReceiptResponse {
 export interface QueryPacketReceiptResponseSDKType {
   received: boolean;
   proof: Uint8Array;
-  proof_height?: HeightSDKType;
+  proof_height: HeightSDKType;
 }
 /**
  * QueryPacketAcknowledgementRequest is the request type for the
@@ -350,7 +350,7 @@ export interface QueryPacketAcknowledgementResponse {
   /** merkle proof of existence */
   proof: Uint8Array;
   /** height at which the proof was retrieved */
-  proofHeight?: Height;
+  proofHeight: Height;
 }
 /**
  * QueryPacketAcknowledgementResponse defines the client query response for a
@@ -360,7 +360,7 @@ export interface QueryPacketAcknowledgementResponse {
 export interface QueryPacketAcknowledgementResponseSDKType {
   acknowledgement: Uint8Array;
   proof: Uint8Array;
-  proof_height?: HeightSDKType;
+  proof_height: HeightSDKType;
 }
 /**
  * QueryPacketAcknowledgementsRequest is the request type for the
@@ -372,9 +372,9 @@ export interface QueryPacketAcknowledgementsRequest {
   /** channel unique identifier */
   channelId: string;
   /** pagination request */
-  pagination?: PageRequest;
+  pagination: PageRequest;
   /** list of packet sequences */
-  packetCommitmentSequences?: Long[];
+  packetCommitmentSequences: Long[];
 }
 /**
  * QueryPacketAcknowledgementsRequest is the request type for the
@@ -383,8 +383,8 @@ export interface QueryPacketAcknowledgementsRequest {
 export interface QueryPacketAcknowledgementsRequestSDKType {
   port_id: string;
   channel_id: string;
-  pagination?: PageRequestSDKType;
-  packet_commitment_sequences?: Long[];
+  pagination: PageRequestSDKType;
+  packet_commitment_sequences: Long[];
 }
 /**
  * QueryPacketAcknowledgemetsResponse is the request type for the
@@ -393,9 +393,9 @@ export interface QueryPacketAcknowledgementsRequestSDKType {
 export interface QueryPacketAcknowledgementsResponse {
   acknowledgements: PacketState[];
   /** pagination response */
-  pagination?: PageResponse;
+  pagination: PageResponse;
   /** query block height */
-  height?: Height;
+  height: Height;
 }
 /**
  * QueryPacketAcknowledgemetsResponse is the request type for the
@@ -403,8 +403,8 @@ export interface QueryPacketAcknowledgementsResponse {
  */
 export interface QueryPacketAcknowledgementsResponseSDKType {
   acknowledgements: PacketStateSDKType[];
-  pagination?: PageResponseSDKType;
-  height?: HeightSDKType;
+  pagination: PageResponseSDKType;
+  height: HeightSDKType;
 }
 /**
  * QueryUnreceivedPacketsRequest is the request type for the
@@ -435,7 +435,7 @@ export interface QueryUnreceivedPacketsResponse {
   /** list of unreceived packet sequences */
   sequences: Long[];
   /** query block height */
-  height?: Height;
+  height: Height;
 }
 /**
  * QueryUnreceivedPacketsResponse is the response type for the
@@ -443,7 +443,7 @@ export interface QueryUnreceivedPacketsResponse {
  */
 export interface QueryUnreceivedPacketsResponseSDKType {
   sequences: Long[];
-  height?: HeightSDKType;
+  height: HeightSDKType;
 }
 /**
  * QueryUnreceivedAcks is the request type for the
@@ -474,7 +474,7 @@ export interface QueryUnreceivedAcksResponse {
   /** list of unreceived acknowledgement sequences */
   sequences: Long[];
   /** query block height */
-  height?: Height;
+  height: Height;
 }
 /**
  * QueryUnreceivedAcksResponse is the response type for the
@@ -482,7 +482,7 @@ export interface QueryUnreceivedAcksResponse {
  */
 export interface QueryUnreceivedAcksResponseSDKType {
   sequences: Long[];
-  height?: HeightSDKType;
+  height: HeightSDKType;
 }
 /**
  * QueryNextSequenceReceiveRequest is the request type for the
@@ -512,7 +512,7 @@ export interface QueryNextSequenceReceiveResponse {
   /** merkle proof of existence */
   proof: Uint8Array;
   /** height at which the proof was retrieved */
-  proofHeight?: Height;
+  proofHeight: Height;
 }
 /**
  * QuerySequenceResponse is the request type for the
@@ -521,7 +521,7 @@ export interface QueryNextSequenceReceiveResponse {
 export interface QueryNextSequenceReceiveResponseSDKType {
   next_sequence_receive: Long;
   proof: Uint8Array;
-  proof_height?: HeightSDKType;
+  proof_height: HeightSDKType;
 }
 function createBaseQueryChannelRequest(): QueryChannelRequest {
   return {
@@ -580,9 +580,9 @@ export const QueryChannelRequest = {
 };
 function createBaseQueryChannelResponse(): QueryChannelResponse {
   return {
-    channel: undefined,
+    channel: Channel.fromPartial({}),
     proof: new Uint8Array(),
-    proofHeight: undefined
+    proofHeight: Height.fromPartial({})
   };
 }
 export const QueryChannelResponse = {
@@ -645,7 +645,7 @@ export const QueryChannelResponse = {
 };
 function createBaseQueryChannelsRequest(): QueryChannelsRequest {
   return {
-    pagination: undefined
+    pagination: PageRequest.fromPartial({})
   };
 }
 export const QueryChannelsRequest = {
@@ -691,8 +691,8 @@ export const QueryChannelsRequest = {
 function createBaseQueryChannelsResponse(): QueryChannelsResponse {
   return {
     channels: [],
-    pagination: undefined,
-    height: undefined
+    pagination: PageResponse.fromPartial({}),
+    height: Height.fromPartial({})
   };
 }
 export const QueryChannelsResponse = {
@@ -760,7 +760,7 @@ export const QueryChannelsResponse = {
 function createBaseQueryConnectionChannelsRequest(): QueryConnectionChannelsRequest {
   return {
     connection: "",
-    pagination: undefined
+    pagination: PageRequest.fromPartial({})
   };
 }
 export const QueryConnectionChannelsRequest = {
@@ -815,8 +815,8 @@ export const QueryConnectionChannelsRequest = {
 function createBaseQueryConnectionChannelsResponse(): QueryConnectionChannelsResponse {
   return {
     channels: [],
-    pagination: undefined,
-    height: undefined
+    pagination: PageResponse.fromPartial({}),
+    height: Height.fromPartial({})
   };
 }
 export const QueryConnectionChannelsResponse = {
@@ -938,9 +938,9 @@ export const QueryChannelClientStateRequest = {
 };
 function createBaseQueryChannelClientStateResponse(): QueryChannelClientStateResponse {
   return {
-    identifiedClientState: undefined,
+    identifiedClientState: IdentifiedClientState.fromPartial({}),
     proof: new Uint8Array(),
-    proofHeight: undefined
+    proofHeight: Height.fromPartial({})
   };
 }
 export const QueryChannelClientStateResponse = {
@@ -1078,10 +1078,10 @@ export const QueryChannelConsensusStateRequest = {
 };
 function createBaseQueryChannelConsensusStateResponse(): QueryChannelConsensusStateResponse {
   return {
-    consensusState: undefined,
+    consensusState: Any.fromPartial({}),
     clientId: "",
     proof: new Uint8Array(),
-    proofHeight: undefined
+    proofHeight: Height.fromPartial({})
   };
 }
 export const QueryChannelConsensusStateResponse = {
@@ -1220,7 +1220,7 @@ function createBaseQueryPacketCommitmentResponse(): QueryPacketCommitmentRespons
   return {
     commitment: new Uint8Array(),
     proof: new Uint8Array(),
-    proofHeight: undefined
+    proofHeight: Height.fromPartial({})
   };
 }
 export const QueryPacketCommitmentResponse = {
@@ -1285,7 +1285,7 @@ function createBaseQueryPacketCommitmentsRequest(): QueryPacketCommitmentsReques
   return {
     portId: "",
     channelId: "",
-    pagination: undefined
+    pagination: PageRequest.fromPartial({})
   };
 }
 export const QueryPacketCommitmentsRequest = {
@@ -1349,8 +1349,8 @@ export const QueryPacketCommitmentsRequest = {
 function createBaseQueryPacketCommitmentsResponse(): QueryPacketCommitmentsResponse {
   return {
     commitments: [],
-    pagination: undefined,
-    height: undefined
+    pagination: PageResponse.fromPartial({}),
+    height: Height.fromPartial({})
   };
 }
 export const QueryPacketCommitmentsResponse = {
@@ -1484,7 +1484,7 @@ function createBaseQueryPacketReceiptResponse(): QueryPacketReceiptResponse {
   return {
     received: false,
     proof: new Uint8Array(),
-    proofHeight: undefined
+    proofHeight: Height.fromPartial({})
   };
 }
 export const QueryPacketReceiptResponse = {
@@ -1614,7 +1614,7 @@ function createBaseQueryPacketAcknowledgementResponse(): QueryPacketAcknowledgem
   return {
     acknowledgement: new Uint8Array(),
     proof: new Uint8Array(),
-    proofHeight: undefined
+    proofHeight: Height.fromPartial({})
   };
 }
 export const QueryPacketAcknowledgementResponse = {
@@ -1679,7 +1679,7 @@ function createBaseQueryPacketAcknowledgementsRequest(): QueryPacketAcknowledgem
   return {
     portId: "",
     channelId: "",
-    pagination: undefined,
+    pagination: PageRequest.fromPartial({}),
     packetCommitmentSequences: []
   };
 }
@@ -1766,8 +1766,8 @@ export const QueryPacketAcknowledgementsRequest = {
 function createBaseQueryPacketAcknowledgementsResponse(): QueryPacketAcknowledgementsResponse {
   return {
     acknowledgements: [],
-    pagination: undefined,
-    height: undefined
+    pagination: PageResponse.fromPartial({}),
+    height: Height.fromPartial({})
   };
 }
 export const QueryPacketAcknowledgementsResponse = {
@@ -1913,7 +1913,7 @@ export const QueryUnreceivedPacketsRequest = {
 function createBaseQueryUnreceivedPacketsResponse(): QueryUnreceivedPacketsResponse {
   return {
     sequences: [],
-    height: undefined
+    height: Height.fromPartial({})
   };
 }
 export const QueryUnreceivedPacketsResponse = {
@@ -2059,7 +2059,7 @@ export const QueryUnreceivedAcksRequest = {
 function createBaseQueryUnreceivedAcksResponse(): QueryUnreceivedAcksResponse {
   return {
     sequences: [],
-    height: undefined
+    height: Height.fromPartial({})
   };
 }
 export const QueryUnreceivedAcksResponse = {
@@ -2183,7 +2183,7 @@ function createBaseQueryNextSequenceReceiveResponse(): QueryNextSequenceReceiveR
   return {
     nextSequenceReceive: Long.UZERO,
     proof: new Uint8Array(),
-    proofHeight: undefined
+    proofHeight: Height.fromPartial({})
   };
 }
 export const QueryNextSequenceReceiveResponse = {
