@@ -319,7 +319,7 @@ export const QueryParamsDesc: UnaryMethodDefinitionish = {
     }
   } as any)
 };
-export const QueryGetPoolTokenDesc: UnaryMethodDefinitionish = {
+export const QueryPoolTokenDesc: UnaryMethodDefinitionish = {
   methodName: "PoolToken",
   service: QueryDesc,
   requestStream: false,
@@ -340,7 +340,7 @@ export const QueryGetPoolTokenDesc: UnaryMethodDefinitionish = {
     }
   } as any)
 };
-export const QueryAllPoolTokenDesc: UnaryMethodDefinitionish = {
+export const QueryPoolTokenAllDesc: UnaryMethodDefinitionish = {
   methodName: "PoolTokenAll",
   service: QueryDesc,
   requestStream: false,
@@ -361,7 +361,7 @@ export const QueryAllPoolTokenDesc: UnaryMethodDefinitionish = {
     }
   } as any)
 };
-export const QueryAllPoolTokenWeightDesc: UnaryMethodDefinitionish = {
+export const QueryPoolTokenWeightAllDesc: UnaryMethodDefinitionish = {
   methodName: "PoolTokenWeightAll",
   service: QueryDesc,
   requestStream: false,
@@ -382,7 +382,7 @@ export const QueryAllPoolTokenWeightDesc: UnaryMethodDefinitionish = {
     }
   } as any)
 };
-export const QueryGetPoolTokenWeightDesc: UnaryMethodDefinitionish = {
+export const QueryPoolTokenWeightDesc: UnaryMethodDefinitionish = {
   methodName: "PoolTokenWeight",
   service: QueryDesc,
   requestStream: false,
@@ -403,7 +403,7 @@ export const QueryGetPoolTokenWeightDesc: UnaryMethodDefinitionish = {
     }
   } as any)
 };
-export const QueryGetPoolDesc: UnaryMethodDefinitionish = {
+export const QueryPoolDesc: UnaryMethodDefinitionish = {
   methodName: "Pool",
   service: QueryDesc,
   requestStream: false,
@@ -424,7 +424,7 @@ export const QueryGetPoolDesc: UnaryMethodDefinitionish = {
     }
   } as any)
 };
-export const QueryAllPoolDesc: UnaryMethodDefinitionish = {
+export const QueryPoolAllDesc: UnaryMethodDefinitionish = {
   methodName: "PoolAll",
   service: QueryDesc,
   requestStream: false,
@@ -445,7 +445,7 @@ export const QueryAllPoolDesc: UnaryMethodDefinitionish = {
     }
   } as any)
 };
-export const QueryGetWeightedTokenDesc: UnaryMethodDefinitionish = {
+export const QueryWeightedTokenDesc: UnaryMethodDefinitionish = {
   methodName: "WeightedToken",
   service: QueryDesc,
   requestStream: false,
@@ -466,7 +466,7 @@ export const QueryGetWeightedTokenDesc: UnaryMethodDefinitionish = {
     }
   } as any)
 };
-export const QueryAllWeightedTokenDesc: UnaryMethodDefinitionish = {
+export const QueryWeightedTokenAllDesc: UnaryMethodDefinitionish = {
   methodName: "WeightedTokenAll",
   service: QueryDesc,
   requestStream: false,
@@ -487,7 +487,7 @@ export const QueryAllWeightedTokenDesc: UnaryMethodDefinitionish = {
     }
   } as any)
 };
-export const QueryGetWeightUpdateTimingDesc: UnaryMethodDefinitionish = {
+export const QueryWeightUpdateTimingDesc: UnaryMethodDefinitionish = {
   methodName: "WeightUpdateTiming",
   service: QueryDesc,
   requestStream: false,
@@ -508,7 +508,7 @@ export const QueryGetWeightUpdateTimingDesc: UnaryMethodDefinitionish = {
     }
   } as any)
 };
-export const QueryAllWeightUpdateTimingDesc: UnaryMethodDefinitionish = {
+export const QueryWeightUpdateTimingAllDesc: UnaryMethodDefinitionish = {
   methodName: "WeightUpdateTimingAll",
   service: QueryDesc,
   requestStream: false,
@@ -718,7 +718,7 @@ export const QuerySpotPriceDesc: UnaryMethodDefinitionish = {
     }
   } as any)
 };
-export const QueryGetIntroducingPoolTokenDesc: UnaryMethodDefinitionish = {
+export const QueryIntroducingPoolTokenDesc: UnaryMethodDefinitionish = {
   methodName: "IntroducingPoolToken",
   service: QueryDesc,
   requestStream: false,
@@ -739,7 +739,7 @@ export const QueryGetIntroducingPoolTokenDesc: UnaryMethodDefinitionish = {
     }
   } as any)
 };
-export const QueryAllIntroducingPoolTokenDesc: UnaryMethodDefinitionish = {
+export const QueryIntroducingPoolTokenAllDesc: UnaryMethodDefinitionish = {
   methodName: "IntroducingPoolTokenAll",
   service: QueryDesc,
   requestStream: false,
@@ -760,7 +760,7 @@ export const QueryAllIntroducingPoolTokenDesc: UnaryMethodDefinitionish = {
     }
   } as any)
 };
-export const QueryGetExpiringPoolTokenDesc: UnaryMethodDefinitionish = {
+export const QueryExpiringPoolTokenDesc: UnaryMethodDefinitionish = {
   methodName: "ExpiringPoolToken",
   service: QueryDesc,
   requestStream: false,
@@ -781,7 +781,7 @@ export const QueryGetExpiringPoolTokenDesc: UnaryMethodDefinitionish = {
     }
   } as any)
 };
-export const QueryAllExpiringPoolTokenDesc: UnaryMethodDefinitionish = {
+export const QueryExpiringPoolTokenAllDesc: UnaryMethodDefinitionish = {
   methodName: "ExpiringPoolTokenAll",
   service: QueryDesc,
   requestStream: false,
@@ -844,7 +844,7 @@ export const QuerySimulateBatchSwapDesc: UnaryMethodDefinitionish = {
     }
   } as any)
 };
-export const QueryGetYammConfigurationDesc: UnaryMethodDefinitionish = {
+export const QueryYammConfigurationDesc: UnaryMethodDefinitionish = {
   methodName: "YammConfiguration",
   service: QueryDesc,
   requestStream: false,
@@ -865,7 +865,7 @@ export const QueryGetYammConfigurationDesc: UnaryMethodDefinitionish = {
     }
   } as any)
 };
-export const QueryAllYammConfigurationDesc: UnaryMethodDefinitionish = {
+export const QueryYammConfigurationAllDesc: UnaryMethodDefinitionish = {
   methodName: "YammConfigurationAll",
   service: QueryDesc,
   requestStream: false,
@@ -886,7 +886,7 @@ export const QueryAllYammConfigurationDesc: UnaryMethodDefinitionish = {
     }
   } as any)
 };
-export const QueryGetWhitelistedRouteDesc: UnaryMethodDefinitionish = {
+export const QueryWhitelistedRouteDesc: UnaryMethodDefinitionish = {
   methodName: "WhitelistedRoute",
   service: QueryDesc,
   requestStream: false,
@@ -907,7 +907,7 @@ export const QueryGetWhitelistedRouteDesc: UnaryMethodDefinitionish = {
     }
   } as any)
 };
-export const QueryAllWhitelistedRouteDesc: UnaryMethodDefinitionish = {
+export const QueryWhitelistedRouteAllDesc: UnaryMethodDefinitionish = {
   methodName: "WhitelistedRouteAll",
   service: QueryDesc,
   requestStream: false,
@@ -928,7 +928,7 @@ export const QueryAllWhitelistedRouteDesc: UnaryMethodDefinitionish = {
     }
   } as any)
 };
-export const QueryGetOrderDesc: UnaryMethodDefinitionish = {
+export const QueryOrderDesc: UnaryMethodDefinitionish = {
   methodName: "Order",
   service: QueryDesc,
   requestStream: false,
@@ -949,7 +949,7 @@ export const QueryGetOrderDesc: UnaryMethodDefinitionish = {
     }
   } as any)
 };
-export const QueryAllOrderDesc: UnaryMethodDefinitionish = {
+export const QueryOrderAllDesc: UnaryMethodDefinitionish = {
   methodName: "OrderAll",
   service: QueryDesc,
   requestStream: false,
@@ -970,7 +970,7 @@ export const QueryAllOrderDesc: UnaryMethodDefinitionish = {
     }
   } as any)
 };
-export const QueryGetExecutableOrderDesc: UnaryMethodDefinitionish = {
+export const QueryExecutableOrderDesc: UnaryMethodDefinitionish = {
   methodName: "ExecutableOrder",
   service: QueryDesc,
   requestStream: false,
@@ -991,7 +991,7 @@ export const QueryGetExecutableOrderDesc: UnaryMethodDefinitionish = {
     }
   } as any)
 };
-export const QueryAllExecutableOrderDesc: UnaryMethodDefinitionish = {
+export const QueryExecutableOrderAllDesc: UnaryMethodDefinitionish = {
   methodName: "ExecutableOrderAll",
   service: QueryDesc,
   requestStream: false,
@@ -1012,7 +1012,7 @@ export const QueryAllExecutableOrderDesc: UnaryMethodDefinitionish = {
     }
   } as any)
 };
-export const QueryGetScheduleOrderDesc: UnaryMethodDefinitionish = {
+export const QueryScheduleOrderDesc: UnaryMethodDefinitionish = {
   methodName: "ScheduleOrder",
   service: QueryDesc,
   requestStream: false,
@@ -1033,7 +1033,7 @@ export const QueryGetScheduleOrderDesc: UnaryMethodDefinitionish = {
     }
   } as any)
 };
-export const QueryAllScheduleOrderDesc: UnaryMethodDefinitionish = {
+export const QueryScheduleOrderAllDesc: UnaryMethodDefinitionish = {
   methodName: "ScheduleOrderAll",
   service: QueryDesc,
   requestStream: false,
@@ -1054,7 +1054,7 @@ export const QueryAllScheduleOrderDesc: UnaryMethodDefinitionish = {
     }
   } as any)
 };
-export const QueryGetOraclePricePairDesc: UnaryMethodDefinitionish = {
+export const QueryOraclePricePairDesc: UnaryMethodDefinitionish = {
   methodName: "OraclePricePair",
   service: QueryDesc,
   requestStream: false,
@@ -1075,7 +1075,7 @@ export const QueryGetOraclePricePairDesc: UnaryMethodDefinitionish = {
     }
   } as any)
 };
-export const QueryAllOraclePricePairDesc: UnaryMethodDefinitionish = {
+export const QueryOraclePricePairAllDesc: UnaryMethodDefinitionish = {
   methodName: "OraclePricePairAll",
   service: QueryDesc,
   requestStream: false,
@@ -1117,7 +1117,7 @@ export const QueryVaultPauseModeDesc: UnaryMethodDefinitionish = {
     }
   } as any)
 };
-export const QueryGetPendingTokenIntroductionDesc: UnaryMethodDefinitionish = {
+export const QueryPendingTokenIntroductionDesc: UnaryMethodDefinitionish = {
   methodName: "PendingTokenIntroduction",
   service: QueryDesc,
   requestStream: false,
@@ -1138,7 +1138,7 @@ export const QueryGetPendingTokenIntroductionDesc: UnaryMethodDefinitionish = {
     }
   } as any)
 };
-export const QueryAllPendingTokenIntroductionDesc: UnaryMethodDefinitionish = {
+export const QueryPendingTokenIntroductionAllDesc: UnaryMethodDefinitionish = {
   methodName: "PendingTokenIntroductionAll",
   service: QueryDesc,
   requestStream: false,

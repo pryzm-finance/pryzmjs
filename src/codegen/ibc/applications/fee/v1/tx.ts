@@ -53,7 +53,7 @@ export interface MsgRegisterCounterpartyPayeeResponseSDKType {}
  */
 export interface MsgPayPacketFee {
   /** fee encapsulates the recv, ack and timeout fees associated with an IBC packet */
-  fee?: Fee;
+  fee: Fee;
   /** the source port unique identifier */
   sourcePortId: string;
   /** the source channel unique identifer */
@@ -69,7 +69,7 @@ export interface MsgPayPacketFee {
  * paid for
  */
 export interface MsgPayPacketFeeSDKType {
-  fee?: FeeSDKType;
+  fee: FeeSDKType;
   source_port_id: string;
   source_channel_id: string;
   signer: string;
@@ -85,17 +85,17 @@ export interface MsgPayPacketFeeResponseSDKType {}
  */
 export interface MsgPayPacketFeeAsync {
   /** unique packet identifier comprised of the channel ID, port ID and sequence */
-  packetId?: PacketId;
+  packetId: PacketId;
   /** the packet fee associated with a particular IBC packet */
-  packetFee?: PacketFee;
+  packetFee: PacketFee;
 }
 /**
  * MsgPayPacketFeeAsync defines the request type for the PayPacketFeeAsync rpc
  * This Msg can be used to pay for a packet at a specified sequence (instead of the next sequence send)
  */
 export interface MsgPayPacketFeeAsyncSDKType {
-  packet_id?: PacketIdSDKType;
-  packet_fee?: PacketFeeSDKType;
+  packet_id: PacketIdSDKType;
+  packet_fee: PacketFeeSDKType;
 }
 /** MsgPayPacketFeeAsyncResponse defines the response type for the PayPacketFeeAsync rpc */
 export interface MsgPayPacketFeeAsyncResponse {}
@@ -319,7 +319,7 @@ export const MsgRegisterCounterpartyPayeeResponse = {
 };
 function createBaseMsgPayPacketFee(): MsgPayPacketFee {
   return {
-    fee: undefined,
+    fee: Fee.fromPartial({}),
     sourcePortId: "",
     sourceChannelId: "",
     signer: "",
@@ -441,8 +441,8 @@ export const MsgPayPacketFeeResponse = {
 };
 function createBaseMsgPayPacketFeeAsync(): MsgPayPacketFeeAsync {
   return {
-    packetId: undefined,
-    packetFee: undefined
+    packetId: PacketId.fromPartial({}),
+    packetFee: PacketFee.fromPartial({})
   };
 }
 export const MsgPayPacketFeeAsync = {

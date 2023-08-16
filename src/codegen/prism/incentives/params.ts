@@ -3,15 +3,15 @@ import * as _m0 from "protobufjs/minimal";
 import { isSet } from "../../helpers";
 /** Params defines the parameters for the module. */
 export interface Params {
-  unbondingPeriod?: Duration;
+  unbondingPeriod: Duration;
 }
 /** Params defines the parameters for the module. */
 export interface ParamsSDKType {
-  unbonding_period?: DurationSDKType;
+  unbonding_period: DurationSDKType;
 }
 function createBaseParams(): Params {
   return {
-    unbondingPeriod: undefined
+    unbondingPeriod: Duration.fromPartial({})
   };
 }
 export const Params = {

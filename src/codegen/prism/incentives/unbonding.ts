@@ -4,27 +4,27 @@ import { Long, isSet, fromJsonTimestamp, fromTimestamp } from "../../helpers";
 import * as _m0 from "protobufjs/minimal";
 export interface Unbonding {
   id: Long;
-  completionTime?: Timestamp;
+  completionTime: Timestamp;
   address: string;
   treasuryAddress: string;
-  amount?: Coin;
+  amount: Coin;
   autoClaim: boolean;
 }
 export interface UnbondingSDKType {
   id: Long;
-  completion_time?: TimestampSDKType;
+  completion_time: TimestampSDKType;
   address: string;
   treasury_address: string;
-  amount?: CoinSDKType;
+  amount: CoinSDKType;
   auto_claim: boolean;
 }
 function createBaseUnbonding(): Unbonding {
   return {
     id: Long.UZERO,
-    completionTime: undefined,
+    completionTime: Timestamp.fromPartial({}),
     address: "",
     treasuryAddress: "",
-    amount: undefined,
+    amount: Coin.fromPartial({}),
     autoClaim: false
   };
 }

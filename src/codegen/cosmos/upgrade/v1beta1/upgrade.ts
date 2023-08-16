@@ -20,7 +20,7 @@ export interface Plan {
    * If this field is not empty, an error will be thrown.
    */
   /** @deprecated */
-  time?: Timestamp;
+  time: Timestamp;
   /** The height at which the upgrade must be performed. */
   height: Long;
   /**
@@ -34,17 +34,17 @@ export interface Plan {
    * If this field is not empty, an error will be thrown.
    */
   /** @deprecated */
-  upgradedClientState?: Any;
+  upgradedClientState: Any;
 }
 /** Plan specifies information about a planned upgrade and when it should occur. */
 export interface PlanSDKType {
   name: string;
   /** @deprecated */
-  time?: TimestampSDKType;
+  time: TimestampSDKType;
   height: Long;
   info: string;
   /** @deprecated */
-  upgraded_client_state?: AnySDKType;
+  upgraded_client_state: AnySDKType;
 }
 /**
  * SoftwareUpgradeProposal is a gov Content type for initiating a software
@@ -59,7 +59,7 @@ export interface SoftwareUpgradeProposal {
   /** description of the proposal */
   description: string;
   /** plan of the proposal */
-  plan?: Plan;
+  plan: Plan;
 }
 /**
  * SoftwareUpgradeProposal is a gov Content type for initiating a software
@@ -71,7 +71,7 @@ export interface SoftwareUpgradeProposal {
 export interface SoftwareUpgradeProposalSDKType {
   title: string;
   description: string;
-  plan?: PlanSDKType;
+  plan: PlanSDKType;
 }
 /**
  * CancelSoftwareUpgradeProposal is a gov Content type for cancelling a software
@@ -120,10 +120,10 @@ export interface ModuleVersionSDKType {
 function createBasePlan(): Plan {
   return {
     name: "",
-    time: undefined,
+    time: Timestamp.fromPartial({}),
     height: Long.ZERO,
     info: "",
-    upgradedClientState: undefined
+    upgradedClientState: Any.fromPartial({})
   };
 }
 export const Plan = {
@@ -206,7 +206,7 @@ function createBaseSoftwareUpgradeProposal(): SoftwareUpgradeProposal {
   return {
     title: "",
     description: "",
-    plan: undefined
+    plan: Plan.fromPartial({})
   };
 }
 export const SoftwareUpgradeProposal = {

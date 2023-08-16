@@ -76,12 +76,12 @@ export interface ForwardRelayerAddress {
   /** the forward relayer address */
   address: string;
   /** unique packet identifer comprised of the channel ID, port ID and sequence */
-  packetId?: PacketId;
+  packetId: PacketId;
 }
 /** ForwardRelayerAddress contains the forward relayer address and PacketId used for async acknowledgements */
 export interface ForwardRelayerAddressSDKType {
   address: string;
-  packet_id?: PacketIdSDKType;
+  packet_id: PacketIdSDKType;
 }
 function createBaseGenesisState(): GenesisState {
   return {
@@ -376,7 +376,7 @@ export const RegisteredCounterpartyPayee = {
 function createBaseForwardRelayerAddress(): ForwardRelayerAddress {
   return {
     address: "",
-    packetId: undefined
+    packetId: PacketId.fromPartial({})
   };
 }
 export const ForwardRelayerAddress = {

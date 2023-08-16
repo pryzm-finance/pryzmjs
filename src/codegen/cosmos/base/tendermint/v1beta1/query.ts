@@ -12,59 +12,59 @@ import * as _m0 from "protobufjs/minimal";
 export interface GetValidatorSetByHeightRequest {
   height: Long;
   /** pagination defines an pagination for the request. */
-  pagination?: PageRequest;
+  pagination: PageRequest;
 }
 /** GetValidatorSetByHeightRequest is the request type for the Query/GetValidatorSetByHeight RPC method. */
 export interface GetValidatorSetByHeightRequestSDKType {
   height: Long;
-  pagination?: PageRequestSDKType;
+  pagination: PageRequestSDKType;
 }
 /** GetValidatorSetByHeightResponse is the response type for the Query/GetValidatorSetByHeight RPC method. */
 export interface GetValidatorSetByHeightResponse {
   blockHeight: Long;
   validators: Validator[];
   /** pagination defines an pagination for the response. */
-  pagination?: PageResponse;
+  pagination: PageResponse;
 }
 /** GetValidatorSetByHeightResponse is the response type for the Query/GetValidatorSetByHeight RPC method. */
 export interface GetValidatorSetByHeightResponseSDKType {
   block_height: Long;
   validators: ValidatorSDKType[];
-  pagination?: PageResponseSDKType;
+  pagination: PageResponseSDKType;
 }
 /** GetLatestValidatorSetRequest is the request type for the Query/GetValidatorSetByHeight RPC method. */
 export interface GetLatestValidatorSetRequest {
   /** pagination defines an pagination for the request. */
-  pagination?: PageRequest;
+  pagination: PageRequest;
 }
 /** GetLatestValidatorSetRequest is the request type for the Query/GetValidatorSetByHeight RPC method. */
 export interface GetLatestValidatorSetRequestSDKType {
-  pagination?: PageRequestSDKType;
+  pagination: PageRequestSDKType;
 }
 /** GetLatestValidatorSetResponse is the response type for the Query/GetValidatorSetByHeight RPC method. */
 export interface GetLatestValidatorSetResponse {
   blockHeight: Long;
   validators: Validator[];
   /** pagination defines an pagination for the response. */
-  pagination?: PageResponse;
+  pagination: PageResponse;
 }
 /** GetLatestValidatorSetResponse is the response type for the Query/GetValidatorSetByHeight RPC method. */
 export interface GetLatestValidatorSetResponseSDKType {
   block_height: Long;
   validators: ValidatorSDKType[];
-  pagination?: PageResponseSDKType;
+  pagination: PageResponseSDKType;
 }
 /** Validator is the type for the validator-set. */
 export interface Validator {
   address: string;
-  pubKey?: Any;
+  pubKey: Any;
   votingPower: Long;
   proposerPriority: Long;
 }
 /** Validator is the type for the validator-set. */
 export interface ValidatorSDKType {
   address: string;
-  pub_key?: AnySDKType;
+  pub_key: AnySDKType;
   voting_power: Long;
   proposer_priority: Long;
 }
@@ -78,17 +78,17 @@ export interface GetBlockByHeightRequestSDKType {
 }
 /** GetBlockByHeightResponse is the response type for the Query/GetBlockByHeight RPC method. */
 export interface GetBlockByHeightResponse {
-  blockId?: BlockID;
+  blockId: BlockID;
   /** Deprecated: please use `sdk_block` instead */
-  block?: Block1;
+  block: Block1;
   /** Since: cosmos-sdk 0.47 */
-  sdkBlock?: Block2;
+  sdkBlock: Block2;
 }
 /** GetBlockByHeightResponse is the response type for the Query/GetBlockByHeight RPC method. */
 export interface GetBlockByHeightResponseSDKType {
-  block_id?: BlockIDSDKType;
-  block?: Block1SDKType;
-  sdk_block?: Block2SDKType;
+  block_id: BlockIDSDKType;
+  block: Block1SDKType;
+  sdk_block: Block2SDKType;
 }
 /** GetLatestBlockRequest is the request type for the Query/GetLatestBlock RPC method. */
 export interface GetLatestBlockRequest {}
@@ -96,17 +96,17 @@ export interface GetLatestBlockRequest {}
 export interface GetLatestBlockRequestSDKType {}
 /** GetLatestBlockResponse is the response type for the Query/GetLatestBlock RPC method. */
 export interface GetLatestBlockResponse {
-  blockId?: BlockID;
+  blockId: BlockID;
   /** Deprecated: please use `sdk_block` instead */
-  block?: Block1;
+  block: Block1;
   /** Since: cosmos-sdk 0.47 */
-  sdkBlock?: Block2;
+  sdkBlock: Block2;
 }
 /** GetLatestBlockResponse is the response type for the Query/GetLatestBlock RPC method. */
 export interface GetLatestBlockResponseSDKType {
-  block_id?: BlockIDSDKType;
-  block?: Block1SDKType;
-  sdk_block?: Block2SDKType;
+  block_id: BlockIDSDKType;
+  block: Block1SDKType;
+  sdk_block: Block2SDKType;
 }
 /** GetSyncingRequest is the request type for the Query/GetSyncing RPC method. */
 export interface GetSyncingRequest {}
@@ -126,13 +126,13 @@ export interface GetNodeInfoRequest {}
 export interface GetNodeInfoRequestSDKType {}
 /** GetNodeInfoResponse is the response type for the Query/GetNodeInfo RPC method. */
 export interface GetNodeInfoResponse {
-  defaultNodeInfo?: DefaultNodeInfo;
-  applicationVersion?: VersionInfo;
+  defaultNodeInfo: DefaultNodeInfo;
+  applicationVersion: VersionInfo;
 }
 /** GetNodeInfoResponse is the response type for the Query/GetNodeInfo RPC method. */
 export interface GetNodeInfoResponseSDKType {
-  default_node_info?: DefaultNodeInfoSDKType;
-  application_version?: VersionInfoSDKType;
+  default_node_info: DefaultNodeInfoSDKType;
+  application_version: VersionInfoSDKType;
 }
 /** VersionInfo is the type for the GetNodeInfoResponse message. */
 export interface VersionInfo {
@@ -174,17 +174,17 @@ export interface ModuleSDKType {
 }
 /** ABCIQueryRequest defines the request structure for the ABCIQuery gRPC query. */
 export interface ABCIQueryRequest {
-  data?: Uint8Array;
-  path?: string;
-  height?: Long;
-  prove?: boolean;
+  data: Uint8Array;
+  path: string;
+  height: Long;
+  prove: boolean;
 }
 /** ABCIQueryRequest defines the request structure for the ABCIQuery gRPC query. */
 export interface ABCIQueryRequestSDKType {
-  data?: Uint8Array;
-  path?: string;
-  height?: Long;
-  prove?: boolean;
+  data: Uint8Array;
+  path: string;
+  height: Long;
+  prove: boolean;
 }
 /**
  * ABCIQueryResponse defines the response structure for the ABCIQuery gRPC query.
@@ -201,7 +201,7 @@ export interface ABCIQueryResponse {
   index: Long;
   key: Uint8Array;
   value: Uint8Array;
-  proofOps?: ProofOps;
+  proofOps: ProofOps;
   height: Long;
   codespace: string;
 }
@@ -218,7 +218,7 @@ export interface ABCIQueryResponseSDKType {
   index: Long;
   key: Uint8Array;
   value: Uint8Array;
-  proof_ops?: ProofOpsSDKType;
+  proof_ops: ProofOpsSDKType;
   height: Long;
   codespace: string;
 }
@@ -265,7 +265,7 @@ export interface ProofOpsSDKType {
 function createBaseGetValidatorSetByHeightRequest(): GetValidatorSetByHeightRequest {
   return {
     height: Long.ZERO,
-    pagination: undefined
+    pagination: PageRequest.fromPartial({})
   };
 }
 export const GetValidatorSetByHeightRequest = {
@@ -321,7 +321,7 @@ function createBaseGetValidatorSetByHeightResponse(): GetValidatorSetByHeightRes
   return {
     blockHeight: Long.ZERO,
     validators: [],
-    pagination: undefined
+    pagination: PageResponse.fromPartial({})
   };
 }
 export const GetValidatorSetByHeightResponse = {
@@ -388,7 +388,7 @@ export const GetValidatorSetByHeightResponse = {
 };
 function createBaseGetLatestValidatorSetRequest(): GetLatestValidatorSetRequest {
   return {
-    pagination: undefined
+    pagination: PageRequest.fromPartial({})
   };
 }
 export const GetLatestValidatorSetRequest = {
@@ -435,7 +435,7 @@ function createBaseGetLatestValidatorSetResponse(): GetLatestValidatorSetRespons
   return {
     blockHeight: Long.ZERO,
     validators: [],
-    pagination: undefined
+    pagination: PageResponse.fromPartial({})
   };
 }
 export const GetLatestValidatorSetResponse = {
@@ -503,7 +503,7 @@ export const GetLatestValidatorSetResponse = {
 function createBaseValidator(): Validator {
   return {
     address: "",
-    pubKey: undefined,
+    pubKey: Any.fromPartial({}),
     votingPower: Long.ZERO,
     proposerPriority: Long.ZERO
   };
@@ -622,9 +622,9 @@ export const GetBlockByHeightRequest = {
 };
 function createBaseGetBlockByHeightResponse(): GetBlockByHeightResponse {
   return {
-    blockId: undefined,
-    block: undefined,
-    sdkBlock: undefined
+    blockId: BlockID.fromPartial({}),
+    block: Block1.fromPartial({}),
+    sdkBlock: Block2.fromPartial({})
   };
 }
 export const GetBlockByHeightResponse = {
@@ -720,9 +720,9 @@ export const GetLatestBlockRequest = {
 };
 function createBaseGetLatestBlockResponse(): GetLatestBlockResponse {
   return {
-    blockId: undefined,
-    block: undefined,
-    sdkBlock: undefined
+    blockId: BlockID.fromPartial({}),
+    block: Block1.fromPartial({}),
+    sdkBlock: Block2.fromPartial({})
   };
 }
 export const GetLatestBlockResponse = {
@@ -896,8 +896,8 @@ export const GetNodeInfoRequest = {
 };
 function createBaseGetNodeInfoResponse(): GetNodeInfoResponse {
   return {
-    defaultNodeInfo: undefined,
-    applicationVersion: undefined
+    defaultNodeInfo: DefaultNodeInfo.fromPartial({}),
+    applicationVersion: VersionInfo.fromPartial({})
   };
 }
 export const GetNodeInfoResponse = {
@@ -1216,7 +1216,7 @@ function createBaseABCIQueryResponse(): ABCIQueryResponse {
     index: Long.ZERO,
     key: new Uint8Array(),
     value: new Uint8Array(),
-    proofOps: undefined,
+    proofOps: ProofOps.fromPartial({}),
     height: Long.ZERO,
     codespace: ""
   };

@@ -10,9 +10,9 @@ export interface RefractableAsset {
   hostChainId: string;
   /** Disabled assets cannot be refracted, but can still be redeemed. */
   disabled: boolean;
-  maturityParams?: MaturityParams;
+  maturityParams: MaturityParams;
   /** The amount of fee for each operation on the asset. */
-  feeRatios?: FeeRatios;
+  feeRatios: FeeRatios;
 }
 /** The properties of a supported asset */
 export interface RefractableAssetSDKType {
@@ -20,8 +20,8 @@ export interface RefractableAssetSDKType {
   token_denom: string;
   host_chain_id: string;
   disabled: boolean;
-  maturity_params?: MaturityParamsSDKType;
-  fee_ratios?: FeeRatiosSDKType;
+  maturity_params: MaturityParamsSDKType;
+  fee_ratios: FeeRatiosSDKType;
 }
 /** The parameters based on which new maturities are introduced */
 export interface MaturityParams {
@@ -57,8 +57,8 @@ function createBaseRefractableAsset(): RefractableAsset {
     tokenDenom: "",
     hostChainId: "",
     disabled: false,
-    maturityParams: undefined,
-    feeRatios: undefined
+    maturityParams: MaturityParams.fromPartial({}),
+    feeRatios: FeeRatios.fromPartial({})
   };
 }
 export const RefractableAsset = {

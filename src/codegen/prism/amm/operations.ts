@@ -135,56 +135,56 @@ export interface SwapSDKType {
 }
 export interface SwapStep {
   poolId: Long;
-  amount: string;
+  amount?: string;
   tokenIn: string;
   tokenOut: string;
 }
 export interface SwapStepSDKType {
   pool_id: Long;
-  amount: string;
+  amount?: string;
   token_in: string;
   token_out: string;
 }
 export interface SwapSummary {
-  tokenIn?: TokenAmount;
-  tokenOut?: TokenAmount;
+  tokenIn: TokenAmount;
+  tokenOut: TokenAmount;
   swapType: SwapType;
-  protocolFee?: Coin;
-  swapFee?: Coin;
+  protocolFee: Coin;
+  swapFee: Coin;
 }
 export interface SwapSummarySDKType {
-  token_in?: TokenAmountSDKType;
-  token_out?: TokenAmountSDKType;
+  token_in: TokenAmountSDKType;
+  token_out: TokenAmountSDKType;
   swap_type: SwapType;
-  protocol_fee?: CoinSDKType;
-  swap_fee?: CoinSDKType;
+  protocol_fee: CoinSDKType;
+  swap_fee: CoinSDKType;
 }
 export interface JoinSummary {
-  lpToken?: TokenAmount;
+  lpToken: TokenAmount;
   tokensIn: TokenAmount[];
   joinType: JoinType;
   protocolFee: Coin[];
   swapFee: Coin[];
 }
 export interface JoinSummarySDKType {
-  lp_token?: TokenAmountSDKType;
+  lp_token: TokenAmountSDKType;
   tokens_in: TokenAmountSDKType[];
   join_type: JoinType;
   protocol_fee: CoinSDKType[];
   swap_fee: CoinSDKType[];
 }
 export interface ExitSummary {
-  lpToken?: TokenAmount;
+  lpToken: TokenAmount;
   tokensOut: TokenAmount[];
   exitType: ExitType;
-  protocolFee?: Coin;
+  protocolFee: Coin;
   swapFee: Coin[];
 }
 export interface ExitSummarySDKType {
-  lp_token?: TokenAmountSDKType;
+  lp_token: TokenAmountSDKType;
   tokens_out: TokenAmountSDKType[];
   exit_type: ExitType;
-  protocol_fee?: CoinSDKType;
+  protocol_fee: CoinSDKType;
   swap_fee: CoinSDKType[];
 }
 function createBaseSwap(): Swap {
@@ -248,7 +248,7 @@ export const Swap = {
     return {
       poolId: isSet(object.poolId) ? Long.fromValue(object.poolId) : Long.UZERO,
       amount: isSet(object.amount) ? String(object.amount) : "",
-      swapType: isSet(object.swapType) ? swapTypeFromJSON(object.swapType) : 0,
+      swapType: isSet(object.swapType) ? swapTypeFromJSON(object.swapType) : -1,
       tokenIn: isSet(object.tokenIn) ? String(object.tokenIn) : "",
       tokenOut: isSet(object.tokenOut) ? String(object.tokenOut) : ""
     };
@@ -349,11 +349,11 @@ export const SwapStep = {
 };
 function createBaseSwapSummary(): SwapSummary {
   return {
-    tokenIn: undefined,
-    tokenOut: undefined,
+    tokenIn: TokenAmount.fromPartial({}),
+    tokenOut: TokenAmount.fromPartial({}),
     swapType: 0,
-    protocolFee: undefined,
-    swapFee: undefined
+    protocolFee: Coin.fromPartial({}),
+    swapFee: Coin.fromPartial({})
   };
 }
 export const SwapSummary = {
@@ -408,7 +408,7 @@ export const SwapSummary = {
     return {
       tokenIn: isSet(object.tokenIn) ? TokenAmount.fromJSON(object.tokenIn) : undefined,
       tokenOut: isSet(object.tokenOut) ? TokenAmount.fromJSON(object.tokenOut) : undefined,
-      swapType: isSet(object.swapType) ? swapTypeFromJSON(object.swapType) : 0,
+      swapType: isSet(object.swapType) ? swapTypeFromJSON(object.swapType) : -1,
       protocolFee: isSet(object.protocolFee) ? Coin.fromJSON(object.protocolFee) : undefined,
       swapFee: isSet(object.swapFee) ? Coin.fromJSON(object.swapFee) : undefined
     };
@@ -434,7 +434,7 @@ export const SwapSummary = {
 };
 function createBaseJoinSummary(): JoinSummary {
   return {
-    lpToken: undefined,
+    lpToken: TokenAmount.fromPartial({}),
     tokensIn: [],
     joinType: 0,
     protocolFee: [],
@@ -493,7 +493,7 @@ export const JoinSummary = {
     return {
       lpToken: isSet(object.lpToken) ? TokenAmount.fromJSON(object.lpToken) : undefined,
       tokensIn: Array.isArray(object?.tokensIn) ? object.tokensIn.map((e: any) => TokenAmount.fromJSON(e)) : [],
-      joinType: isSet(object.joinType) ? joinTypeFromJSON(object.joinType) : 0,
+      joinType: isSet(object.joinType) ? joinTypeFromJSON(object.joinType) : -1,
       protocolFee: Array.isArray(object?.protocolFee) ? object.protocolFee.map((e: any) => Coin.fromJSON(e)) : [],
       swapFee: Array.isArray(object?.swapFee) ? object.swapFee.map((e: any) => Coin.fromJSON(e)) : []
     };
@@ -531,10 +531,10 @@ export const JoinSummary = {
 };
 function createBaseExitSummary(): ExitSummary {
   return {
-    lpToken: undefined,
+    lpToken: TokenAmount.fromPartial({}),
     tokensOut: [],
     exitType: 0,
-    protocolFee: undefined,
+    protocolFee: Coin.fromPartial({}),
     swapFee: []
   };
 }
@@ -590,7 +590,7 @@ export const ExitSummary = {
     return {
       lpToken: isSet(object.lpToken) ? TokenAmount.fromJSON(object.lpToken) : undefined,
       tokensOut: Array.isArray(object?.tokensOut) ? object.tokensOut.map((e: any) => TokenAmount.fromJSON(e)) : [],
-      exitType: isSet(object.exitType) ? exitTypeFromJSON(object.exitType) : 0,
+      exitType: isSet(object.exitType) ? exitTypeFromJSON(object.exitType) : -1,
       protocolFee: isSet(object.protocolFee) ? Coin.fromJSON(object.protocolFee) : undefined,
       swapFee: Array.isArray(object?.swapFee) ? object.swapFee.map((e: any) => Coin.fromJSON(e)) : []
     };

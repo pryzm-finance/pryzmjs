@@ -7,22 +7,22 @@ export interface AppOptionsRequest {}
 export interface AppOptionsRequestSDKType {}
 export interface AppOptionsResponse_ModuleOptionsEntry {
   key: string;
-  value?: ModuleOptions;
+  value: ModuleOptions;
 }
 export interface AppOptionsResponse_ModuleOptionsEntrySDKType {
   key: string;
-  value?: ModuleOptionsSDKType;
+  value: ModuleOptionsSDKType;
 }
 /** AppOptionsResponse is the RemoteInfoService/AppOptions response type. */
 export interface AppOptionsResponse {
   /** module_options is a map of module name to autocli module options. */
-  moduleOptions?: {
+  moduleOptions: {
     [key: string]: ModuleOptions;
   };
 }
 /** AppOptionsResponse is the RemoteInfoService/AppOptions response type. */
 export interface AppOptionsResponseSDKType {
-  module_options?: {
+  module_options: {
     [key: string]: ModuleOptionsSDKType;
   };
 }
@@ -62,7 +62,7 @@ export const AppOptionsRequest = {
 function createBaseAppOptionsResponse_ModuleOptionsEntry(): AppOptionsResponse_ModuleOptionsEntry {
   return {
     key: "",
-    value: undefined
+    value: ModuleOptions.fromPartial({})
   };
 }
 export const AppOptionsResponse_ModuleOptionsEntry = {

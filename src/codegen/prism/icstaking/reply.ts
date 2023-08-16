@@ -4,14 +4,14 @@ import * as _m0 from "protobufjs/minimal";
 /** the stored data for handling the reply of a sent ibc packet */
 export interface ReplyData {
   bridgeId: string;
-  packetId?: PacketId;
+  packetId: PacketId;
   hostChainId: string;
   data: Uint8Array;
 }
 /** the stored data for handling the reply of a sent ibc packet */
 export interface ReplyDataSDKType {
   bridge_id: string;
-  packet_id?: PacketIdSDKType;
+  packet_id: PacketIdSDKType;
   host_chain_id: string;
   data: Uint8Array;
 }
@@ -29,11 +29,11 @@ export interface PacketIdSDKType {
 }
 export interface DelegateTransferReplyData {
   transferSession: string;
-  amount?: Coin;
+  amount: Coin;
 }
 export interface DelegateTransferReplyDataSDKType {
   transfer_session: string;
-  amount?: CoinSDKType;
+  amount: CoinSDKType;
 }
 export interface DelegateTransferSession_PacketFinalizedEntry {
   key: string;
@@ -106,7 +106,7 @@ export interface CompoundDataSDKType {
 function createBaseReplyData(): ReplyData {
   return {
     bridgeId: "",
-    packetId: undefined,
+    packetId: PacketId.fromPartial({}),
     hostChainId: "",
     data: new Uint8Array()
   };
@@ -246,7 +246,7 @@ export const PacketId = {
 function createBaseDelegateTransferReplyData(): DelegateTransferReplyData {
   return {
     transferSession: "",
-    amount: undefined
+    amount: Coin.fromPartial({})
   };
 }
 export const DelegateTransferReplyData = {

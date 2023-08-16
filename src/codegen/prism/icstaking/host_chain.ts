@@ -175,7 +175,7 @@ export interface HostChain {
   /** list of supported transfer channels for transferring the base_denom tokens between the host chain and Prism */
   transferChannels: TransferChannel[];
   /** Parameters for staking/unstaking on the host chain */
-  params?: StakingParams;
+  params: StakingParams;
   /** list of whitelisted validators to which Prism sends the staked funds. */
   validators: Validator[];
 }
@@ -186,7 +186,7 @@ export interface HostChainSDKType {
   connection_id: string;
   base_denom: string;
   transfer_channels: TransferChannelSDKType[];
-  params?: StakingParamsSDKType;
+  params: StakingParamsSDKType;
   validators: ValidatorSDKType[];
 }
 /** Properties of a transfer channel */
@@ -225,20 +225,20 @@ export interface ValidatorSDKType {
 }
 export interface HostChainState_ValidatorsEntry {
   key: string;
-  value?: ValidatorState;
+  value: ValidatorState;
 }
 export interface HostChainState_ValidatorsEntrySDKType {
   key: string;
-  value?: ValidatorStateSDKType;
+  value: ValidatorStateSDKType;
 }
 /** A subset of state on the host chain needed by Prism */
 export interface HostChainState {
   /** The id of the chain */
   hostChainId: string;
   /** Information about the interchain accounts */
-  hostAccounts?: HostAccounts;
+  hostAccounts: HostAccounts;
   /** Mapping of validators address to their state */
-  validators?: {
+  validators: {
     [key: string]: ValidatorState;
   };
   /** The amount of assets that are in the delegation account and ready to be delegated */
@@ -254,26 +254,26 @@ export interface HostChainState {
    * setting state to IDLE happens when an ack/timeout received for an interchain operation,
    * so this is the height of the last received ack from host chain
    */
-  lastIdleStateHostHeight?: Height;
+  lastIdleStateHostHeight: Height;
 }
 /** A subset of state on the host chain needed by Prism */
 export interface HostChainStateSDKType {
   host_chain_id: string;
-  host_accounts?: HostAccountsSDKType;
-  validators?: {
+  host_accounts: HostAccountsSDKType;
+  validators: {
     [key: string]: ValidatorStateSDKType;
   };
   amount_to_be_delegated: string;
   amount_to_be_compounded: string;
   exchange_rate: string;
   state: State;
-  last_idle_state_host_height?: HeightSDKType;
+  last_idle_state_host_height: HeightSDKType;
 }
 /** The interchain accounts */
 export interface HostAccounts {
-  delegation?: HostAccount;
-  reward?: HostAccount;
-  sweep?: HostAccount;
+  delegation: HostAccount;
+  reward: HostAccount;
+  sweep: HostAccount;
   /**
    * This is the state of setting the reward account as the account which receives the staking rewards on host chain.
    * On cosmos based chains, the reward account is registered using MsgSetWithdrawAddress in distribution module.
@@ -282,9 +282,9 @@ export interface HostAccounts {
 }
 /** The interchain accounts */
 export interface HostAccountsSDKType {
-  delegation?: HostAccountSDKType;
-  reward?: HostAccountSDKType;
-  sweep?: HostAccountSDKType;
+  delegation: HostAccountSDKType;
+  reward: HostAccountSDKType;
+  sweep: HostAccountSDKType;
   reward_account_claiming_state: AccountState;
 }
 export interface HostAccount {
@@ -310,7 +310,7 @@ function createBaseHostChain(): HostChain {
     connectionId: "",
     baseDenom: "",
     transferChannels: [],
-    params: undefined,
+    params: StakingParams.fromPartial({}),
     validators: []
   };
 }
@@ -377,7 +377,7 @@ export const HostChain = {
   fromJSON(object: any): HostChain {
     return {
       id: isSet(object.id) ? String(object.id) : "",
-      connectionType: isSet(object.connectionType) ? connectionTypeFromJSON(object.connectionType) : 0,
+      connectionType: isSet(object.connectionType) ? connectionTypeFromJSON(object.connectionType) : -1,
       connectionId: isSet(object.connectionId) ? String(object.connectionId) : "",
       baseDenom: isSet(object.baseDenom) ? String(object.baseDenom) : "",
       transferChannels: Array.isArray(object?.transferChannels) ? object.transferChannels.map((e: any) => TransferChannel.fromJSON(e)) : [],
@@ -468,7 +468,7 @@ export const TransferChannel = {
   },
   fromJSON(object: any): TransferChannel {
     return {
-      type: isSet(object.type) ? transferChannelTypeFromJSON(object.type) : 0,
+      type: isSet(object.type) ? transferChannelTypeFromJSON(object.type) : -1,
       id: isSet(object.id) ? String(object.id) : "",
       wrappedDenom: isSet(object.wrappedDenom) ? String(object.wrappedDenom) : "",
       destinationChain: isSet(object.destinationChain) ? String(object.destinationChain) : ""
@@ -549,7 +549,7 @@ export const Validator = {
 function createBaseHostChainState_ValidatorsEntry(): HostChainState_ValidatorsEntry {
   return {
     key: "",
-    value: undefined
+    value: ValidatorState.fromPartial({})
   };
 }
 export const HostChainState_ValidatorsEntry = {
@@ -604,13 +604,13 @@ export const HostChainState_ValidatorsEntry = {
 function createBaseHostChainState(): HostChainState {
   return {
     hostChainId: "",
-    hostAccounts: undefined,
+    hostAccounts: HostAccounts.fromPartial({}),
     validators: {},
     amountToBeDelegated: "",
     amountToBeCompounded: "",
     exchangeRate: "",
     state: 0,
-    lastIdleStateHostHeight: undefined
+    lastIdleStateHostHeight: Height.fromPartial({})
   };
 }
 export const HostChainState = {
@@ -698,7 +698,7 @@ export const HostChainState = {
       amountToBeDelegated: isSet(object.amountToBeDelegated) ? String(object.amountToBeDelegated) : "",
       amountToBeCompounded: isSet(object.amountToBeCompounded) ? String(object.amountToBeCompounded) : "",
       exchangeRate: isSet(object.exchangeRate) ? String(object.exchangeRate) : "",
-      state: isSet(object.state) ? stateFromJSON(object.state) : 0,
+      state: isSet(object.state) ? stateFromJSON(object.state) : -1,
       lastIdleStateHostHeight: isSet(object.lastIdleStateHostHeight) ? Height.fromJSON(object.lastIdleStateHostHeight) : undefined
     };
   },
@@ -741,9 +741,9 @@ export const HostChainState = {
 };
 function createBaseHostAccounts(): HostAccounts {
   return {
-    delegation: undefined,
-    reward: undefined,
-    sweep: undefined,
+    delegation: HostAccount.fromPartial({}),
+    reward: HostAccount.fromPartial({}),
+    sweep: HostAccount.fromPartial({}),
     rewardAccountClaimingState: 0
   };
 }
@@ -794,7 +794,7 @@ export const HostAccounts = {
       delegation: isSet(object.delegation) ? HostAccount.fromJSON(object.delegation) : undefined,
       reward: isSet(object.reward) ? HostAccount.fromJSON(object.reward) : undefined,
       sweep: isSet(object.sweep) ? HostAccount.fromJSON(object.sweep) : undefined,
-      rewardAccountClaimingState: isSet(object.rewardAccountClaimingState) ? accountStateFromJSON(object.rewardAccountClaimingState) : 0
+      rewardAccountClaimingState: isSet(object.rewardAccountClaimingState) ? accountStateFromJSON(object.rewardAccountClaimingState) : -1
     };
   },
   toJSON(message: HostAccounts): unknown {
@@ -861,7 +861,7 @@ export const HostAccount = {
     return {
       address: isSet(object.address) ? String(object.address) : "",
       balance: isSet(object.balance) ? String(object.balance) : "",
-      state: isSet(object.state) ? accountStateFromJSON(object.state) : 0
+      state: isSet(object.state) ? accountStateFromJSON(object.state) : -1
     };
   },
   toJSON(message: HostAccount): unknown {

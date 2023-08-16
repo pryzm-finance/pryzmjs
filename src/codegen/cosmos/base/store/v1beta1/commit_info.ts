@@ -8,7 +8,7 @@ import * as _m0 from "protobufjs/minimal";
 export interface CommitInfo {
   version: Long;
   storeInfos: StoreInfo[];
-  timestamp?: Timestamp;
+  timestamp: Timestamp;
 }
 /**
  * CommitInfo defines commit information used by the multi-store when committing
@@ -17,7 +17,7 @@ export interface CommitInfo {
 export interface CommitInfoSDKType {
   version: Long;
   store_infos: StoreInfoSDKType[];
-  timestamp?: TimestampSDKType;
+  timestamp: TimestampSDKType;
 }
 /**
  * StoreInfo defines store-specific commit information. It contains a reference
@@ -25,7 +25,7 @@ export interface CommitInfoSDKType {
  */
 export interface StoreInfo {
   name: string;
-  commitId?: CommitID;
+  commitId: CommitID;
 }
 /**
  * StoreInfo defines store-specific commit information. It contains a reference
@@ -33,7 +33,7 @@ export interface StoreInfo {
  */
 export interface StoreInfoSDKType {
   name: string;
-  commit_id?: CommitIDSDKType;
+  commit_id: CommitIDSDKType;
 }
 /**
  * CommitID defines the commitment information when a specific store is
@@ -55,7 +55,7 @@ function createBaseCommitInfo(): CommitInfo {
   return {
     version: Long.ZERO,
     storeInfos: [],
-    timestamp: undefined
+    timestamp: Timestamp.fromPartial({})
   };
 }
 export const CommitInfo = {
@@ -123,7 +123,7 @@ export const CommitInfo = {
 function createBaseStoreInfo(): StoreInfo {
   return {
     name: "",
-    commitId: undefined
+    commitId: CommitID.fromPartial({})
   };
 }
 export const StoreInfo = {

@@ -4,11 +4,11 @@ import { Long, isSet, isObject } from "../../helpers";
 import * as _m0 from "protobufjs/minimal";
 export interface OraclePayload_ValidatorsEntry {
   key: string;
-  value?: ValidatorState;
+  value: ValidatorState;
 }
 export interface OraclePayload_ValidatorsEntrySDKType {
   key: string;
-  value?: ValidatorStateSDKType;
+  value: ValidatorStateSDKType;
 }
 /** OraclePayload defines the structure of oracle vote payload */
 export interface OraclePayload {
@@ -17,9 +17,9 @@ export interface OraclePayload {
    * In order to be accurate, we use a reference of host chain’s latest block in which Prism's state has changed to idle,
    * and oracle feeders' reported block height is checked to be after that specific block
    */
-  blockHeight?: Height;
+  blockHeight: Height;
   /** map of validator addresses to the amount delegated to that validator */
-  validators?: {
+  validators: {
     [key: string]: ValidatorState;
   };
   /** balance of delegation interchain account */
@@ -36,8 +36,8 @@ export interface OraclePayload {
 }
 /** OraclePayload defines the structure of oracle vote payload */
 export interface OraclePayloadSDKType {
-  block_height?: HeightSDKType;
-  validators?: {
+  block_height: HeightSDKType;
+  validators: {
     [key: string]: ValidatorStateSDKType;
   };
   delegation_account_balance: string;
@@ -48,7 +48,7 @@ export interface OraclePayloadSDKType {
 function createBaseOraclePayload_ValidatorsEntry(): OraclePayload_ValidatorsEntry {
   return {
     key: "",
-    value: undefined
+    value: ValidatorState.fromPartial({})
   };
 }
 export const OraclePayload_ValidatorsEntry = {
@@ -102,7 +102,7 @@ export const OraclePayload_ValidatorsEntry = {
 };
 function createBaseOraclePayload(): OraclePayload {
   return {
-    blockHeight: undefined,
+    blockHeight: Height.fromPartial({}),
     validators: {},
     delegationAccountBalance: "",
     rewardAccountBalance: "",

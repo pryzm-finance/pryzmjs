@@ -3,37 +3,37 @@ import * as _m0 from "protobufjs/minimal";
 export interface YammConfiguration {
   poolId: Long;
   /** duration (milliseconds) for virtual balance when adding new pAssets to yamm pools */
-  maturityIntroductionIntervalMillis: string;
-  maturityExpirationIntervalMillis: string;
-  expirationVirtualBalanceScaler: string;
+  maturityIntroductionIntervalMillis?: string;
+  maturityExpirationIntervalMillis?: string;
+  expirationVirtualBalanceScaler?: string;
   /**
    * if the value is not set, will be read from module parameters
    * discount ratio applied to constant sum equations for trading cAsset-pAsset where pAsset is expired or close
    * to expiry
    */
-  expiredAssetDiscountRatio: string;
+  expiredAssetDiscountRatio?: string;
   /** if the value is not set, will be read from module parameters */
-  buyYGivenInLoanFeeRatio: string;
+  buyYGivenInLoanFeeRatio?: string;
   /** if the value is not set, will be read from module parameters */
-  sellYGivenOutFeeRatio: string;
+  sellYGivenOutFeeRatio?: string;
   /** if the value is not set, will be read from module parameters */
-  swapYieldFeeRatio: string;
+  swapYieldFeeRatio?: string;
   /** if the value is not set, will be read from module parameters */
-  leverageScaler: string;
+  leverageScaler?: string;
   /** zero means no limit, and nil means using the value from module parameters */
-  maxWeightRatio: string;
+  maxWeightRatio?: string;
 }
 export interface YammConfigurationSDKType {
   pool_id: Long;
-  maturity_introduction_interval_millis: string;
-  maturity_expiration_interval_millis: string;
-  expiration_virtual_balance_scaler: string;
-  expired_asset_discount_ratio: string;
-  buy_y_given_in_loan_fee_ratio: string;
-  sell_y_given_out_fee_ratio: string;
-  swap_yield_fee_ratio: string;
-  leverage_scaler: string;
-  max_weight_ratio: string;
+  maturity_introduction_interval_millis?: string;
+  maturity_expiration_interval_millis?: string;
+  expiration_virtual_balance_scaler?: string;
+  expired_asset_discount_ratio?: string;
+  buy_y_given_in_loan_fee_ratio?: string;
+  sell_y_given_out_fee_ratio?: string;
+  swap_yield_fee_ratio?: string;
+  leverage_scaler?: string;
+  max_weight_ratio?: string;
 }
 function createBaseYammConfiguration(): YammConfiguration {
   return {

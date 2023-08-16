@@ -289,17 +289,17 @@ export interface RequestInfoSDKType {
   abci_version: string;
 }
 export interface RequestInitChain {
-  time?: Timestamp;
+  time: Timestamp;
   chainId: string;
-  consensusParams?: ConsensusParams;
+  consensusParams: ConsensusParams;
   validators: ValidatorUpdate[];
   appStateBytes: Uint8Array;
   initialHeight: Long;
 }
 export interface RequestInitChainSDKType {
-  time?: TimestampSDKType;
+  time: TimestampSDKType;
   chain_id: string;
-  consensus_params?: ConsensusParamsSDKType;
+  consensus_params: ConsensusParamsSDKType;
   validators: ValidatorUpdateSDKType[];
   app_state_bytes: Uint8Array;
   initial_height: Long;
@@ -318,14 +318,14 @@ export interface RequestQuerySDKType {
 }
 export interface RequestBeginBlock {
   hash: Uint8Array;
-  header?: Header;
-  lastCommitInfo?: CommitInfo;
+  header: Header;
+  lastCommitInfo: CommitInfo;
   byzantineValidators: Misbehavior[];
 }
 export interface RequestBeginBlockSDKType {
   hash: Uint8Array;
-  header?: HeaderSDKType;
-  last_commit_info?: CommitInfoSDKType;
+  header: HeaderSDKType;
+  last_commit_info: CommitInfoSDKType;
   byzantine_validators: MisbehaviorSDKType[];
 }
 export interface RequestCheckTx {
@@ -357,13 +357,13 @@ export interface RequestListSnapshotsSDKType {}
 /** offers a snapshot to the application */
 export interface RequestOfferSnapshot {
   /** snapshot offered by peers */
-  snapshot?: Snapshot;
+  snapshot: Snapshot;
   /** light client-verified app hash for snapshot height */
   appHash: Uint8Array;
 }
 /** offers a snapshot to the application */
 export interface RequestOfferSnapshotSDKType {
-  snapshot?: SnapshotSDKType;
+  snapshot: SnapshotSDKType;
   app_hash: Uint8Array;
 }
 /** loads a snapshot chunk */
@@ -398,10 +398,10 @@ export interface RequestPrepareProposal {
    * sent to the app for possible modifications.
    */
   txs: Uint8Array[];
-  localLastCommit?: ExtendedCommitInfo;
+  localLastCommit: ExtendedCommitInfo;
   misbehavior: Misbehavior[];
   height: Long;
-  time?: Timestamp;
+  time: Timestamp;
   nextValidatorsHash: Uint8Array;
   /** address of the public key of the validator proposing the block. */
   proposerAddress: Uint8Array;
@@ -409,32 +409,32 @@ export interface RequestPrepareProposal {
 export interface RequestPrepareProposalSDKType {
   max_tx_bytes: Long;
   txs: Uint8Array[];
-  local_last_commit?: ExtendedCommitInfoSDKType;
+  local_last_commit: ExtendedCommitInfoSDKType;
   misbehavior: MisbehaviorSDKType[];
   height: Long;
-  time?: TimestampSDKType;
+  time: TimestampSDKType;
   next_validators_hash: Uint8Array;
   proposer_address: Uint8Array;
 }
 export interface RequestProcessProposal {
   txs: Uint8Array[];
-  proposedLastCommit?: CommitInfo;
+  proposedLastCommit: CommitInfo;
   misbehavior: Misbehavior[];
   /** hash is the merkle root hash of the fields of the proposed block. */
   hash: Uint8Array;
   height: Long;
-  time?: Timestamp;
+  time: Timestamp;
   nextValidatorsHash: Uint8Array;
   /** address of the public key of the original proposer of the block. */
   proposerAddress: Uint8Array;
 }
 export interface RequestProcessProposalSDKType {
   txs: Uint8Array[];
-  proposed_last_commit?: CommitInfoSDKType;
+  proposed_last_commit: CommitInfoSDKType;
   misbehavior: MisbehaviorSDKType[];
   hash: Uint8Array;
   height: Long;
-  time?: TimestampSDKType;
+  time: TimestampSDKType;
   next_validators_hash: Uint8Array;
   proposer_address: Uint8Array;
 }
@@ -507,12 +507,12 @@ export interface ResponseInfoSDKType {
   last_block_app_hash: Uint8Array;
 }
 export interface ResponseInitChain {
-  consensusParams?: ConsensusParams;
+  consensusParams: ConsensusParams;
   validators: ValidatorUpdate[];
   appHash: Uint8Array;
 }
 export interface ResponseInitChainSDKType {
-  consensus_params?: ConsensusParamsSDKType;
+  consensus_params: ConsensusParamsSDKType;
   validators: ValidatorUpdateSDKType[];
   app_hash: Uint8Array;
 }
@@ -525,7 +525,7 @@ export interface ResponseQuery {
   index: Long;
   key: Uint8Array;
   value: Uint8Array;
-  proofOps?: ProofOps;
+  proofOps: ProofOps;
   height: Long;
   codespace: string;
 }
@@ -536,7 +536,7 @@ export interface ResponseQuerySDKType {
   index: Long;
   key: Uint8Array;
   value: Uint8Array;
-  proof_ops?: ProofOpsSDKType;
+  proof_ops: ProofOpsSDKType;
   height: Long;
   codespace: string;
 }
@@ -602,12 +602,12 @@ export interface ResponseDeliverTxSDKType {
 }
 export interface ResponseEndBlock {
   validatorUpdates: ValidatorUpdate[];
-  consensusParamUpdates?: ConsensusParams;
+  consensusParamUpdates: ConsensusParams;
   events: Event[];
 }
 export interface ResponseEndBlockSDKType {
   validator_updates: ValidatorUpdateSDKType[];
-  consensus_param_updates?: ConsensusParamsSDKType;
+  consensus_param_updates: ConsensusParamsSDKType;
   events: EventSDKType[];
 }
 export interface ResponseCommit {
@@ -722,7 +722,7 @@ export interface TxResult {
   height: Long;
   index: number;
   tx: Uint8Array;
-  result?: ResponseDeliverTx;
+  result: ResponseDeliverTx;
 }
 /**
  * TxResult contains results of executing the transaction.
@@ -733,7 +733,7 @@ export interface TxResultSDKType {
   height: Long;
   index: number;
   tx: Uint8Array;
-  result?: ResponseDeliverTxSDKType;
+  result: ResponseDeliverTxSDKType;
 }
 /** Validator */
 export interface Validator {
@@ -752,43 +752,43 @@ export interface ValidatorSDKType {
 }
 /** ValidatorUpdate */
 export interface ValidatorUpdate {
-  pubKey?: PublicKey;
+  pubKey: PublicKey;
   power: Long;
 }
 /** ValidatorUpdate */
 export interface ValidatorUpdateSDKType {
-  pub_key?: PublicKeySDKType;
+  pub_key: PublicKeySDKType;
   power: Long;
 }
 /** VoteInfo */
 export interface VoteInfo {
-  validator?: Validator;
+  validator: Validator;
   signedLastBlock: boolean;
 }
 /** VoteInfo */
 export interface VoteInfoSDKType {
-  validator?: ValidatorSDKType;
+  validator: ValidatorSDKType;
   signed_last_block: boolean;
 }
 export interface ExtendedVoteInfo {
-  validator?: Validator;
+  validator: Validator;
   signedLastBlock: boolean;
   /** Reserved for future use */
   voteExtension: Uint8Array;
 }
 export interface ExtendedVoteInfoSDKType {
-  validator?: ValidatorSDKType;
+  validator: ValidatorSDKType;
   signed_last_block: boolean;
   vote_extension: Uint8Array;
 }
 export interface Misbehavior {
   type: MisbehaviorType;
   /** The offending validator */
-  validator?: Validator;
+  validator: Validator;
   /** The height when the offense occurred */
   height: Long;
   /** The corresponding time where the offense occurred */
-  time?: Timestamp;
+  time: Timestamp;
   /**
    * Total voting power of the validator set in case the ABCI application does
    * not store historical validators.
@@ -798,9 +798,9 @@ export interface Misbehavior {
 }
 export interface MisbehaviorSDKType {
   type: MisbehaviorType;
-  validator?: ValidatorSDKType;
+  validator: ValidatorSDKType;
   height: Long;
-  time?: TimestampSDKType;
+  time: TimestampSDKType;
   total_voting_power: Long;
 }
 export interface Snapshot {
@@ -1172,9 +1172,9 @@ export const RequestInfo = {
 };
 function createBaseRequestInitChain(): RequestInitChain {
   return {
-    time: undefined,
+    time: Timestamp.fromPartial({}),
     chainId: "",
-    consensusParams: undefined,
+    consensusParams: ConsensusParams.fromPartial({}),
     validators: [],
     appStateBytes: new Uint8Array(),
     initialHeight: Long.ZERO
@@ -1347,8 +1347,8 @@ export const RequestQuery = {
 function createBaseRequestBeginBlock(): RequestBeginBlock {
   return {
     hash: new Uint8Array(),
-    header: undefined,
-    lastCommitInfo: undefined,
+    header: Header.fromPartial({}),
+    lastCommitInfo: CommitInfo.fromPartial({}),
     byzantineValidators: []
   };
 }
@@ -1462,7 +1462,7 @@ export const RequestCheckTx = {
   fromJSON(object: any): RequestCheckTx {
     return {
       tx: isSet(object.tx) ? bytesFromBase64(object.tx) : new Uint8Array(),
-      type: isSet(object.type) ? checkTxTypeFromJSON(object.type) : 0
+      type: isSet(object.type) ? checkTxTypeFromJSON(object.type) : -1
     };
   },
   toJSON(message: RequestCheckTx): unknown {
@@ -1636,7 +1636,7 @@ export const RequestListSnapshots = {
 };
 function createBaseRequestOfferSnapshot(): RequestOfferSnapshot {
   return {
-    snapshot: undefined,
+    snapshot: Snapshot.fromPartial({}),
     appHash: new Uint8Array()
   };
 }
@@ -1823,10 +1823,10 @@ function createBaseRequestPrepareProposal(): RequestPrepareProposal {
   return {
     maxTxBytes: Long.ZERO,
     txs: [],
-    localLastCommit: undefined,
+    localLastCommit: ExtendedCommitInfo.fromPartial({}),
     misbehavior: [],
     height: Long.ZERO,
-    time: undefined,
+    time: Timestamp.fromPartial({}),
     nextValidatorsHash: new Uint8Array(),
     proposerAddress: new Uint8Array()
   };
@@ -1945,11 +1945,11 @@ export const RequestPrepareProposal = {
 function createBaseRequestProcessProposal(): RequestProcessProposal {
   return {
     txs: [],
-    proposedLastCommit: undefined,
+    proposedLastCommit: CommitInfo.fromPartial({}),
     misbehavior: [],
     hash: new Uint8Array(),
     height: Long.ZERO,
-    time: undefined,
+    time: Timestamp.fromPartial({}),
     nextValidatorsHash: new Uint8Array(),
     proposerAddress: new Uint8Array()
   };
@@ -2480,7 +2480,7 @@ export const ResponseInfo = {
 };
 function createBaseResponseInitChain(): ResponseInitChain {
   return {
-    consensusParams: undefined,
+    consensusParams: ConsensusParams.fromPartial({}),
     validators: [],
     appHash: new Uint8Array()
   };
@@ -2555,7 +2555,7 @@ function createBaseResponseQuery(): ResponseQuery {
     index: Long.ZERO,
     key: new Uint8Array(),
     value: new Uint8Array(),
-    proofOps: undefined,
+    proofOps: ProofOps.fromPartial({}),
     height: Long.ZERO,
     codespace: ""
   };
@@ -2992,7 +2992,7 @@ export const ResponseDeliverTx = {
 function createBaseResponseEndBlock(): ResponseEndBlock {
   return {
     validatorUpdates: [],
-    consensusParamUpdates: undefined,
+    consensusParamUpdates: ConsensusParams.fromPartial({}),
     events: []
   };
 }
@@ -3197,7 +3197,7 @@ export const ResponseOfferSnapshot = {
   },
   fromJSON(object: any): ResponseOfferSnapshot {
     return {
-      result: isSet(object.result) ? responseOfferSnapshot_ResultFromJSON(object.result) : 0
+      result: isSet(object.result) ? responseOfferSnapshot_ResultFromJSON(object.result) : -1
     };
   },
   toJSON(message: ResponseOfferSnapshot): unknown {
@@ -3310,7 +3310,7 @@ export const ResponseApplySnapshotChunk = {
   },
   fromJSON(object: any): ResponseApplySnapshotChunk {
     return {
-      result: isSet(object.result) ? responseApplySnapshotChunk_ResultFromJSON(object.result) : 0,
+      result: isSet(object.result) ? responseApplySnapshotChunk_ResultFromJSON(object.result) : -1,
       refetchChunks: Array.isArray(object?.refetchChunks) ? object.refetchChunks.map((e: any) => Number(e)) : [],
       rejectSenders: Array.isArray(object?.rejectSenders) ? object.rejectSenders.map((e: any) => String(e)) : []
     };
@@ -3418,7 +3418,7 @@ export const ResponseProcessProposal = {
   },
   fromJSON(object: any): ResponseProcessProposal {
     return {
-      status: isSet(object.status) ? responseProcessProposal_ProposalStatusFromJSON(object.status) : 0
+      status: isSet(object.status) ? responseProcessProposal_ProposalStatusFromJSON(object.status) : -1
     };
   },
   toJSON(message: ResponseProcessProposal): unknown {
@@ -3679,7 +3679,7 @@ function createBaseTxResult(): TxResult {
     height: Long.ZERO,
     index: 0,
     tx: new Uint8Array(),
-    result: undefined
+    result: ResponseDeliverTx.fromPartial({})
   };
 }
 export const TxResult = {
@@ -3806,7 +3806,7 @@ export const Validator = {
 };
 function createBaseValidatorUpdate(): ValidatorUpdate {
   return {
-    pubKey: undefined,
+    pubKey: PublicKey.fromPartial({}),
     power: Long.ZERO
   };
 }
@@ -3861,7 +3861,7 @@ export const ValidatorUpdate = {
 };
 function createBaseVoteInfo(): VoteInfo {
   return {
-    validator: undefined,
+    validator: Validator.fromPartial({}),
     signedLastBlock: false
   };
 }
@@ -3916,7 +3916,7 @@ export const VoteInfo = {
 };
 function createBaseExtendedVoteInfo(): ExtendedVoteInfo {
   return {
-    validator: undefined,
+    validator: Validator.fromPartial({}),
     signedLastBlock: false,
     voteExtension: new Uint8Array()
   };
@@ -3982,9 +3982,9 @@ export const ExtendedVoteInfo = {
 function createBaseMisbehavior(): Misbehavior {
   return {
     type: 0,
-    validator: undefined,
+    validator: Validator.fromPartial({}),
     height: Long.ZERO,
-    time: undefined,
+    time: Timestamp.fromPartial({}),
     totalVotingPower: Long.ZERO
   };
 }
@@ -4038,7 +4038,7 @@ export const Misbehavior = {
   },
   fromJSON(object: any): Misbehavior {
     return {
-      type: isSet(object.type) ? misbehaviorTypeFromJSON(object.type) : 0,
+      type: isSet(object.type) ? misbehaviorTypeFromJSON(object.type) : -1,
       validator: isSet(object.validator) ? Validator.fromJSON(object.validator) : undefined,
       height: isSet(object.height) ? Long.fromValue(object.height) : Long.ZERO,
       time: isSet(object.time) ? fromJsonTimestamp(object.time) : undefined,

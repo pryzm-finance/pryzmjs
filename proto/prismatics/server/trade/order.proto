@@ -1,0 +1,36 @@
+syntax = "proto3";
+package prismatics.server.trade;
+
+import "gogoproto/gogo.proto";
+import "cosmos_proto/cosmos.proto";
+import "prismatics/trade/pool_trade_history.proto";
+import "cosmos/base/query/v1beta1/pagination.proto";
+import "prismatics/trade/order.proto";
+
+
+option go_package = "github.com/prism-finance/prismatics/server/trade";
+
+message QueryOrderRequest {
+  uint64 id = 1;
+}
+
+message QueryOrderResponse {
+  prismatics.trade.Order order = 1 [(gogoproto.nullable) = false];
+}
+
+message QueryOrdersRequest {
+  string creator = 1;
+  string pool_id = 2 [
+    (cosmos_proto.scalar) = "cosmos.Int",
+    (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Int",
+    (gogoproto.nullable) = true
+  ];
+  string token_in = 3;
+  string token_out = 4;
+  cosmos.base.query.v1beta1.PageRequest pagination = 5;
+}
+
+message QueryOrdersResponse {
+  repeated prismatics.trade.Order orders = 1 [(gogoproto.nullable) = false];
+  cosmos.base.query.v1beta1.PageResponse pagination = 2;
+}

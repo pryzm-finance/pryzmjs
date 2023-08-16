@@ -4,15 +4,23 @@ import {Long} from "@prism-finance/prismjs/lib/codegen/helpers";
 
 async function main() {
     const client = await prism.ClientFactory.createLCDClient({restEndpoint: "http://0.0.0.0:1317"})
-    let balances = (await client.cosmos.bank.v1beta1.allBalances({address: "prism156pcgs3faegfte0vuaykr9az3hh9kx2e2qfwvu"})).balances
+    let balances = (await client.cosmos.bank.v1beta1.allBalances({
+        address: "prism156pcgs3faegfte0vuaykr9az3hh9kx2e2qfwvu",
+        pagination: {}
+    })).balances
     console.log(balances)
-    balances = (await client.cosmos.bank.v1beta1.allBalances({address: "prism156pcgs3faegfte0vuaykr9az3hh9kx2e2qfwvu"})).balances
+    balances = (await client.cosmos.bank.v1beta1.allBalances({
+        address: "prism156pcgs3faegfte0vuaykr9az3hh9kx2e2qfwvu",
+        pagination: {}
+    })).balances
     console.log(balances)
 
     const ammParams = (await client.prism.amm.params()).params;
     console.log(ammParams)
 
-    const refractableAssets = (await client.prism.assets.refractableAssetAll({})).assets
+    const refractableAssets = (await client.prism.assets.refractableAssetAll({
+        enabled: "", pagination: undefined
+    })).assets
     console.log(refractableAssets)
 
     const spotPrice = (await client.prism.amm.spotPrice({

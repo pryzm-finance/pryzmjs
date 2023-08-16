@@ -9,19 +9,19 @@ export interface QueryParamsRequestSDKType {}
 /** QueryParamsResponse is response type for the Query/Params RPC method. */
 export interface QueryParamsResponse {
   /** params holds all the parameters of this module. */
-  params?: Params;
+  params: Params;
 }
 /** QueryParamsResponse is response type for the Query/Params RPC method. */
 export interface QueryParamsResponseSDKType {
-  params?: ParamsSDKType;
+  params: ParamsSDKType;
 }
 export interface QueryMinterRequest {}
 export interface QueryMinterRequestSDKType {}
 export interface QueryMinterResponse {
-  minter?: Minter;
+  minter: Minter;
 }
 export interface QueryMinterResponseSDKType {
-  minter?: MinterSDKType;
+  minter: MinterSDKType;
 }
 function createBaseQueryParamsRequest(): QueryParamsRequest {
   return {};
@@ -58,7 +58,7 @@ export const QueryParamsRequest = {
 };
 function createBaseQueryParamsResponse(): QueryParamsResponse {
   return {
-    params: undefined
+    params: Params.fromPartial({})
   };
 }
 export const QueryParamsResponse = {
@@ -136,7 +136,7 @@ export const QueryMinterRequest = {
 };
 function createBaseQueryMinterResponse(): QueryMinterResponse {
   return {
-    minter: undefined
+    minter: Minter.fromPartial({})
   };
 }
 export const QueryMinterResponse = {

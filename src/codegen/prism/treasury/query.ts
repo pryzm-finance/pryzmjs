@@ -6,10 +6,10 @@ import * as _m0 from "protobufjs/minimal";
 export interface QueryGetActionRequest {}
 export interface QueryGetActionRequestSDKType {}
 export interface QueryGetActionResponse {
-  action?: Action;
+  action: Action;
 }
 export interface QueryGetActionResponseSDKType {
-  action?: ActionSDKType;
+  action: ActionSDKType;
 }
 export interface QueryGetFlowTradeRequest {
   flowId: Long;
@@ -18,24 +18,24 @@ export interface QueryGetFlowTradeRequestSDKType {
   flow_id: Long;
 }
 export interface QueryGetFlowTradeResponse {
-  flowTrade?: FlowTrade;
+  flowTrade: FlowTrade;
 }
 export interface QueryGetFlowTradeResponseSDKType {
-  flow_trade?: FlowTradeSDKType;
+  flow_trade: FlowTradeSDKType;
 }
 export interface QueryAllFlowTradeRequest {
-  pagination?: PageRequest;
+  pagination: PageRequest;
 }
 export interface QueryAllFlowTradeRequestSDKType {
-  pagination?: PageRequestSDKType;
+  pagination: PageRequestSDKType;
 }
 export interface QueryAllFlowTradeResponse {
   flowTrade: FlowTrade[];
-  pagination?: PageResponse;
+  pagination: PageResponse;
 }
 export interface QueryAllFlowTradeResponseSDKType {
   flow_trade: FlowTradeSDKType[];
-  pagination?: PageResponseSDKType;
+  pagination: PageResponseSDKType;
 }
 function createBaseQueryGetActionRequest(): QueryGetActionRequest {
   return {};
@@ -72,7 +72,7 @@ export const QueryGetActionRequest = {
 };
 function createBaseQueryGetActionResponse(): QueryGetActionResponse {
   return {
-    action: undefined
+    action: Action.fromPartial({})
   };
 }
 export const QueryGetActionResponse = {
@@ -162,7 +162,7 @@ export const QueryGetFlowTradeRequest = {
 };
 function createBaseQueryGetFlowTradeResponse(): QueryGetFlowTradeResponse {
   return {
-    flowTrade: undefined
+    flowTrade: FlowTrade.fromPartial({})
   };
 }
 export const QueryGetFlowTradeResponse = {
@@ -207,7 +207,7 @@ export const QueryGetFlowTradeResponse = {
 };
 function createBaseQueryAllFlowTradeRequest(): QueryAllFlowTradeRequest {
   return {
-    pagination: undefined
+    pagination: PageRequest.fromPartial({})
   };
 }
 export const QueryAllFlowTradeRequest = {
@@ -253,7 +253,7 @@ export const QueryAllFlowTradeRequest = {
 function createBaseQueryAllFlowTradeResponse(): QueryAllFlowTradeResponse {
   return {
     flowTrade: [],
-    pagination: undefined
+    pagination: PageResponse.fromPartial({})
   };
 }
 export const QueryAllFlowTradeResponse = {

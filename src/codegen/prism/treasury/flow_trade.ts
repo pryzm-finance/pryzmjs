@@ -3,18 +3,18 @@ import { ActionType, actionTypeFromJSON, actionTypeToJSON } from "./action";
 import { Long, isSet, fromJsonTimestamp, fromTimestamp } from "../../helpers";
 import * as _m0 from "protobufjs/minimal";
 export interface FlowTrade {
-  endTime?: Timestamp;
+  endTime: Timestamp;
   flowId: Long;
   actionType: ActionType;
 }
 export interface FlowTradeSDKType {
-  end_time?: TimestampSDKType;
+  end_time: TimestampSDKType;
   flow_id: Long;
   action_type: ActionType;
 }
 function createBaseFlowTrade(): FlowTrade {
   return {
-    endTime: undefined,
+    endTime: Timestamp.fromPartial({}),
     flowId: Long.UZERO,
     actionType: 0
   };
@@ -59,7 +59,7 @@ export const FlowTrade = {
     return {
       endTime: isSet(object.endTime) ? fromJsonTimestamp(object.endTime) : undefined,
       flowId: isSet(object.flowId) ? Long.fromValue(object.flowId) : Long.UZERO,
-      actionType: isSet(object.actionType) ? actionTypeFromJSON(object.actionType) : 0
+      actionType: isSet(object.actionType) ? actionTypeFromJSON(object.actionType) : -1
     };
   },
   toJSON(message: FlowTrade): unknown {

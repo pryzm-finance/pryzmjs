@@ -4,15 +4,15 @@ import * as _m0 from "protobufjs/minimal";
 import { isSet, isObject } from "../../helpers";
 export interface OraclePayload_DataSourceBlockHeightsEntry {
   key: string;
-  value?: Height;
+  value: Height;
 }
 export interface OraclePayload_DataSourceBlockHeightsEntrySDKType {
   key: string;
-  value?: HeightSDKType;
+  value: HeightSDKType;
 }
 /** OraclePayload defines the structure of oracle vote payload */
 export interface OraclePayload {
-  dataSourceBlockHeights?: {
+  dataSourceBlockHeights: {
     [key: string]: Height;
   };
   price: string;
@@ -21,7 +21,7 @@ export interface OraclePayload {
 }
 /** OraclePayload defines the structure of oracle vote payload */
 export interface OraclePayloadSDKType {
-  data_source_block_heights?: {
+  data_source_block_heights: {
     [key: string]: HeightSDKType;
   };
   price: string;
@@ -31,7 +31,7 @@ export interface OraclePayloadSDKType {
 function createBaseOraclePayload_DataSourceBlockHeightsEntry(): OraclePayload_DataSourceBlockHeightsEntry {
   return {
     key: "",
-    value: undefined
+    value: Height.fromPartial({})
   };
 }
 export const OraclePayload_DataSourceBlockHeightsEntry = {

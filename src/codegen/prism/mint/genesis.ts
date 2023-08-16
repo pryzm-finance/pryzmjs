@@ -4,19 +4,19 @@ import * as _m0 from "protobufjs/minimal";
 import { isSet } from "../../helpers";
 /** GenesisState defines the mint module's genesis state. */
 export interface GenesisState {
-  params?: Params;
+  params: Params;
   /** minter is an abstraction for holding current rewards information. */
-  minter?: Minter;
+  minter: Minter;
 }
 /** GenesisState defines the mint module's genesis state. */
 export interface GenesisStateSDKType {
-  params?: ParamsSDKType;
-  minter?: MinterSDKType;
+  params: ParamsSDKType;
+  minter: MinterSDKType;
 }
 function createBaseGenesisState(): GenesisState {
   return {
-    params: undefined,
-    minter: undefined
+    params: Params.fromPartial({}),
+    minter: Minter.fromPartial({})
   };
 }
 export const GenesisState = {

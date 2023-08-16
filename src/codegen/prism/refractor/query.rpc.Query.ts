@@ -26,7 +26,7 @@ export class QueryClientImpl implements Query {
 export const QueryDesc = {
   serviceName: "prism.refractor.Query"
 };
-export const QueryGetAssetStateDesc: UnaryMethodDefinitionish = {
+export const QueryAssetStateDesc: UnaryMethodDefinitionish = {
   methodName: "AssetState",
   service: QueryDesc,
   requestStream: false,
@@ -47,7 +47,7 @@ export const QueryGetAssetStateDesc: UnaryMethodDefinitionish = {
     }
   } as any)
 };
-export const QueryGetCPExchangeRateDesc: UnaryMethodDefinitionish = {
+export const QueryCPExchangeRateDesc: UnaryMethodDefinitionish = {
   methodName: "CPExchangeRate",
   service: QueryDesc,
   requestStream: false,

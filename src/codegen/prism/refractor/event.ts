@@ -48,10 +48,10 @@ export interface EventRefractorYieldDistributionSDKType {
   excess_yield: string;
 }
 export interface EventSetAssetState {
-  assetState?: AssetState;
+  assetState: AssetState;
 }
 export interface EventSetAssetStateSDKType {
-  asset_state?: AssetStateSDKType;
+  asset_state: AssetStateSDKType;
 }
 function createBaseEventRefract(): EventRefract {
   return {
@@ -330,7 +330,7 @@ export const EventRefractorYieldDistribution = {
 };
 function createBaseEventSetAssetState(): EventSetAssetState {
   return {
-    assetState: undefined
+    assetState: AssetState.fromPartial({})
   };
 }
 export const EventSetAssetState = {

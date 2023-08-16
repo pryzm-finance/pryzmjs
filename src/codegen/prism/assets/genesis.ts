@@ -5,19 +5,19 @@ import * as _m0 from "protobufjs/minimal";
 import { isSet } from "../../helpers";
 /** GenesisState defines the assets module's genesis state. */
 export interface GenesisState {
-  params?: Params;
+  params: Params;
   assets: RefractableAsset[];
   maturityLevelList: MaturityLevel[];
 }
 /** GenesisState defines the assets module's genesis state. */
 export interface GenesisStateSDKType {
-  params?: ParamsSDKType;
+  params: ParamsSDKType;
   assets: RefractableAssetSDKType[];
   maturity_level_list: MaturityLevelSDKType[];
 }
 function createBaseGenesisState(): GenesisState {
   return {
-    params: undefined,
+    params: Params.fromPartial({}),
     assets: [],
     maturityLevelList: []
   };

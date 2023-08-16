@@ -4,11 +4,11 @@ import * as _m0 from "protobufjs/minimal";
 import { isSet } from "../../helpers";
 export interface MsgRegisterAsset {
   authority: string;
-  asset?: RefractableAsset;
+  asset: RefractableAsset;
 }
 export interface MsgRegisterAssetSDKType {
   authority: string;
-  asset?: RefractableAssetSDKType;
+  asset: RefractableAssetSDKType;
 }
 export interface MsgRegisterAssetResponse {}
 export interface MsgRegisterAssetResponseSDKType {}
@@ -25,41 +25,41 @@ export interface MsgDisableAssetResponseSDKType {}
 export interface MsgUpdateMaturityParams {
   authority: string;
   assetId: string;
-  params?: MaturityParams;
+  params: MaturityParams;
 }
 export interface MsgUpdateMaturityParamsSDKType {
   authority: string;
   asset_id: string;
-  params?: MaturityParamsSDKType;
+  params: MaturityParamsSDKType;
 }
 export interface MsgUpdateMaturityParamsResponse {}
 export interface MsgUpdateMaturityParamsResponseSDKType {}
 export interface MsgUpdateFeeRatios {
   authority: string;
   assetId: string;
-  feeRatios?: FeeRatios;
+  feeRatios: FeeRatios;
 }
 export interface MsgUpdateFeeRatiosSDKType {
   authority: string;
   asset_id: string;
-  fee_ratios?: FeeRatiosSDKType;
+  fee_ratios: FeeRatiosSDKType;
 }
 export interface MsgUpdateFeeRatiosResponse {}
 export interface MsgUpdateFeeRatiosResponseSDKType {}
 export interface MsgUpdateParams {
   authority: string;
-  params?: Params;
+  params: Params;
 }
 export interface MsgUpdateParamsSDKType {
   authority: string;
-  params?: ParamsSDKType;
+  params: ParamsSDKType;
 }
 export interface MsgUpdateParamsResponse {}
 export interface MsgUpdateParamsResponseSDKType {}
 function createBaseMsgRegisterAsset(): MsgRegisterAsset {
   return {
     authority: "",
-    asset: undefined
+    asset: RefractableAsset.fromPartial({})
   };
 }
 export const MsgRegisterAsset = {
@@ -236,7 +236,7 @@ function createBaseMsgUpdateMaturityParams(): MsgUpdateMaturityParams {
   return {
     authority: "",
     assetId: "",
-    params: undefined
+    params: MaturityParams.fromPartial({})
   };
 }
 export const MsgUpdateMaturityParams = {
@@ -334,7 +334,7 @@ function createBaseMsgUpdateFeeRatios(): MsgUpdateFeeRatios {
   return {
     authority: "",
     assetId: "",
-    feeRatios: undefined
+    feeRatios: FeeRatios.fromPartial({})
   };
 }
 export const MsgUpdateFeeRatios = {
@@ -431,7 +431,7 @@ export const MsgUpdateFeeRatiosResponse = {
 function createBaseMsgUpdateParams(): MsgUpdateParams {
   return {
     authority: "",
-    params: undefined
+    params: Params.fromPartial({})
   };
 }
 export const MsgUpdateParams = {

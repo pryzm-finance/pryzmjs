@@ -11,11 +11,11 @@ export interface QueryParamsRequestSDKType {}
 /** QueryParamsResponse is response type for the Query/Params RPC method. */
 export interface QueryParamsResponse {
   /** params holds all the parameters of this module. */
-  params?: Params;
+  params: Params;
 }
 /** QueryParamsResponse is response type for the Query/Params RPC method. */
 export interface QueryParamsResponseSDKType {
-  params?: ParamsSDKType;
+  params: ParamsSDKType;
 }
 export interface QueryGetHostChainRequest {
   hostChainId: string;
@@ -24,24 +24,24 @@ export interface QueryGetHostChainRequestSDKType {
   host_chain_id: string;
 }
 export interface QueryGetHostChainResponse {
-  hostChain?: HostChain;
+  hostChain: HostChain;
 }
 export interface QueryGetHostChainResponseSDKType {
-  host_chain?: HostChainSDKType;
+  host_chain: HostChainSDKType;
 }
 export interface QueryAllHostChainRequest {
-  pagination?: PageRequest;
+  pagination: PageRequest;
 }
 export interface QueryAllHostChainRequestSDKType {
-  pagination?: PageRequestSDKType;
+  pagination: PageRequestSDKType;
 }
 export interface QueryAllHostChainResponse {
   hostChain: HostChain[];
-  pagination?: PageResponse;
+  pagination: PageResponse;
 }
 export interface QueryAllHostChainResponseSDKType {
   host_chain: HostChainSDKType[];
-  pagination?: PageResponseSDKType;
+  pagination: PageResponseSDKType;
 }
 export interface QueryGetHostChainStateRequest {
   hostChainId: string;
@@ -50,24 +50,24 @@ export interface QueryGetHostChainStateRequestSDKType {
   host_chain_id: string;
 }
 export interface QueryGetHostChainStateResponse {
-  hostChainState?: HostChainState;
+  hostChainState: HostChainState;
 }
 export interface QueryGetHostChainStateResponseSDKType {
-  host_chain_state?: HostChainStateSDKType;
+  host_chain_state: HostChainStateSDKType;
 }
 export interface QueryAllHostChainStateRequest {
-  pagination?: PageRequest;
+  pagination: PageRequest;
 }
 export interface QueryAllHostChainStateRequestSDKType {
-  pagination?: PageRequestSDKType;
+  pagination: PageRequestSDKType;
 }
 export interface QueryAllHostChainStateResponse {
   hostChainState: HostChainState[];
-  pagination?: PageResponse;
+  pagination: PageResponse;
 }
 export interface QueryAllHostChainStateResponseSDKType {
   host_chain_state: HostChainStateSDKType[];
-  pagination?: PageResponseSDKType;
+  pagination: PageResponseSDKType;
 }
 export interface QueryGetUndelegationRequest {
   hostChain: string;
@@ -78,40 +78,40 @@ export interface QueryGetUndelegationRequestSDKType {
   epoch: Long;
 }
 export interface QueryGetUndelegationResponse {
-  undelegation?: Undelegation;
+  undelegation: Undelegation;
 }
 export interface QueryGetUndelegationResponseSDKType {
-  undelegation?: UndelegationSDKType;
+  undelegation: UndelegationSDKType;
 }
 export interface QueryAllUndelegationRequest {
-  pagination?: PageRequest;
+  pagination: PageRequest;
 }
 export interface QueryAllUndelegationRequestSDKType {
-  pagination?: PageRequestSDKType;
+  pagination: PageRequestSDKType;
 }
 export interface QueryAllUndelegationResponse {
   undelegation: Undelegation[];
-  pagination?: PageResponse;
+  pagination: PageResponse;
 }
 export interface QueryAllUndelegationResponseSDKType {
   undelegation: UndelegationSDKType[];
-  pagination?: PageResponseSDKType;
+  pagination: PageResponseSDKType;
 }
 export interface QueryIncompleteUndelegationRequest {
   hostChain: string;
-  pagination?: PageRequest;
+  pagination: PageRequest;
 }
 export interface QueryIncompleteUndelegationRequestSDKType {
   host_chain: string;
-  pagination?: PageRequestSDKType;
+  pagination: PageRequestSDKType;
 }
 export interface QueryIncompleteUndelegationResponse {
   undelegation: Undelegation[];
-  pagination?: PageResponse;
+  pagination: PageResponse;
 }
 export interface QueryIncompleteUndelegationResponseSDKType {
   undelegation: UndelegationSDKType[];
-  pagination?: PageResponseSDKType;
+  pagination: PageResponseSDKType;
 }
 function createBaseQueryParamsRequest(): QueryParamsRequest {
   return {};
@@ -148,7 +148,7 @@ export const QueryParamsRequest = {
 };
 function createBaseQueryParamsResponse(): QueryParamsResponse {
   return {
-    params: undefined
+    params: Params.fromPartial({})
   };
 }
 export const QueryParamsResponse = {
@@ -238,7 +238,7 @@ export const QueryGetHostChainRequest = {
 };
 function createBaseQueryGetHostChainResponse(): QueryGetHostChainResponse {
   return {
-    hostChain: undefined
+    hostChain: HostChain.fromPartial({})
   };
 }
 export const QueryGetHostChainResponse = {
@@ -283,7 +283,7 @@ export const QueryGetHostChainResponse = {
 };
 function createBaseQueryAllHostChainRequest(): QueryAllHostChainRequest {
   return {
-    pagination: undefined
+    pagination: PageRequest.fromPartial({})
   };
 }
 export const QueryAllHostChainRequest = {
@@ -329,7 +329,7 @@ export const QueryAllHostChainRequest = {
 function createBaseQueryAllHostChainResponse(): QueryAllHostChainResponse {
   return {
     hostChain: [],
-    pagination: undefined
+    pagination: PageResponse.fromPartial({})
   };
 }
 export const QueryAllHostChainResponse = {
@@ -432,7 +432,7 @@ export const QueryGetHostChainStateRequest = {
 };
 function createBaseQueryGetHostChainStateResponse(): QueryGetHostChainStateResponse {
   return {
-    hostChainState: undefined
+    hostChainState: HostChainState.fromPartial({})
   };
 }
 export const QueryGetHostChainStateResponse = {
@@ -477,7 +477,7 @@ export const QueryGetHostChainStateResponse = {
 };
 function createBaseQueryAllHostChainStateRequest(): QueryAllHostChainStateRequest {
   return {
-    pagination: undefined
+    pagination: PageRequest.fromPartial({})
   };
 }
 export const QueryAllHostChainStateRequest = {
@@ -523,7 +523,7 @@ export const QueryAllHostChainStateRequest = {
 function createBaseQueryAllHostChainStateResponse(): QueryAllHostChainStateResponse {
   return {
     hostChainState: [],
-    pagination: undefined
+    pagination: PageResponse.fromPartial({})
   };
 }
 export const QueryAllHostChainStateResponse = {
@@ -636,7 +636,7 @@ export const QueryGetUndelegationRequest = {
 };
 function createBaseQueryGetUndelegationResponse(): QueryGetUndelegationResponse {
   return {
-    undelegation: undefined
+    undelegation: Undelegation.fromPartial({})
   };
 }
 export const QueryGetUndelegationResponse = {
@@ -681,7 +681,7 @@ export const QueryGetUndelegationResponse = {
 };
 function createBaseQueryAllUndelegationRequest(): QueryAllUndelegationRequest {
   return {
-    pagination: undefined
+    pagination: PageRequest.fromPartial({})
   };
 }
 export const QueryAllUndelegationRequest = {
@@ -727,7 +727,7 @@ export const QueryAllUndelegationRequest = {
 function createBaseQueryAllUndelegationResponse(): QueryAllUndelegationResponse {
   return {
     undelegation: [],
-    pagination: undefined
+    pagination: PageResponse.fromPartial({})
   };
 }
 export const QueryAllUndelegationResponse = {
@@ -786,7 +786,7 @@ export const QueryAllUndelegationResponse = {
 function createBaseQueryIncompleteUndelegationRequest(): QueryIncompleteUndelegationRequest {
   return {
     hostChain: "",
-    pagination: undefined
+    pagination: PageRequest.fromPartial({})
   };
 }
 export const QueryIncompleteUndelegationRequest = {
@@ -841,7 +841,7 @@ export const QueryIncompleteUndelegationRequest = {
 function createBaseQueryIncompleteUndelegationResponse(): QueryIncompleteUndelegationResponse {
   return {
     undelegation: [],
-    pagination: undefined
+    pagination: PageResponse.fromPartial({})
   };
 }
 export const QueryIncompleteUndelegationResponse = {

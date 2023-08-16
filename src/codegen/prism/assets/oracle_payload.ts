@@ -3,17 +3,17 @@ import * as _m0 from "protobufjs/minimal";
 import { isSet } from "../../helpers";
 /** OraclePayload defines the structure of oracle vote payload */
 export interface OraclePayload {
-  blockHeight?: Height;
+  blockHeight: Height;
   exchangeRate: string;
 }
 /** OraclePayload defines the structure of oracle vote payload */
 export interface OraclePayloadSDKType {
-  block_height?: HeightSDKType;
+  block_height: HeightSDKType;
   exchange_rate: string;
 }
 function createBaseOraclePayload(): OraclePayload {
   return {
-    blockHeight: undefined,
+    blockHeight: Height.fromPartial({}),
     exchangeRate: ""
   };
 }

@@ -9,7 +9,7 @@ import * as _m0 from "protobufjs/minimal";
  */
 export interface MsgSubmitProposal {
   /** content is the proposal's content. */
-  content?: Any;
+  content: Any;
   /** initial_deposit is the deposit value that must be paid at proposal submission. */
   initialDeposit: Coin[];
   /** proposer is the account address of the proposer. */
@@ -20,7 +20,7 @@ export interface MsgSubmitProposal {
  * proposal Content.
  */
 export interface MsgSubmitProposalSDKType {
-  content?: AnySDKType;
+  content: AnySDKType;
   initial_deposit: CoinSDKType[];
   proposer: string;
 }
@@ -108,7 +108,7 @@ export interface MsgDepositResponse {}
 export interface MsgDepositResponseSDKType {}
 function createBaseMsgSubmitProposal(): MsgSubmitProposal {
   return {
-    content: undefined,
+    content: Any.fromPartial({}),
     initialDeposit: [],
     proposer: ""
   };
@@ -267,7 +267,7 @@ export const MsgVote = {
     return {
       proposalId: isSet(object.proposalId) ? Long.fromValue(object.proposalId) : Long.UZERO,
       voter: isSet(object.voter) ? String(object.voter) : "",
-      option: isSet(object.option) ? voteOptionFromJSON(object.option) : 0
+      option: isSet(object.option) ? voteOptionFromJSON(object.option) : -1
     };
   },
   toJSON(message: MsgVote): unknown {

@@ -11,23 +11,23 @@ export interface BondRewardTokenSDKType {
 }
 export interface Bond_RewardsEntry {
   key: string;
-  value?: BondRewardToken;
+  value: BondRewardToken;
 }
 export interface Bond_RewardsEntrySDKType {
   key: string;
-  value?: BondRewardTokenSDKType;
+  value: BondRewardTokenSDKType;
 }
 export interface Bond {
   address: string;
-  token?: Coin;
-  rewards?: {
+  token: Coin;
+  rewards: {
     [key: string]: BondRewardToken;
   };
 }
 export interface BondSDKType {
   address: string;
-  token?: CoinSDKType;
-  rewards?: {
+  token: CoinSDKType;
+  rewards: {
     [key: string]: BondRewardTokenSDKType;
   };
 }
@@ -89,7 +89,7 @@ export const BondRewardToken = {
 function createBaseBond_RewardsEntry(): Bond_RewardsEntry {
   return {
     key: "",
-    value: undefined
+    value: BondRewardToken.fromPartial({})
   };
 }
 export const Bond_RewardsEntry = {
@@ -144,7 +144,7 @@ export const Bond_RewardsEntry = {
 function createBaseBond(): Bond {
   return {
     address: "",
-    token: undefined,
+    token: Coin.fromPartial({}),
     rewards: {}
   };
 }

@@ -3,22 +3,22 @@ import { isSet, isObject } from "../../../helpers";
 /** ModuleOptions describes the CLI options for a Cosmos SDK module. */
 export interface ModuleOptions {
   /** tx describes the tx command for the module. */
-  tx?: ServiceCommandDescriptor;
+  tx: ServiceCommandDescriptor;
   /** query describes the tx command for the module. */
-  query?: ServiceCommandDescriptor;
+  query: ServiceCommandDescriptor;
 }
 /** ModuleOptions describes the CLI options for a Cosmos SDK module. */
 export interface ModuleOptionsSDKType {
-  tx?: ServiceCommandDescriptorSDKType;
-  query?: ServiceCommandDescriptorSDKType;
+  tx: ServiceCommandDescriptorSDKType;
+  query: ServiceCommandDescriptorSDKType;
 }
 export interface ServiceCommandDescriptor_SubCommandsEntry {
   key: string;
-  value?: ServiceCommandDescriptor;
+  value: ServiceCommandDescriptor;
 }
 export interface ServiceCommandDescriptor_SubCommandsEntrySDKType {
   key: string;
-  value?: ServiceCommandDescriptorSDKType;
+  value: ServiceCommandDescriptorSDKType;
 }
 /** ServiceCommandDescriptor describes a CLI command based on a protobuf service. */
 export interface ServiceCommandDescriptor {
@@ -39,7 +39,7 @@ export interface ServiceCommandDescriptor {
    * different protobuf services. The map key is used as the name of the
    * sub-command.
    */
-  subCommands?: {
+  subCommands: {
     [key: string]: ServiceCommandDescriptor;
   };
 }
@@ -47,17 +47,17 @@ export interface ServiceCommandDescriptor {
 export interface ServiceCommandDescriptorSDKType {
   service: string;
   rpc_command_options: RpcCommandOptionsSDKType[];
-  sub_commands?: {
+  sub_commands: {
     [key: string]: ServiceCommandDescriptorSDKType;
   };
 }
 export interface RpcCommandOptions_FlagOptionsEntry {
   key: string;
-  value?: FlagOptions;
+  value: FlagOptions;
 }
 export interface RpcCommandOptions_FlagOptionsEntrySDKType {
   key: string;
-  value?: FlagOptionsSDKType;
+  value: FlagOptionsSDKType;
 }
 /**
  * RpcCommandOptions specifies options for commands generated from protobuf
@@ -104,7 +104,7 @@ export interface RpcCommandOptions {
    * By default all request fields are configured as flags. They can
    * also be configured as positional args instead using positional_args.
    */
-  flagOptions?: {
+  flagOptions: {
     [key: string]: FlagOptions;
   };
   /** positional_args specifies positional arguments for the command. */
@@ -126,7 +126,7 @@ export interface RpcCommandOptionsSDKType {
   suggest_for: string[];
   deprecated: string;
   version: string;
-  flag_options?: {
+  flag_options: {
     [key: string]: FlagOptionsSDKType;
   };
   positional_args: PositionalArgDescriptorSDKType[];
@@ -193,8 +193,8 @@ export interface PositionalArgDescriptorSDKType {
 }
 function createBaseModuleOptions(): ModuleOptions {
   return {
-    tx: undefined,
-    query: undefined
+    tx: ServiceCommandDescriptor.fromPartial({}),
+    query: ServiceCommandDescriptor.fromPartial({})
   };
 }
 export const ModuleOptions = {
@@ -249,7 +249,7 @@ export const ModuleOptions = {
 function createBaseServiceCommandDescriptor_SubCommandsEntry(): ServiceCommandDescriptor_SubCommandsEntry {
   return {
     key: "",
-    value: undefined
+    value: ServiceCommandDescriptor.fromPartial({})
   };
 }
 export const ServiceCommandDescriptor_SubCommandsEntry = {
@@ -396,7 +396,7 @@ export const ServiceCommandDescriptor = {
 function createBaseRpcCommandOptions_FlagOptionsEntry(): RpcCommandOptions_FlagOptionsEntry {
   return {
     key: "",
-    value: undefined
+    value: FlagOptions.fromPartial({})
   };
 }
 export const RpcCommandOptions_FlagOptionsEntry = {

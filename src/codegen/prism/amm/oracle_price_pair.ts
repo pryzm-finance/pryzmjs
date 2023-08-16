@@ -210,7 +210,7 @@ export const OraclePricePair = {
       assetId: isSet(object.assetId) ? String(object.assetId) : "",
       quoteToken: isSet(object.quoteToken) ? String(object.quoteToken) : "",
       twapDurationMillis: isSet(object.twapDurationMillis) ? Long.fromValue(object.twapDurationMillis) : Long.UZERO,
-      twapAlgorithm: isSet(object.twapAlgorithm) ? twapAlgorithmFromJSON(object.twapAlgorithm) : 0,
+      twapAlgorithm: isSet(object.twapAlgorithm) ? twapAlgorithmFromJSON(object.twapAlgorithm) : -1,
       disabled: isSet(object.disabled) ? Boolean(object.disabled) : false,
       pairs: Array.isArray(object?.pairs) ? object.pairs.map((e: any) => Pair.fromJSON(e)) : []
     };

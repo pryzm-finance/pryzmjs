@@ -4,19 +4,19 @@ import { isSet, bytesFromBase64, base64FromBytes } from "../../../../helpers";
 /** MsgCreateClient defines a message to create an IBC client */
 export interface MsgCreateClient {
   /** light client state */
-  clientState?: Any;
+  clientState: Any;
   /**
    * consensus state associated with the client that corresponds to a given
    * height.
    */
-  consensusState?: Any;
+  consensusState: Any;
   /** signer address */
   signer: string;
 }
 /** MsgCreateClient defines a message to create an IBC client */
 export interface MsgCreateClientSDKType {
-  client_state?: AnySDKType;
-  consensus_state?: AnySDKType;
+  client_state: AnySDKType;
+  consensus_state: AnySDKType;
   signer: string;
 }
 /** MsgCreateClientResponse defines the Msg/CreateClient response type. */
@@ -31,7 +31,7 @@ export interface MsgUpdateClient {
   /** client unique identifier */
   clientId: string;
   /** client message to update the light client */
-  clientMessage?: Any;
+  clientMessage: Any;
   /** signer address */
   signer: string;
 }
@@ -41,7 +41,7 @@ export interface MsgUpdateClient {
  */
 export interface MsgUpdateClientSDKType {
   client_id: string;
-  client_message?: AnySDKType;
+  client_message: AnySDKType;
   signer: string;
 }
 /** MsgUpdateClientResponse defines the Msg/UpdateClient response type. */
@@ -56,12 +56,12 @@ export interface MsgUpgradeClient {
   /** client unique identifier */
   clientId: string;
   /** upgraded client state */
-  clientState?: Any;
+  clientState: Any;
   /**
    * upgraded consensus state, only contains enough information to serve as a
    * basis of trust in update logic
    */
-  consensusState?: Any;
+  consensusState: Any;
   /** proof that old chain committed to new client */
   proofUpgradeClient: Uint8Array;
   /** proof that old chain committed to new consensus state */
@@ -75,8 +75,8 @@ export interface MsgUpgradeClient {
  */
 export interface MsgUpgradeClientSDKType {
   client_id: string;
-  client_state?: AnySDKType;
-  consensus_state?: AnySDKType;
+  client_state: AnySDKType;
+  consensus_state: AnySDKType;
   proof_upgrade_client: Uint8Array;
   proof_upgrade_consensus_state: Uint8Array;
   signer: string;
@@ -96,7 +96,7 @@ export interface MsgSubmitMisbehaviour {
   clientId: string;
   /** misbehaviour used for freezing the light client */
   /** @deprecated */
-  misbehaviour?: Any;
+  misbehaviour: Any;
   /** signer address */
   /** @deprecated */
   signer: string;
@@ -110,7 +110,7 @@ export interface MsgSubmitMisbehaviourSDKType {
   /** @deprecated */
   client_id: string;
   /** @deprecated */
-  misbehaviour?: AnySDKType;
+  misbehaviour: AnySDKType;
   /** @deprecated */
   signer: string;
 }
@@ -126,8 +126,8 @@ export interface MsgSubmitMisbehaviourResponse {}
 export interface MsgSubmitMisbehaviourResponseSDKType {}
 function createBaseMsgCreateClient(): MsgCreateClient {
   return {
-    clientState: undefined,
-    consensusState: undefined,
+    clientState: Any.fromPartial({}),
+    consensusState: Any.fromPartial({}),
     signer: ""
   };
 }
@@ -225,7 +225,7 @@ export const MsgCreateClientResponse = {
 function createBaseMsgUpdateClient(): MsgUpdateClient {
   return {
     clientId: "",
-    clientMessage: undefined,
+    clientMessage: Any.fromPartial({}),
     signer: ""
   };
 }
@@ -323,8 +323,8 @@ export const MsgUpdateClientResponse = {
 function createBaseMsgUpgradeClient(): MsgUpgradeClient {
   return {
     clientId: "",
-    clientState: undefined,
-    consensusState: undefined,
+    clientState: Any.fromPartial({}),
+    consensusState: Any.fromPartial({}),
     proofUpgradeClient: new Uint8Array(),
     proofUpgradeConsensusState: new Uint8Array(),
     signer: ""
@@ -451,7 +451,7 @@ export const MsgUpgradeClientResponse = {
 function createBaseMsgSubmitMisbehaviour(): MsgSubmitMisbehaviour {
   return {
     clientId: "",
-    misbehaviour: undefined,
+    misbehaviour: Any.fromPartial({}),
     signer: ""
   };
 }

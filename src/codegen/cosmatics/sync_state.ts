@@ -3,24 +3,24 @@ import { Long, isSet, fromJsonTimestamp, fromTimestamp } from "../helpers";
 import * as _m0 from "protobufjs/minimal";
 export interface SyncState {
   blockHeight: Long;
-  blockTime?: Timestamp;
+  blockTime: Timestamp;
 }
 export interface SyncStateSDKType {
   block_height: Long;
-  block_time?: TimestampSDKType;
+  block_time: TimestampSDKType;
 }
 export interface QuerySyncStateRequest {}
 export interface QuerySyncStateRequestSDKType {}
 export interface QuerySyncStateResponse {
-  syncState?: SyncState;
+  syncState: SyncState;
 }
 export interface QuerySyncStateResponseSDKType {
-  sync_state?: SyncStateSDKType;
+  sync_state: SyncStateSDKType;
 }
 function createBaseSyncState(): SyncState {
   return {
     blockHeight: Long.ZERO,
-    blockTime: undefined
+    blockTime: Timestamp.fromPartial({})
   };
 }
 export const SyncState = {
@@ -107,7 +107,7 @@ export const QuerySyncStateRequest = {
 };
 function createBaseQuerySyncStateResponse(): QuerySyncStateResponse {
   return {
-    syncState: undefined
+    syncState: SyncState.fromPartial({})
   };
 }
 export const QuerySyncStateResponse = {

@@ -3,12 +3,12 @@ import { Long, isSet } from "../../helpers";
 import * as _m0 from "protobufjs/minimal";
 export interface WeightedPoolProperties {
   poolId: Long;
-  weightUpdateTiming?: WeightUpdateTiming;
+  weightUpdateTiming: WeightUpdateTiming;
   tokenList: WeightedToken[];
 }
 export interface WeightedPoolPropertiesSDKType {
   pool_id: Long;
-  weight_update_timing?: WeightUpdateTimingSDKType;
+  weight_update_timing: WeightUpdateTimingSDKType;
   token_list: WeightedTokenSDKType[];
 }
 export interface WeightedToken {
@@ -26,7 +26,7 @@ export interface WeightedTokenSDKType {
 function createBaseWeightedPoolProperties(): WeightedPoolProperties {
   return {
     poolId: Long.UZERO,
-    weightUpdateTiming: undefined,
+    weightUpdateTiming: WeightUpdateTiming.fromPartial({}),
     tokenList: []
   };
 }

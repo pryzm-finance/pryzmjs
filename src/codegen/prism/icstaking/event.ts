@@ -5,64 +5,64 @@ import { Coin, CoinSDKType } from "../../cosmos/base/v1beta1/coin";
 import { Long, isSet } from "../../helpers";
 import * as _m0 from "protobufjs/minimal";
 export interface EventSetHostChain {
-  hostChain?: HostChain;
+  hostChain: HostChain;
 }
 export interface EventSetHostChainSDKType {
-  host_chain?: HostChainSDKType;
+  host_chain: HostChainSDKType;
 }
 export interface EventSetHostChainState {
-  hostChainState?: HostChainState;
+  hostChainState: HostChainState;
 }
 export interface EventSetHostChainStateSDKType {
-  host_chain_state?: HostChainStateSDKType;
+  host_chain_state: HostChainStateSDKType;
 }
 export interface EventSetParams {
-  params?: Params;
+  params: Params;
 }
 export interface EventSetParamsSDKType {
-  params?: ParamsSDKType;
+  params: ParamsSDKType;
 }
 export interface EventSetUndelegation {
-  undelegation?: Undelegation;
+  undelegation: Undelegation;
 }
 export interface EventSetUndelegationSDKType {
-  undelegation?: UndelegationSDKType;
+  undelegation: UndelegationSDKType;
 }
 export interface EventSetChannelUndelegation {
-  channelUndelegation?: ChannelUndelegation;
+  channelUndelegation: ChannelUndelegation;
 }
 export interface EventSetChannelUndelegationSDKType {
-  channel_undelegation?: ChannelUndelegationSDKType;
+  channel_undelegation: ChannelUndelegationSDKType;
 }
 export interface EventStake {
   creator: string;
   hostChain: string;
   transferChannel: string;
   amount: string;
-  fee?: Coin;
-  cAmount?: Coin;
+  fee: Coin;
+  cAmount: Coin;
 }
 export interface EventStakeSDKType {
   creator: string;
   host_chain: string;
   transfer_channel: string;
   amount: string;
-  fee?: CoinSDKType;
-  c_amount?: CoinSDKType;
+  fee: CoinSDKType;
+  c_amount: CoinSDKType;
 }
 export interface EventUnstake {
   creator: string;
   hostChain: string;
   transferChannel: string;
   cAmount: string;
-  uAmount?: Coin;
+  uAmount: Coin;
 }
 export interface EventUnstakeSDKType {
   creator: string;
   host_chain: string;
   transfer_channel: string;
   c_amount: string;
-  u_amount?: CoinSDKType;
+  u_amount: CoinSDKType;
 }
 export interface EventRedeemUnstaked {
   creator: string;
@@ -70,8 +70,8 @@ export interface EventRedeemUnstaked {
   transferChannel: string;
   epoch: Long;
   uAmount: string;
-  amount?: Coin;
-  fee?: Coin;
+  amount: Coin;
+  fee: Coin;
 }
 export interface EventRedeemUnstakedSDKType {
   creator: string;
@@ -79,8 +79,8 @@ export interface EventRedeemUnstakedSDKType {
   transfer_channel: string;
   epoch: Long;
   u_amount: string;
-  amount?: CoinSDKType;
-  fee?: CoinSDKType;
+  amount: CoinSDKType;
+  fee: CoinSDKType;
 }
 export interface EventInstantUnstake {
   creator: string;
@@ -88,8 +88,8 @@ export interface EventInstantUnstake {
   transferChannel: string;
   minCAmount: string;
   maxCAmount: string;
-  amount?: Coin;
-  fee?: Coin;
+  amount: Coin;
+  fee: Coin;
 }
 export interface EventInstantUnstakeSDKType {
   creator: string;
@@ -97,12 +97,12 @@ export interface EventInstantUnstakeSDKType {
   transfer_channel: string;
   min_c_amount: string;
   max_c_amount: string;
-  amount?: CoinSDKType;
-  fee?: CoinSDKType;
+  amount: CoinSDKType;
+  fee: CoinSDKType;
 }
 function createBaseEventSetHostChain(): EventSetHostChain {
   return {
-    hostChain: undefined
+    hostChain: HostChain.fromPartial({})
   };
 }
 export const EventSetHostChain = {
@@ -147,7 +147,7 @@ export const EventSetHostChain = {
 };
 function createBaseEventSetHostChainState(): EventSetHostChainState {
   return {
-    hostChainState: undefined
+    hostChainState: HostChainState.fromPartial({})
   };
 }
 export const EventSetHostChainState = {
@@ -192,7 +192,7 @@ export const EventSetHostChainState = {
 };
 function createBaseEventSetParams(): EventSetParams {
   return {
-    params: undefined
+    params: Params.fromPartial({})
   };
 }
 export const EventSetParams = {
@@ -237,7 +237,7 @@ export const EventSetParams = {
 };
 function createBaseEventSetUndelegation(): EventSetUndelegation {
   return {
-    undelegation: undefined
+    undelegation: Undelegation.fromPartial({})
   };
 }
 export const EventSetUndelegation = {
@@ -282,7 +282,7 @@ export const EventSetUndelegation = {
 };
 function createBaseEventSetChannelUndelegation(): EventSetChannelUndelegation {
   return {
-    channelUndelegation: undefined
+    channelUndelegation: ChannelUndelegation.fromPartial({})
   };
 }
 export const EventSetChannelUndelegation = {
@@ -331,8 +331,8 @@ function createBaseEventStake(): EventStake {
     hostChain: "",
     transferChannel: "",
     amount: "",
-    fee: undefined,
-    cAmount: undefined
+    fee: Coin.fromPartial({}),
+    cAmount: Coin.fromPartial({})
   };
 }
 export const EventStake = {
@@ -426,7 +426,7 @@ function createBaseEventUnstake(): EventUnstake {
     hostChain: "",
     transferChannel: "",
     cAmount: "",
-    uAmount: undefined
+    uAmount: Coin.fromPartial({})
   };
 }
 export const EventUnstake = {
@@ -512,8 +512,8 @@ function createBaseEventRedeemUnstaked(): EventRedeemUnstaked {
     transferChannel: "",
     epoch: Long.UZERO,
     uAmount: "",
-    amount: undefined,
-    fee: undefined
+    amount: Coin.fromPartial({}),
+    fee: Coin.fromPartial({})
   };
 }
 export const EventRedeemUnstaked = {
@@ -617,8 +617,8 @@ function createBaseEventInstantUnstake(): EventInstantUnstake {
     transferChannel: "",
     minCAmount: "",
     maxCAmount: "",
-    amount: undefined,
-    fee: undefined
+    amount: Coin.fromPartial({}),
+    fee: Coin.fromPartial({})
   };
 }
 export const EventInstantUnstake = {

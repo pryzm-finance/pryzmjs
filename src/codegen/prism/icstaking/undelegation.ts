@@ -14,7 +14,7 @@ export interface Undelegation {
   /** whether the undelegation un-bonding period is passed and undelegated assets are available */
   completed: boolean;
   /** the time in which the undelegation will be completed and the assets are transferred to delegation account */
-  completionTime?: Timestamp;
+  completionTime: Timestamp;
 }
 /** Information about an undelegation in a specific epoch */
 export interface UndelegationSDKType {
@@ -23,7 +23,7 @@ export interface UndelegationSDKType {
   exchange_rate: string;
   started: boolean;
   completed: boolean;
-  completion_time?: TimestampSDKType;
+  completion_time: TimestampSDKType;
 }
 /** ChannelUndelegation contains information about an undelegation epoch for a specific transfer channel */
 export interface ChannelUndelegation {
@@ -77,7 +77,7 @@ function createBaseUndelegation(): Undelegation {
     exchangeRate: "",
     started: false,
     completed: false,
-    completionTime: undefined
+    completionTime: Timestamp.fromPartial({})
   };
 }
 export const Undelegation = {

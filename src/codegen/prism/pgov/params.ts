@@ -4,19 +4,19 @@ import { isSet } from "../../helpers";
 /** Params defines the parameters for the module. */
 export interface Params {
   /** (Host chain proposal end time) - (Prism proposal end time) */
-  votingResultSubmissionWindow?: Duration;
+  votingResultSubmissionWindow: Duration;
   /** Zero value means default timeout */
-  votingResultSubmissionTimeout?: Duration;
+  votingResultSubmissionTimeout: Duration;
 }
 /** Params defines the parameters for the module. */
 export interface ParamsSDKType {
-  voting_result_submission_window?: DurationSDKType;
-  voting_result_submission_timeout?: DurationSDKType;
+  voting_result_submission_window: DurationSDKType;
+  voting_result_submission_timeout: DurationSDKType;
 }
 function createBaseParams(): Params {
   return {
-    votingResultSubmissionWindow: undefined,
-    votingResultSubmissionTimeout: undefined
+    votingResultSubmissionWindow: Duration.fromPartial({}),
+    votingResultSubmissionTimeout: Duration.fromPartial({})
   };
 }
 export const Params = {

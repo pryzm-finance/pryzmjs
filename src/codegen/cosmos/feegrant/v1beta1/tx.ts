@@ -11,7 +11,7 @@ export interface MsgGrantAllowance {
   /** grantee is the address of the user being granted an allowance of another user's funds. */
   grantee: string;
   /** allowance can be any of basic, periodic, allowed fee allowance. */
-  allowance?: Any;
+  allowance: Any;
 }
 /**
  * MsgGrantAllowance adds permission for Grantee to spend up to Allowance
@@ -20,7 +20,7 @@ export interface MsgGrantAllowance {
 export interface MsgGrantAllowanceSDKType {
   granter: string;
   grantee: string;
-  allowance?: AnySDKType;
+  allowance: AnySDKType;
 }
 /** MsgGrantAllowanceResponse defines the Msg/GrantAllowanceResponse response type. */
 export interface MsgGrantAllowanceResponse {}
@@ -46,7 +46,7 @@ function createBaseMsgGrantAllowance(): MsgGrantAllowance {
   return {
     granter: "",
     grantee: "",
-    allowance: undefined
+    allowance: Any.fromPartial({})
   };
 }
 export const MsgGrantAllowance = {

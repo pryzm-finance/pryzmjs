@@ -55,7 +55,7 @@ export interface Params {
    * denom, i.e, which stakeholders will receive the minted
    * denoms and how much.
    */
-  distributionProportions?: DistributionProportions;
+  distributionProportions: DistributionProportions;
   /** epoch provisions from the first epoch. */
   genesisEpochProvisions: string;
   developmentAccountAddress: string;
@@ -69,7 +69,7 @@ export interface ParamsSDKType {
   goal_bonded: string;
   epoch_identifier: string;
   minting_rewards_distribution_start_epoch: Long;
-  distribution_proportions?: DistributionProportionsSDKType;
+  distribution_proportions: DistributionProportionsSDKType;
   genesis_epoch_provisions: string;
   development_account_address: string;
 }
@@ -167,7 +167,7 @@ function createBaseParams(): Params {
     goalBonded: "",
     epochIdentifier: "",
     mintingRewardsDistributionStartEpoch: Long.ZERO,
-    distributionProportions: undefined,
+    distributionProportions: DistributionProportions.fromPartial({}),
     genesisEpochProvisions: "",
     developmentAccountAddress: ""
   };

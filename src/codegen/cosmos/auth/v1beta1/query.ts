@@ -10,7 +10,7 @@ import * as _m0 from "protobufjs/minimal";
  */
 export interface QueryAccountsRequest {
   /** pagination defines an optional pagination for the request. */
-  pagination?: PageRequest;
+  pagination: PageRequest;
 }
 /**
  * QueryAccountsRequest is the request type for the Query/Accounts RPC method.
@@ -18,7 +18,7 @@ export interface QueryAccountsRequest {
  * Since: cosmos-sdk 0.43
  */
 export interface QueryAccountsRequestSDKType {
-  pagination?: PageRequestSDKType;
+  pagination: PageRequestSDKType;
 }
 /**
  * QueryAccountsResponse is the response type for the Query/Accounts RPC method.
@@ -29,7 +29,7 @@ export interface QueryAccountsResponse {
   /** accounts are the existing accounts */
   accounts: Any[];
   /** pagination defines the pagination in the response. */
-  pagination?: PageResponse;
+  pagination: PageResponse;
 }
 /**
  * QueryAccountsResponse is the response type for the Query/Accounts RPC method.
@@ -38,7 +38,7 @@ export interface QueryAccountsResponse {
  */
 export interface QueryAccountsResponseSDKType {
   accounts: AnySDKType[];
-  pagination?: PageResponseSDKType;
+  pagination: PageResponseSDKType;
 }
 /** QueryAccountRequest is the request type for the Query/Account RPC method. */
 export interface QueryAccountRequest {
@@ -52,11 +52,11 @@ export interface QueryAccountRequestSDKType {
 /** QueryAccountResponse is the response type for the Query/Account RPC method. */
 export interface QueryAccountResponse {
   /** account defines the account of the corresponding address. */
-  account?: Any;
+  account: Any;
 }
 /** QueryAccountResponse is the response type for the Query/Account RPC method. */
 export interface QueryAccountResponseSDKType {
-  account?: AnySDKType;
+  account: AnySDKType;
 }
 /** QueryParamsRequest is the request type for the Query/Params RPC method. */
 export interface QueryParamsRequest {}
@@ -65,11 +65,11 @@ export interface QueryParamsRequestSDKType {}
 /** QueryParamsResponse is the response type for the Query/Params RPC method. */
 export interface QueryParamsResponse {
   /** params defines the parameters of the module. */
-  params?: Params;
+  params: Params;
 }
 /** QueryParamsResponse is the response type for the Query/Params RPC method. */
 export interface QueryParamsResponseSDKType {
-  params?: ParamsSDKType;
+  params: ParamsSDKType;
 }
 /**
  * QueryModuleAccountsRequest is the request type for the Query/ModuleAccounts RPC method.
@@ -109,11 +109,11 @@ export interface QueryModuleAccountByNameRequestSDKType {
 }
 /** QueryModuleAccountByNameResponse is the response type for the Query/ModuleAccountByName RPC method. */
 export interface QueryModuleAccountByNameResponse {
-  account?: Any;
+  account: Any;
 }
 /** QueryModuleAccountByNameResponse is the response type for the Query/ModuleAccountByName RPC method. */
 export interface QueryModuleAccountByNameResponseSDKType {
-  account?: AnySDKType;
+  account: AnySDKType;
 }
 /**
  * Bech32PrefixRequest is the request type for Bech32Prefix rpc method.
@@ -227,7 +227,7 @@ export interface QueryAccountAddressByIDRequest {
    * 
    * Since: cosmos-sdk 0.47
    */
-  accountId?: Long;
+  accountId: Long;
 }
 /**
  * QueryAccountAddressByIDRequest is the request type for AccountAddressByID rpc method
@@ -237,7 +237,7 @@ export interface QueryAccountAddressByIDRequest {
 export interface QueryAccountAddressByIDRequestSDKType {
   /** @deprecated */
   id: Long;
-  account_id?: Long;
+  account_id: Long;
 }
 /**
  * QueryAccountAddressByIDResponse is the response type for AccountAddressByID rpc method
@@ -279,7 +279,7 @@ export interface QueryAccountInfoRequestSDKType {
  */
 export interface QueryAccountInfoResponse {
   /** info is the account info which is represented by BaseAccount. */
-  info?: BaseAccount;
+  info: BaseAccount;
 }
 /**
  * QueryAccountInfoResponse is the Query/AccountInfo response type.
@@ -287,11 +287,11 @@ export interface QueryAccountInfoResponse {
  * Since: cosmos-sdk 0.47
  */
 export interface QueryAccountInfoResponseSDKType {
-  info?: BaseAccountSDKType;
+  info: BaseAccountSDKType;
 }
 function createBaseQueryAccountsRequest(): QueryAccountsRequest {
   return {
-    pagination: undefined
+    pagination: PageRequest.fromPartial({})
   };
 }
 export const QueryAccountsRequest = {
@@ -337,7 +337,7 @@ export const QueryAccountsRequest = {
 function createBaseQueryAccountsResponse(): QueryAccountsResponse {
   return {
     accounts: [],
-    pagination: undefined
+    pagination: PageResponse.fromPartial({})
   };
 }
 export const QueryAccountsResponse = {
@@ -440,7 +440,7 @@ export const QueryAccountRequest = {
 };
 function createBaseQueryAccountResponse(): QueryAccountResponse {
   return {
-    account: undefined
+    account: Any.fromPartial({})
   };
 }
 export const QueryAccountResponse = {
@@ -518,7 +518,7 @@ export const QueryParamsRequest = {
 };
 function createBaseQueryParamsResponse(): QueryParamsResponse {
   return {
-    params: undefined
+    params: Params.fromPartial({})
   };
 }
 export const QueryParamsResponse = {
@@ -690,7 +690,7 @@ export const QueryModuleAccountByNameRequest = {
 };
 function createBaseQueryModuleAccountByNameResponse(): QueryModuleAccountByNameResponse {
   return {
-    account: undefined
+    account: Any.fromPartial({})
   };
 }
 export const QueryModuleAccountByNameResponse = {
@@ -1138,7 +1138,7 @@ export const QueryAccountInfoRequest = {
 };
 function createBaseQueryAccountInfoResponse(): QueryAccountInfoResponse {
   return {
-    info: undefined
+    info: BaseAccount.fromPartial({})
   };
 }
 export const QueryAccountInfoResponse = {

@@ -3,15 +3,15 @@ import * as _m0 from "protobufjs/minimal";
 import { isSet } from "../../helpers";
 /** Params defines the parameters for the module. */
 export interface Params {
-  defaultFeeRatios?: FeeRatios;
+  defaultFeeRatios: FeeRatios;
 }
 /** Params defines the parameters for the module. */
 export interface ParamsSDKType {
-  default_fee_ratios?: FeeRatiosSDKType;
+  default_fee_ratios: FeeRatiosSDKType;
 }
 function createBaseParams(): Params {
   return {
-    defaultFeeRatios: undefined
+    defaultFeeRatios: FeeRatios.fromPartial({})
   };
 }
 export const Params = {

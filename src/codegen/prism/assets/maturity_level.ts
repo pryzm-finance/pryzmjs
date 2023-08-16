@@ -5,23 +5,23 @@ export interface MaturityLevel {
   active: boolean;
   assetId: string;
   symbol: string;
-  introductionTime?: Timestamp;
-  expirationTime?: Timestamp;
+  introductionTime: Timestamp;
+  expirationTime: Timestamp;
 }
 export interface MaturityLevelSDKType {
   active: boolean;
   asset_id: string;
   symbol: string;
-  introduction_time?: TimestampSDKType;
-  expiration_time?: TimestampSDKType;
+  introduction_time: TimestampSDKType;
+  expiration_time: TimestampSDKType;
 }
 function createBaseMaturityLevel(): MaturityLevel {
   return {
     active: false,
     assetId: "",
     symbol: "",
-    introductionTime: undefined,
-    expirationTime: undefined
+    introductionTime: Timestamp.fromPartial({}),
+    expirationTime: Timestamp.fromPartial({})
   };
 }
 export const MaturityLevel = {

@@ -17,7 +17,7 @@ export class QueryClientImpl implements Query {
     this.appOptions = this.appOptions.bind(this);
   }
   appOptions(request: DeepPartial<AppOptionsRequest> = {}, metadata?: grpc.Metadata): Promise<AppOptionsResponse> {
-    return this.rpc.unary(AppOptionsDesc, AppOptionsRequest.fromPartial(request), metadata);
+    return this.rpc.unary(QueryAppOptionsDesc, AppOptionsRequest.fromPartial(request), metadata);
   }
 }
 export const QueryDesc = {

@@ -9,7 +9,7 @@ export interface MsgSubmitEvidence {
   /** submitter is the signer account address of evidence. */
   submitter: string;
   /** evidence defines the evidence of misbehavior. */
-  evidence?: Any;
+  evidence: Any;
 }
 /**
  * MsgSubmitEvidence represents a message that supports submitting arbitrary
@@ -17,7 +17,7 @@ export interface MsgSubmitEvidence {
  */
 export interface MsgSubmitEvidenceSDKType {
   submitter: string;
-  evidence?: AnySDKType;
+  evidence: AnySDKType;
 }
 /** MsgSubmitEvidenceResponse defines the Msg/SubmitEvidence response type. */
 export interface MsgSubmitEvidenceResponse {
@@ -31,7 +31,7 @@ export interface MsgSubmitEvidenceResponseSDKType {
 function createBaseMsgSubmitEvidence(): MsgSubmitEvidence {
   return {
     submitter: "",
-    evidence: undefined
+    evidence: Any.fromPartial({})
   };
 }
 export const MsgSubmitEvidence = {

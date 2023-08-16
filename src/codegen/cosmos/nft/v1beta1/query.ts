@@ -65,29 +65,29 @@ export interface QuerySupplyResponseSDKType {
 /** QueryNFTstRequest is the request type for the Query/NFTs RPC method */
 export interface QueryNFTsRequest {
   /** class_id associated with the nft */
-  classId?: string;
+  classId: string;
   /** owner is the owner address of the nft */
-  owner?: string;
+  owner: string;
   /** pagination defines an optional pagination for the request. */
-  pagination?: PageRequest;
+  pagination: PageRequest;
 }
 /** QueryNFTstRequest is the request type for the Query/NFTs RPC method */
 export interface QueryNFTsRequestSDKType {
-  class_id?: string;
-  owner?: string;
-  pagination?: PageRequestSDKType;
+  class_id: string;
+  owner: string;
+  pagination: PageRequestSDKType;
 }
 /** QueryNFTsResponse is the response type for the Query/NFTs RPC methods */
 export interface QueryNFTsResponse {
   /** NFT defines the NFT */
   nfts: NFT[];
   /** pagination defines the pagination in the response. */
-  pagination?: PageResponse;
+  pagination: PageResponse;
 }
 /** QueryNFTsResponse is the response type for the Query/NFTs RPC methods */
 export interface QueryNFTsResponseSDKType {
   nfts: NFTSDKType[];
-  pagination?: PageResponseSDKType;
+  pagination: PageResponseSDKType;
 }
 /** QueryNFTRequest is the request type for the Query/NFT RPC method */
 export interface QueryNFTRequest {
@@ -104,11 +104,11 @@ export interface QueryNFTRequestSDKType {
 /** QueryNFTResponse is the response type for the Query/NFT RPC method */
 export interface QueryNFTResponse {
   /** owner is the owner address of the nft */
-  nft?: NFT;
+  nft: NFT;
 }
 /** QueryNFTResponse is the response type for the Query/NFT RPC method */
 export interface QueryNFTResponseSDKType {
-  nft?: NFTSDKType;
+  nft: NFTSDKType;
 }
 /** QueryClassRequest is the request type for the Query/Class RPC method */
 export interface QueryClassRequest {
@@ -122,32 +122,32 @@ export interface QueryClassRequestSDKType {
 /** QueryClassResponse is the response type for the Query/Class RPC method */
 export interface QueryClassResponse {
   /** class defines the class of the nft type. */
-  class?: Class;
+  class: Class;
 }
 /** QueryClassResponse is the response type for the Query/Class RPC method */
 export interface QueryClassResponseSDKType {
-  class?: ClassSDKType;
+  class: ClassSDKType;
 }
 /** QueryClassesRequest is the request type for the Query/Classes RPC method */
 export interface QueryClassesRequest {
   /** pagination defines an optional pagination for the request. */
-  pagination?: PageRequest;
+  pagination: PageRequest;
 }
 /** QueryClassesRequest is the request type for the Query/Classes RPC method */
 export interface QueryClassesRequestSDKType {
-  pagination?: PageRequestSDKType;
+  pagination: PageRequestSDKType;
 }
 /** QueryClassesResponse is the response type for the Query/Classes RPC method */
 export interface QueryClassesResponse {
   /** class defines the class of the nft type. */
   classes: Class[];
   /** pagination defines the pagination in the response. */
-  pagination?: PageResponse;
+  pagination: PageResponse;
 }
 /** QueryClassesResponse is the response type for the Query/Classes RPC method */
 export interface QueryClassesResponseSDKType {
   classes: ClassSDKType[];
-  pagination?: PageResponseSDKType;
+  pagination: PageResponseSDKType;
 }
 function createBaseQueryBalanceRequest(): QueryBalanceRequest {
   return {
@@ -443,7 +443,7 @@ function createBaseQueryNFTsRequest(): QueryNFTsRequest {
   return {
     classId: "",
     owner: "",
-    pagination: undefined
+    pagination: PageRequest.fromPartial({})
   };
 }
 export const QueryNFTsRequest = {
@@ -507,7 +507,7 @@ export const QueryNFTsRequest = {
 function createBaseQueryNFTsResponse(): QueryNFTsResponse {
   return {
     nfts: [],
-    pagination: undefined
+    pagination: PageResponse.fromPartial({})
   };
 }
 export const QueryNFTsResponse = {
@@ -620,7 +620,7 @@ export const QueryNFTRequest = {
 };
 function createBaseQueryNFTResponse(): QueryNFTResponse {
   return {
-    nft: undefined
+    nft: NFT.fromPartial({})
   };
 }
 export const QueryNFTResponse = {
@@ -710,7 +710,7 @@ export const QueryClassRequest = {
 };
 function createBaseQueryClassResponse(): QueryClassResponse {
   return {
-    class: undefined
+    class: Class.fromPartial({})
   };
 }
 export const QueryClassResponse = {
@@ -755,7 +755,7 @@ export const QueryClassResponse = {
 };
 function createBaseQueryClassesRequest(): QueryClassesRequest {
   return {
-    pagination: undefined
+    pagination: PageRequest.fromPartial({})
   };
 }
 export const QueryClassesRequest = {
@@ -801,7 +801,7 @@ export const QueryClassesRequest = {
 function createBaseQueryClassesResponse(): QueryClassesResponse {
   return {
     classes: [],
-    pagination: undefined
+    pagination: PageResponse.fromPartial({})
   };
 }
 export const QueryClassesResponse = {

@@ -72,7 +72,7 @@ export interface ConnectionEnd {
   /** current state of the connection end. */
   state: State;
   /** counterparty chain associated with this connection. */
-  counterparty?: Counterparty;
+  counterparty: Counterparty;
   /**
    * delay period that must pass before a consensus state can be used for
    * packet-verification NOTE: delay period logic is only implemented by some
@@ -90,7 +90,7 @@ export interface ConnectionEndSDKType {
   client_id: string;
   versions: VersionSDKType[];
   state: State;
-  counterparty?: CounterpartySDKType;
+  counterparty: CounterpartySDKType;
   delay_period: Long;
 }
 /**
@@ -110,7 +110,7 @@ export interface IdentifiedConnection {
   /** current state of the connection end. */
   state: State;
   /** counterparty chain associated with this connection. */
-  counterparty?: Counterparty;
+  counterparty: Counterparty;
   /** delay period associated with this connection. */
   delayPeriod: Long;
 }
@@ -123,7 +123,7 @@ export interface IdentifiedConnectionSDKType {
   client_id: string;
   versions: VersionSDKType[];
   state: State;
-  counterparty?: CounterpartySDKType;
+  counterparty: CounterpartySDKType;
   delay_period: Long;
 }
 /** Counterparty defines the counterparty chain associated with a connection end. */
@@ -139,13 +139,13 @@ export interface Counterparty {
    */
   connectionId: string;
   /** commitment merkle prefix of the counterparty chain. */
-  prefix?: MerklePrefix;
+  prefix: MerklePrefix;
 }
 /** Counterparty defines the counterparty chain associated with a connection end. */
 export interface CounterpartySDKType {
   client_id: string;
   connection_id: string;
-  prefix?: MerklePrefixSDKType;
+  prefix: MerklePrefixSDKType;
 }
 /** ClientPaths define all the connection paths for a client state. */
 export interface ClientPaths {
@@ -204,7 +204,7 @@ function createBaseConnectionEnd(): ConnectionEnd {
     clientId: "",
     versions: [],
     state: 0,
-    counterparty: undefined,
+    counterparty: Counterparty.fromPartial({}),
     delayPeriod: Long.UZERO
   };
 }
@@ -260,7 +260,7 @@ export const ConnectionEnd = {
     return {
       clientId: isSet(object.clientId) ? String(object.clientId) : "",
       versions: Array.isArray(object?.versions) ? object.versions.map((e: any) => Version.fromJSON(e)) : [],
-      state: isSet(object.state) ? stateFromJSON(object.state) : 0,
+      state: isSet(object.state) ? stateFromJSON(object.state) : -1,
       counterparty: isSet(object.counterparty) ? Counterparty.fromJSON(object.counterparty) : undefined,
       delayPeriod: isSet(object.delayPeriod) ? Long.fromValue(object.delayPeriod) : Long.UZERO
     };
@@ -294,7 +294,7 @@ function createBaseIdentifiedConnection(): IdentifiedConnection {
     clientId: "",
     versions: [],
     state: 0,
-    counterparty: undefined,
+    counterparty: Counterparty.fromPartial({}),
     delayPeriod: Long.UZERO
   };
 }
@@ -357,7 +357,7 @@ export const IdentifiedConnection = {
       id: isSet(object.id) ? String(object.id) : "",
       clientId: isSet(object.clientId) ? String(object.clientId) : "",
       versions: Array.isArray(object?.versions) ? object.versions.map((e: any) => Version.fromJSON(e)) : [],
-      state: isSet(object.state) ? stateFromJSON(object.state) : 0,
+      state: isSet(object.state) ? stateFromJSON(object.state) : -1,
       counterparty: isSet(object.counterparty) ? Counterparty.fromJSON(object.counterparty) : undefined,
       delayPeriod: isSet(object.delayPeriod) ? Long.fromValue(object.delayPeriod) : Long.UZERO
     };
@@ -391,7 +391,7 @@ function createBaseCounterparty(): Counterparty {
   return {
     clientId: "",
     connectionId: "",
-    prefix: undefined
+    prefix: MerklePrefix.fromPartial({})
   };
 }
 export const Counterparty = {

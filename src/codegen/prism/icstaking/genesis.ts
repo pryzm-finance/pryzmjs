@@ -5,7 +5,7 @@ import * as _m0 from "protobufjs/minimal";
 import { isSet } from "../../helpers";
 /** GenesisState defines the icstaking module's genesis state. */
 export interface GenesisState {
-  params?: Params;
+  params: Params;
   portId: string;
   hostChainList: HostChain[];
   hostChainStateList: HostChainState[];
@@ -14,7 +14,7 @@ export interface GenesisState {
 }
 /** GenesisState defines the icstaking module's genesis state. */
 export interface GenesisStateSDKType {
-  params?: ParamsSDKType;
+  params: ParamsSDKType;
   port_id: string;
   host_chain_list: HostChainSDKType[];
   host_chain_state_list: HostChainStateSDKType[];
@@ -23,7 +23,7 @@ export interface GenesisStateSDKType {
 }
 function createBaseGenesisState(): GenesisState {
   return {
-    params: undefined,
+    params: Params.fromPartial({}),
     portId: "",
     hostChainList: [],
     hostChainStateList: [],

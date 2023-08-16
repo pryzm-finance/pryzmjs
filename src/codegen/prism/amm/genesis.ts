@@ -13,12 +13,12 @@ import { PendingTokenIntroduction, PendingTokenIntroductionSDKType } from "./pen
 import { Long, isSet, isObject } from "../../helpers";
 import * as _m0 from "protobufjs/minimal";
 export interface GenesisPoolData {
-  pool?: Pool;
+  pool: Pool;
   totalLpTokenSupply: string;
   poolTokenList: PoolToken[];
 }
 export interface GenesisPoolDataSDKType {
-  pool?: PoolSDKType;
+  pool: PoolSDKType;
   total_lp_token_supply: string;
   pool_token_list: PoolTokenSDKType[];
 }
@@ -32,7 +32,7 @@ export interface GenesisState_YammPoolAssetIdEntrySDKType {
 }
 /** GenesisState defines the amm module's genesis state. */
 export interface GenesisState {
-  params?: Params;
+  params: Params;
   poolList: GenesisPoolData[];
   weightedPoolPropertiesList: WeightedPoolProperties[];
   yammPoolAssetId: {
@@ -52,7 +52,7 @@ export interface GenesisState {
 }
 /** GenesisState defines the amm module's genesis state. */
 export interface GenesisStateSDKType {
-  params?: ParamsSDKType;
+  params: ParamsSDKType;
   pool_list: GenesisPoolDataSDKType[];
   weighted_pool_properties_list: WeightedPoolPropertiesSDKType[];
   yamm_pool_asset_id: {
@@ -72,7 +72,7 @@ export interface GenesisStateSDKType {
 }
 function createBaseGenesisPoolData(): GenesisPoolData {
   return {
-    pool: undefined,
+    pool: Pool.fromPartial({}),
     totalLpTokenSupply: "",
     poolTokenList: []
   };
@@ -196,7 +196,7 @@ export const GenesisState_YammPoolAssetIdEntry = {
 };
 function createBaseGenesisState(): GenesisState {
   return {
-    params: undefined,
+    params: Params.fromPartial({}),
     poolList: [],
     weightedPoolPropertiesList: [],
     yammPoolAssetId: {},

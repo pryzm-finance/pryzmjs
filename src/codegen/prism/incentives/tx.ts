@@ -6,11 +6,11 @@ import { Long, isSet } from "../../helpers";
 import * as _m0 from "protobufjs/minimal";
 export interface MsgUpdateParams {
   authority: string;
-  params?: Params;
+  params: Params;
 }
 export interface MsgUpdateParamsSDKType {
   authority: string;
-  params?: ParamsSDKType;
+  params: ParamsSDKType;
 }
 export interface MsgUpdateParamsResponse {}
 export interface MsgUpdateParamsResponseSDKType {}
@@ -41,61 +41,61 @@ export interface MsgCreatePoolResponseSDKType {}
 export interface MsgUpdateRewardTokenWeight {
   authority: string;
   bondDenom: string;
-  rewardToken?: WeightedRewardToken;
+  rewardToken: WeightedRewardToken;
 }
 export interface MsgUpdateRewardTokenWeightSDKType {
   authority: string;
   bond_denom: string;
-  reward_token?: WeightedRewardTokenSDKType;
+  reward_token: WeightedRewardTokenSDKType;
 }
 export interface MsgUpdateRewardTokenWeightResponse {}
 export interface MsgUpdateRewardTokenWeightResponseSDKType {}
 export interface MsgAddRewardTokenToPool {
   authority: string;
   bondDenom: string;
-  rewardToken?: WeightedRewardToken;
+  rewardToken: WeightedRewardToken;
 }
 export interface MsgAddRewardTokenToPoolSDKType {
   authority: string;
   bond_denom: string;
-  reward_token?: WeightedRewardTokenSDKType;
+  reward_token: WeightedRewardTokenSDKType;
 }
 export interface MsgAddRewardTokenToPoolResponse {}
 export interface MsgAddRewardTokenToPoolResponseSDKType {}
 export interface MsgBond {
   creator: string;
-  amount?: Coin;
+  amount: Coin;
 }
 export interface MsgBondSDKType {
   creator: string;
-  amount?: CoinSDKType;
+  amount: CoinSDKType;
 }
 export interface MsgBondResponse {
-  bond?: Bond;
+  bond: Bond;
 }
 export interface MsgBondResponseSDKType {
-  bond?: BondSDKType;
+  bond: BondSDKType;
 }
 export interface MsgUnbond {
   creator: string;
-  amount?: Coin;
+  amount: Coin;
   unbondTreasury: string;
   rewardTreasury: string;
   autoClaim: boolean;
 }
 export interface MsgUnbondSDKType {
   creator: string;
-  amount?: CoinSDKType;
+  amount: CoinSDKType;
   unbond_treasury: string;
   reward_treasury: string;
   auto_claim: boolean;
 }
 export interface MsgUnbondResponse {
-  unbonding?: Unbonding;
+  unbonding: Unbonding;
   rewards: Coin[];
 }
 export interface MsgUnbondResponseSDKType {
-  unbonding?: UnbondingSDKType;
+  unbonding: UnbondingSDKType;
   rewards: CoinSDKType[];
 }
 export interface MsgClaimReward {
@@ -123,26 +123,26 @@ export interface MsgClaimUnbondingSDKType {
   unbonding_id: Long;
 }
 export interface MsgClaimUnbondingResponse {
-  amount?: Coin;
+  amount: Coin;
 }
 export interface MsgClaimUnbondingResponseSDKType {
-  amount?: CoinSDKType;
+  amount: CoinSDKType;
 }
 export interface MsgCancelUnbonding {
   creator: string;
   unbondingId: Long;
-  amount?: Coin;
+  amount: Coin;
 }
 export interface MsgCancelUnbondingSDKType {
   creator: string;
   unbonding_id: Long;
-  amount?: CoinSDKType;
+  amount: CoinSDKType;
 }
 export interface MsgCancelUnbondingResponse {
-  bond?: Bond;
+  bond: Bond;
 }
 export interface MsgCancelUnbondingResponseSDKType {
-  bond?: BondSDKType;
+  bond: BondSDKType;
 }
 export interface MsgIncentivizePool {
   creator: string;
@@ -159,7 +159,7 @@ export interface MsgIncentivizePoolResponseSDKType {}
 function createBaseMsgUpdateParams(): MsgUpdateParams {
   return {
     authority: "",
-    params: undefined
+    params: Params.fromPartial({})
   };
 }
 export const MsgUpdateParams = {
@@ -405,7 +405,7 @@ function createBaseMsgUpdateRewardTokenWeight(): MsgUpdateRewardTokenWeight {
   return {
     authority: "",
     bondDenom: "",
-    rewardToken: undefined
+    rewardToken: WeightedRewardToken.fromPartial({})
   };
 }
 export const MsgUpdateRewardTokenWeight = {
@@ -503,7 +503,7 @@ function createBaseMsgAddRewardTokenToPool(): MsgAddRewardTokenToPool {
   return {
     authority: "",
     bondDenom: "",
-    rewardToken: undefined
+    rewardToken: WeightedRewardToken.fromPartial({})
   };
 }
 export const MsgAddRewardTokenToPool = {
@@ -600,7 +600,7 @@ export const MsgAddRewardTokenToPoolResponse = {
 function createBaseMsgBond(): MsgBond {
   return {
     creator: "",
-    amount: undefined
+    amount: Coin.fromPartial({})
   };
 }
 export const MsgBond = {
@@ -654,7 +654,7 @@ export const MsgBond = {
 };
 function createBaseMsgBondResponse(): MsgBondResponse {
   return {
-    bond: undefined
+    bond: Bond.fromPartial({})
   };
 }
 export const MsgBondResponse = {
@@ -700,7 +700,7 @@ export const MsgBondResponse = {
 function createBaseMsgUnbond(): MsgUnbond {
   return {
     creator: "",
-    amount: undefined,
+    amount: Coin.fromPartial({}),
     unbondTreasury: "",
     rewardTreasury: "",
     autoClaim: false
@@ -784,7 +784,7 @@ export const MsgUnbond = {
 };
 function createBaseMsgUnbondResponse(): MsgUnbondResponse {
   return {
-    unbonding: undefined,
+    unbonding: Unbonding.fromPartial({}),
     rewards: []
   };
 }
@@ -1012,7 +1012,7 @@ export const MsgClaimUnbonding = {
 };
 function createBaseMsgClaimUnbondingResponse(): MsgClaimUnbondingResponse {
   return {
-    amount: undefined
+    amount: Coin.fromPartial({})
   };
 }
 export const MsgClaimUnbondingResponse = {
@@ -1059,7 +1059,7 @@ function createBaseMsgCancelUnbonding(): MsgCancelUnbonding {
   return {
     creator: "",
     unbondingId: Long.UZERO,
-    amount: undefined
+    amount: Coin.fromPartial({})
   };
 }
 export const MsgCancelUnbonding = {
@@ -1122,7 +1122,7 @@ export const MsgCancelUnbonding = {
 };
 function createBaseMsgCancelUnbondingResponse(): MsgCancelUnbondingResponse {
   return {
-    bond: undefined
+    bond: Bond.fromPartial({})
   };
 }
 export const MsgCancelUnbondingResponse = {

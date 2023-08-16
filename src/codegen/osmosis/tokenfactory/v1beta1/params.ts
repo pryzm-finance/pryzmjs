@@ -15,12 +15,12 @@ export interface Params {
    * 
    * See: https://github.com/CosmWasm/token-factory/issues/11
    */
-  denomCreationGasConsume: Long;
+  denomCreationGasConsume?: Long;
 }
 /** Params defines the parameters for the tokenfactory module. */
 export interface ParamsSDKType {
   denom_creation_fee: CoinSDKType[];
-  denom_creation_gas_consume: Long;
+  denom_creation_gas_consume?: Long;
 }
 function createBaseParams(): Params {
   return {

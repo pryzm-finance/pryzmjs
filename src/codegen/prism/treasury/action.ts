@@ -51,20 +51,20 @@ export interface ActionFlowTradeSettings {
    * given the occurrence of an action, this is used to compute the start of the flow
    * NOTE: the flowtrade library has a parameter for minimum start delay
    */
-  startDelay?: Duration;
+  startDelay: Duration;
   /** given the start of the flow, this is used to compute the end of the flow */
-  duration?: Duration;
+  duration: Duration;
   /**
    * the interval in which the distribution index is updated and hence tokens are swapped
    * if dist_interval is 0, the flow is updated every time in or out tokens are increased or decreased
    * if dist_interval is equal to the duration of flow, it means that all of the tokens are swapped once after the flow ends
    */
-  distInterval?: Duration;
+  distInterval: Duration;
 }
 export interface ActionFlowTradeSettingsSDKType {
-  start_delay?: DurationSDKType;
-  duration?: DurationSDKType;
-  dist_interval?: DurationSDKType;
+  start_delay: DurationSDKType;
+  duration: DurationSDKType;
+  dist_interval: DurationSDKType;
 }
 export interface Action {
   actionType: ActionType;
@@ -85,9 +85,9 @@ export interface ActionSDKType {
 }
 function createBaseActionFlowTradeSettings(): ActionFlowTradeSettings {
   return {
-    startDelay: undefined,
-    duration: undefined,
-    distInterval: undefined
+    startDelay: Duration.fromPartial({}),
+    duration: Duration.fromPartial({}),
+    distInterval: Duration.fromPartial({})
   };
 }
 export const ActionFlowTradeSettings = {
@@ -207,7 +207,7 @@ export const Action = {
   },
   fromJSON(object: any): Action {
     return {
-      actionType: isSet(object.actionType) ? actionTypeFromJSON(object.actionType) : 0,
+      actionType: isSet(object.actionType) ? actionTypeFromJSON(object.actionType) : -1,
       occurrence: isSet(object.occurrence) ? fromJsonTimestamp(object.occurrence) : undefined,
       expiration: isSet(object.expiration) ? fromJsonTimestamp(object.expiration) : undefined,
       period: isSet(object.period) ? Duration.fromJSON(object.period) : undefined,

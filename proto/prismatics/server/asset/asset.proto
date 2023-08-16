@@ -1,0 +1,15 @@
+syntax = "proto3";
+package prismatics.server.asset;
+
+import "gogoproto/gogo.proto";
+import "prismatics/asset/asset.proto";
+
+option go_package = "github.com/prism-finance/prismatics/server/asset";
+
+message QueryAssetRequest {
+  string asset_id = 1;
+}
+
+message QueryAssetResponse {
+  prismatics.asset.Asset asset = 1 [(gogoproto.nullable) = false];
+}
