@@ -2,15 +2,15 @@ import { Params, ParamsSDKType } from "./params";
 import { Pool, PoolSDKType } from "./pool";
 import { Bond, BondSDKType } from "./bond";
 import { Unbonding, UnbondingSDKType } from "./unbonding";
-import { Long, isSet } from "../../helpers";
-import * as _m0 from "protobufjs/minimal";
+import { BinaryReader, BinaryWriter } from "../../binary";
+import { isSet } from "../../helpers";
 /** GenesisState defines the incentives module's genesis state. */
 export interface GenesisState {
   params: Params;
   poolList: Pool[];
   bondList: Bond[];
   unbondingList: Unbonding[];
-  unbondingCount: Long;
+  unbondingCount: bigint;
 }
 /** GenesisState defines the incentives module's genesis state. */
 export interface GenesisStateSDKType {
@@ -18,7 +18,7 @@ export interface GenesisStateSDKType {
   pool_list: PoolSDKType[];
   bond_list: BondSDKType[];
   unbonding_list: UnbondingSDKType[];
-  unbonding_count: Long;
+  unbonding_count: bigint;
 }
 function createBaseGenesisState(): GenesisState {
   return {
@@ -26,11 +26,11 @@ function createBaseGenesisState(): GenesisState {
     poolList: [],
     bondList: [],
     unbondingList: [],
-    unbondingCount: Long.UZERO
+    unbondingCount: BigInt(0)
   };
 }
 export const GenesisState = {
-  encode(message: GenesisState, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: GenesisState, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.params !== undefined) {
       Params.encode(message.params, writer.uint32(10).fork()).ldelim();
     }
@@ -43,13 +43,13 @@ export const GenesisState = {
     for (const v of message.unbondingList) {
       Unbonding.encode(v!, writer.uint32(34).fork()).ldelim();
     }
-    if (!message.unbondingCount.isZero()) {
+    if (message.unbondingCount !== BigInt(0)) {
       writer.uint32(40).uint64(message.unbondingCount);
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): GenesisState {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): GenesisState {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseGenesisState();
     while (reader.pos < end) {
@@ -68,7 +68,7 @@ export const GenesisState = {
           message.unbondingList.push(Unbonding.decode(reader, reader.uint32()));
           break;
         case 5:
-          message.unbondingCount = (reader.uint64() as Long);
+          message.unbondingCount = reader.uint64();
           break;
         default:
           reader.skipType(tag & 7);
@@ -83,7 +83,7 @@ export const GenesisState = {
       poolList: Array.isArray(object?.poolList) ? object.poolList.map((e: any) => Pool.fromJSON(e)) : [],
       bondList: Array.isArray(object?.bondList) ? object.bondList.map((e: any) => Bond.fromJSON(e)) : [],
       unbondingList: Array.isArray(object?.unbondingList) ? object.unbondingList.map((e: any) => Unbonding.fromJSON(e)) : [],
-      unbondingCount: isSet(object.unbondingCount) ? Long.fromValue(object.unbondingCount) : Long.UZERO
+      unbondingCount: isSet(object.unbondingCount) ? BigInt(object.unbondingCount.toString()) : BigInt(0)
     };
   },
   toJSON(message: GenesisState): unknown {
@@ -104,7 +104,7 @@ export const GenesisState = {
     } else {
       obj.unbondingList = [];
     }
-    message.unbondingCount !== undefined && (obj.unbondingCount = (message.unbondingCount || Long.UZERO).toString());
+    message.unbondingCount !== undefined && (obj.unbondingCount = (message.unbondingCount || BigInt(0)).toString());
     return obj;
   },
   fromPartial(object: Partial<GenesisState>): GenesisState {
@@ -113,7 +113,7 @@ export const GenesisState = {
     message.poolList = object.poolList?.map(e => Pool.fromPartial(e)) || [];
     message.bondList = object.bondList?.map(e => Bond.fromPartial(e)) || [];
     message.unbondingList = object.unbondingList?.map(e => Unbonding.fromPartial(e)) || [];
-    message.unbondingCount = object.unbondingCount !== undefined && object.unbondingCount !== null ? Long.fromValue(object.unbondingCount) : Long.UZERO;
+    message.unbondingCount = object.unbondingCount !== undefined && object.unbondingCount !== null ? BigInt(object.unbondingCount.toString()) : BigInt(0);
     return message;
   }
 };

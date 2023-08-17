@@ -1,13 +1,14 @@
 import { FavoritePair, FavoritePairSDKType } from "../../trade/trade_volume";
-import { Long, isSet } from "../../../helpers";
-import * as _m0 from "protobufjs/minimal";
+import { BinaryReader, BinaryWriter } from "../../../binary";
+import { isSet } from "../../../helpers";
+import { Decimal } from "@cosmjs/math";
 export interface QueryPoolTradeVolumeRequest {
-  poolId: Long;
+  poolId: bigint;
   from: string;
   to: string;
 }
 export interface QueryPoolTradeVolumeRequestSDKType {
-  pool_id: Long;
+  pool_id: bigint;
   from: string;
   to: string;
 }
@@ -55,14 +56,14 @@ export interface QueryFavoritePairsResponseSDKType {
 }
 function createBaseQueryPoolTradeVolumeRequest(): QueryPoolTradeVolumeRequest {
   return {
-    poolId: Long.UZERO,
+    poolId: BigInt(0),
     from: "",
     to: ""
   };
 }
 export const QueryPoolTradeVolumeRequest = {
-  encode(message: QueryPoolTradeVolumeRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (!message.poolId.isZero()) {
+  encode(message: QueryPoolTradeVolumeRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    if (message.poolId !== BigInt(0)) {
       writer.uint32(8).uint64(message.poolId);
     }
     if (message.from !== "") {
@@ -73,15 +74,15 @@ export const QueryPoolTradeVolumeRequest = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): QueryPoolTradeVolumeRequest {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): QueryPoolTradeVolumeRequest {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryPoolTradeVolumeRequest();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.poolId = (reader.uint64() as Long);
+          message.poolId = reader.uint64();
           break;
         case 2:
           message.from = reader.string();
@@ -98,21 +99,21 @@ export const QueryPoolTradeVolumeRequest = {
   },
   fromJSON(object: any): QueryPoolTradeVolumeRequest {
     return {
-      poolId: isSet(object.poolId) ? Long.fromValue(object.poolId) : Long.UZERO,
+      poolId: isSet(object.poolId) ? BigInt(object.poolId.toString()) : BigInt(0),
       from: isSet(object.from) ? String(object.from) : "",
       to: isSet(object.to) ? String(object.to) : ""
     };
   },
   toJSON(message: QueryPoolTradeVolumeRequest): unknown {
     const obj: any = {};
-    message.poolId !== undefined && (obj.poolId = (message.poolId || Long.UZERO).toString());
+    message.poolId !== undefined && (obj.poolId = (message.poolId || BigInt(0)).toString());
     message.from !== undefined && (obj.from = message.from);
     message.to !== undefined && (obj.to = message.to);
     return obj;
   },
   fromPartial(object: Partial<QueryPoolTradeVolumeRequest>): QueryPoolTradeVolumeRequest {
     const message = createBaseQueryPoolTradeVolumeRequest();
-    message.poolId = object.poolId !== undefined && object.poolId !== null ? Long.fromValue(object.poolId) : Long.UZERO;
+    message.poolId = object.poolId !== undefined && object.poolId !== null ? BigInt(object.poolId.toString()) : BigInt(0);
     message.from = object.from ?? "";
     message.to = object.to ?? "";
     return message;
@@ -126,33 +127,33 @@ function createBaseQueryPoolTradeVolumeResponse(): QueryPoolTradeVolumeResponse 
   };
 }
 export const QueryPoolTradeVolumeResponse = {
-  encode(message: QueryPoolTradeVolumeResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: QueryPoolTradeVolumeResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.volume !== "") {
-      writer.uint32(10).string(message.volume);
+      writer.uint32(10).string(Decimal.fromUserInput(message.volume, 18).atomics);
     }
     if (message.swapFeeVolume !== "") {
-      writer.uint32(18).string(message.swapFeeVolume);
+      writer.uint32(18).string(Decimal.fromUserInput(message.swapFeeVolume, 18).atomics);
     }
     if (message.joinExitSwapFeeVolume !== "") {
-      writer.uint32(26).string(message.joinExitSwapFeeVolume);
+      writer.uint32(26).string(Decimal.fromUserInput(message.joinExitSwapFeeVolume, 18).atomics);
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): QueryPoolTradeVolumeResponse {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): QueryPoolTradeVolumeResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryPoolTradeVolumeResponse();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.volume = reader.string();
+          message.volume = Decimal.fromAtomics(reader.string(), 18).toString();
           break;
         case 2:
-          message.swapFeeVolume = reader.string();
+          message.swapFeeVolume = Decimal.fromAtomics(reader.string(), 18).toString();
           break;
         case 3:
-          message.joinExitSwapFeeVolume = reader.string();
+          message.joinExitSwapFeeVolume = Decimal.fromAtomics(reader.string(), 18).toString();
           break;
         default:
           reader.skipType(tag & 7);
@@ -192,7 +193,7 @@ function createBaseQueryTokenTradeVolumeRequest(): QueryTokenTradeVolumeRequest 
   };
 }
 export const QueryTokenTradeVolumeRequest = {
-  encode(message: QueryTokenTradeVolumeRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: QueryTokenTradeVolumeRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.denom !== "") {
       writer.uint32(10).string(message.denom);
     }
@@ -207,8 +208,8 @@ export const QueryTokenTradeVolumeRequest = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): QueryTokenTradeVolumeRequest {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): QueryTokenTradeVolumeRequest {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryTokenTradeVolumeRequest();
     while (reader.pos < end) {
@@ -264,21 +265,21 @@ function createBaseQueryTokenTradeVolumeResponse(): QueryTokenTradeVolumeRespons
   };
 }
 export const QueryTokenTradeVolumeResponse = {
-  encode(message: QueryTokenTradeVolumeResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: QueryTokenTradeVolumeResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.volume !== "") {
-      writer.uint32(10).string(message.volume);
+      writer.uint32(10).string(Decimal.fromUserInput(message.volume, 18).atomics);
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): QueryTokenTradeVolumeResponse {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): QueryTokenTradeVolumeResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryTokenTradeVolumeResponse();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.volume = reader.string();
+          message.volume = Decimal.fromAtomics(reader.string(), 18).toString();
           break;
         default:
           reader.skipType(tag & 7);
@@ -310,7 +311,7 @@ function createBaseQueryFavoritePairsRequest(): QueryFavoritePairsRequest {
   };
 }
 export const QueryFavoritePairsRequest = {
-  encode(message: QueryFavoritePairsRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: QueryFavoritePairsRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.from !== "") {
       writer.uint32(10).string(message.from);
     }
@@ -319,8 +320,8 @@ export const QueryFavoritePairsRequest = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): QueryFavoritePairsRequest {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): QueryFavoritePairsRequest {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryFavoritePairsRequest();
     while (reader.pos < end) {
@@ -364,14 +365,14 @@ function createBaseQueryFavoritePairsResponse(): QueryFavoritePairsResponse {
   };
 }
 export const QueryFavoritePairsResponse = {
-  encode(message: QueryFavoritePairsResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: QueryFavoritePairsResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     for (const v of message.pairs) {
       FavoritePair.encode(v!, writer.uint32(10).fork()).ldelim();
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): QueryFavoritePairsResponse {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): QueryFavoritePairsResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryFavoritePairsResponse();
     while (reader.pos < end) {

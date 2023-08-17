@@ -1,4 +1,5 @@
-import * as _m0 from "protobufjs/minimal";
+import { BinaryReader, BinaryWriter } from "../../binary";
+import { Decimal } from "@cosmjs/math";
 import { isSet } from "../../helpers";
 export interface UserStakeState {
   address: string;
@@ -27,7 +28,7 @@ function createBaseUserStakeState(): UserStakeState {
   };
 }
 export const UserStakeState = {
-  encode(message: UserStakeState, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: UserStakeState, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.address !== "") {
       writer.uint32(10).string(message.address);
     }
@@ -41,15 +42,15 @@ export const UserStakeState = {
       writer.uint32(34).string(message.bondedAmount);
     }
     if (message.userIndex !== "") {
-      writer.uint32(42).string(message.userIndex);
+      writer.uint32(42).string(Decimal.fromUserInput(message.userIndex, 18).atomics);
     }
     if (message.pendingReward !== "") {
       writer.uint32(50).string(message.pendingReward);
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): UserStakeState {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): UserStakeState {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseUserStakeState();
     while (reader.pos < end) {
@@ -68,7 +69,7 @@ export const UserStakeState = {
           message.bondedAmount = reader.string();
           break;
         case 5:
-          message.userIndex = reader.string();
+          message.userIndex = Decimal.fromAtomics(reader.string(), 18).toString();
           break;
         case 6:
           message.pendingReward = reader.string();

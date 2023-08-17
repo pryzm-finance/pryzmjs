@@ -37,28 +37,28 @@ export class QueryClientImpl implements Query {
     return this.rpc.unary(QueryParamsDesc, QueryParamsRequest.fromPartial(request), metadata);
   }
   pool(request: DeepPartial<QueryGetPoolRequest>, metadata?: grpc.Metadata): Promise<QueryGetPoolResponse> {
-    return this.rpc.unary(QueryGetPoolDesc, QueryGetPoolRequest.fromPartial(request), metadata);
+    return this.rpc.unary(QueryPoolDesc, QueryGetPoolRequest.fromPartial(request), metadata);
   }
   poolAll(request: DeepPartial<QueryAllPoolRequest> = {
     pagination: undefined
   }, metadata?: grpc.Metadata): Promise<QueryAllPoolResponse> {
-    return this.rpc.unary(QueryAllPoolDesc, QueryAllPoolRequest.fromPartial(request), metadata);
+    return this.rpc.unary(QueryPoolAllDesc, QueryAllPoolRequest.fromPartial(request), metadata);
   }
   bond(request: DeepPartial<QueryGetBondRequest>, metadata?: grpc.Metadata): Promise<QueryGetBondResponse> {
-    return this.rpc.unary(QueryGetBondDesc, QueryGetBondRequest.fromPartial(request), metadata);
+    return this.rpc.unary(QueryBondDesc, QueryGetBondRequest.fromPartial(request), metadata);
   }
   bondAll(request: DeepPartial<QueryAllBondRequest> = {
     pagination: undefined
   }, metadata?: grpc.Metadata): Promise<QueryAllBondResponse> {
-    return this.rpc.unary(QueryAllBondDesc, QueryAllBondRequest.fromPartial(request), metadata);
+    return this.rpc.unary(QueryBondAllDesc, QueryAllBondRequest.fromPartial(request), metadata);
   }
   unbonding(request: DeepPartial<QueryGetUnbondingRequest>, metadata?: grpc.Metadata): Promise<QueryGetUnbondingResponse> {
-    return this.rpc.unary(QueryGetUnbondingDesc, QueryGetUnbondingRequest.fromPartial(request), metadata);
+    return this.rpc.unary(QueryUnbondingDesc, QueryGetUnbondingRequest.fromPartial(request), metadata);
   }
   unbondingAll(request: DeepPartial<QueryAllUnbondingRequest> = {
     pagination: undefined
   }, metadata?: grpc.Metadata): Promise<QueryAllUnbondingResponse> {
-    return this.rpc.unary(QueryAllUnbondingDesc, QueryAllUnbondingRequest.fromPartial(request), metadata);
+    return this.rpc.unary(QueryUnbondingAllDesc, QueryAllUnbondingRequest.fromPartial(request), metadata);
   }
 }
 export const QueryDesc = {

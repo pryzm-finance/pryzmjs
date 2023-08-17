@@ -1,3 +1,4 @@
+//@ts-nocheck
 import { GeneratedType, Registry } from "@cosmjs/proto-signing";
 import { MsgUpdateParams, MsgCreatePool, MsgUpdateRewardTokenWeight, MsgAddRewardTokenToPool, MsgBond, MsgUnbond, MsgClaimReward, MsgClaimUnbonding, MsgCancelUnbonding, MsgIncentivizePool } from "./tx";
 export const registry: ReadonlyArray<[string, GeneratedType]> = [["/prism.incentives.MsgUpdateParams", MsgUpdateParams], ["/prism.incentives.MsgCreatePool", MsgCreatePool], ["/prism.incentives.MsgUpdateRewardTokenWeight", MsgUpdateRewardTokenWeight], ["/prism.incentives.MsgAddRewardTokenToPool", MsgAddRewardTokenToPool], ["/prism.incentives.MsgBond", MsgBond], ["/prism.incentives.MsgUnbond", MsgUnbond], ["/prism.incentives.MsgClaimReward", MsgClaimReward], ["/prism.incentives.MsgClaimUnbonding", MsgClaimUnbonding], ["/prism.incentives.MsgCancelUnbonding", MsgCancelUnbonding], ["/prism.incentives.MsgIncentivizePool", MsgIncentivizePool]];

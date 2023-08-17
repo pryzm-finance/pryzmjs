@@ -1,7 +1,7 @@
 import { Timestamp, TimestampSDKType } from "../../google/protobuf/timestamp";
 import { WeightedVoteOption, WeightedVoteOptionSDKType } from "../../cosmos/gov/v1/gov";
-import { Long, isSet, fromJsonTimestamp, fromTimestamp } from "../../helpers";
-import * as _m0 from "protobufjs/minimal";
+import { BinaryReader, BinaryWriter } from "../../binary";
+import { isSet, fromJsonTimestamp, fromTimestamp } from "../../helpers";
 export enum ProposalStatus {
   ACTIVE = 0,
   SUBMITTING = 1,
@@ -48,7 +48,7 @@ export function proposalStatusToJSON(object: ProposalStatus): string {
 /** Proposal stores information about a replicated proposal */
 export interface Proposal {
   /** the id of proposal on the host chain */
-  proposalId: Long;
+  proposalId: bigint;
   /** the asset ID */
   asset: string;
   /** the time when the proposal has been started */
@@ -62,7 +62,7 @@ export interface Proposal {
 }
 /** Proposal stores information about a replicated proposal */
 export interface ProposalSDKType {
-  proposal_id: Long;
+  proposal_id: bigint;
   asset: string;
   start_time?: TimestampSDKType;
   end_time: TimestampSDKType;
@@ -71,7 +71,7 @@ export interface ProposalSDKType {
 }
 function createBaseProposal(): Proposal {
   return {
-    proposalId: Long.UZERO,
+    proposalId: BigInt(0),
     asset: "",
     startTime: undefined,
     endTime: Timestamp.fromPartial({}),
@@ -80,8 +80,8 @@ function createBaseProposal(): Proposal {
   };
 }
 export const Proposal = {
-  encode(message: Proposal, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (!message.proposalId.isZero()) {
+  encode(message: Proposal, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    if (message.proposalId !== BigInt(0)) {
       writer.uint32(8).uint64(message.proposalId);
     }
     if (message.asset !== "") {
@@ -101,15 +101,15 @@ export const Proposal = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): Proposal {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): Proposal {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseProposal();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.proposalId = (reader.uint64() as Long);
+          message.proposalId = reader.uint64();
           break;
         case 2:
           message.asset = reader.string();
@@ -135,7 +135,7 @@ export const Proposal = {
   },
   fromJSON(object: any): Proposal {
     return {
-      proposalId: isSet(object.proposalId) ? Long.fromValue(object.proposalId) : Long.UZERO,
+      proposalId: isSet(object.proposalId) ? BigInt(object.proposalId.toString()) : BigInt(0),
       asset: isSet(object.asset) ? String(object.asset) : "",
       startTime: isSet(object.startTime) ? fromJsonTimestamp(object.startTime) : undefined,
       endTime: isSet(object.endTime) ? fromJsonTimestamp(object.endTime) : undefined,
@@ -145,7 +145,7 @@ export const Proposal = {
   },
   toJSON(message: Proposal): unknown {
     const obj: any = {};
-    message.proposalId !== undefined && (obj.proposalId = (message.proposalId || Long.UZERO).toString());
+    message.proposalId !== undefined && (obj.proposalId = (message.proposalId || BigInt(0)).toString());
     message.asset !== undefined && (obj.asset = message.asset);
     message.startTime !== undefined && (obj.startTime = fromTimestamp(message.startTime).toISOString());
     message.endTime !== undefined && (obj.endTime = fromTimestamp(message.endTime).toISOString());
@@ -159,7 +159,7 @@ export const Proposal = {
   },
   fromPartial(object: Partial<Proposal>): Proposal {
     const message = createBaseProposal();
-    message.proposalId = object.proposalId !== undefined && object.proposalId !== null ? Long.fromValue(object.proposalId) : Long.UZERO;
+    message.proposalId = object.proposalId !== undefined && object.proposalId !== null ? BigInt(object.proposalId.toString()) : BigInt(0);
     message.asset = object.asset ?? "";
     message.startTime = object.startTime !== undefined && object.startTime !== null ? Timestamp.fromPartial(object.startTime) : undefined;
     message.endTime = object.endTime !== undefined && object.endTime !== null ? Timestamp.fromPartial(object.endTime) : undefined;

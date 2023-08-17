@@ -1,5 +1,5 @@
 import { Coin, CoinSDKType } from "../../cosmos/base/v1beta1/coin";
-import * as _m0 from "protobufjs/minimal";
+import { BinaryReader, BinaryWriter } from "../../binary";
 import { isSet } from "../../helpers";
 export interface MsgRefract {
   creator: string;
@@ -47,7 +47,7 @@ function createBaseMsgRefract(): MsgRefract {
   };
 }
 export const MsgRefract = {
-  encode(message: MsgRefract, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: MsgRefract, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.creator !== "") {
       writer.uint32(10).string(message.creator);
     }
@@ -59,8 +59,8 @@ export const MsgRefract = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): MsgRefract {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): MsgRefract {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgRefract();
     while (reader.pos < end) {
@@ -112,7 +112,7 @@ function createBaseMsgRefractResponse(): MsgRefractResponse {
   };
 }
 export const MsgRefractResponse = {
-  encode(message: MsgRefractResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: MsgRefractResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.pAmount !== undefined) {
       Coin.encode(message.pAmount, writer.uint32(10).fork()).ldelim();
     }
@@ -124,8 +124,8 @@ export const MsgRefractResponse = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): MsgRefractResponse {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): MsgRefractResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgRefractResponse();
     while (reader.pos < end) {
@@ -177,7 +177,7 @@ function createBaseMsgRedeem(): MsgRedeem {
   };
 }
 export const MsgRedeem = {
-  encode(message: MsgRedeem, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: MsgRedeem, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.creator !== "") {
       writer.uint32(10).string(message.creator);
     }
@@ -189,8 +189,8 @@ export const MsgRedeem = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): MsgRedeem {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): MsgRedeem {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgRedeem();
     while (reader.pos < end) {
@@ -241,7 +241,7 @@ function createBaseMsgRedeemResponse(): MsgRedeemResponse {
   };
 }
 export const MsgRedeemResponse = {
-  encode(message: MsgRedeemResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: MsgRedeemResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.cAmount !== undefined) {
       Coin.encode(message.cAmount, writer.uint32(10).fork()).ldelim();
     }
@@ -250,8 +250,8 @@ export const MsgRedeemResponse = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): MsgRedeemResponse {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): MsgRedeemResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgRedeemResponse();
     while (reader.pos < end) {

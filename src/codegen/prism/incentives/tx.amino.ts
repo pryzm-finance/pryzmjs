@@ -1,6 +1,5 @@
 //@ts-nocheck
 import { AminoMsg } from "@cosmjs/amino";
-import { Long } from "../../helpers";
 import { MsgUpdateParams, MsgCreatePool, MsgUpdateRewardTokenWeight, MsgAddRewardTokenToPool, MsgBond, MsgUnbond, MsgClaimReward, MsgClaimUnbonding, MsgCancelUnbonding, MsgIncentivizePool } from "./tx";
 export interface MsgUpdateParamsAminoType extends AminoMsg {
   type: "/prism.incentives.MsgUpdateParams";
@@ -129,7 +128,7 @@ export const AminoConverter = {
         authority,
         params: {
           unbondingPeriod: {
-            seconds: Long.fromNumber(Math.floor(parseInt(params.unbonding_period) / 1_000_000_000)),
+            seconds: BigInt(Math.floor(parseInt(params.unbonding_period) / 1_000_000_000)),
             nanos: parseInt(params.unbonding_period) % 1_000_000_000
           }
         }
@@ -239,7 +238,7 @@ export const AminoConverter = {
         creator,
         amount: {
           denom: amount.denom,
-          amount: Long.fromValue(amount.amount).toString()
+          amount: amount.amount
         }
       };
     },
@@ -269,7 +268,7 @@ export const AminoConverter = {
         creator,
         amount: {
           denom: amount.denom,
-          amount: Long.fromValue(amount.amount).toString()
+          amount: amount.amount
         },
         unbond_treasury: unbondTreasury,
         reward_treasury: rewardTreasury,
@@ -337,7 +336,7 @@ export const AminoConverter = {
     }: MsgClaimUnbondingAminoType["value"]): MsgClaimUnbonding => {
       return {
         creator,
-        unbondingId: Long.fromString(unbonding_id)
+        unbondingId: BigInt(unbonding_id)
       };
     }
   },
@@ -353,7 +352,7 @@ export const AminoConverter = {
         unbonding_id: unbondingId.toString(),
         amount: {
           denom: amount.denom,
-          amount: Long.fromValue(amount.amount).toString()
+          amount: amount.amount
         }
       };
     },
@@ -364,7 +363,7 @@ export const AminoConverter = {
     }: MsgCancelUnbondingAminoType["value"]): MsgCancelUnbonding => {
       return {
         creator,
-        unbondingId: Long.fromString(unbonding_id),
+        unbondingId: BigInt(unbonding_id),
         amount: {
           denom: amount.denom,
           amount: amount.amount

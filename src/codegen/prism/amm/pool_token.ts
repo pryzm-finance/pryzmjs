@@ -1,5 +1,6 @@
-import { Long, isSet } from "../../helpers";
-import * as _m0 from "protobufjs/minimal";
+import { BinaryReader, BinaryWriter } from "../../binary";
+import { Decimal } from "@cosmjs/math";
+import { isSet } from "../../helpers";
 export interface CircuitBreaker {
   referenceLptPrice: string;
   lowerBound: string;
@@ -17,13 +18,13 @@ export interface CircuitBreakerSDKType {
   adjusted_lower_bound: string;
 }
 export interface PoolToken {
-  poolId: Long;
+  poolId: bigint;
   denom: string;
   balance: string;
   circuitBreaker?: CircuitBreaker;
 }
 export interface PoolTokenSDKType {
-  pool_id: Long;
+  pool_id: bigint;
   denom: string;
   balance: string;
   circuit_breaker?: CircuitBreakerSDKType;
@@ -47,51 +48,51 @@ function createBaseCircuitBreaker(): CircuitBreaker {
   };
 }
 export const CircuitBreaker = {
-  encode(message: CircuitBreaker, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: CircuitBreaker, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.referenceLptPrice !== "") {
-      writer.uint32(10).string(message.referenceLptPrice);
+      writer.uint32(10).string(Decimal.fromUserInput(message.referenceLptPrice, 18).atomics);
     }
     if (message.lowerBound !== "") {
-      writer.uint32(18).string(message.lowerBound);
+      writer.uint32(18).string(Decimal.fromUserInput(message.lowerBound, 18).atomics);
     }
     if (message.upperBound !== "") {
-      writer.uint32(26).string(message.upperBound);
+      writer.uint32(26).string(Decimal.fromUserInput(message.upperBound, 18).atomics);
     }
     if (message.referenceNormalizedWeight !== "") {
-      writer.uint32(34).string(message.referenceNormalizedWeight);
+      writer.uint32(34).string(Decimal.fromUserInput(message.referenceNormalizedWeight, 18).atomics);
     }
     if (message.adjustedUpperBound !== "") {
-      writer.uint32(42).string(message.adjustedUpperBound);
+      writer.uint32(42).string(Decimal.fromUserInput(message.adjustedUpperBound, 18).atomics);
     }
     if (message.adjustedLowerBound !== "") {
-      writer.uint32(50).string(message.adjustedLowerBound);
+      writer.uint32(50).string(Decimal.fromUserInput(message.adjustedLowerBound, 18).atomics);
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): CircuitBreaker {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): CircuitBreaker {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseCircuitBreaker();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.referenceLptPrice = reader.string();
+          message.referenceLptPrice = Decimal.fromAtomics(reader.string(), 18).toString();
           break;
         case 2:
-          message.lowerBound = reader.string();
+          message.lowerBound = Decimal.fromAtomics(reader.string(), 18).toString();
           break;
         case 3:
-          message.upperBound = reader.string();
+          message.upperBound = Decimal.fromAtomics(reader.string(), 18).toString();
           break;
         case 4:
-          message.referenceNormalizedWeight = reader.string();
+          message.referenceNormalizedWeight = Decimal.fromAtomics(reader.string(), 18).toString();
           break;
         case 5:
-          message.adjustedUpperBound = reader.string();
+          message.adjustedUpperBound = Decimal.fromAtomics(reader.string(), 18).toString();
           break;
         case 6:
-          message.adjustedLowerBound = reader.string();
+          message.adjustedLowerBound = Decimal.fromAtomics(reader.string(), 18).toString();
           break;
         default:
           reader.skipType(tag & 7);
@@ -133,15 +134,15 @@ export const CircuitBreaker = {
 };
 function createBasePoolToken(): PoolToken {
   return {
-    poolId: Long.UZERO,
+    poolId: BigInt(0),
     denom: "",
     balance: "",
     circuitBreaker: undefined
   };
 }
 export const PoolToken = {
-  encode(message: PoolToken, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (!message.poolId.isZero()) {
+  encode(message: PoolToken, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    if (message.poolId !== BigInt(0)) {
       writer.uint32(8).uint64(message.poolId);
     }
     if (message.denom !== "") {
@@ -155,15 +156,15 @@ export const PoolToken = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): PoolToken {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): PoolToken {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBasePoolToken();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.poolId = (reader.uint64() as Long);
+          message.poolId = reader.uint64();
           break;
         case 2:
           message.denom = reader.string();
@@ -183,7 +184,7 @@ export const PoolToken = {
   },
   fromJSON(object: any): PoolToken {
     return {
-      poolId: isSet(object.poolId) ? Long.fromValue(object.poolId) : Long.UZERO,
+      poolId: isSet(object.poolId) ? BigInt(object.poolId.toString()) : BigInt(0),
       denom: isSet(object.denom) ? String(object.denom) : "",
       balance: isSet(object.balance) ? String(object.balance) : "",
       circuitBreaker: isSet(object.circuitBreaker) ? CircuitBreaker.fromJSON(object.circuitBreaker) : undefined
@@ -191,7 +192,7 @@ export const PoolToken = {
   },
   toJSON(message: PoolToken): unknown {
     const obj: any = {};
-    message.poolId !== undefined && (obj.poolId = (message.poolId || Long.UZERO).toString());
+    message.poolId !== undefined && (obj.poolId = (message.poolId || BigInt(0)).toString());
     message.denom !== undefined && (obj.denom = message.denom);
     message.balance !== undefined && (obj.balance = message.balance);
     message.circuitBreaker !== undefined && (obj.circuitBreaker = message.circuitBreaker ? CircuitBreaker.toJSON(message.circuitBreaker) : undefined);
@@ -199,7 +200,7 @@ export const PoolToken = {
   },
   fromPartial(object: Partial<PoolToken>): PoolToken {
     const message = createBasePoolToken();
-    message.poolId = object.poolId !== undefined && object.poolId !== null ? Long.fromValue(object.poolId) : Long.UZERO;
+    message.poolId = object.poolId !== undefined && object.poolId !== null ? BigInt(object.poolId.toString()) : BigInt(0);
     message.denom = object.denom ?? "";
     message.balance = object.balance ?? "";
     message.circuitBreaker = object.circuitBreaker !== undefined && object.circuitBreaker !== null ? CircuitBreaker.fromPartial(object.circuitBreaker) : undefined;
@@ -213,7 +214,7 @@ function createBaseTokenAmount(): TokenAmount {
   };
 }
 export const TokenAmount = {
-  encode(message: TokenAmount, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: TokenAmount, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.token !== undefined) {
       PoolToken.encode(message.token, writer.uint32(10).fork()).ldelim();
     }
@@ -222,8 +223,8 @@ export const TokenAmount = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): TokenAmount {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): TokenAmount {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseTokenAmount();
     while (reader.pos < end) {

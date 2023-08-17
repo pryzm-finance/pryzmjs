@@ -1,5 +1,6 @@
-import * as _m0 from "protobufjs/minimal";
+import { BinaryReader, BinaryWriter } from "../../../binary";
 import { isSet } from "../../../helpers";
+import { Decimal } from "@cosmjs/math";
 export interface QueryIncentivesAprRequest {
   denom: string;
   timeWindowInDays?: string;
@@ -21,7 +22,7 @@ function createBaseQueryIncentivesAprRequest(): QueryIncentivesAprRequest {
   };
 }
 export const QueryIncentivesAprRequest = {
-  encode(message: QueryIncentivesAprRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: QueryIncentivesAprRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.denom !== "") {
       writer.uint32(10).string(message.denom);
     }
@@ -30,8 +31,8 @@ export const QueryIncentivesAprRequest = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): QueryIncentivesAprRequest {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): QueryIncentivesAprRequest {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryIncentivesAprRequest();
     while (reader.pos < end) {
@@ -75,21 +76,21 @@ function createBaseQueryIncentivesAprResponse(): QueryIncentivesAprResponse {
   };
 }
 export const QueryIncentivesAprResponse = {
-  encode(message: QueryIncentivesAprResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: QueryIncentivesAprResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.apr !== "") {
-      writer.uint32(10).string(message.apr);
+      writer.uint32(10).string(Decimal.fromUserInput(message.apr, 18).atomics);
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): QueryIncentivesAprResponse {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): QueryIncentivesAprResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryIncentivesAprResponse();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.apr = reader.string();
+          message.apr = Decimal.fromAtomics(reader.string(), 18).toString();
           break;
         default:
           reader.skipType(tag & 7);

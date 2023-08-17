@@ -1,4 +1,4 @@
-import * as _m0 from "protobufjs/minimal";
+import { BinaryReader, BinaryWriter } from "../../../binary";
 import { isSet, isObject } from "../../../helpers";
 /** ModuleOptions describes the CLI options for a Cosmos SDK module. */
 export interface ModuleOptions {
@@ -198,7 +198,7 @@ function createBaseModuleOptions(): ModuleOptions {
   };
 }
 export const ModuleOptions = {
-  encode(message: ModuleOptions, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: ModuleOptions, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.tx !== undefined) {
       ServiceCommandDescriptor.encode(message.tx, writer.uint32(10).fork()).ldelim();
     }
@@ -207,8 +207,8 @@ export const ModuleOptions = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): ModuleOptions {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): ModuleOptions {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseModuleOptions();
     while (reader.pos < end) {
@@ -253,7 +253,7 @@ function createBaseServiceCommandDescriptor_SubCommandsEntry(): ServiceCommandDe
   };
 }
 export const ServiceCommandDescriptor_SubCommandsEntry = {
-  encode(message: ServiceCommandDescriptor_SubCommandsEntry, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: ServiceCommandDescriptor_SubCommandsEntry, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.key !== "") {
       writer.uint32(10).string(message.key);
     }
@@ -262,8 +262,8 @@ export const ServiceCommandDescriptor_SubCommandsEntry = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): ServiceCommandDescriptor_SubCommandsEntry {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): ServiceCommandDescriptor_SubCommandsEntry {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseServiceCommandDescriptor_SubCommandsEntry();
     while (reader.pos < end) {
@@ -309,7 +309,7 @@ function createBaseServiceCommandDescriptor(): ServiceCommandDescriptor {
   };
 }
 export const ServiceCommandDescriptor = {
-  encode(message: ServiceCommandDescriptor, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: ServiceCommandDescriptor, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.service !== "") {
       writer.uint32(10).string(message.service);
     }
@@ -324,8 +324,8 @@ export const ServiceCommandDescriptor = {
     });
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): ServiceCommandDescriptor {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): ServiceCommandDescriptor {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseServiceCommandDescriptor();
     while (reader.pos < end) {
@@ -400,7 +400,7 @@ function createBaseRpcCommandOptions_FlagOptionsEntry(): RpcCommandOptions_FlagO
   };
 }
 export const RpcCommandOptions_FlagOptionsEntry = {
-  encode(message: RpcCommandOptions_FlagOptionsEntry, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: RpcCommandOptions_FlagOptionsEntry, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.key !== "") {
       writer.uint32(10).string(message.key);
     }
@@ -409,8 +409,8 @@ export const RpcCommandOptions_FlagOptionsEntry = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): RpcCommandOptions_FlagOptionsEntry {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): RpcCommandOptions_FlagOptionsEntry {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseRpcCommandOptions_FlagOptionsEntry();
     while (reader.pos < end) {
@@ -465,7 +465,7 @@ function createBaseRpcCommandOptions(): RpcCommandOptions {
   };
 }
 export const RpcCommandOptions = {
-  encode(message: RpcCommandOptions, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: RpcCommandOptions, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.rpcMethod !== "") {
       writer.uint32(10).string(message.rpcMethod);
     }
@@ -507,8 +507,8 @@ export const RpcCommandOptions = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): RpcCommandOptions {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): RpcCommandOptions {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseRpcCommandOptions();
     while (reader.pos < end) {
@@ -651,7 +651,7 @@ function createBaseFlagOptions(): FlagOptions {
   };
 }
 export const FlagOptions = {
-  encode(message: FlagOptions, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: FlagOptions, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.name !== "") {
       writer.uint32(10).string(message.name);
     }
@@ -678,8 +678,8 @@ export const FlagOptions = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): FlagOptions {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): FlagOptions {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseFlagOptions();
     while (reader.pos < end) {
@@ -760,7 +760,7 @@ function createBasePositionalArgDescriptor(): PositionalArgDescriptor {
   };
 }
 export const PositionalArgDescriptor = {
-  encode(message: PositionalArgDescriptor, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: PositionalArgDescriptor, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.protoField !== "") {
       writer.uint32(10).string(message.protoField);
     }
@@ -769,8 +769,8 @@ export const PositionalArgDescriptor = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): PositionalArgDescriptor {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): PositionalArgDescriptor {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBasePositionalArgDescriptor();
     while (reader.pos < end) {

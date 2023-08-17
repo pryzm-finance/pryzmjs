@@ -1,5 +1,5 @@
 import { OperationType, UserTradeHistory, UserTradeHistorySDKType, operationTypeFromJSON, operationTypeToJSON } from "../../trade/user_trade_history";
-import * as _m0 from "protobufjs/minimal";
+import { BinaryReader, BinaryWriter } from "../../../binary";
 import { isSet } from "../../../helpers";
 export interface QueryUserTradeHistoryRequest {
   tokenIn: string;
@@ -28,7 +28,7 @@ function createBaseQueryUserTradeHistoryRequest(): QueryUserTradeHistoryRequest 
   };
 }
 export const QueryUserTradeHistoryRequest = {
-  encode(message: QueryUserTradeHistoryRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: QueryUserTradeHistoryRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.tokenIn !== "") {
       writer.uint32(10).string(message.tokenIn);
     }
@@ -43,8 +43,8 @@ export const QueryUserTradeHistoryRequest = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): QueryUserTradeHistoryRequest {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): QueryUserTradeHistoryRequest {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryUserTradeHistoryRequest();
     while (reader.pos < end) {
@@ -100,14 +100,14 @@ function createBaseQueryUserTradeHistoryResponse(): QueryUserTradeHistoryRespons
   };
 }
 export const QueryUserTradeHistoryResponse = {
-  encode(message: QueryUserTradeHistoryResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: QueryUserTradeHistoryResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     for (const v of message.userTradeHistoryRecords) {
       UserTradeHistory.encode(v!, writer.uint32(10).fork()).ldelim();
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): QueryUserTradeHistoryResponse {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): QueryUserTradeHistoryResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryUserTradeHistoryResponse();
     while (reader.pos < end) {

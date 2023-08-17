@@ -1,34 +1,34 @@
-import { Long, isSet } from "../../helpers";
-import * as _m0 from "protobufjs/minimal";
+import { BinaryReader, BinaryWriter } from "../../binary";
+import { isSet } from "../../helpers";
 export interface PulseTradablePair {
   tokenIn: string;
   tokenOut: string;
-  poolId: Long;
+  poolId: bigint;
   whitelistedRoute: boolean;
 }
 export interface PulseTradablePairSDKType {
   token_in: string;
   token_out: string;
-  pool_id: Long;
+  pool_id: bigint;
   whitelisted_route: boolean;
 }
 function createBasePulseTradablePair(): PulseTradablePair {
   return {
     tokenIn: "",
     tokenOut: "",
-    poolId: Long.UZERO,
+    poolId: BigInt(0),
     whitelistedRoute: false
   };
 }
 export const PulseTradablePair = {
-  encode(message: PulseTradablePair, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: PulseTradablePair, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.tokenIn !== "") {
       writer.uint32(10).string(message.tokenIn);
     }
     if (message.tokenOut !== "") {
       writer.uint32(18).string(message.tokenOut);
     }
-    if (!message.poolId.isZero()) {
+    if (message.poolId !== BigInt(0)) {
       writer.uint32(24).uint64(message.poolId);
     }
     if (message.whitelistedRoute === true) {
@@ -36,8 +36,8 @@ export const PulseTradablePair = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): PulseTradablePair {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): PulseTradablePair {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBasePulseTradablePair();
     while (reader.pos < end) {
@@ -50,7 +50,7 @@ export const PulseTradablePair = {
           message.tokenOut = reader.string();
           break;
         case 3:
-          message.poolId = (reader.uint64() as Long);
+          message.poolId = reader.uint64();
           break;
         case 4:
           message.whitelistedRoute = reader.bool();
@@ -66,7 +66,7 @@ export const PulseTradablePair = {
     return {
       tokenIn: isSet(object.tokenIn) ? String(object.tokenIn) : "",
       tokenOut: isSet(object.tokenOut) ? String(object.tokenOut) : "",
-      poolId: isSet(object.poolId) ? Long.fromValue(object.poolId) : Long.UZERO,
+      poolId: isSet(object.poolId) ? BigInt(object.poolId.toString()) : BigInt(0),
       whitelistedRoute: isSet(object.whitelistedRoute) ? Boolean(object.whitelistedRoute) : false
     };
   },
@@ -74,7 +74,7 @@ export const PulseTradablePair = {
     const obj: any = {};
     message.tokenIn !== undefined && (obj.tokenIn = message.tokenIn);
     message.tokenOut !== undefined && (obj.tokenOut = message.tokenOut);
-    message.poolId !== undefined && (obj.poolId = (message.poolId || Long.UZERO).toString());
+    message.poolId !== undefined && (obj.poolId = (message.poolId || BigInt(0)).toString());
     message.whitelistedRoute !== undefined && (obj.whitelistedRoute = message.whitelistedRoute);
     return obj;
   },
@@ -82,7 +82,7 @@ export const PulseTradablePair = {
     const message = createBasePulseTradablePair();
     message.tokenIn = object.tokenIn ?? "";
     message.tokenOut = object.tokenOut ?? "";
-    message.poolId = object.poolId !== undefined && object.poolId !== null ? Long.fromValue(object.poolId) : Long.UZERO;
+    message.poolId = object.poolId !== undefined && object.poolId !== null ? BigInt(object.poolId.toString()) : BigInt(0);
     message.whitelistedRoute = object.whitelistedRoute ?? false;
     return message;
   }

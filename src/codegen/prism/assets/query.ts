@@ -2,7 +2,7 @@ import { PageRequest, PageRequestSDKType, PageResponse, PageResponseSDKType } fr
 import { Params, ParamsSDKType } from "./params";
 import { RefractableAsset, RefractableAssetSDKType } from "./refractable_asset";
 import { MaturityLevel, MaturityLevelSDKType } from "./maturity_level";
-import * as _m0 from "protobufjs/minimal";
+import { BinaryReader, BinaryWriter } from "../../binary";
 import { isSet } from "../../helpers";
 /** QueryParamsRequest is request type for the Query/Params RPC method. */
 export interface QueryParamsRequest {}
@@ -85,11 +85,11 @@ function createBaseQueryParamsRequest(): QueryParamsRequest {
   return {};
 }
 export const QueryParamsRequest = {
-  encode(_: QueryParamsRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(_: QueryParamsRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): QueryParamsRequest {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): QueryParamsRequest {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryParamsRequest();
     while (reader.pos < end) {
@@ -120,14 +120,14 @@ function createBaseQueryParamsResponse(): QueryParamsResponse {
   };
 }
 export const QueryParamsResponse = {
-  encode(message: QueryParamsResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: QueryParamsResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.params !== undefined) {
       Params.encode(message.params, writer.uint32(10).fork()).ldelim();
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): QueryParamsResponse {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): QueryParamsResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryParamsResponse();
     while (reader.pos < end) {
@@ -165,14 +165,14 @@ function createBaseQueryGetRefractableAssetRequest(): QueryGetRefractableAssetRe
   };
 }
 export const QueryGetRefractableAssetRequest = {
-  encode(message: QueryGetRefractableAssetRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: QueryGetRefractableAssetRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.assetId !== "") {
       writer.uint32(10).string(message.assetId);
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): QueryGetRefractableAssetRequest {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): QueryGetRefractableAssetRequest {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryGetRefractableAssetRequest();
     while (reader.pos < end) {
@@ -210,14 +210,14 @@ function createBaseQueryGetRefractableAssetResponse(): QueryGetRefractableAssetR
   };
 }
 export const QueryGetRefractableAssetResponse = {
-  encode(message: QueryGetRefractableAssetResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: QueryGetRefractableAssetResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.asset !== undefined) {
       RefractableAsset.encode(message.asset, writer.uint32(10).fork()).ldelim();
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): QueryGetRefractableAssetResponse {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): QueryGetRefractableAssetResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryGetRefractableAssetResponse();
     while (reader.pos < end) {
@@ -256,7 +256,7 @@ function createBaseQueryAllRefractableAssetRequest(): QueryAllRefractableAssetRe
   };
 }
 export const QueryAllRefractableAssetRequest = {
-  encode(message: QueryAllRefractableAssetRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: QueryAllRefractableAssetRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.enabled !== "") {
       writer.uint32(10).string(message.enabled);
     }
@@ -265,8 +265,8 @@ export const QueryAllRefractableAssetRequest = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): QueryAllRefractableAssetRequest {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): QueryAllRefractableAssetRequest {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryAllRefractableAssetRequest();
     while (reader.pos < end) {
@@ -311,7 +311,7 @@ function createBaseQueryAllRefractableAssetResponse(): QueryAllRefractableAssetR
   };
 }
 export const QueryAllRefractableAssetResponse = {
-  encode(message: QueryAllRefractableAssetResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: QueryAllRefractableAssetResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     for (const v of message.assets) {
       RefractableAsset.encode(v!, writer.uint32(10).fork()).ldelim();
     }
@@ -320,8 +320,8 @@ export const QueryAllRefractableAssetResponse = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): QueryAllRefractableAssetResponse {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): QueryAllRefractableAssetResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryAllRefractableAssetResponse();
     while (reader.pos < end) {
@@ -371,7 +371,7 @@ function createBaseQueryGetMaturityLevelRequest(): QueryGetMaturityLevelRequest 
   };
 }
 export const QueryGetMaturityLevelRequest = {
-  encode(message: QueryGetMaturityLevelRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: QueryGetMaturityLevelRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.active === true) {
       writer.uint32(8).bool(message.active);
     }
@@ -383,8 +383,8 @@ export const QueryGetMaturityLevelRequest = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): QueryGetMaturityLevelRequest {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): QueryGetMaturityLevelRequest {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryGetMaturityLevelRequest();
     while (reader.pos < end) {
@@ -434,14 +434,14 @@ function createBaseQueryGetMaturityLevelResponse(): QueryGetMaturityLevelRespons
   };
 }
 export const QueryGetMaturityLevelResponse = {
-  encode(message: QueryGetMaturityLevelResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: QueryGetMaturityLevelResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.maturityLevel !== undefined) {
       MaturityLevel.encode(message.maturityLevel, writer.uint32(10).fork()).ldelim();
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): QueryGetMaturityLevelResponse {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): QueryGetMaturityLevelResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryGetMaturityLevelResponse();
     while (reader.pos < end) {
@@ -482,7 +482,7 @@ function createBaseQueryAllMaturityLevelRequest(): QueryAllMaturityLevelRequest 
   };
 }
 export const QueryAllMaturityLevelRequest = {
-  encode(message: QueryAllMaturityLevelRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: QueryAllMaturityLevelRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.active === true) {
       writer.uint32(8).bool(message.active);
     }
@@ -497,8 +497,8 @@ export const QueryAllMaturityLevelRequest = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): QueryAllMaturityLevelRequest {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): QueryAllMaturityLevelRequest {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryAllMaturityLevelRequest();
     while (reader.pos < end) {
@@ -555,7 +555,7 @@ function createBaseQueryAllMaturityLevelResponse(): QueryAllMaturityLevelRespons
   };
 }
 export const QueryAllMaturityLevelResponse = {
-  encode(message: QueryAllMaturityLevelResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: QueryAllMaturityLevelResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     for (const v of message.maturityLevel) {
       MaturityLevel.encode(v!, writer.uint32(10).fork()).ldelim();
     }
@@ -564,8 +564,8 @@ export const QueryAllMaturityLevelResponse = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): QueryAllMaturityLevelResponse {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): QueryAllMaturityLevelResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryAllMaturityLevelResponse();
     while (reader.pos < end) {

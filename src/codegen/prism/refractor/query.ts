@@ -1,6 +1,7 @@
 import { AssetState, AssetStateSDKType } from "./asset_state";
-import * as _m0 from "protobufjs/minimal";
+import { BinaryReader, BinaryWriter } from "../../binary";
 import { isSet } from "../../helpers";
+import { Decimal } from "@cosmjs/math";
 export interface QueryGetAssetStateRequest {
   assetId: string;
 }
@@ -31,14 +32,14 @@ function createBaseQueryGetAssetStateRequest(): QueryGetAssetStateRequest {
   };
 }
 export const QueryGetAssetStateRequest = {
-  encode(message: QueryGetAssetStateRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: QueryGetAssetStateRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.assetId !== "") {
       writer.uint32(10).string(message.assetId);
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): QueryGetAssetStateRequest {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): QueryGetAssetStateRequest {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryGetAssetStateRequest();
     while (reader.pos < end) {
@@ -76,14 +77,14 @@ function createBaseQueryGetAssetStateResponse(): QueryGetAssetStateResponse {
   };
 }
 export const QueryGetAssetStateResponse = {
-  encode(message: QueryGetAssetStateResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: QueryGetAssetStateResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.assetState !== undefined) {
       AssetState.encode(message.assetState, writer.uint32(10).fork()).ldelim();
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): QueryGetAssetStateResponse {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): QueryGetAssetStateResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryGetAssetStateResponse();
     while (reader.pos < end) {
@@ -121,14 +122,14 @@ function createBaseQueryGetCPExchangeRateRequest(): QueryGetCPExchangeRateReques
   };
 }
 export const QueryGetCPExchangeRateRequest = {
-  encode(message: QueryGetCPExchangeRateRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: QueryGetCPExchangeRateRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.assetId !== "") {
       writer.uint32(10).string(message.assetId);
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): QueryGetCPExchangeRateRequest {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): QueryGetCPExchangeRateRequest {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryGetCPExchangeRateRequest();
     while (reader.pos < end) {
@@ -166,21 +167,21 @@ function createBaseQueryGetCPExchangeRateResponse(): QueryGetCPExchangeRateRespo
   };
 }
 export const QueryGetCPExchangeRateResponse = {
-  encode(message: QueryGetCPExchangeRateResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: QueryGetCPExchangeRateResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.exchangeRate !== "") {
-      writer.uint32(10).string(message.exchangeRate);
+      writer.uint32(10).string(Decimal.fromUserInput(message.exchangeRate, 18).atomics);
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): QueryGetCPExchangeRateResponse {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): QueryGetCPExchangeRateResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryGetCPExchangeRateResponse();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.exchangeRate = reader.string();
+          message.exchangeRate = Decimal.fromAtomics(reader.string(), 18).toString();
           break;
         default:
           reader.skipType(tag & 7);

@@ -22,15 +22,15 @@ export class QueryClientImpl implements Query {
     this.flowTradeAll = this.flowTradeAll.bind(this);
   }
   action(request: DeepPartial<QueryGetActionRequest> = {}, metadata?: grpc.Metadata): Promise<QueryGetActionResponse> {
-    return this.rpc.unary(QueryGetActionDesc, QueryGetActionRequest.fromPartial(request), metadata);
+    return this.rpc.unary(QueryActionDesc, QueryGetActionRequest.fromPartial(request), metadata);
   }
   flowTrade(request: DeepPartial<QueryGetFlowTradeRequest>, metadata?: grpc.Metadata): Promise<QueryGetFlowTradeResponse> {
-    return this.rpc.unary(QueryGetFlowTradeDesc, QueryGetFlowTradeRequest.fromPartial(request), metadata);
+    return this.rpc.unary(QueryFlowTradeDesc, QueryGetFlowTradeRequest.fromPartial(request), metadata);
   }
   flowTradeAll(request: DeepPartial<QueryAllFlowTradeRequest> = {
     pagination: undefined
   }, metadata?: grpc.Metadata): Promise<QueryAllFlowTradeResponse> {
-    return this.rpc.unary(QueryAllFlowTradeDesc, QueryAllFlowTradeRequest.fromPartial(request), metadata);
+    return this.rpc.unary(QueryFlowTradeAllDesc, QueryAllFlowTradeRequest.fromPartial(request), metadata);
   }
 }
 export const QueryDesc = {

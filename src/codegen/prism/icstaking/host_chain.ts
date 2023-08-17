@@ -1,7 +1,8 @@
 import { StakingParams, StakingParamsSDKType } from "./params";
 import { Height, HeightSDKType } from "../../ibc/core/client/v1/client";
-import * as _m0 from "protobufjs/minimal";
+import { BinaryReader, BinaryWriter } from "../../binary";
 import { isSet, isObject } from "../../helpers";
+import { Decimal } from "@cosmjs/math";
 /** The types of available connection protocols */
 export enum ConnectionType {
   /** ICA - interchain account connection using ibc-go ICS-27 */
@@ -315,7 +316,7 @@ function createBaseHostChain(): HostChain {
   };
 }
 export const HostChain = {
-  encode(message: HostChain, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: HostChain, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.id !== "") {
       writer.uint32(10).string(message.id);
     }
@@ -339,8 +340,8 @@ export const HostChain = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): HostChain {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): HostChain {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseHostChain();
     while (reader.pos < end) {
@@ -425,7 +426,7 @@ function createBaseTransferChannel(): TransferChannel {
   };
 }
 export const TransferChannel = {
-  encode(message: TransferChannel, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: TransferChannel, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.type !== 0) {
       writer.uint32(8).int32(message.type);
     }
@@ -440,8 +441,8 @@ export const TransferChannel = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): TransferChannel {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): TransferChannel {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseTransferChannel();
     while (reader.pos < end) {
@@ -498,17 +499,17 @@ function createBaseValidator(): Validator {
   };
 }
 export const Validator = {
-  encode(message: Validator, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: Validator, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.address !== "") {
       writer.uint32(10).string(message.address);
     }
     if (message.weight !== "") {
-      writer.uint32(18).string(message.weight);
+      writer.uint32(18).string(Decimal.fromUserInput(message.weight, 18).atomics);
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): Validator {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): Validator {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseValidator();
     while (reader.pos < end) {
@@ -518,7 +519,7 @@ export const Validator = {
           message.address = reader.string();
           break;
         case 2:
-          message.weight = reader.string();
+          message.weight = Decimal.fromAtomics(reader.string(), 18).toString();
           break;
         default:
           reader.skipType(tag & 7);
@@ -553,7 +554,7 @@ function createBaseHostChainState_ValidatorsEntry(): HostChainState_ValidatorsEn
   };
 }
 export const HostChainState_ValidatorsEntry = {
-  encode(message: HostChainState_ValidatorsEntry, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: HostChainState_ValidatorsEntry, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.key !== "") {
       writer.uint32(10).string(message.key);
     }
@@ -562,8 +563,8 @@ export const HostChainState_ValidatorsEntry = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): HostChainState_ValidatorsEntry {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): HostChainState_ValidatorsEntry {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseHostChainState_ValidatorsEntry();
     while (reader.pos < end) {
@@ -614,7 +615,7 @@ function createBaseHostChainState(): HostChainState {
   };
 }
 export const HostChainState = {
-  encode(message: HostChainState, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: HostChainState, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.hostChainId !== "") {
       writer.uint32(10).string(message.hostChainId);
     }
@@ -634,7 +635,7 @@ export const HostChainState = {
       writer.uint32(42).string(message.amountToBeCompounded);
     }
     if (message.exchangeRate !== "") {
-      writer.uint32(50).string(message.exchangeRate);
+      writer.uint32(50).string(Decimal.fromUserInput(message.exchangeRate, 18).atomics);
     }
     if (message.state !== 0) {
       writer.uint32(56).int32(message.state);
@@ -644,8 +645,8 @@ export const HostChainState = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): HostChainState {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): HostChainState {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseHostChainState();
     while (reader.pos < end) {
@@ -670,7 +671,7 @@ export const HostChainState = {
           message.amountToBeCompounded = reader.string();
           break;
         case 6:
-          message.exchangeRate = reader.string();
+          message.exchangeRate = Decimal.fromAtomics(reader.string(), 18).toString();
           break;
         case 7:
           message.state = (reader.int32() as any);
@@ -748,7 +749,7 @@ function createBaseHostAccounts(): HostAccounts {
   };
 }
 export const HostAccounts = {
-  encode(message: HostAccounts, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: HostAccounts, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.delegation !== undefined) {
       HostAccount.encode(message.delegation, writer.uint32(10).fork()).ldelim();
     }
@@ -763,8 +764,8 @@ export const HostAccounts = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): HostAccounts {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): HostAccounts {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseHostAccounts();
     while (reader.pos < end) {
@@ -822,7 +823,7 @@ function createBaseHostAccount(): HostAccount {
   };
 }
 export const HostAccount = {
-  encode(message: HostAccount, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: HostAccount, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.address !== "") {
       writer.uint32(10).string(message.address);
     }
@@ -834,8 +835,8 @@ export const HostAccount = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): HostAccount {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): HostAccount {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseHostAccount();
     while (reader.pos < end) {
@@ -885,14 +886,14 @@ function createBaseValidatorState(): ValidatorState {
   };
 }
 export const ValidatorState = {
-  encode(message: ValidatorState, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: ValidatorState, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.delegatedAmount !== "") {
       writer.uint32(10).string(message.delegatedAmount);
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): ValidatorState {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): ValidatorState {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseValidatorState();
     while (reader.pos < end) {

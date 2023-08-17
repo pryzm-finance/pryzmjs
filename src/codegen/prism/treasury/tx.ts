@@ -1,5 +1,5 @@
 import { Action, ActionSDKType } from "./action";
-import * as _m0 from "protobufjs/minimal";
+import { BinaryReader, BinaryWriter } from "../../binary";
 import { isSet } from "../../helpers";
 export interface MsgSetAction {
   authority: string;
@@ -18,7 +18,7 @@ function createBaseMsgSetAction(): MsgSetAction {
   };
 }
 export const MsgSetAction = {
-  encode(message: MsgSetAction, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: MsgSetAction, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.authority !== "") {
       writer.uint32(10).string(message.authority);
     }
@@ -27,8 +27,8 @@ export const MsgSetAction = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): MsgSetAction {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): MsgSetAction {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgSetAction();
     while (reader.pos < end) {
@@ -70,11 +70,11 @@ function createBaseMsgSetActionResponse(): MsgSetActionResponse {
   return {};
 }
 export const MsgSetActionResponse = {
-  encode(_: MsgSetActionResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(_: MsgSetActionResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): MsgSetActionResponse {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): MsgSetActionResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgSetActionResponse();
     while (reader.pos < end) {

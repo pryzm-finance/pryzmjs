@@ -1,9 +1,10 @@
-import { Long, isSet } from "../../helpers";
-import * as _m0 from "protobufjs/minimal";
+import { BinaryReader, BinaryWriter } from "../../binary";
+import { Decimal } from "@cosmjs/math";
+import { isSet } from "../../helpers";
 export interface Order {
-  id: Long;
+  id: bigint;
   creator: string;
-  poolId: Long;
+  poolId: bigint;
   tokenIn: string;
   tokenOut: string;
   whitelistedRoute: boolean;
@@ -11,14 +12,14 @@ export interface Order {
   amountPerStep: string;
   remainingAmount: string;
   depositedAmount: string;
-  minMillisInterval: Long;
+  minMillisInterval: bigint;
   maxStepSpotPrice: string;
   maxMatchingSpotPrice?: string;
 }
 export interface OrderSDKType {
-  id: Long;
+  id: bigint;
   creator: string;
-  pool_id: Long;
+  pool_id: bigint;
   token_in: string;
   token_out: string;
   whitelisted_route: boolean;
@@ -26,15 +27,15 @@ export interface OrderSDKType {
   amount_per_step: string;
   remaining_amount: string;
   deposited_amount: string;
-  min_millis_interval: Long;
+  min_millis_interval: bigint;
   max_step_spot_price: string;
   max_matching_spot_price?: string;
 }
 function createBaseOrder(): Order {
   return {
-    id: Long.UZERO,
+    id: BigInt(0),
     creator: "",
-    poolId: Long.UZERO,
+    poolId: BigInt(0),
     tokenIn: "",
     tokenOut: "",
     whitelistedRoute: false,
@@ -42,20 +43,20 @@ function createBaseOrder(): Order {
     amountPerStep: "",
     remainingAmount: "",
     depositedAmount: "",
-    minMillisInterval: Long.ZERO,
+    minMillisInterval: BigInt(0),
     maxStepSpotPrice: "",
     maxMatchingSpotPrice: undefined
   };
 }
 export const Order = {
-  encode(message: Order, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (!message.id.isZero()) {
+  encode(message: Order, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    if (message.id !== BigInt(0)) {
       writer.uint32(8).uint64(message.id);
     }
     if (message.creator !== "") {
       writer.uint32(18).string(message.creator);
     }
-    if (!message.poolId.isZero()) {
+    if (message.poolId !== BigInt(0)) {
       writer.uint32(24).uint64(message.poolId);
     }
     if (message.tokenIn !== "") {
@@ -79,32 +80,32 @@ export const Order = {
     if (message.depositedAmount !== "") {
       writer.uint32(82).string(message.depositedAmount);
     }
-    if (!message.minMillisInterval.isZero()) {
+    if (message.minMillisInterval !== BigInt(0)) {
       writer.uint32(88).int64(message.minMillisInterval);
     }
     if (message.maxStepSpotPrice !== "") {
-      writer.uint32(98).string(message.maxStepSpotPrice);
+      writer.uint32(98).string(Decimal.fromUserInput(message.maxStepSpotPrice, 18).atomics);
     }
     if (message.maxMatchingSpotPrice !== undefined) {
-      writer.uint32(106).string(message.maxMatchingSpotPrice);
+      writer.uint32(106).string(Decimal.fromUserInput(message.maxMatchingSpotPrice, 18).atomics);
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): Order {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): Order {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseOrder();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.id = (reader.uint64() as Long);
+          message.id = reader.uint64();
           break;
         case 2:
           message.creator = reader.string();
           break;
         case 3:
-          message.poolId = (reader.uint64() as Long);
+          message.poolId = reader.uint64();
           break;
         case 4:
           message.tokenIn = reader.string();
@@ -128,13 +129,13 @@ export const Order = {
           message.depositedAmount = reader.string();
           break;
         case 11:
-          message.minMillisInterval = (reader.int64() as Long);
+          message.minMillisInterval = reader.int64();
           break;
         case 12:
-          message.maxStepSpotPrice = reader.string();
+          message.maxStepSpotPrice = Decimal.fromAtomics(reader.string(), 18).toString();
           break;
         case 13:
-          message.maxMatchingSpotPrice = reader.string();
+          message.maxMatchingSpotPrice = Decimal.fromAtomics(reader.string(), 18).toString();
           break;
         default:
           reader.skipType(tag & 7);
@@ -145,9 +146,9 @@ export const Order = {
   },
   fromJSON(object: any): Order {
     return {
-      id: isSet(object.id) ? Long.fromValue(object.id) : Long.UZERO,
+      id: isSet(object.id) ? BigInt(object.id.toString()) : BigInt(0),
       creator: isSet(object.creator) ? String(object.creator) : "",
-      poolId: isSet(object.poolId) ? Long.fromValue(object.poolId) : Long.UZERO,
+      poolId: isSet(object.poolId) ? BigInt(object.poolId.toString()) : BigInt(0),
       tokenIn: isSet(object.tokenIn) ? String(object.tokenIn) : "",
       tokenOut: isSet(object.tokenOut) ? String(object.tokenOut) : "",
       whitelistedRoute: isSet(object.whitelistedRoute) ? Boolean(object.whitelistedRoute) : false,
@@ -155,16 +156,16 @@ export const Order = {
       amountPerStep: isSet(object.amountPerStep) ? String(object.amountPerStep) : "",
       remainingAmount: isSet(object.remainingAmount) ? String(object.remainingAmount) : "",
       depositedAmount: isSet(object.depositedAmount) ? String(object.depositedAmount) : "",
-      minMillisInterval: isSet(object.minMillisInterval) ? Long.fromValue(object.minMillisInterval) : Long.ZERO,
+      minMillisInterval: isSet(object.minMillisInterval) ? BigInt(object.minMillisInterval.toString()) : BigInt(0),
       maxStepSpotPrice: isSet(object.maxStepSpotPrice) ? String(object.maxStepSpotPrice) : "",
       maxMatchingSpotPrice: isSet(object.maxMatchingSpotPrice) ? String(object.maxMatchingSpotPrice) : undefined
     };
   },
   toJSON(message: Order): unknown {
     const obj: any = {};
-    message.id !== undefined && (obj.id = (message.id || Long.UZERO).toString());
+    message.id !== undefined && (obj.id = (message.id || BigInt(0)).toString());
     message.creator !== undefined && (obj.creator = message.creator);
-    message.poolId !== undefined && (obj.poolId = (message.poolId || Long.UZERO).toString());
+    message.poolId !== undefined && (obj.poolId = (message.poolId || BigInt(0)).toString());
     message.tokenIn !== undefined && (obj.tokenIn = message.tokenIn);
     message.tokenOut !== undefined && (obj.tokenOut = message.tokenOut);
     message.whitelistedRoute !== undefined && (obj.whitelistedRoute = message.whitelistedRoute);
@@ -172,16 +173,16 @@ export const Order = {
     message.amountPerStep !== undefined && (obj.amountPerStep = message.amountPerStep);
     message.remainingAmount !== undefined && (obj.remainingAmount = message.remainingAmount);
     message.depositedAmount !== undefined && (obj.depositedAmount = message.depositedAmount);
-    message.minMillisInterval !== undefined && (obj.minMillisInterval = (message.minMillisInterval || Long.ZERO).toString());
+    message.minMillisInterval !== undefined && (obj.minMillisInterval = (message.minMillisInterval || BigInt(0)).toString());
     message.maxStepSpotPrice !== undefined && (obj.maxStepSpotPrice = message.maxStepSpotPrice);
     message.maxMatchingSpotPrice !== undefined && (obj.maxMatchingSpotPrice = message.maxMatchingSpotPrice);
     return obj;
   },
   fromPartial(object: Partial<Order>): Order {
     const message = createBaseOrder();
-    message.id = object.id !== undefined && object.id !== null ? Long.fromValue(object.id) : Long.UZERO;
+    message.id = object.id !== undefined && object.id !== null ? BigInt(object.id.toString()) : BigInt(0);
     message.creator = object.creator ?? "";
-    message.poolId = object.poolId !== undefined && object.poolId !== null ? Long.fromValue(object.poolId) : Long.UZERO;
+    message.poolId = object.poolId !== undefined && object.poolId !== null ? BigInt(object.poolId.toString()) : BigInt(0);
     message.tokenIn = object.tokenIn ?? "";
     message.tokenOut = object.tokenOut ?? "";
     message.whitelistedRoute = object.whitelistedRoute ?? false;
@@ -189,7 +190,7 @@ export const Order = {
     message.amountPerStep = object.amountPerStep ?? "";
     message.remainingAmount = object.remainingAmount ?? "";
     message.depositedAmount = object.depositedAmount ?? "";
-    message.minMillisInterval = object.minMillisInterval !== undefined && object.minMillisInterval !== null ? Long.fromValue(object.minMillisInterval) : Long.ZERO;
+    message.minMillisInterval = object.minMillisInterval !== undefined && object.minMillisInterval !== null ? BigInt(object.minMillisInterval.toString()) : BigInt(0);
     message.maxStepSpotPrice = object.maxStepSpotPrice ?? "";
     message.maxMatchingSpotPrice = object.maxMatchingSpotPrice ?? undefined;
     return message;

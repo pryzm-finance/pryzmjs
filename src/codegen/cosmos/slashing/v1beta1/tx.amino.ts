@@ -1,6 +1,5 @@
 //@ts-nocheck
 import { AminoMsg } from "@cosmjs/amino";
-import { Long } from "../../../helpers";
 import { MsgUnjail, MsgUpdateParams } from "./tx";
 export interface MsgUnjailAminoType extends AminoMsg {
   type: "cosmos-sdk/MsgUnjail";
@@ -66,10 +65,10 @@ export const AminoConverter = {
       return {
         authority,
         params: {
-          signedBlocksWindow: Long.fromString(params.signed_blocks_window),
+          signedBlocksWindow: BigInt(params.signed_blocks_window),
           minSignedPerWindow: params.min_signed_per_window,
           downtimeJailDuration: {
-            seconds: Long.fromNumber(Math.floor(parseInt(params.downtime_jail_duration) / 1_000_000_000)),
+            seconds: BigInt(Math.floor(parseInt(params.downtime_jail_duration) / 1_000_000_000)),
             nanos: parseInt(params.downtime_jail_duration) % 1_000_000_000
           },
           slashFractionDoubleSign: params.slash_fraction_double_sign,

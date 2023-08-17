@@ -1,4 +1,4 @@
-import * as _m0 from "protobufjs/minimal";
+import { BinaryReader, BinaryWriter } from "../../binary";
 import { isSet } from "../../helpers";
 /** StakedPAsset stores the amount of pAssets staked for an account */
 export interface StakedPAsset {
@@ -23,7 +23,7 @@ function createBaseStakedPAsset(): StakedPAsset {
   };
 }
 export const StakedPAsset = {
-  encode(message: StakedPAsset, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: StakedPAsset, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.account !== "") {
       writer.uint32(10).string(message.account);
     }
@@ -35,8 +35,8 @@ export const StakedPAsset = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): StakedPAsset {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): StakedPAsset {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseStakedPAsset();
     while (reader.pos < end) {

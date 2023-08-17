@@ -1,3 +1,4 @@
+//@ts-nocheck
 import { GeneratedType, Registry } from "@cosmjs/proto-signing";
 import { MsgBond, MsgUnbond, MsgClaimReward, MsgExitPool } from "./tx";
 export const registry: ReadonlyArray<[string, GeneratedType]> = [["/prism.ystaking.MsgBond", MsgBond], ["/prism.ystaking.MsgUnbond", MsgUnbond], ["/prism.ystaking.MsgClaimReward", MsgClaimReward], ["/prism.ystaking.MsgExitPool", MsgExitPool]];

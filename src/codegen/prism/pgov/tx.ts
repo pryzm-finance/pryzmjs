@@ -1,8 +1,8 @@
 import { Params, ParamsSDKType, WeightedVoteOption, WeightedVoteOptionSDKType, Proposal, ProposalSDKType } from "../../cosmos/gov/v1/gov";
 import { Coin, CoinSDKType } from "../../cosmos/base/v1beta1/coin";
 import { ProofOps, ProofOpsSDKType } from "../../tendermint/crypto/proof";
-import { Long, isSet, bytesFromBase64, base64FromBytes } from "../../helpers";
-import * as _m0 from "protobufjs/minimal";
+import { BinaryReader, BinaryWriter } from "../../binary";
+import { isSet, bytesFromBase64, base64FromBytes } from "../../helpers";
 export interface MsgUpdateParams {
   authority: string;
   params: Params;
@@ -44,13 +44,13 @@ export interface MsgUnstakePAssetsResponseSDKType {
 export interface MsgSubmitVote {
   voter: string;
   asset: string;
-  proposal: Long;
+  proposal: bigint;
   options: WeightedVoteOption[];
 }
 export interface MsgSubmitVoteSDKType {
   voter: string;
   asset: string;
-  proposal: Long;
+  proposal: bigint;
   options: WeightedVoteOptionSDKType[];
 }
 export interface MsgSubmitVoteResponse {}
@@ -59,14 +59,14 @@ export interface MsgSubmitProposal {
   creator: string;
   asset: string;
   proposal: Uint8Array;
-  height: Long;
+  height: bigint;
   proof: ProofOps;
 }
 export interface MsgSubmitProposalSDKType {
   creator: string;
   asset: string;
   proposal: Uint8Array;
-  height: Long;
+  height: bigint;
   proof: ProofOpsSDKType;
 }
 export interface MsgSubmitProposalResponse {
@@ -78,12 +78,12 @@ export interface MsgSubmitProposalResponseSDKType {
 export interface MsgRetryVoteTransmit {
   creator: string;
   asset: string;
-  proposal: Long;
+  proposal: bigint;
 }
 export interface MsgRetryVoteTransmitSDKType {
   creator: string;
   asset: string;
-  proposal: Long;
+  proposal: bigint;
 }
 export interface MsgRetryVoteTransmitResponse {}
 export interface MsgRetryVoteTransmitResponseSDKType {}
@@ -94,7 +94,7 @@ function createBaseMsgUpdateParams(): MsgUpdateParams {
   };
 }
 export const MsgUpdateParams = {
-  encode(message: MsgUpdateParams, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: MsgUpdateParams, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.authority !== "") {
       writer.uint32(10).string(message.authority);
     }
@@ -103,8 +103,8 @@ export const MsgUpdateParams = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): MsgUpdateParams {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): MsgUpdateParams {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgUpdateParams();
     while (reader.pos < end) {
@@ -146,11 +146,11 @@ function createBaseMsgUpdateParamsResponse(): MsgUpdateParamsResponse {
   return {};
 }
 export const MsgUpdateParamsResponse = {
-  encode(_: MsgUpdateParamsResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(_: MsgUpdateParamsResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): MsgUpdateParamsResponse {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): MsgUpdateParamsResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgUpdateParamsResponse();
     while (reader.pos < end) {
@@ -182,7 +182,7 @@ function createBaseMsgStakePAssets(): MsgStakePAssets {
   };
 }
 export const MsgStakePAssets = {
-  encode(message: MsgStakePAssets, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: MsgStakePAssets, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.creator !== "") {
       writer.uint32(10).string(message.creator);
     }
@@ -191,8 +191,8 @@ export const MsgStakePAssets = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): MsgStakePAssets {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): MsgStakePAssets {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgStakePAssets();
     while (reader.pos < end) {
@@ -240,14 +240,14 @@ function createBaseMsgStakePAssetsResponse(): MsgStakePAssetsResponse {
   };
 }
 export const MsgStakePAssetsResponse = {
-  encode(message: MsgStakePAssetsResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: MsgStakePAssetsResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.totalStakedPAssets !== "") {
       writer.uint32(10).string(message.totalStakedPAssets);
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): MsgStakePAssetsResponse {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): MsgStakePAssetsResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgStakePAssetsResponse();
     while (reader.pos < end) {
@@ -286,7 +286,7 @@ function createBaseMsgUnstakePAssets(): MsgUnstakePAssets {
   };
 }
 export const MsgUnstakePAssets = {
-  encode(message: MsgUnstakePAssets, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: MsgUnstakePAssets, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.creator !== "") {
       writer.uint32(10).string(message.creator);
     }
@@ -295,8 +295,8 @@ export const MsgUnstakePAssets = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): MsgUnstakePAssets {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): MsgUnstakePAssets {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgUnstakePAssets();
     while (reader.pos < end) {
@@ -344,14 +344,14 @@ function createBaseMsgUnstakePAssetsResponse(): MsgUnstakePAssetsResponse {
   };
 }
 export const MsgUnstakePAssetsResponse = {
-  encode(message: MsgUnstakePAssetsResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: MsgUnstakePAssetsResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.totalStakedPAssets !== "") {
       writer.uint32(10).string(message.totalStakedPAssets);
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): MsgUnstakePAssetsResponse {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): MsgUnstakePAssetsResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgUnstakePAssetsResponse();
     while (reader.pos < end) {
@@ -387,19 +387,19 @@ function createBaseMsgSubmitVote(): MsgSubmitVote {
   return {
     voter: "",
     asset: "",
-    proposal: Long.UZERO,
+    proposal: BigInt(0),
     options: []
   };
 }
 export const MsgSubmitVote = {
-  encode(message: MsgSubmitVote, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: MsgSubmitVote, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.voter !== "") {
       writer.uint32(10).string(message.voter);
     }
     if (message.asset !== "") {
       writer.uint32(18).string(message.asset);
     }
-    if (!message.proposal.isZero()) {
+    if (message.proposal !== BigInt(0)) {
       writer.uint32(24).uint64(message.proposal);
     }
     for (const v of message.options) {
@@ -407,8 +407,8 @@ export const MsgSubmitVote = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): MsgSubmitVote {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): MsgSubmitVote {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgSubmitVote();
     while (reader.pos < end) {
@@ -421,7 +421,7 @@ export const MsgSubmitVote = {
           message.asset = reader.string();
           break;
         case 3:
-          message.proposal = (reader.uint64() as Long);
+          message.proposal = reader.uint64();
           break;
         case 4:
           message.options.push(WeightedVoteOption.decode(reader, reader.uint32()));
@@ -437,7 +437,7 @@ export const MsgSubmitVote = {
     return {
       voter: isSet(object.voter) ? String(object.voter) : "",
       asset: isSet(object.asset) ? String(object.asset) : "",
-      proposal: isSet(object.proposal) ? Long.fromValue(object.proposal) : Long.UZERO,
+      proposal: isSet(object.proposal) ? BigInt(object.proposal.toString()) : BigInt(0),
       options: Array.isArray(object?.options) ? object.options.map((e: any) => WeightedVoteOption.fromJSON(e)) : []
     };
   },
@@ -445,7 +445,7 @@ export const MsgSubmitVote = {
     const obj: any = {};
     message.voter !== undefined && (obj.voter = message.voter);
     message.asset !== undefined && (obj.asset = message.asset);
-    message.proposal !== undefined && (obj.proposal = (message.proposal || Long.UZERO).toString());
+    message.proposal !== undefined && (obj.proposal = (message.proposal || BigInt(0)).toString());
     if (message.options) {
       obj.options = message.options.map(e => e ? WeightedVoteOption.toJSON(e) : undefined);
     } else {
@@ -457,7 +457,7 @@ export const MsgSubmitVote = {
     const message = createBaseMsgSubmitVote();
     message.voter = object.voter ?? "";
     message.asset = object.asset ?? "";
-    message.proposal = object.proposal !== undefined && object.proposal !== null ? Long.fromValue(object.proposal) : Long.UZERO;
+    message.proposal = object.proposal !== undefined && object.proposal !== null ? BigInt(object.proposal.toString()) : BigInt(0);
     message.options = object.options?.map(e => WeightedVoteOption.fromPartial(e)) || [];
     return message;
   }
@@ -466,11 +466,11 @@ function createBaseMsgSubmitVoteResponse(): MsgSubmitVoteResponse {
   return {};
 }
 export const MsgSubmitVoteResponse = {
-  encode(_: MsgSubmitVoteResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(_: MsgSubmitVoteResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): MsgSubmitVoteResponse {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): MsgSubmitVoteResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgSubmitVoteResponse();
     while (reader.pos < end) {
@@ -500,12 +500,12 @@ function createBaseMsgSubmitProposal(): MsgSubmitProposal {
     creator: "",
     asset: "",
     proposal: new Uint8Array(),
-    height: Long.UZERO,
+    height: BigInt(0),
     proof: ProofOps.fromPartial({})
   };
 }
 export const MsgSubmitProposal = {
-  encode(message: MsgSubmitProposal, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: MsgSubmitProposal, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.creator !== "") {
       writer.uint32(10).string(message.creator);
     }
@@ -515,7 +515,7 @@ export const MsgSubmitProposal = {
     if (message.proposal.length !== 0) {
       writer.uint32(26).bytes(message.proposal);
     }
-    if (!message.height.isZero()) {
+    if (message.height !== BigInt(0)) {
       writer.uint32(32).uint64(message.height);
     }
     if (message.proof !== undefined) {
@@ -523,8 +523,8 @@ export const MsgSubmitProposal = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): MsgSubmitProposal {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): MsgSubmitProposal {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgSubmitProposal();
     while (reader.pos < end) {
@@ -540,7 +540,7 @@ export const MsgSubmitProposal = {
           message.proposal = reader.bytes();
           break;
         case 4:
-          message.height = (reader.uint64() as Long);
+          message.height = reader.uint64();
           break;
         case 5:
           message.proof = ProofOps.decode(reader, reader.uint32());
@@ -557,7 +557,7 @@ export const MsgSubmitProposal = {
       creator: isSet(object.creator) ? String(object.creator) : "",
       asset: isSet(object.asset) ? String(object.asset) : "",
       proposal: isSet(object.proposal) ? bytesFromBase64(object.proposal) : new Uint8Array(),
-      height: isSet(object.height) ? Long.fromValue(object.height) : Long.UZERO,
+      height: isSet(object.height) ? BigInt(object.height.toString()) : BigInt(0),
       proof: isSet(object.proof) ? ProofOps.fromJSON(object.proof) : undefined
     };
   },
@@ -566,7 +566,7 @@ export const MsgSubmitProposal = {
     message.creator !== undefined && (obj.creator = message.creator);
     message.asset !== undefined && (obj.asset = message.asset);
     message.proposal !== undefined && (obj.proposal = base64FromBytes(message.proposal !== undefined ? message.proposal : new Uint8Array()));
-    message.height !== undefined && (obj.height = (message.height || Long.UZERO).toString());
+    message.height !== undefined && (obj.height = (message.height || BigInt(0)).toString());
     message.proof !== undefined && (obj.proof = message.proof ? ProofOps.toJSON(message.proof) : undefined);
     return obj;
   },
@@ -575,7 +575,7 @@ export const MsgSubmitProposal = {
     message.creator = object.creator ?? "";
     message.asset = object.asset ?? "";
     message.proposal = object.proposal ?? new Uint8Array();
-    message.height = object.height !== undefined && object.height !== null ? Long.fromValue(object.height) : Long.UZERO;
+    message.height = object.height !== undefined && object.height !== null ? BigInt(object.height.toString()) : BigInt(0);
     message.proof = object.proof !== undefined && object.proof !== null ? ProofOps.fromPartial(object.proof) : undefined;
     return message;
   }
@@ -586,14 +586,14 @@ function createBaseMsgSubmitProposalResponse(): MsgSubmitProposalResponse {
   };
 }
 export const MsgSubmitProposalResponse = {
-  encode(message: MsgSubmitProposalResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: MsgSubmitProposalResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.proposal !== undefined) {
       Proposal.encode(message.proposal, writer.uint32(10).fork()).ldelim();
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): MsgSubmitProposalResponse {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): MsgSubmitProposalResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgSubmitProposalResponse();
     while (reader.pos < end) {
@@ -629,24 +629,24 @@ function createBaseMsgRetryVoteTransmit(): MsgRetryVoteTransmit {
   return {
     creator: "",
     asset: "",
-    proposal: Long.UZERO
+    proposal: BigInt(0)
   };
 }
 export const MsgRetryVoteTransmit = {
-  encode(message: MsgRetryVoteTransmit, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: MsgRetryVoteTransmit, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.creator !== "") {
       writer.uint32(10).string(message.creator);
     }
     if (message.asset !== "") {
       writer.uint32(18).string(message.asset);
     }
-    if (!message.proposal.isZero()) {
+    if (message.proposal !== BigInt(0)) {
       writer.uint32(24).uint64(message.proposal);
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): MsgRetryVoteTransmit {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): MsgRetryVoteTransmit {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgRetryVoteTransmit();
     while (reader.pos < end) {
@@ -659,7 +659,7 @@ export const MsgRetryVoteTransmit = {
           message.asset = reader.string();
           break;
         case 3:
-          message.proposal = (reader.uint64() as Long);
+          message.proposal = reader.uint64();
           break;
         default:
           reader.skipType(tag & 7);
@@ -672,21 +672,21 @@ export const MsgRetryVoteTransmit = {
     return {
       creator: isSet(object.creator) ? String(object.creator) : "",
       asset: isSet(object.asset) ? String(object.asset) : "",
-      proposal: isSet(object.proposal) ? Long.fromValue(object.proposal) : Long.UZERO
+      proposal: isSet(object.proposal) ? BigInt(object.proposal.toString()) : BigInt(0)
     };
   },
   toJSON(message: MsgRetryVoteTransmit): unknown {
     const obj: any = {};
     message.creator !== undefined && (obj.creator = message.creator);
     message.asset !== undefined && (obj.asset = message.asset);
-    message.proposal !== undefined && (obj.proposal = (message.proposal || Long.UZERO).toString());
+    message.proposal !== undefined && (obj.proposal = (message.proposal || BigInt(0)).toString());
     return obj;
   },
   fromPartial(object: Partial<MsgRetryVoteTransmit>): MsgRetryVoteTransmit {
     const message = createBaseMsgRetryVoteTransmit();
     message.creator = object.creator ?? "";
     message.asset = object.asset ?? "";
-    message.proposal = object.proposal !== undefined && object.proposal !== null ? Long.fromValue(object.proposal) : Long.UZERO;
+    message.proposal = object.proposal !== undefined && object.proposal !== null ? BigInt(object.proposal.toString()) : BigInt(0);
     return message;
   }
 };
@@ -694,11 +694,11 @@ function createBaseMsgRetryVoteTransmitResponse(): MsgRetryVoteTransmitResponse 
   return {};
 }
 export const MsgRetryVoteTransmitResponse = {
-  encode(_: MsgRetryVoteTransmitResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(_: MsgRetryVoteTransmitResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): MsgRetryVoteTransmitResponse {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): MsgRetryVoteTransmitResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgRetryVoteTransmitResponse();
     while (reader.pos < end) {

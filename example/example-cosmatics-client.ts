@@ -1,5 +1,4 @@
 import { cosmatics } from "@prism-finance/prismjs/lib";
-import { Long } from "@prism-finance/prismjs/lib/codegen/helpers";
 import * as console from "console";
 
 async function main() {
@@ -8,9 +7,7 @@ async function main() {
     const syncState = (await cosmaticsClient.cosmatics.syncState()).sync_state
     console.log(syncState)
 
-    const block = (await cosmaticsClient.cosmatics.block({
-        height: Long.fromNumber(100)
-    }))
+    const block = (await cosmaticsClient.cosmatics.block({ height: 100n }))
     console.log(block)
 
     const tx = (await cosmaticsClient.cosmatics.transaction({

@@ -20,3 +20,6 @@ export * from "./prism/client";
 export * from "./prismatics/bundle";
 export * from "./tendermint/bundle";
 export * from "./grpc-web";
+export * from "./varint";
+export * from "./utf8";
+export * from "./binary";

@@ -2,8 +2,8 @@ import { PageRequest, PageRequestSDKType, PageResponse, PageResponseSDKType } fr
 import { Params, ParamsSDKType } from "./params";
 import { HostChain, HostChainSDKType, HostChainState, HostChainStateSDKType } from "./host_chain";
 import { Undelegation, UndelegationSDKType } from "./undelegation";
-import { Long, isSet } from "../../helpers";
-import * as _m0 from "protobufjs/minimal";
+import { BinaryReader, BinaryWriter } from "../../binary";
+import { isSet } from "../../helpers";
 /** QueryParamsRequest is request type for the Query/Params RPC method. */
 export interface QueryParamsRequest {}
 /** QueryParamsRequest is request type for the Query/Params RPC method. */
@@ -71,11 +71,11 @@ export interface QueryAllHostChainStateResponseSDKType {
 }
 export interface QueryGetUndelegationRequest {
   hostChain: string;
-  epoch: Long;
+  epoch: bigint;
 }
 export interface QueryGetUndelegationRequestSDKType {
   host_chain: string;
-  epoch: Long;
+  epoch: bigint;
 }
 export interface QueryGetUndelegationResponse {
   undelegation: Undelegation;
@@ -117,11 +117,11 @@ function createBaseQueryParamsRequest(): QueryParamsRequest {
   return {};
 }
 export const QueryParamsRequest = {
-  encode(_: QueryParamsRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(_: QueryParamsRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): QueryParamsRequest {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): QueryParamsRequest {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryParamsRequest();
     while (reader.pos < end) {
@@ -152,14 +152,14 @@ function createBaseQueryParamsResponse(): QueryParamsResponse {
   };
 }
 export const QueryParamsResponse = {
-  encode(message: QueryParamsResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: QueryParamsResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.params !== undefined) {
       Params.encode(message.params, writer.uint32(10).fork()).ldelim();
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): QueryParamsResponse {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): QueryParamsResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryParamsResponse();
     while (reader.pos < end) {
@@ -197,14 +197,14 @@ function createBaseQueryGetHostChainRequest(): QueryGetHostChainRequest {
   };
 }
 export const QueryGetHostChainRequest = {
-  encode(message: QueryGetHostChainRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: QueryGetHostChainRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.hostChainId !== "") {
       writer.uint32(10).string(message.hostChainId);
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): QueryGetHostChainRequest {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): QueryGetHostChainRequest {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryGetHostChainRequest();
     while (reader.pos < end) {
@@ -242,14 +242,14 @@ function createBaseQueryGetHostChainResponse(): QueryGetHostChainResponse {
   };
 }
 export const QueryGetHostChainResponse = {
-  encode(message: QueryGetHostChainResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: QueryGetHostChainResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.hostChain !== undefined) {
       HostChain.encode(message.hostChain, writer.uint32(10).fork()).ldelim();
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): QueryGetHostChainResponse {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): QueryGetHostChainResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryGetHostChainResponse();
     while (reader.pos < end) {
@@ -287,14 +287,14 @@ function createBaseQueryAllHostChainRequest(): QueryAllHostChainRequest {
   };
 }
 export const QueryAllHostChainRequest = {
-  encode(message: QueryAllHostChainRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: QueryAllHostChainRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.pagination !== undefined) {
       PageRequest.encode(message.pagination, writer.uint32(10).fork()).ldelim();
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): QueryAllHostChainRequest {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): QueryAllHostChainRequest {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryAllHostChainRequest();
     while (reader.pos < end) {
@@ -333,7 +333,7 @@ function createBaseQueryAllHostChainResponse(): QueryAllHostChainResponse {
   };
 }
 export const QueryAllHostChainResponse = {
-  encode(message: QueryAllHostChainResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: QueryAllHostChainResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     for (const v of message.hostChain) {
       HostChain.encode(v!, writer.uint32(10).fork()).ldelim();
     }
@@ -342,8 +342,8 @@ export const QueryAllHostChainResponse = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): QueryAllHostChainResponse {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): QueryAllHostChainResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryAllHostChainResponse();
     while (reader.pos < end) {
@@ -391,14 +391,14 @@ function createBaseQueryGetHostChainStateRequest(): QueryGetHostChainStateReques
   };
 }
 export const QueryGetHostChainStateRequest = {
-  encode(message: QueryGetHostChainStateRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: QueryGetHostChainStateRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.hostChainId !== "") {
       writer.uint32(10).string(message.hostChainId);
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): QueryGetHostChainStateRequest {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): QueryGetHostChainStateRequest {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryGetHostChainStateRequest();
     while (reader.pos < end) {
@@ -436,14 +436,14 @@ function createBaseQueryGetHostChainStateResponse(): QueryGetHostChainStateRespo
   };
 }
 export const QueryGetHostChainStateResponse = {
-  encode(message: QueryGetHostChainStateResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: QueryGetHostChainStateResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.hostChainState !== undefined) {
       HostChainState.encode(message.hostChainState, writer.uint32(10).fork()).ldelim();
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): QueryGetHostChainStateResponse {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): QueryGetHostChainStateResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryGetHostChainStateResponse();
     while (reader.pos < end) {
@@ -481,14 +481,14 @@ function createBaseQueryAllHostChainStateRequest(): QueryAllHostChainStateReques
   };
 }
 export const QueryAllHostChainStateRequest = {
-  encode(message: QueryAllHostChainStateRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: QueryAllHostChainStateRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.pagination !== undefined) {
       PageRequest.encode(message.pagination, writer.uint32(10).fork()).ldelim();
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): QueryAllHostChainStateRequest {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): QueryAllHostChainStateRequest {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryAllHostChainStateRequest();
     while (reader.pos < end) {
@@ -527,7 +527,7 @@ function createBaseQueryAllHostChainStateResponse(): QueryAllHostChainStateRespo
   };
 }
 export const QueryAllHostChainStateResponse = {
-  encode(message: QueryAllHostChainStateResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: QueryAllHostChainStateResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     for (const v of message.hostChainState) {
       HostChainState.encode(v!, writer.uint32(10).fork()).ldelim();
     }
@@ -536,8 +536,8 @@ export const QueryAllHostChainStateResponse = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): QueryAllHostChainStateResponse {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): QueryAllHostChainStateResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryAllHostChainStateResponse();
     while (reader.pos < end) {
@@ -582,21 +582,21 @@ export const QueryAllHostChainStateResponse = {
 function createBaseQueryGetUndelegationRequest(): QueryGetUndelegationRequest {
   return {
     hostChain: "",
-    epoch: Long.UZERO
+    epoch: BigInt(0)
   };
 }
 export const QueryGetUndelegationRequest = {
-  encode(message: QueryGetUndelegationRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: QueryGetUndelegationRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.hostChain !== "") {
       writer.uint32(10).string(message.hostChain);
     }
-    if (!message.epoch.isZero()) {
+    if (message.epoch !== BigInt(0)) {
       writer.uint32(16).uint64(message.epoch);
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): QueryGetUndelegationRequest {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): QueryGetUndelegationRequest {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryGetUndelegationRequest();
     while (reader.pos < end) {
@@ -606,7 +606,7 @@ export const QueryGetUndelegationRequest = {
           message.hostChain = reader.string();
           break;
         case 2:
-          message.epoch = (reader.uint64() as Long);
+          message.epoch = reader.uint64();
           break;
         default:
           reader.skipType(tag & 7);
@@ -618,19 +618,19 @@ export const QueryGetUndelegationRequest = {
   fromJSON(object: any): QueryGetUndelegationRequest {
     return {
       hostChain: isSet(object.hostChain) ? String(object.hostChain) : "",
-      epoch: isSet(object.epoch) ? Long.fromValue(object.epoch) : Long.UZERO
+      epoch: isSet(object.epoch) ? BigInt(object.epoch.toString()) : BigInt(0)
     };
   },
   toJSON(message: QueryGetUndelegationRequest): unknown {
     const obj: any = {};
     message.hostChain !== undefined && (obj.hostChain = message.hostChain);
-    message.epoch !== undefined && (obj.epoch = (message.epoch || Long.UZERO).toString());
+    message.epoch !== undefined && (obj.epoch = (message.epoch || BigInt(0)).toString());
     return obj;
   },
   fromPartial(object: Partial<QueryGetUndelegationRequest>): QueryGetUndelegationRequest {
     const message = createBaseQueryGetUndelegationRequest();
     message.hostChain = object.hostChain ?? "";
-    message.epoch = object.epoch !== undefined && object.epoch !== null ? Long.fromValue(object.epoch) : Long.UZERO;
+    message.epoch = object.epoch !== undefined && object.epoch !== null ? BigInt(object.epoch.toString()) : BigInt(0);
     return message;
   }
 };
@@ -640,14 +640,14 @@ function createBaseQueryGetUndelegationResponse(): QueryGetUndelegationResponse 
   };
 }
 export const QueryGetUndelegationResponse = {
-  encode(message: QueryGetUndelegationResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: QueryGetUndelegationResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.undelegation !== undefined) {
       Undelegation.encode(message.undelegation, writer.uint32(10).fork()).ldelim();
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): QueryGetUndelegationResponse {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): QueryGetUndelegationResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryGetUndelegationResponse();
     while (reader.pos < end) {
@@ -685,14 +685,14 @@ function createBaseQueryAllUndelegationRequest(): QueryAllUndelegationRequest {
   };
 }
 export const QueryAllUndelegationRequest = {
-  encode(message: QueryAllUndelegationRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: QueryAllUndelegationRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.pagination !== undefined) {
       PageRequest.encode(message.pagination, writer.uint32(10).fork()).ldelim();
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): QueryAllUndelegationRequest {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): QueryAllUndelegationRequest {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryAllUndelegationRequest();
     while (reader.pos < end) {
@@ -731,7 +731,7 @@ function createBaseQueryAllUndelegationResponse(): QueryAllUndelegationResponse 
   };
 }
 export const QueryAllUndelegationResponse = {
-  encode(message: QueryAllUndelegationResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: QueryAllUndelegationResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     for (const v of message.undelegation) {
       Undelegation.encode(v!, writer.uint32(10).fork()).ldelim();
     }
@@ -740,8 +740,8 @@ export const QueryAllUndelegationResponse = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): QueryAllUndelegationResponse {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): QueryAllUndelegationResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryAllUndelegationResponse();
     while (reader.pos < end) {
@@ -790,7 +790,7 @@ function createBaseQueryIncompleteUndelegationRequest(): QueryIncompleteUndelega
   };
 }
 export const QueryIncompleteUndelegationRequest = {
-  encode(message: QueryIncompleteUndelegationRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: QueryIncompleteUndelegationRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.hostChain !== "") {
       writer.uint32(10).string(message.hostChain);
     }
@@ -799,8 +799,8 @@ export const QueryIncompleteUndelegationRequest = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): QueryIncompleteUndelegationRequest {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): QueryIncompleteUndelegationRequest {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryIncompleteUndelegationRequest();
     while (reader.pos < end) {
@@ -845,7 +845,7 @@ function createBaseQueryIncompleteUndelegationResponse(): QueryIncompleteUndeleg
   };
 }
 export const QueryIncompleteUndelegationResponse = {
-  encode(message: QueryIncompleteUndelegationResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: QueryIncompleteUndelegationResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     for (const v of message.undelegation) {
       Undelegation.encode(v!, writer.uint32(10).fork()).ldelim();
     }
@@ -854,8 +854,8 @@ export const QueryIncompleteUndelegationResponse = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): QueryIncompleteUndelegationResponse {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): QueryIncompleteUndelegationResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryIncompleteUndelegationResponse();
     while (reader.pos < end) {

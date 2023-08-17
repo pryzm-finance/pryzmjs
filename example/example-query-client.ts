@@ -1,6 +1,5 @@
 import {prism} from "@prism-finance/prismjs"
 import * as console from "console";
-import {Long} from "@prism-finance/prismjs/lib/codegen/helpers";
 
 async function main() {
     const client = await prism.ClientFactory.createLCDClient({restEndpoint: "http://0.0.0.0:1317"})
@@ -24,7 +23,7 @@ async function main() {
     console.log(refractableAssets)
 
     const spotPrice = (await client.prism.amm.spotPrice({
-        poolId: Long.fromString("123"),
+        poolId: 123n,
         tokenIn: "base",
         tokenOut: "quote",
         applyFee: false

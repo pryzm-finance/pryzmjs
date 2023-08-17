@@ -2,8 +2,8 @@ import { Params, ParamsSDKType } from "./params";
 import { Proposal, ProposalSDKType } from "./proposal";
 import { Coin, CoinSDKType } from "../../cosmos/base/v1beta1/coin";
 import { Vote, VoteSDKType } from "./vote";
-import { Long, isSet } from "../../helpers";
-import * as _m0 from "protobufjs/minimal";
+import { BinaryReader, BinaryWriter } from "../../binary";
+import { isSet } from "../../helpers";
 export interface EventSetParams {
   params: Params;
 }
@@ -53,47 +53,47 @@ export interface EventProposalEndSDKType {
   proposal: ProposalSDKType;
 }
 export interface EventVoteTransmit {
-  proposalId: Long;
+  proposalId: bigint;
   asset: string;
 }
 export interface EventVoteTransmitSDKType {
-  proposal_id: Long;
+  proposal_id: bigint;
   asset: string;
 }
 export interface EventVoteTransmitFailure {
-  proposalId: Long;
+  proposalId: bigint;
   asset: string;
   error: string;
 }
 export interface EventVoteTransmitFailureSDKType {
-  proposal_id: Long;
+  proposal_id: bigint;
   asset: string;
   error: string;
 }
 export interface EventVoteAckSuccess {
-  proposalId: Long;
+  proposalId: bigint;
   asset: string;
 }
 export interface EventVoteAckSuccessSDKType {
-  proposal_id: Long;
+  proposal_id: bigint;
   asset: string;
 }
 export interface EventVoteAckFailure {
-  proposalId: Long;
+  proposalId: bigint;
   asset: string;
   error: string;
 }
 export interface EventVoteAckFailureSDKType {
-  proposal_id: Long;
+  proposal_id: bigint;
   asset: string;
   error: string;
 }
 export interface EventVoteTimeout {
-  proposalId: Long;
+  proposalId: bigint;
   asset: string;
 }
 export interface EventVoteTimeoutSDKType {
-  proposal_id: Long;
+  proposal_id: bigint;
   asset: string;
 }
 function createBaseEventSetParams(): EventSetParams {
@@ -102,14 +102,14 @@ function createBaseEventSetParams(): EventSetParams {
   };
 }
 export const EventSetParams = {
-  encode(message: EventSetParams, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: EventSetParams, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.params !== undefined) {
       Params.encode(message.params, writer.uint32(10).fork()).ldelim();
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): EventSetParams {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): EventSetParams {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseEventSetParams();
     while (reader.pos < end) {
@@ -147,14 +147,14 @@ function createBaseEventSetProposal(): EventSetProposal {
   };
 }
 export const EventSetProposal = {
-  encode(message: EventSetProposal, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: EventSetProposal, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.proposal !== undefined) {
       Proposal.encode(message.proposal, writer.uint32(10).fork()).ldelim();
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): EventSetProposal {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): EventSetProposal {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseEventSetProposal();
     while (reader.pos < end) {
@@ -195,7 +195,7 @@ function createBaseEventPAssetStake(): EventPAssetStake {
   };
 }
 export const EventPAssetStake = {
-  encode(message: EventPAssetStake, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: EventPAssetStake, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.address !== "") {
       writer.uint32(10).string(message.address);
     }
@@ -210,8 +210,8 @@ export const EventPAssetStake = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): EventPAssetStake {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): EventPAssetStake {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseEventPAssetStake();
     while (reader.pos < end) {
@@ -274,7 +274,7 @@ function createBaseEventPAssetUnstake(): EventPAssetUnstake {
   };
 }
 export const EventPAssetUnstake = {
-  encode(message: EventPAssetUnstake, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: EventPAssetUnstake, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.address !== "") {
       writer.uint32(10).string(message.address);
     }
@@ -289,8 +289,8 @@ export const EventPAssetUnstake = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): EventPAssetUnstake {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): EventPAssetUnstake {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseEventPAssetUnstake();
     while (reader.pos < end) {
@@ -350,14 +350,14 @@ function createBaseEventVoteSubmit(): EventVoteSubmit {
   };
 }
 export const EventVoteSubmit = {
-  encode(message: EventVoteSubmit, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: EventVoteSubmit, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.vote !== undefined) {
       Vote.encode(message.vote, writer.uint32(10).fork()).ldelim();
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): EventVoteSubmit {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): EventVoteSubmit {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseEventVoteSubmit();
     while (reader.pos < end) {
@@ -395,14 +395,14 @@ function createBaseEventProposalEnd(): EventProposalEnd {
   };
 }
 export const EventProposalEnd = {
-  encode(message: EventProposalEnd, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: EventProposalEnd, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.proposal !== undefined) {
       Proposal.encode(message.proposal, writer.uint32(10).fork()).ldelim();
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): EventProposalEnd {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): EventProposalEnd {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseEventProposalEnd();
     while (reader.pos < end) {
@@ -436,13 +436,13 @@ export const EventProposalEnd = {
 };
 function createBaseEventVoteTransmit(): EventVoteTransmit {
   return {
-    proposalId: Long.UZERO,
+    proposalId: BigInt(0),
     asset: ""
   };
 }
 export const EventVoteTransmit = {
-  encode(message: EventVoteTransmit, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (!message.proposalId.isZero()) {
+  encode(message: EventVoteTransmit, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    if (message.proposalId !== BigInt(0)) {
       writer.uint32(8).uint64(message.proposalId);
     }
     if (message.asset !== "") {
@@ -450,15 +450,15 @@ export const EventVoteTransmit = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): EventVoteTransmit {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): EventVoteTransmit {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseEventVoteTransmit();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.proposalId = (reader.uint64() as Long);
+          message.proposalId = reader.uint64();
           break;
         case 2:
           message.asset = reader.string();
@@ -472,33 +472,33 @@ export const EventVoteTransmit = {
   },
   fromJSON(object: any): EventVoteTransmit {
     return {
-      proposalId: isSet(object.proposalId) ? Long.fromValue(object.proposalId) : Long.UZERO,
+      proposalId: isSet(object.proposalId) ? BigInt(object.proposalId.toString()) : BigInt(0),
       asset: isSet(object.asset) ? String(object.asset) : ""
     };
   },
   toJSON(message: EventVoteTransmit): unknown {
     const obj: any = {};
-    message.proposalId !== undefined && (obj.proposalId = (message.proposalId || Long.UZERO).toString());
+    message.proposalId !== undefined && (obj.proposalId = (message.proposalId || BigInt(0)).toString());
     message.asset !== undefined && (obj.asset = message.asset);
     return obj;
   },
   fromPartial(object: Partial<EventVoteTransmit>): EventVoteTransmit {
     const message = createBaseEventVoteTransmit();
-    message.proposalId = object.proposalId !== undefined && object.proposalId !== null ? Long.fromValue(object.proposalId) : Long.UZERO;
+    message.proposalId = object.proposalId !== undefined && object.proposalId !== null ? BigInt(object.proposalId.toString()) : BigInt(0);
     message.asset = object.asset ?? "";
     return message;
   }
 };
 function createBaseEventVoteTransmitFailure(): EventVoteTransmitFailure {
   return {
-    proposalId: Long.UZERO,
+    proposalId: BigInt(0),
     asset: "",
     error: ""
   };
 }
 export const EventVoteTransmitFailure = {
-  encode(message: EventVoteTransmitFailure, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (!message.proposalId.isZero()) {
+  encode(message: EventVoteTransmitFailure, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    if (message.proposalId !== BigInt(0)) {
       writer.uint32(8).uint64(message.proposalId);
     }
     if (message.asset !== "") {
@@ -509,15 +509,15 @@ export const EventVoteTransmitFailure = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): EventVoteTransmitFailure {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): EventVoteTransmitFailure {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseEventVoteTransmitFailure();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.proposalId = (reader.uint64() as Long);
+          message.proposalId = reader.uint64();
           break;
         case 2:
           message.asset = reader.string();
@@ -534,21 +534,21 @@ export const EventVoteTransmitFailure = {
   },
   fromJSON(object: any): EventVoteTransmitFailure {
     return {
-      proposalId: isSet(object.proposalId) ? Long.fromValue(object.proposalId) : Long.UZERO,
+      proposalId: isSet(object.proposalId) ? BigInt(object.proposalId.toString()) : BigInt(0),
       asset: isSet(object.asset) ? String(object.asset) : "",
       error: isSet(object.error) ? String(object.error) : ""
     };
   },
   toJSON(message: EventVoteTransmitFailure): unknown {
     const obj: any = {};
-    message.proposalId !== undefined && (obj.proposalId = (message.proposalId || Long.UZERO).toString());
+    message.proposalId !== undefined && (obj.proposalId = (message.proposalId || BigInt(0)).toString());
     message.asset !== undefined && (obj.asset = message.asset);
     message.error !== undefined && (obj.error = message.error);
     return obj;
   },
   fromPartial(object: Partial<EventVoteTransmitFailure>): EventVoteTransmitFailure {
     const message = createBaseEventVoteTransmitFailure();
-    message.proposalId = object.proposalId !== undefined && object.proposalId !== null ? Long.fromValue(object.proposalId) : Long.UZERO;
+    message.proposalId = object.proposalId !== undefined && object.proposalId !== null ? BigInt(object.proposalId.toString()) : BigInt(0);
     message.asset = object.asset ?? "";
     message.error = object.error ?? "";
     return message;
@@ -556,13 +556,13 @@ export const EventVoteTransmitFailure = {
 };
 function createBaseEventVoteAckSuccess(): EventVoteAckSuccess {
   return {
-    proposalId: Long.UZERO,
+    proposalId: BigInt(0),
     asset: ""
   };
 }
 export const EventVoteAckSuccess = {
-  encode(message: EventVoteAckSuccess, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (!message.proposalId.isZero()) {
+  encode(message: EventVoteAckSuccess, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    if (message.proposalId !== BigInt(0)) {
       writer.uint32(8).uint64(message.proposalId);
     }
     if (message.asset !== "") {
@@ -570,15 +570,15 @@ export const EventVoteAckSuccess = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): EventVoteAckSuccess {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): EventVoteAckSuccess {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseEventVoteAckSuccess();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.proposalId = (reader.uint64() as Long);
+          message.proposalId = reader.uint64();
           break;
         case 2:
           message.asset = reader.string();
@@ -592,33 +592,33 @@ export const EventVoteAckSuccess = {
   },
   fromJSON(object: any): EventVoteAckSuccess {
     return {
-      proposalId: isSet(object.proposalId) ? Long.fromValue(object.proposalId) : Long.UZERO,
+      proposalId: isSet(object.proposalId) ? BigInt(object.proposalId.toString()) : BigInt(0),
       asset: isSet(object.asset) ? String(object.asset) : ""
     };
   },
   toJSON(message: EventVoteAckSuccess): unknown {
     const obj: any = {};
-    message.proposalId !== undefined && (obj.proposalId = (message.proposalId || Long.UZERO).toString());
+    message.proposalId !== undefined && (obj.proposalId = (message.proposalId || BigInt(0)).toString());
     message.asset !== undefined && (obj.asset = message.asset);
     return obj;
   },
   fromPartial(object: Partial<EventVoteAckSuccess>): EventVoteAckSuccess {
     const message = createBaseEventVoteAckSuccess();
-    message.proposalId = object.proposalId !== undefined && object.proposalId !== null ? Long.fromValue(object.proposalId) : Long.UZERO;
+    message.proposalId = object.proposalId !== undefined && object.proposalId !== null ? BigInt(object.proposalId.toString()) : BigInt(0);
     message.asset = object.asset ?? "";
     return message;
   }
 };
 function createBaseEventVoteAckFailure(): EventVoteAckFailure {
   return {
-    proposalId: Long.UZERO,
+    proposalId: BigInt(0),
     asset: "",
     error: ""
   };
 }
 export const EventVoteAckFailure = {
-  encode(message: EventVoteAckFailure, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (!message.proposalId.isZero()) {
+  encode(message: EventVoteAckFailure, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    if (message.proposalId !== BigInt(0)) {
       writer.uint32(8).uint64(message.proposalId);
     }
     if (message.asset !== "") {
@@ -629,15 +629,15 @@ export const EventVoteAckFailure = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): EventVoteAckFailure {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): EventVoteAckFailure {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseEventVoteAckFailure();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.proposalId = (reader.uint64() as Long);
+          message.proposalId = reader.uint64();
           break;
         case 2:
           message.asset = reader.string();
@@ -654,21 +654,21 @@ export const EventVoteAckFailure = {
   },
   fromJSON(object: any): EventVoteAckFailure {
     return {
-      proposalId: isSet(object.proposalId) ? Long.fromValue(object.proposalId) : Long.UZERO,
+      proposalId: isSet(object.proposalId) ? BigInt(object.proposalId.toString()) : BigInt(0),
       asset: isSet(object.asset) ? String(object.asset) : "",
       error: isSet(object.error) ? String(object.error) : ""
     };
   },
   toJSON(message: EventVoteAckFailure): unknown {
     const obj: any = {};
-    message.proposalId !== undefined && (obj.proposalId = (message.proposalId || Long.UZERO).toString());
+    message.proposalId !== undefined && (obj.proposalId = (message.proposalId || BigInt(0)).toString());
     message.asset !== undefined && (obj.asset = message.asset);
     message.error !== undefined && (obj.error = message.error);
     return obj;
   },
   fromPartial(object: Partial<EventVoteAckFailure>): EventVoteAckFailure {
     const message = createBaseEventVoteAckFailure();
-    message.proposalId = object.proposalId !== undefined && object.proposalId !== null ? Long.fromValue(object.proposalId) : Long.UZERO;
+    message.proposalId = object.proposalId !== undefined && object.proposalId !== null ? BigInt(object.proposalId.toString()) : BigInt(0);
     message.asset = object.asset ?? "";
     message.error = object.error ?? "";
     return message;
@@ -676,13 +676,13 @@ export const EventVoteAckFailure = {
 };
 function createBaseEventVoteTimeout(): EventVoteTimeout {
   return {
-    proposalId: Long.UZERO,
+    proposalId: BigInt(0),
     asset: ""
   };
 }
 export const EventVoteTimeout = {
-  encode(message: EventVoteTimeout, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (!message.proposalId.isZero()) {
+  encode(message: EventVoteTimeout, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    if (message.proposalId !== BigInt(0)) {
       writer.uint32(8).uint64(message.proposalId);
     }
     if (message.asset !== "") {
@@ -690,15 +690,15 @@ export const EventVoteTimeout = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): EventVoteTimeout {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): EventVoteTimeout {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseEventVoteTimeout();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.proposalId = (reader.uint64() as Long);
+          message.proposalId = reader.uint64();
           break;
         case 2:
           message.asset = reader.string();
@@ -712,19 +712,19 @@ export const EventVoteTimeout = {
   },
   fromJSON(object: any): EventVoteTimeout {
     return {
-      proposalId: isSet(object.proposalId) ? Long.fromValue(object.proposalId) : Long.UZERO,
+      proposalId: isSet(object.proposalId) ? BigInt(object.proposalId.toString()) : BigInt(0),
       asset: isSet(object.asset) ? String(object.asset) : ""
     };
   },
   toJSON(message: EventVoteTimeout): unknown {
     const obj: any = {};
-    message.proposalId !== undefined && (obj.proposalId = (message.proposalId || Long.UZERO).toString());
+    message.proposalId !== undefined && (obj.proposalId = (message.proposalId || BigInt(0)).toString());
     message.asset !== undefined && (obj.asset = message.asset);
     return obj;
   },
   fromPartial(object: Partial<EventVoteTimeout>): EventVoteTimeout {
     const message = createBaseEventVoteTimeout();
-    message.proposalId = object.proposalId !== undefined && object.proposalId !== null ? Long.fromValue(object.proposalId) : Long.UZERO;
+    message.proposalId = object.proposalId !== undefined && object.proposalId !== null ? BigInt(object.proposalId.toString()) : BigInt(0);
     message.asset = object.asset ?? "";
     return message;
   }

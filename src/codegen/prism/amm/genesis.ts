@@ -10,8 +10,8 @@ import { Order, OrderSDKType } from "./order";
 import { ScheduleOrder, ScheduleOrderSDKType } from "./schedule_order";
 import { OraclePricePair, OraclePricePairSDKType } from "./oracle_price_pair";
 import { PendingTokenIntroduction, PendingTokenIntroductionSDKType } from "./pending_token_introduction";
-import { Long, isSet, isObject } from "../../helpers";
-import * as _m0 from "protobufjs/minimal";
+import { BinaryReader, BinaryWriter } from "../../binary";
+import { isSet, isObject } from "../../helpers";
 export interface GenesisPoolData {
   pool: Pool;
   totalLpTokenSupply: string;
@@ -23,11 +23,11 @@ export interface GenesisPoolDataSDKType {
   pool_token_list: PoolTokenSDKType[];
 }
 export interface GenesisState_YammPoolAssetIdEntry {
-  key: Long;
+  key: bigint;
   value: string;
 }
 export interface GenesisState_YammPoolAssetIdEntrySDKType {
-  key: Long;
+  key: bigint;
   value: string;
 }
 /** GenesisState defines the amm module's genesis state. */
@@ -36,15 +36,15 @@ export interface GenesisState {
   poolList: GenesisPoolData[];
   weightedPoolPropertiesList: WeightedPoolProperties[];
   yammPoolAssetId: {
-    [key: Long]: string;
+    [key: bigint]: string;
   };
   introducingPoolTokenList: VirtualBalancePoolToken[];
   expiringPoolTokenList: VirtualBalancePoolToken[];
   yammConfigurationList: YammConfiguration[];
   whitelistedRouteList: WhitelistedRoute[];
   orderList: Order[];
-  orderCount: Long;
-  executableOrderList: Long[];
+  orderCount: bigint;
+  executableOrderList: bigint[];
   scheduleOrderList: ScheduleOrder[];
   vaultPaused: boolean;
   oraclePricePairList: OraclePricePair[];
@@ -56,15 +56,15 @@ export interface GenesisStateSDKType {
   pool_list: GenesisPoolDataSDKType[];
   weighted_pool_properties_list: WeightedPoolPropertiesSDKType[];
   yamm_pool_asset_id: {
-    [key: Long]: string;
+    [key: bigint]: string;
   };
   introducing_pool_token_list: VirtualBalancePoolTokenSDKType[];
   expiring_pool_token_list: VirtualBalancePoolTokenSDKType[];
   yamm_configuration_list: YammConfigurationSDKType[];
   whitelisted_route_list: WhitelistedRouteSDKType[];
   order_list: OrderSDKType[];
-  order_count: Long;
-  executable_order_list: Long[];
+  order_count: bigint;
+  executable_order_list: bigint[];
   schedule_order_list: ScheduleOrderSDKType[];
   vault_paused: boolean;
   oracle_price_pair_list: OraclePricePairSDKType[];
@@ -78,7 +78,7 @@ function createBaseGenesisPoolData(): GenesisPoolData {
   };
 }
 export const GenesisPoolData = {
-  encode(message: GenesisPoolData, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: GenesisPoolData, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.pool !== undefined) {
       Pool.encode(message.pool, writer.uint32(10).fork()).ldelim();
     }
@@ -90,8 +90,8 @@ export const GenesisPoolData = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): GenesisPoolData {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): GenesisPoolData {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseGenesisPoolData();
     while (reader.pos < end) {
@@ -141,13 +141,13 @@ export const GenesisPoolData = {
 };
 function createBaseGenesisState_YammPoolAssetIdEntry(): GenesisState_YammPoolAssetIdEntry {
   return {
-    key: Long.UZERO,
+    key: BigInt(0),
     value: ""
   };
 }
 export const GenesisState_YammPoolAssetIdEntry = {
-  encode(message: GenesisState_YammPoolAssetIdEntry, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (!message.key.isZero()) {
+  encode(message: GenesisState_YammPoolAssetIdEntry, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    if (message.key !== BigInt(0)) {
       writer.uint32(8).uint64(message.key);
     }
     if (message.value !== "") {
@@ -155,15 +155,15 @@ export const GenesisState_YammPoolAssetIdEntry = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): GenesisState_YammPoolAssetIdEntry {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): GenesisState_YammPoolAssetIdEntry {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseGenesisState_YammPoolAssetIdEntry();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.key = (reader.uint64() as Long);
+          message.key = reader.uint64();
           break;
         case 2:
           message.value = reader.string();
@@ -177,19 +177,19 @@ export const GenesisState_YammPoolAssetIdEntry = {
   },
   fromJSON(object: any): GenesisState_YammPoolAssetIdEntry {
     return {
-      key: isSet(object.key) ? Long.fromValue(object.key) : Long.UZERO,
+      key: isSet(object.key) ? BigInt(object.key.toString()) : BigInt(0),
       value: isSet(object.value) ? String(object.value) : ""
     };
   },
   toJSON(message: GenesisState_YammPoolAssetIdEntry): unknown {
     const obj: any = {};
-    message.key !== undefined && (obj.key = (message.key || Long.UZERO).toString());
+    message.key !== undefined && (obj.key = (message.key || BigInt(0)).toString());
     message.value !== undefined && (obj.value = message.value);
     return obj;
   },
   fromPartial(object: Partial<GenesisState_YammPoolAssetIdEntry>): GenesisState_YammPoolAssetIdEntry {
     const message = createBaseGenesisState_YammPoolAssetIdEntry();
-    message.key = object.key !== undefined && object.key !== null ? Long.fromValue(object.key) : Long.UZERO;
+    message.key = object.key !== undefined && object.key !== null ? BigInt(object.key.toString()) : BigInt(0);
     message.value = object.value ?? "";
     return message;
   }
@@ -205,7 +205,7 @@ function createBaseGenesisState(): GenesisState {
     yammConfigurationList: [],
     whitelistedRouteList: [],
     orderList: [],
-    orderCount: Long.UZERO,
+    orderCount: BigInt(0),
     executableOrderList: [],
     scheduleOrderList: [],
     vaultPaused: false,
@@ -214,7 +214,7 @@ function createBaseGenesisState(): GenesisState {
   };
 }
 export const GenesisState = {
-  encode(message: GenesisState, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: GenesisState, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.params !== undefined) {
       Params.encode(message.params, writer.uint32(10).fork()).ldelim();
     }
@@ -245,7 +245,7 @@ export const GenesisState = {
     for (const v of message.orderList) {
       Order.encode(v!, writer.uint32(74).fork()).ldelim();
     }
-    if (!message.orderCount.isZero()) {
+    if (message.orderCount !== BigInt(0)) {
       writer.uint32(80).uint64(message.orderCount);
     }
     writer.uint32(90).fork();
@@ -267,8 +267,8 @@ export const GenesisState = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): GenesisState {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): GenesisState {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseGenesisState();
     while (reader.pos < end) {
@@ -305,16 +305,16 @@ export const GenesisState = {
           message.orderList.push(Order.decode(reader, reader.uint32()));
           break;
         case 10:
-          message.orderCount = (reader.uint64() as Long);
+          message.orderCount = reader.uint64();
           break;
         case 11:
           if ((tag & 7) === 2) {
             const end2 = reader.uint32() + reader.pos;
             while (reader.pos < end2) {
-              message.executableOrderList.push((reader.uint64() as Long));
+              message.executableOrderList.push(reader.uint64());
             }
           } else {
-            message.executableOrderList.push((reader.uint64() as Long));
+            message.executableOrderList.push(reader.uint64());
           }
           break;
         case 12:
@@ -342,7 +342,7 @@ export const GenesisState = {
       poolList: Array.isArray(object?.poolList) ? object.poolList.map((e: any) => GenesisPoolData.fromJSON(e)) : [],
       weightedPoolPropertiesList: Array.isArray(object?.weightedPoolPropertiesList) ? object.weightedPoolPropertiesList.map((e: any) => WeightedPoolProperties.fromJSON(e)) : [],
       yammPoolAssetId: isObject(object.yammPoolAssetId) ? Object.entries(object.yammPoolAssetId).reduce<{
-        [key: Long]: string;
+        [key: bigint]: string;
       }>((acc, [key, value]) => {
         acc[Number(key)] = String(value);
         return acc;
@@ -352,8 +352,8 @@ export const GenesisState = {
       yammConfigurationList: Array.isArray(object?.yammConfigurationList) ? object.yammConfigurationList.map((e: any) => YammConfiguration.fromJSON(e)) : [],
       whitelistedRouteList: Array.isArray(object?.whitelistedRouteList) ? object.whitelistedRouteList.map((e: any) => WhitelistedRoute.fromJSON(e)) : [],
       orderList: Array.isArray(object?.orderList) ? object.orderList.map((e: any) => Order.fromJSON(e)) : [],
-      orderCount: isSet(object.orderCount) ? Long.fromValue(object.orderCount) : Long.UZERO,
-      executableOrderList: Array.isArray(object?.executableOrderList) ? object.executableOrderList.map((e: any) => Long.fromValue(e)) : [],
+      orderCount: isSet(object.orderCount) ? BigInt(object.orderCount.toString()) : BigInt(0),
+      executableOrderList: Array.isArray(object?.executableOrderList) ? object.executableOrderList.map((e: any) => BigInt(e.toString())) : [],
       scheduleOrderList: Array.isArray(object?.scheduleOrderList) ? object.scheduleOrderList.map((e: any) => ScheduleOrder.fromJSON(e)) : [],
       vaultPaused: isSet(object.vaultPaused) ? Boolean(object.vaultPaused) : false,
       oraclePricePairList: Array.isArray(object?.oraclePricePairList) ? object.oraclePricePairList.map((e: any) => OraclePricePair.fromJSON(e)) : [],
@@ -404,9 +404,9 @@ export const GenesisState = {
     } else {
       obj.orderList = [];
     }
-    message.orderCount !== undefined && (obj.orderCount = (message.orderCount || Long.UZERO).toString());
+    message.orderCount !== undefined && (obj.orderCount = (message.orderCount || BigInt(0)).toString());
     if (message.executableOrderList) {
-      obj.executableOrderList = message.executableOrderList.map(e => (e || Long.UZERO).toString());
+      obj.executableOrderList = message.executableOrderList.map(e => (e || BigInt(0)).toString());
     } else {
       obj.executableOrderList = [];
     }
@@ -434,7 +434,7 @@ export const GenesisState = {
     message.poolList = object.poolList?.map(e => GenesisPoolData.fromPartial(e)) || [];
     message.weightedPoolPropertiesList = object.weightedPoolPropertiesList?.map(e => WeightedPoolProperties.fromPartial(e)) || [];
     message.yammPoolAssetId = Object.entries(object.yammPoolAssetId ?? {}).reduce<{
-      [key: Long]: string;
+      [key: bigint]: string;
     }>((acc, [key, value]) => {
       if (value !== undefined) {
         acc[Number(key)] = String(value);
@@ -446,8 +446,8 @@ export const GenesisState = {
     message.yammConfigurationList = object.yammConfigurationList?.map(e => YammConfiguration.fromPartial(e)) || [];
     message.whitelistedRouteList = object.whitelistedRouteList?.map(e => WhitelistedRoute.fromPartial(e)) || [];
     message.orderList = object.orderList?.map(e => Order.fromPartial(e)) || [];
-    message.orderCount = object.orderCount !== undefined && object.orderCount !== null ? Long.fromValue(object.orderCount) : Long.UZERO;
-    message.executableOrderList = object.executableOrderList?.map(e => Long.fromValue(e)) || [];
+    message.orderCount = object.orderCount !== undefined && object.orderCount !== null ? BigInt(object.orderCount.toString()) : BigInt(0);
+    message.executableOrderList = object.executableOrderList?.map(e => BigInt(e.toString())) || [];
     message.scheduleOrderList = object.scheduleOrderList?.map(e => ScheduleOrder.fromPartial(e)) || [];
     message.vaultPaused = object.vaultPaused ?? false;
     message.oraclePricePairList = object.oraclePricePairList?.map(e => OraclePricePair.fromPartial(e)) || [];

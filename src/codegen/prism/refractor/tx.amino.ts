@@ -1,6 +1,5 @@
 //@ts-nocheck
 import { AminoMsg } from "@cosmjs/amino";
-import { Long } from "../../helpers";
 import { MsgRefract, MsgRedeem } from "./tx";
 export interface MsgRefractAminoType extends AminoMsg {
   type: "/prism.refractor.MsgRefract";
@@ -39,7 +38,7 @@ export const AminoConverter = {
         creator,
         amount: {
           denom: amount.denom,
-          amount: Long.fromValue(amount.amount).toString()
+          amount: amount.amount
         },
         maturity
       };
@@ -70,11 +69,11 @@ export const AminoConverter = {
         creator,
         p_amount: {
           denom: pAmount.denom,
-          amount: Long.fromValue(pAmount.amount).toString()
+          amount: pAmount.amount
         },
         y_amount: {
           denom: yAmount.denom,
-          amount: Long.fromValue(yAmount.amount).toString()
+          amount: yAmount.amount
         }
       };
     },

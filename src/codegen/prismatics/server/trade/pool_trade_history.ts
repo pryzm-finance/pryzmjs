@@ -1,5 +1,5 @@
 import { PoolOperationType, PoolTradeHistory, PoolTradeHistorySDKType, poolOperationTypeFromJSON, poolOperationTypeToJSON } from "../../trade/pool_trade_history";
-import * as _m0 from "protobufjs/minimal";
+import { BinaryReader, BinaryWriter } from "../../../binary";
 import { isSet } from "../../../helpers";
 export interface QueryPoolTradeHistoryRequest {
   poolId?: string;
@@ -28,7 +28,7 @@ function createBaseQueryPoolTradeHistoryRequest(): QueryPoolTradeHistoryRequest 
   };
 }
 export const QueryPoolTradeHistoryRequest = {
-  encode(message: QueryPoolTradeHistoryRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: QueryPoolTradeHistoryRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.poolId !== undefined) {
       writer.uint32(10).string(message.poolId);
     }
@@ -43,8 +43,8 @@ export const QueryPoolTradeHistoryRequest = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): QueryPoolTradeHistoryRequest {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): QueryPoolTradeHistoryRequest {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryPoolTradeHistoryRequest();
     while (reader.pos < end) {
@@ -100,14 +100,14 @@ function createBaseQueryPoolTradeHistoryResponse(): QueryPoolTradeHistoryRespons
   };
 }
 export const QueryPoolTradeHistoryResponse = {
-  encode(message: QueryPoolTradeHistoryResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: QueryPoolTradeHistoryResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     for (const v of message.poolTradeHistoryRecords) {
       PoolTradeHistory.encode(v!, writer.uint32(10).fork()).ldelim();
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): QueryPoolTradeHistoryResponse {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): QueryPoolTradeHistoryResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryPoolTradeHistoryResponse();
     while (reader.pos < end) {

@@ -17,10 +17,10 @@ export class QueryClientImpl implements Query {
     this.cPExchangeRate = this.cPExchangeRate.bind(this);
   }
   assetState(request: DeepPartial<QueryGetAssetStateRequest>, metadata?: grpc.Metadata): Promise<QueryGetAssetStateResponse> {
-    return this.rpc.unary(QueryGetAssetStateDesc, QueryGetAssetStateRequest.fromPartial(request), metadata);
+    return this.rpc.unary(QueryAssetStateDesc, QueryGetAssetStateRequest.fromPartial(request), metadata);
   }
   cPExchangeRate(request: DeepPartial<QueryGetCPExchangeRateRequest>, metadata?: grpc.Metadata): Promise<QueryGetCPExchangeRateResponse> {
-    return this.rpc.unary(QueryGetCPExchangeRateDesc, QueryGetCPExchangeRateRequest.fromPartial(request), metadata);
+    return this.rpc.unary(QueryCPExchangeRateDesc, QueryGetCPExchangeRateRequest.fromPartial(request), metadata);
   }
 }
 export const QueryDesc = {

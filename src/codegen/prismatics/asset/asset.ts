@@ -1,13 +1,14 @@
 import { Timestamp, TimestampSDKType } from "../../google/protobuf/timestamp";
-import { Long, isSet, fromJsonTimestamp, fromTimestamp } from "../../helpers";
-import * as _m0 from "protobufjs/minimal";
+import { BinaryReader, BinaryWriter } from "../../binary";
+import { Decimal } from "@cosmjs/math";
+import { isSet, fromJsonTimestamp, fromTimestamp } from "../../helpers";
 export interface Asset {
   id: string;
   tokenDenom: string;
-  totalRefractedCAsset: Long;
-  totalPAsset: Long;
+  totalRefractedCAsset: bigint;
+  totalPAsset: bigint;
   accruedYieldPerYAsset: string;
-  poolId: Long;
+  poolId: bigint;
   exchangeRate: string;
   firstExchangeRateTime: Timestamp;
   lastExchangeRateTime: Timestamp;
@@ -16,10 +17,10 @@ export interface Asset {
 export interface AssetSDKType {
   id: string;
   token_denom: string;
-  total_refracted_c_asset: Long;
-  total_p_asset: Long;
+  total_refracted_c_asset: bigint;
+  total_p_asset: bigint;
   accrued_yield_per_y_asset: string;
-  pool_id: Long;
+  pool_id: bigint;
   exchange_rate: string;
   first_exchange_rate_time: TimestampSDKType;
   last_exchange_rate_time: TimestampSDKType;
@@ -29,10 +30,10 @@ function createBaseAsset(): Asset {
   return {
     id: "",
     tokenDenom: "",
-    totalRefractedCAsset: Long.ZERO,
-    totalPAsset: Long.ZERO,
+    totalRefractedCAsset: BigInt(0),
+    totalPAsset: BigInt(0),
     accruedYieldPerYAsset: "",
-    poolId: Long.ZERO,
+    poolId: BigInt(0),
     exchangeRate: "",
     firstExchangeRateTime: Timestamp.fromPartial({}),
     lastExchangeRateTime: Timestamp.fromPartial({}),
@@ -40,27 +41,27 @@ function createBaseAsset(): Asset {
   };
 }
 export const Asset = {
-  encode(message: Asset, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: Asset, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.id !== "") {
       writer.uint32(10).string(message.id);
     }
     if (message.tokenDenom !== "") {
       writer.uint32(18).string(message.tokenDenom);
     }
-    if (!message.totalRefractedCAsset.isZero()) {
+    if (message.totalRefractedCAsset !== BigInt(0)) {
       writer.uint32(24).int64(message.totalRefractedCAsset);
     }
-    if (!message.totalPAsset.isZero()) {
+    if (message.totalPAsset !== BigInt(0)) {
       writer.uint32(32).int64(message.totalPAsset);
     }
     if (message.accruedYieldPerYAsset !== "") {
-      writer.uint32(42).string(message.accruedYieldPerYAsset);
+      writer.uint32(42).string(Decimal.fromUserInput(message.accruedYieldPerYAsset, 18).atomics);
     }
-    if (!message.poolId.isZero()) {
+    if (message.poolId !== BigInt(0)) {
       writer.uint32(48).int64(message.poolId);
     }
     if (message.exchangeRate !== "") {
-      writer.uint32(58).string(message.exchangeRate);
+      writer.uint32(58).string(Decimal.fromUserInput(message.exchangeRate, 18).atomics);
     }
     if (message.firstExchangeRateTime !== undefined) {
       Timestamp.encode(message.firstExchangeRateTime, writer.uint32(66).fork()).ldelim();
@@ -69,12 +70,12 @@ export const Asset = {
       Timestamp.encode(message.lastExchangeRateTime, writer.uint32(74).fork()).ldelim();
     }
     if (message.cPAssetExchangeRate !== "") {
-      writer.uint32(82).string(message.cPAssetExchangeRate);
+      writer.uint32(82).string(Decimal.fromUserInput(message.cPAssetExchangeRate, 18).atomics);
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): Asset {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): Asset {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseAsset();
     while (reader.pos < end) {
@@ -87,19 +88,19 @@ export const Asset = {
           message.tokenDenom = reader.string();
           break;
         case 3:
-          message.totalRefractedCAsset = (reader.int64() as Long);
+          message.totalRefractedCAsset = reader.int64();
           break;
         case 4:
-          message.totalPAsset = (reader.int64() as Long);
+          message.totalPAsset = reader.int64();
           break;
         case 5:
-          message.accruedYieldPerYAsset = reader.string();
+          message.accruedYieldPerYAsset = Decimal.fromAtomics(reader.string(), 18).toString();
           break;
         case 6:
-          message.poolId = (reader.int64() as Long);
+          message.poolId = reader.int64();
           break;
         case 7:
-          message.exchangeRate = reader.string();
+          message.exchangeRate = Decimal.fromAtomics(reader.string(), 18).toString();
           break;
         case 8:
           message.firstExchangeRateTime = Timestamp.decode(reader, reader.uint32());
@@ -108,7 +109,7 @@ export const Asset = {
           message.lastExchangeRateTime = Timestamp.decode(reader, reader.uint32());
           break;
         case 10:
-          message.cPAssetExchangeRate = reader.string();
+          message.cPAssetExchangeRate = Decimal.fromAtomics(reader.string(), 18).toString();
           break;
         default:
           reader.skipType(tag & 7);
@@ -121,10 +122,10 @@ export const Asset = {
     return {
       id: isSet(object.id) ? String(object.id) : "",
       tokenDenom: isSet(object.tokenDenom) ? String(object.tokenDenom) : "",
-      totalRefractedCAsset: isSet(object.totalRefractedCAsset) ? Long.fromValue(object.totalRefractedCAsset) : Long.ZERO,
-      totalPAsset: isSet(object.totalPAsset) ? Long.fromValue(object.totalPAsset) : Long.ZERO,
+      totalRefractedCAsset: isSet(object.totalRefractedCAsset) ? BigInt(object.totalRefractedCAsset.toString()) : BigInt(0),
+      totalPAsset: isSet(object.totalPAsset) ? BigInt(object.totalPAsset.toString()) : BigInt(0),
       accruedYieldPerYAsset: isSet(object.accruedYieldPerYAsset) ? String(object.accruedYieldPerYAsset) : "",
-      poolId: isSet(object.poolId) ? Long.fromValue(object.poolId) : Long.ZERO,
+      poolId: isSet(object.poolId) ? BigInt(object.poolId.toString()) : BigInt(0),
       exchangeRate: isSet(object.exchangeRate) ? String(object.exchangeRate) : "",
       firstExchangeRateTime: isSet(object.firstExchangeRateTime) ? fromJsonTimestamp(object.firstExchangeRateTime) : undefined,
       lastExchangeRateTime: isSet(object.lastExchangeRateTime) ? fromJsonTimestamp(object.lastExchangeRateTime) : undefined,
@@ -135,10 +136,10 @@ export const Asset = {
     const obj: any = {};
     message.id !== undefined && (obj.id = message.id);
     message.tokenDenom !== undefined && (obj.tokenDenom = message.tokenDenom);
-    message.totalRefractedCAsset !== undefined && (obj.totalRefractedCAsset = (message.totalRefractedCAsset || Long.ZERO).toString());
-    message.totalPAsset !== undefined && (obj.totalPAsset = (message.totalPAsset || Long.ZERO).toString());
+    message.totalRefractedCAsset !== undefined && (obj.totalRefractedCAsset = (message.totalRefractedCAsset || BigInt(0)).toString());
+    message.totalPAsset !== undefined && (obj.totalPAsset = (message.totalPAsset || BigInt(0)).toString());
     message.accruedYieldPerYAsset !== undefined && (obj.accruedYieldPerYAsset = message.accruedYieldPerYAsset);
-    message.poolId !== undefined && (obj.poolId = (message.poolId || Long.ZERO).toString());
+    message.poolId !== undefined && (obj.poolId = (message.poolId || BigInt(0)).toString());
     message.exchangeRate !== undefined && (obj.exchangeRate = message.exchangeRate);
     message.firstExchangeRateTime !== undefined && (obj.firstExchangeRateTime = fromTimestamp(message.firstExchangeRateTime).toISOString());
     message.lastExchangeRateTime !== undefined && (obj.lastExchangeRateTime = fromTimestamp(message.lastExchangeRateTime).toISOString());
@@ -149,10 +150,10 @@ export const Asset = {
     const message = createBaseAsset();
     message.id = object.id ?? "";
     message.tokenDenom = object.tokenDenom ?? "";
-    message.totalRefractedCAsset = object.totalRefractedCAsset !== undefined && object.totalRefractedCAsset !== null ? Long.fromValue(object.totalRefractedCAsset) : Long.ZERO;
-    message.totalPAsset = object.totalPAsset !== undefined && object.totalPAsset !== null ? Long.fromValue(object.totalPAsset) : Long.ZERO;
+    message.totalRefractedCAsset = object.totalRefractedCAsset !== undefined && object.totalRefractedCAsset !== null ? BigInt(object.totalRefractedCAsset.toString()) : BigInt(0);
+    message.totalPAsset = object.totalPAsset !== undefined && object.totalPAsset !== null ? BigInt(object.totalPAsset.toString()) : BigInt(0);
     message.accruedYieldPerYAsset = object.accruedYieldPerYAsset ?? "";
-    message.poolId = object.poolId !== undefined && object.poolId !== null ? Long.fromValue(object.poolId) : Long.ZERO;
+    message.poolId = object.poolId !== undefined && object.poolId !== null ? BigInt(object.poolId.toString()) : BigInt(0);
     message.exchangeRate = object.exchangeRate ?? "";
     message.firstExchangeRateTime = object.firstExchangeRateTime !== undefined && object.firstExchangeRateTime !== null ? Timestamp.fromPartial(object.firstExchangeRateTime) : undefined;
     message.lastExchangeRateTime = object.lastExchangeRateTime !== undefined && object.lastExchangeRateTime !== null ? Timestamp.fromPartial(object.lastExchangeRateTime) : undefined;

@@ -1,8 +1,8 @@
 import { Params, ParamsSDKType, StakingParams, StakingParamsSDKType } from "./params";
 import { HostChain, HostChainSDKType, Validator, ValidatorSDKType } from "./host_chain";
 import { Coin, CoinSDKType } from "../../cosmos/base/v1beta1/coin";
-import { Long, isSet } from "../../helpers";
-import * as _m0 from "protobufjs/minimal";
+import { BinaryReader, BinaryWriter } from "../../binary";
+import { isSet } from "../../helpers";
 export enum ICAType {
   DELEGATION = 0,
   REWARD = 1,
@@ -117,14 +117,14 @@ export interface MsgRedeemUnstaked {
   hostChain: string;
   transferChannel: string;
   uAmount: string;
-  epoch: Long;
+  epoch: bigint;
 }
 export interface MsgRedeemUnstakedSDKType {
   creator: string;
   host_chain: string;
   transfer_channel: string;
   u_amount: string;
-  epoch: Long;
+  epoch: bigint;
 }
 export interface MsgRedeemUnstakedResponse {
   amount: Coin;
@@ -185,7 +185,7 @@ function createBaseMsgUpdateParams(): MsgUpdateParams {
   };
 }
 export const MsgUpdateParams = {
-  encode(message: MsgUpdateParams, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: MsgUpdateParams, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.authority !== "") {
       writer.uint32(10).string(message.authority);
     }
@@ -194,8 +194,8 @@ export const MsgUpdateParams = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): MsgUpdateParams {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): MsgUpdateParams {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgUpdateParams();
     while (reader.pos < end) {
@@ -237,11 +237,11 @@ function createBaseMsgUpdateParamsResponse(): MsgUpdateParamsResponse {
   return {};
 }
 export const MsgUpdateParamsResponse = {
-  encode(_: MsgUpdateParamsResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(_: MsgUpdateParamsResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): MsgUpdateParamsResponse {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): MsgUpdateParamsResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgUpdateParamsResponse();
     while (reader.pos < end) {
@@ -273,7 +273,7 @@ function createBaseMsgRegisterHostChain(): MsgRegisterHostChain {
   };
 }
 export const MsgRegisterHostChain = {
-  encode(message: MsgRegisterHostChain, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: MsgRegisterHostChain, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.authority !== "") {
       writer.uint32(10).string(message.authority);
     }
@@ -282,8 +282,8 @@ export const MsgRegisterHostChain = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): MsgRegisterHostChain {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): MsgRegisterHostChain {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgRegisterHostChain();
     while (reader.pos < end) {
@@ -325,11 +325,11 @@ function createBaseMsgRegisterHostChainResponse(): MsgRegisterHostChainResponse 
   return {};
 }
 export const MsgRegisterHostChainResponse = {
-  encode(_: MsgRegisterHostChainResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(_: MsgRegisterHostChainResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): MsgRegisterHostChainResponse {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): MsgRegisterHostChainResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgRegisterHostChainResponse();
     while (reader.pos < end) {
@@ -363,7 +363,7 @@ function createBaseMsgUpdateHostChain(): MsgUpdateHostChain {
   };
 }
 export const MsgUpdateHostChain = {
-  encode(message: MsgUpdateHostChain, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: MsgUpdateHostChain, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.authority !== "") {
       writer.uint32(10).string(message.authority);
     }
@@ -378,8 +378,8 @@ export const MsgUpdateHostChain = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): MsgUpdateHostChain {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): MsgUpdateHostChain {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgUpdateHostChain();
     while (reader.pos < end) {
@@ -437,11 +437,11 @@ function createBaseMsgUpdateHostChainResponse(): MsgUpdateHostChainResponse {
   return {};
 }
 export const MsgUpdateHostChainResponse = {
-  encode(_: MsgUpdateHostChainResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(_: MsgUpdateHostChainResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): MsgUpdateHostChainResponse {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): MsgUpdateHostChainResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgUpdateHostChainResponse();
     while (reader.pos < end) {
@@ -475,7 +475,7 @@ function createBaseMsgStake(): MsgStake {
   };
 }
 export const MsgStake = {
-  encode(message: MsgStake, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: MsgStake, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.creator !== "") {
       writer.uint32(10).string(message.creator);
     }
@@ -490,8 +490,8 @@ export const MsgStake = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): MsgStake {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): MsgStake {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgStake();
     while (reader.pos < end) {
@@ -548,7 +548,7 @@ function createBaseMsgStakeResponse(): MsgStakeResponse {
   };
 }
 export const MsgStakeResponse = {
-  encode(message: MsgStakeResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: MsgStakeResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.cAmount !== undefined) {
       Coin.encode(message.cAmount, writer.uint32(10).fork()).ldelim();
     }
@@ -557,8 +557,8 @@ export const MsgStakeResponse = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): MsgStakeResponse {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): MsgStakeResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgStakeResponse();
     while (reader.pos < end) {
@@ -605,7 +605,7 @@ function createBaseMsgUnstake(): MsgUnstake {
   };
 }
 export const MsgUnstake = {
-  encode(message: MsgUnstake, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: MsgUnstake, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.creator !== "") {
       writer.uint32(10).string(message.creator);
     }
@@ -620,8 +620,8 @@ export const MsgUnstake = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): MsgUnstake {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): MsgUnstake {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgUnstake();
     while (reader.pos < end) {
@@ -677,14 +677,14 @@ function createBaseMsgUnstakeResponse(): MsgUnstakeResponse {
   };
 }
 export const MsgUnstakeResponse = {
-  encode(message: MsgUnstakeResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: MsgUnstakeResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.uAmount !== undefined) {
       Coin.encode(message.uAmount, writer.uint32(10).fork()).ldelim();
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): MsgUnstakeResponse {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): MsgUnstakeResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgUnstakeResponse();
     while (reader.pos < end) {
@@ -722,11 +722,11 @@ function createBaseMsgRedeemUnstaked(): MsgRedeemUnstaked {
     hostChain: "",
     transferChannel: "",
     uAmount: "",
-    epoch: Long.UZERO
+    epoch: BigInt(0)
   };
 }
 export const MsgRedeemUnstaked = {
-  encode(message: MsgRedeemUnstaked, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: MsgRedeemUnstaked, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.creator !== "") {
       writer.uint32(10).string(message.creator);
     }
@@ -739,13 +739,13 @@ export const MsgRedeemUnstaked = {
     if (message.uAmount !== "") {
       writer.uint32(34).string(message.uAmount);
     }
-    if (!message.epoch.isZero()) {
+    if (message.epoch !== BigInt(0)) {
       writer.uint32(40).uint64(message.epoch);
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): MsgRedeemUnstaked {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): MsgRedeemUnstaked {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgRedeemUnstaked();
     while (reader.pos < end) {
@@ -764,7 +764,7 @@ export const MsgRedeemUnstaked = {
           message.uAmount = reader.string();
           break;
         case 5:
-          message.epoch = (reader.uint64() as Long);
+          message.epoch = reader.uint64();
           break;
         default:
           reader.skipType(tag & 7);
@@ -779,7 +779,7 @@ export const MsgRedeemUnstaked = {
       hostChain: isSet(object.hostChain) ? String(object.hostChain) : "",
       transferChannel: isSet(object.transferChannel) ? String(object.transferChannel) : "",
       uAmount: isSet(object.uAmount) ? String(object.uAmount) : "",
-      epoch: isSet(object.epoch) ? Long.fromValue(object.epoch) : Long.UZERO
+      epoch: isSet(object.epoch) ? BigInt(object.epoch.toString()) : BigInt(0)
     };
   },
   toJSON(message: MsgRedeemUnstaked): unknown {
@@ -788,7 +788,7 @@ export const MsgRedeemUnstaked = {
     message.hostChain !== undefined && (obj.hostChain = message.hostChain);
     message.transferChannel !== undefined && (obj.transferChannel = message.transferChannel);
     message.uAmount !== undefined && (obj.uAmount = message.uAmount);
-    message.epoch !== undefined && (obj.epoch = (message.epoch || Long.UZERO).toString());
+    message.epoch !== undefined && (obj.epoch = (message.epoch || BigInt(0)).toString());
     return obj;
   },
   fromPartial(object: Partial<MsgRedeemUnstaked>): MsgRedeemUnstaked {
@@ -797,7 +797,7 @@ export const MsgRedeemUnstaked = {
     message.hostChain = object.hostChain ?? "";
     message.transferChannel = object.transferChannel ?? "";
     message.uAmount = object.uAmount ?? "";
-    message.epoch = object.epoch !== undefined && object.epoch !== null ? Long.fromValue(object.epoch) : Long.UZERO;
+    message.epoch = object.epoch !== undefined && object.epoch !== null ? BigInt(object.epoch.toString()) : BigInt(0);
     return message;
   }
 };
@@ -808,7 +808,7 @@ function createBaseMsgRedeemUnstakedResponse(): MsgRedeemUnstakedResponse {
   };
 }
 export const MsgRedeemUnstakedResponse = {
-  encode(message: MsgRedeemUnstakedResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: MsgRedeemUnstakedResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.amount !== undefined) {
       Coin.encode(message.amount, writer.uint32(10).fork()).ldelim();
     }
@@ -817,8 +817,8 @@ export const MsgRedeemUnstakedResponse = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): MsgRedeemUnstakedResponse {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): MsgRedeemUnstakedResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgRedeemUnstakedResponse();
     while (reader.pos < end) {
@@ -866,7 +866,7 @@ function createBaseMsgInstantUnstake(): MsgInstantUnstake {
   };
 }
 export const MsgInstantUnstake = {
-  encode(message: MsgInstantUnstake, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: MsgInstantUnstake, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.creator !== "") {
       writer.uint32(10).string(message.creator);
     }
@@ -884,8 +884,8 @@ export const MsgInstantUnstake = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): MsgInstantUnstake {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): MsgInstantUnstake {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgInstantUnstake();
     while (reader.pos < end) {
@@ -948,7 +948,7 @@ function createBaseMsgInstantUnstakeResponse(): MsgInstantUnstakeResponse {
   };
 }
 export const MsgInstantUnstakeResponse = {
-  encode(message: MsgInstantUnstakeResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: MsgInstantUnstakeResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.amount !== undefined) {
       Coin.encode(message.amount, writer.uint32(10).fork()).ldelim();
     }
@@ -957,8 +957,8 @@ export const MsgInstantUnstakeResponse = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): MsgInstantUnstakeResponse {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): MsgInstantUnstakeResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgInstantUnstakeResponse();
     while (reader.pos < end) {
@@ -1003,7 +1003,7 @@ function createBaseMsgRebalanceDelegations(): MsgRebalanceDelegations {
   };
 }
 export const MsgRebalanceDelegations = {
-  encode(message: MsgRebalanceDelegations, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: MsgRebalanceDelegations, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.creator !== "") {
       writer.uint32(10).string(message.creator);
     }
@@ -1012,8 +1012,8 @@ export const MsgRebalanceDelegations = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): MsgRebalanceDelegations {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): MsgRebalanceDelegations {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgRebalanceDelegations();
     while (reader.pos < end) {
@@ -1055,11 +1055,11 @@ function createBaseMsgRebalanceDelegationsResponse(): MsgRebalanceDelegationsRes
   return {};
 }
 export const MsgRebalanceDelegationsResponse = {
-  encode(_: MsgRebalanceDelegationsResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(_: MsgRebalanceDelegationsResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): MsgRebalanceDelegationsResponse {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): MsgRebalanceDelegationsResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgRebalanceDelegationsResponse();
     while (reader.pos < end) {
@@ -1092,7 +1092,7 @@ function createBaseMsgRedeemInterchainAccount(): MsgRedeemInterchainAccount {
   };
 }
 export const MsgRedeemInterchainAccount = {
-  encode(message: MsgRedeemInterchainAccount, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: MsgRedeemInterchainAccount, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.creator !== "") {
       writer.uint32(10).string(message.creator);
     }
@@ -1104,8 +1104,8 @@ export const MsgRedeemInterchainAccount = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): MsgRedeemInterchainAccount {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): MsgRedeemInterchainAccount {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgRedeemInterchainAccount();
     while (reader.pos < end) {
@@ -1153,11 +1153,11 @@ function createBaseMsgRedeemInterchainAccountResponse(): MsgRedeemInterchainAcco
   return {};
 }
 export const MsgRedeemInterchainAccountResponse = {
-  encode(_: MsgRedeemInterchainAccountResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(_: MsgRedeemInterchainAccountResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): MsgRedeemInterchainAccountResponse {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): MsgRedeemInterchainAccountResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgRedeemInterchainAccountResponse();
     while (reader.pos < end) {

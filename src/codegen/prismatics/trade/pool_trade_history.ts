@@ -1,8 +1,8 @@
 import { TokenAmount, TokenAmountSDKType } from "../../prism/amm/pool_token";
 import { Coin, CoinSDKType } from "../../cosmos/base/v1beta1/coin";
 import { Timestamp, TimestampSDKType } from "../../google/protobuf/timestamp";
-import { Long, isSet, fromJsonTimestamp, fromTimestamp } from "../../helpers";
-import * as _m0 from "protobufjs/minimal";
+import { BinaryReader, BinaryWriter } from "../../binary";
+import { isSet, fromJsonTimestamp, fromTimestamp } from "../../helpers";
 export enum PoolOperationType {
   POOL_OPERATION_TYPE_ANY = 0,
   POOL_OPERATION_TYPE_SWAP = 1,
@@ -55,7 +55,7 @@ export function poolOperationTypeToJSON(object: PoolOperationType): string {
 export interface PoolTradeHistory {
   tokensIn: TokenAmount[];
   tokensOut: TokenAmount[];
-  poolId: Long;
+  poolId: bigint;
   operationType: PoolOperationType;
   swapFee: Coin[];
   protocolFee: Coin[];
@@ -64,7 +64,7 @@ export interface PoolTradeHistory {
 export interface PoolTradeHistorySDKType {
   tokens_in: TokenAmountSDKType[];
   tokens_out: TokenAmountSDKType[];
-  pool_id: Long;
+  pool_id: bigint;
   operation_type: PoolOperationType;
   swap_fee: CoinSDKType[];
   protocol_fee: CoinSDKType[];
@@ -74,7 +74,7 @@ function createBasePoolTradeHistory(): PoolTradeHistory {
   return {
     tokensIn: [],
     tokensOut: [],
-    poolId: Long.UZERO,
+    poolId: BigInt(0),
     operationType: 0,
     swapFee: [],
     protocolFee: [],
@@ -82,14 +82,14 @@ function createBasePoolTradeHistory(): PoolTradeHistory {
   };
 }
 export const PoolTradeHistory = {
-  encode(message: PoolTradeHistory, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: PoolTradeHistory, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     for (const v of message.tokensIn) {
       TokenAmount.encode(v!, writer.uint32(10).fork()).ldelim();
     }
     for (const v of message.tokensOut) {
       TokenAmount.encode(v!, writer.uint32(18).fork()).ldelim();
     }
-    if (!message.poolId.isZero()) {
+    if (message.poolId !== BigInt(0)) {
       writer.uint32(24).uint64(message.poolId);
     }
     if (message.operationType !== 0) {
@@ -106,8 +106,8 @@ export const PoolTradeHistory = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): PoolTradeHistory {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): PoolTradeHistory {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBasePoolTradeHistory();
     while (reader.pos < end) {
@@ -120,7 +120,7 @@ export const PoolTradeHistory = {
           message.tokensOut.push(TokenAmount.decode(reader, reader.uint32()));
           break;
         case 3:
-          message.poolId = (reader.uint64() as Long);
+          message.poolId = reader.uint64();
           break;
         case 4:
           message.operationType = (reader.int32() as any);
@@ -145,7 +145,7 @@ export const PoolTradeHistory = {
     return {
       tokensIn: Array.isArray(object?.tokensIn) ? object.tokensIn.map((e: any) => TokenAmount.fromJSON(e)) : [],
       tokensOut: Array.isArray(object?.tokensOut) ? object.tokensOut.map((e: any) => TokenAmount.fromJSON(e)) : [],
-      poolId: isSet(object.poolId) ? Long.fromValue(object.poolId) : Long.UZERO,
+      poolId: isSet(object.poolId) ? BigInt(object.poolId.toString()) : BigInt(0),
       operationType: isSet(object.operationType) ? poolOperationTypeFromJSON(object.operationType) : -1,
       swapFee: Array.isArray(object?.swapFee) ? object.swapFee.map((e: any) => Coin.fromJSON(e)) : [],
       protocolFee: Array.isArray(object?.protocolFee) ? object.protocolFee.map((e: any) => Coin.fromJSON(e)) : [],
@@ -164,7 +164,7 @@ export const PoolTradeHistory = {
     } else {
       obj.tokensOut = [];
     }
-    message.poolId !== undefined && (obj.poolId = (message.poolId || Long.UZERO).toString());
+    message.poolId !== undefined && (obj.poolId = (message.poolId || BigInt(0)).toString());
     message.operationType !== undefined && (obj.operationType = poolOperationTypeToJSON(message.operationType));
     if (message.swapFee) {
       obj.swapFee = message.swapFee.map(e => e ? Coin.toJSON(e) : undefined);
@@ -183,7 +183,7 @@ export const PoolTradeHistory = {
     const message = createBasePoolTradeHistory();
     message.tokensIn = object.tokensIn?.map(e => TokenAmount.fromPartial(e)) || [];
     message.tokensOut = object.tokensOut?.map(e => TokenAmount.fromPartial(e)) || [];
-    message.poolId = object.poolId !== undefined && object.poolId !== null ? Long.fromValue(object.poolId) : Long.UZERO;
+    message.poolId = object.poolId !== undefined && object.poolId !== null ? BigInt(object.poolId.toString()) : BigInt(0);
     message.operationType = object.operationType ?? 0;
     message.swapFee = object.swapFee?.map(e => Coin.fromPartial(e)) || [];
     message.protocolFee = object.protocolFee?.map(e => Coin.fromPartial(e)) || [];

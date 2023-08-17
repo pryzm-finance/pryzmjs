@@ -1,5 +1,6 @@
-import * as _m0 from "protobufjs/minimal";
+import { BinaryReader, BinaryWriter } from "../../../binary";
 import { isSet } from "../../../helpers";
+import { Decimal } from "@cosmjs/math";
 export interface QueryPriceBoundsRequest {
   denom: string;
   from: string;
@@ -26,7 +27,7 @@ function createBaseQueryPriceBoundsRequest(): QueryPriceBoundsRequest {
   };
 }
 export const QueryPriceBoundsRequest = {
-  encode(message: QueryPriceBoundsRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: QueryPriceBoundsRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.denom !== "") {
       writer.uint32(10).string(message.denom);
     }
@@ -38,8 +39,8 @@ export const QueryPriceBoundsRequest = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): QueryPriceBoundsRequest {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): QueryPriceBoundsRequest {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryPriceBoundsRequest();
     while (reader.pos < end) {
@@ -90,27 +91,27 @@ function createBaseQueryPriceBoundsResponse(): QueryPriceBoundsResponse {
   };
 }
 export const QueryPriceBoundsResponse = {
-  encode(message: QueryPriceBoundsResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: QueryPriceBoundsResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.min !== undefined) {
-      writer.uint32(10).string(message.min);
+      writer.uint32(10).string(Decimal.fromUserInput(message.min, 18).atomics);
     }
     if (message.max !== undefined) {
-      writer.uint32(18).string(message.max);
+      writer.uint32(18).string(Decimal.fromUserInput(message.max, 18).atomics);
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): QueryPriceBoundsResponse {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): QueryPriceBoundsResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryPriceBoundsResponse();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.min = reader.string();
+          message.min = Decimal.fromAtomics(reader.string(), 18).toString();
           break;
         case 2:
-          message.max = reader.string();
+          message.max = Decimal.fromAtomics(reader.string(), 18).toString();
           break;
         default:
           reader.skipType(tag & 7);

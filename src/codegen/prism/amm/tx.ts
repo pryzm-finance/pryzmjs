@@ -8,8 +8,9 @@ import { TokenCircuitBreakerSettings, TokenCircuitBreakerSettingsSDKType } from 
 import { OraclePricePair, OraclePricePairSDKType } from "./oracle_price_pair";
 import { GeneralPoolParameters, GeneralPoolParametersSDKType, YammParameters, YammParametersSDKType, OrderParameters, OrderParametersSDKType } from "./params";
 import { Order, OrderSDKType } from "./order";
-import { Long, isSet } from "../../helpers";
-import * as _m0 from "protobufjs/minimal";
+import { BinaryReader, BinaryWriter } from "../../binary";
+import { isSet } from "../../helpers";
+import { Decimal } from "@cosmjs/math";
 export interface MsgSingleSwap {
   creator: string;
   swap: Swap;
@@ -40,13 +41,13 @@ export interface MsgSingleSwapResponseSDKType {
 }
 export interface MsgJoinAllTokensExactLpt {
   creator: string;
-  poolId: Long;
+  poolId: bigint;
   lptOut: string;
   maxAmountsIn: Coin[];
 }
 export interface MsgJoinAllTokensExactLptSDKType {
   creator: string;
-  pool_id: Long;
+  pool_id: bigint;
   lpt_out: string;
   max_amounts_in: CoinSDKType[];
 }
@@ -62,14 +63,14 @@ export interface MsgJoinAllTokensExactLptResponseSDKType {
 }
 export interface MsgJoinTokenExactLpt {
   creator: string;
-  poolId: Long;
+  poolId: bigint;
   lptOut: string;
   tokenIn: string;
   maxAmountIn?: string;
 }
 export interface MsgJoinTokenExactLptSDKType {
   creator: string;
-  pool_id: Long;
+  pool_id: bigint;
   lpt_out: string;
   token_in: string;
   max_amount_in?: string;
@@ -88,13 +89,13 @@ export interface MsgJoinTokenExactLptResponseSDKType {
 }
 export interface MsgJoinExactTokens {
   creator: string;
-  poolId: Long;
+  poolId: bigint;
   amountsIn: Coin[];
   minLptOut?: string;
 }
 export interface MsgJoinExactTokensSDKType {
   creator: string;
-  pool_id: Long;
+  pool_id: bigint;
   amounts_in: CoinSDKType[];
   min_lpt_out?: string;
 }
@@ -112,13 +113,13 @@ export interface MsgJoinExactTokensResponseSDKType {
 }
 export interface MsgExitExactTokens {
   creator: string;
-  poolId: Long;
+  poolId: bigint;
   amountsOut: Coin[];
   maxLptIn?: string;
 }
 export interface MsgExitExactTokensSDKType {
   creator: string;
-  pool_id: Long;
+  pool_id: bigint;
   amounts_out: CoinSDKType[];
   max_lpt_in?: string;
 }
@@ -136,14 +137,14 @@ export interface MsgExitExactTokensResponseSDKType {
 }
 export interface MsgExitTokenExactLpt {
   creator: string;
-  poolId: Long;
+  poolId: bigint;
   lptIn: string;
   tokenOut: string;
   minAmountOut?: string;
 }
 export interface MsgExitTokenExactLptSDKType {
   creator: string;
-  pool_id: Long;
+  pool_id: bigint;
   lpt_in: string;
   token_out: string;
   min_amount_out?: string;
@@ -162,13 +163,13 @@ export interface MsgExitTokenExactLptResponseSDKType {
 }
 export interface MsgExitAllTokensExactLpt {
   creator: string;
-  poolId: Long;
+  poolId: bigint;
   lptIn: string;
   minAmountsOut: Coin[];
 }
 export interface MsgExitAllTokensExactLptSDKType {
   creator: string;
-  pool_id: Long;
+  pool_id: bigint;
   lpt_in: string;
   min_amounts_out: CoinSDKType[];
 }
@@ -194,8 +195,8 @@ export interface MsgCreateWeightedPool {
   creator: string;
   name: string;
   swapFeeRatio: string;
-  pauseWindowDurationMillis: Long;
-  pauseBufferDurationMillis: Long;
+  pauseWindowDurationMillis: bigint;
+  pauseBufferDurationMillis: bigint;
   tokens: CreateWeightedPoolToken[];
   /** if not empty, only these addresses can initialize the pool */
   initializationAllowList: string[];
@@ -204,37 +205,37 @@ export interface MsgCreateWeightedPoolSDKType {
   creator: string;
   name: string;
   swap_fee_ratio: string;
-  pause_window_duration_millis: Long;
-  pause_buffer_duration_millis: Long;
+  pause_window_duration_millis: bigint;
+  pause_buffer_duration_millis: bigint;
   tokens: CreateWeightedPoolTokenSDKType[];
   initialization_allow_list: string[];
 }
 export interface MsgCreateWeightedPoolResponse {
-  poolId: Long;
+  poolId: bigint;
 }
 export interface MsgCreateWeightedPoolResponseSDKType {
-  pool_id: Long;
+  pool_id: bigint;
 }
 export interface MsgUpdateSwapFee {
   creator: string;
-  poolId: Long;
+  poolId: bigint;
   swapFeeRatio: string;
 }
 export interface MsgUpdateSwapFeeSDKType {
   creator: string;
-  pool_id: Long;
+  pool_id: bigint;
   swap_fee_ratio: string;
 }
 export interface MsgUpdateSwapFeeResponse {}
 export interface MsgUpdateSwapFeeResponseSDKType {}
 export interface MsgInitializePool {
   creator: string;
-  poolId: Long;
+  poolId: bigint;
   amountsIn: Coin[];
 }
 export interface MsgInitializePoolSDKType {
   creator: string;
-  pool_id: Long;
+  pool_id: bigint;
   amounts_in: CoinSDKType[];
 }
 export interface MsgInitializePoolResponse {
@@ -249,17 +250,17 @@ export interface MsgInitializePoolResponseSDKType {
 }
 export interface MsgUpdateWeights {
   creator: string;
-  poolId: Long;
+  poolId: bigint;
   tokenWeights: TokenWeight[];
-  startTimeUnixMillis: Long;
-  endTimeUnixMillis: Long;
+  startTimeUnixMillis: bigint;
+  endTimeUnixMillis: bigint;
 }
 export interface MsgUpdateWeightsSDKType {
   creator: string;
-  pool_id: Long;
+  pool_id: bigint;
   token_weights: TokenWeightSDKType[];
-  start_time_unix_millis: Long;
-  end_time_unix_millis: Long;
+  start_time_unix_millis: bigint;
+  end_time_unix_millis: bigint;
 }
 export interface MsgUpdateWeightsResponse {}
 export interface MsgUpdateWeightsResponseSDKType {}
@@ -329,27 +330,27 @@ export interface MsgSetWhitelistedRouteEnabledResponse {}
 export interface MsgSetWhitelistedRouteEnabledResponseSDKType {}
 export interface MsgSubmitOrder {
   creator: string;
-  poolId: Long;
+  poolId: bigint;
   tokenIn: string;
   tokenOut: string;
   whitelistedRoute: boolean;
   allowMatching: boolean;
   amountPerStep: string;
   totalAmount: string;
-  millisInterval: Long;
+  millisInterval: bigint;
   maxStepSpotPrice: string;
   maxMatchingSpotPrice?: string;
 }
 export interface MsgSubmitOrderSDKType {
   creator: string;
-  pool_id: Long;
+  pool_id: bigint;
   token_in: string;
   token_out: string;
   whitelisted_route: boolean;
   allow_matching: boolean;
   amount_per_step: string;
   total_amount: string;
-  millis_interval: Long;
+  millis_interval: bigint;
   max_step_spot_price: string;
   max_matching_spot_price?: string;
 }
@@ -361,11 +362,11 @@ export interface MsgSubmitOrderResponseSDKType {
 }
 export interface MsgCancelOrder {
   creator: string;
-  id: Long;
+  id: bigint;
 }
 export interface MsgCancelOrderSDKType {
   creator: string;
-  id: Long;
+  id: bigint;
 }
 export interface MsgCancelOrderResponse {
   withdrawnDeposit: Coin;
@@ -389,37 +390,37 @@ export interface MsgProposeMatchResponseSDKType {
 }
 export interface MsgSetCircuitBreakers {
   creator: string;
-  poolId: Long;
+  poolId: bigint;
   tokenCircuitBreakers: TokenCircuitBreakerSettings[];
 }
 export interface MsgSetCircuitBreakersSDKType {
   creator: string;
-  pool_id: Long;
+  pool_id: bigint;
   token_circuit_breakers: TokenCircuitBreakerSettingsSDKType[];
 }
 export interface MsgSetCircuitBreakersResponse {}
 export interface MsgSetCircuitBreakersResponseSDKType {}
 export interface MsgSetRecoveryMode {
   authority: string;
-  poolId: Long;
+  poolId: bigint;
   recoveryMode: boolean;
 }
 export interface MsgSetRecoveryModeSDKType {
   authority: string;
-  pool_id: Long;
+  pool_id: bigint;
   recovery_mode: boolean;
 }
 export interface MsgSetRecoveryModeResponse {}
 export interface MsgSetRecoveryModeResponseSDKType {}
 export interface MsgRecoveryExit {
   creator: string;
-  poolId: Long;
+  poolId: bigint;
   lptIn: string;
   minAmountsOut: Coin[];
 }
 export interface MsgRecoveryExitSDKType {
   creator: string;
-  pool_id: Long;
+  pool_id: bigint;
   lpt_in: string;
   min_amounts_out: CoinSDKType[];
 }
@@ -433,12 +434,12 @@ export interface MsgRecoveryExitResponseSDKType {
 }
 export interface MsgSetPauseMode {
   creator: string;
-  poolId: Long;
+  poolId: bigint;
   pauseMode: boolean;
 }
 export interface MsgSetPauseModeSDKType {
   creator: string;
-  pool_id: Long;
+  pool_id: bigint;
   pause_mode: boolean;
 }
 export interface MsgSetPauseModeResponse {}
@@ -485,87 +486,87 @@ export interface MsgDeleteOraclePricePairResponse {}
 export interface MsgDeleteOraclePricePairResponseSDKType {}
 export interface MsgSetSwapProtocolFee {
   authority: string;
-  poolId: Long;
+  poolId: bigint;
   /** if protocol fee parameters are nil, then the values are read from treasury module parameters */
   swapProtocolFee?: string;
 }
 export interface MsgSetSwapProtocolFeeSDKType {
   authority: string;
-  pool_id: Long;
+  pool_id: bigint;
   swap_protocol_fee?: string;
 }
 export interface MsgSetSwapProtocolFeeResponse {}
 export interface MsgSetSwapProtocolFeeResponseSDKType {}
 export interface MsgSetJoinExitProtocolFee {
   authority: string;
-  poolId: Long;
+  poolId: bigint;
   /** if protocol fee parameters are nil, then the values are read from treasury module parameters */
   joinExitProtocolFee?: string;
 }
 export interface MsgSetJoinExitProtocolFeeSDKType {
   authority: string;
-  pool_id: Long;
+  pool_id: bigint;
   join_exit_protocol_fee?: string;
 }
 export interface MsgSetJoinExitProtocolFeeResponse {}
 export interface MsgSetJoinExitProtocolFeeResponseSDKType {}
 export interface MsgIntroduceYammLpToWeightedPool {
   authority: string;
-  weightedPoolId: Long;
-  yammPoolId: Long;
+  weightedPoolId: bigint;
+  yammPoolId: bigint;
   tokenNormalizedWeight: string;
-  virtualBalanceIntervalMillis: Long;
+  virtualBalanceIntervalMillis: bigint;
 }
 export interface MsgIntroduceYammLpToWeightedPoolSDKType {
   authority: string;
-  weighted_pool_id: Long;
-  yamm_pool_id: Long;
+  weighted_pool_id: bigint;
+  yamm_pool_id: bigint;
   token_normalized_weight: string;
-  virtual_balance_interval_millis: Long;
+  virtual_balance_interval_millis: bigint;
 }
 export interface MsgIntroduceYammLpToWeightedPoolResponse {}
 export interface MsgIntroduceYammLpToWeightedPoolResponseSDKType {}
 export interface MsgIntroduceAssetBaseTokenToWeightedPool {
   authority: string;
-  weightedPoolId: Long;
+  weightedPoolId: bigint;
   tokenDenom: string;
   assetId: string;
   tokenNormalizedWeight: string;
-  virtualBalanceIntervalMillis: Long;
+  virtualBalanceIntervalMillis: bigint;
 }
 export interface MsgIntroduceAssetBaseTokenToWeightedPoolSDKType {
   authority: string;
-  weighted_pool_id: Long;
+  weighted_pool_id: bigint;
   token_denom: string;
   asset_id: string;
   token_normalized_weight: string;
-  virtual_balance_interval_millis: Long;
+  virtual_balance_interval_millis: bigint;
 }
 export interface MsgIntroduceAssetBaseTokenToWeightedPoolResponse {}
 export interface MsgIntroduceAssetBaseTokenToWeightedPoolResponseSDKType {}
 export interface MsgCancelPendingTokenIntroduction {
   authority: string;
   assetId: string;
-  targetPoolId: Long;
+  targetPoolId: bigint;
 }
 export interface MsgCancelPendingTokenIntroductionSDKType {
   authority: string;
   asset_id: string;
-  target_pool_id: Long;
+  target_pool_id: bigint;
 }
 export interface MsgCancelPendingTokenIntroductionResponse {}
 export interface MsgCancelPendingTokenIntroductionResponseSDKType {}
 export interface MsgRemoveTokenFromWeightedPool {
   creator: string;
-  poolId: Long;
+  poolId: bigint;
   tokenDenom: string;
-  virtualBalanceIntervalMillis: Long;
+  virtualBalanceIntervalMillis: bigint;
 }
 export interface MsgRemoveTokenFromWeightedPoolSDKType {
   creator: string;
-  pool_id: Long;
+  pool_id: bigint;
   token_denom: string;
-  virtual_balance_interval_millis: Long;
+  virtual_balance_interval_millis: bigint;
 }
 export interface MsgRemoveTokenFromWeightedPoolResponse {}
 export interface MsgRemoveTokenFromWeightedPoolResponseSDKType {}
@@ -597,12 +598,12 @@ export interface MsgAddMaturityToYammResponse {}
 export interface MsgAddMaturityToYammResponseSDKType {}
 export interface MsgSetInitializationAllowList {
   creator: string;
-  poolId: Long;
+  poolId: bigint;
   initializationAllowList: string[];
 }
 export interface MsgSetInitializationAllowListSDKType {
   creator: string;
-  pool_id: Long;
+  pool_id: bigint;
   initialization_allow_list: string[];
 }
 export interface MsgSetInitializationAllowListResponse {}
@@ -616,7 +617,7 @@ function createBaseMsgSingleSwap(): MsgSingleSwap {
   };
 }
 export const MsgSingleSwap = {
-  encode(message: MsgSingleSwap, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: MsgSingleSwap, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.creator !== "") {
       writer.uint32(10).string(message.creator);
     }
@@ -631,8 +632,8 @@ export const MsgSingleSwap = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): MsgSingleSwap {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): MsgSingleSwap {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgSingleSwap();
     while (reader.pos < end) {
@@ -691,7 +692,7 @@ function createBaseMsgSingleSwapResponse(): MsgSingleSwapResponse {
   };
 }
 export const MsgSingleSwapResponse = {
-  encode(message: MsgSingleSwapResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: MsgSingleSwapResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.amountOut !== undefined) {
       Coin.encode(message.amountOut, writer.uint32(10).fork()).ldelim();
     }
@@ -706,8 +707,8 @@ export const MsgSingleSwapResponse = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): MsgSingleSwapResponse {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): MsgSingleSwapResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgSingleSwapResponse();
     while (reader.pos < end) {
@@ -760,17 +761,17 @@ export const MsgSingleSwapResponse = {
 function createBaseMsgJoinAllTokensExactLpt(): MsgJoinAllTokensExactLpt {
   return {
     creator: "",
-    poolId: Long.UZERO,
+    poolId: BigInt(0),
     lptOut: "",
     maxAmountsIn: []
   };
 }
 export const MsgJoinAllTokensExactLpt = {
-  encode(message: MsgJoinAllTokensExactLpt, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: MsgJoinAllTokensExactLpt, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.creator !== "") {
       writer.uint32(10).string(message.creator);
     }
-    if (!message.poolId.isZero()) {
+    if (message.poolId !== BigInt(0)) {
       writer.uint32(16).uint64(message.poolId);
     }
     if (message.lptOut !== "") {
@@ -781,8 +782,8 @@ export const MsgJoinAllTokensExactLpt = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): MsgJoinAllTokensExactLpt {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): MsgJoinAllTokensExactLpt {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgJoinAllTokensExactLpt();
     while (reader.pos < end) {
@@ -792,7 +793,7 @@ export const MsgJoinAllTokensExactLpt = {
           message.creator = reader.string();
           break;
         case 2:
-          message.poolId = (reader.uint64() as Long);
+          message.poolId = reader.uint64();
           break;
         case 3:
           message.lptOut = reader.string();
@@ -810,7 +811,7 @@ export const MsgJoinAllTokensExactLpt = {
   fromJSON(object: any): MsgJoinAllTokensExactLpt {
     return {
       creator: isSet(object.creator) ? String(object.creator) : "",
-      poolId: isSet(object.poolId) ? Long.fromValue(object.poolId) : Long.UZERO,
+      poolId: isSet(object.poolId) ? BigInt(object.poolId.toString()) : BigInt(0),
       lptOut: isSet(object.lptOut) ? String(object.lptOut) : "",
       maxAmountsIn: Array.isArray(object?.maxAmountsIn) ? object.maxAmountsIn.map((e: any) => Coin.fromJSON(e)) : []
     };
@@ -818,7 +819,7 @@ export const MsgJoinAllTokensExactLpt = {
   toJSON(message: MsgJoinAllTokensExactLpt): unknown {
     const obj: any = {};
     message.creator !== undefined && (obj.creator = message.creator);
-    message.poolId !== undefined && (obj.poolId = (message.poolId || Long.UZERO).toString());
+    message.poolId !== undefined && (obj.poolId = (message.poolId || BigInt(0)).toString());
     message.lptOut !== undefined && (obj.lptOut = message.lptOut);
     if (message.maxAmountsIn) {
       obj.maxAmountsIn = message.maxAmountsIn.map(e => e ? Coin.toJSON(e) : undefined);
@@ -830,7 +831,7 @@ export const MsgJoinAllTokensExactLpt = {
   fromPartial(object: Partial<MsgJoinAllTokensExactLpt>): MsgJoinAllTokensExactLpt {
     const message = createBaseMsgJoinAllTokensExactLpt();
     message.creator = object.creator ?? "";
-    message.poolId = object.poolId !== undefined && object.poolId !== null ? Long.fromValue(object.poolId) : Long.UZERO;
+    message.poolId = object.poolId !== undefined && object.poolId !== null ? BigInt(object.poolId.toString()) : BigInt(0);
     message.lptOut = object.lptOut ?? "";
     message.maxAmountsIn = object.maxAmountsIn?.map(e => Coin.fromPartial(e)) || [];
     return message;
@@ -844,7 +845,7 @@ function createBaseMsgJoinAllTokensExactLptResponse(): MsgJoinAllTokensExactLptR
   };
 }
 export const MsgJoinAllTokensExactLptResponse = {
-  encode(message: MsgJoinAllTokensExactLptResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: MsgJoinAllTokensExactLptResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.lptOut !== undefined) {
       Coin.encode(message.lptOut, writer.uint32(10).fork()).ldelim();
     }
@@ -856,8 +857,8 @@ export const MsgJoinAllTokensExactLptResponse = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): MsgJoinAllTokensExactLptResponse {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): MsgJoinAllTokensExactLptResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgJoinAllTokensExactLptResponse();
     while (reader.pos < end) {
@@ -912,18 +913,18 @@ export const MsgJoinAllTokensExactLptResponse = {
 function createBaseMsgJoinTokenExactLpt(): MsgJoinTokenExactLpt {
   return {
     creator: "",
-    poolId: Long.UZERO,
+    poolId: BigInt(0),
     lptOut: "",
     tokenIn: "",
     maxAmountIn: undefined
   };
 }
 export const MsgJoinTokenExactLpt = {
-  encode(message: MsgJoinTokenExactLpt, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: MsgJoinTokenExactLpt, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.creator !== "") {
       writer.uint32(10).string(message.creator);
     }
-    if (!message.poolId.isZero()) {
+    if (message.poolId !== BigInt(0)) {
       writer.uint32(16).uint64(message.poolId);
     }
     if (message.lptOut !== "") {
@@ -937,8 +938,8 @@ export const MsgJoinTokenExactLpt = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): MsgJoinTokenExactLpt {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): MsgJoinTokenExactLpt {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgJoinTokenExactLpt();
     while (reader.pos < end) {
@@ -948,7 +949,7 @@ export const MsgJoinTokenExactLpt = {
           message.creator = reader.string();
           break;
         case 2:
-          message.poolId = (reader.uint64() as Long);
+          message.poolId = reader.uint64();
           break;
         case 3:
           message.lptOut = reader.string();
@@ -969,7 +970,7 @@ export const MsgJoinTokenExactLpt = {
   fromJSON(object: any): MsgJoinTokenExactLpt {
     return {
       creator: isSet(object.creator) ? String(object.creator) : "",
-      poolId: isSet(object.poolId) ? Long.fromValue(object.poolId) : Long.UZERO,
+      poolId: isSet(object.poolId) ? BigInt(object.poolId.toString()) : BigInt(0),
       lptOut: isSet(object.lptOut) ? String(object.lptOut) : "",
       tokenIn: isSet(object.tokenIn) ? String(object.tokenIn) : "",
       maxAmountIn: isSet(object.maxAmountIn) ? String(object.maxAmountIn) : undefined
@@ -978,7 +979,7 @@ export const MsgJoinTokenExactLpt = {
   toJSON(message: MsgJoinTokenExactLpt): unknown {
     const obj: any = {};
     message.creator !== undefined && (obj.creator = message.creator);
-    message.poolId !== undefined && (obj.poolId = (message.poolId || Long.UZERO).toString());
+    message.poolId !== undefined && (obj.poolId = (message.poolId || BigInt(0)).toString());
     message.lptOut !== undefined && (obj.lptOut = message.lptOut);
     message.tokenIn !== undefined && (obj.tokenIn = message.tokenIn);
     message.maxAmountIn !== undefined && (obj.maxAmountIn = message.maxAmountIn);
@@ -987,7 +988,7 @@ export const MsgJoinTokenExactLpt = {
   fromPartial(object: Partial<MsgJoinTokenExactLpt>): MsgJoinTokenExactLpt {
     const message = createBaseMsgJoinTokenExactLpt();
     message.creator = object.creator ?? "";
-    message.poolId = object.poolId !== undefined && object.poolId !== null ? Long.fromValue(object.poolId) : Long.UZERO;
+    message.poolId = object.poolId !== undefined && object.poolId !== null ? BigInt(object.poolId.toString()) : BigInt(0);
     message.lptOut = object.lptOut ?? "";
     message.tokenIn = object.tokenIn ?? "";
     message.maxAmountIn = object.maxAmountIn ?? undefined;
@@ -1003,7 +1004,7 @@ function createBaseMsgJoinTokenExactLptResponse(): MsgJoinTokenExactLptResponse 
   };
 }
 export const MsgJoinTokenExactLptResponse = {
-  encode(message: MsgJoinTokenExactLptResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: MsgJoinTokenExactLptResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.lptOut !== undefined) {
       Coin.encode(message.lptOut, writer.uint32(10).fork()).ldelim();
     }
@@ -1018,8 +1019,8 @@ export const MsgJoinTokenExactLptResponse = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): MsgJoinTokenExactLptResponse {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): MsgJoinTokenExactLptResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgJoinTokenExactLptResponse();
     while (reader.pos < end) {
@@ -1072,17 +1073,17 @@ export const MsgJoinTokenExactLptResponse = {
 function createBaseMsgJoinExactTokens(): MsgJoinExactTokens {
   return {
     creator: "",
-    poolId: Long.UZERO,
+    poolId: BigInt(0),
     amountsIn: [],
     minLptOut: undefined
   };
 }
 export const MsgJoinExactTokens = {
-  encode(message: MsgJoinExactTokens, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: MsgJoinExactTokens, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.creator !== "") {
       writer.uint32(10).string(message.creator);
     }
-    if (!message.poolId.isZero()) {
+    if (message.poolId !== BigInt(0)) {
       writer.uint32(16).uint64(message.poolId);
     }
     for (const v of message.amountsIn) {
@@ -1093,8 +1094,8 @@ export const MsgJoinExactTokens = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): MsgJoinExactTokens {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): MsgJoinExactTokens {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgJoinExactTokens();
     while (reader.pos < end) {
@@ -1104,7 +1105,7 @@ export const MsgJoinExactTokens = {
           message.creator = reader.string();
           break;
         case 2:
-          message.poolId = (reader.uint64() as Long);
+          message.poolId = reader.uint64();
           break;
         case 3:
           message.amountsIn.push(Coin.decode(reader, reader.uint32()));
@@ -1122,7 +1123,7 @@ export const MsgJoinExactTokens = {
   fromJSON(object: any): MsgJoinExactTokens {
     return {
       creator: isSet(object.creator) ? String(object.creator) : "",
-      poolId: isSet(object.poolId) ? Long.fromValue(object.poolId) : Long.UZERO,
+      poolId: isSet(object.poolId) ? BigInt(object.poolId.toString()) : BigInt(0),
       amountsIn: Array.isArray(object?.amountsIn) ? object.amountsIn.map((e: any) => Coin.fromJSON(e)) : [],
       minLptOut: isSet(object.minLptOut) ? String(object.minLptOut) : undefined
     };
@@ -1130,7 +1131,7 @@ export const MsgJoinExactTokens = {
   toJSON(message: MsgJoinExactTokens): unknown {
     const obj: any = {};
     message.creator !== undefined && (obj.creator = message.creator);
-    message.poolId !== undefined && (obj.poolId = (message.poolId || Long.UZERO).toString());
+    message.poolId !== undefined && (obj.poolId = (message.poolId || BigInt(0)).toString());
     if (message.amountsIn) {
       obj.amountsIn = message.amountsIn.map(e => e ? Coin.toJSON(e) : undefined);
     } else {
@@ -1142,7 +1143,7 @@ export const MsgJoinExactTokens = {
   fromPartial(object: Partial<MsgJoinExactTokens>): MsgJoinExactTokens {
     const message = createBaseMsgJoinExactTokens();
     message.creator = object.creator ?? "";
-    message.poolId = object.poolId !== undefined && object.poolId !== null ? Long.fromValue(object.poolId) : Long.UZERO;
+    message.poolId = object.poolId !== undefined && object.poolId !== null ? BigInt(object.poolId.toString()) : BigInt(0);
     message.amountsIn = object.amountsIn?.map(e => Coin.fromPartial(e)) || [];
     message.minLptOut = object.minLptOut ?? undefined;
     return message;
@@ -1157,7 +1158,7 @@ function createBaseMsgJoinExactTokensResponse(): MsgJoinExactTokensResponse {
   };
 }
 export const MsgJoinExactTokensResponse = {
-  encode(message: MsgJoinExactTokensResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: MsgJoinExactTokensResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.lptOut !== undefined) {
       Coin.encode(message.lptOut, writer.uint32(10).fork()).ldelim();
     }
@@ -1172,8 +1173,8 @@ export const MsgJoinExactTokensResponse = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): MsgJoinExactTokensResponse {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): MsgJoinExactTokensResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgJoinExactTokensResponse();
     while (reader.pos < end) {
@@ -1238,17 +1239,17 @@ export const MsgJoinExactTokensResponse = {
 function createBaseMsgExitExactTokens(): MsgExitExactTokens {
   return {
     creator: "",
-    poolId: Long.UZERO,
+    poolId: BigInt(0),
     amountsOut: [],
     maxLptIn: undefined
   };
 }
 export const MsgExitExactTokens = {
-  encode(message: MsgExitExactTokens, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: MsgExitExactTokens, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.creator !== "") {
       writer.uint32(10).string(message.creator);
     }
-    if (!message.poolId.isZero()) {
+    if (message.poolId !== BigInt(0)) {
       writer.uint32(16).uint64(message.poolId);
     }
     for (const v of message.amountsOut) {
@@ -1259,8 +1260,8 @@ export const MsgExitExactTokens = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): MsgExitExactTokens {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): MsgExitExactTokens {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgExitExactTokens();
     while (reader.pos < end) {
@@ -1270,7 +1271,7 @@ export const MsgExitExactTokens = {
           message.creator = reader.string();
           break;
         case 2:
-          message.poolId = (reader.uint64() as Long);
+          message.poolId = reader.uint64();
           break;
         case 3:
           message.amountsOut.push(Coin.decode(reader, reader.uint32()));
@@ -1288,7 +1289,7 @@ export const MsgExitExactTokens = {
   fromJSON(object: any): MsgExitExactTokens {
     return {
       creator: isSet(object.creator) ? String(object.creator) : "",
-      poolId: isSet(object.poolId) ? Long.fromValue(object.poolId) : Long.UZERO,
+      poolId: isSet(object.poolId) ? BigInt(object.poolId.toString()) : BigInt(0),
       amountsOut: Array.isArray(object?.amountsOut) ? object.amountsOut.map((e: any) => Coin.fromJSON(e)) : [],
       maxLptIn: isSet(object.maxLptIn) ? String(object.maxLptIn) : undefined
     };
@@ -1296,7 +1297,7 @@ export const MsgExitExactTokens = {
   toJSON(message: MsgExitExactTokens): unknown {
     const obj: any = {};
     message.creator !== undefined && (obj.creator = message.creator);
-    message.poolId !== undefined && (obj.poolId = (message.poolId || Long.UZERO).toString());
+    message.poolId !== undefined && (obj.poolId = (message.poolId || BigInt(0)).toString());
     if (message.amountsOut) {
       obj.amountsOut = message.amountsOut.map(e => e ? Coin.toJSON(e) : undefined);
     } else {
@@ -1308,7 +1309,7 @@ export const MsgExitExactTokens = {
   fromPartial(object: Partial<MsgExitExactTokens>): MsgExitExactTokens {
     const message = createBaseMsgExitExactTokens();
     message.creator = object.creator ?? "";
-    message.poolId = object.poolId !== undefined && object.poolId !== null ? Long.fromValue(object.poolId) : Long.UZERO;
+    message.poolId = object.poolId !== undefined && object.poolId !== null ? BigInt(object.poolId.toString()) : BigInt(0);
     message.amountsOut = object.amountsOut?.map(e => Coin.fromPartial(e)) || [];
     message.maxLptIn = object.maxLptIn ?? undefined;
     return message;
@@ -1323,7 +1324,7 @@ function createBaseMsgExitExactTokensResponse(): MsgExitExactTokensResponse {
   };
 }
 export const MsgExitExactTokensResponse = {
-  encode(message: MsgExitExactTokensResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: MsgExitExactTokensResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.lptIn !== undefined) {
       Coin.encode(message.lptIn, writer.uint32(10).fork()).ldelim();
     }
@@ -1338,8 +1339,8 @@ export const MsgExitExactTokensResponse = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): MsgExitExactTokensResponse {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): MsgExitExactTokensResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgExitExactTokensResponse();
     while (reader.pos < end) {
@@ -1400,18 +1401,18 @@ export const MsgExitExactTokensResponse = {
 function createBaseMsgExitTokenExactLpt(): MsgExitTokenExactLpt {
   return {
     creator: "",
-    poolId: Long.UZERO,
+    poolId: BigInt(0),
     lptIn: "",
     tokenOut: "",
     minAmountOut: undefined
   };
 }
 export const MsgExitTokenExactLpt = {
-  encode(message: MsgExitTokenExactLpt, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: MsgExitTokenExactLpt, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.creator !== "") {
       writer.uint32(10).string(message.creator);
     }
-    if (!message.poolId.isZero()) {
+    if (message.poolId !== BigInt(0)) {
       writer.uint32(16).uint64(message.poolId);
     }
     if (message.lptIn !== "") {
@@ -1425,8 +1426,8 @@ export const MsgExitTokenExactLpt = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): MsgExitTokenExactLpt {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): MsgExitTokenExactLpt {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgExitTokenExactLpt();
     while (reader.pos < end) {
@@ -1436,7 +1437,7 @@ export const MsgExitTokenExactLpt = {
           message.creator = reader.string();
           break;
         case 2:
-          message.poolId = (reader.uint64() as Long);
+          message.poolId = reader.uint64();
           break;
         case 3:
           message.lptIn = reader.string();
@@ -1457,7 +1458,7 @@ export const MsgExitTokenExactLpt = {
   fromJSON(object: any): MsgExitTokenExactLpt {
     return {
       creator: isSet(object.creator) ? String(object.creator) : "",
-      poolId: isSet(object.poolId) ? Long.fromValue(object.poolId) : Long.UZERO,
+      poolId: isSet(object.poolId) ? BigInt(object.poolId.toString()) : BigInt(0),
       lptIn: isSet(object.lptIn) ? String(object.lptIn) : "",
       tokenOut: isSet(object.tokenOut) ? String(object.tokenOut) : "",
       minAmountOut: isSet(object.minAmountOut) ? String(object.minAmountOut) : undefined
@@ -1466,7 +1467,7 @@ export const MsgExitTokenExactLpt = {
   toJSON(message: MsgExitTokenExactLpt): unknown {
     const obj: any = {};
     message.creator !== undefined && (obj.creator = message.creator);
-    message.poolId !== undefined && (obj.poolId = (message.poolId || Long.UZERO).toString());
+    message.poolId !== undefined && (obj.poolId = (message.poolId || BigInt(0)).toString());
     message.lptIn !== undefined && (obj.lptIn = message.lptIn);
     message.tokenOut !== undefined && (obj.tokenOut = message.tokenOut);
     message.minAmountOut !== undefined && (obj.minAmountOut = message.minAmountOut);
@@ -1475,7 +1476,7 @@ export const MsgExitTokenExactLpt = {
   fromPartial(object: Partial<MsgExitTokenExactLpt>): MsgExitTokenExactLpt {
     const message = createBaseMsgExitTokenExactLpt();
     message.creator = object.creator ?? "";
-    message.poolId = object.poolId !== undefined && object.poolId !== null ? Long.fromValue(object.poolId) : Long.UZERO;
+    message.poolId = object.poolId !== undefined && object.poolId !== null ? BigInt(object.poolId.toString()) : BigInt(0);
     message.lptIn = object.lptIn ?? "";
     message.tokenOut = object.tokenOut ?? "";
     message.minAmountOut = object.minAmountOut ?? undefined;
@@ -1491,7 +1492,7 @@ function createBaseMsgExitTokenExactLptResponse(): MsgExitTokenExactLptResponse 
   };
 }
 export const MsgExitTokenExactLptResponse = {
-  encode(message: MsgExitTokenExactLptResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: MsgExitTokenExactLptResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.lptIn !== undefined) {
       Coin.encode(message.lptIn, writer.uint32(10).fork()).ldelim();
     }
@@ -1506,8 +1507,8 @@ export const MsgExitTokenExactLptResponse = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): MsgExitTokenExactLptResponse {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): MsgExitTokenExactLptResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgExitTokenExactLptResponse();
     while (reader.pos < end) {
@@ -1560,17 +1561,17 @@ export const MsgExitTokenExactLptResponse = {
 function createBaseMsgExitAllTokensExactLpt(): MsgExitAllTokensExactLpt {
   return {
     creator: "",
-    poolId: Long.UZERO,
+    poolId: BigInt(0),
     lptIn: "",
     minAmountsOut: []
   };
 }
 export const MsgExitAllTokensExactLpt = {
-  encode(message: MsgExitAllTokensExactLpt, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: MsgExitAllTokensExactLpt, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.creator !== "") {
       writer.uint32(10).string(message.creator);
     }
-    if (!message.poolId.isZero()) {
+    if (message.poolId !== BigInt(0)) {
       writer.uint32(16).uint64(message.poolId);
     }
     if (message.lptIn !== "") {
@@ -1581,8 +1582,8 @@ export const MsgExitAllTokensExactLpt = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): MsgExitAllTokensExactLpt {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): MsgExitAllTokensExactLpt {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgExitAllTokensExactLpt();
     while (reader.pos < end) {
@@ -1592,7 +1593,7 @@ export const MsgExitAllTokensExactLpt = {
           message.creator = reader.string();
           break;
         case 2:
-          message.poolId = (reader.uint64() as Long);
+          message.poolId = reader.uint64();
           break;
         case 3:
           message.lptIn = reader.string();
@@ -1610,7 +1611,7 @@ export const MsgExitAllTokensExactLpt = {
   fromJSON(object: any): MsgExitAllTokensExactLpt {
     return {
       creator: isSet(object.creator) ? String(object.creator) : "",
-      poolId: isSet(object.poolId) ? Long.fromValue(object.poolId) : Long.UZERO,
+      poolId: isSet(object.poolId) ? BigInt(object.poolId.toString()) : BigInt(0),
       lptIn: isSet(object.lptIn) ? String(object.lptIn) : "",
       minAmountsOut: Array.isArray(object?.minAmountsOut) ? object.minAmountsOut.map((e: any) => Coin.fromJSON(e)) : []
     };
@@ -1618,7 +1619,7 @@ export const MsgExitAllTokensExactLpt = {
   toJSON(message: MsgExitAllTokensExactLpt): unknown {
     const obj: any = {};
     message.creator !== undefined && (obj.creator = message.creator);
-    message.poolId !== undefined && (obj.poolId = (message.poolId || Long.UZERO).toString());
+    message.poolId !== undefined && (obj.poolId = (message.poolId || BigInt(0)).toString());
     message.lptIn !== undefined && (obj.lptIn = message.lptIn);
     if (message.minAmountsOut) {
       obj.minAmountsOut = message.minAmountsOut.map(e => e ? Coin.toJSON(e) : undefined);
@@ -1630,7 +1631,7 @@ export const MsgExitAllTokensExactLpt = {
   fromPartial(object: Partial<MsgExitAllTokensExactLpt>): MsgExitAllTokensExactLpt {
     const message = createBaseMsgExitAllTokensExactLpt();
     message.creator = object.creator ?? "";
-    message.poolId = object.poolId !== undefined && object.poolId !== null ? Long.fromValue(object.poolId) : Long.UZERO;
+    message.poolId = object.poolId !== undefined && object.poolId !== null ? BigInt(object.poolId.toString()) : BigInt(0);
     message.lptIn = object.lptIn ?? "";
     message.minAmountsOut = object.minAmountsOut?.map(e => Coin.fromPartial(e)) || [];
     return message;
@@ -1644,7 +1645,7 @@ function createBaseMsgExitAllTokensExactLptResponse(): MsgExitAllTokensExactLptR
   };
 }
 export const MsgExitAllTokensExactLptResponse = {
-  encode(message: MsgExitAllTokensExactLptResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: MsgExitAllTokensExactLptResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.lptIn !== undefined) {
       Coin.encode(message.lptIn, writer.uint32(10).fork()).ldelim();
     }
@@ -1656,8 +1657,8 @@ export const MsgExitAllTokensExactLptResponse = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): MsgExitAllTokensExactLptResponse {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): MsgExitAllTokensExactLptResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgExitAllTokensExactLptResponse();
     while (reader.pos < end) {
@@ -1712,17 +1713,17 @@ function createBaseCreateWeightedPoolToken(): CreateWeightedPoolToken {
   };
 }
 export const CreateWeightedPoolToken = {
-  encode(message: CreateWeightedPoolToken, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: CreateWeightedPoolToken, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.denom !== "") {
       writer.uint32(10).string(message.denom);
     }
     if (message.normalizedWeight !== "") {
-      writer.uint32(26).string(message.normalizedWeight);
+      writer.uint32(26).string(Decimal.fromUserInput(message.normalizedWeight, 18).atomics);
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): CreateWeightedPoolToken {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): CreateWeightedPoolToken {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseCreateWeightedPoolToken();
     while (reader.pos < end) {
@@ -1732,7 +1733,7 @@ export const CreateWeightedPoolToken = {
           message.denom = reader.string();
           break;
         case 3:
-          message.normalizedWeight = reader.string();
+          message.normalizedWeight = Decimal.fromAtomics(reader.string(), 18).toString();
           break;
         default:
           reader.skipType(tag & 7);
@@ -1765,14 +1766,14 @@ function createBaseMsgCreateWeightedPool(): MsgCreateWeightedPool {
     creator: "",
     name: "",
     swapFeeRatio: "",
-    pauseWindowDurationMillis: Long.ZERO,
-    pauseBufferDurationMillis: Long.ZERO,
+    pauseWindowDurationMillis: BigInt(0),
+    pauseBufferDurationMillis: BigInt(0),
     tokens: [],
     initializationAllowList: []
   };
 }
 export const MsgCreateWeightedPool = {
-  encode(message: MsgCreateWeightedPool, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: MsgCreateWeightedPool, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.creator !== "") {
       writer.uint32(10).string(message.creator);
     }
@@ -1780,12 +1781,12 @@ export const MsgCreateWeightedPool = {
       writer.uint32(18).string(message.name);
     }
     if (message.swapFeeRatio !== "") {
-      writer.uint32(26).string(message.swapFeeRatio);
+      writer.uint32(26).string(Decimal.fromUserInput(message.swapFeeRatio, 18).atomics);
     }
-    if (!message.pauseWindowDurationMillis.isZero()) {
+    if (message.pauseWindowDurationMillis !== BigInt(0)) {
       writer.uint32(32).int64(message.pauseWindowDurationMillis);
     }
-    if (!message.pauseBufferDurationMillis.isZero()) {
+    if (message.pauseBufferDurationMillis !== BigInt(0)) {
       writer.uint32(40).int64(message.pauseBufferDurationMillis);
     }
     for (const v of message.tokens) {
@@ -1796,8 +1797,8 @@ export const MsgCreateWeightedPool = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): MsgCreateWeightedPool {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): MsgCreateWeightedPool {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgCreateWeightedPool();
     while (reader.pos < end) {
@@ -1810,13 +1811,13 @@ export const MsgCreateWeightedPool = {
           message.name = reader.string();
           break;
         case 3:
-          message.swapFeeRatio = reader.string();
+          message.swapFeeRatio = Decimal.fromAtomics(reader.string(), 18).toString();
           break;
         case 4:
-          message.pauseWindowDurationMillis = (reader.int64() as Long);
+          message.pauseWindowDurationMillis = reader.int64();
           break;
         case 5:
-          message.pauseBufferDurationMillis = (reader.int64() as Long);
+          message.pauseBufferDurationMillis = reader.int64();
           break;
         case 6:
           message.tokens.push(CreateWeightedPoolToken.decode(reader, reader.uint32()));
@@ -1836,8 +1837,8 @@ export const MsgCreateWeightedPool = {
       creator: isSet(object.creator) ? String(object.creator) : "",
       name: isSet(object.name) ? String(object.name) : "",
       swapFeeRatio: isSet(object.swapFeeRatio) ? String(object.swapFeeRatio) : "",
-      pauseWindowDurationMillis: isSet(object.pauseWindowDurationMillis) ? Long.fromValue(object.pauseWindowDurationMillis) : Long.ZERO,
-      pauseBufferDurationMillis: isSet(object.pauseBufferDurationMillis) ? Long.fromValue(object.pauseBufferDurationMillis) : Long.ZERO,
+      pauseWindowDurationMillis: isSet(object.pauseWindowDurationMillis) ? BigInt(object.pauseWindowDurationMillis.toString()) : BigInt(0),
+      pauseBufferDurationMillis: isSet(object.pauseBufferDurationMillis) ? BigInt(object.pauseBufferDurationMillis.toString()) : BigInt(0),
       tokens: Array.isArray(object?.tokens) ? object.tokens.map((e: any) => CreateWeightedPoolToken.fromJSON(e)) : [],
       initializationAllowList: Array.isArray(object?.initializationAllowList) ? object.initializationAllowList.map((e: any) => String(e)) : []
     };
@@ -1847,8 +1848,8 @@ export const MsgCreateWeightedPool = {
     message.creator !== undefined && (obj.creator = message.creator);
     message.name !== undefined && (obj.name = message.name);
     message.swapFeeRatio !== undefined && (obj.swapFeeRatio = message.swapFeeRatio);
-    message.pauseWindowDurationMillis !== undefined && (obj.pauseWindowDurationMillis = (message.pauseWindowDurationMillis || Long.ZERO).toString());
-    message.pauseBufferDurationMillis !== undefined && (obj.pauseBufferDurationMillis = (message.pauseBufferDurationMillis || Long.ZERO).toString());
+    message.pauseWindowDurationMillis !== undefined && (obj.pauseWindowDurationMillis = (message.pauseWindowDurationMillis || BigInt(0)).toString());
+    message.pauseBufferDurationMillis !== undefined && (obj.pauseBufferDurationMillis = (message.pauseBufferDurationMillis || BigInt(0)).toString());
     if (message.tokens) {
       obj.tokens = message.tokens.map(e => e ? CreateWeightedPoolToken.toJSON(e) : undefined);
     } else {
@@ -1866,8 +1867,8 @@ export const MsgCreateWeightedPool = {
     message.creator = object.creator ?? "";
     message.name = object.name ?? "";
     message.swapFeeRatio = object.swapFeeRatio ?? "";
-    message.pauseWindowDurationMillis = object.pauseWindowDurationMillis !== undefined && object.pauseWindowDurationMillis !== null ? Long.fromValue(object.pauseWindowDurationMillis) : Long.ZERO;
-    message.pauseBufferDurationMillis = object.pauseBufferDurationMillis !== undefined && object.pauseBufferDurationMillis !== null ? Long.fromValue(object.pauseBufferDurationMillis) : Long.ZERO;
+    message.pauseWindowDurationMillis = object.pauseWindowDurationMillis !== undefined && object.pauseWindowDurationMillis !== null ? BigInt(object.pauseWindowDurationMillis.toString()) : BigInt(0);
+    message.pauseBufferDurationMillis = object.pauseBufferDurationMillis !== undefined && object.pauseBufferDurationMillis !== null ? BigInt(object.pauseBufferDurationMillis.toString()) : BigInt(0);
     message.tokens = object.tokens?.map(e => CreateWeightedPoolToken.fromPartial(e)) || [];
     message.initializationAllowList = object.initializationAllowList?.map(e => e) || [];
     return message;
@@ -1875,25 +1876,25 @@ export const MsgCreateWeightedPool = {
 };
 function createBaseMsgCreateWeightedPoolResponse(): MsgCreateWeightedPoolResponse {
   return {
-    poolId: Long.UZERO
+    poolId: BigInt(0)
   };
 }
 export const MsgCreateWeightedPoolResponse = {
-  encode(message: MsgCreateWeightedPoolResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (!message.poolId.isZero()) {
+  encode(message: MsgCreateWeightedPoolResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    if (message.poolId !== BigInt(0)) {
       writer.uint32(8).uint64(message.poolId);
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): MsgCreateWeightedPoolResponse {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): MsgCreateWeightedPoolResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgCreateWeightedPoolResponse();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.poolId = (reader.uint64() as Long);
+          message.poolId = reader.uint64();
           break;
         default:
           reader.skipType(tag & 7);
@@ -1904,42 +1905,42 @@ export const MsgCreateWeightedPoolResponse = {
   },
   fromJSON(object: any): MsgCreateWeightedPoolResponse {
     return {
-      poolId: isSet(object.poolId) ? Long.fromValue(object.poolId) : Long.UZERO
+      poolId: isSet(object.poolId) ? BigInt(object.poolId.toString()) : BigInt(0)
     };
   },
   toJSON(message: MsgCreateWeightedPoolResponse): unknown {
     const obj: any = {};
-    message.poolId !== undefined && (obj.poolId = (message.poolId || Long.UZERO).toString());
+    message.poolId !== undefined && (obj.poolId = (message.poolId || BigInt(0)).toString());
     return obj;
   },
   fromPartial(object: Partial<MsgCreateWeightedPoolResponse>): MsgCreateWeightedPoolResponse {
     const message = createBaseMsgCreateWeightedPoolResponse();
-    message.poolId = object.poolId !== undefined && object.poolId !== null ? Long.fromValue(object.poolId) : Long.UZERO;
+    message.poolId = object.poolId !== undefined && object.poolId !== null ? BigInt(object.poolId.toString()) : BigInt(0);
     return message;
   }
 };
 function createBaseMsgUpdateSwapFee(): MsgUpdateSwapFee {
   return {
     creator: "",
-    poolId: Long.UZERO,
+    poolId: BigInt(0),
     swapFeeRatio: ""
   };
 }
 export const MsgUpdateSwapFee = {
-  encode(message: MsgUpdateSwapFee, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: MsgUpdateSwapFee, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.creator !== "") {
       writer.uint32(10).string(message.creator);
     }
-    if (!message.poolId.isZero()) {
+    if (message.poolId !== BigInt(0)) {
       writer.uint32(16).uint64(message.poolId);
     }
     if (message.swapFeeRatio !== "") {
-      writer.uint32(26).string(message.swapFeeRatio);
+      writer.uint32(26).string(Decimal.fromUserInput(message.swapFeeRatio, 18).atomics);
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): MsgUpdateSwapFee {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): MsgUpdateSwapFee {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgUpdateSwapFee();
     while (reader.pos < end) {
@@ -1949,10 +1950,10 @@ export const MsgUpdateSwapFee = {
           message.creator = reader.string();
           break;
         case 2:
-          message.poolId = (reader.uint64() as Long);
+          message.poolId = reader.uint64();
           break;
         case 3:
-          message.swapFeeRatio = reader.string();
+          message.swapFeeRatio = Decimal.fromAtomics(reader.string(), 18).toString();
           break;
         default:
           reader.skipType(tag & 7);
@@ -1964,21 +1965,21 @@ export const MsgUpdateSwapFee = {
   fromJSON(object: any): MsgUpdateSwapFee {
     return {
       creator: isSet(object.creator) ? String(object.creator) : "",
-      poolId: isSet(object.poolId) ? Long.fromValue(object.poolId) : Long.UZERO,
+      poolId: isSet(object.poolId) ? BigInt(object.poolId.toString()) : BigInt(0),
       swapFeeRatio: isSet(object.swapFeeRatio) ? String(object.swapFeeRatio) : ""
     };
   },
   toJSON(message: MsgUpdateSwapFee): unknown {
     const obj: any = {};
     message.creator !== undefined && (obj.creator = message.creator);
-    message.poolId !== undefined && (obj.poolId = (message.poolId || Long.UZERO).toString());
+    message.poolId !== undefined && (obj.poolId = (message.poolId || BigInt(0)).toString());
     message.swapFeeRatio !== undefined && (obj.swapFeeRatio = message.swapFeeRatio);
     return obj;
   },
   fromPartial(object: Partial<MsgUpdateSwapFee>): MsgUpdateSwapFee {
     const message = createBaseMsgUpdateSwapFee();
     message.creator = object.creator ?? "";
-    message.poolId = object.poolId !== undefined && object.poolId !== null ? Long.fromValue(object.poolId) : Long.UZERO;
+    message.poolId = object.poolId !== undefined && object.poolId !== null ? BigInt(object.poolId.toString()) : BigInt(0);
     message.swapFeeRatio = object.swapFeeRatio ?? "";
     return message;
   }
@@ -1987,11 +1988,11 @@ function createBaseMsgUpdateSwapFeeResponse(): MsgUpdateSwapFeeResponse {
   return {};
 }
 export const MsgUpdateSwapFeeResponse = {
-  encode(_: MsgUpdateSwapFeeResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(_: MsgUpdateSwapFeeResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): MsgUpdateSwapFeeResponse {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): MsgUpdateSwapFeeResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgUpdateSwapFeeResponse();
     while (reader.pos < end) {
@@ -2019,16 +2020,16 @@ export const MsgUpdateSwapFeeResponse = {
 function createBaseMsgInitializePool(): MsgInitializePool {
   return {
     creator: "",
-    poolId: Long.UZERO,
+    poolId: BigInt(0),
     amountsIn: []
   };
 }
 export const MsgInitializePool = {
-  encode(message: MsgInitializePool, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: MsgInitializePool, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.creator !== "") {
       writer.uint32(10).string(message.creator);
     }
-    if (!message.poolId.isZero()) {
+    if (message.poolId !== BigInt(0)) {
       writer.uint32(16).uint64(message.poolId);
     }
     for (const v of message.amountsIn) {
@@ -2036,8 +2037,8 @@ export const MsgInitializePool = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): MsgInitializePool {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): MsgInitializePool {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgInitializePool();
     while (reader.pos < end) {
@@ -2047,7 +2048,7 @@ export const MsgInitializePool = {
           message.creator = reader.string();
           break;
         case 2:
-          message.poolId = (reader.uint64() as Long);
+          message.poolId = reader.uint64();
           break;
         case 3:
           message.amountsIn.push(Coin.decode(reader, reader.uint32()));
@@ -2062,14 +2063,14 @@ export const MsgInitializePool = {
   fromJSON(object: any): MsgInitializePool {
     return {
       creator: isSet(object.creator) ? String(object.creator) : "",
-      poolId: isSet(object.poolId) ? Long.fromValue(object.poolId) : Long.UZERO,
+      poolId: isSet(object.poolId) ? BigInt(object.poolId.toString()) : BigInt(0),
       amountsIn: Array.isArray(object?.amountsIn) ? object.amountsIn.map((e: any) => Coin.fromJSON(e)) : []
     };
   },
   toJSON(message: MsgInitializePool): unknown {
     const obj: any = {};
     message.creator !== undefined && (obj.creator = message.creator);
-    message.poolId !== undefined && (obj.poolId = (message.poolId || Long.UZERO).toString());
+    message.poolId !== undefined && (obj.poolId = (message.poolId || BigInt(0)).toString());
     if (message.amountsIn) {
       obj.amountsIn = message.amountsIn.map(e => e ? Coin.toJSON(e) : undefined);
     } else {
@@ -2080,7 +2081,7 @@ export const MsgInitializePool = {
   fromPartial(object: Partial<MsgInitializePool>): MsgInitializePool {
     const message = createBaseMsgInitializePool();
     message.creator = object.creator ?? "";
-    message.poolId = object.poolId !== undefined && object.poolId !== null ? Long.fromValue(object.poolId) : Long.UZERO;
+    message.poolId = object.poolId !== undefined && object.poolId !== null ? BigInt(object.poolId.toString()) : BigInt(0);
     message.amountsIn = object.amountsIn?.map(e => Coin.fromPartial(e)) || [];
     return message;
   }
@@ -2093,7 +2094,7 @@ function createBaseMsgInitializePoolResponse(): MsgInitializePoolResponse {
   };
 }
 export const MsgInitializePoolResponse = {
-  encode(message: MsgInitializePoolResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: MsgInitializePoolResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.lptOut !== undefined) {
       Coin.encode(message.lptOut, writer.uint32(10).fork()).ldelim();
     }
@@ -2105,8 +2106,8 @@ export const MsgInitializePoolResponse = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): MsgInitializePoolResponse {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): MsgInitializePoolResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgInitializePoolResponse();
     while (reader.pos < end) {
@@ -2161,33 +2162,33 @@ export const MsgInitializePoolResponse = {
 function createBaseMsgUpdateWeights(): MsgUpdateWeights {
   return {
     creator: "",
-    poolId: Long.UZERO,
+    poolId: BigInt(0),
     tokenWeights: [],
-    startTimeUnixMillis: Long.ZERO,
-    endTimeUnixMillis: Long.ZERO
+    startTimeUnixMillis: BigInt(0),
+    endTimeUnixMillis: BigInt(0)
   };
 }
 export const MsgUpdateWeights = {
-  encode(message: MsgUpdateWeights, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: MsgUpdateWeights, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.creator !== "") {
       writer.uint32(10).string(message.creator);
     }
-    if (!message.poolId.isZero()) {
+    if (message.poolId !== BigInt(0)) {
       writer.uint32(16).uint64(message.poolId);
     }
     for (const v of message.tokenWeights) {
       TokenWeight.encode(v!, writer.uint32(26).fork()).ldelim();
     }
-    if (!message.startTimeUnixMillis.isZero()) {
+    if (message.startTimeUnixMillis !== BigInt(0)) {
       writer.uint32(32).int64(message.startTimeUnixMillis);
     }
-    if (!message.endTimeUnixMillis.isZero()) {
+    if (message.endTimeUnixMillis !== BigInt(0)) {
       writer.uint32(40).int64(message.endTimeUnixMillis);
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): MsgUpdateWeights {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): MsgUpdateWeights {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgUpdateWeights();
     while (reader.pos < end) {
@@ -2197,16 +2198,16 @@ export const MsgUpdateWeights = {
           message.creator = reader.string();
           break;
         case 2:
-          message.poolId = (reader.uint64() as Long);
+          message.poolId = reader.uint64();
           break;
         case 3:
           message.tokenWeights.push(TokenWeight.decode(reader, reader.uint32()));
           break;
         case 4:
-          message.startTimeUnixMillis = (reader.int64() as Long);
+          message.startTimeUnixMillis = reader.int64();
           break;
         case 5:
-          message.endTimeUnixMillis = (reader.int64() as Long);
+          message.endTimeUnixMillis = reader.int64();
           break;
         default:
           reader.skipType(tag & 7);
@@ -2218,32 +2219,32 @@ export const MsgUpdateWeights = {
   fromJSON(object: any): MsgUpdateWeights {
     return {
       creator: isSet(object.creator) ? String(object.creator) : "",
-      poolId: isSet(object.poolId) ? Long.fromValue(object.poolId) : Long.UZERO,
+      poolId: isSet(object.poolId) ? BigInt(object.poolId.toString()) : BigInt(0),
       tokenWeights: Array.isArray(object?.tokenWeights) ? object.tokenWeights.map((e: any) => TokenWeight.fromJSON(e)) : [],
-      startTimeUnixMillis: isSet(object.startTimeUnixMillis) ? Long.fromValue(object.startTimeUnixMillis) : Long.ZERO,
-      endTimeUnixMillis: isSet(object.endTimeUnixMillis) ? Long.fromValue(object.endTimeUnixMillis) : Long.ZERO
+      startTimeUnixMillis: isSet(object.startTimeUnixMillis) ? BigInt(object.startTimeUnixMillis.toString()) : BigInt(0),
+      endTimeUnixMillis: isSet(object.endTimeUnixMillis) ? BigInt(object.endTimeUnixMillis.toString()) : BigInt(0)
     };
   },
   toJSON(message: MsgUpdateWeights): unknown {
     const obj: any = {};
     message.creator !== undefined && (obj.creator = message.creator);
-    message.poolId !== undefined && (obj.poolId = (message.poolId || Long.UZERO).toString());
+    message.poolId !== undefined && (obj.poolId = (message.poolId || BigInt(0)).toString());
     if (message.tokenWeights) {
       obj.tokenWeights = message.tokenWeights.map(e => e ? TokenWeight.toJSON(e) : undefined);
     } else {
       obj.tokenWeights = [];
     }
-    message.startTimeUnixMillis !== undefined && (obj.startTimeUnixMillis = (message.startTimeUnixMillis || Long.ZERO).toString());
-    message.endTimeUnixMillis !== undefined && (obj.endTimeUnixMillis = (message.endTimeUnixMillis || Long.ZERO).toString());
+    message.startTimeUnixMillis !== undefined && (obj.startTimeUnixMillis = (message.startTimeUnixMillis || BigInt(0)).toString());
+    message.endTimeUnixMillis !== undefined && (obj.endTimeUnixMillis = (message.endTimeUnixMillis || BigInt(0)).toString());
     return obj;
   },
   fromPartial(object: Partial<MsgUpdateWeights>): MsgUpdateWeights {
     const message = createBaseMsgUpdateWeights();
     message.creator = object.creator ?? "";
-    message.poolId = object.poolId !== undefined && object.poolId !== null ? Long.fromValue(object.poolId) : Long.UZERO;
+    message.poolId = object.poolId !== undefined && object.poolId !== null ? BigInt(object.poolId.toString()) : BigInt(0);
     message.tokenWeights = object.tokenWeights?.map(e => TokenWeight.fromPartial(e)) || [];
-    message.startTimeUnixMillis = object.startTimeUnixMillis !== undefined && object.startTimeUnixMillis !== null ? Long.fromValue(object.startTimeUnixMillis) : Long.ZERO;
-    message.endTimeUnixMillis = object.endTimeUnixMillis !== undefined && object.endTimeUnixMillis !== null ? Long.fromValue(object.endTimeUnixMillis) : Long.ZERO;
+    message.startTimeUnixMillis = object.startTimeUnixMillis !== undefined && object.startTimeUnixMillis !== null ? BigInt(object.startTimeUnixMillis.toString()) : BigInt(0);
+    message.endTimeUnixMillis = object.endTimeUnixMillis !== undefined && object.endTimeUnixMillis !== null ? BigInt(object.endTimeUnixMillis.toString()) : BigInt(0);
     return message;
   }
 };
@@ -2251,11 +2252,11 @@ function createBaseMsgUpdateWeightsResponse(): MsgUpdateWeightsResponse {
   return {};
 }
 export const MsgUpdateWeightsResponse = {
-  encode(_: MsgUpdateWeightsResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(_: MsgUpdateWeightsResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): MsgUpdateWeightsResponse {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): MsgUpdateWeightsResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgUpdateWeightsResponse();
     while (reader.pos < end) {
@@ -2290,7 +2291,7 @@ function createBaseMsgBatchSwap(): MsgBatchSwap {
   };
 }
 export const MsgBatchSwap = {
-  encode(message: MsgBatchSwap, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: MsgBatchSwap, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.creator !== "") {
       writer.uint32(10).string(message.creator);
     }
@@ -2308,8 +2309,8 @@ export const MsgBatchSwap = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): MsgBatchSwap {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): MsgBatchSwap {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgBatchSwap();
     while (reader.pos < end) {
@@ -2386,7 +2387,7 @@ function createBaseMsgBatchSwapResponse(): MsgBatchSwapResponse {
   };
 }
 export const MsgBatchSwapResponse = {
-  encode(message: MsgBatchSwapResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: MsgBatchSwapResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     for (const v of message.amountsIn) {
       Coin.encode(v!, writer.uint32(10).fork()).ldelim();
     }
@@ -2401,8 +2402,8 @@ export const MsgBatchSwapResponse = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): MsgBatchSwapResponse {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): MsgBatchSwapResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgBatchSwapResponse();
     while (reader.pos < end) {
@@ -2475,7 +2476,7 @@ function createBaseMsgSetYammConfiguration(): MsgSetYammConfiguration {
   };
 }
 export const MsgSetYammConfiguration = {
-  encode(message: MsgSetYammConfiguration, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: MsgSetYammConfiguration, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.creator !== "") {
       writer.uint32(10).string(message.creator);
     }
@@ -2484,8 +2485,8 @@ export const MsgSetYammConfiguration = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): MsgSetYammConfiguration {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): MsgSetYammConfiguration {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgSetYammConfiguration();
     while (reader.pos < end) {
@@ -2527,11 +2528,11 @@ function createBaseMsgSetYammConfigurationResponse(): MsgSetYammConfigurationRes
   return {};
 }
 export const MsgSetYammConfigurationResponse = {
-  encode(_: MsgSetYammConfigurationResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(_: MsgSetYammConfigurationResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): MsgSetYammConfigurationResponse {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): MsgSetYammConfigurationResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgSetYammConfigurationResponse();
     while (reader.pos < end) {
@@ -2563,7 +2564,7 @@ function createBaseMsgWhitelistRoute(): MsgWhitelistRoute {
   };
 }
 export const MsgWhitelistRoute = {
-  encode(message: MsgWhitelistRoute, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: MsgWhitelistRoute, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.authority !== "") {
       writer.uint32(10).string(message.authority);
     }
@@ -2572,8 +2573,8 @@ export const MsgWhitelistRoute = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): MsgWhitelistRoute {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): MsgWhitelistRoute {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgWhitelistRoute();
     while (reader.pos < end) {
@@ -2615,11 +2616,11 @@ function createBaseMsgWhitelistRouteResponse(): MsgWhitelistRouteResponse {
   return {};
 }
 export const MsgWhitelistRouteResponse = {
-  encode(_: MsgWhitelistRouteResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(_: MsgWhitelistRouteResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): MsgWhitelistRouteResponse {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): MsgWhitelistRouteResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgWhitelistRouteResponse();
     while (reader.pos < end) {
@@ -2653,7 +2654,7 @@ function createBaseMsgSetWhitelistedRouteEnabled(): MsgSetWhitelistedRouteEnable
   };
 }
 export const MsgSetWhitelistedRouteEnabled = {
-  encode(message: MsgSetWhitelistedRouteEnabled, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: MsgSetWhitelistedRouteEnabled, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.authority !== "") {
       writer.uint32(10).string(message.authority);
     }
@@ -2668,8 +2669,8 @@ export const MsgSetWhitelistedRouteEnabled = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): MsgSetWhitelistedRouteEnabled {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): MsgSetWhitelistedRouteEnabled {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgSetWhitelistedRouteEnabled();
     while (reader.pos < end) {
@@ -2723,11 +2724,11 @@ function createBaseMsgSetWhitelistedRouteEnabledResponse(): MsgSetWhitelistedRou
   return {};
 }
 export const MsgSetWhitelistedRouteEnabledResponse = {
-  encode(_: MsgSetWhitelistedRouteEnabledResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(_: MsgSetWhitelistedRouteEnabledResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): MsgSetWhitelistedRouteEnabledResponse {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): MsgSetWhitelistedRouteEnabledResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgSetWhitelistedRouteEnabledResponse();
     while (reader.pos < end) {
@@ -2755,24 +2756,24 @@ export const MsgSetWhitelistedRouteEnabledResponse = {
 function createBaseMsgSubmitOrder(): MsgSubmitOrder {
   return {
     creator: "",
-    poolId: Long.UZERO,
+    poolId: BigInt(0),
     tokenIn: "",
     tokenOut: "",
     whitelistedRoute: false,
     allowMatching: false,
     amountPerStep: "",
     totalAmount: "",
-    millisInterval: Long.ZERO,
+    millisInterval: BigInt(0),
     maxStepSpotPrice: "",
     maxMatchingSpotPrice: undefined
   };
 }
 export const MsgSubmitOrder = {
-  encode(message: MsgSubmitOrder, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: MsgSubmitOrder, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.creator !== "") {
       writer.uint32(10).string(message.creator);
     }
-    if (!message.poolId.isZero()) {
+    if (message.poolId !== BigInt(0)) {
       writer.uint32(16).uint64(message.poolId);
     }
     if (message.tokenIn !== "") {
@@ -2793,19 +2794,19 @@ export const MsgSubmitOrder = {
     if (message.totalAmount !== "") {
       writer.uint32(66).string(message.totalAmount);
     }
-    if (!message.millisInterval.isZero()) {
+    if (message.millisInterval !== BigInt(0)) {
       writer.uint32(72).int64(message.millisInterval);
     }
     if (message.maxStepSpotPrice !== "") {
-      writer.uint32(82).string(message.maxStepSpotPrice);
+      writer.uint32(82).string(Decimal.fromUserInput(message.maxStepSpotPrice, 18).atomics);
     }
     if (message.maxMatchingSpotPrice !== undefined) {
-      writer.uint32(90).string(message.maxMatchingSpotPrice);
+      writer.uint32(90).string(Decimal.fromUserInput(message.maxMatchingSpotPrice, 18).atomics);
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): MsgSubmitOrder {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): MsgSubmitOrder {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgSubmitOrder();
     while (reader.pos < end) {
@@ -2815,7 +2816,7 @@ export const MsgSubmitOrder = {
           message.creator = reader.string();
           break;
         case 2:
-          message.poolId = (reader.uint64() as Long);
+          message.poolId = reader.uint64();
           break;
         case 3:
           message.tokenIn = reader.string();
@@ -2836,13 +2837,13 @@ export const MsgSubmitOrder = {
           message.totalAmount = reader.string();
           break;
         case 9:
-          message.millisInterval = (reader.int64() as Long);
+          message.millisInterval = reader.int64();
           break;
         case 10:
-          message.maxStepSpotPrice = reader.string();
+          message.maxStepSpotPrice = Decimal.fromAtomics(reader.string(), 18).toString();
           break;
         case 11:
-          message.maxMatchingSpotPrice = reader.string();
+          message.maxMatchingSpotPrice = Decimal.fromAtomics(reader.string(), 18).toString();
           break;
         default:
           reader.skipType(tag & 7);
@@ -2854,14 +2855,14 @@ export const MsgSubmitOrder = {
   fromJSON(object: any): MsgSubmitOrder {
     return {
       creator: isSet(object.creator) ? String(object.creator) : "",
-      poolId: isSet(object.poolId) ? Long.fromValue(object.poolId) : Long.UZERO,
+      poolId: isSet(object.poolId) ? BigInt(object.poolId.toString()) : BigInt(0),
       tokenIn: isSet(object.tokenIn) ? String(object.tokenIn) : "",
       tokenOut: isSet(object.tokenOut) ? String(object.tokenOut) : "",
       whitelistedRoute: isSet(object.whitelistedRoute) ? Boolean(object.whitelistedRoute) : false,
       allowMatching: isSet(object.allowMatching) ? Boolean(object.allowMatching) : false,
       amountPerStep: isSet(object.amountPerStep) ? String(object.amountPerStep) : "",
       totalAmount: isSet(object.totalAmount) ? String(object.totalAmount) : "",
-      millisInterval: isSet(object.millisInterval) ? Long.fromValue(object.millisInterval) : Long.ZERO,
+      millisInterval: isSet(object.millisInterval) ? BigInt(object.millisInterval.toString()) : BigInt(0),
       maxStepSpotPrice: isSet(object.maxStepSpotPrice) ? String(object.maxStepSpotPrice) : "",
       maxMatchingSpotPrice: isSet(object.maxMatchingSpotPrice) ? String(object.maxMatchingSpotPrice) : undefined
     };
@@ -2869,14 +2870,14 @@ export const MsgSubmitOrder = {
   toJSON(message: MsgSubmitOrder): unknown {
     const obj: any = {};
     message.creator !== undefined && (obj.creator = message.creator);
-    message.poolId !== undefined && (obj.poolId = (message.poolId || Long.UZERO).toString());
+    message.poolId !== undefined && (obj.poolId = (message.poolId || BigInt(0)).toString());
     message.tokenIn !== undefined && (obj.tokenIn = message.tokenIn);
     message.tokenOut !== undefined && (obj.tokenOut = message.tokenOut);
     message.whitelistedRoute !== undefined && (obj.whitelistedRoute = message.whitelistedRoute);
     message.allowMatching !== undefined && (obj.allowMatching = message.allowMatching);
     message.amountPerStep !== undefined && (obj.amountPerStep = message.amountPerStep);
     message.totalAmount !== undefined && (obj.totalAmount = message.totalAmount);
-    message.millisInterval !== undefined && (obj.millisInterval = (message.millisInterval || Long.ZERO).toString());
+    message.millisInterval !== undefined && (obj.millisInterval = (message.millisInterval || BigInt(0)).toString());
     message.maxStepSpotPrice !== undefined && (obj.maxStepSpotPrice = message.maxStepSpotPrice);
     message.maxMatchingSpotPrice !== undefined && (obj.maxMatchingSpotPrice = message.maxMatchingSpotPrice);
     return obj;
@@ -2884,14 +2885,14 @@ export const MsgSubmitOrder = {
   fromPartial(object: Partial<MsgSubmitOrder>): MsgSubmitOrder {
     const message = createBaseMsgSubmitOrder();
     message.creator = object.creator ?? "";
-    message.poolId = object.poolId !== undefined && object.poolId !== null ? Long.fromValue(object.poolId) : Long.UZERO;
+    message.poolId = object.poolId !== undefined && object.poolId !== null ? BigInt(object.poolId.toString()) : BigInt(0);
     message.tokenIn = object.tokenIn ?? "";
     message.tokenOut = object.tokenOut ?? "";
     message.whitelistedRoute = object.whitelistedRoute ?? false;
     message.allowMatching = object.allowMatching ?? false;
     message.amountPerStep = object.amountPerStep ?? "";
     message.totalAmount = object.totalAmount ?? "";
-    message.millisInterval = object.millisInterval !== undefined && object.millisInterval !== null ? Long.fromValue(object.millisInterval) : Long.ZERO;
+    message.millisInterval = object.millisInterval !== undefined && object.millisInterval !== null ? BigInt(object.millisInterval.toString()) : BigInt(0);
     message.maxStepSpotPrice = object.maxStepSpotPrice ?? "";
     message.maxMatchingSpotPrice = object.maxMatchingSpotPrice ?? undefined;
     return message;
@@ -2903,14 +2904,14 @@ function createBaseMsgSubmitOrderResponse(): MsgSubmitOrderResponse {
   };
 }
 export const MsgSubmitOrderResponse = {
-  encode(message: MsgSubmitOrderResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: MsgSubmitOrderResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.order !== undefined) {
       Order.encode(message.order, writer.uint32(10).fork()).ldelim();
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): MsgSubmitOrderResponse {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): MsgSubmitOrderResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgSubmitOrderResponse();
     while (reader.pos < end) {
@@ -2945,21 +2946,21 @@ export const MsgSubmitOrderResponse = {
 function createBaseMsgCancelOrder(): MsgCancelOrder {
   return {
     creator: "",
-    id: Long.UZERO
+    id: BigInt(0)
   };
 }
 export const MsgCancelOrder = {
-  encode(message: MsgCancelOrder, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: MsgCancelOrder, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.creator !== "") {
       writer.uint32(10).string(message.creator);
     }
-    if (!message.id.isZero()) {
+    if (message.id !== BigInt(0)) {
       writer.uint32(16).uint64(message.id);
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): MsgCancelOrder {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): MsgCancelOrder {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgCancelOrder();
     while (reader.pos < end) {
@@ -2969,7 +2970,7 @@ export const MsgCancelOrder = {
           message.creator = reader.string();
           break;
         case 2:
-          message.id = (reader.uint64() as Long);
+          message.id = reader.uint64();
           break;
         default:
           reader.skipType(tag & 7);
@@ -2981,19 +2982,19 @@ export const MsgCancelOrder = {
   fromJSON(object: any): MsgCancelOrder {
     return {
       creator: isSet(object.creator) ? String(object.creator) : "",
-      id: isSet(object.id) ? Long.fromValue(object.id) : Long.UZERO
+      id: isSet(object.id) ? BigInt(object.id.toString()) : BigInt(0)
     };
   },
   toJSON(message: MsgCancelOrder): unknown {
     const obj: any = {};
     message.creator !== undefined && (obj.creator = message.creator);
-    message.id !== undefined && (obj.id = (message.id || Long.UZERO).toString());
+    message.id !== undefined && (obj.id = (message.id || BigInt(0)).toString());
     return obj;
   },
   fromPartial(object: Partial<MsgCancelOrder>): MsgCancelOrder {
     const message = createBaseMsgCancelOrder();
     message.creator = object.creator ?? "";
-    message.id = object.id !== undefined && object.id !== null ? Long.fromValue(object.id) : Long.UZERO;
+    message.id = object.id !== undefined && object.id !== null ? BigInt(object.id.toString()) : BigInt(0);
     return message;
   }
 };
@@ -3003,14 +3004,14 @@ function createBaseMsgCancelOrderResponse(): MsgCancelOrderResponse {
   };
 }
 export const MsgCancelOrderResponse = {
-  encode(message: MsgCancelOrderResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: MsgCancelOrderResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.withdrawnDeposit !== undefined) {
       Coin.encode(message.withdrawnDeposit, writer.uint32(10).fork()).ldelim();
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): MsgCancelOrderResponse {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): MsgCancelOrderResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgCancelOrderResponse();
     while (reader.pos < end) {
@@ -3049,7 +3050,7 @@ function createBaseMsgProposeMatch(): MsgProposeMatch {
   };
 }
 export const MsgProposeMatch = {
-  encode(message: MsgProposeMatch, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: MsgProposeMatch, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.creator !== "") {
       writer.uint32(10).string(message.creator);
     }
@@ -3058,8 +3059,8 @@ export const MsgProposeMatch = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): MsgProposeMatch {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): MsgProposeMatch {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgProposeMatch();
     while (reader.pos < end) {
@@ -3107,14 +3108,14 @@ function createBaseMsgProposeMatchResponse(): MsgProposeMatchResponse {
   };
 }
 export const MsgProposeMatchResponse = {
-  encode(message: MsgProposeMatchResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: MsgProposeMatchResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     for (const v of message.proposerReward) {
       Coin.encode(v!, writer.uint32(10).fork()).ldelim();
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): MsgProposeMatchResponse {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): MsgProposeMatchResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgProposeMatchResponse();
     while (reader.pos < end) {
@@ -3153,16 +3154,16 @@ export const MsgProposeMatchResponse = {
 function createBaseMsgSetCircuitBreakers(): MsgSetCircuitBreakers {
   return {
     creator: "",
-    poolId: Long.UZERO,
+    poolId: BigInt(0),
     tokenCircuitBreakers: []
   };
 }
 export const MsgSetCircuitBreakers = {
-  encode(message: MsgSetCircuitBreakers, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: MsgSetCircuitBreakers, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.creator !== "") {
       writer.uint32(10).string(message.creator);
     }
-    if (!message.poolId.isZero()) {
+    if (message.poolId !== BigInt(0)) {
       writer.uint32(16).uint64(message.poolId);
     }
     for (const v of message.tokenCircuitBreakers) {
@@ -3170,8 +3171,8 @@ export const MsgSetCircuitBreakers = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): MsgSetCircuitBreakers {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): MsgSetCircuitBreakers {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgSetCircuitBreakers();
     while (reader.pos < end) {
@@ -3181,7 +3182,7 @@ export const MsgSetCircuitBreakers = {
           message.creator = reader.string();
           break;
         case 2:
-          message.poolId = (reader.uint64() as Long);
+          message.poolId = reader.uint64();
           break;
         case 3:
           message.tokenCircuitBreakers.push(TokenCircuitBreakerSettings.decode(reader, reader.uint32()));
@@ -3196,14 +3197,14 @@ export const MsgSetCircuitBreakers = {
   fromJSON(object: any): MsgSetCircuitBreakers {
     return {
       creator: isSet(object.creator) ? String(object.creator) : "",
-      poolId: isSet(object.poolId) ? Long.fromValue(object.poolId) : Long.UZERO,
+      poolId: isSet(object.poolId) ? BigInt(object.poolId.toString()) : BigInt(0),
       tokenCircuitBreakers: Array.isArray(object?.tokenCircuitBreakers) ? object.tokenCircuitBreakers.map((e: any) => TokenCircuitBreakerSettings.fromJSON(e)) : []
     };
   },
   toJSON(message: MsgSetCircuitBreakers): unknown {
     const obj: any = {};
     message.creator !== undefined && (obj.creator = message.creator);
-    message.poolId !== undefined && (obj.poolId = (message.poolId || Long.UZERO).toString());
+    message.poolId !== undefined && (obj.poolId = (message.poolId || BigInt(0)).toString());
     if (message.tokenCircuitBreakers) {
       obj.tokenCircuitBreakers = message.tokenCircuitBreakers.map(e => e ? TokenCircuitBreakerSettings.toJSON(e) : undefined);
     } else {
@@ -3214,7 +3215,7 @@ export const MsgSetCircuitBreakers = {
   fromPartial(object: Partial<MsgSetCircuitBreakers>): MsgSetCircuitBreakers {
     const message = createBaseMsgSetCircuitBreakers();
     message.creator = object.creator ?? "";
-    message.poolId = object.poolId !== undefined && object.poolId !== null ? Long.fromValue(object.poolId) : Long.UZERO;
+    message.poolId = object.poolId !== undefined && object.poolId !== null ? BigInt(object.poolId.toString()) : BigInt(0);
     message.tokenCircuitBreakers = object.tokenCircuitBreakers?.map(e => TokenCircuitBreakerSettings.fromPartial(e)) || [];
     return message;
   }
@@ -3223,11 +3224,11 @@ function createBaseMsgSetCircuitBreakersResponse(): MsgSetCircuitBreakersRespons
   return {};
 }
 export const MsgSetCircuitBreakersResponse = {
-  encode(_: MsgSetCircuitBreakersResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(_: MsgSetCircuitBreakersResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): MsgSetCircuitBreakersResponse {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): MsgSetCircuitBreakersResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgSetCircuitBreakersResponse();
     while (reader.pos < end) {
@@ -3255,16 +3256,16 @@ export const MsgSetCircuitBreakersResponse = {
 function createBaseMsgSetRecoveryMode(): MsgSetRecoveryMode {
   return {
     authority: "",
-    poolId: Long.UZERO,
+    poolId: BigInt(0),
     recoveryMode: false
   };
 }
 export const MsgSetRecoveryMode = {
-  encode(message: MsgSetRecoveryMode, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: MsgSetRecoveryMode, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.authority !== "") {
       writer.uint32(10).string(message.authority);
     }
-    if (!message.poolId.isZero()) {
+    if (message.poolId !== BigInt(0)) {
       writer.uint32(16).uint64(message.poolId);
     }
     if (message.recoveryMode === true) {
@@ -3272,8 +3273,8 @@ export const MsgSetRecoveryMode = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): MsgSetRecoveryMode {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): MsgSetRecoveryMode {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgSetRecoveryMode();
     while (reader.pos < end) {
@@ -3283,7 +3284,7 @@ export const MsgSetRecoveryMode = {
           message.authority = reader.string();
           break;
         case 2:
-          message.poolId = (reader.uint64() as Long);
+          message.poolId = reader.uint64();
           break;
         case 3:
           message.recoveryMode = reader.bool();
@@ -3298,21 +3299,21 @@ export const MsgSetRecoveryMode = {
   fromJSON(object: any): MsgSetRecoveryMode {
     return {
       authority: isSet(object.authority) ? String(object.authority) : "",
-      poolId: isSet(object.poolId) ? Long.fromValue(object.poolId) : Long.UZERO,
+      poolId: isSet(object.poolId) ? BigInt(object.poolId.toString()) : BigInt(0),
       recoveryMode: isSet(object.recoveryMode) ? Boolean(object.recoveryMode) : false
     };
   },
   toJSON(message: MsgSetRecoveryMode): unknown {
     const obj: any = {};
     message.authority !== undefined && (obj.authority = message.authority);
-    message.poolId !== undefined && (obj.poolId = (message.poolId || Long.UZERO).toString());
+    message.poolId !== undefined && (obj.poolId = (message.poolId || BigInt(0)).toString());
     message.recoveryMode !== undefined && (obj.recoveryMode = message.recoveryMode);
     return obj;
   },
   fromPartial(object: Partial<MsgSetRecoveryMode>): MsgSetRecoveryMode {
     const message = createBaseMsgSetRecoveryMode();
     message.authority = object.authority ?? "";
-    message.poolId = object.poolId !== undefined && object.poolId !== null ? Long.fromValue(object.poolId) : Long.UZERO;
+    message.poolId = object.poolId !== undefined && object.poolId !== null ? BigInt(object.poolId.toString()) : BigInt(0);
     message.recoveryMode = object.recoveryMode ?? false;
     return message;
   }
@@ -3321,11 +3322,11 @@ function createBaseMsgSetRecoveryModeResponse(): MsgSetRecoveryModeResponse {
   return {};
 }
 export const MsgSetRecoveryModeResponse = {
-  encode(_: MsgSetRecoveryModeResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(_: MsgSetRecoveryModeResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): MsgSetRecoveryModeResponse {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): MsgSetRecoveryModeResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgSetRecoveryModeResponse();
     while (reader.pos < end) {
@@ -3353,17 +3354,17 @@ export const MsgSetRecoveryModeResponse = {
 function createBaseMsgRecoveryExit(): MsgRecoveryExit {
   return {
     creator: "",
-    poolId: Long.UZERO,
+    poolId: BigInt(0),
     lptIn: "",
     minAmountsOut: []
   };
 }
 export const MsgRecoveryExit = {
-  encode(message: MsgRecoveryExit, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: MsgRecoveryExit, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.creator !== "") {
       writer.uint32(10).string(message.creator);
     }
-    if (!message.poolId.isZero()) {
+    if (message.poolId !== BigInt(0)) {
       writer.uint32(16).uint64(message.poolId);
     }
     if (message.lptIn !== "") {
@@ -3374,8 +3375,8 @@ export const MsgRecoveryExit = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): MsgRecoveryExit {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): MsgRecoveryExit {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgRecoveryExit();
     while (reader.pos < end) {
@@ -3385,7 +3386,7 @@ export const MsgRecoveryExit = {
           message.creator = reader.string();
           break;
         case 2:
-          message.poolId = (reader.uint64() as Long);
+          message.poolId = reader.uint64();
           break;
         case 3:
           message.lptIn = reader.string();
@@ -3403,7 +3404,7 @@ export const MsgRecoveryExit = {
   fromJSON(object: any): MsgRecoveryExit {
     return {
       creator: isSet(object.creator) ? String(object.creator) : "",
-      poolId: isSet(object.poolId) ? Long.fromValue(object.poolId) : Long.UZERO,
+      poolId: isSet(object.poolId) ? BigInt(object.poolId.toString()) : BigInt(0),
       lptIn: isSet(object.lptIn) ? String(object.lptIn) : "",
       minAmountsOut: Array.isArray(object?.minAmountsOut) ? object.minAmountsOut.map((e: any) => Coin.fromJSON(e)) : []
     };
@@ -3411,7 +3412,7 @@ export const MsgRecoveryExit = {
   toJSON(message: MsgRecoveryExit): unknown {
     const obj: any = {};
     message.creator !== undefined && (obj.creator = message.creator);
-    message.poolId !== undefined && (obj.poolId = (message.poolId || Long.UZERO).toString());
+    message.poolId !== undefined && (obj.poolId = (message.poolId || BigInt(0)).toString());
     message.lptIn !== undefined && (obj.lptIn = message.lptIn);
     if (message.minAmountsOut) {
       obj.minAmountsOut = message.minAmountsOut.map(e => e ? Coin.toJSON(e) : undefined);
@@ -3423,7 +3424,7 @@ export const MsgRecoveryExit = {
   fromPartial(object: Partial<MsgRecoveryExit>): MsgRecoveryExit {
     const message = createBaseMsgRecoveryExit();
     message.creator = object.creator ?? "";
-    message.poolId = object.poolId !== undefined && object.poolId !== null ? Long.fromValue(object.poolId) : Long.UZERO;
+    message.poolId = object.poolId !== undefined && object.poolId !== null ? BigInt(object.poolId.toString()) : BigInt(0);
     message.lptIn = object.lptIn ?? "";
     message.minAmountsOut = object.minAmountsOut?.map(e => Coin.fromPartial(e)) || [];
     return message;
@@ -3436,7 +3437,7 @@ function createBaseMsgRecoveryExitResponse(): MsgRecoveryExitResponse {
   };
 }
 export const MsgRecoveryExitResponse = {
-  encode(message: MsgRecoveryExitResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: MsgRecoveryExitResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.lptIn !== undefined) {
       Coin.encode(message.lptIn, writer.uint32(10).fork()).ldelim();
     }
@@ -3445,8 +3446,8 @@ export const MsgRecoveryExitResponse = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): MsgRecoveryExitResponse {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): MsgRecoveryExitResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgRecoveryExitResponse();
     while (reader.pos < end) {
@@ -3491,16 +3492,16 @@ export const MsgRecoveryExitResponse = {
 function createBaseMsgSetPauseMode(): MsgSetPauseMode {
   return {
     creator: "",
-    poolId: Long.UZERO,
+    poolId: BigInt(0),
     pauseMode: false
   };
 }
 export const MsgSetPauseMode = {
-  encode(message: MsgSetPauseMode, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: MsgSetPauseMode, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.creator !== "") {
       writer.uint32(10).string(message.creator);
     }
-    if (!message.poolId.isZero()) {
+    if (message.poolId !== BigInt(0)) {
       writer.uint32(16).uint64(message.poolId);
     }
     if (message.pauseMode === true) {
@@ -3508,8 +3509,8 @@ export const MsgSetPauseMode = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): MsgSetPauseMode {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): MsgSetPauseMode {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgSetPauseMode();
     while (reader.pos < end) {
@@ -3519,7 +3520,7 @@ export const MsgSetPauseMode = {
           message.creator = reader.string();
           break;
         case 2:
-          message.poolId = (reader.uint64() as Long);
+          message.poolId = reader.uint64();
           break;
         case 3:
           message.pauseMode = reader.bool();
@@ -3534,21 +3535,21 @@ export const MsgSetPauseMode = {
   fromJSON(object: any): MsgSetPauseMode {
     return {
       creator: isSet(object.creator) ? String(object.creator) : "",
-      poolId: isSet(object.poolId) ? Long.fromValue(object.poolId) : Long.UZERO,
+      poolId: isSet(object.poolId) ? BigInt(object.poolId.toString()) : BigInt(0),
       pauseMode: isSet(object.pauseMode) ? Boolean(object.pauseMode) : false
     };
   },
   toJSON(message: MsgSetPauseMode): unknown {
     const obj: any = {};
     message.creator !== undefined && (obj.creator = message.creator);
-    message.poolId !== undefined && (obj.poolId = (message.poolId || Long.UZERO).toString());
+    message.poolId !== undefined && (obj.poolId = (message.poolId || BigInt(0)).toString());
     message.pauseMode !== undefined && (obj.pauseMode = message.pauseMode);
     return obj;
   },
   fromPartial(object: Partial<MsgSetPauseMode>): MsgSetPauseMode {
     const message = createBaseMsgSetPauseMode();
     message.creator = object.creator ?? "";
-    message.poolId = object.poolId !== undefined && object.poolId !== null ? Long.fromValue(object.poolId) : Long.UZERO;
+    message.poolId = object.poolId !== undefined && object.poolId !== null ? BigInt(object.poolId.toString()) : BigInt(0);
     message.pauseMode = object.pauseMode ?? false;
     return message;
   }
@@ -3557,11 +3558,11 @@ function createBaseMsgSetPauseModeResponse(): MsgSetPauseModeResponse {
   return {};
 }
 export const MsgSetPauseModeResponse = {
-  encode(_: MsgSetPauseModeResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(_: MsgSetPauseModeResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): MsgSetPauseModeResponse {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): MsgSetPauseModeResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgSetPauseModeResponse();
     while (reader.pos < end) {
@@ -3593,7 +3594,7 @@ function createBaseMsgSetVaultPauseMode(): MsgSetVaultPauseMode {
   };
 }
 export const MsgSetVaultPauseMode = {
-  encode(message: MsgSetVaultPauseMode, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: MsgSetVaultPauseMode, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.authority !== "") {
       writer.uint32(10).string(message.authority);
     }
@@ -3602,8 +3603,8 @@ export const MsgSetVaultPauseMode = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): MsgSetVaultPauseMode {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): MsgSetVaultPauseMode {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgSetVaultPauseMode();
     while (reader.pos < end) {
@@ -3645,11 +3646,11 @@ function createBaseMsgSetVaultPauseModeResponse(): MsgSetVaultPauseModeResponse 
   return {};
 }
 export const MsgSetVaultPauseModeResponse = {
-  encode(_: MsgSetVaultPauseModeResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(_: MsgSetVaultPauseModeResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): MsgSetVaultPauseModeResponse {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): MsgSetVaultPauseModeResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgSetVaultPauseModeResponse();
     while (reader.pos < end) {
@@ -3681,7 +3682,7 @@ function createBaseMsgCreateOraclePricePair(): MsgCreateOraclePricePair {
   };
 }
 export const MsgCreateOraclePricePair = {
-  encode(message: MsgCreateOraclePricePair, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: MsgCreateOraclePricePair, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.authority !== "") {
       writer.uint32(10).string(message.authority);
     }
@@ -3690,8 +3691,8 @@ export const MsgCreateOraclePricePair = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): MsgCreateOraclePricePair {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): MsgCreateOraclePricePair {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgCreateOraclePricePair();
     while (reader.pos < end) {
@@ -3733,11 +3734,11 @@ function createBaseMsgCreateOraclePricePairResponse(): MsgCreateOraclePricePairR
   return {};
 }
 export const MsgCreateOraclePricePairResponse = {
-  encode(_: MsgCreateOraclePricePairResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(_: MsgCreateOraclePricePairResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): MsgCreateOraclePricePairResponse {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): MsgCreateOraclePricePairResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgCreateOraclePricePairResponse();
     while (reader.pos < end) {
@@ -3769,7 +3770,7 @@ function createBaseMsgUpdateOraclePricePair(): MsgUpdateOraclePricePair {
   };
 }
 export const MsgUpdateOraclePricePair = {
-  encode(message: MsgUpdateOraclePricePair, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: MsgUpdateOraclePricePair, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.authority !== "") {
       writer.uint32(10).string(message.authority);
     }
@@ -3778,8 +3779,8 @@ export const MsgUpdateOraclePricePair = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): MsgUpdateOraclePricePair {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): MsgUpdateOraclePricePair {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgUpdateOraclePricePair();
     while (reader.pos < end) {
@@ -3821,11 +3822,11 @@ function createBaseMsgUpdateOraclePricePairResponse(): MsgUpdateOraclePricePairR
   return {};
 }
 export const MsgUpdateOraclePricePairResponse = {
-  encode(_: MsgUpdateOraclePricePairResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(_: MsgUpdateOraclePricePairResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): MsgUpdateOraclePricePairResponse {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): MsgUpdateOraclePricePairResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgUpdateOraclePricePairResponse();
     while (reader.pos < end) {
@@ -3857,7 +3858,7 @@ function createBaseMsgDeleteOraclePricePair(): MsgDeleteOraclePricePair {
   };
 }
 export const MsgDeleteOraclePricePair = {
-  encode(message: MsgDeleteOraclePricePair, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: MsgDeleteOraclePricePair, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.authority !== "") {
       writer.uint32(10).string(message.authority);
     }
@@ -3866,8 +3867,8 @@ export const MsgDeleteOraclePricePair = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): MsgDeleteOraclePricePair {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): MsgDeleteOraclePricePair {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgDeleteOraclePricePair();
     while (reader.pos < end) {
@@ -3909,11 +3910,11 @@ function createBaseMsgDeleteOraclePricePairResponse(): MsgDeleteOraclePricePairR
   return {};
 }
 export const MsgDeleteOraclePricePairResponse = {
-  encode(_: MsgDeleteOraclePricePairResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(_: MsgDeleteOraclePricePairResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): MsgDeleteOraclePricePairResponse {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): MsgDeleteOraclePricePairResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgDeleteOraclePricePairResponse();
     while (reader.pos < end) {
@@ -3941,25 +3942,25 @@ export const MsgDeleteOraclePricePairResponse = {
 function createBaseMsgSetSwapProtocolFee(): MsgSetSwapProtocolFee {
   return {
     authority: "",
-    poolId: Long.UZERO,
+    poolId: BigInt(0),
     swapProtocolFee: undefined
   };
 }
 export const MsgSetSwapProtocolFee = {
-  encode(message: MsgSetSwapProtocolFee, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: MsgSetSwapProtocolFee, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.authority !== "") {
       writer.uint32(10).string(message.authority);
     }
-    if (!message.poolId.isZero()) {
+    if (message.poolId !== BigInt(0)) {
       writer.uint32(16).uint64(message.poolId);
     }
     if (message.swapProtocolFee !== undefined) {
-      writer.uint32(26).string(message.swapProtocolFee);
+      writer.uint32(26).string(Decimal.fromUserInput(message.swapProtocolFee, 18).atomics);
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): MsgSetSwapProtocolFee {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): MsgSetSwapProtocolFee {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgSetSwapProtocolFee();
     while (reader.pos < end) {
@@ -3969,10 +3970,10 @@ export const MsgSetSwapProtocolFee = {
           message.authority = reader.string();
           break;
         case 2:
-          message.poolId = (reader.uint64() as Long);
+          message.poolId = reader.uint64();
           break;
         case 3:
-          message.swapProtocolFee = reader.string();
+          message.swapProtocolFee = Decimal.fromAtomics(reader.string(), 18).toString();
           break;
         default:
           reader.skipType(tag & 7);
@@ -3984,21 +3985,21 @@ export const MsgSetSwapProtocolFee = {
   fromJSON(object: any): MsgSetSwapProtocolFee {
     return {
       authority: isSet(object.authority) ? String(object.authority) : "",
-      poolId: isSet(object.poolId) ? Long.fromValue(object.poolId) : Long.UZERO,
+      poolId: isSet(object.poolId) ? BigInt(object.poolId.toString()) : BigInt(0),
       swapProtocolFee: isSet(object.swapProtocolFee) ? String(object.swapProtocolFee) : undefined
     };
   },
   toJSON(message: MsgSetSwapProtocolFee): unknown {
     const obj: any = {};
     message.authority !== undefined && (obj.authority = message.authority);
-    message.poolId !== undefined && (obj.poolId = (message.poolId || Long.UZERO).toString());
+    message.poolId !== undefined && (obj.poolId = (message.poolId || BigInt(0)).toString());
     message.swapProtocolFee !== undefined && (obj.swapProtocolFee = message.swapProtocolFee);
     return obj;
   },
   fromPartial(object: Partial<MsgSetSwapProtocolFee>): MsgSetSwapProtocolFee {
     const message = createBaseMsgSetSwapProtocolFee();
     message.authority = object.authority ?? "";
-    message.poolId = object.poolId !== undefined && object.poolId !== null ? Long.fromValue(object.poolId) : Long.UZERO;
+    message.poolId = object.poolId !== undefined && object.poolId !== null ? BigInt(object.poolId.toString()) : BigInt(0);
     message.swapProtocolFee = object.swapProtocolFee ?? undefined;
     return message;
   }
@@ -4007,11 +4008,11 @@ function createBaseMsgSetSwapProtocolFeeResponse(): MsgSetSwapProtocolFeeRespons
   return {};
 }
 export const MsgSetSwapProtocolFeeResponse = {
-  encode(_: MsgSetSwapProtocolFeeResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(_: MsgSetSwapProtocolFeeResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): MsgSetSwapProtocolFeeResponse {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): MsgSetSwapProtocolFeeResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgSetSwapProtocolFeeResponse();
     while (reader.pos < end) {
@@ -4039,25 +4040,25 @@ export const MsgSetSwapProtocolFeeResponse = {
 function createBaseMsgSetJoinExitProtocolFee(): MsgSetJoinExitProtocolFee {
   return {
     authority: "",
-    poolId: Long.UZERO,
+    poolId: BigInt(0),
     joinExitProtocolFee: undefined
   };
 }
 export const MsgSetJoinExitProtocolFee = {
-  encode(message: MsgSetJoinExitProtocolFee, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: MsgSetJoinExitProtocolFee, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.authority !== "") {
       writer.uint32(10).string(message.authority);
     }
-    if (!message.poolId.isZero()) {
+    if (message.poolId !== BigInt(0)) {
       writer.uint32(16).uint64(message.poolId);
     }
     if (message.joinExitProtocolFee !== undefined) {
-      writer.uint32(26).string(message.joinExitProtocolFee);
+      writer.uint32(26).string(Decimal.fromUserInput(message.joinExitProtocolFee, 18).atomics);
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): MsgSetJoinExitProtocolFee {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): MsgSetJoinExitProtocolFee {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgSetJoinExitProtocolFee();
     while (reader.pos < end) {
@@ -4067,10 +4068,10 @@ export const MsgSetJoinExitProtocolFee = {
           message.authority = reader.string();
           break;
         case 2:
-          message.poolId = (reader.uint64() as Long);
+          message.poolId = reader.uint64();
           break;
         case 3:
-          message.joinExitProtocolFee = reader.string();
+          message.joinExitProtocolFee = Decimal.fromAtomics(reader.string(), 18).toString();
           break;
         default:
           reader.skipType(tag & 7);
@@ -4082,21 +4083,21 @@ export const MsgSetJoinExitProtocolFee = {
   fromJSON(object: any): MsgSetJoinExitProtocolFee {
     return {
       authority: isSet(object.authority) ? String(object.authority) : "",
-      poolId: isSet(object.poolId) ? Long.fromValue(object.poolId) : Long.UZERO,
+      poolId: isSet(object.poolId) ? BigInt(object.poolId.toString()) : BigInt(0),
       joinExitProtocolFee: isSet(object.joinExitProtocolFee) ? String(object.joinExitProtocolFee) : undefined
     };
   },
   toJSON(message: MsgSetJoinExitProtocolFee): unknown {
     const obj: any = {};
     message.authority !== undefined && (obj.authority = message.authority);
-    message.poolId !== undefined && (obj.poolId = (message.poolId || Long.UZERO).toString());
+    message.poolId !== undefined && (obj.poolId = (message.poolId || BigInt(0)).toString());
     message.joinExitProtocolFee !== undefined && (obj.joinExitProtocolFee = message.joinExitProtocolFee);
     return obj;
   },
   fromPartial(object: Partial<MsgSetJoinExitProtocolFee>): MsgSetJoinExitProtocolFee {
     const message = createBaseMsgSetJoinExitProtocolFee();
     message.authority = object.authority ?? "";
-    message.poolId = object.poolId !== undefined && object.poolId !== null ? Long.fromValue(object.poolId) : Long.UZERO;
+    message.poolId = object.poolId !== undefined && object.poolId !== null ? BigInt(object.poolId.toString()) : BigInt(0);
     message.joinExitProtocolFee = object.joinExitProtocolFee ?? undefined;
     return message;
   }
@@ -4105,11 +4106,11 @@ function createBaseMsgSetJoinExitProtocolFeeResponse(): MsgSetJoinExitProtocolFe
   return {};
 }
 export const MsgSetJoinExitProtocolFeeResponse = {
-  encode(_: MsgSetJoinExitProtocolFeeResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(_: MsgSetJoinExitProtocolFeeResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): MsgSetJoinExitProtocolFeeResponse {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): MsgSetJoinExitProtocolFeeResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgSetJoinExitProtocolFeeResponse();
     while (reader.pos < end) {
@@ -4137,33 +4138,33 @@ export const MsgSetJoinExitProtocolFeeResponse = {
 function createBaseMsgIntroduceYammLpToWeightedPool(): MsgIntroduceYammLpToWeightedPool {
   return {
     authority: "",
-    weightedPoolId: Long.UZERO,
-    yammPoolId: Long.UZERO,
+    weightedPoolId: BigInt(0),
+    yammPoolId: BigInt(0),
     tokenNormalizedWeight: "",
-    virtualBalanceIntervalMillis: Long.ZERO
+    virtualBalanceIntervalMillis: BigInt(0)
   };
 }
 export const MsgIntroduceYammLpToWeightedPool = {
-  encode(message: MsgIntroduceYammLpToWeightedPool, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: MsgIntroduceYammLpToWeightedPool, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.authority !== "") {
       writer.uint32(10).string(message.authority);
     }
-    if (!message.weightedPoolId.isZero()) {
+    if (message.weightedPoolId !== BigInt(0)) {
       writer.uint32(16).uint64(message.weightedPoolId);
     }
-    if (!message.yammPoolId.isZero()) {
+    if (message.yammPoolId !== BigInt(0)) {
       writer.uint32(24).uint64(message.yammPoolId);
     }
     if (message.tokenNormalizedWeight !== "") {
-      writer.uint32(34).string(message.tokenNormalizedWeight);
+      writer.uint32(34).string(Decimal.fromUserInput(message.tokenNormalizedWeight, 18).atomics);
     }
-    if (!message.virtualBalanceIntervalMillis.isZero()) {
+    if (message.virtualBalanceIntervalMillis !== BigInt(0)) {
       writer.uint32(40).int64(message.virtualBalanceIntervalMillis);
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): MsgIntroduceYammLpToWeightedPool {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): MsgIntroduceYammLpToWeightedPool {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgIntroduceYammLpToWeightedPool();
     while (reader.pos < end) {
@@ -4173,16 +4174,16 @@ export const MsgIntroduceYammLpToWeightedPool = {
           message.authority = reader.string();
           break;
         case 2:
-          message.weightedPoolId = (reader.uint64() as Long);
+          message.weightedPoolId = reader.uint64();
           break;
         case 3:
-          message.yammPoolId = (reader.uint64() as Long);
+          message.yammPoolId = reader.uint64();
           break;
         case 4:
-          message.tokenNormalizedWeight = reader.string();
+          message.tokenNormalizedWeight = Decimal.fromAtomics(reader.string(), 18).toString();
           break;
         case 5:
-          message.virtualBalanceIntervalMillis = (reader.int64() as Long);
+          message.virtualBalanceIntervalMillis = reader.int64();
           break;
         default:
           reader.skipType(tag & 7);
@@ -4194,28 +4195,28 @@ export const MsgIntroduceYammLpToWeightedPool = {
   fromJSON(object: any): MsgIntroduceYammLpToWeightedPool {
     return {
       authority: isSet(object.authority) ? String(object.authority) : "",
-      weightedPoolId: isSet(object.weightedPoolId) ? Long.fromValue(object.weightedPoolId) : Long.UZERO,
-      yammPoolId: isSet(object.yammPoolId) ? Long.fromValue(object.yammPoolId) : Long.UZERO,
+      weightedPoolId: isSet(object.weightedPoolId) ? BigInt(object.weightedPoolId.toString()) : BigInt(0),
+      yammPoolId: isSet(object.yammPoolId) ? BigInt(object.yammPoolId.toString()) : BigInt(0),
       tokenNormalizedWeight: isSet(object.tokenNormalizedWeight) ? String(object.tokenNormalizedWeight) : "",
-      virtualBalanceIntervalMillis: isSet(object.virtualBalanceIntervalMillis) ? Long.fromValue(object.virtualBalanceIntervalMillis) : Long.ZERO
+      virtualBalanceIntervalMillis: isSet(object.virtualBalanceIntervalMillis) ? BigInt(object.virtualBalanceIntervalMillis.toString()) : BigInt(0)
     };
   },
   toJSON(message: MsgIntroduceYammLpToWeightedPool): unknown {
     const obj: any = {};
     message.authority !== undefined && (obj.authority = message.authority);
-    message.weightedPoolId !== undefined && (obj.weightedPoolId = (message.weightedPoolId || Long.UZERO).toString());
-    message.yammPoolId !== undefined && (obj.yammPoolId = (message.yammPoolId || Long.UZERO).toString());
+    message.weightedPoolId !== undefined && (obj.weightedPoolId = (message.weightedPoolId || BigInt(0)).toString());
+    message.yammPoolId !== undefined && (obj.yammPoolId = (message.yammPoolId || BigInt(0)).toString());
     message.tokenNormalizedWeight !== undefined && (obj.tokenNormalizedWeight = message.tokenNormalizedWeight);
-    message.virtualBalanceIntervalMillis !== undefined && (obj.virtualBalanceIntervalMillis = (message.virtualBalanceIntervalMillis || Long.ZERO).toString());
+    message.virtualBalanceIntervalMillis !== undefined && (obj.virtualBalanceIntervalMillis = (message.virtualBalanceIntervalMillis || BigInt(0)).toString());
     return obj;
   },
   fromPartial(object: Partial<MsgIntroduceYammLpToWeightedPool>): MsgIntroduceYammLpToWeightedPool {
     const message = createBaseMsgIntroduceYammLpToWeightedPool();
     message.authority = object.authority ?? "";
-    message.weightedPoolId = object.weightedPoolId !== undefined && object.weightedPoolId !== null ? Long.fromValue(object.weightedPoolId) : Long.UZERO;
-    message.yammPoolId = object.yammPoolId !== undefined && object.yammPoolId !== null ? Long.fromValue(object.yammPoolId) : Long.UZERO;
+    message.weightedPoolId = object.weightedPoolId !== undefined && object.weightedPoolId !== null ? BigInt(object.weightedPoolId.toString()) : BigInt(0);
+    message.yammPoolId = object.yammPoolId !== undefined && object.yammPoolId !== null ? BigInt(object.yammPoolId.toString()) : BigInt(0);
     message.tokenNormalizedWeight = object.tokenNormalizedWeight ?? "";
-    message.virtualBalanceIntervalMillis = object.virtualBalanceIntervalMillis !== undefined && object.virtualBalanceIntervalMillis !== null ? Long.fromValue(object.virtualBalanceIntervalMillis) : Long.ZERO;
+    message.virtualBalanceIntervalMillis = object.virtualBalanceIntervalMillis !== undefined && object.virtualBalanceIntervalMillis !== null ? BigInt(object.virtualBalanceIntervalMillis.toString()) : BigInt(0);
     return message;
   }
 };
@@ -4223,11 +4224,11 @@ function createBaseMsgIntroduceYammLpToWeightedPoolResponse(): MsgIntroduceYammL
   return {};
 }
 export const MsgIntroduceYammLpToWeightedPoolResponse = {
-  encode(_: MsgIntroduceYammLpToWeightedPoolResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(_: MsgIntroduceYammLpToWeightedPoolResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): MsgIntroduceYammLpToWeightedPoolResponse {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): MsgIntroduceYammLpToWeightedPoolResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgIntroduceYammLpToWeightedPoolResponse();
     while (reader.pos < end) {
@@ -4255,19 +4256,19 @@ export const MsgIntroduceYammLpToWeightedPoolResponse = {
 function createBaseMsgIntroduceAssetBaseTokenToWeightedPool(): MsgIntroduceAssetBaseTokenToWeightedPool {
   return {
     authority: "",
-    weightedPoolId: Long.UZERO,
+    weightedPoolId: BigInt(0),
     tokenDenom: "",
     assetId: "",
     tokenNormalizedWeight: "",
-    virtualBalanceIntervalMillis: Long.ZERO
+    virtualBalanceIntervalMillis: BigInt(0)
   };
 }
 export const MsgIntroduceAssetBaseTokenToWeightedPool = {
-  encode(message: MsgIntroduceAssetBaseTokenToWeightedPool, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: MsgIntroduceAssetBaseTokenToWeightedPool, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.authority !== "") {
       writer.uint32(10).string(message.authority);
     }
-    if (!message.weightedPoolId.isZero()) {
+    if (message.weightedPoolId !== BigInt(0)) {
       writer.uint32(16).uint64(message.weightedPoolId);
     }
     if (message.tokenDenom !== "") {
@@ -4277,15 +4278,15 @@ export const MsgIntroduceAssetBaseTokenToWeightedPool = {
       writer.uint32(34).string(message.assetId);
     }
     if (message.tokenNormalizedWeight !== "") {
-      writer.uint32(42).string(message.tokenNormalizedWeight);
+      writer.uint32(42).string(Decimal.fromUserInput(message.tokenNormalizedWeight, 18).atomics);
     }
-    if (!message.virtualBalanceIntervalMillis.isZero()) {
+    if (message.virtualBalanceIntervalMillis !== BigInt(0)) {
       writer.uint32(48).int64(message.virtualBalanceIntervalMillis);
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): MsgIntroduceAssetBaseTokenToWeightedPool {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): MsgIntroduceAssetBaseTokenToWeightedPool {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgIntroduceAssetBaseTokenToWeightedPool();
     while (reader.pos < end) {
@@ -4295,7 +4296,7 @@ export const MsgIntroduceAssetBaseTokenToWeightedPool = {
           message.authority = reader.string();
           break;
         case 2:
-          message.weightedPoolId = (reader.uint64() as Long);
+          message.weightedPoolId = reader.uint64();
           break;
         case 3:
           message.tokenDenom = reader.string();
@@ -4304,10 +4305,10 @@ export const MsgIntroduceAssetBaseTokenToWeightedPool = {
           message.assetId = reader.string();
           break;
         case 5:
-          message.tokenNormalizedWeight = reader.string();
+          message.tokenNormalizedWeight = Decimal.fromAtomics(reader.string(), 18).toString();
           break;
         case 6:
-          message.virtualBalanceIntervalMillis = (reader.int64() as Long);
+          message.virtualBalanceIntervalMillis = reader.int64();
           break;
         default:
           reader.skipType(tag & 7);
@@ -4319,31 +4320,31 @@ export const MsgIntroduceAssetBaseTokenToWeightedPool = {
   fromJSON(object: any): MsgIntroduceAssetBaseTokenToWeightedPool {
     return {
       authority: isSet(object.authority) ? String(object.authority) : "",
-      weightedPoolId: isSet(object.weightedPoolId) ? Long.fromValue(object.weightedPoolId) : Long.UZERO,
+      weightedPoolId: isSet(object.weightedPoolId) ? BigInt(object.weightedPoolId.toString()) : BigInt(0),
       tokenDenom: isSet(object.tokenDenom) ? String(object.tokenDenom) : "",
       assetId: isSet(object.assetId) ? String(object.assetId) : "",
       tokenNormalizedWeight: isSet(object.tokenNormalizedWeight) ? String(object.tokenNormalizedWeight) : "",
-      virtualBalanceIntervalMillis: isSet(object.virtualBalanceIntervalMillis) ? Long.fromValue(object.virtualBalanceIntervalMillis) : Long.ZERO
+      virtualBalanceIntervalMillis: isSet(object.virtualBalanceIntervalMillis) ? BigInt(object.virtualBalanceIntervalMillis.toString()) : BigInt(0)
     };
   },
   toJSON(message: MsgIntroduceAssetBaseTokenToWeightedPool): unknown {
     const obj: any = {};
     message.authority !== undefined && (obj.authority = message.authority);
-    message.weightedPoolId !== undefined && (obj.weightedPoolId = (message.weightedPoolId || Long.UZERO).toString());
+    message.weightedPoolId !== undefined && (obj.weightedPoolId = (message.weightedPoolId || BigInt(0)).toString());
     message.tokenDenom !== undefined && (obj.tokenDenom = message.tokenDenom);
     message.assetId !== undefined && (obj.assetId = message.assetId);
     message.tokenNormalizedWeight !== undefined && (obj.tokenNormalizedWeight = message.tokenNormalizedWeight);
-    message.virtualBalanceIntervalMillis !== undefined && (obj.virtualBalanceIntervalMillis = (message.virtualBalanceIntervalMillis || Long.ZERO).toString());
+    message.virtualBalanceIntervalMillis !== undefined && (obj.virtualBalanceIntervalMillis = (message.virtualBalanceIntervalMillis || BigInt(0)).toString());
     return obj;
   },
   fromPartial(object: Partial<MsgIntroduceAssetBaseTokenToWeightedPool>): MsgIntroduceAssetBaseTokenToWeightedPool {
     const message = createBaseMsgIntroduceAssetBaseTokenToWeightedPool();
     message.authority = object.authority ?? "";
-    message.weightedPoolId = object.weightedPoolId !== undefined && object.weightedPoolId !== null ? Long.fromValue(object.weightedPoolId) : Long.UZERO;
+    message.weightedPoolId = object.weightedPoolId !== undefined && object.weightedPoolId !== null ? BigInt(object.weightedPoolId.toString()) : BigInt(0);
     message.tokenDenom = object.tokenDenom ?? "";
     message.assetId = object.assetId ?? "";
     message.tokenNormalizedWeight = object.tokenNormalizedWeight ?? "";
-    message.virtualBalanceIntervalMillis = object.virtualBalanceIntervalMillis !== undefined && object.virtualBalanceIntervalMillis !== null ? Long.fromValue(object.virtualBalanceIntervalMillis) : Long.ZERO;
+    message.virtualBalanceIntervalMillis = object.virtualBalanceIntervalMillis !== undefined && object.virtualBalanceIntervalMillis !== null ? BigInt(object.virtualBalanceIntervalMillis.toString()) : BigInt(0);
     return message;
   }
 };
@@ -4351,11 +4352,11 @@ function createBaseMsgIntroduceAssetBaseTokenToWeightedPoolResponse(): MsgIntrod
   return {};
 }
 export const MsgIntroduceAssetBaseTokenToWeightedPoolResponse = {
-  encode(_: MsgIntroduceAssetBaseTokenToWeightedPoolResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(_: MsgIntroduceAssetBaseTokenToWeightedPoolResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): MsgIntroduceAssetBaseTokenToWeightedPoolResponse {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): MsgIntroduceAssetBaseTokenToWeightedPoolResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgIntroduceAssetBaseTokenToWeightedPoolResponse();
     while (reader.pos < end) {
@@ -4384,24 +4385,24 @@ function createBaseMsgCancelPendingTokenIntroduction(): MsgCancelPendingTokenInt
   return {
     authority: "",
     assetId: "",
-    targetPoolId: Long.UZERO
+    targetPoolId: BigInt(0)
   };
 }
 export const MsgCancelPendingTokenIntroduction = {
-  encode(message: MsgCancelPendingTokenIntroduction, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: MsgCancelPendingTokenIntroduction, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.authority !== "") {
       writer.uint32(10).string(message.authority);
     }
     if (message.assetId !== "") {
       writer.uint32(18).string(message.assetId);
     }
-    if (!message.targetPoolId.isZero()) {
+    if (message.targetPoolId !== BigInt(0)) {
       writer.uint32(24).uint64(message.targetPoolId);
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): MsgCancelPendingTokenIntroduction {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): MsgCancelPendingTokenIntroduction {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgCancelPendingTokenIntroduction();
     while (reader.pos < end) {
@@ -4414,7 +4415,7 @@ export const MsgCancelPendingTokenIntroduction = {
           message.assetId = reader.string();
           break;
         case 3:
-          message.targetPoolId = (reader.uint64() as Long);
+          message.targetPoolId = reader.uint64();
           break;
         default:
           reader.skipType(tag & 7);
@@ -4427,21 +4428,21 @@ export const MsgCancelPendingTokenIntroduction = {
     return {
       authority: isSet(object.authority) ? String(object.authority) : "",
       assetId: isSet(object.assetId) ? String(object.assetId) : "",
-      targetPoolId: isSet(object.targetPoolId) ? Long.fromValue(object.targetPoolId) : Long.UZERO
+      targetPoolId: isSet(object.targetPoolId) ? BigInt(object.targetPoolId.toString()) : BigInt(0)
     };
   },
   toJSON(message: MsgCancelPendingTokenIntroduction): unknown {
     const obj: any = {};
     message.authority !== undefined && (obj.authority = message.authority);
     message.assetId !== undefined && (obj.assetId = message.assetId);
-    message.targetPoolId !== undefined && (obj.targetPoolId = (message.targetPoolId || Long.UZERO).toString());
+    message.targetPoolId !== undefined && (obj.targetPoolId = (message.targetPoolId || BigInt(0)).toString());
     return obj;
   },
   fromPartial(object: Partial<MsgCancelPendingTokenIntroduction>): MsgCancelPendingTokenIntroduction {
     const message = createBaseMsgCancelPendingTokenIntroduction();
     message.authority = object.authority ?? "";
     message.assetId = object.assetId ?? "";
-    message.targetPoolId = object.targetPoolId !== undefined && object.targetPoolId !== null ? Long.fromValue(object.targetPoolId) : Long.UZERO;
+    message.targetPoolId = object.targetPoolId !== undefined && object.targetPoolId !== null ? BigInt(object.targetPoolId.toString()) : BigInt(0);
     return message;
   }
 };
@@ -4449,11 +4450,11 @@ function createBaseMsgCancelPendingTokenIntroductionResponse(): MsgCancelPending
   return {};
 }
 export const MsgCancelPendingTokenIntroductionResponse = {
-  encode(_: MsgCancelPendingTokenIntroductionResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(_: MsgCancelPendingTokenIntroductionResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): MsgCancelPendingTokenIntroductionResponse {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): MsgCancelPendingTokenIntroductionResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgCancelPendingTokenIntroductionResponse();
     while (reader.pos < end) {
@@ -4481,29 +4482,29 @@ export const MsgCancelPendingTokenIntroductionResponse = {
 function createBaseMsgRemoveTokenFromWeightedPool(): MsgRemoveTokenFromWeightedPool {
   return {
     creator: "",
-    poolId: Long.UZERO,
+    poolId: BigInt(0),
     tokenDenom: "",
-    virtualBalanceIntervalMillis: Long.ZERO
+    virtualBalanceIntervalMillis: BigInt(0)
   };
 }
 export const MsgRemoveTokenFromWeightedPool = {
-  encode(message: MsgRemoveTokenFromWeightedPool, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: MsgRemoveTokenFromWeightedPool, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.creator !== "") {
       writer.uint32(10).string(message.creator);
     }
-    if (!message.poolId.isZero()) {
+    if (message.poolId !== BigInt(0)) {
       writer.uint32(16).uint64(message.poolId);
     }
     if (message.tokenDenom !== "") {
       writer.uint32(26).string(message.tokenDenom);
     }
-    if (!message.virtualBalanceIntervalMillis.isZero()) {
+    if (message.virtualBalanceIntervalMillis !== BigInt(0)) {
       writer.uint32(32).int64(message.virtualBalanceIntervalMillis);
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): MsgRemoveTokenFromWeightedPool {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): MsgRemoveTokenFromWeightedPool {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgRemoveTokenFromWeightedPool();
     while (reader.pos < end) {
@@ -4513,13 +4514,13 @@ export const MsgRemoveTokenFromWeightedPool = {
           message.creator = reader.string();
           break;
         case 2:
-          message.poolId = (reader.uint64() as Long);
+          message.poolId = reader.uint64();
           break;
         case 3:
           message.tokenDenom = reader.string();
           break;
         case 4:
-          message.virtualBalanceIntervalMillis = (reader.int64() as Long);
+          message.virtualBalanceIntervalMillis = reader.int64();
           break;
         default:
           reader.skipType(tag & 7);
@@ -4531,25 +4532,25 @@ export const MsgRemoveTokenFromWeightedPool = {
   fromJSON(object: any): MsgRemoveTokenFromWeightedPool {
     return {
       creator: isSet(object.creator) ? String(object.creator) : "",
-      poolId: isSet(object.poolId) ? Long.fromValue(object.poolId) : Long.UZERO,
+      poolId: isSet(object.poolId) ? BigInt(object.poolId.toString()) : BigInt(0),
       tokenDenom: isSet(object.tokenDenom) ? String(object.tokenDenom) : "",
-      virtualBalanceIntervalMillis: isSet(object.virtualBalanceIntervalMillis) ? Long.fromValue(object.virtualBalanceIntervalMillis) : Long.ZERO
+      virtualBalanceIntervalMillis: isSet(object.virtualBalanceIntervalMillis) ? BigInt(object.virtualBalanceIntervalMillis.toString()) : BigInt(0)
     };
   },
   toJSON(message: MsgRemoveTokenFromWeightedPool): unknown {
     const obj: any = {};
     message.creator !== undefined && (obj.creator = message.creator);
-    message.poolId !== undefined && (obj.poolId = (message.poolId || Long.UZERO).toString());
+    message.poolId !== undefined && (obj.poolId = (message.poolId || BigInt(0)).toString());
     message.tokenDenom !== undefined && (obj.tokenDenom = message.tokenDenom);
-    message.virtualBalanceIntervalMillis !== undefined && (obj.virtualBalanceIntervalMillis = (message.virtualBalanceIntervalMillis || Long.ZERO).toString());
+    message.virtualBalanceIntervalMillis !== undefined && (obj.virtualBalanceIntervalMillis = (message.virtualBalanceIntervalMillis || BigInt(0)).toString());
     return obj;
   },
   fromPartial(object: Partial<MsgRemoveTokenFromWeightedPool>): MsgRemoveTokenFromWeightedPool {
     const message = createBaseMsgRemoveTokenFromWeightedPool();
     message.creator = object.creator ?? "";
-    message.poolId = object.poolId !== undefined && object.poolId !== null ? Long.fromValue(object.poolId) : Long.UZERO;
+    message.poolId = object.poolId !== undefined && object.poolId !== null ? BigInt(object.poolId.toString()) : BigInt(0);
     message.tokenDenom = object.tokenDenom ?? "";
-    message.virtualBalanceIntervalMillis = object.virtualBalanceIntervalMillis !== undefined && object.virtualBalanceIntervalMillis !== null ? Long.fromValue(object.virtualBalanceIntervalMillis) : Long.ZERO;
+    message.virtualBalanceIntervalMillis = object.virtualBalanceIntervalMillis !== undefined && object.virtualBalanceIntervalMillis !== null ? BigInt(object.virtualBalanceIntervalMillis.toString()) : BigInt(0);
     return message;
   }
 };
@@ -4557,11 +4558,11 @@ function createBaseMsgRemoveTokenFromWeightedPoolResponse(): MsgRemoveTokenFromW
   return {};
 }
 export const MsgRemoveTokenFromWeightedPoolResponse = {
-  encode(_: MsgRemoveTokenFromWeightedPoolResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(_: MsgRemoveTokenFromWeightedPoolResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): MsgRemoveTokenFromWeightedPoolResponse {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): MsgRemoveTokenFromWeightedPoolResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgRemoveTokenFromWeightedPoolResponse();
     while (reader.pos < end) {
@@ -4595,7 +4596,7 @@ function createBaseMsgUpdateParams(): MsgUpdateParams {
   };
 }
 export const MsgUpdateParams = {
-  encode(message: MsgUpdateParams, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: MsgUpdateParams, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.authority !== "") {
       writer.uint32(10).string(message.authority);
     }
@@ -4610,8 +4611,8 @@ export const MsgUpdateParams = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): MsgUpdateParams {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): MsgUpdateParams {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgUpdateParams();
     while (reader.pos < end) {
@@ -4665,11 +4666,11 @@ function createBaseMsgUpdateParamsResponse(): MsgUpdateParamsResponse {
   return {};
 }
 export const MsgUpdateParamsResponse = {
-  encode(_: MsgUpdateParamsResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(_: MsgUpdateParamsResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): MsgUpdateParamsResponse {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): MsgUpdateParamsResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgUpdateParamsResponse();
     while (reader.pos < end) {
@@ -4702,7 +4703,7 @@ function createBaseMsgAddMaturityToYamm(): MsgAddMaturityToYamm {
   };
 }
 export const MsgAddMaturityToYamm = {
-  encode(message: MsgAddMaturityToYamm, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: MsgAddMaturityToYamm, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.authority !== "") {
       writer.uint32(10).string(message.authority);
     }
@@ -4714,8 +4715,8 @@ export const MsgAddMaturityToYamm = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): MsgAddMaturityToYamm {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): MsgAddMaturityToYamm {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgAddMaturityToYamm();
     while (reader.pos < end) {
@@ -4763,11 +4764,11 @@ function createBaseMsgAddMaturityToYammResponse(): MsgAddMaturityToYammResponse 
   return {};
 }
 export const MsgAddMaturityToYammResponse = {
-  encode(_: MsgAddMaturityToYammResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(_: MsgAddMaturityToYammResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): MsgAddMaturityToYammResponse {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): MsgAddMaturityToYammResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgAddMaturityToYammResponse();
     while (reader.pos < end) {
@@ -4795,16 +4796,16 @@ export const MsgAddMaturityToYammResponse = {
 function createBaseMsgSetInitializationAllowList(): MsgSetInitializationAllowList {
   return {
     creator: "",
-    poolId: Long.UZERO,
+    poolId: BigInt(0),
     initializationAllowList: []
   };
 }
 export const MsgSetInitializationAllowList = {
-  encode(message: MsgSetInitializationAllowList, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: MsgSetInitializationAllowList, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.creator !== "") {
       writer.uint32(10).string(message.creator);
     }
-    if (!message.poolId.isZero()) {
+    if (message.poolId !== BigInt(0)) {
       writer.uint32(16).uint64(message.poolId);
     }
     for (const v of message.initializationAllowList) {
@@ -4812,8 +4813,8 @@ export const MsgSetInitializationAllowList = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): MsgSetInitializationAllowList {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): MsgSetInitializationAllowList {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgSetInitializationAllowList();
     while (reader.pos < end) {
@@ -4823,7 +4824,7 @@ export const MsgSetInitializationAllowList = {
           message.creator = reader.string();
           break;
         case 2:
-          message.poolId = (reader.uint64() as Long);
+          message.poolId = reader.uint64();
           break;
         case 3:
           message.initializationAllowList.push(reader.string());
@@ -4838,14 +4839,14 @@ export const MsgSetInitializationAllowList = {
   fromJSON(object: any): MsgSetInitializationAllowList {
     return {
       creator: isSet(object.creator) ? String(object.creator) : "",
-      poolId: isSet(object.poolId) ? Long.fromValue(object.poolId) : Long.UZERO,
+      poolId: isSet(object.poolId) ? BigInt(object.poolId.toString()) : BigInt(0),
       initializationAllowList: Array.isArray(object?.initializationAllowList) ? object.initializationAllowList.map((e: any) => String(e)) : []
     };
   },
   toJSON(message: MsgSetInitializationAllowList): unknown {
     const obj: any = {};
     message.creator !== undefined && (obj.creator = message.creator);
-    message.poolId !== undefined && (obj.poolId = (message.poolId || Long.UZERO).toString());
+    message.poolId !== undefined && (obj.poolId = (message.poolId || BigInt(0)).toString());
     if (message.initializationAllowList) {
       obj.initializationAllowList = message.initializationAllowList.map(e => e);
     } else {
@@ -4856,7 +4857,7 @@ export const MsgSetInitializationAllowList = {
   fromPartial(object: Partial<MsgSetInitializationAllowList>): MsgSetInitializationAllowList {
     const message = createBaseMsgSetInitializationAllowList();
     message.creator = object.creator ?? "";
-    message.poolId = object.poolId !== undefined && object.poolId !== null ? Long.fromValue(object.poolId) : Long.UZERO;
+    message.poolId = object.poolId !== undefined && object.poolId !== null ? BigInt(object.poolId.toString()) : BigInt(0);
     message.initializationAllowList = object.initializationAllowList?.map(e => e) || [];
     return message;
   }
@@ -4865,11 +4866,11 @@ function createBaseMsgSetInitializationAllowListResponse(): MsgSetInitialization
   return {};
 }
 export const MsgSetInitializationAllowListResponse = {
-  encode(_: MsgSetInitializationAllowListResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(_: MsgSetInitializationAllowListResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): MsgSetInitializationAllowListResponse {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): MsgSetInitializationAllowListResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgSetInitializationAllowListResponse();
     while (reader.pos < end) {

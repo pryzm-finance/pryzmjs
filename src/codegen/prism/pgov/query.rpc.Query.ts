@@ -39,29 +39,29 @@ export class QueryClientImpl implements Query {
     return this.rpc.unary(QueryParamsDesc, QueryParamsRequest.fromPartial(request), metadata);
   }
   stakedPAsset(request: DeepPartial<QueryGetStakedPAssetRequest>, metadata?: grpc.Metadata): Promise<QueryGetStakedPAssetResponse> {
-    return this.rpc.unary(QueryGetStakedPAssetDesc, QueryGetStakedPAssetRequest.fromPartial(request), metadata);
+    return this.rpc.unary(QueryStakedPAssetDesc, QueryGetStakedPAssetRequest.fromPartial(request), metadata);
   }
   stakedPAssetAll(request: DeepPartial<QueryAllStakedPAssetRequest> = {
     pagination: undefined
   }, metadata?: grpc.Metadata): Promise<QueryAllStakedPAssetResponse> {
-    return this.rpc.unary(QueryAllStakedPAssetDesc, QueryAllStakedPAssetRequest.fromPartial(request), metadata);
+    return this.rpc.unary(QueryStakedPAssetAllDesc, QueryAllStakedPAssetRequest.fromPartial(request), metadata);
   }
   totalStakedPAsset(request: DeepPartial<QueryGetTotalStakedPAssetRequest>, metadata?: grpc.Metadata): Promise<QueryGetTotalStakedPAssetResponse> {
-    return this.rpc.unary(QueryGetTotalStakedPAssetDesc, QueryGetTotalStakedPAssetRequest.fromPartial(request), metadata);
+    return this.rpc.unary(QueryTotalStakedPAssetDesc, QueryGetTotalStakedPAssetRequest.fromPartial(request), metadata);
   }
   vote(request: DeepPartial<QueryGetVoteRequest>, metadata?: grpc.Metadata): Promise<QueryGetVoteResponse> {
-    return this.rpc.unary(QueryGetVoteDesc, QueryGetVoteRequest.fromPartial(request), metadata);
+    return this.rpc.unary(QueryVoteDesc, QueryGetVoteRequest.fromPartial(request), metadata);
   }
   voteAll(request: DeepPartial<QueryAllVoteRequest> = {
     pagination: undefined
   }, metadata?: grpc.Metadata): Promise<QueryAllVoteResponse> {
-    return this.rpc.unary(QueryAllVoteDesc, QueryAllVoteRequest.fromPartial(request), metadata);
+    return this.rpc.unary(QueryVoteAllDesc, QueryAllVoteRequest.fromPartial(request), metadata);
   }
   proposal(request: DeepPartial<QueryGetProposalRequest>, metadata?: grpc.Metadata): Promise<QueryGetProposalResponse> {
-    return this.rpc.unary(QueryGetProposalDesc, QueryGetProposalRequest.fromPartial(request), metadata);
+    return this.rpc.unary(QueryProposalDesc, QueryGetProposalRequest.fromPartial(request), metadata);
   }
   proposalAll(request: DeepPartial<QueryAllProposalRequest>, metadata?: grpc.Metadata): Promise<QueryAllProposalResponse> {
-    return this.rpc.unary(QueryAllProposalDesc, QueryAllProposalRequest.fromPartial(request), metadata);
+    return this.rpc.unary(QueryProposalAllDesc, QueryAllProposalRequest.fromPartial(request), metadata);
   }
 }
 export const QueryDesc = {

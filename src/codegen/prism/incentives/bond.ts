@@ -1,5 +1,6 @@
 import { Coin, CoinSDKType } from "../../cosmos/base/v1beta1/coin";
-import * as _m0 from "protobufjs/minimal";
+import { BinaryReader, BinaryWriter } from "../../binary";
+import { Decimal } from "@cosmjs/math";
 import { isSet, isObject } from "../../helpers";
 export interface BondRewardToken {
   pendingAmount: string;
@@ -38,17 +39,17 @@ function createBaseBondRewardToken(): BondRewardToken {
   };
 }
 export const BondRewardToken = {
-  encode(message: BondRewardToken, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: BondRewardToken, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.pendingAmount !== "") {
       writer.uint32(10).string(message.pendingAmount);
     }
     if (message.userIndex !== "") {
-      writer.uint32(18).string(message.userIndex);
+      writer.uint32(18).string(Decimal.fromUserInput(message.userIndex, 18).atomics);
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): BondRewardToken {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): BondRewardToken {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseBondRewardToken();
     while (reader.pos < end) {
@@ -58,7 +59,7 @@ export const BondRewardToken = {
           message.pendingAmount = reader.string();
           break;
         case 2:
-          message.userIndex = reader.string();
+          message.userIndex = Decimal.fromAtomics(reader.string(), 18).toString();
           break;
         default:
           reader.skipType(tag & 7);
@@ -93,7 +94,7 @@ function createBaseBond_RewardsEntry(): Bond_RewardsEntry {
   };
 }
 export const Bond_RewardsEntry = {
-  encode(message: Bond_RewardsEntry, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: Bond_RewardsEntry, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.key !== "") {
       writer.uint32(10).string(message.key);
     }
@@ -102,8 +103,8 @@ export const Bond_RewardsEntry = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): Bond_RewardsEntry {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): Bond_RewardsEntry {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseBond_RewardsEntry();
     while (reader.pos < end) {
@@ -149,7 +150,7 @@ function createBaseBond(): Bond {
   };
 }
 export const Bond = {
-  encode(message: Bond, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: Bond, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.address !== "") {
       writer.uint32(10).string(message.address);
     }
@@ -164,8 +165,8 @@ export const Bond = {
     });
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): Bond {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): Bond {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseBond();
     while (reader.pos < end) {

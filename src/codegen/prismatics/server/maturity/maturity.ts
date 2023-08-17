@@ -1,6 +1,6 @@
 import { PageRequest, PageRequestSDKType, PageResponse, PageResponseSDKType } from "../../../cosmos/base/query/v1beta1/pagination";
 import { Maturity, MaturitySDKType } from "../../maturity/maturity";
-import * as _m0 from "protobufjs/minimal";
+import { BinaryReader, BinaryWriter } from "../../../binary";
 import { isSet } from "../../../helpers";
 export interface QueryAllMaturitiesRequest {
   assetId: string;
@@ -28,7 +28,7 @@ function createBaseQueryAllMaturitiesRequest(): QueryAllMaturitiesRequest {
   };
 }
 export const QueryAllMaturitiesRequest = {
-  encode(message: QueryAllMaturitiesRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: QueryAllMaturitiesRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.assetId !== "") {
       writer.uint32(10).string(message.assetId);
     }
@@ -40,8 +40,8 @@ export const QueryAllMaturitiesRequest = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): QueryAllMaturitiesRequest {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): QueryAllMaturitiesRequest {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryAllMaturitiesRequest();
     while (reader.pos < end) {
@@ -92,7 +92,7 @@ function createBaseQueryAllMaturitiesResponse(): QueryAllMaturitiesResponse {
   };
 }
 export const QueryAllMaturitiesResponse = {
-  encode(message: QueryAllMaturitiesResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: QueryAllMaturitiesResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     for (const v of message.maturities) {
       Maturity.encode(v!, writer.uint32(10).fork()).ldelim();
     }
@@ -101,8 +101,8 @@ export const QueryAllMaturitiesResponse = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): QueryAllMaturitiesResponse {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): QueryAllMaturitiesResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryAllMaturitiesResponse();
     while (reader.pos < end) {

@@ -1,5 +1,6 @@
-import * as _m0 from "protobufjs/minimal";
+import { BinaryReader, BinaryWriter } from "../../binary";
 import { isSet } from "../../helpers";
+import { Decimal } from "@cosmjs/math";
 /** The properties of a supported asset */
 export interface RefractableAsset {
   /** A unique user-provided identifier. Is used in the p/y token denom */
@@ -62,7 +63,7 @@ function createBaseRefractableAsset(): RefractableAsset {
   };
 }
 export const RefractableAsset = {
-  encode(message: RefractableAsset, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: RefractableAsset, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.id !== "") {
       writer.uint32(10).string(message.id);
     }
@@ -83,8 +84,8 @@ export const RefractableAsset = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): RefractableAsset {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): RefractableAsset {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseRefractableAsset();
     while (reader.pos < end) {
@@ -153,7 +154,7 @@ function createBaseMaturityParams(): MaturityParams {
   };
 }
 export const MaturityParams = {
-  encode(message: MaturityParams, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: MaturityParams, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.levelsPerYear !== 0) {
       writer.uint32(8).int32(message.levelsPerYear);
     }
@@ -162,8 +163,8 @@ export const MaturityParams = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): MaturityParams {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): MaturityParams {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMaturityParams();
     while (reader.pos < end) {
@@ -211,45 +212,45 @@ function createBaseFeeRatios(): FeeRatios {
   };
 }
 export const FeeRatios = {
-  encode(message: FeeRatios, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: FeeRatios, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.yield !== "") {
-      writer.uint32(10).string(message.yield);
+      writer.uint32(10).string(Decimal.fromUserInput(message.yield, 18).atomics);
     }
     if (message.refractorRefract !== "") {
-      writer.uint32(18).string(message.refractorRefract);
+      writer.uint32(18).string(Decimal.fromUserInput(message.refractorRefract, 18).atomics);
     }
     if (message.refractorMerge !== "") {
-      writer.uint32(26).string(message.refractorMerge);
+      writer.uint32(26).string(Decimal.fromUserInput(message.refractorMerge, 18).atomics);
     }
     if (message.refractorRedeem !== "") {
-      writer.uint32(34).string(message.refractorRedeem);
+      writer.uint32(34).string(Decimal.fromUserInput(message.refractorRedeem, 18).atomics);
     }
     if (message.yStakingClaimReward !== "") {
-      writer.uint32(42).string(message.yStakingClaimReward);
+      writer.uint32(42).string(Decimal.fromUserInput(message.yStakingClaimReward, 18).atomics);
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): FeeRatios {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): FeeRatios {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseFeeRatios();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.yield = reader.string();
+          message.yield = Decimal.fromAtomics(reader.string(), 18).toString();
           break;
         case 2:
-          message.refractorRefract = reader.string();
+          message.refractorRefract = Decimal.fromAtomics(reader.string(), 18).toString();
           break;
         case 3:
-          message.refractorMerge = reader.string();
+          message.refractorMerge = Decimal.fromAtomics(reader.string(), 18).toString();
           break;
         case 4:
-          message.refractorRedeem = reader.string();
+          message.refractorRedeem = Decimal.fromAtomics(reader.string(), 18).toString();
           break;
         case 5:
-          message.yStakingClaimReward = reader.string();
+          message.yStakingClaimReward = Decimal.fromAtomics(reader.string(), 18).toString();
           break;
         default:
           reader.skipType(tag & 7);

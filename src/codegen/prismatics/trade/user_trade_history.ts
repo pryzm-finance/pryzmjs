@@ -1,8 +1,8 @@
 import { Coin, CoinSDKType } from "../../cosmos/base/v1beta1/coin";
 import { SwapStep, SwapStepSDKType } from "../../prism/amm/operations";
 import { Timestamp, TimestampSDKType } from "../../google/protobuf/timestamp";
-import { Long, isSet, fromJsonTimestamp, fromTimestamp } from "../../helpers";
-import * as _m0 from "protobufjs/minimal";
+import { BinaryReader, BinaryWriter } from "../../binary";
+import { isSet, fromJsonTimestamp, fromTimestamp } from "../../helpers";
 export enum OperationType {
   OPERATION_TYPE_ANY = 0,
   OPERATION_TYPE_SINGLE_SWAP = 1,
@@ -56,7 +56,7 @@ export interface UserTradeHistory {
   amountsIn: Coin[];
   amountsOut: Coin[];
   address: string;
-  poolId: Long;
+  poolId: bigint;
   path: SwapStep[];
   operationType: OperationType;
   swapFee: Coin[];
@@ -67,7 +67,7 @@ export interface UserTradeHistorySDKType {
   amounts_in: CoinSDKType[];
   amounts_out: CoinSDKType[];
   address: string;
-  pool_id: Long;
+  pool_id: bigint;
   path: SwapStepSDKType[];
   operation_type: OperationType;
   swap_fee: CoinSDKType[];
@@ -79,7 +79,7 @@ function createBaseUserTradeHistory(): UserTradeHistory {
     amountsIn: [],
     amountsOut: [],
     address: "",
-    poolId: Long.UZERO,
+    poolId: BigInt(0),
     path: [],
     operationType: 0,
     swapFee: [],
@@ -88,7 +88,7 @@ function createBaseUserTradeHistory(): UserTradeHistory {
   };
 }
 export const UserTradeHistory = {
-  encode(message: UserTradeHistory, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: UserTradeHistory, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     for (const v of message.amountsIn) {
       Coin.encode(v!, writer.uint32(10).fork()).ldelim();
     }
@@ -98,7 +98,7 @@ export const UserTradeHistory = {
     if (message.address !== "") {
       writer.uint32(26).string(message.address);
     }
-    if (!message.poolId.isZero()) {
+    if (message.poolId !== BigInt(0)) {
       writer.uint32(32).uint64(message.poolId);
     }
     for (const v of message.path) {
@@ -118,8 +118,8 @@ export const UserTradeHistory = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): UserTradeHistory {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): UserTradeHistory {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseUserTradeHistory();
     while (reader.pos < end) {
@@ -135,7 +135,7 @@ export const UserTradeHistory = {
           message.address = reader.string();
           break;
         case 4:
-          message.poolId = (reader.uint64() as Long);
+          message.poolId = reader.uint64();
           break;
         case 5:
           message.path.push(SwapStep.decode(reader, reader.uint32()));
@@ -164,7 +164,7 @@ export const UserTradeHistory = {
       amountsIn: Array.isArray(object?.amountsIn) ? object.amountsIn.map((e: any) => Coin.fromJSON(e)) : [],
       amountsOut: Array.isArray(object?.amountsOut) ? object.amountsOut.map((e: any) => Coin.fromJSON(e)) : [],
       address: isSet(object.address) ? String(object.address) : "",
-      poolId: isSet(object.poolId) ? Long.fromValue(object.poolId) : Long.UZERO,
+      poolId: isSet(object.poolId) ? BigInt(object.poolId.toString()) : BigInt(0),
       path: Array.isArray(object?.path) ? object.path.map((e: any) => SwapStep.fromJSON(e)) : [],
       operationType: isSet(object.operationType) ? operationTypeFromJSON(object.operationType) : -1,
       swapFee: Array.isArray(object?.swapFee) ? object.swapFee.map((e: any) => Coin.fromJSON(e)) : [],
@@ -185,7 +185,7 @@ export const UserTradeHistory = {
       obj.amountsOut = [];
     }
     message.address !== undefined && (obj.address = message.address);
-    message.poolId !== undefined && (obj.poolId = (message.poolId || Long.UZERO).toString());
+    message.poolId !== undefined && (obj.poolId = (message.poolId || BigInt(0)).toString());
     if (message.path) {
       obj.path = message.path.map(e => e ? SwapStep.toJSON(e) : undefined);
     } else {
@@ -210,7 +210,7 @@ export const UserTradeHistory = {
     message.amountsIn = object.amountsIn?.map(e => Coin.fromPartial(e)) || [];
     message.amountsOut = object.amountsOut?.map(e => Coin.fromPartial(e)) || [];
     message.address = object.address ?? "";
-    message.poolId = object.poolId !== undefined && object.poolId !== null ? Long.fromValue(object.poolId) : Long.UZERO;
+    message.poolId = object.poolId !== undefined && object.poolId !== null ? BigInt(object.poolId.toString()) : BigInt(0);
     message.path = object.path?.map(e => SwapStep.fromPartial(e)) || [];
     message.operationType = object.operationType ?? 0;
     message.swapFee = object.swapFee?.map(e => Coin.fromPartial(e)) || [];

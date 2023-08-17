@@ -3,8 +3,8 @@ import { Bond, BondSDKType } from "./bond";
 import { Pool, PoolSDKType } from "./pool";
 import { Unbonding, UnbondingSDKType } from "./unbonding";
 import { Coin, CoinSDKType } from "../../cosmos/base/v1beta1/coin";
-import { Long, isSet } from "../../helpers";
-import * as _m0 from "protobufjs/minimal";
+import { BinaryReader, BinaryWriter } from "../../binary";
+import { isSet } from "../../helpers";
 export interface EventSetParams {
   params: Params;
 }
@@ -38,10 +38,10 @@ export interface EventSetUnbondingSDKType {
   unbonding: UnbondingSDKType;
 }
 export interface EventRemoveUnbonding {
-  id: Long;
+  id: bigint;
 }
 export interface EventRemoveUnbondingSDKType {
-  id: Long;
+  id: bigint;
 }
 export interface EventClaimReward {
   address: string;
@@ -80,17 +80,17 @@ export interface EventUnbondSDKType {
   unbond_treasury: string;
 }
 export interface EventClaimUnbonding {
-  id: Long;
+  id: bigint;
 }
 export interface EventClaimUnbondingSDKType {
-  id: Long;
+  id: bigint;
 }
 export interface EventCancelUnbonding {
-  id: Long;
+  id: bigint;
   amount: Coin;
 }
 export interface EventCancelUnbondingSDKType {
-  id: Long;
+  id: bigint;
   amount: CoinSDKType;
 }
 export interface EventIncentivizePool {
@@ -107,14 +107,14 @@ function createBaseEventSetParams(): EventSetParams {
   };
 }
 export const EventSetParams = {
-  encode(message: EventSetParams, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: EventSetParams, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.params !== undefined) {
       Params.encode(message.params, writer.uint32(10).fork()).ldelim();
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): EventSetParams {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): EventSetParams {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseEventSetParams();
     while (reader.pos < end) {
@@ -152,14 +152,14 @@ function createBaseEventSetBond(): EventSetBond {
   };
 }
 export const EventSetBond = {
-  encode(message: EventSetBond, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: EventSetBond, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.bond !== undefined) {
       Bond.encode(message.bond, writer.uint32(10).fork()).ldelim();
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): EventSetBond {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): EventSetBond {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseEventSetBond();
     while (reader.pos < end) {
@@ -198,7 +198,7 @@ function createBaseEventRemoveBond(): EventRemoveBond {
   };
 }
 export const EventRemoveBond = {
-  encode(message: EventRemoveBond, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: EventRemoveBond, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.address !== "") {
       writer.uint32(10).string(message.address);
     }
@@ -207,8 +207,8 @@ export const EventRemoveBond = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): EventRemoveBond {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): EventRemoveBond {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseEventRemoveBond();
     while (reader.pos < end) {
@@ -252,14 +252,14 @@ function createBaseEventSetPool(): EventSetPool {
   };
 }
 export const EventSetPool = {
-  encode(message: EventSetPool, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: EventSetPool, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.pool !== undefined) {
       Pool.encode(message.pool, writer.uint32(10).fork()).ldelim();
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): EventSetPool {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): EventSetPool {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseEventSetPool();
     while (reader.pos < end) {
@@ -297,14 +297,14 @@ function createBaseEventSetUnbonding(): EventSetUnbonding {
   };
 }
 export const EventSetUnbonding = {
-  encode(message: EventSetUnbonding, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: EventSetUnbonding, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.unbonding !== undefined) {
       Unbonding.encode(message.unbonding, writer.uint32(10).fork()).ldelim();
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): EventSetUnbonding {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): EventSetUnbonding {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseEventSetUnbonding();
     while (reader.pos < end) {
@@ -338,25 +338,25 @@ export const EventSetUnbonding = {
 };
 function createBaseEventRemoveUnbonding(): EventRemoveUnbonding {
   return {
-    id: Long.UZERO
+    id: BigInt(0)
   };
 }
 export const EventRemoveUnbonding = {
-  encode(message: EventRemoveUnbonding, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (!message.id.isZero()) {
+  encode(message: EventRemoveUnbonding, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    if (message.id !== BigInt(0)) {
       writer.uint32(8).uint64(message.id);
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): EventRemoveUnbonding {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): EventRemoveUnbonding {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseEventRemoveUnbonding();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.id = (reader.uint64() as Long);
+          message.id = reader.uint64();
           break;
         default:
           reader.skipType(tag & 7);
@@ -367,17 +367,17 @@ export const EventRemoveUnbonding = {
   },
   fromJSON(object: any): EventRemoveUnbonding {
     return {
-      id: isSet(object.id) ? Long.fromValue(object.id) : Long.UZERO
+      id: isSet(object.id) ? BigInt(object.id.toString()) : BigInt(0)
     };
   },
   toJSON(message: EventRemoveUnbonding): unknown {
     const obj: any = {};
-    message.id !== undefined && (obj.id = (message.id || Long.UZERO).toString());
+    message.id !== undefined && (obj.id = (message.id || BigInt(0)).toString());
     return obj;
   },
   fromPartial(object: Partial<EventRemoveUnbonding>): EventRemoveUnbonding {
     const message = createBaseEventRemoveUnbonding();
-    message.id = object.id !== undefined && object.id !== null ? Long.fromValue(object.id) : Long.UZERO;
+    message.id = object.id !== undefined && object.id !== null ? BigInt(object.id.toString()) : BigInt(0);
     return message;
   }
 };
@@ -390,7 +390,7 @@ function createBaseEventClaimReward(): EventClaimReward {
   };
 }
 export const EventClaimReward = {
-  encode(message: EventClaimReward, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: EventClaimReward, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.address !== "") {
       writer.uint32(10).string(message.address);
     }
@@ -405,8 +405,8 @@ export const EventClaimReward = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): EventClaimReward {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): EventClaimReward {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseEventClaimReward();
     while (reader.pos < end) {
@@ -467,7 +467,7 @@ function createBaseEventBond(): EventBond {
   };
 }
 export const EventBond = {
-  encode(message: EventBond, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: EventBond, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.address !== "") {
       writer.uint32(10).string(message.address);
     }
@@ -476,8 +476,8 @@ export const EventBond = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): EventBond {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): EventBond {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseEventBond();
     while (reader.pos < end) {
@@ -526,7 +526,7 @@ function createBaseEventUnbond(): EventUnbond {
   };
 }
 export const EventUnbond = {
-  encode(message: EventUnbond, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: EventUnbond, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.address !== "") {
       writer.uint32(10).string(message.address);
     }
@@ -547,8 +547,8 @@ export const EventUnbond = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): EventUnbond {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): EventUnbond {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseEventUnbond();
     while (reader.pos < end) {
@@ -616,25 +616,25 @@ export const EventUnbond = {
 };
 function createBaseEventClaimUnbonding(): EventClaimUnbonding {
   return {
-    id: Long.UZERO
+    id: BigInt(0)
   };
 }
 export const EventClaimUnbonding = {
-  encode(message: EventClaimUnbonding, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (!message.id.isZero()) {
+  encode(message: EventClaimUnbonding, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    if (message.id !== BigInt(0)) {
       writer.uint32(8).uint64(message.id);
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): EventClaimUnbonding {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): EventClaimUnbonding {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseEventClaimUnbonding();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.id = (reader.uint64() as Long);
+          message.id = reader.uint64();
           break;
         default:
           reader.skipType(tag & 7);
@@ -645,29 +645,29 @@ export const EventClaimUnbonding = {
   },
   fromJSON(object: any): EventClaimUnbonding {
     return {
-      id: isSet(object.id) ? Long.fromValue(object.id) : Long.UZERO
+      id: isSet(object.id) ? BigInt(object.id.toString()) : BigInt(0)
     };
   },
   toJSON(message: EventClaimUnbonding): unknown {
     const obj: any = {};
-    message.id !== undefined && (obj.id = (message.id || Long.UZERO).toString());
+    message.id !== undefined && (obj.id = (message.id || BigInt(0)).toString());
     return obj;
   },
   fromPartial(object: Partial<EventClaimUnbonding>): EventClaimUnbonding {
     const message = createBaseEventClaimUnbonding();
-    message.id = object.id !== undefined && object.id !== null ? Long.fromValue(object.id) : Long.UZERO;
+    message.id = object.id !== undefined && object.id !== null ? BigInt(object.id.toString()) : BigInt(0);
     return message;
   }
 };
 function createBaseEventCancelUnbonding(): EventCancelUnbonding {
   return {
-    id: Long.UZERO,
+    id: BigInt(0),
     amount: Coin.fromPartial({})
   };
 }
 export const EventCancelUnbonding = {
-  encode(message: EventCancelUnbonding, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (!message.id.isZero()) {
+  encode(message: EventCancelUnbonding, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    if (message.id !== BigInt(0)) {
       writer.uint32(8).uint64(message.id);
     }
     if (message.amount !== undefined) {
@@ -675,15 +675,15 @@ export const EventCancelUnbonding = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): EventCancelUnbonding {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): EventCancelUnbonding {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseEventCancelUnbonding();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.id = (reader.uint64() as Long);
+          message.id = reader.uint64();
           break;
         case 2:
           message.amount = Coin.decode(reader, reader.uint32());
@@ -697,19 +697,19 @@ export const EventCancelUnbonding = {
   },
   fromJSON(object: any): EventCancelUnbonding {
     return {
-      id: isSet(object.id) ? Long.fromValue(object.id) : Long.UZERO,
+      id: isSet(object.id) ? BigInt(object.id.toString()) : BigInt(0),
       amount: isSet(object.amount) ? Coin.fromJSON(object.amount) : undefined
     };
   },
   toJSON(message: EventCancelUnbonding): unknown {
     const obj: any = {};
-    message.id !== undefined && (obj.id = (message.id || Long.UZERO).toString());
+    message.id !== undefined && (obj.id = (message.id || BigInt(0)).toString());
     message.amount !== undefined && (obj.amount = message.amount ? Coin.toJSON(message.amount) : undefined);
     return obj;
   },
   fromPartial(object: Partial<EventCancelUnbonding>): EventCancelUnbonding {
     const message = createBaseEventCancelUnbonding();
-    message.id = object.id !== undefined && object.id !== null ? Long.fromValue(object.id) : Long.UZERO;
+    message.id = object.id !== undefined && object.id !== null ? BigInt(object.id.toString()) : BigInt(0);
     message.amount = object.amount !== undefined && object.amount !== null ? Coin.fromPartial(object.amount) : undefined;
     return message;
   }
@@ -721,7 +721,7 @@ function createBaseEventIncentivizePool(): EventIncentivizePool {
   };
 }
 export const EventIncentivizePool = {
-  encode(message: EventIncentivizePool, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: EventIncentivizePool, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.bondDenom !== "") {
       writer.uint32(10).string(message.bondDenom);
     }
@@ -730,8 +730,8 @@ export const EventIncentivizePool = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): EventIncentivizePool {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): EventIncentivizePool {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseEventIncentivizePool();
     while (reader.pos < end) {

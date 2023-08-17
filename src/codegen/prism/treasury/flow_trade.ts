@@ -1,30 +1,30 @@
 import { Timestamp, TimestampSDKType } from "../../google/protobuf/timestamp";
 import { ActionType, actionTypeFromJSON, actionTypeToJSON } from "./action";
-import { Long, isSet, fromJsonTimestamp, fromTimestamp } from "../../helpers";
-import * as _m0 from "protobufjs/minimal";
+import { BinaryReader, BinaryWriter } from "../../binary";
+import { isSet, fromJsonTimestamp, fromTimestamp } from "../../helpers";
 export interface FlowTrade {
   endTime: Timestamp;
-  flowId: Long;
+  flowId: bigint;
   actionType: ActionType;
 }
 export interface FlowTradeSDKType {
   end_time: TimestampSDKType;
-  flow_id: Long;
+  flow_id: bigint;
   action_type: ActionType;
 }
 function createBaseFlowTrade(): FlowTrade {
   return {
     endTime: Timestamp.fromPartial({}),
-    flowId: Long.UZERO,
+    flowId: BigInt(0),
     actionType: 0
   };
 }
 export const FlowTrade = {
-  encode(message: FlowTrade, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: FlowTrade, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.endTime !== undefined) {
       Timestamp.encode(message.endTime, writer.uint32(10).fork()).ldelim();
     }
-    if (!message.flowId.isZero()) {
+    if (message.flowId !== BigInt(0)) {
       writer.uint32(16).uint64(message.flowId);
     }
     if (message.actionType !== 0) {
@@ -32,8 +32,8 @@ export const FlowTrade = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): FlowTrade {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): FlowTrade {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseFlowTrade();
     while (reader.pos < end) {
@@ -43,7 +43,7 @@ export const FlowTrade = {
           message.endTime = Timestamp.decode(reader, reader.uint32());
           break;
         case 2:
-          message.flowId = (reader.uint64() as Long);
+          message.flowId = reader.uint64();
           break;
         case 3:
           message.actionType = (reader.int32() as any);
@@ -58,21 +58,21 @@ export const FlowTrade = {
   fromJSON(object: any): FlowTrade {
     return {
       endTime: isSet(object.endTime) ? fromJsonTimestamp(object.endTime) : undefined,
-      flowId: isSet(object.flowId) ? Long.fromValue(object.flowId) : Long.UZERO,
+      flowId: isSet(object.flowId) ? BigInt(object.flowId.toString()) : BigInt(0),
       actionType: isSet(object.actionType) ? actionTypeFromJSON(object.actionType) : -1
     };
   },
   toJSON(message: FlowTrade): unknown {
     const obj: any = {};
     message.endTime !== undefined && (obj.endTime = fromTimestamp(message.endTime).toISOString());
-    message.flowId !== undefined && (obj.flowId = (message.flowId || Long.UZERO).toString());
+    message.flowId !== undefined && (obj.flowId = (message.flowId || BigInt(0)).toString());
     message.actionType !== undefined && (obj.actionType = actionTypeToJSON(message.actionType));
     return obj;
   },
   fromPartial(object: Partial<FlowTrade>): FlowTrade {
     const message = createBaseFlowTrade();
     message.endTime = object.endTime !== undefined && object.endTime !== null ? Timestamp.fromPartial(object.endTime) : undefined;
-    message.flowId = object.flowId !== undefined && object.flowId !== null ? Long.fromValue(object.flowId) : Long.UZERO;
+    message.flowId = object.flowId !== undefined && object.flowId !== null ? BigInt(object.flowId.toString()) : BigInt(0);
     message.actionType = object.actionType ?? 0;
     return message;
   }
