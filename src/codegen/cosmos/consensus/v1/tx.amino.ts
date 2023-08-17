@@ -1,6 +1,5 @@
 //@ts-nocheck
 import { AminoMsg } from "@cosmjs/amino";
-import { Long } from "../../../helpers";
 import { MsgUpdateParams } from "./tx";
 export interface MsgUpdateParamsAminoType extends AminoMsg {
   type: "cosmos-sdk/MsgUpdateParams";
@@ -57,16 +56,16 @@ export const AminoConverter = {
       return {
         authority,
         block: {
-          maxBytes: Long.fromString(block.max_bytes),
-          maxGas: Long.fromString(block.max_gas)
+          maxBytes: BigInt(block.max_bytes),
+          maxGas: BigInt(block.max_gas)
         },
         evidence: {
-          maxAgeNumBlocks: Long.fromString(evidence.max_age_num_blocks),
+          maxAgeNumBlocks: BigInt(evidence.max_age_num_blocks),
           maxAgeDuration: {
-            seconds: Long.fromNumber(Math.floor(parseInt(evidence.max_age_duration) / 1_000_000_000)),
+            seconds: BigInt(Math.floor(parseInt(evidence.max_age_duration) / 1_000_000_000)),
             nanos: parseInt(evidence.max_age_duration) % 1_000_000_000
           },
-          maxBytes: Long.fromString(evidence.max_bytes)
+          maxBytes: BigInt(evidence.max_bytes)
         },
         validator: {
           pubKeyTypes: validator.pub_key_types

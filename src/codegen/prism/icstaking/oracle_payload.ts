@@ -1,7 +1,7 @@
 import { Height, HeightSDKType } from "../../ibc/core/client/v1/client";
 import { ValidatorState, ValidatorStateSDKType } from "./host_chain";
-import { Long, isSet, isObject } from "../../helpers";
-import * as _m0 from "protobufjs/minimal";
+import { BinaryReader, BinaryWriter } from "../../binary";
+import { isSet, isObject } from "../../helpers";
 export interface OraclePayload_ValidatorsEntry {
   key: string;
   value: ValidatorState;
@@ -32,7 +32,7 @@ export interface OraclePayload {
    * the largest undelegation epoch number for which the undelegation is completed and is ready to be swept to PRISM
    * reporting this with zero means that none of incomplete undelegations are completed.
    */
-  lastCompletedUndelegationEpoch: Long;
+  lastCompletedUndelegationEpoch: bigint;
 }
 /** OraclePayload defines the structure of oracle vote payload */
 export interface OraclePayloadSDKType {
@@ -43,7 +43,7 @@ export interface OraclePayloadSDKType {
   delegation_account_balance: string;
   reward_account_balance: string;
   sweep_account_balance: string;
-  last_completed_undelegation_epoch: Long;
+  last_completed_undelegation_epoch: bigint;
 }
 function createBaseOraclePayload_ValidatorsEntry(): OraclePayload_ValidatorsEntry {
   return {
@@ -52,7 +52,7 @@ function createBaseOraclePayload_ValidatorsEntry(): OraclePayload_ValidatorsEntr
   };
 }
 export const OraclePayload_ValidatorsEntry = {
-  encode(message: OraclePayload_ValidatorsEntry, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: OraclePayload_ValidatorsEntry, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.key !== "") {
       writer.uint32(10).string(message.key);
     }
@@ -61,8 +61,8 @@ export const OraclePayload_ValidatorsEntry = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): OraclePayload_ValidatorsEntry {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): OraclePayload_ValidatorsEntry {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseOraclePayload_ValidatorsEntry();
     while (reader.pos < end) {
@@ -107,11 +107,11 @@ function createBaseOraclePayload(): OraclePayload {
     delegationAccountBalance: "",
     rewardAccountBalance: "",
     sweepAccountBalance: "",
-    lastCompletedUndelegationEpoch: Long.UZERO
+    lastCompletedUndelegationEpoch: BigInt(0)
   };
 }
 export const OraclePayload = {
-  encode(message: OraclePayload, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: OraclePayload, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.blockHeight !== undefined) {
       Height.encode(message.blockHeight, writer.uint32(10).fork()).ldelim();
     }
@@ -130,13 +130,13 @@ export const OraclePayload = {
     if (message.sweepAccountBalance !== "") {
       writer.uint32(50).string(message.sweepAccountBalance);
     }
-    if (!message.lastCompletedUndelegationEpoch.isZero()) {
+    if (message.lastCompletedUndelegationEpoch !== BigInt(0)) {
       writer.uint32(56).uint64(message.lastCompletedUndelegationEpoch);
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): OraclePayload {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): OraclePayload {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseOraclePayload();
     while (reader.pos < end) {
@@ -161,7 +161,7 @@ export const OraclePayload = {
           message.sweepAccountBalance = reader.string();
           break;
         case 7:
-          message.lastCompletedUndelegationEpoch = (reader.uint64() as Long);
+          message.lastCompletedUndelegationEpoch = reader.uint64();
           break;
         default:
           reader.skipType(tag & 7);
@@ -182,7 +182,7 @@ export const OraclePayload = {
       delegationAccountBalance: isSet(object.delegationAccountBalance) ? String(object.delegationAccountBalance) : "",
       rewardAccountBalance: isSet(object.rewardAccountBalance) ? String(object.rewardAccountBalance) : "",
       sweepAccountBalance: isSet(object.sweepAccountBalance) ? String(object.sweepAccountBalance) : "",
-      lastCompletedUndelegationEpoch: isSet(object.lastCompletedUndelegationEpoch) ? Long.fromValue(object.lastCompletedUndelegationEpoch) : Long.UZERO
+      lastCompletedUndelegationEpoch: isSet(object.lastCompletedUndelegationEpoch) ? BigInt(object.lastCompletedUndelegationEpoch.toString()) : BigInt(0)
     };
   },
   toJSON(message: OraclePayload): unknown {
@@ -197,7 +197,7 @@ export const OraclePayload = {
     message.delegationAccountBalance !== undefined && (obj.delegationAccountBalance = message.delegationAccountBalance);
     message.rewardAccountBalance !== undefined && (obj.rewardAccountBalance = message.rewardAccountBalance);
     message.sweepAccountBalance !== undefined && (obj.sweepAccountBalance = message.sweepAccountBalance);
-    message.lastCompletedUndelegationEpoch !== undefined && (obj.lastCompletedUndelegationEpoch = (message.lastCompletedUndelegationEpoch || Long.UZERO).toString());
+    message.lastCompletedUndelegationEpoch !== undefined && (obj.lastCompletedUndelegationEpoch = (message.lastCompletedUndelegationEpoch || BigInt(0)).toString());
     return obj;
   },
   fromPartial(object: Partial<OraclePayload>): OraclePayload {
@@ -214,7 +214,7 @@ export const OraclePayload = {
     message.delegationAccountBalance = object.delegationAccountBalance ?? "";
     message.rewardAccountBalance = object.rewardAccountBalance ?? "";
     message.sweepAccountBalance = object.sweepAccountBalance ?? "";
-    message.lastCompletedUndelegationEpoch = object.lastCompletedUndelegationEpoch !== undefined && object.lastCompletedUndelegationEpoch !== null ? Long.fromValue(object.lastCompletedUndelegationEpoch) : Long.UZERO;
+    message.lastCompletedUndelegationEpoch = object.lastCompletedUndelegationEpoch !== undefined && object.lastCompletedUndelegationEpoch !== null ? BigInt(object.lastCompletedUndelegationEpoch.toString()) : BigInt(0);
     return message;
   }
 };

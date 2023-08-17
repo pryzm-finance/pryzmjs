@@ -2,8 +2,8 @@ import { ActionType, Action, ActionSDKType, actionTypeFromJSON, actionTypeToJSON
 import { Coin, CoinSDKType } from "../../cosmos/base/v1beta1/coin";
 import { FlowTrade, FlowTradeSDKType } from "./flow_trade";
 import { Timestamp, TimestampSDKType } from "../../google/protobuf/timestamp";
-import { Long, isSet, fromJsonTimestamp, fromTimestamp } from "../../helpers";
-import * as _m0 from "protobufjs/minimal";
+import { BinaryReader, BinaryWriter } from "../../binary";
+import { isSet, fromJsonTimestamp, fromTimestamp } from "../../helpers";
 export interface EventTreasuryCollectFee {
   feeType: string;
   amount: string;
@@ -15,12 +15,12 @@ export interface EventTreasuryCollectFeeSDKType {
   from: string;
 }
 export interface EventCreateFlowForAmount {
-  flowId: Long;
+  flowId: bigint;
   actionType: ActionType;
   amount: Coin;
 }
 export interface EventCreateFlowForAmountSDKType {
-  flow_id: Long;
+  flow_id: bigint;
   action_type: ActionType;
   amount: CoinSDKType;
 }
@@ -46,11 +46,11 @@ export interface EventSetFlowTradeSDKType {
 }
 export interface EventRemoveFlowTrade {
   endTime: Timestamp;
-  flowId: Long;
+  flowId: bigint;
 }
 export interface EventRemoveFlowTradeSDKType {
   end_time: TimestampSDKType;
-  flow_id: Long;
+  flow_id: bigint;
 }
 function createBaseEventTreasuryCollectFee(): EventTreasuryCollectFee {
   return {
@@ -60,7 +60,7 @@ function createBaseEventTreasuryCollectFee(): EventTreasuryCollectFee {
   };
 }
 export const EventTreasuryCollectFee = {
-  encode(message: EventTreasuryCollectFee, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: EventTreasuryCollectFee, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.feeType !== "") {
       writer.uint32(10).string(message.feeType);
     }
@@ -72,8 +72,8 @@ export const EventTreasuryCollectFee = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): EventTreasuryCollectFee {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): EventTreasuryCollectFee {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseEventTreasuryCollectFee();
     while (reader.pos < end) {
@@ -119,14 +119,14 @@ export const EventTreasuryCollectFee = {
 };
 function createBaseEventCreateFlowForAmount(): EventCreateFlowForAmount {
   return {
-    flowId: Long.UZERO,
+    flowId: BigInt(0),
     actionType: 0,
     amount: Coin.fromPartial({})
   };
 }
 export const EventCreateFlowForAmount = {
-  encode(message: EventCreateFlowForAmount, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (!message.flowId.isZero()) {
+  encode(message: EventCreateFlowForAmount, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    if (message.flowId !== BigInt(0)) {
       writer.uint32(8).uint64(message.flowId);
     }
     if (message.actionType !== 0) {
@@ -137,15 +137,15 @@ export const EventCreateFlowForAmount = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): EventCreateFlowForAmount {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): EventCreateFlowForAmount {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseEventCreateFlowForAmount();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.flowId = (reader.uint64() as Long);
+          message.flowId = reader.uint64();
           break;
         case 2:
           message.actionType = (reader.int32() as any);
@@ -162,21 +162,21 @@ export const EventCreateFlowForAmount = {
   },
   fromJSON(object: any): EventCreateFlowForAmount {
     return {
-      flowId: isSet(object.flowId) ? Long.fromValue(object.flowId) : Long.UZERO,
+      flowId: isSet(object.flowId) ? BigInt(object.flowId.toString()) : BigInt(0),
       actionType: isSet(object.actionType) ? actionTypeFromJSON(object.actionType) : -1,
       amount: isSet(object.amount) ? Coin.fromJSON(object.amount) : undefined
     };
   },
   toJSON(message: EventCreateFlowForAmount): unknown {
     const obj: any = {};
-    message.flowId !== undefined && (obj.flowId = (message.flowId || Long.UZERO).toString());
+    message.flowId !== undefined && (obj.flowId = (message.flowId || BigInt(0)).toString());
     message.actionType !== undefined && (obj.actionType = actionTypeToJSON(message.actionType));
     message.amount !== undefined && (obj.amount = message.amount ? Coin.toJSON(message.amount) : undefined);
     return obj;
   },
   fromPartial(object: Partial<EventCreateFlowForAmount>): EventCreateFlowForAmount {
     const message = createBaseEventCreateFlowForAmount();
-    message.flowId = object.flowId !== undefined && object.flowId !== null ? Long.fromValue(object.flowId) : Long.UZERO;
+    message.flowId = object.flowId !== undefined && object.flowId !== null ? BigInt(object.flowId.toString()) : BigInt(0);
     message.actionType = object.actionType ?? 0;
     message.amount = object.amount !== undefined && object.amount !== null ? Coin.fromPartial(object.amount) : undefined;
     return message;
@@ -189,7 +189,7 @@ function createBaseEventExecuteActionForAmount(): EventExecuteActionForAmount {
   };
 }
 export const EventExecuteActionForAmount = {
-  encode(message: EventExecuteActionForAmount, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: EventExecuteActionForAmount, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.actionType !== 0) {
       writer.uint32(8).int32(message.actionType);
     }
@@ -198,8 +198,8 @@ export const EventExecuteActionForAmount = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): EventExecuteActionForAmount {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): EventExecuteActionForAmount {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseEventExecuteActionForAmount();
     while (reader.pos < end) {
@@ -243,14 +243,14 @@ function createBaseEventSetAction(): EventSetAction {
   };
 }
 export const EventSetAction = {
-  encode(message: EventSetAction, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: EventSetAction, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.action !== undefined) {
       Action.encode(message.action, writer.uint32(10).fork()).ldelim();
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): EventSetAction {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): EventSetAction {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseEventSetAction();
     while (reader.pos < end) {
@@ -288,14 +288,14 @@ function createBaseEventSetFlowTrade(): EventSetFlowTrade {
   };
 }
 export const EventSetFlowTrade = {
-  encode(message: EventSetFlowTrade, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: EventSetFlowTrade, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.flowTrade !== undefined) {
       FlowTrade.encode(message.flowTrade, writer.uint32(10).fork()).ldelim();
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): EventSetFlowTrade {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): EventSetFlowTrade {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseEventSetFlowTrade();
     while (reader.pos < end) {
@@ -330,21 +330,21 @@ export const EventSetFlowTrade = {
 function createBaseEventRemoveFlowTrade(): EventRemoveFlowTrade {
   return {
     endTime: Timestamp.fromPartial({}),
-    flowId: Long.UZERO
+    flowId: BigInt(0)
   };
 }
 export const EventRemoveFlowTrade = {
-  encode(message: EventRemoveFlowTrade, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: EventRemoveFlowTrade, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.endTime !== undefined) {
       Timestamp.encode(message.endTime, writer.uint32(10).fork()).ldelim();
     }
-    if (!message.flowId.isZero()) {
+    if (message.flowId !== BigInt(0)) {
       writer.uint32(16).uint64(message.flowId);
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): EventRemoveFlowTrade {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): EventRemoveFlowTrade {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseEventRemoveFlowTrade();
     while (reader.pos < end) {
@@ -354,7 +354,7 @@ export const EventRemoveFlowTrade = {
           message.endTime = Timestamp.decode(reader, reader.uint32());
           break;
         case 2:
-          message.flowId = (reader.uint64() as Long);
+          message.flowId = reader.uint64();
           break;
         default:
           reader.skipType(tag & 7);
@@ -366,19 +366,19 @@ export const EventRemoveFlowTrade = {
   fromJSON(object: any): EventRemoveFlowTrade {
     return {
       endTime: isSet(object.endTime) ? fromJsonTimestamp(object.endTime) : undefined,
-      flowId: isSet(object.flowId) ? Long.fromValue(object.flowId) : Long.UZERO
+      flowId: isSet(object.flowId) ? BigInt(object.flowId.toString()) : BigInt(0)
     };
   },
   toJSON(message: EventRemoveFlowTrade): unknown {
     const obj: any = {};
     message.endTime !== undefined && (obj.endTime = fromTimestamp(message.endTime).toISOString());
-    message.flowId !== undefined && (obj.flowId = (message.flowId || Long.UZERO).toString());
+    message.flowId !== undefined && (obj.flowId = (message.flowId || BigInt(0)).toString());
     return obj;
   },
   fromPartial(object: Partial<EventRemoveFlowTrade>): EventRemoveFlowTrade {
     const message = createBaseEventRemoveFlowTrade();
     message.endTime = object.endTime !== undefined && object.endTime !== null ? Timestamp.fromPartial(object.endTime) : undefined;
-    message.flowId = object.flowId !== undefined && object.flowId !== null ? Long.fromValue(object.flowId) : Long.UZERO;
+    message.flowId = object.flowId !== undefined && object.flowId !== null ? BigInt(object.flowId.toString()) : BigInt(0);
     return message;
   }
 };

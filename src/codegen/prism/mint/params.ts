@@ -1,5 +1,6 @@
-import { Long, isSet } from "../../helpers";
-import * as _m0 from "protobufjs/minimal";
+import { BinaryReader, BinaryWriter } from "../../binary";
+import { Decimal } from "@cosmjs/math";
+import { isSet } from "../../helpers";
 export interface DistributionProportions {
   /**
    * defines the proportion of the minted mint_denom that is to be
@@ -49,7 +50,7 @@ export interface Params {
   /** mint epoch identifier e.g. (day, week). */
   epochIdentifier: string;
   /** start epoch to distribute minting rewards */
-  mintingRewardsDistributionStartEpoch: Long;
+  mintingRewardsDistributionStartEpoch: bigint;
   /**
    * defines the distribution proportions of the minted
    * denom, i.e, which stakeholders will receive the minted
@@ -68,7 +69,7 @@ export interface ParamsSDKType {
   inflation_min: string;
   goal_bonded: string;
   epoch_identifier: string;
-  minting_rewards_distribution_start_epoch: Long;
+  minting_rewards_distribution_start_epoch: bigint;
   distribution_proportions: DistributionProportionsSDKType;
   genesis_epoch_provisions: string;
   development_account_address: string;
@@ -83,45 +84,45 @@ function createBaseDistributionProportions(): DistributionProportions {
   };
 }
 export const DistributionProportions = {
-  encode(message: DistributionProportions, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: DistributionProportions, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.staking !== "") {
-      writer.uint32(10).string(message.staking);
+      writer.uint32(10).string(Decimal.fromUserInput(message.staking, 18).atomics);
     }
     if (message.poolIncentives !== "") {
-      writer.uint32(18).string(message.poolIncentives);
+      writer.uint32(18).string(Decimal.fromUserInput(message.poolIncentives, 18).atomics);
     }
     if (message.development !== "") {
-      writer.uint32(26).string(message.development);
+      writer.uint32(26).string(Decimal.fromUserInput(message.development, 18).atomics);
     }
     if (message.dapp !== "") {
-      writer.uint32(34).string(message.dapp);
+      writer.uint32(34).string(Decimal.fromUserInput(message.dapp, 18).atomics);
     }
     if (message.oracle !== "") {
-      writer.uint32(42).string(message.oracle);
+      writer.uint32(42).string(Decimal.fromUserInput(message.oracle, 18).atomics);
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): DistributionProportions {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): DistributionProportions {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseDistributionProportions();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.staking = reader.string();
+          message.staking = Decimal.fromAtomics(reader.string(), 18).toString();
           break;
         case 2:
-          message.poolIncentives = reader.string();
+          message.poolIncentives = Decimal.fromAtomics(reader.string(), 18).toString();
           break;
         case 3:
-          message.development = reader.string();
+          message.development = Decimal.fromAtomics(reader.string(), 18).toString();
           break;
         case 4:
-          message.dapp = reader.string();
+          message.dapp = Decimal.fromAtomics(reader.string(), 18).toString();
           break;
         case 5:
-          message.oracle = reader.string();
+          message.oracle = Decimal.fromAtomics(reader.string(), 18).toString();
           break;
         default:
           reader.skipType(tag & 7);
@@ -166,48 +167,48 @@ function createBaseParams(): Params {
     inflationMin: "",
     goalBonded: "",
     epochIdentifier: "",
-    mintingRewardsDistributionStartEpoch: Long.ZERO,
+    mintingRewardsDistributionStartEpoch: BigInt(0),
     distributionProportions: DistributionProportions.fromPartial({}),
     genesisEpochProvisions: "",
     developmentAccountAddress: ""
   };
 }
 export const Params = {
-  encode(message: Params, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: Params, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.mintDenom !== "") {
       writer.uint32(10).string(message.mintDenom);
     }
     if (message.inflationRateChange !== "") {
-      writer.uint32(18).string(message.inflationRateChange);
+      writer.uint32(18).string(Decimal.fromUserInput(message.inflationRateChange, 18).atomics);
     }
     if (message.inflationMax !== "") {
-      writer.uint32(26).string(message.inflationMax);
+      writer.uint32(26).string(Decimal.fromUserInput(message.inflationMax, 18).atomics);
     }
     if (message.inflationMin !== "") {
-      writer.uint32(34).string(message.inflationMin);
+      writer.uint32(34).string(Decimal.fromUserInput(message.inflationMin, 18).atomics);
     }
     if (message.goalBonded !== "") {
-      writer.uint32(42).string(message.goalBonded);
+      writer.uint32(42).string(Decimal.fromUserInput(message.goalBonded, 18).atomics);
     }
     if (message.epochIdentifier !== "") {
       writer.uint32(50).string(message.epochIdentifier);
     }
-    if (!message.mintingRewardsDistributionStartEpoch.isZero()) {
+    if (message.mintingRewardsDistributionStartEpoch !== BigInt(0)) {
       writer.uint32(56).int64(message.mintingRewardsDistributionStartEpoch);
     }
     if (message.distributionProportions !== undefined) {
       DistributionProportions.encode(message.distributionProportions, writer.uint32(66).fork()).ldelim();
     }
     if (message.genesisEpochProvisions !== "") {
-      writer.uint32(74).string(message.genesisEpochProvisions);
+      writer.uint32(74).string(Decimal.fromUserInput(message.genesisEpochProvisions, 18).atomics);
     }
     if (message.developmentAccountAddress !== "") {
       writer.uint32(82).string(message.developmentAccountAddress);
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): Params {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): Params {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseParams();
     while (reader.pos < end) {
@@ -217,28 +218,28 @@ export const Params = {
           message.mintDenom = reader.string();
           break;
         case 2:
-          message.inflationRateChange = reader.string();
+          message.inflationRateChange = Decimal.fromAtomics(reader.string(), 18).toString();
           break;
         case 3:
-          message.inflationMax = reader.string();
+          message.inflationMax = Decimal.fromAtomics(reader.string(), 18).toString();
           break;
         case 4:
-          message.inflationMin = reader.string();
+          message.inflationMin = Decimal.fromAtomics(reader.string(), 18).toString();
           break;
         case 5:
-          message.goalBonded = reader.string();
+          message.goalBonded = Decimal.fromAtomics(reader.string(), 18).toString();
           break;
         case 6:
           message.epochIdentifier = reader.string();
           break;
         case 7:
-          message.mintingRewardsDistributionStartEpoch = (reader.int64() as Long);
+          message.mintingRewardsDistributionStartEpoch = reader.int64();
           break;
         case 8:
           message.distributionProportions = DistributionProportions.decode(reader, reader.uint32());
           break;
         case 9:
-          message.genesisEpochProvisions = reader.string();
+          message.genesisEpochProvisions = Decimal.fromAtomics(reader.string(), 18).toString();
           break;
         case 10:
           message.developmentAccountAddress = reader.string();
@@ -258,7 +259,7 @@ export const Params = {
       inflationMin: isSet(object.inflationMin) ? String(object.inflationMin) : "",
       goalBonded: isSet(object.goalBonded) ? String(object.goalBonded) : "",
       epochIdentifier: isSet(object.epochIdentifier) ? String(object.epochIdentifier) : "",
-      mintingRewardsDistributionStartEpoch: isSet(object.mintingRewardsDistributionStartEpoch) ? Long.fromValue(object.mintingRewardsDistributionStartEpoch) : Long.ZERO,
+      mintingRewardsDistributionStartEpoch: isSet(object.mintingRewardsDistributionStartEpoch) ? BigInt(object.mintingRewardsDistributionStartEpoch.toString()) : BigInt(0),
       distributionProportions: isSet(object.distributionProportions) ? DistributionProportions.fromJSON(object.distributionProportions) : undefined,
       genesisEpochProvisions: isSet(object.genesisEpochProvisions) ? String(object.genesisEpochProvisions) : "",
       developmentAccountAddress: isSet(object.developmentAccountAddress) ? String(object.developmentAccountAddress) : ""
@@ -272,7 +273,7 @@ export const Params = {
     message.inflationMin !== undefined && (obj.inflationMin = message.inflationMin);
     message.goalBonded !== undefined && (obj.goalBonded = message.goalBonded);
     message.epochIdentifier !== undefined && (obj.epochIdentifier = message.epochIdentifier);
-    message.mintingRewardsDistributionStartEpoch !== undefined && (obj.mintingRewardsDistributionStartEpoch = (message.mintingRewardsDistributionStartEpoch || Long.ZERO).toString());
+    message.mintingRewardsDistributionStartEpoch !== undefined && (obj.mintingRewardsDistributionStartEpoch = (message.mintingRewardsDistributionStartEpoch || BigInt(0)).toString());
     message.distributionProportions !== undefined && (obj.distributionProportions = message.distributionProportions ? DistributionProportions.toJSON(message.distributionProportions) : undefined);
     message.genesisEpochProvisions !== undefined && (obj.genesisEpochProvisions = message.genesisEpochProvisions);
     message.developmentAccountAddress !== undefined && (obj.developmentAccountAddress = message.developmentAccountAddress);
@@ -286,7 +287,7 @@ export const Params = {
     message.inflationMin = object.inflationMin ?? "";
     message.goalBonded = object.goalBonded ?? "";
     message.epochIdentifier = object.epochIdentifier ?? "";
-    message.mintingRewardsDistributionStartEpoch = object.mintingRewardsDistributionStartEpoch !== undefined && object.mintingRewardsDistributionStartEpoch !== null ? Long.fromValue(object.mintingRewardsDistributionStartEpoch) : Long.ZERO;
+    message.mintingRewardsDistributionStartEpoch = object.mintingRewardsDistributionStartEpoch !== undefined && object.mintingRewardsDistributionStartEpoch !== null ? BigInt(object.mintingRewardsDistributionStartEpoch.toString()) : BigInt(0);
     message.distributionProportions = object.distributionProportions !== undefined && object.distributionProportions !== null ? DistributionProportions.fromPartial(object.distributionProportions) : undefined;
     message.genesisEpochProvisions = object.genesisEpochProvisions ?? "";
     message.developmentAccountAddress = object.developmentAccountAddress ?? "";

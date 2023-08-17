@@ -1,7 +1,6 @@
 //@ts-nocheck
 import { voteOptionFromJSON } from "../../cosmos/gov/v1/gov";
 import { AminoMsg } from "@cosmjs/amino";
-import { Long } from "../../helpers";
 import { MsgUpdateParams, MsgStakePAssets, MsgUnstakePAssets, MsgSubmitVote, MsgSubmitProposal, MsgRetryVoteTransmit } from "./tx";
 export interface MsgUpdateParamsAminoType extends AminoMsg {
   type: "/prism.pgov.MsgUpdateParams";
@@ -124,11 +123,11 @@ export const AminoConverter = {
             amount: el1.amount
           })),
           maxDepositPeriod: {
-            seconds: Long.fromNumber(Math.floor(parseInt(params.max_deposit_period) / 1_000_000_000)),
+            seconds: BigInt(Math.floor(parseInt(params.max_deposit_period) / 1_000_000_000)),
             nanos: parseInt(params.max_deposit_period) % 1_000_000_000
           },
           votingPeriod: {
-            seconds: Long.fromNumber(Math.floor(parseInt(params.voting_period) / 1_000_000_000)),
+            seconds: BigInt(Math.floor(parseInt(params.voting_period) / 1_000_000_000)),
             nanos: parseInt(params.voting_period) % 1_000_000_000
           },
           quorum: params.quorum,
@@ -223,7 +222,7 @@ export const AminoConverter = {
       return {
         voter,
         asset,
-        proposal: Long.fromString(proposal),
+        proposal: BigInt(proposal),
         options: options.map(el0 => ({
           option: voteOptionFromJSON(el0.option),
           weight: el0.weight
@@ -265,7 +264,7 @@ export const AminoConverter = {
         creator,
         asset,
         proposal,
-        height: Long.fromString(height),
+        height: BigInt(height),
         proof: {
           ops: proof.ops.map(el1 => ({
             type: el1.type,
@@ -297,7 +296,7 @@ export const AminoConverter = {
       return {
         creator,
         asset,
-        proposal: Long.fromString(proposal)
+        proposal: BigInt(proposal)
       };
     }
   }

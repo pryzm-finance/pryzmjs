@@ -1,6 +1,5 @@
 //@ts-nocheck
 import { AminoMsg } from "@cosmjs/amino";
-import { Long } from "../../helpers";
 import { MsgUpdateParams, MsgDappAccountSpend } from "./tx";
 export interface MsgUpdateParamsAminoType extends AminoMsg {
   type: "/prism.mint.MsgUpdateParams";
@@ -81,7 +80,7 @@ export const AminoConverter = {
           inflationMin: params.inflation_min,
           goalBonded: params.goal_bonded,
           epochIdentifier: params.epoch_identifier,
-          mintingRewardsDistributionStartEpoch: Long.fromString(params.minting_rewards_distribution_start_epoch),
+          mintingRewardsDistributionStartEpoch: BigInt(params.minting_rewards_distribution_start_epoch),
           distributionProportions: {
             staking: params.distribution_proportions.staking,
             poolIncentives: params.distribution_proportions.pool_incentives,

@@ -1,5 +1,5 @@
 import { Timestamp, TimestampSDKType } from "../../google/protobuf/timestamp";
-import * as _m0 from "protobufjs/minimal";
+import { BinaryReader, BinaryWriter } from "../../binary";
 import { isSet, fromJsonTimestamp, fromTimestamp } from "../../helpers";
 export interface MaturityLevel {
   active: boolean;
@@ -25,7 +25,7 @@ function createBaseMaturityLevel(): MaturityLevel {
   };
 }
 export const MaturityLevel = {
-  encode(message: MaturityLevel, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: MaturityLevel, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.active === true) {
       writer.uint32(8).bool(message.active);
     }
@@ -43,8 +43,8 @@ export const MaturityLevel = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): MaturityLevel {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): MaturityLevel {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMaturityLevel();
     while (reader.pos < end) {

@@ -1,7 +1,6 @@
 //@ts-nocheck
 import { voteOptionFromJSON } from "./gov";
 import { AminoMsg } from "@cosmjs/amino";
-import { Long } from "../../../helpers";
 import { MsgSubmitProposal, MsgExecLegacyContent, MsgVote, MsgVoteWeighted, MsgDeposit, MsgUpdateParams } from "./tx";
 export interface MsgSubmitProposalAminoType extends AminoMsg {
   type: "cosmos-sdk/v1/MsgSubmitProposal";
@@ -188,7 +187,7 @@ export const AminoConverter = {
       metadata
     }: MsgVoteAminoType["value"]): MsgVote => {
       return {
-        proposalId: Long.fromString(proposal_id),
+        proposalId: BigInt(proposal_id),
         voter,
         option: voteOptionFromJSON(option),
         metadata
@@ -220,7 +219,7 @@ export const AminoConverter = {
       metadata
     }: MsgVoteWeightedAminoType["value"]): MsgVoteWeighted => {
       return {
-        proposalId: Long.fromString(proposal_id),
+        proposalId: BigInt(proposal_id),
         voter,
         options: options.map(el0 => ({
           option: voteOptionFromJSON(el0.option),
@@ -252,7 +251,7 @@ export const AminoConverter = {
       amount
     }: MsgDepositAminoType["value"]): MsgDeposit => {
       return {
-        proposalId: Long.fromString(proposal_id),
+        proposalId: BigInt(proposal_id),
         depositor,
         amount: amount.map(el0 => ({
           denom: el0.denom,
@@ -298,11 +297,11 @@ export const AminoConverter = {
             amount: el1.amount
           })),
           maxDepositPeriod: {
-            seconds: Long.fromNumber(Math.floor(parseInt(params.max_deposit_period) / 1_000_000_000)),
+            seconds: BigInt(Math.floor(parseInt(params.max_deposit_period) / 1_000_000_000)),
             nanos: parseInt(params.max_deposit_period) % 1_000_000_000
           },
           votingPeriod: {
-            seconds: Long.fromNumber(Math.floor(parseInt(params.voting_period) / 1_000_000_000)),
+            seconds: BigInt(Math.floor(parseInt(params.voting_period) / 1_000_000_000)),
             nanos: parseInt(params.voting_period) % 1_000_000_000
           },
           quorum: params.quorum,

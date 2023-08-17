@@ -1,4 +1,4 @@
-import * as _m0 from "protobufjs/minimal";
+import { BinaryReader, BinaryWriter } from "../../../binary";
 export interface QuerySwappableTokensRequest {}
 export interface QuerySwappableTokensRequestSDKType {}
 export interface QuerySwappableTokensResponse {
@@ -11,11 +11,11 @@ function createBaseQuerySwappableTokensRequest(): QuerySwappableTokensRequest {
   return {};
 }
 export const QuerySwappableTokensRequest = {
-  encode(_: QuerySwappableTokensRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(_: QuerySwappableTokensRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): QuerySwappableTokensRequest {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): QuerySwappableTokensRequest {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQuerySwappableTokensRequest();
     while (reader.pos < end) {
@@ -46,14 +46,14 @@ function createBaseQuerySwappableTokensResponse(): QuerySwappableTokensResponse 
   };
 }
 export const QuerySwappableTokensResponse = {
-  encode(message: QuerySwappableTokensResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: QuerySwappableTokensResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     for (const v of message.tokens) {
       writer.uint32(10).string(v!);
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): QuerySwappableTokensResponse {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): QuerySwappableTokensResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQuerySwappableTokensResponse();
     while (reader.pos < end) {

@@ -1,6 +1,5 @@
 //@ts-nocheck
 import { AminoMsg } from "@cosmjs/amino";
-import { Long } from "../../../../helpers";
 import { MsgRegisterPayee, MsgRegisterCounterpartyPayee, MsgPayPacketFee, MsgPayPacketFeeAsync } from "./tx";
 export interface MsgRegisterPayeeAminoType extends AminoMsg {
   type: "cosmos-sdk/MsgRegisterPayee";
@@ -229,7 +228,7 @@ export const AminoConverter = {
         packetId: {
           portId: packet_id.port_id,
           channelId: packet_id.channel_id,
-          sequence: Long.fromString(packet_id.sequence)
+          sequence: BigInt(packet_id.sequence)
         },
         packetFee: {
           fee: {

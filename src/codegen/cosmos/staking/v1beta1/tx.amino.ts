@@ -1,7 +1,6 @@
 //@ts-nocheck
 import { AminoMsg, decodeBech32Pubkey, encodeBech32Pubkey } from "@cosmjs/amino";
 import { fromBase64, toBase64 } from "@cosmjs/encoding";
-import { Long } from "../../../helpers";
 import { MsgCreateValidator, MsgEditValidator, MsgDelegate, MsgBeginRedelegate, MsgUndelegate, MsgCancelUnbondingDelegation, MsgUpdateParams } from "./tx";
 export interface MsgCreateValidatorAminoType extends AminoMsg {
   type: "cosmos-sdk/MsgCreateValidator";
@@ -143,7 +142,7 @@ export const AminoConverter = {
         },
         value: {
           denom: value.denom,
-          amount: Long.fromValue(value.amount).toString()
+          amount: value.amount
         }
       };
     },
@@ -236,7 +235,7 @@ export const AminoConverter = {
         validator_address: validatorAddress,
         amount: {
           denom: amount.denom,
-          amount: Long.fromValue(amount.amount).toString()
+          amount: amount.amount
         }
       };
     },
@@ -269,7 +268,7 @@ export const AminoConverter = {
         validator_dst_address: validatorDstAddress,
         amount: {
           denom: amount.denom,
-          amount: Long.fromValue(amount.amount).toString()
+          amount: amount.amount
         }
       };
     },
@@ -302,7 +301,7 @@ export const AminoConverter = {
         validator_address: validatorAddress,
         amount: {
           denom: amount.denom,
-          amount: Long.fromValue(amount.amount).toString()
+          amount: amount.amount
         }
       };
     },
@@ -334,7 +333,7 @@ export const AminoConverter = {
         validator_address: validatorAddress,
         amount: {
           denom: amount.denom,
-          amount: Long.fromValue(amount.amount).toString()
+          amount: amount.amount
         },
         creation_height: creationHeight.toString()
       };
@@ -352,7 +351,7 @@ export const AminoConverter = {
           denom: amount.denom,
           amount: amount.amount
         },
-        creationHeight: Long.fromString(creation_height)
+        creationHeight: BigInt(creation_height)
       };
     }
   },
@@ -382,7 +381,7 @@ export const AminoConverter = {
         authority,
         params: {
           unbondingTime: {
-            seconds: Long.fromNumber(Math.floor(parseInt(params.unbonding_time) / 1_000_000_000)),
+            seconds: BigInt(Math.floor(parseInt(params.unbonding_time) / 1_000_000_000)),
             nanos: parseInt(params.unbonding_time) % 1_000_000_000
           },
           maxValidators: params.max_validators,

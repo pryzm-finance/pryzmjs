@@ -1,7 +1,7 @@
 import { Params, ParamsSDKType } from "./params";
 import { MaturityLevel, MaturityLevelSDKType } from "./maturity_level";
 import { RefractableAsset, RefractableAssetSDKType } from "./refractable_asset";
-import * as _m0 from "protobufjs/minimal";
+import { BinaryReader, BinaryWriter } from "../../binary";
 import { isSet } from "../../helpers";
 export interface EventSetParams {
   params: Params;
@@ -39,14 +39,14 @@ function createBaseEventSetParams(): EventSetParams {
   };
 }
 export const EventSetParams = {
-  encode(message: EventSetParams, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: EventSetParams, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.params !== undefined) {
       Params.encode(message.params, writer.uint32(10).fork()).ldelim();
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): EventSetParams {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): EventSetParams {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseEventSetParams();
     while (reader.pos < end) {
@@ -84,14 +84,14 @@ function createBaseEventAddMaturityLevel(): EventAddMaturityLevel {
   };
 }
 export const EventAddMaturityLevel = {
-  encode(message: EventAddMaturityLevel, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: EventAddMaturityLevel, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.maturityLevel !== undefined) {
       MaturityLevel.encode(message.maturityLevel, writer.uint32(10).fork()).ldelim();
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): EventAddMaturityLevel {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): EventAddMaturityLevel {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseEventAddMaturityLevel();
     while (reader.pos < end) {
@@ -129,14 +129,14 @@ function createBaseEventDeactivateMaturityLevel(): EventDeactivateMaturityLevel 
   };
 }
 export const EventDeactivateMaturityLevel = {
-  encode(message: EventDeactivateMaturityLevel, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: EventDeactivateMaturityLevel, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.maturityLevel !== undefined) {
       MaturityLevel.encode(message.maturityLevel, writer.uint32(10).fork()).ldelim();
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): EventDeactivateMaturityLevel {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): EventDeactivateMaturityLevel {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseEventDeactivateMaturityLevel();
     while (reader.pos < end) {
@@ -174,14 +174,14 @@ function createBaseEventSetRefractableAsset(): EventSetRefractableAsset {
   };
 }
 export const EventSetRefractableAsset = {
-  encode(message: EventSetRefractableAsset, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: EventSetRefractableAsset, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.refractableAsset !== undefined) {
       RefractableAsset.encode(message.refractableAsset, writer.uint32(10).fork()).ldelim();
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): EventSetRefractableAsset {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): EventSetRefractableAsset {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseEventSetRefractableAsset();
     while (reader.pos < end) {
@@ -219,14 +219,14 @@ function createBaseEventSetMaturityLevel(): EventSetMaturityLevel {
   };
 }
 export const EventSetMaturityLevel = {
-  encode(message: EventSetMaturityLevel, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: EventSetMaturityLevel, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.maturityLevel !== undefined) {
       MaturityLevel.encode(message.maturityLevel, writer.uint32(10).fork()).ldelim();
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): EventSetMaturityLevel {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): EventSetMaturityLevel {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseEventSetMaturityLevel();
     while (reader.pos < end) {

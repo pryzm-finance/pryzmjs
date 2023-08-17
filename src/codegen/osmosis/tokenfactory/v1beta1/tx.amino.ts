@@ -1,6 +1,5 @@
 //@ts-nocheck
 import { AminoMsg } from "@cosmjs/amino";
-import { Long } from "../../../helpers";
 import { MsgCreateDenom, MsgMint, MsgBurn, MsgChangeAdmin, MsgSetDenomMetadata, MsgForceTransfer } from "./tx";
 export interface MsgCreateDenomAminoType extends AminoMsg {
   type: "osmosis/tokenfactory/create-denom";
@@ -104,7 +103,7 @@ export const AminoConverter = {
         sender,
         amount: {
           denom: amount.denom,
-          amount: Long.fromValue(amount.amount).toString()
+          amount: amount.amount
         },
         mintToAddress
       };
@@ -135,7 +134,7 @@ export const AminoConverter = {
         sender,
         amount: {
           denom: amount.denom,
-          amount: Long.fromValue(amount.amount).toString()
+          amount: amount.amount
         },
         burnFromAddress
       };
@@ -239,7 +238,7 @@ export const AminoConverter = {
         sender,
         amount: {
           denom: amount.denom,
-          amount: Long.fromValue(amount.amount).toString()
+          amount: amount.amount
         },
         transferFromAddress,
         transferToAddress

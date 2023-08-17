@@ -1,6 +1,5 @@
 import {getBrowsersHeadersForBlockHeight, grpcFetchAll, prism} from "@prism-finance/prismjs"
 import * as console from "console";
-import {Long} from "@prism-finance/prismjs/lib/codegen/helpers";
 
 
 async function main() {
@@ -17,9 +16,9 @@ async function main() {
     }, {
         countTotal: false,
         key: new Uint8Array(),
-        offset: Long.ZERO,
+        offset: 0n,
         reverse: false,
-        limit: Long.fromNumber(3)
+        limit: 3n
     })
     console.log(maturities)
 }

@@ -3,8 +3,8 @@ import { Params, ParamsSDKType } from "./params";
 import { StakedPAsset, StakedPAssetSDKType } from "./staked_p_asset";
 import { Vote, VoteSDKType } from "./vote";
 import { Proposal, ProposalSDKType } from "./proposal";
-import { Long, isSet } from "../../helpers";
-import * as _m0 from "protobufjs/minimal";
+import { BinaryReader, BinaryWriter } from "../../binary";
+import { isSet } from "../../helpers";
 /** QueryParamsRequest is request type for the Query/Params RPC method. */
 export interface QueryParamsRequest {}
 /** QueryParamsRequest is request type for the Query/Params RPC method. */
@@ -62,12 +62,12 @@ export interface QueryGetTotalStakedPAssetResponseSDKType {
 }
 export interface QueryGetVoteRequest {
   asset: string;
-  proposal: Long;
+  proposal: bigint;
   voter: string;
 }
 export interface QueryGetVoteRequestSDKType {
   asset: string;
-  proposal: Long;
+  proposal: bigint;
   voter: string;
 }
 export interface QueryGetVoteResponse {
@@ -92,11 +92,11 @@ export interface QueryAllVoteResponseSDKType {
 }
 export interface QueryGetProposalRequest {
   asset: string;
-  proposalId: Long;
+  proposalId: bigint;
 }
 export interface QueryGetProposalRequestSDKType {
   asset: string;
-  proposal_id: Long;
+  proposal_id: bigint;
 }
 export interface QueryGetProposalResponse {
   proposal: Proposal;
@@ -124,11 +124,11 @@ function createBaseQueryParamsRequest(): QueryParamsRequest {
   return {};
 }
 export const QueryParamsRequest = {
-  encode(_: QueryParamsRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(_: QueryParamsRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): QueryParamsRequest {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): QueryParamsRequest {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryParamsRequest();
     while (reader.pos < end) {
@@ -159,14 +159,14 @@ function createBaseQueryParamsResponse(): QueryParamsResponse {
   };
 }
 export const QueryParamsResponse = {
-  encode(message: QueryParamsResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: QueryParamsResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.params !== undefined) {
       Params.encode(message.params, writer.uint32(10).fork()).ldelim();
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): QueryParamsResponse {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): QueryParamsResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryParamsResponse();
     while (reader.pos < end) {
@@ -205,7 +205,7 @@ function createBaseQueryGetStakedPAssetRequest(): QueryGetStakedPAssetRequest {
   };
 }
 export const QueryGetStakedPAssetRequest = {
-  encode(message: QueryGetStakedPAssetRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: QueryGetStakedPAssetRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.account !== "") {
       writer.uint32(10).string(message.account);
     }
@@ -214,8 +214,8 @@ export const QueryGetStakedPAssetRequest = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): QueryGetStakedPAssetRequest {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): QueryGetStakedPAssetRequest {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryGetStakedPAssetRequest();
     while (reader.pos < end) {
@@ -259,14 +259,14 @@ function createBaseQueryGetStakedPAssetResponse(): QueryGetStakedPAssetResponse 
   };
 }
 export const QueryGetStakedPAssetResponse = {
-  encode(message: QueryGetStakedPAssetResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: QueryGetStakedPAssetResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.stakedPAsset !== undefined) {
       StakedPAsset.encode(message.stakedPAsset, writer.uint32(10).fork()).ldelim();
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): QueryGetStakedPAssetResponse {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): QueryGetStakedPAssetResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryGetStakedPAssetResponse();
     while (reader.pos < end) {
@@ -304,14 +304,14 @@ function createBaseQueryAllStakedPAssetRequest(): QueryAllStakedPAssetRequest {
   };
 }
 export const QueryAllStakedPAssetRequest = {
-  encode(message: QueryAllStakedPAssetRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: QueryAllStakedPAssetRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.pagination !== undefined) {
       PageRequest.encode(message.pagination, writer.uint32(10).fork()).ldelim();
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): QueryAllStakedPAssetRequest {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): QueryAllStakedPAssetRequest {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryAllStakedPAssetRequest();
     while (reader.pos < end) {
@@ -350,7 +350,7 @@ function createBaseQueryAllStakedPAssetResponse(): QueryAllStakedPAssetResponse 
   };
 }
 export const QueryAllStakedPAssetResponse = {
-  encode(message: QueryAllStakedPAssetResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: QueryAllStakedPAssetResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     for (const v of message.stakedPAsset) {
       StakedPAsset.encode(v!, writer.uint32(10).fork()).ldelim();
     }
@@ -359,8 +359,8 @@ export const QueryAllStakedPAssetResponse = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): QueryAllStakedPAssetResponse {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): QueryAllStakedPAssetResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryAllStakedPAssetResponse();
     while (reader.pos < end) {
@@ -409,7 +409,7 @@ function createBaseQueryGetTotalStakedPAssetRequest(): QueryGetTotalStakedPAsset
   };
 }
 export const QueryGetTotalStakedPAssetRequest = {
-  encode(message: QueryGetTotalStakedPAssetRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: QueryGetTotalStakedPAssetRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.account !== "") {
       writer.uint32(10).string(message.account);
     }
@@ -418,8 +418,8 @@ export const QueryGetTotalStakedPAssetRequest = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): QueryGetTotalStakedPAssetRequest {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): QueryGetTotalStakedPAssetRequest {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryGetTotalStakedPAssetRequest();
     while (reader.pos < end) {
@@ -463,14 +463,14 @@ function createBaseQueryGetTotalStakedPAssetResponse(): QueryGetTotalStakedPAsse
   };
 }
 export const QueryGetTotalStakedPAssetResponse = {
-  encode(message: QueryGetTotalStakedPAssetResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: QueryGetTotalStakedPAssetResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.totalStakedPAsset !== "") {
       writer.uint32(10).string(message.totalStakedPAsset);
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): QueryGetTotalStakedPAssetResponse {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): QueryGetTotalStakedPAssetResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryGetTotalStakedPAssetResponse();
     while (reader.pos < end) {
@@ -505,16 +505,16 @@ export const QueryGetTotalStakedPAssetResponse = {
 function createBaseQueryGetVoteRequest(): QueryGetVoteRequest {
   return {
     asset: "",
-    proposal: Long.UZERO,
+    proposal: BigInt(0),
     voter: ""
   };
 }
 export const QueryGetVoteRequest = {
-  encode(message: QueryGetVoteRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: QueryGetVoteRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.asset !== "") {
       writer.uint32(10).string(message.asset);
     }
-    if (!message.proposal.isZero()) {
+    if (message.proposal !== BigInt(0)) {
       writer.uint32(16).uint64(message.proposal);
     }
     if (message.voter !== "") {
@@ -522,8 +522,8 @@ export const QueryGetVoteRequest = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): QueryGetVoteRequest {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): QueryGetVoteRequest {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryGetVoteRequest();
     while (reader.pos < end) {
@@ -533,7 +533,7 @@ export const QueryGetVoteRequest = {
           message.asset = reader.string();
           break;
         case 2:
-          message.proposal = (reader.uint64() as Long);
+          message.proposal = reader.uint64();
           break;
         case 3:
           message.voter = reader.string();
@@ -548,21 +548,21 @@ export const QueryGetVoteRequest = {
   fromJSON(object: any): QueryGetVoteRequest {
     return {
       asset: isSet(object.asset) ? String(object.asset) : "",
-      proposal: isSet(object.proposal) ? Long.fromValue(object.proposal) : Long.UZERO,
+      proposal: isSet(object.proposal) ? BigInt(object.proposal.toString()) : BigInt(0),
       voter: isSet(object.voter) ? String(object.voter) : ""
     };
   },
   toJSON(message: QueryGetVoteRequest): unknown {
     const obj: any = {};
     message.asset !== undefined && (obj.asset = message.asset);
-    message.proposal !== undefined && (obj.proposal = (message.proposal || Long.UZERO).toString());
+    message.proposal !== undefined && (obj.proposal = (message.proposal || BigInt(0)).toString());
     message.voter !== undefined && (obj.voter = message.voter);
     return obj;
   },
   fromPartial(object: Partial<QueryGetVoteRequest>): QueryGetVoteRequest {
     const message = createBaseQueryGetVoteRequest();
     message.asset = object.asset ?? "";
-    message.proposal = object.proposal !== undefined && object.proposal !== null ? Long.fromValue(object.proposal) : Long.UZERO;
+    message.proposal = object.proposal !== undefined && object.proposal !== null ? BigInt(object.proposal.toString()) : BigInt(0);
     message.voter = object.voter ?? "";
     return message;
   }
@@ -573,14 +573,14 @@ function createBaseQueryGetVoteResponse(): QueryGetVoteResponse {
   };
 }
 export const QueryGetVoteResponse = {
-  encode(message: QueryGetVoteResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: QueryGetVoteResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.vote !== undefined) {
       Vote.encode(message.vote, writer.uint32(10).fork()).ldelim();
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): QueryGetVoteResponse {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): QueryGetVoteResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryGetVoteResponse();
     while (reader.pos < end) {
@@ -618,14 +618,14 @@ function createBaseQueryAllVoteRequest(): QueryAllVoteRequest {
   };
 }
 export const QueryAllVoteRequest = {
-  encode(message: QueryAllVoteRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: QueryAllVoteRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.pagination !== undefined) {
       PageRequest.encode(message.pagination, writer.uint32(10).fork()).ldelim();
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): QueryAllVoteRequest {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): QueryAllVoteRequest {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryAllVoteRequest();
     while (reader.pos < end) {
@@ -664,7 +664,7 @@ function createBaseQueryAllVoteResponse(): QueryAllVoteResponse {
   };
 }
 export const QueryAllVoteResponse = {
-  encode(message: QueryAllVoteResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: QueryAllVoteResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     for (const v of message.vote) {
       Vote.encode(v!, writer.uint32(10).fork()).ldelim();
     }
@@ -673,8 +673,8 @@ export const QueryAllVoteResponse = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): QueryAllVoteResponse {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): QueryAllVoteResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryAllVoteResponse();
     while (reader.pos < end) {
@@ -719,21 +719,21 @@ export const QueryAllVoteResponse = {
 function createBaseQueryGetProposalRequest(): QueryGetProposalRequest {
   return {
     asset: "",
-    proposalId: Long.UZERO
+    proposalId: BigInt(0)
   };
 }
 export const QueryGetProposalRequest = {
-  encode(message: QueryGetProposalRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: QueryGetProposalRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.asset !== "") {
       writer.uint32(10).string(message.asset);
     }
-    if (!message.proposalId.isZero()) {
+    if (message.proposalId !== BigInt(0)) {
       writer.uint32(16).uint64(message.proposalId);
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): QueryGetProposalRequest {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): QueryGetProposalRequest {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryGetProposalRequest();
     while (reader.pos < end) {
@@ -743,7 +743,7 @@ export const QueryGetProposalRequest = {
           message.asset = reader.string();
           break;
         case 2:
-          message.proposalId = (reader.uint64() as Long);
+          message.proposalId = reader.uint64();
           break;
         default:
           reader.skipType(tag & 7);
@@ -755,19 +755,19 @@ export const QueryGetProposalRequest = {
   fromJSON(object: any): QueryGetProposalRequest {
     return {
       asset: isSet(object.asset) ? String(object.asset) : "",
-      proposalId: isSet(object.proposalId) ? Long.fromValue(object.proposalId) : Long.UZERO
+      proposalId: isSet(object.proposalId) ? BigInt(object.proposalId.toString()) : BigInt(0)
     };
   },
   toJSON(message: QueryGetProposalRequest): unknown {
     const obj: any = {};
     message.asset !== undefined && (obj.asset = message.asset);
-    message.proposalId !== undefined && (obj.proposalId = (message.proposalId || Long.UZERO).toString());
+    message.proposalId !== undefined && (obj.proposalId = (message.proposalId || BigInt(0)).toString());
     return obj;
   },
   fromPartial(object: Partial<QueryGetProposalRequest>): QueryGetProposalRequest {
     const message = createBaseQueryGetProposalRequest();
     message.asset = object.asset ?? "";
-    message.proposalId = object.proposalId !== undefined && object.proposalId !== null ? Long.fromValue(object.proposalId) : Long.UZERO;
+    message.proposalId = object.proposalId !== undefined && object.proposalId !== null ? BigInt(object.proposalId.toString()) : BigInt(0);
     return message;
   }
 };
@@ -777,14 +777,14 @@ function createBaseQueryGetProposalResponse(): QueryGetProposalResponse {
   };
 }
 export const QueryGetProposalResponse = {
-  encode(message: QueryGetProposalResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: QueryGetProposalResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.proposal !== undefined) {
       Proposal.encode(message.proposal, writer.uint32(10).fork()).ldelim();
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): QueryGetProposalResponse {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): QueryGetProposalResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryGetProposalResponse();
     while (reader.pos < end) {
@@ -823,7 +823,7 @@ function createBaseQueryAllProposalRequest(): QueryAllProposalRequest {
   };
 }
 export const QueryAllProposalRequest = {
-  encode(message: QueryAllProposalRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: QueryAllProposalRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.asset !== "") {
       writer.uint32(10).string(message.asset);
     }
@@ -832,8 +832,8 @@ export const QueryAllProposalRequest = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): QueryAllProposalRequest {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): QueryAllProposalRequest {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryAllProposalRequest();
     while (reader.pos < end) {
@@ -878,7 +878,7 @@ function createBaseQueryAllProposalResponse(): QueryAllProposalResponse {
   };
 }
 export const QueryAllProposalResponse = {
-  encode(message: QueryAllProposalResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: QueryAllProposalResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     for (const v of message.proposal) {
       Proposal.encode(v!, writer.uint32(10).fork()).ldelim();
     }
@@ -887,8 +887,8 @@ export const QueryAllProposalResponse = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): QueryAllProposalResponse {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): QueryAllProposalResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryAllProposalResponse();
     while (reader.pos < end) {

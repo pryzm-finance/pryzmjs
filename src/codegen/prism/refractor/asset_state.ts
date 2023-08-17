@@ -1,4 +1,5 @@
-import * as _m0 from "protobufjs/minimal";
+import { BinaryReader, BinaryWriter } from "../../binary";
+import { Decimal } from "@cosmjs/math";
 import { isSet } from "../../helpers";
 export interface AssetState {
   assetId: string;
@@ -18,7 +19,7 @@ function createBaseAssetState(): AssetState {
   };
 }
 export const AssetState = {
-  encode(message: AssetState, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: AssetState, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.assetId !== "") {
       writer.uint32(10).string(message.assetId);
     }
@@ -26,12 +27,12 @@ export const AssetState = {
       writer.uint32(18).string(message.totalPAmount);
     }
     if (message.lastSeenExchangeRate !== "") {
-      writer.uint32(26).string(message.lastSeenExchangeRate);
+      writer.uint32(26).string(Decimal.fromUserInput(message.lastSeenExchangeRate, 18).atomics);
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): AssetState {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): AssetState {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseAssetState();
     while (reader.pos < end) {
@@ -44,7 +45,7 @@ export const AssetState = {
           message.totalPAmount = reader.string();
           break;
         case 3:
-          message.lastSeenExchangeRate = reader.string();
+          message.lastSeenExchangeRate = Decimal.fromAtomics(reader.string(), 18).toString();
           break;
         default:
           reader.skipType(tag & 7);

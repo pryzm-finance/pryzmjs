@@ -1,12 +1,12 @@
 import { Timestamp, TimestampSDKType } from "../google/protobuf/timestamp";
-import { Long, isSet, fromJsonTimestamp, fromTimestamp } from "../helpers";
-import * as _m0 from "protobufjs/minimal";
+import { BinaryReader, BinaryWriter } from "../binary";
+import { isSet, fromJsonTimestamp, fromTimestamp } from "../helpers";
 export interface SyncState {
-  blockHeight: Long;
+  blockHeight: bigint;
   blockTime: Timestamp;
 }
 export interface SyncStateSDKType {
-  block_height: Long;
+  block_height: bigint;
   block_time: TimestampSDKType;
 }
 export interface QuerySyncStateRequest {}
@@ -19,13 +19,13 @@ export interface QuerySyncStateResponseSDKType {
 }
 function createBaseSyncState(): SyncState {
   return {
-    blockHeight: Long.ZERO,
+    blockHeight: BigInt(0),
     blockTime: Timestamp.fromPartial({})
   };
 }
 export const SyncState = {
-  encode(message: SyncState, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (!message.blockHeight.isZero()) {
+  encode(message: SyncState, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    if (message.blockHeight !== BigInt(0)) {
       writer.uint32(8).int64(message.blockHeight);
     }
     if (message.blockTime !== undefined) {
@@ -33,15 +33,15 @@ export const SyncState = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): SyncState {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): SyncState {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseSyncState();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.blockHeight = (reader.int64() as Long);
+          message.blockHeight = reader.int64();
           break;
         case 2:
           message.blockTime = Timestamp.decode(reader, reader.uint32());
@@ -55,19 +55,19 @@ export const SyncState = {
   },
   fromJSON(object: any): SyncState {
     return {
-      blockHeight: isSet(object.blockHeight) ? Long.fromValue(object.blockHeight) : Long.ZERO,
+      blockHeight: isSet(object.blockHeight) ? BigInt(object.blockHeight.toString()) : BigInt(0),
       blockTime: isSet(object.blockTime) ? fromJsonTimestamp(object.blockTime) : undefined
     };
   },
   toJSON(message: SyncState): unknown {
     const obj: any = {};
-    message.blockHeight !== undefined && (obj.blockHeight = (message.blockHeight || Long.ZERO).toString());
+    message.blockHeight !== undefined && (obj.blockHeight = (message.blockHeight || BigInt(0)).toString());
     message.blockTime !== undefined && (obj.blockTime = fromTimestamp(message.blockTime).toISOString());
     return obj;
   },
   fromPartial(object: Partial<SyncState>): SyncState {
     const message = createBaseSyncState();
-    message.blockHeight = object.blockHeight !== undefined && object.blockHeight !== null ? Long.fromValue(object.blockHeight) : Long.ZERO;
+    message.blockHeight = object.blockHeight !== undefined && object.blockHeight !== null ? BigInt(object.blockHeight.toString()) : BigInt(0);
     message.blockTime = object.blockTime !== undefined && object.blockTime !== null ? Timestamp.fromPartial(object.blockTime) : undefined;
     return message;
   }
@@ -76,11 +76,11 @@ function createBaseQuerySyncStateRequest(): QuerySyncStateRequest {
   return {};
 }
 export const QuerySyncStateRequest = {
-  encode(_: QuerySyncStateRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(_: QuerySyncStateRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): QuerySyncStateRequest {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): QuerySyncStateRequest {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQuerySyncStateRequest();
     while (reader.pos < end) {
@@ -111,14 +111,14 @@ function createBaseQuerySyncStateResponse(): QuerySyncStateResponse {
   };
 }
 export const QuerySyncStateResponse = {
-  encode(message: QuerySyncStateResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: QuerySyncStateResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.syncState !== undefined) {
       SyncState.encode(message.syncState, writer.uint32(10).fork()).ldelim();
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): QuerySyncStateResponse {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): QuerySyncStateResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQuerySyncStateResponse();
     while (reader.pos < end) {

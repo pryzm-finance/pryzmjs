@@ -1,9 +1,8 @@
 import {cosmatics, getSigningPrismClientOptions, prism, prismatics} from "./codegen"
-import {Long, PageRequest} from "./codegen/helpers";
+import {PageRequest} from "./codegen/helpers";
 import {BrowserHeaders} from "browser-headers";
 import {OfflineSigner} from "@cosmjs/proto-signing";
-import {defaultRegistryTypes, SigningStargateClient} from "@cosmjs/stargate";
-import {MsgSubmitProposal, MsgVote} from "./codegen/cosmos/gov/v1/tx";
+import {SigningStargateClient} from "@cosmjs/stargate";
 import {HttpEndpoint} from "@cosmjs/tendermint-rpc";
 import {GasPrice} from "@cosmjs/stargate/build/fee";
 
@@ -18,9 +17,9 @@ export function defaultPageRequestProvider(): PageRequest {
     return {
         countTotal: false,
         key: new Uint8Array(),
-        offset: Long.ZERO,
+        offset: 0n,
         reverse: false,
-        limit: Long.fromNumber(50)
+        limit: 50n
     }
 }
 

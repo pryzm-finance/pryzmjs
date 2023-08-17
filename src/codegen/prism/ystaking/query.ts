@@ -1,5 +1,5 @@
 import { Coin, CoinSDKType } from "../../cosmos/base/v1beta1/coin";
-import * as _m0 from "protobufjs/minimal";
+import { BinaryReader, BinaryWriter } from "../../binary";
 import { isSet } from "../../helpers";
 export interface QueryBondedAmountRequest {
   assetId: string;
@@ -39,7 +39,7 @@ function createBaseQueryBondedAmountRequest(): QueryBondedAmountRequest {
   };
 }
 export const QueryBondedAmountRequest = {
-  encode(message: QueryBondedAmountRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: QueryBondedAmountRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.assetId !== "") {
       writer.uint32(10).string(message.assetId);
     }
@@ -51,8 +51,8 @@ export const QueryBondedAmountRequest = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): QueryBondedAmountRequest {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): QueryBondedAmountRequest {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryBondedAmountRequest();
     while (reader.pos < end) {
@@ -102,14 +102,14 @@ function createBaseQueryBondedAmountResponse(): QueryBondedAmountResponse {
   };
 }
 export const QueryBondedAmountResponse = {
-  encode(message: QueryBondedAmountResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: QueryBondedAmountResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.amount !== "") {
       writer.uint32(10).string(message.amount);
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): QueryBondedAmountResponse {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): QueryBondedAmountResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryBondedAmountResponse();
     while (reader.pos < end) {
@@ -148,7 +148,7 @@ function createBaseQueryRewardRequest(): QueryRewardRequest {
   };
 }
 export const QueryRewardRequest = {
-  encode(message: QueryRewardRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: QueryRewardRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.denom !== "") {
       writer.uint32(10).string(message.denom);
     }
@@ -157,8 +157,8 @@ export const QueryRewardRequest = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): QueryRewardRequest {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): QueryRewardRequest {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryRewardRequest();
     while (reader.pos < end) {
@@ -202,14 +202,14 @@ function createBaseQueryRewardResponse(): QueryRewardResponse {
   };
 }
 export const QueryRewardResponse = {
-  encode(message: QueryRewardResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: QueryRewardResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.amount !== undefined) {
       Coin.encode(message.amount, writer.uint32(10).fork()).ldelim();
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): QueryRewardResponse {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): QueryRewardResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryRewardResponse();
     while (reader.pos < end) {

@@ -1,7 +1,6 @@
 //@ts-nocheck
 import { actionTypeFromJSON } from "./action";
 import { AminoMsg } from "@cosmjs/amino";
-import { Long } from "../../helpers";
 import { MsgSetAction } from "./tx";
 export interface MsgSetActionAminoType extends AminoMsg {
   type: "/prism.treasury.MsgSetAction";
@@ -71,20 +70,20 @@ export const AminoConverter = {
           occurrence: action.occurrence,
           expiration: action.expiration,
           period: {
-            seconds: Long.fromNumber(Math.floor(parseInt(action.period) / 1_000_000_000)),
+            seconds: BigInt(Math.floor(parseInt(action.period) / 1_000_000_000)),
             nanos: parseInt(action.period) % 1_000_000_000
           },
           flowTradeSettings: {
             startDelay: {
-              seconds: Long.fromNumber(Math.floor(parseInt(action.flow_trade_settings.start_delay) / 1_000_000_000)),
+              seconds: BigInt(Math.floor(parseInt(action.flow_trade_settings.start_delay) / 1_000_000_000)),
               nanos: parseInt(action.flow_trade_settings.start_delay) % 1_000_000_000
             },
             duration: {
-              seconds: Long.fromNumber(Math.floor(parseInt(action.flow_trade_settings.duration) / 1_000_000_000)),
+              seconds: BigInt(Math.floor(parseInt(action.flow_trade_settings.duration) / 1_000_000_000)),
               nanos: parseInt(action.flow_trade_settings.duration) % 1_000_000_000
             },
             distInterval: {
-              seconds: Long.fromNumber(Math.floor(parseInt(action.flow_trade_settings.dist_interval) / 1_000_000_000)),
+              seconds: BigInt(Math.floor(parseInt(action.flow_trade_settings.dist_interval) / 1_000_000_000)),
               nanos: parseInt(action.flow_trade_settings.dist_interval) % 1_000_000_000
             }
           }

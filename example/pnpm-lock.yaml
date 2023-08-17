@@ -1,13 +1,13 @@
 lockfileVersion: 5.4
 
 specifiers:
-  '@prism-finance/prismjs': 0.9.1
+  '@prism-finance/prismjs': 0.9.2
   '@refractedlabs/oraclejs': ^0.3.0
   '@refractedlabs/utils': 0.1.5
   typescript: ^5.1.6
 
 dependencies:
-  '@prism-finance/prismjs': 0.9.1_google-protobuf@3.21.2
+  '@prism-finance/prismjs': 0.9.2_google-protobuf@3.21.2
   '@refractedlabs/oraclejs': 0.3.0_google-protobuf@3.21.2
   '@refractedlabs/utils': 0.1.5
 
@@ -292,8 +292,8 @@ packages:
       - debug
     dev: false
 
-  /@prism-finance/prismjs/0.9.1_google-protobuf@3.21.2:
-    resolution: {integrity: sha512-zFYbAGJntX+UKgOCObDrHeEiWbaWU0Mfbh7YU9pSlsqj3qtapStA1fpWkY+nqVdbS1eKisDz9K8ccqOsPiR1+w==, tarball: download/@prism-finance/prismjs/0.9.1/fe882c8bb8762f9fdf29bfc732974d163b8288aa}
+  /@prism-finance/prismjs/0.9.2_google-protobuf@3.21.2:
+    resolution: {integrity: sha512-e7PF2VTE0x2gBJ5Q3qw0ZqzcQb9cQ0e9CFj851/XUKpeNJvz7X3WZlPBRZ/p8iMkSRBQWkVdFTMiG6OqK+Wz/g==, tarball: download/@prism-finance/prismjs/0.9.2/87b2118e92d75da2a0b78e6cbce4958579e2b590}
     dependencies:
       '@babel/runtime': 7.22.10
       '@cosmjs/amino': 0.31.0

@@ -1,9 +1,9 @@
 import { Timestamp, TimestampSDKType } from "../../google/protobuf/timestamp";
 import { Coin, CoinSDKType } from "../../cosmos/base/v1beta1/coin";
-import { Long, isSet, fromJsonTimestamp, fromTimestamp } from "../../helpers";
-import * as _m0 from "protobufjs/minimal";
+import { BinaryReader, BinaryWriter } from "../../binary";
+import { isSet, fromJsonTimestamp, fromTimestamp } from "../../helpers";
 export interface Unbonding {
-  id: Long;
+  id: bigint;
   completionTime: Timestamp;
   address: string;
   treasuryAddress: string;
@@ -11,7 +11,7 @@ export interface Unbonding {
   autoClaim: boolean;
 }
 export interface UnbondingSDKType {
-  id: Long;
+  id: bigint;
   completion_time: TimestampSDKType;
   address: string;
   treasury_address: string;
@@ -20,7 +20,7 @@ export interface UnbondingSDKType {
 }
 function createBaseUnbonding(): Unbonding {
   return {
-    id: Long.UZERO,
+    id: BigInt(0),
     completionTime: Timestamp.fromPartial({}),
     address: "",
     treasuryAddress: "",
@@ -29,8 +29,8 @@ function createBaseUnbonding(): Unbonding {
   };
 }
 export const Unbonding = {
-  encode(message: Unbonding, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (!message.id.isZero()) {
+  encode(message: Unbonding, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    if (message.id !== BigInt(0)) {
       writer.uint32(8).uint64(message.id);
     }
     if (message.completionTime !== undefined) {
@@ -50,15 +50,15 @@ export const Unbonding = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): Unbonding {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): Unbonding {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseUnbonding();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.id = (reader.uint64() as Long);
+          message.id = reader.uint64();
           break;
         case 2:
           message.completionTime = Timestamp.decode(reader, reader.uint32());
@@ -84,7 +84,7 @@ export const Unbonding = {
   },
   fromJSON(object: any): Unbonding {
     return {
-      id: isSet(object.id) ? Long.fromValue(object.id) : Long.UZERO,
+      id: isSet(object.id) ? BigInt(object.id.toString()) : BigInt(0),
       completionTime: isSet(object.completionTime) ? fromJsonTimestamp(object.completionTime) : undefined,
       address: isSet(object.address) ? String(object.address) : "",
       treasuryAddress: isSet(object.treasuryAddress) ? String(object.treasuryAddress) : "",
@@ -94,7 +94,7 @@ export const Unbonding = {
   },
   toJSON(message: Unbonding): unknown {
     const obj: any = {};
-    message.id !== undefined && (obj.id = (message.id || Long.UZERO).toString());
+    message.id !== undefined && (obj.id = (message.id || BigInt(0)).toString());
     message.completionTime !== undefined && (obj.completionTime = fromTimestamp(message.completionTime).toISOString());
     message.address !== undefined && (obj.address = message.address);
     message.treasuryAddress !== undefined && (obj.treasuryAddress = message.treasuryAddress);
@@ -104,7 +104,7 @@ export const Unbonding = {
   },
   fromPartial(object: Partial<Unbonding>): Unbonding {
     const message = createBaseUnbonding();
-    message.id = object.id !== undefined && object.id !== null ? Long.fromValue(object.id) : Long.UZERO;
+    message.id = object.id !== undefined && object.id !== null ? BigInt(object.id.toString()) : BigInt(0);
     message.completionTime = object.completionTime !== undefined && object.completionTime !== null ? Timestamp.fromPartial(object.completionTime) : undefined;
     message.address = object.address ?? "";
     message.treasuryAddress = object.treasuryAddress ?? "";

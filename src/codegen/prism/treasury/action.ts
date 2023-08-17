@@ -1,6 +1,6 @@
 import { Duration, DurationSDKType } from "../../google/protobuf/duration";
 import { Timestamp, TimestampSDKType } from "../../google/protobuf/timestamp";
-import * as _m0 from "protobufjs/minimal";
+import { BinaryReader, BinaryWriter } from "../../binary";
 import { isSet, fromJsonTimestamp, fromTimestamp } from "../../helpers";
 /** FeeType enumerates the valid types for feeType. */
 export enum ActionType {
@@ -91,7 +91,7 @@ function createBaseActionFlowTradeSettings(): ActionFlowTradeSettings {
   };
 }
 export const ActionFlowTradeSettings = {
-  encode(message: ActionFlowTradeSettings, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: ActionFlowTradeSettings, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.startDelay !== undefined) {
       Duration.encode(message.startDelay, writer.uint32(10).fork()).ldelim();
     }
@@ -103,8 +103,8 @@ export const ActionFlowTradeSettings = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): ActionFlowTradeSettings {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): ActionFlowTradeSettings {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseActionFlowTradeSettings();
     while (reader.pos < end) {
@@ -158,7 +158,7 @@ function createBaseAction(): Action {
   };
 }
 export const Action = {
-  encode(message: Action, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: Action, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.actionType !== 0) {
       writer.uint32(8).int32(message.actionType);
     }
@@ -176,8 +176,8 @@ export const Action = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): Action {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): Action {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseAction();
     while (reader.pos < end) {

@@ -1,3 +1,4 @@
+//@ts-nocheck
 import { GeneratedType, Registry } from "@cosmjs/proto-signing";
 import { MsgRefract, MsgRedeem } from "./tx";
 export const registry: ReadonlyArray<[string, GeneratedType]> = [["/prism.refractor.MsgRefract", MsgRefract], ["/prism.refractor.MsgRedeem", MsgRedeem]];

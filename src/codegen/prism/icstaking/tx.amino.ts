@@ -1,7 +1,6 @@
 //@ts-nocheck
 import { connectionTypeFromJSON, transferChannelTypeFromJSON } from "./host_chain";
 import { AminoMsg } from "@cosmjs/amino";
-import { Long } from "../../helpers";
 import { iCATypeFromJSON, MsgUpdateParams, MsgRegisterHostChain, MsgUpdateHostChain, MsgStake, MsgUnstake, MsgRedeemUnstaked, MsgInstantUnstake, MsgRebalanceDelegations, MsgRedeemInterchainAccount } from "./tx";
 export interface MsgUpdateParamsAminoType extends AminoMsg {
   type: "/prism.icstaking.MsgUpdateParams";
@@ -238,19 +237,19 @@ export const AminoConverter = {
               instantUnstaking: params.staking_params.fee_ratios.instant_unstaking
             },
             delegationInterval: {
-              seconds: Long.fromNumber(Math.floor(parseInt(params.staking_params.delegation_interval) / 1_000_000_000)),
+              seconds: BigInt(Math.floor(parseInt(params.staking_params.delegation_interval) / 1_000_000_000)),
               nanos: parseInt(params.staking_params.delegation_interval) % 1_000_000_000
             },
             undelegationInterval: {
-              seconds: Long.fromNumber(Math.floor(parseInt(params.staking_params.undelegation_interval) / 1_000_000_000)),
+              seconds: BigInt(Math.floor(parseInt(params.staking_params.undelegation_interval) / 1_000_000_000)),
               nanos: parseInt(params.staking_params.undelegation_interval) % 1_000_000_000
             },
             ibcTransferTimeout: {
-              seconds: Long.fromNumber(Math.floor(parseInt(params.staking_params.ibc_transfer_timeout) / 1_000_000_000)),
+              seconds: BigInt(Math.floor(parseInt(params.staking_params.ibc_transfer_timeout) / 1_000_000_000)),
               nanos: parseInt(params.staking_params.ibc_transfer_timeout) % 1_000_000_000
             },
             icaTimeout: {
-              seconds: Long.fromNumber(Math.floor(parseInt(params.staking_params.ica_timeout) / 1_000_000_000)),
+              seconds: BigInt(Math.floor(parseInt(params.staking_params.ica_timeout) / 1_000_000_000)),
               nanos: parseInt(params.staking_params.ica_timeout) % 1_000_000_000
             },
             maxUndelegationMsgs: params.staking_params.max_undelegation_msgs,
@@ -258,7 +257,7 @@ export const AminoConverter = {
             rebalanceThreshold: params.staking_params.rebalance_threshold,
             minRebalanceAmount: params.staking_params.min_rebalance_amount,
             minRebalanceInterval: {
-              seconds: Long.fromNumber(Math.floor(parseInt(params.staking_params.min_rebalance_interval) / 1_000_000_000)),
+              seconds: BigInt(Math.floor(parseInt(params.staking_params.min_rebalance_interval) / 1_000_000_000)),
               nanos: parseInt(params.staking_params.min_rebalance_interval) % 1_000_000_000
             }
           }
@@ -334,19 +333,19 @@ export const AminoConverter = {
               instantUnstaking: host_chain.params.fee_ratios.instant_unstaking
             },
             delegationInterval: {
-              seconds: Long.fromNumber(Math.floor(parseInt(host_chain.params.delegation_interval) / 1_000_000_000)),
+              seconds: BigInt(Math.floor(parseInt(host_chain.params.delegation_interval) / 1_000_000_000)),
               nanos: parseInt(host_chain.params.delegation_interval) % 1_000_000_000
             },
             undelegationInterval: {
-              seconds: Long.fromNumber(Math.floor(parseInt(host_chain.params.undelegation_interval) / 1_000_000_000)),
+              seconds: BigInt(Math.floor(parseInt(host_chain.params.undelegation_interval) / 1_000_000_000)),
               nanos: parseInt(host_chain.params.undelegation_interval) % 1_000_000_000
             },
             ibcTransferTimeout: {
-              seconds: Long.fromNumber(Math.floor(parseInt(host_chain.params.ibc_transfer_timeout) / 1_000_000_000)),
+              seconds: BigInt(Math.floor(parseInt(host_chain.params.ibc_transfer_timeout) / 1_000_000_000)),
               nanos: parseInt(host_chain.params.ibc_transfer_timeout) % 1_000_000_000
             },
             icaTimeout: {
-              seconds: Long.fromNumber(Math.floor(parseInt(host_chain.params.ica_timeout) / 1_000_000_000)),
+              seconds: BigInt(Math.floor(parseInt(host_chain.params.ica_timeout) / 1_000_000_000)),
               nanos: parseInt(host_chain.params.ica_timeout) % 1_000_000_000
             },
             maxUndelegationMsgs: host_chain.params.max_undelegation_msgs,
@@ -354,7 +353,7 @@ export const AminoConverter = {
             rebalanceThreshold: host_chain.params.rebalance_threshold,
             minRebalanceAmount: host_chain.params.min_rebalance_amount,
             minRebalanceInterval: {
-              seconds: Long.fromNumber(Math.floor(parseInt(host_chain.params.min_rebalance_interval) / 1_000_000_000)),
+              seconds: BigInt(Math.floor(parseInt(host_chain.params.min_rebalance_interval) / 1_000_000_000)),
               nanos: parseInt(host_chain.params.min_rebalance_interval) % 1_000_000_000
             }
           },
@@ -421,19 +420,19 @@ export const AminoConverter = {
             instantUnstaking: params.fee_ratios.instant_unstaking
           },
           delegationInterval: {
-            seconds: Long.fromNumber(Math.floor(parseInt(params.delegation_interval) / 1_000_000_000)),
+            seconds: BigInt(Math.floor(parseInt(params.delegation_interval) / 1_000_000_000)),
             nanos: parseInt(params.delegation_interval) % 1_000_000_000
           },
           undelegationInterval: {
-            seconds: Long.fromNumber(Math.floor(parseInt(params.undelegation_interval) / 1_000_000_000)),
+            seconds: BigInt(Math.floor(parseInt(params.undelegation_interval) / 1_000_000_000)),
             nanos: parseInt(params.undelegation_interval) % 1_000_000_000
           },
           ibcTransferTimeout: {
-            seconds: Long.fromNumber(Math.floor(parseInt(params.ibc_transfer_timeout) / 1_000_000_000)),
+            seconds: BigInt(Math.floor(parseInt(params.ibc_transfer_timeout) / 1_000_000_000)),
             nanos: parseInt(params.ibc_transfer_timeout) % 1_000_000_000
           },
           icaTimeout: {
-            seconds: Long.fromNumber(Math.floor(parseInt(params.ica_timeout) / 1_000_000_000)),
+            seconds: BigInt(Math.floor(parseInt(params.ica_timeout) / 1_000_000_000)),
             nanos: parseInt(params.ica_timeout) % 1_000_000_000
           },
           maxUndelegationMsgs: params.max_undelegation_msgs,
@@ -441,7 +440,7 @@ export const AminoConverter = {
           rebalanceThreshold: params.rebalance_threshold,
           minRebalanceAmount: params.min_rebalance_amount,
           minRebalanceInterval: {
-            seconds: Long.fromNumber(Math.floor(parseInt(params.min_rebalance_interval) / 1_000_000_000)),
+            seconds: BigInt(Math.floor(parseInt(params.min_rebalance_interval) / 1_000_000_000)),
             nanos: parseInt(params.min_rebalance_interval) % 1_000_000_000
           }
         }
@@ -535,7 +534,7 @@ export const AminoConverter = {
         hostChain: host_chain,
         transferChannel: transfer_channel,
         uAmount: u_amount,
-        epoch: Long.fromString(epoch)
+        epoch: BigInt(epoch)
       };
     }
   },

@@ -1,6 +1,5 @@
 //@ts-nocheck
 import { AminoMsg } from "@cosmjs/amino";
-import { Long } from "../../../helpers";
 import { MsgVerifyInvariant, MsgUpdateParams } from "./tx";
 export interface MsgVerifyInvariantAminoType extends AminoMsg {
   type: "cosmos-sdk/MsgVerifyInvariant";
@@ -56,7 +55,7 @@ export const AminoConverter = {
         authority,
         constant_fee: {
           denom: constantFee.denom,
-          amount: Long.fromValue(constantFee.amount).toString()
+          amount: constantFee.amount
         }
       };
     },

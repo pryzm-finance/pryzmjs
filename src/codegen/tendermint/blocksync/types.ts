@@ -1,34 +1,34 @@
-import { Long, isSet } from "../../helpers";
-import * as _m0 from "protobufjs/minimal";
+import { BinaryReader, BinaryWriter } from "../../binary";
+import { isSet } from "../../helpers";
 /** BlockRequest requests a block for a specific height */
 export interface BlockRequest {
-  height: Long;
+  height: bigint;
 }
 /** BlockRequest requests a block for a specific height */
 export interface BlockRequestSDKType {
-  height: Long;
+  height: bigint;
 }
 function createBaseBlockRequest(): BlockRequest {
   return {
-    height: Long.ZERO
+    height: BigInt(0)
   };
 }
 export const BlockRequest = {
-  encode(message: BlockRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (!message.height.isZero()) {
+  encode(message: BlockRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    if (message.height !== BigInt(0)) {
       writer.uint32(8).int64(message.height);
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): BlockRequest {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): BlockRequest {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseBlockRequest();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.height = (reader.int64() as Long);
+          message.height = reader.int64();
           break;
         default:
           reader.skipType(tag & 7);
@@ -39,17 +39,17 @@ export const BlockRequest = {
   },
   fromJSON(object: any): BlockRequest {
     return {
-      height: isSet(object.height) ? Long.fromValue(object.height) : Long.ZERO
+      height: isSet(object.height) ? BigInt(object.height.toString()) : BigInt(0)
     };
   },
   toJSON(message: BlockRequest): unknown {
     const obj: any = {};
-    message.height !== undefined && (obj.height = (message.height || Long.ZERO).toString());
+    message.height !== undefined && (obj.height = (message.height || BigInt(0)).toString());
     return obj;
   },
   fromPartial(object: Partial<BlockRequest>): BlockRequest {
     const message = createBaseBlockRequest();
-    message.height = object.height !== undefined && object.height !== null ? Long.fromValue(object.height) : Long.ZERO;
+    message.height = object.height !== undefined && object.height !== null ? BigInt(object.height.toString()) : BigInt(0);
     return message;
   }
 };

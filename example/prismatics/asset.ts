@@ -1,6 +1,5 @@
 import {prismatics} from "@prism-finance/prismjs/lib";
 import * as console from "console";
-import {Long} from "@prism-finance/prismjs/lib/codegen/helpers";
 import {PRISMATICS_ENDPOINT} from "./config";
 
 async function main() {

@@ -1,8 +1,8 @@
 import { PageRequest, PageRequestSDKType, PageResponse, PageResponseSDKType } from "../../cosmos/base/query/v1beta1/pagination";
 import { Action, ActionSDKType } from "./action";
 import { FlowTrade, FlowTradeSDKType } from "./flow_trade";
-import { Long, isSet } from "../../helpers";
-import * as _m0 from "protobufjs/minimal";
+import { BinaryReader, BinaryWriter } from "../../binary";
+import { isSet } from "../../helpers";
 export interface QueryGetActionRequest {}
 export interface QueryGetActionRequestSDKType {}
 export interface QueryGetActionResponse {
@@ -12,10 +12,10 @@ export interface QueryGetActionResponseSDKType {
   action: ActionSDKType;
 }
 export interface QueryGetFlowTradeRequest {
-  flowId: Long;
+  flowId: bigint;
 }
 export interface QueryGetFlowTradeRequestSDKType {
-  flow_id: Long;
+  flow_id: bigint;
 }
 export interface QueryGetFlowTradeResponse {
   flowTrade: FlowTrade;
@@ -41,11 +41,11 @@ function createBaseQueryGetActionRequest(): QueryGetActionRequest {
   return {};
 }
 export const QueryGetActionRequest = {
-  encode(_: QueryGetActionRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(_: QueryGetActionRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): QueryGetActionRequest {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): QueryGetActionRequest {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryGetActionRequest();
     while (reader.pos < end) {
@@ -76,14 +76,14 @@ function createBaseQueryGetActionResponse(): QueryGetActionResponse {
   };
 }
 export const QueryGetActionResponse = {
-  encode(message: QueryGetActionResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: QueryGetActionResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.action !== undefined) {
       Action.encode(message.action, writer.uint32(10).fork()).ldelim();
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): QueryGetActionResponse {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): QueryGetActionResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryGetActionResponse();
     while (reader.pos < end) {
@@ -117,25 +117,25 @@ export const QueryGetActionResponse = {
 };
 function createBaseQueryGetFlowTradeRequest(): QueryGetFlowTradeRequest {
   return {
-    flowId: Long.UZERO
+    flowId: BigInt(0)
   };
 }
 export const QueryGetFlowTradeRequest = {
-  encode(message: QueryGetFlowTradeRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (!message.flowId.isZero()) {
+  encode(message: QueryGetFlowTradeRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    if (message.flowId !== BigInt(0)) {
       writer.uint32(8).uint64(message.flowId);
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): QueryGetFlowTradeRequest {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): QueryGetFlowTradeRequest {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryGetFlowTradeRequest();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.flowId = (reader.uint64() as Long);
+          message.flowId = reader.uint64();
           break;
         default:
           reader.skipType(tag & 7);
@@ -146,17 +146,17 @@ export const QueryGetFlowTradeRequest = {
   },
   fromJSON(object: any): QueryGetFlowTradeRequest {
     return {
-      flowId: isSet(object.flowId) ? Long.fromValue(object.flowId) : Long.UZERO
+      flowId: isSet(object.flowId) ? BigInt(object.flowId.toString()) : BigInt(0)
     };
   },
   toJSON(message: QueryGetFlowTradeRequest): unknown {
     const obj: any = {};
-    message.flowId !== undefined && (obj.flowId = (message.flowId || Long.UZERO).toString());
+    message.flowId !== undefined && (obj.flowId = (message.flowId || BigInt(0)).toString());
     return obj;
   },
   fromPartial(object: Partial<QueryGetFlowTradeRequest>): QueryGetFlowTradeRequest {
     const message = createBaseQueryGetFlowTradeRequest();
-    message.flowId = object.flowId !== undefined && object.flowId !== null ? Long.fromValue(object.flowId) : Long.UZERO;
+    message.flowId = object.flowId !== undefined && object.flowId !== null ? BigInt(object.flowId.toString()) : BigInt(0);
     return message;
   }
 };
@@ -166,14 +166,14 @@ function createBaseQueryGetFlowTradeResponse(): QueryGetFlowTradeResponse {
   };
 }
 export const QueryGetFlowTradeResponse = {
-  encode(message: QueryGetFlowTradeResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: QueryGetFlowTradeResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.flowTrade !== undefined) {
       FlowTrade.encode(message.flowTrade, writer.uint32(10).fork()).ldelim();
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): QueryGetFlowTradeResponse {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): QueryGetFlowTradeResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryGetFlowTradeResponse();
     while (reader.pos < end) {
@@ -211,14 +211,14 @@ function createBaseQueryAllFlowTradeRequest(): QueryAllFlowTradeRequest {
   };
 }
 export const QueryAllFlowTradeRequest = {
-  encode(message: QueryAllFlowTradeRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: QueryAllFlowTradeRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.pagination !== undefined) {
       PageRequest.encode(message.pagination, writer.uint32(10).fork()).ldelim();
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): QueryAllFlowTradeRequest {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): QueryAllFlowTradeRequest {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryAllFlowTradeRequest();
     while (reader.pos < end) {
@@ -257,7 +257,7 @@ function createBaseQueryAllFlowTradeResponse(): QueryAllFlowTradeResponse {
   };
 }
 export const QueryAllFlowTradeResponse = {
-  encode(message: QueryAllFlowTradeResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: QueryAllFlowTradeResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     for (const v of message.flowTrade) {
       FlowTrade.encode(v!, writer.uint32(10).fork()).ldelim();
     }
@@ -266,8 +266,8 @@ export const QueryAllFlowTradeResponse = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): QueryAllFlowTradeResponse {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): QueryAllFlowTradeResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryAllFlowTradeResponse();
     while (reader.pos < end) {

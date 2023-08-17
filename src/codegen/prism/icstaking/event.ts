@@ -2,8 +2,8 @@ import { HostChain, HostChainSDKType, HostChainState, HostChainStateSDKType } fr
 import { Params, ParamsSDKType } from "./params";
 import { Undelegation, UndelegationSDKType, ChannelUndelegation, ChannelUndelegationSDKType } from "./undelegation";
 import { Coin, CoinSDKType } from "../../cosmos/base/v1beta1/coin";
-import { Long, isSet } from "../../helpers";
-import * as _m0 from "protobufjs/minimal";
+import { BinaryReader, BinaryWriter } from "../../binary";
+import { isSet } from "../../helpers";
 export interface EventSetHostChain {
   hostChain: HostChain;
 }
@@ -68,7 +68,7 @@ export interface EventRedeemUnstaked {
   creator: string;
   hostChain: string;
   transferChannel: string;
-  epoch: Long;
+  epoch: bigint;
   uAmount: string;
   amount: Coin;
   fee: Coin;
@@ -77,7 +77,7 @@ export interface EventRedeemUnstakedSDKType {
   creator: string;
   host_chain: string;
   transfer_channel: string;
-  epoch: Long;
+  epoch: bigint;
   u_amount: string;
   amount: CoinSDKType;
   fee: CoinSDKType;
@@ -106,14 +106,14 @@ function createBaseEventSetHostChain(): EventSetHostChain {
   };
 }
 export const EventSetHostChain = {
-  encode(message: EventSetHostChain, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: EventSetHostChain, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.hostChain !== undefined) {
       HostChain.encode(message.hostChain, writer.uint32(10).fork()).ldelim();
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): EventSetHostChain {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): EventSetHostChain {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseEventSetHostChain();
     while (reader.pos < end) {
@@ -151,14 +151,14 @@ function createBaseEventSetHostChainState(): EventSetHostChainState {
   };
 }
 export const EventSetHostChainState = {
-  encode(message: EventSetHostChainState, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: EventSetHostChainState, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.hostChainState !== undefined) {
       HostChainState.encode(message.hostChainState, writer.uint32(10).fork()).ldelim();
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): EventSetHostChainState {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): EventSetHostChainState {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseEventSetHostChainState();
     while (reader.pos < end) {
@@ -196,14 +196,14 @@ function createBaseEventSetParams(): EventSetParams {
   };
 }
 export const EventSetParams = {
-  encode(message: EventSetParams, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: EventSetParams, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.params !== undefined) {
       Params.encode(message.params, writer.uint32(10).fork()).ldelim();
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): EventSetParams {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): EventSetParams {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseEventSetParams();
     while (reader.pos < end) {
@@ -241,14 +241,14 @@ function createBaseEventSetUndelegation(): EventSetUndelegation {
   };
 }
 export const EventSetUndelegation = {
-  encode(message: EventSetUndelegation, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: EventSetUndelegation, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.undelegation !== undefined) {
       Undelegation.encode(message.undelegation, writer.uint32(10).fork()).ldelim();
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): EventSetUndelegation {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): EventSetUndelegation {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseEventSetUndelegation();
     while (reader.pos < end) {
@@ -286,14 +286,14 @@ function createBaseEventSetChannelUndelegation(): EventSetChannelUndelegation {
   };
 }
 export const EventSetChannelUndelegation = {
-  encode(message: EventSetChannelUndelegation, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: EventSetChannelUndelegation, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.channelUndelegation !== undefined) {
       ChannelUndelegation.encode(message.channelUndelegation, writer.uint32(10).fork()).ldelim();
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): EventSetChannelUndelegation {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): EventSetChannelUndelegation {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseEventSetChannelUndelegation();
     while (reader.pos < end) {
@@ -336,7 +336,7 @@ function createBaseEventStake(): EventStake {
   };
 }
 export const EventStake = {
-  encode(message: EventStake, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: EventStake, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.creator !== "") {
       writer.uint32(10).string(message.creator);
     }
@@ -357,8 +357,8 @@ export const EventStake = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): EventStake {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): EventStake {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseEventStake();
     while (reader.pos < end) {
@@ -430,7 +430,7 @@ function createBaseEventUnstake(): EventUnstake {
   };
 }
 export const EventUnstake = {
-  encode(message: EventUnstake, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: EventUnstake, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.creator !== "") {
       writer.uint32(10).string(message.creator);
     }
@@ -448,8 +448,8 @@ export const EventUnstake = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): EventUnstake {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): EventUnstake {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseEventUnstake();
     while (reader.pos < end) {
@@ -510,14 +510,14 @@ function createBaseEventRedeemUnstaked(): EventRedeemUnstaked {
     creator: "",
     hostChain: "",
     transferChannel: "",
-    epoch: Long.UZERO,
+    epoch: BigInt(0),
     uAmount: "",
     amount: Coin.fromPartial({}),
     fee: Coin.fromPartial({})
   };
 }
 export const EventRedeemUnstaked = {
-  encode(message: EventRedeemUnstaked, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: EventRedeemUnstaked, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.creator !== "") {
       writer.uint32(10).string(message.creator);
     }
@@ -527,7 +527,7 @@ export const EventRedeemUnstaked = {
     if (message.transferChannel !== "") {
       writer.uint32(26).string(message.transferChannel);
     }
-    if (!message.epoch.isZero()) {
+    if (message.epoch !== BigInt(0)) {
       writer.uint32(32).uint64(message.epoch);
     }
     if (message.uAmount !== "") {
@@ -541,8 +541,8 @@ export const EventRedeemUnstaked = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): EventRedeemUnstaked {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): EventRedeemUnstaked {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseEventRedeemUnstaked();
     while (reader.pos < end) {
@@ -558,7 +558,7 @@ export const EventRedeemUnstaked = {
           message.transferChannel = reader.string();
           break;
         case 4:
-          message.epoch = (reader.uint64() as Long);
+          message.epoch = reader.uint64();
           break;
         case 5:
           message.uAmount = reader.string();
@@ -581,7 +581,7 @@ export const EventRedeemUnstaked = {
       creator: isSet(object.creator) ? String(object.creator) : "",
       hostChain: isSet(object.hostChain) ? String(object.hostChain) : "",
       transferChannel: isSet(object.transferChannel) ? String(object.transferChannel) : "",
-      epoch: isSet(object.epoch) ? Long.fromValue(object.epoch) : Long.UZERO,
+      epoch: isSet(object.epoch) ? BigInt(object.epoch.toString()) : BigInt(0),
       uAmount: isSet(object.uAmount) ? String(object.uAmount) : "",
       amount: isSet(object.amount) ? Coin.fromJSON(object.amount) : undefined,
       fee: isSet(object.fee) ? Coin.fromJSON(object.fee) : undefined
@@ -592,7 +592,7 @@ export const EventRedeemUnstaked = {
     message.creator !== undefined && (obj.creator = message.creator);
     message.hostChain !== undefined && (obj.hostChain = message.hostChain);
     message.transferChannel !== undefined && (obj.transferChannel = message.transferChannel);
-    message.epoch !== undefined && (obj.epoch = (message.epoch || Long.UZERO).toString());
+    message.epoch !== undefined && (obj.epoch = (message.epoch || BigInt(0)).toString());
     message.uAmount !== undefined && (obj.uAmount = message.uAmount);
     message.amount !== undefined && (obj.amount = message.amount ? Coin.toJSON(message.amount) : undefined);
     message.fee !== undefined && (obj.fee = message.fee ? Coin.toJSON(message.fee) : undefined);
@@ -603,7 +603,7 @@ export const EventRedeemUnstaked = {
     message.creator = object.creator ?? "";
     message.hostChain = object.hostChain ?? "";
     message.transferChannel = object.transferChannel ?? "";
-    message.epoch = object.epoch !== undefined && object.epoch !== null ? Long.fromValue(object.epoch) : Long.UZERO;
+    message.epoch = object.epoch !== undefined && object.epoch !== null ? BigInt(object.epoch.toString()) : BigInt(0);
     message.uAmount = object.uAmount ?? "";
     message.amount = object.amount !== undefined && object.amount !== null ? Coin.fromPartial(object.amount) : undefined;
     message.fee = object.fee !== undefined && object.fee !== null ? Coin.fromPartial(object.fee) : undefined;
@@ -622,7 +622,7 @@ function createBaseEventInstantUnstake(): EventInstantUnstake {
   };
 }
 export const EventInstantUnstake = {
-  encode(message: EventInstantUnstake, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: EventInstantUnstake, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.creator !== "") {
       writer.uint32(10).string(message.creator);
     }
@@ -646,8 +646,8 @@ export const EventInstantUnstake = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): EventInstantUnstake {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): EventInstantUnstake {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseEventInstantUnstake();
     while (reader.pos < end) {

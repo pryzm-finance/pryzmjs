@@ -1,5 +1,6 @@
-import * as _m0 from "protobufjs/minimal";
+import { BinaryReader, BinaryWriter } from "../../../binary";
 import { isSet } from "../../../helpers";
+import { Decimal } from "@cosmjs/math";
 export interface QueryPriceRequest {
   tokenIn: string;
   tokenOut: string;
@@ -21,7 +22,7 @@ function createBaseQueryPriceRequest(): QueryPriceRequest {
   };
 }
 export const QueryPriceRequest = {
-  encode(message: QueryPriceRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: QueryPriceRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.tokenIn !== "") {
       writer.uint32(10).string(message.tokenIn);
     }
@@ -30,8 +31,8 @@ export const QueryPriceRequest = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): QueryPriceRequest {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): QueryPriceRequest {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryPriceRequest();
     while (reader.pos < end) {
@@ -75,21 +76,21 @@ function createBaseQueryPriceResponse(): QueryPriceResponse {
   };
 }
 export const QueryPriceResponse = {
-  encode(message: QueryPriceResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: QueryPriceResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.price !== "") {
-      writer.uint32(10).string(message.price);
+      writer.uint32(10).string(Decimal.fromUserInput(message.price, 18).atomics);
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): QueryPriceResponse {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): QueryPriceResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryPriceResponse();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.price = reader.string();
+          message.price = Decimal.fromAtomics(reader.string(), 18).toString();
           break;
         default:
           reader.skipType(tag & 7);

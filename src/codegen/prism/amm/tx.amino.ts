@@ -2,7 +2,6 @@
 import { swapTypeFromJSON } from "./operations";
 import { twapAlgorithmFromJSON } from "./oracle_price_pair";
 import { AminoMsg } from "@cosmjs/amino";
-import { Long } from "../../helpers";
 import { MsgSingleSwap, MsgJoinAllTokensExactLpt, MsgJoinTokenExactLpt, MsgJoinExactTokens, MsgExitExactTokens, MsgExitTokenExactLpt, MsgExitAllTokensExactLpt, MsgCreateWeightedPool, MsgUpdateSwapFee, MsgInitializePool, MsgUpdateWeights, MsgBatchSwap, MsgSetYammConfiguration, MsgWhitelistRoute, MsgSetWhitelistedRouteEnabled, MsgSubmitOrder, MsgCancelOrder, MsgProposeMatch, MsgSetCircuitBreakers, MsgSetRecoveryMode, MsgRecoveryExit, MsgSetPauseMode, MsgSetVaultPauseMode, MsgCreateOraclePricePair, MsgUpdateOraclePricePair, MsgDeleteOraclePricePair, MsgSetSwapProtocolFee, MsgSetJoinExitProtocolFee, MsgIntroduceYammLpToWeightedPool, MsgIntroduceAssetBaseTokenToWeightedPool, MsgCancelPendingTokenIntroduction, MsgRemoveTokenFromWeightedPool, MsgUpdateParams, MsgAddMaturityToYamm, MsgSetInitializationAllowList } from "./tx";
 export interface MsgSingleSwapAminoType extends AminoMsg {
   type: "/prism.amm.MsgSingleSwap";
@@ -463,7 +462,7 @@ export const AminoConverter = {
       return {
         creator,
         swap: {
-          poolId: Long.fromString(swap.pool_id),
+          poolId: BigInt(swap.pool_id),
           amount: swap.amount,
           swapType: swapTypeFromJSON(swap.swap_type),
           tokenIn: swap.token_in,
@@ -500,7 +499,7 @@ export const AminoConverter = {
     }: MsgJoinAllTokensExactLptAminoType["value"]): MsgJoinAllTokensExactLpt => {
       return {
         creator,
-        poolId: Long.fromString(pool_id),
+        poolId: BigInt(pool_id),
         lptOut: lpt_out,
         maxAmountsIn: max_amounts_in.map(el0 => ({
           denom: el0.denom,
@@ -535,7 +534,7 @@ export const AminoConverter = {
     }: MsgJoinTokenExactLptAminoType["value"]): MsgJoinTokenExactLpt => {
       return {
         creator,
-        poolId: Long.fromString(pool_id),
+        poolId: BigInt(pool_id),
         lptOut: lpt_out,
         tokenIn: token_in,
         maxAmountIn: max_amount_in
@@ -568,7 +567,7 @@ export const AminoConverter = {
     }: MsgJoinExactTokensAminoType["value"]): MsgJoinExactTokens => {
       return {
         creator,
-        poolId: Long.fromString(pool_id),
+        poolId: BigInt(pool_id),
         amountsIn: amounts_in.map(el0 => ({
           denom: el0.denom,
           amount: el0.amount
@@ -603,7 +602,7 @@ export const AminoConverter = {
     }: MsgExitExactTokensAminoType["value"]): MsgExitExactTokens => {
       return {
         creator,
-        poolId: Long.fromString(pool_id),
+        poolId: BigInt(pool_id),
         amountsOut: amounts_out.map(el0 => ({
           denom: el0.denom,
           amount: el0.amount
@@ -638,7 +637,7 @@ export const AminoConverter = {
     }: MsgExitTokenExactLptAminoType["value"]): MsgExitTokenExactLpt => {
       return {
         creator,
-        poolId: Long.fromString(pool_id),
+        poolId: BigInt(pool_id),
         lptIn: lpt_in,
         tokenOut: token_out,
         minAmountOut: min_amount_out
@@ -671,7 +670,7 @@ export const AminoConverter = {
     }: MsgExitAllTokensExactLptAminoType["value"]): MsgExitAllTokensExactLpt => {
       return {
         creator,
-        poolId: Long.fromString(pool_id),
+        poolId: BigInt(pool_id),
         lptIn: lpt_in,
         minAmountsOut: min_amounts_out.map(el0 => ({
           denom: el0.denom,
@@ -717,8 +716,8 @@ export const AminoConverter = {
         creator,
         name,
         swapFeeRatio: swap_fee_ratio,
-        pauseWindowDurationMillis: Long.fromString(pause_window_duration_millis),
-        pauseBufferDurationMillis: Long.fromString(pause_buffer_duration_millis),
+        pauseWindowDurationMillis: BigInt(pause_window_duration_millis),
+        pauseBufferDurationMillis: BigInt(pause_buffer_duration_millis),
         tokens: tokens.map(el0 => ({
           denom: el0.denom,
           normalizedWeight: el0.normalized_weight
@@ -747,7 +746,7 @@ export const AminoConverter = {
     }: MsgUpdateSwapFeeAminoType["value"]): MsgUpdateSwapFee => {
       return {
         creator,
-        poolId: Long.fromString(pool_id),
+        poolId: BigInt(pool_id),
         swapFeeRatio: swap_fee_ratio
       };
     }
@@ -775,7 +774,7 @@ export const AminoConverter = {
     }: MsgInitializePoolAminoType["value"]): MsgInitializePool => {
       return {
         creator,
-        poolId: Long.fromString(pool_id),
+        poolId: BigInt(pool_id),
         amountsIn: amounts_in.map(el0 => ({
           denom: el0.denom,
           amount: el0.amount
@@ -812,13 +811,13 @@ export const AminoConverter = {
     }: MsgUpdateWeightsAminoType["value"]): MsgUpdateWeights => {
       return {
         creator,
-        poolId: Long.fromString(pool_id),
+        poolId: BigInt(pool_id),
         tokenWeights: token_weights.map(el0 => ({
           denom: el0.denom,
           normalizedWeight: el0.normalized_weight
         })),
-        startTimeUnixMillis: Long.fromString(start_time_unix_millis),
-        endTimeUnixMillis: Long.fromString(end_time_unix_millis)
+        startTimeUnixMillis: BigInt(start_time_unix_millis),
+        endTimeUnixMillis: BigInt(end_time_unix_millis)
       };
     }
   },
@@ -861,7 +860,7 @@ export const AminoConverter = {
         creator,
         swapType: swapTypeFromJSON(swap_type),
         steps: steps.map(el0 => ({
-          poolId: Long.fromString(el0.pool_id),
+          poolId: BigInt(el0.pool_id),
           amount: el0.amount,
           tokenIn: el0.token_in,
           tokenOut: el0.token_out
@@ -906,7 +905,7 @@ export const AminoConverter = {
       return {
         creator,
         configuration: {
-          poolId: Long.fromString(configuration.pool_id),
+          poolId: BigInt(configuration.pool_id),
           maturityIntroductionIntervalMillis: configuration.maturity_introduction_interval_millis,
           maturityExpirationIntervalMillis: configuration.maturity_expiration_interval_millis,
           expirationVirtualBalanceScaler: configuration.expiration_virtual_balance_scaler,
@@ -946,7 +945,7 @@ export const AminoConverter = {
         authority,
         whitelistedRoute: {
           steps: whitelisted_route.steps.map(el1 => ({
-            poolId: Long.fromString(el1.pool_id),
+            poolId: BigInt(el1.pool_id),
             tokenIn: el1.token_in,
             tokenOut: el1.token_out
           })),
@@ -1028,14 +1027,14 @@ export const AminoConverter = {
     }: MsgSubmitOrderAminoType["value"]): MsgSubmitOrder => {
       return {
         creator,
-        poolId: Long.fromString(pool_id),
+        poolId: BigInt(pool_id),
         tokenIn: token_in,
         tokenOut: token_out,
         whitelistedRoute: whitelisted_route,
         allowMatching: allow_matching,
         amountPerStep: amount_per_step,
         totalAmount: total_amount,
-        millisInterval: Long.fromString(millis_interval),
+        millisInterval: BigInt(millis_interval),
         maxStepSpotPrice: max_step_spot_price,
         maxMatchingSpotPrice: max_matching_spot_price
       };
@@ -1058,7 +1057,7 @@ export const AminoConverter = {
     }: MsgCancelOrderAminoType["value"]): MsgCancelOrder => {
       return {
         creator,
-        id: Long.fromString(id)
+        id: BigInt(id)
       };
     }
   },
@@ -1087,12 +1086,12 @@ export const AminoConverter = {
       return {
         creator,
         pairs: pairs.map(el0 => ({
-          poolId: Long.fromString(el0.pool_id),
+          poolId: BigInt(el0.pool_id),
           whitelistedRoute: el0.whitelisted_route,
           tokenIn: el0.token_in,
           tokenOut: el0.token_out,
-          buyOrders: el0.buy_orders.map(el1 => Long.fromString(el1)),
-          sellOrders: el0.sell_orders.map(el1 => Long.fromString(el1))
+          buyOrders: el0.buy_orders.map(el1 => BigInt(el1)),
+          sellOrders: el0.sell_orders.map(el1 => BigInt(el1))
         }))
       };
     }
@@ -1124,7 +1123,7 @@ export const AminoConverter = {
     }: MsgSetCircuitBreakersAminoType["value"]): MsgSetCircuitBreakers => {
       return {
         creator,
-        poolId: Long.fromString(pool_id),
+        poolId: BigInt(pool_id),
         tokenCircuitBreakers: token_circuit_breakers.map(el0 => ({
           denom: el0.denom,
           circuitBreaker: {
@@ -1156,7 +1155,7 @@ export const AminoConverter = {
     }: MsgSetRecoveryModeAminoType["value"]): MsgSetRecoveryMode => {
       return {
         authority,
-        poolId: Long.fromString(pool_id),
+        poolId: BigInt(pool_id),
         recoveryMode: recovery_mode
       };
     }
@@ -1187,7 +1186,7 @@ export const AminoConverter = {
     }: MsgRecoveryExitAminoType["value"]): MsgRecoveryExit => {
       return {
         creator,
-        poolId: Long.fromString(pool_id),
+        poolId: BigInt(pool_id),
         lptIn: lpt_in,
         minAmountsOut: min_amounts_out.map(el0 => ({
           denom: el0.denom,
@@ -1216,7 +1215,7 @@ export const AminoConverter = {
     }: MsgSetPauseModeAminoType["value"]): MsgSetPauseMode => {
       return {
         creator,
-        poolId: Long.fromString(pool_id),
+        poolId: BigInt(pool_id),
         pauseMode: pause_mode
       };
     }
@@ -1274,7 +1273,7 @@ export const AminoConverter = {
         oraclePricePair: {
           assetId: oracle_price_pair.asset_id,
           quoteToken: oracle_price_pair.quote_token,
-          twapDurationMillis: Long.fromString(oracle_price_pair.twap_duration_millis),
+          twapDurationMillis: BigInt(oracle_price_pair.twap_duration_millis),
           twapAlgorithm: twapAlgorithmFromJSON(oracle_price_pair.twap_algorithm),
           disabled: oracle_price_pair.disabled,
           pairs: oracle_price_pair.pairs.map(el1 => ({
@@ -1319,7 +1318,7 @@ export const AminoConverter = {
         oraclePricePair: {
           assetId: oracle_price_pair.asset_id,
           quoteToken: oracle_price_pair.quote_token,
-          twapDurationMillis: Long.fromString(oracle_price_pair.twap_duration_millis),
+          twapDurationMillis: BigInt(oracle_price_pair.twap_duration_millis),
           twapAlgorithm: twapAlgorithmFromJSON(oracle_price_pair.twap_algorithm),
           disabled: oracle_price_pair.disabled,
           pairs: oracle_price_pair.pairs.map(el1 => ({
@@ -1373,7 +1372,7 @@ export const AminoConverter = {
     }: MsgSetSwapProtocolFeeAminoType["value"]): MsgSetSwapProtocolFee => {
       return {
         authority,
-        poolId: Long.fromString(pool_id),
+        poolId: BigInt(pool_id),
         swapProtocolFee: swap_protocol_fee
       };
     }
@@ -1398,7 +1397,7 @@ export const AminoConverter = {
     }: MsgSetJoinExitProtocolFeeAminoType["value"]): MsgSetJoinExitProtocolFee => {
       return {
         authority,
-        poolId: Long.fromString(pool_id),
+        poolId: BigInt(pool_id),
         joinExitProtocolFee: join_exit_protocol_fee
       };
     }
@@ -1429,10 +1428,10 @@ export const AminoConverter = {
     }: MsgIntroduceYammLpToWeightedPoolAminoType["value"]): MsgIntroduceYammLpToWeightedPool => {
       return {
         authority,
-        weightedPoolId: Long.fromString(weighted_pool_id),
-        yammPoolId: Long.fromString(yamm_pool_id),
+        weightedPoolId: BigInt(weighted_pool_id),
+        yammPoolId: BigInt(yamm_pool_id),
         tokenNormalizedWeight: token_normalized_weight,
-        virtualBalanceIntervalMillis: Long.fromString(virtual_balance_interval_millis)
+        virtualBalanceIntervalMillis: BigInt(virtual_balance_interval_millis)
       };
     }
   },
@@ -1465,11 +1464,11 @@ export const AminoConverter = {
     }: MsgIntroduceAssetBaseTokenToWeightedPoolAminoType["value"]): MsgIntroduceAssetBaseTokenToWeightedPool => {
       return {
         authority,
-        weightedPoolId: Long.fromString(weighted_pool_id),
+        weightedPoolId: BigInt(weighted_pool_id),
         tokenDenom: token_denom,
         assetId: asset_id,
         tokenNormalizedWeight: token_normalized_weight,
-        virtualBalanceIntervalMillis: Long.fromString(virtual_balance_interval_millis)
+        virtualBalanceIntervalMillis: BigInt(virtual_balance_interval_millis)
       };
     }
   },
@@ -1494,7 +1493,7 @@ export const AminoConverter = {
       return {
         authority,
         assetId: asset_id,
-        targetPoolId: Long.fromString(target_pool_id)
+        targetPoolId: BigInt(target_pool_id)
       };
     }
   },
@@ -1521,9 +1520,9 @@ export const AminoConverter = {
     }: MsgRemoveTokenFromWeightedPoolAminoType["value"]): MsgRemoveTokenFromWeightedPool => {
       return {
         creator,
-        poolId: Long.fromString(pool_id),
+        poolId: BigInt(pool_id),
         tokenDenom: token_denom,
-        virtualBalanceIntervalMillis: Long.fromString(virtual_balance_interval_millis)
+        virtualBalanceIntervalMillis: BigInt(virtual_balance_interval_millis)
       };
     }
   },
@@ -1582,8 +1581,8 @@ export const AminoConverter = {
           joinExitProtocolFeeRatio: general_pool_parameters.join_exit_protocol_fee_ratio
         },
         yammParameters: {
-          maturityIntroductionIntervalMillis: Long.fromString(yamm_parameters.maturity_introduction_interval_millis),
-          maturityExpirationIntervalMillis: Long.fromString(yamm_parameters.maturity_expiration_interval_millis),
+          maturityIntroductionIntervalMillis: BigInt(yamm_parameters.maturity_introduction_interval_millis),
+          maturityExpirationIntervalMillis: BigInt(yamm_parameters.maturity_expiration_interval_millis),
           expirationVirtualBalanceScaler: yamm_parameters.expiration_virtual_balance_scaler,
           expiredAssetDiscountRatio: yamm_parameters.expired_asset_discount_ratio,
           buyYGivenInLoanFeeRatio: yamm_parameters.buy_y_given_in_loan_fee_ratio,
@@ -1651,7 +1650,7 @@ export const AminoConverter = {
     }: MsgSetInitializationAllowListAminoType["value"]): MsgSetInitializationAllowList => {
       return {
         creator,
-        poolId: Long.fromString(pool_id),
+        poolId: BigInt(pool_id),
         initializationAllowList: initialization_allow_list
       };
     }

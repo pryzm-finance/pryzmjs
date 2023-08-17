@@ -1,5 +1,6 @@
-import * as _m0 from "protobufjs/minimal";
+import { BinaryReader, BinaryWriter } from "../../binary";
 import { isSet } from "../../helpers";
+import { Decimal } from "@cosmjs/math";
 export interface TokenCircuitBreakerSettings {
   denom: string;
   circuitBreaker?: CircuitBreakerSettings;
@@ -25,7 +26,7 @@ function createBaseTokenCircuitBreakerSettings(): TokenCircuitBreakerSettings {
   };
 }
 export const TokenCircuitBreakerSettings = {
-  encode(message: TokenCircuitBreakerSettings, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: TokenCircuitBreakerSettings, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.denom !== "") {
       writer.uint32(10).string(message.denom);
     }
@@ -34,8 +35,8 @@ export const TokenCircuitBreakerSettings = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): TokenCircuitBreakerSettings {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): TokenCircuitBreakerSettings {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseTokenCircuitBreakerSettings();
     while (reader.pos < end) {
@@ -81,33 +82,33 @@ function createBaseCircuitBreakerSettings(): CircuitBreakerSettings {
   };
 }
 export const CircuitBreakerSettings = {
-  encode(message: CircuitBreakerSettings, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: CircuitBreakerSettings, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.referenceLptPrice !== "") {
-      writer.uint32(10).string(message.referenceLptPrice);
+      writer.uint32(10).string(Decimal.fromUserInput(message.referenceLptPrice, 18).atomics);
     }
     if (message.lowerBound !== "") {
-      writer.uint32(18).string(message.lowerBound);
+      writer.uint32(18).string(Decimal.fromUserInput(message.lowerBound, 18).atomics);
     }
     if (message.upperBound !== "") {
-      writer.uint32(26).string(message.upperBound);
+      writer.uint32(26).string(Decimal.fromUserInput(message.upperBound, 18).atomics);
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): CircuitBreakerSettings {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): CircuitBreakerSettings {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseCircuitBreakerSettings();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.referenceLptPrice = reader.string();
+          message.referenceLptPrice = Decimal.fromAtomics(reader.string(), 18).toString();
           break;
         case 2:
-          message.lowerBound = reader.string();
+          message.lowerBound = Decimal.fromAtomics(reader.string(), 18).toString();
           break;
         case 3:
-          message.upperBound = reader.string();
+          message.upperBound = Decimal.fromAtomics(reader.string(), 18).toString();
           break;
         default:
           reader.skipType(tag & 7);

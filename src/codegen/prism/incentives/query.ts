@@ -3,8 +3,8 @@ import { Params, ParamsSDKType } from "./params";
 import { Pool, PoolSDKType } from "./pool";
 import { Bond, BondSDKType } from "./bond";
 import { Unbonding, UnbondingSDKType } from "./unbonding";
-import { Long, isSet } from "../../helpers";
-import * as _m0 from "protobufjs/minimal";
+import { BinaryReader, BinaryWriter } from "../../binary";
+import { isSet } from "../../helpers";
 /** QueryParamsRequest is request type for the Query/Params RPC method. */
 export interface QueryParamsRequest {}
 /** QueryParamsRequest is request type for the Query/Params RPC method. */
@@ -73,10 +73,10 @@ export interface QueryAllBondResponseSDKType {
   pagination: PageResponseSDKType;
 }
 export interface QueryGetUnbondingRequest {
-  id: Long;
+  id: bigint;
 }
 export interface QueryGetUnbondingRequestSDKType {
-  id: Long;
+  id: bigint;
 }
 export interface QueryGetUnbondingResponse {
   unbonding: Unbonding;
@@ -102,11 +102,11 @@ function createBaseQueryParamsRequest(): QueryParamsRequest {
   return {};
 }
 export const QueryParamsRequest = {
-  encode(_: QueryParamsRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(_: QueryParamsRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): QueryParamsRequest {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): QueryParamsRequest {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryParamsRequest();
     while (reader.pos < end) {
@@ -137,14 +137,14 @@ function createBaseQueryParamsResponse(): QueryParamsResponse {
   };
 }
 export const QueryParamsResponse = {
-  encode(message: QueryParamsResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: QueryParamsResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.params !== undefined) {
       Params.encode(message.params, writer.uint32(10).fork()).ldelim();
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): QueryParamsResponse {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): QueryParamsResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryParamsResponse();
     while (reader.pos < end) {
@@ -182,14 +182,14 @@ function createBaseQueryGetPoolRequest(): QueryGetPoolRequest {
   };
 }
 export const QueryGetPoolRequest = {
-  encode(message: QueryGetPoolRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: QueryGetPoolRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.bondDenom !== "") {
       writer.uint32(10).string(message.bondDenom);
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): QueryGetPoolRequest {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): QueryGetPoolRequest {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryGetPoolRequest();
     while (reader.pos < end) {
@@ -227,14 +227,14 @@ function createBaseQueryGetPoolResponse(): QueryGetPoolResponse {
   };
 }
 export const QueryGetPoolResponse = {
-  encode(message: QueryGetPoolResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: QueryGetPoolResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.pool !== undefined) {
       Pool.encode(message.pool, writer.uint32(10).fork()).ldelim();
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): QueryGetPoolResponse {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): QueryGetPoolResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryGetPoolResponse();
     while (reader.pos < end) {
@@ -272,14 +272,14 @@ function createBaseQueryAllPoolRequest(): QueryAllPoolRequest {
   };
 }
 export const QueryAllPoolRequest = {
-  encode(message: QueryAllPoolRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: QueryAllPoolRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.pagination !== undefined) {
       PageRequest.encode(message.pagination, writer.uint32(10).fork()).ldelim();
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): QueryAllPoolRequest {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): QueryAllPoolRequest {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryAllPoolRequest();
     while (reader.pos < end) {
@@ -318,7 +318,7 @@ function createBaseQueryAllPoolResponse(): QueryAllPoolResponse {
   };
 }
 export const QueryAllPoolResponse = {
-  encode(message: QueryAllPoolResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: QueryAllPoolResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     for (const v of message.pool) {
       Pool.encode(v!, writer.uint32(10).fork()).ldelim();
     }
@@ -327,8 +327,8 @@ export const QueryAllPoolResponse = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): QueryAllPoolResponse {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): QueryAllPoolResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryAllPoolResponse();
     while (reader.pos < end) {
@@ -377,7 +377,7 @@ function createBaseQueryGetBondRequest(): QueryGetBondRequest {
   };
 }
 export const QueryGetBondRequest = {
-  encode(message: QueryGetBondRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: QueryGetBondRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.address !== "") {
       writer.uint32(10).string(message.address);
     }
@@ -386,8 +386,8 @@ export const QueryGetBondRequest = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): QueryGetBondRequest {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): QueryGetBondRequest {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryGetBondRequest();
     while (reader.pos < end) {
@@ -431,14 +431,14 @@ function createBaseQueryGetBondResponse(): QueryGetBondResponse {
   };
 }
 export const QueryGetBondResponse = {
-  encode(message: QueryGetBondResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: QueryGetBondResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.bond !== undefined) {
       Bond.encode(message.bond, writer.uint32(10).fork()).ldelim();
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): QueryGetBondResponse {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): QueryGetBondResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryGetBondResponse();
     while (reader.pos < end) {
@@ -476,14 +476,14 @@ function createBaseQueryAllBondRequest(): QueryAllBondRequest {
   };
 }
 export const QueryAllBondRequest = {
-  encode(message: QueryAllBondRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: QueryAllBondRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.pagination !== undefined) {
       PageRequest.encode(message.pagination, writer.uint32(10).fork()).ldelim();
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): QueryAllBondRequest {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): QueryAllBondRequest {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryAllBondRequest();
     while (reader.pos < end) {
@@ -522,7 +522,7 @@ function createBaseQueryAllBondResponse(): QueryAllBondResponse {
   };
 }
 export const QueryAllBondResponse = {
-  encode(message: QueryAllBondResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: QueryAllBondResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     for (const v of message.bond) {
       Bond.encode(v!, writer.uint32(10).fork()).ldelim();
     }
@@ -531,8 +531,8 @@ export const QueryAllBondResponse = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): QueryAllBondResponse {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): QueryAllBondResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryAllBondResponse();
     while (reader.pos < end) {
@@ -576,25 +576,25 @@ export const QueryAllBondResponse = {
 };
 function createBaseQueryGetUnbondingRequest(): QueryGetUnbondingRequest {
   return {
-    id: Long.UZERO
+    id: BigInt(0)
   };
 }
 export const QueryGetUnbondingRequest = {
-  encode(message: QueryGetUnbondingRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (!message.id.isZero()) {
+  encode(message: QueryGetUnbondingRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    if (message.id !== BigInt(0)) {
       writer.uint32(8).uint64(message.id);
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): QueryGetUnbondingRequest {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): QueryGetUnbondingRequest {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryGetUnbondingRequest();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.id = (reader.uint64() as Long);
+          message.id = reader.uint64();
           break;
         default:
           reader.skipType(tag & 7);
@@ -605,17 +605,17 @@ export const QueryGetUnbondingRequest = {
   },
   fromJSON(object: any): QueryGetUnbondingRequest {
     return {
-      id: isSet(object.id) ? Long.fromValue(object.id) : Long.UZERO
+      id: isSet(object.id) ? BigInt(object.id.toString()) : BigInt(0)
     };
   },
   toJSON(message: QueryGetUnbondingRequest): unknown {
     const obj: any = {};
-    message.id !== undefined && (obj.id = (message.id || Long.UZERO).toString());
+    message.id !== undefined && (obj.id = (message.id || BigInt(0)).toString());
     return obj;
   },
   fromPartial(object: Partial<QueryGetUnbondingRequest>): QueryGetUnbondingRequest {
     const message = createBaseQueryGetUnbondingRequest();
-    message.id = object.id !== undefined && object.id !== null ? Long.fromValue(object.id) : Long.UZERO;
+    message.id = object.id !== undefined && object.id !== null ? BigInt(object.id.toString()) : BigInt(0);
     return message;
   }
 };
@@ -625,14 +625,14 @@ function createBaseQueryGetUnbondingResponse(): QueryGetUnbondingResponse {
   };
 }
 export const QueryGetUnbondingResponse = {
-  encode(message: QueryGetUnbondingResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: QueryGetUnbondingResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.unbonding !== undefined) {
       Unbonding.encode(message.unbonding, writer.uint32(10).fork()).ldelim();
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): QueryGetUnbondingResponse {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): QueryGetUnbondingResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryGetUnbondingResponse();
     while (reader.pos < end) {
@@ -670,14 +670,14 @@ function createBaseQueryAllUnbondingRequest(): QueryAllUnbondingRequest {
   };
 }
 export const QueryAllUnbondingRequest = {
-  encode(message: QueryAllUnbondingRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: QueryAllUnbondingRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.pagination !== undefined) {
       PageRequest.encode(message.pagination, writer.uint32(10).fork()).ldelim();
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): QueryAllUnbondingRequest {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): QueryAllUnbondingRequest {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryAllUnbondingRequest();
     while (reader.pos < end) {
@@ -716,7 +716,7 @@ function createBaseQueryAllUnbondingResponse(): QueryAllUnbondingResponse {
   };
 }
 export const QueryAllUnbondingResponse = {
-  encode(message: QueryAllUnbondingResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: QueryAllUnbondingResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     for (const v of message.unbonding) {
       Unbonding.encode(v!, writer.uint32(10).fork()).ldelim();
     }
@@ -725,8 +725,8 @@ export const QueryAllUnbondingResponse = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): QueryAllUnbondingResponse {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): QueryAllUnbondingResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryAllUnbondingResponse();
     while (reader.pos < end) {

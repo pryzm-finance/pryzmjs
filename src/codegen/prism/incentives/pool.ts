@@ -1,5 +1,6 @@
 import { Coin, CoinSDKType } from "../../cosmos/base/v1beta1/coin";
-import * as _m0 from "protobufjs/minimal";
+import { BinaryReader, BinaryWriter } from "../../binary";
+import { Decimal } from "@cosmjs/math";
 import { isSet, isObject } from "../../helpers";
 export interface PoolRewardToken {
   amount: string;
@@ -39,20 +40,20 @@ function createBasePoolRewardToken(): PoolRewardToken {
   };
 }
 export const PoolRewardToken = {
-  encode(message: PoolRewardToken, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: PoolRewardToken, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.amount !== "") {
       writer.uint32(10).string(message.amount);
     }
     if (message.globalIndex !== "") {
-      writer.uint32(18).string(message.globalIndex);
+      writer.uint32(18).string(Decimal.fromUserInput(message.globalIndex, 18).atomics);
     }
     if (message.weight !== "") {
-      writer.uint32(26).string(message.weight);
+      writer.uint32(26).string(Decimal.fromUserInput(message.weight, 18).atomics);
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): PoolRewardToken {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): PoolRewardToken {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBasePoolRewardToken();
     while (reader.pos < end) {
@@ -62,10 +63,10 @@ export const PoolRewardToken = {
           message.amount = reader.string();
           break;
         case 2:
-          message.globalIndex = reader.string();
+          message.globalIndex = Decimal.fromAtomics(reader.string(), 18).toString();
           break;
         case 3:
-          message.weight = reader.string();
+          message.weight = Decimal.fromAtomics(reader.string(), 18).toString();
           break;
         default:
           reader.skipType(tag & 7);
@@ -103,7 +104,7 @@ function createBasePool_RewardsEntry(): Pool_RewardsEntry {
   };
 }
 export const Pool_RewardsEntry = {
-  encode(message: Pool_RewardsEntry, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: Pool_RewardsEntry, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.key !== "") {
       writer.uint32(10).string(message.key);
     }
@@ -112,8 +113,8 @@ export const Pool_RewardsEntry = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): Pool_RewardsEntry {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): Pool_RewardsEntry {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBasePool_RewardsEntry();
     while (reader.pos < end) {
@@ -158,7 +159,7 @@ function createBasePool(): Pool {
   };
 }
 export const Pool = {
-  encode(message: Pool, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: Pool, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.bondedToken !== undefined) {
       Coin.encode(message.bondedToken, writer.uint32(10).fork()).ldelim();
     }
@@ -170,8 +171,8 @@ export const Pool = {
     });
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): Pool {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): Pool {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBasePool();
     while (reader.pos < end) {

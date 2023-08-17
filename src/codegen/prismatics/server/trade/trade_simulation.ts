@@ -1,7 +1,8 @@
 import { SwapType, SwapStep, SwapStepSDKType, swapTypeFromJSON, swapTypeToJSON } from "../../../prism/amm/operations";
 import { Coin, CoinSDKType } from "../../../cosmos/base/v1beta1/coin";
-import * as _m0 from "protobufjs/minimal";
+import { BinaryReader, BinaryWriter } from "../../../binary";
 import { isSet } from "../../../helpers";
+import { Decimal } from "@cosmjs/math";
 export interface QueryTradeSimulationRequest {
   swapType: SwapType;
   tokenIn: string;
@@ -46,7 +47,7 @@ function createBaseQueryTradeSimulationRequest(): QueryTradeSimulationRequest {
   };
 }
 export const QueryTradeSimulationRequest = {
-  encode(message: QueryTradeSimulationRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: QueryTradeSimulationRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.swapType !== 0) {
       writer.uint32(8).int32(message.swapType);
     }
@@ -64,8 +65,8 @@ export const QueryTradeSimulationRequest = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): QueryTradeSimulationRequest {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): QueryTradeSimulationRequest {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryTradeSimulationRequest();
     while (reader.pos < end) {
@@ -138,9 +139,9 @@ function createBaseQueryTradeSimulationResponse(): QueryTradeSimulationResponse 
   };
 }
 export const QueryTradeSimulationResponse = {
-  encode(message: QueryTradeSimulationResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: QueryTradeSimulationResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.priceTokenOutInTokenInTerms !== "") {
-      writer.uint32(10).string(message.priceTokenOutInTokenInTerms);
+      writer.uint32(10).string(Decimal.fromUserInput(message.priceTokenOutInTokenInTerms, 18).atomics);
     }
     if (message.amountIn !== undefined) {
       Coin.encode(message.amountIn, writer.uint32(18).fork()).ldelim();
@@ -155,25 +156,25 @@ export const QueryTradeSimulationResponse = {
       Coin.encode(message.swapFeeTokenInTerms, writer.uint32(42).fork()).ldelim();
     }
     if (message.effectivePrice !== "") {
-      writer.uint32(50).string(message.effectivePrice);
+      writer.uint32(50).string(Decimal.fromUserInput(message.effectivePrice, 18).atomics);
     }
     if (message.priceImpact !== "") {
-      writer.uint32(58).string(message.priceImpact);
+      writer.uint32(58).string(Decimal.fromUserInput(message.priceImpact, 18).atomics);
     }
     for (const v of message.swapSteps) {
       SwapStep.encode(v!, writer.uint32(66).fork()).ldelim();
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): QueryTradeSimulationResponse {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): QueryTradeSimulationResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryTradeSimulationResponse();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.priceTokenOutInTokenInTerms = reader.string();
+          message.priceTokenOutInTokenInTerms = Decimal.fromAtomics(reader.string(), 18).toString();
           break;
         case 2:
           message.amountIn = Coin.decode(reader, reader.uint32());
@@ -188,10 +189,10 @@ export const QueryTradeSimulationResponse = {
           message.swapFeeTokenInTerms = Coin.decode(reader, reader.uint32());
           break;
         case 6:
-          message.effectivePrice = reader.string();
+          message.effectivePrice = Decimal.fromAtomics(reader.string(), 18).toString();
           break;
         case 7:
-          message.priceImpact = reader.string();
+          message.priceImpact = Decimal.fromAtomics(reader.string(), 18).toString();
           break;
         case 8:
           message.swapSteps.push(SwapStep.decode(reader, reader.uint32()));

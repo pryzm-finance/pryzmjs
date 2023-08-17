@@ -1,5 +1,6 @@
-import * as _m0 from "protobufjs/minimal";
+import { BinaryReader, BinaryWriter } from "../../../binary";
 import { isSet } from "../../../helpers";
+import { Decimal } from "@cosmjs/math";
 export interface QueryPriceChangeRequest {
   denom: string;
   from: string;
@@ -24,7 +25,7 @@ function createBaseQueryPriceChangeRequest(): QueryPriceChangeRequest {
   };
 }
 export const QueryPriceChangeRequest = {
-  encode(message: QueryPriceChangeRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: QueryPriceChangeRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.denom !== "") {
       writer.uint32(10).string(message.denom);
     }
@@ -36,8 +37,8 @@ export const QueryPriceChangeRequest = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): QueryPriceChangeRequest {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): QueryPriceChangeRequest {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryPriceChangeRequest();
     while (reader.pos < end) {
@@ -87,21 +88,21 @@ function createBaseQueryPriceChangeResponse(): QueryPriceChangeResponse {
   };
 }
 export const QueryPriceChangeResponse = {
-  encode(message: QueryPriceChangeResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: QueryPriceChangeResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.changePercentage !== undefined) {
-      writer.uint32(10).string(message.changePercentage);
+      writer.uint32(10).string(Decimal.fromUserInput(message.changePercentage, 18).atomics);
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): QueryPriceChangeResponse {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): QueryPriceChangeResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryPriceChangeResponse();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.changePercentage = reader.string();
+          message.changePercentage = Decimal.fromAtomics(reader.string(), 18).toString();
           break;
         default:
           reader.skipType(tag & 7);

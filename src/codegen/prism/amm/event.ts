@@ -12,8 +12,9 @@ import { ExitSummary, ExitSummarySDKType, JoinSummary, JoinSummarySDKType, SwapS
 import { OraclePricePair, OraclePricePairSDKType } from "./oracle_price_pair";
 import { PendingTokenIntroduction, PendingTokenIntroductionSDKType } from "./pending_token_introduction";
 import { Params, ParamsSDKType } from "./params";
-import { Long, isSet } from "../../helpers";
-import * as _m0 from "protobufjs/minimal";
+import { BinaryReader, BinaryWriter } from "../../binary";
+import { isSet } from "../../helpers";
+import { Decimal } from "@cosmjs/math";
 export interface EventSetPool {
   pool: Pool;
 }
@@ -21,17 +22,17 @@ export interface EventSetPoolSDKType {
   pool: PoolSDKType;
 }
 export interface EventSetPoolCount {
-  poolCount: Long;
+  poolCount: bigint;
 }
 export interface EventSetPoolCountSDKType {
-  pool_count: Long;
+  pool_count: bigint;
 }
 export interface EventSetLpTokenSupply {
-  poolId: Long;
+  poolId: bigint;
   supply: string;
 }
 export interface EventSetLpTokenSupplySDKType {
-  pool_id: Long;
+  pool_id: bigint;
   supply: string;
 }
 export interface EventSetPoolToken {
@@ -41,11 +42,11 @@ export interface EventSetPoolTokenSDKType {
   pool_token: PoolTokenSDKType;
 }
 export interface EventRemovePoolToken {
-  poolId: Long;
+  poolId: bigint;
   denom: string;
 }
 export interface EventRemovePoolTokenSDKType {
-  pool_id: Long;
+  pool_id: bigint;
   denom: string;
 }
 export interface EventSetWeightedToken {
@@ -55,11 +56,11 @@ export interface EventSetWeightedTokenSDKType {
   weighted_token: WeightedTokenSDKType;
 }
 export interface EventRemoveWeightedToken {
-  poolId: Long;
+  poolId: bigint;
   denom: string;
 }
 export interface EventRemoveWeightedTokenSDKType {
-  pool_id: Long;
+  pool_id: bigint;
   denom: string;
 }
 export interface EventSetWeightUpdateTiming {
@@ -87,23 +88,23 @@ export interface EventSetOrderSDKType {
   order: OrderSDKType;
 }
 export interface EventSetOrderCount {
-  orderCount: Long;
+  orderCount: bigint;
 }
 export interface EventSetOrderCountSDKType {
-  order_count: Long;
+  order_count: bigint;
 }
 export interface EventRemoveOrder {
-  id: Long;
+  id: bigint;
 }
 export interface EventRemoveOrderSDKType {
-  id: Long;
+  id: bigint;
 }
 export interface EventCancelOrder {
-  id: Long;
+  id: bigint;
   withdrawnAmount: Coin;
 }
 export interface EventCancelOrderSDKType {
-  id: Long;
+  id: bigint;
   withdrawn_amount: CoinSDKType;
 }
 export interface EventSetScheduleOrder {
@@ -113,24 +114,24 @@ export interface EventSetScheduleOrderSDKType {
   schedule_order: ScheduleOrderSDKType;
 }
 export interface EventRemoveScheduleOrder {
-  orderId: Long;
-  timeMillis: Long;
+  orderId: bigint;
+  timeMillis: bigint;
 }
 export interface EventRemoveScheduleOrderSDKType {
-  order_id: Long;
-  time_millis: Long;
+  order_id: bigint;
+  time_millis: bigint;
 }
 export interface EventSetExecutableOrder {
-  orderId: Long;
+  orderId: bigint;
 }
 export interface EventSetExecutableOrderSDKType {
-  order_id: Long;
+  order_id: bigint;
 }
 export interface EventRemoveExecutableOrder {
-  orderId: Long;
+  orderId: bigint;
 }
 export interface EventRemoveExecutableOrderSDKType {
-  order_id: Long;
+  order_id: bigint;
 }
 export interface EventSetIntroducingPoolToken {
   virtualBalanceToken: VirtualBalancePoolToken;
@@ -139,11 +140,11 @@ export interface EventSetIntroducingPoolTokenSDKType {
   virtual_balance_token: VirtualBalancePoolTokenSDKType;
 }
 export interface EventRemoveIntroducingPoolToken {
-  poolId: Long;
+  poolId: bigint;
   denom: string;
 }
 export interface EventRemoveIntroducingPoolTokenSDKType {
-  pool_id: Long;
+  pool_id: bigint;
   denom: string;
 }
 export interface EventSetExpiringPoolToken {
@@ -153,19 +154,19 @@ export interface EventSetExpiringPoolTokenSDKType {
   virtual_balance_token: VirtualBalancePoolTokenSDKType;
 }
 export interface EventRemoveExpiringPoolToken {
-  poolId: Long;
+  poolId: bigint;
   denom: string;
 }
 export interface EventRemoveExpiringPoolTokenSDKType {
-  pool_id: Long;
+  pool_id: bigint;
   denom: string;
 }
 export interface EventSetYammPoolForAssetId {
-  poolId: Long;
+  poolId: bigint;
   assetId: string;
 }
 export interface EventSetYammPoolForAssetIdSDKType {
-  pool_id: Long;
+  pool_id: bigint;
   asset_id: string;
 }
 export interface EventSetVaultPaused {
@@ -175,17 +176,17 @@ export interface EventSetVaultPausedSDKType {
   paused: boolean;
 }
 export interface EventExecuteOrder {
-  orderId: Long;
+  orderId: bigint;
   tradeAmount: string;
   matchAmount: string;
 }
 export interface EventExecuteOrderSDKType {
-  order_id: Long;
+  order_id: bigint;
   trade_amount: string;
   match_amount: string;
 }
 export interface EventExecuteOrdersForPair {
-  poolId: Long;
+  poolId: bigint;
   tokenIn: string;
   tokenOut: string;
   whitelistedRoute: boolean;
@@ -201,7 +202,7 @@ export interface EventExecuteOrdersForPair {
   buyTradeOutput: string;
 }
 export interface EventExecuteOrdersForPairSDKType {
-  pool_id: Long;
+  pool_id: bigint;
   token_in: string;
   token_out: string;
   whitelisted_route: boolean;
@@ -217,15 +218,15 @@ export interface EventExecuteOrdersForPairSDKType {
   buy_trade_output: string;
 }
 export interface EventExecuteMatchProposalOrder {
-  orderId: Long;
+  orderId: bigint;
   matchAmount: string;
 }
 export interface EventExecuteMatchProposalOrderSDKType {
-  order_id: Long;
+  order_id: bigint;
   match_amount: string;
 }
 export interface EventExecuteMatchProposalPair {
-  poolId: Long;
+  poolId: bigint;
   tokenIn: string;
   tokenOut: string;
   whitelistedRoute: boolean;
@@ -237,7 +238,7 @@ export interface EventExecuteMatchProposalPair {
   sellMatchAmount: string;
 }
 export interface EventExecuteMatchProposalPairSDKType {
-  pool_id: Long;
+  pool_id: bigint;
   token_in: string;
   token_out: string;
   whitelisted_route: boolean;
@@ -259,32 +260,32 @@ export interface EventExecuteMatchProposalSDKType {
   proposer_reward: CoinSDKType[];
 }
 export interface EventExitPool {
-  poolId: Long;
+  poolId: bigint;
   summary: ExitSummary;
 }
 export interface EventExitPoolSDKType {
-  pool_id: Long;
+  pool_id: bigint;
   summary: ExitSummarySDKType;
 }
 export interface EventJoinPool {
-  poolId: Long;
+  poolId: bigint;
   summary: JoinSummary;
 }
 export interface EventJoinPoolSDKType {
-  pool_id: Long;
+  pool_id: bigint;
   summary: JoinSummarySDKType;
 }
 export interface EventSwap {
-  poolId: Long;
+  poolId: bigint;
   summary: SwapSummary;
 }
 export interface EventSwapSDKType {
-  pool_id: Long;
+  pool_id: bigint;
   summary: SwapSummarySDKType;
 }
 export interface EventExitPoolRequest {
   creator: string;
-  poolId: Long;
+  poolId: bigint;
   lptIn: Coin;
   amountsOut: Coin[];
   protocolFee: Coin;
@@ -293,7 +294,7 @@ export interface EventExitPoolRequest {
 }
 export interface EventExitPoolRequestSDKType {
   creator: string;
-  pool_id: Long;
+  pool_id: bigint;
   lpt_in: CoinSDKType;
   amounts_out: CoinSDKType[];
   protocol_fee: CoinSDKType;
@@ -302,7 +303,7 @@ export interface EventExitPoolRequestSDKType {
 }
 export interface EventJoinPoolRequest {
   creator: string;
-  poolId: Long;
+  poolId: bigint;
   lptOut: Coin;
   amountsIn: Coin[];
   protocolFee: Coin[];
@@ -311,7 +312,7 @@ export interface EventJoinPoolRequest {
 }
 export interface EventJoinPoolRequestSDKType {
   creator: string;
-  pool_id: Long;
+  pool_id: bigint;
   lpt_out: CoinSDKType;
   amounts_in: CoinSDKType[];
   protocol_fee: CoinSDKType[];
@@ -320,7 +321,7 @@ export interface EventJoinPoolRequestSDKType {
 }
 export interface EventSingleSwapRequest {
   creator: string;
-  poolId: Long;
+  poolId: bigint;
   amountOut: Coin;
   amountIn: Coin;
   protocolFee: Coin;
@@ -329,7 +330,7 @@ export interface EventSingleSwapRequest {
 }
 export interface EventSingleSwapRequestSDKType {
   creator: string;
-  pool_id: Long;
+  pool_id: bigint;
   amount_out: CoinSDKType;
   amount_in: CoinSDKType;
   protocol_fee: CoinSDKType;
@@ -365,13 +366,13 @@ export interface EventYAssetSwapRefractorActionSDKType {
   fee_amount: string;
 }
 export interface EventYAssetSwap {
-  poolId: Long;
+  poolId: bigint;
   summary: SwapSummary;
   refractorAction: EventYAssetSwapRefractorAction;
   fee?: Coin;
 }
 export interface EventYAssetSwapSDKType {
-  pool_id: Long;
+  pool_id: bigint;
   summary: SwapSummarySDKType;
   refractor_action: EventYAssetSwapRefractorActionSDKType;
   fee?: CoinSDKType;
@@ -396,11 +397,11 @@ export interface EventSetPendingTokenIntroductionSDKType {
 }
 export interface EventRemovePendingTokenIntroduction {
   assetId: string;
-  targetPoolId: Long;
+  targetPoolId: bigint;
 }
 export interface EventRemovePendingTokenIntroductionSDKType {
   asset_id: string;
-  target_pool_id: Long;
+  target_pool_id: bigint;
 }
 export interface EventSetParams {
   params: Params;
@@ -414,14 +415,14 @@ function createBaseEventSetPool(): EventSetPool {
   };
 }
 export const EventSetPool = {
-  encode(message: EventSetPool, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: EventSetPool, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.pool !== undefined) {
       Pool.encode(message.pool, writer.uint32(10).fork()).ldelim();
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): EventSetPool {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): EventSetPool {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseEventSetPool();
     while (reader.pos < end) {
@@ -455,25 +456,25 @@ export const EventSetPool = {
 };
 function createBaseEventSetPoolCount(): EventSetPoolCount {
   return {
-    poolCount: Long.UZERO
+    poolCount: BigInt(0)
   };
 }
 export const EventSetPoolCount = {
-  encode(message: EventSetPoolCount, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (!message.poolCount.isZero()) {
+  encode(message: EventSetPoolCount, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    if (message.poolCount !== BigInt(0)) {
       writer.uint32(8).uint64(message.poolCount);
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): EventSetPoolCount {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): EventSetPoolCount {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseEventSetPoolCount();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.poolCount = (reader.uint64() as Long);
+          message.poolCount = reader.uint64();
           break;
         default:
           reader.skipType(tag & 7);
@@ -484,29 +485,29 @@ export const EventSetPoolCount = {
   },
   fromJSON(object: any): EventSetPoolCount {
     return {
-      poolCount: isSet(object.poolCount) ? Long.fromValue(object.poolCount) : Long.UZERO
+      poolCount: isSet(object.poolCount) ? BigInt(object.poolCount.toString()) : BigInt(0)
     };
   },
   toJSON(message: EventSetPoolCount): unknown {
     const obj: any = {};
-    message.poolCount !== undefined && (obj.poolCount = (message.poolCount || Long.UZERO).toString());
+    message.poolCount !== undefined && (obj.poolCount = (message.poolCount || BigInt(0)).toString());
     return obj;
   },
   fromPartial(object: Partial<EventSetPoolCount>): EventSetPoolCount {
     const message = createBaseEventSetPoolCount();
-    message.poolCount = object.poolCount !== undefined && object.poolCount !== null ? Long.fromValue(object.poolCount) : Long.UZERO;
+    message.poolCount = object.poolCount !== undefined && object.poolCount !== null ? BigInt(object.poolCount.toString()) : BigInt(0);
     return message;
   }
 };
 function createBaseEventSetLpTokenSupply(): EventSetLpTokenSupply {
   return {
-    poolId: Long.UZERO,
+    poolId: BigInt(0),
     supply: ""
   };
 }
 export const EventSetLpTokenSupply = {
-  encode(message: EventSetLpTokenSupply, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (!message.poolId.isZero()) {
+  encode(message: EventSetLpTokenSupply, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    if (message.poolId !== BigInt(0)) {
       writer.uint32(8).uint64(message.poolId);
     }
     if (message.supply !== "") {
@@ -514,15 +515,15 @@ export const EventSetLpTokenSupply = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): EventSetLpTokenSupply {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): EventSetLpTokenSupply {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseEventSetLpTokenSupply();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.poolId = (reader.uint64() as Long);
+          message.poolId = reader.uint64();
           break;
         case 2:
           message.supply = reader.string();
@@ -536,19 +537,19 @@ export const EventSetLpTokenSupply = {
   },
   fromJSON(object: any): EventSetLpTokenSupply {
     return {
-      poolId: isSet(object.poolId) ? Long.fromValue(object.poolId) : Long.UZERO,
+      poolId: isSet(object.poolId) ? BigInt(object.poolId.toString()) : BigInt(0),
       supply: isSet(object.supply) ? String(object.supply) : ""
     };
   },
   toJSON(message: EventSetLpTokenSupply): unknown {
     const obj: any = {};
-    message.poolId !== undefined && (obj.poolId = (message.poolId || Long.UZERO).toString());
+    message.poolId !== undefined && (obj.poolId = (message.poolId || BigInt(0)).toString());
     message.supply !== undefined && (obj.supply = message.supply);
     return obj;
   },
   fromPartial(object: Partial<EventSetLpTokenSupply>): EventSetLpTokenSupply {
     const message = createBaseEventSetLpTokenSupply();
-    message.poolId = object.poolId !== undefined && object.poolId !== null ? Long.fromValue(object.poolId) : Long.UZERO;
+    message.poolId = object.poolId !== undefined && object.poolId !== null ? BigInt(object.poolId.toString()) : BigInt(0);
     message.supply = object.supply ?? "";
     return message;
   }
@@ -559,14 +560,14 @@ function createBaseEventSetPoolToken(): EventSetPoolToken {
   };
 }
 export const EventSetPoolToken = {
-  encode(message: EventSetPoolToken, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: EventSetPoolToken, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.poolToken !== undefined) {
       PoolToken.encode(message.poolToken, writer.uint32(10).fork()).ldelim();
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): EventSetPoolToken {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): EventSetPoolToken {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseEventSetPoolToken();
     while (reader.pos < end) {
@@ -600,13 +601,13 @@ export const EventSetPoolToken = {
 };
 function createBaseEventRemovePoolToken(): EventRemovePoolToken {
   return {
-    poolId: Long.UZERO,
+    poolId: BigInt(0),
     denom: ""
   };
 }
 export const EventRemovePoolToken = {
-  encode(message: EventRemovePoolToken, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (!message.poolId.isZero()) {
+  encode(message: EventRemovePoolToken, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    if (message.poolId !== BigInt(0)) {
       writer.uint32(8).uint64(message.poolId);
     }
     if (message.denom !== "") {
@@ -614,15 +615,15 @@ export const EventRemovePoolToken = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): EventRemovePoolToken {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): EventRemovePoolToken {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseEventRemovePoolToken();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.poolId = (reader.uint64() as Long);
+          message.poolId = reader.uint64();
           break;
         case 2:
           message.denom = reader.string();
@@ -636,19 +637,19 @@ export const EventRemovePoolToken = {
   },
   fromJSON(object: any): EventRemovePoolToken {
     return {
-      poolId: isSet(object.poolId) ? Long.fromValue(object.poolId) : Long.UZERO,
+      poolId: isSet(object.poolId) ? BigInt(object.poolId.toString()) : BigInt(0),
       denom: isSet(object.denom) ? String(object.denom) : ""
     };
   },
   toJSON(message: EventRemovePoolToken): unknown {
     const obj: any = {};
-    message.poolId !== undefined && (obj.poolId = (message.poolId || Long.UZERO).toString());
+    message.poolId !== undefined && (obj.poolId = (message.poolId || BigInt(0)).toString());
     message.denom !== undefined && (obj.denom = message.denom);
     return obj;
   },
   fromPartial(object: Partial<EventRemovePoolToken>): EventRemovePoolToken {
     const message = createBaseEventRemovePoolToken();
-    message.poolId = object.poolId !== undefined && object.poolId !== null ? Long.fromValue(object.poolId) : Long.UZERO;
+    message.poolId = object.poolId !== undefined && object.poolId !== null ? BigInt(object.poolId.toString()) : BigInt(0);
     message.denom = object.denom ?? "";
     return message;
   }
@@ -659,14 +660,14 @@ function createBaseEventSetWeightedToken(): EventSetWeightedToken {
   };
 }
 export const EventSetWeightedToken = {
-  encode(message: EventSetWeightedToken, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: EventSetWeightedToken, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.weightedToken !== undefined) {
       WeightedToken.encode(message.weightedToken, writer.uint32(10).fork()).ldelim();
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): EventSetWeightedToken {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): EventSetWeightedToken {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseEventSetWeightedToken();
     while (reader.pos < end) {
@@ -700,13 +701,13 @@ export const EventSetWeightedToken = {
 };
 function createBaseEventRemoveWeightedToken(): EventRemoveWeightedToken {
   return {
-    poolId: Long.UZERO,
+    poolId: BigInt(0),
     denom: ""
   };
 }
 export const EventRemoveWeightedToken = {
-  encode(message: EventRemoveWeightedToken, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (!message.poolId.isZero()) {
+  encode(message: EventRemoveWeightedToken, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    if (message.poolId !== BigInt(0)) {
       writer.uint32(8).uint64(message.poolId);
     }
     if (message.denom !== "") {
@@ -714,15 +715,15 @@ export const EventRemoveWeightedToken = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): EventRemoveWeightedToken {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): EventRemoveWeightedToken {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseEventRemoveWeightedToken();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.poolId = (reader.uint64() as Long);
+          message.poolId = reader.uint64();
           break;
         case 2:
           message.denom = reader.string();
@@ -736,19 +737,19 @@ export const EventRemoveWeightedToken = {
   },
   fromJSON(object: any): EventRemoveWeightedToken {
     return {
-      poolId: isSet(object.poolId) ? Long.fromValue(object.poolId) : Long.UZERO,
+      poolId: isSet(object.poolId) ? BigInt(object.poolId.toString()) : BigInt(0),
       denom: isSet(object.denom) ? String(object.denom) : ""
     };
   },
   toJSON(message: EventRemoveWeightedToken): unknown {
     const obj: any = {};
-    message.poolId !== undefined && (obj.poolId = (message.poolId || Long.UZERO).toString());
+    message.poolId !== undefined && (obj.poolId = (message.poolId || BigInt(0)).toString());
     message.denom !== undefined && (obj.denom = message.denom);
     return obj;
   },
   fromPartial(object: Partial<EventRemoveWeightedToken>): EventRemoveWeightedToken {
     const message = createBaseEventRemoveWeightedToken();
-    message.poolId = object.poolId !== undefined && object.poolId !== null ? Long.fromValue(object.poolId) : Long.UZERO;
+    message.poolId = object.poolId !== undefined && object.poolId !== null ? BigInt(object.poolId.toString()) : BigInt(0);
     message.denom = object.denom ?? "";
     return message;
   }
@@ -759,14 +760,14 @@ function createBaseEventSetWeightUpdateTiming(): EventSetWeightUpdateTiming {
   };
 }
 export const EventSetWeightUpdateTiming = {
-  encode(message: EventSetWeightUpdateTiming, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: EventSetWeightUpdateTiming, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.weightUpdateTiming !== undefined) {
       WeightUpdateTiming.encode(message.weightUpdateTiming, writer.uint32(10).fork()).ldelim();
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): EventSetWeightUpdateTiming {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): EventSetWeightUpdateTiming {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseEventSetWeightUpdateTiming();
     while (reader.pos < end) {
@@ -804,14 +805,14 @@ function createBaseEventSetWhitelistedRoute(): EventSetWhitelistedRoute {
   };
 }
 export const EventSetWhitelistedRoute = {
-  encode(message: EventSetWhitelistedRoute, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: EventSetWhitelistedRoute, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.whitelistedRoute !== undefined) {
       WhitelistedRoute.encode(message.whitelistedRoute, writer.uint32(10).fork()).ldelim();
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): EventSetWhitelistedRoute {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): EventSetWhitelistedRoute {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseEventSetWhitelistedRoute();
     while (reader.pos < end) {
@@ -849,14 +850,14 @@ function createBaseEventSetYammConfiguration(): EventSetYammConfiguration {
   };
 }
 export const EventSetYammConfiguration = {
-  encode(message: EventSetYammConfiguration, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: EventSetYammConfiguration, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.yammConfiguration !== undefined) {
       YammConfiguration.encode(message.yammConfiguration, writer.uint32(10).fork()).ldelim();
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): EventSetYammConfiguration {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): EventSetYammConfiguration {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseEventSetYammConfiguration();
     while (reader.pos < end) {
@@ -894,14 +895,14 @@ function createBaseEventSetOrder(): EventSetOrder {
   };
 }
 export const EventSetOrder = {
-  encode(message: EventSetOrder, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: EventSetOrder, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.order !== undefined) {
       Order.encode(message.order, writer.uint32(10).fork()).ldelim();
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): EventSetOrder {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): EventSetOrder {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseEventSetOrder();
     while (reader.pos < end) {
@@ -935,25 +936,25 @@ export const EventSetOrder = {
 };
 function createBaseEventSetOrderCount(): EventSetOrderCount {
   return {
-    orderCount: Long.UZERO
+    orderCount: BigInt(0)
   };
 }
 export const EventSetOrderCount = {
-  encode(message: EventSetOrderCount, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (!message.orderCount.isZero()) {
+  encode(message: EventSetOrderCount, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    if (message.orderCount !== BigInt(0)) {
       writer.uint32(8).uint64(message.orderCount);
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): EventSetOrderCount {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): EventSetOrderCount {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseEventSetOrderCount();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.orderCount = (reader.uint64() as Long);
+          message.orderCount = reader.uint64();
           break;
         default:
           reader.skipType(tag & 7);
@@ -964,41 +965,41 @@ export const EventSetOrderCount = {
   },
   fromJSON(object: any): EventSetOrderCount {
     return {
-      orderCount: isSet(object.orderCount) ? Long.fromValue(object.orderCount) : Long.UZERO
+      orderCount: isSet(object.orderCount) ? BigInt(object.orderCount.toString()) : BigInt(0)
     };
   },
   toJSON(message: EventSetOrderCount): unknown {
     const obj: any = {};
-    message.orderCount !== undefined && (obj.orderCount = (message.orderCount || Long.UZERO).toString());
+    message.orderCount !== undefined && (obj.orderCount = (message.orderCount || BigInt(0)).toString());
     return obj;
   },
   fromPartial(object: Partial<EventSetOrderCount>): EventSetOrderCount {
     const message = createBaseEventSetOrderCount();
-    message.orderCount = object.orderCount !== undefined && object.orderCount !== null ? Long.fromValue(object.orderCount) : Long.UZERO;
+    message.orderCount = object.orderCount !== undefined && object.orderCount !== null ? BigInt(object.orderCount.toString()) : BigInt(0);
     return message;
   }
 };
 function createBaseEventRemoveOrder(): EventRemoveOrder {
   return {
-    id: Long.UZERO
+    id: BigInt(0)
   };
 }
 export const EventRemoveOrder = {
-  encode(message: EventRemoveOrder, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (!message.id.isZero()) {
+  encode(message: EventRemoveOrder, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    if (message.id !== BigInt(0)) {
       writer.uint32(8).uint64(message.id);
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): EventRemoveOrder {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): EventRemoveOrder {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseEventRemoveOrder();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.id = (reader.uint64() as Long);
+          message.id = reader.uint64();
           break;
         default:
           reader.skipType(tag & 7);
@@ -1009,29 +1010,29 @@ export const EventRemoveOrder = {
   },
   fromJSON(object: any): EventRemoveOrder {
     return {
-      id: isSet(object.id) ? Long.fromValue(object.id) : Long.UZERO
+      id: isSet(object.id) ? BigInt(object.id.toString()) : BigInt(0)
     };
   },
   toJSON(message: EventRemoveOrder): unknown {
     const obj: any = {};
-    message.id !== undefined && (obj.id = (message.id || Long.UZERO).toString());
+    message.id !== undefined && (obj.id = (message.id || BigInt(0)).toString());
     return obj;
   },
   fromPartial(object: Partial<EventRemoveOrder>): EventRemoveOrder {
     const message = createBaseEventRemoveOrder();
-    message.id = object.id !== undefined && object.id !== null ? Long.fromValue(object.id) : Long.UZERO;
+    message.id = object.id !== undefined && object.id !== null ? BigInt(object.id.toString()) : BigInt(0);
     return message;
   }
 };
 function createBaseEventCancelOrder(): EventCancelOrder {
   return {
-    id: Long.UZERO,
+    id: BigInt(0),
     withdrawnAmount: Coin.fromPartial({})
   };
 }
 export const EventCancelOrder = {
-  encode(message: EventCancelOrder, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (!message.id.isZero()) {
+  encode(message: EventCancelOrder, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    if (message.id !== BigInt(0)) {
       writer.uint32(8).uint64(message.id);
     }
     if (message.withdrawnAmount !== undefined) {
@@ -1039,15 +1040,15 @@ export const EventCancelOrder = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): EventCancelOrder {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): EventCancelOrder {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseEventCancelOrder();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.id = (reader.uint64() as Long);
+          message.id = reader.uint64();
           break;
         case 2:
           message.withdrawnAmount = Coin.decode(reader, reader.uint32());
@@ -1061,19 +1062,19 @@ export const EventCancelOrder = {
   },
   fromJSON(object: any): EventCancelOrder {
     return {
-      id: isSet(object.id) ? Long.fromValue(object.id) : Long.UZERO,
+      id: isSet(object.id) ? BigInt(object.id.toString()) : BigInt(0),
       withdrawnAmount: isSet(object.withdrawnAmount) ? Coin.fromJSON(object.withdrawnAmount) : undefined
     };
   },
   toJSON(message: EventCancelOrder): unknown {
     const obj: any = {};
-    message.id !== undefined && (obj.id = (message.id || Long.UZERO).toString());
+    message.id !== undefined && (obj.id = (message.id || BigInt(0)).toString());
     message.withdrawnAmount !== undefined && (obj.withdrawnAmount = message.withdrawnAmount ? Coin.toJSON(message.withdrawnAmount) : undefined);
     return obj;
   },
   fromPartial(object: Partial<EventCancelOrder>): EventCancelOrder {
     const message = createBaseEventCancelOrder();
-    message.id = object.id !== undefined && object.id !== null ? Long.fromValue(object.id) : Long.UZERO;
+    message.id = object.id !== undefined && object.id !== null ? BigInt(object.id.toString()) : BigInt(0);
     message.withdrawnAmount = object.withdrawnAmount !== undefined && object.withdrawnAmount !== null ? Coin.fromPartial(object.withdrawnAmount) : undefined;
     return message;
   }
@@ -1084,14 +1085,14 @@ function createBaseEventSetScheduleOrder(): EventSetScheduleOrder {
   };
 }
 export const EventSetScheduleOrder = {
-  encode(message: EventSetScheduleOrder, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: EventSetScheduleOrder, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.scheduleOrder !== undefined) {
       ScheduleOrder.encode(message.scheduleOrder, writer.uint32(10).fork()).ldelim();
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): EventSetScheduleOrder {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): EventSetScheduleOrder {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseEventSetScheduleOrder();
     while (reader.pos < end) {
@@ -1125,32 +1126,32 @@ export const EventSetScheduleOrder = {
 };
 function createBaseEventRemoveScheduleOrder(): EventRemoveScheduleOrder {
   return {
-    orderId: Long.UZERO,
-    timeMillis: Long.ZERO
+    orderId: BigInt(0),
+    timeMillis: BigInt(0)
   };
 }
 export const EventRemoveScheduleOrder = {
-  encode(message: EventRemoveScheduleOrder, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (!message.orderId.isZero()) {
+  encode(message: EventRemoveScheduleOrder, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    if (message.orderId !== BigInt(0)) {
       writer.uint32(8).uint64(message.orderId);
     }
-    if (!message.timeMillis.isZero()) {
+    if (message.timeMillis !== BigInt(0)) {
       writer.uint32(16).int64(message.timeMillis);
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): EventRemoveScheduleOrder {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): EventRemoveScheduleOrder {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseEventRemoveScheduleOrder();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.orderId = (reader.uint64() as Long);
+          message.orderId = reader.uint64();
           break;
         case 2:
-          message.timeMillis = (reader.int64() as Long);
+          message.timeMillis = reader.int64();
           break;
         default:
           reader.skipType(tag & 7);
@@ -1161,44 +1162,44 @@ export const EventRemoveScheduleOrder = {
   },
   fromJSON(object: any): EventRemoveScheduleOrder {
     return {
-      orderId: isSet(object.orderId) ? Long.fromValue(object.orderId) : Long.UZERO,
-      timeMillis: isSet(object.timeMillis) ? Long.fromValue(object.timeMillis) : Long.ZERO
+      orderId: isSet(object.orderId) ? BigInt(object.orderId.toString()) : BigInt(0),
+      timeMillis: isSet(object.timeMillis) ? BigInt(object.timeMillis.toString()) : BigInt(0)
     };
   },
   toJSON(message: EventRemoveScheduleOrder): unknown {
     const obj: any = {};
-    message.orderId !== undefined && (obj.orderId = (message.orderId || Long.UZERO).toString());
-    message.timeMillis !== undefined && (obj.timeMillis = (message.timeMillis || Long.ZERO).toString());
+    message.orderId !== undefined && (obj.orderId = (message.orderId || BigInt(0)).toString());
+    message.timeMillis !== undefined && (obj.timeMillis = (message.timeMillis || BigInt(0)).toString());
     return obj;
   },
   fromPartial(object: Partial<EventRemoveScheduleOrder>): EventRemoveScheduleOrder {
     const message = createBaseEventRemoveScheduleOrder();
-    message.orderId = object.orderId !== undefined && object.orderId !== null ? Long.fromValue(object.orderId) : Long.UZERO;
-    message.timeMillis = object.timeMillis !== undefined && object.timeMillis !== null ? Long.fromValue(object.timeMillis) : Long.ZERO;
+    message.orderId = object.orderId !== undefined && object.orderId !== null ? BigInt(object.orderId.toString()) : BigInt(0);
+    message.timeMillis = object.timeMillis !== undefined && object.timeMillis !== null ? BigInt(object.timeMillis.toString()) : BigInt(0);
     return message;
   }
 };
 function createBaseEventSetExecutableOrder(): EventSetExecutableOrder {
   return {
-    orderId: Long.UZERO
+    orderId: BigInt(0)
   };
 }
 export const EventSetExecutableOrder = {
-  encode(message: EventSetExecutableOrder, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (!message.orderId.isZero()) {
+  encode(message: EventSetExecutableOrder, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    if (message.orderId !== BigInt(0)) {
       writer.uint32(8).uint64(message.orderId);
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): EventSetExecutableOrder {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): EventSetExecutableOrder {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseEventSetExecutableOrder();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.orderId = (reader.uint64() as Long);
+          message.orderId = reader.uint64();
           break;
         default:
           reader.skipType(tag & 7);
@@ -1209,41 +1210,41 @@ export const EventSetExecutableOrder = {
   },
   fromJSON(object: any): EventSetExecutableOrder {
     return {
-      orderId: isSet(object.orderId) ? Long.fromValue(object.orderId) : Long.UZERO
+      orderId: isSet(object.orderId) ? BigInt(object.orderId.toString()) : BigInt(0)
     };
   },
   toJSON(message: EventSetExecutableOrder): unknown {
     const obj: any = {};
-    message.orderId !== undefined && (obj.orderId = (message.orderId || Long.UZERO).toString());
+    message.orderId !== undefined && (obj.orderId = (message.orderId || BigInt(0)).toString());
     return obj;
   },
   fromPartial(object: Partial<EventSetExecutableOrder>): EventSetExecutableOrder {
     const message = createBaseEventSetExecutableOrder();
-    message.orderId = object.orderId !== undefined && object.orderId !== null ? Long.fromValue(object.orderId) : Long.UZERO;
+    message.orderId = object.orderId !== undefined && object.orderId !== null ? BigInt(object.orderId.toString()) : BigInt(0);
     return message;
   }
 };
 function createBaseEventRemoveExecutableOrder(): EventRemoveExecutableOrder {
   return {
-    orderId: Long.UZERO
+    orderId: BigInt(0)
   };
 }
 export const EventRemoveExecutableOrder = {
-  encode(message: EventRemoveExecutableOrder, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (!message.orderId.isZero()) {
+  encode(message: EventRemoveExecutableOrder, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    if (message.orderId !== BigInt(0)) {
       writer.uint32(8).uint64(message.orderId);
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): EventRemoveExecutableOrder {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): EventRemoveExecutableOrder {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseEventRemoveExecutableOrder();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.orderId = (reader.uint64() as Long);
+          message.orderId = reader.uint64();
           break;
         default:
           reader.skipType(tag & 7);
@@ -1254,17 +1255,17 @@ export const EventRemoveExecutableOrder = {
   },
   fromJSON(object: any): EventRemoveExecutableOrder {
     return {
-      orderId: isSet(object.orderId) ? Long.fromValue(object.orderId) : Long.UZERO
+      orderId: isSet(object.orderId) ? BigInt(object.orderId.toString()) : BigInt(0)
     };
   },
   toJSON(message: EventRemoveExecutableOrder): unknown {
     const obj: any = {};
-    message.orderId !== undefined && (obj.orderId = (message.orderId || Long.UZERO).toString());
+    message.orderId !== undefined && (obj.orderId = (message.orderId || BigInt(0)).toString());
     return obj;
   },
   fromPartial(object: Partial<EventRemoveExecutableOrder>): EventRemoveExecutableOrder {
     const message = createBaseEventRemoveExecutableOrder();
-    message.orderId = object.orderId !== undefined && object.orderId !== null ? Long.fromValue(object.orderId) : Long.UZERO;
+    message.orderId = object.orderId !== undefined && object.orderId !== null ? BigInt(object.orderId.toString()) : BigInt(0);
     return message;
   }
 };
@@ -1274,14 +1275,14 @@ function createBaseEventSetIntroducingPoolToken(): EventSetIntroducingPoolToken 
   };
 }
 export const EventSetIntroducingPoolToken = {
-  encode(message: EventSetIntroducingPoolToken, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: EventSetIntroducingPoolToken, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.virtualBalanceToken !== undefined) {
       VirtualBalancePoolToken.encode(message.virtualBalanceToken, writer.uint32(10).fork()).ldelim();
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): EventSetIntroducingPoolToken {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): EventSetIntroducingPoolToken {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseEventSetIntroducingPoolToken();
     while (reader.pos < end) {
@@ -1315,13 +1316,13 @@ export const EventSetIntroducingPoolToken = {
 };
 function createBaseEventRemoveIntroducingPoolToken(): EventRemoveIntroducingPoolToken {
   return {
-    poolId: Long.UZERO,
+    poolId: BigInt(0),
     denom: ""
   };
 }
 export const EventRemoveIntroducingPoolToken = {
-  encode(message: EventRemoveIntroducingPoolToken, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (!message.poolId.isZero()) {
+  encode(message: EventRemoveIntroducingPoolToken, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    if (message.poolId !== BigInt(0)) {
       writer.uint32(8).uint64(message.poolId);
     }
     if (message.denom !== "") {
@@ -1329,15 +1330,15 @@ export const EventRemoveIntroducingPoolToken = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): EventRemoveIntroducingPoolToken {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): EventRemoveIntroducingPoolToken {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseEventRemoveIntroducingPoolToken();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.poolId = (reader.uint64() as Long);
+          message.poolId = reader.uint64();
           break;
         case 2:
           message.denom = reader.string();
@@ -1351,19 +1352,19 @@ export const EventRemoveIntroducingPoolToken = {
   },
   fromJSON(object: any): EventRemoveIntroducingPoolToken {
     return {
-      poolId: isSet(object.poolId) ? Long.fromValue(object.poolId) : Long.UZERO,
+      poolId: isSet(object.poolId) ? BigInt(object.poolId.toString()) : BigInt(0),
       denom: isSet(object.denom) ? String(object.denom) : ""
     };
   },
   toJSON(message: EventRemoveIntroducingPoolToken): unknown {
     const obj: any = {};
-    message.poolId !== undefined && (obj.poolId = (message.poolId || Long.UZERO).toString());
+    message.poolId !== undefined && (obj.poolId = (message.poolId || BigInt(0)).toString());
     message.denom !== undefined && (obj.denom = message.denom);
     return obj;
   },
   fromPartial(object: Partial<EventRemoveIntroducingPoolToken>): EventRemoveIntroducingPoolToken {
     const message = createBaseEventRemoveIntroducingPoolToken();
-    message.poolId = object.poolId !== undefined && object.poolId !== null ? Long.fromValue(object.poolId) : Long.UZERO;
+    message.poolId = object.poolId !== undefined && object.poolId !== null ? BigInt(object.poolId.toString()) : BigInt(0);
     message.denom = object.denom ?? "";
     return message;
   }
@@ -1374,14 +1375,14 @@ function createBaseEventSetExpiringPoolToken(): EventSetExpiringPoolToken {
   };
 }
 export const EventSetExpiringPoolToken = {
-  encode(message: EventSetExpiringPoolToken, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: EventSetExpiringPoolToken, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.virtualBalanceToken !== undefined) {
       VirtualBalancePoolToken.encode(message.virtualBalanceToken, writer.uint32(10).fork()).ldelim();
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): EventSetExpiringPoolToken {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): EventSetExpiringPoolToken {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseEventSetExpiringPoolToken();
     while (reader.pos < end) {
@@ -1415,13 +1416,13 @@ export const EventSetExpiringPoolToken = {
 };
 function createBaseEventRemoveExpiringPoolToken(): EventRemoveExpiringPoolToken {
   return {
-    poolId: Long.UZERO,
+    poolId: BigInt(0),
     denom: ""
   };
 }
 export const EventRemoveExpiringPoolToken = {
-  encode(message: EventRemoveExpiringPoolToken, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (!message.poolId.isZero()) {
+  encode(message: EventRemoveExpiringPoolToken, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    if (message.poolId !== BigInt(0)) {
       writer.uint32(8).uint64(message.poolId);
     }
     if (message.denom !== "") {
@@ -1429,15 +1430,15 @@ export const EventRemoveExpiringPoolToken = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): EventRemoveExpiringPoolToken {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): EventRemoveExpiringPoolToken {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseEventRemoveExpiringPoolToken();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.poolId = (reader.uint64() as Long);
+          message.poolId = reader.uint64();
           break;
         case 2:
           message.denom = reader.string();
@@ -1451,32 +1452,32 @@ export const EventRemoveExpiringPoolToken = {
   },
   fromJSON(object: any): EventRemoveExpiringPoolToken {
     return {
-      poolId: isSet(object.poolId) ? Long.fromValue(object.poolId) : Long.UZERO,
+      poolId: isSet(object.poolId) ? BigInt(object.poolId.toString()) : BigInt(0),
       denom: isSet(object.denom) ? String(object.denom) : ""
     };
   },
   toJSON(message: EventRemoveExpiringPoolToken): unknown {
     const obj: any = {};
-    message.poolId !== undefined && (obj.poolId = (message.poolId || Long.UZERO).toString());
+    message.poolId !== undefined && (obj.poolId = (message.poolId || BigInt(0)).toString());
     message.denom !== undefined && (obj.denom = message.denom);
     return obj;
   },
   fromPartial(object: Partial<EventRemoveExpiringPoolToken>): EventRemoveExpiringPoolToken {
     const message = createBaseEventRemoveExpiringPoolToken();
-    message.poolId = object.poolId !== undefined && object.poolId !== null ? Long.fromValue(object.poolId) : Long.UZERO;
+    message.poolId = object.poolId !== undefined && object.poolId !== null ? BigInt(object.poolId.toString()) : BigInt(0);
     message.denom = object.denom ?? "";
     return message;
   }
 };
 function createBaseEventSetYammPoolForAssetId(): EventSetYammPoolForAssetId {
   return {
-    poolId: Long.UZERO,
+    poolId: BigInt(0),
     assetId: ""
   };
 }
 export const EventSetYammPoolForAssetId = {
-  encode(message: EventSetYammPoolForAssetId, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (!message.poolId.isZero()) {
+  encode(message: EventSetYammPoolForAssetId, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    if (message.poolId !== BigInt(0)) {
       writer.uint32(8).uint64(message.poolId);
     }
     if (message.assetId !== "") {
@@ -1484,15 +1485,15 @@ export const EventSetYammPoolForAssetId = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): EventSetYammPoolForAssetId {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): EventSetYammPoolForAssetId {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseEventSetYammPoolForAssetId();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.poolId = (reader.uint64() as Long);
+          message.poolId = reader.uint64();
           break;
         case 2:
           message.assetId = reader.string();
@@ -1506,19 +1507,19 @@ export const EventSetYammPoolForAssetId = {
   },
   fromJSON(object: any): EventSetYammPoolForAssetId {
     return {
-      poolId: isSet(object.poolId) ? Long.fromValue(object.poolId) : Long.UZERO,
+      poolId: isSet(object.poolId) ? BigInt(object.poolId.toString()) : BigInt(0),
       assetId: isSet(object.assetId) ? String(object.assetId) : ""
     };
   },
   toJSON(message: EventSetYammPoolForAssetId): unknown {
     const obj: any = {};
-    message.poolId !== undefined && (obj.poolId = (message.poolId || Long.UZERO).toString());
+    message.poolId !== undefined && (obj.poolId = (message.poolId || BigInt(0)).toString());
     message.assetId !== undefined && (obj.assetId = message.assetId);
     return obj;
   },
   fromPartial(object: Partial<EventSetYammPoolForAssetId>): EventSetYammPoolForAssetId {
     const message = createBaseEventSetYammPoolForAssetId();
-    message.poolId = object.poolId !== undefined && object.poolId !== null ? Long.fromValue(object.poolId) : Long.UZERO;
+    message.poolId = object.poolId !== undefined && object.poolId !== null ? BigInt(object.poolId.toString()) : BigInt(0);
     message.assetId = object.assetId ?? "";
     return message;
   }
@@ -1529,14 +1530,14 @@ function createBaseEventSetVaultPaused(): EventSetVaultPaused {
   };
 }
 export const EventSetVaultPaused = {
-  encode(message: EventSetVaultPaused, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: EventSetVaultPaused, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.paused === true) {
       writer.uint32(8).bool(message.paused);
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): EventSetVaultPaused {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): EventSetVaultPaused {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseEventSetVaultPaused();
     while (reader.pos < end) {
@@ -1570,14 +1571,14 @@ export const EventSetVaultPaused = {
 };
 function createBaseEventExecuteOrder(): EventExecuteOrder {
   return {
-    orderId: Long.UZERO,
+    orderId: BigInt(0),
     tradeAmount: "",
     matchAmount: ""
   };
 }
 export const EventExecuteOrder = {
-  encode(message: EventExecuteOrder, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (!message.orderId.isZero()) {
+  encode(message: EventExecuteOrder, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    if (message.orderId !== BigInt(0)) {
       writer.uint32(8).uint64(message.orderId);
     }
     if (message.tradeAmount !== "") {
@@ -1588,15 +1589,15 @@ export const EventExecuteOrder = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): EventExecuteOrder {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): EventExecuteOrder {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseEventExecuteOrder();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.orderId = (reader.uint64() as Long);
+          message.orderId = reader.uint64();
           break;
         case 2:
           message.tradeAmount = reader.string();
@@ -1613,21 +1614,21 @@ export const EventExecuteOrder = {
   },
   fromJSON(object: any): EventExecuteOrder {
     return {
-      orderId: isSet(object.orderId) ? Long.fromValue(object.orderId) : Long.UZERO,
+      orderId: isSet(object.orderId) ? BigInt(object.orderId.toString()) : BigInt(0),
       tradeAmount: isSet(object.tradeAmount) ? String(object.tradeAmount) : "",
       matchAmount: isSet(object.matchAmount) ? String(object.matchAmount) : ""
     };
   },
   toJSON(message: EventExecuteOrder): unknown {
     const obj: any = {};
-    message.orderId !== undefined && (obj.orderId = (message.orderId || Long.UZERO).toString());
+    message.orderId !== undefined && (obj.orderId = (message.orderId || BigInt(0)).toString());
     message.tradeAmount !== undefined && (obj.tradeAmount = message.tradeAmount);
     message.matchAmount !== undefined && (obj.matchAmount = message.matchAmount);
     return obj;
   },
   fromPartial(object: Partial<EventExecuteOrder>): EventExecuteOrder {
     const message = createBaseEventExecuteOrder();
-    message.orderId = object.orderId !== undefined && object.orderId !== null ? Long.fromValue(object.orderId) : Long.UZERO;
+    message.orderId = object.orderId !== undefined && object.orderId !== null ? BigInt(object.orderId.toString()) : BigInt(0);
     message.tradeAmount = object.tradeAmount ?? "";
     message.matchAmount = object.matchAmount ?? "";
     return message;
@@ -1635,7 +1636,7 @@ export const EventExecuteOrder = {
 };
 function createBaseEventExecuteOrdersForPair(): EventExecuteOrdersForPair {
   return {
-    poolId: Long.UZERO,
+    poolId: BigInt(0),
     tokenIn: "",
     tokenOut: "",
     whitelistedRoute: false,
@@ -1652,8 +1653,8 @@ function createBaseEventExecuteOrdersForPair(): EventExecuteOrdersForPair {
   };
 }
 export const EventExecuteOrdersForPair = {
-  encode(message: EventExecuteOrdersForPair, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (!message.poolId.isZero()) {
+  encode(message: EventExecuteOrdersForPair, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    if (message.poolId !== BigInt(0)) {
       writer.uint32(8).uint64(message.poolId);
     }
     if (message.tokenIn !== "") {
@@ -1666,10 +1667,10 @@ export const EventExecuteOrdersForPair = {
       writer.uint32(32).bool(message.whitelistedRoute);
     }
     if (message.buyPrice !== "") {
-      writer.uint32(42).string(message.buyPrice);
+      writer.uint32(42).string(Decimal.fromUserInput(message.buyPrice, 18).atomics);
     }
     if (message.sellPrice !== "") {
-      writer.uint32(50).string(message.sellPrice);
+      writer.uint32(50).string(Decimal.fromUserInput(message.sellPrice, 18).atomics);
     }
     for (const v of message.buyOrders) {
       EventExecuteOrder.encode(v!, writer.uint32(58).fork()).ldelim();
@@ -1697,15 +1698,15 @@ export const EventExecuteOrdersForPair = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): EventExecuteOrdersForPair {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): EventExecuteOrdersForPair {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseEventExecuteOrdersForPair();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.poolId = (reader.uint64() as Long);
+          message.poolId = reader.uint64();
           break;
         case 2:
           message.tokenIn = reader.string();
@@ -1717,10 +1718,10 @@ export const EventExecuteOrdersForPair = {
           message.whitelistedRoute = reader.bool();
           break;
         case 5:
-          message.buyPrice = reader.string();
+          message.buyPrice = Decimal.fromAtomics(reader.string(), 18).toString();
           break;
         case 6:
-          message.sellPrice = reader.string();
+          message.sellPrice = Decimal.fromAtomics(reader.string(), 18).toString();
           break;
         case 7:
           message.buyOrders.push(EventExecuteOrder.decode(reader, reader.uint32()));
@@ -1755,7 +1756,7 @@ export const EventExecuteOrdersForPair = {
   },
   fromJSON(object: any): EventExecuteOrdersForPair {
     return {
-      poolId: isSet(object.poolId) ? Long.fromValue(object.poolId) : Long.UZERO,
+      poolId: isSet(object.poolId) ? BigInt(object.poolId.toString()) : BigInt(0),
       tokenIn: isSet(object.tokenIn) ? String(object.tokenIn) : "",
       tokenOut: isSet(object.tokenOut) ? String(object.tokenOut) : "",
       whitelistedRoute: isSet(object.whitelistedRoute) ? Boolean(object.whitelistedRoute) : false,
@@ -1773,7 +1774,7 @@ export const EventExecuteOrdersForPair = {
   },
   toJSON(message: EventExecuteOrdersForPair): unknown {
     const obj: any = {};
-    message.poolId !== undefined && (obj.poolId = (message.poolId || Long.UZERO).toString());
+    message.poolId !== undefined && (obj.poolId = (message.poolId || BigInt(0)).toString());
     message.tokenIn !== undefined && (obj.tokenIn = message.tokenIn);
     message.tokenOut !== undefined && (obj.tokenOut = message.tokenOut);
     message.whitelistedRoute !== undefined && (obj.whitelistedRoute = message.whitelistedRoute);
@@ -1799,7 +1800,7 @@ export const EventExecuteOrdersForPair = {
   },
   fromPartial(object: Partial<EventExecuteOrdersForPair>): EventExecuteOrdersForPair {
     const message = createBaseEventExecuteOrdersForPair();
-    message.poolId = object.poolId !== undefined && object.poolId !== null ? Long.fromValue(object.poolId) : Long.UZERO;
+    message.poolId = object.poolId !== undefined && object.poolId !== null ? BigInt(object.poolId.toString()) : BigInt(0);
     message.tokenIn = object.tokenIn ?? "";
     message.tokenOut = object.tokenOut ?? "";
     message.whitelistedRoute = object.whitelistedRoute ?? false;
@@ -1818,13 +1819,13 @@ export const EventExecuteOrdersForPair = {
 };
 function createBaseEventExecuteMatchProposalOrder(): EventExecuteMatchProposalOrder {
   return {
-    orderId: Long.UZERO,
+    orderId: BigInt(0),
     matchAmount: ""
   };
 }
 export const EventExecuteMatchProposalOrder = {
-  encode(message: EventExecuteMatchProposalOrder, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (!message.orderId.isZero()) {
+  encode(message: EventExecuteMatchProposalOrder, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    if (message.orderId !== BigInt(0)) {
       writer.uint32(8).uint64(message.orderId);
     }
     if (message.matchAmount !== "") {
@@ -1832,15 +1833,15 @@ export const EventExecuteMatchProposalOrder = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): EventExecuteMatchProposalOrder {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): EventExecuteMatchProposalOrder {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseEventExecuteMatchProposalOrder();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.orderId = (reader.uint64() as Long);
+          message.orderId = reader.uint64();
           break;
         case 3:
           message.matchAmount = reader.string();
@@ -1854,26 +1855,26 @@ export const EventExecuteMatchProposalOrder = {
   },
   fromJSON(object: any): EventExecuteMatchProposalOrder {
     return {
-      orderId: isSet(object.orderId) ? Long.fromValue(object.orderId) : Long.UZERO,
+      orderId: isSet(object.orderId) ? BigInt(object.orderId.toString()) : BigInt(0),
       matchAmount: isSet(object.matchAmount) ? String(object.matchAmount) : ""
     };
   },
   toJSON(message: EventExecuteMatchProposalOrder): unknown {
     const obj: any = {};
-    message.orderId !== undefined && (obj.orderId = (message.orderId || Long.UZERO).toString());
+    message.orderId !== undefined && (obj.orderId = (message.orderId || BigInt(0)).toString());
     message.matchAmount !== undefined && (obj.matchAmount = message.matchAmount);
     return obj;
   },
   fromPartial(object: Partial<EventExecuteMatchProposalOrder>): EventExecuteMatchProposalOrder {
     const message = createBaseEventExecuteMatchProposalOrder();
-    message.orderId = object.orderId !== undefined && object.orderId !== null ? Long.fromValue(object.orderId) : Long.UZERO;
+    message.orderId = object.orderId !== undefined && object.orderId !== null ? BigInt(object.orderId.toString()) : BigInt(0);
     message.matchAmount = object.matchAmount ?? "";
     return message;
   }
 };
 function createBaseEventExecuteMatchProposalPair(): EventExecuteMatchProposalPair {
   return {
-    poolId: Long.UZERO,
+    poolId: BigInt(0),
     tokenIn: "",
     tokenOut: "",
     whitelistedRoute: false,
@@ -1886,8 +1887,8 @@ function createBaseEventExecuteMatchProposalPair(): EventExecuteMatchProposalPai
   };
 }
 export const EventExecuteMatchProposalPair = {
-  encode(message: EventExecuteMatchProposalPair, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (!message.poolId.isZero()) {
+  encode(message: EventExecuteMatchProposalPair, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    if (message.poolId !== BigInt(0)) {
       writer.uint32(8).uint64(message.poolId);
     }
     if (message.tokenIn !== "") {
@@ -1900,10 +1901,10 @@ export const EventExecuteMatchProposalPair = {
       writer.uint32(32).bool(message.whitelistedRoute);
     }
     if (message.buyPrice !== "") {
-      writer.uint32(42).string(message.buyPrice);
+      writer.uint32(42).string(Decimal.fromUserInput(message.buyPrice, 18).atomics);
     }
     if (message.sellPrice !== "") {
-      writer.uint32(50).string(message.sellPrice);
+      writer.uint32(50).string(Decimal.fromUserInput(message.sellPrice, 18).atomics);
     }
     for (const v of message.buyOrders) {
       EventExecuteMatchProposalOrder.encode(v!, writer.uint32(58).fork()).ldelim();
@@ -1919,15 +1920,15 @@ export const EventExecuteMatchProposalPair = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): EventExecuteMatchProposalPair {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): EventExecuteMatchProposalPair {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseEventExecuteMatchProposalPair();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.poolId = (reader.uint64() as Long);
+          message.poolId = reader.uint64();
           break;
         case 2:
           message.tokenIn = reader.string();
@@ -1939,10 +1940,10 @@ export const EventExecuteMatchProposalPair = {
           message.whitelistedRoute = reader.bool();
           break;
         case 5:
-          message.buyPrice = reader.string();
+          message.buyPrice = Decimal.fromAtomics(reader.string(), 18).toString();
           break;
         case 6:
-          message.sellPrice = reader.string();
+          message.sellPrice = Decimal.fromAtomics(reader.string(), 18).toString();
           break;
         case 7:
           message.buyOrders.push(EventExecuteMatchProposalOrder.decode(reader, reader.uint32()));
@@ -1965,7 +1966,7 @@ export const EventExecuteMatchProposalPair = {
   },
   fromJSON(object: any): EventExecuteMatchProposalPair {
     return {
-      poolId: isSet(object.poolId) ? Long.fromValue(object.poolId) : Long.UZERO,
+      poolId: isSet(object.poolId) ? BigInt(object.poolId.toString()) : BigInt(0),
       tokenIn: isSet(object.tokenIn) ? String(object.tokenIn) : "",
       tokenOut: isSet(object.tokenOut) ? String(object.tokenOut) : "",
       whitelistedRoute: isSet(object.whitelistedRoute) ? Boolean(object.whitelistedRoute) : false,
@@ -1979,7 +1980,7 @@ export const EventExecuteMatchProposalPair = {
   },
   toJSON(message: EventExecuteMatchProposalPair): unknown {
     const obj: any = {};
-    message.poolId !== undefined && (obj.poolId = (message.poolId || Long.UZERO).toString());
+    message.poolId !== undefined && (obj.poolId = (message.poolId || BigInt(0)).toString());
     message.tokenIn !== undefined && (obj.tokenIn = message.tokenIn);
     message.tokenOut !== undefined && (obj.tokenOut = message.tokenOut);
     message.whitelistedRoute !== undefined && (obj.whitelistedRoute = message.whitelistedRoute);
@@ -2001,7 +2002,7 @@ export const EventExecuteMatchProposalPair = {
   },
   fromPartial(object: Partial<EventExecuteMatchProposalPair>): EventExecuteMatchProposalPair {
     const message = createBaseEventExecuteMatchProposalPair();
-    message.poolId = object.poolId !== undefined && object.poolId !== null ? Long.fromValue(object.poolId) : Long.UZERO;
+    message.poolId = object.poolId !== undefined && object.poolId !== null ? BigInt(object.poolId.toString()) : BigInt(0);
     message.tokenIn = object.tokenIn ?? "";
     message.tokenOut = object.tokenOut ?? "";
     message.whitelistedRoute = object.whitelistedRoute ?? false;
@@ -2022,7 +2023,7 @@ function createBaseEventExecuteMatchProposal(): EventExecuteMatchProposal {
   };
 }
 export const EventExecuteMatchProposal = {
-  encode(message: EventExecuteMatchProposal, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: EventExecuteMatchProposal, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.proposer !== "") {
       writer.uint32(10).string(message.proposer);
     }
@@ -2034,8 +2035,8 @@ export const EventExecuteMatchProposal = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): EventExecuteMatchProposal {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): EventExecuteMatchProposal {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseEventExecuteMatchProposal();
     while (reader.pos < end) {
@@ -2089,13 +2090,13 @@ export const EventExecuteMatchProposal = {
 };
 function createBaseEventExitPool(): EventExitPool {
   return {
-    poolId: Long.UZERO,
+    poolId: BigInt(0),
     summary: ExitSummary.fromPartial({})
   };
 }
 export const EventExitPool = {
-  encode(message: EventExitPool, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (!message.poolId.isZero()) {
+  encode(message: EventExitPool, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    if (message.poolId !== BigInt(0)) {
       writer.uint32(8).uint64(message.poolId);
     }
     if (message.summary !== undefined) {
@@ -2103,15 +2104,15 @@ export const EventExitPool = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): EventExitPool {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): EventExitPool {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseEventExitPool();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.poolId = (reader.uint64() as Long);
+          message.poolId = reader.uint64();
           break;
         case 2:
           message.summary = ExitSummary.decode(reader, reader.uint32());
@@ -2125,32 +2126,32 @@ export const EventExitPool = {
   },
   fromJSON(object: any): EventExitPool {
     return {
-      poolId: isSet(object.poolId) ? Long.fromValue(object.poolId) : Long.UZERO,
+      poolId: isSet(object.poolId) ? BigInt(object.poolId.toString()) : BigInt(0),
       summary: isSet(object.summary) ? ExitSummary.fromJSON(object.summary) : undefined
     };
   },
   toJSON(message: EventExitPool): unknown {
     const obj: any = {};
-    message.poolId !== undefined && (obj.poolId = (message.poolId || Long.UZERO).toString());
+    message.poolId !== undefined && (obj.poolId = (message.poolId || BigInt(0)).toString());
     message.summary !== undefined && (obj.summary = message.summary ? ExitSummary.toJSON(message.summary) : undefined);
     return obj;
   },
   fromPartial(object: Partial<EventExitPool>): EventExitPool {
     const message = createBaseEventExitPool();
-    message.poolId = object.poolId !== undefined && object.poolId !== null ? Long.fromValue(object.poolId) : Long.UZERO;
+    message.poolId = object.poolId !== undefined && object.poolId !== null ? BigInt(object.poolId.toString()) : BigInt(0);
     message.summary = object.summary !== undefined && object.summary !== null ? ExitSummary.fromPartial(object.summary) : undefined;
     return message;
   }
 };
 function createBaseEventJoinPool(): EventJoinPool {
   return {
-    poolId: Long.UZERO,
+    poolId: BigInt(0),
     summary: JoinSummary.fromPartial({})
   };
 }
 export const EventJoinPool = {
-  encode(message: EventJoinPool, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (!message.poolId.isZero()) {
+  encode(message: EventJoinPool, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    if (message.poolId !== BigInt(0)) {
       writer.uint32(8).uint64(message.poolId);
     }
     if (message.summary !== undefined) {
@@ -2158,15 +2159,15 @@ export const EventJoinPool = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): EventJoinPool {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): EventJoinPool {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseEventJoinPool();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.poolId = (reader.uint64() as Long);
+          message.poolId = reader.uint64();
           break;
         case 2:
           message.summary = JoinSummary.decode(reader, reader.uint32());
@@ -2180,32 +2181,32 @@ export const EventJoinPool = {
   },
   fromJSON(object: any): EventJoinPool {
     return {
-      poolId: isSet(object.poolId) ? Long.fromValue(object.poolId) : Long.UZERO,
+      poolId: isSet(object.poolId) ? BigInt(object.poolId.toString()) : BigInt(0),
       summary: isSet(object.summary) ? JoinSummary.fromJSON(object.summary) : undefined
     };
   },
   toJSON(message: EventJoinPool): unknown {
     const obj: any = {};
-    message.poolId !== undefined && (obj.poolId = (message.poolId || Long.UZERO).toString());
+    message.poolId !== undefined && (obj.poolId = (message.poolId || BigInt(0)).toString());
     message.summary !== undefined && (obj.summary = message.summary ? JoinSummary.toJSON(message.summary) : undefined);
     return obj;
   },
   fromPartial(object: Partial<EventJoinPool>): EventJoinPool {
     const message = createBaseEventJoinPool();
-    message.poolId = object.poolId !== undefined && object.poolId !== null ? Long.fromValue(object.poolId) : Long.UZERO;
+    message.poolId = object.poolId !== undefined && object.poolId !== null ? BigInt(object.poolId.toString()) : BigInt(0);
     message.summary = object.summary !== undefined && object.summary !== null ? JoinSummary.fromPartial(object.summary) : undefined;
     return message;
   }
 };
 function createBaseEventSwap(): EventSwap {
   return {
-    poolId: Long.UZERO,
+    poolId: BigInt(0),
     summary: SwapSummary.fromPartial({})
   };
 }
 export const EventSwap = {
-  encode(message: EventSwap, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (!message.poolId.isZero()) {
+  encode(message: EventSwap, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    if (message.poolId !== BigInt(0)) {
       writer.uint32(8).uint64(message.poolId);
     }
     if (message.summary !== undefined) {
@@ -2213,15 +2214,15 @@ export const EventSwap = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): EventSwap {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): EventSwap {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseEventSwap();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.poolId = (reader.uint64() as Long);
+          message.poolId = reader.uint64();
           break;
         case 2:
           message.summary = SwapSummary.decode(reader, reader.uint32());
@@ -2235,19 +2236,19 @@ export const EventSwap = {
   },
   fromJSON(object: any): EventSwap {
     return {
-      poolId: isSet(object.poolId) ? Long.fromValue(object.poolId) : Long.UZERO,
+      poolId: isSet(object.poolId) ? BigInt(object.poolId.toString()) : BigInt(0),
       summary: isSet(object.summary) ? SwapSummary.fromJSON(object.summary) : undefined
     };
   },
   toJSON(message: EventSwap): unknown {
     const obj: any = {};
-    message.poolId !== undefined && (obj.poolId = (message.poolId || Long.UZERO).toString());
+    message.poolId !== undefined && (obj.poolId = (message.poolId || BigInt(0)).toString());
     message.summary !== undefined && (obj.summary = message.summary ? SwapSummary.toJSON(message.summary) : undefined);
     return obj;
   },
   fromPartial(object: Partial<EventSwap>): EventSwap {
     const message = createBaseEventSwap();
-    message.poolId = object.poolId !== undefined && object.poolId !== null ? Long.fromValue(object.poolId) : Long.UZERO;
+    message.poolId = object.poolId !== undefined && object.poolId !== null ? BigInt(object.poolId.toString()) : BigInt(0);
     message.summary = object.summary !== undefined && object.summary !== null ? SwapSummary.fromPartial(object.summary) : undefined;
     return message;
   }
@@ -2255,7 +2256,7 @@ export const EventSwap = {
 function createBaseEventExitPoolRequest(): EventExitPoolRequest {
   return {
     creator: "",
-    poolId: Long.UZERO,
+    poolId: BigInt(0),
     lptIn: Coin.fromPartial({}),
     amountsOut: [],
     protocolFee: Coin.fromPartial({}),
@@ -2264,11 +2265,11 @@ function createBaseEventExitPoolRequest(): EventExitPoolRequest {
   };
 }
 export const EventExitPoolRequest = {
-  encode(message: EventExitPoolRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: EventExitPoolRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.creator !== "") {
       writer.uint32(10).string(message.creator);
     }
-    if (!message.poolId.isZero()) {
+    if (message.poolId !== BigInt(0)) {
       writer.uint32(16).uint64(message.poolId);
     }
     if (message.lptIn !== undefined) {
@@ -2288,8 +2289,8 @@ export const EventExitPoolRequest = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): EventExitPoolRequest {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): EventExitPoolRequest {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseEventExitPoolRequest();
     while (reader.pos < end) {
@@ -2299,7 +2300,7 @@ export const EventExitPoolRequest = {
           message.creator = reader.string();
           break;
         case 2:
-          message.poolId = (reader.uint64() as Long);
+          message.poolId = reader.uint64();
           break;
         case 3:
           message.lptIn = Coin.decode(reader, reader.uint32());
@@ -2326,7 +2327,7 @@ export const EventExitPoolRequest = {
   fromJSON(object: any): EventExitPoolRequest {
     return {
       creator: isSet(object.creator) ? String(object.creator) : "",
-      poolId: isSet(object.poolId) ? Long.fromValue(object.poolId) : Long.UZERO,
+      poolId: isSet(object.poolId) ? BigInt(object.poolId.toString()) : BigInt(0),
       lptIn: isSet(object.lptIn) ? Coin.fromJSON(object.lptIn) : undefined,
       amountsOut: Array.isArray(object?.amountsOut) ? object.amountsOut.map((e: any) => Coin.fromJSON(e)) : [],
       protocolFee: isSet(object.protocolFee) ? Coin.fromJSON(object.protocolFee) : undefined,
@@ -2337,7 +2338,7 @@ export const EventExitPoolRequest = {
   toJSON(message: EventExitPoolRequest): unknown {
     const obj: any = {};
     message.creator !== undefined && (obj.creator = message.creator);
-    message.poolId !== undefined && (obj.poolId = (message.poolId || Long.UZERO).toString());
+    message.poolId !== undefined && (obj.poolId = (message.poolId || BigInt(0)).toString());
     message.lptIn !== undefined && (obj.lptIn = message.lptIn ? Coin.toJSON(message.lptIn) : undefined);
     if (message.amountsOut) {
       obj.amountsOut = message.amountsOut.map(e => e ? Coin.toJSON(e) : undefined);
@@ -2356,7 +2357,7 @@ export const EventExitPoolRequest = {
   fromPartial(object: Partial<EventExitPoolRequest>): EventExitPoolRequest {
     const message = createBaseEventExitPoolRequest();
     message.creator = object.creator ?? "";
-    message.poolId = object.poolId !== undefined && object.poolId !== null ? Long.fromValue(object.poolId) : Long.UZERO;
+    message.poolId = object.poolId !== undefined && object.poolId !== null ? BigInt(object.poolId.toString()) : BigInt(0);
     message.lptIn = object.lptIn !== undefined && object.lptIn !== null ? Coin.fromPartial(object.lptIn) : undefined;
     message.amountsOut = object.amountsOut?.map(e => Coin.fromPartial(e)) || [];
     message.protocolFee = object.protocolFee !== undefined && object.protocolFee !== null ? Coin.fromPartial(object.protocolFee) : undefined;
@@ -2368,7 +2369,7 @@ export const EventExitPoolRequest = {
 function createBaseEventJoinPoolRequest(): EventJoinPoolRequest {
   return {
     creator: "",
-    poolId: Long.UZERO,
+    poolId: BigInt(0),
     lptOut: Coin.fromPartial({}),
     amountsIn: [],
     protocolFee: [],
@@ -2377,11 +2378,11 @@ function createBaseEventJoinPoolRequest(): EventJoinPoolRequest {
   };
 }
 export const EventJoinPoolRequest = {
-  encode(message: EventJoinPoolRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: EventJoinPoolRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.creator !== "") {
       writer.uint32(10).string(message.creator);
     }
-    if (!message.poolId.isZero()) {
+    if (message.poolId !== BigInt(0)) {
       writer.uint32(16).uint64(message.poolId);
     }
     if (message.lptOut !== undefined) {
@@ -2401,8 +2402,8 @@ export const EventJoinPoolRequest = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): EventJoinPoolRequest {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): EventJoinPoolRequest {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseEventJoinPoolRequest();
     while (reader.pos < end) {
@@ -2412,7 +2413,7 @@ export const EventJoinPoolRequest = {
           message.creator = reader.string();
           break;
         case 2:
-          message.poolId = (reader.uint64() as Long);
+          message.poolId = reader.uint64();
           break;
         case 3:
           message.lptOut = Coin.decode(reader, reader.uint32());
@@ -2439,7 +2440,7 @@ export const EventJoinPoolRequest = {
   fromJSON(object: any): EventJoinPoolRequest {
     return {
       creator: isSet(object.creator) ? String(object.creator) : "",
-      poolId: isSet(object.poolId) ? Long.fromValue(object.poolId) : Long.UZERO,
+      poolId: isSet(object.poolId) ? BigInt(object.poolId.toString()) : BigInt(0),
       lptOut: isSet(object.lptOut) ? Coin.fromJSON(object.lptOut) : undefined,
       amountsIn: Array.isArray(object?.amountsIn) ? object.amountsIn.map((e: any) => Coin.fromJSON(e)) : [],
       protocolFee: Array.isArray(object?.protocolFee) ? object.protocolFee.map((e: any) => Coin.fromJSON(e)) : [],
@@ -2450,7 +2451,7 @@ export const EventJoinPoolRequest = {
   toJSON(message: EventJoinPoolRequest): unknown {
     const obj: any = {};
     message.creator !== undefined && (obj.creator = message.creator);
-    message.poolId !== undefined && (obj.poolId = (message.poolId || Long.UZERO).toString());
+    message.poolId !== undefined && (obj.poolId = (message.poolId || BigInt(0)).toString());
     message.lptOut !== undefined && (obj.lptOut = message.lptOut ? Coin.toJSON(message.lptOut) : undefined);
     if (message.amountsIn) {
       obj.amountsIn = message.amountsIn.map(e => e ? Coin.toJSON(e) : undefined);
@@ -2473,7 +2474,7 @@ export const EventJoinPoolRequest = {
   fromPartial(object: Partial<EventJoinPoolRequest>): EventJoinPoolRequest {
     const message = createBaseEventJoinPoolRequest();
     message.creator = object.creator ?? "";
-    message.poolId = object.poolId !== undefined && object.poolId !== null ? Long.fromValue(object.poolId) : Long.UZERO;
+    message.poolId = object.poolId !== undefined && object.poolId !== null ? BigInt(object.poolId.toString()) : BigInt(0);
     message.lptOut = object.lptOut !== undefined && object.lptOut !== null ? Coin.fromPartial(object.lptOut) : undefined;
     message.amountsIn = object.amountsIn?.map(e => Coin.fromPartial(e)) || [];
     message.protocolFee = object.protocolFee?.map(e => Coin.fromPartial(e)) || [];
@@ -2485,7 +2486,7 @@ export const EventJoinPoolRequest = {
 function createBaseEventSingleSwapRequest(): EventSingleSwapRequest {
   return {
     creator: "",
-    poolId: Long.UZERO,
+    poolId: BigInt(0),
     amountOut: Coin.fromPartial({}),
     amountIn: Coin.fromPartial({}),
     protocolFee: Coin.fromPartial({}),
@@ -2494,11 +2495,11 @@ function createBaseEventSingleSwapRequest(): EventSingleSwapRequest {
   };
 }
 export const EventSingleSwapRequest = {
-  encode(message: EventSingleSwapRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: EventSingleSwapRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.creator !== "") {
       writer.uint32(10).string(message.creator);
     }
-    if (!message.poolId.isZero()) {
+    if (message.poolId !== BigInt(0)) {
       writer.uint32(16).uint64(message.poolId);
     }
     if (message.amountOut !== undefined) {
@@ -2518,8 +2519,8 @@ export const EventSingleSwapRequest = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): EventSingleSwapRequest {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): EventSingleSwapRequest {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseEventSingleSwapRequest();
     while (reader.pos < end) {
@@ -2529,7 +2530,7 @@ export const EventSingleSwapRequest = {
           message.creator = reader.string();
           break;
         case 2:
-          message.poolId = (reader.uint64() as Long);
+          message.poolId = reader.uint64();
           break;
         case 3:
           message.amountOut = Coin.decode(reader, reader.uint32());
@@ -2556,7 +2557,7 @@ export const EventSingleSwapRequest = {
   fromJSON(object: any): EventSingleSwapRequest {
     return {
       creator: isSet(object.creator) ? String(object.creator) : "",
-      poolId: isSet(object.poolId) ? Long.fromValue(object.poolId) : Long.UZERO,
+      poolId: isSet(object.poolId) ? BigInt(object.poolId.toString()) : BigInt(0),
       amountOut: isSet(object.amountOut) ? Coin.fromJSON(object.amountOut) : undefined,
       amountIn: isSet(object.amountIn) ? Coin.fromJSON(object.amountIn) : undefined,
       protocolFee: isSet(object.protocolFee) ? Coin.fromJSON(object.protocolFee) : undefined,
@@ -2567,7 +2568,7 @@ export const EventSingleSwapRequest = {
   toJSON(message: EventSingleSwapRequest): unknown {
     const obj: any = {};
     message.creator !== undefined && (obj.creator = message.creator);
-    message.poolId !== undefined && (obj.poolId = (message.poolId || Long.UZERO).toString());
+    message.poolId !== undefined && (obj.poolId = (message.poolId || BigInt(0)).toString());
     message.amountOut !== undefined && (obj.amountOut = message.amountOut ? Coin.toJSON(message.amountOut) : undefined);
     message.amountIn !== undefined && (obj.amountIn = message.amountIn ? Coin.toJSON(message.amountIn) : undefined);
     message.protocolFee !== undefined && (obj.protocolFee = message.protocolFee ? Coin.toJSON(message.protocolFee) : undefined);
@@ -2578,7 +2579,7 @@ export const EventSingleSwapRequest = {
   fromPartial(object: Partial<EventSingleSwapRequest>): EventSingleSwapRequest {
     const message = createBaseEventSingleSwapRequest();
     message.creator = object.creator ?? "";
-    message.poolId = object.poolId !== undefined && object.poolId !== null ? Long.fromValue(object.poolId) : Long.UZERO;
+    message.poolId = object.poolId !== undefined && object.poolId !== null ? BigInt(object.poolId.toString()) : BigInt(0);
     message.amountOut = object.amountOut !== undefined && object.amountOut !== null ? Coin.fromPartial(object.amountOut) : undefined;
     message.amountIn = object.amountIn !== undefined && object.amountIn !== null ? Coin.fromPartial(object.amountIn) : undefined;
     message.protocolFee = object.protocolFee !== undefined && object.protocolFee !== null ? Coin.fromPartial(object.protocolFee) : undefined;
@@ -2599,7 +2600,7 @@ function createBaseEventBatchSwapRequest(): EventBatchSwapRequest {
   };
 }
 export const EventBatchSwapRequest = {
-  encode(message: EventBatchSwapRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: EventBatchSwapRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.creator !== "") {
       writer.uint32(10).string(message.creator);
     }
@@ -2623,8 +2624,8 @@ export const EventBatchSwapRequest = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): EventBatchSwapRequest {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): EventBatchSwapRequest {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseEventBatchSwapRequest();
     while (reader.pos < end) {
@@ -2720,7 +2721,7 @@ function createBaseEventYAssetSwapRefractorAction(): EventYAssetSwapRefractorAct
   };
 }
 export const EventYAssetSwapRefractorAction = {
-  encode(message: EventYAssetSwapRefractorAction, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: EventYAssetSwapRefractorAction, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.yAmount !== "") {
       writer.uint32(10).string(message.yAmount);
     }
@@ -2732,8 +2733,8 @@ export const EventYAssetSwapRefractorAction = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): EventYAssetSwapRefractorAction {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): EventYAssetSwapRefractorAction {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseEventYAssetSwapRefractorAction();
     while (reader.pos < end) {
@@ -2779,15 +2780,15 @@ export const EventYAssetSwapRefractorAction = {
 };
 function createBaseEventYAssetSwap(): EventYAssetSwap {
   return {
-    poolId: Long.UZERO,
+    poolId: BigInt(0),
     summary: SwapSummary.fromPartial({}),
     refractorAction: EventYAssetSwapRefractorAction.fromPartial({}),
     fee: undefined
   };
 }
 export const EventYAssetSwap = {
-  encode(message: EventYAssetSwap, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (!message.poolId.isZero()) {
+  encode(message: EventYAssetSwap, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    if (message.poolId !== BigInt(0)) {
       writer.uint32(8).uint64(message.poolId);
     }
     if (message.summary !== undefined) {
@@ -2801,15 +2802,15 @@ export const EventYAssetSwap = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): EventYAssetSwap {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): EventYAssetSwap {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseEventYAssetSwap();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.poolId = (reader.uint64() as Long);
+          message.poolId = reader.uint64();
           break;
         case 2:
           message.summary = SwapSummary.decode(reader, reader.uint32());
@@ -2829,7 +2830,7 @@ export const EventYAssetSwap = {
   },
   fromJSON(object: any): EventYAssetSwap {
     return {
-      poolId: isSet(object.poolId) ? Long.fromValue(object.poolId) : Long.UZERO,
+      poolId: isSet(object.poolId) ? BigInt(object.poolId.toString()) : BigInt(0),
       summary: isSet(object.summary) ? SwapSummary.fromJSON(object.summary) : undefined,
       refractorAction: isSet(object.refractorAction) ? EventYAssetSwapRefractorAction.fromJSON(object.refractorAction) : undefined,
       fee: isSet(object.fee) ? Coin.fromJSON(object.fee) : undefined
@@ -2837,7 +2838,7 @@ export const EventYAssetSwap = {
   },
   toJSON(message: EventYAssetSwap): unknown {
     const obj: any = {};
-    message.poolId !== undefined && (obj.poolId = (message.poolId || Long.UZERO).toString());
+    message.poolId !== undefined && (obj.poolId = (message.poolId || BigInt(0)).toString());
     message.summary !== undefined && (obj.summary = message.summary ? SwapSummary.toJSON(message.summary) : undefined);
     message.refractorAction !== undefined && (obj.refractorAction = message.refractorAction ? EventYAssetSwapRefractorAction.toJSON(message.refractorAction) : undefined);
     message.fee !== undefined && (obj.fee = message.fee ? Coin.toJSON(message.fee) : undefined);
@@ -2845,7 +2846,7 @@ export const EventYAssetSwap = {
   },
   fromPartial(object: Partial<EventYAssetSwap>): EventYAssetSwap {
     const message = createBaseEventYAssetSwap();
-    message.poolId = object.poolId !== undefined && object.poolId !== null ? Long.fromValue(object.poolId) : Long.UZERO;
+    message.poolId = object.poolId !== undefined && object.poolId !== null ? BigInt(object.poolId.toString()) : BigInt(0);
     message.summary = object.summary !== undefined && object.summary !== null ? SwapSummary.fromPartial(object.summary) : undefined;
     message.refractorAction = object.refractorAction !== undefined && object.refractorAction !== null ? EventYAssetSwapRefractorAction.fromPartial(object.refractorAction) : undefined;
     message.fee = object.fee !== undefined && object.fee !== null ? Coin.fromPartial(object.fee) : undefined;
@@ -2858,14 +2859,14 @@ function createBaseEventSetOraclePricePair(): EventSetOraclePricePair {
   };
 }
 export const EventSetOraclePricePair = {
-  encode(message: EventSetOraclePricePair, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: EventSetOraclePricePair, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.oraclePricePair !== undefined) {
       OraclePricePair.encode(message.oraclePricePair, writer.uint32(10).fork()).ldelim();
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): EventSetOraclePricePair {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): EventSetOraclePricePair {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseEventSetOraclePricePair();
     while (reader.pos < end) {
@@ -2903,14 +2904,14 @@ function createBaseEventRemoveOraclePricePair(): EventRemoveOraclePricePair {
   };
 }
 export const EventRemoveOraclePricePair = {
-  encode(message: EventRemoveOraclePricePair, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: EventRemoveOraclePricePair, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.assetId !== "") {
       writer.uint32(10).string(message.assetId);
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): EventRemoveOraclePricePair {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): EventRemoveOraclePricePair {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseEventRemoveOraclePricePair();
     while (reader.pos < end) {
@@ -2948,14 +2949,14 @@ function createBaseEventSetPendingTokenIntroduction(): EventSetPendingTokenIntro
   };
 }
 export const EventSetPendingTokenIntroduction = {
-  encode(message: EventSetPendingTokenIntroduction, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: EventSetPendingTokenIntroduction, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.pendingTokenIntroduction !== undefined) {
       PendingTokenIntroduction.encode(message.pendingTokenIntroduction, writer.uint32(10).fork()).ldelim();
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): EventSetPendingTokenIntroduction {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): EventSetPendingTokenIntroduction {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseEventSetPendingTokenIntroduction();
     while (reader.pos < end) {
@@ -2990,21 +2991,21 @@ export const EventSetPendingTokenIntroduction = {
 function createBaseEventRemovePendingTokenIntroduction(): EventRemovePendingTokenIntroduction {
   return {
     assetId: "",
-    targetPoolId: Long.UZERO
+    targetPoolId: BigInt(0)
   };
 }
 export const EventRemovePendingTokenIntroduction = {
-  encode(message: EventRemovePendingTokenIntroduction, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: EventRemovePendingTokenIntroduction, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.assetId !== "") {
       writer.uint32(10).string(message.assetId);
     }
-    if (!message.targetPoolId.isZero()) {
+    if (message.targetPoolId !== BigInt(0)) {
       writer.uint32(16).uint64(message.targetPoolId);
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): EventRemovePendingTokenIntroduction {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): EventRemovePendingTokenIntroduction {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseEventRemovePendingTokenIntroduction();
     while (reader.pos < end) {
@@ -3014,7 +3015,7 @@ export const EventRemovePendingTokenIntroduction = {
           message.assetId = reader.string();
           break;
         case 2:
-          message.targetPoolId = (reader.uint64() as Long);
+          message.targetPoolId = reader.uint64();
           break;
         default:
           reader.skipType(tag & 7);
@@ -3026,19 +3027,19 @@ export const EventRemovePendingTokenIntroduction = {
   fromJSON(object: any): EventRemovePendingTokenIntroduction {
     return {
       assetId: isSet(object.assetId) ? String(object.assetId) : "",
-      targetPoolId: isSet(object.targetPoolId) ? Long.fromValue(object.targetPoolId) : Long.UZERO
+      targetPoolId: isSet(object.targetPoolId) ? BigInt(object.targetPoolId.toString()) : BigInt(0)
     };
   },
   toJSON(message: EventRemovePendingTokenIntroduction): unknown {
     const obj: any = {};
     message.assetId !== undefined && (obj.assetId = message.assetId);
-    message.targetPoolId !== undefined && (obj.targetPoolId = (message.targetPoolId || Long.UZERO).toString());
+    message.targetPoolId !== undefined && (obj.targetPoolId = (message.targetPoolId || BigInt(0)).toString());
     return obj;
   },
   fromPartial(object: Partial<EventRemovePendingTokenIntroduction>): EventRemovePendingTokenIntroduction {
     const message = createBaseEventRemovePendingTokenIntroduction();
     message.assetId = object.assetId ?? "";
-    message.targetPoolId = object.targetPoolId !== undefined && object.targetPoolId !== null ? Long.fromValue(object.targetPoolId) : Long.UZERO;
+    message.targetPoolId = object.targetPoolId !== undefined && object.targetPoolId !== null ? BigInt(object.targetPoolId.toString()) : BigInt(0);
     return message;
   }
 };
@@ -3048,14 +3049,14 @@ function createBaseEventSetParams(): EventSetParams {
   };
 }
 export const EventSetParams = {
-  encode(message: EventSetParams, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: EventSetParams, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.params !== undefined) {
       Params.encode(message.params, writer.uint32(10).fork()).ldelim();
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): EventSetParams {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): EventSetParams {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseEventSetParams();
     while (reader.pos < end) {

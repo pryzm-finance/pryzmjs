@@ -1,5 +1,6 @@
 import { Timestamp, TimestampSDKType } from "../../google/protobuf/timestamp";
-import * as _m0 from "protobufjs/minimal";
+import { BinaryReader, BinaryWriter } from "../../binary";
+import { Decimal } from "@cosmjs/math";
 import { isSet, fromJsonTimestamp, fromTimestamp } from "../../helpers";
 export enum TimeResolutionType {
   TIME_RESOLUTION_TYPE_MINUTE = 0,
@@ -85,23 +86,23 @@ function createBaseHistoricalPrice(): HistoricalPrice {
   };
 }
 export const HistoricalPrice = {
-  encode(message: HistoricalPrice, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: HistoricalPrice, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.time !== undefined) {
       Timestamp.encode(message.time, writer.uint32(10).fork()).ldelim();
     }
     if (message.min !== undefined) {
-      writer.uint32(18).string(message.min);
+      writer.uint32(18).string(Decimal.fromUserInput(message.min, 18).atomics);
     }
     if (message.max !== undefined) {
-      writer.uint32(26).string(message.max);
+      writer.uint32(26).string(Decimal.fromUserInput(message.max, 18).atomics);
     }
     if (message.avg !== undefined) {
-      writer.uint32(34).string(message.avg);
+      writer.uint32(34).string(Decimal.fromUserInput(message.avg, 18).atomics);
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): HistoricalPrice {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): HistoricalPrice {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseHistoricalPrice();
     while (reader.pos < end) {
@@ -111,13 +112,13 @@ export const HistoricalPrice = {
           message.time = Timestamp.decode(reader, reader.uint32());
           break;
         case 2:
-          message.min = reader.string();
+          message.min = Decimal.fromAtomics(reader.string(), 18).toString();
           break;
         case 3:
-          message.max = reader.string();
+          message.max = Decimal.fromAtomics(reader.string(), 18).toString();
           break;
         case 4:
-          message.avg = reader.string();
+          message.avg = Decimal.fromAtomics(reader.string(), 18).toString();
           break;
         default:
           reader.skipType(tag & 7);
@@ -158,7 +159,7 @@ function createBaseTimeResolution(): TimeResolution {
   };
 }
 export const TimeResolution = {
-  encode(message: TimeResolution, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: TimeResolution, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.type !== 0) {
       writer.uint32(8).int32(message.type);
     }
@@ -167,8 +168,8 @@ export const TimeResolution = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): TimeResolution {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): TimeResolution {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseTimeResolution();
     while (reader.pos < end) {

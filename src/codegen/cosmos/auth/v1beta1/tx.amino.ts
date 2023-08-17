@@ -1,6 +1,5 @@
 //@ts-nocheck
 import { AminoMsg } from "@cosmjs/amino";
-import { Long } from "../../../helpers";
 import { MsgUpdateParams } from "./tx";
 export interface MsgUpdateParamsAminoType extends AminoMsg {
   type: "cosmos-sdk/x/auth/MsgUpdateParams";
@@ -40,11 +39,11 @@ export const AminoConverter = {
       return {
         authority,
         params: {
-          maxMemoCharacters: Long.fromString(params.max_memo_characters),
-          txSigLimit: Long.fromString(params.tx_sig_limit),
-          txSizeCostPerByte: Long.fromString(params.tx_size_cost_per_byte),
-          sigVerifyCostEd25519: Long.fromString(params.sig_verify_cost_ed25519),
-          sigVerifyCostSecp256k1: Long.fromString(params.sig_verify_cost_secp256k1)
+          maxMemoCharacters: BigInt(params.max_memo_characters),
+          txSigLimit: BigInt(params.tx_sig_limit),
+          txSizeCostPerByte: BigInt(params.tx_size_cost_per_byte),
+          sigVerifyCostEd25519: BigInt(params.sig_verify_cost_ed25519),
+          sigVerifyCostSecp256k1: BigInt(params.sig_verify_cost_secp256k1)
         }
       };
     }

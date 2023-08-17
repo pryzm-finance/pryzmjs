@@ -1,6 +1,7 @@
 import { Duration, DurationSDKType } from "../../google/protobuf/duration";
-import * as _m0 from "protobufjs/minimal";
+import { BinaryReader, BinaryWriter } from "../../binary";
 import { isSet } from "../../helpers";
+import { Decimal } from "@cosmjs/math";
 /** Params defines the parameters for the module. */
 export interface Params {
   /** the default staking parameters. properties of HostChain.staking_params are overridden to this default params if provided */
@@ -68,14 +69,14 @@ function createBaseParams(): Params {
   };
 }
 export const Params = {
-  encode(message: Params, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: Params, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.stakingParams !== undefined) {
       StakingParams.encode(message.stakingParams, writer.uint32(10).fork()).ldelim();
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): Params {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): Params {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseParams();
     while (reader.pos < end) {
@@ -122,7 +123,7 @@ function createBaseStakingParams(): StakingParams {
   };
 }
 export const StakingParams = {
-  encode(message: StakingParams, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: StakingParams, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.feeRatios !== undefined) {
       FeeRatios.encode(message.feeRatios, writer.uint32(10).fork()).ldelim();
     }
@@ -145,7 +146,7 @@ export const StakingParams = {
       writer.uint32(56).int32(message.maxRedelegationMsgs);
     }
     if (message.rebalanceThreshold !== "") {
-      writer.uint32(66).string(message.rebalanceThreshold);
+      writer.uint32(66).string(Decimal.fromUserInput(message.rebalanceThreshold, 18).atomics);
     }
     if (message.minRebalanceAmount !== "") {
       writer.uint32(74).string(message.minRebalanceAmount);
@@ -155,8 +156,8 @@ export const StakingParams = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): StakingParams {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): StakingParams {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseStakingParams();
     while (reader.pos < end) {
@@ -184,7 +185,7 @@ export const StakingParams = {
           message.maxRedelegationMsgs = reader.int32();
           break;
         case 8:
-          message.rebalanceThreshold = reader.string();
+          message.rebalanceThreshold = Decimal.fromAtomics(reader.string(), 18).toString();
           break;
         case 9:
           message.minRebalanceAmount = reader.string();
@@ -251,39 +252,39 @@ function createBaseFeeRatios(): FeeRatios {
   };
 }
 export const FeeRatios = {
-  encode(message: FeeRatios, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: FeeRatios, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.yield !== "") {
-      writer.uint32(10).string(message.yield);
+      writer.uint32(10).string(Decimal.fromUserInput(message.yield, 18).atomics);
     }
     if (message.staking !== "") {
-      writer.uint32(18).string(message.staking);
+      writer.uint32(18).string(Decimal.fromUserInput(message.staking, 18).atomics);
     }
     if (message.unstaking !== "") {
-      writer.uint32(26).string(message.unstaking);
+      writer.uint32(26).string(Decimal.fromUserInput(message.unstaking, 18).atomics);
     }
     if (message.instantUnstaking !== "") {
-      writer.uint32(34).string(message.instantUnstaking);
+      writer.uint32(34).string(Decimal.fromUserInput(message.instantUnstaking, 18).atomics);
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): FeeRatios {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): FeeRatios {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseFeeRatios();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.yield = reader.string();
+          message.yield = Decimal.fromAtomics(reader.string(), 18).toString();
           break;
         case 2:
-          message.staking = reader.string();
+          message.staking = Decimal.fromAtomics(reader.string(), 18).toString();
           break;
         case 3:
-          message.unstaking = reader.string();
+          message.unstaking = Decimal.fromAtomics(reader.string(), 18).toString();
           break;
         case 4:
-          message.instantUnstaking = reader.string();
+          message.instantUnstaking = Decimal.fromAtomics(reader.string(), 18).toString();
           break;
         default:
           reader.skipType(tag & 7);

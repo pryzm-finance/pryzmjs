@@ -1,34 +1,34 @@
 import { WeightedVoteOption, WeightedVoteOptionSDKType } from "../../cosmos/gov/v1/gov";
-import { Long, isSet } from "../../helpers";
-import * as _m0 from "protobufjs/minimal";
+import { BinaryReader, BinaryWriter } from "../../binary";
+import { isSet } from "../../helpers";
 /** Vote stores the information for a user's vote for a proposal */
 export interface Vote {
   asset: string;
-  proposal: Long;
+  proposal: bigint;
   voter: string;
   options: WeightedVoteOption[];
 }
 /** Vote stores the information for a user's vote for a proposal */
 export interface VoteSDKType {
   asset: string;
-  proposal: Long;
+  proposal: bigint;
   voter: string;
   options: WeightedVoteOptionSDKType[];
 }
 function createBaseVote(): Vote {
   return {
     asset: "",
-    proposal: Long.UZERO,
+    proposal: BigInt(0),
     voter: "",
     options: []
   };
 }
 export const Vote = {
-  encode(message: Vote, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: Vote, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.asset !== "") {
       writer.uint32(10).string(message.asset);
     }
-    if (!message.proposal.isZero()) {
+    if (message.proposal !== BigInt(0)) {
       writer.uint32(16).uint64(message.proposal);
     }
     if (message.voter !== "") {
@@ -39,8 +39,8 @@ export const Vote = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): Vote {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): Vote {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseVote();
     while (reader.pos < end) {
@@ -50,7 +50,7 @@ export const Vote = {
           message.asset = reader.string();
           break;
         case 2:
-          message.proposal = (reader.uint64() as Long);
+          message.proposal = reader.uint64();
           break;
         case 3:
           message.voter = reader.string();
@@ -68,7 +68,7 @@ export const Vote = {
   fromJSON(object: any): Vote {
     return {
       asset: isSet(object.asset) ? String(object.asset) : "",
-      proposal: isSet(object.proposal) ? Long.fromValue(object.proposal) : Long.UZERO,
+      proposal: isSet(object.proposal) ? BigInt(object.proposal.toString()) : BigInt(0),
       voter: isSet(object.voter) ? String(object.voter) : "",
       options: Array.isArray(object?.options) ? object.options.map((e: any) => WeightedVoteOption.fromJSON(e)) : []
     };
@@ -76,7 +76,7 @@ export const Vote = {
   toJSON(message: Vote): unknown {
     const obj: any = {};
     message.asset !== undefined && (obj.asset = message.asset);
-    message.proposal !== undefined && (obj.proposal = (message.proposal || Long.UZERO).toString());
+    message.proposal !== undefined && (obj.proposal = (message.proposal || BigInt(0)).toString());
     message.voter !== undefined && (obj.voter = message.voter);
     if (message.options) {
       obj.options = message.options.map(e => e ? WeightedVoteOption.toJSON(e) : undefined);
@@ -88,7 +88,7 @@ export const Vote = {
   fromPartial(object: Partial<Vote>): Vote {
     const message = createBaseVote();
     message.asset = object.asset ?? "";
-    message.proposal = object.proposal !== undefined && object.proposal !== null ? Long.fromValue(object.proposal) : Long.UZERO;
+    message.proposal = object.proposal !== undefined && object.proposal !== null ? BigInt(object.proposal.toString()) : BigInt(0);
     message.voter = object.voter ?? "";
     message.options = object.options?.map(e => WeightedVoteOption.fromPartial(e)) || [];
     return message;

@@ -1,6 +1,5 @@
 //@ts-nocheck
 import { AminoMsg } from "@cosmjs/amino";
-import { Long } from "../../../helpers";
 import { MsgUpdateParams } from "./tx";
 export interface MsgUpdateParamsAminoType extends AminoMsg {
   type: "cosmos-sdk/x/mint/MsgUpdateParams";
@@ -47,7 +46,7 @@ export const AminoConverter = {
           inflationMax: params.inflation_max,
           inflationMin: params.inflation_min,
           goalBonded: params.goal_bonded,
-          blocksPerYear: Long.fromString(params.blocks_per_year)
+          blocksPerYear: BigInt(params.blocks_per_year)
         }
       };
     }

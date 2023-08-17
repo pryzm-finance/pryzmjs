@@ -1,5 +1,6 @@
 import { Height, HeightSDKType } from "../../ibc/core/client/v1/client";
-import * as _m0 from "protobufjs/minimal";
+import { BinaryReader, BinaryWriter } from "../../binary";
+import { Decimal } from "@cosmjs/math";
 import { isSet } from "../../helpers";
 /** OraclePayload defines the structure of oracle vote payload */
 export interface OraclePayload {
@@ -18,17 +19,17 @@ function createBaseOraclePayload(): OraclePayload {
   };
 }
 export const OraclePayload = {
-  encode(message: OraclePayload, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: OraclePayload, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.blockHeight !== undefined) {
       Height.encode(message.blockHeight, writer.uint32(10).fork()).ldelim();
     }
     if (message.exchangeRate !== "") {
-      writer.uint32(18).string(message.exchangeRate);
+      writer.uint32(18).string(Decimal.fromUserInput(message.exchangeRate, 18).atomics);
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): OraclePayload {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): OraclePayload {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseOraclePayload();
     while (reader.pos < end) {
@@ -38,7 +39,7 @@ export const OraclePayload = {
           message.blockHeight = Height.decode(reader, reader.uint32());
           break;
         case 2:
-          message.exchangeRate = reader.string();
+          message.exchangeRate = Decimal.fromAtomics(reader.string(), 18).toString();
           break;
         default:
           reader.skipType(tag & 7);

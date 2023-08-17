@@ -1,41 +1,41 @@
-import { Long, isSet } from "../../helpers";
-import * as _m0 from "protobufjs/minimal";
+import { BinaryReader, BinaryWriter } from "../../binary";
+import { isSet } from "../../helpers";
 export interface ScheduleOrder {
-  timeMillis: Long;
-  orderId: Long;
+  timeMillis: bigint;
+  orderId: bigint;
 }
 export interface ScheduleOrderSDKType {
-  time_millis: Long;
-  order_id: Long;
+  time_millis: bigint;
+  order_id: bigint;
 }
 function createBaseScheduleOrder(): ScheduleOrder {
   return {
-    timeMillis: Long.ZERO,
-    orderId: Long.UZERO
+    timeMillis: BigInt(0),
+    orderId: BigInt(0)
   };
 }
 export const ScheduleOrder = {
-  encode(message: ScheduleOrder, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (!message.timeMillis.isZero()) {
+  encode(message: ScheduleOrder, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    if (message.timeMillis !== BigInt(0)) {
       writer.uint32(8).int64(message.timeMillis);
     }
-    if (!message.orderId.isZero()) {
+    if (message.orderId !== BigInt(0)) {
       writer.uint32(16).uint64(message.orderId);
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): ScheduleOrder {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): ScheduleOrder {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseScheduleOrder();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.timeMillis = (reader.int64() as Long);
+          message.timeMillis = reader.int64();
           break;
         case 2:
-          message.orderId = (reader.uint64() as Long);
+          message.orderId = reader.uint64();
           break;
         default:
           reader.skipType(tag & 7);
@@ -46,20 +46,20 @@ export const ScheduleOrder = {
   },
   fromJSON(object: any): ScheduleOrder {
     return {
-      timeMillis: isSet(object.timeMillis) ? Long.fromValue(object.timeMillis) : Long.ZERO,
-      orderId: isSet(object.orderId) ? Long.fromValue(object.orderId) : Long.UZERO
+      timeMillis: isSet(object.timeMillis) ? BigInt(object.timeMillis.toString()) : BigInt(0),
+      orderId: isSet(object.orderId) ? BigInt(object.orderId.toString()) : BigInt(0)
     };
   },
   toJSON(message: ScheduleOrder): unknown {
     const obj: any = {};
-    message.timeMillis !== undefined && (obj.timeMillis = (message.timeMillis || Long.ZERO).toString());
-    message.orderId !== undefined && (obj.orderId = (message.orderId || Long.UZERO).toString());
+    message.timeMillis !== undefined && (obj.timeMillis = (message.timeMillis || BigInt(0)).toString());
+    message.orderId !== undefined && (obj.orderId = (message.orderId || BigInt(0)).toString());
     return obj;
   },
   fromPartial(object: Partial<ScheduleOrder>): ScheduleOrder {
     const message = createBaseScheduleOrder();
-    message.timeMillis = object.timeMillis !== undefined && object.timeMillis !== null ? Long.fromValue(object.timeMillis) : Long.ZERO;
-    message.orderId = object.orderId !== undefined && object.orderId !== null ? Long.fromValue(object.orderId) : Long.UZERO;
+    message.timeMillis = object.timeMillis !== undefined && object.timeMillis !== null ? BigInt(object.timeMillis.toString()) : BigInt(0);
+    message.orderId = object.orderId !== undefined && object.orderId !== null ? BigInt(object.orderId.toString()) : BigInt(0);
     return message;
   }
 };

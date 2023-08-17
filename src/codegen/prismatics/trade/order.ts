@@ -1,7 +1,8 @@
 import { Order as Order1 } from "../../prism/amm/order";
 import { OrderSDKType as Order1SDKType } from "../../prism/amm/order";
 import { Timestamp, TimestampSDKType } from "../../google/protobuf/timestamp";
-import * as _m0 from "protobufjs/minimal";
+import { BinaryReader, BinaryWriter } from "../../binary";
+import { Decimal } from "@cosmjs/math";
 import { isSet, fromJsonTimestamp, fromTimestamp } from "../../helpers";
 export interface Order {
   ammOrder: Order1;
@@ -24,7 +25,7 @@ function createBaseOrder(): Order {
   };
 }
 export const Order = {
-  encode(message: Order, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: Order, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.ammOrder !== undefined) {
       Order1.encode(message.ammOrder, writer.uint32(10).fork()).ldelim();
     }
@@ -35,12 +36,12 @@ export const Order = {
       writer.uint32(26).string(message.totalAmount);
     }
     if (message.progress !== "") {
-      writer.uint32(34).string(message.progress);
+      writer.uint32(34).string(Decimal.fromUserInput(message.progress, 18).atomics);
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): Order {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): Order {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseOrder();
     while (reader.pos < end) {
@@ -56,7 +57,7 @@ export const Order = {
           message.totalAmount = reader.string();
           break;
         case 4:
-          message.progress = reader.string();
+          message.progress = Decimal.fromAtomics(reader.string(), 18).toString();
           break;
         default:
           reader.skipType(tag & 7);

@@ -31,16 +31,16 @@ export class QueryClientImpl implements Query {
     return this.rpc.unary(QueryParamsDesc, QueryParamsRequest.fromPartial(request), metadata);
   }
   refractableAsset(request: DeepPartial<QueryGetRefractableAssetRequest>, metadata?: grpc.Metadata): Promise<QueryGetRefractableAssetResponse> {
-    return this.rpc.unary(QueryGetRefractableAssetDesc, QueryGetRefractableAssetRequest.fromPartial(request), metadata);
+    return this.rpc.unary(QueryRefractableAssetDesc, QueryGetRefractableAssetRequest.fromPartial(request), metadata);
   }
   refractableAssetAll(request: DeepPartial<QueryAllRefractableAssetRequest>, metadata?: grpc.Metadata): Promise<QueryAllRefractableAssetResponse> {
-    return this.rpc.unary(QueryAllRefractableAssetDesc, QueryAllRefractableAssetRequest.fromPartial(request), metadata);
+    return this.rpc.unary(QueryRefractableAssetAllDesc, QueryAllRefractableAssetRequest.fromPartial(request), metadata);
   }
   maturityLevel(request: DeepPartial<QueryGetMaturityLevelRequest>, metadata?: grpc.Metadata): Promise<QueryGetMaturityLevelResponse> {
-    return this.rpc.unary(QueryGetMaturityLevelDesc, QueryGetMaturityLevelRequest.fromPartial(request), metadata);
+    return this.rpc.unary(QueryMaturityLevelDesc, QueryGetMaturityLevelRequest.fromPartial(request), metadata);
   }
   maturityLevelAll(request: DeepPartial<QueryAllMaturityLevelRequest>, metadata?: grpc.Metadata): Promise<QueryAllMaturityLevelResponse> {
-    return this.rpc.unary(QueryAllMaturityLevelDesc, QueryAllMaturityLevelRequest.fromPartial(request), metadata);
+    return this.rpc.unary(QueryMaturityLevelAllDesc, QueryAllMaturityLevelRequest.fromPartial(request), metadata);
   }
 }
 export const QueryDesc = {

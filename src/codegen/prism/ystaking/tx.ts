@@ -1,5 +1,5 @@
 import { Coin, CoinSDKType } from "../../cosmos/base/v1beta1/coin";
-import * as _m0 from "protobufjs/minimal";
+import { BinaryReader, BinaryWriter } from "../../binary";
 import { isSet } from "../../helpers";
 export interface MsgBond {
   creator: string;
@@ -72,7 +72,7 @@ function createBaseMsgBond(): MsgBond {
   };
 }
 export const MsgBond = {
-  encode(message: MsgBond, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: MsgBond, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.creator !== "") {
       writer.uint32(10).string(message.creator);
     }
@@ -81,8 +81,8 @@ export const MsgBond = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): MsgBond {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): MsgBond {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgBond();
     while (reader.pos < end) {
@@ -126,14 +126,14 @@ function createBaseMsgBondResponse(): MsgBondResponse {
   };
 }
 export const MsgBondResponse = {
-  encode(message: MsgBondResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: MsgBondResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.totalBondedAmount !== undefined) {
       Coin.encode(message.totalBondedAmount, writer.uint32(10).fork()).ldelim();
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): MsgBondResponse {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): MsgBondResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgBondResponse();
     while (reader.pos < end) {
@@ -172,7 +172,7 @@ function createBaseMsgUnbond(): MsgUnbond {
   };
 }
 export const MsgUnbond = {
-  encode(message: MsgUnbond, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: MsgUnbond, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.creator !== "") {
       writer.uint32(10).string(message.creator);
     }
@@ -181,8 +181,8 @@ export const MsgUnbond = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): MsgUnbond {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): MsgUnbond {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgUnbond();
     while (reader.pos < end) {
@@ -228,7 +228,7 @@ function createBaseMsgUnbondResponse(): MsgUnbondResponse {
   };
 }
 export const MsgUnbondResponse = {
-  encode(message: MsgUnbondResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: MsgUnbondResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.remainderBondedAmount !== undefined) {
       Coin.encode(message.remainderBondedAmount, writer.uint32(10).fork()).ldelim();
     }
@@ -240,8 +240,8 @@ export const MsgUnbondResponse = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): MsgUnbondResponse {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): MsgUnbondResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgUnbondResponse();
     while (reader.pos < end) {
@@ -292,7 +292,7 @@ function createBaseMsgClaimReward(): MsgClaimReward {
   };
 }
 export const MsgClaimReward = {
-  encode(message: MsgClaimReward, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: MsgClaimReward, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.creator !== "") {
       writer.uint32(10).string(message.creator);
     }
@@ -301,8 +301,8 @@ export const MsgClaimReward = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): MsgClaimReward {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): MsgClaimReward {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgClaimReward();
     while (reader.pos < end) {
@@ -347,7 +347,7 @@ function createBaseMsgClaimRewardResponse(): MsgClaimRewardResponse {
   };
 }
 export const MsgClaimRewardResponse = {
-  encode(message: MsgClaimRewardResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: MsgClaimRewardResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.accruedReward !== undefined) {
       Coin.encode(message.accruedReward, writer.uint32(10).fork()).ldelim();
     }
@@ -356,8 +356,8 @@ export const MsgClaimRewardResponse = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): MsgClaimRewardResponse {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): MsgClaimRewardResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgClaimRewardResponse();
     while (reader.pos < end) {
@@ -402,7 +402,7 @@ function createBaseMsgExitPool(): MsgExitPool {
   };
 }
 export const MsgExitPool = {
-  encode(message: MsgExitPool, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: MsgExitPool, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.creator !== "") {
       writer.uint32(10).string(message.creator);
     }
@@ -411,8 +411,8 @@ export const MsgExitPool = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): MsgExitPool {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): MsgExitPool {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgExitPool();
     while (reader.pos < end) {
@@ -457,7 +457,7 @@ function createBaseMsgExitPoolResponse(): MsgExitPoolResponse {
   };
 }
 export const MsgExitPoolResponse = {
-  encode(message: MsgExitPoolResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: MsgExitPoolResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.accruedReward !== undefined) {
       Coin.encode(message.accruedReward, writer.uint32(10).fork()).ldelim();
     }
@@ -466,8 +466,8 @@ export const MsgExitPoolResponse = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): MsgExitPoolResponse {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): MsgExitPoolResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgExitPoolResponse();
     while (reader.pos < end) {

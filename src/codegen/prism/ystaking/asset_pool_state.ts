@@ -1,4 +1,5 @@
-import * as _m0 from "protobufjs/minimal";
+import { BinaryReader, BinaryWriter } from "../../binary";
+import { Decimal } from "@cosmjs/math";
 import { isSet } from "../../helpers";
 export interface AssetPoolState {
   assetId: string;
@@ -32,7 +33,7 @@ function createBaseAssetPoolState(): AssetPoolState {
   };
 }
 export const AssetPoolState = {
-  encode(message: AssetPoolState, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: AssetPoolState, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.assetId !== "") {
       writer.uint32(10).string(message.assetId);
     }
@@ -40,12 +41,12 @@ export const AssetPoolState = {
       writer.uint32(18).string(message.bondedAmount);
     }
     if (message.globalIndex !== "") {
-      writer.uint32(26).string(message.globalIndex);
+      writer.uint32(26).string(Decimal.fromUserInput(message.globalIndex, 18).atomics);
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): AssetPoolState {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): AssetPoolState {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseAssetPoolState();
     while (reader.pos < end) {
@@ -58,7 +59,7 @@ export const AssetPoolState = {
           message.bondedAmount = reader.string();
           break;
         case 3:
-          message.globalIndex = reader.string();
+          message.globalIndex = Decimal.fromAtomics(reader.string(), 18).toString();
           break;
         default:
           reader.skipType(tag & 7);
@@ -99,7 +100,7 @@ function createBaseAssetMaturityPoolState(): AssetMaturityPoolState {
   };
 }
 export const AssetMaturityPoolState = {
-  encode(message: AssetMaturityPoolState, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: AssetMaturityPoolState, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.assetId !== "") {
       writer.uint32(10).string(message.assetId);
     }
@@ -113,12 +114,12 @@ export const AssetMaturityPoolState = {
       writer.uint32(34).string(message.bondedAmount);
     }
     if (message.globalIndex !== undefined) {
-      writer.uint32(42).string(message.globalIndex);
+      writer.uint32(42).string(Decimal.fromUserInput(message.globalIndex, 18).atomics);
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): AssetMaturityPoolState {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): AssetMaturityPoolState {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseAssetMaturityPoolState();
     while (reader.pos < end) {
@@ -137,7 +138,7 @@ export const AssetMaturityPoolState = {
           message.bondedAmount = reader.string();
           break;
         case 5:
-          message.globalIndex = reader.string();
+          message.globalIndex = Decimal.fromAtomics(reader.string(), 18).toString();
           break;
         default:
           reader.skipType(tag & 7);

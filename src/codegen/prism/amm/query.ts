@@ -14,8 +14,9 @@ import { Order, OrderSDKType } from "./order";
 import { ScheduleOrder, ScheduleOrderSDKType } from "./schedule_order";
 import { OraclePricePair, OraclePricePairSDKType } from "./oracle_price_pair";
 import { PendingTokenIntroduction, PendingTokenIntroductionSDKType } from "./pending_token_introduction";
-import { Long, isSet } from "../../helpers";
-import * as _m0 from "protobufjs/minimal";
+import { BinaryReader, BinaryWriter } from "../../binary";
+import { isSet } from "../../helpers";
+import { Decimal } from "@cosmjs/math";
 /** QueryParamsRequest is request type for the Query/Params RPC method. */
 export interface QueryParamsRequest {}
 /** QueryParamsRequest is request type for the Query/Params RPC method. */
@@ -30,11 +31,11 @@ export interface QueryParamsResponseSDKType {
   params: ParamsSDKType;
 }
 export interface QueryGetPoolTokenRequest {
-  poolId: Long;
+  poolId: bigint;
   denom: string;
 }
 export interface QueryGetPoolTokenRequestSDKType {
-  pool_id: Long;
+  pool_id: bigint;
   denom: string;
 }
 export interface QueryGetPoolTokenResponse {
@@ -65,7 +66,7 @@ export interface QueryAllPoolTokenResponseSDKType {
  * therefore, this query is not paginated
  */
 export interface QueryAllPoolTokenWeightRequest {
-  poolId: Long;
+  poolId: bigint;
 }
 /**
  * computing normalized weights requires reading all tokens from the context
@@ -73,7 +74,7 @@ export interface QueryAllPoolTokenWeightRequest {
  * therefore, this query is not paginated
  */
 export interface QueryAllPoolTokenWeightRequestSDKType {
-  pool_id: Long;
+  pool_id: bigint;
 }
 /**
  * computing normalized weights requires reading all tokens from the context
@@ -92,11 +93,11 @@ export interface QueryAllPoolTokenWeightResponseSDKType {
   token_weight: TokenWeightSDKType[];
 }
 export interface QueryGetPoolTokenWeightRequest {
-  poolId: Long;
+  poolId: bigint;
   denom: string;
 }
 export interface QueryGetPoolTokenWeightRequestSDKType {
-  pool_id: Long;
+  pool_id: bigint;
   denom: string;
 }
 export interface QueryGetPoolTokenWeightResponse {
@@ -106,10 +107,10 @@ export interface QueryGetPoolTokenWeightResponseSDKType {
   token_weight: TokenWeightSDKType;
 }
 export interface QueryGetPoolRequest {
-  id: Long;
+  id: bigint;
 }
 export interface QueryGetPoolRequestSDKType {
-  id: Long;
+  id: bigint;
 }
 export interface QueryGetPoolResponse {
   pool: Pool;
@@ -132,11 +133,11 @@ export interface QueryAllPoolResponseSDKType {
   pagination: PageResponseSDKType;
 }
 export interface QueryGetWeightedTokenRequest {
-  poolId: Long;
+  poolId: bigint;
   denom: string;
 }
 export interface QueryGetWeightedTokenRequestSDKType {
-  pool_id: Long;
+  pool_id: bigint;
   denom: string;
 }
 export interface QueryGetWeightedTokenResponse {
@@ -160,10 +161,10 @@ export interface QueryAllWeightedTokenResponseSDKType {
   pagination: PageResponseSDKType;
 }
 export interface QueryGetWeightUpdateTimingRequest {
-  poolId: Long;
+  poolId: bigint;
 }
 export interface QueryGetWeightUpdateTimingRequestSDKType {
-  pool_id: Long;
+  pool_id: bigint;
 }
 export interface QueryGetWeightUpdateTimingResponse {
   weightUpdateTiming: WeightUpdateTiming;
@@ -208,11 +209,11 @@ export interface QuerySimulateSingleSwapResponseSDKType {
   swap_fee: CoinSDKType;
 }
 export interface QuerySimulateInitializePoolRequest {
-  poolId: Long;
+  poolId: bigint;
   amountsIn: Coin[];
 }
 export interface QuerySimulateInitializePoolRequestSDKType {
-  pool_id: Long;
+  pool_id: bigint;
   amounts_in: CoinSDKType[];
 }
 export interface QuerySimulateInitializePoolResponse {
@@ -226,11 +227,11 @@ export interface QuerySimulateInitializePoolResponseSDKType {
   protocol_fee: CoinSDKType[];
 }
 export interface QuerySimulateJoinAllTokensExactLptRequest {
-  poolId: Long;
+  poolId: bigint;
   lptOut: string;
 }
 export interface QuerySimulateJoinAllTokensExactLptRequestSDKType {
-  pool_id: Long;
+  pool_id: bigint;
   lpt_out: string;
 }
 export interface QuerySimulateJoinAllTokensExactLptResponse {
@@ -244,11 +245,11 @@ export interface QuerySimulateJoinAllTokensExactLptResponseSDKType {
   protocol_fee: CoinSDKType[];
 }
 export interface QuerySimulateJoinExactTokensRequest {
-  poolId: Long;
+  poolId: bigint;
   amountsIn: Coin[];
 }
 export interface QuerySimulateJoinExactTokensRequestSDKType {
-  pool_id: Long;
+  pool_id: bigint;
   amounts_in: CoinSDKType[];
 }
 export interface QuerySimulateJoinExactTokensResponse {
@@ -264,12 +265,12 @@ export interface QuerySimulateJoinExactTokensResponseSDKType {
   swap_fee: CoinSDKType[];
 }
 export interface QuerySimulateJoinTokenExactLptRequest {
-  poolId: Long;
+  poolId: bigint;
   lptOut: string;
   tokenIn: string;
 }
 export interface QuerySimulateJoinTokenExactLptRequestSDKType {
-  pool_id: Long;
+  pool_id: bigint;
   lpt_out: string;
   token_in: string;
 }
@@ -286,12 +287,12 @@ export interface QuerySimulateJoinTokenExactLptResponseSDKType {
   swap_fee: CoinSDKType;
 }
 export interface QuerySimulateExitTokenExactLptRequest {
-  poolId: Long;
+  poolId: bigint;
   lptIn: string;
   tokenOut: string;
 }
 export interface QuerySimulateExitTokenExactLptRequestSDKType {
-  pool_id: Long;
+  pool_id: bigint;
   lpt_in: string;
   token_out: string;
 }
@@ -308,11 +309,11 @@ export interface QuerySimulateExitTokenExactLptResponseSDKType {
   swap_fee: CoinSDKType;
 }
 export interface QuerySimulateExitExactTokensRequest {
-  poolId: Long;
+  poolId: bigint;
   amountsOut: Coin[];
 }
 export interface QuerySimulateExitExactTokensRequestSDKType {
-  pool_id: Long;
+  pool_id: bigint;
   amounts_out: CoinSDKType[];
 }
 export interface QuerySimulateExitExactTokensResponse {
@@ -328,11 +329,11 @@ export interface QuerySimulateExitExactTokensResponseSDKType {
   swap_fee: CoinSDKType[];
 }
 export interface QuerySimulateExitAllTokensExactLptRequest {
-  poolId: Long;
+  poolId: bigint;
   lptIn: string;
 }
 export interface QuerySimulateExitAllTokensExactLptRequestSDKType {
-  pool_id: Long;
+  pool_id: bigint;
   lpt_in: string;
 }
 export interface QuerySimulateExitAllTokensExactLptResponse {
@@ -346,13 +347,13 @@ export interface QuerySimulateExitAllTokensExactLptResponseSDKType {
   protocol_fee: CoinSDKType;
 }
 export interface QuerySpotPriceRequest {
-  poolId: Long;
+  poolId: bigint;
   tokenIn: string;
   tokenOut: string;
   applyFee: boolean;
 }
 export interface QuerySpotPriceRequestSDKType {
-  pool_id: Long;
+  pool_id: bigint;
   token_in: string;
   token_out: string;
   apply_fee: boolean;
@@ -364,11 +365,11 @@ export interface QuerySpotPriceResponseSDKType {
   spot_price: string;
 }
 export interface QueryGetIntroducingPoolTokenRequest {
-  poolId: Long;
+  poolId: bigint;
   denom: string;
 }
 export interface QueryGetIntroducingPoolTokenRequestSDKType {
-  pool_id: Long;
+  pool_id: bigint;
   denom: string;
 }
 export interface QueryGetIntroducingPoolTokenResponse {
@@ -392,11 +393,11 @@ export interface QueryAllIntroducingPoolTokenResponseSDKType {
   pagination: PageResponseSDKType;
 }
 export interface QueryGetExpiringPoolTokenRequest {
-  poolId: Long;
+  poolId: bigint;
   denom: string;
 }
 export interface QueryGetExpiringPoolTokenRequestSDKType {
-  pool_id: Long;
+  pool_id: bigint;
   denom: string;
 }
 export interface QueryGetExpiringPoolTokenResponse {
@@ -420,10 +421,10 @@ export interface QueryAllExpiringPoolTokenResponseSDKType {
   pagination: PageResponseSDKType;
 }
 export interface QueryLpTokenRequest {
-  poolId: Long;
+  poolId: bigint;
 }
 export interface QueryLpTokenRequestSDKType {
-  pool_id: Long;
+  pool_id: bigint;
 }
 export interface QueryLpTokenResponse {
   lpToken: PoolToken;
@@ -456,10 +457,10 @@ export interface QuerySimulateBatchSwapResponseSDKType {
   swap_fee: CoinSDKType[];
 }
 export interface QueryGetYammConfigurationRequest {
-  poolId: Long;
+  poolId: bigint;
 }
 export interface QueryGetYammConfigurationRequestSDKType {
-  pool_id: Long;
+  pool_id: bigint;
 }
 export interface QueryGetYammConfigurationResponse {
   yammConfiguration: YammConfiguration;
@@ -510,10 +511,10 @@ export interface QueryAllWhitelistedRouteResponseSDKType {
   pagination: PageResponseSDKType;
 }
 export interface QueryGetOrderRequest {
-  id: Long;
+  id: bigint;
 }
 export interface QueryGetOrderRequestSDKType {
-  id: Long;
+  id: bigint;
 }
 export interface QueryGetOrderResponse {
   order: Order;
@@ -536,10 +537,10 @@ export interface QueryAllOrderResponseSDKType {
   pagination: PageResponseSDKType;
 }
 export interface QueryGetExecutableOrderRequest {
-  orderId: Long;
+  orderId: bigint;
 }
 export interface QueryGetExecutableOrderRequestSDKType {
-  order_id: Long;
+  order_id: bigint;
 }
 export interface QueryGetExecutableOrderResponse {
   executableOrder: Order;
@@ -562,10 +563,10 @@ export interface QueryAllExecutableOrderResponseSDKType {
   pagination: PageResponseSDKType;
 }
 export interface QueryGetScheduleOrderRequest {
-  orderId: Long;
+  orderId: bigint;
 }
 export interface QueryGetScheduleOrderRequestSDKType {
-  order_id: Long;
+  order_id: bigint;
 }
 export interface QueryGetScheduleOrderResponse {
   scheduleOrder: ScheduleOrder;
@@ -623,11 +624,11 @@ export interface QueryVaultPauseModeResponseSDKType {
 }
 export interface QueryGetPendingTokenIntroductionRequest {
   assetId: string;
-  targetPoolId: Long;
+  targetPoolId: bigint;
 }
 export interface QueryGetPendingTokenIntroductionRequestSDKType {
   asset_id: string;
-  target_pool_id: Long;
+  target_pool_id: bigint;
 }
 export interface QueryGetPendingTokenIntroductionResponse {
   pendingTokenIntroduction: PendingTokenIntroduction;
@@ -656,20 +657,20 @@ export interface QueryYammPoolIdRequestSDKType {
   asset_id: string;
 }
 export interface QueryYammPoolIdResponse {
-  poolId: Long;
+  poolId: bigint;
 }
 export interface QueryYammPoolIdResponseSDKType {
-  pool_id: Long;
+  pool_id: bigint;
 }
 function createBaseQueryParamsRequest(): QueryParamsRequest {
   return {};
 }
 export const QueryParamsRequest = {
-  encode(_: QueryParamsRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(_: QueryParamsRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): QueryParamsRequest {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): QueryParamsRequest {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryParamsRequest();
     while (reader.pos < end) {
@@ -700,14 +701,14 @@ function createBaseQueryParamsResponse(): QueryParamsResponse {
   };
 }
 export const QueryParamsResponse = {
-  encode(message: QueryParamsResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: QueryParamsResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.params !== undefined) {
       Params.encode(message.params, writer.uint32(10).fork()).ldelim();
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): QueryParamsResponse {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): QueryParamsResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryParamsResponse();
     while (reader.pos < end) {
@@ -741,13 +742,13 @@ export const QueryParamsResponse = {
 };
 function createBaseQueryGetPoolTokenRequest(): QueryGetPoolTokenRequest {
   return {
-    poolId: Long.UZERO,
+    poolId: BigInt(0),
     denom: ""
   };
 }
 export const QueryGetPoolTokenRequest = {
-  encode(message: QueryGetPoolTokenRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (!message.poolId.isZero()) {
+  encode(message: QueryGetPoolTokenRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    if (message.poolId !== BigInt(0)) {
       writer.uint32(8).uint64(message.poolId);
     }
     if (message.denom !== "") {
@@ -755,15 +756,15 @@ export const QueryGetPoolTokenRequest = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): QueryGetPoolTokenRequest {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): QueryGetPoolTokenRequest {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryGetPoolTokenRequest();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.poolId = (reader.uint64() as Long);
+          message.poolId = reader.uint64();
           break;
         case 2:
           message.denom = reader.string();
@@ -777,19 +778,19 @@ export const QueryGetPoolTokenRequest = {
   },
   fromJSON(object: any): QueryGetPoolTokenRequest {
     return {
-      poolId: isSet(object.poolId) ? Long.fromValue(object.poolId) : Long.UZERO,
+      poolId: isSet(object.poolId) ? BigInt(object.poolId.toString()) : BigInt(0),
       denom: isSet(object.denom) ? String(object.denom) : ""
     };
   },
   toJSON(message: QueryGetPoolTokenRequest): unknown {
     const obj: any = {};
-    message.poolId !== undefined && (obj.poolId = (message.poolId || Long.UZERO).toString());
+    message.poolId !== undefined && (obj.poolId = (message.poolId || BigInt(0)).toString());
     message.denom !== undefined && (obj.denom = message.denom);
     return obj;
   },
   fromPartial(object: Partial<QueryGetPoolTokenRequest>): QueryGetPoolTokenRequest {
     const message = createBaseQueryGetPoolTokenRequest();
-    message.poolId = object.poolId !== undefined && object.poolId !== null ? Long.fromValue(object.poolId) : Long.UZERO;
+    message.poolId = object.poolId !== undefined && object.poolId !== null ? BigInt(object.poolId.toString()) : BigInt(0);
     message.denom = object.denom ?? "";
     return message;
   }
@@ -800,14 +801,14 @@ function createBaseQueryGetPoolTokenResponse(): QueryGetPoolTokenResponse {
   };
 }
 export const QueryGetPoolTokenResponse = {
-  encode(message: QueryGetPoolTokenResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: QueryGetPoolTokenResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.poolToken !== undefined) {
       PoolToken.encode(message.poolToken, writer.uint32(10).fork()).ldelim();
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): QueryGetPoolTokenResponse {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): QueryGetPoolTokenResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryGetPoolTokenResponse();
     while (reader.pos < end) {
@@ -846,7 +847,7 @@ function createBaseQueryAllPoolTokenRequest(): QueryAllPoolTokenRequest {
   };
 }
 export const QueryAllPoolTokenRequest = {
-  encode(message: QueryAllPoolTokenRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: QueryAllPoolTokenRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.pagination !== undefined) {
       PageRequest.encode(message.pagination, writer.uint32(10).fork()).ldelim();
     }
@@ -855,8 +856,8 @@ export const QueryAllPoolTokenRequest = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): QueryAllPoolTokenRequest {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): QueryAllPoolTokenRequest {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryAllPoolTokenRequest();
     while (reader.pos < end) {
@@ -901,7 +902,7 @@ function createBaseQueryAllPoolTokenResponse(): QueryAllPoolTokenResponse {
   };
 }
 export const QueryAllPoolTokenResponse = {
-  encode(message: QueryAllPoolTokenResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: QueryAllPoolTokenResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     for (const v of message.poolToken) {
       PoolToken.encode(v!, writer.uint32(10).fork()).ldelim();
     }
@@ -910,8 +911,8 @@ export const QueryAllPoolTokenResponse = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): QueryAllPoolTokenResponse {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): QueryAllPoolTokenResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryAllPoolTokenResponse();
     while (reader.pos < end) {
@@ -955,25 +956,25 @@ export const QueryAllPoolTokenResponse = {
 };
 function createBaseQueryAllPoolTokenWeightRequest(): QueryAllPoolTokenWeightRequest {
   return {
-    poolId: Long.UZERO
+    poolId: BigInt(0)
   };
 }
 export const QueryAllPoolTokenWeightRequest = {
-  encode(message: QueryAllPoolTokenWeightRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (!message.poolId.isZero()) {
+  encode(message: QueryAllPoolTokenWeightRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    if (message.poolId !== BigInt(0)) {
       writer.uint32(8).uint64(message.poolId);
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): QueryAllPoolTokenWeightRequest {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): QueryAllPoolTokenWeightRequest {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryAllPoolTokenWeightRequest();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.poolId = (reader.uint64() as Long);
+          message.poolId = reader.uint64();
           break;
         default:
           reader.skipType(tag & 7);
@@ -984,17 +985,17 @@ export const QueryAllPoolTokenWeightRequest = {
   },
   fromJSON(object: any): QueryAllPoolTokenWeightRequest {
     return {
-      poolId: isSet(object.poolId) ? Long.fromValue(object.poolId) : Long.UZERO
+      poolId: isSet(object.poolId) ? BigInt(object.poolId.toString()) : BigInt(0)
     };
   },
   toJSON(message: QueryAllPoolTokenWeightRequest): unknown {
     const obj: any = {};
-    message.poolId !== undefined && (obj.poolId = (message.poolId || Long.UZERO).toString());
+    message.poolId !== undefined && (obj.poolId = (message.poolId || BigInt(0)).toString());
     return obj;
   },
   fromPartial(object: Partial<QueryAllPoolTokenWeightRequest>): QueryAllPoolTokenWeightRequest {
     const message = createBaseQueryAllPoolTokenWeightRequest();
-    message.poolId = object.poolId !== undefined && object.poolId !== null ? Long.fromValue(object.poolId) : Long.UZERO;
+    message.poolId = object.poolId !== undefined && object.poolId !== null ? BigInt(object.poolId.toString()) : BigInt(0);
     return message;
   }
 };
@@ -1004,14 +1005,14 @@ function createBaseQueryAllPoolTokenWeightResponse(): QueryAllPoolTokenWeightRes
   };
 }
 export const QueryAllPoolTokenWeightResponse = {
-  encode(message: QueryAllPoolTokenWeightResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: QueryAllPoolTokenWeightResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     for (const v of message.tokenWeight) {
       TokenWeight.encode(v!, writer.uint32(10).fork()).ldelim();
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): QueryAllPoolTokenWeightResponse {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): QueryAllPoolTokenWeightResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryAllPoolTokenWeightResponse();
     while (reader.pos < end) {
@@ -1049,13 +1050,13 @@ export const QueryAllPoolTokenWeightResponse = {
 };
 function createBaseQueryGetPoolTokenWeightRequest(): QueryGetPoolTokenWeightRequest {
   return {
-    poolId: Long.UZERO,
+    poolId: BigInt(0),
     denom: ""
   };
 }
 export const QueryGetPoolTokenWeightRequest = {
-  encode(message: QueryGetPoolTokenWeightRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (!message.poolId.isZero()) {
+  encode(message: QueryGetPoolTokenWeightRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    if (message.poolId !== BigInt(0)) {
       writer.uint32(8).uint64(message.poolId);
     }
     if (message.denom !== "") {
@@ -1063,15 +1064,15 @@ export const QueryGetPoolTokenWeightRequest = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): QueryGetPoolTokenWeightRequest {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): QueryGetPoolTokenWeightRequest {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryGetPoolTokenWeightRequest();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.poolId = (reader.uint64() as Long);
+          message.poolId = reader.uint64();
           break;
         case 2:
           message.denom = reader.string();
@@ -1085,19 +1086,19 @@ export const QueryGetPoolTokenWeightRequest = {
   },
   fromJSON(object: any): QueryGetPoolTokenWeightRequest {
     return {
-      poolId: isSet(object.poolId) ? Long.fromValue(object.poolId) : Long.UZERO,
+      poolId: isSet(object.poolId) ? BigInt(object.poolId.toString()) : BigInt(0),
       denom: isSet(object.denom) ? String(object.denom) : ""
     };
   },
   toJSON(message: QueryGetPoolTokenWeightRequest): unknown {
     const obj: any = {};
-    message.poolId !== undefined && (obj.poolId = (message.poolId || Long.UZERO).toString());
+    message.poolId !== undefined && (obj.poolId = (message.poolId || BigInt(0)).toString());
     message.denom !== undefined && (obj.denom = message.denom);
     return obj;
   },
   fromPartial(object: Partial<QueryGetPoolTokenWeightRequest>): QueryGetPoolTokenWeightRequest {
     const message = createBaseQueryGetPoolTokenWeightRequest();
-    message.poolId = object.poolId !== undefined && object.poolId !== null ? Long.fromValue(object.poolId) : Long.UZERO;
+    message.poolId = object.poolId !== undefined && object.poolId !== null ? BigInt(object.poolId.toString()) : BigInt(0);
     message.denom = object.denom ?? "";
     return message;
   }
@@ -1108,14 +1109,14 @@ function createBaseQueryGetPoolTokenWeightResponse(): QueryGetPoolTokenWeightRes
   };
 }
 export const QueryGetPoolTokenWeightResponse = {
-  encode(message: QueryGetPoolTokenWeightResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: QueryGetPoolTokenWeightResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.tokenWeight !== undefined) {
       TokenWeight.encode(message.tokenWeight, writer.uint32(10).fork()).ldelim();
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): QueryGetPoolTokenWeightResponse {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): QueryGetPoolTokenWeightResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryGetPoolTokenWeightResponse();
     while (reader.pos < end) {
@@ -1149,25 +1150,25 @@ export const QueryGetPoolTokenWeightResponse = {
 };
 function createBaseQueryGetPoolRequest(): QueryGetPoolRequest {
   return {
-    id: Long.UZERO
+    id: BigInt(0)
   };
 }
 export const QueryGetPoolRequest = {
-  encode(message: QueryGetPoolRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (!message.id.isZero()) {
+  encode(message: QueryGetPoolRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    if (message.id !== BigInt(0)) {
       writer.uint32(8).uint64(message.id);
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): QueryGetPoolRequest {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): QueryGetPoolRequest {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryGetPoolRequest();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.id = (reader.uint64() as Long);
+          message.id = reader.uint64();
           break;
         default:
           reader.skipType(tag & 7);
@@ -1178,17 +1179,17 @@ export const QueryGetPoolRequest = {
   },
   fromJSON(object: any): QueryGetPoolRequest {
     return {
-      id: isSet(object.id) ? Long.fromValue(object.id) : Long.UZERO
+      id: isSet(object.id) ? BigInt(object.id.toString()) : BigInt(0)
     };
   },
   toJSON(message: QueryGetPoolRequest): unknown {
     const obj: any = {};
-    message.id !== undefined && (obj.id = (message.id || Long.UZERO).toString());
+    message.id !== undefined && (obj.id = (message.id || BigInt(0)).toString());
     return obj;
   },
   fromPartial(object: Partial<QueryGetPoolRequest>): QueryGetPoolRequest {
     const message = createBaseQueryGetPoolRequest();
-    message.id = object.id !== undefined && object.id !== null ? Long.fromValue(object.id) : Long.UZERO;
+    message.id = object.id !== undefined && object.id !== null ? BigInt(object.id.toString()) : BigInt(0);
     return message;
   }
 };
@@ -1198,14 +1199,14 @@ function createBaseQueryGetPoolResponse(): QueryGetPoolResponse {
   };
 }
 export const QueryGetPoolResponse = {
-  encode(message: QueryGetPoolResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: QueryGetPoolResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.pool !== undefined) {
       Pool.encode(message.pool, writer.uint32(10).fork()).ldelim();
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): QueryGetPoolResponse {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): QueryGetPoolResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryGetPoolResponse();
     while (reader.pos < end) {
@@ -1243,14 +1244,14 @@ function createBaseQueryAllPoolRequest(): QueryAllPoolRequest {
   };
 }
 export const QueryAllPoolRequest = {
-  encode(message: QueryAllPoolRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: QueryAllPoolRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.pagination !== undefined) {
       PageRequest.encode(message.pagination, writer.uint32(10).fork()).ldelim();
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): QueryAllPoolRequest {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): QueryAllPoolRequest {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryAllPoolRequest();
     while (reader.pos < end) {
@@ -1289,7 +1290,7 @@ function createBaseQueryAllPoolResponse(): QueryAllPoolResponse {
   };
 }
 export const QueryAllPoolResponse = {
-  encode(message: QueryAllPoolResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: QueryAllPoolResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     for (const v of message.pool) {
       Pool.encode(v!, writer.uint32(10).fork()).ldelim();
     }
@@ -1298,8 +1299,8 @@ export const QueryAllPoolResponse = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): QueryAllPoolResponse {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): QueryAllPoolResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryAllPoolResponse();
     while (reader.pos < end) {
@@ -1343,13 +1344,13 @@ export const QueryAllPoolResponse = {
 };
 function createBaseQueryGetWeightedTokenRequest(): QueryGetWeightedTokenRequest {
   return {
-    poolId: Long.UZERO,
+    poolId: BigInt(0),
     denom: ""
   };
 }
 export const QueryGetWeightedTokenRequest = {
-  encode(message: QueryGetWeightedTokenRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (!message.poolId.isZero()) {
+  encode(message: QueryGetWeightedTokenRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    if (message.poolId !== BigInt(0)) {
       writer.uint32(8).uint64(message.poolId);
     }
     if (message.denom !== "") {
@@ -1357,15 +1358,15 @@ export const QueryGetWeightedTokenRequest = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): QueryGetWeightedTokenRequest {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): QueryGetWeightedTokenRequest {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryGetWeightedTokenRequest();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.poolId = (reader.uint64() as Long);
+          message.poolId = reader.uint64();
           break;
         case 2:
           message.denom = reader.string();
@@ -1379,19 +1380,19 @@ export const QueryGetWeightedTokenRequest = {
   },
   fromJSON(object: any): QueryGetWeightedTokenRequest {
     return {
-      poolId: isSet(object.poolId) ? Long.fromValue(object.poolId) : Long.UZERO,
+      poolId: isSet(object.poolId) ? BigInt(object.poolId.toString()) : BigInt(0),
       denom: isSet(object.denom) ? String(object.denom) : ""
     };
   },
   toJSON(message: QueryGetWeightedTokenRequest): unknown {
     const obj: any = {};
-    message.poolId !== undefined && (obj.poolId = (message.poolId || Long.UZERO).toString());
+    message.poolId !== undefined && (obj.poolId = (message.poolId || BigInt(0)).toString());
     message.denom !== undefined && (obj.denom = message.denom);
     return obj;
   },
   fromPartial(object: Partial<QueryGetWeightedTokenRequest>): QueryGetWeightedTokenRequest {
     const message = createBaseQueryGetWeightedTokenRequest();
-    message.poolId = object.poolId !== undefined && object.poolId !== null ? Long.fromValue(object.poolId) : Long.UZERO;
+    message.poolId = object.poolId !== undefined && object.poolId !== null ? BigInt(object.poolId.toString()) : BigInt(0);
     message.denom = object.denom ?? "";
     return message;
   }
@@ -1402,14 +1403,14 @@ function createBaseQueryGetWeightedTokenResponse(): QueryGetWeightedTokenRespons
   };
 }
 export const QueryGetWeightedTokenResponse = {
-  encode(message: QueryGetWeightedTokenResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: QueryGetWeightedTokenResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.weightedToken !== undefined) {
       WeightedToken.encode(message.weightedToken, writer.uint32(10).fork()).ldelim();
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): QueryGetWeightedTokenResponse {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): QueryGetWeightedTokenResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryGetWeightedTokenResponse();
     while (reader.pos < end) {
@@ -1447,14 +1448,14 @@ function createBaseQueryAllWeightedTokenRequest(): QueryAllWeightedTokenRequest 
   };
 }
 export const QueryAllWeightedTokenRequest = {
-  encode(message: QueryAllWeightedTokenRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: QueryAllWeightedTokenRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.pagination !== undefined) {
       PageRequest.encode(message.pagination, writer.uint32(10).fork()).ldelim();
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): QueryAllWeightedTokenRequest {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): QueryAllWeightedTokenRequest {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryAllWeightedTokenRequest();
     while (reader.pos < end) {
@@ -1493,7 +1494,7 @@ function createBaseQueryAllWeightedTokenResponse(): QueryAllWeightedTokenRespons
   };
 }
 export const QueryAllWeightedTokenResponse = {
-  encode(message: QueryAllWeightedTokenResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: QueryAllWeightedTokenResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     for (const v of message.weightedToken) {
       WeightedToken.encode(v!, writer.uint32(10).fork()).ldelim();
     }
@@ -1502,8 +1503,8 @@ export const QueryAllWeightedTokenResponse = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): QueryAllWeightedTokenResponse {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): QueryAllWeightedTokenResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryAllWeightedTokenResponse();
     while (reader.pos < end) {
@@ -1547,25 +1548,25 @@ export const QueryAllWeightedTokenResponse = {
 };
 function createBaseQueryGetWeightUpdateTimingRequest(): QueryGetWeightUpdateTimingRequest {
   return {
-    poolId: Long.UZERO
+    poolId: BigInt(0)
   };
 }
 export const QueryGetWeightUpdateTimingRequest = {
-  encode(message: QueryGetWeightUpdateTimingRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (!message.poolId.isZero()) {
+  encode(message: QueryGetWeightUpdateTimingRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    if (message.poolId !== BigInt(0)) {
       writer.uint32(8).uint64(message.poolId);
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): QueryGetWeightUpdateTimingRequest {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): QueryGetWeightUpdateTimingRequest {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryGetWeightUpdateTimingRequest();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.poolId = (reader.uint64() as Long);
+          message.poolId = reader.uint64();
           break;
         default:
           reader.skipType(tag & 7);
@@ -1576,17 +1577,17 @@ export const QueryGetWeightUpdateTimingRequest = {
   },
   fromJSON(object: any): QueryGetWeightUpdateTimingRequest {
     return {
-      poolId: isSet(object.poolId) ? Long.fromValue(object.poolId) : Long.UZERO
+      poolId: isSet(object.poolId) ? BigInt(object.poolId.toString()) : BigInt(0)
     };
   },
   toJSON(message: QueryGetWeightUpdateTimingRequest): unknown {
     const obj: any = {};
-    message.poolId !== undefined && (obj.poolId = (message.poolId || Long.UZERO).toString());
+    message.poolId !== undefined && (obj.poolId = (message.poolId || BigInt(0)).toString());
     return obj;
   },
   fromPartial(object: Partial<QueryGetWeightUpdateTimingRequest>): QueryGetWeightUpdateTimingRequest {
     const message = createBaseQueryGetWeightUpdateTimingRequest();
-    message.poolId = object.poolId !== undefined && object.poolId !== null ? Long.fromValue(object.poolId) : Long.UZERO;
+    message.poolId = object.poolId !== undefined && object.poolId !== null ? BigInt(object.poolId.toString()) : BigInt(0);
     return message;
   }
 };
@@ -1596,14 +1597,14 @@ function createBaseQueryGetWeightUpdateTimingResponse(): QueryGetWeightUpdateTim
   };
 }
 export const QueryGetWeightUpdateTimingResponse = {
-  encode(message: QueryGetWeightUpdateTimingResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: QueryGetWeightUpdateTimingResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.weightUpdateTiming !== undefined) {
       WeightUpdateTiming.encode(message.weightUpdateTiming, writer.uint32(10).fork()).ldelim();
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): QueryGetWeightUpdateTimingResponse {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): QueryGetWeightUpdateTimingResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryGetWeightUpdateTimingResponse();
     while (reader.pos < end) {
@@ -1641,14 +1642,14 @@ function createBaseQueryAllWeightUpdateTimingRequest(): QueryAllWeightUpdateTimi
   };
 }
 export const QueryAllWeightUpdateTimingRequest = {
-  encode(message: QueryAllWeightUpdateTimingRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: QueryAllWeightUpdateTimingRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.pagination !== undefined) {
       PageRequest.encode(message.pagination, writer.uint32(10).fork()).ldelim();
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): QueryAllWeightUpdateTimingRequest {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): QueryAllWeightUpdateTimingRequest {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryAllWeightUpdateTimingRequest();
     while (reader.pos < end) {
@@ -1687,7 +1688,7 @@ function createBaseQueryAllWeightUpdateTimingResponse(): QueryAllWeightUpdateTim
   };
 }
 export const QueryAllWeightUpdateTimingResponse = {
-  encode(message: QueryAllWeightUpdateTimingResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: QueryAllWeightUpdateTimingResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     for (const v of message.weightUpdateTiming) {
       WeightUpdateTiming.encode(v!, writer.uint32(10).fork()).ldelim();
     }
@@ -1696,8 +1697,8 @@ export const QueryAllWeightUpdateTimingResponse = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): QueryAllWeightUpdateTimingResponse {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): QueryAllWeightUpdateTimingResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryAllWeightUpdateTimingResponse();
     while (reader.pos < end) {
@@ -1745,14 +1746,14 @@ function createBaseQuerySimulateSingleSwapRequest(): QuerySimulateSingleSwapRequ
   };
 }
 export const QuerySimulateSingleSwapRequest = {
-  encode(message: QuerySimulateSingleSwapRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: QuerySimulateSingleSwapRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.swap !== undefined) {
       Swap.encode(message.swap, writer.uint32(10).fork()).ldelim();
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): QuerySimulateSingleSwapRequest {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): QuerySimulateSingleSwapRequest {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQuerySimulateSingleSwapRequest();
     while (reader.pos < end) {
@@ -1793,7 +1794,7 @@ function createBaseQuerySimulateSingleSwapResponse(): QuerySimulateSingleSwapRes
   };
 }
 export const QuerySimulateSingleSwapResponse = {
-  encode(message: QuerySimulateSingleSwapResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: QuerySimulateSingleSwapResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.amountOut !== undefined) {
       Coin.encode(message.amountOut, writer.uint32(10).fork()).ldelim();
     }
@@ -1808,8 +1809,8 @@ export const QuerySimulateSingleSwapResponse = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): QuerySimulateSingleSwapResponse {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): QuerySimulateSingleSwapResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQuerySimulateSingleSwapResponse();
     while (reader.pos < end) {
@@ -1861,13 +1862,13 @@ export const QuerySimulateSingleSwapResponse = {
 };
 function createBaseQuerySimulateInitializePoolRequest(): QuerySimulateInitializePoolRequest {
   return {
-    poolId: Long.UZERO,
+    poolId: BigInt(0),
     amountsIn: []
   };
 }
 export const QuerySimulateInitializePoolRequest = {
-  encode(message: QuerySimulateInitializePoolRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (!message.poolId.isZero()) {
+  encode(message: QuerySimulateInitializePoolRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    if (message.poolId !== BigInt(0)) {
       writer.uint32(8).uint64(message.poolId);
     }
     for (const v of message.amountsIn) {
@@ -1875,15 +1876,15 @@ export const QuerySimulateInitializePoolRequest = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): QuerySimulateInitializePoolRequest {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): QuerySimulateInitializePoolRequest {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQuerySimulateInitializePoolRequest();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.poolId = (reader.uint64() as Long);
+          message.poolId = reader.uint64();
           break;
         case 2:
           message.amountsIn.push(Coin.decode(reader, reader.uint32()));
@@ -1897,13 +1898,13 @@ export const QuerySimulateInitializePoolRequest = {
   },
   fromJSON(object: any): QuerySimulateInitializePoolRequest {
     return {
-      poolId: isSet(object.poolId) ? Long.fromValue(object.poolId) : Long.UZERO,
+      poolId: isSet(object.poolId) ? BigInt(object.poolId.toString()) : BigInt(0),
       amountsIn: Array.isArray(object?.amountsIn) ? object.amountsIn.map((e: any) => Coin.fromJSON(e)) : []
     };
   },
   toJSON(message: QuerySimulateInitializePoolRequest): unknown {
     const obj: any = {};
-    message.poolId !== undefined && (obj.poolId = (message.poolId || Long.UZERO).toString());
+    message.poolId !== undefined && (obj.poolId = (message.poolId || BigInt(0)).toString());
     if (message.amountsIn) {
       obj.amountsIn = message.amountsIn.map(e => e ? Coin.toJSON(e) : undefined);
     } else {
@@ -1913,7 +1914,7 @@ export const QuerySimulateInitializePoolRequest = {
   },
   fromPartial(object: Partial<QuerySimulateInitializePoolRequest>): QuerySimulateInitializePoolRequest {
     const message = createBaseQuerySimulateInitializePoolRequest();
-    message.poolId = object.poolId !== undefined && object.poolId !== null ? Long.fromValue(object.poolId) : Long.UZERO;
+    message.poolId = object.poolId !== undefined && object.poolId !== null ? BigInt(object.poolId.toString()) : BigInt(0);
     message.amountsIn = object.amountsIn?.map(e => Coin.fromPartial(e)) || [];
     return message;
   }
@@ -1926,7 +1927,7 @@ function createBaseQuerySimulateInitializePoolResponse(): QuerySimulateInitializ
   };
 }
 export const QuerySimulateInitializePoolResponse = {
-  encode(message: QuerySimulateInitializePoolResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: QuerySimulateInitializePoolResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.lptOut !== undefined) {
       Coin.encode(message.lptOut, writer.uint32(10).fork()).ldelim();
     }
@@ -1938,8 +1939,8 @@ export const QuerySimulateInitializePoolResponse = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): QuerySimulateInitializePoolResponse {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): QuerySimulateInitializePoolResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQuerySimulateInitializePoolResponse();
     while (reader.pos < end) {
@@ -1993,13 +1994,13 @@ export const QuerySimulateInitializePoolResponse = {
 };
 function createBaseQuerySimulateJoinAllTokensExactLptRequest(): QuerySimulateJoinAllTokensExactLptRequest {
   return {
-    poolId: Long.UZERO,
+    poolId: BigInt(0),
     lptOut: ""
   };
 }
 export const QuerySimulateJoinAllTokensExactLptRequest = {
-  encode(message: QuerySimulateJoinAllTokensExactLptRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (!message.poolId.isZero()) {
+  encode(message: QuerySimulateJoinAllTokensExactLptRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    if (message.poolId !== BigInt(0)) {
       writer.uint32(8).uint64(message.poolId);
     }
     if (message.lptOut !== "") {
@@ -2007,15 +2008,15 @@ export const QuerySimulateJoinAllTokensExactLptRequest = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): QuerySimulateJoinAllTokensExactLptRequest {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): QuerySimulateJoinAllTokensExactLptRequest {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQuerySimulateJoinAllTokensExactLptRequest();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.poolId = (reader.uint64() as Long);
+          message.poolId = reader.uint64();
           break;
         case 2:
           message.lptOut = reader.string();
@@ -2029,19 +2030,19 @@ export const QuerySimulateJoinAllTokensExactLptRequest = {
   },
   fromJSON(object: any): QuerySimulateJoinAllTokensExactLptRequest {
     return {
-      poolId: isSet(object.poolId) ? Long.fromValue(object.poolId) : Long.UZERO,
+      poolId: isSet(object.poolId) ? BigInt(object.poolId.toString()) : BigInt(0),
       lptOut: isSet(object.lptOut) ? String(object.lptOut) : ""
     };
   },
   toJSON(message: QuerySimulateJoinAllTokensExactLptRequest): unknown {
     const obj: any = {};
-    message.poolId !== undefined && (obj.poolId = (message.poolId || Long.UZERO).toString());
+    message.poolId !== undefined && (obj.poolId = (message.poolId || BigInt(0)).toString());
     message.lptOut !== undefined && (obj.lptOut = message.lptOut);
     return obj;
   },
   fromPartial(object: Partial<QuerySimulateJoinAllTokensExactLptRequest>): QuerySimulateJoinAllTokensExactLptRequest {
     const message = createBaseQuerySimulateJoinAllTokensExactLptRequest();
-    message.poolId = object.poolId !== undefined && object.poolId !== null ? Long.fromValue(object.poolId) : Long.UZERO;
+    message.poolId = object.poolId !== undefined && object.poolId !== null ? BigInt(object.poolId.toString()) : BigInt(0);
     message.lptOut = object.lptOut ?? "";
     return message;
   }
@@ -2054,7 +2055,7 @@ function createBaseQuerySimulateJoinAllTokensExactLptResponse(): QuerySimulateJo
   };
 }
 export const QuerySimulateJoinAllTokensExactLptResponse = {
-  encode(message: QuerySimulateJoinAllTokensExactLptResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: QuerySimulateJoinAllTokensExactLptResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.lptOut !== undefined) {
       Coin.encode(message.lptOut, writer.uint32(10).fork()).ldelim();
     }
@@ -2066,8 +2067,8 @@ export const QuerySimulateJoinAllTokensExactLptResponse = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): QuerySimulateJoinAllTokensExactLptResponse {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): QuerySimulateJoinAllTokensExactLptResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQuerySimulateJoinAllTokensExactLptResponse();
     while (reader.pos < end) {
@@ -2121,13 +2122,13 @@ export const QuerySimulateJoinAllTokensExactLptResponse = {
 };
 function createBaseQuerySimulateJoinExactTokensRequest(): QuerySimulateJoinExactTokensRequest {
   return {
-    poolId: Long.UZERO,
+    poolId: BigInt(0),
     amountsIn: []
   };
 }
 export const QuerySimulateJoinExactTokensRequest = {
-  encode(message: QuerySimulateJoinExactTokensRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (!message.poolId.isZero()) {
+  encode(message: QuerySimulateJoinExactTokensRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    if (message.poolId !== BigInt(0)) {
       writer.uint32(8).uint64(message.poolId);
     }
     for (const v of message.amountsIn) {
@@ -2135,15 +2136,15 @@ export const QuerySimulateJoinExactTokensRequest = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): QuerySimulateJoinExactTokensRequest {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): QuerySimulateJoinExactTokensRequest {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQuerySimulateJoinExactTokensRequest();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.poolId = (reader.uint64() as Long);
+          message.poolId = reader.uint64();
           break;
         case 2:
           message.amountsIn.push(Coin.decode(reader, reader.uint32()));
@@ -2157,13 +2158,13 @@ export const QuerySimulateJoinExactTokensRequest = {
   },
   fromJSON(object: any): QuerySimulateJoinExactTokensRequest {
     return {
-      poolId: isSet(object.poolId) ? Long.fromValue(object.poolId) : Long.UZERO,
+      poolId: isSet(object.poolId) ? BigInt(object.poolId.toString()) : BigInt(0),
       amountsIn: Array.isArray(object?.amountsIn) ? object.amountsIn.map((e: any) => Coin.fromJSON(e)) : []
     };
   },
   toJSON(message: QuerySimulateJoinExactTokensRequest): unknown {
     const obj: any = {};
-    message.poolId !== undefined && (obj.poolId = (message.poolId || Long.UZERO).toString());
+    message.poolId !== undefined && (obj.poolId = (message.poolId || BigInt(0)).toString());
     if (message.amountsIn) {
       obj.amountsIn = message.amountsIn.map(e => e ? Coin.toJSON(e) : undefined);
     } else {
@@ -2173,7 +2174,7 @@ export const QuerySimulateJoinExactTokensRequest = {
   },
   fromPartial(object: Partial<QuerySimulateJoinExactTokensRequest>): QuerySimulateJoinExactTokensRequest {
     const message = createBaseQuerySimulateJoinExactTokensRequest();
-    message.poolId = object.poolId !== undefined && object.poolId !== null ? Long.fromValue(object.poolId) : Long.UZERO;
+    message.poolId = object.poolId !== undefined && object.poolId !== null ? BigInt(object.poolId.toString()) : BigInt(0);
     message.amountsIn = object.amountsIn?.map(e => Coin.fromPartial(e)) || [];
     return message;
   }
@@ -2187,7 +2188,7 @@ function createBaseQuerySimulateJoinExactTokensResponse(): QuerySimulateJoinExac
   };
 }
 export const QuerySimulateJoinExactTokensResponse = {
-  encode(message: QuerySimulateJoinExactTokensResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: QuerySimulateJoinExactTokensResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.lptOut !== undefined) {
       Coin.encode(message.lptOut, writer.uint32(10).fork()).ldelim();
     }
@@ -2202,8 +2203,8 @@ export const QuerySimulateJoinExactTokensResponse = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): QuerySimulateJoinExactTokensResponse {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): QuerySimulateJoinExactTokensResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQuerySimulateJoinExactTokensResponse();
     while (reader.pos < end) {
@@ -2267,14 +2268,14 @@ export const QuerySimulateJoinExactTokensResponse = {
 };
 function createBaseQuerySimulateJoinTokenExactLptRequest(): QuerySimulateJoinTokenExactLptRequest {
   return {
-    poolId: Long.UZERO,
+    poolId: BigInt(0),
     lptOut: "",
     tokenIn: ""
   };
 }
 export const QuerySimulateJoinTokenExactLptRequest = {
-  encode(message: QuerySimulateJoinTokenExactLptRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (!message.poolId.isZero()) {
+  encode(message: QuerySimulateJoinTokenExactLptRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    if (message.poolId !== BigInt(0)) {
       writer.uint32(8).uint64(message.poolId);
     }
     if (message.lptOut !== "") {
@@ -2285,15 +2286,15 @@ export const QuerySimulateJoinTokenExactLptRequest = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): QuerySimulateJoinTokenExactLptRequest {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): QuerySimulateJoinTokenExactLptRequest {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQuerySimulateJoinTokenExactLptRequest();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.poolId = (reader.uint64() as Long);
+          message.poolId = reader.uint64();
           break;
         case 2:
           message.lptOut = reader.string();
@@ -2310,21 +2311,21 @@ export const QuerySimulateJoinTokenExactLptRequest = {
   },
   fromJSON(object: any): QuerySimulateJoinTokenExactLptRequest {
     return {
-      poolId: isSet(object.poolId) ? Long.fromValue(object.poolId) : Long.UZERO,
+      poolId: isSet(object.poolId) ? BigInt(object.poolId.toString()) : BigInt(0),
       lptOut: isSet(object.lptOut) ? String(object.lptOut) : "",
       tokenIn: isSet(object.tokenIn) ? String(object.tokenIn) : ""
     };
   },
   toJSON(message: QuerySimulateJoinTokenExactLptRequest): unknown {
     const obj: any = {};
-    message.poolId !== undefined && (obj.poolId = (message.poolId || Long.UZERO).toString());
+    message.poolId !== undefined && (obj.poolId = (message.poolId || BigInt(0)).toString());
     message.lptOut !== undefined && (obj.lptOut = message.lptOut);
     message.tokenIn !== undefined && (obj.tokenIn = message.tokenIn);
     return obj;
   },
   fromPartial(object: Partial<QuerySimulateJoinTokenExactLptRequest>): QuerySimulateJoinTokenExactLptRequest {
     const message = createBaseQuerySimulateJoinTokenExactLptRequest();
-    message.poolId = object.poolId !== undefined && object.poolId !== null ? Long.fromValue(object.poolId) : Long.UZERO;
+    message.poolId = object.poolId !== undefined && object.poolId !== null ? BigInt(object.poolId.toString()) : BigInt(0);
     message.lptOut = object.lptOut ?? "";
     message.tokenIn = object.tokenIn ?? "";
     return message;
@@ -2339,7 +2340,7 @@ function createBaseQuerySimulateJoinTokenExactLptResponse(): QuerySimulateJoinTo
   };
 }
 export const QuerySimulateJoinTokenExactLptResponse = {
-  encode(message: QuerySimulateJoinTokenExactLptResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: QuerySimulateJoinTokenExactLptResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.lptOut !== undefined) {
       Coin.encode(message.lptOut, writer.uint32(10).fork()).ldelim();
     }
@@ -2354,8 +2355,8 @@ export const QuerySimulateJoinTokenExactLptResponse = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): QuerySimulateJoinTokenExactLptResponse {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): QuerySimulateJoinTokenExactLptResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQuerySimulateJoinTokenExactLptResponse();
     while (reader.pos < end) {
@@ -2407,14 +2408,14 @@ export const QuerySimulateJoinTokenExactLptResponse = {
 };
 function createBaseQuerySimulateExitTokenExactLptRequest(): QuerySimulateExitTokenExactLptRequest {
   return {
-    poolId: Long.UZERO,
+    poolId: BigInt(0),
     lptIn: "",
     tokenOut: ""
   };
 }
 export const QuerySimulateExitTokenExactLptRequest = {
-  encode(message: QuerySimulateExitTokenExactLptRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (!message.poolId.isZero()) {
+  encode(message: QuerySimulateExitTokenExactLptRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    if (message.poolId !== BigInt(0)) {
       writer.uint32(8).uint64(message.poolId);
     }
     if (message.lptIn !== "") {
@@ -2425,15 +2426,15 @@ export const QuerySimulateExitTokenExactLptRequest = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): QuerySimulateExitTokenExactLptRequest {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): QuerySimulateExitTokenExactLptRequest {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQuerySimulateExitTokenExactLptRequest();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.poolId = (reader.uint64() as Long);
+          message.poolId = reader.uint64();
           break;
         case 2:
           message.lptIn = reader.string();
@@ -2450,21 +2451,21 @@ export const QuerySimulateExitTokenExactLptRequest = {
   },
   fromJSON(object: any): QuerySimulateExitTokenExactLptRequest {
     return {
-      poolId: isSet(object.poolId) ? Long.fromValue(object.poolId) : Long.UZERO,
+      poolId: isSet(object.poolId) ? BigInt(object.poolId.toString()) : BigInt(0),
       lptIn: isSet(object.lptIn) ? String(object.lptIn) : "",
       tokenOut: isSet(object.tokenOut) ? String(object.tokenOut) : ""
     };
   },
   toJSON(message: QuerySimulateExitTokenExactLptRequest): unknown {
     const obj: any = {};
-    message.poolId !== undefined && (obj.poolId = (message.poolId || Long.UZERO).toString());
+    message.poolId !== undefined && (obj.poolId = (message.poolId || BigInt(0)).toString());
     message.lptIn !== undefined && (obj.lptIn = message.lptIn);
     message.tokenOut !== undefined && (obj.tokenOut = message.tokenOut);
     return obj;
   },
   fromPartial(object: Partial<QuerySimulateExitTokenExactLptRequest>): QuerySimulateExitTokenExactLptRequest {
     const message = createBaseQuerySimulateExitTokenExactLptRequest();
-    message.poolId = object.poolId !== undefined && object.poolId !== null ? Long.fromValue(object.poolId) : Long.UZERO;
+    message.poolId = object.poolId !== undefined && object.poolId !== null ? BigInt(object.poolId.toString()) : BigInt(0);
     message.lptIn = object.lptIn ?? "";
     message.tokenOut = object.tokenOut ?? "";
     return message;
@@ -2479,7 +2480,7 @@ function createBaseQuerySimulateExitTokenExactLptResponse(): QuerySimulateExitTo
   };
 }
 export const QuerySimulateExitTokenExactLptResponse = {
-  encode(message: QuerySimulateExitTokenExactLptResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: QuerySimulateExitTokenExactLptResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.lptIn !== undefined) {
       Coin.encode(message.lptIn, writer.uint32(10).fork()).ldelim();
     }
@@ -2494,8 +2495,8 @@ export const QuerySimulateExitTokenExactLptResponse = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): QuerySimulateExitTokenExactLptResponse {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): QuerySimulateExitTokenExactLptResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQuerySimulateExitTokenExactLptResponse();
     while (reader.pos < end) {
@@ -2547,13 +2548,13 @@ export const QuerySimulateExitTokenExactLptResponse = {
 };
 function createBaseQuerySimulateExitExactTokensRequest(): QuerySimulateExitExactTokensRequest {
   return {
-    poolId: Long.UZERO,
+    poolId: BigInt(0),
     amountsOut: []
   };
 }
 export const QuerySimulateExitExactTokensRequest = {
-  encode(message: QuerySimulateExitExactTokensRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (!message.poolId.isZero()) {
+  encode(message: QuerySimulateExitExactTokensRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    if (message.poolId !== BigInt(0)) {
       writer.uint32(8).uint64(message.poolId);
     }
     for (const v of message.amountsOut) {
@@ -2561,15 +2562,15 @@ export const QuerySimulateExitExactTokensRequest = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): QuerySimulateExitExactTokensRequest {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): QuerySimulateExitExactTokensRequest {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQuerySimulateExitExactTokensRequest();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.poolId = (reader.uint64() as Long);
+          message.poolId = reader.uint64();
           break;
         case 2:
           message.amountsOut.push(Coin.decode(reader, reader.uint32()));
@@ -2583,13 +2584,13 @@ export const QuerySimulateExitExactTokensRequest = {
   },
   fromJSON(object: any): QuerySimulateExitExactTokensRequest {
     return {
-      poolId: isSet(object.poolId) ? Long.fromValue(object.poolId) : Long.UZERO,
+      poolId: isSet(object.poolId) ? BigInt(object.poolId.toString()) : BigInt(0),
       amountsOut: Array.isArray(object?.amountsOut) ? object.amountsOut.map((e: any) => Coin.fromJSON(e)) : []
     };
   },
   toJSON(message: QuerySimulateExitExactTokensRequest): unknown {
     const obj: any = {};
-    message.poolId !== undefined && (obj.poolId = (message.poolId || Long.UZERO).toString());
+    message.poolId !== undefined && (obj.poolId = (message.poolId || BigInt(0)).toString());
     if (message.amountsOut) {
       obj.amountsOut = message.amountsOut.map(e => e ? Coin.toJSON(e) : undefined);
     } else {
@@ -2599,7 +2600,7 @@ export const QuerySimulateExitExactTokensRequest = {
   },
   fromPartial(object: Partial<QuerySimulateExitExactTokensRequest>): QuerySimulateExitExactTokensRequest {
     const message = createBaseQuerySimulateExitExactTokensRequest();
-    message.poolId = object.poolId !== undefined && object.poolId !== null ? Long.fromValue(object.poolId) : Long.UZERO;
+    message.poolId = object.poolId !== undefined && object.poolId !== null ? BigInt(object.poolId.toString()) : BigInt(0);
     message.amountsOut = object.amountsOut?.map(e => Coin.fromPartial(e)) || [];
     return message;
   }
@@ -2613,7 +2614,7 @@ function createBaseQuerySimulateExitExactTokensResponse(): QuerySimulateExitExac
   };
 }
 export const QuerySimulateExitExactTokensResponse = {
-  encode(message: QuerySimulateExitExactTokensResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: QuerySimulateExitExactTokensResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.lptIn !== undefined) {
       Coin.encode(message.lptIn, writer.uint32(10).fork()).ldelim();
     }
@@ -2628,8 +2629,8 @@ export const QuerySimulateExitExactTokensResponse = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): QuerySimulateExitExactTokensResponse {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): QuerySimulateExitExactTokensResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQuerySimulateExitExactTokensResponse();
     while (reader.pos < end) {
@@ -2689,13 +2690,13 @@ export const QuerySimulateExitExactTokensResponse = {
 };
 function createBaseQuerySimulateExitAllTokensExactLptRequest(): QuerySimulateExitAllTokensExactLptRequest {
   return {
-    poolId: Long.UZERO,
+    poolId: BigInt(0),
     lptIn: ""
   };
 }
 export const QuerySimulateExitAllTokensExactLptRequest = {
-  encode(message: QuerySimulateExitAllTokensExactLptRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (!message.poolId.isZero()) {
+  encode(message: QuerySimulateExitAllTokensExactLptRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    if (message.poolId !== BigInt(0)) {
       writer.uint32(8).uint64(message.poolId);
     }
     if (message.lptIn !== "") {
@@ -2703,15 +2704,15 @@ export const QuerySimulateExitAllTokensExactLptRequest = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): QuerySimulateExitAllTokensExactLptRequest {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): QuerySimulateExitAllTokensExactLptRequest {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQuerySimulateExitAllTokensExactLptRequest();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.poolId = (reader.uint64() as Long);
+          message.poolId = reader.uint64();
           break;
         case 2:
           message.lptIn = reader.string();
@@ -2725,19 +2726,19 @@ export const QuerySimulateExitAllTokensExactLptRequest = {
   },
   fromJSON(object: any): QuerySimulateExitAllTokensExactLptRequest {
     return {
-      poolId: isSet(object.poolId) ? Long.fromValue(object.poolId) : Long.UZERO,
+      poolId: isSet(object.poolId) ? BigInt(object.poolId.toString()) : BigInt(0),
       lptIn: isSet(object.lptIn) ? String(object.lptIn) : ""
     };
   },
   toJSON(message: QuerySimulateExitAllTokensExactLptRequest): unknown {
     const obj: any = {};
-    message.poolId !== undefined && (obj.poolId = (message.poolId || Long.UZERO).toString());
+    message.poolId !== undefined && (obj.poolId = (message.poolId || BigInt(0)).toString());
     message.lptIn !== undefined && (obj.lptIn = message.lptIn);
     return obj;
   },
   fromPartial(object: Partial<QuerySimulateExitAllTokensExactLptRequest>): QuerySimulateExitAllTokensExactLptRequest {
     const message = createBaseQuerySimulateExitAllTokensExactLptRequest();
-    message.poolId = object.poolId !== undefined && object.poolId !== null ? Long.fromValue(object.poolId) : Long.UZERO;
+    message.poolId = object.poolId !== undefined && object.poolId !== null ? BigInt(object.poolId.toString()) : BigInt(0);
     message.lptIn = object.lptIn ?? "";
     return message;
   }
@@ -2750,7 +2751,7 @@ function createBaseQuerySimulateExitAllTokensExactLptResponse(): QuerySimulateEx
   };
 }
 export const QuerySimulateExitAllTokensExactLptResponse = {
-  encode(message: QuerySimulateExitAllTokensExactLptResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: QuerySimulateExitAllTokensExactLptResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.lptIn !== undefined) {
       Coin.encode(message.lptIn, writer.uint32(10).fork()).ldelim();
     }
@@ -2762,8 +2763,8 @@ export const QuerySimulateExitAllTokensExactLptResponse = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): QuerySimulateExitAllTokensExactLptResponse {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): QuerySimulateExitAllTokensExactLptResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQuerySimulateExitAllTokensExactLptResponse();
     while (reader.pos < end) {
@@ -2813,15 +2814,15 @@ export const QuerySimulateExitAllTokensExactLptResponse = {
 };
 function createBaseQuerySpotPriceRequest(): QuerySpotPriceRequest {
   return {
-    poolId: Long.UZERO,
+    poolId: BigInt(0),
     tokenIn: "",
     tokenOut: "",
     applyFee: false
   };
 }
 export const QuerySpotPriceRequest = {
-  encode(message: QuerySpotPriceRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (!message.poolId.isZero()) {
+  encode(message: QuerySpotPriceRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    if (message.poolId !== BigInt(0)) {
       writer.uint32(8).uint64(message.poolId);
     }
     if (message.tokenIn !== "") {
@@ -2835,15 +2836,15 @@ export const QuerySpotPriceRequest = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): QuerySpotPriceRequest {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): QuerySpotPriceRequest {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQuerySpotPriceRequest();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.poolId = (reader.uint64() as Long);
+          message.poolId = reader.uint64();
           break;
         case 2:
           message.tokenIn = reader.string();
@@ -2863,7 +2864,7 @@ export const QuerySpotPriceRequest = {
   },
   fromJSON(object: any): QuerySpotPriceRequest {
     return {
-      poolId: isSet(object.poolId) ? Long.fromValue(object.poolId) : Long.UZERO,
+      poolId: isSet(object.poolId) ? BigInt(object.poolId.toString()) : BigInt(0),
       tokenIn: isSet(object.tokenIn) ? String(object.tokenIn) : "",
       tokenOut: isSet(object.tokenOut) ? String(object.tokenOut) : "",
       applyFee: isSet(object.applyFee) ? Boolean(object.applyFee) : false
@@ -2871,7 +2872,7 @@ export const QuerySpotPriceRequest = {
   },
   toJSON(message: QuerySpotPriceRequest): unknown {
     const obj: any = {};
-    message.poolId !== undefined && (obj.poolId = (message.poolId || Long.UZERO).toString());
+    message.poolId !== undefined && (obj.poolId = (message.poolId || BigInt(0)).toString());
     message.tokenIn !== undefined && (obj.tokenIn = message.tokenIn);
     message.tokenOut !== undefined && (obj.tokenOut = message.tokenOut);
     message.applyFee !== undefined && (obj.applyFee = message.applyFee);
@@ -2879,7 +2880,7 @@ export const QuerySpotPriceRequest = {
   },
   fromPartial(object: Partial<QuerySpotPriceRequest>): QuerySpotPriceRequest {
     const message = createBaseQuerySpotPriceRequest();
-    message.poolId = object.poolId !== undefined && object.poolId !== null ? Long.fromValue(object.poolId) : Long.UZERO;
+    message.poolId = object.poolId !== undefined && object.poolId !== null ? BigInt(object.poolId.toString()) : BigInt(0);
     message.tokenIn = object.tokenIn ?? "";
     message.tokenOut = object.tokenOut ?? "";
     message.applyFee = object.applyFee ?? false;
@@ -2892,21 +2893,21 @@ function createBaseQuerySpotPriceResponse(): QuerySpotPriceResponse {
   };
 }
 export const QuerySpotPriceResponse = {
-  encode(message: QuerySpotPriceResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: QuerySpotPriceResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.spotPrice !== "") {
-      writer.uint32(10).string(message.spotPrice);
+      writer.uint32(10).string(Decimal.fromUserInput(message.spotPrice, 18).atomics);
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): QuerySpotPriceResponse {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): QuerySpotPriceResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQuerySpotPriceResponse();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.spotPrice = reader.string();
+          message.spotPrice = Decimal.fromAtomics(reader.string(), 18).toString();
           break;
         default:
           reader.skipType(tag & 7);
@@ -2933,13 +2934,13 @@ export const QuerySpotPriceResponse = {
 };
 function createBaseQueryGetIntroducingPoolTokenRequest(): QueryGetIntroducingPoolTokenRequest {
   return {
-    poolId: Long.UZERO,
+    poolId: BigInt(0),
     denom: ""
   };
 }
 export const QueryGetIntroducingPoolTokenRequest = {
-  encode(message: QueryGetIntroducingPoolTokenRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (!message.poolId.isZero()) {
+  encode(message: QueryGetIntroducingPoolTokenRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    if (message.poolId !== BigInt(0)) {
       writer.uint32(8).uint64(message.poolId);
     }
     if (message.denom !== "") {
@@ -2947,15 +2948,15 @@ export const QueryGetIntroducingPoolTokenRequest = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): QueryGetIntroducingPoolTokenRequest {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): QueryGetIntroducingPoolTokenRequest {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryGetIntroducingPoolTokenRequest();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.poolId = (reader.uint64() as Long);
+          message.poolId = reader.uint64();
           break;
         case 2:
           message.denom = reader.string();
@@ -2969,19 +2970,19 @@ export const QueryGetIntroducingPoolTokenRequest = {
   },
   fromJSON(object: any): QueryGetIntroducingPoolTokenRequest {
     return {
-      poolId: isSet(object.poolId) ? Long.fromValue(object.poolId) : Long.UZERO,
+      poolId: isSet(object.poolId) ? BigInt(object.poolId.toString()) : BigInt(0),
       denom: isSet(object.denom) ? String(object.denom) : ""
     };
   },
   toJSON(message: QueryGetIntroducingPoolTokenRequest): unknown {
     const obj: any = {};
-    message.poolId !== undefined && (obj.poolId = (message.poolId || Long.UZERO).toString());
+    message.poolId !== undefined && (obj.poolId = (message.poolId || BigInt(0)).toString());
     message.denom !== undefined && (obj.denom = message.denom);
     return obj;
   },
   fromPartial(object: Partial<QueryGetIntroducingPoolTokenRequest>): QueryGetIntroducingPoolTokenRequest {
     const message = createBaseQueryGetIntroducingPoolTokenRequest();
-    message.poolId = object.poolId !== undefined && object.poolId !== null ? Long.fromValue(object.poolId) : Long.UZERO;
+    message.poolId = object.poolId !== undefined && object.poolId !== null ? BigInt(object.poolId.toString()) : BigInt(0);
     message.denom = object.denom ?? "";
     return message;
   }
@@ -2992,14 +2993,14 @@ function createBaseQueryGetIntroducingPoolTokenResponse(): QueryGetIntroducingPo
   };
 }
 export const QueryGetIntroducingPoolTokenResponse = {
-  encode(message: QueryGetIntroducingPoolTokenResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: QueryGetIntroducingPoolTokenResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.introducingPoolToken !== undefined) {
       VirtualBalancePoolToken.encode(message.introducingPoolToken, writer.uint32(10).fork()).ldelim();
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): QueryGetIntroducingPoolTokenResponse {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): QueryGetIntroducingPoolTokenResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryGetIntroducingPoolTokenResponse();
     while (reader.pos < end) {
@@ -3037,14 +3038,14 @@ function createBaseQueryAllIntroducingPoolTokenRequest(): QueryAllIntroducingPoo
   };
 }
 export const QueryAllIntroducingPoolTokenRequest = {
-  encode(message: QueryAllIntroducingPoolTokenRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: QueryAllIntroducingPoolTokenRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.pagination !== undefined) {
       PageRequest.encode(message.pagination, writer.uint32(10).fork()).ldelim();
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): QueryAllIntroducingPoolTokenRequest {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): QueryAllIntroducingPoolTokenRequest {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryAllIntroducingPoolTokenRequest();
     while (reader.pos < end) {
@@ -3083,7 +3084,7 @@ function createBaseQueryAllIntroducingPoolTokenResponse(): QueryAllIntroducingPo
   };
 }
 export const QueryAllIntroducingPoolTokenResponse = {
-  encode(message: QueryAllIntroducingPoolTokenResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: QueryAllIntroducingPoolTokenResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     for (const v of message.introducingPoolToken) {
       VirtualBalancePoolToken.encode(v!, writer.uint32(10).fork()).ldelim();
     }
@@ -3092,8 +3093,8 @@ export const QueryAllIntroducingPoolTokenResponse = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): QueryAllIntroducingPoolTokenResponse {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): QueryAllIntroducingPoolTokenResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryAllIntroducingPoolTokenResponse();
     while (reader.pos < end) {
@@ -3137,13 +3138,13 @@ export const QueryAllIntroducingPoolTokenResponse = {
 };
 function createBaseQueryGetExpiringPoolTokenRequest(): QueryGetExpiringPoolTokenRequest {
   return {
-    poolId: Long.UZERO,
+    poolId: BigInt(0),
     denom: ""
   };
 }
 export const QueryGetExpiringPoolTokenRequest = {
-  encode(message: QueryGetExpiringPoolTokenRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (!message.poolId.isZero()) {
+  encode(message: QueryGetExpiringPoolTokenRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    if (message.poolId !== BigInt(0)) {
       writer.uint32(8).uint64(message.poolId);
     }
     if (message.denom !== "") {
@@ -3151,15 +3152,15 @@ export const QueryGetExpiringPoolTokenRequest = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): QueryGetExpiringPoolTokenRequest {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): QueryGetExpiringPoolTokenRequest {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryGetExpiringPoolTokenRequest();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.poolId = (reader.uint64() as Long);
+          message.poolId = reader.uint64();
           break;
         case 2:
           message.denom = reader.string();
@@ -3173,19 +3174,19 @@ export const QueryGetExpiringPoolTokenRequest = {
   },
   fromJSON(object: any): QueryGetExpiringPoolTokenRequest {
     return {
-      poolId: isSet(object.poolId) ? Long.fromValue(object.poolId) : Long.UZERO,
+      poolId: isSet(object.poolId) ? BigInt(object.poolId.toString()) : BigInt(0),
       denom: isSet(object.denom) ? String(object.denom) : ""
     };
   },
   toJSON(message: QueryGetExpiringPoolTokenRequest): unknown {
     const obj: any = {};
-    message.poolId !== undefined && (obj.poolId = (message.poolId || Long.UZERO).toString());
+    message.poolId !== undefined && (obj.poolId = (message.poolId || BigInt(0)).toString());
     message.denom !== undefined && (obj.denom = message.denom);
     return obj;
   },
   fromPartial(object: Partial<QueryGetExpiringPoolTokenRequest>): QueryGetExpiringPoolTokenRequest {
     const message = createBaseQueryGetExpiringPoolTokenRequest();
-    message.poolId = object.poolId !== undefined && object.poolId !== null ? Long.fromValue(object.poolId) : Long.UZERO;
+    message.poolId = object.poolId !== undefined && object.poolId !== null ? BigInt(object.poolId.toString()) : BigInt(0);
     message.denom = object.denom ?? "";
     return message;
   }
@@ -3196,14 +3197,14 @@ function createBaseQueryGetExpiringPoolTokenResponse(): QueryGetExpiringPoolToke
   };
 }
 export const QueryGetExpiringPoolTokenResponse = {
-  encode(message: QueryGetExpiringPoolTokenResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: QueryGetExpiringPoolTokenResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.expiringPoolToken !== undefined) {
       VirtualBalancePoolToken.encode(message.expiringPoolToken, writer.uint32(10).fork()).ldelim();
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): QueryGetExpiringPoolTokenResponse {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): QueryGetExpiringPoolTokenResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryGetExpiringPoolTokenResponse();
     while (reader.pos < end) {
@@ -3241,14 +3242,14 @@ function createBaseQueryAllExpiringPoolTokenRequest(): QueryAllExpiringPoolToken
   };
 }
 export const QueryAllExpiringPoolTokenRequest = {
-  encode(message: QueryAllExpiringPoolTokenRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: QueryAllExpiringPoolTokenRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.pagination !== undefined) {
       PageRequest.encode(message.pagination, writer.uint32(10).fork()).ldelim();
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): QueryAllExpiringPoolTokenRequest {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): QueryAllExpiringPoolTokenRequest {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryAllExpiringPoolTokenRequest();
     while (reader.pos < end) {
@@ -3287,7 +3288,7 @@ function createBaseQueryAllExpiringPoolTokenResponse(): QueryAllExpiringPoolToke
   };
 }
 export const QueryAllExpiringPoolTokenResponse = {
-  encode(message: QueryAllExpiringPoolTokenResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: QueryAllExpiringPoolTokenResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     for (const v of message.expiringPoolToken) {
       VirtualBalancePoolToken.encode(v!, writer.uint32(10).fork()).ldelim();
     }
@@ -3296,8 +3297,8 @@ export const QueryAllExpiringPoolTokenResponse = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): QueryAllExpiringPoolTokenResponse {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): QueryAllExpiringPoolTokenResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryAllExpiringPoolTokenResponse();
     while (reader.pos < end) {
@@ -3341,25 +3342,25 @@ export const QueryAllExpiringPoolTokenResponse = {
 };
 function createBaseQueryLpTokenRequest(): QueryLpTokenRequest {
   return {
-    poolId: Long.UZERO
+    poolId: BigInt(0)
   };
 }
 export const QueryLpTokenRequest = {
-  encode(message: QueryLpTokenRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (!message.poolId.isZero()) {
+  encode(message: QueryLpTokenRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    if (message.poolId !== BigInt(0)) {
       writer.uint32(8).uint64(message.poolId);
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): QueryLpTokenRequest {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): QueryLpTokenRequest {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryLpTokenRequest();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.poolId = (reader.uint64() as Long);
+          message.poolId = reader.uint64();
           break;
         default:
           reader.skipType(tag & 7);
@@ -3370,17 +3371,17 @@ export const QueryLpTokenRequest = {
   },
   fromJSON(object: any): QueryLpTokenRequest {
     return {
-      poolId: isSet(object.poolId) ? Long.fromValue(object.poolId) : Long.UZERO
+      poolId: isSet(object.poolId) ? BigInt(object.poolId.toString()) : BigInt(0)
     };
   },
   toJSON(message: QueryLpTokenRequest): unknown {
     const obj: any = {};
-    message.poolId !== undefined && (obj.poolId = (message.poolId || Long.UZERO).toString());
+    message.poolId !== undefined && (obj.poolId = (message.poolId || BigInt(0)).toString());
     return obj;
   },
   fromPartial(object: Partial<QueryLpTokenRequest>): QueryLpTokenRequest {
     const message = createBaseQueryLpTokenRequest();
-    message.poolId = object.poolId !== undefined && object.poolId !== null ? Long.fromValue(object.poolId) : Long.UZERO;
+    message.poolId = object.poolId !== undefined && object.poolId !== null ? BigInt(object.poolId.toString()) : BigInt(0);
     return message;
   }
 };
@@ -3390,14 +3391,14 @@ function createBaseQueryLpTokenResponse(): QueryLpTokenResponse {
   };
 }
 export const QueryLpTokenResponse = {
-  encode(message: QueryLpTokenResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: QueryLpTokenResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.lpToken !== undefined) {
       PoolToken.encode(message.lpToken, writer.uint32(10).fork()).ldelim();
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): QueryLpTokenResponse {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): QueryLpTokenResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryLpTokenResponse();
     while (reader.pos < end) {
@@ -3436,7 +3437,7 @@ function createBaseQuerySimulateBatchSwapRequest(): QuerySimulateBatchSwapReques
   };
 }
 export const QuerySimulateBatchSwapRequest = {
-  encode(message: QuerySimulateBatchSwapRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: QuerySimulateBatchSwapRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.swapType !== 0) {
       writer.uint32(8).int32(message.swapType);
     }
@@ -3445,8 +3446,8 @@ export const QuerySimulateBatchSwapRequest = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): QuerySimulateBatchSwapRequest {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): QuerySimulateBatchSwapRequest {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQuerySimulateBatchSwapRequest();
     while (reader.pos < end) {
@@ -3497,7 +3498,7 @@ function createBaseQuerySimulateBatchSwapResponse(): QuerySimulateBatchSwapRespo
   };
 }
 export const QuerySimulateBatchSwapResponse = {
-  encode(message: QuerySimulateBatchSwapResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: QuerySimulateBatchSwapResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     for (const v of message.amountsIn) {
       Coin.encode(v!, writer.uint32(10).fork()).ldelim();
     }
@@ -3512,8 +3513,8 @@ export const QuerySimulateBatchSwapResponse = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): QuerySimulateBatchSwapResponse {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): QuerySimulateBatchSwapResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQuerySimulateBatchSwapResponse();
     while (reader.pos < end) {
@@ -3581,25 +3582,25 @@ export const QuerySimulateBatchSwapResponse = {
 };
 function createBaseQueryGetYammConfigurationRequest(): QueryGetYammConfigurationRequest {
   return {
-    poolId: Long.UZERO
+    poolId: BigInt(0)
   };
 }
 export const QueryGetYammConfigurationRequest = {
-  encode(message: QueryGetYammConfigurationRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (!message.poolId.isZero()) {
+  encode(message: QueryGetYammConfigurationRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    if (message.poolId !== BigInt(0)) {
       writer.uint32(8).uint64(message.poolId);
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): QueryGetYammConfigurationRequest {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): QueryGetYammConfigurationRequest {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryGetYammConfigurationRequest();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.poolId = (reader.uint64() as Long);
+          message.poolId = reader.uint64();
           break;
         default:
           reader.skipType(tag & 7);
@@ -3610,17 +3611,17 @@ export const QueryGetYammConfigurationRequest = {
   },
   fromJSON(object: any): QueryGetYammConfigurationRequest {
     return {
-      poolId: isSet(object.poolId) ? Long.fromValue(object.poolId) : Long.UZERO
+      poolId: isSet(object.poolId) ? BigInt(object.poolId.toString()) : BigInt(0)
     };
   },
   toJSON(message: QueryGetYammConfigurationRequest): unknown {
     const obj: any = {};
-    message.poolId !== undefined && (obj.poolId = (message.poolId || Long.UZERO).toString());
+    message.poolId !== undefined && (obj.poolId = (message.poolId || BigInt(0)).toString());
     return obj;
   },
   fromPartial(object: Partial<QueryGetYammConfigurationRequest>): QueryGetYammConfigurationRequest {
     const message = createBaseQueryGetYammConfigurationRequest();
-    message.poolId = object.poolId !== undefined && object.poolId !== null ? Long.fromValue(object.poolId) : Long.UZERO;
+    message.poolId = object.poolId !== undefined && object.poolId !== null ? BigInt(object.poolId.toString()) : BigInt(0);
     return message;
   }
 };
@@ -3630,14 +3631,14 @@ function createBaseQueryGetYammConfigurationResponse(): QueryGetYammConfiguratio
   };
 }
 export const QueryGetYammConfigurationResponse = {
-  encode(message: QueryGetYammConfigurationResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: QueryGetYammConfigurationResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.yammConfiguration !== undefined) {
       YammConfiguration.encode(message.yammConfiguration, writer.uint32(10).fork()).ldelim();
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): QueryGetYammConfigurationResponse {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): QueryGetYammConfigurationResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryGetYammConfigurationResponse();
     while (reader.pos < end) {
@@ -3675,14 +3676,14 @@ function createBaseQueryAllYammConfigurationRequest(): QueryAllYammConfiguration
   };
 }
 export const QueryAllYammConfigurationRequest = {
-  encode(message: QueryAllYammConfigurationRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: QueryAllYammConfigurationRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.pagination !== undefined) {
       PageRequest.encode(message.pagination, writer.uint32(10).fork()).ldelim();
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): QueryAllYammConfigurationRequest {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): QueryAllYammConfigurationRequest {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryAllYammConfigurationRequest();
     while (reader.pos < end) {
@@ -3721,7 +3722,7 @@ function createBaseQueryAllYammConfigurationResponse(): QueryAllYammConfiguratio
   };
 }
 export const QueryAllYammConfigurationResponse = {
-  encode(message: QueryAllYammConfigurationResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: QueryAllYammConfigurationResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     for (const v of message.yammConfiguration) {
       YammConfiguration.encode(v!, writer.uint32(10).fork()).ldelim();
     }
@@ -3730,8 +3731,8 @@ export const QueryAllYammConfigurationResponse = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): QueryAllYammConfigurationResponse {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): QueryAllYammConfigurationResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryAllYammConfigurationResponse();
     while (reader.pos < end) {
@@ -3780,7 +3781,7 @@ function createBaseQueryGetWhitelistedRouteRequest(): QueryGetWhitelistedRouteRe
   };
 }
 export const QueryGetWhitelistedRouteRequest = {
-  encode(message: QueryGetWhitelistedRouteRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: QueryGetWhitelistedRouteRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.tokenIn !== "") {
       writer.uint32(10).string(message.tokenIn);
     }
@@ -3789,8 +3790,8 @@ export const QueryGetWhitelistedRouteRequest = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): QueryGetWhitelistedRouteRequest {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): QueryGetWhitelistedRouteRequest {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryGetWhitelistedRouteRequest();
     while (reader.pos < end) {
@@ -3834,14 +3835,14 @@ function createBaseQueryGetWhitelistedRouteResponse(): QueryGetWhitelistedRouteR
   };
 }
 export const QueryGetWhitelistedRouteResponse = {
-  encode(message: QueryGetWhitelistedRouteResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: QueryGetWhitelistedRouteResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.whitelistedRoute !== undefined) {
       WhitelistedRoute.encode(message.whitelistedRoute, writer.uint32(10).fork()).ldelim();
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): QueryGetWhitelistedRouteResponse {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): QueryGetWhitelistedRouteResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryGetWhitelistedRouteResponse();
     while (reader.pos < end) {
@@ -3879,14 +3880,14 @@ function createBaseQueryAllWhitelistedRouteRequest(): QueryAllWhitelistedRouteRe
   };
 }
 export const QueryAllWhitelistedRouteRequest = {
-  encode(message: QueryAllWhitelistedRouteRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: QueryAllWhitelistedRouteRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.pagination !== undefined) {
       PageRequest.encode(message.pagination, writer.uint32(10).fork()).ldelim();
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): QueryAllWhitelistedRouteRequest {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): QueryAllWhitelistedRouteRequest {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryAllWhitelistedRouteRequest();
     while (reader.pos < end) {
@@ -3925,7 +3926,7 @@ function createBaseQueryAllWhitelistedRouteResponse(): QueryAllWhitelistedRouteR
   };
 }
 export const QueryAllWhitelistedRouteResponse = {
-  encode(message: QueryAllWhitelistedRouteResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: QueryAllWhitelistedRouteResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     for (const v of message.whitelistedRoute) {
       WhitelistedRoute.encode(v!, writer.uint32(10).fork()).ldelim();
     }
@@ -3934,8 +3935,8 @@ export const QueryAllWhitelistedRouteResponse = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): QueryAllWhitelistedRouteResponse {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): QueryAllWhitelistedRouteResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryAllWhitelistedRouteResponse();
     while (reader.pos < end) {
@@ -3979,25 +3980,25 @@ export const QueryAllWhitelistedRouteResponse = {
 };
 function createBaseQueryGetOrderRequest(): QueryGetOrderRequest {
   return {
-    id: Long.UZERO
+    id: BigInt(0)
   };
 }
 export const QueryGetOrderRequest = {
-  encode(message: QueryGetOrderRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (!message.id.isZero()) {
+  encode(message: QueryGetOrderRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    if (message.id !== BigInt(0)) {
       writer.uint32(8).uint64(message.id);
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): QueryGetOrderRequest {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): QueryGetOrderRequest {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryGetOrderRequest();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.id = (reader.uint64() as Long);
+          message.id = reader.uint64();
           break;
         default:
           reader.skipType(tag & 7);
@@ -4008,17 +4009,17 @@ export const QueryGetOrderRequest = {
   },
   fromJSON(object: any): QueryGetOrderRequest {
     return {
-      id: isSet(object.id) ? Long.fromValue(object.id) : Long.UZERO
+      id: isSet(object.id) ? BigInt(object.id.toString()) : BigInt(0)
     };
   },
   toJSON(message: QueryGetOrderRequest): unknown {
     const obj: any = {};
-    message.id !== undefined && (obj.id = (message.id || Long.UZERO).toString());
+    message.id !== undefined && (obj.id = (message.id || BigInt(0)).toString());
     return obj;
   },
   fromPartial(object: Partial<QueryGetOrderRequest>): QueryGetOrderRequest {
     const message = createBaseQueryGetOrderRequest();
-    message.id = object.id !== undefined && object.id !== null ? Long.fromValue(object.id) : Long.UZERO;
+    message.id = object.id !== undefined && object.id !== null ? BigInt(object.id.toString()) : BigInt(0);
     return message;
   }
 };
@@ -4028,14 +4029,14 @@ function createBaseQueryGetOrderResponse(): QueryGetOrderResponse {
   };
 }
 export const QueryGetOrderResponse = {
-  encode(message: QueryGetOrderResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: QueryGetOrderResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.order !== undefined) {
       Order.encode(message.order, writer.uint32(10).fork()).ldelim();
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): QueryGetOrderResponse {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): QueryGetOrderResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryGetOrderResponse();
     while (reader.pos < end) {
@@ -4073,14 +4074,14 @@ function createBaseQueryAllOrderRequest(): QueryAllOrderRequest {
   };
 }
 export const QueryAllOrderRequest = {
-  encode(message: QueryAllOrderRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: QueryAllOrderRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.pagination !== undefined) {
       PageRequest.encode(message.pagination, writer.uint32(10).fork()).ldelim();
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): QueryAllOrderRequest {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): QueryAllOrderRequest {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryAllOrderRequest();
     while (reader.pos < end) {
@@ -4119,7 +4120,7 @@ function createBaseQueryAllOrderResponse(): QueryAllOrderResponse {
   };
 }
 export const QueryAllOrderResponse = {
-  encode(message: QueryAllOrderResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: QueryAllOrderResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     for (const v of message.order) {
       Order.encode(v!, writer.uint32(10).fork()).ldelim();
     }
@@ -4128,8 +4129,8 @@ export const QueryAllOrderResponse = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): QueryAllOrderResponse {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): QueryAllOrderResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryAllOrderResponse();
     while (reader.pos < end) {
@@ -4173,25 +4174,25 @@ export const QueryAllOrderResponse = {
 };
 function createBaseQueryGetExecutableOrderRequest(): QueryGetExecutableOrderRequest {
   return {
-    orderId: Long.UZERO
+    orderId: BigInt(0)
   };
 }
 export const QueryGetExecutableOrderRequest = {
-  encode(message: QueryGetExecutableOrderRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (!message.orderId.isZero()) {
+  encode(message: QueryGetExecutableOrderRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    if (message.orderId !== BigInt(0)) {
       writer.uint32(8).uint64(message.orderId);
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): QueryGetExecutableOrderRequest {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): QueryGetExecutableOrderRequest {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryGetExecutableOrderRequest();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.orderId = (reader.uint64() as Long);
+          message.orderId = reader.uint64();
           break;
         default:
           reader.skipType(tag & 7);
@@ -4202,17 +4203,17 @@ export const QueryGetExecutableOrderRequest = {
   },
   fromJSON(object: any): QueryGetExecutableOrderRequest {
     return {
-      orderId: isSet(object.orderId) ? Long.fromValue(object.orderId) : Long.UZERO
+      orderId: isSet(object.orderId) ? BigInt(object.orderId.toString()) : BigInt(0)
     };
   },
   toJSON(message: QueryGetExecutableOrderRequest): unknown {
     const obj: any = {};
-    message.orderId !== undefined && (obj.orderId = (message.orderId || Long.UZERO).toString());
+    message.orderId !== undefined && (obj.orderId = (message.orderId || BigInt(0)).toString());
     return obj;
   },
   fromPartial(object: Partial<QueryGetExecutableOrderRequest>): QueryGetExecutableOrderRequest {
     const message = createBaseQueryGetExecutableOrderRequest();
-    message.orderId = object.orderId !== undefined && object.orderId !== null ? Long.fromValue(object.orderId) : Long.UZERO;
+    message.orderId = object.orderId !== undefined && object.orderId !== null ? BigInt(object.orderId.toString()) : BigInt(0);
     return message;
   }
 };
@@ -4222,14 +4223,14 @@ function createBaseQueryGetExecutableOrderResponse(): QueryGetExecutableOrderRes
   };
 }
 export const QueryGetExecutableOrderResponse = {
-  encode(message: QueryGetExecutableOrderResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: QueryGetExecutableOrderResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.executableOrder !== undefined) {
       Order.encode(message.executableOrder, writer.uint32(10).fork()).ldelim();
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): QueryGetExecutableOrderResponse {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): QueryGetExecutableOrderResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryGetExecutableOrderResponse();
     while (reader.pos < end) {
@@ -4267,14 +4268,14 @@ function createBaseQueryAllExecutableOrderRequest(): QueryAllExecutableOrderRequ
   };
 }
 export const QueryAllExecutableOrderRequest = {
-  encode(message: QueryAllExecutableOrderRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: QueryAllExecutableOrderRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.pagination !== undefined) {
       PageRequest.encode(message.pagination, writer.uint32(10).fork()).ldelim();
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): QueryAllExecutableOrderRequest {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): QueryAllExecutableOrderRequest {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryAllExecutableOrderRequest();
     while (reader.pos < end) {
@@ -4313,7 +4314,7 @@ function createBaseQueryAllExecutableOrderResponse(): QueryAllExecutableOrderRes
   };
 }
 export const QueryAllExecutableOrderResponse = {
-  encode(message: QueryAllExecutableOrderResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: QueryAllExecutableOrderResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     for (const v of message.executableOrder) {
       Order.encode(v!, writer.uint32(10).fork()).ldelim();
     }
@@ -4322,8 +4323,8 @@ export const QueryAllExecutableOrderResponse = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): QueryAllExecutableOrderResponse {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): QueryAllExecutableOrderResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryAllExecutableOrderResponse();
     while (reader.pos < end) {
@@ -4367,25 +4368,25 @@ export const QueryAllExecutableOrderResponse = {
 };
 function createBaseQueryGetScheduleOrderRequest(): QueryGetScheduleOrderRequest {
   return {
-    orderId: Long.UZERO
+    orderId: BigInt(0)
   };
 }
 export const QueryGetScheduleOrderRequest = {
-  encode(message: QueryGetScheduleOrderRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (!message.orderId.isZero()) {
+  encode(message: QueryGetScheduleOrderRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    if (message.orderId !== BigInt(0)) {
       writer.uint32(8).uint64(message.orderId);
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): QueryGetScheduleOrderRequest {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): QueryGetScheduleOrderRequest {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryGetScheduleOrderRequest();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.orderId = (reader.uint64() as Long);
+          message.orderId = reader.uint64();
           break;
         default:
           reader.skipType(tag & 7);
@@ -4396,17 +4397,17 @@ export const QueryGetScheduleOrderRequest = {
   },
   fromJSON(object: any): QueryGetScheduleOrderRequest {
     return {
-      orderId: isSet(object.orderId) ? Long.fromValue(object.orderId) : Long.UZERO
+      orderId: isSet(object.orderId) ? BigInt(object.orderId.toString()) : BigInt(0)
     };
   },
   toJSON(message: QueryGetScheduleOrderRequest): unknown {
     const obj: any = {};
-    message.orderId !== undefined && (obj.orderId = (message.orderId || Long.UZERO).toString());
+    message.orderId !== undefined && (obj.orderId = (message.orderId || BigInt(0)).toString());
     return obj;
   },
   fromPartial(object: Partial<QueryGetScheduleOrderRequest>): QueryGetScheduleOrderRequest {
     const message = createBaseQueryGetScheduleOrderRequest();
-    message.orderId = object.orderId !== undefined && object.orderId !== null ? Long.fromValue(object.orderId) : Long.UZERO;
+    message.orderId = object.orderId !== undefined && object.orderId !== null ? BigInt(object.orderId.toString()) : BigInt(0);
     return message;
   }
 };
@@ -4416,14 +4417,14 @@ function createBaseQueryGetScheduleOrderResponse(): QueryGetScheduleOrderRespons
   };
 }
 export const QueryGetScheduleOrderResponse = {
-  encode(message: QueryGetScheduleOrderResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: QueryGetScheduleOrderResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.scheduleOrder !== undefined) {
       ScheduleOrder.encode(message.scheduleOrder, writer.uint32(10).fork()).ldelim();
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): QueryGetScheduleOrderResponse {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): QueryGetScheduleOrderResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryGetScheduleOrderResponse();
     while (reader.pos < end) {
@@ -4461,14 +4462,14 @@ function createBaseQueryAllScheduleOrderRequest(): QueryAllScheduleOrderRequest 
   };
 }
 export const QueryAllScheduleOrderRequest = {
-  encode(message: QueryAllScheduleOrderRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: QueryAllScheduleOrderRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.pagination !== undefined) {
       PageRequest.encode(message.pagination, writer.uint32(10).fork()).ldelim();
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): QueryAllScheduleOrderRequest {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): QueryAllScheduleOrderRequest {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryAllScheduleOrderRequest();
     while (reader.pos < end) {
@@ -4507,7 +4508,7 @@ function createBaseQueryAllScheduleOrderResponse(): QueryAllScheduleOrderRespons
   };
 }
 export const QueryAllScheduleOrderResponse = {
-  encode(message: QueryAllScheduleOrderResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: QueryAllScheduleOrderResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     for (const v of message.scheduleOrder) {
       ScheduleOrder.encode(v!, writer.uint32(10).fork()).ldelim();
     }
@@ -4516,8 +4517,8 @@ export const QueryAllScheduleOrderResponse = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): QueryAllScheduleOrderResponse {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): QueryAllScheduleOrderResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryAllScheduleOrderResponse();
     while (reader.pos < end) {
@@ -4565,14 +4566,14 @@ function createBaseQueryGetOraclePricePairRequest(): QueryGetOraclePricePairRequ
   };
 }
 export const QueryGetOraclePricePairRequest = {
-  encode(message: QueryGetOraclePricePairRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: QueryGetOraclePricePairRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.assetId !== "") {
       writer.uint32(10).string(message.assetId);
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): QueryGetOraclePricePairRequest {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): QueryGetOraclePricePairRequest {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryGetOraclePricePairRequest();
     while (reader.pos < end) {
@@ -4610,14 +4611,14 @@ function createBaseQueryGetOraclePricePairResponse(): QueryGetOraclePricePairRes
   };
 }
 export const QueryGetOraclePricePairResponse = {
-  encode(message: QueryGetOraclePricePairResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: QueryGetOraclePricePairResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.oraclePricePair !== undefined) {
       OraclePricePair.encode(message.oraclePricePair, writer.uint32(10).fork()).ldelim();
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): QueryGetOraclePricePairResponse {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): QueryGetOraclePricePairResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryGetOraclePricePairResponse();
     while (reader.pos < end) {
@@ -4655,14 +4656,14 @@ function createBaseQueryAllOraclePricePairRequest(): QueryAllOraclePricePairRequ
   };
 }
 export const QueryAllOraclePricePairRequest = {
-  encode(message: QueryAllOraclePricePairRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: QueryAllOraclePricePairRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.pagination !== undefined) {
       PageRequest.encode(message.pagination, writer.uint32(10).fork()).ldelim();
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): QueryAllOraclePricePairRequest {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): QueryAllOraclePricePairRequest {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryAllOraclePricePairRequest();
     while (reader.pos < end) {
@@ -4701,7 +4702,7 @@ function createBaseQueryAllOraclePricePairResponse(): QueryAllOraclePricePairRes
   };
 }
 export const QueryAllOraclePricePairResponse = {
-  encode(message: QueryAllOraclePricePairResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: QueryAllOraclePricePairResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     for (const v of message.oraclePricePair) {
       OraclePricePair.encode(v!, writer.uint32(10).fork()).ldelim();
     }
@@ -4710,8 +4711,8 @@ export const QueryAllOraclePricePairResponse = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): QueryAllOraclePricePairResponse {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): QueryAllOraclePricePairResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryAllOraclePricePairResponse();
     while (reader.pos < end) {
@@ -4757,11 +4758,11 @@ function createBaseQueryVaultPauseModeRequest(): QueryVaultPauseModeRequest {
   return {};
 }
 export const QueryVaultPauseModeRequest = {
-  encode(_: QueryVaultPauseModeRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(_: QueryVaultPauseModeRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): QueryVaultPauseModeRequest {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): QueryVaultPauseModeRequest {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryVaultPauseModeRequest();
     while (reader.pos < end) {
@@ -4792,14 +4793,14 @@ function createBaseQueryVaultPauseModeResponse(): QueryVaultPauseModeResponse {
   };
 }
 export const QueryVaultPauseModeResponse = {
-  encode(message: QueryVaultPauseModeResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: QueryVaultPauseModeResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.paused === true) {
       writer.uint32(8).bool(message.paused);
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): QueryVaultPauseModeResponse {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): QueryVaultPauseModeResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryVaultPauseModeResponse();
     while (reader.pos < end) {
@@ -4834,21 +4835,21 @@ export const QueryVaultPauseModeResponse = {
 function createBaseQueryGetPendingTokenIntroductionRequest(): QueryGetPendingTokenIntroductionRequest {
   return {
     assetId: "",
-    targetPoolId: Long.UZERO
+    targetPoolId: BigInt(0)
   };
 }
 export const QueryGetPendingTokenIntroductionRequest = {
-  encode(message: QueryGetPendingTokenIntroductionRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: QueryGetPendingTokenIntroductionRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.assetId !== "") {
       writer.uint32(10).string(message.assetId);
     }
-    if (!message.targetPoolId.isZero()) {
+    if (message.targetPoolId !== BigInt(0)) {
       writer.uint32(16).uint64(message.targetPoolId);
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): QueryGetPendingTokenIntroductionRequest {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): QueryGetPendingTokenIntroductionRequest {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryGetPendingTokenIntroductionRequest();
     while (reader.pos < end) {
@@ -4858,7 +4859,7 @@ export const QueryGetPendingTokenIntroductionRequest = {
           message.assetId = reader.string();
           break;
         case 2:
-          message.targetPoolId = (reader.uint64() as Long);
+          message.targetPoolId = reader.uint64();
           break;
         default:
           reader.skipType(tag & 7);
@@ -4870,19 +4871,19 @@ export const QueryGetPendingTokenIntroductionRequest = {
   fromJSON(object: any): QueryGetPendingTokenIntroductionRequest {
     return {
       assetId: isSet(object.assetId) ? String(object.assetId) : "",
-      targetPoolId: isSet(object.targetPoolId) ? Long.fromValue(object.targetPoolId) : Long.UZERO
+      targetPoolId: isSet(object.targetPoolId) ? BigInt(object.targetPoolId.toString()) : BigInt(0)
     };
   },
   toJSON(message: QueryGetPendingTokenIntroductionRequest): unknown {
     const obj: any = {};
     message.assetId !== undefined && (obj.assetId = message.assetId);
-    message.targetPoolId !== undefined && (obj.targetPoolId = (message.targetPoolId || Long.UZERO).toString());
+    message.targetPoolId !== undefined && (obj.targetPoolId = (message.targetPoolId || BigInt(0)).toString());
     return obj;
   },
   fromPartial(object: Partial<QueryGetPendingTokenIntroductionRequest>): QueryGetPendingTokenIntroductionRequest {
     const message = createBaseQueryGetPendingTokenIntroductionRequest();
     message.assetId = object.assetId ?? "";
-    message.targetPoolId = object.targetPoolId !== undefined && object.targetPoolId !== null ? Long.fromValue(object.targetPoolId) : Long.UZERO;
+    message.targetPoolId = object.targetPoolId !== undefined && object.targetPoolId !== null ? BigInt(object.targetPoolId.toString()) : BigInt(0);
     return message;
   }
 };
@@ -4892,14 +4893,14 @@ function createBaseQueryGetPendingTokenIntroductionResponse(): QueryGetPendingTo
   };
 }
 export const QueryGetPendingTokenIntroductionResponse = {
-  encode(message: QueryGetPendingTokenIntroductionResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: QueryGetPendingTokenIntroductionResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.pendingTokenIntroduction !== undefined) {
       PendingTokenIntroduction.encode(message.pendingTokenIntroduction, writer.uint32(10).fork()).ldelim();
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): QueryGetPendingTokenIntroductionResponse {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): QueryGetPendingTokenIntroductionResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryGetPendingTokenIntroductionResponse();
     while (reader.pos < end) {
@@ -4937,14 +4938,14 @@ function createBaseQueryAllPendingTokenIntroductionRequest(): QueryAllPendingTok
   };
 }
 export const QueryAllPendingTokenIntroductionRequest = {
-  encode(message: QueryAllPendingTokenIntroductionRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: QueryAllPendingTokenIntroductionRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.pagination !== undefined) {
       PageRequest.encode(message.pagination, writer.uint32(10).fork()).ldelim();
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): QueryAllPendingTokenIntroductionRequest {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): QueryAllPendingTokenIntroductionRequest {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryAllPendingTokenIntroductionRequest();
     while (reader.pos < end) {
@@ -4983,7 +4984,7 @@ function createBaseQueryAllPendingTokenIntroductionResponse(): QueryAllPendingTo
   };
 }
 export const QueryAllPendingTokenIntroductionResponse = {
-  encode(message: QueryAllPendingTokenIntroductionResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: QueryAllPendingTokenIntroductionResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     for (const v of message.pendingTokenIntroduction) {
       PendingTokenIntroduction.encode(v!, writer.uint32(10).fork()).ldelim();
     }
@@ -4992,8 +4993,8 @@ export const QueryAllPendingTokenIntroductionResponse = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): QueryAllPendingTokenIntroductionResponse {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): QueryAllPendingTokenIntroductionResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryAllPendingTokenIntroductionResponse();
     while (reader.pos < end) {
@@ -5041,14 +5042,14 @@ function createBaseQueryYammPoolIdRequest(): QueryYammPoolIdRequest {
   };
 }
 export const QueryYammPoolIdRequest = {
-  encode(message: QueryYammPoolIdRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: QueryYammPoolIdRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.assetId !== "") {
       writer.uint32(10).string(message.assetId);
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): QueryYammPoolIdRequest {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): QueryYammPoolIdRequest {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryYammPoolIdRequest();
     while (reader.pos < end) {
@@ -5082,25 +5083,25 @@ export const QueryYammPoolIdRequest = {
 };
 function createBaseQueryYammPoolIdResponse(): QueryYammPoolIdResponse {
   return {
-    poolId: Long.UZERO
+    poolId: BigInt(0)
   };
 }
 export const QueryYammPoolIdResponse = {
-  encode(message: QueryYammPoolIdResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (!message.poolId.isZero()) {
+  encode(message: QueryYammPoolIdResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    if (message.poolId !== BigInt(0)) {
       writer.uint32(8).uint64(message.poolId);
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): QueryYammPoolIdResponse {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): QueryYammPoolIdResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryYammPoolIdResponse();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.poolId = (reader.uint64() as Long);
+          message.poolId = reader.uint64();
           break;
         default:
           reader.skipType(tag & 7);
@@ -5111,17 +5112,17 @@ export const QueryYammPoolIdResponse = {
   },
   fromJSON(object: any): QueryYammPoolIdResponse {
     return {
-      poolId: isSet(object.poolId) ? Long.fromValue(object.poolId) : Long.UZERO
+      poolId: isSet(object.poolId) ? BigInt(object.poolId.toString()) : BigInt(0)
     };
   },
   toJSON(message: QueryYammPoolIdResponse): unknown {
     const obj: any = {};
-    message.poolId !== undefined && (obj.poolId = (message.poolId || Long.UZERO).toString());
+    message.poolId !== undefined && (obj.poolId = (message.poolId || BigInt(0)).toString());
     return obj;
   },
   fromPartial(object: Partial<QueryYammPoolIdResponse>): QueryYammPoolIdResponse {
     const message = createBaseQueryYammPoolIdResponse();
-    message.poolId = object.poolId !== undefined && object.poolId !== null ? Long.fromValue(object.poolId) : Long.UZERO;
+    message.poolId = object.poolId !== undefined && object.poolId !== null ? BigInt(object.poolId.toString()) : BigInt(0);
     return message;
   }
 };

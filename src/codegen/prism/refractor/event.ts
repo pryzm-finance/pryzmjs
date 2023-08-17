@@ -1,5 +1,5 @@
 import { AssetState, AssetStateSDKType } from "./asset_state";
-import * as _m0 from "protobufjs/minimal";
+import { BinaryReader, BinaryWriter } from "../../binary";
 import { isSet } from "../../helpers";
 export interface EventRefract {
   creator: string;
@@ -64,7 +64,7 @@ function createBaseEventRefract(): EventRefract {
   };
 }
 export const EventRefract = {
-  encode(message: EventRefract, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: EventRefract, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.creator !== "") {
       writer.uint32(10).string(message.creator);
     }
@@ -85,8 +85,8 @@ export const EventRefract = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): EventRefract {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): EventRefract {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseEventRefract();
     while (reader.pos < end) {
@@ -159,7 +159,7 @@ function createBaseEventRedeem(): EventRedeem {
   };
 }
 export const EventRedeem = {
-  encode(message: EventRedeem, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: EventRedeem, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.creator !== "") {
       writer.uint32(10).string(message.creator);
     }
@@ -180,8 +180,8 @@ export const EventRedeem = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): EventRedeem {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): EventRedeem {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseEventRedeem();
     while (reader.pos < end) {
@@ -253,7 +253,7 @@ function createBaseEventRefractorYieldDistribution(): EventRefractorYieldDistrib
   };
 }
 export const EventRefractorYieldDistribution = {
-  encode(message: EventRefractorYieldDistribution, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: EventRefractorYieldDistribution, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.assetId !== "") {
       writer.uint32(10).string(message.assetId);
     }
@@ -271,8 +271,8 @@ export const EventRefractorYieldDistribution = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): EventRefractorYieldDistribution {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): EventRefractorYieldDistribution {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseEventRefractorYieldDistribution();
     while (reader.pos < end) {
@@ -334,14 +334,14 @@ function createBaseEventSetAssetState(): EventSetAssetState {
   };
 }
 export const EventSetAssetState = {
-  encode(message: EventSetAssetState, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: EventSetAssetState, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.assetState !== undefined) {
       AssetState.encode(message.assetState, writer.uint32(10).fork()).ldelim();
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): EventSetAssetState {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): EventSetAssetState {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseEventSetAssetState();
     while (reader.pos < end) {

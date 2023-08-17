@@ -1,5 +1,5 @@
 import { PulseTradablePair, PulseTradablePairSDKType } from "../../trade/pulse_tradable_pair";
-import * as _m0 from "protobufjs/minimal";
+import { BinaryReader, BinaryWriter } from "../../../binary";
 import { isSet } from "../../../helpers";
 export interface QueryPulseTradablePairsRequest {
   denom: string;
@@ -23,7 +23,7 @@ function createBaseQueryPulseTradablePairsRequest(): QueryPulseTradablePairsRequ
   };
 }
 export const QueryPulseTradablePairsRequest = {
-  encode(message: QueryPulseTradablePairsRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: QueryPulseTradablePairsRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.denom !== "") {
       writer.uint32(10).string(message.denom);
     }
@@ -32,8 +32,8 @@ export const QueryPulseTradablePairsRequest = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): QueryPulseTradablePairsRequest {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): QueryPulseTradablePairsRequest {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryPulseTradablePairsRequest();
     while (reader.pos < end) {
@@ -77,14 +77,14 @@ function createBaseQueryPulseTradablePairsResponse(): QueryPulseTradablePairsRes
   };
 }
 export const QueryPulseTradablePairsResponse = {
-  encode(message: QueryPulseTradablePairsResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: QueryPulseTradablePairsResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     for (const v of message.pairs) {
       PulseTradablePair.encode(v!, writer.uint32(10).fork()).ldelim();
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): QueryPulseTradablePairsResponse {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): QueryPulseTradablePairsResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryPulseTradablePairsResponse();
     while (reader.pos < end) {

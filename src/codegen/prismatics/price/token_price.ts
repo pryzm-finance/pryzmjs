@@ -1,5 +1,6 @@
 import { Timestamp, TimestampSDKType } from "../../google/protobuf/timestamp";
-import * as _m0 from "protobufjs/minimal";
+import { BinaryReader, BinaryWriter } from "../../binary";
+import { Decimal } from "@cosmjs/math";
 import { isSet, fromJsonTimestamp, fromTimestamp } from "../../helpers";
 export interface TokenPrice {
   denom: string;
@@ -22,7 +23,7 @@ function createBaseTokenPrice(): TokenPrice {
   };
 }
 export const TokenPrice = {
-  encode(message: TokenPrice, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: TokenPrice, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.denom !== "") {
       writer.uint32(10).string(message.denom);
     }
@@ -33,12 +34,12 @@ export const TokenPrice = {
       Timestamp.encode(message.blockTime, writer.uint32(26).fork()).ldelim();
     }
     if (message.price !== "") {
-      writer.uint32(34).string(message.price);
+      writer.uint32(34).string(Decimal.fromUserInput(message.price, 18).atomics);
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): TokenPrice {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): TokenPrice {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseTokenPrice();
     while (reader.pos < end) {
@@ -54,7 +55,7 @@ export const TokenPrice = {
           message.blockTime = Timestamp.decode(reader, reader.uint32());
           break;
         case 4:
-          message.price = reader.string();
+          message.price = Decimal.fromAtomics(reader.string(), 18).toString();
           break;
         default:
           reader.skipType(tag & 7);

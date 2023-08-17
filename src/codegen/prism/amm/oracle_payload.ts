@@ -1,7 +1,8 @@
 import { Height, HeightSDKType } from "../../ibc/core/client/v1/client";
 import { Pair, PairSDKType } from "./oracle_price_pair";
-import * as _m0 from "protobufjs/minimal";
+import { BinaryReader, BinaryWriter } from "../../binary";
 import { isSet, isObject } from "../../helpers";
+import { Decimal } from "@cosmjs/math";
 export interface OraclePayload_DataSourceBlockHeightsEntry {
   key: string;
   value: Height;
@@ -35,7 +36,7 @@ function createBaseOraclePayload_DataSourceBlockHeightsEntry(): OraclePayload_Da
   };
 }
 export const OraclePayload_DataSourceBlockHeightsEntry = {
-  encode(message: OraclePayload_DataSourceBlockHeightsEntry, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: OraclePayload_DataSourceBlockHeightsEntry, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.key !== "") {
       writer.uint32(10).string(message.key);
     }
@@ -44,8 +45,8 @@ export const OraclePayload_DataSourceBlockHeightsEntry = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): OraclePayload_DataSourceBlockHeightsEntry {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): OraclePayload_DataSourceBlockHeightsEntry {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseOraclePayload_DataSourceBlockHeightsEntry();
     while (reader.pos < end) {
@@ -92,7 +93,7 @@ function createBaseOraclePayload(): OraclePayload {
   };
 }
 export const OraclePayload = {
-  encode(message: OraclePayload, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: OraclePayload, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     Object.entries(message.dataSourceBlockHeights).forEach(([key, value]) => {
       OraclePayload_DataSourceBlockHeightsEntry.encode({
         key: (key as any),
@@ -100,7 +101,7 @@ export const OraclePayload = {
       }, writer.uint32(10).fork()).ldelim();
     });
     if (message.price !== "") {
-      writer.uint32(18).string(message.price);
+      writer.uint32(18).string(Decimal.fromUserInput(message.price, 18).atomics);
     }
     for (const v of message.pairs) {
       Pair.encode(v!, writer.uint32(26).fork()).ldelim();
@@ -110,8 +111,8 @@ export const OraclePayload = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): OraclePayload {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): OraclePayload {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseOraclePayload();
     while (reader.pos < end) {
@@ -124,7 +125,7 @@ export const OraclePayload = {
           }
           break;
         case 2:
-          message.price = reader.string();
+          message.price = Decimal.fromAtomics(reader.string(), 18).toString();
           break;
         case 3:
           message.pairs.push(Pair.decode(reader, reader.uint32()));

@@ -1,13 +1,14 @@
 import { Timestamp, TimestampSDKType } from "../../google/protobuf/timestamp";
-import { Long, isSet, fromJsonTimestamp, fromTimestamp } from "../../helpers";
-import * as _m0 from "protobufjs/minimal";
+import { BinaryReader, BinaryWriter } from "../../binary";
+import { Decimal } from "@cosmjs/math";
+import { isSet, fromJsonTimestamp, fromTimestamp } from "../../helpers";
 export interface Maturity {
   assetId: string;
   symbol: string;
   active: boolean;
   introductionTime: Timestamp;
   expirationTime: Timestamp;
-  blockHeight: Long;
+  blockHeight: bigint;
   blockTime: Timestamp;
   roi?: string;
   yApy?: string;
@@ -22,7 +23,7 @@ export interface MaturitySDKType {
   active: boolean;
   introduction_time: TimestampSDKType;
   expiration_time: TimestampSDKType;
-  block_height: Long;
+  block_height: bigint;
   block_time: TimestampSDKType;
   roi?: string;
   y_apy?: string;
@@ -38,7 +39,7 @@ function createBaseMaturity(): Maturity {
     active: false,
     introductionTime: Timestamp.fromPartial({}),
     expirationTime: Timestamp.fromPartial({}),
-    blockHeight: Long.ZERO,
+    blockHeight: BigInt(0),
     blockTime: Timestamp.fromPartial({}),
     roi: undefined,
     yApy: undefined,
@@ -49,7 +50,7 @@ function createBaseMaturity(): Maturity {
   };
 }
 export const Maturity = {
-  encode(message: Maturity, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: Maturity, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.assetId !== "") {
       writer.uint32(10).string(message.assetId);
     }
@@ -65,34 +66,34 @@ export const Maturity = {
     if (message.expirationTime !== undefined) {
       Timestamp.encode(message.expirationTime, writer.uint32(42).fork()).ldelim();
     }
-    if (!message.blockHeight.isZero()) {
+    if (message.blockHeight !== BigInt(0)) {
       writer.uint32(48).int64(message.blockHeight);
     }
     if (message.blockTime !== undefined) {
       Timestamp.encode(message.blockTime, writer.uint32(58).fork()).ldelim();
     }
     if (message.roi !== undefined) {
-      writer.uint32(66).string(message.roi);
+      writer.uint32(66).string(Decimal.fromUserInput(message.roi, 18).atomics);
     }
     if (message.yApy !== undefined) {
-      writer.uint32(74).string(message.yApy);
+      writer.uint32(74).string(Decimal.fromUserInput(message.yApy, 18).atomics);
     }
     if (message.pApy !== undefined) {
-      writer.uint32(82).string(message.pApy);
+      writer.uint32(82).string(Decimal.fromUserInput(message.pApy, 18).atomics);
     }
     if (message.yPrice !== undefined) {
-      writer.uint32(90).string(message.yPrice);
+      writer.uint32(90).string(Decimal.fromUserInput(message.yPrice, 18).atomics);
     }
     if (message.pPrice !== undefined) {
-      writer.uint32(98).string(message.pPrice);
+      writer.uint32(98).string(Decimal.fromUserInput(message.pPrice, 18).atomics);
     }
     if (message.error !== "") {
       writer.uint32(106).string(message.error);
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): Maturity {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): Maturity {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMaturity();
     while (reader.pos < end) {
@@ -114,25 +115,25 @@ export const Maturity = {
           message.expirationTime = Timestamp.decode(reader, reader.uint32());
           break;
         case 6:
-          message.blockHeight = (reader.int64() as Long);
+          message.blockHeight = reader.int64();
           break;
         case 7:
           message.blockTime = Timestamp.decode(reader, reader.uint32());
           break;
         case 8:
-          message.roi = reader.string();
+          message.roi = Decimal.fromAtomics(reader.string(), 18).toString();
           break;
         case 9:
-          message.yApy = reader.string();
+          message.yApy = Decimal.fromAtomics(reader.string(), 18).toString();
           break;
         case 10:
-          message.pApy = reader.string();
+          message.pApy = Decimal.fromAtomics(reader.string(), 18).toString();
           break;
         case 11:
-          message.yPrice = reader.string();
+          message.yPrice = Decimal.fromAtomics(reader.string(), 18).toString();
           break;
         case 12:
-          message.pPrice = reader.string();
+          message.pPrice = Decimal.fromAtomics(reader.string(), 18).toString();
           break;
         case 13:
           message.error = reader.string();
@@ -151,7 +152,7 @@ export const Maturity = {
       active: isSet(object.active) ? Boolean(object.active) : false,
       introductionTime: isSet(object.introductionTime) ? fromJsonTimestamp(object.introductionTime) : undefined,
       expirationTime: isSet(object.expirationTime) ? fromJsonTimestamp(object.expirationTime) : undefined,
-      blockHeight: isSet(object.blockHeight) ? Long.fromValue(object.blockHeight) : Long.ZERO,
+      blockHeight: isSet(object.blockHeight) ? BigInt(object.blockHeight.toString()) : BigInt(0),
       blockTime: isSet(object.blockTime) ? fromJsonTimestamp(object.blockTime) : undefined,
       roi: isSet(object.roi) ? String(object.roi) : undefined,
       yApy: isSet(object.yApy) ? String(object.yApy) : undefined,
@@ -168,7 +169,7 @@ export const Maturity = {
     message.active !== undefined && (obj.active = message.active);
     message.introductionTime !== undefined && (obj.introductionTime = fromTimestamp(message.introductionTime).toISOString());
     message.expirationTime !== undefined && (obj.expirationTime = fromTimestamp(message.expirationTime).toISOString());
-    message.blockHeight !== undefined && (obj.blockHeight = (message.blockHeight || Long.ZERO).toString());
+    message.blockHeight !== undefined && (obj.blockHeight = (message.blockHeight || BigInt(0)).toString());
     message.blockTime !== undefined && (obj.blockTime = fromTimestamp(message.blockTime).toISOString());
     message.roi !== undefined && (obj.roi = message.roi);
     message.yApy !== undefined && (obj.yApy = message.yApy);
@@ -185,7 +186,7 @@ export const Maturity = {
     message.active = object.active ?? false;
     message.introductionTime = object.introductionTime !== undefined && object.introductionTime !== null ? Timestamp.fromPartial(object.introductionTime) : undefined;
     message.expirationTime = object.expirationTime !== undefined && object.expirationTime !== null ? Timestamp.fromPartial(object.expirationTime) : undefined;
-    message.blockHeight = object.blockHeight !== undefined && object.blockHeight !== null ? Long.fromValue(object.blockHeight) : Long.ZERO;
+    message.blockHeight = object.blockHeight !== undefined && object.blockHeight !== null ? BigInt(object.blockHeight.toString()) : BigInt(0);
     message.blockTime = object.blockTime !== undefined && object.blockTime !== null ? Timestamp.fromPartial(object.blockTime) : undefined;
     message.roi = object.roi ?? undefined;
     message.yApy = object.yApy ?? undefined;

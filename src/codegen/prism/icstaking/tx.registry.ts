@@ -1,3 +1,4 @@
+//@ts-nocheck
 import { GeneratedType, Registry } from "@cosmjs/proto-signing";
 import { MsgUpdateParams, MsgRegisterHostChain, MsgUpdateHostChain, MsgStake, MsgUnstake, MsgRedeemUnstaked, MsgInstantUnstake, MsgRebalanceDelegations, MsgRedeemInterchainAccount } from "./tx";
 export const registry: ReadonlyArray<[string, GeneratedType]> = [["/prism.icstaking.MsgUpdateParams", MsgUpdateParams], ["/prism.icstaking.MsgRegisterHostChain", MsgRegisterHostChain], ["/prism.icstaking.MsgUpdateHostChain", MsgUpdateHostChain], ["/prism.icstaking.MsgStake", MsgStake], ["/prism.icstaking.MsgUnstake", MsgUnstake], ["/prism.icstaking.MsgRedeemUnstaked", MsgRedeemUnstaked], ["/prism.icstaking.MsgInstantUnstake", MsgInstantUnstake], ["/prism.icstaking.MsgRebalanceDelegations", MsgRebalanceDelegations], ["/prism.icstaking.MsgRedeemInterchainAccount", MsgRedeemInterchainAccount]];

@@ -148,40 +148,40 @@ export class QueryClientImpl implements Query {
     return this.rpc.unary(QueryParamsDesc, QueryParamsRequest.fromPartial(request), metadata);
   }
   poolToken(request: DeepPartial<QueryGetPoolTokenRequest>, metadata?: grpc.Metadata): Promise<QueryGetPoolTokenResponse> {
-    return this.rpc.unary(QueryGetPoolTokenDesc, QueryGetPoolTokenRequest.fromPartial(request), metadata);
+    return this.rpc.unary(QueryPoolTokenDesc, QueryGetPoolTokenRequest.fromPartial(request), metadata);
   }
   poolTokenAll(request: DeepPartial<QueryAllPoolTokenRequest>, metadata?: grpc.Metadata): Promise<QueryAllPoolTokenResponse> {
-    return this.rpc.unary(QueryAllPoolTokenDesc, QueryAllPoolTokenRequest.fromPartial(request), metadata);
+    return this.rpc.unary(QueryPoolTokenAllDesc, QueryAllPoolTokenRequest.fromPartial(request), metadata);
   }
   poolTokenWeightAll(request: DeepPartial<QueryAllPoolTokenWeightRequest>, metadata?: grpc.Metadata): Promise<QueryAllPoolTokenWeightResponse> {
-    return this.rpc.unary(QueryAllPoolTokenWeightDesc, QueryAllPoolTokenWeightRequest.fromPartial(request), metadata);
+    return this.rpc.unary(QueryPoolTokenWeightAllDesc, QueryAllPoolTokenWeightRequest.fromPartial(request), metadata);
   }
   poolTokenWeight(request: DeepPartial<QueryGetPoolTokenWeightRequest>, metadata?: grpc.Metadata): Promise<QueryGetPoolTokenWeightResponse> {
-    return this.rpc.unary(QueryGetPoolTokenWeightDesc, QueryGetPoolTokenWeightRequest.fromPartial(request), metadata);
+    return this.rpc.unary(QueryPoolTokenWeightDesc, QueryGetPoolTokenWeightRequest.fromPartial(request), metadata);
   }
   pool(request: DeepPartial<QueryGetPoolRequest>, metadata?: grpc.Metadata): Promise<QueryGetPoolResponse> {
-    return this.rpc.unary(QueryGetPoolDesc, QueryGetPoolRequest.fromPartial(request), metadata);
+    return this.rpc.unary(QueryPoolDesc, QueryGetPoolRequest.fromPartial(request), metadata);
   }
   poolAll(request: DeepPartial<QueryAllPoolRequest> = {
     pagination: undefined
   }, metadata?: grpc.Metadata): Promise<QueryAllPoolResponse> {
-    return this.rpc.unary(QueryAllPoolDesc, QueryAllPoolRequest.fromPartial(request), metadata);
+    return this.rpc.unary(QueryPoolAllDesc, QueryAllPoolRequest.fromPartial(request), metadata);
   }
   weightedToken(request: DeepPartial<QueryGetWeightedTokenRequest>, metadata?: grpc.Metadata): Promise<QueryGetWeightedTokenResponse> {
-    return this.rpc.unary(QueryGetWeightedTokenDesc, QueryGetWeightedTokenRequest.fromPartial(request), metadata);
+    return this.rpc.unary(QueryWeightedTokenDesc, QueryGetWeightedTokenRequest.fromPartial(request), metadata);
   }
   weightedTokenAll(request: DeepPartial<QueryAllWeightedTokenRequest> = {
     pagination: undefined
   }, metadata?: grpc.Metadata): Promise<QueryAllWeightedTokenResponse> {
-    return this.rpc.unary(QueryAllWeightedTokenDesc, QueryAllWeightedTokenRequest.fromPartial(request), metadata);
+    return this.rpc.unary(QueryWeightedTokenAllDesc, QueryAllWeightedTokenRequest.fromPartial(request), metadata);
   }
   weightUpdateTiming(request: DeepPartial<QueryGetWeightUpdateTimingRequest>, metadata?: grpc.Metadata): Promise<QueryGetWeightUpdateTimingResponse> {
-    return this.rpc.unary(QueryGetWeightUpdateTimingDesc, QueryGetWeightUpdateTimingRequest.fromPartial(request), metadata);
+    return this.rpc.unary(QueryWeightUpdateTimingDesc, QueryGetWeightUpdateTimingRequest.fromPartial(request), metadata);
   }
   weightUpdateTimingAll(request: DeepPartial<QueryAllWeightUpdateTimingRequest> = {
     pagination: undefined
   }, metadata?: grpc.Metadata): Promise<QueryAllWeightUpdateTimingResponse> {
-    return this.rpc.unary(QueryAllWeightUpdateTimingDesc, QueryAllWeightUpdateTimingRequest.fromPartial(request), metadata);
+    return this.rpc.unary(QueryWeightUpdateTimingAllDesc, QueryAllWeightUpdateTimingRequest.fromPartial(request), metadata);
   }
   simulateSingleSwap(request: DeepPartial<QuerySimulateSingleSwapRequest>, metadata?: grpc.Metadata): Promise<QuerySimulateSingleSwapResponse> {
     return this.rpc.unary(QuerySimulateSingleSwapDesc, QuerySimulateSingleSwapRequest.fromPartial(request), metadata);
@@ -211,20 +211,20 @@ export class QueryClientImpl implements Query {
     return this.rpc.unary(QuerySpotPriceDesc, QuerySpotPriceRequest.fromPartial(request), metadata);
   }
   introducingPoolToken(request: DeepPartial<QueryGetIntroducingPoolTokenRequest>, metadata?: grpc.Metadata): Promise<QueryGetIntroducingPoolTokenResponse> {
-    return this.rpc.unary(QueryGetIntroducingPoolTokenDesc, QueryGetIntroducingPoolTokenRequest.fromPartial(request), metadata);
+    return this.rpc.unary(QueryIntroducingPoolTokenDesc, QueryGetIntroducingPoolTokenRequest.fromPartial(request), metadata);
   }
   introducingPoolTokenAll(request: DeepPartial<QueryAllIntroducingPoolTokenRequest> = {
     pagination: undefined
   }, metadata?: grpc.Metadata): Promise<QueryAllIntroducingPoolTokenResponse> {
-    return this.rpc.unary(QueryAllIntroducingPoolTokenDesc, QueryAllIntroducingPoolTokenRequest.fromPartial(request), metadata);
+    return this.rpc.unary(QueryIntroducingPoolTokenAllDesc, QueryAllIntroducingPoolTokenRequest.fromPartial(request), metadata);
   }
   expiringPoolToken(request: DeepPartial<QueryGetExpiringPoolTokenRequest>, metadata?: grpc.Metadata): Promise<QueryGetExpiringPoolTokenResponse> {
-    return this.rpc.unary(QueryGetExpiringPoolTokenDesc, QueryGetExpiringPoolTokenRequest.fromPartial(request), metadata);
+    return this.rpc.unary(QueryExpiringPoolTokenDesc, QueryGetExpiringPoolTokenRequest.fromPartial(request), metadata);
   }
   expiringPoolTokenAll(request: DeepPartial<QueryAllExpiringPoolTokenRequest> = {
     pagination: undefined
   }, metadata?: grpc.Metadata): Promise<QueryAllExpiringPoolTokenResponse> {
-    return this.rpc.unary(QueryAllExpiringPoolTokenDesc, QueryAllExpiringPoolTokenRequest.fromPartial(request), metadata);
+    return this.rpc.unary(QueryExpiringPoolTokenAllDesc, QueryAllExpiringPoolTokenRequest.fromPartial(request), metadata);
   }
   lpToken(request: DeepPartial<QueryLpTokenRequest>, metadata?: grpc.Metadata): Promise<QueryLpTokenResponse> {
     return this.rpc.unary(QueryLpTokenDesc, QueryLpTokenRequest.fromPartial(request), metadata);
@@ -233,63 +233,63 @@ export class QueryClientImpl implements Query {
     return this.rpc.unary(QuerySimulateBatchSwapDesc, QuerySimulateBatchSwapRequest.fromPartial(request), metadata);
   }
   yammConfiguration(request: DeepPartial<QueryGetYammConfigurationRequest>, metadata?: grpc.Metadata): Promise<QueryGetYammConfigurationResponse> {
-    return this.rpc.unary(QueryGetYammConfigurationDesc, QueryGetYammConfigurationRequest.fromPartial(request), metadata);
+    return this.rpc.unary(QueryYammConfigurationDesc, QueryGetYammConfigurationRequest.fromPartial(request), metadata);
   }
   yammConfigurationAll(request: DeepPartial<QueryAllYammConfigurationRequest> = {
     pagination: undefined
   }, metadata?: grpc.Metadata): Promise<QueryAllYammConfigurationResponse> {
-    return this.rpc.unary(QueryAllYammConfigurationDesc, QueryAllYammConfigurationRequest.fromPartial(request), metadata);
+    return this.rpc.unary(QueryYammConfigurationAllDesc, QueryAllYammConfigurationRequest.fromPartial(request), metadata);
   }
   whitelistedRoute(request: DeepPartial<QueryGetWhitelistedRouteRequest>, metadata?: grpc.Metadata): Promise<QueryGetWhitelistedRouteResponse> {
-    return this.rpc.unary(QueryGetWhitelistedRouteDesc, QueryGetWhitelistedRouteRequest.fromPartial(request), metadata);
+    return this.rpc.unary(QueryWhitelistedRouteDesc, QueryGetWhitelistedRouteRequest.fromPartial(request), metadata);
   }
   whitelistedRouteAll(request: DeepPartial<QueryAllWhitelistedRouteRequest> = {
     pagination: undefined
   }, metadata?: grpc.Metadata): Promise<QueryAllWhitelistedRouteResponse> {
-    return this.rpc.unary(QueryAllWhitelistedRouteDesc, QueryAllWhitelistedRouteRequest.fromPartial(request), metadata);
+    return this.rpc.unary(QueryWhitelistedRouteAllDesc, QueryAllWhitelistedRouteRequest.fromPartial(request), metadata);
   }
   order(request: DeepPartial<QueryGetOrderRequest>, metadata?: grpc.Metadata): Promise<QueryGetOrderResponse> {
-    return this.rpc.unary(QueryGetOrderDesc, QueryGetOrderRequest.fromPartial(request), metadata);
+    return this.rpc.unary(QueryOrderDesc, QueryGetOrderRequest.fromPartial(request), metadata);
   }
   orderAll(request: DeepPartial<QueryAllOrderRequest> = {
     pagination: undefined
   }, metadata?: grpc.Metadata): Promise<QueryAllOrderResponse> {
-    return this.rpc.unary(QueryAllOrderDesc, QueryAllOrderRequest.fromPartial(request), metadata);
+    return this.rpc.unary(QueryOrderAllDesc, QueryAllOrderRequest.fromPartial(request), metadata);
   }
   executableOrder(request: DeepPartial<QueryGetExecutableOrderRequest>, metadata?: grpc.Metadata): Promise<QueryGetExecutableOrderResponse> {
-    return this.rpc.unary(QueryGetExecutableOrderDesc, QueryGetExecutableOrderRequest.fromPartial(request), metadata);
+    return this.rpc.unary(QueryExecutableOrderDesc, QueryGetExecutableOrderRequest.fromPartial(request), metadata);
   }
   executableOrderAll(request: DeepPartial<QueryAllExecutableOrderRequest> = {
     pagination: undefined
   }, metadata?: grpc.Metadata): Promise<QueryAllExecutableOrderResponse> {
-    return this.rpc.unary(QueryAllExecutableOrderDesc, QueryAllExecutableOrderRequest.fromPartial(request), metadata);
+    return this.rpc.unary(QueryExecutableOrderAllDesc, QueryAllExecutableOrderRequest.fromPartial(request), metadata);
   }
   scheduleOrder(request: DeepPartial<QueryGetScheduleOrderRequest>, metadata?: grpc.Metadata): Promise<QueryGetScheduleOrderResponse> {
-    return this.rpc.unary(QueryGetScheduleOrderDesc, QueryGetScheduleOrderRequest.fromPartial(request), metadata);
+    return this.rpc.unary(QueryScheduleOrderDesc, QueryGetScheduleOrderRequest.fromPartial(request), metadata);
   }
   scheduleOrderAll(request: DeepPartial<QueryAllScheduleOrderRequest> = {
     pagination: undefined
   }, metadata?: grpc.Metadata): Promise<QueryAllScheduleOrderResponse> {
-    return this.rpc.unary(QueryAllScheduleOrderDesc, QueryAllScheduleOrderRequest.fromPartial(request), metadata);
+    return this.rpc.unary(QueryScheduleOrderAllDesc, QueryAllScheduleOrderRequest.fromPartial(request), metadata);
   }
   oraclePricePair(request: DeepPartial<QueryGetOraclePricePairRequest>, metadata?: grpc.Metadata): Promise<QueryGetOraclePricePairResponse> {
-    return this.rpc.unary(QueryGetOraclePricePairDesc, QueryGetOraclePricePairRequest.fromPartial(request), metadata);
+    return this.rpc.unary(QueryOraclePricePairDesc, QueryGetOraclePricePairRequest.fromPartial(request), metadata);
   }
   oraclePricePairAll(request: DeepPartial<QueryAllOraclePricePairRequest> = {
     pagination: undefined
   }, metadata?: grpc.Metadata): Promise<QueryAllOraclePricePairResponse> {
-    return this.rpc.unary(QueryAllOraclePricePairDesc, QueryAllOraclePricePairRequest.fromPartial(request), metadata);
+    return this.rpc.unary(QueryOraclePricePairAllDesc, QueryAllOraclePricePairRequest.fromPartial(request), metadata);
   }
   vaultPauseMode(request: DeepPartial<QueryVaultPauseModeRequest> = {}, metadata?: grpc.Metadata): Promise<QueryVaultPauseModeResponse> {
     return this.rpc.unary(QueryVaultPauseModeDesc, QueryVaultPauseModeRequest.fromPartial(request), metadata);
   }
   pendingTokenIntroduction(request: DeepPartial<QueryGetPendingTokenIntroductionRequest>, metadata?: grpc.Metadata): Promise<QueryGetPendingTokenIntroductionResponse> {
-    return this.rpc.unary(QueryGetPendingTokenIntroductionDesc, QueryGetPendingTokenIntroductionRequest.fromPartial(request), metadata);
+    return this.rpc.unary(QueryPendingTokenIntroductionDesc, QueryGetPendingTokenIntroductionRequest.fromPartial(request), metadata);
   }
   pendingTokenIntroductionAll(request: DeepPartial<QueryAllPendingTokenIntroductionRequest> = {
     pagination: undefined
   }, metadata?: grpc.Metadata): Promise<QueryAllPendingTokenIntroductionResponse> {
-    return this.rpc.unary(QueryAllPendingTokenIntroductionDesc, QueryAllPendingTokenIntroductionRequest.fromPartial(request), metadata);
+    return this.rpc.unary(QueryPendingTokenIntroductionAllDesc, QueryAllPendingTokenIntroductionRequest.fromPartial(request), metadata);
   }
   yammPoolId(request: DeepPartial<QueryYammPoolIdRequest>, metadata?: grpc.Metadata): Promise<QueryYammPoolIdResponse> {
     return this.rpc.unary(QueryYammPoolIdDesc, QueryYammPoolIdRequest.fromPartial(request), metadata);

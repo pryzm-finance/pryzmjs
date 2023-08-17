@@ -1,6 +1,6 @@
 import { Coin, CoinSDKType } from "../../cosmos/base/v1beta1/coin";
-import { Long, isSet, bytesFromBase64, base64FromBytes, isObject } from "../../helpers";
-import * as _m0 from "protobufjs/minimal";
+import { BinaryReader, BinaryWriter } from "../../binary";
+import { isSet, bytesFromBase64, base64FromBytes, isObject } from "../../helpers";
 /** the stored data for handling the reply of a sent ibc packet */
 export interface ReplyData {
   bridgeId: string;
@@ -19,13 +19,13 @@ export interface ReplyDataSDKType {
 export interface PacketId {
   portId: string;
   channelId: string;
-  sequence: Long;
+  sequence: bigint;
 }
 /** the id for a sent ibc packet */
 export interface PacketIdSDKType {
   port_id: string;
   channel_id: string;
-  sequence: Long;
+  sequence: bigint;
 }
 export interface DelegateTransferReplyData {
   transferSession: string;
@@ -86,14 +86,14 @@ export interface UndelegateReplyData {
   undelegations: {
     [key: string]: string;
   };
-  epochs: Long[];
+  epochs: bigint[];
 }
 export interface UndelegateReplyDataSDKType {
   total_c_amount: string;
   undelegations: {
     [key: string]: string;
   };
-  epochs: Long[];
+  epochs: bigint[];
 }
 export interface CompoundData {
   feeAmount: string;
@@ -112,7 +112,7 @@ function createBaseReplyData(): ReplyData {
   };
 }
 export const ReplyData = {
-  encode(message: ReplyData, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: ReplyData, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.bridgeId !== "") {
       writer.uint32(10).string(message.bridgeId);
     }
@@ -127,8 +127,8 @@ export const ReplyData = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): ReplyData {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): ReplyData {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseReplyData();
     while (reader.pos < end) {
@@ -182,24 +182,24 @@ function createBasePacketId(): PacketId {
   return {
     portId: "",
     channelId: "",
-    sequence: Long.UZERO
+    sequence: BigInt(0)
   };
 }
 export const PacketId = {
-  encode(message: PacketId, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: PacketId, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.portId !== "") {
       writer.uint32(10).string(message.portId);
     }
     if (message.channelId !== "") {
       writer.uint32(18).string(message.channelId);
     }
-    if (!message.sequence.isZero()) {
+    if (message.sequence !== BigInt(0)) {
       writer.uint32(24).uint64(message.sequence);
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): PacketId {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): PacketId {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBasePacketId();
     while (reader.pos < end) {
@@ -212,7 +212,7 @@ export const PacketId = {
           message.channelId = reader.string();
           break;
         case 3:
-          message.sequence = (reader.uint64() as Long);
+          message.sequence = reader.uint64();
           break;
         default:
           reader.skipType(tag & 7);
@@ -225,21 +225,21 @@ export const PacketId = {
     return {
       portId: isSet(object.portId) ? String(object.portId) : "",
       channelId: isSet(object.channelId) ? String(object.channelId) : "",
-      sequence: isSet(object.sequence) ? Long.fromValue(object.sequence) : Long.UZERO
+      sequence: isSet(object.sequence) ? BigInt(object.sequence.toString()) : BigInt(0)
     };
   },
   toJSON(message: PacketId): unknown {
     const obj: any = {};
     message.portId !== undefined && (obj.portId = message.portId);
     message.channelId !== undefined && (obj.channelId = message.channelId);
-    message.sequence !== undefined && (obj.sequence = (message.sequence || Long.UZERO).toString());
+    message.sequence !== undefined && (obj.sequence = (message.sequence || BigInt(0)).toString());
     return obj;
   },
   fromPartial(object: Partial<PacketId>): PacketId {
     const message = createBasePacketId();
     message.portId = object.portId ?? "";
     message.channelId = object.channelId ?? "";
-    message.sequence = object.sequence !== undefined && object.sequence !== null ? Long.fromValue(object.sequence) : Long.UZERO;
+    message.sequence = object.sequence !== undefined && object.sequence !== null ? BigInt(object.sequence.toString()) : BigInt(0);
     return message;
   }
 };
@@ -250,7 +250,7 @@ function createBaseDelegateTransferReplyData(): DelegateTransferReplyData {
   };
 }
 export const DelegateTransferReplyData = {
-  encode(message: DelegateTransferReplyData, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: DelegateTransferReplyData, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.transferSession !== "") {
       writer.uint32(10).string(message.transferSession);
     }
@@ -259,8 +259,8 @@ export const DelegateTransferReplyData = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): DelegateTransferReplyData {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): DelegateTransferReplyData {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseDelegateTransferReplyData();
     while (reader.pos < end) {
@@ -305,7 +305,7 @@ function createBaseDelegateTransferSession_PacketFinalizedEntry(): DelegateTrans
   };
 }
 export const DelegateTransferSession_PacketFinalizedEntry = {
-  encode(message: DelegateTransferSession_PacketFinalizedEntry, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: DelegateTransferSession_PacketFinalizedEntry, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.key !== "") {
       writer.uint32(10).string(message.key);
     }
@@ -314,8 +314,8 @@ export const DelegateTransferSession_PacketFinalizedEntry = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): DelegateTransferSession_PacketFinalizedEntry {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): DelegateTransferSession_PacketFinalizedEntry {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseDelegateTransferSession_PacketFinalizedEntry();
     while (reader.pos < end) {
@@ -360,7 +360,7 @@ function createBaseDelegateTransferSession(): DelegateTransferSession {
   };
 }
 export const DelegateTransferSession = {
-  encode(message: DelegateTransferSession, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: DelegateTransferSession, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.id !== "") {
       writer.uint32(10).string(message.id);
     }
@@ -372,8 +372,8 @@ export const DelegateTransferSession = {
     });
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): DelegateTransferSession {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): DelegateTransferSession {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseDelegateTransferSession();
     while (reader.pos < end) {
@@ -438,7 +438,7 @@ function createBaseDelegateReplyData_DelegationsEntry(): DelegateReplyData_Deleg
   };
 }
 export const DelegateReplyData_DelegationsEntry = {
-  encode(message: DelegateReplyData_DelegationsEntry, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: DelegateReplyData_DelegationsEntry, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.key !== "") {
       writer.uint32(10).string(message.key);
     }
@@ -447,8 +447,8 @@ export const DelegateReplyData_DelegationsEntry = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): DelegateReplyData_DelegationsEntry {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): DelegateReplyData_DelegationsEntry {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseDelegateReplyData_DelegationsEntry();
     while (reader.pos < end) {
@@ -492,7 +492,7 @@ function createBaseDelegateReplyData(): DelegateReplyData {
   };
 }
 export const DelegateReplyData = {
-  encode(message: DelegateReplyData, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: DelegateReplyData, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     Object.entries(message.delegations).forEach(([key, value]) => {
       DelegateReplyData_DelegationsEntry.encode({
         key: (key as any),
@@ -501,8 +501,8 @@ export const DelegateReplyData = {
     });
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): DelegateReplyData {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): DelegateReplyData {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseDelegateReplyData();
     while (reader.pos < end) {
@@ -561,7 +561,7 @@ function createBaseUndelegateReplyData_UndelegationsEntry(): UndelegateReplyData
   };
 }
 export const UndelegateReplyData_UndelegationsEntry = {
-  encode(message: UndelegateReplyData_UndelegationsEntry, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: UndelegateReplyData_UndelegationsEntry, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.key !== "") {
       writer.uint32(10).string(message.key);
     }
@@ -570,8 +570,8 @@ export const UndelegateReplyData_UndelegationsEntry = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): UndelegateReplyData_UndelegationsEntry {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): UndelegateReplyData_UndelegationsEntry {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseUndelegateReplyData_UndelegationsEntry();
     while (reader.pos < end) {
@@ -617,7 +617,7 @@ function createBaseUndelegateReplyData(): UndelegateReplyData {
   };
 }
 export const UndelegateReplyData = {
-  encode(message: UndelegateReplyData, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: UndelegateReplyData, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.totalCAmount !== "") {
       writer.uint32(10).string(message.totalCAmount);
     }
@@ -634,8 +634,8 @@ export const UndelegateReplyData = {
     writer.ldelim();
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): UndelegateReplyData {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): UndelegateReplyData {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseUndelegateReplyData();
     while (reader.pos < end) {
@@ -654,10 +654,10 @@ export const UndelegateReplyData = {
           if ((tag & 7) === 2) {
             const end2 = reader.uint32() + reader.pos;
             while (reader.pos < end2) {
-              message.epochs.push((reader.uint64() as Long));
+              message.epochs.push(reader.uint64());
             }
           } else {
-            message.epochs.push((reader.uint64() as Long));
+            message.epochs.push(reader.uint64());
           }
           break;
         default:
@@ -676,7 +676,7 @@ export const UndelegateReplyData = {
         acc[key] = String(value);
         return acc;
       }, {}) : {},
-      epochs: Array.isArray(object?.epochs) ? object.epochs.map((e: any) => Long.fromValue(e)) : []
+      epochs: Array.isArray(object?.epochs) ? object.epochs.map((e: any) => BigInt(e.toString())) : []
     };
   },
   toJSON(message: UndelegateReplyData): unknown {
@@ -689,7 +689,7 @@ export const UndelegateReplyData = {
       });
     }
     if (message.epochs) {
-      obj.epochs = message.epochs.map(e => (e || Long.UZERO).toString());
+      obj.epochs = message.epochs.map(e => (e || BigInt(0)).toString());
     } else {
       obj.epochs = [];
     }
@@ -706,7 +706,7 @@ export const UndelegateReplyData = {
       }
       return acc;
     }, {});
-    message.epochs = object.epochs?.map(e => Long.fromValue(e)) || [];
+    message.epochs = object.epochs?.map(e => BigInt(e.toString())) || [];
     return message;
   }
 };
@@ -717,7 +717,7 @@ function createBaseCompoundData(): CompoundData {
   };
 }
 export const CompoundData = {
-  encode(message: CompoundData, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: CompoundData, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.feeAmount !== "") {
       writer.uint32(10).string(message.feeAmount);
     }
@@ -726,8 +726,8 @@ export const CompoundData = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): CompoundData {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): CompoundData {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseCompoundData();
     while (reader.pos < end) {

@@ -1,7 +1,7 @@
 import { TokenAmount, TokenAmountSDKType } from "./pool_token";
 import { Coin, CoinSDKType } from "../../cosmos/base/v1beta1/coin";
-import { Long, isSet } from "../../helpers";
-import * as _m0 from "protobufjs/minimal";
+import { BinaryReader, BinaryWriter } from "../../binary";
+import { isSet } from "../../helpers";
 export enum SwapType {
   SWAP_TYPE_GIVEN_IN = 0,
   SWAP_TYPE_GIVEN_OUT = 1,
@@ -120,27 +120,27 @@ export function exitTypeToJSON(object: ExitType): string {
   }
 }
 export interface Swap {
-  poolId: Long;
+  poolId: bigint;
   amount: string;
   swapType: SwapType;
   tokenIn: string;
   tokenOut: string;
 }
 export interface SwapSDKType {
-  pool_id: Long;
+  pool_id: bigint;
   amount: string;
   swap_type: SwapType;
   token_in: string;
   token_out: string;
 }
 export interface SwapStep {
-  poolId: Long;
+  poolId: bigint;
   amount?: string;
   tokenIn: string;
   tokenOut: string;
 }
 export interface SwapStepSDKType {
-  pool_id: Long;
+  pool_id: bigint;
   amount?: string;
   token_in: string;
   token_out: string;
@@ -189,7 +189,7 @@ export interface ExitSummarySDKType {
 }
 function createBaseSwap(): Swap {
   return {
-    poolId: Long.UZERO,
+    poolId: BigInt(0),
     amount: "",
     swapType: 0,
     tokenIn: "",
@@ -197,8 +197,8 @@ function createBaseSwap(): Swap {
   };
 }
 export const Swap = {
-  encode(message: Swap, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (!message.poolId.isZero()) {
+  encode(message: Swap, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    if (message.poolId !== BigInt(0)) {
       writer.uint32(8).uint64(message.poolId);
     }
     if (message.amount !== "") {
@@ -215,15 +215,15 @@ export const Swap = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): Swap {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): Swap {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseSwap();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.poolId = (reader.uint64() as Long);
+          message.poolId = reader.uint64();
           break;
         case 2:
           message.amount = reader.string();
@@ -246,7 +246,7 @@ export const Swap = {
   },
   fromJSON(object: any): Swap {
     return {
-      poolId: isSet(object.poolId) ? Long.fromValue(object.poolId) : Long.UZERO,
+      poolId: isSet(object.poolId) ? BigInt(object.poolId.toString()) : BigInt(0),
       amount: isSet(object.amount) ? String(object.amount) : "",
       swapType: isSet(object.swapType) ? swapTypeFromJSON(object.swapType) : -1,
       tokenIn: isSet(object.tokenIn) ? String(object.tokenIn) : "",
@@ -255,7 +255,7 @@ export const Swap = {
   },
   toJSON(message: Swap): unknown {
     const obj: any = {};
-    message.poolId !== undefined && (obj.poolId = (message.poolId || Long.UZERO).toString());
+    message.poolId !== undefined && (obj.poolId = (message.poolId || BigInt(0)).toString());
     message.amount !== undefined && (obj.amount = message.amount);
     message.swapType !== undefined && (obj.swapType = swapTypeToJSON(message.swapType));
     message.tokenIn !== undefined && (obj.tokenIn = message.tokenIn);
@@ -264,7 +264,7 @@ export const Swap = {
   },
   fromPartial(object: Partial<Swap>): Swap {
     const message = createBaseSwap();
-    message.poolId = object.poolId !== undefined && object.poolId !== null ? Long.fromValue(object.poolId) : Long.UZERO;
+    message.poolId = object.poolId !== undefined && object.poolId !== null ? BigInt(object.poolId.toString()) : BigInt(0);
     message.amount = object.amount ?? "";
     message.swapType = object.swapType ?? 0;
     message.tokenIn = object.tokenIn ?? "";
@@ -274,15 +274,15 @@ export const Swap = {
 };
 function createBaseSwapStep(): SwapStep {
   return {
-    poolId: Long.UZERO,
+    poolId: BigInt(0),
     amount: undefined,
     tokenIn: "",
     tokenOut: ""
   };
 }
 export const SwapStep = {
-  encode(message: SwapStep, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (!message.poolId.isZero()) {
+  encode(message: SwapStep, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    if (message.poolId !== BigInt(0)) {
       writer.uint32(8).uint64(message.poolId);
     }
     if (message.amount !== undefined) {
@@ -296,15 +296,15 @@ export const SwapStep = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): SwapStep {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): SwapStep {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseSwapStep();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.poolId = (reader.uint64() as Long);
+          message.poolId = reader.uint64();
           break;
         case 2:
           message.amount = reader.string();
@@ -324,7 +324,7 @@ export const SwapStep = {
   },
   fromJSON(object: any): SwapStep {
     return {
-      poolId: isSet(object.poolId) ? Long.fromValue(object.poolId) : Long.UZERO,
+      poolId: isSet(object.poolId) ? BigInt(object.poolId.toString()) : BigInt(0),
       amount: isSet(object.amount) ? String(object.amount) : undefined,
       tokenIn: isSet(object.tokenIn) ? String(object.tokenIn) : "",
       tokenOut: isSet(object.tokenOut) ? String(object.tokenOut) : ""
@@ -332,7 +332,7 @@ export const SwapStep = {
   },
   toJSON(message: SwapStep): unknown {
     const obj: any = {};
-    message.poolId !== undefined && (obj.poolId = (message.poolId || Long.UZERO).toString());
+    message.poolId !== undefined && (obj.poolId = (message.poolId || BigInt(0)).toString());
     message.amount !== undefined && (obj.amount = message.amount);
     message.tokenIn !== undefined && (obj.tokenIn = message.tokenIn);
     message.tokenOut !== undefined && (obj.tokenOut = message.tokenOut);
@@ -340,7 +340,7 @@ export const SwapStep = {
   },
   fromPartial(object: Partial<SwapStep>): SwapStep {
     const message = createBaseSwapStep();
-    message.poolId = object.poolId !== undefined && object.poolId !== null ? Long.fromValue(object.poolId) : Long.UZERO;
+    message.poolId = object.poolId !== undefined && object.poolId !== null ? BigInt(object.poolId.toString()) : BigInt(0);
     message.amount = object.amount ?? undefined;
     message.tokenIn = object.tokenIn ?? "";
     message.tokenOut = object.tokenOut ?? "";
@@ -357,7 +357,7 @@ function createBaseSwapSummary(): SwapSummary {
   };
 }
 export const SwapSummary = {
-  encode(message: SwapSummary, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: SwapSummary, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.tokenIn !== undefined) {
       TokenAmount.encode(message.tokenIn, writer.uint32(10).fork()).ldelim();
     }
@@ -375,8 +375,8 @@ export const SwapSummary = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): SwapSummary {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): SwapSummary {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseSwapSummary();
     while (reader.pos < end) {
@@ -442,7 +442,7 @@ function createBaseJoinSummary(): JoinSummary {
   };
 }
 export const JoinSummary = {
-  encode(message: JoinSummary, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: JoinSummary, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.lpToken !== undefined) {
       TokenAmount.encode(message.lpToken, writer.uint32(10).fork()).ldelim();
     }
@@ -460,8 +460,8 @@ export const JoinSummary = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): JoinSummary {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): JoinSummary {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseJoinSummary();
     while (reader.pos < end) {
@@ -539,7 +539,7 @@ function createBaseExitSummary(): ExitSummary {
   };
 }
 export const ExitSummary = {
-  encode(message: ExitSummary, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: ExitSummary, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.lpToken !== undefined) {
       TokenAmount.encode(message.lpToken, writer.uint32(10).fork()).ldelim();
     }
@@ -557,8 +557,8 @@ export const ExitSummary = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): ExitSummary {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): ExitSummary {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseExitSummary();
     while (reader.pos < end) {

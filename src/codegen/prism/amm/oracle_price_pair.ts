@@ -1,5 +1,5 @@
-import { Long, isSet } from "../../helpers";
-import * as _m0 from "protobufjs/minimal";
+import { BinaryReader, BinaryWriter } from "../../binary";
+import { isSet } from "../../helpers";
 /** TwapAlgorithm enumerates the valid algorithms for twap_algorithm. */
 export enum TwapAlgorithm {
   TWAP_ALGORITHM_ARITHMETIC = 0,
@@ -53,7 +53,7 @@ export interface OraclePricePair {
    * for example usdc token might have contract or ibc denom on different chains with different channel and ids
    */
   quoteToken: string;
-  twapDurationMillis: Long;
+  twapDurationMillis: bigint;
   twapAlgorithm: TwapAlgorithm;
   disabled: boolean;
   pairs: Pair[];
@@ -61,7 +61,7 @@ export interface OraclePricePair {
 export interface OraclePricePairSDKType {
   asset_id: string;
   quote_token: string;
-  twap_duration_millis: Long;
+  twap_duration_millis: bigint;
   twap_algorithm: TwapAlgorithm;
   disabled: boolean;
   pairs: PairSDKType[];
@@ -75,7 +75,7 @@ function createBasePair(): Pair {
   };
 }
 export const Pair = {
-  encode(message: Pair, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: Pair, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.base !== "") {
       writer.uint32(10).string(message.base);
     }
@@ -90,8 +90,8 @@ export const Pair = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): Pair {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): Pair {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBasePair();
     while (reader.pos < end) {
@@ -145,21 +145,21 @@ function createBaseOraclePricePair(): OraclePricePair {
   return {
     assetId: "",
     quoteToken: "",
-    twapDurationMillis: Long.UZERO,
+    twapDurationMillis: BigInt(0),
     twapAlgorithm: 0,
     disabled: false,
     pairs: []
   };
 }
 export const OraclePricePair = {
-  encode(message: OraclePricePair, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: OraclePricePair, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.assetId !== "") {
       writer.uint32(10).string(message.assetId);
     }
     if (message.quoteToken !== "") {
       writer.uint32(18).string(message.quoteToken);
     }
-    if (!message.twapDurationMillis.isZero()) {
+    if (message.twapDurationMillis !== BigInt(0)) {
       writer.uint32(24).uint64(message.twapDurationMillis);
     }
     if (message.twapAlgorithm !== 0) {
@@ -173,8 +173,8 @@ export const OraclePricePair = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): OraclePricePair {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): OraclePricePair {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseOraclePricePair();
     while (reader.pos < end) {
@@ -187,7 +187,7 @@ export const OraclePricePair = {
           message.quoteToken = reader.string();
           break;
         case 3:
-          message.twapDurationMillis = (reader.uint64() as Long);
+          message.twapDurationMillis = reader.uint64();
           break;
         case 4:
           message.twapAlgorithm = (reader.int32() as any);
@@ -209,7 +209,7 @@ export const OraclePricePair = {
     return {
       assetId: isSet(object.assetId) ? String(object.assetId) : "",
       quoteToken: isSet(object.quoteToken) ? String(object.quoteToken) : "",
-      twapDurationMillis: isSet(object.twapDurationMillis) ? Long.fromValue(object.twapDurationMillis) : Long.UZERO,
+      twapDurationMillis: isSet(object.twapDurationMillis) ? BigInt(object.twapDurationMillis.toString()) : BigInt(0),
       twapAlgorithm: isSet(object.twapAlgorithm) ? twapAlgorithmFromJSON(object.twapAlgorithm) : -1,
       disabled: isSet(object.disabled) ? Boolean(object.disabled) : false,
       pairs: Array.isArray(object?.pairs) ? object.pairs.map((e: any) => Pair.fromJSON(e)) : []
@@ -219,7 +219,7 @@ export const OraclePricePair = {
     const obj: any = {};
     message.assetId !== undefined && (obj.assetId = message.assetId);
     message.quoteToken !== undefined && (obj.quoteToken = message.quoteToken);
-    message.twapDurationMillis !== undefined && (obj.twapDurationMillis = (message.twapDurationMillis || Long.UZERO).toString());
+    message.twapDurationMillis !== undefined && (obj.twapDurationMillis = (message.twapDurationMillis || BigInt(0)).toString());
     message.twapAlgorithm !== undefined && (obj.twapAlgorithm = twapAlgorithmToJSON(message.twapAlgorithm));
     message.disabled !== undefined && (obj.disabled = message.disabled);
     if (message.pairs) {
@@ -233,7 +233,7 @@ export const OraclePricePair = {
     const message = createBaseOraclePricePair();
     message.assetId = object.assetId ?? "";
     message.quoteToken = object.quoteToken ?? "";
-    message.twapDurationMillis = object.twapDurationMillis !== undefined && object.twapDurationMillis !== null ? Long.fromValue(object.twapDurationMillis) : Long.UZERO;
+    message.twapDurationMillis = object.twapDurationMillis !== undefined && object.twapDurationMillis !== null ? BigInt(object.twapDurationMillis.toString()) : BigInt(0);
     message.twapAlgorithm = object.twapAlgorithm ?? 0;
     message.disabled = object.disabled ?? false;
     message.pairs = object.pairs?.map(e => Pair.fromPartial(e)) || [];

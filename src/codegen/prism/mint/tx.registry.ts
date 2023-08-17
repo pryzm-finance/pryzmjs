@@ -1,3 +1,4 @@
+//@ts-nocheck
 import { GeneratedType, Registry } from "@cosmjs/proto-signing";
 import { MsgUpdateParams, MsgDappAccountSpend } from "./tx";
 export const registry: ReadonlyArray<[string, GeneratedType]> = [["/prism.mint.MsgUpdateParams", MsgUpdateParams], ["/prism.mint.MsgDappAccountSpend", MsgDappAccountSpend]];

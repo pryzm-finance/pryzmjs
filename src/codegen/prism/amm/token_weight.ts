@@ -1,4 +1,5 @@
-import * as _m0 from "protobufjs/minimal";
+import { BinaryReader, BinaryWriter } from "../../binary";
+import { Decimal } from "@cosmjs/math";
 import { isSet } from "../../helpers";
 export interface TokenWeight {
   denom: string;
@@ -15,17 +16,17 @@ function createBaseTokenWeight(): TokenWeight {
   };
 }
 export const TokenWeight = {
-  encode(message: TokenWeight, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: TokenWeight, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.denom !== "") {
       writer.uint32(10).string(message.denom);
     }
     if (message.normalizedWeight !== "") {
-      writer.uint32(18).string(message.normalizedWeight);
+      writer.uint32(18).string(Decimal.fromUserInput(message.normalizedWeight, 18).atomics);
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): TokenWeight {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): TokenWeight {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseTokenWeight();
     while (reader.pos < end) {
@@ -35,7 +36,7 @@ export const TokenWeight = {
           message.denom = reader.string();
           break;
         case 2:
-          message.normalizedWeight = reader.string();
+          message.normalizedWeight = Decimal.fromAtomics(reader.string(), 18).toString();
           break;
         default:
           reader.skipType(tag & 7);

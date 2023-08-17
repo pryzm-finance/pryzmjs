@@ -1,12 +1,13 @@
 import { Timestamp, TimestampSDKType } from "../../google/protobuf/timestamp";
-import { Long, isSet, fromJsonTimestamp, fromTimestamp } from "../../helpers";
-import * as _m0 from "protobufjs/minimal";
+import { BinaryReader, BinaryWriter } from "../../binary";
+import { Decimal } from "@cosmjs/math";
+import { isSet, fromJsonTimestamp, fromTimestamp } from "../../helpers";
 /** Information about an undelegation in a specific epoch */
 export interface Undelegation {
   /** host chain id */
   hostChain: string;
   /** the undelegation epoch id */
-  epoch: Long;
+  epoch: bigint;
   /** the exchange rate of cToken:Token at the end of undelegation epoch */
   exchangeRate: string;
   /** whether the undelegation request is sent and has started on host chain */
@@ -19,7 +20,7 @@ export interface Undelegation {
 /** Information about an undelegation in a specific epoch */
 export interface UndelegationSDKType {
   host_chain: string;
-  epoch: Long;
+  epoch: bigint;
   exchange_rate: string;
   started: boolean;
   completed: boolean;
@@ -30,7 +31,7 @@ export interface ChannelUndelegation {
   /** host chain id */
   hostChain: string;
   /** the undelegation epoch id */
-  epoch: Long;
+  epoch: bigint;
   /** the transfer channel on which the undelegated assets must be received */
   transferChannel: string;
   /** the total amount of cTokens requested to be undelegated */
@@ -59,7 +60,7 @@ export interface ChannelUndelegation {
 /** ChannelUndelegation contains information about an undelegation epoch for a specific transfer channel */
 export interface ChannelUndelegationSDKType {
   host_chain: string;
-  epoch: Long;
+  epoch: bigint;
   transfer_channel: string;
   total_c_amount: string;
   undelegated_c_amount: string;
@@ -73,7 +74,7 @@ export interface ChannelUndelegationSDKType {
 function createBaseUndelegation(): Undelegation {
   return {
     hostChain: "",
-    epoch: Long.UZERO,
+    epoch: BigInt(0),
     exchangeRate: "",
     started: false,
     completed: false,
@@ -81,15 +82,15 @@ function createBaseUndelegation(): Undelegation {
   };
 }
 export const Undelegation = {
-  encode(message: Undelegation, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: Undelegation, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.hostChain !== "") {
       writer.uint32(10).string(message.hostChain);
     }
-    if (!message.epoch.isZero()) {
+    if (message.epoch !== BigInt(0)) {
       writer.uint32(16).uint64(message.epoch);
     }
     if (message.exchangeRate !== "") {
-      writer.uint32(26).string(message.exchangeRate);
+      writer.uint32(26).string(Decimal.fromUserInput(message.exchangeRate, 18).atomics);
     }
     if (message.started === true) {
       writer.uint32(32).bool(message.started);
@@ -102,8 +103,8 @@ export const Undelegation = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): Undelegation {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): Undelegation {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseUndelegation();
     while (reader.pos < end) {
@@ -113,10 +114,10 @@ export const Undelegation = {
           message.hostChain = reader.string();
           break;
         case 2:
-          message.epoch = (reader.uint64() as Long);
+          message.epoch = reader.uint64();
           break;
         case 3:
-          message.exchangeRate = reader.string();
+          message.exchangeRate = Decimal.fromAtomics(reader.string(), 18).toString();
           break;
         case 4:
           message.started = reader.bool();
@@ -137,7 +138,7 @@ export const Undelegation = {
   fromJSON(object: any): Undelegation {
     return {
       hostChain: isSet(object.hostChain) ? String(object.hostChain) : "",
-      epoch: isSet(object.epoch) ? Long.fromValue(object.epoch) : Long.UZERO,
+      epoch: isSet(object.epoch) ? BigInt(object.epoch.toString()) : BigInt(0),
       exchangeRate: isSet(object.exchangeRate) ? String(object.exchangeRate) : "",
       started: isSet(object.started) ? Boolean(object.started) : false,
       completed: isSet(object.completed) ? Boolean(object.completed) : false,
@@ -147,7 +148,7 @@ export const Undelegation = {
   toJSON(message: Undelegation): unknown {
     const obj: any = {};
     message.hostChain !== undefined && (obj.hostChain = message.hostChain);
-    message.epoch !== undefined && (obj.epoch = (message.epoch || Long.UZERO).toString());
+    message.epoch !== undefined && (obj.epoch = (message.epoch || BigInt(0)).toString());
     message.exchangeRate !== undefined && (obj.exchangeRate = message.exchangeRate);
     message.started !== undefined && (obj.started = message.started);
     message.completed !== undefined && (obj.completed = message.completed);
@@ -157,7 +158,7 @@ export const Undelegation = {
   fromPartial(object: Partial<Undelegation>): Undelegation {
     const message = createBaseUndelegation();
     message.hostChain = object.hostChain ?? "";
-    message.epoch = object.epoch !== undefined && object.epoch !== null ? Long.fromValue(object.epoch) : Long.UZERO;
+    message.epoch = object.epoch !== undefined && object.epoch !== null ? BigInt(object.epoch.toString()) : BigInt(0);
     message.exchangeRate = object.exchangeRate ?? "";
     message.started = object.started ?? false;
     message.completed = object.completed ?? false;
@@ -168,7 +169,7 @@ export const Undelegation = {
 function createBaseChannelUndelegation(): ChannelUndelegation {
   return {
     hostChain: "",
-    epoch: Long.UZERO,
+    epoch: BigInt(0),
     transferChannel: "",
     totalCAmount: "",
     undelegatedCAmount: "",
@@ -181,11 +182,11 @@ function createBaseChannelUndelegation(): ChannelUndelegation {
   };
 }
 export const ChannelUndelegation = {
-  encode(message: ChannelUndelegation, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: ChannelUndelegation, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.hostChain !== "") {
       writer.uint32(10).string(message.hostChain);
     }
-    if (!message.epoch.isZero()) {
+    if (message.epoch !== BigInt(0)) {
       writer.uint32(16).uint64(message.epoch);
     }
     if (message.transferChannel !== "") {
@@ -217,8 +218,8 @@ export const ChannelUndelegation = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): ChannelUndelegation {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): ChannelUndelegation {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseChannelUndelegation();
     while (reader.pos < end) {
@@ -228,7 +229,7 @@ export const ChannelUndelegation = {
           message.hostChain = reader.string();
           break;
         case 2:
-          message.epoch = (reader.uint64() as Long);
+          message.epoch = reader.uint64();
           break;
         case 3:
           message.transferChannel = reader.string();
@@ -267,7 +268,7 @@ export const ChannelUndelegation = {
   fromJSON(object: any): ChannelUndelegation {
     return {
       hostChain: isSet(object.hostChain) ? String(object.hostChain) : "",
-      epoch: isSet(object.epoch) ? Long.fromValue(object.epoch) : Long.UZERO,
+      epoch: isSet(object.epoch) ? BigInt(object.epoch.toString()) : BigInt(0),
       transferChannel: isSet(object.transferChannel) ? String(object.transferChannel) : "",
       totalCAmount: isSet(object.totalCAmount) ? String(object.totalCAmount) : "",
       undelegatedCAmount: isSet(object.undelegatedCAmount) ? String(object.undelegatedCAmount) : "",
@@ -282,7 +283,7 @@ export const ChannelUndelegation = {
   toJSON(message: ChannelUndelegation): unknown {
     const obj: any = {};
     message.hostChain !== undefined && (obj.hostChain = message.hostChain);
-    message.epoch !== undefined && (obj.epoch = (message.epoch || Long.UZERO).toString());
+    message.epoch !== undefined && (obj.epoch = (message.epoch || BigInt(0)).toString());
     message.transferChannel !== undefined && (obj.transferChannel = message.transferChannel);
     message.totalCAmount !== undefined && (obj.totalCAmount = message.totalCAmount);
     message.undelegatedCAmount !== undefined && (obj.undelegatedCAmount = message.undelegatedCAmount);
@@ -297,7 +298,7 @@ export const ChannelUndelegation = {
   fromPartial(object: Partial<ChannelUndelegation>): ChannelUndelegation {
     const message = createBaseChannelUndelegation();
     message.hostChain = object.hostChain ?? "";
-    message.epoch = object.epoch !== undefined && object.epoch !== null ? Long.fromValue(object.epoch) : Long.UZERO;
+    message.epoch = object.epoch !== undefined && object.epoch !== null ? BigInt(object.epoch.toString()) : BigInt(0);
     message.transferChannel = object.transferChannel ?? "";
     message.totalCAmount = object.totalCAmount ?? "";
     message.undelegatedCAmount = object.undelegatedCAmount ?? "";

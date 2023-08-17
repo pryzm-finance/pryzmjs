@@ -1,6 +1,5 @@
 //@ts-nocheck
 import { AminoMsg } from "@cosmjs/amino";
-import { Long } from "../../helpers";
 import { MsgBond, MsgUnbond, MsgClaimReward, MsgExitPool } from "./tx";
 export interface MsgBondAminoType extends AminoMsg {
   type: "/prism.ystaking.MsgBond";
@@ -47,7 +46,7 @@ export const AminoConverter = {
         creator,
         amount: {
           denom: amount.denom,
-          amount: Long.fromValue(amount.amount).toString()
+          amount: amount.amount
         }
       };
     },
@@ -74,7 +73,7 @@ export const AminoConverter = {
         creator,
         amount: {
           denom: amount.denom,
-          amount: Long.fromValue(amount.amount).toString()
+          amount: amount.amount
         }
       };
     },

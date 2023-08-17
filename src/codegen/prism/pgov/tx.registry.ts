@@ -1,3 +1,4 @@
+//@ts-nocheck
 import { GeneratedType, Registry } from "@cosmjs/proto-signing";
 import { MsgUpdateParams, MsgStakePAssets, MsgUnstakePAssets, MsgSubmitVote, MsgSubmitProposal, MsgRetryVoteTransmit } from "./tx";
 export const registry: ReadonlyArray<[string, GeneratedType]> = [["/prism.pgov.MsgUpdateParams", MsgUpdateParams], ["/prism.pgov.MsgStakePAssets", MsgStakePAssets], ["/prism.pgov.MsgUnstakePAssets", MsgUnstakePAssets], ["/prism.pgov.MsgSubmitVote", MsgSubmitVote], ["/prism.pgov.MsgSubmitProposal", MsgSubmitProposal], ["/prism.pgov.MsgRetryVoteTransmit", MsgRetryVoteTransmit]];

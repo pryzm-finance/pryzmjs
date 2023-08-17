@@ -1,4 +1,4 @@
-import * as _m0 from "protobufjs/minimal";
+import { BinaryReader, BinaryWriter } from "../../binary";
 import { isSet } from "../../helpers";
 export interface EventYStakingBond {
   accountAddress: string;
@@ -57,7 +57,7 @@ function createBaseEventYStakingBond(): EventYStakingBond {
   };
 }
 export const EventYStakingBond = {
-  encode(message: EventYStakingBond, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: EventYStakingBond, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.accountAddress !== "") {
       writer.uint32(10).string(message.accountAddress);
     }
@@ -66,8 +66,8 @@ export const EventYStakingBond = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): EventYStakingBond {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): EventYStakingBond {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseEventYStakingBond();
     while (reader.pos < end) {
@@ -114,7 +114,7 @@ function createBaseEventYStakingUnbond(): EventYStakingUnbond {
   };
 }
 export const EventYStakingUnbond = {
-  encode(message: EventYStakingUnbond, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: EventYStakingUnbond, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.accountAddress !== "") {
       writer.uint32(10).string(message.accountAddress);
     }
@@ -129,8 +129,8 @@ export const EventYStakingUnbond = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): EventYStakingUnbond {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): EventYStakingUnbond {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseEventYStakingUnbond();
     while (reader.pos < end) {
@@ -188,7 +188,7 @@ function createBaseEventYStakingExitPool(): EventYStakingExitPool {
   };
 }
 export const EventYStakingExitPool = {
-  encode(message: EventYStakingExitPool, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: EventYStakingExitPool, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.accountAddress !== "") {
       writer.uint32(10).string(message.accountAddress);
     }
@@ -200,8 +200,8 @@ export const EventYStakingExitPool = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): EventYStakingExitPool {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): EventYStakingExitPool {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseEventYStakingExitPool();
     while (reader.pos < end) {
@@ -253,7 +253,7 @@ function createBaseEventYStakingClaimReward(): EventYStakingClaimReward {
   };
 }
 export const EventYStakingClaimReward = {
-  encode(message: EventYStakingClaimReward, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: EventYStakingClaimReward, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.accountAddress !== "") {
       writer.uint32(10).string(message.accountAddress);
     }
@@ -265,8 +265,8 @@ export const EventYStakingClaimReward = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): EventYStakingClaimReward {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): EventYStakingClaimReward {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseEventYStakingClaimReward();
     while (reader.pos < end) {
@@ -318,7 +318,7 @@ function createBaseEventDeactivateYStakingMaturityPool(): EventDeactivateYStakin
   };
 }
 export const EventDeactivateYStakingMaturityPool = {
-  encode(message: EventDeactivateYStakingMaturityPool, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: EventDeactivateYStakingMaturityPool, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.burntBondedAmount !== "") {
       writer.uint32(10).string(message.burntBondedAmount);
     }
@@ -330,8 +330,8 @@ export const EventDeactivateYStakingMaturityPool = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): EventDeactivateYStakingMaturityPool {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): EventDeactivateYStakingMaturityPool {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseEventDeactivateYStakingMaturityPool();
     while (reader.pos < end) {

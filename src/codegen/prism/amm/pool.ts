@@ -1,5 +1,6 @@
-import { Long, isSet } from "../../helpers";
-import * as _m0 from "protobufjs/minimal";
+import { BinaryReader, BinaryWriter } from "../../binary";
+import { isSet } from "../../helpers";
+import { Decimal } from "@cosmjs/math";
 /** PoolType enumerates the valid types for pool_type. */
 export enum PoolType {
   POOL_TYPE_WEIGHTED = 0,
@@ -33,15 +34,15 @@ export function poolTypeToJSON(object: PoolType): string {
   }
 }
 export interface PoolPauseWindow {
-  pauseWindowEndUnixMillis: Long;
-  bufferPeriodEndUnixMillis: Long;
+  pauseWindowEndUnixMillis: bigint;
+  bufferPeriodEndUnixMillis: bigint;
 }
 export interface PoolPauseWindowSDKType {
-  pause_window_end_unix_millis: Long;
-  buffer_period_end_unix_millis: Long;
+  pause_window_end_unix_millis: bigint;
+  buffer_period_end_unix_millis: bigint;
 }
 export interface Pool {
-  id: Long;
+  id: bigint;
   name: string;
   /**
    * this is the constant swap fee ratio, for dynamic swap fees other pools might have other parameters.
@@ -61,7 +62,7 @@ export interface Pool {
   initializationAllowList: string[];
 }
 export interface PoolSDKType {
-  id: Long;
+  id: bigint;
   name: string;
   swap_fee_ratio: string;
   pool_type: PoolType;
@@ -76,32 +77,32 @@ export interface PoolSDKType {
 }
 function createBasePoolPauseWindow(): PoolPauseWindow {
   return {
-    pauseWindowEndUnixMillis: Long.ZERO,
-    bufferPeriodEndUnixMillis: Long.ZERO
+    pauseWindowEndUnixMillis: BigInt(0),
+    bufferPeriodEndUnixMillis: BigInt(0)
   };
 }
 export const PoolPauseWindow = {
-  encode(message: PoolPauseWindow, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (!message.pauseWindowEndUnixMillis.isZero()) {
+  encode(message: PoolPauseWindow, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    if (message.pauseWindowEndUnixMillis !== BigInt(0)) {
       writer.uint32(8).int64(message.pauseWindowEndUnixMillis);
     }
-    if (!message.bufferPeriodEndUnixMillis.isZero()) {
+    if (message.bufferPeriodEndUnixMillis !== BigInt(0)) {
       writer.uint32(16).int64(message.bufferPeriodEndUnixMillis);
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): PoolPauseWindow {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): PoolPauseWindow {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBasePoolPauseWindow();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.pauseWindowEndUnixMillis = (reader.int64() as Long);
+          message.pauseWindowEndUnixMillis = reader.int64();
           break;
         case 2:
-          message.bufferPeriodEndUnixMillis = (reader.int64() as Long);
+          message.bufferPeriodEndUnixMillis = reader.int64();
           break;
         default:
           reader.skipType(tag & 7);
@@ -112,26 +113,26 @@ export const PoolPauseWindow = {
   },
   fromJSON(object: any): PoolPauseWindow {
     return {
-      pauseWindowEndUnixMillis: isSet(object.pauseWindowEndUnixMillis) ? Long.fromValue(object.pauseWindowEndUnixMillis) : Long.ZERO,
-      bufferPeriodEndUnixMillis: isSet(object.bufferPeriodEndUnixMillis) ? Long.fromValue(object.bufferPeriodEndUnixMillis) : Long.ZERO
+      pauseWindowEndUnixMillis: isSet(object.pauseWindowEndUnixMillis) ? BigInt(object.pauseWindowEndUnixMillis.toString()) : BigInt(0),
+      bufferPeriodEndUnixMillis: isSet(object.bufferPeriodEndUnixMillis) ? BigInt(object.bufferPeriodEndUnixMillis.toString()) : BigInt(0)
     };
   },
   toJSON(message: PoolPauseWindow): unknown {
     const obj: any = {};
-    message.pauseWindowEndUnixMillis !== undefined && (obj.pauseWindowEndUnixMillis = (message.pauseWindowEndUnixMillis || Long.ZERO).toString());
-    message.bufferPeriodEndUnixMillis !== undefined && (obj.bufferPeriodEndUnixMillis = (message.bufferPeriodEndUnixMillis || Long.ZERO).toString());
+    message.pauseWindowEndUnixMillis !== undefined && (obj.pauseWindowEndUnixMillis = (message.pauseWindowEndUnixMillis || BigInt(0)).toString());
+    message.bufferPeriodEndUnixMillis !== undefined && (obj.bufferPeriodEndUnixMillis = (message.bufferPeriodEndUnixMillis || BigInt(0)).toString());
     return obj;
   },
   fromPartial(object: Partial<PoolPauseWindow>): PoolPauseWindow {
     const message = createBasePoolPauseWindow();
-    message.pauseWindowEndUnixMillis = object.pauseWindowEndUnixMillis !== undefined && object.pauseWindowEndUnixMillis !== null ? Long.fromValue(object.pauseWindowEndUnixMillis) : Long.ZERO;
-    message.bufferPeriodEndUnixMillis = object.bufferPeriodEndUnixMillis !== undefined && object.bufferPeriodEndUnixMillis !== null ? Long.fromValue(object.bufferPeriodEndUnixMillis) : Long.ZERO;
+    message.pauseWindowEndUnixMillis = object.pauseWindowEndUnixMillis !== undefined && object.pauseWindowEndUnixMillis !== null ? BigInt(object.pauseWindowEndUnixMillis.toString()) : BigInt(0);
+    message.bufferPeriodEndUnixMillis = object.bufferPeriodEndUnixMillis !== undefined && object.bufferPeriodEndUnixMillis !== null ? BigInt(object.bufferPeriodEndUnixMillis.toString()) : BigInt(0);
     return message;
   }
 };
 function createBasePool(): Pool {
   return {
-    id: Long.UZERO,
+    id: BigInt(0),
     name: "",
     swapFeeRatio: "",
     poolType: 0,
@@ -146,15 +147,15 @@ function createBasePool(): Pool {
   };
 }
 export const Pool = {
-  encode(message: Pool, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (!message.id.isZero()) {
+  encode(message: Pool, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    if (message.id !== BigInt(0)) {
       writer.uint32(8).uint64(message.id);
     }
     if (message.name !== "") {
       writer.uint32(18).string(message.name);
     }
     if (message.swapFeeRatio !== "") {
-      writer.uint32(26).string(message.swapFeeRatio);
+      writer.uint32(26).string(Decimal.fromUserInput(message.swapFeeRatio, 18).atomics);
     }
     if (message.poolType !== 0) {
       writer.uint32(32).int32(message.poolType);
@@ -175,31 +176,31 @@ export const Pool = {
       PoolPauseWindow.encode(message.ownerPauseWindowTiming, writer.uint32(74).fork()).ldelim();
     }
     if (message.swapProtocolFeeRatio !== undefined) {
-      writer.uint32(82).string(message.swapProtocolFeeRatio);
+      writer.uint32(82).string(Decimal.fromUserInput(message.swapProtocolFeeRatio, 18).atomics);
     }
     if (message.joinExitProtocolFeeRatio !== undefined) {
-      writer.uint32(90).string(message.joinExitProtocolFeeRatio);
+      writer.uint32(90).string(Decimal.fromUserInput(message.joinExitProtocolFeeRatio, 18).atomics);
     }
     for (const v of message.initializationAllowList) {
       writer.uint32(98).string(v!);
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): Pool {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): Pool {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBasePool();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.id = (reader.uint64() as Long);
+          message.id = reader.uint64();
           break;
         case 2:
           message.name = reader.string();
           break;
         case 3:
-          message.swapFeeRatio = reader.string();
+          message.swapFeeRatio = Decimal.fromAtomics(reader.string(), 18).toString();
           break;
         case 4:
           message.poolType = (reader.int32() as any);
@@ -220,10 +221,10 @@ export const Pool = {
           message.ownerPauseWindowTiming = PoolPauseWindow.decode(reader, reader.uint32());
           break;
         case 10:
-          message.swapProtocolFeeRatio = reader.string();
+          message.swapProtocolFeeRatio = Decimal.fromAtomics(reader.string(), 18).toString();
           break;
         case 11:
-          message.joinExitProtocolFeeRatio = reader.string();
+          message.joinExitProtocolFeeRatio = Decimal.fromAtomics(reader.string(), 18).toString();
           break;
         case 12:
           message.initializationAllowList.push(reader.string());
@@ -237,7 +238,7 @@ export const Pool = {
   },
   fromJSON(object: any): Pool {
     return {
-      id: isSet(object.id) ? Long.fromValue(object.id) : Long.UZERO,
+      id: isSet(object.id) ? BigInt(object.id.toString()) : BigInt(0),
       name: isSet(object.name) ? String(object.name) : "",
       swapFeeRatio: isSet(object.swapFeeRatio) ? String(object.swapFeeRatio) : "",
       poolType: isSet(object.poolType) ? poolTypeFromJSON(object.poolType) : -1,
@@ -253,7 +254,7 @@ export const Pool = {
   },
   toJSON(message: Pool): unknown {
     const obj: any = {};
-    message.id !== undefined && (obj.id = (message.id || Long.UZERO).toString());
+    message.id !== undefined && (obj.id = (message.id || BigInt(0)).toString());
     message.name !== undefined && (obj.name = message.name);
     message.swapFeeRatio !== undefined && (obj.swapFeeRatio = message.swapFeeRatio);
     message.poolType !== undefined && (obj.poolType = poolTypeToJSON(message.poolType));
@@ -273,7 +274,7 @@ export const Pool = {
   },
   fromPartial(object: Partial<Pool>): Pool {
     const message = createBasePool();
-    message.id = object.id !== undefined && object.id !== null ? Long.fromValue(object.id) : Long.UZERO;
+    message.id = object.id !== undefined && object.id !== null ? BigInt(object.id.toString()) : BigInt(0);
     message.name = object.name ?? "";
     message.swapFeeRatio = object.swapFeeRatio ?? "";
     message.poolType = object.poolType ?? 0;

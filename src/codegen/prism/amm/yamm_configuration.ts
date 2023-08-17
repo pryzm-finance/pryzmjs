@@ -1,7 +1,8 @@
-import { Long, isSet } from "../../helpers";
-import * as _m0 from "protobufjs/minimal";
+import { BinaryReader, BinaryWriter } from "../../binary";
+import { Decimal } from "@cosmjs/math";
+import { isSet } from "../../helpers";
 export interface YammConfiguration {
-  poolId: Long;
+  poolId: bigint;
   /** duration (milliseconds) for virtual balance when adding new pAssets to yamm pools */
   maturityIntroductionIntervalMillis?: string;
   maturityExpirationIntervalMillis?: string;
@@ -24,7 +25,7 @@ export interface YammConfiguration {
   maxWeightRatio?: string;
 }
 export interface YammConfigurationSDKType {
-  pool_id: Long;
+  pool_id: bigint;
   maturity_introduction_interval_millis?: string;
   maturity_expiration_interval_millis?: string;
   expiration_virtual_balance_scaler?: string;
@@ -37,7 +38,7 @@ export interface YammConfigurationSDKType {
 }
 function createBaseYammConfiguration(): YammConfiguration {
   return {
-    poolId: Long.UZERO,
+    poolId: BigInt(0),
     maturityIntroductionIntervalMillis: undefined,
     maturityExpirationIntervalMillis: undefined,
     expirationVirtualBalanceScaler: undefined,
@@ -50,8 +51,8 @@ function createBaseYammConfiguration(): YammConfiguration {
   };
 }
 export const YammConfiguration = {
-  encode(message: YammConfiguration, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (!message.poolId.isZero()) {
+  encode(message: YammConfiguration, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    if (message.poolId !== BigInt(0)) {
       writer.uint32(8).uint64(message.poolId);
     }
     if (message.maturityIntroductionIntervalMillis !== undefined) {
@@ -61,37 +62,37 @@ export const YammConfiguration = {
       writer.uint32(26).string(message.maturityExpirationIntervalMillis);
     }
     if (message.expirationVirtualBalanceScaler !== undefined) {
-      writer.uint32(34).string(message.expirationVirtualBalanceScaler);
+      writer.uint32(34).string(Decimal.fromUserInput(message.expirationVirtualBalanceScaler, 18).atomics);
     }
     if (message.expiredAssetDiscountRatio !== undefined) {
-      writer.uint32(42).string(message.expiredAssetDiscountRatio);
+      writer.uint32(42).string(Decimal.fromUserInput(message.expiredAssetDiscountRatio, 18).atomics);
     }
     if (message.buyYGivenInLoanFeeRatio !== undefined) {
-      writer.uint32(50).string(message.buyYGivenInLoanFeeRatio);
+      writer.uint32(50).string(Decimal.fromUserInput(message.buyYGivenInLoanFeeRatio, 18).atomics);
     }
     if (message.sellYGivenOutFeeRatio !== undefined) {
-      writer.uint32(58).string(message.sellYGivenOutFeeRatio);
+      writer.uint32(58).string(Decimal.fromUserInput(message.sellYGivenOutFeeRatio, 18).atomics);
     }
     if (message.swapYieldFeeRatio !== undefined) {
-      writer.uint32(66).string(message.swapYieldFeeRatio);
+      writer.uint32(66).string(Decimal.fromUserInput(message.swapYieldFeeRatio, 18).atomics);
     }
     if (message.leverageScaler !== undefined) {
-      writer.uint32(74).string(message.leverageScaler);
+      writer.uint32(74).string(Decimal.fromUserInput(message.leverageScaler, 18).atomics);
     }
     if (message.maxWeightRatio !== undefined) {
-      writer.uint32(82).string(message.maxWeightRatio);
+      writer.uint32(82).string(Decimal.fromUserInput(message.maxWeightRatio, 18).atomics);
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): YammConfiguration {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): YammConfiguration {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseYammConfiguration();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.poolId = (reader.uint64() as Long);
+          message.poolId = reader.uint64();
           break;
         case 2:
           message.maturityIntroductionIntervalMillis = reader.string();
@@ -100,25 +101,25 @@ export const YammConfiguration = {
           message.maturityExpirationIntervalMillis = reader.string();
           break;
         case 4:
-          message.expirationVirtualBalanceScaler = reader.string();
+          message.expirationVirtualBalanceScaler = Decimal.fromAtomics(reader.string(), 18).toString();
           break;
         case 5:
-          message.expiredAssetDiscountRatio = reader.string();
+          message.expiredAssetDiscountRatio = Decimal.fromAtomics(reader.string(), 18).toString();
           break;
         case 6:
-          message.buyYGivenInLoanFeeRatio = reader.string();
+          message.buyYGivenInLoanFeeRatio = Decimal.fromAtomics(reader.string(), 18).toString();
           break;
         case 7:
-          message.sellYGivenOutFeeRatio = reader.string();
+          message.sellYGivenOutFeeRatio = Decimal.fromAtomics(reader.string(), 18).toString();
           break;
         case 8:
-          message.swapYieldFeeRatio = reader.string();
+          message.swapYieldFeeRatio = Decimal.fromAtomics(reader.string(), 18).toString();
           break;
         case 9:
-          message.leverageScaler = reader.string();
+          message.leverageScaler = Decimal.fromAtomics(reader.string(), 18).toString();
           break;
         case 10:
-          message.maxWeightRatio = reader.string();
+          message.maxWeightRatio = Decimal.fromAtomics(reader.string(), 18).toString();
           break;
         default:
           reader.skipType(tag & 7);
@@ -129,7 +130,7 @@ export const YammConfiguration = {
   },
   fromJSON(object: any): YammConfiguration {
     return {
-      poolId: isSet(object.poolId) ? Long.fromValue(object.poolId) : Long.UZERO,
+      poolId: isSet(object.poolId) ? BigInt(object.poolId.toString()) : BigInt(0),
       maturityIntroductionIntervalMillis: isSet(object.maturityIntroductionIntervalMillis) ? String(object.maturityIntroductionIntervalMillis) : undefined,
       maturityExpirationIntervalMillis: isSet(object.maturityExpirationIntervalMillis) ? String(object.maturityExpirationIntervalMillis) : undefined,
       expirationVirtualBalanceScaler: isSet(object.expirationVirtualBalanceScaler) ? String(object.expirationVirtualBalanceScaler) : undefined,
@@ -143,7 +144,7 @@ export const YammConfiguration = {
   },
   toJSON(message: YammConfiguration): unknown {
     const obj: any = {};
-    message.poolId !== undefined && (obj.poolId = (message.poolId || Long.UZERO).toString());
+    message.poolId !== undefined && (obj.poolId = (message.poolId || BigInt(0)).toString());
     message.maturityIntroductionIntervalMillis !== undefined && (obj.maturityIntroductionIntervalMillis = message.maturityIntroductionIntervalMillis);
     message.maturityExpirationIntervalMillis !== undefined && (obj.maturityExpirationIntervalMillis = message.maturityExpirationIntervalMillis);
     message.expirationVirtualBalanceScaler !== undefined && (obj.expirationVirtualBalanceScaler = message.expirationVirtualBalanceScaler);
@@ -157,7 +158,7 @@ export const YammConfiguration = {
   },
   fromPartial(object: Partial<YammConfiguration>): YammConfiguration {
     const message = createBaseYammConfiguration();
-    message.poolId = object.poolId !== undefined && object.poolId !== null ? Long.fromValue(object.poolId) : Long.UZERO;
+    message.poolId = object.poolId !== undefined && object.poolId !== null ? BigInt(object.poolId.toString()) : BigInt(0);
     message.maturityIntroductionIntervalMillis = object.maturityIntroductionIntervalMillis ?? undefined;
     message.maturityExpirationIntervalMillis = object.maturityExpirationIntervalMillis ?? undefined;
     message.expirationVirtualBalanceScaler = object.expirationVirtualBalanceScaler ?? undefined;

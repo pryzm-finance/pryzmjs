@@ -1,24 +1,24 @@
-import { Long, isSet } from "../../helpers";
-import * as _m0 from "protobufjs/minimal";
+import { BinaryReader, BinaryWriter } from "../../binary";
+import { isSet } from "../../helpers";
 export interface PairMatchProposal {
-  poolId: Long;
+  poolId: bigint;
   whitelistedRoute: boolean;
   tokenIn: string;
   tokenOut: string;
-  buyOrders: Long[];
-  sellOrders: Long[];
+  buyOrders: bigint[];
+  sellOrders: bigint[];
 }
 export interface PairMatchProposalSDKType {
-  pool_id: Long;
+  pool_id: bigint;
   whitelisted_route: boolean;
   token_in: string;
   token_out: string;
-  buy_orders: Long[];
-  sell_orders: Long[];
+  buy_orders: bigint[];
+  sell_orders: bigint[];
 }
 function createBasePairMatchProposal(): PairMatchProposal {
   return {
-    poolId: Long.UZERO,
+    poolId: BigInt(0),
     whitelistedRoute: false,
     tokenIn: "",
     tokenOut: "",
@@ -27,8 +27,8 @@ function createBasePairMatchProposal(): PairMatchProposal {
   };
 }
 export const PairMatchProposal = {
-  encode(message: PairMatchProposal, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (!message.poolId.isZero()) {
+  encode(message: PairMatchProposal, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    if (message.poolId !== BigInt(0)) {
       writer.uint32(8).uint64(message.poolId);
     }
     if (message.whitelistedRoute === true) {
@@ -52,15 +52,15 @@ export const PairMatchProposal = {
     writer.ldelim();
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): PairMatchProposal {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): PairMatchProposal {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBasePairMatchProposal();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.poolId = (reader.uint64() as Long);
+          message.poolId = reader.uint64();
           break;
         case 2:
           message.whitelistedRoute = reader.bool();
@@ -75,20 +75,20 @@ export const PairMatchProposal = {
           if ((tag & 7) === 2) {
             const end2 = reader.uint32() + reader.pos;
             while (reader.pos < end2) {
-              message.buyOrders.push((reader.uint64() as Long));
+              message.buyOrders.push(reader.uint64());
             }
           } else {
-            message.buyOrders.push((reader.uint64() as Long));
+            message.buyOrders.push(reader.uint64());
           }
           break;
         case 6:
           if ((tag & 7) === 2) {
             const end2 = reader.uint32() + reader.pos;
             while (reader.pos < end2) {
-              message.sellOrders.push((reader.uint64() as Long));
+              message.sellOrders.push(reader.uint64());
             }
           } else {
-            message.sellOrders.push((reader.uint64() as Long));
+            message.sellOrders.push(reader.uint64());
           }
           break;
         default:
@@ -100,27 +100,27 @@ export const PairMatchProposal = {
   },
   fromJSON(object: any): PairMatchProposal {
     return {
-      poolId: isSet(object.poolId) ? Long.fromValue(object.poolId) : Long.UZERO,
+      poolId: isSet(object.poolId) ? BigInt(object.poolId.toString()) : BigInt(0),
       whitelistedRoute: isSet(object.whitelistedRoute) ? Boolean(object.whitelistedRoute) : false,
       tokenIn: isSet(object.tokenIn) ? String(object.tokenIn) : "",
       tokenOut: isSet(object.tokenOut) ? String(object.tokenOut) : "",
-      buyOrders: Array.isArray(object?.buyOrders) ? object.buyOrders.map((e: any) => Long.fromValue(e)) : [],
-      sellOrders: Array.isArray(object?.sellOrders) ? object.sellOrders.map((e: any) => Long.fromValue(e)) : []
+      buyOrders: Array.isArray(object?.buyOrders) ? object.buyOrders.map((e: any) => BigInt(e.toString())) : [],
+      sellOrders: Array.isArray(object?.sellOrders) ? object.sellOrders.map((e: any) => BigInt(e.toString())) : []
     };
   },
   toJSON(message: PairMatchProposal): unknown {
     const obj: any = {};
-    message.poolId !== undefined && (obj.poolId = (message.poolId || Long.UZERO).toString());
+    message.poolId !== undefined && (obj.poolId = (message.poolId || BigInt(0)).toString());
     message.whitelistedRoute !== undefined && (obj.whitelistedRoute = message.whitelistedRoute);
     message.tokenIn !== undefined && (obj.tokenIn = message.tokenIn);
     message.tokenOut !== undefined && (obj.tokenOut = message.tokenOut);
     if (message.buyOrders) {
-      obj.buyOrders = message.buyOrders.map(e => (e || Long.UZERO).toString());
+      obj.buyOrders = message.buyOrders.map(e => (e || BigInt(0)).toString());
     } else {
       obj.buyOrders = [];
     }
     if (message.sellOrders) {
-      obj.sellOrders = message.sellOrders.map(e => (e || Long.UZERO).toString());
+      obj.sellOrders = message.sellOrders.map(e => (e || BigInt(0)).toString());
     } else {
       obj.sellOrders = [];
     }
@@ -128,12 +128,12 @@ export const PairMatchProposal = {
   },
   fromPartial(object: Partial<PairMatchProposal>): PairMatchProposal {
     const message = createBasePairMatchProposal();
-    message.poolId = object.poolId !== undefined && object.poolId !== null ? Long.fromValue(object.poolId) : Long.UZERO;
+    message.poolId = object.poolId !== undefined && object.poolId !== null ? BigInt(object.poolId.toString()) : BigInt(0);
     message.whitelistedRoute = object.whitelistedRoute ?? false;
     message.tokenIn = object.tokenIn ?? "";
     message.tokenOut = object.tokenOut ?? "";
-    message.buyOrders = object.buyOrders?.map(e => Long.fromValue(e)) || [];
-    message.sellOrders = object.sellOrders?.map(e => Long.fromValue(e)) || [];
+    message.buyOrders = object.buyOrders?.map(e => BigInt(e.toString())) || [];
+    message.sellOrders = object.sellOrders?.map(e => BigInt(e.toString())) || [];
     return message;
   }
 };
