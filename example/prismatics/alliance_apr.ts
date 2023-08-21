@@ -5,12 +5,12 @@ import { PRISMATICS_ENDPOINT } from "./config";
 async function main() {
     const prismaticsClient = await prismatics.ClientFactory.createClient({ restEndpoint: PRISMATICS_ENDPOINT })
 
-    let apr = (await prismaticsClient.prismatics.incentivesApr({
-        denom: "cluna"
+    let apr = (await prismaticsClient.prismatics.allianceApr({
+        denom: "cluna",
     })).apr
     console.log(apr)
 
-    apr = (await prismaticsClient.prismatics.incentivesApr({
+    apr = (await prismaticsClient.prismatics.allianceApr({
         denom: "cluna",
         timeWindowInDays: "20"
     })).apr

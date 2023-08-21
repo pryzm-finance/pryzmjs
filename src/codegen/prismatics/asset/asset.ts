@@ -10,7 +10,9 @@ export interface Asset {
   accruedYieldPerYAsset: string;
   poolId: bigint;
   exchangeRate: string;
+  /** TODO make nullable */
   firstExchangeRateTime: Timestamp;
+  /** TODO make nullable */
   lastExchangeRateTime: Timestamp;
   cPAssetExchangeRate: string;
 }

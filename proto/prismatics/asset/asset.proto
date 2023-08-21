@@ -15,7 +15,7 @@ message Asset {
   string accrued_yield_per_y_asset = 5 [(cosmos_proto.scalar) = "cosmos.Dec", (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Dec", (gogoproto.nullable) = false];
   int64 pool_id = 6;
   string exchange_rate = 7 [(cosmos_proto.scalar) = "cosmos.Dec", (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Dec"];
-  google.protobuf.Timestamp first_exchange_rate_time = 8 [(gogoproto.stdtime) = true, (gogoproto.nullable) = false];
-  google.protobuf.Timestamp last_exchange_rate_time = 9 [(gogoproto.stdtime) = true, (gogoproto.nullable) = false];
+  google.protobuf.Timestamp first_exchange_rate_time = 8 [(gogoproto.stdtime) = true, (gogoproto.nullable) = false]; //TODO make nullable
+  google.protobuf.Timestamp last_exchange_rate_time = 9 [(gogoproto.stdtime) = true, (gogoproto.nullable) = false]; //TODO make nullable
   string c_p_asset_exchange_rate = 10 [(cosmos_proto.scalar) = "cosmos.Dec", (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Dec"];
 }
