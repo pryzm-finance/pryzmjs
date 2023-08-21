@@ -17,6 +17,7 @@ import { QueryTokenTradeVolumeRequest, QueryTokenTradeVolumeResponseSDKType, Que
 import { QueryPulseTradablePairsRequest, QueryPulseTradablePairsResponseSDKType } from "./trade/pulse_tradable_pairs";
 import { QueryOrderRequest, QueryOrderResponseSDKType, QueryOrdersRequest, QueryOrdersResponseSDKType } from "./trade/order";
 import { QueryIncentivesAprRequest, QueryIncentivesAprResponseSDKType } from "./incentives/incentives";
+import { QueryAllianceAprRequest, QueryAllianceAprResponseSDKType } from "./alliance/alliance";
 export class LCDQueryClient {
   req: LCDClient;
   constructor({
@@ -46,6 +47,7 @@ export class LCDQueryClient {
     this.order = this.order.bind(this);
     this.orders = this.orders.bind(this);
     this.incentivesApr = this.incentivesApr.bind(this);
+    this.allianceApr = this.allianceApr.bind(this);
   }
   /* Asset */
   async asset(params: QueryAssetRequest): Promise<QueryAssetResponseSDKType> {
@@ -304,5 +306,16 @@ export class LCDQueryClient {
     }
     const endpoint = `prismatics/incentives/apr/${params.denom}`;
     return await this.req.get<QueryIncentivesAprResponseSDKType>(endpoint, options);
+  }
+  /* AllianceApr */
+  async allianceApr(params: QueryAllianceAprRequest): Promise<QueryAllianceAprResponseSDKType> {
+    const options: any = {
+      params: {}
+    };
+    if (typeof params?.timeWindowInDays !== "undefined") {
+      options.params.time_window_in_days = params.timeWindowInDays;
+    }
+    const endpoint = `prismatics/alliance/apr/${params.denom}`;
+    return await this.req.get<QueryAllianceAprResponseSDKType>(endpoint, options);
   }
 }

@@ -28,6 +28,8 @@ import "prismatics/server/trade/order.proto";
 
 import "prismatics/server/incentives/incentives.proto";
 
+import "prismatics/server/alliance/alliance.proto";
+
 
 option go_package = "github.com/prism-finance/prismatics/server";
 
@@ -115,5 +117,9 @@ service Query {
 
   rpc IncentivesApr(prismatics.server.incentives.QueryIncentivesAprRequest) returns (prismatics.server.incentives.QueryIncentivesAprResponse) {
     option (google.api.http).get = "/prismatics/incentives/apr/{denom}";
+  }
+
+  rpc AllianceApr(prismatics.server.alliance.QueryAllianceAprRequest) returns (prismatics.server.alliance.QueryAllianceAprResponse) {
+    option (google.api.http).get = "/prismatics/alliance/apr/{denom}";
   }
 }
