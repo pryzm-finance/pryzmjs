@@ -4,6 +4,7 @@ package prismatics.server.maturity;
 import "gogoproto/gogo.proto";
 import "cosmos/base/query/v1beta1/pagination.proto";
 import "prismatics/maturity/maturity.proto";
+import "cosmos_proto/cosmos.proto";
 
 option go_package = "github.com/prism-finance/prismatics/server/maturity";
 
@@ -11,7 +12,12 @@ option go_package = "github.com/prism-finance/prismatics/server/maturity";
 message QueryAllMaturitiesRequest {
   string asset_id = 1;
   string active = 2;
-  cosmos.base.query.v1beta1.PageRequest pagination = 3;
+  string time_window_in_days = 3 [
+    (cosmos_proto.scalar) = "cosmos.Int",
+    (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Int",
+    (gogoproto.nullable) = true
+  ];
+  cosmos.base.query.v1beta1.PageRequest pagination = 4;
 }
 
 message QueryAllMaturitiesResponse {

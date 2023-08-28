@@ -7,12 +7,12 @@ async function main() {
     const prismaticsClient = await prismatics.ClientFactory.createClient({ restEndpoint: PRISMATICS_ENDPOINT })
 
     let history = (await prismaticsClient.prismatics.poolTradeHistory({
-        operationType: PoolOperationType.POOL_OPERATION_TYPE_ANY, tokenIn: "", tokenOut: ""
+        operationType: PoolOperationType.POOL_OPERATION_TYPE_ANY, firstToken: "", secondToken: ""
     })).pool_trade_history_records
     console.log(history)
 
     history = (await prismaticsClient.prismatics.poolTradeHistory({
-        operationType: PoolOperationType.POOL_OPERATION_TYPE_ANY, poolId: "0", tokenIn: "cluna", tokenOut: "pluna"
+        operationType: PoolOperationType.POOL_OPERATION_TYPE_ANY, poolId: "0", firstToken: "cluna", secondToken: "pluna"
     })).pool_trade_history_records
     console.log(history)
 }

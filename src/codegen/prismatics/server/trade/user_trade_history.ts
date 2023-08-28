@@ -2,14 +2,14 @@ import { OperationType, UserTradeHistory, UserTradeHistorySDKType, operationType
 import { BinaryReader, BinaryWriter } from "../../../binary";
 import { isSet } from "../../../helpers";
 export interface QueryUserTradeHistoryRequest {
-  tokenIn: string;
-  tokenOut: string;
+  firstToken: string;
+  secondToken: string;
   address: string;
   operationType: OperationType;
 }
 export interface QueryUserTradeHistoryRequestSDKType {
-  token_in: string;
-  token_out: string;
+  first_token: string;
+  second_token: string;
   address: string;
   operation_type: OperationType;
 }
@@ -21,19 +21,19 @@ export interface QueryUserTradeHistoryResponseSDKType {
 }
 function createBaseQueryUserTradeHistoryRequest(): QueryUserTradeHistoryRequest {
   return {
-    tokenIn: "",
-    tokenOut: "",
+    firstToken: "",
+    secondToken: "",
     address: "",
     operationType: 0
   };
 }
 export const QueryUserTradeHistoryRequest = {
   encode(message: QueryUserTradeHistoryRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
-    if (message.tokenIn !== "") {
-      writer.uint32(10).string(message.tokenIn);
+    if (message.firstToken !== "") {
+      writer.uint32(10).string(message.firstToken);
     }
-    if (message.tokenOut !== "") {
-      writer.uint32(18).string(message.tokenOut);
+    if (message.secondToken !== "") {
+      writer.uint32(18).string(message.secondToken);
     }
     if (message.address !== "") {
       writer.uint32(26).string(message.address);
@@ -51,10 +51,10 @@ export const QueryUserTradeHistoryRequest = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.tokenIn = reader.string();
+          message.firstToken = reader.string();
           break;
         case 2:
-          message.tokenOut = reader.string();
+          message.secondToken = reader.string();
           break;
         case 3:
           message.address = reader.string();
@@ -71,24 +71,24 @@ export const QueryUserTradeHistoryRequest = {
   },
   fromJSON(object: any): QueryUserTradeHistoryRequest {
     return {
-      tokenIn: isSet(object.tokenIn) ? String(object.tokenIn) : "",
-      tokenOut: isSet(object.tokenOut) ? String(object.tokenOut) : "",
+      firstToken: isSet(object.firstToken) ? String(object.firstToken) : "",
+      secondToken: isSet(object.secondToken) ? String(object.secondToken) : "",
       address: isSet(object.address) ? String(object.address) : "",
       operationType: isSet(object.operationType) ? operationTypeFromJSON(object.operationType) : -1
     };
   },
   toJSON(message: QueryUserTradeHistoryRequest): unknown {
     const obj: any = {};
-    message.tokenIn !== undefined && (obj.tokenIn = message.tokenIn);
-    message.tokenOut !== undefined && (obj.tokenOut = message.tokenOut);
+    message.firstToken !== undefined && (obj.firstToken = message.firstToken);
+    message.secondToken !== undefined && (obj.secondToken = message.secondToken);
     message.address !== undefined && (obj.address = message.address);
     message.operationType !== undefined && (obj.operationType = operationTypeToJSON(message.operationType));
     return obj;
   },
   fromPartial(object: Partial<QueryUserTradeHistoryRequest>): QueryUserTradeHistoryRequest {
     const message = createBaseQueryUserTradeHistoryRequest();
-    message.tokenIn = object.tokenIn ?? "";
-    message.tokenOut = object.tokenOut ?? "";
+    message.firstToken = object.firstToken ?? "";
+    message.secondToken = object.secondToken ?? "";
     message.address = object.address ?? "";
     message.operationType = object.operationType ?? 0;
     return message;

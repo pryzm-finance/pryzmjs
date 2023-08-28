@@ -13,8 +13,8 @@ message QueryPoolTradeHistoryRequest {
     (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Int",
     (gogoproto.nullable) = true
   ];
-  string token_in = 2;
-  string token_out = 3;
+  string first_token = 2;
+  string second_token = 3;
   prismatics.trade.PoolOperationType operation_type = 4;
 }
 

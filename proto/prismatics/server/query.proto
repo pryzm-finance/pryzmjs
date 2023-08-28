@@ -12,6 +12,7 @@ import "prismatics/server/maturity/maturity.proto";
 import "prismatics/server/pgov/pgov.proto";
 
 import "prismatics/server/pool/pool_token.proto";
+import "prismatics/server/pool/pool.proto";
 
 import "prismatics/server/price/historical_price.proto";
 import "prismatics/server/price/price.proto";
@@ -59,8 +60,12 @@ service Query {
     option (google.api.http).get = "/prismatics/pool/token/{pool_id}";
   }
 
+  rpc Pool(prismatics.server.pool.QueryPoolRequest) returns (prismatics.server.pool.QueryPoolResponse) {
+    option (google.api.http).get = "/prismatics/pool/{pool_id}";
+  }
+
   rpc TokenPrice(prismatics.server.price.QueryPriceRequest) returns (prismatics.server.price.QueryPriceResponse) {
-    option (google.api.http).get = "/prismatics/price/{token_in}/{token_out}";
+    option (google.api.http).get = "/prismatics/price/{token_in}";
   }
 
   rpc HistoricalPrice(prismatics.server.price.QueryHistoricalPriceRequest) returns (prismatics.server.price.QueryHistoricalPriceResponse) {

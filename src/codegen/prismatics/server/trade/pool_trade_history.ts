@@ -3,14 +3,14 @@ import { BinaryReader, BinaryWriter } from "../../../binary";
 import { isSet } from "../../../helpers";
 export interface QueryPoolTradeHistoryRequest {
   poolId?: string;
-  tokenIn: string;
-  tokenOut: string;
+  firstToken: string;
+  secondToken: string;
   operationType: PoolOperationType;
 }
 export interface QueryPoolTradeHistoryRequestSDKType {
   pool_id?: string;
-  token_in: string;
-  token_out: string;
+  first_token: string;
+  second_token: string;
   operation_type: PoolOperationType;
 }
 export interface QueryPoolTradeHistoryResponse {
@@ -22,8 +22,8 @@ export interface QueryPoolTradeHistoryResponseSDKType {
 function createBaseQueryPoolTradeHistoryRequest(): QueryPoolTradeHistoryRequest {
   return {
     poolId: undefined,
-    tokenIn: "",
-    tokenOut: "",
+    firstToken: "",
+    secondToken: "",
     operationType: 0
   };
 }
@@ -32,11 +32,11 @@ export const QueryPoolTradeHistoryRequest = {
     if (message.poolId !== undefined) {
       writer.uint32(10).string(message.poolId);
     }
-    if (message.tokenIn !== "") {
-      writer.uint32(18).string(message.tokenIn);
+    if (message.firstToken !== "") {
+      writer.uint32(18).string(message.firstToken);
     }
-    if (message.tokenOut !== "") {
-      writer.uint32(26).string(message.tokenOut);
+    if (message.secondToken !== "") {
+      writer.uint32(26).string(message.secondToken);
     }
     if (message.operationType !== 0) {
       writer.uint32(32).int32(message.operationType);
@@ -54,10 +54,10 @@ export const QueryPoolTradeHistoryRequest = {
           message.poolId = reader.string();
           break;
         case 2:
-          message.tokenIn = reader.string();
+          message.firstToken = reader.string();
           break;
         case 3:
-          message.tokenOut = reader.string();
+          message.secondToken = reader.string();
           break;
         case 4:
           message.operationType = (reader.int32() as any);
@@ -72,24 +72,24 @@ export const QueryPoolTradeHistoryRequest = {
   fromJSON(object: any): QueryPoolTradeHistoryRequest {
     return {
       poolId: isSet(object.poolId) ? String(object.poolId) : undefined,
-      tokenIn: isSet(object.tokenIn) ? String(object.tokenIn) : "",
-      tokenOut: isSet(object.tokenOut) ? String(object.tokenOut) : "",
+      firstToken: isSet(object.firstToken) ? String(object.firstToken) : "",
+      secondToken: isSet(object.secondToken) ? String(object.secondToken) : "",
       operationType: isSet(object.operationType) ? poolOperationTypeFromJSON(object.operationType) : -1
     };
   },
   toJSON(message: QueryPoolTradeHistoryRequest): unknown {
     const obj: any = {};
     message.poolId !== undefined && (obj.poolId = message.poolId);
-    message.tokenIn !== undefined && (obj.tokenIn = message.tokenIn);
-    message.tokenOut !== undefined && (obj.tokenOut = message.tokenOut);
+    message.firstToken !== undefined && (obj.firstToken = message.firstToken);
+    message.secondToken !== undefined && (obj.secondToken = message.secondToken);
     message.operationType !== undefined && (obj.operationType = poolOperationTypeToJSON(message.operationType));
     return obj;
   },
   fromPartial(object: Partial<QueryPoolTradeHistoryRequest>): QueryPoolTradeHistoryRequest {
     const message = createBaseQueryPoolTradeHistoryRequest();
     message.poolId = object.poolId ?? undefined;
-    message.tokenIn = object.tokenIn ?? "";
-    message.tokenOut = object.tokenOut ?? "";
+    message.firstToken = object.firstToken ?? "";
+    message.secondToken = object.secondToken ?? "";
     message.operationType = object.operationType ?? 0;
     return message;
   }

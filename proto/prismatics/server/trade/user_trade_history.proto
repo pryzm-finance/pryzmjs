@@ -7,8 +7,8 @@ import "prismatics/trade/user_trade_history.proto";
 option go_package = "github.com/prism-finance/prismatics/server/trade";
 
 message QueryUserTradeHistoryRequest {
-  string token_in = 1;
-  string token_out = 2;
+  string first_token = 1;
+  string second_token = 2;
   string address = 3;
   prismatics.trade.OperationType operation_type = 4;
 }

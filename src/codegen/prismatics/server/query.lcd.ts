@@ -5,6 +5,7 @@ import { QueryAssetRequest, QueryAssetResponseSDKType } from "./asset/asset";
 import { QueryAllMaturitiesRequest, QueryAllMaturitiesResponseSDKType } from "./maturity/maturity";
 import { QuerySubmitProposalMsgsRequest, QuerySubmitProposalMsgsResponseSDKType, QueryAssetProposalRequest, QueryAssetProposalResponseSDKType } from "./pgov/pgov";
 import { QueryPoolTokenRequest, QueryPoolTokenResponseSDKType, QueryAllPoolTokenRequest, QueryAllPoolTokenResponseSDKType } from "./pool/pool_token";
+import { QueryPoolRequest, QueryPoolResponseSDKType } from "./pool/pool";
 import { QueryPriceRequest, QueryPriceResponseSDKType } from "./price/price";
 import { QueryHistoricalPriceRequest, QueryHistoricalPriceResponseSDKType } from "./price/historical_price";
 import { QuerySwappableTokensRequest, QuerySwappableTokensResponseSDKType } from "./price/swappable_tokens";
@@ -32,6 +33,7 @@ export class LCDQueryClient {
     this.assetProposals = this.assetProposals.bind(this);
     this.poolToken = this.poolToken.bind(this);
     this.poolTokens = this.poolTokens.bind(this);
+    this.pool = this.pool.bind(this);
     this.tokenPrice = this.tokenPrice.bind(this);
     this.historicalPrice = this.historicalPrice.bind(this);
     this.swappableTokens = this.swappableTokens.bind(this);
@@ -65,6 +67,9 @@ export class LCDQueryClient {
     if (typeof params?.active !== "undefined") {
       options.params.active = params.active;
     }
+    if (typeof params?.timeWindowInDays !== "undefined") {
+      options.params.time_window_in_days = params.timeWindowInDays;
+    }
     if (typeof params?.pagination !== "undefined") {
       setPaginationParams(options, params.pagination);
     }
@@ -91,10 +96,27 @@ export class LCDQueryClient {
     const endpoint = `prismatics/pool/token/${params.poolId}`;
     return await this.req.get<QueryAllPoolTokenResponseSDKType>(endpoint);
   }
+  /* Pool */
+  async pool(params: QueryPoolRequest): Promise<QueryPoolResponseSDKType> {
+    const options: any = {
+      params: {}
+    };
+    if (typeof params?.timeWindowInDays !== "undefined") {
+      options.params.time_window_in_days = params.timeWindowInDays;
+    }
+    const endpoint = `prismatics/pool/${params.poolId}`;
+    return await this.req.get<QueryPoolResponseSDKType>(endpoint, options);
+  }
   /* TokenPrice */
   async tokenPrice(params: QueryPriceRequest): Promise<QueryPriceResponseSDKType> {
-    const endpoint = `prismatics/price/${params.tokenIn}/${params.tokenOut}`;
-    return await this.req.get<QueryPriceResponseSDKType>(endpoint);
+    const options: any = {
+      params: {}
+    };
+    if (typeof params?.tokenOut !== "undefined") {
+      options.params.token_out = params.tokenOut;
+    }
+    const endpoint = `prismatics/price/${params.tokenIn}`;
+    return await this.req.get<QueryPriceResponseSDKType>(endpoint, options);
   }
   /* HistoricalPrice */
   async historicalPrice(params: QueryHistoricalPriceRequest): Promise<QueryHistoricalPriceResponseSDKType> {
@@ -177,11 +199,11 @@ export class LCDQueryClient {
     const options: any = {
       params: {}
     };
-    if (typeof params?.tokenIn !== "undefined") {
-      options.params.token_in = params.tokenIn;
+    if (typeof params?.firstToken !== "undefined") {
+      options.params.first_token = params.firstToken;
     }
-    if (typeof params?.tokenOut !== "undefined") {
-      options.params.token_out = params.tokenOut;
+    if (typeof params?.secondToken !== "undefined") {
+      options.params.second_token = params.secondToken;
     }
     if (typeof params?.address !== "undefined") {
       options.params.address = params.address;
@@ -200,11 +222,11 @@ export class LCDQueryClient {
     if (typeof params?.poolId !== "undefined") {
       options.params.pool_id = params.poolId;
     }
-    if (typeof params?.tokenIn !== "undefined") {
-      options.params.token_in = params.tokenIn;
+    if (typeof params?.firstToken !== "undefined") {
+      options.params.first_token = params.firstToken;
     }
-    if (typeof params?.tokenOut !== "undefined") {
-      options.params.token_out = params.tokenOut;
+    if (typeof params?.secondToken !== "undefined") {
+      options.params.second_token = params.secondToken;
     }
     if (typeof params?.operationType !== "undefined") {
       options.params.operation_type = params.operationType;

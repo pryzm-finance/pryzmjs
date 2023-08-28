@@ -7,7 +7,7 @@ async function main() {
     let balances = (await client.cosmos.bank.v1beta1.allBalances({address: "prism156pcgs3faegfte0vuaykr9az3hh9kx2e2qfwvu"})).balances
     console.log(balances)
 
-    balances = (await client.cosmos.bank.v1beta1.allBalances({address: "prism156pcgs3faegfte0vuaykr9az3hh9kx2e2qfwvu"}, getBrowsersHeadersForBlockHeight(10))).balances
+    balances = (await client.cosmos.bank.v1beta1.allBalances({address: "prism156pcgs3faegfte0vuaykr9az3hh9kx2e2qfwvu"}, getBrowsersHeadersForBlockHeight(10n))).balances
     console.log(balances)
 
     const maturities = await grpcFetchAll(client, async (client, pageRequest) => {

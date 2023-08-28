@@ -1,13 +1,13 @@
 lockfileVersion: 5.4
 
 specifiers:
-  '@prism-finance/prismjs': 0.9.4
+  '@prism-finance/prismjs': 0.9.5
   '@refractedlabs/oraclejs': ^0.3.0
   '@refractedlabs/utils': 0.1.5
   typescript: ^5.1.6
 
 dependencies:
-  '@prism-finance/prismjs': 0.9.4_google-protobuf@3.21.2
+  '@prism-finance/prismjs': 0.9.5_google-protobuf@3.21.2
   '@refractedlabs/oraclejs': 0.3.0_google-protobuf@3.21.2
   '@refractedlabs/utils': 0.1.5
 
@@ -18,6 +18,13 @@ packages:
 
   /@babel/runtime/7.22.10:
     resolution: {integrity: sha512-21t/fkKLMZI4pqP2wlmsQAWnYW1PDyKyyUV4vCi+B25ydmdaYTKXPwCj0BzSUnZf4seIiYvSA3jcZ3gdsMFkLQ==}
+    engines: {node: '>=6.9.0'}
+    dependencies:
+      regenerator-runtime: 0.14.0
+    dev: false
+
+  /@babel/runtime/7.22.11:
+    resolution: {integrity: sha512-ee7jVNlWN09+KftVOu9n7S8gQzD/Z6hN/I8VBRXW4P1+Xe7kJGXMwu8vds4aGIMHZnNbdpSWCfZZtinytpcAvA==}
     engines: {node: '>=6.9.0'}
     dependencies:
       regenerator-runtime: 0.14.0
@@ -78,7 +85,7 @@ packages:
       '@cosmjs/encoding': 0.31.1
       '@cosmjs/math': 0.31.1
       '@cosmjs/utils': 0.31.1
-      '@noble/hashes': 1.3.1
+      '@noble/hashes': 1.3.2
       bn.js: 5.2.1
       elliptic: 6.5.4
       libsodium-wrappers-sumo: 0.7.11
@@ -302,7 +309,7 @@ packages:
   /@cosmology/lcd/0.12.0:
     resolution: {integrity: sha512-f2mcySYO1xdislAhuWtNFmg4q/bzY3Aem2UkDzYzI0ZELVev5i2Pi0bQrYUNTeNg1isAo0Kyrdqj/4YPqEwjGA==}
     dependencies:
-      '@babel/runtime': 7.22.10
+      '@babel/runtime': 7.22.11
       axios: 0.27.2
     transitivePeerDependencies:
       - debug
@@ -338,6 +345,11 @@ packages:
     engines: {node: '>= 16'}
     dev: false
 
+  /@noble/hashes/1.3.2:
+    resolution: {integrity: sha512-MVC8EAQp7MvEcm30KWENFjgR+Mkmf+D189XJTkFIlwohU5hcBbn1ZkKq7KVTi2Hme3PMGF390DaL52beVrIihQ==}
+    engines: {node: '>= 16'}
+    dev: false
+
   /@osmonauts/lcd/0.10.0:
     resolution: {integrity: sha512-PzmXk9x9MHyLn2fUztpAqWqvDmMiEJaQv/JcAoAOE8VdHrD9Hf/KWnE1RZtamuS2ngQRqvQPD0xotCGXW7eTxA==}
     dependencies:
@@ -347,10 +359,10 @@ packages:
       - debug
     dev: false
 
-  /@prism-finance/prismjs/0.9.4_google-protobuf@3.21.2:
-    resolution: {integrity: sha512-wbdkkXe2W+w6Zxtgng0jvE6dMm+35R3k+ETDX3IYWgw03UjrCNV4g12567V+Kn7E9fvxGyF686NK7yYORrN0jA==, tarball: download/@prism-finance/prismjs/0.9.4/4fae40f9cb3962521cae6d46506010a015a81265}
+  /@prism-finance/prismjs/0.9.5_google-protobuf@3.21.2:
+    resolution: {integrity: sha512-aGJSwt6lFw8ImE1/e0C5hBsLUiBRRBrFtI05jE0nmoEzT4WG6WTYw21lt4DE/gDnw+0mo1GaxqTquDBYKiOZmQ==, tarball: download/@prism-finance/prismjs/0.9.5/6528f533191c115784cd53a677f1c36fa9351776}
     dependencies:
-      '@babel/runtime': 7.22.10
+      '@babel/runtime': 7.22.11
       '@cosmjs/amino': 0.31.0
       '@cosmjs/proto-signing': 0.31.0
       '@cosmjs/stargate': 0.31.0
@@ -457,8 +469,8 @@ packages:
     resolution: {integrity: sha512-rt40Nk13II9JwQBdeYqmbn2Q6IVTA5uPhvSO+JVqdXw/6/4glI6oR9ezty/A9Hg5u7JH4OmYmuQ+XvjKm0Datg==}
     dev: false
 
-  /@types/node/20.5.1:
-    resolution: {integrity: sha512-4tT2UrL5LBqDwoed9wZ6N3umC4Yhz3W3FloMmiiG4JwmUJWpie0c7lcnUNd4gtMKuDEO4wRVS8B6Xa0uMRsMKg==}
+  /@types/node/20.5.7:
+    resolution: {integrity: sha512-dP7f3LdZIysZnmvP3ANJYTSwg+wLLl8p7RqniVlV7j+oXSXAbt9h0WIBFmJy5inWZoX9wZN6eXx+YXd9Rh3RBA==}
     dev: false
 
   /@types/triple-beam/1.3.2:
@@ -850,7 +862,7 @@ packages:
       '@protobufjs/pool': 1.1.0
       '@protobufjs/utf8': 1.1.0
       '@types/long': 4.0.2
-      '@types/node': 20.5.1
+      '@types/node': 20.5.7
       long: 4.0.0
     dev: false
 
