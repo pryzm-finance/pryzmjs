@@ -253,5 +253,5 @@ export function fromJsonTimestamp(o: any): Timestamp {
 }
 
 function numberToLong(number: number) {
-  return BigInt(number);
+  return BigInt(Math.floor(number));
 }
