@@ -1,62 +1,62 @@
-import { Pool, PoolSDKType } from "../../pool/pool";
+import { Token, TokenSDKType } from "../../pool/token";
 import { PageRequest, PageRequestSDKType, PageResponse, PageResponseSDKType } from "../../../cosmos/base/query/v1beta1/pagination";
 import { BinaryReader, BinaryWriter } from "../../../binary";
 import { isSet } from "../../../helpers";
-export interface QueryPoolRequest {
-  poolId: bigint;
+export interface QueryTokenRequest {
+  denom: string;
   timeWindowInDays?: string;
 }
-export interface QueryPoolRequestSDKType {
-  pool_id: bigint;
+export interface QueryTokenRequestSDKType {
+  denom: string;
   time_window_in_days?: string;
 }
-export interface QueryPoolResponse {
-  pool: Pool;
+export interface QueryTokenResponse {
+  token: Token;
 }
-export interface QueryPoolResponseSDKType {
-  pool: PoolSDKType;
+export interface QueryTokenResponseSDKType {
+  token: TokenSDKType;
 }
-export interface QueryPoolsRequest {
+export interface QueryTokensRequest {
   timeWindowInDays?: string;
   pagination: PageRequest;
 }
-export interface QueryPoolsRequestSDKType {
+export interface QueryTokensRequestSDKType {
   time_window_in_days?: string;
   pagination: PageRequestSDKType;
 }
-export interface QueryPoolsResponse {
-  pools: Pool[];
+export interface QueryTokensResponse {
+  tokens: Token[];
   pagination: PageResponse;
 }
-export interface QueryPoolsResponseSDKType {
-  pools: PoolSDKType[];
+export interface QueryTokensResponseSDKType {
+  tokens: TokenSDKType[];
   pagination: PageResponseSDKType;
 }
-function createBaseQueryPoolRequest(): QueryPoolRequest {
+function createBaseQueryTokenRequest(): QueryTokenRequest {
   return {
-    poolId: BigInt(0),
+    denom: "",
     timeWindowInDays: undefined
   };
 }
-export const QueryPoolRequest = {
-  encode(message: QueryPoolRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
-    if (message.poolId !== BigInt(0)) {
-      writer.uint32(8).uint64(message.poolId);
+export const QueryTokenRequest = {
+  encode(message: QueryTokenRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    if (message.denom !== "") {
+      writer.uint32(10).string(message.denom);
     }
     if (message.timeWindowInDays !== undefined) {
       writer.uint32(18).string(message.timeWindowInDays);
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): QueryPoolRequest {
+  decode(input: BinaryReader | Uint8Array, length?: number): QueryTokenRequest {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseQueryPoolRequest();
+    const message = createBaseQueryTokenRequest();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.poolId = reader.uint64();
+          message.denom = reader.string();
           break;
         case 2:
           message.timeWindowInDays = reader.string();
@@ -68,46 +68,46 @@ export const QueryPoolRequest = {
     }
     return message;
   },
-  fromJSON(object: any): QueryPoolRequest {
+  fromJSON(object: any): QueryTokenRequest {
     return {
-      poolId: isSet(object.poolId) ? BigInt(object.poolId.toString()) : BigInt(0),
+      denom: isSet(object.denom) ? String(object.denom) : "",
       timeWindowInDays: isSet(object.timeWindowInDays) ? String(object.timeWindowInDays) : undefined
     };
   },
-  toJSON(message: QueryPoolRequest): unknown {
+  toJSON(message: QueryTokenRequest): unknown {
     const obj: any = {};
-    message.poolId !== undefined && (obj.poolId = (message.poolId || BigInt(0)).toString());
+    message.denom !== undefined && (obj.denom = message.denom);
     message.timeWindowInDays !== undefined && (obj.timeWindowInDays = message.timeWindowInDays);
     return obj;
   },
-  fromPartial(object: Partial<QueryPoolRequest>): QueryPoolRequest {
-    const message = createBaseQueryPoolRequest();
-    message.poolId = object.poolId !== undefined && object.poolId !== null ? BigInt(object.poolId.toString()) : BigInt(0);
+  fromPartial(object: Partial<QueryTokenRequest>): QueryTokenRequest {
+    const message = createBaseQueryTokenRequest();
+    message.denom = object.denom ?? "";
     message.timeWindowInDays = object.timeWindowInDays ?? undefined;
     return message;
   }
 };
-function createBaseQueryPoolResponse(): QueryPoolResponse {
+function createBaseQueryTokenResponse(): QueryTokenResponse {
   return {
-    pool: Pool.fromPartial({})
+    token: Token.fromPartial({})
   };
 }
-export const QueryPoolResponse = {
-  encode(message: QueryPoolResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
-    if (message.pool !== undefined) {
-      Pool.encode(message.pool, writer.uint32(10).fork()).ldelim();
+export const QueryTokenResponse = {
+  encode(message: QueryTokenResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    if (message.token !== undefined) {
+      Token.encode(message.token, writer.uint32(10).fork()).ldelim();
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): QueryPoolResponse {
+  decode(input: BinaryReader | Uint8Array, length?: number): QueryTokenResponse {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseQueryPoolResponse();
+    const message = createBaseQueryTokenResponse();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.pool = Pool.decode(reader, reader.uint32());
+          message.token = Token.decode(reader, reader.uint32());
           break;
         default:
           reader.skipType(tag & 7);
@@ -116,30 +116,30 @@ export const QueryPoolResponse = {
     }
     return message;
   },
-  fromJSON(object: any): QueryPoolResponse {
+  fromJSON(object: any): QueryTokenResponse {
     return {
-      pool: isSet(object.pool) ? Pool.fromJSON(object.pool) : undefined
+      token: isSet(object.token) ? Token.fromJSON(object.token) : undefined
     };
   },
-  toJSON(message: QueryPoolResponse): unknown {
+  toJSON(message: QueryTokenResponse): unknown {
     const obj: any = {};
-    message.pool !== undefined && (obj.pool = message.pool ? Pool.toJSON(message.pool) : undefined);
+    message.token !== undefined && (obj.token = message.token ? Token.toJSON(message.token) : undefined);
     return obj;
   },
-  fromPartial(object: Partial<QueryPoolResponse>): QueryPoolResponse {
-    const message = createBaseQueryPoolResponse();
-    message.pool = object.pool !== undefined && object.pool !== null ? Pool.fromPartial(object.pool) : undefined;
+  fromPartial(object: Partial<QueryTokenResponse>): QueryTokenResponse {
+    const message = createBaseQueryTokenResponse();
+    message.token = object.token !== undefined && object.token !== null ? Token.fromPartial(object.token) : undefined;
     return message;
   }
 };
-function createBaseQueryPoolsRequest(): QueryPoolsRequest {
+function createBaseQueryTokensRequest(): QueryTokensRequest {
   return {
     timeWindowInDays: undefined,
     pagination: PageRequest.fromPartial({})
   };
 }
-export const QueryPoolsRequest = {
-  encode(message: QueryPoolsRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+export const QueryTokensRequest = {
+  encode(message: QueryTokensRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.timeWindowInDays !== undefined) {
       writer.uint32(10).string(message.timeWindowInDays);
     }
@@ -148,10 +148,10 @@ export const QueryPoolsRequest = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): QueryPoolsRequest {
+  decode(input: BinaryReader | Uint8Array, length?: number): QueryTokensRequest {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseQueryPoolsRequest();
+    const message = createBaseQueryTokensRequest();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -168,50 +168,50 @@ export const QueryPoolsRequest = {
     }
     return message;
   },
-  fromJSON(object: any): QueryPoolsRequest {
+  fromJSON(object: any): QueryTokensRequest {
     return {
       timeWindowInDays: isSet(object.timeWindowInDays) ? String(object.timeWindowInDays) : undefined,
       pagination: isSet(object.pagination) ? PageRequest.fromJSON(object.pagination) : undefined
     };
   },
-  toJSON(message: QueryPoolsRequest): unknown {
+  toJSON(message: QueryTokensRequest): unknown {
     const obj: any = {};
     message.timeWindowInDays !== undefined && (obj.timeWindowInDays = message.timeWindowInDays);
     message.pagination !== undefined && (obj.pagination = message.pagination ? PageRequest.toJSON(message.pagination) : undefined);
     return obj;
   },
-  fromPartial(object: Partial<QueryPoolsRequest>): QueryPoolsRequest {
-    const message = createBaseQueryPoolsRequest();
+  fromPartial(object: Partial<QueryTokensRequest>): QueryTokensRequest {
+    const message = createBaseQueryTokensRequest();
     message.timeWindowInDays = object.timeWindowInDays ?? undefined;
     message.pagination = object.pagination !== undefined && object.pagination !== null ? PageRequest.fromPartial(object.pagination) : undefined;
     return message;
   }
 };
-function createBaseQueryPoolsResponse(): QueryPoolsResponse {
+function createBaseQueryTokensResponse(): QueryTokensResponse {
   return {
-    pools: [],
+    tokens: [],
     pagination: PageResponse.fromPartial({})
   };
 }
-export const QueryPoolsResponse = {
-  encode(message: QueryPoolsResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
-    for (const v of message.pools) {
-      Pool.encode(v!, writer.uint32(10).fork()).ldelim();
+export const QueryTokensResponse = {
+  encode(message: QueryTokensResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    for (const v of message.tokens) {
+      Token.encode(v!, writer.uint32(10).fork()).ldelim();
     }
     if (message.pagination !== undefined) {
       PageResponse.encode(message.pagination, writer.uint32(18).fork()).ldelim();
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): QueryPoolsResponse {
+  decode(input: BinaryReader | Uint8Array, length?: number): QueryTokensResponse {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseQueryPoolsResponse();
+    const message = createBaseQueryTokensResponse();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.pools.push(Pool.decode(reader, reader.uint32()));
+          message.tokens.push(Token.decode(reader, reader.uint32()));
           break;
         case 2:
           message.pagination = PageResponse.decode(reader, reader.uint32());
@@ -223,25 +223,25 @@ export const QueryPoolsResponse = {
     }
     return message;
   },
-  fromJSON(object: any): QueryPoolsResponse {
+  fromJSON(object: any): QueryTokensResponse {
     return {
-      pools: Array.isArray(object?.pools) ? object.pools.map((e: any) => Pool.fromJSON(e)) : [],
+      tokens: Array.isArray(object?.tokens) ? object.tokens.map((e: any) => Token.fromJSON(e)) : [],
       pagination: isSet(object.pagination) ? PageResponse.fromJSON(object.pagination) : undefined
     };
   },
-  toJSON(message: QueryPoolsResponse): unknown {
+  toJSON(message: QueryTokensResponse): unknown {
     const obj: any = {};
-    if (message.pools) {
-      obj.pools = message.pools.map(e => e ? Pool.toJSON(e) : undefined);
+    if (message.tokens) {
+      obj.tokens = message.tokens.map(e => e ? Token.toJSON(e) : undefined);
     } else {
-      obj.pools = [];
+      obj.tokens = [];
     }
     message.pagination !== undefined && (obj.pagination = message.pagination ? PageResponse.toJSON(message.pagination) : undefined);
     return obj;
   },
-  fromPartial(object: Partial<QueryPoolsResponse>): QueryPoolsResponse {
-    const message = createBaseQueryPoolsResponse();
-    message.pools = object.pools?.map(e => Pool.fromPartial(e)) || [];
+  fromPartial(object: Partial<QueryTokensResponse>): QueryTokensResponse {
+    const message = createBaseQueryTokensResponse();
+    message.tokens = object.tokens?.map(e => Token.fromPartial(e)) || [];
     message.pagination = object.pagination !== undefined && object.pagination !== null ? PageResponse.fromPartial(object.pagination) : undefined;
     return message;
   }

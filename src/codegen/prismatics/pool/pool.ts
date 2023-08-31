@@ -10,7 +10,7 @@ export interface Pool {
   lpDenom: string;
   apr?: string;
   swapFeeApr?: string;
-  poolTokenApr?: string;
+  tokenYield?: string;
   incentivesApr?: string;
   allianceApr?: string;
   aprCalculationTime?: Timestamp;
@@ -23,7 +23,7 @@ export interface PoolSDKType {
   lp_denom: string;
   apr?: string;
   swap_fee_apr?: string;
-  pool_token_apr?: string;
+  token_yield?: string;
   incentives_apr?: string;
   alliance_apr?: string;
   apr_calculation_time?: TimestampSDKType;
@@ -37,7 +37,7 @@ function createBasePool(): Pool {
     lpDenom: "",
     apr: undefined,
     swapFeeApr: undefined,
-    poolTokenApr: undefined,
+    tokenYield: undefined,
     incentivesApr: undefined,
     allianceApr: undefined,
     aprCalculationTime: undefined,
@@ -64,8 +64,8 @@ export const Pool = {
     if (message.swapFeeApr !== undefined) {
       writer.uint32(50).string(Decimal.fromUserInput(message.swapFeeApr, 18).atomics);
     }
-    if (message.poolTokenApr !== undefined) {
-      writer.uint32(58).string(Decimal.fromUserInput(message.poolTokenApr, 18).atomics);
+    if (message.tokenYield !== undefined) {
+      writer.uint32(58).string(Decimal.fromUserInput(message.tokenYield, 18).atomics);
     }
     if (message.incentivesApr !== undefined) {
       writer.uint32(66).string(Decimal.fromUserInput(message.incentivesApr, 18).atomics);
@@ -107,7 +107,7 @@ export const Pool = {
           message.swapFeeApr = Decimal.fromAtomics(reader.string(), 18).toString();
           break;
         case 7:
-          message.poolTokenApr = Decimal.fromAtomics(reader.string(), 18).toString();
+          message.tokenYield = Decimal.fromAtomics(reader.string(), 18).toString();
           break;
         case 8:
           message.incentivesApr = Decimal.fromAtomics(reader.string(), 18).toString();
@@ -136,7 +136,7 @@ export const Pool = {
       lpDenom: isSet(object.lpDenom) ? String(object.lpDenom) : "",
       apr: isSet(object.apr) ? String(object.apr) : undefined,
       swapFeeApr: isSet(object.swapFeeApr) ? String(object.swapFeeApr) : undefined,
-      poolTokenApr: isSet(object.poolTokenApr) ? String(object.poolTokenApr) : undefined,
+      tokenYield: isSet(object.tokenYield) ? String(object.tokenYield) : undefined,
       incentivesApr: isSet(object.incentivesApr) ? String(object.incentivesApr) : undefined,
       allianceApr: isSet(object.allianceApr) ? String(object.allianceApr) : undefined,
       aprCalculationTime: isSet(object.aprCalculationTime) ? fromJsonTimestamp(object.aprCalculationTime) : undefined,
@@ -151,7 +151,7 @@ export const Pool = {
     message.lpDenom !== undefined && (obj.lpDenom = message.lpDenom);
     message.apr !== undefined && (obj.apr = message.apr);
     message.swapFeeApr !== undefined && (obj.swapFeeApr = message.swapFeeApr);
-    message.poolTokenApr !== undefined && (obj.poolTokenApr = message.poolTokenApr);
+    message.tokenYield !== undefined && (obj.tokenYield = message.tokenYield);
     message.incentivesApr !== undefined && (obj.incentivesApr = message.incentivesApr);
     message.allianceApr !== undefined && (obj.allianceApr = message.allianceApr);
     message.aprCalculationTime !== undefined && (obj.aprCalculationTime = fromTimestamp(message.aprCalculationTime).toISOString());
@@ -166,7 +166,7 @@ export const Pool = {
     message.lpDenom = object.lpDenom ?? "";
     message.apr = object.apr ?? undefined;
     message.swapFeeApr = object.swapFeeApr ?? undefined;
-    message.poolTokenApr = object.poolTokenApr ?? undefined;
+    message.tokenYield = object.tokenYield ?? undefined;
     message.incentivesApr = object.incentivesApr ?? undefined;
     message.allianceApr = object.allianceApr ?? undefined;
     message.aprCalculationTime = object.aprCalculationTime !== undefined && object.aprCalculationTime !== null ? Timestamp.fromPartial(object.aprCalculationTime) : undefined;

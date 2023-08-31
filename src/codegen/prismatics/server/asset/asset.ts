@@ -3,9 +3,11 @@ import { BinaryReader, BinaryWriter } from "../../../binary";
 import { isSet } from "../../../helpers";
 export interface QueryAssetRequest {
   assetId: string;
+  timeWindowInDays?: string;
 }
 export interface QueryAssetRequestSDKType {
   asset_id: string;
+  time_window_in_days?: string;
 }
 export interface QueryAssetResponse {
   asset: Asset;
@@ -15,13 +17,17 @@ export interface QueryAssetResponseSDKType {
 }
 function createBaseQueryAssetRequest(): QueryAssetRequest {
   return {
-    assetId: ""
+    assetId: "",
+    timeWindowInDays: undefined
   };
 }
 export const QueryAssetRequest = {
   encode(message: QueryAssetRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.assetId !== "") {
       writer.uint32(10).string(message.assetId);
+    }
+    if (message.timeWindowInDays !== undefined) {
+      writer.uint32(26).string(message.timeWindowInDays);
     }
     return writer;
   },
@@ -35,6 +41,9 @@ export const QueryAssetRequest = {
         case 1:
           message.assetId = reader.string();
           break;
+        case 3:
+          message.timeWindowInDays = reader.string();
+          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -44,17 +53,20 @@ export const QueryAssetRequest = {
   },
   fromJSON(object: any): QueryAssetRequest {
     return {
-      assetId: isSet(object.assetId) ? String(object.assetId) : ""
+      assetId: isSet(object.assetId) ? String(object.assetId) : "",
+      timeWindowInDays: isSet(object.timeWindowInDays) ? String(object.timeWindowInDays) : undefined
     };
   },
   toJSON(message: QueryAssetRequest): unknown {
     const obj: any = {};
     message.assetId !== undefined && (obj.assetId = message.assetId);
+    message.timeWindowInDays !== undefined && (obj.timeWindowInDays = message.timeWindowInDays);
     return obj;
   },
   fromPartial(object: Partial<QueryAssetRequest>): QueryAssetRequest {
     const message = createBaseQueryAssetRequest();
     message.assetId = object.assetId ?? "";
+    message.timeWindowInDays = object.timeWindowInDays ?? undefined;
     return message;
   }
 };

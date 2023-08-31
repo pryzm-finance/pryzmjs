@@ -3,14 +3,14 @@ package prismatics.server.pool;
 
 import "gogoproto/gogo.proto";
 import "cosmos_proto/cosmos.proto";
-import "prismatics/pool/pool.proto";
+import "prismatics/pool/token.proto";
 import "cosmos/base/query/v1beta1/pagination.proto";
 
 
 option go_package = "github.com/prism-finance/prismatics/server/pool";
 
-message QueryPoolRequest {
-  uint64 pool_id = 1;
+message QueryTokenRequest {
+  string denom = 1;
   string time_window_in_days = 2 [
     (cosmos_proto.scalar) = "cosmos.Int",
     (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Int",
@@ -18,11 +18,11 @@ message QueryPoolRequest {
   ];
 }
 
-message QueryPoolResponse {
-  prismatics.pool.Pool pool = 1 [(gogoproto.nullable) = false];
+message QueryTokenResponse {
+  prismatics.pool.Token token = 1 [(gogoproto.nullable) = false];
 }
 
-message QueryPoolsRequest {
+message QueryTokensRequest {
   string time_window_in_days = 1 [
     (cosmos_proto.scalar) = "cosmos.Int",
     (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Int",
@@ -31,7 +31,7 @@ message QueryPoolsRequest {
   cosmos.base.query.v1beta1.PageRequest pagination = 2;
 }
 
-message QueryPoolsResponse {
-  repeated prismatics.pool.Pool pools = 1 [(gogoproto.nullable) = false];
+message QueryTokensResponse {
+  repeated prismatics.pool.Token tokens = 1 [(gogoproto.nullable) = false];
   cosmos.base.query.v1beta1.PageResponse pagination = 2;
 }

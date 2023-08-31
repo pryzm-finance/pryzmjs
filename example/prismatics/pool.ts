@@ -5,17 +5,16 @@ import { PRISMATICS_ENDPOINT } from "./config";
 async function main() {
     const prismaticsClient = await prismatics.ClientFactory.createClient({ restEndpoint: PRISMATICS_ENDPOINT })
 
-    let asset = (await prismaticsClient.prismatics.asset({
-        assetId: "eth"
-    })).asset
-    console.log(asset)
+    let pool = (await prismaticsClient.prismatics.pool({
+        poolId: 0n
+    })).pool
+    console.log(pool)
 
-    asset = (await prismaticsClient.prismatics.asset({
-        assetId: "eth",
+    pool = (await prismaticsClient.prismatics.pool({
+        poolId: 0n,
         timeWindowInDays: "20"
-    })).asset
-    console.log(asset)
-
+    })).pool
+    console.log(pool)
 }
 
 main().catch(console.error)

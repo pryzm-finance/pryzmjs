@@ -3,11 +3,17 @@ package prismatics.server.asset;
 
 import "gogoproto/gogo.proto";
 import "prismatics/asset/asset.proto";
+import "cosmos_proto/cosmos.proto";
 
 option go_package = "github.com/prism-finance/prismatics/server/asset";
 
 message QueryAssetRequest {
   string asset_id = 1;
+  string time_window_in_days = 3 [
+    (cosmos_proto.scalar) = "cosmos.Int",
+    (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Int",
+    (gogoproto.nullable) = true
+  ];
 }
 
 message QueryAssetResponse {

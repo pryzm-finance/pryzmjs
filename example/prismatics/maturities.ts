@@ -5,9 +5,9 @@ import {PRISMATICS_ENDPOINT} from "./config";
 async function main() {
     const prismaticsClient = await prismatics.ClientFactory.createClient({restEndpoint: PRISMATICS_ENDPOINT})
 
-    const maturities = await fetchAll(prismaticsClient, async (client, pageRequest) => {
+    let maturities = await fetchAll(prismaticsClient, async (client, pageRequest) => {
         const result = (await prismaticsClient.prismatics.maturityAll({
-            assetId: "atom",
+            assetId: "eth",
             active: "true",
             pagination: pageRequest
         }))
@@ -20,6 +20,18 @@ async function main() {
         reverse: false,
         limit: Long.fromNumber(12)
     }*/)
+    console.log(maturities)
+
+    maturities = await fetchAll(prismaticsClient, async (client, pageRequest) => {
+        const result = (await prismaticsClient.prismatics.maturityAll({
+            assetId: "eth",
+            active: "true",
+            pagination: pageRequest,
+            timeWindowInDays: "20"
+        }))
+        console.log(result)
+        return [result.pagination.next_key, result.maturities]
+    })
     console.log(maturities)
 }
 

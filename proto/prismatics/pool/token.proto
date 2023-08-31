@@ -3,42 +3,33 @@ package prismatics.pool;
 
 import "gogoproto/gogo.proto";
 import "cosmos_proto/cosmos.proto";
-import "prism/amm/pool.proto";
 import "google/protobuf/timestamp.proto";
 
 
 option go_package = "github.com/prism-finance/prismatics/types/pool";
 
-message Pool {
-  uint64 id = 1;
-  string name = 2;
-  prism.amm.PoolType pool_type = 3;
-  string lp_denom = 4;
-  string apr = 5 [
+message Token {
+  string denom = 1;
+  string total_yield = 2 [
     (cosmos_proto.scalar) = "cosmos.Dec",
     (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Dec",
     (gogoproto.nullable) = true
   ];
-  string swap_fee_apr = 6 [
+  string internal_yield = 3 [
     (cosmos_proto.scalar) = "cosmos.Dec",
     (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Dec",
     (gogoproto.nullable) = true
   ];
-  string token_yield = 7 [
+  string incentives_apr = 4 [
     (cosmos_proto.scalar) = "cosmos.Dec",
     (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Dec",
     (gogoproto.nullable) = true
   ];
-  string incentives_apr = 8 [
+  string alliance_apr = 5 [
     (cosmos_proto.scalar) = "cosmos.Dec",
     (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Dec",
     (gogoproto.nullable) = true
   ];
-  string alliance_apr = 9 [
-    (cosmos_proto.scalar) = "cosmos.Dec",
-    (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Dec",
-    (gogoproto.nullable) = true
-  ];
-  google.protobuf.Timestamp apr_calculation_time = 10 [(gogoproto.stdtime) = true, (gogoproto.nullable) = true];
-  string error = 11;
+  google.protobuf.Timestamp yield_calculation_time = 6 [(gogoproto.stdtime) = true, (gogoproto.nullable) = true];
+  string error = 7;
 }

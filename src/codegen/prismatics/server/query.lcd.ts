@@ -5,7 +5,8 @@ import { QueryAssetRequest, QueryAssetResponseSDKType } from "./asset/asset";
 import { QueryAllMaturitiesRequest, QueryAllMaturitiesResponseSDKType } from "./maturity/maturity";
 import { QuerySubmitProposalMsgsRequest, QuerySubmitProposalMsgsResponseSDKType, QueryAssetProposalRequest, QueryAssetProposalResponseSDKType } from "./pgov/pgov";
 import { QueryPoolTokenRequest, QueryPoolTokenResponseSDKType, QueryAllPoolTokenRequest, QueryAllPoolTokenResponseSDKType } from "./pool/pool_token";
-import { QueryPoolRequest, QueryPoolResponseSDKType } from "./pool/pool";
+import { QueryPoolRequest, QueryPoolResponseSDKType, QueryPoolsRequest, QueryPoolsResponseSDKType } from "./pool/pool";
+import { QueryTokenRequest, QueryTokenResponseSDKType, QueryTokensRequest, QueryTokensResponseSDKType } from "./pool/token";
 import { QueryPriceRequest, QueryPriceResponseSDKType } from "./price/price";
 import { QueryHistoricalPriceRequest, QueryHistoricalPriceResponseSDKType } from "./price/historical_price";
 import { QuerySwappableTokensRequest, QuerySwappableTokensResponseSDKType } from "./price/swappable_tokens";
@@ -34,6 +35,9 @@ export class LCDQueryClient {
     this.poolToken = this.poolToken.bind(this);
     this.poolTokens = this.poolTokens.bind(this);
     this.pool = this.pool.bind(this);
+    this.pools = this.pools.bind(this);
+    this.token = this.token.bind(this);
+    this.tokens = this.tokens.bind(this);
     this.tokenPrice = this.tokenPrice.bind(this);
     this.historicalPrice = this.historicalPrice.bind(this);
     this.swappableTokens = this.swappableTokens.bind(this);
@@ -53,8 +57,14 @@ export class LCDQueryClient {
   }
   /* Asset */
   async asset(params: QueryAssetRequest): Promise<QueryAssetResponseSDKType> {
+    const options: any = {
+      params: {}
+    };
+    if (typeof params?.timeWindowInDays !== "undefined") {
+      options.params.time_window_in_days = params.timeWindowInDays;
+    }
     const endpoint = `prismatics/asset/${params.assetId}`;
-    return await this.req.get<QueryAssetResponseSDKType>(endpoint);
+    return await this.req.get<QueryAssetResponseSDKType>(endpoint, options);
   }
   /* MaturityAll */
   async maturityAll(params: QueryAllMaturitiesRequest): Promise<QueryAllMaturitiesResponseSDKType> {
@@ -106,6 +116,45 @@ export class LCDQueryClient {
     }
     const endpoint = `prismatics/pool/${params.poolId}`;
     return await this.req.get<QueryPoolResponseSDKType>(endpoint, options);
+  }
+  /* Pools */
+  async pools(params: QueryPoolsRequest): Promise<QueryPoolsResponseSDKType> {
+    const options: any = {
+      params: {}
+    };
+    if (typeof params?.timeWindowInDays !== "undefined") {
+      options.params.time_window_in_days = params.timeWindowInDays;
+    }
+    if (typeof params?.pagination !== "undefined") {
+      setPaginationParams(options, params.pagination);
+    }
+    const endpoint = `prismatics/pool`;
+    return await this.req.get<QueryPoolsResponseSDKType>(endpoint, options);
+  }
+  /* Token */
+  async token(params: QueryTokenRequest): Promise<QueryTokenResponseSDKType> {
+    const options: any = {
+      params: {}
+    };
+    if (typeof params?.timeWindowInDays !== "undefined") {
+      options.params.time_window_in_days = params.timeWindowInDays;
+    }
+    const endpoint = `prismatics/token/${params.denom}`;
+    return await this.req.get<QueryTokenResponseSDKType>(endpoint, options);
+  }
+  /* Tokens */
+  async tokens(params: QueryTokensRequest): Promise<QueryTokensResponseSDKType> {
+    const options: any = {
+      params: {}
+    };
+    if (typeof params?.timeWindowInDays !== "undefined") {
+      options.params.time_window_in_days = params.timeWindowInDays;
+    }
+    if (typeof params?.pagination !== "undefined") {
+      setPaginationParams(options, params.pagination);
+    }
+    const endpoint = `prismatics/token`;
+    return await this.req.get<QueryTokensResponseSDKType>(endpoint, options);
   }
   /* TokenPrice */
   async tokenPrice(params: QueryPriceRequest): Promise<QueryPriceResponseSDKType> {
