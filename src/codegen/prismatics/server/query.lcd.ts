@@ -147,6 +147,9 @@ export class LCDQueryClient {
     const options: any = {
       params: {}
     };
+    if (typeof params?.tokenType !== "undefined") {
+      options.params.token_type = params.tokenType;
+    }
     if (typeof params?.timeWindowInDays !== "undefined") {
       options.params.time_window_in_days = params.timeWindowInDays;
     }

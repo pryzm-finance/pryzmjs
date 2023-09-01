@@ -1,4 +1,4 @@
-import { Token, TokenSDKType } from "../../pool/token";
+import { Token, TokenSDKType, TokenType, tokenTypeFromJSON, tokenTypeToJSON } from "../../pool/token";
 import { PageRequest, PageRequestSDKType, PageResponse, PageResponseSDKType } from "../../../cosmos/base/query/v1beta1/pagination";
 import { BinaryReader, BinaryWriter } from "../../../binary";
 import { isSet } from "../../../helpers";
@@ -17,10 +17,12 @@ export interface QueryTokenResponseSDKType {
   token: TokenSDKType;
 }
 export interface QueryTokensRequest {
+  tokenType: TokenType;
   timeWindowInDays?: string;
   pagination: PageRequest;
 }
 export interface QueryTokensRequestSDKType {
+  token_type: TokenType;
   time_window_in_days?: string;
   pagination: PageRequestSDKType;
 }
@@ -134,17 +136,21 @@ export const QueryTokenResponse = {
 };
 function createBaseQueryTokensRequest(): QueryTokensRequest {
   return {
+    tokenType: 0,
     timeWindowInDays: undefined,
     pagination: PageRequest.fromPartial({})
   };
 }
 export const QueryTokensRequest = {
   encode(message: QueryTokensRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    if (message.tokenType !== 0) {
+      writer.uint32(8).int32(message.tokenType);
+    }
     if (message.timeWindowInDays !== undefined) {
-      writer.uint32(10).string(message.timeWindowInDays);
+      writer.uint32(18).string(message.timeWindowInDays);
     }
     if (message.pagination !== undefined) {
-      PageRequest.encode(message.pagination, writer.uint32(18).fork()).ldelim();
+      PageRequest.encode(message.pagination, writer.uint32(26).fork()).ldelim();
     }
     return writer;
   },
@@ -156,9 +162,12 @@ export const QueryTokensRequest = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.timeWindowInDays = reader.string();
+          message.tokenType = (reader.int32() as any);
           break;
         case 2:
+          message.timeWindowInDays = reader.string();
+          break;
+        case 3:
           message.pagination = PageRequest.decode(reader, reader.uint32());
           break;
         default:
@@ -170,18 +179,21 @@ export const QueryTokensRequest = {
   },
   fromJSON(object: any): QueryTokensRequest {
     return {
+      tokenType: isSet(object.tokenType) ? tokenTypeFromJSON(object.tokenType) : -1,
       timeWindowInDays: isSet(object.timeWindowInDays) ? String(object.timeWindowInDays) : undefined,
       pagination: isSet(object.pagination) ? PageRequest.fromJSON(object.pagination) : undefined
     };
   },
   toJSON(message: QueryTokensRequest): unknown {
     const obj: any = {};
+    message.tokenType !== undefined && (obj.tokenType = tokenTypeToJSON(message.tokenType));
     message.timeWindowInDays !== undefined && (obj.timeWindowInDays = message.timeWindowInDays);
     message.pagination !== undefined && (obj.pagination = message.pagination ? PageRequest.toJSON(message.pagination) : undefined);
     return obj;
   },
   fromPartial(object: Partial<QueryTokensRequest>): QueryTokensRequest {
     const message = createBaseQueryTokensRequest();
+    message.tokenType = object.tokenType ?? 0;
     message.timeWindowInDays = object.timeWindowInDays ?? undefined;
     message.pagination = object.pagination !== undefined && object.pagination !== null ? PageRequest.fromPartial(object.pagination) : undefined;
     return message;

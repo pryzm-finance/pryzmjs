@@ -23,12 +23,13 @@ message QueryTokenResponse {
 }
 
 message QueryTokensRequest {
-  string time_window_in_days = 1 [
+  prismatics.pool.TokenType token_type = 1;
+  string time_window_in_days = 2 [
     (cosmos_proto.scalar) = "cosmos.Int",
     (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Int",
     (gogoproto.nullable) = true
   ];
-  cosmos.base.query.v1beta1.PageRequest pagination = 2;
+  cosmos.base.query.v1beta1.PageRequest pagination = 3;
 }
 
 message QueryTokensResponse {

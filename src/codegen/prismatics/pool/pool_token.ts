@@ -1,34 +1,41 @@
+import { TokenType, tokenTypeFromJSON, tokenTypeToJSON } from "./token";
 import { PoolType, poolTypeFromJSON, poolTypeToJSON } from "../../prism/amm/pool";
 import { BinaryReader, BinaryWriter } from "../../binary";
 import { Decimal } from "@cosmjs/math";
 import { isSet } from "../../helpers";
 export interface PoolToken {
   denom: string;
+  type: TokenType;
   poolId: bigint;
   poolType: PoolType;
   poolLpDenom: string;
   balance: string;
   weight: string;
   priceLpTerms: string;
+  virtual: boolean;
 }
 export interface PoolTokenSDKType {
   denom: string;
+  type: TokenType;
   pool_id: bigint;
   pool_type: PoolType;
   pool_lp_denom: string;
   balance: string;
   weight: string;
   price_lp_terms: string;
+  virtual: boolean;
 }
 function createBasePoolToken(): PoolToken {
   return {
     denom: "",
+    type: 0,
     poolId: BigInt(0),
     poolType: 0,
     poolLpDenom: "",
     balance: "",
     weight: "",
-    priceLpTerms: ""
+    priceLpTerms: "",
+    virtual: false
   };
 }
 export const PoolToken = {
@@ -36,23 +43,29 @@ export const PoolToken = {
     if (message.denom !== "") {
       writer.uint32(10).string(message.denom);
     }
+    if (message.type !== 0) {
+      writer.uint32(16).int32(message.type);
+    }
     if (message.poolId !== BigInt(0)) {
-      writer.uint32(16).uint64(message.poolId);
+      writer.uint32(24).uint64(message.poolId);
     }
     if (message.poolType !== 0) {
-      writer.uint32(24).int32(message.poolType);
+      writer.uint32(32).int32(message.poolType);
     }
     if (message.poolLpDenom !== "") {
-      writer.uint32(34).string(message.poolLpDenom);
+      writer.uint32(42).string(message.poolLpDenom);
     }
     if (message.balance !== "") {
-      writer.uint32(42).string(message.balance);
+      writer.uint32(50).string(message.balance);
     }
     if (message.weight !== "") {
-      writer.uint32(50).string(Decimal.fromUserInput(message.weight, 18).atomics);
+      writer.uint32(58).string(Decimal.fromUserInput(message.weight, 18).atomics);
     }
     if (message.priceLpTerms !== "") {
-      writer.uint32(58).string(Decimal.fromUserInput(message.priceLpTerms, 18).atomics);
+      writer.uint32(66).string(Decimal.fromUserInput(message.priceLpTerms, 18).atomics);
+    }
+    if (message.virtual === true) {
+      writer.uint32(72).bool(message.virtual);
     }
     return writer;
   },
@@ -67,22 +80,28 @@ export const PoolToken = {
           message.denom = reader.string();
           break;
         case 2:
-          message.poolId = reader.uint64();
+          message.type = (reader.int32() as any);
           break;
         case 3:
-          message.poolType = (reader.int32() as any);
+          message.poolId = reader.uint64();
           break;
         case 4:
-          message.poolLpDenom = reader.string();
+          message.poolType = (reader.int32() as any);
           break;
         case 5:
-          message.balance = reader.string();
+          message.poolLpDenom = reader.string();
           break;
         case 6:
-          message.weight = Decimal.fromAtomics(reader.string(), 18).toString();
+          message.balance = reader.string();
           break;
         case 7:
+          message.weight = Decimal.fromAtomics(reader.string(), 18).toString();
+          break;
+        case 8:
           message.priceLpTerms = Decimal.fromAtomics(reader.string(), 18).toString();
+          break;
+        case 9:
+          message.virtual = reader.bool();
           break;
         default:
           reader.skipType(tag & 7);
@@ -94,34 +113,40 @@ export const PoolToken = {
   fromJSON(object: any): PoolToken {
     return {
       denom: isSet(object.denom) ? String(object.denom) : "",
+      type: isSet(object.type) ? tokenTypeFromJSON(object.type) : -1,
       poolId: isSet(object.poolId) ? BigInt(object.poolId.toString()) : BigInt(0),
       poolType: isSet(object.poolType) ? poolTypeFromJSON(object.poolType) : -1,
       poolLpDenom: isSet(object.poolLpDenom) ? String(object.poolLpDenom) : "",
       balance: isSet(object.balance) ? String(object.balance) : "",
       weight: isSet(object.weight) ? String(object.weight) : "",
-      priceLpTerms: isSet(object.priceLpTerms) ? String(object.priceLpTerms) : ""
+      priceLpTerms: isSet(object.priceLpTerms) ? String(object.priceLpTerms) : "",
+      virtual: isSet(object.virtual) ? Boolean(object.virtual) : false
     };
   },
   toJSON(message: PoolToken): unknown {
     const obj: any = {};
     message.denom !== undefined && (obj.denom = message.denom);
+    message.type !== undefined && (obj.type = tokenTypeToJSON(message.type));
     message.poolId !== undefined && (obj.poolId = (message.poolId || BigInt(0)).toString());
     message.poolType !== undefined && (obj.poolType = poolTypeToJSON(message.poolType));
     message.poolLpDenom !== undefined && (obj.poolLpDenom = message.poolLpDenom);
     message.balance !== undefined && (obj.balance = message.balance);
     message.weight !== undefined && (obj.weight = message.weight);
     message.priceLpTerms !== undefined && (obj.priceLpTerms = message.priceLpTerms);
+    message.virtual !== undefined && (obj.virtual = message.virtual);
     return obj;
   },
   fromPartial(object: Partial<PoolToken>): PoolToken {
     const message = createBasePoolToken();
     message.denom = object.denom ?? "";
+    message.type = object.type ?? 0;
     message.poolId = object.poolId !== undefined && object.poolId !== null ? BigInt(object.poolId.toString()) : BigInt(0);
     message.poolType = object.poolType ?? 0;
     message.poolLpDenom = object.poolLpDenom ?? "";
     message.balance = object.balance ?? "";
     message.weight = object.weight ?? "";
     message.priceLpTerms = object.priceLpTerms ?? "";
+    message.virtual = object.virtual ?? false;
     return message;
   }
 };
