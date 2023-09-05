@@ -32,6 +32,8 @@ import "prismatics/server/incentives/incentives.proto";
 
 import "prismatics/server/alliance/alliance.proto";
 
+import "prismatics/server/icstaking/host_chain.proto";
+
 
 option go_package = "github.com/prism-finance/prismatics/server";
 
@@ -139,5 +141,13 @@ service Query {
 
   rpc AllianceApr(prismatics.server.alliance.QueryAllianceAprRequest) returns (prismatics.server.alliance.QueryAllianceAprResponse) {
     option (google.api.http).get = "/prismatics/alliance/apr/{denom}";
+  }
+
+  rpc HostChain(prismatics.server.icstaking.QueryHostChainRequest) returns (prismatics.server.icstaking.QueryHostChainResponse) {
+    option (google.api.http).get = "/prismatics/icstaking/host_chain/{host_chain_id}";
+  }
+
+  rpc HostChains(prismatics.server.icstaking.QueryHostChainsRequest) returns (prismatics.server.icstaking.QueryHostChainsResponse) {
+    option (google.api.http).get = "/prismatics/icstaking/host_chain";
   }
 }

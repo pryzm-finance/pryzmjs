@@ -20,6 +20,7 @@ import { QueryPulseTradablePairsRequest, QueryPulseTradablePairsResponseSDKType 
 import { QueryOrderRequest, QueryOrderResponseSDKType, QueryOrdersRequest, QueryOrdersResponseSDKType } from "./trade/order";
 import { QueryIncentivesAprRequest, QueryIncentivesAprResponseSDKType } from "./incentives/incentives";
 import { QueryAllianceAprRequest, QueryAllianceAprResponseSDKType } from "./alliance/alliance";
+import { QueryHostChainRequest, QueryHostChainResponseSDKType, QueryHostChainsRequest, QueryHostChainsResponseSDKType } from "./icstaking/host_chain";
 export class LCDQueryClient {
   req: LCDClient;
   constructor({
@@ -54,6 +55,8 @@ export class LCDQueryClient {
     this.orders = this.orders.bind(this);
     this.incentivesApr = this.incentivesApr.bind(this);
     this.allianceApr = this.allianceApr.bind(this);
+    this.hostChain = this.hostChain.bind(this);
+    this.hostChains = this.hostChains.bind(this);
   }
   /* Asset */
   async asset(params: QueryAssetRequest): Promise<QueryAssetResponseSDKType> {
@@ -391,5 +394,30 @@ export class LCDQueryClient {
     }
     const endpoint = `prismatics/alliance/apr/${params.denom}`;
     return await this.req.get<QueryAllianceAprResponseSDKType>(endpoint, options);
+  }
+  /* HostChain */
+  async hostChain(params: QueryHostChainRequest): Promise<QueryHostChainResponseSDKType> {
+    const options: any = {
+      params: {}
+    };
+    if (typeof params?.timeWindowInDays !== "undefined") {
+      options.params.time_window_in_days = params.timeWindowInDays;
+    }
+    const endpoint = `prismatics/icstaking/host_chain/${params.hostChainId}`;
+    return await this.req.get<QueryHostChainResponseSDKType>(endpoint, options);
+  }
+  /* HostChains */
+  async hostChains(params: QueryHostChainsRequest): Promise<QueryHostChainsResponseSDKType> {
+    const options: any = {
+      params: {}
+    };
+    if (typeof params?.timeWindowInDays !== "undefined") {
+      options.params.time_window_in_days = params.timeWindowInDays;
+    }
+    if (typeof params?.pagination !== "undefined") {
+      setPaginationParams(options, params.pagination);
+    }
+    const endpoint = `prismatics/icstaking/host_chain`;
+    return await this.req.get<QueryHostChainsResponseSDKType>(endpoint, options);
   }
 }

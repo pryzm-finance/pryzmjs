@@ -1,0 +1,28 @@
+syntax = "proto3";
+package prismatics.icstaking;
+
+import "gogoproto/gogo.proto";
+import "cosmos_proto/cosmos.proto";
+import "prism/icstaking/host_chain.proto";
+
+option go_package = "github.com/prism-finance/prismatics/types/icstaking";
+
+message HostChain {
+  prism.icstaking.HostChain host_chain = 1 [(gogoproto.nullable) = false];
+  string c_asset_market_cap = 2 [
+    (cosmos_proto.scalar) = "cosmos.Dec",
+    (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Dec",
+    (gogoproto.nullable) = true
+  ];
+  string c_asset_apy = 3 [
+    (cosmos_proto.scalar) = "cosmos.Dec",
+    (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Dec",
+    (gogoproto.nullable) = true
+  ];
+  string asset_in_vault = 4 [
+    (cosmos_proto.scalar) = "cosmos.Int",
+    (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Int",
+    (gogoproto.nullable) = false
+  ];
+  string error = 5;
+}
