@@ -16,6 +16,7 @@ message QueryTokenRequest {
     (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Int",
     (gogoproto.nullable) = true
   ];
+  string token_out = 3;
 }
 
 message QueryTokenResponse {
@@ -29,7 +30,8 @@ message QueryTokensRequest {
     (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Int",
     (gogoproto.nullable) = true
   ];
-  cosmos.base.query.v1beta1.PageRequest pagination = 3;
+  string token_out = 3;
+  cosmos.base.query.v1beta1.PageRequest pagination = 4;
 }
 
 message QueryTokensResponse {

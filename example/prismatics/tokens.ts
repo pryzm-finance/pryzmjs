@@ -8,12 +8,14 @@ async function main() {
 
     let tokens = (await prismaticsClient.prismatics.tokens({
         tokenType: TokenType.TOKEN_TYPE_ANY,
+        tokenOut: "",
         pagination: undefined
     })).tokens
     console.log(tokens)
 
     tokens = (await prismaticsClient.prismatics.tokens({
         tokenType: TokenType.TOKEN_TYPE_P,
+        tokenOut: "",
         pagination: undefined,
         timeWindowInDays: "20"
     })).tokens

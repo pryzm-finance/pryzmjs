@@ -6,13 +6,15 @@ async function main() {
     const prismaticsClient = await prismatics.ClientFactory.createClient({ restEndpoint: PRISMATICS_ENDPOINT })
 
     let token = (await prismaticsClient.prismatics.token({
-        denom: "y:eth:30Jun2024"
+        denom: "ceth",
+        timeWindowInDays: "20",
+        tokenOut: ""
     })).token
     console.log(token)
 
     token = (await prismaticsClient.prismatics.token({
-        denom: "ceth",
-        timeWindowInDays: "20"
+        denom: "y:eth:30Jun2024",
+        tokenOut: ""
     })).token
     console.log(token)
 }
