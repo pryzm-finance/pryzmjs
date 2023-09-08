@@ -44,7 +44,7 @@ export const QueryHostChainRequest = {
       writer.uint32(10).string(message.hostChainId);
     }
     if (message.timeWindowInDays !== undefined) {
-      writer.uint32(26).string(message.timeWindowInDays);
+      writer.uint32(18).string(message.timeWindowInDays);
     }
     return writer;
   },
@@ -58,7 +58,7 @@ export const QueryHostChainRequest = {
         case 1:
           message.hostChainId = reader.string();
           break;
-        case 3:
+        case 2:
           message.timeWindowInDays = reader.string();
           break;
         default:

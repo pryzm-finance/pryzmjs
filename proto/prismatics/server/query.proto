@@ -24,6 +24,12 @@ import "prismatics/server/price/swappable_tokens.proto";
 import "prismatics/server/trade/pool_trade_history.proto";
 import "prismatics/server/trade/pulse_tradable_pairs.proto";
 import "prismatics/server/trade/trade_simulation.proto";
+import "prismatics/server/trade/join_all_tokens_exact_lpt_simulation.proto";
+import "prismatics/server/trade/join_exact_tokens_simulation.proto";
+import "prismatics/server/trade/join_token_exact_lpt_simulation.proto";
+import "prismatics/server/trade/exit_token_exact_lpt_simulation.proto";
+import "prismatics/server/trade/exit_exact_tokens_simulation.proto";
+import "prismatics/server/trade/exit_all_tokens_exact_lpt_simulation.proto";
 import "prismatics/server/trade/trade_volume.proto";
 import "prismatics/server/trade/user_trade_history.proto";
 import "prismatics/server/trade/order.proto";
@@ -101,6 +107,30 @@ service Query {
 
   rpc TradeSimulation(prismatics.server.trade.QueryTradeSimulationRequest) returns (prismatics.server.trade.QueryTradeSimulationResponse) {
     option (google.api.http).get = "/prismatics/trade/simulation";
+  }
+
+  rpc JoinAllTokensExactLptSimulation(prismatics.server.trade.QueryJoinAllTokensExactLptSimulationRequest) returns (prismatics.server.trade.QueryJoinAllTokensExactLptSimulationResponse) {
+    option (google.api.http).get = "/prismatics/trade/join_all_tokens_exact_lpt_simulation/{pool_id}";
+  }
+
+  rpc JoinExactTokensSimulation(prismatics.server.trade.QueryJoinExactTokensSimulationRequest) returns (prismatics.server.trade.QueryJoinExactTokensSimulationResponse) {
+    option (google.api.http).get = "/prismatics/trade/join_exact_tokens_simulation/{pool_id}";
+  }
+
+  rpc JoinTokenExactLptSimulation(prismatics.server.trade.QueryJoinTokenExactLptSimulationRequest) returns (prismatics.server.trade.QueryJoinTokenExactLptSimulationResponse) {
+    option (google.api.http).get = "/prismatics/trade/join_token_exact_lpt_simulation/{pool_id}";
+  }
+
+  rpc ExitTokenExactLptSimulation(prismatics.server.trade.QueryExitTokenExactLptSimulationRequest) returns (prismatics.server.trade.QueryExitTokenExactLptSimulationResponse) {
+    option (google.api.http).get = "/prismatics/trade/exit_token_exact_lpt_simulation/{pool_id}";
+  }
+
+  rpc ExitExactTokensSimulation(prismatics.server.trade.QueryExitExactTokensSimulationRequest) returns (prismatics.server.trade.QueryExitExactTokensSimulationResponse) {
+    option (google.api.http).get = "/prismatics/trade/exit_exact_tokens_simulation/{pool_id}";
+  }
+
+  rpc ExitAllTokensExactLptSimulation(prismatics.server.trade.QueryExitAllTokensExactLptSimulationRequest) returns (prismatics.server.trade.QueryExitAllTokensExactLptSimulationResponse) {
+    option (google.api.http).get = "/prismatics/trade/exit_all_tokens_exact_lpt_simulation/{pool_id}";
   }
 
   rpc UserTradeHistory(prismatics.server.trade.QueryUserTradeHistoryRequest) returns (prismatics.server.trade.QueryUserTradeHistoryResponse) {

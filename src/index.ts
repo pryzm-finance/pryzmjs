@@ -13,6 +13,11 @@ export type PrismGrpcWebClient = Awaited<ReturnType<typeof prism.ClientFactory.c
 
 export * from './codegen';
 
+// workaround for bigint serialization issue (axios, JSON.stringify, ...)
+(BigInt.prototype as any).toJSON = function () {
+    return this.toString()
+}
+
 export function defaultPageRequestProvider(): PageRequest {
     return {
         countTotal: false,

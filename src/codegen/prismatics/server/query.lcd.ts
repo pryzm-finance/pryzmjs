@@ -13,6 +13,12 @@ import { QuerySwappableTokensRequest, QuerySwappableTokensResponseSDKType } from
 import { QueryPriceBoundsRequest, QueryPriceBoundsResponseSDKType } from "./price/price_bounds";
 import { QueryPriceChangeRequest, QueryPriceChangeResponseSDKType } from "./price/price_change";
 import { QueryTradeSimulationRequest, QueryTradeSimulationResponseSDKType } from "./trade/trade_simulation";
+import { QueryJoinAllTokensExactLptSimulationRequest, QueryJoinAllTokensExactLptSimulationResponseSDKType } from "./trade/join_all_tokens_exact_lpt_simulation";
+import { QueryJoinExactTokensSimulationRequest, QueryJoinExactTokensSimulationResponseSDKType } from "./trade/join_exact_tokens_simulation";
+import { QueryJoinTokenExactLptSimulationRequest, QueryJoinTokenExactLptSimulationResponseSDKType } from "./trade/join_token_exact_lpt_simulation";
+import { QueryExitTokenExactLptSimulationRequest, QueryExitTokenExactLptSimulationResponseSDKType } from "./trade/exit_token_exact_lpt_simulation";
+import { QueryExitExactTokensSimulationRequest, QueryExitExactTokensSimulationResponseSDKType } from "./trade/exit_exact_tokens_simulation";
+import { QueryExitAllTokensExactLptSimulationRequest, QueryExitAllTokensExactLptSimulationResponseSDKType } from "./trade/exit_all_tokens_exact_lpt_simulation";
 import { QueryUserTradeHistoryRequest, QueryUserTradeHistoryResponseSDKType } from "./trade/user_trade_history";
 import { QueryPoolTradeHistoryRequest, QueryPoolTradeHistoryResponseSDKType } from "./trade/pool_trade_history";
 import { QueryTokenTradeVolumeRequest, QueryTokenTradeVolumeResponseSDKType, QueryPoolTradeVolumeRequest, QueryPoolTradeVolumeResponseSDKType, QueryFavoritePairsRequest, QueryFavoritePairsResponseSDKType } from "./trade/trade_volume";
@@ -45,6 +51,12 @@ export class LCDQueryClient {
     this.priceBounds = this.priceBounds.bind(this);
     this.priceChange = this.priceChange.bind(this);
     this.tradeSimulation = this.tradeSimulation.bind(this);
+    this.joinAllTokensExactLptSimulation = this.joinAllTokensExactLptSimulation.bind(this);
+    this.joinExactTokensSimulation = this.joinExactTokensSimulation.bind(this);
+    this.joinTokenExactLptSimulation = this.joinTokenExactLptSimulation.bind(this);
+    this.exitTokenExactLptSimulation = this.exitTokenExactLptSimulation.bind(this);
+    this.exitExactTokensSimulation = this.exitExactTokensSimulation.bind(this);
+    this.exitAllTokensExactLptSimulation = this.exitAllTokensExactLptSimulation.bind(this);
     this.userTradeHistory = this.userTradeHistory.bind(this);
     this.poolTradeHistory = this.poolTradeHistory.bind(this);
     this.tokenTradeVolume = this.tokenTradeVolume.bind(this);
@@ -142,6 +154,9 @@ export class LCDQueryClient {
     if (typeof params?.timeWindowInDays !== "undefined") {
       options.params.time_window_in_days = params.timeWindowInDays;
     }
+    if (typeof params?.tokenOut !== "undefined") {
+      options.params.token_out = params.tokenOut;
+    }
     const endpoint = `prismatics/token/${params.denom}`;
     return await this.req.get<QueryTokenResponseSDKType>(endpoint, options);
   }
@@ -155,6 +170,9 @@ export class LCDQueryClient {
     }
     if (typeof params?.timeWindowInDays !== "undefined") {
       options.params.time_window_in_days = params.timeWindowInDays;
+    }
+    if (typeof params?.tokenOut !== "undefined") {
+      options.params.token_out = params.tokenOut;
     }
     if (typeof params?.pagination !== "undefined") {
       setPaginationParams(options, params.pagination);
@@ -243,11 +261,83 @@ export class LCDQueryClient {
     if (typeof params?.amount !== "undefined") {
       options.params.amount = params.amount;
     }
-    if (typeof params?.swapSteps !== "undefined") {
-      options.params.swap_steps = params.swapSteps;
+    if (typeof params?.steps !== "undefined") {
+      options.params.steps = params.steps;
     }
     const endpoint = `prismatics/trade/simulation`;
     return await this.req.get<QueryTradeSimulationResponseSDKType>(endpoint, options);
+  }
+  /* JoinAllTokensExactLptSimulation */
+  async joinAllTokensExactLptSimulation(params: QueryJoinAllTokensExactLptSimulationRequest): Promise<QueryJoinAllTokensExactLptSimulationResponseSDKType> {
+    const options: any = {
+      params: {}
+    };
+    if (typeof params?.lptOutAmount !== "undefined") {
+      options.params.lpt_out_amount = params.lptOutAmount;
+    }
+    const endpoint = `prismatics/trade/join_all_tokens_exact_lpt_simulation/${params.poolId}`;
+    return await this.req.get<QueryJoinAllTokensExactLptSimulationResponseSDKType>(endpoint, options);
+  }
+  /* JoinExactTokensSimulation */
+  async joinExactTokensSimulation(params: QueryJoinExactTokensSimulationRequest): Promise<QueryJoinExactTokensSimulationResponseSDKType> {
+    const options: any = {
+      params: {}
+    };
+    if (typeof params?.amountsIn !== "undefined") {
+      options.params.amounts_in = params.amountsIn;
+    }
+    const endpoint = `prismatics/trade/join_exact_tokens_simulation/${params.poolId}`;
+    return await this.req.get<QueryJoinExactTokensSimulationResponseSDKType>(endpoint, options);
+  }
+  /* JoinTokenExactLptSimulation */
+  async joinTokenExactLptSimulation(params: QueryJoinTokenExactLptSimulationRequest): Promise<QueryJoinTokenExactLptSimulationResponseSDKType> {
+    const options: any = {
+      params: {}
+    };
+    if (typeof params?.lptOutAmount !== "undefined") {
+      options.params.lpt_out_amount = params.lptOutAmount;
+    }
+    if (typeof params?.tokenIn !== "undefined") {
+      options.params.token_in = params.tokenIn;
+    }
+    const endpoint = `prismatics/trade/join_token_exact_lpt_simulation/${params.poolId}`;
+    return await this.req.get<QueryJoinTokenExactLptSimulationResponseSDKType>(endpoint, options);
+  }
+  /* ExitTokenExactLptSimulation */
+  async exitTokenExactLptSimulation(params: QueryExitTokenExactLptSimulationRequest): Promise<QueryExitTokenExactLptSimulationResponseSDKType> {
+    const options: any = {
+      params: {}
+    };
+    if (typeof params?.lptInAmount !== "undefined") {
+      options.params.lpt_in_amount = params.lptInAmount;
+    }
+    if (typeof params?.tokenOut !== "undefined") {
+      options.params.token_out = params.tokenOut;
+    }
+    const endpoint = `prismatics/trade/exit_token_exact_lpt_simulation/${params.poolId}`;
+    return await this.req.get<QueryExitTokenExactLptSimulationResponseSDKType>(endpoint, options);
+  }
+  /* ExitExactTokensSimulation */
+  async exitExactTokensSimulation(params: QueryExitExactTokensSimulationRequest): Promise<QueryExitExactTokensSimulationResponseSDKType> {
+    const options: any = {
+      params: {}
+    };
+    if (typeof params?.amountsOut !== "undefined") {
+      options.params.amounts_out = params.amountsOut;
+    }
+    const endpoint = `prismatics/trade/exit_exact_tokens_simulation/${params.poolId}`;
+    return await this.req.get<QueryExitExactTokensSimulationResponseSDKType>(endpoint, options);
+  }
+  /* ExitAllTokensExactLptSimulation */
+  async exitAllTokensExactLptSimulation(params: QueryExitAllTokensExactLptSimulationRequest): Promise<QueryExitAllTokensExactLptSimulationResponseSDKType> {
+    const options: any = {
+      params: {}
+    };
+    if (typeof params?.lptInAmount !== "undefined") {
+      options.params.lpt_in_amount = params.lptInAmount;
+    }
+    const endpoint = `prismatics/trade/exit_all_tokens_exact_lpt_simulation/${params.poolId}`;
+    return await this.req.get<QueryExitAllTokensExactLptSimulationResponseSDKType>(endpoint, options);
   }
   /* UserTradeHistory */
   async userTradeHistory(params: QueryUserTradeHistoryRequest): Promise<QueryUserTradeHistoryResponseSDKType> {

@@ -4,6 +4,7 @@ package prismatics.server.trade;
 import "gogoproto/gogo.proto";
 import "cosmos_proto/cosmos.proto";
 import "prism/amm/operations.proto";
+import "prism/amm/route_step.proto";
 import "cosmos/base/v1beta1/coin.proto";
 
 
@@ -18,11 +19,11 @@ message QueryTradeSimulationRequest {
     (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Int",
     (gogoproto.nullable) = false
   ];
-  repeated prism.amm.SwapStep swap_steps = 5 [(gogoproto.nullable) = false];
+  repeated prism.amm.RouteStep steps = 5 [(gogoproto.nullable) = false];
 }
 
 message QueryTradeSimulationResponse {
-  string price_token_out_in_token_in_terms = 1 [
+  string price_token_in_token_out_terms = 1 [
     (cosmos_proto.scalar) = "cosmos.Dec",
     (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Dec",
     (gogoproto.nullable) = false

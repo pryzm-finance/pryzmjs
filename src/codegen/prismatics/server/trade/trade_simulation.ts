@@ -1,4 +1,5 @@
 import { SwapType, SwapStep, SwapStepSDKType, swapTypeFromJSON, swapTypeToJSON } from "../../../prism/amm/operations";
+import { RouteStep, RouteStepSDKType } from "../../../prism/amm/route_step";
 import { Coin, CoinSDKType } from "../../../cosmos/base/v1beta1/coin";
 import { BinaryReader, BinaryWriter } from "../../../binary";
 import { isSet } from "../../../helpers";
@@ -8,17 +9,17 @@ export interface QueryTradeSimulationRequest {
   tokenIn: string;
   tokenOut: string;
   amount: string;
-  swapSteps: SwapStep[];
+  steps: RouteStep[];
 }
 export interface QueryTradeSimulationRequestSDKType {
   swap_type: SwapType;
   token_in: string;
   token_out: string;
   amount: string;
-  swap_steps: SwapStepSDKType[];
+  steps: RouteStepSDKType[];
 }
 export interface QueryTradeSimulationResponse {
-  priceTokenOutInTokenInTerms: string;
+  priceTokenInTokenOutTerms: string;
   amountIn: Coin;
   amountOut: Coin;
   swapFee: Coin[];
@@ -28,7 +29,7 @@ export interface QueryTradeSimulationResponse {
   swapSteps: SwapStep[];
 }
 export interface QueryTradeSimulationResponseSDKType {
-  price_token_out_in_token_in_terms: string;
+  price_token_in_token_out_terms: string;
   amount_in: CoinSDKType;
   amount_out: CoinSDKType;
   swapFee: CoinSDKType[];
@@ -43,7 +44,7 @@ function createBaseQueryTradeSimulationRequest(): QueryTradeSimulationRequest {
     tokenIn: "",
     tokenOut: "",
     amount: "",
-    swapSteps: []
+    steps: []
   };
 }
 export const QueryTradeSimulationRequest = {
@@ -60,8 +61,8 @@ export const QueryTradeSimulationRequest = {
     if (message.amount !== "") {
       writer.uint32(34).string(message.amount);
     }
-    for (const v of message.swapSteps) {
-      SwapStep.encode(v!, writer.uint32(42).fork()).ldelim();
+    for (const v of message.steps) {
+      RouteStep.encode(v!, writer.uint32(42).fork()).ldelim();
     }
     return writer;
   },
@@ -85,7 +86,7 @@ export const QueryTradeSimulationRequest = {
           message.amount = reader.string();
           break;
         case 5:
-          message.swapSteps.push(SwapStep.decode(reader, reader.uint32()));
+          message.steps.push(RouteStep.decode(reader, reader.uint32()));
           break;
         default:
           reader.skipType(tag & 7);
@@ -100,7 +101,7 @@ export const QueryTradeSimulationRequest = {
       tokenIn: isSet(object.tokenIn) ? String(object.tokenIn) : "",
       tokenOut: isSet(object.tokenOut) ? String(object.tokenOut) : "",
       amount: isSet(object.amount) ? String(object.amount) : "",
-      swapSteps: Array.isArray(object?.swapSteps) ? object.swapSteps.map((e: any) => SwapStep.fromJSON(e)) : []
+      steps: Array.isArray(object?.steps) ? object.steps.map((e: any) => RouteStep.fromJSON(e)) : []
     };
   },
   toJSON(message: QueryTradeSimulationRequest): unknown {
@@ -109,10 +110,10 @@ export const QueryTradeSimulationRequest = {
     message.tokenIn !== undefined && (obj.tokenIn = message.tokenIn);
     message.tokenOut !== undefined && (obj.tokenOut = message.tokenOut);
     message.amount !== undefined && (obj.amount = message.amount);
-    if (message.swapSteps) {
-      obj.swapSteps = message.swapSteps.map(e => e ? SwapStep.toJSON(e) : undefined);
+    if (message.steps) {
+      obj.steps = message.steps.map(e => e ? RouteStep.toJSON(e) : undefined);
     } else {
-      obj.swapSteps = [];
+      obj.steps = [];
     }
     return obj;
   },
@@ -122,13 +123,13 @@ export const QueryTradeSimulationRequest = {
     message.tokenIn = object.tokenIn ?? "";
     message.tokenOut = object.tokenOut ?? "";
     message.amount = object.amount ?? "";
-    message.swapSteps = object.swapSteps?.map(e => SwapStep.fromPartial(e)) || [];
+    message.steps = object.steps?.map(e => RouteStep.fromPartial(e)) || [];
     return message;
   }
 };
 function createBaseQueryTradeSimulationResponse(): QueryTradeSimulationResponse {
   return {
-    priceTokenOutInTokenInTerms: "",
+    priceTokenInTokenOutTerms: "",
     amountIn: Coin.fromPartial({}),
     amountOut: Coin.fromPartial({}),
     swapFee: [],
@@ -140,8 +141,8 @@ function createBaseQueryTradeSimulationResponse(): QueryTradeSimulationResponse 
 }
 export const QueryTradeSimulationResponse = {
   encode(message: QueryTradeSimulationResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
-    if (message.priceTokenOutInTokenInTerms !== "") {
-      writer.uint32(10).string(Decimal.fromUserInput(message.priceTokenOutInTokenInTerms, 18).atomics);
+    if (message.priceTokenInTokenOutTerms !== "") {
+      writer.uint32(10).string(Decimal.fromUserInput(message.priceTokenInTokenOutTerms, 18).atomics);
     }
     if (message.amountIn !== undefined) {
       Coin.encode(message.amountIn, writer.uint32(18).fork()).ldelim();
@@ -174,7 +175,7 @@ export const QueryTradeSimulationResponse = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.priceTokenOutInTokenInTerms = Decimal.fromAtomics(reader.string(), 18).toString();
+          message.priceTokenInTokenOutTerms = Decimal.fromAtomics(reader.string(), 18).toString();
           break;
         case 2:
           message.amountIn = Coin.decode(reader, reader.uint32());
@@ -206,7 +207,7 @@ export const QueryTradeSimulationResponse = {
   },
   fromJSON(object: any): QueryTradeSimulationResponse {
     return {
-      priceTokenOutInTokenInTerms: isSet(object.priceTokenOutInTokenInTerms) ? String(object.priceTokenOutInTokenInTerms) : "",
+      priceTokenInTokenOutTerms: isSet(object.priceTokenInTokenOutTerms) ? String(object.priceTokenInTokenOutTerms) : "",
       amountIn: isSet(object.amountIn) ? Coin.fromJSON(object.amountIn) : undefined,
       amountOut: isSet(object.amountOut) ? Coin.fromJSON(object.amountOut) : undefined,
       swapFee: Array.isArray(object?.swapFee) ? object.swapFee.map((e: any) => Coin.fromJSON(e)) : [],
@@ -218,7 +219,7 @@ export const QueryTradeSimulationResponse = {
   },
   toJSON(message: QueryTradeSimulationResponse): unknown {
     const obj: any = {};
-    message.priceTokenOutInTokenInTerms !== undefined && (obj.priceTokenOutInTokenInTerms = message.priceTokenOutInTokenInTerms);
+    message.priceTokenInTokenOutTerms !== undefined && (obj.priceTokenInTokenOutTerms = message.priceTokenInTokenOutTerms);
     message.amountIn !== undefined && (obj.amountIn = message.amountIn ? Coin.toJSON(message.amountIn) : undefined);
     message.amountOut !== undefined && (obj.amountOut = message.amountOut ? Coin.toJSON(message.amountOut) : undefined);
     if (message.swapFee) {
@@ -238,7 +239,7 @@ export const QueryTradeSimulationResponse = {
   },
   fromPartial(object: Partial<QueryTradeSimulationResponse>): QueryTradeSimulationResponse {
     const message = createBaseQueryTradeSimulationResponse();
-    message.priceTokenOutInTokenInTerms = object.priceTokenOutInTokenInTerms ?? "";
+    message.priceTokenInTokenOutTerms = object.priceTokenInTokenOutTerms ?? "";
     message.amountIn = object.amountIn !== undefined && object.amountIn !== null ? Coin.fromPartial(object.amountIn) : undefined;
     message.amountOut = object.amountOut !== undefined && object.amountOut !== null ? Coin.fromPartial(object.amountOut) : undefined;
     message.swapFee = object.swapFee?.map(e => Coin.fromPartial(e)) || [];

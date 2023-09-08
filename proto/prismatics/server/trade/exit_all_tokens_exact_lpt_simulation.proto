@@ -1,0 +1,32 @@
+syntax = "proto3";
+package prismatics.server.trade;
+
+import "gogoproto/gogo.proto";
+import "cosmos_proto/cosmos.proto";
+import "cosmos/base/v1beta1/coin.proto";
+
+option go_package = "github.com/prism-finance/prismatics/server/trade";
+
+message QueryExitAllTokensExactLptSimulationRequest {
+  uint64 pool_id = 1;
+  string lpt_in_amount = 2 [
+    (cosmos_proto.scalar) = "cosmos.Int",
+    (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Int",
+    (gogoproto.nullable) = false
+  ];
+}
+
+message QueryExitAllTokensExactLptSimulationResponse {
+  cosmos.base.v1beta1.Coin amount_in = 1 [(gogoproto.nullable) = false];
+  repeated cosmos.base.v1beta1.Coin amounts_out = 2 [
+    (gogoproto.nullable) = false,
+    (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins"
+  ];
+  cosmos.base.v1beta1.Coin protocol_fee = 3 [(gogoproto.nullable) = false];
+  cosmos.base.v1beta1.Coin protocol_fee_lp_terms = 4 [(gogoproto.nullable) = false];
+  string price_impact = 5 [
+    (cosmos_proto.scalar) = "cosmos.Dec",
+    (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Dec",
+    (gogoproto.nullable) = false
+  ];
+}
