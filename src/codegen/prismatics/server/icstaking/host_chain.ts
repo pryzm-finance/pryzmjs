@@ -18,19 +18,19 @@ export interface QueryHostChainResponseSDKType {
 }
 export interface QueryHostChainsRequest {
   timeWindowInDays?: string;
-  pagination: PageRequest;
+  pagination?: PageRequest;
 }
 export interface QueryHostChainsRequestSDKType {
   time_window_in_days?: string;
-  pagination: PageRequestSDKType;
+  pagination?: PageRequestSDKType;
 }
 export interface QueryHostChainsResponse {
   hostChains: HostChain[];
-  pagination: PageResponse;
+  pagination?: PageResponse;
 }
 export interface QueryHostChainsResponseSDKType {
   host_chains: HostChainSDKType[];
-  pagination: PageResponseSDKType;
+  pagination?: PageResponseSDKType;
 }
 function createBaseQueryHostChainRequest(): QueryHostChainRequest {
   return {
@@ -135,7 +135,7 @@ export const QueryHostChainResponse = {
 function createBaseQueryHostChainsRequest(): QueryHostChainsRequest {
   return {
     timeWindowInDays: undefined,
-    pagination: PageRequest.fromPartial({})
+    pagination: undefined
   };
 }
 export const QueryHostChainsRequest = {
@@ -190,7 +190,7 @@ export const QueryHostChainsRequest = {
 function createBaseQueryHostChainsResponse(): QueryHostChainsResponse {
   return {
     hostChains: [],
-    pagination: PageResponse.fromPartial({})
+    pagination: undefined
   };
 }
 export const QueryHostChainsResponse = {

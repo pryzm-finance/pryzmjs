@@ -1,9 +1,9 @@
-import {fetchAll, prismatics} from "@prism-finance/prismjs/lib";
+import { fetchAll, prismatics } from "@prism-finance/prismjs/lib";
 import * as console from "console";
-import {PRISMATICS_ENDPOINT} from "./config";
+import { PRISMATICS_ENDPOINT } from "./config";
 
 async function main() {
-    const prismaticsClient = await prismatics.ClientFactory.createClient({restEndpoint: PRISMATICS_ENDPOINT})
+    const prismaticsClient = await prismatics.ClientFactory.createClient({ restEndpoint: PRISMATICS_ENDPOINT })
 
     let maturities = await fetchAll(prismaticsClient, async (client, pageRequest) => {
         const result = (await prismaticsClient.prismatics.maturityAll({
@@ -16,9 +16,9 @@ async function main() {
     }/*, {
         countTotal: false,
         key: new Uint8Array(),
-        offset: Long.ZERO,
+        offset: 0n,
         reverse: false,
-        limit: Long.fromNumber(12)
+        limit: 3n
     }*/)
     console.log(maturities)
 

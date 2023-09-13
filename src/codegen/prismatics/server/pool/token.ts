@@ -22,21 +22,21 @@ export interface QueryTokensRequest {
   tokenType: TokenType;
   timeWindowInDays?: string;
   tokenOut: string;
-  pagination: PageRequest;
+  pagination?: PageRequest;
 }
 export interface QueryTokensRequestSDKType {
   token_type: TokenType;
   time_window_in_days?: string;
   token_out: string;
-  pagination: PageRequestSDKType;
+  pagination?: PageRequestSDKType;
 }
 export interface QueryTokensResponse {
   tokens: Token[];
-  pagination: PageResponse;
+  pagination?: PageResponse;
 }
 export interface QueryTokensResponseSDKType {
   tokens: TokenSDKType[];
-  pagination: PageResponseSDKType;
+  pagination?: PageResponseSDKType;
 }
 function createBaseQueryTokenRequest(): QueryTokenRequest {
   return {
@@ -153,7 +153,7 @@ function createBaseQueryTokensRequest(): QueryTokensRequest {
     tokenType: 0,
     timeWindowInDays: undefined,
     tokenOut: "",
-    pagination: PageRequest.fromPartial({})
+    pagination: undefined
   };
 }
 export const QueryTokensRequest = {
@@ -226,7 +226,7 @@ export const QueryTokensRequest = {
 function createBaseQueryTokensResponse(): QueryTokensResponse {
   return {
     tokens: [],
-    pagination: PageResponse.fromPartial({})
+    pagination: undefined
   };
 }
 export const QueryTokensResponse = {

@@ -31,10 +31,10 @@ message QueryTokensRequest {
     (gogoproto.nullable) = true
   ];
   string token_out = 3;
-  cosmos.base.query.v1beta1.PageRequest pagination = 4;
+  cosmos.base.query.v1beta1.PageRequest pagination = 4 [(gogoproto.nullable) = true];
 }
 
 message QueryTokensResponse {
   repeated prismatics.pool.Token tokens = 1 [(gogoproto.nullable) = false];
-  cosmos.base.query.v1beta1.PageResponse pagination = 2;
+  cosmos.base.query.v1beta1.PageResponse pagination = 2 [(gogoproto.nullable) = true];
 }

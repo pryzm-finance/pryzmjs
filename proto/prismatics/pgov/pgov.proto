@@ -12,5 +12,5 @@ option go_package = "github.com/prism-finance/prismatics/types/pgov";
 
 message AssetProposal {
   cosmos.gov.v1.Proposal orig_proposal = 1 [(gogoproto.nullable) = false];
-  prism.pgov.Proposal prism_proposal = 2;
+  prism.pgov.Proposal prism_proposal = 2 [(gogoproto.nullable) = true];
 }

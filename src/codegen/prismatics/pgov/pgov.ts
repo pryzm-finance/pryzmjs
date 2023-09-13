@@ -6,16 +6,16 @@ import { BinaryReader, BinaryWriter } from "../../binary";
 import { isSet } from "../../helpers";
 export interface AssetProposal {
   origProposal: Proposal1;
-  prismProposal: Proposal2;
+  prismProposal?: Proposal2;
 }
 export interface AssetProposalSDKType {
   orig_proposal: Proposal1SDKType;
-  prism_proposal: Proposal2SDKType;
+  prism_proposal?: Proposal2SDKType;
 }
 function createBaseAssetProposal(): AssetProposal {
   return {
     origProposal: Proposal1.fromPartial({}),
-    prismProposal: Proposal2.fromPartial({})
+    prismProposal: undefined
   };
 }
 export const AssetProposal = {

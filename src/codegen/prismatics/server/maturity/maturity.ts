@@ -6,28 +6,28 @@ export interface QueryAllMaturitiesRequest {
   assetId: string;
   active: string;
   timeWindowInDays?: string;
-  pagination: PageRequest;
+  pagination?: PageRequest;
 }
 export interface QueryAllMaturitiesRequestSDKType {
   asset_id: string;
   active: string;
   time_window_in_days?: string;
-  pagination: PageRequestSDKType;
+  pagination?: PageRequestSDKType;
 }
 export interface QueryAllMaturitiesResponse {
   maturities: Maturity[];
-  pagination: PageResponse;
+  pagination?: PageResponse;
 }
 export interface QueryAllMaturitiesResponseSDKType {
   maturities: MaturitySDKType[];
-  pagination: PageResponseSDKType;
+  pagination?: PageResponseSDKType;
 }
 function createBaseQueryAllMaturitiesRequest(): QueryAllMaturitiesRequest {
   return {
     assetId: "",
     active: "",
     timeWindowInDays: undefined,
-    pagination: PageRequest.fromPartial({})
+    pagination: undefined
   };
 }
 export const QueryAllMaturitiesRequest = {
@@ -100,7 +100,7 @@ export const QueryAllMaturitiesRequest = {
 function createBaseQueryAllMaturitiesResponse(): QueryAllMaturitiesResponse {
   return {
     maturities: [],
-    pagination: PageResponse.fromPartial({})
+    pagination: undefined
   };
 }
 export const QueryAllMaturitiesResponse = {

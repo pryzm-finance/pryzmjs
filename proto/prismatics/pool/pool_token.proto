@@ -26,7 +26,8 @@ message PoolToken {
   ];
   string price_lp_terms = 8 [
     (cosmos_proto.scalar) = "cosmos.Dec",
-    (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Dec"
+    (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Dec",
+    (gogoproto.nullable) = true
   ];
   bool virtual = 9;
 }

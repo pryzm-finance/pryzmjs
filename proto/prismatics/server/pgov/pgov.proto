@@ -26,5 +26,5 @@ message QuerySubmitProposalMsgsRequest {
 }
 
 message QuerySubmitProposalMsgsResponse {
-  repeated google.protobuf.Any messages = 1;
+  repeated google.protobuf.Any messages = 1 [(gogoproto.nullable) = true];
 }

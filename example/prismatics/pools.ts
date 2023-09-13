@@ -5,15 +5,10 @@ import { PRISMATICS_ENDPOINT } from "./config";
 async function main() {
     const prismaticsClient = await prismatics.ClientFactory.createClient({ restEndpoint: PRISMATICS_ENDPOINT })
 
-    let pools = (await prismaticsClient.prismatics.pools({
-        pagination: undefined
-    })).pools
+    let pools = (await prismaticsClient.prismatics.pools({})).pools
     console.log(pools)
 
-    pools = (await prismaticsClient.prismatics.pools({
-        pagination: undefined,
-        timeWindowInDays: "20"
-    })).pools
+    pools = (await prismaticsClient.prismatics.pools({ timeWindowInDays: "20" })).pools
     console.log(pools)
 }
 

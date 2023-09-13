@@ -19,22 +19,22 @@ export interface QueryOrdersRequest {
   poolId?: string;
   tokenIn: string;
   tokenOut: string;
-  pagination: PageRequest;
+  pagination?: PageRequest;
 }
 export interface QueryOrdersRequestSDKType {
   creator: string;
   pool_id?: string;
   token_in: string;
   token_out: string;
-  pagination: PageRequestSDKType;
+  pagination?: PageRequestSDKType;
 }
 export interface QueryOrdersResponse {
   orders: Order[];
-  pagination: PageResponse;
+  pagination?: PageResponse;
 }
 export interface QueryOrdersResponseSDKType {
   orders: OrderSDKType[];
-  pagination: PageResponseSDKType;
+  pagination?: PageResponseSDKType;
 }
 function createBaseQueryOrderRequest(): QueryOrderRequest {
   return {
@@ -132,7 +132,7 @@ function createBaseQueryOrdersRequest(): QueryOrdersRequest {
     poolId: undefined,
     tokenIn: "",
     tokenOut: "",
-    pagination: PageRequest.fromPartial({})
+    pagination: undefined
   };
 }
 export const QueryOrdersRequest = {
@@ -214,7 +214,7 @@ export const QueryOrdersRequest = {
 function createBaseQueryOrdersResponse(): QueryOrdersResponse {
   return {
     orders: [],
-    pagination: PageResponse.fromPartial({})
+    pagination: undefined
   };
 }
 export const QueryOrdersResponse = {

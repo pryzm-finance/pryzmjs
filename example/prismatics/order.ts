@@ -6,7 +6,7 @@ async function main() {
     const prismaticsClient = await prismatics.ClientFactory.createClient({ restEndpoint: PRISMATICS_ENDPOINT })
 
     const orders = (await prismaticsClient.prismatics.orders({
-        creator: "", tokenIn: "tokenIn", tokenOut: "", pagination: undefined // means only filter by tokenIn and ignore the rest fields
+        creator: "", tokenIn: "tokenIn", tokenOut: "" // means only filter by tokenIn and ignore the rest fields
     })).orders
     console.log(orders)
 

@@ -23,10 +23,10 @@ export interface QuerySubmitProposalMsgsRequestSDKType {
   proposal_id: bigint;
 }
 export interface QuerySubmitProposalMsgsResponse {
-  messages: Any[];
+  messages?: Any[];
 }
 export interface QuerySubmitProposalMsgsResponseSDKType {
-  messages: AnySDKType[];
+  messages?: AnySDKType[];
 }
 function createBaseQueryAssetProposalRequest(): QueryAssetProposalRequest {
   return {
@@ -179,7 +179,7 @@ export const QuerySubmitProposalMsgsRequest = {
 };
 function createBaseQuerySubmitProposalMsgsResponse(): QuerySubmitProposalMsgsResponse {
   return {
-    messages: []
+    messages: undefined
   };
 }
 export const QuerySubmitProposalMsgsResponse = {

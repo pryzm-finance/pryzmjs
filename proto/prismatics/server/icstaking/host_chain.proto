@@ -27,10 +27,10 @@ message QueryHostChainsRequest {
     (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Int",
     (gogoproto.nullable) = true
   ];
-  cosmos.base.query.v1beta1.PageRequest pagination = 2;
+  cosmos.base.query.v1beta1.PageRequest pagination = 2 [(gogoproto.nullable) = true];
 }
 
 message QueryHostChainsResponse {
   repeated prismatics.icstaking.HostChain host_chains = 1 [(gogoproto.nullable) = false];
-  cosmos.base.query.v1beta1.PageResponse pagination = 2;
+  cosmos.base.query.v1beta1.PageResponse pagination = 2 [(gogoproto.nullable) = true];
 }

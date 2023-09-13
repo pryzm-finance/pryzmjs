@@ -11,7 +11,7 @@ export interface PoolToken {
   poolLpDenom: string;
   balance: string;
   weight: string;
-  priceLpTerms: string;
+  priceLpTerms?: string;
   virtual: boolean;
 }
 export interface PoolTokenSDKType {
@@ -22,7 +22,7 @@ export interface PoolTokenSDKType {
   pool_lp_denom: string;
   balance: string;
   weight: string;
-  price_lp_terms: string;
+  price_lp_terms?: string;
   virtual: boolean;
 }
 function createBasePoolToken(): PoolToken {
@@ -34,7 +34,7 @@ function createBasePoolToken(): PoolToken {
     poolLpDenom: "",
     balance: "",
     weight: "",
-    priceLpTerms: "",
+    priceLpTerms: undefined,
     virtual: false
   };
 }
@@ -61,7 +61,7 @@ export const PoolToken = {
     if (message.weight !== "") {
       writer.uint32(58).string(Decimal.fromUserInput(message.weight, 18).atomics);
     }
-    if (message.priceLpTerms !== "") {
+    if (message.priceLpTerms !== undefined) {
       writer.uint32(66).string(Decimal.fromUserInput(message.priceLpTerms, 18).atomics);
     }
     if (message.virtual === true) {
@@ -119,7 +119,7 @@ export const PoolToken = {
       poolLpDenom: isSet(object.poolLpDenom) ? String(object.poolLpDenom) : "",
       balance: isSet(object.balance) ? String(object.balance) : "",
       weight: isSet(object.weight) ? String(object.weight) : "",
-      priceLpTerms: isSet(object.priceLpTerms) ? String(object.priceLpTerms) : "",
+      priceLpTerms: isSet(object.priceLpTerms) ? String(object.priceLpTerms) : undefined,
       virtual: isSet(object.virtual) ? Boolean(object.virtual) : false
     };
   },
@@ -145,7 +145,7 @@ export const PoolToken = {
     message.poolLpDenom = object.poolLpDenom ?? "";
     message.balance = object.balance ?? "";
     message.weight = object.weight ?? "";
-    message.priceLpTerms = object.priceLpTerms ?? "";
+    message.priceLpTerms = object.priceLpTerms ?? undefined;
     message.virtual = object.virtual ?? false;
     return message;
   }

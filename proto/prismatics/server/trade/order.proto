@@ -27,10 +27,10 @@ message QueryOrdersRequest {
   ];
   string token_in = 3;
   string token_out = 4;
-  cosmos.base.query.v1beta1.PageRequest pagination = 5;
+  cosmos.base.query.v1beta1.PageRequest pagination = 5 [(gogoproto.nullable) = true];
 }
 
 message QueryOrdersResponse {
   repeated prismatics.trade.Order orders = 1 [(gogoproto.nullable) = false];
-  cosmos.base.query.v1beta1.PageResponse pagination = 2;
+  cosmos.base.query.v1beta1.PageResponse pagination = 2 [(gogoproto.nullable) = true];
 }

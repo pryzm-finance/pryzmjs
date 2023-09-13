@@ -5,10 +5,7 @@ import { PRISMATICS_ENDPOINT } from "./config";
 async function main() {
     const prismaticsClient = await prismatics.ClientFactory.createClient({ restEndpoint: PRISMATICS_ENDPOINT })
 
-    const hostChains = (await prismaticsClient.prismatics.hostChains({
-        timeWindowInDays: "30",
-        pagination: undefined
-    })).host_chains
+    const hostChains = (await prismaticsClient.prismatics.hostChains({ timeWindowInDays: "30" })).host_chains
     console.log(JSON.stringify(hostChains))
 }
 

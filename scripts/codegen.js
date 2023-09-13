@@ -45,8 +45,7 @@ telescope({
                 toJSON: true,
                 fromJSON: true
             },
-            optionalPageRequests: true,
-            fieldDefaultIsOptional: true
+            optionalPageRequests: true
         },
         aminoEncoding: {
             enabled: true,

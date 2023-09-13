@@ -18,19 +18,19 @@ export interface QueryPoolResponseSDKType {
 }
 export interface QueryPoolsRequest {
   timeWindowInDays?: string;
-  pagination: PageRequest;
+  pagination?: PageRequest;
 }
 export interface QueryPoolsRequestSDKType {
   time_window_in_days?: string;
-  pagination: PageRequestSDKType;
+  pagination?: PageRequestSDKType;
 }
 export interface QueryPoolsResponse {
   pools: Pool[];
-  pagination: PageResponse;
+  pagination?: PageResponse;
 }
 export interface QueryPoolsResponseSDKType {
   pools: PoolSDKType[];
-  pagination: PageResponseSDKType;
+  pagination?: PageResponseSDKType;
 }
 function createBaseQueryPoolRequest(): QueryPoolRequest {
   return {
@@ -135,7 +135,7 @@ export const QueryPoolResponse = {
 function createBaseQueryPoolsRequest(): QueryPoolsRequest {
   return {
     timeWindowInDays: undefined,
-    pagination: PageRequest.fromPartial({})
+    pagination: undefined
   };
 }
 export const QueryPoolsRequest = {
@@ -190,7 +190,7 @@ export const QueryPoolsRequest = {
 function createBaseQueryPoolsResponse(): QueryPoolsResponse {
   return {
     pools: [],
-    pagination: PageResponse.fromPartial({})
+    pagination: undefined
   };
 }
 export const QueryPoolsResponse = {
