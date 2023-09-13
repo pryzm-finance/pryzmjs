@@ -1,5 +1,5 @@
 import { GeneratedType, Registry, OfflineSigner } from "@cosmjs/proto-signing";
-import { defaultRegistryTypes, AminoTypes, SigningStargateClient } from "@cosmjs/stargate";
+import { AminoTypes, SigningStargateClient } from "@cosmjs/stargate";
 import { HttpEndpoint } from "@cosmjs/tendermint-rpc";
 import * as ibcApplicationsFeeV1TxRegistry from "./applications/fee/v1/tx.registry";
 import * as ibcApplicationsInterchainAccountsControllerV1TxRegistry from "./applications/interchain_accounts/controller/v1/tx.registry";
@@ -13,6 +13,7 @@ import * as ibcApplicationsTransferV1TxAmino from "./applications/transfer/v1/tx
 import * as ibcCoreChannelV1TxAmino from "./core/channel/v1/tx.amino";
 import * as ibcCoreClientV1TxAmino from "./core/client/v1/tx.amino";
 import * as ibcCoreConnectionV1TxAmino from "./core/connection/v1/tx.amino";
+import { cosmosAminoConverters, cosmosProtoRegistry } from "../cosmos/client";
 export const ibcAminoConverters = {
   ...ibcApplicationsFeeV1TxAmino.AminoConverter,
   ...ibcApplicationsInterchainAccountsControllerV1TxAmino.AminoConverter,
@@ -23,7 +24,7 @@ export const ibcAminoConverters = {
 };
 export const ibcProtoRegistry: ReadonlyArray<[string, GeneratedType]> = [...ibcApplicationsFeeV1TxRegistry.registry, ...ibcApplicationsInterchainAccountsControllerV1TxRegistry.registry, ...ibcApplicationsTransferV1TxRegistry.registry, ...ibcCoreChannelV1TxRegistry.registry, ...ibcCoreClientV1TxRegistry.registry, ...ibcCoreConnectionV1TxRegistry.registry];
 export const getSigningIbcClientOptions = ({
-  defaultTypes = defaultRegistryTypes
+  defaultTypes = cosmosProtoRegistry
 }: {
   defaultTypes?: ReadonlyArray<[string, GeneratedType]>;
 } = {}): {
@@ -32,7 +33,8 @@ export const getSigningIbcClientOptions = ({
 } => {
   const registry = new Registry([...defaultTypes, ...ibcProtoRegistry]);
   const aminoTypes = new AminoTypes({
-    ...ibcAminoConverters
+    ...ibcAminoConverters,
+    ...cosmosAminoConverters
   });
   return {
     registry,
@@ -42,7 +44,7 @@ export const getSigningIbcClientOptions = ({
 export const getSigningIbcClient = async ({
   rpcEndpoint,
   signer,
-  defaultTypes = defaultRegistryTypes
+  defaultTypes = cosmosProtoRegistry
 }: {
   rpcEndpoint: string | HttpEndpoint;
   signer: OfflineSigner;

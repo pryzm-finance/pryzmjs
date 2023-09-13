@@ -1,5 +1,5 @@
 import { GeneratedType, Registry, OfflineSigner } from "@cosmjs/proto-signing";
-import { defaultRegistryTypes, AminoTypes, SigningStargateClient } from "@cosmjs/stargate";
+import { AminoTypes, SigningStargateClient } from "@cosmjs/stargate";
 import { HttpEndpoint } from "@cosmjs/tendermint-rpc";
 import * as prismAmmTxRegistry from "./amm/tx.registry";
 import * as prismAssetsTxRegistry from "./assets/tx.registry";
@@ -19,6 +19,7 @@ import * as prismPgovTxAmino from "./pgov/tx.amino";
 import * as prismRefractorTxAmino from "./refractor/tx.amino";
 import * as prismTreasuryTxAmino from "./treasury/tx.amino";
 import * as prismYstakingTxAmino from "./ystaking/tx.amino";
+import { cosmosAminoConverters, cosmosProtoRegistry } from "../cosmos/client";
 export const prismAminoConverters = {
   ...prismAmmTxAmino.AminoConverter,
   ...prismAssetsTxAmino.AminoConverter,
@@ -32,7 +33,7 @@ export const prismAminoConverters = {
 };
 export const prismProtoRegistry: ReadonlyArray<[string, GeneratedType]> = [...prismAmmTxRegistry.registry, ...prismAssetsTxRegistry.registry, ...prismIcstakingTxRegistry.registry, ...prismIncentivesTxRegistry.registry, ...prismMintTxRegistry.registry, ...prismPgovTxRegistry.registry, ...prismRefractorTxRegistry.registry, ...prismTreasuryTxRegistry.registry, ...prismYstakingTxRegistry.registry];
 export const getSigningPrismClientOptions = ({
-  defaultTypes = defaultRegistryTypes
+  defaultTypes = cosmosProtoRegistry
 }: {
   defaultTypes?: ReadonlyArray<[string, GeneratedType]>;
 } = {}): {
@@ -41,7 +42,8 @@ export const getSigningPrismClientOptions = ({
 } => {
   const registry = new Registry([...defaultTypes, ...prismProtoRegistry]);
   const aminoTypes = new AminoTypes({
-    ...prismAminoConverters
+    ...prismAminoConverters,
+    ...cosmosAminoConverters
   });
   return {
     registry,
@@ -51,7 +53,7 @@ export const getSigningPrismClientOptions = ({
 export const getSigningPrismClient = async ({
   rpcEndpoint,
   signer,
-  defaultTypes = defaultRegistryTypes
+  defaultTypes = cosmosProtoRegistry
 }: {
   rpcEndpoint: string | HttpEndpoint;
   signer: OfflineSigner;

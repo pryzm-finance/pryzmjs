@@ -4,6 +4,10 @@ import * as console from "console";
 
 async function main() {
     const client = await prism.ClientFactory.createGrpcWebClient({endpoint: "http://0.0.0.0:9091"})
+
+    const authParams = (await client.cosmos.auth.v1beta1.params()).params
+    console.log(authParams)
+
     let balances = (await client.cosmos.bank.v1beta1.allBalances({address: "prism156pcgs3faegfte0vuaykr9az3hh9kx2e2qfwvu"})).balances
     console.log(balances)
 
