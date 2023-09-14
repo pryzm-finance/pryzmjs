@@ -342,7 +342,8 @@ export interface EventBatchSwapRequest {
   steps: SwapStep[];
   amountsIn: Coin[];
   amountsOut: Coin[];
-  protocolFee: Coin[];
+  sawpProtocolFee: Coin[];
+  joinExitProtocolFee: Coin[];
   swapFee: Coin[];
   swapType: SwapType;
 }
@@ -351,7 +352,8 @@ export interface EventBatchSwapRequestSDKType {
   steps: SwapStepSDKType[];
   amounts_in: CoinSDKType[];
   amounts_out: CoinSDKType[];
-  protocol_fee: CoinSDKType[];
+  sawp_protocol_fee: CoinSDKType[];
+  join_exit_protocol_fee: CoinSDKType[];
   swap_fee: CoinSDKType[];
   swap_type: SwapType;
 }
@@ -2594,7 +2596,8 @@ function createBaseEventBatchSwapRequest(): EventBatchSwapRequest {
     steps: [],
     amountsIn: [],
     amountsOut: [],
-    protocolFee: [],
+    sawpProtocolFee: [],
+    joinExitProtocolFee: [],
     swapFee: [],
     swapType: 0
   };
@@ -2613,11 +2616,14 @@ export const EventBatchSwapRequest = {
     for (const v of message.amountsOut) {
       Coin.encode(v!, writer.uint32(34).fork()).ldelim();
     }
-    for (const v of message.protocolFee) {
+    for (const v of message.sawpProtocolFee) {
       Coin.encode(v!, writer.uint32(42).fork()).ldelim();
     }
-    for (const v of message.swapFee) {
+    for (const v of message.joinExitProtocolFee) {
       Coin.encode(v!, writer.uint32(50).fork()).ldelim();
+    }
+    for (const v of message.swapFee) {
+      Coin.encode(v!, writer.uint32(58).fork()).ldelim();
     }
     if (message.swapType !== 0) {
       writer.uint32(64).int32(message.swapType);
@@ -2644,9 +2650,12 @@ export const EventBatchSwapRequest = {
           message.amountsOut.push(Coin.decode(reader, reader.uint32()));
           break;
         case 5:
-          message.protocolFee.push(Coin.decode(reader, reader.uint32()));
+          message.sawpProtocolFee.push(Coin.decode(reader, reader.uint32()));
           break;
         case 6:
+          message.joinExitProtocolFee.push(Coin.decode(reader, reader.uint32()));
+          break;
+        case 7:
           message.swapFee.push(Coin.decode(reader, reader.uint32()));
           break;
         case 8:
@@ -2665,7 +2674,8 @@ export const EventBatchSwapRequest = {
       steps: Array.isArray(object?.steps) ? object.steps.map((e: any) => SwapStep.fromJSON(e)) : [],
       amountsIn: Array.isArray(object?.amountsIn) ? object.amountsIn.map((e: any) => Coin.fromJSON(e)) : [],
       amountsOut: Array.isArray(object?.amountsOut) ? object.amountsOut.map((e: any) => Coin.fromJSON(e)) : [],
-      protocolFee: Array.isArray(object?.protocolFee) ? object.protocolFee.map((e: any) => Coin.fromJSON(e)) : [],
+      sawpProtocolFee: Array.isArray(object?.sawpProtocolFee) ? object.sawpProtocolFee.map((e: any) => Coin.fromJSON(e)) : [],
+      joinExitProtocolFee: Array.isArray(object?.joinExitProtocolFee) ? object.joinExitProtocolFee.map((e: any) => Coin.fromJSON(e)) : [],
       swapFee: Array.isArray(object?.swapFee) ? object.swapFee.map((e: any) => Coin.fromJSON(e)) : [],
       swapType: isSet(object.swapType) ? swapTypeFromJSON(object.swapType) : -1
     };
@@ -2688,10 +2698,15 @@ export const EventBatchSwapRequest = {
     } else {
       obj.amountsOut = [];
     }
-    if (message.protocolFee) {
-      obj.protocolFee = message.protocolFee.map(e => e ? Coin.toJSON(e) : undefined);
+    if (message.sawpProtocolFee) {
+      obj.sawpProtocolFee = message.sawpProtocolFee.map(e => e ? Coin.toJSON(e) : undefined);
     } else {
-      obj.protocolFee = [];
+      obj.sawpProtocolFee = [];
+    }
+    if (message.joinExitProtocolFee) {
+      obj.joinExitProtocolFee = message.joinExitProtocolFee.map(e => e ? Coin.toJSON(e) : undefined);
+    } else {
+      obj.joinExitProtocolFee = [];
     }
     if (message.swapFee) {
       obj.swapFee = message.swapFee.map(e => e ? Coin.toJSON(e) : undefined);
@@ -2707,7 +2722,8 @@ export const EventBatchSwapRequest = {
     message.steps = object.steps?.map(e => SwapStep.fromPartial(e)) || [];
     message.amountsIn = object.amountsIn?.map(e => Coin.fromPartial(e)) || [];
     message.amountsOut = object.amountsOut?.map(e => Coin.fromPartial(e)) || [];
-    message.protocolFee = object.protocolFee?.map(e => Coin.fromPartial(e)) || [];
+    message.sawpProtocolFee = object.sawpProtocolFee?.map(e => Coin.fromPartial(e)) || [];
+    message.joinExitProtocolFee = object.joinExitProtocolFee?.map(e => Coin.fromPartial(e)) || [];
     message.swapFee = object.swapFee?.map(e => Coin.fromPartial(e)) || [];
     message.swapType = object.swapType ?? 0;
     return message;

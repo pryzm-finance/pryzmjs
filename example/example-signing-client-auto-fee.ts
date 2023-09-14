@@ -5,7 +5,7 @@ import {GasPrice} from "@cosmjs/stargate";
 async function main() {
     const mnemonic = "short ocean antique emerge glory lock army wine guard sketch hotel remove music demand romance raven roof survey tired thank vessel cliff choose apology";
     const signer = await DirectSecp256k1HdWallet.fromMnemonic(mnemonic, {prefix: "prism"});
-    const signingClient = await connectWithSigner("http://0.0.0.0:26657", signer, 1000, GasPrice.fromString('0.03uprism'))
+    const signingClient = await connectWithSigner("http://0.0.0.0:26657", signer, 10000, GasPrice.fromString('0.03uprism'))
 
     const msg = cosmos.bank.v1beta1.MessageComposer.withTypeUrl.send({
         amount: [{

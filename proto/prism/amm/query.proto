@@ -262,13 +262,13 @@ message QueryGetPoolTokenResponse {
 }
 
 message QueryAllPoolTokenRequest {
-  cosmos.base.query.v1beta1.PageRequest pagination = 1;
+  cosmos.base.query.v1beta1.PageRequest pagination = 1 [(gogoproto.nullable) = true];
   string pool_id = 2;
 }
 
 message QueryAllPoolTokenResponse {
   repeated PoolToken pool_token = 1 [(gogoproto.nullable) = false];
-  cosmos.base.query.v1beta1.PageResponse pagination = 2;
+  cosmos.base.query.v1beta1.PageResponse pagination = 2 [(gogoproto.nullable) = true];
 }
 
 // computing normalized weights requires reading all tokens from the context
@@ -303,12 +303,12 @@ message QueryGetPoolResponse {
 }
 
 message QueryAllPoolRequest {
-  cosmos.base.query.v1beta1.PageRequest pagination = 1;
+  cosmos.base.query.v1beta1.PageRequest pagination = 1 [(gogoproto.nullable) = true];
 }
 
 message QueryAllPoolResponse {
   repeated Pool pool = 1 [(gogoproto.nullable) = false];
-  cosmos.base.query.v1beta1.PageResponse pagination = 2;
+  cosmos.base.query.v1beta1.PageResponse pagination = 2 [(gogoproto.nullable) = true];
 }
 
 message QueryGetWeightedTokenRequest {
@@ -321,12 +321,12 @@ message QueryGetWeightedTokenResponse {
 }
 
 message QueryAllWeightedTokenRequest {
-  cosmos.base.query.v1beta1.PageRequest pagination = 1;
+  cosmos.base.query.v1beta1.PageRequest pagination = 1 [(gogoproto.nullable) = true];
 }
 
 message QueryAllWeightedTokenResponse {
   repeated WeightedToken weighted_token = 1 [(gogoproto.nullable) = false];
-  cosmos.base.query.v1beta1.PageResponse pagination = 2;
+  cosmos.base.query.v1beta1.PageResponse pagination = 2 [(gogoproto.nullable) = true];
 }
 
 message QueryGetWeightUpdateTimingRequest {
@@ -338,12 +338,12 @@ message QueryGetWeightUpdateTimingResponse {
 }
 
 message QueryAllWeightUpdateTimingRequest {
-  cosmos.base.query.v1beta1.PageRequest pagination = 1;
+  cosmos.base.query.v1beta1.PageRequest pagination = 1 [(gogoproto.nullable) = true];
 }
 
 message QueryAllWeightUpdateTimingResponse {
   repeated WeightUpdateTiming weight_update_timing = 1 [(gogoproto.nullable) = false];
-  cosmos.base.query.v1beta1.PageResponse pagination = 2;
+  cosmos.base.query.v1beta1.PageResponse pagination = 2 [(gogoproto.nullable) = true];
 }
 
 message QuerySimulateSingleSwapRequest {
@@ -525,12 +525,12 @@ message QueryGetIntroducingPoolTokenResponse {
 }
 
 message QueryAllIntroducingPoolTokenRequest {
-  cosmos.base.query.v1beta1.PageRequest pagination = 1;
+  cosmos.base.query.v1beta1.PageRequest pagination = 1 [(gogoproto.nullable) = true];
 }
 
 message QueryAllIntroducingPoolTokenResponse {
   repeated VirtualBalancePoolToken introducing_pool_token = 1 [(gogoproto.nullable) = false];
-  cosmos.base.query.v1beta1.PageResponse pagination = 2;
+  cosmos.base.query.v1beta1.PageResponse pagination = 2 [(gogoproto.nullable) = true];
 }
 
 message QueryGetExpiringPoolTokenRequest {
@@ -543,12 +543,12 @@ message QueryGetExpiringPoolTokenResponse {
 }
 
 message QueryAllExpiringPoolTokenRequest {
-  cosmos.base.query.v1beta1.PageRequest pagination = 1;
+  cosmos.base.query.v1beta1.PageRequest pagination = 1 [(gogoproto.nullable) = true];
 }
 
 message QueryAllExpiringPoolTokenResponse {
   repeated VirtualBalancePoolToken expiring_pool_token = 1 [(gogoproto.nullable) = false];
-  cosmos.base.query.v1beta1.PageResponse pagination = 2;
+  cosmos.base.query.v1beta1.PageResponse pagination = 2 [(gogoproto.nullable) = true];
 }
 message QueryLpTokenRequest {
   uint64 pool_id = 1;
@@ -574,11 +574,15 @@ message QuerySimulateBatchSwapResponse {
   ];
   // protocol fee does not contain the y_trade fee and refractor fee
   // which is paid in case of a yAsset trade
-  repeated cosmos.base.v1beta1.Coin protocol_fee = 3 [
+  repeated cosmos.base.v1beta1.Coin swap_protocol_fee = 3 [
     (gogoproto.nullable) = false,
     (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins"
   ];
-  repeated cosmos.base.v1beta1.Coin swap_fee = 4 [
+  repeated cosmos.base.v1beta1.Coin join_exit_protocol_fee = 4 [
+    (gogoproto.nullable) = false,
+    (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins"
+  ];
+  repeated cosmos.base.v1beta1.Coin swap_fee = 5 [
     (gogoproto.nullable) = false,
     (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins"
   ];
@@ -593,12 +597,12 @@ message QueryGetYammConfigurationResponse {
 }
 
 message QueryAllYammConfigurationRequest {
-  cosmos.base.query.v1beta1.PageRequest pagination = 1;
+  cosmos.base.query.v1beta1.PageRequest pagination = 1 [(gogoproto.nullable) = true];
 }
 
 message QueryAllYammConfigurationResponse {
   repeated YammConfiguration yamm_configuration = 1 [(gogoproto.nullable) = false];
-  cosmos.base.query.v1beta1.PageResponse pagination = 2;
+  cosmos.base.query.v1beta1.PageResponse pagination = 2 [(gogoproto.nullable) = true];
 }
 
 message QueryGetWhitelistedRouteRequest {
@@ -611,12 +615,12 @@ message QueryGetWhitelistedRouteResponse {
 }
 
 message QueryAllWhitelistedRouteRequest {
-  cosmos.base.query.v1beta1.PageRequest pagination = 1;
+  cosmos.base.query.v1beta1.PageRequest pagination = 1 [(gogoproto.nullable) = true];
 }
 
 message QueryAllWhitelistedRouteResponse {
   repeated WhitelistedRoute whitelisted_route = 1 [(gogoproto.nullable) = false];
-  cosmos.base.query.v1beta1.PageResponse pagination = 2;
+  cosmos.base.query.v1beta1.PageResponse pagination = 2 [(gogoproto.nullable) = true];
 }
 
 message QueryGetOrderRequest {
@@ -628,12 +632,12 @@ message QueryGetOrderResponse {
 }
 
 message QueryAllOrderRequest {
-  cosmos.base.query.v1beta1.PageRequest pagination = 1;
+  cosmos.base.query.v1beta1.PageRequest pagination = 1 [(gogoproto.nullable) = true];
 }
 
 message QueryAllOrderResponse {
   repeated Order order = 1 [(gogoproto.nullable) = false];
-  cosmos.base.query.v1beta1.PageResponse pagination = 2;
+  cosmos.base.query.v1beta1.PageResponse pagination = 2 [(gogoproto.nullable) = true];
 }
 
 message QueryGetExecutableOrderRequest {
@@ -645,12 +649,12 @@ message QueryGetExecutableOrderResponse {
 }
 
 message QueryAllExecutableOrderRequest {
-  cosmos.base.query.v1beta1.PageRequest pagination = 1;
+  cosmos.base.query.v1beta1.PageRequest pagination = 1 [(gogoproto.nullable) = true];
 }
 
 message QueryAllExecutableOrderResponse {
   repeated Order executable_order = 1 [(gogoproto.nullable) = false];
-  cosmos.base.query.v1beta1.PageResponse pagination = 2;
+  cosmos.base.query.v1beta1.PageResponse pagination = 2 [(gogoproto.nullable) = true];
 }
 
 message QueryGetScheduleOrderRequest {
@@ -662,12 +666,12 @@ message QueryGetScheduleOrderResponse {
 }
 
 message QueryAllScheduleOrderRequest {
-  cosmos.base.query.v1beta1.PageRequest pagination = 1;
+  cosmos.base.query.v1beta1.PageRequest pagination = 1 [(gogoproto.nullable) = true];
 }
 
 message QueryAllScheduleOrderResponse {
   repeated ScheduleOrder schedule_order = 1 [(gogoproto.nullable) = false];
-  cosmos.base.query.v1beta1.PageResponse pagination = 2;
+  cosmos.base.query.v1beta1.PageResponse pagination = 2 [(gogoproto.nullable) = true];
 }
 
 message QueryGetOraclePricePairRequest {
@@ -679,12 +683,12 @@ message QueryGetOraclePricePairResponse {
 }
 
 message QueryAllOraclePricePairRequest {
-  cosmos.base.query.v1beta1.PageRequest pagination = 1;
+  cosmos.base.query.v1beta1.PageRequest pagination = 1 [(gogoproto.nullable) = true];
 }
 
 message QueryAllOraclePricePairResponse {
   repeated OraclePricePair oracle_price_pair = 1 [(gogoproto.nullable) = false];
-  cosmos.base.query.v1beta1.PageResponse pagination = 2;
+  cosmos.base.query.v1beta1.PageResponse pagination = 2 [(gogoproto.nullable) = true];
 }
 
 message QueryVaultPauseModeRequest {}
@@ -703,12 +707,12 @@ message QueryGetPendingTokenIntroductionResponse {
 }
 
 message QueryAllPendingTokenIntroductionRequest {
-  cosmos.base.query.v1beta1.PageRequest pagination = 1;
+  cosmos.base.query.v1beta1.PageRequest pagination = 1 [(gogoproto.nullable) = true];
 }
 
 message QueryAllPendingTokenIntroductionResponse {
   repeated PendingTokenIntroduction pending_token_introduction = 1 [(gogoproto.nullable) = false];
-  cosmos.base.query.v1beta1.PageResponse pagination = 2;
+  cosmos.base.query.v1beta1.PageResponse pagination = 2 [(gogoproto.nullable) = true];
 }
 
 message QueryYammPoolIdRequest {

@@ -238,7 +238,7 @@ message EventExecuteMatchProposalPair {
 }
 
 message EventExecuteMatchProposal {
-  string proposer = 1;
+  string proposer = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
   repeated EventExecuteMatchProposalPair pairs = 2 [(gogoproto.nullable) = false];
   repeated cosmos.base.v1beta1.Coin proposer_reward = 3 [
     (gogoproto.nullable) = false,
@@ -262,7 +262,7 @@ message EventSwap {
 }
 
 message EventExitPoolRequest {
-  string creator = 1;
+  string creator = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
   uint64 pool_id = 2;
   cosmos.base.v1beta1.Coin lpt_in = 3 [(gogoproto.nullable) = false];
   repeated cosmos.base.v1beta1.Coin amounts_out = 4 [
@@ -278,7 +278,7 @@ message EventExitPoolRequest {
 }
 
 message EventJoinPoolRequest {
-  string creator = 1;
+  string creator = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
   uint64 pool_id = 2;
   cosmos.base.v1beta1.Coin lpt_out = 3 [(gogoproto.nullable) = false];
   repeated cosmos.base.v1beta1.Coin amounts_in = 4 [
@@ -297,7 +297,7 @@ message EventJoinPoolRequest {
 }
 
 message EventSingleSwapRequest {
-  string creator = 1;
+  string creator = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
   uint64 pool_id = 2;
   cosmos.base.v1beta1.Coin amount_out = 3 [(gogoproto.nullable) = false];
   cosmos.base.v1beta1.Coin amount_in = 4 [(gogoproto.nullable) = false];
@@ -307,7 +307,7 @@ message EventSingleSwapRequest {
 }
 
 message EventBatchSwapRequest {
-  string creator = 1;
+  string creator = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
   repeated SwapStep steps = 2 [(gogoproto.nullable) = false];
   repeated cosmos.base.v1beta1.Coin amounts_in = 3 [
     (gogoproto.nullable) = false,
@@ -317,11 +317,15 @@ message EventBatchSwapRequest {
     (gogoproto.nullable) = false,
     (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins"
   ];
-  repeated cosmos.base.v1beta1.Coin protocol_fee = 5 [
+  repeated cosmos.base.v1beta1.Coin sawp_protocol_fee = 5 [
     (gogoproto.nullable) = false,
     (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins"
   ];
-  repeated cosmos.base.v1beta1.Coin swap_fee = 6 [
+  repeated cosmos.base.v1beta1.Coin join_exit_protocol_fee = 6 [
+    (gogoproto.nullable) = false,
+    (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins"
+  ];
+  repeated cosmos.base.v1beta1.Coin swap_fee = 7 [
     (gogoproto.nullable) = false,
     (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins"
   ];

@@ -104,7 +104,8 @@ export enum State {
   UNDELEGATING = 4,
   REDELEGATING = 5,
   COMPOUNDING = 6,
-  SWEEPING = 7,
+  COLLECTING = 7,
+  SWEEPING = 8,
   UNRECOGNIZED = -1,
 }
 export const StateSDKType = State;
@@ -132,6 +133,9 @@ export function stateFromJSON(object: any): State {
     case "COMPOUNDING":
       return State.COMPOUNDING;
     case 7:
+    case "COLLECTING":
+      return State.COLLECTING;
+    case 8:
     case "SWEEPING":
       return State.SWEEPING;
     case -1:
@@ -156,6 +160,8 @@ export function stateToJSON(object: State): string {
       return "REDELEGATING";
     case State.COMPOUNDING:
       return "COMPOUNDING";
+    case State.COLLECTING:
+      return "COLLECTING";
     case State.SWEEPING:
       return "SWEEPING";
     case State.UNRECOGNIZED:
@@ -244,8 +250,8 @@ export interface HostChainState {
   };
   /** The amount of assets that are in the delegation account and ready to be delegated */
   amountToBeDelegated: string;
-  /** The amount of assets that are in the reward account and ready to be transferred to the delegation account */
-  amountToBeCompounded: string;
+  /** The amount of assets that are in the delegation account and ready to be delegated */
+  undelegatedAmountToCollect: string;
   /** The current exchange rate of cToken to the host chain staking token */
   exchangeRate: string;
   /** The current state of interchain operations state machine */
@@ -265,7 +271,7 @@ export interface HostChainStateSDKType {
     [key: string]: ValidatorStateSDKType;
   };
   amount_to_be_delegated: string;
-  amount_to_be_compounded: string;
+  undelegated_amount_to_collect: string;
   exchange_rate: string;
   state: State;
   last_idle_state_host_height: HeightSDKType;
@@ -608,7 +614,7 @@ function createBaseHostChainState(): HostChainState {
     hostAccounts: HostAccounts.fromPartial({}),
     validators: {},
     amountToBeDelegated: "",
-    amountToBeCompounded: "",
+    undelegatedAmountToCollect: "",
     exchangeRate: "",
     state: 0,
     lastIdleStateHostHeight: Height.fromPartial({})
@@ -631,8 +637,8 @@ export const HostChainState = {
     if (message.amountToBeDelegated !== "") {
       writer.uint32(34).string(message.amountToBeDelegated);
     }
-    if (message.amountToBeCompounded !== "") {
-      writer.uint32(42).string(message.amountToBeCompounded);
+    if (message.undelegatedAmountToCollect !== "") {
+      writer.uint32(42).string(message.undelegatedAmountToCollect);
     }
     if (message.exchangeRate !== "") {
       writer.uint32(50).string(Decimal.fromUserInput(message.exchangeRate, 18).atomics);
@@ -668,7 +674,7 @@ export const HostChainState = {
           message.amountToBeDelegated = reader.string();
           break;
         case 5:
-          message.amountToBeCompounded = reader.string();
+          message.undelegatedAmountToCollect = reader.string();
           break;
         case 6:
           message.exchangeRate = Decimal.fromAtomics(reader.string(), 18).toString();
@@ -697,7 +703,7 @@ export const HostChainState = {
         return acc;
       }, {}) : {},
       amountToBeDelegated: isSet(object.amountToBeDelegated) ? String(object.amountToBeDelegated) : "",
-      amountToBeCompounded: isSet(object.amountToBeCompounded) ? String(object.amountToBeCompounded) : "",
+      undelegatedAmountToCollect: isSet(object.undelegatedAmountToCollect) ? String(object.undelegatedAmountToCollect) : "",
       exchangeRate: isSet(object.exchangeRate) ? String(object.exchangeRate) : "",
       state: isSet(object.state) ? stateFromJSON(object.state) : -1,
       lastIdleStateHostHeight: isSet(object.lastIdleStateHostHeight) ? Height.fromJSON(object.lastIdleStateHostHeight) : undefined
@@ -714,7 +720,7 @@ export const HostChainState = {
       });
     }
     message.amountToBeDelegated !== undefined && (obj.amountToBeDelegated = message.amountToBeDelegated);
-    message.amountToBeCompounded !== undefined && (obj.amountToBeCompounded = message.amountToBeCompounded);
+    message.undelegatedAmountToCollect !== undefined && (obj.undelegatedAmountToCollect = message.undelegatedAmountToCollect);
     message.exchangeRate !== undefined && (obj.exchangeRate = message.exchangeRate);
     message.state !== undefined && (obj.state = stateToJSON(message.state));
     message.lastIdleStateHostHeight !== undefined && (obj.lastIdleStateHostHeight = message.lastIdleStateHostHeight ? Height.toJSON(message.lastIdleStateHostHeight) : undefined);
@@ -733,7 +739,7 @@ export const HostChainState = {
       return acc;
     }, {});
     message.amountToBeDelegated = object.amountToBeDelegated ?? "";
-    message.amountToBeCompounded = object.amountToBeCompounded ?? "";
+    message.undelegatedAmountToCollect = object.undelegatedAmountToCollect ?? "";
     message.exchangeRate = object.exchangeRate ?? "";
     message.state = object.state ?? 0;
     message.lastIdleStateHostHeight = object.lastIdleStateHostHeight !== undefined && object.lastIdleStateHostHeight !== null ? Height.fromPartial(object.lastIdleStateHostHeight) : undefined;

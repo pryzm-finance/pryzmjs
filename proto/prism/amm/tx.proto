@@ -2,6 +2,7 @@ syntax = "proto3";
 package prism.amm;
 
 import "cosmos/base/v1beta1/coin.proto";
+import "cosmos/msg/v1/msg.proto";
 import "cosmos_proto/cosmos.proto";
 import "gogoproto/gogo.proto";
 import "prism/amm/operations.proto";
@@ -19,6 +20,8 @@ option go_package = "github.com/prism-finance/prism-core/x/amm/types";
 
 // Msg defines the Msg service.
 service Msg {
+  option (cosmos.msg.v1.service) = true;
+
   rpc SingleSwap(MsgSingleSwap) returns (MsgSingleSwapResponse);
   rpc JoinAllTokensExactLpt(MsgJoinAllTokensExactLpt) returns (MsgJoinAllTokensExactLptResponse);
   rpc JoinTokenExactLpt(MsgJoinTokenExactLpt) returns (MsgJoinTokenExactLptResponse);
@@ -58,7 +61,9 @@ service Msg {
 }
 
 message MsgSingleSwap {
-  string creator = 1;
+  option (cosmos.msg.v1.signer) = "creator";
+
+  string creator = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
   Swap swap = 2 [(gogoproto.nullable) = false];
   string max_amount_in = 3 [
     (cosmos_proto.scalar) = "cosmos.Int",
@@ -82,7 +87,9 @@ message MsgSingleSwapResponse {
 }
 
 message MsgJoinAllTokensExactLpt {
-  string creator = 1;
+  option (cosmos.msg.v1.signer) = "creator";
+
+  string creator = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
   uint64 pool_id = 2;
   string lpt_out = 3 [
     (cosmos_proto.scalar) = "cosmos.Int",
@@ -108,7 +115,9 @@ message MsgJoinAllTokensExactLptResponse {
 }
 
 message MsgJoinTokenExactLpt {
-  string creator = 1;
+  option (cosmos.msg.v1.signer) = "creator";
+
+  string creator = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
   uint64 pool_id = 2;
   string lpt_out = 3 [
     (cosmos_proto.scalar) = "cosmos.Int",
@@ -131,7 +140,9 @@ message MsgJoinTokenExactLptResponse {
 }
 
 message MsgJoinExactTokens {
-  string creator = 1;
+  option (cosmos.msg.v1.signer) = "creator";
+
+  string creator = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
   uint64 pool_id = 2;
   repeated cosmos.base.v1beta1.Coin amounts_in = 3 [
     (gogoproto.nullable) = false,
@@ -161,7 +172,9 @@ message MsgJoinExactTokensResponse {
 }
 
 message MsgExitExactTokens {
-  string creator = 1;
+  option (cosmos.msg.v1.signer) = "creator";
+
+  string creator = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
   uint64 pool_id = 2;
   repeated cosmos.base.v1beta1.Coin amounts_out = 3 [
     (gogoproto.nullable) = false,
@@ -188,7 +201,9 @@ message MsgExitExactTokensResponse {
 }
 
 message MsgExitTokenExactLpt {
-  string creator = 1;
+  option (cosmos.msg.v1.signer) = "creator";
+
+  string creator = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
   uint64 pool_id = 2;
   string lpt_in = 3 [
     (cosmos_proto.scalar) = "cosmos.Int",
@@ -211,7 +226,9 @@ message MsgExitTokenExactLptResponse {
 }
 
 message MsgExitAllTokensExactLpt {
-  string creator = 1;
+  option (cosmos.msg.v1.signer) = "creator";
+
+  string creator = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
   uint64 pool_id = 2;
   string lpt_in = 3 [
     (cosmos_proto.scalar) = "cosmos.Int",
@@ -243,7 +260,9 @@ message CreateWeightedPoolToken {
 }
 
 message MsgCreateWeightedPool {
-  string creator = 1;
+  option (cosmos.msg.v1.signer) = "creator";
+
+  string creator = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
   string name = 2;
   string swap_fee_ratio = 3 [
     (cosmos_proto.scalar) = "cosmos.Dec",
@@ -262,7 +281,9 @@ message MsgCreateWeightedPoolResponse {
 }
 
 message MsgUpdateSwapFee {
-  string creator = 1;
+  option (cosmos.msg.v1.signer) = "creator";
+
+  string creator = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
   uint64 pool_id = 2;
   string swap_fee_ratio = 3 [
     (cosmos_proto.scalar) = "cosmos.Dec",
@@ -274,7 +295,9 @@ message MsgUpdateSwapFee {
 message MsgUpdateSwapFeeResponse {}
 
 message MsgInitializePool {
-  string creator = 1;
+  option (cosmos.msg.v1.signer) = "creator";
+
+  string creator = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
   uint64 pool_id = 2;
   repeated cosmos.base.v1beta1.Coin amounts_in = 3 [
     (gogoproto.nullable) = false,
@@ -295,7 +318,9 @@ message MsgInitializePoolResponse {
 }
 
 message MsgUpdateWeights {
-  string creator = 1;
+  option (cosmos.msg.v1.signer) = "creator";
+
+  string creator = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
   uint64 pool_id = 2;
   repeated TokenWeight token_weights = 3 [(gogoproto.nullable) = false];
   int64 start_time_unix_millis = 4;
@@ -305,7 +330,9 @@ message MsgUpdateWeights {
 message MsgUpdateWeightsResponse {}
 
 message MsgBatchSwap {
-  string creator = 1;
+  option (cosmos.msg.v1.signer) = "creator";
+
+  string creator = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
   SwapType swap_type = 2;
   repeated SwapStep steps = 3 [(gogoproto.nullable) = false];
   repeated cosmos.base.v1beta1.Coin min_amounts_out = 4 [
@@ -329,32 +356,42 @@ message MsgBatchSwapResponse {
   ];
   // protocol fee does not contain the y_trade fee and refractor fee
   // which is paid in case of a yAsset trade
-  repeated cosmos.base.v1beta1.Coin protocol_fee = 3 [
+  repeated cosmos.base.v1beta1.Coin swap_protocol_fee = 3 [
     (gogoproto.nullable) = false,
     (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins"
   ];
-  repeated cosmos.base.v1beta1.Coin swap_fee = 4 [
+  repeated cosmos.base.v1beta1.Coin join_exit_protocol_fee = 4 [
+    (gogoproto.nullable) = false,
+    (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins"
+  ];
+  repeated cosmos.base.v1beta1.Coin swap_fee = 5 [
     (gogoproto.nullable) = false,
     (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins"
   ];
 }
 
 message MsgSetYammConfiguration {
-  string creator = 1;
+  option (cosmos.msg.v1.signer) = "creator";
+
+  string creator = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
   YammConfiguration configuration = 2 [(gogoproto.nullable) = false];
 }
 
 message MsgSetYammConfigurationResponse {}
 
 message MsgWhitelistRoute {
-  string authority = 1;
+  option (cosmos.msg.v1.signer) = "authority";
+
+  string authority = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
   WhitelistedRoute whitelisted_route = 2 [(gogoproto.nullable) = false];
 }
 
 message MsgWhitelistRouteResponse {}
 
 message MsgSetWhitelistedRouteEnabled {
-  string authority = 1;
+  option (cosmos.msg.v1.signer) = "authority";
+
+  string authority = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
   string token_in = 2;
   string token_out = 3;
   bool enabled = 4;
@@ -363,7 +400,9 @@ message MsgSetWhitelistedRouteEnabled {
 message MsgSetWhitelistedRouteEnabledResponse {}
 
 message MsgSubmitOrder {
-  string creator = 1;
+  option (cosmos.msg.v1.signer) = "creator";
+
+  string creator = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
   uint64 pool_id = 2;
   string token_in = 3;
   string token_out = 4;
@@ -397,7 +436,9 @@ message MsgSubmitOrderResponse {
 }
 
 message MsgCancelOrder {
-  string creator = 1;
+  option (cosmos.msg.v1.signer) = "creator";
+
+  string creator = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
   uint64 id = 2;
 }
 
@@ -406,7 +447,9 @@ message MsgCancelOrderResponse {
 }
 
 message MsgProposeMatch {
-  string creator = 1;
+  option (cosmos.msg.v1.signer) = "creator";
+
+  string creator = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
   repeated PairMatchProposal pairs = 2 [(gogoproto.nullable) = false];
 }
 
@@ -418,7 +461,9 @@ message MsgProposeMatchResponse {
 }
 
 message MsgSetCircuitBreakers {
-  string creator = 1;
+  option (cosmos.msg.v1.signer) = "creator";
+
+  string creator = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
   uint64 pool_id = 2;
   repeated TokenCircuitBreakerSettings token_circuit_breakers = 3 [(gogoproto.nullable) = false];
 }
@@ -426,7 +471,9 @@ message MsgSetCircuitBreakers {
 message MsgSetCircuitBreakersResponse {}
 
 message MsgSetRecoveryMode {
-  string authority = 1;
+  option (cosmos.msg.v1.signer) = "authority";
+
+  string authority = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
   uint64 pool_id = 2;
   bool recovery_mode = 3;
 }
@@ -434,7 +481,9 @@ message MsgSetRecoveryMode {
 message MsgSetRecoveryModeResponse {}
 
 message MsgRecoveryExit {
-  string creator = 1;
+  option (cosmos.msg.v1.signer) = "creator";
+
+  string creator = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
   uint64 pool_id = 2;
   string lpt_in = 3 [
     (cosmos_proto.scalar) = "cosmos.Int",
@@ -456,7 +505,9 @@ message MsgRecoveryExitResponse {
 }
 
 message MsgSetPauseMode {
-  string creator = 1;
+  option (cosmos.msg.v1.signer) = "creator";
+
+  string creator = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
   uint64 pool_id = 2;
   bool pause_mode = 3;
 }
@@ -464,32 +515,42 @@ message MsgSetPauseMode {
 message MsgSetPauseModeResponse {}
 
 message MsgSetVaultPauseMode {
-  string authority = 1;
+  option (cosmos.msg.v1.signer) = "authority";
+
+  string authority = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
   bool pause_mode = 2;
 }
 
 message MsgSetVaultPauseModeResponse {}
 
 message MsgCreateOraclePricePair {
-  string authority = 1;
+  option (cosmos.msg.v1.signer) = "authority";
+
+  string authority = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
   OraclePricePair oracle_price_pair = 2 [(gogoproto.nullable) = false];
 }
 message MsgCreateOraclePricePairResponse {}
 
 message MsgUpdateOraclePricePair {
-  string authority = 1;
+  option (cosmos.msg.v1.signer) = "authority";
+
+  string authority = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
   OraclePricePair oracle_price_pair = 2 [(gogoproto.nullable) = false];
 }
 message MsgUpdateOraclePricePairResponse {}
 
 message MsgDeleteOraclePricePair {
-  string authority = 1;
+  option (cosmos.msg.v1.signer) = "authority";
+
+  string authority = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
   string asset_id = 2;
 }
 message MsgDeleteOraclePricePairResponse {}
 
 message MsgSetSwapProtocolFee {
-  string authority = 1;
+  option (cosmos.msg.v1.signer) = "authority";
+
+  string authority = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
   uint64 pool_id = 2;
   // if protocol fee parameters are nil, then the values are read from treasury module parameters
   string swap_protocol_fee = 3 [
@@ -502,7 +563,9 @@ message MsgSetSwapProtocolFee {
 message MsgSetSwapProtocolFeeResponse {}
 
 message MsgSetJoinExitProtocolFee {
-  string authority = 1;
+  option (cosmos.msg.v1.signer) = "authority";
+
+  string authority = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
   uint64 pool_id = 2;
   // if protocol fee parameters are nil, then the values are read from treasury module parameters
   string join_exit_protocol_fee = 3 [
@@ -515,7 +578,9 @@ message MsgSetJoinExitProtocolFee {
 message MsgSetJoinExitProtocolFeeResponse {}
 
 message MsgIntroduceYammLpToWeightedPool {
-  string authority = 1;
+  option (cosmos.msg.v1.signer) = "authority";
+
+  string authority = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
   uint64 weighted_pool_id = 2;
   uint64 yamm_pool_id = 3;
   string token_normalized_weight = 4 [
@@ -529,7 +594,9 @@ message MsgIntroduceYammLpToWeightedPool {
 message MsgIntroduceYammLpToWeightedPoolResponse {}
 
 message MsgIntroduceAssetBaseTokenToWeightedPool {
-  string authority = 1;
+  option (cosmos.msg.v1.signer) = "authority";
+
+  string authority = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
   uint64 weighted_pool_id = 2;
   string token_denom = 3;
   string asset_id = 4;
@@ -544,7 +611,9 @@ message MsgIntroduceAssetBaseTokenToWeightedPool {
 message MsgIntroduceAssetBaseTokenToWeightedPoolResponse {}
 
 message MsgCancelPendingTokenIntroduction {
-  string authority = 1;
+  option (cosmos.msg.v1.signer) = "authority";
+
+  string authority = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
   string asset_id = 2;
   uint64 target_pool_id = 3;
 }
@@ -552,7 +621,9 @@ message MsgCancelPendingTokenIntroduction {
 message MsgCancelPendingTokenIntroductionResponse {}
 
 message MsgRemoveTokenFromWeightedPool {
-  string creator = 1;
+  option (cosmos.msg.v1.signer) = "creator";
+
+  string creator = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
   uint64 pool_id = 2;
   string token_denom = 3;
   int64 virtual_balance_interval_millis = 4;
@@ -561,7 +632,9 @@ message MsgRemoveTokenFromWeightedPool {
 message MsgRemoveTokenFromWeightedPoolResponse {}
 
 message MsgUpdateParams {
-  string authority = 1;
+  option (cosmos.msg.v1.signer) = "authority";
+
+  string authority = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
   GeneralPoolParameters general_pool_parameters = 2 [(gogoproto.nullable) = true];
   YammParameters yamm_parameters = 3 [(gogoproto.nullable) = true];
   OrderParameters order_parameters = 4 [(gogoproto.nullable) = true];
@@ -570,7 +643,9 @@ message MsgUpdateParams {
 message MsgUpdateParamsResponse {}
 
 message MsgAddMaturityToYamm {
-  string authority = 1;
+  option (cosmos.msg.v1.signer) = "authority";
+
+  string authority = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
   string assetId = 2;
   string maturitySymbol = 3;
 }
@@ -578,7 +653,9 @@ message MsgAddMaturityToYamm {
 message MsgAddMaturityToYammResponse {}
 
 message MsgSetInitializationAllowList {
-  string creator = 1;
+  option (cosmos.msg.v1.signer) = "creator";
+
+  string creator = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
   uint64 pool_id = 2;
   repeated string initialization_allow_list = 3;
 }

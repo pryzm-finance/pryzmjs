@@ -31,18 +31,18 @@ export interface QueryGetPoolResponseSDKType {
   pool: PoolSDKType;
 }
 export interface QueryAllPoolRequest {
-  pagination: PageRequest;
+  pagination?: PageRequest;
 }
 export interface QueryAllPoolRequestSDKType {
-  pagination: PageRequestSDKType;
+  pagination?: PageRequestSDKType;
 }
 export interface QueryAllPoolResponse {
   pool: Pool[];
-  pagination: PageResponse;
+  pagination?: PageResponse;
 }
 export interface QueryAllPoolResponseSDKType {
   pool: PoolSDKType[];
-  pagination: PageResponseSDKType;
+  pagination?: PageResponseSDKType;
 }
 export interface QueryGetBondRequest {
   address: string;
@@ -59,18 +59,18 @@ export interface QueryGetBondResponseSDKType {
   bond: BondSDKType;
 }
 export interface QueryAllBondRequest {
-  pagination: PageRequest;
+  pagination?: PageRequest;
 }
 export interface QueryAllBondRequestSDKType {
-  pagination: PageRequestSDKType;
+  pagination?: PageRequestSDKType;
 }
 export interface QueryAllBondResponse {
   bond: Bond[];
-  pagination: PageResponse;
+  pagination?: PageResponse;
 }
 export interface QueryAllBondResponseSDKType {
   bond: BondSDKType[];
-  pagination: PageResponseSDKType;
+  pagination?: PageResponseSDKType;
 }
 export interface QueryGetUnbondingRequest {
   id: bigint;
@@ -85,18 +85,18 @@ export interface QueryGetUnbondingResponseSDKType {
   unbonding: UnbondingSDKType;
 }
 export interface QueryAllUnbondingRequest {
-  pagination: PageRequest;
+  pagination?: PageRequest;
 }
 export interface QueryAllUnbondingRequestSDKType {
-  pagination: PageRequestSDKType;
+  pagination?: PageRequestSDKType;
 }
 export interface QueryAllUnbondingResponse {
   unbonding: Unbonding[];
-  pagination: PageResponse;
+  pagination?: PageResponse;
 }
 export interface QueryAllUnbondingResponseSDKType {
   unbonding: UnbondingSDKType[];
-  pagination: PageResponseSDKType;
+  pagination?: PageResponseSDKType;
 }
 function createBaseQueryParamsRequest(): QueryParamsRequest {
   return {};
@@ -268,7 +268,7 @@ export const QueryGetPoolResponse = {
 };
 function createBaseQueryAllPoolRequest(): QueryAllPoolRequest {
   return {
-    pagination: PageRequest.fromPartial({})
+    pagination: undefined
   };
 }
 export const QueryAllPoolRequest = {
@@ -314,7 +314,7 @@ export const QueryAllPoolRequest = {
 function createBaseQueryAllPoolResponse(): QueryAllPoolResponse {
   return {
     pool: [],
-    pagination: PageResponse.fromPartial({})
+    pagination: undefined
   };
 }
 export const QueryAllPoolResponse = {
@@ -472,7 +472,7 @@ export const QueryGetBondResponse = {
 };
 function createBaseQueryAllBondRequest(): QueryAllBondRequest {
   return {
-    pagination: PageRequest.fromPartial({})
+    pagination: undefined
   };
 }
 export const QueryAllBondRequest = {
@@ -518,7 +518,7 @@ export const QueryAllBondRequest = {
 function createBaseQueryAllBondResponse(): QueryAllBondResponse {
   return {
     bond: [],
-    pagination: PageResponse.fromPartial({})
+    pagination: undefined
   };
 }
 export const QueryAllBondResponse = {
@@ -666,7 +666,7 @@ export const QueryGetUnbondingResponse = {
 };
 function createBaseQueryAllUnbondingRequest(): QueryAllUnbondingRequest {
   return {
-    pagination: PageRequest.fromPartial({})
+    pagination: undefined
   };
 }
 export const QueryAllUnbondingRequest = {
@@ -712,7 +712,7 @@ export const QueryAllUnbondingRequest = {
 function createBaseQueryAllUnbondingResponse(): QueryAllUnbondingResponse {
   return {
     unbonding: [],
-    pagination: PageResponse.fromPartial({})
+    pagination: undefined
   };
 }
 export const QueryAllUnbondingResponse = {

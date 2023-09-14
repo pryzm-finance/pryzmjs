@@ -16,52 +16,62 @@ export interface StakingParams {
   /** the amount of operation fees */
   feeRatios: FeeRatios;
   /** the interval in which PRISM sends delegation messages to the host chain */
-  delegationInterval: Duration;
+  delegationInterval?: Duration;
   /**
    * the interval in which PRISM sends undelegation messages to the host chain
    * host chain's (UnbondingTime / MaxEntries) must be considered as the max value when setting this field
    */
-  undelegationInterval: Duration;
+  undelegationInterval?: Duration;
   /** the time-out value being set on ibc transfer messages */
-  ibcTransferTimeout: Duration;
+  ibcTransferTimeout?: Duration;
   /** the time-out value being set on ica messages */
-  icaTimeout: Duration;
-  maxUndelegationMsgs: number;
-  maxRedelegationMsgs: number;
-  rebalanceThreshold: string;
-  minRebalanceAmount: string;
-  minRebalanceInterval: Duration;
+  icaTimeout?: Duration;
+  rebalanceParams: RebalanceParams;
 }
 /** StakingParams defines the parameters related to staking on each host chain */
 export interface StakingParamsSDKType {
   fee_ratios: FeeRatiosSDKType;
-  delegation_interval: DurationSDKType;
-  undelegation_interval: DurationSDKType;
-  ibc_transfer_timeout: DurationSDKType;
-  ica_timeout: DurationSDKType;
-  max_undelegation_msgs: number;
-  max_redelegation_msgs: number;
-  rebalance_threshold: string;
-  min_rebalance_amount: string;
-  min_rebalance_interval: DurationSDKType;
+  delegation_interval?: DurationSDKType;
+  undelegation_interval?: DurationSDKType;
+  ibc_transfer_timeout?: DurationSDKType;
+  ica_timeout?: DurationSDKType;
+  rebalance_params: RebalanceParamsSDKType;
 }
 /** FeeRatios defines the fee ratio operations supported by icstaking */
 export interface FeeRatios {
   /** the ratio of fee reduced from yield of staking on the host chain */
-  yield: string;
+  yield?: string;
   /** the ratio of fee reduced from the amount of assets being staked on PRISM */
-  staking: string;
+  staking?: string;
   /** the ratio of fee reduced from the amount of assets being unstaked from PRISM */
-  unstaking: string;
+  unstaking?: string;
   /** the ratio of fee reduced from the amount of assets being instantly unstaked from PRISM */
-  instantUnstaking: string;
+  instantUnstaking?: string;
 }
 /** FeeRatios defines the fee ratio operations supported by icstaking */
 export interface FeeRatiosSDKType {
-  yield: string;
-  staking: string;
-  unstaking: string;
-  instant_unstaking: string;
+  yield?: string;
+  staking?: string;
+  unstaking?: string;
+  instant_unstaking?: string;
+}
+/** RebalanceParams contains the parameters for re-balancing a host chain's validator delegation weights */
+export interface RebalanceParams {
+  /** the maximum number of redelegation messages sent to the host chain in each rebalance operation */
+  maxMsgs: number;
+  /** the minimum divergence a validator delegation weight must have with the expected weight to start rebalance operation */
+  rebalanceThreshold?: string;
+  /** the minimum amount of assets for each redelegation message sent to a host chain */
+  minRebalanceAmount?: string;
+  /** the minimum interval between two rebalance operations */
+  minRebalanceInterval?: Duration;
+}
+/** RebalanceParams contains the parameters for re-balancing a host chain's validator delegation weights */
+export interface RebalanceParamsSDKType {
+  max_msgs: number;
+  rebalance_threshold?: string;
+  min_rebalance_amount?: string;
+  min_rebalance_interval?: DurationSDKType;
 }
 function createBaseParams(): Params {
   return {
@@ -111,15 +121,11 @@ export const Params = {
 function createBaseStakingParams(): StakingParams {
   return {
     feeRatios: FeeRatios.fromPartial({}),
-    delegationInterval: Duration.fromPartial({}),
-    undelegationInterval: Duration.fromPartial({}),
-    ibcTransferTimeout: Duration.fromPartial({}),
-    icaTimeout: Duration.fromPartial({}),
-    maxUndelegationMsgs: 0,
-    maxRedelegationMsgs: 0,
-    rebalanceThreshold: "",
-    minRebalanceAmount: "",
-    minRebalanceInterval: Duration.fromPartial({})
+    delegationInterval: undefined,
+    undelegationInterval: undefined,
+    ibcTransferTimeout: undefined,
+    icaTimeout: undefined,
+    rebalanceParams: RebalanceParams.fromPartial({})
   };
 }
 export const StakingParams = {
@@ -139,20 +145,8 @@ export const StakingParams = {
     if (message.icaTimeout !== undefined) {
       Duration.encode(message.icaTimeout, writer.uint32(42).fork()).ldelim();
     }
-    if (message.maxUndelegationMsgs !== 0) {
-      writer.uint32(48).int32(message.maxUndelegationMsgs);
-    }
-    if (message.maxRedelegationMsgs !== 0) {
-      writer.uint32(56).int32(message.maxRedelegationMsgs);
-    }
-    if (message.rebalanceThreshold !== "") {
-      writer.uint32(66).string(Decimal.fromUserInput(message.rebalanceThreshold, 18).atomics);
-    }
-    if (message.minRebalanceAmount !== "") {
-      writer.uint32(74).string(message.minRebalanceAmount);
-    }
-    if (message.minRebalanceInterval !== undefined) {
-      Duration.encode(message.minRebalanceInterval, writer.uint32(82).fork()).ldelim();
+    if (message.rebalanceParams !== undefined) {
+      RebalanceParams.encode(message.rebalanceParams, writer.uint32(50).fork()).ldelim();
     }
     return writer;
   },
@@ -179,19 +173,7 @@ export const StakingParams = {
           message.icaTimeout = Duration.decode(reader, reader.uint32());
           break;
         case 6:
-          message.maxUndelegationMsgs = reader.int32();
-          break;
-        case 7:
-          message.maxRedelegationMsgs = reader.int32();
-          break;
-        case 8:
-          message.rebalanceThreshold = Decimal.fromAtomics(reader.string(), 18).toString();
-          break;
-        case 9:
-          message.minRebalanceAmount = reader.string();
-          break;
-        case 10:
-          message.minRebalanceInterval = Duration.decode(reader, reader.uint32());
+          message.rebalanceParams = RebalanceParams.decode(reader, reader.uint32());
           break;
         default:
           reader.skipType(tag & 7);
@@ -207,11 +189,7 @@ export const StakingParams = {
       undelegationInterval: isSet(object.undelegationInterval) ? Duration.fromJSON(object.undelegationInterval) : undefined,
       ibcTransferTimeout: isSet(object.ibcTransferTimeout) ? Duration.fromJSON(object.ibcTransferTimeout) : undefined,
       icaTimeout: isSet(object.icaTimeout) ? Duration.fromJSON(object.icaTimeout) : undefined,
-      maxUndelegationMsgs: isSet(object.maxUndelegationMsgs) ? Number(object.maxUndelegationMsgs) : 0,
-      maxRedelegationMsgs: isSet(object.maxRedelegationMsgs) ? Number(object.maxRedelegationMsgs) : 0,
-      rebalanceThreshold: isSet(object.rebalanceThreshold) ? String(object.rebalanceThreshold) : "",
-      minRebalanceAmount: isSet(object.minRebalanceAmount) ? String(object.minRebalanceAmount) : "",
-      minRebalanceInterval: isSet(object.minRebalanceInterval) ? Duration.fromJSON(object.minRebalanceInterval) : undefined
+      rebalanceParams: isSet(object.rebalanceParams) ? RebalanceParams.fromJSON(object.rebalanceParams) : undefined
     };
   },
   toJSON(message: StakingParams): unknown {
@@ -221,11 +199,7 @@ export const StakingParams = {
     message.undelegationInterval !== undefined && (obj.undelegationInterval = message.undelegationInterval ? Duration.toJSON(message.undelegationInterval) : undefined);
     message.ibcTransferTimeout !== undefined && (obj.ibcTransferTimeout = message.ibcTransferTimeout ? Duration.toJSON(message.ibcTransferTimeout) : undefined);
     message.icaTimeout !== undefined && (obj.icaTimeout = message.icaTimeout ? Duration.toJSON(message.icaTimeout) : undefined);
-    message.maxUndelegationMsgs !== undefined && (obj.maxUndelegationMsgs = Math.round(message.maxUndelegationMsgs));
-    message.maxRedelegationMsgs !== undefined && (obj.maxRedelegationMsgs = Math.round(message.maxRedelegationMsgs));
-    message.rebalanceThreshold !== undefined && (obj.rebalanceThreshold = message.rebalanceThreshold);
-    message.minRebalanceAmount !== undefined && (obj.minRebalanceAmount = message.minRebalanceAmount);
-    message.minRebalanceInterval !== undefined && (obj.minRebalanceInterval = message.minRebalanceInterval ? Duration.toJSON(message.minRebalanceInterval) : undefined);
+    message.rebalanceParams !== undefined && (obj.rebalanceParams = message.rebalanceParams ? RebalanceParams.toJSON(message.rebalanceParams) : undefined);
     return obj;
   },
   fromPartial(object: Partial<StakingParams>): StakingParams {
@@ -235,34 +209,30 @@ export const StakingParams = {
     message.undelegationInterval = object.undelegationInterval !== undefined && object.undelegationInterval !== null ? Duration.fromPartial(object.undelegationInterval) : undefined;
     message.ibcTransferTimeout = object.ibcTransferTimeout !== undefined && object.ibcTransferTimeout !== null ? Duration.fromPartial(object.ibcTransferTimeout) : undefined;
     message.icaTimeout = object.icaTimeout !== undefined && object.icaTimeout !== null ? Duration.fromPartial(object.icaTimeout) : undefined;
-    message.maxUndelegationMsgs = object.maxUndelegationMsgs ?? 0;
-    message.maxRedelegationMsgs = object.maxRedelegationMsgs ?? 0;
-    message.rebalanceThreshold = object.rebalanceThreshold ?? "";
-    message.minRebalanceAmount = object.minRebalanceAmount ?? "";
-    message.minRebalanceInterval = object.minRebalanceInterval !== undefined && object.minRebalanceInterval !== null ? Duration.fromPartial(object.minRebalanceInterval) : undefined;
+    message.rebalanceParams = object.rebalanceParams !== undefined && object.rebalanceParams !== null ? RebalanceParams.fromPartial(object.rebalanceParams) : undefined;
     return message;
   }
 };
 function createBaseFeeRatios(): FeeRatios {
   return {
-    yield: "",
-    staking: "",
-    unstaking: "",
-    instantUnstaking: ""
+    yield: undefined,
+    staking: undefined,
+    unstaking: undefined,
+    instantUnstaking: undefined
   };
 }
 export const FeeRatios = {
   encode(message: FeeRatios, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
-    if (message.yield !== "") {
+    if (message.yield !== undefined) {
       writer.uint32(10).string(Decimal.fromUserInput(message.yield, 18).atomics);
     }
-    if (message.staking !== "") {
+    if (message.staking !== undefined) {
       writer.uint32(18).string(Decimal.fromUserInput(message.staking, 18).atomics);
     }
-    if (message.unstaking !== "") {
+    if (message.unstaking !== undefined) {
       writer.uint32(26).string(Decimal.fromUserInput(message.unstaking, 18).atomics);
     }
-    if (message.instantUnstaking !== "") {
+    if (message.instantUnstaking !== undefined) {
       writer.uint32(34).string(Decimal.fromUserInput(message.instantUnstaking, 18).atomics);
     }
     return writer;
@@ -295,10 +265,10 @@ export const FeeRatios = {
   },
   fromJSON(object: any): FeeRatios {
     return {
-      yield: isSet(object.yield) ? String(object.yield) : "",
-      staking: isSet(object.staking) ? String(object.staking) : "",
-      unstaking: isSet(object.unstaking) ? String(object.unstaking) : "",
-      instantUnstaking: isSet(object.instantUnstaking) ? String(object.instantUnstaking) : ""
+      yield: isSet(object.yield) ? String(object.yield) : undefined,
+      staking: isSet(object.staking) ? String(object.staking) : undefined,
+      unstaking: isSet(object.unstaking) ? String(object.unstaking) : undefined,
+      instantUnstaking: isSet(object.instantUnstaking) ? String(object.instantUnstaking) : undefined
     };
   },
   toJSON(message: FeeRatios): unknown {
@@ -311,10 +281,85 @@ export const FeeRatios = {
   },
   fromPartial(object: Partial<FeeRatios>): FeeRatios {
     const message = createBaseFeeRatios();
-    message.yield = object.yield ?? "";
-    message.staking = object.staking ?? "";
-    message.unstaking = object.unstaking ?? "";
-    message.instantUnstaking = object.instantUnstaking ?? "";
+    message.yield = object.yield ?? undefined;
+    message.staking = object.staking ?? undefined;
+    message.unstaking = object.unstaking ?? undefined;
+    message.instantUnstaking = object.instantUnstaking ?? undefined;
+    return message;
+  }
+};
+function createBaseRebalanceParams(): RebalanceParams {
+  return {
+    maxMsgs: 0,
+    rebalanceThreshold: undefined,
+    minRebalanceAmount: undefined,
+    minRebalanceInterval: undefined
+  };
+}
+export const RebalanceParams = {
+  encode(message: RebalanceParams, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    if (message.maxMsgs !== 0) {
+      writer.uint32(8).int32(message.maxMsgs);
+    }
+    if (message.rebalanceThreshold !== undefined) {
+      writer.uint32(18).string(Decimal.fromUserInput(message.rebalanceThreshold, 18).atomics);
+    }
+    if (message.minRebalanceAmount !== undefined) {
+      writer.uint32(26).string(message.minRebalanceAmount);
+    }
+    if (message.minRebalanceInterval !== undefined) {
+      Duration.encode(message.minRebalanceInterval, writer.uint32(34).fork()).ldelim();
+    }
+    return writer;
+  },
+  decode(input: BinaryReader | Uint8Array, length?: number): RebalanceParams {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseRebalanceParams();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.maxMsgs = reader.int32();
+          break;
+        case 2:
+          message.rebalanceThreshold = Decimal.fromAtomics(reader.string(), 18).toString();
+          break;
+        case 3:
+          message.minRebalanceAmount = reader.string();
+          break;
+        case 4:
+          message.minRebalanceInterval = Duration.decode(reader, reader.uint32());
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromJSON(object: any): RebalanceParams {
+    return {
+      maxMsgs: isSet(object.maxMsgs) ? Number(object.maxMsgs) : 0,
+      rebalanceThreshold: isSet(object.rebalanceThreshold) ? String(object.rebalanceThreshold) : undefined,
+      minRebalanceAmount: isSet(object.minRebalanceAmount) ? String(object.minRebalanceAmount) : undefined,
+      minRebalanceInterval: isSet(object.minRebalanceInterval) ? Duration.fromJSON(object.minRebalanceInterval) : undefined
+    };
+  },
+  toJSON(message: RebalanceParams): unknown {
+    const obj: any = {};
+    message.maxMsgs !== undefined && (obj.maxMsgs = Math.round(message.maxMsgs));
+    message.rebalanceThreshold !== undefined && (obj.rebalanceThreshold = message.rebalanceThreshold);
+    message.minRebalanceAmount !== undefined && (obj.minRebalanceAmount = message.minRebalanceAmount);
+    message.minRebalanceInterval !== undefined && (obj.minRebalanceInterval = message.minRebalanceInterval ? Duration.toJSON(message.minRebalanceInterval) : undefined);
+    return obj;
+  },
+  fromPartial(object: Partial<RebalanceParams>): RebalanceParams {
+    const message = createBaseRebalanceParams();
+    message.maxMsgs = object.maxMsgs ?? 0;
+    message.rebalanceThreshold = object.rebalanceThreshold ?? undefined;
+    message.minRebalanceAmount = object.minRebalanceAmount ?? undefined;
+    message.minRebalanceInterval = object.minRebalanceInterval !== undefined && object.minRebalanceInterval !== null ? Duration.fromPartial(object.minRebalanceInterval) : undefined;
     return message;
   }
 };

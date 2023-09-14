@@ -1,7 +1,7 @@
 //@ts-nocheck
 import { GeneratedType, Registry } from "@cosmjs/proto-signing";
-import { MsgUpdateParams, MsgRegisterHostChain, MsgUpdateHostChain, MsgStake, MsgUnstake, MsgRedeemUnstaked, MsgInstantUnstake, MsgRebalanceDelegations, MsgRedeemInterchainAccount } from "./tx";
-export const registry: ReadonlyArray<[string, GeneratedType]> = [["/prism.icstaking.MsgUpdateParams", MsgUpdateParams], ["/prism.icstaking.MsgRegisterHostChain", MsgRegisterHostChain], ["/prism.icstaking.MsgUpdateHostChain", MsgUpdateHostChain], ["/prism.icstaking.MsgStake", MsgStake], ["/prism.icstaking.MsgUnstake", MsgUnstake], ["/prism.icstaking.MsgRedeemUnstaked", MsgRedeemUnstaked], ["/prism.icstaking.MsgInstantUnstake", MsgInstantUnstake], ["/prism.icstaking.MsgRebalanceDelegations", MsgRebalanceDelegations], ["/prism.icstaking.MsgRedeemInterchainAccount", MsgRedeemInterchainAccount]];
+import { MsgUpdateParams, MsgRegisterHostChain, MsgUpdateHostChain, MsgStake, MsgUnstake, MsgRedeemUnstaked, MsgInstantUnstake, MsgRebalanceDelegations, MsgRegisterInterchainAccount } from "./tx";
+export const registry: ReadonlyArray<[string, GeneratedType]> = [["/prism.icstaking.MsgUpdateParams", MsgUpdateParams], ["/prism.icstaking.MsgRegisterHostChain", MsgRegisterHostChain], ["/prism.icstaking.MsgUpdateHostChain", MsgUpdateHostChain], ["/prism.icstaking.MsgStake", MsgStake], ["/prism.icstaking.MsgUnstake", MsgUnstake], ["/prism.icstaking.MsgRedeemUnstaked", MsgRedeemUnstaked], ["/prism.icstaking.MsgInstantUnstake", MsgInstantUnstake], ["/prism.icstaking.MsgRebalanceDelegations", MsgRebalanceDelegations], ["/prism.icstaking.MsgRegisterInterchainAccount", MsgRegisterInterchainAccount]];
 export const load = (protoRegistry: Registry) => {
   registry.forEach(([typeUrl, mod]) => {
     protoRegistry.register(typeUrl, mod);
@@ -57,10 +57,10 @@ export const MessageComposer = {
         value: MsgRebalanceDelegations.encode(value).finish()
       };
     },
-    redeemInterchainAccount(value: MsgRedeemInterchainAccount) {
+    registerInterchainAccount(value: MsgRegisterInterchainAccount) {
       return {
-        typeUrl: "/prism.icstaking.MsgRedeemInterchainAccount",
-        value: MsgRedeemInterchainAccount.encode(value).finish()
+        typeUrl: "/prism.icstaking.MsgRegisterInterchainAccount",
+        value: MsgRegisterInterchainAccount.encode(value).finish()
       };
     }
   },
@@ -113,9 +113,9 @@ export const MessageComposer = {
         value
       };
     },
-    redeemInterchainAccount(value: MsgRedeemInterchainAccount) {
+    registerInterchainAccount(value: MsgRegisterInterchainAccount) {
       return {
-        typeUrl: "/prism.icstaking.MsgRedeemInterchainAccount",
+        typeUrl: "/prism.icstaking.MsgRegisterInterchainAccount",
         value
       };
     }
@@ -169,10 +169,10 @@ export const MessageComposer = {
         value: MsgRebalanceDelegations.toJSON(value)
       };
     },
-    redeemInterchainAccount(value: MsgRedeemInterchainAccount) {
+    registerInterchainAccount(value: MsgRegisterInterchainAccount) {
       return {
-        typeUrl: "/prism.icstaking.MsgRedeemInterchainAccount",
-        value: MsgRedeemInterchainAccount.toJSON(value)
+        typeUrl: "/prism.icstaking.MsgRegisterInterchainAccount",
+        value: MsgRegisterInterchainAccount.toJSON(value)
       };
     }
   },
@@ -225,10 +225,10 @@ export const MessageComposer = {
         value: MsgRebalanceDelegations.fromJSON(value)
       };
     },
-    redeemInterchainAccount(value: any) {
+    registerInterchainAccount(value: any) {
       return {
-        typeUrl: "/prism.icstaking.MsgRedeemInterchainAccount",
-        value: MsgRedeemInterchainAccount.fromJSON(value)
+        typeUrl: "/prism.icstaking.MsgRegisterInterchainAccount",
+        value: MsgRegisterInterchainAccount.fromJSON(value)
       };
     }
   },
@@ -281,10 +281,10 @@ export const MessageComposer = {
         value: MsgRebalanceDelegations.fromPartial(value)
       };
     },
-    redeemInterchainAccount(value: MsgRedeemInterchainAccount) {
+    registerInterchainAccount(value: MsgRegisterInterchainAccount) {
       return {
-        typeUrl: "/prism.icstaking.MsgRedeemInterchainAccount",
-        value: MsgRedeemInterchainAccount.fromPartial(value)
+        typeUrl: "/prism.icstaking.MsgRegisterInterchainAccount",
+        value: MsgRegisterInterchainAccount.fromPartial(value)
       };
     }
   }

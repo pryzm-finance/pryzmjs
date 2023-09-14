@@ -45,12 +45,12 @@ message QueryGetFlowTradeResponse {
 }
 
 message QueryAllFlowTradeRequest {
-  cosmos.base.query.v1beta1.PageRequest pagination = 1;
+  cosmos.base.query.v1beta1.PageRequest pagination = 1 [(gogoproto.nullable) = true];
 }
 
 message QueryAllFlowTradeResponse {
   repeated FlowTrade flow_trade = 1 [(gogoproto.nullable) = false];
-  cosmos.base.query.v1beta1.PageResponse pagination = 2;
+  cosmos.base.query.v1beta1.PageResponse pagination = 2 [(gogoproto.nullable) = true];
 }
 
 // this line is used by starport scaffolding # 3

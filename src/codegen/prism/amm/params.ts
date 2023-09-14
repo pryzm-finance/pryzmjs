@@ -24,32 +24,31 @@ export interface OrderParametersSDKType {
   min_order_step_ratio: string;
 }
 export interface YammParameters {
+  lambda: string;
   /** duration (milliseconds) for virtual balance when adding new pAssets to yamm pools */
   maturityIntroductionIntervalMillis: bigint;
   maturityExpirationIntervalMillis: bigint;
+  introductionVirtualBalanceScaler: string;
   expirationVirtualBalanceScaler: string;
-  /**
-   * discount ratio applied to constant sum equations for trading cAsset-pAsset where pAsset is expired or close
-   * to expiry
-   */
-  expiredAssetDiscountRatio: string;
   buyYGivenInLoanFeeRatio: string;
   sellYGivenOutFeeRatio: string;
-  swapYieldFeeRatio: string;
-  leverageScaler: string;
-  /** zero means no limit */
-  maxWeightRatio: string;
+  maxAlpha: string;
+  /**
+   * this will be set to newly created yamm pools
+   * if not empty, only these addresses can initialize the pools
+   */
+  defaultInitializationAllowList: string[];
 }
 export interface YammParametersSDKType {
+  lambda: string;
   maturity_introduction_interval_millis: bigint;
   maturity_expiration_interval_millis: bigint;
+  introduction_virtual_balance_scaler: string;
   expiration_virtual_balance_scaler: string;
-  expired_asset_discount_ratio: string;
   buy_y_given_in_loan_fee_ratio: string;
   sell_y_given_out_fee_ratio: string;
-  swap_yield_fee_ratio: string;
-  leverage_scaler: string;
-  max_weight_ratio: string;
+  max_alpha: string;
+  default_initialization_allow_list: string[];
 }
 export interface GeneralPoolParameters {
   allowPublicPoolCreation: boolean;
@@ -202,45 +201,45 @@ export const OrderParameters = {
 };
 function createBaseYammParameters(): YammParameters {
   return {
+    lambda: "",
     maturityIntroductionIntervalMillis: BigInt(0),
     maturityExpirationIntervalMillis: BigInt(0),
+    introductionVirtualBalanceScaler: "",
     expirationVirtualBalanceScaler: "",
-    expiredAssetDiscountRatio: "",
     buyYGivenInLoanFeeRatio: "",
     sellYGivenOutFeeRatio: "",
-    swapYieldFeeRatio: "",
-    leverageScaler: "",
-    maxWeightRatio: ""
+    maxAlpha: "",
+    defaultInitializationAllowList: []
   };
 }
 export const YammParameters = {
   encode(message: YammParameters, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    if (message.lambda !== "") {
+      writer.uint32(10).string(Decimal.fromUserInput(message.lambda, 18).atomics);
+    }
     if (message.maturityIntroductionIntervalMillis !== BigInt(0)) {
-      writer.uint32(8).int64(message.maturityIntroductionIntervalMillis);
+      writer.uint32(16).int64(message.maturityIntroductionIntervalMillis);
     }
     if (message.maturityExpirationIntervalMillis !== BigInt(0)) {
-      writer.uint32(16).int64(message.maturityExpirationIntervalMillis);
+      writer.uint32(24).int64(message.maturityExpirationIntervalMillis);
+    }
+    if (message.introductionVirtualBalanceScaler !== "") {
+      writer.uint32(34).string(message.introductionVirtualBalanceScaler);
     }
     if (message.expirationVirtualBalanceScaler !== "") {
-      writer.uint32(26).string(Decimal.fromUserInput(message.expirationVirtualBalanceScaler, 18).atomics);
-    }
-    if (message.expiredAssetDiscountRatio !== "") {
-      writer.uint32(34).string(Decimal.fromUserInput(message.expiredAssetDiscountRatio, 18).atomics);
+      writer.uint32(42).string(message.expirationVirtualBalanceScaler);
     }
     if (message.buyYGivenInLoanFeeRatio !== "") {
-      writer.uint32(42).string(Decimal.fromUserInput(message.buyYGivenInLoanFeeRatio, 18).atomics);
+      writer.uint32(50).string(Decimal.fromUserInput(message.buyYGivenInLoanFeeRatio, 18).atomics);
     }
     if (message.sellYGivenOutFeeRatio !== "") {
-      writer.uint32(50).string(Decimal.fromUserInput(message.sellYGivenOutFeeRatio, 18).atomics);
+      writer.uint32(58).string(Decimal.fromUserInput(message.sellYGivenOutFeeRatio, 18).atomics);
     }
-    if (message.swapYieldFeeRatio !== "") {
-      writer.uint32(58).string(Decimal.fromUserInput(message.swapYieldFeeRatio, 18).atomics);
+    if (message.maxAlpha !== "") {
+      writer.uint32(66).string(Decimal.fromUserInput(message.maxAlpha, 18).atomics);
     }
-    if (message.leverageScaler !== "") {
-      writer.uint32(66).string(Decimal.fromUserInput(message.leverageScaler, 18).atomics);
-    }
-    if (message.maxWeightRatio !== "") {
-      writer.uint32(82).string(Decimal.fromUserInput(message.maxWeightRatio, 18).atomics);
+    for (const v of message.defaultInitializationAllowList) {
+      writer.uint32(74).string(v!);
     }
     return writer;
   },
@@ -252,31 +251,31 @@ export const YammParameters = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.maturityIntroductionIntervalMillis = reader.int64();
+          message.lambda = Decimal.fromAtomics(reader.string(), 18).toString();
           break;
         case 2:
-          message.maturityExpirationIntervalMillis = reader.int64();
+          message.maturityIntroductionIntervalMillis = reader.int64();
           break;
         case 3:
-          message.expirationVirtualBalanceScaler = Decimal.fromAtomics(reader.string(), 18).toString();
+          message.maturityExpirationIntervalMillis = reader.int64();
           break;
         case 4:
-          message.expiredAssetDiscountRatio = Decimal.fromAtomics(reader.string(), 18).toString();
+          message.introductionVirtualBalanceScaler = reader.string();
           break;
         case 5:
-          message.buyYGivenInLoanFeeRatio = Decimal.fromAtomics(reader.string(), 18).toString();
+          message.expirationVirtualBalanceScaler = reader.string();
           break;
         case 6:
-          message.sellYGivenOutFeeRatio = Decimal.fromAtomics(reader.string(), 18).toString();
+          message.buyYGivenInLoanFeeRatio = Decimal.fromAtomics(reader.string(), 18).toString();
           break;
         case 7:
-          message.swapYieldFeeRatio = Decimal.fromAtomics(reader.string(), 18).toString();
+          message.sellYGivenOutFeeRatio = Decimal.fromAtomics(reader.string(), 18).toString();
           break;
         case 8:
-          message.leverageScaler = Decimal.fromAtomics(reader.string(), 18).toString();
+          message.maxAlpha = Decimal.fromAtomics(reader.string(), 18).toString();
           break;
-        case 10:
-          message.maxWeightRatio = Decimal.fromAtomics(reader.string(), 18).toString();
+        case 9:
+          message.defaultInitializationAllowList.push(reader.string());
           break;
         default:
           reader.skipType(tag & 7);
@@ -287,41 +286,45 @@ export const YammParameters = {
   },
   fromJSON(object: any): YammParameters {
     return {
+      lambda: isSet(object.lambda) ? String(object.lambda) : "",
       maturityIntroductionIntervalMillis: isSet(object.maturityIntroductionIntervalMillis) ? BigInt(object.maturityIntroductionIntervalMillis.toString()) : BigInt(0),
       maturityExpirationIntervalMillis: isSet(object.maturityExpirationIntervalMillis) ? BigInt(object.maturityExpirationIntervalMillis.toString()) : BigInt(0),
+      introductionVirtualBalanceScaler: isSet(object.introductionVirtualBalanceScaler) ? String(object.introductionVirtualBalanceScaler) : "",
       expirationVirtualBalanceScaler: isSet(object.expirationVirtualBalanceScaler) ? String(object.expirationVirtualBalanceScaler) : "",
-      expiredAssetDiscountRatio: isSet(object.expiredAssetDiscountRatio) ? String(object.expiredAssetDiscountRatio) : "",
       buyYGivenInLoanFeeRatio: isSet(object.buyYGivenInLoanFeeRatio) ? String(object.buyYGivenInLoanFeeRatio) : "",
       sellYGivenOutFeeRatio: isSet(object.sellYGivenOutFeeRatio) ? String(object.sellYGivenOutFeeRatio) : "",
-      swapYieldFeeRatio: isSet(object.swapYieldFeeRatio) ? String(object.swapYieldFeeRatio) : "",
-      leverageScaler: isSet(object.leverageScaler) ? String(object.leverageScaler) : "",
-      maxWeightRatio: isSet(object.maxWeightRatio) ? String(object.maxWeightRatio) : ""
+      maxAlpha: isSet(object.maxAlpha) ? String(object.maxAlpha) : "",
+      defaultInitializationAllowList: Array.isArray(object?.defaultInitializationAllowList) ? object.defaultInitializationAllowList.map((e: any) => String(e)) : []
     };
   },
   toJSON(message: YammParameters): unknown {
     const obj: any = {};
+    message.lambda !== undefined && (obj.lambda = message.lambda);
     message.maturityIntroductionIntervalMillis !== undefined && (obj.maturityIntroductionIntervalMillis = (message.maturityIntroductionIntervalMillis || BigInt(0)).toString());
     message.maturityExpirationIntervalMillis !== undefined && (obj.maturityExpirationIntervalMillis = (message.maturityExpirationIntervalMillis || BigInt(0)).toString());
+    message.introductionVirtualBalanceScaler !== undefined && (obj.introductionVirtualBalanceScaler = message.introductionVirtualBalanceScaler);
     message.expirationVirtualBalanceScaler !== undefined && (obj.expirationVirtualBalanceScaler = message.expirationVirtualBalanceScaler);
-    message.expiredAssetDiscountRatio !== undefined && (obj.expiredAssetDiscountRatio = message.expiredAssetDiscountRatio);
     message.buyYGivenInLoanFeeRatio !== undefined && (obj.buyYGivenInLoanFeeRatio = message.buyYGivenInLoanFeeRatio);
     message.sellYGivenOutFeeRatio !== undefined && (obj.sellYGivenOutFeeRatio = message.sellYGivenOutFeeRatio);
-    message.swapYieldFeeRatio !== undefined && (obj.swapYieldFeeRatio = message.swapYieldFeeRatio);
-    message.leverageScaler !== undefined && (obj.leverageScaler = message.leverageScaler);
-    message.maxWeightRatio !== undefined && (obj.maxWeightRatio = message.maxWeightRatio);
+    message.maxAlpha !== undefined && (obj.maxAlpha = message.maxAlpha);
+    if (message.defaultInitializationAllowList) {
+      obj.defaultInitializationAllowList = message.defaultInitializationAllowList.map(e => e);
+    } else {
+      obj.defaultInitializationAllowList = [];
+    }
     return obj;
   },
   fromPartial(object: Partial<YammParameters>): YammParameters {
     const message = createBaseYammParameters();
+    message.lambda = object.lambda ?? "";
     message.maturityIntroductionIntervalMillis = object.maturityIntroductionIntervalMillis !== undefined && object.maturityIntroductionIntervalMillis !== null ? BigInt(object.maturityIntroductionIntervalMillis.toString()) : BigInt(0);
     message.maturityExpirationIntervalMillis = object.maturityExpirationIntervalMillis !== undefined && object.maturityExpirationIntervalMillis !== null ? BigInt(object.maturityExpirationIntervalMillis.toString()) : BigInt(0);
+    message.introductionVirtualBalanceScaler = object.introductionVirtualBalanceScaler ?? "";
     message.expirationVirtualBalanceScaler = object.expirationVirtualBalanceScaler ?? "";
-    message.expiredAssetDiscountRatio = object.expiredAssetDiscountRatio ?? "";
     message.buyYGivenInLoanFeeRatio = object.buyYGivenInLoanFeeRatio ?? "";
     message.sellYGivenOutFeeRatio = object.sellYGivenOutFeeRatio ?? "";
-    message.swapYieldFeeRatio = object.swapYieldFeeRatio ?? "";
-    message.leverageScaler = object.leverageScaler ?? "";
-    message.maxWeightRatio = object.maxWeightRatio ?? "";
+    message.maxAlpha = object.maxAlpha ?? "";
+    message.defaultInitializationAllowList = object.defaultInitializationAllowList?.map(e => e) || [];
     return message;
   }
 };

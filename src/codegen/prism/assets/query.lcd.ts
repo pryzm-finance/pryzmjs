@@ -42,7 +42,7 @@ export class LCDQueryClient {
   }
   /* Queries a MaturityLevel by index. */
   async maturityLevel(params: QueryGetMaturityLevelRequest): Promise<QueryGetMaturityLevelResponseSDKType> {
-    const endpoint = `prism-finance/prism-core/assets/maturity_level/${params.active}/${params.assetId}/${params.symbol}`;
+    const endpoint = `prism-finance/prism-core/assets/maturity_level/${params.assetId}/${params.symbol}`;
     return await this.req.get<QueryGetMaturityLevelResponseSDKType>(endpoint);
   }
   /* Queries a list of MaturityLevel items. */

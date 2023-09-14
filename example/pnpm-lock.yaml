@@ -1,13 +1,13 @@
 lockfileVersion: 5.4
 
 specifiers:
-  '@prism-finance/prismjs': 0.10.9
+  '@prism-finance/prismjs': 0.11.0
   '@refractedlabs/oraclejs': ^0.3.0
   '@refractedlabs/utils': 0.1.5
   typescript: ^5.1.6
 
 dependencies:
-  '@prism-finance/prismjs': 0.10.9_google-protobuf@3.21.2
+  '@prism-finance/prismjs': 0.11.0_google-protobuf@3.21.2
   '@refractedlabs/oraclejs': 0.3.0_google-protobuf@3.21.2
   '@refractedlabs/utils': 0.1.5
 
@@ -88,7 +88,7 @@ packages:
       '@noble/hashes': 1.3.2
       bn.js: 5.2.1
       elliptic: 6.5.4
-      libsodium-wrappers-sumo: 0.7.11
+      libsodium-wrappers-sumo: 0.7.13
     dev: false
 
   /@cosmjs/encoding/0.31.0:
@@ -359,8 +359,8 @@ packages:
       - debug
     dev: false
 
-  /@prism-finance/prismjs/0.10.9_google-protobuf@3.21.2:
-    resolution: {integrity: sha512-tFW4Q0cXF/kNPJyEQlkIJQar0tFSR9tYHPlGpuDqfyu+kx28/nNe49ffY52gEPjwP148MsY6kIM8hA4uXkQnoA==, tarball: download/@prism-finance/prismjs/0.10.9/c603589b59574d0ae3596a9b0fe119ff90c08490}
+  /@prism-finance/prismjs/0.11.0_google-protobuf@3.21.2:
+    resolution: {integrity: sha512-6uPGu1wB5mo5UkoZKc70QAC+e/Hw4qY4WJ1K39LexylXZ6XKWqxOLlcGRuGN1rYdGO3nbnTS66ZcUa+4vHk5ww==, tarball: download/@prism-finance/prismjs/0.11.0/d42e970d0670f5a0167201198c4a6f2f1a5653ce}
     dependencies:
       '@babel/runtime': 7.22.15
       '@cosmjs/amino': 0.31.0
@@ -756,10 +756,20 @@ packages:
     resolution: {integrity: sha512-bY+7ph7xpk51Ez2GbE10lXAQ5sJma6NghcIDaSPbM/G9elfrjLa0COHl/7P6Wb/JizQzl5UQontOOP1z0VwbLA==}
     dev: false
 
+  /libsodium-sumo/0.7.13:
+    resolution: {integrity: sha512-zTGdLu4b9zSNLfovImpBCbdAA4xkpkZbMnSQjP8HShyOutnGjRHmSOKlsylh1okao6QhLiz7nG98EGn+04cZjQ==}
+    dev: false
+
   /libsodium-wrappers-sumo/0.7.11:
     resolution: {integrity: sha512-DGypHOmJbB1nZn89KIfGOAkDgfv5N6SBGC3Qvmy/On0P0WD1JQvNRS/e3UL3aFF+xC0m+MYz5M+MnRnK2HMrKQ==}
     dependencies:
       libsodium-sumo: 0.7.11
+    dev: false
+
+  /libsodium-wrappers-sumo/0.7.13:
+    resolution: {integrity: sha512-lz4YdplzDRh6AhnLGF2Dj2IUj94xRN6Bh8T0HLNwzYGwPehQJX6c7iYVrFUPZ3QqxE0bqC+K0IIqqZJYWumwSQ==}
+    dependencies:
+      libsodium-sumo: 0.7.13
     dev: false
 
   /logform/2.5.1:

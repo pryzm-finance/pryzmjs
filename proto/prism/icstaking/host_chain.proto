@@ -92,12 +92,14 @@ message HostChainState {
 
   // The amount of assets that are in the delegation account and ready to be delegated
   string amount_to_be_delegated = 4 [
+    (cosmos_proto.scalar) = "cosmos.Int",
     (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Int",
     (gogoproto.nullable) = false
   ];
 
-  // The amount of assets that are in the reward account and ready to be transferred to the delegation account
-  string amount_to_be_compounded = 5 [
+  // The amount of assets that are in the delegation account and ready to be delegated
+  string undelegated_amount_to_collect = 5 [
+    (cosmos_proto.scalar) = "cosmos.Int",
     (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Int",
     (gogoproto.nullable) = false
   ];
@@ -132,6 +134,7 @@ message HostAccounts {
 message HostAccount {
   string address = 1;
   string balance = 2 [
+    (cosmos_proto.scalar) = "cosmos.Int",
     (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Int",
     (gogoproto.nullable) = false
   ];
@@ -146,6 +149,7 @@ enum AccountState {
 
 message ValidatorState {
   string delegated_amount = 1 [
+    (cosmos_proto.scalar) = "cosmos.Int",
     (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Int",
     (gogoproto.nullable) = false
   ];
@@ -159,5 +163,6 @@ enum State {
   UNDELEGATING = 4;
   REDELEGATING = 5;
   COMPOUNDING = 6;
-  SWEEPING = 7;
+  COLLECTING = 7;
+  SWEEPING = 8;
 }

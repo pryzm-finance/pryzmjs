@@ -9,9 +9,12 @@ option go_package = "github.com/prism-finance/prism-core/x/icstaking/types";
 
 // the stored data for handling the reply of a sent ibc packet
 message ReplyData {
+  // the identifier of the bridge
   string bridge_id = 1;
+  // the identifier of the sent packet
   PacketId packet_id = 2 [(gogoproto.nullable) = false];
   string host_chain_id = 3;
+  // serialized data shared when handling the packet result
   bytes data = 4;
 }
 
@@ -24,35 +27,108 @@ message PacketId {
   uint64 sequence = 3;
 }
 
+// The reply data for DelegateTransferBridge
 message DelegateTransferReplyData {
+  // the identifier of the transfer session
   string transfer_session = 1;
+  // the amount being transferred
   cosmos.base.v1beta1.Coin amount = 2 [(gogoproto.nullable) = false];
 }
 
+// A session of token transfer to a host chain from multiple channels, used in DelegateTransferBridge
 message DelegateTransferSession {
+  // a generated id for the session
   string id = 1;
+  // a map of packet id to a boolean, determining whether the packet is finalized (either succeeded or failed)
   map<string, bool> packet_finalized = 2;
 }
 
+// The reply data for DelegateBridge
 message DelegateReplyData {
-  map<string, string> delegations = 1;
+  // a list of delegations to different validators
+  repeated DelegationEntry delegations = 1 [(gogoproto.nullable) = false];
 }
 
-message UndelegateReplyData {
-  string total_c_amount = 1 [
+// Contains info about delegating an amount of assets to a validator
+message DelegationEntry {
+  string validator = 1;
+  string amount = 2 [
     (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Int",
     (gogoproto.nullable) = false
   ];
-  map<string, string> undelegations = 2;
+}
+
+// The reply data for UndelegateBridge
+message UndelegateReplyData {
+  string total_c_amount = 1 [
+    (cosmos_proto.scalar) = "cosmos.Int",
+    (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Int",
+    (gogoproto.nullable) = false
+  ];
+  repeated UndelegationEntry undelegations = 2 [(gogoproto.nullable) = false];
   repeated uint64 epochs = 3;
 }
 
+// Contains info about undelegating an amount of assets from a validator
+message UndelegationEntry {
+  string validator = 1;
+  string amount = 2 [
+    (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Int",
+    (gogoproto.nullable) = false
+  ];
+}
+
+// The reply data for RedelegateBridge
+message RedelegateReplyData {
+  repeated RedelegationEntry redelegations = 1 [(gogoproto.nullable) = false];
+}
+
+// Contains info about redelegating an amount of assets from a validator to another validator
+message RedelegationEntry {
+  string src_validator = 1;
+  string dst_validator = 2;
+  string amount = 3 [
+    (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Int",
+    (gogoproto.nullable) = false
+  ];
+}
+
+// The reply data used in CompoundBridge
 message CompoundData {
   string fee_amount = 1 [
+    (cosmos_proto.scalar) = "cosmos.Int",
     (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Int",
     (gogoproto.nullable) = false
   ];
   string compound_amount = 2 [
+    (cosmos_proto.scalar) = "cosmos.Int",
+    (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Int",
+    (gogoproto.nullable) = false
+  ];
+}
+
+message CollectUndelegatedReplyData {
+  string undelegated_amount = 1 [
+    (cosmos_proto.scalar) = "cosmos.Int",
+    (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Int",
+    (gogoproto.nullable) = false
+  ];
+}
+
+// The reply data used in SweepBridge
+message SweepData {
+  // a map of channel id to info about the sweep operation through that channel
+  map<string, ChannelSweep> channel_sweeps = 1 [(gogoproto.nullable) = false];
+}
+
+// Contains info about the sweep operation through a channel
+message ChannelSweep {
+  string channel = 1;
+  // a list of epochs that the sweep is related to
+  repeated uint64 epochs = 2;
+  // the amount being swept from the host chain
+  string amount = 3 [
+    (cosmos_proto.scalar) = "cosmos.Int",
     (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Int",
     (gogoproto.nullable) = false
   ];

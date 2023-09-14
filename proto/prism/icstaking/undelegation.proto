@@ -88,9 +88,9 @@ message ChannelUndelegation {
   // if received is true, pending_amount must be zero
   bool received = 10;
 
-  // the amount of assets that are redeemed by users.
-  // a channel undelegation record is deleted when received is true and this amount is equal the received_amount
-  string claimed_amount = 11 [
+  // the amount of uAssets redeemed by users.
+  // a channel undelegation record is deleted when this amount is equal the total_c_amount
+  string claimed_u_amount = 11 [
     (cosmos_proto.scalar) = "cosmos.Int",
     (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Int",
     (gogoproto.nullable) = false

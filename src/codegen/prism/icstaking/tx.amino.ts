@@ -1,7 +1,7 @@
 //@ts-nocheck
 import { connectionTypeFromJSON, transferChannelTypeFromJSON } from "./host_chain";
 import { AminoMsg } from "@cosmjs/amino";
-import { iCATypeFromJSON, MsgUpdateParams, MsgRegisterHostChain, MsgUpdateHostChain, MsgStake, MsgUnstake, MsgRedeemUnstaked, MsgInstantUnstake, MsgRebalanceDelegations, MsgRedeemInterchainAccount } from "./tx";
+import { iCARegistrationTypeFromJSON, MsgUpdateParams, MsgRegisterHostChain, MsgUpdateHostChain, MsgStake, MsgUnstake, MsgRedeemUnstaked, MsgInstantUnstake, MsgRebalanceDelegations, MsgRegisterInterchainAccount } from "./tx";
 export interface MsgUpdateParamsAminoType extends AminoMsg {
   type: "/prism.icstaking.MsgUpdateParams";
   value: {
@@ -30,13 +30,14 @@ export interface MsgUpdateParamsAminoType extends AminoMsg {
           seconds: string;
           nanos: number;
         };
-        max_undelegation_msgs: number;
-        max_redelegation_msgs: number;
-        rebalance_threshold: string;
-        min_rebalance_amount: string;
-        min_rebalance_interval: {
-          seconds: string;
-          nanos: number;
+        rebalance_params: {
+          max_msgs: number;
+          rebalance_threshold: string;
+          min_rebalance_amount: string;
+          min_rebalance_interval: {
+            seconds: string;
+            nanos: number;
+          };
         };
       };
     };
@@ -80,13 +81,14 @@ export interface MsgRegisterHostChainAminoType extends AminoMsg {
           seconds: string;
           nanos: number;
         };
-        max_undelegation_msgs: number;
-        max_redelegation_msgs: number;
-        rebalance_threshold: string;
-        min_rebalance_amount: string;
-        min_rebalance_interval: {
-          seconds: string;
-          nanos: number;
+        rebalance_params: {
+          max_msgs: number;
+          rebalance_threshold: string;
+          min_rebalance_amount: string;
+          min_rebalance_interval: {
+            seconds: string;
+            nanos: number;
+          };
         };
       };
       validators: {
@@ -128,13 +130,14 @@ export interface MsgUpdateHostChainAminoType extends AminoMsg {
         seconds: string;
         nanos: number;
       };
-      max_undelegation_msgs: number;
-      max_redelegation_msgs: number;
-      rebalance_threshold: string;
-      min_rebalance_amount: string;
-      min_rebalance_interval: {
-        seconds: string;
-        nanos: number;
+      rebalance_params: {
+        max_msgs: number;
+        rebalance_threshold: string;
+        min_rebalance_amount: string;
+        min_rebalance_interval: {
+          seconds: string;
+          nanos: number;
+        };
       };
     };
   };
@@ -184,12 +187,12 @@ export interface MsgRebalanceDelegationsAminoType extends AminoMsg {
     host_chain: string;
   };
 }
-export interface MsgRedeemInterchainAccountAminoType extends AminoMsg {
-  type: "/prism.icstaking.MsgRedeemInterchainAccount";
+export interface MsgRegisterInterchainAccountAminoType extends AminoMsg {
+  type: "/prism.icstaking.MsgRegisterInterchainAccount";
   value: {
     creator: string;
     host_chain: string;
-    account_type: number;
+    registration_type: number;
   };
 }
 export const AminoConverter = {
@@ -213,11 +216,12 @@ export const AminoConverter = {
             undelegation_interval: (params.stakingParams.undelegationInterval * 1_000_000_000).toString(),
             ibc_transfer_timeout: (params.stakingParams.ibcTransferTimeout * 1_000_000_000).toString(),
             ica_timeout: (params.stakingParams.icaTimeout * 1_000_000_000).toString(),
-            max_undelegation_msgs: params.stakingParams.maxUndelegationMsgs,
-            max_redelegation_msgs: params.stakingParams.maxRedelegationMsgs,
-            rebalance_threshold: params.stakingParams.rebalanceThreshold,
-            min_rebalance_amount: params.stakingParams.minRebalanceAmount,
-            min_rebalance_interval: (params.stakingParams.minRebalanceInterval * 1_000_000_000).toString()
+            rebalance_params: {
+              max_msgs: params.stakingParams.rebalanceParams.maxMsgs,
+              rebalance_threshold: params.stakingParams.rebalanceParams.rebalanceThreshold,
+              min_rebalance_amount: params.stakingParams.rebalanceParams.minRebalanceAmount,
+              min_rebalance_interval: (params.stakingParams.rebalanceParams.minRebalanceInterval * 1_000_000_000).toString()
+            }
           }
         }
       };
@@ -252,13 +256,14 @@ export const AminoConverter = {
               seconds: BigInt(Math.floor(parseInt(params.staking_params.ica_timeout) / 1_000_000_000)),
               nanos: parseInt(params.staking_params.ica_timeout) % 1_000_000_000
             },
-            maxUndelegationMsgs: params.staking_params.max_undelegation_msgs,
-            maxRedelegationMsgs: params.staking_params.max_redelegation_msgs,
-            rebalanceThreshold: params.staking_params.rebalance_threshold,
-            minRebalanceAmount: params.staking_params.min_rebalance_amount,
-            minRebalanceInterval: {
-              seconds: BigInt(Math.floor(parseInt(params.staking_params.min_rebalance_interval) / 1_000_000_000)),
-              nanos: parseInt(params.staking_params.min_rebalance_interval) % 1_000_000_000
+            rebalanceParams: {
+              maxMsgs: params.staking_params.rebalance_params.max_msgs,
+              rebalanceThreshold: params.staking_params.rebalance_params.rebalance_threshold,
+              minRebalanceAmount: params.staking_params.rebalance_params.min_rebalance_amount,
+              minRebalanceInterval: {
+                seconds: BigInt(Math.floor(parseInt(params.staking_params.rebalance_params.min_rebalance_interval) / 1_000_000_000)),
+                nanos: parseInt(params.staking_params.rebalance_params.min_rebalance_interval) % 1_000_000_000
+              }
             }
           }
         }
@@ -295,11 +300,12 @@ export const AminoConverter = {
             undelegation_interval: (hostChain.params.undelegationInterval * 1_000_000_000).toString(),
             ibc_transfer_timeout: (hostChain.params.ibcTransferTimeout * 1_000_000_000).toString(),
             ica_timeout: (hostChain.params.icaTimeout * 1_000_000_000).toString(),
-            max_undelegation_msgs: hostChain.params.maxUndelegationMsgs,
-            max_redelegation_msgs: hostChain.params.maxRedelegationMsgs,
-            rebalance_threshold: hostChain.params.rebalanceThreshold,
-            min_rebalance_amount: hostChain.params.minRebalanceAmount,
-            min_rebalance_interval: (hostChain.params.minRebalanceInterval * 1_000_000_000).toString()
+            rebalance_params: {
+              max_msgs: hostChain.params.rebalanceParams.maxMsgs,
+              rebalance_threshold: hostChain.params.rebalanceParams.rebalanceThreshold,
+              min_rebalance_amount: hostChain.params.rebalanceParams.minRebalanceAmount,
+              min_rebalance_interval: (hostChain.params.rebalanceParams.minRebalanceInterval * 1_000_000_000).toString()
+            }
           },
           validators: hostChain.validators.map(el0 => ({
             address: el0.address,
@@ -348,13 +354,14 @@ export const AminoConverter = {
               seconds: BigInt(Math.floor(parseInt(host_chain.params.ica_timeout) / 1_000_000_000)),
               nanos: parseInt(host_chain.params.ica_timeout) % 1_000_000_000
             },
-            maxUndelegationMsgs: host_chain.params.max_undelegation_msgs,
-            maxRedelegationMsgs: host_chain.params.max_redelegation_msgs,
-            rebalanceThreshold: host_chain.params.rebalance_threshold,
-            minRebalanceAmount: host_chain.params.min_rebalance_amount,
-            minRebalanceInterval: {
-              seconds: BigInt(Math.floor(parseInt(host_chain.params.min_rebalance_interval) / 1_000_000_000)),
-              nanos: parseInt(host_chain.params.min_rebalance_interval) % 1_000_000_000
+            rebalanceParams: {
+              maxMsgs: host_chain.params.rebalance_params.max_msgs,
+              rebalanceThreshold: host_chain.params.rebalance_params.rebalance_threshold,
+              minRebalanceAmount: host_chain.params.rebalance_params.min_rebalance_amount,
+              minRebalanceInterval: {
+                seconds: BigInt(Math.floor(parseInt(host_chain.params.rebalance_params.min_rebalance_interval) / 1_000_000_000)),
+                nanos: parseInt(host_chain.params.rebalance_params.min_rebalance_interval) % 1_000_000_000
+              }
             }
           },
           validators: host_chain.validators.map(el1 => ({
@@ -391,11 +398,12 @@ export const AminoConverter = {
           undelegation_interval: (params.undelegationInterval * 1_000_000_000).toString(),
           ibc_transfer_timeout: (params.ibcTransferTimeout * 1_000_000_000).toString(),
           ica_timeout: (params.icaTimeout * 1_000_000_000).toString(),
-          max_undelegation_msgs: params.maxUndelegationMsgs,
-          max_redelegation_msgs: params.maxRedelegationMsgs,
-          rebalance_threshold: params.rebalanceThreshold,
-          min_rebalance_amount: params.minRebalanceAmount,
-          min_rebalance_interval: (params.minRebalanceInterval * 1_000_000_000).toString()
+          rebalance_params: {
+            max_msgs: params.rebalanceParams.maxMsgs,
+            rebalance_threshold: params.rebalanceParams.rebalanceThreshold,
+            min_rebalance_amount: params.rebalanceParams.minRebalanceAmount,
+            min_rebalance_interval: (params.rebalanceParams.minRebalanceInterval * 1_000_000_000).toString()
+          }
         }
       };
     },
@@ -435,13 +443,14 @@ export const AminoConverter = {
             seconds: BigInt(Math.floor(parseInt(params.ica_timeout) / 1_000_000_000)),
             nanos: parseInt(params.ica_timeout) % 1_000_000_000
           },
-          maxUndelegationMsgs: params.max_undelegation_msgs,
-          maxRedelegationMsgs: params.max_redelegation_msgs,
-          rebalanceThreshold: params.rebalance_threshold,
-          minRebalanceAmount: params.min_rebalance_amount,
-          minRebalanceInterval: {
-            seconds: BigInt(Math.floor(parseInt(params.min_rebalance_interval) / 1_000_000_000)),
-            nanos: parseInt(params.min_rebalance_interval) % 1_000_000_000
+          rebalanceParams: {
+            maxMsgs: params.rebalance_params.max_msgs,
+            rebalanceThreshold: params.rebalance_params.rebalance_threshold,
+            minRebalanceAmount: params.rebalance_params.min_rebalance_amount,
+            minRebalanceInterval: {
+              seconds: BigInt(Math.floor(parseInt(params.rebalance_params.min_rebalance_interval) / 1_000_000_000)),
+              nanos: parseInt(params.rebalance_params.min_rebalance_interval) % 1_000_000_000
+            }
           }
         }
       };
@@ -592,28 +601,28 @@ export const AminoConverter = {
       };
     }
   },
-  "/prism.icstaking.MsgRedeemInterchainAccount": {
-    aminoType: "/prism.icstaking.MsgRedeemInterchainAccount",
+  "/prism.icstaking.MsgRegisterInterchainAccount": {
+    aminoType: "/prism.icstaking.MsgRegisterInterchainAccount",
     toAmino: ({
       creator,
       hostChain,
-      accountType
-    }: MsgRedeemInterchainAccount): MsgRedeemInterchainAccountAminoType["value"] => {
+      registrationType
+    }: MsgRegisterInterchainAccount): MsgRegisterInterchainAccountAminoType["value"] => {
       return {
         creator,
         host_chain: hostChain,
-        account_type: accountType
+        registration_type: registrationType
       };
     },
     fromAmino: ({
       creator,
       host_chain,
-      account_type
-    }: MsgRedeemInterchainAccountAminoType["value"]): MsgRedeemInterchainAccount => {
+      registration_type
+    }: MsgRegisterInterchainAccountAminoType["value"]): MsgRegisterInterchainAccount => {
       return {
         creator,
         hostChain: host_chain,
-        accountType: iCATypeFromJSON(account_type)
+        registrationType: iCARegistrationTypeFromJSON(registration_type)
       };
     }
   }

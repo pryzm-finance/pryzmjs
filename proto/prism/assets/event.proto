@@ -20,7 +20,7 @@ message EventDeactivateMaturityLevel {
   MaturityLevel maturity_level = 1 [(gogoproto.nullable) = false];
 }
 
-message EventSetRefractableAsset{
+message EventSetRefractableAsset {
   RefractableAsset refractable_asset = 1 [(gogoproto.nullable) = false];
 }
 

@@ -196,7 +196,7 @@ export const EventYStakingExitPool = {
       writer.uint32(18).string(message.accruedReward);
     }
     if (message.fee !== "") {
-      writer.uint32(34).string(message.fee);
+      writer.uint32(26).string(message.fee);
     }
     return writer;
   },
@@ -213,7 +213,7 @@ export const EventYStakingExitPool = {
         case 2:
           message.accruedReward = reader.string();
           break;
-        case 4:
+        case 3:
           message.fee = reader.string();
           break;
         default:
@@ -261,7 +261,7 @@ export const EventYStakingClaimReward = {
       writer.uint32(18).string(message.accruedReward);
     }
     if (message.fee !== "") {
-      writer.uint32(34).string(message.fee);
+      writer.uint32(26).string(message.fee);
     }
     return writer;
   },
@@ -278,7 +278,7 @@ export const EventYStakingClaimReward = {
         case 2:
           message.accruedReward = reader.string();
           break;
-        case 4:
+        case 3:
           message.fee = reader.string();
           break;
         default:

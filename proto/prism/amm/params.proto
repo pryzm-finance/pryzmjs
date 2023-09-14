@@ -47,47 +47,49 @@ message OrderParameters {
 }
 
 message YammParameters {
+  string lambda = 1 [
+    (cosmos_proto.scalar) = "cosmos.Dec",
+    (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Dec",
+    (gogoproto.nullable) = false
+  ];
+
   // duration (milliseconds) for virtual balance when adding new pAssets to yamm pools
-  int64 maturity_introduction_interval_millis = 1;
-  int64 maturity_expiration_interval_millis = 2;
-  string expiration_virtual_balance_scaler = 3 [
+  int64 maturity_introduction_interval_millis = 2;
+  int64 maturity_expiration_interval_millis = 3;
+
+  string introduction_virtual_balance_scaler = 4 [
+    (cosmos_proto.scalar) = "cosmos.Int",
+    (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Int",
+    (gogoproto.nullable) = false
+  ];
+
+  string expiration_virtual_balance_scaler = 5 [
+    (cosmos_proto.scalar) = "cosmos.Int",
+    (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Int",
+    (gogoproto.nullable) = false
+  ];
+
+  string buy_y_given_in_loan_fee_ratio = 6 [
     (cosmos_proto.scalar) = "cosmos.Dec",
     (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Dec",
     (gogoproto.nullable) = false
   ];
-  // discount ratio applied to constant sum equations for trading cAsset-pAsset where pAsset is expired or close
-  // to expiry
-  string expired_asset_discount_ratio = 4 [
+
+  string sell_y_given_out_fee_ratio = 7 [
     (cosmos_proto.scalar) = "cosmos.Dec",
     (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Dec",
     (gogoproto.nullable) = false
   ];
-  string buy_y_given_in_loan_fee_ratio = 5 [
+
+  string max_alpha = 8 [
     (cosmos_proto.scalar) = "cosmos.Dec",
     (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Dec",
     (gogoproto.nullable) = false
   ];
-  string sell_y_given_out_fee_ratio = 6 [
-    (cosmos_proto.scalar) = "cosmos.Dec",
-    (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Dec",
-    (gogoproto.nullable) = false
-  ];
-  string swap_yield_fee_ratio = 7 [
-    (cosmos_proto.scalar) = "cosmos.Dec",
-    (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Dec",
-    (gogoproto.nullable) = false
-  ];
-  string leverage_scaler = 8 [
-    (cosmos_proto.scalar) = "cosmos.Dec",
-    (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Dec",
-    (gogoproto.nullable) = false
-  ];
-  // zero means no limit
-  string max_weight_ratio = 10 [
-    (cosmos_proto.scalar) = "cosmos.Dec",
-    (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Dec",
-    (gogoproto.nullable) = false
-  ];
+
+  // this will be set to newly created yamm pools
+  // if not empty, only these addresses can initialize the pools
+  repeated string default_initialization_allow_list = 9;
 }
 
 message GeneralPoolParameters {

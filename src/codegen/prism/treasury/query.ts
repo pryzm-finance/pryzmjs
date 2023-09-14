@@ -24,18 +24,18 @@ export interface QueryGetFlowTradeResponseSDKType {
   flow_trade: FlowTradeSDKType;
 }
 export interface QueryAllFlowTradeRequest {
-  pagination: PageRequest;
+  pagination?: PageRequest;
 }
 export interface QueryAllFlowTradeRequestSDKType {
-  pagination: PageRequestSDKType;
+  pagination?: PageRequestSDKType;
 }
 export interface QueryAllFlowTradeResponse {
   flowTrade: FlowTrade[];
-  pagination: PageResponse;
+  pagination?: PageResponse;
 }
 export interface QueryAllFlowTradeResponseSDKType {
   flow_trade: FlowTradeSDKType[];
-  pagination: PageResponseSDKType;
+  pagination?: PageResponseSDKType;
 }
 function createBaseQueryGetActionRequest(): QueryGetActionRequest {
   return {};
@@ -207,7 +207,7 @@ export const QueryGetFlowTradeResponse = {
 };
 function createBaseQueryAllFlowTradeRequest(): QueryAllFlowTradeRequest {
   return {
-    pagination: PageRequest.fromPartial({})
+    pagination: undefined
   };
 }
 export const QueryAllFlowTradeRequest = {
@@ -253,7 +253,7 @@ export const QueryAllFlowTradeRequest = {
 function createBaseQueryAllFlowTradeResponse(): QueryAllFlowTradeResponse {
   return {
     flowTrade: [],
-    pagination: PageResponse.fromPartial({})
+    pagination: undefined
   };
 }
 export const QueryAllFlowTradeResponse = {

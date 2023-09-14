@@ -31,27 +31,25 @@ export interface QueryGetRefractableAssetResponseSDKType {
 }
 export interface QueryAllRefractableAssetRequest {
   enabled: string;
-  pagination: PageRequest;
+  pagination?: PageRequest;
 }
 export interface QueryAllRefractableAssetRequestSDKType {
   enabled: string;
-  pagination: PageRequestSDKType;
+  pagination?: PageRequestSDKType;
 }
 export interface QueryAllRefractableAssetResponse {
   assets: RefractableAsset[];
-  pagination: PageResponse;
+  pagination?: PageResponse;
 }
 export interface QueryAllRefractableAssetResponseSDKType {
   assets: RefractableAssetSDKType[];
-  pagination: PageResponseSDKType;
+  pagination?: PageResponseSDKType;
 }
 export interface QueryGetMaturityLevelRequest {
-  active: boolean;
   assetId: string;
   symbol: string;
 }
 export interface QueryGetMaturityLevelRequestSDKType {
-  active: boolean;
   asset_id: string;
   symbol: string;
 }
@@ -65,21 +63,21 @@ export interface QueryAllMaturityLevelRequest {
   active: boolean;
   assetId: string;
   assetEnabled: string;
-  pagination: PageRequest;
+  pagination?: PageRequest;
 }
 export interface QueryAllMaturityLevelRequestSDKType {
   active: boolean;
   asset_id: string;
   asset_enabled: string;
-  pagination: PageRequestSDKType;
+  pagination?: PageRequestSDKType;
 }
 export interface QueryAllMaturityLevelResponse {
   maturityLevel: MaturityLevel[];
-  pagination: PageResponse;
+  pagination?: PageResponse;
 }
 export interface QueryAllMaturityLevelResponseSDKType {
   maturity_level: MaturityLevelSDKType[];
-  pagination: PageResponseSDKType;
+  pagination?: PageResponseSDKType;
 }
 function createBaseQueryParamsRequest(): QueryParamsRequest {
   return {};
@@ -252,7 +250,7 @@ export const QueryGetRefractableAssetResponse = {
 function createBaseQueryAllRefractableAssetRequest(): QueryAllRefractableAssetRequest {
   return {
     enabled: "",
-    pagination: PageRequest.fromPartial({})
+    pagination: undefined
   };
 }
 export const QueryAllRefractableAssetRequest = {
@@ -307,7 +305,7 @@ export const QueryAllRefractableAssetRequest = {
 function createBaseQueryAllRefractableAssetResponse(): QueryAllRefractableAssetResponse {
   return {
     assets: [],
-    pagination: PageResponse.fromPartial({})
+    pagination: undefined
   };
 }
 export const QueryAllRefractableAssetResponse = {
@@ -365,21 +363,17 @@ export const QueryAllRefractableAssetResponse = {
 };
 function createBaseQueryGetMaturityLevelRequest(): QueryGetMaturityLevelRequest {
   return {
-    active: false,
     assetId: "",
     symbol: ""
   };
 }
 export const QueryGetMaturityLevelRequest = {
   encode(message: QueryGetMaturityLevelRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
-    if (message.active === true) {
-      writer.uint32(8).bool(message.active);
-    }
     if (message.assetId !== "") {
-      writer.uint32(18).string(message.assetId);
+      writer.uint32(10).string(message.assetId);
     }
     if (message.symbol !== "") {
-      writer.uint32(26).string(message.symbol);
+      writer.uint32(18).string(message.symbol);
     }
     return writer;
   },
@@ -391,12 +385,9 @@ export const QueryGetMaturityLevelRequest = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.active = reader.bool();
-          break;
-        case 2:
           message.assetId = reader.string();
           break;
-        case 3:
+        case 2:
           message.symbol = reader.string();
           break;
         default:
@@ -408,21 +399,18 @@ export const QueryGetMaturityLevelRequest = {
   },
   fromJSON(object: any): QueryGetMaturityLevelRequest {
     return {
-      active: isSet(object.active) ? Boolean(object.active) : false,
       assetId: isSet(object.assetId) ? String(object.assetId) : "",
       symbol: isSet(object.symbol) ? String(object.symbol) : ""
     };
   },
   toJSON(message: QueryGetMaturityLevelRequest): unknown {
     const obj: any = {};
-    message.active !== undefined && (obj.active = message.active);
     message.assetId !== undefined && (obj.assetId = message.assetId);
     message.symbol !== undefined && (obj.symbol = message.symbol);
     return obj;
   },
   fromPartial(object: Partial<QueryGetMaturityLevelRequest>): QueryGetMaturityLevelRequest {
     const message = createBaseQueryGetMaturityLevelRequest();
-    message.active = object.active ?? false;
     message.assetId = object.assetId ?? "";
     message.symbol = object.symbol ?? "";
     return message;
@@ -478,7 +466,7 @@ function createBaseQueryAllMaturityLevelRequest(): QueryAllMaturityLevelRequest 
     active: false,
     assetId: "",
     assetEnabled: "",
-    pagination: PageRequest.fromPartial({})
+    pagination: undefined
   };
 }
 export const QueryAllMaturityLevelRequest = {
@@ -551,7 +539,7 @@ export const QueryAllMaturityLevelRequest = {
 function createBaseQueryAllMaturityLevelResponse(): QueryAllMaturityLevelResponse {
   return {
     maturityLevel: [],
-    pagination: PageResponse.fromPartial({})
+    pagination: undefined
   };
 }
 export const QueryAllMaturityLevelResponse = {

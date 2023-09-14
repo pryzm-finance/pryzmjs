@@ -52,10 +52,10 @@ export interface ChannelUndelegation {
    */
   received: boolean;
   /**
-   * the amount of assets that are redeemed by users.
-   * a channel undelegation record is deleted when received is true and this amount is equal the received_amount
+   * the amount of uAssets redeemed by users.
+   * a channel undelegation record is deleted when this amount is equal the total_c_amount
    */
-  claimedAmount: string;
+  claimedUAmount: string;
 }
 /** ChannelUndelegation contains information about an undelegation epoch for a specific transfer channel */
 export interface ChannelUndelegationSDKType {
@@ -69,7 +69,7 @@ export interface ChannelUndelegationSDKType {
   pending_c_amount: string;
   swept: boolean;
   received: boolean;
-  claimed_amount: string;
+  claimed_u_amount: string;
 }
 function createBaseUndelegation(): Undelegation {
   return {
@@ -178,7 +178,7 @@ function createBaseChannelUndelegation(): ChannelUndelegation {
     pendingCAmount: "",
     swept: false,
     received: false,
-    claimedAmount: ""
+    claimedUAmount: ""
   };
 }
 export const ChannelUndelegation = {
@@ -213,8 +213,8 @@ export const ChannelUndelegation = {
     if (message.received === true) {
       writer.uint32(80).bool(message.received);
     }
-    if (message.claimedAmount !== "") {
-      writer.uint32(90).string(message.claimedAmount);
+    if (message.claimedUAmount !== "") {
+      writer.uint32(90).string(message.claimedUAmount);
     }
     return writer;
   },
@@ -256,7 +256,7 @@ export const ChannelUndelegation = {
           message.received = reader.bool();
           break;
         case 11:
-          message.claimedAmount = reader.string();
+          message.claimedUAmount = reader.string();
           break;
         default:
           reader.skipType(tag & 7);
@@ -277,7 +277,7 @@ export const ChannelUndelegation = {
       pendingCAmount: isSet(object.pendingCAmount) ? String(object.pendingCAmount) : "",
       swept: isSet(object.swept) ? Boolean(object.swept) : false,
       received: isSet(object.received) ? Boolean(object.received) : false,
-      claimedAmount: isSet(object.claimedAmount) ? String(object.claimedAmount) : ""
+      claimedUAmount: isSet(object.claimedUAmount) ? String(object.claimedUAmount) : ""
     };
   },
   toJSON(message: ChannelUndelegation): unknown {
@@ -292,7 +292,7 @@ export const ChannelUndelegation = {
     message.pendingCAmount !== undefined && (obj.pendingCAmount = message.pendingCAmount);
     message.swept !== undefined && (obj.swept = message.swept);
     message.received !== undefined && (obj.received = message.received);
-    message.claimedAmount !== undefined && (obj.claimedAmount = message.claimedAmount);
+    message.claimedUAmount !== undefined && (obj.claimedUAmount = message.claimedUAmount);
     return obj;
   },
   fromPartial(object: Partial<ChannelUndelegation>): ChannelUndelegation {
@@ -307,7 +307,7 @@ export const ChannelUndelegation = {
     message.pendingCAmount = object.pendingCAmount ?? "";
     message.swept = object.swept ?? false;
     message.received = object.received ?? false;
-    message.claimedAmount = object.claimedAmount ?? "";
+    message.claimedUAmount = object.claimedUAmount ?? "";
     return message;
   }
 };

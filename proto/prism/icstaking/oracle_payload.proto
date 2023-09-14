@@ -1,6 +1,7 @@
 syntax = "proto3";
 package prism.icstaking;
 
+import "cosmos_proto/cosmos.proto";
 import "gogoproto/gogo.proto";
 import "ibc/core/client/v1/client.proto";
 import "prism/icstaking/host_chain.proto";
@@ -19,18 +20,21 @@ message OraclePayload {
 
   // balance of delegation interchain account
   string delegation_account_balance = 4 [
+    (cosmos_proto.scalar) = "cosmos.Int",
     (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Int",
     (gogoproto.nullable) = false
   ];
 
   // balance of reward interchain account
   string reward_account_balance = 5 [
+    (cosmos_proto.scalar) = "cosmos.Int",
     (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Int",
     (gogoproto.nullable) = false
   ];
 
   // balance of sweep interchain account
   string sweep_account_balance = 6 [
+    (cosmos_proto.scalar) = "cosmos.Int",
     (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Int",
     (gogoproto.nullable) = false
   ];

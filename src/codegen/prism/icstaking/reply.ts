@@ -3,9 +3,12 @@ import { BinaryReader, BinaryWriter } from "../../binary";
 import { isSet, bytesFromBase64, base64FromBytes, isObject } from "../../helpers";
 /** the stored data for handling the reply of a sent ibc packet */
 export interface ReplyData {
+  /** the identifier of the bridge */
   bridgeId: string;
+  /** the identifier of the sent packet */
   packetId: PacketId;
   hostChainId: string;
+  /** serialized data shared when handling the packet result */
   data: Uint8Array;
 }
 /** the stored data for handling the reply of a sent ibc packet */
@@ -27,10 +30,14 @@ export interface PacketIdSDKType {
   channel_id: string;
   sequence: bigint;
 }
+/** The reply data for DelegateTransferBridge */
 export interface DelegateTransferReplyData {
+  /** the identifier of the transfer session */
   transferSession: string;
+  /** the amount being transferred */
   amount: Coin;
 }
+/** The reply data for DelegateTransferBridge */
 export interface DelegateTransferReplyDataSDKType {
   transfer_session: string;
   amount: CoinSDKType;
@@ -43,65 +50,133 @@ export interface DelegateTransferSession_PacketFinalizedEntrySDKType {
   key: string;
   value: boolean;
 }
+/** A session of token transfer to a host chain from multiple channels, used in DelegateTransferBridge */
 export interface DelegateTransferSession {
+  /** a generated id for the session */
   id: string;
+  /** a map of packet id to a boolean, determining whether the packet is finalized (either succeeded or failed) */
   packetFinalized: {
     [key: string]: boolean;
   };
 }
+/** A session of token transfer to a host chain from multiple channels, used in DelegateTransferBridge */
 export interface DelegateTransferSessionSDKType {
   id: string;
   packet_finalized: {
     [key: string]: boolean;
   };
 }
-export interface DelegateReplyData_DelegationsEntry {
-  key: string;
-  value: string;
-}
-export interface DelegateReplyData_DelegationsEntrySDKType {
-  key: string;
-  value: string;
-}
+/** The reply data for DelegateBridge */
 export interface DelegateReplyData {
-  delegations: {
-    [key: string]: string;
-  };
+  /** a list of delegations to different validators */
+  delegations: DelegationEntry[];
 }
+/** The reply data for DelegateBridge */
 export interface DelegateReplyDataSDKType {
-  delegations: {
-    [key: string]: string;
-  };
+  delegations: DelegationEntrySDKType[];
 }
-export interface UndelegateReplyData_UndelegationsEntry {
-  key: string;
-  value: string;
+/** Contains info about delegating an amount of assets to a validator */
+export interface DelegationEntry {
+  validator: string;
+  amount: string;
 }
-export interface UndelegateReplyData_UndelegationsEntrySDKType {
-  key: string;
-  value: string;
+/** Contains info about delegating an amount of assets to a validator */
+export interface DelegationEntrySDKType {
+  validator: string;
+  amount: string;
 }
+/** The reply data for UndelegateBridge */
 export interface UndelegateReplyData {
   totalCAmount: string;
-  undelegations: {
-    [key: string]: string;
-  };
+  undelegations: UndelegationEntry[];
   epochs: bigint[];
 }
+/** The reply data for UndelegateBridge */
 export interface UndelegateReplyDataSDKType {
   total_c_amount: string;
-  undelegations: {
-    [key: string]: string;
-  };
+  undelegations: UndelegationEntrySDKType[];
   epochs: bigint[];
 }
+/** Contains info about undelegating an amount of assets from a validator */
+export interface UndelegationEntry {
+  validator: string;
+  amount: string;
+}
+/** Contains info about undelegating an amount of assets from a validator */
+export interface UndelegationEntrySDKType {
+  validator: string;
+  amount: string;
+}
+/** The reply data for RedelegateBridge */
+export interface RedelegateReplyData {
+  redelegations: RedelegationEntry[];
+}
+/** The reply data for RedelegateBridge */
+export interface RedelegateReplyDataSDKType {
+  redelegations: RedelegationEntrySDKType[];
+}
+/** Contains info about redelegating an amount of assets from a validator to another validator */
+export interface RedelegationEntry {
+  srcValidator: string;
+  dstValidator: string;
+  amount: string;
+}
+/** Contains info about redelegating an amount of assets from a validator to another validator */
+export interface RedelegationEntrySDKType {
+  src_validator: string;
+  dst_validator: string;
+  amount: string;
+}
+/** The reply data used in CompoundBridge */
 export interface CompoundData {
   feeAmount: string;
   compoundAmount: string;
 }
+/** The reply data used in CompoundBridge */
 export interface CompoundDataSDKType {
   fee_amount: string;
   compound_amount: string;
+}
+export interface CollectUndelegatedReplyData {
+  undelegatedAmount: string;
+}
+export interface CollectUndelegatedReplyDataSDKType {
+  undelegated_amount: string;
+}
+export interface SweepData_ChannelSweepsEntry {
+  key: string;
+  value: ChannelSweep;
+}
+export interface SweepData_ChannelSweepsEntrySDKType {
+  key: string;
+  value: ChannelSweepSDKType;
+}
+/** The reply data used in SweepBridge */
+export interface SweepData {
+  /** a map of channel id to info about the sweep operation through that channel */
+  channelSweeps: {
+    [key: string]: ChannelSweep;
+  };
+}
+/** The reply data used in SweepBridge */
+export interface SweepDataSDKType {
+  channel_sweeps: {
+    [key: string]: ChannelSweepSDKType;
+  };
+}
+/** Contains info about the sweep operation through a channel */
+export interface ChannelSweep {
+  channel: string;
+  /** a list of epochs that the sweep is related to */
+  epochs: bigint[];
+  /** the amount being swept from the host chain */
+  amount: string;
+}
+/** Contains info about the sweep operation through a channel */
+export interface ChannelSweepSDKType {
+  channel: string;
+  epochs: bigint[];
+  amount: string;
 }
 function createBaseReplyData(): ReplyData {
   return {
@@ -431,74 +506,16 @@ export const DelegateTransferSession = {
     return message;
   }
 };
-function createBaseDelegateReplyData_DelegationsEntry(): DelegateReplyData_DelegationsEntry {
-  return {
-    key: "",
-    value: ""
-  };
-}
-export const DelegateReplyData_DelegationsEntry = {
-  encode(message: DelegateReplyData_DelegationsEntry, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
-    if (message.key !== "") {
-      writer.uint32(10).string(message.key);
-    }
-    if (message.value !== "") {
-      writer.uint32(18).string(message.value);
-    }
-    return writer;
-  },
-  decode(input: BinaryReader | Uint8Array, length?: number): DelegateReplyData_DelegationsEntry {
-    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
-    let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseDelegateReplyData_DelegationsEntry();
-    while (reader.pos < end) {
-      const tag = reader.uint32();
-      switch (tag >>> 3) {
-        case 1:
-          message.key = reader.string();
-          break;
-        case 2:
-          message.value = reader.string();
-          break;
-        default:
-          reader.skipType(tag & 7);
-          break;
-      }
-    }
-    return message;
-  },
-  fromJSON(object: any): DelegateReplyData_DelegationsEntry {
-    return {
-      key: isSet(object.key) ? String(object.key) : "",
-      value: isSet(object.value) ? String(object.value) : ""
-    };
-  },
-  toJSON(message: DelegateReplyData_DelegationsEntry): unknown {
-    const obj: any = {};
-    message.key !== undefined && (obj.key = message.key);
-    message.value !== undefined && (obj.value = message.value);
-    return obj;
-  },
-  fromPartial(object: Partial<DelegateReplyData_DelegationsEntry>): DelegateReplyData_DelegationsEntry {
-    const message = createBaseDelegateReplyData_DelegationsEntry();
-    message.key = object.key ?? "";
-    message.value = object.value ?? "";
-    return message;
-  }
-};
 function createBaseDelegateReplyData(): DelegateReplyData {
   return {
-    delegations: {}
+    delegations: []
   };
 }
 export const DelegateReplyData = {
   encode(message: DelegateReplyData, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
-    Object.entries(message.delegations).forEach(([key, value]) => {
-      DelegateReplyData_DelegationsEntry.encode({
-        key: (key as any),
-        value
-      }, writer.uint32(10).fork()).ldelim();
-    });
+    for (const v of message.delegations) {
+      DelegationEntry.encode(v!, writer.uint32(10).fork()).ldelim();
+    }
     return writer;
   },
   decode(input: BinaryReader | Uint8Array, length?: number): DelegateReplyData {
@@ -509,10 +526,7 @@ export const DelegateReplyData = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          const entry1 = DelegateReplyData_DelegationsEntry.decode(reader, reader.uint32());
-          if (entry1.value !== undefined) {
-            message.delegations[entry1.key] = entry1.value;
-          }
+          message.delegations.push(DelegationEntry.decode(reader, reader.uint32()));
           break;
         default:
           reader.skipType(tag & 7);
@@ -523,65 +537,52 @@ export const DelegateReplyData = {
   },
   fromJSON(object: any): DelegateReplyData {
     return {
-      delegations: isObject(object.delegations) ? Object.entries(object.delegations).reduce<{
-        [key: string]: string;
-      }>((acc, [key, value]) => {
-        acc[key] = String(value);
-        return acc;
-      }, {}) : {}
+      delegations: Array.isArray(object?.delegations) ? object.delegations.map((e: any) => DelegationEntry.fromJSON(e)) : []
     };
   },
   toJSON(message: DelegateReplyData): unknown {
     const obj: any = {};
-    obj.delegations = {};
     if (message.delegations) {
-      Object.entries(message.delegations).forEach(([k, v]) => {
-        obj.delegations[k] = v;
-      });
+      obj.delegations = message.delegations.map(e => e ? DelegationEntry.toJSON(e) : undefined);
+    } else {
+      obj.delegations = [];
     }
     return obj;
   },
   fromPartial(object: Partial<DelegateReplyData>): DelegateReplyData {
     const message = createBaseDelegateReplyData();
-    message.delegations = Object.entries(object.delegations ?? {}).reduce<{
-      [key: string]: string;
-    }>((acc, [key, value]) => {
-      if (value !== undefined) {
-        acc[key] = String(value);
-      }
-      return acc;
-    }, {});
+    message.delegations = object.delegations?.map(e => DelegationEntry.fromPartial(e)) || [];
     return message;
   }
 };
-function createBaseUndelegateReplyData_UndelegationsEntry(): UndelegateReplyData_UndelegationsEntry {
+function createBaseDelegationEntry(): DelegationEntry {
   return {
-    key: "",
-    value: ""
+    validator: "",
+    amount: ""
   };
 }
-export const UndelegateReplyData_UndelegationsEntry = {
-  encode(message: UndelegateReplyData_UndelegationsEntry, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
-    if (message.key !== "") {
-      writer.uint32(10).string(message.key);
+export const DelegationEntry = {
+  encode(message: DelegationEntry, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    if (message.validator !== "") {
+      writer.uint32(10).string(message.validator);
     }
-    if (message.value !== "") {
-      writer.uint32(18).string(message.value);
+    if (message.amount !== "") {
+      writer.uint32(18).string(message.amount);
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): UndelegateReplyData_UndelegationsEntry {
+  decode(input: BinaryReader | Uint8Array, length?: number): DelegationEntry {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseUndelegateReplyData_UndelegationsEntry();
+    const message = createBaseDelegationEntry();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.key = reader.string();
+          message.validator = reader.string();
           break;
         case 2:
-          message.value = reader.string();
+          message.amount = reader.string();
           break;
         default:
           reader.skipType(tag & 7);
@@ -590,29 +591,29 @@ export const UndelegateReplyData_UndelegationsEntry = {
     }
     return message;
   },
-  fromJSON(object: any): UndelegateReplyData_UndelegationsEntry {
+  fromJSON(object: any): DelegationEntry {
     return {
-      key: isSet(object.key) ? String(object.key) : "",
-      value: isSet(object.value) ? String(object.value) : ""
+      validator: isSet(object.validator) ? String(object.validator) : "",
+      amount: isSet(object.amount) ? String(object.amount) : ""
     };
   },
-  toJSON(message: UndelegateReplyData_UndelegationsEntry): unknown {
+  toJSON(message: DelegationEntry): unknown {
     const obj: any = {};
-    message.key !== undefined && (obj.key = message.key);
-    message.value !== undefined && (obj.value = message.value);
+    message.validator !== undefined && (obj.validator = message.validator);
+    message.amount !== undefined && (obj.amount = message.amount);
     return obj;
   },
-  fromPartial(object: Partial<UndelegateReplyData_UndelegationsEntry>): UndelegateReplyData_UndelegationsEntry {
-    const message = createBaseUndelegateReplyData_UndelegationsEntry();
-    message.key = object.key ?? "";
-    message.value = object.value ?? "";
+  fromPartial(object: Partial<DelegationEntry>): DelegationEntry {
+    const message = createBaseDelegationEntry();
+    message.validator = object.validator ?? "";
+    message.amount = object.amount ?? "";
     return message;
   }
 };
 function createBaseUndelegateReplyData(): UndelegateReplyData {
   return {
     totalCAmount: "",
-    undelegations: {},
+    undelegations: [],
     epochs: []
   };
 }
@@ -621,12 +622,9 @@ export const UndelegateReplyData = {
     if (message.totalCAmount !== "") {
       writer.uint32(10).string(message.totalCAmount);
     }
-    Object.entries(message.undelegations).forEach(([key, value]) => {
-      UndelegateReplyData_UndelegationsEntry.encode({
-        key: (key as any),
-        value
-      }, writer.uint32(18).fork()).ldelim();
-    });
+    for (const v of message.undelegations) {
+      UndelegationEntry.encode(v!, writer.uint32(18).fork()).ldelim();
+    }
     writer.uint32(26).fork();
     for (const v of message.epochs) {
       writer.uint64(v);
@@ -645,10 +643,7 @@ export const UndelegateReplyData = {
           message.totalCAmount = reader.string();
           break;
         case 2:
-          const entry2 = UndelegateReplyData_UndelegationsEntry.decode(reader, reader.uint32());
-          if (entry2.value !== undefined) {
-            message.undelegations[entry2.key] = entry2.value;
-          }
+          message.undelegations.push(UndelegationEntry.decode(reader, reader.uint32()));
           break;
         case 3:
           if ((tag & 7) === 2) {
@@ -670,23 +665,17 @@ export const UndelegateReplyData = {
   fromJSON(object: any): UndelegateReplyData {
     return {
       totalCAmount: isSet(object.totalCAmount) ? String(object.totalCAmount) : "",
-      undelegations: isObject(object.undelegations) ? Object.entries(object.undelegations).reduce<{
-        [key: string]: string;
-      }>((acc, [key, value]) => {
-        acc[key] = String(value);
-        return acc;
-      }, {}) : {},
+      undelegations: Array.isArray(object?.undelegations) ? object.undelegations.map((e: any) => UndelegationEntry.fromJSON(e)) : [],
       epochs: Array.isArray(object?.epochs) ? object.epochs.map((e: any) => BigInt(e.toString())) : []
     };
   },
   toJSON(message: UndelegateReplyData): unknown {
     const obj: any = {};
     message.totalCAmount !== undefined && (obj.totalCAmount = message.totalCAmount);
-    obj.undelegations = {};
     if (message.undelegations) {
-      Object.entries(message.undelegations).forEach(([k, v]) => {
-        obj.undelegations[k] = v;
-      });
+      obj.undelegations = message.undelegations.map(e => e ? UndelegationEntry.toJSON(e) : undefined);
+    } else {
+      obj.undelegations = [];
     }
     if (message.epochs) {
       obj.epochs = message.epochs.map(e => (e || BigInt(0)).toString());
@@ -698,15 +687,177 @@ export const UndelegateReplyData = {
   fromPartial(object: Partial<UndelegateReplyData>): UndelegateReplyData {
     const message = createBaseUndelegateReplyData();
     message.totalCAmount = object.totalCAmount ?? "";
-    message.undelegations = Object.entries(object.undelegations ?? {}).reduce<{
-      [key: string]: string;
-    }>((acc, [key, value]) => {
-      if (value !== undefined) {
-        acc[key] = String(value);
-      }
-      return acc;
-    }, {});
+    message.undelegations = object.undelegations?.map(e => UndelegationEntry.fromPartial(e)) || [];
     message.epochs = object.epochs?.map(e => BigInt(e.toString())) || [];
+    return message;
+  }
+};
+function createBaseUndelegationEntry(): UndelegationEntry {
+  return {
+    validator: "",
+    amount: ""
+  };
+}
+export const UndelegationEntry = {
+  encode(message: UndelegationEntry, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    if (message.validator !== "") {
+      writer.uint32(10).string(message.validator);
+    }
+    if (message.amount !== "") {
+      writer.uint32(18).string(message.amount);
+    }
+    return writer;
+  },
+  decode(input: BinaryReader | Uint8Array, length?: number): UndelegationEntry {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseUndelegationEntry();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.validator = reader.string();
+          break;
+        case 2:
+          message.amount = reader.string();
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromJSON(object: any): UndelegationEntry {
+    return {
+      validator: isSet(object.validator) ? String(object.validator) : "",
+      amount: isSet(object.amount) ? String(object.amount) : ""
+    };
+  },
+  toJSON(message: UndelegationEntry): unknown {
+    const obj: any = {};
+    message.validator !== undefined && (obj.validator = message.validator);
+    message.amount !== undefined && (obj.amount = message.amount);
+    return obj;
+  },
+  fromPartial(object: Partial<UndelegationEntry>): UndelegationEntry {
+    const message = createBaseUndelegationEntry();
+    message.validator = object.validator ?? "";
+    message.amount = object.amount ?? "";
+    return message;
+  }
+};
+function createBaseRedelegateReplyData(): RedelegateReplyData {
+  return {
+    redelegations: []
+  };
+}
+export const RedelegateReplyData = {
+  encode(message: RedelegateReplyData, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    for (const v of message.redelegations) {
+      RedelegationEntry.encode(v!, writer.uint32(10).fork()).ldelim();
+    }
+    return writer;
+  },
+  decode(input: BinaryReader | Uint8Array, length?: number): RedelegateReplyData {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseRedelegateReplyData();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.redelegations.push(RedelegationEntry.decode(reader, reader.uint32()));
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromJSON(object: any): RedelegateReplyData {
+    return {
+      redelegations: Array.isArray(object?.redelegations) ? object.redelegations.map((e: any) => RedelegationEntry.fromJSON(e)) : []
+    };
+  },
+  toJSON(message: RedelegateReplyData): unknown {
+    const obj: any = {};
+    if (message.redelegations) {
+      obj.redelegations = message.redelegations.map(e => e ? RedelegationEntry.toJSON(e) : undefined);
+    } else {
+      obj.redelegations = [];
+    }
+    return obj;
+  },
+  fromPartial(object: Partial<RedelegateReplyData>): RedelegateReplyData {
+    const message = createBaseRedelegateReplyData();
+    message.redelegations = object.redelegations?.map(e => RedelegationEntry.fromPartial(e)) || [];
+    return message;
+  }
+};
+function createBaseRedelegationEntry(): RedelegationEntry {
+  return {
+    srcValidator: "",
+    dstValidator: "",
+    amount: ""
+  };
+}
+export const RedelegationEntry = {
+  encode(message: RedelegationEntry, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    if (message.srcValidator !== "") {
+      writer.uint32(10).string(message.srcValidator);
+    }
+    if (message.dstValidator !== "") {
+      writer.uint32(18).string(message.dstValidator);
+    }
+    if (message.amount !== "") {
+      writer.uint32(26).string(message.amount);
+    }
+    return writer;
+  },
+  decode(input: BinaryReader | Uint8Array, length?: number): RedelegationEntry {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseRedelegationEntry();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.srcValidator = reader.string();
+          break;
+        case 2:
+          message.dstValidator = reader.string();
+          break;
+        case 3:
+          message.amount = reader.string();
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromJSON(object: any): RedelegationEntry {
+    return {
+      srcValidator: isSet(object.srcValidator) ? String(object.srcValidator) : "",
+      dstValidator: isSet(object.dstValidator) ? String(object.dstValidator) : "",
+      amount: isSet(object.amount) ? String(object.amount) : ""
+    };
+  },
+  toJSON(message: RedelegationEntry): unknown {
+    const obj: any = {};
+    message.srcValidator !== undefined && (obj.srcValidator = message.srcValidator);
+    message.dstValidator !== undefined && (obj.dstValidator = message.dstValidator);
+    message.amount !== undefined && (obj.amount = message.amount);
+    return obj;
+  },
+  fromPartial(object: Partial<RedelegationEntry>): RedelegationEntry {
+    const message = createBaseRedelegationEntry();
+    message.srcValidator = object.srcValidator ?? "";
+    message.dstValidator = object.dstValidator ?? "";
+    message.amount = object.amount ?? "";
     return message;
   }
 };
@@ -762,6 +913,252 @@ export const CompoundData = {
     const message = createBaseCompoundData();
     message.feeAmount = object.feeAmount ?? "";
     message.compoundAmount = object.compoundAmount ?? "";
+    return message;
+  }
+};
+function createBaseCollectUndelegatedReplyData(): CollectUndelegatedReplyData {
+  return {
+    undelegatedAmount: ""
+  };
+}
+export const CollectUndelegatedReplyData = {
+  encode(message: CollectUndelegatedReplyData, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    if (message.undelegatedAmount !== "") {
+      writer.uint32(10).string(message.undelegatedAmount);
+    }
+    return writer;
+  },
+  decode(input: BinaryReader | Uint8Array, length?: number): CollectUndelegatedReplyData {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseCollectUndelegatedReplyData();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.undelegatedAmount = reader.string();
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromJSON(object: any): CollectUndelegatedReplyData {
+    return {
+      undelegatedAmount: isSet(object.undelegatedAmount) ? String(object.undelegatedAmount) : ""
+    };
+  },
+  toJSON(message: CollectUndelegatedReplyData): unknown {
+    const obj: any = {};
+    message.undelegatedAmount !== undefined && (obj.undelegatedAmount = message.undelegatedAmount);
+    return obj;
+  },
+  fromPartial(object: Partial<CollectUndelegatedReplyData>): CollectUndelegatedReplyData {
+    const message = createBaseCollectUndelegatedReplyData();
+    message.undelegatedAmount = object.undelegatedAmount ?? "";
+    return message;
+  }
+};
+function createBaseSweepData_ChannelSweepsEntry(): SweepData_ChannelSweepsEntry {
+  return {
+    key: "",
+    value: ChannelSweep.fromPartial({})
+  };
+}
+export const SweepData_ChannelSweepsEntry = {
+  encode(message: SweepData_ChannelSweepsEntry, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    if (message.key !== "") {
+      writer.uint32(10).string(message.key);
+    }
+    if (message.value !== undefined) {
+      ChannelSweep.encode(message.value, writer.uint32(18).fork()).ldelim();
+    }
+    return writer;
+  },
+  decode(input: BinaryReader | Uint8Array, length?: number): SweepData_ChannelSweepsEntry {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseSweepData_ChannelSweepsEntry();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.key = reader.string();
+          break;
+        case 2:
+          message.value = ChannelSweep.decode(reader, reader.uint32());
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromJSON(object: any): SweepData_ChannelSweepsEntry {
+    return {
+      key: isSet(object.key) ? String(object.key) : "",
+      value: isSet(object.value) ? ChannelSweep.fromJSON(object.value) : undefined
+    };
+  },
+  toJSON(message: SweepData_ChannelSweepsEntry): unknown {
+    const obj: any = {};
+    message.key !== undefined && (obj.key = message.key);
+    message.value !== undefined && (obj.value = message.value ? ChannelSweep.toJSON(message.value) : undefined);
+    return obj;
+  },
+  fromPartial(object: Partial<SweepData_ChannelSweepsEntry>): SweepData_ChannelSweepsEntry {
+    const message = createBaseSweepData_ChannelSweepsEntry();
+    message.key = object.key ?? "";
+    message.value = object.value !== undefined && object.value !== null ? ChannelSweep.fromPartial(object.value) : undefined;
+    return message;
+  }
+};
+function createBaseSweepData(): SweepData {
+  return {
+    channelSweeps: {}
+  };
+}
+export const SweepData = {
+  encode(message: SweepData, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    Object.entries(message.channelSweeps).forEach(([key, value]) => {
+      SweepData_ChannelSweepsEntry.encode({
+        key: (key as any),
+        value
+      }, writer.uint32(10).fork()).ldelim();
+    });
+    return writer;
+  },
+  decode(input: BinaryReader | Uint8Array, length?: number): SweepData {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseSweepData();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          const entry1 = SweepData_ChannelSweepsEntry.decode(reader, reader.uint32());
+          if (entry1.value !== undefined) {
+            message.channelSweeps[entry1.key] = entry1.value;
+          }
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromJSON(object: any): SweepData {
+    return {
+      channelSweeps: isObject(object.channelSweeps) ? Object.entries(object.channelSweeps).reduce<{
+        [key: string]: ChannelSweep;
+      }>((acc, [key, value]) => {
+        acc[key] = ChannelSweep.fromJSON(value);
+        return acc;
+      }, {}) : {}
+    };
+  },
+  toJSON(message: SweepData): unknown {
+    const obj: any = {};
+    obj.channelSweeps = {};
+    if (message.channelSweeps) {
+      Object.entries(message.channelSweeps).forEach(([k, v]) => {
+        obj.channelSweeps[k] = ChannelSweep.toJSON(v);
+      });
+    }
+    return obj;
+  },
+  fromPartial(object: Partial<SweepData>): SweepData {
+    const message = createBaseSweepData();
+    message.channelSweeps = Object.entries(object.channelSweeps ?? {}).reduce<{
+      [key: string]: ChannelSweep;
+    }>((acc, [key, value]) => {
+      if (value !== undefined) {
+        acc[key] = ChannelSweep.fromPartial(value);
+      }
+      return acc;
+    }, {});
+    return message;
+  }
+};
+function createBaseChannelSweep(): ChannelSweep {
+  return {
+    channel: "",
+    epochs: [],
+    amount: ""
+  };
+}
+export const ChannelSweep = {
+  encode(message: ChannelSweep, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    if (message.channel !== "") {
+      writer.uint32(10).string(message.channel);
+    }
+    writer.uint32(18).fork();
+    for (const v of message.epochs) {
+      writer.uint64(v);
+    }
+    writer.ldelim();
+    if (message.amount !== "") {
+      writer.uint32(26).string(message.amount);
+    }
+    return writer;
+  },
+  decode(input: BinaryReader | Uint8Array, length?: number): ChannelSweep {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseChannelSweep();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.channel = reader.string();
+          break;
+        case 2:
+          if ((tag & 7) === 2) {
+            const end2 = reader.uint32() + reader.pos;
+            while (reader.pos < end2) {
+              message.epochs.push(reader.uint64());
+            }
+          } else {
+            message.epochs.push(reader.uint64());
+          }
+          break;
+        case 3:
+          message.amount = reader.string();
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromJSON(object: any): ChannelSweep {
+    return {
+      channel: isSet(object.channel) ? String(object.channel) : "",
+      epochs: Array.isArray(object?.epochs) ? object.epochs.map((e: any) => BigInt(e.toString())) : [],
+      amount: isSet(object.amount) ? String(object.amount) : ""
+    };
+  },
+  toJSON(message: ChannelSweep): unknown {
+    const obj: any = {};
+    message.channel !== undefined && (obj.channel = message.channel);
+    if (message.epochs) {
+      obj.epochs = message.epochs.map(e => (e || BigInt(0)).toString());
+    } else {
+      obj.epochs = [];
+    }
+    message.amount !== undefined && (obj.amount = message.amount);
+    return obj;
+  },
+  fromPartial(object: Partial<ChannelSweep>): ChannelSweep {
+    const message = createBaseChannelSweep();
+    message.channel = object.channel ?? "";
+    message.epochs = object.epochs?.map(e => BigInt(e.toString())) || [];
+    message.amount = object.amount ?? "";
     return message;
   }
 };

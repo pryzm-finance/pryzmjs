@@ -2,14 +2,15 @@ syntax = "proto3";
 package prism.incentives;
 
 import "cosmos/base/query/v1beta1/pagination.proto";
-// this line is used by starport scaffolding # 1
 import "cosmos/base/v1beta1/coin.proto";
+import "cosmos_proto/cosmos.proto";
 import "gogoproto/gogo.proto";
 import "google/api/annotations.proto";
 import "prism/incentives/bond.proto";
 import "prism/incentives/params.proto";
 import "prism/incentives/pool.proto";
 import "prism/incentives/unbonding.proto";
+// this line is used by starport scaffolding # 1
 
 option go_package = "github.com/prism-finance/prism-core/x/incentives/types";
 
@@ -70,16 +71,16 @@ message QueryGetPoolResponse {
 }
 
 message QueryAllPoolRequest {
-  cosmos.base.query.v1beta1.PageRequest pagination = 1;
+  cosmos.base.query.v1beta1.PageRequest pagination = 1 [(gogoproto.nullable) = true];
 }
 
 message QueryAllPoolResponse {
   repeated Pool pool = 1 [(gogoproto.nullable) = false];
-  cosmos.base.query.v1beta1.PageResponse pagination = 2;
+  cosmos.base.query.v1beta1.PageResponse pagination = 2 [(gogoproto.nullable) = true];
 }
 
 message QueryGetBondRequest {
-  string address = 1;
+  string address = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
   string bond_denom = 2;
 }
 
@@ -88,12 +89,12 @@ message QueryGetBondResponse {
 }
 
 message QueryAllBondRequest {
-  cosmos.base.query.v1beta1.PageRequest pagination = 1;
+  cosmos.base.query.v1beta1.PageRequest pagination = 1 [(gogoproto.nullable) = true];
 }
 
 message QueryAllBondResponse {
   repeated Bond bond = 1 [(gogoproto.nullable) = false];
-  cosmos.base.query.v1beta1.PageResponse pagination = 2;
+  cosmos.base.query.v1beta1.PageResponse pagination = 2 [(gogoproto.nullable) = true];
 }
 
 message QueryGetUnbondingRequest {
@@ -105,12 +106,12 @@ message QueryGetUnbondingResponse {
 }
 
 message QueryAllUnbondingRequest {
-  cosmos.base.query.v1beta1.PageRequest pagination = 1;
+  cosmos.base.query.v1beta1.PageRequest pagination = 1 [(gogoproto.nullable) = true];
 }
 
 message QueryAllUnbondingResponse {
   repeated Unbonding unbonding = 1 [(gogoproto.nullable) = false];
-  cosmos.base.query.v1beta1.PageResponse pagination = 2;
+  cosmos.base.query.v1beta1.PageResponse pagination = 2 [(gogoproto.nullable) = true];
 }
 
 // this line is used by starport scaffolding # 3

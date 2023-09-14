@@ -29,7 +29,7 @@ message Pool {
     (gogoproto.nullable) = false
   ];
   PoolType pool_type = 4;
-  string creator = 5;
+  string creator = 5 [(cosmos_proto.scalar) = "cosmos.AddressString"];
   bool recovery_mode = 6;
   bool paused_by_gov = 7;
   bool paused_by_owner = 8;

@@ -3,39 +3,49 @@ import { HostChain, HostChainSDKType, Validator, ValidatorSDKType } from "./host
 import { Coin, CoinSDKType } from "../../cosmos/base/v1beta1/coin";
 import { BinaryReader, BinaryWriter } from "../../binary";
 import { isSet } from "../../helpers";
-export enum ICAType {
+export enum ICARegistrationType {
+  /** DELEGATION - register delegation interchain account */
   DELEGATION = 0,
+  /** REWARD - register reward interchain account */
   REWARD = 1,
+  /** SWEEP - register sweep interchain account */
   SWEEP = 2,
+  /** REWARD_CLAIMING - registration of reward account as the withdraw address on the host chain */
+  REWARD_CLAIMING = 3,
   UNRECOGNIZED = -1,
 }
-export const ICATypeSDKType = ICAType;
-export function iCATypeFromJSON(object: any): ICAType {
+export const ICARegistrationTypeSDKType = ICARegistrationType;
+export function iCARegistrationTypeFromJSON(object: any): ICARegistrationType {
   switch (object) {
     case 0:
     case "DELEGATION":
-      return ICAType.DELEGATION;
+      return ICARegistrationType.DELEGATION;
     case 1:
     case "REWARD":
-      return ICAType.REWARD;
+      return ICARegistrationType.REWARD;
     case 2:
     case "SWEEP":
-      return ICAType.SWEEP;
+      return ICARegistrationType.SWEEP;
+    case 3:
+    case "REWARD_CLAIMING":
+      return ICARegistrationType.REWARD_CLAIMING;
     case -1:
     case "UNRECOGNIZED":
     default:
-      return ICAType.UNRECOGNIZED;
+      return ICARegistrationType.UNRECOGNIZED;
   }
 }
-export function iCATypeToJSON(object: ICAType): string {
+export function iCARegistrationTypeToJSON(object: ICARegistrationType): string {
   switch (object) {
-    case ICAType.DELEGATION:
+    case ICARegistrationType.DELEGATION:
       return "DELEGATION";
-    case ICAType.REWARD:
+    case ICARegistrationType.REWARD:
       return "REWARD";
-    case ICAType.SWEEP:
+    case ICARegistrationType.SWEEP:
       return "SWEEP";
-    case ICAType.UNRECOGNIZED:
+    case ICARegistrationType.REWARD_CLAIMING:
+      return "REWARD_CLAIMING";
+    case ICARegistrationType.UNRECOGNIZED:
     default:
       return "UNRECOGNIZED";
   }
@@ -64,13 +74,13 @@ export interface MsgUpdateHostChain {
   authority: string;
   hostChainId: string;
   validators: Validator[];
-  params: StakingParams;
+  params?: StakingParams;
 }
 export interface MsgUpdateHostChainSDKType {
   authority: string;
   host_chain_id: string;
   validators: ValidatorSDKType[];
-  params: StakingParamsSDKType;
+  params?: StakingParamsSDKType;
 }
 export interface MsgUpdateHostChainResponse {}
 export interface MsgUpdateHostChainResponseSDKType {}
@@ -166,18 +176,18 @@ export interface MsgRebalanceDelegationsSDKType {
 }
 export interface MsgRebalanceDelegationsResponse {}
 export interface MsgRebalanceDelegationsResponseSDKType {}
-export interface MsgRedeemInterchainAccount {
+export interface MsgRegisterInterchainAccount {
   creator: string;
   hostChain: string;
-  accountType: ICAType;
+  registrationType: ICARegistrationType;
 }
-export interface MsgRedeemInterchainAccountSDKType {
+export interface MsgRegisterInterchainAccountSDKType {
   creator: string;
   host_chain: string;
-  account_type: ICAType;
+  registration_type: ICARegistrationType;
 }
-export interface MsgRedeemInterchainAccountResponse {}
-export interface MsgRedeemInterchainAccountResponseSDKType {}
+export interface MsgRegisterInterchainAccountResponse {}
+export interface MsgRegisterInterchainAccountResponseSDKType {}
 function createBaseMsgUpdateParams(): MsgUpdateParams {
   return {
     authority: "",
@@ -359,7 +369,7 @@ function createBaseMsgUpdateHostChain(): MsgUpdateHostChain {
     authority: "",
     hostChainId: "",
     validators: [],
-    params: StakingParams.fromPartial({})
+    params: undefined
   };
 }
 export const MsgUpdateHostChain = {
@@ -1084,30 +1094,30 @@ export const MsgRebalanceDelegationsResponse = {
     return message;
   }
 };
-function createBaseMsgRedeemInterchainAccount(): MsgRedeemInterchainAccount {
+function createBaseMsgRegisterInterchainAccount(): MsgRegisterInterchainAccount {
   return {
     creator: "",
     hostChain: "",
-    accountType: 0
+    registrationType: 0
   };
 }
-export const MsgRedeemInterchainAccount = {
-  encode(message: MsgRedeemInterchainAccount, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+export const MsgRegisterInterchainAccount = {
+  encode(message: MsgRegisterInterchainAccount, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.creator !== "") {
       writer.uint32(10).string(message.creator);
     }
     if (message.hostChain !== "") {
       writer.uint32(18).string(message.hostChain);
     }
-    if (message.accountType !== 0) {
-      writer.uint32(24).int32(message.accountType);
+    if (message.registrationType !== 0) {
+      writer.uint32(24).int32(message.registrationType);
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): MsgRedeemInterchainAccount {
+  decode(input: BinaryReader | Uint8Array, length?: number): MsgRegisterInterchainAccount {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseMsgRedeemInterchainAccount();
+    const message = createBaseMsgRegisterInterchainAccount();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -1118,7 +1128,7 @@ export const MsgRedeemInterchainAccount = {
           message.hostChain = reader.string();
           break;
         case 3:
-          message.accountType = (reader.int32() as any);
+          message.registrationType = (reader.int32() as any);
           break;
         default:
           reader.skipType(tag & 7);
@@ -1127,39 +1137,39 @@ export const MsgRedeemInterchainAccount = {
     }
     return message;
   },
-  fromJSON(object: any): MsgRedeemInterchainAccount {
+  fromJSON(object: any): MsgRegisterInterchainAccount {
     return {
       creator: isSet(object.creator) ? String(object.creator) : "",
       hostChain: isSet(object.hostChain) ? String(object.hostChain) : "",
-      accountType: isSet(object.accountType) ? iCATypeFromJSON(object.accountType) : -1
+      registrationType: isSet(object.registrationType) ? iCARegistrationTypeFromJSON(object.registrationType) : -1
     };
   },
-  toJSON(message: MsgRedeemInterchainAccount): unknown {
+  toJSON(message: MsgRegisterInterchainAccount): unknown {
     const obj: any = {};
     message.creator !== undefined && (obj.creator = message.creator);
     message.hostChain !== undefined && (obj.hostChain = message.hostChain);
-    message.accountType !== undefined && (obj.accountType = iCATypeToJSON(message.accountType));
+    message.registrationType !== undefined && (obj.registrationType = iCARegistrationTypeToJSON(message.registrationType));
     return obj;
   },
-  fromPartial(object: Partial<MsgRedeemInterchainAccount>): MsgRedeemInterchainAccount {
-    const message = createBaseMsgRedeemInterchainAccount();
+  fromPartial(object: Partial<MsgRegisterInterchainAccount>): MsgRegisterInterchainAccount {
+    const message = createBaseMsgRegisterInterchainAccount();
     message.creator = object.creator ?? "";
     message.hostChain = object.hostChain ?? "";
-    message.accountType = object.accountType ?? 0;
+    message.registrationType = object.registrationType ?? 0;
     return message;
   }
 };
-function createBaseMsgRedeemInterchainAccountResponse(): MsgRedeemInterchainAccountResponse {
+function createBaseMsgRegisterInterchainAccountResponse(): MsgRegisterInterchainAccountResponse {
   return {};
 }
-export const MsgRedeemInterchainAccountResponse = {
-  encode(_: MsgRedeemInterchainAccountResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+export const MsgRegisterInterchainAccountResponse = {
+  encode(_: MsgRegisterInterchainAccountResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): MsgRedeemInterchainAccountResponse {
+  decode(input: BinaryReader | Uint8Array, length?: number): MsgRegisterInterchainAccountResponse {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseMsgRedeemInterchainAccountResponse();
+    const message = createBaseMsgRegisterInterchainAccountResponse();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -1170,15 +1180,15 @@ export const MsgRedeemInterchainAccountResponse = {
     }
     return message;
   },
-  fromJSON(_: any): MsgRedeemInterchainAccountResponse {
+  fromJSON(_: any): MsgRegisterInterchainAccountResponse {
     return {};
   },
-  toJSON(_: MsgRedeemInterchainAccountResponse): unknown {
+  toJSON(_: MsgRegisterInterchainAccountResponse): unknown {
     const obj: any = {};
     return obj;
   },
-  fromPartial(_: Partial<MsgRedeemInterchainAccountResponse>): MsgRedeemInterchainAccountResponse {
-    const message = createBaseMsgRedeemInterchainAccountResponse();
+  fromPartial(_: Partial<MsgRegisterInterchainAccountResponse>): MsgRegisterInterchainAccountResponse {
+    const message = createBaseMsgRegisterInterchainAccountResponse();
     return message;
   }
 };

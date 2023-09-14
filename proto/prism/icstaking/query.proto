@@ -73,12 +73,12 @@ message QueryGetHostChainResponse {
 }
 
 message QueryAllHostChainRequest {
-  cosmos.base.query.v1beta1.PageRequest pagination = 1;
+  cosmos.base.query.v1beta1.PageRequest pagination = 1 [(gogoproto.nullable) = true];
 }
 
 message QueryAllHostChainResponse {
   repeated HostChain host_chain = 1 [(gogoproto.nullable) = false];
-  cosmos.base.query.v1beta1.PageResponse pagination = 2;
+  cosmos.base.query.v1beta1.PageResponse pagination = 2 [(gogoproto.nullable) = true];
 }
 
 message QueryGetHostChainStateRequest {
@@ -90,12 +90,12 @@ message QueryGetHostChainStateResponse {
 }
 
 message QueryAllHostChainStateRequest {
-  cosmos.base.query.v1beta1.PageRequest pagination = 1;
+  cosmos.base.query.v1beta1.PageRequest pagination = 1 [(gogoproto.nullable) = true];
 }
 
 message QueryAllHostChainStateResponse {
   repeated HostChainState host_chain_state = 1 [(gogoproto.nullable) = false];
-  cosmos.base.query.v1beta1.PageResponse pagination = 2;
+  cosmos.base.query.v1beta1.PageResponse pagination = 2 [(gogoproto.nullable) = true];
 }
 
 message QueryGetUndelegationRequest {
@@ -108,22 +108,22 @@ message QueryGetUndelegationResponse {
 }
 
 message QueryAllUndelegationRequest {
-  cosmos.base.query.v1beta1.PageRequest pagination = 1;
+  cosmos.base.query.v1beta1.PageRequest pagination = 1 [(gogoproto.nullable) = true];
 }
 
 message QueryAllUndelegationResponse {
   repeated Undelegation undelegation = 1 [(gogoproto.nullable) = false];
-  cosmos.base.query.v1beta1.PageResponse pagination = 2;
+  cosmos.base.query.v1beta1.PageResponse pagination = 2 [(gogoproto.nullable) = true];
 }
 
 message QueryIncompleteUndelegationRequest {
   string host_chain = 1;
-  cosmos.base.query.v1beta1.PageRequest pagination = 2;
+  cosmos.base.query.v1beta1.PageRequest pagination = 2 [(gogoproto.nullable) = true];
 }
 
 message QueryIncompleteUndelegationResponse {
   repeated Undelegation undelegation = 1 [(gogoproto.nullable) = false];
-  cosmos.base.query.v1beta1.PageResponse pagination = 2;
+  cosmos.base.query.v1beta1.PageResponse pagination = 2 [(gogoproto.nullable) = true];
 }
 
 // this line is used by starport scaffolding # 3

@@ -3,7 +3,7 @@ import { UnaryMethodDefinitionish } from "../../grpc-web";
 import { DeepPartial } from "../../helpers";
 import { grpc } from "@improbable-eng/grpc-web";
 import { BrowserHeaders } from "browser-headers";
-import { MsgUpdateParams, MsgUpdateParamsResponse, MsgRegisterHostChain, MsgRegisterHostChainResponse, MsgUpdateHostChain, MsgUpdateHostChainResponse, MsgStake, MsgStakeResponse, MsgUnstake, MsgUnstakeResponse, MsgRedeemUnstaked, MsgRedeemUnstakedResponse, MsgInstantUnstake, MsgInstantUnstakeResponse, MsgRebalanceDelegations, MsgRebalanceDelegationsResponse, MsgRedeemInterchainAccount, MsgRedeemInterchainAccountResponse } from "./tx";
+import { MsgUpdateParams, MsgUpdateParamsResponse, MsgRegisterHostChain, MsgRegisterHostChainResponse, MsgUpdateHostChain, MsgUpdateHostChainResponse, MsgStake, MsgStakeResponse, MsgUnstake, MsgUnstakeResponse, MsgRedeemUnstaked, MsgRedeemUnstakedResponse, MsgInstantUnstake, MsgInstantUnstakeResponse, MsgRebalanceDelegations, MsgRebalanceDelegationsResponse, MsgRegisterInterchainAccount, MsgRegisterInterchainAccountResponse } from "./tx";
 /** Msg defines the Msg service. */
 export interface Msg {
   updateParams(request: DeepPartial<MsgUpdateParams>, metadata?: grpc.Metadata): Promise<MsgUpdateParamsResponse>;
@@ -14,7 +14,7 @@ export interface Msg {
   redeemUnstaked(request: DeepPartial<MsgRedeemUnstaked>, metadata?: grpc.Metadata): Promise<MsgRedeemUnstakedResponse>;
   instantUnstake(request: DeepPartial<MsgInstantUnstake>, metadata?: grpc.Metadata): Promise<MsgInstantUnstakeResponse>;
   rebalanceDelegations(request: DeepPartial<MsgRebalanceDelegations>, metadata?: grpc.Metadata): Promise<MsgRebalanceDelegationsResponse>;
-  redeemInterchainAccount(request: DeepPartial<MsgRedeemInterchainAccount>, metadata?: grpc.Metadata): Promise<MsgRedeemInterchainAccountResponse>;
+  registerInterchainAccount(request: DeepPartial<MsgRegisterInterchainAccount>, metadata?: grpc.Metadata): Promise<MsgRegisterInterchainAccountResponse>;
 }
 export class MsgClientImpl implements Msg {
   private readonly rpc: Rpc;
@@ -28,7 +28,7 @@ export class MsgClientImpl implements Msg {
     this.redeemUnstaked = this.redeemUnstaked.bind(this);
     this.instantUnstake = this.instantUnstake.bind(this);
     this.rebalanceDelegations = this.rebalanceDelegations.bind(this);
-    this.redeemInterchainAccount = this.redeemInterchainAccount.bind(this);
+    this.registerInterchainAccount = this.registerInterchainAccount.bind(this);
   }
   updateParams(request: DeepPartial<MsgUpdateParams>, metadata?: grpc.Metadata): Promise<MsgUpdateParamsResponse> {
     return this.rpc.unary(MsgUpdateParamsDesc, MsgUpdateParams.fromPartial(request), metadata);
@@ -54,8 +54,8 @@ export class MsgClientImpl implements Msg {
   rebalanceDelegations(request: DeepPartial<MsgRebalanceDelegations>, metadata?: grpc.Metadata): Promise<MsgRebalanceDelegationsResponse> {
     return this.rpc.unary(MsgRebalanceDelegationsDesc, MsgRebalanceDelegations.fromPartial(request), metadata);
   }
-  redeemInterchainAccount(request: DeepPartial<MsgRedeemInterchainAccount>, metadata?: grpc.Metadata): Promise<MsgRedeemInterchainAccountResponse> {
-    return this.rpc.unary(MsgRedeemInterchainAccountDesc, MsgRedeemInterchainAccount.fromPartial(request), metadata);
+  registerInterchainAccount(request: DeepPartial<MsgRegisterInterchainAccount>, metadata?: grpc.Metadata): Promise<MsgRegisterInterchainAccountResponse> {
+    return this.rpc.unary(MsgRegisterInterchainAccountDesc, MsgRegisterInterchainAccount.fromPartial(request), metadata);
   }
 }
 export const MsgDesc = {
@@ -229,20 +229,20 @@ export const MsgRebalanceDelegationsDesc: UnaryMethodDefinitionish = {
     }
   } as any)
 };
-export const MsgRedeemInterchainAccountDesc: UnaryMethodDefinitionish = {
-  methodName: "RedeemInterchainAccount",
+export const MsgRegisterInterchainAccountDesc: UnaryMethodDefinitionish = {
+  methodName: "RegisterInterchainAccount",
   service: MsgDesc,
   requestStream: false,
   responseStream: false,
   requestType: ({
     serializeBinary() {
-      return MsgRedeemInterchainAccount.encode(this).finish();
+      return MsgRegisterInterchainAccount.encode(this).finish();
     }
   } as any),
   responseType: ({
     deserializeBinary(data: Uint8Array) {
       return {
-        ...MsgRedeemInterchainAccountResponse.decode(data),
+        ...MsgRegisterInterchainAccountResponse.decode(data),
         toObject() {
           return this;
         }

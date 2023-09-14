@@ -1,16 +1,18 @@
 syntax = "proto3";
 package prism.assets;
 
+import "cosmos/msg/v1/msg.proto";
 import "cosmos_proto/cosmos.proto";
 import "gogoproto/gogo.proto";
 import "prism/assets/params.proto";
-// this line is used by starport scaffolding # proto/tx/import
 import "prism/assets/refractable_asset.proto";
 
 option go_package = "github.com/prism-finance/prism-core/x/assets/types";
 
 // Msg defines the Msg service.
 service Msg {
+  option (cosmos.msg.v1.service) = true;
+
   rpc UpdateParams(MsgUpdateParams) returns (MsgUpdateParamsResponse);
   rpc RegisterAsset(MsgRegisterAsset) returns (MsgRegisterAssetResponse);
   rpc DisableAsset(MsgDisableAsset) returns (MsgDisableAssetResponse);
@@ -20,21 +22,27 @@ service Msg {
 }
 
 message MsgRegisterAsset {
-  string authority = 1;
+  option (cosmos.msg.v1.signer) = "authority";
+
+  string authority = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
   RefractableAsset asset = 2 [(gogoproto.nullable) = false];
 }
 
 message MsgRegisterAssetResponse {}
 
 message MsgDisableAsset {
-  string authority = 1;
+  option (cosmos.msg.v1.signer) = "authority";
+
+  string authority = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
   string asset_id = 2;
 }
 
 message MsgDisableAssetResponse {}
 
 message MsgUpdateMaturityParams {
-  string authority = 1;
+  option (cosmos.msg.v1.signer) = "authority";
+
+  string authority = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
   string asset_id = 2;
   MaturityParams params = 3 [(gogoproto.nullable) = false];
 }
@@ -42,7 +50,9 @@ message MsgUpdateMaturityParams {
 message MsgUpdateMaturityParamsResponse {}
 
 message MsgUpdateFeeRatios {
-  string authority = 1;
+  option (cosmos.msg.v1.signer) = "authority";
+
+  string authority = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
   string asset_id = 2;
   FeeRatios fee_ratios = 3 [(gogoproto.nullable) = false];
 }
@@ -50,7 +60,9 @@ message MsgUpdateFeeRatios {
 message MsgUpdateFeeRatiosResponse {}
 
 message MsgUpdateParams {
-  string authority = 1;
+  option (cosmos.msg.v1.signer) = "authority";
+
+  string authority = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
   Params params = 2 [(gogoproto.nullable) = false];
 }
 

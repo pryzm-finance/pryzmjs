@@ -2,6 +2,7 @@ syntax = "proto3";
 package prism.pgov;
 
 import "cosmos/base/v1beta1/coin.proto";
+import "cosmos_proto/cosmos.proto";
 import "gogoproto/gogo.proto";
 import "prism/pgov/params.proto";
 import "prism/pgov/proposal.proto";
@@ -18,7 +19,7 @@ message EventSetProposal {
 }
 
 message EventPAssetStake {
-  string address = 1;
+  string address = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
   string asset = 2;
   repeated cosmos.base.v1beta1.Coin amount = 3 [
     (gogoproto.nullable) = false,
@@ -31,7 +32,7 @@ message EventPAssetStake {
 }
 
 message EventPAssetUnstake {
-  string address = 1;
+  string address = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
   string asset = 2;
   repeated cosmos.base.v1beta1.Coin amount = 3 [
     (gogoproto.nullable) = false,
@@ -44,11 +45,11 @@ message EventPAssetUnstake {
 }
 
 message EventVoteSubmit {
-  pgov.Vote vote = 1;
+  Vote vote = 1;
 }
 
 message EventProposalEnd {
-  pgov.Proposal proposal = 1;
+  Proposal proposal = 1;
 }
 
 message EventVoteTransmit {

@@ -29,7 +29,7 @@ service Query {
 
   // Queries a MaturityLevel by index.
   rpc MaturityLevel(QueryGetMaturityLevelRequest) returns (QueryGetMaturityLevelResponse) {
-    option (google.api.http).get = "/prism-finance/prism-core/assets/maturity_level/{active}/{asset_id}/{symbol}";
+    option (google.api.http).get = "/prism-finance/prism-core/assets/maturity_level/{asset_id}/{symbol}";
   }
 
   // Queries a list of MaturityLevel items.
@@ -59,18 +59,17 @@ message QueryGetRefractableAssetResponse {
 
 message QueryAllRefractableAssetRequest {
   string enabled = 1;
-  cosmos.base.query.v1beta1.PageRequest pagination = 2;
+  cosmos.base.query.v1beta1.PageRequest pagination = 2 [(gogoproto.nullable) = true];
 }
 
 message QueryAllRefractableAssetResponse {
   repeated RefractableAsset assets = 1 [(gogoproto.nullable) = false];
-  cosmos.base.query.v1beta1.PageResponse pagination = 2;
+  cosmos.base.query.v1beta1.PageResponse pagination = 2 [(gogoproto.nullable) = true];
 }
 
 message QueryGetMaturityLevelRequest {
-  bool active = 1;
-  string asset_id = 2;
-  string symbol = 3;
+  string asset_id = 1;
+  string symbol = 2;
 }
 
 message QueryGetMaturityLevelResponse {
@@ -81,12 +80,12 @@ message QueryAllMaturityLevelRequest {
   bool active = 1;
   string asset_id = 2;
   string asset_enabled = 3;
-  cosmos.base.query.v1beta1.PageRequest pagination = 4;
+  cosmos.base.query.v1beta1.PageRequest pagination = 4 [(gogoproto.nullable) = true];
 }
 
 message QueryAllMaturityLevelResponse {
   repeated MaturityLevel maturity_level = 1 [(gogoproto.nullable) = false];
-  cosmos.base.query.v1beta1.PageResponse pagination = 2;
+  cosmos.base.query.v1beta1.PageResponse pagination = 2 [(gogoproto.nullable) = true];
 }
 
 // this line is used by starport scaffolding # 3

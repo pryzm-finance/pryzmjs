@@ -160,15 +160,14 @@ export interface MsgSetYammConfigurationAminoType extends AminoMsg {
     creator: string;
     configuration: {
       pool_id: string;
+      lambda: string;
       maturity_introduction_interval_millis: string;
       maturity_expiration_interval_millis: string;
+      introduction_virtual_balance_scaler: string;
       expiration_virtual_balance_scaler: string;
-      expired_asset_discount_ratio: string;
       buy_y_given_in_loan_fee_ratio: string;
       sell_y_given_out_fee_ratio: string;
-      swap_yield_fee_ratio: string;
-      leverage_scaler: string;
-      max_weight_ratio: string;
+      max_alpha: string;
     };
   };
 }
@@ -392,15 +391,15 @@ export interface MsgUpdateParamsAminoType extends AminoMsg {
       join_exit_protocol_fee_ratio: string;
     };
     yamm_parameters: {
+      lambda: string;
       maturity_introduction_interval_millis: string;
       maturity_expiration_interval_millis: string;
+      introduction_virtual_balance_scaler: string;
       expiration_virtual_balance_scaler: string;
-      expired_asset_discount_ratio: string;
       buy_y_given_in_loan_fee_ratio: string;
       sell_y_given_out_fee_ratio: string;
-      swap_yield_fee_ratio: string;
-      leverage_scaler: string;
-      max_weight_ratio: string;
+      max_alpha: string;
+      default_initialization_allow_list: string[];
     };
     order_parameters: {
       step_matching_fee_ratio: string;
@@ -886,15 +885,14 @@ export const AminoConverter = {
         creator,
         configuration: {
           pool_id: configuration.poolId.toString(),
+          lambda: configuration.lambda,
           maturity_introduction_interval_millis: configuration.maturityIntroductionIntervalMillis,
           maturity_expiration_interval_millis: configuration.maturityExpirationIntervalMillis,
+          introduction_virtual_balance_scaler: configuration.introductionVirtualBalanceScaler,
           expiration_virtual_balance_scaler: configuration.expirationVirtualBalanceScaler,
-          expired_asset_discount_ratio: configuration.expiredAssetDiscountRatio,
           buy_y_given_in_loan_fee_ratio: configuration.buyYGivenInLoanFeeRatio,
           sell_y_given_out_fee_ratio: configuration.sellYGivenOutFeeRatio,
-          swap_yield_fee_ratio: configuration.swapYieldFeeRatio,
-          leverage_scaler: configuration.leverageScaler,
-          max_weight_ratio: configuration.maxWeightRatio
+          max_alpha: configuration.maxAlpha
         }
       };
     },
@@ -906,15 +904,14 @@ export const AminoConverter = {
         creator,
         configuration: {
           poolId: BigInt(configuration.pool_id),
+          lambda: configuration.lambda,
           maturityIntroductionIntervalMillis: configuration.maturity_introduction_interval_millis,
           maturityExpirationIntervalMillis: configuration.maturity_expiration_interval_millis,
+          introductionVirtualBalanceScaler: configuration.introduction_virtual_balance_scaler,
           expirationVirtualBalanceScaler: configuration.expiration_virtual_balance_scaler,
-          expiredAssetDiscountRatio: configuration.expired_asset_discount_ratio,
           buyYGivenInLoanFeeRatio: configuration.buy_y_given_in_loan_fee_ratio,
           sellYGivenOutFeeRatio: configuration.sell_y_given_out_fee_ratio,
-          swapYieldFeeRatio: configuration.swap_yield_fee_ratio,
-          leverageScaler: configuration.leverage_scaler,
-          maxWeightRatio: configuration.max_weight_ratio
+          maxAlpha: configuration.max_alpha
         }
       };
     }
@@ -1543,15 +1540,15 @@ export const AminoConverter = {
           join_exit_protocol_fee_ratio: generalPoolParameters.joinExitProtocolFeeRatio
         },
         yamm_parameters: {
+          lambda: yammParameters.lambda,
           maturity_introduction_interval_millis: yammParameters.maturityIntroductionIntervalMillis.toString(),
           maturity_expiration_interval_millis: yammParameters.maturityExpirationIntervalMillis.toString(),
+          introduction_virtual_balance_scaler: yammParameters.introductionVirtualBalanceScaler,
           expiration_virtual_balance_scaler: yammParameters.expirationVirtualBalanceScaler,
-          expired_asset_discount_ratio: yammParameters.expiredAssetDiscountRatio,
           buy_y_given_in_loan_fee_ratio: yammParameters.buyYGivenInLoanFeeRatio,
           sell_y_given_out_fee_ratio: yammParameters.sellYGivenOutFeeRatio,
-          swap_yield_fee_ratio: yammParameters.swapYieldFeeRatio,
-          leverage_scaler: yammParameters.leverageScaler,
-          max_weight_ratio: yammParameters.maxWeightRatio
+          max_alpha: yammParameters.maxAlpha,
+          default_initialization_allow_list: yammParameters.defaultInitializationAllowList
         },
         order_parameters: {
           step_matching_fee_ratio: orderParameters.stepMatchingFeeRatio,
@@ -1581,15 +1578,15 @@ export const AminoConverter = {
           joinExitProtocolFeeRatio: general_pool_parameters.join_exit_protocol_fee_ratio
         },
         yammParameters: {
+          lambda: yamm_parameters.lambda,
           maturityIntroductionIntervalMillis: BigInt(yamm_parameters.maturity_introduction_interval_millis),
           maturityExpirationIntervalMillis: BigInt(yamm_parameters.maturity_expiration_interval_millis),
+          introductionVirtualBalanceScaler: yamm_parameters.introduction_virtual_balance_scaler,
           expirationVirtualBalanceScaler: yamm_parameters.expiration_virtual_balance_scaler,
-          expiredAssetDiscountRatio: yamm_parameters.expired_asset_discount_ratio,
           buyYGivenInLoanFeeRatio: yamm_parameters.buy_y_given_in_loan_fee_ratio,
           sellYGivenOutFeeRatio: yamm_parameters.sell_y_given_out_fee_ratio,
-          swapYieldFeeRatio: yamm_parameters.swap_yield_fee_ratio,
-          leverageScaler: yamm_parameters.leverage_scaler,
-          maxWeightRatio: yamm_parameters.max_weight_ratio
+          maxAlpha: yamm_parameters.max_alpha,
+          defaultInitializationAllowList: yamm_parameters.default_initialization_allow_list
         },
         orderParameters: {
           stepMatchingFeeRatio: order_parameters.step_matching_fee_ratio,
