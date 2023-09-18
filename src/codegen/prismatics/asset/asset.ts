@@ -11,6 +11,7 @@ export interface Asset {
   exchangeRateBlockHeight?: string;
   cPAssetExchangeRate?: string;
   cAssetApy?: string;
+  error: string;
 }
 export interface AssetSDKType {
   id: string;
@@ -22,6 +23,7 @@ export interface AssetSDKType {
   exchange_rate_block_height?: string;
   c_p_asset_exchange_rate?: string;
   c_asset_apy?: string;
+  error: string;
 }
 function createBaseAsset(): Asset {
   return {
@@ -33,7 +35,8 @@ function createBaseAsset(): Asset {
     exchangeRate: undefined,
     exchangeRateBlockHeight: undefined,
     cPAssetExchangeRate: undefined,
-    cAssetApy: undefined
+    cAssetApy: undefined,
+    error: ""
   };
 }
 export const Asset = {
@@ -64,6 +67,9 @@ export const Asset = {
     }
     if (message.cAssetApy !== undefined) {
       writer.uint32(74).string(Decimal.fromUserInput(message.cAssetApy, 18).atomics);
+    }
+    if (message.error !== "") {
+      writer.uint32(82).string(message.error);
     }
     return writer;
   },
@@ -101,6 +107,9 @@ export const Asset = {
         case 9:
           message.cAssetApy = Decimal.fromAtomics(reader.string(), 18).toString();
           break;
+        case 10:
+          message.error = reader.string();
+          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -118,7 +127,8 @@ export const Asset = {
       exchangeRate: isSet(object.exchangeRate) ? String(object.exchangeRate) : undefined,
       exchangeRateBlockHeight: isSet(object.exchangeRateBlockHeight) ? String(object.exchangeRateBlockHeight) : undefined,
       cPAssetExchangeRate: isSet(object.cPAssetExchangeRate) ? String(object.cPAssetExchangeRate) : undefined,
-      cAssetApy: isSet(object.cAssetApy) ? String(object.cAssetApy) : undefined
+      cAssetApy: isSet(object.cAssetApy) ? String(object.cAssetApy) : undefined,
+      error: isSet(object.error) ? String(object.error) : ""
     };
   },
   toJSON(message: Asset): unknown {
@@ -132,6 +142,7 @@ export const Asset = {
     message.exchangeRateBlockHeight !== undefined && (obj.exchangeRateBlockHeight = message.exchangeRateBlockHeight);
     message.cPAssetExchangeRate !== undefined && (obj.cPAssetExchangeRate = message.cPAssetExchangeRate);
     message.cAssetApy !== undefined && (obj.cAssetApy = message.cAssetApy);
+    message.error !== undefined && (obj.error = message.error);
     return obj;
   },
   fromPartial(object: Partial<Asset>): Asset {
@@ -145,6 +156,7 @@ export const Asset = {
     message.exchangeRateBlockHeight = object.exchangeRateBlockHeight ?? undefined;
     message.cPAssetExchangeRate = object.cPAssetExchangeRate ?? undefined;
     message.cAssetApy = object.cAssetApy ?? undefined;
+    message.error = object.error ?? "";
     return message;
   }
 };

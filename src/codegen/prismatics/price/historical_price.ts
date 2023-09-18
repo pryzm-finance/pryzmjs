@@ -73,14 +73,6 @@ export interface HistoricalPriceSDKType {
   open?: string;
   close?: string;
 }
-export interface TimeResolution {
-  type: TimeResolutionType;
-  value: number;
-}
-export interface TimeResolutionSDKType {
-  type: TimeResolutionType;
-  value: number;
-}
 function createBaseHistoricalPrice(): HistoricalPrice {
   return {
     time: Timestamp.fromPartial({}),
@@ -173,61 +165,6 @@ export const HistoricalPrice = {
     message.avg = object.avg ?? undefined;
     message.open = object.open ?? undefined;
     message.close = object.close ?? undefined;
-    return message;
-  }
-};
-function createBaseTimeResolution(): TimeResolution {
-  return {
-    type: 0,
-    value: 0
-  };
-}
-export const TimeResolution = {
-  encode(message: TimeResolution, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
-    if (message.type !== 0) {
-      writer.uint32(8).int32(message.type);
-    }
-    if (message.value !== 0) {
-      writer.uint32(16).uint32(message.value);
-    }
-    return writer;
-  },
-  decode(input: BinaryReader | Uint8Array, length?: number): TimeResolution {
-    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
-    let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseTimeResolution();
-    while (reader.pos < end) {
-      const tag = reader.uint32();
-      switch (tag >>> 3) {
-        case 1:
-          message.type = (reader.int32() as any);
-          break;
-        case 2:
-          message.value = reader.uint32();
-          break;
-        default:
-          reader.skipType(tag & 7);
-          break;
-      }
-    }
-    return message;
-  },
-  fromJSON(object: any): TimeResolution {
-    return {
-      type: isSet(object.type) ? timeResolutionTypeFromJSON(object.type) : -1,
-      value: isSet(object.value) ? Number(object.value) : 0
-    };
-  },
-  toJSON(message: TimeResolution): unknown {
-    const obj: any = {};
-    message.type !== undefined && (obj.type = timeResolutionTypeToJSON(message.type));
-    message.value !== undefined && (obj.value = Math.round(message.value));
-    return obj;
-  },
-  fromPartial(object: Partial<TimeResolution>): TimeResolution {
-    const message = createBaseTimeResolution();
-    message.type = object.type ?? 0;
-    message.value = object.value ?? 0;
     return message;
   }
 };

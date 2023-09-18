@@ -1,17 +1,19 @@
-import { TimeResolution, TimeResolutionSDKType, HistoricalPrice, HistoricalPriceSDKType } from "../../price/historical_price";
+import { TimeResolutionType, HistoricalPrice, HistoricalPriceSDKType, timeResolutionTypeFromJSON, timeResolutionTypeToJSON } from "../../price/historical_price";
 import { BinaryReader, BinaryWriter } from "../../../binary";
 import { isSet } from "../../../helpers";
 export interface QueryHistoricalPriceRequest {
   denom: string;
   quote: string;
-  timeResolution: TimeResolution;
+  timeResolutionType: TimeResolutionType;
+  timeResolutionValue: number;
   from: string;
   to: string;
 }
 export interface QueryHistoricalPriceRequestSDKType {
   denom: string;
   quote: string;
-  time_resolution: TimeResolutionSDKType;
+  time_resolution_type: TimeResolutionType;
+  time_resolution_value: number;
   from: string;
   to: string;
 }
@@ -25,7 +27,8 @@ function createBaseQueryHistoricalPriceRequest(): QueryHistoricalPriceRequest {
   return {
     denom: "",
     quote: "",
-    timeResolution: TimeResolution.fromPartial({}),
+    timeResolutionType: 0,
+    timeResolutionValue: 0,
     from: "",
     to: ""
   };
@@ -38,14 +41,17 @@ export const QueryHistoricalPriceRequest = {
     if (message.quote !== "") {
       writer.uint32(18).string(message.quote);
     }
-    if (message.timeResolution !== undefined) {
-      TimeResolution.encode(message.timeResolution, writer.uint32(26).fork()).ldelim();
+    if (message.timeResolutionType !== 0) {
+      writer.uint32(24).int32(message.timeResolutionType);
+    }
+    if (message.timeResolutionValue !== 0) {
+      writer.uint32(32).uint32(message.timeResolutionValue);
     }
     if (message.from !== "") {
-      writer.uint32(34).string(message.from);
+      writer.uint32(42).string(message.from);
     }
     if (message.to !== "") {
-      writer.uint32(42).string(message.to);
+      writer.uint32(50).string(message.to);
     }
     return writer;
   },
@@ -63,12 +69,15 @@ export const QueryHistoricalPriceRequest = {
           message.quote = reader.string();
           break;
         case 3:
-          message.timeResolution = TimeResolution.decode(reader, reader.uint32());
+          message.timeResolutionType = (reader.int32() as any);
           break;
         case 4:
-          message.from = reader.string();
+          message.timeResolutionValue = reader.uint32();
           break;
         case 5:
+          message.from = reader.string();
+          break;
+        case 6:
           message.to = reader.string();
           break;
         default:
@@ -82,7 +91,8 @@ export const QueryHistoricalPriceRequest = {
     return {
       denom: isSet(object.denom) ? String(object.denom) : "",
       quote: isSet(object.quote) ? String(object.quote) : "",
-      timeResolution: isSet(object.timeResolution) ? TimeResolution.fromJSON(object.timeResolution) : undefined,
+      timeResolutionType: isSet(object.timeResolutionType) ? timeResolutionTypeFromJSON(object.timeResolutionType) : -1,
+      timeResolutionValue: isSet(object.timeResolutionValue) ? Number(object.timeResolutionValue) : 0,
       from: isSet(object.from) ? String(object.from) : "",
       to: isSet(object.to) ? String(object.to) : ""
     };
@@ -91,7 +101,8 @@ export const QueryHistoricalPriceRequest = {
     const obj: any = {};
     message.denom !== undefined && (obj.denom = message.denom);
     message.quote !== undefined && (obj.quote = message.quote);
-    message.timeResolution !== undefined && (obj.timeResolution = message.timeResolution ? TimeResolution.toJSON(message.timeResolution) : undefined);
+    message.timeResolutionType !== undefined && (obj.timeResolutionType = timeResolutionTypeToJSON(message.timeResolutionType));
+    message.timeResolutionValue !== undefined && (obj.timeResolutionValue = Math.round(message.timeResolutionValue));
     message.from !== undefined && (obj.from = message.from);
     message.to !== undefined && (obj.to = message.to);
     return obj;
@@ -100,7 +111,8 @@ export const QueryHistoricalPriceRequest = {
     const message = createBaseQueryHistoricalPriceRequest();
     message.denom = object.denom ?? "";
     message.quote = object.quote ?? "";
-    message.timeResolution = object.timeResolution !== undefined && object.timeResolution !== null ? TimeResolution.fromPartial(object.timeResolution) : undefined;
+    message.timeResolutionType = object.timeResolutionType ?? 0;
+    message.timeResolutionValue = object.timeResolutionValue ?? 0;
     message.from = object.from ?? "";
     message.to = object.to ?? "";
     return message;

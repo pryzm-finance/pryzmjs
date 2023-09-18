@@ -45,8 +45,3 @@ enum TimeResolutionType {
   TIME_RESOLUTION_TYPE_MONTH = 4 [(gogoproto.enumvalue_customname) = "MonthTimeResolutionType"];
   TIME_RESOLUTION_TYPE_YEAR = 5 [(gogoproto.enumvalue_customname) = "YearTimeResolutionType"];
 }
-
-message TimeResolution {
-  TimeResolutionType type = 1;
-  uint32 value = 2;
-}

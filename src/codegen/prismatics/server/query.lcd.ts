@@ -199,8 +199,11 @@ export class LCDQueryClient {
     if (typeof params?.quote !== "undefined") {
       options.params.quote = params.quote;
     }
-    if (typeof params?.timeResolution !== "undefined") {
-      options.params.time_resolution = params.timeResolution;
+    if (typeof params?.timeResolutionType !== "undefined") {
+      options.params.time_resolution_type = params.timeResolutionType;
+    }
+    if (typeof params?.timeResolutionValue !== "undefined") {
+      options.params.time_resolution_value = params.timeResolutionValue;
     }
     if (typeof params?.from !== "undefined") {
       options.params.from = params.from;

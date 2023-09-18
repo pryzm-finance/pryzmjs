@@ -45,4 +45,5 @@ message Asset {
     (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Dec",
     (gogoproto.nullable) = true
   ];
+  string error = 10;
 }
