@@ -1,0 +1,19 @@
+syntax = "proto3";
+package pryzm.amm;
+
+import "cosmos_proto/cosmos.proto";
+import "gogoproto/gogo.proto";
+
+option go_package = "github.com/pryzm-finance/pryzm-core/x/amm/types";
+
+message VirtualBalancePoolToken {
+  uint64 pool_id = 1;
+  string denom = 2;
+  string target_virtual_balance = 3 [
+    (cosmos_proto.scalar) = "cosmos.Int",
+    (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Int",
+    (gogoproto.nullable) = false
+  ];
+  int64 start_unix_millis = 4;
+  int64 end_unix_millis = 5;
+}

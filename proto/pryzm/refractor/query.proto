@@ -1,0 +1,46 @@
+syntax = "proto3";
+package pryzm.refractor;
+
+import "cosmos/base/query/v1beta1/pagination.proto";
+import "cosmos_proto/cosmos.proto";
+import "gogoproto/gogo.proto";
+import "google/api/annotations.proto";
+import "pryzm/refractor/asset_state.proto";
+// this line is used by starport scaffolding # 1
+
+option go_package = "github.com/pryzm-finance/pryzm-core/x/refractor/types";
+
+// Query defines the gRPC querier service.
+service Query {
+  rpc AssetState(QueryGetAssetStateRequest) returns (QueryGetAssetStateResponse) {
+    option (google.api.http).get = "/pryzm-finance/pryzm-core/refractor/asset_state/{asset_id}";
+  }
+
+  rpc CPExchangeRate(QueryGetCPExchangeRateRequest) returns (QueryGetCPExchangeRateResponse) {
+    option (google.api.http).get = "/pryzm-finance/pryzm-core/refractor/c_p_exchange_rate/{asset_id}";
+  }
+
+  // this line is used by starport scaffolding # 2
+}
+
+message QueryGetAssetStateRequest {
+  string asset_id = 1;
+}
+
+message QueryGetAssetStateResponse {
+  AssetState asset_state = 1 [(gogoproto.nullable) = false];
+}
+
+message QueryGetCPExchangeRateRequest {
+  string asset_id = 1;
+}
+
+message QueryGetCPExchangeRateResponse {
+  string exchange_rate = 1 [
+    (cosmos_proto.scalar) = "cosmos.Dec",
+    (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Dec",
+    (gogoproto.nullable) = false
+  ];
+}
+
+// this line is used by starport scaffolding # 3

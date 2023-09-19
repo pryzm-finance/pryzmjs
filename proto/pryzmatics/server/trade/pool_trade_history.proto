@@ -1,0 +1,23 @@
+syntax = "proto3";
+package pryzmatics.server.trade;
+
+import "gogoproto/gogo.proto";
+import "cosmos_proto/cosmos.proto";
+import "pryzmatics/trade/pool_trade_history.proto";
+
+option go_package = "github.com/pryzm-finance/pryzmatics/server/trade";
+
+message QueryPoolTradeHistoryRequest {
+  string pool_id = 1 [
+    (cosmos_proto.scalar) = "cosmos.Int",
+    (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Int",
+    (gogoproto.nullable) = true
+  ];
+  string first_token = 2;
+  string second_token = 3;
+  pryzmatics.trade.PoolOperationType operation_type = 4;
+}
+
+message QueryPoolTradeHistoryResponse {
+  repeated pryzmatics.trade.PoolTradeHistory pool_trade_history_records = 1 [(gogoproto.nullable) = false];
+}

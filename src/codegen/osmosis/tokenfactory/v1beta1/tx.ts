@@ -49,7 +49,9 @@ export interface MsgCreateDenomResponseSDKType {
 }
 /**
  * MsgMint is the sdk.Msg type for allowing an admin account to mint
- * more of a token.  For now, we only support minting to the sender account
+ * more of a token.
+ * Only the admin of the token factory denom has permission to mint unless
+ * the denom does not have any admin.
  */
 export interface MsgMint {
   sender: string;
@@ -58,7 +60,9 @@ export interface MsgMint {
 }
 /**
  * MsgMint is the sdk.Msg type for allowing an admin account to mint
- * more of a token.  For now, we only support minting to the sender account
+ * more of a token.
+ * Only the admin of the token factory denom has permission to mint unless
+ * the denom does not have any admin.
  */
 export interface MsgMintSDKType {
   sender: string;
@@ -69,7 +73,9 @@ export interface MsgMintResponse {}
 export interface MsgMintResponseSDKType {}
 /**
  * MsgBurn is the sdk.Msg type for allowing an admin account to burn
- * a token.  For now, we only support burning from the sender account.
+ * a token.
+ * Only the admin of the token factory denom has permission to burn unless
+ * the denom does not have any admin.
  */
 export interface MsgBurn {
   sender: string;
@@ -78,7 +84,9 @@ export interface MsgBurn {
 }
 /**
  * MsgBurn is the sdk.Msg type for allowing an admin account to burn
- * a token.  For now, we only support burning from the sender account.
+ * a token.
+ * Only the admin of the token factory denom has permission to burn unless
+ * the denom does not have any admin.
  */
 export interface MsgBurnSDKType {
   sender: string;

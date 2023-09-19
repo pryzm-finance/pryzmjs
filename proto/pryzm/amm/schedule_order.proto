@@ -1,0 +1,9 @@
+syntax = "proto3";
+package pryzm.amm;
+
+option go_package = "github.com/pryzm-finance/pryzm-core/x/amm/types";
+
+message ScheduleOrder {
+  int64 time_millis = 1;
+  uint64 order_id = 2;
+}

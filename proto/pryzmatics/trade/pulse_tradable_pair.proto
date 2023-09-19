@@ -1,0 +1,11 @@
+syntax = "proto3";
+package pryzmatics.trade;
+
+option go_package = "github.com/pryzm-finance/pryzmatics/types/trade";
+
+message PulseTradablePair {
+  string token_in = 1;
+  string token_out = 2;
+  uint64 pool_id = 3;
+  bool whitelisted_route = 4;
+}

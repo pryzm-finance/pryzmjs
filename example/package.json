@@ -1,19 +1,12 @@
 {
   "name": "example",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
   "scripts": {
-    "compile": "rm -rf lib && tsc",
-    "test": "ts-node example-grpc-web.ts"
+    "compile": "rm -rf lib && tsc"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
   "dependencies": {
-    "@prism-finance/prismjs": "0.11.0",
+    "@pryzm-finance/pryzmjs": "0.12.2",
     "@refractedlabs/oraclejs": "^0.3.0",
-    "@refractedlabs/utils": "0.1.5"
+    "@refractedlabs/utils": "0.1.7"
   },
   "devDependencies": {
     "typescript": "^5.1.6"

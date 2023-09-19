@@ -1,0 +1,40 @@
+syntax = "proto3";
+package pryzmatics.server.pool;
+
+import "gogoproto/gogo.proto";
+import "cosmos_proto/cosmos.proto";
+import "pryzmatics/pool/token.proto";
+import "cosmos/base/query/v1beta1/pagination.proto";
+
+
+option go_package = "github.com/pryzm-finance/pryzmatics/server/pool";
+
+message QueryTokenRequest {
+  string denom = 1;
+  string time_window_in_days = 2 [
+    (cosmos_proto.scalar) = "cosmos.Int",
+    (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Int",
+    (gogoproto.nullable) = true
+  ];
+  string token_out = 3;
+}
+
+message QueryTokenResponse {
+  pryzmatics.pool.Token token = 1 [(gogoproto.nullable) = false];
+}
+
+message QueryTokensRequest {
+  pryzmatics.pool.TokenType token_type = 1;
+  string time_window_in_days = 2 [
+    (cosmos_proto.scalar) = "cosmos.Int",
+    (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Int",
+    (gogoproto.nullable) = true
+  ];
+  string token_out = 3;
+  cosmos.base.query.v1beta1.PageRequest pagination = 4 [(gogoproto.nullable) = true];
+}
+
+message QueryTokensResponse {
+  repeated pryzmatics.pool.Token tokens = 1 [(gogoproto.nullable) = false];
+  cosmos.base.query.v1beta1.PageResponse pagination = 2 [(gogoproto.nullable) = true];
+}

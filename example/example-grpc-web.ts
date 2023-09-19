@@ -1,21 +1,25 @@
-import {getBrowsersHeadersForBlockHeight, grpcFetchAll, prism} from "@prism-finance/prismjs"
+import {getBrowsersHeadersForBlockHeight, grpcFetchAll, pryzm} from "@pryzm-finance/pryzmjs"
 import * as console from "console";
+import { DirectSecp256k1HdWallet } from "@cosmjs/proto-signing";
 
 
 async function main() {
-    const client = await prism.ClientFactory.createGrpcWebClient({endpoint: "http://0.0.0.0:9091"})
+    const mnemonic = "short ocean antique emerge glory lock army wine guard sketch hotel remove music demand romance raven roof survey tired thank vessel cliff choose apology";
+    const signer = await DirectSecp256k1HdWallet.fromMnemonic(mnemonic, {prefix: "pryzm"});
+    const address = (await signer.getAccounts())[0].address
+    const client = await pryzm.ClientFactory.createGrpcWebClient({endpoint: "http://0.0.0.0:9091"})
 
     const authParams = (await client.cosmos.auth.v1beta1.params()).params
     console.log(authParams)
 
-    let balances = (await client.cosmos.bank.v1beta1.allBalances({address: "prism156pcgs3faegfte0vuaykr9az3hh9kx2e2qfwvu"})).balances
+    let balances = (await client.cosmos.bank.v1beta1.allBalances({address})).balances
     console.log(balances)
 
-    balances = (await client.cosmos.bank.v1beta1.allBalances({address: "prism156pcgs3faegfte0vuaykr9az3hh9kx2e2qfwvu"}, getBrowsersHeadersForBlockHeight(10n))).balances
+    balances = (await client.cosmos.bank.v1beta1.allBalances({address}, getBrowsersHeadersForBlockHeight(10n))).balances
     console.log(balances)
 
     const maturities = await grpcFetchAll(client, async (client, pageRequest) => {
-        const result = await client.prism.assets.maturityLevelAll({active: true, pagination: pageRequest})
+        const result = await client.pryzm.assets.maturityLevelAll({active: true, pagination: pageRequest})
         return [result.pagination.nextKey, result.maturityLevel]
     }, {
         countTotal: false,

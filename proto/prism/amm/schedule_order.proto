@@ -1,9 +1,0 @@
-syntax = "proto3";
-package prism.amm;
-
-option go_package = "github.com/prism-finance/prism-core/x/amm/types";
-
-message ScheduleOrder {
-  int64 time_millis = 1;
-  uint64 order_id = 2;
-}

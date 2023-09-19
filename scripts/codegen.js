@@ -17,7 +17,7 @@ telescope({
                 'cosmos/authz/v1beta1/tx.amino.ts',
                 'cosmos/staking/v1beta1/tx.amino.ts',
                 'google/protobuf/descriptor.ts',
-                'prism/amm/genesis.ts',
+                'pryzm/amm/genesis.ts',
                 'cosmos/base/tendermint/v1beta1/query.rpc.Service.ts',
                 'cosmos/tx/v1beta1/service.rpc.Service.ts'
             ],

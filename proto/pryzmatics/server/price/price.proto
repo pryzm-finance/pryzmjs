@@ -1,0 +1,20 @@
+syntax = "proto3";
+package pryzmatics.server.price;
+
+import "gogoproto/gogo.proto";
+import "cosmos_proto/cosmos.proto";
+
+option go_package = "github.com/pryzm-finance/pryzmatics/server/price";
+
+message QueryPriceRequest {
+  string token_in = 1;
+  string token_out = 2;
+}
+
+message QueryPriceResponse {
+  string price = 1 [
+    (cosmos_proto.scalar) = "cosmos.Dec",
+    (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Dec",
+    (gogoproto.nullable) = false
+  ];
+}

@@ -1,76 +1,76 @@
-# PrismJs: Javascript SDK for prism-finance/prism-core
+# PryzmJs: Javascript SDK for pryzm-finance/pryzm-core
 
-PrismJs is a JavaScript software development kit (SDK) that enables the development of applications that interact with the Prism blockchain from both Node.js and web browsers. It offers straightforward abstractions over fundamental data structures and serialization, simplifying the process of building applications that utilize the Prism blockchain.
+PryzmJs is a JavaScript software development kit (SDK) that enables the development of applications that interact with the Pryzm blockchain from both Node.js and web browsers. It offers straightforward abstractions over fundamental data structures and serialization, simplifying the process of building applications that utilize the Pryzm blockchain.
 
 # Install
 
 ```bash
-pnpm install @prism-finance/prismjs
+pnpm install @pryzm-finance/pryzmjs
 ```
 
 # Usage
 
 ## gRPC-web Clients
 
-Import the `prism-finance` object from `@prism-finance/prismjs`.
+Import the `pryzm-finance` object from `@pryzm-finance/pryzmjs`.
 
 ```tsx
-import { prism } from '@prism-finance/prismjs';
+import { pryzm } from '@pryzm-finance/pryzmjs';
 
-const client = await prism.ClientFactory.createGrpcWebClient({endpoint: GRPC_ENDPOINT});
+const client = await pryzm.ClientFactory.createGrpcWebClient({endpoint: GRPC_ENDPOINT});
 
-// now you can query the prism modules
-const params = await client.prism.amm.params();
+// now you can query the pryzm modules
+const params = await client.pryzm.amm.params();
 
 // you can also query the cosmos modules
-const balance = await client.cosmos.bank.v1beta1.allBalances({ address: 'prism1addresshere' });
+const balance = await client.cosmos.bank.v1beta1.allBalances({ address: 'pryzm1addresshere' });
 ```
 
 ## LCD Clients
 
 ```tsx
-import { prism } from '@prism-finance/prismjs';
+import { pryzm } from '@pryzm-finance/pryzmjs';
 
-const client = await prism.ClientFactory.createLCDClient({restEndpoint: LCD_ENDPOINT})
+const client = await pryzm.ClientFactory.createLCDClient({restEndpoint: LCD_ENDPOINT})
 
-// now you can query the prism modules
-const params = await client.prism.amm.params();
+// now you can query the pryzm modules
+const params = await client.pryzm.amm.params();
 
 // you can also query the cosmos modules
-const balance = await client.cosmos.bank.v1beta1.allBalances({ address: 'prism1addresshere' });
+const balance = await client.cosmos.bank.v1beta1.allBalances({ address: 'pryzm1addresshere' });
 ```
 
-## PrismaticsClient
+## PryzmaticsClient
 
 ```tsx
-import { prismatics } from "@prism-finance/prismjs";
+import { pryzmatics } from "@pryzm-finance/pryzmjs";
 
-const prismaticsClient = await prismatics.ClientFactory.createClient({restEndpoint: PRISMATICS_ENDPOINT})
+const pryzmaticsClient = await pryzmatics.ClientFactory.createClient({restEndpoint: PRISMATICS_ENDPOINT})
 
-const syncInfo = (await prismaticsClient.prismatics.syncInfo()).sync_info
+const syncInfo = (await pryzmaticsClient.pryzmatics.syncInfo()).sync_info
 ```
 
 ## Composing Messages
 
 ```tsx
-import { prism } from '@prism-finance/prismjs';
+import { pryzm } from '@pryzm-finance/pryzmjs';
 
 // sample messages from refactor module
 const {
     refract,
     redeem
-} = prism.refractor.MessageComposer.withTypeUrl
+} = pryzm.refractor.MessageComposer.withTypeUrl
 
 // sample messages from amm module
 const {
     singleSwap,
     initializePool
-} = prism.amm.MessageComposer.withTypeUrl
+} = pryzm.amm.MessageComposer.withTypeUrl
 ```
 
 ## Example Project
 
-[example](/example) is a sample project that depends on `@prism-finance/prismjs` and contains example on how to query data or sign and send messages.
+[example](/example) is a sample project that depends on `@pryzm-finance/pryzmjs` and contains example on how to query data or sign and send messages.
 
 ## Connecting with Wallets and Signing Messages
 
@@ -80,12 +80,12 @@ Here are the docs on [creating signers](https://github.com/cosmology-tech/cosmos
 
 ### Initializing the Stargate Client
 
-Use `getSigningPrismClient` to get your `SigningStargateClient`, with the proto/amino messages full-loaded. No need to manually add amino types, just require and initialize the client:
+Use `getSigningPryzmClient` to get your `SigningStargateClient`, with the proto/amino messages full-loaded. No need to manually add amino types, just require and initialize the client:
 
 ```tsx
-import { getSigningPrismClient } from '@prism-finance/prismjs';
+import { getSigningPryzmClient } from '@pryzm-finance/pryzmjs';
 
-const stargateClient = await getSigningPrismClient({
+const stargateClient = await getSigningPryzmClient({
   rpcEndpoint,
   signer // OfflineSigner
 });
@@ -119,7 +119,7 @@ WARNING: NOT RECOMMENDED TO USE PLAIN-TEXT MNEMONICS. Please take care of your s
 import { chains } from 'chain-registry';
 
 const mnemonic = 'unfold client turtle either pilot stock floor glow toward bullet car science';
-const chain = chains.find(({ chain_name }) => chain_name === 'prism');
+const chain = chains.find(({ chain_name }) => chain_name === 'pryzm');
 const signer = await getOfflineSigner({
   mnemonic,
   chain
@@ -131,9 +131,9 @@ const signer = await getOfflineSigner({
 Now that you have your `stargateClient`, you can broadcast messages:
 
 ```tsx
-import { prism } from '@prism-finance/prismjs';
+import { pryzm } from '@pryzm-finance/pryzmjs';
 
-const { refract } = prism.refractor.MessageComposer.withTypeUrl
+const { refract } = pryzm.refractor.MessageComposer.withTypeUrl
 
 const msg = refract({
     creator: "signer",
@@ -171,25 +171,25 @@ import {
     cosmwasmProtoRegistry,
     ibcProtoRegistry,
     ibcAminoConverters,
-    prismAminoConverters,
-    prismProtoRegistry
-} from '@prism-finance/prismjs';
+    pryzmAminoConverters,
+    pryzmProtoRegistry
+} from '@pryzm-finance/pryzmjs';
 
 const signer: OfflineSigner = /* create your signer (see above)  */
-const rpcEndpint = '<https://rpc.cosmos.directory/prism>'; // or another URL
+const rpcEndpint = '<https://rpc.cosmos.directory/pryzm>'; // or another URL
 
 const protoRegistry: ReadonlyArray<[string, GeneratedType]> = [
     ...cosmosProtoRegistry,
     ...cosmwasmProtoRegistry,
     ...ibcProtoRegistry,
-    ...prismProtoRegistry
+    ...pryzmProtoRegistry
 ];
 
 const aminoConverters = {
     ...cosmosAminoConverters,
     ...cosmwasmAminoConverters,
     ...ibcAminoConverters,
-    ...prismAminoConverters
+    ...pryzmAminoConverters
 };
 
 const registry = new Registry(protoRegistry);
@@ -211,7 +211,7 @@ pnpm install
 
 ## Codegen
 
-Contract schemas live in `./contracts`, and protos in `./proto`. Look inside of `scripts/codegen.js` and configure the settings for bundling your SDK and contracts into `@prism-finance/prismjs`:
+Contract schemas live in `./contracts`, and protos in `./proto`. Look inside of `scripts/codegen.js` and configure the settings for bundling your SDK and contracts into `@pryzm-finance/pryzmjs`:
 
 ```bash
 pnpm codegen

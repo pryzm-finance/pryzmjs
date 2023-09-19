@@ -1,4 +1,4 @@
-import { cosmatics } from "@prism-finance/prismjs/lib";
+import { cosmatics } from "@pryzm-finance/pryzmjs/lib";
 import * as console from "console";
 
 async function main() {
@@ -17,7 +17,7 @@ async function main() {
 
     const txs = (await cosmaticsClient.cosmatics.transactionByEvent({
         events: [
-            "transfer.sender=prism156pcgs3faegfte0vuaykr9az3hh9kx2e2qfwvu",
+            "transfer.sender=pryzm156pcgs3faegfte0vuaykr9az3hh9kx2e2qfwvu",
             "tx.signature=P2a2BwreLnfo9BXsxujVswxmCdLp96EcRzxj5l+yVaQn+aaTtFgCIHyVG5LP+8ZQWGLtkjWG1wEeixkWSfdeZA==",
         ], limit: undefined, orderBy: undefined, page: undefined, pagination: undefined
     }))

@@ -1,0 +1,11 @@
+syntax = "proto3";
+package pryzmatics.server.price;
+
+option go_package = "github.com/pryzm-finance/pryzmatics/server/price";
+
+message QuerySwappableTokensRequest {
+}
+
+message QuerySwappableTokensResponse {
+  repeated string tokens = 1;
+}

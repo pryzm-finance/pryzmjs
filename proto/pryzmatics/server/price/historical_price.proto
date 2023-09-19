@@ -1,0 +1,29 @@
+syntax = "proto3";
+package pryzmatics.server.price;
+
+import "gogoproto/gogo.proto";
+import "cosmos_proto/cosmos.proto";
+import "pryzmatics/price/historical_price.proto";
+
+option go_package = "github.com/pryzm-finance/pryzmatics/server/price";
+
+message QueryHistoricalPriceRequest {
+  string denom = 1;
+  string quote = 2;
+  pryzmatics.price.TimeResolutionType time_resolution_type = 3;
+  uint32 time_resolution_value = 4;
+  string from = 5 [
+    (cosmos_proto.scalar) = "cosmos.Int",
+    (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Int",
+    (gogoproto.nullable) = false
+  ];
+  string to = 6 [
+    (cosmos_proto.scalar) = "cosmos.Int",
+    (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Int",
+    (gogoproto.nullable) = false
+  ];
+}
+
+message QueryHistoricalPriceResponse {
+  repeated pryzmatics.price.HistoricalPrice historical_prices = 1 [(gogoproto.nullable) = false];
+}

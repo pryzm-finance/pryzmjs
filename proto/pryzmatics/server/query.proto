@@ -1,0 +1,183 @@
+syntax = "proto3";
+package pryzmatics.server;
+
+import "gogoproto/gogo.proto";
+import "google/api/annotations.proto";
+import "cosmos/tx/v1beta1/service.proto";
+
+import "pryzmatics/server/asset/asset.proto";
+
+import "pryzmatics/server/maturity/maturity.proto";
+
+import "pryzmatics/server/pgov/pgov.proto";
+
+import "pryzmatics/server/pool/pool_token.proto";
+import "pryzmatics/server/pool/pool.proto";
+import "pryzmatics/server/pool/token.proto";
+
+import "pryzmatics/server/price/historical_price.proto";
+import "pryzmatics/server/price/price.proto";
+import "pryzmatics/server/price/price_bounds.proto";
+import "pryzmatics/server/price/price_change.proto";
+import "pryzmatics/server/price/swappable_tokens.proto";
+
+import "pryzmatics/server/trade/pool_trade_history.proto";
+import "pryzmatics/server/trade/pulse_tradable_pairs.proto";
+import "pryzmatics/server/trade/trade_simulation.proto";
+import "pryzmatics/server/trade/join_all_tokens_exact_lpt_simulation.proto";
+import "pryzmatics/server/trade/join_exact_tokens_simulation.proto";
+import "pryzmatics/server/trade/join_token_exact_lpt_simulation.proto";
+import "pryzmatics/server/trade/exit_token_exact_lpt_simulation.proto";
+import "pryzmatics/server/trade/exit_exact_tokens_simulation.proto";
+import "pryzmatics/server/trade/exit_all_tokens_exact_lpt_simulation.proto";
+import "pryzmatics/server/trade/trade_volume.proto";
+import "pryzmatics/server/trade/user_trade_history.proto";
+import "pryzmatics/server/trade/order.proto";
+
+import "pryzmatics/server/incentives/incentives.proto";
+
+import "pryzmatics/server/alliance/alliance.proto";
+
+import "pryzmatics/server/icstaking/host_chain.proto";
+
+
+option go_package = "github.com/pryzm-finance/pryzmatics/server";
+
+service Query {
+
+  rpc Asset(pryzmatics.server.asset.QueryAssetRequest) returns (pryzmatics.server.asset.QueryAssetResponse) {
+    option (google.api.http).get = "/pryzmatics/asset/{asset_id}";
+  }
+
+  rpc MaturityAll(pryzmatics.server.maturity.QueryAllMaturitiesRequest) returns (pryzmatics.server.maturity.QueryAllMaturitiesResponse) {
+    option (google.api.http).get = "/pryzmatics/maturity";
+  }
+
+  rpc SubmitProposalMsgs(pryzmatics.server.pgov.QuerySubmitProposalMsgsRequest) returns (pryzmatics.server.pgov.QuerySubmitProposalMsgsResponse) {
+    option (google.api.http).get = "/pryzmatics/pgov/submit_proposal_msgs/{asset_id}/{proposal_id}";
+  }
+
+  rpc AssetProposals(pryzmatics.server.pgov.QueryAssetProposalRequest) returns (pryzmatics.server.pgov.QueryAssetProposalResponse) {
+    option (google.api.http).get = "/pryzmatics/pgov/asset_proposal/{asset_id}";
+  }
+
+  rpc PoolToken(pryzmatics.server.pool.QueryPoolTokenRequest) returns (pryzmatics.server.pool.QueryPoolTokenResponse) {
+    option (google.api.http).get = "/pryzmatics/pool/token/{pool_id}/{denom}";
+  }
+
+  rpc PoolTokens(pryzmatics.server.pool.QueryAllPoolTokenRequest) returns (pryzmatics.server.pool.QueryAllPoolTokenResponse) {
+    option (google.api.http).get = "/pryzmatics/pool/token/{pool_id}";
+  }
+
+  rpc Pool(pryzmatics.server.pool.QueryPoolRequest) returns (pryzmatics.server.pool.QueryPoolResponse) {
+    option (google.api.http).get = "/pryzmatics/pool/{pool_id}";
+  }
+
+  rpc Pools(pryzmatics.server.pool.QueryPoolsRequest) returns (pryzmatics.server.pool.QueryPoolsResponse) {
+    option (google.api.http).get = "/pryzmatics/pool";
+  }
+
+  rpc Token(pryzmatics.server.pool.QueryTokenRequest) returns (pryzmatics.server.pool.QueryTokenResponse) {
+    option (google.api.http).get = "/pryzmatics/token/{denom}";
+  }
+
+  rpc Tokens(pryzmatics.server.pool.QueryTokensRequest) returns (pryzmatics.server.pool.QueryTokensResponse) {
+    option (google.api.http).get = "/pryzmatics/token";
+  }
+
+  rpc TokenPrice(pryzmatics.server.price.QueryPriceRequest) returns (pryzmatics.server.price.QueryPriceResponse) {
+    option (google.api.http).get = "/pryzmatics/price/{token_in}";
+  }
+
+  rpc HistoricalPrice(pryzmatics.server.price.QueryHistoricalPriceRequest) returns (pryzmatics.server.price.QueryHistoricalPriceResponse) {
+    option (google.api.http).get = "/pryzmatics/price/historical/{denom}";
+  }
+
+  rpc SwappableTokens(pryzmatics.server.price.QuerySwappableTokensRequest) returns (pryzmatics.server.price.QuerySwappableTokensResponse) {
+    option (google.api.http).get = "/pryzmatics/price/swappable_tokens";
+  }
+
+  rpc PriceBounds(pryzmatics.server.price.QueryPriceBoundsRequest) returns (pryzmatics.server.price.QueryPriceBoundsResponse) {
+    option (google.api.http).get = "/pryzmatics/price/bounds/{denom}";
+  }
+
+  rpc PriceChange(pryzmatics.server.price.QueryPriceChangeRequest) returns (pryzmatics.server.price.QueryPriceChangeResponse) {
+    option (google.api.http).get = "/pryzmatics/price/change/{denom}";
+  }
+
+  rpc TradeSimulation(pryzmatics.server.trade.QueryTradeSimulationRequest) returns (pryzmatics.server.trade.QueryTradeSimulationResponse) {
+    option (google.api.http).get = "/pryzmatics/trade/simulation";
+  }
+
+  rpc JoinAllTokensExactLptSimulation(pryzmatics.server.trade.QueryJoinAllTokensExactLptSimulationRequest) returns (pryzmatics.server.trade.QueryJoinAllTokensExactLptSimulationResponse) {
+    option (google.api.http).get = "/pryzmatics/trade/join_all_tokens_exact_lpt_simulation/{pool_id}";
+  }
+
+  rpc JoinExactTokensSimulation(pryzmatics.server.trade.QueryJoinExactTokensSimulationRequest) returns (pryzmatics.server.trade.QueryJoinExactTokensSimulationResponse) {
+    option (google.api.http).get = "/pryzmatics/trade/join_exact_tokens_simulation/{pool_id}";
+  }
+
+  rpc JoinTokenExactLptSimulation(pryzmatics.server.trade.QueryJoinTokenExactLptSimulationRequest) returns (pryzmatics.server.trade.QueryJoinTokenExactLptSimulationResponse) {
+    option (google.api.http).get = "/pryzmatics/trade/join_token_exact_lpt_simulation/{pool_id}";
+  }
+
+  rpc ExitTokenExactLptSimulation(pryzmatics.server.trade.QueryExitTokenExactLptSimulationRequest) returns (pryzmatics.server.trade.QueryExitTokenExactLptSimulationResponse) {
+    option (google.api.http).get = "/pryzmatics/trade/exit_token_exact_lpt_simulation/{pool_id}";
+  }
+
+  rpc ExitExactTokensSimulation(pryzmatics.server.trade.QueryExitExactTokensSimulationRequest) returns (pryzmatics.server.trade.QueryExitExactTokensSimulationResponse) {
+    option (google.api.http).get = "/pryzmatics/trade/exit_exact_tokens_simulation/{pool_id}";
+  }
+
+  rpc ExitAllTokensExactLptSimulation(pryzmatics.server.trade.QueryExitAllTokensExactLptSimulationRequest) returns (pryzmatics.server.trade.QueryExitAllTokensExactLptSimulationResponse) {
+    option (google.api.http).get = "/pryzmatics/trade/exit_all_tokens_exact_lpt_simulation/{pool_id}";
+  }
+
+  rpc UserTradeHistory(pryzmatics.server.trade.QueryUserTradeHistoryRequest) returns (pryzmatics.server.trade.QueryUserTradeHistoryResponse) {
+    option (google.api.http).get = "/pryzmatics/trade/user_trade_history";
+  }
+
+  rpc PoolTradeHistory(pryzmatics.server.trade.QueryPoolTradeHistoryRequest) returns (pryzmatics.server.trade.QueryPoolTradeHistoryResponse) {
+    option (google.api.http).get = "/pryzmatics/trade/pool_trade_history";
+  }
+
+  rpc TokenTradeVolume(pryzmatics.server.trade.QueryTokenTradeVolumeRequest) returns (pryzmatics.server.trade.QueryTokenTradeVolumeResponse) {
+    option (google.api.http).get = "/pryzmatics/trade/volume/token/{denom}";
+  }
+
+  rpc PoolTradeVolume(pryzmatics.server.trade.QueryPoolTradeVolumeRequest) returns (pryzmatics.server.trade.QueryPoolTradeVolumeResponse) {
+    option (google.api.http).get = "/pryzmatics/trade/volume/pool/{pool_id}";
+  }
+
+  rpc FavoritePairs(pryzmatics.server.trade.QueryFavoritePairsRequest) returns (pryzmatics.server.trade.QueryFavoritePairsResponse) {
+    option (google.api.http).get = "/pryzmatics/trade/volume/favorite_pairs";
+  }
+
+  rpc PulseTradablePairs(pryzmatics.server.trade.QueryPulseTradablePairsRequest) returns (pryzmatics.server.trade.QueryPulseTradablePairsResponse) {
+    option (google.api.http).get = "/pryzmatics/trade/pulse_tradable_pairs/{denom}";
+  }
+
+  rpc Order(pryzmatics.server.trade.QueryOrderRequest) returns (pryzmatics.server.trade.QueryOrderResponse) {
+    option (google.api.http).get = "/pryzmatics/trade/order/{id}";
+  }
+
+  rpc Orders(pryzmatics.server.trade.QueryOrdersRequest) returns (pryzmatics.server.trade.QueryOrdersResponse) {
+    option (google.api.http).get = "/pryzmatics/trade/order";
+  }
+
+  rpc IncentivesApr(pryzmatics.server.incentives.QueryIncentivesAprRequest) returns (pryzmatics.server.incentives.QueryIncentivesAprResponse) {
+    option (google.api.http).get = "/pryzmatics/incentives/apr/{denom}";
+  }
+
+  rpc AllianceApr(pryzmatics.server.alliance.QueryAllianceAprRequest) returns (pryzmatics.server.alliance.QueryAllianceAprResponse) {
+    option (google.api.http).get = "/pryzmatics/alliance/apr/{denom}";
+  }
+
+  rpc HostChain(pryzmatics.server.icstaking.QueryHostChainRequest) returns (pryzmatics.server.icstaking.QueryHostChainResponse) {
+    option (google.api.http).get = "/pryzmatics/icstaking/host_chain/{host_chain_id}";
+  }
+
+  rpc HostChains(pryzmatics.server.icstaking.QueryHostChainsRequest) returns (pryzmatics.server.icstaking.QueryHostChainsResponse) {
+    option (google.api.http).get = "/pryzmatics/icstaking/host_chain";
+  }
+}

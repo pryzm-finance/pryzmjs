@@ -4,8 +4,8 @@
 //     const query: any = {};
 //     const attr = "refractedlabs.oracle.oracle.EventVoteIntervalEnds.time_millis";
 //     query[attr] = ["EXISTS"];
-//     const prismWebsocketClient = new TendermintWebsocketClient("ws://0.0.0.0:26657", 2000);
-//     prismWebsocketClient
+//     const pryzmWebsocketClient = new TendermintWebsocketClient("ws://0.0.0.0:26657", 2000);
+//     pryzmWebsocketClient
 //         .getEventStream("NewBlock", query)
 //         .map((result) => {
 //             const epochMillis = JSON.parse(result.events[`${attr}`][0]);
@@ -19,7 +19,7 @@
 //         },
 //         complete: () => console.log('Websocket subscription completed'),
 //     });
-//     prismWebsocketClient.addListener({
+//     pryzmWebsocketClient.addListener({
 //         onConnectionStatusUpdateEvent: status => {
 //             console.log(status)
 //             if (status == ConnectionStatus.Connected) {
@@ -30,7 +30,7 @@
 //     let resolve: () => void
 //     const p = new Promise<void>((res, rej) => {
 //         resolve = res
-//         prismWebsocketClient.connect()
+//         pryzmWebsocketClient.connect()
 //     })
 //     await p
 // }

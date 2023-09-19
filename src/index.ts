@@ -1,4 +1,4 @@
-import {cosmatics, getSigningPrismClientOptions, prism, prismatics} from "./codegen"
+import {cosmatics, getSigningPryzmClientOptions, pryzm, pryzmatics} from "./codegen"
 import {PageRequest} from "./codegen/helpers";
 import {BrowserHeaders} from "browser-headers";
 import {OfflineSigner} from "@cosmjs/proto-signing";
@@ -6,10 +6,10 @@ import {SigningStargateClient} from "@cosmjs/stargate";
 import {HttpEndpoint} from "@cosmjs/tendermint-rpc";
 import {GasPrice} from "@cosmjs/stargate/build/fee";
 
-export type PrismLCDClient = Awaited<ReturnType<typeof prism.ClientFactory.createLCDClient>>
-export type PrismaticsClient = Awaited<ReturnType<typeof prismatics.ClientFactory.createClient>>
+export type PryzmLCDClient = Awaited<ReturnType<typeof pryzm.ClientFactory.createLCDClient>>
+export type PryzmaticsClient = Awaited<ReturnType<typeof pryzmatics.ClientFactory.createClient>>
 export type CosmaticsClient = Awaited<ReturnType<typeof cosmatics.ClientFactory.createClient>>
-export type PrismGrpcWebClient = Awaited<ReturnType<typeof prism.ClientFactory.createGrpcWebClient>>
+export type PryzmGrpcWebClient = Awaited<ReturnType<typeof pryzm.ClientFactory.createGrpcWebClient>>
 
 export * from './codegen';
 
@@ -33,14 +33,14 @@ export function defaultPageRequestProvider(): PageRequest {
  * ```ts
  *    const balances = await lcdFetchAll(lcdClient, async (client, pageRequest) => {
  *         const result = await client.cosmos.bank.v1beta1.allBalances({
- *             address: "prism156pcgs3faegfte0vuaykr9az3hh9kx2e2qfwvu",
+ *             address: "pryzm156pcgs3faegfte0vuaykr9az3hh9kx2e2qfwvu",
  *             pagination: pageRequest
  *         })
  *         return [result.pagination.next_key, result.balances]
  *     })
  * ```
  */
-export async function lcdFetchAll<Type>(client: PrismLCDClient, fetch: (client: PrismLCDClient, request: PageRequest) =>
+export async function lcdFetchAll<Type>(client: PryzmLCDClient, fetch: (client: PryzmLCDClient, request: PageRequest) =>
     Promise<[Uint8Array, Type[]]>, pageRequest = defaultPageRequestProvider()): Promise<Type[]> {
     const result: Type[] = []
     do {
@@ -56,14 +56,14 @@ export async function lcdFetchAll<Type>(client: PrismLCDClient, fetch: (client: 
  * example:
  *     const balances = await grpcFetchAll(grpcClient, async (client, pageRequest) => {
  *         const result = await client.cosmos.bank.v1beta1.allBalances({
- *             address: "prism156pcgs3faegfte0vuaykr9az3hh9kx2e2qfwvu",
+ *             address: "pryzm156pcgs3faegfte0vuaykr9az3hh9kx2e2qfwvu",
  *             pagination: pageRequest
  *         })
  *         return [result.pagination.nextKey, result.balances]
  *     })
  * ```
  */
-export async function grpcFetchAll<Type>(client: PrismGrpcWebClient, fetch: (client: PrismGrpcWebClient, request: PageRequest) =>
+export async function grpcFetchAll<Type>(client: PryzmGrpcWebClient, fetch: (client: PryzmGrpcWebClient, request: PageRequest) =>
     Promise<[Uint8Array, Type[]]>, pageRequest = defaultPageRequestProvider()): Promise<Type[]> {
     const result: Type[] = []
     do {
@@ -78,8 +78,8 @@ export async function grpcFetchAll<Type>(client: PrismGrpcWebClient, fetch: (cli
 /**
  * ```ts
  * example:
- *     const allMaturities = await fetchAll(prismaticsClient, async (client, pageRequest) => {
- *         const result = (await prismaticsClient.prismatics.maturityAll({
+ *     const allMaturities = await fetchAll(pryzmaticsClient, async (client, pageRequest) => {
+ *         const result = (await pryzmaticsClient.pryzmatics.maturityAll({
  *             assetId: "Luna",
  *             active: "true",
  *             pagination: pageRequest
@@ -88,7 +88,7 @@ export async function grpcFetchAll<Type>(client: PrismGrpcWebClient, fetch: (cli
  *     })
  * ```
  */
-export async function fetchAll<Type>(client: PrismaticsClient, fetch: (client: PrismaticsClient, request: PageRequest) =>
+export async function fetchAll<Type>(client: PryzmaticsClient, fetch: (client: PryzmaticsClient, request: PageRequest) =>
     Promise<[Uint8Array, Type[]]>, pageRequest = defaultPageRequestProvider()): Promise<Type[]> {
     const result: Type[] = []
     do {
@@ -109,7 +109,7 @@ export async function connectWithSigner(endpoint: string | HttpEndpoint, signer:
     const {
         registry,
         aminoTypes
-    } = getSigningPrismClientOptions();
+    } = getSigningPryzmClientOptions();
 
     return SigningStargateClient.connectWithSigner(endpoint, signer, {
         registry,

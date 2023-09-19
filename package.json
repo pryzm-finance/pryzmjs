@@ -1,24 +1,19 @@
 {
-  "name": "@prism-finance/prismjs",
-  "version": "0.11.1",
-  "description": "Javascript SDK for Prism",
-  "author": "amin <amin@prismprotocol.app>",
-  "homepage": "https://github.com/prism-finance/prismjs#readme",
-  "license": "GPL Version 2.0 or a later version",
+  "name": "@pryzm-finance/pryzmjs",
+  "version": "0.12.2",
+  "description": "Javascript SDK for Pryzm",
+  "author": "amin <amin@refractedlabs.com>",
+  "homepage": "https://github.com/pryzm-finance/pryzmjs#readme",
+  "license" : "SEE LICENSE IN LICENSE.md",
   "scripts": {
     "compile": "rm -rf lib && tsc",
     "codegen": "cross-env NODE_ENV=development babel-node scripts/codegen.js"
   },
-  "licenses": [
-    {
-      "type": "GPL Version 2.0 or a later version",
-      "url": "https://github.com/prism-finance/prism-contracts/blob/main/LICENSE.md"
-    }
-  ],
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
   "files": [
-    "lib/**/*"
+    "lib/**/*",
+    "LICENSE.md"
   ],
   "publishConfig": {
     "registry": "https://npm.pkg.github.com",
@@ -26,7 +21,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/prism-finance/prismjs"
+    "url": "https://github.com/pryzm-finance/pryzmjs"
   },
   "devDependencies": {
     "@babel/cli": "7.21.0",

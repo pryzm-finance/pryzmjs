@@ -1,0 +1,36 @@
+syntax = "proto3";
+package pryzmatics.server.icstaking;
+
+import "gogoproto/gogo.proto";
+import "pryzmatics/icstaking/host_chain.proto";
+import "cosmos_proto/cosmos.proto";
+import "cosmos/base/query/v1beta1/pagination.proto";
+
+option go_package = "github.com/pryzm-finance/pryzmatics/server/icstaking";
+
+message QueryHostChainRequest {
+  string host_chain_id = 1;
+  string time_window_in_days = 2 [
+    (cosmos_proto.scalar) = "cosmos.Int",
+    (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Int",
+    (gogoproto.nullable) = true
+  ];
+}
+
+message QueryHostChainResponse {
+  pryzmatics.icstaking.HostChain host_chain = 1 [(gogoproto.nullable) = false];
+}
+
+message QueryHostChainsRequest {
+  string time_window_in_days = 1 [
+    (cosmos_proto.scalar) = "cosmos.Int",
+    (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Int",
+    (gogoproto.nullable) = true
+  ];
+  cosmos.base.query.v1beta1.PageRequest pagination = 2 [(gogoproto.nullable) = true];
+}
+
+message QueryHostChainsResponse {
+  repeated pryzmatics.icstaking.HostChain host_chains = 1 [(gogoproto.nullable) = false];
+  cosmos.base.query.v1beta1.PageResponse pagination = 2 [(gogoproto.nullable) = true];
+}

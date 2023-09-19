@@ -1,0 +1,24 @@
+syntax = "proto3";
+package pryzmatics.server.pool;
+
+import "gogoproto/gogo.proto";
+import "pryzmatics/pool/pool_token.proto";
+
+option go_package = "github.com/pryzm-finance/pryzmatics/server/pool";
+
+message QueryPoolTokenRequest {
+  uint64 pool_id = 1;
+  string denom = 2;
+}
+
+message QueryPoolTokenResponse {
+  pryzmatics.pool.PoolToken pool_token = 1 [(gogoproto.nullable) = false];
+}
+
+message QueryAllPoolTokenRequest {
+  uint64 pool_id = 1;
+}
+
+message QueryAllPoolTokenResponse {
+  repeated pryzmatics.pool.PoolToken pool_tokens = 1 [(gogoproto.nullable) = false];
+}

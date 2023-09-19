@@ -1,0 +1,21 @@
+syntax = "proto3";
+package pryzmatics.server.asset;
+
+import "gogoproto/gogo.proto";
+import "pryzmatics/asset/asset.proto";
+import "cosmos_proto/cosmos.proto";
+
+option go_package = "github.com/pryzm-finance/pryzmatics/server/asset";
+
+message QueryAssetRequest {
+  string asset_id = 1;
+  string time_window_in_days = 3 [
+    (cosmos_proto.scalar) = "cosmos.Int",
+    (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Int",
+    (gogoproto.nullable) = true
+  ];
+}
+
+message QueryAssetResponse {
+  pryzmatics.asset.Asset asset = 1 [(gogoproto.nullable) = false];
+}
