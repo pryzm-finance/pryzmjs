@@ -1,52 +1,52 @@
-import * as _242 from "./asset/asset";
-import * as _243 from "./icstaking/host_chain";
-import * as _244 from "./maturity/maturity";
-import * as _245 from "./pgov/pgov";
-import * as _246 from "./pool/pool_token";
-import * as _247 from "./pool/pool";
-import * as _248 from "./pool/token";
-import * as _249 from "./price/historical_price";
-import * as _250 from "./price/token_price";
-import * as _252 from "./trade/order";
-import * as _253 from "./trade/pool_trade_history";
-import * as _254 from "./trade/pulse_tradable_pair";
-import * as _255 from "./trade/trade_volume";
-import * as _256 from "./trade/user_trade_history";
-import * as _447 from "./server/query.lcd";
-import * as _463 from "./lcd";
+import * as _252 from "./asset/asset";
+import * as _253 from "./icstaking/host_chain";
+import * as _254 from "./maturity/maturity";
+import * as _255 from "./pgov/pgov";
+import * as _256 from "./pool/pool_token";
+import * as _257 from "./pool/pool";
+import * as _258 from "./pool/token";
+import * as _259 from "./price/historical_price";
+import * as _260 from "./price/token_price";
+import * as _262 from "./trade/order";
+import * as _263 from "./trade/pool_trade_history";
+import * as _264 from "./trade/pulse_tradable_pair";
+import * as _265 from "./trade/trade_volume";
+import * as _266 from "./trade/user_trade_history";
+import * as _462 from "./server/query.lcd";
+import * as _481 from "./lcd";
 export namespace pryzmatics {
   export const asset = {
-    ..._242
+    ..._252
   };
   export const icstaking = {
-    ..._243
+    ..._253
   };
   export const maturity = {
-    ..._244
+    ..._254
   };
   export const pgov = {
-    ..._245
+    ..._255
   };
   export const pool = {
-    ..._246,
-    ..._247,
-    ..._248
+    ..._256,
+    ..._257,
+    ..._258
   };
   export const price = {
-    ..._249,
-    ..._250
+    ..._259,
+    ..._260
   };
   export const server = {
-    ..._447,
+    ..._462,
   };
   export const trade = {
-    ..._252,
-    ..._253,
-    ..._254,
-    ..._255,
-    ..._256
+    ..._262,
+    ..._263,
+    ..._264,
+    ..._265,
+    ..._266
   };
   export const ClientFactory = {
-    ..._463,
+    ..._481,
   };
 }

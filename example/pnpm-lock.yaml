@@ -1,13 +1,13 @@
 lockfileVersion: 5.4
 
 specifiers:
-  '@pryzm-finance/pryzmjs': 0.12.2
+  '@pryzm-finance/pryzmjs': 0.12.4
   '@refractedlabs/oraclejs': ^0.3.0
   '@refractedlabs/utils': 0.1.7
   typescript: ^5.1.6
 
 dependencies:
-  '@pryzm-finance/pryzmjs': 0.12.2_google-protobuf@3.21.2
+  '@pryzm-finance/pryzmjs': 0.12.4_google-protobuf@3.21.2
   '@refractedlabs/oraclejs': 0.3.6_google-protobuf@3.21.2
   '@refractedlabs/utils': 0.1.7
 
@@ -18,6 +18,13 @@ packages:
 
   /@babel/runtime/7.22.15:
     resolution: {integrity: sha512-T0O+aa+4w0u06iNmapipJXMV4HoUir03hpx3/YqXXhu9xim3w+dVphjFWl1OH8NbZHw5Lbm9k45drDkgq2VNNA==}
+    engines: {node: '>=6.9.0'}
+    dependencies:
+      regenerator-runtime: 0.14.0
+    dev: false
+
+  /@babel/runtime/7.23.1:
+    resolution: {integrity: sha512-hC2v6p8ZSI/W0HUzh3V8C5g+NwSKzKPtJwSpTjwl0o297GP9+ZLQSkdvHz46CM3LqyoXxq+5G9komY+eSqSO0g==}
     engines: {node: '>=6.9.0'}
     dependencies:
       regenerator-runtime: 0.14.0
@@ -252,10 +259,10 @@ packages:
     resolution: {integrity: sha512-Vvn3zZrhQZkkBE8LSuW3em98c0FwgO4nxzv6OdSxPKJIEKY2bGbHn+mhGIPerzI4twdxaP8/0+06HBpwf345Lw==}
     dev: false
 
-  /@pryzm-finance/pryzmjs/0.12.2_google-protobuf@3.21.2:
-    resolution: {integrity: sha512-nZ6JzRdZfw5VtAUmEQrePXUvmm2sA9eY49IIFoYpRshEPr9UO+Bj4R1DpeEAGa+pgQr/CaEspKrzHsZFu2kVqQ==, tarball: download/@pryzm-finance/pryzmjs/0.12.2/d0aab94e8f3c0ec761bf4554de46bf531fab0231}
+  /@pryzm-finance/pryzmjs/0.12.4_google-protobuf@3.21.2:
+    resolution: {integrity: sha512-mrolAwJOeRhbK3X+XYM1FLnOoGi9apNJ/+tfe46O6IMpLMm6JeYWpit4/shifS9WcQm2uMTp+L2SPf2LP3fA6g==, tarball: download/@pryzm-finance/pryzmjs/0.12.4/2f5ca2fd0641eecf4a382ba037ed461a60cdcf23}
     dependencies:
-      '@babel/runtime': 7.22.15
+      '@babel/runtime': 7.23.1
       '@cosmjs/amino': 0.31.0
       '@cosmjs/proto-signing': 0.31.0
       '@cosmjs/stargate': 0.31.0
@@ -338,7 +345,7 @@ packages:
   /axios/0.21.4:
     resolution: {integrity: sha512-ut5vewkiu8jjGBdqpM44XxjuCjq9LAKeHVmoVfHVzy8eHgxxq8SbAVQNovDA8mVi05kP0Ea/n/UzcSHcTJQfNg==}
     dependencies:
-      follow-redirects: 1.15.2
+      follow-redirects: 1.15.3
     transitivePeerDependencies:
       - debug
     dev: false
@@ -492,6 +499,16 @@ packages:
 
   /follow-redirects/1.15.2:
     resolution: {integrity: sha512-VQLG33o04KaQ8uYi2tVNbdrWp1QWxNNea+nmIB4EVM28v0hmP17z7aG1+wAkNzVq4KeXTq3221ye5qTJP91JwA==}
+    engines: {node: '>=4.0'}
+    peerDependencies:
+      debug: '*'
+    peerDependenciesMeta:
+      debug:
+        optional: true
+    dev: false
+
+  /follow-redirects/1.15.3:
+    resolution: {integrity: sha512-1VzOtuEM8pC9SFU1E+8KfTjZyMztRsgEfwQl44z8A25uy13jSzTj6dyK2Df52iV0vgHCfBwLhDWevLn95w5v6Q==}
     engines: {node: '>=4.0'}
     peerDependencies:
       debug: '*'
