@@ -1,0 +1,29 @@
+syntax = "proto3";
+package pryzmatics.server.oracle;
+
+import "gogoproto/gogo.proto";
+import "cosmos_proto/cosmos.proto";
+import "pryzmatics/oracle/slash_window.proto";
+import "cosmos/base/query/v1beta1/pagination.proto";
+
+
+option go_package = "github.com/pryzm-finance/pryzmatics/server/oracle";
+
+message QuerySlashWindowsRequest {
+  string from_block_height = 1 [
+    (cosmos_proto.scalar) = "cosmos.Int",
+    (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Int",
+    (gogoproto.nullable) = true
+  ];
+  string to_block_height = 2 [
+    (cosmos_proto.scalar) = "cosmos.Int",
+    (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Int",
+    (gogoproto.nullable) = true
+  ];
+  cosmos.base.query.v1beta1.PageRequest pagination = 3 [(gogoproto.nullable) = true];
+}
+
+message QuerySlashWindowsResponse {
+  repeated pryzmatics.oracle.SlashWindow windows = 1 [(gogoproto.nullable) = false];
+  cosmos.base.query.v1beta1.PageResponse pagination = 2 [(gogoproto.nullable) = true];
+}

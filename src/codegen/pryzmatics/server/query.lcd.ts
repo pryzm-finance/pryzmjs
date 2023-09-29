@@ -27,6 +27,15 @@ import { QueryOrderRequest, QueryOrderResponseSDKType, QueryOrdersRequest, Query
 import { QueryIncentivesAprRequest, QueryIncentivesAprResponseSDKType } from "./incentives/incentives";
 import { QueryAllianceAprRequest, QueryAllianceAprResponseSDKType } from "./alliance/alliance";
 import { QueryHostChainRequest, QueryHostChainResponseSDKType, QueryHostChainsRequest, QueryHostChainsResponseSDKType } from "./icstaking/host_chain";
+import { QueryValidatorRequest, QueryValidatorResponseSDKType, QueryValidatorsRequest, QueryValidatorsResponseSDKType } from "./oracle/validator";
+import { QueryVoteIntervalsRequest, QueryVoteIntervalsResponseSDKType } from "./oracle/vote_interval";
+import { QuerySlashWindowsRequest, QuerySlashWindowsResponseSDKType } from "./oracle/slash_window";
+import { QueryVoteSummaryRequest, QueryVoteSummaryResponseSDKType } from "./oracle/vote_summary";
+import { QueryValidatorVoteIntervalSummariesRequest, QueryValidatorVoteIntervalSummariesResponseSDKType } from "./oracle/validator_vote_interval_summary";
+import { QueryValidatorSlashWindowSummariesRequest, QueryValidatorSlashWindowSummariesResponseSDKType } from "./oracle/validator_slash_window_summary";
+import { QueryPreVotesRequest, QueryPreVotesResponseSDKType } from "./oracle/pre_vote";
+import { QueryVotesRequest, QueryVotesResponseSDKType } from "./oracle/vote";
+import { QueryVotePayloadsRequest, QueryVotePayloadsResponseSDKType } from "./oracle/vote_payload";
 export class LCDQueryClient {
   req: LCDClient;
   constructor({
@@ -69,6 +78,16 @@ export class LCDQueryClient {
     this.allianceApr = this.allianceApr.bind(this);
     this.hostChain = this.hostChain.bind(this);
     this.hostChains = this.hostChains.bind(this);
+    this.validator = this.validator.bind(this);
+    this.validators = this.validators.bind(this);
+    this.voteIntervals = this.voteIntervals.bind(this);
+    this.slashWindows = this.slashWindows.bind(this);
+    this.voteSummary = this.voteSummary.bind(this);
+    this.validatorVoteIntervalSummaries = this.validatorVoteIntervalSummaries.bind(this);
+    this.validatorSlashWindowSummaries = this.validatorSlashWindowSummaries.bind(this);
+    this.preVotes = this.preVotes.bind(this);
+    this.votes = this.votes.bind(this);
+    this.votePayloads = this.votePayloads.bind(this);
   }
   /* Asset */
   async asset(params: QueryAssetRequest): Promise<QueryAssetResponseSDKType> {
@@ -512,5 +531,162 @@ export class LCDQueryClient {
     }
     const endpoint = `pryzmatics/icstaking/host_chain`;
     return await this.req.get<QueryHostChainsResponseSDKType>(endpoint, options);
+  }
+  /* Validator */
+  async validator(params: QueryValidatorRequest): Promise<QueryValidatorResponseSDKType> {
+    const endpoint = `pryzmatics/oracle/validator/${params.operatorAddress}`;
+    return await this.req.get<QueryValidatorResponseSDKType>(endpoint);
+  }
+  /* Validators */
+  async validators(params: QueryValidatorsRequest = {
+    pagination: undefined
+  }): Promise<QueryValidatorsResponseSDKType> {
+    const options: any = {
+      params: {}
+    };
+    if (typeof params?.pagination !== "undefined") {
+      setPaginationParams(options, params.pagination);
+    }
+    const endpoint = `pryzmatics/oracle/validator`;
+    return await this.req.get<QueryValidatorsResponseSDKType>(endpoint, options);
+  }
+  /* VoteIntervals */
+  async voteIntervals(params: QueryVoteIntervalsRequest): Promise<QueryVoteIntervalsResponseSDKType> {
+    const options: any = {
+      params: {}
+    };
+    if (typeof params?.fromBlockHeight !== "undefined") {
+      options.params.from_block_height = params.fromBlockHeight;
+    }
+    if (typeof params?.toBlockHeight !== "undefined") {
+      options.params.to_block_height = params.toBlockHeight;
+    }
+    if (typeof params?.pagination !== "undefined") {
+      setPaginationParams(options, params.pagination);
+    }
+    const endpoint = `pryzmatics/oracle/vote_interval`;
+    return await this.req.get<QueryVoteIntervalsResponseSDKType>(endpoint, options);
+  }
+  /* SlashWindows */
+  async slashWindows(params: QuerySlashWindowsRequest): Promise<QuerySlashWindowsResponseSDKType> {
+    const options: any = {
+      params: {}
+    };
+    if (typeof params?.fromBlockHeight !== "undefined") {
+      options.params.from_block_height = params.fromBlockHeight;
+    }
+    if (typeof params?.toBlockHeight !== "undefined") {
+      options.params.to_block_height = params.toBlockHeight;
+    }
+    if (typeof params?.pagination !== "undefined") {
+      setPaginationParams(options, params.pagination);
+    }
+    const endpoint = `pryzmatics/oracle/slash_window`;
+    return await this.req.get<QuerySlashWindowsResponseSDKType>(endpoint, options);
+  }
+  /* VoteSummary */
+  async voteSummary(_params: QueryVoteSummaryRequest = {}): Promise<QueryVoteSummaryResponseSDKType> {
+    const endpoint = `pryzmatics/oracle/vote_summary`;
+    return await this.req.get<QueryVoteSummaryResponseSDKType>(endpoint);
+  }
+  /* ValidatorVoteIntervalSummaries */
+  async validatorVoteIntervalSummaries(params: QueryValidatorVoteIntervalSummariesRequest): Promise<QueryValidatorVoteIntervalSummariesResponseSDKType> {
+    const options: any = {
+      params: {}
+    };
+    if (typeof params?.fromBlockHeight !== "undefined") {
+      options.params.from_block_height = params.fromBlockHeight;
+    }
+    if (typeof params?.toBlockHeight !== "undefined") {
+      options.params.to_block_height = params.toBlockHeight;
+    }
+    if (typeof params?.pagination !== "undefined") {
+      setPaginationParams(options, params.pagination);
+    }
+    const endpoint = `pryzmatics/oracle/validator/vote_interval_summary/${params.operatorAddress}`;
+    return await this.req.get<QueryValidatorVoteIntervalSummariesResponseSDKType>(endpoint, options);
+  }
+  /* ValidatorSlashWindowSummaries */
+  async validatorSlashWindowSummaries(params: QueryValidatorSlashWindowSummariesRequest): Promise<QueryValidatorSlashWindowSummariesResponseSDKType> {
+    const options: any = {
+      params: {}
+    };
+    if (typeof params?.fromBlockHeight !== "undefined") {
+      options.params.from_block_height = params.fromBlockHeight;
+    }
+    if (typeof params?.toBlockHeight !== "undefined") {
+      options.params.to_block_height = params.toBlockHeight;
+    }
+    if (typeof params?.pagination !== "undefined") {
+      setPaginationParams(options, params.pagination);
+    }
+    const endpoint = `pryzmatics/oracle/validator/slash_window_summary/${params.operatorAddress}`;
+    return await this.req.get<QueryValidatorSlashWindowSummariesResponseSDKType>(endpoint, options);
+  }
+  /* PreVotes */
+  async preVotes(params: QueryPreVotesRequest): Promise<QueryPreVotesResponseSDKType> {
+    const options: any = {
+      params: {}
+    };
+    if (typeof params?.feeder !== "undefined") {
+      options.params.feeder = params.feeder;
+    }
+    if (typeof params?.validator !== "undefined") {
+      options.params.validator = params.validator;
+    }
+    if (typeof params?.fromBlockHeight !== "undefined") {
+      options.params.from_block_height = params.fromBlockHeight;
+    }
+    if (typeof params?.toBlockHeight !== "undefined") {
+      options.params.to_block_height = params.toBlockHeight;
+    }
+    if (typeof params?.pagination !== "undefined") {
+      setPaginationParams(options, params.pagination);
+    }
+    const endpoint = `pryzmatics/oracle/pre_vote`;
+    return await this.req.get<QueryPreVotesResponseSDKType>(endpoint, options);
+  }
+  /* Votes */
+  async votes(params: QueryVotesRequest): Promise<QueryVotesResponseSDKType> {
+    const options: any = {
+      params: {}
+    };
+    if (typeof params?.feeder !== "undefined") {
+      options.params.feeder = params.feeder;
+    }
+    if (typeof params?.validator !== "undefined") {
+      options.params.validator = params.validator;
+    }
+    if (typeof params?.fromBlockHeight !== "undefined") {
+      options.params.from_block_height = params.fromBlockHeight;
+    }
+    if (typeof params?.toBlockHeight !== "undefined") {
+      options.params.to_block_height = params.toBlockHeight;
+    }
+    if (typeof params?.pagination !== "undefined") {
+      setPaginationParams(options, params.pagination);
+    }
+    const endpoint = `pryzmatics/oracle/vote`;
+    return await this.req.get<QueryVotesResponseSDKType>(endpoint, options);
+  }
+  /* VotePayloads */
+  async votePayloads(params: QueryVotePayloadsRequest): Promise<QueryVotePayloadsResponseSDKType> {
+    const options: any = {
+      params: {}
+    };
+    if (typeof params?.voteId !== "undefined") {
+      options.params.vote_id = params.voteId;
+    }
+    if (typeof params?.module !== "undefined") {
+      options.params.module = params.module;
+    }
+    if (typeof params?.namespace !== "undefined") {
+      options.params.namespace = params.namespace;
+    }
+    if (typeof params?.pagination !== "undefined") {
+      setPaginationParams(options, params.pagination);
+    }
+    const endpoint = `pryzmatics/oracle/vote_payload`;
+    return await this.req.get<QueryVotePayloadsResponseSDKType>(endpoint, options);
   }
 }

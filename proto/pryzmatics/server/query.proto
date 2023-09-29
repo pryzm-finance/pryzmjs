@@ -40,6 +40,16 @@ import "pryzmatics/server/alliance/alliance.proto";
 
 import "pryzmatics/server/icstaking/host_chain.proto";
 
+import "pryzmatics/server/oracle/validator.proto";
+import "pryzmatics/server/oracle/vote_interval.proto";
+import "pryzmatics/server/oracle/slash_window.proto";
+import "pryzmatics/server/oracle/vote_summary.proto";
+import "pryzmatics/server/oracle/validator_vote_interval_summary.proto";
+import "pryzmatics/server/oracle/validator_slash_window_summary.proto";
+import "pryzmatics/server/oracle/pre_vote.proto";
+import "pryzmatics/server/oracle/vote.proto";
+import "pryzmatics/server/oracle/vote_payload.proto";
+
 
 option go_package = "github.com/pryzm-finance/pryzmatics/server";
 
@@ -179,5 +189,45 @@ service Query {
 
   rpc HostChains(pryzmatics.server.icstaking.QueryHostChainsRequest) returns (pryzmatics.server.icstaking.QueryHostChainsResponse) {
     option (google.api.http).get = "/pryzmatics/icstaking/host_chain";
+  }
+
+  rpc Validator(pryzmatics.server.oracle.QueryValidatorRequest) returns (pryzmatics.server.oracle.QueryValidatorResponse) {
+    option (google.api.http).get = "/pryzmatics/oracle/validator/{operator_address}";
+  }
+
+  rpc Validators(pryzmatics.server.oracle.QueryValidatorsRequest) returns (pryzmatics.server.oracle.QueryValidatorsResponse) {
+    option (google.api.http).get = "/pryzmatics/oracle/validator";
+  }
+
+  rpc VoteIntervals(pryzmatics.server.oracle.QueryVoteIntervalsRequest) returns (pryzmatics.server.oracle.QueryVoteIntervalsResponse) {
+    option (google.api.http).get = "/pryzmatics/oracle/vote_interval";
+  }
+
+  rpc SlashWindows(pryzmatics.server.oracle.QuerySlashWindowsRequest) returns (pryzmatics.server.oracle.QuerySlashWindowsResponse) {
+    option (google.api.http).get = "/pryzmatics/oracle/slash_window";
+  }
+
+  rpc VoteSummary(pryzmatics.server.oracle.QueryVoteSummaryRequest) returns (pryzmatics.server.oracle.QueryVoteSummaryResponse) {
+    option (google.api.http).get = "/pryzmatics/oracle/vote_summary";
+  }
+
+  rpc ValidatorVoteIntervalSummaries(pryzmatics.server.oracle.QueryValidatorVoteIntervalSummariesRequest) returns (pryzmatics.server.oracle.QueryValidatorVoteIntervalSummariesResponse) {
+    option (google.api.http).get = "/pryzmatics/oracle/validator/vote_interval_summary/{operator_address}";
+  }
+
+  rpc ValidatorSlashWindowSummaries(pryzmatics.server.oracle.QueryValidatorSlashWindowSummariesRequest) returns (pryzmatics.server.oracle.QueryValidatorSlashWindowSummariesResponse) {
+    option (google.api.http).get = "/pryzmatics/oracle/validator/slash_window_summary/{operator_address}";
+  }
+
+  rpc PreVotes(pryzmatics.server.oracle.QueryPreVotesRequest) returns (pryzmatics.server.oracle.QueryPreVotesResponse) {
+    option (google.api.http).get = "/pryzmatics/oracle/pre_vote";
+  }
+
+  rpc Votes(pryzmatics.server.oracle.QueryVotesRequest) returns (pryzmatics.server.oracle.QueryVotesResponse) {
+    option (google.api.http).get = "/pryzmatics/oracle/vote";
+  }
+
+  rpc VotePayloads(pryzmatics.server.oracle.QueryVotePayloadsRequest) returns (pryzmatics.server.oracle.QueryVotePayloadsResponse) {
+    option (google.api.http).get = "/pryzmatics/oracle/vote_payload";
   }
 }

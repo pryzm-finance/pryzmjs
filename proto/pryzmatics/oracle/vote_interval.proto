@@ -1,0 +1,20 @@
+syntax = "proto3";
+package pryzmatics.oracle;
+
+import "gogoproto/gogo.proto";
+import "cosmos_proto/cosmos.proto";
+import "google/protobuf/timestamp.proto";
+
+option go_package = "github.com/pryzm-finance/pryzmatics/types/oracle";
+
+message VoteInterval {
+  uint64 id = 1;
+  int64 vote_period = 2;
+  int64 close_block_height = 3;
+  google.protobuf.Timestamp close_block_time = 4 [(gogoproto.stdtime) = true, (gogoproto.nullable) = false];
+  string slash_window_close_block_height = 6 [
+    (cosmos_proto.scalar) = "cosmos.Int",
+    (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Int",
+    (gogoproto.nullable) = true
+  ];
+}

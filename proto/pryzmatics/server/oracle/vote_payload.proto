@@ -1,0 +1,26 @@
+syntax = "proto3";
+package pryzmatics.server.oracle;
+
+import "gogoproto/gogo.proto";
+import "cosmos_proto/cosmos.proto";
+import "pryzmatics/oracle/vote.proto";
+import "cosmos/base/query/v1beta1/pagination.proto";
+
+
+option go_package = "github.com/pryzm-finance/pryzmatics/server/oracle";
+
+message QueryVotePayloadsRequest {
+  string vote_id = 1 [
+    (cosmos_proto.scalar) = "cosmos.Int",
+    (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Int",
+    (gogoproto.nullable) = true
+  ];
+  string module = 2;
+  string namespace = 3;
+  cosmos.base.query.v1beta1.PageRequest pagination = 4 [(gogoproto.nullable) = true];
+}
+
+message QueryVotePayloadsResponse {
+  repeated pryzmatics.oracle.VotePayload payloads = 1 [(gogoproto.nullable) = false];
+  cosmos.base.query.v1beta1.PageResponse pagination = 2 [(gogoproto.nullable) = true];
+}

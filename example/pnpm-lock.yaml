@@ -1,13 +1,13 @@
 lockfileVersion: 5.4
 
 specifiers:
-  '@pryzm-finance/pryzmjs': 0.12.4
+  '@pryzm-finance/pryzmjs': 0.12.5
   '@refractedlabs/oraclejs': ^0.3.0
   '@refractedlabs/utils': 0.1.7
   typescript: ^5.1.6
 
 dependencies:
-  '@pryzm-finance/pryzmjs': 0.12.4_google-protobuf@3.21.2
+  '@pryzm-finance/pryzmjs': 0.12.5_google-protobuf@3.21.2
   '@refractedlabs/oraclejs': 0.3.6_google-protobuf@3.21.2
   '@refractedlabs/utils': 0.1.7
 
@@ -259,8 +259,8 @@ packages:
     resolution: {integrity: sha512-Vvn3zZrhQZkkBE8LSuW3em98c0FwgO4nxzv6OdSxPKJIEKY2bGbHn+mhGIPerzI4twdxaP8/0+06HBpwf345Lw==}
     dev: false
 
-  /@pryzm-finance/pryzmjs/0.12.4_google-protobuf@3.21.2:
-    resolution: {integrity: sha512-mrolAwJOeRhbK3X+XYM1FLnOoGi9apNJ/+tfe46O6IMpLMm6JeYWpit4/shifS9WcQm2uMTp+L2SPf2LP3fA6g==, tarball: download/@pryzm-finance/pryzmjs/0.12.4/2f5ca2fd0641eecf4a382ba037ed461a60cdcf23}
+  /@pryzm-finance/pryzmjs/0.12.5_google-protobuf@3.21.2:
+    resolution: {integrity: sha512-WK38ThQa3MZds/EwqYekx/U9Xzg9T95tLlTJb7T7Vjf7lIqWYFx/NO9yFNQ7xU1sZYbQ7GWWeuGa4huqGCrgSA==, tarball: download/@pryzm-finance/pryzmjs/0.12.5/317c79d27cf395e0790159b630ada95ccec9c932}
     dependencies:
       '@babel/runtime': 7.23.1
       '@cosmjs/amino': 0.31.0

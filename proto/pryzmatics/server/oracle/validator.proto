@@ -1,0 +1,27 @@
+syntax = "proto3";
+package pryzmatics.server.oracle;
+
+import "gogoproto/gogo.proto";
+import "cosmos_proto/cosmos.proto";
+import "pryzmatics/oracle/validator.proto";
+import "cosmos/base/query/v1beta1/pagination.proto";
+
+
+option go_package = "github.com/pryzm-finance/pryzmatics/server/oracle";
+
+message QueryValidatorRequest {
+  string operator_address = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
+}
+
+message QueryValidatorResponse {
+  pryzmatics.oracle.Validator validator = 1 [(gogoproto.nullable) = false];
+}
+
+message QueryValidatorsRequest {
+  cosmos.base.query.v1beta1.PageRequest pagination = 1 [(gogoproto.nullable) = true];
+}
+
+message QueryValidatorsResponse {
+  repeated pryzmatics.oracle.Validator validators = 1 [(gogoproto.nullable) = false];
+  cosmos.base.query.v1beta1.PageResponse pagination = 2 [(gogoproto.nullable) = true];
+}

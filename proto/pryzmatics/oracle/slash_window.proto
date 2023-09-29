@@ -1,0 +1,14 @@
+syntax = "proto3";
+package pryzmatics.oracle;
+
+import "gogoproto/gogo.proto";
+import "google/protobuf/timestamp.proto";
+
+option go_package = "github.com/pryzm-finance/pryzmatics/types/oracle";
+
+message SlashWindow {
+  uint64 id = 1;
+  int64 slash_window = 2;
+  int64 close_block_height = 3;
+  google.protobuf.Timestamp close_block_time = 4 [(gogoproto.stdtime) = true, (gogoproto.nullable) = false];
+}

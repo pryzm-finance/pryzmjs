@@ -1,0 +1,17 @@
+syntax = "proto3";
+package pryzmatics.server.oracle;
+
+import "gogoproto/gogo.proto";
+import "cosmos_proto/cosmos.proto";
+import "pryzmatics/oracle/vote_summary.proto";
+import "cosmos/base/query/v1beta1/pagination.proto";
+
+
+option go_package = "github.com/pryzm-finance/pryzmatics/server/oracle";
+
+message QueryVoteSummaryRequest {
+}
+
+message QueryVoteSummaryResponse {
+  pryzmatics.oracle.VoteSummary summary = 1 [(gogoproto.nullable) = false];
+}

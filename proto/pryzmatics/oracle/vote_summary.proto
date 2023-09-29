@@ -1,0 +1,12 @@
+syntax = "proto3";
+package pryzmatics.oracle;
+
+import "gogoproto/gogo.proto";
+import "google/protobuf/timestamp.proto";
+
+option go_package = "github.com/pryzm-finance/pryzmatics/types/oracle";
+
+message VoteSummary {
+  int64 total_vote_periods = 2;
+  int64 total_slash_windows = 3;
+}
