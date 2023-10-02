@@ -12,7 +12,7 @@ pnpm install @pryzm-finance/pryzmjs
 
 ## gRPC-web Clients
 
-Import the `pryzm-finance` object from `@pryzm-finance/pryzmjs`.
+Import the `pryzm` object from `@pryzm-finance/pryzmjs`.
 
 ```tsx
 import { pryzm } from '@pryzm-finance/pryzmjs';
@@ -24,6 +24,17 @@ const params = await client.pryzm.amm.params();
 
 // you can also query the cosmos modules
 const balance = await client.cosmos.bank.v1beta1.allBalances({ address: 'pryzm1addresshere' });
+```
+
+Import the `alliance` object from `@pryzm-finance/pryzmjs/lib/alliance`.
+
+```tsx
+import { alliance } from "@pryzm-finance/pryzmjs/lib/alliance"
+
+const client = await alliance.ClientFactory.createGrpcWebClient({ endpoint: GRPC_ENDPOINT })
+
+// now you can query the alliance module
+const params = await client.alliance.params()
 ```
 
 ## LCD Clients
@@ -38,6 +49,15 @@ const params = await client.pryzm.amm.params();
 
 // you can also query the cosmos modules
 const balance = await client.cosmos.bank.v1beta1.allBalances({ address: 'pryzm1addresshere' });
+```
+
+```tsx
+import { alliance } from "@pryzm-finance/pryzmjs/lib/alliance"
+
+const client = await alliance.ClientFactory.createLCDClient({restEndpoint: LCD_ENDPOINT})
+
+// now you can query the alliance module
+const params = await client.alliance.params()
 ```
 
 ## PryzmaticsClient
@@ -66,6 +86,18 @@ const {
     singleSwap,
     initializePool
 } = pryzm.amm.MessageComposer.withTypeUrl
+```
+
+```tsx
+import { alliance } from "@pryzm-finance/pryzmjs/lib/alliance"
+
+// sample messages from alliance module
+const {
+    delegate,
+    redelegate,
+    undelegate,
+    claimDelegationRewards
+} = alliance.MessageComposer.withTypeUrl
 ```
 
 ## Example Project
