@@ -102,7 +102,7 @@ const {
 
 ## Example Project
 
-[example](/example) is a sample project that depends on `@pryzm-finance/pryzmjs` and contains example on how to query data or sign and send messages.
+[example](https://github.com/pryzm-finance/pryzmjs/tree/main/example) is a sample project that depends on `@pryzm-finance/pryzmjs` and contains example on how to query data or sign and send messages.
 
 ## Connecting with Wallets and Signing Messages
 
