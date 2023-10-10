@@ -1,4 +1,5 @@
 import { BinaryReader, BinaryWriter } from "../../binary";
+import { Decimal } from "@cosmjs/math";
 import { isSet } from "../../helpers";
 export interface VirtualBalancePoolToken {
   poolId: bigint;
@@ -32,7 +33,7 @@ export const VirtualBalancePoolToken = {
       writer.uint32(18).string(message.denom);
     }
     if (message.targetVirtualBalance !== "") {
-      writer.uint32(26).string(message.targetVirtualBalance);
+      writer.uint32(26).string(Decimal.fromUserInput(message.targetVirtualBalance, 18).atomics);
     }
     if (message.startUnixMillis !== BigInt(0)) {
       writer.uint32(32).int64(message.startUnixMillis);
@@ -56,7 +57,7 @@ export const VirtualBalancePoolToken = {
           message.denom = reader.string();
           break;
         case 3:
-          message.targetVirtualBalance = reader.string();
+          message.targetVirtualBalance = Decimal.fromAtomics(reader.string(), 18).toString();
           break;
         case 4:
           message.startUnixMillis = reader.int64();

@@ -3,7 +3,7 @@ import { grpc } from "@improbable-eng/grpc-web";
 import { UnaryMethodDefinitionish } from "../../grpc-web";
 import { DeepPartial } from "../../helpers";
 import { BrowserHeaders } from "browser-headers";
-import { QueryParamsRequest, QueryParamsResponse, QueryGetHostChainRequest, QueryGetHostChainResponse, QueryAllHostChainRequest, QueryAllHostChainResponse, QueryGetHostChainStateRequest, QueryGetHostChainStateResponse, QueryAllHostChainStateRequest, QueryAllHostChainStateResponse, QueryGetUndelegationRequest, QueryGetUndelegationResponse, QueryAllUndelegationRequest, QueryAllUndelegationResponse, QueryIncompleteUndelegationRequest, QueryIncompleteUndelegationResponse } from "./query";
+import { QueryParamsRequest, QueryParamsResponse, QueryGetHostChainRequest, QueryGetHostChainResponse, QueryAllHostChainRequest, QueryAllHostChainResponse, QueryGetHostChainStateRequest, QueryGetHostChainStateResponse, QueryAllHostChainStateRequest, QueryAllHostChainStateResponse, QueryGetUndelegationRequest, QueryGetUndelegationResponse, QueryAllUndelegationRequest, QueryAllUndelegationResponse, QueryIncompleteUndelegationRequest, QueryIncompleteUndelegationResponse, QueryDelegationQueueBalanceRequest, QueryDelegationQueueBalanceResponse } from "./query";
 /** Query defines the gRPC querier service. */
 export interface Query {
   /** Parameters queries the parameters of the module. */
@@ -22,6 +22,8 @@ export interface Query {
   undelegationAll(request?: DeepPartial<QueryAllUndelegationRequest>, metadata?: grpc.Metadata): Promise<QueryAllUndelegationResponse>;
   /** Queries a list of incomplete undelegations sorted by completion time. */
   incompleteUndelegationAll(request: DeepPartial<QueryIncompleteUndelegationRequest>, metadata?: grpc.Metadata): Promise<QueryIncompleteUndelegationResponse>;
+  /** Queries the balance of the delegation queue. */
+  delegationQueueBalance(request: DeepPartial<QueryDelegationQueueBalanceRequest>, metadata?: grpc.Metadata): Promise<QueryDelegationQueueBalanceResponse>;
 }
 export class QueryClientImpl implements Query {
   private readonly rpc: Rpc;
@@ -35,6 +37,7 @@ export class QueryClientImpl implements Query {
     this.undelegation = this.undelegation.bind(this);
     this.undelegationAll = this.undelegationAll.bind(this);
     this.incompleteUndelegationAll = this.incompleteUndelegationAll.bind(this);
+    this.delegationQueueBalance = this.delegationQueueBalance.bind(this);
   }
   params(request: DeepPartial<QueryParamsRequest> = {}, metadata?: grpc.Metadata): Promise<QueryParamsResponse> {
     return this.rpc.unary(QueryParamsDesc, QueryParamsRequest.fromPartial(request), metadata);
@@ -65,6 +68,9 @@ export class QueryClientImpl implements Query {
   }
   incompleteUndelegationAll(request: DeepPartial<QueryIncompleteUndelegationRequest>, metadata?: grpc.Metadata): Promise<QueryIncompleteUndelegationResponse> {
     return this.rpc.unary(QueryIncompleteUndelegationAllDesc, QueryIncompleteUndelegationRequest.fromPartial(request), metadata);
+  }
+  delegationQueueBalance(request: DeepPartial<QueryDelegationQueueBalanceRequest>, metadata?: grpc.Metadata): Promise<QueryDelegationQueueBalanceResponse> {
+    return this.rpc.unary(QueryDelegationQueueBalanceDesc, QueryDelegationQueueBalanceRequest.fromPartial(request), metadata);
   }
 }
 export const QueryDesc = {
@@ -231,6 +237,27 @@ export const QueryIncompleteUndelegationAllDesc: UnaryMethodDefinitionish = {
     deserializeBinary(data: Uint8Array) {
       return {
         ...QueryIncompleteUndelegationResponse.decode(data),
+        toObject() {
+          return this;
+        }
+      };
+    }
+  } as any)
+};
+export const QueryDelegationQueueBalanceDesc: UnaryMethodDefinitionish = {
+  methodName: "DelegationQueueBalance",
+  service: QueryDesc,
+  requestStream: false,
+  responseStream: false,
+  requestType: ({
+    serializeBinary() {
+      return QueryDelegationQueueBalanceRequest.encode(this).finish();
+    }
+  } as any),
+  responseType: ({
+    deserializeBinary(data: Uint8Array) {
+      return {
+        ...QueryDelegationQueueBalanceResponse.decode(data),
         toObject() {
           return this;
         }

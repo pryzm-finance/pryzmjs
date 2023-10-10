@@ -1,0 +1,29 @@
+syntax = "proto3";
+package pryzmatics.server.pool;
+
+import "gogoproto/gogo.proto";
+import "cosmos_proto/cosmos.proto";
+import "pryzmatics/common/time_resolution.proto";
+import "pryzmatics/pool/historical_token_yield.proto";
+
+option go_package = "github.com/pryzm-finance/pryzmatics/server/pool";
+
+message QueryHistoricalTokenYieldRequest {
+  string denom = 1;
+  pryzmatics.common.TimeResolutionType time_resolution_type = 2;
+  uint32 time_resolution_value = 3;
+  string from = 4 [
+    (cosmos_proto.scalar) = "cosmos.Int",
+    (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Int",
+    (gogoproto.nullable) = false
+  ];
+  string to = 5 [
+    (cosmos_proto.scalar) = "cosmos.Int",
+    (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Int",
+    (gogoproto.nullable) = false
+  ];
+}
+
+message QueryHistoricalTokenYieldResponse {
+  repeated pryzmatics.pool.HistoricalTokenYield historical_token_yields = 1 [(gogoproto.nullable) = false];
+}

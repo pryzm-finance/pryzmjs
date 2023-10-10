@@ -3,7 +3,7 @@ import { grpc } from "@improbable-eng/grpc-web";
 import { UnaryMethodDefinitionish } from "../../grpc-web";
 import { DeepPartial } from "../../helpers";
 import { BrowserHeaders } from "browser-headers";
-import { QueryParamsRequest, QueryParamsResponse, QueryGetPoolTokenRequest, QueryGetPoolTokenResponse, QueryAllPoolTokenRequest, QueryAllPoolTokenResponse, QueryAllPoolTokenWeightRequest, QueryAllPoolTokenWeightResponse, QueryGetPoolTokenWeightRequest, QueryGetPoolTokenWeightResponse, QueryGetPoolRequest, QueryGetPoolResponse, QueryAllPoolRequest, QueryAllPoolResponse, QueryGetWeightedTokenRequest, QueryGetWeightedTokenResponse, QueryAllWeightedTokenRequest, QueryAllWeightedTokenResponse, QueryGetWeightUpdateTimingRequest, QueryGetWeightUpdateTimingResponse, QueryAllWeightUpdateTimingRequest, QueryAllWeightUpdateTimingResponse, QuerySimulateSingleSwapRequest, QuerySimulateSingleSwapResponse, QuerySimulateInitializePoolRequest, QuerySimulateInitializePoolResponse, QuerySimulateJoinAllTokensExactLptRequest, QuerySimulateJoinAllTokensExactLptResponse, QuerySimulateJoinExactTokensRequest, QuerySimulateJoinExactTokensResponse, QuerySimulateJoinTokenExactLptRequest, QuerySimulateJoinTokenExactLptResponse, QuerySimulateExitTokenExactLptRequest, QuerySimulateExitTokenExactLptResponse, QuerySimulateExitExactTokensRequest, QuerySimulateExitExactTokensResponse, QuerySimulateExitAllTokensExactLptRequest, QuerySimulateExitAllTokensExactLptResponse, QuerySpotPriceRequest, QuerySpotPriceResponse, QueryGetIntroducingPoolTokenRequest, QueryGetIntroducingPoolTokenResponse, QueryAllIntroducingPoolTokenRequest, QueryAllIntroducingPoolTokenResponse, QueryGetExpiringPoolTokenRequest, QueryGetExpiringPoolTokenResponse, QueryAllExpiringPoolTokenRequest, QueryAllExpiringPoolTokenResponse, QueryLpTokenRequest, QueryLpTokenResponse, QuerySimulateBatchSwapRequest, QuerySimulateBatchSwapResponse, QueryGetYammConfigurationRequest, QueryGetYammConfigurationResponse, QueryAllYammConfigurationRequest, QueryAllYammConfigurationResponse, QueryGetWhitelistedRouteRequest, QueryGetWhitelistedRouteResponse, QueryAllWhitelistedRouteRequest, QueryAllWhitelistedRouteResponse, QueryGetOrderRequest, QueryGetOrderResponse, QueryAllOrderRequest, QueryAllOrderResponse, QueryGetExecutableOrderRequest, QueryGetExecutableOrderResponse, QueryAllExecutableOrderRequest, QueryAllExecutableOrderResponse, QueryGetScheduleOrderRequest, QueryGetScheduleOrderResponse, QueryAllScheduleOrderRequest, QueryAllScheduleOrderResponse, QueryGetOraclePricePairRequest, QueryGetOraclePricePairResponse, QueryAllOraclePricePairRequest, QueryAllOraclePricePairResponse, QueryVaultPauseModeRequest, QueryVaultPauseModeResponse, QueryGetPendingTokenIntroductionRequest, QueryGetPendingTokenIntroductionResponse, QueryAllPendingTokenIntroductionRequest, QueryAllPendingTokenIntroductionResponse, QueryYammPoolIdRequest, QueryYammPoolIdResponse } from "./query";
+import { QueryParamsRequest, QueryParamsResponse, QueryGetPoolTokenRequest, QueryGetPoolTokenResponse, QueryAllPoolTokenRequest, QueryAllPoolTokenResponse, QueryAllPoolTokenWeightRequest, QueryAllPoolTokenWeightResponse, QueryGetPoolTokenWeightRequest, QueryGetPoolTokenWeightResponse, QueryGetPoolRequest, QueryGetPoolResponse, QueryAllPoolRequest, QueryAllPoolResponse, QueryGetWeightedTokenRequest, QueryGetWeightedTokenResponse, QueryAllWeightedTokenRequest, QueryAllWeightedTokenResponse, QueryGetWeightUpdateTimingRequest, QueryGetWeightUpdateTimingResponse, QueryAllWeightUpdateTimingRequest, QueryAllWeightUpdateTimingResponse, QuerySimulateSingleSwapRequest, QuerySimulateSingleSwapResponse, QuerySimulateInitializePoolRequest, QuerySimulateInitializePoolResponse, QuerySimulateJoinAllTokensExactLptRequest, QuerySimulateJoinAllTokensExactLptResponse, QuerySimulateJoinExactTokensRequest, QuerySimulateJoinExactTokensResponse, QuerySimulateZeroImpactJoinYammRequest, QuerySimulateZeroImpactJoinYammResponse, QuerySimulateJoinTokenExactLptRequest, QuerySimulateJoinTokenExactLptResponse, QuerySimulateExitTokenExactLptRequest, QuerySimulateExitTokenExactLptResponse, QuerySimulateExitExactTokensRequest, QuerySimulateExitExactTokensResponse, QuerySimulateExitAllTokensExactLptRequest, QuerySimulateExitAllTokensExactLptResponse, QuerySpotPriceRequest, QuerySpotPriceResponse, QueryGetIntroducingPoolTokenRequest, QueryGetIntroducingPoolTokenResponse, QueryAllIntroducingPoolTokenRequest, QueryAllIntroducingPoolTokenResponse, QueryGetExpiringPoolTokenRequest, QueryGetExpiringPoolTokenResponse, QueryAllExpiringPoolTokenRequest, QueryAllExpiringPoolTokenResponse, QueryLpTokenRequest, QueryLpTokenResponse, QuerySimulateBatchSwapRequest, QuerySimulateBatchSwapResponse, QueryGetYammConfigurationRequest, QueryGetYammConfigurationResponse, QueryAllYammConfigurationRequest, QueryAllYammConfigurationResponse, QueryGetWhitelistedRouteRequest, QueryGetWhitelistedRouteResponse, QueryAllWhitelistedRouteRequest, QueryAllWhitelistedRouteResponse, QueryGetOrderRequest, QueryGetOrderResponse, QueryAllOrderRequest, QueryAllOrderResponse, QueryGetExecutableOrderRequest, QueryGetExecutableOrderResponse, QueryAllExecutableOrderRequest, QueryAllExecutableOrderResponse, QueryGetScheduleOrderRequest, QueryGetScheduleOrderResponse, QueryAllScheduleOrderRequest, QueryAllScheduleOrderResponse, QueryGetOraclePricePairRequest, QueryGetOraclePricePairResponse, QueryAllOraclePricePairRequest, QueryAllOraclePricePairResponse, QueryVaultPauseModeRequest, QueryVaultPauseModeResponse, QueryGetPendingTokenIntroductionRequest, QueryGetPendingTokenIntroductionResponse, QueryAllPendingTokenIntroductionRequest, QueryAllPendingTokenIntroductionResponse, QueryYammPoolIdRequest, QueryYammPoolIdResponse } from "./query";
 /** Query defines the gRPC querier service. */
 export interface Query {
   /** Parameters queries the parameters of the module. */
@@ -42,6 +42,8 @@ export interface Query {
   simulateJoinAllTokensExactLpt(request: DeepPartial<QuerySimulateJoinAllTokensExactLptRequest>, metadata?: grpc.Metadata): Promise<QuerySimulateJoinAllTokensExactLptResponse>;
   /** Queries a list of SimulateJoinExactTokens items. */
   simulateJoinExactTokens(request: DeepPartial<QuerySimulateJoinExactTokensRequest>, metadata?: grpc.Metadata): Promise<QuerySimulateJoinExactTokensResponse>;
+  /** Queries a list of SimulateJoinExactTokens items. */
+  simulateZeroImpactJoinYamm(request: DeepPartial<QuerySimulateZeroImpactJoinYammRequest>, metadata?: grpc.Metadata): Promise<QuerySimulateZeroImpactJoinYammResponse>;
   /** Queries a list of SimulateJoinTokenExactLpt items. */
   simulateJoinTokenExactLpt(request: DeepPartial<QuerySimulateJoinTokenExactLptRequest>, metadata?: grpc.Metadata): Promise<QuerySimulateJoinTokenExactLptResponse>;
   /** Queries a list of SimulateExitTokenExactLpt items. */
@@ -116,6 +118,7 @@ export class QueryClientImpl implements Query {
     this.simulateInitializePool = this.simulateInitializePool.bind(this);
     this.simulateJoinAllTokensExactLpt = this.simulateJoinAllTokensExactLpt.bind(this);
     this.simulateJoinExactTokens = this.simulateJoinExactTokens.bind(this);
+    this.simulateZeroImpactJoinYamm = this.simulateZeroImpactJoinYamm.bind(this);
     this.simulateJoinTokenExactLpt = this.simulateJoinTokenExactLpt.bind(this);
     this.simulateExitTokenExactLpt = this.simulateExitTokenExactLpt.bind(this);
     this.simulateExitExactTokens = this.simulateExitExactTokens.bind(this);
@@ -194,6 +197,9 @@ export class QueryClientImpl implements Query {
   }
   simulateJoinExactTokens(request: DeepPartial<QuerySimulateJoinExactTokensRequest>, metadata?: grpc.Metadata): Promise<QuerySimulateJoinExactTokensResponse> {
     return this.rpc.unary(QuerySimulateJoinExactTokensDesc, QuerySimulateJoinExactTokensRequest.fromPartial(request), metadata);
+  }
+  simulateZeroImpactJoinYamm(request: DeepPartial<QuerySimulateZeroImpactJoinYammRequest>, metadata?: grpc.Metadata): Promise<QuerySimulateZeroImpactJoinYammResponse> {
+    return this.rpc.unary(QuerySimulateZeroImpactJoinYammDesc, QuerySimulateZeroImpactJoinYammRequest.fromPartial(request), metadata);
   }
   simulateJoinTokenExactLpt(request: DeepPartial<QuerySimulateJoinTokenExactLptRequest>, metadata?: grpc.Metadata): Promise<QuerySimulateJoinTokenExactLptResponse> {
     return this.rpc.unary(QuerySimulateJoinTokenExactLptDesc, QuerySimulateJoinTokenExactLptRequest.fromPartial(request), metadata);
@@ -606,6 +612,27 @@ export const QuerySimulateJoinExactTokensDesc: UnaryMethodDefinitionish = {
     deserializeBinary(data: Uint8Array) {
       return {
         ...QuerySimulateJoinExactTokensResponse.decode(data),
+        toObject() {
+          return this;
+        }
+      };
+    }
+  } as any)
+};
+export const QuerySimulateZeroImpactJoinYammDesc: UnaryMethodDefinitionish = {
+  methodName: "SimulateZeroImpactJoinYamm",
+  service: QueryDesc,
+  requestStream: false,
+  responseStream: false,
+  requestType: ({
+    serializeBinary() {
+      return QuerySimulateZeroImpactJoinYammRequest.encode(this).finish();
+    }
+  } as any),
+  responseType: ({
+    deserializeBinary(data: Uint8Array) {
+      return {
+        ...QuerySimulateZeroImpactJoinYammResponse.decode(data),
         toObject() {
           return this;
         }

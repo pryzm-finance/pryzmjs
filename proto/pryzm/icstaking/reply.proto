@@ -39,8 +39,16 @@ message DelegateTransferReplyData {
 message DelegateTransferSession {
   // a generated id for the session
   string id = 1;
-  // a map of packet id to a boolean, determining whether the packet is finalized (either succeeded or failed)
-  map<string, bool> packet_finalized = 2;
+  // a list of packet states, determining whether the packet is finalized (either succeeded or failed)
+  repeated TransferPacketState packet_states = 2 [(gogoproto.nullable) = false];
+}
+
+// The state of a delegation transfer
+message TransferPacketState {
+  // packet identifier
+  string packet_id = 1;
+  // whether the transfer is finalized (either succeeded or failed)
+  bool finalized = 2;
 }
 
 // The reply data for DelegateBridge
@@ -117,8 +125,8 @@ message CollectUndelegatedReplyData {
 
 // The reply data used in SweepBridge
 message SweepData {
-  // a map of channel id to info about the sweep operation through that channel
-  map<string, ChannelSweep> channel_sweeps = 1 [(gogoproto.nullable) = false];
+  // a list containing info about the sweep operation through different channel channel
+  repeated ChannelSweep channel_sweeps = 1 [(gogoproto.nullable) = false];
 }
 
 // Contains info about the sweep operation through a channel

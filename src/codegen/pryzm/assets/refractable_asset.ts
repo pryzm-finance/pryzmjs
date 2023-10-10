@@ -38,19 +38,19 @@ export interface MaturityParamsSDKType {
 }
 /** Fee ratio per each operation */
 export interface FeeRatios {
-  yield: string;
-  refractorRefract: string;
-  refractorMerge: string;
-  refractorRedeem: string;
-  yStakingClaimReward: string;
+  yield?: string;
+  refractorRefract?: string;
+  refractorMerge?: string;
+  refractorRedeem?: string;
+  yStakingClaimReward?: string;
 }
 /** Fee ratio per each operation */
 export interface FeeRatiosSDKType {
-  yield: string;
-  refractor_refract: string;
-  refractor_merge: string;
-  refractor_redeem: string;
-  y_staking_claim_reward: string;
+  yield?: string;
+  refractor_refract?: string;
+  refractor_merge?: string;
+  refractor_redeem?: string;
+  y_staking_claim_reward?: string;
 }
 function createBaseRefractableAsset(): RefractableAsset {
   return {
@@ -204,28 +204,28 @@ export const MaturityParams = {
 };
 function createBaseFeeRatios(): FeeRatios {
   return {
-    yield: "",
-    refractorRefract: "",
-    refractorMerge: "",
-    refractorRedeem: "",
-    yStakingClaimReward: ""
+    yield: undefined,
+    refractorRefract: undefined,
+    refractorMerge: undefined,
+    refractorRedeem: undefined,
+    yStakingClaimReward: undefined
   };
 }
 export const FeeRatios = {
   encode(message: FeeRatios, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
-    if (message.yield !== "") {
+    if (message.yield !== undefined) {
       writer.uint32(10).string(Decimal.fromUserInput(message.yield, 18).atomics);
     }
-    if (message.refractorRefract !== "") {
+    if (message.refractorRefract !== undefined) {
       writer.uint32(18).string(Decimal.fromUserInput(message.refractorRefract, 18).atomics);
     }
-    if (message.refractorMerge !== "") {
+    if (message.refractorMerge !== undefined) {
       writer.uint32(26).string(Decimal.fromUserInput(message.refractorMerge, 18).atomics);
     }
-    if (message.refractorRedeem !== "") {
+    if (message.refractorRedeem !== undefined) {
       writer.uint32(34).string(Decimal.fromUserInput(message.refractorRedeem, 18).atomics);
     }
-    if (message.yStakingClaimReward !== "") {
+    if (message.yStakingClaimReward !== undefined) {
       writer.uint32(42).string(Decimal.fromUserInput(message.yStakingClaimReward, 18).atomics);
     }
     return writer;
@@ -261,11 +261,11 @@ export const FeeRatios = {
   },
   fromJSON(object: any): FeeRatios {
     return {
-      yield: isSet(object.yield) ? String(object.yield) : "",
-      refractorRefract: isSet(object.refractorRefract) ? String(object.refractorRefract) : "",
-      refractorMerge: isSet(object.refractorMerge) ? String(object.refractorMerge) : "",
-      refractorRedeem: isSet(object.refractorRedeem) ? String(object.refractorRedeem) : "",
-      yStakingClaimReward: isSet(object.yStakingClaimReward) ? String(object.yStakingClaimReward) : ""
+      yield: isSet(object.yield) ? String(object.yield) : undefined,
+      refractorRefract: isSet(object.refractorRefract) ? String(object.refractorRefract) : undefined,
+      refractorMerge: isSet(object.refractorMerge) ? String(object.refractorMerge) : undefined,
+      refractorRedeem: isSet(object.refractorRedeem) ? String(object.refractorRedeem) : undefined,
+      yStakingClaimReward: isSet(object.yStakingClaimReward) ? String(object.yStakingClaimReward) : undefined
     };
   },
   toJSON(message: FeeRatios): unknown {
@@ -279,11 +279,11 @@ export const FeeRatios = {
   },
   fromPartial(object: Partial<FeeRatios>): FeeRatios {
     const message = createBaseFeeRatios();
-    message.yield = object.yield ?? "";
-    message.refractorRefract = object.refractorRefract ?? "";
-    message.refractorMerge = object.refractorMerge ?? "";
-    message.refractorRedeem = object.refractorRedeem ?? "";
-    message.yStakingClaimReward = object.yStakingClaimReward ?? "";
+    message.yield = object.yield ?? undefined;
+    message.refractorRefract = object.refractorRefract ?? undefined;
+    message.refractorMerge = object.refractorMerge ?? undefined;
+    message.refractorRedeem = object.refractorRedeem ?? undefined;
+    message.yStakingClaimReward = object.yStakingClaimReward ?? undefined;
     return message;
   }
 };

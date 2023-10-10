@@ -1,7 +1,7 @@
 //@ts-nocheck
 import { GeneratedType, Registry } from "@cosmjs/proto-signing";
-import { MsgSingleSwap, MsgJoinAllTokensExactLpt, MsgJoinTokenExactLpt, MsgJoinExactTokens, MsgExitExactTokens, MsgExitTokenExactLpt, MsgExitAllTokensExactLpt, MsgCreateWeightedPool, MsgUpdateSwapFee, MsgInitializePool, MsgUpdateWeights, MsgBatchSwap, MsgSetYammConfiguration, MsgWhitelistRoute, MsgSetWhitelistedRouteEnabled, MsgSubmitOrder, MsgCancelOrder, MsgProposeMatch, MsgSetCircuitBreakers, MsgSetRecoveryMode, MsgRecoveryExit, MsgSetPauseMode, MsgSetVaultPauseMode, MsgCreateOraclePricePair, MsgUpdateOraclePricePair, MsgDeleteOraclePricePair, MsgSetSwapProtocolFee, MsgSetJoinExitProtocolFee, MsgIntroduceYammLpToWeightedPool, MsgIntroduceAssetBaseTokenToWeightedPool, MsgCancelPendingTokenIntroduction, MsgRemoveTokenFromWeightedPool, MsgUpdateParams, MsgAddMaturityToYamm, MsgSetInitializationAllowList } from "./tx";
-export const registry: ReadonlyArray<[string, GeneratedType]> = [["/pryzm.amm.MsgSingleSwap", MsgSingleSwap], ["/pryzm.amm.MsgJoinAllTokensExactLpt", MsgJoinAllTokensExactLpt], ["/pryzm.amm.MsgJoinTokenExactLpt", MsgJoinTokenExactLpt], ["/pryzm.amm.MsgJoinExactTokens", MsgJoinExactTokens], ["/pryzm.amm.MsgExitExactTokens", MsgExitExactTokens], ["/pryzm.amm.MsgExitTokenExactLpt", MsgExitTokenExactLpt], ["/pryzm.amm.MsgExitAllTokensExactLpt", MsgExitAllTokensExactLpt], ["/pryzm.amm.MsgCreateWeightedPool", MsgCreateWeightedPool], ["/pryzm.amm.MsgUpdateSwapFee", MsgUpdateSwapFee], ["/pryzm.amm.MsgInitializePool", MsgInitializePool], ["/pryzm.amm.MsgUpdateWeights", MsgUpdateWeights], ["/pryzm.amm.MsgBatchSwap", MsgBatchSwap], ["/pryzm.amm.MsgSetYammConfiguration", MsgSetYammConfiguration], ["/pryzm.amm.MsgWhitelistRoute", MsgWhitelistRoute], ["/pryzm.amm.MsgSetWhitelistedRouteEnabled", MsgSetWhitelistedRouteEnabled], ["/pryzm.amm.MsgSubmitOrder", MsgSubmitOrder], ["/pryzm.amm.MsgCancelOrder", MsgCancelOrder], ["/pryzm.amm.MsgProposeMatch", MsgProposeMatch], ["/pryzm.amm.MsgSetCircuitBreakers", MsgSetCircuitBreakers], ["/pryzm.amm.MsgSetRecoveryMode", MsgSetRecoveryMode], ["/pryzm.amm.MsgRecoveryExit", MsgRecoveryExit], ["/pryzm.amm.MsgSetPauseMode", MsgSetPauseMode], ["/pryzm.amm.MsgSetVaultPauseMode", MsgSetVaultPauseMode], ["/pryzm.amm.MsgCreateOraclePricePair", MsgCreateOraclePricePair], ["/pryzm.amm.MsgUpdateOraclePricePair", MsgUpdateOraclePricePair], ["/pryzm.amm.MsgDeleteOraclePricePair", MsgDeleteOraclePricePair], ["/pryzm.amm.MsgSetSwapProtocolFee", MsgSetSwapProtocolFee], ["/pryzm.amm.MsgSetJoinExitProtocolFee", MsgSetJoinExitProtocolFee], ["/pryzm.amm.MsgIntroduceYammLpToWeightedPool", MsgIntroduceYammLpToWeightedPool], ["/pryzm.amm.MsgIntroduceAssetBaseTokenToWeightedPool", MsgIntroduceAssetBaseTokenToWeightedPool], ["/pryzm.amm.MsgCancelPendingTokenIntroduction", MsgCancelPendingTokenIntroduction], ["/pryzm.amm.MsgRemoveTokenFromWeightedPool", MsgRemoveTokenFromWeightedPool], ["/pryzm.amm.MsgUpdateParams", MsgUpdateParams], ["/pryzm.amm.MsgAddMaturityToYamm", MsgAddMaturityToYamm], ["/pryzm.amm.MsgSetInitializationAllowList", MsgSetInitializationAllowList]];
+import { MsgSingleSwap, MsgJoinAllTokensExactLpt, MsgJoinTokenExactLpt, MsgJoinExactTokens, MsgZeroImpactJoinYamm, MsgExitExactTokens, MsgExitTokenExactLpt, MsgExitAllTokensExactLpt, MsgCreateWeightedPool, MsgUpdateSwapFee, MsgInitializePool, MsgUpdateWeights, MsgBatchSwap, MsgSetYammConfiguration, MsgWhitelistRoute, MsgSetWhitelistedRouteEnabled, MsgSubmitOrder, MsgCancelOrder, MsgProposeMatch, MsgSetCircuitBreakers, MsgSetRecoveryMode, MsgRecoveryExit, MsgSetPauseMode, MsgSetVaultPauseMode, MsgCreateOraclePricePair, MsgUpdateOraclePricePair, MsgDeleteOraclePricePair, MsgSetSwapProtocolFee, MsgSetJoinExitProtocolFee, MsgIntroduceYammLpToWeightedPool, MsgIntroduceAssetBaseTokenToWeightedPool, MsgCancelPendingTokenIntroduction, MsgRemoveTokenFromWeightedPool, MsgUpdateParams, MsgAddMaturityToYamm, MsgSetInitializationAllowList } from "./tx";
+export const registry: ReadonlyArray<[string, GeneratedType]> = [["/pryzm.amm.MsgSingleSwap", MsgSingleSwap], ["/pryzm.amm.MsgJoinAllTokensExactLpt", MsgJoinAllTokensExactLpt], ["/pryzm.amm.MsgJoinTokenExactLpt", MsgJoinTokenExactLpt], ["/pryzm.amm.MsgJoinExactTokens", MsgJoinExactTokens], ["/pryzm.amm.MsgZeroImpactJoinYamm", MsgZeroImpactJoinYamm], ["/pryzm.amm.MsgExitExactTokens", MsgExitExactTokens], ["/pryzm.amm.MsgExitTokenExactLpt", MsgExitTokenExactLpt], ["/pryzm.amm.MsgExitAllTokensExactLpt", MsgExitAllTokensExactLpt], ["/pryzm.amm.MsgCreateWeightedPool", MsgCreateWeightedPool], ["/pryzm.amm.MsgUpdateSwapFee", MsgUpdateSwapFee], ["/pryzm.amm.MsgInitializePool", MsgInitializePool], ["/pryzm.amm.MsgUpdateWeights", MsgUpdateWeights], ["/pryzm.amm.MsgBatchSwap", MsgBatchSwap], ["/pryzm.amm.MsgSetYammConfiguration", MsgSetYammConfiguration], ["/pryzm.amm.MsgWhitelistRoute", MsgWhitelistRoute], ["/pryzm.amm.MsgSetWhitelistedRouteEnabled", MsgSetWhitelistedRouteEnabled], ["/pryzm.amm.MsgSubmitOrder", MsgSubmitOrder], ["/pryzm.amm.MsgCancelOrder", MsgCancelOrder], ["/pryzm.amm.MsgProposeMatch", MsgProposeMatch], ["/pryzm.amm.MsgSetCircuitBreakers", MsgSetCircuitBreakers], ["/pryzm.amm.MsgSetRecoveryMode", MsgSetRecoveryMode], ["/pryzm.amm.MsgRecoveryExit", MsgRecoveryExit], ["/pryzm.amm.MsgSetPauseMode", MsgSetPauseMode], ["/pryzm.amm.MsgSetVaultPauseMode", MsgSetVaultPauseMode], ["/pryzm.amm.MsgCreateOraclePricePair", MsgCreateOraclePricePair], ["/pryzm.amm.MsgUpdateOraclePricePair", MsgUpdateOraclePricePair], ["/pryzm.amm.MsgDeleteOraclePricePair", MsgDeleteOraclePricePair], ["/pryzm.amm.MsgSetSwapProtocolFee", MsgSetSwapProtocolFee], ["/pryzm.amm.MsgSetJoinExitProtocolFee", MsgSetJoinExitProtocolFee], ["/pryzm.amm.MsgIntroduceYammLpToWeightedPool", MsgIntroduceYammLpToWeightedPool], ["/pryzm.amm.MsgIntroduceAssetBaseTokenToWeightedPool", MsgIntroduceAssetBaseTokenToWeightedPool], ["/pryzm.amm.MsgCancelPendingTokenIntroduction", MsgCancelPendingTokenIntroduction], ["/pryzm.amm.MsgRemoveTokenFromWeightedPool", MsgRemoveTokenFromWeightedPool], ["/pryzm.amm.MsgUpdateParams", MsgUpdateParams], ["/pryzm.amm.MsgAddMaturityToYamm", MsgAddMaturityToYamm], ["/pryzm.amm.MsgSetInitializationAllowList", MsgSetInitializationAllowList]];
 export const load = (protoRegistry: Registry) => {
   registry.forEach(([typeUrl, mod]) => {
     protoRegistry.register(typeUrl, mod);
@@ -31,6 +31,12 @@ export const MessageComposer = {
       return {
         typeUrl: "/pryzm.amm.MsgJoinExactTokens",
         value: MsgJoinExactTokens.encode(value).finish()
+      };
+    },
+    zeroImpactJoinYamm(value: MsgZeroImpactJoinYamm) {
+      return {
+        typeUrl: "/pryzm.amm.MsgZeroImpactJoinYamm",
+        value: MsgZeroImpactJoinYamm.encode(value).finish()
       };
     },
     exitExactTokens(value: MsgExitExactTokens) {
@@ -242,6 +248,12 @@ export const MessageComposer = {
     joinExactTokens(value: MsgJoinExactTokens) {
       return {
         typeUrl: "/pryzm.amm.MsgJoinExactTokens",
+        value
+      };
+    },
+    zeroImpactJoinYamm(value: MsgZeroImpactJoinYamm) {
+      return {
+        typeUrl: "/pryzm.amm.MsgZeroImpactJoinYamm",
         value
       };
     },
@@ -457,6 +469,12 @@ export const MessageComposer = {
         value: MsgJoinExactTokens.toJSON(value)
       };
     },
+    zeroImpactJoinYamm(value: MsgZeroImpactJoinYamm) {
+      return {
+        typeUrl: "/pryzm.amm.MsgZeroImpactJoinYamm",
+        value: MsgZeroImpactJoinYamm.toJSON(value)
+      };
+    },
     exitExactTokens(value: MsgExitExactTokens) {
       return {
         typeUrl: "/pryzm.amm.MsgExitExactTokens",
@@ -669,6 +687,12 @@ export const MessageComposer = {
         value: MsgJoinExactTokens.fromJSON(value)
       };
     },
+    zeroImpactJoinYamm(value: any) {
+      return {
+        typeUrl: "/pryzm.amm.MsgZeroImpactJoinYamm",
+        value: MsgZeroImpactJoinYamm.fromJSON(value)
+      };
+    },
     exitExactTokens(value: any) {
       return {
         typeUrl: "/pryzm.amm.MsgExitExactTokens",
@@ -879,6 +903,12 @@ export const MessageComposer = {
       return {
         typeUrl: "/pryzm.amm.MsgJoinExactTokens",
         value: MsgJoinExactTokens.fromPartial(value)
+      };
+    },
+    zeroImpactJoinYamm(value: MsgZeroImpactJoinYamm) {
+      return {
+        typeUrl: "/pryzm.amm.MsgZeroImpactJoinYamm",
+        value: MsgZeroImpactJoinYamm.fromPartial(value)
       };
     },
     exitExactTokens(value: MsgExitExactTokens) {

@@ -2,7 +2,7 @@
 import { swapTypeFromJSON } from "./operations";
 import { twapAlgorithmFromJSON } from "./oracle_price_pair";
 import { AminoMsg } from "@cosmjs/amino";
-import { MsgSingleSwap, MsgJoinAllTokensExactLpt, MsgJoinTokenExactLpt, MsgJoinExactTokens, MsgExitExactTokens, MsgExitTokenExactLpt, MsgExitAllTokensExactLpt, MsgCreateWeightedPool, MsgUpdateSwapFee, MsgInitializePool, MsgUpdateWeights, MsgBatchSwap, MsgSetYammConfiguration, MsgWhitelistRoute, MsgSetWhitelistedRouteEnabled, MsgSubmitOrder, MsgCancelOrder, MsgProposeMatch, MsgSetCircuitBreakers, MsgSetRecoveryMode, MsgRecoveryExit, MsgSetPauseMode, MsgSetVaultPauseMode, MsgCreateOraclePricePair, MsgUpdateOraclePricePair, MsgDeleteOraclePricePair, MsgSetSwapProtocolFee, MsgSetJoinExitProtocolFee, MsgIntroduceYammLpToWeightedPool, MsgIntroduceAssetBaseTokenToWeightedPool, MsgCancelPendingTokenIntroduction, MsgRemoveTokenFromWeightedPool, MsgUpdateParams, MsgAddMaturityToYamm, MsgSetInitializationAllowList } from "./tx";
+import { MsgSingleSwap, MsgJoinAllTokensExactLpt, MsgJoinTokenExactLpt, MsgJoinExactTokens, MsgZeroImpactJoinYamm, MsgExitExactTokens, MsgExitTokenExactLpt, MsgExitAllTokensExactLpt, MsgCreateWeightedPool, MsgUpdateSwapFee, MsgInitializePool, MsgUpdateWeights, MsgBatchSwap, MsgSetYammConfiguration, MsgWhitelistRoute, MsgSetWhitelistedRouteEnabled, MsgSubmitOrder, MsgCancelOrder, MsgProposeMatch, MsgSetCircuitBreakers, MsgSetRecoveryMode, MsgRecoveryExit, MsgSetPauseMode, MsgSetVaultPauseMode, MsgCreateOraclePricePair, MsgUpdateOraclePricePair, MsgDeleteOraclePricePair, MsgSetSwapProtocolFee, MsgSetJoinExitProtocolFee, MsgIntroduceYammLpToWeightedPool, MsgIntroduceAssetBaseTokenToWeightedPool, MsgCancelPendingTokenIntroduction, MsgRemoveTokenFromWeightedPool, MsgUpdateParams, MsgAddMaturityToYamm, MsgSetInitializationAllowList } from "./tx";
 export interface MsgSingleSwapAminoType extends AminoMsg {
   type: "/pryzm.amm.MsgSingleSwap";
   value: {
@@ -49,6 +49,17 @@ export interface MsgJoinExactTokensAminoType extends AminoMsg {
       denom: string;
       amount: string;
     }[];
+    min_lpt_out: string;
+  };
+}
+export interface MsgZeroImpactJoinYammAminoType extends AminoMsg {
+  type: "/pryzm.amm.MsgZeroImpactJoinYamm";
+  value: {
+    creator: string;
+    c_amount_in: {
+      denom: string;
+      amount: string;
+    };
     min_lpt_out: string;
   };
 }
@@ -168,6 +179,8 @@ export interface MsgSetYammConfigurationAminoType extends AminoMsg {
       buy_y_given_in_loan_fee_ratio: string;
       sell_y_given_out_fee_ratio: string;
       max_alpha: string;
+      avg_monthly_yield_rate: string;
+      yield_fee_scaler: string;
     };
   };
 }
@@ -400,6 +413,8 @@ export interface MsgUpdateParamsAminoType extends AminoMsg {
       sell_y_given_out_fee_ratio: string;
       max_alpha: string;
       default_initialization_allow_list: string[];
+      avg_monthly_yield_rate: string;
+      yield_fee_scaler: string;
     };
     order_parameters: {
       step_matching_fee_ratio: string;
@@ -571,6 +586,37 @@ export const AminoConverter = {
           denom: el0.denom,
           amount: el0.amount
         })),
+        minLptOut: min_lpt_out
+      };
+    }
+  },
+  "/pryzm.amm.MsgZeroImpactJoinYamm": {
+    aminoType: "/pryzm.amm.MsgZeroImpactJoinYamm",
+    toAmino: ({
+      creator,
+      cAmountIn,
+      minLptOut
+    }: MsgZeroImpactJoinYamm): MsgZeroImpactJoinYammAminoType["value"] => {
+      return {
+        creator,
+        c_amount_in: {
+          denom: cAmountIn.denom,
+          amount: cAmountIn.amount
+        },
+        min_lpt_out: minLptOut
+      };
+    },
+    fromAmino: ({
+      creator,
+      c_amount_in,
+      min_lpt_out
+    }: MsgZeroImpactJoinYammAminoType["value"]): MsgZeroImpactJoinYamm => {
+      return {
+        creator,
+        cAmountIn: {
+          denom: c_amount_in.denom,
+          amount: c_amount_in.amount
+        },
         minLptOut: min_lpt_out
       };
     }
@@ -892,7 +938,9 @@ export const AminoConverter = {
           expiration_virtual_balance_scaler: configuration.expirationVirtualBalanceScaler,
           buy_y_given_in_loan_fee_ratio: configuration.buyYGivenInLoanFeeRatio,
           sell_y_given_out_fee_ratio: configuration.sellYGivenOutFeeRatio,
-          max_alpha: configuration.maxAlpha
+          max_alpha: configuration.maxAlpha,
+          avg_monthly_yield_rate: configuration.avgMonthlyYieldRate,
+          yield_fee_scaler: configuration.yieldFeeScaler
         }
       };
     },
@@ -911,7 +959,9 @@ export const AminoConverter = {
           expirationVirtualBalanceScaler: configuration.expiration_virtual_balance_scaler,
           buyYGivenInLoanFeeRatio: configuration.buy_y_given_in_loan_fee_ratio,
           sellYGivenOutFeeRatio: configuration.sell_y_given_out_fee_ratio,
-          maxAlpha: configuration.max_alpha
+          maxAlpha: configuration.max_alpha,
+          avgMonthlyYieldRate: configuration.avg_monthly_yield_rate,
+          yieldFeeScaler: configuration.yield_fee_scaler
         }
       };
     }
@@ -1548,7 +1598,9 @@ export const AminoConverter = {
           buy_y_given_in_loan_fee_ratio: yammParameters.buyYGivenInLoanFeeRatio,
           sell_y_given_out_fee_ratio: yammParameters.sellYGivenOutFeeRatio,
           max_alpha: yammParameters.maxAlpha,
-          default_initialization_allow_list: yammParameters.defaultInitializationAllowList
+          default_initialization_allow_list: yammParameters.defaultInitializationAllowList,
+          avg_monthly_yield_rate: yammParameters.avgMonthlyYieldRate,
+          yield_fee_scaler: yammParameters.yieldFeeScaler
         },
         order_parameters: {
           step_matching_fee_ratio: orderParameters.stepMatchingFeeRatio,
@@ -1586,7 +1638,9 @@ export const AminoConverter = {
           buyYGivenInLoanFeeRatio: yamm_parameters.buy_y_given_in_loan_fee_ratio,
           sellYGivenOutFeeRatio: yamm_parameters.sell_y_given_out_fee_ratio,
           maxAlpha: yamm_parameters.max_alpha,
-          defaultInitializationAllowList: yamm_parameters.default_initialization_allow_list
+          defaultInitializationAllowList: yamm_parameters.default_initialization_allow_list,
+          avgMonthlyYieldRate: yamm_parameters.avg_monthly_yield_rate,
+          yieldFeeScaler: yamm_parameters.yield_fee_scaler
         },
         orderParameters: {
           stepMatchingFeeRatio: order_parameters.step_matching_fee_ratio,

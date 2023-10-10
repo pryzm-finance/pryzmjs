@@ -12,12 +12,7 @@ option go_package = "github.com/pryzm-finance/pryzmatics/server/maturity";
 message QueryAllMaturitiesRequest {
   string asset_id = 1;
   string active = 2;
-  string time_window_in_days = 3 [
-    (cosmos_proto.scalar) = "cosmos.Int",
-    (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Int",
-    (gogoproto.nullable) = true
-  ];
-  cosmos.base.query.v1beta1.PageRequest pagination = 4 [(gogoproto.nullable) = true];
+  cosmos.base.query.v1beta1.PageRequest pagination = 3 [(gogoproto.nullable) = true];
 }
 
 message QueryAllMaturitiesResponse {

@@ -111,6 +111,30 @@ export interface MsgJoinExactTokensResponseSDKType {
   protocol_fee: CoinSDKType[];
   swap_fee: CoinSDKType[];
 }
+export interface MsgZeroImpactJoinYamm {
+  creator: string;
+  cAmountIn: Coin;
+  minLptOut?: string;
+}
+export interface MsgZeroImpactJoinYammSDKType {
+  creator: string;
+  c_amount_in: CoinSDKType;
+  min_lpt_out?: string;
+}
+export interface MsgZeroImpactJoinYammResponse {
+  lptOut: Coin;
+  yOut: Coin[];
+  refractFee: Coin;
+  joinProtocolFee: Coin[];
+  swapFee: Coin[];
+}
+export interface MsgZeroImpactJoinYammResponseSDKType {
+  lpt_out: CoinSDKType;
+  y_out: CoinSDKType[];
+  refract_fee: CoinSDKType;
+  join_protocol_fee: CoinSDKType[];
+  swap_fee: CoinSDKType[];
+}
 export interface MsgExitExactTokens {
   creator: string;
   poolId: bigint;
@@ -1234,6 +1258,168 @@ export const MsgJoinExactTokensResponse = {
     message.lptOut = object.lptOut !== undefined && object.lptOut !== null ? Coin.fromPartial(object.lptOut) : undefined;
     message.amountsIn = object.amountsIn?.map(e => Coin.fromPartial(e)) || [];
     message.protocolFee = object.protocolFee?.map(e => Coin.fromPartial(e)) || [];
+    message.swapFee = object.swapFee?.map(e => Coin.fromPartial(e)) || [];
+    return message;
+  }
+};
+function createBaseMsgZeroImpactJoinYamm(): MsgZeroImpactJoinYamm {
+  return {
+    creator: "",
+    cAmountIn: Coin.fromPartial({}),
+    minLptOut: undefined
+  };
+}
+export const MsgZeroImpactJoinYamm = {
+  encode(message: MsgZeroImpactJoinYamm, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    if (message.creator !== "") {
+      writer.uint32(10).string(message.creator);
+    }
+    if (message.cAmountIn !== undefined) {
+      Coin.encode(message.cAmountIn, writer.uint32(18).fork()).ldelim();
+    }
+    if (message.minLptOut !== undefined) {
+      writer.uint32(26).string(message.minLptOut);
+    }
+    return writer;
+  },
+  decode(input: BinaryReader | Uint8Array, length?: number): MsgZeroImpactJoinYamm {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseMsgZeroImpactJoinYamm();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.creator = reader.string();
+          break;
+        case 2:
+          message.cAmountIn = Coin.decode(reader, reader.uint32());
+          break;
+        case 3:
+          message.minLptOut = reader.string();
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromJSON(object: any): MsgZeroImpactJoinYamm {
+    return {
+      creator: isSet(object.creator) ? String(object.creator) : "",
+      cAmountIn: isSet(object.cAmountIn) ? Coin.fromJSON(object.cAmountIn) : undefined,
+      minLptOut: isSet(object.minLptOut) ? String(object.minLptOut) : undefined
+    };
+  },
+  toJSON(message: MsgZeroImpactJoinYamm): unknown {
+    const obj: any = {};
+    message.creator !== undefined && (obj.creator = message.creator);
+    message.cAmountIn !== undefined && (obj.cAmountIn = message.cAmountIn ? Coin.toJSON(message.cAmountIn) : undefined);
+    message.minLptOut !== undefined && (obj.minLptOut = message.minLptOut);
+    return obj;
+  },
+  fromPartial(object: Partial<MsgZeroImpactJoinYamm>): MsgZeroImpactJoinYamm {
+    const message = createBaseMsgZeroImpactJoinYamm();
+    message.creator = object.creator ?? "";
+    message.cAmountIn = object.cAmountIn !== undefined && object.cAmountIn !== null ? Coin.fromPartial(object.cAmountIn) : undefined;
+    message.minLptOut = object.minLptOut ?? undefined;
+    return message;
+  }
+};
+function createBaseMsgZeroImpactJoinYammResponse(): MsgZeroImpactJoinYammResponse {
+  return {
+    lptOut: Coin.fromPartial({}),
+    yOut: [],
+    refractFee: Coin.fromPartial({}),
+    joinProtocolFee: [],
+    swapFee: []
+  };
+}
+export const MsgZeroImpactJoinYammResponse = {
+  encode(message: MsgZeroImpactJoinYammResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    if (message.lptOut !== undefined) {
+      Coin.encode(message.lptOut, writer.uint32(10).fork()).ldelim();
+    }
+    for (const v of message.yOut) {
+      Coin.encode(v!, writer.uint32(18).fork()).ldelim();
+    }
+    if (message.refractFee !== undefined) {
+      Coin.encode(message.refractFee, writer.uint32(26).fork()).ldelim();
+    }
+    for (const v of message.joinProtocolFee) {
+      Coin.encode(v!, writer.uint32(34).fork()).ldelim();
+    }
+    for (const v of message.swapFee) {
+      Coin.encode(v!, writer.uint32(42).fork()).ldelim();
+    }
+    return writer;
+  },
+  decode(input: BinaryReader | Uint8Array, length?: number): MsgZeroImpactJoinYammResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseMsgZeroImpactJoinYammResponse();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.lptOut = Coin.decode(reader, reader.uint32());
+          break;
+        case 2:
+          message.yOut.push(Coin.decode(reader, reader.uint32()));
+          break;
+        case 3:
+          message.refractFee = Coin.decode(reader, reader.uint32());
+          break;
+        case 4:
+          message.joinProtocolFee.push(Coin.decode(reader, reader.uint32()));
+          break;
+        case 5:
+          message.swapFee.push(Coin.decode(reader, reader.uint32()));
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromJSON(object: any): MsgZeroImpactJoinYammResponse {
+    return {
+      lptOut: isSet(object.lptOut) ? Coin.fromJSON(object.lptOut) : undefined,
+      yOut: Array.isArray(object?.yOut) ? object.yOut.map((e: any) => Coin.fromJSON(e)) : [],
+      refractFee: isSet(object.refractFee) ? Coin.fromJSON(object.refractFee) : undefined,
+      joinProtocolFee: Array.isArray(object?.joinProtocolFee) ? object.joinProtocolFee.map((e: any) => Coin.fromJSON(e)) : [],
+      swapFee: Array.isArray(object?.swapFee) ? object.swapFee.map((e: any) => Coin.fromJSON(e)) : []
+    };
+  },
+  toJSON(message: MsgZeroImpactJoinYammResponse): unknown {
+    const obj: any = {};
+    message.lptOut !== undefined && (obj.lptOut = message.lptOut ? Coin.toJSON(message.lptOut) : undefined);
+    if (message.yOut) {
+      obj.yOut = message.yOut.map(e => e ? Coin.toJSON(e) : undefined);
+    } else {
+      obj.yOut = [];
+    }
+    message.refractFee !== undefined && (obj.refractFee = message.refractFee ? Coin.toJSON(message.refractFee) : undefined);
+    if (message.joinProtocolFee) {
+      obj.joinProtocolFee = message.joinProtocolFee.map(e => e ? Coin.toJSON(e) : undefined);
+    } else {
+      obj.joinProtocolFee = [];
+    }
+    if (message.swapFee) {
+      obj.swapFee = message.swapFee.map(e => e ? Coin.toJSON(e) : undefined);
+    } else {
+      obj.swapFee = [];
+    }
+    return obj;
+  },
+  fromPartial(object: Partial<MsgZeroImpactJoinYammResponse>): MsgZeroImpactJoinYammResponse {
+    const message = createBaseMsgZeroImpactJoinYammResponse();
+    message.lptOut = object.lptOut !== undefined && object.lptOut !== null ? Coin.fromPartial(object.lptOut) : undefined;
+    message.yOut = object.yOut?.map(e => Coin.fromPartial(e)) || [];
+    message.refractFee = object.refractFee !== undefined && object.refractFee !== null ? Coin.fromPartial(object.refractFee) : undefined;
+    message.joinProtocolFee = object.joinProtocolFee?.map(e => Coin.fromPartial(e)) || [];
     message.swapFee = object.swapFee?.map(e => Coin.fromPartial(e)) || [];
     return message;
   }

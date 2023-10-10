@@ -1,6 +1,6 @@
 import { Coin, CoinSDKType } from "../../cosmos/base/v1beta1/coin";
 import { BinaryReader, BinaryWriter } from "../../binary";
-import { isSet, bytesFromBase64, base64FromBytes, isObject } from "../../helpers";
+import { isSet, bytesFromBase64, base64FromBytes } from "../../helpers";
 /** the stored data for handling the reply of a sent ibc packet */
 export interface ReplyData {
   /** the identifier of the bridge */
@@ -42,29 +42,29 @@ export interface DelegateTransferReplyDataSDKType {
   transfer_session: string;
   amount: CoinSDKType;
 }
-export interface DelegateTransferSession_PacketFinalizedEntry {
-  key: string;
-  value: boolean;
-}
-export interface DelegateTransferSession_PacketFinalizedEntrySDKType {
-  key: string;
-  value: boolean;
-}
 /** A session of token transfer to a host chain from multiple channels, used in DelegateTransferBridge */
 export interface DelegateTransferSession {
   /** a generated id for the session */
   id: string;
-  /** a map of packet id to a boolean, determining whether the packet is finalized (either succeeded or failed) */
-  packetFinalized: {
-    [key: string]: boolean;
-  };
+  /** a list of packet states, determining whether the packet is finalized (either succeeded or failed) */
+  packetStates: TransferPacketState[];
 }
 /** A session of token transfer to a host chain from multiple channels, used in DelegateTransferBridge */
 export interface DelegateTransferSessionSDKType {
   id: string;
-  packet_finalized: {
-    [key: string]: boolean;
-  };
+  packet_states: TransferPacketStateSDKType[];
+}
+/** The state of a delegation transfer */
+export interface TransferPacketState {
+  /** packet identifier */
+  packetId: string;
+  /** whether the transfer is finalized (either succeeded or failed) */
+  finalized: boolean;
+}
+/** The state of a delegation transfer */
+export interface TransferPacketStateSDKType {
+  packet_id: string;
+  finalized: boolean;
 }
 /** The reply data for DelegateBridge */
 export interface DelegateReplyData {
@@ -143,26 +143,14 @@ export interface CollectUndelegatedReplyData {
 export interface CollectUndelegatedReplyDataSDKType {
   undelegated_amount: string;
 }
-export interface SweepData_ChannelSweepsEntry {
-  key: string;
-  value: ChannelSweep;
-}
-export interface SweepData_ChannelSweepsEntrySDKType {
-  key: string;
-  value: ChannelSweepSDKType;
-}
 /** The reply data used in SweepBridge */
 export interface SweepData {
-  /** a map of channel id to info about the sweep operation through that channel */
-  channelSweeps: {
-    [key: string]: ChannelSweep;
-  };
+  /** a list containing info about the sweep operation through different channel channel */
+  channelSweeps: ChannelSweep[];
 }
 /** The reply data used in SweepBridge */
 export interface SweepDataSDKType {
-  channel_sweeps: {
-    [key: string]: ChannelSweepSDKType;
-  };
+  channel_sweeps: ChannelSweepSDKType[];
 }
 /** Contains info about the sweep operation through a channel */
 export interface ChannelSweep {
@@ -373,65 +361,10 @@ export const DelegateTransferReplyData = {
     return message;
   }
 };
-function createBaseDelegateTransferSession_PacketFinalizedEntry(): DelegateTransferSession_PacketFinalizedEntry {
-  return {
-    key: "",
-    value: false
-  };
-}
-export const DelegateTransferSession_PacketFinalizedEntry = {
-  encode(message: DelegateTransferSession_PacketFinalizedEntry, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
-    if (message.key !== "") {
-      writer.uint32(10).string(message.key);
-    }
-    if (message.value === true) {
-      writer.uint32(16).bool(message.value);
-    }
-    return writer;
-  },
-  decode(input: BinaryReader | Uint8Array, length?: number): DelegateTransferSession_PacketFinalizedEntry {
-    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
-    let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseDelegateTransferSession_PacketFinalizedEntry();
-    while (reader.pos < end) {
-      const tag = reader.uint32();
-      switch (tag >>> 3) {
-        case 1:
-          message.key = reader.string();
-          break;
-        case 2:
-          message.value = reader.bool();
-          break;
-        default:
-          reader.skipType(tag & 7);
-          break;
-      }
-    }
-    return message;
-  },
-  fromJSON(object: any): DelegateTransferSession_PacketFinalizedEntry {
-    return {
-      key: isSet(object.key) ? String(object.key) : "",
-      value: isSet(object.value) ? Boolean(object.value) : false
-    };
-  },
-  toJSON(message: DelegateTransferSession_PacketFinalizedEntry): unknown {
-    const obj: any = {};
-    message.key !== undefined && (obj.key = message.key);
-    message.value !== undefined && (obj.value = message.value);
-    return obj;
-  },
-  fromPartial(object: Partial<DelegateTransferSession_PacketFinalizedEntry>): DelegateTransferSession_PacketFinalizedEntry {
-    const message = createBaseDelegateTransferSession_PacketFinalizedEntry();
-    message.key = object.key ?? "";
-    message.value = object.value ?? false;
-    return message;
-  }
-};
 function createBaseDelegateTransferSession(): DelegateTransferSession {
   return {
     id: "",
-    packetFinalized: {}
+    packetStates: []
   };
 }
 export const DelegateTransferSession = {
@@ -439,12 +372,9 @@ export const DelegateTransferSession = {
     if (message.id !== "") {
       writer.uint32(10).string(message.id);
     }
-    Object.entries(message.packetFinalized).forEach(([key, value]) => {
-      DelegateTransferSession_PacketFinalizedEntry.encode({
-        key: (key as any),
-        value
-      }, writer.uint32(16).fork()).ldelim();
-    });
+    for (const v of message.packetStates) {
+      TransferPacketState.encode(v!, writer.uint32(18).fork()).ldelim();
+    }
     return writer;
   },
   decode(input: BinaryReader | Uint8Array, length?: number): DelegateTransferSession {
@@ -458,10 +388,7 @@ export const DelegateTransferSession = {
           message.id = reader.string();
           break;
         case 2:
-          const entry2 = DelegateTransferSession_PacketFinalizedEntry.decode(reader, reader.uint32());
-          if (entry2.value !== undefined) {
-            message.packetFinalized[entry2.key] = entry2.value;
-          }
+          message.packetStates.push(TransferPacketState.decode(reader, reader.uint32()));
           break;
         default:
           reader.skipType(tag & 7);
@@ -473,36 +400,78 @@ export const DelegateTransferSession = {
   fromJSON(object: any): DelegateTransferSession {
     return {
       id: isSet(object.id) ? String(object.id) : "",
-      packetFinalized: isObject(object.packetFinalized) ? Object.entries(object.packetFinalized).reduce<{
-        [key: string]: boolean;
-      }>((acc, [key, value]) => {
-        acc[key] = Boolean(value).valueOf();
-        return acc;
-      }, {}) : {}
+      packetStates: Array.isArray(object?.packetStates) ? object.packetStates.map((e: any) => TransferPacketState.fromJSON(e)) : []
     };
   },
   toJSON(message: DelegateTransferSession): unknown {
     const obj: any = {};
     message.id !== undefined && (obj.id = message.id);
-    obj.packetFinalized = {};
-    if (message.packetFinalized) {
-      Object.entries(message.packetFinalized).forEach(([k, v]) => {
-        obj.packetFinalized[k] = v ? "true" : "false";
-      });
+    if (message.packetStates) {
+      obj.packetStates = message.packetStates.map(e => e ? TransferPacketState.toJSON(e) : undefined);
+    } else {
+      obj.packetStates = [];
     }
     return obj;
   },
   fromPartial(object: Partial<DelegateTransferSession>): DelegateTransferSession {
     const message = createBaseDelegateTransferSession();
     message.id = object.id ?? "";
-    message.packetFinalized = Object.entries(object.packetFinalized ?? {}).reduce<{
-      [key: string]: boolean;
-    }>((acc, [key, value]) => {
-      if (value !== undefined) {
-        acc[key] = value;
+    message.packetStates = object.packetStates?.map(e => TransferPacketState.fromPartial(e)) || [];
+    return message;
+  }
+};
+function createBaseTransferPacketState(): TransferPacketState {
+  return {
+    packetId: "",
+    finalized: false
+  };
+}
+export const TransferPacketState = {
+  encode(message: TransferPacketState, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    if (message.packetId !== "") {
+      writer.uint32(10).string(message.packetId);
+    }
+    if (message.finalized === true) {
+      writer.uint32(16).bool(message.finalized);
+    }
+    return writer;
+  },
+  decode(input: BinaryReader | Uint8Array, length?: number): TransferPacketState {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseTransferPacketState();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.packetId = reader.string();
+          break;
+        case 2:
+          message.finalized = reader.bool();
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
       }
-      return acc;
-    }, {});
+    }
+    return message;
+  },
+  fromJSON(object: any): TransferPacketState {
+    return {
+      packetId: isSet(object.packetId) ? String(object.packetId) : "",
+      finalized: isSet(object.finalized) ? Boolean(object.finalized) : false
+    };
+  },
+  toJSON(message: TransferPacketState): unknown {
+    const obj: any = {};
+    message.packetId !== undefined && (obj.packetId = message.packetId);
+    message.finalized !== undefined && (obj.finalized = message.finalized);
+    return obj;
+  },
+  fromPartial(object: Partial<TransferPacketState>): TransferPacketState {
+    const message = createBaseTransferPacketState();
+    message.packetId = object.packetId ?? "";
+    message.finalized = object.finalized ?? false;
     return message;
   }
 };
@@ -961,74 +930,16 @@ export const CollectUndelegatedReplyData = {
     return message;
   }
 };
-function createBaseSweepData_ChannelSweepsEntry(): SweepData_ChannelSweepsEntry {
-  return {
-    key: "",
-    value: ChannelSweep.fromPartial({})
-  };
-}
-export const SweepData_ChannelSweepsEntry = {
-  encode(message: SweepData_ChannelSweepsEntry, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
-    if (message.key !== "") {
-      writer.uint32(10).string(message.key);
-    }
-    if (message.value !== undefined) {
-      ChannelSweep.encode(message.value, writer.uint32(18).fork()).ldelim();
-    }
-    return writer;
-  },
-  decode(input: BinaryReader | Uint8Array, length?: number): SweepData_ChannelSweepsEntry {
-    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
-    let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseSweepData_ChannelSweepsEntry();
-    while (reader.pos < end) {
-      const tag = reader.uint32();
-      switch (tag >>> 3) {
-        case 1:
-          message.key = reader.string();
-          break;
-        case 2:
-          message.value = ChannelSweep.decode(reader, reader.uint32());
-          break;
-        default:
-          reader.skipType(tag & 7);
-          break;
-      }
-    }
-    return message;
-  },
-  fromJSON(object: any): SweepData_ChannelSweepsEntry {
-    return {
-      key: isSet(object.key) ? String(object.key) : "",
-      value: isSet(object.value) ? ChannelSweep.fromJSON(object.value) : undefined
-    };
-  },
-  toJSON(message: SweepData_ChannelSweepsEntry): unknown {
-    const obj: any = {};
-    message.key !== undefined && (obj.key = message.key);
-    message.value !== undefined && (obj.value = message.value ? ChannelSweep.toJSON(message.value) : undefined);
-    return obj;
-  },
-  fromPartial(object: Partial<SweepData_ChannelSweepsEntry>): SweepData_ChannelSweepsEntry {
-    const message = createBaseSweepData_ChannelSweepsEntry();
-    message.key = object.key ?? "";
-    message.value = object.value !== undefined && object.value !== null ? ChannelSweep.fromPartial(object.value) : undefined;
-    return message;
-  }
-};
 function createBaseSweepData(): SweepData {
   return {
-    channelSweeps: {}
+    channelSweeps: []
   };
 }
 export const SweepData = {
   encode(message: SweepData, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
-    Object.entries(message.channelSweeps).forEach(([key, value]) => {
-      SweepData_ChannelSweepsEntry.encode({
-        key: (key as any),
-        value
-      }, writer.uint32(10).fork()).ldelim();
-    });
+    for (const v of message.channelSweeps) {
+      ChannelSweep.encode(v!, writer.uint32(10).fork()).ldelim();
+    }
     return writer;
   },
   decode(input: BinaryReader | Uint8Array, length?: number): SweepData {
@@ -1039,10 +950,7 @@ export const SweepData = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          const entry1 = SweepData_ChannelSweepsEntry.decode(reader, reader.uint32());
-          if (entry1.value !== undefined) {
-            message.channelSweeps[entry1.key] = entry1.value;
-          }
+          message.channelSweeps.push(ChannelSweep.decode(reader, reader.uint32()));
           break;
         default:
           reader.skipType(tag & 7);
@@ -1053,34 +961,21 @@ export const SweepData = {
   },
   fromJSON(object: any): SweepData {
     return {
-      channelSweeps: isObject(object.channelSweeps) ? Object.entries(object.channelSweeps).reduce<{
-        [key: string]: ChannelSweep;
-      }>((acc, [key, value]) => {
-        acc[key] = ChannelSweep.fromJSON(value);
-        return acc;
-      }, {}) : {}
+      channelSweeps: Array.isArray(object?.channelSweeps) ? object.channelSweeps.map((e: any) => ChannelSweep.fromJSON(e)) : []
     };
   },
   toJSON(message: SweepData): unknown {
     const obj: any = {};
-    obj.channelSweeps = {};
     if (message.channelSweeps) {
-      Object.entries(message.channelSweeps).forEach(([k, v]) => {
-        obj.channelSweeps[k] = ChannelSweep.toJSON(v);
-      });
+      obj.channelSweeps = message.channelSweeps.map(e => e ? ChannelSweep.toJSON(e) : undefined);
+    } else {
+      obj.channelSweeps = [];
     }
     return obj;
   },
   fromPartial(object: Partial<SweepData>): SweepData {
     const message = createBaseSweepData();
-    message.channelSweeps = Object.entries(object.channelSweeps ?? {}).reduce<{
-      [key: string]: ChannelSweep;
-    }>((acc, [key, value]) => {
-      if (value !== undefined) {
-        acc[key] = ChannelSweep.fromPartial(value);
-      }
-      return acc;
-    }, {});
+    message.channelSweeps = object.channelSweeps?.map(e => ChannelSweep.fromPartial(e)) || [];
     return message;
   }
 };

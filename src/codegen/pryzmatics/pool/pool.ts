@@ -1,33 +1,39 @@
 import { PoolType, poolTypeFromJSON, poolTypeToJSON } from "../../pryzm/amm/pool";
-import { Timestamp, TimestampSDKType } from "../../google/protobuf/timestamp";
+import { PoolApr, PoolAprSDKType } from "./pool_apr";
 import { BinaryReader, BinaryWriter } from "../../binary";
 import { Decimal } from "@cosmjs/math";
-import { isSet, fromJsonTimestamp, fromTimestamp } from "../../helpers";
+import { isSet } from "../../helpers";
 export interface Pool {
   id: bigint;
   name: string;
   poolType: PoolType;
   lpDenom: string;
-  apr?: string;
-  swapFeeApr?: string;
-  tokenYield?: string;
-  incentivesApr?: string;
-  allianceApr?: string;
-  aprCalculationTime?: Timestamp;
-  error: string;
+  apr?: PoolApr;
+  tradeVolume24h: string;
+  tradeVolume7d: string;
+  tradeVolume30d: string;
+  swapFeeVolume24h: string;
+  swapFeeVolume7d: string;
+  swapFeeVolume30d: string;
+  joinExitSwapFeeVolume24h: string;
+  joinExitSwapFeeVolume7d: string;
+  joinExitSwapFeeVolume30d: string;
 }
 export interface PoolSDKType {
   id: bigint;
   name: string;
   pool_type: PoolType;
   lp_denom: string;
-  apr?: string;
-  swap_fee_apr?: string;
-  token_yield?: string;
-  incentives_apr?: string;
-  alliance_apr?: string;
-  apr_calculation_time?: TimestampSDKType;
-  error: string;
+  apr?: PoolAprSDKType;
+  trade_volume_24h: string;
+  trade_volume_7d: string;
+  trade_volume_30d: string;
+  swap_fee_volume_24h: string;
+  swap_fee_volume_7d: string;
+  swap_fee_volume_30d: string;
+  join_exit_swap_fee_volume_24h: string;
+  join_exit_swap_fee_volume_7d: string;
+  join_exit_swap_fee_volume_30d: string;
 }
 function createBasePool(): Pool {
   return {
@@ -36,12 +42,15 @@ function createBasePool(): Pool {
     poolType: 0,
     lpDenom: "",
     apr: undefined,
-    swapFeeApr: undefined,
-    tokenYield: undefined,
-    incentivesApr: undefined,
-    allianceApr: undefined,
-    aprCalculationTime: undefined,
-    error: ""
+    tradeVolume24h: "",
+    tradeVolume7d: "",
+    tradeVolume30d: "",
+    swapFeeVolume24h: "",
+    swapFeeVolume7d: "",
+    swapFeeVolume30d: "",
+    joinExitSwapFeeVolume24h: "",
+    joinExitSwapFeeVolume7d: "",
+    joinExitSwapFeeVolume30d: ""
   };
 }
 export const Pool = {
@@ -59,25 +68,34 @@ export const Pool = {
       writer.uint32(34).string(message.lpDenom);
     }
     if (message.apr !== undefined) {
-      writer.uint32(42).string(Decimal.fromUserInput(message.apr, 18).atomics);
+      PoolApr.encode(message.apr, writer.uint32(42).fork()).ldelim();
     }
-    if (message.swapFeeApr !== undefined) {
-      writer.uint32(50).string(Decimal.fromUserInput(message.swapFeeApr, 18).atomics);
+    if (message.tradeVolume24h !== "") {
+      writer.uint32(50).string(Decimal.fromUserInput(message.tradeVolume24h, 18).atomics);
     }
-    if (message.tokenYield !== undefined) {
-      writer.uint32(58).string(Decimal.fromUserInput(message.tokenYield, 18).atomics);
+    if (message.tradeVolume7d !== "") {
+      writer.uint32(58).string(Decimal.fromUserInput(message.tradeVolume7d, 18).atomics);
     }
-    if (message.incentivesApr !== undefined) {
-      writer.uint32(66).string(Decimal.fromUserInput(message.incentivesApr, 18).atomics);
+    if (message.tradeVolume30d !== "") {
+      writer.uint32(66).string(Decimal.fromUserInput(message.tradeVolume30d, 18).atomics);
     }
-    if (message.allianceApr !== undefined) {
-      writer.uint32(74).string(Decimal.fromUserInput(message.allianceApr, 18).atomics);
+    if (message.swapFeeVolume24h !== "") {
+      writer.uint32(74).string(Decimal.fromUserInput(message.swapFeeVolume24h, 18).atomics);
     }
-    if (message.aprCalculationTime !== undefined) {
-      Timestamp.encode(message.aprCalculationTime, writer.uint32(82).fork()).ldelim();
+    if (message.swapFeeVolume7d !== "") {
+      writer.uint32(82).string(Decimal.fromUserInput(message.swapFeeVolume7d, 18).atomics);
     }
-    if (message.error !== "") {
-      writer.uint32(90).string(message.error);
+    if (message.swapFeeVolume30d !== "") {
+      writer.uint32(90).string(Decimal.fromUserInput(message.swapFeeVolume30d, 18).atomics);
+    }
+    if (message.joinExitSwapFeeVolume24h !== "") {
+      writer.uint32(98).string(Decimal.fromUserInput(message.joinExitSwapFeeVolume24h, 18).atomics);
+    }
+    if (message.joinExitSwapFeeVolume7d !== "") {
+      writer.uint32(106).string(Decimal.fromUserInput(message.joinExitSwapFeeVolume7d, 18).atomics);
+    }
+    if (message.joinExitSwapFeeVolume30d !== "") {
+      writer.uint32(114).string(Decimal.fromUserInput(message.joinExitSwapFeeVolume30d, 18).atomics);
     }
     return writer;
   },
@@ -101,25 +119,34 @@ export const Pool = {
           message.lpDenom = reader.string();
           break;
         case 5:
-          message.apr = Decimal.fromAtomics(reader.string(), 18).toString();
+          message.apr = PoolApr.decode(reader, reader.uint32());
           break;
         case 6:
-          message.swapFeeApr = Decimal.fromAtomics(reader.string(), 18).toString();
+          message.tradeVolume24h = Decimal.fromAtomics(reader.string(), 18).toString();
           break;
         case 7:
-          message.tokenYield = Decimal.fromAtomics(reader.string(), 18).toString();
+          message.tradeVolume7d = Decimal.fromAtomics(reader.string(), 18).toString();
           break;
         case 8:
-          message.incentivesApr = Decimal.fromAtomics(reader.string(), 18).toString();
+          message.tradeVolume30d = Decimal.fromAtomics(reader.string(), 18).toString();
           break;
         case 9:
-          message.allianceApr = Decimal.fromAtomics(reader.string(), 18).toString();
+          message.swapFeeVolume24h = Decimal.fromAtomics(reader.string(), 18).toString();
           break;
         case 10:
-          message.aprCalculationTime = Timestamp.decode(reader, reader.uint32());
+          message.swapFeeVolume7d = Decimal.fromAtomics(reader.string(), 18).toString();
           break;
         case 11:
-          message.error = reader.string();
+          message.swapFeeVolume30d = Decimal.fromAtomics(reader.string(), 18).toString();
+          break;
+        case 12:
+          message.joinExitSwapFeeVolume24h = Decimal.fromAtomics(reader.string(), 18).toString();
+          break;
+        case 13:
+          message.joinExitSwapFeeVolume7d = Decimal.fromAtomics(reader.string(), 18).toString();
+          break;
+        case 14:
+          message.joinExitSwapFeeVolume30d = Decimal.fromAtomics(reader.string(), 18).toString();
           break;
         default:
           reader.skipType(tag & 7);
@@ -134,13 +161,16 @@ export const Pool = {
       name: isSet(object.name) ? String(object.name) : "",
       poolType: isSet(object.poolType) ? poolTypeFromJSON(object.poolType) : -1,
       lpDenom: isSet(object.lpDenom) ? String(object.lpDenom) : "",
-      apr: isSet(object.apr) ? String(object.apr) : undefined,
-      swapFeeApr: isSet(object.swapFeeApr) ? String(object.swapFeeApr) : undefined,
-      tokenYield: isSet(object.tokenYield) ? String(object.tokenYield) : undefined,
-      incentivesApr: isSet(object.incentivesApr) ? String(object.incentivesApr) : undefined,
-      allianceApr: isSet(object.allianceApr) ? String(object.allianceApr) : undefined,
-      aprCalculationTime: isSet(object.aprCalculationTime) ? fromJsonTimestamp(object.aprCalculationTime) : undefined,
-      error: isSet(object.error) ? String(object.error) : ""
+      apr: isSet(object.apr) ? PoolApr.fromJSON(object.apr) : undefined,
+      tradeVolume24h: isSet(object.tradeVolume24h) ? String(object.tradeVolume24h) : "",
+      tradeVolume7d: isSet(object.tradeVolume7d) ? String(object.tradeVolume7d) : "",
+      tradeVolume30d: isSet(object.tradeVolume30d) ? String(object.tradeVolume30d) : "",
+      swapFeeVolume24h: isSet(object.swapFeeVolume24h) ? String(object.swapFeeVolume24h) : "",
+      swapFeeVolume7d: isSet(object.swapFeeVolume7d) ? String(object.swapFeeVolume7d) : "",
+      swapFeeVolume30d: isSet(object.swapFeeVolume30d) ? String(object.swapFeeVolume30d) : "",
+      joinExitSwapFeeVolume24h: isSet(object.joinExitSwapFeeVolume24h) ? String(object.joinExitSwapFeeVolume24h) : "",
+      joinExitSwapFeeVolume7d: isSet(object.joinExitSwapFeeVolume7d) ? String(object.joinExitSwapFeeVolume7d) : "",
+      joinExitSwapFeeVolume30d: isSet(object.joinExitSwapFeeVolume30d) ? String(object.joinExitSwapFeeVolume30d) : ""
     };
   },
   toJSON(message: Pool): unknown {
@@ -149,13 +179,16 @@ export const Pool = {
     message.name !== undefined && (obj.name = message.name);
     message.poolType !== undefined && (obj.poolType = poolTypeToJSON(message.poolType));
     message.lpDenom !== undefined && (obj.lpDenom = message.lpDenom);
-    message.apr !== undefined && (obj.apr = message.apr);
-    message.swapFeeApr !== undefined && (obj.swapFeeApr = message.swapFeeApr);
-    message.tokenYield !== undefined && (obj.tokenYield = message.tokenYield);
-    message.incentivesApr !== undefined && (obj.incentivesApr = message.incentivesApr);
-    message.allianceApr !== undefined && (obj.allianceApr = message.allianceApr);
-    message.aprCalculationTime !== undefined && (obj.aprCalculationTime = fromTimestamp(message.aprCalculationTime).toISOString());
-    message.error !== undefined && (obj.error = message.error);
+    message.apr !== undefined && (obj.apr = message.apr ? PoolApr.toJSON(message.apr) : undefined);
+    message.tradeVolume24h !== undefined && (obj.tradeVolume24h = message.tradeVolume24h);
+    message.tradeVolume7d !== undefined && (obj.tradeVolume7d = message.tradeVolume7d);
+    message.tradeVolume30d !== undefined && (obj.tradeVolume30d = message.tradeVolume30d);
+    message.swapFeeVolume24h !== undefined && (obj.swapFeeVolume24h = message.swapFeeVolume24h);
+    message.swapFeeVolume7d !== undefined && (obj.swapFeeVolume7d = message.swapFeeVolume7d);
+    message.swapFeeVolume30d !== undefined && (obj.swapFeeVolume30d = message.swapFeeVolume30d);
+    message.joinExitSwapFeeVolume24h !== undefined && (obj.joinExitSwapFeeVolume24h = message.joinExitSwapFeeVolume24h);
+    message.joinExitSwapFeeVolume7d !== undefined && (obj.joinExitSwapFeeVolume7d = message.joinExitSwapFeeVolume7d);
+    message.joinExitSwapFeeVolume30d !== undefined && (obj.joinExitSwapFeeVolume30d = message.joinExitSwapFeeVolume30d);
     return obj;
   },
   fromPartial(object: Partial<Pool>): Pool {
@@ -164,13 +197,16 @@ export const Pool = {
     message.name = object.name ?? "";
     message.poolType = object.poolType ?? 0;
     message.lpDenom = object.lpDenom ?? "";
-    message.apr = object.apr ?? undefined;
-    message.swapFeeApr = object.swapFeeApr ?? undefined;
-    message.tokenYield = object.tokenYield ?? undefined;
-    message.incentivesApr = object.incentivesApr ?? undefined;
-    message.allianceApr = object.allianceApr ?? undefined;
-    message.aprCalculationTime = object.aprCalculationTime !== undefined && object.aprCalculationTime !== null ? Timestamp.fromPartial(object.aprCalculationTime) : undefined;
-    message.error = object.error ?? "";
+    message.apr = object.apr !== undefined && object.apr !== null ? PoolApr.fromPartial(object.apr) : undefined;
+    message.tradeVolume24h = object.tradeVolume24h ?? "";
+    message.tradeVolume7d = object.tradeVolume7d ?? "";
+    message.tradeVolume30d = object.tradeVolume30d ?? "";
+    message.swapFeeVolume24h = object.swapFeeVolume24h ?? "";
+    message.swapFeeVolume7d = object.swapFeeVolume7d ?? "";
+    message.swapFeeVolume30d = object.swapFeeVolume30d ?? "";
+    message.joinExitSwapFeeVolume24h = object.joinExitSwapFeeVolume24h ?? "";
+    message.joinExitSwapFeeVolume7d = object.joinExitSwapFeeVolume7d ?? "";
+    message.joinExitSwapFeeVolume30d = object.joinExitSwapFeeVolume30d ?? "";
     return message;
   }
 };

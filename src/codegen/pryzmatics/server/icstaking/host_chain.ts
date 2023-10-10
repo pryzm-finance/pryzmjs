@@ -4,11 +4,9 @@ import { BinaryReader, BinaryWriter } from "../../../binary";
 import { isSet } from "../../../helpers";
 export interface QueryHostChainRequest {
   hostChainId: string;
-  timeWindowInDays?: string;
 }
 export interface QueryHostChainRequestSDKType {
   host_chain_id: string;
-  time_window_in_days?: string;
 }
 export interface QueryHostChainResponse {
   hostChain: HostChain;
@@ -17,11 +15,9 @@ export interface QueryHostChainResponseSDKType {
   host_chain: HostChainSDKType;
 }
 export interface QueryHostChainsRequest {
-  timeWindowInDays?: string;
   pagination?: PageRequest;
 }
 export interface QueryHostChainsRequestSDKType {
-  time_window_in_days?: string;
   pagination?: PageRequestSDKType;
 }
 export interface QueryHostChainsResponse {
@@ -34,17 +30,13 @@ export interface QueryHostChainsResponseSDKType {
 }
 function createBaseQueryHostChainRequest(): QueryHostChainRequest {
   return {
-    hostChainId: "",
-    timeWindowInDays: undefined
+    hostChainId: ""
   };
 }
 export const QueryHostChainRequest = {
   encode(message: QueryHostChainRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.hostChainId !== "") {
       writer.uint32(10).string(message.hostChainId);
-    }
-    if (message.timeWindowInDays !== undefined) {
-      writer.uint32(18).string(message.timeWindowInDays);
     }
     return writer;
   },
@@ -58,9 +50,6 @@ export const QueryHostChainRequest = {
         case 1:
           message.hostChainId = reader.string();
           break;
-        case 2:
-          message.timeWindowInDays = reader.string();
-          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -70,20 +59,17 @@ export const QueryHostChainRequest = {
   },
   fromJSON(object: any): QueryHostChainRequest {
     return {
-      hostChainId: isSet(object.hostChainId) ? String(object.hostChainId) : "",
-      timeWindowInDays: isSet(object.timeWindowInDays) ? String(object.timeWindowInDays) : undefined
+      hostChainId: isSet(object.hostChainId) ? String(object.hostChainId) : ""
     };
   },
   toJSON(message: QueryHostChainRequest): unknown {
     const obj: any = {};
     message.hostChainId !== undefined && (obj.hostChainId = message.hostChainId);
-    message.timeWindowInDays !== undefined && (obj.timeWindowInDays = message.timeWindowInDays);
     return obj;
   },
   fromPartial(object: Partial<QueryHostChainRequest>): QueryHostChainRequest {
     const message = createBaseQueryHostChainRequest();
     message.hostChainId = object.hostChainId ?? "";
-    message.timeWindowInDays = object.timeWindowInDays ?? undefined;
     return message;
   }
 };
@@ -134,17 +120,13 @@ export const QueryHostChainResponse = {
 };
 function createBaseQueryHostChainsRequest(): QueryHostChainsRequest {
   return {
-    timeWindowInDays: undefined,
     pagination: undefined
   };
 }
 export const QueryHostChainsRequest = {
   encode(message: QueryHostChainsRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
-    if (message.timeWindowInDays !== undefined) {
-      writer.uint32(10).string(message.timeWindowInDays);
-    }
     if (message.pagination !== undefined) {
-      PageRequest.encode(message.pagination, writer.uint32(18).fork()).ldelim();
+      PageRequest.encode(message.pagination, writer.uint32(10).fork()).ldelim();
     }
     return writer;
   },
@@ -156,9 +138,6 @@ export const QueryHostChainsRequest = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.timeWindowInDays = reader.string();
-          break;
-        case 2:
           message.pagination = PageRequest.decode(reader, reader.uint32());
           break;
         default:
@@ -170,19 +149,16 @@ export const QueryHostChainsRequest = {
   },
   fromJSON(object: any): QueryHostChainsRequest {
     return {
-      timeWindowInDays: isSet(object.timeWindowInDays) ? String(object.timeWindowInDays) : undefined,
       pagination: isSet(object.pagination) ? PageRequest.fromJSON(object.pagination) : undefined
     };
   },
   toJSON(message: QueryHostChainsRequest): unknown {
     const obj: any = {};
-    message.timeWindowInDays !== undefined && (obj.timeWindowInDays = message.timeWindowInDays);
     message.pagination !== undefined && (obj.pagination = message.pagination ? PageRequest.toJSON(message.pagination) : undefined);
     return obj;
   },
   fromPartial(object: Partial<QueryHostChainsRequest>): QueryHostChainsRequest {
     const message = createBaseQueryHostChainsRequest();
-    message.timeWindowInDays = object.timeWindowInDays ?? undefined;
     message.pagination = object.pagination !== undefined && object.pagination !== null ? PageRequest.fromPartial(object.pagination) : undefined;
     return message;
   }

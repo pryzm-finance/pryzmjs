@@ -1,7 +1,7 @@
 import { StakingParams, StakingParamsSDKType } from "./params";
 import { Height, HeightSDKType } from "../../ibc/core/client/v1/client";
 import { BinaryReader, BinaryWriter } from "../../binary";
-import { isSet, isObject } from "../../helpers";
+import { isSet } from "../../helpers";
 import { Decimal } from "@cosmjs/math";
 /** The types of available connection protocols */
 export enum ConnectionType {
@@ -230,27 +230,17 @@ export interface ValidatorSDKType {
   address: string;
   weight: string;
 }
-export interface HostChainState_ValidatorsEntry {
-  key: string;
-  value: ValidatorState;
-}
-export interface HostChainState_ValidatorsEntrySDKType {
-  key: string;
-  value: ValidatorStateSDKType;
-}
 /** A subset of state on the host chain needed by Pryzm */
 export interface HostChainState {
   /** The id of the chain */
   hostChainId: string;
   /** Information about the interchain accounts */
   hostAccounts: HostAccounts;
-  /** Mapping of validators address to their state */
-  validators: {
-    [key: string]: ValidatorState;
-  };
+  /** list of validators and their state containing the delegation amount */
+  validatorStates: ValidatorState[];
   /** The amount of assets that are in the delegation account and ready to be delegated */
   amountToBeDelegated: string;
-  /** The amount of assets that are in the delegation account and ready to be delegated */
+  /** The amount of undelegated assets that are currently in the delegation account waiting to be collected */
   undelegatedAmountToCollect: string;
   /** The current exchange rate of cToken to the host chain staking token */
   exchangeRate: string;
@@ -267,9 +257,7 @@ export interface HostChainState {
 export interface HostChainStateSDKType {
   host_chain_id: string;
   host_accounts: HostAccountsSDKType;
-  validators: {
-    [key: string]: ValidatorStateSDKType;
-  };
+  validator_states: ValidatorStateSDKType[];
   amount_to_be_delegated: string;
   undelegated_amount_to_collect: string;
   exchange_rate: string;
@@ -305,9 +293,11 @@ export interface HostAccountSDKType {
   state: AccountState;
 }
 export interface ValidatorState {
+  validatorAddress: string;
   delegatedAmount: string;
 }
 export interface ValidatorStateSDKType {
+  validator_address: string;
   delegated_amount: string;
 }
 function createBaseHostChain(): HostChain {
@@ -553,66 +543,11 @@ export const Validator = {
     return message;
   }
 };
-function createBaseHostChainState_ValidatorsEntry(): HostChainState_ValidatorsEntry {
-  return {
-    key: "",
-    value: ValidatorState.fromPartial({})
-  };
-}
-export const HostChainState_ValidatorsEntry = {
-  encode(message: HostChainState_ValidatorsEntry, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
-    if (message.key !== "") {
-      writer.uint32(10).string(message.key);
-    }
-    if (message.value !== undefined) {
-      ValidatorState.encode(message.value, writer.uint32(18).fork()).ldelim();
-    }
-    return writer;
-  },
-  decode(input: BinaryReader | Uint8Array, length?: number): HostChainState_ValidatorsEntry {
-    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
-    let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseHostChainState_ValidatorsEntry();
-    while (reader.pos < end) {
-      const tag = reader.uint32();
-      switch (tag >>> 3) {
-        case 1:
-          message.key = reader.string();
-          break;
-        case 2:
-          message.value = ValidatorState.decode(reader, reader.uint32());
-          break;
-        default:
-          reader.skipType(tag & 7);
-          break;
-      }
-    }
-    return message;
-  },
-  fromJSON(object: any): HostChainState_ValidatorsEntry {
-    return {
-      key: isSet(object.key) ? String(object.key) : "",
-      value: isSet(object.value) ? ValidatorState.fromJSON(object.value) : undefined
-    };
-  },
-  toJSON(message: HostChainState_ValidatorsEntry): unknown {
-    const obj: any = {};
-    message.key !== undefined && (obj.key = message.key);
-    message.value !== undefined && (obj.value = message.value ? ValidatorState.toJSON(message.value) : undefined);
-    return obj;
-  },
-  fromPartial(object: Partial<HostChainState_ValidatorsEntry>): HostChainState_ValidatorsEntry {
-    const message = createBaseHostChainState_ValidatorsEntry();
-    message.key = object.key ?? "";
-    message.value = object.value !== undefined && object.value !== null ? ValidatorState.fromPartial(object.value) : undefined;
-    return message;
-  }
-};
 function createBaseHostChainState(): HostChainState {
   return {
     hostChainId: "",
     hostAccounts: HostAccounts.fromPartial({}),
-    validators: {},
+    validatorStates: [],
     amountToBeDelegated: "",
     undelegatedAmountToCollect: "",
     exchangeRate: "",
@@ -628,12 +563,9 @@ export const HostChainState = {
     if (message.hostAccounts !== undefined) {
       HostAccounts.encode(message.hostAccounts, writer.uint32(18).fork()).ldelim();
     }
-    Object.entries(message.validators).forEach(([key, value]) => {
-      HostChainState_ValidatorsEntry.encode({
-        key: (key as any),
-        value
-      }, writer.uint32(26).fork()).ldelim();
-    });
+    for (const v of message.validatorStates) {
+      ValidatorState.encode(v!, writer.uint32(26).fork()).ldelim();
+    }
     if (message.amountToBeDelegated !== "") {
       writer.uint32(34).string(message.amountToBeDelegated);
     }
@@ -665,10 +597,7 @@ export const HostChainState = {
           message.hostAccounts = HostAccounts.decode(reader, reader.uint32());
           break;
         case 3:
-          const entry3 = HostChainState_ValidatorsEntry.decode(reader, reader.uint32());
-          if (entry3.value !== undefined) {
-            message.validators[entry3.key] = entry3.value;
-          }
+          message.validatorStates.push(ValidatorState.decode(reader, reader.uint32()));
           break;
         case 4:
           message.amountToBeDelegated = reader.string();
@@ -696,12 +625,7 @@ export const HostChainState = {
     return {
       hostChainId: isSet(object.hostChainId) ? String(object.hostChainId) : "",
       hostAccounts: isSet(object.hostAccounts) ? HostAccounts.fromJSON(object.hostAccounts) : undefined,
-      validators: isObject(object.validators) ? Object.entries(object.validators).reduce<{
-        [key: string]: ValidatorState;
-      }>((acc, [key, value]) => {
-        acc[key] = ValidatorState.fromJSON(value);
-        return acc;
-      }, {}) : {},
+      validatorStates: Array.isArray(object?.validatorStates) ? object.validatorStates.map((e: any) => ValidatorState.fromJSON(e)) : [],
       amountToBeDelegated: isSet(object.amountToBeDelegated) ? String(object.amountToBeDelegated) : "",
       undelegatedAmountToCollect: isSet(object.undelegatedAmountToCollect) ? String(object.undelegatedAmountToCollect) : "",
       exchangeRate: isSet(object.exchangeRate) ? String(object.exchangeRate) : "",
@@ -713,11 +637,10 @@ export const HostChainState = {
     const obj: any = {};
     message.hostChainId !== undefined && (obj.hostChainId = message.hostChainId);
     message.hostAccounts !== undefined && (obj.hostAccounts = message.hostAccounts ? HostAccounts.toJSON(message.hostAccounts) : undefined);
-    obj.validators = {};
-    if (message.validators) {
-      Object.entries(message.validators).forEach(([k, v]) => {
-        obj.validators[k] = ValidatorState.toJSON(v);
-      });
+    if (message.validatorStates) {
+      obj.validatorStates = message.validatorStates.map(e => e ? ValidatorState.toJSON(e) : undefined);
+    } else {
+      obj.validatorStates = [];
     }
     message.amountToBeDelegated !== undefined && (obj.amountToBeDelegated = message.amountToBeDelegated);
     message.undelegatedAmountToCollect !== undefined && (obj.undelegatedAmountToCollect = message.undelegatedAmountToCollect);
@@ -730,14 +653,7 @@ export const HostChainState = {
     const message = createBaseHostChainState();
     message.hostChainId = object.hostChainId ?? "";
     message.hostAccounts = object.hostAccounts !== undefined && object.hostAccounts !== null ? HostAccounts.fromPartial(object.hostAccounts) : undefined;
-    message.validators = Object.entries(object.validators ?? {}).reduce<{
-      [key: string]: ValidatorState;
-    }>((acc, [key, value]) => {
-      if (value !== undefined) {
-        acc[key] = ValidatorState.fromPartial(value);
-      }
-      return acc;
-    }, {});
+    message.validatorStates = object.validatorStates?.map(e => ValidatorState.fromPartial(e)) || [];
     message.amountToBeDelegated = object.amountToBeDelegated ?? "";
     message.undelegatedAmountToCollect = object.undelegatedAmountToCollect ?? "";
     message.exchangeRate = object.exchangeRate ?? "";
@@ -888,13 +804,17 @@ export const HostAccount = {
 };
 function createBaseValidatorState(): ValidatorState {
   return {
+    validatorAddress: "",
     delegatedAmount: ""
   };
 }
 export const ValidatorState = {
   encode(message: ValidatorState, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    if (message.validatorAddress !== "") {
+      writer.uint32(10).string(message.validatorAddress);
+    }
     if (message.delegatedAmount !== "") {
-      writer.uint32(10).string(message.delegatedAmount);
+      writer.uint32(18).string(message.delegatedAmount);
     }
     return writer;
   },
@@ -906,6 +826,9 @@ export const ValidatorState = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
+          message.validatorAddress = reader.string();
+          break;
+        case 2:
           message.delegatedAmount = reader.string();
           break;
         default:
@@ -917,16 +840,19 @@ export const ValidatorState = {
   },
   fromJSON(object: any): ValidatorState {
     return {
+      validatorAddress: isSet(object.validatorAddress) ? String(object.validatorAddress) : "",
       delegatedAmount: isSet(object.delegatedAmount) ? String(object.delegatedAmount) : ""
     };
   },
   toJSON(message: ValidatorState): unknown {
     const obj: any = {};
+    message.validatorAddress !== undefined && (obj.validatorAddress = message.validatorAddress);
     message.delegatedAmount !== undefined && (obj.delegatedAmount = message.delegatedAmount);
     return obj;
   },
   fromPartial(object: Partial<ValidatorState>): ValidatorState {
     const message = createBaseValidatorState();
+    message.validatorAddress = object.validatorAddress ?? "";
     message.delegatedAmount = object.delegatedAmount ?? "";
     return message;
   }

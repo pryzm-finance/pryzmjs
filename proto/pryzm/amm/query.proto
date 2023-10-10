@@ -106,6 +106,11 @@ service Query {
     option (google.api.http).get = "/pryzm-finance/pryzm-core/amm/simulate_join_exact_tokens/{pool_id}";
   }
 
+  // Queries a list of SimulateJoinExactTokens items.
+  rpc SimulateZeroImpactJoinYamm(QuerySimulateZeroImpactJoinYammRequest) returns (QuerySimulateZeroImpactJoinYammResponse) {
+    option (google.api.http).get = "/pryzm-finance/pryzm-core/amm/simulate_zero_impact_join_yamm";
+  }
+
   // Queries a list of SimulateJoinTokenExactLpt items.
   rpc SimulateJoinTokenExactLpt(QuerySimulateJoinTokenExactLptRequest) returns (QuerySimulateJoinTokenExactLptResponse) {
     option (google.api.http).get = "/pryzm-finance/pryzm-core/amm/simulate_join_token_exact_lpt/{pool_id}";
@@ -419,6 +424,31 @@ message QuerySimulateJoinExactTokensResponse {
     (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins"
   ];
   repeated cosmos.base.v1beta1.Coin swap_fee = 4 [
+    (gogoproto.nullable) = false,
+    (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins"
+  ];
+}
+
+message QuerySimulateZeroImpactJoinYammRequest {
+  cosmos.base.v1beta1.Coin c_amount_in = 1 [(gogoproto.nullable) = false];
+}
+
+message QuerySimulateZeroImpactJoinYammResponse {
+  cosmos.base.v1beta1.Coin lpt_out = 1 [(gogoproto.nullable) = false];
+
+  repeated cosmos.base.v1beta1.Coin y_out = 2 [
+    (gogoproto.nullable) = false,
+    (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins"
+  ];
+
+  cosmos.base.v1beta1.Coin refract_fee = 3 [(gogoproto.nullable) = false];
+
+  repeated cosmos.base.v1beta1.Coin join_protocol_fee = 4 [
+    (gogoproto.nullable) = false,
+    (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins"
+  ];
+
+  repeated cosmos.base.v1beta1.Coin swap_fee = 5 [
     (gogoproto.nullable) = false,
     (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins"
   ];

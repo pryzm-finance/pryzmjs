@@ -1,6 +1,6 @@
 import { pryzmatics } from "@pryzm-finance/pryzmjs/lib";
 import * as console from "console";
-import { TimeResolutionType } from "@pryzm-finance/pryzmjs/lib/codegen/pryzmatics/price/historical_price";
+import { TimeResolutionType } from "@pryzm-finance/pryzmjs/lib/codegen/pryzmatics/common/time_resolution";
 import { PRYZMATICS_ENDPOINT } from "./config";
 
 async function main() {

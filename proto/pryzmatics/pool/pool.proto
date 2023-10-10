@@ -5,6 +5,7 @@ import "gogoproto/gogo.proto";
 import "cosmos_proto/cosmos.proto";
 import "pryzm/amm/pool.proto";
 import "google/protobuf/timestamp.proto";
+import "pryzmatics/pool/pool_apr.proto";
 
 
 option go_package = "github.com/pryzm-finance/pryzmatics/types/pool";
@@ -14,31 +15,50 @@ message Pool {
   string name = 2;
   pryzm.amm.PoolType pool_type = 3;
   string lp_denom = 4;
-  string apr = 5 [
+  pryzmatics.pool.PoolApr apr = 5 [(gogoproto.nullable) = true];
+  string trade_volume_24h = 6 [
     (cosmos_proto.scalar) = "cosmos.Dec",
     (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Dec",
-    (gogoproto.nullable) = true
+    (gogoproto.nullable) = false
   ];
-  string swap_fee_apr = 6 [
+  string trade_volume_7d = 7 [
     (cosmos_proto.scalar) = "cosmos.Dec",
     (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Dec",
-    (gogoproto.nullable) = true
+    (gogoproto.nullable) = false
   ];
-  string token_yield = 7 [
+  string trade_volume_30d = 8 [
     (cosmos_proto.scalar) = "cosmos.Dec",
     (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Dec",
-    (gogoproto.nullable) = true
+    (gogoproto.nullable) = false
   ];
-  string incentives_apr = 8 [
+  string swap_fee_volume_24h = 9 [
     (cosmos_proto.scalar) = "cosmos.Dec",
     (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Dec",
-    (gogoproto.nullable) = true
+    (gogoproto.nullable) = false
   ];
-  string alliance_apr = 9 [
+  string swap_fee_volume_7d = 10 [
     (cosmos_proto.scalar) = "cosmos.Dec",
     (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Dec",
-    (gogoproto.nullable) = true
+    (gogoproto.nullable) = false
   ];
-  google.protobuf.Timestamp apr_calculation_time = 10 [(gogoproto.stdtime) = true, (gogoproto.nullable) = true];
-  string error = 11;
+  string swap_fee_volume_30d = 11 [
+    (cosmos_proto.scalar) = "cosmos.Dec",
+    (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Dec",
+    (gogoproto.nullable) = false
+  ];
+  string join_exit_swap_fee_volume_24h = 12 [
+    (cosmos_proto.scalar) = "cosmos.Dec",
+    (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Dec",
+    (gogoproto.nullable) = false
+  ];
+  string join_exit_swap_fee_volume_7d = 13 [
+    (cosmos_proto.scalar) = "cosmos.Dec",
+    (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Dec",
+    (gogoproto.nullable) = false
+  ];
+  string join_exit_swap_fee_volume_30d = 14 [
+    (cosmos_proto.scalar) = "cosmos.Dec",
+    (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Dec",
+    (gogoproto.nullable) = false
+  ];
 }

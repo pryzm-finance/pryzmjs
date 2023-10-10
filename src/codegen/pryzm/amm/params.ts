@@ -38,6 +38,8 @@ export interface YammParameters {
    * if not empty, only these addresses can initialize the pools
    */
   defaultInitializationAllowList: string[];
+  avgMonthlyYieldRate: string;
+  yieldFeeScaler: string;
 }
 export interface YammParametersSDKType {
   lambda: string;
@@ -49,6 +51,8 @@ export interface YammParametersSDKType {
   sell_y_given_out_fee_ratio: string;
   max_alpha: string;
   default_initialization_allow_list: string[];
+  avg_monthly_yield_rate: string;
+  yield_fee_scaler: string;
 }
 export interface GeneralPoolParameters {
   allowPublicPoolCreation: boolean;
@@ -209,7 +213,9 @@ function createBaseYammParameters(): YammParameters {
     buyYGivenInLoanFeeRatio: "",
     sellYGivenOutFeeRatio: "",
     maxAlpha: "",
-    defaultInitializationAllowList: []
+    defaultInitializationAllowList: [],
+    avgMonthlyYieldRate: "",
+    yieldFeeScaler: ""
   };
 }
 export const YammParameters = {
@@ -224,10 +230,10 @@ export const YammParameters = {
       writer.uint32(24).int64(message.maturityExpirationIntervalMillis);
     }
     if (message.introductionVirtualBalanceScaler !== "") {
-      writer.uint32(34).string(message.introductionVirtualBalanceScaler);
+      writer.uint32(34).string(Decimal.fromUserInput(message.introductionVirtualBalanceScaler, 18).atomics);
     }
     if (message.expirationVirtualBalanceScaler !== "") {
-      writer.uint32(42).string(message.expirationVirtualBalanceScaler);
+      writer.uint32(42).string(Decimal.fromUserInput(message.expirationVirtualBalanceScaler, 18).atomics);
     }
     if (message.buyYGivenInLoanFeeRatio !== "") {
       writer.uint32(50).string(Decimal.fromUserInput(message.buyYGivenInLoanFeeRatio, 18).atomics);
@@ -240,6 +246,12 @@ export const YammParameters = {
     }
     for (const v of message.defaultInitializationAllowList) {
       writer.uint32(74).string(v!);
+    }
+    if (message.avgMonthlyYieldRate !== "") {
+      writer.uint32(82).string(Decimal.fromUserInput(message.avgMonthlyYieldRate, 18).atomics);
+    }
+    if (message.yieldFeeScaler !== "") {
+      writer.uint32(90).string(Decimal.fromUserInput(message.yieldFeeScaler, 18).atomics);
     }
     return writer;
   },
@@ -260,10 +272,10 @@ export const YammParameters = {
           message.maturityExpirationIntervalMillis = reader.int64();
           break;
         case 4:
-          message.introductionVirtualBalanceScaler = reader.string();
+          message.introductionVirtualBalanceScaler = Decimal.fromAtomics(reader.string(), 18).toString();
           break;
         case 5:
-          message.expirationVirtualBalanceScaler = reader.string();
+          message.expirationVirtualBalanceScaler = Decimal.fromAtomics(reader.string(), 18).toString();
           break;
         case 6:
           message.buyYGivenInLoanFeeRatio = Decimal.fromAtomics(reader.string(), 18).toString();
@@ -276,6 +288,12 @@ export const YammParameters = {
           break;
         case 9:
           message.defaultInitializationAllowList.push(reader.string());
+          break;
+        case 10:
+          message.avgMonthlyYieldRate = Decimal.fromAtomics(reader.string(), 18).toString();
+          break;
+        case 11:
+          message.yieldFeeScaler = Decimal.fromAtomics(reader.string(), 18).toString();
           break;
         default:
           reader.skipType(tag & 7);
@@ -294,7 +312,9 @@ export const YammParameters = {
       buyYGivenInLoanFeeRatio: isSet(object.buyYGivenInLoanFeeRatio) ? String(object.buyYGivenInLoanFeeRatio) : "",
       sellYGivenOutFeeRatio: isSet(object.sellYGivenOutFeeRatio) ? String(object.sellYGivenOutFeeRatio) : "",
       maxAlpha: isSet(object.maxAlpha) ? String(object.maxAlpha) : "",
-      defaultInitializationAllowList: Array.isArray(object?.defaultInitializationAllowList) ? object.defaultInitializationAllowList.map((e: any) => String(e)) : []
+      defaultInitializationAllowList: Array.isArray(object?.defaultInitializationAllowList) ? object.defaultInitializationAllowList.map((e: any) => String(e)) : [],
+      avgMonthlyYieldRate: isSet(object.avgMonthlyYieldRate) ? String(object.avgMonthlyYieldRate) : "",
+      yieldFeeScaler: isSet(object.yieldFeeScaler) ? String(object.yieldFeeScaler) : ""
     };
   },
   toJSON(message: YammParameters): unknown {
@@ -312,6 +332,8 @@ export const YammParameters = {
     } else {
       obj.defaultInitializationAllowList = [];
     }
+    message.avgMonthlyYieldRate !== undefined && (obj.avgMonthlyYieldRate = message.avgMonthlyYieldRate);
+    message.yieldFeeScaler !== undefined && (obj.yieldFeeScaler = message.yieldFeeScaler);
     return obj;
   },
   fromPartial(object: Partial<YammParameters>): YammParameters {
@@ -325,6 +347,8 @@ export const YammParameters = {
     message.sellYGivenOutFeeRatio = object.sellYGivenOutFeeRatio ?? "";
     message.maxAlpha = object.maxAlpha ?? "";
     message.defaultInitializationAllowList = object.defaultInitializationAllowList?.map(e => e) || [];
+    message.avgMonthlyYieldRate = object.avgMonthlyYieldRate ?? "";
+    message.yieldFeeScaler = object.yieldFeeScaler ?? "";
     return message;
   }
 };

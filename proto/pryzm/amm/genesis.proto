@@ -28,12 +28,17 @@ message GenesisPoolData {
   repeated PoolToken pool_token_list = 3 [(gogoproto.nullable) = false];
 }
 
+message YammPoolAssetId {
+  uint64 pool_id = 1;
+  string asset_id = 2;
+}
+
 // GenesisState defines the amm module's genesis state.
 message GenesisState {
   Params params = 1 [(gogoproto.nullable) = false];
   repeated GenesisPoolData pool_list = 2 [(gogoproto.nullable) = false];
   repeated WeightedPoolProperties weighted_pool_properties_list = 3 [(gogoproto.nullable) = false];
-  map<uint64, string> yamm_pool_asset_id = 4 [(gogoproto.nullable) = false];
+  repeated YammPoolAssetId yamm_pool_asset_id_list = 4 [(gogoproto.nullable) = false];
   repeated VirtualBalancePoolToken introducing_pool_token_list = 5 [(gogoproto.nullable) = false];
   repeated VirtualBalancePoolToken expiring_pool_token_list = 6 [(gogoproto.nullable) = false];
   repeated YammConfiguration yamm_configuration_list = 7 [(gogoproto.nullable) = false];

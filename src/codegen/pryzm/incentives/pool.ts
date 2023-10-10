@@ -1,39 +1,30 @@
 import { Coin, CoinSDKType } from "../../cosmos/base/v1beta1/coin";
 import { BinaryReader, BinaryWriter } from "../../binary";
 import { Decimal } from "@cosmjs/math";
-import { isSet, isObject } from "../../helpers";
+import { isSet } from "../../helpers";
 export interface PoolRewardToken {
+  denom: string;
   amount: string;
   globalIndex: string;
   weight: string;
 }
 export interface PoolRewardTokenSDKType {
+  denom: string;
   amount: string;
   global_index: string;
   weight: string;
 }
-export interface Pool_RewardsEntry {
-  key: string;
-  value: PoolRewardToken;
-}
-export interface Pool_RewardsEntrySDKType {
-  key: string;
-  value: PoolRewardTokenSDKType;
-}
 export interface Pool {
   bondedToken: Coin;
-  rewards: {
-    [key: string]: PoolRewardToken;
-  };
+  rewards: PoolRewardToken[];
 }
 export interface PoolSDKType {
   bonded_token: CoinSDKType;
-  rewards: {
-    [key: string]: PoolRewardTokenSDKType;
-  };
+  rewards: PoolRewardTokenSDKType[];
 }
 function createBasePoolRewardToken(): PoolRewardToken {
   return {
+    denom: "",
     amount: "",
     globalIndex: "",
     weight: ""
@@ -41,14 +32,17 @@ function createBasePoolRewardToken(): PoolRewardToken {
 }
 export const PoolRewardToken = {
   encode(message: PoolRewardToken, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    if (message.denom !== "") {
+      writer.uint32(10).string(message.denom);
+    }
     if (message.amount !== "") {
-      writer.uint32(10).string(message.amount);
+      writer.uint32(18).string(message.amount);
     }
     if (message.globalIndex !== "") {
-      writer.uint32(18).string(Decimal.fromUserInput(message.globalIndex, 18).atomics);
+      writer.uint32(26).string(Decimal.fromUserInput(message.globalIndex, 18).atomics);
     }
     if (message.weight !== "") {
-      writer.uint32(26).string(Decimal.fromUserInput(message.weight, 18).atomics);
+      writer.uint32(34).string(Decimal.fromUserInput(message.weight, 18).atomics);
     }
     return writer;
   },
@@ -60,12 +54,15 @@ export const PoolRewardToken = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.amount = reader.string();
+          message.denom = reader.string();
           break;
         case 2:
-          message.globalIndex = Decimal.fromAtomics(reader.string(), 18).toString();
+          message.amount = reader.string();
           break;
         case 3:
+          message.globalIndex = Decimal.fromAtomics(reader.string(), 18).toString();
+          break;
+        case 4:
           message.weight = Decimal.fromAtomics(reader.string(), 18).toString();
           break;
         default:
@@ -77,6 +74,7 @@ export const PoolRewardToken = {
   },
   fromJSON(object: any): PoolRewardToken {
     return {
+      denom: isSet(object.denom) ? String(object.denom) : "",
       amount: isSet(object.amount) ? String(object.amount) : "",
       globalIndex: isSet(object.globalIndex) ? String(object.globalIndex) : "",
       weight: isSet(object.weight) ? String(object.weight) : ""
@@ -84,6 +82,7 @@ export const PoolRewardToken = {
   },
   toJSON(message: PoolRewardToken): unknown {
     const obj: any = {};
+    message.denom !== undefined && (obj.denom = message.denom);
     message.amount !== undefined && (obj.amount = message.amount);
     message.globalIndex !== undefined && (obj.globalIndex = message.globalIndex);
     message.weight !== undefined && (obj.weight = message.weight);
@@ -91,71 +90,17 @@ export const PoolRewardToken = {
   },
   fromPartial(object: Partial<PoolRewardToken>): PoolRewardToken {
     const message = createBasePoolRewardToken();
+    message.denom = object.denom ?? "";
     message.amount = object.amount ?? "";
     message.globalIndex = object.globalIndex ?? "";
     message.weight = object.weight ?? "";
     return message;
   }
 };
-function createBasePool_RewardsEntry(): Pool_RewardsEntry {
-  return {
-    key: "",
-    value: PoolRewardToken.fromPartial({})
-  };
-}
-export const Pool_RewardsEntry = {
-  encode(message: Pool_RewardsEntry, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
-    if (message.key !== "") {
-      writer.uint32(10).string(message.key);
-    }
-    if (message.value !== undefined) {
-      PoolRewardToken.encode(message.value, writer.uint32(18).fork()).ldelim();
-    }
-    return writer;
-  },
-  decode(input: BinaryReader | Uint8Array, length?: number): Pool_RewardsEntry {
-    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
-    let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBasePool_RewardsEntry();
-    while (reader.pos < end) {
-      const tag = reader.uint32();
-      switch (tag >>> 3) {
-        case 1:
-          message.key = reader.string();
-          break;
-        case 2:
-          message.value = PoolRewardToken.decode(reader, reader.uint32());
-          break;
-        default:
-          reader.skipType(tag & 7);
-          break;
-      }
-    }
-    return message;
-  },
-  fromJSON(object: any): Pool_RewardsEntry {
-    return {
-      key: isSet(object.key) ? String(object.key) : "",
-      value: isSet(object.value) ? PoolRewardToken.fromJSON(object.value) : undefined
-    };
-  },
-  toJSON(message: Pool_RewardsEntry): unknown {
-    const obj: any = {};
-    message.key !== undefined && (obj.key = message.key);
-    message.value !== undefined && (obj.value = message.value ? PoolRewardToken.toJSON(message.value) : undefined);
-    return obj;
-  },
-  fromPartial(object: Partial<Pool_RewardsEntry>): Pool_RewardsEntry {
-    const message = createBasePool_RewardsEntry();
-    message.key = object.key ?? "";
-    message.value = object.value !== undefined && object.value !== null ? PoolRewardToken.fromPartial(object.value) : undefined;
-    return message;
-  }
-};
 function createBasePool(): Pool {
   return {
     bondedToken: Coin.fromPartial({}),
-    rewards: {}
+    rewards: []
   };
 }
 export const Pool = {
@@ -163,12 +108,9 @@ export const Pool = {
     if (message.bondedToken !== undefined) {
       Coin.encode(message.bondedToken, writer.uint32(10).fork()).ldelim();
     }
-    Object.entries(message.rewards).forEach(([key, value]) => {
-      Pool_RewardsEntry.encode({
-        key: (key as any),
-        value
-      }, writer.uint32(18).fork()).ldelim();
-    });
+    for (const v of message.rewards) {
+      PoolRewardToken.encode(v!, writer.uint32(18).fork()).ldelim();
+    }
     return writer;
   },
   decode(input: BinaryReader | Uint8Array, length?: number): Pool {
@@ -182,10 +124,7 @@ export const Pool = {
           message.bondedToken = Coin.decode(reader, reader.uint32());
           break;
         case 2:
-          const entry2 = Pool_RewardsEntry.decode(reader, reader.uint32());
-          if (entry2.value !== undefined) {
-            message.rewards[entry2.key] = entry2.value;
-          }
+          message.rewards.push(PoolRewardToken.decode(reader, reader.uint32()));
           break;
         default:
           reader.skipType(tag & 7);
@@ -197,36 +136,23 @@ export const Pool = {
   fromJSON(object: any): Pool {
     return {
       bondedToken: isSet(object.bondedToken) ? Coin.fromJSON(object.bondedToken) : undefined,
-      rewards: isObject(object.rewards) ? Object.entries(object.rewards).reduce<{
-        [key: string]: PoolRewardToken;
-      }>((acc, [key, value]) => {
-        acc[key] = PoolRewardToken.fromJSON(value);
-        return acc;
-      }, {}) : {}
+      rewards: Array.isArray(object?.rewards) ? object.rewards.map((e: any) => PoolRewardToken.fromJSON(e)) : []
     };
   },
   toJSON(message: Pool): unknown {
     const obj: any = {};
     message.bondedToken !== undefined && (obj.bondedToken = message.bondedToken ? Coin.toJSON(message.bondedToken) : undefined);
-    obj.rewards = {};
     if (message.rewards) {
-      Object.entries(message.rewards).forEach(([k, v]) => {
-        obj.rewards[k] = PoolRewardToken.toJSON(v);
-      });
+      obj.rewards = message.rewards.map(e => e ? PoolRewardToken.toJSON(e) : undefined);
+    } else {
+      obj.rewards = [];
     }
     return obj;
   },
   fromPartial(object: Partial<Pool>): Pool {
     const message = createBasePool();
     message.bondedToken = object.bondedToken !== undefined && object.bondedToken !== null ? Coin.fromPartial(object.bondedToken) : undefined;
-    message.rewards = Object.entries(object.rewards ?? {}).reduce<{
-      [key: string]: PoolRewardToken;
-    }>((acc, [key, value]) => {
-      if (value !== undefined) {
-        acc[key] = PoolRewardToken.fromPartial(value);
-      }
-      return acc;
-    }, {});
+    message.rewards = object.rewards?.map(e => PoolRewardToken.fromPartial(e)) || [];
     return message;
   }
 };

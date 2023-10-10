@@ -11,7 +11,7 @@ import { ScheduleOrder, ScheduleOrderSDKType } from "./schedule_order";
 import { OraclePricePair, OraclePricePairSDKType } from "./oracle_price_pair";
 import { PendingTokenIntroduction, PendingTokenIntroductionSDKType } from "./pending_token_introduction";
 import { BinaryReader, BinaryWriter } from "../../binary";
-import { isSet, isObject } from "../../helpers";
+import { isSet } from "../../helpers";
 export interface GenesisPoolData {
   pool: Pool;
   totalLpTokenSupply: string;
@@ -22,22 +22,20 @@ export interface GenesisPoolDataSDKType {
   total_lp_token_supply: string;
   pool_token_list: PoolTokenSDKType[];
 }
-export interface GenesisState_YammPoolAssetIdEntry {
-  key: bigint;
-  value: string;
+export interface YammPoolAssetId {
+  poolId: bigint;
+  assetId: string;
 }
-export interface GenesisState_YammPoolAssetIdEntrySDKType {
-  key: bigint;
-  value: string;
+export interface YammPoolAssetIdSDKType {
+  pool_id: bigint;
+  asset_id: string;
 }
 /** GenesisState defines the amm module's genesis state. */
 export interface GenesisState {
   params: Params;
   poolList: GenesisPoolData[];
   weightedPoolPropertiesList: WeightedPoolProperties[];
-  yammPoolAssetId: {
-    [key: bigint]: string;
-  };
+  yammPoolAssetIdList: YammPoolAssetId[];
   introducingPoolTokenList: VirtualBalancePoolToken[];
   expiringPoolTokenList: VirtualBalancePoolToken[];
   yammConfigurationList: YammConfiguration[];
@@ -55,9 +53,7 @@ export interface GenesisStateSDKType {
   params: ParamsSDKType;
   pool_list: GenesisPoolDataSDKType[];
   weighted_pool_properties_list: WeightedPoolPropertiesSDKType[];
-  yamm_pool_asset_id: {
-    [key: bigint]: string;
-  };
+  yamm_pool_asset_id_list: YammPoolAssetIdSDKType[];
   introducing_pool_token_list: VirtualBalancePoolTokenSDKType[];
   expiring_pool_token_list: VirtualBalancePoolTokenSDKType[];
   yamm_configuration_list: YammConfigurationSDKType[];
@@ -139,34 +135,34 @@ export const GenesisPoolData = {
     return message;
   }
 };
-function createBaseGenesisState_YammPoolAssetIdEntry(): GenesisState_YammPoolAssetIdEntry {
+function createBaseYammPoolAssetId(): YammPoolAssetId {
   return {
-    key: BigInt(0),
-    value: ""
+    poolId: BigInt(0),
+    assetId: ""
   };
 }
-export const GenesisState_YammPoolAssetIdEntry = {
-  encode(message: GenesisState_YammPoolAssetIdEntry, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
-    if (message.key !== BigInt(0)) {
-      writer.uint32(8).uint64(message.key);
+export const YammPoolAssetId = {
+  encode(message: YammPoolAssetId, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    if (message.poolId !== BigInt(0)) {
+      writer.uint32(8).uint64(message.poolId);
     }
-    if (message.value !== "") {
-      writer.uint32(18).string(message.value);
+    if (message.assetId !== "") {
+      writer.uint32(18).string(message.assetId);
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): GenesisState_YammPoolAssetIdEntry {
+  decode(input: BinaryReader | Uint8Array, length?: number): YammPoolAssetId {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseGenesisState_YammPoolAssetIdEntry();
+    const message = createBaseYammPoolAssetId();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.key = reader.uint64();
+          message.poolId = reader.uint64();
           break;
         case 2:
-          message.value = reader.string();
+          message.assetId = reader.string();
           break;
         default:
           reader.skipType(tag & 7);
@@ -175,22 +171,22 @@ export const GenesisState_YammPoolAssetIdEntry = {
     }
     return message;
   },
-  fromJSON(object: any): GenesisState_YammPoolAssetIdEntry {
+  fromJSON(object: any): YammPoolAssetId {
     return {
-      key: isSet(object.key) ? BigInt(object.key.toString()) : BigInt(0),
-      value: isSet(object.value) ? String(object.value) : ""
+      poolId: isSet(object.poolId) ? BigInt(object.poolId.toString()) : BigInt(0),
+      assetId: isSet(object.assetId) ? String(object.assetId) : ""
     };
   },
-  toJSON(message: GenesisState_YammPoolAssetIdEntry): unknown {
+  toJSON(message: YammPoolAssetId): unknown {
     const obj: any = {};
-    message.key !== undefined && (obj.key = (message.key || BigInt(0)).toString());
-    message.value !== undefined && (obj.value = message.value);
+    message.poolId !== undefined && (obj.poolId = (message.poolId || BigInt(0)).toString());
+    message.assetId !== undefined && (obj.assetId = message.assetId);
     return obj;
   },
-  fromPartial(object: Partial<GenesisState_YammPoolAssetIdEntry>): GenesisState_YammPoolAssetIdEntry {
-    const message = createBaseGenesisState_YammPoolAssetIdEntry();
-    message.key = object.key !== undefined && object.key !== null ? BigInt(object.key.toString()) : BigInt(0);
-    message.value = object.value ?? "";
+  fromPartial(object: Partial<YammPoolAssetId>): YammPoolAssetId {
+    const message = createBaseYammPoolAssetId();
+    message.poolId = object.poolId !== undefined && object.poolId !== null ? BigInt(object.poolId.toString()) : BigInt(0);
+    message.assetId = object.assetId ?? "";
     return message;
   }
 };
@@ -199,7 +195,7 @@ function createBaseGenesisState(): GenesisState {
     params: Params.fromPartial({}),
     poolList: [],
     weightedPoolPropertiesList: [],
-    yammPoolAssetId: {},
+    yammPoolAssetIdList: [],
     introducingPoolTokenList: [],
     expiringPoolTokenList: [],
     yammConfigurationList: [],
@@ -224,12 +220,9 @@ export const GenesisState = {
     for (const v of message.weightedPoolPropertiesList) {
       WeightedPoolProperties.encode(v!, writer.uint32(26).fork()).ldelim();
     }
-    Object.entries(message.yammPoolAssetId).forEach(([key, value]) => {
-      GenesisState_YammPoolAssetIdEntry.encode({
-        key: (key as any),
-        value
-      }, writer.uint32(34).fork()).ldelim();
-    });
+    for (const v of message.yammPoolAssetIdList) {
+      YammPoolAssetId.encode(v!, writer.uint32(34).fork()).ldelim();
+    }
     for (const v of message.introducingPoolTokenList) {
       VirtualBalancePoolToken.encode(v!, writer.uint32(42).fork()).ldelim();
     }
@@ -284,10 +277,7 @@ export const GenesisState = {
           message.weightedPoolPropertiesList.push(WeightedPoolProperties.decode(reader, reader.uint32()));
           break;
         case 4:
-          const entry4 = GenesisState_YammPoolAssetIdEntry.decode(reader, reader.uint32());
-          if (entry4.value !== undefined) {
-            message.yammPoolAssetId[entry4.key] = entry4.value;
-          }
+          message.yammPoolAssetIdList.push(YammPoolAssetId.decode(reader, reader.uint32()));
           break;
         case 5:
           message.introducingPoolTokenList.push(VirtualBalancePoolToken.decode(reader, reader.uint32()));
@@ -341,12 +331,7 @@ export const GenesisState = {
       params: isSet(object.params) ? Params.fromJSON(object.params) : undefined,
       poolList: Array.isArray(object?.poolList) ? object.poolList.map((e: any) => GenesisPoolData.fromJSON(e)) : [],
       weightedPoolPropertiesList: Array.isArray(object?.weightedPoolPropertiesList) ? object.weightedPoolPropertiesList.map((e: any) => WeightedPoolProperties.fromJSON(e)) : [],
-      yammPoolAssetId: isObject(object.yammPoolAssetId) ? Object.entries(object.yammPoolAssetId).reduce<{
-        [key: bigint]: string;
-      }>((acc, [key, value]) => {
-        acc[Number(key)] = String(value);
-        return acc;
-      }, {}) : {},
+      yammPoolAssetIdList: Array.isArray(object?.yammPoolAssetIdList) ? object.yammPoolAssetIdList.map((e: any) => YammPoolAssetId.fromJSON(e)) : [],
       introducingPoolTokenList: Array.isArray(object?.introducingPoolTokenList) ? object.introducingPoolTokenList.map((e: any) => VirtualBalancePoolToken.fromJSON(e)) : [],
       expiringPoolTokenList: Array.isArray(object?.expiringPoolTokenList) ? object.expiringPoolTokenList.map((e: any) => VirtualBalancePoolToken.fromJSON(e)) : [],
       yammConfigurationList: Array.isArray(object?.yammConfigurationList) ? object.yammConfigurationList.map((e: any) => YammConfiguration.fromJSON(e)) : [],
@@ -373,11 +358,10 @@ export const GenesisState = {
     } else {
       obj.weightedPoolPropertiesList = [];
     }
-    obj.yammPoolAssetId = {};
-    if (message.yammPoolAssetId) {
-      Object.entries(message.yammPoolAssetId).forEach(([k, v]) => {
-        obj.yammPoolAssetId[k] = v;
-      });
+    if (message.yammPoolAssetIdList) {
+      obj.yammPoolAssetIdList = message.yammPoolAssetIdList.map(e => e ? YammPoolAssetId.toJSON(e) : undefined);
+    } else {
+      obj.yammPoolAssetIdList = [];
     }
     if (message.introducingPoolTokenList) {
       obj.introducingPoolTokenList = message.introducingPoolTokenList.map(e => e ? VirtualBalancePoolToken.toJSON(e) : undefined);
@@ -433,14 +417,7 @@ export const GenesisState = {
     message.params = object.params !== undefined && object.params !== null ? Params.fromPartial(object.params) : undefined;
     message.poolList = object.poolList?.map(e => GenesisPoolData.fromPartial(e)) || [];
     message.weightedPoolPropertiesList = object.weightedPoolPropertiesList?.map(e => WeightedPoolProperties.fromPartial(e)) || [];
-    message.yammPoolAssetId = Object.entries(object.yammPoolAssetId ?? {}).reduce<{
-      [key: bigint]: string;
-    }>((acc, [key, value]) => {
-      if (value !== undefined) {
-        acc[Number(key)] = String(value);
-      }
-      return acc;
-    }, {});
+    message.yammPoolAssetIdList = object.yammPoolAssetIdList?.map(e => YammPoolAssetId.fromPartial(e)) || [];
     message.introducingPoolTokenList = object.introducingPoolTokenList?.map(e => VirtualBalancePoolToken.fromPartial(e)) || [];
     message.expiringPoolTokenList = object.expiringPoolTokenList?.map(e => VirtualBalancePoolToken.fromPartial(e)) || [];
     message.yammConfigurationList = object.yammConfigurationList?.map(e => YammConfiguration.fromPartial(e)) || [];

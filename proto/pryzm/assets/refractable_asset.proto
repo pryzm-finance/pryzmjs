@@ -38,22 +38,27 @@ message MaturityParams {
 // Fee ratio per each operation
 message FeeRatios {
   string yield = 1 [
+    (gogoproto.nullable) = true,
     (cosmos_proto.scalar) = "cosmos.Dec",
     (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Dec"
   ];
   string refractor_refract = 2 [
+    (gogoproto.nullable) = true,
     (cosmos_proto.scalar) = "cosmos.Dec",
     (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Dec"
   ];
   string refractor_merge = 3 [
+    (gogoproto.nullable) = true,
     (cosmos_proto.scalar) = "cosmos.Dec",
     (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Dec"
   ];
   string refractor_redeem = 4 [
+    (gogoproto.nullable) = true,
     (cosmos_proto.scalar) = "cosmos.Dec",
     (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Dec"
   ];
   string y_staking_claim_reward = 5 [
+    (gogoproto.nullable) = true,
     (cosmos_proto.scalar) = "cosmos.Dec",
     (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Dec"
   ];

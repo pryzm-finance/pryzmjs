@@ -1,62 +1,58 @@
 import { Height, HeightSDKType } from "../../ibc/core/client/v1/client";
 import { Pair, PairSDKType } from "./oracle_price_pair";
 import { BinaryReader, BinaryWriter } from "../../binary";
-import { isSet, isObject } from "../../helpers";
+import { isSet } from "../../helpers";
 import { Decimal } from "@cosmjs/math";
-export interface OraclePayload_DataSourceBlockHeightsEntry {
-  key: string;
-  value: Height;
+export interface OraclePayloadDataSourceBlockHeight {
+  dataSource: string;
+  blockHeight: Height;
 }
-export interface OraclePayload_DataSourceBlockHeightsEntrySDKType {
-  key: string;
-  value: HeightSDKType;
+export interface OraclePayloadDataSourceBlockHeightSDKType {
+  data_source: string;
+  block_height: HeightSDKType;
 }
 /** OraclePayload defines the structure of oracle vote payload */
 export interface OraclePayload {
-  dataSourceBlockHeights: {
-    [key: string]: Height;
-  };
+  dataSourceBlockHeights: OraclePayloadDataSourceBlockHeight[];
   price: string;
   pairs: Pair[];
   quoteToken: string;
 }
 /** OraclePayload defines the structure of oracle vote payload */
 export interface OraclePayloadSDKType {
-  data_source_block_heights: {
-    [key: string]: HeightSDKType;
-  };
+  data_source_block_heights: OraclePayloadDataSourceBlockHeightSDKType[];
   price: string;
   pairs: PairSDKType[];
   quote_token: string;
 }
-function createBaseOraclePayload_DataSourceBlockHeightsEntry(): OraclePayload_DataSourceBlockHeightsEntry {
+function createBaseOraclePayloadDataSourceBlockHeight(): OraclePayloadDataSourceBlockHeight {
   return {
-    key: "",
-    value: Height.fromPartial({})
+    dataSource: "",
+    blockHeight: Height.fromPartial({})
   };
 }
-export const OraclePayload_DataSourceBlockHeightsEntry = {
-  encode(message: OraclePayload_DataSourceBlockHeightsEntry, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
-    if (message.key !== "") {
-      writer.uint32(10).string(message.key);
+export const OraclePayloadDataSourceBlockHeight = {
+  encode(message: OraclePayloadDataSourceBlockHeight, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    if (message.dataSource !== "") {
+      writer.uint32(10).string(message.dataSource);
     }
-    if (message.value !== undefined) {
-      Height.encode(message.value, writer.uint32(18).fork()).ldelim();
+    if (message.blockHeight !== undefined) {
+      Height.encode(message.blockHeight, writer.uint32(18).fork()).ldelim();
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): OraclePayload_DataSourceBlockHeightsEntry {
+  decode(input: BinaryReader | Uint8Array, length?: number): OraclePayloadDataSourceBlockHeight {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseOraclePayload_DataSourceBlockHeightsEntry();
+    const message = createBaseOraclePayloadDataSourceBlockHeight();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.key = reader.string();
+          message.dataSource = reader.string();
           break;
         case 2:
-          message.value = Height.decode(reader, reader.uint32());
+          message.blockHeight = Height.decode(reader, reader.uint32());
           break;
         default:
           reader.skipType(tag & 7);
@@ -65,28 +61,28 @@ export const OraclePayload_DataSourceBlockHeightsEntry = {
     }
     return message;
   },
-  fromJSON(object: any): OraclePayload_DataSourceBlockHeightsEntry {
+  fromJSON(object: any): OraclePayloadDataSourceBlockHeight {
     return {
-      key: isSet(object.key) ? String(object.key) : "",
-      value: isSet(object.value) ? Height.fromJSON(object.value) : undefined
+      dataSource: isSet(object.dataSource) ? String(object.dataSource) : "",
+      blockHeight: isSet(object.blockHeight) ? Height.fromJSON(object.blockHeight) : undefined
     };
   },
-  toJSON(message: OraclePayload_DataSourceBlockHeightsEntry): unknown {
+  toJSON(message: OraclePayloadDataSourceBlockHeight): unknown {
     const obj: any = {};
-    message.key !== undefined && (obj.key = message.key);
-    message.value !== undefined && (obj.value = message.value ? Height.toJSON(message.value) : undefined);
+    message.dataSource !== undefined && (obj.dataSource = message.dataSource);
+    message.blockHeight !== undefined && (obj.blockHeight = message.blockHeight ? Height.toJSON(message.blockHeight) : undefined);
     return obj;
   },
-  fromPartial(object: Partial<OraclePayload_DataSourceBlockHeightsEntry>): OraclePayload_DataSourceBlockHeightsEntry {
-    const message = createBaseOraclePayload_DataSourceBlockHeightsEntry();
-    message.key = object.key ?? "";
-    message.value = object.value !== undefined && object.value !== null ? Height.fromPartial(object.value) : undefined;
+  fromPartial(object: Partial<OraclePayloadDataSourceBlockHeight>): OraclePayloadDataSourceBlockHeight {
+    const message = createBaseOraclePayloadDataSourceBlockHeight();
+    message.dataSource = object.dataSource ?? "";
+    message.blockHeight = object.blockHeight !== undefined && object.blockHeight !== null ? Height.fromPartial(object.blockHeight) : undefined;
     return message;
   }
 };
 function createBaseOraclePayload(): OraclePayload {
   return {
-    dataSourceBlockHeights: {},
+    dataSourceBlockHeights: [],
     price: "",
     pairs: [],
     quoteToken: ""
@@ -94,12 +90,9 @@ function createBaseOraclePayload(): OraclePayload {
 }
 export const OraclePayload = {
   encode(message: OraclePayload, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
-    Object.entries(message.dataSourceBlockHeights).forEach(([key, value]) => {
-      OraclePayload_DataSourceBlockHeightsEntry.encode({
-        key: (key as any),
-        value
-      }, writer.uint32(10).fork()).ldelim();
-    });
+    for (const v of message.dataSourceBlockHeights) {
+      OraclePayloadDataSourceBlockHeight.encode(v!, writer.uint32(10).fork()).ldelim();
+    }
     if (message.price !== "") {
       writer.uint32(18).string(Decimal.fromUserInput(message.price, 18).atomics);
     }
@@ -119,10 +112,7 @@ export const OraclePayload = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          const entry1 = OraclePayload_DataSourceBlockHeightsEntry.decode(reader, reader.uint32());
-          if (entry1.value !== undefined) {
-            message.dataSourceBlockHeights[entry1.key] = entry1.value;
-          }
+          message.dataSourceBlockHeights.push(OraclePayloadDataSourceBlockHeight.decode(reader, reader.uint32()));
           break;
         case 2:
           message.price = Decimal.fromAtomics(reader.string(), 18).toString();
@@ -142,12 +132,7 @@ export const OraclePayload = {
   },
   fromJSON(object: any): OraclePayload {
     return {
-      dataSourceBlockHeights: isObject(object.dataSourceBlockHeights) ? Object.entries(object.dataSourceBlockHeights).reduce<{
-        [key: string]: Height;
-      }>((acc, [key, value]) => {
-        acc[key] = Height.fromJSON(value);
-        return acc;
-      }, {}) : {},
+      dataSourceBlockHeights: Array.isArray(object?.dataSourceBlockHeights) ? object.dataSourceBlockHeights.map((e: any) => OraclePayloadDataSourceBlockHeight.fromJSON(e)) : [],
       price: isSet(object.price) ? String(object.price) : "",
       pairs: Array.isArray(object?.pairs) ? object.pairs.map((e: any) => Pair.fromJSON(e)) : [],
       quoteToken: isSet(object.quoteToken) ? String(object.quoteToken) : ""
@@ -155,11 +140,10 @@ export const OraclePayload = {
   },
   toJSON(message: OraclePayload): unknown {
     const obj: any = {};
-    obj.dataSourceBlockHeights = {};
     if (message.dataSourceBlockHeights) {
-      Object.entries(message.dataSourceBlockHeights).forEach(([k, v]) => {
-        obj.dataSourceBlockHeights[k] = Height.toJSON(v);
-      });
+      obj.dataSourceBlockHeights = message.dataSourceBlockHeights.map(e => e ? OraclePayloadDataSourceBlockHeight.toJSON(e) : undefined);
+    } else {
+      obj.dataSourceBlockHeights = [];
     }
     message.price !== undefined && (obj.price = message.price);
     if (message.pairs) {
@@ -172,14 +156,7 @@ export const OraclePayload = {
   },
   fromPartial(object: Partial<OraclePayload>): OraclePayload {
     const message = createBaseOraclePayload();
-    message.dataSourceBlockHeights = Object.entries(object.dataSourceBlockHeights ?? {}).reduce<{
-      [key: string]: Height;
-    }>((acc, [key, value]) => {
-      if (value !== undefined) {
-        acc[key] = Height.fromPartial(value);
-      }
-      return acc;
-    }, {});
+    message.dataSourceBlockHeights = object.dataSourceBlockHeights?.map(e => OraclePayloadDataSourceBlockHeight.fromPartial(e)) || [];
     message.price = object.price ?? "";
     message.pairs = object.pairs?.map(e => Pair.fromPartial(e)) || [];
     message.quoteToken = object.quoteToken ?? "";

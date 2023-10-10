@@ -15,8 +15,8 @@ message OraclePayload {
   // and oracle feeders' reported block height is checked to be after that specific block
   ibc.core.client.v1.Height block_height = 1 [(gogoproto.nullable) = false];
 
-  // map of validator addresses to the amount delegated to that validator
-  map<string, ValidatorState> validators = 3 [(gogoproto.nullable) = false];
+  // list of validators and their state containing the delegation amount
+  repeated ValidatorState validator_states = 3 [(gogoproto.nullable) = false];
 
   // balance of delegation interchain account
   string delegation_account_balance = 4 [

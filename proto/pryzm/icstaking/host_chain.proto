@@ -87,8 +87,8 @@ message HostChainState {
   // Information about the interchain accounts
   HostAccounts host_accounts = 2 [(gogoproto.nullable) = false];
 
-  // Mapping of validators address to their state
-  map<string, ValidatorState> validators = 3 [(gogoproto.nullable) = false];
+  // list of validators and their state containing the delegation amount
+  repeated ValidatorState validator_states = 3 [(gogoproto.nullable) = false];
 
   // The amount of assets that are in the delegation account and ready to be delegated
   string amount_to_be_delegated = 4 [
@@ -97,7 +97,7 @@ message HostChainState {
     (gogoproto.nullable) = false
   ];
 
-  // The amount of assets that are in the delegation account and ready to be delegated
+  // The amount of undelegated assets that are currently in the delegation account waiting to be collected
   string undelegated_amount_to_collect = 5 [
     (cosmos_proto.scalar) = "cosmos.Int",
     (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Int",
@@ -148,7 +148,8 @@ enum AccountState {
 }
 
 message ValidatorState {
-  string delegated_amount = 1 [
+  string validator_address = 1;
+  string delegated_amount = 2 [
     (cosmos_proto.scalar) = "cosmos.Int",
     (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Int",
     (gogoproto.nullable) = false

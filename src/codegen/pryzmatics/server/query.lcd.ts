@@ -7,6 +7,8 @@ import { QuerySubmitProposalMsgsRequest, QuerySubmitProposalMsgsResponseSDKType,
 import { QueryPoolTokenRequest, QueryPoolTokenResponseSDKType, QueryAllPoolTokenRequest, QueryAllPoolTokenResponseSDKType } from "./pool/pool_token";
 import { QueryPoolRequest, QueryPoolResponseSDKType, QueryPoolsRequest, QueryPoolsResponseSDKType } from "./pool/pool";
 import { QueryTokenRequest, QueryTokenResponseSDKType, QueryTokensRequest, QueryTokensResponseSDKType } from "./pool/token";
+import { QueryHistoricalTokenYieldRequest, QueryHistoricalTokenYieldResponseSDKType } from "./pool/historical_token_yield";
+import { QueryHistoricalPoolAprRequest, QueryHistoricalPoolAprResponseSDKType } from "./pool/historical_pool_apr";
 import { QueryPriceRequest, QueryPriceResponseSDKType } from "./price/price";
 import { QueryHistoricalPriceRequest, QueryHistoricalPriceResponseSDKType } from "./price/historical_price";
 import { QuerySwappableTokensRequest, QuerySwappableTokensResponseSDKType } from "./price/swappable_tokens";
@@ -24,8 +26,6 @@ import { QueryPoolTradeHistoryRequest, QueryPoolTradeHistoryResponseSDKType } fr
 import { QueryTokenTradeVolumeRequest, QueryTokenTradeVolumeResponseSDKType, QueryPoolTradeVolumeRequest, QueryPoolTradeVolumeResponseSDKType, QueryFavoritePairsRequest, QueryFavoritePairsResponseSDKType } from "./trade/trade_volume";
 import { QueryPulseTradablePairsRequest, QueryPulseTradablePairsResponseSDKType } from "./trade/pulse_tradable_pairs";
 import { QueryOrderRequest, QueryOrderResponseSDKType, QueryOrdersRequest, QueryOrdersResponseSDKType } from "./trade/order";
-import { QueryIncentivesAprRequest, QueryIncentivesAprResponseSDKType } from "./incentives/incentives";
-import { QueryAllianceAprRequest, QueryAllianceAprResponseSDKType } from "./alliance/alliance";
 import { QueryHostChainRequest, QueryHostChainResponseSDKType, QueryHostChainsRequest, QueryHostChainsResponseSDKType } from "./icstaking/host_chain";
 import { QueryValidatorRequest, QueryValidatorResponseSDKType, QueryValidatorsRequest, QueryValidatorsResponseSDKType } from "./oracle/validator";
 import { QueryVoteIntervalsRequest, QueryVoteIntervalsResponseSDKType } from "./oracle/vote_interval";
@@ -54,6 +54,8 @@ export class LCDQueryClient {
     this.pools = this.pools.bind(this);
     this.token = this.token.bind(this);
     this.tokens = this.tokens.bind(this);
+    this.historicalTokenYield = this.historicalTokenYield.bind(this);
+    this.historicalPoolApr = this.historicalPoolApr.bind(this);
     this.tokenPrice = this.tokenPrice.bind(this);
     this.historicalPrice = this.historicalPrice.bind(this);
     this.swappableTokens = this.swappableTokens.bind(this);
@@ -74,8 +76,6 @@ export class LCDQueryClient {
     this.pulseTradablePairs = this.pulseTradablePairs.bind(this);
     this.order = this.order.bind(this);
     this.orders = this.orders.bind(this);
-    this.incentivesApr = this.incentivesApr.bind(this);
-    this.allianceApr = this.allianceApr.bind(this);
     this.hostChain = this.hostChain.bind(this);
     this.hostChains = this.hostChains.bind(this);
     this.validator = this.validator.bind(this);
@@ -91,14 +91,8 @@ export class LCDQueryClient {
   }
   /* Asset */
   async asset(params: QueryAssetRequest): Promise<QueryAssetResponseSDKType> {
-    const options: any = {
-      params: {}
-    };
-    if (typeof params?.timeWindowInDays !== "undefined") {
-      options.params.time_window_in_days = params.timeWindowInDays;
-    }
     const endpoint = `pryzmatics/asset/${params.assetId}`;
-    return await this.req.get<QueryAssetResponseSDKType>(endpoint, options);
+    return await this.req.get<QueryAssetResponseSDKType>(endpoint);
   }
   /* MaturityAll */
   async maturityAll(params: QueryAllMaturitiesRequest): Promise<QueryAllMaturitiesResponseSDKType> {
@@ -110,9 +104,6 @@ export class LCDQueryClient {
     }
     if (typeof params?.active !== "undefined") {
       options.params.active = params.active;
-    }
-    if (typeof params?.timeWindowInDays !== "undefined") {
-      options.params.time_window_in_days = params.timeWindowInDays;
     }
     if (typeof params?.pagination !== "undefined") {
       setPaginationParams(options, params.pagination);
@@ -142,23 +133,16 @@ export class LCDQueryClient {
   }
   /* Pool */
   async pool(params: QueryPoolRequest): Promise<QueryPoolResponseSDKType> {
-    const options: any = {
-      params: {}
-    };
-    if (typeof params?.timeWindowInDays !== "undefined") {
-      options.params.time_window_in_days = params.timeWindowInDays;
-    }
     const endpoint = `pryzmatics/pool/${params.poolId}`;
-    return await this.req.get<QueryPoolResponseSDKType>(endpoint, options);
+    return await this.req.get<QueryPoolResponseSDKType>(endpoint);
   }
   /* Pools */
-  async pools(params: QueryPoolsRequest): Promise<QueryPoolsResponseSDKType> {
+  async pools(params: QueryPoolsRequest = {
+    pagination: undefined
+  }): Promise<QueryPoolsResponseSDKType> {
     const options: any = {
       params: {}
     };
-    if (typeof params?.timeWindowInDays !== "undefined") {
-      options.params.time_window_in_days = params.timeWindowInDays;
-    }
     if (typeof params?.pagination !== "undefined") {
       setPaginationParams(options, params.pagination);
     }
@@ -170,9 +154,6 @@ export class LCDQueryClient {
     const options: any = {
       params: {}
     };
-    if (typeof params?.timeWindowInDays !== "undefined") {
-      options.params.time_window_in_days = params.timeWindowInDays;
-    }
     if (typeof params?.tokenOut !== "undefined") {
       options.params.token_out = params.tokenOut;
     }
@@ -187,9 +168,6 @@ export class LCDQueryClient {
     if (typeof params?.tokenType !== "undefined") {
       options.params.token_type = params.tokenType;
     }
-    if (typeof params?.timeWindowInDays !== "undefined") {
-      options.params.time_window_in_days = params.timeWindowInDays;
-    }
     if (typeof params?.tokenOut !== "undefined") {
       options.params.token_out = params.tokenOut;
     }
@@ -198,6 +176,46 @@ export class LCDQueryClient {
     }
     const endpoint = `pryzmatics/token`;
     return await this.req.get<QueryTokensResponseSDKType>(endpoint, options);
+  }
+  /* HistoricalTokenYield */
+  async historicalTokenYield(params: QueryHistoricalTokenYieldRequest): Promise<QueryHistoricalTokenYieldResponseSDKType> {
+    const options: any = {
+      params: {}
+    };
+    if (typeof params?.timeResolutionType !== "undefined") {
+      options.params.time_resolution_type = params.timeResolutionType;
+    }
+    if (typeof params?.timeResolutionValue !== "undefined") {
+      options.params.time_resolution_value = params.timeResolutionValue;
+    }
+    if (typeof params?.from !== "undefined") {
+      options.params.from = params.from;
+    }
+    if (typeof params?.to !== "undefined") {
+      options.params.to = params.to;
+    }
+    const endpoint = `pryzmatics/token/historical_yield/${params.denom}`;
+    return await this.req.get<QueryHistoricalTokenYieldResponseSDKType>(endpoint, options);
+  }
+  /* HistoricalPoolApr */
+  async historicalPoolApr(params: QueryHistoricalPoolAprRequest): Promise<QueryHistoricalPoolAprResponseSDKType> {
+    const options: any = {
+      params: {}
+    };
+    if (typeof params?.timeResolutionType !== "undefined") {
+      options.params.time_resolution_type = params.timeResolutionType;
+    }
+    if (typeof params?.timeResolutionValue !== "undefined") {
+      options.params.time_resolution_value = params.timeResolutionValue;
+    }
+    if (typeof params?.from !== "undefined") {
+      options.params.from = params.from;
+    }
+    if (typeof params?.to !== "undefined") {
+      options.params.to = params.to;
+    }
+    const endpoint = `pryzmatics/pool/historical_apr/${params.poolId}`;
+    return await this.req.get<QueryHistoricalPoolAprResponseSDKType>(endpoint, options);
   }
   /* TokenPrice */
   async tokenPrice(params: QueryPriceRequest): Promise<QueryPriceResponseSDKType> {
@@ -485,47 +503,18 @@ export class LCDQueryClient {
     const endpoint = `pryzmatics/trade/order`;
     return await this.req.get<QueryOrdersResponseSDKType>(endpoint, options);
   }
-  /* IncentivesApr */
-  async incentivesApr(params: QueryIncentivesAprRequest): Promise<QueryIncentivesAprResponseSDKType> {
-    const options: any = {
-      params: {}
-    };
-    if (typeof params?.timeWindowInDays !== "undefined") {
-      options.params.time_window_in_days = params.timeWindowInDays;
-    }
-    const endpoint = `pryzmatics/incentives/apr/${params.denom}`;
-    return await this.req.get<QueryIncentivesAprResponseSDKType>(endpoint, options);
-  }
-  /* AllianceApr */
-  async allianceApr(params: QueryAllianceAprRequest): Promise<QueryAllianceAprResponseSDKType> {
-    const options: any = {
-      params: {}
-    };
-    if (typeof params?.timeWindowInDays !== "undefined") {
-      options.params.time_window_in_days = params.timeWindowInDays;
-    }
-    const endpoint = `pryzmatics/alliance/apr/${params.denom}`;
-    return await this.req.get<QueryAllianceAprResponseSDKType>(endpoint, options);
-  }
   /* HostChain */
   async hostChain(params: QueryHostChainRequest): Promise<QueryHostChainResponseSDKType> {
-    const options: any = {
-      params: {}
-    };
-    if (typeof params?.timeWindowInDays !== "undefined") {
-      options.params.time_window_in_days = params.timeWindowInDays;
-    }
     const endpoint = `pryzmatics/icstaking/host_chain/${params.hostChainId}`;
-    return await this.req.get<QueryHostChainResponseSDKType>(endpoint, options);
+    return await this.req.get<QueryHostChainResponseSDKType>(endpoint);
   }
   /* HostChains */
-  async hostChains(params: QueryHostChainsRequest): Promise<QueryHostChainsResponseSDKType> {
+  async hostChains(params: QueryHostChainsRequest = {
+    pagination: undefined
+  }): Promise<QueryHostChainsResponseSDKType> {
     const options: any = {
       params: {}
     };
-    if (typeof params?.timeWindowInDays !== "undefined") {
-      options.params.time_window_in_days = params.timeWindowInDays;
-    }
     if (typeof params?.pagination !== "undefined") {
       setPaginationParams(options, params.pagination);
     }

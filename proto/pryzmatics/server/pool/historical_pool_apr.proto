@@ -1,0 +1,29 @@
+syntax = "proto3";
+package pryzmatics.server.pool;
+
+import "gogoproto/gogo.proto";
+import "cosmos_proto/cosmos.proto";
+import "pryzmatics/common/time_resolution.proto";
+import "pryzmatics/pool/historical_pool_apr.proto";
+
+option go_package = "github.com/pryzm-finance/pryzmatics/server/pool";
+
+message QueryHistoricalPoolAprRequest {
+  uint64 pool_id = 1;
+  pryzmatics.common.TimeResolutionType time_resolution_type = 2;
+  uint32 time_resolution_value = 3;
+  string from = 4 [
+    (cosmos_proto.scalar) = "cosmos.Int",
+    (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Int",
+    (gogoproto.nullable) = false
+  ];
+  string to = 5 [
+    (cosmos_proto.scalar) = "cosmos.Int",
+    (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Int",
+    (gogoproto.nullable) = false
+  ];
+}
+
+message QueryHistoricalPoolAprResponse {
+  repeated pryzmatics.pool.HistoricalPoolApr historical_pool_aprs = 1 [(gogoproto.nullable) = false];
+}

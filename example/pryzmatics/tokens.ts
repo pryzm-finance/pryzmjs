@@ -15,7 +15,6 @@ async function main() {
     tokens = (await pryzmaticsClient.pryzmatics.tokens({
         tokenType: TokenType.TOKEN_TYPE_P,
         tokenOut: "",
-        timeWindowInDays: "20"
     })).tokens
     console.log(tokens)
 }

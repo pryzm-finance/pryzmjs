@@ -1,9 +1,7 @@
 syntax = "proto3";
 package pryzmatics.server;
 
-import "gogoproto/gogo.proto";
 import "google/api/annotations.proto";
-import "cosmos/tx/v1beta1/service.proto";
 
 import "pryzmatics/server/asset/asset.proto";
 
@@ -14,6 +12,9 @@ import "pryzmatics/server/pgov/pgov.proto";
 import "pryzmatics/server/pool/pool_token.proto";
 import "pryzmatics/server/pool/pool.proto";
 import "pryzmatics/server/pool/token.proto";
+import "pryzmatics/server/pool/historical_token_yield.proto";
+import "pryzmatics/server/pool/historical_pool_apr.proto";
+
 
 import "pryzmatics/server/price/historical_price.proto";
 import "pryzmatics/server/price/price.proto";
@@ -33,10 +34,6 @@ import "pryzmatics/server/trade/exit_all_tokens_exact_lpt_simulation.proto";
 import "pryzmatics/server/trade/trade_volume.proto";
 import "pryzmatics/server/trade/user_trade_history.proto";
 import "pryzmatics/server/trade/order.proto";
-
-import "pryzmatics/server/incentives/incentives.proto";
-
-import "pryzmatics/server/alliance/alliance.proto";
 
 import "pryzmatics/server/icstaking/host_chain.proto";
 
@@ -93,6 +90,14 @@ service Query {
 
   rpc Tokens(pryzmatics.server.pool.QueryTokensRequest) returns (pryzmatics.server.pool.QueryTokensResponse) {
     option (google.api.http).get = "/pryzmatics/token";
+  }
+
+  rpc HistoricalTokenYield(pryzmatics.server.pool.QueryHistoricalTokenYieldRequest) returns (pryzmatics.server.pool.QueryHistoricalTokenYieldResponse) {
+    option (google.api.http).get = "/pryzmatics/token/historical_yield/{denom}";
+  }
+
+  rpc HistoricalPoolApr(pryzmatics.server.pool.QueryHistoricalPoolAprRequest) returns (pryzmatics.server.pool.QueryHistoricalPoolAprResponse) {
+    option (google.api.http).get = "/pryzmatics/pool/historical_apr/{pool_id}";
   }
 
   rpc TokenPrice(pryzmatics.server.price.QueryPriceRequest) returns (pryzmatics.server.price.QueryPriceResponse) {
@@ -173,14 +178,6 @@ service Query {
 
   rpc Orders(pryzmatics.server.trade.QueryOrdersRequest) returns (pryzmatics.server.trade.QueryOrdersResponse) {
     option (google.api.http).get = "/pryzmatics/trade/order";
-  }
-
-  rpc IncentivesApr(pryzmatics.server.incentives.QueryIncentivesAprRequest) returns (pryzmatics.server.incentives.QueryIncentivesAprResponse) {
-    option (google.api.http).get = "/pryzmatics/incentives/apr/{denom}";
-  }
-
-  rpc AllianceApr(pryzmatics.server.alliance.QueryAllianceAprRequest) returns (pryzmatics.server.alliance.QueryAllianceAprResponse) {
-    option (google.api.http).get = "/pryzmatics/alliance/apr/{denom}";
   }
 
   rpc HostChain(pryzmatics.server.icstaking.QueryHostChainRequest) returns (pryzmatics.server.icstaking.QueryHostChainResponse) {

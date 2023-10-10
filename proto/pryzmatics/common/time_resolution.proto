@@ -1,0 +1,18 @@
+syntax = "proto3";
+package pryzmatics.common;
+
+import "gogoproto/gogo.proto";
+import "google/protobuf/timestamp.proto";
+import "cosmos_proto/cosmos.proto";
+
+option go_package = "github.com/pryzm-finance/pryzmatics/types/common";
+
+enum TimeResolutionType {
+  option (gogoproto.goproto_enum_prefix) = false;
+  TIME_RESOLUTION_TYPE_MINUTE = 0 [(gogoproto.enumvalue_customname) = "MinuteTimeResolutionType"];
+  TIME_RESOLUTION_TYPE_HOUR = 1 [(gogoproto.enumvalue_customname) = "HourTimeResolutionType"];
+  TIME_RESOLUTION_TYPE_DAY = 2 [(gogoproto.enumvalue_customname) = "DayTimeResolutionType"];
+  TIME_RESOLUTION_TYPE_WEEK = 3 [(gogoproto.enumvalue_customname) = "WeekTimeResolutionType"];
+  TIME_RESOLUTION_TYPE_MONTH = 4 [(gogoproto.enumvalue_customname) = "MonthTimeResolutionType"];
+  TIME_RESOLUTION_TYPE_YEAR = 5 [(gogoproto.enumvalue_customname) = "YearTimeResolutionType"];
+}

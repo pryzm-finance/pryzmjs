@@ -5,10 +5,7 @@ import { PRYZMATICS_ENDPOINT } from "./config";
 async function main() {
     const pryzmaticsClient = await pryzmatics.ClientFactory.createClient({ restEndpoint: PRYZMATICS_ENDPOINT })
 
-    let pools = (await pryzmaticsClient.pryzmatics.pools({})).pools
-    console.log(pools)
-
-    pools = (await pryzmaticsClient.pryzmatics.pools({ timeWindowInDays: "20" })).pools
+    const pools = (await pryzmaticsClient.pryzmatics.pools({})).pools
     console.log(pools)
 }
 

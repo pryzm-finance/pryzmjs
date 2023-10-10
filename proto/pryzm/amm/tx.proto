@@ -26,6 +26,7 @@ service Msg {
   rpc JoinAllTokensExactLpt(MsgJoinAllTokensExactLpt) returns (MsgJoinAllTokensExactLptResponse);
   rpc JoinTokenExactLpt(MsgJoinTokenExactLpt) returns (MsgJoinTokenExactLptResponse);
   rpc JoinExactTokens(MsgJoinExactTokens) returns (MsgJoinExactTokensResponse);
+  rpc ZeroImpactJoinYamm(MsgZeroImpactJoinYamm) returns (MsgZeroImpactJoinYammResponse);
   rpc ExitExactTokens(MsgExitExactTokens) returns (MsgExitExactTokensResponse);
   rpc ExitTokenExactLpt(MsgExitTokenExactLpt) returns (MsgExitTokenExactLptResponse);
   rpc ExitAllTokensExactLpt(MsgExitAllTokensExactLpt) returns (MsgExitAllTokensExactLptResponse);
@@ -166,6 +167,39 @@ message MsgJoinExactTokensResponse {
     (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins"
   ];
   repeated cosmos.base.v1beta1.Coin swap_fee = 4 [
+    (gogoproto.nullable) = false,
+    (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins"
+  ];
+}
+
+message MsgZeroImpactJoinYamm {
+  option (cosmos.msg.v1.signer) = "creator";
+
+  string creator = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
+  cosmos.base.v1beta1.Coin c_amount_in = 2 [(gogoproto.nullable) = false];
+  string min_lpt_out = 3 [
+    (cosmos_proto.scalar) = "cosmos.Int",
+    (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Int",
+    (gogoproto.nullable) = true
+  ];
+}
+
+message MsgZeroImpactJoinYammResponse {
+  cosmos.base.v1beta1.Coin lpt_out = 1 [(gogoproto.nullable) = false];
+
+  repeated cosmos.base.v1beta1.Coin y_out = 2 [
+    (gogoproto.nullable) = false,
+    (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins"
+  ];
+
+  cosmos.base.v1beta1.Coin refract_fee = 3 [(gogoproto.nullable) = false];
+
+  repeated cosmos.base.v1beta1.Coin join_protocol_fee = 4 [
+    (gogoproto.nullable) = false,
+    (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins"
+  ];
+
+  repeated cosmos.base.v1beta1.Coin swap_fee = 5 [
     (gogoproto.nullable) = false,
     (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins"
   ];

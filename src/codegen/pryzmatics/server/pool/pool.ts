@@ -4,11 +4,9 @@ import { BinaryReader, BinaryWriter } from "../../../binary";
 import { isSet } from "../../../helpers";
 export interface QueryPoolRequest {
   poolId: bigint;
-  timeWindowInDays?: string;
 }
 export interface QueryPoolRequestSDKType {
   pool_id: bigint;
-  time_window_in_days?: string;
 }
 export interface QueryPoolResponse {
   pool: Pool;
@@ -17,11 +15,9 @@ export interface QueryPoolResponseSDKType {
   pool: PoolSDKType;
 }
 export interface QueryPoolsRequest {
-  timeWindowInDays?: string;
   pagination?: PageRequest;
 }
 export interface QueryPoolsRequestSDKType {
-  time_window_in_days?: string;
   pagination?: PageRequestSDKType;
 }
 export interface QueryPoolsResponse {
@@ -34,17 +30,13 @@ export interface QueryPoolsResponseSDKType {
 }
 function createBaseQueryPoolRequest(): QueryPoolRequest {
   return {
-    poolId: BigInt(0),
-    timeWindowInDays: undefined
+    poolId: BigInt(0)
   };
 }
 export const QueryPoolRequest = {
   encode(message: QueryPoolRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.poolId !== BigInt(0)) {
       writer.uint32(8).uint64(message.poolId);
-    }
-    if (message.timeWindowInDays !== undefined) {
-      writer.uint32(18).string(message.timeWindowInDays);
     }
     return writer;
   },
@@ -58,9 +50,6 @@ export const QueryPoolRequest = {
         case 1:
           message.poolId = reader.uint64();
           break;
-        case 2:
-          message.timeWindowInDays = reader.string();
-          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -70,20 +59,17 @@ export const QueryPoolRequest = {
   },
   fromJSON(object: any): QueryPoolRequest {
     return {
-      poolId: isSet(object.poolId) ? BigInt(object.poolId.toString()) : BigInt(0),
-      timeWindowInDays: isSet(object.timeWindowInDays) ? String(object.timeWindowInDays) : undefined
+      poolId: isSet(object.poolId) ? BigInt(object.poolId.toString()) : BigInt(0)
     };
   },
   toJSON(message: QueryPoolRequest): unknown {
     const obj: any = {};
     message.poolId !== undefined && (obj.poolId = (message.poolId || BigInt(0)).toString());
-    message.timeWindowInDays !== undefined && (obj.timeWindowInDays = message.timeWindowInDays);
     return obj;
   },
   fromPartial(object: Partial<QueryPoolRequest>): QueryPoolRequest {
     const message = createBaseQueryPoolRequest();
     message.poolId = object.poolId !== undefined && object.poolId !== null ? BigInt(object.poolId.toString()) : BigInt(0);
-    message.timeWindowInDays = object.timeWindowInDays ?? undefined;
     return message;
   }
 };
@@ -134,17 +120,13 @@ export const QueryPoolResponse = {
 };
 function createBaseQueryPoolsRequest(): QueryPoolsRequest {
   return {
-    timeWindowInDays: undefined,
     pagination: undefined
   };
 }
 export const QueryPoolsRequest = {
   encode(message: QueryPoolsRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
-    if (message.timeWindowInDays !== undefined) {
-      writer.uint32(10).string(message.timeWindowInDays);
-    }
     if (message.pagination !== undefined) {
-      PageRequest.encode(message.pagination, writer.uint32(18).fork()).ldelim();
+      PageRequest.encode(message.pagination, writer.uint32(10).fork()).ldelim();
     }
     return writer;
   },
@@ -156,9 +138,6 @@ export const QueryPoolsRequest = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.timeWindowInDays = reader.string();
-          break;
-        case 2:
           message.pagination = PageRequest.decode(reader, reader.uint32());
           break;
         default:
@@ -170,19 +149,16 @@ export const QueryPoolsRequest = {
   },
   fromJSON(object: any): QueryPoolsRequest {
     return {
-      timeWindowInDays: isSet(object.timeWindowInDays) ? String(object.timeWindowInDays) : undefined,
       pagination: isSet(object.pagination) ? PageRequest.fromJSON(object.pagination) : undefined
     };
   },
   toJSON(message: QueryPoolsRequest): unknown {
     const obj: any = {};
-    message.timeWindowInDays !== undefined && (obj.timeWindowInDays = message.timeWindowInDays);
     message.pagination !== undefined && (obj.pagination = message.pagination ? PageRequest.toJSON(message.pagination) : undefined);
     return obj;
   },
   fromPartial(object: Partial<QueryPoolsRequest>): QueryPoolsRequest {
     const message = createBaseQueryPoolsRequest();
-    message.timeWindowInDays = object.timeWindowInDays ?? undefined;
     message.pagination = object.pagination !== undefined && object.pagination !== null ? PageRequest.fromPartial(object.pagination) : undefined;
     return message;
   }

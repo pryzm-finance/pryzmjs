@@ -1,4 +1,5 @@
-import { TimeResolutionType, HistoricalPrice, HistoricalPriceSDKType, timeResolutionTypeFromJSON, timeResolutionTypeToJSON } from "../../price/historical_price";
+import { TimeResolutionType, timeResolutionTypeFromJSON, timeResolutionTypeToJSON } from "../../common/time_resolution";
+import { HistoricalPrice, HistoricalPriceSDKType } from "../../price/historical_price";
 import { BinaryReader, BinaryWriter } from "../../../binary";
 import { isSet } from "../../../helpers";
 export interface QueryHistoricalPriceRequest {

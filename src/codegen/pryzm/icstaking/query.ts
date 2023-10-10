@@ -2,6 +2,7 @@ import { PageRequest, PageRequestSDKType, PageResponse, PageResponseSDKType } fr
 import { Params, ParamsSDKType } from "./params";
 import { HostChain, HostChainSDKType, HostChainState, HostChainStateSDKType } from "./host_chain";
 import { Undelegation, UndelegationSDKType } from "./undelegation";
+import { Coin, CoinSDKType } from "../../cosmos/base/v1beta1/coin";
 import { BinaryReader, BinaryWriter } from "../../binary";
 import { isSet } from "../../helpers";
 /** QueryParamsRequest is request type for the Query/Params RPC method. */
@@ -112,6 +113,20 @@ export interface QueryIncompleteUndelegationResponse {
 export interface QueryIncompleteUndelegationResponseSDKType {
   undelegation: UndelegationSDKType[];
   pagination?: PageResponseSDKType;
+}
+export interface QueryDelegationQueueBalanceRequest {
+  hostChain: string;
+  transferChannel: string;
+}
+export interface QueryDelegationQueueBalanceRequestSDKType {
+  host_chain: string;
+  transfer_channel: string;
+}
+export interface QueryDelegationQueueBalanceResponse {
+  balance: Coin;
+}
+export interface QueryDelegationQueueBalanceResponseSDKType {
+  balance: CoinSDKType;
 }
 function createBaseQueryParamsRequest(): QueryParamsRequest {
   return {};
@@ -894,6 +909,106 @@ export const QueryIncompleteUndelegationResponse = {
     const message = createBaseQueryIncompleteUndelegationResponse();
     message.undelegation = object.undelegation?.map(e => Undelegation.fromPartial(e)) || [];
     message.pagination = object.pagination !== undefined && object.pagination !== null ? PageResponse.fromPartial(object.pagination) : undefined;
+    return message;
+  }
+};
+function createBaseQueryDelegationQueueBalanceRequest(): QueryDelegationQueueBalanceRequest {
+  return {
+    hostChain: "",
+    transferChannel: ""
+  };
+}
+export const QueryDelegationQueueBalanceRequest = {
+  encode(message: QueryDelegationQueueBalanceRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    if (message.hostChain !== "") {
+      writer.uint32(10).string(message.hostChain);
+    }
+    if (message.transferChannel !== "") {
+      writer.uint32(18).string(message.transferChannel);
+    }
+    return writer;
+  },
+  decode(input: BinaryReader | Uint8Array, length?: number): QueryDelegationQueueBalanceRequest {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseQueryDelegationQueueBalanceRequest();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.hostChain = reader.string();
+          break;
+        case 2:
+          message.transferChannel = reader.string();
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromJSON(object: any): QueryDelegationQueueBalanceRequest {
+    return {
+      hostChain: isSet(object.hostChain) ? String(object.hostChain) : "",
+      transferChannel: isSet(object.transferChannel) ? String(object.transferChannel) : ""
+    };
+  },
+  toJSON(message: QueryDelegationQueueBalanceRequest): unknown {
+    const obj: any = {};
+    message.hostChain !== undefined && (obj.hostChain = message.hostChain);
+    message.transferChannel !== undefined && (obj.transferChannel = message.transferChannel);
+    return obj;
+  },
+  fromPartial(object: Partial<QueryDelegationQueueBalanceRequest>): QueryDelegationQueueBalanceRequest {
+    const message = createBaseQueryDelegationQueueBalanceRequest();
+    message.hostChain = object.hostChain ?? "";
+    message.transferChannel = object.transferChannel ?? "";
+    return message;
+  }
+};
+function createBaseQueryDelegationQueueBalanceResponse(): QueryDelegationQueueBalanceResponse {
+  return {
+    balance: Coin.fromPartial({})
+  };
+}
+export const QueryDelegationQueueBalanceResponse = {
+  encode(message: QueryDelegationQueueBalanceResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    if (message.balance !== undefined) {
+      Coin.encode(message.balance, writer.uint32(10).fork()).ldelim();
+    }
+    return writer;
+  },
+  decode(input: BinaryReader | Uint8Array, length?: number): QueryDelegationQueueBalanceResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseQueryDelegationQueueBalanceResponse();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.balance = Coin.decode(reader, reader.uint32());
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromJSON(object: any): QueryDelegationQueueBalanceResponse {
+    return {
+      balance: isSet(object.balance) ? Coin.fromJSON(object.balance) : undefined
+    };
+  },
+  toJSON(message: QueryDelegationQueueBalanceResponse): unknown {
+    const obj: any = {};
+    message.balance !== undefined && (obj.balance = message.balance ? Coin.toJSON(message.balance) : undefined);
+    return obj;
+  },
+  fromPartial(object: Partial<QueryDelegationQueueBalanceResponse>): QueryDelegationQueueBalanceResponse {
+    const message = createBaseQueryDelegationQueueBalanceResponse();
+    message.balance = object.balance !== undefined && object.balance !== null ? Coin.fromPartial(object.balance) : undefined;
     return message;
   }
 };

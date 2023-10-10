@@ -5,13 +5,11 @@ import { isSet } from "../../../helpers";
 export interface QueryAllMaturitiesRequest {
   assetId: string;
   active: string;
-  timeWindowInDays?: string;
   pagination?: PageRequest;
 }
 export interface QueryAllMaturitiesRequestSDKType {
   asset_id: string;
   active: string;
-  time_window_in_days?: string;
   pagination?: PageRequestSDKType;
 }
 export interface QueryAllMaturitiesResponse {
@@ -26,7 +24,6 @@ function createBaseQueryAllMaturitiesRequest(): QueryAllMaturitiesRequest {
   return {
     assetId: "",
     active: "",
-    timeWindowInDays: undefined,
     pagination: undefined
   };
 }
@@ -38,11 +35,8 @@ export const QueryAllMaturitiesRequest = {
     if (message.active !== "") {
       writer.uint32(18).string(message.active);
     }
-    if (message.timeWindowInDays !== undefined) {
-      writer.uint32(26).string(message.timeWindowInDays);
-    }
     if (message.pagination !== undefined) {
-      PageRequest.encode(message.pagination, writer.uint32(34).fork()).ldelim();
+      PageRequest.encode(message.pagination, writer.uint32(26).fork()).ldelim();
     }
     return writer;
   },
@@ -60,9 +54,6 @@ export const QueryAllMaturitiesRequest = {
           message.active = reader.string();
           break;
         case 3:
-          message.timeWindowInDays = reader.string();
-          break;
-        case 4:
           message.pagination = PageRequest.decode(reader, reader.uint32());
           break;
         default:
@@ -76,7 +67,6 @@ export const QueryAllMaturitiesRequest = {
     return {
       assetId: isSet(object.assetId) ? String(object.assetId) : "",
       active: isSet(object.active) ? String(object.active) : "",
-      timeWindowInDays: isSet(object.timeWindowInDays) ? String(object.timeWindowInDays) : undefined,
       pagination: isSet(object.pagination) ? PageRequest.fromJSON(object.pagination) : undefined
     };
   },
@@ -84,7 +74,6 @@ export const QueryAllMaturitiesRequest = {
     const obj: any = {};
     message.assetId !== undefined && (obj.assetId = message.assetId);
     message.active !== undefined && (obj.active = message.active);
-    message.timeWindowInDays !== undefined && (obj.timeWindowInDays = message.timeWindowInDays);
     message.pagination !== undefined && (obj.pagination = message.pagination ? PageRequest.toJSON(message.pagination) : undefined);
     return obj;
   },
@@ -92,7 +81,6 @@ export const QueryAllMaturitiesRequest = {
     const message = createBaseQueryAllMaturitiesRequest();
     message.assetId = object.assetId ?? "";
     message.active = object.active ?? "";
-    message.timeWindowInDays = object.timeWindowInDays ?? undefined;
     message.pagination = object.pagination !== undefined && object.pagination !== null ? PageRequest.fromPartial(object.pagination) : undefined;
     return message;
   }

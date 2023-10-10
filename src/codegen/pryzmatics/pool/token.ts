@@ -1,7 +1,7 @@
-import { Timestamp, TimestampSDKType } from "../../google/protobuf/timestamp";
+import { TokenYield, TokenYieldSDKType } from "./token_yield";
 import { BinaryReader, BinaryWriter } from "../../binary";
 import { Decimal } from "@cosmjs/math";
-import { isSet, fromJsonTimestamp, fromTimestamp } from "../../helpers";
+import { isSet } from "../../helpers";
 export enum TokenType {
   TOKEN_TYPE_ANY = 0,
   TOKEN_TYPE_P = 1,
@@ -60,44 +60,41 @@ export function tokenTypeToJSON(object: TokenType): string {
 export interface Token {
   denom: string;
   type: TokenType;
-  totalYield?: string;
-  internalYield?: string;
-  incentivesApr?: string;
-  allianceApr?: string;
-  yStakingYield?: string;
-  yieldCalculationTime?: Timestamp;
+  yield?: TokenYield;
   price?: string;
-  priceChangePercentage?: string;
-  tradeVolume: string;
+  priceChangePercentage24h?: string;
+  priceChangePercentage7d?: string;
+  priceChangePercentage30d?: string;
+  tradeVolume24h: string;
+  tradeVolume7d: string;
+  tradeVolume30d: string;
   error: string;
 }
 export interface TokenSDKType {
   denom: string;
   type: TokenType;
-  total_yield?: string;
-  internal_yield?: string;
-  incentives_apr?: string;
-  alliance_apr?: string;
-  y_staking_yield?: string;
-  yield_calculation_time?: TimestampSDKType;
+  yield?: TokenYieldSDKType;
   price?: string;
-  price_change_percentage?: string;
-  trade_volume: string;
+  price_change_percentage_24h?: string;
+  price_change_percentage_7d?: string;
+  price_change_percentage_30d?: string;
+  trade_volume_24h: string;
+  trade_volume_7d: string;
+  trade_volume_30d: string;
   error: string;
 }
 function createBaseToken(): Token {
   return {
     denom: "",
     type: 0,
-    totalYield: undefined,
-    internalYield: undefined,
-    incentivesApr: undefined,
-    allianceApr: undefined,
-    yStakingYield: undefined,
-    yieldCalculationTime: undefined,
+    yield: undefined,
     price: undefined,
-    priceChangePercentage: undefined,
-    tradeVolume: "",
+    priceChangePercentage24h: undefined,
+    priceChangePercentage7d: undefined,
+    priceChangePercentage30d: undefined,
+    tradeVolume24h: "",
+    tradeVolume7d: "",
+    tradeVolume30d: "",
     error: ""
   };
 }
@@ -109,35 +106,32 @@ export const Token = {
     if (message.type !== 0) {
       writer.uint32(16).int32(message.type);
     }
-    if (message.totalYield !== undefined) {
-      writer.uint32(26).string(Decimal.fromUserInput(message.totalYield, 18).atomics);
-    }
-    if (message.internalYield !== undefined) {
-      writer.uint32(34).string(Decimal.fromUserInput(message.internalYield, 18).atomics);
-    }
-    if (message.incentivesApr !== undefined) {
-      writer.uint32(42).string(Decimal.fromUserInput(message.incentivesApr, 18).atomics);
-    }
-    if (message.allianceApr !== undefined) {
-      writer.uint32(50).string(Decimal.fromUserInput(message.allianceApr, 18).atomics);
-    }
-    if (message.yStakingYield !== undefined) {
-      writer.uint32(58).string(Decimal.fromUserInput(message.yStakingYield, 18).atomics);
-    }
-    if (message.yieldCalculationTime !== undefined) {
-      Timestamp.encode(message.yieldCalculationTime, writer.uint32(66).fork()).ldelim();
+    if (message.yield !== undefined) {
+      TokenYield.encode(message.yield, writer.uint32(26).fork()).ldelim();
     }
     if (message.price !== undefined) {
-      writer.uint32(74).string(Decimal.fromUserInput(message.price, 18).atomics);
+      writer.uint32(34).string(Decimal.fromUserInput(message.price, 18).atomics);
     }
-    if (message.priceChangePercentage !== undefined) {
-      writer.uint32(82).string(Decimal.fromUserInput(message.priceChangePercentage, 18).atomics);
+    if (message.priceChangePercentage24h !== undefined) {
+      writer.uint32(42).string(Decimal.fromUserInput(message.priceChangePercentage24h, 18).atomics);
     }
-    if (message.tradeVolume !== "") {
-      writer.uint32(90).string(Decimal.fromUserInput(message.tradeVolume, 18).atomics);
+    if (message.priceChangePercentage7d !== undefined) {
+      writer.uint32(50).string(Decimal.fromUserInput(message.priceChangePercentage7d, 18).atomics);
+    }
+    if (message.priceChangePercentage30d !== undefined) {
+      writer.uint32(58).string(Decimal.fromUserInput(message.priceChangePercentage30d, 18).atomics);
+    }
+    if (message.tradeVolume24h !== "") {
+      writer.uint32(66).string(Decimal.fromUserInput(message.tradeVolume24h, 18).atomics);
+    }
+    if (message.tradeVolume7d !== "") {
+      writer.uint32(74).string(Decimal.fromUserInput(message.tradeVolume7d, 18).atomics);
+    }
+    if (message.tradeVolume30d !== "") {
+      writer.uint32(82).string(Decimal.fromUserInput(message.tradeVolume30d, 18).atomics);
     }
     if (message.error !== "") {
-      writer.uint32(98).string(message.error);
+      writer.uint32(90).string(message.error);
     }
     return writer;
   },
@@ -155,33 +149,30 @@ export const Token = {
           message.type = (reader.int32() as any);
           break;
         case 3:
-          message.totalYield = Decimal.fromAtomics(reader.string(), 18).toString();
+          message.yield = TokenYield.decode(reader, reader.uint32());
           break;
         case 4:
-          message.internalYield = Decimal.fromAtomics(reader.string(), 18).toString();
-          break;
-        case 5:
-          message.incentivesApr = Decimal.fromAtomics(reader.string(), 18).toString();
-          break;
-        case 6:
-          message.allianceApr = Decimal.fromAtomics(reader.string(), 18).toString();
-          break;
-        case 7:
-          message.yStakingYield = Decimal.fromAtomics(reader.string(), 18).toString();
-          break;
-        case 8:
-          message.yieldCalculationTime = Timestamp.decode(reader, reader.uint32());
-          break;
-        case 9:
           message.price = Decimal.fromAtomics(reader.string(), 18).toString();
           break;
+        case 5:
+          message.priceChangePercentage24h = Decimal.fromAtomics(reader.string(), 18).toString();
+          break;
+        case 6:
+          message.priceChangePercentage7d = Decimal.fromAtomics(reader.string(), 18).toString();
+          break;
+        case 7:
+          message.priceChangePercentage30d = Decimal.fromAtomics(reader.string(), 18).toString();
+          break;
+        case 8:
+          message.tradeVolume24h = Decimal.fromAtomics(reader.string(), 18).toString();
+          break;
+        case 9:
+          message.tradeVolume7d = Decimal.fromAtomics(reader.string(), 18).toString();
+          break;
         case 10:
-          message.priceChangePercentage = Decimal.fromAtomics(reader.string(), 18).toString();
+          message.tradeVolume30d = Decimal.fromAtomics(reader.string(), 18).toString();
           break;
         case 11:
-          message.tradeVolume = Decimal.fromAtomics(reader.string(), 18).toString();
-          break;
-        case 12:
           message.error = reader.string();
           break;
         default:
@@ -195,15 +186,14 @@ export const Token = {
     return {
       denom: isSet(object.denom) ? String(object.denom) : "",
       type: isSet(object.type) ? tokenTypeFromJSON(object.type) : -1,
-      totalYield: isSet(object.totalYield) ? String(object.totalYield) : undefined,
-      internalYield: isSet(object.internalYield) ? String(object.internalYield) : undefined,
-      incentivesApr: isSet(object.incentivesApr) ? String(object.incentivesApr) : undefined,
-      allianceApr: isSet(object.allianceApr) ? String(object.allianceApr) : undefined,
-      yStakingYield: isSet(object.yStakingYield) ? String(object.yStakingYield) : undefined,
-      yieldCalculationTime: isSet(object.yieldCalculationTime) ? fromJsonTimestamp(object.yieldCalculationTime) : undefined,
+      yield: isSet(object.yield) ? TokenYield.fromJSON(object.yield) : undefined,
       price: isSet(object.price) ? String(object.price) : undefined,
-      priceChangePercentage: isSet(object.priceChangePercentage) ? String(object.priceChangePercentage) : undefined,
-      tradeVolume: isSet(object.tradeVolume) ? String(object.tradeVolume) : "",
+      priceChangePercentage24h: isSet(object.priceChangePercentage24h) ? String(object.priceChangePercentage24h) : undefined,
+      priceChangePercentage7d: isSet(object.priceChangePercentage7d) ? String(object.priceChangePercentage7d) : undefined,
+      priceChangePercentage30d: isSet(object.priceChangePercentage30d) ? String(object.priceChangePercentage30d) : undefined,
+      tradeVolume24h: isSet(object.tradeVolume24h) ? String(object.tradeVolume24h) : "",
+      tradeVolume7d: isSet(object.tradeVolume7d) ? String(object.tradeVolume7d) : "",
+      tradeVolume30d: isSet(object.tradeVolume30d) ? String(object.tradeVolume30d) : "",
       error: isSet(object.error) ? String(object.error) : ""
     };
   },
@@ -211,15 +201,14 @@ export const Token = {
     const obj: any = {};
     message.denom !== undefined && (obj.denom = message.denom);
     message.type !== undefined && (obj.type = tokenTypeToJSON(message.type));
-    message.totalYield !== undefined && (obj.totalYield = message.totalYield);
-    message.internalYield !== undefined && (obj.internalYield = message.internalYield);
-    message.incentivesApr !== undefined && (obj.incentivesApr = message.incentivesApr);
-    message.allianceApr !== undefined && (obj.allianceApr = message.allianceApr);
-    message.yStakingYield !== undefined && (obj.yStakingYield = message.yStakingYield);
-    message.yieldCalculationTime !== undefined && (obj.yieldCalculationTime = fromTimestamp(message.yieldCalculationTime).toISOString());
+    message.yield !== undefined && (obj.yield = message.yield ? TokenYield.toJSON(message.yield) : undefined);
     message.price !== undefined && (obj.price = message.price);
-    message.priceChangePercentage !== undefined && (obj.priceChangePercentage = message.priceChangePercentage);
-    message.tradeVolume !== undefined && (obj.tradeVolume = message.tradeVolume);
+    message.priceChangePercentage24h !== undefined && (obj.priceChangePercentage24h = message.priceChangePercentage24h);
+    message.priceChangePercentage7d !== undefined && (obj.priceChangePercentage7d = message.priceChangePercentage7d);
+    message.priceChangePercentage30d !== undefined && (obj.priceChangePercentage30d = message.priceChangePercentage30d);
+    message.tradeVolume24h !== undefined && (obj.tradeVolume24h = message.tradeVolume24h);
+    message.tradeVolume7d !== undefined && (obj.tradeVolume7d = message.tradeVolume7d);
+    message.tradeVolume30d !== undefined && (obj.tradeVolume30d = message.tradeVolume30d);
     message.error !== undefined && (obj.error = message.error);
     return obj;
   },
@@ -227,15 +216,14 @@ export const Token = {
     const message = createBaseToken();
     message.denom = object.denom ?? "";
     message.type = object.type ?? 0;
-    message.totalYield = object.totalYield ?? undefined;
-    message.internalYield = object.internalYield ?? undefined;
-    message.incentivesApr = object.incentivesApr ?? undefined;
-    message.allianceApr = object.allianceApr ?? undefined;
-    message.yStakingYield = object.yStakingYield ?? undefined;
-    message.yieldCalculationTime = object.yieldCalculationTime !== undefined && object.yieldCalculationTime !== null ? Timestamp.fromPartial(object.yieldCalculationTime) : undefined;
+    message.yield = object.yield !== undefined && object.yield !== null ? TokenYield.fromPartial(object.yield) : undefined;
     message.price = object.price ?? undefined;
-    message.priceChangePercentage = object.priceChangePercentage ?? undefined;
-    message.tradeVolume = object.tradeVolume ?? "";
+    message.priceChangePercentage24h = object.priceChangePercentage24h ?? undefined;
+    message.priceChangePercentage7d = object.priceChangePercentage7d ?? undefined;
+    message.priceChangePercentage30d = object.priceChangePercentage30d ?? undefined;
+    message.tradeVolume24h = object.tradeVolume24h ?? "";
+    message.tradeVolume7d = object.tradeVolume7d ?? "";
+    message.tradeVolume30d = object.tradeVolume30d ?? "";
     message.error = object.error ?? "";
     return message;
   }
