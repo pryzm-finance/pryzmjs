@@ -3,7 +3,7 @@ import { grpc } from "@improbable-eng/grpc-web";
 import { UnaryMethodDefinitionish } from "../../grpc-web";
 import { DeepPartial } from "../../helpers";
 import { BrowserHeaders } from "browser-headers";
-import { QueryParamsRequest, QueryParamsResponse, QueryGetStakedPAssetRequest, QueryGetStakedPAssetResponse, QueryAllStakedPAssetRequest, QueryAllStakedPAssetResponse, QueryGetTotalStakedPAssetRequest, QueryGetTotalStakedPAssetResponse, QueryGetVoteRequest, QueryGetVoteResponse, QueryAllVoteRequest, QueryAllVoteResponse, QueryGetProposalRequest, QueryGetProposalResponse, QueryAllProposalRequest, QueryAllProposalResponse } from "./query";
+import { QueryParamsRequest, QueryParamsResponse, QueryGetStakedPAssetRequest, QueryGetStakedPAssetResponse, QueryAllStakedPAssetRequest, QueryAllStakedPAssetResponse, QueryGetTotalStakedPAssetRequest, QueryGetTotalStakedPAssetResponse, QueryAllTotalStakedPAssetRequest, QueryAllTotalStakedPAssetResponse, QueryGetVoteRequest, QueryGetVoteResponse, QueryAllVoteRequest, QueryAllVoteResponse, QueryGetProposalRequest, QueryGetProposalResponse, QueryAllProposalRequest, QueryAllProposalResponse } from "./query";
 /** Query defines the gRPC querier service. */
 export interface Query {
   /** Parameters queries the parameters of the module. */
@@ -11,8 +11,9 @@ export interface Query {
   /** Queries a StakedPAsset by index. */
   stakedPAsset(request: DeepPartial<QueryGetStakedPAssetRequest>, metadata?: grpc.Metadata): Promise<QueryGetStakedPAssetResponse>;
   /** Queries a list of StakedPAsset items. */
-  stakedPAssetAll(request?: DeepPartial<QueryAllStakedPAssetRequest>, metadata?: grpc.Metadata): Promise<QueryAllStakedPAssetResponse>;
+  stakedPAssetAll(request: DeepPartial<QueryAllStakedPAssetRequest>, metadata?: grpc.Metadata): Promise<QueryAllStakedPAssetResponse>;
   totalStakedPAsset(request: DeepPartial<QueryGetTotalStakedPAssetRequest>, metadata?: grpc.Metadata): Promise<QueryGetTotalStakedPAssetResponse>;
+  totalStakedPAssetAll(request: DeepPartial<QueryAllTotalStakedPAssetRequest>, metadata?: grpc.Metadata): Promise<QueryAllTotalStakedPAssetResponse>;
   /** Queries a Vote by index. */
   vote(request: DeepPartial<QueryGetVoteRequest>, metadata?: grpc.Metadata): Promise<QueryGetVoteResponse>;
   /** Queries a list of Vote items. */
@@ -30,6 +31,7 @@ export class QueryClientImpl implements Query {
     this.stakedPAsset = this.stakedPAsset.bind(this);
     this.stakedPAssetAll = this.stakedPAssetAll.bind(this);
     this.totalStakedPAsset = this.totalStakedPAsset.bind(this);
+    this.totalStakedPAssetAll = this.totalStakedPAssetAll.bind(this);
     this.vote = this.vote.bind(this);
     this.voteAll = this.voteAll.bind(this);
     this.proposal = this.proposal.bind(this);
@@ -41,13 +43,14 @@ export class QueryClientImpl implements Query {
   stakedPAsset(request: DeepPartial<QueryGetStakedPAssetRequest>, metadata?: grpc.Metadata): Promise<QueryGetStakedPAssetResponse> {
     return this.rpc.unary(QueryStakedPAssetDesc, QueryGetStakedPAssetRequest.fromPartial(request), metadata);
   }
-  stakedPAssetAll(request: DeepPartial<QueryAllStakedPAssetRequest> = {
-    pagination: undefined
-  }, metadata?: grpc.Metadata): Promise<QueryAllStakedPAssetResponse> {
+  stakedPAssetAll(request: DeepPartial<QueryAllStakedPAssetRequest>, metadata?: grpc.Metadata): Promise<QueryAllStakedPAssetResponse> {
     return this.rpc.unary(QueryStakedPAssetAllDesc, QueryAllStakedPAssetRequest.fromPartial(request), metadata);
   }
   totalStakedPAsset(request: DeepPartial<QueryGetTotalStakedPAssetRequest>, metadata?: grpc.Metadata): Promise<QueryGetTotalStakedPAssetResponse> {
     return this.rpc.unary(QueryTotalStakedPAssetDesc, QueryGetTotalStakedPAssetRequest.fromPartial(request), metadata);
+  }
+  totalStakedPAssetAll(request: DeepPartial<QueryAllTotalStakedPAssetRequest>, metadata?: grpc.Metadata): Promise<QueryAllTotalStakedPAssetResponse> {
+    return this.rpc.unary(QueryTotalStakedPAssetAllDesc, QueryAllTotalStakedPAssetRequest.fromPartial(request), metadata);
   }
   vote(request: DeepPartial<QueryGetVoteRequest>, metadata?: grpc.Metadata): Promise<QueryGetVoteResponse> {
     return this.rpc.unary(QueryVoteDesc, QueryGetVoteRequest.fromPartial(request), metadata);
@@ -144,6 +147,27 @@ export const QueryTotalStakedPAssetDesc: UnaryMethodDefinitionish = {
     deserializeBinary(data: Uint8Array) {
       return {
         ...QueryGetTotalStakedPAssetResponse.decode(data),
+        toObject() {
+          return this;
+        }
+      };
+    }
+  } as any)
+};
+export const QueryTotalStakedPAssetAllDesc: UnaryMethodDefinitionish = {
+  methodName: "TotalStakedPAssetAll",
+  service: QueryDesc,
+  requestStream: false,
+  responseStream: false,
+  requestType: ({
+    serializeBinary() {
+      return QueryAllTotalStakedPAssetRequest.encode(this).finish();
+    }
+  } as any),
+  responseType: ({
+    deserializeBinary(data: Uint8Array) {
+      return {
+        ...QueryAllTotalStakedPAssetResponse.decode(data),
         toObject() {
           return this;
         }

@@ -1,6 +1,6 @@
 import { PageRequest, PageRequestSDKType, PageResponse, PageResponseSDKType } from "../../cosmos/base/query/v1beta1/pagination";
 import { Params, ParamsSDKType } from "./params";
-import { StakedPAsset, StakedPAssetSDKType } from "./staked_p_asset";
+import { StakedPAsset, StakedPAssetSDKType, TotalStakedPAsset, TotalStakedPAssetSDKType } from "./staked_p_asset";
 import { Vote, VoteSDKType } from "./vote";
 import { Proposal, ProposalSDKType } from "./proposal";
 import { BinaryReader, BinaryWriter } from "../../binary";
@@ -33,9 +33,11 @@ export interface QueryGetStakedPAssetResponseSDKType {
   staked_p_asset: StakedPAssetSDKType;
 }
 export interface QueryAllStakedPAssetRequest {
+  account: string;
   pagination?: PageRequest;
 }
 export interface QueryAllStakedPAssetRequestSDKType {
+  account: string;
   pagination?: PageRequestSDKType;
 }
 export interface QueryAllStakedPAssetResponse {
@@ -44,6 +46,22 @@ export interface QueryAllStakedPAssetResponse {
 }
 export interface QueryAllStakedPAssetResponseSDKType {
   staked_p_asset: StakedPAssetSDKType[];
+  pagination?: PageResponseSDKType;
+}
+export interface QueryAllTotalStakedPAssetRequest {
+  account: string;
+  pagination?: PageRequest;
+}
+export interface QueryAllTotalStakedPAssetRequestSDKType {
+  account: string;
+  pagination?: PageRequestSDKType;
+}
+export interface QueryAllTotalStakedPAssetResponse {
+  totalStakedPAsset: TotalStakedPAsset[];
+  pagination?: PageResponse;
+}
+export interface QueryAllTotalStakedPAssetResponseSDKType {
+  total_staked_p_asset: TotalStakedPAssetSDKType[];
   pagination?: PageResponseSDKType;
 }
 export interface QueryGetTotalStakedPAssetRequest {
@@ -55,10 +73,10 @@ export interface QueryGetTotalStakedPAssetRequestSDKType {
   asset: string;
 }
 export interface QueryGetTotalStakedPAssetResponse {
-  totalStakedPAsset: string;
+  totalStakedPAsset: TotalStakedPAsset;
 }
 export interface QueryGetTotalStakedPAssetResponseSDKType {
-  total_staked_p_asset: string;
+  total_staked_p_asset: TotalStakedPAssetSDKType;
 }
 export interface QueryGetVoteRequest {
   asset: string;
@@ -300,13 +318,17 @@ export const QueryGetStakedPAssetResponse = {
 };
 function createBaseQueryAllStakedPAssetRequest(): QueryAllStakedPAssetRequest {
   return {
+    account: "",
     pagination: undefined
   };
 }
 export const QueryAllStakedPAssetRequest = {
   encode(message: QueryAllStakedPAssetRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    if (message.account !== "") {
+      writer.uint32(10).string(message.account);
+    }
     if (message.pagination !== undefined) {
-      PageRequest.encode(message.pagination, writer.uint32(10).fork()).ldelim();
+      PageRequest.encode(message.pagination, writer.uint32(18).fork()).ldelim();
     }
     return writer;
   },
@@ -318,6 +340,9 @@ export const QueryAllStakedPAssetRequest = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
+          message.account = reader.string();
+          break;
+        case 2:
           message.pagination = PageRequest.decode(reader, reader.uint32());
           break;
         default:
@@ -329,16 +354,19 @@ export const QueryAllStakedPAssetRequest = {
   },
   fromJSON(object: any): QueryAllStakedPAssetRequest {
     return {
+      account: isSet(object.account) ? String(object.account) : "",
       pagination: isSet(object.pagination) ? PageRequest.fromJSON(object.pagination) : undefined
     };
   },
   toJSON(message: QueryAllStakedPAssetRequest): unknown {
     const obj: any = {};
+    message.account !== undefined && (obj.account = message.account);
     message.pagination !== undefined && (obj.pagination = message.pagination ? PageRequest.toJSON(message.pagination) : undefined);
     return obj;
   },
   fromPartial(object: Partial<QueryAllStakedPAssetRequest>): QueryAllStakedPAssetRequest {
     const message = createBaseQueryAllStakedPAssetRequest();
+    message.account = object.account ?? "";
     message.pagination = object.pagination !== undefined && object.pagination !== null ? PageRequest.fromPartial(object.pagination) : undefined;
     return message;
   }
@@ -402,6 +430,120 @@ export const QueryAllStakedPAssetResponse = {
     return message;
   }
 };
+function createBaseQueryAllTotalStakedPAssetRequest(): QueryAllTotalStakedPAssetRequest {
+  return {
+    account: "",
+    pagination: undefined
+  };
+}
+export const QueryAllTotalStakedPAssetRequest = {
+  encode(message: QueryAllTotalStakedPAssetRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    if (message.account !== "") {
+      writer.uint32(10).string(message.account);
+    }
+    if (message.pagination !== undefined) {
+      PageRequest.encode(message.pagination, writer.uint32(18).fork()).ldelim();
+    }
+    return writer;
+  },
+  decode(input: BinaryReader | Uint8Array, length?: number): QueryAllTotalStakedPAssetRequest {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseQueryAllTotalStakedPAssetRequest();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.account = reader.string();
+          break;
+        case 2:
+          message.pagination = PageRequest.decode(reader, reader.uint32());
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromJSON(object: any): QueryAllTotalStakedPAssetRequest {
+    return {
+      account: isSet(object.account) ? String(object.account) : "",
+      pagination: isSet(object.pagination) ? PageRequest.fromJSON(object.pagination) : undefined
+    };
+  },
+  toJSON(message: QueryAllTotalStakedPAssetRequest): unknown {
+    const obj: any = {};
+    message.account !== undefined && (obj.account = message.account);
+    message.pagination !== undefined && (obj.pagination = message.pagination ? PageRequest.toJSON(message.pagination) : undefined);
+    return obj;
+  },
+  fromPartial(object: Partial<QueryAllTotalStakedPAssetRequest>): QueryAllTotalStakedPAssetRequest {
+    const message = createBaseQueryAllTotalStakedPAssetRequest();
+    message.account = object.account ?? "";
+    message.pagination = object.pagination !== undefined && object.pagination !== null ? PageRequest.fromPartial(object.pagination) : undefined;
+    return message;
+  }
+};
+function createBaseQueryAllTotalStakedPAssetResponse(): QueryAllTotalStakedPAssetResponse {
+  return {
+    totalStakedPAsset: [],
+    pagination: undefined
+  };
+}
+export const QueryAllTotalStakedPAssetResponse = {
+  encode(message: QueryAllTotalStakedPAssetResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    for (const v of message.totalStakedPAsset) {
+      TotalStakedPAsset.encode(v!, writer.uint32(10).fork()).ldelim();
+    }
+    if (message.pagination !== undefined) {
+      PageResponse.encode(message.pagination, writer.uint32(18).fork()).ldelim();
+    }
+    return writer;
+  },
+  decode(input: BinaryReader | Uint8Array, length?: number): QueryAllTotalStakedPAssetResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseQueryAllTotalStakedPAssetResponse();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.totalStakedPAsset.push(TotalStakedPAsset.decode(reader, reader.uint32()));
+          break;
+        case 2:
+          message.pagination = PageResponse.decode(reader, reader.uint32());
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromJSON(object: any): QueryAllTotalStakedPAssetResponse {
+    return {
+      totalStakedPAsset: Array.isArray(object?.totalStakedPAsset) ? object.totalStakedPAsset.map((e: any) => TotalStakedPAsset.fromJSON(e)) : [],
+      pagination: isSet(object.pagination) ? PageResponse.fromJSON(object.pagination) : undefined
+    };
+  },
+  toJSON(message: QueryAllTotalStakedPAssetResponse): unknown {
+    const obj: any = {};
+    if (message.totalStakedPAsset) {
+      obj.totalStakedPAsset = message.totalStakedPAsset.map(e => e ? TotalStakedPAsset.toJSON(e) : undefined);
+    } else {
+      obj.totalStakedPAsset = [];
+    }
+    message.pagination !== undefined && (obj.pagination = message.pagination ? PageResponse.toJSON(message.pagination) : undefined);
+    return obj;
+  },
+  fromPartial(object: Partial<QueryAllTotalStakedPAssetResponse>): QueryAllTotalStakedPAssetResponse {
+    const message = createBaseQueryAllTotalStakedPAssetResponse();
+    message.totalStakedPAsset = object.totalStakedPAsset?.map(e => TotalStakedPAsset.fromPartial(e)) || [];
+    message.pagination = object.pagination !== undefined && object.pagination !== null ? PageResponse.fromPartial(object.pagination) : undefined;
+    return message;
+  }
+};
 function createBaseQueryGetTotalStakedPAssetRequest(): QueryGetTotalStakedPAssetRequest {
   return {
     account: "",
@@ -459,13 +601,13 @@ export const QueryGetTotalStakedPAssetRequest = {
 };
 function createBaseQueryGetTotalStakedPAssetResponse(): QueryGetTotalStakedPAssetResponse {
   return {
-    totalStakedPAsset: ""
+    totalStakedPAsset: TotalStakedPAsset.fromPartial({})
   };
 }
 export const QueryGetTotalStakedPAssetResponse = {
   encode(message: QueryGetTotalStakedPAssetResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
-    if (message.totalStakedPAsset !== "") {
-      writer.uint32(10).string(message.totalStakedPAsset);
+    if (message.totalStakedPAsset !== undefined) {
+      TotalStakedPAsset.encode(message.totalStakedPAsset, writer.uint32(10).fork()).ldelim();
     }
     return writer;
   },
@@ -477,7 +619,7 @@ export const QueryGetTotalStakedPAssetResponse = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.totalStakedPAsset = reader.string();
+          message.totalStakedPAsset = TotalStakedPAsset.decode(reader, reader.uint32());
           break;
         default:
           reader.skipType(tag & 7);
@@ -488,17 +630,17 @@ export const QueryGetTotalStakedPAssetResponse = {
   },
   fromJSON(object: any): QueryGetTotalStakedPAssetResponse {
     return {
-      totalStakedPAsset: isSet(object.totalStakedPAsset) ? String(object.totalStakedPAsset) : ""
+      totalStakedPAsset: isSet(object.totalStakedPAsset) ? TotalStakedPAsset.fromJSON(object.totalStakedPAsset) : undefined
     };
   },
   toJSON(message: QueryGetTotalStakedPAssetResponse): unknown {
     const obj: any = {};
-    message.totalStakedPAsset !== undefined && (obj.totalStakedPAsset = message.totalStakedPAsset);
+    message.totalStakedPAsset !== undefined && (obj.totalStakedPAsset = message.totalStakedPAsset ? TotalStakedPAsset.toJSON(message.totalStakedPAsset) : undefined);
     return obj;
   },
   fromPartial(object: Partial<QueryGetTotalStakedPAssetResponse>): QueryGetTotalStakedPAssetResponse {
     const message = createBaseQueryGetTotalStakedPAssetResponse();
-    message.totalStakedPAsset = object.totalStakedPAsset ?? "";
+    message.totalStakedPAsset = object.totalStakedPAsset !== undefined && object.totalStakedPAsset !== null ? TotalStakedPAsset.fromPartial(object.totalStakedPAsset) : undefined;
     return message;
   }
 };

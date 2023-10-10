@@ -31,7 +31,11 @@ service Query {
   }
 
   rpc TotalStakedPAsset(QueryGetTotalStakedPAssetRequest) returns (QueryGetTotalStakedPAssetResponse) {
-    option (google.api.http).get = "/pryzm-finance/pryzm-core/pgov/staked_p_asset/total/{account}/{asset}";
+    option (google.api.http).get = "/pryzm-finance/pryzm-core/pgov/total_staked_p_asset/{account}/{asset}";
+  }
+
+  rpc TotalStakedPAssetAll(QueryAllTotalStakedPAssetRequest) returns (QueryAllTotalStakedPAssetResponse) {
+    option (google.api.http).get = "/pryzm-finance/pryzm-core/pgov/total_staked_p_asset";
   }
 
   // Queries a Vote by index.
@@ -75,11 +79,22 @@ message QueryGetStakedPAssetResponse {
 }
 
 message QueryAllStakedPAssetRequest {
-  cosmos.base.query.v1beta1.PageRequest pagination = 1 [(gogoproto.nullable) = true];
+  string account = 1;
+  cosmos.base.query.v1beta1.PageRequest pagination = 2 [(gogoproto.nullable) = true];
 }
 
 message QueryAllStakedPAssetResponse {
   repeated StakedPAsset staked_p_asset = 1 [(gogoproto.nullable) = false];
+  cosmos.base.query.v1beta1.PageResponse pagination = 2 [(gogoproto.nullable) = true];
+}
+
+message QueryAllTotalStakedPAssetRequest {
+  string account = 1;
+  cosmos.base.query.v1beta1.PageRequest pagination = 2 [(gogoproto.nullable) = true];
+}
+
+message QueryAllTotalStakedPAssetResponse {
+  repeated TotalStakedPAsset total_staked_p_asset = 1 [(gogoproto.nullable) = false];
   cosmos.base.query.v1beta1.PageResponse pagination = 2 [(gogoproto.nullable) = true];
 }
 
@@ -89,10 +104,7 @@ message QueryGetTotalStakedPAssetRequest {
 }
 
 message QueryGetTotalStakedPAssetResponse {
-  string total_staked_p_asset = 1 [
-    (gogoproto.customtype) = "cosmossdk.io/math.Int",
-    (gogoproto.nullable) = false
-  ];
+  TotalStakedPAsset total_staked_p_asset = 1 [(gogoproto.nullable) = false];
 }
 
 message QueryGetVoteRequest {

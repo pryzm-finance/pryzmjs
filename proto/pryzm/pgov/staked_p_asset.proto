@@ -21,3 +21,18 @@ message StakedPAsset {
     (gogoproto.nullable) = false
   ];
 }
+
+message TotalStakedPAsset {
+  // the address of owner
+  string account = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
+
+  // asset denom
+  string asset = 2;
+
+  // staked amount
+  string amount = 3 [
+    (cosmos_proto.scalar) = "cosmos.Int",
+    (gogoproto.customtype) = "cosmossdk.io/math.Int",
+    (gogoproto.nullable) = false
+  ];
+}

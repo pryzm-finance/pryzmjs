@@ -1,7 +1,7 @@
 //@ts-nocheck
 import { setPaginationParams } from "../../helpers";
 import { LCDClient } from "@cosmology/lcd";
-import { QueryParamsRequest, QueryParamsResponseSDKType, QueryGetStakedPAssetRequest, QueryGetStakedPAssetResponseSDKType, QueryAllStakedPAssetRequest, QueryAllStakedPAssetResponseSDKType, QueryGetTotalStakedPAssetRequest, QueryGetTotalStakedPAssetResponseSDKType, QueryGetVoteRequest, QueryGetVoteResponseSDKType, QueryAllVoteRequest, QueryAllVoteResponseSDKType, QueryGetProposalRequest, QueryGetProposalResponseSDKType, QueryAllProposalRequest, QueryAllProposalResponseSDKType } from "./query";
+import { QueryParamsRequest, QueryParamsResponseSDKType, QueryGetStakedPAssetRequest, QueryGetStakedPAssetResponseSDKType, QueryAllStakedPAssetRequest, QueryAllStakedPAssetResponseSDKType, QueryGetTotalStakedPAssetRequest, QueryGetTotalStakedPAssetResponseSDKType, QueryAllTotalStakedPAssetRequest, QueryAllTotalStakedPAssetResponseSDKType, QueryGetVoteRequest, QueryGetVoteResponseSDKType, QueryAllVoteRequest, QueryAllVoteResponseSDKType, QueryGetProposalRequest, QueryGetProposalResponseSDKType, QueryAllProposalRequest, QueryAllProposalResponseSDKType } from "./query";
 export class LCDQueryClient {
   req: LCDClient;
   constructor({
@@ -14,6 +14,7 @@ export class LCDQueryClient {
     this.stakedPAsset = this.stakedPAsset.bind(this);
     this.stakedPAssetAll = this.stakedPAssetAll.bind(this);
     this.totalStakedPAsset = this.totalStakedPAsset.bind(this);
+    this.totalStakedPAssetAll = this.totalStakedPAssetAll.bind(this);
     this.vote = this.vote.bind(this);
     this.voteAll = this.voteAll.bind(this);
     this.proposal = this.proposal.bind(this);
@@ -30,12 +31,13 @@ export class LCDQueryClient {
     return await this.req.get<QueryGetStakedPAssetResponseSDKType>(endpoint);
   }
   /* Queries a list of StakedPAsset items. */
-  async stakedPAssetAll(params: QueryAllStakedPAssetRequest = {
-    pagination: undefined
-  }): Promise<QueryAllStakedPAssetResponseSDKType> {
+  async stakedPAssetAll(params: QueryAllStakedPAssetRequest): Promise<QueryAllStakedPAssetResponseSDKType> {
     const options: any = {
       params: {}
     };
+    if (typeof params?.account !== "undefined") {
+      options.params.account = params.account;
+    }
     if (typeof params?.pagination !== "undefined") {
       setPaginationParams(options, params.pagination);
     }
@@ -44,8 +46,22 @@ export class LCDQueryClient {
   }
   /* TotalStakedPAsset */
   async totalStakedPAsset(params: QueryGetTotalStakedPAssetRequest): Promise<QueryGetTotalStakedPAssetResponseSDKType> {
-    const endpoint = `pryzm-finance/pryzm-core/pgov/staked_p_asset/total/${params.account}/${params.asset}`;
+    const endpoint = `pryzm-finance/pryzm-core/pgov/total_staked_p_asset/${params.account}/${params.asset}`;
     return await this.req.get<QueryGetTotalStakedPAssetResponseSDKType>(endpoint);
+  }
+  /* TotalStakedPAssetAll */
+  async totalStakedPAssetAll(params: QueryAllTotalStakedPAssetRequest): Promise<QueryAllTotalStakedPAssetResponseSDKType> {
+    const options: any = {
+      params: {}
+    };
+    if (typeof params?.account !== "undefined") {
+      options.params.account = params.account;
+    }
+    if (typeof params?.pagination !== "undefined") {
+      setPaginationParams(options, params.pagination);
+    }
+    const endpoint = `pryzm-finance/pryzm-core/pgov/total_staked_p_asset`;
+    return await this.req.get<QueryAllTotalStakedPAssetResponseSDKType>(endpoint, options);
   }
   /* Queries a Vote by index. */
   async vote(params: QueryGetVoteRequest): Promise<QueryGetVoteResponseSDKType> {
