@@ -1,36 +1,67 @@
 syntax = "proto3";
 package pryzm.ystaking;
 
+import "cosmos/base/v1beta1/coin.proto";
 import "cosmos_proto/cosmos.proto";
+import "gogoproto/gogo.proto";
+import "pryzm/ystaking/asset_pool_state.proto";
+import "pryzm/ystaking/user_stake_state.proto";
 
 option go_package = "github.com/pryzm-finance/pryzm-core/x/ystaking/types";
 
 message EventYStakingBond {
   string account_address = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
-  string amount = 2;
+  cosmos.base.v1beta1.Coin amount = 2 [(gogoproto.nullable) = false];
 }
 
 message EventYStakingUnbond {
   string account_address = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
-  string amount = 2;
-  string accrued_reward = 3;
-  string fee = 4;
+  cosmos.base.v1beta1.Coin amount = 2 [(gogoproto.nullable) = false];
+  cosmos.base.v1beta1.Coin accrued_reward = 3 [(gogoproto.nullable) = false];
+  cosmos.base.v1beta1.Coin fee = 4 [(gogoproto.nullable) = false];
 }
 
 message EventYStakingExitPool {
   string account_address = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
-  string accrued_reward = 2;
-  string fee = 3;
+  cosmos.base.v1beta1.Coin accrued_reward = 2 [(gogoproto.nullable) = false];
+  cosmos.base.v1beta1.Coin fee = 3 [(gogoproto.nullable) = false];
 }
 
 message EventYStakingClaimReward {
   string account_address = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
-  string accrued_reward = 2;
-  string fee = 3;
+  cosmos.base.v1beta1.Coin accrued_reward = 2 [(gogoproto.nullable) = false];
+  cosmos.base.v1beta1.Coin fee = 3 [(gogoproto.nullable) = false];
 }
 
 message EventDeactivateYStakingMaturityPool {
-  string burnt_bonded_amount = 1;
+  cosmos.base.v1beta1.Coin burnt_bonded_amount = 1 [(gogoproto.nullable) = false];
   string asset_id = 2;
   string maturity_symbol = 3;
+}
+
+message EventSetUserStakeState {
+  UserStakeState user_stake_state = 1 [(gogoproto.nullable) = false];
+}
+
+message EventSetAssetPoolState {
+  AssetPoolState asset_pool_state = 1 [(gogoproto.nullable) = false];
+}
+
+message EventSetAssetMaturityPoolState {
+  AssetMaturityPoolState asset_maturity_pool_state = 1 [(gogoproto.nullable) = false];
+}
+
+message EventDeleteUserStakeState {
+  string address = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
+  string asset_id = 2;
+  string maturity_symbol = 3;
+}
+
+message EventDeleteAssetPoolState {
+  string asset_id = 1;
+}
+
+message EventDeleteAssetMaturityPoolState {
+  string asset_id = 1;
+  string maturity_symbol = 2;
 }

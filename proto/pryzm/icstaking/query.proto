@@ -53,6 +53,16 @@ service Query {
     option (google.api.http).get = "/pryzm-finance/pryzm-core/icstaking/undelegation/{host_chain}";
   }
 
+  // Queries a ChannelUndelegation by index.
+  rpc ChannelUndelegation(QueryGetChannelUndelegationRequest) returns (QueryGetChannelUndelegationResponse) {
+    option (google.api.http).get = "/pryzm-finance/pryzm-core/icstaking/channel_undelegation/{host_chain}/{epoch}/{transfer_channel}";
+  }
+
+  // Queries a list of ChannelUndelegation items.
+  rpc ChannelUndelegationAll(QueryAllChannelUndelegationRequest) returns (QueryAllChannelUndelegationResponse) {
+    option (google.api.http).get = "/pryzm-finance/pryzm-core/icstaking/channel_undelegation";
+  }
+
   // Queries the balance of the delegation queue.
   rpc DelegationQueueBalance(QueryDelegationQueueBalanceRequest) returns (QueryDelegationQueueBalanceResponse) {
     option (google.api.http).get = "/pryzm-finance/pryzm-core/icstaking/delegation_queue_balance/{host_chain}/{transfer_channel}";
@@ -114,7 +124,8 @@ message QueryGetUndelegationResponse {
 }
 
 message QueryAllUndelegationRequest {
-  cosmos.base.query.v1beta1.PageRequest pagination = 1 [(gogoproto.nullable) = true];
+  string host_chain = 1;
+  cosmos.base.query.v1beta1.PageRequest pagination = 2 [(gogoproto.nullable) = true];
 }
 
 message QueryAllUndelegationResponse {
@@ -129,6 +140,27 @@ message QueryIncompleteUndelegationRequest {
 
 message QueryIncompleteUndelegationResponse {
   repeated Undelegation undelegation = 1 [(gogoproto.nullable) = false];
+  cosmos.base.query.v1beta1.PageResponse pagination = 2 [(gogoproto.nullable) = true];
+}
+
+message QueryGetChannelUndelegationRequest {
+  string host_chain = 1;
+  uint64 epoch = 2;
+  string transfer_channel = 3;
+}
+
+message QueryGetChannelUndelegationResponse {
+  ChannelUndelegation channel_undelegation = 1 [(gogoproto.nullable) = false];
+}
+
+message QueryAllChannelUndelegationRequest {
+  string host_chain = 1;
+  uint64 epoch = 2;
+  cosmos.base.query.v1beta1.PageRequest pagination = 3 [(gogoproto.nullable) = true];
+}
+
+message QueryAllChannelUndelegationResponse {
+  repeated ChannelUndelegation channel_undelegation = 1 [(gogoproto.nullable) = false];
   cosmos.base.query.v1beta1.PageResponse pagination = 2 [(gogoproto.nullable) = true];
 }
 

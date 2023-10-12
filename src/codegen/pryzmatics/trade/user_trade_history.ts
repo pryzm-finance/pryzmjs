@@ -60,7 +60,8 @@ export interface UserTradeHistory {
   path: SwapStep[];
   operationType: OperationType;
   swapFee: Coin[];
-  protocolFee: Coin[];
+  joinExitProtocolFee: Coin[];
+  swapProtocolFee: Coin[];
   blockTime: Timestamp;
 }
 export interface UserTradeHistorySDKType {
@@ -71,7 +72,8 @@ export interface UserTradeHistorySDKType {
   path: SwapStepSDKType[];
   operation_type: OperationType;
   swap_fee: CoinSDKType[];
-  protocol_fee: CoinSDKType[];
+  join_exit_protocol_fee: CoinSDKType[];
+  swap_protocol_fee: CoinSDKType[];
   block_time: TimestampSDKType;
 }
 function createBaseUserTradeHistory(): UserTradeHistory {
@@ -83,7 +85,8 @@ function createBaseUserTradeHistory(): UserTradeHistory {
     path: [],
     operationType: 0,
     swapFee: [],
-    protocolFee: [],
+    joinExitProtocolFee: [],
+    swapProtocolFee: [],
     blockTime: Timestamp.fromPartial({})
   };
 }
@@ -110,11 +113,14 @@ export const UserTradeHistory = {
     for (const v of message.swapFee) {
       Coin.encode(v!, writer.uint32(58).fork()).ldelim();
     }
-    for (const v of message.protocolFee) {
+    for (const v of message.joinExitProtocolFee) {
       Coin.encode(v!, writer.uint32(66).fork()).ldelim();
     }
+    for (const v of message.swapProtocolFee) {
+      Coin.encode(v!, writer.uint32(74).fork()).ldelim();
+    }
     if (message.blockTime !== undefined) {
-      Timestamp.encode(message.blockTime, writer.uint32(74).fork()).ldelim();
+      Timestamp.encode(message.blockTime, writer.uint32(82).fork()).ldelim();
     }
     return writer;
   },
@@ -147,9 +153,12 @@ export const UserTradeHistory = {
           message.swapFee.push(Coin.decode(reader, reader.uint32()));
           break;
         case 8:
-          message.protocolFee.push(Coin.decode(reader, reader.uint32()));
+          message.joinExitProtocolFee.push(Coin.decode(reader, reader.uint32()));
           break;
         case 9:
+          message.swapProtocolFee.push(Coin.decode(reader, reader.uint32()));
+          break;
+        case 10:
           message.blockTime = Timestamp.decode(reader, reader.uint32());
           break;
         default:
@@ -168,7 +177,8 @@ export const UserTradeHistory = {
       path: Array.isArray(object?.path) ? object.path.map((e: any) => SwapStep.fromJSON(e)) : [],
       operationType: isSet(object.operationType) ? operationTypeFromJSON(object.operationType) : -1,
       swapFee: Array.isArray(object?.swapFee) ? object.swapFee.map((e: any) => Coin.fromJSON(e)) : [],
-      protocolFee: Array.isArray(object?.protocolFee) ? object.protocolFee.map((e: any) => Coin.fromJSON(e)) : [],
+      joinExitProtocolFee: Array.isArray(object?.joinExitProtocolFee) ? object.joinExitProtocolFee.map((e: any) => Coin.fromJSON(e)) : [],
+      swapProtocolFee: Array.isArray(object?.swapProtocolFee) ? object.swapProtocolFee.map((e: any) => Coin.fromJSON(e)) : [],
       blockTime: isSet(object.blockTime) ? fromJsonTimestamp(object.blockTime) : undefined
     };
   },
@@ -197,10 +207,15 @@ export const UserTradeHistory = {
     } else {
       obj.swapFee = [];
     }
-    if (message.protocolFee) {
-      obj.protocolFee = message.protocolFee.map(e => e ? Coin.toJSON(e) : undefined);
+    if (message.joinExitProtocolFee) {
+      obj.joinExitProtocolFee = message.joinExitProtocolFee.map(e => e ? Coin.toJSON(e) : undefined);
     } else {
-      obj.protocolFee = [];
+      obj.joinExitProtocolFee = [];
+    }
+    if (message.swapProtocolFee) {
+      obj.swapProtocolFee = message.swapProtocolFee.map(e => e ? Coin.toJSON(e) : undefined);
+    } else {
+      obj.swapProtocolFee = [];
     }
     message.blockTime !== undefined && (obj.blockTime = fromTimestamp(message.blockTime).toISOString());
     return obj;
@@ -214,7 +229,8 @@ export const UserTradeHistory = {
     message.path = object.path?.map(e => SwapStep.fromPartial(e)) || [];
     message.operationType = object.operationType ?? 0;
     message.swapFee = object.swapFee?.map(e => Coin.fromPartial(e)) || [];
-    message.protocolFee = object.protocolFee?.map(e => Coin.fromPartial(e)) || [];
+    message.joinExitProtocolFee = object.joinExitProtocolFee?.map(e => Coin.fromPartial(e)) || [];
+    message.swapProtocolFee = object.swapProtocolFee?.map(e => Coin.fromPartial(e)) || [];
     message.blockTime = object.blockTime !== undefined && object.blockTime !== null ? Timestamp.fromPartial(object.blockTime) : undefined;
     return message;
   }

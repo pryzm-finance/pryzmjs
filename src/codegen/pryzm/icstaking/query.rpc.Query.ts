@@ -3,7 +3,7 @@ import { grpc } from "@improbable-eng/grpc-web";
 import { UnaryMethodDefinitionish } from "../../grpc-web";
 import { DeepPartial } from "../../helpers";
 import { BrowserHeaders } from "browser-headers";
-import { QueryParamsRequest, QueryParamsResponse, QueryGetHostChainRequest, QueryGetHostChainResponse, QueryAllHostChainRequest, QueryAllHostChainResponse, QueryGetHostChainStateRequest, QueryGetHostChainStateResponse, QueryAllHostChainStateRequest, QueryAllHostChainStateResponse, QueryGetUndelegationRequest, QueryGetUndelegationResponse, QueryAllUndelegationRequest, QueryAllUndelegationResponse, QueryIncompleteUndelegationRequest, QueryIncompleteUndelegationResponse, QueryDelegationQueueBalanceRequest, QueryDelegationQueueBalanceResponse } from "./query";
+import { QueryParamsRequest, QueryParamsResponse, QueryGetHostChainRequest, QueryGetHostChainResponse, QueryAllHostChainRequest, QueryAllHostChainResponse, QueryGetHostChainStateRequest, QueryGetHostChainStateResponse, QueryAllHostChainStateRequest, QueryAllHostChainStateResponse, QueryGetUndelegationRequest, QueryGetUndelegationResponse, QueryAllUndelegationRequest, QueryAllUndelegationResponse, QueryIncompleteUndelegationRequest, QueryIncompleteUndelegationResponse, QueryGetChannelUndelegationRequest, QueryGetChannelUndelegationResponse, QueryAllChannelUndelegationRequest, QueryAllChannelUndelegationResponse, QueryDelegationQueueBalanceRequest, QueryDelegationQueueBalanceResponse } from "./query";
 /** Query defines the gRPC querier service. */
 export interface Query {
   /** Parameters queries the parameters of the module. */
@@ -19,9 +19,13 @@ export interface Query {
   /** Queries a Undelegation by index. */
   undelegation(request: DeepPartial<QueryGetUndelegationRequest>, metadata?: grpc.Metadata): Promise<QueryGetUndelegationResponse>;
   /** Queries a list of Undelegation items. */
-  undelegationAll(request?: DeepPartial<QueryAllUndelegationRequest>, metadata?: grpc.Metadata): Promise<QueryAllUndelegationResponse>;
+  undelegationAll(request: DeepPartial<QueryAllUndelegationRequest>, metadata?: grpc.Metadata): Promise<QueryAllUndelegationResponse>;
   /** Queries a list of incomplete undelegations sorted by completion time. */
   incompleteUndelegationAll(request: DeepPartial<QueryIncompleteUndelegationRequest>, metadata?: grpc.Metadata): Promise<QueryIncompleteUndelegationResponse>;
+  /** Queries a ChannelUndelegation by index. */
+  channelUndelegation(request: DeepPartial<QueryGetChannelUndelegationRequest>, metadata?: grpc.Metadata): Promise<QueryGetChannelUndelegationResponse>;
+  /** Queries a list of ChannelUndelegation items. */
+  channelUndelegationAll(request: DeepPartial<QueryAllChannelUndelegationRequest>, metadata?: grpc.Metadata): Promise<QueryAllChannelUndelegationResponse>;
   /** Queries the balance of the delegation queue. */
   delegationQueueBalance(request: DeepPartial<QueryDelegationQueueBalanceRequest>, metadata?: grpc.Metadata): Promise<QueryDelegationQueueBalanceResponse>;
 }
@@ -37,6 +41,8 @@ export class QueryClientImpl implements Query {
     this.undelegation = this.undelegation.bind(this);
     this.undelegationAll = this.undelegationAll.bind(this);
     this.incompleteUndelegationAll = this.incompleteUndelegationAll.bind(this);
+    this.channelUndelegation = this.channelUndelegation.bind(this);
+    this.channelUndelegationAll = this.channelUndelegationAll.bind(this);
     this.delegationQueueBalance = this.delegationQueueBalance.bind(this);
   }
   params(request: DeepPartial<QueryParamsRequest> = {}, metadata?: grpc.Metadata): Promise<QueryParamsResponse> {
@@ -61,13 +67,17 @@ export class QueryClientImpl implements Query {
   undelegation(request: DeepPartial<QueryGetUndelegationRequest>, metadata?: grpc.Metadata): Promise<QueryGetUndelegationResponse> {
     return this.rpc.unary(QueryUndelegationDesc, QueryGetUndelegationRequest.fromPartial(request), metadata);
   }
-  undelegationAll(request: DeepPartial<QueryAllUndelegationRequest> = {
-    pagination: undefined
-  }, metadata?: grpc.Metadata): Promise<QueryAllUndelegationResponse> {
+  undelegationAll(request: DeepPartial<QueryAllUndelegationRequest>, metadata?: grpc.Metadata): Promise<QueryAllUndelegationResponse> {
     return this.rpc.unary(QueryUndelegationAllDesc, QueryAllUndelegationRequest.fromPartial(request), metadata);
   }
   incompleteUndelegationAll(request: DeepPartial<QueryIncompleteUndelegationRequest>, metadata?: grpc.Metadata): Promise<QueryIncompleteUndelegationResponse> {
     return this.rpc.unary(QueryIncompleteUndelegationAllDesc, QueryIncompleteUndelegationRequest.fromPartial(request), metadata);
+  }
+  channelUndelegation(request: DeepPartial<QueryGetChannelUndelegationRequest>, metadata?: grpc.Metadata): Promise<QueryGetChannelUndelegationResponse> {
+    return this.rpc.unary(QueryChannelUndelegationDesc, QueryGetChannelUndelegationRequest.fromPartial(request), metadata);
+  }
+  channelUndelegationAll(request: DeepPartial<QueryAllChannelUndelegationRequest>, metadata?: grpc.Metadata): Promise<QueryAllChannelUndelegationResponse> {
+    return this.rpc.unary(QueryChannelUndelegationAllDesc, QueryAllChannelUndelegationRequest.fromPartial(request), metadata);
   }
   delegationQueueBalance(request: DeepPartial<QueryDelegationQueueBalanceRequest>, metadata?: grpc.Metadata): Promise<QueryDelegationQueueBalanceResponse> {
     return this.rpc.unary(QueryDelegationQueueBalanceDesc, QueryDelegationQueueBalanceRequest.fromPartial(request), metadata);
@@ -237,6 +247,48 @@ export const QueryIncompleteUndelegationAllDesc: UnaryMethodDefinitionish = {
     deserializeBinary(data: Uint8Array) {
       return {
         ...QueryIncompleteUndelegationResponse.decode(data),
+        toObject() {
+          return this;
+        }
+      };
+    }
+  } as any)
+};
+export const QueryChannelUndelegationDesc: UnaryMethodDefinitionish = {
+  methodName: "ChannelUndelegation",
+  service: QueryDesc,
+  requestStream: false,
+  responseStream: false,
+  requestType: ({
+    serializeBinary() {
+      return QueryGetChannelUndelegationRequest.encode(this).finish();
+    }
+  } as any),
+  responseType: ({
+    deserializeBinary(data: Uint8Array) {
+      return {
+        ...QueryGetChannelUndelegationResponse.decode(data),
+        toObject() {
+          return this;
+        }
+      };
+    }
+  } as any)
+};
+export const QueryChannelUndelegationAllDesc: UnaryMethodDefinitionish = {
+  methodName: "ChannelUndelegationAll",
+  service: QueryDesc,
+  requestStream: false,
+  responseStream: false,
+  requestType: ({
+    serializeBinary() {
+      return QueryAllChannelUndelegationRequest.encode(this).finish();
+    }
+  } as any),
+  responseType: ({
+    deserializeBinary(data: Uint8Array) {
+      return {
+        ...QueryAllChannelUndelegationResponse.decode(data),
         toObject() {
           return this;
         }

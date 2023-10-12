@@ -1,0 +1,16 @@
+syntax = "proto3";
+package pryzmatics.server.ystaking;
+
+import "gogoproto/gogo.proto";
+import "pryzmatics/ystaking/user_stake.proto";
+
+option go_package = "github.com/pryzm-finance/pryzmatics/server/ystaking";
+
+message QueryUserStakesRequest {
+  string address = 1;
+  string denom = 2;
+}
+
+message QueryUserStakesResponse {
+  repeated pryzmatics.ystaking.UserStake user_stakes = 1 [(gogoproto.nullable) = false];
+}

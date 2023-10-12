@@ -36,11 +36,15 @@ message UserTradeHistory {
     (gogoproto.nullable) = false,
     (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins"
   ];
-  repeated cosmos.base.v1beta1.Coin protocol_fee = 8 [
+  repeated cosmos.base.v1beta1.Coin join_exit_protocol_fee = 8 [
     (gogoproto.nullable) = false,
     (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins"
   ];
-  google.protobuf.Timestamp block_time = 9 [
+  repeated cosmos.base.v1beta1.Coin swap_protocol_fee = 9 [
+    (gogoproto.nullable) = false,
+    (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins"
+  ];
+  google.protobuf.Timestamp block_time = 10 [
     (gogoproto.stdtime) = true,
     (gogoproto.nullable) = false
   ];

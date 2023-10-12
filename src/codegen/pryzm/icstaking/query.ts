@@ -1,7 +1,7 @@
 import { PageRequest, PageRequestSDKType, PageResponse, PageResponseSDKType } from "../../cosmos/base/query/v1beta1/pagination";
 import { Params, ParamsSDKType } from "./params";
 import { HostChain, HostChainSDKType, HostChainState, HostChainStateSDKType } from "./host_chain";
-import { Undelegation, UndelegationSDKType } from "./undelegation";
+import { Undelegation, UndelegationSDKType, ChannelUndelegation, ChannelUndelegationSDKType } from "./undelegation";
 import { Coin, CoinSDKType } from "../../cosmos/base/v1beta1/coin";
 import { BinaryReader, BinaryWriter } from "../../binary";
 import { isSet } from "../../helpers";
@@ -85,9 +85,11 @@ export interface QueryGetUndelegationResponseSDKType {
   undelegation: UndelegationSDKType;
 }
 export interface QueryAllUndelegationRequest {
+  hostChain: string;
   pagination?: PageRequest;
 }
 export interface QueryAllUndelegationRequestSDKType {
+  host_chain: string;
   pagination?: PageRequestSDKType;
 }
 export interface QueryAllUndelegationResponse {
@@ -112,6 +114,40 @@ export interface QueryIncompleteUndelegationResponse {
 }
 export interface QueryIncompleteUndelegationResponseSDKType {
   undelegation: UndelegationSDKType[];
+  pagination?: PageResponseSDKType;
+}
+export interface QueryGetChannelUndelegationRequest {
+  hostChain: string;
+  epoch: bigint;
+  transferChannel: string;
+}
+export interface QueryGetChannelUndelegationRequestSDKType {
+  host_chain: string;
+  epoch: bigint;
+  transfer_channel: string;
+}
+export interface QueryGetChannelUndelegationResponse {
+  channelUndelegation: ChannelUndelegation;
+}
+export interface QueryGetChannelUndelegationResponseSDKType {
+  channel_undelegation: ChannelUndelegationSDKType;
+}
+export interface QueryAllChannelUndelegationRequest {
+  hostChain: string;
+  epoch: bigint;
+  pagination?: PageRequest;
+}
+export interface QueryAllChannelUndelegationRequestSDKType {
+  host_chain: string;
+  epoch: bigint;
+  pagination?: PageRequestSDKType;
+}
+export interface QueryAllChannelUndelegationResponse {
+  channelUndelegation: ChannelUndelegation[];
+  pagination?: PageResponse;
+}
+export interface QueryAllChannelUndelegationResponseSDKType {
+  channel_undelegation: ChannelUndelegationSDKType[];
   pagination?: PageResponseSDKType;
 }
 export interface QueryDelegationQueueBalanceRequest {
@@ -696,13 +732,17 @@ export const QueryGetUndelegationResponse = {
 };
 function createBaseQueryAllUndelegationRequest(): QueryAllUndelegationRequest {
   return {
+    hostChain: "",
     pagination: undefined
   };
 }
 export const QueryAllUndelegationRequest = {
   encode(message: QueryAllUndelegationRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    if (message.hostChain !== "") {
+      writer.uint32(10).string(message.hostChain);
+    }
     if (message.pagination !== undefined) {
-      PageRequest.encode(message.pagination, writer.uint32(10).fork()).ldelim();
+      PageRequest.encode(message.pagination, writer.uint32(18).fork()).ldelim();
     }
     return writer;
   },
@@ -714,6 +754,9 @@ export const QueryAllUndelegationRequest = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
+          message.hostChain = reader.string();
+          break;
+        case 2:
           message.pagination = PageRequest.decode(reader, reader.uint32());
           break;
         default:
@@ -725,16 +768,19 @@ export const QueryAllUndelegationRequest = {
   },
   fromJSON(object: any): QueryAllUndelegationRequest {
     return {
+      hostChain: isSet(object.hostChain) ? String(object.hostChain) : "",
       pagination: isSet(object.pagination) ? PageRequest.fromJSON(object.pagination) : undefined
     };
   },
   toJSON(message: QueryAllUndelegationRequest): unknown {
     const obj: any = {};
+    message.hostChain !== undefined && (obj.hostChain = message.hostChain);
     message.pagination !== undefined && (obj.pagination = message.pagination ? PageRequest.toJSON(message.pagination) : undefined);
     return obj;
   },
   fromPartial(object: Partial<QueryAllUndelegationRequest>): QueryAllUndelegationRequest {
     const message = createBaseQueryAllUndelegationRequest();
+    message.hostChain = object.hostChain ?? "";
     message.pagination = object.pagination !== undefined && object.pagination !== null ? PageRequest.fromPartial(object.pagination) : undefined;
     return message;
   }
@@ -908,6 +954,240 @@ export const QueryIncompleteUndelegationResponse = {
   fromPartial(object: Partial<QueryIncompleteUndelegationResponse>): QueryIncompleteUndelegationResponse {
     const message = createBaseQueryIncompleteUndelegationResponse();
     message.undelegation = object.undelegation?.map(e => Undelegation.fromPartial(e)) || [];
+    message.pagination = object.pagination !== undefined && object.pagination !== null ? PageResponse.fromPartial(object.pagination) : undefined;
+    return message;
+  }
+};
+function createBaseQueryGetChannelUndelegationRequest(): QueryGetChannelUndelegationRequest {
+  return {
+    hostChain: "",
+    epoch: BigInt(0),
+    transferChannel: ""
+  };
+}
+export const QueryGetChannelUndelegationRequest = {
+  encode(message: QueryGetChannelUndelegationRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    if (message.hostChain !== "") {
+      writer.uint32(10).string(message.hostChain);
+    }
+    if (message.epoch !== BigInt(0)) {
+      writer.uint32(16).uint64(message.epoch);
+    }
+    if (message.transferChannel !== "") {
+      writer.uint32(26).string(message.transferChannel);
+    }
+    return writer;
+  },
+  decode(input: BinaryReader | Uint8Array, length?: number): QueryGetChannelUndelegationRequest {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseQueryGetChannelUndelegationRequest();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.hostChain = reader.string();
+          break;
+        case 2:
+          message.epoch = reader.uint64();
+          break;
+        case 3:
+          message.transferChannel = reader.string();
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromJSON(object: any): QueryGetChannelUndelegationRequest {
+    return {
+      hostChain: isSet(object.hostChain) ? String(object.hostChain) : "",
+      epoch: isSet(object.epoch) ? BigInt(object.epoch.toString()) : BigInt(0),
+      transferChannel: isSet(object.transferChannel) ? String(object.transferChannel) : ""
+    };
+  },
+  toJSON(message: QueryGetChannelUndelegationRequest): unknown {
+    const obj: any = {};
+    message.hostChain !== undefined && (obj.hostChain = message.hostChain);
+    message.epoch !== undefined && (obj.epoch = (message.epoch || BigInt(0)).toString());
+    message.transferChannel !== undefined && (obj.transferChannel = message.transferChannel);
+    return obj;
+  },
+  fromPartial(object: Partial<QueryGetChannelUndelegationRequest>): QueryGetChannelUndelegationRequest {
+    const message = createBaseQueryGetChannelUndelegationRequest();
+    message.hostChain = object.hostChain ?? "";
+    message.epoch = object.epoch !== undefined && object.epoch !== null ? BigInt(object.epoch.toString()) : BigInt(0);
+    message.transferChannel = object.transferChannel ?? "";
+    return message;
+  }
+};
+function createBaseQueryGetChannelUndelegationResponse(): QueryGetChannelUndelegationResponse {
+  return {
+    channelUndelegation: ChannelUndelegation.fromPartial({})
+  };
+}
+export const QueryGetChannelUndelegationResponse = {
+  encode(message: QueryGetChannelUndelegationResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    if (message.channelUndelegation !== undefined) {
+      ChannelUndelegation.encode(message.channelUndelegation, writer.uint32(10).fork()).ldelim();
+    }
+    return writer;
+  },
+  decode(input: BinaryReader | Uint8Array, length?: number): QueryGetChannelUndelegationResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseQueryGetChannelUndelegationResponse();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.channelUndelegation = ChannelUndelegation.decode(reader, reader.uint32());
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromJSON(object: any): QueryGetChannelUndelegationResponse {
+    return {
+      channelUndelegation: isSet(object.channelUndelegation) ? ChannelUndelegation.fromJSON(object.channelUndelegation) : undefined
+    };
+  },
+  toJSON(message: QueryGetChannelUndelegationResponse): unknown {
+    const obj: any = {};
+    message.channelUndelegation !== undefined && (obj.channelUndelegation = message.channelUndelegation ? ChannelUndelegation.toJSON(message.channelUndelegation) : undefined);
+    return obj;
+  },
+  fromPartial(object: Partial<QueryGetChannelUndelegationResponse>): QueryGetChannelUndelegationResponse {
+    const message = createBaseQueryGetChannelUndelegationResponse();
+    message.channelUndelegation = object.channelUndelegation !== undefined && object.channelUndelegation !== null ? ChannelUndelegation.fromPartial(object.channelUndelegation) : undefined;
+    return message;
+  }
+};
+function createBaseQueryAllChannelUndelegationRequest(): QueryAllChannelUndelegationRequest {
+  return {
+    hostChain: "",
+    epoch: BigInt(0),
+    pagination: undefined
+  };
+}
+export const QueryAllChannelUndelegationRequest = {
+  encode(message: QueryAllChannelUndelegationRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    if (message.hostChain !== "") {
+      writer.uint32(10).string(message.hostChain);
+    }
+    if (message.epoch !== BigInt(0)) {
+      writer.uint32(16).uint64(message.epoch);
+    }
+    if (message.pagination !== undefined) {
+      PageRequest.encode(message.pagination, writer.uint32(26).fork()).ldelim();
+    }
+    return writer;
+  },
+  decode(input: BinaryReader | Uint8Array, length?: number): QueryAllChannelUndelegationRequest {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseQueryAllChannelUndelegationRequest();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.hostChain = reader.string();
+          break;
+        case 2:
+          message.epoch = reader.uint64();
+          break;
+        case 3:
+          message.pagination = PageRequest.decode(reader, reader.uint32());
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromJSON(object: any): QueryAllChannelUndelegationRequest {
+    return {
+      hostChain: isSet(object.hostChain) ? String(object.hostChain) : "",
+      epoch: isSet(object.epoch) ? BigInt(object.epoch.toString()) : BigInt(0),
+      pagination: isSet(object.pagination) ? PageRequest.fromJSON(object.pagination) : undefined
+    };
+  },
+  toJSON(message: QueryAllChannelUndelegationRequest): unknown {
+    const obj: any = {};
+    message.hostChain !== undefined && (obj.hostChain = message.hostChain);
+    message.epoch !== undefined && (obj.epoch = (message.epoch || BigInt(0)).toString());
+    message.pagination !== undefined && (obj.pagination = message.pagination ? PageRequest.toJSON(message.pagination) : undefined);
+    return obj;
+  },
+  fromPartial(object: Partial<QueryAllChannelUndelegationRequest>): QueryAllChannelUndelegationRequest {
+    const message = createBaseQueryAllChannelUndelegationRequest();
+    message.hostChain = object.hostChain ?? "";
+    message.epoch = object.epoch !== undefined && object.epoch !== null ? BigInt(object.epoch.toString()) : BigInt(0);
+    message.pagination = object.pagination !== undefined && object.pagination !== null ? PageRequest.fromPartial(object.pagination) : undefined;
+    return message;
+  }
+};
+function createBaseQueryAllChannelUndelegationResponse(): QueryAllChannelUndelegationResponse {
+  return {
+    channelUndelegation: [],
+    pagination: undefined
+  };
+}
+export const QueryAllChannelUndelegationResponse = {
+  encode(message: QueryAllChannelUndelegationResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    for (const v of message.channelUndelegation) {
+      ChannelUndelegation.encode(v!, writer.uint32(10).fork()).ldelim();
+    }
+    if (message.pagination !== undefined) {
+      PageResponse.encode(message.pagination, writer.uint32(18).fork()).ldelim();
+    }
+    return writer;
+  },
+  decode(input: BinaryReader | Uint8Array, length?: number): QueryAllChannelUndelegationResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseQueryAllChannelUndelegationResponse();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.channelUndelegation.push(ChannelUndelegation.decode(reader, reader.uint32()));
+          break;
+        case 2:
+          message.pagination = PageResponse.decode(reader, reader.uint32());
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromJSON(object: any): QueryAllChannelUndelegationResponse {
+    return {
+      channelUndelegation: Array.isArray(object?.channelUndelegation) ? object.channelUndelegation.map((e: any) => ChannelUndelegation.fromJSON(e)) : [],
+      pagination: isSet(object.pagination) ? PageResponse.fromJSON(object.pagination) : undefined
+    };
+  },
+  toJSON(message: QueryAllChannelUndelegationResponse): unknown {
+    const obj: any = {};
+    if (message.channelUndelegation) {
+      obj.channelUndelegation = message.channelUndelegation.map(e => e ? ChannelUndelegation.toJSON(e) : undefined);
+    } else {
+      obj.channelUndelegation = [];
+    }
+    message.pagination !== undefined && (obj.pagination = message.pagination ? PageResponse.toJSON(message.pagination) : undefined);
+    return obj;
+  },
+  fromPartial(object: Partial<QueryAllChannelUndelegationResponse>): QueryAllChannelUndelegationResponse {
+    const message = createBaseQueryAllChannelUndelegationResponse();
+    message.channelUndelegation = object.channelUndelegation?.map(e => ChannelUndelegation.fromPartial(e)) || [];
     message.pagination = object.pagination !== undefined && object.pagination !== null ? PageResponse.fromPartial(object.pagination) : undefined;
     return message;
   }

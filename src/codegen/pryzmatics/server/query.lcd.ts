@@ -36,6 +36,7 @@ import { QueryValidatorSlashWindowSummariesRequest, QueryValidatorSlashWindowSum
 import { QueryPreVotesRequest, QueryPreVotesResponseSDKType } from "./oracle/pre_vote";
 import { QueryVotesRequest, QueryVotesResponseSDKType } from "./oracle/vote";
 import { QueryVotePayloadsRequest, QueryVotePayloadsResponseSDKType } from "./oracle/vote_payload";
+import { QueryUserStakesRequest, QueryUserStakesResponseSDKType } from "./ystaking/user_stake";
 export class LCDQueryClient {
   req: LCDClient;
   constructor({
@@ -88,6 +89,7 @@ export class LCDQueryClient {
     this.preVotes = this.preVotes.bind(this);
     this.votes = this.votes.bind(this);
     this.votePayloads = this.votePayloads.bind(this);
+    this.userStakes = this.userStakes.bind(this);
   }
   /* Asset */
   async asset(params: QueryAssetRequest): Promise<QueryAssetResponseSDKType> {
@@ -677,5 +679,19 @@ export class LCDQueryClient {
     }
     const endpoint = `pryzmatics/oracle/vote_payload`;
     return await this.req.get<QueryVotePayloadsResponseSDKType>(endpoint, options);
+  }
+  /* UserStakes */
+  async userStakes(params: QueryUserStakesRequest): Promise<QueryUserStakesResponseSDKType> {
+    const options: any = {
+      params: {}
+    };
+    if (typeof params?.address !== "undefined") {
+      options.params.address = params.address;
+    }
+    if (typeof params?.denom !== "undefined") {
+      options.params.denom = params.denom;
+    }
+    const endpoint = `pryzmatics/ystaking/user_stake`;
+    return await this.req.get<QueryUserStakesResponseSDKType>(endpoint, options);
   }
 }

@@ -1,7 +1,7 @@
 //@ts-nocheck
 import { setPaginationParams } from "../../helpers";
 import { LCDClient } from "@cosmology/lcd";
-import { QueryParamsRequest, QueryParamsResponseSDKType, QueryGetHostChainRequest, QueryGetHostChainResponseSDKType, QueryAllHostChainRequest, QueryAllHostChainResponseSDKType, QueryGetHostChainStateRequest, QueryGetHostChainStateResponseSDKType, QueryAllHostChainStateRequest, QueryAllHostChainStateResponseSDKType, QueryGetUndelegationRequest, QueryGetUndelegationResponseSDKType, QueryAllUndelegationRequest, QueryAllUndelegationResponseSDKType, QueryIncompleteUndelegationRequest, QueryIncompleteUndelegationResponseSDKType, QueryDelegationQueueBalanceRequest, QueryDelegationQueueBalanceResponseSDKType } from "./query";
+import { QueryParamsRequest, QueryParamsResponseSDKType, QueryGetHostChainRequest, QueryGetHostChainResponseSDKType, QueryAllHostChainRequest, QueryAllHostChainResponseSDKType, QueryGetHostChainStateRequest, QueryGetHostChainStateResponseSDKType, QueryAllHostChainStateRequest, QueryAllHostChainStateResponseSDKType, QueryGetUndelegationRequest, QueryGetUndelegationResponseSDKType, QueryAllUndelegationRequest, QueryAllUndelegationResponseSDKType, QueryIncompleteUndelegationRequest, QueryIncompleteUndelegationResponseSDKType, QueryGetChannelUndelegationRequest, QueryGetChannelUndelegationResponseSDKType, QueryAllChannelUndelegationRequest, QueryAllChannelUndelegationResponseSDKType, QueryDelegationQueueBalanceRequest, QueryDelegationQueueBalanceResponseSDKType } from "./query";
 export class LCDQueryClient {
   req: LCDClient;
   constructor({
@@ -18,6 +18,8 @@ export class LCDQueryClient {
     this.undelegation = this.undelegation.bind(this);
     this.undelegationAll = this.undelegationAll.bind(this);
     this.incompleteUndelegationAll = this.incompleteUndelegationAll.bind(this);
+    this.channelUndelegation = this.channelUndelegation.bind(this);
+    this.channelUndelegationAll = this.channelUndelegationAll.bind(this);
     this.delegationQueueBalance = this.delegationQueueBalance.bind(this);
   }
   /* Parameters queries the parameters of the module. */
@@ -67,12 +69,13 @@ export class LCDQueryClient {
     return await this.req.get<QueryGetUndelegationResponseSDKType>(endpoint);
   }
   /* Queries a list of Undelegation items. */
-  async undelegationAll(params: QueryAllUndelegationRequest = {
-    pagination: undefined
-  }): Promise<QueryAllUndelegationResponseSDKType> {
+  async undelegationAll(params: QueryAllUndelegationRequest): Promise<QueryAllUndelegationResponseSDKType> {
     const options: any = {
       params: {}
     };
+    if (typeof params?.hostChain !== "undefined") {
+      options.params.host_chain = params.hostChain;
+    }
     if (typeof params?.pagination !== "undefined") {
       setPaginationParams(options, params.pagination);
     }
@@ -89,6 +92,28 @@ export class LCDQueryClient {
     }
     const endpoint = `pryzm-finance/pryzm-core/icstaking/undelegation/${params.hostChain}`;
     return await this.req.get<QueryIncompleteUndelegationResponseSDKType>(endpoint, options);
+  }
+  /* Queries a ChannelUndelegation by index. */
+  async channelUndelegation(params: QueryGetChannelUndelegationRequest): Promise<QueryGetChannelUndelegationResponseSDKType> {
+    const endpoint = `pryzm-finance/pryzm-core/icstaking/channel_undelegation/${params.hostChain}/${params.epoch}/${params.transferChannel}`;
+    return await this.req.get<QueryGetChannelUndelegationResponseSDKType>(endpoint);
+  }
+  /* Queries a list of ChannelUndelegation items. */
+  async channelUndelegationAll(params: QueryAllChannelUndelegationRequest): Promise<QueryAllChannelUndelegationResponseSDKType> {
+    const options: any = {
+      params: {}
+    };
+    if (typeof params?.hostChain !== "undefined") {
+      options.params.host_chain = params.hostChain;
+    }
+    if (typeof params?.epoch !== "undefined") {
+      options.params.epoch = params.epoch;
+    }
+    if (typeof params?.pagination !== "undefined") {
+      setPaginationParams(options, params.pagination);
+    }
+    const endpoint = `pryzm-finance/pryzm-core/icstaking/channel_undelegation`;
+    return await this.req.get<QueryAllChannelUndelegationResponseSDKType>(endpoint, options);
   }
   /* Queries the balance of the delegation queue. */
   async delegationQueueBalance(params: QueryDelegationQueueBalanceRequest): Promise<QueryDelegationQueueBalanceResponseSDKType> {

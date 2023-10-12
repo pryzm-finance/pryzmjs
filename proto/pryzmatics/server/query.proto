@@ -47,6 +47,8 @@ import "pryzmatics/server/oracle/pre_vote.proto";
 import "pryzmatics/server/oracle/vote.proto";
 import "pryzmatics/server/oracle/vote_payload.proto";
 
+import "pryzmatics/server/ystaking/user_stake.proto";
+
 
 option go_package = "github.com/pryzm-finance/pryzmatics/server";
 
@@ -226,5 +228,9 @@ service Query {
 
   rpc VotePayloads(pryzmatics.server.oracle.QueryVotePayloadsRequest) returns (pryzmatics.server.oracle.QueryVotePayloadsResponse) {
     option (google.api.http).get = "/pryzmatics/oracle/vote_payload";
+  }
+
+  rpc UserStakes(pryzmatics.server.ystaking.QueryUserStakesRequest) returns (pryzmatics.server.ystaking.QueryUserStakesResponse) {
+    option (google.api.http).get = "/pryzmatics/ystaking/user_stake";
   }
 }

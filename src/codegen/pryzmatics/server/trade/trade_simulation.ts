@@ -22,8 +22,8 @@ export interface QueryTradeSimulationResponse {
   priceTokenInTokenOutTerms: string;
   amountIn: Coin;
   amountOut: Coin;
-  swapFee: Coin[];
-  swapFeeTokenInTerms: Coin;
+  fee: Coin[];
+  feeTokenInTerms: Coin;
   effectivePrice: string;
   priceImpact: string;
   swapSteps: SwapStep[];
@@ -32,8 +32,8 @@ export interface QueryTradeSimulationResponseSDKType {
   price_token_in_token_out_terms: string;
   amount_in: CoinSDKType;
   amount_out: CoinSDKType;
-  swapFee: CoinSDKType[];
-  swapFeeTokenInTerms: CoinSDKType;
+  fee: CoinSDKType[];
+  feeTokenInTerms: CoinSDKType;
   effective_price: string;
   price_impact: string;
   swap_steps: SwapStepSDKType[];
@@ -132,8 +132,8 @@ function createBaseQueryTradeSimulationResponse(): QueryTradeSimulationResponse 
     priceTokenInTokenOutTerms: "",
     amountIn: Coin.fromPartial({}),
     amountOut: Coin.fromPartial({}),
-    swapFee: [],
-    swapFeeTokenInTerms: Coin.fromPartial({}),
+    fee: [],
+    feeTokenInTerms: Coin.fromPartial({}),
     effectivePrice: "",
     priceImpact: "",
     swapSteps: []
@@ -150,11 +150,11 @@ export const QueryTradeSimulationResponse = {
     if (message.amountOut !== undefined) {
       Coin.encode(message.amountOut, writer.uint32(26).fork()).ldelim();
     }
-    for (const v of message.swapFee) {
+    for (const v of message.fee) {
       Coin.encode(v!, writer.uint32(34).fork()).ldelim();
     }
-    if (message.swapFeeTokenInTerms !== undefined) {
-      Coin.encode(message.swapFeeTokenInTerms, writer.uint32(42).fork()).ldelim();
+    if (message.feeTokenInTerms !== undefined) {
+      Coin.encode(message.feeTokenInTerms, writer.uint32(42).fork()).ldelim();
     }
     if (message.effectivePrice !== "") {
       writer.uint32(50).string(Decimal.fromUserInput(message.effectivePrice, 18).atomics);
@@ -184,10 +184,10 @@ export const QueryTradeSimulationResponse = {
           message.amountOut = Coin.decode(reader, reader.uint32());
           break;
         case 4:
-          message.swapFee.push(Coin.decode(reader, reader.uint32()));
+          message.fee.push(Coin.decode(reader, reader.uint32()));
           break;
         case 5:
-          message.swapFeeTokenInTerms = Coin.decode(reader, reader.uint32());
+          message.feeTokenInTerms = Coin.decode(reader, reader.uint32());
           break;
         case 6:
           message.effectivePrice = Decimal.fromAtomics(reader.string(), 18).toString();
@@ -210,8 +210,8 @@ export const QueryTradeSimulationResponse = {
       priceTokenInTokenOutTerms: isSet(object.priceTokenInTokenOutTerms) ? String(object.priceTokenInTokenOutTerms) : "",
       amountIn: isSet(object.amountIn) ? Coin.fromJSON(object.amountIn) : undefined,
       amountOut: isSet(object.amountOut) ? Coin.fromJSON(object.amountOut) : undefined,
-      swapFee: Array.isArray(object?.swapFee) ? object.swapFee.map((e: any) => Coin.fromJSON(e)) : [],
-      swapFeeTokenInTerms: isSet(object.swapFeeTokenInTerms) ? Coin.fromJSON(object.swapFeeTokenInTerms) : undefined,
+      fee: Array.isArray(object?.fee) ? object.fee.map((e: any) => Coin.fromJSON(e)) : [],
+      feeTokenInTerms: isSet(object.feeTokenInTerms) ? Coin.fromJSON(object.feeTokenInTerms) : undefined,
       effectivePrice: isSet(object.effectivePrice) ? String(object.effectivePrice) : "",
       priceImpact: isSet(object.priceImpact) ? String(object.priceImpact) : "",
       swapSteps: Array.isArray(object?.swapSteps) ? object.swapSteps.map((e: any) => SwapStep.fromJSON(e)) : []
@@ -222,12 +222,12 @@ export const QueryTradeSimulationResponse = {
     message.priceTokenInTokenOutTerms !== undefined && (obj.priceTokenInTokenOutTerms = message.priceTokenInTokenOutTerms);
     message.amountIn !== undefined && (obj.amountIn = message.amountIn ? Coin.toJSON(message.amountIn) : undefined);
     message.amountOut !== undefined && (obj.amountOut = message.amountOut ? Coin.toJSON(message.amountOut) : undefined);
-    if (message.swapFee) {
-      obj.swapFee = message.swapFee.map(e => e ? Coin.toJSON(e) : undefined);
+    if (message.fee) {
+      obj.fee = message.fee.map(e => e ? Coin.toJSON(e) : undefined);
     } else {
-      obj.swapFee = [];
+      obj.fee = [];
     }
-    message.swapFeeTokenInTerms !== undefined && (obj.swapFeeTokenInTerms = message.swapFeeTokenInTerms ? Coin.toJSON(message.swapFeeTokenInTerms) : undefined);
+    message.feeTokenInTerms !== undefined && (obj.feeTokenInTerms = message.feeTokenInTerms ? Coin.toJSON(message.feeTokenInTerms) : undefined);
     message.effectivePrice !== undefined && (obj.effectivePrice = message.effectivePrice);
     message.priceImpact !== undefined && (obj.priceImpact = message.priceImpact);
     if (message.swapSteps) {
@@ -242,8 +242,8 @@ export const QueryTradeSimulationResponse = {
     message.priceTokenInTokenOutTerms = object.priceTokenInTokenOutTerms ?? "";
     message.amountIn = object.amountIn !== undefined && object.amountIn !== null ? Coin.fromPartial(object.amountIn) : undefined;
     message.amountOut = object.amountOut !== undefined && object.amountOut !== null ? Coin.fromPartial(object.amountOut) : undefined;
-    message.swapFee = object.swapFee?.map(e => Coin.fromPartial(e)) || [];
-    message.swapFeeTokenInTerms = object.swapFeeTokenInTerms !== undefined && object.swapFeeTokenInTerms !== null ? Coin.fromPartial(object.swapFeeTokenInTerms) : undefined;
+    message.fee = object.fee?.map(e => Coin.fromPartial(e)) || [];
+    message.feeTokenInTerms = object.feeTokenInTerms !== undefined && object.feeTokenInTerms !== null ? Coin.fromPartial(object.feeTokenInTerms) : undefined;
     message.effectivePrice = object.effectivePrice ?? "";
     message.priceImpact = object.priceImpact ?? "";
     message.swapSteps = object.swapSteps?.map(e => SwapStep.fromPartial(e)) || [];

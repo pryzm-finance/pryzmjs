@@ -58,6 +58,7 @@ export interface PoolTradeHistory {
   poolId: bigint;
   operationType: PoolOperationType;
   swapFee: Coin[];
+  joinExitSwapFee: Coin[];
   protocolFee: Coin[];
   blockTime: Timestamp;
 }
@@ -67,6 +68,7 @@ export interface PoolTradeHistorySDKType {
   pool_id: bigint;
   operation_type: PoolOperationType;
   swap_fee: CoinSDKType[];
+  join_exit_swap_fee: CoinSDKType[];
   protocol_fee: CoinSDKType[];
   block_time: TimestampSDKType;
 }
@@ -77,6 +79,7 @@ function createBasePoolTradeHistory(): PoolTradeHistory {
     poolId: BigInt(0),
     operationType: 0,
     swapFee: [],
+    joinExitSwapFee: [],
     protocolFee: [],
     blockTime: Timestamp.fromPartial({})
   };
@@ -98,11 +101,14 @@ export const PoolTradeHistory = {
     for (const v of message.swapFee) {
       Coin.encode(v!, writer.uint32(42).fork()).ldelim();
     }
-    for (const v of message.protocolFee) {
+    for (const v of message.joinExitSwapFee) {
       Coin.encode(v!, writer.uint32(50).fork()).ldelim();
     }
+    for (const v of message.protocolFee) {
+      Coin.encode(v!, writer.uint32(58).fork()).ldelim();
+    }
     if (message.blockTime !== undefined) {
-      Timestamp.encode(message.blockTime, writer.uint32(58).fork()).ldelim();
+      Timestamp.encode(message.blockTime, writer.uint32(66).fork()).ldelim();
     }
     return writer;
   },
@@ -129,9 +135,12 @@ export const PoolTradeHistory = {
           message.swapFee.push(Coin.decode(reader, reader.uint32()));
           break;
         case 6:
-          message.protocolFee.push(Coin.decode(reader, reader.uint32()));
+          message.joinExitSwapFee.push(Coin.decode(reader, reader.uint32()));
           break;
         case 7:
+          message.protocolFee.push(Coin.decode(reader, reader.uint32()));
+          break;
+        case 8:
           message.blockTime = Timestamp.decode(reader, reader.uint32());
           break;
         default:
@@ -148,6 +157,7 @@ export const PoolTradeHistory = {
       poolId: isSet(object.poolId) ? BigInt(object.poolId.toString()) : BigInt(0),
       operationType: isSet(object.operationType) ? poolOperationTypeFromJSON(object.operationType) : -1,
       swapFee: Array.isArray(object?.swapFee) ? object.swapFee.map((e: any) => Coin.fromJSON(e)) : [],
+      joinExitSwapFee: Array.isArray(object?.joinExitSwapFee) ? object.joinExitSwapFee.map((e: any) => Coin.fromJSON(e)) : [],
       protocolFee: Array.isArray(object?.protocolFee) ? object.protocolFee.map((e: any) => Coin.fromJSON(e)) : [],
       blockTime: isSet(object.blockTime) ? fromJsonTimestamp(object.blockTime) : undefined
     };
@@ -171,6 +181,11 @@ export const PoolTradeHistory = {
     } else {
       obj.swapFee = [];
     }
+    if (message.joinExitSwapFee) {
+      obj.joinExitSwapFee = message.joinExitSwapFee.map(e => e ? Coin.toJSON(e) : undefined);
+    } else {
+      obj.joinExitSwapFee = [];
+    }
     if (message.protocolFee) {
       obj.protocolFee = message.protocolFee.map(e => e ? Coin.toJSON(e) : undefined);
     } else {
@@ -186,6 +201,7 @@ export const PoolTradeHistory = {
     message.poolId = object.poolId !== undefined && object.poolId !== null ? BigInt(object.poolId.toString()) : BigInt(0);
     message.operationType = object.operationType ?? 0;
     message.swapFee = object.swapFee?.map(e => Coin.fromPartial(e)) || [];
+    message.joinExitSwapFee = object.joinExitSwapFee?.map(e => Coin.fromPartial(e)) || [];
     message.protocolFee = object.protocolFee?.map(e => Coin.fromPartial(e)) || [];
     message.blockTime = object.blockTime !== undefined && object.blockTime !== null ? Timestamp.fromPartial(object.blockTime) : undefined;
     return message;
