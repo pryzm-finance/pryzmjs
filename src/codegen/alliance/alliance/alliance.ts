@@ -1,9 +1,9 @@
-import { Timestamp, TimestampSDKType } from "../google/protobuf/timestamp";
-import { Duration, DurationSDKType } from "../google/protobuf/duration";
+import { Timestamp, TimestampSDKType } from "../../google/protobuf/timestamp";
+import { Duration, DurationSDKType } from "../../google/protobuf/duration";
 import { RewardHistory, RewardHistorySDKType } from "./params";
-import { BinaryReader, BinaryWriter } from "../binary";
+import { BinaryReader, BinaryWriter } from "../../binary";
 import { Decimal } from "@cosmjs/math";
-import { isSet, fromJsonTimestamp, fromTimestamp } from "../helpers";
+import { isSet, fromJsonTimestamp, fromTimestamp } from "../../helpers";
 export interface RewardWeightRange {
   min: string;
   max: string;

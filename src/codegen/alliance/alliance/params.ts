@@ -1,7 +1,7 @@
-import { Duration, DurationSDKType } from "../google/protobuf/duration";
-import { Timestamp, TimestampSDKType } from "../google/protobuf/timestamp";
-import { BinaryReader, BinaryWriter } from "../binary";
-import { isSet, fromJsonTimestamp, fromTimestamp } from "../helpers";
+import { Duration, DurationSDKType } from "../../google/protobuf/duration";
+import { Timestamp, TimestampSDKType } from "../../google/protobuf/timestamp";
+import { BinaryReader, BinaryWriter } from "../../binary";
+import { isSet, fromJsonTimestamp, fromTimestamp } from "../../helpers";
 import { Decimal } from "@cosmjs/math";
 export interface Params {
   rewardDelayTime: Duration;

@@ -1,12 +1,12 @@
-import { PageRequest, PageRequestSDKType, PageResponse, PageResponseSDKType } from "../cosmos/base/query/v1beta1/pagination";
+import { PageRequest, PageRequestSDKType, PageResponse, PageResponseSDKType } from "../../cosmos/base/query/v1beta1/pagination";
 import { Params, ParamsSDKType } from "./params";
 import { AllianceAsset, AllianceAssetSDKType } from "./alliance";
 import { Delegation, DelegationSDKType } from "./delegations";
-import { Coin, CoinSDKType, DecCoin, DecCoinSDKType } from "../cosmos/base/v1beta1/coin";
+import { Coin, CoinSDKType, DecCoin, DecCoinSDKType } from "../../cosmos/base/v1beta1/coin";
 import { UnbondingDelegation, UnbondingDelegationSDKType } from "./unbonding";
 import { RedelegationEntry, RedelegationEntrySDKType } from "./redelegations";
-import { BinaryReader, BinaryWriter } from "../binary";
-import { isSet } from "../helpers";
+import { BinaryReader, BinaryWriter } from "../../binary";
+import { isSet } from "../../helpers";
 /** Params */
 export interface QueryParamsRequest {}
 /** Params */

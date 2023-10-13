@@ -1,7 +1,7 @@
-import { Coin, CoinSDKType } from "../cosmos/base/v1beta1/coin";
-import { Timestamp, TimestampSDKType } from "../google/protobuf/timestamp";
-import { BinaryReader, BinaryWriter } from "../binary";
-import { isSet, fromJsonTimestamp, fromTimestamp } from "../helpers";
+import { Coin, CoinSDKType } from "../../cosmos/base/v1beta1/coin";
+import { Timestamp, TimestampSDKType } from "../../google/protobuf/timestamp";
+import { BinaryReader, BinaryWriter } from "../../binary";
+import { isSet, fromJsonTimestamp, fromTimestamp } from "../../helpers";
 /** Used internally to keep track of redelegations */
 export interface QueuedRedelegation {
   entries: Redelegation[];

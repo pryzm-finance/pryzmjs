@@ -26,7 +26,7 @@ export const createRPCMsgClient = async ({
     });
   }
   return {
-    alliance: new (await import("./tx.rpc.msg")).MsgClientImpl(grpcWeb),
+    alliance: new (await import("./alliance/tx.rpc.msg")).MsgClientImpl(grpcWeb),
     cosmos: {
       auth: {
         v1beta1: new (await import("../cosmos/auth/v1beta1/tx.rpc.msg")).MsgClientImpl(grpcWeb)

@@ -1,8 +1,8 @@
-import { Duration, DurationSDKType } from "../google/protobuf/duration";
+import { Duration, DurationSDKType } from "../../google/protobuf/duration";
 import { RewardWeightRange, RewardWeightRangeSDKType } from "./alliance";
-import { BinaryReader, BinaryWriter } from "../binary";
+import { BinaryReader, BinaryWriter } from "../../binary";
 import { Decimal } from "@cosmjs/math";
-import { isSet } from "../helpers";
+import { isSet } from "../../helpers";
 export interface MsgCreateAllianceProposal {
   /** the title of the update proposal */
   title: string;

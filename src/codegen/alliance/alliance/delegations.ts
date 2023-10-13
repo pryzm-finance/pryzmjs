@@ -1,8 +1,8 @@
 import { RewardHistory, RewardHistorySDKType } from "./params";
-import { Coin, CoinSDKType, DecCoin, DecCoinSDKType } from "../cosmos/base/v1beta1/coin";
-import { BinaryReader, BinaryWriter } from "../binary";
+import { Coin, CoinSDKType, DecCoin, DecCoinSDKType } from "../../cosmos/base/v1beta1/coin";
+import { BinaryReader, BinaryWriter } from "../../binary";
 import { Decimal } from "@cosmjs/math";
-import { isSet } from "../helpers";
+import { isSet } from "../../helpers";
 export interface Delegation {
   /** delegator_address is the bech32-encoded address of the delegator. */
   delegatorAddress: string;

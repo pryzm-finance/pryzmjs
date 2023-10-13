@@ -1,14 +1,18 @@
 //@ts-nocheck
-import { UnaryMethodDefinitionish } from "../grpc-web";
-import { DeepPartial } from "../helpers";
+import { UnaryMethodDefinitionish } from "../../grpc-web";
+import { DeepPartial } from "../../helpers";
 import { grpc } from "@improbable-eng/grpc-web";
 import { BrowserHeaders } from "browser-headers";
-import { MsgDelegate, MsgDelegateResponse, MsgRedelegate, MsgRedelegateResponse, MsgUndelegate, MsgUndelegateResponse, MsgClaimDelegationRewards, MsgClaimDelegationRewardsResponse } from "./tx";
+import { MsgDelegate, MsgDelegateResponse, MsgRedelegate, MsgRedelegateResponse, MsgUndelegate, MsgUndelegateResponse, MsgClaimDelegationRewards, MsgClaimDelegationRewardsResponse, MsgUpdateParams, MsgUpdateParamsResponse, MsgCreateAlliance, MsgCreateAllianceResponse, MsgUpdateAlliance, MsgUpdateAllianceResponse, MsgDeleteAlliance, MsgDeleteAllianceResponse } from "./tx";
 export interface Msg {
   delegate(request: DeepPartial<MsgDelegate>, metadata?: grpc.Metadata): Promise<MsgDelegateResponse>;
   redelegate(request: DeepPartial<MsgRedelegate>, metadata?: grpc.Metadata): Promise<MsgRedelegateResponse>;
   undelegate(request: DeepPartial<MsgUndelegate>, metadata?: grpc.Metadata): Promise<MsgUndelegateResponse>;
   claimDelegationRewards(request: DeepPartial<MsgClaimDelegationRewards>, metadata?: grpc.Metadata): Promise<MsgClaimDelegationRewardsResponse>;
+  updateParams(request: DeepPartial<MsgUpdateParams>, metadata?: grpc.Metadata): Promise<MsgUpdateParamsResponse>;
+  createAlliance(request: DeepPartial<MsgCreateAlliance>, metadata?: grpc.Metadata): Promise<MsgCreateAllianceResponse>;
+  updateAlliance(request: DeepPartial<MsgUpdateAlliance>, metadata?: grpc.Metadata): Promise<MsgUpdateAllianceResponse>;
+  deleteAlliance(request: DeepPartial<MsgDeleteAlliance>, metadata?: grpc.Metadata): Promise<MsgDeleteAllianceResponse>;
 }
 export class MsgClientImpl implements Msg {
   private readonly rpc: Rpc;
@@ -18,6 +22,10 @@ export class MsgClientImpl implements Msg {
     this.redelegate = this.redelegate.bind(this);
     this.undelegate = this.undelegate.bind(this);
     this.claimDelegationRewards = this.claimDelegationRewards.bind(this);
+    this.updateParams = this.updateParams.bind(this);
+    this.createAlliance = this.createAlliance.bind(this);
+    this.updateAlliance = this.updateAlliance.bind(this);
+    this.deleteAlliance = this.deleteAlliance.bind(this);
   }
   delegate(request: DeepPartial<MsgDelegate>, metadata?: grpc.Metadata): Promise<MsgDelegateResponse> {
     return this.rpc.unary(MsgDelegateDesc, MsgDelegate.fromPartial(request), metadata);
@@ -31,9 +39,21 @@ export class MsgClientImpl implements Msg {
   claimDelegationRewards(request: DeepPartial<MsgClaimDelegationRewards>, metadata?: grpc.Metadata): Promise<MsgClaimDelegationRewardsResponse> {
     return this.rpc.unary(MsgClaimDelegationRewardsDesc, MsgClaimDelegationRewards.fromPartial(request), metadata);
   }
+  updateParams(request: DeepPartial<MsgUpdateParams>, metadata?: grpc.Metadata): Promise<MsgUpdateParamsResponse> {
+    return this.rpc.unary(MsgUpdateParamsDesc, MsgUpdateParams.fromPartial(request), metadata);
+  }
+  createAlliance(request: DeepPartial<MsgCreateAlliance>, metadata?: grpc.Metadata): Promise<MsgCreateAllianceResponse> {
+    return this.rpc.unary(MsgCreateAllianceDesc, MsgCreateAlliance.fromPartial(request), metadata);
+  }
+  updateAlliance(request: DeepPartial<MsgUpdateAlliance>, metadata?: grpc.Metadata): Promise<MsgUpdateAllianceResponse> {
+    return this.rpc.unary(MsgUpdateAllianceDesc, MsgUpdateAlliance.fromPartial(request), metadata);
+  }
+  deleteAlliance(request: DeepPartial<MsgDeleteAlliance>, metadata?: grpc.Metadata): Promise<MsgDeleteAllianceResponse> {
+    return this.rpc.unary(MsgDeleteAllianceDesc, MsgDeleteAlliance.fromPartial(request), metadata);
+  }
 }
 export const MsgDesc = {
-  serviceName: "alliance.Msg"
+  serviceName: "alliance.alliance.Msg"
 };
 export const MsgDelegateDesc: UnaryMethodDefinitionish = {
   methodName: "Delegate",
@@ -112,6 +132,90 @@ export const MsgClaimDelegationRewardsDesc: UnaryMethodDefinitionish = {
     deserializeBinary(data: Uint8Array) {
       return {
         ...MsgClaimDelegationRewardsResponse.decode(data),
+        toObject() {
+          return this;
+        }
+      };
+    }
+  } as any)
+};
+export const MsgUpdateParamsDesc: UnaryMethodDefinitionish = {
+  methodName: "UpdateParams",
+  service: MsgDesc,
+  requestStream: false,
+  responseStream: false,
+  requestType: ({
+    serializeBinary() {
+      return MsgUpdateParams.encode(this).finish();
+    }
+  } as any),
+  responseType: ({
+    deserializeBinary(data: Uint8Array) {
+      return {
+        ...MsgUpdateParamsResponse.decode(data),
+        toObject() {
+          return this;
+        }
+      };
+    }
+  } as any)
+};
+export const MsgCreateAllianceDesc: UnaryMethodDefinitionish = {
+  methodName: "CreateAlliance",
+  service: MsgDesc,
+  requestStream: false,
+  responseStream: false,
+  requestType: ({
+    serializeBinary() {
+      return MsgCreateAlliance.encode(this).finish();
+    }
+  } as any),
+  responseType: ({
+    deserializeBinary(data: Uint8Array) {
+      return {
+        ...MsgCreateAllianceResponse.decode(data),
+        toObject() {
+          return this;
+        }
+      };
+    }
+  } as any)
+};
+export const MsgUpdateAllianceDesc: UnaryMethodDefinitionish = {
+  methodName: "UpdateAlliance",
+  service: MsgDesc,
+  requestStream: false,
+  responseStream: false,
+  requestType: ({
+    serializeBinary() {
+      return MsgUpdateAlliance.encode(this).finish();
+    }
+  } as any),
+  responseType: ({
+    deserializeBinary(data: Uint8Array) {
+      return {
+        ...MsgUpdateAllianceResponse.decode(data),
+        toObject() {
+          return this;
+        }
+      };
+    }
+  } as any)
+};
+export const MsgDeleteAllianceDesc: UnaryMethodDefinitionish = {
+  methodName: "DeleteAlliance",
+  service: MsgDesc,
+  requestStream: false,
+  responseStream: false,
+  requestType: ({
+    serializeBinary() {
+      return MsgDeleteAlliance.encode(this).finish();
+    }
+  } as any),
+  responseType: ({
+    deserializeBinary(data: Uint8Array) {
+      return {
+        ...MsgDeleteAllianceResponse.decode(data),
         toObject() {
           return this;
         }

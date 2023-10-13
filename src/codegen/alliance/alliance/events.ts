@@ -1,8 +1,8 @@
-import { Coin, CoinSDKType } from "../cosmos/base/v1beta1/coin";
-import { Timestamp, TimestampSDKType } from "../google/protobuf/timestamp";
-import { BinaryReader, BinaryWriter } from "../binary";
+import { Coin, CoinSDKType } from "../../cosmos/base/v1beta1/coin";
+import { Timestamp, TimestampSDKType } from "../../google/protobuf/timestamp";
+import { BinaryReader, BinaryWriter } from "../../binary";
 import { Decimal } from "@cosmjs/math";
-import { isSet, fromJsonTimestamp, fromTimestamp } from "../helpers";
+import { isSet, fromJsonTimestamp, fromTimestamp } from "../../helpers";
 export interface DelegateAllianceEvent {
   allianceSender: string;
   validator: string;

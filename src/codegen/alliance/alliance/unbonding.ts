@@ -1,6 +1,6 @@
-import { Timestamp, TimestampSDKType } from "../google/protobuf/timestamp";
-import { BinaryReader, BinaryWriter } from "../binary";
-import { isSet, fromJsonTimestamp, fromTimestamp } from "../helpers";
+import { Timestamp, TimestampSDKType } from "../../google/protobuf/timestamp";
+import { BinaryReader, BinaryWriter } from "../../binary";
+import { isSet, fromJsonTimestamp, fromTimestamp } from "../../helpers";
 /** UnbondingDelegation defines an unbonding object with relevant metadata. */
 export interface UnbondingDelegation {
   /** completion_time is the unix time for unbonding completion. */

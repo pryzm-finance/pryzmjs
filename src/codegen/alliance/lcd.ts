@@ -8,7 +8,7 @@ export const createLCDClient = async ({
     restEndpoint
   });
   return {
-    alliance: new (await import("./query.lcd")).LCDQueryClient({
+    alliance: new (await import("./alliance/query.lcd")).LCDQueryClient({
       requestClient
     }),
     cosmos: {

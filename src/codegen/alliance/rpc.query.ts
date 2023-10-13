@@ -26,7 +26,7 @@ export const createGrpcWebClient = async ({
     });
   }
   return {
-    alliance: new (await import("./query.rpc.Query")).QueryClientImpl(grpcWeb),
+    alliance: new (await import("./alliance/query.rpc.Query")).QueryClientImpl(grpcWeb),
     cosmos: {
       app: {
         v1alpha1: new (await import("../cosmos/app/v1alpha1/query.rpc.Query")).QueryClientImpl(grpcWeb)

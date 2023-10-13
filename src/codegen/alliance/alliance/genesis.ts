@@ -1,10 +1,10 @@
 import { AllianceValidatorInfo, AllianceValidatorInfoSDKType, QueuedUndelegation, QueuedUndelegationSDKType, Delegation, DelegationSDKType } from "./delegations";
-import { Timestamp, TimestampSDKType } from "../google/protobuf/timestamp";
+import { Timestamp, TimestampSDKType } from "../../google/protobuf/timestamp";
 import { Redelegation, RedelegationSDKType } from "./redelegations";
 import { RewardWeightChangeSnapshot, RewardWeightChangeSnapshotSDKType, AllianceAsset, AllianceAssetSDKType } from "./alliance";
 import { Params, ParamsSDKType } from "./params";
-import { BinaryReader, BinaryWriter } from "../binary";
-import { isSet, fromJsonTimestamp, fromTimestamp } from "../helpers";
+import { BinaryReader, BinaryWriter } from "../../binary";
+import { isSet, fromJsonTimestamp, fromTimestamp } from "../../helpers";
 export interface ValidatorInfoState {
   validatorAddress: string;
   validator: AllianceValidatorInfo;

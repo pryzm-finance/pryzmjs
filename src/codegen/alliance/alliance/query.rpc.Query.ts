@@ -1,7 +1,7 @@
 //@ts-nocheck
 import { grpc } from "@improbable-eng/grpc-web";
-import { UnaryMethodDefinitionish } from "../grpc-web";
-import { DeepPartial } from "../helpers";
+import { UnaryMethodDefinitionish } from "../../grpc-web";
+import { DeepPartial } from "../../helpers";
 import { BrowserHeaders } from "browser-headers";
 import { QueryParamsRequest, QueryParamsResponse, QueryAlliancesRequest, QueryAlliancesResponse, QueryIBCAllianceRequest, QueryAllianceResponse, QueryAllAlliancesDelegationsRequest, QueryAlliancesDelegationsResponse, QueryAllianceValidatorRequest, QueryAllianceValidatorResponse, QueryAllAllianceValidatorsRequest, QueryAllianceValidatorsResponse, QueryAlliancesDelegationsRequest, QueryAlliancesDelegationByValidatorRequest, QueryAllianceDelegationRequest, QueryAllianceDelegationResponse, QueryIBCAllianceDelegationRequest, QueryAllianceDelegationRewardsRequest, QueryAllianceDelegationRewardsResponse, QueryIBCAllianceDelegationRewardsRequest, QueryAllianceUnbondingsByDenomAndDelegatorRequest, QueryAllianceUnbondingsByDenomAndDelegatorResponse, QueryAllianceUnbondingsRequest, QueryAllianceUnbondingsResponse, QueryAllianceRedelegationsRequest, QueryAllianceRedelegationsResponse, QueryAllianceRequest } from "./query";
 export interface Query {
@@ -126,7 +126,7 @@ export class QueryClientImpl implements Query {
   }
 }
 export const QueryDesc = {
-  serviceName: "alliance.Query"
+  serviceName: "alliance.alliance.Query"
 };
 export const QueryParamsDesc: UnaryMethodDefinitionish = {
   methodName: "Params",
