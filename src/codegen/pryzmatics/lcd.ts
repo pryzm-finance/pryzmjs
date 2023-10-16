@@ -1,4 +1,4 @@
-import { LCDClient } from "@cosmology/lcd";
+import { LCDClient } from "@refractedlabs/cosmology-lcd-fork";
 export const createClient = async ({
   restEndpoint
 }: {

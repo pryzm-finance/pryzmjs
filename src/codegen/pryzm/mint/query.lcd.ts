@@ -1,5 +1,5 @@
 //@ts-nocheck
-import { LCDClient } from "@cosmology/lcd";
+import { LCDClient } from "@refractedlabs/cosmology-lcd-fork";
 import { QueryParamsRequest, QueryParamsResponseSDKType, QueryMinterRequest, QueryMinterResponseSDKType } from "./query";
 export class LCDQueryClient {
   req: LCDClient;

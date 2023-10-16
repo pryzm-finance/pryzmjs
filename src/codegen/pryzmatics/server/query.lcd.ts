@@ -1,6 +1,6 @@
 //@ts-nocheck
 import { setPaginationParams } from "../../helpers";
-import { LCDClient } from "@cosmology/lcd";
+import { LCDClient } from "@refractedlabs/cosmology-lcd-fork";
 import { QueryAssetRequest, QueryAssetResponseSDKType } from "./asset/asset";
 import { QueryAllMaturitiesRequest, QueryAllMaturitiesResponseSDKType } from "./maturity/maturity";
 import { QuerySubmitProposalMsgsRequest, QuerySubmitProposalMsgsResponseSDKType, QueryAssetProposalRequest, QueryAssetProposalResponseSDKType } from "./pgov/pgov";
