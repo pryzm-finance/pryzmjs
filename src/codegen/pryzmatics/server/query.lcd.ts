@@ -36,6 +36,7 @@ import { QueryValidatorSlashWindowSummariesRequest, QueryValidatorSlashWindowSum
 import { QueryPreVotesRequest, QueryPreVotesResponseSDKType } from "./oracle/pre_vote";
 import { QueryVotesRequest, QueryVotesResponseSDKType } from "./oracle/vote";
 import { QueryVotePayloadsRequest, QueryVotePayloadsResponseSDKType } from "./oracle/vote_payload";
+import { QueryBallotVoteResultsRequest, QueryBallotVoteResultsResponseSDKType } from "./oracle/ballot_vote_result";
 import { QueryUserStakesRequest, QueryUserStakesResponseSDKType } from "./ystaking/user_stake";
 export class LCDQueryClient {
   req: LCDClient;
@@ -89,6 +90,7 @@ export class LCDQueryClient {
     this.preVotes = this.preVotes.bind(this);
     this.votes = this.votes.bind(this);
     this.votePayloads = this.votePayloads.bind(this);
+    this.ballotVoteResults = this.ballotVoteResults.bind(this);
     this.userStakes = this.userStakes.bind(this);
   }
   /* Asset */
@@ -679,6 +681,29 @@ export class LCDQueryClient {
     }
     const endpoint = `pryzmatics/oracle/vote_payload`;
     return await this.req.get<QueryVotePayloadsResponseSDKType>(endpoint, options);
+  }
+  /* BallotVoteResults */
+  async ballotVoteResults(params: QueryBallotVoteResultsRequest): Promise<QueryBallotVoteResultsResponseSDKType> {
+    const options: any = {
+      params: {}
+    };
+    if (typeof params?.module !== "undefined") {
+      options.params.module = params.module;
+    }
+    if (typeof params?.namespace !== "undefined") {
+      options.params.namespace = params.namespace;
+    }
+    if (typeof params?.fromBlockHeight !== "undefined") {
+      options.params.from_block_height = params.fromBlockHeight;
+    }
+    if (typeof params?.toBlockHeight !== "undefined") {
+      options.params.to_block_height = params.toBlockHeight;
+    }
+    if (typeof params?.pagination !== "undefined") {
+      setPaginationParams(options, params.pagination);
+    }
+    const endpoint = `pryzmatics/oracle/ballot_vote_result`;
+    return await this.req.get<QueryBallotVoteResultsResponseSDKType>(endpoint, options);
   }
   /* UserStakes */
   async userStakes(params: QueryUserStakesRequest): Promise<QueryUserStakesResponseSDKType> {

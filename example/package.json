@@ -4,9 +4,9 @@
     "compile": "rm -rf lib && tsc"
   },
   "dependencies": {
-    "@pryzm-finance/pryzmjs": "0.13.4",
-    "@refractedlabs/oraclejs": "^0.3.0",
-    "@refractedlabs/utils": "0.1.7"
+    "@pryzm-finance/pryzmjs": "0.13.5",
+    "@refractedlabs/oraclejs": "^0.4.1",
+    "@refractedlabs/utils": "0.1.9"
   },
   "devDependencies": {
     "typescript": "^5.1.6"

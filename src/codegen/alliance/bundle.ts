@@ -8,36 +8,35 @@ import * as _6 from "./alliance/query";
 import * as _7 from "./alliance/redelegations";
 import * as _8 from "./alliance/tx";
 import * as _9 from "./alliance/unbonding";
-import * as _293 from "./alliance/tx.amino";
-import * as _294 from "./alliance/tx.registry";
-import * as _295 from "./alliance/query.lcd";
-import * as _296 from "./alliance/query.rpc.Query";
-import * as _297 from "./alliance/tx.rpc.msg";
-import * as _478 from "./lcd";
-import * as _479 from "./rpc.query";
-import * as _480 from "./rpc.tx";
-
-const ClientFactory = {
-  ..._478,
-  ..._479,
-  ..._480
-};
-
-export const alliance = {
-  ..._0,
-  ..._1,
-  ..._2,
-  ..._3,
-  ..._4,
-  ..._5,
-  ..._6,
-  ..._7,
-  ..._8,
-  ..._9,
-  ..._293,
-  ..._294,
-  ..._295,
-  ..._296,
-  ..._297,
-  ClientFactory,
-};
+import * as _295 from "./alliance/tx.amino";
+import * as _296 from "./alliance/tx.registry";
+import * as _297 from "./alliance/query.lcd";
+import * as _298 from "./alliance/query.rpc.Query";
+import * as _299 from "./alliance/tx.rpc.msg";
+import * as _480 from "./lcd";
+import * as _481 from "./rpc.query";
+import * as _482 from "./rpc.tx";
+export namespace alliance {
+  export const alliance = {
+    ..._0,
+    ..._1,
+    ..._2,
+    ..._3,
+    ..._4,
+    ..._5,
+    ..._6,
+    ..._7,
+    ..._8,
+    ..._9,
+    ..._295,
+    ..._296,
+    ..._297,
+    ..._298,
+    ..._299
+  };
+  export const ClientFactory = {
+    ..._480,
+    ..._481,
+    ..._482
+  };
+}

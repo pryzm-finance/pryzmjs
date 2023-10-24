@@ -1,27 +1,20 @@
 lockfileVersion: 5.4
 
 specifiers:
-  '@pryzm-finance/pryzmjs': 0.13.4
-  '@refractedlabs/oraclejs': ^0.3.0
-  '@refractedlabs/utils': 0.1.7
+  '@pryzm-finance/pryzmjs': 0.13.5
+  '@refractedlabs/oraclejs': ^0.4.1
+  '@refractedlabs/utils': 0.1.9
   typescript: ^5.1.6
 
 dependencies:
-  '@pryzm-finance/pryzmjs': 0.13.4_google-protobuf@3.21.2
-  '@refractedlabs/oraclejs': 0.3.6_google-protobuf@3.21.2
-  '@refractedlabs/utils': 0.1.7
+  '@pryzm-finance/pryzmjs': 0.13.5_google-protobuf@3.21.2
+  '@refractedlabs/oraclejs': 0.4.1_google-protobuf@3.21.2
+  '@refractedlabs/utils': 0.1.9
 
 devDependencies:
   typescript: 5.2.2
 
 packages:
-
-  /@babel/runtime/7.22.15:
-    resolution: {integrity: sha512-T0O+aa+4w0u06iNmapipJXMV4HoUir03hpx3/YqXXhu9xim3w+dVphjFWl1OH8NbZHw5Lbm9k45drDkgq2VNNA==}
-    engines: {node: '>=6.9.0'}
-    dependencies:
-      regenerator-runtime: 0.14.0
-    dev: false
 
   /@babel/runtime/7.23.2:
     resolution: {integrity: sha512-mM8eg4yl5D6i3lu2QKPuPH4FArvJ8KhTofbE7jwMUv9KX5mBvwPAqnV3MlyBNqdp9RyRKP6Yck8TrfYrPvX3bg==}
@@ -30,8 +23,8 @@ packages:
       regenerator-runtime: 0.14.0
     dev: false
 
-  /@colors/colors/1.5.0:
-    resolution: {integrity: sha512-ooWCrlZP11i8GImSjTHYHLkvFDP48nS4+204nGb1RiX/WXYHmJA2III9/e2DWVabCESdW7hBAEzHRqUn9OUVvQ==}
+  /@colors/colors/1.6.0:
+    resolution: {integrity: sha512-Ir+AOibqzrIsL6ajt3Rz3LskB7OiMVHqltZmspbW/TJuTVuyOMirVqAkjfY6JISiLHgyNqicAC8AyHHGzNd/dA==}
     engines: {node: '>=0.1.90'}
     dev: false
 
@@ -180,7 +173,7 @@ packages:
   /@cosmology/lcd/0.12.0:
     resolution: {integrity: sha512-f2mcySYO1xdislAhuWtNFmg4q/bzY3Aem2UkDzYzI0ZELVev5i2Pi0bQrYUNTeNg1isAo0Kyrdqj/4YPqEwjGA==}
     dependencies:
-      '@babel/runtime': 7.22.15
+      '@babel/runtime': 7.23.2
       axios: 0.27.2
     transitivePeerDependencies:
       - debug
@@ -259,8 +252,8 @@ packages:
     resolution: {integrity: sha512-Vvn3zZrhQZkkBE8LSuW3em98c0FwgO4nxzv6OdSxPKJIEKY2bGbHn+mhGIPerzI4twdxaP8/0+06HBpwf345Lw==}
     dev: false
 
-  /@pryzm-finance/pryzmjs/0.13.4_google-protobuf@3.21.2:
-    resolution: {integrity: sha512-f26ZS7qWZzWkvcatZGeF1HDEvB9PgsS1lFb7QeSANgDdrUWkmRnPFD9gmcKk8Oh9M87iYOXsTt7RdwSvtDuyKw==, tarball: download/@pryzm-finance/pryzmjs/0.13.4/eff640038a13c8f1f24134e84abe43e328e9e351}
+  /@pryzm-finance/pryzmjs/0.13.5_google-protobuf@3.21.2:
+    resolution: {integrity: sha512-/bcjLnoD8zjlGYBe2Qv2spW6EqofvmouKlpCeXWauDk+JBTVIyWvmUAwg8ibuTyuFNDVY4J0sdE1KbzrvHnf+Q==, tarball: download/@pryzm-finance/pryzmjs/0.13.5/87cc95b95a1b388ce9195bdb56210c262fb5264f}
     dependencies:
       '@babel/runtime': 7.23.2
       '@cosmjs/amino': 0.31.0
@@ -288,10 +281,10 @@ packages:
       - debug
     dev: false
 
-  /@refractedlabs/oraclejs/0.3.6_google-protobuf@3.21.2:
-    resolution: {integrity: sha512-49dUzHOTT0lC6fkkA2GnFCVTG7xLQQgSsJkWDFFf1POxrUZZ85D250Pz0SZImJoIrcFzWLNGaM6zTYLmUKBI8A==, tarball: download/@refractedlabs/oraclejs/0.3.6/c84d037c5ee23851ec018404f61dc60c60e47dcb}
+  /@refractedlabs/oraclejs/0.4.1_google-protobuf@3.21.2:
+    resolution: {integrity: sha512-zmDxFESqQnmLyyunwCnQZ3cgkQ3TF8o8C2wDWK+Yb+H2VfHixJJvdtRMMARL8ErtHLwUBMeFe6CDtlZelDJUQA==, tarball: download/@refractedlabs/oraclejs/0.4.1/562f4acbd0cde10aba9745f212920c1b142d46c4}
     dependencies:
-      '@babel/runtime': 7.22.15
+      '@babel/runtime': 7.23.2
       '@cosmjs/amino': 0.31.0
       '@cosmjs/proto-signing': 0.31.0
       '@cosmjs/stargate': 0.31.0
@@ -308,23 +301,23 @@ packages:
       - utf-8-validate
     dev: false
 
-  /@refractedlabs/utils/0.1.7:
-    resolution: {integrity: sha512-GvNQejMUj2hjMTHMKf66b9/OqyFglI3pgzUcIGMvd0Hpej7Z5m0oPevAWsJ/06wIdKQ+UI5SghcnqZSIyr3VnQ==, tarball: download/@refractedlabs/utils/0.1.7/13d35b8be1a33fa1abb408dac05e17053aaa1410}
+  /@refractedlabs/utils/0.1.9:
+    resolution: {integrity: sha512-Vj+l/fExpWDAWOuy7zZ69VajlzLFxLI9LojEiWxh3vqroCX+avZCgnnd5begjHLnRyV5GwdpwWOspHqG3+7cOQ==, tarball: download/@refractedlabs/utils/0.1.9/1ab1e5cbefc4c9ec36612dbf5a0a9f9c595f1284}
     dependencies:
       '@cosmjs/json-rpc': 0.31.0
       '@cosmjs/socket': 0.31.0
-      '@types/js-yaml': 4.0.6
+      '@types/js-yaml': 4.0.8
       js-yaml: 4.1.0
-      winston: 3.10.0
-      winston-daily-rotate-file: 4.7.1_winston@3.10.0
-      winston-syslog: 2.7.0_winston@3.10.0
+      winston: 3.11.0
+      winston-daily-rotate-file: 4.7.1_winston@3.11.0
+      winston-syslog: 2.7.0_winston@3.11.0
     transitivePeerDependencies:
       - bufferutil
       - utf-8-validate
     dev: false
 
-  /@types/js-yaml/4.0.6:
-    resolution: {integrity: sha512-ACTuifTSIIbyksx2HTon3aFtCKWcID7/h3XEmRpDYdMCXxPbl+m9GteOJeaAkiAta/NJaSFuA7ahZ0NkwajDSw==}
+  /@types/js-yaml/4.0.8:
+    resolution: {integrity: sha512-m6jnPk1VhlYRiLFm3f8X9Uep761f+CK8mHyS65LutH2OhmBF0BeMEjHgg05usH8PLZMWWc/BUR9RPmkvpWnyRA==}
     dev: false
 
   /@types/long/4.0.2:
@@ -335,8 +328,8 @@ packages:
     resolution: {integrity: sha512-Y+/1vGBHV/cYk6OI1Na/LHzwnlNCAfU3ZNGrc1LdRe/LAIbdDPTTv/HU3M7yXN448aTVDq3eKRm2cg7iKLb8gw==}
     dev: false
 
-  /@types/triple-beam/1.3.3:
-    resolution: {integrity: sha512-6tOUG+nVHn0cJbVp25JFayS5UE6+xlbcNF9Lo9mU7U0zk3zeUShZied4YEQZjy1JBF043FSkdXw8YkUJuVtB5g==}
+  /@types/triple-beam/1.3.4:
+    resolution: {integrity: sha512-HlJjF3wxV4R2VQkFpKe0YqJLilYNgtRtsqqZtby7RkVsSs+i+vbyzjtUwpFEdUCKcrGzCiEJE7F/0mKjh0sunA==}
     dev: false
 
   /argparse/2.0.1:
@@ -650,11 +643,12 @@ packages:
       libsodium-sumo: 0.7.13
     dev: false
 
-  /logform/2.5.1:
-    resolution: {integrity: sha512-9FyqAm9o9NKKfiAKfZoYo9bGXXuwMkxQiQttkT4YjjVtQVIQtK6LmVtlxmCaFswo6N4AfEkHqZTV0taDtPotNg==}
+  /logform/2.6.0:
+    resolution: {integrity: sha512-1ulHeNPp6k/LD8H91o7VYFBng5i1BDE7HoKxVbZiGFidS1Rj65qcywLxX+pVfAPoQJEjRdvKcusKwOupHCVOVQ==}
+    engines: {node: '>= 12.0.0'}
     dependencies:
-      '@colors/colors': 1.5.0
-      '@types/triple-beam': 1.3.3
+      '@colors/colors': 1.6.0
+      '@types/triple-beam': 1.3.4
       fecha: 4.2.3
       ms: 2.1.3
       safe-stable-stringify: 2.4.3
@@ -810,7 +804,7 @@ packages:
     resolution: {integrity: sha512-EPD5q1uXyFxJpCrLnCc1nHnq3gOa6DZBocAIiI2TaSCA7VCJ1UJDMagCzIkXNsUYfD1daK//LTEQ8xiIbrHtcw==}
     dev: false
 
-  /winston-daily-rotate-file/4.7.1_winston@3.10.0:
+  /winston-daily-rotate-file/4.7.1_winston@3.11.0:
     resolution: {integrity: sha512-7LGPiYGBPNyGHLn9z33i96zx/bd71pjBn9tqQzO3I4Tayv94WPmBNwKC7CO1wPHdP9uvu+Md/1nr6VSH9h0iaA==}
     engines: {node: '>=8'}
     peerDependencies:
@@ -819,46 +813,46 @@ packages:
       file-stream-rotator: 0.6.1
       object-hash: 2.2.0
       triple-beam: 1.4.1
-      winston: 3.10.0
-      winston-transport: 4.5.0
+      winston: 3.11.0
+      winston-transport: 4.6.0
     dev: false
 
-  /winston-syslog/2.7.0_winston@3.10.0:
+  /winston-syslog/2.7.0_winston@3.11.0:
     resolution: {integrity: sha512-w+V0lHO2W6XqcYlvVi4DrblwJShvQbAaruRvUlMPzH1Z+dYvUvo4ra2hhoF6UNTFmC9LBltcTG05ypYL6S/B8A==}
     engines: {node: '>= 8'}
     peerDependencies:
       winston: ^3.8.2
     dependencies:
       glossy: 0.1.7
-      winston: 3.10.0
+      winston: 3.11.0
     optionalDependencies:
       unix-dgram: 2.0.6
     dev: false
 
-  /winston-transport/4.5.0:
-    resolution: {integrity: sha512-YpZzcUzBedhlTAfJg6vJDlyEai/IFMIVcaEZZyl3UXIl4gmqRpU7AE89AHLkbzLUsv0NVmw7ts+iztqKxxPW1Q==}
-    engines: {node: '>= 6.4.0'}
+  /winston-transport/4.6.0:
+    resolution: {integrity: sha512-wbBA9PbPAHxKiygo7ub7BYRiKxms0tpfU2ljtWzb3SjRjv5yl6Ozuy/TkXf00HTAt+Uylo3gSkNwzc4ME0wiIg==}
+    engines: {node: '>= 12.0.0'}
     dependencies:
-      logform: 2.5.1
+      logform: 2.6.0
       readable-stream: 3.6.2
       triple-beam: 1.4.1
     dev: false
 
-  /winston/3.10.0:
-    resolution: {integrity: sha512-nT6SIDaE9B7ZRO0u3UvdrimG0HkB7dSTAgInQnNR2SOPJ4bvq5q79+pXLftKmP52lJGW15+H5MCK0nM9D3KB/g==}
+  /winston/3.11.0:
+    resolution: {integrity: sha512-L3yR6/MzZAOl0DsysUXHVjOwv8mKZ71TrA/41EIduGpOOV5LQVodqN+QdQ6BS6PJ/RdIshZhq84P/fStEZkk7g==}
     engines: {node: '>= 12.0.0'}
     dependencies:
-      '@colors/colors': 1.5.0
+      '@colors/colors': 1.6.0
       '@dabh/diagnostics': 2.0.3
       async: 3.2.4
       is-stream: 2.0.1
-      logform: 2.5.1
+      logform: 2.6.0
       one-time: 1.0.0
       readable-stream: 3.6.2
       safe-stable-stringify: 2.4.3
       stack-trace: 0.0.10
       triple-beam: 1.4.1
-      winston-transport: 4.5.0
+      winston-transport: 4.6.0
     dev: false
 
   /ws/7.5.9:

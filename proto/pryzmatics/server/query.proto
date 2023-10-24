@@ -46,6 +46,7 @@ import "pryzmatics/server/oracle/validator_slash_window_summary.proto";
 import "pryzmatics/server/oracle/pre_vote.proto";
 import "pryzmatics/server/oracle/vote.proto";
 import "pryzmatics/server/oracle/vote_payload.proto";
+import "pryzmatics/server/oracle/ballot_vote_result.proto";
 
 import "pryzmatics/server/ystaking/user_stake.proto";
 
@@ -228,6 +229,10 @@ service Query {
 
   rpc VotePayloads(pryzmatics.server.oracle.QueryVotePayloadsRequest) returns (pryzmatics.server.oracle.QueryVotePayloadsResponse) {
     option (google.api.http).get = "/pryzmatics/oracle/vote_payload";
+  }
+
+  rpc BallotVoteResults(pryzmatics.server.oracle.QueryBallotVoteResultsRequest) returns (pryzmatics.server.oracle.QueryBallotVoteResultsResponse) {
+    option (google.api.http).get = "/pryzmatics/oracle/ballot_vote_result";
   }
 
   rpc UserStakes(pryzmatics.server.ystaking.QueryUserStakesRequest) returns (pryzmatics.server.ystaking.QueryUserStakesResponse) {
