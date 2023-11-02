@@ -1,7 +1,7 @@
 //@ts-nocheck
 import { setPaginationParams } from "../../helpers";
 import { LCDClient } from "@refractedlabs/cosmology-lcd-fork";
-import { QueryParamsRequest, QueryParamsResponseSDKType, QueryGetHostChainRequest, QueryGetHostChainResponseSDKType, QueryAllHostChainRequest, QueryAllHostChainResponseSDKType, QueryGetHostChainStateRequest, QueryGetHostChainStateResponseSDKType, QueryAllHostChainStateRequest, QueryAllHostChainStateResponseSDKType, QueryGetUndelegationRequest, QueryGetUndelegationResponseSDKType, QueryAllUndelegationRequest, QueryAllUndelegationResponseSDKType, QueryIncompleteUndelegationRequest, QueryIncompleteUndelegationResponseSDKType, QueryGetChannelUndelegationRequest, QueryGetChannelUndelegationResponseSDKType, QueryAllChannelUndelegationRequest, QueryAllChannelUndelegationResponseSDKType, QueryDelegationQueueBalanceRequest, QueryDelegationQueueBalanceResponseSDKType } from "./query";
+import { QueryParamsRequest, QueryParamsResponseSDKType, QueryGetHostChainRequest, QueryGetHostChainResponseSDKType, QueryAllHostChainRequest, QueryAllHostChainResponseSDKType, QueryGetHostChainStateRequest, QueryGetHostChainStateResponseSDKType, QueryAllHostChainStateRequest, QueryAllHostChainStateResponseSDKType, QueryGetUndelegationRequest, QueryGetUndelegationResponseSDKType, QueryAllUndelegationRequest, QueryAllUndelegationResponseSDKType, QueryIncompleteUndelegationRequest, QueryIncompleteUndelegationResponseSDKType, QueryGetChannelUndelegationRequest, QueryGetChannelUndelegationResponseSDKType, QueryAllChannelUndelegationRequest, QueryAllChannelUndelegationResponseSDKType, QueryDelegationQueueBalanceRequest, QueryDelegationQueueBalanceResponseSDKType, QueryEpochInfoRequest, QueryEpochInfoResponseSDKType } from "./query";
 export class LCDQueryClient {
   req: LCDClient;
   constructor({
@@ -21,6 +21,7 @@ export class LCDQueryClient {
     this.channelUndelegation = this.channelUndelegation.bind(this);
     this.channelUndelegationAll = this.channelUndelegationAll.bind(this);
     this.delegationQueueBalance = this.delegationQueueBalance.bind(this);
+    this.epochInfo = this.epochInfo.bind(this);
   }
   /* Parameters queries the parameters of the module. */
   async params(_params: QueryParamsRequest = {}): Promise<QueryParamsResponseSDKType> {
@@ -119,5 +120,10 @@ export class LCDQueryClient {
   async delegationQueueBalance(params: QueryDelegationQueueBalanceRequest): Promise<QueryDelegationQueueBalanceResponseSDKType> {
     const endpoint = `pryzm-finance/pryzm-core/icstaking/delegation_queue_balance/${params.hostChain}/${params.transferChannel}`;
     return await this.req.get<QueryDelegationQueueBalanceResponseSDKType>(endpoint);
+  }
+  /* Queries the information about last delegation and undelegation times */
+  async epochInfo(params: QueryEpochInfoRequest): Promise<QueryEpochInfoResponseSDKType> {
+    const endpoint = `pryzm-finance/pryzm-core/icstaking/epoch_info/${params.hostChain}`;
+    return await this.req.get<QueryEpochInfoResponseSDKType>(endpoint);
   }
 }

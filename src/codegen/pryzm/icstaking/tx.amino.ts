@@ -40,6 +40,7 @@ export interface MsgUpdateParamsAminoType extends AminoMsg {
           };
         };
       };
+      admins: string[];
     };
   };
 }
@@ -222,7 +223,8 @@ export const AminoConverter = {
               min_rebalance_amount: params.stakingParams.rebalanceParams.minRebalanceAmount,
               min_rebalance_interval: (params.stakingParams.rebalanceParams.minRebalanceInterval * 1_000_000_000).toString()
             }
-          }
+          },
+          admins: params.admins
         }
       };
     },
@@ -265,7 +267,8 @@ export const AminoConverter = {
                 nanos: parseInt(params.staking_params.rebalance_params.min_rebalance_interval) % 1_000_000_000
               }
             }
-          }
+          },
+          admins: params.admins
         }
       };
     }

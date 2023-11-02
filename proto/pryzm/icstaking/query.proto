@@ -4,6 +4,7 @@ package pryzm.icstaking;
 import "cosmos/base/query/v1beta1/pagination.proto";
 import "cosmos/base/v1beta1/coin.proto";
 import "gogoproto/gogo.proto";
+import "google/protobuf/timestamp.proto";
 import "google/api/annotations.proto";
 import "pryzm/icstaking/host_chain.proto";
 import "pryzm/icstaking/params.proto";
@@ -66,6 +67,11 @@ service Query {
   // Queries the balance of the delegation queue.
   rpc DelegationQueueBalance(QueryDelegationQueueBalanceRequest) returns (QueryDelegationQueueBalanceResponse) {
     option (google.api.http).get = "/pryzm-finance/pryzm-core/icstaking/delegation_queue_balance/{host_chain}/{transfer_channel}";
+  }
+
+  // Queries the information about last delegation and undelegation times
+  rpc EpochInfo(QueryEpochInfoRequest) returns (QueryEpochInfoResponse) {
+    option (google.api.http).get = "/pryzm-finance/pryzm-core/icstaking/epoch_info/{host_chain}";
   }
 
   // this line is used by starport scaffolding # 2
@@ -171,6 +177,22 @@ message QueryDelegationQueueBalanceRequest {
 
 message QueryDelegationQueueBalanceResponse {
   cosmos.base.v1beta1.Coin balance = 1 [(gogoproto.nullable) = false];
+}
+
+message QueryEpochInfoRequest {
+  string host_chain = 1;
+}
+
+message QueryEpochInfoResponse {
+  google.protobuf.Timestamp last_delegation_time = 1 [
+    (gogoproto.nullable) = false,
+    (gogoproto.stdtime) = true
+  ];
+  google.protobuf.Timestamp last_undelegation_time = 2 [
+    (gogoproto.nullable) = false,
+    (gogoproto.stdtime) = true
+  ];
+  uint64 current_undelegation_epoch = 3;
 }
 
 // this line is used by starport scaffolding # 3

@@ -3,8 +3,9 @@ import { Params, ParamsSDKType } from "./params";
 import { HostChain, HostChainSDKType, HostChainState, HostChainStateSDKType } from "./host_chain";
 import { Undelegation, UndelegationSDKType, ChannelUndelegation, ChannelUndelegationSDKType } from "./undelegation";
 import { Coin, CoinSDKType } from "../../cosmos/base/v1beta1/coin";
+import { Timestamp, TimestampSDKType } from "../../google/protobuf/timestamp";
 import { BinaryReader, BinaryWriter } from "../../binary";
-import { isSet } from "../../helpers";
+import { isSet, fromJsonTimestamp, fromTimestamp } from "../../helpers";
 /** QueryParamsRequest is request type for the Query/Params RPC method. */
 export interface QueryParamsRequest {}
 /** QueryParamsRequest is request type for the Query/Params RPC method. */
@@ -163,6 +164,22 @@ export interface QueryDelegationQueueBalanceResponse {
 }
 export interface QueryDelegationQueueBalanceResponseSDKType {
   balance: CoinSDKType;
+}
+export interface QueryEpochInfoRequest {
+  hostChain: string;
+}
+export interface QueryEpochInfoRequestSDKType {
+  host_chain: string;
+}
+export interface QueryEpochInfoResponse {
+  lastDelegationTime: Timestamp;
+  lastUndelegationTime: Timestamp;
+  currentUndelegationEpoch: bigint;
+}
+export interface QueryEpochInfoResponseSDKType {
+  last_delegation_time: TimestampSDKType;
+  last_undelegation_time: TimestampSDKType;
+  current_undelegation_epoch: bigint;
 }
 function createBaseQueryParamsRequest(): QueryParamsRequest {
   return {};
@@ -1289,6 +1306,116 @@ export const QueryDelegationQueueBalanceResponse = {
   fromPartial(object: Partial<QueryDelegationQueueBalanceResponse>): QueryDelegationQueueBalanceResponse {
     const message = createBaseQueryDelegationQueueBalanceResponse();
     message.balance = object.balance !== undefined && object.balance !== null ? Coin.fromPartial(object.balance) : undefined;
+    return message;
+  }
+};
+function createBaseQueryEpochInfoRequest(): QueryEpochInfoRequest {
+  return {
+    hostChain: ""
+  };
+}
+export const QueryEpochInfoRequest = {
+  encode(message: QueryEpochInfoRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    if (message.hostChain !== "") {
+      writer.uint32(10).string(message.hostChain);
+    }
+    return writer;
+  },
+  decode(input: BinaryReader | Uint8Array, length?: number): QueryEpochInfoRequest {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseQueryEpochInfoRequest();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.hostChain = reader.string();
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromJSON(object: any): QueryEpochInfoRequest {
+    return {
+      hostChain: isSet(object.hostChain) ? String(object.hostChain) : ""
+    };
+  },
+  toJSON(message: QueryEpochInfoRequest): unknown {
+    const obj: any = {};
+    message.hostChain !== undefined && (obj.hostChain = message.hostChain);
+    return obj;
+  },
+  fromPartial(object: Partial<QueryEpochInfoRequest>): QueryEpochInfoRequest {
+    const message = createBaseQueryEpochInfoRequest();
+    message.hostChain = object.hostChain ?? "";
+    return message;
+  }
+};
+function createBaseQueryEpochInfoResponse(): QueryEpochInfoResponse {
+  return {
+    lastDelegationTime: Timestamp.fromPartial({}),
+    lastUndelegationTime: Timestamp.fromPartial({}),
+    currentUndelegationEpoch: BigInt(0)
+  };
+}
+export const QueryEpochInfoResponse = {
+  encode(message: QueryEpochInfoResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    if (message.lastDelegationTime !== undefined) {
+      Timestamp.encode(message.lastDelegationTime, writer.uint32(10).fork()).ldelim();
+    }
+    if (message.lastUndelegationTime !== undefined) {
+      Timestamp.encode(message.lastUndelegationTime, writer.uint32(18).fork()).ldelim();
+    }
+    if (message.currentUndelegationEpoch !== BigInt(0)) {
+      writer.uint32(24).uint64(message.currentUndelegationEpoch);
+    }
+    return writer;
+  },
+  decode(input: BinaryReader | Uint8Array, length?: number): QueryEpochInfoResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseQueryEpochInfoResponse();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.lastDelegationTime = Timestamp.decode(reader, reader.uint32());
+          break;
+        case 2:
+          message.lastUndelegationTime = Timestamp.decode(reader, reader.uint32());
+          break;
+        case 3:
+          message.currentUndelegationEpoch = reader.uint64();
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromJSON(object: any): QueryEpochInfoResponse {
+    return {
+      lastDelegationTime: isSet(object.lastDelegationTime) ? fromJsonTimestamp(object.lastDelegationTime) : undefined,
+      lastUndelegationTime: isSet(object.lastUndelegationTime) ? fromJsonTimestamp(object.lastUndelegationTime) : undefined,
+      currentUndelegationEpoch: isSet(object.currentUndelegationEpoch) ? BigInt(object.currentUndelegationEpoch.toString()) : BigInt(0)
+    };
+  },
+  toJSON(message: QueryEpochInfoResponse): unknown {
+    const obj: any = {};
+    message.lastDelegationTime !== undefined && (obj.lastDelegationTime = fromTimestamp(message.lastDelegationTime).toISOString());
+    message.lastUndelegationTime !== undefined && (obj.lastUndelegationTime = fromTimestamp(message.lastUndelegationTime).toISOString());
+    message.currentUndelegationEpoch !== undefined && (obj.currentUndelegationEpoch = (message.currentUndelegationEpoch || BigInt(0)).toString());
+    return obj;
+  },
+  fromPartial(object: Partial<QueryEpochInfoResponse>): QueryEpochInfoResponse {
+    const message = createBaseQueryEpochInfoResponse();
+    message.lastDelegationTime = object.lastDelegationTime !== undefined && object.lastDelegationTime !== null ? Timestamp.fromPartial(object.lastDelegationTime) : undefined;
+    message.lastUndelegationTime = object.lastUndelegationTime !== undefined && object.lastUndelegationTime !== null ? Timestamp.fromPartial(object.lastUndelegationTime) : undefined;
+    message.currentUndelegationEpoch = object.currentUndelegationEpoch !== undefined && object.currentUndelegationEpoch !== null ? BigInt(object.currentUndelegationEpoch.toString()) : BigInt(0);
     return message;
   }
 };

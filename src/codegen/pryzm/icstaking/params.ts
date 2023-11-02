@@ -6,10 +6,13 @@ import { Decimal } from "@cosmjs/math";
 export interface Params {
   /** the default staking parameters. properties of HostChain.staking_params are overridden to this default params if provided */
   stakingParams: StakingParams;
+  /** the list of admin addresses, able to register a new host chain or update an existing host chain */
+  admins: string[];
 }
 /** Params defines the parameters for the module. */
 export interface ParamsSDKType {
   staking_params: StakingParamsSDKType;
+  admins: string[];
 }
 /** StakingParams defines the parameters related to staking on each host chain */
 export interface StakingParams {
@@ -75,13 +78,17 @@ export interface RebalanceParamsSDKType {
 }
 function createBaseParams(): Params {
   return {
-    stakingParams: StakingParams.fromPartial({})
+    stakingParams: StakingParams.fromPartial({}),
+    admins: []
   };
 }
 export const Params = {
   encode(message: Params, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.stakingParams !== undefined) {
       StakingParams.encode(message.stakingParams, writer.uint32(10).fork()).ldelim();
+    }
+    for (const v of message.admins) {
+      writer.uint32(18).string(v!);
     }
     return writer;
   },
@@ -95,6 +102,9 @@ export const Params = {
         case 1:
           message.stakingParams = StakingParams.decode(reader, reader.uint32());
           break;
+        case 2:
+          message.admins.push(reader.string());
+          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -104,17 +114,24 @@ export const Params = {
   },
   fromJSON(object: any): Params {
     return {
-      stakingParams: isSet(object.stakingParams) ? StakingParams.fromJSON(object.stakingParams) : undefined
+      stakingParams: isSet(object.stakingParams) ? StakingParams.fromJSON(object.stakingParams) : undefined,
+      admins: Array.isArray(object?.admins) ? object.admins.map((e: any) => String(e)) : []
     };
   },
   toJSON(message: Params): unknown {
     const obj: any = {};
     message.stakingParams !== undefined && (obj.stakingParams = message.stakingParams ? StakingParams.toJSON(message.stakingParams) : undefined);
+    if (message.admins) {
+      obj.admins = message.admins.map(e => e);
+    } else {
+      obj.admins = [];
+    }
     return obj;
   },
   fromPartial(object: Partial<Params>): Params {
     const message = createBaseParams();
     message.stakingParams = object.stakingParams !== undefined && object.stakingParams !== null ? StakingParams.fromPartial(object.stakingParams) : undefined;
+    message.admins = object.admins?.map(e => e) || [];
     return message;
   }
 };

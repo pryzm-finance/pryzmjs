@@ -9,4 +9,6 @@ option go_package = "github.com/pryzm-finance/pryzm-core/x/assets/types";
 // Params defines the parameters for the module.
 message Params {
   FeeRatios default_fee_ratios = 1 [(gogoproto.nullable) = false];
+  // the list of admin addresses, able to register new assets or disable an existing asset
+  repeated string admins = 2;
 }

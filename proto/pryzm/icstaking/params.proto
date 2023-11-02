@@ -11,6 +11,8 @@ option go_package = "github.com/pryzm-finance/pryzm-core/x/icstaking/types";
 message Params {
   // the default staking parameters. properties of HostChain.staking_params are overridden to this default params if provided
   StakingParams staking_params = 1 [(gogoproto.nullable) = false];
+  // the list of admin addresses, able to register a new host chain or update an existing host chain
+  repeated string admins = 2;
 }
 
 // StakingParams defines the parameters related to staking on each host chain

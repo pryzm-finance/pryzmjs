@@ -13,6 +13,7 @@ export interface MsgUpdateParamsAminoType extends AminoMsg {
         refractor_redeem: string;
         y_staking_claim_reward: string;
       };
+      admins: string[];
     };
   };
 }
@@ -87,7 +88,8 @@ export const AminoConverter = {
             refractor_merge: params.defaultFeeRatios.refractorMerge,
             refractor_redeem: params.defaultFeeRatios.refractorRedeem,
             y_staking_claim_reward: params.defaultFeeRatios.yStakingClaimReward
-          }
+          },
+          admins: params.admins
         }
       };
     },
@@ -104,7 +106,8 @@ export const AminoConverter = {
             refractorMerge: params.default_fee_ratios.refractor_merge,
             refractorRedeem: params.default_fee_ratios.refractor_redeem,
             yStakingClaimReward: params.default_fee_ratios.y_staking_claim_reward
-          }
+          },
+          admins: params.admins
         }
       };
     }

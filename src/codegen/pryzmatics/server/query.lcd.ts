@@ -37,6 +37,7 @@ import { QueryPreVotesRequest, QueryPreVotesResponseSDKType } from "./oracle/pre
 import { QueryVotesRequest, QueryVotesResponseSDKType } from "./oracle/vote";
 import { QueryVotePayloadsRequest, QueryVotePayloadsResponseSDKType } from "./oracle/vote_payload";
 import { QueryBallotVoteResultsRequest, QueryBallotVoteResultsResponseSDKType } from "./oracle/ballot_vote_result";
+import { QueryVoteIntervalReportRequest, QueryVoteIntervalReportResponseSDKType } from "./oracle/vote_interval_report";
 import { QueryUserStakesRequest, QueryUserStakesResponseSDKType } from "./ystaking/user_stake";
 export class LCDQueryClient {
   req: LCDClient;
@@ -91,6 +92,7 @@ export class LCDQueryClient {
     this.votes = this.votes.bind(this);
     this.votePayloads = this.votePayloads.bind(this);
     this.ballotVoteResults = this.ballotVoteResults.bind(this);
+    this.voteIntervalReport = this.voteIntervalReport.bind(this);
     this.userStakes = this.userStakes.bind(this);
   }
   /* Asset */
@@ -704,6 +706,11 @@ export class LCDQueryClient {
     }
     const endpoint = `pryzmatics/oracle/ballot_vote_result`;
     return await this.req.get<QueryBallotVoteResultsResponseSDKType>(endpoint, options);
+  }
+  /* VoteIntervalReport */
+  async voteIntervalReport(params: QueryVoteIntervalReportRequest): Promise<QueryVoteIntervalReportResponseSDKType> {
+    const endpoint = `pryzmatics/oracle/vote_interval_report/${params.voteIntervalCloseBlockHeight}`;
+    return await this.req.get<QueryVoteIntervalReportResponseSDKType>(endpoint);
   }
   /* UserStakes */
   async userStakes(params: QueryUserStakesRequest): Promise<QueryUserStakesResponseSDKType> {

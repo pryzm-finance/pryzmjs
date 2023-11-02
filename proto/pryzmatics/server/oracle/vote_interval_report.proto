@@ -1,0 +1,18 @@
+syntax = "proto3";
+package pryzmatics.server.oracle;
+
+import "gogoproto/gogo.proto";
+import "pryzmatics/oracle/vote_interval_report.proto";
+
+
+option go_package = "github.com/pryzm-finance/pryzmatics/server/oracle";
+
+message QueryVoteIntervalReportRequest {
+  int64 vote_interval_close_block_height = 1;
+}
+
+message QueryVoteIntervalReportResponse {
+  pryzmatics.oracle.VoteIntervalReport vote_interval_report = 1;
+  string ballot_vote_result_csv = 2;
+  string validator_vote_interval_report_csv = 3;
+}
