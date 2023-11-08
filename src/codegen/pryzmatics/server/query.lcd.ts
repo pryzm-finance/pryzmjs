@@ -18,6 +18,7 @@ import { QueryTradeSimulationRequest, QueryTradeSimulationResponseSDKType } from
 import { QueryJoinAllTokensExactLptSimulationRequest, QueryJoinAllTokensExactLptSimulationResponseSDKType } from "./trade/join_all_tokens_exact_lpt_simulation";
 import { QueryJoinExactTokensSimulationRequest, QueryJoinExactTokensSimulationResponseSDKType } from "./trade/join_exact_tokens_simulation";
 import { QueryJoinTokenExactLptSimulationRequest, QueryJoinTokenExactLptSimulationResponseSDKType } from "./trade/join_token_exact_lpt_simulation";
+import { QueryZeroImpactJoinYammSimulationRequest, QueryZeroImpactJoinYammSimulationResponseSDKType } from "./trade/zero_impact_join_yamm_simulation";
 import { QueryExitTokenExactLptSimulationRequest, QueryExitTokenExactLptSimulationResponseSDKType } from "./trade/exit_token_exact_lpt_simulation";
 import { QueryExitExactTokensSimulationRequest, QueryExitExactTokensSimulationResponseSDKType } from "./trade/exit_exact_tokens_simulation";
 import { QueryExitAllTokensExactLptSimulationRequest, QueryExitAllTokensExactLptSimulationResponseSDKType } from "./trade/exit_all_tokens_exact_lpt_simulation";
@@ -68,6 +69,7 @@ export class LCDQueryClient {
     this.joinAllTokensExactLptSimulation = this.joinAllTokensExactLptSimulation.bind(this);
     this.joinExactTokensSimulation = this.joinExactTokensSimulation.bind(this);
     this.joinTokenExactLptSimulation = this.joinTokenExactLptSimulation.bind(this);
+    this.zeroImpactJoinYammSimulation = this.zeroImpactJoinYammSimulation.bind(this);
     this.exitTokenExactLptSimulation = this.exitTokenExactLptSimulation.bind(this);
     this.exitExactTokensSimulation = this.exitExactTokensSimulation.bind(this);
     this.exitAllTokensExactLptSimulation = this.exitAllTokensExactLptSimulation.bind(this);
@@ -348,6 +350,17 @@ export class LCDQueryClient {
     }
     const endpoint = `pryzmatics/trade/join_token_exact_lpt_simulation/${params.poolId}`;
     return await this.req.get<QueryJoinTokenExactLptSimulationResponseSDKType>(endpoint, options);
+  }
+  /* ZeroImpactJoinYammSimulation */
+  async zeroImpactJoinYammSimulation(params: QueryZeroImpactJoinYammSimulationRequest): Promise<QueryZeroImpactJoinYammSimulationResponseSDKType> {
+    const options: any = {
+      params: {}
+    };
+    if (typeof params?.cAmountIn !== "undefined") {
+      options.params.c_amount_in = params.cAmountIn;
+    }
+    const endpoint = `pryzmatics/trade/zero_impact_join_yamm_simulation`;
+    return await this.req.get<QueryZeroImpactJoinYammSimulationResponseSDKType>(endpoint, options);
   }
   /* ExitTokenExactLptSimulation */
   async exitTokenExactLptSimulation(params: QueryExitTokenExactLptSimulationRequest): Promise<QueryExitTokenExactLptSimulationResponseSDKType> {
