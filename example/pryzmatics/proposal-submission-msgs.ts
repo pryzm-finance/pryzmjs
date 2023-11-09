@@ -5,7 +5,7 @@ import {PRYZMATICS_ENDPOINT} from "./config";
 async function main() {
     const pryzmaticsClient = await pryzmatics.ClientFactory.createClient({restEndpoint: PRYZMATICS_ENDPOINT})
 
-    const msgs = (await pryzmaticsClient.pryzmatics.submitProposalMsgs({
+    const msgs = (await pryzmaticsClient.pryzmatics.proposalSubmissionMsgs({
         assetId: "atom", proposalId: 123n
     })).messages
     console.log(msgs)

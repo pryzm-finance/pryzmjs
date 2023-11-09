@@ -1,6 +1,7 @@
-import { alliance, connectWithSigner } from "@pryzm-finance/pryzmjs/lib/alliance"
+import { connectWithSigner } from "@pryzm-finance/pryzmjs/lib/alliance"
 import { DirectSecp256k1HdWallet } from "@cosmjs/proto-signing";
 import { GasPrice } from "@cosmjs/stargate";
+import { MessageComposer } from "../lib/codegen/alliance/alliance/tx.registry";
 
 async function main() {
     const mnemonic = "short ocean antique emerge glory lock army wine guard sketch hotel remove music demand romance raven roof survey tired thank vessel cliff choose apology";
@@ -9,7 +10,7 @@ async function main() {
 
     const address = (await signer.getAccounts())[0].address
 
-    const msg = alliance.MessageComposer.withTypeUrl.delegate({
+    const msg = MessageComposer.withTypeUrl.delegate({
         amount: {
             amount: "10",
             denom: "upryzm"

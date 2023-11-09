@@ -50,7 +50,7 @@ export class LCDQueryClient {
     this.req = requestClient;
     this.asset = this.asset.bind(this);
     this.maturityAll = this.maturityAll.bind(this);
-    this.submitProposalMsgs = this.submitProposalMsgs.bind(this);
+    this.proposalSubmissionMsgs = this.proposalSubmissionMsgs.bind(this);
     this.assetProposals = this.assetProposals.bind(this);
     this.poolToken = this.poolToken.bind(this);
     this.poolTokens = this.poolTokens.bind(this);
@@ -119,9 +119,9 @@ export class LCDQueryClient {
     const endpoint = `pryzmatics/maturity`;
     return await this.req.get<QueryAllMaturitiesResponseSDKType>(endpoint, options);
   }
-  /* SubmitProposalMsgs */
-  async submitProposalMsgs(params: QuerySubmitProposalMsgsRequest): Promise<QuerySubmitProposalMsgsResponseSDKType> {
-    const endpoint = `pryzmatics/pgov/submit_proposal_msgs/${params.assetId}/${params.proposalId}`;
+  /* ProposalSubmissionMsgs */
+  async proposalSubmissionMsgs(params: QuerySubmitProposalMsgsRequest): Promise<QuerySubmitProposalMsgsResponseSDKType> {
+    const endpoint = `pryzmatics/pgov/proposal_submission_msgs/${params.assetId}/${params.proposalId}`;
     return await this.req.get<QuerySubmitProposalMsgsResponseSDKType>(endpoint);
   }
   /* AssetProposals */
