@@ -3,7 +3,7 @@ import { setPaginationParams } from "../../helpers";
 import { LCDClient } from "@refractedlabs/cosmology-lcd-fork";
 import { QueryAssetRequest, QueryAssetResponseSDKType } from "./asset/asset";
 import { QueryAllMaturitiesRequest, QueryAllMaturitiesResponseSDKType } from "./maturity/maturity";
-import { QuerySubmitProposalMsgsRequest, QuerySubmitProposalMsgsResponseSDKType, QueryAssetProposalRequest, QueryAssetProposalResponseSDKType } from "./pgov/pgov";
+import { QueryProposalSubmissionMsgsRequest, QueryProposalSubmissionMsgsResponseSDKType, QueryAssetProposalRequest, QueryAssetProposalResponseSDKType } from "./pgov/pgov";
 import { QueryPoolTokenRequest, QueryPoolTokenResponseSDKType, QueryAllPoolTokenRequest, QueryAllPoolTokenResponseSDKType } from "./pool/pool_token";
 import { QueryPoolRequest, QueryPoolResponseSDKType, QueryPoolsRequest, QueryPoolsResponseSDKType } from "./pool/pool";
 import { QueryTokenRequest, QueryTokenResponseSDKType, QueryTokensRequest, QueryTokensResponseSDKType } from "./pool/token";
@@ -120,13 +120,13 @@ export class LCDQueryClient {
     return await this.req.get<QueryAllMaturitiesResponseSDKType>(endpoint, options);
   }
   /* ProposalSubmissionMsgs */
-  async proposalSubmissionMsgs(params: QuerySubmitProposalMsgsRequest): Promise<QuerySubmitProposalMsgsResponseSDKType> {
-    const endpoint = `pryzmatics/pgov/proposal_submission_msgs/${params.assetId}/${params.proposalId}`;
-    return await this.req.get<QuerySubmitProposalMsgsResponseSDKType>(endpoint);
+  async proposalSubmissionMsgs(params: QueryProposalSubmissionMsgsRequest): Promise<QueryProposalSubmissionMsgsResponseSDKType> {
+    const endpoint = `pryzmatics/pgov/proposal_submission_msgs/${params.assetId}/${params.proposalId}/${params.creator}`;
+    return await this.req.get<QueryProposalSubmissionMsgsResponseSDKType>(endpoint);
   }
   /* AssetProposals */
   async assetProposals(params: QueryAssetProposalRequest): Promise<QueryAssetProposalResponseSDKType> {
-    const endpoint = `pryzmatics/pgov/asset_proposal/${params.assetId}`;
+    const endpoint = `pryzmatics/pgov/asset_proposals/${params.assetId}`;
     return await this.req.get<QueryAssetProposalResponseSDKType>(endpoint);
   }
   /* PoolToken */

@@ -20,11 +20,17 @@ message QueryAssetProposalResponse {
   repeated pryzmatics.pgov.AssetProposal proposals = 1 [(gogoproto.nullable) = false];
 }
 
-message QuerySubmitProposalMsgsRequest {
+message QueryProposalSubmissionMsgsRequest {
   string asset_id = 1;
   uint64 proposal_id = 2;
+  string creator = 3;
 }
 
-message QuerySubmitProposalMsgsResponse {
-  repeated google.protobuf.Any messages = 1 [(gogoproto.nullable) = true];
+message QueryProposalSubmissionMsgsResponse {
+  repeated EncodeObject messages = 1 [(gogoproto.nullable) = true];
+}
+
+message EncodeObject {
+  string typeUrl = 1;
+  bytes value = 2;
 }

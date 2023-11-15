@@ -65,12 +65,12 @@ service Query {
     option (google.api.http).get = "/pryzmatics/maturity";
   }
 
-  rpc ProposalSubmissionMsgs(pryzmatics.server.pgov.QuerySubmitProposalMsgsRequest) returns (pryzmatics.server.pgov.QuerySubmitProposalMsgsResponse) {
-    option (google.api.http).get = "/pryzmatics/pgov/proposal_submission_msgs/{asset_id}/{proposal_id}";
+  rpc ProposalSubmissionMsgs(pryzmatics.server.pgov.QueryProposalSubmissionMsgsRequest) returns (pryzmatics.server.pgov.QueryProposalSubmissionMsgsResponse) {
+    option (google.api.http).get = "/pryzmatics/pgov/proposal_submission_msgs/{asset_id}/{proposal_id}/{creator}";
   }
 
   rpc AssetProposals(pryzmatics.server.pgov.QueryAssetProposalRequest) returns (pryzmatics.server.pgov.QueryAssetProposalResponse) {
-    option (google.api.http).get = "/pryzmatics/pgov/asset_proposal/{asset_id}";
+    option (google.api.http).get = "/pryzmatics/pgov/asset_proposals/{asset_id}";
   }
 
   rpc PoolToken(pryzmatics.server.pool.QueryPoolTokenRequest) returns (pryzmatics.server.pool.QueryPoolTokenResponse) {
