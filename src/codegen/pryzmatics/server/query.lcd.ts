@@ -40,6 +40,7 @@ import { QueryVotePayloadsRequest, QueryVotePayloadsResponseSDKType } from "./or
 import { QueryBallotVoteResultsRequest, QueryBallotVoteResultsResponseSDKType } from "./oracle/ballot_vote_result";
 import { QueryVoteIntervalReportRequest, QueryVoteIntervalReportResponseSDKType } from "./oracle/vote_interval_report";
 import { QueryUserStakesRequest, QueryUserStakesResponseSDKType } from "./ystaking/user_stake";
+import { QueryClaimRequest, QueryClaimResponseSDKType } from "./faucet/claim";
 export class LCDQueryClient {
   req: LCDClient;
   constructor({
@@ -96,6 +97,7 @@ export class LCDQueryClient {
     this.ballotVoteResults = this.ballotVoteResults.bind(this);
     this.voteIntervalReport = this.voteIntervalReport.bind(this);
     this.userStakes = this.userStakes.bind(this);
+    this.faucetClaim = this.faucetClaim.bind(this);
   }
   /* Asset */
   async asset(params: QueryAssetRequest): Promise<QueryAssetResponseSDKType> {
@@ -738,5 +740,22 @@ export class LCDQueryClient {
     }
     const endpoint = `pryzmatics/ystaking/user_stake`;
     return await this.req.get<QueryUserStakesResponseSDKType>(endpoint, options);
+  }
+  /* FaucetClaim */
+  async faucetClaim(params: QueryClaimRequest): Promise<QueryClaimResponseSDKType> {
+    const options: any = {
+      params: {}
+    };
+    if (typeof params?.address !== "undefined") {
+      options.params.address = params.address;
+    }
+    if (typeof params?.denom !== "undefined") {
+      options.params.denom = params.denom;
+    }
+    if (typeof params?.captchaResponse !== "undefined") {
+      options.params.captcha_response = params.captchaResponse;
+    }
+    const endpoint = `pryzmatics/faucet/claim`;
+    return await this.req.get<QueryClaimResponseSDKType>(endpoint, options);
   }
 }

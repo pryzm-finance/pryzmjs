@@ -52,6 +52,8 @@ import "pryzmatics/server/oracle/vote_interval_report.proto";
 
 import "pryzmatics/server/ystaking/user_stake.proto";
 
+import "pryzmatics/server/faucet/claim.proto";
+
 
 option go_package = "github.com/pryzm-finance/pryzmatics/server";
 
@@ -247,5 +249,9 @@ service Query {
 
   rpc UserStakes(pryzmatics.server.ystaking.QueryUserStakesRequest) returns (pryzmatics.server.ystaking.QueryUserStakesResponse) {
     option (google.api.http).get = "/pryzmatics/ystaking/user_stake";
+  }
+
+  rpc FaucetClaim(pryzmatics.server.faucet.QueryClaimRequest) returns (pryzmatics.server.faucet.QueryClaimResponse) {
+    option (google.api.http).get = "/pryzmatics/faucet/claim";
   }
 }

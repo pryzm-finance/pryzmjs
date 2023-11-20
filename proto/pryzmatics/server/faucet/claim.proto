@@ -1,0 +1,13 @@
+syntax = "proto3";
+package pryzmatics.server.faucet;
+
+option go_package = "github.com/pryzm-finance/pryzmatics/server/faucet";
+
+message QueryClaimRequest {
+  string address = 1;
+  string denom = 2;
+  string captcha_response = 3;
+}
+
+message QueryClaimResponse {
+}
