@@ -1,4 +1,5 @@
 //@ts-nocheck
+import { QueryAllFlowRequest, QueryAllFlowResponseSDKType, QueryFlowRequest, QueryFlowResponseSDKType } from "./flowtrade/flowtrade";
 import { setPaginationParams } from "../../helpers";
 import { LCDClient } from "@refractedlabs/cosmology-lcd-fork";
 import { QueryAssetRequest, QueryAssetResponseSDKType } from "./asset/asset";
@@ -41,6 +42,7 @@ import { QueryBallotVoteResultsRequest, QueryBallotVoteResultsResponseSDKType } 
 import { QueryVoteIntervalReportRequest, QueryVoteIntervalReportResponseSDKType } from "./oracle/vote_interval_report";
 import { QueryUserStakesRequest, QueryUserStakesResponseSDKType } from "./ystaking/user_stake";
 import { QueryClaimRequest, QueryClaimResponseSDKType } from "./faucet/claim";
+import { QueryFlowHistoricalPriceRequest, QueryFlowHistoricalPriceResponseSDKType } from "./flowtrade/flow_historical_price";
 export class LCDQueryClient {
   req: LCDClient;
   constructor({
@@ -98,6 +100,9 @@ export class LCDQueryClient {
     this.voteIntervalReport = this.voteIntervalReport.bind(this);
     this.userStakes = this.userStakes.bind(this);
     this.faucetClaim = this.faucetClaim.bind(this);
+    this.allFlow = this.allFlow.bind(this);
+    this.flow = this.flow.bind(this);
+    this.flowHistoricalPrice = this.flowHistoricalPrice.bind(this);
   }
   /* Asset */
   async asset(params: QueryAssetRequest): Promise<QueryAssetResponseSDKType> {
@@ -757,5 +762,56 @@ export class LCDQueryClient {
     }
     const endpoint = `pryzmatics/faucet/claim`;
     return await this.req.get<QueryClaimResponseSDKType>(endpoint, options);
+  }
+  /* AllFlow */
+  async allFlow(params: QueryAllFlowRequest): Promise<QueryAllFlowResponseSDKType> {
+    const options: any = {
+      params: {}
+    };
+    if (typeof params?.status !== "undefined") {
+      options.params.status = params.status;
+    }
+    if (typeof params?.creator !== "undefined") {
+      options.params.creator = params.creator;
+    }
+    if (typeof params?.tokenInClaimability !== "undefined") {
+      options.params.token_in_claimability = params.tokenInClaimability;
+    }
+    if (typeof params?.participant !== "undefined") {
+      options.params.participant = params.participant;
+    }
+    if (typeof params?.tokenOutClaimability !== "undefined") {
+      options.params.token_out_claimability = params.tokenOutClaimability;
+    }
+    if (typeof params?.pagination !== "undefined") {
+      setPaginationParams(options, params.pagination);
+    }
+    const endpoint = `pryzmatics/flowtrade/flow`;
+    return await this.req.get<QueryAllFlowResponseSDKType>(endpoint, options);
+  }
+  /* Flow */
+  async flow(params: QueryFlowRequest): Promise<QueryFlowResponseSDKType> {
+    const endpoint = `pryzmatics/flowtrade/flow/${params.id}`;
+    return await this.req.get<QueryFlowResponseSDKType>(endpoint);
+  }
+  /* FlowHistoricalPrice */
+  async flowHistoricalPrice(params: QueryFlowHistoricalPriceRequest): Promise<QueryFlowHistoricalPriceResponseSDKType> {
+    const options: any = {
+      params: {}
+    };
+    if (typeof params?.timeResolutionType !== "undefined") {
+      options.params.time_resolution_type = params.timeResolutionType;
+    }
+    if (typeof params?.timeResolutionValue !== "undefined") {
+      options.params.time_resolution_value = params.timeResolutionValue;
+    }
+    if (typeof params?.from !== "undefined") {
+      options.params.from = params.from;
+    }
+    if (typeof params?.to !== "undefined") {
+      options.params.to = params.to;
+    }
+    const endpoint = `pryzmatics/flowtrade/flow/historical_price/${params.flowId}`;
+    return await this.req.get<QueryFlowHistoricalPriceResponseSDKType>(endpoint, options);
   }
 }

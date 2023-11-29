@@ -54,6 +54,9 @@ import "pryzmatics/server/ystaking/user_stake.proto";
 
 import "pryzmatics/server/faucet/claim.proto";
 
+import "pryzmatics/server/flowtrade/flowtrade.proto";
+import "pryzmatics/server/flowtrade/flow_historical_price.proto";
+
 
 option go_package = "github.com/pryzm-finance/pryzmatics/server";
 
@@ -253,5 +256,17 @@ service Query {
 
   rpc FaucetClaim(pryzmatics.server.faucet.QueryClaimRequest) returns (pryzmatics.server.faucet.QueryClaimResponse) {
     option (google.api.http).get = "/pryzmatics/faucet/claim";
+  }
+
+  rpc AllFlow(pryzmatics.server.flowtrade.QueryAllFlowRequest) returns (pryzmatics.server.flowtrade.QueryAllFlowResponse) {
+    option (google.api.http).get = "/pryzmatics/flowtrade/flow";
+  }
+
+  rpc Flow(pryzmatics.server.flowtrade.QueryFlowRequest) returns (pryzmatics.server.flowtrade.QueryFlowResponse) {
+    option (google.api.http).get = "/pryzmatics/flowtrade/flow/{id}";
+  }
+
+  rpc FlowHistoricalPrice(pryzmatics.server.flowtrade.QueryFlowHistoricalPriceRequest) returns (pryzmatics.server.flowtrade.QueryFlowHistoricalPriceResponse) {
+    option (google.api.http).get = "/pryzmatics/flowtrade/flow/historical_price/{flow_id}";
   }
 }

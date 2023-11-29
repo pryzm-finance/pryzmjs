@@ -1,0 +1,228 @@
+syntax = "proto3";
+package refractedlabs.flowtrade;
+
+import "cosmos/base/v1beta1/coin.proto";
+import "cosmos_proto/cosmos.proto";
+import "gogoproto/gogo.proto";
+import "google/protobuf/duration.proto";
+import "google/protobuf/timestamp.proto";
+
+option go_package = "github.com/refractedlabs/flowtrade/x/flowtrade/types";
+
+// Flow holds information and price calculations for a flow trade
+message Flow {
+  // auto-generated identifier for a flow
+  uint64 id = 1;
+
+  // the address of flow creator and owner
+  string creator = 2 [(cosmos_proto.scalar) = "cosmos.AddressString"];
+
+  // informational data about the flow
+  FlowInfo flow_info = 3 [(gogoproto.nullable) = false];
+
+  // the time that swap distribution starts
+  google.protobuf.Timestamp start_time = 4 [
+    (gogoproto.stdtime) = true,
+    (gogoproto.nullable) = false
+  ];
+
+  // the time that flow is ended
+  google.protobuf.Timestamp endTime = 5 [
+    (gogoproto.stdtime) = true,
+    (gogoproto.nullable) = false
+  ];
+
+  // the interval in which the distribution index is updated and hence tokens are swapped
+  // if dist_interval is 0, the flow is updated every time in or out tokens are increased or decreased
+  // if dist_interval is equal to the duration of flow, it means that all of the tokens are swapped once after the flow ends
+  google.protobuf.Duration dist_interval = 6 [
+    (gogoproto.stdduration) = true,
+    (gogoproto.nullable) = false
+  ];
+
+  // the address that the swapped tokens are sent to after the flow ends
+  string treasury_address = 7 [(cosmos_proto.scalar) = "cosmos.AddressString"];
+
+  // total amount creator provided to be swapped
+  cosmos.base.v1beta1.Coin total_token_out = 8 [(gogoproto.nullable) = false];
+
+  // the accepted token to buy the out tokens
+  string token_in_denom = 9;
+
+  // the time from then the buyers can claim their purchased tokens
+  google.protobuf.Timestamp token_out_claimable_after = 10 [
+    (gogoproto.stdtime) = true,
+    (gogoproto.nullable) = false
+  ];
+
+  // the time from then the flow creator can claim the swapped tokens
+  google.protobuf.Timestamp token_in_claimable_after = 11 [
+    (gogoproto.stdtime) = true,
+    (gogoproto.nullable) = false
+  ];
+
+  // whether the flow can be stopped by the flow's creator
+  bool stoppable = 12;
+  // whether to allow buyers to claim their tokens immediately after the flow is stopped
+  bool allow_immediate_token_out_claim_if_stopped = 13;
+  // whether to allow flow's creator to claim tokens immediately after the flow is stopped
+  bool allow_immediate_token_in_claim_if_stopped = 14;
+
+  // a global index for the amount of purchase that has already been applied
+  string dist_index = 15 [
+    (cosmos_proto.scalar) = "cosmos.Dec",
+    (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Dec",
+    (gogoproto.nullable) = false
+  ];
+
+  // the last time the dist index is updated
+  google.protobuf.Timestamp last_dist_update = 16 [
+    (gogoproto.stdtime) = true,
+    (gogoproto.nullable) = false
+  ];
+
+  // the amount of remaining out tokens to sell
+  string token_out_balance = 17 [
+    (cosmos_proto.scalar) = "cosmos.Int",
+    (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Int",
+    (gogoproto.nullable) = false
+  ];
+
+  // the current amount of token-in provided to buy token-out
+  string token_in_balance = 18 [
+    (cosmos_proto.scalar) = "cosmos.Int",
+    (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Int",
+    (gogoproto.nullable) = false
+  ];
+
+  // the amount of already spent in tokens
+  string spent_token_in = 19 [
+    (cosmos_proto.scalar) = "cosmos.Int",
+    (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Int",
+    (gogoproto.nullable) = false
+  ];
+
+  // the total number of users shares
+  string total_shares = 20 [
+    (cosmos_proto.scalar) = "cosmos.Int",
+    (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Int",
+    (gogoproto.nullable) = false
+  ];
+
+  // the last swap price
+  string live_price = 21 [
+    (cosmos_proto.scalar) = "cosmos.Dec",
+    (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Dec",
+    (gogoproto.nullable) = false
+  ];
+
+  // the current status of flow
+  FlowStatus status = 22;
+
+  // the amount of creation deposit that should be revenue to the flow creator
+  cosmos.base.v1beta1.Coin creation_deposit = 23 [(gogoproto.nullable) = true];
+
+  // the fee ratio taken from token-out, this is copied from module params at the time of flow creation
+  string token_out_fee_ratio = 24 [
+    (cosmos_proto.scalar) = "cosmos.Dec",
+    (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Dec",
+    (gogoproto.nullable) = false
+  ];
+
+  // the fee ratio taken from token-in, this is copied from module params at the time of flow creation
+  string token_in_fee_ratio = 25 [
+    (cosmos_proto.scalar) = "cosmos.Dec",
+    (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Dec",
+    (gogoproto.nullable) = false
+  ];
+
+  // if true, the swapped tokens are automatically sent to the treasury address when the flow ends
+  // this option is only available when another module creates a flow using keeper api
+  bool automatic_treasury_collection = 26;
+
+  // the amount of spent in tokens that have been claimed by the flow's creator
+  string claimed_token_in = 27 [
+    (cosmos_proto.scalar) = "cosmos.Int",
+    (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Int",
+    (gogoproto.nullable) = false
+  ];
+
+  // whether the flow is checked out, meaning the creation deposit and any remaining out tokens are transferred back to the creator
+  bool checked_out = 28;
+}
+
+// Informational data about the flow
+message FlowInfo {
+  // a name of the flow
+  string name = 1;
+
+  // a short description about the flow
+  string description = 2;
+
+  // a referring url
+  string url = 3;
+}
+
+enum FlowStatus {
+  // the flow is waiting to be started
+  WAITING = 0;
+  // the flow is active
+  ACTIVE = 1;
+  // the flow has been ended. this is a final state
+  ENDED = 2;
+  // the flow has been stopped. this is a final state
+  STOPPED = 3;
+}
+
+// a structure for requesting a new flow's creation
+message FlowCreationRequest {
+  // informational data about the flow
+  FlowInfo flow_info = 1 [(gogoproto.nullable) = false];
+
+  // the time that swap distribution starts
+  google.protobuf.Timestamp start_time = 2 [
+    (gogoproto.stdtime) = true,
+    (gogoproto.nullable) = false
+  ];
+
+  // the time that flow is ended
+  google.protobuf.Timestamp end_time = 3 [
+    (gogoproto.stdtime) = true,
+    (gogoproto.nullable) = false
+  ];
+
+  // the interval in which the distribution index is updated and hence tokens are swapped
+  // if dist_interval is 0, the flow is updated every time in or out tokens are increased or decreased
+  // if dist_interval is equal to the duration of flow, it means that all of the tokens are swapped once after the flow ends
+  google.protobuf.Duration dist_interval = 4 [
+    (gogoproto.stdduration) = true,
+    (gogoproto.nullable) = false
+  ];
+
+  // the address that the swapped tokens are sent to after the flow ends
+  string treasury_address = 5 [(cosmos_proto.scalar) = "cosmos.AddressString"];
+
+  // total amount creator provided to be swapped
+  cosmos.base.v1beta1.Coin tokens_out = 6 [(gogoproto.nullable) = false];
+
+  // the accepted token to buy the out tokens
+  string token_in_denom = 7;
+
+  // the time from then the flow buyers can claim their purchased tokens
+  google.protobuf.Timestamp token_out_claimable_after = 8 [
+    (gogoproto.stdtime) = true,
+    (gogoproto.nullable) = false
+  ];
+  // the time from then the flow creator can claim the swapped tokens
+  google.protobuf.Timestamp token_in_claimable_after = 9 [
+    (gogoproto.stdtime) = true,
+    (gogoproto.nullable) = false
+  ];
+
+  // whether the flow can be stopped by the flow's creator
+  bool stoppable = 10;
+  // whether to allow buyers to claim their tokens immediately after the flow is stopped
+  bool allow_immediate_token_out_claim_if_stopped = 11;
+  // whether to allow flow's creator to claim tokens immediately after the flow is stopped
+  bool allow_immediate_token_in_claim_if_stopped = 12;
+}
