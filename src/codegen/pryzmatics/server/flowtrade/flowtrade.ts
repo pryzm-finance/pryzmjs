@@ -1,5 +1,7 @@
 import { Flow, FlowSDKType } from "../../../refractedlabs/flowtrade/flow";
+import { ParticipationType, participationTypeFromJSON, participationTypeToJSON } from "../../flowtrade/participation_type";
 import { PageRequest, PageRequestSDKType, PageResponse, PageResponseSDKType } from "../../../cosmos/base/query/v1beta1/pagination";
+import { FlowPositionPair, FlowPositionPairSDKType } from "../../flowtrade/flow_position_pair";
 import { BinaryReader, BinaryWriter } from "../../../binary";
 import { isSet } from "../../../helpers";
 export enum FlowStatus {
@@ -93,6 +95,7 @@ export interface QueryAllFlowRequest {
   creator: string;
   tokenInClaimability: TokenClaimability;
   participant: string;
+  participationType: ParticipationType;
   tokenOutClaimability: TokenClaimability;
   pagination?: PageRequest;
 }
@@ -101,15 +104,16 @@ export interface QueryAllFlowRequestSDKType {
   creator: string;
   token_in_claimability: TokenClaimability;
   participant: string;
+  participation_type: ParticipationType;
   token_out_claimability: TokenClaimability;
   pagination?: PageRequestSDKType;
 }
 export interface QueryAllFlowResponse {
-  flows: Flow[];
+  flows: FlowPositionPair[];
   pagination?: PageResponse;
 }
 export interface QueryAllFlowResponseSDKType {
-  flows: FlowSDKType[];
+  flows: FlowPositionPairSDKType[];
   pagination?: PageResponseSDKType;
 }
 function createBaseQueryFlowRequest(): QueryFlowRequest {
@@ -208,6 +212,7 @@ function createBaseQueryAllFlowRequest(): QueryAllFlowRequest {
     creator: "",
     tokenInClaimability: 0,
     participant: "",
+    participationType: 0,
     tokenOutClaimability: 0,
     pagination: undefined
   };
@@ -226,11 +231,14 @@ export const QueryAllFlowRequest = {
     if (message.participant !== "") {
       writer.uint32(34).string(message.participant);
     }
+    if (message.participationType !== 0) {
+      writer.uint32(40).int32(message.participationType);
+    }
     if (message.tokenOutClaimability !== 0) {
-      writer.uint32(40).int32(message.tokenOutClaimability);
+      writer.uint32(48).int32(message.tokenOutClaimability);
     }
     if (message.pagination !== undefined) {
-      PageRequest.encode(message.pagination, writer.uint32(50).fork()).ldelim();
+      PageRequest.encode(message.pagination, writer.uint32(58).fork()).ldelim();
     }
     return writer;
   },
@@ -254,9 +262,12 @@ export const QueryAllFlowRequest = {
           message.participant = reader.string();
           break;
         case 5:
-          message.tokenOutClaimability = (reader.int32() as any);
+          message.participationType = (reader.int32() as any);
           break;
         case 6:
+          message.tokenOutClaimability = (reader.int32() as any);
+          break;
+        case 7:
           message.pagination = PageRequest.decode(reader, reader.uint32());
           break;
         default:
@@ -272,6 +283,7 @@ export const QueryAllFlowRequest = {
       creator: isSet(object.creator) ? String(object.creator) : "",
       tokenInClaimability: isSet(object.tokenInClaimability) ? tokenClaimabilityFromJSON(object.tokenInClaimability) : -1,
       participant: isSet(object.participant) ? String(object.participant) : "",
+      participationType: isSet(object.participationType) ? participationTypeFromJSON(object.participationType) : -1,
       tokenOutClaimability: isSet(object.tokenOutClaimability) ? tokenClaimabilityFromJSON(object.tokenOutClaimability) : -1,
       pagination: isSet(object.pagination) ? PageRequest.fromJSON(object.pagination) : undefined
     };
@@ -282,6 +294,7 @@ export const QueryAllFlowRequest = {
     message.creator !== undefined && (obj.creator = message.creator);
     message.tokenInClaimability !== undefined && (obj.tokenInClaimability = tokenClaimabilityToJSON(message.tokenInClaimability));
     message.participant !== undefined && (obj.participant = message.participant);
+    message.participationType !== undefined && (obj.participationType = participationTypeToJSON(message.participationType));
     message.tokenOutClaimability !== undefined && (obj.tokenOutClaimability = tokenClaimabilityToJSON(message.tokenOutClaimability));
     message.pagination !== undefined && (obj.pagination = message.pagination ? PageRequest.toJSON(message.pagination) : undefined);
     return obj;
@@ -292,6 +305,7 @@ export const QueryAllFlowRequest = {
     message.creator = object.creator ?? "";
     message.tokenInClaimability = object.tokenInClaimability ?? 0;
     message.participant = object.participant ?? "";
+    message.participationType = object.participationType ?? 0;
     message.tokenOutClaimability = object.tokenOutClaimability ?? 0;
     message.pagination = object.pagination !== undefined && object.pagination !== null ? PageRequest.fromPartial(object.pagination) : undefined;
     return message;
@@ -306,7 +320,7 @@ function createBaseQueryAllFlowResponse(): QueryAllFlowResponse {
 export const QueryAllFlowResponse = {
   encode(message: QueryAllFlowResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     for (const v of message.flows) {
-      Flow.encode(v!, writer.uint32(10).fork()).ldelim();
+      FlowPositionPair.encode(v!, writer.uint32(10).fork()).ldelim();
     }
     if (message.pagination !== undefined) {
       PageResponse.encode(message.pagination, writer.uint32(18).fork()).ldelim();
@@ -321,7 +335,7 @@ export const QueryAllFlowResponse = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.flows.push(Flow.decode(reader, reader.uint32()));
+          message.flows.push(FlowPositionPair.decode(reader, reader.uint32()));
           break;
         case 2:
           message.pagination = PageResponse.decode(reader, reader.uint32());
@@ -335,14 +349,14 @@ export const QueryAllFlowResponse = {
   },
   fromJSON(object: any): QueryAllFlowResponse {
     return {
-      flows: Array.isArray(object?.flows) ? object.flows.map((e: any) => Flow.fromJSON(e)) : [],
+      flows: Array.isArray(object?.flows) ? object.flows.map((e: any) => FlowPositionPair.fromJSON(e)) : [],
       pagination: isSet(object.pagination) ? PageResponse.fromJSON(object.pagination) : undefined
     };
   },
   toJSON(message: QueryAllFlowResponse): unknown {
     const obj: any = {};
     if (message.flows) {
-      obj.flows = message.flows.map(e => e ? Flow.toJSON(e) : undefined);
+      obj.flows = message.flows.map(e => e ? FlowPositionPair.toJSON(e) : undefined);
     } else {
       obj.flows = [];
     }
@@ -351,7 +365,7 @@ export const QueryAllFlowResponse = {
   },
   fromPartial(object: Partial<QueryAllFlowResponse>): QueryAllFlowResponse {
     const message = createBaseQueryAllFlowResponse();
-    message.flows = object.flows?.map(e => Flow.fromPartial(e)) || [];
+    message.flows = object.flows?.map(e => FlowPositionPair.fromPartial(e)) || [];
     message.pagination = object.pagination !== undefined && object.pagination !== null ? PageResponse.fromPartial(object.pagination) : undefined;
     return message;
   }

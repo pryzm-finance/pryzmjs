@@ -1,0 +1,13 @@
+syntax = "proto3";
+package pryzmatics.flowtrade;
+
+import "gogoproto/gogo.proto";
+import "refractedlabs/flowtrade/flow.proto";
+import "refractedlabs/flowtrade/position.proto";
+
+option go_package = "github.com/pryzm-finance/pryzmatics/types/flowtrade";
+
+message FlowPositionPair {
+  refractedlabs.flowtrade.Flow flow = 1 [(gogoproto.nullable) = false];
+  refractedlabs.flowtrade.Position position = 2 [(gogoproto.nullable) = true];
+}

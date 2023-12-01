@@ -780,6 +780,9 @@ export class LCDQueryClient {
     if (typeof params?.participant !== "undefined") {
       options.params.participant = params.participant;
     }
+    if (typeof params?.participationType !== "undefined") {
+      options.params.participation_type = params.participationType;
+    }
     if (typeof params?.tokenOutClaimability !== "undefined") {
       options.params.token_out_claimability = params.tokenOutClaimability;
     }

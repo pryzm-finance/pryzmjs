@@ -1,0 +1,13 @@
+syntax = "proto3";
+package pryzmatics.flowtrade;
+
+import "gogoproto/gogo.proto";
+
+option go_package = "github.com/pryzm-finance/pryzmatics/types/flowtrade";
+
+enum ParticipationType {
+  option (gogoproto.goproto_enum_prefix) = false;
+  PARTICIPATION_TYPE_FLOW_CREATOR_OR_POSITION_OWNER = 0;
+  PARTICIPATION_TYPE_POSITION_OWNER = 1;
+  PARTICIPATION_TYPE_NO_PARTICIPATION = 2;
+}

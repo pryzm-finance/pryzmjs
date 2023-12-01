@@ -5,6 +5,7 @@ import {
     FlowStatus,
     TokenClaimability
 } from "@pryzm-finance/pryzmjs/lib/codegen/pryzmatics/server/flowtrade/flowtrade";
+import { ParticipationType } from "@pryzm-finance/pryzmjs/lib/codegen/pryzmatics/flowtrade/participation_type";
 
 async function main() {
     const pryzmaticsClient = await pryzmatics.ClientFactory.createClient({ restEndpoint: PRYZMATICS_ENDPOINT })
@@ -13,6 +14,7 @@ async function main() {
     let flows = (await pryzmaticsClient.pryzmatics.allFlow({
         creator: "",
         participant: "",
+        participationType: ParticipationType.PARTICIPATION_TYPE_NO_PARTICIPATION,
         status: FlowStatus.FLOW_STATUS_ANY,
         tokenInClaimability: TokenClaimability.TOKEN_CLAIMABILITY_ANY,
         tokenOutClaimability: TokenClaimability.TOKEN_CLAIMABILITY_ANY,
@@ -25,6 +27,7 @@ async function main() {
         creator: "user_address",
         tokenInClaimability: TokenClaimability.TOKEN_CLAIMABILITY_CLAIMABLE,
         participant: "",
+        participationType: ParticipationType.PARTICIPATION_TYPE_NO_PARTICIPATION,
         status: FlowStatus.FLOW_STATUS_ANY,
         tokenOutClaimability: TokenClaimability.TOKEN_CLAIMABILITY_ANY,
         pagination: undefined,
@@ -34,6 +37,7 @@ async function main() {
     // list of flows a user has participated and can claim token-out from
     flows = (await pryzmaticsClient.pryzmatics.allFlow({
         participant: "user_address",
+        participationType: ParticipationType.PARTICIPATION_TYPE_POSITION_OWNER,
         tokenOutClaimability: TokenClaimability.TOKEN_CLAIMABILITY_CLAIMABLE,
         creator: "",
         tokenInClaimability: TokenClaimability.TOKEN_CLAIMABILITY_ANY,

@@ -5,20 +5,23 @@ import "cosmos/base/query/v1beta1/pagination.proto";
 import "gogoproto/gogo.proto";
 import "refractedlabs/flowtrade/flow.proto";
 import "cosmos_proto/cosmos.proto";
+import "pryzmatics/flowtrade/flow_position_pair.proto";
+import "pryzmatics/flowtrade/participation_type.proto";
 
 option go_package = "github.com/pryzm-finance/pryzmatics/server/flowtrade";
 
 enum FlowStatus {
   option (gogoproto.goproto_enum_prefix) = false;
-  FLOW_STATUS_ANY = 0 [(gogoproto.enumvalue_customname) = "FLOW_STATUS_ANY"];
-  FLOW_STATUS_ACTIVE = 1 [(gogoproto.enumvalue_customname) = "FLOW_STATUS_ACTIVE"];
-  FLOW_STATUS_ENDED = 2 [(gogoproto.enumvalue_customname) = "FLOW_STATUS_ENDED"];
+  FLOW_STATUS_ANY = 0;
+  FLOW_STATUS_ACTIVE = 1;
+  FLOW_STATUS_ENDED = 2;
 }
 
 enum TokenClaimability {
-  TOKEN_CLAIMABILITY_ANY = 0 [(gogoproto.enumvalue_customname) = "TOKEN_CLAIMABILITY_ANY"];
-  TOKEN_CLAIMABILITY_CLAIMABLE = 1 [(gogoproto.enumvalue_customname) = "TOKEN_CLAIMABILITY_CLAIMABLE"];
-  TOKEN_CLAIMABILITY_NOT_CLAIMABLE = 2 [(gogoproto.enumvalue_customname) = "TOKEN_CLAIMABILITY_NOT_CLAIMABLE"];
+  option (gogoproto.goproto_enum_prefix) = false;
+  TOKEN_CLAIMABILITY_ANY = 0;
+  TOKEN_CLAIMABILITY_CLAIMABLE = 1;
+  TOKEN_CLAIMABILITY_NOT_CLAIMABLE = 2;
 }
 
 message QueryFlowRequest {
@@ -34,11 +37,12 @@ message QueryAllFlowRequest {
   string creator = 2;
   TokenClaimability token_in_claimability = 3;
   string participant = 4;
-  TokenClaimability token_out_claimability = 5;
-  cosmos.base.query.v1beta1.PageRequest pagination = 6 [(gogoproto.nullable) = true];
+  pryzmatics.flowtrade.ParticipationType participation_type = 5;
+  TokenClaimability token_out_claimability = 6;
+  cosmos.base.query.v1beta1.PageRequest pagination = 7 [(gogoproto.nullable) = true];
 }
 
 message QueryAllFlowResponse {
-  repeated refractedlabs.flowtrade.Flow flows = 1 [(gogoproto.nullable) = false];
+  repeated pryzmatics.flowtrade.FlowPositionPair flows = 1 [(gogoproto.nullable) = false];
   cosmos.base.query.v1beta1.PageResponse pagination = 2 [(gogoproto.nullable) = true];
 }

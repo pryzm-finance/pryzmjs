@@ -77,54 +77,54 @@ import * as _248 from "./ystaking/genesis";
 import * as _249 from "./ystaking/query";
 import * as _250 from "./ystaking/tx";
 import * as _251 from "./ystaking/user_stake_state";
-import * as _440 from "./amm/tx.amino";
-import * as _441 from "./assets/tx.amino";
-import * as _442 from "./icstaking/tx.amino";
-import * as _443 from "./incentives/tx.amino";
-import * as _444 from "./mint/tx.amino";
-import * as _445 from "./pgov/tx.amino";
-import * as _446 from "./refractor/tx.amino";
-import * as _447 from "./treasury/tx.amino";
-import * as _448 from "./ystaking/tx.amino";
-import * as _449 from "./amm/tx.registry";
-import * as _450 from "./assets/tx.registry";
-import * as _451 from "./icstaking/tx.registry";
-import * as _452 from "./incentives/tx.registry";
-import * as _453 from "./mint/tx.registry";
-import * as _454 from "./pgov/tx.registry";
-import * as _455 from "./refractor/tx.registry";
-import * as _456 from "./treasury/tx.registry";
-import * as _457 from "./ystaking/tx.registry";
-import * as _458 from "./amm/query.lcd";
-import * as _459 from "./assets/query.lcd";
-import * as _460 from "./icstaking/query.lcd";
-import * as _461 from "./incentives/query.lcd";
-import * as _462 from "./mint/query.lcd";
-import * as _463 from "./pgov/query.lcd";
-import * as _464 from "./refractor/query.lcd";
-import * as _465 from "./treasury/query.lcd";
-import * as _466 from "./ystaking/query.lcd";
-import * as _467 from "./amm/query.rpc.Query";
-import * as _468 from "./assets/query.rpc.Query";
-import * as _469 from "./icstaking/query.rpc.Query";
-import * as _470 from "./incentives/query.rpc.Query";
-import * as _471 from "./mint/query.rpc.Query";
-import * as _472 from "./pgov/query.rpc.Query";
-import * as _473 from "./refractor/query.rpc.Query";
-import * as _474 from "./treasury/query.rpc.Query";
-import * as _475 from "./ystaking/query.rpc.Query";
-import * as _476 from "./amm/tx.rpc.msg";
-import * as _477 from "./assets/tx.rpc.msg";
-import * as _478 from "./icstaking/tx.rpc.msg";
-import * as _479 from "./incentives/tx.rpc.msg";
-import * as _480 from "./mint/tx.rpc.msg";
-import * as _481 from "./pgov/tx.rpc.msg";
-import * as _482 from "./refractor/tx.rpc.msg";
-import * as _483 from "./treasury/tx.rpc.msg";
-import * as _484 from "./ystaking/tx.rpc.msg";
-import * as _501 from "./lcd";
-import * as _502 from "./rpc.query";
-import * as _503 from "./rpc.tx";
+import * as _442 from "./amm/tx.amino";
+import * as _443 from "./assets/tx.amino";
+import * as _444 from "./icstaking/tx.amino";
+import * as _445 from "./incentives/tx.amino";
+import * as _446 from "./mint/tx.amino";
+import * as _447 from "./pgov/tx.amino";
+import * as _448 from "./refractor/tx.amino";
+import * as _449 from "./treasury/tx.amino";
+import * as _450 from "./ystaking/tx.amino";
+import * as _451 from "./amm/tx.registry";
+import * as _452 from "./assets/tx.registry";
+import * as _453 from "./icstaking/tx.registry";
+import * as _454 from "./incentives/tx.registry";
+import * as _455 from "./mint/tx.registry";
+import * as _456 from "./pgov/tx.registry";
+import * as _457 from "./refractor/tx.registry";
+import * as _458 from "./treasury/tx.registry";
+import * as _459 from "./ystaking/tx.registry";
+import * as _460 from "./amm/query.lcd";
+import * as _461 from "./assets/query.lcd";
+import * as _462 from "./icstaking/query.lcd";
+import * as _463 from "./incentives/query.lcd";
+import * as _464 from "./mint/query.lcd";
+import * as _465 from "./pgov/query.lcd";
+import * as _466 from "./refractor/query.lcd";
+import * as _467 from "./treasury/query.lcd";
+import * as _468 from "./ystaking/query.lcd";
+import * as _469 from "./amm/query.rpc.Query";
+import * as _470 from "./assets/query.rpc.Query";
+import * as _471 from "./icstaking/query.rpc.Query";
+import * as _472 from "./incentives/query.rpc.Query";
+import * as _473 from "./mint/query.rpc.Query";
+import * as _474 from "./pgov/query.rpc.Query";
+import * as _475 from "./refractor/query.rpc.Query";
+import * as _476 from "./treasury/query.rpc.Query";
+import * as _477 from "./ystaking/query.rpc.Query";
+import * as _478 from "./amm/tx.rpc.msg";
+import * as _479 from "./assets/tx.rpc.msg";
+import * as _480 from "./icstaking/tx.rpc.msg";
+import * as _481 from "./incentives/tx.rpc.msg";
+import * as _482 from "./mint/tx.rpc.msg";
+import * as _483 from "./pgov/tx.rpc.msg";
+import * as _484 from "./refractor/tx.rpc.msg";
+import * as _485 from "./treasury/tx.rpc.msg";
+import * as _486 from "./ystaking/tx.rpc.msg";
+import * as _503 from "./lcd";
+import * as _504 from "./rpc.query";
+import * as _505 from "./rpc.tx";
 export namespace pryzm {
   export const amm = {
     ..._173,
@@ -150,11 +150,11 @@ export namespace pryzm {
     ..._193,
     ..._194,
     ..._195,
-    ..._440,
-    ..._449,
-    ..._458,
-    ..._467,
-    ..._476
+    ..._442,
+    ..._451,
+    ..._460,
+    ..._469,
+    ..._478
   };
   export const assets = {
     ..._196,
@@ -165,11 +165,11 @@ export namespace pryzm {
     ..._201,
     ..._202,
     ..._203,
-    ..._441,
-    ..._450,
-    ..._459,
-    ..._468,
-    ..._477
+    ..._443,
+    ..._452,
+    ..._461,
+    ..._470,
+    ..._479
   };
   export const icstaking = {
     ..._204,
@@ -181,11 +181,11 @@ export namespace pryzm {
     ..._210,
     ..._211,
     ..._212,
-    ..._442,
-    ..._451,
-    ..._460,
-    ..._469,
-    ..._478
+    ..._444,
+    ..._453,
+    ..._462,
+    ..._471,
+    ..._480
   };
   export const incentives = {
     ..._213,
@@ -196,11 +196,11 @@ export namespace pryzm {
     ..._218,
     ..._219,
     ..._220,
-    ..._443,
-    ..._452,
-    ..._461,
-    ..._470,
-    ..._479
+    ..._445,
+    ..._454,
+    ..._463,
+    ..._472,
+    ..._481
   };
   export const mint = {
     ..._221,
@@ -209,11 +209,11 @@ export namespace pryzm {
     ..._224,
     ..._225,
     ..._226,
-    ..._444,
-    ..._453,
-    ..._462,
-    ..._471,
-    ..._480
+    ..._446,
+    ..._455,
+    ..._464,
+    ..._473,
+    ..._482
   };
   export const pgov = {
     ..._227,
@@ -224,11 +224,11 @@ export namespace pryzm {
     ..._232,
     ..._233,
     ..._234,
-    ..._445,
-    ..._454,
-    ..._463,
-    ..._472,
-    ..._481
+    ..._447,
+    ..._456,
+    ..._465,
+    ..._474,
+    ..._483
   };
   export const refractor = {
     ..._235,
@@ -236,11 +236,11 @@ export namespace pryzm {
     ..._237,
     ..._238,
     ..._239,
-    ..._446,
-    ..._455,
-    ..._464,
-    ..._473,
-    ..._482
+    ..._448,
+    ..._457,
+    ..._466,
+    ..._475,
+    ..._484
   };
   export const treasury = {
     ..._240,
@@ -249,11 +249,11 @@ export namespace pryzm {
     ..._243,
     ..._244,
     ..._245,
-    ..._447,
-    ..._456,
-    ..._465,
-    ..._474,
-    ..._483
+    ..._449,
+    ..._458,
+    ..._467,
+    ..._476,
+    ..._485
   };
   export const ystaking = {
     ..._246,
@@ -262,15 +262,15 @@ export namespace pryzm {
     ..._249,
     ..._250,
     ..._251,
-    ..._448,
-    ..._457,
-    ..._466,
-    ..._475,
-    ..._484
+    ..._450,
+    ..._459,
+    ..._468,
+    ..._477,
+    ..._486
   };
   export const ClientFactory = {
-    ..._501,
-    ..._502,
-    ..._503
+    ..._503,
+    ..._504,
+    ..._505
   };
 }
