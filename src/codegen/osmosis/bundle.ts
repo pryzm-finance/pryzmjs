@@ -1,46 +1,46 @@
-import * as _166 from "./epochs/v1beta1/genesis";
-import * as _167 from "./epochs/v1beta1/query";
-import * as _168 from "./tokenfactory/v1beta1/authorityMetadata";
-import * as _169 from "./tokenfactory/v1beta1/genesis";
-import * as _170 from "./tokenfactory/v1beta1/params";
-import * as _171 from "./tokenfactory/v1beta1/query";
-import * as _172 from "./tokenfactory/v1beta1/tx";
-import * as _435 from "./tokenfactory/v1beta1/tx.amino";
-import * as _436 from "./tokenfactory/v1beta1/tx.registry";
-import * as _437 from "./epochs/v1beta1/query.lcd";
-import * as _438 from "./tokenfactory/v1beta1/query.lcd";
-import * as _439 from "./epochs/v1beta1/query.rpc.Query";
-import * as _440 from "./tokenfactory/v1beta1/query.rpc.Query";
-import * as _441 from "./tokenfactory/v1beta1/tx.rpc.msg";
-import * as _500 from "./lcd";
-import * as _501 from "./rpc.query";
-import * as _502 from "./rpc.tx";
+import * as _187 from "./epochs/v1beta1/genesis";
+import * as _188 from "./epochs/v1beta1/query";
+import * as _189 from "./tokenfactory/v1beta1/authorityMetadata";
+import * as _190 from "./tokenfactory/v1beta1/genesis";
+import * as _191 from "./tokenfactory/v1beta1/params";
+import * as _192 from "./tokenfactory/v1beta1/query";
+import * as _193 from "./tokenfactory/v1beta1/tx";
+import * as _467 from "./tokenfactory/v1beta1/tx.amino";
+import * as _468 from "./tokenfactory/v1beta1/tx.registry";
+import * as _469 from "./epochs/v1beta1/query.lcd";
+import * as _470 from "./tokenfactory/v1beta1/query.lcd";
+import * as _471 from "./epochs/v1beta1/query.rpc.Query";
+import * as _472 from "./tokenfactory/v1beta1/query.rpc.Query";
+import * as _473 from "./tokenfactory/v1beta1/tx.rpc.msg";
+import * as _542 from "./lcd";
+import * as _543 from "./rpc.query";
+import * as _544 from "./rpc.tx";
 export namespace osmosis {
   export namespace epochs {
     export const v1beta1 = {
-      ..._166,
-      ..._167,
-      ..._437,
-      ..._439
+      ..._187,
+      ..._188,
+      ..._469,
+      ..._471
     };
   }
   export namespace tokenfactory {
     export const v1beta1 = {
-      ..._168,
-      ..._169,
-      ..._170,
-      ..._171,
-      ..._172,
-      ..._435,
-      ..._436,
-      ..._438,
-      ..._440,
-      ..._441
+      ..._189,
+      ..._190,
+      ..._191,
+      ..._192,
+      ..._193,
+      ..._467,
+      ..._468,
+      ..._470,
+      ..._472,
+      ..._473
     };
   }
   export const ClientFactory = {
-    ..._500,
-    ..._501,
-    ..._502
+    ..._542,
+    ..._543,
+    ..._544
   };
 }

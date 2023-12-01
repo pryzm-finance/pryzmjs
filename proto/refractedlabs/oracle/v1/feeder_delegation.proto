@@ -1,0 +1,11 @@
+syntax = "proto3";
+package refractedlabs.oracle.v1;
+
+import "cosmos_proto/cosmos.proto";
+
+option go_package = "github.com/refractedlabs/oracle/x/oracle/types/v1";
+
+message FeederDelegation {
+  string validator = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
+  string feeder = 2 [(cosmos_proto.scalar) = "cosmos.AddressString"];
+}

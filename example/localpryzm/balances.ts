@@ -5,7 +5,7 @@ import {localPryzm} from "./config";
 
 async function main() {
     const pryzmClient = await pryzm.ClientFactory.createGrpcWebClient({endpoint: localPryzm.grpcWebUrl})
-    const c = await pryzmClient.pryzm.refractor.assetState({
+    const c = await pryzmClient.pryzm.refractor.v1.assetState({
         assetId: "luna"
     })
     console.log(c.assetState.lastSeenExchangeRate)

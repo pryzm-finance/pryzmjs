@@ -78,15 +78,33 @@ export const createRPCMsgClient = async ({
       }
     },
     pryzm: {
-      amm: new (await import("./amm/tx.rpc.msg")).MsgClientImpl(grpcWeb),
-      assets: new (await import("./assets/tx.rpc.msg")).MsgClientImpl(grpcWeb),
-      icstaking: new (await import("./icstaking/tx.rpc.msg")).MsgClientImpl(grpcWeb),
-      incentives: new (await import("./incentives/tx.rpc.msg")).MsgClientImpl(grpcWeb),
-      mint: new (await import("./mint/tx.rpc.msg")).MsgClientImpl(grpcWeb),
-      pgov: new (await import("./pgov/tx.rpc.msg")).MsgClientImpl(grpcWeb),
-      refractor: new (await import("./refractor/tx.rpc.msg")).MsgClientImpl(grpcWeb),
-      treasury: new (await import("./treasury/tx.rpc.msg")).MsgClientImpl(grpcWeb),
-      ystaking: new (await import("./ystaking/tx.rpc.msg")).MsgClientImpl(grpcWeb)
+      amm: {
+        v1: new (await import("./amm/v1/tx.rpc.msg")).MsgClientImpl(grpcWeb)
+      },
+      assets: {
+        v1: new (await import("./assets/v1/tx.rpc.msg")).MsgClientImpl(grpcWeb)
+      },
+      icstaking: {
+        v1: new (await import("./icstaking/v1/tx.rpc.msg")).MsgClientImpl(grpcWeb)
+      },
+      incentives: {
+        v1: new (await import("./incentives/v1/tx.rpc.msg")).MsgClientImpl(grpcWeb)
+      },
+      mint: {
+        v1: new (await import("./mint/v1/tx.rpc.msg")).MsgClientImpl(grpcWeb)
+      },
+      pgov: {
+        v1: new (await import("./pgov/v1/tx.rpc.msg")).MsgClientImpl(grpcWeb)
+      },
+      refractor: {
+        v1: new (await import("./refractor/v1/tx.rpc.msg")).MsgClientImpl(grpcWeb)
+      },
+      treasury: {
+        v1: new (await import("./treasury/v1/tx.rpc.msg")).MsgClientImpl(grpcWeb)
+      },
+      ystaking: {
+        v1: new (await import("./ystaking/v1/tx.rpc.msg")).MsgClientImpl(grpcWeb)
+      }
     }
   };
 };

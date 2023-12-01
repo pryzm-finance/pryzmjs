@@ -4,12 +4,12 @@ package pryzmatics.trade;
 import "gogoproto/gogo.proto";
 import "google/protobuf/timestamp.proto";
 import "cosmos_proto/cosmos.proto";
-import "pryzm/amm/order.proto";
+import "pryzm/amm/v1/order.proto";
 
 option go_package = "github.com/pryzm-finance/pryzmatics/types/trade";
 
 message Order {
-  pryzm.amm.Order amm_order = 1 [(gogoproto.nullable) = false];
+  pryzm.amm.v1.Order amm_order = 1 [(gogoproto.nullable) = false];
   google.protobuf.Timestamp creation_time = 2 [(gogoproto.stdtime) = true, (gogoproto.nullable) = false];
   string total_amount = 3 [
     (cosmos_proto.scalar) = "cosmos.Int",

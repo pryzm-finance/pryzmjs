@@ -1,0 +1,86 @@
+syntax = "proto3";
+package refractedlabs.oracle.v1;
+
+import "cosmos/base/v1beta1/coin.proto";
+import "cosmos_proto/cosmos.proto";
+import "gogoproto/gogo.proto";
+import "refractedlabs/oracle/v1/oracle_vote.proto";
+import "refractedlabs/oracle/v1/params.proto";
+
+option go_package = "github.com/refractedlabs/oracle/x/oracle/types/v1";
+
+message EventDelegateFeedConsent {
+  string validator = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
+  string feeder = 2 [(cosmos_proto.scalar) = "cosmos.AddressString"];
+}
+
+message EventOraclePreVote {
+  string validator = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
+  string feeder = 2 [(cosmos_proto.scalar) = "cosmos.AddressString"];
+}
+
+message EventOracleVote {
+  string feeder = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
+  OracleVote oracle_vote = 2 [(gogoproto.nullable) = false];
+}
+
+enum VoteType {
+  option (gogoproto.goproto_enum_prefix) = false;
+  VOTE_TYPE_ABSTAIN_VOTE = 0 [(gogoproto.enumvalue_customname) = "AbstainVote"];
+  VOTE_TYPE_NO_VOTE = 1 [(gogoproto.enumvalue_customname) = "NoVote"];
+  VOTE_TYPE_VALID_VOTE = 2 [(gogoproto.enumvalue_customname) = "ValidVote"];
+}
+
+message BallotVoteResult {
+  string namespace = 1;
+  string module = 2;
+  bool quorum_reached = 3;
+  int64 ballot_power = 4;
+  bool majority_achieved = 5;
+  VoteType majority_vote_type = 6;
+  string majority_vote_payload = 7;
+  // error returned by a call to the corresponding module's OnMajorityVote callback method
+  string callback_error = 8;
+}
+
+message ValidatorVoteIntervalSummary {
+  string validator = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
+  int64 validator_power = 2;
+  bool voted = 3;
+  int64 vote_interval_miss_counter = 4;
+  int64 slash_window_miss_counter = 5;
+  repeated cosmos.base.v1beta1.Coin rewards = 6 [
+    (gogoproto.nullable) = false,
+    (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins"
+  ];
+}
+
+message EventVoteIntervalEnds {
+  int64 time_millis = 1;
+  int64 block_height = 2;
+  int64 vote_period = 3;
+  repeated ValidatorVoteIntervalSummary validator_summaries = 4 [(gogoproto.nullable) = false];
+  int64 previous_vote_interval_end_time_millis = 5;
+  repeated BallotVoteResult ballot_vote_results = 6 [(gogoproto.nullable) = false];
+}
+
+message ValidatorSlashWindowSummary {
+  string validator = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
+  int64 validator_power = 2;
+  int64 miss_counter = 3;
+  bool jailed = 4;
+  string slash_amount = 5 [
+    (cosmos_proto.scalar) = "cosmos.Int",
+    (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Int",
+    (gogoproto.nullable) = false
+  ];
+}
+
+message EventSlashWindowEnds {
+  int64 slash_window = 1;
+  repeated ValidatorSlashWindowSummary validator_summaries = 2 [(gogoproto.nullable) = false];
+}
+
+message EventSetParams {
+  Params params = 1 [(gogoproto.nullable) = false];
+}

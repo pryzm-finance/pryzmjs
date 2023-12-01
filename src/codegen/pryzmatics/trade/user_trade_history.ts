@@ -1,5 +1,5 @@
 import { Coin, CoinSDKType } from "../../cosmos/base/v1beta1/coin";
-import { SwapStep, SwapStepSDKType } from "../../pryzm/amm/operations";
+import { SwapStep, SwapStepSDKType } from "../../pryzm/amm/v1/operations";
 import { Timestamp, TimestampSDKType } from "../../google/protobuf/timestamp";
 import { BinaryReader, BinaryWriter } from "../../binary";
 import { isSet, fromJsonTimestamp, fromTimestamp } from "../../helpers";

@@ -1,276 +1,296 @@
-import * as _173 from "./amm/event";
-import * as _174 from "./amm/genesis";
-import * as _175 from "./amm/operations";
-import * as _176 from "./amm/oracle_payload";
-import * as _177 from "./amm/oracle_price_pair";
-import * as _178 from "./amm/order";
-import * as _179 from "./amm/pair_match_proposal";
-import * as _180 from "./amm/params";
-import * as _181 from "./amm/pending_token_introduction";
-import * as _182 from "./amm/pool_token";
-import * as _183 from "./amm/pool";
-import * as _184 from "./amm/query";
-import * as _185 from "./amm/route_step";
-import * as _186 from "./amm/schedule_order_count";
-import * as _187 from "./amm/schedule_order";
-import * as _188 from "./amm/token_circuit_breaker_settings";
-import * as _189 from "./amm/token_weight";
-import * as _190 from "./amm/tx";
-import * as _191 from "./amm/virtual_balance_pool_token";
-import * as _192 from "./amm/weight_update_timing";
-import * as _193 from "./amm/weighted_token";
-import * as _194 from "./amm/whitelisted_route";
-import * as _195 from "./amm/yamm_configuration";
-import * as _196 from "./assets/event";
-import * as _197 from "./assets/genesis";
-import * as _198 from "./assets/maturity_level";
-import * as _199 from "./assets/oracle_payload";
-import * as _200 from "./assets/params";
-import * as _201 from "./assets/query";
-import * as _202 from "./assets/refractable_asset";
-import * as _203 from "./assets/tx";
-import * as _204 from "./icstaking/event";
-import * as _205 from "./icstaking/genesis";
-import * as _206 from "./icstaking/host_chain";
-import * as _207 from "./icstaking/oracle_payload";
-import * as _208 from "./icstaking/params";
-import * as _209 from "./icstaking/query";
-import * as _210 from "./icstaking/reply";
-import * as _211 from "./icstaking/tx";
-import * as _212 from "./icstaking/undelegation";
-import * as _213 from "./incentives/bond";
-import * as _214 from "./incentives/event";
-import * as _215 from "./incentives/genesis";
-import * as _216 from "./incentives/params";
-import * as _217 from "./incentives/pool";
-import * as _218 from "./incentives/query";
-import * as _219 from "./incentives/tx";
-import * as _220 from "./incentives/unbonding";
-import * as _221 from "./mint/event";
-import * as _222 from "./mint/genesis";
-import * as _223 from "./mint/minter";
-import * as _224 from "./mint/params";
-import * as _225 from "./mint/query";
-import * as _226 from "./mint/tx";
-import * as _227 from "./pgov/event";
-import * as _228 from "./pgov/genesis";
-import * as _229 from "./pgov/params";
-import * as _230 from "./pgov/proposal";
-import * as _231 from "./pgov/query";
-import * as _232 from "./pgov/staked_p_asset";
-import * as _233 from "./pgov/tx";
-import * as _234 from "./pgov/vote";
-import * as _235 from "./refractor/asset_state";
-import * as _236 from "./refractor/event";
-import * as _237 from "./refractor/genesis";
-import * as _238 from "./refractor/query";
-import * as _239 from "./refractor/tx";
-import * as _240 from "./treasury/action";
-import * as _241 from "./treasury/event";
-import * as _242 from "./treasury/flow_trade";
-import * as _243 from "./treasury/genesis";
-import * as _244 from "./treasury/query";
-import * as _245 from "./treasury/tx";
-import * as _246 from "./ystaking/asset_pool_state";
-import * as _247 from "./ystaking/event";
-import * as _248 from "./ystaking/genesis";
-import * as _249 from "./ystaking/query";
-import * as _250 from "./ystaking/tx";
-import * as _251 from "./ystaking/user_stake_state";
-import * as _442 from "./amm/tx.amino";
-import * as _443 from "./assets/tx.amino";
-import * as _444 from "./icstaking/tx.amino";
-import * as _445 from "./incentives/tx.amino";
-import * as _446 from "./mint/tx.amino";
-import * as _447 from "./pgov/tx.amino";
-import * as _448 from "./refractor/tx.amino";
-import * as _449 from "./treasury/tx.amino";
-import * as _450 from "./ystaking/tx.amino";
-import * as _451 from "./amm/tx.registry";
-import * as _452 from "./assets/tx.registry";
-import * as _453 from "./icstaking/tx.registry";
-import * as _454 from "./incentives/tx.registry";
-import * as _455 from "./mint/tx.registry";
-import * as _456 from "./pgov/tx.registry";
-import * as _457 from "./refractor/tx.registry";
-import * as _458 from "./treasury/tx.registry";
-import * as _459 from "./ystaking/tx.registry";
-import * as _460 from "./amm/query.lcd";
-import * as _461 from "./assets/query.lcd";
-import * as _462 from "./icstaking/query.lcd";
-import * as _463 from "./incentives/query.lcd";
-import * as _464 from "./mint/query.lcd";
-import * as _465 from "./pgov/query.lcd";
-import * as _466 from "./refractor/query.lcd";
-import * as _467 from "./treasury/query.lcd";
-import * as _468 from "./ystaking/query.lcd";
-import * as _469 from "./amm/query.rpc.Query";
-import * as _470 from "./assets/query.rpc.Query";
-import * as _471 from "./icstaking/query.rpc.Query";
-import * as _472 from "./incentives/query.rpc.Query";
-import * as _473 from "./mint/query.rpc.Query";
-import * as _474 from "./pgov/query.rpc.Query";
-import * as _475 from "./refractor/query.rpc.Query";
-import * as _476 from "./treasury/query.rpc.Query";
-import * as _477 from "./ystaking/query.rpc.Query";
-import * as _478 from "./amm/tx.rpc.msg";
-import * as _479 from "./assets/tx.rpc.msg";
-import * as _480 from "./icstaking/tx.rpc.msg";
-import * as _481 from "./incentives/tx.rpc.msg";
-import * as _482 from "./mint/tx.rpc.msg";
-import * as _483 from "./pgov/tx.rpc.msg";
-import * as _484 from "./refractor/tx.rpc.msg";
-import * as _485 from "./treasury/tx.rpc.msg";
-import * as _486 from "./ystaking/tx.rpc.msg";
-import * as _503 from "./lcd";
-import * as _504 from "./rpc.query";
-import * as _505 from "./rpc.tx";
+import * as _194 from "./amm/v1/event";
+import * as _195 from "./amm/v1/genesis";
+import * as _196 from "./amm/v1/operations";
+import * as _197 from "./amm/v1/oracle_payload";
+import * as _198 from "./amm/v1/oracle_price_pair";
+import * as _199 from "./amm/v1/order";
+import * as _200 from "./amm/v1/pair_match_proposal";
+import * as _201 from "./amm/v1/params";
+import * as _202 from "./amm/v1/pending_token_introduction";
+import * as _203 from "./amm/v1/pool_token";
+import * as _204 from "./amm/v1/pool";
+import * as _205 from "./amm/v1/query";
+import * as _206 from "./amm/v1/route_step";
+import * as _207 from "./amm/v1/schedule_order_count";
+import * as _208 from "./amm/v1/schedule_order";
+import * as _209 from "./amm/v1/token_circuit_breaker_settings";
+import * as _210 from "./amm/v1/token_weight";
+import * as _211 from "./amm/v1/tx";
+import * as _212 from "./amm/v1/virtual_balance_pool_token";
+import * as _213 from "./amm/v1/weight_update_timing";
+import * as _214 from "./amm/v1/weighted_token";
+import * as _215 from "./amm/v1/whitelisted_route";
+import * as _216 from "./amm/v1/yamm_configuration";
+import * as _217 from "./assets/v1/event";
+import * as _218 from "./assets/v1/genesis";
+import * as _219 from "./assets/v1/maturity_level";
+import * as _220 from "./assets/v1/oracle_payload";
+import * as _221 from "./assets/v1/params";
+import * as _222 from "./assets/v1/query";
+import * as _223 from "./assets/v1/refractable_asset";
+import * as _224 from "./assets/v1/tx";
+import * as _225 from "./icstaking/v1/event";
+import * as _226 from "./icstaking/v1/genesis";
+import * as _227 from "./icstaking/v1/host_chain";
+import * as _228 from "./icstaking/v1/oracle_payload";
+import * as _229 from "./icstaking/v1/params";
+import * as _230 from "./icstaking/v1/query";
+import * as _231 from "./icstaking/v1/reply";
+import * as _232 from "./icstaking/v1/tx";
+import * as _233 from "./icstaking/v1/undelegation";
+import * as _234 from "./incentives/v1/bond";
+import * as _235 from "./incentives/v1/event";
+import * as _236 from "./incentives/v1/genesis";
+import * as _237 from "./incentives/v1/params";
+import * as _238 from "./incentives/v1/pool";
+import * as _239 from "./incentives/v1/query";
+import * as _240 from "./incentives/v1/tx";
+import * as _241 from "./incentives/v1/unbonding";
+import * as _242 from "./mint/v1/event";
+import * as _243 from "./mint/v1/genesis";
+import * as _244 from "./mint/v1/minter";
+import * as _245 from "./mint/v1/params";
+import * as _246 from "./mint/v1/query";
+import * as _247 from "./mint/v1/tx";
+import * as _248 from "./pgov/v1/event";
+import * as _249 from "./pgov/v1/genesis";
+import * as _250 from "./pgov/v1/params";
+import * as _251 from "./pgov/v1/proposal";
+import * as _252 from "./pgov/v1/query";
+import * as _253 from "./pgov/v1/staked_p_asset";
+import * as _254 from "./pgov/v1/tx";
+import * as _255 from "./pgov/v1/vote";
+import * as _256 from "./refractor/v1/asset_state";
+import * as _257 from "./refractor/v1/event";
+import * as _258 from "./refractor/v1/genesis";
+import * as _259 from "./refractor/v1/query";
+import * as _260 from "./refractor/v1/tx";
+import * as _261 from "./treasury/v1/action";
+import * as _262 from "./treasury/v1/event";
+import * as _263 from "./treasury/v1/flow_trade";
+import * as _264 from "./treasury/v1/genesis";
+import * as _265 from "./treasury/v1/params";
+import * as _266 from "./treasury/v1/query";
+import * as _267 from "./treasury/v1/tx";
+import * as _268 from "./ystaking/v1/asset_pool_state";
+import * as _269 from "./ystaking/v1/event";
+import * as _270 from "./ystaking/v1/genesis";
+import * as _271 from "./ystaking/v1/query";
+import * as _272 from "./ystaking/v1/tx";
+import * as _273 from "./ystaking/v1/user_stake_state";
+import * as _474 from "./amm/v1/tx.amino";
+import * as _475 from "./assets/v1/tx.amino";
+import * as _476 from "./icstaking/v1/tx.amino";
+import * as _477 from "./incentives/v1/tx.amino";
+import * as _478 from "./mint/v1/tx.amino";
+import * as _479 from "./pgov/v1/tx.amino";
+import * as _480 from "./refractor/v1/tx.amino";
+import * as _481 from "./treasury/v1/tx.amino";
+import * as _482 from "./ystaking/v1/tx.amino";
+import * as _483 from "./amm/v1/tx.registry";
+import * as _484 from "./assets/v1/tx.registry";
+import * as _485 from "./icstaking/v1/tx.registry";
+import * as _486 from "./incentives/v1/tx.registry";
+import * as _487 from "./mint/v1/tx.registry";
+import * as _488 from "./pgov/v1/tx.registry";
+import * as _489 from "./refractor/v1/tx.registry";
+import * as _490 from "./treasury/v1/tx.registry";
+import * as _491 from "./ystaking/v1/tx.registry";
+import * as _492 from "./amm/v1/query.lcd";
+import * as _493 from "./assets/v1/query.lcd";
+import * as _494 from "./icstaking/v1/query.lcd";
+import * as _495 from "./incentives/v1/query.lcd";
+import * as _496 from "./mint/v1/query.lcd";
+import * as _497 from "./pgov/v1/query.lcd";
+import * as _498 from "./refractor/v1/query.lcd";
+import * as _499 from "./treasury/v1/query.lcd";
+import * as _500 from "./ystaking/v1/query.lcd";
+import * as _501 from "./amm/v1/query.rpc.Query";
+import * as _502 from "./assets/v1/query.rpc.Query";
+import * as _503 from "./icstaking/v1/query.rpc.Query";
+import * as _504 from "./incentives/v1/query.rpc.Query";
+import * as _505 from "./mint/v1/query.rpc.Query";
+import * as _506 from "./pgov/v1/query.rpc.Query";
+import * as _507 from "./refractor/v1/query.rpc.Query";
+import * as _508 from "./treasury/v1/query.rpc.Query";
+import * as _509 from "./ystaking/v1/query.rpc.Query";
+import * as _510 from "./amm/v1/tx.rpc.msg";
+import * as _511 from "./assets/v1/tx.rpc.msg";
+import * as _512 from "./icstaking/v1/tx.rpc.msg";
+import * as _513 from "./incentives/v1/tx.rpc.msg";
+import * as _514 from "./mint/v1/tx.rpc.msg";
+import * as _515 from "./pgov/v1/tx.rpc.msg";
+import * as _516 from "./refractor/v1/tx.rpc.msg";
+import * as _517 from "./treasury/v1/tx.rpc.msg";
+import * as _518 from "./ystaking/v1/tx.rpc.msg";
+import * as _545 from "./lcd";
+import * as _546 from "./rpc.query";
+import * as _547 from "./rpc.tx";
 export namespace pryzm {
-  export const amm = {
-    ..._173,
-    ..._174,
-    ..._175,
-    ..._176,
-    ..._177,
-    ..._178,
-    ..._179,
-    ..._180,
-    ..._181,
-    ..._182,
-    ..._183,
-    ..._184,
-    ..._185,
-    ..._186,
-    ..._187,
-    ..._188,
-    ..._189,
-    ..._190,
-    ..._191,
-    ..._192,
-    ..._193,
-    ..._194,
-    ..._195,
-    ..._442,
-    ..._451,
-    ..._460,
-    ..._469,
-    ..._478
-  };
-  export const assets = {
-    ..._196,
-    ..._197,
-    ..._198,
-    ..._199,
-    ..._200,
-    ..._201,
-    ..._202,
-    ..._203,
-    ..._443,
-    ..._452,
-    ..._461,
-    ..._470,
-    ..._479
-  };
-  export const icstaking = {
-    ..._204,
-    ..._205,
-    ..._206,
-    ..._207,
-    ..._208,
-    ..._209,
-    ..._210,
-    ..._211,
-    ..._212,
-    ..._444,
-    ..._453,
-    ..._462,
-    ..._471,
-    ..._480
-  };
-  export const incentives = {
-    ..._213,
-    ..._214,
-    ..._215,
-    ..._216,
-    ..._217,
-    ..._218,
-    ..._219,
-    ..._220,
-    ..._445,
-    ..._454,
-    ..._463,
-    ..._472,
-    ..._481
-  };
-  export const mint = {
-    ..._221,
-    ..._222,
-    ..._223,
-    ..._224,
-    ..._225,
-    ..._226,
-    ..._446,
-    ..._455,
-    ..._464,
-    ..._473,
-    ..._482
-  };
-  export const pgov = {
-    ..._227,
-    ..._228,
-    ..._229,
-    ..._230,
-    ..._231,
-    ..._232,
-    ..._233,
-    ..._234,
-    ..._447,
-    ..._456,
-    ..._465,
-    ..._474,
-    ..._483
-  };
-  export const refractor = {
-    ..._235,
-    ..._236,
-    ..._237,
-    ..._238,
-    ..._239,
-    ..._448,
-    ..._457,
-    ..._466,
-    ..._475,
-    ..._484
-  };
-  export const treasury = {
-    ..._240,
-    ..._241,
-    ..._242,
-    ..._243,
-    ..._244,
-    ..._245,
-    ..._449,
-    ..._458,
-    ..._467,
-    ..._476,
-    ..._485
-  };
-  export const ystaking = {
-    ..._246,
-    ..._247,
-    ..._248,
-    ..._249,
-    ..._250,
-    ..._251,
-    ..._450,
-    ..._459,
-    ..._468,
-    ..._477,
-    ..._486
-  };
+  export namespace amm {
+    export const v1 = {
+      ..._194,
+      ..._195,
+      ..._196,
+      ..._197,
+      ..._198,
+      ..._199,
+      ..._200,
+      ..._201,
+      ..._202,
+      ..._203,
+      ..._204,
+      ..._205,
+      ..._206,
+      ..._207,
+      ..._208,
+      ..._209,
+      ..._210,
+      ..._211,
+      ..._212,
+      ..._213,
+      ..._214,
+      ..._215,
+      ..._216,
+      ..._474,
+      ..._483,
+      ..._492,
+      ..._501,
+      ..._510
+    };
+  }
+  export namespace assets {
+    export const v1 = {
+      ..._217,
+      ..._218,
+      ..._219,
+      ..._220,
+      ..._221,
+      ..._222,
+      ..._223,
+      ..._224,
+      ..._475,
+      ..._484,
+      ..._493,
+      ..._502,
+      ..._511
+    };
+  }
+  export namespace icstaking {
+    export const v1 = {
+      ..._225,
+      ..._226,
+      ..._227,
+      ..._228,
+      ..._229,
+      ..._230,
+      ..._231,
+      ..._232,
+      ..._233,
+      ..._476,
+      ..._485,
+      ..._494,
+      ..._503,
+      ..._512
+    };
+  }
+  export namespace incentives {
+    export const v1 = {
+      ..._234,
+      ..._235,
+      ..._236,
+      ..._237,
+      ..._238,
+      ..._239,
+      ..._240,
+      ..._241,
+      ..._477,
+      ..._486,
+      ..._495,
+      ..._504,
+      ..._513
+    };
+  }
+  export namespace mint {
+    export const v1 = {
+      ..._242,
+      ..._243,
+      ..._244,
+      ..._245,
+      ..._246,
+      ..._247,
+      ..._478,
+      ..._487,
+      ..._496,
+      ..._505,
+      ..._514
+    };
+  }
+  export namespace pgov {
+    export const v1 = {
+      ..._248,
+      ..._249,
+      ..._250,
+      ..._251,
+      ..._252,
+      ..._253,
+      ..._254,
+      ..._255,
+      ..._479,
+      ..._488,
+      ..._497,
+      ..._506,
+      ..._515
+    };
+  }
+  export namespace refractor {
+    export const v1 = {
+      ..._256,
+      ..._257,
+      ..._258,
+      ..._259,
+      ..._260,
+      ..._480,
+      ..._489,
+      ..._498,
+      ..._507,
+      ..._516
+    };
+  }
+  export namespace treasury {
+    export const v1 = {
+      ..._261,
+      ..._262,
+      ..._263,
+      ..._264,
+      ..._265,
+      ..._266,
+      ..._267,
+      ..._481,
+      ..._490,
+      ..._499,
+      ..._508,
+      ..._517
+    };
+  }
+  export namespace ystaking {
+    export const v1 = {
+      ..._268,
+      ..._269,
+      ..._270,
+      ..._271,
+      ..._272,
+      ..._273,
+      ..._482,
+      ..._491,
+      ..._500,
+      ..._509,
+      ..._518
+    };
+  }
   export const ClientFactory = {
-    ..._503,
-    ..._504,
-    ..._505
+    ..._545,
+    ..._546,
+    ..._547
   };
 }

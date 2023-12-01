@@ -1,7 +1,7 @@
 syntax = "proto3";
 package pryzmatics.oracle;
 
-import "refractedlabs/oracle/event.proto";
+import "refractedlabs/oracle/v1/event.proto";
 
 
 option go_package = "github.com/pryzm-finance/pryzmatics/types/oracle";
@@ -13,7 +13,7 @@ message BallotVoteResult {
   bool quorum_reached = 4;
   int64 ballot_power = 5;
   bool majority_achieved = 6;
-  refractedlabs.oracle.VoteType majority_vote_type = 7;
+  refractedlabs.oracle.v1.VoteType majority_vote_type = 7;
   string majority_vote_payload = 8;
   // error returned by a call to the corresponding module's OnMajorityVote callback method
   string callback_error = 9;

@@ -1,5 +1,5 @@
-import { Flow, FlowSDKType } from "../../refractedlabs/flowtrade/flow";
-import { Position, PositionSDKType } from "../../refractedlabs/flowtrade/position";
+import { Flow, FlowSDKType } from "../../refractedlabs/flowtrade/v1/flow";
+import { Position, PositionSDKType } from "../../refractedlabs/flowtrade/v1/position";
 import { BinaryReader, BinaryWriter } from "../../binary";
 import { isSet } from "../../helpers";
 export interface FlowPositionPair {

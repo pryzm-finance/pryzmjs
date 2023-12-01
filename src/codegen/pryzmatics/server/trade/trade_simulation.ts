@@ -1,5 +1,5 @@
-import { SwapType, SwapStep, SwapStepSDKType, swapTypeFromJSON, swapTypeToJSON } from "../../../pryzm/amm/operations";
-import { RouteStep, RouteStepSDKType } from "../../../pryzm/amm/route_step";
+import { SwapType, SwapStep, SwapStepSDKType, swapTypeFromJSON, swapTypeToJSON } from "../../../pryzm/amm/v1/operations";
+import { RouteStep, RouteStepSDKType } from "../../../pryzm/amm/v1/route_step";
 import { Coin, CoinSDKType } from "../../../cosmos/base/v1beta1/coin";
 import { BinaryReader, BinaryWriter } from "../../../binary";
 import { isSet } from "../../../helpers";

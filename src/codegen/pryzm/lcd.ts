@@ -106,33 +106,51 @@ export const createLCDClient = async ({
       }
     },
     pryzm: {
-      amm: new (await import("./amm/query.lcd")).LCDQueryClient({
-        requestClient
-      }),
-      assets: new (await import("./assets/query.lcd")).LCDQueryClient({
-        requestClient
-      }),
-      icstaking: new (await import("./icstaking/query.lcd")).LCDQueryClient({
-        requestClient
-      }),
-      incentives: new (await import("./incentives/query.lcd")).LCDQueryClient({
-        requestClient
-      }),
-      mint: new (await import("./mint/query.lcd")).LCDQueryClient({
-        requestClient
-      }),
-      pgov: new (await import("./pgov/query.lcd")).LCDQueryClient({
-        requestClient
-      }),
-      refractor: new (await import("./refractor/query.lcd")).LCDQueryClient({
-        requestClient
-      }),
-      treasury: new (await import("./treasury/query.lcd")).LCDQueryClient({
-        requestClient
-      }),
-      ystaking: new (await import("./ystaking/query.lcd")).LCDQueryClient({
-        requestClient
-      })
+      amm: {
+        v1: new (await import("./amm/v1/query.lcd")).LCDQueryClient({
+          requestClient
+        })
+      },
+      assets: {
+        v1: new (await import("./assets/v1/query.lcd")).LCDQueryClient({
+          requestClient
+        })
+      },
+      icstaking: {
+        v1: new (await import("./icstaking/v1/query.lcd")).LCDQueryClient({
+          requestClient
+        })
+      },
+      incentives: {
+        v1: new (await import("./incentives/v1/query.lcd")).LCDQueryClient({
+          requestClient
+        })
+      },
+      mint: {
+        v1: new (await import("./mint/v1/query.lcd")).LCDQueryClient({
+          requestClient
+        })
+      },
+      pgov: {
+        v1: new (await import("./pgov/v1/query.lcd")).LCDQueryClient({
+          requestClient
+        })
+      },
+      refractor: {
+        v1: new (await import("./refractor/v1/query.lcd")).LCDQueryClient({
+          requestClient
+        })
+      },
+      treasury: {
+        v1: new (await import("./treasury/v1/query.lcd")).LCDQueryClient({
+          requestClient
+        })
+      },
+      ystaking: {
+        v1: new (await import("./ystaking/v1/query.lcd")).LCDQueryClient({
+          requestClient
+        })
+      }
     }
   };
 };

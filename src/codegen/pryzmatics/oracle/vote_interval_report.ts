@@ -1,4 +1,4 @@
-import { VoteType, voteTypeFromJSON, voteTypeToJSON } from "../../refractedlabs/oracle/event";
+import { VoteType, voteTypeFromJSON, voteTypeToJSON } from "../../refractedlabs/oracle/v1/event";
 import { Coin, CoinSDKType } from "../../cosmos/base/v1beta1/coin";
 import { VoteInterval, VoteIntervalSDKType } from "./vote_interval";
 import { BallotVoteResult, BallotVoteResultSDKType } from "./ballot_vote_result";

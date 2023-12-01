@@ -1,4 +1,4 @@
-import { VoteType, voteTypeFromJSON, voteTypeToJSON } from "../../refractedlabs/oracle/event";
+import { VoteType, voteTypeFromJSON, voteTypeToJSON } from "../../refractedlabs/oracle/v1/event";
 import { BinaryReader, BinaryWriter } from "../../binary";
 import { isSet } from "../../helpers";
 export interface BallotVoteResult {

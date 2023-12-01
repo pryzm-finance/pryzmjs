@@ -1,5 +1,5 @@
-import { HostChain as HostChain1 } from "../../pryzm/icstaking/host_chain";
-import { HostChainSDKType as HostChain1SDKType } from "../../pryzm/icstaking/host_chain";
+import { HostChain as HostChain1 } from "../../pryzm/icstaking/v1/host_chain";
+import { HostChainSDKType as HostChain1SDKType } from "../../pryzm/icstaking/v1/host_chain";
 import { BinaryReader, BinaryWriter } from "../../binary";
 import { Decimal } from "@cosmjs/math";
 import { isSet } from "../../helpers";

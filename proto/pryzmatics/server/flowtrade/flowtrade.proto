@@ -3,7 +3,7 @@ package pryzmatics.server.flowtrade;
 
 import "cosmos/base/query/v1beta1/pagination.proto";
 import "gogoproto/gogo.proto";
-import "refractedlabs/flowtrade/flow.proto";
+import "refractedlabs/flowtrade/v1/flow.proto";
 import "cosmos_proto/cosmos.proto";
 import "pryzmatics/flowtrade/flow_position_pair.proto";
 import "pryzmatics/flowtrade/participation_type.proto";
@@ -29,7 +29,7 @@ message QueryFlowRequest {
 }
 
 message QueryFlowResponse {
-  refractedlabs.flowtrade.Flow flow = 1 [(gogoproto.nullable) = false];
+  refractedlabs.flowtrade.v1.Flow flow = 1 [(gogoproto.nullable) = false];
 }
 
 message QueryAllFlowRequest {

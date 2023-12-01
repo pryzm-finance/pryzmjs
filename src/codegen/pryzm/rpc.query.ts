@@ -97,15 +97,33 @@ export const createGrpcWebClient = async ({
       }
     },
     pryzm: {
-      amm: new (await import("./amm/query.rpc.Query")).QueryClientImpl(grpcWeb),
-      assets: new (await import("./assets/query.rpc.Query")).QueryClientImpl(grpcWeb),
-      icstaking: new (await import("./icstaking/query.rpc.Query")).QueryClientImpl(grpcWeb),
-      incentives: new (await import("./incentives/query.rpc.Query")).QueryClientImpl(grpcWeb),
-      mint: new (await import("./mint/query.rpc.Query")).QueryClientImpl(grpcWeb),
-      pgov: new (await import("./pgov/query.rpc.Query")).QueryClientImpl(grpcWeb),
-      refractor: new (await import("./refractor/query.rpc.Query")).QueryClientImpl(grpcWeb),
-      treasury: new (await import("./treasury/query.rpc.Query")).QueryClientImpl(grpcWeb),
-      ystaking: new (await import("./ystaking/query.rpc.Query")).QueryClientImpl(grpcWeb)
+      amm: {
+        v1: new (await import("./amm/v1/query.rpc.Query")).QueryClientImpl(grpcWeb)
+      },
+      assets: {
+        v1: new (await import("./assets/v1/query.rpc.Query")).QueryClientImpl(grpcWeb)
+      },
+      icstaking: {
+        v1: new (await import("./icstaking/v1/query.rpc.Query")).QueryClientImpl(grpcWeb)
+      },
+      incentives: {
+        v1: new (await import("./incentives/v1/query.rpc.Query")).QueryClientImpl(grpcWeb)
+      },
+      mint: {
+        v1: new (await import("./mint/v1/query.rpc.Query")).QueryClientImpl(grpcWeb)
+      },
+      pgov: {
+        v1: new (await import("./pgov/v1/query.rpc.Query")).QueryClientImpl(grpcWeb)
+      },
+      refractor: {
+        v1: new (await import("./refractor/v1/query.rpc.Query")).QueryClientImpl(grpcWeb)
+      },
+      treasury: {
+        v1: new (await import("./treasury/v1/query.rpc.Query")).QueryClientImpl(grpcWeb)
+      },
+      ystaking: {
+        v1: new (await import("./ystaking/v1/query.rpc.Query")).QueryClientImpl(grpcWeb)
+      }
     }
   };
 };

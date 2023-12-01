@@ -4,7 +4,7 @@ package pryzmatics.trade;
 import "cosmos/base/v1beta1/coin.proto";
 import "gogoproto/gogo.proto";
 import "google/protobuf/timestamp.proto";
-import "pryzm/amm/pool_token.proto";
+import "pryzm/amm/v1/pool_token.proto";
 
 
 option go_package = "github.com/pryzm-finance/pryzmatics/types/trade";
@@ -19,8 +19,8 @@ enum PoolOperationType {
 }
 
 message PoolTradeHistory {
-  repeated pryzm.amm.TokenAmount tokens_in = 1 [(gogoproto.nullable) = false];
-  repeated pryzm.amm.TokenAmount tokens_out = 2 [(gogoproto.nullable) = false];
+  repeated pryzm.amm.v1.TokenAmount tokens_in = 1 [(gogoproto.nullable) = false];
+  repeated pryzm.amm.v1.TokenAmount tokens_out = 2 [(gogoproto.nullable) = false];
   uint64 pool_id = 3;
   PoolOperationType operation_type = 4;
   repeated cosmos.base.v1beta1.Coin swap_fee = 5 [

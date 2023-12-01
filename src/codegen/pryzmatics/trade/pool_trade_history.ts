@@ -1,4 +1,4 @@
-import { TokenAmount, TokenAmountSDKType } from "../../pryzm/amm/pool_token";
+import { TokenAmount, TokenAmountSDKType } from "../../pryzm/amm/v1/pool_token";
 import { Coin, CoinSDKType } from "../../cosmos/base/v1beta1/coin";
 import { Timestamp, TimestampSDKType } from "../../google/protobuf/timestamp";
 import { BinaryReader, BinaryWriter } from "../../binary";

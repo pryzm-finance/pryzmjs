@@ -12,6 +12,9 @@ async function main() {
     const authParams = (await client.cosmos.auth.v1beta1.params()).params
     console.log(authParams)
 
+    const ammParams = (await client.pryzm.amm.v1.params()).params
+    console.log(ammParams)
+
     let balances = (await client.cosmos.bank.v1beta1.allBalances({address})).balances
     console.log(balances)
 
@@ -19,7 +22,7 @@ async function main() {
     console.log(balances)
 
     const maturities = await grpcFetchAll(client, async (client, pageRequest) => {
-        const result = await client.pryzm.assets.maturityLevelAll({active: true, pagination: pageRequest})
+        const result = await client.pryzm.assets.v1.maturityLevelAll({active: true, pagination: pageRequest})
         return [result.pagination.nextKey, result.maturityLevel]
     }, {
         countTotal: false,

@@ -1,0 +1,18 @@
+syntax = "proto3";
+
+package refractedlabs.flowtrade.v1;
+
+import "gogoproto/gogo.proto";
+import "refractedlabs/flowtrade/v1/flow.proto";
+import "refractedlabs/flowtrade/v1/params.proto";
+import "refractedlabs/flowtrade/v1/position.proto";
+
+option go_package = "github.com/refractedlabs/flowtrade/x/flowtrade/types/v1";
+
+// GenesisState defines the flowtrade module's genesis state.
+message GenesisState {
+  Params params = 1 [(gogoproto.nullable) = false];
+  repeated Flow flow_list = 2 [(gogoproto.nullable) = false];
+  uint64 flow_count = 3;
+  repeated Position position_list = 4 [(gogoproto.nullable) = false];
+}
