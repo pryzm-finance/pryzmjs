@@ -8,7 +8,7 @@ import "cosmos/base/v1beta1/coin.proto";
 import "pryzmatics/oracle/vote_interval.proto";
 import "pryzmatics/oracle/vote.proto";
 import "pryzmatics/oracle/ballot_vote_result.proto";
-import "refractedlabs/oracle/event.proto";
+import "refractedlabs/oracle/v1/event.proto";
 
 option go_package = "github.com/pryzm-finance/pryzmatics/types/oracle";
 
@@ -16,7 +16,7 @@ message VotePayloadReport {
   string module = 1;
   string namespace = 2;
   string payload = 3;
-  refractedlabs.oracle.VoteType type = 4;
+  refractedlabs.oracle.v1.VoteType type = 4;
 }
 
 message ValidatorVoteIntervalReport {

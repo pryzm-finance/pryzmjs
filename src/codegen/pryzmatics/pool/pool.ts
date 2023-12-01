@@ -1,4 +1,4 @@
-import { PoolType, poolTypeFromJSON, poolTypeToJSON } from "../../pryzm/amm/pool";
+import { PoolType, poolTypeFromJSON, poolTypeToJSON } from "../../pryzm/amm/v1/pool";
 import { PoolApr, PoolAprSDKType } from "./pool_apr";
 import { BinaryReader, BinaryWriter } from "../../binary";
 import { Decimal } from "@cosmjs/math";

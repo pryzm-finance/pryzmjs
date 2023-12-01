@@ -1,5 +1,5 @@
 import { TokenType, tokenTypeFromJSON, tokenTypeToJSON } from "./token";
-import { PoolType, poolTypeFromJSON, poolTypeToJSON } from "../../pryzm/amm/pool";
+import { PoolType, poolTypeFromJSON, poolTypeToJSON } from "../../pryzm/amm/v1/pool";
 import { BinaryReader, BinaryWriter } from "../../binary";
 import { Decimal } from "@cosmjs/math";
 import { isSet } from "../../helpers";

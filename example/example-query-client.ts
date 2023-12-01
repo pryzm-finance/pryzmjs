@@ -18,15 +18,15 @@ async function main() {
     })).balances
     console.log(balances)
 
-    const ammParams = (await client.pryzm.amm.params()).params;
+    const ammParams = (await client.pryzm.amm.v1.params()).params;
     console.log(ammParams)
 
-    const refractableAssets = (await client.pryzm.assets.refractableAssetAll({
+    const refractableAssets = (await client.pryzm.assets.v1.refractableAssetAll({
         enabled: "", pagination: undefined
     })).assets
     console.log(refractableAssets)
 
-    const spotPrice = (await client.pryzm.amm.spotPrice({
+    const spotPrice = (await client.pryzm.amm.v1.spotPrice({
         poolId: 123n,
         tokenIn: "base",
         tokenOut: "quote",

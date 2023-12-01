@@ -1,5 +1,5 @@
-import { Order as Order1 } from "../../pryzm/amm/order";
-import { OrderSDKType as Order1SDKType } from "../../pryzm/amm/order";
+import { Order as Order1 } from "../../pryzm/amm/v1/order";
+import { OrderSDKType as Order1SDKType } from "../../pryzm/amm/v1/order";
 import { Timestamp, TimestampSDKType } from "../../google/protobuf/timestamp";
 import { BinaryReader, BinaryWriter } from "../../binary";
 import { Decimal } from "@cosmjs/math";

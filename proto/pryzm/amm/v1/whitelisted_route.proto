@@ -1,0 +1,12 @@
+syntax = "proto3";
+package pryzm.amm.v1;
+
+import "gogoproto/gogo.proto";
+import "pryzm/amm/v1/route_step.proto";
+
+option go_package = "github.com/pryzm-finance/pryzm-core/x/amm/types/v1";
+
+message WhitelistedRoute {
+  repeated RouteStep steps = 1 [(gogoproto.nullable) = false];
+  bool enabled = 2;
+}

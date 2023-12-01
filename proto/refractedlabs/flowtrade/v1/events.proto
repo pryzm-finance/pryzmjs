@@ -1,0 +1,73 @@
+syntax = "proto3";
+package refractedlabs.flowtrade.v1;
+
+import "cosmos/base/v1beta1/coin.proto";
+import "cosmos_proto/cosmos.proto";
+import "gogoproto/gogo.proto";
+import "refractedlabs/flowtrade/v1/flow.proto";
+import "refractedlabs/flowtrade/v1/params.proto";
+import "refractedlabs/flowtrade/v1/position.proto";
+
+option go_package = "github.com/refractedlabs/flowtrade/x/flowtrade/types/v1";
+
+message EventSetParams {
+  Params params = 1 [(gogoproto.nullable) = false];
+}
+
+message EventFlowCreated {
+  Flow flow = 1 [(gogoproto.nullable) = false];
+}
+
+message EventFlowEnded {
+  uint64 flow_id = 1;
+}
+
+message EventFlowStopped {
+  uint64 flow_id = 1;
+}
+
+message EventFlowCheckedOut {
+  uint64 flow_id = 1;
+  cosmos.base.v1beta1.Coin returned_deposit = 2;
+  cosmos.base.v1beta1.Coin returned_token_out = 3;
+}
+
+message EventFlowTokenInClaimed {
+  uint64 flow_id = 1;
+  cosmos.base.v1beta1.Coin amount = 2 [(gogoproto.nullable) = false];
+  cosmos.base.v1beta1.Coin fee = 3 [(gogoproto.nullable) = false];
+  string treasury = 4 [(cosmos_proto.scalar) = "cosmos.AddressString"];
+}
+
+message EventFlowTokenOutClaimed {
+  uint64 flow_id = 1;
+  string owner = 2 [(cosmos_proto.scalar) = "cosmos.AddressString"];
+  cosmos.base.v1beta1.Coin amount = 3 [(gogoproto.nullable) = false];
+  cosmos.base.v1beta1.Coin fee = 4 [(gogoproto.nullable) = false];
+}
+
+message EventJoinFlow {
+  uint64 flow_id = 1;
+  string address = 2 [(cosmos_proto.scalar) = "cosmos.AddressString"];
+  cosmos.base.v1beta1.Coin amount = 3 [(gogoproto.nullable) = false];
+}
+
+message EventExitFlow {
+  uint64 flow_id = 1;
+  string address = 2 [(cosmos_proto.scalar) = "cosmos.AddressString"];
+  cosmos.base.v1beta1.Coin amount = 3 [(gogoproto.nullable) = false];
+}
+
+message EventSetOperator {
+  uint64 flow_id = 1;
+  string owner = 2 [(cosmos_proto.scalar) = "cosmos.AddressString"];
+  string operator = 3 [(cosmos_proto.scalar) = "cosmos.AddressString"];
+}
+
+message EventSetFlow {
+  Flow flow = 1 [(gogoproto.nullable) = false];
+}
+
+message EventSetPosition {
+  Position position = 1 [(gogoproto.nullable) = false];
+}

@@ -1,4 +1,5 @@
 import { DenomTrace, DenomTraceSDKType, Params, ParamsSDKType } from "./transfer";
+import { Coin, CoinSDKType } from "../../../../cosmos/base/v1beta1/coin";
 import { BinaryReader, BinaryWriter } from "../../../../binary";
 import { isSet } from "../../../../helpers";
 /** GenesisState defines the ibc-transfer genesis state */
@@ -6,18 +7,25 @@ export interface GenesisState {
   portId: string;
   denomTraces: DenomTrace[];
   params: Params;
+  /**
+   * total_escrowed contains the total amount of tokens escrowed
+   * by the transfer module
+   */
+  totalEscrowed: Coin[];
 }
 /** GenesisState defines the ibc-transfer genesis state */
 export interface GenesisStateSDKType {
   port_id: string;
   denom_traces: DenomTraceSDKType[];
   params: ParamsSDKType;
+  total_escrowed: CoinSDKType[];
 }
 function createBaseGenesisState(): GenesisState {
   return {
     portId: "",
     denomTraces: [],
-    params: Params.fromPartial({})
+    params: Params.fromPartial({}),
+    totalEscrowed: []
   };
 }
 export const GenesisState = {
@@ -30,6 +38,9 @@ export const GenesisState = {
     }
     if (message.params !== undefined) {
       Params.encode(message.params, writer.uint32(26).fork()).ldelim();
+    }
+    for (const v of message.totalEscrowed) {
+      Coin.encode(v!, writer.uint32(34).fork()).ldelim();
     }
     return writer;
   },
@@ -49,6 +60,9 @@ export const GenesisState = {
         case 3:
           message.params = Params.decode(reader, reader.uint32());
           break;
+        case 4:
+          message.totalEscrowed.push(Coin.decode(reader, reader.uint32()));
+          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -60,7 +74,8 @@ export const GenesisState = {
     return {
       portId: isSet(object.portId) ? String(object.portId) : "",
       denomTraces: Array.isArray(object?.denomTraces) ? object.denomTraces.map((e: any) => DenomTrace.fromJSON(e)) : [],
-      params: isSet(object.params) ? Params.fromJSON(object.params) : undefined
+      params: isSet(object.params) ? Params.fromJSON(object.params) : undefined,
+      totalEscrowed: Array.isArray(object?.totalEscrowed) ? object.totalEscrowed.map((e: any) => Coin.fromJSON(e)) : []
     };
   },
   toJSON(message: GenesisState): unknown {
@@ -72,6 +87,11 @@ export const GenesisState = {
       obj.denomTraces = [];
     }
     message.params !== undefined && (obj.params = message.params ? Params.toJSON(message.params) : undefined);
+    if (message.totalEscrowed) {
+      obj.totalEscrowed = message.totalEscrowed.map(e => e ? Coin.toJSON(e) : undefined);
+    } else {
+      obj.totalEscrowed = [];
+    }
     return obj;
   },
   fromPartial(object: Partial<GenesisState>): GenesisState {
@@ -79,6 +99,7 @@ export const GenesisState = {
     message.portId = object.portId ?? "";
     message.denomTraces = object.denomTraces?.map(e => DenomTrace.fromPartial(e)) || [];
     message.params = object.params !== undefined && object.params !== null ? Params.fromPartial(object.params) : undefined;
+    message.totalEscrowed = object.totalEscrowed?.map(e => Coin.fromPartial(e)) || [];
     return message;
   }
 };

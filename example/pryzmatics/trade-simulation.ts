@@ -1,6 +1,6 @@
 import { pryzmatics } from "@pryzm-finance/pryzmjs/lib";
 import * as console from "console";
-import { SwapType } from "@pryzm-finance/pryzmjs/lib/codegen/pryzm/amm/operations";
+import { SwapType } from "@pryzm-finance/pryzmjs/lib/codegen/pryzm/amm/v1/operations";
 import { PRYZMATICS_ENDPOINT } from "./config";
 
 async function main() {

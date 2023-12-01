@@ -1,0 +1,28 @@
+syntax = "proto3";
+package refractedlabs.oracle.v1;
+
+import "cosmos_proto/cosmos.proto";
+import "gogoproto/gogo.proto";
+
+option go_package = "github.com/refractedlabs/oracle/x/oracle/types/v1";
+
+message NamespaceVote {
+  string namespace = 1;
+  string payload = 2;
+}
+
+message ModuleVote {
+  string module = 1;
+  repeated NamespaceVote namespace_votes = 2 [
+    (gogoproto.nullable) = false,
+    json_name = "namespace_votes"
+  ];
+}
+
+message OracleVote {
+  string validator = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
+  repeated ModuleVote module_votes = 2 [
+    (gogoproto.nullable) = false,
+    json_name = "module_votes"
+  ];
+}

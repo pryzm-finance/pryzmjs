@@ -1,0 +1,198 @@
+syntax = "proto3";
+package pryzm.icstaking.v1;
+
+import "cosmos/base/query/v1beta1/pagination.proto";
+import "cosmos/base/v1beta1/coin.proto";
+import "gogoproto/gogo.proto";
+import "google/api/annotations.proto";
+import "google/protobuf/timestamp.proto";
+import "pryzm/icstaking/v1/host_chain.proto";
+import "pryzm/icstaking/v1/params.proto";
+import "pryzm/icstaking/v1/undelegation.proto";
+// this line is used by starport scaffolding # 1
+
+option go_package = "github.com/pryzm-finance/pryzm-core/x/icstaking/types/v1";
+
+// Query defines the gRPC querier service.
+service Query {
+  // Parameters queries the parameters of the module.
+  rpc Params(QueryParamsRequest) returns (QueryParamsResponse) {
+    option (google.api.http).get = "/pryzm/icstaking/v1/params";
+  }
+  // Queries a HostChain by index.
+  rpc HostChain(QueryGetHostChainRequest) returns (QueryGetHostChainResponse) {
+    option (google.api.http).get = "/pryzm/icstaking/v1/host_chain/{host_chain_id}";
+  }
+
+  // Queries a list of HostChain items.
+  rpc HostChainAll(QueryAllHostChainRequest) returns (QueryAllHostChainResponse) {
+    option (google.api.http).get = "/pryzm/icstaking/v1/host_chain";
+  }
+
+  // Queries a HostChainState by index.
+  rpc HostChainState(QueryGetHostChainStateRequest) returns (QueryGetHostChainStateResponse) {
+    option (google.api.http).get = "/pryzm/icstaking/v1/host_chain_state/{host_chain_id}";
+  }
+
+  // Queries a list of HostChainState items.
+  rpc HostChainStateAll(QueryAllHostChainStateRequest) returns (QueryAllHostChainStateResponse) {
+    option (google.api.http).get = "/pryzm/icstaking/v1/host_chain_state";
+  }
+
+  // Queries a Undelegation by index.
+  rpc Undelegation(QueryGetUndelegationRequest) returns (QueryGetUndelegationResponse) {
+    option (google.api.http).get = "/pryzm/icstaking/v1/undelegation/{host_chain}/{epoch}";
+  }
+
+  // Queries a list of Undelegation items.
+  rpc UndelegationAll(QueryAllUndelegationRequest) returns (QueryAllUndelegationResponse) {
+    option (google.api.http).get = "/pryzm/icstaking/v1/undelegation";
+  }
+
+  // Queries a list of incomplete undelegations sorted by completion time.
+  rpc IncompleteUndelegationAll(QueryIncompleteUndelegationRequest) returns (QueryIncompleteUndelegationResponse) {
+    option (google.api.http).get = "/pryzm/icstaking/v1/undelegation/{host_chain}";
+  }
+
+  // Queries a ChannelUndelegation by index.
+  rpc ChannelUndelegation(QueryGetChannelUndelegationRequest) returns (QueryGetChannelUndelegationResponse) {
+    option (google.api.http).get = "/pryzm/icstaking/v1/channel_undelegation/{host_chain}/{epoch}/{transfer_channel}";
+  }
+
+  // Queries a list of ChannelUndelegation items.
+  rpc ChannelUndelegationAll(QueryAllChannelUndelegationRequest) returns (QueryAllChannelUndelegationResponse) {
+    option (google.api.http).get = "/pryzm/icstaking/v1/channel_undelegation";
+  }
+
+  // Queries the balance of the delegation queue.
+  rpc DelegationQueueBalance(QueryDelegationQueueBalanceRequest) returns (QueryDelegationQueueBalanceResponse) {
+    option (google.api.http).get = "/pryzm/icstaking/v1/delegation_queue_balance/{host_chain}/{transfer_channel}";
+  }
+
+  // Queries the information about last delegation and undelegation times
+  rpc EpochInfo(QueryEpochInfoRequest) returns (QueryEpochInfoResponse) {
+    option (google.api.http).get = "/pryzm/icstaking/v1/epoch_info/{host_chain}";
+  }
+
+  // this line is used by starport scaffolding # 2
+}
+
+// QueryParamsRequest is request type for the Query/Params RPC method.
+message QueryParamsRequest {}
+
+// QueryParamsResponse is response type for the Query/Params RPC method.
+message QueryParamsResponse {
+  // params holds all the parameters of this module.
+  Params params = 1 [(gogoproto.nullable) = false];
+}
+
+message QueryGetHostChainRequest {
+  string host_chain_id = 1;
+}
+
+message QueryGetHostChainResponse {
+  HostChain host_chain = 1 [(gogoproto.nullable) = false];
+}
+
+message QueryAllHostChainRequest {
+  cosmos.base.query.v1beta1.PageRequest pagination = 1 [(gogoproto.nullable) = true];
+}
+
+message QueryAllHostChainResponse {
+  repeated HostChain host_chain = 1 [(gogoproto.nullable) = false];
+  cosmos.base.query.v1beta1.PageResponse pagination = 2 [(gogoproto.nullable) = true];
+}
+
+message QueryGetHostChainStateRequest {
+  string host_chain_id = 1;
+}
+
+message QueryGetHostChainStateResponse {
+  HostChainState host_chain_state = 1 [(gogoproto.nullable) = false];
+}
+
+message QueryAllHostChainStateRequest {
+  cosmos.base.query.v1beta1.PageRequest pagination = 1 [(gogoproto.nullable) = true];
+}
+
+message QueryAllHostChainStateResponse {
+  repeated HostChainState host_chain_state = 1 [(gogoproto.nullable) = false];
+  cosmos.base.query.v1beta1.PageResponse pagination = 2 [(gogoproto.nullable) = true];
+}
+
+message QueryGetUndelegationRequest {
+  string host_chain = 1;
+  uint64 epoch = 2;
+}
+
+message QueryGetUndelegationResponse {
+  Undelegation undelegation = 1 [(gogoproto.nullable) = false];
+}
+
+message QueryAllUndelegationRequest {
+  string host_chain = 1;
+  cosmos.base.query.v1beta1.PageRequest pagination = 2 [(gogoproto.nullable) = true];
+}
+
+message QueryAllUndelegationResponse {
+  repeated Undelegation undelegation = 1 [(gogoproto.nullable) = false];
+  cosmos.base.query.v1beta1.PageResponse pagination = 2 [(gogoproto.nullable) = true];
+}
+
+message QueryIncompleteUndelegationRequest {
+  string host_chain = 1;
+  cosmos.base.query.v1beta1.PageRequest pagination = 2 [(gogoproto.nullable) = true];
+}
+
+message QueryIncompleteUndelegationResponse {
+  repeated Undelegation undelegation = 1 [(gogoproto.nullable) = false];
+  cosmos.base.query.v1beta1.PageResponse pagination = 2 [(gogoproto.nullable) = true];
+}
+
+message QueryGetChannelUndelegationRequest {
+  string host_chain = 1;
+  uint64 epoch = 2;
+  string transfer_channel = 3;
+}
+
+message QueryGetChannelUndelegationResponse {
+  ChannelUndelegation channel_undelegation = 1 [(gogoproto.nullable) = false];
+}
+
+message QueryAllChannelUndelegationRequest {
+  string host_chain = 1;
+  uint64 epoch = 2;
+  cosmos.base.query.v1beta1.PageRequest pagination = 3 [(gogoproto.nullable) = true];
+}
+
+message QueryAllChannelUndelegationResponse {
+  repeated ChannelUndelegation channel_undelegation = 1 [(gogoproto.nullable) = false];
+  cosmos.base.query.v1beta1.PageResponse pagination = 2 [(gogoproto.nullable) = true];
+}
+
+message QueryDelegationQueueBalanceRequest {
+  string host_chain = 1;
+  string transfer_channel = 2;
+}
+
+message QueryDelegationQueueBalanceResponse {
+  cosmos.base.v1beta1.Coin balance = 1 [(gogoproto.nullable) = false];
+}
+
+message QueryEpochInfoRequest {
+  string host_chain = 1;
+}
+
+message QueryEpochInfoResponse {
+  google.protobuf.Timestamp last_delegation_time = 1 [
+    (gogoproto.nullable) = false,
+    (gogoproto.stdtime) = true
+  ];
+  google.protobuf.Timestamp last_undelegation_time = 2 [
+    (gogoproto.nullable) = false,
+    (gogoproto.stdtime) = true
+  ];
+  uint64 current_undelegation_epoch = 3;
+}
+
+// this line is used by starport scaffolding # 3

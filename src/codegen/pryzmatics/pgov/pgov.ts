@@ -1,7 +1,7 @@
 import { Proposal as Proposal1 } from "../../cosmos/gov/v1/gov";
 import { ProposalSDKType as Proposal1SDKType } from "../../cosmos/gov/v1/gov";
-import { Proposal as Proposal2 } from "../../pryzm/pgov/proposal";
-import { ProposalSDKType as Proposal2SDKType } from "../../pryzm/pgov/proposal";
+import { Proposal as Proposal2 } from "../../pryzm/pgov/v1/proposal";
+import { ProposalSDKType as Proposal2SDKType } from "../../pryzm/pgov/v1/proposal";
 import { BinaryReader, BinaryWriter } from "../../binary";
 import { isSet } from "../../helpers";
 export interface AssetProposal {

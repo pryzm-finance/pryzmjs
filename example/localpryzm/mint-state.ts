@@ -7,11 +7,11 @@ async function main() {
     const pryzmClient = await pryzm.ClientFactory.createGrpcWebClient({endpoint: localPryzm.grpcWebUrl})
 
     console.log("fetching mint params:")
-    const params = (await pryzmClient.pryzm.mint.params({})).params;
+    const params = (await pryzmClient.pryzm.mint.v1.params({})).params;
     console.log(params)
 
     console.log("\nfetching minter:")
-    const minter = (await pryzmClient.pryzm.mint.minter({})).minter;
+    const minter = (await pryzmClient.pryzm.mint.v1.minter({})).minter;
     console.log(minter)
 }
 

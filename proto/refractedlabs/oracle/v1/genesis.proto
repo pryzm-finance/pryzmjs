@@ -1,0 +1,20 @@
+syntax = "proto3";
+package refractedlabs.oracle.v1;
+
+import "gogoproto/gogo.proto";
+import "refractedlabs/oracle/v1/feeder_delegation.proto";
+import "refractedlabs/oracle/v1/miss_counter.proto";
+import "refractedlabs/oracle/v1/oracle_pre_vote.proto";
+import "refractedlabs/oracle/v1/oracle_vote.proto";
+import "refractedlabs/oracle/v1/params.proto";
+
+option go_package = "github.com/refractedlabs/oracle/x/oracle/types/v1";
+
+// GenesisState defines the oracle module's genesis state.
+message GenesisState {
+  Params params = 1 [(gogoproto.nullable) = false];
+  repeated FeederDelegation feeder_delegation_list = 2 [(gogoproto.nullable) = false];
+  repeated OraclePreVote oracle_pre_vote_list = 3 [(gogoproto.nullable) = false];
+  repeated OracleVote oracle_vote_list = 4 [(gogoproto.nullable) = false];
+  repeated MissCounter miss_counter_list = 5 [(gogoproto.nullable) = false];
+}

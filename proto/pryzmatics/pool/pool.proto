@@ -3,7 +3,7 @@ package pryzmatics.pool;
 
 import "gogoproto/gogo.proto";
 import "cosmos_proto/cosmos.proto";
-import "pryzm/amm/pool.proto";
+import "pryzm/amm/v1/pool.proto";
 import "google/protobuf/timestamp.proto";
 import "pryzmatics/pool/pool_apr.proto";
 
@@ -66,7 +66,7 @@ message PoolMetrics {
 message Pool {
   uint64 id = 1;
   string name = 2;
-  pryzm.amm.PoolType pool_type = 3;
+  pryzm.amm.v1.PoolType pool_type = 3;
   string lp_denom = 4;
   pryzmatics.pool.PoolApr apr = 5 [(gogoproto.nullable) = true];
   PoolMetrics metrics = 6 [(gogoproto.nullable) = false];
