@@ -5,11 +5,10 @@ import { PRYZMATICS_ENDPOINT } from "./config";
 async function main() {
     const pryzmaticsClient = await pryzmatics.ClientFactory.createClient({ restEndpoint: PRYZMATICS_ENDPOINT })
 
-    const resp = (await pryzmaticsClient.pryzmatics.faucetClaim({
-        address: "pryzm156pcgs3faegfte0vuaykr9az3hh9kx2eudxks2",
-        recaptchaResponse: ""
-    }))
-    console.log(resp)
+    const unbondingTime = (await pryzmaticsClient.pryzmatics.hostChainUnbondingTime({
+        hostChainId: "uatom",
+    })).unbonding_time
+    console.log(unbondingTime)
 }
 
 main().catch(console.error)

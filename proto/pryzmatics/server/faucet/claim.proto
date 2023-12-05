@@ -5,8 +5,7 @@ option go_package = "github.com/pryzm-finance/pryzmatics/server/faucet";
 
 message QueryClaimRequest {
   string address = 1;
-  string denom = 2;
-  string captcha_response = 3;
+  string recaptcha_response = 2;
 }
 
 message QueryClaimResponse {

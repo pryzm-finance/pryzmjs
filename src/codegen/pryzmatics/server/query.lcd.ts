@@ -28,7 +28,7 @@ import { QueryPoolTradeHistoryRequest, QueryPoolTradeHistoryResponseSDKType } fr
 import { QueryTokenTradeVolumeRequest, QueryTokenTradeVolumeResponseSDKType, QueryPoolTradeVolumeRequest, QueryPoolTradeVolumeResponseSDKType, QueryFavoritePairsRequest, QueryFavoritePairsResponseSDKType } from "./trade/trade_volume";
 import { QueryPulseTradablePairsRequest, QueryPulseTradablePairsResponseSDKType } from "./trade/pulse_tradable_pairs";
 import { QueryOrderRequest, QueryOrderResponseSDKType, QueryOrdersRequest, QueryOrdersResponseSDKType } from "./trade/order";
-import { QueryHostChainRequest, QueryHostChainResponseSDKType, QueryHostChainsRequest, QueryHostChainsResponseSDKType } from "./icstaking/host_chain";
+import { QueryHostChainUnbondingTimeRequest, QueryHostChainUnbondingTimeResponseSDKType, QueryHostChainRequest, QueryHostChainResponseSDKType, QueryHostChainsRequest, QueryHostChainsResponseSDKType } from "./icstaking/host_chain";
 import { QueryValidatorRequest, QueryValidatorResponseSDKType, QueryValidatorsRequest, QueryValidatorsResponseSDKType } from "./oracle/validator";
 import { QueryVoteIntervalsRequest, QueryVoteIntervalsResponseSDKType } from "./oracle/vote_interval";
 import { QuerySlashWindowsRequest, QuerySlashWindowsResponseSDKType } from "./oracle/slash_window";
@@ -84,6 +84,7 @@ export class LCDQueryClient {
     this.pulseTradablePairs = this.pulseTradablePairs.bind(this);
     this.order = this.order.bind(this);
     this.orders = this.orders.bind(this);
+    this.hostChainUnbondingTime = this.hostChainUnbondingTime.bind(this);
     this.hostChain = this.hostChain.bind(this);
     this.hostChains = this.hostChains.bind(this);
     this.validator = this.validator.bind(this);
@@ -529,6 +530,11 @@ export class LCDQueryClient {
     const endpoint = `pryzmatics/trade/order`;
     return await this.req.get<QueryOrdersResponseSDKType>(endpoint, options);
   }
+  /* HostChainUnbondingTime */
+  async hostChainUnbondingTime(params: QueryHostChainUnbondingTimeRequest): Promise<QueryHostChainUnbondingTimeResponseSDKType> {
+    const endpoint = `pryzmatics/icstaking/host_chain_unbonding_time/${params.hostChainId}`;
+    return await this.req.get<QueryHostChainUnbondingTimeResponseSDKType>(endpoint);
+  }
   /* HostChain */
   async hostChain(params: QueryHostChainRequest): Promise<QueryHostChainResponseSDKType> {
     const endpoint = `pryzmatics/icstaking/host_chain/${params.hostChainId}`;
@@ -754,11 +760,8 @@ export class LCDQueryClient {
     if (typeof params?.address !== "undefined") {
       options.params.address = params.address;
     }
-    if (typeof params?.denom !== "undefined") {
-      options.params.denom = params.denom;
-    }
-    if (typeof params?.captchaResponse !== "undefined") {
-      options.params.captcha_response = params.captchaResponse;
+    if (typeof params?.recaptchaResponse !== "undefined") {
+      options.params.recaptcha_response = params.recaptchaResponse;
     }
     const endpoint = `pryzmatics/faucet/claim`;
     return await this.req.get<QueryClaimResponseSDKType>(endpoint, options);

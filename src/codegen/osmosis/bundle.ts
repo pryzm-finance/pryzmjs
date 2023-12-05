@@ -5,23 +5,23 @@ import * as _190 from "./tokenfactory/v1beta1/genesis";
 import * as _191 from "./tokenfactory/v1beta1/params";
 import * as _192 from "./tokenfactory/v1beta1/query";
 import * as _193 from "./tokenfactory/v1beta1/tx";
-import * as _467 from "./tokenfactory/v1beta1/tx.amino";
-import * as _468 from "./tokenfactory/v1beta1/tx.registry";
-import * as _469 from "./epochs/v1beta1/query.lcd";
-import * as _470 from "./tokenfactory/v1beta1/query.lcd";
-import * as _471 from "./epochs/v1beta1/query.rpc.Query";
-import * as _472 from "./tokenfactory/v1beta1/query.rpc.Query";
-import * as _473 from "./tokenfactory/v1beta1/tx.rpc.msg";
-import * as _542 from "./lcd";
-import * as _543 from "./rpc.query";
-import * as _544 from "./rpc.tx";
+import * as _463 from "./tokenfactory/v1beta1/tx.amino";
+import * as _464 from "./tokenfactory/v1beta1/tx.registry";
+import * as _465 from "./epochs/v1beta1/query.lcd";
+import * as _466 from "./tokenfactory/v1beta1/query.lcd";
+import * as _467 from "./epochs/v1beta1/query.rpc.Query";
+import * as _468 from "./tokenfactory/v1beta1/query.rpc.Query";
+import * as _469 from "./tokenfactory/v1beta1/tx.rpc.msg";
+import * as _528 from "./lcd";
+import * as _529 from "./rpc.query";
+import * as _530 from "./rpc.tx";
 export namespace osmosis {
   export namespace epochs {
     export const v1beta1 = {
       ..._187,
       ..._188,
-      ..._469,
-      ..._471
+      ..._465,
+      ..._467
     };
   }
   export namespace tokenfactory {
@@ -31,16 +31,16 @@ export namespace osmosis {
       ..._191,
       ..._192,
       ..._193,
-      ..._467,
+      ..._463,
+      ..._464,
+      ..._466,
       ..._468,
-      ..._470,
-      ..._472,
-      ..._473
+      ..._469
     };
   }
   export const ClientFactory = {
-    ..._542,
-    ..._543,
-    ..._544
+    ..._528,
+    ..._529,
+    ..._530
   };
 }

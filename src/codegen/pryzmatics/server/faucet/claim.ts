@@ -2,21 +2,18 @@ import { BinaryReader, BinaryWriter } from "../../../binary";
 import { isSet } from "../../../helpers";
 export interface QueryClaimRequest {
   address: string;
-  denom: string;
-  captchaResponse: string;
+  recaptchaResponse: string;
 }
 export interface QueryClaimRequestSDKType {
   address: string;
-  denom: string;
-  captcha_response: string;
+  recaptcha_response: string;
 }
 export interface QueryClaimResponse {}
 export interface QueryClaimResponseSDKType {}
 function createBaseQueryClaimRequest(): QueryClaimRequest {
   return {
     address: "",
-    denom: "",
-    captchaResponse: ""
+    recaptchaResponse: ""
   };
 }
 export const QueryClaimRequest = {
@@ -24,11 +21,8 @@ export const QueryClaimRequest = {
     if (message.address !== "") {
       writer.uint32(10).string(message.address);
     }
-    if (message.denom !== "") {
-      writer.uint32(18).string(message.denom);
-    }
-    if (message.captchaResponse !== "") {
-      writer.uint32(26).string(message.captchaResponse);
+    if (message.recaptchaResponse !== "") {
+      writer.uint32(18).string(message.recaptchaResponse);
     }
     return writer;
   },
@@ -43,10 +37,7 @@ export const QueryClaimRequest = {
           message.address = reader.string();
           break;
         case 2:
-          message.denom = reader.string();
-          break;
-        case 3:
-          message.captchaResponse = reader.string();
+          message.recaptchaResponse = reader.string();
           break;
         default:
           reader.skipType(tag & 7);
@@ -58,22 +49,19 @@ export const QueryClaimRequest = {
   fromJSON(object: any): QueryClaimRequest {
     return {
       address: isSet(object.address) ? String(object.address) : "",
-      denom: isSet(object.denom) ? String(object.denom) : "",
-      captchaResponse: isSet(object.captchaResponse) ? String(object.captchaResponse) : ""
+      recaptchaResponse: isSet(object.recaptchaResponse) ? String(object.recaptchaResponse) : ""
     };
   },
   toJSON(message: QueryClaimRequest): unknown {
     const obj: any = {};
     message.address !== undefined && (obj.address = message.address);
-    message.denom !== undefined && (obj.denom = message.denom);
-    message.captchaResponse !== undefined && (obj.captchaResponse = message.captchaResponse);
+    message.recaptchaResponse !== undefined && (obj.recaptchaResponse = message.recaptchaResponse);
     return obj;
   },
   fromPartial(object: Partial<QueryClaimRequest>): QueryClaimRequest {
     const message = createBaseQueryClaimRequest();
     message.address = object.address ?? "";
-    message.denom = object.denom ?? "";
-    message.captchaResponse = object.captchaResponse ?? "";
+    message.recaptchaResponse = object.recaptchaResponse ?? "";
     return message;
   }
 };

@@ -31,8 +31,8 @@ import * as _304 from "./trade/pulse_tradable_pair";
 import * as _305 from "./trade/trade_volume";
 import * as _306 from "./trade/user_trade_history";
 import * as _307 from "./ystaking/user_stake";
-import * as _519 from "./server/query.lcd";
-import * as _548 from "./lcd";
+import * as _515 from "./server/query.lcd";
+import * as _534 from "./lcd";
 export namespace pryzmatics {
   export const asset = {
     ..._274
@@ -80,7 +80,7 @@ export namespace pryzmatics {
     ..._300
   };
   export const server = {
-    ..._519,
+    ..._515,
   };
   export const trade = {
     ..._302,
@@ -93,6 +93,6 @@ export namespace pryzmatics {
     ..._307
   };
   export const ClientFactory = {
-    ..._548,
+    ..._534,
   };
 }

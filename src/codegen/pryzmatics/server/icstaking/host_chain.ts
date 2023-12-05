@@ -1,5 +1,6 @@
 import { HostChain, HostChainSDKType } from "../../icstaking/host_chain";
 import { PageRequest, PageRequestSDKType, PageResponse, PageResponseSDKType } from "../../../cosmos/base/query/v1beta1/pagination";
+import { Duration, DurationSDKType } from "../../../google/protobuf/duration";
 import { BinaryReader, BinaryWriter } from "../../../binary";
 import { isSet } from "../../../helpers";
 export interface QueryHostChainRequest {
@@ -27,6 +28,18 @@ export interface QueryHostChainsResponse {
 export interface QueryHostChainsResponseSDKType {
   host_chains: HostChainSDKType[];
   pagination?: PageResponseSDKType;
+}
+export interface QueryHostChainUnbondingTimeRequest {
+  hostChainId: string;
+}
+export interface QueryHostChainUnbondingTimeRequestSDKType {
+  host_chain_id: string;
+}
+export interface QueryHostChainUnbondingTimeResponse {
+  unbondingTime: Duration;
+}
+export interface QueryHostChainUnbondingTimeResponseSDKType {
+  unbonding_time: DurationSDKType;
 }
 function createBaseQueryHostChainRequest(): QueryHostChainRequest {
   return {
@@ -219,6 +232,96 @@ export const QueryHostChainsResponse = {
     const message = createBaseQueryHostChainsResponse();
     message.hostChains = object.hostChains?.map(e => HostChain.fromPartial(e)) || [];
     message.pagination = object.pagination !== undefined && object.pagination !== null ? PageResponse.fromPartial(object.pagination) : undefined;
+    return message;
+  }
+};
+function createBaseQueryHostChainUnbondingTimeRequest(): QueryHostChainUnbondingTimeRequest {
+  return {
+    hostChainId: ""
+  };
+}
+export const QueryHostChainUnbondingTimeRequest = {
+  encode(message: QueryHostChainUnbondingTimeRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    if (message.hostChainId !== "") {
+      writer.uint32(10).string(message.hostChainId);
+    }
+    return writer;
+  },
+  decode(input: BinaryReader | Uint8Array, length?: number): QueryHostChainUnbondingTimeRequest {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseQueryHostChainUnbondingTimeRequest();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.hostChainId = reader.string();
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromJSON(object: any): QueryHostChainUnbondingTimeRequest {
+    return {
+      hostChainId: isSet(object.hostChainId) ? String(object.hostChainId) : ""
+    };
+  },
+  toJSON(message: QueryHostChainUnbondingTimeRequest): unknown {
+    const obj: any = {};
+    message.hostChainId !== undefined && (obj.hostChainId = message.hostChainId);
+    return obj;
+  },
+  fromPartial(object: Partial<QueryHostChainUnbondingTimeRequest>): QueryHostChainUnbondingTimeRequest {
+    const message = createBaseQueryHostChainUnbondingTimeRequest();
+    message.hostChainId = object.hostChainId ?? "";
+    return message;
+  }
+};
+function createBaseQueryHostChainUnbondingTimeResponse(): QueryHostChainUnbondingTimeResponse {
+  return {
+    unbondingTime: Duration.fromPartial({})
+  };
+}
+export const QueryHostChainUnbondingTimeResponse = {
+  encode(message: QueryHostChainUnbondingTimeResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    if (message.unbondingTime !== undefined) {
+      Duration.encode(message.unbondingTime, writer.uint32(10).fork()).ldelim();
+    }
+    return writer;
+  },
+  decode(input: BinaryReader | Uint8Array, length?: number): QueryHostChainUnbondingTimeResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseQueryHostChainUnbondingTimeResponse();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.unbondingTime = Duration.decode(reader, reader.uint32());
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromJSON(object: any): QueryHostChainUnbondingTimeResponse {
+    return {
+      unbondingTime: isSet(object.unbondingTime) ? Duration.fromJSON(object.unbondingTime) : undefined
+    };
+  },
+  toJSON(message: QueryHostChainUnbondingTimeResponse): unknown {
+    const obj: any = {};
+    message.unbondingTime !== undefined && (obj.unbondingTime = message.unbondingTime ? Duration.toJSON(message.unbondingTime) : undefined);
+    return obj;
+  },
+  fromPartial(object: Partial<QueryHostChainUnbondingTimeResponse>): QueryHostChainUnbondingTimeResponse {
+    const message = createBaseQueryHostChainUnbondingTimeResponse();
+    message.unbondingTime = object.unbondingTime !== undefined && object.unbondingTime !== null ? Duration.fromPartial(object.unbondingTime) : undefined;
     return message;
   }
 };

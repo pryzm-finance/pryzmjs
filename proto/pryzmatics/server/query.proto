@@ -194,6 +194,10 @@ service Query {
     option (google.api.http).get = "/pryzmatics/trade/order";
   }
 
+  rpc HostChainUnbondingTime(pryzmatics.server.icstaking.QueryHostChainUnbondingTimeRequest) returns (pryzmatics.server.icstaking.QueryHostChainUnbondingTimeResponse) {
+    option (google.api.http).get = "/pryzmatics/icstaking/host_chain_unbonding_time/{host_chain_id}";
+  }
+
   rpc HostChain(pryzmatics.server.icstaking.QueryHostChainRequest) returns (pryzmatics.server.icstaking.QueryHostChainResponse) {
     option (google.api.http).get = "/pryzmatics/icstaking/host_chain/{host_chain_id}";
   }

@@ -20,7 +20,7 @@ import { pryzm } from '@pryzm-finance/pryzmjs';
 const client = await pryzm.ClientFactory.createGrpcWebClient({endpoint: GRPC_ENDPOINT});
 
 // now you can query the pryzm modules
-const params = await client.pryzm.amm.params();
+const params = await client.pryzm.amm.v1.params();
 
 // you can also query the cosmos modules
 const balance = await client.cosmos.bank.v1beta1.allBalances({ address: 'pryzm1addresshere' });
@@ -45,7 +45,7 @@ import { pryzm } from '@pryzm-finance/pryzmjs';
 const client = await pryzm.ClientFactory.createLCDClient({restEndpoint: LCD_ENDPOINT})
 
 // now you can query the pryzm modules
-const params = await client.pryzm.amm.params();
+const params = await client.pryzm.amm.v1.params();
 
 // you can also query the cosmos modules
 const balance = await client.cosmos.bank.v1beta1.allBalances({ address: 'pryzm1addresshere' });
@@ -79,13 +79,13 @@ import { pryzm } from '@pryzm-finance/pryzmjs';
 const {
     refract,
     redeem
-} = pryzm.refractor.MessageComposer.withTypeUrl
+} = pryzm.refractor.v1.MessageComposer.withTypeUrl
 
 // sample messages from amm module
 const {
     singleSwap,
     initializePool
-} = pryzm.amm.MessageComposer.withTypeUrl
+} = pryzm.amm.v1.MessageComposer.withTypeUrl
 ```
 
 ```tsx
@@ -165,7 +165,7 @@ Now that you have your `stargateClient`, you can broadcast messages:
 ```tsx
 import { pryzm } from '@pryzm-finance/pryzmjs';
 
-const { refract } = pryzm.refractor.MessageComposer.withTypeUrl
+const { refract } = pryzm.refractor.v1.MessageComposer.withTypeUrl
 
 const msg = refract({
     creator: "signer",
