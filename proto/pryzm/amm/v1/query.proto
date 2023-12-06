@@ -245,6 +245,10 @@ service Query {
     option (google.api.http).get = "/pryzm/amm/v1/yamm_pool_id/{asset_id}";
   }
 
+  rpc OrderStepBounds(QueryOrderStepBoundsRequest) returns (QueryOrderStepBoundsResponse) {
+    option (google.api.http).get = "/pryzm/amm/v1/order_step_bounds/{pool_id}/{token_in}/{token_out}/{whitelisted_route}";
+  }
+
   // this line is used by starport scaffolding # 2
 }
 
@@ -751,6 +755,27 @@ message QueryYammPoolIdRequest {
 
 message QueryYammPoolIdResponse {
   uint64 pool_id = 1;
+}
+
+message QueryOrderStepBoundsRequest {
+  uint64 pool_id = 1;
+  string token_in = 2;
+  string token_out = 3;
+  bool whitelisted_route = 4;
+}
+
+message QueryOrderStepBoundsResponse {
+  string min_step = 1 [
+    (cosmos_proto.scalar) = "cosmos.Int",
+    (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Int",
+    (gogoproto.nullable) = false
+  ];
+
+  string max_step = 2 [
+    (cosmos_proto.scalar) = "cosmos.Int",
+    (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Int",
+    (gogoproto.nullable) = false
+  ];
 }
 
 // this line is used by starport scaffolding # 3

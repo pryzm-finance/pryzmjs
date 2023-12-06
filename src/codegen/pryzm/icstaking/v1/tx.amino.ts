@@ -3,7 +3,7 @@ import { connectionTypeFromJSON, transferChannelTypeFromJSON } from "./host_chai
 import { AminoMsg } from "@cosmjs/amino";
 import { iCARegistrationTypeFromJSON, MsgUpdateParams, MsgRegisterHostChain, MsgUpdateHostChain, MsgStake, MsgUnstake, MsgRedeemUnstaked, MsgInstantUnstake, MsgRebalanceDelegations, MsgRegisterInterchainAccount } from "./tx";
 export interface MsgUpdateParamsAminoType extends AminoMsg {
-  type: "/pryzm.icstaking.v1.MsgUpdateParams";
+  type: "pryzm/icstaking/v1/UpdateParams";
   value: {
     authority: string;
     params: {
@@ -45,7 +45,7 @@ export interface MsgUpdateParamsAminoType extends AminoMsg {
   };
 }
 export interface MsgRegisterHostChainAminoType extends AminoMsg {
-  type: "/pryzm.icstaking.v1.MsgRegisterHostChain";
+  type: "pryzm/icstaking/v1/RegisterHostChain";
   value: {
     creator: string;
     host_chain: {
@@ -100,7 +100,7 @@ export interface MsgRegisterHostChainAminoType extends AminoMsg {
   };
 }
 export interface MsgUpdateHostChainAminoType extends AminoMsg {
-  type: "/pryzm.icstaking.v1.MsgUpdateHostChain";
+  type: "pryzm/icstaking/v1/UpdateHostChain";
   value: {
     creator: string;
     host_chain_id: string;
@@ -144,7 +144,7 @@ export interface MsgUpdateHostChainAminoType extends AminoMsg {
   };
 }
 export interface MsgStakeAminoType extends AminoMsg {
-  type: "/pryzm.icstaking.v1.MsgStake";
+  type: "pryzm/icstaking/v1/Stake";
   value: {
     creator: string;
     host_chain: string;
@@ -153,7 +153,7 @@ export interface MsgStakeAminoType extends AminoMsg {
   };
 }
 export interface MsgUnstakeAminoType extends AminoMsg {
-  type: "/pryzm.icstaking.v1.MsgUnstake";
+  type: "pryzm/icstaking/v1/Unstake";
   value: {
     creator: string;
     host_chain: string;
@@ -162,7 +162,7 @@ export interface MsgUnstakeAminoType extends AminoMsg {
   };
 }
 export interface MsgRedeemUnstakedAminoType extends AminoMsg {
-  type: "/pryzm.icstaking.v1.MsgRedeemUnstaked";
+  type: "pryzm/icstaking/v1/RedeemUnstaked";
   value: {
     creator: string;
     host_chain: string;
@@ -172,7 +172,7 @@ export interface MsgRedeemUnstakedAminoType extends AminoMsg {
   };
 }
 export interface MsgInstantUnstakeAminoType extends AminoMsg {
-  type: "/pryzm.icstaking.v1.MsgInstantUnstake";
+  type: "pryzm/icstaking/v1/InstantUnstake";
   value: {
     creator: string;
     host_chain: string;
@@ -182,14 +182,14 @@ export interface MsgInstantUnstakeAminoType extends AminoMsg {
   };
 }
 export interface MsgRebalanceDelegationsAminoType extends AminoMsg {
-  type: "/pryzm.icstaking.v1.MsgRebalanceDelegations";
+  type: "pryzm/icstaking/v1/RebalanceDelegations";
   value: {
     creator: string;
     host_chain: string;
   };
 }
 export interface MsgRegisterInterchainAccountAminoType extends AminoMsg {
-  type: "/pryzm.icstaking.v1.MsgRegisterInterchainAccount";
+  type: "pryzm/icstaking/v1/RegisterInterchainAccount";
   value: {
     creator: string;
     host_chain: string;
@@ -198,7 +198,7 @@ export interface MsgRegisterInterchainAccountAminoType extends AminoMsg {
 }
 export const AminoConverter = {
   "/pryzm.icstaking.v1.MsgUpdateParams": {
-    aminoType: "/pryzm.icstaking.v1.MsgUpdateParams",
+    aminoType: "pryzm/icstaking/v1/UpdateParams",
     toAmino: ({
       authority,
       params
@@ -274,7 +274,7 @@ export const AminoConverter = {
     }
   },
   "/pryzm.icstaking.v1.MsgRegisterHostChain": {
-    aminoType: "/pryzm.icstaking.v1.MsgRegisterHostChain",
+    aminoType: "pryzm/icstaking/v1/RegisterHostChain",
     toAmino: ({
       creator,
       hostChain
@@ -376,7 +376,7 @@ export const AminoConverter = {
     }
   },
   "/pryzm.icstaking.v1.MsgUpdateHostChain": {
-    aminoType: "/pryzm.icstaking.v1.MsgUpdateHostChain",
+    aminoType: "pryzm/icstaking/v1/UpdateHostChain",
     toAmino: ({
       creator,
       hostChainId,
@@ -460,7 +460,7 @@ export const AminoConverter = {
     }
   },
   "/pryzm.icstaking.v1.MsgStake": {
-    aminoType: "/pryzm.icstaking.v1.MsgStake",
+    aminoType: "pryzm/icstaking/v1/Stake",
     toAmino: ({
       creator,
       hostChain,
@@ -489,7 +489,7 @@ export const AminoConverter = {
     }
   },
   "/pryzm.icstaking.v1.MsgUnstake": {
-    aminoType: "/pryzm.icstaking.v1.MsgUnstake",
+    aminoType: "pryzm/icstaking/v1/Unstake",
     toAmino: ({
       creator,
       hostChain,
@@ -518,7 +518,7 @@ export const AminoConverter = {
     }
   },
   "/pryzm.icstaking.v1.MsgRedeemUnstaked": {
-    aminoType: "/pryzm.icstaking.v1.MsgRedeemUnstaked",
+    aminoType: "pryzm/icstaking/v1/RedeemUnstaked",
     toAmino: ({
       creator,
       hostChain,
@@ -551,7 +551,7 @@ export const AminoConverter = {
     }
   },
   "/pryzm.icstaking.v1.MsgInstantUnstake": {
-    aminoType: "/pryzm.icstaking.v1.MsgInstantUnstake",
+    aminoType: "pryzm/icstaking/v1/InstantUnstake",
     toAmino: ({
       creator,
       hostChain,
@@ -584,7 +584,7 @@ export const AminoConverter = {
     }
   },
   "/pryzm.icstaking.v1.MsgRebalanceDelegations": {
-    aminoType: "/pryzm.icstaking.v1.MsgRebalanceDelegations",
+    aminoType: "pryzm/icstaking/v1/RebalanceDelegations",
     toAmino: ({
       creator,
       hostChain
@@ -605,7 +605,7 @@ export const AminoConverter = {
     }
   },
   "/pryzm.icstaking.v1.MsgRegisterInterchainAccount": {
-    aminoType: "/pryzm.icstaking.v1.MsgRegisterInterchainAccount",
+    aminoType: "pryzm/icstaking/v1/RegisterInterchainAccount",
     toAmino: ({
       creator,
       hostChain,

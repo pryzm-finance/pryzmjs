@@ -2,7 +2,7 @@
 import { AminoMsg } from "@cosmjs/amino";
 import { MsgUpdateParams, MsgCreatePool, MsgUpdateRewardTokenWeight, MsgAddRewardTokenToPool, MsgBond, MsgUnbond, MsgClaimReward, MsgClaimUnbonding, MsgCancelUnbonding, MsgIncentivizePool } from "./tx";
 export interface MsgUpdateParamsAminoType extends AminoMsg {
-  type: "/pryzm.incentives.v1.MsgUpdateParams";
+  type: "pryzm/incentives/v1/UpdateParams";
   value: {
     authority: string;
     params: {
@@ -14,7 +14,7 @@ export interface MsgUpdateParamsAminoType extends AminoMsg {
   };
 }
 export interface MsgCreatePoolAminoType extends AminoMsg {
-  type: "/pryzm.incentives.v1.MsgCreatePool";
+  type: "pryzm/incentives/v1/CreatePool";
   value: {
     authority: string;
     bond_denom: string;
@@ -25,7 +25,7 @@ export interface MsgCreatePoolAminoType extends AminoMsg {
   };
 }
 export interface MsgUpdateRewardTokenWeightAminoType extends AminoMsg {
-  type: "/pryzm.incentives.v1.MsgUpdateRewardTokenWeight";
+  type: "pryzm/incentives/v1/UpdateRewardTokenWeight";
   value: {
     authority: string;
     bond_denom: string;
@@ -36,7 +36,7 @@ export interface MsgUpdateRewardTokenWeightAminoType extends AminoMsg {
   };
 }
 export interface MsgAddRewardTokenToPoolAminoType extends AminoMsg {
-  type: "/pryzm.incentives.v1.MsgAddRewardTokenToPool";
+  type: "pryzm/incentives/v1/AddRewardTokenToPool";
   value: {
     authority: string;
     bond_denom: string;
@@ -47,7 +47,7 @@ export interface MsgAddRewardTokenToPoolAminoType extends AminoMsg {
   };
 }
 export interface MsgBondAminoType extends AminoMsg {
-  type: "/pryzm.incentives.v1.MsgBond";
+  type: "pryzm/incentives/v1/Bond";
   value: {
     creator: string;
     amount: {
@@ -57,7 +57,7 @@ export interface MsgBondAminoType extends AminoMsg {
   };
 }
 export interface MsgUnbondAminoType extends AminoMsg {
-  type: "/pryzm.incentives.v1.MsgUnbond";
+  type: "pryzm/incentives/v1/Unbond";
   value: {
     creator: string;
     amount: {
@@ -70,7 +70,7 @@ export interface MsgUnbondAminoType extends AminoMsg {
   };
 }
 export interface MsgClaimRewardAminoType extends AminoMsg {
-  type: "/pryzm.incentives.v1.MsgClaimReward";
+  type: "pryzm/incentives/v1/ClaimReward";
   value: {
     creator: string;
     bond_denom: string;
@@ -78,14 +78,14 @@ export interface MsgClaimRewardAminoType extends AminoMsg {
   };
 }
 export interface MsgClaimUnbondingAminoType extends AminoMsg {
-  type: "/pryzm.incentives.v1.MsgClaimUnbonding";
+  type: "pryzm/incentives/v1/ClaimUnbonding";
   value: {
     creator: string;
     unbonding_id: string;
   };
 }
 export interface MsgCancelUnbondingAminoType extends AminoMsg {
-  type: "/pryzm.incentives.v1.MsgCancelUnbonding";
+  type: "pryzm/incentives/v1/CancelUnbonding";
   value: {
     creator: string;
     unbonding_id: string;
@@ -96,7 +96,7 @@ export interface MsgCancelUnbondingAminoType extends AminoMsg {
   };
 }
 export interface MsgIncentivizePoolAminoType extends AminoMsg {
-  type: "/pryzm.incentives.v1.MsgIncentivizePool";
+  type: "pryzm/incentives/v1/IncentivizePool";
   value: {
     creator: string;
     bond_denom: string;
@@ -108,7 +108,7 @@ export interface MsgIncentivizePoolAminoType extends AminoMsg {
 }
 export const AminoConverter = {
   "/pryzm.incentives.v1.MsgUpdateParams": {
-    aminoType: "/pryzm.incentives.v1.MsgUpdateParams",
+    aminoType: "pryzm/incentives/v1/UpdateParams",
     toAmino: ({
       authority,
       params
@@ -136,7 +136,7 @@ export const AminoConverter = {
     }
   },
   "/pryzm.incentives.v1.MsgCreatePool": {
-    aminoType: "/pryzm.incentives.v1.MsgCreatePool",
+    aminoType: "pryzm/incentives/v1/CreatePool",
     toAmino: ({
       authority,
       bondDenom,
@@ -167,7 +167,7 @@ export const AminoConverter = {
     }
   },
   "/pryzm.incentives.v1.MsgUpdateRewardTokenWeight": {
-    aminoType: "/pryzm.incentives.v1.MsgUpdateRewardTokenWeight",
+    aminoType: "pryzm/incentives/v1/UpdateRewardTokenWeight",
     toAmino: ({
       authority,
       bondDenom,
@@ -198,7 +198,7 @@ export const AminoConverter = {
     }
   },
   "/pryzm.incentives.v1.MsgAddRewardTokenToPool": {
-    aminoType: "/pryzm.incentives.v1.MsgAddRewardTokenToPool",
+    aminoType: "pryzm/incentives/v1/AddRewardTokenToPool",
     toAmino: ({
       authority,
       bondDenom,
@@ -229,7 +229,7 @@ export const AminoConverter = {
     }
   },
   "/pryzm.incentives.v1.MsgBond": {
-    aminoType: "/pryzm.incentives.v1.MsgBond",
+    aminoType: "pryzm/incentives/v1/Bond",
     toAmino: ({
       creator,
       amount
@@ -256,7 +256,7 @@ export const AminoConverter = {
     }
   },
   "/pryzm.incentives.v1.MsgUnbond": {
-    aminoType: "/pryzm.incentives.v1.MsgUnbond",
+    aminoType: "pryzm/incentives/v1/Unbond",
     toAmino: ({
       creator,
       amount,
@@ -295,7 +295,7 @@ export const AminoConverter = {
     }
   },
   "/pryzm.incentives.v1.MsgClaimReward": {
-    aminoType: "/pryzm.incentives.v1.MsgClaimReward",
+    aminoType: "pryzm/incentives/v1/ClaimReward",
     toAmino: ({
       creator,
       bondDenom,
@@ -320,7 +320,7 @@ export const AminoConverter = {
     }
   },
   "/pryzm.incentives.v1.MsgClaimUnbonding": {
-    aminoType: "/pryzm.incentives.v1.MsgClaimUnbonding",
+    aminoType: "pryzm/incentives/v1/ClaimUnbonding",
     toAmino: ({
       creator,
       unbondingId
@@ -341,7 +341,7 @@ export const AminoConverter = {
     }
   },
   "/pryzm.incentives.v1.MsgCancelUnbonding": {
-    aminoType: "/pryzm.incentives.v1.MsgCancelUnbonding",
+    aminoType: "pryzm/incentives/v1/CancelUnbonding",
     toAmino: ({
       creator,
       unbondingId,
@@ -372,7 +372,7 @@ export const AminoConverter = {
     }
   },
   "/pryzm.incentives.v1.MsgIncentivizePool": {
-    aminoType: "/pryzm.incentives.v1.MsgIncentivizePool",
+    aminoType: "pryzm/incentives/v1/IncentivizePool",
     toAmino: ({
       creator,
       bondDenom,

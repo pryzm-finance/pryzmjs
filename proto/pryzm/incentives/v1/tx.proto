@@ -1,7 +1,7 @@
 syntax = "proto3";
 package pryzm.incentives.v1;
 
-// this line is used by starport scaffolding # proto/tx/import
+import "amino/amino.proto";
 import "cosmos/base/v1beta1/coin.proto";
 import "cosmos/msg/v1/msg.proto";
 import "cosmos_proto/cosmos.proto";
@@ -31,6 +31,7 @@ service Msg {
 
 message MsgUpdateParams {
   option (cosmos.msg.v1.signer) = "authority";
+  option (amino.name) = "pryzm/incentives/v1/UpdateParams";
 
   string authority = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
   Params params = 2 [(gogoproto.nullable) = false];
@@ -51,6 +52,7 @@ message WeightedRewardToken {
 
 message MsgCreatePool {
   option (cosmos.msg.v1.signer) = "authority";
+  option (amino.name) = "pryzm/incentives/v1/CreatePool";
 
   string authority = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
   string bond_denom = 2;
@@ -61,6 +63,7 @@ message MsgCreatePoolResponse {}
 
 message MsgUpdateRewardTokenWeight {
   option (cosmos.msg.v1.signer) = "authority";
+  option (amino.name) = "pryzm/incentives/v1/UpdateRewardTokenWeight";
 
   string authority = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
   string bond_denom = 2;
@@ -71,6 +74,7 @@ message MsgUpdateRewardTokenWeightResponse {}
 
 message MsgAddRewardTokenToPool {
   option (cosmos.msg.v1.signer) = "authority";
+  option (amino.name) = "pryzm/incentives/v1/AddRewardTokenToPool";
 
   string authority = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
   string bond_denom = 2;
@@ -81,6 +85,7 @@ message MsgAddRewardTokenToPoolResponse {}
 
 message MsgBond {
   option (cosmos.msg.v1.signer) = "creator";
+  option (amino.name) = "pryzm/incentives/v1/Bond";
 
   string creator = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
   cosmos.base.v1beta1.Coin amount = 2 [(gogoproto.nullable) = false];
@@ -92,6 +97,7 @@ message MsgBondResponse {
 
 message MsgUnbond {
   option (cosmos.msg.v1.signer) = "creator";
+  option (amino.name) = "pryzm/incentives/v1/Unbond";
 
   string creator = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
   cosmos.base.v1beta1.Coin amount = 2 [(gogoproto.nullable) = false];
@@ -110,6 +116,7 @@ message MsgUnbondResponse {
 
 message MsgClaimReward {
   option (cosmos.msg.v1.signer) = "creator";
+  option (amino.name) = "pryzm/incentives/v1/ClaimReward";
 
   string creator = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
   string bond_denom = 2;
@@ -122,6 +129,7 @@ message MsgClaimRewardResponse {
 
 message MsgClaimUnbonding {
   option (cosmos.msg.v1.signer) = "creator";
+  option (amino.name) = "pryzm/incentives/v1/ClaimUnbonding";
 
   string creator = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
   uint64 unbonding_id = 2;
@@ -133,6 +141,7 @@ message MsgClaimUnbondingResponse {
 
 message MsgCancelUnbonding {
   option (cosmos.msg.v1.signer) = "creator";
+  option (amino.name) = "pryzm/incentives/v1/CancelUnbonding";
 
   string creator = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
   uint64 unbonding_id = 2;
@@ -145,6 +154,7 @@ message MsgCancelUnbondingResponse {
 
 message MsgIncentivizePool {
   option (cosmos.msg.v1.signer) = "creator";
+  option (amino.name) = "pryzm/incentives/v1/IncentivizePool";
 
   string creator = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
   string bond_denom = 2;

@@ -1,9 +1,9 @@
 syntax = "proto3";
 package pryzm.ystaking.v1;
 
+import "amino/amino.proto";
 import "cosmos/base/v1beta1/coin.proto";
 import "cosmos/msg/v1/msg.proto";
-// this line is used by starport scaffolding # proto/tx/import
 import "cosmos_proto/cosmos.proto";
 import "gogoproto/gogo.proto";
 
@@ -22,6 +22,7 @@ service Msg {
 
 message MsgBond {
   option (cosmos.msg.v1.signer) = "creator";
+  option (amino.name) = "pryzm/ystaking/v1/Bond";
 
   string creator = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
   cosmos.base.v1beta1.Coin amount = 2 [(gogoproto.nullable) = false];
@@ -33,6 +34,7 @@ message MsgBondResponse {
 
 message MsgUnbond {
   option (cosmos.msg.v1.signer) = "creator";
+  option (amino.name) = "pryzm/ystaking/v1/Unbond";
 
   string creator = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
   cosmos.base.v1beta1.Coin amount = 2 [(gogoproto.nullable) = false];
@@ -46,6 +48,7 @@ message MsgUnbondResponse {
 
 message MsgClaimReward {
   option (cosmos.msg.v1.signer) = "creator";
+  option (amino.name) = "pryzm/ystaking/v1/ClaimReward";
 
   string creator = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
   string denom = 2;
@@ -58,6 +61,7 @@ message MsgClaimRewardResponse {
 
 message MsgExitPool {
   option (cosmos.msg.v1.signer) = "creator";
+  option (amino.name) = "pryzm/ystaking/v1/ExitPool";
 
   string creator = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
   string denom = 2;

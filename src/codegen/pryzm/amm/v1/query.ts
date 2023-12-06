@@ -684,6 +684,26 @@ export interface QueryYammPoolIdResponse {
 export interface QueryYammPoolIdResponseSDKType {
   pool_id: bigint;
 }
+export interface QueryOrderStepBoundsRequest {
+  poolId: bigint;
+  tokenIn: string;
+  tokenOut: string;
+  whitelistedRoute: boolean;
+}
+export interface QueryOrderStepBoundsRequestSDKType {
+  pool_id: bigint;
+  token_in: string;
+  token_out: string;
+  whitelisted_route: boolean;
+}
+export interface QueryOrderStepBoundsResponse {
+  minStep: string;
+  maxStep: string;
+}
+export interface QueryOrderStepBoundsResponseSDKType {
+  min_step: string;
+  max_step: string;
+}
 function createBaseQueryParamsRequest(): QueryParamsRequest {
   return {};
 }
@@ -5301,6 +5321,136 @@ export const QueryYammPoolIdResponse = {
   fromPartial(object: Partial<QueryYammPoolIdResponse>): QueryYammPoolIdResponse {
     const message = createBaseQueryYammPoolIdResponse();
     message.poolId = object.poolId !== undefined && object.poolId !== null ? BigInt(object.poolId.toString()) : BigInt(0);
+    return message;
+  }
+};
+function createBaseQueryOrderStepBoundsRequest(): QueryOrderStepBoundsRequest {
+  return {
+    poolId: BigInt(0),
+    tokenIn: "",
+    tokenOut: "",
+    whitelistedRoute: false
+  };
+}
+export const QueryOrderStepBoundsRequest = {
+  encode(message: QueryOrderStepBoundsRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    if (message.poolId !== BigInt(0)) {
+      writer.uint32(8).uint64(message.poolId);
+    }
+    if (message.tokenIn !== "") {
+      writer.uint32(18).string(message.tokenIn);
+    }
+    if (message.tokenOut !== "") {
+      writer.uint32(26).string(message.tokenOut);
+    }
+    if (message.whitelistedRoute === true) {
+      writer.uint32(32).bool(message.whitelistedRoute);
+    }
+    return writer;
+  },
+  decode(input: BinaryReader | Uint8Array, length?: number): QueryOrderStepBoundsRequest {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseQueryOrderStepBoundsRequest();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.poolId = reader.uint64();
+          break;
+        case 2:
+          message.tokenIn = reader.string();
+          break;
+        case 3:
+          message.tokenOut = reader.string();
+          break;
+        case 4:
+          message.whitelistedRoute = reader.bool();
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromJSON(object: any): QueryOrderStepBoundsRequest {
+    return {
+      poolId: isSet(object.poolId) ? BigInt(object.poolId.toString()) : BigInt(0),
+      tokenIn: isSet(object.tokenIn) ? String(object.tokenIn) : "",
+      tokenOut: isSet(object.tokenOut) ? String(object.tokenOut) : "",
+      whitelistedRoute: isSet(object.whitelistedRoute) ? Boolean(object.whitelistedRoute) : false
+    };
+  },
+  toJSON(message: QueryOrderStepBoundsRequest): unknown {
+    const obj: any = {};
+    message.poolId !== undefined && (obj.poolId = (message.poolId || BigInt(0)).toString());
+    message.tokenIn !== undefined && (obj.tokenIn = message.tokenIn);
+    message.tokenOut !== undefined && (obj.tokenOut = message.tokenOut);
+    message.whitelistedRoute !== undefined && (obj.whitelistedRoute = message.whitelistedRoute);
+    return obj;
+  },
+  fromPartial(object: Partial<QueryOrderStepBoundsRequest>): QueryOrderStepBoundsRequest {
+    const message = createBaseQueryOrderStepBoundsRequest();
+    message.poolId = object.poolId !== undefined && object.poolId !== null ? BigInt(object.poolId.toString()) : BigInt(0);
+    message.tokenIn = object.tokenIn ?? "";
+    message.tokenOut = object.tokenOut ?? "";
+    message.whitelistedRoute = object.whitelistedRoute ?? false;
+    return message;
+  }
+};
+function createBaseQueryOrderStepBoundsResponse(): QueryOrderStepBoundsResponse {
+  return {
+    minStep: "",
+    maxStep: ""
+  };
+}
+export const QueryOrderStepBoundsResponse = {
+  encode(message: QueryOrderStepBoundsResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    if (message.minStep !== "") {
+      writer.uint32(10).string(message.minStep);
+    }
+    if (message.maxStep !== "") {
+      writer.uint32(18).string(message.maxStep);
+    }
+    return writer;
+  },
+  decode(input: BinaryReader | Uint8Array, length?: number): QueryOrderStepBoundsResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseQueryOrderStepBoundsResponse();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.minStep = reader.string();
+          break;
+        case 2:
+          message.maxStep = reader.string();
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromJSON(object: any): QueryOrderStepBoundsResponse {
+    return {
+      minStep: isSet(object.minStep) ? String(object.minStep) : "",
+      maxStep: isSet(object.maxStep) ? String(object.maxStep) : ""
+    };
+  },
+  toJSON(message: QueryOrderStepBoundsResponse): unknown {
+    const obj: any = {};
+    message.minStep !== undefined && (obj.minStep = message.minStep);
+    message.maxStep !== undefined && (obj.maxStep = message.maxStep);
+    return obj;
+  },
+  fromPartial(object: Partial<QueryOrderStepBoundsResponse>): QueryOrderStepBoundsResponse {
+    const message = createBaseQueryOrderStepBoundsResponse();
+    message.minStep = object.minStep ?? "";
+    message.maxStep = object.maxStep ?? "";
     return message;
   }
 };

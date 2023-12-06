@@ -2,7 +2,7 @@
 import { AminoMsg } from "@cosmjs/amino";
 import { MsgBond, MsgUnbond, MsgClaimReward, MsgExitPool } from "./tx";
 export interface MsgBondAminoType extends AminoMsg {
-  type: "/pryzm.ystaking.v1.MsgBond";
+  type: "pryzm/ystaking/v1/Bond";
   value: {
     creator: string;
     amount: {
@@ -12,7 +12,7 @@ export interface MsgBondAminoType extends AminoMsg {
   };
 }
 export interface MsgUnbondAminoType extends AminoMsg {
-  type: "/pryzm.ystaking.v1.MsgUnbond";
+  type: "pryzm/ystaking/v1/Unbond";
   value: {
     creator: string;
     amount: {
@@ -22,14 +22,14 @@ export interface MsgUnbondAminoType extends AminoMsg {
   };
 }
 export interface MsgClaimRewardAminoType extends AminoMsg {
-  type: "/pryzm.ystaking.v1.MsgClaimReward";
+  type: "pryzm/ystaking/v1/ClaimReward";
   value: {
     creator: string;
     denom: string;
   };
 }
 export interface MsgExitPoolAminoType extends AminoMsg {
-  type: "/pryzm.ystaking.v1.MsgExitPool";
+  type: "pryzm/ystaking/v1/ExitPool";
   value: {
     creator: string;
     denom: string;
@@ -37,7 +37,7 @@ export interface MsgExitPoolAminoType extends AminoMsg {
 }
 export const AminoConverter = {
   "/pryzm.ystaking.v1.MsgBond": {
-    aminoType: "/pryzm.ystaking.v1.MsgBond",
+    aminoType: "pryzm/ystaking/v1/Bond",
     toAmino: ({
       creator,
       amount
@@ -64,7 +64,7 @@ export const AminoConverter = {
     }
   },
   "/pryzm.ystaking.v1.MsgUnbond": {
-    aminoType: "/pryzm.ystaking.v1.MsgUnbond",
+    aminoType: "pryzm/ystaking/v1/Unbond",
     toAmino: ({
       creator,
       amount
@@ -91,7 +91,7 @@ export const AminoConverter = {
     }
   },
   "/pryzm.ystaking.v1.MsgClaimReward": {
-    aminoType: "/pryzm.ystaking.v1.MsgClaimReward",
+    aminoType: "pryzm/ystaking/v1/ClaimReward",
     toAmino: ({
       creator,
       denom
@@ -112,7 +112,7 @@ export const AminoConverter = {
     }
   },
   "/pryzm.ystaking.v1.MsgExitPool": {
-    aminoType: "/pryzm.ystaking.v1.MsgExitPool",
+    aminoType: "pryzm/ystaking/v1/ExitPool",
     toAmino: ({
       creator,
       denom

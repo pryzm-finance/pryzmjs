@@ -2,7 +2,7 @@
 import { AminoMsg } from "@cosmjs/amino";
 import { MsgRefract, MsgRedeem } from "./tx";
 export interface MsgRefractAminoType extends AminoMsg {
-  type: "/pryzm.refractor.v1.MsgRefract";
+  type: "pryzm/refractor/v1/Refract";
   value: {
     creator: string;
     amount: {
@@ -13,7 +13,7 @@ export interface MsgRefractAminoType extends AminoMsg {
   };
 }
 export interface MsgRedeemAminoType extends AminoMsg {
-  type: "/pryzm.refractor.v1.MsgRedeem";
+  type: "pryzm/refractor/v1/Redeem";
   value: {
     creator: string;
     p_amount: {
@@ -28,7 +28,7 @@ export interface MsgRedeemAminoType extends AminoMsg {
 }
 export const AminoConverter = {
   "/pryzm.refractor.v1.MsgRefract": {
-    aminoType: "/pryzm.refractor.v1.MsgRefract",
+    aminoType: "pryzm/refractor/v1/Refract",
     toAmino: ({
       creator,
       amount,
@@ -59,7 +59,7 @@ export const AminoConverter = {
     }
   },
   "/pryzm.refractor.v1.MsgRedeem": {
-    aminoType: "/pryzm.refractor.v1.MsgRedeem",
+    aminoType: "pryzm/refractor/v1/Redeem",
     toAmino: ({
       creator,
       pAmount,

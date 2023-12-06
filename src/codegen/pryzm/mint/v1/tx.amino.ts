@@ -2,7 +2,7 @@
 import { AminoMsg } from "@cosmjs/amino";
 import { MsgUpdateParams, MsgDappAccountSpend } from "./tx";
 export interface MsgUpdateParamsAminoType extends AminoMsg {
-  type: "/pryzm.mint.v1.MsgUpdateParams";
+  type: "pryzm/mint/v1/UpdateParams";
   value: {
     authority: string;
     params: {
@@ -26,7 +26,7 @@ export interface MsgUpdateParamsAminoType extends AminoMsg {
   };
 }
 export interface MsgDappAccountSpendAminoType extends AminoMsg {
-  type: "/pryzm.mint.v1.MsgDappAccountSpend";
+  type: "pryzm/mint/v1/DappAccountSpend";
   value: {
     authority: string;
     title: string;
@@ -40,7 +40,7 @@ export interface MsgDappAccountSpendAminoType extends AminoMsg {
 }
 export const AminoConverter = {
   "/pryzm.mint.v1.MsgUpdateParams": {
-    aminoType: "/pryzm.mint.v1.MsgUpdateParams",
+    aminoType: "pryzm/mint/v1/UpdateParams",
     toAmino: ({
       authority,
       params
@@ -95,7 +95,7 @@ export const AminoConverter = {
     }
   },
   "/pryzm.mint.v1.MsgDappAccountSpend": {
-    aminoType: "/pryzm.mint.v1.MsgDappAccountSpend",
+    aminoType: "pryzm/mint/v1/DappAccountSpend",
     toAmino: ({
       authority,
       title,

@@ -3,7 +3,7 @@ import { grpc } from "@improbable-eng/grpc-web";
 import { UnaryMethodDefinitionish } from "../../../grpc-web";
 import { DeepPartial } from "../../../helpers";
 import { BrowserHeaders } from "browser-headers";
-import { QueryParamsRequest, QueryParamsResponse, QueryGetPoolTokenRequest, QueryGetPoolTokenResponse, QueryAllPoolTokenRequest, QueryAllPoolTokenResponse, QueryAllPoolTokenWeightRequest, QueryAllPoolTokenWeightResponse, QueryGetPoolTokenWeightRequest, QueryGetPoolTokenWeightResponse, QueryGetPoolRequest, QueryGetPoolResponse, QueryAllPoolRequest, QueryAllPoolResponse, QueryGetWeightedTokenRequest, QueryGetWeightedTokenResponse, QueryAllWeightedTokenRequest, QueryAllWeightedTokenResponse, QueryGetWeightUpdateTimingRequest, QueryGetWeightUpdateTimingResponse, QueryAllWeightUpdateTimingRequest, QueryAllWeightUpdateTimingResponse, QuerySimulateSingleSwapRequest, QuerySimulateSingleSwapResponse, QuerySimulateInitializePoolRequest, QuerySimulateInitializePoolResponse, QuerySimulateJoinAllTokensExactLptRequest, QuerySimulateJoinAllTokensExactLptResponse, QuerySimulateJoinExactTokensRequest, QuerySimulateJoinExactTokensResponse, QuerySimulateZeroImpactJoinYammRequest, QuerySimulateZeroImpactJoinYammResponse, QuerySimulateJoinTokenExactLptRequest, QuerySimulateJoinTokenExactLptResponse, QuerySimulateExitTokenExactLptRequest, QuerySimulateExitTokenExactLptResponse, QuerySimulateExitExactTokensRequest, QuerySimulateExitExactTokensResponse, QuerySimulateExitAllTokensExactLptRequest, QuerySimulateExitAllTokensExactLptResponse, QuerySpotPriceRequest, QuerySpotPriceResponse, QueryGetIntroducingPoolTokenRequest, QueryGetIntroducingPoolTokenResponse, QueryAllIntroducingPoolTokenRequest, QueryAllIntroducingPoolTokenResponse, QueryGetExpiringPoolTokenRequest, QueryGetExpiringPoolTokenResponse, QueryAllExpiringPoolTokenRequest, QueryAllExpiringPoolTokenResponse, QueryLpTokenRequest, QueryLpTokenResponse, QuerySimulateBatchSwapRequest, QuerySimulateBatchSwapResponse, QueryGetYammConfigurationRequest, QueryGetYammConfigurationResponse, QueryAllYammConfigurationRequest, QueryAllYammConfigurationResponse, QueryGetWhitelistedRouteRequest, QueryGetWhitelistedRouteResponse, QueryAllWhitelistedRouteRequest, QueryAllWhitelistedRouteResponse, QueryGetOrderRequest, QueryGetOrderResponse, QueryAllOrderRequest, QueryAllOrderResponse, QueryGetExecutableOrderRequest, QueryGetExecutableOrderResponse, QueryAllExecutableOrderRequest, QueryAllExecutableOrderResponse, QueryGetScheduleOrderRequest, QueryGetScheduleOrderResponse, QueryAllScheduleOrderRequest, QueryAllScheduleOrderResponse, QueryGetOraclePricePairRequest, QueryGetOraclePricePairResponse, QueryAllOraclePricePairRequest, QueryAllOraclePricePairResponse, QueryVaultPauseModeRequest, QueryVaultPauseModeResponse, QueryGetPendingTokenIntroductionRequest, QueryGetPendingTokenIntroductionResponse, QueryAllPendingTokenIntroductionRequest, QueryAllPendingTokenIntroductionResponse, QueryYammPoolIdRequest, QueryYammPoolIdResponse } from "./query";
+import { QueryParamsRequest, QueryParamsResponse, QueryGetPoolTokenRequest, QueryGetPoolTokenResponse, QueryAllPoolTokenRequest, QueryAllPoolTokenResponse, QueryAllPoolTokenWeightRequest, QueryAllPoolTokenWeightResponse, QueryGetPoolTokenWeightRequest, QueryGetPoolTokenWeightResponse, QueryGetPoolRequest, QueryGetPoolResponse, QueryAllPoolRequest, QueryAllPoolResponse, QueryGetWeightedTokenRequest, QueryGetWeightedTokenResponse, QueryAllWeightedTokenRequest, QueryAllWeightedTokenResponse, QueryGetWeightUpdateTimingRequest, QueryGetWeightUpdateTimingResponse, QueryAllWeightUpdateTimingRequest, QueryAllWeightUpdateTimingResponse, QuerySimulateSingleSwapRequest, QuerySimulateSingleSwapResponse, QuerySimulateInitializePoolRequest, QuerySimulateInitializePoolResponse, QuerySimulateJoinAllTokensExactLptRequest, QuerySimulateJoinAllTokensExactLptResponse, QuerySimulateJoinExactTokensRequest, QuerySimulateJoinExactTokensResponse, QuerySimulateZeroImpactJoinYammRequest, QuerySimulateZeroImpactJoinYammResponse, QuerySimulateJoinTokenExactLptRequest, QuerySimulateJoinTokenExactLptResponse, QuerySimulateExitTokenExactLptRequest, QuerySimulateExitTokenExactLptResponse, QuerySimulateExitExactTokensRequest, QuerySimulateExitExactTokensResponse, QuerySimulateExitAllTokensExactLptRequest, QuerySimulateExitAllTokensExactLptResponse, QuerySpotPriceRequest, QuerySpotPriceResponse, QueryGetIntroducingPoolTokenRequest, QueryGetIntroducingPoolTokenResponse, QueryAllIntroducingPoolTokenRequest, QueryAllIntroducingPoolTokenResponse, QueryGetExpiringPoolTokenRequest, QueryGetExpiringPoolTokenResponse, QueryAllExpiringPoolTokenRequest, QueryAllExpiringPoolTokenResponse, QueryLpTokenRequest, QueryLpTokenResponse, QuerySimulateBatchSwapRequest, QuerySimulateBatchSwapResponse, QueryGetYammConfigurationRequest, QueryGetYammConfigurationResponse, QueryAllYammConfigurationRequest, QueryAllYammConfigurationResponse, QueryGetWhitelistedRouteRequest, QueryGetWhitelistedRouteResponse, QueryAllWhitelistedRouteRequest, QueryAllWhitelistedRouteResponse, QueryGetOrderRequest, QueryGetOrderResponse, QueryAllOrderRequest, QueryAllOrderResponse, QueryGetExecutableOrderRequest, QueryGetExecutableOrderResponse, QueryAllExecutableOrderRequest, QueryAllExecutableOrderResponse, QueryGetScheduleOrderRequest, QueryGetScheduleOrderResponse, QueryAllScheduleOrderRequest, QueryAllScheduleOrderResponse, QueryGetOraclePricePairRequest, QueryGetOraclePricePairResponse, QueryAllOraclePricePairRequest, QueryAllOraclePricePairResponse, QueryVaultPauseModeRequest, QueryVaultPauseModeResponse, QueryGetPendingTokenIntroductionRequest, QueryGetPendingTokenIntroductionResponse, QueryAllPendingTokenIntroductionRequest, QueryAllPendingTokenIntroductionResponse, QueryYammPoolIdRequest, QueryYammPoolIdResponse, QueryOrderStepBoundsRequest, QueryOrderStepBoundsResponse } from "./query";
 /** Query defines the gRPC querier service. */
 export interface Query {
   /** Parameters queries the parameters of the module. */
@@ -98,6 +98,7 @@ export interface Query {
   pendingTokenIntroductionAll(request?: DeepPartial<QueryAllPendingTokenIntroductionRequest>, metadata?: grpc.Metadata): Promise<QueryAllPendingTokenIntroductionResponse>;
   /** Queries a YammPoolId item. */
   yammPoolId(request: DeepPartial<QueryYammPoolIdRequest>, metadata?: grpc.Metadata): Promise<QueryYammPoolIdResponse>;
+  orderStepBounds(request: DeepPartial<QueryOrderStepBoundsRequest>, metadata?: grpc.Metadata): Promise<QueryOrderStepBoundsResponse>;
 }
 export class QueryClientImpl implements Query {
   private readonly rpc: Rpc;
@@ -146,6 +147,7 @@ export class QueryClientImpl implements Query {
     this.pendingTokenIntroduction = this.pendingTokenIntroduction.bind(this);
     this.pendingTokenIntroductionAll = this.pendingTokenIntroductionAll.bind(this);
     this.yammPoolId = this.yammPoolId.bind(this);
+    this.orderStepBounds = this.orderStepBounds.bind(this);
   }
   params(request: DeepPartial<QueryParamsRequest> = {}, metadata?: grpc.Metadata): Promise<QueryParamsResponse> {
     return this.rpc.unary(QueryParamsDesc, QueryParamsRequest.fromPartial(request), metadata);
@@ -299,6 +301,9 @@ export class QueryClientImpl implements Query {
   }
   yammPoolId(request: DeepPartial<QueryYammPoolIdRequest>, metadata?: grpc.Metadata): Promise<QueryYammPoolIdResponse> {
     return this.rpc.unary(QueryYammPoolIdDesc, QueryYammPoolIdRequest.fromPartial(request), metadata);
+  }
+  orderStepBounds(request: DeepPartial<QueryOrderStepBoundsRequest>, metadata?: grpc.Metadata): Promise<QueryOrderStepBoundsResponse> {
+    return this.rpc.unary(QueryOrderStepBoundsDesc, QueryOrderStepBoundsRequest.fromPartial(request), metadata);
   }
 }
 export const QueryDesc = {
@@ -1200,6 +1205,27 @@ export const QueryYammPoolIdDesc: UnaryMethodDefinitionish = {
     deserializeBinary(data: Uint8Array) {
       return {
         ...QueryYammPoolIdResponse.decode(data),
+        toObject() {
+          return this;
+        }
+      };
+    }
+  } as any)
+};
+export const QueryOrderStepBoundsDesc: UnaryMethodDefinitionish = {
+  methodName: "OrderStepBounds",
+  service: QueryDesc,
+  requestStream: false,
+  responseStream: false,
+  requestType: ({
+    serializeBinary() {
+      return QueryOrderStepBoundsRequest.encode(this).finish();
+    }
+  } as any),
+  responseType: ({
+    deserializeBinary(data: Uint8Array) {
+      return {
+        ...QueryOrderStepBoundsResponse.decode(data),
         toObject() {
           return this;
         }

@@ -3,7 +3,7 @@ import { actionTypeFromJSON } from "./action";
 import { AminoMsg } from "@cosmjs/amino";
 import { MsgUpdateParams, MsgSetAction } from "./tx";
 export interface MsgUpdateParamsAminoType extends AminoMsg {
-  type: "/pryzm.treasury.v1.MsgUpdateParams";
+  type: "pryzm/treasury/v1/UpdateParams";
   value: {
     authority: string;
     params: {
@@ -12,7 +12,7 @@ export interface MsgUpdateParamsAminoType extends AminoMsg {
   };
 }
 export interface MsgSetActionAminoType extends AminoMsg {
-  type: "/pryzm.treasury.v1.MsgSetAction";
+  type: "pryzm/treasury/v1/SetAction";
   value: {
     authority: string;
     action: {
@@ -54,7 +54,7 @@ export interface MsgSetActionAminoType extends AminoMsg {
 }
 export const AminoConverter = {
   "/pryzm.treasury.v1.MsgUpdateParams": {
-    aminoType: "/pryzm.treasury.v1.MsgUpdateParams",
+    aminoType: "pryzm/treasury/v1/UpdateParams",
     toAmino: ({
       authority,
       params
@@ -79,7 +79,7 @@ export const AminoConverter = {
     }
   },
   "/pryzm.treasury.v1.MsgSetAction": {
-    aminoType: "/pryzm.treasury.v1.MsgSetAction",
+    aminoType: "pryzm/treasury/v1/SetAction",
     toAmino: ({
       authority,
       action

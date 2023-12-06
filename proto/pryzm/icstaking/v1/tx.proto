@@ -1,6 +1,7 @@
 syntax = "proto3";
 package pryzm.icstaking.v1;
 
+import "amino/amino.proto";
 import "cosmos/base/v1beta1/coin.proto";
 import "cosmos/msg/v1/msg.proto";
 import "cosmos_proto/cosmos.proto";
@@ -29,6 +30,7 @@ service Msg {
 
 message MsgUpdateParams {
   option (cosmos.msg.v1.signer) = "authority";
+  option (amino.name) = "pryzm/icstaking/v1/UpdateParams";
 
   string authority = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
   Params params = 2 [(gogoproto.nullable) = false];
@@ -38,6 +40,7 @@ message MsgUpdateParamsResponse {}
 
 message MsgRegisterHostChain {
   option (cosmos.msg.v1.signer) = "creator";
+  option (amino.name) = "pryzm/icstaking/v1/RegisterHostChain";
 
   string creator = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
   HostChain host_chain = 2 [(gogoproto.nullable) = false];
@@ -47,6 +50,7 @@ message MsgRegisterHostChainResponse {}
 
 message MsgUpdateHostChain {
   option (cosmos.msg.v1.signer) = "creator";
+  option (amino.name) = "pryzm/icstaking/v1/UpdateHostChain";
 
   string creator = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
   string host_chain_id = 2;
@@ -61,6 +65,7 @@ message MsgUpdateHostChainResponse {}
 
 message MsgStake {
   option (cosmos.msg.v1.signer) = "creator";
+  option (amino.name) = "pryzm/icstaking/v1/Stake";
 
   string creator = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
   string host_chain = 2;
@@ -79,6 +84,7 @@ message MsgStakeResponse {
 
 message MsgUnstake {
   option (cosmos.msg.v1.signer) = "creator";
+  option (amino.name) = "pryzm/icstaking/v1/Unstake";
 
   string creator = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
   string host_chain = 2;
@@ -96,6 +102,7 @@ message MsgUnstakeResponse {
 
 message MsgRedeemUnstaked {
   option (cosmos.msg.v1.signer) = "creator";
+  option (amino.name) = "pryzm/icstaking/v1/RedeemUnstaked";
 
   string creator = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
   string host_chain = 2;
@@ -115,6 +122,7 @@ message MsgRedeemUnstakedResponse {
 
 message MsgInstantUnstake {
   option (cosmos.msg.v1.signer) = "creator";
+  option (amino.name) = "pryzm/icstaking/v1/InstantUnstake";
 
   string creator = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
   string host_chain = 2;
@@ -138,6 +146,7 @@ message MsgInstantUnstakeResponse {
 
 message MsgRebalanceDelegations {
   option (cosmos.msg.v1.signer) = "creator";
+  option (amino.name) = "pryzm/icstaking/v1/RebalanceDelegations";
 
   string creator = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
   string host_chain = 2;
@@ -147,6 +156,7 @@ message MsgRebalanceDelegationsResponse {}
 
 message MsgRegisterInterchainAccount {
   option (cosmos.msg.v1.signer) = "creator";
+  option (amino.name) = "pryzm/icstaking/v1/RegisterInterchainAccount";
 
   string creator = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
   string host_chain = 2;

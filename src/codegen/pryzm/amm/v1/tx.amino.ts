@@ -4,7 +4,7 @@ import { twapAlgorithmFromJSON } from "./oracle_price_pair";
 import { AminoMsg } from "@cosmjs/amino";
 import { MsgSingleSwap, MsgJoinAllTokensExactLpt, MsgJoinTokenExactLpt, MsgJoinExactTokens, MsgZeroImpactJoinYamm, MsgExitExactTokens, MsgExitTokenExactLpt, MsgExitAllTokensExactLpt, MsgCreateWeightedPool, MsgUpdateSwapFee, MsgInitializePool, MsgUpdateWeights, MsgBatchSwap, MsgSetYammConfiguration, MsgWhitelistRoute, MsgSetWhitelistedRouteEnabled, MsgSubmitOrder, MsgCancelOrder, MsgProposeMatch, MsgSetCircuitBreakers, MsgSetRecoveryMode, MsgRecoveryExit, MsgSetPauseMode, MsgSetVaultPauseMode, MsgCreateOraclePricePair, MsgUpdateOraclePricePair, MsgDeleteOraclePricePair, MsgSetSwapProtocolFee, MsgSetJoinExitProtocolFee, MsgIntroduceYammLpToWeightedPool, MsgIntroduceAssetBaseTokenToWeightedPool, MsgCancelPendingTokenIntroduction, MsgRemoveTokenFromWeightedPool, MsgUpdateParams, MsgAddMaturityToYamm, MsgSetInitializationAllowList, MsgSetPoolAdmins, MsgSetPauseAllowList, MsgSetPauseWindow } from "./tx";
 export interface MsgSingleSwapAminoType extends AminoMsg {
-  type: "/pryzm.amm.v1.MsgSingleSwap";
+  type: "pryzm/amm/v1/SingleSwap";
   value: {
     creator: string;
     swap: {
@@ -19,7 +19,7 @@ export interface MsgSingleSwapAminoType extends AminoMsg {
   };
 }
 export interface MsgJoinAllTokensExactLptAminoType extends AminoMsg {
-  type: "/pryzm.amm.v1.MsgJoinAllTokensExactLpt";
+  type: "pryzm/amm/v1/JoinAllTokensExactLpt";
   value: {
     creator: string;
     pool_id: string;
@@ -31,7 +31,7 @@ export interface MsgJoinAllTokensExactLptAminoType extends AminoMsg {
   };
 }
 export interface MsgJoinTokenExactLptAminoType extends AminoMsg {
-  type: "/pryzm.amm.v1.MsgJoinTokenExactLpt";
+  type: "pryzm/amm/v1/JoinTokenExactLpt";
   value: {
     creator: string;
     pool_id: string;
@@ -41,7 +41,7 @@ export interface MsgJoinTokenExactLptAminoType extends AminoMsg {
   };
 }
 export interface MsgJoinExactTokensAminoType extends AminoMsg {
-  type: "/pryzm.amm.v1.MsgJoinExactTokens";
+  type: "pryzm/amm/v1/JoinExactTokens";
   value: {
     creator: string;
     pool_id: string;
@@ -53,7 +53,7 @@ export interface MsgJoinExactTokensAminoType extends AminoMsg {
   };
 }
 export interface MsgZeroImpactJoinYammAminoType extends AminoMsg {
-  type: "/pryzm.amm.v1.MsgZeroImpactJoinYamm";
+  type: "pryzm/amm/v1/ZeroImpactJoinYamm";
   value: {
     creator: string;
     c_amount_in: {
@@ -64,7 +64,7 @@ export interface MsgZeroImpactJoinYammAminoType extends AminoMsg {
   };
 }
 export interface MsgExitExactTokensAminoType extends AminoMsg {
-  type: "/pryzm.amm.v1.MsgExitExactTokens";
+  type: "pryzm/amm/v1/ExitExactTokens";
   value: {
     creator: string;
     pool_id: string;
@@ -76,7 +76,7 @@ export interface MsgExitExactTokensAminoType extends AminoMsg {
   };
 }
 export interface MsgExitTokenExactLptAminoType extends AminoMsg {
-  type: "/pryzm.amm.v1.MsgExitTokenExactLpt";
+  type: "pryzm/amm/v1/ExitTokenExactLpt";
   value: {
     creator: string;
     pool_id: string;
@@ -86,7 +86,7 @@ export interface MsgExitTokenExactLptAminoType extends AminoMsg {
   };
 }
 export interface MsgExitAllTokensExactLptAminoType extends AminoMsg {
-  type: "/pryzm.amm.v1.MsgExitAllTokensExactLpt";
+  type: "pryzm/amm/v1/ExitAllTokensExactLpt";
   value: {
     creator: string;
     pool_id: string;
@@ -98,7 +98,7 @@ export interface MsgExitAllTokensExactLptAminoType extends AminoMsg {
   };
 }
 export interface MsgCreateWeightedPoolAminoType extends AminoMsg {
-  type: "/pryzm.amm.v1.MsgCreateWeightedPool";
+  type: "pryzm/amm/v1/CreateWeightedPool";
   value: {
     creator: string;
     name: string;
@@ -113,7 +113,7 @@ export interface MsgCreateWeightedPoolAminoType extends AminoMsg {
   };
 }
 export interface MsgUpdateSwapFeeAminoType extends AminoMsg {
-  type: "/pryzm.amm.v1.MsgUpdateSwapFee";
+  type: "pryzm/amm/v1/UpdateSwapFee";
   value: {
     creator: string;
     pool_id: string;
@@ -121,7 +121,7 @@ export interface MsgUpdateSwapFeeAminoType extends AminoMsg {
   };
 }
 export interface MsgInitializePoolAminoType extends AminoMsg {
-  type: "/pryzm.amm.v1.MsgInitializePool";
+  type: "pryzm/amm/v1/InitializePool";
   value: {
     creator: string;
     pool_id: string;
@@ -132,7 +132,7 @@ export interface MsgInitializePoolAminoType extends AminoMsg {
   };
 }
 export interface MsgUpdateWeightsAminoType extends AminoMsg {
-  type: "/pryzm.amm.v1.MsgUpdateWeights";
+  type: "pryzm/amm/v1/UpdateWeights";
   value: {
     creator: string;
     pool_id: string;
@@ -145,7 +145,7 @@ export interface MsgUpdateWeightsAminoType extends AminoMsg {
   };
 }
 export interface MsgBatchSwapAminoType extends AminoMsg {
-  type: "/pryzm.amm.v1.MsgBatchSwap";
+  type: "pryzm/amm/v1/BatchSwap";
   value: {
     creator: string;
     swap_type: number;
@@ -166,7 +166,7 @@ export interface MsgBatchSwapAminoType extends AminoMsg {
   };
 }
 export interface MsgSetYammConfigurationAminoType extends AminoMsg {
-  type: "/pryzm.amm.v1.MsgSetYammConfiguration";
+  type: "pryzm/amm/v1/SetYammConfiguration";
   value: {
     creator: string;
     configuration: {
@@ -185,7 +185,7 @@ export interface MsgSetYammConfigurationAminoType extends AminoMsg {
   };
 }
 export interface MsgWhitelistRouteAminoType extends AminoMsg {
-  type: "/pryzm.amm.v1.MsgWhitelistRoute";
+  type: "pryzm/amm/v1/WhitelistRoute";
   value: {
     authority: string;
     whitelisted_route: {
@@ -199,7 +199,7 @@ export interface MsgWhitelistRouteAminoType extends AminoMsg {
   };
 }
 export interface MsgSetWhitelistedRouteEnabledAminoType extends AminoMsg {
-  type: "/pryzm.amm.v1.MsgSetWhitelistedRouteEnabled";
+  type: "pryzm/amm/v1/SetWhitelistedRouteEnabled";
   value: {
     authority: string;
     token_in: string;
@@ -208,7 +208,7 @@ export interface MsgSetWhitelistedRouteEnabledAminoType extends AminoMsg {
   };
 }
 export interface MsgSubmitOrderAminoType extends AminoMsg {
-  type: "/pryzm.amm.v1.MsgSubmitOrder";
+  type: "pryzm/amm/v1/SubmitOrder";
   value: {
     creator: string;
     pool_id: string;
@@ -224,14 +224,14 @@ export interface MsgSubmitOrderAminoType extends AminoMsg {
   };
 }
 export interface MsgCancelOrderAminoType extends AminoMsg {
-  type: "/pryzm.amm.v1.MsgCancelOrder";
+  type: "pryzm/amm/v1/CancelOrder";
   value: {
     creator: string;
     id: string;
   };
 }
 export interface MsgProposeMatchAminoType extends AminoMsg {
-  type: "/pryzm.amm.v1.MsgProposeMatch";
+  type: "pryzm/amm/v1/ProposeMatch";
   value: {
     creator: string;
     pairs: {
@@ -245,7 +245,7 @@ export interface MsgProposeMatchAminoType extends AminoMsg {
   };
 }
 export interface MsgSetCircuitBreakersAminoType extends AminoMsg {
-  type: "/pryzm.amm.v1.MsgSetCircuitBreakers";
+  type: "pryzm/amm/v1/SetCircuitBreakers";
   value: {
     creator: string;
     pool_id: string;
@@ -260,7 +260,7 @@ export interface MsgSetCircuitBreakersAminoType extends AminoMsg {
   };
 }
 export interface MsgSetRecoveryModeAminoType extends AminoMsg {
-  type: "/pryzm.amm.v1.MsgSetRecoveryMode";
+  type: "pryzm/amm/v1/SetRecoveryMode";
   value: {
     authority: string;
     pool_id: string;
@@ -268,7 +268,7 @@ export interface MsgSetRecoveryModeAminoType extends AminoMsg {
   };
 }
 export interface MsgRecoveryExitAminoType extends AminoMsg {
-  type: "/pryzm.amm.v1.MsgRecoveryExit";
+  type: "pryzm/amm/v1/RecoveryExit";
   value: {
     creator: string;
     pool_id: string;
@@ -280,7 +280,7 @@ export interface MsgRecoveryExitAminoType extends AminoMsg {
   };
 }
 export interface MsgSetPauseModeAminoType extends AminoMsg {
-  type: "/pryzm.amm.v1.MsgSetPauseMode";
+  type: "pryzm/amm/v1/SetPauseMode";
   value: {
     creator: string;
     pool_id: string;
@@ -288,14 +288,14 @@ export interface MsgSetPauseModeAminoType extends AminoMsg {
   };
 }
 export interface MsgSetVaultPauseModeAminoType extends AminoMsg {
-  type: "/pryzm.amm.v1.MsgSetVaultPauseMode";
+  type: "pryzm/amm/v1/SetVaultPauseMode";
   value: {
     authority: string;
     pause_mode: boolean;
   };
 }
 export interface MsgCreateOraclePricePairAminoType extends AminoMsg {
-  type: "/pryzm.amm.v1.MsgCreateOraclePricePair";
+  type: "pryzm/amm/v1/CreateOraclePricePair";
   value: {
     authority: string;
     oracle_price_pair: {
@@ -315,7 +315,7 @@ export interface MsgCreateOraclePricePairAminoType extends AminoMsg {
   };
 }
 export interface MsgUpdateOraclePricePairAminoType extends AminoMsg {
-  type: "/pryzm.amm.v1.MsgUpdateOraclePricePair";
+  type: "pryzm/amm/v1/UpdateOraclePricePair";
   value: {
     authority: string;
     oracle_price_pair: {
@@ -335,14 +335,14 @@ export interface MsgUpdateOraclePricePairAminoType extends AminoMsg {
   };
 }
 export interface MsgDeleteOraclePricePairAminoType extends AminoMsg {
-  type: "/pryzm.amm.v1.MsgDeleteOraclePricePair";
+  type: "pryzm/amm/v1/DeleteOraclePricePair";
   value: {
     authority: string;
     asset_id: string;
   };
 }
 export interface MsgSetSwapProtocolFeeAminoType extends AminoMsg {
-  type: "/pryzm.amm.v1.MsgSetSwapProtocolFee";
+  type: "pryzm/amm/v1/SetSwapProtocolFee";
   value: {
     authority: string;
     pool_id: string;
@@ -350,7 +350,7 @@ export interface MsgSetSwapProtocolFeeAminoType extends AminoMsg {
   };
 }
 export interface MsgSetJoinExitProtocolFeeAminoType extends AminoMsg {
-  type: "/pryzm.amm.v1.MsgSetJoinExitProtocolFee";
+  type: "pryzm/amm/v1/SetJoinExitProtocolFee";
   value: {
     authority: string;
     pool_id: string;
@@ -358,7 +358,7 @@ export interface MsgSetJoinExitProtocolFeeAminoType extends AminoMsg {
   };
 }
 export interface MsgIntroduceYammLpToWeightedPoolAminoType extends AminoMsg {
-  type: "/pryzm.amm.v1.MsgIntroduceYammLpToWeightedPool";
+  type: "pryzm/amm/v1/IntroduceYammLpToWeightedPool";
   value: {
     creator: string;
     weighted_pool_id: string;
@@ -368,7 +368,7 @@ export interface MsgIntroduceYammLpToWeightedPoolAminoType extends AminoMsg {
   };
 }
 export interface MsgIntroduceAssetBaseTokenToWeightedPoolAminoType extends AminoMsg {
-  type: "/pryzm.amm.v1.MsgIntroduceAssetBaseTokenToWeightedPool";
+  type: "pryzm/amm/v1/IntroduceAssetBaseTokenToWeightedPool";
   value: {
     creator: string;
     weighted_pool_id: string;
@@ -379,7 +379,7 @@ export interface MsgIntroduceAssetBaseTokenToWeightedPoolAminoType extends Amino
   };
 }
 export interface MsgCancelPendingTokenIntroductionAminoType extends AminoMsg {
-  type: "/pryzm.amm.v1.MsgCancelPendingTokenIntroduction";
+  type: "pryzm/amm/v1/CancelPendingTokenIntroduction";
   value: {
     creator: string;
     asset_id: string;
@@ -387,7 +387,7 @@ export interface MsgCancelPendingTokenIntroductionAminoType extends AminoMsg {
   };
 }
 export interface MsgRemoveTokenFromWeightedPoolAminoType extends AminoMsg {
-  type: "/pryzm.amm.v1.MsgRemoveTokenFromWeightedPool";
+  type: "pryzm/amm/v1/RemoveTokenFromWeightedPool";
   value: {
     creator: string;
     pool_id: string;
@@ -396,7 +396,7 @@ export interface MsgRemoveTokenFromWeightedPoolAminoType extends AminoMsg {
   };
 }
 export interface MsgUpdateParamsAminoType extends AminoMsg {
-  type: "/pryzm.amm.v1.MsgUpdateParams";
+  type: "pryzm/amm/v1/UpdateParams";
   value: {
     authority: string;
     general_pool_parameters: {
@@ -438,7 +438,7 @@ export interface MsgUpdateParamsAminoType extends AminoMsg {
   };
 }
 export interface MsgAddMaturityToYammAminoType extends AminoMsg {
-  type: "/pryzm.amm.v1.MsgAddMaturityToYamm";
+  type: "pryzm/amm/v1/AddMaturityToYamm";
   value: {
     authority: string;
     assetId: string;
@@ -446,7 +446,7 @@ export interface MsgAddMaturityToYammAminoType extends AminoMsg {
   };
 }
 export interface MsgSetInitializationAllowListAminoType extends AminoMsg {
-  type: "/pryzm.amm.v1.MsgSetInitializationAllowList";
+  type: "pryzm/amm/v1/SetInitializationAllowList";
   value: {
     creator: string;
     pool_id: string;
@@ -454,7 +454,7 @@ export interface MsgSetInitializationAllowListAminoType extends AminoMsg {
   };
 }
 export interface MsgSetPoolAdminsAminoType extends AminoMsg {
-  type: "/pryzm.amm.v1.MsgSetPoolAdmins";
+  type: "pryzm/amm/v1/SetPoolAdmins";
   value: {
     creator: string;
     pool_id: string;
@@ -462,7 +462,7 @@ export interface MsgSetPoolAdminsAminoType extends AminoMsg {
   };
 }
 export interface MsgSetPauseAllowListAminoType extends AminoMsg {
-  type: "/pryzm.amm.v1.MsgSetPauseAllowList";
+  type: "pryzm/amm/v1/SetPauseAllowList";
   value: {
     creator: string;
     pool_id: string;
@@ -470,7 +470,7 @@ export interface MsgSetPauseAllowListAminoType extends AminoMsg {
   };
 }
 export interface MsgSetPauseWindowAminoType extends AminoMsg {
-  type: "/pryzm.amm.v1.MsgSetPauseWindow";
+  type: "pryzm/amm/v1/SetPauseWindow";
   value: {
     authority: string;
     pool_id: string;
@@ -482,7 +482,7 @@ export interface MsgSetPauseWindowAminoType extends AminoMsg {
 }
 export const AminoConverter = {
   "/pryzm.amm.v1.MsgSingleSwap": {
-    aminoType: "/pryzm.amm.v1.MsgSingleSwap",
+    aminoType: "pryzm/amm/v1/SingleSwap",
     toAmino: ({
       creator,
       swap,
@@ -523,7 +523,7 @@ export const AminoConverter = {
     }
   },
   "/pryzm.amm.v1.MsgJoinAllTokensExactLpt": {
-    aminoType: "/pryzm.amm.v1.MsgJoinAllTokensExactLpt",
+    aminoType: "pryzm/amm/v1/JoinAllTokensExactLpt",
     toAmino: ({
       creator,
       poolId,
@@ -558,7 +558,7 @@ export const AminoConverter = {
     }
   },
   "/pryzm.amm.v1.MsgJoinTokenExactLpt": {
-    aminoType: "/pryzm.amm.v1.MsgJoinTokenExactLpt",
+    aminoType: "pryzm/amm/v1/JoinTokenExactLpt",
     toAmino: ({
       creator,
       poolId,
@@ -591,7 +591,7 @@ export const AminoConverter = {
     }
   },
   "/pryzm.amm.v1.MsgJoinExactTokens": {
-    aminoType: "/pryzm.amm.v1.MsgJoinExactTokens",
+    aminoType: "pryzm/amm/v1/JoinExactTokens",
     toAmino: ({
       creator,
       poolId,
@@ -626,7 +626,7 @@ export const AminoConverter = {
     }
   },
   "/pryzm.amm.v1.MsgZeroImpactJoinYamm": {
-    aminoType: "/pryzm.amm.v1.MsgZeroImpactJoinYamm",
+    aminoType: "pryzm/amm/v1/ZeroImpactJoinYamm",
     toAmino: ({
       creator,
       cAmountIn,
@@ -657,7 +657,7 @@ export const AminoConverter = {
     }
   },
   "/pryzm.amm.v1.MsgExitExactTokens": {
-    aminoType: "/pryzm.amm.v1.MsgExitExactTokens",
+    aminoType: "pryzm/amm/v1/ExitExactTokens",
     toAmino: ({
       creator,
       poolId,
@@ -692,7 +692,7 @@ export const AminoConverter = {
     }
   },
   "/pryzm.amm.v1.MsgExitTokenExactLpt": {
-    aminoType: "/pryzm.amm.v1.MsgExitTokenExactLpt",
+    aminoType: "pryzm/amm/v1/ExitTokenExactLpt",
     toAmino: ({
       creator,
       poolId,
@@ -725,7 +725,7 @@ export const AminoConverter = {
     }
   },
   "/pryzm.amm.v1.MsgExitAllTokensExactLpt": {
-    aminoType: "/pryzm.amm.v1.MsgExitAllTokensExactLpt",
+    aminoType: "pryzm/amm/v1/ExitAllTokensExactLpt",
     toAmino: ({
       creator,
       poolId,
@@ -760,7 +760,7 @@ export const AminoConverter = {
     }
   },
   "/pryzm.amm.v1.MsgCreateWeightedPool": {
-    aminoType: "/pryzm.amm.v1.MsgCreateWeightedPool",
+    aminoType: "pryzm/amm/v1/CreateWeightedPool",
     toAmino: ({
       creator,
       name,
@@ -807,7 +807,7 @@ export const AminoConverter = {
     }
   },
   "/pryzm.amm.v1.MsgUpdateSwapFee": {
-    aminoType: "/pryzm.amm.v1.MsgUpdateSwapFee",
+    aminoType: "pryzm/amm/v1/UpdateSwapFee",
     toAmino: ({
       creator,
       poolId,
@@ -832,7 +832,7 @@ export const AminoConverter = {
     }
   },
   "/pryzm.amm.v1.MsgInitializePool": {
-    aminoType: "/pryzm.amm.v1.MsgInitializePool",
+    aminoType: "pryzm/amm/v1/InitializePool",
     toAmino: ({
       creator,
       poolId,
@@ -863,7 +863,7 @@ export const AminoConverter = {
     }
   },
   "/pryzm.amm.v1.MsgUpdateWeights": {
-    aminoType: "/pryzm.amm.v1.MsgUpdateWeights",
+    aminoType: "pryzm/amm/v1/UpdateWeights",
     toAmino: ({
       creator,
       poolId,
@@ -902,7 +902,7 @@ export const AminoConverter = {
     }
   },
   "/pryzm.amm.v1.MsgBatchSwap": {
-    aminoType: "/pryzm.amm.v1.MsgBatchSwap",
+    aminoType: "pryzm/amm/v1/BatchSwap",
     toAmino: ({
       creator,
       swapType,
@@ -957,7 +957,7 @@ export const AminoConverter = {
     }
   },
   "/pryzm.amm.v1.MsgSetYammConfiguration": {
-    aminoType: "/pryzm.amm.v1.MsgSetYammConfiguration",
+    aminoType: "pryzm/amm/v1/SetYammConfiguration",
     toAmino: ({
       creator,
       configuration
@@ -1002,7 +1002,7 @@ export const AminoConverter = {
     }
   },
   "/pryzm.amm.v1.MsgWhitelistRoute": {
-    aminoType: "/pryzm.amm.v1.MsgWhitelistRoute",
+    aminoType: "pryzm/amm/v1/WhitelistRoute",
     toAmino: ({
       authority,
       whitelistedRoute
@@ -1037,7 +1037,7 @@ export const AminoConverter = {
     }
   },
   "/pryzm.amm.v1.MsgSetWhitelistedRouteEnabled": {
-    aminoType: "/pryzm.amm.v1.MsgSetWhitelistedRouteEnabled",
+    aminoType: "pryzm/amm/v1/SetWhitelistedRouteEnabled",
     toAmino: ({
       authority,
       tokenIn,
@@ -1066,7 +1066,7 @@ export const AminoConverter = {
     }
   },
   "/pryzm.amm.v1.MsgSubmitOrder": {
-    aminoType: "/pryzm.amm.v1.MsgSubmitOrder",
+    aminoType: "pryzm/amm/v1/SubmitOrder",
     toAmino: ({
       creator,
       poolId,
@@ -1123,7 +1123,7 @@ export const AminoConverter = {
     }
   },
   "/pryzm.amm.v1.MsgCancelOrder": {
-    aminoType: "/pryzm.amm.v1.MsgCancelOrder",
+    aminoType: "pryzm/amm/v1/CancelOrder",
     toAmino: ({
       creator,
       id
@@ -1144,7 +1144,7 @@ export const AminoConverter = {
     }
   },
   "/pryzm.amm.v1.MsgProposeMatch": {
-    aminoType: "/pryzm.amm.v1.MsgProposeMatch",
+    aminoType: "pryzm/amm/v1/ProposeMatch",
     toAmino: ({
       creator,
       pairs
@@ -1179,7 +1179,7 @@ export const AminoConverter = {
     }
   },
   "/pryzm.amm.v1.MsgSetCircuitBreakers": {
-    aminoType: "/pryzm.amm.v1.MsgSetCircuitBreakers",
+    aminoType: "pryzm/amm/v1/SetCircuitBreakers",
     toAmino: ({
       creator,
       poolId,
@@ -1218,7 +1218,7 @@ export const AminoConverter = {
     }
   },
   "/pryzm.amm.v1.MsgSetRecoveryMode": {
-    aminoType: "/pryzm.amm.v1.MsgSetRecoveryMode",
+    aminoType: "pryzm/amm/v1/SetRecoveryMode",
     toAmino: ({
       authority,
       poolId,
@@ -1243,7 +1243,7 @@ export const AminoConverter = {
     }
   },
   "/pryzm.amm.v1.MsgRecoveryExit": {
-    aminoType: "/pryzm.amm.v1.MsgRecoveryExit",
+    aminoType: "pryzm/amm/v1/RecoveryExit",
     toAmino: ({
       creator,
       poolId,
@@ -1278,7 +1278,7 @@ export const AminoConverter = {
     }
   },
   "/pryzm.amm.v1.MsgSetPauseMode": {
-    aminoType: "/pryzm.amm.v1.MsgSetPauseMode",
+    aminoType: "pryzm/amm/v1/SetPauseMode",
     toAmino: ({
       creator,
       poolId,
@@ -1303,7 +1303,7 @@ export const AminoConverter = {
     }
   },
   "/pryzm.amm.v1.MsgSetVaultPauseMode": {
-    aminoType: "/pryzm.amm.v1.MsgSetVaultPauseMode",
+    aminoType: "pryzm/amm/v1/SetVaultPauseMode",
     toAmino: ({
       authority,
       pauseMode
@@ -1324,7 +1324,7 @@ export const AminoConverter = {
     }
   },
   "/pryzm.amm.v1.MsgCreateOraclePricePair": {
-    aminoType: "/pryzm.amm.v1.MsgCreateOraclePricePair",
+    aminoType: "pryzm/amm/v1/CreateOraclePricePair",
     toAmino: ({
       authority,
       oraclePricePair
@@ -1371,7 +1371,7 @@ export const AminoConverter = {
     }
   },
   "/pryzm.amm.v1.MsgUpdateOraclePricePair": {
-    aminoType: "/pryzm.amm.v1.MsgUpdateOraclePricePair",
+    aminoType: "pryzm/amm/v1/UpdateOraclePricePair",
     toAmino: ({
       authority,
       oraclePricePair
@@ -1418,7 +1418,7 @@ export const AminoConverter = {
     }
   },
   "/pryzm.amm.v1.MsgDeleteOraclePricePair": {
-    aminoType: "/pryzm.amm.v1.MsgDeleteOraclePricePair",
+    aminoType: "pryzm/amm/v1/DeleteOraclePricePair",
     toAmino: ({
       authority,
       assetId
@@ -1439,7 +1439,7 @@ export const AminoConverter = {
     }
   },
   "/pryzm.amm.v1.MsgSetSwapProtocolFee": {
-    aminoType: "/pryzm.amm.v1.MsgSetSwapProtocolFee",
+    aminoType: "pryzm/amm/v1/SetSwapProtocolFee",
     toAmino: ({
       authority,
       poolId,
@@ -1464,7 +1464,7 @@ export const AminoConverter = {
     }
   },
   "/pryzm.amm.v1.MsgSetJoinExitProtocolFee": {
-    aminoType: "/pryzm.amm.v1.MsgSetJoinExitProtocolFee",
+    aminoType: "pryzm/amm/v1/SetJoinExitProtocolFee",
     toAmino: ({
       authority,
       poolId,
@@ -1489,7 +1489,7 @@ export const AminoConverter = {
     }
   },
   "/pryzm.amm.v1.MsgIntroduceYammLpToWeightedPool": {
-    aminoType: "/pryzm.amm.v1.MsgIntroduceYammLpToWeightedPool",
+    aminoType: "pryzm/amm/v1/IntroduceYammLpToWeightedPool",
     toAmino: ({
       creator,
       weightedPoolId,
@@ -1522,7 +1522,7 @@ export const AminoConverter = {
     }
   },
   "/pryzm.amm.v1.MsgIntroduceAssetBaseTokenToWeightedPool": {
-    aminoType: "/pryzm.amm.v1.MsgIntroduceAssetBaseTokenToWeightedPool",
+    aminoType: "pryzm/amm/v1/IntroduceAssetBaseTokenToWeightedPool",
     toAmino: ({
       creator,
       weightedPoolId,
@@ -1559,7 +1559,7 @@ export const AminoConverter = {
     }
   },
   "/pryzm.amm.v1.MsgCancelPendingTokenIntroduction": {
-    aminoType: "/pryzm.amm.v1.MsgCancelPendingTokenIntroduction",
+    aminoType: "pryzm/amm/v1/CancelPendingTokenIntroduction",
     toAmino: ({
       creator,
       assetId,
@@ -1584,7 +1584,7 @@ export const AminoConverter = {
     }
   },
   "/pryzm.amm.v1.MsgRemoveTokenFromWeightedPool": {
-    aminoType: "/pryzm.amm.v1.MsgRemoveTokenFromWeightedPool",
+    aminoType: "pryzm/amm/v1/RemoveTokenFromWeightedPool",
     toAmino: ({
       creator,
       poolId,
@@ -1613,7 +1613,7 @@ export const AminoConverter = {
     }
   },
   "/pryzm.amm.v1.MsgUpdateParams": {
-    aminoType: "/pryzm.amm.v1.MsgUpdateParams",
+    aminoType: "pryzm/amm/v1/UpdateParams",
     toAmino: ({
       authority,
       generalPoolParameters,
@@ -1710,7 +1710,7 @@ export const AminoConverter = {
     }
   },
   "/pryzm.amm.v1.MsgAddMaturityToYamm": {
-    aminoType: "/pryzm.amm.v1.MsgAddMaturityToYamm",
+    aminoType: "pryzm/amm/v1/AddMaturityToYamm",
     toAmino: ({
       authority,
       assetId,
@@ -1735,7 +1735,7 @@ export const AminoConverter = {
     }
   },
   "/pryzm.amm.v1.MsgSetInitializationAllowList": {
-    aminoType: "/pryzm.amm.v1.MsgSetInitializationAllowList",
+    aminoType: "pryzm/amm/v1/SetInitializationAllowList",
     toAmino: ({
       creator,
       poolId,
@@ -1760,7 +1760,7 @@ export const AminoConverter = {
     }
   },
   "/pryzm.amm.v1.MsgSetPoolAdmins": {
-    aminoType: "/pryzm.amm.v1.MsgSetPoolAdmins",
+    aminoType: "pryzm/amm/v1/SetPoolAdmins",
     toAmino: ({
       creator,
       poolId,
@@ -1785,7 +1785,7 @@ export const AminoConverter = {
     }
   },
   "/pryzm.amm.v1.MsgSetPauseAllowList": {
-    aminoType: "/pryzm.amm.v1.MsgSetPauseAllowList",
+    aminoType: "pryzm/amm/v1/SetPauseAllowList",
     toAmino: ({
       creator,
       poolId,
@@ -1810,7 +1810,7 @@ export const AminoConverter = {
     }
   },
   "/pryzm.amm.v1.MsgSetPauseWindow": {
-    aminoType: "/pryzm.amm.v1.MsgSetPauseWindow",
+    aminoType: "pryzm/amm/v1/SetPauseWindow",
     toAmino: ({
       authority,
       poolId,

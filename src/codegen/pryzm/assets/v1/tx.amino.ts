@@ -2,7 +2,7 @@
 import { AminoMsg } from "@cosmjs/amino";
 import { MsgUpdateParams, MsgRegisterAsset, MsgDisableAsset, MsgUpdateMaturityParams, MsgUpdateFeeRatios } from "./tx";
 export interface MsgUpdateParamsAminoType extends AminoMsg {
-  type: "/pryzm.assets.v1.MsgUpdateParams";
+  type: "pryzm/assets/v1/UpdateParams";
   value: {
     authority: string;
     params: {
@@ -18,7 +18,7 @@ export interface MsgUpdateParamsAminoType extends AminoMsg {
   };
 }
 export interface MsgRegisterAssetAminoType extends AminoMsg {
-  type: "/pryzm.assets.v1.MsgRegisterAsset";
+  type: "pryzm/assets/v1/RegisterAsset";
   value: {
     creator: string;
     asset: {
@@ -41,14 +41,14 @@ export interface MsgRegisterAssetAminoType extends AminoMsg {
   };
 }
 export interface MsgDisableAssetAminoType extends AminoMsg {
-  type: "/pryzm.assets.v1.MsgDisableAsset";
+  type: "pryzm/assets/v1/DisableAsset";
   value: {
     creator: string;
     asset_id: string;
   };
 }
 export interface MsgUpdateMaturityParamsAminoType extends AminoMsg {
-  type: "/pryzm.assets.v1.MsgUpdateMaturityParams";
+  type: "pryzm/assets/v1/UpdateMaturityParams";
   value: {
     authority: string;
     asset_id: string;
@@ -59,7 +59,7 @@ export interface MsgUpdateMaturityParamsAminoType extends AminoMsg {
   };
 }
 export interface MsgUpdateFeeRatiosAminoType extends AminoMsg {
-  type: "/pryzm.assets.v1.MsgUpdateFeeRatios";
+  type: "pryzm/assets/v1/UpdateFeeRatios";
   value: {
     authority: string;
     asset_id: string;
@@ -74,7 +74,7 @@ export interface MsgUpdateFeeRatiosAminoType extends AminoMsg {
 }
 export const AminoConverter = {
   "/pryzm.assets.v1.MsgUpdateParams": {
-    aminoType: "/pryzm.assets.v1.MsgUpdateParams",
+    aminoType: "pryzm/assets/v1/UpdateParams",
     toAmino: ({
       authority,
       params
@@ -113,7 +113,7 @@ export const AminoConverter = {
     }
   },
   "/pryzm.assets.v1.MsgRegisterAsset": {
-    aminoType: "/pryzm.assets.v1.MsgRegisterAsset",
+    aminoType: "pryzm/assets/v1/RegisterAsset",
     toAmino: ({
       creator,
       asset
@@ -166,7 +166,7 @@ export const AminoConverter = {
     }
   },
   "/pryzm.assets.v1.MsgDisableAsset": {
-    aminoType: "/pryzm.assets.v1.MsgDisableAsset",
+    aminoType: "pryzm/assets/v1/DisableAsset",
     toAmino: ({
       creator,
       assetId
@@ -187,7 +187,7 @@ export const AminoConverter = {
     }
   },
   "/pryzm.assets.v1.MsgUpdateMaturityParams": {
-    aminoType: "/pryzm.assets.v1.MsgUpdateMaturityParams",
+    aminoType: "pryzm/assets/v1/UpdateMaturityParams",
     toAmino: ({
       authority,
       assetId,
@@ -218,7 +218,7 @@ export const AminoConverter = {
     }
   },
   "/pryzm.assets.v1.MsgUpdateFeeRatios": {
-    aminoType: "/pryzm.assets.v1.MsgUpdateFeeRatios",
+    aminoType: "pryzm/assets/v1/UpdateFeeRatios",
     toAmino: ({
       authority,
       assetId,

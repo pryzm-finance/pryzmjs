@@ -3,7 +3,7 @@ import { voteOptionFromJSON } from "../../../cosmos/gov/v1/gov";
 import { AminoMsg } from "@cosmjs/amino";
 import { MsgUpdateParams, MsgStakePAssets, MsgUnstakePAssets, MsgSubmitVote, MsgSubmitProposal, MsgRetryVoteTransmit } from "./tx";
 export interface MsgUpdateParamsAminoType extends AminoMsg {
-  type: "/pryzm.pgov.v1.MsgUpdateParams";
+  type: "pryzm/pgov/v1/UpdateParams";
   value: {
     authority: string;
     params: {
@@ -30,7 +30,7 @@ export interface MsgUpdateParamsAminoType extends AminoMsg {
   };
 }
 export interface MsgStakePAssetsAminoType extends AminoMsg {
-  type: "/pryzm.pgov.v1.MsgStakePAssets";
+  type: "pryzm/pgov/v1/StakePAssets";
   value: {
     creator: string;
     amount: {
@@ -40,7 +40,7 @@ export interface MsgStakePAssetsAminoType extends AminoMsg {
   };
 }
 export interface MsgUnstakePAssetsAminoType extends AminoMsg {
-  type: "/pryzm.pgov.v1.MsgUnstakePAssets";
+  type: "pryzm/pgov/v1/UnstakePAssets";
   value: {
     creator: string;
     amount: {
@@ -50,7 +50,7 @@ export interface MsgUnstakePAssetsAminoType extends AminoMsg {
   };
 }
 export interface MsgSubmitVoteAminoType extends AminoMsg {
-  type: "/pryzm.pgov.v1.MsgSubmitVote";
+  type: "pryzm/pgov/v1/SubmitVote";
   value: {
     voter: string;
     asset: string;
@@ -62,7 +62,7 @@ export interface MsgSubmitVoteAminoType extends AminoMsg {
   };
 }
 export interface MsgSubmitProposalAminoType extends AminoMsg {
-  type: "/pryzm.pgov.v1.MsgSubmitProposal";
+  type: "pryzm/pgov/v1/SubmitProposal";
   value: {
     creator: string;
     asset: string;
@@ -78,7 +78,7 @@ export interface MsgSubmitProposalAminoType extends AminoMsg {
   };
 }
 export interface MsgRetryVoteTransmitAminoType extends AminoMsg {
-  type: "/pryzm.pgov.v1.MsgRetryVoteTransmit";
+  type: "pryzm/pgov/v1/RetryVoteTransmit";
   value: {
     creator: string;
     asset: string;
@@ -87,7 +87,7 @@ export interface MsgRetryVoteTransmitAminoType extends AminoMsg {
 }
 export const AminoConverter = {
   "/pryzm.pgov.v1.MsgUpdateParams": {
-    aminoType: "/pryzm.pgov.v1.MsgUpdateParams",
+    aminoType: "pryzm/pgov/v1/UpdateParams",
     toAmino: ({
       authority,
       params
@@ -142,7 +142,7 @@ export const AminoConverter = {
     }
   },
   "/pryzm.pgov.v1.MsgStakePAssets": {
-    aminoType: "/pryzm.pgov.v1.MsgStakePAssets",
+    aminoType: "pryzm/pgov/v1/StakePAssets",
     toAmino: ({
       creator,
       amount
@@ -169,7 +169,7 @@ export const AminoConverter = {
     }
   },
   "/pryzm.pgov.v1.MsgUnstakePAssets": {
-    aminoType: "/pryzm.pgov.v1.MsgUnstakePAssets",
+    aminoType: "pryzm/pgov/v1/UnstakePAssets",
     toAmino: ({
       creator,
       amount
@@ -196,7 +196,7 @@ export const AminoConverter = {
     }
   },
   "/pryzm.pgov.v1.MsgSubmitVote": {
-    aminoType: "/pryzm.pgov.v1.MsgSubmitVote",
+    aminoType: "pryzm/pgov/v1/SubmitVote",
     toAmino: ({
       voter,
       asset,
@@ -231,7 +231,7 @@ export const AminoConverter = {
     }
   },
   "/pryzm.pgov.v1.MsgSubmitProposal": {
-    aminoType: "/pryzm.pgov.v1.MsgSubmitProposal",
+    aminoType: "pryzm/pgov/v1/SubmitProposal",
     toAmino: ({
       creator,
       asset,
@@ -276,7 +276,7 @@ export const AminoConverter = {
     }
   },
   "/pryzm.pgov.v1.MsgRetryVoteTransmit": {
-    aminoType: "/pryzm.pgov.v1.MsgRetryVoteTransmit",
+    aminoType: "pryzm/pgov/v1/RetryVoteTransmit",
     toAmino: ({
       creator,
       asset,
