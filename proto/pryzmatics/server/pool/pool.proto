@@ -3,7 +3,7 @@ package pryzmatics.server.pool;
 
 import "gogoproto/gogo.proto";
 import "cosmos_proto/cosmos.proto";
-import "pryzmatics/pool/pool.proto";
+import "pryzmatics/pool/extended_pool.proto";
 import "cosmos/base/query/v1beta1/pagination.proto";
 
 
@@ -14,7 +14,7 @@ message QueryPoolRequest {
 }
 
 message QueryPoolResponse {
-  pryzmatics.pool.Pool pool = 1 [(gogoproto.nullable) = false];
+  pryzmatics.pool.ExtendedPool pool = 1 [(gogoproto.nullable) = false];
 }
 
 message QueryPoolsRequest {
@@ -22,6 +22,6 @@ message QueryPoolsRequest {
 }
 
 message QueryPoolsResponse {
-  repeated pryzmatics.pool.Pool pools = 1 [(gogoproto.nullable) = false];
+  repeated pryzmatics.pool.ExtendedPool pools = 1 [(gogoproto.nullable) = false];
   cosmos.base.query.v1beta1.PageResponse pagination = 2 [(gogoproto.nullable) = true];
 }

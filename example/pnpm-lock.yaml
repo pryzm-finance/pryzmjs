@@ -1,13 +1,13 @@
 lockfileVersion: 5.4
 
 specifiers:
-  '@pryzm-finance/pryzmjs': 0.15.2
+  '@pryzm-finance/pryzmjs': 0.15.3
   '@refractedlabs/oraclejs': ^0.4.1
   '@refractedlabs/utils': 0.1.9
   typescript: ^5.1.6
 
 dependencies:
-  '@pryzm-finance/pryzmjs': 0.15.2_google-protobuf@3.21.2
+  '@pryzm-finance/pryzmjs': 0.15.3_google-protobuf@3.21.2
   '@refractedlabs/oraclejs': 0.4.1_google-protobuf@3.21.2
   '@refractedlabs/utils': 0.1.9
 
@@ -23,8 +23,8 @@ packages:
       regenerator-runtime: 0.14.0
     dev: false
 
-  /@babel/runtime/7.23.5:
-    resolution: {integrity: sha512-NdUTHcPe4C99WxPub+K9l9tK5/lV4UXIoaHSYgzco9BCyjKAAwzdBI+wWtYqHt7LJdbo74ZjRPJgzVweq1sz0w==}
+  /@babel/runtime/7.23.6:
+    resolution: {integrity: sha512-zHd0eUrf5GZoOWVCXp6koAKQTfZV07eit6bGPmJgnZdnSAvvZee6zniW2XMF7Cmc4ISOOnPy3QaSiIJGJkVEDQ==}
     engines: {node: '>=6.9.0'}
     dependencies:
       regenerator-runtime: 0.14.0
@@ -326,10 +326,10 @@ packages:
     resolution: {integrity: sha512-Vvn3zZrhQZkkBE8LSuW3em98c0FwgO4nxzv6OdSxPKJIEKY2bGbHn+mhGIPerzI4twdxaP8/0+06HBpwf345Lw==}
     dev: false
 
-  /@pryzm-finance/pryzmjs/0.15.2_google-protobuf@3.21.2:
-    resolution: {integrity: sha512-JaqUwZPGW8C32YQuDFS0Db6+JUVsKww9CuFdKPY5nJ808tJOmhn9CLVlv5x2e7G0ilydxs6q3Zzpxd+D/3XDJA==, tarball: download/@pryzm-finance/pryzmjs/0.15.2/9941c47b0dcf22d63a0a697db73d40430f2149b7}
+  /@pryzm-finance/pryzmjs/0.15.3_google-protobuf@3.21.2:
+    resolution: {integrity: sha512-pYkShWGE+QJgfXkKw19ap/4UzfoSkNd+SM+u5hpNAOt0nTWZ1RAXOV3qp/a+wgVPdU28s6ET9u6ZsUCbnV1vKA==, tarball: download/@pryzm-finance/pryzmjs/0.15.3/8b19c57314e0f8c327b91da9aceac9da4230667f}
     dependencies:
-      '@babel/runtime': 7.23.5
+      '@babel/runtime': 7.23.6
       '@cosmjs/amino': 0.31.3
       '@cosmjs/proto-signing': 0.31.3
       '@cosmjs/stargate': 0.31.3
@@ -349,7 +349,7 @@ packages:
   /@refractedlabs/cosmology-lcd-fork/0.1.1:
     resolution: {integrity: sha512-526EqwprOHVrI31c1jUSOarcYHWZRC3AddR61H2l92cvilZ0xYzLU12r94U9WfjrZkvMgy21vnMuEBPk1+gCaQ==, tarball: download/@refractedlabs/cosmology-lcd-fork/0.1.1/3f091d4a473f79aaf28702256f29d7b6f61d14fb}
     dependencies:
-      '@babel/runtime': 7.23.5
+      '@babel/runtime': 7.23.6
       axios: 0.27.2
     transitivePeerDependencies:
       - debug

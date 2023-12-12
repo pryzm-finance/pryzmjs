@@ -1,0 +1,37 @@
+syntax = "proto3";
+package pryzmatics.pool;
+
+import "gogoproto/gogo.proto";
+import "cosmos_proto/cosmos.proto";
+import "pryzm/amm/v1/pool.proto";
+import "pryzmatics/pool/pool_apr.proto";
+import "pryzmatics/pool/pool.proto";
+import "pryzmatics/pool/pool_token.proto";
+
+
+option go_package = "github.com/pryzm-finance/pryzmatics/types/pool";
+
+message ExtendedPool {
+  uint64 id = 1;
+  string name = 2;
+  pryzm.amm.v1.PoolType pool_type = 3;
+  string lp_denom = 4;
+  string lp_supply = 5 [
+    (cosmos_proto.scalar) = "cosmos.Int",
+    (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Int",
+    (gogoproto.nullable) = false
+  ];
+  string lp_price = 6 [
+    (cosmos_proto.scalar) = "cosmos.Dec",
+    (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Dec",
+    (gogoproto.nullable) = true
+  ];
+  string total_liquidity = 7 [
+    (cosmos_proto.scalar) = "cosmos.Dec",
+    (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Dec",
+    (gogoproto.nullable) = true
+  ];
+  pryzmatics.pool.PoolApr apr = 8 [(gogoproto.nullable) = true];
+  pryzmatics.pool.PoolMetrics metrics = 9 [(gogoproto.nullable) = false];
+  repeated pryzmatics.pool.PoolToken tokens = 10 [(gogoproto.nullable) = false];
+}

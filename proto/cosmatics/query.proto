@@ -4,6 +4,7 @@ package cosmatics;
 import "gogoproto/gogo.proto";
 import "google/api/annotations.proto";
 import "cosmatics/sync_state.proto";
+import "cosmatics/metric.proto";
 import "tendermint/types/block.proto";
 import "tendermint/blocksync/types.proto";
 import "cosmos/tx/v1beta1/service.proto";
@@ -26,5 +27,9 @@ service Query {
 
   rpc TransactionByEvent(cosmos.tx.v1beta1.GetTxsEventRequest) returns (cosmos.tx.v1beta1.GetTxsEventResponse) {
     option (google.api.http).get = "/cosmatics/transaction";
+  }
+
+  rpc Metrics(QueryMetricsRequest) returns (QueryMetricsResponse) {
+    option (google.api.http).get = "/cosmatics/metric";
   }
 }

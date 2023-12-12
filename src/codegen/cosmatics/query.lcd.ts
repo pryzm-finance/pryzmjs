@@ -1,5 +1,6 @@
 //@ts-nocheck
 import { GetTxRequest, GetTxResponseSDKType, GetTxsEventRequest, GetTxsEventResponseSDKType } from "../cosmos/tx/v1beta1/service";
+import { QueryMetricsRequest, QueryMetricsResponseSDKType } from "./metric";
 import { setPaginationParams } from "../helpers";
 import { LCDClient } from "@refractedlabs/cosmology-lcd-fork";
 import { QuerySyncStateRequest, QuerySyncStateResponseSDKType } from "./sync_state";
@@ -17,6 +18,7 @@ export class LCDQueryClient {
     this.block = this.block.bind(this);
     this.transaction = this.transaction.bind(this);
     this.transactionByEvent = this.transactionByEvent.bind(this);
+    this.metrics = this.metrics.bind(this);
   }
   /* SyncState */
   async syncState(_params: QuerySyncStateRequest = {}): Promise<QuerySyncStateResponseSDKType> {
@@ -55,5 +57,34 @@ export class LCDQueryClient {
     }
     const endpoint = `cosmatics/transaction`;
     return await this.req.get<GetTxsEventResponseSDKType>(endpoint, options);
+  }
+  /* Metrics */
+  async metrics(params: QueryMetricsRequest): Promise<QueryMetricsResponseSDKType> {
+    const options: any = {
+      params: {}
+    };
+    if (typeof params?.metricId !== "undefined") {
+      options.params.metric_id = params.metricId;
+    }
+    if (typeof params?.metricType !== "undefined") {
+      options.params.metric_type = params.metricType;
+    }
+    if (typeof params?.fromBlockHeight !== "undefined") {
+      options.params.from_block_height = params.fromBlockHeight;
+    }
+    if (typeof params?.toBlockHeight !== "undefined") {
+      options.params.to_block_height = params.toBlockHeight;
+    }
+    if (typeof params?.fromTime !== "undefined") {
+      options.params.from_time = params.fromTime;
+    }
+    if (typeof params?.toTime !== "undefined") {
+      options.params.to_time = params.toTime;
+    }
+    if (typeof params?.pagination !== "undefined") {
+      setPaginationParams(options, params.pagination);
+    }
+    const endpoint = `cosmatics/metric`;
+    return await this.req.get<QueryMetricsResponseSDKType>(endpoint, options);
   }
 }

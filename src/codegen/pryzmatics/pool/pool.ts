@@ -4,7 +4,6 @@ import { BinaryReader, BinaryWriter } from "../../binary";
 import { Decimal } from "@cosmjs/math";
 import { isSet } from "../../helpers";
 export interface PoolMetrics {
-  totalLiquidity: string;
   tradeVolume24h: string;
   tradeVolume7d: string;
   tradeVolume30d: string;
@@ -16,7 +15,6 @@ export interface PoolMetrics {
   joinExitSwapFeeVolume30d: string;
 }
 export interface PoolMetricsSDKType {
-  total_liquidity: string;
   trade_volume_24h: string;
   trade_volume_7d: string;
   trade_volume_30d: string;
@@ -45,7 +43,6 @@ export interface PoolSDKType {
 }
 function createBasePoolMetrics(): PoolMetrics {
   return {
-    totalLiquidity: "",
     tradeVolume24h: "",
     tradeVolume7d: "",
     tradeVolume30d: "",
@@ -59,35 +56,32 @@ function createBasePoolMetrics(): PoolMetrics {
 }
 export const PoolMetrics = {
   encode(message: PoolMetrics, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
-    if (message.totalLiquidity !== "") {
-      writer.uint32(10).string(Decimal.fromUserInput(message.totalLiquidity, 18).atomics);
-    }
     if (message.tradeVolume24h !== "") {
-      writer.uint32(18).string(Decimal.fromUserInput(message.tradeVolume24h, 18).atomics);
+      writer.uint32(10).string(Decimal.fromUserInput(message.tradeVolume24h, 18).atomics);
     }
     if (message.tradeVolume7d !== "") {
-      writer.uint32(26).string(Decimal.fromUserInput(message.tradeVolume7d, 18).atomics);
+      writer.uint32(18).string(Decimal.fromUserInput(message.tradeVolume7d, 18).atomics);
     }
     if (message.tradeVolume30d !== "") {
-      writer.uint32(34).string(Decimal.fromUserInput(message.tradeVolume30d, 18).atomics);
+      writer.uint32(26).string(Decimal.fromUserInput(message.tradeVolume30d, 18).atomics);
     }
     if (message.swapFeeVolume24h !== "") {
-      writer.uint32(42).string(Decimal.fromUserInput(message.swapFeeVolume24h, 18).atomics);
+      writer.uint32(34).string(Decimal.fromUserInput(message.swapFeeVolume24h, 18).atomics);
     }
     if (message.swapFeeVolume7d !== "") {
-      writer.uint32(50).string(Decimal.fromUserInput(message.swapFeeVolume7d, 18).atomics);
+      writer.uint32(42).string(Decimal.fromUserInput(message.swapFeeVolume7d, 18).atomics);
     }
     if (message.swapFeeVolume30d !== "") {
-      writer.uint32(58).string(Decimal.fromUserInput(message.swapFeeVolume30d, 18).atomics);
+      writer.uint32(50).string(Decimal.fromUserInput(message.swapFeeVolume30d, 18).atomics);
     }
     if (message.joinExitSwapFeeVolume24h !== "") {
-      writer.uint32(66).string(Decimal.fromUserInput(message.joinExitSwapFeeVolume24h, 18).atomics);
+      writer.uint32(58).string(Decimal.fromUserInput(message.joinExitSwapFeeVolume24h, 18).atomics);
     }
     if (message.joinExitSwapFeeVolume7d !== "") {
-      writer.uint32(74).string(Decimal.fromUserInput(message.joinExitSwapFeeVolume7d, 18).atomics);
+      writer.uint32(66).string(Decimal.fromUserInput(message.joinExitSwapFeeVolume7d, 18).atomics);
     }
     if (message.joinExitSwapFeeVolume30d !== "") {
-      writer.uint32(82).string(Decimal.fromUserInput(message.joinExitSwapFeeVolume30d, 18).atomics);
+      writer.uint32(74).string(Decimal.fromUserInput(message.joinExitSwapFeeVolume30d, 18).atomics);
     }
     return writer;
   },
@@ -99,33 +93,30 @@ export const PoolMetrics = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.totalLiquidity = Decimal.fromAtomics(reader.string(), 18).toString();
-          break;
-        case 2:
           message.tradeVolume24h = Decimal.fromAtomics(reader.string(), 18).toString();
           break;
-        case 3:
+        case 2:
           message.tradeVolume7d = Decimal.fromAtomics(reader.string(), 18).toString();
           break;
-        case 4:
+        case 3:
           message.tradeVolume30d = Decimal.fromAtomics(reader.string(), 18).toString();
           break;
-        case 5:
+        case 4:
           message.swapFeeVolume24h = Decimal.fromAtomics(reader.string(), 18).toString();
           break;
-        case 6:
+        case 5:
           message.swapFeeVolume7d = Decimal.fromAtomics(reader.string(), 18).toString();
           break;
-        case 7:
+        case 6:
           message.swapFeeVolume30d = Decimal.fromAtomics(reader.string(), 18).toString();
           break;
-        case 8:
+        case 7:
           message.joinExitSwapFeeVolume24h = Decimal.fromAtomics(reader.string(), 18).toString();
           break;
-        case 9:
+        case 8:
           message.joinExitSwapFeeVolume7d = Decimal.fromAtomics(reader.string(), 18).toString();
           break;
-        case 10:
+        case 9:
           message.joinExitSwapFeeVolume30d = Decimal.fromAtomics(reader.string(), 18).toString();
           break;
         default:
@@ -137,7 +128,6 @@ export const PoolMetrics = {
   },
   fromJSON(object: any): PoolMetrics {
     return {
-      totalLiquidity: isSet(object.totalLiquidity) ? String(object.totalLiquidity) : "",
       tradeVolume24h: isSet(object.tradeVolume24h) ? String(object.tradeVolume24h) : "",
       tradeVolume7d: isSet(object.tradeVolume7d) ? String(object.tradeVolume7d) : "",
       tradeVolume30d: isSet(object.tradeVolume30d) ? String(object.tradeVolume30d) : "",
@@ -151,7 +141,6 @@ export const PoolMetrics = {
   },
   toJSON(message: PoolMetrics): unknown {
     const obj: any = {};
-    message.totalLiquidity !== undefined && (obj.totalLiquidity = message.totalLiquidity);
     message.tradeVolume24h !== undefined && (obj.tradeVolume24h = message.tradeVolume24h);
     message.tradeVolume7d !== undefined && (obj.tradeVolume7d = message.tradeVolume7d);
     message.tradeVolume30d !== undefined && (obj.tradeVolume30d = message.tradeVolume30d);
@@ -165,7 +154,6 @@ export const PoolMetrics = {
   },
   fromPartial(object: Partial<PoolMetrics>): PoolMetrics {
     const message = createBasePoolMetrics();
-    message.totalLiquidity = object.totalLiquidity ?? "";
     message.tradeVolume24h = object.tradeVolume24h ?? "";
     message.tradeVolume7d = object.tradeVolume7d ?? "";
     message.tradeVolume30d = object.tradeVolume30d ?? "";

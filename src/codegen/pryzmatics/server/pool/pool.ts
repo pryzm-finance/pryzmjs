@@ -1,4 +1,4 @@
-import { Pool, PoolSDKType } from "../../pool/pool";
+import { ExtendedPool, ExtendedPoolSDKType } from "../../pool/extended_pool";
 import { PageRequest, PageRequestSDKType, PageResponse, PageResponseSDKType } from "../../../cosmos/base/query/v1beta1/pagination";
 import { BinaryReader, BinaryWriter } from "../../../binary";
 import { isSet } from "../../../helpers";
@@ -9,10 +9,10 @@ export interface QueryPoolRequestSDKType {
   pool_id: bigint;
 }
 export interface QueryPoolResponse {
-  pool: Pool;
+  pool: ExtendedPool;
 }
 export interface QueryPoolResponseSDKType {
-  pool: PoolSDKType;
+  pool: ExtendedPoolSDKType;
 }
 export interface QueryPoolsRequest {
   pagination?: PageRequest;
@@ -21,11 +21,11 @@ export interface QueryPoolsRequestSDKType {
   pagination?: PageRequestSDKType;
 }
 export interface QueryPoolsResponse {
-  pools: Pool[];
+  pools: ExtendedPool[];
   pagination?: PageResponse;
 }
 export interface QueryPoolsResponseSDKType {
-  pools: PoolSDKType[];
+  pools: ExtendedPoolSDKType[];
   pagination?: PageResponseSDKType;
 }
 function createBaseQueryPoolRequest(): QueryPoolRequest {
@@ -75,13 +75,13 @@ export const QueryPoolRequest = {
 };
 function createBaseQueryPoolResponse(): QueryPoolResponse {
   return {
-    pool: Pool.fromPartial({})
+    pool: ExtendedPool.fromPartial({})
   };
 }
 export const QueryPoolResponse = {
   encode(message: QueryPoolResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.pool !== undefined) {
-      Pool.encode(message.pool, writer.uint32(10).fork()).ldelim();
+      ExtendedPool.encode(message.pool, writer.uint32(10).fork()).ldelim();
     }
     return writer;
   },
@@ -93,7 +93,7 @@ export const QueryPoolResponse = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.pool = Pool.decode(reader, reader.uint32());
+          message.pool = ExtendedPool.decode(reader, reader.uint32());
           break;
         default:
           reader.skipType(tag & 7);
@@ -104,17 +104,17 @@ export const QueryPoolResponse = {
   },
   fromJSON(object: any): QueryPoolResponse {
     return {
-      pool: isSet(object.pool) ? Pool.fromJSON(object.pool) : undefined
+      pool: isSet(object.pool) ? ExtendedPool.fromJSON(object.pool) : undefined
     };
   },
   toJSON(message: QueryPoolResponse): unknown {
     const obj: any = {};
-    message.pool !== undefined && (obj.pool = message.pool ? Pool.toJSON(message.pool) : undefined);
+    message.pool !== undefined && (obj.pool = message.pool ? ExtendedPool.toJSON(message.pool) : undefined);
     return obj;
   },
   fromPartial(object: Partial<QueryPoolResponse>): QueryPoolResponse {
     const message = createBaseQueryPoolResponse();
-    message.pool = object.pool !== undefined && object.pool !== null ? Pool.fromPartial(object.pool) : undefined;
+    message.pool = object.pool !== undefined && object.pool !== null ? ExtendedPool.fromPartial(object.pool) : undefined;
     return message;
   }
 };
@@ -172,7 +172,7 @@ function createBaseQueryPoolsResponse(): QueryPoolsResponse {
 export const QueryPoolsResponse = {
   encode(message: QueryPoolsResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     for (const v of message.pools) {
-      Pool.encode(v!, writer.uint32(10).fork()).ldelim();
+      ExtendedPool.encode(v!, writer.uint32(10).fork()).ldelim();
     }
     if (message.pagination !== undefined) {
       PageResponse.encode(message.pagination, writer.uint32(18).fork()).ldelim();
@@ -187,7 +187,7 @@ export const QueryPoolsResponse = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.pools.push(Pool.decode(reader, reader.uint32()));
+          message.pools.push(ExtendedPool.decode(reader, reader.uint32()));
           break;
         case 2:
           message.pagination = PageResponse.decode(reader, reader.uint32());
@@ -201,14 +201,14 @@ export const QueryPoolsResponse = {
   },
   fromJSON(object: any): QueryPoolsResponse {
     return {
-      pools: Array.isArray(object?.pools) ? object.pools.map((e: any) => Pool.fromJSON(e)) : [],
+      pools: Array.isArray(object?.pools) ? object.pools.map((e: any) => ExtendedPool.fromJSON(e)) : [],
       pagination: isSet(object.pagination) ? PageResponse.fromJSON(object.pagination) : undefined
     };
   },
   toJSON(message: QueryPoolsResponse): unknown {
     const obj: any = {};
     if (message.pools) {
-      obj.pools = message.pools.map(e => e ? Pool.toJSON(e) : undefined);
+      obj.pools = message.pools.map(e => e ? ExtendedPool.toJSON(e) : undefined);
     } else {
       obj.pools = [];
     }
@@ -217,7 +217,7 @@ export const QueryPoolsResponse = {
   },
   fromPartial(object: Partial<QueryPoolsResponse>): QueryPoolsResponse {
     const message = createBaseQueryPoolsResponse();
-    message.pools = object.pools?.map(e => Pool.fromPartial(e)) || [];
+    message.pools = object.pools?.map(e => ExtendedPool.fromPartial(e)) || [];
     message.pagination = object.pagination !== undefined && object.pagination !== null ? PageResponse.fromPartial(object.pagination) : undefined;
     return message;
   }

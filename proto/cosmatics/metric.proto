@@ -1,0 +1,57 @@
+syntax = "proto3";
+package cosmatics;
+
+import "gogoproto/gogo.proto";
+import "google/protobuf/timestamp.proto";
+import "cosmos_proto/cosmos.proto";
+import "cosmos/base/query/v1beta1/pagination.proto";
+
+option go_package = "github.com/refractedlabs/cosmatics/types";
+
+enum MetricType {
+  option (gogoproto.goproto_enum_prefix) = false;
+  ANY = 0 [(gogoproto.enumvalue_customname) = "METRIC_TYPE_ANY"];
+  LST = 1 [(gogoproto.enumvalue_customname) = "METRIC_TYPE_LISTENER"];
+  FTC = 2 [(gogoproto.enumvalue_customname) = "METRIC_TYPE_FETCHER"];
+  PRC = 3 [(gogoproto.enumvalue_customname) = "METRIC_TYPE_PROCESSOR"];
+  PPR = 4 [(gogoproto.enumvalue_customname) = "METRIC_TYPE_POST_PROCESSOR"];
+}
+
+message Metric {
+  string id = 1;
+  MetricType type = 2;
+  google.protobuf.Timestamp block_time = 3 [(gogoproto.stdtime) = true, (gogoproto.nullable) = false];
+  int64 block_height = 4;
+  google.protobuf.Timestamp time = 5 [(gogoproto.stdtime) = true, (gogoproto.nullable) = false];
+  double value = 6;
+}
+
+message QueryMetricsRequest {
+  string metric_id = 1;
+  MetricType metric_type = 2;
+  string from_block_height = 3 [
+    (cosmos_proto.scalar) = "cosmos.Int",
+    (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Int",
+    (gogoproto.nullable) = true
+  ];
+  string to_block_height = 4 [
+    (cosmos_proto.scalar) = "cosmos.Int",
+    (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Int",
+    (gogoproto.nullable) = true
+  ];
+  string from_time = 5 [
+    (cosmos_proto.scalar) = "cosmos.Int",
+    (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Int",
+    (gogoproto.nullable) = true
+  ];
+  string to_time = 6 [
+    (cosmos_proto.scalar) = "cosmos.Int",
+    (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Int",
+    (gogoproto.nullable) = true
+  ];
+  cosmos.base.query.v1beta1.PageRequest pagination = 7 [(gogoproto.nullable) = true];
+}
+
+message QueryMetricsResponse {
+  repeated Metric metrics = 1 [(gogoproto.nullable) = false];
+}
