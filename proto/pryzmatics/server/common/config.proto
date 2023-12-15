@@ -1,0 +1,13 @@
+syntax = "proto3";
+package pryzmatics.server.common;
+
+import "gogoproto/gogo.proto";
+
+option go_package = "github.com/pryzm-finance/pryzmatics/server/common";
+
+message QueryConfigRequest {
+}
+
+message QueryConfigResponse {
+  map<string, string> configurations = 1 [(gogoproto.nullable) = false];
+}

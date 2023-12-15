@@ -10,6 +10,22 @@ export interface HistoricalPrice {
   open?: string;
   close?: string;
 }
+export interface HistoricalPriceProtoMsg {
+  typeUrl: "/pryzmatics.price.HistoricalPrice";
+  value: Uint8Array;
+}
+export interface HistoricalPriceAmino {
+  time?: string;
+  low?: string;
+  high?: string;
+  avg?: string;
+  open?: string;
+  close?: string;
+}
+export interface HistoricalPriceAminoMsg {
+  type: "/pryzmatics.price.HistoricalPrice";
+  value: HistoricalPriceAmino;
+}
 export interface HistoricalPriceSDKType {
   time: TimestampSDKType;
   low?: string;
@@ -29,6 +45,7 @@ function createBaseHistoricalPrice(): HistoricalPrice {
   };
 }
 export const HistoricalPrice = {
+  typeUrl: "/pryzmatics.price.HistoricalPrice",
   encode(message: HistoricalPrice, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.time !== undefined) {
       Timestamp.encode(message.time, writer.uint32(10).fork()).ldelim();
@@ -111,5 +128,52 @@ export const HistoricalPrice = {
     message.open = object.open ?? undefined;
     message.close = object.close ?? undefined;
     return message;
+  },
+  fromAmino(object: HistoricalPriceAmino): HistoricalPrice {
+    const message = createBaseHistoricalPrice();
+    if (object.time !== undefined && object.time !== null) {
+      message.time = Timestamp.fromAmino(object.time);
+    }
+    if (object.low !== undefined && object.low !== null) {
+      message.low = object.low;
+    }
+    if (object.high !== undefined && object.high !== null) {
+      message.high = object.high;
+    }
+    if (object.avg !== undefined && object.avg !== null) {
+      message.avg = object.avg;
+    }
+    if (object.open !== undefined && object.open !== null) {
+      message.open = object.open;
+    }
+    if (object.close !== undefined && object.close !== null) {
+      message.close = object.close;
+    }
+    return message;
+  },
+  toAmino(message: HistoricalPrice): HistoricalPriceAmino {
+    const obj: any = {};
+    obj.time = message.time ? Timestamp.toAmino(message.time) : undefined;
+    obj.low = message.low;
+    obj.high = message.high;
+    obj.avg = message.avg;
+    obj.open = message.open;
+    obj.close = message.close;
+    return obj;
+  },
+  fromAminoMsg(object: HistoricalPriceAminoMsg): HistoricalPrice {
+    return HistoricalPrice.fromAmino(object.value);
+  },
+  fromProtoMsg(message: HistoricalPriceProtoMsg): HistoricalPrice {
+    return HistoricalPrice.decode(message.value);
+  },
+  toProto(message: HistoricalPrice): Uint8Array {
+    return HistoricalPrice.encode(message).finish();
+  },
+  toProtoMsg(message: HistoricalPrice): HistoricalPriceProtoMsg {
+    return {
+      typeUrl: "/pryzmatics.price.HistoricalPrice",
+      value: HistoricalPrice.encode(message).finish()
+    };
   }
 };

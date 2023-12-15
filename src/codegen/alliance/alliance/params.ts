@@ -1,4 +1,4 @@
-import { Duration, DurationSDKType } from "../../google/protobuf/duration";
+import { Duration, DurationAmino, DurationSDKType } from "../../google/protobuf/duration";
 import { Timestamp, TimestampSDKType } from "../../google/protobuf/timestamp";
 import { BinaryReader, BinaryWriter } from "../../binary";
 import { isSet, fromJsonTimestamp, fromTimestamp } from "../../helpers";
@@ -10,6 +10,21 @@ export interface Params {
   /** Last application of `take_rate` on assets */
   lastTakeRateClaimTime: Timestamp;
 }
+export interface ParamsProtoMsg {
+  typeUrl: "/alliance.alliance.Params";
+  value: Uint8Array;
+}
+export interface ParamsAmino {
+  reward_delay_time?: DurationAmino;
+  /** Time interval between consecutive applications of `take_rate` */
+  take_rate_claim_interval?: DurationAmino;
+  /** Last application of `take_rate` on assets */
+  last_take_rate_claim_time?: string;
+}
+export interface ParamsAminoMsg {
+  type: "/alliance.alliance.Params";
+  value: ParamsAmino;
+}
 export interface ParamsSDKType {
   reward_delay_time: DurationSDKType;
   take_rate_claim_interval: DurationSDKType;
@@ -18,6 +33,18 @@ export interface ParamsSDKType {
 export interface RewardHistory {
   denom: string;
   index: string;
+}
+export interface RewardHistoryProtoMsg {
+  typeUrl: "/alliance.alliance.RewardHistory";
+  value: Uint8Array;
+}
+export interface RewardHistoryAmino {
+  denom?: string;
+  index?: string;
+}
+export interface RewardHistoryAminoMsg {
+  type: "/alliance.alliance.RewardHistory";
+  value: RewardHistoryAmino;
 }
 export interface RewardHistorySDKType {
   denom: string;
@@ -31,6 +58,7 @@ function createBaseParams(): Params {
   };
 }
 export const Params = {
+  typeUrl: "/alliance.alliance.Params",
   encode(message: Params, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.rewardDelayTime !== undefined) {
       Duration.encode(message.rewardDelayTime, writer.uint32(10).fork()).ldelim();
@@ -86,6 +114,41 @@ export const Params = {
     message.takeRateClaimInterval = object.takeRateClaimInterval !== undefined && object.takeRateClaimInterval !== null ? Duration.fromPartial(object.takeRateClaimInterval) : undefined;
     message.lastTakeRateClaimTime = object.lastTakeRateClaimTime !== undefined && object.lastTakeRateClaimTime !== null ? Timestamp.fromPartial(object.lastTakeRateClaimTime) : undefined;
     return message;
+  },
+  fromAmino(object: ParamsAmino): Params {
+    const message = createBaseParams();
+    if (object.reward_delay_time !== undefined && object.reward_delay_time !== null) {
+      message.rewardDelayTime = Duration.fromAmino(object.reward_delay_time);
+    }
+    if (object.take_rate_claim_interval !== undefined && object.take_rate_claim_interval !== null) {
+      message.takeRateClaimInterval = Duration.fromAmino(object.take_rate_claim_interval);
+    }
+    if (object.last_take_rate_claim_time !== undefined && object.last_take_rate_claim_time !== null) {
+      message.lastTakeRateClaimTime = Timestamp.fromAmino(object.last_take_rate_claim_time);
+    }
+    return message;
+  },
+  toAmino(message: Params): ParamsAmino {
+    const obj: any = {};
+    obj.reward_delay_time = message.rewardDelayTime ? Duration.toAmino(message.rewardDelayTime) : undefined;
+    obj.take_rate_claim_interval = message.takeRateClaimInterval ? Duration.toAmino(message.takeRateClaimInterval) : undefined;
+    obj.last_take_rate_claim_time = message.lastTakeRateClaimTime ? Timestamp.toAmino(message.lastTakeRateClaimTime) : undefined;
+    return obj;
+  },
+  fromAminoMsg(object: ParamsAminoMsg): Params {
+    return Params.fromAmino(object.value);
+  },
+  fromProtoMsg(message: ParamsProtoMsg): Params {
+    return Params.decode(message.value);
+  },
+  toProto(message: Params): Uint8Array {
+    return Params.encode(message).finish();
+  },
+  toProtoMsg(message: Params): ParamsProtoMsg {
+    return {
+      typeUrl: "/alliance.alliance.Params",
+      value: Params.encode(message).finish()
+    };
   }
 };
 function createBaseRewardHistory(): RewardHistory {
@@ -95,6 +158,7 @@ function createBaseRewardHistory(): RewardHistory {
   };
 }
 export const RewardHistory = {
+  typeUrl: "/alliance.alliance.RewardHistory",
   encode(message: RewardHistory, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.denom !== "") {
       writer.uint32(10).string(message.denom);
@@ -141,5 +205,36 @@ export const RewardHistory = {
     message.denom = object.denom ?? "";
     message.index = object.index ?? "";
     return message;
+  },
+  fromAmino(object: RewardHistoryAmino): RewardHistory {
+    const message = createBaseRewardHistory();
+    if (object.denom !== undefined && object.denom !== null) {
+      message.denom = object.denom;
+    }
+    if (object.index !== undefined && object.index !== null) {
+      message.index = object.index;
+    }
+    return message;
+  },
+  toAmino(message: RewardHistory): RewardHistoryAmino {
+    const obj: any = {};
+    obj.denom = message.denom;
+    obj.index = message.index;
+    return obj;
+  },
+  fromAminoMsg(object: RewardHistoryAminoMsg): RewardHistory {
+    return RewardHistory.fromAmino(object.value);
+  },
+  fromProtoMsg(message: RewardHistoryProtoMsg): RewardHistory {
+    return RewardHistory.decode(message.value);
+  },
+  toProto(message: RewardHistory): Uint8Array {
+    return RewardHistory.encode(message).finish();
+  },
+  toProtoMsg(message: RewardHistory): RewardHistoryProtoMsg {
+    return {
+      typeUrl: "/alliance.alliance.RewardHistory",
+      value: RewardHistory.encode(message).finish()
+    };
   }
 };

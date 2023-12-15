@@ -1,4 +1,3 @@
-//@ts-nocheck
 import { grpc } from "@improbable-eng/grpc-web";
 import { UnaryMethodDefinitionish } from "../../../grpc-web";
 import { DeepPartial } from "../../../helpers";
@@ -37,28 +36,28 @@ export class QueryClientImpl implements Query {
     this.tallyResult = this.tallyResult.bind(this);
   }
   proposal(request: DeepPartial<QueryProposalRequest>, metadata?: grpc.Metadata): Promise<QueryProposalResponse> {
-    return this.rpc.unary(QueryProposalDesc, QueryProposalRequest.fromPartial(request), metadata);
+    return this.rpc.unary(QueryProposalDesc, QueryProposalRequest.fromPartial(request as any), metadata);
   }
   proposals(request: DeepPartial<QueryProposalsRequest>, metadata?: grpc.Metadata): Promise<QueryProposalsResponse> {
-    return this.rpc.unary(QueryProposalsDesc, QueryProposalsRequest.fromPartial(request), metadata);
+    return this.rpc.unary(QueryProposalsDesc, QueryProposalsRequest.fromPartial(request as any), metadata);
   }
   vote(request: DeepPartial<QueryVoteRequest>, metadata?: grpc.Metadata): Promise<QueryVoteResponse> {
-    return this.rpc.unary(QueryVoteDesc, QueryVoteRequest.fromPartial(request), metadata);
+    return this.rpc.unary(QueryVoteDesc, QueryVoteRequest.fromPartial(request as any), metadata);
   }
   votes(request: DeepPartial<QueryVotesRequest>, metadata?: grpc.Metadata): Promise<QueryVotesResponse> {
-    return this.rpc.unary(QueryVotesDesc, QueryVotesRequest.fromPartial(request), metadata);
+    return this.rpc.unary(QueryVotesDesc, QueryVotesRequest.fromPartial(request as any), metadata);
   }
   params(request: DeepPartial<QueryParamsRequest>, metadata?: grpc.Metadata): Promise<QueryParamsResponse> {
-    return this.rpc.unary(QueryParamsDesc, QueryParamsRequest.fromPartial(request), metadata);
+    return this.rpc.unary(QueryParamsDesc, QueryParamsRequest.fromPartial(request as any), metadata);
   }
   deposit(request: DeepPartial<QueryDepositRequest>, metadata?: grpc.Metadata): Promise<QueryDepositResponse> {
-    return this.rpc.unary(QueryDepositDesc, QueryDepositRequest.fromPartial(request), metadata);
+    return this.rpc.unary(QueryDepositDesc, QueryDepositRequest.fromPartial(request as any), metadata);
   }
   deposits(request: DeepPartial<QueryDepositsRequest>, metadata?: grpc.Metadata): Promise<QueryDepositsResponse> {
-    return this.rpc.unary(QueryDepositsDesc, QueryDepositsRequest.fromPartial(request), metadata);
+    return this.rpc.unary(QueryDepositsDesc, QueryDepositsRequest.fromPartial(request as any), metadata);
   }
   tallyResult(request: DeepPartial<QueryTallyResultRequest>, metadata?: grpc.Metadata): Promise<QueryTallyResultResponse> {
-    return this.rpc.unary(QueryTallyResultDesc, QueryTallyResultRequest.fromPartial(request), metadata);
+    return this.rpc.unary(QueryTallyResultDesc, QueryTallyResultRequest.fromPartial(request as any), metadata);
   }
 }
 export const QueryDesc = {

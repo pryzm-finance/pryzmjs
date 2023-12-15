@@ -1,5 +1,5 @@
-import { Height, HeightSDKType } from "../../../ibc/core/client/v1/client";
-import { ValidatorState, ValidatorStateSDKType } from "./host_chain";
+import { Height, HeightAmino, HeightSDKType } from "../../../ibc/core/client/v1/client";
+import { ValidatorState, ValidatorStateAmino, ValidatorStateSDKType } from "./host_chain";
 import { BinaryReader, BinaryWriter } from "../../../binary";
 import { isSet } from "../../../helpers";
 /** OraclePayload defines the structure of oracle vote payload */
@@ -24,6 +24,36 @@ export interface OraclePayload {
    */
   lastCompletedUndelegationEpoch: bigint;
 }
+export interface OraclePayloadProtoMsg {
+  typeUrl: "/pryzm.icstaking.v1.OraclePayload";
+  value: Uint8Array;
+}
+/** OraclePayload defines the structure of oracle vote payload */
+export interface OraclePayloadAmino {
+  /**
+   * Oracle is reporting the data based on the host chain’s time which may have a time difference with Pryzm.
+   * In order to be accurate, we use a reference of host chain’s latest block in which Pryzm's state has changed to idle,
+   * and oracle feeders' reported block height is checked to be after that specific block
+   */
+  block_height?: HeightAmino;
+  /** list of validators and their state containing the delegation amount */
+  validator_states?: ValidatorStateAmino[];
+  /** balance of delegation interchain account */
+  delegation_account_balance?: string;
+  /** balance of reward interchain account */
+  reward_account_balance?: string;
+  /** balance of sweep interchain account */
+  sweep_account_balance?: string;
+  /**
+   * the largest undelegation epoch number for which the undelegation is completed and is ready to be swept to PRYZM
+   * reporting this with zero means that none of incomplete undelegations are completed.
+   */
+  last_completed_undelegation_epoch?: string;
+}
+export interface OraclePayloadAminoMsg {
+  type: "/pryzm.icstaking.v1.OraclePayload";
+  value: OraclePayloadAmino;
+}
 /** OraclePayload defines the structure of oracle vote payload */
 export interface OraclePayloadSDKType {
   block_height: HeightSDKType;
@@ -44,6 +74,7 @@ function createBaseOraclePayload(): OraclePayload {
   };
 }
 export const OraclePayload = {
+  typeUrl: "/pryzm.icstaking.v1.OraclePayload",
   encode(message: OraclePayload, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.blockHeight !== undefined) {
       Height.encode(message.blockHeight, writer.uint32(10).fork()).ldelim();
@@ -130,5 +161,54 @@ export const OraclePayload = {
     message.sweepAccountBalance = object.sweepAccountBalance ?? "";
     message.lastCompletedUndelegationEpoch = object.lastCompletedUndelegationEpoch !== undefined && object.lastCompletedUndelegationEpoch !== null ? BigInt(object.lastCompletedUndelegationEpoch.toString()) : BigInt(0);
     return message;
+  },
+  fromAmino(object: OraclePayloadAmino): OraclePayload {
+    const message = createBaseOraclePayload();
+    if (object.block_height !== undefined && object.block_height !== null) {
+      message.blockHeight = Height.fromAmino(object.block_height);
+    }
+    message.validatorStates = object.validator_states?.map(e => ValidatorState.fromAmino(e)) || [];
+    if (object.delegation_account_balance !== undefined && object.delegation_account_balance !== null) {
+      message.delegationAccountBalance = object.delegation_account_balance;
+    }
+    if (object.reward_account_balance !== undefined && object.reward_account_balance !== null) {
+      message.rewardAccountBalance = object.reward_account_balance;
+    }
+    if (object.sweep_account_balance !== undefined && object.sweep_account_balance !== null) {
+      message.sweepAccountBalance = object.sweep_account_balance;
+    }
+    if (object.last_completed_undelegation_epoch !== undefined && object.last_completed_undelegation_epoch !== null) {
+      message.lastCompletedUndelegationEpoch = BigInt(object.last_completed_undelegation_epoch);
+    }
+    return message;
+  },
+  toAmino(message: OraclePayload): OraclePayloadAmino {
+    const obj: any = {};
+    obj.block_height = message.blockHeight ? Height.toAmino(message.blockHeight) : {};
+    if (message.validatorStates) {
+      obj.validator_states = message.validatorStates.map(e => e ? ValidatorState.toAmino(e) : undefined);
+    } else {
+      obj.validator_states = [];
+    }
+    obj.delegation_account_balance = message.delegationAccountBalance;
+    obj.reward_account_balance = message.rewardAccountBalance;
+    obj.sweep_account_balance = message.sweepAccountBalance;
+    obj.last_completed_undelegation_epoch = message.lastCompletedUndelegationEpoch ? message.lastCompletedUndelegationEpoch.toString() : undefined;
+    return obj;
+  },
+  fromAminoMsg(object: OraclePayloadAminoMsg): OraclePayload {
+    return OraclePayload.fromAmino(object.value);
+  },
+  fromProtoMsg(message: OraclePayloadProtoMsg): OraclePayload {
+    return OraclePayload.decode(message.value);
+  },
+  toProto(message: OraclePayload): Uint8Array {
+    return OraclePayload.encode(message).finish();
+  },
+  toProtoMsg(message: OraclePayload): OraclePayloadProtoMsg {
+    return {
+      typeUrl: "/pryzm.icstaking.v1.OraclePayload",
+      value: OraclePayload.encode(message).finish()
+    };
   }
 };

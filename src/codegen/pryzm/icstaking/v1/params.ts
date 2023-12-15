@@ -1,4 +1,4 @@
-import { Duration, DurationSDKType } from "../../../google/protobuf/duration";
+import { Duration, DurationAmino, DurationSDKType } from "../../../google/protobuf/duration";
 import { BinaryReader, BinaryWriter } from "../../../binary";
 import { isSet } from "../../../helpers";
 import { Decimal } from "@cosmjs/math";
@@ -8,6 +8,21 @@ export interface Params {
   stakingParams: StakingParams;
   /** the list of admin addresses, able to register a new host chain or update an existing host chain */
   admins: string[];
+}
+export interface ParamsProtoMsg {
+  typeUrl: "/pryzm.icstaking.v1.Params";
+  value: Uint8Array;
+}
+/** Params defines the parameters for the module. */
+export interface ParamsAmino {
+  /** the default staking parameters. properties of HostChain.staking_params are overridden to this default params if provided */
+  staking_params?: StakingParamsAmino;
+  /** the list of admin addresses, able to register a new host chain or update an existing host chain */
+  admins?: string[];
+}
+export interface ParamsAminoMsg {
+  type: "/pryzm.icstaking.v1.Params";
+  value: ParamsAmino;
 }
 /** Params defines the parameters for the module. */
 export interface ParamsSDKType {
@@ -31,6 +46,31 @@ export interface StakingParams {
   icaTimeout?: Duration;
   rebalanceParams: RebalanceParams;
 }
+export interface StakingParamsProtoMsg {
+  typeUrl: "/pryzm.icstaking.v1.StakingParams";
+  value: Uint8Array;
+}
+/** StakingParams defines the parameters related to staking on each host chain */
+export interface StakingParamsAmino {
+  /** the amount of operation fees */
+  fee_ratios?: FeeRatiosAmino;
+  /** the interval in which PRYZM sends delegation messages to the host chain */
+  delegation_interval?: DurationAmino;
+  /**
+   * the interval in which PRYZM sends undelegation messages to the host chain
+   * host chain's (UnbondingTime / MaxEntries) must be considered as the max value when setting this field
+   */
+  undelegation_interval?: DurationAmino;
+  /** the time-out value being set on ibc transfer messages */
+  ibc_transfer_timeout?: DurationAmino;
+  /** the time-out value being set on ica messages */
+  ica_timeout?: DurationAmino;
+  rebalance_params?: RebalanceParamsAmino;
+}
+export interface StakingParamsAminoMsg {
+  type: "/pryzm.icstaking.v1.StakingParams";
+  value: StakingParamsAmino;
+}
 /** StakingParams defines the parameters related to staking on each host chain */
 export interface StakingParamsSDKType {
   fee_ratios: FeeRatiosSDKType;
@@ -51,6 +91,25 @@ export interface FeeRatios {
   /** the ratio of fee reduced from the amount of assets being instantly unstaked from PRYZM */
   instantUnstaking?: string;
 }
+export interface FeeRatiosProtoMsg {
+  typeUrl: "/pryzm.icstaking.v1.FeeRatios";
+  value: Uint8Array;
+}
+/** FeeRatios defines the fee ratio operations supported by icstaking */
+export interface FeeRatiosAmino {
+  /** the ratio of fee reduced from yield of staking on the host chain */
+  yield?: string;
+  /** the ratio of fee reduced from the amount of assets being staked on PRYZM */
+  staking?: string;
+  /** the ratio of fee reduced from the amount of assets being unstaked from PRYZM */
+  unstaking?: string;
+  /** the ratio of fee reduced from the amount of assets being instantly unstaked from PRYZM */
+  instant_unstaking?: string;
+}
+export interface FeeRatiosAminoMsg {
+  type: "/pryzm.icstaking.v1.FeeRatios";
+  value: FeeRatiosAmino;
+}
 /** FeeRatios defines the fee ratio operations supported by icstaking */
 export interface FeeRatiosSDKType {
   yield?: string;
@@ -69,6 +128,25 @@ export interface RebalanceParams {
   /** the minimum interval between two rebalance operations */
   minRebalanceInterval?: Duration;
 }
+export interface RebalanceParamsProtoMsg {
+  typeUrl: "/pryzm.icstaking.v1.RebalanceParams";
+  value: Uint8Array;
+}
+/** RebalanceParams contains the parameters for re-balancing a host chain's validator delegation weights */
+export interface RebalanceParamsAmino {
+  /** the maximum number of redelegation messages sent to the host chain in each rebalance operation */
+  max_msgs?: number;
+  /** the minimum divergence a validator delegation weight must have with the expected weight to start rebalance operation */
+  rebalance_threshold?: string;
+  /** the minimum amount of assets for each redelegation message sent to a host chain */
+  min_rebalance_amount?: string;
+  /** the minimum interval between two rebalance operations */
+  min_rebalance_interval?: DurationAmino;
+}
+export interface RebalanceParamsAminoMsg {
+  type: "/pryzm.icstaking.v1.RebalanceParams";
+  value: RebalanceParamsAmino;
+}
 /** RebalanceParams contains the parameters for re-balancing a host chain's validator delegation weights */
 export interface RebalanceParamsSDKType {
   max_msgs: number;
@@ -83,6 +161,7 @@ function createBaseParams(): Params {
   };
 }
 export const Params = {
+  typeUrl: "/pryzm.icstaking.v1.Params",
   encode(message: Params, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.stakingParams !== undefined) {
       StakingParams.encode(message.stakingParams, writer.uint32(10).fork()).ldelim();
@@ -133,6 +212,39 @@ export const Params = {
     message.stakingParams = object.stakingParams !== undefined && object.stakingParams !== null ? StakingParams.fromPartial(object.stakingParams) : undefined;
     message.admins = object.admins?.map(e => e) || [];
     return message;
+  },
+  fromAmino(object: ParamsAmino): Params {
+    const message = createBaseParams();
+    if (object.staking_params !== undefined && object.staking_params !== null) {
+      message.stakingParams = StakingParams.fromAmino(object.staking_params);
+    }
+    message.admins = object.admins?.map(e => e) || [];
+    return message;
+  },
+  toAmino(message: Params): ParamsAmino {
+    const obj: any = {};
+    obj.staking_params = message.stakingParams ? StakingParams.toAmino(message.stakingParams) : undefined;
+    if (message.admins) {
+      obj.admins = message.admins.map(e => e);
+    } else {
+      obj.admins = [];
+    }
+    return obj;
+  },
+  fromAminoMsg(object: ParamsAminoMsg): Params {
+    return Params.fromAmino(object.value);
+  },
+  fromProtoMsg(message: ParamsProtoMsg): Params {
+    return Params.decode(message.value);
+  },
+  toProto(message: Params): Uint8Array {
+    return Params.encode(message).finish();
+  },
+  toProtoMsg(message: Params): ParamsProtoMsg {
+    return {
+      typeUrl: "/pryzm.icstaking.v1.Params",
+      value: Params.encode(message).finish()
+    };
   }
 };
 function createBaseStakingParams(): StakingParams {
@@ -146,6 +258,7 @@ function createBaseStakingParams(): StakingParams {
   };
 }
 export const StakingParams = {
+  typeUrl: "/pryzm.icstaking.v1.StakingParams",
   encode(message: StakingParams, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.feeRatios !== undefined) {
       FeeRatios.encode(message.feeRatios, writer.uint32(10).fork()).ldelim();
@@ -228,6 +341,53 @@ export const StakingParams = {
     message.icaTimeout = object.icaTimeout !== undefined && object.icaTimeout !== null ? Duration.fromPartial(object.icaTimeout) : undefined;
     message.rebalanceParams = object.rebalanceParams !== undefined && object.rebalanceParams !== null ? RebalanceParams.fromPartial(object.rebalanceParams) : undefined;
     return message;
+  },
+  fromAmino(object: StakingParamsAmino): StakingParams {
+    const message = createBaseStakingParams();
+    if (object.fee_ratios !== undefined && object.fee_ratios !== null) {
+      message.feeRatios = FeeRatios.fromAmino(object.fee_ratios);
+    }
+    if (object.delegation_interval !== undefined && object.delegation_interval !== null) {
+      message.delegationInterval = Duration.fromAmino(object.delegation_interval);
+    }
+    if (object.undelegation_interval !== undefined && object.undelegation_interval !== null) {
+      message.undelegationInterval = Duration.fromAmino(object.undelegation_interval);
+    }
+    if (object.ibc_transfer_timeout !== undefined && object.ibc_transfer_timeout !== null) {
+      message.ibcTransferTimeout = Duration.fromAmino(object.ibc_transfer_timeout);
+    }
+    if (object.ica_timeout !== undefined && object.ica_timeout !== null) {
+      message.icaTimeout = Duration.fromAmino(object.ica_timeout);
+    }
+    if (object.rebalance_params !== undefined && object.rebalance_params !== null) {
+      message.rebalanceParams = RebalanceParams.fromAmino(object.rebalance_params);
+    }
+    return message;
+  },
+  toAmino(message: StakingParams): StakingParamsAmino {
+    const obj: any = {};
+    obj.fee_ratios = message.feeRatios ? FeeRatios.toAmino(message.feeRatios) : undefined;
+    obj.delegation_interval = message.delegationInterval ? Duration.toAmino(message.delegationInterval) : undefined;
+    obj.undelegation_interval = message.undelegationInterval ? Duration.toAmino(message.undelegationInterval) : undefined;
+    obj.ibc_transfer_timeout = message.ibcTransferTimeout ? Duration.toAmino(message.ibcTransferTimeout) : undefined;
+    obj.ica_timeout = message.icaTimeout ? Duration.toAmino(message.icaTimeout) : undefined;
+    obj.rebalance_params = message.rebalanceParams ? RebalanceParams.toAmino(message.rebalanceParams) : undefined;
+    return obj;
+  },
+  fromAminoMsg(object: StakingParamsAminoMsg): StakingParams {
+    return StakingParams.fromAmino(object.value);
+  },
+  fromProtoMsg(message: StakingParamsProtoMsg): StakingParams {
+    return StakingParams.decode(message.value);
+  },
+  toProto(message: StakingParams): Uint8Array {
+    return StakingParams.encode(message).finish();
+  },
+  toProtoMsg(message: StakingParams): StakingParamsProtoMsg {
+    return {
+      typeUrl: "/pryzm.icstaking.v1.StakingParams",
+      value: StakingParams.encode(message).finish()
+    };
   }
 };
 function createBaseFeeRatios(): FeeRatios {
@@ -239,6 +399,7 @@ function createBaseFeeRatios(): FeeRatios {
   };
 }
 export const FeeRatios = {
+  typeUrl: "/pryzm.icstaking.v1.FeeRatios",
   encode(message: FeeRatios, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.yield !== undefined) {
       writer.uint32(10).string(Decimal.fromUserInput(message.yield, 18).atomics);
@@ -303,6 +464,45 @@ export const FeeRatios = {
     message.unstaking = object.unstaking ?? undefined;
     message.instantUnstaking = object.instantUnstaking ?? undefined;
     return message;
+  },
+  fromAmino(object: FeeRatiosAmino): FeeRatios {
+    const message = createBaseFeeRatios();
+    if (object.yield !== undefined && object.yield !== null) {
+      message.yield = object.yield;
+    }
+    if (object.staking !== undefined && object.staking !== null) {
+      message.staking = object.staking;
+    }
+    if (object.unstaking !== undefined && object.unstaking !== null) {
+      message.unstaking = object.unstaking;
+    }
+    if (object.instant_unstaking !== undefined && object.instant_unstaking !== null) {
+      message.instantUnstaking = object.instant_unstaking;
+    }
+    return message;
+  },
+  toAmino(message: FeeRatios): FeeRatiosAmino {
+    const obj: any = {};
+    obj.yield = message.yield;
+    obj.staking = message.staking;
+    obj.unstaking = message.unstaking;
+    obj.instant_unstaking = message.instantUnstaking;
+    return obj;
+  },
+  fromAminoMsg(object: FeeRatiosAminoMsg): FeeRatios {
+    return FeeRatios.fromAmino(object.value);
+  },
+  fromProtoMsg(message: FeeRatiosProtoMsg): FeeRatios {
+    return FeeRatios.decode(message.value);
+  },
+  toProto(message: FeeRatios): Uint8Array {
+    return FeeRatios.encode(message).finish();
+  },
+  toProtoMsg(message: FeeRatios): FeeRatiosProtoMsg {
+    return {
+      typeUrl: "/pryzm.icstaking.v1.FeeRatios",
+      value: FeeRatios.encode(message).finish()
+    };
   }
 };
 function createBaseRebalanceParams(): RebalanceParams {
@@ -314,6 +514,7 @@ function createBaseRebalanceParams(): RebalanceParams {
   };
 }
 export const RebalanceParams = {
+  typeUrl: "/pryzm.icstaking.v1.RebalanceParams",
   encode(message: RebalanceParams, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.maxMsgs !== 0) {
       writer.uint32(8).int32(message.maxMsgs);
@@ -378,5 +579,44 @@ export const RebalanceParams = {
     message.minRebalanceAmount = object.minRebalanceAmount ?? undefined;
     message.minRebalanceInterval = object.minRebalanceInterval !== undefined && object.minRebalanceInterval !== null ? Duration.fromPartial(object.minRebalanceInterval) : undefined;
     return message;
+  },
+  fromAmino(object: RebalanceParamsAmino): RebalanceParams {
+    const message = createBaseRebalanceParams();
+    if (object.max_msgs !== undefined && object.max_msgs !== null) {
+      message.maxMsgs = object.max_msgs;
+    }
+    if (object.rebalance_threshold !== undefined && object.rebalance_threshold !== null) {
+      message.rebalanceThreshold = object.rebalance_threshold;
+    }
+    if (object.min_rebalance_amount !== undefined && object.min_rebalance_amount !== null) {
+      message.minRebalanceAmount = object.min_rebalance_amount;
+    }
+    if (object.min_rebalance_interval !== undefined && object.min_rebalance_interval !== null) {
+      message.minRebalanceInterval = Duration.fromAmino(object.min_rebalance_interval);
+    }
+    return message;
+  },
+  toAmino(message: RebalanceParams): RebalanceParamsAmino {
+    const obj: any = {};
+    obj.max_msgs = message.maxMsgs;
+    obj.rebalance_threshold = message.rebalanceThreshold;
+    obj.min_rebalance_amount = message.minRebalanceAmount;
+    obj.min_rebalance_interval = message.minRebalanceInterval ? Duration.toAmino(message.minRebalanceInterval) : undefined;
+    return obj;
+  },
+  fromAminoMsg(object: RebalanceParamsAminoMsg): RebalanceParams {
+    return RebalanceParams.fromAmino(object.value);
+  },
+  fromProtoMsg(message: RebalanceParamsProtoMsg): RebalanceParams {
+    return RebalanceParams.decode(message.value);
+  },
+  toProto(message: RebalanceParams): Uint8Array {
+    return RebalanceParams.encode(message).finish();
+  },
+  toProtoMsg(message: RebalanceParams): RebalanceParamsProtoMsg {
+    return {
+      typeUrl: "/pryzm.icstaking.v1.RebalanceParams",
+      value: RebalanceParams.encode(message).finish()
+    };
   }
 };

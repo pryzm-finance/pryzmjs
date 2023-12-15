@@ -1,5 +1,5 @@
-import { Duration, DurationSDKType } from "../../google/protobuf/duration";
-import { RewardWeightRange, RewardWeightRangeSDKType } from "./alliance";
+import { Duration, DurationAmino, DurationSDKType } from "../../google/protobuf/duration";
+import { RewardWeightRange, RewardWeightRangeAmino, RewardWeightRangeSDKType } from "./alliance";
 import { BinaryReader, BinaryWriter } from "../../binary";
 import { Decimal } from "@cosmjs/math";
 import { isSet } from "../../helpers";
@@ -25,6 +25,37 @@ export interface MsgCreateAllianceProposal {
   rewardChangeInterval: Duration;
   /** set a bound of weight range to limit how much reward weights can scale. */
   rewardWeightRange: RewardWeightRange;
+}
+export interface MsgCreateAllianceProposalProtoMsg {
+  typeUrl: "/alliance.alliance.MsgCreateAllianceProposal";
+  value: Uint8Array;
+}
+export interface MsgCreateAllianceProposalAmino {
+  /** the title of the update proposal */
+  title?: string;
+  /** the description of the proposal */
+  description?: string;
+  /** Denom of the asset. It could either be a native token or an IBC token */
+  denom?: string;
+  /**
+   * The reward weight specifies the ratio of rewards that will be given to each alliance asset
+   * It does not need to sum to 1. rate = weight / total_weight
+   * Native asset is always assumed to have a weight of 1.
+   */
+  reward_weight?: string;
+  /**
+   * A positive take rate is used for liquid staking derivatives. It defines an annualized reward rate that
+   * will be redirected to the distribution rewards pool
+   */
+  take_rate?: string;
+  reward_change_rate?: string;
+  reward_change_interval?: DurationAmino;
+  /** set a bound of weight range to limit how much reward weights can scale. */
+  reward_weight_range?: RewardWeightRangeAmino;
+}
+export interface MsgCreateAllianceProposalAminoMsg {
+  type: "/alliance.alliance.MsgCreateAllianceProposal";
+  value: MsgCreateAllianceProposalAmino;
 }
 export interface MsgCreateAllianceProposalSDKType {
   title: string;
@@ -53,6 +84,31 @@ export interface MsgUpdateAllianceProposal {
   rewardChangeRate: string;
   rewardChangeInterval: Duration;
 }
+export interface MsgUpdateAllianceProposalProtoMsg {
+  typeUrl: "/alliance.alliance.MsgUpdateAllianceProposal";
+  value: Uint8Array;
+}
+export interface MsgUpdateAllianceProposalAmino {
+  /** the title of the update proposal */
+  title?: string;
+  /** the description of the proposal */
+  description?: string;
+  /** Denom of the asset. It could either be a native token or an IBC token */
+  denom?: string;
+  /**
+   * The reward weight specifies the ratio of rewards that will be given to each alliance asset
+   * It does not need to sum to 1. rate = weight / total_weight
+   * Native asset is always assumed to have a weight of 1.
+   */
+  reward_weight?: string;
+  take_rate?: string;
+  reward_change_rate?: string;
+  reward_change_interval?: DurationAmino;
+}
+export interface MsgUpdateAllianceProposalAminoMsg {
+  type: "/alliance.alliance.MsgUpdateAllianceProposal";
+  value: MsgUpdateAllianceProposalAmino;
+}
 export interface MsgUpdateAllianceProposalSDKType {
   title: string;
   description: string;
@@ -68,6 +124,21 @@ export interface MsgDeleteAllianceProposal {
   /** the description of the proposal */
   description: string;
   denom: string;
+}
+export interface MsgDeleteAllianceProposalProtoMsg {
+  typeUrl: "/alliance.alliance.MsgDeleteAllianceProposal";
+  value: Uint8Array;
+}
+export interface MsgDeleteAllianceProposalAmino {
+  /** the title of the update proposal */
+  title?: string;
+  /** the description of the proposal */
+  description?: string;
+  denom?: string;
+}
+export interface MsgDeleteAllianceProposalAminoMsg {
+  type: "/alliance.alliance.MsgDeleteAllianceProposal";
+  value: MsgDeleteAllianceProposalAmino;
 }
 export interface MsgDeleteAllianceProposalSDKType {
   title: string;
@@ -87,6 +158,7 @@ function createBaseMsgCreateAllianceProposal(): MsgCreateAllianceProposal {
   };
 }
 export const MsgCreateAllianceProposal = {
+  typeUrl: "/alliance.alliance.MsgCreateAllianceProposal",
   encode(message: MsgCreateAllianceProposal, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.title !== "") {
       writer.uint32(10).string(message.title);
@@ -187,6 +259,61 @@ export const MsgCreateAllianceProposal = {
     message.rewardChangeInterval = object.rewardChangeInterval !== undefined && object.rewardChangeInterval !== null ? Duration.fromPartial(object.rewardChangeInterval) : undefined;
     message.rewardWeightRange = object.rewardWeightRange !== undefined && object.rewardWeightRange !== null ? RewardWeightRange.fromPartial(object.rewardWeightRange) : undefined;
     return message;
+  },
+  fromAmino(object: MsgCreateAllianceProposalAmino): MsgCreateAllianceProposal {
+    const message = createBaseMsgCreateAllianceProposal();
+    if (object.title !== undefined && object.title !== null) {
+      message.title = object.title;
+    }
+    if (object.description !== undefined && object.description !== null) {
+      message.description = object.description;
+    }
+    if (object.denom !== undefined && object.denom !== null) {
+      message.denom = object.denom;
+    }
+    if (object.reward_weight !== undefined && object.reward_weight !== null) {
+      message.rewardWeight = object.reward_weight;
+    }
+    if (object.take_rate !== undefined && object.take_rate !== null) {
+      message.takeRate = object.take_rate;
+    }
+    if (object.reward_change_rate !== undefined && object.reward_change_rate !== null) {
+      message.rewardChangeRate = object.reward_change_rate;
+    }
+    if (object.reward_change_interval !== undefined && object.reward_change_interval !== null) {
+      message.rewardChangeInterval = Duration.fromAmino(object.reward_change_interval);
+    }
+    if (object.reward_weight_range !== undefined && object.reward_weight_range !== null) {
+      message.rewardWeightRange = RewardWeightRange.fromAmino(object.reward_weight_range);
+    }
+    return message;
+  },
+  toAmino(message: MsgCreateAllianceProposal): MsgCreateAllianceProposalAmino {
+    const obj: any = {};
+    obj.title = message.title;
+    obj.description = message.description;
+    obj.denom = message.denom;
+    obj.reward_weight = message.rewardWeight;
+    obj.take_rate = message.takeRate;
+    obj.reward_change_rate = message.rewardChangeRate;
+    obj.reward_change_interval = message.rewardChangeInterval ? Duration.toAmino(message.rewardChangeInterval) : undefined;
+    obj.reward_weight_range = message.rewardWeightRange ? RewardWeightRange.toAmino(message.rewardWeightRange) : undefined;
+    return obj;
+  },
+  fromAminoMsg(object: MsgCreateAllianceProposalAminoMsg): MsgCreateAllianceProposal {
+    return MsgCreateAllianceProposal.fromAmino(object.value);
+  },
+  fromProtoMsg(message: MsgCreateAllianceProposalProtoMsg): MsgCreateAllianceProposal {
+    return MsgCreateAllianceProposal.decode(message.value);
+  },
+  toProto(message: MsgCreateAllianceProposal): Uint8Array {
+    return MsgCreateAllianceProposal.encode(message).finish();
+  },
+  toProtoMsg(message: MsgCreateAllianceProposal): MsgCreateAllianceProposalProtoMsg {
+    return {
+      typeUrl: "/alliance.alliance.MsgCreateAllianceProposal",
+      value: MsgCreateAllianceProposal.encode(message).finish()
+    };
   }
 };
 function createBaseMsgUpdateAllianceProposal(): MsgUpdateAllianceProposal {
@@ -201,6 +328,7 @@ function createBaseMsgUpdateAllianceProposal(): MsgUpdateAllianceProposal {
   };
 }
 export const MsgUpdateAllianceProposal = {
+  typeUrl: "/alliance.alliance.MsgUpdateAllianceProposal",
   encode(message: MsgUpdateAllianceProposal, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.title !== "") {
       writer.uint32(10).string(message.title);
@@ -292,6 +420,57 @@ export const MsgUpdateAllianceProposal = {
     message.rewardChangeRate = object.rewardChangeRate ?? "";
     message.rewardChangeInterval = object.rewardChangeInterval !== undefined && object.rewardChangeInterval !== null ? Duration.fromPartial(object.rewardChangeInterval) : undefined;
     return message;
+  },
+  fromAmino(object: MsgUpdateAllianceProposalAmino): MsgUpdateAllianceProposal {
+    const message = createBaseMsgUpdateAllianceProposal();
+    if (object.title !== undefined && object.title !== null) {
+      message.title = object.title;
+    }
+    if (object.description !== undefined && object.description !== null) {
+      message.description = object.description;
+    }
+    if (object.denom !== undefined && object.denom !== null) {
+      message.denom = object.denom;
+    }
+    if (object.reward_weight !== undefined && object.reward_weight !== null) {
+      message.rewardWeight = object.reward_weight;
+    }
+    if (object.take_rate !== undefined && object.take_rate !== null) {
+      message.takeRate = object.take_rate;
+    }
+    if (object.reward_change_rate !== undefined && object.reward_change_rate !== null) {
+      message.rewardChangeRate = object.reward_change_rate;
+    }
+    if (object.reward_change_interval !== undefined && object.reward_change_interval !== null) {
+      message.rewardChangeInterval = Duration.fromAmino(object.reward_change_interval);
+    }
+    return message;
+  },
+  toAmino(message: MsgUpdateAllianceProposal): MsgUpdateAllianceProposalAmino {
+    const obj: any = {};
+    obj.title = message.title;
+    obj.description = message.description;
+    obj.denom = message.denom;
+    obj.reward_weight = message.rewardWeight;
+    obj.take_rate = message.takeRate;
+    obj.reward_change_rate = message.rewardChangeRate;
+    obj.reward_change_interval = message.rewardChangeInterval ? Duration.toAmino(message.rewardChangeInterval) : undefined;
+    return obj;
+  },
+  fromAminoMsg(object: MsgUpdateAllianceProposalAminoMsg): MsgUpdateAllianceProposal {
+    return MsgUpdateAllianceProposal.fromAmino(object.value);
+  },
+  fromProtoMsg(message: MsgUpdateAllianceProposalProtoMsg): MsgUpdateAllianceProposal {
+    return MsgUpdateAllianceProposal.decode(message.value);
+  },
+  toProto(message: MsgUpdateAllianceProposal): Uint8Array {
+    return MsgUpdateAllianceProposal.encode(message).finish();
+  },
+  toProtoMsg(message: MsgUpdateAllianceProposal): MsgUpdateAllianceProposalProtoMsg {
+    return {
+      typeUrl: "/alliance.alliance.MsgUpdateAllianceProposal",
+      value: MsgUpdateAllianceProposal.encode(message).finish()
+    };
   }
 };
 function createBaseMsgDeleteAllianceProposal(): MsgDeleteAllianceProposal {
@@ -302,6 +481,7 @@ function createBaseMsgDeleteAllianceProposal(): MsgDeleteAllianceProposal {
   };
 }
 export const MsgDeleteAllianceProposal = {
+  typeUrl: "/alliance.alliance.MsgDeleteAllianceProposal",
   encode(message: MsgDeleteAllianceProposal, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.title !== "") {
       writer.uint32(10).string(message.title);
@@ -357,5 +537,40 @@ export const MsgDeleteAllianceProposal = {
     message.description = object.description ?? "";
     message.denom = object.denom ?? "";
     return message;
+  },
+  fromAmino(object: MsgDeleteAllianceProposalAmino): MsgDeleteAllianceProposal {
+    const message = createBaseMsgDeleteAllianceProposal();
+    if (object.title !== undefined && object.title !== null) {
+      message.title = object.title;
+    }
+    if (object.description !== undefined && object.description !== null) {
+      message.description = object.description;
+    }
+    if (object.denom !== undefined && object.denom !== null) {
+      message.denom = object.denom;
+    }
+    return message;
+  },
+  toAmino(message: MsgDeleteAllianceProposal): MsgDeleteAllianceProposalAmino {
+    const obj: any = {};
+    obj.title = message.title;
+    obj.description = message.description;
+    obj.denom = message.denom;
+    return obj;
+  },
+  fromAminoMsg(object: MsgDeleteAllianceProposalAminoMsg): MsgDeleteAllianceProposal {
+    return MsgDeleteAllianceProposal.fromAmino(object.value);
+  },
+  fromProtoMsg(message: MsgDeleteAllianceProposalProtoMsg): MsgDeleteAllianceProposal {
+    return MsgDeleteAllianceProposal.decode(message.value);
+  },
+  toProto(message: MsgDeleteAllianceProposal): Uint8Array {
+    return MsgDeleteAllianceProposal.encode(message).finish();
+  },
+  toProtoMsg(message: MsgDeleteAllianceProposal): MsgDeleteAllianceProposalProtoMsg {
+    return {
+      typeUrl: "/alliance.alliance.MsgDeleteAllianceProposal",
+      value: MsgDeleteAllianceProposal.encode(message).finish()
+    };
   }
 };

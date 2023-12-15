@@ -1,4 +1,4 @@
-import { WeightedVoteOption, WeightedVoteOptionSDKType } from "../../../cosmos/gov/v1/gov";
+import { WeightedVoteOption, WeightedVoteOptionAmino, WeightedVoteOptionSDKType } from "../../../cosmos/gov/v1/gov";
 import { BinaryReader, BinaryWriter } from "../../../binary";
 import { isSet } from "../../../helpers";
 /** Vote stores the information for a user's vote for a proposal */
@@ -7,6 +7,21 @@ export interface Vote {
   proposal: bigint;
   voter: string;
   options: WeightedVoteOption[];
+}
+export interface VoteProtoMsg {
+  typeUrl: "/pryzm.pgov.v1.Vote";
+  value: Uint8Array;
+}
+/** Vote stores the information for a user's vote for a proposal */
+export interface VoteAmino {
+  asset?: string;
+  proposal?: string;
+  voter?: string;
+  options?: WeightedVoteOptionAmino[];
+}
+export interface VoteAminoMsg {
+  type: "/pryzm.pgov.v1.Vote";
+  value: VoteAmino;
 }
 /** Vote stores the information for a user's vote for a proposal */
 export interface VoteSDKType {
@@ -24,6 +39,7 @@ function createBaseVote(): Vote {
   };
 }
 export const Vote = {
+  typeUrl: "/pryzm.pgov.v1.Vote",
   encode(message: Vote, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.asset !== "") {
       writer.uint32(10).string(message.asset);
@@ -92,5 +108,46 @@ export const Vote = {
     message.voter = object.voter ?? "";
     message.options = object.options?.map(e => WeightedVoteOption.fromPartial(e)) || [];
     return message;
+  },
+  fromAmino(object: VoteAmino): Vote {
+    const message = createBaseVote();
+    if (object.asset !== undefined && object.asset !== null) {
+      message.asset = object.asset;
+    }
+    if (object.proposal !== undefined && object.proposal !== null) {
+      message.proposal = BigInt(object.proposal);
+    }
+    if (object.voter !== undefined && object.voter !== null) {
+      message.voter = object.voter;
+    }
+    message.options = object.options?.map(e => WeightedVoteOption.fromAmino(e)) || [];
+    return message;
+  },
+  toAmino(message: Vote): VoteAmino {
+    const obj: any = {};
+    obj.asset = message.asset;
+    obj.proposal = message.proposal ? message.proposal.toString() : undefined;
+    obj.voter = message.voter;
+    if (message.options) {
+      obj.options = message.options.map(e => e ? WeightedVoteOption.toAmino(e) : undefined);
+    } else {
+      obj.options = [];
+    }
+    return obj;
+  },
+  fromAminoMsg(object: VoteAminoMsg): Vote {
+    return Vote.fromAmino(object.value);
+  },
+  fromProtoMsg(message: VoteProtoMsg): Vote {
+    return Vote.decode(message.value);
+  },
+  toProto(message: Vote): Uint8Array {
+    return Vote.encode(message).finish();
+  },
+  toProtoMsg(message: Vote): VoteProtoMsg {
+    return {
+      typeUrl: "/pryzm.pgov.v1.Vote",
+      value: Vote.encode(message).finish()
+    };
   }
 };

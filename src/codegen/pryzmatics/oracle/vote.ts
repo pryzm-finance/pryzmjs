@@ -9,6 +9,22 @@ export interface Vote {
   blockTime: Timestamp;
   voteIntervalCloseBlockHeight?: string;
 }
+export interface VoteProtoMsg {
+  typeUrl: "/pryzmatics.oracle.Vote";
+  value: Uint8Array;
+}
+export interface VoteAmino {
+  id?: string;
+  feeder?: string;
+  validator?: string;
+  block_height?: string;
+  block_time?: string;
+  vote_interval_close_block_height?: string;
+}
+export interface VoteAminoMsg {
+  type: "/pryzmatics.oracle.Vote";
+  value: VoteAmino;
+}
 export interface VoteSDKType {
   id: bigint;
   feeder: string;
@@ -22,6 +38,20 @@ export interface VotePayload {
   module: string;
   namespace: string;
   payload: string;
+}
+export interface VotePayloadProtoMsg {
+  typeUrl: "/pryzmatics.oracle.VotePayload";
+  value: Uint8Array;
+}
+export interface VotePayloadAmino {
+  vote_id?: string;
+  module?: string;
+  namespace?: string;
+  payload?: string;
+}
+export interface VotePayloadAminoMsg {
+  type: "/pryzmatics.oracle.VotePayload";
+  value: VotePayloadAmino;
 }
 export interface VotePayloadSDKType {
   vote_id: bigint;
@@ -40,6 +70,7 @@ function createBaseVote(): Vote {
   };
 }
 export const Vote = {
+  typeUrl: "/pryzmatics.oracle.Vote",
   encode(message: Vote, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.id !== BigInt(0)) {
       writer.uint32(8).uint64(message.id);
@@ -122,6 +153,53 @@ export const Vote = {
     message.blockTime = object.blockTime !== undefined && object.blockTime !== null ? Timestamp.fromPartial(object.blockTime) : undefined;
     message.voteIntervalCloseBlockHeight = object.voteIntervalCloseBlockHeight ?? undefined;
     return message;
+  },
+  fromAmino(object: VoteAmino): Vote {
+    const message = createBaseVote();
+    if (object.id !== undefined && object.id !== null) {
+      message.id = BigInt(object.id);
+    }
+    if (object.feeder !== undefined && object.feeder !== null) {
+      message.feeder = object.feeder;
+    }
+    if (object.validator !== undefined && object.validator !== null) {
+      message.validator = object.validator;
+    }
+    if (object.block_height !== undefined && object.block_height !== null) {
+      message.blockHeight = BigInt(object.block_height);
+    }
+    if (object.block_time !== undefined && object.block_time !== null) {
+      message.blockTime = Timestamp.fromAmino(object.block_time);
+    }
+    if (object.vote_interval_close_block_height !== undefined && object.vote_interval_close_block_height !== null) {
+      message.voteIntervalCloseBlockHeight = object.vote_interval_close_block_height;
+    }
+    return message;
+  },
+  toAmino(message: Vote): VoteAmino {
+    const obj: any = {};
+    obj.id = message.id ? message.id.toString() : undefined;
+    obj.feeder = message.feeder;
+    obj.validator = message.validator;
+    obj.block_height = message.blockHeight ? message.blockHeight.toString() : undefined;
+    obj.block_time = message.blockTime ? Timestamp.toAmino(message.blockTime) : undefined;
+    obj.vote_interval_close_block_height = message.voteIntervalCloseBlockHeight;
+    return obj;
+  },
+  fromAminoMsg(object: VoteAminoMsg): Vote {
+    return Vote.fromAmino(object.value);
+  },
+  fromProtoMsg(message: VoteProtoMsg): Vote {
+    return Vote.decode(message.value);
+  },
+  toProto(message: Vote): Uint8Array {
+    return Vote.encode(message).finish();
+  },
+  toProtoMsg(message: Vote): VoteProtoMsg {
+    return {
+      typeUrl: "/pryzmatics.oracle.Vote",
+      value: Vote.encode(message).finish()
+    };
   }
 };
 function createBaseVotePayload(): VotePayload {
@@ -133,6 +211,7 @@ function createBaseVotePayload(): VotePayload {
   };
 }
 export const VotePayload = {
+  typeUrl: "/pryzmatics.oracle.VotePayload",
   encode(message: VotePayload, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.voteId !== BigInt(0)) {
       writer.uint32(8).uint64(message.voteId);
@@ -197,5 +276,44 @@ export const VotePayload = {
     message.namespace = object.namespace ?? "";
     message.payload = object.payload ?? "";
     return message;
+  },
+  fromAmino(object: VotePayloadAmino): VotePayload {
+    const message = createBaseVotePayload();
+    if (object.vote_id !== undefined && object.vote_id !== null) {
+      message.voteId = BigInt(object.vote_id);
+    }
+    if (object.module !== undefined && object.module !== null) {
+      message.module = object.module;
+    }
+    if (object.namespace !== undefined && object.namespace !== null) {
+      message.namespace = object.namespace;
+    }
+    if (object.payload !== undefined && object.payload !== null) {
+      message.payload = object.payload;
+    }
+    return message;
+  },
+  toAmino(message: VotePayload): VotePayloadAmino {
+    const obj: any = {};
+    obj.vote_id = message.voteId ? message.voteId.toString() : undefined;
+    obj.module = message.module;
+    obj.namespace = message.namespace;
+    obj.payload = message.payload;
+    return obj;
+  },
+  fromAminoMsg(object: VotePayloadAminoMsg): VotePayload {
+    return VotePayload.fromAmino(object.value);
+  },
+  fromProtoMsg(message: VotePayloadProtoMsg): VotePayload {
+    return VotePayload.decode(message.value);
+  },
+  toProto(message: VotePayload): Uint8Array {
+    return VotePayload.encode(message).finish();
+  },
+  toProtoMsg(message: VotePayload): VotePayloadProtoMsg {
+    return {
+      typeUrl: "/pryzmatics.oracle.VotePayload",
+      value: VotePayload.encode(message).finish()
+    };
   }
 };

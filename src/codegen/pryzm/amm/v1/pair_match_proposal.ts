@@ -8,6 +8,22 @@ export interface PairMatchProposal {
   buyOrders: bigint[];
   sellOrders: bigint[];
 }
+export interface PairMatchProposalProtoMsg {
+  typeUrl: "/pryzm.amm.v1.PairMatchProposal";
+  value: Uint8Array;
+}
+export interface PairMatchProposalAmino {
+  pool_id?: string;
+  whitelisted_route?: boolean;
+  token_in?: string;
+  token_out?: string;
+  buy_orders?: string[];
+  sell_orders?: string[];
+}
+export interface PairMatchProposalAminoMsg {
+  type: "/pryzm.amm.v1.PairMatchProposal";
+  value: PairMatchProposalAmino;
+}
 export interface PairMatchProposalSDKType {
   pool_id: bigint;
   whitelisted_route: boolean;
@@ -27,6 +43,7 @@ function createBasePairMatchProposal(): PairMatchProposal {
   };
 }
 export const PairMatchProposal = {
+  typeUrl: "/pryzm.amm.v1.PairMatchProposal",
   encode(message: PairMatchProposal, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.poolId !== BigInt(0)) {
       writer.uint32(8).uint64(message.poolId);
@@ -135,5 +152,56 @@ export const PairMatchProposal = {
     message.buyOrders = object.buyOrders?.map(e => BigInt(e.toString())) || [];
     message.sellOrders = object.sellOrders?.map(e => BigInt(e.toString())) || [];
     return message;
+  },
+  fromAmino(object: PairMatchProposalAmino): PairMatchProposal {
+    const message = createBasePairMatchProposal();
+    if (object.pool_id !== undefined && object.pool_id !== null) {
+      message.poolId = BigInt(object.pool_id);
+    }
+    if (object.whitelisted_route !== undefined && object.whitelisted_route !== null) {
+      message.whitelistedRoute = object.whitelisted_route;
+    }
+    if (object.token_in !== undefined && object.token_in !== null) {
+      message.tokenIn = object.token_in;
+    }
+    if (object.token_out !== undefined && object.token_out !== null) {
+      message.tokenOut = object.token_out;
+    }
+    message.buyOrders = object.buy_orders?.map(e => BigInt(e)) || [];
+    message.sellOrders = object.sell_orders?.map(e => BigInt(e)) || [];
+    return message;
+  },
+  toAmino(message: PairMatchProposal): PairMatchProposalAmino {
+    const obj: any = {};
+    obj.pool_id = message.poolId ? message.poolId.toString() : undefined;
+    obj.whitelisted_route = message.whitelistedRoute;
+    obj.token_in = message.tokenIn;
+    obj.token_out = message.tokenOut;
+    if (message.buyOrders) {
+      obj.buy_orders = message.buyOrders.map(e => e.toString());
+    } else {
+      obj.buy_orders = [];
+    }
+    if (message.sellOrders) {
+      obj.sell_orders = message.sellOrders.map(e => e.toString());
+    } else {
+      obj.sell_orders = [];
+    }
+    return obj;
+  },
+  fromAminoMsg(object: PairMatchProposalAminoMsg): PairMatchProposal {
+    return PairMatchProposal.fromAmino(object.value);
+  },
+  fromProtoMsg(message: PairMatchProposalProtoMsg): PairMatchProposal {
+    return PairMatchProposal.decode(message.value);
+  },
+  toProto(message: PairMatchProposal): Uint8Array {
+    return PairMatchProposal.encode(message).finish();
+  },
+  toProtoMsg(message: PairMatchProposal): PairMatchProposalProtoMsg {
+    return {
+      typeUrl: "/pryzm.amm.v1.PairMatchProposal",
+      value: PairMatchProposal.encode(message).finish()
+    };
   }
 };

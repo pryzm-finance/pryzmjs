@@ -1,5 +1,5 @@
-import { StakingParams, StakingParamsSDKType } from "./params";
-import { Height, HeightSDKType } from "../../../ibc/core/client/v1/client";
+import { StakingParams, StakingParamsAmino, StakingParamsSDKType } from "./params";
+import { Height, HeightAmino, HeightSDKType } from "../../../ibc/core/client/v1/client";
 import { BinaryReader, BinaryWriter } from "../../../binary";
 import { isSet } from "../../../helpers";
 import { Decimal } from "@cosmjs/math";
@@ -10,6 +10,7 @@ export enum ConnectionType {
   UNRECOGNIZED = -1,
 }
 export const ConnectionTypeSDKType = ConnectionType;
+export const ConnectionTypeAmino = ConnectionType;
 export function connectionTypeFromJSON(object: any): ConnectionType {
   switch (object) {
     case 0:
@@ -39,6 +40,7 @@ export enum TransferChannelType {
   UNRECOGNIZED = -1,
 }
 export const TransferChannelTypeSDKType = TransferChannelType;
+export const TransferChannelTypeAmino = TransferChannelType;
 export function transferChannelTypeFromJSON(object: any): TransferChannelType {
   switch (object) {
     case 0:
@@ -66,6 +68,7 @@ export enum AccountState {
   UNRECOGNIZED = -1,
 }
 export const AccountStateSDKType = AccountState;
+export const AccountStateAmino = AccountState;
 export function accountStateFromJSON(object: any): AccountState {
   switch (object) {
     case 0:
@@ -109,6 +112,7 @@ export enum State {
   UNRECOGNIZED = -1,
 }
 export const StateSDKType = State;
+export const StateAmino = State;
 export function stateFromJSON(object: any): State {
   switch (object) {
     case 0:
@@ -186,6 +190,31 @@ export interface HostChain {
   /** list of whitelisted validators to which Pryzm sends the staked funds. */
   validators: Validator[];
 }
+export interface HostChainProtoMsg {
+  typeUrl: "/pryzm.icstaking.v1.HostChain";
+  value: Uint8Array;
+}
+/** The properties of the target chain for staking */
+export interface HostChainAmino {
+  /** A unique user-provided identifier. Is used in the cToken denom */
+  id?: string;
+  /** connection type. connection type and connection id are unique together */
+  connection_type?: ConnectionType;
+  /** the identifier for connection. connection id and connection type are unique together */
+  connection_id?: string;
+  /** the base denom of the token to be staked on the target chain */
+  base_denom?: string;
+  /** list of supported transfer channels for transferring the base_denom tokens between the host chain and Pryzm */
+  transfer_channels?: TransferChannelAmino[];
+  /** Parameters for staking/unstaking on the host chain */
+  params?: StakingParamsAmino;
+  /** list of whitelisted validators to which Pryzm sends the staked funds. */
+  validators?: ValidatorAmino[];
+}
+export interface HostChainAminoMsg {
+  type: "/pryzm.icstaking.v1.HostChain";
+  value: HostChainAmino;
+}
 /** The properties of the target chain for staking */
 export interface HostChainSDKType {
   id: string;
@@ -213,6 +242,31 @@ export interface TransferChannel {
    */
   destinationChain: string;
 }
+export interface TransferChannelProtoMsg {
+  typeUrl: "/pryzm.icstaking.v1.TransferChannel";
+  value: Uint8Array;
+}
+/** Properties of a transfer channel */
+export interface TransferChannelAmino {
+  /** the type of the channel */
+  type?: TransferChannelType;
+  /** the id of the channel. in the case of IBC channel type, this is the channel name. */
+  id?: string;
+  /**
+   * Optional. This is the name of the token on the receiving chain.
+   * This is useful when a bridge is being used and the underlying asset is wrapped on the bridge, like axlWETH.
+   */
+  wrapped_denom?: string;
+  /**
+   * Optional. This is the name of the target chain.
+   * This is useful when a bridge is being used and the host chain is different with the receiving chain.
+   */
+  destination_chain?: string;
+}
+export interface TransferChannelAminoMsg {
+  type: "/pryzm.icstaking.v1.TransferChannel";
+  value: TransferChannelAmino;
+}
 /** Properties of a transfer channel */
 export interface TransferChannelSDKType {
   type: TransferChannelType;
@@ -225,6 +279,20 @@ export interface Validator {
   address: string;
   /** The weight of delegation to the validator. Total weight of all validators per host chain must be equal to 1. */
   weight: string;
+}
+export interface ValidatorProtoMsg {
+  typeUrl: "/pryzm.icstaking.v1.Validator";
+  value: Uint8Array;
+}
+export interface ValidatorAmino {
+  /** validator's address on the host chain */
+  address?: string;
+  /** The weight of delegation to the validator. Total weight of all validators per host chain must be equal to 1. */
+  weight?: string;
+}
+export interface ValidatorAminoMsg {
+  type: "/pryzm.icstaking.v1.Validator";
+  value: ValidatorAmino;
 }
 export interface ValidatorSDKType {
   address: string;
@@ -253,6 +321,37 @@ export interface HostChainState {
    */
   lastIdleStateHostHeight: Height;
 }
+export interface HostChainStateProtoMsg {
+  typeUrl: "/pryzm.icstaking.v1.HostChainState";
+  value: Uint8Array;
+}
+/** A subset of state on the host chain needed by Pryzm */
+export interface HostChainStateAmino {
+  /** The id of the chain */
+  host_chain_id?: string;
+  /** Information about the interchain accounts */
+  host_accounts?: HostAccountsAmino;
+  /** list of validators and their state containing the delegation amount */
+  validator_states?: ValidatorStateAmino[];
+  /** The amount of assets that are in the delegation account and ready to be delegated */
+  amount_to_be_delegated?: string;
+  /** The amount of undelegated assets that are currently in the delegation account waiting to be collected */
+  undelegated_amount_to_collect?: string;
+  /** The current exchange rate of cToken to the host chain staking token */
+  exchange_rate?: string;
+  /** The current state of interchain operations state machine */
+  state?: State;
+  /**
+   * The last host chain's block height in which PRYZM's state is changed to IDLE
+   * setting state to IDLE happens when an ack/timeout received for an interchain operation,
+   * so this is the height of the last received ack from host chain
+   */
+  last_idle_state_host_height?: HeightAmino;
+}
+export interface HostChainStateAminoMsg {
+  type: "/pryzm.icstaking.v1.HostChainState";
+  value: HostChainStateAmino;
+}
 /** A subset of state on the host chain needed by Pryzm */
 export interface HostChainStateSDKType {
   host_chain_id: string;
@@ -275,6 +374,25 @@ export interface HostAccounts {
    */
   rewardAccountClaimingState: AccountState;
 }
+export interface HostAccountsProtoMsg {
+  typeUrl: "/pryzm.icstaking.v1.HostAccounts";
+  value: Uint8Array;
+}
+/** The interchain accounts */
+export interface HostAccountsAmino {
+  delegation?: HostAccountAmino;
+  reward?: HostAccountAmino;
+  sweep?: HostAccountAmino;
+  /**
+   * This is the state of setting the reward account as the account which receives the staking rewards on host chain.
+   * On cosmos based chains, the reward account is registered using MsgSetWithdrawAddress in distribution module.
+   */
+  reward_account_claiming_state?: AccountState;
+}
+export interface HostAccountsAminoMsg {
+  type: "/pryzm.icstaking.v1.HostAccounts";
+  value: HostAccountsAmino;
+}
 /** The interchain accounts */
 export interface HostAccountsSDKType {
   delegation: HostAccountSDKType;
@@ -287,6 +405,19 @@ export interface HostAccount {
   balance: string;
   state: AccountState;
 }
+export interface HostAccountProtoMsg {
+  typeUrl: "/pryzm.icstaking.v1.HostAccount";
+  value: Uint8Array;
+}
+export interface HostAccountAmino {
+  address?: string;
+  balance?: string;
+  state?: AccountState;
+}
+export interface HostAccountAminoMsg {
+  type: "/pryzm.icstaking.v1.HostAccount";
+  value: HostAccountAmino;
+}
 export interface HostAccountSDKType {
   address: string;
   balance: string;
@@ -295,6 +426,18 @@ export interface HostAccountSDKType {
 export interface ValidatorState {
   validatorAddress: string;
   delegatedAmount: string;
+}
+export interface ValidatorStateProtoMsg {
+  typeUrl: "/pryzm.icstaking.v1.ValidatorState";
+  value: Uint8Array;
+}
+export interface ValidatorStateAmino {
+  validator_address?: string;
+  delegated_amount?: string;
+}
+export interface ValidatorStateAminoMsg {
+  type: "/pryzm.icstaking.v1.ValidatorState";
+  value: ValidatorStateAmino;
 }
 export interface ValidatorStateSDKType {
   validator_address: string;
@@ -312,6 +455,7 @@ function createBaseHostChain(): HostChain {
   };
 }
 export const HostChain = {
+  typeUrl: "/pryzm.icstaking.v1.HostChain",
   encode(message: HostChain, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.id !== "") {
       writer.uint32(10).string(message.id);
@@ -411,6 +555,61 @@ export const HostChain = {
     message.params = object.params !== undefined && object.params !== null ? StakingParams.fromPartial(object.params) : undefined;
     message.validators = object.validators?.map(e => Validator.fromPartial(e)) || [];
     return message;
+  },
+  fromAmino(object: HostChainAmino): HostChain {
+    const message = createBaseHostChain();
+    if (object.id !== undefined && object.id !== null) {
+      message.id = object.id;
+    }
+    if (object.connection_type !== undefined && object.connection_type !== null) {
+      message.connectionType = connectionTypeFromJSON(object.connection_type);
+    }
+    if (object.connection_id !== undefined && object.connection_id !== null) {
+      message.connectionId = object.connection_id;
+    }
+    if (object.base_denom !== undefined && object.base_denom !== null) {
+      message.baseDenom = object.base_denom;
+    }
+    message.transferChannels = object.transfer_channels?.map(e => TransferChannel.fromAmino(e)) || [];
+    if (object.params !== undefined && object.params !== null) {
+      message.params = StakingParams.fromAmino(object.params);
+    }
+    message.validators = object.validators?.map(e => Validator.fromAmino(e)) || [];
+    return message;
+  },
+  toAmino(message: HostChain): HostChainAmino {
+    const obj: any = {};
+    obj.id = message.id;
+    obj.connection_type = connectionTypeToJSON(message.connectionType);
+    obj.connection_id = message.connectionId;
+    obj.base_denom = message.baseDenom;
+    if (message.transferChannels) {
+      obj.transfer_channels = message.transferChannels.map(e => e ? TransferChannel.toAmino(e) : undefined);
+    } else {
+      obj.transfer_channels = [];
+    }
+    obj.params = message.params ? StakingParams.toAmino(message.params) : undefined;
+    if (message.validators) {
+      obj.validators = message.validators.map(e => e ? Validator.toAmino(e) : undefined);
+    } else {
+      obj.validators = [];
+    }
+    return obj;
+  },
+  fromAminoMsg(object: HostChainAminoMsg): HostChain {
+    return HostChain.fromAmino(object.value);
+  },
+  fromProtoMsg(message: HostChainProtoMsg): HostChain {
+    return HostChain.decode(message.value);
+  },
+  toProto(message: HostChain): Uint8Array {
+    return HostChain.encode(message).finish();
+  },
+  toProtoMsg(message: HostChain): HostChainProtoMsg {
+    return {
+      typeUrl: "/pryzm.icstaking.v1.HostChain",
+      value: HostChain.encode(message).finish()
+    };
   }
 };
 function createBaseTransferChannel(): TransferChannel {
@@ -422,6 +621,7 @@ function createBaseTransferChannel(): TransferChannel {
   };
 }
 export const TransferChannel = {
+  typeUrl: "/pryzm.icstaking.v1.TransferChannel",
   encode(message: TransferChannel, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.type !== 0) {
       writer.uint32(8).int32(message.type);
@@ -486,6 +686,45 @@ export const TransferChannel = {
     message.wrappedDenom = object.wrappedDenom ?? "";
     message.destinationChain = object.destinationChain ?? "";
     return message;
+  },
+  fromAmino(object: TransferChannelAmino): TransferChannel {
+    const message = createBaseTransferChannel();
+    if (object.type !== undefined && object.type !== null) {
+      message.type = transferChannelTypeFromJSON(object.type);
+    }
+    if (object.id !== undefined && object.id !== null) {
+      message.id = object.id;
+    }
+    if (object.wrapped_denom !== undefined && object.wrapped_denom !== null) {
+      message.wrappedDenom = object.wrapped_denom;
+    }
+    if (object.destination_chain !== undefined && object.destination_chain !== null) {
+      message.destinationChain = object.destination_chain;
+    }
+    return message;
+  },
+  toAmino(message: TransferChannel): TransferChannelAmino {
+    const obj: any = {};
+    obj.type = transferChannelTypeToJSON(message.type);
+    obj.id = message.id;
+    obj.wrapped_denom = message.wrappedDenom;
+    obj.destination_chain = message.destinationChain;
+    return obj;
+  },
+  fromAminoMsg(object: TransferChannelAminoMsg): TransferChannel {
+    return TransferChannel.fromAmino(object.value);
+  },
+  fromProtoMsg(message: TransferChannelProtoMsg): TransferChannel {
+    return TransferChannel.decode(message.value);
+  },
+  toProto(message: TransferChannel): Uint8Array {
+    return TransferChannel.encode(message).finish();
+  },
+  toProtoMsg(message: TransferChannel): TransferChannelProtoMsg {
+    return {
+      typeUrl: "/pryzm.icstaking.v1.TransferChannel",
+      value: TransferChannel.encode(message).finish()
+    };
   }
 };
 function createBaseValidator(): Validator {
@@ -495,6 +734,7 @@ function createBaseValidator(): Validator {
   };
 }
 export const Validator = {
+  typeUrl: "/pryzm.icstaking.v1.Validator",
   encode(message: Validator, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.address !== "") {
       writer.uint32(10).string(message.address);
@@ -541,6 +781,37 @@ export const Validator = {
     message.address = object.address ?? "";
     message.weight = object.weight ?? "";
     return message;
+  },
+  fromAmino(object: ValidatorAmino): Validator {
+    const message = createBaseValidator();
+    if (object.address !== undefined && object.address !== null) {
+      message.address = object.address;
+    }
+    if (object.weight !== undefined && object.weight !== null) {
+      message.weight = object.weight;
+    }
+    return message;
+  },
+  toAmino(message: Validator): ValidatorAmino {
+    const obj: any = {};
+    obj.address = message.address;
+    obj.weight = message.weight;
+    return obj;
+  },
+  fromAminoMsg(object: ValidatorAminoMsg): Validator {
+    return Validator.fromAmino(object.value);
+  },
+  fromProtoMsg(message: ValidatorProtoMsg): Validator {
+    return Validator.decode(message.value);
+  },
+  toProto(message: Validator): Uint8Array {
+    return Validator.encode(message).finish();
+  },
+  toProtoMsg(message: Validator): ValidatorProtoMsg {
+    return {
+      typeUrl: "/pryzm.icstaking.v1.Validator",
+      value: Validator.encode(message).finish()
+    };
   }
 };
 function createBaseHostChainState(): HostChainState {
@@ -556,6 +827,7 @@ function createBaseHostChainState(): HostChainState {
   };
 }
 export const HostChainState = {
+  typeUrl: "/pryzm.icstaking.v1.HostChainState",
   encode(message: HostChainState, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.hostChainId !== "") {
       writer.uint32(10).string(message.hostChainId);
@@ -660,6 +932,63 @@ export const HostChainState = {
     message.state = object.state ?? 0;
     message.lastIdleStateHostHeight = object.lastIdleStateHostHeight !== undefined && object.lastIdleStateHostHeight !== null ? Height.fromPartial(object.lastIdleStateHostHeight) : undefined;
     return message;
+  },
+  fromAmino(object: HostChainStateAmino): HostChainState {
+    const message = createBaseHostChainState();
+    if (object.host_chain_id !== undefined && object.host_chain_id !== null) {
+      message.hostChainId = object.host_chain_id;
+    }
+    if (object.host_accounts !== undefined && object.host_accounts !== null) {
+      message.hostAccounts = HostAccounts.fromAmino(object.host_accounts);
+    }
+    message.validatorStates = object.validator_states?.map(e => ValidatorState.fromAmino(e)) || [];
+    if (object.amount_to_be_delegated !== undefined && object.amount_to_be_delegated !== null) {
+      message.amountToBeDelegated = object.amount_to_be_delegated;
+    }
+    if (object.undelegated_amount_to_collect !== undefined && object.undelegated_amount_to_collect !== null) {
+      message.undelegatedAmountToCollect = object.undelegated_amount_to_collect;
+    }
+    if (object.exchange_rate !== undefined && object.exchange_rate !== null) {
+      message.exchangeRate = object.exchange_rate;
+    }
+    if (object.state !== undefined && object.state !== null) {
+      message.state = stateFromJSON(object.state);
+    }
+    if (object.last_idle_state_host_height !== undefined && object.last_idle_state_host_height !== null) {
+      message.lastIdleStateHostHeight = Height.fromAmino(object.last_idle_state_host_height);
+    }
+    return message;
+  },
+  toAmino(message: HostChainState): HostChainStateAmino {
+    const obj: any = {};
+    obj.host_chain_id = message.hostChainId;
+    obj.host_accounts = message.hostAccounts ? HostAccounts.toAmino(message.hostAccounts) : undefined;
+    if (message.validatorStates) {
+      obj.validator_states = message.validatorStates.map(e => e ? ValidatorState.toAmino(e) : undefined);
+    } else {
+      obj.validator_states = [];
+    }
+    obj.amount_to_be_delegated = message.amountToBeDelegated;
+    obj.undelegated_amount_to_collect = message.undelegatedAmountToCollect;
+    obj.exchange_rate = message.exchangeRate;
+    obj.state = stateToJSON(message.state);
+    obj.last_idle_state_host_height = message.lastIdleStateHostHeight ? Height.toAmino(message.lastIdleStateHostHeight) : {};
+    return obj;
+  },
+  fromAminoMsg(object: HostChainStateAminoMsg): HostChainState {
+    return HostChainState.fromAmino(object.value);
+  },
+  fromProtoMsg(message: HostChainStateProtoMsg): HostChainState {
+    return HostChainState.decode(message.value);
+  },
+  toProto(message: HostChainState): Uint8Array {
+    return HostChainState.encode(message).finish();
+  },
+  toProtoMsg(message: HostChainState): HostChainStateProtoMsg {
+    return {
+      typeUrl: "/pryzm.icstaking.v1.HostChainState",
+      value: HostChainState.encode(message).finish()
+    };
   }
 };
 function createBaseHostAccounts(): HostAccounts {
@@ -671,6 +1000,7 @@ function createBaseHostAccounts(): HostAccounts {
   };
 }
 export const HostAccounts = {
+  typeUrl: "/pryzm.icstaking.v1.HostAccounts",
   encode(message: HostAccounts, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.delegation !== undefined) {
       HostAccount.encode(message.delegation, writer.uint32(10).fork()).ldelim();
@@ -735,6 +1065,45 @@ export const HostAccounts = {
     message.sweep = object.sweep !== undefined && object.sweep !== null ? HostAccount.fromPartial(object.sweep) : undefined;
     message.rewardAccountClaimingState = object.rewardAccountClaimingState ?? 0;
     return message;
+  },
+  fromAmino(object: HostAccountsAmino): HostAccounts {
+    const message = createBaseHostAccounts();
+    if (object.delegation !== undefined && object.delegation !== null) {
+      message.delegation = HostAccount.fromAmino(object.delegation);
+    }
+    if (object.reward !== undefined && object.reward !== null) {
+      message.reward = HostAccount.fromAmino(object.reward);
+    }
+    if (object.sweep !== undefined && object.sweep !== null) {
+      message.sweep = HostAccount.fromAmino(object.sweep);
+    }
+    if (object.reward_account_claiming_state !== undefined && object.reward_account_claiming_state !== null) {
+      message.rewardAccountClaimingState = accountStateFromJSON(object.reward_account_claiming_state);
+    }
+    return message;
+  },
+  toAmino(message: HostAccounts): HostAccountsAmino {
+    const obj: any = {};
+    obj.delegation = message.delegation ? HostAccount.toAmino(message.delegation) : undefined;
+    obj.reward = message.reward ? HostAccount.toAmino(message.reward) : undefined;
+    obj.sweep = message.sweep ? HostAccount.toAmino(message.sweep) : undefined;
+    obj.reward_account_claiming_state = accountStateToJSON(message.rewardAccountClaimingState);
+    return obj;
+  },
+  fromAminoMsg(object: HostAccountsAminoMsg): HostAccounts {
+    return HostAccounts.fromAmino(object.value);
+  },
+  fromProtoMsg(message: HostAccountsProtoMsg): HostAccounts {
+    return HostAccounts.decode(message.value);
+  },
+  toProto(message: HostAccounts): Uint8Array {
+    return HostAccounts.encode(message).finish();
+  },
+  toProtoMsg(message: HostAccounts): HostAccountsProtoMsg {
+    return {
+      typeUrl: "/pryzm.icstaking.v1.HostAccounts",
+      value: HostAccounts.encode(message).finish()
+    };
   }
 };
 function createBaseHostAccount(): HostAccount {
@@ -745,6 +1114,7 @@ function createBaseHostAccount(): HostAccount {
   };
 }
 export const HostAccount = {
+  typeUrl: "/pryzm.icstaking.v1.HostAccount",
   encode(message: HostAccount, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.address !== "") {
       writer.uint32(10).string(message.address);
@@ -800,6 +1170,41 @@ export const HostAccount = {
     message.balance = object.balance ?? "";
     message.state = object.state ?? 0;
     return message;
+  },
+  fromAmino(object: HostAccountAmino): HostAccount {
+    const message = createBaseHostAccount();
+    if (object.address !== undefined && object.address !== null) {
+      message.address = object.address;
+    }
+    if (object.balance !== undefined && object.balance !== null) {
+      message.balance = object.balance;
+    }
+    if (object.state !== undefined && object.state !== null) {
+      message.state = accountStateFromJSON(object.state);
+    }
+    return message;
+  },
+  toAmino(message: HostAccount): HostAccountAmino {
+    const obj: any = {};
+    obj.address = message.address;
+    obj.balance = message.balance;
+    obj.state = accountStateToJSON(message.state);
+    return obj;
+  },
+  fromAminoMsg(object: HostAccountAminoMsg): HostAccount {
+    return HostAccount.fromAmino(object.value);
+  },
+  fromProtoMsg(message: HostAccountProtoMsg): HostAccount {
+    return HostAccount.decode(message.value);
+  },
+  toProto(message: HostAccount): Uint8Array {
+    return HostAccount.encode(message).finish();
+  },
+  toProtoMsg(message: HostAccount): HostAccountProtoMsg {
+    return {
+      typeUrl: "/pryzm.icstaking.v1.HostAccount",
+      value: HostAccount.encode(message).finish()
+    };
   }
 };
 function createBaseValidatorState(): ValidatorState {
@@ -809,6 +1214,7 @@ function createBaseValidatorState(): ValidatorState {
   };
 }
 export const ValidatorState = {
+  typeUrl: "/pryzm.icstaking.v1.ValidatorState",
   encode(message: ValidatorState, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.validatorAddress !== "") {
       writer.uint32(10).string(message.validatorAddress);
@@ -855,5 +1261,36 @@ export const ValidatorState = {
     message.validatorAddress = object.validatorAddress ?? "";
     message.delegatedAmount = object.delegatedAmount ?? "";
     return message;
+  },
+  fromAmino(object: ValidatorStateAmino): ValidatorState {
+    const message = createBaseValidatorState();
+    if (object.validator_address !== undefined && object.validator_address !== null) {
+      message.validatorAddress = object.validator_address;
+    }
+    if (object.delegated_amount !== undefined && object.delegated_amount !== null) {
+      message.delegatedAmount = object.delegated_amount;
+    }
+    return message;
+  },
+  toAmino(message: ValidatorState): ValidatorStateAmino {
+    const obj: any = {};
+    obj.validator_address = message.validatorAddress;
+    obj.delegated_amount = message.delegatedAmount;
+    return obj;
+  },
+  fromAminoMsg(object: ValidatorStateAminoMsg): ValidatorState {
+    return ValidatorState.fromAmino(object.value);
+  },
+  fromProtoMsg(message: ValidatorStateProtoMsg): ValidatorState {
+    return ValidatorState.decode(message.value);
+  },
+  toProto(message: ValidatorState): Uint8Array {
+    return ValidatorState.encode(message).finish();
+  },
+  toProtoMsg(message: ValidatorState): ValidatorStateProtoMsg {
+    return {
+      typeUrl: "/pryzm.icstaking.v1.ValidatorState",
+      value: ValidatorState.encode(message).finish()
+    };
   }
 };

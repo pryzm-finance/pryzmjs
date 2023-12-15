@@ -1,4 +1,4 @@
-import { Coin, CoinSDKType } from "../../../cosmos/base/v1beta1/coin";
+import { Coin, CoinAmino, CoinSDKType } from "../../../cosmos/base/v1beta1/coin";
 import { BinaryReader, BinaryWriter } from "../../../binary";
 import { isSet } from "../../../helpers";
 import { Decimal } from "@cosmjs/math";
@@ -6,6 +6,19 @@ export interface QueryJoinTokenExactLptSimulationRequest {
   poolId: bigint;
   lptOutAmount: string;
   tokenIn: string;
+}
+export interface QueryJoinTokenExactLptSimulationRequestProtoMsg {
+  typeUrl: "/pryzmatics.server.trade.QueryJoinTokenExactLptSimulationRequest";
+  value: Uint8Array;
+}
+export interface QueryJoinTokenExactLptSimulationRequestAmino {
+  pool_id?: string;
+  lpt_out_amount?: string;
+  token_in?: string;
+}
+export interface QueryJoinTokenExactLptSimulationRequestAminoMsg {
+  type: "/pryzmatics.server.trade.QueryJoinTokenExactLptSimulationRequest";
+  value: QueryJoinTokenExactLptSimulationRequestAmino;
 }
 export interface QueryJoinTokenExactLptSimulationRequestSDKType {
   pool_id: bigint;
@@ -20,6 +33,23 @@ export interface QueryJoinTokenExactLptSimulationResponse {
   swapFee: Coin;
   swapFeeLpTerms: Coin;
   priceImpact: string;
+}
+export interface QueryJoinTokenExactLptSimulationResponseProtoMsg {
+  typeUrl: "/pryzmatics.server.trade.QueryJoinTokenExactLptSimulationResponse";
+  value: Uint8Array;
+}
+export interface QueryJoinTokenExactLptSimulationResponseAmino {
+  amount_in?: CoinAmino;
+  amount_out?: CoinAmino;
+  protocol_fee?: CoinAmino;
+  protocol_fee_lp_terms?: CoinAmino;
+  swap_fee?: CoinAmino;
+  swap_fee_lp_terms?: CoinAmino;
+  price_impact?: string;
+}
+export interface QueryJoinTokenExactLptSimulationResponseAminoMsg {
+  type: "/pryzmatics.server.trade.QueryJoinTokenExactLptSimulationResponse";
+  value: QueryJoinTokenExactLptSimulationResponseAmino;
 }
 export interface QueryJoinTokenExactLptSimulationResponseSDKType {
   amount_in: CoinSDKType;
@@ -38,6 +68,7 @@ function createBaseQueryJoinTokenExactLptSimulationRequest(): QueryJoinTokenExac
   };
 }
 export const QueryJoinTokenExactLptSimulationRequest = {
+  typeUrl: "/pryzmatics.server.trade.QueryJoinTokenExactLptSimulationRequest",
   encode(message: QueryJoinTokenExactLptSimulationRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.poolId !== BigInt(0)) {
       writer.uint32(8).uint64(message.poolId);
@@ -93,6 +124,41 @@ export const QueryJoinTokenExactLptSimulationRequest = {
     message.lptOutAmount = object.lptOutAmount ?? "";
     message.tokenIn = object.tokenIn ?? "";
     return message;
+  },
+  fromAmino(object: QueryJoinTokenExactLptSimulationRequestAmino): QueryJoinTokenExactLptSimulationRequest {
+    const message = createBaseQueryJoinTokenExactLptSimulationRequest();
+    if (object.pool_id !== undefined && object.pool_id !== null) {
+      message.poolId = BigInt(object.pool_id);
+    }
+    if (object.lpt_out_amount !== undefined && object.lpt_out_amount !== null) {
+      message.lptOutAmount = object.lpt_out_amount;
+    }
+    if (object.token_in !== undefined && object.token_in !== null) {
+      message.tokenIn = object.token_in;
+    }
+    return message;
+  },
+  toAmino(message: QueryJoinTokenExactLptSimulationRequest): QueryJoinTokenExactLptSimulationRequestAmino {
+    const obj: any = {};
+    obj.pool_id = message.poolId ? message.poolId.toString() : undefined;
+    obj.lpt_out_amount = message.lptOutAmount;
+    obj.token_in = message.tokenIn;
+    return obj;
+  },
+  fromAminoMsg(object: QueryJoinTokenExactLptSimulationRequestAminoMsg): QueryJoinTokenExactLptSimulationRequest {
+    return QueryJoinTokenExactLptSimulationRequest.fromAmino(object.value);
+  },
+  fromProtoMsg(message: QueryJoinTokenExactLptSimulationRequestProtoMsg): QueryJoinTokenExactLptSimulationRequest {
+    return QueryJoinTokenExactLptSimulationRequest.decode(message.value);
+  },
+  toProto(message: QueryJoinTokenExactLptSimulationRequest): Uint8Array {
+    return QueryJoinTokenExactLptSimulationRequest.encode(message).finish();
+  },
+  toProtoMsg(message: QueryJoinTokenExactLptSimulationRequest): QueryJoinTokenExactLptSimulationRequestProtoMsg {
+    return {
+      typeUrl: "/pryzmatics.server.trade.QueryJoinTokenExactLptSimulationRequest",
+      value: QueryJoinTokenExactLptSimulationRequest.encode(message).finish()
+    };
   }
 };
 function createBaseQueryJoinTokenExactLptSimulationResponse(): QueryJoinTokenExactLptSimulationResponse {
@@ -107,6 +173,7 @@ function createBaseQueryJoinTokenExactLptSimulationResponse(): QueryJoinTokenExa
   };
 }
 export const QueryJoinTokenExactLptSimulationResponse = {
+  typeUrl: "/pryzmatics.server.trade.QueryJoinTokenExactLptSimulationResponse",
   encode(message: QueryJoinTokenExactLptSimulationResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.amountIn !== undefined) {
       Coin.encode(message.amountIn, writer.uint32(10).fork()).ldelim();
@@ -198,5 +265,56 @@ export const QueryJoinTokenExactLptSimulationResponse = {
     message.swapFeeLpTerms = object.swapFeeLpTerms !== undefined && object.swapFeeLpTerms !== null ? Coin.fromPartial(object.swapFeeLpTerms) : undefined;
     message.priceImpact = object.priceImpact ?? "";
     return message;
+  },
+  fromAmino(object: QueryJoinTokenExactLptSimulationResponseAmino): QueryJoinTokenExactLptSimulationResponse {
+    const message = createBaseQueryJoinTokenExactLptSimulationResponse();
+    if (object.amount_in !== undefined && object.amount_in !== null) {
+      message.amountIn = Coin.fromAmino(object.amount_in);
+    }
+    if (object.amount_out !== undefined && object.amount_out !== null) {
+      message.amountOut = Coin.fromAmino(object.amount_out);
+    }
+    if (object.protocol_fee !== undefined && object.protocol_fee !== null) {
+      message.protocolFee = Coin.fromAmino(object.protocol_fee);
+    }
+    if (object.protocol_fee_lp_terms !== undefined && object.protocol_fee_lp_terms !== null) {
+      message.protocolFeeLpTerms = Coin.fromAmino(object.protocol_fee_lp_terms);
+    }
+    if (object.swap_fee !== undefined && object.swap_fee !== null) {
+      message.swapFee = Coin.fromAmino(object.swap_fee);
+    }
+    if (object.swap_fee_lp_terms !== undefined && object.swap_fee_lp_terms !== null) {
+      message.swapFeeLpTerms = Coin.fromAmino(object.swap_fee_lp_terms);
+    }
+    if (object.price_impact !== undefined && object.price_impact !== null) {
+      message.priceImpact = object.price_impact;
+    }
+    return message;
+  },
+  toAmino(message: QueryJoinTokenExactLptSimulationResponse): QueryJoinTokenExactLptSimulationResponseAmino {
+    const obj: any = {};
+    obj.amount_in = message.amountIn ? Coin.toAmino(message.amountIn) : undefined;
+    obj.amount_out = message.amountOut ? Coin.toAmino(message.amountOut) : undefined;
+    obj.protocol_fee = message.protocolFee ? Coin.toAmino(message.protocolFee) : undefined;
+    obj.protocol_fee_lp_terms = message.protocolFeeLpTerms ? Coin.toAmino(message.protocolFeeLpTerms) : undefined;
+    obj.swap_fee = message.swapFee ? Coin.toAmino(message.swapFee) : undefined;
+    obj.swap_fee_lp_terms = message.swapFeeLpTerms ? Coin.toAmino(message.swapFeeLpTerms) : undefined;
+    obj.price_impact = message.priceImpact;
+    return obj;
+  },
+  fromAminoMsg(object: QueryJoinTokenExactLptSimulationResponseAminoMsg): QueryJoinTokenExactLptSimulationResponse {
+    return QueryJoinTokenExactLptSimulationResponse.fromAmino(object.value);
+  },
+  fromProtoMsg(message: QueryJoinTokenExactLptSimulationResponseProtoMsg): QueryJoinTokenExactLptSimulationResponse {
+    return QueryJoinTokenExactLptSimulationResponse.decode(message.value);
+  },
+  toProto(message: QueryJoinTokenExactLptSimulationResponse): Uint8Array {
+    return QueryJoinTokenExactLptSimulationResponse.encode(message).finish();
+  },
+  toProtoMsg(message: QueryJoinTokenExactLptSimulationResponse): QueryJoinTokenExactLptSimulationResponseProtoMsg {
+    return {
+      typeUrl: "/pryzmatics.server.trade.QueryJoinTokenExactLptSimulationResponse",
+      value: QueryJoinTokenExactLptSimulationResponse.encode(message).finish()
+    };
   }
 };

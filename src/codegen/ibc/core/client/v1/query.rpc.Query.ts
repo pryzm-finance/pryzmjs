@@ -1,4 +1,3 @@
-//@ts-nocheck
 import { grpc } from "@improbable-eng/grpc-web";
 import { UnaryMethodDefinitionish } from "../../../../grpc-web";
 import { DeepPartial } from "../../../../helpers";
@@ -46,33 +45,33 @@ export class QueryClientImpl implements Query {
     this.upgradedConsensusState = this.upgradedConsensusState.bind(this);
   }
   clientState(request: DeepPartial<QueryClientStateRequest>, metadata?: grpc.Metadata): Promise<QueryClientStateResponse> {
-    return this.rpc.unary(QueryClientStateDesc, QueryClientStateRequest.fromPartial(request), metadata);
+    return this.rpc.unary(QueryClientStateDesc, QueryClientStateRequest.fromPartial(request as any), metadata);
   }
   clientStates(request: DeepPartial<QueryClientStatesRequest> = {
     pagination: undefined
   }, metadata?: grpc.Metadata): Promise<QueryClientStatesResponse> {
-    return this.rpc.unary(QueryClientStatesDesc, QueryClientStatesRequest.fromPartial(request), metadata);
+    return this.rpc.unary(QueryClientStatesDesc, QueryClientStatesRequest.fromPartial(request as any), metadata);
   }
   consensusState(request: DeepPartial<QueryConsensusStateRequest>, metadata?: grpc.Metadata): Promise<QueryConsensusStateResponse> {
-    return this.rpc.unary(QueryConsensusStateDesc, QueryConsensusStateRequest.fromPartial(request), metadata);
+    return this.rpc.unary(QueryConsensusStateDesc, QueryConsensusStateRequest.fromPartial(request as any), metadata);
   }
   consensusStates(request: DeepPartial<QueryConsensusStatesRequest>, metadata?: grpc.Metadata): Promise<QueryConsensusStatesResponse> {
-    return this.rpc.unary(QueryConsensusStatesDesc, QueryConsensusStatesRequest.fromPartial(request), metadata);
+    return this.rpc.unary(QueryConsensusStatesDesc, QueryConsensusStatesRequest.fromPartial(request as any), metadata);
   }
   consensusStateHeights(request: DeepPartial<QueryConsensusStateHeightsRequest>, metadata?: grpc.Metadata): Promise<QueryConsensusStateHeightsResponse> {
-    return this.rpc.unary(QueryConsensusStateHeightsDesc, QueryConsensusStateHeightsRequest.fromPartial(request), metadata);
+    return this.rpc.unary(QueryConsensusStateHeightsDesc, QueryConsensusStateHeightsRequest.fromPartial(request as any), metadata);
   }
   clientStatus(request: DeepPartial<QueryClientStatusRequest>, metadata?: grpc.Metadata): Promise<QueryClientStatusResponse> {
-    return this.rpc.unary(QueryClientStatusDesc, QueryClientStatusRequest.fromPartial(request), metadata);
+    return this.rpc.unary(QueryClientStatusDesc, QueryClientStatusRequest.fromPartial(request as any), metadata);
   }
   clientParams(request: DeepPartial<QueryClientParamsRequest> = {}, metadata?: grpc.Metadata): Promise<QueryClientParamsResponse> {
-    return this.rpc.unary(QueryClientParamsDesc, QueryClientParamsRequest.fromPartial(request), metadata);
+    return this.rpc.unary(QueryClientParamsDesc, QueryClientParamsRequest.fromPartial(request as any), metadata);
   }
   upgradedClientState(request: DeepPartial<QueryUpgradedClientStateRequest> = {}, metadata?: grpc.Metadata): Promise<QueryUpgradedClientStateResponse> {
-    return this.rpc.unary(QueryUpgradedClientStateDesc, QueryUpgradedClientStateRequest.fromPartial(request), metadata);
+    return this.rpc.unary(QueryUpgradedClientStateDesc, QueryUpgradedClientStateRequest.fromPartial(request as any), metadata);
   }
   upgradedConsensusState(request: DeepPartial<QueryUpgradedConsensusStateRequest> = {}, metadata?: grpc.Metadata): Promise<QueryUpgradedConsensusStateResponse> {
-    return this.rpc.unary(QueryUpgradedConsensusStateDesc, QueryUpgradedConsensusStateRequest.fromPartial(request), metadata);
+    return this.rpc.unary(QueryUpgradedConsensusStateDesc, QueryUpgradedConsensusStateRequest.fromPartial(request as any), metadata);
   }
 }
 export const QueryDesc = {

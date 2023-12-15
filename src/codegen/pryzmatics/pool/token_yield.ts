@@ -13,6 +13,25 @@ export interface TokenYield {
   yRoi?: string;
   error: string;
 }
+export interface TokenYieldProtoMsg {
+  typeUrl: "/pryzmatics.pool.TokenYield";
+  value: Uint8Array;
+}
+export interface TokenYieldAmino {
+  token_denom?: string;
+  time?: string;
+  total_yield?: string;
+  internal_yield?: string;
+  incentives_apr?: string;
+  alliance_apr?: string;
+  y_staking_yield?: string;
+  y_roi?: string;
+  error?: string;
+}
+export interface TokenYieldAminoMsg {
+  type: "/pryzmatics.pool.TokenYield";
+  value: TokenYieldAmino;
+}
 export interface TokenYieldSDKType {
   token_denom: string;
   time: TimestampSDKType;
@@ -38,6 +57,7 @@ function createBaseTokenYield(): TokenYield {
   };
 }
 export const TokenYield = {
+  typeUrl: "/pryzmatics.pool.TokenYield",
   encode(message: TokenYield, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.tokenDenom !== "") {
       writer.uint32(10).string(message.tokenDenom);
@@ -147,5 +167,64 @@ export const TokenYield = {
     message.yRoi = object.yRoi ?? undefined;
     message.error = object.error ?? "";
     return message;
+  },
+  fromAmino(object: TokenYieldAmino): TokenYield {
+    const message = createBaseTokenYield();
+    if (object.token_denom !== undefined && object.token_denom !== null) {
+      message.tokenDenom = object.token_denom;
+    }
+    if (object.time !== undefined && object.time !== null) {
+      message.time = Timestamp.fromAmino(object.time);
+    }
+    if (object.total_yield !== undefined && object.total_yield !== null) {
+      message.totalYield = object.total_yield;
+    }
+    if (object.internal_yield !== undefined && object.internal_yield !== null) {
+      message.internalYield = object.internal_yield;
+    }
+    if (object.incentives_apr !== undefined && object.incentives_apr !== null) {
+      message.incentivesApr = object.incentives_apr;
+    }
+    if (object.alliance_apr !== undefined && object.alliance_apr !== null) {
+      message.allianceApr = object.alliance_apr;
+    }
+    if (object.y_staking_yield !== undefined && object.y_staking_yield !== null) {
+      message.yStakingYield = object.y_staking_yield;
+    }
+    if (object.y_roi !== undefined && object.y_roi !== null) {
+      message.yRoi = object.y_roi;
+    }
+    if (object.error !== undefined && object.error !== null) {
+      message.error = object.error;
+    }
+    return message;
+  },
+  toAmino(message: TokenYield): TokenYieldAmino {
+    const obj: any = {};
+    obj.token_denom = message.tokenDenom;
+    obj.time = message.time ? Timestamp.toAmino(message.time) : undefined;
+    obj.total_yield = message.totalYield;
+    obj.internal_yield = message.internalYield;
+    obj.incentives_apr = message.incentivesApr;
+    obj.alliance_apr = message.allianceApr;
+    obj.y_staking_yield = message.yStakingYield;
+    obj.y_roi = message.yRoi;
+    obj.error = message.error;
+    return obj;
+  },
+  fromAminoMsg(object: TokenYieldAminoMsg): TokenYield {
+    return TokenYield.fromAmino(object.value);
+  },
+  fromProtoMsg(message: TokenYieldProtoMsg): TokenYield {
+    return TokenYield.decode(message.value);
+  },
+  toProto(message: TokenYield): Uint8Array {
+    return TokenYield.encode(message).finish();
+  },
+  toProtoMsg(message: TokenYield): TokenYieldProtoMsg {
+    return {
+      typeUrl: "/pryzmatics.pool.TokenYield",
+      value: TokenYield.encode(message).finish()
+    };
   }
 };

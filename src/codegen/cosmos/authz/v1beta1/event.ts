@@ -9,6 +9,23 @@ export interface EventGrant {
   /** Grantee account address */
   grantee: string;
 }
+export interface EventGrantProtoMsg {
+  typeUrl: "/cosmos.authz.v1beta1.EventGrant";
+  value: Uint8Array;
+}
+/** EventGrant is emitted on Msg/Grant */
+export interface EventGrantAmino {
+  /** Msg type URL for which an autorization is granted */
+  msg_type_url?: string;
+  /** Granter account address */
+  granter?: string;
+  /** Grantee account address */
+  grantee?: string;
+}
+export interface EventGrantAminoMsg {
+  type: "cosmos-sdk/EventGrant";
+  value: EventGrantAmino;
+}
 /** EventGrant is emitted on Msg/Grant */
 export interface EventGrantSDKType {
   msg_type_url: string;
@@ -24,6 +41,23 @@ export interface EventRevoke {
   /** Grantee account address */
   grantee: string;
 }
+export interface EventRevokeProtoMsg {
+  typeUrl: "/cosmos.authz.v1beta1.EventRevoke";
+  value: Uint8Array;
+}
+/** EventRevoke is emitted on Msg/Revoke */
+export interface EventRevokeAmino {
+  /** Msg type URL for which an autorization is revoked */
+  msg_type_url?: string;
+  /** Granter account address */
+  granter?: string;
+  /** Grantee account address */
+  grantee?: string;
+}
+export interface EventRevokeAminoMsg {
+  type: "cosmos-sdk/EventRevoke";
+  value: EventRevokeAmino;
+}
 /** EventRevoke is emitted on Msg/Revoke */
 export interface EventRevokeSDKType {
   msg_type_url: string;
@@ -38,6 +72,7 @@ function createBaseEventGrant(): EventGrant {
   };
 }
 export const EventGrant = {
+  typeUrl: "/cosmos.authz.v1beta1.EventGrant",
   encode(message: EventGrant, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.msgTypeUrl !== "") {
       writer.uint32(18).string(message.msgTypeUrl);
@@ -93,6 +128,47 @@ export const EventGrant = {
     message.granter = object.granter ?? "";
     message.grantee = object.grantee ?? "";
     return message;
+  },
+  fromAmino(object: EventGrantAmino): EventGrant {
+    const message = createBaseEventGrant();
+    if (object.msg_type_url !== undefined && object.msg_type_url !== null) {
+      message.msgTypeUrl = object.msg_type_url;
+    }
+    if (object.granter !== undefined && object.granter !== null) {
+      message.granter = object.granter;
+    }
+    if (object.grantee !== undefined && object.grantee !== null) {
+      message.grantee = object.grantee;
+    }
+    return message;
+  },
+  toAmino(message: EventGrant): EventGrantAmino {
+    const obj: any = {};
+    obj.msg_type_url = message.msgTypeUrl;
+    obj.granter = message.granter;
+    obj.grantee = message.grantee;
+    return obj;
+  },
+  fromAminoMsg(object: EventGrantAminoMsg): EventGrant {
+    return EventGrant.fromAmino(object.value);
+  },
+  toAminoMsg(message: EventGrant): EventGrantAminoMsg {
+    return {
+      type: "cosmos-sdk/EventGrant",
+      value: EventGrant.toAmino(message)
+    };
+  },
+  fromProtoMsg(message: EventGrantProtoMsg): EventGrant {
+    return EventGrant.decode(message.value);
+  },
+  toProto(message: EventGrant): Uint8Array {
+    return EventGrant.encode(message).finish();
+  },
+  toProtoMsg(message: EventGrant): EventGrantProtoMsg {
+    return {
+      typeUrl: "/cosmos.authz.v1beta1.EventGrant",
+      value: EventGrant.encode(message).finish()
+    };
   }
 };
 function createBaseEventRevoke(): EventRevoke {
@@ -103,6 +179,7 @@ function createBaseEventRevoke(): EventRevoke {
   };
 }
 export const EventRevoke = {
+  typeUrl: "/cosmos.authz.v1beta1.EventRevoke",
   encode(message: EventRevoke, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.msgTypeUrl !== "") {
       writer.uint32(18).string(message.msgTypeUrl);
@@ -158,5 +235,46 @@ export const EventRevoke = {
     message.granter = object.granter ?? "";
     message.grantee = object.grantee ?? "";
     return message;
+  },
+  fromAmino(object: EventRevokeAmino): EventRevoke {
+    const message = createBaseEventRevoke();
+    if (object.msg_type_url !== undefined && object.msg_type_url !== null) {
+      message.msgTypeUrl = object.msg_type_url;
+    }
+    if (object.granter !== undefined && object.granter !== null) {
+      message.granter = object.granter;
+    }
+    if (object.grantee !== undefined && object.grantee !== null) {
+      message.grantee = object.grantee;
+    }
+    return message;
+  },
+  toAmino(message: EventRevoke): EventRevokeAmino {
+    const obj: any = {};
+    obj.msg_type_url = message.msgTypeUrl;
+    obj.granter = message.granter;
+    obj.grantee = message.grantee;
+    return obj;
+  },
+  fromAminoMsg(object: EventRevokeAminoMsg): EventRevoke {
+    return EventRevoke.fromAmino(object.value);
+  },
+  toAminoMsg(message: EventRevoke): EventRevokeAminoMsg {
+    return {
+      type: "cosmos-sdk/EventRevoke",
+      value: EventRevoke.toAmino(message)
+    };
+  },
+  fromProtoMsg(message: EventRevokeProtoMsg): EventRevoke {
+    return EventRevoke.decode(message.value);
+  },
+  toProto(message: EventRevoke): Uint8Array {
+    return EventRevoke.encode(message).finish();
+  },
+  toProtoMsg(message: EventRevoke): EventRevokeProtoMsg {
+    return {
+      typeUrl: "/cosmos.authz.v1beta1.EventRevoke",
+      value: EventRevoke.encode(message).finish()
+    };
   }
 };

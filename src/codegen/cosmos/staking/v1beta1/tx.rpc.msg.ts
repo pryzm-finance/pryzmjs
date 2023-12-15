@@ -1,4 +1,3 @@
-//@ts-nocheck
 import { UnaryMethodDefinitionish } from "../../../grpc-web";
 import { DeepPartial } from "../../../helpers";
 import { grpc } from "@improbable-eng/grpc-web";
@@ -52,25 +51,25 @@ export class MsgClientImpl implements Msg {
     this.updateParams = this.updateParams.bind(this);
   }
   createValidator(request: DeepPartial<MsgCreateValidator>, metadata?: grpc.Metadata): Promise<MsgCreateValidatorResponse> {
-    return this.rpc.unary(MsgCreateValidatorDesc, MsgCreateValidator.fromPartial(request), metadata);
+    return this.rpc.unary(MsgCreateValidatorDesc, MsgCreateValidator.fromPartial(request as any), metadata);
   }
   editValidator(request: DeepPartial<MsgEditValidator>, metadata?: grpc.Metadata): Promise<MsgEditValidatorResponse> {
-    return this.rpc.unary(MsgEditValidatorDesc, MsgEditValidator.fromPartial(request), metadata);
+    return this.rpc.unary(MsgEditValidatorDesc, MsgEditValidator.fromPartial(request as any), metadata);
   }
   delegate(request: DeepPartial<MsgDelegate>, metadata?: grpc.Metadata): Promise<MsgDelegateResponse> {
-    return this.rpc.unary(MsgDelegateDesc, MsgDelegate.fromPartial(request), metadata);
+    return this.rpc.unary(MsgDelegateDesc, MsgDelegate.fromPartial(request as any), metadata);
   }
   beginRedelegate(request: DeepPartial<MsgBeginRedelegate>, metadata?: grpc.Metadata): Promise<MsgBeginRedelegateResponse> {
-    return this.rpc.unary(MsgBeginRedelegateDesc, MsgBeginRedelegate.fromPartial(request), metadata);
+    return this.rpc.unary(MsgBeginRedelegateDesc, MsgBeginRedelegate.fromPartial(request as any), metadata);
   }
   undelegate(request: DeepPartial<MsgUndelegate>, metadata?: grpc.Metadata): Promise<MsgUndelegateResponse> {
-    return this.rpc.unary(MsgUndelegateDesc, MsgUndelegate.fromPartial(request), metadata);
+    return this.rpc.unary(MsgUndelegateDesc, MsgUndelegate.fromPartial(request as any), metadata);
   }
   cancelUnbondingDelegation(request: DeepPartial<MsgCancelUnbondingDelegation>, metadata?: grpc.Metadata): Promise<MsgCancelUnbondingDelegationResponse> {
-    return this.rpc.unary(MsgCancelUnbondingDelegationDesc, MsgCancelUnbondingDelegation.fromPartial(request), metadata);
+    return this.rpc.unary(MsgCancelUnbondingDelegationDesc, MsgCancelUnbondingDelegation.fromPartial(request as any), metadata);
   }
   updateParams(request: DeepPartial<MsgUpdateParams>, metadata?: grpc.Metadata): Promise<MsgUpdateParamsResponse> {
-    return this.rpc.unary(MsgUpdateParamsDesc, MsgUpdateParams.fromPartial(request), metadata);
+    return this.rpc.unary(MsgUpdateParamsDesc, MsgUpdateParams.fromPartial(request as any), metadata);
   }
 }
 export const MsgDesc = {

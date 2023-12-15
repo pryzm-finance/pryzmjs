@@ -1,9 +1,21 @@
-import { RouteStep, RouteStepSDKType } from "./route_step";
+import { RouteStep, RouteStepAmino, RouteStepSDKType } from "./route_step";
 import { BinaryReader, BinaryWriter } from "../../../binary";
 import { isSet } from "../../../helpers";
 export interface WhitelistedRoute {
   steps: RouteStep[];
   enabled: boolean;
+}
+export interface WhitelistedRouteProtoMsg {
+  typeUrl: "/pryzm.amm.v1.WhitelistedRoute";
+  value: Uint8Array;
+}
+export interface WhitelistedRouteAmino {
+  steps?: RouteStepAmino[];
+  enabled?: boolean;
+}
+export interface WhitelistedRouteAminoMsg {
+  type: "/pryzm.amm.v1.WhitelistedRoute";
+  value: WhitelistedRouteAmino;
 }
 export interface WhitelistedRouteSDKType {
   steps: RouteStepSDKType[];
@@ -16,6 +28,7 @@ function createBaseWhitelistedRoute(): WhitelistedRoute {
   };
 }
 export const WhitelistedRoute = {
+  typeUrl: "/pryzm.amm.v1.WhitelistedRoute",
   encode(message: WhitelistedRoute, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     for (const v of message.steps) {
       RouteStep.encode(v!, writer.uint32(10).fork()).ldelim();
@@ -66,5 +79,38 @@ export const WhitelistedRoute = {
     message.steps = object.steps?.map(e => RouteStep.fromPartial(e)) || [];
     message.enabled = object.enabled ?? false;
     return message;
+  },
+  fromAmino(object: WhitelistedRouteAmino): WhitelistedRoute {
+    const message = createBaseWhitelistedRoute();
+    message.steps = object.steps?.map(e => RouteStep.fromAmino(e)) || [];
+    if (object.enabled !== undefined && object.enabled !== null) {
+      message.enabled = object.enabled;
+    }
+    return message;
+  },
+  toAmino(message: WhitelistedRoute): WhitelistedRouteAmino {
+    const obj: any = {};
+    if (message.steps) {
+      obj.steps = message.steps.map(e => e ? RouteStep.toAmino(e) : undefined);
+    } else {
+      obj.steps = [];
+    }
+    obj.enabled = message.enabled;
+    return obj;
+  },
+  fromAminoMsg(object: WhitelistedRouteAminoMsg): WhitelistedRoute {
+    return WhitelistedRoute.fromAmino(object.value);
+  },
+  fromProtoMsg(message: WhitelistedRouteProtoMsg): WhitelistedRoute {
+    return WhitelistedRoute.decode(message.value);
+  },
+  toProto(message: WhitelistedRoute): Uint8Array {
+    return WhitelistedRoute.encode(message).finish();
+  },
+  toProtoMsg(message: WhitelistedRoute): WhitelistedRouteProtoMsg {
+    return {
+      typeUrl: "/pryzm.amm.v1.WhitelistedRoute",
+      value: WhitelistedRoute.encode(message).finish()
+    };
   }
 };

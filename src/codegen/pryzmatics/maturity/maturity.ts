@@ -17,6 +17,29 @@ export interface Maturity {
   pPrice?: string;
   error: string;
 }
+export interface MaturityProtoMsg {
+  typeUrl: "/pryzmatics.maturity.Maturity";
+  value: Uint8Array;
+}
+export interface MaturityAmino {
+  asset_id?: string;
+  symbol?: string;
+  active?: boolean;
+  introduction_time?: string;
+  expiration_time?: string;
+  block_height?: string;
+  block_time?: string;
+  roi?: string;
+  y_apy?: string;
+  p_apy?: string;
+  y_price?: string;
+  p_price?: string;
+  error?: string;
+}
+export interface MaturityAminoMsg {
+  type: "/pryzmatics.maturity.Maturity";
+  value: MaturityAmino;
+}
 export interface MaturitySDKType {
   asset_id: string;
   symbol: string;
@@ -50,6 +73,7 @@ function createBaseMaturity(): Maturity {
   };
 }
 export const Maturity = {
+  typeUrl: "/pryzmatics.maturity.Maturity",
   encode(message: Maturity, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.assetId !== "") {
       writer.uint32(10).string(message.assetId);
@@ -195,5 +219,80 @@ export const Maturity = {
     message.pPrice = object.pPrice ?? undefined;
     message.error = object.error ?? "";
     return message;
+  },
+  fromAmino(object: MaturityAmino): Maturity {
+    const message = createBaseMaturity();
+    if (object.asset_id !== undefined && object.asset_id !== null) {
+      message.assetId = object.asset_id;
+    }
+    if (object.symbol !== undefined && object.symbol !== null) {
+      message.symbol = object.symbol;
+    }
+    if (object.active !== undefined && object.active !== null) {
+      message.active = object.active;
+    }
+    if (object.introduction_time !== undefined && object.introduction_time !== null) {
+      message.introductionTime = Timestamp.fromAmino(object.introduction_time);
+    }
+    if (object.expiration_time !== undefined && object.expiration_time !== null) {
+      message.expirationTime = Timestamp.fromAmino(object.expiration_time);
+    }
+    if (object.block_height !== undefined && object.block_height !== null) {
+      message.blockHeight = BigInt(object.block_height);
+    }
+    if (object.block_time !== undefined && object.block_time !== null) {
+      message.blockTime = Timestamp.fromAmino(object.block_time);
+    }
+    if (object.roi !== undefined && object.roi !== null) {
+      message.roi = object.roi;
+    }
+    if (object.y_apy !== undefined && object.y_apy !== null) {
+      message.yApy = object.y_apy;
+    }
+    if (object.p_apy !== undefined && object.p_apy !== null) {
+      message.pApy = object.p_apy;
+    }
+    if (object.y_price !== undefined && object.y_price !== null) {
+      message.yPrice = object.y_price;
+    }
+    if (object.p_price !== undefined && object.p_price !== null) {
+      message.pPrice = object.p_price;
+    }
+    if (object.error !== undefined && object.error !== null) {
+      message.error = object.error;
+    }
+    return message;
+  },
+  toAmino(message: Maturity): MaturityAmino {
+    const obj: any = {};
+    obj.asset_id = message.assetId;
+    obj.symbol = message.symbol;
+    obj.active = message.active;
+    obj.introduction_time = message.introductionTime ? Timestamp.toAmino(message.introductionTime) : undefined;
+    obj.expiration_time = message.expirationTime ? Timestamp.toAmino(message.expirationTime) : undefined;
+    obj.block_height = message.blockHeight ? message.blockHeight.toString() : undefined;
+    obj.block_time = message.blockTime ? Timestamp.toAmino(message.blockTime) : undefined;
+    obj.roi = message.roi;
+    obj.y_apy = message.yApy;
+    obj.p_apy = message.pApy;
+    obj.y_price = message.yPrice;
+    obj.p_price = message.pPrice;
+    obj.error = message.error;
+    return obj;
+  },
+  fromAminoMsg(object: MaturityAminoMsg): Maturity {
+    return Maturity.fromAmino(object.value);
+  },
+  fromProtoMsg(message: MaturityProtoMsg): Maturity {
+    return Maturity.decode(message.value);
+  },
+  toProto(message: Maturity): Uint8Array {
+    return Maturity.encode(message).finish();
+  },
+  toProtoMsg(message: Maturity): MaturityProtoMsg {
+    return {
+      typeUrl: "/pryzmatics.maturity.Maturity",
+      value: Maturity.encode(message).finish()
+    };
   }
 };

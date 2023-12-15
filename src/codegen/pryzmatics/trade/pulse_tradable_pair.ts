@@ -6,6 +6,20 @@ export interface PulseTradablePair {
   poolId: bigint;
   whitelistedRoute: boolean;
 }
+export interface PulseTradablePairProtoMsg {
+  typeUrl: "/pryzmatics.trade.PulseTradablePair";
+  value: Uint8Array;
+}
+export interface PulseTradablePairAmino {
+  token_in?: string;
+  token_out?: string;
+  pool_id?: string;
+  whitelisted_route?: boolean;
+}
+export interface PulseTradablePairAminoMsg {
+  type: "/pryzmatics.trade.PulseTradablePair";
+  value: PulseTradablePairAmino;
+}
 export interface PulseTradablePairSDKType {
   token_in: string;
   token_out: string;
@@ -21,6 +35,7 @@ function createBasePulseTradablePair(): PulseTradablePair {
   };
 }
 export const PulseTradablePair = {
+  typeUrl: "/pryzmatics.trade.PulseTradablePair",
   encode(message: PulseTradablePair, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.tokenIn !== "") {
       writer.uint32(10).string(message.tokenIn);
@@ -85,5 +100,44 @@ export const PulseTradablePair = {
     message.poolId = object.poolId !== undefined && object.poolId !== null ? BigInt(object.poolId.toString()) : BigInt(0);
     message.whitelistedRoute = object.whitelistedRoute ?? false;
     return message;
+  },
+  fromAmino(object: PulseTradablePairAmino): PulseTradablePair {
+    const message = createBasePulseTradablePair();
+    if (object.token_in !== undefined && object.token_in !== null) {
+      message.tokenIn = object.token_in;
+    }
+    if (object.token_out !== undefined && object.token_out !== null) {
+      message.tokenOut = object.token_out;
+    }
+    if (object.pool_id !== undefined && object.pool_id !== null) {
+      message.poolId = BigInt(object.pool_id);
+    }
+    if (object.whitelisted_route !== undefined && object.whitelisted_route !== null) {
+      message.whitelistedRoute = object.whitelisted_route;
+    }
+    return message;
+  },
+  toAmino(message: PulseTradablePair): PulseTradablePairAmino {
+    const obj: any = {};
+    obj.token_in = message.tokenIn;
+    obj.token_out = message.tokenOut;
+    obj.pool_id = message.poolId ? message.poolId.toString() : undefined;
+    obj.whitelisted_route = message.whitelistedRoute;
+    return obj;
+  },
+  fromAminoMsg(object: PulseTradablePairAminoMsg): PulseTradablePair {
+    return PulseTradablePair.fromAmino(object.value);
+  },
+  fromProtoMsg(message: PulseTradablePairProtoMsg): PulseTradablePair {
+    return PulseTradablePair.decode(message.value);
+  },
+  toProto(message: PulseTradablePair): Uint8Array {
+    return PulseTradablePair.encode(message).finish();
+  },
+  toProtoMsg(message: PulseTradablePair): PulseTradablePairProtoMsg {
+    return {
+      typeUrl: "/pryzmatics.trade.PulseTradablePair",
+      value: PulseTradablePair.encode(message).finish()
+    };
   }
 };

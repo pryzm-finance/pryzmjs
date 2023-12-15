@@ -1,4 +1,3 @@
-//@ts-nocheck
 import { LCDClient } from "@refractedlabs/cosmology-lcd-fork";
 import { QueryInterchainAccountRequest, QueryInterchainAccountResponseSDKType, QueryParamsRequest, QueryParamsResponseSDKType } from "./query";
 export class LCDQueryClient {

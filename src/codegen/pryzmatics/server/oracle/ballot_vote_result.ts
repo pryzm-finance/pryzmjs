@@ -1,5 +1,5 @@
-import { PageRequest, PageRequestSDKType, PageResponse, PageResponseSDKType } from "../../../cosmos/base/query/v1beta1/pagination";
-import { BallotVoteResult, BallotVoteResultSDKType } from "../../oracle/ballot_vote_result";
+import { PageRequest, PageRequestAmino, PageRequestSDKType, PageResponse, PageResponseAmino, PageResponseSDKType } from "../../../cosmos/base/query/v1beta1/pagination";
+import { BallotVoteResult, BallotVoteResultAmino, BallotVoteResultSDKType } from "../../oracle/ballot_vote_result";
 import { BinaryReader, BinaryWriter } from "../../../binary";
 import { isSet } from "../../../helpers";
 export interface QueryBallotVoteResultsRequest {
@@ -8,6 +8,21 @@ export interface QueryBallotVoteResultsRequest {
   fromBlockHeight?: string;
   toBlockHeight?: string;
   pagination?: PageRequest;
+}
+export interface QueryBallotVoteResultsRequestProtoMsg {
+  typeUrl: "/pryzmatics.server.oracle.QueryBallotVoteResultsRequest";
+  value: Uint8Array;
+}
+export interface QueryBallotVoteResultsRequestAmino {
+  module?: string;
+  namespace?: string;
+  from_block_height?: string;
+  to_block_height?: string;
+  pagination?: PageRequestAmino;
+}
+export interface QueryBallotVoteResultsRequestAminoMsg {
+  type: "/pryzmatics.server.oracle.QueryBallotVoteResultsRequest";
+  value: QueryBallotVoteResultsRequestAmino;
 }
 export interface QueryBallotVoteResultsRequestSDKType {
   module: string;
@@ -19,6 +34,18 @@ export interface QueryBallotVoteResultsRequestSDKType {
 export interface QueryBallotVoteResultsResponse {
   results: BallotVoteResult[];
   pagination?: PageResponse;
+}
+export interface QueryBallotVoteResultsResponseProtoMsg {
+  typeUrl: "/pryzmatics.server.oracle.QueryBallotVoteResultsResponse";
+  value: Uint8Array;
+}
+export interface QueryBallotVoteResultsResponseAmino {
+  results?: BallotVoteResultAmino[];
+  pagination?: PageResponseAmino;
+}
+export interface QueryBallotVoteResultsResponseAminoMsg {
+  type: "/pryzmatics.server.oracle.QueryBallotVoteResultsResponse";
+  value: QueryBallotVoteResultsResponseAmino;
 }
 export interface QueryBallotVoteResultsResponseSDKType {
   results: BallotVoteResultSDKType[];
@@ -34,6 +61,7 @@ function createBaseQueryBallotVoteResultsRequest(): QueryBallotVoteResultsReques
   };
 }
 export const QueryBallotVoteResultsRequest = {
+  typeUrl: "/pryzmatics.server.oracle.QueryBallotVoteResultsRequest",
   encode(message: QueryBallotVoteResultsRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.module !== "") {
       writer.uint32(10).string(message.module);
@@ -107,6 +135,49 @@ export const QueryBallotVoteResultsRequest = {
     message.toBlockHeight = object.toBlockHeight ?? undefined;
     message.pagination = object.pagination !== undefined && object.pagination !== null ? PageRequest.fromPartial(object.pagination) : undefined;
     return message;
+  },
+  fromAmino(object: QueryBallotVoteResultsRequestAmino): QueryBallotVoteResultsRequest {
+    const message = createBaseQueryBallotVoteResultsRequest();
+    if (object.module !== undefined && object.module !== null) {
+      message.module = object.module;
+    }
+    if (object.namespace !== undefined && object.namespace !== null) {
+      message.namespace = object.namespace;
+    }
+    if (object.from_block_height !== undefined && object.from_block_height !== null) {
+      message.fromBlockHeight = object.from_block_height;
+    }
+    if (object.to_block_height !== undefined && object.to_block_height !== null) {
+      message.toBlockHeight = object.to_block_height;
+    }
+    if (object.pagination !== undefined && object.pagination !== null) {
+      message.pagination = PageRequest.fromAmino(object.pagination);
+    }
+    return message;
+  },
+  toAmino(message: QueryBallotVoteResultsRequest): QueryBallotVoteResultsRequestAmino {
+    const obj: any = {};
+    obj.module = message.module;
+    obj.namespace = message.namespace;
+    obj.from_block_height = message.fromBlockHeight;
+    obj.to_block_height = message.toBlockHeight;
+    obj.pagination = message.pagination ? PageRequest.toAmino(message.pagination) : undefined;
+    return obj;
+  },
+  fromAminoMsg(object: QueryBallotVoteResultsRequestAminoMsg): QueryBallotVoteResultsRequest {
+    return QueryBallotVoteResultsRequest.fromAmino(object.value);
+  },
+  fromProtoMsg(message: QueryBallotVoteResultsRequestProtoMsg): QueryBallotVoteResultsRequest {
+    return QueryBallotVoteResultsRequest.decode(message.value);
+  },
+  toProto(message: QueryBallotVoteResultsRequest): Uint8Array {
+    return QueryBallotVoteResultsRequest.encode(message).finish();
+  },
+  toProtoMsg(message: QueryBallotVoteResultsRequest): QueryBallotVoteResultsRequestProtoMsg {
+    return {
+      typeUrl: "/pryzmatics.server.oracle.QueryBallotVoteResultsRequest",
+      value: QueryBallotVoteResultsRequest.encode(message).finish()
+    };
   }
 };
 function createBaseQueryBallotVoteResultsResponse(): QueryBallotVoteResultsResponse {
@@ -116,6 +187,7 @@ function createBaseQueryBallotVoteResultsResponse(): QueryBallotVoteResultsRespo
   };
 }
 export const QueryBallotVoteResultsResponse = {
+  typeUrl: "/pryzmatics.server.oracle.QueryBallotVoteResultsResponse",
   encode(message: QueryBallotVoteResultsResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     for (const v of message.results) {
       BallotVoteResult.encode(v!, writer.uint32(10).fork()).ldelim();
@@ -166,5 +238,38 @@ export const QueryBallotVoteResultsResponse = {
     message.results = object.results?.map(e => BallotVoteResult.fromPartial(e)) || [];
     message.pagination = object.pagination !== undefined && object.pagination !== null ? PageResponse.fromPartial(object.pagination) : undefined;
     return message;
+  },
+  fromAmino(object: QueryBallotVoteResultsResponseAmino): QueryBallotVoteResultsResponse {
+    const message = createBaseQueryBallotVoteResultsResponse();
+    message.results = object.results?.map(e => BallotVoteResult.fromAmino(e)) || [];
+    if (object.pagination !== undefined && object.pagination !== null) {
+      message.pagination = PageResponse.fromAmino(object.pagination);
+    }
+    return message;
+  },
+  toAmino(message: QueryBallotVoteResultsResponse): QueryBallotVoteResultsResponseAmino {
+    const obj: any = {};
+    if (message.results) {
+      obj.results = message.results.map(e => e ? BallotVoteResult.toAmino(e) : undefined);
+    } else {
+      obj.results = [];
+    }
+    obj.pagination = message.pagination ? PageResponse.toAmino(message.pagination) : undefined;
+    return obj;
+  },
+  fromAminoMsg(object: QueryBallotVoteResultsResponseAminoMsg): QueryBallotVoteResultsResponse {
+    return QueryBallotVoteResultsResponse.fromAmino(object.value);
+  },
+  fromProtoMsg(message: QueryBallotVoteResultsResponseProtoMsg): QueryBallotVoteResultsResponse {
+    return QueryBallotVoteResultsResponse.decode(message.value);
+  },
+  toProto(message: QueryBallotVoteResultsResponse): Uint8Array {
+    return QueryBallotVoteResultsResponse.encode(message).finish();
+  },
+  toProtoMsg(message: QueryBallotVoteResultsResponse): QueryBallotVoteResultsResponseProtoMsg {
+    return {
+      typeUrl: "/pryzmatics.server.oracle.QueryBallotVoteResultsResponse",
+      value: QueryBallotVoteResultsResponse.encode(message).finish()
+    };
   }
 };

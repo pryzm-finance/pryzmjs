@@ -1,4 +1,3 @@
-//@ts-nocheck
 import { grpc } from "@improbable-eng/grpc-web";
 import { UnaryMethodDefinitionish } from "../../../../grpc-web";
 import { DeepPartial } from "../../../../helpers";
@@ -40,24 +39,24 @@ export class QueryClientImpl implements Query {
     this.connectionParams = this.connectionParams.bind(this);
   }
   connection(request: DeepPartial<QueryConnectionRequest>, metadata?: grpc.Metadata): Promise<QueryConnectionResponse> {
-    return this.rpc.unary(QueryConnectionDesc, QueryConnectionRequest.fromPartial(request), metadata);
+    return this.rpc.unary(QueryConnectionDesc, QueryConnectionRequest.fromPartial(request as any), metadata);
   }
   connections(request: DeepPartial<QueryConnectionsRequest> = {
     pagination: undefined
   }, metadata?: grpc.Metadata): Promise<QueryConnectionsResponse> {
-    return this.rpc.unary(QueryConnectionsDesc, QueryConnectionsRequest.fromPartial(request), metadata);
+    return this.rpc.unary(QueryConnectionsDesc, QueryConnectionsRequest.fromPartial(request as any), metadata);
   }
   clientConnections(request: DeepPartial<QueryClientConnectionsRequest>, metadata?: grpc.Metadata): Promise<QueryClientConnectionsResponse> {
-    return this.rpc.unary(QueryClientConnectionsDesc, QueryClientConnectionsRequest.fromPartial(request), metadata);
+    return this.rpc.unary(QueryClientConnectionsDesc, QueryClientConnectionsRequest.fromPartial(request as any), metadata);
   }
   connectionClientState(request: DeepPartial<QueryConnectionClientStateRequest>, metadata?: grpc.Metadata): Promise<QueryConnectionClientStateResponse> {
-    return this.rpc.unary(QueryConnectionClientStateDesc, QueryConnectionClientStateRequest.fromPartial(request), metadata);
+    return this.rpc.unary(QueryConnectionClientStateDesc, QueryConnectionClientStateRequest.fromPartial(request as any), metadata);
   }
   connectionConsensusState(request: DeepPartial<QueryConnectionConsensusStateRequest>, metadata?: grpc.Metadata): Promise<QueryConnectionConsensusStateResponse> {
-    return this.rpc.unary(QueryConnectionConsensusStateDesc, QueryConnectionConsensusStateRequest.fromPartial(request), metadata);
+    return this.rpc.unary(QueryConnectionConsensusStateDesc, QueryConnectionConsensusStateRequest.fromPartial(request as any), metadata);
   }
   connectionParams(request: DeepPartial<QueryConnectionParamsRequest> = {}, metadata?: grpc.Metadata): Promise<QueryConnectionParamsResponse> {
-    return this.rpc.unary(QueryConnectionParamsDesc, QueryConnectionParamsRequest.fromPartial(request), metadata);
+    return this.rpc.unary(QueryConnectionParamsDesc, QueryConnectionParamsRequest.fromPartial(request as any), metadata);
   }
 }
 export const QueryDesc = {

@@ -1,7 +1,7 @@
 import { VoteType, voteTypeFromJSON, voteTypeToJSON } from "../../refractedlabs/oracle/v1/event";
-import { Coin, CoinSDKType } from "../../cosmos/base/v1beta1/coin";
-import { VoteInterval, VoteIntervalSDKType } from "./vote_interval";
-import { BallotVoteResult, BallotVoteResultSDKType } from "./ballot_vote_result";
+import { Coin, CoinAmino, CoinSDKType } from "../../cosmos/base/v1beta1/coin";
+import { VoteInterval, VoteIntervalAmino, VoteIntervalSDKType } from "./vote_interval";
+import { BallotVoteResult, BallotVoteResultAmino, BallotVoteResultSDKType } from "./ballot_vote_result";
 import { BinaryReader, BinaryWriter } from "../../binary";
 import { isSet } from "../../helpers";
 export interface VotePayloadReport {
@@ -9,6 +9,20 @@ export interface VotePayloadReport {
   namespace: string;
   payload: string;
   type: VoteType;
+}
+export interface VotePayloadReportProtoMsg {
+  typeUrl: "/pryzmatics.oracle.VotePayloadReport";
+  value: Uint8Array;
+}
+export interface VotePayloadReportAmino {
+  module?: string;
+  namespace?: string;
+  payload?: string;
+  type?: VoteType;
+}
+export interface VotePayloadReportAminoMsg {
+  type: "/pryzmatics.oracle.VotePayloadReport";
+  value: VotePayloadReportAmino;
 }
 export interface VotePayloadReportSDKType {
   module: string;
@@ -24,6 +38,22 @@ export interface ValidatorVoteIntervalReport {
   rewards: Coin[];
   payloads: VotePayloadReport[];
 }
+export interface ValidatorVoteIntervalReportProtoMsg {
+  typeUrl: "/pryzmatics.oracle.ValidatorVoteIntervalReport";
+  value: Uint8Array;
+}
+export interface ValidatorVoteIntervalReportAmino {
+  validator?: string;
+  pre_voted?: boolean;
+  voted?: boolean;
+  miss_counter?: string;
+  rewards?: CoinAmino[];
+  payloads?: VotePayloadReportAmino[];
+}
+export interface ValidatorVoteIntervalReportAminoMsg {
+  type: "/pryzmatics.oracle.ValidatorVoteIntervalReport";
+  value: ValidatorVoteIntervalReportAmino;
+}
 export interface ValidatorVoteIntervalReportSDKType {
   validator: string;
   pre_voted: boolean;
@@ -36,6 +66,19 @@ export interface VoteIntervalReport {
   voteInterval: VoteInterval;
   ballotVoteResults: BallotVoteResult[];
   validatorReports: ValidatorVoteIntervalReport[];
+}
+export interface VoteIntervalReportProtoMsg {
+  typeUrl: "/pryzmatics.oracle.VoteIntervalReport";
+  value: Uint8Array;
+}
+export interface VoteIntervalReportAmino {
+  vote_interval?: VoteIntervalAmino;
+  ballot_vote_results?: BallotVoteResultAmino[];
+  validator_reports?: ValidatorVoteIntervalReportAmino[];
+}
+export interface VoteIntervalReportAminoMsg {
+  type: "/pryzmatics.oracle.VoteIntervalReport";
+  value: VoteIntervalReportAmino;
 }
 export interface VoteIntervalReportSDKType {
   vote_interval: VoteIntervalSDKType;
@@ -51,6 +94,7 @@ function createBaseVotePayloadReport(): VotePayloadReport {
   };
 }
 export const VotePayloadReport = {
+  typeUrl: "/pryzmatics.oracle.VotePayloadReport",
   encode(message: VotePayloadReport, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.module !== "") {
       writer.uint32(10).string(message.module);
@@ -115,6 +159,45 @@ export const VotePayloadReport = {
     message.payload = object.payload ?? "";
     message.type = object.type ?? 0;
     return message;
+  },
+  fromAmino(object: VotePayloadReportAmino): VotePayloadReport {
+    const message = createBaseVotePayloadReport();
+    if (object.module !== undefined && object.module !== null) {
+      message.module = object.module;
+    }
+    if (object.namespace !== undefined && object.namespace !== null) {
+      message.namespace = object.namespace;
+    }
+    if (object.payload !== undefined && object.payload !== null) {
+      message.payload = object.payload;
+    }
+    if (object.type !== undefined && object.type !== null) {
+      message.type = voteTypeFromJSON(object.type);
+    }
+    return message;
+  },
+  toAmino(message: VotePayloadReport): VotePayloadReportAmino {
+    const obj: any = {};
+    obj.module = message.module;
+    obj.namespace = message.namespace;
+    obj.payload = message.payload;
+    obj.type = voteTypeToJSON(message.type);
+    return obj;
+  },
+  fromAminoMsg(object: VotePayloadReportAminoMsg): VotePayloadReport {
+    return VotePayloadReport.fromAmino(object.value);
+  },
+  fromProtoMsg(message: VotePayloadReportProtoMsg): VotePayloadReport {
+    return VotePayloadReport.decode(message.value);
+  },
+  toProto(message: VotePayloadReport): Uint8Array {
+    return VotePayloadReport.encode(message).finish();
+  },
+  toProtoMsg(message: VotePayloadReport): VotePayloadReportProtoMsg {
+    return {
+      typeUrl: "/pryzmatics.oracle.VotePayloadReport",
+      value: VotePayloadReport.encode(message).finish()
+    };
   }
 };
 function createBaseValidatorVoteIntervalReport(): ValidatorVoteIntervalReport {
@@ -128,6 +211,7 @@ function createBaseValidatorVoteIntervalReport(): ValidatorVoteIntervalReport {
   };
 }
 export const ValidatorVoteIntervalReport = {
+  typeUrl: "/pryzmatics.oracle.ValidatorVoteIntervalReport",
   encode(message: ValidatorVoteIntervalReport, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.validator !== "") {
       writer.uint32(10).string(message.validator);
@@ -218,6 +302,57 @@ export const ValidatorVoteIntervalReport = {
     message.rewards = object.rewards?.map(e => Coin.fromPartial(e)) || [];
     message.payloads = object.payloads?.map(e => VotePayloadReport.fromPartial(e)) || [];
     return message;
+  },
+  fromAmino(object: ValidatorVoteIntervalReportAmino): ValidatorVoteIntervalReport {
+    const message = createBaseValidatorVoteIntervalReport();
+    if (object.validator !== undefined && object.validator !== null) {
+      message.validator = object.validator;
+    }
+    if (object.pre_voted !== undefined && object.pre_voted !== null) {
+      message.preVoted = object.pre_voted;
+    }
+    if (object.voted !== undefined && object.voted !== null) {
+      message.voted = object.voted;
+    }
+    if (object.miss_counter !== undefined && object.miss_counter !== null) {
+      message.missCounter = BigInt(object.miss_counter);
+    }
+    message.rewards = object.rewards?.map(e => Coin.fromAmino(e)) || [];
+    message.payloads = object.payloads?.map(e => VotePayloadReport.fromAmino(e)) || [];
+    return message;
+  },
+  toAmino(message: ValidatorVoteIntervalReport): ValidatorVoteIntervalReportAmino {
+    const obj: any = {};
+    obj.validator = message.validator;
+    obj.pre_voted = message.preVoted;
+    obj.voted = message.voted;
+    obj.miss_counter = message.missCounter ? message.missCounter.toString() : undefined;
+    if (message.rewards) {
+      obj.rewards = message.rewards.map(e => e ? Coin.toAmino(e) : undefined);
+    } else {
+      obj.rewards = [];
+    }
+    if (message.payloads) {
+      obj.payloads = message.payloads.map(e => e ? VotePayloadReport.toAmino(e) : undefined);
+    } else {
+      obj.payloads = [];
+    }
+    return obj;
+  },
+  fromAminoMsg(object: ValidatorVoteIntervalReportAminoMsg): ValidatorVoteIntervalReport {
+    return ValidatorVoteIntervalReport.fromAmino(object.value);
+  },
+  fromProtoMsg(message: ValidatorVoteIntervalReportProtoMsg): ValidatorVoteIntervalReport {
+    return ValidatorVoteIntervalReport.decode(message.value);
+  },
+  toProto(message: ValidatorVoteIntervalReport): Uint8Array {
+    return ValidatorVoteIntervalReport.encode(message).finish();
+  },
+  toProtoMsg(message: ValidatorVoteIntervalReport): ValidatorVoteIntervalReportProtoMsg {
+    return {
+      typeUrl: "/pryzmatics.oracle.ValidatorVoteIntervalReport",
+      value: ValidatorVoteIntervalReport.encode(message).finish()
+    };
   }
 };
 function createBaseVoteIntervalReport(): VoteIntervalReport {
@@ -228,6 +363,7 @@ function createBaseVoteIntervalReport(): VoteIntervalReport {
   };
 }
 export const VoteIntervalReport = {
+  typeUrl: "/pryzmatics.oracle.VoteIntervalReport",
   encode(message: VoteIntervalReport, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.voteInterval !== undefined) {
       VoteInterval.encode(message.voteInterval, writer.uint32(10).fork()).ldelim();
@@ -291,5 +427,44 @@ export const VoteIntervalReport = {
     message.ballotVoteResults = object.ballotVoteResults?.map(e => BallotVoteResult.fromPartial(e)) || [];
     message.validatorReports = object.validatorReports?.map(e => ValidatorVoteIntervalReport.fromPartial(e)) || [];
     return message;
+  },
+  fromAmino(object: VoteIntervalReportAmino): VoteIntervalReport {
+    const message = createBaseVoteIntervalReport();
+    if (object.vote_interval !== undefined && object.vote_interval !== null) {
+      message.voteInterval = VoteInterval.fromAmino(object.vote_interval);
+    }
+    message.ballotVoteResults = object.ballot_vote_results?.map(e => BallotVoteResult.fromAmino(e)) || [];
+    message.validatorReports = object.validator_reports?.map(e => ValidatorVoteIntervalReport.fromAmino(e)) || [];
+    return message;
+  },
+  toAmino(message: VoteIntervalReport): VoteIntervalReportAmino {
+    const obj: any = {};
+    obj.vote_interval = message.voteInterval ? VoteInterval.toAmino(message.voteInterval) : undefined;
+    if (message.ballotVoteResults) {
+      obj.ballot_vote_results = message.ballotVoteResults.map(e => e ? BallotVoteResult.toAmino(e) : undefined);
+    } else {
+      obj.ballot_vote_results = [];
+    }
+    if (message.validatorReports) {
+      obj.validator_reports = message.validatorReports.map(e => e ? ValidatorVoteIntervalReport.toAmino(e) : undefined);
+    } else {
+      obj.validator_reports = [];
+    }
+    return obj;
+  },
+  fromAminoMsg(object: VoteIntervalReportAminoMsg): VoteIntervalReport {
+    return VoteIntervalReport.fromAmino(object.value);
+  },
+  fromProtoMsg(message: VoteIntervalReportProtoMsg): VoteIntervalReport {
+    return VoteIntervalReport.decode(message.value);
+  },
+  toProto(message: VoteIntervalReport): Uint8Array {
+    return VoteIntervalReport.encode(message).finish();
+  },
+  toProtoMsg(message: VoteIntervalReport): VoteIntervalReportProtoMsg {
+    return {
+      typeUrl: "/pryzmatics.oracle.VoteIntervalReport",
+      value: VoteIntervalReport.encode(message).finish()
+    };
   }
 };

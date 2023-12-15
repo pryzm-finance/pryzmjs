@@ -1,4 +1,3 @@
-//@ts-nocheck
 import { UnaryMethodDefinitionish } from "../../../grpc-web";
 import { DeepPartial } from "../../../helpers";
 import { grpc } from "@improbable-eng/grpc-web";
@@ -35,13 +34,13 @@ export class MsgClientImpl implements Msg {
     this.createPeriodicVestingAccount = this.createPeriodicVestingAccount.bind(this);
   }
   createVestingAccount(request: DeepPartial<MsgCreateVestingAccount>, metadata?: grpc.Metadata): Promise<MsgCreateVestingAccountResponse> {
-    return this.rpc.unary(MsgCreateVestingAccountDesc, MsgCreateVestingAccount.fromPartial(request), metadata);
+    return this.rpc.unary(MsgCreateVestingAccountDesc, MsgCreateVestingAccount.fromPartial(request as any), metadata);
   }
   createPermanentLockedAccount(request: DeepPartial<MsgCreatePermanentLockedAccount>, metadata?: grpc.Metadata): Promise<MsgCreatePermanentLockedAccountResponse> {
-    return this.rpc.unary(MsgCreatePermanentLockedAccountDesc, MsgCreatePermanentLockedAccount.fromPartial(request), metadata);
+    return this.rpc.unary(MsgCreatePermanentLockedAccountDesc, MsgCreatePermanentLockedAccount.fromPartial(request as any), metadata);
   }
   createPeriodicVestingAccount(request: DeepPartial<MsgCreatePeriodicVestingAccount>, metadata?: grpc.Metadata): Promise<MsgCreatePeriodicVestingAccountResponse> {
-    return this.rpc.unary(MsgCreatePeriodicVestingAccountDesc, MsgCreatePeriodicVestingAccount.fromPartial(request), metadata);
+    return this.rpc.unary(MsgCreatePeriodicVestingAccountDesc, MsgCreatePeriodicVestingAccount.fromPartial(request as any), metadata);
   }
 }
 export const MsgDesc = {

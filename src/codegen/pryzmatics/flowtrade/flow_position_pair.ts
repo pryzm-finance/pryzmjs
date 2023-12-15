@@ -1,10 +1,22 @@
-import { Flow, FlowSDKType } from "../../refractedlabs/flowtrade/v1/flow";
-import { Position, PositionSDKType } from "../../refractedlabs/flowtrade/v1/position";
+import { Flow, FlowAmino, FlowSDKType } from "../../refractedlabs/flowtrade/v1/flow";
+import { Position, PositionAmino, PositionSDKType } from "../../refractedlabs/flowtrade/v1/position";
 import { BinaryReader, BinaryWriter } from "../../binary";
 import { isSet } from "../../helpers";
 export interface FlowPositionPair {
   flow: Flow;
   position?: Position;
+}
+export interface FlowPositionPairProtoMsg {
+  typeUrl: "/pryzmatics.flowtrade.FlowPositionPair";
+  value: Uint8Array;
+}
+export interface FlowPositionPairAmino {
+  flow?: FlowAmino;
+  position?: PositionAmino;
+}
+export interface FlowPositionPairAminoMsg {
+  type: "/pryzmatics.flowtrade.FlowPositionPair";
+  value: FlowPositionPairAmino;
 }
 export interface FlowPositionPairSDKType {
   flow: FlowSDKType;
@@ -17,6 +29,7 @@ function createBaseFlowPositionPair(): FlowPositionPair {
   };
 }
 export const FlowPositionPair = {
+  typeUrl: "/pryzmatics.flowtrade.FlowPositionPair",
   encode(message: FlowPositionPair, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.flow !== undefined) {
       Flow.encode(message.flow, writer.uint32(10).fork()).ldelim();
@@ -63,5 +76,36 @@ export const FlowPositionPair = {
     message.flow = object.flow !== undefined && object.flow !== null ? Flow.fromPartial(object.flow) : undefined;
     message.position = object.position !== undefined && object.position !== null ? Position.fromPartial(object.position) : undefined;
     return message;
+  },
+  fromAmino(object: FlowPositionPairAmino): FlowPositionPair {
+    const message = createBaseFlowPositionPair();
+    if (object.flow !== undefined && object.flow !== null) {
+      message.flow = Flow.fromAmino(object.flow);
+    }
+    if (object.position !== undefined && object.position !== null) {
+      message.position = Position.fromAmino(object.position);
+    }
+    return message;
+  },
+  toAmino(message: FlowPositionPair): FlowPositionPairAmino {
+    const obj: any = {};
+    obj.flow = message.flow ? Flow.toAmino(message.flow) : undefined;
+    obj.position = message.position ? Position.toAmino(message.position) : undefined;
+    return obj;
+  },
+  fromAminoMsg(object: FlowPositionPairAminoMsg): FlowPositionPair {
+    return FlowPositionPair.fromAmino(object.value);
+  },
+  fromProtoMsg(message: FlowPositionPairProtoMsg): FlowPositionPair {
+    return FlowPositionPair.decode(message.value);
+  },
+  toProto(message: FlowPositionPair): Uint8Array {
+    return FlowPositionPair.encode(message).finish();
+  },
+  toProtoMsg(message: FlowPositionPair): FlowPositionPairProtoMsg {
+    return {
+      typeUrl: "/pryzmatics.flowtrade.FlowPositionPair",
+      value: FlowPositionPair.encode(message).finish()
+    };
   }
 };

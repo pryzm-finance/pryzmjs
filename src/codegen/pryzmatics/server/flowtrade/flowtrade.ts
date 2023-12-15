@@ -1,7 +1,7 @@
-import { Flow, FlowSDKType } from "../../../refractedlabs/flowtrade/v1/flow";
+import { Flow, FlowAmino, FlowSDKType } from "../../../refractedlabs/flowtrade/v1/flow";
 import { ParticipationType, participationTypeFromJSON, participationTypeToJSON } from "../../flowtrade/participation_type";
-import { PageRequest, PageRequestSDKType, PageResponse, PageResponseSDKType } from "../../../cosmos/base/query/v1beta1/pagination";
-import { FlowPositionPair, FlowPositionPairSDKType } from "../../flowtrade/flow_position_pair";
+import { PageRequest, PageRequestAmino, PageRequestSDKType, PageResponse, PageResponseAmino, PageResponseSDKType } from "../../../cosmos/base/query/v1beta1/pagination";
+import { FlowPositionPair, FlowPositionPairAmino, FlowPositionPairSDKType } from "../../flowtrade/flow_position_pair";
 import { BinaryReader, BinaryWriter } from "../../../binary";
 import { isSet } from "../../../helpers";
 export enum FlowStatus {
@@ -11,6 +11,7 @@ export enum FlowStatus {
   UNRECOGNIZED = -1,
 }
 export const FlowStatusSDKType = FlowStatus;
+export const FlowStatusAmino = FlowStatus;
 export function flowStatusFromJSON(object: any): FlowStatus {
   switch (object) {
     case 0:
@@ -48,6 +49,7 @@ export enum TokenClaimability {
   UNRECOGNIZED = -1,
 }
 export const TokenClaimabilitySDKType = TokenClaimability;
+export const TokenClaimabilityAmino = TokenClaimability;
 export function tokenClaimabilityFromJSON(object: any): TokenClaimability {
   switch (object) {
     case 0:
@@ -81,11 +83,33 @@ export function tokenClaimabilityToJSON(object: TokenClaimability): string {
 export interface QueryFlowRequest {
   id: bigint;
 }
+export interface QueryFlowRequestProtoMsg {
+  typeUrl: "/pryzmatics.server.flowtrade.QueryFlowRequest";
+  value: Uint8Array;
+}
+export interface QueryFlowRequestAmino {
+  id?: string;
+}
+export interface QueryFlowRequestAminoMsg {
+  type: "/pryzmatics.server.flowtrade.QueryFlowRequest";
+  value: QueryFlowRequestAmino;
+}
 export interface QueryFlowRequestSDKType {
   id: bigint;
 }
 export interface QueryFlowResponse {
   flow: Flow;
+}
+export interface QueryFlowResponseProtoMsg {
+  typeUrl: "/pryzmatics.server.flowtrade.QueryFlowResponse";
+  value: Uint8Array;
+}
+export interface QueryFlowResponseAmino {
+  flow?: FlowAmino;
+}
+export interface QueryFlowResponseAminoMsg {
+  type: "/pryzmatics.server.flowtrade.QueryFlowResponse";
+  value: QueryFlowResponseAmino;
 }
 export interface QueryFlowResponseSDKType {
   flow: FlowSDKType;
@@ -98,6 +122,23 @@ export interface QueryAllFlowRequest {
   participationType: ParticipationType;
   tokenOutClaimability: TokenClaimability;
   pagination?: PageRequest;
+}
+export interface QueryAllFlowRequestProtoMsg {
+  typeUrl: "/pryzmatics.server.flowtrade.QueryAllFlowRequest";
+  value: Uint8Array;
+}
+export interface QueryAllFlowRequestAmino {
+  status?: FlowStatus;
+  creator?: string;
+  token_in_claimability?: TokenClaimability;
+  participant?: string;
+  participation_type?: ParticipationType;
+  token_out_claimability?: TokenClaimability;
+  pagination?: PageRequestAmino;
+}
+export interface QueryAllFlowRequestAminoMsg {
+  type: "/pryzmatics.server.flowtrade.QueryAllFlowRequest";
+  value: QueryAllFlowRequestAmino;
 }
 export interface QueryAllFlowRequestSDKType {
   status: FlowStatus;
@@ -112,6 +153,18 @@ export interface QueryAllFlowResponse {
   flows: FlowPositionPair[];
   pagination?: PageResponse;
 }
+export interface QueryAllFlowResponseProtoMsg {
+  typeUrl: "/pryzmatics.server.flowtrade.QueryAllFlowResponse";
+  value: Uint8Array;
+}
+export interface QueryAllFlowResponseAmino {
+  flows?: FlowPositionPairAmino[];
+  pagination?: PageResponseAmino;
+}
+export interface QueryAllFlowResponseAminoMsg {
+  type: "/pryzmatics.server.flowtrade.QueryAllFlowResponse";
+  value: QueryAllFlowResponseAmino;
+}
 export interface QueryAllFlowResponseSDKType {
   flows: FlowPositionPairSDKType[];
   pagination?: PageResponseSDKType;
@@ -122,6 +175,7 @@ function createBaseQueryFlowRequest(): QueryFlowRequest {
   };
 }
 export const QueryFlowRequest = {
+  typeUrl: "/pryzmatics.server.flowtrade.QueryFlowRequest",
   encode(message: QueryFlowRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.id !== BigInt(0)) {
       writer.uint32(8).uint64(message.id);
@@ -159,6 +213,33 @@ export const QueryFlowRequest = {
     const message = createBaseQueryFlowRequest();
     message.id = object.id !== undefined && object.id !== null ? BigInt(object.id.toString()) : BigInt(0);
     return message;
+  },
+  fromAmino(object: QueryFlowRequestAmino): QueryFlowRequest {
+    const message = createBaseQueryFlowRequest();
+    if (object.id !== undefined && object.id !== null) {
+      message.id = BigInt(object.id);
+    }
+    return message;
+  },
+  toAmino(message: QueryFlowRequest): QueryFlowRequestAmino {
+    const obj: any = {};
+    obj.id = message.id ? message.id.toString() : undefined;
+    return obj;
+  },
+  fromAminoMsg(object: QueryFlowRequestAminoMsg): QueryFlowRequest {
+    return QueryFlowRequest.fromAmino(object.value);
+  },
+  fromProtoMsg(message: QueryFlowRequestProtoMsg): QueryFlowRequest {
+    return QueryFlowRequest.decode(message.value);
+  },
+  toProto(message: QueryFlowRequest): Uint8Array {
+    return QueryFlowRequest.encode(message).finish();
+  },
+  toProtoMsg(message: QueryFlowRequest): QueryFlowRequestProtoMsg {
+    return {
+      typeUrl: "/pryzmatics.server.flowtrade.QueryFlowRequest",
+      value: QueryFlowRequest.encode(message).finish()
+    };
   }
 };
 function createBaseQueryFlowResponse(): QueryFlowResponse {
@@ -167,6 +248,7 @@ function createBaseQueryFlowResponse(): QueryFlowResponse {
   };
 }
 export const QueryFlowResponse = {
+  typeUrl: "/pryzmatics.server.flowtrade.QueryFlowResponse",
   encode(message: QueryFlowResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.flow !== undefined) {
       Flow.encode(message.flow, writer.uint32(10).fork()).ldelim();
@@ -204,6 +286,33 @@ export const QueryFlowResponse = {
     const message = createBaseQueryFlowResponse();
     message.flow = object.flow !== undefined && object.flow !== null ? Flow.fromPartial(object.flow) : undefined;
     return message;
+  },
+  fromAmino(object: QueryFlowResponseAmino): QueryFlowResponse {
+    const message = createBaseQueryFlowResponse();
+    if (object.flow !== undefined && object.flow !== null) {
+      message.flow = Flow.fromAmino(object.flow);
+    }
+    return message;
+  },
+  toAmino(message: QueryFlowResponse): QueryFlowResponseAmino {
+    const obj: any = {};
+    obj.flow = message.flow ? Flow.toAmino(message.flow) : undefined;
+    return obj;
+  },
+  fromAminoMsg(object: QueryFlowResponseAminoMsg): QueryFlowResponse {
+    return QueryFlowResponse.fromAmino(object.value);
+  },
+  fromProtoMsg(message: QueryFlowResponseProtoMsg): QueryFlowResponse {
+    return QueryFlowResponse.decode(message.value);
+  },
+  toProto(message: QueryFlowResponse): Uint8Array {
+    return QueryFlowResponse.encode(message).finish();
+  },
+  toProtoMsg(message: QueryFlowResponse): QueryFlowResponseProtoMsg {
+    return {
+      typeUrl: "/pryzmatics.server.flowtrade.QueryFlowResponse",
+      value: QueryFlowResponse.encode(message).finish()
+    };
   }
 };
 function createBaseQueryAllFlowRequest(): QueryAllFlowRequest {
@@ -218,6 +327,7 @@ function createBaseQueryAllFlowRequest(): QueryAllFlowRequest {
   };
 }
 export const QueryAllFlowRequest = {
+  typeUrl: "/pryzmatics.server.flowtrade.QueryAllFlowRequest",
   encode(message: QueryAllFlowRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.status !== 0) {
       writer.uint32(8).int32(message.status);
@@ -309,6 +419,57 @@ export const QueryAllFlowRequest = {
     message.tokenOutClaimability = object.tokenOutClaimability ?? 0;
     message.pagination = object.pagination !== undefined && object.pagination !== null ? PageRequest.fromPartial(object.pagination) : undefined;
     return message;
+  },
+  fromAmino(object: QueryAllFlowRequestAmino): QueryAllFlowRequest {
+    const message = createBaseQueryAllFlowRequest();
+    if (object.status !== undefined && object.status !== null) {
+      message.status = flowStatusFromJSON(object.status);
+    }
+    if (object.creator !== undefined && object.creator !== null) {
+      message.creator = object.creator;
+    }
+    if (object.token_in_claimability !== undefined && object.token_in_claimability !== null) {
+      message.tokenInClaimability = tokenClaimabilityFromJSON(object.token_in_claimability);
+    }
+    if (object.participant !== undefined && object.participant !== null) {
+      message.participant = object.participant;
+    }
+    if (object.participation_type !== undefined && object.participation_type !== null) {
+      message.participationType = participationTypeFromJSON(object.participation_type);
+    }
+    if (object.token_out_claimability !== undefined && object.token_out_claimability !== null) {
+      message.tokenOutClaimability = tokenClaimabilityFromJSON(object.token_out_claimability);
+    }
+    if (object.pagination !== undefined && object.pagination !== null) {
+      message.pagination = PageRequest.fromAmino(object.pagination);
+    }
+    return message;
+  },
+  toAmino(message: QueryAllFlowRequest): QueryAllFlowRequestAmino {
+    const obj: any = {};
+    obj.status = flowStatusToJSON(message.status);
+    obj.creator = message.creator;
+    obj.token_in_claimability = tokenClaimabilityToJSON(message.tokenInClaimability);
+    obj.participant = message.participant;
+    obj.participation_type = participationTypeToJSON(message.participationType);
+    obj.token_out_claimability = tokenClaimabilityToJSON(message.tokenOutClaimability);
+    obj.pagination = message.pagination ? PageRequest.toAmino(message.pagination) : undefined;
+    return obj;
+  },
+  fromAminoMsg(object: QueryAllFlowRequestAminoMsg): QueryAllFlowRequest {
+    return QueryAllFlowRequest.fromAmino(object.value);
+  },
+  fromProtoMsg(message: QueryAllFlowRequestProtoMsg): QueryAllFlowRequest {
+    return QueryAllFlowRequest.decode(message.value);
+  },
+  toProto(message: QueryAllFlowRequest): Uint8Array {
+    return QueryAllFlowRequest.encode(message).finish();
+  },
+  toProtoMsg(message: QueryAllFlowRequest): QueryAllFlowRequestProtoMsg {
+    return {
+      typeUrl: "/pryzmatics.server.flowtrade.QueryAllFlowRequest",
+      value: QueryAllFlowRequest.encode(message).finish()
+    };
   }
 };
 function createBaseQueryAllFlowResponse(): QueryAllFlowResponse {
@@ -318,6 +479,7 @@ function createBaseQueryAllFlowResponse(): QueryAllFlowResponse {
   };
 }
 export const QueryAllFlowResponse = {
+  typeUrl: "/pryzmatics.server.flowtrade.QueryAllFlowResponse",
   encode(message: QueryAllFlowResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     for (const v of message.flows) {
       FlowPositionPair.encode(v!, writer.uint32(10).fork()).ldelim();
@@ -368,5 +530,38 @@ export const QueryAllFlowResponse = {
     message.flows = object.flows?.map(e => FlowPositionPair.fromPartial(e)) || [];
     message.pagination = object.pagination !== undefined && object.pagination !== null ? PageResponse.fromPartial(object.pagination) : undefined;
     return message;
+  },
+  fromAmino(object: QueryAllFlowResponseAmino): QueryAllFlowResponse {
+    const message = createBaseQueryAllFlowResponse();
+    message.flows = object.flows?.map(e => FlowPositionPair.fromAmino(e)) || [];
+    if (object.pagination !== undefined && object.pagination !== null) {
+      message.pagination = PageResponse.fromAmino(object.pagination);
+    }
+    return message;
+  },
+  toAmino(message: QueryAllFlowResponse): QueryAllFlowResponseAmino {
+    const obj: any = {};
+    if (message.flows) {
+      obj.flows = message.flows.map(e => e ? FlowPositionPair.toAmino(e) : undefined);
+    } else {
+      obj.flows = [];
+    }
+    obj.pagination = message.pagination ? PageResponse.toAmino(message.pagination) : undefined;
+    return obj;
+  },
+  fromAminoMsg(object: QueryAllFlowResponseAminoMsg): QueryAllFlowResponse {
+    return QueryAllFlowResponse.fromAmino(object.value);
+  },
+  fromProtoMsg(message: QueryAllFlowResponseProtoMsg): QueryAllFlowResponse {
+    return QueryAllFlowResponse.decode(message.value);
+  },
+  toProto(message: QueryAllFlowResponse): Uint8Array {
+    return QueryAllFlowResponse.encode(message).finish();
+  },
+  toProtoMsg(message: QueryAllFlowResponse): QueryAllFlowResponseProtoMsg {
+    return {
+      typeUrl: "/pryzmatics.server.flowtrade.QueryAllFlowResponse",
+      value: QueryAllFlowResponse.encode(message).finish()
+    };
   }
 };

@@ -4,6 +4,18 @@ export interface FeederDelegation {
   validator: string;
   feeder: string;
 }
+export interface FeederDelegationProtoMsg {
+  typeUrl: "/refractedlabs.oracle.v1.FeederDelegation";
+  value: Uint8Array;
+}
+export interface FeederDelegationAmino {
+  validator?: string;
+  feeder?: string;
+}
+export interface FeederDelegationAminoMsg {
+  type: "/refractedlabs.oracle.v1.FeederDelegation";
+  value: FeederDelegationAmino;
+}
 export interface FeederDelegationSDKType {
   validator: string;
   feeder: string;
@@ -15,6 +27,7 @@ function createBaseFeederDelegation(): FeederDelegation {
   };
 }
 export const FeederDelegation = {
+  typeUrl: "/refractedlabs.oracle.v1.FeederDelegation",
   encode(message: FeederDelegation, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.validator !== "") {
       writer.uint32(10).string(message.validator);
@@ -61,5 +74,36 @@ export const FeederDelegation = {
     message.validator = object.validator ?? "";
     message.feeder = object.feeder ?? "";
     return message;
+  },
+  fromAmino(object: FeederDelegationAmino): FeederDelegation {
+    const message = createBaseFeederDelegation();
+    if (object.validator !== undefined && object.validator !== null) {
+      message.validator = object.validator;
+    }
+    if (object.feeder !== undefined && object.feeder !== null) {
+      message.feeder = object.feeder;
+    }
+    return message;
+  },
+  toAmino(message: FeederDelegation): FeederDelegationAmino {
+    const obj: any = {};
+    obj.validator = message.validator;
+    obj.feeder = message.feeder;
+    return obj;
+  },
+  fromAminoMsg(object: FeederDelegationAminoMsg): FeederDelegation {
+    return FeederDelegation.fromAmino(object.value);
+  },
+  fromProtoMsg(message: FeederDelegationProtoMsg): FeederDelegation {
+    return FeederDelegation.decode(message.value);
+  },
+  toProto(message: FeederDelegation): Uint8Array {
+    return FeederDelegation.encode(message).finish();
+  },
+  toProtoMsg(message: FeederDelegation): FeederDelegationProtoMsg {
+    return {
+      typeUrl: "/refractedlabs.oracle.v1.FeederDelegation",
+      value: FeederDelegation.encode(message).finish()
+    };
   }
 };

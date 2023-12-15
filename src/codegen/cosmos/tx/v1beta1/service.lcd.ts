@@ -1,4 +1,3 @@
-//@ts-nocheck
 import { setPaginationParams } from "../../../helpers";
 import { LCDClient } from "@refractedlabs/cosmology-lcd-fork";
 import { GetTxRequest, GetTxResponseSDKType, GetTxsEventRequest, GetTxsEventResponseSDKType, GetBlockWithTxsRequest, GetBlockWithTxsResponseSDKType } from "./service";

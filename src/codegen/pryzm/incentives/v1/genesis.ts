@@ -1,7 +1,7 @@
-import { Params, ParamsSDKType } from "./params";
-import { Pool, PoolSDKType } from "./pool";
-import { Bond, BondSDKType } from "./bond";
-import { Unbonding, UnbondingSDKType } from "./unbonding";
+import { Params, ParamsAmino, ParamsSDKType } from "./params";
+import { Pool, PoolAmino, PoolSDKType } from "./pool";
+import { Bond, BondAmino, BondSDKType } from "./bond";
+import { Unbonding, UnbondingAmino, UnbondingSDKType } from "./unbonding";
 import { BinaryReader, BinaryWriter } from "../../../binary";
 import { isSet } from "../../../helpers";
 /** GenesisState defines the incentives module's genesis state. */
@@ -11,6 +11,22 @@ export interface GenesisState {
   bondList: Bond[];
   unbondingList: Unbonding[];
   unbondingCount: bigint;
+}
+export interface GenesisStateProtoMsg {
+  typeUrl: "/pryzm.incentives.v1.GenesisState";
+  value: Uint8Array;
+}
+/** GenesisState defines the incentives module's genesis state. */
+export interface GenesisStateAmino {
+  params?: ParamsAmino;
+  pool_list?: PoolAmino[];
+  bond_list?: BondAmino[];
+  unbonding_list?: UnbondingAmino[];
+  unbonding_count?: string;
+}
+export interface GenesisStateAminoMsg {
+  type: "/pryzm.incentives.v1.GenesisState";
+  value: GenesisStateAmino;
 }
 /** GenesisState defines the incentives module's genesis state. */
 export interface GenesisStateSDKType {
@@ -30,6 +46,7 @@ function createBaseGenesisState(): GenesisState {
   };
 }
 export const GenesisState = {
+  typeUrl: "/pryzm.incentives.v1.GenesisState",
   encode(message: GenesisState, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.params !== undefined) {
       Params.encode(message.params, writer.uint32(10).fork()).ldelim();
@@ -115,5 +132,54 @@ export const GenesisState = {
     message.unbondingList = object.unbondingList?.map(e => Unbonding.fromPartial(e)) || [];
     message.unbondingCount = object.unbondingCount !== undefined && object.unbondingCount !== null ? BigInt(object.unbondingCount.toString()) : BigInt(0);
     return message;
+  },
+  fromAmino(object: GenesisStateAmino): GenesisState {
+    const message = createBaseGenesisState();
+    if (object.params !== undefined && object.params !== null) {
+      message.params = Params.fromAmino(object.params);
+    }
+    message.poolList = object.pool_list?.map(e => Pool.fromAmino(e)) || [];
+    message.bondList = object.bond_list?.map(e => Bond.fromAmino(e)) || [];
+    message.unbondingList = object.unbonding_list?.map(e => Unbonding.fromAmino(e)) || [];
+    if (object.unbonding_count !== undefined && object.unbonding_count !== null) {
+      message.unbondingCount = BigInt(object.unbonding_count);
+    }
+    return message;
+  },
+  toAmino(message: GenesisState): GenesisStateAmino {
+    const obj: any = {};
+    obj.params = message.params ? Params.toAmino(message.params) : undefined;
+    if (message.poolList) {
+      obj.pool_list = message.poolList.map(e => e ? Pool.toAmino(e) : undefined);
+    } else {
+      obj.pool_list = [];
+    }
+    if (message.bondList) {
+      obj.bond_list = message.bondList.map(e => e ? Bond.toAmino(e) : undefined);
+    } else {
+      obj.bond_list = [];
+    }
+    if (message.unbondingList) {
+      obj.unbonding_list = message.unbondingList.map(e => e ? Unbonding.toAmino(e) : undefined);
+    } else {
+      obj.unbonding_list = [];
+    }
+    obj.unbonding_count = message.unbondingCount ? message.unbondingCount.toString() : undefined;
+    return obj;
+  },
+  fromAminoMsg(object: GenesisStateAminoMsg): GenesisState {
+    return GenesisState.fromAmino(object.value);
+  },
+  fromProtoMsg(message: GenesisStateProtoMsg): GenesisState {
+    return GenesisState.decode(message.value);
+  },
+  toProto(message: GenesisState): Uint8Array {
+    return GenesisState.encode(message).finish();
+  },
+  toProtoMsg(message: GenesisState): GenesisStateProtoMsg {
+    return {
+      typeUrl: "/pryzm.incentives.v1.GenesisState",
+      value: GenesisState.encode(message).finish()
+    };
   }
 };

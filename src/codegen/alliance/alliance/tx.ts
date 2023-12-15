@@ -1,7 +1,7 @@
-import { Coin, CoinSDKType } from "../../cosmos/base/v1beta1/coin";
-import { Params, ParamsSDKType } from "./params";
-import { Duration, DurationSDKType } from "../../google/protobuf/duration";
-import { RewardWeightRange, RewardWeightRangeSDKType } from "./alliance";
+import { Coin, CoinAmino, CoinSDKType } from "../../cosmos/base/v1beta1/coin";
+import { Params, ParamsAmino, ParamsSDKType } from "./params";
+import { Duration, DurationAmino, DurationSDKType } from "../../google/protobuf/duration";
+import { RewardWeightRange, RewardWeightRangeAmino, RewardWeightRangeSDKType } from "./alliance";
 import { BinaryReader, BinaryWriter } from "../../binary";
 import { isSet } from "../../helpers";
 import { Decimal } from "@cosmjs/math";
@@ -10,17 +10,52 @@ export interface MsgDelegate {
   validatorAddress: string;
   amount: Coin;
 }
+export interface MsgDelegateProtoMsg {
+  typeUrl: "/alliance.alliance.MsgDelegate";
+  value: Uint8Array;
+}
+export interface MsgDelegateAmino {
+  delegator_address?: string;
+  validator_address?: string;
+  amount?: CoinAmino;
+}
+export interface MsgDelegateAminoMsg {
+  type: "/alliance.alliance.MsgDelegate";
+  value: MsgDelegateAmino;
+}
 export interface MsgDelegateSDKType {
   delegator_address: string;
   validator_address: string;
   amount: CoinSDKType;
 }
 export interface MsgDelegateResponse {}
+export interface MsgDelegateResponseProtoMsg {
+  typeUrl: "/alliance.alliance.MsgDelegateResponse";
+  value: Uint8Array;
+}
+export interface MsgDelegateResponseAmino {}
+export interface MsgDelegateResponseAminoMsg {
+  type: "/alliance.alliance.MsgDelegateResponse";
+  value: MsgDelegateResponseAmino;
+}
 export interface MsgDelegateResponseSDKType {}
 export interface MsgUndelegate {
   delegatorAddress: string;
   validatorAddress: string;
   amount: Coin;
+}
+export interface MsgUndelegateProtoMsg {
+  typeUrl: "/alliance.alliance.MsgUndelegate";
+  value: Uint8Array;
+}
+export interface MsgUndelegateAmino {
+  delegator_address?: string;
+  validator_address?: string;
+  amount?: CoinAmino;
+}
+export interface MsgUndelegateAminoMsg {
+  type: "/alliance.alliance.MsgUndelegate";
+  value: MsgUndelegateAmino;
 }
 export interface MsgUndelegateSDKType {
   delegator_address: string;
@@ -28,12 +63,35 @@ export interface MsgUndelegateSDKType {
   amount: CoinSDKType;
 }
 export interface MsgUndelegateResponse {}
+export interface MsgUndelegateResponseProtoMsg {
+  typeUrl: "/alliance.alliance.MsgUndelegateResponse";
+  value: Uint8Array;
+}
+export interface MsgUndelegateResponseAmino {}
+export interface MsgUndelegateResponseAminoMsg {
+  type: "/alliance.alliance.MsgUndelegateResponse";
+  value: MsgUndelegateResponseAmino;
+}
 export interface MsgUndelegateResponseSDKType {}
 export interface MsgRedelegate {
   delegatorAddress: string;
   validatorSrcAddress: string;
   validatorDstAddress: string;
   amount: Coin;
+}
+export interface MsgRedelegateProtoMsg {
+  typeUrl: "/alliance.alliance.MsgRedelegate";
+  value: Uint8Array;
+}
+export interface MsgRedelegateAmino {
+  delegator_address?: string;
+  validator_src_address?: string;
+  validator_dst_address?: string;
+  amount?: CoinAmino;
+}
+export interface MsgRedelegateAminoMsg {
+  type: "/alliance.alliance.MsgRedelegate";
+  value: MsgRedelegateAmino;
 }
 export interface MsgRedelegateSDKType {
   delegator_address: string;
@@ -42,11 +100,33 @@ export interface MsgRedelegateSDKType {
   amount: CoinSDKType;
 }
 export interface MsgRedelegateResponse {}
+export interface MsgRedelegateResponseProtoMsg {
+  typeUrl: "/alliance.alliance.MsgRedelegateResponse";
+  value: Uint8Array;
+}
+export interface MsgRedelegateResponseAmino {}
+export interface MsgRedelegateResponseAminoMsg {
+  type: "/alliance.alliance.MsgRedelegateResponse";
+  value: MsgRedelegateResponseAmino;
+}
 export interface MsgRedelegateResponseSDKType {}
 export interface MsgClaimDelegationRewards {
   delegatorAddress: string;
   validatorAddress: string;
   denom: string;
+}
+export interface MsgClaimDelegationRewardsProtoMsg {
+  typeUrl: "/alliance.alliance.MsgClaimDelegationRewards";
+  value: Uint8Array;
+}
+export interface MsgClaimDelegationRewardsAmino {
+  delegator_address?: string;
+  validator_address?: string;
+  denom?: string;
+}
+export interface MsgClaimDelegationRewardsAminoMsg {
+  type: "/alliance.alliance.MsgClaimDelegationRewards";
+  value: MsgClaimDelegationRewardsAmino;
 }
 export interface MsgClaimDelegationRewardsSDKType {
   delegator_address: string;
@@ -54,16 +134,46 @@ export interface MsgClaimDelegationRewardsSDKType {
   denom: string;
 }
 export interface MsgClaimDelegationRewardsResponse {}
+export interface MsgClaimDelegationRewardsResponseProtoMsg {
+  typeUrl: "/alliance.alliance.MsgClaimDelegationRewardsResponse";
+  value: Uint8Array;
+}
+export interface MsgClaimDelegationRewardsResponseAmino {}
+export interface MsgClaimDelegationRewardsResponseAminoMsg {
+  type: "/alliance.alliance.MsgClaimDelegationRewardsResponse";
+  value: MsgClaimDelegationRewardsResponseAmino;
+}
 export interface MsgClaimDelegationRewardsResponseSDKType {}
 export interface MsgUpdateParams {
   authority: string;
   params: Params;
+}
+export interface MsgUpdateParamsProtoMsg {
+  typeUrl: "/alliance.alliance.MsgUpdateParams";
+  value: Uint8Array;
+}
+export interface MsgUpdateParamsAmino {
+  authority?: string;
+  params?: ParamsAmino;
+}
+export interface MsgUpdateParamsAminoMsg {
+  type: "/alliance.alliance.MsgUpdateParams";
+  value: MsgUpdateParamsAmino;
 }
 export interface MsgUpdateParamsSDKType {
   authority: string;
   params: ParamsSDKType;
 }
 export interface MsgUpdateParamsResponse {}
+export interface MsgUpdateParamsResponseProtoMsg {
+  typeUrl: "/alliance.alliance.MsgUpdateParamsResponse";
+  value: Uint8Array;
+}
+export interface MsgUpdateParamsResponseAmino {}
+export interface MsgUpdateParamsResponseAminoMsg {
+  type: "/alliance.alliance.MsgUpdateParamsResponse";
+  value: MsgUpdateParamsResponseAmino;
+}
 export interface MsgUpdateParamsResponseSDKType {}
 export interface MsgCreateAlliance {
   authority: string;
@@ -85,6 +195,34 @@ export interface MsgCreateAlliance {
   /** set a bound of weight range to limit how much reward weights can scale. */
   rewardWeightRange: RewardWeightRange;
 }
+export interface MsgCreateAllianceProtoMsg {
+  typeUrl: "/alliance.alliance.MsgCreateAlliance";
+  value: Uint8Array;
+}
+export interface MsgCreateAllianceAmino {
+  authority?: string;
+  /** Denom of the asset. It could either be a native token or an IBC token */
+  denom?: string;
+  /**
+   * The reward weight specifies the ratio of rewards that will be given to each alliance asset
+   * It does not need to sum to 1. rate = weight / total_weight
+   * Native asset is always assumed to have a weight of 1.
+   */
+  reward_weight?: string;
+  /**
+   * A positive take rate is used for liquid staking derivatives. It defines an annualized reward rate that
+   * will be redirected to the distribution rewards pool
+   */
+  take_rate?: string;
+  reward_change_rate?: string;
+  reward_change_interval?: DurationAmino;
+  /** set a bound of weight range to limit how much reward weights can scale. */
+  reward_weight_range?: RewardWeightRangeAmino;
+}
+export interface MsgCreateAllianceAminoMsg {
+  type: "/alliance.alliance.MsgCreateAlliance";
+  value: MsgCreateAllianceAmino;
+}
 export interface MsgCreateAllianceSDKType {
   authority: string;
   denom: string;
@@ -95,6 +233,15 @@ export interface MsgCreateAllianceSDKType {
   reward_weight_range: RewardWeightRangeSDKType;
 }
 export interface MsgCreateAllianceResponse {}
+export interface MsgCreateAllianceResponseProtoMsg {
+  typeUrl: "/alliance.alliance.MsgCreateAllianceResponse";
+  value: Uint8Array;
+}
+export interface MsgCreateAllianceResponseAmino {}
+export interface MsgCreateAllianceResponseAminoMsg {
+  type: "/alliance.alliance.MsgCreateAllianceResponse";
+  value: MsgCreateAllianceResponseAmino;
+}
 export interface MsgCreateAllianceResponseSDKType {}
 export interface MsgUpdateAlliance {
   authority: string;
@@ -110,6 +257,28 @@ export interface MsgUpdateAlliance {
   rewardChangeRate: string;
   rewardChangeInterval: Duration;
 }
+export interface MsgUpdateAllianceProtoMsg {
+  typeUrl: "/alliance.alliance.MsgUpdateAlliance";
+  value: Uint8Array;
+}
+export interface MsgUpdateAllianceAmino {
+  authority?: string;
+  /** Denom of the asset. It could either be a native token or an IBC token */
+  denom?: string;
+  /**
+   * The reward weight specifies the ratio of rewards that will be given to each alliance asset
+   * It does not need to sum to 1. rate = weight / total_weight
+   * Native asset is always assumed to have a weight of 1.
+   */
+  reward_weight?: string;
+  take_rate?: string;
+  reward_change_rate?: string;
+  reward_change_interval?: DurationAmino;
+}
+export interface MsgUpdateAllianceAminoMsg {
+  type: "/alliance.alliance.MsgUpdateAlliance";
+  value: MsgUpdateAllianceAmino;
+}
 export interface MsgUpdateAllianceSDKType {
   authority: string;
   denom: string;
@@ -119,16 +288,46 @@ export interface MsgUpdateAllianceSDKType {
   reward_change_interval: DurationSDKType;
 }
 export interface MsgUpdateAllianceResponse {}
+export interface MsgUpdateAllianceResponseProtoMsg {
+  typeUrl: "/alliance.alliance.MsgUpdateAllianceResponse";
+  value: Uint8Array;
+}
+export interface MsgUpdateAllianceResponseAmino {}
+export interface MsgUpdateAllianceResponseAminoMsg {
+  type: "/alliance.alliance.MsgUpdateAllianceResponse";
+  value: MsgUpdateAllianceResponseAmino;
+}
 export interface MsgUpdateAllianceResponseSDKType {}
 export interface MsgDeleteAlliance {
   authority: string;
   denom: string;
+}
+export interface MsgDeleteAllianceProtoMsg {
+  typeUrl: "/alliance.alliance.MsgDeleteAlliance";
+  value: Uint8Array;
+}
+export interface MsgDeleteAllianceAmino {
+  authority?: string;
+  denom?: string;
+}
+export interface MsgDeleteAllianceAminoMsg {
+  type: "/alliance.alliance.MsgDeleteAlliance";
+  value: MsgDeleteAllianceAmino;
 }
 export interface MsgDeleteAllianceSDKType {
   authority: string;
   denom: string;
 }
 export interface MsgDeleteAllianceResponse {}
+export interface MsgDeleteAllianceResponseProtoMsg {
+  typeUrl: "/alliance.alliance.MsgDeleteAllianceResponse";
+  value: Uint8Array;
+}
+export interface MsgDeleteAllianceResponseAmino {}
+export interface MsgDeleteAllianceResponseAminoMsg {
+  type: "/alliance.alliance.MsgDeleteAllianceResponse";
+  value: MsgDeleteAllianceResponseAmino;
+}
 export interface MsgDeleteAllianceResponseSDKType {}
 function createBaseMsgDelegate(): MsgDelegate {
   return {
@@ -138,6 +337,7 @@ function createBaseMsgDelegate(): MsgDelegate {
   };
 }
 export const MsgDelegate = {
+  typeUrl: "/alliance.alliance.MsgDelegate",
   encode(message: MsgDelegate, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.delegatorAddress !== "") {
       writer.uint32(10).string(message.delegatorAddress);
@@ -193,12 +393,48 @@ export const MsgDelegate = {
     message.validatorAddress = object.validatorAddress ?? "";
     message.amount = object.amount !== undefined && object.amount !== null ? Coin.fromPartial(object.amount) : undefined;
     return message;
+  },
+  fromAmino(object: MsgDelegateAmino): MsgDelegate {
+    const message = createBaseMsgDelegate();
+    if (object.delegator_address !== undefined && object.delegator_address !== null) {
+      message.delegatorAddress = object.delegator_address;
+    }
+    if (object.validator_address !== undefined && object.validator_address !== null) {
+      message.validatorAddress = object.validator_address;
+    }
+    if (object.amount !== undefined && object.amount !== null) {
+      message.amount = Coin.fromAmino(object.amount);
+    }
+    return message;
+  },
+  toAmino(message: MsgDelegate): MsgDelegateAmino {
+    const obj: any = {};
+    obj.delegator_address = message.delegatorAddress;
+    obj.validator_address = message.validatorAddress;
+    obj.amount = message.amount ? Coin.toAmino(message.amount) : undefined;
+    return obj;
+  },
+  fromAminoMsg(object: MsgDelegateAminoMsg): MsgDelegate {
+    return MsgDelegate.fromAmino(object.value);
+  },
+  fromProtoMsg(message: MsgDelegateProtoMsg): MsgDelegate {
+    return MsgDelegate.decode(message.value);
+  },
+  toProto(message: MsgDelegate): Uint8Array {
+    return MsgDelegate.encode(message).finish();
+  },
+  toProtoMsg(message: MsgDelegate): MsgDelegateProtoMsg {
+    return {
+      typeUrl: "/alliance.alliance.MsgDelegate",
+      value: MsgDelegate.encode(message).finish()
+    };
   }
 };
 function createBaseMsgDelegateResponse(): MsgDelegateResponse {
   return {};
 }
 export const MsgDelegateResponse = {
+  typeUrl: "/alliance.alliance.MsgDelegateResponse",
   encode(_: MsgDelegateResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     return writer;
   },
@@ -226,6 +462,29 @@ export const MsgDelegateResponse = {
   fromPartial(_: Partial<MsgDelegateResponse>): MsgDelegateResponse {
     const message = createBaseMsgDelegateResponse();
     return message;
+  },
+  fromAmino(_: MsgDelegateResponseAmino): MsgDelegateResponse {
+    const message = createBaseMsgDelegateResponse();
+    return message;
+  },
+  toAmino(_: MsgDelegateResponse): MsgDelegateResponseAmino {
+    const obj: any = {};
+    return obj;
+  },
+  fromAminoMsg(object: MsgDelegateResponseAminoMsg): MsgDelegateResponse {
+    return MsgDelegateResponse.fromAmino(object.value);
+  },
+  fromProtoMsg(message: MsgDelegateResponseProtoMsg): MsgDelegateResponse {
+    return MsgDelegateResponse.decode(message.value);
+  },
+  toProto(message: MsgDelegateResponse): Uint8Array {
+    return MsgDelegateResponse.encode(message).finish();
+  },
+  toProtoMsg(message: MsgDelegateResponse): MsgDelegateResponseProtoMsg {
+    return {
+      typeUrl: "/alliance.alliance.MsgDelegateResponse",
+      value: MsgDelegateResponse.encode(message).finish()
+    };
   }
 };
 function createBaseMsgUndelegate(): MsgUndelegate {
@@ -236,6 +495,7 @@ function createBaseMsgUndelegate(): MsgUndelegate {
   };
 }
 export const MsgUndelegate = {
+  typeUrl: "/alliance.alliance.MsgUndelegate",
   encode(message: MsgUndelegate, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.delegatorAddress !== "") {
       writer.uint32(10).string(message.delegatorAddress);
@@ -291,12 +551,48 @@ export const MsgUndelegate = {
     message.validatorAddress = object.validatorAddress ?? "";
     message.amount = object.amount !== undefined && object.amount !== null ? Coin.fromPartial(object.amount) : undefined;
     return message;
+  },
+  fromAmino(object: MsgUndelegateAmino): MsgUndelegate {
+    const message = createBaseMsgUndelegate();
+    if (object.delegator_address !== undefined && object.delegator_address !== null) {
+      message.delegatorAddress = object.delegator_address;
+    }
+    if (object.validator_address !== undefined && object.validator_address !== null) {
+      message.validatorAddress = object.validator_address;
+    }
+    if (object.amount !== undefined && object.amount !== null) {
+      message.amount = Coin.fromAmino(object.amount);
+    }
+    return message;
+  },
+  toAmino(message: MsgUndelegate): MsgUndelegateAmino {
+    const obj: any = {};
+    obj.delegator_address = message.delegatorAddress;
+    obj.validator_address = message.validatorAddress;
+    obj.amount = message.amount ? Coin.toAmino(message.amount) : undefined;
+    return obj;
+  },
+  fromAminoMsg(object: MsgUndelegateAminoMsg): MsgUndelegate {
+    return MsgUndelegate.fromAmino(object.value);
+  },
+  fromProtoMsg(message: MsgUndelegateProtoMsg): MsgUndelegate {
+    return MsgUndelegate.decode(message.value);
+  },
+  toProto(message: MsgUndelegate): Uint8Array {
+    return MsgUndelegate.encode(message).finish();
+  },
+  toProtoMsg(message: MsgUndelegate): MsgUndelegateProtoMsg {
+    return {
+      typeUrl: "/alliance.alliance.MsgUndelegate",
+      value: MsgUndelegate.encode(message).finish()
+    };
   }
 };
 function createBaseMsgUndelegateResponse(): MsgUndelegateResponse {
   return {};
 }
 export const MsgUndelegateResponse = {
+  typeUrl: "/alliance.alliance.MsgUndelegateResponse",
   encode(_: MsgUndelegateResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     return writer;
   },
@@ -324,6 +620,29 @@ export const MsgUndelegateResponse = {
   fromPartial(_: Partial<MsgUndelegateResponse>): MsgUndelegateResponse {
     const message = createBaseMsgUndelegateResponse();
     return message;
+  },
+  fromAmino(_: MsgUndelegateResponseAmino): MsgUndelegateResponse {
+    const message = createBaseMsgUndelegateResponse();
+    return message;
+  },
+  toAmino(_: MsgUndelegateResponse): MsgUndelegateResponseAmino {
+    const obj: any = {};
+    return obj;
+  },
+  fromAminoMsg(object: MsgUndelegateResponseAminoMsg): MsgUndelegateResponse {
+    return MsgUndelegateResponse.fromAmino(object.value);
+  },
+  fromProtoMsg(message: MsgUndelegateResponseProtoMsg): MsgUndelegateResponse {
+    return MsgUndelegateResponse.decode(message.value);
+  },
+  toProto(message: MsgUndelegateResponse): Uint8Array {
+    return MsgUndelegateResponse.encode(message).finish();
+  },
+  toProtoMsg(message: MsgUndelegateResponse): MsgUndelegateResponseProtoMsg {
+    return {
+      typeUrl: "/alliance.alliance.MsgUndelegateResponse",
+      value: MsgUndelegateResponse.encode(message).finish()
+    };
   }
 };
 function createBaseMsgRedelegate(): MsgRedelegate {
@@ -335,6 +654,7 @@ function createBaseMsgRedelegate(): MsgRedelegate {
   };
 }
 export const MsgRedelegate = {
+  typeUrl: "/alliance.alliance.MsgRedelegate",
   encode(message: MsgRedelegate, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.delegatorAddress !== "") {
       writer.uint32(10).string(message.delegatorAddress);
@@ -399,12 +719,52 @@ export const MsgRedelegate = {
     message.validatorDstAddress = object.validatorDstAddress ?? "";
     message.amount = object.amount !== undefined && object.amount !== null ? Coin.fromPartial(object.amount) : undefined;
     return message;
+  },
+  fromAmino(object: MsgRedelegateAmino): MsgRedelegate {
+    const message = createBaseMsgRedelegate();
+    if (object.delegator_address !== undefined && object.delegator_address !== null) {
+      message.delegatorAddress = object.delegator_address;
+    }
+    if (object.validator_src_address !== undefined && object.validator_src_address !== null) {
+      message.validatorSrcAddress = object.validator_src_address;
+    }
+    if (object.validator_dst_address !== undefined && object.validator_dst_address !== null) {
+      message.validatorDstAddress = object.validator_dst_address;
+    }
+    if (object.amount !== undefined && object.amount !== null) {
+      message.amount = Coin.fromAmino(object.amount);
+    }
+    return message;
+  },
+  toAmino(message: MsgRedelegate): MsgRedelegateAmino {
+    const obj: any = {};
+    obj.delegator_address = message.delegatorAddress;
+    obj.validator_src_address = message.validatorSrcAddress;
+    obj.validator_dst_address = message.validatorDstAddress;
+    obj.amount = message.amount ? Coin.toAmino(message.amount) : undefined;
+    return obj;
+  },
+  fromAminoMsg(object: MsgRedelegateAminoMsg): MsgRedelegate {
+    return MsgRedelegate.fromAmino(object.value);
+  },
+  fromProtoMsg(message: MsgRedelegateProtoMsg): MsgRedelegate {
+    return MsgRedelegate.decode(message.value);
+  },
+  toProto(message: MsgRedelegate): Uint8Array {
+    return MsgRedelegate.encode(message).finish();
+  },
+  toProtoMsg(message: MsgRedelegate): MsgRedelegateProtoMsg {
+    return {
+      typeUrl: "/alliance.alliance.MsgRedelegate",
+      value: MsgRedelegate.encode(message).finish()
+    };
   }
 };
 function createBaseMsgRedelegateResponse(): MsgRedelegateResponse {
   return {};
 }
 export const MsgRedelegateResponse = {
+  typeUrl: "/alliance.alliance.MsgRedelegateResponse",
   encode(_: MsgRedelegateResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     return writer;
   },
@@ -432,6 +792,29 @@ export const MsgRedelegateResponse = {
   fromPartial(_: Partial<MsgRedelegateResponse>): MsgRedelegateResponse {
     const message = createBaseMsgRedelegateResponse();
     return message;
+  },
+  fromAmino(_: MsgRedelegateResponseAmino): MsgRedelegateResponse {
+    const message = createBaseMsgRedelegateResponse();
+    return message;
+  },
+  toAmino(_: MsgRedelegateResponse): MsgRedelegateResponseAmino {
+    const obj: any = {};
+    return obj;
+  },
+  fromAminoMsg(object: MsgRedelegateResponseAminoMsg): MsgRedelegateResponse {
+    return MsgRedelegateResponse.fromAmino(object.value);
+  },
+  fromProtoMsg(message: MsgRedelegateResponseProtoMsg): MsgRedelegateResponse {
+    return MsgRedelegateResponse.decode(message.value);
+  },
+  toProto(message: MsgRedelegateResponse): Uint8Array {
+    return MsgRedelegateResponse.encode(message).finish();
+  },
+  toProtoMsg(message: MsgRedelegateResponse): MsgRedelegateResponseProtoMsg {
+    return {
+      typeUrl: "/alliance.alliance.MsgRedelegateResponse",
+      value: MsgRedelegateResponse.encode(message).finish()
+    };
   }
 };
 function createBaseMsgClaimDelegationRewards(): MsgClaimDelegationRewards {
@@ -442,6 +825,7 @@ function createBaseMsgClaimDelegationRewards(): MsgClaimDelegationRewards {
   };
 }
 export const MsgClaimDelegationRewards = {
+  typeUrl: "/alliance.alliance.MsgClaimDelegationRewards",
   encode(message: MsgClaimDelegationRewards, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.delegatorAddress !== "") {
       writer.uint32(10).string(message.delegatorAddress);
@@ -497,12 +881,48 @@ export const MsgClaimDelegationRewards = {
     message.validatorAddress = object.validatorAddress ?? "";
     message.denom = object.denom ?? "";
     return message;
+  },
+  fromAmino(object: MsgClaimDelegationRewardsAmino): MsgClaimDelegationRewards {
+    const message = createBaseMsgClaimDelegationRewards();
+    if (object.delegator_address !== undefined && object.delegator_address !== null) {
+      message.delegatorAddress = object.delegator_address;
+    }
+    if (object.validator_address !== undefined && object.validator_address !== null) {
+      message.validatorAddress = object.validator_address;
+    }
+    if (object.denom !== undefined && object.denom !== null) {
+      message.denom = object.denom;
+    }
+    return message;
+  },
+  toAmino(message: MsgClaimDelegationRewards): MsgClaimDelegationRewardsAmino {
+    const obj: any = {};
+    obj.delegator_address = message.delegatorAddress;
+    obj.validator_address = message.validatorAddress;
+    obj.denom = message.denom;
+    return obj;
+  },
+  fromAminoMsg(object: MsgClaimDelegationRewardsAminoMsg): MsgClaimDelegationRewards {
+    return MsgClaimDelegationRewards.fromAmino(object.value);
+  },
+  fromProtoMsg(message: MsgClaimDelegationRewardsProtoMsg): MsgClaimDelegationRewards {
+    return MsgClaimDelegationRewards.decode(message.value);
+  },
+  toProto(message: MsgClaimDelegationRewards): Uint8Array {
+    return MsgClaimDelegationRewards.encode(message).finish();
+  },
+  toProtoMsg(message: MsgClaimDelegationRewards): MsgClaimDelegationRewardsProtoMsg {
+    return {
+      typeUrl: "/alliance.alliance.MsgClaimDelegationRewards",
+      value: MsgClaimDelegationRewards.encode(message).finish()
+    };
   }
 };
 function createBaseMsgClaimDelegationRewardsResponse(): MsgClaimDelegationRewardsResponse {
   return {};
 }
 export const MsgClaimDelegationRewardsResponse = {
+  typeUrl: "/alliance.alliance.MsgClaimDelegationRewardsResponse",
   encode(_: MsgClaimDelegationRewardsResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     return writer;
   },
@@ -530,6 +950,29 @@ export const MsgClaimDelegationRewardsResponse = {
   fromPartial(_: Partial<MsgClaimDelegationRewardsResponse>): MsgClaimDelegationRewardsResponse {
     const message = createBaseMsgClaimDelegationRewardsResponse();
     return message;
+  },
+  fromAmino(_: MsgClaimDelegationRewardsResponseAmino): MsgClaimDelegationRewardsResponse {
+    const message = createBaseMsgClaimDelegationRewardsResponse();
+    return message;
+  },
+  toAmino(_: MsgClaimDelegationRewardsResponse): MsgClaimDelegationRewardsResponseAmino {
+    const obj: any = {};
+    return obj;
+  },
+  fromAminoMsg(object: MsgClaimDelegationRewardsResponseAminoMsg): MsgClaimDelegationRewardsResponse {
+    return MsgClaimDelegationRewardsResponse.fromAmino(object.value);
+  },
+  fromProtoMsg(message: MsgClaimDelegationRewardsResponseProtoMsg): MsgClaimDelegationRewardsResponse {
+    return MsgClaimDelegationRewardsResponse.decode(message.value);
+  },
+  toProto(message: MsgClaimDelegationRewardsResponse): Uint8Array {
+    return MsgClaimDelegationRewardsResponse.encode(message).finish();
+  },
+  toProtoMsg(message: MsgClaimDelegationRewardsResponse): MsgClaimDelegationRewardsResponseProtoMsg {
+    return {
+      typeUrl: "/alliance.alliance.MsgClaimDelegationRewardsResponse",
+      value: MsgClaimDelegationRewardsResponse.encode(message).finish()
+    };
   }
 };
 function createBaseMsgUpdateParams(): MsgUpdateParams {
@@ -539,6 +982,7 @@ function createBaseMsgUpdateParams(): MsgUpdateParams {
   };
 }
 export const MsgUpdateParams = {
+  typeUrl: "/alliance.alliance.MsgUpdateParams",
   encode(message: MsgUpdateParams, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.authority !== "") {
       writer.uint32(10).string(message.authority);
@@ -585,12 +1029,44 @@ export const MsgUpdateParams = {
     message.authority = object.authority ?? "";
     message.params = object.params !== undefined && object.params !== null ? Params.fromPartial(object.params) : undefined;
     return message;
+  },
+  fromAmino(object: MsgUpdateParamsAmino): MsgUpdateParams {
+    const message = createBaseMsgUpdateParams();
+    if (object.authority !== undefined && object.authority !== null) {
+      message.authority = object.authority;
+    }
+    if (object.params !== undefined && object.params !== null) {
+      message.params = Params.fromAmino(object.params);
+    }
+    return message;
+  },
+  toAmino(message: MsgUpdateParams): MsgUpdateParamsAmino {
+    const obj: any = {};
+    obj.authority = message.authority;
+    obj.params = message.params ? Params.toAmino(message.params) : undefined;
+    return obj;
+  },
+  fromAminoMsg(object: MsgUpdateParamsAminoMsg): MsgUpdateParams {
+    return MsgUpdateParams.fromAmino(object.value);
+  },
+  fromProtoMsg(message: MsgUpdateParamsProtoMsg): MsgUpdateParams {
+    return MsgUpdateParams.decode(message.value);
+  },
+  toProto(message: MsgUpdateParams): Uint8Array {
+    return MsgUpdateParams.encode(message).finish();
+  },
+  toProtoMsg(message: MsgUpdateParams): MsgUpdateParamsProtoMsg {
+    return {
+      typeUrl: "/alliance.alliance.MsgUpdateParams",
+      value: MsgUpdateParams.encode(message).finish()
+    };
   }
 };
 function createBaseMsgUpdateParamsResponse(): MsgUpdateParamsResponse {
   return {};
 }
 export const MsgUpdateParamsResponse = {
+  typeUrl: "/alliance.alliance.MsgUpdateParamsResponse",
   encode(_: MsgUpdateParamsResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     return writer;
   },
@@ -618,6 +1094,29 @@ export const MsgUpdateParamsResponse = {
   fromPartial(_: Partial<MsgUpdateParamsResponse>): MsgUpdateParamsResponse {
     const message = createBaseMsgUpdateParamsResponse();
     return message;
+  },
+  fromAmino(_: MsgUpdateParamsResponseAmino): MsgUpdateParamsResponse {
+    const message = createBaseMsgUpdateParamsResponse();
+    return message;
+  },
+  toAmino(_: MsgUpdateParamsResponse): MsgUpdateParamsResponseAmino {
+    const obj: any = {};
+    return obj;
+  },
+  fromAminoMsg(object: MsgUpdateParamsResponseAminoMsg): MsgUpdateParamsResponse {
+    return MsgUpdateParamsResponse.fromAmino(object.value);
+  },
+  fromProtoMsg(message: MsgUpdateParamsResponseProtoMsg): MsgUpdateParamsResponse {
+    return MsgUpdateParamsResponse.decode(message.value);
+  },
+  toProto(message: MsgUpdateParamsResponse): Uint8Array {
+    return MsgUpdateParamsResponse.encode(message).finish();
+  },
+  toProtoMsg(message: MsgUpdateParamsResponse): MsgUpdateParamsResponseProtoMsg {
+    return {
+      typeUrl: "/alliance.alliance.MsgUpdateParamsResponse",
+      value: MsgUpdateParamsResponse.encode(message).finish()
+    };
   }
 };
 function createBaseMsgCreateAlliance(): MsgCreateAlliance {
@@ -632,6 +1131,7 @@ function createBaseMsgCreateAlliance(): MsgCreateAlliance {
   };
 }
 export const MsgCreateAlliance = {
+  typeUrl: "/alliance.alliance.MsgCreateAlliance",
   encode(message: MsgCreateAlliance, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.authority !== "") {
       writer.uint32(10).string(message.authority);
@@ -723,12 +1223,64 @@ export const MsgCreateAlliance = {
     message.rewardChangeInterval = object.rewardChangeInterval !== undefined && object.rewardChangeInterval !== null ? Duration.fromPartial(object.rewardChangeInterval) : undefined;
     message.rewardWeightRange = object.rewardWeightRange !== undefined && object.rewardWeightRange !== null ? RewardWeightRange.fromPartial(object.rewardWeightRange) : undefined;
     return message;
+  },
+  fromAmino(object: MsgCreateAllianceAmino): MsgCreateAlliance {
+    const message = createBaseMsgCreateAlliance();
+    if (object.authority !== undefined && object.authority !== null) {
+      message.authority = object.authority;
+    }
+    if (object.denom !== undefined && object.denom !== null) {
+      message.denom = object.denom;
+    }
+    if (object.reward_weight !== undefined && object.reward_weight !== null) {
+      message.rewardWeight = object.reward_weight;
+    }
+    if (object.take_rate !== undefined && object.take_rate !== null) {
+      message.takeRate = object.take_rate;
+    }
+    if (object.reward_change_rate !== undefined && object.reward_change_rate !== null) {
+      message.rewardChangeRate = object.reward_change_rate;
+    }
+    if (object.reward_change_interval !== undefined && object.reward_change_interval !== null) {
+      message.rewardChangeInterval = Duration.fromAmino(object.reward_change_interval);
+    }
+    if (object.reward_weight_range !== undefined && object.reward_weight_range !== null) {
+      message.rewardWeightRange = RewardWeightRange.fromAmino(object.reward_weight_range);
+    }
+    return message;
+  },
+  toAmino(message: MsgCreateAlliance): MsgCreateAllianceAmino {
+    const obj: any = {};
+    obj.authority = message.authority;
+    obj.denom = message.denom;
+    obj.reward_weight = message.rewardWeight;
+    obj.take_rate = message.takeRate;
+    obj.reward_change_rate = message.rewardChangeRate;
+    obj.reward_change_interval = message.rewardChangeInterval ? Duration.toAmino(message.rewardChangeInterval) : undefined;
+    obj.reward_weight_range = message.rewardWeightRange ? RewardWeightRange.toAmino(message.rewardWeightRange) : undefined;
+    return obj;
+  },
+  fromAminoMsg(object: MsgCreateAllianceAminoMsg): MsgCreateAlliance {
+    return MsgCreateAlliance.fromAmino(object.value);
+  },
+  fromProtoMsg(message: MsgCreateAllianceProtoMsg): MsgCreateAlliance {
+    return MsgCreateAlliance.decode(message.value);
+  },
+  toProto(message: MsgCreateAlliance): Uint8Array {
+    return MsgCreateAlliance.encode(message).finish();
+  },
+  toProtoMsg(message: MsgCreateAlliance): MsgCreateAllianceProtoMsg {
+    return {
+      typeUrl: "/alliance.alliance.MsgCreateAlliance",
+      value: MsgCreateAlliance.encode(message).finish()
+    };
   }
 };
 function createBaseMsgCreateAllianceResponse(): MsgCreateAllianceResponse {
   return {};
 }
 export const MsgCreateAllianceResponse = {
+  typeUrl: "/alliance.alliance.MsgCreateAllianceResponse",
   encode(_: MsgCreateAllianceResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     return writer;
   },
@@ -756,6 +1308,29 @@ export const MsgCreateAllianceResponse = {
   fromPartial(_: Partial<MsgCreateAllianceResponse>): MsgCreateAllianceResponse {
     const message = createBaseMsgCreateAllianceResponse();
     return message;
+  },
+  fromAmino(_: MsgCreateAllianceResponseAmino): MsgCreateAllianceResponse {
+    const message = createBaseMsgCreateAllianceResponse();
+    return message;
+  },
+  toAmino(_: MsgCreateAllianceResponse): MsgCreateAllianceResponseAmino {
+    const obj: any = {};
+    return obj;
+  },
+  fromAminoMsg(object: MsgCreateAllianceResponseAminoMsg): MsgCreateAllianceResponse {
+    return MsgCreateAllianceResponse.fromAmino(object.value);
+  },
+  fromProtoMsg(message: MsgCreateAllianceResponseProtoMsg): MsgCreateAllianceResponse {
+    return MsgCreateAllianceResponse.decode(message.value);
+  },
+  toProto(message: MsgCreateAllianceResponse): Uint8Array {
+    return MsgCreateAllianceResponse.encode(message).finish();
+  },
+  toProtoMsg(message: MsgCreateAllianceResponse): MsgCreateAllianceResponseProtoMsg {
+    return {
+      typeUrl: "/alliance.alliance.MsgCreateAllianceResponse",
+      value: MsgCreateAllianceResponse.encode(message).finish()
+    };
   }
 };
 function createBaseMsgUpdateAlliance(): MsgUpdateAlliance {
@@ -769,6 +1344,7 @@ function createBaseMsgUpdateAlliance(): MsgUpdateAlliance {
   };
 }
 export const MsgUpdateAlliance = {
+  typeUrl: "/alliance.alliance.MsgUpdateAlliance",
   encode(message: MsgUpdateAlliance, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.authority !== "") {
       writer.uint32(10).string(message.authority);
@@ -851,12 +1427,60 @@ export const MsgUpdateAlliance = {
     message.rewardChangeRate = object.rewardChangeRate ?? "";
     message.rewardChangeInterval = object.rewardChangeInterval !== undefined && object.rewardChangeInterval !== null ? Duration.fromPartial(object.rewardChangeInterval) : undefined;
     return message;
+  },
+  fromAmino(object: MsgUpdateAllianceAmino): MsgUpdateAlliance {
+    const message = createBaseMsgUpdateAlliance();
+    if (object.authority !== undefined && object.authority !== null) {
+      message.authority = object.authority;
+    }
+    if (object.denom !== undefined && object.denom !== null) {
+      message.denom = object.denom;
+    }
+    if (object.reward_weight !== undefined && object.reward_weight !== null) {
+      message.rewardWeight = object.reward_weight;
+    }
+    if (object.take_rate !== undefined && object.take_rate !== null) {
+      message.takeRate = object.take_rate;
+    }
+    if (object.reward_change_rate !== undefined && object.reward_change_rate !== null) {
+      message.rewardChangeRate = object.reward_change_rate;
+    }
+    if (object.reward_change_interval !== undefined && object.reward_change_interval !== null) {
+      message.rewardChangeInterval = Duration.fromAmino(object.reward_change_interval);
+    }
+    return message;
+  },
+  toAmino(message: MsgUpdateAlliance): MsgUpdateAllianceAmino {
+    const obj: any = {};
+    obj.authority = message.authority;
+    obj.denom = message.denom;
+    obj.reward_weight = message.rewardWeight;
+    obj.take_rate = message.takeRate;
+    obj.reward_change_rate = message.rewardChangeRate;
+    obj.reward_change_interval = message.rewardChangeInterval ? Duration.toAmino(message.rewardChangeInterval) : undefined;
+    return obj;
+  },
+  fromAminoMsg(object: MsgUpdateAllianceAminoMsg): MsgUpdateAlliance {
+    return MsgUpdateAlliance.fromAmino(object.value);
+  },
+  fromProtoMsg(message: MsgUpdateAllianceProtoMsg): MsgUpdateAlliance {
+    return MsgUpdateAlliance.decode(message.value);
+  },
+  toProto(message: MsgUpdateAlliance): Uint8Array {
+    return MsgUpdateAlliance.encode(message).finish();
+  },
+  toProtoMsg(message: MsgUpdateAlliance): MsgUpdateAllianceProtoMsg {
+    return {
+      typeUrl: "/alliance.alliance.MsgUpdateAlliance",
+      value: MsgUpdateAlliance.encode(message).finish()
+    };
   }
 };
 function createBaseMsgUpdateAllianceResponse(): MsgUpdateAllianceResponse {
   return {};
 }
 export const MsgUpdateAllianceResponse = {
+  typeUrl: "/alliance.alliance.MsgUpdateAllianceResponse",
   encode(_: MsgUpdateAllianceResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     return writer;
   },
@@ -884,6 +1508,29 @@ export const MsgUpdateAllianceResponse = {
   fromPartial(_: Partial<MsgUpdateAllianceResponse>): MsgUpdateAllianceResponse {
     const message = createBaseMsgUpdateAllianceResponse();
     return message;
+  },
+  fromAmino(_: MsgUpdateAllianceResponseAmino): MsgUpdateAllianceResponse {
+    const message = createBaseMsgUpdateAllianceResponse();
+    return message;
+  },
+  toAmino(_: MsgUpdateAllianceResponse): MsgUpdateAllianceResponseAmino {
+    const obj: any = {};
+    return obj;
+  },
+  fromAminoMsg(object: MsgUpdateAllianceResponseAminoMsg): MsgUpdateAllianceResponse {
+    return MsgUpdateAllianceResponse.fromAmino(object.value);
+  },
+  fromProtoMsg(message: MsgUpdateAllianceResponseProtoMsg): MsgUpdateAllianceResponse {
+    return MsgUpdateAllianceResponse.decode(message.value);
+  },
+  toProto(message: MsgUpdateAllianceResponse): Uint8Array {
+    return MsgUpdateAllianceResponse.encode(message).finish();
+  },
+  toProtoMsg(message: MsgUpdateAllianceResponse): MsgUpdateAllianceResponseProtoMsg {
+    return {
+      typeUrl: "/alliance.alliance.MsgUpdateAllianceResponse",
+      value: MsgUpdateAllianceResponse.encode(message).finish()
+    };
   }
 };
 function createBaseMsgDeleteAlliance(): MsgDeleteAlliance {
@@ -893,6 +1540,7 @@ function createBaseMsgDeleteAlliance(): MsgDeleteAlliance {
   };
 }
 export const MsgDeleteAlliance = {
+  typeUrl: "/alliance.alliance.MsgDeleteAlliance",
   encode(message: MsgDeleteAlliance, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.authority !== "") {
       writer.uint32(10).string(message.authority);
@@ -939,12 +1587,44 @@ export const MsgDeleteAlliance = {
     message.authority = object.authority ?? "";
     message.denom = object.denom ?? "";
     return message;
+  },
+  fromAmino(object: MsgDeleteAllianceAmino): MsgDeleteAlliance {
+    const message = createBaseMsgDeleteAlliance();
+    if (object.authority !== undefined && object.authority !== null) {
+      message.authority = object.authority;
+    }
+    if (object.denom !== undefined && object.denom !== null) {
+      message.denom = object.denom;
+    }
+    return message;
+  },
+  toAmino(message: MsgDeleteAlliance): MsgDeleteAllianceAmino {
+    const obj: any = {};
+    obj.authority = message.authority;
+    obj.denom = message.denom;
+    return obj;
+  },
+  fromAminoMsg(object: MsgDeleteAllianceAminoMsg): MsgDeleteAlliance {
+    return MsgDeleteAlliance.fromAmino(object.value);
+  },
+  fromProtoMsg(message: MsgDeleteAllianceProtoMsg): MsgDeleteAlliance {
+    return MsgDeleteAlliance.decode(message.value);
+  },
+  toProto(message: MsgDeleteAlliance): Uint8Array {
+    return MsgDeleteAlliance.encode(message).finish();
+  },
+  toProtoMsg(message: MsgDeleteAlliance): MsgDeleteAllianceProtoMsg {
+    return {
+      typeUrl: "/alliance.alliance.MsgDeleteAlliance",
+      value: MsgDeleteAlliance.encode(message).finish()
+    };
   }
 };
 function createBaseMsgDeleteAllianceResponse(): MsgDeleteAllianceResponse {
   return {};
 }
 export const MsgDeleteAllianceResponse = {
+  typeUrl: "/alliance.alliance.MsgDeleteAllianceResponse",
   encode(_: MsgDeleteAllianceResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     return writer;
   },
@@ -972,5 +1652,28 @@ export const MsgDeleteAllianceResponse = {
   fromPartial(_: Partial<MsgDeleteAllianceResponse>): MsgDeleteAllianceResponse {
     const message = createBaseMsgDeleteAllianceResponse();
     return message;
+  },
+  fromAmino(_: MsgDeleteAllianceResponseAmino): MsgDeleteAllianceResponse {
+    const message = createBaseMsgDeleteAllianceResponse();
+    return message;
+  },
+  toAmino(_: MsgDeleteAllianceResponse): MsgDeleteAllianceResponseAmino {
+    const obj: any = {};
+    return obj;
+  },
+  fromAminoMsg(object: MsgDeleteAllianceResponseAminoMsg): MsgDeleteAllianceResponse {
+    return MsgDeleteAllianceResponse.fromAmino(object.value);
+  },
+  fromProtoMsg(message: MsgDeleteAllianceResponseProtoMsg): MsgDeleteAllianceResponse {
+    return MsgDeleteAllianceResponse.decode(message.value);
+  },
+  toProto(message: MsgDeleteAllianceResponse): Uint8Array {
+    return MsgDeleteAllianceResponse.encode(message).finish();
+  },
+  toProtoMsg(message: MsgDeleteAllianceResponse): MsgDeleteAllianceResponseProtoMsg {
+    return {
+      typeUrl: "/alliance.alliance.MsgDeleteAllianceResponse",
+      value: MsgDeleteAllianceResponse.encode(message).finish()
+    };
   }
 };

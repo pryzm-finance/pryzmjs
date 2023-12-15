@@ -1,4 +1,4 @@
-import { Coin, CoinSDKType } from "../../../cosmos/base/v1beta1/coin";
+import { Coin, CoinAmino, CoinSDKType } from "../../../cosmos/base/v1beta1/coin";
 import { BinaryReader, BinaryWriter } from "../../../binary";
 import { Decimal } from "@cosmjs/math";
 import { isSet } from "../../../helpers";
@@ -7,6 +7,20 @@ export interface PoolRewardToken {
   amount: string;
   globalIndex: string;
   weight: string;
+}
+export interface PoolRewardTokenProtoMsg {
+  typeUrl: "/pryzm.incentives.v1.PoolRewardToken";
+  value: Uint8Array;
+}
+export interface PoolRewardTokenAmino {
+  denom?: string;
+  amount?: string;
+  global_index?: string;
+  weight?: string;
+}
+export interface PoolRewardTokenAminoMsg {
+  type: "/pryzm.incentives.v1.PoolRewardToken";
+  value: PoolRewardTokenAmino;
 }
 export interface PoolRewardTokenSDKType {
   denom: string;
@@ -17,6 +31,18 @@ export interface PoolRewardTokenSDKType {
 export interface Pool {
   bondedToken: Coin;
   rewards: PoolRewardToken[];
+}
+export interface PoolProtoMsg {
+  typeUrl: "/pryzm.incentives.v1.Pool";
+  value: Uint8Array;
+}
+export interface PoolAmino {
+  bonded_token?: CoinAmino;
+  rewards?: PoolRewardTokenAmino[];
+}
+export interface PoolAminoMsg {
+  type: "/pryzm.incentives.v1.Pool";
+  value: PoolAmino;
 }
 export interface PoolSDKType {
   bonded_token: CoinSDKType;
@@ -31,6 +57,7 @@ function createBasePoolRewardToken(): PoolRewardToken {
   };
 }
 export const PoolRewardToken = {
+  typeUrl: "/pryzm.incentives.v1.PoolRewardToken",
   encode(message: PoolRewardToken, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.denom !== "") {
       writer.uint32(10).string(message.denom);
@@ -95,6 +122,45 @@ export const PoolRewardToken = {
     message.globalIndex = object.globalIndex ?? "";
     message.weight = object.weight ?? "";
     return message;
+  },
+  fromAmino(object: PoolRewardTokenAmino): PoolRewardToken {
+    const message = createBasePoolRewardToken();
+    if (object.denom !== undefined && object.denom !== null) {
+      message.denom = object.denom;
+    }
+    if (object.amount !== undefined && object.amount !== null) {
+      message.amount = object.amount;
+    }
+    if (object.global_index !== undefined && object.global_index !== null) {
+      message.globalIndex = object.global_index;
+    }
+    if (object.weight !== undefined && object.weight !== null) {
+      message.weight = object.weight;
+    }
+    return message;
+  },
+  toAmino(message: PoolRewardToken): PoolRewardTokenAmino {
+    const obj: any = {};
+    obj.denom = message.denom;
+    obj.amount = message.amount;
+    obj.global_index = message.globalIndex;
+    obj.weight = message.weight;
+    return obj;
+  },
+  fromAminoMsg(object: PoolRewardTokenAminoMsg): PoolRewardToken {
+    return PoolRewardToken.fromAmino(object.value);
+  },
+  fromProtoMsg(message: PoolRewardTokenProtoMsg): PoolRewardToken {
+    return PoolRewardToken.decode(message.value);
+  },
+  toProto(message: PoolRewardToken): Uint8Array {
+    return PoolRewardToken.encode(message).finish();
+  },
+  toProtoMsg(message: PoolRewardToken): PoolRewardTokenProtoMsg {
+    return {
+      typeUrl: "/pryzm.incentives.v1.PoolRewardToken",
+      value: PoolRewardToken.encode(message).finish()
+    };
   }
 };
 function createBasePool(): Pool {
@@ -104,6 +170,7 @@ function createBasePool(): Pool {
   };
 }
 export const Pool = {
+  typeUrl: "/pryzm.incentives.v1.Pool",
   encode(message: Pool, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.bondedToken !== undefined) {
       Coin.encode(message.bondedToken, writer.uint32(10).fork()).ldelim();
@@ -154,5 +221,38 @@ export const Pool = {
     message.bondedToken = object.bondedToken !== undefined && object.bondedToken !== null ? Coin.fromPartial(object.bondedToken) : undefined;
     message.rewards = object.rewards?.map(e => PoolRewardToken.fromPartial(e)) || [];
     return message;
+  },
+  fromAmino(object: PoolAmino): Pool {
+    const message = createBasePool();
+    if (object.bonded_token !== undefined && object.bonded_token !== null) {
+      message.bondedToken = Coin.fromAmino(object.bonded_token);
+    }
+    message.rewards = object.rewards?.map(e => PoolRewardToken.fromAmino(e)) || [];
+    return message;
+  },
+  toAmino(message: Pool): PoolAmino {
+    const obj: any = {};
+    obj.bonded_token = message.bondedToken ? Coin.toAmino(message.bondedToken) : undefined;
+    if (message.rewards) {
+      obj.rewards = message.rewards.map(e => e ? PoolRewardToken.toAmino(e) : undefined);
+    } else {
+      obj.rewards = [];
+    }
+    return obj;
+  },
+  fromAminoMsg(object: PoolAminoMsg): Pool {
+    return Pool.fromAmino(object.value);
+  },
+  fromProtoMsg(message: PoolProtoMsg): Pool {
+    return Pool.decode(message.value);
+  },
+  toProto(message: Pool): Uint8Array {
+    return Pool.encode(message).finish();
+  },
+  toProtoMsg(message: Pool): PoolProtoMsg {
+    return {
+      typeUrl: "/pryzm.incentives.v1.Pool",
+      value: Pool.encode(message).finish()
+    };
   }
 };

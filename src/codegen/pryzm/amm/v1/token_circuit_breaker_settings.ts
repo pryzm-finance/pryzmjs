@@ -5,6 +5,18 @@ export interface TokenCircuitBreakerSettings {
   denom: string;
   circuitBreaker?: CircuitBreakerSettings;
 }
+export interface TokenCircuitBreakerSettingsProtoMsg {
+  typeUrl: "/pryzm.amm.v1.TokenCircuitBreakerSettings";
+  value: Uint8Array;
+}
+export interface TokenCircuitBreakerSettingsAmino {
+  denom?: string;
+  circuit_breaker?: CircuitBreakerSettingsAmino;
+}
+export interface TokenCircuitBreakerSettingsAminoMsg {
+  type: "/pryzm.amm.v1.TokenCircuitBreakerSettings";
+  value: TokenCircuitBreakerSettingsAmino;
+}
 export interface TokenCircuitBreakerSettingsSDKType {
   denom: string;
   circuit_breaker?: CircuitBreakerSettingsSDKType;
@@ -13,6 +25,19 @@ export interface CircuitBreakerSettings {
   referenceLptPrice: string;
   lowerBound: string;
   upperBound: string;
+}
+export interface CircuitBreakerSettingsProtoMsg {
+  typeUrl: "/pryzm.amm.v1.CircuitBreakerSettings";
+  value: Uint8Array;
+}
+export interface CircuitBreakerSettingsAmino {
+  reference_lpt_price?: string;
+  lower_bound?: string;
+  upper_bound?: string;
+}
+export interface CircuitBreakerSettingsAminoMsg {
+  type: "/pryzm.amm.v1.CircuitBreakerSettings";
+  value: CircuitBreakerSettingsAmino;
 }
 export interface CircuitBreakerSettingsSDKType {
   reference_lpt_price: string;
@@ -26,6 +51,7 @@ function createBaseTokenCircuitBreakerSettings(): TokenCircuitBreakerSettings {
   };
 }
 export const TokenCircuitBreakerSettings = {
+  typeUrl: "/pryzm.amm.v1.TokenCircuitBreakerSettings",
   encode(message: TokenCircuitBreakerSettings, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.denom !== "") {
       writer.uint32(10).string(message.denom);
@@ -72,6 +98,37 @@ export const TokenCircuitBreakerSettings = {
     message.denom = object.denom ?? "";
     message.circuitBreaker = object.circuitBreaker !== undefined && object.circuitBreaker !== null ? CircuitBreakerSettings.fromPartial(object.circuitBreaker) : undefined;
     return message;
+  },
+  fromAmino(object: TokenCircuitBreakerSettingsAmino): TokenCircuitBreakerSettings {
+    const message = createBaseTokenCircuitBreakerSettings();
+    if (object.denom !== undefined && object.denom !== null) {
+      message.denom = object.denom;
+    }
+    if (object.circuit_breaker !== undefined && object.circuit_breaker !== null) {
+      message.circuitBreaker = CircuitBreakerSettings.fromAmino(object.circuit_breaker);
+    }
+    return message;
+  },
+  toAmino(message: TokenCircuitBreakerSettings): TokenCircuitBreakerSettingsAmino {
+    const obj: any = {};
+    obj.denom = message.denom;
+    obj.circuit_breaker = message.circuitBreaker ? CircuitBreakerSettings.toAmino(message.circuitBreaker) : undefined;
+    return obj;
+  },
+  fromAminoMsg(object: TokenCircuitBreakerSettingsAminoMsg): TokenCircuitBreakerSettings {
+    return TokenCircuitBreakerSettings.fromAmino(object.value);
+  },
+  fromProtoMsg(message: TokenCircuitBreakerSettingsProtoMsg): TokenCircuitBreakerSettings {
+    return TokenCircuitBreakerSettings.decode(message.value);
+  },
+  toProto(message: TokenCircuitBreakerSettings): Uint8Array {
+    return TokenCircuitBreakerSettings.encode(message).finish();
+  },
+  toProtoMsg(message: TokenCircuitBreakerSettings): TokenCircuitBreakerSettingsProtoMsg {
+    return {
+      typeUrl: "/pryzm.amm.v1.TokenCircuitBreakerSettings",
+      value: TokenCircuitBreakerSettings.encode(message).finish()
+    };
   }
 };
 function createBaseCircuitBreakerSettings(): CircuitBreakerSettings {
@@ -82,6 +139,7 @@ function createBaseCircuitBreakerSettings(): CircuitBreakerSettings {
   };
 }
 export const CircuitBreakerSettings = {
+  typeUrl: "/pryzm.amm.v1.CircuitBreakerSettings",
   encode(message: CircuitBreakerSettings, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.referenceLptPrice !== "") {
       writer.uint32(10).string(Decimal.fromUserInput(message.referenceLptPrice, 18).atomics);
@@ -137,5 +195,40 @@ export const CircuitBreakerSettings = {
     message.lowerBound = object.lowerBound ?? "";
     message.upperBound = object.upperBound ?? "";
     return message;
+  },
+  fromAmino(object: CircuitBreakerSettingsAmino): CircuitBreakerSettings {
+    const message = createBaseCircuitBreakerSettings();
+    if (object.reference_lpt_price !== undefined && object.reference_lpt_price !== null) {
+      message.referenceLptPrice = object.reference_lpt_price;
+    }
+    if (object.lower_bound !== undefined && object.lower_bound !== null) {
+      message.lowerBound = object.lower_bound;
+    }
+    if (object.upper_bound !== undefined && object.upper_bound !== null) {
+      message.upperBound = object.upper_bound;
+    }
+    return message;
+  },
+  toAmino(message: CircuitBreakerSettings): CircuitBreakerSettingsAmino {
+    const obj: any = {};
+    obj.reference_lpt_price = message.referenceLptPrice;
+    obj.lower_bound = message.lowerBound;
+    obj.upper_bound = message.upperBound;
+    return obj;
+  },
+  fromAminoMsg(object: CircuitBreakerSettingsAminoMsg): CircuitBreakerSettings {
+    return CircuitBreakerSettings.fromAmino(object.value);
+  },
+  fromProtoMsg(message: CircuitBreakerSettingsProtoMsg): CircuitBreakerSettings {
+    return CircuitBreakerSettings.decode(message.value);
+  },
+  toProto(message: CircuitBreakerSettings): Uint8Array {
+    return CircuitBreakerSettings.encode(message).finish();
+  },
+  toProtoMsg(message: CircuitBreakerSettings): CircuitBreakerSettingsProtoMsg {
+    return {
+      typeUrl: "/pryzm.amm.v1.CircuitBreakerSettings",
+      value: CircuitBreakerSettings.encode(message).finish()
+    };
   }
 };

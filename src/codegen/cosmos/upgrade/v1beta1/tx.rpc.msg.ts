@@ -1,4 +1,3 @@
-//@ts-nocheck
 import { UnaryMethodDefinitionish } from "../../../grpc-web";
 import { DeepPartial } from "../../../helpers";
 import { grpc } from "@improbable-eng/grpc-web";
@@ -28,10 +27,10 @@ export class MsgClientImpl implements Msg {
     this.cancelUpgrade = this.cancelUpgrade.bind(this);
   }
   softwareUpgrade(request: DeepPartial<MsgSoftwareUpgrade>, metadata?: grpc.Metadata): Promise<MsgSoftwareUpgradeResponse> {
-    return this.rpc.unary(MsgSoftwareUpgradeDesc, MsgSoftwareUpgrade.fromPartial(request), metadata);
+    return this.rpc.unary(MsgSoftwareUpgradeDesc, MsgSoftwareUpgrade.fromPartial(request as any), metadata);
   }
   cancelUpgrade(request: DeepPartial<MsgCancelUpgrade>, metadata?: grpc.Metadata): Promise<MsgCancelUpgradeResponse> {
-    return this.rpc.unary(MsgCancelUpgradeDesc, MsgCancelUpgrade.fromPartial(request), metadata);
+    return this.rpc.unary(MsgCancelUpgradeDesc, MsgCancelUpgrade.fromPartial(request as any), metadata);
   }
 }
 export const MsgDesc = {

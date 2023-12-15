@@ -1,4 +1,3 @@
-//@ts-nocheck
 import { UnaryMethodDefinitionish } from "../../../grpc-web";
 import { DeepPartial } from "../../../helpers";
 import { grpc } from "@improbable-eng/grpc-web";
@@ -34,13 +33,13 @@ export class MsgClientImpl implements Msg {
     this.revoke = this.revoke.bind(this);
   }
   grant(request: DeepPartial<MsgGrant>, metadata?: grpc.Metadata): Promise<MsgGrantResponse> {
-    return this.rpc.unary(MsgGrantDesc, MsgGrant.fromPartial(request), metadata);
+    return this.rpc.unary(MsgGrantDesc, MsgGrant.fromPartial(request as any), metadata);
   }
   exec(request: DeepPartial<MsgExec>, metadata?: grpc.Metadata): Promise<MsgExecResponse> {
-    return this.rpc.unary(MsgExecDesc, MsgExec.fromPartial(request), metadata);
+    return this.rpc.unary(MsgExecDesc, MsgExec.fromPartial(request as any), metadata);
   }
   revoke(request: DeepPartial<MsgRevoke>, metadata?: grpc.Metadata): Promise<MsgRevokeResponse> {
-    return this.rpc.unary(MsgRevokeDesc, MsgRevoke.fromPartial(request), metadata);
+    return this.rpc.unary(MsgRevokeDesc, MsgRevoke.fromPartial(request as any), metadata);
   }
 }
 export const MsgDesc = {

@@ -1,4 +1,4 @@
-import { Coin, CoinSDKType } from "../../../../cosmos/base/v1beta1/coin";
+import { Coin, CoinAmino, CoinSDKType } from "../../../../cosmos/base/v1beta1/coin";
 import { BinaryReader, BinaryWriter } from "../../../../binary";
 import { isSet } from "../../../../helpers";
 /** Allocation defines the spend limit for a particular port and channel */
@@ -12,6 +12,25 @@ export interface Allocation {
   /** allow list of receivers, an empty allow list permits any receiver address */
   allowList: string[];
 }
+export interface AllocationProtoMsg {
+  typeUrl: "/ibc.applications.transfer.v1.Allocation";
+  value: Uint8Array;
+}
+/** Allocation defines the spend limit for a particular port and channel */
+export interface AllocationAmino {
+  /** the port on which the packet will be sent */
+  source_port?: string;
+  /** the channel by which the packet will be sent */
+  source_channel?: string;
+  /** spend limitation on the channel */
+  spend_limit?: CoinAmino[];
+  /** allow list of receivers, an empty allow list permits any receiver address */
+  allow_list?: string[];
+}
+export interface AllocationAminoMsg {
+  type: "cosmos-sdk/Allocation";
+  value: AllocationAmino;
+}
 /** Allocation defines the spend limit for a particular port and channel */
 export interface AllocationSDKType {
   source_port: string;
@@ -24,14 +43,32 @@ export interface AllocationSDKType {
  * the granter's account for ibc transfer on a specific channel
  */
 export interface TransferAuthorization {
+  $typeUrl?: "/ibc.applications.transfer.v1.TransferAuthorization";
   /** port and channel amounts */
   allocations: Allocation[];
+}
+export interface TransferAuthorizationProtoMsg {
+  typeUrl: "/ibc.applications.transfer.v1.TransferAuthorization";
+  value: Uint8Array;
+}
+/**
+ * TransferAuthorization allows the grantee to spend up to spend_limit coins from
+ * the granter's account for ibc transfer on a specific channel
+ */
+export interface TransferAuthorizationAmino {
+  /** port and channel amounts */
+  allocations?: AllocationAmino[];
+}
+export interface TransferAuthorizationAminoMsg {
+  type: "cosmos-sdk/TransferAuthorization";
+  value: TransferAuthorizationAmino;
 }
 /**
  * TransferAuthorization allows the grantee to spend up to spend_limit coins from
  * the granter's account for ibc transfer on a specific channel
  */
 export interface TransferAuthorizationSDKType {
+  $typeUrl?: "/ibc.applications.transfer.v1.TransferAuthorization";
   allocations: AllocationSDKType[];
 }
 function createBaseAllocation(): Allocation {
@@ -43,6 +80,7 @@ function createBaseAllocation(): Allocation {
   };
 }
 export const Allocation = {
+  typeUrl: "/ibc.applications.transfer.v1.Allocation",
   encode(message: Allocation, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.sourcePort !== "") {
       writer.uint32(10).string(message.sourcePort);
@@ -115,14 +153,65 @@ export const Allocation = {
     message.spendLimit = object.spendLimit?.map(e => Coin.fromPartial(e)) || [];
     message.allowList = object.allowList?.map(e => e) || [];
     return message;
+  },
+  fromAmino(object: AllocationAmino): Allocation {
+    const message = createBaseAllocation();
+    if (object.source_port !== undefined && object.source_port !== null) {
+      message.sourcePort = object.source_port;
+    }
+    if (object.source_channel !== undefined && object.source_channel !== null) {
+      message.sourceChannel = object.source_channel;
+    }
+    message.spendLimit = object.spend_limit?.map(e => Coin.fromAmino(e)) || [];
+    message.allowList = object.allow_list?.map(e => e) || [];
+    return message;
+  },
+  toAmino(message: Allocation): AllocationAmino {
+    const obj: any = {};
+    obj.source_port = message.sourcePort;
+    obj.source_channel = message.sourceChannel;
+    if (message.spendLimit) {
+      obj.spend_limit = message.spendLimit.map(e => e ? Coin.toAmino(e) : undefined);
+    } else {
+      obj.spend_limit = [];
+    }
+    if (message.allowList) {
+      obj.allow_list = message.allowList.map(e => e);
+    } else {
+      obj.allow_list = [];
+    }
+    return obj;
+  },
+  fromAminoMsg(object: AllocationAminoMsg): Allocation {
+    return Allocation.fromAmino(object.value);
+  },
+  toAminoMsg(message: Allocation): AllocationAminoMsg {
+    return {
+      type: "cosmos-sdk/Allocation",
+      value: Allocation.toAmino(message)
+    };
+  },
+  fromProtoMsg(message: AllocationProtoMsg): Allocation {
+    return Allocation.decode(message.value);
+  },
+  toProto(message: Allocation): Uint8Array {
+    return Allocation.encode(message).finish();
+  },
+  toProtoMsg(message: Allocation): AllocationProtoMsg {
+    return {
+      typeUrl: "/ibc.applications.transfer.v1.Allocation",
+      value: Allocation.encode(message).finish()
+    };
   }
 };
 function createBaseTransferAuthorization(): TransferAuthorization {
   return {
+    $typeUrl: "/ibc.applications.transfer.v1.TransferAuthorization",
     allocations: []
   };
 }
 export const TransferAuthorization = {
+  typeUrl: "/ibc.applications.transfer.v1.TransferAuthorization",
   encode(message: TransferAuthorization, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     for (const v of message.allocations) {
       Allocation.encode(v!, writer.uint32(10).fork()).ldelim();
@@ -164,5 +253,40 @@ export const TransferAuthorization = {
     const message = createBaseTransferAuthorization();
     message.allocations = object.allocations?.map(e => Allocation.fromPartial(e)) || [];
     return message;
+  },
+  fromAmino(object: TransferAuthorizationAmino): TransferAuthorization {
+    const message = createBaseTransferAuthorization();
+    message.allocations = object.allocations?.map(e => Allocation.fromAmino(e)) || [];
+    return message;
+  },
+  toAmino(message: TransferAuthorization): TransferAuthorizationAmino {
+    const obj: any = {};
+    if (message.allocations) {
+      obj.allocations = message.allocations.map(e => e ? Allocation.toAmino(e) : undefined);
+    } else {
+      obj.allocations = [];
+    }
+    return obj;
+  },
+  fromAminoMsg(object: TransferAuthorizationAminoMsg): TransferAuthorization {
+    return TransferAuthorization.fromAmino(object.value);
+  },
+  toAminoMsg(message: TransferAuthorization): TransferAuthorizationAminoMsg {
+    return {
+      type: "cosmos-sdk/TransferAuthorization",
+      value: TransferAuthorization.toAmino(message)
+    };
+  },
+  fromProtoMsg(message: TransferAuthorizationProtoMsg): TransferAuthorization {
+    return TransferAuthorization.decode(message.value);
+  },
+  toProto(message: TransferAuthorization): Uint8Array {
+    return TransferAuthorization.encode(message).finish();
+  },
+  toProtoMsg(message: TransferAuthorization): TransferAuthorizationProtoMsg {
+    return {
+      typeUrl: "/ibc.applications.transfer.v1.TransferAuthorization",
+      value: TransferAuthorization.encode(message).finish()
+    };
   }
 };

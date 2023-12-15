@@ -8,6 +8,22 @@ export interface ValidatorSlashWindowSummary {
   jailed: boolean;
   slashAmount: string;
 }
+export interface ValidatorSlashWindowSummaryProtoMsg {
+  typeUrl: "/pryzmatics.oracle.ValidatorSlashWindowSummary";
+  value: Uint8Array;
+}
+export interface ValidatorSlashWindowSummaryAmino {
+  validator?: string;
+  slash_window_close_block_height?: string;
+  validator_power?: string;
+  miss_counter?: string;
+  jailed?: boolean;
+  slash_amount?: string;
+}
+export interface ValidatorSlashWindowSummaryAminoMsg {
+  type: "/pryzmatics.oracle.ValidatorSlashWindowSummary";
+  value: ValidatorSlashWindowSummaryAmino;
+}
 export interface ValidatorSlashWindowSummarySDKType {
   validator: string;
   slash_window_close_block_height: bigint;
@@ -27,6 +43,7 @@ function createBaseValidatorSlashWindowSummary(): ValidatorSlashWindowSummary {
   };
 }
 export const ValidatorSlashWindowSummary = {
+  typeUrl: "/pryzmatics.oracle.ValidatorSlashWindowSummary",
   encode(message: ValidatorSlashWindowSummary, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.validator !== "") {
       writer.uint32(10).string(message.validator);
@@ -109,5 +126,52 @@ export const ValidatorSlashWindowSummary = {
     message.jailed = object.jailed ?? false;
     message.slashAmount = object.slashAmount ?? "";
     return message;
+  },
+  fromAmino(object: ValidatorSlashWindowSummaryAmino): ValidatorSlashWindowSummary {
+    const message = createBaseValidatorSlashWindowSummary();
+    if (object.validator !== undefined && object.validator !== null) {
+      message.validator = object.validator;
+    }
+    if (object.slash_window_close_block_height !== undefined && object.slash_window_close_block_height !== null) {
+      message.slashWindowCloseBlockHeight = BigInt(object.slash_window_close_block_height);
+    }
+    if (object.validator_power !== undefined && object.validator_power !== null) {
+      message.validatorPower = BigInt(object.validator_power);
+    }
+    if (object.miss_counter !== undefined && object.miss_counter !== null) {
+      message.missCounter = BigInt(object.miss_counter);
+    }
+    if (object.jailed !== undefined && object.jailed !== null) {
+      message.jailed = object.jailed;
+    }
+    if (object.slash_amount !== undefined && object.slash_amount !== null) {
+      message.slashAmount = object.slash_amount;
+    }
+    return message;
+  },
+  toAmino(message: ValidatorSlashWindowSummary): ValidatorSlashWindowSummaryAmino {
+    const obj: any = {};
+    obj.validator = message.validator;
+    obj.slash_window_close_block_height = message.slashWindowCloseBlockHeight ? message.slashWindowCloseBlockHeight.toString() : undefined;
+    obj.validator_power = message.validatorPower ? message.validatorPower.toString() : undefined;
+    obj.miss_counter = message.missCounter ? message.missCounter.toString() : undefined;
+    obj.jailed = message.jailed;
+    obj.slash_amount = message.slashAmount;
+    return obj;
+  },
+  fromAminoMsg(object: ValidatorSlashWindowSummaryAminoMsg): ValidatorSlashWindowSummary {
+    return ValidatorSlashWindowSummary.fromAmino(object.value);
+  },
+  fromProtoMsg(message: ValidatorSlashWindowSummaryProtoMsg): ValidatorSlashWindowSummary {
+    return ValidatorSlashWindowSummary.decode(message.value);
+  },
+  toProto(message: ValidatorSlashWindowSummary): Uint8Array {
+    return ValidatorSlashWindowSummary.encode(message).finish();
+  },
+  toProtoMsg(message: ValidatorSlashWindowSummary): ValidatorSlashWindowSummaryProtoMsg {
+    return {
+      typeUrl: "/pryzmatics.oracle.ValidatorSlashWindowSummary",
+      value: ValidatorSlashWindowSummary.encode(message).finish()
+    };
   }
 };

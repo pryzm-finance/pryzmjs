@@ -1,4 +1,3 @@
-//@ts-nocheck
 import { grpc } from "@improbable-eng/grpc-web";
 import { UnaryMethodDefinitionish } from "../../../../grpc-web";
 import { DeepPartial } from "../../../../helpers";
@@ -19,10 +18,10 @@ export class QueryClientImpl implements Query {
     this.list = this.list.bind(this);
   }
   get(request: DeepPartial<GetRequest>, metadata?: grpc.Metadata): Promise<GetResponse> {
-    return this.rpc.unary(QueryGetDesc, GetRequest.fromPartial(request), metadata);
+    return this.rpc.unary(QueryGetDesc, GetRequest.fromPartial(request as any), metadata);
   }
   list(request: DeepPartial<ListRequest>, metadata?: grpc.Metadata): Promise<ListResponse> {
-    return this.rpc.unary(QueryListDesc, ListRequest.fromPartial(request), metadata);
+    return this.rpc.unary(QueryListDesc, ListRequest.fromPartial(request as any), metadata);
   }
 }
 export const QueryDesc = {

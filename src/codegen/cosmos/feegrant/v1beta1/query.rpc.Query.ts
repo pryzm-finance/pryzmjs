@@ -1,4 +1,3 @@
-//@ts-nocheck
 import { grpc } from "@improbable-eng/grpc-web";
 import { UnaryMethodDefinitionish } from "../../../grpc-web";
 import { DeepPartial } from "../../../helpers";
@@ -26,13 +25,13 @@ export class QueryClientImpl implements Query {
     this.allowancesByGranter = this.allowancesByGranter.bind(this);
   }
   allowance(request: DeepPartial<QueryAllowanceRequest>, metadata?: grpc.Metadata): Promise<QueryAllowanceResponse> {
-    return this.rpc.unary(QueryAllowanceDesc, QueryAllowanceRequest.fromPartial(request), metadata);
+    return this.rpc.unary(QueryAllowanceDesc, QueryAllowanceRequest.fromPartial(request as any), metadata);
   }
   allowances(request: DeepPartial<QueryAllowancesRequest>, metadata?: grpc.Metadata): Promise<QueryAllowancesResponse> {
-    return this.rpc.unary(QueryAllowancesDesc, QueryAllowancesRequest.fromPartial(request), metadata);
+    return this.rpc.unary(QueryAllowancesDesc, QueryAllowancesRequest.fromPartial(request as any), metadata);
   }
   allowancesByGranter(request: DeepPartial<QueryAllowancesByGranterRequest>, metadata?: grpc.Metadata): Promise<QueryAllowancesByGranterResponse> {
-    return this.rpc.unary(QueryAllowancesByGranterDesc, QueryAllowancesByGranterRequest.fromPartial(request), metadata);
+    return this.rpc.unary(QueryAllowancesByGranterDesc, QueryAllowancesByGranterRequest.fromPartial(request as any), metadata);
   }
 }
 export const QueryDesc = {

@@ -1,10 +1,22 @@
-import { Coin, CoinSDKType } from "../../../cosmos/base/v1beta1/coin";
+import { Coin, CoinAmino, CoinSDKType } from "../../../cosmos/base/v1beta1/coin";
 import { BinaryReader, BinaryWriter } from "../../../binary";
 import { isSet } from "../../../helpers";
 import { Decimal } from "@cosmjs/math";
 export interface QueryJoinExactTokensSimulationRequest {
   poolId: bigint;
   amountsIn: Coin[];
+}
+export interface QueryJoinExactTokensSimulationRequestProtoMsg {
+  typeUrl: "/pryzmatics.server.trade.QueryJoinExactTokensSimulationRequest";
+  value: Uint8Array;
+}
+export interface QueryJoinExactTokensSimulationRequestAmino {
+  pool_id?: string;
+  amounts_in?: CoinAmino[];
+}
+export interface QueryJoinExactTokensSimulationRequestAminoMsg {
+  type: "/pryzmatics.server.trade.QueryJoinExactTokensSimulationRequest";
+  value: QueryJoinExactTokensSimulationRequestAmino;
 }
 export interface QueryJoinExactTokensSimulationRequestSDKType {
   pool_id: bigint;
@@ -18,6 +30,23 @@ export interface QueryJoinExactTokensSimulationResponse {
   swapFee: Coin[];
   swapFeeLpTerms: Coin;
   priceImpact: string;
+}
+export interface QueryJoinExactTokensSimulationResponseProtoMsg {
+  typeUrl: "/pryzmatics.server.trade.QueryJoinExactTokensSimulationResponse";
+  value: Uint8Array;
+}
+export interface QueryJoinExactTokensSimulationResponseAmino {
+  amounts_in?: CoinAmino[];
+  amount_out?: CoinAmino;
+  protocol_fee?: CoinAmino[];
+  protocol_fee_lp_terms?: CoinAmino;
+  swap_fee?: CoinAmino[];
+  swap_fee_lp_terms?: CoinAmino;
+  price_impact?: string;
+}
+export interface QueryJoinExactTokensSimulationResponseAminoMsg {
+  type: "/pryzmatics.server.trade.QueryJoinExactTokensSimulationResponse";
+  value: QueryJoinExactTokensSimulationResponseAmino;
 }
 export interface QueryJoinExactTokensSimulationResponseSDKType {
   amounts_in: CoinSDKType[];
@@ -35,6 +64,7 @@ function createBaseQueryJoinExactTokensSimulationRequest(): QueryJoinExactTokens
   };
 }
 export const QueryJoinExactTokensSimulationRequest = {
+  typeUrl: "/pryzmatics.server.trade.QueryJoinExactTokensSimulationRequest",
   encode(message: QueryJoinExactTokensSimulationRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.poolId !== BigInt(0)) {
       writer.uint32(8).uint64(message.poolId);
@@ -85,6 +115,39 @@ export const QueryJoinExactTokensSimulationRequest = {
     message.poolId = object.poolId !== undefined && object.poolId !== null ? BigInt(object.poolId.toString()) : BigInt(0);
     message.amountsIn = object.amountsIn?.map(e => Coin.fromPartial(e)) || [];
     return message;
+  },
+  fromAmino(object: QueryJoinExactTokensSimulationRequestAmino): QueryJoinExactTokensSimulationRequest {
+    const message = createBaseQueryJoinExactTokensSimulationRequest();
+    if (object.pool_id !== undefined && object.pool_id !== null) {
+      message.poolId = BigInt(object.pool_id);
+    }
+    message.amountsIn = object.amounts_in?.map(e => Coin.fromAmino(e)) || [];
+    return message;
+  },
+  toAmino(message: QueryJoinExactTokensSimulationRequest): QueryJoinExactTokensSimulationRequestAmino {
+    const obj: any = {};
+    obj.pool_id = message.poolId ? message.poolId.toString() : undefined;
+    if (message.amountsIn) {
+      obj.amounts_in = message.amountsIn.map(e => e ? Coin.toAmino(e) : undefined);
+    } else {
+      obj.amounts_in = [];
+    }
+    return obj;
+  },
+  fromAminoMsg(object: QueryJoinExactTokensSimulationRequestAminoMsg): QueryJoinExactTokensSimulationRequest {
+    return QueryJoinExactTokensSimulationRequest.fromAmino(object.value);
+  },
+  fromProtoMsg(message: QueryJoinExactTokensSimulationRequestProtoMsg): QueryJoinExactTokensSimulationRequest {
+    return QueryJoinExactTokensSimulationRequest.decode(message.value);
+  },
+  toProto(message: QueryJoinExactTokensSimulationRequest): Uint8Array {
+    return QueryJoinExactTokensSimulationRequest.encode(message).finish();
+  },
+  toProtoMsg(message: QueryJoinExactTokensSimulationRequest): QueryJoinExactTokensSimulationRequestProtoMsg {
+    return {
+      typeUrl: "/pryzmatics.server.trade.QueryJoinExactTokensSimulationRequest",
+      value: QueryJoinExactTokensSimulationRequest.encode(message).finish()
+    };
   }
 };
 function createBaseQueryJoinExactTokensSimulationResponse(): QueryJoinExactTokensSimulationResponse {
@@ -99,6 +162,7 @@ function createBaseQueryJoinExactTokensSimulationResponse(): QueryJoinExactToken
   };
 }
 export const QueryJoinExactTokensSimulationResponse = {
+  typeUrl: "/pryzmatics.server.trade.QueryJoinExactTokensSimulationResponse",
   encode(message: QueryJoinExactTokensSimulationResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     for (const v of message.amountsIn) {
       Coin.encode(v!, writer.uint32(10).fork()).ldelim();
@@ -202,5 +266,62 @@ export const QueryJoinExactTokensSimulationResponse = {
     message.swapFeeLpTerms = object.swapFeeLpTerms !== undefined && object.swapFeeLpTerms !== null ? Coin.fromPartial(object.swapFeeLpTerms) : undefined;
     message.priceImpact = object.priceImpact ?? "";
     return message;
+  },
+  fromAmino(object: QueryJoinExactTokensSimulationResponseAmino): QueryJoinExactTokensSimulationResponse {
+    const message = createBaseQueryJoinExactTokensSimulationResponse();
+    message.amountsIn = object.amounts_in?.map(e => Coin.fromAmino(e)) || [];
+    if (object.amount_out !== undefined && object.amount_out !== null) {
+      message.amountOut = Coin.fromAmino(object.amount_out);
+    }
+    message.protocolFee = object.protocol_fee?.map(e => Coin.fromAmino(e)) || [];
+    if (object.protocol_fee_lp_terms !== undefined && object.protocol_fee_lp_terms !== null) {
+      message.protocolFeeLpTerms = Coin.fromAmino(object.protocol_fee_lp_terms);
+    }
+    message.swapFee = object.swap_fee?.map(e => Coin.fromAmino(e)) || [];
+    if (object.swap_fee_lp_terms !== undefined && object.swap_fee_lp_terms !== null) {
+      message.swapFeeLpTerms = Coin.fromAmino(object.swap_fee_lp_terms);
+    }
+    if (object.price_impact !== undefined && object.price_impact !== null) {
+      message.priceImpact = object.price_impact;
+    }
+    return message;
+  },
+  toAmino(message: QueryJoinExactTokensSimulationResponse): QueryJoinExactTokensSimulationResponseAmino {
+    const obj: any = {};
+    if (message.amountsIn) {
+      obj.amounts_in = message.amountsIn.map(e => e ? Coin.toAmino(e) : undefined);
+    } else {
+      obj.amounts_in = [];
+    }
+    obj.amount_out = message.amountOut ? Coin.toAmino(message.amountOut) : undefined;
+    if (message.protocolFee) {
+      obj.protocol_fee = message.protocolFee.map(e => e ? Coin.toAmino(e) : undefined);
+    } else {
+      obj.protocol_fee = [];
+    }
+    obj.protocol_fee_lp_terms = message.protocolFeeLpTerms ? Coin.toAmino(message.protocolFeeLpTerms) : undefined;
+    if (message.swapFee) {
+      obj.swap_fee = message.swapFee.map(e => e ? Coin.toAmino(e) : undefined);
+    } else {
+      obj.swap_fee = [];
+    }
+    obj.swap_fee_lp_terms = message.swapFeeLpTerms ? Coin.toAmino(message.swapFeeLpTerms) : undefined;
+    obj.price_impact = message.priceImpact;
+    return obj;
+  },
+  fromAminoMsg(object: QueryJoinExactTokensSimulationResponseAminoMsg): QueryJoinExactTokensSimulationResponse {
+    return QueryJoinExactTokensSimulationResponse.fromAmino(object.value);
+  },
+  fromProtoMsg(message: QueryJoinExactTokensSimulationResponseProtoMsg): QueryJoinExactTokensSimulationResponse {
+    return QueryJoinExactTokensSimulationResponse.decode(message.value);
+  },
+  toProto(message: QueryJoinExactTokensSimulationResponse): Uint8Array {
+    return QueryJoinExactTokensSimulationResponse.encode(message).finish();
+  },
+  toProtoMsg(message: QueryJoinExactTokensSimulationResponse): QueryJoinExactTokensSimulationResponseProtoMsg {
+    return {
+      typeUrl: "/pryzmatics.server.trade.QueryJoinExactTokensSimulationResponse",
+      value: QueryJoinExactTokensSimulationResponse.encode(message).finish()
+    };
   }
 };

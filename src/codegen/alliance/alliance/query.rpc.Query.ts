@@ -1,4 +1,3 @@
-//@ts-nocheck
 import { grpc } from "@improbable-eng/grpc-web";
 import { UnaryMethodDefinitionish } from "../../grpc-web";
 import { DeepPartial } from "../../helpers";
@@ -71,58 +70,58 @@ export class QueryClientImpl implements Query {
     this.alliance = this.alliance.bind(this);
   }
   params(request: DeepPartial<QueryParamsRequest> = {}, metadata?: grpc.Metadata): Promise<QueryParamsResponse> {
-    return this.rpc.unary(QueryParamsDesc, QueryParamsRequest.fromPartial(request), metadata);
+    return this.rpc.unary(QueryParamsDesc, QueryParamsRequest.fromPartial(request as any), metadata);
   }
   alliances(request: DeepPartial<QueryAlliancesRequest> = {
     pagination: undefined
   }, metadata?: grpc.Metadata): Promise<QueryAlliancesResponse> {
-    return this.rpc.unary(QueryAlliancesDesc, QueryAlliancesRequest.fromPartial(request), metadata);
+    return this.rpc.unary(QueryAlliancesDesc, QueryAlliancesRequest.fromPartial(request as any), metadata);
   }
   iBCAlliance(request: DeepPartial<QueryIBCAllianceRequest>, metadata?: grpc.Metadata): Promise<QueryAllianceResponse> {
-    return this.rpc.unary(QueryIBCAllianceDesc, QueryIBCAllianceRequest.fromPartial(request), metadata);
+    return this.rpc.unary(QueryIBCAllianceDesc, QueryIBCAllianceRequest.fromPartial(request as any), metadata);
   }
   allAlliancesDelegations(request: DeepPartial<QueryAllAlliancesDelegationsRequest> = {
     pagination: undefined
   }, metadata?: grpc.Metadata): Promise<QueryAlliancesDelegationsResponse> {
-    return this.rpc.unary(QueryAllAlliancesDelegationsDesc, QueryAllAlliancesDelegationsRequest.fromPartial(request), metadata);
+    return this.rpc.unary(QueryAllAlliancesDelegationsDesc, QueryAllAlliancesDelegationsRequest.fromPartial(request as any), metadata);
   }
   allianceValidator(request: DeepPartial<QueryAllianceValidatorRequest>, metadata?: grpc.Metadata): Promise<QueryAllianceValidatorResponse> {
-    return this.rpc.unary(QueryAllianceValidatorDesc, QueryAllianceValidatorRequest.fromPartial(request), metadata);
+    return this.rpc.unary(QueryAllianceValidatorDesc, QueryAllianceValidatorRequest.fromPartial(request as any), metadata);
   }
   allAllianceValidators(request: DeepPartial<QueryAllAllianceValidatorsRequest> = {
     pagination: undefined
   }, metadata?: grpc.Metadata): Promise<QueryAllianceValidatorsResponse> {
-    return this.rpc.unary(QueryAllAllianceValidatorsDesc, QueryAllAllianceValidatorsRequest.fromPartial(request), metadata);
+    return this.rpc.unary(QueryAllAllianceValidatorsDesc, QueryAllAllianceValidatorsRequest.fromPartial(request as any), metadata);
   }
   alliancesDelegation(request: DeepPartial<QueryAlliancesDelegationsRequest>, metadata?: grpc.Metadata): Promise<QueryAlliancesDelegationsResponse> {
-    return this.rpc.unary(QueryAlliancesDelegationDesc, QueryAlliancesDelegationsRequest.fromPartial(request), metadata);
+    return this.rpc.unary(QueryAlliancesDelegationDesc, QueryAlliancesDelegationsRequest.fromPartial(request as any), metadata);
   }
   alliancesDelegationByValidator(request: DeepPartial<QueryAlliancesDelegationByValidatorRequest>, metadata?: grpc.Metadata): Promise<QueryAlliancesDelegationsResponse> {
-    return this.rpc.unary(QueryAlliancesDelegationByValidatorDesc, QueryAlliancesDelegationByValidatorRequest.fromPartial(request), metadata);
+    return this.rpc.unary(QueryAlliancesDelegationByValidatorDesc, QueryAlliancesDelegationByValidatorRequest.fromPartial(request as any), metadata);
   }
   allianceDelegation(request: DeepPartial<QueryAllianceDelegationRequest>, metadata?: grpc.Metadata): Promise<QueryAllianceDelegationResponse> {
-    return this.rpc.unary(QueryAllianceDelegationDesc, QueryAllianceDelegationRequest.fromPartial(request), metadata);
+    return this.rpc.unary(QueryAllianceDelegationDesc, QueryAllianceDelegationRequest.fromPartial(request as any), metadata);
   }
   iBCAllianceDelegation(request: DeepPartial<QueryIBCAllianceDelegationRequest>, metadata?: grpc.Metadata): Promise<QueryAllianceDelegationResponse> {
-    return this.rpc.unary(QueryIBCAllianceDelegationDesc, QueryIBCAllianceDelegationRequest.fromPartial(request), metadata);
+    return this.rpc.unary(QueryIBCAllianceDelegationDesc, QueryIBCAllianceDelegationRequest.fromPartial(request as any), metadata);
   }
   allianceDelegationRewards(request: DeepPartial<QueryAllianceDelegationRewardsRequest>, metadata?: grpc.Metadata): Promise<QueryAllianceDelegationRewardsResponse> {
-    return this.rpc.unary(QueryAllianceDelegationRewardsDesc, QueryAllianceDelegationRewardsRequest.fromPartial(request), metadata);
+    return this.rpc.unary(QueryAllianceDelegationRewardsDesc, QueryAllianceDelegationRewardsRequest.fromPartial(request as any), metadata);
   }
   iBCAllianceDelegationRewards(request: DeepPartial<QueryIBCAllianceDelegationRewardsRequest>, metadata?: grpc.Metadata): Promise<QueryAllianceDelegationRewardsResponse> {
-    return this.rpc.unary(QueryIBCAllianceDelegationRewardsDesc, QueryIBCAllianceDelegationRewardsRequest.fromPartial(request), metadata);
+    return this.rpc.unary(QueryIBCAllianceDelegationRewardsDesc, QueryIBCAllianceDelegationRewardsRequest.fromPartial(request as any), metadata);
   }
   allianceUnbondingsByDenomAndDelegator(request: DeepPartial<QueryAllianceUnbondingsByDenomAndDelegatorRequest>, metadata?: grpc.Metadata): Promise<QueryAllianceUnbondingsByDenomAndDelegatorResponse> {
-    return this.rpc.unary(QueryAllianceUnbondingsByDenomAndDelegatorDesc, QueryAllianceUnbondingsByDenomAndDelegatorRequest.fromPartial(request), metadata);
+    return this.rpc.unary(QueryAllianceUnbondingsByDenomAndDelegatorDesc, QueryAllianceUnbondingsByDenomAndDelegatorRequest.fromPartial(request as any), metadata);
   }
   allianceUnbondings(request: DeepPartial<QueryAllianceUnbondingsRequest>, metadata?: grpc.Metadata): Promise<QueryAllianceUnbondingsResponse> {
-    return this.rpc.unary(QueryAllianceUnbondingsDesc, QueryAllianceUnbondingsRequest.fromPartial(request), metadata);
+    return this.rpc.unary(QueryAllianceUnbondingsDesc, QueryAllianceUnbondingsRequest.fromPartial(request as any), metadata);
   }
   allianceRedelegations(request: DeepPartial<QueryAllianceRedelegationsRequest>, metadata?: grpc.Metadata): Promise<QueryAllianceRedelegationsResponse> {
-    return this.rpc.unary(QueryAllianceRedelegationsDesc, QueryAllianceRedelegationsRequest.fromPartial(request), metadata);
+    return this.rpc.unary(QueryAllianceRedelegationsDesc, QueryAllianceRedelegationsRequest.fromPartial(request as any), metadata);
   }
   alliance(request: DeepPartial<QueryAllianceRequest>, metadata?: grpc.Metadata): Promise<QueryAllianceResponse> {
-    return this.rpc.unary(QueryAllianceDesc, QueryAllianceRequest.fromPartial(request), metadata);
+    return this.rpc.unary(QueryAllianceDesc, QueryAllianceRequest.fromPartial(request as any), metadata);
   }
 }
 export const QueryDesc = {

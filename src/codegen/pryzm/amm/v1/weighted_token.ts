@@ -1,4 +1,4 @@
-import { WeightUpdateTiming, WeightUpdateTimingSDKType } from "./weight_update_timing";
+import { WeightUpdateTiming, WeightUpdateTimingAmino, WeightUpdateTimingSDKType } from "./weight_update_timing";
 import { BinaryReader, BinaryWriter } from "../../../binary";
 import { isSet } from "../../../helpers";
 import { Decimal } from "@cosmjs/math";
@@ -6,6 +6,19 @@ export interface WeightedPoolProperties {
   poolId: bigint;
   weightUpdateTiming: WeightUpdateTiming;
   tokenList: WeightedToken[];
+}
+export interface WeightedPoolPropertiesProtoMsg {
+  typeUrl: "/pryzm.amm.v1.WeightedPoolProperties";
+  value: Uint8Array;
+}
+export interface WeightedPoolPropertiesAmino {
+  pool_id?: string;
+  weight_update_timing?: WeightUpdateTimingAmino;
+  token_list?: WeightedTokenAmino[];
+}
+export interface WeightedPoolPropertiesAminoMsg {
+  type: "/pryzm.amm.v1.WeightedPoolProperties";
+  value: WeightedPoolPropertiesAmino;
 }
 export interface WeightedPoolPropertiesSDKType {
   pool_id: bigint;
@@ -17,6 +30,20 @@ export interface WeightedToken {
   denom: string;
   normalizedStartWeight: string;
   normalizedEndWeight: string;
+}
+export interface WeightedTokenProtoMsg {
+  typeUrl: "/pryzm.amm.v1.WeightedToken";
+  value: Uint8Array;
+}
+export interface WeightedTokenAmino {
+  pool_id?: string;
+  denom?: string;
+  normalized_start_weight?: string;
+  normalized_end_weight?: string;
+}
+export interface WeightedTokenAminoMsg {
+  type: "/pryzm.amm.v1.WeightedToken";
+  value: WeightedTokenAmino;
 }
 export interface WeightedTokenSDKType {
   pool_id: bigint;
@@ -32,6 +59,7 @@ function createBaseWeightedPoolProperties(): WeightedPoolProperties {
   };
 }
 export const WeightedPoolProperties = {
+  typeUrl: "/pryzm.amm.v1.WeightedPoolProperties",
   encode(message: WeightedPoolProperties, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.poolId !== BigInt(0)) {
       writer.uint32(8).uint64(message.poolId);
@@ -91,6 +119,43 @@ export const WeightedPoolProperties = {
     message.weightUpdateTiming = object.weightUpdateTiming !== undefined && object.weightUpdateTiming !== null ? WeightUpdateTiming.fromPartial(object.weightUpdateTiming) : undefined;
     message.tokenList = object.tokenList?.map(e => WeightedToken.fromPartial(e)) || [];
     return message;
+  },
+  fromAmino(object: WeightedPoolPropertiesAmino): WeightedPoolProperties {
+    const message = createBaseWeightedPoolProperties();
+    if (object.pool_id !== undefined && object.pool_id !== null) {
+      message.poolId = BigInt(object.pool_id);
+    }
+    if (object.weight_update_timing !== undefined && object.weight_update_timing !== null) {
+      message.weightUpdateTiming = WeightUpdateTiming.fromAmino(object.weight_update_timing);
+    }
+    message.tokenList = object.token_list?.map(e => WeightedToken.fromAmino(e)) || [];
+    return message;
+  },
+  toAmino(message: WeightedPoolProperties): WeightedPoolPropertiesAmino {
+    const obj: any = {};
+    obj.pool_id = message.poolId ? message.poolId.toString() : undefined;
+    obj.weight_update_timing = message.weightUpdateTiming ? WeightUpdateTiming.toAmino(message.weightUpdateTiming) : undefined;
+    if (message.tokenList) {
+      obj.token_list = message.tokenList.map(e => e ? WeightedToken.toAmino(e) : undefined);
+    } else {
+      obj.token_list = [];
+    }
+    return obj;
+  },
+  fromAminoMsg(object: WeightedPoolPropertiesAminoMsg): WeightedPoolProperties {
+    return WeightedPoolProperties.fromAmino(object.value);
+  },
+  fromProtoMsg(message: WeightedPoolPropertiesProtoMsg): WeightedPoolProperties {
+    return WeightedPoolProperties.decode(message.value);
+  },
+  toProto(message: WeightedPoolProperties): Uint8Array {
+    return WeightedPoolProperties.encode(message).finish();
+  },
+  toProtoMsg(message: WeightedPoolProperties): WeightedPoolPropertiesProtoMsg {
+    return {
+      typeUrl: "/pryzm.amm.v1.WeightedPoolProperties",
+      value: WeightedPoolProperties.encode(message).finish()
+    };
   }
 };
 function createBaseWeightedToken(): WeightedToken {
@@ -102,6 +167,7 @@ function createBaseWeightedToken(): WeightedToken {
   };
 }
 export const WeightedToken = {
+  typeUrl: "/pryzm.amm.v1.WeightedToken",
   encode(message: WeightedToken, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.poolId !== BigInt(0)) {
       writer.uint32(8).uint64(message.poolId);
@@ -166,5 +232,44 @@ export const WeightedToken = {
     message.normalizedStartWeight = object.normalizedStartWeight ?? "";
     message.normalizedEndWeight = object.normalizedEndWeight ?? "";
     return message;
+  },
+  fromAmino(object: WeightedTokenAmino): WeightedToken {
+    const message = createBaseWeightedToken();
+    if (object.pool_id !== undefined && object.pool_id !== null) {
+      message.poolId = BigInt(object.pool_id);
+    }
+    if (object.denom !== undefined && object.denom !== null) {
+      message.denom = object.denom;
+    }
+    if (object.normalized_start_weight !== undefined && object.normalized_start_weight !== null) {
+      message.normalizedStartWeight = object.normalized_start_weight;
+    }
+    if (object.normalized_end_weight !== undefined && object.normalized_end_weight !== null) {
+      message.normalizedEndWeight = object.normalized_end_weight;
+    }
+    return message;
+  },
+  toAmino(message: WeightedToken): WeightedTokenAmino {
+    const obj: any = {};
+    obj.pool_id = message.poolId ? message.poolId.toString() : undefined;
+    obj.denom = message.denom;
+    obj.normalized_start_weight = message.normalizedStartWeight;
+    obj.normalized_end_weight = message.normalizedEndWeight;
+    return obj;
+  },
+  fromAminoMsg(object: WeightedTokenAminoMsg): WeightedToken {
+    return WeightedToken.fromAmino(object.value);
+  },
+  fromProtoMsg(message: WeightedTokenProtoMsg): WeightedToken {
+    return WeightedToken.decode(message.value);
+  },
+  toProto(message: WeightedToken): Uint8Array {
+    return WeightedToken.encode(message).finish();
+  },
+  toProtoMsg(message: WeightedToken): WeightedTokenProtoMsg {
+    return {
+      typeUrl: "/pryzm.amm.v1.WeightedToken",
+      value: WeightedToken.encode(message).finish()
+    };
   }
 };

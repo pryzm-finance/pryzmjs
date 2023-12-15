@@ -5,6 +5,18 @@ export interface TokenWeight {
   denom: string;
   normalizedWeight: string;
 }
+export interface TokenWeightProtoMsg {
+  typeUrl: "/pryzm.amm.v1.TokenWeight";
+  value: Uint8Array;
+}
+export interface TokenWeightAmino {
+  denom?: string;
+  normalized_weight?: string;
+}
+export interface TokenWeightAminoMsg {
+  type: "/pryzm.amm.v1.TokenWeight";
+  value: TokenWeightAmino;
+}
 export interface TokenWeightSDKType {
   denom: string;
   normalized_weight: string;
@@ -16,6 +28,7 @@ function createBaseTokenWeight(): TokenWeight {
   };
 }
 export const TokenWeight = {
+  typeUrl: "/pryzm.amm.v1.TokenWeight",
   encode(message: TokenWeight, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.denom !== "") {
       writer.uint32(10).string(message.denom);
@@ -62,5 +75,36 @@ export const TokenWeight = {
     message.denom = object.denom ?? "";
     message.normalizedWeight = object.normalizedWeight ?? "";
     return message;
+  },
+  fromAmino(object: TokenWeightAmino): TokenWeight {
+    const message = createBaseTokenWeight();
+    if (object.denom !== undefined && object.denom !== null) {
+      message.denom = object.denom;
+    }
+    if (object.normalized_weight !== undefined && object.normalized_weight !== null) {
+      message.normalizedWeight = object.normalized_weight;
+    }
+    return message;
+  },
+  toAmino(message: TokenWeight): TokenWeightAmino {
+    const obj: any = {};
+    obj.denom = message.denom;
+    obj.normalized_weight = message.normalizedWeight;
+    return obj;
+  },
+  fromAminoMsg(object: TokenWeightAminoMsg): TokenWeight {
+    return TokenWeight.fromAmino(object.value);
+  },
+  fromProtoMsg(message: TokenWeightProtoMsg): TokenWeight {
+    return TokenWeight.decode(message.value);
+  },
+  toProto(message: TokenWeight): Uint8Array {
+    return TokenWeight.encode(message).finish();
+  },
+  toProtoMsg(message: TokenWeight): TokenWeightProtoMsg {
+    return {
+      typeUrl: "/pryzm.amm.v1.TokenWeight",
+      value: TokenWeight.encode(message).finish()
+    };
   }
 };

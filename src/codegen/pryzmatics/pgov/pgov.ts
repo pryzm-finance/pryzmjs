@@ -1,12 +1,26 @@
 import { Proposal as Proposal1 } from "../../cosmos/gov/v1/gov";
+import { ProposalAmino as Proposal1Amino } from "../../cosmos/gov/v1/gov";
 import { ProposalSDKType as Proposal1SDKType } from "../../cosmos/gov/v1/gov";
 import { Proposal as Proposal2 } from "../../pryzm/pgov/v1/proposal";
+import { ProposalAmino as Proposal2Amino } from "../../pryzm/pgov/v1/proposal";
 import { ProposalSDKType as Proposal2SDKType } from "../../pryzm/pgov/v1/proposal";
 import { BinaryReader, BinaryWriter } from "../../binary";
 import { isSet } from "../../helpers";
 export interface AssetProposal {
   origProposal: Proposal1;
   pryzmProposal?: Proposal2;
+}
+export interface AssetProposalProtoMsg {
+  typeUrl: "/pryzmatics.pgov.AssetProposal";
+  value: Uint8Array;
+}
+export interface AssetProposalAmino {
+  orig_proposal?: Proposal1Amino;
+  pryzm_proposal?: Proposal2Amino;
+}
+export interface AssetProposalAminoMsg {
+  type: "/pryzmatics.pgov.AssetProposal";
+  value: AssetProposalAmino;
 }
 export interface AssetProposalSDKType {
   orig_proposal: Proposal1SDKType;
@@ -19,6 +33,7 @@ function createBaseAssetProposal(): AssetProposal {
   };
 }
 export const AssetProposal = {
+  typeUrl: "/pryzmatics.pgov.AssetProposal",
   encode(message: AssetProposal, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.origProposal !== undefined) {
       Proposal1.encode(message.origProposal, writer.uint32(10).fork()).ldelim();
@@ -65,5 +80,36 @@ export const AssetProposal = {
     message.origProposal = object.origProposal !== undefined && object.origProposal !== null ? Proposal1.fromPartial(object.origProposal) : undefined;
     message.pryzmProposal = object.pryzmProposal !== undefined && object.pryzmProposal !== null ? Proposal2.fromPartial(object.pryzmProposal) : undefined;
     return message;
+  },
+  fromAmino(object: AssetProposalAmino): AssetProposal {
+    const message = createBaseAssetProposal();
+    if (object.orig_proposal !== undefined && object.orig_proposal !== null) {
+      message.origProposal = Proposal1.fromAmino(object.orig_proposal);
+    }
+    if (object.pryzm_proposal !== undefined && object.pryzm_proposal !== null) {
+      message.pryzmProposal = Proposal2.fromAmino(object.pryzm_proposal);
+    }
+    return message;
+  },
+  toAmino(message: AssetProposal): AssetProposalAmino {
+    const obj: any = {};
+    obj.orig_proposal = message.origProposal ? Proposal1.toAmino(message.origProposal) : undefined;
+    obj.pryzm_proposal = message.pryzmProposal ? Proposal2.toAmino(message.pryzmProposal) : undefined;
+    return obj;
+  },
+  fromAminoMsg(object: AssetProposalAminoMsg): AssetProposal {
+    return AssetProposal.fromAmino(object.value);
+  },
+  fromProtoMsg(message: AssetProposalProtoMsg): AssetProposal {
+    return AssetProposal.decode(message.value);
+  },
+  toProto(message: AssetProposal): Uint8Array {
+    return AssetProposal.encode(message).finish();
+  },
+  toProtoMsg(message: AssetProposal): AssetProposalProtoMsg {
+    return {
+      typeUrl: "/pryzmatics.pgov.AssetProposal",
+      value: AssetProposal.encode(message).finish()
+    };
   }
 };

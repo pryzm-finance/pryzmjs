@@ -1,4 +1,3 @@
-//@ts-nocheck
 import { UnaryMethodDefinitionish } from "../../../../grpc-web";
 import { DeepPartial } from "../../../../helpers";
 import { grpc } from "@improbable-eng/grpc-web";
@@ -16,7 +15,7 @@ export class MsgClientImpl implements Msg {
     this.transfer = this.transfer.bind(this);
   }
   transfer(request: DeepPartial<MsgTransfer>, metadata?: grpc.Metadata): Promise<MsgTransferResponse> {
-    return this.rpc.unary(MsgTransferDesc, MsgTransfer.fromPartial(request), metadata);
+    return this.rpc.unary(MsgTransferDesc, MsgTransfer.fromPartial(request as any), metadata);
   }
 }
 export const MsgDesc = {

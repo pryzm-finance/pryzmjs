@@ -10,6 +10,22 @@ export interface FlowHistoricalPrice {
   open?: string;
   close?: string;
 }
+export interface FlowHistoricalPriceProtoMsg {
+  typeUrl: "/pryzmatics.flowtrade.FlowHistoricalPrice";
+  value: Uint8Array;
+}
+export interface FlowHistoricalPriceAmino {
+  time?: string;
+  low?: string;
+  high?: string;
+  avg?: string;
+  open?: string;
+  close?: string;
+}
+export interface FlowHistoricalPriceAminoMsg {
+  type: "/pryzmatics.flowtrade.FlowHistoricalPrice";
+  value: FlowHistoricalPriceAmino;
+}
 export interface FlowHistoricalPriceSDKType {
   time: TimestampSDKType;
   low?: string;
@@ -29,6 +45,7 @@ function createBaseFlowHistoricalPrice(): FlowHistoricalPrice {
   };
 }
 export const FlowHistoricalPrice = {
+  typeUrl: "/pryzmatics.flowtrade.FlowHistoricalPrice",
   encode(message: FlowHistoricalPrice, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.time !== undefined) {
       Timestamp.encode(message.time, writer.uint32(10).fork()).ldelim();
@@ -111,5 +128,52 @@ export const FlowHistoricalPrice = {
     message.open = object.open ?? undefined;
     message.close = object.close ?? undefined;
     return message;
+  },
+  fromAmino(object: FlowHistoricalPriceAmino): FlowHistoricalPrice {
+    const message = createBaseFlowHistoricalPrice();
+    if (object.time !== undefined && object.time !== null) {
+      message.time = Timestamp.fromAmino(object.time);
+    }
+    if (object.low !== undefined && object.low !== null) {
+      message.low = object.low;
+    }
+    if (object.high !== undefined && object.high !== null) {
+      message.high = object.high;
+    }
+    if (object.avg !== undefined && object.avg !== null) {
+      message.avg = object.avg;
+    }
+    if (object.open !== undefined && object.open !== null) {
+      message.open = object.open;
+    }
+    if (object.close !== undefined && object.close !== null) {
+      message.close = object.close;
+    }
+    return message;
+  },
+  toAmino(message: FlowHistoricalPrice): FlowHistoricalPriceAmino {
+    const obj: any = {};
+    obj.time = message.time ? Timestamp.toAmino(message.time) : undefined;
+    obj.low = message.low;
+    obj.high = message.high;
+    obj.avg = message.avg;
+    obj.open = message.open;
+    obj.close = message.close;
+    return obj;
+  },
+  fromAminoMsg(object: FlowHistoricalPriceAminoMsg): FlowHistoricalPrice {
+    return FlowHistoricalPrice.fromAmino(object.value);
+  },
+  fromProtoMsg(message: FlowHistoricalPriceProtoMsg): FlowHistoricalPrice {
+    return FlowHistoricalPrice.decode(message.value);
+  },
+  toProto(message: FlowHistoricalPrice): Uint8Array {
+    return FlowHistoricalPrice.encode(message).finish();
+  },
+  toProtoMsg(message: FlowHistoricalPrice): FlowHistoricalPriceProtoMsg {
+    return {
+      typeUrl: "/pryzmatics.flowtrade.FlowHistoricalPrice",
+      value: FlowHistoricalPrice.encode(message).finish()
+    };
   }
 };

@@ -1,11 +1,25 @@
-import { AssetPoolState, AssetPoolStateSDKType, AssetMaturityPoolState, AssetMaturityPoolStateSDKType } from "./asset_pool_state";
-import { UserStakeState, UserStakeStateSDKType } from "./user_stake_state";
+import { AssetPoolState, AssetPoolStateAmino, AssetPoolStateSDKType, AssetMaturityPoolState, AssetMaturityPoolStateAmino, AssetMaturityPoolStateSDKType } from "./asset_pool_state";
+import { UserStakeState, UserStakeStateAmino, UserStakeStateSDKType } from "./user_stake_state";
 import { BinaryReader, BinaryWriter } from "../../../binary";
 /** GenesisState defines the ystaking module's genesis state. */
 export interface GenesisState {
   assetPoolStateList: AssetPoolState[];
   maturityPoolStateList: AssetMaturityPoolState[];
   userStakeStateList: UserStakeState[];
+}
+export interface GenesisStateProtoMsg {
+  typeUrl: "/pryzm.ystaking.v1.GenesisState";
+  value: Uint8Array;
+}
+/** GenesisState defines the ystaking module's genesis state. */
+export interface GenesisStateAmino {
+  asset_pool_state_list?: AssetPoolStateAmino[];
+  maturity_pool_state_list?: AssetMaturityPoolStateAmino[];
+  user_stake_state_list?: UserStakeStateAmino[];
+}
+export interface GenesisStateAminoMsg {
+  type: "/pryzm.ystaking.v1.GenesisState";
+  value: GenesisStateAmino;
 }
 /** GenesisState defines the ystaking module's genesis state. */
 export interface GenesisStateSDKType {
@@ -21,6 +35,7 @@ function createBaseGenesisState(): GenesisState {
   };
 }
 export const GenesisState = {
+  typeUrl: "/pryzm.ystaking.v1.GenesisState",
   encode(message: GenesisState, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     for (const v of message.assetPoolStateList) {
       AssetPoolState.encode(v!, writer.uint32(10).fork()).ldelim();
@@ -88,5 +103,46 @@ export const GenesisState = {
     message.maturityPoolStateList = object.maturityPoolStateList?.map(e => AssetMaturityPoolState.fromPartial(e)) || [];
     message.userStakeStateList = object.userStakeStateList?.map(e => UserStakeState.fromPartial(e)) || [];
     return message;
+  },
+  fromAmino(object: GenesisStateAmino): GenesisState {
+    const message = createBaseGenesisState();
+    message.assetPoolStateList = object.asset_pool_state_list?.map(e => AssetPoolState.fromAmino(e)) || [];
+    message.maturityPoolStateList = object.maturity_pool_state_list?.map(e => AssetMaturityPoolState.fromAmino(e)) || [];
+    message.userStakeStateList = object.user_stake_state_list?.map(e => UserStakeState.fromAmino(e)) || [];
+    return message;
+  },
+  toAmino(message: GenesisState): GenesisStateAmino {
+    const obj: any = {};
+    if (message.assetPoolStateList) {
+      obj.asset_pool_state_list = message.assetPoolStateList.map(e => e ? AssetPoolState.toAmino(e) : undefined);
+    } else {
+      obj.asset_pool_state_list = [];
+    }
+    if (message.maturityPoolStateList) {
+      obj.maturity_pool_state_list = message.maturityPoolStateList.map(e => e ? AssetMaturityPoolState.toAmino(e) : undefined);
+    } else {
+      obj.maturity_pool_state_list = [];
+    }
+    if (message.userStakeStateList) {
+      obj.user_stake_state_list = message.userStakeStateList.map(e => e ? UserStakeState.toAmino(e) : undefined);
+    } else {
+      obj.user_stake_state_list = [];
+    }
+    return obj;
+  },
+  fromAminoMsg(object: GenesisStateAminoMsg): GenesisState {
+    return GenesisState.fromAmino(object.value);
+  },
+  fromProtoMsg(message: GenesisStateProtoMsg): GenesisState {
+    return GenesisState.decode(message.value);
+  },
+  toProto(message: GenesisState): Uint8Array {
+    return GenesisState.encode(message).finish();
+  },
+  toProtoMsg(message: GenesisState): GenesisStateProtoMsg {
+    return {
+      typeUrl: "/pryzm.ystaking.v1.GenesisState",
+      value: GenesisState.encode(message).finish()
+    };
   }
 };

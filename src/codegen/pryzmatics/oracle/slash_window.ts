@@ -7,6 +7,20 @@ export interface SlashWindow {
   closeBlockHeight: bigint;
   closeBlockTime: Timestamp;
 }
+export interface SlashWindowProtoMsg {
+  typeUrl: "/pryzmatics.oracle.SlashWindow";
+  value: Uint8Array;
+}
+export interface SlashWindowAmino {
+  id?: string;
+  slash_window?: string;
+  close_block_height?: string;
+  close_block_time?: string;
+}
+export interface SlashWindowAminoMsg {
+  type: "/pryzmatics.oracle.SlashWindow";
+  value: SlashWindowAmino;
+}
 export interface SlashWindowSDKType {
   id: bigint;
   slash_window: bigint;
@@ -22,6 +36,7 @@ function createBaseSlashWindow(): SlashWindow {
   };
 }
 export const SlashWindow = {
+  typeUrl: "/pryzmatics.oracle.SlashWindow",
   encode(message: SlashWindow, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.id !== BigInt(0)) {
       writer.uint32(8).uint64(message.id);
@@ -86,5 +101,44 @@ export const SlashWindow = {
     message.closeBlockHeight = object.closeBlockHeight !== undefined && object.closeBlockHeight !== null ? BigInt(object.closeBlockHeight.toString()) : BigInt(0);
     message.closeBlockTime = object.closeBlockTime !== undefined && object.closeBlockTime !== null ? Timestamp.fromPartial(object.closeBlockTime) : undefined;
     return message;
+  },
+  fromAmino(object: SlashWindowAmino): SlashWindow {
+    const message = createBaseSlashWindow();
+    if (object.id !== undefined && object.id !== null) {
+      message.id = BigInt(object.id);
+    }
+    if (object.slash_window !== undefined && object.slash_window !== null) {
+      message.slashWindow = BigInt(object.slash_window);
+    }
+    if (object.close_block_height !== undefined && object.close_block_height !== null) {
+      message.closeBlockHeight = BigInt(object.close_block_height);
+    }
+    if (object.close_block_time !== undefined && object.close_block_time !== null) {
+      message.closeBlockTime = Timestamp.fromAmino(object.close_block_time);
+    }
+    return message;
+  },
+  toAmino(message: SlashWindow): SlashWindowAmino {
+    const obj: any = {};
+    obj.id = message.id ? message.id.toString() : undefined;
+    obj.slash_window = message.slashWindow ? message.slashWindow.toString() : undefined;
+    obj.close_block_height = message.closeBlockHeight ? message.closeBlockHeight.toString() : undefined;
+    obj.close_block_time = message.closeBlockTime ? Timestamp.toAmino(message.closeBlockTime) : undefined;
+    return obj;
+  },
+  fromAminoMsg(object: SlashWindowAminoMsg): SlashWindow {
+    return SlashWindow.fromAmino(object.value);
+  },
+  fromProtoMsg(message: SlashWindowProtoMsg): SlashWindow {
+    return SlashWindow.decode(message.value);
+  },
+  toProto(message: SlashWindow): Uint8Array {
+    return SlashWindow.encode(message).finish();
+  },
+  toProtoMsg(message: SlashWindow): SlashWindowProtoMsg {
+    return {
+      typeUrl: "/pryzmatics.oracle.SlashWindow",
+      value: SlashWindow.encode(message).finish()
+    };
   }
 };

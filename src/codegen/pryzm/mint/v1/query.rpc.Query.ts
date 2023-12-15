@@ -1,4 +1,3 @@
-//@ts-nocheck
 import { grpc } from "@improbable-eng/grpc-web";
 import { UnaryMethodDefinitionish } from "../../../grpc-web";
 import { DeepPartial } from "../../../helpers";
@@ -19,10 +18,10 @@ export class QueryClientImpl implements Query {
     this.minter = this.minter.bind(this);
   }
   params(request: DeepPartial<QueryParamsRequest> = {}, metadata?: grpc.Metadata): Promise<QueryParamsResponse> {
-    return this.rpc.unary(QueryParamsDesc, QueryParamsRequest.fromPartial(request), metadata);
+    return this.rpc.unary(QueryParamsDesc, QueryParamsRequest.fromPartial(request as any), metadata);
   }
   minter(request: DeepPartial<QueryMinterRequest> = {}, metadata?: grpc.Metadata): Promise<QueryMinterResponse> {
-    return this.rpc.unary(QueryMinterDesc, QueryMinterRequest.fromPartial(request), metadata);
+    return this.rpc.unary(QueryMinterDesc, QueryMinterRequest.fromPartial(request as any), metadata);
   }
 }
 export const QueryDesc = {

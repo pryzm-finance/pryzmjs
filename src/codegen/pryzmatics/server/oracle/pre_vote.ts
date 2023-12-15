@@ -1,5 +1,5 @@
-import { PageRequest, PageRequestSDKType, PageResponse, PageResponseSDKType } from "../../../cosmos/base/query/v1beta1/pagination";
-import { PreVote, PreVoteSDKType } from "../../oracle/pre_vote";
+import { PageRequest, PageRequestAmino, PageRequestSDKType, PageResponse, PageResponseAmino, PageResponseSDKType } from "../../../cosmos/base/query/v1beta1/pagination";
+import { PreVote, PreVoteAmino, PreVoteSDKType } from "../../oracle/pre_vote";
 import { BinaryReader, BinaryWriter } from "../../../binary";
 import { isSet } from "../../../helpers";
 export interface QueryPreVotesRequest {
@@ -8,6 +8,21 @@ export interface QueryPreVotesRequest {
   fromBlockHeight?: string;
   toBlockHeight?: string;
   pagination?: PageRequest;
+}
+export interface QueryPreVotesRequestProtoMsg {
+  typeUrl: "/pryzmatics.server.oracle.QueryPreVotesRequest";
+  value: Uint8Array;
+}
+export interface QueryPreVotesRequestAmino {
+  feeder?: string;
+  validator?: string;
+  from_block_height?: string;
+  to_block_height?: string;
+  pagination?: PageRequestAmino;
+}
+export interface QueryPreVotesRequestAminoMsg {
+  type: "/pryzmatics.server.oracle.QueryPreVotesRequest";
+  value: QueryPreVotesRequestAmino;
 }
 export interface QueryPreVotesRequestSDKType {
   feeder: string;
@@ -19,6 +34,18 @@ export interface QueryPreVotesRequestSDKType {
 export interface QueryPreVotesResponse {
   preVotes: PreVote[];
   pagination?: PageResponse;
+}
+export interface QueryPreVotesResponseProtoMsg {
+  typeUrl: "/pryzmatics.server.oracle.QueryPreVotesResponse";
+  value: Uint8Array;
+}
+export interface QueryPreVotesResponseAmino {
+  preVotes?: PreVoteAmino[];
+  pagination?: PageResponseAmino;
+}
+export interface QueryPreVotesResponseAminoMsg {
+  type: "/pryzmatics.server.oracle.QueryPreVotesResponse";
+  value: QueryPreVotesResponseAmino;
 }
 export interface QueryPreVotesResponseSDKType {
   preVotes: PreVoteSDKType[];
@@ -34,6 +61,7 @@ function createBaseQueryPreVotesRequest(): QueryPreVotesRequest {
   };
 }
 export const QueryPreVotesRequest = {
+  typeUrl: "/pryzmatics.server.oracle.QueryPreVotesRequest",
   encode(message: QueryPreVotesRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.feeder !== "") {
       writer.uint32(10).string(message.feeder);
@@ -107,6 +135,49 @@ export const QueryPreVotesRequest = {
     message.toBlockHeight = object.toBlockHeight ?? undefined;
     message.pagination = object.pagination !== undefined && object.pagination !== null ? PageRequest.fromPartial(object.pagination) : undefined;
     return message;
+  },
+  fromAmino(object: QueryPreVotesRequestAmino): QueryPreVotesRequest {
+    const message = createBaseQueryPreVotesRequest();
+    if (object.feeder !== undefined && object.feeder !== null) {
+      message.feeder = object.feeder;
+    }
+    if (object.validator !== undefined && object.validator !== null) {
+      message.validator = object.validator;
+    }
+    if (object.from_block_height !== undefined && object.from_block_height !== null) {
+      message.fromBlockHeight = object.from_block_height;
+    }
+    if (object.to_block_height !== undefined && object.to_block_height !== null) {
+      message.toBlockHeight = object.to_block_height;
+    }
+    if (object.pagination !== undefined && object.pagination !== null) {
+      message.pagination = PageRequest.fromAmino(object.pagination);
+    }
+    return message;
+  },
+  toAmino(message: QueryPreVotesRequest): QueryPreVotesRequestAmino {
+    const obj: any = {};
+    obj.feeder = message.feeder;
+    obj.validator = message.validator;
+    obj.from_block_height = message.fromBlockHeight;
+    obj.to_block_height = message.toBlockHeight;
+    obj.pagination = message.pagination ? PageRequest.toAmino(message.pagination) : undefined;
+    return obj;
+  },
+  fromAminoMsg(object: QueryPreVotesRequestAminoMsg): QueryPreVotesRequest {
+    return QueryPreVotesRequest.fromAmino(object.value);
+  },
+  fromProtoMsg(message: QueryPreVotesRequestProtoMsg): QueryPreVotesRequest {
+    return QueryPreVotesRequest.decode(message.value);
+  },
+  toProto(message: QueryPreVotesRequest): Uint8Array {
+    return QueryPreVotesRequest.encode(message).finish();
+  },
+  toProtoMsg(message: QueryPreVotesRequest): QueryPreVotesRequestProtoMsg {
+    return {
+      typeUrl: "/pryzmatics.server.oracle.QueryPreVotesRequest",
+      value: QueryPreVotesRequest.encode(message).finish()
+    };
   }
 };
 function createBaseQueryPreVotesResponse(): QueryPreVotesResponse {
@@ -116,6 +187,7 @@ function createBaseQueryPreVotesResponse(): QueryPreVotesResponse {
   };
 }
 export const QueryPreVotesResponse = {
+  typeUrl: "/pryzmatics.server.oracle.QueryPreVotesResponse",
   encode(message: QueryPreVotesResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     for (const v of message.preVotes) {
       PreVote.encode(v!, writer.uint32(10).fork()).ldelim();
@@ -166,5 +238,38 @@ export const QueryPreVotesResponse = {
     message.preVotes = object.preVotes?.map(e => PreVote.fromPartial(e)) || [];
     message.pagination = object.pagination !== undefined && object.pagination !== null ? PageResponse.fromPartial(object.pagination) : undefined;
     return message;
+  },
+  fromAmino(object: QueryPreVotesResponseAmino): QueryPreVotesResponse {
+    const message = createBaseQueryPreVotesResponse();
+    message.preVotes = object.preVotes?.map(e => PreVote.fromAmino(e)) || [];
+    if (object.pagination !== undefined && object.pagination !== null) {
+      message.pagination = PageResponse.fromAmino(object.pagination);
+    }
+    return message;
+  },
+  toAmino(message: QueryPreVotesResponse): QueryPreVotesResponseAmino {
+    const obj: any = {};
+    if (message.preVotes) {
+      obj.preVotes = message.preVotes.map(e => e ? PreVote.toAmino(e) : undefined);
+    } else {
+      obj.preVotes = [];
+    }
+    obj.pagination = message.pagination ? PageResponse.toAmino(message.pagination) : undefined;
+    return obj;
+  },
+  fromAminoMsg(object: QueryPreVotesResponseAminoMsg): QueryPreVotesResponse {
+    return QueryPreVotesResponse.fromAmino(object.value);
+  },
+  fromProtoMsg(message: QueryPreVotesResponseProtoMsg): QueryPreVotesResponse {
+    return QueryPreVotesResponse.decode(message.value);
+  },
+  toProto(message: QueryPreVotesResponse): Uint8Array {
+    return QueryPreVotesResponse.encode(message).finish();
+  },
+  toProtoMsg(message: QueryPreVotesResponse): QueryPreVotesResponseProtoMsg {
+    return {
+      typeUrl: "/pryzmatics.server.oracle.QueryPreVotesResponse",
+      value: QueryPreVotesResponse.encode(message).finish()
+    };
   }
 };

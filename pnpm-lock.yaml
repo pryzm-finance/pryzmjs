@@ -19,12 +19,12 @@ specifiers:
   '@cosmjs/proto-signing': ^0.31.3
   '@cosmjs/stargate': ^0.31.3
   '@cosmjs/tendermint-rpc': ^0.31.3
-  '@cosmology/telescope': ^0.104.0
+  '@cosmology/telescope': ^1.3.3
   '@improbable-eng/grpc-web': ^0.15.0
   '@improbable-eng/grpc-web-node-http-transport': ^0.15.0
   '@protobufs/cosmos': ^0.1.0
   '@protobufs/gogoproto': ^0.0.10
-  '@refractedlabs/cosmology-lcd-fork': 0.1.1
+  '@refractedlabs/cosmology-lcd-fork': 0.13.3
   '@types/jest': ^29.5.8
   '@types/node': ^20.9.0
   babel-core: 7.0.0-bridge.0
@@ -54,7 +54,7 @@ dependencies:
   '@cosmjs/tendermint-rpc': 0.31.3
   '@improbable-eng/grpc-web': 0.15.0_google-protobuf@3.21.2
   '@improbable-eng/grpc-web-node-http-transport': 0.15.0_fng5pv4qmdetiqq66m6yjkaacu
-  '@refractedlabs/cosmology-lcd-fork': 0.1.1
+  '@refractedlabs/cosmology-lcd-fork': 0.13.3
   browser-headers: 0.4.1
   protobufjs: 6.11.4
 
@@ -72,7 +72,7 @@ devDependencies:
   '@babel/plugin-transform-runtime': 7.21.4_@babel+core@7.21.4
   '@babel/preset-env': 7.21.4_@babel+core@7.21.4
   '@babel/preset-typescript': 7.23.2_@babel+core@7.21.4
-  '@cosmology/telescope': 0.104.0
+  '@cosmology/telescope': 1.3.3
   '@protobufs/cosmos': 0.1.0
   '@protobufs/gogoproto': 0.0.10
   '@types/jest': 29.5.8
@@ -148,14 +148,14 @@ packages:
     dependencies:
       '@ampproject/remapping': 2.2.1
       '@babel/code-frame': 7.22.13
-      '@babel/generator': 7.21.4
+      '@babel/generator': 7.23.0
       '@babel/helper-compilation-targets': 7.22.15
       '@babel/helper-module-transforms': 7.23.0_@babel+core@7.18.10
       '@babel/helpers': 7.23.2
       '@babel/parser': 7.23.0
       '@babel/template': 7.22.15
-      '@babel/traverse': 7.21.4
-      '@babel/types': 7.21.4
+      '@babel/traverse': 7.23.2
+      '@babel/types': 7.23.0
       convert-source-map: 1.9.0
       debug: 4.3.4
       gensync: 1.0.0-beta.2
@@ -206,7 +206,7 @@ packages:
     resolution: {integrity: sha512-dfQ8ebCN98SvyL7IxNMCUtZQSq5R7kxgN+r8qYTGDmmSion1hX2C0zq2yo1bsCDhXixokv1SAWTZUMYbO/V5zg==}
     engines: {node: '>=6.9.0'}
     dependencies:
-      '@babel/types': 7.21.4
+      '@babel/types': 7.23.0
       '@jridgewell/gen-mapping': 0.3.3
       jsesc: 2.5.2
     dev: true
@@ -215,7 +215,7 @@ packages:
     resolution: {integrity: sha512-NieM3pVIYW2SwGzKoqfPrQsf4xGs9M9AIG3ThppsSRmO+m7eQhmI6amajKMUeIO37wFfsvnvcxQFx6x6iqxDnA==}
     engines: {node: '>=6.9.0'}
     dependencies:
-      '@babel/types': 7.21.4
+      '@babel/types': 7.23.0
       '@jridgewell/gen-mapping': 0.3.3
       '@jridgewell/trace-mapping': 0.3.20
       jsesc: 2.5.2
@@ -556,7 +556,7 @@ packages:
     engines: {node: '>=6.0.0'}
     hasBin: true
     dependencies:
-      '@babel/types': 7.21.4
+      '@babel/types': 7.23.0
     dev: true
 
   /@babel/parser/7.23.0:
@@ -2236,7 +2236,7 @@ packages:
       '@babel/plugin-transform-unicode-escapes': 7.22.10_@babel+core@7.18.10
       '@babel/plugin-transform-unicode-regex': 7.22.5_@babel+core@7.18.10
       '@babel/preset-modules': 0.1.6_@babel+core@7.18.10
-      '@babel/types': 7.21.4
+      '@babel/types': 7.23.0
       babel-plugin-polyfill-corejs2: 0.3.3_@babel+core@7.18.10
       babel-plugin-polyfill-corejs3: 0.5.3_@babel+core@7.18.10
       babel-plugin-polyfill-regenerator: 0.4.1_@babel+core@7.18.10
@@ -2424,31 +2424,13 @@ packages:
     engines: {node: '>=6.9.0'}
     dependencies:
       '@babel/code-frame': 7.22.13
-      '@babel/generator': 7.21.4
+      '@babel/generator': 7.23.0
       '@babel/helper-environment-visitor': 7.22.20
       '@babel/helper-function-name': 7.23.0
       '@babel/helper-hoist-variables': 7.22.5
       '@babel/helper-split-export-declaration': 7.22.6
       '@babel/parser': 7.23.0
-      '@babel/types': 7.21.4
-      debug: 4.3.4
-      globals: 11.12.0
-    transitivePeerDependencies:
-      - supports-color
-    dev: true
-
-  /@babel/traverse/7.21.4:
-    resolution: {integrity: sha512-eyKrRHKdyZxqDm+fV1iqL9UAHMoIg0nDaGqfIOd8rKH17m5snv7Gn4qgjBoFfLz9APvjFU/ICT00NVCv1Epp8Q==}
-    engines: {node: '>=6.9.0'}
-    dependencies:
-      '@babel/code-frame': 7.22.13
-      '@babel/generator': 7.21.4
-      '@babel/helper-environment-visitor': 7.22.20
-      '@babel/helper-function-name': 7.23.0
-      '@babel/helper-hoist-variables': 7.22.5
-      '@babel/helper-split-export-declaration': 7.22.6
-      '@babel/parser': 7.23.0
-      '@babel/types': 7.21.4
+      '@babel/types': 7.23.0
       debug: 4.3.4
       globals: 11.12.0
     transitivePeerDependencies:
@@ -2627,25 +2609,23 @@ packages:
     resolution: {integrity: sha512-VBhAgzrrYdIe0O5IbKRqwszbQa7ZyQLx9nEQuHQ3HUplQW7P44COG/ye2n6AzCudtqxmwdX7nyX8ta1J07GoqA==}
     dev: false
 
-  /@cosmology/ast/0.91.0:
-    resolution: {integrity: sha512-9mKak4brufPO9oN6TjsZeLqut6TQkhqZfnvv710aDFZzCE3ICm6aBo5pikWAQbCe1MB0c1Kp/GbdFh+MbEG9wg==}
+  /@cosmology/ast/1.3.3:
+    resolution: {integrity: sha512-z1bHVKJW1GHEFEJdJ6nK07URpZ7k/3xjRoTOtlGzXs2CRiSbz3gPXLm7KBwMgWbFfBAfx3g0tsIiZo8jczvr2Q==}
     dependencies:
       '@babel/parser': 7.23.0
-      '@babel/runtime': 7.23.2
       '@babel/types': 7.21.4
-      '@cosmology/types': 0.39.0
-      '@cosmology/utils': 0.14.0
+      '@cosmology/types': 1.3.2
+      '@cosmology/utils': 1.3.2
       case: 1.6.3
       dotty: 0.1.2
     dev: true
 
-  /@cosmology/proto-parser/0.48.0:
-    resolution: {integrity: sha512-GjK/WGY6wXHeiTBG41e+Tam77ieAuUj58XEqr6cJ/Dcjo1dQiQmyZnWPTx7zFva/oTYJagIi4zfdTJ8bM9Msxg==}
+  /@cosmology/proto-parser/1.3.2:
+    resolution: {integrity: sha512-ieI+dVlmWZP8uhXyabKYes2AY8O22klRehmpnW6/49Lvz4FDk6AhqRPIA0qZnbbi0pwpHd0glf5el6UjKBSgGg==}
     dependencies:
-      '@babel/runtime': 7.23.2
       '@cosmology/protobufjs': 6.11.6
-      '@cosmology/types': 0.39.0
-      '@cosmology/utils': 0.14.0
+      '@cosmology/types': 1.3.2
+      '@cosmology/utils': 1.3.2
       dotty: 0.1.2
       glob: 8.0.3
       minimatch: 5.1.0
@@ -2672,26 +2652,18 @@ packages:
       long: 4.0.0
     dev: true
 
-  /@cosmology/telescope/0.104.0:
-    resolution: {integrity: sha512-Y2Ina4pUHDZFT9105KumgeIaGKrk/CAn6Myt2t5Mi7gsDTawWq98zUBLRUrWyhtF3vNni8NvnBc8b3Yl/4SwBw==}
+  /@cosmology/telescope/1.3.3:
+    resolution: {integrity: sha512-R/pCefpUtHFg9QNsUb8+ccZ5j8iVDop96XISwwbf9K1uQ5uArf7H+BeSLO2ZekCqH3BkzpdFasdp5abzImO0+Q==}
     hasBin: true
     dependencies:
-      '@babel/core': 7.21.4
       '@babel/generator': 7.21.4
       '@babel/parser': 7.23.0
-      '@babel/plugin-proposal-class-properties': 7.18.6_@babel+core@7.21.4
-      '@babel/plugin-proposal-export-default-from': 7.18.10_@babel+core@7.21.4
-      '@babel/plugin-proposal-object-rest-spread': 7.20.7_@babel+core@7.21.4
-      '@babel/plugin-transform-runtime': 7.21.4_@babel+core@7.21.4
-      '@babel/preset-env': 7.21.4_@babel+core@7.21.4
-      '@babel/preset-typescript': 7.23.2_@babel+core@7.21.4
-      '@babel/runtime': 7.23.2
-      '@babel/traverse': 7.21.4
+      '@babel/traverse': 7.23.2
       '@babel/types': 7.21.4
-      '@cosmology/ast': 0.91.0
-      '@cosmology/proto-parser': 0.48.0
-      '@cosmology/types': 0.39.0
-      '@cosmology/utils': 0.14.0
+      '@cosmology/ast': 1.3.3
+      '@cosmology/proto-parser': 1.3.2
+      '@cosmology/types': 1.3.2
+      '@cosmology/utils': 1.3.2
       '@cosmwasm/ts-codegen': 0.34.0
       '@types/parse-package-name': 0.1.0
       case: 1.6.3
@@ -2712,18 +2684,16 @@ packages:
       - supports-color
     dev: true
 
-  /@cosmology/types/0.39.0:
-    resolution: {integrity: sha512-0CXcWcAxV12fYBkj0DWtpKf6WhYnp3UDw2v1EtBCdEZSRTfXahjqopvtc8pejbfqId52+/y745xKy/FKYJqJTg==}
+  /@cosmology/types/1.3.2:
+    resolution: {integrity: sha512-teQ5jAtgzw1JDQTGAzEHSZaABoVrweEyHbjizBoq0+2U1pwAPbuMcVtem1VGQJl54f4/qqWUFPz2fY5vZkK1Ig==}
     dependencies:
-      '@babel/runtime': 7.23.2
       case: 1.6.3
     dev: true
 
-  /@cosmology/utils/0.14.0:
-    resolution: {integrity: sha512-UsAtzxJgCqp2uGwUNItEdFgSdkKLsQ/RBIrGx0vphpalPMg7a917I/o6AJA+UBgzIpfXpxVk4D6JIA/SEMWawQ==}
+  /@cosmology/utils/1.3.2:
+    resolution: {integrity: sha512-KcxpnLNHBkkIJ7Dy5wVs72C5JYJ8iO1TdqRIvJVMJ5gNavIcm1BRlzaXdSfHuPuifZjxSc2hmYJ5WGgEp/QhRw==}
     dependencies:
-      '@babel/runtime': 7.23.2
-      '@cosmology/types': 0.39.0
+      '@cosmology/types': 1.3.2
       dotty: 0.1.2
     dev: true
 
@@ -3300,7 +3270,7 @@ packages:
     dependencies:
       '@pyramation/json-schema-ref-parser': 9.0.6
       '@types/json-schema': 7.0.15
-      '@types/lodash': 4.14.201
+      '@types/lodash': 4.14.202
       '@types/prettier': 2.7.3
       cli-color: 2.0.3
       get-stdin: 8.0.0
@@ -3314,11 +3284,10 @@ packages:
       prettier: 2.8.8
     dev: true
 
-  /@refractedlabs/cosmology-lcd-fork/0.1.1:
-    resolution: {integrity: sha512-526EqwprOHVrI31c1jUSOarcYHWZRC3AddR61H2l92cvilZ0xYzLU12r94U9WfjrZkvMgy21vnMuEBPk1+gCaQ==, tarball: download/@refractedlabs/cosmology-lcd-fork/0.1.1/3f091d4a473f79aaf28702256f29d7b6f61d14fb}
+  /@refractedlabs/cosmology-lcd-fork/0.13.3:
+    resolution: {integrity: sha512-bCrdoeBPeE7GI/Yel9yM4gEHNk2XLUN/XA2+g/2M/eOLScCOU55oZhmWO7lGlQva2OkwanXkrGDU+jy5uWtqiA==, tarball: download/@refractedlabs/cosmology-lcd-fork/0.13.3/2e5d2abc04960a71ffeaf520ac450e710bda76db}
     dependencies:
-      '@babel/runtime': 7.23.2
-      axios: 0.27.2
+      axios: 1.6.0
     transitivePeerDependencies:
       - debug
     dev: false
@@ -3428,8 +3397,8 @@ packages:
     resolution: {integrity: sha512-5+fP8P8MFNC+AyZCDxrB2pkZFPGzqQWUzpSeuuVLvm8VMcorNYavBqoFcxK8bQz4Qsbn4oUEEem4wDLfcysGHA==}
     dev: true
 
-  /@types/lodash/4.14.201:
-    resolution: {integrity: sha512-y9euML0cim1JrykNxADLfaG0FgD1g/yTHwUs/Jg9ZIU7WKj2/4IW9Lbb1WZbvck78W/lfGXFfe+u2EGfIJXdLQ==}
+  /@types/lodash/4.14.202:
+    resolution: {integrity: sha512-OvlIYQK9tNneDlS0VN54LLd5uiPCBOp7gS5Z0f1mjoJYBrtStzgmJBxONW3U6OZqdtNzZPmn9BS/7WI7BFFcFQ==}
     dev: true
 
   /@types/long/4.0.2:
@@ -3645,11 +3614,12 @@ packages:
       - debug
     dev: false
 
-  /axios/0.27.2:
-    resolution: {integrity: sha512-t+yRIyySRTp/wua5xEr+z1q60QmLq8ABsS5O9Me1AsE5dfKqgnCFzwiCZZ/cGNd1lq4/7akDWMxdhVlucjmnOQ==}
+  /axios/1.6.0:
+    resolution: {integrity: sha512-EZ1DYihju9pwVB+jg67ogm+Tmqc6JmhamRN6I4Zt8DfZu5lbcQGw3ozH9lFejSJgs/ibaef3A9PMXPLeefFGJg==}
     dependencies:
       follow-redirects: 1.15.3
       form-data: 4.0.0
+      proxy-from-env: 1.1.0
     transitivePeerDependencies:
       - debug
     dev: false
@@ -6466,6 +6436,10 @@ packages:
       '@types/long': 4.0.2
       '@types/node': 20.9.0
       long: 4.0.0
+    dev: false
+
+  /proxy-from-env/1.1.0:
+    resolution: {integrity: sha512-D+zkORCbA9f1tdWRK0RaCR3GPv50cMxcrz4X8k5LTSUD1Dkw47mKJEZQNunItRTkWwgtaUSo1RVFRIG9ZXiFYg==}
     dev: false
 
   /punycode/2.3.1:

@@ -5,12 +5,35 @@ export interface QueryPriceRequest {
   tokenIn: string;
   tokenOut: string;
 }
+export interface QueryPriceRequestProtoMsg {
+  typeUrl: "/pryzmatics.server.price.QueryPriceRequest";
+  value: Uint8Array;
+}
+export interface QueryPriceRequestAmino {
+  token_in?: string;
+  token_out?: string;
+}
+export interface QueryPriceRequestAminoMsg {
+  type: "/pryzmatics.server.price.QueryPriceRequest";
+  value: QueryPriceRequestAmino;
+}
 export interface QueryPriceRequestSDKType {
   token_in: string;
   token_out: string;
 }
 export interface QueryPriceResponse {
   price: string;
+}
+export interface QueryPriceResponseProtoMsg {
+  typeUrl: "/pryzmatics.server.price.QueryPriceResponse";
+  value: Uint8Array;
+}
+export interface QueryPriceResponseAmino {
+  price?: string;
+}
+export interface QueryPriceResponseAminoMsg {
+  type: "/pryzmatics.server.price.QueryPriceResponse";
+  value: QueryPriceResponseAmino;
 }
 export interface QueryPriceResponseSDKType {
   price: string;
@@ -22,6 +45,7 @@ function createBaseQueryPriceRequest(): QueryPriceRequest {
   };
 }
 export const QueryPriceRequest = {
+  typeUrl: "/pryzmatics.server.price.QueryPriceRequest",
   encode(message: QueryPriceRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.tokenIn !== "") {
       writer.uint32(10).string(message.tokenIn);
@@ -68,6 +92,37 @@ export const QueryPriceRequest = {
     message.tokenIn = object.tokenIn ?? "";
     message.tokenOut = object.tokenOut ?? "";
     return message;
+  },
+  fromAmino(object: QueryPriceRequestAmino): QueryPriceRequest {
+    const message = createBaseQueryPriceRequest();
+    if (object.token_in !== undefined && object.token_in !== null) {
+      message.tokenIn = object.token_in;
+    }
+    if (object.token_out !== undefined && object.token_out !== null) {
+      message.tokenOut = object.token_out;
+    }
+    return message;
+  },
+  toAmino(message: QueryPriceRequest): QueryPriceRequestAmino {
+    const obj: any = {};
+    obj.token_in = message.tokenIn;
+    obj.token_out = message.tokenOut;
+    return obj;
+  },
+  fromAminoMsg(object: QueryPriceRequestAminoMsg): QueryPriceRequest {
+    return QueryPriceRequest.fromAmino(object.value);
+  },
+  fromProtoMsg(message: QueryPriceRequestProtoMsg): QueryPriceRequest {
+    return QueryPriceRequest.decode(message.value);
+  },
+  toProto(message: QueryPriceRequest): Uint8Array {
+    return QueryPriceRequest.encode(message).finish();
+  },
+  toProtoMsg(message: QueryPriceRequest): QueryPriceRequestProtoMsg {
+    return {
+      typeUrl: "/pryzmatics.server.price.QueryPriceRequest",
+      value: QueryPriceRequest.encode(message).finish()
+    };
   }
 };
 function createBaseQueryPriceResponse(): QueryPriceResponse {
@@ -76,6 +131,7 @@ function createBaseQueryPriceResponse(): QueryPriceResponse {
   };
 }
 export const QueryPriceResponse = {
+  typeUrl: "/pryzmatics.server.price.QueryPriceResponse",
   encode(message: QueryPriceResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.price !== "") {
       writer.uint32(10).string(Decimal.fromUserInput(message.price, 18).atomics);
@@ -113,5 +169,32 @@ export const QueryPriceResponse = {
     const message = createBaseQueryPriceResponse();
     message.price = object.price ?? "";
     return message;
+  },
+  fromAmino(object: QueryPriceResponseAmino): QueryPriceResponse {
+    const message = createBaseQueryPriceResponse();
+    if (object.price !== undefined && object.price !== null) {
+      message.price = object.price;
+    }
+    return message;
+  },
+  toAmino(message: QueryPriceResponse): QueryPriceResponseAmino {
+    const obj: any = {};
+    obj.price = message.price;
+    return obj;
+  },
+  fromAminoMsg(object: QueryPriceResponseAminoMsg): QueryPriceResponse {
+    return QueryPriceResponse.fromAmino(object.value);
+  },
+  fromProtoMsg(message: QueryPriceResponseProtoMsg): QueryPriceResponse {
+    return QueryPriceResponse.decode(message.value);
+  },
+  toProto(message: QueryPriceResponse): Uint8Array {
+    return QueryPriceResponse.encode(message).finish();
+  },
+  toProtoMsg(message: QueryPriceResponse): QueryPriceResponseProtoMsg {
+    return {
+      typeUrl: "/pryzmatics.server.price.QueryPriceResponse",
+      value: QueryPriceResponse.encode(message).finish()
+    };
   }
 };

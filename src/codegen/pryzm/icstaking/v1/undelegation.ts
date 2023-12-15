@@ -17,6 +17,29 @@ export interface Undelegation {
   /** the time in which the undelegation will be completed and the assets are transferred to delegation account */
   completionTime: Timestamp;
 }
+export interface UndelegationProtoMsg {
+  typeUrl: "/pryzm.icstaking.v1.Undelegation";
+  value: Uint8Array;
+}
+/** Information about an undelegation in a specific epoch */
+export interface UndelegationAmino {
+  /** host chain id */
+  host_chain?: string;
+  /** the undelegation epoch id */
+  epoch?: string;
+  /** the exchange rate of cToken:Token at the end of undelegation epoch */
+  exchange_rate?: string;
+  /** whether the undelegation request is sent and has started on host chain */
+  started?: boolean;
+  /** whether the undelegation un-bonding period is passed and undelegated assets are available */
+  completed?: boolean;
+  /** the time in which the undelegation will be completed and the assets are transferred to delegation account */
+  completion_time?: string;
+}
+export interface UndelegationAminoMsg {
+  type: "/pryzm.icstaking.v1.Undelegation";
+  value: UndelegationAmino;
+}
 /** Information about an undelegation in a specific epoch */
 export interface UndelegationSDKType {
   host_chain: string;
@@ -57,6 +80,45 @@ export interface ChannelUndelegation {
    */
   claimedUAmount: string;
 }
+export interface ChannelUndelegationProtoMsg {
+  typeUrl: "/pryzm.icstaking.v1.ChannelUndelegation";
+  value: Uint8Array;
+}
+/** ChannelUndelegation contains information about an undelegation epoch for a specific transfer channel */
+export interface ChannelUndelegationAmino {
+  /** host chain id */
+  host_chain?: string;
+  /** the undelegation epoch id */
+  epoch?: string;
+  /** the transfer channel on which the undelegated assets must be received */
+  transfer_channel?: string;
+  /** the total amount of cTokens requested to be undelegated */
+  total_c_amount?: string;
+  /** the total amount of cTokens for which the undelegation message has been sent */
+  undelegated_c_amount?: string;
+  /** the amount of assets already undelegated */
+  received_amount?: string;
+  /** the amount of assets waiting to be received */
+  pending_amount?: string;
+  /** the cAsset equivalent of assets waiting to be received */
+  pending_c_amount?: string;
+  /** whether the ibc transfer messages for sweeping assets to PRYZM are sent successfully */
+  swept?: boolean;
+  /**
+   * whether all the undelegation are completely received
+   * if received is true, pending_amount must be zero
+   */
+  received?: boolean;
+  /**
+   * the amount of uAssets redeemed by users.
+   * a channel undelegation record is deleted when this amount is equal the total_c_amount
+   */
+  claimed_u_amount?: string;
+}
+export interface ChannelUndelegationAminoMsg {
+  type: "/pryzm.icstaking.v1.ChannelUndelegation";
+  value: ChannelUndelegationAmino;
+}
 /** ChannelUndelegation contains information about an undelegation epoch for a specific transfer channel */
 export interface ChannelUndelegationSDKType {
   host_chain: string;
@@ -82,6 +144,7 @@ function createBaseUndelegation(): Undelegation {
   };
 }
 export const Undelegation = {
+  typeUrl: "/pryzm.icstaking.v1.Undelegation",
   encode(message: Undelegation, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.hostChain !== "") {
       writer.uint32(10).string(message.hostChain);
@@ -164,6 +227,53 @@ export const Undelegation = {
     message.completed = object.completed ?? false;
     message.completionTime = object.completionTime !== undefined && object.completionTime !== null ? Timestamp.fromPartial(object.completionTime) : undefined;
     return message;
+  },
+  fromAmino(object: UndelegationAmino): Undelegation {
+    const message = createBaseUndelegation();
+    if (object.host_chain !== undefined && object.host_chain !== null) {
+      message.hostChain = object.host_chain;
+    }
+    if (object.epoch !== undefined && object.epoch !== null) {
+      message.epoch = BigInt(object.epoch);
+    }
+    if (object.exchange_rate !== undefined && object.exchange_rate !== null) {
+      message.exchangeRate = object.exchange_rate;
+    }
+    if (object.started !== undefined && object.started !== null) {
+      message.started = object.started;
+    }
+    if (object.completed !== undefined && object.completed !== null) {
+      message.completed = object.completed;
+    }
+    if (object.completion_time !== undefined && object.completion_time !== null) {
+      message.completionTime = Timestamp.fromAmino(object.completion_time);
+    }
+    return message;
+  },
+  toAmino(message: Undelegation): UndelegationAmino {
+    const obj: any = {};
+    obj.host_chain = message.hostChain;
+    obj.epoch = message.epoch ? message.epoch.toString() : undefined;
+    obj.exchange_rate = message.exchangeRate;
+    obj.started = message.started;
+    obj.completed = message.completed;
+    obj.completion_time = message.completionTime ? Timestamp.toAmino(message.completionTime) : undefined;
+    return obj;
+  },
+  fromAminoMsg(object: UndelegationAminoMsg): Undelegation {
+    return Undelegation.fromAmino(object.value);
+  },
+  fromProtoMsg(message: UndelegationProtoMsg): Undelegation {
+    return Undelegation.decode(message.value);
+  },
+  toProto(message: Undelegation): Uint8Array {
+    return Undelegation.encode(message).finish();
+  },
+  toProtoMsg(message: Undelegation): UndelegationProtoMsg {
+    return {
+      typeUrl: "/pryzm.icstaking.v1.Undelegation",
+      value: Undelegation.encode(message).finish()
+    };
   }
 };
 function createBaseChannelUndelegation(): ChannelUndelegation {
@@ -182,6 +292,7 @@ function createBaseChannelUndelegation(): ChannelUndelegation {
   };
 }
 export const ChannelUndelegation = {
+  typeUrl: "/pryzm.icstaking.v1.ChannelUndelegation",
   encode(message: ChannelUndelegation, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.hostChain !== "") {
       writer.uint32(10).string(message.hostChain);
@@ -309,5 +420,72 @@ export const ChannelUndelegation = {
     message.received = object.received ?? false;
     message.claimedUAmount = object.claimedUAmount ?? "";
     return message;
+  },
+  fromAmino(object: ChannelUndelegationAmino): ChannelUndelegation {
+    const message = createBaseChannelUndelegation();
+    if (object.host_chain !== undefined && object.host_chain !== null) {
+      message.hostChain = object.host_chain;
+    }
+    if (object.epoch !== undefined && object.epoch !== null) {
+      message.epoch = BigInt(object.epoch);
+    }
+    if (object.transfer_channel !== undefined && object.transfer_channel !== null) {
+      message.transferChannel = object.transfer_channel;
+    }
+    if (object.total_c_amount !== undefined && object.total_c_amount !== null) {
+      message.totalCAmount = object.total_c_amount;
+    }
+    if (object.undelegated_c_amount !== undefined && object.undelegated_c_amount !== null) {
+      message.undelegatedCAmount = object.undelegated_c_amount;
+    }
+    if (object.received_amount !== undefined && object.received_amount !== null) {
+      message.receivedAmount = object.received_amount;
+    }
+    if (object.pending_amount !== undefined && object.pending_amount !== null) {
+      message.pendingAmount = object.pending_amount;
+    }
+    if (object.pending_c_amount !== undefined && object.pending_c_amount !== null) {
+      message.pendingCAmount = object.pending_c_amount;
+    }
+    if (object.swept !== undefined && object.swept !== null) {
+      message.swept = object.swept;
+    }
+    if (object.received !== undefined && object.received !== null) {
+      message.received = object.received;
+    }
+    if (object.claimed_u_amount !== undefined && object.claimed_u_amount !== null) {
+      message.claimedUAmount = object.claimed_u_amount;
+    }
+    return message;
+  },
+  toAmino(message: ChannelUndelegation): ChannelUndelegationAmino {
+    const obj: any = {};
+    obj.host_chain = message.hostChain;
+    obj.epoch = message.epoch ? message.epoch.toString() : undefined;
+    obj.transfer_channel = message.transferChannel;
+    obj.total_c_amount = message.totalCAmount;
+    obj.undelegated_c_amount = message.undelegatedCAmount;
+    obj.received_amount = message.receivedAmount;
+    obj.pending_amount = message.pendingAmount;
+    obj.pending_c_amount = message.pendingCAmount;
+    obj.swept = message.swept;
+    obj.received = message.received;
+    obj.claimed_u_amount = message.claimedUAmount;
+    return obj;
+  },
+  fromAminoMsg(object: ChannelUndelegationAminoMsg): ChannelUndelegation {
+    return ChannelUndelegation.fromAmino(object.value);
+  },
+  fromProtoMsg(message: ChannelUndelegationProtoMsg): ChannelUndelegation {
+    return ChannelUndelegation.decode(message.value);
+  },
+  toProto(message: ChannelUndelegation): Uint8Array {
+    return ChannelUndelegation.encode(message).finish();
+  },
+  toProtoMsg(message: ChannelUndelegation): ChannelUndelegationProtoMsg {
+    return {
+      typeUrl: "/pryzm.icstaking.v1.ChannelUndelegation",
+      value: ChannelUndelegation.encode(message).finish()
+    };
   }
 };

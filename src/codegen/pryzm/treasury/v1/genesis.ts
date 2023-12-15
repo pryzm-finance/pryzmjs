@@ -1,6 +1,6 @@
-import { Action, ActionSDKType } from "./action";
-import { FlowTrade, FlowTradeSDKType } from "./flow_trade";
-import { Params, ParamsSDKType } from "./params";
+import { Action, ActionAmino, ActionSDKType } from "./action";
+import { FlowTrade, FlowTradeAmino, FlowTradeSDKType } from "./flow_trade";
+import { Params, ParamsAmino, ParamsSDKType } from "./params";
 import { BinaryReader, BinaryWriter } from "../../../binary";
 import { isSet } from "../../../helpers";
 /** GenesisState defines the treasury module's genesis state. */
@@ -8,6 +8,20 @@ export interface GenesisState {
   action: Action;
   flowTradeList: FlowTrade[];
   params: Params;
+}
+export interface GenesisStateProtoMsg {
+  typeUrl: "/pryzm.treasury.v1.GenesisState";
+  value: Uint8Array;
+}
+/** GenesisState defines the treasury module's genesis state. */
+export interface GenesisStateAmino {
+  action?: ActionAmino;
+  flow_trade_list?: FlowTradeAmino[];
+  params?: ParamsAmino;
+}
+export interface GenesisStateAminoMsg {
+  type: "/pryzm.treasury.v1.GenesisState";
+  value: GenesisStateAmino;
 }
 /** GenesisState defines the treasury module's genesis state. */
 export interface GenesisStateSDKType {
@@ -23,6 +37,7 @@ function createBaseGenesisState(): GenesisState {
   };
 }
 export const GenesisState = {
+  typeUrl: "/pryzm.treasury.v1.GenesisState",
   encode(message: GenesisState, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.action !== undefined) {
       Action.encode(message.action, writer.uint32(10).fork()).ldelim();
@@ -82,5 +97,42 @@ export const GenesisState = {
     message.flowTradeList = object.flowTradeList?.map(e => FlowTrade.fromPartial(e)) || [];
     message.params = object.params !== undefined && object.params !== null ? Params.fromPartial(object.params) : undefined;
     return message;
+  },
+  fromAmino(object: GenesisStateAmino): GenesisState {
+    const message = createBaseGenesisState();
+    if (object.action !== undefined && object.action !== null) {
+      message.action = Action.fromAmino(object.action);
+    }
+    message.flowTradeList = object.flow_trade_list?.map(e => FlowTrade.fromAmino(e)) || [];
+    if (object.params !== undefined && object.params !== null) {
+      message.params = Params.fromAmino(object.params);
+    }
+    return message;
+  },
+  toAmino(message: GenesisState): GenesisStateAmino {
+    const obj: any = {};
+    obj.action = message.action ? Action.toAmino(message.action) : undefined;
+    if (message.flowTradeList) {
+      obj.flow_trade_list = message.flowTradeList.map(e => e ? FlowTrade.toAmino(e) : undefined);
+    } else {
+      obj.flow_trade_list = [];
+    }
+    obj.params = message.params ? Params.toAmino(message.params) : undefined;
+    return obj;
+  },
+  fromAminoMsg(object: GenesisStateAminoMsg): GenesisState {
+    return GenesisState.fromAmino(object.value);
+  },
+  fromProtoMsg(message: GenesisStateProtoMsg): GenesisState {
+    return GenesisState.decode(message.value);
+  },
+  toProto(message: GenesisState): Uint8Array {
+    return GenesisState.encode(message).finish();
+  },
+  toProtoMsg(message: GenesisState): GenesisStateProtoMsg {
+    return {
+      typeUrl: "/pryzm.treasury.v1.GenesisState",
+      value: GenesisState.encode(message).finish()
+    };
   }
 };

@@ -1,4 +1,4 @@
-import { AssetState, AssetStateSDKType } from "./asset_state";
+import { AssetState, AssetStateAmino, AssetStateSDKType } from "./asset_state";
 import { BinaryReader, BinaryWriter } from "../../../binary";
 import { isSet } from "../../../helpers";
 export interface EventRefract {
@@ -8,6 +8,22 @@ export interface EventRefract {
   refractedPAmount: string;
   refractedYAmount: string;
   fee: string;
+}
+export interface EventRefractProtoMsg {
+  typeUrl: "/pryzm.refractor.v1.EventRefract";
+  value: Uint8Array;
+}
+export interface EventRefractAmino {
+  creator?: string;
+  c_amount?: string;
+  maturity?: string;
+  refracted_p_amount?: string;
+  refracted_y_amount?: string;
+  fee?: string;
+}
+export interface EventRefractAminoMsg {
+  type: "/pryzm.refractor.v1.EventRefract";
+  value: EventRefractAmino;
 }
 export interface EventRefractSDKType {
   creator: string;
@@ -25,6 +41,22 @@ export interface EventRedeem {
   redeemedCAmount: string;
   fee: string;
 }
+export interface EventRedeemProtoMsg {
+  typeUrl: "/pryzm.refractor.v1.EventRedeem";
+  value: Uint8Array;
+}
+export interface EventRedeemAmino {
+  creator?: string;
+  p_amount?: string;
+  y_amount?: string;
+  maturity?: string;
+  redeemed_c_amount?: string;
+  fee?: string;
+}
+export interface EventRedeemAminoMsg {
+  type: "/pryzm.refractor.v1.EventRedeem";
+  value: EventRedeemAmino;
+}
 export interface EventRedeemSDKType {
   creator: string;
   p_amount: string;
@@ -40,6 +72,21 @@ export interface EventRefractorYieldDistribution {
   stakeYield: string;
   excessYield: string;
 }
+export interface EventRefractorYieldDistributionProtoMsg {
+  typeUrl: "/pryzm.refractor.v1.EventRefractorYieldDistribution";
+  value: Uint8Array;
+}
+export interface EventRefractorYieldDistributionAmino {
+  asset_id?: string;
+  total_yield?: string;
+  protocol_fee?: string;
+  stake_yield?: string;
+  excess_yield?: string;
+}
+export interface EventRefractorYieldDistributionAminoMsg {
+  type: "/pryzm.refractor.v1.EventRefractorYieldDistribution";
+  value: EventRefractorYieldDistributionAmino;
+}
 export interface EventRefractorYieldDistributionSDKType {
   asset_id: string;
   total_yield: string;
@@ -49,6 +96,17 @@ export interface EventRefractorYieldDistributionSDKType {
 }
 export interface EventSetAssetState {
   assetState: AssetState;
+}
+export interface EventSetAssetStateProtoMsg {
+  typeUrl: "/pryzm.refractor.v1.EventSetAssetState";
+  value: Uint8Array;
+}
+export interface EventSetAssetStateAmino {
+  asset_state?: AssetStateAmino;
+}
+export interface EventSetAssetStateAminoMsg {
+  type: "/pryzm.refractor.v1.EventSetAssetState";
+  value: EventSetAssetStateAmino;
 }
 export interface EventSetAssetStateSDKType {
   asset_state: AssetStateSDKType;
@@ -64,6 +122,7 @@ function createBaseEventRefract(): EventRefract {
   };
 }
 export const EventRefract = {
+  typeUrl: "/pryzm.refractor.v1.EventRefract",
   encode(message: EventRefract, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.creator !== "") {
       writer.uint32(10).string(message.creator);
@@ -146,6 +205,53 @@ export const EventRefract = {
     message.refractedYAmount = object.refractedYAmount ?? "";
     message.fee = object.fee ?? "";
     return message;
+  },
+  fromAmino(object: EventRefractAmino): EventRefract {
+    const message = createBaseEventRefract();
+    if (object.creator !== undefined && object.creator !== null) {
+      message.creator = object.creator;
+    }
+    if (object.c_amount !== undefined && object.c_amount !== null) {
+      message.cAmount = object.c_amount;
+    }
+    if (object.maturity !== undefined && object.maturity !== null) {
+      message.maturity = object.maturity;
+    }
+    if (object.refracted_p_amount !== undefined && object.refracted_p_amount !== null) {
+      message.refractedPAmount = object.refracted_p_amount;
+    }
+    if (object.refracted_y_amount !== undefined && object.refracted_y_amount !== null) {
+      message.refractedYAmount = object.refracted_y_amount;
+    }
+    if (object.fee !== undefined && object.fee !== null) {
+      message.fee = object.fee;
+    }
+    return message;
+  },
+  toAmino(message: EventRefract): EventRefractAmino {
+    const obj: any = {};
+    obj.creator = message.creator;
+    obj.c_amount = message.cAmount;
+    obj.maturity = message.maturity;
+    obj.refracted_p_amount = message.refractedPAmount;
+    obj.refracted_y_amount = message.refractedYAmount;
+    obj.fee = message.fee;
+    return obj;
+  },
+  fromAminoMsg(object: EventRefractAminoMsg): EventRefract {
+    return EventRefract.fromAmino(object.value);
+  },
+  fromProtoMsg(message: EventRefractProtoMsg): EventRefract {
+    return EventRefract.decode(message.value);
+  },
+  toProto(message: EventRefract): Uint8Array {
+    return EventRefract.encode(message).finish();
+  },
+  toProtoMsg(message: EventRefract): EventRefractProtoMsg {
+    return {
+      typeUrl: "/pryzm.refractor.v1.EventRefract",
+      value: EventRefract.encode(message).finish()
+    };
   }
 };
 function createBaseEventRedeem(): EventRedeem {
@@ -159,6 +265,7 @@ function createBaseEventRedeem(): EventRedeem {
   };
 }
 export const EventRedeem = {
+  typeUrl: "/pryzm.refractor.v1.EventRedeem",
   encode(message: EventRedeem, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.creator !== "") {
       writer.uint32(10).string(message.creator);
@@ -241,6 +348,53 @@ export const EventRedeem = {
     message.redeemedCAmount = object.redeemedCAmount ?? "";
     message.fee = object.fee ?? "";
     return message;
+  },
+  fromAmino(object: EventRedeemAmino): EventRedeem {
+    const message = createBaseEventRedeem();
+    if (object.creator !== undefined && object.creator !== null) {
+      message.creator = object.creator;
+    }
+    if (object.p_amount !== undefined && object.p_amount !== null) {
+      message.pAmount = object.p_amount;
+    }
+    if (object.y_amount !== undefined && object.y_amount !== null) {
+      message.yAmount = object.y_amount;
+    }
+    if (object.maturity !== undefined && object.maturity !== null) {
+      message.maturity = object.maturity;
+    }
+    if (object.redeemed_c_amount !== undefined && object.redeemed_c_amount !== null) {
+      message.redeemedCAmount = object.redeemed_c_amount;
+    }
+    if (object.fee !== undefined && object.fee !== null) {
+      message.fee = object.fee;
+    }
+    return message;
+  },
+  toAmino(message: EventRedeem): EventRedeemAmino {
+    const obj: any = {};
+    obj.creator = message.creator;
+    obj.p_amount = message.pAmount;
+    obj.y_amount = message.yAmount;
+    obj.maturity = message.maturity;
+    obj.redeemed_c_amount = message.redeemedCAmount;
+    obj.fee = message.fee;
+    return obj;
+  },
+  fromAminoMsg(object: EventRedeemAminoMsg): EventRedeem {
+    return EventRedeem.fromAmino(object.value);
+  },
+  fromProtoMsg(message: EventRedeemProtoMsg): EventRedeem {
+    return EventRedeem.decode(message.value);
+  },
+  toProto(message: EventRedeem): Uint8Array {
+    return EventRedeem.encode(message).finish();
+  },
+  toProtoMsg(message: EventRedeem): EventRedeemProtoMsg {
+    return {
+      typeUrl: "/pryzm.refractor.v1.EventRedeem",
+      value: EventRedeem.encode(message).finish()
+    };
   }
 };
 function createBaseEventRefractorYieldDistribution(): EventRefractorYieldDistribution {
@@ -253,6 +407,7 @@ function createBaseEventRefractorYieldDistribution(): EventRefractorYieldDistrib
   };
 }
 export const EventRefractorYieldDistribution = {
+  typeUrl: "/pryzm.refractor.v1.EventRefractorYieldDistribution",
   encode(message: EventRefractorYieldDistribution, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.assetId !== "") {
       writer.uint32(10).string(message.assetId);
@@ -326,6 +481,49 @@ export const EventRefractorYieldDistribution = {
     message.stakeYield = object.stakeYield ?? "";
     message.excessYield = object.excessYield ?? "";
     return message;
+  },
+  fromAmino(object: EventRefractorYieldDistributionAmino): EventRefractorYieldDistribution {
+    const message = createBaseEventRefractorYieldDistribution();
+    if (object.asset_id !== undefined && object.asset_id !== null) {
+      message.assetId = object.asset_id;
+    }
+    if (object.total_yield !== undefined && object.total_yield !== null) {
+      message.totalYield = object.total_yield;
+    }
+    if (object.protocol_fee !== undefined && object.protocol_fee !== null) {
+      message.protocolFee = object.protocol_fee;
+    }
+    if (object.stake_yield !== undefined && object.stake_yield !== null) {
+      message.stakeYield = object.stake_yield;
+    }
+    if (object.excess_yield !== undefined && object.excess_yield !== null) {
+      message.excessYield = object.excess_yield;
+    }
+    return message;
+  },
+  toAmino(message: EventRefractorYieldDistribution): EventRefractorYieldDistributionAmino {
+    const obj: any = {};
+    obj.asset_id = message.assetId;
+    obj.total_yield = message.totalYield;
+    obj.protocol_fee = message.protocolFee;
+    obj.stake_yield = message.stakeYield;
+    obj.excess_yield = message.excessYield;
+    return obj;
+  },
+  fromAminoMsg(object: EventRefractorYieldDistributionAminoMsg): EventRefractorYieldDistribution {
+    return EventRefractorYieldDistribution.fromAmino(object.value);
+  },
+  fromProtoMsg(message: EventRefractorYieldDistributionProtoMsg): EventRefractorYieldDistribution {
+    return EventRefractorYieldDistribution.decode(message.value);
+  },
+  toProto(message: EventRefractorYieldDistribution): Uint8Array {
+    return EventRefractorYieldDistribution.encode(message).finish();
+  },
+  toProtoMsg(message: EventRefractorYieldDistribution): EventRefractorYieldDistributionProtoMsg {
+    return {
+      typeUrl: "/pryzm.refractor.v1.EventRefractorYieldDistribution",
+      value: EventRefractorYieldDistribution.encode(message).finish()
+    };
   }
 };
 function createBaseEventSetAssetState(): EventSetAssetState {
@@ -334,6 +532,7 @@ function createBaseEventSetAssetState(): EventSetAssetState {
   };
 }
 export const EventSetAssetState = {
+  typeUrl: "/pryzm.refractor.v1.EventSetAssetState",
   encode(message: EventSetAssetState, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.assetState !== undefined) {
       AssetState.encode(message.assetState, writer.uint32(10).fork()).ldelim();
@@ -371,5 +570,32 @@ export const EventSetAssetState = {
     const message = createBaseEventSetAssetState();
     message.assetState = object.assetState !== undefined && object.assetState !== null ? AssetState.fromPartial(object.assetState) : undefined;
     return message;
+  },
+  fromAmino(object: EventSetAssetStateAmino): EventSetAssetState {
+    const message = createBaseEventSetAssetState();
+    if (object.asset_state !== undefined && object.asset_state !== null) {
+      message.assetState = AssetState.fromAmino(object.asset_state);
+    }
+    return message;
+  },
+  toAmino(message: EventSetAssetState): EventSetAssetStateAmino {
+    const obj: any = {};
+    obj.asset_state = message.assetState ? AssetState.toAmino(message.assetState) : undefined;
+    return obj;
+  },
+  fromAminoMsg(object: EventSetAssetStateAminoMsg): EventSetAssetState {
+    return EventSetAssetState.fromAmino(object.value);
+  },
+  fromProtoMsg(message: EventSetAssetStateProtoMsg): EventSetAssetState {
+    return EventSetAssetState.decode(message.value);
+  },
+  toProto(message: EventSetAssetState): Uint8Array {
+    return EventSetAssetState.encode(message).finish();
+  },
+  toProtoMsg(message: EventSetAssetState): EventSetAssetStateProtoMsg {
+    return {
+      typeUrl: "/pryzm.refractor.v1.EventSetAssetState",
+      value: EventSetAssetState.encode(message).finish()
+    };
   }
 };

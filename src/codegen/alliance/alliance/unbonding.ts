@@ -10,6 +10,23 @@ export interface UnbondingDelegation {
   /** amount defines the tokens to receive at completion. */
   amount: string;
 }
+export interface UnbondingDelegationProtoMsg {
+  typeUrl: "/alliance.alliance.UnbondingDelegation";
+  value: Uint8Array;
+}
+/** UnbondingDelegation defines an unbonding object with relevant metadata. */
+export interface UnbondingDelegationAmino {
+  /** completion_time is the unix time for unbonding completion. */
+  completion_time?: string;
+  /** validator_address is the bech32-encoded address of the validator. */
+  validator_address?: string;
+  /** amount defines the tokens to receive at completion. */
+  amount?: string;
+}
+export interface UnbondingDelegationAminoMsg {
+  type: "/alliance.alliance.UnbondingDelegation";
+  value: UnbondingDelegationAmino;
+}
 /** UnbondingDelegation defines an unbonding object with relevant metadata. */
 export interface UnbondingDelegationSDKType {
   completion_time: TimestampSDKType;
@@ -24,6 +41,7 @@ function createBaseUnbondingDelegation(): UnbondingDelegation {
   };
 }
 export const UnbondingDelegation = {
+  typeUrl: "/alliance.alliance.UnbondingDelegation",
   encode(message: UnbondingDelegation, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.completionTime !== undefined) {
       Timestamp.encode(message.completionTime, writer.uint32(10).fork()).ldelim();
@@ -79,5 +97,40 @@ export const UnbondingDelegation = {
     message.validatorAddress = object.validatorAddress ?? "";
     message.amount = object.amount ?? "";
     return message;
+  },
+  fromAmino(object: UnbondingDelegationAmino): UnbondingDelegation {
+    const message = createBaseUnbondingDelegation();
+    if (object.completion_time !== undefined && object.completion_time !== null) {
+      message.completionTime = Timestamp.fromAmino(object.completion_time);
+    }
+    if (object.validator_address !== undefined && object.validator_address !== null) {
+      message.validatorAddress = object.validator_address;
+    }
+    if (object.amount !== undefined && object.amount !== null) {
+      message.amount = object.amount;
+    }
+    return message;
+  },
+  toAmino(message: UnbondingDelegation): UnbondingDelegationAmino {
+    const obj: any = {};
+    obj.completion_time = message.completionTime ? Timestamp.toAmino(message.completionTime) : undefined;
+    obj.validator_address = message.validatorAddress;
+    obj.amount = message.amount;
+    return obj;
+  },
+  fromAminoMsg(object: UnbondingDelegationAminoMsg): UnbondingDelegation {
+    return UnbondingDelegation.fromAmino(object.value);
+  },
+  fromProtoMsg(message: UnbondingDelegationProtoMsg): UnbondingDelegation {
+    return UnbondingDelegation.decode(message.value);
+  },
+  toProto(message: UnbondingDelegation): Uint8Array {
+    return UnbondingDelegation.encode(message).finish();
+  },
+  toProtoMsg(message: UnbondingDelegation): UnbondingDelegationProtoMsg {
+    return {
+      typeUrl: "/alliance.alliance.UnbondingDelegation",
+      value: UnbondingDelegation.encode(message).finish()
+    };
   }
 };

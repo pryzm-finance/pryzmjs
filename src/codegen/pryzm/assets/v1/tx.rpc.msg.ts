@@ -1,4 +1,3 @@
-//@ts-nocheck
 import { UnaryMethodDefinitionish } from "../../../grpc-web";
 import { DeepPartial } from "../../../helpers";
 import { grpc } from "@improbable-eng/grpc-web";
@@ -23,19 +22,19 @@ export class MsgClientImpl implements Msg {
     this.updateFeeRatios = this.updateFeeRatios.bind(this);
   }
   updateParams(request: DeepPartial<MsgUpdateParams>, metadata?: grpc.Metadata): Promise<MsgUpdateParamsResponse> {
-    return this.rpc.unary(MsgUpdateParamsDesc, MsgUpdateParams.fromPartial(request), metadata);
+    return this.rpc.unary(MsgUpdateParamsDesc, MsgUpdateParams.fromPartial(request as any), metadata);
   }
   registerAsset(request: DeepPartial<MsgRegisterAsset>, metadata?: grpc.Metadata): Promise<MsgRegisterAssetResponse> {
-    return this.rpc.unary(MsgRegisterAssetDesc, MsgRegisterAsset.fromPartial(request), metadata);
+    return this.rpc.unary(MsgRegisterAssetDesc, MsgRegisterAsset.fromPartial(request as any), metadata);
   }
   disableAsset(request: DeepPartial<MsgDisableAsset>, metadata?: grpc.Metadata): Promise<MsgDisableAssetResponse> {
-    return this.rpc.unary(MsgDisableAssetDesc, MsgDisableAsset.fromPartial(request), metadata);
+    return this.rpc.unary(MsgDisableAssetDesc, MsgDisableAsset.fromPartial(request as any), metadata);
   }
   updateMaturityParams(request: DeepPartial<MsgUpdateMaturityParams>, metadata?: grpc.Metadata): Promise<MsgUpdateMaturityParamsResponse> {
-    return this.rpc.unary(MsgUpdateMaturityParamsDesc, MsgUpdateMaturityParams.fromPartial(request), metadata);
+    return this.rpc.unary(MsgUpdateMaturityParamsDesc, MsgUpdateMaturityParams.fromPartial(request as any), metadata);
   }
   updateFeeRatios(request: DeepPartial<MsgUpdateFeeRatios>, metadata?: grpc.Metadata): Promise<MsgUpdateFeeRatiosResponse> {
-    return this.rpc.unary(MsgUpdateFeeRatiosDesc, MsgUpdateFeeRatios.fromPartial(request), metadata);
+    return this.rpc.unary(MsgUpdateFeeRatiosDesc, MsgUpdateFeeRatios.fromPartial(request as any), metadata);
   }
 }
 export const MsgDesc = {

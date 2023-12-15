@@ -5,6 +5,19 @@ export interface UserStake {
   denom: string;
   bondedAmount: string;
 }
+export interface UserStakeProtoMsg {
+  typeUrl: "/pryzmatics.ystaking.UserStake";
+  value: Uint8Array;
+}
+export interface UserStakeAmino {
+  address?: string;
+  denom?: string;
+  bonded_amount?: string;
+}
+export interface UserStakeAminoMsg {
+  type: "/pryzmatics.ystaking.UserStake";
+  value: UserStakeAmino;
+}
 export interface UserStakeSDKType {
   address: string;
   denom: string;
@@ -18,6 +31,7 @@ function createBaseUserStake(): UserStake {
   };
 }
 export const UserStake = {
+  typeUrl: "/pryzmatics.ystaking.UserStake",
   encode(message: UserStake, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.address !== "") {
       writer.uint32(10).string(message.address);
@@ -73,5 +87,40 @@ export const UserStake = {
     message.denom = object.denom ?? "";
     message.bondedAmount = object.bondedAmount ?? "";
     return message;
+  },
+  fromAmino(object: UserStakeAmino): UserStake {
+    const message = createBaseUserStake();
+    if (object.address !== undefined && object.address !== null) {
+      message.address = object.address;
+    }
+    if (object.denom !== undefined && object.denom !== null) {
+      message.denom = object.denom;
+    }
+    if (object.bonded_amount !== undefined && object.bonded_amount !== null) {
+      message.bondedAmount = object.bonded_amount;
+    }
+    return message;
+  },
+  toAmino(message: UserStake): UserStakeAmino {
+    const obj: any = {};
+    obj.address = message.address;
+    obj.denom = message.denom;
+    obj.bonded_amount = message.bondedAmount;
+    return obj;
+  },
+  fromAminoMsg(object: UserStakeAminoMsg): UserStake {
+    return UserStake.fromAmino(object.value);
+  },
+  fromProtoMsg(message: UserStakeProtoMsg): UserStake {
+    return UserStake.decode(message.value);
+  },
+  toProto(message: UserStake): Uint8Array {
+    return UserStake.encode(message).finish();
+  },
+  toProtoMsg(message: UserStake): UserStakeProtoMsg {
+    return {
+      typeUrl: "/pryzmatics.ystaking.UserStake",
+      value: UserStake.encode(message).finish()
+    };
   }
 };

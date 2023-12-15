@@ -1,17 +1,39 @@
-import { Params, ParamsSDKType } from "./params";
-import { Proposal, ProposalSDKType } from "./proposal";
-import { Coin, CoinSDKType } from "../../../cosmos/base/v1beta1/coin";
-import { Vote, VoteSDKType } from "./vote";
+import { Params, ParamsAmino, ParamsSDKType } from "./params";
+import { Proposal, ProposalAmino, ProposalSDKType } from "./proposal";
+import { Coin, CoinAmino, CoinSDKType } from "../../../cosmos/base/v1beta1/coin";
+import { Vote, VoteAmino, VoteSDKType } from "./vote";
 import { BinaryReader, BinaryWriter } from "../../../binary";
 import { isSet } from "../../../helpers";
 export interface EventSetParams {
   params: Params;
+}
+export interface EventSetParamsProtoMsg {
+  typeUrl: "/pryzm.pgov.v1.EventSetParams";
+  value: Uint8Array;
+}
+export interface EventSetParamsAmino {
+  params?: ParamsAmino;
+}
+export interface EventSetParamsAminoMsg {
+  type: "/pryzm.pgov.v1.EventSetParams";
+  value: EventSetParamsAmino;
 }
 export interface EventSetParamsSDKType {
   params: ParamsSDKType;
 }
 export interface EventSetProposal {
   proposal: Proposal;
+}
+export interface EventSetProposalProtoMsg {
+  typeUrl: "/pryzm.pgov.v1.EventSetProposal";
+  value: Uint8Array;
+}
+export interface EventSetProposalAmino {
+  proposal?: ProposalAmino;
+}
+export interface EventSetProposalAminoMsg {
+  type: "/pryzm.pgov.v1.EventSetProposal";
+  value: EventSetProposalAmino;
 }
 export interface EventSetProposalSDKType {
   proposal: ProposalSDKType;
@@ -21,6 +43,20 @@ export interface EventPAssetStake {
   asset: string;
   amount: Coin[];
   totalStakedPAsset: string;
+}
+export interface EventPAssetStakeProtoMsg {
+  typeUrl: "/pryzm.pgov.v1.EventPAssetStake";
+  value: Uint8Array;
+}
+export interface EventPAssetStakeAmino {
+  address?: string;
+  asset?: string;
+  amount?: CoinAmino[];
+  total_staked_p_asset?: string;
+}
+export interface EventPAssetStakeAminoMsg {
+  type: "/pryzm.pgov.v1.EventPAssetStake";
+  value: EventPAssetStakeAmino;
 }
 export interface EventPAssetStakeSDKType {
   address: string;
@@ -34,6 +70,20 @@ export interface EventPAssetUnstake {
   amount: Coin[];
   totalStakedPAsset: string;
 }
+export interface EventPAssetUnstakeProtoMsg {
+  typeUrl: "/pryzm.pgov.v1.EventPAssetUnstake";
+  value: Uint8Array;
+}
+export interface EventPAssetUnstakeAmino {
+  address?: string;
+  asset?: string;
+  amount?: CoinAmino[];
+  total_staked_p_asset?: string;
+}
+export interface EventPAssetUnstakeAminoMsg {
+  type: "/pryzm.pgov.v1.EventPAssetUnstake";
+  value: EventPAssetUnstakeAmino;
+}
 export interface EventPAssetUnstakeSDKType {
   address: string;
   asset: string;
@@ -41,20 +91,54 @@ export interface EventPAssetUnstakeSDKType {
   total_staked_p_asset: string;
 }
 export interface EventVoteSubmit {
-  vote: Vote;
+  vote?: Vote;
+}
+export interface EventVoteSubmitProtoMsg {
+  typeUrl: "/pryzm.pgov.v1.EventVoteSubmit";
+  value: Uint8Array;
+}
+export interface EventVoteSubmitAmino {
+  vote?: VoteAmino;
+}
+export interface EventVoteSubmitAminoMsg {
+  type: "/pryzm.pgov.v1.EventVoteSubmit";
+  value: EventVoteSubmitAmino;
 }
 export interface EventVoteSubmitSDKType {
-  vote: VoteSDKType;
+  vote?: VoteSDKType;
 }
 export interface EventProposalEnd {
-  proposal: Proposal;
+  proposal?: Proposal;
+}
+export interface EventProposalEndProtoMsg {
+  typeUrl: "/pryzm.pgov.v1.EventProposalEnd";
+  value: Uint8Array;
+}
+export interface EventProposalEndAmino {
+  proposal?: ProposalAmino;
+}
+export interface EventProposalEndAminoMsg {
+  type: "/pryzm.pgov.v1.EventProposalEnd";
+  value: EventProposalEndAmino;
 }
 export interface EventProposalEndSDKType {
-  proposal: ProposalSDKType;
+  proposal?: ProposalSDKType;
 }
 export interface EventVoteTransmit {
   proposalId: bigint;
   asset: string;
+}
+export interface EventVoteTransmitProtoMsg {
+  typeUrl: "/pryzm.pgov.v1.EventVoteTransmit";
+  value: Uint8Array;
+}
+export interface EventVoteTransmitAmino {
+  proposal_id?: string;
+  asset?: string;
+}
+export interface EventVoteTransmitAminoMsg {
+  type: "/pryzm.pgov.v1.EventVoteTransmit";
+  value: EventVoteTransmitAmino;
 }
 export interface EventVoteTransmitSDKType {
   proposal_id: bigint;
@@ -65,6 +149,19 @@ export interface EventVoteTransmitFailure {
   asset: string;
   error: string;
 }
+export interface EventVoteTransmitFailureProtoMsg {
+  typeUrl: "/pryzm.pgov.v1.EventVoteTransmitFailure";
+  value: Uint8Array;
+}
+export interface EventVoteTransmitFailureAmino {
+  proposal_id?: string;
+  asset?: string;
+  error?: string;
+}
+export interface EventVoteTransmitFailureAminoMsg {
+  type: "/pryzm.pgov.v1.EventVoteTransmitFailure";
+  value: EventVoteTransmitFailureAmino;
+}
 export interface EventVoteTransmitFailureSDKType {
   proposal_id: bigint;
   asset: string;
@@ -73,6 +170,18 @@ export interface EventVoteTransmitFailureSDKType {
 export interface EventVoteAckSuccess {
   proposalId: bigint;
   asset: string;
+}
+export interface EventVoteAckSuccessProtoMsg {
+  typeUrl: "/pryzm.pgov.v1.EventVoteAckSuccess";
+  value: Uint8Array;
+}
+export interface EventVoteAckSuccessAmino {
+  proposal_id?: string;
+  asset?: string;
+}
+export interface EventVoteAckSuccessAminoMsg {
+  type: "/pryzm.pgov.v1.EventVoteAckSuccess";
+  value: EventVoteAckSuccessAmino;
 }
 export interface EventVoteAckSuccessSDKType {
   proposal_id: bigint;
@@ -83,6 +192,19 @@ export interface EventVoteAckFailure {
   asset: string;
   error: string;
 }
+export interface EventVoteAckFailureProtoMsg {
+  typeUrl: "/pryzm.pgov.v1.EventVoteAckFailure";
+  value: Uint8Array;
+}
+export interface EventVoteAckFailureAmino {
+  proposal_id?: string;
+  asset?: string;
+  error?: string;
+}
+export interface EventVoteAckFailureAminoMsg {
+  type: "/pryzm.pgov.v1.EventVoteAckFailure";
+  value: EventVoteAckFailureAmino;
+}
 export interface EventVoteAckFailureSDKType {
   proposal_id: bigint;
   asset: string;
@@ -91,6 +213,18 @@ export interface EventVoteAckFailureSDKType {
 export interface EventVoteTimeout {
   proposalId: bigint;
   asset: string;
+}
+export interface EventVoteTimeoutProtoMsg {
+  typeUrl: "/pryzm.pgov.v1.EventVoteTimeout";
+  value: Uint8Array;
+}
+export interface EventVoteTimeoutAmino {
+  proposal_id?: string;
+  asset?: string;
+}
+export interface EventVoteTimeoutAminoMsg {
+  type: "/pryzm.pgov.v1.EventVoteTimeout";
+  value: EventVoteTimeoutAmino;
 }
 export interface EventVoteTimeoutSDKType {
   proposal_id: bigint;
@@ -102,6 +236,7 @@ function createBaseEventSetParams(): EventSetParams {
   };
 }
 export const EventSetParams = {
+  typeUrl: "/pryzm.pgov.v1.EventSetParams",
   encode(message: EventSetParams, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.params !== undefined) {
       Params.encode(message.params, writer.uint32(10).fork()).ldelim();
@@ -139,6 +274,33 @@ export const EventSetParams = {
     const message = createBaseEventSetParams();
     message.params = object.params !== undefined && object.params !== null ? Params.fromPartial(object.params) : undefined;
     return message;
+  },
+  fromAmino(object: EventSetParamsAmino): EventSetParams {
+    const message = createBaseEventSetParams();
+    if (object.params !== undefined && object.params !== null) {
+      message.params = Params.fromAmino(object.params);
+    }
+    return message;
+  },
+  toAmino(message: EventSetParams): EventSetParamsAmino {
+    const obj: any = {};
+    obj.params = message.params ? Params.toAmino(message.params) : undefined;
+    return obj;
+  },
+  fromAminoMsg(object: EventSetParamsAminoMsg): EventSetParams {
+    return EventSetParams.fromAmino(object.value);
+  },
+  fromProtoMsg(message: EventSetParamsProtoMsg): EventSetParams {
+    return EventSetParams.decode(message.value);
+  },
+  toProto(message: EventSetParams): Uint8Array {
+    return EventSetParams.encode(message).finish();
+  },
+  toProtoMsg(message: EventSetParams): EventSetParamsProtoMsg {
+    return {
+      typeUrl: "/pryzm.pgov.v1.EventSetParams",
+      value: EventSetParams.encode(message).finish()
+    };
   }
 };
 function createBaseEventSetProposal(): EventSetProposal {
@@ -147,6 +309,7 @@ function createBaseEventSetProposal(): EventSetProposal {
   };
 }
 export const EventSetProposal = {
+  typeUrl: "/pryzm.pgov.v1.EventSetProposal",
   encode(message: EventSetProposal, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.proposal !== undefined) {
       Proposal.encode(message.proposal, writer.uint32(10).fork()).ldelim();
@@ -184,6 +347,33 @@ export const EventSetProposal = {
     const message = createBaseEventSetProposal();
     message.proposal = object.proposal !== undefined && object.proposal !== null ? Proposal.fromPartial(object.proposal) : undefined;
     return message;
+  },
+  fromAmino(object: EventSetProposalAmino): EventSetProposal {
+    const message = createBaseEventSetProposal();
+    if (object.proposal !== undefined && object.proposal !== null) {
+      message.proposal = Proposal.fromAmino(object.proposal);
+    }
+    return message;
+  },
+  toAmino(message: EventSetProposal): EventSetProposalAmino {
+    const obj: any = {};
+    obj.proposal = message.proposal ? Proposal.toAmino(message.proposal) : undefined;
+    return obj;
+  },
+  fromAminoMsg(object: EventSetProposalAminoMsg): EventSetProposal {
+    return EventSetProposal.fromAmino(object.value);
+  },
+  fromProtoMsg(message: EventSetProposalProtoMsg): EventSetProposal {
+    return EventSetProposal.decode(message.value);
+  },
+  toProto(message: EventSetProposal): Uint8Array {
+    return EventSetProposal.encode(message).finish();
+  },
+  toProtoMsg(message: EventSetProposal): EventSetProposalProtoMsg {
+    return {
+      typeUrl: "/pryzm.pgov.v1.EventSetProposal",
+      value: EventSetProposal.encode(message).finish()
+    };
   }
 };
 function createBaseEventPAssetStake(): EventPAssetStake {
@@ -195,6 +385,7 @@ function createBaseEventPAssetStake(): EventPAssetStake {
   };
 }
 export const EventPAssetStake = {
+  typeUrl: "/pryzm.pgov.v1.EventPAssetStake",
   encode(message: EventPAssetStake, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.address !== "") {
       writer.uint32(10).string(message.address);
@@ -263,6 +454,47 @@ export const EventPAssetStake = {
     message.amount = object.amount?.map(e => Coin.fromPartial(e)) || [];
     message.totalStakedPAsset = object.totalStakedPAsset ?? "";
     return message;
+  },
+  fromAmino(object: EventPAssetStakeAmino): EventPAssetStake {
+    const message = createBaseEventPAssetStake();
+    if (object.address !== undefined && object.address !== null) {
+      message.address = object.address;
+    }
+    if (object.asset !== undefined && object.asset !== null) {
+      message.asset = object.asset;
+    }
+    message.amount = object.amount?.map(e => Coin.fromAmino(e)) || [];
+    if (object.total_staked_p_asset !== undefined && object.total_staked_p_asset !== null) {
+      message.totalStakedPAsset = object.total_staked_p_asset;
+    }
+    return message;
+  },
+  toAmino(message: EventPAssetStake): EventPAssetStakeAmino {
+    const obj: any = {};
+    obj.address = message.address;
+    obj.asset = message.asset;
+    if (message.amount) {
+      obj.amount = message.amount.map(e => e ? Coin.toAmino(e) : undefined);
+    } else {
+      obj.amount = [];
+    }
+    obj.total_staked_p_asset = message.totalStakedPAsset;
+    return obj;
+  },
+  fromAminoMsg(object: EventPAssetStakeAminoMsg): EventPAssetStake {
+    return EventPAssetStake.fromAmino(object.value);
+  },
+  fromProtoMsg(message: EventPAssetStakeProtoMsg): EventPAssetStake {
+    return EventPAssetStake.decode(message.value);
+  },
+  toProto(message: EventPAssetStake): Uint8Array {
+    return EventPAssetStake.encode(message).finish();
+  },
+  toProtoMsg(message: EventPAssetStake): EventPAssetStakeProtoMsg {
+    return {
+      typeUrl: "/pryzm.pgov.v1.EventPAssetStake",
+      value: EventPAssetStake.encode(message).finish()
+    };
   }
 };
 function createBaseEventPAssetUnstake(): EventPAssetUnstake {
@@ -274,6 +506,7 @@ function createBaseEventPAssetUnstake(): EventPAssetUnstake {
   };
 }
 export const EventPAssetUnstake = {
+  typeUrl: "/pryzm.pgov.v1.EventPAssetUnstake",
   encode(message: EventPAssetUnstake, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.address !== "") {
       writer.uint32(10).string(message.address);
@@ -342,14 +575,56 @@ export const EventPAssetUnstake = {
     message.amount = object.amount?.map(e => Coin.fromPartial(e)) || [];
     message.totalStakedPAsset = object.totalStakedPAsset ?? "";
     return message;
+  },
+  fromAmino(object: EventPAssetUnstakeAmino): EventPAssetUnstake {
+    const message = createBaseEventPAssetUnstake();
+    if (object.address !== undefined && object.address !== null) {
+      message.address = object.address;
+    }
+    if (object.asset !== undefined && object.asset !== null) {
+      message.asset = object.asset;
+    }
+    message.amount = object.amount?.map(e => Coin.fromAmino(e)) || [];
+    if (object.total_staked_p_asset !== undefined && object.total_staked_p_asset !== null) {
+      message.totalStakedPAsset = object.total_staked_p_asset;
+    }
+    return message;
+  },
+  toAmino(message: EventPAssetUnstake): EventPAssetUnstakeAmino {
+    const obj: any = {};
+    obj.address = message.address;
+    obj.asset = message.asset;
+    if (message.amount) {
+      obj.amount = message.amount.map(e => e ? Coin.toAmino(e) : undefined);
+    } else {
+      obj.amount = [];
+    }
+    obj.total_staked_p_asset = message.totalStakedPAsset;
+    return obj;
+  },
+  fromAminoMsg(object: EventPAssetUnstakeAminoMsg): EventPAssetUnstake {
+    return EventPAssetUnstake.fromAmino(object.value);
+  },
+  fromProtoMsg(message: EventPAssetUnstakeProtoMsg): EventPAssetUnstake {
+    return EventPAssetUnstake.decode(message.value);
+  },
+  toProto(message: EventPAssetUnstake): Uint8Array {
+    return EventPAssetUnstake.encode(message).finish();
+  },
+  toProtoMsg(message: EventPAssetUnstake): EventPAssetUnstakeProtoMsg {
+    return {
+      typeUrl: "/pryzm.pgov.v1.EventPAssetUnstake",
+      value: EventPAssetUnstake.encode(message).finish()
+    };
   }
 };
 function createBaseEventVoteSubmit(): EventVoteSubmit {
   return {
-    vote: Vote.fromPartial({})
+    vote: undefined
   };
 }
 export const EventVoteSubmit = {
+  typeUrl: "/pryzm.pgov.v1.EventVoteSubmit",
   encode(message: EventVoteSubmit, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.vote !== undefined) {
       Vote.encode(message.vote, writer.uint32(10).fork()).ldelim();
@@ -387,14 +662,42 @@ export const EventVoteSubmit = {
     const message = createBaseEventVoteSubmit();
     message.vote = object.vote !== undefined && object.vote !== null ? Vote.fromPartial(object.vote) : undefined;
     return message;
+  },
+  fromAmino(object: EventVoteSubmitAmino): EventVoteSubmit {
+    const message = createBaseEventVoteSubmit();
+    if (object.vote !== undefined && object.vote !== null) {
+      message.vote = Vote.fromAmino(object.vote);
+    }
+    return message;
+  },
+  toAmino(message: EventVoteSubmit): EventVoteSubmitAmino {
+    const obj: any = {};
+    obj.vote = message.vote ? Vote.toAmino(message.vote) : undefined;
+    return obj;
+  },
+  fromAminoMsg(object: EventVoteSubmitAminoMsg): EventVoteSubmit {
+    return EventVoteSubmit.fromAmino(object.value);
+  },
+  fromProtoMsg(message: EventVoteSubmitProtoMsg): EventVoteSubmit {
+    return EventVoteSubmit.decode(message.value);
+  },
+  toProto(message: EventVoteSubmit): Uint8Array {
+    return EventVoteSubmit.encode(message).finish();
+  },
+  toProtoMsg(message: EventVoteSubmit): EventVoteSubmitProtoMsg {
+    return {
+      typeUrl: "/pryzm.pgov.v1.EventVoteSubmit",
+      value: EventVoteSubmit.encode(message).finish()
+    };
   }
 };
 function createBaseEventProposalEnd(): EventProposalEnd {
   return {
-    proposal: Proposal.fromPartial({})
+    proposal: undefined
   };
 }
 export const EventProposalEnd = {
+  typeUrl: "/pryzm.pgov.v1.EventProposalEnd",
   encode(message: EventProposalEnd, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.proposal !== undefined) {
       Proposal.encode(message.proposal, writer.uint32(10).fork()).ldelim();
@@ -432,6 +735,33 @@ export const EventProposalEnd = {
     const message = createBaseEventProposalEnd();
     message.proposal = object.proposal !== undefined && object.proposal !== null ? Proposal.fromPartial(object.proposal) : undefined;
     return message;
+  },
+  fromAmino(object: EventProposalEndAmino): EventProposalEnd {
+    const message = createBaseEventProposalEnd();
+    if (object.proposal !== undefined && object.proposal !== null) {
+      message.proposal = Proposal.fromAmino(object.proposal);
+    }
+    return message;
+  },
+  toAmino(message: EventProposalEnd): EventProposalEndAmino {
+    const obj: any = {};
+    obj.proposal = message.proposal ? Proposal.toAmino(message.proposal) : undefined;
+    return obj;
+  },
+  fromAminoMsg(object: EventProposalEndAminoMsg): EventProposalEnd {
+    return EventProposalEnd.fromAmino(object.value);
+  },
+  fromProtoMsg(message: EventProposalEndProtoMsg): EventProposalEnd {
+    return EventProposalEnd.decode(message.value);
+  },
+  toProto(message: EventProposalEnd): Uint8Array {
+    return EventProposalEnd.encode(message).finish();
+  },
+  toProtoMsg(message: EventProposalEnd): EventProposalEndProtoMsg {
+    return {
+      typeUrl: "/pryzm.pgov.v1.EventProposalEnd",
+      value: EventProposalEnd.encode(message).finish()
+    };
   }
 };
 function createBaseEventVoteTransmit(): EventVoteTransmit {
@@ -441,6 +771,7 @@ function createBaseEventVoteTransmit(): EventVoteTransmit {
   };
 }
 export const EventVoteTransmit = {
+  typeUrl: "/pryzm.pgov.v1.EventVoteTransmit",
   encode(message: EventVoteTransmit, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.proposalId !== BigInt(0)) {
       writer.uint32(8).uint64(message.proposalId);
@@ -487,6 +818,37 @@ export const EventVoteTransmit = {
     message.proposalId = object.proposalId !== undefined && object.proposalId !== null ? BigInt(object.proposalId.toString()) : BigInt(0);
     message.asset = object.asset ?? "";
     return message;
+  },
+  fromAmino(object: EventVoteTransmitAmino): EventVoteTransmit {
+    const message = createBaseEventVoteTransmit();
+    if (object.proposal_id !== undefined && object.proposal_id !== null) {
+      message.proposalId = BigInt(object.proposal_id);
+    }
+    if (object.asset !== undefined && object.asset !== null) {
+      message.asset = object.asset;
+    }
+    return message;
+  },
+  toAmino(message: EventVoteTransmit): EventVoteTransmitAmino {
+    const obj: any = {};
+    obj.proposal_id = message.proposalId ? message.proposalId.toString() : undefined;
+    obj.asset = message.asset;
+    return obj;
+  },
+  fromAminoMsg(object: EventVoteTransmitAminoMsg): EventVoteTransmit {
+    return EventVoteTransmit.fromAmino(object.value);
+  },
+  fromProtoMsg(message: EventVoteTransmitProtoMsg): EventVoteTransmit {
+    return EventVoteTransmit.decode(message.value);
+  },
+  toProto(message: EventVoteTransmit): Uint8Array {
+    return EventVoteTransmit.encode(message).finish();
+  },
+  toProtoMsg(message: EventVoteTransmit): EventVoteTransmitProtoMsg {
+    return {
+      typeUrl: "/pryzm.pgov.v1.EventVoteTransmit",
+      value: EventVoteTransmit.encode(message).finish()
+    };
   }
 };
 function createBaseEventVoteTransmitFailure(): EventVoteTransmitFailure {
@@ -497,6 +859,7 @@ function createBaseEventVoteTransmitFailure(): EventVoteTransmitFailure {
   };
 }
 export const EventVoteTransmitFailure = {
+  typeUrl: "/pryzm.pgov.v1.EventVoteTransmitFailure",
   encode(message: EventVoteTransmitFailure, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.proposalId !== BigInt(0)) {
       writer.uint32(8).uint64(message.proposalId);
@@ -552,6 +915,41 @@ export const EventVoteTransmitFailure = {
     message.asset = object.asset ?? "";
     message.error = object.error ?? "";
     return message;
+  },
+  fromAmino(object: EventVoteTransmitFailureAmino): EventVoteTransmitFailure {
+    const message = createBaseEventVoteTransmitFailure();
+    if (object.proposal_id !== undefined && object.proposal_id !== null) {
+      message.proposalId = BigInt(object.proposal_id);
+    }
+    if (object.asset !== undefined && object.asset !== null) {
+      message.asset = object.asset;
+    }
+    if (object.error !== undefined && object.error !== null) {
+      message.error = object.error;
+    }
+    return message;
+  },
+  toAmino(message: EventVoteTransmitFailure): EventVoteTransmitFailureAmino {
+    const obj: any = {};
+    obj.proposal_id = message.proposalId ? message.proposalId.toString() : undefined;
+    obj.asset = message.asset;
+    obj.error = message.error;
+    return obj;
+  },
+  fromAminoMsg(object: EventVoteTransmitFailureAminoMsg): EventVoteTransmitFailure {
+    return EventVoteTransmitFailure.fromAmino(object.value);
+  },
+  fromProtoMsg(message: EventVoteTransmitFailureProtoMsg): EventVoteTransmitFailure {
+    return EventVoteTransmitFailure.decode(message.value);
+  },
+  toProto(message: EventVoteTransmitFailure): Uint8Array {
+    return EventVoteTransmitFailure.encode(message).finish();
+  },
+  toProtoMsg(message: EventVoteTransmitFailure): EventVoteTransmitFailureProtoMsg {
+    return {
+      typeUrl: "/pryzm.pgov.v1.EventVoteTransmitFailure",
+      value: EventVoteTransmitFailure.encode(message).finish()
+    };
   }
 };
 function createBaseEventVoteAckSuccess(): EventVoteAckSuccess {
@@ -561,6 +959,7 @@ function createBaseEventVoteAckSuccess(): EventVoteAckSuccess {
   };
 }
 export const EventVoteAckSuccess = {
+  typeUrl: "/pryzm.pgov.v1.EventVoteAckSuccess",
   encode(message: EventVoteAckSuccess, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.proposalId !== BigInt(0)) {
       writer.uint32(8).uint64(message.proposalId);
@@ -607,6 +1006,37 @@ export const EventVoteAckSuccess = {
     message.proposalId = object.proposalId !== undefined && object.proposalId !== null ? BigInt(object.proposalId.toString()) : BigInt(0);
     message.asset = object.asset ?? "";
     return message;
+  },
+  fromAmino(object: EventVoteAckSuccessAmino): EventVoteAckSuccess {
+    const message = createBaseEventVoteAckSuccess();
+    if (object.proposal_id !== undefined && object.proposal_id !== null) {
+      message.proposalId = BigInt(object.proposal_id);
+    }
+    if (object.asset !== undefined && object.asset !== null) {
+      message.asset = object.asset;
+    }
+    return message;
+  },
+  toAmino(message: EventVoteAckSuccess): EventVoteAckSuccessAmino {
+    const obj: any = {};
+    obj.proposal_id = message.proposalId ? message.proposalId.toString() : undefined;
+    obj.asset = message.asset;
+    return obj;
+  },
+  fromAminoMsg(object: EventVoteAckSuccessAminoMsg): EventVoteAckSuccess {
+    return EventVoteAckSuccess.fromAmino(object.value);
+  },
+  fromProtoMsg(message: EventVoteAckSuccessProtoMsg): EventVoteAckSuccess {
+    return EventVoteAckSuccess.decode(message.value);
+  },
+  toProto(message: EventVoteAckSuccess): Uint8Array {
+    return EventVoteAckSuccess.encode(message).finish();
+  },
+  toProtoMsg(message: EventVoteAckSuccess): EventVoteAckSuccessProtoMsg {
+    return {
+      typeUrl: "/pryzm.pgov.v1.EventVoteAckSuccess",
+      value: EventVoteAckSuccess.encode(message).finish()
+    };
   }
 };
 function createBaseEventVoteAckFailure(): EventVoteAckFailure {
@@ -617,6 +1047,7 @@ function createBaseEventVoteAckFailure(): EventVoteAckFailure {
   };
 }
 export const EventVoteAckFailure = {
+  typeUrl: "/pryzm.pgov.v1.EventVoteAckFailure",
   encode(message: EventVoteAckFailure, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.proposalId !== BigInt(0)) {
       writer.uint32(8).uint64(message.proposalId);
@@ -672,6 +1103,41 @@ export const EventVoteAckFailure = {
     message.asset = object.asset ?? "";
     message.error = object.error ?? "";
     return message;
+  },
+  fromAmino(object: EventVoteAckFailureAmino): EventVoteAckFailure {
+    const message = createBaseEventVoteAckFailure();
+    if (object.proposal_id !== undefined && object.proposal_id !== null) {
+      message.proposalId = BigInt(object.proposal_id);
+    }
+    if (object.asset !== undefined && object.asset !== null) {
+      message.asset = object.asset;
+    }
+    if (object.error !== undefined && object.error !== null) {
+      message.error = object.error;
+    }
+    return message;
+  },
+  toAmino(message: EventVoteAckFailure): EventVoteAckFailureAmino {
+    const obj: any = {};
+    obj.proposal_id = message.proposalId ? message.proposalId.toString() : undefined;
+    obj.asset = message.asset;
+    obj.error = message.error;
+    return obj;
+  },
+  fromAminoMsg(object: EventVoteAckFailureAminoMsg): EventVoteAckFailure {
+    return EventVoteAckFailure.fromAmino(object.value);
+  },
+  fromProtoMsg(message: EventVoteAckFailureProtoMsg): EventVoteAckFailure {
+    return EventVoteAckFailure.decode(message.value);
+  },
+  toProto(message: EventVoteAckFailure): Uint8Array {
+    return EventVoteAckFailure.encode(message).finish();
+  },
+  toProtoMsg(message: EventVoteAckFailure): EventVoteAckFailureProtoMsg {
+    return {
+      typeUrl: "/pryzm.pgov.v1.EventVoteAckFailure",
+      value: EventVoteAckFailure.encode(message).finish()
+    };
   }
 };
 function createBaseEventVoteTimeout(): EventVoteTimeout {
@@ -681,6 +1147,7 @@ function createBaseEventVoteTimeout(): EventVoteTimeout {
   };
 }
 export const EventVoteTimeout = {
+  typeUrl: "/pryzm.pgov.v1.EventVoteTimeout",
   encode(message: EventVoteTimeout, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.proposalId !== BigInt(0)) {
       writer.uint32(8).uint64(message.proposalId);
@@ -727,5 +1194,36 @@ export const EventVoteTimeout = {
     message.proposalId = object.proposalId !== undefined && object.proposalId !== null ? BigInt(object.proposalId.toString()) : BigInt(0);
     message.asset = object.asset ?? "";
     return message;
+  },
+  fromAmino(object: EventVoteTimeoutAmino): EventVoteTimeout {
+    const message = createBaseEventVoteTimeout();
+    if (object.proposal_id !== undefined && object.proposal_id !== null) {
+      message.proposalId = BigInt(object.proposal_id);
+    }
+    if (object.asset !== undefined && object.asset !== null) {
+      message.asset = object.asset;
+    }
+    return message;
+  },
+  toAmino(message: EventVoteTimeout): EventVoteTimeoutAmino {
+    const obj: any = {};
+    obj.proposal_id = message.proposalId ? message.proposalId.toString() : undefined;
+    obj.asset = message.asset;
+    return obj;
+  },
+  fromAminoMsg(object: EventVoteTimeoutAminoMsg): EventVoteTimeout {
+    return EventVoteTimeout.fromAmino(object.value);
+  },
+  fromProtoMsg(message: EventVoteTimeoutProtoMsg): EventVoteTimeout {
+    return EventVoteTimeout.decode(message.value);
+  },
+  toProto(message: EventVoteTimeout): Uint8Array {
+    return EventVoteTimeout.encode(message).finish();
+  },
+  toProtoMsg(message: EventVoteTimeout): EventVoteTimeoutProtoMsg {
+    return {
+      typeUrl: "/pryzm.pgov.v1.EventVoteTimeout",
+      value: EventVoteTimeout.encode(message).finish()
+    };
   }
 };

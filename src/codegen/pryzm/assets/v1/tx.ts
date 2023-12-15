@@ -1,31 +1,86 @@
-import { Params, ParamsSDKType } from "./params";
-import { RefractableAsset, RefractableAssetSDKType, MaturityParams, MaturityParamsSDKType, FeeRatios, FeeRatiosSDKType } from "./refractable_asset";
+import { Params, ParamsAmino, ParamsSDKType } from "./params";
+import { RefractableAsset, RefractableAssetAmino, RefractableAssetSDKType, MaturityParams, MaturityParamsAmino, MaturityParamsSDKType, FeeRatios, FeeRatiosAmino, FeeRatiosSDKType } from "./refractable_asset";
 import { BinaryReader, BinaryWriter } from "../../../binary";
 import { isSet } from "../../../helpers";
 export interface MsgRegisterAsset {
   creator: string;
   asset: RefractableAsset;
 }
+export interface MsgRegisterAssetProtoMsg {
+  typeUrl: "/pryzm.assets.v1.MsgRegisterAsset";
+  value: Uint8Array;
+}
+export interface MsgRegisterAssetAmino {
+  creator?: string;
+  asset?: RefractableAssetAmino;
+}
+export interface MsgRegisterAssetAminoMsg {
+  type: "pryzm/assets/v1/RegisterAsset";
+  value: MsgRegisterAssetAmino;
+}
 export interface MsgRegisterAssetSDKType {
   creator: string;
   asset: RefractableAssetSDKType;
 }
 export interface MsgRegisterAssetResponse {}
+export interface MsgRegisterAssetResponseProtoMsg {
+  typeUrl: "/pryzm.assets.v1.MsgRegisterAssetResponse";
+  value: Uint8Array;
+}
+export interface MsgRegisterAssetResponseAmino {}
+export interface MsgRegisterAssetResponseAminoMsg {
+  type: "/pryzm.assets.v1.MsgRegisterAssetResponse";
+  value: MsgRegisterAssetResponseAmino;
+}
 export interface MsgRegisterAssetResponseSDKType {}
 export interface MsgDisableAsset {
   creator: string;
   assetId: string;
+}
+export interface MsgDisableAssetProtoMsg {
+  typeUrl: "/pryzm.assets.v1.MsgDisableAsset";
+  value: Uint8Array;
+}
+export interface MsgDisableAssetAmino {
+  creator?: string;
+  asset_id?: string;
+}
+export interface MsgDisableAssetAminoMsg {
+  type: "pryzm/assets/v1/DisableAsset";
+  value: MsgDisableAssetAmino;
 }
 export interface MsgDisableAssetSDKType {
   creator: string;
   asset_id: string;
 }
 export interface MsgDisableAssetResponse {}
+export interface MsgDisableAssetResponseProtoMsg {
+  typeUrl: "/pryzm.assets.v1.MsgDisableAssetResponse";
+  value: Uint8Array;
+}
+export interface MsgDisableAssetResponseAmino {}
+export interface MsgDisableAssetResponseAminoMsg {
+  type: "/pryzm.assets.v1.MsgDisableAssetResponse";
+  value: MsgDisableAssetResponseAmino;
+}
 export interface MsgDisableAssetResponseSDKType {}
 export interface MsgUpdateMaturityParams {
   authority: string;
   assetId: string;
   params: MaturityParams;
+}
+export interface MsgUpdateMaturityParamsProtoMsg {
+  typeUrl: "/pryzm.assets.v1.MsgUpdateMaturityParams";
+  value: Uint8Array;
+}
+export interface MsgUpdateMaturityParamsAmino {
+  authority?: string;
+  asset_id?: string;
+  params?: MaturityParamsAmino;
+}
+export interface MsgUpdateMaturityParamsAminoMsg {
+  type: "pryzm/assets/v1/UpdateMaturityParams";
+  value: MsgUpdateMaturityParamsAmino;
 }
 export interface MsgUpdateMaturityParamsSDKType {
   authority: string;
@@ -33,11 +88,33 @@ export interface MsgUpdateMaturityParamsSDKType {
   params: MaturityParamsSDKType;
 }
 export interface MsgUpdateMaturityParamsResponse {}
+export interface MsgUpdateMaturityParamsResponseProtoMsg {
+  typeUrl: "/pryzm.assets.v1.MsgUpdateMaturityParamsResponse";
+  value: Uint8Array;
+}
+export interface MsgUpdateMaturityParamsResponseAmino {}
+export interface MsgUpdateMaturityParamsResponseAminoMsg {
+  type: "/pryzm.assets.v1.MsgUpdateMaturityParamsResponse";
+  value: MsgUpdateMaturityParamsResponseAmino;
+}
 export interface MsgUpdateMaturityParamsResponseSDKType {}
 export interface MsgUpdateFeeRatios {
   authority: string;
   assetId: string;
   feeRatios: FeeRatios;
+}
+export interface MsgUpdateFeeRatiosProtoMsg {
+  typeUrl: "/pryzm.assets.v1.MsgUpdateFeeRatios";
+  value: Uint8Array;
+}
+export interface MsgUpdateFeeRatiosAmino {
+  authority?: string;
+  asset_id?: string;
+  fee_ratios?: FeeRatiosAmino;
+}
+export interface MsgUpdateFeeRatiosAminoMsg {
+  type: "pryzm/assets/v1/UpdateFeeRatios";
+  value: MsgUpdateFeeRatiosAmino;
 }
 export interface MsgUpdateFeeRatiosSDKType {
   authority: string;
@@ -45,16 +122,46 @@ export interface MsgUpdateFeeRatiosSDKType {
   fee_ratios: FeeRatiosSDKType;
 }
 export interface MsgUpdateFeeRatiosResponse {}
+export interface MsgUpdateFeeRatiosResponseProtoMsg {
+  typeUrl: "/pryzm.assets.v1.MsgUpdateFeeRatiosResponse";
+  value: Uint8Array;
+}
+export interface MsgUpdateFeeRatiosResponseAmino {}
+export interface MsgUpdateFeeRatiosResponseAminoMsg {
+  type: "/pryzm.assets.v1.MsgUpdateFeeRatiosResponse";
+  value: MsgUpdateFeeRatiosResponseAmino;
+}
 export interface MsgUpdateFeeRatiosResponseSDKType {}
 export interface MsgUpdateParams {
   authority: string;
   params: Params;
+}
+export interface MsgUpdateParamsProtoMsg {
+  typeUrl: "/pryzm.assets.v1.MsgUpdateParams";
+  value: Uint8Array;
+}
+export interface MsgUpdateParamsAmino {
+  authority?: string;
+  params?: ParamsAmino;
+}
+export interface MsgUpdateParamsAminoMsg {
+  type: "pryzm/assets/v1/UpdateParams";
+  value: MsgUpdateParamsAmino;
 }
 export interface MsgUpdateParamsSDKType {
   authority: string;
   params: ParamsSDKType;
 }
 export interface MsgUpdateParamsResponse {}
+export interface MsgUpdateParamsResponseProtoMsg {
+  typeUrl: "/pryzm.assets.v1.MsgUpdateParamsResponse";
+  value: Uint8Array;
+}
+export interface MsgUpdateParamsResponseAmino {}
+export interface MsgUpdateParamsResponseAminoMsg {
+  type: "/pryzm.assets.v1.MsgUpdateParamsResponse";
+  value: MsgUpdateParamsResponseAmino;
+}
 export interface MsgUpdateParamsResponseSDKType {}
 function createBaseMsgRegisterAsset(): MsgRegisterAsset {
   return {
@@ -63,6 +170,7 @@ function createBaseMsgRegisterAsset(): MsgRegisterAsset {
   };
 }
 export const MsgRegisterAsset = {
+  typeUrl: "/pryzm.assets.v1.MsgRegisterAsset",
   encode(message: MsgRegisterAsset, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.creator !== "") {
       writer.uint32(10).string(message.creator);
@@ -109,12 +217,50 @@ export const MsgRegisterAsset = {
     message.creator = object.creator ?? "";
     message.asset = object.asset !== undefined && object.asset !== null ? RefractableAsset.fromPartial(object.asset) : undefined;
     return message;
+  },
+  fromAmino(object: MsgRegisterAssetAmino): MsgRegisterAsset {
+    const message = createBaseMsgRegisterAsset();
+    if (object.creator !== undefined && object.creator !== null) {
+      message.creator = object.creator;
+    }
+    if (object.asset !== undefined && object.asset !== null) {
+      message.asset = RefractableAsset.fromAmino(object.asset);
+    }
+    return message;
+  },
+  toAmino(message: MsgRegisterAsset): MsgRegisterAssetAmino {
+    const obj: any = {};
+    obj.creator = message.creator;
+    obj.asset = message.asset ? RefractableAsset.toAmino(message.asset) : undefined;
+    return obj;
+  },
+  fromAminoMsg(object: MsgRegisterAssetAminoMsg): MsgRegisterAsset {
+    return MsgRegisterAsset.fromAmino(object.value);
+  },
+  toAminoMsg(message: MsgRegisterAsset): MsgRegisterAssetAminoMsg {
+    return {
+      type: "pryzm/assets/v1/RegisterAsset",
+      value: MsgRegisterAsset.toAmino(message)
+    };
+  },
+  fromProtoMsg(message: MsgRegisterAssetProtoMsg): MsgRegisterAsset {
+    return MsgRegisterAsset.decode(message.value);
+  },
+  toProto(message: MsgRegisterAsset): Uint8Array {
+    return MsgRegisterAsset.encode(message).finish();
+  },
+  toProtoMsg(message: MsgRegisterAsset): MsgRegisterAssetProtoMsg {
+    return {
+      typeUrl: "/pryzm.assets.v1.MsgRegisterAsset",
+      value: MsgRegisterAsset.encode(message).finish()
+    };
   }
 };
 function createBaseMsgRegisterAssetResponse(): MsgRegisterAssetResponse {
   return {};
 }
 export const MsgRegisterAssetResponse = {
+  typeUrl: "/pryzm.assets.v1.MsgRegisterAssetResponse",
   encode(_: MsgRegisterAssetResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     return writer;
   },
@@ -142,6 +288,29 @@ export const MsgRegisterAssetResponse = {
   fromPartial(_: Partial<MsgRegisterAssetResponse>): MsgRegisterAssetResponse {
     const message = createBaseMsgRegisterAssetResponse();
     return message;
+  },
+  fromAmino(_: MsgRegisterAssetResponseAmino): MsgRegisterAssetResponse {
+    const message = createBaseMsgRegisterAssetResponse();
+    return message;
+  },
+  toAmino(_: MsgRegisterAssetResponse): MsgRegisterAssetResponseAmino {
+    const obj: any = {};
+    return obj;
+  },
+  fromAminoMsg(object: MsgRegisterAssetResponseAminoMsg): MsgRegisterAssetResponse {
+    return MsgRegisterAssetResponse.fromAmino(object.value);
+  },
+  fromProtoMsg(message: MsgRegisterAssetResponseProtoMsg): MsgRegisterAssetResponse {
+    return MsgRegisterAssetResponse.decode(message.value);
+  },
+  toProto(message: MsgRegisterAssetResponse): Uint8Array {
+    return MsgRegisterAssetResponse.encode(message).finish();
+  },
+  toProtoMsg(message: MsgRegisterAssetResponse): MsgRegisterAssetResponseProtoMsg {
+    return {
+      typeUrl: "/pryzm.assets.v1.MsgRegisterAssetResponse",
+      value: MsgRegisterAssetResponse.encode(message).finish()
+    };
   }
 };
 function createBaseMsgDisableAsset(): MsgDisableAsset {
@@ -151,6 +320,7 @@ function createBaseMsgDisableAsset(): MsgDisableAsset {
   };
 }
 export const MsgDisableAsset = {
+  typeUrl: "/pryzm.assets.v1.MsgDisableAsset",
   encode(message: MsgDisableAsset, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.creator !== "") {
       writer.uint32(10).string(message.creator);
@@ -197,12 +367,50 @@ export const MsgDisableAsset = {
     message.creator = object.creator ?? "";
     message.assetId = object.assetId ?? "";
     return message;
+  },
+  fromAmino(object: MsgDisableAssetAmino): MsgDisableAsset {
+    const message = createBaseMsgDisableAsset();
+    if (object.creator !== undefined && object.creator !== null) {
+      message.creator = object.creator;
+    }
+    if (object.asset_id !== undefined && object.asset_id !== null) {
+      message.assetId = object.asset_id;
+    }
+    return message;
+  },
+  toAmino(message: MsgDisableAsset): MsgDisableAssetAmino {
+    const obj: any = {};
+    obj.creator = message.creator;
+    obj.asset_id = message.assetId;
+    return obj;
+  },
+  fromAminoMsg(object: MsgDisableAssetAminoMsg): MsgDisableAsset {
+    return MsgDisableAsset.fromAmino(object.value);
+  },
+  toAminoMsg(message: MsgDisableAsset): MsgDisableAssetAminoMsg {
+    return {
+      type: "pryzm/assets/v1/DisableAsset",
+      value: MsgDisableAsset.toAmino(message)
+    };
+  },
+  fromProtoMsg(message: MsgDisableAssetProtoMsg): MsgDisableAsset {
+    return MsgDisableAsset.decode(message.value);
+  },
+  toProto(message: MsgDisableAsset): Uint8Array {
+    return MsgDisableAsset.encode(message).finish();
+  },
+  toProtoMsg(message: MsgDisableAsset): MsgDisableAssetProtoMsg {
+    return {
+      typeUrl: "/pryzm.assets.v1.MsgDisableAsset",
+      value: MsgDisableAsset.encode(message).finish()
+    };
   }
 };
 function createBaseMsgDisableAssetResponse(): MsgDisableAssetResponse {
   return {};
 }
 export const MsgDisableAssetResponse = {
+  typeUrl: "/pryzm.assets.v1.MsgDisableAssetResponse",
   encode(_: MsgDisableAssetResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     return writer;
   },
@@ -230,6 +438,29 @@ export const MsgDisableAssetResponse = {
   fromPartial(_: Partial<MsgDisableAssetResponse>): MsgDisableAssetResponse {
     const message = createBaseMsgDisableAssetResponse();
     return message;
+  },
+  fromAmino(_: MsgDisableAssetResponseAmino): MsgDisableAssetResponse {
+    const message = createBaseMsgDisableAssetResponse();
+    return message;
+  },
+  toAmino(_: MsgDisableAssetResponse): MsgDisableAssetResponseAmino {
+    const obj: any = {};
+    return obj;
+  },
+  fromAminoMsg(object: MsgDisableAssetResponseAminoMsg): MsgDisableAssetResponse {
+    return MsgDisableAssetResponse.fromAmino(object.value);
+  },
+  fromProtoMsg(message: MsgDisableAssetResponseProtoMsg): MsgDisableAssetResponse {
+    return MsgDisableAssetResponse.decode(message.value);
+  },
+  toProto(message: MsgDisableAssetResponse): Uint8Array {
+    return MsgDisableAssetResponse.encode(message).finish();
+  },
+  toProtoMsg(message: MsgDisableAssetResponse): MsgDisableAssetResponseProtoMsg {
+    return {
+      typeUrl: "/pryzm.assets.v1.MsgDisableAssetResponse",
+      value: MsgDisableAssetResponse.encode(message).finish()
+    };
   }
 };
 function createBaseMsgUpdateMaturityParams(): MsgUpdateMaturityParams {
@@ -240,6 +471,7 @@ function createBaseMsgUpdateMaturityParams(): MsgUpdateMaturityParams {
   };
 }
 export const MsgUpdateMaturityParams = {
+  typeUrl: "/pryzm.assets.v1.MsgUpdateMaturityParams",
   encode(message: MsgUpdateMaturityParams, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.authority !== "") {
       writer.uint32(10).string(message.authority);
@@ -295,12 +527,54 @@ export const MsgUpdateMaturityParams = {
     message.assetId = object.assetId ?? "";
     message.params = object.params !== undefined && object.params !== null ? MaturityParams.fromPartial(object.params) : undefined;
     return message;
+  },
+  fromAmino(object: MsgUpdateMaturityParamsAmino): MsgUpdateMaturityParams {
+    const message = createBaseMsgUpdateMaturityParams();
+    if (object.authority !== undefined && object.authority !== null) {
+      message.authority = object.authority;
+    }
+    if (object.asset_id !== undefined && object.asset_id !== null) {
+      message.assetId = object.asset_id;
+    }
+    if (object.params !== undefined && object.params !== null) {
+      message.params = MaturityParams.fromAmino(object.params);
+    }
+    return message;
+  },
+  toAmino(message: MsgUpdateMaturityParams): MsgUpdateMaturityParamsAmino {
+    const obj: any = {};
+    obj.authority = message.authority;
+    obj.asset_id = message.assetId;
+    obj.params = message.params ? MaturityParams.toAmino(message.params) : undefined;
+    return obj;
+  },
+  fromAminoMsg(object: MsgUpdateMaturityParamsAminoMsg): MsgUpdateMaturityParams {
+    return MsgUpdateMaturityParams.fromAmino(object.value);
+  },
+  toAminoMsg(message: MsgUpdateMaturityParams): MsgUpdateMaturityParamsAminoMsg {
+    return {
+      type: "pryzm/assets/v1/UpdateMaturityParams",
+      value: MsgUpdateMaturityParams.toAmino(message)
+    };
+  },
+  fromProtoMsg(message: MsgUpdateMaturityParamsProtoMsg): MsgUpdateMaturityParams {
+    return MsgUpdateMaturityParams.decode(message.value);
+  },
+  toProto(message: MsgUpdateMaturityParams): Uint8Array {
+    return MsgUpdateMaturityParams.encode(message).finish();
+  },
+  toProtoMsg(message: MsgUpdateMaturityParams): MsgUpdateMaturityParamsProtoMsg {
+    return {
+      typeUrl: "/pryzm.assets.v1.MsgUpdateMaturityParams",
+      value: MsgUpdateMaturityParams.encode(message).finish()
+    };
   }
 };
 function createBaseMsgUpdateMaturityParamsResponse(): MsgUpdateMaturityParamsResponse {
   return {};
 }
 export const MsgUpdateMaturityParamsResponse = {
+  typeUrl: "/pryzm.assets.v1.MsgUpdateMaturityParamsResponse",
   encode(_: MsgUpdateMaturityParamsResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     return writer;
   },
@@ -328,6 +602,29 @@ export const MsgUpdateMaturityParamsResponse = {
   fromPartial(_: Partial<MsgUpdateMaturityParamsResponse>): MsgUpdateMaturityParamsResponse {
     const message = createBaseMsgUpdateMaturityParamsResponse();
     return message;
+  },
+  fromAmino(_: MsgUpdateMaturityParamsResponseAmino): MsgUpdateMaturityParamsResponse {
+    const message = createBaseMsgUpdateMaturityParamsResponse();
+    return message;
+  },
+  toAmino(_: MsgUpdateMaturityParamsResponse): MsgUpdateMaturityParamsResponseAmino {
+    const obj: any = {};
+    return obj;
+  },
+  fromAminoMsg(object: MsgUpdateMaturityParamsResponseAminoMsg): MsgUpdateMaturityParamsResponse {
+    return MsgUpdateMaturityParamsResponse.fromAmino(object.value);
+  },
+  fromProtoMsg(message: MsgUpdateMaturityParamsResponseProtoMsg): MsgUpdateMaturityParamsResponse {
+    return MsgUpdateMaturityParamsResponse.decode(message.value);
+  },
+  toProto(message: MsgUpdateMaturityParamsResponse): Uint8Array {
+    return MsgUpdateMaturityParamsResponse.encode(message).finish();
+  },
+  toProtoMsg(message: MsgUpdateMaturityParamsResponse): MsgUpdateMaturityParamsResponseProtoMsg {
+    return {
+      typeUrl: "/pryzm.assets.v1.MsgUpdateMaturityParamsResponse",
+      value: MsgUpdateMaturityParamsResponse.encode(message).finish()
+    };
   }
 };
 function createBaseMsgUpdateFeeRatios(): MsgUpdateFeeRatios {
@@ -338,6 +635,7 @@ function createBaseMsgUpdateFeeRatios(): MsgUpdateFeeRatios {
   };
 }
 export const MsgUpdateFeeRatios = {
+  typeUrl: "/pryzm.assets.v1.MsgUpdateFeeRatios",
   encode(message: MsgUpdateFeeRatios, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.authority !== "") {
       writer.uint32(10).string(message.authority);
@@ -393,12 +691,54 @@ export const MsgUpdateFeeRatios = {
     message.assetId = object.assetId ?? "";
     message.feeRatios = object.feeRatios !== undefined && object.feeRatios !== null ? FeeRatios.fromPartial(object.feeRatios) : undefined;
     return message;
+  },
+  fromAmino(object: MsgUpdateFeeRatiosAmino): MsgUpdateFeeRatios {
+    const message = createBaseMsgUpdateFeeRatios();
+    if (object.authority !== undefined && object.authority !== null) {
+      message.authority = object.authority;
+    }
+    if (object.asset_id !== undefined && object.asset_id !== null) {
+      message.assetId = object.asset_id;
+    }
+    if (object.fee_ratios !== undefined && object.fee_ratios !== null) {
+      message.feeRatios = FeeRatios.fromAmino(object.fee_ratios);
+    }
+    return message;
+  },
+  toAmino(message: MsgUpdateFeeRatios): MsgUpdateFeeRatiosAmino {
+    const obj: any = {};
+    obj.authority = message.authority;
+    obj.asset_id = message.assetId;
+    obj.fee_ratios = message.feeRatios ? FeeRatios.toAmino(message.feeRatios) : undefined;
+    return obj;
+  },
+  fromAminoMsg(object: MsgUpdateFeeRatiosAminoMsg): MsgUpdateFeeRatios {
+    return MsgUpdateFeeRatios.fromAmino(object.value);
+  },
+  toAminoMsg(message: MsgUpdateFeeRatios): MsgUpdateFeeRatiosAminoMsg {
+    return {
+      type: "pryzm/assets/v1/UpdateFeeRatios",
+      value: MsgUpdateFeeRatios.toAmino(message)
+    };
+  },
+  fromProtoMsg(message: MsgUpdateFeeRatiosProtoMsg): MsgUpdateFeeRatios {
+    return MsgUpdateFeeRatios.decode(message.value);
+  },
+  toProto(message: MsgUpdateFeeRatios): Uint8Array {
+    return MsgUpdateFeeRatios.encode(message).finish();
+  },
+  toProtoMsg(message: MsgUpdateFeeRatios): MsgUpdateFeeRatiosProtoMsg {
+    return {
+      typeUrl: "/pryzm.assets.v1.MsgUpdateFeeRatios",
+      value: MsgUpdateFeeRatios.encode(message).finish()
+    };
   }
 };
 function createBaseMsgUpdateFeeRatiosResponse(): MsgUpdateFeeRatiosResponse {
   return {};
 }
 export const MsgUpdateFeeRatiosResponse = {
+  typeUrl: "/pryzm.assets.v1.MsgUpdateFeeRatiosResponse",
   encode(_: MsgUpdateFeeRatiosResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     return writer;
   },
@@ -426,6 +766,29 @@ export const MsgUpdateFeeRatiosResponse = {
   fromPartial(_: Partial<MsgUpdateFeeRatiosResponse>): MsgUpdateFeeRatiosResponse {
     const message = createBaseMsgUpdateFeeRatiosResponse();
     return message;
+  },
+  fromAmino(_: MsgUpdateFeeRatiosResponseAmino): MsgUpdateFeeRatiosResponse {
+    const message = createBaseMsgUpdateFeeRatiosResponse();
+    return message;
+  },
+  toAmino(_: MsgUpdateFeeRatiosResponse): MsgUpdateFeeRatiosResponseAmino {
+    const obj: any = {};
+    return obj;
+  },
+  fromAminoMsg(object: MsgUpdateFeeRatiosResponseAminoMsg): MsgUpdateFeeRatiosResponse {
+    return MsgUpdateFeeRatiosResponse.fromAmino(object.value);
+  },
+  fromProtoMsg(message: MsgUpdateFeeRatiosResponseProtoMsg): MsgUpdateFeeRatiosResponse {
+    return MsgUpdateFeeRatiosResponse.decode(message.value);
+  },
+  toProto(message: MsgUpdateFeeRatiosResponse): Uint8Array {
+    return MsgUpdateFeeRatiosResponse.encode(message).finish();
+  },
+  toProtoMsg(message: MsgUpdateFeeRatiosResponse): MsgUpdateFeeRatiosResponseProtoMsg {
+    return {
+      typeUrl: "/pryzm.assets.v1.MsgUpdateFeeRatiosResponse",
+      value: MsgUpdateFeeRatiosResponse.encode(message).finish()
+    };
   }
 };
 function createBaseMsgUpdateParams(): MsgUpdateParams {
@@ -435,6 +798,7 @@ function createBaseMsgUpdateParams(): MsgUpdateParams {
   };
 }
 export const MsgUpdateParams = {
+  typeUrl: "/pryzm.assets.v1.MsgUpdateParams",
   encode(message: MsgUpdateParams, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.authority !== "") {
       writer.uint32(10).string(message.authority);
@@ -481,12 +845,50 @@ export const MsgUpdateParams = {
     message.authority = object.authority ?? "";
     message.params = object.params !== undefined && object.params !== null ? Params.fromPartial(object.params) : undefined;
     return message;
+  },
+  fromAmino(object: MsgUpdateParamsAmino): MsgUpdateParams {
+    const message = createBaseMsgUpdateParams();
+    if (object.authority !== undefined && object.authority !== null) {
+      message.authority = object.authority;
+    }
+    if (object.params !== undefined && object.params !== null) {
+      message.params = Params.fromAmino(object.params);
+    }
+    return message;
+  },
+  toAmino(message: MsgUpdateParams): MsgUpdateParamsAmino {
+    const obj: any = {};
+    obj.authority = message.authority;
+    obj.params = message.params ? Params.toAmino(message.params) : undefined;
+    return obj;
+  },
+  fromAminoMsg(object: MsgUpdateParamsAminoMsg): MsgUpdateParams {
+    return MsgUpdateParams.fromAmino(object.value);
+  },
+  toAminoMsg(message: MsgUpdateParams): MsgUpdateParamsAminoMsg {
+    return {
+      type: "pryzm/assets/v1/UpdateParams",
+      value: MsgUpdateParams.toAmino(message)
+    };
+  },
+  fromProtoMsg(message: MsgUpdateParamsProtoMsg): MsgUpdateParams {
+    return MsgUpdateParams.decode(message.value);
+  },
+  toProto(message: MsgUpdateParams): Uint8Array {
+    return MsgUpdateParams.encode(message).finish();
+  },
+  toProtoMsg(message: MsgUpdateParams): MsgUpdateParamsProtoMsg {
+    return {
+      typeUrl: "/pryzm.assets.v1.MsgUpdateParams",
+      value: MsgUpdateParams.encode(message).finish()
+    };
   }
 };
 function createBaseMsgUpdateParamsResponse(): MsgUpdateParamsResponse {
   return {};
 }
 export const MsgUpdateParamsResponse = {
+  typeUrl: "/pryzm.assets.v1.MsgUpdateParamsResponse",
   encode(_: MsgUpdateParamsResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     return writer;
   },
@@ -514,5 +916,28 @@ export const MsgUpdateParamsResponse = {
   fromPartial(_: Partial<MsgUpdateParamsResponse>): MsgUpdateParamsResponse {
     const message = createBaseMsgUpdateParamsResponse();
     return message;
+  },
+  fromAmino(_: MsgUpdateParamsResponseAmino): MsgUpdateParamsResponse {
+    const message = createBaseMsgUpdateParamsResponse();
+    return message;
+  },
+  toAmino(_: MsgUpdateParamsResponse): MsgUpdateParamsResponseAmino {
+    const obj: any = {};
+    return obj;
+  },
+  fromAminoMsg(object: MsgUpdateParamsResponseAminoMsg): MsgUpdateParamsResponse {
+    return MsgUpdateParamsResponse.fromAmino(object.value);
+  },
+  fromProtoMsg(message: MsgUpdateParamsResponseProtoMsg): MsgUpdateParamsResponse {
+    return MsgUpdateParamsResponse.decode(message.value);
+  },
+  toProto(message: MsgUpdateParamsResponse): Uint8Array {
+    return MsgUpdateParamsResponse.encode(message).finish();
+  },
+  toProtoMsg(message: MsgUpdateParamsResponse): MsgUpdateParamsResponseProtoMsg {
+    return {
+      typeUrl: "/pryzm.assets.v1.MsgUpdateParamsResponse",
+      value: MsgUpdateParamsResponse.encode(message).finish()
+    };
   }
 };

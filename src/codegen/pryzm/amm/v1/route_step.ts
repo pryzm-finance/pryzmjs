@@ -5,6 +5,19 @@ export interface RouteStep {
   tokenIn: string;
   tokenOut: string;
 }
+export interface RouteStepProtoMsg {
+  typeUrl: "/pryzm.amm.v1.RouteStep";
+  value: Uint8Array;
+}
+export interface RouteStepAmino {
+  pool_id?: string;
+  token_in?: string;
+  token_out?: string;
+}
+export interface RouteStepAminoMsg {
+  type: "/pryzm.amm.v1.RouteStep";
+  value: RouteStepAmino;
+}
 export interface RouteStepSDKType {
   pool_id: bigint;
   token_in: string;
@@ -18,6 +31,7 @@ function createBaseRouteStep(): RouteStep {
   };
 }
 export const RouteStep = {
+  typeUrl: "/pryzm.amm.v1.RouteStep",
   encode(message: RouteStep, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.poolId !== BigInt(0)) {
       writer.uint32(8).uint64(message.poolId);
@@ -73,5 +87,40 @@ export const RouteStep = {
     message.tokenIn = object.tokenIn ?? "";
     message.tokenOut = object.tokenOut ?? "";
     return message;
+  },
+  fromAmino(object: RouteStepAmino): RouteStep {
+    const message = createBaseRouteStep();
+    if (object.pool_id !== undefined && object.pool_id !== null) {
+      message.poolId = BigInt(object.pool_id);
+    }
+    if (object.token_in !== undefined && object.token_in !== null) {
+      message.tokenIn = object.token_in;
+    }
+    if (object.token_out !== undefined && object.token_out !== null) {
+      message.tokenOut = object.token_out;
+    }
+    return message;
+  },
+  toAmino(message: RouteStep): RouteStepAmino {
+    const obj: any = {};
+    obj.pool_id = message.poolId ? message.poolId.toString() : undefined;
+    obj.token_in = message.tokenIn;
+    obj.token_out = message.tokenOut;
+    return obj;
+  },
+  fromAminoMsg(object: RouteStepAminoMsg): RouteStep {
+    return RouteStep.fromAmino(object.value);
+  },
+  fromProtoMsg(message: RouteStepProtoMsg): RouteStep {
+    return RouteStep.decode(message.value);
+  },
+  toProto(message: RouteStep): Uint8Array {
+    return RouteStep.encode(message).finish();
+  },
+  toProtoMsg(message: RouteStep): RouteStepProtoMsg {
+    return {
+      typeUrl: "/pryzm.amm.v1.RouteStep",
+      value: RouteStep.encode(message).finish()
+    };
   }
 };

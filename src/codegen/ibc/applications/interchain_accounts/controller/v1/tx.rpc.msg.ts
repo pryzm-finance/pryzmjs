@@ -1,4 +1,3 @@
-//@ts-nocheck
 import { UnaryMethodDefinitionish } from "../../../../../grpc-web";
 import { DeepPartial } from "../../../../../helpers";
 import { grpc } from "@improbable-eng/grpc-web";
@@ -19,10 +18,10 @@ export class MsgClientImpl implements Msg {
     this.sendTx = this.sendTx.bind(this);
   }
   registerInterchainAccount(request: DeepPartial<MsgRegisterInterchainAccount>, metadata?: grpc.Metadata): Promise<MsgRegisterInterchainAccountResponse> {
-    return this.rpc.unary(MsgRegisterInterchainAccountDesc, MsgRegisterInterchainAccount.fromPartial(request), metadata);
+    return this.rpc.unary(MsgRegisterInterchainAccountDesc, MsgRegisterInterchainAccount.fromPartial(request as any), metadata);
   }
   sendTx(request: DeepPartial<MsgSendTx>, metadata?: grpc.Metadata): Promise<MsgSendTxResponse> {
-    return this.rpc.unary(MsgSendTxDesc, MsgSendTx.fromPartial(request), metadata);
+    return this.rpc.unary(MsgSendTxDesc, MsgSendTx.fromPartial(request as any), metadata);
   }
 }
 export const MsgDesc = {

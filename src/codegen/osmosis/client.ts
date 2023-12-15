@@ -1,15 +1,15 @@
 import { GeneratedType, Registry, OfflineSigner } from "@cosmjs/proto-signing";
 import { AminoTypes, SigningStargateClient } from "@cosmjs/stargate";
+import { cosmosProtoRegistry as defaultRegistryTypes, cosmosAminoConverters } from "../cosmos/client";
 import { HttpEndpoint } from "@cosmjs/tendermint-rpc";
 import * as osmosisTokenfactoryV1beta1TxRegistry from "./tokenfactory/v1beta1/tx.registry";
 import * as osmosisTokenfactoryV1beta1TxAmino from "./tokenfactory/v1beta1/tx.amino";
-import { cosmosAminoConverters, cosmosProtoRegistry } from "../cosmos/client";
 export const osmosisAminoConverters = {
   ...osmosisTokenfactoryV1beta1TxAmino.AminoConverter
 };
 export const osmosisProtoRegistry: ReadonlyArray<[string, GeneratedType]> = [...osmosisTokenfactoryV1beta1TxRegistry.registry];
 export const getSigningOsmosisClientOptions = ({
-  defaultTypes = cosmosProtoRegistry
+  defaultTypes = defaultRegistryTypes
 }: {
   defaultTypes?: ReadonlyArray<[string, GeneratedType]>;
 } = {}): {
@@ -18,8 +18,8 @@ export const getSigningOsmosisClientOptions = ({
 } => {
   const registry = new Registry([...defaultTypes, ...osmosisProtoRegistry]);
   const aminoTypes = new AminoTypes({
-    ...osmosisAminoConverters,
-    ...cosmosAminoConverters
+    ...cosmosAminoConverters,
+    ...osmosisAminoConverters
   });
   return {
     registry,
@@ -29,7 +29,7 @@ export const getSigningOsmosisClientOptions = ({
 export const getSigningOsmosisClient = async ({
   rpcEndpoint,
   signer,
-  defaultTypes = cosmosProtoRegistry
+  defaultTypes = defaultRegistryTypes
 }: {
   rpcEndpoint: string | HttpEndpoint;
   signer: OfflineSigner;

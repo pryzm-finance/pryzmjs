@@ -1,4 +1,3 @@
-//@ts-nocheck
 import { UnaryMethodDefinitionish } from "../../../grpc-web";
 import { DeepPartial } from "../../../helpers";
 import { grpc } from "@improbable-eng/grpc-web";
@@ -55,46 +54,46 @@ export class MsgClientImpl implements Msg {
     this.leaveGroup = this.leaveGroup.bind(this);
   }
   createGroup(request: DeepPartial<MsgCreateGroup>, metadata?: grpc.Metadata): Promise<MsgCreateGroupResponse> {
-    return this.rpc.unary(MsgCreateGroupDesc, MsgCreateGroup.fromPartial(request), metadata);
+    return this.rpc.unary(MsgCreateGroupDesc, MsgCreateGroup.fromPartial(request as any), metadata);
   }
   updateGroupMembers(request: DeepPartial<MsgUpdateGroupMembers>, metadata?: grpc.Metadata): Promise<MsgUpdateGroupMembersResponse> {
-    return this.rpc.unary(MsgUpdateGroupMembersDesc, MsgUpdateGroupMembers.fromPartial(request), metadata);
+    return this.rpc.unary(MsgUpdateGroupMembersDesc, MsgUpdateGroupMembers.fromPartial(request as any), metadata);
   }
   updateGroupAdmin(request: DeepPartial<MsgUpdateGroupAdmin>, metadata?: grpc.Metadata): Promise<MsgUpdateGroupAdminResponse> {
-    return this.rpc.unary(MsgUpdateGroupAdminDesc, MsgUpdateGroupAdmin.fromPartial(request), metadata);
+    return this.rpc.unary(MsgUpdateGroupAdminDesc, MsgUpdateGroupAdmin.fromPartial(request as any), metadata);
   }
   updateGroupMetadata(request: DeepPartial<MsgUpdateGroupMetadata>, metadata?: grpc.Metadata): Promise<MsgUpdateGroupMetadataResponse> {
-    return this.rpc.unary(MsgUpdateGroupMetadataDesc, MsgUpdateGroupMetadata.fromPartial(request), metadata);
+    return this.rpc.unary(MsgUpdateGroupMetadataDesc, MsgUpdateGroupMetadata.fromPartial(request as any), metadata);
   }
   createGroupPolicy(request: DeepPartial<MsgCreateGroupPolicy>, metadata?: grpc.Metadata): Promise<MsgCreateGroupPolicyResponse> {
-    return this.rpc.unary(MsgCreateGroupPolicyDesc, MsgCreateGroupPolicy.fromPartial(request), metadata);
+    return this.rpc.unary(MsgCreateGroupPolicyDesc, MsgCreateGroupPolicy.fromPartial(request as any), metadata);
   }
   createGroupWithPolicy(request: DeepPartial<MsgCreateGroupWithPolicy>, metadata?: grpc.Metadata): Promise<MsgCreateGroupWithPolicyResponse> {
-    return this.rpc.unary(MsgCreateGroupWithPolicyDesc, MsgCreateGroupWithPolicy.fromPartial(request), metadata);
+    return this.rpc.unary(MsgCreateGroupWithPolicyDesc, MsgCreateGroupWithPolicy.fromPartial(request as any), metadata);
   }
   updateGroupPolicyAdmin(request: DeepPartial<MsgUpdateGroupPolicyAdmin>, metadata?: grpc.Metadata): Promise<MsgUpdateGroupPolicyAdminResponse> {
-    return this.rpc.unary(MsgUpdateGroupPolicyAdminDesc, MsgUpdateGroupPolicyAdmin.fromPartial(request), metadata);
+    return this.rpc.unary(MsgUpdateGroupPolicyAdminDesc, MsgUpdateGroupPolicyAdmin.fromPartial(request as any), metadata);
   }
   updateGroupPolicyDecisionPolicy(request: DeepPartial<MsgUpdateGroupPolicyDecisionPolicy>, metadata?: grpc.Metadata): Promise<MsgUpdateGroupPolicyDecisionPolicyResponse> {
-    return this.rpc.unary(MsgUpdateGroupPolicyDecisionPolicyDesc, MsgUpdateGroupPolicyDecisionPolicy.fromPartial(request), metadata);
+    return this.rpc.unary(MsgUpdateGroupPolicyDecisionPolicyDesc, MsgUpdateGroupPolicyDecisionPolicy.fromPartial(request as any), metadata);
   }
   updateGroupPolicyMetadata(request: DeepPartial<MsgUpdateGroupPolicyMetadata>, metadata?: grpc.Metadata): Promise<MsgUpdateGroupPolicyMetadataResponse> {
-    return this.rpc.unary(MsgUpdateGroupPolicyMetadataDesc, MsgUpdateGroupPolicyMetadata.fromPartial(request), metadata);
+    return this.rpc.unary(MsgUpdateGroupPolicyMetadataDesc, MsgUpdateGroupPolicyMetadata.fromPartial(request as any), metadata);
   }
   submitProposal(request: DeepPartial<MsgSubmitProposal>, metadata?: grpc.Metadata): Promise<MsgSubmitProposalResponse> {
-    return this.rpc.unary(MsgSubmitProposalDesc, MsgSubmitProposal.fromPartial(request), metadata);
+    return this.rpc.unary(MsgSubmitProposalDesc, MsgSubmitProposal.fromPartial(request as any), metadata);
   }
   withdrawProposal(request: DeepPartial<MsgWithdrawProposal>, metadata?: grpc.Metadata): Promise<MsgWithdrawProposalResponse> {
-    return this.rpc.unary(MsgWithdrawProposalDesc, MsgWithdrawProposal.fromPartial(request), metadata);
+    return this.rpc.unary(MsgWithdrawProposalDesc, MsgWithdrawProposal.fromPartial(request as any), metadata);
   }
   vote(request: DeepPartial<MsgVote>, metadata?: grpc.Metadata): Promise<MsgVoteResponse> {
-    return this.rpc.unary(MsgVoteDesc, MsgVote.fromPartial(request), metadata);
+    return this.rpc.unary(MsgVoteDesc, MsgVote.fromPartial(request as any), metadata);
   }
   exec(request: DeepPartial<MsgExec>, metadata?: grpc.Metadata): Promise<MsgExecResponse> {
-    return this.rpc.unary(MsgExecDesc, MsgExec.fromPartial(request), metadata);
+    return this.rpc.unary(MsgExecDesc, MsgExec.fromPartial(request as any), metadata);
   }
   leaveGroup(request: DeepPartial<MsgLeaveGroup>, metadata?: grpc.Metadata): Promise<MsgLeaveGroupResponse> {
-    return this.rpc.unary(MsgLeaveGroupDesc, MsgLeaveGroup.fromPartial(request), metadata);
+    return this.rpc.unary(MsgLeaveGroupDesc, MsgLeaveGroup.fromPartial(request as any), metadata);
   }
 }
 export const MsgDesc = {

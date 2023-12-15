@@ -4,6 +4,18 @@ export interface ScheduleOrder {
   timeMillis: bigint;
   orderId: bigint;
 }
+export interface ScheduleOrderProtoMsg {
+  typeUrl: "/pryzm.amm.v1.ScheduleOrder";
+  value: Uint8Array;
+}
+export interface ScheduleOrderAmino {
+  time_millis?: string;
+  order_id?: string;
+}
+export interface ScheduleOrderAminoMsg {
+  type: "/pryzm.amm.v1.ScheduleOrder";
+  value: ScheduleOrderAmino;
+}
 export interface ScheduleOrderSDKType {
   time_millis: bigint;
   order_id: bigint;
@@ -15,6 +27,7 @@ function createBaseScheduleOrder(): ScheduleOrder {
   };
 }
 export const ScheduleOrder = {
+  typeUrl: "/pryzm.amm.v1.ScheduleOrder",
   encode(message: ScheduleOrder, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.timeMillis !== BigInt(0)) {
       writer.uint32(8).int64(message.timeMillis);
@@ -61,5 +74,36 @@ export const ScheduleOrder = {
     message.timeMillis = object.timeMillis !== undefined && object.timeMillis !== null ? BigInt(object.timeMillis.toString()) : BigInt(0);
     message.orderId = object.orderId !== undefined && object.orderId !== null ? BigInt(object.orderId.toString()) : BigInt(0);
     return message;
+  },
+  fromAmino(object: ScheduleOrderAmino): ScheduleOrder {
+    const message = createBaseScheduleOrder();
+    if (object.time_millis !== undefined && object.time_millis !== null) {
+      message.timeMillis = BigInt(object.time_millis);
+    }
+    if (object.order_id !== undefined && object.order_id !== null) {
+      message.orderId = BigInt(object.order_id);
+    }
+    return message;
+  },
+  toAmino(message: ScheduleOrder): ScheduleOrderAmino {
+    const obj: any = {};
+    obj.time_millis = message.timeMillis ? message.timeMillis.toString() : undefined;
+    obj.order_id = message.orderId ? message.orderId.toString() : undefined;
+    return obj;
+  },
+  fromAminoMsg(object: ScheduleOrderAminoMsg): ScheduleOrder {
+    return ScheduleOrder.fromAmino(object.value);
+  },
+  fromProtoMsg(message: ScheduleOrderProtoMsg): ScheduleOrder {
+    return ScheduleOrder.decode(message.value);
+  },
+  toProto(message: ScheduleOrder): Uint8Array {
+    return ScheduleOrder.encode(message).finish();
+  },
+  toProtoMsg(message: ScheduleOrder): ScheduleOrderProtoMsg {
+    return {
+      typeUrl: "/pryzm.amm.v1.ScheduleOrder",
+      value: ScheduleOrder.encode(message).finish()
+    };
   }
 };

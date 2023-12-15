@@ -1,4 +1,4 @@
-import { PulseTradablePair, PulseTradablePairSDKType } from "../../trade/pulse_tradable_pair";
+import { PulseTradablePair, PulseTradablePairAmino, PulseTradablePairSDKType } from "../../trade/pulse_tradable_pair";
 import { BinaryReader, BinaryWriter } from "../../../binary";
 import { isSet } from "../../../helpers";
 export interface QueryPulseTradablePairsRequest {
@@ -6,12 +6,36 @@ export interface QueryPulseTradablePairsRequest {
   /** determines whether the given denom should be considered as token_in or token_out */
   tokenIn: boolean;
 }
+export interface QueryPulseTradablePairsRequestProtoMsg {
+  typeUrl: "/pryzmatics.server.trade.QueryPulseTradablePairsRequest";
+  value: Uint8Array;
+}
+export interface QueryPulseTradablePairsRequestAmino {
+  denom?: string;
+  /** determines whether the given denom should be considered as token_in or token_out */
+  token_in?: boolean;
+}
+export interface QueryPulseTradablePairsRequestAminoMsg {
+  type: "/pryzmatics.server.trade.QueryPulseTradablePairsRequest";
+  value: QueryPulseTradablePairsRequestAmino;
+}
 export interface QueryPulseTradablePairsRequestSDKType {
   denom: string;
   token_in: boolean;
 }
 export interface QueryPulseTradablePairsResponse {
   pairs: PulseTradablePair[];
+}
+export interface QueryPulseTradablePairsResponseProtoMsg {
+  typeUrl: "/pryzmatics.server.trade.QueryPulseTradablePairsResponse";
+  value: Uint8Array;
+}
+export interface QueryPulseTradablePairsResponseAmino {
+  pairs?: PulseTradablePairAmino[];
+}
+export interface QueryPulseTradablePairsResponseAminoMsg {
+  type: "/pryzmatics.server.trade.QueryPulseTradablePairsResponse";
+  value: QueryPulseTradablePairsResponseAmino;
 }
 export interface QueryPulseTradablePairsResponseSDKType {
   pairs: PulseTradablePairSDKType[];
@@ -23,6 +47,7 @@ function createBaseQueryPulseTradablePairsRequest(): QueryPulseTradablePairsRequ
   };
 }
 export const QueryPulseTradablePairsRequest = {
+  typeUrl: "/pryzmatics.server.trade.QueryPulseTradablePairsRequest",
   encode(message: QueryPulseTradablePairsRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.denom !== "") {
       writer.uint32(10).string(message.denom);
@@ -69,6 +94,37 @@ export const QueryPulseTradablePairsRequest = {
     message.denom = object.denom ?? "";
     message.tokenIn = object.tokenIn ?? false;
     return message;
+  },
+  fromAmino(object: QueryPulseTradablePairsRequestAmino): QueryPulseTradablePairsRequest {
+    const message = createBaseQueryPulseTradablePairsRequest();
+    if (object.denom !== undefined && object.denom !== null) {
+      message.denom = object.denom;
+    }
+    if (object.token_in !== undefined && object.token_in !== null) {
+      message.tokenIn = object.token_in;
+    }
+    return message;
+  },
+  toAmino(message: QueryPulseTradablePairsRequest): QueryPulseTradablePairsRequestAmino {
+    const obj: any = {};
+    obj.denom = message.denom;
+    obj.token_in = message.tokenIn;
+    return obj;
+  },
+  fromAminoMsg(object: QueryPulseTradablePairsRequestAminoMsg): QueryPulseTradablePairsRequest {
+    return QueryPulseTradablePairsRequest.fromAmino(object.value);
+  },
+  fromProtoMsg(message: QueryPulseTradablePairsRequestProtoMsg): QueryPulseTradablePairsRequest {
+    return QueryPulseTradablePairsRequest.decode(message.value);
+  },
+  toProto(message: QueryPulseTradablePairsRequest): Uint8Array {
+    return QueryPulseTradablePairsRequest.encode(message).finish();
+  },
+  toProtoMsg(message: QueryPulseTradablePairsRequest): QueryPulseTradablePairsRequestProtoMsg {
+    return {
+      typeUrl: "/pryzmatics.server.trade.QueryPulseTradablePairsRequest",
+      value: QueryPulseTradablePairsRequest.encode(message).finish()
+    };
   }
 };
 function createBaseQueryPulseTradablePairsResponse(): QueryPulseTradablePairsResponse {
@@ -77,6 +133,7 @@ function createBaseQueryPulseTradablePairsResponse(): QueryPulseTradablePairsRes
   };
 }
 export const QueryPulseTradablePairsResponse = {
+  typeUrl: "/pryzmatics.server.trade.QueryPulseTradablePairsResponse",
   encode(message: QueryPulseTradablePairsResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     for (const v of message.pairs) {
       PulseTradablePair.encode(v!, writer.uint32(10).fork()).ldelim();
@@ -118,5 +175,34 @@ export const QueryPulseTradablePairsResponse = {
     const message = createBaseQueryPulseTradablePairsResponse();
     message.pairs = object.pairs?.map(e => PulseTradablePair.fromPartial(e)) || [];
     return message;
+  },
+  fromAmino(object: QueryPulseTradablePairsResponseAmino): QueryPulseTradablePairsResponse {
+    const message = createBaseQueryPulseTradablePairsResponse();
+    message.pairs = object.pairs?.map(e => PulseTradablePair.fromAmino(e)) || [];
+    return message;
+  },
+  toAmino(message: QueryPulseTradablePairsResponse): QueryPulseTradablePairsResponseAmino {
+    const obj: any = {};
+    if (message.pairs) {
+      obj.pairs = message.pairs.map(e => e ? PulseTradablePair.toAmino(e) : undefined);
+    } else {
+      obj.pairs = [];
+    }
+    return obj;
+  },
+  fromAminoMsg(object: QueryPulseTradablePairsResponseAminoMsg): QueryPulseTradablePairsResponse {
+    return QueryPulseTradablePairsResponse.fromAmino(object.value);
+  },
+  fromProtoMsg(message: QueryPulseTradablePairsResponseProtoMsg): QueryPulseTradablePairsResponse {
+    return QueryPulseTradablePairsResponse.decode(message.value);
+  },
+  toProto(message: QueryPulseTradablePairsResponse): Uint8Array {
+    return QueryPulseTradablePairsResponse.encode(message).finish();
+  },
+  toProtoMsg(message: QueryPulseTradablePairsResponse): QueryPulseTradablePairsResponseProtoMsg {
+    return {
+      typeUrl: "/pryzmatics.server.trade.QueryPulseTradablePairsResponse",
+      value: QueryPulseTradablePairsResponse.encode(message).finish()
+    };
   }
 };

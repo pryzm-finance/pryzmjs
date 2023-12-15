@@ -1,10 +1,22 @@
-import { Token, TokenSDKType, TokenType, tokenTypeFromJSON, tokenTypeToJSON } from "../../pool/token";
-import { PageRequest, PageRequestSDKType, PageResponse, PageResponseSDKType } from "../../../cosmos/base/query/v1beta1/pagination";
+import { Token, TokenAmino, TokenSDKType, TokenType, tokenTypeFromJSON, tokenTypeToJSON } from "../../pool/token";
+import { PageRequest, PageRequestAmino, PageRequestSDKType, PageResponse, PageResponseAmino, PageResponseSDKType } from "../../../cosmos/base/query/v1beta1/pagination";
 import { BinaryReader, BinaryWriter } from "../../../binary";
 import { isSet } from "../../../helpers";
 export interface QueryTokenRequest {
   denom: string;
   tokenOut: string;
+}
+export interface QueryTokenRequestProtoMsg {
+  typeUrl: "/pryzmatics.server.pool.QueryTokenRequest";
+  value: Uint8Array;
+}
+export interface QueryTokenRequestAmino {
+  denom?: string;
+  token_out?: string;
+}
+export interface QueryTokenRequestAminoMsg {
+  type: "/pryzmatics.server.pool.QueryTokenRequest";
+  value: QueryTokenRequestAmino;
 }
 export interface QueryTokenRequestSDKType {
   denom: string;
@@ -12,6 +24,17 @@ export interface QueryTokenRequestSDKType {
 }
 export interface QueryTokenResponse {
   token: Token;
+}
+export interface QueryTokenResponseProtoMsg {
+  typeUrl: "/pryzmatics.server.pool.QueryTokenResponse";
+  value: Uint8Array;
+}
+export interface QueryTokenResponseAmino {
+  token?: TokenAmino;
+}
+export interface QueryTokenResponseAminoMsg {
+  type: "/pryzmatics.server.pool.QueryTokenResponse";
+  value: QueryTokenResponseAmino;
 }
 export interface QueryTokenResponseSDKType {
   token: TokenSDKType;
@@ -21,6 +44,19 @@ export interface QueryTokensRequest {
   tokenOut: string;
   pagination?: PageRequest;
 }
+export interface QueryTokensRequestProtoMsg {
+  typeUrl: "/pryzmatics.server.pool.QueryTokensRequest";
+  value: Uint8Array;
+}
+export interface QueryTokensRequestAmino {
+  token_type?: TokenType;
+  token_out?: string;
+  pagination?: PageRequestAmino;
+}
+export interface QueryTokensRequestAminoMsg {
+  type: "/pryzmatics.server.pool.QueryTokensRequest";
+  value: QueryTokensRequestAmino;
+}
 export interface QueryTokensRequestSDKType {
   token_type: TokenType;
   token_out: string;
@@ -29,6 +65,18 @@ export interface QueryTokensRequestSDKType {
 export interface QueryTokensResponse {
   tokens: Token[];
   pagination?: PageResponse;
+}
+export interface QueryTokensResponseProtoMsg {
+  typeUrl: "/pryzmatics.server.pool.QueryTokensResponse";
+  value: Uint8Array;
+}
+export interface QueryTokensResponseAmino {
+  tokens?: TokenAmino[];
+  pagination?: PageResponseAmino;
+}
+export interface QueryTokensResponseAminoMsg {
+  type: "/pryzmatics.server.pool.QueryTokensResponse";
+  value: QueryTokensResponseAmino;
 }
 export interface QueryTokensResponseSDKType {
   tokens: TokenSDKType[];
@@ -41,6 +89,7 @@ function createBaseQueryTokenRequest(): QueryTokenRequest {
   };
 }
 export const QueryTokenRequest = {
+  typeUrl: "/pryzmatics.server.pool.QueryTokenRequest",
   encode(message: QueryTokenRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.denom !== "") {
       writer.uint32(10).string(message.denom);
@@ -87,6 +136,37 @@ export const QueryTokenRequest = {
     message.denom = object.denom ?? "";
     message.tokenOut = object.tokenOut ?? "";
     return message;
+  },
+  fromAmino(object: QueryTokenRequestAmino): QueryTokenRequest {
+    const message = createBaseQueryTokenRequest();
+    if (object.denom !== undefined && object.denom !== null) {
+      message.denom = object.denom;
+    }
+    if (object.token_out !== undefined && object.token_out !== null) {
+      message.tokenOut = object.token_out;
+    }
+    return message;
+  },
+  toAmino(message: QueryTokenRequest): QueryTokenRequestAmino {
+    const obj: any = {};
+    obj.denom = message.denom;
+    obj.token_out = message.tokenOut;
+    return obj;
+  },
+  fromAminoMsg(object: QueryTokenRequestAminoMsg): QueryTokenRequest {
+    return QueryTokenRequest.fromAmino(object.value);
+  },
+  fromProtoMsg(message: QueryTokenRequestProtoMsg): QueryTokenRequest {
+    return QueryTokenRequest.decode(message.value);
+  },
+  toProto(message: QueryTokenRequest): Uint8Array {
+    return QueryTokenRequest.encode(message).finish();
+  },
+  toProtoMsg(message: QueryTokenRequest): QueryTokenRequestProtoMsg {
+    return {
+      typeUrl: "/pryzmatics.server.pool.QueryTokenRequest",
+      value: QueryTokenRequest.encode(message).finish()
+    };
   }
 };
 function createBaseQueryTokenResponse(): QueryTokenResponse {
@@ -95,6 +175,7 @@ function createBaseQueryTokenResponse(): QueryTokenResponse {
   };
 }
 export const QueryTokenResponse = {
+  typeUrl: "/pryzmatics.server.pool.QueryTokenResponse",
   encode(message: QueryTokenResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.token !== undefined) {
       Token.encode(message.token, writer.uint32(10).fork()).ldelim();
@@ -132,6 +213,33 @@ export const QueryTokenResponse = {
     const message = createBaseQueryTokenResponse();
     message.token = object.token !== undefined && object.token !== null ? Token.fromPartial(object.token) : undefined;
     return message;
+  },
+  fromAmino(object: QueryTokenResponseAmino): QueryTokenResponse {
+    const message = createBaseQueryTokenResponse();
+    if (object.token !== undefined && object.token !== null) {
+      message.token = Token.fromAmino(object.token);
+    }
+    return message;
+  },
+  toAmino(message: QueryTokenResponse): QueryTokenResponseAmino {
+    const obj: any = {};
+    obj.token = message.token ? Token.toAmino(message.token) : undefined;
+    return obj;
+  },
+  fromAminoMsg(object: QueryTokenResponseAminoMsg): QueryTokenResponse {
+    return QueryTokenResponse.fromAmino(object.value);
+  },
+  fromProtoMsg(message: QueryTokenResponseProtoMsg): QueryTokenResponse {
+    return QueryTokenResponse.decode(message.value);
+  },
+  toProto(message: QueryTokenResponse): Uint8Array {
+    return QueryTokenResponse.encode(message).finish();
+  },
+  toProtoMsg(message: QueryTokenResponse): QueryTokenResponseProtoMsg {
+    return {
+      typeUrl: "/pryzmatics.server.pool.QueryTokenResponse",
+      value: QueryTokenResponse.encode(message).finish()
+    };
   }
 };
 function createBaseQueryTokensRequest(): QueryTokensRequest {
@@ -142,6 +250,7 @@ function createBaseQueryTokensRequest(): QueryTokensRequest {
   };
 }
 export const QueryTokensRequest = {
+  typeUrl: "/pryzmatics.server.pool.QueryTokensRequest",
   encode(message: QueryTokensRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.tokenType !== 0) {
       writer.uint32(8).int32(message.tokenType);
@@ -197,6 +306,41 @@ export const QueryTokensRequest = {
     message.tokenOut = object.tokenOut ?? "";
     message.pagination = object.pagination !== undefined && object.pagination !== null ? PageRequest.fromPartial(object.pagination) : undefined;
     return message;
+  },
+  fromAmino(object: QueryTokensRequestAmino): QueryTokensRequest {
+    const message = createBaseQueryTokensRequest();
+    if (object.token_type !== undefined && object.token_type !== null) {
+      message.tokenType = tokenTypeFromJSON(object.token_type);
+    }
+    if (object.token_out !== undefined && object.token_out !== null) {
+      message.tokenOut = object.token_out;
+    }
+    if (object.pagination !== undefined && object.pagination !== null) {
+      message.pagination = PageRequest.fromAmino(object.pagination);
+    }
+    return message;
+  },
+  toAmino(message: QueryTokensRequest): QueryTokensRequestAmino {
+    const obj: any = {};
+    obj.token_type = tokenTypeToJSON(message.tokenType);
+    obj.token_out = message.tokenOut;
+    obj.pagination = message.pagination ? PageRequest.toAmino(message.pagination) : undefined;
+    return obj;
+  },
+  fromAminoMsg(object: QueryTokensRequestAminoMsg): QueryTokensRequest {
+    return QueryTokensRequest.fromAmino(object.value);
+  },
+  fromProtoMsg(message: QueryTokensRequestProtoMsg): QueryTokensRequest {
+    return QueryTokensRequest.decode(message.value);
+  },
+  toProto(message: QueryTokensRequest): Uint8Array {
+    return QueryTokensRequest.encode(message).finish();
+  },
+  toProtoMsg(message: QueryTokensRequest): QueryTokensRequestProtoMsg {
+    return {
+      typeUrl: "/pryzmatics.server.pool.QueryTokensRequest",
+      value: QueryTokensRequest.encode(message).finish()
+    };
   }
 };
 function createBaseQueryTokensResponse(): QueryTokensResponse {
@@ -206,6 +350,7 @@ function createBaseQueryTokensResponse(): QueryTokensResponse {
   };
 }
 export const QueryTokensResponse = {
+  typeUrl: "/pryzmatics.server.pool.QueryTokensResponse",
   encode(message: QueryTokensResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     for (const v of message.tokens) {
       Token.encode(v!, writer.uint32(10).fork()).ldelim();
@@ -256,5 +401,38 @@ export const QueryTokensResponse = {
     message.tokens = object.tokens?.map(e => Token.fromPartial(e)) || [];
     message.pagination = object.pagination !== undefined && object.pagination !== null ? PageResponse.fromPartial(object.pagination) : undefined;
     return message;
+  },
+  fromAmino(object: QueryTokensResponseAmino): QueryTokensResponse {
+    const message = createBaseQueryTokensResponse();
+    message.tokens = object.tokens?.map(e => Token.fromAmino(e)) || [];
+    if (object.pagination !== undefined && object.pagination !== null) {
+      message.pagination = PageResponse.fromAmino(object.pagination);
+    }
+    return message;
+  },
+  toAmino(message: QueryTokensResponse): QueryTokensResponseAmino {
+    const obj: any = {};
+    if (message.tokens) {
+      obj.tokens = message.tokens.map(e => e ? Token.toAmino(e) : undefined);
+    } else {
+      obj.tokens = [];
+    }
+    obj.pagination = message.pagination ? PageResponse.toAmino(message.pagination) : undefined;
+    return obj;
+  },
+  fromAminoMsg(object: QueryTokensResponseAminoMsg): QueryTokensResponse {
+    return QueryTokensResponse.fromAmino(object.value);
+  },
+  fromProtoMsg(message: QueryTokensResponseProtoMsg): QueryTokensResponse {
+    return QueryTokensResponse.decode(message.value);
+  },
+  toProto(message: QueryTokensResponse): Uint8Array {
+    return QueryTokensResponse.encode(message).finish();
+  },
+  toProtoMsg(message: QueryTokensResponse): QueryTokensResponseProtoMsg {
+    return {
+      typeUrl: "/pryzmatics.server.pool.QueryTokensResponse",
+      value: QueryTokensResponse.encode(message).finish()
+    };
   }
 };

@@ -9,6 +9,22 @@ export interface CircuitBreaker {
   adjustedUpperBound: string;
   adjustedLowerBound: string;
 }
+export interface CircuitBreakerProtoMsg {
+  typeUrl: "/pryzm.amm.v1.CircuitBreaker";
+  value: Uint8Array;
+}
+export interface CircuitBreakerAmino {
+  reference_lpt_price?: string;
+  lower_bound?: string;
+  upper_bound?: string;
+  reference_normalized_weight?: string;
+  adjusted_upper_bound?: string;
+  adjusted_lower_bound?: string;
+}
+export interface CircuitBreakerAminoMsg {
+  type: "/pryzm.amm.v1.CircuitBreaker";
+  value: CircuitBreakerAmino;
+}
 export interface CircuitBreakerSDKType {
   reference_lpt_price: string;
   lower_bound: string;
@@ -23,6 +39,20 @@ export interface PoolToken {
   balance: string;
   circuitBreaker?: CircuitBreaker;
 }
+export interface PoolTokenProtoMsg {
+  typeUrl: "/pryzm.amm.v1.PoolToken";
+  value: Uint8Array;
+}
+export interface PoolTokenAmino {
+  pool_id?: string;
+  denom?: string;
+  balance?: string;
+  circuit_breaker?: CircuitBreakerAmino;
+}
+export interface PoolTokenAminoMsg {
+  type: "/pryzm.amm.v1.PoolToken";
+  value: PoolTokenAmino;
+}
 export interface PoolTokenSDKType {
   pool_id: bigint;
   denom: string;
@@ -32,6 +62,18 @@ export interface PoolTokenSDKType {
 export interface TokenAmount {
   token: PoolToken;
   amount: string;
+}
+export interface TokenAmountProtoMsg {
+  typeUrl: "/pryzm.amm.v1.TokenAmount";
+  value: Uint8Array;
+}
+export interface TokenAmountAmino {
+  token?: PoolTokenAmino;
+  amount?: string;
+}
+export interface TokenAmountAminoMsg {
+  type: "/pryzm.amm.v1.TokenAmount";
+  value: TokenAmountAmino;
 }
 export interface TokenAmountSDKType {
   token: PoolTokenSDKType;
@@ -48,6 +90,7 @@ function createBaseCircuitBreaker(): CircuitBreaker {
   };
 }
 export const CircuitBreaker = {
+  typeUrl: "/pryzm.amm.v1.CircuitBreaker",
   encode(message: CircuitBreaker, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.referenceLptPrice !== "") {
       writer.uint32(10).string(Decimal.fromUserInput(message.referenceLptPrice, 18).atomics);
@@ -130,6 +173,53 @@ export const CircuitBreaker = {
     message.adjustedUpperBound = object.adjustedUpperBound ?? "";
     message.adjustedLowerBound = object.adjustedLowerBound ?? "";
     return message;
+  },
+  fromAmino(object: CircuitBreakerAmino): CircuitBreaker {
+    const message = createBaseCircuitBreaker();
+    if (object.reference_lpt_price !== undefined && object.reference_lpt_price !== null) {
+      message.referenceLptPrice = object.reference_lpt_price;
+    }
+    if (object.lower_bound !== undefined && object.lower_bound !== null) {
+      message.lowerBound = object.lower_bound;
+    }
+    if (object.upper_bound !== undefined && object.upper_bound !== null) {
+      message.upperBound = object.upper_bound;
+    }
+    if (object.reference_normalized_weight !== undefined && object.reference_normalized_weight !== null) {
+      message.referenceNormalizedWeight = object.reference_normalized_weight;
+    }
+    if (object.adjusted_upper_bound !== undefined && object.adjusted_upper_bound !== null) {
+      message.adjustedUpperBound = object.adjusted_upper_bound;
+    }
+    if (object.adjusted_lower_bound !== undefined && object.adjusted_lower_bound !== null) {
+      message.adjustedLowerBound = object.adjusted_lower_bound;
+    }
+    return message;
+  },
+  toAmino(message: CircuitBreaker): CircuitBreakerAmino {
+    const obj: any = {};
+    obj.reference_lpt_price = message.referenceLptPrice;
+    obj.lower_bound = message.lowerBound;
+    obj.upper_bound = message.upperBound;
+    obj.reference_normalized_weight = message.referenceNormalizedWeight;
+    obj.adjusted_upper_bound = message.adjustedUpperBound;
+    obj.adjusted_lower_bound = message.adjustedLowerBound;
+    return obj;
+  },
+  fromAminoMsg(object: CircuitBreakerAminoMsg): CircuitBreaker {
+    return CircuitBreaker.fromAmino(object.value);
+  },
+  fromProtoMsg(message: CircuitBreakerProtoMsg): CircuitBreaker {
+    return CircuitBreaker.decode(message.value);
+  },
+  toProto(message: CircuitBreaker): Uint8Array {
+    return CircuitBreaker.encode(message).finish();
+  },
+  toProtoMsg(message: CircuitBreaker): CircuitBreakerProtoMsg {
+    return {
+      typeUrl: "/pryzm.amm.v1.CircuitBreaker",
+      value: CircuitBreaker.encode(message).finish()
+    };
   }
 };
 function createBasePoolToken(): PoolToken {
@@ -141,6 +231,7 @@ function createBasePoolToken(): PoolToken {
   };
 }
 export const PoolToken = {
+  typeUrl: "/pryzm.amm.v1.PoolToken",
   encode(message: PoolToken, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.poolId !== BigInt(0)) {
       writer.uint32(8).uint64(message.poolId);
@@ -205,6 +296,45 @@ export const PoolToken = {
     message.balance = object.balance ?? "";
     message.circuitBreaker = object.circuitBreaker !== undefined && object.circuitBreaker !== null ? CircuitBreaker.fromPartial(object.circuitBreaker) : undefined;
     return message;
+  },
+  fromAmino(object: PoolTokenAmino): PoolToken {
+    const message = createBasePoolToken();
+    if (object.pool_id !== undefined && object.pool_id !== null) {
+      message.poolId = BigInt(object.pool_id);
+    }
+    if (object.denom !== undefined && object.denom !== null) {
+      message.denom = object.denom;
+    }
+    if (object.balance !== undefined && object.balance !== null) {
+      message.balance = object.balance;
+    }
+    if (object.circuit_breaker !== undefined && object.circuit_breaker !== null) {
+      message.circuitBreaker = CircuitBreaker.fromAmino(object.circuit_breaker);
+    }
+    return message;
+  },
+  toAmino(message: PoolToken): PoolTokenAmino {
+    const obj: any = {};
+    obj.pool_id = message.poolId ? message.poolId.toString() : undefined;
+    obj.denom = message.denom;
+    obj.balance = message.balance;
+    obj.circuit_breaker = message.circuitBreaker ? CircuitBreaker.toAmino(message.circuitBreaker) : undefined;
+    return obj;
+  },
+  fromAminoMsg(object: PoolTokenAminoMsg): PoolToken {
+    return PoolToken.fromAmino(object.value);
+  },
+  fromProtoMsg(message: PoolTokenProtoMsg): PoolToken {
+    return PoolToken.decode(message.value);
+  },
+  toProto(message: PoolToken): Uint8Array {
+    return PoolToken.encode(message).finish();
+  },
+  toProtoMsg(message: PoolToken): PoolTokenProtoMsg {
+    return {
+      typeUrl: "/pryzm.amm.v1.PoolToken",
+      value: PoolToken.encode(message).finish()
+    };
   }
 };
 function createBaseTokenAmount(): TokenAmount {
@@ -214,6 +344,7 @@ function createBaseTokenAmount(): TokenAmount {
   };
 }
 export const TokenAmount = {
+  typeUrl: "/pryzm.amm.v1.TokenAmount",
   encode(message: TokenAmount, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.token !== undefined) {
       PoolToken.encode(message.token, writer.uint32(10).fork()).ldelim();
@@ -260,5 +391,36 @@ export const TokenAmount = {
     message.token = object.token !== undefined && object.token !== null ? PoolToken.fromPartial(object.token) : undefined;
     message.amount = object.amount ?? "";
     return message;
+  },
+  fromAmino(object: TokenAmountAmino): TokenAmount {
+    const message = createBaseTokenAmount();
+    if (object.token !== undefined && object.token !== null) {
+      message.token = PoolToken.fromAmino(object.token);
+    }
+    if (object.amount !== undefined && object.amount !== null) {
+      message.amount = object.amount;
+    }
+    return message;
+  },
+  toAmino(message: TokenAmount): TokenAmountAmino {
+    const obj: any = {};
+    obj.token = message.token ? PoolToken.toAmino(message.token) : undefined;
+    obj.amount = message.amount;
+    return obj;
+  },
+  fromAminoMsg(object: TokenAmountAminoMsg): TokenAmount {
+    return TokenAmount.fromAmino(object.value);
+  },
+  fromProtoMsg(message: TokenAmountProtoMsg): TokenAmount {
+    return TokenAmount.decode(message.value);
+  },
+  toProto(message: TokenAmount): Uint8Array {
+    return TokenAmount.encode(message).finish();
+  },
+  toProtoMsg(message: TokenAmount): TokenAmountProtoMsg {
+    return {
+      typeUrl: "/pryzm.amm.v1.TokenAmount",
+      value: TokenAmount.encode(message).finish()
+    };
   }
 };

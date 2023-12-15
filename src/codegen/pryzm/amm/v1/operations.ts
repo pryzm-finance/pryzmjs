@@ -1,5 +1,5 @@
-import { TokenAmount, TokenAmountSDKType } from "./pool_token";
-import { Coin, CoinSDKType } from "../../../cosmos/base/v1beta1/coin";
+import { TokenAmount, TokenAmountAmino, TokenAmountSDKType } from "./pool_token";
+import { Coin, CoinAmino, CoinSDKType } from "../../../cosmos/base/v1beta1/coin";
 import { BinaryReader, BinaryWriter } from "../../../binary";
 import { isSet } from "../../../helpers";
 export enum SwapType {
@@ -8,6 +8,7 @@ export enum SwapType {
   UNRECOGNIZED = -1,
 }
 export const SwapTypeSDKType = SwapType;
+export const SwapTypeAmino = SwapType;
 export function swapTypeFromJSON(object: any): SwapType {
   switch (object) {
     case 0:
@@ -41,6 +42,7 @@ export enum JoinType {
   UNRECOGNIZED = -1,
 }
 export const JoinTypeSDKType = JoinType;
+export const JoinTypeAmino = JoinType;
 export function joinTypeFromJSON(object: any): JoinType {
   switch (object) {
     case 0:
@@ -84,6 +86,7 @@ export enum ExitType {
   UNRECOGNIZED = -1,
 }
 export const ExitTypeSDKType = ExitType;
+export const ExitTypeAmino = ExitType;
 export function exitTypeFromJSON(object: any): ExitType {
   switch (object) {
     case 0:
@@ -126,6 +129,21 @@ export interface Swap {
   tokenIn: string;
   tokenOut: string;
 }
+export interface SwapProtoMsg {
+  typeUrl: "/pryzm.amm.v1.Swap";
+  value: Uint8Array;
+}
+export interface SwapAmino {
+  pool_id?: string;
+  amount?: string;
+  swap_type?: SwapType;
+  token_in?: string;
+  token_out?: string;
+}
+export interface SwapAminoMsg {
+  type: "/pryzm.amm.v1.Swap";
+  value: SwapAmino;
+}
 export interface SwapSDKType {
   pool_id: bigint;
   amount: string;
@@ -139,6 +157,20 @@ export interface SwapStep {
   tokenIn: string;
   tokenOut: string;
 }
+export interface SwapStepProtoMsg {
+  typeUrl: "/pryzm.amm.v1.SwapStep";
+  value: Uint8Array;
+}
+export interface SwapStepAmino {
+  pool_id?: string;
+  amount?: string;
+  token_in?: string;
+  token_out?: string;
+}
+export interface SwapStepAminoMsg {
+  type: "/pryzm.amm.v1.SwapStep";
+  value: SwapStepAmino;
+}
 export interface SwapStepSDKType {
   pool_id: bigint;
   amount?: string;
@@ -151,6 +183,21 @@ export interface SwapSummary {
   swapType: SwapType;
   protocolFee: Coin;
   swapFee: Coin;
+}
+export interface SwapSummaryProtoMsg {
+  typeUrl: "/pryzm.amm.v1.SwapSummary";
+  value: Uint8Array;
+}
+export interface SwapSummaryAmino {
+  token_in?: TokenAmountAmino;
+  token_out?: TokenAmountAmino;
+  swap_type?: SwapType;
+  protocol_fee?: CoinAmino;
+  swap_fee?: CoinAmino;
+}
+export interface SwapSummaryAminoMsg {
+  type: "/pryzm.amm.v1.SwapSummary";
+  value: SwapSummaryAmino;
 }
 export interface SwapSummarySDKType {
   token_in: TokenAmountSDKType;
@@ -166,6 +213,21 @@ export interface JoinSummary {
   protocolFee: Coin[];
   swapFee: Coin[];
 }
+export interface JoinSummaryProtoMsg {
+  typeUrl: "/pryzm.amm.v1.JoinSummary";
+  value: Uint8Array;
+}
+export interface JoinSummaryAmino {
+  lp_token?: TokenAmountAmino;
+  tokens_in?: TokenAmountAmino[];
+  join_type?: JoinType;
+  protocol_fee?: CoinAmino[];
+  swap_fee?: CoinAmino[];
+}
+export interface JoinSummaryAminoMsg {
+  type: "/pryzm.amm.v1.JoinSummary";
+  value: JoinSummaryAmino;
+}
 export interface JoinSummarySDKType {
   lp_token: TokenAmountSDKType;
   tokens_in: TokenAmountSDKType[];
@@ -179,6 +241,21 @@ export interface ExitSummary {
   exitType: ExitType;
   protocolFee: Coin;
   swapFee: Coin[];
+}
+export interface ExitSummaryProtoMsg {
+  typeUrl: "/pryzm.amm.v1.ExitSummary";
+  value: Uint8Array;
+}
+export interface ExitSummaryAmino {
+  lp_token?: TokenAmountAmino;
+  tokens_out?: TokenAmountAmino[];
+  exit_type?: ExitType;
+  protocol_fee?: CoinAmino;
+  swap_fee?: CoinAmino[];
+}
+export interface ExitSummaryAminoMsg {
+  type: "/pryzm.amm.v1.ExitSummary";
+  value: ExitSummaryAmino;
 }
 export interface ExitSummarySDKType {
   lp_token: TokenAmountSDKType;
@@ -197,6 +274,7 @@ function createBaseSwap(): Swap {
   };
 }
 export const Swap = {
+  typeUrl: "/pryzm.amm.v1.Swap",
   encode(message: Swap, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.poolId !== BigInt(0)) {
       writer.uint32(8).uint64(message.poolId);
@@ -270,6 +348,49 @@ export const Swap = {
     message.tokenIn = object.tokenIn ?? "";
     message.tokenOut = object.tokenOut ?? "";
     return message;
+  },
+  fromAmino(object: SwapAmino): Swap {
+    const message = createBaseSwap();
+    if (object.pool_id !== undefined && object.pool_id !== null) {
+      message.poolId = BigInt(object.pool_id);
+    }
+    if (object.amount !== undefined && object.amount !== null) {
+      message.amount = object.amount;
+    }
+    if (object.swap_type !== undefined && object.swap_type !== null) {
+      message.swapType = swapTypeFromJSON(object.swap_type);
+    }
+    if (object.token_in !== undefined && object.token_in !== null) {
+      message.tokenIn = object.token_in;
+    }
+    if (object.token_out !== undefined && object.token_out !== null) {
+      message.tokenOut = object.token_out;
+    }
+    return message;
+  },
+  toAmino(message: Swap): SwapAmino {
+    const obj: any = {};
+    obj.pool_id = message.poolId ? message.poolId.toString() : undefined;
+    obj.amount = message.amount;
+    obj.swap_type = swapTypeToJSON(message.swapType);
+    obj.token_in = message.tokenIn;
+    obj.token_out = message.tokenOut;
+    return obj;
+  },
+  fromAminoMsg(object: SwapAminoMsg): Swap {
+    return Swap.fromAmino(object.value);
+  },
+  fromProtoMsg(message: SwapProtoMsg): Swap {
+    return Swap.decode(message.value);
+  },
+  toProto(message: Swap): Uint8Array {
+    return Swap.encode(message).finish();
+  },
+  toProtoMsg(message: Swap): SwapProtoMsg {
+    return {
+      typeUrl: "/pryzm.amm.v1.Swap",
+      value: Swap.encode(message).finish()
+    };
   }
 };
 function createBaseSwapStep(): SwapStep {
@@ -281,6 +402,7 @@ function createBaseSwapStep(): SwapStep {
   };
 }
 export const SwapStep = {
+  typeUrl: "/pryzm.amm.v1.SwapStep",
   encode(message: SwapStep, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.poolId !== BigInt(0)) {
       writer.uint32(8).uint64(message.poolId);
@@ -345,6 +467,45 @@ export const SwapStep = {
     message.tokenIn = object.tokenIn ?? "";
     message.tokenOut = object.tokenOut ?? "";
     return message;
+  },
+  fromAmino(object: SwapStepAmino): SwapStep {
+    const message = createBaseSwapStep();
+    if (object.pool_id !== undefined && object.pool_id !== null) {
+      message.poolId = BigInt(object.pool_id);
+    }
+    if (object.amount !== undefined && object.amount !== null) {
+      message.amount = object.amount;
+    }
+    if (object.token_in !== undefined && object.token_in !== null) {
+      message.tokenIn = object.token_in;
+    }
+    if (object.token_out !== undefined && object.token_out !== null) {
+      message.tokenOut = object.token_out;
+    }
+    return message;
+  },
+  toAmino(message: SwapStep): SwapStepAmino {
+    const obj: any = {};
+    obj.pool_id = message.poolId ? message.poolId.toString() : undefined;
+    obj.amount = message.amount;
+    obj.token_in = message.tokenIn;
+    obj.token_out = message.tokenOut;
+    return obj;
+  },
+  fromAminoMsg(object: SwapStepAminoMsg): SwapStep {
+    return SwapStep.fromAmino(object.value);
+  },
+  fromProtoMsg(message: SwapStepProtoMsg): SwapStep {
+    return SwapStep.decode(message.value);
+  },
+  toProto(message: SwapStep): Uint8Array {
+    return SwapStep.encode(message).finish();
+  },
+  toProtoMsg(message: SwapStep): SwapStepProtoMsg {
+    return {
+      typeUrl: "/pryzm.amm.v1.SwapStep",
+      value: SwapStep.encode(message).finish()
+    };
   }
 };
 function createBaseSwapSummary(): SwapSummary {
@@ -357,6 +518,7 @@ function createBaseSwapSummary(): SwapSummary {
   };
 }
 export const SwapSummary = {
+  typeUrl: "/pryzm.amm.v1.SwapSummary",
   encode(message: SwapSummary, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.tokenIn !== undefined) {
       TokenAmount.encode(message.tokenIn, writer.uint32(10).fork()).ldelim();
@@ -430,6 +592,49 @@ export const SwapSummary = {
     message.protocolFee = object.protocolFee !== undefined && object.protocolFee !== null ? Coin.fromPartial(object.protocolFee) : undefined;
     message.swapFee = object.swapFee !== undefined && object.swapFee !== null ? Coin.fromPartial(object.swapFee) : undefined;
     return message;
+  },
+  fromAmino(object: SwapSummaryAmino): SwapSummary {
+    const message = createBaseSwapSummary();
+    if (object.token_in !== undefined && object.token_in !== null) {
+      message.tokenIn = TokenAmount.fromAmino(object.token_in);
+    }
+    if (object.token_out !== undefined && object.token_out !== null) {
+      message.tokenOut = TokenAmount.fromAmino(object.token_out);
+    }
+    if (object.swap_type !== undefined && object.swap_type !== null) {
+      message.swapType = swapTypeFromJSON(object.swap_type);
+    }
+    if (object.protocol_fee !== undefined && object.protocol_fee !== null) {
+      message.protocolFee = Coin.fromAmino(object.protocol_fee);
+    }
+    if (object.swap_fee !== undefined && object.swap_fee !== null) {
+      message.swapFee = Coin.fromAmino(object.swap_fee);
+    }
+    return message;
+  },
+  toAmino(message: SwapSummary): SwapSummaryAmino {
+    const obj: any = {};
+    obj.token_in = message.tokenIn ? TokenAmount.toAmino(message.tokenIn) : undefined;
+    obj.token_out = message.tokenOut ? TokenAmount.toAmino(message.tokenOut) : undefined;
+    obj.swap_type = swapTypeToJSON(message.swapType);
+    obj.protocol_fee = message.protocolFee ? Coin.toAmino(message.protocolFee) : undefined;
+    obj.swap_fee = message.swapFee ? Coin.toAmino(message.swapFee) : undefined;
+    return obj;
+  },
+  fromAminoMsg(object: SwapSummaryAminoMsg): SwapSummary {
+    return SwapSummary.fromAmino(object.value);
+  },
+  fromProtoMsg(message: SwapSummaryProtoMsg): SwapSummary {
+    return SwapSummary.decode(message.value);
+  },
+  toProto(message: SwapSummary): Uint8Array {
+    return SwapSummary.encode(message).finish();
+  },
+  toProtoMsg(message: SwapSummary): SwapSummaryProtoMsg {
+    return {
+      typeUrl: "/pryzm.amm.v1.SwapSummary",
+      value: SwapSummary.encode(message).finish()
+    };
   }
 };
 function createBaseJoinSummary(): JoinSummary {
@@ -442,6 +647,7 @@ function createBaseJoinSummary(): JoinSummary {
   };
 }
 export const JoinSummary = {
+  typeUrl: "/pryzm.amm.v1.JoinSummary",
   encode(message: JoinSummary, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.lpToken !== undefined) {
       TokenAmount.encode(message.lpToken, writer.uint32(10).fork()).ldelim();
@@ -527,6 +733,55 @@ export const JoinSummary = {
     message.protocolFee = object.protocolFee?.map(e => Coin.fromPartial(e)) || [];
     message.swapFee = object.swapFee?.map(e => Coin.fromPartial(e)) || [];
     return message;
+  },
+  fromAmino(object: JoinSummaryAmino): JoinSummary {
+    const message = createBaseJoinSummary();
+    if (object.lp_token !== undefined && object.lp_token !== null) {
+      message.lpToken = TokenAmount.fromAmino(object.lp_token);
+    }
+    message.tokensIn = object.tokens_in?.map(e => TokenAmount.fromAmino(e)) || [];
+    if (object.join_type !== undefined && object.join_type !== null) {
+      message.joinType = joinTypeFromJSON(object.join_type);
+    }
+    message.protocolFee = object.protocol_fee?.map(e => Coin.fromAmino(e)) || [];
+    message.swapFee = object.swap_fee?.map(e => Coin.fromAmino(e)) || [];
+    return message;
+  },
+  toAmino(message: JoinSummary): JoinSummaryAmino {
+    const obj: any = {};
+    obj.lp_token = message.lpToken ? TokenAmount.toAmino(message.lpToken) : undefined;
+    if (message.tokensIn) {
+      obj.tokens_in = message.tokensIn.map(e => e ? TokenAmount.toAmino(e) : undefined);
+    } else {
+      obj.tokens_in = [];
+    }
+    obj.join_type = joinTypeToJSON(message.joinType);
+    if (message.protocolFee) {
+      obj.protocol_fee = message.protocolFee.map(e => e ? Coin.toAmino(e) : undefined);
+    } else {
+      obj.protocol_fee = [];
+    }
+    if (message.swapFee) {
+      obj.swap_fee = message.swapFee.map(e => e ? Coin.toAmino(e) : undefined);
+    } else {
+      obj.swap_fee = [];
+    }
+    return obj;
+  },
+  fromAminoMsg(object: JoinSummaryAminoMsg): JoinSummary {
+    return JoinSummary.fromAmino(object.value);
+  },
+  fromProtoMsg(message: JoinSummaryProtoMsg): JoinSummary {
+    return JoinSummary.decode(message.value);
+  },
+  toProto(message: JoinSummary): Uint8Array {
+    return JoinSummary.encode(message).finish();
+  },
+  toProtoMsg(message: JoinSummary): JoinSummaryProtoMsg {
+    return {
+      typeUrl: "/pryzm.amm.v1.JoinSummary",
+      value: JoinSummary.encode(message).finish()
+    };
   }
 };
 function createBaseExitSummary(): ExitSummary {
@@ -539,6 +794,7 @@ function createBaseExitSummary(): ExitSummary {
   };
 }
 export const ExitSummary = {
+  typeUrl: "/pryzm.amm.v1.ExitSummary",
   encode(message: ExitSummary, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.lpToken !== undefined) {
       TokenAmount.encode(message.lpToken, writer.uint32(10).fork()).ldelim();
@@ -620,5 +876,52 @@ export const ExitSummary = {
     message.protocolFee = object.protocolFee !== undefined && object.protocolFee !== null ? Coin.fromPartial(object.protocolFee) : undefined;
     message.swapFee = object.swapFee?.map(e => Coin.fromPartial(e)) || [];
     return message;
+  },
+  fromAmino(object: ExitSummaryAmino): ExitSummary {
+    const message = createBaseExitSummary();
+    if (object.lp_token !== undefined && object.lp_token !== null) {
+      message.lpToken = TokenAmount.fromAmino(object.lp_token);
+    }
+    message.tokensOut = object.tokens_out?.map(e => TokenAmount.fromAmino(e)) || [];
+    if (object.exit_type !== undefined && object.exit_type !== null) {
+      message.exitType = exitTypeFromJSON(object.exit_type);
+    }
+    if (object.protocol_fee !== undefined && object.protocol_fee !== null) {
+      message.protocolFee = Coin.fromAmino(object.protocol_fee);
+    }
+    message.swapFee = object.swap_fee?.map(e => Coin.fromAmino(e)) || [];
+    return message;
+  },
+  toAmino(message: ExitSummary): ExitSummaryAmino {
+    const obj: any = {};
+    obj.lp_token = message.lpToken ? TokenAmount.toAmino(message.lpToken) : undefined;
+    if (message.tokensOut) {
+      obj.tokens_out = message.tokensOut.map(e => e ? TokenAmount.toAmino(e) : undefined);
+    } else {
+      obj.tokens_out = [];
+    }
+    obj.exit_type = exitTypeToJSON(message.exitType);
+    obj.protocol_fee = message.protocolFee ? Coin.toAmino(message.protocolFee) : undefined;
+    if (message.swapFee) {
+      obj.swap_fee = message.swapFee.map(e => e ? Coin.toAmino(e) : undefined);
+    } else {
+      obj.swap_fee = [];
+    }
+    return obj;
+  },
+  fromAminoMsg(object: ExitSummaryAminoMsg): ExitSummary {
+    return ExitSummary.fromAmino(object.value);
+  },
+  fromProtoMsg(message: ExitSummaryProtoMsg): ExitSummary {
+    return ExitSummary.decode(message.value);
+  },
+  toProto(message: ExitSummary): Uint8Array {
+    return ExitSummary.encode(message).finish();
+  },
+  toProtoMsg(message: ExitSummary): ExitSummaryProtoMsg {
+    return {
+      typeUrl: "/pryzm.amm.v1.ExitSummary",
+      value: ExitSummary.encode(message).finish()
+    };
   }
 };

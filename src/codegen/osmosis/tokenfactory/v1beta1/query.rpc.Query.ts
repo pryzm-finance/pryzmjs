@@ -1,4 +1,3 @@
-//@ts-nocheck
 import { grpc } from "@improbable-eng/grpc-web";
 import { UnaryMethodDefinitionish } from "../../../grpc-web";
 import { DeepPartial } from "../../../helpers";
@@ -31,13 +30,13 @@ export class QueryClientImpl implements Query {
     this.denomsFromCreator = this.denomsFromCreator.bind(this);
   }
   params(request: DeepPartial<QueryParamsRequest> = {}, metadata?: grpc.Metadata): Promise<QueryParamsResponse> {
-    return this.rpc.unary(QueryParamsDesc, QueryParamsRequest.fromPartial(request), metadata);
+    return this.rpc.unary(QueryParamsDesc, QueryParamsRequest.fromPartial(request as any), metadata);
   }
   denomAuthorityMetadata(request: DeepPartial<QueryDenomAuthorityMetadataRequest>, metadata?: grpc.Metadata): Promise<QueryDenomAuthorityMetadataResponse> {
-    return this.rpc.unary(QueryDenomAuthorityMetadataDesc, QueryDenomAuthorityMetadataRequest.fromPartial(request), metadata);
+    return this.rpc.unary(QueryDenomAuthorityMetadataDesc, QueryDenomAuthorityMetadataRequest.fromPartial(request as any), metadata);
   }
   denomsFromCreator(request: DeepPartial<QueryDenomsFromCreatorRequest>, metadata?: grpc.Metadata): Promise<QueryDenomsFromCreatorResponse> {
-    return this.rpc.unary(QueryDenomsFromCreatorDesc, QueryDenomsFromCreatorRequest.fromPartial(request), metadata);
+    return this.rpc.unary(QueryDenomsFromCreatorDesc, QueryDenomsFromCreatorRequest.fromPartial(request as any), metadata);
   }
 }
 export const QueryDesc = {

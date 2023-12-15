@@ -1,5 +1,5 @@
 import { Timestamp, TimestampSDKType } from "../../../google/protobuf/timestamp";
-import { WeightedVoteOption, WeightedVoteOptionSDKType } from "../../../cosmos/gov/v1/gov";
+import { WeightedVoteOption, WeightedVoteOptionAmino, WeightedVoteOptionSDKType } from "../../../cosmos/gov/v1/gov";
 import { BinaryReader, BinaryWriter } from "../../../binary";
 import { isSet, fromJsonTimestamp, fromTimestamp } from "../../../helpers";
 export enum ProposalStatus {
@@ -10,6 +10,7 @@ export enum ProposalStatus {
   UNRECOGNIZED = -1,
 }
 export const ProposalStatusSDKType = ProposalStatus;
+export const ProposalStatusAmino = ProposalStatus;
 export function proposalStatusFromJSON(object: any): ProposalStatus {
   switch (object) {
     case 0:
@@ -60,6 +61,29 @@ export interface Proposal {
   /** the state of the proposal */
   status: ProposalStatus;
 }
+export interface ProposalProtoMsg {
+  typeUrl: "/pryzm.pgov.v1.Proposal";
+  value: Uint8Array;
+}
+/** Proposal stores information about a replicated proposal */
+export interface ProposalAmino {
+  /** the id of proposal on the host chain */
+  proposal_id?: string;
+  /** the asset ID */
+  asset?: string;
+  /** the time when the proposal has been started */
+  start_time?: string;
+  /** the time of proposal ending on PRYZM, this time is sooner than the real end time of proposal on the host chain */
+  end_time?: string;
+  /** the final aggregation of votes on PRYZM, which is submitted to the host chain */
+  final_vote?: WeightedVoteOptionAmino[];
+  /** the state of the proposal */
+  status?: ProposalStatus;
+}
+export interface ProposalAminoMsg {
+  type: "/pryzm.pgov.v1.Proposal";
+  value: ProposalAmino;
+}
 /** Proposal stores information about a replicated proposal */
 export interface ProposalSDKType {
   proposal_id: bigint;
@@ -80,6 +104,7 @@ function createBaseProposal(): Proposal {
   };
 }
 export const Proposal = {
+  typeUrl: "/pryzm.pgov.v1.Proposal",
   encode(message: Proposal, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.proposalId !== BigInt(0)) {
       writer.uint32(8).uint64(message.proposalId);
@@ -166,5 +191,54 @@ export const Proposal = {
     message.finalVote = object.finalVote?.map(e => WeightedVoteOption.fromPartial(e)) || [];
     message.status = object.status ?? 0;
     return message;
+  },
+  fromAmino(object: ProposalAmino): Proposal {
+    const message = createBaseProposal();
+    if (object.proposal_id !== undefined && object.proposal_id !== null) {
+      message.proposalId = BigInt(object.proposal_id);
+    }
+    if (object.asset !== undefined && object.asset !== null) {
+      message.asset = object.asset;
+    }
+    if (object.start_time !== undefined && object.start_time !== null) {
+      message.startTime = Timestamp.fromAmino(object.start_time);
+    }
+    if (object.end_time !== undefined && object.end_time !== null) {
+      message.endTime = Timestamp.fromAmino(object.end_time);
+    }
+    message.finalVote = object.final_vote?.map(e => WeightedVoteOption.fromAmino(e)) || [];
+    if (object.status !== undefined && object.status !== null) {
+      message.status = proposalStatusFromJSON(object.status);
+    }
+    return message;
+  },
+  toAmino(message: Proposal): ProposalAmino {
+    const obj: any = {};
+    obj.proposal_id = message.proposalId ? message.proposalId.toString() : undefined;
+    obj.asset = message.asset;
+    obj.start_time = message.startTime ? Timestamp.toAmino(message.startTime) : undefined;
+    obj.end_time = message.endTime ? Timestamp.toAmino(message.endTime) : undefined;
+    if (message.finalVote) {
+      obj.final_vote = message.finalVote.map(e => e ? WeightedVoteOption.toAmino(e) : undefined);
+    } else {
+      obj.final_vote = [];
+    }
+    obj.status = proposalStatusToJSON(message.status);
+    return obj;
+  },
+  fromAminoMsg(object: ProposalAminoMsg): Proposal {
+    return Proposal.fromAmino(object.value);
+  },
+  fromProtoMsg(message: ProposalProtoMsg): Proposal {
+    return Proposal.decode(message.value);
+  },
+  toProto(message: Proposal): Uint8Array {
+    return Proposal.encode(message).finish();
+  },
+  toProtoMsg(message: Proposal): ProposalProtoMsg {
+    return {
+      typeUrl: "/pryzm.pgov.v1.Proposal",
+      value: Proposal.encode(message).finish()
+    };
   }
 };

@@ -17,6 +17,30 @@ export interface YammConfiguration {
   avgMonthlyYieldRate?: string;
   yieldFeeScaler?: string;
 }
+export interface YammConfigurationProtoMsg {
+  typeUrl: "/pryzm.amm.v1.YammConfiguration";
+  value: Uint8Array;
+}
+export interface YammConfigurationAmino {
+  pool_id?: string;
+  lambda?: string;
+  /** duration (milliseconds) for virtual balance when adding new pAssets to yamm pools */
+  maturity_introduction_interval_millis?: string;
+  maturity_expiration_interval_millis?: string;
+  introduction_virtual_balance_scaler?: string;
+  expiration_virtual_balance_scaler?: string;
+  /** if the value is not set, will be read from module parameters */
+  buy_y_given_in_loan_fee_ratio?: string;
+  /** if the value is not set, will be read from module parameters */
+  sell_y_given_out_fee_ratio?: string;
+  max_alpha?: string;
+  avg_monthly_yield_rate?: string;
+  yield_fee_scaler?: string;
+}
+export interface YammConfigurationAminoMsg {
+  type: "/pryzm.amm.v1.YammConfiguration";
+  value: YammConfigurationAmino;
+}
 export interface YammConfigurationSDKType {
   pool_id: bigint;
   lambda?: string;
@@ -46,6 +70,7 @@ function createBaseYammConfiguration(): YammConfiguration {
   };
 }
 export const YammConfiguration = {
+  typeUrl: "/pryzm.amm.v1.YammConfiguration",
   encode(message: YammConfiguration, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.poolId !== BigInt(0)) {
       writer.uint32(8).uint64(message.poolId);
@@ -173,5 +198,72 @@ export const YammConfiguration = {
     message.avgMonthlyYieldRate = object.avgMonthlyYieldRate ?? undefined;
     message.yieldFeeScaler = object.yieldFeeScaler ?? undefined;
     return message;
+  },
+  fromAmino(object: YammConfigurationAmino): YammConfiguration {
+    const message = createBaseYammConfiguration();
+    if (object.pool_id !== undefined && object.pool_id !== null) {
+      message.poolId = BigInt(object.pool_id);
+    }
+    if (object.lambda !== undefined && object.lambda !== null) {
+      message.lambda = object.lambda;
+    }
+    if (object.maturity_introduction_interval_millis !== undefined && object.maturity_introduction_interval_millis !== null) {
+      message.maturityIntroductionIntervalMillis = object.maturity_introduction_interval_millis;
+    }
+    if (object.maturity_expiration_interval_millis !== undefined && object.maturity_expiration_interval_millis !== null) {
+      message.maturityExpirationIntervalMillis = object.maturity_expiration_interval_millis;
+    }
+    if (object.introduction_virtual_balance_scaler !== undefined && object.introduction_virtual_balance_scaler !== null) {
+      message.introductionVirtualBalanceScaler = object.introduction_virtual_balance_scaler;
+    }
+    if (object.expiration_virtual_balance_scaler !== undefined && object.expiration_virtual_balance_scaler !== null) {
+      message.expirationVirtualBalanceScaler = object.expiration_virtual_balance_scaler;
+    }
+    if (object.buy_y_given_in_loan_fee_ratio !== undefined && object.buy_y_given_in_loan_fee_ratio !== null) {
+      message.buyYGivenInLoanFeeRatio = object.buy_y_given_in_loan_fee_ratio;
+    }
+    if (object.sell_y_given_out_fee_ratio !== undefined && object.sell_y_given_out_fee_ratio !== null) {
+      message.sellYGivenOutFeeRatio = object.sell_y_given_out_fee_ratio;
+    }
+    if (object.max_alpha !== undefined && object.max_alpha !== null) {
+      message.maxAlpha = object.max_alpha;
+    }
+    if (object.avg_monthly_yield_rate !== undefined && object.avg_monthly_yield_rate !== null) {
+      message.avgMonthlyYieldRate = object.avg_monthly_yield_rate;
+    }
+    if (object.yield_fee_scaler !== undefined && object.yield_fee_scaler !== null) {
+      message.yieldFeeScaler = object.yield_fee_scaler;
+    }
+    return message;
+  },
+  toAmino(message: YammConfiguration): YammConfigurationAmino {
+    const obj: any = {};
+    obj.pool_id = message.poolId ? message.poolId.toString() : undefined;
+    obj.lambda = message.lambda;
+    obj.maturity_introduction_interval_millis = message.maturityIntroductionIntervalMillis;
+    obj.maturity_expiration_interval_millis = message.maturityExpirationIntervalMillis;
+    obj.introduction_virtual_balance_scaler = message.introductionVirtualBalanceScaler;
+    obj.expiration_virtual_balance_scaler = message.expirationVirtualBalanceScaler;
+    obj.buy_y_given_in_loan_fee_ratio = message.buyYGivenInLoanFeeRatio;
+    obj.sell_y_given_out_fee_ratio = message.sellYGivenOutFeeRatio;
+    obj.max_alpha = message.maxAlpha;
+    obj.avg_monthly_yield_rate = message.avgMonthlyYieldRate;
+    obj.yield_fee_scaler = message.yieldFeeScaler;
+    return obj;
+  },
+  fromAminoMsg(object: YammConfigurationAminoMsg): YammConfiguration {
+    return YammConfiguration.fromAmino(object.value);
+  },
+  fromProtoMsg(message: YammConfigurationProtoMsg): YammConfiguration {
+    return YammConfiguration.decode(message.value);
+  },
+  toProto(message: YammConfiguration): Uint8Array {
+    return YammConfiguration.encode(message).finish();
+  },
+  toProtoMsg(message: YammConfiguration): YammConfigurationProtoMsg {
+    return {
+      typeUrl: "/pryzm.amm.v1.YammConfiguration",
+      value: YammConfiguration.encode(message).finish()
+    };
   }
 };

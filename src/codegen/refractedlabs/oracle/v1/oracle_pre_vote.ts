@@ -5,6 +5,19 @@ export interface OraclePreVote {
   hash: string;
   submitBlock: bigint;
 }
+export interface OraclePreVoteProtoMsg {
+  typeUrl: "/refractedlabs.oracle.v1.OraclePreVote";
+  value: Uint8Array;
+}
+export interface OraclePreVoteAmino {
+  validator?: string;
+  hash?: string;
+  submit_block?: string;
+}
+export interface OraclePreVoteAminoMsg {
+  type: "/refractedlabs.oracle.v1.OraclePreVote";
+  value: OraclePreVoteAmino;
+}
 export interface OraclePreVoteSDKType {
   validator: string;
   hash: string;
@@ -18,6 +31,7 @@ function createBaseOraclePreVote(): OraclePreVote {
   };
 }
 export const OraclePreVote = {
+  typeUrl: "/refractedlabs.oracle.v1.OraclePreVote",
   encode(message: OraclePreVote, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.validator !== "") {
       writer.uint32(10).string(message.validator);
@@ -73,5 +87,40 @@ export const OraclePreVote = {
     message.hash = object.hash ?? "";
     message.submitBlock = object.submitBlock !== undefined && object.submitBlock !== null ? BigInt(object.submitBlock.toString()) : BigInt(0);
     return message;
+  },
+  fromAmino(object: OraclePreVoteAmino): OraclePreVote {
+    const message = createBaseOraclePreVote();
+    if (object.validator !== undefined && object.validator !== null) {
+      message.validator = object.validator;
+    }
+    if (object.hash !== undefined && object.hash !== null) {
+      message.hash = object.hash;
+    }
+    if (object.submit_block !== undefined && object.submit_block !== null) {
+      message.submitBlock = BigInt(object.submit_block);
+    }
+    return message;
+  },
+  toAmino(message: OraclePreVote): OraclePreVoteAmino {
+    const obj: any = {};
+    obj.validator = message.validator;
+    obj.hash = message.hash;
+    obj.submit_block = message.submitBlock ? message.submitBlock.toString() : undefined;
+    return obj;
+  },
+  fromAminoMsg(object: OraclePreVoteAminoMsg): OraclePreVote {
+    return OraclePreVote.fromAmino(object.value);
+  },
+  fromProtoMsg(message: OraclePreVoteProtoMsg): OraclePreVote {
+    return OraclePreVote.decode(message.value);
+  },
+  toProto(message: OraclePreVote): Uint8Array {
+    return OraclePreVote.encode(message).finish();
+  },
+  toProtoMsg(message: OraclePreVote): OraclePreVoteProtoMsg {
+    return {
+      typeUrl: "/refractedlabs.oracle.v1.OraclePreVote",
+      value: OraclePreVote.encode(message).finish()
+    };
   }
 };

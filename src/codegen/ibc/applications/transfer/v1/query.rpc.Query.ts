@@ -1,4 +1,3 @@
-//@ts-nocheck
 import { grpc } from "@improbable-eng/grpc-web";
 import { UnaryMethodDefinitionish } from "../../../../grpc-web";
 import { DeepPartial } from "../../../../helpers";
@@ -33,22 +32,22 @@ export class QueryClientImpl implements Query {
   denomTraces(request: DeepPartial<QueryDenomTracesRequest> = {
     pagination: undefined
   }, metadata?: grpc.Metadata): Promise<QueryDenomTracesResponse> {
-    return this.rpc.unary(QueryDenomTracesDesc, QueryDenomTracesRequest.fromPartial(request), metadata);
+    return this.rpc.unary(QueryDenomTracesDesc, QueryDenomTracesRequest.fromPartial(request as any), metadata);
   }
   denomTrace(request: DeepPartial<QueryDenomTraceRequest>, metadata?: grpc.Metadata): Promise<QueryDenomTraceResponse> {
-    return this.rpc.unary(QueryDenomTraceDesc, QueryDenomTraceRequest.fromPartial(request), metadata);
+    return this.rpc.unary(QueryDenomTraceDesc, QueryDenomTraceRequest.fromPartial(request as any), metadata);
   }
   params(request: DeepPartial<QueryParamsRequest> = {}, metadata?: grpc.Metadata): Promise<QueryParamsResponse> {
-    return this.rpc.unary(QueryParamsDesc, QueryParamsRequest.fromPartial(request), metadata);
+    return this.rpc.unary(QueryParamsDesc, QueryParamsRequest.fromPartial(request as any), metadata);
   }
   denomHash(request: DeepPartial<QueryDenomHashRequest>, metadata?: grpc.Metadata): Promise<QueryDenomHashResponse> {
-    return this.rpc.unary(QueryDenomHashDesc, QueryDenomHashRequest.fromPartial(request), metadata);
+    return this.rpc.unary(QueryDenomHashDesc, QueryDenomHashRequest.fromPartial(request as any), metadata);
   }
   escrowAddress(request: DeepPartial<QueryEscrowAddressRequest>, metadata?: grpc.Metadata): Promise<QueryEscrowAddressResponse> {
-    return this.rpc.unary(QueryEscrowAddressDesc, QueryEscrowAddressRequest.fromPartial(request), metadata);
+    return this.rpc.unary(QueryEscrowAddressDesc, QueryEscrowAddressRequest.fromPartial(request as any), metadata);
   }
   totalEscrowForDenom(request: DeepPartial<QueryTotalEscrowForDenomRequest>, metadata?: grpc.Metadata): Promise<QueryTotalEscrowForDenomResponse> {
-    return this.rpc.unary(QueryTotalEscrowForDenomDesc, QueryTotalEscrowForDenomRequest.fromPartial(request), metadata);
+    return this.rpc.unary(QueryTotalEscrowForDenomDesc, QueryTotalEscrowForDenomRequest.fromPartial(request as any), metadata);
   }
 }
 export const QueryDesc = {

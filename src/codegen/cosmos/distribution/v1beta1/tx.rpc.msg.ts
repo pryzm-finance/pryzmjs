@@ -1,4 +1,3 @@
-//@ts-nocheck
 import { UnaryMethodDefinitionish } from "../../../grpc-web";
 import { DeepPartial } from "../../../helpers";
 import { grpc } from "@improbable-eng/grpc-web";
@@ -55,22 +54,22 @@ export class MsgClientImpl implements Msg {
     this.communityPoolSpend = this.communityPoolSpend.bind(this);
   }
   setWithdrawAddress(request: DeepPartial<MsgSetWithdrawAddress>, metadata?: grpc.Metadata): Promise<MsgSetWithdrawAddressResponse> {
-    return this.rpc.unary(MsgSetWithdrawAddressDesc, MsgSetWithdrawAddress.fromPartial(request), metadata);
+    return this.rpc.unary(MsgSetWithdrawAddressDesc, MsgSetWithdrawAddress.fromPartial(request as any), metadata);
   }
   withdrawDelegatorReward(request: DeepPartial<MsgWithdrawDelegatorReward>, metadata?: grpc.Metadata): Promise<MsgWithdrawDelegatorRewardResponse> {
-    return this.rpc.unary(MsgWithdrawDelegatorRewardDesc, MsgWithdrawDelegatorReward.fromPartial(request), metadata);
+    return this.rpc.unary(MsgWithdrawDelegatorRewardDesc, MsgWithdrawDelegatorReward.fromPartial(request as any), metadata);
   }
   withdrawValidatorCommission(request: DeepPartial<MsgWithdrawValidatorCommission>, metadata?: grpc.Metadata): Promise<MsgWithdrawValidatorCommissionResponse> {
-    return this.rpc.unary(MsgWithdrawValidatorCommissionDesc, MsgWithdrawValidatorCommission.fromPartial(request), metadata);
+    return this.rpc.unary(MsgWithdrawValidatorCommissionDesc, MsgWithdrawValidatorCommission.fromPartial(request as any), metadata);
   }
   fundCommunityPool(request: DeepPartial<MsgFundCommunityPool>, metadata?: grpc.Metadata): Promise<MsgFundCommunityPoolResponse> {
-    return this.rpc.unary(MsgFundCommunityPoolDesc, MsgFundCommunityPool.fromPartial(request), metadata);
+    return this.rpc.unary(MsgFundCommunityPoolDesc, MsgFundCommunityPool.fromPartial(request as any), metadata);
   }
   updateParams(request: DeepPartial<MsgUpdateParams>, metadata?: grpc.Metadata): Promise<MsgUpdateParamsResponse> {
-    return this.rpc.unary(MsgUpdateParamsDesc, MsgUpdateParams.fromPartial(request), metadata);
+    return this.rpc.unary(MsgUpdateParamsDesc, MsgUpdateParams.fromPartial(request as any), metadata);
   }
   communityPoolSpend(request: DeepPartial<MsgCommunityPoolSpend>, metadata?: grpc.Metadata): Promise<MsgCommunityPoolSpendResponse> {
-    return this.rpc.unary(MsgCommunityPoolSpendDesc, MsgCommunityPoolSpend.fromPartial(request), metadata);
+    return this.rpc.unary(MsgCommunityPoolSpendDesc, MsgCommunityPoolSpend.fromPartial(request as any), metadata);
   }
 }
 export const MsgDesc = {

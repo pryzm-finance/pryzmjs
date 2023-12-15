@@ -1,11 +1,22 @@
-import { Params, ParamsSDKType } from "./params";
-import { Flow, FlowSDKType } from "./flow";
-import { Coin, CoinSDKType } from "../../../cosmos/base/v1beta1/coin";
-import { Position, PositionSDKType } from "./position";
+import { Params, ParamsAmino, ParamsSDKType } from "./params";
+import { Flow, FlowAmino, FlowSDKType } from "./flow";
+import { Coin, CoinAmino, CoinSDKType } from "../../../cosmos/base/v1beta1/coin";
+import { Position, PositionAmino, PositionSDKType } from "./position";
 import { BinaryReader, BinaryWriter } from "../../../binary";
 import { isSet } from "../../../helpers";
 export interface EventSetParams {
   params: Params;
+}
+export interface EventSetParamsProtoMsg {
+  typeUrl: "/refractedlabs.flowtrade.v1.EventSetParams";
+  value: Uint8Array;
+}
+export interface EventSetParamsAmino {
+  params?: ParamsAmino;
+}
+export interface EventSetParamsAminoMsg {
+  type: "/refractedlabs.flowtrade.v1.EventSetParams";
+  value: EventSetParamsAmino;
 }
 export interface EventSetParamsSDKType {
   params: ParamsSDKType;
@@ -13,11 +24,33 @@ export interface EventSetParamsSDKType {
 export interface EventFlowCreated {
   flow: Flow;
 }
+export interface EventFlowCreatedProtoMsg {
+  typeUrl: "/refractedlabs.flowtrade.v1.EventFlowCreated";
+  value: Uint8Array;
+}
+export interface EventFlowCreatedAmino {
+  flow?: FlowAmino;
+}
+export interface EventFlowCreatedAminoMsg {
+  type: "/refractedlabs.flowtrade.v1.EventFlowCreated";
+  value: EventFlowCreatedAmino;
+}
 export interface EventFlowCreatedSDKType {
   flow: FlowSDKType;
 }
 export interface EventFlowEnded {
   flowId: bigint;
+}
+export interface EventFlowEndedProtoMsg {
+  typeUrl: "/refractedlabs.flowtrade.v1.EventFlowEnded";
+  value: Uint8Array;
+}
+export interface EventFlowEndedAmino {
+  flow_id?: string;
+}
+export interface EventFlowEndedAminoMsg {
+  type: "/refractedlabs.flowtrade.v1.EventFlowEnded";
+  value: EventFlowEndedAmino;
 }
 export interface EventFlowEndedSDKType {
   flow_id: bigint;
@@ -25,24 +58,62 @@ export interface EventFlowEndedSDKType {
 export interface EventFlowStopped {
   flowId: bigint;
 }
+export interface EventFlowStoppedProtoMsg {
+  typeUrl: "/refractedlabs.flowtrade.v1.EventFlowStopped";
+  value: Uint8Array;
+}
+export interface EventFlowStoppedAmino {
+  flow_id?: string;
+}
+export interface EventFlowStoppedAminoMsg {
+  type: "/refractedlabs.flowtrade.v1.EventFlowStopped";
+  value: EventFlowStoppedAmino;
+}
 export interface EventFlowStoppedSDKType {
   flow_id: bigint;
 }
 export interface EventFlowCheckedOut {
   flowId: bigint;
-  returnedDeposit: Coin;
-  returnedTokenOut: Coin;
+  returnedDeposit?: Coin;
+  returnedTokenOut?: Coin;
+}
+export interface EventFlowCheckedOutProtoMsg {
+  typeUrl: "/refractedlabs.flowtrade.v1.EventFlowCheckedOut";
+  value: Uint8Array;
+}
+export interface EventFlowCheckedOutAmino {
+  flow_id?: string;
+  returned_deposit?: CoinAmino;
+  returned_token_out?: CoinAmino;
+}
+export interface EventFlowCheckedOutAminoMsg {
+  type: "/refractedlabs.flowtrade.v1.EventFlowCheckedOut";
+  value: EventFlowCheckedOutAmino;
 }
 export interface EventFlowCheckedOutSDKType {
   flow_id: bigint;
-  returned_deposit: CoinSDKType;
-  returned_token_out: CoinSDKType;
+  returned_deposit?: CoinSDKType;
+  returned_token_out?: CoinSDKType;
 }
 export interface EventFlowTokenInClaimed {
   flowId: bigint;
   amount: Coin;
   fee: Coin;
   treasury: string;
+}
+export interface EventFlowTokenInClaimedProtoMsg {
+  typeUrl: "/refractedlabs.flowtrade.v1.EventFlowTokenInClaimed";
+  value: Uint8Array;
+}
+export interface EventFlowTokenInClaimedAmino {
+  flow_id?: string;
+  amount?: CoinAmino;
+  fee?: CoinAmino;
+  treasury?: string;
+}
+export interface EventFlowTokenInClaimedAminoMsg {
+  type: "/refractedlabs.flowtrade.v1.EventFlowTokenInClaimed";
+  value: EventFlowTokenInClaimedAmino;
 }
 export interface EventFlowTokenInClaimedSDKType {
   flow_id: bigint;
@@ -56,6 +127,20 @@ export interface EventFlowTokenOutClaimed {
   amount: Coin;
   fee: Coin;
 }
+export interface EventFlowTokenOutClaimedProtoMsg {
+  typeUrl: "/refractedlabs.flowtrade.v1.EventFlowTokenOutClaimed";
+  value: Uint8Array;
+}
+export interface EventFlowTokenOutClaimedAmino {
+  flow_id?: string;
+  owner?: string;
+  amount?: CoinAmino;
+  fee?: CoinAmino;
+}
+export interface EventFlowTokenOutClaimedAminoMsg {
+  type: "/refractedlabs.flowtrade.v1.EventFlowTokenOutClaimed";
+  value: EventFlowTokenOutClaimedAmino;
+}
 export interface EventFlowTokenOutClaimedSDKType {
   flow_id: bigint;
   owner: string;
@@ -67,6 +152,19 @@ export interface EventJoinFlow {
   address: string;
   amount: Coin;
 }
+export interface EventJoinFlowProtoMsg {
+  typeUrl: "/refractedlabs.flowtrade.v1.EventJoinFlow";
+  value: Uint8Array;
+}
+export interface EventJoinFlowAmino {
+  flow_id?: string;
+  address?: string;
+  amount?: CoinAmino;
+}
+export interface EventJoinFlowAminoMsg {
+  type: "/refractedlabs.flowtrade.v1.EventJoinFlow";
+  value: EventJoinFlowAmino;
+}
 export interface EventJoinFlowSDKType {
   flow_id: bigint;
   address: string;
@@ -76,6 +174,19 @@ export interface EventExitFlow {
   flowId: bigint;
   address: string;
   amount: Coin;
+}
+export interface EventExitFlowProtoMsg {
+  typeUrl: "/refractedlabs.flowtrade.v1.EventExitFlow";
+  value: Uint8Array;
+}
+export interface EventExitFlowAmino {
+  flow_id?: string;
+  address?: string;
+  amount?: CoinAmino;
+}
+export interface EventExitFlowAminoMsg {
+  type: "/refractedlabs.flowtrade.v1.EventExitFlow";
+  value: EventExitFlowAmino;
 }
 export interface EventExitFlowSDKType {
   flow_id: bigint;
@@ -87,6 +198,19 @@ export interface EventSetOperator {
   owner: string;
   operator: string;
 }
+export interface EventSetOperatorProtoMsg {
+  typeUrl: "/refractedlabs.flowtrade.v1.EventSetOperator";
+  value: Uint8Array;
+}
+export interface EventSetOperatorAmino {
+  flow_id?: string;
+  owner?: string;
+  operator?: string;
+}
+export interface EventSetOperatorAminoMsg {
+  type: "/refractedlabs.flowtrade.v1.EventSetOperator";
+  value: EventSetOperatorAmino;
+}
 export interface EventSetOperatorSDKType {
   flow_id: bigint;
   owner: string;
@@ -95,11 +219,33 @@ export interface EventSetOperatorSDKType {
 export interface EventSetFlow {
   flow: Flow;
 }
+export interface EventSetFlowProtoMsg {
+  typeUrl: "/refractedlabs.flowtrade.v1.EventSetFlow";
+  value: Uint8Array;
+}
+export interface EventSetFlowAmino {
+  flow?: FlowAmino;
+}
+export interface EventSetFlowAminoMsg {
+  type: "/refractedlabs.flowtrade.v1.EventSetFlow";
+  value: EventSetFlowAmino;
+}
 export interface EventSetFlowSDKType {
   flow: FlowSDKType;
 }
 export interface EventSetPosition {
   position: Position;
+}
+export interface EventSetPositionProtoMsg {
+  typeUrl: "/refractedlabs.flowtrade.v1.EventSetPosition";
+  value: Uint8Array;
+}
+export interface EventSetPositionAmino {
+  position?: PositionAmino;
+}
+export interface EventSetPositionAminoMsg {
+  type: "/refractedlabs.flowtrade.v1.EventSetPosition";
+  value: EventSetPositionAmino;
 }
 export interface EventSetPositionSDKType {
   position: PositionSDKType;
@@ -110,6 +256,7 @@ function createBaseEventSetParams(): EventSetParams {
   };
 }
 export const EventSetParams = {
+  typeUrl: "/refractedlabs.flowtrade.v1.EventSetParams",
   encode(message: EventSetParams, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.params !== undefined) {
       Params.encode(message.params, writer.uint32(10).fork()).ldelim();
@@ -147,6 +294,33 @@ export const EventSetParams = {
     const message = createBaseEventSetParams();
     message.params = object.params !== undefined && object.params !== null ? Params.fromPartial(object.params) : undefined;
     return message;
+  },
+  fromAmino(object: EventSetParamsAmino): EventSetParams {
+    const message = createBaseEventSetParams();
+    if (object.params !== undefined && object.params !== null) {
+      message.params = Params.fromAmino(object.params);
+    }
+    return message;
+  },
+  toAmino(message: EventSetParams): EventSetParamsAmino {
+    const obj: any = {};
+    obj.params = message.params ? Params.toAmino(message.params) : undefined;
+    return obj;
+  },
+  fromAminoMsg(object: EventSetParamsAminoMsg): EventSetParams {
+    return EventSetParams.fromAmino(object.value);
+  },
+  fromProtoMsg(message: EventSetParamsProtoMsg): EventSetParams {
+    return EventSetParams.decode(message.value);
+  },
+  toProto(message: EventSetParams): Uint8Array {
+    return EventSetParams.encode(message).finish();
+  },
+  toProtoMsg(message: EventSetParams): EventSetParamsProtoMsg {
+    return {
+      typeUrl: "/refractedlabs.flowtrade.v1.EventSetParams",
+      value: EventSetParams.encode(message).finish()
+    };
   }
 };
 function createBaseEventFlowCreated(): EventFlowCreated {
@@ -155,6 +329,7 @@ function createBaseEventFlowCreated(): EventFlowCreated {
   };
 }
 export const EventFlowCreated = {
+  typeUrl: "/refractedlabs.flowtrade.v1.EventFlowCreated",
   encode(message: EventFlowCreated, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.flow !== undefined) {
       Flow.encode(message.flow, writer.uint32(10).fork()).ldelim();
@@ -192,6 +367,33 @@ export const EventFlowCreated = {
     const message = createBaseEventFlowCreated();
     message.flow = object.flow !== undefined && object.flow !== null ? Flow.fromPartial(object.flow) : undefined;
     return message;
+  },
+  fromAmino(object: EventFlowCreatedAmino): EventFlowCreated {
+    const message = createBaseEventFlowCreated();
+    if (object.flow !== undefined && object.flow !== null) {
+      message.flow = Flow.fromAmino(object.flow);
+    }
+    return message;
+  },
+  toAmino(message: EventFlowCreated): EventFlowCreatedAmino {
+    const obj: any = {};
+    obj.flow = message.flow ? Flow.toAmino(message.flow) : undefined;
+    return obj;
+  },
+  fromAminoMsg(object: EventFlowCreatedAminoMsg): EventFlowCreated {
+    return EventFlowCreated.fromAmino(object.value);
+  },
+  fromProtoMsg(message: EventFlowCreatedProtoMsg): EventFlowCreated {
+    return EventFlowCreated.decode(message.value);
+  },
+  toProto(message: EventFlowCreated): Uint8Array {
+    return EventFlowCreated.encode(message).finish();
+  },
+  toProtoMsg(message: EventFlowCreated): EventFlowCreatedProtoMsg {
+    return {
+      typeUrl: "/refractedlabs.flowtrade.v1.EventFlowCreated",
+      value: EventFlowCreated.encode(message).finish()
+    };
   }
 };
 function createBaseEventFlowEnded(): EventFlowEnded {
@@ -200,6 +402,7 @@ function createBaseEventFlowEnded(): EventFlowEnded {
   };
 }
 export const EventFlowEnded = {
+  typeUrl: "/refractedlabs.flowtrade.v1.EventFlowEnded",
   encode(message: EventFlowEnded, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.flowId !== BigInt(0)) {
       writer.uint32(8).uint64(message.flowId);
@@ -237,6 +440,33 @@ export const EventFlowEnded = {
     const message = createBaseEventFlowEnded();
     message.flowId = object.flowId !== undefined && object.flowId !== null ? BigInt(object.flowId.toString()) : BigInt(0);
     return message;
+  },
+  fromAmino(object: EventFlowEndedAmino): EventFlowEnded {
+    const message = createBaseEventFlowEnded();
+    if (object.flow_id !== undefined && object.flow_id !== null) {
+      message.flowId = BigInt(object.flow_id);
+    }
+    return message;
+  },
+  toAmino(message: EventFlowEnded): EventFlowEndedAmino {
+    const obj: any = {};
+    obj.flow_id = message.flowId ? message.flowId.toString() : undefined;
+    return obj;
+  },
+  fromAminoMsg(object: EventFlowEndedAminoMsg): EventFlowEnded {
+    return EventFlowEnded.fromAmino(object.value);
+  },
+  fromProtoMsg(message: EventFlowEndedProtoMsg): EventFlowEnded {
+    return EventFlowEnded.decode(message.value);
+  },
+  toProto(message: EventFlowEnded): Uint8Array {
+    return EventFlowEnded.encode(message).finish();
+  },
+  toProtoMsg(message: EventFlowEnded): EventFlowEndedProtoMsg {
+    return {
+      typeUrl: "/refractedlabs.flowtrade.v1.EventFlowEnded",
+      value: EventFlowEnded.encode(message).finish()
+    };
   }
 };
 function createBaseEventFlowStopped(): EventFlowStopped {
@@ -245,6 +475,7 @@ function createBaseEventFlowStopped(): EventFlowStopped {
   };
 }
 export const EventFlowStopped = {
+  typeUrl: "/refractedlabs.flowtrade.v1.EventFlowStopped",
   encode(message: EventFlowStopped, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.flowId !== BigInt(0)) {
       writer.uint32(8).uint64(message.flowId);
@@ -282,16 +513,44 @@ export const EventFlowStopped = {
     const message = createBaseEventFlowStopped();
     message.flowId = object.flowId !== undefined && object.flowId !== null ? BigInt(object.flowId.toString()) : BigInt(0);
     return message;
+  },
+  fromAmino(object: EventFlowStoppedAmino): EventFlowStopped {
+    const message = createBaseEventFlowStopped();
+    if (object.flow_id !== undefined && object.flow_id !== null) {
+      message.flowId = BigInt(object.flow_id);
+    }
+    return message;
+  },
+  toAmino(message: EventFlowStopped): EventFlowStoppedAmino {
+    const obj: any = {};
+    obj.flow_id = message.flowId ? message.flowId.toString() : undefined;
+    return obj;
+  },
+  fromAminoMsg(object: EventFlowStoppedAminoMsg): EventFlowStopped {
+    return EventFlowStopped.fromAmino(object.value);
+  },
+  fromProtoMsg(message: EventFlowStoppedProtoMsg): EventFlowStopped {
+    return EventFlowStopped.decode(message.value);
+  },
+  toProto(message: EventFlowStopped): Uint8Array {
+    return EventFlowStopped.encode(message).finish();
+  },
+  toProtoMsg(message: EventFlowStopped): EventFlowStoppedProtoMsg {
+    return {
+      typeUrl: "/refractedlabs.flowtrade.v1.EventFlowStopped",
+      value: EventFlowStopped.encode(message).finish()
+    };
   }
 };
 function createBaseEventFlowCheckedOut(): EventFlowCheckedOut {
   return {
     flowId: BigInt(0),
-    returnedDeposit: Coin.fromPartial({}),
-    returnedTokenOut: Coin.fromPartial({})
+    returnedDeposit: undefined,
+    returnedTokenOut: undefined
   };
 }
 export const EventFlowCheckedOut = {
+  typeUrl: "/refractedlabs.flowtrade.v1.EventFlowCheckedOut",
   encode(message: EventFlowCheckedOut, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.flowId !== BigInt(0)) {
       writer.uint32(8).uint64(message.flowId);
@@ -347,6 +606,41 @@ export const EventFlowCheckedOut = {
     message.returnedDeposit = object.returnedDeposit !== undefined && object.returnedDeposit !== null ? Coin.fromPartial(object.returnedDeposit) : undefined;
     message.returnedTokenOut = object.returnedTokenOut !== undefined && object.returnedTokenOut !== null ? Coin.fromPartial(object.returnedTokenOut) : undefined;
     return message;
+  },
+  fromAmino(object: EventFlowCheckedOutAmino): EventFlowCheckedOut {
+    const message = createBaseEventFlowCheckedOut();
+    if (object.flow_id !== undefined && object.flow_id !== null) {
+      message.flowId = BigInt(object.flow_id);
+    }
+    if (object.returned_deposit !== undefined && object.returned_deposit !== null) {
+      message.returnedDeposit = Coin.fromAmino(object.returned_deposit);
+    }
+    if (object.returned_token_out !== undefined && object.returned_token_out !== null) {
+      message.returnedTokenOut = Coin.fromAmino(object.returned_token_out);
+    }
+    return message;
+  },
+  toAmino(message: EventFlowCheckedOut): EventFlowCheckedOutAmino {
+    const obj: any = {};
+    obj.flow_id = message.flowId ? message.flowId.toString() : undefined;
+    obj.returned_deposit = message.returnedDeposit ? Coin.toAmino(message.returnedDeposit) : undefined;
+    obj.returned_token_out = message.returnedTokenOut ? Coin.toAmino(message.returnedTokenOut) : undefined;
+    return obj;
+  },
+  fromAminoMsg(object: EventFlowCheckedOutAminoMsg): EventFlowCheckedOut {
+    return EventFlowCheckedOut.fromAmino(object.value);
+  },
+  fromProtoMsg(message: EventFlowCheckedOutProtoMsg): EventFlowCheckedOut {
+    return EventFlowCheckedOut.decode(message.value);
+  },
+  toProto(message: EventFlowCheckedOut): Uint8Array {
+    return EventFlowCheckedOut.encode(message).finish();
+  },
+  toProtoMsg(message: EventFlowCheckedOut): EventFlowCheckedOutProtoMsg {
+    return {
+      typeUrl: "/refractedlabs.flowtrade.v1.EventFlowCheckedOut",
+      value: EventFlowCheckedOut.encode(message).finish()
+    };
   }
 };
 function createBaseEventFlowTokenInClaimed(): EventFlowTokenInClaimed {
@@ -358,6 +652,7 @@ function createBaseEventFlowTokenInClaimed(): EventFlowTokenInClaimed {
   };
 }
 export const EventFlowTokenInClaimed = {
+  typeUrl: "/refractedlabs.flowtrade.v1.EventFlowTokenInClaimed",
   encode(message: EventFlowTokenInClaimed, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.flowId !== BigInt(0)) {
       writer.uint32(8).uint64(message.flowId);
@@ -422,6 +717,45 @@ export const EventFlowTokenInClaimed = {
     message.fee = object.fee !== undefined && object.fee !== null ? Coin.fromPartial(object.fee) : undefined;
     message.treasury = object.treasury ?? "";
     return message;
+  },
+  fromAmino(object: EventFlowTokenInClaimedAmino): EventFlowTokenInClaimed {
+    const message = createBaseEventFlowTokenInClaimed();
+    if (object.flow_id !== undefined && object.flow_id !== null) {
+      message.flowId = BigInt(object.flow_id);
+    }
+    if (object.amount !== undefined && object.amount !== null) {
+      message.amount = Coin.fromAmino(object.amount);
+    }
+    if (object.fee !== undefined && object.fee !== null) {
+      message.fee = Coin.fromAmino(object.fee);
+    }
+    if (object.treasury !== undefined && object.treasury !== null) {
+      message.treasury = object.treasury;
+    }
+    return message;
+  },
+  toAmino(message: EventFlowTokenInClaimed): EventFlowTokenInClaimedAmino {
+    const obj: any = {};
+    obj.flow_id = message.flowId ? message.flowId.toString() : undefined;
+    obj.amount = message.amount ? Coin.toAmino(message.amount) : undefined;
+    obj.fee = message.fee ? Coin.toAmino(message.fee) : undefined;
+    obj.treasury = message.treasury;
+    return obj;
+  },
+  fromAminoMsg(object: EventFlowTokenInClaimedAminoMsg): EventFlowTokenInClaimed {
+    return EventFlowTokenInClaimed.fromAmino(object.value);
+  },
+  fromProtoMsg(message: EventFlowTokenInClaimedProtoMsg): EventFlowTokenInClaimed {
+    return EventFlowTokenInClaimed.decode(message.value);
+  },
+  toProto(message: EventFlowTokenInClaimed): Uint8Array {
+    return EventFlowTokenInClaimed.encode(message).finish();
+  },
+  toProtoMsg(message: EventFlowTokenInClaimed): EventFlowTokenInClaimedProtoMsg {
+    return {
+      typeUrl: "/refractedlabs.flowtrade.v1.EventFlowTokenInClaimed",
+      value: EventFlowTokenInClaimed.encode(message).finish()
+    };
   }
 };
 function createBaseEventFlowTokenOutClaimed(): EventFlowTokenOutClaimed {
@@ -433,6 +767,7 @@ function createBaseEventFlowTokenOutClaimed(): EventFlowTokenOutClaimed {
   };
 }
 export const EventFlowTokenOutClaimed = {
+  typeUrl: "/refractedlabs.flowtrade.v1.EventFlowTokenOutClaimed",
   encode(message: EventFlowTokenOutClaimed, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.flowId !== BigInt(0)) {
       writer.uint32(8).uint64(message.flowId);
@@ -497,6 +832,45 @@ export const EventFlowTokenOutClaimed = {
     message.amount = object.amount !== undefined && object.amount !== null ? Coin.fromPartial(object.amount) : undefined;
     message.fee = object.fee !== undefined && object.fee !== null ? Coin.fromPartial(object.fee) : undefined;
     return message;
+  },
+  fromAmino(object: EventFlowTokenOutClaimedAmino): EventFlowTokenOutClaimed {
+    const message = createBaseEventFlowTokenOutClaimed();
+    if (object.flow_id !== undefined && object.flow_id !== null) {
+      message.flowId = BigInt(object.flow_id);
+    }
+    if (object.owner !== undefined && object.owner !== null) {
+      message.owner = object.owner;
+    }
+    if (object.amount !== undefined && object.amount !== null) {
+      message.amount = Coin.fromAmino(object.amount);
+    }
+    if (object.fee !== undefined && object.fee !== null) {
+      message.fee = Coin.fromAmino(object.fee);
+    }
+    return message;
+  },
+  toAmino(message: EventFlowTokenOutClaimed): EventFlowTokenOutClaimedAmino {
+    const obj: any = {};
+    obj.flow_id = message.flowId ? message.flowId.toString() : undefined;
+    obj.owner = message.owner;
+    obj.amount = message.amount ? Coin.toAmino(message.amount) : undefined;
+    obj.fee = message.fee ? Coin.toAmino(message.fee) : undefined;
+    return obj;
+  },
+  fromAminoMsg(object: EventFlowTokenOutClaimedAminoMsg): EventFlowTokenOutClaimed {
+    return EventFlowTokenOutClaimed.fromAmino(object.value);
+  },
+  fromProtoMsg(message: EventFlowTokenOutClaimedProtoMsg): EventFlowTokenOutClaimed {
+    return EventFlowTokenOutClaimed.decode(message.value);
+  },
+  toProto(message: EventFlowTokenOutClaimed): Uint8Array {
+    return EventFlowTokenOutClaimed.encode(message).finish();
+  },
+  toProtoMsg(message: EventFlowTokenOutClaimed): EventFlowTokenOutClaimedProtoMsg {
+    return {
+      typeUrl: "/refractedlabs.flowtrade.v1.EventFlowTokenOutClaimed",
+      value: EventFlowTokenOutClaimed.encode(message).finish()
+    };
   }
 };
 function createBaseEventJoinFlow(): EventJoinFlow {
@@ -507,6 +881,7 @@ function createBaseEventJoinFlow(): EventJoinFlow {
   };
 }
 export const EventJoinFlow = {
+  typeUrl: "/refractedlabs.flowtrade.v1.EventJoinFlow",
   encode(message: EventJoinFlow, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.flowId !== BigInt(0)) {
       writer.uint32(8).uint64(message.flowId);
@@ -562,6 +937,41 @@ export const EventJoinFlow = {
     message.address = object.address ?? "";
     message.amount = object.amount !== undefined && object.amount !== null ? Coin.fromPartial(object.amount) : undefined;
     return message;
+  },
+  fromAmino(object: EventJoinFlowAmino): EventJoinFlow {
+    const message = createBaseEventJoinFlow();
+    if (object.flow_id !== undefined && object.flow_id !== null) {
+      message.flowId = BigInt(object.flow_id);
+    }
+    if (object.address !== undefined && object.address !== null) {
+      message.address = object.address;
+    }
+    if (object.amount !== undefined && object.amount !== null) {
+      message.amount = Coin.fromAmino(object.amount);
+    }
+    return message;
+  },
+  toAmino(message: EventJoinFlow): EventJoinFlowAmino {
+    const obj: any = {};
+    obj.flow_id = message.flowId ? message.flowId.toString() : undefined;
+    obj.address = message.address;
+    obj.amount = message.amount ? Coin.toAmino(message.amount) : undefined;
+    return obj;
+  },
+  fromAminoMsg(object: EventJoinFlowAminoMsg): EventJoinFlow {
+    return EventJoinFlow.fromAmino(object.value);
+  },
+  fromProtoMsg(message: EventJoinFlowProtoMsg): EventJoinFlow {
+    return EventJoinFlow.decode(message.value);
+  },
+  toProto(message: EventJoinFlow): Uint8Array {
+    return EventJoinFlow.encode(message).finish();
+  },
+  toProtoMsg(message: EventJoinFlow): EventJoinFlowProtoMsg {
+    return {
+      typeUrl: "/refractedlabs.flowtrade.v1.EventJoinFlow",
+      value: EventJoinFlow.encode(message).finish()
+    };
   }
 };
 function createBaseEventExitFlow(): EventExitFlow {
@@ -572,6 +982,7 @@ function createBaseEventExitFlow(): EventExitFlow {
   };
 }
 export const EventExitFlow = {
+  typeUrl: "/refractedlabs.flowtrade.v1.EventExitFlow",
   encode(message: EventExitFlow, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.flowId !== BigInt(0)) {
       writer.uint32(8).uint64(message.flowId);
@@ -627,6 +1038,41 @@ export const EventExitFlow = {
     message.address = object.address ?? "";
     message.amount = object.amount !== undefined && object.amount !== null ? Coin.fromPartial(object.amount) : undefined;
     return message;
+  },
+  fromAmino(object: EventExitFlowAmino): EventExitFlow {
+    const message = createBaseEventExitFlow();
+    if (object.flow_id !== undefined && object.flow_id !== null) {
+      message.flowId = BigInt(object.flow_id);
+    }
+    if (object.address !== undefined && object.address !== null) {
+      message.address = object.address;
+    }
+    if (object.amount !== undefined && object.amount !== null) {
+      message.amount = Coin.fromAmino(object.amount);
+    }
+    return message;
+  },
+  toAmino(message: EventExitFlow): EventExitFlowAmino {
+    const obj: any = {};
+    obj.flow_id = message.flowId ? message.flowId.toString() : undefined;
+    obj.address = message.address;
+    obj.amount = message.amount ? Coin.toAmino(message.amount) : undefined;
+    return obj;
+  },
+  fromAminoMsg(object: EventExitFlowAminoMsg): EventExitFlow {
+    return EventExitFlow.fromAmino(object.value);
+  },
+  fromProtoMsg(message: EventExitFlowProtoMsg): EventExitFlow {
+    return EventExitFlow.decode(message.value);
+  },
+  toProto(message: EventExitFlow): Uint8Array {
+    return EventExitFlow.encode(message).finish();
+  },
+  toProtoMsg(message: EventExitFlow): EventExitFlowProtoMsg {
+    return {
+      typeUrl: "/refractedlabs.flowtrade.v1.EventExitFlow",
+      value: EventExitFlow.encode(message).finish()
+    };
   }
 };
 function createBaseEventSetOperator(): EventSetOperator {
@@ -637,6 +1083,7 @@ function createBaseEventSetOperator(): EventSetOperator {
   };
 }
 export const EventSetOperator = {
+  typeUrl: "/refractedlabs.flowtrade.v1.EventSetOperator",
   encode(message: EventSetOperator, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.flowId !== BigInt(0)) {
       writer.uint32(8).uint64(message.flowId);
@@ -692,6 +1139,41 @@ export const EventSetOperator = {
     message.owner = object.owner ?? "";
     message.operator = object.operator ?? "";
     return message;
+  },
+  fromAmino(object: EventSetOperatorAmino): EventSetOperator {
+    const message = createBaseEventSetOperator();
+    if (object.flow_id !== undefined && object.flow_id !== null) {
+      message.flowId = BigInt(object.flow_id);
+    }
+    if (object.owner !== undefined && object.owner !== null) {
+      message.owner = object.owner;
+    }
+    if (object.operator !== undefined && object.operator !== null) {
+      message.operator = object.operator;
+    }
+    return message;
+  },
+  toAmino(message: EventSetOperator): EventSetOperatorAmino {
+    const obj: any = {};
+    obj.flow_id = message.flowId ? message.flowId.toString() : undefined;
+    obj.owner = message.owner;
+    obj.operator = message.operator;
+    return obj;
+  },
+  fromAminoMsg(object: EventSetOperatorAminoMsg): EventSetOperator {
+    return EventSetOperator.fromAmino(object.value);
+  },
+  fromProtoMsg(message: EventSetOperatorProtoMsg): EventSetOperator {
+    return EventSetOperator.decode(message.value);
+  },
+  toProto(message: EventSetOperator): Uint8Array {
+    return EventSetOperator.encode(message).finish();
+  },
+  toProtoMsg(message: EventSetOperator): EventSetOperatorProtoMsg {
+    return {
+      typeUrl: "/refractedlabs.flowtrade.v1.EventSetOperator",
+      value: EventSetOperator.encode(message).finish()
+    };
   }
 };
 function createBaseEventSetFlow(): EventSetFlow {
@@ -700,6 +1182,7 @@ function createBaseEventSetFlow(): EventSetFlow {
   };
 }
 export const EventSetFlow = {
+  typeUrl: "/refractedlabs.flowtrade.v1.EventSetFlow",
   encode(message: EventSetFlow, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.flow !== undefined) {
       Flow.encode(message.flow, writer.uint32(10).fork()).ldelim();
@@ -737,6 +1220,33 @@ export const EventSetFlow = {
     const message = createBaseEventSetFlow();
     message.flow = object.flow !== undefined && object.flow !== null ? Flow.fromPartial(object.flow) : undefined;
     return message;
+  },
+  fromAmino(object: EventSetFlowAmino): EventSetFlow {
+    const message = createBaseEventSetFlow();
+    if (object.flow !== undefined && object.flow !== null) {
+      message.flow = Flow.fromAmino(object.flow);
+    }
+    return message;
+  },
+  toAmino(message: EventSetFlow): EventSetFlowAmino {
+    const obj: any = {};
+    obj.flow = message.flow ? Flow.toAmino(message.flow) : undefined;
+    return obj;
+  },
+  fromAminoMsg(object: EventSetFlowAminoMsg): EventSetFlow {
+    return EventSetFlow.fromAmino(object.value);
+  },
+  fromProtoMsg(message: EventSetFlowProtoMsg): EventSetFlow {
+    return EventSetFlow.decode(message.value);
+  },
+  toProto(message: EventSetFlow): Uint8Array {
+    return EventSetFlow.encode(message).finish();
+  },
+  toProtoMsg(message: EventSetFlow): EventSetFlowProtoMsg {
+    return {
+      typeUrl: "/refractedlabs.flowtrade.v1.EventSetFlow",
+      value: EventSetFlow.encode(message).finish()
+    };
   }
 };
 function createBaseEventSetPosition(): EventSetPosition {
@@ -745,6 +1255,7 @@ function createBaseEventSetPosition(): EventSetPosition {
   };
 }
 export const EventSetPosition = {
+  typeUrl: "/refractedlabs.flowtrade.v1.EventSetPosition",
   encode(message: EventSetPosition, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.position !== undefined) {
       Position.encode(message.position, writer.uint32(10).fork()).ldelim();
@@ -782,5 +1293,32 @@ export const EventSetPosition = {
     const message = createBaseEventSetPosition();
     message.position = object.position !== undefined && object.position !== null ? Position.fromPartial(object.position) : undefined;
     return message;
+  },
+  fromAmino(object: EventSetPositionAmino): EventSetPosition {
+    const message = createBaseEventSetPosition();
+    if (object.position !== undefined && object.position !== null) {
+      message.position = Position.fromAmino(object.position);
+    }
+    return message;
+  },
+  toAmino(message: EventSetPosition): EventSetPositionAmino {
+    const obj: any = {};
+    obj.position = message.position ? Position.toAmino(message.position) : undefined;
+    return obj;
+  },
+  fromAminoMsg(object: EventSetPositionAminoMsg): EventSetPosition {
+    return EventSetPosition.fromAmino(object.value);
+  },
+  fromProtoMsg(message: EventSetPositionProtoMsg): EventSetPosition {
+    return EventSetPosition.decode(message.value);
+  },
+  toProto(message: EventSetPosition): Uint8Array {
+    return EventSetPosition.encode(message).finish();
+  },
+  toProtoMsg(message: EventSetPosition): EventSetPositionProtoMsg {
+    return {
+      typeUrl: "/refractedlabs.flowtrade.v1.EventSetPosition",
+      value: EventSetPosition.encode(message).finish()
+    };
   }
 };

@@ -1,4 +1,3 @@
-//@ts-nocheck
 import { UnaryMethodDefinitionish } from "../../grpc-web";
 import { DeepPartial } from "../../helpers";
 import { grpc } from "@improbable-eng/grpc-web";
@@ -28,28 +27,28 @@ export class MsgClientImpl implements Msg {
     this.deleteAlliance = this.deleteAlliance.bind(this);
   }
   delegate(request: DeepPartial<MsgDelegate>, metadata?: grpc.Metadata): Promise<MsgDelegateResponse> {
-    return this.rpc.unary(MsgDelegateDesc, MsgDelegate.fromPartial(request), metadata);
+    return this.rpc.unary(MsgDelegateDesc, MsgDelegate.fromPartial(request as any), metadata);
   }
   redelegate(request: DeepPartial<MsgRedelegate>, metadata?: grpc.Metadata): Promise<MsgRedelegateResponse> {
-    return this.rpc.unary(MsgRedelegateDesc, MsgRedelegate.fromPartial(request), metadata);
+    return this.rpc.unary(MsgRedelegateDesc, MsgRedelegate.fromPartial(request as any), metadata);
   }
   undelegate(request: DeepPartial<MsgUndelegate>, metadata?: grpc.Metadata): Promise<MsgUndelegateResponse> {
-    return this.rpc.unary(MsgUndelegateDesc, MsgUndelegate.fromPartial(request), metadata);
+    return this.rpc.unary(MsgUndelegateDesc, MsgUndelegate.fromPartial(request as any), metadata);
   }
   claimDelegationRewards(request: DeepPartial<MsgClaimDelegationRewards>, metadata?: grpc.Metadata): Promise<MsgClaimDelegationRewardsResponse> {
-    return this.rpc.unary(MsgClaimDelegationRewardsDesc, MsgClaimDelegationRewards.fromPartial(request), metadata);
+    return this.rpc.unary(MsgClaimDelegationRewardsDesc, MsgClaimDelegationRewards.fromPartial(request as any), metadata);
   }
   updateParams(request: DeepPartial<MsgUpdateParams>, metadata?: grpc.Metadata): Promise<MsgUpdateParamsResponse> {
-    return this.rpc.unary(MsgUpdateParamsDesc, MsgUpdateParams.fromPartial(request), metadata);
+    return this.rpc.unary(MsgUpdateParamsDesc, MsgUpdateParams.fromPartial(request as any), metadata);
   }
   createAlliance(request: DeepPartial<MsgCreateAlliance>, metadata?: grpc.Metadata): Promise<MsgCreateAllianceResponse> {
-    return this.rpc.unary(MsgCreateAllianceDesc, MsgCreateAlliance.fromPartial(request), metadata);
+    return this.rpc.unary(MsgCreateAllianceDesc, MsgCreateAlliance.fromPartial(request as any), metadata);
   }
   updateAlliance(request: DeepPartial<MsgUpdateAlliance>, metadata?: grpc.Metadata): Promise<MsgUpdateAllianceResponse> {
-    return this.rpc.unary(MsgUpdateAllianceDesc, MsgUpdateAlliance.fromPartial(request), metadata);
+    return this.rpc.unary(MsgUpdateAllianceDesc, MsgUpdateAlliance.fromPartial(request as any), metadata);
   }
   deleteAlliance(request: DeepPartial<MsgDeleteAlliance>, metadata?: grpc.Metadata): Promise<MsgDeleteAllianceResponse> {
-    return this.rpc.unary(MsgDeleteAllianceDesc, MsgDeleteAlliance.fromPartial(request), metadata);
+    return this.rpc.unary(MsgDeleteAllianceDesc, MsgDeleteAlliance.fromPartial(request as any), metadata);
   }
 }
 export const MsgDesc = {

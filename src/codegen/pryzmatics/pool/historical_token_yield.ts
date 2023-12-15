@@ -6,6 +6,18 @@ export interface HistoricalTokenYield {
   time: Timestamp;
   yield?: string;
 }
+export interface HistoricalTokenYieldProtoMsg {
+  typeUrl: "/pryzmatics.pool.HistoricalTokenYield";
+  value: Uint8Array;
+}
+export interface HistoricalTokenYieldAmino {
+  time?: string;
+  yield?: string;
+}
+export interface HistoricalTokenYieldAminoMsg {
+  type: "/pryzmatics.pool.HistoricalTokenYield";
+  value: HistoricalTokenYieldAmino;
+}
 export interface HistoricalTokenYieldSDKType {
   time: TimestampSDKType;
   yield?: string;
@@ -17,6 +29,7 @@ function createBaseHistoricalTokenYield(): HistoricalTokenYield {
   };
 }
 export const HistoricalTokenYield = {
+  typeUrl: "/pryzmatics.pool.HistoricalTokenYield",
   encode(message: HistoricalTokenYield, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.time !== undefined) {
       Timestamp.encode(message.time, writer.uint32(10).fork()).ldelim();
@@ -63,5 +76,36 @@ export const HistoricalTokenYield = {
     message.time = object.time !== undefined && object.time !== null ? Timestamp.fromPartial(object.time) : undefined;
     message.yield = object.yield ?? undefined;
     return message;
+  },
+  fromAmino(object: HistoricalTokenYieldAmino): HistoricalTokenYield {
+    const message = createBaseHistoricalTokenYield();
+    if (object.time !== undefined && object.time !== null) {
+      message.time = Timestamp.fromAmino(object.time);
+    }
+    if (object.yield !== undefined && object.yield !== null) {
+      message.yield = object.yield;
+    }
+    return message;
+  },
+  toAmino(message: HistoricalTokenYield): HistoricalTokenYieldAmino {
+    const obj: any = {};
+    obj.time = message.time ? Timestamp.toAmino(message.time) : undefined;
+    obj.yield = message.yield;
+    return obj;
+  },
+  fromAminoMsg(object: HistoricalTokenYieldAminoMsg): HistoricalTokenYield {
+    return HistoricalTokenYield.fromAmino(object.value);
+  },
+  fromProtoMsg(message: HistoricalTokenYieldProtoMsg): HistoricalTokenYield {
+    return HistoricalTokenYield.decode(message.value);
+  },
+  toProto(message: HistoricalTokenYield): Uint8Array {
+    return HistoricalTokenYield.encode(message).finish();
+  },
+  toProtoMsg(message: HistoricalTokenYield): HistoricalTokenYieldProtoMsg {
+    return {
+      typeUrl: "/pryzmatics.pool.HistoricalTokenYield",
+      value: HistoricalTokenYield.encode(message).finish()
+    };
   }
 };

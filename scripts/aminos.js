@@ -1,4 +1,4 @@
-export const AMINO_MAP = {
+module.exports.AMINO_MAP = {
   // PUT YOUR AMINO names here...
 
   // Staking

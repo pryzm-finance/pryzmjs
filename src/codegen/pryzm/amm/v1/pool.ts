@@ -8,6 +8,7 @@ export enum PoolType {
   UNRECOGNIZED = -1,
 }
 export const PoolTypeSDKType = PoolType;
+export const PoolTypeAmino = PoolType;
 export function poolTypeFromJSON(object: any): PoolType {
   switch (object) {
     case 0:
@@ -36,6 +37,18 @@ export function poolTypeToJSON(object: PoolType): string {
 export interface PoolPauseWindow {
   pauseWindowEndUnixMillis: bigint;
   bufferPeriodEndUnixMillis: bigint;
+}
+export interface PoolPauseWindowProtoMsg {
+  typeUrl: "/pryzm.amm.v1.PoolPauseWindow";
+  value: Uint8Array;
+}
+export interface PoolPauseWindowAmino {
+  pause_window_end_unix_millis?: string;
+  buffer_period_end_unix_millis?: string;
+}
+export interface PoolPauseWindowAminoMsg {
+  type: "/pryzm.amm.v1.PoolPauseWindow";
+  value: PoolPauseWindowAmino;
 }
 export interface PoolPauseWindowSDKType {
   pause_window_end_unix_millis: bigint;
@@ -67,6 +80,40 @@ export interface Pool {
   admins: string[];
   pauseAllowList: string[];
 }
+export interface PoolProtoMsg {
+  typeUrl: "/pryzm.amm.v1.Pool";
+  value: Uint8Array;
+}
+export interface PoolAmino {
+  id?: string;
+  name?: string;
+  /**
+   * this is the constant swap fee ratio, for dynamic swap fees other pools might have other parameters.
+   * for example, check yamm configuration
+   */
+  swap_fee_ratio?: string;
+  pool_type?: PoolType;
+  creator?: string;
+  recovery_mode?: boolean;
+  paused_by_gov?: boolean;
+  paused_by_owner?: boolean;
+  owner_pause_window_timing?: PoolPauseWindowAmino;
+  /** if protocol fee parameters are nil, then the values are read from treasury module parameters */
+  swap_protocol_fee_ratio?: string;
+  join_exit_protocol_fee_ratio?: string;
+  /** if not empty, only these addresses can initialize the pool */
+  initialization_allow_list?: string[];
+  /**
+   * these have the same permissions as the creator, except for
+   * updating the admins list and pausing the pool
+   */
+  admins?: string[];
+  pause_allow_list?: string[];
+}
+export interface PoolAminoMsg {
+  type: "/pryzm.amm.v1.Pool";
+  value: PoolAmino;
+}
 export interface PoolSDKType {
   id: bigint;
   name: string;
@@ -90,6 +137,7 @@ function createBasePoolPauseWindow(): PoolPauseWindow {
   };
 }
 export const PoolPauseWindow = {
+  typeUrl: "/pryzm.amm.v1.PoolPauseWindow",
   encode(message: PoolPauseWindow, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.pauseWindowEndUnixMillis !== BigInt(0)) {
       writer.uint32(8).int64(message.pauseWindowEndUnixMillis);
@@ -136,6 +184,37 @@ export const PoolPauseWindow = {
     message.pauseWindowEndUnixMillis = object.pauseWindowEndUnixMillis !== undefined && object.pauseWindowEndUnixMillis !== null ? BigInt(object.pauseWindowEndUnixMillis.toString()) : BigInt(0);
     message.bufferPeriodEndUnixMillis = object.bufferPeriodEndUnixMillis !== undefined && object.bufferPeriodEndUnixMillis !== null ? BigInt(object.bufferPeriodEndUnixMillis.toString()) : BigInt(0);
     return message;
+  },
+  fromAmino(object: PoolPauseWindowAmino): PoolPauseWindow {
+    const message = createBasePoolPauseWindow();
+    if (object.pause_window_end_unix_millis !== undefined && object.pause_window_end_unix_millis !== null) {
+      message.pauseWindowEndUnixMillis = BigInt(object.pause_window_end_unix_millis);
+    }
+    if (object.buffer_period_end_unix_millis !== undefined && object.buffer_period_end_unix_millis !== null) {
+      message.bufferPeriodEndUnixMillis = BigInt(object.buffer_period_end_unix_millis);
+    }
+    return message;
+  },
+  toAmino(message: PoolPauseWindow): PoolPauseWindowAmino {
+    const obj: any = {};
+    obj.pause_window_end_unix_millis = message.pauseWindowEndUnixMillis ? message.pauseWindowEndUnixMillis.toString() : undefined;
+    obj.buffer_period_end_unix_millis = message.bufferPeriodEndUnixMillis ? message.bufferPeriodEndUnixMillis.toString() : undefined;
+    return obj;
+  },
+  fromAminoMsg(object: PoolPauseWindowAminoMsg): PoolPauseWindow {
+    return PoolPauseWindow.fromAmino(object.value);
+  },
+  fromProtoMsg(message: PoolPauseWindowProtoMsg): PoolPauseWindow {
+    return PoolPauseWindow.decode(message.value);
+  },
+  toProto(message: PoolPauseWindow): Uint8Array {
+    return PoolPauseWindow.encode(message).finish();
+  },
+  toProtoMsg(message: PoolPauseWindow): PoolPauseWindowProtoMsg {
+    return {
+      typeUrl: "/pryzm.amm.v1.PoolPauseWindow",
+      value: PoolPauseWindow.encode(message).finish()
+    };
   }
 };
 function createBasePool(): Pool {
@@ -157,6 +236,7 @@ function createBasePool(): Pool {
   };
 }
 export const Pool = {
+  typeUrl: "/pryzm.amm.v1.Pool",
   encode(message: Pool, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.id !== BigInt(0)) {
       writer.uint32(8).uint64(message.id);
@@ -323,5 +403,90 @@ export const Pool = {
     message.admins = object.admins?.map(e => e) || [];
     message.pauseAllowList = object.pauseAllowList?.map(e => e) || [];
     return message;
+  },
+  fromAmino(object: PoolAmino): Pool {
+    const message = createBasePool();
+    if (object.id !== undefined && object.id !== null) {
+      message.id = BigInt(object.id);
+    }
+    if (object.name !== undefined && object.name !== null) {
+      message.name = object.name;
+    }
+    if (object.swap_fee_ratio !== undefined && object.swap_fee_ratio !== null) {
+      message.swapFeeRatio = object.swap_fee_ratio;
+    }
+    if (object.pool_type !== undefined && object.pool_type !== null) {
+      message.poolType = poolTypeFromJSON(object.pool_type);
+    }
+    if (object.creator !== undefined && object.creator !== null) {
+      message.creator = object.creator;
+    }
+    if (object.recovery_mode !== undefined && object.recovery_mode !== null) {
+      message.recoveryMode = object.recovery_mode;
+    }
+    if (object.paused_by_gov !== undefined && object.paused_by_gov !== null) {
+      message.pausedByGov = object.paused_by_gov;
+    }
+    if (object.paused_by_owner !== undefined && object.paused_by_owner !== null) {
+      message.pausedByOwner = object.paused_by_owner;
+    }
+    if (object.owner_pause_window_timing !== undefined && object.owner_pause_window_timing !== null) {
+      message.ownerPauseWindowTiming = PoolPauseWindow.fromAmino(object.owner_pause_window_timing);
+    }
+    if (object.swap_protocol_fee_ratio !== undefined && object.swap_protocol_fee_ratio !== null) {
+      message.swapProtocolFeeRatio = object.swap_protocol_fee_ratio;
+    }
+    if (object.join_exit_protocol_fee_ratio !== undefined && object.join_exit_protocol_fee_ratio !== null) {
+      message.joinExitProtocolFeeRatio = object.join_exit_protocol_fee_ratio;
+    }
+    message.initializationAllowList = object.initialization_allow_list?.map(e => e) || [];
+    message.admins = object.admins?.map(e => e) || [];
+    message.pauseAllowList = object.pause_allow_list?.map(e => e) || [];
+    return message;
+  },
+  toAmino(message: Pool): PoolAmino {
+    const obj: any = {};
+    obj.id = message.id ? message.id.toString() : undefined;
+    obj.name = message.name;
+    obj.swap_fee_ratio = message.swapFeeRatio;
+    obj.pool_type = poolTypeToJSON(message.poolType);
+    obj.creator = message.creator;
+    obj.recovery_mode = message.recoveryMode;
+    obj.paused_by_gov = message.pausedByGov;
+    obj.paused_by_owner = message.pausedByOwner;
+    obj.owner_pause_window_timing = message.ownerPauseWindowTiming ? PoolPauseWindow.toAmino(message.ownerPauseWindowTiming) : undefined;
+    obj.swap_protocol_fee_ratio = message.swapProtocolFeeRatio;
+    obj.join_exit_protocol_fee_ratio = message.joinExitProtocolFeeRatio;
+    if (message.initializationAllowList) {
+      obj.initialization_allow_list = message.initializationAllowList.map(e => e);
+    } else {
+      obj.initialization_allow_list = [];
+    }
+    if (message.admins) {
+      obj.admins = message.admins.map(e => e);
+    } else {
+      obj.admins = [];
+    }
+    if (message.pauseAllowList) {
+      obj.pause_allow_list = message.pauseAllowList.map(e => e);
+    } else {
+      obj.pause_allow_list = [];
+    }
+    return obj;
+  },
+  fromAminoMsg(object: PoolAminoMsg): Pool {
+    return Pool.fromAmino(object.value);
+  },
+  fromProtoMsg(message: PoolProtoMsg): Pool {
+    return Pool.decode(message.value);
+  },
+  toProto(message: Pool): Uint8Array {
+    return Pool.encode(message).finish();
+  },
+  toProtoMsg(message: Pool): PoolProtoMsg {
+    return {
+      typeUrl: "/pryzm.amm.v1.Pool",
+      value: Pool.encode(message).finish()
+    };
   }
 };

@@ -1,5 +1,5 @@
-import { PageRequest } from "./codegen/helpers";
 import { BrowserHeaders } from "browser-headers";
+import { PageRequest } from "./codegen/cosmos/base/query/v1beta1/pagination";
 
 export * from './codegen';
 export * from './pryzm'

@@ -1,4 +1,3 @@
-//@ts-nocheck
 import { UnaryMethodDefinitionish } from "../../../grpc-web";
 import { DeepPartial } from "../../../helpers";
 import { grpc } from "@improbable-eng/grpc-web";
@@ -17,10 +16,10 @@ export class MsgClientImpl implements Msg {
     this.dappAccountSpend = this.dappAccountSpend.bind(this);
   }
   updateParams(request: DeepPartial<MsgUpdateParams>, metadata?: grpc.Metadata): Promise<MsgUpdateParamsResponse> {
-    return this.rpc.unary(MsgUpdateParamsDesc, MsgUpdateParams.fromPartial(request), metadata);
+    return this.rpc.unary(MsgUpdateParamsDesc, MsgUpdateParams.fromPartial(request as any), metadata);
   }
   dappAccountSpend(request: DeepPartial<MsgDappAccountSpend>, metadata?: grpc.Metadata): Promise<MsgDappAccountSpendResponse> {
-    return this.rpc.unary(MsgDappAccountSpendDesc, MsgDappAccountSpend.fromPartial(request), metadata);
+    return this.rpc.unary(MsgDappAccountSpendDesc, MsgDappAccountSpend.fromPartial(request as any), metadata);
   }
 }
 export const MsgDesc = {

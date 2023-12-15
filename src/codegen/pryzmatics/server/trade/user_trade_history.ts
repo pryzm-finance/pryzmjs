@@ -1,4 +1,4 @@
-import { OperationType, UserTradeHistory, UserTradeHistorySDKType, operationTypeFromJSON, operationTypeToJSON } from "../../trade/user_trade_history";
+import { OperationType, UserTradeHistory, UserTradeHistoryAmino, UserTradeHistorySDKType, operationTypeFromJSON, operationTypeToJSON } from "../../trade/user_trade_history";
 import { BinaryReader, BinaryWriter } from "../../../binary";
 import { isSet } from "../../../helpers";
 export interface QueryUserTradeHistoryRequest {
@@ -6,6 +6,20 @@ export interface QueryUserTradeHistoryRequest {
   secondToken: string;
   address: string;
   operationType: OperationType;
+}
+export interface QueryUserTradeHistoryRequestProtoMsg {
+  typeUrl: "/pryzmatics.server.trade.QueryUserTradeHistoryRequest";
+  value: Uint8Array;
+}
+export interface QueryUserTradeHistoryRequestAmino {
+  first_token?: string;
+  second_token?: string;
+  address?: string;
+  operation_type?: OperationType;
+}
+export interface QueryUserTradeHistoryRequestAminoMsg {
+  type: "/pryzmatics.server.trade.QueryUserTradeHistoryRequest";
+  value: QueryUserTradeHistoryRequestAmino;
 }
 export interface QueryUserTradeHistoryRequestSDKType {
   first_token: string;
@@ -15,6 +29,17 @@ export interface QueryUserTradeHistoryRequestSDKType {
 }
 export interface QueryUserTradeHistoryResponse {
   userTradeHistoryRecords: UserTradeHistory[];
+}
+export interface QueryUserTradeHistoryResponseProtoMsg {
+  typeUrl: "/pryzmatics.server.trade.QueryUserTradeHistoryResponse";
+  value: Uint8Array;
+}
+export interface QueryUserTradeHistoryResponseAmino {
+  user_trade_history_records?: UserTradeHistoryAmino[];
+}
+export interface QueryUserTradeHistoryResponseAminoMsg {
+  type: "/pryzmatics.server.trade.QueryUserTradeHistoryResponse";
+  value: QueryUserTradeHistoryResponseAmino;
 }
 export interface QueryUserTradeHistoryResponseSDKType {
   user_trade_history_records: UserTradeHistorySDKType[];
@@ -28,6 +53,7 @@ function createBaseQueryUserTradeHistoryRequest(): QueryUserTradeHistoryRequest 
   };
 }
 export const QueryUserTradeHistoryRequest = {
+  typeUrl: "/pryzmatics.server.trade.QueryUserTradeHistoryRequest",
   encode(message: QueryUserTradeHistoryRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.firstToken !== "") {
       writer.uint32(10).string(message.firstToken);
@@ -92,6 +118,45 @@ export const QueryUserTradeHistoryRequest = {
     message.address = object.address ?? "";
     message.operationType = object.operationType ?? 0;
     return message;
+  },
+  fromAmino(object: QueryUserTradeHistoryRequestAmino): QueryUserTradeHistoryRequest {
+    const message = createBaseQueryUserTradeHistoryRequest();
+    if (object.first_token !== undefined && object.first_token !== null) {
+      message.firstToken = object.first_token;
+    }
+    if (object.second_token !== undefined && object.second_token !== null) {
+      message.secondToken = object.second_token;
+    }
+    if (object.address !== undefined && object.address !== null) {
+      message.address = object.address;
+    }
+    if (object.operation_type !== undefined && object.operation_type !== null) {
+      message.operationType = operationTypeFromJSON(object.operation_type);
+    }
+    return message;
+  },
+  toAmino(message: QueryUserTradeHistoryRequest): QueryUserTradeHistoryRequestAmino {
+    const obj: any = {};
+    obj.first_token = message.firstToken;
+    obj.second_token = message.secondToken;
+    obj.address = message.address;
+    obj.operation_type = operationTypeToJSON(message.operationType);
+    return obj;
+  },
+  fromAminoMsg(object: QueryUserTradeHistoryRequestAminoMsg): QueryUserTradeHistoryRequest {
+    return QueryUserTradeHistoryRequest.fromAmino(object.value);
+  },
+  fromProtoMsg(message: QueryUserTradeHistoryRequestProtoMsg): QueryUserTradeHistoryRequest {
+    return QueryUserTradeHistoryRequest.decode(message.value);
+  },
+  toProto(message: QueryUserTradeHistoryRequest): Uint8Array {
+    return QueryUserTradeHistoryRequest.encode(message).finish();
+  },
+  toProtoMsg(message: QueryUserTradeHistoryRequest): QueryUserTradeHistoryRequestProtoMsg {
+    return {
+      typeUrl: "/pryzmatics.server.trade.QueryUserTradeHistoryRequest",
+      value: QueryUserTradeHistoryRequest.encode(message).finish()
+    };
   }
 };
 function createBaseQueryUserTradeHistoryResponse(): QueryUserTradeHistoryResponse {
@@ -100,6 +165,7 @@ function createBaseQueryUserTradeHistoryResponse(): QueryUserTradeHistoryRespons
   };
 }
 export const QueryUserTradeHistoryResponse = {
+  typeUrl: "/pryzmatics.server.trade.QueryUserTradeHistoryResponse",
   encode(message: QueryUserTradeHistoryResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     for (const v of message.userTradeHistoryRecords) {
       UserTradeHistory.encode(v!, writer.uint32(10).fork()).ldelim();
@@ -141,5 +207,34 @@ export const QueryUserTradeHistoryResponse = {
     const message = createBaseQueryUserTradeHistoryResponse();
     message.userTradeHistoryRecords = object.userTradeHistoryRecords?.map(e => UserTradeHistory.fromPartial(e)) || [];
     return message;
+  },
+  fromAmino(object: QueryUserTradeHistoryResponseAmino): QueryUserTradeHistoryResponse {
+    const message = createBaseQueryUserTradeHistoryResponse();
+    message.userTradeHistoryRecords = object.user_trade_history_records?.map(e => UserTradeHistory.fromAmino(e)) || [];
+    return message;
+  },
+  toAmino(message: QueryUserTradeHistoryResponse): QueryUserTradeHistoryResponseAmino {
+    const obj: any = {};
+    if (message.userTradeHistoryRecords) {
+      obj.user_trade_history_records = message.userTradeHistoryRecords.map(e => e ? UserTradeHistory.toAmino(e) : undefined);
+    } else {
+      obj.user_trade_history_records = [];
+    }
+    return obj;
+  },
+  fromAminoMsg(object: QueryUserTradeHistoryResponseAminoMsg): QueryUserTradeHistoryResponse {
+    return QueryUserTradeHistoryResponse.fromAmino(object.value);
+  },
+  fromProtoMsg(message: QueryUserTradeHistoryResponseProtoMsg): QueryUserTradeHistoryResponse {
+    return QueryUserTradeHistoryResponse.decode(message.value);
+  },
+  toProto(message: QueryUserTradeHistoryResponse): Uint8Array {
+    return QueryUserTradeHistoryResponse.encode(message).finish();
+  },
+  toProtoMsg(message: QueryUserTradeHistoryResponse): QueryUserTradeHistoryResponseProtoMsg {
+    return {
+      typeUrl: "/pryzmatics.server.trade.QueryUserTradeHistoryResponse",
+      value: QueryUserTradeHistoryResponse.encode(message).finish()
+    };
   }
 };

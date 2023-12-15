@@ -1,4 +1,4 @@
-import { Height, HeightSDKType } from "../../../ibc/core/client/v1/client";
+import { Height, HeightAmino, HeightSDKType } from "../../../ibc/core/client/v1/client";
 import { BinaryReader, BinaryWriter } from "../../../binary";
 import { Decimal } from "@cosmjs/math";
 import { isSet } from "../../../helpers";
@@ -6,6 +6,19 @@ import { isSet } from "../../../helpers";
 export interface OraclePayload {
   blockHeight: Height;
   exchangeRate: string;
+}
+export interface OraclePayloadProtoMsg {
+  typeUrl: "/pryzm.assets.v1.OraclePayload";
+  value: Uint8Array;
+}
+/** OraclePayload defines the structure of oracle vote payload */
+export interface OraclePayloadAmino {
+  block_height?: HeightAmino;
+  exchange_rate?: string;
+}
+export interface OraclePayloadAminoMsg {
+  type: "/pryzm.assets.v1.OraclePayload";
+  value: OraclePayloadAmino;
 }
 /** OraclePayload defines the structure of oracle vote payload */
 export interface OraclePayloadSDKType {
@@ -19,6 +32,7 @@ function createBaseOraclePayload(): OraclePayload {
   };
 }
 export const OraclePayload = {
+  typeUrl: "/pryzm.assets.v1.OraclePayload",
   encode(message: OraclePayload, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.blockHeight !== undefined) {
       Height.encode(message.blockHeight, writer.uint32(10).fork()).ldelim();
@@ -65,5 +79,36 @@ export const OraclePayload = {
     message.blockHeight = object.blockHeight !== undefined && object.blockHeight !== null ? Height.fromPartial(object.blockHeight) : undefined;
     message.exchangeRate = object.exchangeRate ?? "";
     return message;
+  },
+  fromAmino(object: OraclePayloadAmino): OraclePayload {
+    const message = createBaseOraclePayload();
+    if (object.block_height !== undefined && object.block_height !== null) {
+      message.blockHeight = Height.fromAmino(object.block_height);
+    }
+    if (object.exchange_rate !== undefined && object.exchange_rate !== null) {
+      message.exchangeRate = object.exchange_rate;
+    }
+    return message;
+  },
+  toAmino(message: OraclePayload): OraclePayloadAmino {
+    const obj: any = {};
+    obj.block_height = message.blockHeight ? Height.toAmino(message.blockHeight) : {};
+    obj.exchange_rate = message.exchangeRate;
+    return obj;
+  },
+  fromAminoMsg(object: OraclePayloadAminoMsg): OraclePayload {
+    return OraclePayload.fromAmino(object.value);
+  },
+  fromProtoMsg(message: OraclePayloadProtoMsg): OraclePayload {
+    return OraclePayload.decode(message.value);
+  },
+  toProto(message: OraclePayload): Uint8Array {
+    return OraclePayload.encode(message).finish();
+  },
+  toProtoMsg(message: OraclePayload): OraclePayloadProtoMsg {
+    return {
+      typeUrl: "/pryzm.assets.v1.OraclePayload",
+      value: OraclePayload.encode(message).finish()
+    };
   }
 };

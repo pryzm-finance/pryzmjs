@@ -9,6 +9,22 @@ export interface PreVote {
   blockTime: Timestamp;
   voteIntervalCloseBlockHeight?: string;
 }
+export interface PreVoteProtoMsg {
+  typeUrl: "/pryzmatics.oracle.PreVote";
+  value: Uint8Array;
+}
+export interface PreVoteAmino {
+  id?: string;
+  feeder?: string;
+  validator?: string;
+  block_height?: string;
+  block_time?: string;
+  vote_interval_close_block_height?: string;
+}
+export interface PreVoteAminoMsg {
+  type: "/pryzmatics.oracle.PreVote";
+  value: PreVoteAmino;
+}
 export interface PreVoteSDKType {
   id: bigint;
   feeder: string;
@@ -28,6 +44,7 @@ function createBasePreVote(): PreVote {
   };
 }
 export const PreVote = {
+  typeUrl: "/pryzmatics.oracle.PreVote",
   encode(message: PreVote, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.id !== BigInt(0)) {
       writer.uint32(8).uint64(message.id);
@@ -110,5 +127,52 @@ export const PreVote = {
     message.blockTime = object.blockTime !== undefined && object.blockTime !== null ? Timestamp.fromPartial(object.blockTime) : undefined;
     message.voteIntervalCloseBlockHeight = object.voteIntervalCloseBlockHeight ?? undefined;
     return message;
+  },
+  fromAmino(object: PreVoteAmino): PreVote {
+    const message = createBasePreVote();
+    if (object.id !== undefined && object.id !== null) {
+      message.id = BigInt(object.id);
+    }
+    if (object.feeder !== undefined && object.feeder !== null) {
+      message.feeder = object.feeder;
+    }
+    if (object.validator !== undefined && object.validator !== null) {
+      message.validator = object.validator;
+    }
+    if (object.block_height !== undefined && object.block_height !== null) {
+      message.blockHeight = BigInt(object.block_height);
+    }
+    if (object.block_time !== undefined && object.block_time !== null) {
+      message.blockTime = Timestamp.fromAmino(object.block_time);
+    }
+    if (object.vote_interval_close_block_height !== undefined && object.vote_interval_close_block_height !== null) {
+      message.voteIntervalCloseBlockHeight = object.vote_interval_close_block_height;
+    }
+    return message;
+  },
+  toAmino(message: PreVote): PreVoteAmino {
+    const obj: any = {};
+    obj.id = message.id ? message.id.toString() : undefined;
+    obj.feeder = message.feeder;
+    obj.validator = message.validator;
+    obj.block_height = message.blockHeight ? message.blockHeight.toString() : undefined;
+    obj.block_time = message.blockTime ? Timestamp.toAmino(message.blockTime) : undefined;
+    obj.vote_interval_close_block_height = message.voteIntervalCloseBlockHeight;
+    return obj;
+  },
+  fromAminoMsg(object: PreVoteAminoMsg): PreVote {
+    return PreVote.fromAmino(object.value);
+  },
+  fromProtoMsg(message: PreVoteProtoMsg): PreVote {
+    return PreVote.decode(message.value);
+  },
+  toProto(message: PreVote): Uint8Array {
+    return PreVote.encode(message).finish();
+  },
+  toProtoMsg(message: PreVote): PreVoteProtoMsg {
+    return {
+      typeUrl: "/pryzmatics.oracle.PreVote",
+      value: PreVote.encode(message).finish()
+    };
   }
 };

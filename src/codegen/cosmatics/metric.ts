@@ -1,5 +1,5 @@
 import { Timestamp, TimestampSDKType } from "../google/protobuf/timestamp";
-import { PageRequest, PageRequestSDKType } from "../cosmos/base/query/v1beta1/pagination";
+import { PageRequest, PageRequestAmino, PageRequestSDKType } from "../cosmos/base/query/v1beta1/pagination";
 import { BinaryReader, BinaryWriter } from "../binary";
 import { isSet, fromJsonTimestamp, fromTimestamp } from "../helpers";
 export enum MetricType {
@@ -11,6 +11,7 @@ export enum MetricType {
   UNRECOGNIZED = -1,
 }
 export const MetricTypeSDKType = MetricType;
+export const MetricTypeAmino = MetricType;
 export function metricTypeFromJSON(object: any): MetricType {
   switch (object) {
     case 0:
@@ -59,6 +60,22 @@ export interface Metric {
   time: Timestamp;
   value: number;
 }
+export interface MetricProtoMsg {
+  typeUrl: "/cosmatics.Metric";
+  value: Uint8Array;
+}
+export interface MetricAmino {
+  id?: string;
+  type?: MetricType;
+  block_time?: string;
+  block_height?: string;
+  time?: string;
+  value?: number;
+}
+export interface MetricAminoMsg {
+  type: "/cosmatics.Metric";
+  value: MetricAmino;
+}
 export interface MetricSDKType {
   id: string;
   type: MetricType;
@@ -76,6 +93,23 @@ export interface QueryMetricsRequest {
   toTime?: string;
   pagination?: PageRequest;
 }
+export interface QueryMetricsRequestProtoMsg {
+  typeUrl: "/cosmatics.QueryMetricsRequest";
+  value: Uint8Array;
+}
+export interface QueryMetricsRequestAmino {
+  metric_id?: string;
+  metric_type?: MetricType;
+  from_block_height?: string;
+  to_block_height?: string;
+  from_time?: string;
+  to_time?: string;
+  pagination?: PageRequestAmino;
+}
+export interface QueryMetricsRequestAminoMsg {
+  type: "/cosmatics.QueryMetricsRequest";
+  value: QueryMetricsRequestAmino;
+}
 export interface QueryMetricsRequestSDKType {
   metric_id: string;
   metric_type: MetricType;
@@ -87,6 +121,17 @@ export interface QueryMetricsRequestSDKType {
 }
 export interface QueryMetricsResponse {
   metrics: Metric[];
+}
+export interface QueryMetricsResponseProtoMsg {
+  typeUrl: "/cosmatics.QueryMetricsResponse";
+  value: Uint8Array;
+}
+export interface QueryMetricsResponseAmino {
+  metrics?: MetricAmino[];
+}
+export interface QueryMetricsResponseAminoMsg {
+  type: "/cosmatics.QueryMetricsResponse";
+  value: QueryMetricsResponseAmino;
 }
 export interface QueryMetricsResponseSDKType {
   metrics: MetricSDKType[];
@@ -102,6 +147,7 @@ function createBaseMetric(): Metric {
   };
 }
 export const Metric = {
+  typeUrl: "/cosmatics.Metric",
   encode(message: Metric, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.id !== "") {
       writer.uint32(10).string(message.id);
@@ -184,6 +230,53 @@ export const Metric = {
     message.time = object.time !== undefined && object.time !== null ? Timestamp.fromPartial(object.time) : undefined;
     message.value = object.value ?? 0;
     return message;
+  },
+  fromAmino(object: MetricAmino): Metric {
+    const message = createBaseMetric();
+    if (object.id !== undefined && object.id !== null) {
+      message.id = object.id;
+    }
+    if (object.type !== undefined && object.type !== null) {
+      message.type = metricTypeFromJSON(object.type);
+    }
+    if (object.block_time !== undefined && object.block_time !== null) {
+      message.blockTime = Timestamp.fromAmino(object.block_time);
+    }
+    if (object.block_height !== undefined && object.block_height !== null) {
+      message.blockHeight = BigInt(object.block_height);
+    }
+    if (object.time !== undefined && object.time !== null) {
+      message.time = Timestamp.fromAmino(object.time);
+    }
+    if (object.value !== undefined && object.value !== null) {
+      message.value = object.value;
+    }
+    return message;
+  },
+  toAmino(message: Metric): MetricAmino {
+    const obj: any = {};
+    obj.id = message.id;
+    obj.type = metricTypeToJSON(message.type);
+    obj.block_time = message.blockTime ? Timestamp.toAmino(message.blockTime) : undefined;
+    obj.block_height = message.blockHeight ? message.blockHeight.toString() : undefined;
+    obj.time = message.time ? Timestamp.toAmino(message.time) : undefined;
+    obj.value = message.value;
+    return obj;
+  },
+  fromAminoMsg(object: MetricAminoMsg): Metric {
+    return Metric.fromAmino(object.value);
+  },
+  fromProtoMsg(message: MetricProtoMsg): Metric {
+    return Metric.decode(message.value);
+  },
+  toProto(message: Metric): Uint8Array {
+    return Metric.encode(message).finish();
+  },
+  toProtoMsg(message: Metric): MetricProtoMsg {
+    return {
+      typeUrl: "/cosmatics.Metric",
+      value: Metric.encode(message).finish()
+    };
   }
 };
 function createBaseQueryMetricsRequest(): QueryMetricsRequest {
@@ -198,6 +291,7 @@ function createBaseQueryMetricsRequest(): QueryMetricsRequest {
   };
 }
 export const QueryMetricsRequest = {
+  typeUrl: "/cosmatics.QueryMetricsRequest",
   encode(message: QueryMetricsRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.metricId !== "") {
       writer.uint32(10).string(message.metricId);
@@ -289,6 +383,57 @@ export const QueryMetricsRequest = {
     message.toTime = object.toTime ?? undefined;
     message.pagination = object.pagination !== undefined && object.pagination !== null ? PageRequest.fromPartial(object.pagination) : undefined;
     return message;
+  },
+  fromAmino(object: QueryMetricsRequestAmino): QueryMetricsRequest {
+    const message = createBaseQueryMetricsRequest();
+    if (object.metric_id !== undefined && object.metric_id !== null) {
+      message.metricId = object.metric_id;
+    }
+    if (object.metric_type !== undefined && object.metric_type !== null) {
+      message.metricType = metricTypeFromJSON(object.metric_type);
+    }
+    if (object.from_block_height !== undefined && object.from_block_height !== null) {
+      message.fromBlockHeight = object.from_block_height;
+    }
+    if (object.to_block_height !== undefined && object.to_block_height !== null) {
+      message.toBlockHeight = object.to_block_height;
+    }
+    if (object.from_time !== undefined && object.from_time !== null) {
+      message.fromTime = object.from_time;
+    }
+    if (object.to_time !== undefined && object.to_time !== null) {
+      message.toTime = object.to_time;
+    }
+    if (object.pagination !== undefined && object.pagination !== null) {
+      message.pagination = PageRequest.fromAmino(object.pagination);
+    }
+    return message;
+  },
+  toAmino(message: QueryMetricsRequest): QueryMetricsRequestAmino {
+    const obj: any = {};
+    obj.metric_id = message.metricId;
+    obj.metric_type = metricTypeToJSON(message.metricType);
+    obj.from_block_height = message.fromBlockHeight;
+    obj.to_block_height = message.toBlockHeight;
+    obj.from_time = message.fromTime;
+    obj.to_time = message.toTime;
+    obj.pagination = message.pagination ? PageRequest.toAmino(message.pagination) : undefined;
+    return obj;
+  },
+  fromAminoMsg(object: QueryMetricsRequestAminoMsg): QueryMetricsRequest {
+    return QueryMetricsRequest.fromAmino(object.value);
+  },
+  fromProtoMsg(message: QueryMetricsRequestProtoMsg): QueryMetricsRequest {
+    return QueryMetricsRequest.decode(message.value);
+  },
+  toProto(message: QueryMetricsRequest): Uint8Array {
+    return QueryMetricsRequest.encode(message).finish();
+  },
+  toProtoMsg(message: QueryMetricsRequest): QueryMetricsRequestProtoMsg {
+    return {
+      typeUrl: "/cosmatics.QueryMetricsRequest",
+      value: QueryMetricsRequest.encode(message).finish()
+    };
   }
 };
 function createBaseQueryMetricsResponse(): QueryMetricsResponse {
@@ -297,6 +442,7 @@ function createBaseQueryMetricsResponse(): QueryMetricsResponse {
   };
 }
 export const QueryMetricsResponse = {
+  typeUrl: "/cosmatics.QueryMetricsResponse",
   encode(message: QueryMetricsResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     for (const v of message.metrics) {
       Metric.encode(v!, writer.uint32(10).fork()).ldelim();
@@ -338,5 +484,34 @@ export const QueryMetricsResponse = {
     const message = createBaseQueryMetricsResponse();
     message.metrics = object.metrics?.map(e => Metric.fromPartial(e)) || [];
     return message;
+  },
+  fromAmino(object: QueryMetricsResponseAmino): QueryMetricsResponse {
+    const message = createBaseQueryMetricsResponse();
+    message.metrics = object.metrics?.map(e => Metric.fromAmino(e)) || [];
+    return message;
+  },
+  toAmino(message: QueryMetricsResponse): QueryMetricsResponseAmino {
+    const obj: any = {};
+    if (message.metrics) {
+      obj.metrics = message.metrics.map(e => e ? Metric.toAmino(e) : undefined);
+    } else {
+      obj.metrics = [];
+    }
+    return obj;
+  },
+  fromAminoMsg(object: QueryMetricsResponseAminoMsg): QueryMetricsResponse {
+    return QueryMetricsResponse.fromAmino(object.value);
+  },
+  fromProtoMsg(message: QueryMetricsResponseProtoMsg): QueryMetricsResponse {
+    return QueryMetricsResponse.decode(message.value);
+  },
+  toProto(message: QueryMetricsResponse): Uint8Array {
+    return QueryMetricsResponse.encode(message).finish();
+  },
+  toProtoMsg(message: QueryMetricsResponse): QueryMetricsResponseProtoMsg {
+    return {
+      typeUrl: "/cosmatics.QueryMetricsResponse",
+      value: QueryMetricsResponse.encode(message).finish()
+    };
   }
 };
