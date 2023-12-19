@@ -1,6 +1,6 @@
-import {connectWithSigner, cosmos} from "@pryzm-finance/pryzmjs"
-import {DirectSecp256k1HdWallet} from "@cosmjs/proto-signing";
-import {GasPrice} from "@cosmjs/stargate";
+import { connectWithSigner, cosmos } from "@pryzm-finance/pryzmjs"
+import { DirectSecp256k1HdWallet } from "@cosmjs/proto-signing";
+import { GasPrice } from "@cosmjs/stargate";
 
 async function main() {
     const mnemonic = "short ocean antique emerge glory lock army wine guard sketch hotel remove music demand romance raven roof survey tired thank vessel cliff choose apology";

@@ -1,10 +1,10 @@
-import {pryzmatics} from "@pryzm-finance/pryzmjs/lib";
 import * as console from "console";
-import {PRYZMATICS_ENDPOINT} from "./config";
-import {OperationType} from "@pryzm-finance/pryzmjs/lib/codegen/pryzmatics/trade/user_trade_history";
+import { PRYZMATICS_ENDPOINT } from "./config";
+import { OperationType } from "@pryzm-finance/pryzmjs/lib/codegen/pryzmatics/trade/user_trade_history";
+import { createPryzmaticsClient } from "@pryzm-finance/pryzmjs";
 
 async function main() {
-    const pryzmaticsClient = await pryzmatics.ClientFactory.createClient({restEndpoint: PRYZMATICS_ENDPOINT})
+    const pryzmaticsClient = await createPryzmaticsClient({restEndpoint: PRYZMATICS_ENDPOINT})
 
     let history = (await pryzmaticsClient.pryzmatics.userTradeHistory({
         operationType: OperationType.OPERATION_TYPE_ANY, address: "", firstToken: "", secondToken: ""

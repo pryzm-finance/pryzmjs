@@ -1,10 +1,10 @@
-import {pryzm} from "@pryzm-finance/pryzmjs"
+import { createPryzmGrpcWebClient } from "@pryzm-finance/pryzmjs"
 import * as console from "console";
-import {localPryzm} from "./config";
+import { localPryzm } from "./config";
 
 
 async function main() {
-    const pryzmClient = await pryzm.ClientFactory.createGrpcWebClient({endpoint: localPryzm.grpcWebUrl})
+    const pryzmClient = await createPryzmGrpcWebClient({endpoint: localPryzm.grpcWebUrl})
 
     console.log("fetching validatorOutstandingRewards:")
     const rewards = (await pryzmClient.cosmos.distribution.v1beta1.validatorOutstandingRewards({

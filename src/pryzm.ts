@@ -8,6 +8,7 @@ import { PageRequest } from "./codegen/cosmos/base/query/v1beta1/pagination";
 import { createGrpcWebClient } from "./codegen/pryzm/rpc.query";
 
 export type PryzmGrpcWebClient = Awaited<ReturnType<typeof createGrpcWebClient>>
+export const createPryzmGrpcWebClient = createGrpcWebClient
 
 /**
  * ```ts

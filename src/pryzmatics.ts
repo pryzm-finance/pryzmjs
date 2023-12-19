@@ -1,9 +1,9 @@
-import { cosmatics, pryzmatics } from "./codegen"
 import { defaultPageRequestProvider } from "./index";
 import { PageRequest } from "./codegen/cosmos/base/query/v1beta1/pagination";
 import { createClient } from "./codegen/pryzmatics/lcd";
 
 export type PryzmaticsClient = Awaited<ReturnType<typeof createClient>>
+export const createPryzmaticsClient = createClient
 
 /**
  * ```ts

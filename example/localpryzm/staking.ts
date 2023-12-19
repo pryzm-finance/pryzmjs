@@ -1,11 +1,11 @@
-import {pryzm} from "@pryzm-finance/pryzmjs"
+import { createPryzmGrpcWebClient } from "@pryzm-finance/pryzmjs"
 import * as console from "console";
-import {localPryzm} from "./config";
-import {BondStatus, bondStatusToJSON} from "@pryzm-finance/pryzmjs/lib/codegen/cosmos/staking/v1beta1/staking";
+import { localPryzm } from "./config";
+import { BondStatus, bondStatusToJSON } from "@pryzm-finance/pryzmjs/lib/codegen/cosmos/staking/v1beta1/staking";
 
 
 async function main() {
-    const pryzmClient = await pryzm.ClientFactory.createGrpcWebClient({endpoint: localPryzm.grpcWebUrl})
+    const pryzmClient = await createPryzmGrpcWebClient({endpoint: localPryzm.grpcWebUrl})
 
     console.log("fetching bonded validators:")
     const validators = await pryzmClient.cosmos.staking.v1beta1.validators({

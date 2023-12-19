@@ -1,9 +1,10 @@
-import { fetchAll, pryzmatics } from "@pryzm-finance/pryzmjs/lib";
+import { fetchAll } from "@pryzm-finance/pryzmjs/lib";
 import * as console from "console";
 import { PRYZMATICS_ENDPOINT } from "./config";
+import { createPryzmaticsClient } from "@pryzm-finance/pryzmjs";
 
 async function main() {
-    const pryzmaticsClient = await pryzmatics.ClientFactory.createClient({ restEndpoint: PRYZMATICS_ENDPOINT })
+    const pryzmaticsClient = await createPryzmaticsClient({ restEndpoint: PRYZMATICS_ENDPOINT })
 
     let maturities = await fetchAll(pryzmaticsClient, async (client, pageRequest) => {
         const result = (await pryzmaticsClient.pryzmatics.maturityAll({

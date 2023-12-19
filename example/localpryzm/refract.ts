@@ -1,8 +1,8 @@
-import { connectWithSigner, cosmos, getSigningPryzmClientOptions, pryzm } from "@pryzm-finance/pryzmjs"
-import {DirectSecp256k1HdWallet} from "@cosmjs/proto-signing";
-import {defaultRegistryTypes, GasPrice, SigningStargateClient} from "@cosmjs/stargate";
+import { connectWithSigner, pryzm } from "@pryzm-finance/pryzmjs"
+import { DirectSecp256k1HdWallet } from "@cosmjs/proto-signing";
+import { GasPrice } from "@cosmjs/stargate";
 import * as console from "console";
-import {localPryzm} from "./config";
+import { localPryzm } from "./config";
 
 async function main() {
     const signer = await DirectSecp256k1HdWallet.fromMnemonic(localPryzm.accounts.test1.mnemonic, {prefix: "pryzm"});
