@@ -1,13 +1,25 @@
-import { AllianceValidatorInfo, AllianceValidatorInfoSDKType, QueuedUndelegation, QueuedUndelegationSDKType, Delegation, DelegationSDKType } from "./delegations";
+import { AllianceValidatorInfo, AllianceValidatorInfoAmino, AllianceValidatorInfoSDKType, QueuedUndelegation, QueuedUndelegationAmino, QueuedUndelegationSDKType, Delegation, DelegationAmino, DelegationSDKType } from "./delegations";
 import { Timestamp, TimestampSDKType } from "../../google/protobuf/timestamp";
-import { Redelegation, RedelegationSDKType } from "./redelegations";
-import { RewardWeightChangeSnapshot, RewardWeightChangeSnapshotSDKType, AllianceAsset, AllianceAssetSDKType } from "./alliance";
-import { Params, ParamsSDKType } from "./params";
+import { Redelegation, RedelegationAmino, RedelegationSDKType } from "./redelegations";
+import { RewardWeightChangeSnapshot, RewardWeightChangeSnapshotAmino, RewardWeightChangeSnapshotSDKType, AllianceAsset, AllianceAssetAmino, AllianceAssetSDKType } from "./alliance";
+import { Params, ParamsAmino, ParamsSDKType } from "./params";
 import { BinaryReader, BinaryWriter } from "../../binary";
 import { isSet, fromJsonTimestamp, fromTimestamp } from "../../helpers";
 export interface ValidatorInfoState {
   validatorAddress: string;
   validator: AllianceValidatorInfo;
+}
+export interface ValidatorInfoStateProtoMsg {
+  typeUrl: "/alliance.alliance.ValidatorInfoState";
+  value: Uint8Array;
+}
+export interface ValidatorInfoStateAmino {
+  validator_address?: string;
+  validator?: AllianceValidatorInfoAmino;
+}
+export interface ValidatorInfoStateAminoMsg {
+  type: "/alliance.alliance.ValidatorInfoState";
+  value: ValidatorInfoStateAmino;
 }
 export interface ValidatorInfoStateSDKType {
   validator_address: string;
@@ -17,6 +29,18 @@ export interface RedelegationState {
   completionTime: Timestamp;
   redelegation: Redelegation;
 }
+export interface RedelegationStateProtoMsg {
+  typeUrl: "/alliance.alliance.RedelegationState";
+  value: Uint8Array;
+}
+export interface RedelegationStateAmino {
+  completion_time?: string;
+  redelegation?: RedelegationAmino;
+}
+export interface RedelegationStateAminoMsg {
+  type: "/alliance.alliance.RedelegationState";
+  value: RedelegationStateAmino;
+}
 export interface RedelegationStateSDKType {
   completion_time: TimestampSDKType;
   redelegation: RedelegationSDKType;
@@ -24,6 +48,18 @@ export interface RedelegationStateSDKType {
 export interface UndelegationState {
   completionTime: Timestamp;
   undelegation: QueuedUndelegation;
+}
+export interface UndelegationStateProtoMsg {
+  typeUrl: "/alliance.alliance.UndelegationState";
+  value: Uint8Array;
+}
+export interface UndelegationStateAmino {
+  completion_time?: string;
+  undelegation?: QueuedUndelegationAmino;
+}
+export interface UndelegationStateAminoMsg {
+  type: "/alliance.alliance.UndelegationState";
+  value: UndelegationStateAmino;
 }
 export interface UndelegationStateSDKType {
   completion_time: TimestampSDKType;
@@ -34,6 +70,20 @@ export interface RewardWeightChangeSnapshotState {
   validator: string;
   denom: string;
   snapshot: RewardWeightChangeSnapshot;
+}
+export interface RewardWeightChangeSnapshotStateProtoMsg {
+  typeUrl: "/alliance.alliance.RewardWeightChangeSnapshotState";
+  value: Uint8Array;
+}
+export interface RewardWeightChangeSnapshotStateAmino {
+  height?: string;
+  validator?: string;
+  denom?: string;
+  snapshot?: RewardWeightChangeSnapshotAmino;
+}
+export interface RewardWeightChangeSnapshotStateAminoMsg {
+  type: "/alliance.alliance.RewardWeightChangeSnapshotState";
+  value: RewardWeightChangeSnapshotStateAmino;
 }
 export interface RewardWeightChangeSnapshotStateSDKType {
   height: bigint;
@@ -50,6 +100,24 @@ export interface GenesisState {
   delegations: Delegation[];
   redelegations: RedelegationState[];
   undelegations: UndelegationState[];
+}
+export interface GenesisStateProtoMsg {
+  typeUrl: "/alliance.alliance.GenesisState";
+  value: Uint8Array;
+}
+/** GenesisState defines the module's genesis state. */
+export interface GenesisStateAmino {
+  params?: ParamsAmino;
+  assets?: AllianceAssetAmino[];
+  validator_infos?: ValidatorInfoStateAmino[];
+  reward_weight_change_snaphots?: RewardWeightChangeSnapshotStateAmino[];
+  delegations?: DelegationAmino[];
+  redelegations?: RedelegationStateAmino[];
+  undelegations?: UndelegationStateAmino[];
+}
+export interface GenesisStateAminoMsg {
+  type: "/alliance.alliance.GenesisState";
+  value: GenesisStateAmino;
 }
 /** GenesisState defines the module's genesis state. */
 export interface GenesisStateSDKType {
@@ -68,6 +136,7 @@ function createBaseValidatorInfoState(): ValidatorInfoState {
   };
 }
 export const ValidatorInfoState = {
+  typeUrl: "/alliance.alliance.ValidatorInfoState",
   encode(message: ValidatorInfoState, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.validatorAddress !== "") {
       writer.uint32(10).string(message.validatorAddress);
@@ -114,6 +183,37 @@ export const ValidatorInfoState = {
     message.validatorAddress = object.validatorAddress ?? "";
     message.validator = object.validator !== undefined && object.validator !== null ? AllianceValidatorInfo.fromPartial(object.validator) : undefined;
     return message;
+  },
+  fromAmino(object: ValidatorInfoStateAmino): ValidatorInfoState {
+    const message = createBaseValidatorInfoState();
+    if (object.validator_address !== undefined && object.validator_address !== null) {
+      message.validatorAddress = object.validator_address;
+    }
+    if (object.validator !== undefined && object.validator !== null) {
+      message.validator = AllianceValidatorInfo.fromAmino(object.validator);
+    }
+    return message;
+  },
+  toAmino(message: ValidatorInfoState): ValidatorInfoStateAmino {
+    const obj: any = {};
+    obj.validator_address = message.validatorAddress;
+    obj.validator = message.validator ? AllianceValidatorInfo.toAmino(message.validator) : undefined;
+    return obj;
+  },
+  fromAminoMsg(object: ValidatorInfoStateAminoMsg): ValidatorInfoState {
+    return ValidatorInfoState.fromAmino(object.value);
+  },
+  fromProtoMsg(message: ValidatorInfoStateProtoMsg): ValidatorInfoState {
+    return ValidatorInfoState.decode(message.value);
+  },
+  toProto(message: ValidatorInfoState): Uint8Array {
+    return ValidatorInfoState.encode(message).finish();
+  },
+  toProtoMsg(message: ValidatorInfoState): ValidatorInfoStateProtoMsg {
+    return {
+      typeUrl: "/alliance.alliance.ValidatorInfoState",
+      value: ValidatorInfoState.encode(message).finish()
+    };
   }
 };
 function createBaseRedelegationState(): RedelegationState {
@@ -123,6 +223,7 @@ function createBaseRedelegationState(): RedelegationState {
   };
 }
 export const RedelegationState = {
+  typeUrl: "/alliance.alliance.RedelegationState",
   encode(message: RedelegationState, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.completionTime !== undefined) {
       Timestamp.encode(message.completionTime, writer.uint32(10).fork()).ldelim();
@@ -169,6 +270,37 @@ export const RedelegationState = {
     message.completionTime = object.completionTime !== undefined && object.completionTime !== null ? Timestamp.fromPartial(object.completionTime) : undefined;
     message.redelegation = object.redelegation !== undefined && object.redelegation !== null ? Redelegation.fromPartial(object.redelegation) : undefined;
     return message;
+  },
+  fromAmino(object: RedelegationStateAmino): RedelegationState {
+    const message = createBaseRedelegationState();
+    if (object.completion_time !== undefined && object.completion_time !== null) {
+      message.completionTime = Timestamp.fromAmino(object.completion_time);
+    }
+    if (object.redelegation !== undefined && object.redelegation !== null) {
+      message.redelegation = Redelegation.fromAmino(object.redelegation);
+    }
+    return message;
+  },
+  toAmino(message: RedelegationState): RedelegationStateAmino {
+    const obj: any = {};
+    obj.completion_time = message.completionTime ? Timestamp.toAmino(message.completionTime) : undefined;
+    obj.redelegation = message.redelegation ? Redelegation.toAmino(message.redelegation) : undefined;
+    return obj;
+  },
+  fromAminoMsg(object: RedelegationStateAminoMsg): RedelegationState {
+    return RedelegationState.fromAmino(object.value);
+  },
+  fromProtoMsg(message: RedelegationStateProtoMsg): RedelegationState {
+    return RedelegationState.decode(message.value);
+  },
+  toProto(message: RedelegationState): Uint8Array {
+    return RedelegationState.encode(message).finish();
+  },
+  toProtoMsg(message: RedelegationState): RedelegationStateProtoMsg {
+    return {
+      typeUrl: "/alliance.alliance.RedelegationState",
+      value: RedelegationState.encode(message).finish()
+    };
   }
 };
 function createBaseUndelegationState(): UndelegationState {
@@ -178,6 +310,7 @@ function createBaseUndelegationState(): UndelegationState {
   };
 }
 export const UndelegationState = {
+  typeUrl: "/alliance.alliance.UndelegationState",
   encode(message: UndelegationState, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.completionTime !== undefined) {
       Timestamp.encode(message.completionTime, writer.uint32(10).fork()).ldelim();
@@ -224,6 +357,37 @@ export const UndelegationState = {
     message.completionTime = object.completionTime !== undefined && object.completionTime !== null ? Timestamp.fromPartial(object.completionTime) : undefined;
     message.undelegation = object.undelegation !== undefined && object.undelegation !== null ? QueuedUndelegation.fromPartial(object.undelegation) : undefined;
     return message;
+  },
+  fromAmino(object: UndelegationStateAmino): UndelegationState {
+    const message = createBaseUndelegationState();
+    if (object.completion_time !== undefined && object.completion_time !== null) {
+      message.completionTime = Timestamp.fromAmino(object.completion_time);
+    }
+    if (object.undelegation !== undefined && object.undelegation !== null) {
+      message.undelegation = QueuedUndelegation.fromAmino(object.undelegation);
+    }
+    return message;
+  },
+  toAmino(message: UndelegationState): UndelegationStateAmino {
+    const obj: any = {};
+    obj.completion_time = message.completionTime ? Timestamp.toAmino(message.completionTime) : undefined;
+    obj.undelegation = message.undelegation ? QueuedUndelegation.toAmino(message.undelegation) : undefined;
+    return obj;
+  },
+  fromAminoMsg(object: UndelegationStateAminoMsg): UndelegationState {
+    return UndelegationState.fromAmino(object.value);
+  },
+  fromProtoMsg(message: UndelegationStateProtoMsg): UndelegationState {
+    return UndelegationState.decode(message.value);
+  },
+  toProto(message: UndelegationState): Uint8Array {
+    return UndelegationState.encode(message).finish();
+  },
+  toProtoMsg(message: UndelegationState): UndelegationStateProtoMsg {
+    return {
+      typeUrl: "/alliance.alliance.UndelegationState",
+      value: UndelegationState.encode(message).finish()
+    };
   }
 };
 function createBaseRewardWeightChangeSnapshotState(): RewardWeightChangeSnapshotState {
@@ -235,6 +399,7 @@ function createBaseRewardWeightChangeSnapshotState(): RewardWeightChangeSnapshot
   };
 }
 export const RewardWeightChangeSnapshotState = {
+  typeUrl: "/alliance.alliance.RewardWeightChangeSnapshotState",
   encode(message: RewardWeightChangeSnapshotState, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.height !== BigInt(0)) {
       writer.uint32(8).uint64(message.height);
@@ -299,6 +464,45 @@ export const RewardWeightChangeSnapshotState = {
     message.denom = object.denom ?? "";
     message.snapshot = object.snapshot !== undefined && object.snapshot !== null ? RewardWeightChangeSnapshot.fromPartial(object.snapshot) : undefined;
     return message;
+  },
+  fromAmino(object: RewardWeightChangeSnapshotStateAmino): RewardWeightChangeSnapshotState {
+    const message = createBaseRewardWeightChangeSnapshotState();
+    if (object.height !== undefined && object.height !== null) {
+      message.height = BigInt(object.height);
+    }
+    if (object.validator !== undefined && object.validator !== null) {
+      message.validator = object.validator;
+    }
+    if (object.denom !== undefined && object.denom !== null) {
+      message.denom = object.denom;
+    }
+    if (object.snapshot !== undefined && object.snapshot !== null) {
+      message.snapshot = RewardWeightChangeSnapshot.fromAmino(object.snapshot);
+    }
+    return message;
+  },
+  toAmino(message: RewardWeightChangeSnapshotState): RewardWeightChangeSnapshotStateAmino {
+    const obj: any = {};
+    obj.height = message.height ? message.height.toString() : undefined;
+    obj.validator = message.validator;
+    obj.denom = message.denom;
+    obj.snapshot = message.snapshot ? RewardWeightChangeSnapshot.toAmino(message.snapshot) : undefined;
+    return obj;
+  },
+  fromAminoMsg(object: RewardWeightChangeSnapshotStateAminoMsg): RewardWeightChangeSnapshotState {
+    return RewardWeightChangeSnapshotState.fromAmino(object.value);
+  },
+  fromProtoMsg(message: RewardWeightChangeSnapshotStateProtoMsg): RewardWeightChangeSnapshotState {
+    return RewardWeightChangeSnapshotState.decode(message.value);
+  },
+  toProto(message: RewardWeightChangeSnapshotState): Uint8Array {
+    return RewardWeightChangeSnapshotState.encode(message).finish();
+  },
+  toProtoMsg(message: RewardWeightChangeSnapshotState): RewardWeightChangeSnapshotStateProtoMsg {
+    return {
+      typeUrl: "/alliance.alliance.RewardWeightChangeSnapshotState",
+      value: RewardWeightChangeSnapshotState.encode(message).finish()
+    };
   }
 };
 function createBaseGenesisState(): GenesisState {
@@ -313,6 +517,7 @@ function createBaseGenesisState(): GenesisState {
   };
 }
 export const GenesisState = {
+  typeUrl: "/alliance.alliance.GenesisState",
   encode(message: GenesisState, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.params !== undefined) {
       Params.encode(message.params, writer.uint32(10).fork()).ldelim();
@@ -428,5 +633,68 @@ export const GenesisState = {
     message.redelegations = object.redelegations?.map(e => RedelegationState.fromPartial(e)) || [];
     message.undelegations = object.undelegations?.map(e => UndelegationState.fromPartial(e)) || [];
     return message;
+  },
+  fromAmino(object: GenesisStateAmino): GenesisState {
+    const message = createBaseGenesisState();
+    if (object.params !== undefined && object.params !== null) {
+      message.params = Params.fromAmino(object.params);
+    }
+    message.assets = object.assets?.map(e => AllianceAsset.fromAmino(e)) || [];
+    message.validatorInfos = object.validator_infos?.map(e => ValidatorInfoState.fromAmino(e)) || [];
+    message.rewardWeightChangeSnaphots = object.reward_weight_change_snaphots?.map(e => RewardWeightChangeSnapshotState.fromAmino(e)) || [];
+    message.delegations = object.delegations?.map(e => Delegation.fromAmino(e)) || [];
+    message.redelegations = object.redelegations?.map(e => RedelegationState.fromAmino(e)) || [];
+    message.undelegations = object.undelegations?.map(e => UndelegationState.fromAmino(e)) || [];
+    return message;
+  },
+  toAmino(message: GenesisState): GenesisStateAmino {
+    const obj: any = {};
+    obj.params = message.params ? Params.toAmino(message.params) : undefined;
+    if (message.assets) {
+      obj.assets = message.assets.map(e => e ? AllianceAsset.toAmino(e) : undefined);
+    } else {
+      obj.assets = [];
+    }
+    if (message.validatorInfos) {
+      obj.validator_infos = message.validatorInfos.map(e => e ? ValidatorInfoState.toAmino(e) : undefined);
+    } else {
+      obj.validator_infos = [];
+    }
+    if (message.rewardWeightChangeSnaphots) {
+      obj.reward_weight_change_snaphots = message.rewardWeightChangeSnaphots.map(e => e ? RewardWeightChangeSnapshotState.toAmino(e) : undefined);
+    } else {
+      obj.reward_weight_change_snaphots = [];
+    }
+    if (message.delegations) {
+      obj.delegations = message.delegations.map(e => e ? Delegation.toAmino(e) : undefined);
+    } else {
+      obj.delegations = [];
+    }
+    if (message.redelegations) {
+      obj.redelegations = message.redelegations.map(e => e ? RedelegationState.toAmino(e) : undefined);
+    } else {
+      obj.redelegations = [];
+    }
+    if (message.undelegations) {
+      obj.undelegations = message.undelegations.map(e => e ? UndelegationState.toAmino(e) : undefined);
+    } else {
+      obj.undelegations = [];
+    }
+    return obj;
+  },
+  fromAminoMsg(object: GenesisStateAminoMsg): GenesisState {
+    return GenesisState.fromAmino(object.value);
+  },
+  fromProtoMsg(message: GenesisStateProtoMsg): GenesisState {
+    return GenesisState.decode(message.value);
+  },
+  toProto(message: GenesisState): Uint8Array {
+    return GenesisState.encode(message).finish();
+  },
+  toProtoMsg(message: GenesisState): GenesisStateProtoMsg {
+    return {
+      typeUrl: "/alliance.alliance.GenesisState",
+      value: GenesisState.encode(message).finish()
+    };
   }
 };

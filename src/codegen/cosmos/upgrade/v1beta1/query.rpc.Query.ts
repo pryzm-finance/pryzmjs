@@ -1,4 +1,3 @@
-//@ts-nocheck
 import { grpc } from "@improbable-eng/grpc-web";
 import { UnaryMethodDefinitionish } from "../../../grpc-web";
 import { DeepPartial } from "../../../helpers";
@@ -43,19 +42,19 @@ export class QueryClientImpl implements Query {
     this.authority = this.authority.bind(this);
   }
   currentPlan(request: DeepPartial<QueryCurrentPlanRequest> = {}, metadata?: grpc.Metadata): Promise<QueryCurrentPlanResponse> {
-    return this.rpc.unary(QueryCurrentPlanDesc, QueryCurrentPlanRequest.fromPartial(request), metadata);
+    return this.rpc.unary(QueryCurrentPlanDesc, QueryCurrentPlanRequest.fromPartial(request as any), metadata);
   }
   appliedPlan(request: DeepPartial<QueryAppliedPlanRequest>, metadata?: grpc.Metadata): Promise<QueryAppliedPlanResponse> {
-    return this.rpc.unary(QueryAppliedPlanDesc, QueryAppliedPlanRequest.fromPartial(request), metadata);
+    return this.rpc.unary(QueryAppliedPlanDesc, QueryAppliedPlanRequest.fromPartial(request as any), metadata);
   }
   upgradedConsensusState(request: DeepPartial<QueryUpgradedConsensusStateRequest>, metadata?: grpc.Metadata): Promise<QueryUpgradedConsensusStateResponse> {
-    return this.rpc.unary(QueryUpgradedConsensusStateDesc, QueryUpgradedConsensusStateRequest.fromPartial(request), metadata);
+    return this.rpc.unary(QueryUpgradedConsensusStateDesc, QueryUpgradedConsensusStateRequest.fromPartial(request as any), metadata);
   }
   moduleVersions(request: DeepPartial<QueryModuleVersionsRequest>, metadata?: grpc.Metadata): Promise<QueryModuleVersionsResponse> {
-    return this.rpc.unary(QueryModuleVersionsDesc, QueryModuleVersionsRequest.fromPartial(request), metadata);
+    return this.rpc.unary(QueryModuleVersionsDesc, QueryModuleVersionsRequest.fromPartial(request as any), metadata);
   }
   authority(request: DeepPartial<QueryAuthorityRequest> = {}, metadata?: grpc.Metadata): Promise<QueryAuthorityResponse> {
-    return this.rpc.unary(QueryAuthorityDesc, QueryAuthorityRequest.fromPartial(request), metadata);
+    return this.rpc.unary(QueryAuthorityDesc, QueryAuthorityRequest.fromPartial(request as any), metadata);
   }
 }
 export const QueryDesc = {

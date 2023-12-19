@@ -1,5 +1,5 @@
 import { TimeResolutionType, timeResolutionTypeFromJSON, timeResolutionTypeToJSON } from "../../common/time_resolution";
-import { HistoricalPoolApr, HistoricalPoolAprSDKType } from "../../pool/historical_pool_apr";
+import { HistoricalPoolApr, HistoricalPoolAprAmino, HistoricalPoolAprSDKType } from "../../pool/historical_pool_apr";
 import { BinaryReader, BinaryWriter } from "../../../binary";
 import { isSet } from "../../../helpers";
 export interface QueryHistoricalPoolAprRequest {
@@ -8,6 +8,21 @@ export interface QueryHistoricalPoolAprRequest {
   timeResolutionValue: number;
   from: string;
   to: string;
+}
+export interface QueryHistoricalPoolAprRequestProtoMsg {
+  typeUrl: "/pryzmatics.server.pool.QueryHistoricalPoolAprRequest";
+  value: Uint8Array;
+}
+export interface QueryHistoricalPoolAprRequestAmino {
+  pool_id?: string;
+  time_resolution_type?: TimeResolutionType;
+  time_resolution_value?: number;
+  from?: string;
+  to?: string;
+}
+export interface QueryHistoricalPoolAprRequestAminoMsg {
+  type: "/pryzmatics.server.pool.QueryHistoricalPoolAprRequest";
+  value: QueryHistoricalPoolAprRequestAmino;
 }
 export interface QueryHistoricalPoolAprRequestSDKType {
   pool_id: bigint;
@@ -18,6 +33,17 @@ export interface QueryHistoricalPoolAprRequestSDKType {
 }
 export interface QueryHistoricalPoolAprResponse {
   historicalPoolAprs: HistoricalPoolApr[];
+}
+export interface QueryHistoricalPoolAprResponseProtoMsg {
+  typeUrl: "/pryzmatics.server.pool.QueryHistoricalPoolAprResponse";
+  value: Uint8Array;
+}
+export interface QueryHistoricalPoolAprResponseAmino {
+  historical_pool_aprs?: HistoricalPoolAprAmino[];
+}
+export interface QueryHistoricalPoolAprResponseAminoMsg {
+  type: "/pryzmatics.server.pool.QueryHistoricalPoolAprResponse";
+  value: QueryHistoricalPoolAprResponseAmino;
 }
 export interface QueryHistoricalPoolAprResponseSDKType {
   historical_pool_aprs: HistoricalPoolAprSDKType[];
@@ -32,6 +58,7 @@ function createBaseQueryHistoricalPoolAprRequest(): QueryHistoricalPoolAprReques
   };
 }
 export const QueryHistoricalPoolAprRequest = {
+  typeUrl: "/pryzmatics.server.pool.QueryHistoricalPoolAprRequest",
   encode(message: QueryHistoricalPoolAprRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.poolId !== BigInt(0)) {
       writer.uint32(8).uint64(message.poolId);
@@ -105,6 +132,49 @@ export const QueryHistoricalPoolAprRequest = {
     message.from = object.from ?? "";
     message.to = object.to ?? "";
     return message;
+  },
+  fromAmino(object: QueryHistoricalPoolAprRequestAmino): QueryHistoricalPoolAprRequest {
+    const message = createBaseQueryHistoricalPoolAprRequest();
+    if (object.pool_id !== undefined && object.pool_id !== null) {
+      message.poolId = BigInt(object.pool_id);
+    }
+    if (object.time_resolution_type !== undefined && object.time_resolution_type !== null) {
+      message.timeResolutionType = timeResolutionTypeFromJSON(object.time_resolution_type);
+    }
+    if (object.time_resolution_value !== undefined && object.time_resolution_value !== null) {
+      message.timeResolutionValue = object.time_resolution_value;
+    }
+    if (object.from !== undefined && object.from !== null) {
+      message.from = object.from;
+    }
+    if (object.to !== undefined && object.to !== null) {
+      message.to = object.to;
+    }
+    return message;
+  },
+  toAmino(message: QueryHistoricalPoolAprRequest): QueryHistoricalPoolAprRequestAmino {
+    const obj: any = {};
+    obj.pool_id = message.poolId ? message.poolId.toString() : undefined;
+    obj.time_resolution_type = timeResolutionTypeToJSON(message.timeResolutionType);
+    obj.time_resolution_value = message.timeResolutionValue;
+    obj.from = message.from;
+    obj.to = message.to;
+    return obj;
+  },
+  fromAminoMsg(object: QueryHistoricalPoolAprRequestAminoMsg): QueryHistoricalPoolAprRequest {
+    return QueryHistoricalPoolAprRequest.fromAmino(object.value);
+  },
+  fromProtoMsg(message: QueryHistoricalPoolAprRequestProtoMsg): QueryHistoricalPoolAprRequest {
+    return QueryHistoricalPoolAprRequest.decode(message.value);
+  },
+  toProto(message: QueryHistoricalPoolAprRequest): Uint8Array {
+    return QueryHistoricalPoolAprRequest.encode(message).finish();
+  },
+  toProtoMsg(message: QueryHistoricalPoolAprRequest): QueryHistoricalPoolAprRequestProtoMsg {
+    return {
+      typeUrl: "/pryzmatics.server.pool.QueryHistoricalPoolAprRequest",
+      value: QueryHistoricalPoolAprRequest.encode(message).finish()
+    };
   }
 };
 function createBaseQueryHistoricalPoolAprResponse(): QueryHistoricalPoolAprResponse {
@@ -113,6 +183,7 @@ function createBaseQueryHistoricalPoolAprResponse(): QueryHistoricalPoolAprRespo
   };
 }
 export const QueryHistoricalPoolAprResponse = {
+  typeUrl: "/pryzmatics.server.pool.QueryHistoricalPoolAprResponse",
   encode(message: QueryHistoricalPoolAprResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     for (const v of message.historicalPoolAprs) {
       HistoricalPoolApr.encode(v!, writer.uint32(10).fork()).ldelim();
@@ -154,5 +225,34 @@ export const QueryHistoricalPoolAprResponse = {
     const message = createBaseQueryHistoricalPoolAprResponse();
     message.historicalPoolAprs = object.historicalPoolAprs?.map(e => HistoricalPoolApr.fromPartial(e)) || [];
     return message;
+  },
+  fromAmino(object: QueryHistoricalPoolAprResponseAmino): QueryHistoricalPoolAprResponse {
+    const message = createBaseQueryHistoricalPoolAprResponse();
+    message.historicalPoolAprs = object.historical_pool_aprs?.map(e => HistoricalPoolApr.fromAmino(e)) || [];
+    return message;
+  },
+  toAmino(message: QueryHistoricalPoolAprResponse): QueryHistoricalPoolAprResponseAmino {
+    const obj: any = {};
+    if (message.historicalPoolAprs) {
+      obj.historical_pool_aprs = message.historicalPoolAprs.map(e => e ? HistoricalPoolApr.toAmino(e) : undefined);
+    } else {
+      obj.historical_pool_aprs = [];
+    }
+    return obj;
+  },
+  fromAminoMsg(object: QueryHistoricalPoolAprResponseAminoMsg): QueryHistoricalPoolAprResponse {
+    return QueryHistoricalPoolAprResponse.fromAmino(object.value);
+  },
+  fromProtoMsg(message: QueryHistoricalPoolAprResponseProtoMsg): QueryHistoricalPoolAprResponse {
+    return QueryHistoricalPoolAprResponse.decode(message.value);
+  },
+  toProto(message: QueryHistoricalPoolAprResponse): Uint8Array {
+    return QueryHistoricalPoolAprResponse.encode(message).finish();
+  },
+  toProtoMsg(message: QueryHistoricalPoolAprResponse): QueryHistoricalPoolAprResponseProtoMsg {
+    return {
+      typeUrl: "/pryzmatics.server.pool.QueryHistoricalPoolAprResponse",
+      value: QueryHistoricalPoolAprResponse.encode(message).finish()
+    };
   }
 };

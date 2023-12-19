@@ -7,6 +7,7 @@ export enum TwapAlgorithm {
   UNRECOGNIZED = -1,
 }
 export const TwapAlgorithmSDKType = TwapAlgorithm;
+export const TwapAlgorithmAmino = TwapAlgorithm;
 export function twapAlgorithmFromJSON(object: any): TwapAlgorithm {
   switch (object) {
     case 0:
@@ -39,6 +40,21 @@ export interface Pair {
   poolId: string;
   dataSource: string;
 }
+export interface PairProtoMsg {
+  typeUrl: "/pryzm.amm.v1.Pair";
+  value: Uint8Array;
+}
+export interface PairAmino {
+  base?: string;
+  quote?: string;
+  /** refers to the data source pool (e.g. osmosis gamm pool) */
+  pool_id?: string;
+  data_source?: string;
+}
+export interface PairAminoMsg {
+  type: "/pryzm.amm.v1.Pair";
+  value: PairAmino;
+}
 export interface PairSDKType {
   base: string;
   quote: string;
@@ -63,6 +79,32 @@ export interface OraclePricePair {
    */
   baseDenom: string;
 }
+export interface OraclePricePairProtoMsg {
+  typeUrl: "/pryzm.amm.v1.OraclePricePair";
+  value: Uint8Array;
+}
+export interface OraclePricePairAmino {
+  asset_id?: string;
+  /**
+   * this is the token denom which should exist in the target weighted pool in pryzm chain
+   * the reason for adding this property and not using the pairs, is that the token denom in various chains might be different
+   * for example usdc token might have contract or ibc denom on different chains with different channel and ids
+   */
+  quote_token?: string;
+  twap_duration_millis?: string;
+  twap_algorithm?: TwapAlgorithm;
+  disabled?: boolean;
+  pairs?: PairAmino[];
+  /**
+   * this is the denom of the base token on this chain
+   * should be ibc denom for most cases
+   */
+  base_denom?: string;
+}
+export interface OraclePricePairAminoMsg {
+  type: "/pryzm.amm.v1.OraclePricePair";
+  value: OraclePricePairAmino;
+}
 export interface OraclePricePairSDKType {
   asset_id: string;
   quote_token: string;
@@ -81,6 +123,7 @@ function createBasePair(): Pair {
   };
 }
 export const Pair = {
+  typeUrl: "/pryzm.amm.v1.Pair",
   encode(message: Pair, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.base !== "") {
       writer.uint32(10).string(message.base);
@@ -145,6 +188,45 @@ export const Pair = {
     message.poolId = object.poolId ?? "";
     message.dataSource = object.dataSource ?? "";
     return message;
+  },
+  fromAmino(object: PairAmino): Pair {
+    const message = createBasePair();
+    if (object.base !== undefined && object.base !== null) {
+      message.base = object.base;
+    }
+    if (object.quote !== undefined && object.quote !== null) {
+      message.quote = object.quote;
+    }
+    if (object.pool_id !== undefined && object.pool_id !== null) {
+      message.poolId = object.pool_id;
+    }
+    if (object.data_source !== undefined && object.data_source !== null) {
+      message.dataSource = object.data_source;
+    }
+    return message;
+  },
+  toAmino(message: Pair): PairAmino {
+    const obj: any = {};
+    obj.base = message.base;
+    obj.quote = message.quote;
+    obj.pool_id = message.poolId;
+    obj.data_source = message.dataSource;
+    return obj;
+  },
+  fromAminoMsg(object: PairAminoMsg): Pair {
+    return Pair.fromAmino(object.value);
+  },
+  fromProtoMsg(message: PairProtoMsg): Pair {
+    return Pair.decode(message.value);
+  },
+  toProto(message: Pair): Uint8Array {
+    return Pair.encode(message).finish();
+  },
+  toProtoMsg(message: Pair): PairProtoMsg {
+    return {
+      typeUrl: "/pryzm.amm.v1.Pair",
+      value: Pair.encode(message).finish()
+    };
   }
 };
 function createBaseOraclePricePair(): OraclePricePair {
@@ -159,6 +241,7 @@ function createBaseOraclePricePair(): OraclePricePair {
   };
 }
 export const OraclePricePair = {
+  typeUrl: "/pryzm.amm.v1.OraclePricePair",
   encode(message: OraclePricePair, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.assetId !== "") {
       writer.uint32(10).string(message.assetId);
@@ -254,5 +337,58 @@ export const OraclePricePair = {
     message.pairs = object.pairs?.map(e => Pair.fromPartial(e)) || [];
     message.baseDenom = object.baseDenom ?? "";
     return message;
+  },
+  fromAmino(object: OraclePricePairAmino): OraclePricePair {
+    const message = createBaseOraclePricePair();
+    if (object.asset_id !== undefined && object.asset_id !== null) {
+      message.assetId = object.asset_id;
+    }
+    if (object.quote_token !== undefined && object.quote_token !== null) {
+      message.quoteToken = object.quote_token;
+    }
+    if (object.twap_duration_millis !== undefined && object.twap_duration_millis !== null) {
+      message.twapDurationMillis = BigInt(object.twap_duration_millis);
+    }
+    if (object.twap_algorithm !== undefined && object.twap_algorithm !== null) {
+      message.twapAlgorithm = twapAlgorithmFromJSON(object.twap_algorithm);
+    }
+    if (object.disabled !== undefined && object.disabled !== null) {
+      message.disabled = object.disabled;
+    }
+    message.pairs = object.pairs?.map(e => Pair.fromAmino(e)) || [];
+    if (object.base_denom !== undefined && object.base_denom !== null) {
+      message.baseDenom = object.base_denom;
+    }
+    return message;
+  },
+  toAmino(message: OraclePricePair): OraclePricePairAmino {
+    const obj: any = {};
+    obj.asset_id = message.assetId;
+    obj.quote_token = message.quoteToken;
+    obj.twap_duration_millis = message.twapDurationMillis ? message.twapDurationMillis.toString() : undefined;
+    obj.twap_algorithm = twapAlgorithmToJSON(message.twapAlgorithm);
+    obj.disabled = message.disabled;
+    if (message.pairs) {
+      obj.pairs = message.pairs.map(e => e ? Pair.toAmino(e) : undefined);
+    } else {
+      obj.pairs = [];
+    }
+    obj.base_denom = message.baseDenom;
+    return obj;
+  },
+  fromAminoMsg(object: OraclePricePairAminoMsg): OraclePricePair {
+    return OraclePricePair.fromAmino(object.value);
+  },
+  fromProtoMsg(message: OraclePricePairProtoMsg): OraclePricePair {
+    return OraclePricePair.decode(message.value);
+  },
+  toProto(message: OraclePricePair): Uint8Array {
+    return OraclePricePair.encode(message).finish();
+  },
+  toProtoMsg(message: OraclePricePair): OraclePricePairProtoMsg {
+    return {
+      typeUrl: "/pryzm.amm.v1.OraclePricePair",
+      value: OraclePricePair.encode(message).finish()
+    };
   }
 };

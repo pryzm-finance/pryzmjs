@@ -1,4 +1,4 @@
-import { TokenYield, TokenYieldSDKType } from "./token_yield";
+import { TokenYield, TokenYieldAmino, TokenYieldSDKType } from "./token_yield";
 import { BinaryReader, BinaryWriter } from "../../binary";
 import { Decimal } from "@cosmjs/math";
 import { isSet } from "../../helpers";
@@ -12,6 +12,7 @@ export enum TokenType {
   UNRECOGNIZED = -1,
 }
 export const TokenTypeSDKType = TokenType;
+export const TokenTypeAmino = TokenType;
 export function tokenTypeFromJSON(object: any): TokenType {
   switch (object) {
     case 0:
@@ -67,6 +68,24 @@ export interface TokenMetrics {
   price52wLow?: string;
   price52wHigh?: string;
 }
+export interface TokenMetricsProtoMsg {
+  typeUrl: "/pryzmatics.pool.TokenMetrics";
+  value: Uint8Array;
+}
+export interface TokenMetricsAmino {
+  price_change_percentage_24h?: string;
+  price_change_percentage_7d?: string;
+  price_change_percentage_30d?: string;
+  trade_volume_24h?: string;
+  trade_volume_7d?: string;
+  trade_volume_30d?: string;
+  price_52w_low?: string;
+  price_52w_high?: string;
+}
+export interface TokenMetricsAminoMsg {
+  type: "/pryzmatics.pool.TokenMetrics";
+  value: TokenMetricsAmino;
+}
 export interface TokenMetricsSDKType {
   price_change_percentage_24h?: string;
   price_change_percentage_7d?: string;
@@ -84,6 +103,22 @@ export interface Token {
   price?: string;
   metrics: TokenMetrics;
   error: string;
+}
+export interface TokenProtoMsg {
+  typeUrl: "/pryzmatics.pool.Token";
+  value: Uint8Array;
+}
+export interface TokenAmino {
+  denom?: string;
+  type?: TokenType;
+  yield?: TokenYieldAmino;
+  price?: string;
+  metrics?: TokenMetricsAmino;
+  error?: string;
+}
+export interface TokenAminoMsg {
+  type: "/pryzmatics.pool.Token";
+  value: TokenAmino;
 }
 export interface TokenSDKType {
   denom: string;
@@ -106,6 +141,7 @@ function createBaseTokenMetrics(): TokenMetrics {
   };
 }
 export const TokenMetrics = {
+  typeUrl: "/pryzmatics.pool.TokenMetrics",
   encode(message: TokenMetrics, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.priceChangePercentage24h !== undefined) {
       writer.uint32(10).string(Decimal.fromUserInput(message.priceChangePercentage24h, 18).atomics);
@@ -206,6 +242,61 @@ export const TokenMetrics = {
     message.price52wLow = object.price52wLow ?? undefined;
     message.price52wHigh = object.price52wHigh ?? undefined;
     return message;
+  },
+  fromAmino(object: TokenMetricsAmino): TokenMetrics {
+    const message = createBaseTokenMetrics();
+    if (object.price_change_percentage_24h !== undefined && object.price_change_percentage_24h !== null) {
+      message.priceChangePercentage24h = object.price_change_percentage_24h;
+    }
+    if (object.price_change_percentage_7d !== undefined && object.price_change_percentage_7d !== null) {
+      message.priceChangePercentage7d = object.price_change_percentage_7d;
+    }
+    if (object.price_change_percentage_30d !== undefined && object.price_change_percentage_30d !== null) {
+      message.priceChangePercentage30d = object.price_change_percentage_30d;
+    }
+    if (object.trade_volume_24h !== undefined && object.trade_volume_24h !== null) {
+      message.tradeVolume24h = object.trade_volume_24h;
+    }
+    if (object.trade_volume_7d !== undefined && object.trade_volume_7d !== null) {
+      message.tradeVolume7d = object.trade_volume_7d;
+    }
+    if (object.trade_volume_30d !== undefined && object.trade_volume_30d !== null) {
+      message.tradeVolume30d = object.trade_volume_30d;
+    }
+    if (object.price_52w_low !== undefined && object.price_52w_low !== null) {
+      message.price52wLow = object.price_52w_low;
+    }
+    if (object.price_52w_high !== undefined && object.price_52w_high !== null) {
+      message.price52wHigh = object.price_52w_high;
+    }
+    return message;
+  },
+  toAmino(message: TokenMetrics): TokenMetricsAmino {
+    const obj: any = {};
+    obj.price_change_percentage_24h = message.priceChangePercentage24h;
+    obj.price_change_percentage_7d = message.priceChangePercentage7d;
+    obj.price_change_percentage_30d = message.priceChangePercentage30d;
+    obj.trade_volume_24h = message.tradeVolume24h;
+    obj.trade_volume_7d = message.tradeVolume7d;
+    obj.trade_volume_30d = message.tradeVolume30d;
+    obj.price_52w_low = message.price52wLow;
+    obj.price_52w_high = message.price52wHigh;
+    return obj;
+  },
+  fromAminoMsg(object: TokenMetricsAminoMsg): TokenMetrics {
+    return TokenMetrics.fromAmino(object.value);
+  },
+  fromProtoMsg(message: TokenMetricsProtoMsg): TokenMetrics {
+    return TokenMetrics.decode(message.value);
+  },
+  toProto(message: TokenMetrics): Uint8Array {
+    return TokenMetrics.encode(message).finish();
+  },
+  toProtoMsg(message: TokenMetrics): TokenMetricsProtoMsg {
+    return {
+      typeUrl: "/pryzmatics.pool.TokenMetrics",
+      value: TokenMetrics.encode(message).finish()
+    };
   }
 };
 function createBaseToken(): Token {
@@ -219,6 +310,7 @@ function createBaseToken(): Token {
   };
 }
 export const Token = {
+  typeUrl: "/pryzmatics.pool.Token",
   encode(message: Token, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.denom !== "") {
       writer.uint32(10).string(message.denom);
@@ -301,5 +393,52 @@ export const Token = {
     message.metrics = object.metrics !== undefined && object.metrics !== null ? TokenMetrics.fromPartial(object.metrics) : undefined;
     message.error = object.error ?? "";
     return message;
+  },
+  fromAmino(object: TokenAmino): Token {
+    const message = createBaseToken();
+    if (object.denom !== undefined && object.denom !== null) {
+      message.denom = object.denom;
+    }
+    if (object.type !== undefined && object.type !== null) {
+      message.type = tokenTypeFromJSON(object.type);
+    }
+    if (object.yield !== undefined && object.yield !== null) {
+      message.yield = TokenYield.fromAmino(object.yield);
+    }
+    if (object.price !== undefined && object.price !== null) {
+      message.price = object.price;
+    }
+    if (object.metrics !== undefined && object.metrics !== null) {
+      message.metrics = TokenMetrics.fromAmino(object.metrics);
+    }
+    if (object.error !== undefined && object.error !== null) {
+      message.error = object.error;
+    }
+    return message;
+  },
+  toAmino(message: Token): TokenAmino {
+    const obj: any = {};
+    obj.denom = message.denom;
+    obj.type = tokenTypeToJSON(message.type);
+    obj.yield = message.yield ? TokenYield.toAmino(message.yield) : undefined;
+    obj.price = message.price;
+    obj.metrics = message.metrics ? TokenMetrics.toAmino(message.metrics) : undefined;
+    obj.error = message.error;
+    return obj;
+  },
+  fromAminoMsg(object: TokenAminoMsg): Token {
+    return Token.fromAmino(object.value);
+  },
+  fromProtoMsg(message: TokenProtoMsg): Token {
+    return Token.decode(message.value);
+  },
+  toProto(message: Token): Uint8Array {
+    return Token.encode(message).finish();
+  },
+  toProtoMsg(message: Token): TokenProtoMsg {
+    return {
+      typeUrl: "/pryzmatics.pool.Token",
+      value: Token.encode(message).finish()
+    };
   }
 };

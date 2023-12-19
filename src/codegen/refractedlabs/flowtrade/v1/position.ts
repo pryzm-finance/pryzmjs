@@ -26,6 +26,39 @@ export interface Position {
   /** the amount of purchase that has been claimed by user and already transferred to their account */
   claimedAmount: string;
 }
+export interface PositionProtoMsg {
+  typeUrl: "/refractedlabs.flowtrade.v1.Position";
+  value: Uint8Array;
+}
+export interface PositionAmino {
+  /** the flow for which this position is created */
+  flow?: string;
+  /** the address of the position's owner */
+  owner?: string;
+  /**
+   * the address that the owner has delegated position management to.
+   * the operator is allowed to manage the position
+   */
+  operator?: string;
+  /** an index for the amount of purchase that has already been applied */
+  dist_index?: string;
+  /** the current amount of token-in provided to buy token-out */
+  token_in_balance?: string;
+  /** the amount of already spent in tokens */
+  spent_token_in?: string;
+  /** the shares of this position from the flow */
+  shares?: string;
+  /** the amount of out tokens that has purchased by user */
+  purchased_token_out?: string;
+  /** the amount of purchased token that are paid for, but not calculated in purchased_token_out because of rounding errors */
+  pending_purchase?: string;
+  /** the amount of purchase that has been claimed by user and already transferred to their account */
+  claimed_amount?: string;
+}
+export interface PositionAminoMsg {
+  type: "/refractedlabs.flowtrade.v1.Position";
+  value: PositionAmino;
+}
 export interface PositionSDKType {
   flow: bigint;
   owner: string;
@@ -53,6 +86,7 @@ function createBasePosition(): Position {
   };
 }
 export const Position = {
+  typeUrl: "/refractedlabs.flowtrade.v1.Position",
   encode(message: Position, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.flow !== BigInt(0)) {
       writer.uint32(8).uint64(message.flow);
@@ -171,5 +205,68 @@ export const Position = {
     message.pendingPurchase = object.pendingPurchase ?? "";
     message.claimedAmount = object.claimedAmount ?? "";
     return message;
+  },
+  fromAmino(object: PositionAmino): Position {
+    const message = createBasePosition();
+    if (object.flow !== undefined && object.flow !== null) {
+      message.flow = BigInt(object.flow);
+    }
+    if (object.owner !== undefined && object.owner !== null) {
+      message.owner = object.owner;
+    }
+    if (object.operator !== undefined && object.operator !== null) {
+      message.operator = object.operator;
+    }
+    if (object.dist_index !== undefined && object.dist_index !== null) {
+      message.distIndex = object.dist_index;
+    }
+    if (object.token_in_balance !== undefined && object.token_in_balance !== null) {
+      message.tokenInBalance = object.token_in_balance;
+    }
+    if (object.spent_token_in !== undefined && object.spent_token_in !== null) {
+      message.spentTokenIn = object.spent_token_in;
+    }
+    if (object.shares !== undefined && object.shares !== null) {
+      message.shares = object.shares;
+    }
+    if (object.purchased_token_out !== undefined && object.purchased_token_out !== null) {
+      message.purchasedTokenOut = object.purchased_token_out;
+    }
+    if (object.pending_purchase !== undefined && object.pending_purchase !== null) {
+      message.pendingPurchase = object.pending_purchase;
+    }
+    if (object.claimed_amount !== undefined && object.claimed_amount !== null) {
+      message.claimedAmount = object.claimed_amount;
+    }
+    return message;
+  },
+  toAmino(message: Position): PositionAmino {
+    const obj: any = {};
+    obj.flow = message.flow ? message.flow.toString() : undefined;
+    obj.owner = message.owner;
+    obj.operator = message.operator;
+    obj.dist_index = message.distIndex;
+    obj.token_in_balance = message.tokenInBalance;
+    obj.spent_token_in = message.spentTokenIn;
+    obj.shares = message.shares;
+    obj.purchased_token_out = message.purchasedTokenOut;
+    obj.pending_purchase = message.pendingPurchase;
+    obj.claimed_amount = message.claimedAmount;
+    return obj;
+  },
+  fromAminoMsg(object: PositionAminoMsg): Position {
+    return Position.fromAmino(object.value);
+  },
+  fromProtoMsg(message: PositionProtoMsg): Position {
+    return Position.decode(message.value);
+  },
+  toProto(message: Position): Uint8Array {
+    return Position.encode(message).finish();
+  },
+  toProtoMsg(message: Position): PositionProtoMsg {
+    return {
+      typeUrl: "/refractedlabs.flowtrade.v1.Position",
+      value: Position.encode(message).finish()
+    };
   }
 };

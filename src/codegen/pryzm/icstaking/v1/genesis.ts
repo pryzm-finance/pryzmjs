@@ -1,6 +1,6 @@
-import { Params, ParamsSDKType } from "./params";
-import { HostChain, HostChainSDKType, HostChainState, HostChainStateSDKType } from "./host_chain";
-import { Undelegation, UndelegationSDKType, ChannelUndelegation, ChannelUndelegationSDKType } from "./undelegation";
+import { Params, ParamsAmino, ParamsSDKType } from "./params";
+import { HostChain, HostChainAmino, HostChainSDKType, HostChainState, HostChainStateAmino, HostChainStateSDKType } from "./host_chain";
+import { Undelegation, UndelegationAmino, UndelegationSDKType, ChannelUndelegation, ChannelUndelegationAmino, ChannelUndelegationSDKType } from "./undelegation";
 import { BinaryReader, BinaryWriter } from "../../../binary";
 import { isSet } from "../../../helpers";
 /** GenesisState defines the icstaking module's genesis state. */
@@ -11,6 +11,23 @@ export interface GenesisState {
   hostChainStateList: HostChainState[];
   undelegationList: Undelegation[];
   channelUndelegationList: ChannelUndelegation[];
+}
+export interface GenesisStateProtoMsg {
+  typeUrl: "/pryzm.icstaking.v1.GenesisState";
+  value: Uint8Array;
+}
+/** GenesisState defines the icstaking module's genesis state. */
+export interface GenesisStateAmino {
+  params?: ParamsAmino;
+  port_id?: string;
+  host_chain_list?: HostChainAmino[];
+  host_chain_state_list?: HostChainStateAmino[];
+  undelegation_list?: UndelegationAmino[];
+  channel_undelegation_list?: ChannelUndelegationAmino[];
+}
+export interface GenesisStateAminoMsg {
+  type: "/pryzm.icstaking.v1.GenesisState";
+  value: GenesisStateAmino;
 }
 /** GenesisState defines the icstaking module's genesis state. */
 export interface GenesisStateSDKType {
@@ -32,6 +49,7 @@ function createBaseGenesisState(): GenesisState {
   };
 }
 export const GenesisState = {
+  typeUrl: "/pryzm.icstaking.v1.GenesisState",
   encode(message: GenesisState, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.params !== undefined) {
       Params.encode(message.params, writer.uint32(10).fork()).ldelim();
@@ -130,5 +148,60 @@ export const GenesisState = {
     message.undelegationList = object.undelegationList?.map(e => Undelegation.fromPartial(e)) || [];
     message.channelUndelegationList = object.channelUndelegationList?.map(e => ChannelUndelegation.fromPartial(e)) || [];
     return message;
+  },
+  fromAmino(object: GenesisStateAmino): GenesisState {
+    const message = createBaseGenesisState();
+    if (object.params !== undefined && object.params !== null) {
+      message.params = Params.fromAmino(object.params);
+    }
+    if (object.port_id !== undefined && object.port_id !== null) {
+      message.portId = object.port_id;
+    }
+    message.hostChainList = object.host_chain_list?.map(e => HostChain.fromAmino(e)) || [];
+    message.hostChainStateList = object.host_chain_state_list?.map(e => HostChainState.fromAmino(e)) || [];
+    message.undelegationList = object.undelegation_list?.map(e => Undelegation.fromAmino(e)) || [];
+    message.channelUndelegationList = object.channel_undelegation_list?.map(e => ChannelUndelegation.fromAmino(e)) || [];
+    return message;
+  },
+  toAmino(message: GenesisState): GenesisStateAmino {
+    const obj: any = {};
+    obj.params = message.params ? Params.toAmino(message.params) : undefined;
+    obj.port_id = message.portId;
+    if (message.hostChainList) {
+      obj.host_chain_list = message.hostChainList.map(e => e ? HostChain.toAmino(e) : undefined);
+    } else {
+      obj.host_chain_list = [];
+    }
+    if (message.hostChainStateList) {
+      obj.host_chain_state_list = message.hostChainStateList.map(e => e ? HostChainState.toAmino(e) : undefined);
+    } else {
+      obj.host_chain_state_list = [];
+    }
+    if (message.undelegationList) {
+      obj.undelegation_list = message.undelegationList.map(e => e ? Undelegation.toAmino(e) : undefined);
+    } else {
+      obj.undelegation_list = [];
+    }
+    if (message.channelUndelegationList) {
+      obj.channel_undelegation_list = message.channelUndelegationList.map(e => e ? ChannelUndelegation.toAmino(e) : undefined);
+    } else {
+      obj.channel_undelegation_list = [];
+    }
+    return obj;
+  },
+  fromAminoMsg(object: GenesisStateAminoMsg): GenesisState {
+    return GenesisState.fromAmino(object.value);
+  },
+  fromProtoMsg(message: GenesisStateProtoMsg): GenesisState {
+    return GenesisState.decode(message.value);
+  },
+  toProto(message: GenesisState): Uint8Array {
+    return GenesisState.encode(message).finish();
+  },
+  toProtoMsg(message: GenesisState): GenesisStateProtoMsg {
+    return {
+      typeUrl: "/pryzm.icstaking.v1.GenesisState",
+      value: GenesisState.encode(message).finish()
+    };
   }
 };

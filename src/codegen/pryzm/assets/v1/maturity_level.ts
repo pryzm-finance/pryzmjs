@@ -8,6 +8,21 @@ export interface MaturityLevel {
   introductionTime: Timestamp;
   expirationTime: Timestamp;
 }
+export interface MaturityLevelProtoMsg {
+  typeUrl: "/pryzm.assets.v1.MaturityLevel";
+  value: Uint8Array;
+}
+export interface MaturityLevelAmino {
+  active?: boolean;
+  asset_id?: string;
+  symbol?: string;
+  introduction_time?: string;
+  expiration_time?: string;
+}
+export interface MaturityLevelAminoMsg {
+  type: "/pryzm.assets.v1.MaturityLevel";
+  value: MaturityLevelAmino;
+}
 export interface MaturityLevelSDKType {
   active: boolean;
   asset_id: string;
@@ -25,6 +40,7 @@ function createBaseMaturityLevel(): MaturityLevel {
   };
 }
 export const MaturityLevel = {
+  typeUrl: "/pryzm.assets.v1.MaturityLevel",
   encode(message: MaturityLevel, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.active === true) {
       writer.uint32(8).bool(message.active);
@@ -98,5 +114,48 @@ export const MaturityLevel = {
     message.introductionTime = object.introductionTime !== undefined && object.introductionTime !== null ? Timestamp.fromPartial(object.introductionTime) : undefined;
     message.expirationTime = object.expirationTime !== undefined && object.expirationTime !== null ? Timestamp.fromPartial(object.expirationTime) : undefined;
     return message;
+  },
+  fromAmino(object: MaturityLevelAmino): MaturityLevel {
+    const message = createBaseMaturityLevel();
+    if (object.active !== undefined && object.active !== null) {
+      message.active = object.active;
+    }
+    if (object.asset_id !== undefined && object.asset_id !== null) {
+      message.assetId = object.asset_id;
+    }
+    if (object.symbol !== undefined && object.symbol !== null) {
+      message.symbol = object.symbol;
+    }
+    if (object.introduction_time !== undefined && object.introduction_time !== null) {
+      message.introductionTime = Timestamp.fromAmino(object.introduction_time);
+    }
+    if (object.expiration_time !== undefined && object.expiration_time !== null) {
+      message.expirationTime = Timestamp.fromAmino(object.expiration_time);
+    }
+    return message;
+  },
+  toAmino(message: MaturityLevel): MaturityLevelAmino {
+    const obj: any = {};
+    obj.active = message.active;
+    obj.asset_id = message.assetId;
+    obj.symbol = message.symbol;
+    obj.introduction_time = message.introductionTime ? Timestamp.toAmino(message.introductionTime) : undefined;
+    obj.expiration_time = message.expirationTime ? Timestamp.toAmino(message.expirationTime) : undefined;
+    return obj;
+  },
+  fromAminoMsg(object: MaturityLevelAminoMsg): MaturityLevel {
+    return MaturityLevel.fromAmino(object.value);
+  },
+  fromProtoMsg(message: MaturityLevelProtoMsg): MaturityLevel {
+    return MaturityLevel.decode(message.value);
+  },
+  toProto(message: MaturityLevel): Uint8Array {
+    return MaturityLevel.encode(message).finish();
+  },
+  toProtoMsg(message: MaturityLevel): MaturityLevelProtoMsg {
+    return {
+      typeUrl: "/pryzm.assets.v1.MaturityLevel",
+      value: MaturityLevel.encode(message).finish()
+    };
   }
 };

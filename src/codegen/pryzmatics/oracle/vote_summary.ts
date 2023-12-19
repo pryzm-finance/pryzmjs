@@ -4,6 +4,18 @@ export interface VoteSummary {
   totalVotePeriods: bigint;
   totalSlashWindows: bigint;
 }
+export interface VoteSummaryProtoMsg {
+  typeUrl: "/pryzmatics.oracle.VoteSummary";
+  value: Uint8Array;
+}
+export interface VoteSummaryAmino {
+  total_vote_periods?: string;
+  total_slash_windows?: string;
+}
+export interface VoteSummaryAminoMsg {
+  type: "/pryzmatics.oracle.VoteSummary";
+  value: VoteSummaryAmino;
+}
 export interface VoteSummarySDKType {
   total_vote_periods: bigint;
   total_slash_windows: bigint;
@@ -15,6 +27,7 @@ function createBaseVoteSummary(): VoteSummary {
   };
 }
 export const VoteSummary = {
+  typeUrl: "/pryzmatics.oracle.VoteSummary",
   encode(message: VoteSummary, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.totalVotePeriods !== BigInt(0)) {
       writer.uint32(16).int64(message.totalVotePeriods);
@@ -61,5 +74,36 @@ export const VoteSummary = {
     message.totalVotePeriods = object.totalVotePeriods !== undefined && object.totalVotePeriods !== null ? BigInt(object.totalVotePeriods.toString()) : BigInt(0);
     message.totalSlashWindows = object.totalSlashWindows !== undefined && object.totalSlashWindows !== null ? BigInt(object.totalSlashWindows.toString()) : BigInt(0);
     return message;
+  },
+  fromAmino(object: VoteSummaryAmino): VoteSummary {
+    const message = createBaseVoteSummary();
+    if (object.total_vote_periods !== undefined && object.total_vote_periods !== null) {
+      message.totalVotePeriods = BigInt(object.total_vote_periods);
+    }
+    if (object.total_slash_windows !== undefined && object.total_slash_windows !== null) {
+      message.totalSlashWindows = BigInt(object.total_slash_windows);
+    }
+    return message;
+  },
+  toAmino(message: VoteSummary): VoteSummaryAmino {
+    const obj: any = {};
+    obj.total_vote_periods = message.totalVotePeriods ? message.totalVotePeriods.toString() : undefined;
+    obj.total_slash_windows = message.totalSlashWindows ? message.totalSlashWindows.toString() : undefined;
+    return obj;
+  },
+  fromAminoMsg(object: VoteSummaryAminoMsg): VoteSummary {
+    return VoteSummary.fromAmino(object.value);
+  },
+  fromProtoMsg(message: VoteSummaryProtoMsg): VoteSummary {
+    return VoteSummary.decode(message.value);
+  },
+  toProto(message: VoteSummary): Uint8Array {
+    return VoteSummary.encode(message).finish();
+  },
+  toProtoMsg(message: VoteSummary): VoteSummaryProtoMsg {
+    return {
+      typeUrl: "/pryzmatics.oracle.VoteSummary",
+      value: VoteSummary.encode(message).finish()
+    };
   }
 };

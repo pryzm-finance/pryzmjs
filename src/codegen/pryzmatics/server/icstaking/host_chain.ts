@@ -1,10 +1,21 @@
-import { HostChain, HostChainSDKType } from "../../icstaking/host_chain";
-import { PageRequest, PageRequestSDKType, PageResponse, PageResponseSDKType } from "../../../cosmos/base/query/v1beta1/pagination";
-import { Duration, DurationSDKType } from "../../../google/protobuf/duration";
+import { HostChain, HostChainAmino, HostChainSDKType } from "../../icstaking/host_chain";
+import { PageRequest, PageRequestAmino, PageRequestSDKType, PageResponse, PageResponseAmino, PageResponseSDKType } from "../../../cosmos/base/query/v1beta1/pagination";
+import { Duration, DurationAmino, DurationSDKType } from "../../../google/protobuf/duration";
 import { BinaryReader, BinaryWriter } from "../../../binary";
 import { isSet } from "../../../helpers";
 export interface QueryHostChainRequest {
   hostChainId: string;
+}
+export interface QueryHostChainRequestProtoMsg {
+  typeUrl: "/pryzmatics.server.icstaking.QueryHostChainRequest";
+  value: Uint8Array;
+}
+export interface QueryHostChainRequestAmino {
+  host_chain_id?: string;
+}
+export interface QueryHostChainRequestAminoMsg {
+  type: "/pryzmatics.server.icstaking.QueryHostChainRequest";
+  value: QueryHostChainRequestAmino;
 }
 export interface QueryHostChainRequestSDKType {
   host_chain_id: string;
@@ -12,11 +23,33 @@ export interface QueryHostChainRequestSDKType {
 export interface QueryHostChainResponse {
   hostChain: HostChain;
 }
+export interface QueryHostChainResponseProtoMsg {
+  typeUrl: "/pryzmatics.server.icstaking.QueryHostChainResponse";
+  value: Uint8Array;
+}
+export interface QueryHostChainResponseAmino {
+  host_chain?: HostChainAmino;
+}
+export interface QueryHostChainResponseAminoMsg {
+  type: "/pryzmatics.server.icstaking.QueryHostChainResponse";
+  value: QueryHostChainResponseAmino;
+}
 export interface QueryHostChainResponseSDKType {
   host_chain: HostChainSDKType;
 }
 export interface QueryHostChainsRequest {
   pagination?: PageRequest;
+}
+export interface QueryHostChainsRequestProtoMsg {
+  typeUrl: "/pryzmatics.server.icstaking.QueryHostChainsRequest";
+  value: Uint8Array;
+}
+export interface QueryHostChainsRequestAmino {
+  pagination?: PageRequestAmino;
+}
+export interface QueryHostChainsRequestAminoMsg {
+  type: "/pryzmatics.server.icstaking.QueryHostChainsRequest";
+  value: QueryHostChainsRequestAmino;
 }
 export interface QueryHostChainsRequestSDKType {
   pagination?: PageRequestSDKType;
@@ -25,6 +58,18 @@ export interface QueryHostChainsResponse {
   hostChains: HostChain[];
   pagination?: PageResponse;
 }
+export interface QueryHostChainsResponseProtoMsg {
+  typeUrl: "/pryzmatics.server.icstaking.QueryHostChainsResponse";
+  value: Uint8Array;
+}
+export interface QueryHostChainsResponseAmino {
+  host_chains?: HostChainAmino[];
+  pagination?: PageResponseAmino;
+}
+export interface QueryHostChainsResponseAminoMsg {
+  type: "/pryzmatics.server.icstaking.QueryHostChainsResponse";
+  value: QueryHostChainsResponseAmino;
+}
 export interface QueryHostChainsResponseSDKType {
   host_chains: HostChainSDKType[];
   pagination?: PageResponseSDKType;
@@ -32,11 +77,33 @@ export interface QueryHostChainsResponseSDKType {
 export interface QueryHostChainUnbondingTimeRequest {
   hostChainId: string;
 }
+export interface QueryHostChainUnbondingTimeRequestProtoMsg {
+  typeUrl: "/pryzmatics.server.icstaking.QueryHostChainUnbondingTimeRequest";
+  value: Uint8Array;
+}
+export interface QueryHostChainUnbondingTimeRequestAmino {
+  host_chain_id?: string;
+}
+export interface QueryHostChainUnbondingTimeRequestAminoMsg {
+  type: "/pryzmatics.server.icstaking.QueryHostChainUnbondingTimeRequest";
+  value: QueryHostChainUnbondingTimeRequestAmino;
+}
 export interface QueryHostChainUnbondingTimeRequestSDKType {
   host_chain_id: string;
 }
 export interface QueryHostChainUnbondingTimeResponse {
   unbondingTime: Duration;
+}
+export interface QueryHostChainUnbondingTimeResponseProtoMsg {
+  typeUrl: "/pryzmatics.server.icstaking.QueryHostChainUnbondingTimeResponse";
+  value: Uint8Array;
+}
+export interface QueryHostChainUnbondingTimeResponseAmino {
+  unbonding_time?: DurationAmino;
+}
+export interface QueryHostChainUnbondingTimeResponseAminoMsg {
+  type: "/pryzmatics.server.icstaking.QueryHostChainUnbondingTimeResponse";
+  value: QueryHostChainUnbondingTimeResponseAmino;
 }
 export interface QueryHostChainUnbondingTimeResponseSDKType {
   unbonding_time: DurationSDKType;
@@ -47,6 +114,7 @@ function createBaseQueryHostChainRequest(): QueryHostChainRequest {
   };
 }
 export const QueryHostChainRequest = {
+  typeUrl: "/pryzmatics.server.icstaking.QueryHostChainRequest",
   encode(message: QueryHostChainRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.hostChainId !== "") {
       writer.uint32(10).string(message.hostChainId);
@@ -84,6 +152,33 @@ export const QueryHostChainRequest = {
     const message = createBaseQueryHostChainRequest();
     message.hostChainId = object.hostChainId ?? "";
     return message;
+  },
+  fromAmino(object: QueryHostChainRequestAmino): QueryHostChainRequest {
+    const message = createBaseQueryHostChainRequest();
+    if (object.host_chain_id !== undefined && object.host_chain_id !== null) {
+      message.hostChainId = object.host_chain_id;
+    }
+    return message;
+  },
+  toAmino(message: QueryHostChainRequest): QueryHostChainRequestAmino {
+    const obj: any = {};
+    obj.host_chain_id = message.hostChainId;
+    return obj;
+  },
+  fromAminoMsg(object: QueryHostChainRequestAminoMsg): QueryHostChainRequest {
+    return QueryHostChainRequest.fromAmino(object.value);
+  },
+  fromProtoMsg(message: QueryHostChainRequestProtoMsg): QueryHostChainRequest {
+    return QueryHostChainRequest.decode(message.value);
+  },
+  toProto(message: QueryHostChainRequest): Uint8Array {
+    return QueryHostChainRequest.encode(message).finish();
+  },
+  toProtoMsg(message: QueryHostChainRequest): QueryHostChainRequestProtoMsg {
+    return {
+      typeUrl: "/pryzmatics.server.icstaking.QueryHostChainRequest",
+      value: QueryHostChainRequest.encode(message).finish()
+    };
   }
 };
 function createBaseQueryHostChainResponse(): QueryHostChainResponse {
@@ -92,6 +187,7 @@ function createBaseQueryHostChainResponse(): QueryHostChainResponse {
   };
 }
 export const QueryHostChainResponse = {
+  typeUrl: "/pryzmatics.server.icstaking.QueryHostChainResponse",
   encode(message: QueryHostChainResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.hostChain !== undefined) {
       HostChain.encode(message.hostChain, writer.uint32(10).fork()).ldelim();
@@ -129,6 +225,33 @@ export const QueryHostChainResponse = {
     const message = createBaseQueryHostChainResponse();
     message.hostChain = object.hostChain !== undefined && object.hostChain !== null ? HostChain.fromPartial(object.hostChain) : undefined;
     return message;
+  },
+  fromAmino(object: QueryHostChainResponseAmino): QueryHostChainResponse {
+    const message = createBaseQueryHostChainResponse();
+    if (object.host_chain !== undefined && object.host_chain !== null) {
+      message.hostChain = HostChain.fromAmino(object.host_chain);
+    }
+    return message;
+  },
+  toAmino(message: QueryHostChainResponse): QueryHostChainResponseAmino {
+    const obj: any = {};
+    obj.host_chain = message.hostChain ? HostChain.toAmino(message.hostChain) : undefined;
+    return obj;
+  },
+  fromAminoMsg(object: QueryHostChainResponseAminoMsg): QueryHostChainResponse {
+    return QueryHostChainResponse.fromAmino(object.value);
+  },
+  fromProtoMsg(message: QueryHostChainResponseProtoMsg): QueryHostChainResponse {
+    return QueryHostChainResponse.decode(message.value);
+  },
+  toProto(message: QueryHostChainResponse): Uint8Array {
+    return QueryHostChainResponse.encode(message).finish();
+  },
+  toProtoMsg(message: QueryHostChainResponse): QueryHostChainResponseProtoMsg {
+    return {
+      typeUrl: "/pryzmatics.server.icstaking.QueryHostChainResponse",
+      value: QueryHostChainResponse.encode(message).finish()
+    };
   }
 };
 function createBaseQueryHostChainsRequest(): QueryHostChainsRequest {
@@ -137,6 +260,7 @@ function createBaseQueryHostChainsRequest(): QueryHostChainsRequest {
   };
 }
 export const QueryHostChainsRequest = {
+  typeUrl: "/pryzmatics.server.icstaking.QueryHostChainsRequest",
   encode(message: QueryHostChainsRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.pagination !== undefined) {
       PageRequest.encode(message.pagination, writer.uint32(10).fork()).ldelim();
@@ -174,6 +298,33 @@ export const QueryHostChainsRequest = {
     const message = createBaseQueryHostChainsRequest();
     message.pagination = object.pagination !== undefined && object.pagination !== null ? PageRequest.fromPartial(object.pagination) : undefined;
     return message;
+  },
+  fromAmino(object: QueryHostChainsRequestAmino): QueryHostChainsRequest {
+    const message = createBaseQueryHostChainsRequest();
+    if (object.pagination !== undefined && object.pagination !== null) {
+      message.pagination = PageRequest.fromAmino(object.pagination);
+    }
+    return message;
+  },
+  toAmino(message: QueryHostChainsRequest): QueryHostChainsRequestAmino {
+    const obj: any = {};
+    obj.pagination = message.pagination ? PageRequest.toAmino(message.pagination) : undefined;
+    return obj;
+  },
+  fromAminoMsg(object: QueryHostChainsRequestAminoMsg): QueryHostChainsRequest {
+    return QueryHostChainsRequest.fromAmino(object.value);
+  },
+  fromProtoMsg(message: QueryHostChainsRequestProtoMsg): QueryHostChainsRequest {
+    return QueryHostChainsRequest.decode(message.value);
+  },
+  toProto(message: QueryHostChainsRequest): Uint8Array {
+    return QueryHostChainsRequest.encode(message).finish();
+  },
+  toProtoMsg(message: QueryHostChainsRequest): QueryHostChainsRequestProtoMsg {
+    return {
+      typeUrl: "/pryzmatics.server.icstaking.QueryHostChainsRequest",
+      value: QueryHostChainsRequest.encode(message).finish()
+    };
   }
 };
 function createBaseQueryHostChainsResponse(): QueryHostChainsResponse {
@@ -183,6 +334,7 @@ function createBaseQueryHostChainsResponse(): QueryHostChainsResponse {
   };
 }
 export const QueryHostChainsResponse = {
+  typeUrl: "/pryzmatics.server.icstaking.QueryHostChainsResponse",
   encode(message: QueryHostChainsResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     for (const v of message.hostChains) {
       HostChain.encode(v!, writer.uint32(10).fork()).ldelim();
@@ -233,6 +385,39 @@ export const QueryHostChainsResponse = {
     message.hostChains = object.hostChains?.map(e => HostChain.fromPartial(e)) || [];
     message.pagination = object.pagination !== undefined && object.pagination !== null ? PageResponse.fromPartial(object.pagination) : undefined;
     return message;
+  },
+  fromAmino(object: QueryHostChainsResponseAmino): QueryHostChainsResponse {
+    const message = createBaseQueryHostChainsResponse();
+    message.hostChains = object.host_chains?.map(e => HostChain.fromAmino(e)) || [];
+    if (object.pagination !== undefined && object.pagination !== null) {
+      message.pagination = PageResponse.fromAmino(object.pagination);
+    }
+    return message;
+  },
+  toAmino(message: QueryHostChainsResponse): QueryHostChainsResponseAmino {
+    const obj: any = {};
+    if (message.hostChains) {
+      obj.host_chains = message.hostChains.map(e => e ? HostChain.toAmino(e) : undefined);
+    } else {
+      obj.host_chains = [];
+    }
+    obj.pagination = message.pagination ? PageResponse.toAmino(message.pagination) : undefined;
+    return obj;
+  },
+  fromAminoMsg(object: QueryHostChainsResponseAminoMsg): QueryHostChainsResponse {
+    return QueryHostChainsResponse.fromAmino(object.value);
+  },
+  fromProtoMsg(message: QueryHostChainsResponseProtoMsg): QueryHostChainsResponse {
+    return QueryHostChainsResponse.decode(message.value);
+  },
+  toProto(message: QueryHostChainsResponse): Uint8Array {
+    return QueryHostChainsResponse.encode(message).finish();
+  },
+  toProtoMsg(message: QueryHostChainsResponse): QueryHostChainsResponseProtoMsg {
+    return {
+      typeUrl: "/pryzmatics.server.icstaking.QueryHostChainsResponse",
+      value: QueryHostChainsResponse.encode(message).finish()
+    };
   }
 };
 function createBaseQueryHostChainUnbondingTimeRequest(): QueryHostChainUnbondingTimeRequest {
@@ -241,6 +426,7 @@ function createBaseQueryHostChainUnbondingTimeRequest(): QueryHostChainUnbonding
   };
 }
 export const QueryHostChainUnbondingTimeRequest = {
+  typeUrl: "/pryzmatics.server.icstaking.QueryHostChainUnbondingTimeRequest",
   encode(message: QueryHostChainUnbondingTimeRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.hostChainId !== "") {
       writer.uint32(10).string(message.hostChainId);
@@ -278,6 +464,33 @@ export const QueryHostChainUnbondingTimeRequest = {
     const message = createBaseQueryHostChainUnbondingTimeRequest();
     message.hostChainId = object.hostChainId ?? "";
     return message;
+  },
+  fromAmino(object: QueryHostChainUnbondingTimeRequestAmino): QueryHostChainUnbondingTimeRequest {
+    const message = createBaseQueryHostChainUnbondingTimeRequest();
+    if (object.host_chain_id !== undefined && object.host_chain_id !== null) {
+      message.hostChainId = object.host_chain_id;
+    }
+    return message;
+  },
+  toAmino(message: QueryHostChainUnbondingTimeRequest): QueryHostChainUnbondingTimeRequestAmino {
+    const obj: any = {};
+    obj.host_chain_id = message.hostChainId;
+    return obj;
+  },
+  fromAminoMsg(object: QueryHostChainUnbondingTimeRequestAminoMsg): QueryHostChainUnbondingTimeRequest {
+    return QueryHostChainUnbondingTimeRequest.fromAmino(object.value);
+  },
+  fromProtoMsg(message: QueryHostChainUnbondingTimeRequestProtoMsg): QueryHostChainUnbondingTimeRequest {
+    return QueryHostChainUnbondingTimeRequest.decode(message.value);
+  },
+  toProto(message: QueryHostChainUnbondingTimeRequest): Uint8Array {
+    return QueryHostChainUnbondingTimeRequest.encode(message).finish();
+  },
+  toProtoMsg(message: QueryHostChainUnbondingTimeRequest): QueryHostChainUnbondingTimeRequestProtoMsg {
+    return {
+      typeUrl: "/pryzmatics.server.icstaking.QueryHostChainUnbondingTimeRequest",
+      value: QueryHostChainUnbondingTimeRequest.encode(message).finish()
+    };
   }
 };
 function createBaseQueryHostChainUnbondingTimeResponse(): QueryHostChainUnbondingTimeResponse {
@@ -286,6 +499,7 @@ function createBaseQueryHostChainUnbondingTimeResponse(): QueryHostChainUnbondin
   };
 }
 export const QueryHostChainUnbondingTimeResponse = {
+  typeUrl: "/pryzmatics.server.icstaking.QueryHostChainUnbondingTimeResponse",
   encode(message: QueryHostChainUnbondingTimeResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.unbondingTime !== undefined) {
       Duration.encode(message.unbondingTime, writer.uint32(10).fork()).ldelim();
@@ -323,5 +537,32 @@ export const QueryHostChainUnbondingTimeResponse = {
     const message = createBaseQueryHostChainUnbondingTimeResponse();
     message.unbondingTime = object.unbondingTime !== undefined && object.unbondingTime !== null ? Duration.fromPartial(object.unbondingTime) : undefined;
     return message;
+  },
+  fromAmino(object: QueryHostChainUnbondingTimeResponseAmino): QueryHostChainUnbondingTimeResponse {
+    const message = createBaseQueryHostChainUnbondingTimeResponse();
+    if (object.unbonding_time !== undefined && object.unbonding_time !== null) {
+      message.unbondingTime = Duration.fromAmino(object.unbonding_time);
+    }
+    return message;
+  },
+  toAmino(message: QueryHostChainUnbondingTimeResponse): QueryHostChainUnbondingTimeResponseAmino {
+    const obj: any = {};
+    obj.unbonding_time = message.unbondingTime ? Duration.toAmino(message.unbondingTime) : undefined;
+    return obj;
+  },
+  fromAminoMsg(object: QueryHostChainUnbondingTimeResponseAminoMsg): QueryHostChainUnbondingTimeResponse {
+    return QueryHostChainUnbondingTimeResponse.fromAmino(object.value);
+  },
+  fromProtoMsg(message: QueryHostChainUnbondingTimeResponseProtoMsg): QueryHostChainUnbondingTimeResponse {
+    return QueryHostChainUnbondingTimeResponse.decode(message.value);
+  },
+  toProto(message: QueryHostChainUnbondingTimeResponse): Uint8Array {
+    return QueryHostChainUnbondingTimeResponse.encode(message).finish();
+  },
+  toProtoMsg(message: QueryHostChainUnbondingTimeResponse): QueryHostChainUnbondingTimeResponseProtoMsg {
+    return {
+      typeUrl: "/pryzmatics.server.icstaking.QueryHostChainUnbondingTimeResponse",
+      value: QueryHostChainUnbondingTimeResponse.encode(message).finish()
+    };
   }
 };

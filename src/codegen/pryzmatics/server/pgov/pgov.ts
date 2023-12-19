@@ -1,14 +1,36 @@
-import { AssetProposal, AssetProposalSDKType } from "../../pgov/pgov";
+import { AssetProposal, AssetProposalAmino, AssetProposalSDKType } from "../../pgov/pgov";
 import { BinaryReader, BinaryWriter } from "../../../binary";
 import { isSet, bytesFromBase64, base64FromBytes } from "../../../helpers";
 export interface QueryAssetProposalRequest {
   assetId: string;
+}
+export interface QueryAssetProposalRequestProtoMsg {
+  typeUrl: "/pryzmatics.server.pgov.QueryAssetProposalRequest";
+  value: Uint8Array;
+}
+export interface QueryAssetProposalRequestAmino {
+  asset_id?: string;
+}
+export interface QueryAssetProposalRequestAminoMsg {
+  type: "/pryzmatics.server.pgov.QueryAssetProposalRequest";
+  value: QueryAssetProposalRequestAmino;
 }
 export interface QueryAssetProposalRequestSDKType {
   asset_id: string;
 }
 export interface QueryAssetProposalResponse {
   proposals: AssetProposal[];
+}
+export interface QueryAssetProposalResponseProtoMsg {
+  typeUrl: "/pryzmatics.server.pgov.QueryAssetProposalResponse";
+  value: Uint8Array;
+}
+export interface QueryAssetProposalResponseAmino {
+  proposals?: AssetProposalAmino[];
+}
+export interface QueryAssetProposalResponseAminoMsg {
+  type: "/pryzmatics.server.pgov.QueryAssetProposalResponse";
+  value: QueryAssetProposalResponseAmino;
 }
 export interface QueryAssetProposalResponseSDKType {
   proposals: AssetProposalSDKType[];
@@ -18,6 +40,19 @@ export interface QueryProposalSubmissionMsgsRequest {
   proposalId: bigint;
   creator: string;
 }
+export interface QueryProposalSubmissionMsgsRequestProtoMsg {
+  typeUrl: "/pryzmatics.server.pgov.QueryProposalSubmissionMsgsRequest";
+  value: Uint8Array;
+}
+export interface QueryProposalSubmissionMsgsRequestAmino {
+  asset_id?: string;
+  proposal_id?: string;
+  creator?: string;
+}
+export interface QueryProposalSubmissionMsgsRequestAminoMsg {
+  type: "/pryzmatics.server.pgov.QueryProposalSubmissionMsgsRequest";
+  value: QueryProposalSubmissionMsgsRequestAmino;
+}
 export interface QueryProposalSubmissionMsgsRequestSDKType {
   asset_id: string;
   proposal_id: bigint;
@@ -26,12 +61,35 @@ export interface QueryProposalSubmissionMsgsRequestSDKType {
 export interface QueryProposalSubmissionMsgsResponse {
   messages?: EncodeObject[];
 }
+export interface QueryProposalSubmissionMsgsResponseProtoMsg {
+  typeUrl: "/pryzmatics.server.pgov.QueryProposalSubmissionMsgsResponse";
+  value: Uint8Array;
+}
+export interface QueryProposalSubmissionMsgsResponseAmino {
+  messages?: EncodeObjectAmino[];
+}
+export interface QueryProposalSubmissionMsgsResponseAminoMsg {
+  type: "/pryzmatics.server.pgov.QueryProposalSubmissionMsgsResponse";
+  value: QueryProposalSubmissionMsgsResponseAmino;
+}
 export interface QueryProposalSubmissionMsgsResponseSDKType {
   messages?: EncodeObjectSDKType[];
 }
 export interface EncodeObject {
   typeUrl: string;
   value: Uint8Array;
+}
+export interface EncodeObjectProtoMsg {
+  typeUrl: "/pryzmatics.server.pgov.EncodeObject";
+  value: Uint8Array;
+}
+export interface EncodeObjectAmino {
+  typeUrl?: string;
+  value?: string;
+}
+export interface EncodeObjectAminoMsg {
+  type: "/pryzmatics.server.pgov.EncodeObject";
+  value: EncodeObjectAmino;
 }
 export interface EncodeObjectSDKType {
   typeUrl: string;
@@ -43,6 +101,7 @@ function createBaseQueryAssetProposalRequest(): QueryAssetProposalRequest {
   };
 }
 export const QueryAssetProposalRequest = {
+  typeUrl: "/pryzmatics.server.pgov.QueryAssetProposalRequest",
   encode(message: QueryAssetProposalRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.assetId !== "") {
       writer.uint32(10).string(message.assetId);
@@ -80,6 +139,33 @@ export const QueryAssetProposalRequest = {
     const message = createBaseQueryAssetProposalRequest();
     message.assetId = object.assetId ?? "";
     return message;
+  },
+  fromAmino(object: QueryAssetProposalRequestAmino): QueryAssetProposalRequest {
+    const message = createBaseQueryAssetProposalRequest();
+    if (object.asset_id !== undefined && object.asset_id !== null) {
+      message.assetId = object.asset_id;
+    }
+    return message;
+  },
+  toAmino(message: QueryAssetProposalRequest): QueryAssetProposalRequestAmino {
+    const obj: any = {};
+    obj.asset_id = message.assetId;
+    return obj;
+  },
+  fromAminoMsg(object: QueryAssetProposalRequestAminoMsg): QueryAssetProposalRequest {
+    return QueryAssetProposalRequest.fromAmino(object.value);
+  },
+  fromProtoMsg(message: QueryAssetProposalRequestProtoMsg): QueryAssetProposalRequest {
+    return QueryAssetProposalRequest.decode(message.value);
+  },
+  toProto(message: QueryAssetProposalRequest): Uint8Array {
+    return QueryAssetProposalRequest.encode(message).finish();
+  },
+  toProtoMsg(message: QueryAssetProposalRequest): QueryAssetProposalRequestProtoMsg {
+    return {
+      typeUrl: "/pryzmatics.server.pgov.QueryAssetProposalRequest",
+      value: QueryAssetProposalRequest.encode(message).finish()
+    };
   }
 };
 function createBaseQueryAssetProposalResponse(): QueryAssetProposalResponse {
@@ -88,6 +174,7 @@ function createBaseQueryAssetProposalResponse(): QueryAssetProposalResponse {
   };
 }
 export const QueryAssetProposalResponse = {
+  typeUrl: "/pryzmatics.server.pgov.QueryAssetProposalResponse",
   encode(message: QueryAssetProposalResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     for (const v of message.proposals) {
       AssetProposal.encode(v!, writer.uint32(10).fork()).ldelim();
@@ -129,6 +216,35 @@ export const QueryAssetProposalResponse = {
     const message = createBaseQueryAssetProposalResponse();
     message.proposals = object.proposals?.map(e => AssetProposal.fromPartial(e)) || [];
     return message;
+  },
+  fromAmino(object: QueryAssetProposalResponseAmino): QueryAssetProposalResponse {
+    const message = createBaseQueryAssetProposalResponse();
+    message.proposals = object.proposals?.map(e => AssetProposal.fromAmino(e)) || [];
+    return message;
+  },
+  toAmino(message: QueryAssetProposalResponse): QueryAssetProposalResponseAmino {
+    const obj: any = {};
+    if (message.proposals) {
+      obj.proposals = message.proposals.map(e => e ? AssetProposal.toAmino(e) : undefined);
+    } else {
+      obj.proposals = [];
+    }
+    return obj;
+  },
+  fromAminoMsg(object: QueryAssetProposalResponseAminoMsg): QueryAssetProposalResponse {
+    return QueryAssetProposalResponse.fromAmino(object.value);
+  },
+  fromProtoMsg(message: QueryAssetProposalResponseProtoMsg): QueryAssetProposalResponse {
+    return QueryAssetProposalResponse.decode(message.value);
+  },
+  toProto(message: QueryAssetProposalResponse): Uint8Array {
+    return QueryAssetProposalResponse.encode(message).finish();
+  },
+  toProtoMsg(message: QueryAssetProposalResponse): QueryAssetProposalResponseProtoMsg {
+    return {
+      typeUrl: "/pryzmatics.server.pgov.QueryAssetProposalResponse",
+      value: QueryAssetProposalResponse.encode(message).finish()
+    };
   }
 };
 function createBaseQueryProposalSubmissionMsgsRequest(): QueryProposalSubmissionMsgsRequest {
@@ -139,6 +255,7 @@ function createBaseQueryProposalSubmissionMsgsRequest(): QueryProposalSubmission
   };
 }
 export const QueryProposalSubmissionMsgsRequest = {
+  typeUrl: "/pryzmatics.server.pgov.QueryProposalSubmissionMsgsRequest",
   encode(message: QueryProposalSubmissionMsgsRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.assetId !== "") {
       writer.uint32(10).string(message.assetId);
@@ -194,14 +311,50 @@ export const QueryProposalSubmissionMsgsRequest = {
     message.proposalId = object.proposalId !== undefined && object.proposalId !== null ? BigInt(object.proposalId.toString()) : BigInt(0);
     message.creator = object.creator ?? "";
     return message;
+  },
+  fromAmino(object: QueryProposalSubmissionMsgsRequestAmino): QueryProposalSubmissionMsgsRequest {
+    const message = createBaseQueryProposalSubmissionMsgsRequest();
+    if (object.asset_id !== undefined && object.asset_id !== null) {
+      message.assetId = object.asset_id;
+    }
+    if (object.proposal_id !== undefined && object.proposal_id !== null) {
+      message.proposalId = BigInt(object.proposal_id);
+    }
+    if (object.creator !== undefined && object.creator !== null) {
+      message.creator = object.creator;
+    }
+    return message;
+  },
+  toAmino(message: QueryProposalSubmissionMsgsRequest): QueryProposalSubmissionMsgsRequestAmino {
+    const obj: any = {};
+    obj.asset_id = message.assetId;
+    obj.proposal_id = message.proposalId ? message.proposalId.toString() : undefined;
+    obj.creator = message.creator;
+    return obj;
+  },
+  fromAminoMsg(object: QueryProposalSubmissionMsgsRequestAminoMsg): QueryProposalSubmissionMsgsRequest {
+    return QueryProposalSubmissionMsgsRequest.fromAmino(object.value);
+  },
+  fromProtoMsg(message: QueryProposalSubmissionMsgsRequestProtoMsg): QueryProposalSubmissionMsgsRequest {
+    return QueryProposalSubmissionMsgsRequest.decode(message.value);
+  },
+  toProto(message: QueryProposalSubmissionMsgsRequest): Uint8Array {
+    return QueryProposalSubmissionMsgsRequest.encode(message).finish();
+  },
+  toProtoMsg(message: QueryProposalSubmissionMsgsRequest): QueryProposalSubmissionMsgsRequestProtoMsg {
+    return {
+      typeUrl: "/pryzmatics.server.pgov.QueryProposalSubmissionMsgsRequest",
+      value: QueryProposalSubmissionMsgsRequest.encode(message).finish()
+    };
   }
 };
 function createBaseQueryProposalSubmissionMsgsResponse(): QueryProposalSubmissionMsgsResponse {
   return {
-    messages: undefined
+    messages: []
   };
 }
 export const QueryProposalSubmissionMsgsResponse = {
+  typeUrl: "/pryzmatics.server.pgov.QueryProposalSubmissionMsgsResponse",
   encode(message: QueryProposalSubmissionMsgsResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     for (const v of message.messages) {
       EncodeObject.encode(v!, writer.uint32(10).fork()).ldelim();
@@ -243,6 +396,35 @@ export const QueryProposalSubmissionMsgsResponse = {
     const message = createBaseQueryProposalSubmissionMsgsResponse();
     message.messages = object.messages?.map(e => EncodeObject.fromPartial(e)) || [];
     return message;
+  },
+  fromAmino(object: QueryProposalSubmissionMsgsResponseAmino): QueryProposalSubmissionMsgsResponse {
+    const message = createBaseQueryProposalSubmissionMsgsResponse();
+    message.messages = object.messages?.map(e => EncodeObject.fromAmino(e)) || [];
+    return message;
+  },
+  toAmino(message: QueryProposalSubmissionMsgsResponse): QueryProposalSubmissionMsgsResponseAmino {
+    const obj: any = {};
+    if (message.messages) {
+      obj.messages = message.messages.map(e => e ? EncodeObject.toAmino(e) : undefined);
+    } else {
+      obj.messages = [];
+    }
+    return obj;
+  },
+  fromAminoMsg(object: QueryProposalSubmissionMsgsResponseAminoMsg): QueryProposalSubmissionMsgsResponse {
+    return QueryProposalSubmissionMsgsResponse.fromAmino(object.value);
+  },
+  fromProtoMsg(message: QueryProposalSubmissionMsgsResponseProtoMsg): QueryProposalSubmissionMsgsResponse {
+    return QueryProposalSubmissionMsgsResponse.decode(message.value);
+  },
+  toProto(message: QueryProposalSubmissionMsgsResponse): Uint8Array {
+    return QueryProposalSubmissionMsgsResponse.encode(message).finish();
+  },
+  toProtoMsg(message: QueryProposalSubmissionMsgsResponse): QueryProposalSubmissionMsgsResponseProtoMsg {
+    return {
+      typeUrl: "/pryzmatics.server.pgov.QueryProposalSubmissionMsgsResponse",
+      value: QueryProposalSubmissionMsgsResponse.encode(message).finish()
+    };
   }
 };
 function createBaseEncodeObject(): EncodeObject {
@@ -252,6 +434,7 @@ function createBaseEncodeObject(): EncodeObject {
   };
 }
 export const EncodeObject = {
+  typeUrl: "/pryzmatics.server.pgov.EncodeObject",
   encode(message: EncodeObject, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.typeUrl !== "") {
       writer.uint32(10).string(message.typeUrl);
@@ -298,5 +481,36 @@ export const EncodeObject = {
     message.typeUrl = object.typeUrl ?? "";
     message.value = object.value ?? new Uint8Array();
     return message;
+  },
+  fromAmino(object: EncodeObjectAmino): EncodeObject {
+    const message = createBaseEncodeObject();
+    if (object.typeUrl !== undefined && object.typeUrl !== null) {
+      message.typeUrl = object.typeUrl;
+    }
+    if (object.value !== undefined && object.value !== null) {
+      message.value = bytesFromBase64(object.value);
+    }
+    return message;
+  },
+  toAmino(message: EncodeObject): EncodeObjectAmino {
+    const obj: any = {};
+    obj.typeUrl = message.typeUrl;
+    obj.value = message.value ? base64FromBytes(message.value) : undefined;
+    return obj;
+  },
+  fromAminoMsg(object: EncodeObjectAminoMsg): EncodeObject {
+    return EncodeObject.fromAmino(object.value);
+  },
+  fromProtoMsg(message: EncodeObjectProtoMsg): EncodeObject {
+    return EncodeObject.decode(message.value);
+  },
+  toProto(message: EncodeObject): Uint8Array {
+    return EncodeObject.encode(message).finish();
+  },
+  toProtoMsg(message: EncodeObject): EncodeObjectProtoMsg {
+    return {
+      typeUrl: "/pryzmatics.server.pgov.EncodeObject",
+      value: EncodeObject.encode(message).finish()
+    };
   }
 };

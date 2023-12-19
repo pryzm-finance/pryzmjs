@@ -1,11 +1,23 @@
-import { Coin, CoinSDKType } from "../../../cosmos/base/v1beta1/coin";
-import { UserStakeState, UserStakeStateSDKType } from "./user_stake_state";
-import { AssetPoolState, AssetPoolStateSDKType, AssetMaturityPoolState, AssetMaturityPoolStateSDKType } from "./asset_pool_state";
+import { Coin, CoinAmino, CoinSDKType } from "../../../cosmos/base/v1beta1/coin";
+import { UserStakeState, UserStakeStateAmino, UserStakeStateSDKType } from "./user_stake_state";
+import { AssetPoolState, AssetPoolStateAmino, AssetPoolStateSDKType, AssetMaturityPoolState, AssetMaturityPoolStateAmino, AssetMaturityPoolStateSDKType } from "./asset_pool_state";
 import { BinaryReader, BinaryWriter } from "../../../binary";
 import { isSet } from "../../../helpers";
 export interface EventYStakingBond {
   accountAddress: string;
   amount: Coin;
+}
+export interface EventYStakingBondProtoMsg {
+  typeUrl: "/pryzm.ystaking.v1.EventYStakingBond";
+  value: Uint8Array;
+}
+export interface EventYStakingBondAmino {
+  account_address?: string;
+  amount?: CoinAmino;
+}
+export interface EventYStakingBondAminoMsg {
+  type: "/pryzm.ystaking.v1.EventYStakingBond";
+  value: EventYStakingBondAmino;
 }
 export interface EventYStakingBondSDKType {
   account_address: string;
@@ -16,6 +28,20 @@ export interface EventYStakingUnbond {
   amount: Coin;
   accruedReward: Coin;
   fee: Coin;
+}
+export interface EventYStakingUnbondProtoMsg {
+  typeUrl: "/pryzm.ystaking.v1.EventYStakingUnbond";
+  value: Uint8Array;
+}
+export interface EventYStakingUnbondAmino {
+  account_address?: string;
+  amount?: CoinAmino;
+  accrued_reward?: CoinAmino;
+  fee?: CoinAmino;
+}
+export interface EventYStakingUnbondAminoMsg {
+  type: "/pryzm.ystaking.v1.EventYStakingUnbond";
+  value: EventYStakingUnbondAmino;
 }
 export interface EventYStakingUnbondSDKType {
   account_address: string;
@@ -28,6 +54,19 @@ export interface EventYStakingExitPool {
   accruedReward: Coin;
   fee: Coin;
 }
+export interface EventYStakingExitPoolProtoMsg {
+  typeUrl: "/pryzm.ystaking.v1.EventYStakingExitPool";
+  value: Uint8Array;
+}
+export interface EventYStakingExitPoolAmino {
+  account_address?: string;
+  accrued_reward?: CoinAmino;
+  fee?: CoinAmino;
+}
+export interface EventYStakingExitPoolAminoMsg {
+  type: "/pryzm.ystaking.v1.EventYStakingExitPool";
+  value: EventYStakingExitPoolAmino;
+}
 export interface EventYStakingExitPoolSDKType {
   account_address: string;
   accrued_reward: CoinSDKType;
@@ -37,6 +76,19 @@ export interface EventYStakingClaimReward {
   accountAddress: string;
   accruedReward: Coin;
   fee: Coin;
+}
+export interface EventYStakingClaimRewardProtoMsg {
+  typeUrl: "/pryzm.ystaking.v1.EventYStakingClaimReward";
+  value: Uint8Array;
+}
+export interface EventYStakingClaimRewardAmino {
+  account_address?: string;
+  accrued_reward?: CoinAmino;
+  fee?: CoinAmino;
+}
+export interface EventYStakingClaimRewardAminoMsg {
+  type: "/pryzm.ystaking.v1.EventYStakingClaimReward";
+  value: EventYStakingClaimRewardAmino;
 }
 export interface EventYStakingClaimRewardSDKType {
   account_address: string;
@@ -48,6 +100,19 @@ export interface EventDeactivateYStakingMaturityPool {
   assetId: string;
   maturitySymbol: string;
 }
+export interface EventDeactivateYStakingMaturityPoolProtoMsg {
+  typeUrl: "/pryzm.ystaking.v1.EventDeactivateYStakingMaturityPool";
+  value: Uint8Array;
+}
+export interface EventDeactivateYStakingMaturityPoolAmino {
+  burnt_bonded_amount?: CoinAmino;
+  asset_id?: string;
+  maturity_symbol?: string;
+}
+export interface EventDeactivateYStakingMaturityPoolAminoMsg {
+  type: "/pryzm.ystaking.v1.EventDeactivateYStakingMaturityPool";
+  value: EventDeactivateYStakingMaturityPoolAmino;
+}
 export interface EventDeactivateYStakingMaturityPoolSDKType {
   burnt_bonded_amount: CoinSDKType;
   asset_id: string;
@@ -56,17 +121,50 @@ export interface EventDeactivateYStakingMaturityPoolSDKType {
 export interface EventSetUserStakeState {
   userStakeState: UserStakeState;
 }
+export interface EventSetUserStakeStateProtoMsg {
+  typeUrl: "/pryzm.ystaking.v1.EventSetUserStakeState";
+  value: Uint8Array;
+}
+export interface EventSetUserStakeStateAmino {
+  user_stake_state?: UserStakeStateAmino;
+}
+export interface EventSetUserStakeStateAminoMsg {
+  type: "/pryzm.ystaking.v1.EventSetUserStakeState";
+  value: EventSetUserStakeStateAmino;
+}
 export interface EventSetUserStakeStateSDKType {
   user_stake_state: UserStakeStateSDKType;
 }
 export interface EventSetAssetPoolState {
   assetPoolState: AssetPoolState;
 }
+export interface EventSetAssetPoolStateProtoMsg {
+  typeUrl: "/pryzm.ystaking.v1.EventSetAssetPoolState";
+  value: Uint8Array;
+}
+export interface EventSetAssetPoolStateAmino {
+  asset_pool_state?: AssetPoolStateAmino;
+}
+export interface EventSetAssetPoolStateAminoMsg {
+  type: "/pryzm.ystaking.v1.EventSetAssetPoolState";
+  value: EventSetAssetPoolStateAmino;
+}
 export interface EventSetAssetPoolStateSDKType {
   asset_pool_state: AssetPoolStateSDKType;
 }
 export interface EventSetAssetMaturityPoolState {
   assetMaturityPoolState: AssetMaturityPoolState;
+}
+export interface EventSetAssetMaturityPoolStateProtoMsg {
+  typeUrl: "/pryzm.ystaking.v1.EventSetAssetMaturityPoolState";
+  value: Uint8Array;
+}
+export interface EventSetAssetMaturityPoolStateAmino {
+  asset_maturity_pool_state?: AssetMaturityPoolStateAmino;
+}
+export interface EventSetAssetMaturityPoolStateAminoMsg {
+  type: "/pryzm.ystaking.v1.EventSetAssetMaturityPoolState";
+  value: EventSetAssetMaturityPoolStateAmino;
 }
 export interface EventSetAssetMaturityPoolStateSDKType {
   asset_maturity_pool_state: AssetMaturityPoolStateSDKType;
@@ -76,6 +174,19 @@ export interface EventDeleteUserStakeState {
   assetId: string;
   maturitySymbol: string;
 }
+export interface EventDeleteUserStakeStateProtoMsg {
+  typeUrl: "/pryzm.ystaking.v1.EventDeleteUserStakeState";
+  value: Uint8Array;
+}
+export interface EventDeleteUserStakeStateAmino {
+  address?: string;
+  asset_id?: string;
+  maturity_symbol?: string;
+}
+export interface EventDeleteUserStakeStateAminoMsg {
+  type: "/pryzm.ystaking.v1.EventDeleteUserStakeState";
+  value: EventDeleteUserStakeStateAmino;
+}
 export interface EventDeleteUserStakeStateSDKType {
   address: string;
   asset_id: string;
@@ -84,12 +195,35 @@ export interface EventDeleteUserStakeStateSDKType {
 export interface EventDeleteAssetPoolState {
   assetId: string;
 }
+export interface EventDeleteAssetPoolStateProtoMsg {
+  typeUrl: "/pryzm.ystaking.v1.EventDeleteAssetPoolState";
+  value: Uint8Array;
+}
+export interface EventDeleteAssetPoolStateAmino {
+  asset_id?: string;
+}
+export interface EventDeleteAssetPoolStateAminoMsg {
+  type: "/pryzm.ystaking.v1.EventDeleteAssetPoolState";
+  value: EventDeleteAssetPoolStateAmino;
+}
 export interface EventDeleteAssetPoolStateSDKType {
   asset_id: string;
 }
 export interface EventDeleteAssetMaturityPoolState {
   assetId: string;
   maturitySymbol: string;
+}
+export interface EventDeleteAssetMaturityPoolStateProtoMsg {
+  typeUrl: "/pryzm.ystaking.v1.EventDeleteAssetMaturityPoolState";
+  value: Uint8Array;
+}
+export interface EventDeleteAssetMaturityPoolStateAmino {
+  asset_id?: string;
+  maturity_symbol?: string;
+}
+export interface EventDeleteAssetMaturityPoolStateAminoMsg {
+  type: "/pryzm.ystaking.v1.EventDeleteAssetMaturityPoolState";
+  value: EventDeleteAssetMaturityPoolStateAmino;
 }
 export interface EventDeleteAssetMaturityPoolStateSDKType {
   asset_id: string;
@@ -102,6 +236,7 @@ function createBaseEventYStakingBond(): EventYStakingBond {
   };
 }
 export const EventYStakingBond = {
+  typeUrl: "/pryzm.ystaking.v1.EventYStakingBond",
   encode(message: EventYStakingBond, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.accountAddress !== "") {
       writer.uint32(10).string(message.accountAddress);
@@ -148,6 +283,37 @@ export const EventYStakingBond = {
     message.accountAddress = object.accountAddress ?? "";
     message.amount = object.amount !== undefined && object.amount !== null ? Coin.fromPartial(object.amount) : undefined;
     return message;
+  },
+  fromAmino(object: EventYStakingBondAmino): EventYStakingBond {
+    const message = createBaseEventYStakingBond();
+    if (object.account_address !== undefined && object.account_address !== null) {
+      message.accountAddress = object.account_address;
+    }
+    if (object.amount !== undefined && object.amount !== null) {
+      message.amount = Coin.fromAmino(object.amount);
+    }
+    return message;
+  },
+  toAmino(message: EventYStakingBond): EventYStakingBondAmino {
+    const obj: any = {};
+    obj.account_address = message.accountAddress;
+    obj.amount = message.amount ? Coin.toAmino(message.amount) : undefined;
+    return obj;
+  },
+  fromAminoMsg(object: EventYStakingBondAminoMsg): EventYStakingBond {
+    return EventYStakingBond.fromAmino(object.value);
+  },
+  fromProtoMsg(message: EventYStakingBondProtoMsg): EventYStakingBond {
+    return EventYStakingBond.decode(message.value);
+  },
+  toProto(message: EventYStakingBond): Uint8Array {
+    return EventYStakingBond.encode(message).finish();
+  },
+  toProtoMsg(message: EventYStakingBond): EventYStakingBondProtoMsg {
+    return {
+      typeUrl: "/pryzm.ystaking.v1.EventYStakingBond",
+      value: EventYStakingBond.encode(message).finish()
+    };
   }
 };
 function createBaseEventYStakingUnbond(): EventYStakingUnbond {
@@ -159,6 +325,7 @@ function createBaseEventYStakingUnbond(): EventYStakingUnbond {
   };
 }
 export const EventYStakingUnbond = {
+  typeUrl: "/pryzm.ystaking.v1.EventYStakingUnbond",
   encode(message: EventYStakingUnbond, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.accountAddress !== "") {
       writer.uint32(10).string(message.accountAddress);
@@ -223,6 +390,45 @@ export const EventYStakingUnbond = {
     message.accruedReward = object.accruedReward !== undefined && object.accruedReward !== null ? Coin.fromPartial(object.accruedReward) : undefined;
     message.fee = object.fee !== undefined && object.fee !== null ? Coin.fromPartial(object.fee) : undefined;
     return message;
+  },
+  fromAmino(object: EventYStakingUnbondAmino): EventYStakingUnbond {
+    const message = createBaseEventYStakingUnbond();
+    if (object.account_address !== undefined && object.account_address !== null) {
+      message.accountAddress = object.account_address;
+    }
+    if (object.amount !== undefined && object.amount !== null) {
+      message.amount = Coin.fromAmino(object.amount);
+    }
+    if (object.accrued_reward !== undefined && object.accrued_reward !== null) {
+      message.accruedReward = Coin.fromAmino(object.accrued_reward);
+    }
+    if (object.fee !== undefined && object.fee !== null) {
+      message.fee = Coin.fromAmino(object.fee);
+    }
+    return message;
+  },
+  toAmino(message: EventYStakingUnbond): EventYStakingUnbondAmino {
+    const obj: any = {};
+    obj.account_address = message.accountAddress;
+    obj.amount = message.amount ? Coin.toAmino(message.amount) : undefined;
+    obj.accrued_reward = message.accruedReward ? Coin.toAmino(message.accruedReward) : undefined;
+    obj.fee = message.fee ? Coin.toAmino(message.fee) : undefined;
+    return obj;
+  },
+  fromAminoMsg(object: EventYStakingUnbondAminoMsg): EventYStakingUnbond {
+    return EventYStakingUnbond.fromAmino(object.value);
+  },
+  fromProtoMsg(message: EventYStakingUnbondProtoMsg): EventYStakingUnbond {
+    return EventYStakingUnbond.decode(message.value);
+  },
+  toProto(message: EventYStakingUnbond): Uint8Array {
+    return EventYStakingUnbond.encode(message).finish();
+  },
+  toProtoMsg(message: EventYStakingUnbond): EventYStakingUnbondProtoMsg {
+    return {
+      typeUrl: "/pryzm.ystaking.v1.EventYStakingUnbond",
+      value: EventYStakingUnbond.encode(message).finish()
+    };
   }
 };
 function createBaseEventYStakingExitPool(): EventYStakingExitPool {
@@ -233,6 +439,7 @@ function createBaseEventYStakingExitPool(): EventYStakingExitPool {
   };
 }
 export const EventYStakingExitPool = {
+  typeUrl: "/pryzm.ystaking.v1.EventYStakingExitPool",
   encode(message: EventYStakingExitPool, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.accountAddress !== "") {
       writer.uint32(10).string(message.accountAddress);
@@ -288,6 +495,41 @@ export const EventYStakingExitPool = {
     message.accruedReward = object.accruedReward !== undefined && object.accruedReward !== null ? Coin.fromPartial(object.accruedReward) : undefined;
     message.fee = object.fee !== undefined && object.fee !== null ? Coin.fromPartial(object.fee) : undefined;
     return message;
+  },
+  fromAmino(object: EventYStakingExitPoolAmino): EventYStakingExitPool {
+    const message = createBaseEventYStakingExitPool();
+    if (object.account_address !== undefined && object.account_address !== null) {
+      message.accountAddress = object.account_address;
+    }
+    if (object.accrued_reward !== undefined && object.accrued_reward !== null) {
+      message.accruedReward = Coin.fromAmino(object.accrued_reward);
+    }
+    if (object.fee !== undefined && object.fee !== null) {
+      message.fee = Coin.fromAmino(object.fee);
+    }
+    return message;
+  },
+  toAmino(message: EventYStakingExitPool): EventYStakingExitPoolAmino {
+    const obj: any = {};
+    obj.account_address = message.accountAddress;
+    obj.accrued_reward = message.accruedReward ? Coin.toAmino(message.accruedReward) : undefined;
+    obj.fee = message.fee ? Coin.toAmino(message.fee) : undefined;
+    return obj;
+  },
+  fromAminoMsg(object: EventYStakingExitPoolAminoMsg): EventYStakingExitPool {
+    return EventYStakingExitPool.fromAmino(object.value);
+  },
+  fromProtoMsg(message: EventYStakingExitPoolProtoMsg): EventYStakingExitPool {
+    return EventYStakingExitPool.decode(message.value);
+  },
+  toProto(message: EventYStakingExitPool): Uint8Array {
+    return EventYStakingExitPool.encode(message).finish();
+  },
+  toProtoMsg(message: EventYStakingExitPool): EventYStakingExitPoolProtoMsg {
+    return {
+      typeUrl: "/pryzm.ystaking.v1.EventYStakingExitPool",
+      value: EventYStakingExitPool.encode(message).finish()
+    };
   }
 };
 function createBaseEventYStakingClaimReward(): EventYStakingClaimReward {
@@ -298,6 +540,7 @@ function createBaseEventYStakingClaimReward(): EventYStakingClaimReward {
   };
 }
 export const EventYStakingClaimReward = {
+  typeUrl: "/pryzm.ystaking.v1.EventYStakingClaimReward",
   encode(message: EventYStakingClaimReward, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.accountAddress !== "") {
       writer.uint32(10).string(message.accountAddress);
@@ -353,6 +596,41 @@ export const EventYStakingClaimReward = {
     message.accruedReward = object.accruedReward !== undefined && object.accruedReward !== null ? Coin.fromPartial(object.accruedReward) : undefined;
     message.fee = object.fee !== undefined && object.fee !== null ? Coin.fromPartial(object.fee) : undefined;
     return message;
+  },
+  fromAmino(object: EventYStakingClaimRewardAmino): EventYStakingClaimReward {
+    const message = createBaseEventYStakingClaimReward();
+    if (object.account_address !== undefined && object.account_address !== null) {
+      message.accountAddress = object.account_address;
+    }
+    if (object.accrued_reward !== undefined && object.accrued_reward !== null) {
+      message.accruedReward = Coin.fromAmino(object.accrued_reward);
+    }
+    if (object.fee !== undefined && object.fee !== null) {
+      message.fee = Coin.fromAmino(object.fee);
+    }
+    return message;
+  },
+  toAmino(message: EventYStakingClaimReward): EventYStakingClaimRewardAmino {
+    const obj: any = {};
+    obj.account_address = message.accountAddress;
+    obj.accrued_reward = message.accruedReward ? Coin.toAmino(message.accruedReward) : undefined;
+    obj.fee = message.fee ? Coin.toAmino(message.fee) : undefined;
+    return obj;
+  },
+  fromAminoMsg(object: EventYStakingClaimRewardAminoMsg): EventYStakingClaimReward {
+    return EventYStakingClaimReward.fromAmino(object.value);
+  },
+  fromProtoMsg(message: EventYStakingClaimRewardProtoMsg): EventYStakingClaimReward {
+    return EventYStakingClaimReward.decode(message.value);
+  },
+  toProto(message: EventYStakingClaimReward): Uint8Array {
+    return EventYStakingClaimReward.encode(message).finish();
+  },
+  toProtoMsg(message: EventYStakingClaimReward): EventYStakingClaimRewardProtoMsg {
+    return {
+      typeUrl: "/pryzm.ystaking.v1.EventYStakingClaimReward",
+      value: EventYStakingClaimReward.encode(message).finish()
+    };
   }
 };
 function createBaseEventDeactivateYStakingMaturityPool(): EventDeactivateYStakingMaturityPool {
@@ -363,6 +641,7 @@ function createBaseEventDeactivateYStakingMaturityPool(): EventDeactivateYStakin
   };
 }
 export const EventDeactivateYStakingMaturityPool = {
+  typeUrl: "/pryzm.ystaking.v1.EventDeactivateYStakingMaturityPool",
   encode(message: EventDeactivateYStakingMaturityPool, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.burntBondedAmount !== undefined) {
       Coin.encode(message.burntBondedAmount, writer.uint32(10).fork()).ldelim();
@@ -418,6 +697,41 @@ export const EventDeactivateYStakingMaturityPool = {
     message.assetId = object.assetId ?? "";
     message.maturitySymbol = object.maturitySymbol ?? "";
     return message;
+  },
+  fromAmino(object: EventDeactivateYStakingMaturityPoolAmino): EventDeactivateYStakingMaturityPool {
+    const message = createBaseEventDeactivateYStakingMaturityPool();
+    if (object.burnt_bonded_amount !== undefined && object.burnt_bonded_amount !== null) {
+      message.burntBondedAmount = Coin.fromAmino(object.burnt_bonded_amount);
+    }
+    if (object.asset_id !== undefined && object.asset_id !== null) {
+      message.assetId = object.asset_id;
+    }
+    if (object.maturity_symbol !== undefined && object.maturity_symbol !== null) {
+      message.maturitySymbol = object.maturity_symbol;
+    }
+    return message;
+  },
+  toAmino(message: EventDeactivateYStakingMaturityPool): EventDeactivateYStakingMaturityPoolAmino {
+    const obj: any = {};
+    obj.burnt_bonded_amount = message.burntBondedAmount ? Coin.toAmino(message.burntBondedAmount) : undefined;
+    obj.asset_id = message.assetId;
+    obj.maturity_symbol = message.maturitySymbol;
+    return obj;
+  },
+  fromAminoMsg(object: EventDeactivateYStakingMaturityPoolAminoMsg): EventDeactivateYStakingMaturityPool {
+    return EventDeactivateYStakingMaturityPool.fromAmino(object.value);
+  },
+  fromProtoMsg(message: EventDeactivateYStakingMaturityPoolProtoMsg): EventDeactivateYStakingMaturityPool {
+    return EventDeactivateYStakingMaturityPool.decode(message.value);
+  },
+  toProto(message: EventDeactivateYStakingMaturityPool): Uint8Array {
+    return EventDeactivateYStakingMaturityPool.encode(message).finish();
+  },
+  toProtoMsg(message: EventDeactivateYStakingMaturityPool): EventDeactivateYStakingMaturityPoolProtoMsg {
+    return {
+      typeUrl: "/pryzm.ystaking.v1.EventDeactivateYStakingMaturityPool",
+      value: EventDeactivateYStakingMaturityPool.encode(message).finish()
+    };
   }
 };
 function createBaseEventSetUserStakeState(): EventSetUserStakeState {
@@ -426,6 +740,7 @@ function createBaseEventSetUserStakeState(): EventSetUserStakeState {
   };
 }
 export const EventSetUserStakeState = {
+  typeUrl: "/pryzm.ystaking.v1.EventSetUserStakeState",
   encode(message: EventSetUserStakeState, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.userStakeState !== undefined) {
       UserStakeState.encode(message.userStakeState, writer.uint32(10).fork()).ldelim();
@@ -463,6 +778,33 @@ export const EventSetUserStakeState = {
     const message = createBaseEventSetUserStakeState();
     message.userStakeState = object.userStakeState !== undefined && object.userStakeState !== null ? UserStakeState.fromPartial(object.userStakeState) : undefined;
     return message;
+  },
+  fromAmino(object: EventSetUserStakeStateAmino): EventSetUserStakeState {
+    const message = createBaseEventSetUserStakeState();
+    if (object.user_stake_state !== undefined && object.user_stake_state !== null) {
+      message.userStakeState = UserStakeState.fromAmino(object.user_stake_state);
+    }
+    return message;
+  },
+  toAmino(message: EventSetUserStakeState): EventSetUserStakeStateAmino {
+    const obj: any = {};
+    obj.user_stake_state = message.userStakeState ? UserStakeState.toAmino(message.userStakeState) : undefined;
+    return obj;
+  },
+  fromAminoMsg(object: EventSetUserStakeStateAminoMsg): EventSetUserStakeState {
+    return EventSetUserStakeState.fromAmino(object.value);
+  },
+  fromProtoMsg(message: EventSetUserStakeStateProtoMsg): EventSetUserStakeState {
+    return EventSetUserStakeState.decode(message.value);
+  },
+  toProto(message: EventSetUserStakeState): Uint8Array {
+    return EventSetUserStakeState.encode(message).finish();
+  },
+  toProtoMsg(message: EventSetUserStakeState): EventSetUserStakeStateProtoMsg {
+    return {
+      typeUrl: "/pryzm.ystaking.v1.EventSetUserStakeState",
+      value: EventSetUserStakeState.encode(message).finish()
+    };
   }
 };
 function createBaseEventSetAssetPoolState(): EventSetAssetPoolState {
@@ -471,6 +813,7 @@ function createBaseEventSetAssetPoolState(): EventSetAssetPoolState {
   };
 }
 export const EventSetAssetPoolState = {
+  typeUrl: "/pryzm.ystaking.v1.EventSetAssetPoolState",
   encode(message: EventSetAssetPoolState, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.assetPoolState !== undefined) {
       AssetPoolState.encode(message.assetPoolState, writer.uint32(10).fork()).ldelim();
@@ -508,6 +851,33 @@ export const EventSetAssetPoolState = {
     const message = createBaseEventSetAssetPoolState();
     message.assetPoolState = object.assetPoolState !== undefined && object.assetPoolState !== null ? AssetPoolState.fromPartial(object.assetPoolState) : undefined;
     return message;
+  },
+  fromAmino(object: EventSetAssetPoolStateAmino): EventSetAssetPoolState {
+    const message = createBaseEventSetAssetPoolState();
+    if (object.asset_pool_state !== undefined && object.asset_pool_state !== null) {
+      message.assetPoolState = AssetPoolState.fromAmino(object.asset_pool_state);
+    }
+    return message;
+  },
+  toAmino(message: EventSetAssetPoolState): EventSetAssetPoolStateAmino {
+    const obj: any = {};
+    obj.asset_pool_state = message.assetPoolState ? AssetPoolState.toAmino(message.assetPoolState) : undefined;
+    return obj;
+  },
+  fromAminoMsg(object: EventSetAssetPoolStateAminoMsg): EventSetAssetPoolState {
+    return EventSetAssetPoolState.fromAmino(object.value);
+  },
+  fromProtoMsg(message: EventSetAssetPoolStateProtoMsg): EventSetAssetPoolState {
+    return EventSetAssetPoolState.decode(message.value);
+  },
+  toProto(message: EventSetAssetPoolState): Uint8Array {
+    return EventSetAssetPoolState.encode(message).finish();
+  },
+  toProtoMsg(message: EventSetAssetPoolState): EventSetAssetPoolStateProtoMsg {
+    return {
+      typeUrl: "/pryzm.ystaking.v1.EventSetAssetPoolState",
+      value: EventSetAssetPoolState.encode(message).finish()
+    };
   }
 };
 function createBaseEventSetAssetMaturityPoolState(): EventSetAssetMaturityPoolState {
@@ -516,6 +886,7 @@ function createBaseEventSetAssetMaturityPoolState(): EventSetAssetMaturityPoolSt
   };
 }
 export const EventSetAssetMaturityPoolState = {
+  typeUrl: "/pryzm.ystaking.v1.EventSetAssetMaturityPoolState",
   encode(message: EventSetAssetMaturityPoolState, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.assetMaturityPoolState !== undefined) {
       AssetMaturityPoolState.encode(message.assetMaturityPoolState, writer.uint32(10).fork()).ldelim();
@@ -553,6 +924,33 @@ export const EventSetAssetMaturityPoolState = {
     const message = createBaseEventSetAssetMaturityPoolState();
     message.assetMaturityPoolState = object.assetMaturityPoolState !== undefined && object.assetMaturityPoolState !== null ? AssetMaturityPoolState.fromPartial(object.assetMaturityPoolState) : undefined;
     return message;
+  },
+  fromAmino(object: EventSetAssetMaturityPoolStateAmino): EventSetAssetMaturityPoolState {
+    const message = createBaseEventSetAssetMaturityPoolState();
+    if (object.asset_maturity_pool_state !== undefined && object.asset_maturity_pool_state !== null) {
+      message.assetMaturityPoolState = AssetMaturityPoolState.fromAmino(object.asset_maturity_pool_state);
+    }
+    return message;
+  },
+  toAmino(message: EventSetAssetMaturityPoolState): EventSetAssetMaturityPoolStateAmino {
+    const obj: any = {};
+    obj.asset_maturity_pool_state = message.assetMaturityPoolState ? AssetMaturityPoolState.toAmino(message.assetMaturityPoolState) : undefined;
+    return obj;
+  },
+  fromAminoMsg(object: EventSetAssetMaturityPoolStateAminoMsg): EventSetAssetMaturityPoolState {
+    return EventSetAssetMaturityPoolState.fromAmino(object.value);
+  },
+  fromProtoMsg(message: EventSetAssetMaturityPoolStateProtoMsg): EventSetAssetMaturityPoolState {
+    return EventSetAssetMaturityPoolState.decode(message.value);
+  },
+  toProto(message: EventSetAssetMaturityPoolState): Uint8Array {
+    return EventSetAssetMaturityPoolState.encode(message).finish();
+  },
+  toProtoMsg(message: EventSetAssetMaturityPoolState): EventSetAssetMaturityPoolStateProtoMsg {
+    return {
+      typeUrl: "/pryzm.ystaking.v1.EventSetAssetMaturityPoolState",
+      value: EventSetAssetMaturityPoolState.encode(message).finish()
+    };
   }
 };
 function createBaseEventDeleteUserStakeState(): EventDeleteUserStakeState {
@@ -563,6 +961,7 @@ function createBaseEventDeleteUserStakeState(): EventDeleteUserStakeState {
   };
 }
 export const EventDeleteUserStakeState = {
+  typeUrl: "/pryzm.ystaking.v1.EventDeleteUserStakeState",
   encode(message: EventDeleteUserStakeState, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.address !== "") {
       writer.uint32(10).string(message.address);
@@ -618,6 +1017,41 @@ export const EventDeleteUserStakeState = {
     message.assetId = object.assetId ?? "";
     message.maturitySymbol = object.maturitySymbol ?? "";
     return message;
+  },
+  fromAmino(object: EventDeleteUserStakeStateAmino): EventDeleteUserStakeState {
+    const message = createBaseEventDeleteUserStakeState();
+    if (object.address !== undefined && object.address !== null) {
+      message.address = object.address;
+    }
+    if (object.asset_id !== undefined && object.asset_id !== null) {
+      message.assetId = object.asset_id;
+    }
+    if (object.maturity_symbol !== undefined && object.maturity_symbol !== null) {
+      message.maturitySymbol = object.maturity_symbol;
+    }
+    return message;
+  },
+  toAmino(message: EventDeleteUserStakeState): EventDeleteUserStakeStateAmino {
+    const obj: any = {};
+    obj.address = message.address;
+    obj.asset_id = message.assetId;
+    obj.maturity_symbol = message.maturitySymbol;
+    return obj;
+  },
+  fromAminoMsg(object: EventDeleteUserStakeStateAminoMsg): EventDeleteUserStakeState {
+    return EventDeleteUserStakeState.fromAmino(object.value);
+  },
+  fromProtoMsg(message: EventDeleteUserStakeStateProtoMsg): EventDeleteUserStakeState {
+    return EventDeleteUserStakeState.decode(message.value);
+  },
+  toProto(message: EventDeleteUserStakeState): Uint8Array {
+    return EventDeleteUserStakeState.encode(message).finish();
+  },
+  toProtoMsg(message: EventDeleteUserStakeState): EventDeleteUserStakeStateProtoMsg {
+    return {
+      typeUrl: "/pryzm.ystaking.v1.EventDeleteUserStakeState",
+      value: EventDeleteUserStakeState.encode(message).finish()
+    };
   }
 };
 function createBaseEventDeleteAssetPoolState(): EventDeleteAssetPoolState {
@@ -626,6 +1060,7 @@ function createBaseEventDeleteAssetPoolState(): EventDeleteAssetPoolState {
   };
 }
 export const EventDeleteAssetPoolState = {
+  typeUrl: "/pryzm.ystaking.v1.EventDeleteAssetPoolState",
   encode(message: EventDeleteAssetPoolState, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.assetId !== "") {
       writer.uint32(10).string(message.assetId);
@@ -663,6 +1098,33 @@ export const EventDeleteAssetPoolState = {
     const message = createBaseEventDeleteAssetPoolState();
     message.assetId = object.assetId ?? "";
     return message;
+  },
+  fromAmino(object: EventDeleteAssetPoolStateAmino): EventDeleteAssetPoolState {
+    const message = createBaseEventDeleteAssetPoolState();
+    if (object.asset_id !== undefined && object.asset_id !== null) {
+      message.assetId = object.asset_id;
+    }
+    return message;
+  },
+  toAmino(message: EventDeleteAssetPoolState): EventDeleteAssetPoolStateAmino {
+    const obj: any = {};
+    obj.asset_id = message.assetId;
+    return obj;
+  },
+  fromAminoMsg(object: EventDeleteAssetPoolStateAminoMsg): EventDeleteAssetPoolState {
+    return EventDeleteAssetPoolState.fromAmino(object.value);
+  },
+  fromProtoMsg(message: EventDeleteAssetPoolStateProtoMsg): EventDeleteAssetPoolState {
+    return EventDeleteAssetPoolState.decode(message.value);
+  },
+  toProto(message: EventDeleteAssetPoolState): Uint8Array {
+    return EventDeleteAssetPoolState.encode(message).finish();
+  },
+  toProtoMsg(message: EventDeleteAssetPoolState): EventDeleteAssetPoolStateProtoMsg {
+    return {
+      typeUrl: "/pryzm.ystaking.v1.EventDeleteAssetPoolState",
+      value: EventDeleteAssetPoolState.encode(message).finish()
+    };
   }
 };
 function createBaseEventDeleteAssetMaturityPoolState(): EventDeleteAssetMaturityPoolState {
@@ -672,6 +1134,7 @@ function createBaseEventDeleteAssetMaturityPoolState(): EventDeleteAssetMaturity
   };
 }
 export const EventDeleteAssetMaturityPoolState = {
+  typeUrl: "/pryzm.ystaking.v1.EventDeleteAssetMaturityPoolState",
   encode(message: EventDeleteAssetMaturityPoolState, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.assetId !== "") {
       writer.uint32(10).string(message.assetId);
@@ -718,5 +1181,36 @@ export const EventDeleteAssetMaturityPoolState = {
     message.assetId = object.assetId ?? "";
     message.maturitySymbol = object.maturitySymbol ?? "";
     return message;
+  },
+  fromAmino(object: EventDeleteAssetMaturityPoolStateAmino): EventDeleteAssetMaturityPoolState {
+    const message = createBaseEventDeleteAssetMaturityPoolState();
+    if (object.asset_id !== undefined && object.asset_id !== null) {
+      message.assetId = object.asset_id;
+    }
+    if (object.maturity_symbol !== undefined && object.maturity_symbol !== null) {
+      message.maturitySymbol = object.maturity_symbol;
+    }
+    return message;
+  },
+  toAmino(message: EventDeleteAssetMaturityPoolState): EventDeleteAssetMaturityPoolStateAmino {
+    const obj: any = {};
+    obj.asset_id = message.assetId;
+    obj.maturity_symbol = message.maturitySymbol;
+    return obj;
+  },
+  fromAminoMsg(object: EventDeleteAssetMaturityPoolStateAminoMsg): EventDeleteAssetMaturityPoolState {
+    return EventDeleteAssetMaturityPoolState.fromAmino(object.value);
+  },
+  fromProtoMsg(message: EventDeleteAssetMaturityPoolStateProtoMsg): EventDeleteAssetMaturityPoolState {
+    return EventDeleteAssetMaturityPoolState.decode(message.value);
+  },
+  toProto(message: EventDeleteAssetMaturityPoolState): Uint8Array {
+    return EventDeleteAssetMaturityPoolState.encode(message).finish();
+  },
+  toProtoMsg(message: EventDeleteAssetMaturityPoolState): EventDeleteAssetMaturityPoolStateProtoMsg {
+    return {
+      typeUrl: "/pryzm.ystaking.v1.EventDeleteAssetMaturityPoolState",
+      value: EventDeleteAssetMaturityPoolState.encode(message).finish()
+    };
   }
 };

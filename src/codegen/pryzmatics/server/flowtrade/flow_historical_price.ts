@@ -1,5 +1,5 @@
 import { TimeResolutionType, timeResolutionTypeFromJSON, timeResolutionTypeToJSON } from "../../common/time_resolution";
-import { HistoricalPrice, HistoricalPriceSDKType } from "../../price/historical_price";
+import { HistoricalPrice, HistoricalPriceAmino, HistoricalPriceSDKType } from "../../price/historical_price";
 import { BinaryReader, BinaryWriter } from "../../../binary";
 import { isSet } from "../../../helpers";
 export interface QueryFlowHistoricalPriceRequest {
@@ -8,6 +8,21 @@ export interface QueryFlowHistoricalPriceRequest {
   timeResolutionValue: number;
   from: string;
   to: string;
+}
+export interface QueryFlowHistoricalPriceRequestProtoMsg {
+  typeUrl: "/pryzmatics.server.flowtrade.QueryFlowHistoricalPriceRequest";
+  value: Uint8Array;
+}
+export interface QueryFlowHistoricalPriceRequestAmino {
+  flow_id?: string;
+  time_resolution_type?: TimeResolutionType;
+  time_resolution_value?: number;
+  from?: string;
+  to?: string;
+}
+export interface QueryFlowHistoricalPriceRequestAminoMsg {
+  type: "/pryzmatics.server.flowtrade.QueryFlowHistoricalPriceRequest";
+  value: QueryFlowHistoricalPriceRequestAmino;
 }
 export interface QueryFlowHistoricalPriceRequestSDKType {
   flow_id: bigint;
@@ -18,6 +33,17 @@ export interface QueryFlowHistoricalPriceRequestSDKType {
 }
 export interface QueryFlowHistoricalPriceResponse {
   historicalPrices: HistoricalPrice[];
+}
+export interface QueryFlowHistoricalPriceResponseProtoMsg {
+  typeUrl: "/pryzmatics.server.flowtrade.QueryFlowHistoricalPriceResponse";
+  value: Uint8Array;
+}
+export interface QueryFlowHistoricalPriceResponseAmino {
+  historical_prices?: HistoricalPriceAmino[];
+}
+export interface QueryFlowHistoricalPriceResponseAminoMsg {
+  type: "/pryzmatics.server.flowtrade.QueryFlowHistoricalPriceResponse";
+  value: QueryFlowHistoricalPriceResponseAmino;
 }
 export interface QueryFlowHistoricalPriceResponseSDKType {
   historical_prices: HistoricalPriceSDKType[];
@@ -32,6 +58,7 @@ function createBaseQueryFlowHistoricalPriceRequest(): QueryFlowHistoricalPriceRe
   };
 }
 export const QueryFlowHistoricalPriceRequest = {
+  typeUrl: "/pryzmatics.server.flowtrade.QueryFlowHistoricalPriceRequest",
   encode(message: QueryFlowHistoricalPriceRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.flowId !== BigInt(0)) {
       writer.uint32(8).uint64(message.flowId);
@@ -105,6 +132,49 @@ export const QueryFlowHistoricalPriceRequest = {
     message.from = object.from ?? "";
     message.to = object.to ?? "";
     return message;
+  },
+  fromAmino(object: QueryFlowHistoricalPriceRequestAmino): QueryFlowHistoricalPriceRequest {
+    const message = createBaseQueryFlowHistoricalPriceRequest();
+    if (object.flow_id !== undefined && object.flow_id !== null) {
+      message.flowId = BigInt(object.flow_id);
+    }
+    if (object.time_resolution_type !== undefined && object.time_resolution_type !== null) {
+      message.timeResolutionType = timeResolutionTypeFromJSON(object.time_resolution_type);
+    }
+    if (object.time_resolution_value !== undefined && object.time_resolution_value !== null) {
+      message.timeResolutionValue = object.time_resolution_value;
+    }
+    if (object.from !== undefined && object.from !== null) {
+      message.from = object.from;
+    }
+    if (object.to !== undefined && object.to !== null) {
+      message.to = object.to;
+    }
+    return message;
+  },
+  toAmino(message: QueryFlowHistoricalPriceRequest): QueryFlowHistoricalPriceRequestAmino {
+    const obj: any = {};
+    obj.flow_id = message.flowId ? message.flowId.toString() : undefined;
+    obj.time_resolution_type = timeResolutionTypeToJSON(message.timeResolutionType);
+    obj.time_resolution_value = message.timeResolutionValue;
+    obj.from = message.from;
+    obj.to = message.to;
+    return obj;
+  },
+  fromAminoMsg(object: QueryFlowHistoricalPriceRequestAminoMsg): QueryFlowHistoricalPriceRequest {
+    return QueryFlowHistoricalPriceRequest.fromAmino(object.value);
+  },
+  fromProtoMsg(message: QueryFlowHistoricalPriceRequestProtoMsg): QueryFlowHistoricalPriceRequest {
+    return QueryFlowHistoricalPriceRequest.decode(message.value);
+  },
+  toProto(message: QueryFlowHistoricalPriceRequest): Uint8Array {
+    return QueryFlowHistoricalPriceRequest.encode(message).finish();
+  },
+  toProtoMsg(message: QueryFlowHistoricalPriceRequest): QueryFlowHistoricalPriceRequestProtoMsg {
+    return {
+      typeUrl: "/pryzmatics.server.flowtrade.QueryFlowHistoricalPriceRequest",
+      value: QueryFlowHistoricalPriceRequest.encode(message).finish()
+    };
   }
 };
 function createBaseQueryFlowHistoricalPriceResponse(): QueryFlowHistoricalPriceResponse {
@@ -113,6 +183,7 @@ function createBaseQueryFlowHistoricalPriceResponse(): QueryFlowHistoricalPriceR
   };
 }
 export const QueryFlowHistoricalPriceResponse = {
+  typeUrl: "/pryzmatics.server.flowtrade.QueryFlowHistoricalPriceResponse",
   encode(message: QueryFlowHistoricalPriceResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     for (const v of message.historicalPrices) {
       HistoricalPrice.encode(v!, writer.uint32(10).fork()).ldelim();
@@ -154,5 +225,34 @@ export const QueryFlowHistoricalPriceResponse = {
     const message = createBaseQueryFlowHistoricalPriceResponse();
     message.historicalPrices = object.historicalPrices?.map(e => HistoricalPrice.fromPartial(e)) || [];
     return message;
+  },
+  fromAmino(object: QueryFlowHistoricalPriceResponseAmino): QueryFlowHistoricalPriceResponse {
+    const message = createBaseQueryFlowHistoricalPriceResponse();
+    message.historicalPrices = object.historical_prices?.map(e => HistoricalPrice.fromAmino(e)) || [];
+    return message;
+  },
+  toAmino(message: QueryFlowHistoricalPriceResponse): QueryFlowHistoricalPriceResponseAmino {
+    const obj: any = {};
+    if (message.historicalPrices) {
+      obj.historical_prices = message.historicalPrices.map(e => e ? HistoricalPrice.toAmino(e) : undefined);
+    } else {
+      obj.historical_prices = [];
+    }
+    return obj;
+  },
+  fromAminoMsg(object: QueryFlowHistoricalPriceResponseAminoMsg): QueryFlowHistoricalPriceResponse {
+    return QueryFlowHistoricalPriceResponse.fromAmino(object.value);
+  },
+  fromProtoMsg(message: QueryFlowHistoricalPriceResponseProtoMsg): QueryFlowHistoricalPriceResponse {
+    return QueryFlowHistoricalPriceResponse.decode(message.value);
+  },
+  toProto(message: QueryFlowHistoricalPriceResponse): Uint8Array {
+    return QueryFlowHistoricalPriceResponse.encode(message).finish();
+  },
+  toProtoMsg(message: QueryFlowHistoricalPriceResponse): QueryFlowHistoricalPriceResponseProtoMsg {
+    return {
+      typeUrl: "/pryzmatics.server.flowtrade.QueryFlowHistoricalPriceResponse",
+      value: QueryFlowHistoricalPriceResponse.encode(message).finish()
+    };
   }
 };

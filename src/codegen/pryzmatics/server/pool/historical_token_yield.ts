@@ -1,5 +1,5 @@
 import { TimeResolutionType, timeResolutionTypeFromJSON, timeResolutionTypeToJSON } from "../../common/time_resolution";
-import { HistoricalTokenYield, HistoricalTokenYieldSDKType } from "../../pool/historical_token_yield";
+import { HistoricalTokenYield, HistoricalTokenYieldAmino, HistoricalTokenYieldSDKType } from "../../pool/historical_token_yield";
 import { BinaryReader, BinaryWriter } from "../../../binary";
 import { isSet } from "../../../helpers";
 export interface QueryHistoricalTokenYieldRequest {
@@ -8,6 +8,21 @@ export interface QueryHistoricalTokenYieldRequest {
   timeResolutionValue: number;
   from: string;
   to: string;
+}
+export interface QueryHistoricalTokenYieldRequestProtoMsg {
+  typeUrl: "/pryzmatics.server.pool.QueryHistoricalTokenYieldRequest";
+  value: Uint8Array;
+}
+export interface QueryHistoricalTokenYieldRequestAmino {
+  denom?: string;
+  time_resolution_type?: TimeResolutionType;
+  time_resolution_value?: number;
+  from?: string;
+  to?: string;
+}
+export interface QueryHistoricalTokenYieldRequestAminoMsg {
+  type: "/pryzmatics.server.pool.QueryHistoricalTokenYieldRequest";
+  value: QueryHistoricalTokenYieldRequestAmino;
 }
 export interface QueryHistoricalTokenYieldRequestSDKType {
   denom: string;
@@ -18,6 +33,17 @@ export interface QueryHistoricalTokenYieldRequestSDKType {
 }
 export interface QueryHistoricalTokenYieldResponse {
   historicalTokenYields: HistoricalTokenYield[];
+}
+export interface QueryHistoricalTokenYieldResponseProtoMsg {
+  typeUrl: "/pryzmatics.server.pool.QueryHistoricalTokenYieldResponse";
+  value: Uint8Array;
+}
+export interface QueryHistoricalTokenYieldResponseAmino {
+  historical_token_yields?: HistoricalTokenYieldAmino[];
+}
+export interface QueryHistoricalTokenYieldResponseAminoMsg {
+  type: "/pryzmatics.server.pool.QueryHistoricalTokenYieldResponse";
+  value: QueryHistoricalTokenYieldResponseAmino;
 }
 export interface QueryHistoricalTokenYieldResponseSDKType {
   historical_token_yields: HistoricalTokenYieldSDKType[];
@@ -32,6 +58,7 @@ function createBaseQueryHistoricalTokenYieldRequest(): QueryHistoricalTokenYield
   };
 }
 export const QueryHistoricalTokenYieldRequest = {
+  typeUrl: "/pryzmatics.server.pool.QueryHistoricalTokenYieldRequest",
   encode(message: QueryHistoricalTokenYieldRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.denom !== "") {
       writer.uint32(10).string(message.denom);
@@ -105,6 +132,49 @@ export const QueryHistoricalTokenYieldRequest = {
     message.from = object.from ?? "";
     message.to = object.to ?? "";
     return message;
+  },
+  fromAmino(object: QueryHistoricalTokenYieldRequestAmino): QueryHistoricalTokenYieldRequest {
+    const message = createBaseQueryHistoricalTokenYieldRequest();
+    if (object.denom !== undefined && object.denom !== null) {
+      message.denom = object.denom;
+    }
+    if (object.time_resolution_type !== undefined && object.time_resolution_type !== null) {
+      message.timeResolutionType = timeResolutionTypeFromJSON(object.time_resolution_type);
+    }
+    if (object.time_resolution_value !== undefined && object.time_resolution_value !== null) {
+      message.timeResolutionValue = object.time_resolution_value;
+    }
+    if (object.from !== undefined && object.from !== null) {
+      message.from = object.from;
+    }
+    if (object.to !== undefined && object.to !== null) {
+      message.to = object.to;
+    }
+    return message;
+  },
+  toAmino(message: QueryHistoricalTokenYieldRequest): QueryHistoricalTokenYieldRequestAmino {
+    const obj: any = {};
+    obj.denom = message.denom;
+    obj.time_resolution_type = timeResolutionTypeToJSON(message.timeResolutionType);
+    obj.time_resolution_value = message.timeResolutionValue;
+    obj.from = message.from;
+    obj.to = message.to;
+    return obj;
+  },
+  fromAminoMsg(object: QueryHistoricalTokenYieldRequestAminoMsg): QueryHistoricalTokenYieldRequest {
+    return QueryHistoricalTokenYieldRequest.fromAmino(object.value);
+  },
+  fromProtoMsg(message: QueryHistoricalTokenYieldRequestProtoMsg): QueryHistoricalTokenYieldRequest {
+    return QueryHistoricalTokenYieldRequest.decode(message.value);
+  },
+  toProto(message: QueryHistoricalTokenYieldRequest): Uint8Array {
+    return QueryHistoricalTokenYieldRequest.encode(message).finish();
+  },
+  toProtoMsg(message: QueryHistoricalTokenYieldRequest): QueryHistoricalTokenYieldRequestProtoMsg {
+    return {
+      typeUrl: "/pryzmatics.server.pool.QueryHistoricalTokenYieldRequest",
+      value: QueryHistoricalTokenYieldRequest.encode(message).finish()
+    };
   }
 };
 function createBaseQueryHistoricalTokenYieldResponse(): QueryHistoricalTokenYieldResponse {
@@ -113,6 +183,7 @@ function createBaseQueryHistoricalTokenYieldResponse(): QueryHistoricalTokenYiel
   };
 }
 export const QueryHistoricalTokenYieldResponse = {
+  typeUrl: "/pryzmatics.server.pool.QueryHistoricalTokenYieldResponse",
   encode(message: QueryHistoricalTokenYieldResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     for (const v of message.historicalTokenYields) {
       HistoricalTokenYield.encode(v!, writer.uint32(10).fork()).ldelim();
@@ -154,5 +225,34 @@ export const QueryHistoricalTokenYieldResponse = {
     const message = createBaseQueryHistoricalTokenYieldResponse();
     message.historicalTokenYields = object.historicalTokenYields?.map(e => HistoricalTokenYield.fromPartial(e)) || [];
     return message;
+  },
+  fromAmino(object: QueryHistoricalTokenYieldResponseAmino): QueryHistoricalTokenYieldResponse {
+    const message = createBaseQueryHistoricalTokenYieldResponse();
+    message.historicalTokenYields = object.historical_token_yields?.map(e => HistoricalTokenYield.fromAmino(e)) || [];
+    return message;
+  },
+  toAmino(message: QueryHistoricalTokenYieldResponse): QueryHistoricalTokenYieldResponseAmino {
+    const obj: any = {};
+    if (message.historicalTokenYields) {
+      obj.historical_token_yields = message.historicalTokenYields.map(e => e ? HistoricalTokenYield.toAmino(e) : undefined);
+    } else {
+      obj.historical_token_yields = [];
+    }
+    return obj;
+  },
+  fromAminoMsg(object: QueryHistoricalTokenYieldResponseAminoMsg): QueryHistoricalTokenYieldResponse {
+    return QueryHistoricalTokenYieldResponse.fromAmino(object.value);
+  },
+  fromProtoMsg(message: QueryHistoricalTokenYieldResponseProtoMsg): QueryHistoricalTokenYieldResponse {
+    return QueryHistoricalTokenYieldResponse.decode(message.value);
+  },
+  toProto(message: QueryHistoricalTokenYieldResponse): Uint8Array {
+    return QueryHistoricalTokenYieldResponse.encode(message).finish();
+  },
+  toProtoMsg(message: QueryHistoricalTokenYieldResponse): QueryHistoricalTokenYieldResponseProtoMsg {
+    return {
+      typeUrl: "/pryzmatics.server.pool.QueryHistoricalTokenYieldResponse",
+      value: QueryHistoricalTokenYieldResponse.encode(message).finish()
+    };
   }
 };

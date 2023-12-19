@@ -1,4 +1,3 @@
-//@ts-nocheck
 import { UnaryMethodDefinitionish } from "../../../grpc-web";
 import { DeepPartial } from "../../../helpers";
 import { grpc } from "@improbable-eng/grpc-web";
@@ -25,22 +24,22 @@ export class MsgClientImpl implements Msg {
     this.retryVoteTransmit = this.retryVoteTransmit.bind(this);
   }
   updateParams(request: DeepPartial<MsgUpdateParams>, metadata?: grpc.Metadata): Promise<MsgUpdateParamsResponse> {
-    return this.rpc.unary(MsgUpdateParamsDesc, MsgUpdateParams.fromPartial(request), metadata);
+    return this.rpc.unary(MsgUpdateParamsDesc, MsgUpdateParams.fromPartial(request as any), metadata);
   }
   stakePAssets(request: DeepPartial<MsgStakePAssets>, metadata?: grpc.Metadata): Promise<MsgStakePAssetsResponse> {
-    return this.rpc.unary(MsgStakePAssetsDesc, MsgStakePAssets.fromPartial(request), metadata);
+    return this.rpc.unary(MsgStakePAssetsDesc, MsgStakePAssets.fromPartial(request as any), metadata);
   }
   unstakePAssets(request: DeepPartial<MsgUnstakePAssets>, metadata?: grpc.Metadata): Promise<MsgUnstakePAssetsResponse> {
-    return this.rpc.unary(MsgUnstakePAssetsDesc, MsgUnstakePAssets.fromPartial(request), metadata);
+    return this.rpc.unary(MsgUnstakePAssetsDesc, MsgUnstakePAssets.fromPartial(request as any), metadata);
   }
   submitVote(request: DeepPartial<MsgSubmitVote>, metadata?: grpc.Metadata): Promise<MsgSubmitVoteResponse> {
-    return this.rpc.unary(MsgSubmitVoteDesc, MsgSubmitVote.fromPartial(request), metadata);
+    return this.rpc.unary(MsgSubmitVoteDesc, MsgSubmitVote.fromPartial(request as any), metadata);
   }
   submitProposal(request: DeepPartial<MsgSubmitProposal>, metadata?: grpc.Metadata): Promise<MsgSubmitProposalResponse> {
-    return this.rpc.unary(MsgSubmitProposalDesc, MsgSubmitProposal.fromPartial(request), metadata);
+    return this.rpc.unary(MsgSubmitProposalDesc, MsgSubmitProposal.fromPartial(request as any), metadata);
   }
   retryVoteTransmit(request: DeepPartial<MsgRetryVoteTransmit>, metadata?: grpc.Metadata): Promise<MsgRetryVoteTransmitResponse> {
-    return this.rpc.unary(MsgRetryVoteTransmitDesc, MsgRetryVoteTransmit.fromPartial(request), metadata);
+    return this.rpc.unary(MsgRetryVoteTransmitDesc, MsgRetryVoteTransmit.fromPartial(request as any), metadata);
   }
 }
 export const MsgDesc = {

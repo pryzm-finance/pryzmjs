@@ -1,8 +1,28 @@
 import { BinaryReader, BinaryWriter } from "../../../binary";
 export interface QuerySwappableTokensRequest {}
+export interface QuerySwappableTokensRequestProtoMsg {
+  typeUrl: "/pryzmatics.server.price.QuerySwappableTokensRequest";
+  value: Uint8Array;
+}
+export interface QuerySwappableTokensRequestAmino {}
+export interface QuerySwappableTokensRequestAminoMsg {
+  type: "/pryzmatics.server.price.QuerySwappableTokensRequest";
+  value: QuerySwappableTokensRequestAmino;
+}
 export interface QuerySwappableTokensRequestSDKType {}
 export interface QuerySwappableTokensResponse {
   tokens: string[];
+}
+export interface QuerySwappableTokensResponseProtoMsg {
+  typeUrl: "/pryzmatics.server.price.QuerySwappableTokensResponse";
+  value: Uint8Array;
+}
+export interface QuerySwappableTokensResponseAmino {
+  tokens?: string[];
+}
+export interface QuerySwappableTokensResponseAminoMsg {
+  type: "/pryzmatics.server.price.QuerySwappableTokensResponse";
+  value: QuerySwappableTokensResponseAmino;
 }
 export interface QuerySwappableTokensResponseSDKType {
   tokens: string[];
@@ -11,6 +31,7 @@ function createBaseQuerySwappableTokensRequest(): QuerySwappableTokensRequest {
   return {};
 }
 export const QuerySwappableTokensRequest = {
+  typeUrl: "/pryzmatics.server.price.QuerySwappableTokensRequest",
   encode(_: QuerySwappableTokensRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     return writer;
   },
@@ -38,6 +59,29 @@ export const QuerySwappableTokensRequest = {
   fromPartial(_: Partial<QuerySwappableTokensRequest>): QuerySwappableTokensRequest {
     const message = createBaseQuerySwappableTokensRequest();
     return message;
+  },
+  fromAmino(_: QuerySwappableTokensRequestAmino): QuerySwappableTokensRequest {
+    const message = createBaseQuerySwappableTokensRequest();
+    return message;
+  },
+  toAmino(_: QuerySwappableTokensRequest): QuerySwappableTokensRequestAmino {
+    const obj: any = {};
+    return obj;
+  },
+  fromAminoMsg(object: QuerySwappableTokensRequestAminoMsg): QuerySwappableTokensRequest {
+    return QuerySwappableTokensRequest.fromAmino(object.value);
+  },
+  fromProtoMsg(message: QuerySwappableTokensRequestProtoMsg): QuerySwappableTokensRequest {
+    return QuerySwappableTokensRequest.decode(message.value);
+  },
+  toProto(message: QuerySwappableTokensRequest): Uint8Array {
+    return QuerySwappableTokensRequest.encode(message).finish();
+  },
+  toProtoMsg(message: QuerySwappableTokensRequest): QuerySwappableTokensRequestProtoMsg {
+    return {
+      typeUrl: "/pryzmatics.server.price.QuerySwappableTokensRequest",
+      value: QuerySwappableTokensRequest.encode(message).finish()
+    };
   }
 };
 function createBaseQuerySwappableTokensResponse(): QuerySwappableTokensResponse {
@@ -46,6 +90,7 @@ function createBaseQuerySwappableTokensResponse(): QuerySwappableTokensResponse 
   };
 }
 export const QuerySwappableTokensResponse = {
+  typeUrl: "/pryzmatics.server.price.QuerySwappableTokensResponse",
   encode(message: QuerySwappableTokensResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     for (const v of message.tokens) {
       writer.uint32(10).string(v!);
@@ -87,5 +132,34 @@ export const QuerySwappableTokensResponse = {
     const message = createBaseQuerySwappableTokensResponse();
     message.tokens = object.tokens?.map(e => e) || [];
     return message;
+  },
+  fromAmino(object: QuerySwappableTokensResponseAmino): QuerySwappableTokensResponse {
+    const message = createBaseQuerySwappableTokensResponse();
+    message.tokens = object.tokens?.map(e => e) || [];
+    return message;
+  },
+  toAmino(message: QuerySwappableTokensResponse): QuerySwappableTokensResponseAmino {
+    const obj: any = {};
+    if (message.tokens) {
+      obj.tokens = message.tokens.map(e => e);
+    } else {
+      obj.tokens = [];
+    }
+    return obj;
+  },
+  fromAminoMsg(object: QuerySwappableTokensResponseAminoMsg): QuerySwappableTokensResponse {
+    return QuerySwappableTokensResponse.fromAmino(object.value);
+  },
+  fromProtoMsg(message: QuerySwappableTokensResponseProtoMsg): QuerySwappableTokensResponse {
+    return QuerySwappableTokensResponse.decode(message.value);
+  },
+  toProto(message: QuerySwappableTokensResponse): Uint8Array {
+    return QuerySwappableTokensResponse.encode(message).finish();
+  },
+  toProtoMsg(message: QuerySwappableTokensResponse): QuerySwappableTokensResponseProtoMsg {
+    return {
+      typeUrl: "/pryzmatics.server.price.QuerySwappableTokensResponse",
+      value: QuerySwappableTokensResponse.encode(message).finish()
+    };
   }
 };

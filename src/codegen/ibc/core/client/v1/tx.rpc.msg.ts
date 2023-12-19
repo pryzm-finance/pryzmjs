@@ -1,4 +1,3 @@
-//@ts-nocheck
 import { UnaryMethodDefinitionish } from "../../../../grpc-web";
 import { DeepPartial } from "../../../../helpers";
 import { grpc } from "@improbable-eng/grpc-web";
@@ -25,16 +24,16 @@ export class MsgClientImpl implements Msg {
     this.submitMisbehaviour = this.submitMisbehaviour.bind(this);
   }
   createClient(request: DeepPartial<MsgCreateClient>, metadata?: grpc.Metadata): Promise<MsgCreateClientResponse> {
-    return this.rpc.unary(MsgCreateClientDesc, MsgCreateClient.fromPartial(request), metadata);
+    return this.rpc.unary(MsgCreateClientDesc, MsgCreateClient.fromPartial(request as any), metadata);
   }
   updateClient(request: DeepPartial<MsgUpdateClient>, metadata?: grpc.Metadata): Promise<MsgUpdateClientResponse> {
-    return this.rpc.unary(MsgUpdateClientDesc, MsgUpdateClient.fromPartial(request), metadata);
+    return this.rpc.unary(MsgUpdateClientDesc, MsgUpdateClient.fromPartial(request as any), metadata);
   }
   upgradeClient(request: DeepPartial<MsgUpgradeClient>, metadata?: grpc.Metadata): Promise<MsgUpgradeClientResponse> {
-    return this.rpc.unary(MsgUpgradeClientDesc, MsgUpgradeClient.fromPartial(request), metadata);
+    return this.rpc.unary(MsgUpgradeClientDesc, MsgUpgradeClient.fromPartial(request as any), metadata);
   }
   submitMisbehaviour(request: DeepPartial<MsgSubmitMisbehaviour>, metadata?: grpc.Metadata): Promise<MsgSubmitMisbehaviourResponse> {
-    return this.rpc.unary(MsgSubmitMisbehaviourDesc, MsgSubmitMisbehaviour.fromPartial(request), metadata);
+    return this.rpc.unary(MsgSubmitMisbehaviourDesc, MsgSubmitMisbehaviour.fromPartial(request as any), metadata);
   }
 }
 export const MsgDesc = {

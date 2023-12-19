@@ -1,4 +1,3 @@
-//@ts-nocheck
 import { UnaryMethodDefinitionish } from "../../../grpc-web";
 import { DeepPartial } from "../../../helpers";
 import { grpc } from "@improbable-eng/grpc-web";
@@ -17,10 +16,10 @@ export class MsgClientImpl implements Msg {
     this.redeem = this.redeem.bind(this);
   }
   refract(request: DeepPartial<MsgRefract>, metadata?: grpc.Metadata): Promise<MsgRefractResponse> {
-    return this.rpc.unary(MsgRefractDesc, MsgRefract.fromPartial(request), metadata);
+    return this.rpc.unary(MsgRefractDesc, MsgRefract.fromPartial(request as any), metadata);
   }
   redeem(request: DeepPartial<MsgRedeem>, metadata?: grpc.Metadata): Promise<MsgRedeemResponse> {
-    return this.rpc.unary(MsgRedeemDesc, MsgRedeem.fromPartial(request), metadata);
+    return this.rpc.unary(MsgRedeemDesc, MsgRedeem.fromPartial(request as any), metadata);
   }
 }
 export const MsgDesc = {

@@ -57,6 +57,8 @@ import "pryzmatics/server/faucet/claim.proto";
 import "pryzmatics/server/flowtrade/flowtrade.proto";
 import "pryzmatics/server/flowtrade/flow_historical_price.proto";
 
+import "pryzmatics/server/common/config.proto";
+
 
 option go_package = "github.com/pryzm-finance/pryzmatics/server";
 
@@ -272,5 +274,9 @@ service Query {
 
   rpc FlowHistoricalPrice(pryzmatics.server.flowtrade.QueryFlowHistoricalPriceRequest) returns (pryzmatics.server.flowtrade.QueryFlowHistoricalPriceResponse) {
     option (google.api.http).get = "/pryzmatics/flowtrade/flow/historical_price/{flow_id}";
+  }
+
+  rpc Config(pryzmatics.server.common.QueryConfigRequest) returns (pryzmatics.server.common.QueryConfigResponse) {
+    option (google.api.http).get = "/pryzmatics/config";
   }
 }

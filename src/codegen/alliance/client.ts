@@ -1,50 +1,49 @@
-import { GeneratedType, OfflineSigner, Registry } from "@cosmjs/proto-signing";
+import { GeneratedType, Registry, OfflineSigner } from "@cosmjs/proto-signing";
 import { AminoTypes, SigningStargateClient } from "@cosmjs/stargate";
+import { cosmosProtoRegistry as defaultRegistryTypes, cosmosAminoConverters } from "../cosmos/client";
 import { HttpEndpoint } from "@cosmjs/tendermint-rpc";
 import * as allianceAllianceTxRegistry from "./alliance/tx.registry";
 import * as allianceAllianceTxAmino from "./alliance/tx.amino";
-import { cosmosAminoConverters, cosmosProtoRegistry } from "../cosmos/client";
-
 export const allianceAminoConverters = {
-    ...allianceAllianceTxAmino.AminoConverter
+  ...allianceAllianceTxAmino.AminoConverter
 };
 export const allianceProtoRegistry: ReadonlyArray<[string, GeneratedType]> = [...allianceAllianceTxRegistry.registry];
 export const getSigningAllianceClientOptions = ({
-                                                    defaultTypes = cosmosProtoRegistry
-                                                }: {
-    defaultTypes?: ReadonlyArray<[string, GeneratedType]>;
+  defaultTypes = defaultRegistryTypes
+}: {
+  defaultTypes?: ReadonlyArray<[string, GeneratedType]>;
 } = {}): {
-    registry: Registry;
-    aminoTypes: AminoTypes;
+  registry: Registry;
+  aminoTypes: AminoTypes;
 } => {
-    const registry = new Registry([...defaultTypes, ...allianceProtoRegistry]);
-    const aminoTypes = new AminoTypes({
-        ...allianceAminoConverters,
-        ...cosmosAminoConverters
-    });
-    return {
-        registry,
-        aminoTypes
-    };
+  const registry = new Registry([...defaultTypes, ...allianceProtoRegistry]);
+  const aminoTypes = new AminoTypes({
+    ...cosmosAminoConverters,
+    ...allianceAminoConverters
+  });
+  return {
+    registry,
+    aminoTypes
+  };
 };
 export const getSigningAllianceClient = async ({
-                                                   rpcEndpoint,
-                                                   signer,
-                                                   defaultTypes = cosmosProtoRegistry
-                                               }: {
-    rpcEndpoint: string | HttpEndpoint;
-    signer: OfflineSigner;
-    defaultTypes?: ReadonlyArray<[string, GeneratedType]>;
+  rpcEndpoint,
+  signer,
+  defaultTypes = defaultRegistryTypes
+}: {
+  rpcEndpoint: string | HttpEndpoint;
+  signer: OfflineSigner;
+  defaultTypes?: ReadonlyArray<[string, GeneratedType]>;
 }) => {
-    const {
-        registry,
-        aminoTypes
-    } = getSigningAllianceClientOptions({
-        defaultTypes
-    });
-    const client = await SigningStargateClient.connectWithSigner(rpcEndpoint, signer, {
-        registry: (registry as any),
-        aminoTypes
-    });
-    return client;
+  const {
+    registry,
+    aminoTypes
+  } = getSigningAllianceClientOptions({
+    defaultTypes
+  });
+  const client = await SigningStargateClient.connectWithSigner(rpcEndpoint, signer, {
+    registry: (registry as any),
+    aminoTypes
+  });
+  return client;
 };

@@ -1,4 +1,3 @@
-//@ts-nocheck
 import { GetTxRequest, GetTxResponseSDKType, GetTxsEventRequest, GetTxsEventResponseSDKType } from "../cosmos/tx/v1beta1/service";
 import { QueryMetricsRequest, QueryMetricsResponseSDKType } from "./metric";
 import { setPaginationParams } from "../helpers";

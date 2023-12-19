@@ -8,6 +8,22 @@ export interface Validator {
   latestExpectedVoteVoteIntervalCloseBlockHeight: bigint;
   lastJailedBlockHeight?: string;
 }
+export interface ValidatorProtoMsg {
+  typeUrl: "/pryzmatics.oracle.Validator";
+  value: Uint8Array;
+}
+export interface ValidatorAmino {
+  operator_address?: string;
+  vote_count?: string;
+  expected_vote_count?: string;
+  latest_vote_vote_interval_close_block_height?: string;
+  latest_expected_vote_vote_interval_close_block_height?: string;
+  last_jailed_block_height?: string;
+}
+export interface ValidatorAminoMsg {
+  type: "/pryzmatics.oracle.Validator";
+  value: ValidatorAmino;
+}
 export interface ValidatorSDKType {
   operator_address: string;
   vote_count: bigint;
@@ -27,6 +43,7 @@ function createBaseValidator(): Validator {
   };
 }
 export const Validator = {
+  typeUrl: "/pryzmatics.oracle.Validator",
   encode(message: Validator, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.operatorAddress !== "") {
       writer.uint32(10).string(message.operatorAddress);
@@ -109,5 +126,52 @@ export const Validator = {
     message.latestExpectedVoteVoteIntervalCloseBlockHeight = object.latestExpectedVoteVoteIntervalCloseBlockHeight !== undefined && object.latestExpectedVoteVoteIntervalCloseBlockHeight !== null ? BigInt(object.latestExpectedVoteVoteIntervalCloseBlockHeight.toString()) : BigInt(0);
     message.lastJailedBlockHeight = object.lastJailedBlockHeight ?? undefined;
     return message;
+  },
+  fromAmino(object: ValidatorAmino): Validator {
+    const message = createBaseValidator();
+    if (object.operator_address !== undefined && object.operator_address !== null) {
+      message.operatorAddress = object.operator_address;
+    }
+    if (object.vote_count !== undefined && object.vote_count !== null) {
+      message.voteCount = BigInt(object.vote_count);
+    }
+    if (object.expected_vote_count !== undefined && object.expected_vote_count !== null) {
+      message.expectedVoteCount = BigInt(object.expected_vote_count);
+    }
+    if (object.latest_vote_vote_interval_close_block_height !== undefined && object.latest_vote_vote_interval_close_block_height !== null) {
+      message.latestVoteVoteIntervalCloseBlockHeight = object.latest_vote_vote_interval_close_block_height;
+    }
+    if (object.latest_expected_vote_vote_interval_close_block_height !== undefined && object.latest_expected_vote_vote_interval_close_block_height !== null) {
+      message.latestExpectedVoteVoteIntervalCloseBlockHeight = BigInt(object.latest_expected_vote_vote_interval_close_block_height);
+    }
+    if (object.last_jailed_block_height !== undefined && object.last_jailed_block_height !== null) {
+      message.lastJailedBlockHeight = object.last_jailed_block_height;
+    }
+    return message;
+  },
+  toAmino(message: Validator): ValidatorAmino {
+    const obj: any = {};
+    obj.operator_address = message.operatorAddress;
+    obj.vote_count = message.voteCount ? message.voteCount.toString() : undefined;
+    obj.expected_vote_count = message.expectedVoteCount ? message.expectedVoteCount.toString() : undefined;
+    obj.latest_vote_vote_interval_close_block_height = message.latestVoteVoteIntervalCloseBlockHeight;
+    obj.latest_expected_vote_vote_interval_close_block_height = message.latestExpectedVoteVoteIntervalCloseBlockHeight ? message.latestExpectedVoteVoteIntervalCloseBlockHeight.toString() : undefined;
+    obj.last_jailed_block_height = message.lastJailedBlockHeight;
+    return obj;
+  },
+  fromAminoMsg(object: ValidatorAminoMsg): Validator {
+    return Validator.fromAmino(object.value);
+  },
+  fromProtoMsg(message: ValidatorProtoMsg): Validator {
+    return Validator.decode(message.value);
+  },
+  toProto(message: Validator): Uint8Array {
+    return Validator.encode(message).finish();
+  },
+  toProtoMsg(message: Validator): ValidatorProtoMsg {
+    return {
+      typeUrl: "/pryzmatics.oracle.Validator",
+      value: Validator.encode(message).finish()
+    };
   }
 };

@@ -1,5 +1,5 @@
-import { Minter, MinterSDKType } from "./minter";
-import { DistributionProportions, DistributionProportionsSDKType } from "./params";
+import { Minter, MinterAmino, MinterSDKType } from "./minter";
+import { DistributionProportions, DistributionProportionsAmino, DistributionProportionsSDKType } from "./params";
 import { BinaryReader, BinaryWriter } from "../../../binary";
 import { Decimal } from "@cosmjs/math";
 import { isSet } from "../../../helpers";
@@ -9,6 +9,21 @@ export interface EventMint {
   totalMinted: string;
   distributedAmounts: DistributionProportions;
   epochNumber: bigint;
+}
+export interface EventMintProtoMsg {
+  typeUrl: "/pryzm.mint.v1.EventMint";
+  value: Uint8Array;
+}
+export interface EventMintAmino {
+  minter?: MinterAmino;
+  bonded_ratio?: string;
+  total_minted?: string;
+  distributed_amounts?: DistributionProportionsAmino;
+  epoch_number?: string;
+}
+export interface EventMintAminoMsg {
+  type: "/pryzm.mint.v1.EventMint";
+  value: EventMintAmino;
 }
 export interface EventMintSDKType {
   minter: MinterSDKType;
@@ -27,6 +42,7 @@ function createBaseEventMint(): EventMint {
   };
 }
 export const EventMint = {
+  typeUrl: "/pryzm.mint.v1.EventMint",
   encode(message: EventMint, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.minter !== undefined) {
       Minter.encode(message.minter, writer.uint32(10).fork()).ldelim();
@@ -100,5 +116,48 @@ export const EventMint = {
     message.distributedAmounts = object.distributedAmounts !== undefined && object.distributedAmounts !== null ? DistributionProportions.fromPartial(object.distributedAmounts) : undefined;
     message.epochNumber = object.epochNumber !== undefined && object.epochNumber !== null ? BigInt(object.epochNumber.toString()) : BigInt(0);
     return message;
+  },
+  fromAmino(object: EventMintAmino): EventMint {
+    const message = createBaseEventMint();
+    if (object.minter !== undefined && object.minter !== null) {
+      message.minter = Minter.fromAmino(object.minter);
+    }
+    if (object.bonded_ratio !== undefined && object.bonded_ratio !== null) {
+      message.bondedRatio = object.bonded_ratio;
+    }
+    if (object.total_minted !== undefined && object.total_minted !== null) {
+      message.totalMinted = object.total_minted;
+    }
+    if (object.distributed_amounts !== undefined && object.distributed_amounts !== null) {
+      message.distributedAmounts = DistributionProportions.fromAmino(object.distributed_amounts);
+    }
+    if (object.epoch_number !== undefined && object.epoch_number !== null) {
+      message.epochNumber = BigInt(object.epoch_number);
+    }
+    return message;
+  },
+  toAmino(message: EventMint): EventMintAmino {
+    const obj: any = {};
+    obj.minter = message.minter ? Minter.toAmino(message.minter) : undefined;
+    obj.bonded_ratio = message.bondedRatio;
+    obj.total_minted = message.totalMinted;
+    obj.distributed_amounts = message.distributedAmounts ? DistributionProportions.toAmino(message.distributedAmounts) : undefined;
+    obj.epoch_number = message.epochNumber ? message.epochNumber.toString() : undefined;
+    return obj;
+  },
+  fromAminoMsg(object: EventMintAminoMsg): EventMint {
+    return EventMint.fromAmino(object.value);
+  },
+  fromProtoMsg(message: EventMintProtoMsg): EventMint {
+    return EventMint.decode(message.value);
+  },
+  toProto(message: EventMint): Uint8Array {
+    return EventMint.encode(message).finish();
+  },
+  toProtoMsg(message: EventMint): EventMintProtoMsg {
+    return {
+      typeUrl: "/pryzm.mint.v1.EventMint",
+      value: EventMint.encode(message).finish()
+    };
   }
 };

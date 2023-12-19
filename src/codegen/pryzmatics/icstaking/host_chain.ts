@@ -1,4 +1,5 @@
 import { HostChain as HostChain1 } from "../../pryzm/icstaking/v1/host_chain";
+import { HostChainAmino as HostChain1Amino } from "../../pryzm/icstaking/v1/host_chain";
 import { HostChainSDKType as HostChain1SDKType } from "../../pryzm/icstaking/v1/host_chain";
 import { BinaryReader, BinaryWriter } from "../../binary";
 import { Decimal } from "@cosmjs/math";
@@ -9,6 +10,21 @@ export interface HostChain {
   cAssetApy?: string;
   assetInVault: string;
   error: string;
+}
+export interface HostChainProtoMsg {
+  typeUrl: "/pryzmatics.icstaking.HostChain";
+  value: Uint8Array;
+}
+export interface HostChainAmino {
+  host_chain?: HostChain1Amino;
+  c_asset_market_cap?: string;
+  c_asset_apy?: string;
+  asset_in_vault?: string;
+  error?: string;
+}
+export interface HostChainAminoMsg {
+  type: "/pryzmatics.icstaking.HostChain";
+  value: HostChainAmino;
 }
 export interface HostChainSDKType {
   host_chain: HostChain1SDKType;
@@ -27,6 +43,7 @@ function createBaseHostChain(): HostChain {
   };
 }
 export const HostChain = {
+  typeUrl: "/pryzmatics.icstaking.HostChain",
   encode(message: HostChain, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.hostChain !== undefined) {
       HostChain1.encode(message.hostChain, writer.uint32(10).fork()).ldelim();
@@ -100,5 +117,48 @@ export const HostChain = {
     message.assetInVault = object.assetInVault ?? "";
     message.error = object.error ?? "";
     return message;
+  },
+  fromAmino(object: HostChainAmino): HostChain {
+    const message = createBaseHostChain();
+    if (object.host_chain !== undefined && object.host_chain !== null) {
+      message.hostChain = HostChain1.fromAmino(object.host_chain);
+    }
+    if (object.c_asset_market_cap !== undefined && object.c_asset_market_cap !== null) {
+      message.cAssetMarketCap = object.c_asset_market_cap;
+    }
+    if (object.c_asset_apy !== undefined && object.c_asset_apy !== null) {
+      message.cAssetApy = object.c_asset_apy;
+    }
+    if (object.asset_in_vault !== undefined && object.asset_in_vault !== null) {
+      message.assetInVault = object.asset_in_vault;
+    }
+    if (object.error !== undefined && object.error !== null) {
+      message.error = object.error;
+    }
+    return message;
+  },
+  toAmino(message: HostChain): HostChainAmino {
+    const obj: any = {};
+    obj.host_chain = message.hostChain ? HostChain1.toAmino(message.hostChain) : undefined;
+    obj.c_asset_market_cap = message.cAssetMarketCap;
+    obj.c_asset_apy = message.cAssetApy;
+    obj.asset_in_vault = message.assetInVault;
+    obj.error = message.error;
+    return obj;
+  },
+  fromAminoMsg(object: HostChainAminoMsg): HostChain {
+    return HostChain.fromAmino(object.value);
+  },
+  fromProtoMsg(message: HostChainProtoMsg): HostChain {
+    return HostChain.decode(message.value);
+  },
+  toProto(message: HostChain): Uint8Array {
+    return HostChain.encode(message).finish();
+  },
+  toProtoMsg(message: HostChain): HostChainProtoMsg {
+    return {
+      typeUrl: "/pryzmatics.icstaking.HostChain",
+      value: HostChain.encode(message).finish()
+    };
   }
 };

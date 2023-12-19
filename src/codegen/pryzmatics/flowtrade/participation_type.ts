@@ -5,6 +5,7 @@ export enum ParticipationType {
   UNRECOGNIZED = -1,
 }
 export const ParticipationTypeSDKType = ParticipationType;
+export const ParticipationTypeAmino = ParticipationType;
 export function participationTypeFromJSON(object: any): ParticipationType {
   switch (object) {
     case 0:

@@ -12,6 +12,24 @@ export interface PoolApr {
   allianceApr?: string;
   error: string;
 }
+export interface PoolAprProtoMsg {
+  typeUrl: "/pryzmatics.pool.PoolApr";
+  value: Uint8Array;
+}
+export interface PoolAprAmino {
+  pool_id?: string;
+  time?: string;
+  apr?: string;
+  swap_fee_apr?: string;
+  token_yield?: string;
+  incentives_apr?: string;
+  alliance_apr?: string;
+  error?: string;
+}
+export interface PoolAprAminoMsg {
+  type: "/pryzmatics.pool.PoolApr";
+  value: PoolAprAmino;
+}
 export interface PoolAprSDKType {
   pool_id: bigint;
   time: TimestampSDKType;
@@ -35,6 +53,7 @@ function createBasePoolApr(): PoolApr {
   };
 }
 export const PoolApr = {
+  typeUrl: "/pryzmatics.pool.PoolApr",
   encode(message: PoolApr, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.poolId !== BigInt(0)) {
       writer.uint32(8).uint64(message.poolId);
@@ -135,5 +154,60 @@ export const PoolApr = {
     message.allianceApr = object.allianceApr ?? undefined;
     message.error = object.error ?? "";
     return message;
+  },
+  fromAmino(object: PoolAprAmino): PoolApr {
+    const message = createBasePoolApr();
+    if (object.pool_id !== undefined && object.pool_id !== null) {
+      message.poolId = BigInt(object.pool_id);
+    }
+    if (object.time !== undefined && object.time !== null) {
+      message.time = Timestamp.fromAmino(object.time);
+    }
+    if (object.apr !== undefined && object.apr !== null) {
+      message.apr = object.apr;
+    }
+    if (object.swap_fee_apr !== undefined && object.swap_fee_apr !== null) {
+      message.swapFeeApr = object.swap_fee_apr;
+    }
+    if (object.token_yield !== undefined && object.token_yield !== null) {
+      message.tokenYield = object.token_yield;
+    }
+    if (object.incentives_apr !== undefined && object.incentives_apr !== null) {
+      message.incentivesApr = object.incentives_apr;
+    }
+    if (object.alliance_apr !== undefined && object.alliance_apr !== null) {
+      message.allianceApr = object.alliance_apr;
+    }
+    if (object.error !== undefined && object.error !== null) {
+      message.error = object.error;
+    }
+    return message;
+  },
+  toAmino(message: PoolApr): PoolAprAmino {
+    const obj: any = {};
+    obj.pool_id = message.poolId ? message.poolId.toString() : undefined;
+    obj.time = message.time ? Timestamp.toAmino(message.time) : undefined;
+    obj.apr = message.apr;
+    obj.swap_fee_apr = message.swapFeeApr;
+    obj.token_yield = message.tokenYield;
+    obj.incentives_apr = message.incentivesApr;
+    obj.alliance_apr = message.allianceApr;
+    obj.error = message.error;
+    return obj;
+  },
+  fromAminoMsg(object: PoolAprAminoMsg): PoolApr {
+    return PoolApr.fromAmino(object.value);
+  },
+  fromProtoMsg(message: PoolAprProtoMsg): PoolApr {
+    return PoolApr.decode(message.value);
+  },
+  toProto(message: PoolApr): Uint8Array {
+    return PoolApr.encode(message).finish();
+  },
+  toProtoMsg(message: PoolApr): PoolAprProtoMsg {
+    return {
+      typeUrl: "/pryzmatics.pool.PoolApr",
+      value: PoolApr.encode(message).finish()
+    };
   }
 };

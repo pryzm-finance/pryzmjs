@@ -1,5 +1,5 @@
-import { Coin, CoinSDKType } from "../../../cosmos/base/v1beta1/coin";
-import { Duration, DurationSDKType } from "../../../google/protobuf/duration";
+import { Coin, CoinAmino, CoinSDKType } from "../../../cosmos/base/v1beta1/coin";
+import { Duration, DurationAmino, DurationSDKType } from "../../../google/protobuf/duration";
 import { BinaryReader, BinaryWriter } from "../../../binary";
 import { Decimal } from "@cosmjs/math";
 import { isSet } from "../../../helpers";
@@ -15,6 +15,27 @@ export interface Params {
   tokenOutFeeRatio: string;
   /** the protocol fee ratio taken from token-in */
   tokenInFeeRatio: string;
+}
+export interface ParamsProtoMsg {
+  typeUrl: "/refractedlabs.flowtrade.v1.Params";
+  value: Uint8Array;
+}
+/** Params defines the parameters for the module. */
+export interface ParamsAmino {
+  /** The deposit amount taken from flow creator and transferred back after the flow ends */
+  flow_creation_deposit?: CoinAmino;
+  /** The minimum possible duration a flow can have */
+  min_flow_duration?: DurationAmino;
+  /** The minimum possible duration from the flow creation time to its start time */
+  min_duration_to_flow_start?: DurationAmino;
+  /** the protocol fee ratio taken from token-out */
+  token_out_fee_ratio?: string;
+  /** the protocol fee ratio taken from token-in */
+  token_in_fee_ratio?: string;
+}
+export interface ParamsAminoMsg {
+  type: "/refractedlabs.flowtrade.v1.Params";
+  value: ParamsAmino;
 }
 /** Params defines the parameters for the module. */
 export interface ParamsSDKType {
@@ -34,6 +55,7 @@ function createBaseParams(): Params {
   };
 }
 export const Params = {
+  typeUrl: "/refractedlabs.flowtrade.v1.Params",
   encode(message: Params, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.flowCreationDeposit !== undefined) {
       Coin.encode(message.flowCreationDeposit, writer.uint32(10).fork()).ldelim();
@@ -107,5 +129,48 @@ export const Params = {
     message.tokenOutFeeRatio = object.tokenOutFeeRatio ?? "";
     message.tokenInFeeRatio = object.tokenInFeeRatio ?? "";
     return message;
+  },
+  fromAmino(object: ParamsAmino): Params {
+    const message = createBaseParams();
+    if (object.flow_creation_deposit !== undefined && object.flow_creation_deposit !== null) {
+      message.flowCreationDeposit = Coin.fromAmino(object.flow_creation_deposit);
+    }
+    if (object.min_flow_duration !== undefined && object.min_flow_duration !== null) {
+      message.minFlowDuration = Duration.fromAmino(object.min_flow_duration);
+    }
+    if (object.min_duration_to_flow_start !== undefined && object.min_duration_to_flow_start !== null) {
+      message.minDurationToFlowStart = Duration.fromAmino(object.min_duration_to_flow_start);
+    }
+    if (object.token_out_fee_ratio !== undefined && object.token_out_fee_ratio !== null) {
+      message.tokenOutFeeRatio = object.token_out_fee_ratio;
+    }
+    if (object.token_in_fee_ratio !== undefined && object.token_in_fee_ratio !== null) {
+      message.tokenInFeeRatio = object.token_in_fee_ratio;
+    }
+    return message;
+  },
+  toAmino(message: Params): ParamsAmino {
+    const obj: any = {};
+    obj.flow_creation_deposit = message.flowCreationDeposit ? Coin.toAmino(message.flowCreationDeposit) : undefined;
+    obj.min_flow_duration = message.minFlowDuration ? Duration.toAmino(message.minFlowDuration) : undefined;
+    obj.min_duration_to_flow_start = message.minDurationToFlowStart ? Duration.toAmino(message.minDurationToFlowStart) : undefined;
+    obj.token_out_fee_ratio = message.tokenOutFeeRatio;
+    obj.token_in_fee_ratio = message.tokenInFeeRatio;
+    return obj;
+  },
+  fromAminoMsg(object: ParamsAminoMsg): Params {
+    return Params.fromAmino(object.value);
+  },
+  fromProtoMsg(message: ParamsProtoMsg): Params {
+    return Params.decode(message.value);
+  },
+  toProto(message: Params): Uint8Array {
+    return Params.encode(message).finish();
+  },
+  toProtoMsg(message: Params): ParamsProtoMsg {
+    return {
+      typeUrl: "/refractedlabs.flowtrade.v1.Params",
+      value: Params.encode(message).finish()
+    };
   }
 };

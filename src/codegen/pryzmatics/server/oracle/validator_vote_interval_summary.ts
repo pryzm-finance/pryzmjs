@@ -1,5 +1,5 @@
-import { PageRequest, PageRequestSDKType, PageResponse, PageResponseSDKType } from "../../../cosmos/base/query/v1beta1/pagination";
-import { ValidatorVoteIntervalSummary, ValidatorVoteIntervalSummarySDKType } from "../../oracle/validator_vote_interval_summary";
+import { PageRequest, PageRequestAmino, PageRequestSDKType, PageResponse, PageResponseAmino, PageResponseSDKType } from "../../../cosmos/base/query/v1beta1/pagination";
+import { ValidatorVoteIntervalSummary, ValidatorVoteIntervalSummaryAmino, ValidatorVoteIntervalSummarySDKType } from "../../oracle/validator_vote_interval_summary";
 import { BinaryReader, BinaryWriter } from "../../../binary";
 import { isSet } from "../../../helpers";
 export interface QueryValidatorVoteIntervalSummariesRequest {
@@ -7,6 +7,20 @@ export interface QueryValidatorVoteIntervalSummariesRequest {
   fromBlockHeight?: string;
   toBlockHeight?: string;
   pagination?: PageRequest;
+}
+export interface QueryValidatorVoteIntervalSummariesRequestProtoMsg {
+  typeUrl: "/pryzmatics.server.oracle.QueryValidatorVoteIntervalSummariesRequest";
+  value: Uint8Array;
+}
+export interface QueryValidatorVoteIntervalSummariesRequestAmino {
+  operator_address?: string;
+  from_block_height?: string;
+  to_block_height?: string;
+  pagination?: PageRequestAmino;
+}
+export interface QueryValidatorVoteIntervalSummariesRequestAminoMsg {
+  type: "/pryzmatics.server.oracle.QueryValidatorVoteIntervalSummariesRequest";
+  value: QueryValidatorVoteIntervalSummariesRequestAmino;
 }
 export interface QueryValidatorVoteIntervalSummariesRequestSDKType {
   operator_address: string;
@@ -17,6 +31,18 @@ export interface QueryValidatorVoteIntervalSummariesRequestSDKType {
 export interface QueryValidatorVoteIntervalSummariesResponse {
   summaries: ValidatorVoteIntervalSummary[];
   pagination?: PageResponse;
+}
+export interface QueryValidatorVoteIntervalSummariesResponseProtoMsg {
+  typeUrl: "/pryzmatics.server.oracle.QueryValidatorVoteIntervalSummariesResponse";
+  value: Uint8Array;
+}
+export interface QueryValidatorVoteIntervalSummariesResponseAmino {
+  summaries?: ValidatorVoteIntervalSummaryAmino[];
+  pagination?: PageResponseAmino;
+}
+export interface QueryValidatorVoteIntervalSummariesResponseAminoMsg {
+  type: "/pryzmatics.server.oracle.QueryValidatorVoteIntervalSummariesResponse";
+  value: QueryValidatorVoteIntervalSummariesResponseAmino;
 }
 export interface QueryValidatorVoteIntervalSummariesResponseSDKType {
   summaries: ValidatorVoteIntervalSummarySDKType[];
@@ -31,6 +57,7 @@ function createBaseQueryValidatorVoteIntervalSummariesRequest(): QueryValidatorV
   };
 }
 export const QueryValidatorVoteIntervalSummariesRequest = {
+  typeUrl: "/pryzmatics.server.oracle.QueryValidatorVoteIntervalSummariesRequest",
   encode(message: QueryValidatorVoteIntervalSummariesRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.operatorAddress !== "") {
       writer.uint32(10).string(message.operatorAddress);
@@ -95,6 +122,45 @@ export const QueryValidatorVoteIntervalSummariesRequest = {
     message.toBlockHeight = object.toBlockHeight ?? undefined;
     message.pagination = object.pagination !== undefined && object.pagination !== null ? PageRequest.fromPartial(object.pagination) : undefined;
     return message;
+  },
+  fromAmino(object: QueryValidatorVoteIntervalSummariesRequestAmino): QueryValidatorVoteIntervalSummariesRequest {
+    const message = createBaseQueryValidatorVoteIntervalSummariesRequest();
+    if (object.operator_address !== undefined && object.operator_address !== null) {
+      message.operatorAddress = object.operator_address;
+    }
+    if (object.from_block_height !== undefined && object.from_block_height !== null) {
+      message.fromBlockHeight = object.from_block_height;
+    }
+    if (object.to_block_height !== undefined && object.to_block_height !== null) {
+      message.toBlockHeight = object.to_block_height;
+    }
+    if (object.pagination !== undefined && object.pagination !== null) {
+      message.pagination = PageRequest.fromAmino(object.pagination);
+    }
+    return message;
+  },
+  toAmino(message: QueryValidatorVoteIntervalSummariesRequest): QueryValidatorVoteIntervalSummariesRequestAmino {
+    const obj: any = {};
+    obj.operator_address = message.operatorAddress;
+    obj.from_block_height = message.fromBlockHeight;
+    obj.to_block_height = message.toBlockHeight;
+    obj.pagination = message.pagination ? PageRequest.toAmino(message.pagination) : undefined;
+    return obj;
+  },
+  fromAminoMsg(object: QueryValidatorVoteIntervalSummariesRequestAminoMsg): QueryValidatorVoteIntervalSummariesRequest {
+    return QueryValidatorVoteIntervalSummariesRequest.fromAmino(object.value);
+  },
+  fromProtoMsg(message: QueryValidatorVoteIntervalSummariesRequestProtoMsg): QueryValidatorVoteIntervalSummariesRequest {
+    return QueryValidatorVoteIntervalSummariesRequest.decode(message.value);
+  },
+  toProto(message: QueryValidatorVoteIntervalSummariesRequest): Uint8Array {
+    return QueryValidatorVoteIntervalSummariesRequest.encode(message).finish();
+  },
+  toProtoMsg(message: QueryValidatorVoteIntervalSummariesRequest): QueryValidatorVoteIntervalSummariesRequestProtoMsg {
+    return {
+      typeUrl: "/pryzmatics.server.oracle.QueryValidatorVoteIntervalSummariesRequest",
+      value: QueryValidatorVoteIntervalSummariesRequest.encode(message).finish()
+    };
   }
 };
 function createBaseQueryValidatorVoteIntervalSummariesResponse(): QueryValidatorVoteIntervalSummariesResponse {
@@ -104,6 +170,7 @@ function createBaseQueryValidatorVoteIntervalSummariesResponse(): QueryValidator
   };
 }
 export const QueryValidatorVoteIntervalSummariesResponse = {
+  typeUrl: "/pryzmatics.server.oracle.QueryValidatorVoteIntervalSummariesResponse",
   encode(message: QueryValidatorVoteIntervalSummariesResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     for (const v of message.summaries) {
       ValidatorVoteIntervalSummary.encode(v!, writer.uint32(10).fork()).ldelim();
@@ -154,5 +221,38 @@ export const QueryValidatorVoteIntervalSummariesResponse = {
     message.summaries = object.summaries?.map(e => ValidatorVoteIntervalSummary.fromPartial(e)) || [];
     message.pagination = object.pagination !== undefined && object.pagination !== null ? PageResponse.fromPartial(object.pagination) : undefined;
     return message;
+  },
+  fromAmino(object: QueryValidatorVoteIntervalSummariesResponseAmino): QueryValidatorVoteIntervalSummariesResponse {
+    const message = createBaseQueryValidatorVoteIntervalSummariesResponse();
+    message.summaries = object.summaries?.map(e => ValidatorVoteIntervalSummary.fromAmino(e)) || [];
+    if (object.pagination !== undefined && object.pagination !== null) {
+      message.pagination = PageResponse.fromAmino(object.pagination);
+    }
+    return message;
+  },
+  toAmino(message: QueryValidatorVoteIntervalSummariesResponse): QueryValidatorVoteIntervalSummariesResponseAmino {
+    const obj: any = {};
+    if (message.summaries) {
+      obj.summaries = message.summaries.map(e => e ? ValidatorVoteIntervalSummary.toAmino(e) : undefined);
+    } else {
+      obj.summaries = [];
+    }
+    obj.pagination = message.pagination ? PageResponse.toAmino(message.pagination) : undefined;
+    return obj;
+  },
+  fromAminoMsg(object: QueryValidatorVoteIntervalSummariesResponseAminoMsg): QueryValidatorVoteIntervalSummariesResponse {
+    return QueryValidatorVoteIntervalSummariesResponse.fromAmino(object.value);
+  },
+  fromProtoMsg(message: QueryValidatorVoteIntervalSummariesResponseProtoMsg): QueryValidatorVoteIntervalSummariesResponse {
+    return QueryValidatorVoteIntervalSummariesResponse.decode(message.value);
+  },
+  toProto(message: QueryValidatorVoteIntervalSummariesResponse): Uint8Array {
+    return QueryValidatorVoteIntervalSummariesResponse.encode(message).finish();
+  },
+  toProtoMsg(message: QueryValidatorVoteIntervalSummariesResponse): QueryValidatorVoteIntervalSummariesResponseProtoMsg {
+    return {
+      typeUrl: "/pryzmatics.server.oracle.QueryValidatorVoteIntervalSummariesResponse",
+      value: QueryValidatorVoteIntervalSummariesResponse.encode(message).finish()
+    };
   }
 };

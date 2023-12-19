@@ -13,6 +13,26 @@ export interface Params {
   /** ratio in range [0, 1] which determines the amount of collected fees that is supposed to be distributed among validators as oracle reward */
   feeCollectorRewardRatio: string;
 }
+export interface ParamsProtoMsg {
+  typeUrl: "/refractedlabs.oracle.v1.Params";
+  value: Uint8Array;
+}
+/** Params defines the parameters for the module. */
+export interface ParamsAmino {
+  vote_period?: string;
+  quorum?: string;
+  vote_threshold?: string;
+  slash_fraction?: string;
+  slash_window?: string;
+  max_miss_rate_per_slash_window?: string;
+  max_miss_rate_per_vote_period?: string;
+  /** ratio in range [0, 1] which determines the amount of collected fees that is supposed to be distributed among validators as oracle reward */
+  fee_collector_reward_ratio?: string;
+}
+export interface ParamsAminoMsg {
+  type: "/refractedlabs.oracle.v1.Params";
+  value: ParamsAmino;
+}
 /** Params defines the parameters for the module. */
 export interface ParamsSDKType {
   vote_period: bigint;
@@ -37,6 +57,7 @@ function createBaseParams(): Params {
   };
 }
 export const Params = {
+  typeUrl: "/refractedlabs.oracle.v1.Params",
   encode(message: Params, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.votePeriod !== BigInt(0)) {
       writer.uint32(8).int64(message.votePeriod);
@@ -137,5 +158,60 @@ export const Params = {
     message.maxMissRatePerVotePeriod = object.maxMissRatePerVotePeriod ?? "";
     message.feeCollectorRewardRatio = object.feeCollectorRewardRatio ?? "";
     return message;
+  },
+  fromAmino(object: ParamsAmino): Params {
+    const message = createBaseParams();
+    if (object.vote_period !== undefined && object.vote_period !== null) {
+      message.votePeriod = BigInt(object.vote_period);
+    }
+    if (object.quorum !== undefined && object.quorum !== null) {
+      message.quorum = object.quorum;
+    }
+    if (object.vote_threshold !== undefined && object.vote_threshold !== null) {
+      message.voteThreshold = object.vote_threshold;
+    }
+    if (object.slash_fraction !== undefined && object.slash_fraction !== null) {
+      message.slashFraction = object.slash_fraction;
+    }
+    if (object.slash_window !== undefined && object.slash_window !== null) {
+      message.slashWindow = BigInt(object.slash_window);
+    }
+    if (object.max_miss_rate_per_slash_window !== undefined && object.max_miss_rate_per_slash_window !== null) {
+      message.maxMissRatePerSlashWindow = object.max_miss_rate_per_slash_window;
+    }
+    if (object.max_miss_rate_per_vote_period !== undefined && object.max_miss_rate_per_vote_period !== null) {
+      message.maxMissRatePerVotePeriod = object.max_miss_rate_per_vote_period;
+    }
+    if (object.fee_collector_reward_ratio !== undefined && object.fee_collector_reward_ratio !== null) {
+      message.feeCollectorRewardRatio = object.fee_collector_reward_ratio;
+    }
+    return message;
+  },
+  toAmino(message: Params): ParamsAmino {
+    const obj: any = {};
+    obj.vote_period = message.votePeriod ? message.votePeriod.toString() : undefined;
+    obj.quorum = message.quorum;
+    obj.vote_threshold = message.voteThreshold;
+    obj.slash_fraction = message.slashFraction;
+    obj.slash_window = message.slashWindow ? message.slashWindow.toString() : undefined;
+    obj.max_miss_rate_per_slash_window = message.maxMissRatePerSlashWindow;
+    obj.max_miss_rate_per_vote_period = message.maxMissRatePerVotePeriod;
+    obj.fee_collector_reward_ratio = message.feeCollectorRewardRatio;
+    return obj;
+  },
+  fromAminoMsg(object: ParamsAminoMsg): Params {
+    return Params.fromAmino(object.value);
+  },
+  fromProtoMsg(message: ParamsProtoMsg): Params {
+    return Params.decode(message.value);
+  },
+  toProto(message: Params): Uint8Array {
+    return Params.encode(message).finish();
+  },
+  toProtoMsg(message: Params): ParamsProtoMsg {
+    return {
+      typeUrl: "/refractedlabs.oracle.v1.Params",
+      value: Params.encode(message).finish()
+    };
   }
 };

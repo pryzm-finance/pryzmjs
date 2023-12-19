@@ -1,4 +1,3 @@
-//@ts-nocheck
 import { grpc } from "@improbable-eng/grpc-web";
 import { UnaryMethodDefinitionish } from "../../../grpc-web";
 import { DeepPartial } from "../../../helpers";
@@ -98,46 +97,46 @@ export class QueryClientImpl implements Query {
     this.params = this.params.bind(this);
   }
   validators(request: DeepPartial<QueryValidatorsRequest>, metadata?: grpc.Metadata): Promise<QueryValidatorsResponse> {
-    return this.rpc.unary(QueryValidatorsDesc, QueryValidatorsRequest.fromPartial(request), metadata);
+    return this.rpc.unary(QueryValidatorsDesc, QueryValidatorsRequest.fromPartial(request as any), metadata);
   }
   validator(request: DeepPartial<QueryValidatorRequest>, metadata?: grpc.Metadata): Promise<QueryValidatorResponse> {
-    return this.rpc.unary(QueryValidatorDesc, QueryValidatorRequest.fromPartial(request), metadata);
+    return this.rpc.unary(QueryValidatorDesc, QueryValidatorRequest.fromPartial(request as any), metadata);
   }
   validatorDelegations(request: DeepPartial<QueryValidatorDelegationsRequest>, metadata?: grpc.Metadata): Promise<QueryValidatorDelegationsResponse> {
-    return this.rpc.unary(QueryValidatorDelegationsDesc, QueryValidatorDelegationsRequest.fromPartial(request), metadata);
+    return this.rpc.unary(QueryValidatorDelegationsDesc, QueryValidatorDelegationsRequest.fromPartial(request as any), metadata);
   }
   validatorUnbondingDelegations(request: DeepPartial<QueryValidatorUnbondingDelegationsRequest>, metadata?: grpc.Metadata): Promise<QueryValidatorUnbondingDelegationsResponse> {
-    return this.rpc.unary(QueryValidatorUnbondingDelegationsDesc, QueryValidatorUnbondingDelegationsRequest.fromPartial(request), metadata);
+    return this.rpc.unary(QueryValidatorUnbondingDelegationsDesc, QueryValidatorUnbondingDelegationsRequest.fromPartial(request as any), metadata);
   }
   delegation(request: DeepPartial<QueryDelegationRequest>, metadata?: grpc.Metadata): Promise<QueryDelegationResponse> {
-    return this.rpc.unary(QueryDelegationDesc, QueryDelegationRequest.fromPartial(request), metadata);
+    return this.rpc.unary(QueryDelegationDesc, QueryDelegationRequest.fromPartial(request as any), metadata);
   }
   unbondingDelegation(request: DeepPartial<QueryUnbondingDelegationRequest>, metadata?: grpc.Metadata): Promise<QueryUnbondingDelegationResponse> {
-    return this.rpc.unary(QueryUnbondingDelegationDesc, QueryUnbondingDelegationRequest.fromPartial(request), metadata);
+    return this.rpc.unary(QueryUnbondingDelegationDesc, QueryUnbondingDelegationRequest.fromPartial(request as any), metadata);
   }
   delegatorDelegations(request: DeepPartial<QueryDelegatorDelegationsRequest>, metadata?: grpc.Metadata): Promise<QueryDelegatorDelegationsResponse> {
-    return this.rpc.unary(QueryDelegatorDelegationsDesc, QueryDelegatorDelegationsRequest.fromPartial(request), metadata);
+    return this.rpc.unary(QueryDelegatorDelegationsDesc, QueryDelegatorDelegationsRequest.fromPartial(request as any), metadata);
   }
   delegatorUnbondingDelegations(request: DeepPartial<QueryDelegatorUnbondingDelegationsRequest>, metadata?: grpc.Metadata): Promise<QueryDelegatorUnbondingDelegationsResponse> {
-    return this.rpc.unary(QueryDelegatorUnbondingDelegationsDesc, QueryDelegatorUnbondingDelegationsRequest.fromPartial(request), metadata);
+    return this.rpc.unary(QueryDelegatorUnbondingDelegationsDesc, QueryDelegatorUnbondingDelegationsRequest.fromPartial(request as any), metadata);
   }
   redelegations(request: DeepPartial<QueryRedelegationsRequest>, metadata?: grpc.Metadata): Promise<QueryRedelegationsResponse> {
-    return this.rpc.unary(QueryRedelegationsDesc, QueryRedelegationsRequest.fromPartial(request), metadata);
+    return this.rpc.unary(QueryRedelegationsDesc, QueryRedelegationsRequest.fromPartial(request as any), metadata);
   }
   delegatorValidators(request: DeepPartial<QueryDelegatorValidatorsRequest>, metadata?: grpc.Metadata): Promise<QueryDelegatorValidatorsResponse> {
-    return this.rpc.unary(QueryDelegatorValidatorsDesc, QueryDelegatorValidatorsRequest.fromPartial(request), metadata);
+    return this.rpc.unary(QueryDelegatorValidatorsDesc, QueryDelegatorValidatorsRequest.fromPartial(request as any), metadata);
   }
   delegatorValidator(request: DeepPartial<QueryDelegatorValidatorRequest>, metadata?: grpc.Metadata): Promise<QueryDelegatorValidatorResponse> {
-    return this.rpc.unary(QueryDelegatorValidatorDesc, QueryDelegatorValidatorRequest.fromPartial(request), metadata);
+    return this.rpc.unary(QueryDelegatorValidatorDesc, QueryDelegatorValidatorRequest.fromPartial(request as any), metadata);
   }
   historicalInfo(request: DeepPartial<QueryHistoricalInfoRequest>, metadata?: grpc.Metadata): Promise<QueryHistoricalInfoResponse> {
-    return this.rpc.unary(QueryHistoricalInfoDesc, QueryHistoricalInfoRequest.fromPartial(request), metadata);
+    return this.rpc.unary(QueryHistoricalInfoDesc, QueryHistoricalInfoRequest.fromPartial(request as any), metadata);
   }
   pool(request: DeepPartial<QueryPoolRequest> = {}, metadata?: grpc.Metadata): Promise<QueryPoolResponse> {
-    return this.rpc.unary(QueryPoolDesc, QueryPoolRequest.fromPartial(request), metadata);
+    return this.rpc.unary(QueryPoolDesc, QueryPoolRequest.fromPartial(request as any), metadata);
   }
   params(request: DeepPartial<QueryParamsRequest> = {}, metadata?: grpc.Metadata): Promise<QueryParamsResponse> {
-    return this.rpc.unary(QueryParamsDesc, QueryParamsRequest.fromPartial(request), metadata);
+    return this.rpc.unary(QueryParamsDesc, QueryParamsRequest.fromPartial(request as any), metadata);
   }
 }
 export const QueryDesc = {

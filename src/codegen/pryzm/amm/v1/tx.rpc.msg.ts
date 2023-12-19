@@ -1,4 +1,3 @@
-//@ts-nocheck
 import { UnaryMethodDefinitionish } from "../../../grpc-web";
 import { DeepPartial } from "../../../helpers";
 import { grpc } from "@improbable-eng/grpc-web";
@@ -91,121 +90,121 @@ export class MsgClientImpl implements Msg {
     this.setPauseWindow = this.setPauseWindow.bind(this);
   }
   singleSwap(request: DeepPartial<MsgSingleSwap>, metadata?: grpc.Metadata): Promise<MsgSingleSwapResponse> {
-    return this.rpc.unary(MsgSingleSwapDesc, MsgSingleSwap.fromPartial(request), metadata);
+    return this.rpc.unary(MsgSingleSwapDesc, MsgSingleSwap.fromPartial(request as any), metadata);
   }
   joinAllTokensExactLpt(request: DeepPartial<MsgJoinAllTokensExactLpt>, metadata?: grpc.Metadata): Promise<MsgJoinAllTokensExactLptResponse> {
-    return this.rpc.unary(MsgJoinAllTokensExactLptDesc, MsgJoinAllTokensExactLpt.fromPartial(request), metadata);
+    return this.rpc.unary(MsgJoinAllTokensExactLptDesc, MsgJoinAllTokensExactLpt.fromPartial(request as any), metadata);
   }
   joinTokenExactLpt(request: DeepPartial<MsgJoinTokenExactLpt>, metadata?: grpc.Metadata): Promise<MsgJoinTokenExactLptResponse> {
-    return this.rpc.unary(MsgJoinTokenExactLptDesc, MsgJoinTokenExactLpt.fromPartial(request), metadata);
+    return this.rpc.unary(MsgJoinTokenExactLptDesc, MsgJoinTokenExactLpt.fromPartial(request as any), metadata);
   }
   joinExactTokens(request: DeepPartial<MsgJoinExactTokens>, metadata?: grpc.Metadata): Promise<MsgJoinExactTokensResponse> {
-    return this.rpc.unary(MsgJoinExactTokensDesc, MsgJoinExactTokens.fromPartial(request), metadata);
+    return this.rpc.unary(MsgJoinExactTokensDesc, MsgJoinExactTokens.fromPartial(request as any), metadata);
   }
   zeroImpactJoinYamm(request: DeepPartial<MsgZeroImpactJoinYamm>, metadata?: grpc.Metadata): Promise<MsgZeroImpactJoinYammResponse> {
-    return this.rpc.unary(MsgZeroImpactJoinYammDesc, MsgZeroImpactJoinYamm.fromPartial(request), metadata);
+    return this.rpc.unary(MsgZeroImpactJoinYammDesc, MsgZeroImpactJoinYamm.fromPartial(request as any), metadata);
   }
   exitExactTokens(request: DeepPartial<MsgExitExactTokens>, metadata?: grpc.Metadata): Promise<MsgExitExactTokensResponse> {
-    return this.rpc.unary(MsgExitExactTokensDesc, MsgExitExactTokens.fromPartial(request), metadata);
+    return this.rpc.unary(MsgExitExactTokensDesc, MsgExitExactTokens.fromPartial(request as any), metadata);
   }
   exitTokenExactLpt(request: DeepPartial<MsgExitTokenExactLpt>, metadata?: grpc.Metadata): Promise<MsgExitTokenExactLptResponse> {
-    return this.rpc.unary(MsgExitTokenExactLptDesc, MsgExitTokenExactLpt.fromPartial(request), metadata);
+    return this.rpc.unary(MsgExitTokenExactLptDesc, MsgExitTokenExactLpt.fromPartial(request as any), metadata);
   }
   exitAllTokensExactLpt(request: DeepPartial<MsgExitAllTokensExactLpt>, metadata?: grpc.Metadata): Promise<MsgExitAllTokensExactLptResponse> {
-    return this.rpc.unary(MsgExitAllTokensExactLptDesc, MsgExitAllTokensExactLpt.fromPartial(request), metadata);
+    return this.rpc.unary(MsgExitAllTokensExactLptDesc, MsgExitAllTokensExactLpt.fromPartial(request as any), metadata);
   }
   createWeightedPool(request: DeepPartial<MsgCreateWeightedPool>, metadata?: grpc.Metadata): Promise<MsgCreateWeightedPoolResponse> {
-    return this.rpc.unary(MsgCreateWeightedPoolDesc, MsgCreateWeightedPool.fromPartial(request), metadata);
+    return this.rpc.unary(MsgCreateWeightedPoolDesc, MsgCreateWeightedPool.fromPartial(request as any), metadata);
   }
   updateSwapFee(request: DeepPartial<MsgUpdateSwapFee>, metadata?: grpc.Metadata): Promise<MsgUpdateSwapFeeResponse> {
-    return this.rpc.unary(MsgUpdateSwapFeeDesc, MsgUpdateSwapFee.fromPartial(request), metadata);
+    return this.rpc.unary(MsgUpdateSwapFeeDesc, MsgUpdateSwapFee.fromPartial(request as any), metadata);
   }
   initializePool(request: DeepPartial<MsgInitializePool>, metadata?: grpc.Metadata): Promise<MsgInitializePoolResponse> {
-    return this.rpc.unary(MsgInitializePoolDesc, MsgInitializePool.fromPartial(request), metadata);
+    return this.rpc.unary(MsgInitializePoolDesc, MsgInitializePool.fromPartial(request as any), metadata);
   }
   updateWeights(request: DeepPartial<MsgUpdateWeights>, metadata?: grpc.Metadata): Promise<MsgUpdateWeightsResponse> {
-    return this.rpc.unary(MsgUpdateWeightsDesc, MsgUpdateWeights.fromPartial(request), metadata);
+    return this.rpc.unary(MsgUpdateWeightsDesc, MsgUpdateWeights.fromPartial(request as any), metadata);
   }
   batchSwap(request: DeepPartial<MsgBatchSwap>, metadata?: grpc.Metadata): Promise<MsgBatchSwapResponse> {
-    return this.rpc.unary(MsgBatchSwapDesc, MsgBatchSwap.fromPartial(request), metadata);
+    return this.rpc.unary(MsgBatchSwapDesc, MsgBatchSwap.fromPartial(request as any), metadata);
   }
   setYammConfiguration(request: DeepPartial<MsgSetYammConfiguration>, metadata?: grpc.Metadata): Promise<MsgSetYammConfigurationResponse> {
-    return this.rpc.unary(MsgSetYammConfigurationDesc, MsgSetYammConfiguration.fromPartial(request), metadata);
+    return this.rpc.unary(MsgSetYammConfigurationDesc, MsgSetYammConfiguration.fromPartial(request as any), metadata);
   }
   whitelistRoute(request: DeepPartial<MsgWhitelistRoute>, metadata?: grpc.Metadata): Promise<MsgWhitelistRouteResponse> {
-    return this.rpc.unary(MsgWhitelistRouteDesc, MsgWhitelistRoute.fromPartial(request), metadata);
+    return this.rpc.unary(MsgWhitelistRouteDesc, MsgWhitelistRoute.fromPartial(request as any), metadata);
   }
   setWhitelistedRouteEnabled(request: DeepPartial<MsgSetWhitelistedRouteEnabled>, metadata?: grpc.Metadata): Promise<MsgSetWhitelistedRouteEnabledResponse> {
-    return this.rpc.unary(MsgSetWhitelistedRouteEnabledDesc, MsgSetWhitelistedRouteEnabled.fromPartial(request), metadata);
+    return this.rpc.unary(MsgSetWhitelistedRouteEnabledDesc, MsgSetWhitelistedRouteEnabled.fromPartial(request as any), metadata);
   }
   submitOrder(request: DeepPartial<MsgSubmitOrder>, metadata?: grpc.Metadata): Promise<MsgSubmitOrderResponse> {
-    return this.rpc.unary(MsgSubmitOrderDesc, MsgSubmitOrder.fromPartial(request), metadata);
+    return this.rpc.unary(MsgSubmitOrderDesc, MsgSubmitOrder.fromPartial(request as any), metadata);
   }
   cancelOrder(request: DeepPartial<MsgCancelOrder>, metadata?: grpc.Metadata): Promise<MsgCancelOrderResponse> {
-    return this.rpc.unary(MsgCancelOrderDesc, MsgCancelOrder.fromPartial(request), metadata);
+    return this.rpc.unary(MsgCancelOrderDesc, MsgCancelOrder.fromPartial(request as any), metadata);
   }
   proposeMatch(request: DeepPartial<MsgProposeMatch>, metadata?: grpc.Metadata): Promise<MsgProposeMatchResponse> {
-    return this.rpc.unary(MsgProposeMatchDesc, MsgProposeMatch.fromPartial(request), metadata);
+    return this.rpc.unary(MsgProposeMatchDesc, MsgProposeMatch.fromPartial(request as any), metadata);
   }
   setCircuitBreakers(request: DeepPartial<MsgSetCircuitBreakers>, metadata?: grpc.Metadata): Promise<MsgSetCircuitBreakersResponse> {
-    return this.rpc.unary(MsgSetCircuitBreakersDesc, MsgSetCircuitBreakers.fromPartial(request), metadata);
+    return this.rpc.unary(MsgSetCircuitBreakersDesc, MsgSetCircuitBreakers.fromPartial(request as any), metadata);
   }
   setRecoveryMode(request: DeepPartial<MsgSetRecoveryMode>, metadata?: grpc.Metadata): Promise<MsgSetRecoveryModeResponse> {
-    return this.rpc.unary(MsgSetRecoveryModeDesc, MsgSetRecoveryMode.fromPartial(request), metadata);
+    return this.rpc.unary(MsgSetRecoveryModeDesc, MsgSetRecoveryMode.fromPartial(request as any), metadata);
   }
   recoveryExit(request: DeepPartial<MsgRecoveryExit>, metadata?: grpc.Metadata): Promise<MsgRecoveryExitResponse> {
-    return this.rpc.unary(MsgRecoveryExitDesc, MsgRecoveryExit.fromPartial(request), metadata);
+    return this.rpc.unary(MsgRecoveryExitDesc, MsgRecoveryExit.fromPartial(request as any), metadata);
   }
   setPauseMode(request: DeepPartial<MsgSetPauseMode>, metadata?: grpc.Metadata): Promise<MsgSetPauseModeResponse> {
-    return this.rpc.unary(MsgSetPauseModeDesc, MsgSetPauseMode.fromPartial(request), metadata);
+    return this.rpc.unary(MsgSetPauseModeDesc, MsgSetPauseMode.fromPartial(request as any), metadata);
   }
   setVaultPauseMode(request: DeepPartial<MsgSetVaultPauseMode>, metadata?: grpc.Metadata): Promise<MsgSetVaultPauseModeResponse> {
-    return this.rpc.unary(MsgSetVaultPauseModeDesc, MsgSetVaultPauseMode.fromPartial(request), metadata);
+    return this.rpc.unary(MsgSetVaultPauseModeDesc, MsgSetVaultPauseMode.fromPartial(request as any), metadata);
   }
   createOraclePricePair(request: DeepPartial<MsgCreateOraclePricePair>, metadata?: grpc.Metadata): Promise<MsgCreateOraclePricePairResponse> {
-    return this.rpc.unary(MsgCreateOraclePricePairDesc, MsgCreateOraclePricePair.fromPartial(request), metadata);
+    return this.rpc.unary(MsgCreateOraclePricePairDesc, MsgCreateOraclePricePair.fromPartial(request as any), metadata);
   }
   updateOraclePricePair(request: DeepPartial<MsgUpdateOraclePricePair>, metadata?: grpc.Metadata): Promise<MsgUpdateOraclePricePairResponse> {
-    return this.rpc.unary(MsgUpdateOraclePricePairDesc, MsgUpdateOraclePricePair.fromPartial(request), metadata);
+    return this.rpc.unary(MsgUpdateOraclePricePairDesc, MsgUpdateOraclePricePair.fromPartial(request as any), metadata);
   }
   deleteOraclePricePair(request: DeepPartial<MsgDeleteOraclePricePair>, metadata?: grpc.Metadata): Promise<MsgDeleteOraclePricePairResponse> {
-    return this.rpc.unary(MsgDeleteOraclePricePairDesc, MsgDeleteOraclePricePair.fromPartial(request), metadata);
+    return this.rpc.unary(MsgDeleteOraclePricePairDesc, MsgDeleteOraclePricePair.fromPartial(request as any), metadata);
   }
   setSwapProtocolFee(request: DeepPartial<MsgSetSwapProtocolFee>, metadata?: grpc.Metadata): Promise<MsgSetSwapProtocolFeeResponse> {
-    return this.rpc.unary(MsgSetSwapProtocolFeeDesc, MsgSetSwapProtocolFee.fromPartial(request), metadata);
+    return this.rpc.unary(MsgSetSwapProtocolFeeDesc, MsgSetSwapProtocolFee.fromPartial(request as any), metadata);
   }
   setJoinExitProtocolFee(request: DeepPartial<MsgSetJoinExitProtocolFee>, metadata?: grpc.Metadata): Promise<MsgSetJoinExitProtocolFeeResponse> {
-    return this.rpc.unary(MsgSetJoinExitProtocolFeeDesc, MsgSetJoinExitProtocolFee.fromPartial(request), metadata);
+    return this.rpc.unary(MsgSetJoinExitProtocolFeeDesc, MsgSetJoinExitProtocolFee.fromPartial(request as any), metadata);
   }
   introduceYammLpToWeightedPool(request: DeepPartial<MsgIntroduceYammLpToWeightedPool>, metadata?: grpc.Metadata): Promise<MsgIntroduceYammLpToWeightedPoolResponse> {
-    return this.rpc.unary(MsgIntroduceYammLpToWeightedPoolDesc, MsgIntroduceYammLpToWeightedPool.fromPartial(request), metadata);
+    return this.rpc.unary(MsgIntroduceYammLpToWeightedPoolDesc, MsgIntroduceYammLpToWeightedPool.fromPartial(request as any), metadata);
   }
   introduceAssetBaseTokenToWeightedPool(request: DeepPartial<MsgIntroduceAssetBaseTokenToWeightedPool>, metadata?: grpc.Metadata): Promise<MsgIntroduceAssetBaseTokenToWeightedPoolResponse> {
-    return this.rpc.unary(MsgIntroduceAssetBaseTokenToWeightedPoolDesc, MsgIntroduceAssetBaseTokenToWeightedPool.fromPartial(request), metadata);
+    return this.rpc.unary(MsgIntroduceAssetBaseTokenToWeightedPoolDesc, MsgIntroduceAssetBaseTokenToWeightedPool.fromPartial(request as any), metadata);
   }
   cancelPendingTokenIntroduction(request: DeepPartial<MsgCancelPendingTokenIntroduction>, metadata?: grpc.Metadata): Promise<MsgCancelPendingTokenIntroductionResponse> {
-    return this.rpc.unary(MsgCancelPendingTokenIntroductionDesc, MsgCancelPendingTokenIntroduction.fromPartial(request), metadata);
+    return this.rpc.unary(MsgCancelPendingTokenIntroductionDesc, MsgCancelPendingTokenIntroduction.fromPartial(request as any), metadata);
   }
   removeTokenFromWeightedPool(request: DeepPartial<MsgRemoveTokenFromWeightedPool>, metadata?: grpc.Metadata): Promise<MsgRemoveTokenFromWeightedPoolResponse> {
-    return this.rpc.unary(MsgRemoveTokenFromWeightedPoolDesc, MsgRemoveTokenFromWeightedPool.fromPartial(request), metadata);
+    return this.rpc.unary(MsgRemoveTokenFromWeightedPoolDesc, MsgRemoveTokenFromWeightedPool.fromPartial(request as any), metadata);
   }
   updateParams(request: DeepPartial<MsgUpdateParams>, metadata?: grpc.Metadata): Promise<MsgUpdateParamsResponse> {
-    return this.rpc.unary(MsgUpdateParamsDesc, MsgUpdateParams.fromPartial(request), metadata);
+    return this.rpc.unary(MsgUpdateParamsDesc, MsgUpdateParams.fromPartial(request as any), metadata);
   }
   addMaturityToYamm(request: DeepPartial<MsgAddMaturityToYamm>, metadata?: grpc.Metadata): Promise<MsgAddMaturityToYammResponse> {
-    return this.rpc.unary(MsgAddMaturityToYammDesc, MsgAddMaturityToYamm.fromPartial(request), metadata);
+    return this.rpc.unary(MsgAddMaturityToYammDesc, MsgAddMaturityToYamm.fromPartial(request as any), metadata);
   }
   setInitializationAllowList(request: DeepPartial<MsgSetInitializationAllowList>, metadata?: grpc.Metadata): Promise<MsgSetInitializationAllowListResponse> {
-    return this.rpc.unary(MsgSetInitializationAllowListDesc, MsgSetInitializationAllowList.fromPartial(request), metadata);
+    return this.rpc.unary(MsgSetInitializationAllowListDesc, MsgSetInitializationAllowList.fromPartial(request as any), metadata);
   }
   setPoolAdmins(request: DeepPartial<MsgSetPoolAdmins>, metadata?: grpc.Metadata): Promise<MsgSetPoolAdminsResponse> {
-    return this.rpc.unary(MsgSetPoolAdminsDesc, MsgSetPoolAdmins.fromPartial(request), metadata);
+    return this.rpc.unary(MsgSetPoolAdminsDesc, MsgSetPoolAdmins.fromPartial(request as any), metadata);
   }
   setPauseAllowList(request: DeepPartial<MsgSetPauseAllowList>, metadata?: grpc.Metadata): Promise<MsgSetPauseAllowListResponse> {
-    return this.rpc.unary(MsgSetPauseAllowListDesc, MsgSetPauseAllowList.fromPartial(request), metadata);
+    return this.rpc.unary(MsgSetPauseAllowListDesc, MsgSetPauseAllowList.fromPartial(request as any), metadata);
   }
   setPauseWindow(request: DeepPartial<MsgSetPauseWindow>, metadata?: grpc.Metadata): Promise<MsgSetPauseWindowResponse> {
-    return this.rpc.unary(MsgSetPauseWindowDesc, MsgSetPauseWindow.fromPartial(request), metadata);
+    return this.rpc.unary(MsgSetPauseWindowDesc, MsgSetPauseWindow.fromPartial(request as any), metadata);
   }
 }
 export const MsgDesc = {

@@ -1,4 +1,4 @@
-import { PoolOperationType, PoolTradeHistory, PoolTradeHistorySDKType, poolOperationTypeFromJSON, poolOperationTypeToJSON } from "../../trade/pool_trade_history";
+import { PoolOperationType, PoolTradeHistory, PoolTradeHistoryAmino, PoolTradeHistorySDKType, poolOperationTypeFromJSON, poolOperationTypeToJSON } from "../../trade/pool_trade_history";
 import { BinaryReader, BinaryWriter } from "../../../binary";
 import { isSet } from "../../../helpers";
 export interface QueryPoolTradeHistoryRequest {
@@ -6,6 +6,20 @@ export interface QueryPoolTradeHistoryRequest {
   firstToken: string;
   secondToken: string;
   operationType: PoolOperationType;
+}
+export interface QueryPoolTradeHistoryRequestProtoMsg {
+  typeUrl: "/pryzmatics.server.trade.QueryPoolTradeHistoryRequest";
+  value: Uint8Array;
+}
+export interface QueryPoolTradeHistoryRequestAmino {
+  pool_id?: string;
+  first_token?: string;
+  second_token?: string;
+  operation_type?: PoolOperationType;
+}
+export interface QueryPoolTradeHistoryRequestAminoMsg {
+  type: "/pryzmatics.server.trade.QueryPoolTradeHistoryRequest";
+  value: QueryPoolTradeHistoryRequestAmino;
 }
 export interface QueryPoolTradeHistoryRequestSDKType {
   pool_id?: string;
@@ -15,6 +29,17 @@ export interface QueryPoolTradeHistoryRequestSDKType {
 }
 export interface QueryPoolTradeHistoryResponse {
   poolTradeHistoryRecords: PoolTradeHistory[];
+}
+export interface QueryPoolTradeHistoryResponseProtoMsg {
+  typeUrl: "/pryzmatics.server.trade.QueryPoolTradeHistoryResponse";
+  value: Uint8Array;
+}
+export interface QueryPoolTradeHistoryResponseAmino {
+  pool_trade_history_records?: PoolTradeHistoryAmino[];
+}
+export interface QueryPoolTradeHistoryResponseAminoMsg {
+  type: "/pryzmatics.server.trade.QueryPoolTradeHistoryResponse";
+  value: QueryPoolTradeHistoryResponseAmino;
 }
 export interface QueryPoolTradeHistoryResponseSDKType {
   pool_trade_history_records: PoolTradeHistorySDKType[];
@@ -28,6 +53,7 @@ function createBaseQueryPoolTradeHistoryRequest(): QueryPoolTradeHistoryRequest 
   };
 }
 export const QueryPoolTradeHistoryRequest = {
+  typeUrl: "/pryzmatics.server.trade.QueryPoolTradeHistoryRequest",
   encode(message: QueryPoolTradeHistoryRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.poolId !== undefined) {
       writer.uint32(10).string(message.poolId);
@@ -92,6 +118,45 @@ export const QueryPoolTradeHistoryRequest = {
     message.secondToken = object.secondToken ?? "";
     message.operationType = object.operationType ?? 0;
     return message;
+  },
+  fromAmino(object: QueryPoolTradeHistoryRequestAmino): QueryPoolTradeHistoryRequest {
+    const message = createBaseQueryPoolTradeHistoryRequest();
+    if (object.pool_id !== undefined && object.pool_id !== null) {
+      message.poolId = object.pool_id;
+    }
+    if (object.first_token !== undefined && object.first_token !== null) {
+      message.firstToken = object.first_token;
+    }
+    if (object.second_token !== undefined && object.second_token !== null) {
+      message.secondToken = object.second_token;
+    }
+    if (object.operation_type !== undefined && object.operation_type !== null) {
+      message.operationType = poolOperationTypeFromJSON(object.operation_type);
+    }
+    return message;
+  },
+  toAmino(message: QueryPoolTradeHistoryRequest): QueryPoolTradeHistoryRequestAmino {
+    const obj: any = {};
+    obj.pool_id = message.poolId;
+    obj.first_token = message.firstToken;
+    obj.second_token = message.secondToken;
+    obj.operation_type = poolOperationTypeToJSON(message.operationType);
+    return obj;
+  },
+  fromAminoMsg(object: QueryPoolTradeHistoryRequestAminoMsg): QueryPoolTradeHistoryRequest {
+    return QueryPoolTradeHistoryRequest.fromAmino(object.value);
+  },
+  fromProtoMsg(message: QueryPoolTradeHistoryRequestProtoMsg): QueryPoolTradeHistoryRequest {
+    return QueryPoolTradeHistoryRequest.decode(message.value);
+  },
+  toProto(message: QueryPoolTradeHistoryRequest): Uint8Array {
+    return QueryPoolTradeHistoryRequest.encode(message).finish();
+  },
+  toProtoMsg(message: QueryPoolTradeHistoryRequest): QueryPoolTradeHistoryRequestProtoMsg {
+    return {
+      typeUrl: "/pryzmatics.server.trade.QueryPoolTradeHistoryRequest",
+      value: QueryPoolTradeHistoryRequest.encode(message).finish()
+    };
   }
 };
 function createBaseQueryPoolTradeHistoryResponse(): QueryPoolTradeHistoryResponse {
@@ -100,6 +165,7 @@ function createBaseQueryPoolTradeHistoryResponse(): QueryPoolTradeHistoryRespons
   };
 }
 export const QueryPoolTradeHistoryResponse = {
+  typeUrl: "/pryzmatics.server.trade.QueryPoolTradeHistoryResponse",
   encode(message: QueryPoolTradeHistoryResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     for (const v of message.poolTradeHistoryRecords) {
       PoolTradeHistory.encode(v!, writer.uint32(10).fork()).ldelim();
@@ -141,5 +207,34 @@ export const QueryPoolTradeHistoryResponse = {
     const message = createBaseQueryPoolTradeHistoryResponse();
     message.poolTradeHistoryRecords = object.poolTradeHistoryRecords?.map(e => PoolTradeHistory.fromPartial(e)) || [];
     return message;
+  },
+  fromAmino(object: QueryPoolTradeHistoryResponseAmino): QueryPoolTradeHistoryResponse {
+    const message = createBaseQueryPoolTradeHistoryResponse();
+    message.poolTradeHistoryRecords = object.pool_trade_history_records?.map(e => PoolTradeHistory.fromAmino(e)) || [];
+    return message;
+  },
+  toAmino(message: QueryPoolTradeHistoryResponse): QueryPoolTradeHistoryResponseAmino {
+    const obj: any = {};
+    if (message.poolTradeHistoryRecords) {
+      obj.pool_trade_history_records = message.poolTradeHistoryRecords.map(e => e ? PoolTradeHistory.toAmino(e) : undefined);
+    } else {
+      obj.pool_trade_history_records = [];
+    }
+    return obj;
+  },
+  fromAminoMsg(object: QueryPoolTradeHistoryResponseAminoMsg): QueryPoolTradeHistoryResponse {
+    return QueryPoolTradeHistoryResponse.fromAmino(object.value);
+  },
+  fromProtoMsg(message: QueryPoolTradeHistoryResponseProtoMsg): QueryPoolTradeHistoryResponse {
+    return QueryPoolTradeHistoryResponse.decode(message.value);
+  },
+  toProto(message: QueryPoolTradeHistoryResponse): Uint8Array {
+    return QueryPoolTradeHistoryResponse.encode(message).finish();
+  },
+  toProtoMsg(message: QueryPoolTradeHistoryResponse): QueryPoolTradeHistoryResponseProtoMsg {
+    return {
+      typeUrl: "/pryzmatics.server.trade.QueryPoolTradeHistoryResponse",
+      value: QueryPoolTradeHistoryResponse.encode(message).finish()
+    };
   }
 };

@@ -1,4 +1,3 @@
-//@ts-nocheck
 import { grpc } from "@improbable-eng/grpc-web";
 import { UnaryMethodDefinitionish } from "../../../grpc-web";
 import { DeepPartial } from "../../../helpers";
@@ -31,32 +30,32 @@ export class QueryClientImpl implements Query {
     this.assetMaturityPoolStateAll = this.assetMaturityPoolStateAll.bind(this);
   }
   bondedAmount(request: DeepPartial<QueryBondedAmountRequest>, metadata?: grpc.Metadata): Promise<QueryBondedAmountResponse> {
-    return this.rpc.unary(QueryBondedAmountDesc, QueryBondedAmountRequest.fromPartial(request), metadata);
+    return this.rpc.unary(QueryBondedAmountDesc, QueryBondedAmountRequest.fromPartial(request as any), metadata);
   }
   reward(request: DeepPartial<QueryRewardRequest>, metadata?: grpc.Metadata): Promise<QueryRewardResponse> {
-    return this.rpc.unary(QueryRewardDesc, QueryRewardRequest.fromPartial(request), metadata);
+    return this.rpc.unary(QueryRewardDesc, QueryRewardRequest.fromPartial(request as any), metadata);
   }
   userStakeState(request: DeepPartial<QueryGetUserStakeStateRequest>, metadata?: grpc.Metadata): Promise<QueryGetUserStakeStateResponse> {
-    return this.rpc.unary(QueryUserStakeStateDesc, QueryGetUserStakeStateRequest.fromPartial(request), metadata);
+    return this.rpc.unary(QueryUserStakeStateDesc, QueryGetUserStakeStateRequest.fromPartial(request as any), metadata);
   }
   userStakeStateAll(request: DeepPartial<QueryAllUserStakeStateRequest>, metadata?: grpc.Metadata): Promise<QueryAllUserStakeStateResponse> {
-    return this.rpc.unary(QueryUserStakeStateAllDesc, QueryAllUserStakeStateRequest.fromPartial(request), metadata);
+    return this.rpc.unary(QueryUserStakeStateAllDesc, QueryAllUserStakeStateRequest.fromPartial(request as any), metadata);
   }
   assetPoolState(request: DeepPartial<QueryGetAssetPoolStateRequest>, metadata?: grpc.Metadata): Promise<QueryGetAssetPoolStateResponse> {
-    return this.rpc.unary(QueryAssetPoolStateDesc, QueryGetAssetPoolStateRequest.fromPartial(request), metadata);
+    return this.rpc.unary(QueryAssetPoolStateDesc, QueryGetAssetPoolStateRequest.fromPartial(request as any), metadata);
   }
   assetPoolStateAll(request: DeepPartial<QueryAllAssetPoolStateRequest> = {
     pagination: undefined
   }, metadata?: grpc.Metadata): Promise<QueryAllAssetPoolStateResponse> {
-    return this.rpc.unary(QueryAssetPoolStateAllDesc, QueryAllAssetPoolStateRequest.fromPartial(request), metadata);
+    return this.rpc.unary(QueryAssetPoolStateAllDesc, QueryAllAssetPoolStateRequest.fromPartial(request as any), metadata);
   }
   assetMaturityPoolState(request: DeepPartial<QueryGetAssetMaturityPoolStateRequest>, metadata?: grpc.Metadata): Promise<QueryGetAssetMaturityPoolStateResponse> {
-    return this.rpc.unary(QueryAssetMaturityPoolStateDesc, QueryGetAssetMaturityPoolStateRequest.fromPartial(request), metadata);
+    return this.rpc.unary(QueryAssetMaturityPoolStateDesc, QueryGetAssetMaturityPoolStateRequest.fromPartial(request as any), metadata);
   }
   assetMaturityPoolStateAll(request: DeepPartial<QueryAllAssetMaturityPoolStateRequest> = {
     pagination: undefined
   }, metadata?: grpc.Metadata): Promise<QueryAllAssetMaturityPoolStateResponse> {
-    return this.rpc.unary(QueryAssetMaturityPoolStateAllDesc, QueryAllAssetMaturityPoolStateRequest.fromPartial(request), metadata);
+    return this.rpc.unary(QueryAssetMaturityPoolStateAllDesc, QueryAllAssetMaturityPoolStateRequest.fromPartial(request as any), metadata);
   }
 }
 export const QueryDesc = {

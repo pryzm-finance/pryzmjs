@@ -9,6 +9,22 @@ export interface UserStakeState {
   userIndex: string;
   pendingReward: string;
 }
+export interface UserStakeStateProtoMsg {
+  typeUrl: "/pryzm.ystaking.v1.UserStakeState";
+  value: Uint8Array;
+}
+export interface UserStakeStateAmino {
+  address?: string;
+  asset_id?: string;
+  maturity_symbol?: string;
+  bonded_amount?: string;
+  user_index?: string;
+  pending_reward?: string;
+}
+export interface UserStakeStateAminoMsg {
+  type: "/pryzm.ystaking.v1.UserStakeState";
+  value: UserStakeStateAmino;
+}
 export interface UserStakeStateSDKType {
   address: string;
   asset_id: string;
@@ -28,6 +44,7 @@ function createBaseUserStakeState(): UserStakeState {
   };
 }
 export const UserStakeState = {
+  typeUrl: "/pryzm.ystaking.v1.UserStakeState",
   encode(message: UserStakeState, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.address !== "") {
       writer.uint32(10).string(message.address);
@@ -110,5 +127,52 @@ export const UserStakeState = {
     message.userIndex = object.userIndex ?? "";
     message.pendingReward = object.pendingReward ?? "";
     return message;
+  },
+  fromAmino(object: UserStakeStateAmino): UserStakeState {
+    const message = createBaseUserStakeState();
+    if (object.address !== undefined && object.address !== null) {
+      message.address = object.address;
+    }
+    if (object.asset_id !== undefined && object.asset_id !== null) {
+      message.assetId = object.asset_id;
+    }
+    if (object.maturity_symbol !== undefined && object.maturity_symbol !== null) {
+      message.maturitySymbol = object.maturity_symbol;
+    }
+    if (object.bonded_amount !== undefined && object.bonded_amount !== null) {
+      message.bondedAmount = object.bonded_amount;
+    }
+    if (object.user_index !== undefined && object.user_index !== null) {
+      message.userIndex = object.user_index;
+    }
+    if (object.pending_reward !== undefined && object.pending_reward !== null) {
+      message.pendingReward = object.pending_reward;
+    }
+    return message;
+  },
+  toAmino(message: UserStakeState): UserStakeStateAmino {
+    const obj: any = {};
+    obj.address = message.address;
+    obj.asset_id = message.assetId;
+    obj.maturity_symbol = message.maturitySymbol;
+    obj.bonded_amount = message.bondedAmount;
+    obj.user_index = message.userIndex;
+    obj.pending_reward = message.pendingReward;
+    return obj;
+  },
+  fromAminoMsg(object: UserStakeStateAminoMsg): UserStakeState {
+    return UserStakeState.fromAmino(object.value);
+  },
+  fromProtoMsg(message: UserStakeStateProtoMsg): UserStakeState {
+    return UserStakeState.decode(message.value);
+  },
+  toProto(message: UserStakeState): Uint8Array {
+    return UserStakeState.encode(message).finish();
+  },
+  toProtoMsg(message: UserStakeState): UserStakeStateProtoMsg {
+    return {
+      typeUrl: "/pryzm.ystaking.v1.UserStakeState",
+      value: UserStakeState.encode(message).finish()
+    };
   }
 };

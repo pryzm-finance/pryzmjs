@@ -1,4 +1,3 @@
-//@ts-nocheck
 import { grpc } from "@improbable-eng/grpc-web";
 import { UnaryMethodDefinitionish } from "../../../grpc-web";
 import { DeepPartial } from "../../../helpers";
@@ -28,19 +27,19 @@ export class QueryClientImpl implements Query {
     this.maturityLevelAll = this.maturityLevelAll.bind(this);
   }
   params(request: DeepPartial<QueryParamsRequest> = {}, metadata?: grpc.Metadata): Promise<QueryParamsResponse> {
-    return this.rpc.unary(QueryParamsDesc, QueryParamsRequest.fromPartial(request), metadata);
+    return this.rpc.unary(QueryParamsDesc, QueryParamsRequest.fromPartial(request as any), metadata);
   }
   refractableAsset(request: DeepPartial<QueryGetRefractableAssetRequest>, metadata?: grpc.Metadata): Promise<QueryGetRefractableAssetResponse> {
-    return this.rpc.unary(QueryRefractableAssetDesc, QueryGetRefractableAssetRequest.fromPartial(request), metadata);
+    return this.rpc.unary(QueryRefractableAssetDesc, QueryGetRefractableAssetRequest.fromPartial(request as any), metadata);
   }
   refractableAssetAll(request: DeepPartial<QueryAllRefractableAssetRequest>, metadata?: grpc.Metadata): Promise<QueryAllRefractableAssetResponse> {
-    return this.rpc.unary(QueryRefractableAssetAllDesc, QueryAllRefractableAssetRequest.fromPartial(request), metadata);
+    return this.rpc.unary(QueryRefractableAssetAllDesc, QueryAllRefractableAssetRequest.fromPartial(request as any), metadata);
   }
   maturityLevel(request: DeepPartial<QueryGetMaturityLevelRequest>, metadata?: grpc.Metadata): Promise<QueryGetMaturityLevelResponse> {
-    return this.rpc.unary(QueryMaturityLevelDesc, QueryGetMaturityLevelRequest.fromPartial(request), metadata);
+    return this.rpc.unary(QueryMaturityLevelDesc, QueryGetMaturityLevelRequest.fromPartial(request as any), metadata);
   }
   maturityLevelAll(request: DeepPartial<QueryAllMaturityLevelRequest>, metadata?: grpc.Metadata): Promise<QueryAllMaturityLevelResponse> {
-    return this.rpc.unary(QueryMaturityLevelAllDesc, QueryAllMaturityLevelRequest.fromPartial(request), metadata);
+    return this.rpc.unary(QueryMaturityLevelAllDesc, QueryAllMaturityLevelRequest.fromPartial(request as any), metadata);
   }
 }
 export const QueryDesc = {

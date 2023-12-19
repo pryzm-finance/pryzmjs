@@ -1,28 +1,50 @@
-import { Pool, PoolSDKType } from "./pool";
-import { PoolToken, PoolTokenSDKType } from "./pool_token";
-import { WeightedToken, WeightedTokenSDKType } from "./weighted_token";
-import { WeightUpdateTiming, WeightUpdateTimingSDKType } from "./weight_update_timing";
-import { WhitelistedRoute, WhitelistedRouteSDKType } from "./whitelisted_route";
-import { YammConfiguration, YammConfigurationSDKType } from "./yamm_configuration";
-import { Order, OrderSDKType } from "./order";
-import { Coin, CoinSDKType } from "../../../cosmos/base/v1beta1/coin";
-import { ScheduleOrder, ScheduleOrderSDKType } from "./schedule_order";
-import { VirtualBalancePoolToken, VirtualBalancePoolTokenSDKType } from "./virtual_balance_pool_token";
-import { ExitSummary, ExitSummarySDKType, JoinSummary, JoinSummarySDKType, SwapSummary, SwapSummarySDKType, ExitType, JoinType, SwapType, SwapStep, SwapStepSDKType, exitTypeFromJSON, exitTypeToJSON, joinTypeFromJSON, joinTypeToJSON, swapTypeFromJSON, swapTypeToJSON } from "./operations";
-import { OraclePricePair, OraclePricePairSDKType } from "./oracle_price_pair";
-import { PendingTokenIntroduction, PendingTokenIntroductionSDKType } from "./pending_token_introduction";
-import { Params, ParamsSDKType } from "./params";
+import { Pool, PoolAmino, PoolSDKType } from "./pool";
+import { PoolToken, PoolTokenAmino, PoolTokenSDKType } from "./pool_token";
+import { WeightedToken, WeightedTokenAmino, WeightedTokenSDKType } from "./weighted_token";
+import { WeightUpdateTiming, WeightUpdateTimingAmino, WeightUpdateTimingSDKType } from "./weight_update_timing";
+import { WhitelistedRoute, WhitelistedRouteAmino, WhitelistedRouteSDKType } from "./whitelisted_route";
+import { YammConfiguration, YammConfigurationAmino, YammConfigurationSDKType } from "./yamm_configuration";
+import { Order, OrderAmino, OrderSDKType } from "./order";
+import { Coin, CoinAmino, CoinSDKType } from "../../../cosmos/base/v1beta1/coin";
+import { ScheduleOrder, ScheduleOrderAmino, ScheduleOrderSDKType } from "./schedule_order";
+import { VirtualBalancePoolToken, VirtualBalancePoolTokenAmino, VirtualBalancePoolTokenSDKType } from "./virtual_balance_pool_token";
+import { ExitSummary, ExitSummaryAmino, ExitSummarySDKType, JoinSummary, JoinSummaryAmino, JoinSummarySDKType, SwapSummary, SwapSummaryAmino, SwapSummarySDKType, ExitType, JoinType, SwapType, SwapStep, SwapStepAmino, SwapStepSDKType, exitTypeFromJSON, exitTypeToJSON, joinTypeFromJSON, joinTypeToJSON, swapTypeFromJSON, swapTypeToJSON } from "./operations";
+import { OraclePricePair, OraclePricePairAmino, OraclePricePairSDKType } from "./oracle_price_pair";
+import { PendingTokenIntroduction, PendingTokenIntroductionAmino, PendingTokenIntroductionSDKType } from "./pending_token_introduction";
+import { Params, ParamsAmino, ParamsSDKType } from "./params";
 import { BinaryReader, BinaryWriter } from "../../../binary";
 import { isSet } from "../../../helpers";
 import { Decimal } from "@cosmjs/math";
 export interface EventSetPool {
   pool: Pool;
 }
+export interface EventSetPoolProtoMsg {
+  typeUrl: "/pryzm.amm.v1.EventSetPool";
+  value: Uint8Array;
+}
+export interface EventSetPoolAmino {
+  pool?: PoolAmino;
+}
+export interface EventSetPoolAminoMsg {
+  type: "/pryzm.amm.v1.EventSetPool";
+  value: EventSetPoolAmino;
+}
 export interface EventSetPoolSDKType {
   pool: PoolSDKType;
 }
 export interface EventSetPoolCount {
   poolCount: bigint;
+}
+export interface EventSetPoolCountProtoMsg {
+  typeUrl: "/pryzm.amm.v1.EventSetPoolCount";
+  value: Uint8Array;
+}
+export interface EventSetPoolCountAmino {
+  pool_count?: string;
+}
+export interface EventSetPoolCountAminoMsg {
+  type: "/pryzm.amm.v1.EventSetPoolCount";
+  value: EventSetPoolCountAmino;
 }
 export interface EventSetPoolCountSDKType {
   pool_count: bigint;
@@ -31,12 +53,35 @@ export interface EventSetLpTokenSupply {
   poolId: bigint;
   supply: string;
 }
+export interface EventSetLpTokenSupplyProtoMsg {
+  typeUrl: "/pryzm.amm.v1.EventSetLpTokenSupply";
+  value: Uint8Array;
+}
+export interface EventSetLpTokenSupplyAmino {
+  pool_id?: string;
+  supply?: string;
+}
+export interface EventSetLpTokenSupplyAminoMsg {
+  type: "/pryzm.amm.v1.EventSetLpTokenSupply";
+  value: EventSetLpTokenSupplyAmino;
+}
 export interface EventSetLpTokenSupplySDKType {
   pool_id: bigint;
   supply: string;
 }
 export interface EventSetPoolToken {
   poolToken: PoolToken;
+}
+export interface EventSetPoolTokenProtoMsg {
+  typeUrl: "/pryzm.amm.v1.EventSetPoolToken";
+  value: Uint8Array;
+}
+export interface EventSetPoolTokenAmino {
+  pool_token?: PoolTokenAmino;
+}
+export interface EventSetPoolTokenAminoMsg {
+  type: "/pryzm.amm.v1.EventSetPoolToken";
+  value: EventSetPoolTokenAmino;
 }
 export interface EventSetPoolTokenSDKType {
   pool_token: PoolTokenSDKType;
@@ -45,12 +90,35 @@ export interface EventRemovePoolToken {
   poolId: bigint;
   denom: string;
 }
+export interface EventRemovePoolTokenProtoMsg {
+  typeUrl: "/pryzm.amm.v1.EventRemovePoolToken";
+  value: Uint8Array;
+}
+export interface EventRemovePoolTokenAmino {
+  pool_id?: string;
+  denom?: string;
+}
+export interface EventRemovePoolTokenAminoMsg {
+  type: "/pryzm.amm.v1.EventRemovePoolToken";
+  value: EventRemovePoolTokenAmino;
+}
 export interface EventRemovePoolTokenSDKType {
   pool_id: bigint;
   denom: string;
 }
 export interface EventSetWeightedToken {
   weightedToken: WeightedToken;
+}
+export interface EventSetWeightedTokenProtoMsg {
+  typeUrl: "/pryzm.amm.v1.EventSetWeightedToken";
+  value: Uint8Array;
+}
+export interface EventSetWeightedTokenAmino {
+  weighted_token?: WeightedTokenAmino;
+}
+export interface EventSetWeightedTokenAminoMsg {
+  type: "/pryzm.amm.v1.EventSetWeightedToken";
+  value: EventSetWeightedTokenAmino;
 }
 export interface EventSetWeightedTokenSDKType {
   weighted_token: WeightedTokenSDKType;
@@ -59,6 +127,18 @@ export interface EventRemoveWeightedToken {
   poolId: bigint;
   denom: string;
 }
+export interface EventRemoveWeightedTokenProtoMsg {
+  typeUrl: "/pryzm.amm.v1.EventRemoveWeightedToken";
+  value: Uint8Array;
+}
+export interface EventRemoveWeightedTokenAmino {
+  pool_id?: string;
+  denom?: string;
+}
+export interface EventRemoveWeightedTokenAminoMsg {
+  type: "/pryzm.amm.v1.EventRemoveWeightedToken";
+  value: EventRemoveWeightedTokenAmino;
+}
 export interface EventRemoveWeightedTokenSDKType {
   pool_id: bigint;
   denom: string;
@@ -66,11 +146,33 @@ export interface EventRemoveWeightedTokenSDKType {
 export interface EventSetWeightUpdateTiming {
   weightUpdateTiming: WeightUpdateTiming;
 }
+export interface EventSetWeightUpdateTimingProtoMsg {
+  typeUrl: "/pryzm.amm.v1.EventSetWeightUpdateTiming";
+  value: Uint8Array;
+}
+export interface EventSetWeightUpdateTimingAmino {
+  weight_update_timing?: WeightUpdateTimingAmino;
+}
+export interface EventSetWeightUpdateTimingAminoMsg {
+  type: "/pryzm.amm.v1.EventSetWeightUpdateTiming";
+  value: EventSetWeightUpdateTimingAmino;
+}
 export interface EventSetWeightUpdateTimingSDKType {
   weight_update_timing: WeightUpdateTimingSDKType;
 }
 export interface EventSetWhitelistedRoute {
   whitelistedRoute: WhitelistedRoute;
+}
+export interface EventSetWhitelistedRouteProtoMsg {
+  typeUrl: "/pryzm.amm.v1.EventSetWhitelistedRoute";
+  value: Uint8Array;
+}
+export interface EventSetWhitelistedRouteAmino {
+  whitelisted_route?: WhitelistedRouteAmino;
+}
+export interface EventSetWhitelistedRouteAminoMsg {
+  type: "/pryzm.amm.v1.EventSetWhitelistedRoute";
+  value: EventSetWhitelistedRouteAmino;
 }
 export interface EventSetWhitelistedRouteSDKType {
   whitelisted_route: WhitelistedRouteSDKType;
@@ -78,11 +180,33 @@ export interface EventSetWhitelistedRouteSDKType {
 export interface EventSetYammConfiguration {
   yammConfiguration: YammConfiguration;
 }
+export interface EventSetYammConfigurationProtoMsg {
+  typeUrl: "/pryzm.amm.v1.EventSetYammConfiguration";
+  value: Uint8Array;
+}
+export interface EventSetYammConfigurationAmino {
+  yamm_configuration?: YammConfigurationAmino;
+}
+export interface EventSetYammConfigurationAminoMsg {
+  type: "/pryzm.amm.v1.EventSetYammConfiguration";
+  value: EventSetYammConfigurationAmino;
+}
 export interface EventSetYammConfigurationSDKType {
   yamm_configuration: YammConfigurationSDKType;
 }
 export interface EventSetOrder {
   order: Order;
+}
+export interface EventSetOrderProtoMsg {
+  typeUrl: "/pryzm.amm.v1.EventSetOrder";
+  value: Uint8Array;
+}
+export interface EventSetOrderAmino {
+  order?: OrderAmino;
+}
+export interface EventSetOrderAminoMsg {
+  type: "/pryzm.amm.v1.EventSetOrder";
+  value: EventSetOrderAmino;
 }
 export interface EventSetOrderSDKType {
   order: OrderSDKType;
@@ -90,11 +214,33 @@ export interface EventSetOrderSDKType {
 export interface EventSetOrderCount {
   orderCount: bigint;
 }
+export interface EventSetOrderCountProtoMsg {
+  typeUrl: "/pryzm.amm.v1.EventSetOrderCount";
+  value: Uint8Array;
+}
+export interface EventSetOrderCountAmino {
+  order_count?: string;
+}
+export interface EventSetOrderCountAminoMsg {
+  type: "/pryzm.amm.v1.EventSetOrderCount";
+  value: EventSetOrderCountAmino;
+}
 export interface EventSetOrderCountSDKType {
   order_count: bigint;
 }
 export interface EventRemoveOrder {
   id: bigint;
+}
+export interface EventRemoveOrderProtoMsg {
+  typeUrl: "/pryzm.amm.v1.EventRemoveOrder";
+  value: Uint8Array;
+}
+export interface EventRemoveOrderAmino {
+  id?: string;
+}
+export interface EventRemoveOrderAminoMsg {
+  type: "/pryzm.amm.v1.EventRemoveOrder";
+  value: EventRemoveOrderAmino;
 }
 export interface EventRemoveOrderSDKType {
   id: bigint;
@@ -103,12 +249,35 @@ export interface EventCancelOrder {
   id: bigint;
   withdrawnAmount: Coin;
 }
+export interface EventCancelOrderProtoMsg {
+  typeUrl: "/pryzm.amm.v1.EventCancelOrder";
+  value: Uint8Array;
+}
+export interface EventCancelOrderAmino {
+  id?: string;
+  withdrawn_amount?: CoinAmino;
+}
+export interface EventCancelOrderAminoMsg {
+  type: "/pryzm.amm.v1.EventCancelOrder";
+  value: EventCancelOrderAmino;
+}
 export interface EventCancelOrderSDKType {
   id: bigint;
   withdrawn_amount: CoinSDKType;
 }
 export interface EventSetScheduleOrder {
   scheduleOrder: ScheduleOrder;
+}
+export interface EventSetScheduleOrderProtoMsg {
+  typeUrl: "/pryzm.amm.v1.EventSetScheduleOrder";
+  value: Uint8Array;
+}
+export interface EventSetScheduleOrderAmino {
+  schedule_order?: ScheduleOrderAmino;
+}
+export interface EventSetScheduleOrderAminoMsg {
+  type: "/pryzm.amm.v1.EventSetScheduleOrder";
+  value: EventSetScheduleOrderAmino;
 }
 export interface EventSetScheduleOrderSDKType {
   schedule_order: ScheduleOrderSDKType;
@@ -117,6 +286,18 @@ export interface EventRemoveScheduleOrder {
   orderId: bigint;
   timeMillis: bigint;
 }
+export interface EventRemoveScheduleOrderProtoMsg {
+  typeUrl: "/pryzm.amm.v1.EventRemoveScheduleOrder";
+  value: Uint8Array;
+}
+export interface EventRemoveScheduleOrderAmino {
+  order_id?: string;
+  time_millis?: string;
+}
+export interface EventRemoveScheduleOrderAminoMsg {
+  type: "/pryzm.amm.v1.EventRemoveScheduleOrder";
+  value: EventRemoveScheduleOrderAmino;
+}
 export interface EventRemoveScheduleOrderSDKType {
   order_id: bigint;
   time_millis: bigint;
@@ -124,17 +305,50 @@ export interface EventRemoveScheduleOrderSDKType {
 export interface EventSetExecutableOrder {
   orderId: bigint;
 }
+export interface EventSetExecutableOrderProtoMsg {
+  typeUrl: "/pryzm.amm.v1.EventSetExecutableOrder";
+  value: Uint8Array;
+}
+export interface EventSetExecutableOrderAmino {
+  order_id?: string;
+}
+export interface EventSetExecutableOrderAminoMsg {
+  type: "/pryzm.amm.v1.EventSetExecutableOrder";
+  value: EventSetExecutableOrderAmino;
+}
 export interface EventSetExecutableOrderSDKType {
   order_id: bigint;
 }
 export interface EventRemoveExecutableOrder {
   orderId: bigint;
 }
+export interface EventRemoveExecutableOrderProtoMsg {
+  typeUrl: "/pryzm.amm.v1.EventRemoveExecutableOrder";
+  value: Uint8Array;
+}
+export interface EventRemoveExecutableOrderAmino {
+  order_id?: string;
+}
+export interface EventRemoveExecutableOrderAminoMsg {
+  type: "/pryzm.amm.v1.EventRemoveExecutableOrder";
+  value: EventRemoveExecutableOrderAmino;
+}
 export interface EventRemoveExecutableOrderSDKType {
   order_id: bigint;
 }
 export interface EventSetIntroducingPoolToken {
   virtualBalanceToken: VirtualBalancePoolToken;
+}
+export interface EventSetIntroducingPoolTokenProtoMsg {
+  typeUrl: "/pryzm.amm.v1.EventSetIntroducingPoolToken";
+  value: Uint8Array;
+}
+export interface EventSetIntroducingPoolTokenAmino {
+  virtual_balance_token?: VirtualBalancePoolTokenAmino;
+}
+export interface EventSetIntroducingPoolTokenAminoMsg {
+  type: "/pryzm.amm.v1.EventSetIntroducingPoolToken";
+  value: EventSetIntroducingPoolTokenAmino;
 }
 export interface EventSetIntroducingPoolTokenSDKType {
   virtual_balance_token: VirtualBalancePoolTokenSDKType;
@@ -143,6 +357,18 @@ export interface EventRemoveIntroducingPoolToken {
   poolId: bigint;
   denom: string;
 }
+export interface EventRemoveIntroducingPoolTokenProtoMsg {
+  typeUrl: "/pryzm.amm.v1.EventRemoveIntroducingPoolToken";
+  value: Uint8Array;
+}
+export interface EventRemoveIntroducingPoolTokenAmino {
+  pool_id?: string;
+  denom?: string;
+}
+export interface EventRemoveIntroducingPoolTokenAminoMsg {
+  type: "/pryzm.amm.v1.EventRemoveIntroducingPoolToken";
+  value: EventRemoveIntroducingPoolTokenAmino;
+}
 export interface EventRemoveIntroducingPoolTokenSDKType {
   pool_id: bigint;
   denom: string;
@@ -150,12 +376,35 @@ export interface EventRemoveIntroducingPoolTokenSDKType {
 export interface EventSetExpiringPoolToken {
   virtualBalanceToken: VirtualBalancePoolToken;
 }
+export interface EventSetExpiringPoolTokenProtoMsg {
+  typeUrl: "/pryzm.amm.v1.EventSetExpiringPoolToken";
+  value: Uint8Array;
+}
+export interface EventSetExpiringPoolTokenAmino {
+  virtual_balance_token?: VirtualBalancePoolTokenAmino;
+}
+export interface EventSetExpiringPoolTokenAminoMsg {
+  type: "/pryzm.amm.v1.EventSetExpiringPoolToken";
+  value: EventSetExpiringPoolTokenAmino;
+}
 export interface EventSetExpiringPoolTokenSDKType {
   virtual_balance_token: VirtualBalancePoolTokenSDKType;
 }
 export interface EventRemoveExpiringPoolToken {
   poolId: bigint;
   denom: string;
+}
+export interface EventRemoveExpiringPoolTokenProtoMsg {
+  typeUrl: "/pryzm.amm.v1.EventRemoveExpiringPoolToken";
+  value: Uint8Array;
+}
+export interface EventRemoveExpiringPoolTokenAmino {
+  pool_id?: string;
+  denom?: string;
+}
+export interface EventRemoveExpiringPoolTokenAminoMsg {
+  type: "/pryzm.amm.v1.EventRemoveExpiringPoolToken";
+  value: EventRemoveExpiringPoolTokenAmino;
 }
 export interface EventRemoveExpiringPoolTokenSDKType {
   pool_id: bigint;
@@ -165,12 +414,35 @@ export interface EventSetYammPoolForAssetId {
   poolId: bigint;
   assetId: string;
 }
+export interface EventSetYammPoolForAssetIdProtoMsg {
+  typeUrl: "/pryzm.amm.v1.EventSetYammPoolForAssetId";
+  value: Uint8Array;
+}
+export interface EventSetYammPoolForAssetIdAmino {
+  pool_id?: string;
+  asset_id?: string;
+}
+export interface EventSetYammPoolForAssetIdAminoMsg {
+  type: "/pryzm.amm.v1.EventSetYammPoolForAssetId";
+  value: EventSetYammPoolForAssetIdAmino;
+}
 export interface EventSetYammPoolForAssetIdSDKType {
   pool_id: bigint;
   asset_id: string;
 }
 export interface EventSetVaultPaused {
   paused: boolean;
+}
+export interface EventSetVaultPausedProtoMsg {
+  typeUrl: "/pryzm.amm.v1.EventSetVaultPaused";
+  value: Uint8Array;
+}
+export interface EventSetVaultPausedAmino {
+  paused?: boolean;
+}
+export interface EventSetVaultPausedAminoMsg {
+  type: "/pryzm.amm.v1.EventSetVaultPaused";
+  value: EventSetVaultPausedAmino;
 }
 export interface EventSetVaultPausedSDKType {
   paused: boolean;
@@ -179,6 +451,19 @@ export interface EventExecuteOrder {
   orderId: bigint;
   tradeAmount: string;
   matchAmount: string;
+}
+export interface EventExecuteOrderProtoMsg {
+  typeUrl: "/pryzm.amm.v1.EventExecuteOrder";
+  value: Uint8Array;
+}
+export interface EventExecuteOrderAmino {
+  order_id?: string;
+  trade_amount?: string;
+  match_amount?: string;
+}
+export interface EventExecuteOrderAminoMsg {
+  type: "/pryzm.amm.v1.EventExecuteOrder";
+  value: EventExecuteOrderAmino;
 }
 export interface EventExecuteOrderSDKType {
   order_id: bigint;
@@ -201,6 +486,30 @@ export interface EventExecuteOrdersForPair {
   sellTradeOutput: string;
   buyTradeOutput: string;
 }
+export interface EventExecuteOrdersForPairProtoMsg {
+  typeUrl: "/pryzm.amm.v1.EventExecuteOrdersForPair";
+  value: Uint8Array;
+}
+export interface EventExecuteOrdersForPairAmino {
+  pool_id?: string;
+  token_in?: string;
+  token_out?: string;
+  whitelisted_route?: boolean;
+  buy_price?: string;
+  sell_price?: string;
+  buy_orders?: EventExecuteOrderAmino[];
+  sell_orders?: EventExecuteOrderAmino[];
+  buy_trade_amount?: string;
+  buy_match_amount?: string;
+  sell_trade_amount?: string;
+  sell_match_amount?: string;
+  sell_trade_output?: string;
+  buy_trade_output?: string;
+}
+export interface EventExecuteOrdersForPairAminoMsg {
+  type: "/pryzm.amm.v1.EventExecuteOrdersForPair";
+  value: EventExecuteOrdersForPairAmino;
+}
 export interface EventExecuteOrdersForPairSDKType {
   pool_id: bigint;
   token_in: string;
@@ -221,6 +530,18 @@ export interface EventExecuteMatchProposalOrder {
   orderId: bigint;
   matchAmount: string;
 }
+export interface EventExecuteMatchProposalOrderProtoMsg {
+  typeUrl: "/pryzm.amm.v1.EventExecuteMatchProposalOrder";
+  value: Uint8Array;
+}
+export interface EventExecuteMatchProposalOrderAmino {
+  order_id?: string;
+  match_amount?: string;
+}
+export interface EventExecuteMatchProposalOrderAminoMsg {
+  type: "/pryzm.amm.v1.EventExecuteMatchProposalOrder";
+  value: EventExecuteMatchProposalOrderAmino;
+}
 export interface EventExecuteMatchProposalOrderSDKType {
   order_id: bigint;
   match_amount: string;
@@ -236,6 +557,26 @@ export interface EventExecuteMatchProposalPair {
   sellOrders: EventExecuteMatchProposalOrder[];
   buyMatchAmount: string;
   sellMatchAmount: string;
+}
+export interface EventExecuteMatchProposalPairProtoMsg {
+  typeUrl: "/pryzm.amm.v1.EventExecuteMatchProposalPair";
+  value: Uint8Array;
+}
+export interface EventExecuteMatchProposalPairAmino {
+  pool_id?: string;
+  token_in?: string;
+  token_out?: string;
+  whitelisted_route?: boolean;
+  buy_price?: string;
+  sell_price?: string;
+  buy_orders?: EventExecuteMatchProposalOrderAmino[];
+  sell_orders?: EventExecuteMatchProposalOrderAmino[];
+  buy_match_amount?: string;
+  sell_match_amount?: string;
+}
+export interface EventExecuteMatchProposalPairAminoMsg {
+  type: "/pryzm.amm.v1.EventExecuteMatchProposalPair";
+  value: EventExecuteMatchProposalPairAmino;
 }
 export interface EventExecuteMatchProposalPairSDKType {
   pool_id: bigint;
@@ -254,6 +595,19 @@ export interface EventExecuteMatchProposal {
   pairs: EventExecuteMatchProposalPair[];
   proposerReward: Coin[];
 }
+export interface EventExecuteMatchProposalProtoMsg {
+  typeUrl: "/pryzm.amm.v1.EventExecuteMatchProposal";
+  value: Uint8Array;
+}
+export interface EventExecuteMatchProposalAmino {
+  proposer?: string;
+  pairs?: EventExecuteMatchProposalPairAmino[];
+  proposer_reward?: CoinAmino[];
+}
+export interface EventExecuteMatchProposalAminoMsg {
+  type: "/pryzm.amm.v1.EventExecuteMatchProposal";
+  value: EventExecuteMatchProposalAmino;
+}
 export interface EventExecuteMatchProposalSDKType {
   proposer: string;
   pairs: EventExecuteMatchProposalPairSDKType[];
@@ -263,6 +617,18 @@ export interface EventExitPool {
   poolId: bigint;
   summary: ExitSummary;
 }
+export interface EventExitPoolProtoMsg {
+  typeUrl: "/pryzm.amm.v1.EventExitPool";
+  value: Uint8Array;
+}
+export interface EventExitPoolAmino {
+  pool_id?: string;
+  summary?: ExitSummaryAmino;
+}
+export interface EventExitPoolAminoMsg {
+  type: "/pryzm.amm.v1.EventExitPool";
+  value: EventExitPoolAmino;
+}
 export interface EventExitPoolSDKType {
   pool_id: bigint;
   summary: ExitSummarySDKType;
@@ -271,6 +637,18 @@ export interface EventJoinPool {
   poolId: bigint;
   summary: JoinSummary;
 }
+export interface EventJoinPoolProtoMsg {
+  typeUrl: "/pryzm.amm.v1.EventJoinPool";
+  value: Uint8Array;
+}
+export interface EventJoinPoolAmino {
+  pool_id?: string;
+  summary?: JoinSummaryAmino;
+}
+export interface EventJoinPoolAminoMsg {
+  type: "/pryzm.amm.v1.EventJoinPool";
+  value: EventJoinPoolAmino;
+}
 export interface EventJoinPoolSDKType {
   pool_id: bigint;
   summary: JoinSummarySDKType;
@@ -278,6 +656,18 @@ export interface EventJoinPoolSDKType {
 export interface EventSwap {
   poolId: bigint;
   summary: SwapSummary;
+}
+export interface EventSwapProtoMsg {
+  typeUrl: "/pryzm.amm.v1.EventSwap";
+  value: Uint8Array;
+}
+export interface EventSwapAmino {
+  pool_id?: string;
+  summary?: SwapSummaryAmino;
+}
+export interface EventSwapAminoMsg {
+  type: "/pryzm.amm.v1.EventSwap";
+  value: EventSwapAmino;
 }
 export interface EventSwapSDKType {
   pool_id: bigint;
@@ -291,6 +681,23 @@ export interface EventExitPoolRequest {
   protocolFee: Coin;
   swapFee: Coin[];
   exitType: ExitType;
+}
+export interface EventExitPoolRequestProtoMsg {
+  typeUrl: "/pryzm.amm.v1.EventExitPoolRequest";
+  value: Uint8Array;
+}
+export interface EventExitPoolRequestAmino {
+  creator?: string;
+  pool_id?: string;
+  lpt_in?: CoinAmino;
+  amounts_out?: CoinAmino[];
+  protocol_fee?: CoinAmino;
+  swap_fee?: CoinAmino[];
+  exit_type?: ExitType;
+}
+export interface EventExitPoolRequestAminoMsg {
+  type: "/pryzm.amm.v1.EventExitPoolRequest";
+  value: EventExitPoolRequestAmino;
 }
 export interface EventExitPoolRequestSDKType {
   creator: string;
@@ -310,6 +717,23 @@ export interface EventJoinPoolRequest {
   swapFee: Coin[];
   joinType: JoinType;
 }
+export interface EventJoinPoolRequestProtoMsg {
+  typeUrl: "/pryzm.amm.v1.EventJoinPoolRequest";
+  value: Uint8Array;
+}
+export interface EventJoinPoolRequestAmino {
+  creator?: string;
+  pool_id?: string;
+  lpt_out?: CoinAmino;
+  amounts_in?: CoinAmino[];
+  protocol_fee?: CoinAmino[];
+  swap_fee?: CoinAmino[];
+  join_type?: JoinType;
+}
+export interface EventJoinPoolRequestAminoMsg {
+  type: "/pryzm.amm.v1.EventJoinPoolRequest";
+  value: EventJoinPoolRequestAmino;
+}
 export interface EventJoinPoolRequestSDKType {
   creator: string;
   pool_id: bigint;
@@ -327,6 +751,23 @@ export interface EventSingleSwapRequest {
   protocolFee: Coin;
   swapFee: Coin;
   swapType: SwapType;
+}
+export interface EventSingleSwapRequestProtoMsg {
+  typeUrl: "/pryzm.amm.v1.EventSingleSwapRequest";
+  value: Uint8Array;
+}
+export interface EventSingleSwapRequestAmino {
+  creator?: string;
+  pool_id?: string;
+  amount_out?: CoinAmino;
+  amount_in?: CoinAmino;
+  protocol_fee?: CoinAmino;
+  swap_fee?: CoinAmino;
+  swap_type?: SwapType;
+}
+export interface EventSingleSwapRequestAminoMsg {
+  type: "/pryzm.amm.v1.EventSingleSwapRequest";
+  value: EventSingleSwapRequestAmino;
 }
 export interface EventSingleSwapRequestSDKType {
   creator: string;
@@ -347,6 +788,24 @@ export interface EventBatchSwapRequest {
   swapFee: Coin[];
   swapType: SwapType;
 }
+export interface EventBatchSwapRequestProtoMsg {
+  typeUrl: "/pryzm.amm.v1.EventBatchSwapRequest";
+  value: Uint8Array;
+}
+export interface EventBatchSwapRequestAmino {
+  creator?: string;
+  steps?: SwapStepAmino[];
+  amounts_in?: CoinAmino[];
+  amounts_out?: CoinAmino[];
+  swap_protocol_fee?: CoinAmino[];
+  join_exit_protocol_fee?: CoinAmino[];
+  swap_fee?: CoinAmino[];
+  swap_type?: SwapType;
+}
+export interface EventBatchSwapRequestAminoMsg {
+  type: "/pryzm.amm.v1.EventBatchSwapRequest";
+  value: EventBatchSwapRequestAmino;
+}
 export interface EventBatchSwapRequestSDKType {
   creator: string;
   steps: SwapStepSDKType[];
@@ -362,6 +821,19 @@ export interface EventYAssetSwapRefractorAction {
   cAmountAfterFee: string;
   feeAmount: string;
 }
+export interface EventYAssetSwapRefractorActionProtoMsg {
+  typeUrl: "/pryzm.amm.v1.EventYAssetSwapRefractorAction";
+  value: Uint8Array;
+}
+export interface EventYAssetSwapRefractorActionAmino {
+  y_amount?: string;
+  c_amount_after_fee?: string;
+  fee_amount?: string;
+}
+export interface EventYAssetSwapRefractorActionAminoMsg {
+  type: "/pryzm.amm.v1.EventYAssetSwapRefractorAction";
+  value: EventYAssetSwapRefractorActionAmino;
+}
 export interface EventYAssetSwapRefractorActionSDKType {
   y_amount: string;
   c_amount_after_fee: string;
@@ -373,6 +845,20 @@ export interface EventYAssetSwap {
   refractorAction: EventYAssetSwapRefractorAction;
   fee?: Coin;
 }
+export interface EventYAssetSwapProtoMsg {
+  typeUrl: "/pryzm.amm.v1.EventYAssetSwap";
+  value: Uint8Array;
+}
+export interface EventYAssetSwapAmino {
+  pool_id?: string;
+  summary?: SwapSummaryAmino;
+  refractor_action?: EventYAssetSwapRefractorActionAmino;
+  fee?: CoinAmino;
+}
+export interface EventYAssetSwapAminoMsg {
+  type: "/pryzm.amm.v1.EventYAssetSwap";
+  value: EventYAssetSwapAmino;
+}
 export interface EventYAssetSwapSDKType {
   pool_id: bigint;
   summary: SwapSummarySDKType;
@@ -382,17 +868,50 @@ export interface EventYAssetSwapSDKType {
 export interface EventSetOraclePricePair {
   oraclePricePair: OraclePricePair;
 }
+export interface EventSetOraclePricePairProtoMsg {
+  typeUrl: "/pryzm.amm.v1.EventSetOraclePricePair";
+  value: Uint8Array;
+}
+export interface EventSetOraclePricePairAmino {
+  oracle_price_pair?: OraclePricePairAmino;
+}
+export interface EventSetOraclePricePairAminoMsg {
+  type: "/pryzm.amm.v1.EventSetOraclePricePair";
+  value: EventSetOraclePricePairAmino;
+}
 export interface EventSetOraclePricePairSDKType {
   oracle_price_pair: OraclePricePairSDKType;
 }
 export interface EventRemoveOraclePricePair {
   assetId: string;
 }
+export interface EventRemoveOraclePricePairProtoMsg {
+  typeUrl: "/pryzm.amm.v1.EventRemoveOraclePricePair";
+  value: Uint8Array;
+}
+export interface EventRemoveOraclePricePairAmino {
+  asset_id?: string;
+}
+export interface EventRemoveOraclePricePairAminoMsg {
+  type: "/pryzm.amm.v1.EventRemoveOraclePricePair";
+  value: EventRemoveOraclePricePairAmino;
+}
 export interface EventRemoveOraclePricePairSDKType {
   asset_id: string;
 }
 export interface EventSetPendingTokenIntroduction {
   pendingTokenIntroduction: PendingTokenIntroduction;
+}
+export interface EventSetPendingTokenIntroductionProtoMsg {
+  typeUrl: "/pryzm.amm.v1.EventSetPendingTokenIntroduction";
+  value: Uint8Array;
+}
+export interface EventSetPendingTokenIntroductionAmino {
+  pending_token_introduction?: PendingTokenIntroductionAmino;
+}
+export interface EventSetPendingTokenIntroductionAminoMsg {
+  type: "/pryzm.amm.v1.EventSetPendingTokenIntroduction";
+  value: EventSetPendingTokenIntroductionAmino;
 }
 export interface EventSetPendingTokenIntroductionSDKType {
   pending_token_introduction: PendingTokenIntroductionSDKType;
@@ -401,12 +920,35 @@ export interface EventRemovePendingTokenIntroduction {
   assetId: string;
   targetPoolId: bigint;
 }
+export interface EventRemovePendingTokenIntroductionProtoMsg {
+  typeUrl: "/pryzm.amm.v1.EventRemovePendingTokenIntroduction";
+  value: Uint8Array;
+}
+export interface EventRemovePendingTokenIntroductionAmino {
+  asset_id?: string;
+  target_pool_id?: string;
+}
+export interface EventRemovePendingTokenIntroductionAminoMsg {
+  type: "/pryzm.amm.v1.EventRemovePendingTokenIntroduction";
+  value: EventRemovePendingTokenIntroductionAmino;
+}
 export interface EventRemovePendingTokenIntroductionSDKType {
   asset_id: string;
   target_pool_id: bigint;
 }
 export interface EventSetParams {
   params: Params;
+}
+export interface EventSetParamsProtoMsg {
+  typeUrl: "/pryzm.amm.v1.EventSetParams";
+  value: Uint8Array;
+}
+export interface EventSetParamsAmino {
+  params?: ParamsAmino;
+}
+export interface EventSetParamsAminoMsg {
+  type: "/pryzm.amm.v1.EventSetParams";
+  value: EventSetParamsAmino;
 }
 export interface EventSetParamsSDKType {
   params: ParamsSDKType;
@@ -417,6 +959,7 @@ function createBaseEventSetPool(): EventSetPool {
   };
 }
 export const EventSetPool = {
+  typeUrl: "/pryzm.amm.v1.EventSetPool",
   encode(message: EventSetPool, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.pool !== undefined) {
       Pool.encode(message.pool, writer.uint32(10).fork()).ldelim();
@@ -454,6 +997,33 @@ export const EventSetPool = {
     const message = createBaseEventSetPool();
     message.pool = object.pool !== undefined && object.pool !== null ? Pool.fromPartial(object.pool) : undefined;
     return message;
+  },
+  fromAmino(object: EventSetPoolAmino): EventSetPool {
+    const message = createBaseEventSetPool();
+    if (object.pool !== undefined && object.pool !== null) {
+      message.pool = Pool.fromAmino(object.pool);
+    }
+    return message;
+  },
+  toAmino(message: EventSetPool): EventSetPoolAmino {
+    const obj: any = {};
+    obj.pool = message.pool ? Pool.toAmino(message.pool) : undefined;
+    return obj;
+  },
+  fromAminoMsg(object: EventSetPoolAminoMsg): EventSetPool {
+    return EventSetPool.fromAmino(object.value);
+  },
+  fromProtoMsg(message: EventSetPoolProtoMsg): EventSetPool {
+    return EventSetPool.decode(message.value);
+  },
+  toProto(message: EventSetPool): Uint8Array {
+    return EventSetPool.encode(message).finish();
+  },
+  toProtoMsg(message: EventSetPool): EventSetPoolProtoMsg {
+    return {
+      typeUrl: "/pryzm.amm.v1.EventSetPool",
+      value: EventSetPool.encode(message).finish()
+    };
   }
 };
 function createBaseEventSetPoolCount(): EventSetPoolCount {
@@ -462,6 +1032,7 @@ function createBaseEventSetPoolCount(): EventSetPoolCount {
   };
 }
 export const EventSetPoolCount = {
+  typeUrl: "/pryzm.amm.v1.EventSetPoolCount",
   encode(message: EventSetPoolCount, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.poolCount !== BigInt(0)) {
       writer.uint32(8).uint64(message.poolCount);
@@ -499,6 +1070,33 @@ export const EventSetPoolCount = {
     const message = createBaseEventSetPoolCount();
     message.poolCount = object.poolCount !== undefined && object.poolCount !== null ? BigInt(object.poolCount.toString()) : BigInt(0);
     return message;
+  },
+  fromAmino(object: EventSetPoolCountAmino): EventSetPoolCount {
+    const message = createBaseEventSetPoolCount();
+    if (object.pool_count !== undefined && object.pool_count !== null) {
+      message.poolCount = BigInt(object.pool_count);
+    }
+    return message;
+  },
+  toAmino(message: EventSetPoolCount): EventSetPoolCountAmino {
+    const obj: any = {};
+    obj.pool_count = message.poolCount ? message.poolCount.toString() : undefined;
+    return obj;
+  },
+  fromAminoMsg(object: EventSetPoolCountAminoMsg): EventSetPoolCount {
+    return EventSetPoolCount.fromAmino(object.value);
+  },
+  fromProtoMsg(message: EventSetPoolCountProtoMsg): EventSetPoolCount {
+    return EventSetPoolCount.decode(message.value);
+  },
+  toProto(message: EventSetPoolCount): Uint8Array {
+    return EventSetPoolCount.encode(message).finish();
+  },
+  toProtoMsg(message: EventSetPoolCount): EventSetPoolCountProtoMsg {
+    return {
+      typeUrl: "/pryzm.amm.v1.EventSetPoolCount",
+      value: EventSetPoolCount.encode(message).finish()
+    };
   }
 };
 function createBaseEventSetLpTokenSupply(): EventSetLpTokenSupply {
@@ -508,6 +1106,7 @@ function createBaseEventSetLpTokenSupply(): EventSetLpTokenSupply {
   };
 }
 export const EventSetLpTokenSupply = {
+  typeUrl: "/pryzm.amm.v1.EventSetLpTokenSupply",
   encode(message: EventSetLpTokenSupply, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.poolId !== BigInt(0)) {
       writer.uint32(8).uint64(message.poolId);
@@ -554,6 +1153,37 @@ export const EventSetLpTokenSupply = {
     message.poolId = object.poolId !== undefined && object.poolId !== null ? BigInt(object.poolId.toString()) : BigInt(0);
     message.supply = object.supply ?? "";
     return message;
+  },
+  fromAmino(object: EventSetLpTokenSupplyAmino): EventSetLpTokenSupply {
+    const message = createBaseEventSetLpTokenSupply();
+    if (object.pool_id !== undefined && object.pool_id !== null) {
+      message.poolId = BigInt(object.pool_id);
+    }
+    if (object.supply !== undefined && object.supply !== null) {
+      message.supply = object.supply;
+    }
+    return message;
+  },
+  toAmino(message: EventSetLpTokenSupply): EventSetLpTokenSupplyAmino {
+    const obj: any = {};
+    obj.pool_id = message.poolId ? message.poolId.toString() : undefined;
+    obj.supply = message.supply;
+    return obj;
+  },
+  fromAminoMsg(object: EventSetLpTokenSupplyAminoMsg): EventSetLpTokenSupply {
+    return EventSetLpTokenSupply.fromAmino(object.value);
+  },
+  fromProtoMsg(message: EventSetLpTokenSupplyProtoMsg): EventSetLpTokenSupply {
+    return EventSetLpTokenSupply.decode(message.value);
+  },
+  toProto(message: EventSetLpTokenSupply): Uint8Array {
+    return EventSetLpTokenSupply.encode(message).finish();
+  },
+  toProtoMsg(message: EventSetLpTokenSupply): EventSetLpTokenSupplyProtoMsg {
+    return {
+      typeUrl: "/pryzm.amm.v1.EventSetLpTokenSupply",
+      value: EventSetLpTokenSupply.encode(message).finish()
+    };
   }
 };
 function createBaseEventSetPoolToken(): EventSetPoolToken {
@@ -562,6 +1192,7 @@ function createBaseEventSetPoolToken(): EventSetPoolToken {
   };
 }
 export const EventSetPoolToken = {
+  typeUrl: "/pryzm.amm.v1.EventSetPoolToken",
   encode(message: EventSetPoolToken, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.poolToken !== undefined) {
       PoolToken.encode(message.poolToken, writer.uint32(10).fork()).ldelim();
@@ -599,6 +1230,33 @@ export const EventSetPoolToken = {
     const message = createBaseEventSetPoolToken();
     message.poolToken = object.poolToken !== undefined && object.poolToken !== null ? PoolToken.fromPartial(object.poolToken) : undefined;
     return message;
+  },
+  fromAmino(object: EventSetPoolTokenAmino): EventSetPoolToken {
+    const message = createBaseEventSetPoolToken();
+    if (object.pool_token !== undefined && object.pool_token !== null) {
+      message.poolToken = PoolToken.fromAmino(object.pool_token);
+    }
+    return message;
+  },
+  toAmino(message: EventSetPoolToken): EventSetPoolTokenAmino {
+    const obj: any = {};
+    obj.pool_token = message.poolToken ? PoolToken.toAmino(message.poolToken) : undefined;
+    return obj;
+  },
+  fromAminoMsg(object: EventSetPoolTokenAminoMsg): EventSetPoolToken {
+    return EventSetPoolToken.fromAmino(object.value);
+  },
+  fromProtoMsg(message: EventSetPoolTokenProtoMsg): EventSetPoolToken {
+    return EventSetPoolToken.decode(message.value);
+  },
+  toProto(message: EventSetPoolToken): Uint8Array {
+    return EventSetPoolToken.encode(message).finish();
+  },
+  toProtoMsg(message: EventSetPoolToken): EventSetPoolTokenProtoMsg {
+    return {
+      typeUrl: "/pryzm.amm.v1.EventSetPoolToken",
+      value: EventSetPoolToken.encode(message).finish()
+    };
   }
 };
 function createBaseEventRemovePoolToken(): EventRemovePoolToken {
@@ -608,6 +1266,7 @@ function createBaseEventRemovePoolToken(): EventRemovePoolToken {
   };
 }
 export const EventRemovePoolToken = {
+  typeUrl: "/pryzm.amm.v1.EventRemovePoolToken",
   encode(message: EventRemovePoolToken, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.poolId !== BigInt(0)) {
       writer.uint32(8).uint64(message.poolId);
@@ -654,6 +1313,37 @@ export const EventRemovePoolToken = {
     message.poolId = object.poolId !== undefined && object.poolId !== null ? BigInt(object.poolId.toString()) : BigInt(0);
     message.denom = object.denom ?? "";
     return message;
+  },
+  fromAmino(object: EventRemovePoolTokenAmino): EventRemovePoolToken {
+    const message = createBaseEventRemovePoolToken();
+    if (object.pool_id !== undefined && object.pool_id !== null) {
+      message.poolId = BigInt(object.pool_id);
+    }
+    if (object.denom !== undefined && object.denom !== null) {
+      message.denom = object.denom;
+    }
+    return message;
+  },
+  toAmino(message: EventRemovePoolToken): EventRemovePoolTokenAmino {
+    const obj: any = {};
+    obj.pool_id = message.poolId ? message.poolId.toString() : undefined;
+    obj.denom = message.denom;
+    return obj;
+  },
+  fromAminoMsg(object: EventRemovePoolTokenAminoMsg): EventRemovePoolToken {
+    return EventRemovePoolToken.fromAmino(object.value);
+  },
+  fromProtoMsg(message: EventRemovePoolTokenProtoMsg): EventRemovePoolToken {
+    return EventRemovePoolToken.decode(message.value);
+  },
+  toProto(message: EventRemovePoolToken): Uint8Array {
+    return EventRemovePoolToken.encode(message).finish();
+  },
+  toProtoMsg(message: EventRemovePoolToken): EventRemovePoolTokenProtoMsg {
+    return {
+      typeUrl: "/pryzm.amm.v1.EventRemovePoolToken",
+      value: EventRemovePoolToken.encode(message).finish()
+    };
   }
 };
 function createBaseEventSetWeightedToken(): EventSetWeightedToken {
@@ -662,6 +1352,7 @@ function createBaseEventSetWeightedToken(): EventSetWeightedToken {
   };
 }
 export const EventSetWeightedToken = {
+  typeUrl: "/pryzm.amm.v1.EventSetWeightedToken",
   encode(message: EventSetWeightedToken, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.weightedToken !== undefined) {
       WeightedToken.encode(message.weightedToken, writer.uint32(10).fork()).ldelim();
@@ -699,6 +1390,33 @@ export const EventSetWeightedToken = {
     const message = createBaseEventSetWeightedToken();
     message.weightedToken = object.weightedToken !== undefined && object.weightedToken !== null ? WeightedToken.fromPartial(object.weightedToken) : undefined;
     return message;
+  },
+  fromAmino(object: EventSetWeightedTokenAmino): EventSetWeightedToken {
+    const message = createBaseEventSetWeightedToken();
+    if (object.weighted_token !== undefined && object.weighted_token !== null) {
+      message.weightedToken = WeightedToken.fromAmino(object.weighted_token);
+    }
+    return message;
+  },
+  toAmino(message: EventSetWeightedToken): EventSetWeightedTokenAmino {
+    const obj: any = {};
+    obj.weighted_token = message.weightedToken ? WeightedToken.toAmino(message.weightedToken) : undefined;
+    return obj;
+  },
+  fromAminoMsg(object: EventSetWeightedTokenAminoMsg): EventSetWeightedToken {
+    return EventSetWeightedToken.fromAmino(object.value);
+  },
+  fromProtoMsg(message: EventSetWeightedTokenProtoMsg): EventSetWeightedToken {
+    return EventSetWeightedToken.decode(message.value);
+  },
+  toProto(message: EventSetWeightedToken): Uint8Array {
+    return EventSetWeightedToken.encode(message).finish();
+  },
+  toProtoMsg(message: EventSetWeightedToken): EventSetWeightedTokenProtoMsg {
+    return {
+      typeUrl: "/pryzm.amm.v1.EventSetWeightedToken",
+      value: EventSetWeightedToken.encode(message).finish()
+    };
   }
 };
 function createBaseEventRemoveWeightedToken(): EventRemoveWeightedToken {
@@ -708,6 +1426,7 @@ function createBaseEventRemoveWeightedToken(): EventRemoveWeightedToken {
   };
 }
 export const EventRemoveWeightedToken = {
+  typeUrl: "/pryzm.amm.v1.EventRemoveWeightedToken",
   encode(message: EventRemoveWeightedToken, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.poolId !== BigInt(0)) {
       writer.uint32(8).uint64(message.poolId);
@@ -754,6 +1473,37 @@ export const EventRemoveWeightedToken = {
     message.poolId = object.poolId !== undefined && object.poolId !== null ? BigInt(object.poolId.toString()) : BigInt(0);
     message.denom = object.denom ?? "";
     return message;
+  },
+  fromAmino(object: EventRemoveWeightedTokenAmino): EventRemoveWeightedToken {
+    const message = createBaseEventRemoveWeightedToken();
+    if (object.pool_id !== undefined && object.pool_id !== null) {
+      message.poolId = BigInt(object.pool_id);
+    }
+    if (object.denom !== undefined && object.denom !== null) {
+      message.denom = object.denom;
+    }
+    return message;
+  },
+  toAmino(message: EventRemoveWeightedToken): EventRemoveWeightedTokenAmino {
+    const obj: any = {};
+    obj.pool_id = message.poolId ? message.poolId.toString() : undefined;
+    obj.denom = message.denom;
+    return obj;
+  },
+  fromAminoMsg(object: EventRemoveWeightedTokenAminoMsg): EventRemoveWeightedToken {
+    return EventRemoveWeightedToken.fromAmino(object.value);
+  },
+  fromProtoMsg(message: EventRemoveWeightedTokenProtoMsg): EventRemoveWeightedToken {
+    return EventRemoveWeightedToken.decode(message.value);
+  },
+  toProto(message: EventRemoveWeightedToken): Uint8Array {
+    return EventRemoveWeightedToken.encode(message).finish();
+  },
+  toProtoMsg(message: EventRemoveWeightedToken): EventRemoveWeightedTokenProtoMsg {
+    return {
+      typeUrl: "/pryzm.amm.v1.EventRemoveWeightedToken",
+      value: EventRemoveWeightedToken.encode(message).finish()
+    };
   }
 };
 function createBaseEventSetWeightUpdateTiming(): EventSetWeightUpdateTiming {
@@ -762,6 +1512,7 @@ function createBaseEventSetWeightUpdateTiming(): EventSetWeightUpdateTiming {
   };
 }
 export const EventSetWeightUpdateTiming = {
+  typeUrl: "/pryzm.amm.v1.EventSetWeightUpdateTiming",
   encode(message: EventSetWeightUpdateTiming, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.weightUpdateTiming !== undefined) {
       WeightUpdateTiming.encode(message.weightUpdateTiming, writer.uint32(10).fork()).ldelim();
@@ -799,6 +1550,33 @@ export const EventSetWeightUpdateTiming = {
     const message = createBaseEventSetWeightUpdateTiming();
     message.weightUpdateTiming = object.weightUpdateTiming !== undefined && object.weightUpdateTiming !== null ? WeightUpdateTiming.fromPartial(object.weightUpdateTiming) : undefined;
     return message;
+  },
+  fromAmino(object: EventSetWeightUpdateTimingAmino): EventSetWeightUpdateTiming {
+    const message = createBaseEventSetWeightUpdateTiming();
+    if (object.weight_update_timing !== undefined && object.weight_update_timing !== null) {
+      message.weightUpdateTiming = WeightUpdateTiming.fromAmino(object.weight_update_timing);
+    }
+    return message;
+  },
+  toAmino(message: EventSetWeightUpdateTiming): EventSetWeightUpdateTimingAmino {
+    const obj: any = {};
+    obj.weight_update_timing = message.weightUpdateTiming ? WeightUpdateTiming.toAmino(message.weightUpdateTiming) : undefined;
+    return obj;
+  },
+  fromAminoMsg(object: EventSetWeightUpdateTimingAminoMsg): EventSetWeightUpdateTiming {
+    return EventSetWeightUpdateTiming.fromAmino(object.value);
+  },
+  fromProtoMsg(message: EventSetWeightUpdateTimingProtoMsg): EventSetWeightUpdateTiming {
+    return EventSetWeightUpdateTiming.decode(message.value);
+  },
+  toProto(message: EventSetWeightUpdateTiming): Uint8Array {
+    return EventSetWeightUpdateTiming.encode(message).finish();
+  },
+  toProtoMsg(message: EventSetWeightUpdateTiming): EventSetWeightUpdateTimingProtoMsg {
+    return {
+      typeUrl: "/pryzm.amm.v1.EventSetWeightUpdateTiming",
+      value: EventSetWeightUpdateTiming.encode(message).finish()
+    };
   }
 };
 function createBaseEventSetWhitelistedRoute(): EventSetWhitelistedRoute {
@@ -807,6 +1585,7 @@ function createBaseEventSetWhitelistedRoute(): EventSetWhitelistedRoute {
   };
 }
 export const EventSetWhitelistedRoute = {
+  typeUrl: "/pryzm.amm.v1.EventSetWhitelistedRoute",
   encode(message: EventSetWhitelistedRoute, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.whitelistedRoute !== undefined) {
       WhitelistedRoute.encode(message.whitelistedRoute, writer.uint32(10).fork()).ldelim();
@@ -844,6 +1623,33 @@ export const EventSetWhitelistedRoute = {
     const message = createBaseEventSetWhitelistedRoute();
     message.whitelistedRoute = object.whitelistedRoute !== undefined && object.whitelistedRoute !== null ? WhitelistedRoute.fromPartial(object.whitelistedRoute) : undefined;
     return message;
+  },
+  fromAmino(object: EventSetWhitelistedRouteAmino): EventSetWhitelistedRoute {
+    const message = createBaseEventSetWhitelistedRoute();
+    if (object.whitelisted_route !== undefined && object.whitelisted_route !== null) {
+      message.whitelistedRoute = WhitelistedRoute.fromAmino(object.whitelisted_route);
+    }
+    return message;
+  },
+  toAmino(message: EventSetWhitelistedRoute): EventSetWhitelistedRouteAmino {
+    const obj: any = {};
+    obj.whitelisted_route = message.whitelistedRoute ? WhitelistedRoute.toAmino(message.whitelistedRoute) : undefined;
+    return obj;
+  },
+  fromAminoMsg(object: EventSetWhitelistedRouteAminoMsg): EventSetWhitelistedRoute {
+    return EventSetWhitelistedRoute.fromAmino(object.value);
+  },
+  fromProtoMsg(message: EventSetWhitelistedRouteProtoMsg): EventSetWhitelistedRoute {
+    return EventSetWhitelistedRoute.decode(message.value);
+  },
+  toProto(message: EventSetWhitelistedRoute): Uint8Array {
+    return EventSetWhitelistedRoute.encode(message).finish();
+  },
+  toProtoMsg(message: EventSetWhitelistedRoute): EventSetWhitelistedRouteProtoMsg {
+    return {
+      typeUrl: "/pryzm.amm.v1.EventSetWhitelistedRoute",
+      value: EventSetWhitelistedRoute.encode(message).finish()
+    };
   }
 };
 function createBaseEventSetYammConfiguration(): EventSetYammConfiguration {
@@ -852,6 +1658,7 @@ function createBaseEventSetYammConfiguration(): EventSetYammConfiguration {
   };
 }
 export const EventSetYammConfiguration = {
+  typeUrl: "/pryzm.amm.v1.EventSetYammConfiguration",
   encode(message: EventSetYammConfiguration, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.yammConfiguration !== undefined) {
       YammConfiguration.encode(message.yammConfiguration, writer.uint32(10).fork()).ldelim();
@@ -889,6 +1696,33 @@ export const EventSetYammConfiguration = {
     const message = createBaseEventSetYammConfiguration();
     message.yammConfiguration = object.yammConfiguration !== undefined && object.yammConfiguration !== null ? YammConfiguration.fromPartial(object.yammConfiguration) : undefined;
     return message;
+  },
+  fromAmino(object: EventSetYammConfigurationAmino): EventSetYammConfiguration {
+    const message = createBaseEventSetYammConfiguration();
+    if (object.yamm_configuration !== undefined && object.yamm_configuration !== null) {
+      message.yammConfiguration = YammConfiguration.fromAmino(object.yamm_configuration);
+    }
+    return message;
+  },
+  toAmino(message: EventSetYammConfiguration): EventSetYammConfigurationAmino {
+    const obj: any = {};
+    obj.yamm_configuration = message.yammConfiguration ? YammConfiguration.toAmino(message.yammConfiguration) : undefined;
+    return obj;
+  },
+  fromAminoMsg(object: EventSetYammConfigurationAminoMsg): EventSetYammConfiguration {
+    return EventSetYammConfiguration.fromAmino(object.value);
+  },
+  fromProtoMsg(message: EventSetYammConfigurationProtoMsg): EventSetYammConfiguration {
+    return EventSetYammConfiguration.decode(message.value);
+  },
+  toProto(message: EventSetYammConfiguration): Uint8Array {
+    return EventSetYammConfiguration.encode(message).finish();
+  },
+  toProtoMsg(message: EventSetYammConfiguration): EventSetYammConfigurationProtoMsg {
+    return {
+      typeUrl: "/pryzm.amm.v1.EventSetYammConfiguration",
+      value: EventSetYammConfiguration.encode(message).finish()
+    };
   }
 };
 function createBaseEventSetOrder(): EventSetOrder {
@@ -897,6 +1731,7 @@ function createBaseEventSetOrder(): EventSetOrder {
   };
 }
 export const EventSetOrder = {
+  typeUrl: "/pryzm.amm.v1.EventSetOrder",
   encode(message: EventSetOrder, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.order !== undefined) {
       Order.encode(message.order, writer.uint32(10).fork()).ldelim();
@@ -934,6 +1769,33 @@ export const EventSetOrder = {
     const message = createBaseEventSetOrder();
     message.order = object.order !== undefined && object.order !== null ? Order.fromPartial(object.order) : undefined;
     return message;
+  },
+  fromAmino(object: EventSetOrderAmino): EventSetOrder {
+    const message = createBaseEventSetOrder();
+    if (object.order !== undefined && object.order !== null) {
+      message.order = Order.fromAmino(object.order);
+    }
+    return message;
+  },
+  toAmino(message: EventSetOrder): EventSetOrderAmino {
+    const obj: any = {};
+    obj.order = message.order ? Order.toAmino(message.order) : undefined;
+    return obj;
+  },
+  fromAminoMsg(object: EventSetOrderAminoMsg): EventSetOrder {
+    return EventSetOrder.fromAmino(object.value);
+  },
+  fromProtoMsg(message: EventSetOrderProtoMsg): EventSetOrder {
+    return EventSetOrder.decode(message.value);
+  },
+  toProto(message: EventSetOrder): Uint8Array {
+    return EventSetOrder.encode(message).finish();
+  },
+  toProtoMsg(message: EventSetOrder): EventSetOrderProtoMsg {
+    return {
+      typeUrl: "/pryzm.amm.v1.EventSetOrder",
+      value: EventSetOrder.encode(message).finish()
+    };
   }
 };
 function createBaseEventSetOrderCount(): EventSetOrderCount {
@@ -942,6 +1804,7 @@ function createBaseEventSetOrderCount(): EventSetOrderCount {
   };
 }
 export const EventSetOrderCount = {
+  typeUrl: "/pryzm.amm.v1.EventSetOrderCount",
   encode(message: EventSetOrderCount, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.orderCount !== BigInt(0)) {
       writer.uint32(8).uint64(message.orderCount);
@@ -979,6 +1842,33 @@ export const EventSetOrderCount = {
     const message = createBaseEventSetOrderCount();
     message.orderCount = object.orderCount !== undefined && object.orderCount !== null ? BigInt(object.orderCount.toString()) : BigInt(0);
     return message;
+  },
+  fromAmino(object: EventSetOrderCountAmino): EventSetOrderCount {
+    const message = createBaseEventSetOrderCount();
+    if (object.order_count !== undefined && object.order_count !== null) {
+      message.orderCount = BigInt(object.order_count);
+    }
+    return message;
+  },
+  toAmino(message: EventSetOrderCount): EventSetOrderCountAmino {
+    const obj: any = {};
+    obj.order_count = message.orderCount ? message.orderCount.toString() : undefined;
+    return obj;
+  },
+  fromAminoMsg(object: EventSetOrderCountAminoMsg): EventSetOrderCount {
+    return EventSetOrderCount.fromAmino(object.value);
+  },
+  fromProtoMsg(message: EventSetOrderCountProtoMsg): EventSetOrderCount {
+    return EventSetOrderCount.decode(message.value);
+  },
+  toProto(message: EventSetOrderCount): Uint8Array {
+    return EventSetOrderCount.encode(message).finish();
+  },
+  toProtoMsg(message: EventSetOrderCount): EventSetOrderCountProtoMsg {
+    return {
+      typeUrl: "/pryzm.amm.v1.EventSetOrderCount",
+      value: EventSetOrderCount.encode(message).finish()
+    };
   }
 };
 function createBaseEventRemoveOrder(): EventRemoveOrder {
@@ -987,6 +1877,7 @@ function createBaseEventRemoveOrder(): EventRemoveOrder {
   };
 }
 export const EventRemoveOrder = {
+  typeUrl: "/pryzm.amm.v1.EventRemoveOrder",
   encode(message: EventRemoveOrder, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.id !== BigInt(0)) {
       writer.uint32(8).uint64(message.id);
@@ -1024,6 +1915,33 @@ export const EventRemoveOrder = {
     const message = createBaseEventRemoveOrder();
     message.id = object.id !== undefined && object.id !== null ? BigInt(object.id.toString()) : BigInt(0);
     return message;
+  },
+  fromAmino(object: EventRemoveOrderAmino): EventRemoveOrder {
+    const message = createBaseEventRemoveOrder();
+    if (object.id !== undefined && object.id !== null) {
+      message.id = BigInt(object.id);
+    }
+    return message;
+  },
+  toAmino(message: EventRemoveOrder): EventRemoveOrderAmino {
+    const obj: any = {};
+    obj.id = message.id ? message.id.toString() : undefined;
+    return obj;
+  },
+  fromAminoMsg(object: EventRemoveOrderAminoMsg): EventRemoveOrder {
+    return EventRemoveOrder.fromAmino(object.value);
+  },
+  fromProtoMsg(message: EventRemoveOrderProtoMsg): EventRemoveOrder {
+    return EventRemoveOrder.decode(message.value);
+  },
+  toProto(message: EventRemoveOrder): Uint8Array {
+    return EventRemoveOrder.encode(message).finish();
+  },
+  toProtoMsg(message: EventRemoveOrder): EventRemoveOrderProtoMsg {
+    return {
+      typeUrl: "/pryzm.amm.v1.EventRemoveOrder",
+      value: EventRemoveOrder.encode(message).finish()
+    };
   }
 };
 function createBaseEventCancelOrder(): EventCancelOrder {
@@ -1033,6 +1951,7 @@ function createBaseEventCancelOrder(): EventCancelOrder {
   };
 }
 export const EventCancelOrder = {
+  typeUrl: "/pryzm.amm.v1.EventCancelOrder",
   encode(message: EventCancelOrder, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.id !== BigInt(0)) {
       writer.uint32(8).uint64(message.id);
@@ -1079,6 +1998,37 @@ export const EventCancelOrder = {
     message.id = object.id !== undefined && object.id !== null ? BigInt(object.id.toString()) : BigInt(0);
     message.withdrawnAmount = object.withdrawnAmount !== undefined && object.withdrawnAmount !== null ? Coin.fromPartial(object.withdrawnAmount) : undefined;
     return message;
+  },
+  fromAmino(object: EventCancelOrderAmino): EventCancelOrder {
+    const message = createBaseEventCancelOrder();
+    if (object.id !== undefined && object.id !== null) {
+      message.id = BigInt(object.id);
+    }
+    if (object.withdrawn_amount !== undefined && object.withdrawn_amount !== null) {
+      message.withdrawnAmount = Coin.fromAmino(object.withdrawn_amount);
+    }
+    return message;
+  },
+  toAmino(message: EventCancelOrder): EventCancelOrderAmino {
+    const obj: any = {};
+    obj.id = message.id ? message.id.toString() : undefined;
+    obj.withdrawn_amount = message.withdrawnAmount ? Coin.toAmino(message.withdrawnAmount) : undefined;
+    return obj;
+  },
+  fromAminoMsg(object: EventCancelOrderAminoMsg): EventCancelOrder {
+    return EventCancelOrder.fromAmino(object.value);
+  },
+  fromProtoMsg(message: EventCancelOrderProtoMsg): EventCancelOrder {
+    return EventCancelOrder.decode(message.value);
+  },
+  toProto(message: EventCancelOrder): Uint8Array {
+    return EventCancelOrder.encode(message).finish();
+  },
+  toProtoMsg(message: EventCancelOrder): EventCancelOrderProtoMsg {
+    return {
+      typeUrl: "/pryzm.amm.v1.EventCancelOrder",
+      value: EventCancelOrder.encode(message).finish()
+    };
   }
 };
 function createBaseEventSetScheduleOrder(): EventSetScheduleOrder {
@@ -1087,6 +2037,7 @@ function createBaseEventSetScheduleOrder(): EventSetScheduleOrder {
   };
 }
 export const EventSetScheduleOrder = {
+  typeUrl: "/pryzm.amm.v1.EventSetScheduleOrder",
   encode(message: EventSetScheduleOrder, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.scheduleOrder !== undefined) {
       ScheduleOrder.encode(message.scheduleOrder, writer.uint32(10).fork()).ldelim();
@@ -1124,6 +2075,33 @@ export const EventSetScheduleOrder = {
     const message = createBaseEventSetScheduleOrder();
     message.scheduleOrder = object.scheduleOrder !== undefined && object.scheduleOrder !== null ? ScheduleOrder.fromPartial(object.scheduleOrder) : undefined;
     return message;
+  },
+  fromAmino(object: EventSetScheduleOrderAmino): EventSetScheduleOrder {
+    const message = createBaseEventSetScheduleOrder();
+    if (object.schedule_order !== undefined && object.schedule_order !== null) {
+      message.scheduleOrder = ScheduleOrder.fromAmino(object.schedule_order);
+    }
+    return message;
+  },
+  toAmino(message: EventSetScheduleOrder): EventSetScheduleOrderAmino {
+    const obj: any = {};
+    obj.schedule_order = message.scheduleOrder ? ScheduleOrder.toAmino(message.scheduleOrder) : undefined;
+    return obj;
+  },
+  fromAminoMsg(object: EventSetScheduleOrderAminoMsg): EventSetScheduleOrder {
+    return EventSetScheduleOrder.fromAmino(object.value);
+  },
+  fromProtoMsg(message: EventSetScheduleOrderProtoMsg): EventSetScheduleOrder {
+    return EventSetScheduleOrder.decode(message.value);
+  },
+  toProto(message: EventSetScheduleOrder): Uint8Array {
+    return EventSetScheduleOrder.encode(message).finish();
+  },
+  toProtoMsg(message: EventSetScheduleOrder): EventSetScheduleOrderProtoMsg {
+    return {
+      typeUrl: "/pryzm.amm.v1.EventSetScheduleOrder",
+      value: EventSetScheduleOrder.encode(message).finish()
+    };
   }
 };
 function createBaseEventRemoveScheduleOrder(): EventRemoveScheduleOrder {
@@ -1133,6 +2111,7 @@ function createBaseEventRemoveScheduleOrder(): EventRemoveScheduleOrder {
   };
 }
 export const EventRemoveScheduleOrder = {
+  typeUrl: "/pryzm.amm.v1.EventRemoveScheduleOrder",
   encode(message: EventRemoveScheduleOrder, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.orderId !== BigInt(0)) {
       writer.uint32(8).uint64(message.orderId);
@@ -1179,6 +2158,37 @@ export const EventRemoveScheduleOrder = {
     message.orderId = object.orderId !== undefined && object.orderId !== null ? BigInt(object.orderId.toString()) : BigInt(0);
     message.timeMillis = object.timeMillis !== undefined && object.timeMillis !== null ? BigInt(object.timeMillis.toString()) : BigInt(0);
     return message;
+  },
+  fromAmino(object: EventRemoveScheduleOrderAmino): EventRemoveScheduleOrder {
+    const message = createBaseEventRemoveScheduleOrder();
+    if (object.order_id !== undefined && object.order_id !== null) {
+      message.orderId = BigInt(object.order_id);
+    }
+    if (object.time_millis !== undefined && object.time_millis !== null) {
+      message.timeMillis = BigInt(object.time_millis);
+    }
+    return message;
+  },
+  toAmino(message: EventRemoveScheduleOrder): EventRemoveScheduleOrderAmino {
+    const obj: any = {};
+    obj.order_id = message.orderId ? message.orderId.toString() : undefined;
+    obj.time_millis = message.timeMillis ? message.timeMillis.toString() : undefined;
+    return obj;
+  },
+  fromAminoMsg(object: EventRemoveScheduleOrderAminoMsg): EventRemoveScheduleOrder {
+    return EventRemoveScheduleOrder.fromAmino(object.value);
+  },
+  fromProtoMsg(message: EventRemoveScheduleOrderProtoMsg): EventRemoveScheduleOrder {
+    return EventRemoveScheduleOrder.decode(message.value);
+  },
+  toProto(message: EventRemoveScheduleOrder): Uint8Array {
+    return EventRemoveScheduleOrder.encode(message).finish();
+  },
+  toProtoMsg(message: EventRemoveScheduleOrder): EventRemoveScheduleOrderProtoMsg {
+    return {
+      typeUrl: "/pryzm.amm.v1.EventRemoveScheduleOrder",
+      value: EventRemoveScheduleOrder.encode(message).finish()
+    };
   }
 };
 function createBaseEventSetExecutableOrder(): EventSetExecutableOrder {
@@ -1187,6 +2197,7 @@ function createBaseEventSetExecutableOrder(): EventSetExecutableOrder {
   };
 }
 export const EventSetExecutableOrder = {
+  typeUrl: "/pryzm.amm.v1.EventSetExecutableOrder",
   encode(message: EventSetExecutableOrder, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.orderId !== BigInt(0)) {
       writer.uint32(8).uint64(message.orderId);
@@ -1224,6 +2235,33 @@ export const EventSetExecutableOrder = {
     const message = createBaseEventSetExecutableOrder();
     message.orderId = object.orderId !== undefined && object.orderId !== null ? BigInt(object.orderId.toString()) : BigInt(0);
     return message;
+  },
+  fromAmino(object: EventSetExecutableOrderAmino): EventSetExecutableOrder {
+    const message = createBaseEventSetExecutableOrder();
+    if (object.order_id !== undefined && object.order_id !== null) {
+      message.orderId = BigInt(object.order_id);
+    }
+    return message;
+  },
+  toAmino(message: EventSetExecutableOrder): EventSetExecutableOrderAmino {
+    const obj: any = {};
+    obj.order_id = message.orderId ? message.orderId.toString() : undefined;
+    return obj;
+  },
+  fromAminoMsg(object: EventSetExecutableOrderAminoMsg): EventSetExecutableOrder {
+    return EventSetExecutableOrder.fromAmino(object.value);
+  },
+  fromProtoMsg(message: EventSetExecutableOrderProtoMsg): EventSetExecutableOrder {
+    return EventSetExecutableOrder.decode(message.value);
+  },
+  toProto(message: EventSetExecutableOrder): Uint8Array {
+    return EventSetExecutableOrder.encode(message).finish();
+  },
+  toProtoMsg(message: EventSetExecutableOrder): EventSetExecutableOrderProtoMsg {
+    return {
+      typeUrl: "/pryzm.amm.v1.EventSetExecutableOrder",
+      value: EventSetExecutableOrder.encode(message).finish()
+    };
   }
 };
 function createBaseEventRemoveExecutableOrder(): EventRemoveExecutableOrder {
@@ -1232,6 +2270,7 @@ function createBaseEventRemoveExecutableOrder(): EventRemoveExecutableOrder {
   };
 }
 export const EventRemoveExecutableOrder = {
+  typeUrl: "/pryzm.amm.v1.EventRemoveExecutableOrder",
   encode(message: EventRemoveExecutableOrder, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.orderId !== BigInt(0)) {
       writer.uint32(8).uint64(message.orderId);
@@ -1269,6 +2308,33 @@ export const EventRemoveExecutableOrder = {
     const message = createBaseEventRemoveExecutableOrder();
     message.orderId = object.orderId !== undefined && object.orderId !== null ? BigInt(object.orderId.toString()) : BigInt(0);
     return message;
+  },
+  fromAmino(object: EventRemoveExecutableOrderAmino): EventRemoveExecutableOrder {
+    const message = createBaseEventRemoveExecutableOrder();
+    if (object.order_id !== undefined && object.order_id !== null) {
+      message.orderId = BigInt(object.order_id);
+    }
+    return message;
+  },
+  toAmino(message: EventRemoveExecutableOrder): EventRemoveExecutableOrderAmino {
+    const obj: any = {};
+    obj.order_id = message.orderId ? message.orderId.toString() : undefined;
+    return obj;
+  },
+  fromAminoMsg(object: EventRemoveExecutableOrderAminoMsg): EventRemoveExecutableOrder {
+    return EventRemoveExecutableOrder.fromAmino(object.value);
+  },
+  fromProtoMsg(message: EventRemoveExecutableOrderProtoMsg): EventRemoveExecutableOrder {
+    return EventRemoveExecutableOrder.decode(message.value);
+  },
+  toProto(message: EventRemoveExecutableOrder): Uint8Array {
+    return EventRemoveExecutableOrder.encode(message).finish();
+  },
+  toProtoMsg(message: EventRemoveExecutableOrder): EventRemoveExecutableOrderProtoMsg {
+    return {
+      typeUrl: "/pryzm.amm.v1.EventRemoveExecutableOrder",
+      value: EventRemoveExecutableOrder.encode(message).finish()
+    };
   }
 };
 function createBaseEventSetIntroducingPoolToken(): EventSetIntroducingPoolToken {
@@ -1277,6 +2343,7 @@ function createBaseEventSetIntroducingPoolToken(): EventSetIntroducingPoolToken 
   };
 }
 export const EventSetIntroducingPoolToken = {
+  typeUrl: "/pryzm.amm.v1.EventSetIntroducingPoolToken",
   encode(message: EventSetIntroducingPoolToken, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.virtualBalanceToken !== undefined) {
       VirtualBalancePoolToken.encode(message.virtualBalanceToken, writer.uint32(10).fork()).ldelim();
@@ -1314,6 +2381,33 @@ export const EventSetIntroducingPoolToken = {
     const message = createBaseEventSetIntroducingPoolToken();
     message.virtualBalanceToken = object.virtualBalanceToken !== undefined && object.virtualBalanceToken !== null ? VirtualBalancePoolToken.fromPartial(object.virtualBalanceToken) : undefined;
     return message;
+  },
+  fromAmino(object: EventSetIntroducingPoolTokenAmino): EventSetIntroducingPoolToken {
+    const message = createBaseEventSetIntroducingPoolToken();
+    if (object.virtual_balance_token !== undefined && object.virtual_balance_token !== null) {
+      message.virtualBalanceToken = VirtualBalancePoolToken.fromAmino(object.virtual_balance_token);
+    }
+    return message;
+  },
+  toAmino(message: EventSetIntroducingPoolToken): EventSetIntroducingPoolTokenAmino {
+    const obj: any = {};
+    obj.virtual_balance_token = message.virtualBalanceToken ? VirtualBalancePoolToken.toAmino(message.virtualBalanceToken) : undefined;
+    return obj;
+  },
+  fromAminoMsg(object: EventSetIntroducingPoolTokenAminoMsg): EventSetIntroducingPoolToken {
+    return EventSetIntroducingPoolToken.fromAmino(object.value);
+  },
+  fromProtoMsg(message: EventSetIntroducingPoolTokenProtoMsg): EventSetIntroducingPoolToken {
+    return EventSetIntroducingPoolToken.decode(message.value);
+  },
+  toProto(message: EventSetIntroducingPoolToken): Uint8Array {
+    return EventSetIntroducingPoolToken.encode(message).finish();
+  },
+  toProtoMsg(message: EventSetIntroducingPoolToken): EventSetIntroducingPoolTokenProtoMsg {
+    return {
+      typeUrl: "/pryzm.amm.v1.EventSetIntroducingPoolToken",
+      value: EventSetIntroducingPoolToken.encode(message).finish()
+    };
   }
 };
 function createBaseEventRemoveIntroducingPoolToken(): EventRemoveIntroducingPoolToken {
@@ -1323,6 +2417,7 @@ function createBaseEventRemoveIntroducingPoolToken(): EventRemoveIntroducingPool
   };
 }
 export const EventRemoveIntroducingPoolToken = {
+  typeUrl: "/pryzm.amm.v1.EventRemoveIntroducingPoolToken",
   encode(message: EventRemoveIntroducingPoolToken, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.poolId !== BigInt(0)) {
       writer.uint32(8).uint64(message.poolId);
@@ -1369,6 +2464,37 @@ export const EventRemoveIntroducingPoolToken = {
     message.poolId = object.poolId !== undefined && object.poolId !== null ? BigInt(object.poolId.toString()) : BigInt(0);
     message.denom = object.denom ?? "";
     return message;
+  },
+  fromAmino(object: EventRemoveIntroducingPoolTokenAmino): EventRemoveIntroducingPoolToken {
+    const message = createBaseEventRemoveIntroducingPoolToken();
+    if (object.pool_id !== undefined && object.pool_id !== null) {
+      message.poolId = BigInt(object.pool_id);
+    }
+    if (object.denom !== undefined && object.denom !== null) {
+      message.denom = object.denom;
+    }
+    return message;
+  },
+  toAmino(message: EventRemoveIntroducingPoolToken): EventRemoveIntroducingPoolTokenAmino {
+    const obj: any = {};
+    obj.pool_id = message.poolId ? message.poolId.toString() : undefined;
+    obj.denom = message.denom;
+    return obj;
+  },
+  fromAminoMsg(object: EventRemoveIntroducingPoolTokenAminoMsg): EventRemoveIntroducingPoolToken {
+    return EventRemoveIntroducingPoolToken.fromAmino(object.value);
+  },
+  fromProtoMsg(message: EventRemoveIntroducingPoolTokenProtoMsg): EventRemoveIntroducingPoolToken {
+    return EventRemoveIntroducingPoolToken.decode(message.value);
+  },
+  toProto(message: EventRemoveIntroducingPoolToken): Uint8Array {
+    return EventRemoveIntroducingPoolToken.encode(message).finish();
+  },
+  toProtoMsg(message: EventRemoveIntroducingPoolToken): EventRemoveIntroducingPoolTokenProtoMsg {
+    return {
+      typeUrl: "/pryzm.amm.v1.EventRemoveIntroducingPoolToken",
+      value: EventRemoveIntroducingPoolToken.encode(message).finish()
+    };
   }
 };
 function createBaseEventSetExpiringPoolToken(): EventSetExpiringPoolToken {
@@ -1377,6 +2503,7 @@ function createBaseEventSetExpiringPoolToken(): EventSetExpiringPoolToken {
   };
 }
 export const EventSetExpiringPoolToken = {
+  typeUrl: "/pryzm.amm.v1.EventSetExpiringPoolToken",
   encode(message: EventSetExpiringPoolToken, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.virtualBalanceToken !== undefined) {
       VirtualBalancePoolToken.encode(message.virtualBalanceToken, writer.uint32(10).fork()).ldelim();
@@ -1414,6 +2541,33 @@ export const EventSetExpiringPoolToken = {
     const message = createBaseEventSetExpiringPoolToken();
     message.virtualBalanceToken = object.virtualBalanceToken !== undefined && object.virtualBalanceToken !== null ? VirtualBalancePoolToken.fromPartial(object.virtualBalanceToken) : undefined;
     return message;
+  },
+  fromAmino(object: EventSetExpiringPoolTokenAmino): EventSetExpiringPoolToken {
+    const message = createBaseEventSetExpiringPoolToken();
+    if (object.virtual_balance_token !== undefined && object.virtual_balance_token !== null) {
+      message.virtualBalanceToken = VirtualBalancePoolToken.fromAmino(object.virtual_balance_token);
+    }
+    return message;
+  },
+  toAmino(message: EventSetExpiringPoolToken): EventSetExpiringPoolTokenAmino {
+    const obj: any = {};
+    obj.virtual_balance_token = message.virtualBalanceToken ? VirtualBalancePoolToken.toAmino(message.virtualBalanceToken) : undefined;
+    return obj;
+  },
+  fromAminoMsg(object: EventSetExpiringPoolTokenAminoMsg): EventSetExpiringPoolToken {
+    return EventSetExpiringPoolToken.fromAmino(object.value);
+  },
+  fromProtoMsg(message: EventSetExpiringPoolTokenProtoMsg): EventSetExpiringPoolToken {
+    return EventSetExpiringPoolToken.decode(message.value);
+  },
+  toProto(message: EventSetExpiringPoolToken): Uint8Array {
+    return EventSetExpiringPoolToken.encode(message).finish();
+  },
+  toProtoMsg(message: EventSetExpiringPoolToken): EventSetExpiringPoolTokenProtoMsg {
+    return {
+      typeUrl: "/pryzm.amm.v1.EventSetExpiringPoolToken",
+      value: EventSetExpiringPoolToken.encode(message).finish()
+    };
   }
 };
 function createBaseEventRemoveExpiringPoolToken(): EventRemoveExpiringPoolToken {
@@ -1423,6 +2577,7 @@ function createBaseEventRemoveExpiringPoolToken(): EventRemoveExpiringPoolToken 
   };
 }
 export const EventRemoveExpiringPoolToken = {
+  typeUrl: "/pryzm.amm.v1.EventRemoveExpiringPoolToken",
   encode(message: EventRemoveExpiringPoolToken, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.poolId !== BigInt(0)) {
       writer.uint32(8).uint64(message.poolId);
@@ -1469,6 +2624,37 @@ export const EventRemoveExpiringPoolToken = {
     message.poolId = object.poolId !== undefined && object.poolId !== null ? BigInt(object.poolId.toString()) : BigInt(0);
     message.denom = object.denom ?? "";
     return message;
+  },
+  fromAmino(object: EventRemoveExpiringPoolTokenAmino): EventRemoveExpiringPoolToken {
+    const message = createBaseEventRemoveExpiringPoolToken();
+    if (object.pool_id !== undefined && object.pool_id !== null) {
+      message.poolId = BigInt(object.pool_id);
+    }
+    if (object.denom !== undefined && object.denom !== null) {
+      message.denom = object.denom;
+    }
+    return message;
+  },
+  toAmino(message: EventRemoveExpiringPoolToken): EventRemoveExpiringPoolTokenAmino {
+    const obj: any = {};
+    obj.pool_id = message.poolId ? message.poolId.toString() : undefined;
+    obj.denom = message.denom;
+    return obj;
+  },
+  fromAminoMsg(object: EventRemoveExpiringPoolTokenAminoMsg): EventRemoveExpiringPoolToken {
+    return EventRemoveExpiringPoolToken.fromAmino(object.value);
+  },
+  fromProtoMsg(message: EventRemoveExpiringPoolTokenProtoMsg): EventRemoveExpiringPoolToken {
+    return EventRemoveExpiringPoolToken.decode(message.value);
+  },
+  toProto(message: EventRemoveExpiringPoolToken): Uint8Array {
+    return EventRemoveExpiringPoolToken.encode(message).finish();
+  },
+  toProtoMsg(message: EventRemoveExpiringPoolToken): EventRemoveExpiringPoolTokenProtoMsg {
+    return {
+      typeUrl: "/pryzm.amm.v1.EventRemoveExpiringPoolToken",
+      value: EventRemoveExpiringPoolToken.encode(message).finish()
+    };
   }
 };
 function createBaseEventSetYammPoolForAssetId(): EventSetYammPoolForAssetId {
@@ -1478,6 +2664,7 @@ function createBaseEventSetYammPoolForAssetId(): EventSetYammPoolForAssetId {
   };
 }
 export const EventSetYammPoolForAssetId = {
+  typeUrl: "/pryzm.amm.v1.EventSetYammPoolForAssetId",
   encode(message: EventSetYammPoolForAssetId, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.poolId !== BigInt(0)) {
       writer.uint32(8).uint64(message.poolId);
@@ -1524,6 +2711,37 @@ export const EventSetYammPoolForAssetId = {
     message.poolId = object.poolId !== undefined && object.poolId !== null ? BigInt(object.poolId.toString()) : BigInt(0);
     message.assetId = object.assetId ?? "";
     return message;
+  },
+  fromAmino(object: EventSetYammPoolForAssetIdAmino): EventSetYammPoolForAssetId {
+    const message = createBaseEventSetYammPoolForAssetId();
+    if (object.pool_id !== undefined && object.pool_id !== null) {
+      message.poolId = BigInt(object.pool_id);
+    }
+    if (object.asset_id !== undefined && object.asset_id !== null) {
+      message.assetId = object.asset_id;
+    }
+    return message;
+  },
+  toAmino(message: EventSetYammPoolForAssetId): EventSetYammPoolForAssetIdAmino {
+    const obj: any = {};
+    obj.pool_id = message.poolId ? message.poolId.toString() : undefined;
+    obj.asset_id = message.assetId;
+    return obj;
+  },
+  fromAminoMsg(object: EventSetYammPoolForAssetIdAminoMsg): EventSetYammPoolForAssetId {
+    return EventSetYammPoolForAssetId.fromAmino(object.value);
+  },
+  fromProtoMsg(message: EventSetYammPoolForAssetIdProtoMsg): EventSetYammPoolForAssetId {
+    return EventSetYammPoolForAssetId.decode(message.value);
+  },
+  toProto(message: EventSetYammPoolForAssetId): Uint8Array {
+    return EventSetYammPoolForAssetId.encode(message).finish();
+  },
+  toProtoMsg(message: EventSetYammPoolForAssetId): EventSetYammPoolForAssetIdProtoMsg {
+    return {
+      typeUrl: "/pryzm.amm.v1.EventSetYammPoolForAssetId",
+      value: EventSetYammPoolForAssetId.encode(message).finish()
+    };
   }
 };
 function createBaseEventSetVaultPaused(): EventSetVaultPaused {
@@ -1532,6 +2750,7 @@ function createBaseEventSetVaultPaused(): EventSetVaultPaused {
   };
 }
 export const EventSetVaultPaused = {
+  typeUrl: "/pryzm.amm.v1.EventSetVaultPaused",
   encode(message: EventSetVaultPaused, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.paused === true) {
       writer.uint32(8).bool(message.paused);
@@ -1569,6 +2788,33 @@ export const EventSetVaultPaused = {
     const message = createBaseEventSetVaultPaused();
     message.paused = object.paused ?? false;
     return message;
+  },
+  fromAmino(object: EventSetVaultPausedAmino): EventSetVaultPaused {
+    const message = createBaseEventSetVaultPaused();
+    if (object.paused !== undefined && object.paused !== null) {
+      message.paused = object.paused;
+    }
+    return message;
+  },
+  toAmino(message: EventSetVaultPaused): EventSetVaultPausedAmino {
+    const obj: any = {};
+    obj.paused = message.paused;
+    return obj;
+  },
+  fromAminoMsg(object: EventSetVaultPausedAminoMsg): EventSetVaultPaused {
+    return EventSetVaultPaused.fromAmino(object.value);
+  },
+  fromProtoMsg(message: EventSetVaultPausedProtoMsg): EventSetVaultPaused {
+    return EventSetVaultPaused.decode(message.value);
+  },
+  toProto(message: EventSetVaultPaused): Uint8Array {
+    return EventSetVaultPaused.encode(message).finish();
+  },
+  toProtoMsg(message: EventSetVaultPaused): EventSetVaultPausedProtoMsg {
+    return {
+      typeUrl: "/pryzm.amm.v1.EventSetVaultPaused",
+      value: EventSetVaultPaused.encode(message).finish()
+    };
   }
 };
 function createBaseEventExecuteOrder(): EventExecuteOrder {
@@ -1579,6 +2825,7 @@ function createBaseEventExecuteOrder(): EventExecuteOrder {
   };
 }
 export const EventExecuteOrder = {
+  typeUrl: "/pryzm.amm.v1.EventExecuteOrder",
   encode(message: EventExecuteOrder, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.orderId !== BigInt(0)) {
       writer.uint32(8).uint64(message.orderId);
@@ -1634,6 +2881,41 @@ export const EventExecuteOrder = {
     message.tradeAmount = object.tradeAmount ?? "";
     message.matchAmount = object.matchAmount ?? "";
     return message;
+  },
+  fromAmino(object: EventExecuteOrderAmino): EventExecuteOrder {
+    const message = createBaseEventExecuteOrder();
+    if (object.order_id !== undefined && object.order_id !== null) {
+      message.orderId = BigInt(object.order_id);
+    }
+    if (object.trade_amount !== undefined && object.trade_amount !== null) {
+      message.tradeAmount = object.trade_amount;
+    }
+    if (object.match_amount !== undefined && object.match_amount !== null) {
+      message.matchAmount = object.match_amount;
+    }
+    return message;
+  },
+  toAmino(message: EventExecuteOrder): EventExecuteOrderAmino {
+    const obj: any = {};
+    obj.order_id = message.orderId ? message.orderId.toString() : undefined;
+    obj.trade_amount = message.tradeAmount;
+    obj.match_amount = message.matchAmount;
+    return obj;
+  },
+  fromAminoMsg(object: EventExecuteOrderAminoMsg): EventExecuteOrder {
+    return EventExecuteOrder.fromAmino(object.value);
+  },
+  fromProtoMsg(message: EventExecuteOrderProtoMsg): EventExecuteOrder {
+    return EventExecuteOrder.decode(message.value);
+  },
+  toProto(message: EventExecuteOrder): Uint8Array {
+    return EventExecuteOrder.encode(message).finish();
+  },
+  toProtoMsg(message: EventExecuteOrder): EventExecuteOrderProtoMsg {
+    return {
+      typeUrl: "/pryzm.amm.v1.EventExecuteOrder",
+      value: EventExecuteOrder.encode(message).finish()
+    };
   }
 };
 function createBaseEventExecuteOrdersForPair(): EventExecuteOrdersForPair {
@@ -1655,6 +2937,7 @@ function createBaseEventExecuteOrdersForPair(): EventExecuteOrdersForPair {
   };
 }
 export const EventExecuteOrdersForPair = {
+  typeUrl: "/pryzm.amm.v1.EventExecuteOrdersForPair",
   encode(message: EventExecuteOrdersForPair, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.poolId !== BigInt(0)) {
       writer.uint32(8).uint64(message.poolId);
@@ -1817,6 +3100,89 @@ export const EventExecuteOrdersForPair = {
     message.sellTradeOutput = object.sellTradeOutput ?? "";
     message.buyTradeOutput = object.buyTradeOutput ?? "";
     return message;
+  },
+  fromAmino(object: EventExecuteOrdersForPairAmino): EventExecuteOrdersForPair {
+    const message = createBaseEventExecuteOrdersForPair();
+    if (object.pool_id !== undefined && object.pool_id !== null) {
+      message.poolId = BigInt(object.pool_id);
+    }
+    if (object.token_in !== undefined && object.token_in !== null) {
+      message.tokenIn = object.token_in;
+    }
+    if (object.token_out !== undefined && object.token_out !== null) {
+      message.tokenOut = object.token_out;
+    }
+    if (object.whitelisted_route !== undefined && object.whitelisted_route !== null) {
+      message.whitelistedRoute = object.whitelisted_route;
+    }
+    if (object.buy_price !== undefined && object.buy_price !== null) {
+      message.buyPrice = object.buy_price;
+    }
+    if (object.sell_price !== undefined && object.sell_price !== null) {
+      message.sellPrice = object.sell_price;
+    }
+    message.buyOrders = object.buy_orders?.map(e => EventExecuteOrder.fromAmino(e)) || [];
+    message.sellOrders = object.sell_orders?.map(e => EventExecuteOrder.fromAmino(e)) || [];
+    if (object.buy_trade_amount !== undefined && object.buy_trade_amount !== null) {
+      message.buyTradeAmount = object.buy_trade_amount;
+    }
+    if (object.buy_match_amount !== undefined && object.buy_match_amount !== null) {
+      message.buyMatchAmount = object.buy_match_amount;
+    }
+    if (object.sell_trade_amount !== undefined && object.sell_trade_amount !== null) {
+      message.sellTradeAmount = object.sell_trade_amount;
+    }
+    if (object.sell_match_amount !== undefined && object.sell_match_amount !== null) {
+      message.sellMatchAmount = object.sell_match_amount;
+    }
+    if (object.sell_trade_output !== undefined && object.sell_trade_output !== null) {
+      message.sellTradeOutput = object.sell_trade_output;
+    }
+    if (object.buy_trade_output !== undefined && object.buy_trade_output !== null) {
+      message.buyTradeOutput = object.buy_trade_output;
+    }
+    return message;
+  },
+  toAmino(message: EventExecuteOrdersForPair): EventExecuteOrdersForPairAmino {
+    const obj: any = {};
+    obj.pool_id = message.poolId ? message.poolId.toString() : undefined;
+    obj.token_in = message.tokenIn;
+    obj.token_out = message.tokenOut;
+    obj.whitelisted_route = message.whitelistedRoute;
+    obj.buy_price = message.buyPrice;
+    obj.sell_price = message.sellPrice;
+    if (message.buyOrders) {
+      obj.buy_orders = message.buyOrders.map(e => e ? EventExecuteOrder.toAmino(e) : undefined);
+    } else {
+      obj.buy_orders = [];
+    }
+    if (message.sellOrders) {
+      obj.sell_orders = message.sellOrders.map(e => e ? EventExecuteOrder.toAmino(e) : undefined);
+    } else {
+      obj.sell_orders = [];
+    }
+    obj.buy_trade_amount = message.buyTradeAmount;
+    obj.buy_match_amount = message.buyMatchAmount;
+    obj.sell_trade_amount = message.sellTradeAmount;
+    obj.sell_match_amount = message.sellMatchAmount;
+    obj.sell_trade_output = message.sellTradeOutput;
+    obj.buy_trade_output = message.buyTradeOutput;
+    return obj;
+  },
+  fromAminoMsg(object: EventExecuteOrdersForPairAminoMsg): EventExecuteOrdersForPair {
+    return EventExecuteOrdersForPair.fromAmino(object.value);
+  },
+  fromProtoMsg(message: EventExecuteOrdersForPairProtoMsg): EventExecuteOrdersForPair {
+    return EventExecuteOrdersForPair.decode(message.value);
+  },
+  toProto(message: EventExecuteOrdersForPair): Uint8Array {
+    return EventExecuteOrdersForPair.encode(message).finish();
+  },
+  toProtoMsg(message: EventExecuteOrdersForPair): EventExecuteOrdersForPairProtoMsg {
+    return {
+      typeUrl: "/pryzm.amm.v1.EventExecuteOrdersForPair",
+      value: EventExecuteOrdersForPair.encode(message).finish()
+    };
   }
 };
 function createBaseEventExecuteMatchProposalOrder(): EventExecuteMatchProposalOrder {
@@ -1826,6 +3192,7 @@ function createBaseEventExecuteMatchProposalOrder(): EventExecuteMatchProposalOr
   };
 }
 export const EventExecuteMatchProposalOrder = {
+  typeUrl: "/pryzm.amm.v1.EventExecuteMatchProposalOrder",
   encode(message: EventExecuteMatchProposalOrder, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.orderId !== BigInt(0)) {
       writer.uint32(8).uint64(message.orderId);
@@ -1872,6 +3239,37 @@ export const EventExecuteMatchProposalOrder = {
     message.orderId = object.orderId !== undefined && object.orderId !== null ? BigInt(object.orderId.toString()) : BigInt(0);
     message.matchAmount = object.matchAmount ?? "";
     return message;
+  },
+  fromAmino(object: EventExecuteMatchProposalOrderAmino): EventExecuteMatchProposalOrder {
+    const message = createBaseEventExecuteMatchProposalOrder();
+    if (object.order_id !== undefined && object.order_id !== null) {
+      message.orderId = BigInt(object.order_id);
+    }
+    if (object.match_amount !== undefined && object.match_amount !== null) {
+      message.matchAmount = object.match_amount;
+    }
+    return message;
+  },
+  toAmino(message: EventExecuteMatchProposalOrder): EventExecuteMatchProposalOrderAmino {
+    const obj: any = {};
+    obj.order_id = message.orderId ? message.orderId.toString() : undefined;
+    obj.match_amount = message.matchAmount;
+    return obj;
+  },
+  fromAminoMsg(object: EventExecuteMatchProposalOrderAminoMsg): EventExecuteMatchProposalOrder {
+    return EventExecuteMatchProposalOrder.fromAmino(object.value);
+  },
+  fromProtoMsg(message: EventExecuteMatchProposalOrderProtoMsg): EventExecuteMatchProposalOrder {
+    return EventExecuteMatchProposalOrder.decode(message.value);
+  },
+  toProto(message: EventExecuteMatchProposalOrder): Uint8Array {
+    return EventExecuteMatchProposalOrder.encode(message).finish();
+  },
+  toProtoMsg(message: EventExecuteMatchProposalOrder): EventExecuteMatchProposalOrderProtoMsg {
+    return {
+      typeUrl: "/pryzm.amm.v1.EventExecuteMatchProposalOrder",
+      value: EventExecuteMatchProposalOrder.encode(message).finish()
+    };
   }
 };
 function createBaseEventExecuteMatchProposalPair(): EventExecuteMatchProposalPair {
@@ -1889,6 +3287,7 @@ function createBaseEventExecuteMatchProposalPair(): EventExecuteMatchProposalPai
   };
 }
 export const EventExecuteMatchProposalPair = {
+  typeUrl: "/pryzm.amm.v1.EventExecuteMatchProposalPair",
   encode(message: EventExecuteMatchProposalPair, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.poolId !== BigInt(0)) {
       writer.uint32(8).uint64(message.poolId);
@@ -2015,6 +3414,73 @@ export const EventExecuteMatchProposalPair = {
     message.buyMatchAmount = object.buyMatchAmount ?? "";
     message.sellMatchAmount = object.sellMatchAmount ?? "";
     return message;
+  },
+  fromAmino(object: EventExecuteMatchProposalPairAmino): EventExecuteMatchProposalPair {
+    const message = createBaseEventExecuteMatchProposalPair();
+    if (object.pool_id !== undefined && object.pool_id !== null) {
+      message.poolId = BigInt(object.pool_id);
+    }
+    if (object.token_in !== undefined && object.token_in !== null) {
+      message.tokenIn = object.token_in;
+    }
+    if (object.token_out !== undefined && object.token_out !== null) {
+      message.tokenOut = object.token_out;
+    }
+    if (object.whitelisted_route !== undefined && object.whitelisted_route !== null) {
+      message.whitelistedRoute = object.whitelisted_route;
+    }
+    if (object.buy_price !== undefined && object.buy_price !== null) {
+      message.buyPrice = object.buy_price;
+    }
+    if (object.sell_price !== undefined && object.sell_price !== null) {
+      message.sellPrice = object.sell_price;
+    }
+    message.buyOrders = object.buy_orders?.map(e => EventExecuteMatchProposalOrder.fromAmino(e)) || [];
+    message.sellOrders = object.sell_orders?.map(e => EventExecuteMatchProposalOrder.fromAmino(e)) || [];
+    if (object.buy_match_amount !== undefined && object.buy_match_amount !== null) {
+      message.buyMatchAmount = object.buy_match_amount;
+    }
+    if (object.sell_match_amount !== undefined && object.sell_match_amount !== null) {
+      message.sellMatchAmount = object.sell_match_amount;
+    }
+    return message;
+  },
+  toAmino(message: EventExecuteMatchProposalPair): EventExecuteMatchProposalPairAmino {
+    const obj: any = {};
+    obj.pool_id = message.poolId ? message.poolId.toString() : undefined;
+    obj.token_in = message.tokenIn;
+    obj.token_out = message.tokenOut;
+    obj.whitelisted_route = message.whitelistedRoute;
+    obj.buy_price = message.buyPrice;
+    obj.sell_price = message.sellPrice;
+    if (message.buyOrders) {
+      obj.buy_orders = message.buyOrders.map(e => e ? EventExecuteMatchProposalOrder.toAmino(e) : undefined);
+    } else {
+      obj.buy_orders = [];
+    }
+    if (message.sellOrders) {
+      obj.sell_orders = message.sellOrders.map(e => e ? EventExecuteMatchProposalOrder.toAmino(e) : undefined);
+    } else {
+      obj.sell_orders = [];
+    }
+    obj.buy_match_amount = message.buyMatchAmount;
+    obj.sell_match_amount = message.sellMatchAmount;
+    return obj;
+  },
+  fromAminoMsg(object: EventExecuteMatchProposalPairAminoMsg): EventExecuteMatchProposalPair {
+    return EventExecuteMatchProposalPair.fromAmino(object.value);
+  },
+  fromProtoMsg(message: EventExecuteMatchProposalPairProtoMsg): EventExecuteMatchProposalPair {
+    return EventExecuteMatchProposalPair.decode(message.value);
+  },
+  toProto(message: EventExecuteMatchProposalPair): Uint8Array {
+    return EventExecuteMatchProposalPair.encode(message).finish();
+  },
+  toProtoMsg(message: EventExecuteMatchProposalPair): EventExecuteMatchProposalPairProtoMsg {
+    return {
+      typeUrl: "/pryzm.amm.v1.EventExecuteMatchProposalPair",
+      value: EventExecuteMatchProposalPair.encode(message).finish()
+    };
   }
 };
 function createBaseEventExecuteMatchProposal(): EventExecuteMatchProposal {
@@ -2025,6 +3491,7 @@ function createBaseEventExecuteMatchProposal(): EventExecuteMatchProposal {
   };
 }
 export const EventExecuteMatchProposal = {
+  typeUrl: "/pryzm.amm.v1.EventExecuteMatchProposal",
   encode(message: EventExecuteMatchProposal, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.proposer !== "") {
       writer.uint32(10).string(message.proposer);
@@ -2088,6 +3555,45 @@ export const EventExecuteMatchProposal = {
     message.pairs = object.pairs?.map(e => EventExecuteMatchProposalPair.fromPartial(e)) || [];
     message.proposerReward = object.proposerReward?.map(e => Coin.fromPartial(e)) || [];
     return message;
+  },
+  fromAmino(object: EventExecuteMatchProposalAmino): EventExecuteMatchProposal {
+    const message = createBaseEventExecuteMatchProposal();
+    if (object.proposer !== undefined && object.proposer !== null) {
+      message.proposer = object.proposer;
+    }
+    message.pairs = object.pairs?.map(e => EventExecuteMatchProposalPair.fromAmino(e)) || [];
+    message.proposerReward = object.proposer_reward?.map(e => Coin.fromAmino(e)) || [];
+    return message;
+  },
+  toAmino(message: EventExecuteMatchProposal): EventExecuteMatchProposalAmino {
+    const obj: any = {};
+    obj.proposer = message.proposer;
+    if (message.pairs) {
+      obj.pairs = message.pairs.map(e => e ? EventExecuteMatchProposalPair.toAmino(e) : undefined);
+    } else {
+      obj.pairs = [];
+    }
+    if (message.proposerReward) {
+      obj.proposer_reward = message.proposerReward.map(e => e ? Coin.toAmino(e) : undefined);
+    } else {
+      obj.proposer_reward = [];
+    }
+    return obj;
+  },
+  fromAminoMsg(object: EventExecuteMatchProposalAminoMsg): EventExecuteMatchProposal {
+    return EventExecuteMatchProposal.fromAmino(object.value);
+  },
+  fromProtoMsg(message: EventExecuteMatchProposalProtoMsg): EventExecuteMatchProposal {
+    return EventExecuteMatchProposal.decode(message.value);
+  },
+  toProto(message: EventExecuteMatchProposal): Uint8Array {
+    return EventExecuteMatchProposal.encode(message).finish();
+  },
+  toProtoMsg(message: EventExecuteMatchProposal): EventExecuteMatchProposalProtoMsg {
+    return {
+      typeUrl: "/pryzm.amm.v1.EventExecuteMatchProposal",
+      value: EventExecuteMatchProposal.encode(message).finish()
+    };
   }
 };
 function createBaseEventExitPool(): EventExitPool {
@@ -2097,6 +3603,7 @@ function createBaseEventExitPool(): EventExitPool {
   };
 }
 export const EventExitPool = {
+  typeUrl: "/pryzm.amm.v1.EventExitPool",
   encode(message: EventExitPool, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.poolId !== BigInt(0)) {
       writer.uint32(8).uint64(message.poolId);
@@ -2143,6 +3650,37 @@ export const EventExitPool = {
     message.poolId = object.poolId !== undefined && object.poolId !== null ? BigInt(object.poolId.toString()) : BigInt(0);
     message.summary = object.summary !== undefined && object.summary !== null ? ExitSummary.fromPartial(object.summary) : undefined;
     return message;
+  },
+  fromAmino(object: EventExitPoolAmino): EventExitPool {
+    const message = createBaseEventExitPool();
+    if (object.pool_id !== undefined && object.pool_id !== null) {
+      message.poolId = BigInt(object.pool_id);
+    }
+    if (object.summary !== undefined && object.summary !== null) {
+      message.summary = ExitSummary.fromAmino(object.summary);
+    }
+    return message;
+  },
+  toAmino(message: EventExitPool): EventExitPoolAmino {
+    const obj: any = {};
+    obj.pool_id = message.poolId ? message.poolId.toString() : undefined;
+    obj.summary = message.summary ? ExitSummary.toAmino(message.summary) : undefined;
+    return obj;
+  },
+  fromAminoMsg(object: EventExitPoolAminoMsg): EventExitPool {
+    return EventExitPool.fromAmino(object.value);
+  },
+  fromProtoMsg(message: EventExitPoolProtoMsg): EventExitPool {
+    return EventExitPool.decode(message.value);
+  },
+  toProto(message: EventExitPool): Uint8Array {
+    return EventExitPool.encode(message).finish();
+  },
+  toProtoMsg(message: EventExitPool): EventExitPoolProtoMsg {
+    return {
+      typeUrl: "/pryzm.amm.v1.EventExitPool",
+      value: EventExitPool.encode(message).finish()
+    };
   }
 };
 function createBaseEventJoinPool(): EventJoinPool {
@@ -2152,6 +3690,7 @@ function createBaseEventJoinPool(): EventJoinPool {
   };
 }
 export const EventJoinPool = {
+  typeUrl: "/pryzm.amm.v1.EventJoinPool",
   encode(message: EventJoinPool, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.poolId !== BigInt(0)) {
       writer.uint32(8).uint64(message.poolId);
@@ -2198,6 +3737,37 @@ export const EventJoinPool = {
     message.poolId = object.poolId !== undefined && object.poolId !== null ? BigInt(object.poolId.toString()) : BigInt(0);
     message.summary = object.summary !== undefined && object.summary !== null ? JoinSummary.fromPartial(object.summary) : undefined;
     return message;
+  },
+  fromAmino(object: EventJoinPoolAmino): EventJoinPool {
+    const message = createBaseEventJoinPool();
+    if (object.pool_id !== undefined && object.pool_id !== null) {
+      message.poolId = BigInt(object.pool_id);
+    }
+    if (object.summary !== undefined && object.summary !== null) {
+      message.summary = JoinSummary.fromAmino(object.summary);
+    }
+    return message;
+  },
+  toAmino(message: EventJoinPool): EventJoinPoolAmino {
+    const obj: any = {};
+    obj.pool_id = message.poolId ? message.poolId.toString() : undefined;
+    obj.summary = message.summary ? JoinSummary.toAmino(message.summary) : undefined;
+    return obj;
+  },
+  fromAminoMsg(object: EventJoinPoolAminoMsg): EventJoinPool {
+    return EventJoinPool.fromAmino(object.value);
+  },
+  fromProtoMsg(message: EventJoinPoolProtoMsg): EventJoinPool {
+    return EventJoinPool.decode(message.value);
+  },
+  toProto(message: EventJoinPool): Uint8Array {
+    return EventJoinPool.encode(message).finish();
+  },
+  toProtoMsg(message: EventJoinPool): EventJoinPoolProtoMsg {
+    return {
+      typeUrl: "/pryzm.amm.v1.EventJoinPool",
+      value: EventJoinPool.encode(message).finish()
+    };
   }
 };
 function createBaseEventSwap(): EventSwap {
@@ -2207,6 +3777,7 @@ function createBaseEventSwap(): EventSwap {
   };
 }
 export const EventSwap = {
+  typeUrl: "/pryzm.amm.v1.EventSwap",
   encode(message: EventSwap, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.poolId !== BigInt(0)) {
       writer.uint32(8).uint64(message.poolId);
@@ -2253,6 +3824,37 @@ export const EventSwap = {
     message.poolId = object.poolId !== undefined && object.poolId !== null ? BigInt(object.poolId.toString()) : BigInt(0);
     message.summary = object.summary !== undefined && object.summary !== null ? SwapSummary.fromPartial(object.summary) : undefined;
     return message;
+  },
+  fromAmino(object: EventSwapAmino): EventSwap {
+    const message = createBaseEventSwap();
+    if (object.pool_id !== undefined && object.pool_id !== null) {
+      message.poolId = BigInt(object.pool_id);
+    }
+    if (object.summary !== undefined && object.summary !== null) {
+      message.summary = SwapSummary.fromAmino(object.summary);
+    }
+    return message;
+  },
+  toAmino(message: EventSwap): EventSwapAmino {
+    const obj: any = {};
+    obj.pool_id = message.poolId ? message.poolId.toString() : undefined;
+    obj.summary = message.summary ? SwapSummary.toAmino(message.summary) : undefined;
+    return obj;
+  },
+  fromAminoMsg(object: EventSwapAminoMsg): EventSwap {
+    return EventSwap.fromAmino(object.value);
+  },
+  fromProtoMsg(message: EventSwapProtoMsg): EventSwap {
+    return EventSwap.decode(message.value);
+  },
+  toProto(message: EventSwap): Uint8Array {
+    return EventSwap.encode(message).finish();
+  },
+  toProtoMsg(message: EventSwap): EventSwapProtoMsg {
+    return {
+      typeUrl: "/pryzm.amm.v1.EventSwap",
+      value: EventSwap.encode(message).finish()
+    };
   }
 };
 function createBaseEventExitPoolRequest(): EventExitPoolRequest {
@@ -2267,6 +3869,7 @@ function createBaseEventExitPoolRequest(): EventExitPoolRequest {
   };
 }
 export const EventExitPoolRequest = {
+  typeUrl: "/pryzm.amm.v1.EventExitPoolRequest",
   encode(message: EventExitPoolRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.creator !== "") {
       writer.uint32(10).string(message.creator);
@@ -2366,6 +3969,61 @@ export const EventExitPoolRequest = {
     message.swapFee = object.swapFee?.map(e => Coin.fromPartial(e)) || [];
     message.exitType = object.exitType ?? 0;
     return message;
+  },
+  fromAmino(object: EventExitPoolRequestAmino): EventExitPoolRequest {
+    const message = createBaseEventExitPoolRequest();
+    if (object.creator !== undefined && object.creator !== null) {
+      message.creator = object.creator;
+    }
+    if (object.pool_id !== undefined && object.pool_id !== null) {
+      message.poolId = BigInt(object.pool_id);
+    }
+    if (object.lpt_in !== undefined && object.lpt_in !== null) {
+      message.lptIn = Coin.fromAmino(object.lpt_in);
+    }
+    message.amountsOut = object.amounts_out?.map(e => Coin.fromAmino(e)) || [];
+    if (object.protocol_fee !== undefined && object.protocol_fee !== null) {
+      message.protocolFee = Coin.fromAmino(object.protocol_fee);
+    }
+    message.swapFee = object.swap_fee?.map(e => Coin.fromAmino(e)) || [];
+    if (object.exit_type !== undefined && object.exit_type !== null) {
+      message.exitType = exitTypeFromJSON(object.exit_type);
+    }
+    return message;
+  },
+  toAmino(message: EventExitPoolRequest): EventExitPoolRequestAmino {
+    const obj: any = {};
+    obj.creator = message.creator;
+    obj.pool_id = message.poolId ? message.poolId.toString() : undefined;
+    obj.lpt_in = message.lptIn ? Coin.toAmino(message.lptIn) : undefined;
+    if (message.amountsOut) {
+      obj.amounts_out = message.amountsOut.map(e => e ? Coin.toAmino(e) : undefined);
+    } else {
+      obj.amounts_out = [];
+    }
+    obj.protocol_fee = message.protocolFee ? Coin.toAmino(message.protocolFee) : undefined;
+    if (message.swapFee) {
+      obj.swap_fee = message.swapFee.map(e => e ? Coin.toAmino(e) : undefined);
+    } else {
+      obj.swap_fee = [];
+    }
+    obj.exit_type = exitTypeToJSON(message.exitType);
+    return obj;
+  },
+  fromAminoMsg(object: EventExitPoolRequestAminoMsg): EventExitPoolRequest {
+    return EventExitPoolRequest.fromAmino(object.value);
+  },
+  fromProtoMsg(message: EventExitPoolRequestProtoMsg): EventExitPoolRequest {
+    return EventExitPoolRequest.decode(message.value);
+  },
+  toProto(message: EventExitPoolRequest): Uint8Array {
+    return EventExitPoolRequest.encode(message).finish();
+  },
+  toProtoMsg(message: EventExitPoolRequest): EventExitPoolRequestProtoMsg {
+    return {
+      typeUrl: "/pryzm.amm.v1.EventExitPoolRequest",
+      value: EventExitPoolRequest.encode(message).finish()
+    };
   }
 };
 function createBaseEventJoinPoolRequest(): EventJoinPoolRequest {
@@ -2380,6 +4038,7 @@ function createBaseEventJoinPoolRequest(): EventJoinPoolRequest {
   };
 }
 export const EventJoinPoolRequest = {
+  typeUrl: "/pryzm.amm.v1.EventJoinPoolRequest",
   encode(message: EventJoinPoolRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.creator !== "") {
       writer.uint32(10).string(message.creator);
@@ -2483,6 +4142,63 @@ export const EventJoinPoolRequest = {
     message.swapFee = object.swapFee?.map(e => Coin.fromPartial(e)) || [];
     message.joinType = object.joinType ?? 0;
     return message;
+  },
+  fromAmino(object: EventJoinPoolRequestAmino): EventJoinPoolRequest {
+    const message = createBaseEventJoinPoolRequest();
+    if (object.creator !== undefined && object.creator !== null) {
+      message.creator = object.creator;
+    }
+    if (object.pool_id !== undefined && object.pool_id !== null) {
+      message.poolId = BigInt(object.pool_id);
+    }
+    if (object.lpt_out !== undefined && object.lpt_out !== null) {
+      message.lptOut = Coin.fromAmino(object.lpt_out);
+    }
+    message.amountsIn = object.amounts_in?.map(e => Coin.fromAmino(e)) || [];
+    message.protocolFee = object.protocol_fee?.map(e => Coin.fromAmino(e)) || [];
+    message.swapFee = object.swap_fee?.map(e => Coin.fromAmino(e)) || [];
+    if (object.join_type !== undefined && object.join_type !== null) {
+      message.joinType = joinTypeFromJSON(object.join_type);
+    }
+    return message;
+  },
+  toAmino(message: EventJoinPoolRequest): EventJoinPoolRequestAmino {
+    const obj: any = {};
+    obj.creator = message.creator;
+    obj.pool_id = message.poolId ? message.poolId.toString() : undefined;
+    obj.lpt_out = message.lptOut ? Coin.toAmino(message.lptOut) : undefined;
+    if (message.amountsIn) {
+      obj.amounts_in = message.amountsIn.map(e => e ? Coin.toAmino(e) : undefined);
+    } else {
+      obj.amounts_in = [];
+    }
+    if (message.protocolFee) {
+      obj.protocol_fee = message.protocolFee.map(e => e ? Coin.toAmino(e) : undefined);
+    } else {
+      obj.protocol_fee = [];
+    }
+    if (message.swapFee) {
+      obj.swap_fee = message.swapFee.map(e => e ? Coin.toAmino(e) : undefined);
+    } else {
+      obj.swap_fee = [];
+    }
+    obj.join_type = joinTypeToJSON(message.joinType);
+    return obj;
+  },
+  fromAminoMsg(object: EventJoinPoolRequestAminoMsg): EventJoinPoolRequest {
+    return EventJoinPoolRequest.fromAmino(object.value);
+  },
+  fromProtoMsg(message: EventJoinPoolRequestProtoMsg): EventJoinPoolRequest {
+    return EventJoinPoolRequest.decode(message.value);
+  },
+  toProto(message: EventJoinPoolRequest): Uint8Array {
+    return EventJoinPoolRequest.encode(message).finish();
+  },
+  toProtoMsg(message: EventJoinPoolRequest): EventJoinPoolRequestProtoMsg {
+    return {
+      typeUrl: "/pryzm.amm.v1.EventJoinPoolRequest",
+      value: EventJoinPoolRequest.encode(message).finish()
+    };
   }
 };
 function createBaseEventSingleSwapRequest(): EventSingleSwapRequest {
@@ -2497,6 +4213,7 @@ function createBaseEventSingleSwapRequest(): EventSingleSwapRequest {
   };
 }
 export const EventSingleSwapRequest = {
+  typeUrl: "/pryzm.amm.v1.EventSingleSwapRequest",
   encode(message: EventSingleSwapRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.creator !== "") {
       writer.uint32(10).string(message.creator);
@@ -2588,6 +4305,57 @@ export const EventSingleSwapRequest = {
     message.swapFee = object.swapFee !== undefined && object.swapFee !== null ? Coin.fromPartial(object.swapFee) : undefined;
     message.swapType = object.swapType ?? 0;
     return message;
+  },
+  fromAmino(object: EventSingleSwapRequestAmino): EventSingleSwapRequest {
+    const message = createBaseEventSingleSwapRequest();
+    if (object.creator !== undefined && object.creator !== null) {
+      message.creator = object.creator;
+    }
+    if (object.pool_id !== undefined && object.pool_id !== null) {
+      message.poolId = BigInt(object.pool_id);
+    }
+    if (object.amount_out !== undefined && object.amount_out !== null) {
+      message.amountOut = Coin.fromAmino(object.amount_out);
+    }
+    if (object.amount_in !== undefined && object.amount_in !== null) {
+      message.amountIn = Coin.fromAmino(object.amount_in);
+    }
+    if (object.protocol_fee !== undefined && object.protocol_fee !== null) {
+      message.protocolFee = Coin.fromAmino(object.protocol_fee);
+    }
+    if (object.swap_fee !== undefined && object.swap_fee !== null) {
+      message.swapFee = Coin.fromAmino(object.swap_fee);
+    }
+    if (object.swap_type !== undefined && object.swap_type !== null) {
+      message.swapType = swapTypeFromJSON(object.swap_type);
+    }
+    return message;
+  },
+  toAmino(message: EventSingleSwapRequest): EventSingleSwapRequestAmino {
+    const obj: any = {};
+    obj.creator = message.creator;
+    obj.pool_id = message.poolId ? message.poolId.toString() : undefined;
+    obj.amount_out = message.amountOut ? Coin.toAmino(message.amountOut) : undefined;
+    obj.amount_in = message.amountIn ? Coin.toAmino(message.amountIn) : undefined;
+    obj.protocol_fee = message.protocolFee ? Coin.toAmino(message.protocolFee) : undefined;
+    obj.swap_fee = message.swapFee ? Coin.toAmino(message.swapFee) : undefined;
+    obj.swap_type = swapTypeToJSON(message.swapType);
+    return obj;
+  },
+  fromAminoMsg(object: EventSingleSwapRequestAminoMsg): EventSingleSwapRequest {
+    return EventSingleSwapRequest.fromAmino(object.value);
+  },
+  fromProtoMsg(message: EventSingleSwapRequestProtoMsg): EventSingleSwapRequest {
+    return EventSingleSwapRequest.decode(message.value);
+  },
+  toProto(message: EventSingleSwapRequest): Uint8Array {
+    return EventSingleSwapRequest.encode(message).finish();
+  },
+  toProtoMsg(message: EventSingleSwapRequest): EventSingleSwapRequestProtoMsg {
+    return {
+      typeUrl: "/pryzm.amm.v1.EventSingleSwapRequest",
+      value: EventSingleSwapRequest.encode(message).finish()
+    };
   }
 };
 function createBaseEventBatchSwapRequest(): EventBatchSwapRequest {
@@ -2603,6 +4371,7 @@ function createBaseEventBatchSwapRequest(): EventBatchSwapRequest {
   };
 }
 export const EventBatchSwapRequest = {
+  typeUrl: "/pryzm.amm.v1.EventBatchSwapRequest",
   encode(message: EventBatchSwapRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.creator !== "") {
       writer.uint32(10).string(message.creator);
@@ -2727,6 +4496,73 @@ export const EventBatchSwapRequest = {
     message.swapFee = object.swapFee?.map(e => Coin.fromPartial(e)) || [];
     message.swapType = object.swapType ?? 0;
     return message;
+  },
+  fromAmino(object: EventBatchSwapRequestAmino): EventBatchSwapRequest {
+    const message = createBaseEventBatchSwapRequest();
+    if (object.creator !== undefined && object.creator !== null) {
+      message.creator = object.creator;
+    }
+    message.steps = object.steps?.map(e => SwapStep.fromAmino(e)) || [];
+    message.amountsIn = object.amounts_in?.map(e => Coin.fromAmino(e)) || [];
+    message.amountsOut = object.amounts_out?.map(e => Coin.fromAmino(e)) || [];
+    message.swapProtocolFee = object.swap_protocol_fee?.map(e => Coin.fromAmino(e)) || [];
+    message.joinExitProtocolFee = object.join_exit_protocol_fee?.map(e => Coin.fromAmino(e)) || [];
+    message.swapFee = object.swap_fee?.map(e => Coin.fromAmino(e)) || [];
+    if (object.swap_type !== undefined && object.swap_type !== null) {
+      message.swapType = swapTypeFromJSON(object.swap_type);
+    }
+    return message;
+  },
+  toAmino(message: EventBatchSwapRequest): EventBatchSwapRequestAmino {
+    const obj: any = {};
+    obj.creator = message.creator;
+    if (message.steps) {
+      obj.steps = message.steps.map(e => e ? SwapStep.toAmino(e) : undefined);
+    } else {
+      obj.steps = [];
+    }
+    if (message.amountsIn) {
+      obj.amounts_in = message.amountsIn.map(e => e ? Coin.toAmino(e) : undefined);
+    } else {
+      obj.amounts_in = [];
+    }
+    if (message.amountsOut) {
+      obj.amounts_out = message.amountsOut.map(e => e ? Coin.toAmino(e) : undefined);
+    } else {
+      obj.amounts_out = [];
+    }
+    if (message.swapProtocolFee) {
+      obj.swap_protocol_fee = message.swapProtocolFee.map(e => e ? Coin.toAmino(e) : undefined);
+    } else {
+      obj.swap_protocol_fee = [];
+    }
+    if (message.joinExitProtocolFee) {
+      obj.join_exit_protocol_fee = message.joinExitProtocolFee.map(e => e ? Coin.toAmino(e) : undefined);
+    } else {
+      obj.join_exit_protocol_fee = [];
+    }
+    if (message.swapFee) {
+      obj.swap_fee = message.swapFee.map(e => e ? Coin.toAmino(e) : undefined);
+    } else {
+      obj.swap_fee = [];
+    }
+    obj.swap_type = swapTypeToJSON(message.swapType);
+    return obj;
+  },
+  fromAminoMsg(object: EventBatchSwapRequestAminoMsg): EventBatchSwapRequest {
+    return EventBatchSwapRequest.fromAmino(object.value);
+  },
+  fromProtoMsg(message: EventBatchSwapRequestProtoMsg): EventBatchSwapRequest {
+    return EventBatchSwapRequest.decode(message.value);
+  },
+  toProto(message: EventBatchSwapRequest): Uint8Array {
+    return EventBatchSwapRequest.encode(message).finish();
+  },
+  toProtoMsg(message: EventBatchSwapRequest): EventBatchSwapRequestProtoMsg {
+    return {
+      typeUrl: "/pryzm.amm.v1.EventBatchSwapRequest",
+      value: EventBatchSwapRequest.encode(message).finish()
+    };
   }
 };
 function createBaseEventYAssetSwapRefractorAction(): EventYAssetSwapRefractorAction {
@@ -2737,6 +4573,7 @@ function createBaseEventYAssetSwapRefractorAction(): EventYAssetSwapRefractorAct
   };
 }
 export const EventYAssetSwapRefractorAction = {
+  typeUrl: "/pryzm.amm.v1.EventYAssetSwapRefractorAction",
   encode(message: EventYAssetSwapRefractorAction, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.yAmount !== "") {
       writer.uint32(10).string(message.yAmount);
@@ -2792,6 +4629,41 @@ export const EventYAssetSwapRefractorAction = {
     message.cAmountAfterFee = object.cAmountAfterFee ?? "";
     message.feeAmount = object.feeAmount ?? "";
     return message;
+  },
+  fromAmino(object: EventYAssetSwapRefractorActionAmino): EventYAssetSwapRefractorAction {
+    const message = createBaseEventYAssetSwapRefractorAction();
+    if (object.y_amount !== undefined && object.y_amount !== null) {
+      message.yAmount = object.y_amount;
+    }
+    if (object.c_amount_after_fee !== undefined && object.c_amount_after_fee !== null) {
+      message.cAmountAfterFee = object.c_amount_after_fee;
+    }
+    if (object.fee_amount !== undefined && object.fee_amount !== null) {
+      message.feeAmount = object.fee_amount;
+    }
+    return message;
+  },
+  toAmino(message: EventYAssetSwapRefractorAction): EventYAssetSwapRefractorActionAmino {
+    const obj: any = {};
+    obj.y_amount = message.yAmount;
+    obj.c_amount_after_fee = message.cAmountAfterFee;
+    obj.fee_amount = message.feeAmount;
+    return obj;
+  },
+  fromAminoMsg(object: EventYAssetSwapRefractorActionAminoMsg): EventYAssetSwapRefractorAction {
+    return EventYAssetSwapRefractorAction.fromAmino(object.value);
+  },
+  fromProtoMsg(message: EventYAssetSwapRefractorActionProtoMsg): EventYAssetSwapRefractorAction {
+    return EventYAssetSwapRefractorAction.decode(message.value);
+  },
+  toProto(message: EventYAssetSwapRefractorAction): Uint8Array {
+    return EventYAssetSwapRefractorAction.encode(message).finish();
+  },
+  toProtoMsg(message: EventYAssetSwapRefractorAction): EventYAssetSwapRefractorActionProtoMsg {
+    return {
+      typeUrl: "/pryzm.amm.v1.EventYAssetSwapRefractorAction",
+      value: EventYAssetSwapRefractorAction.encode(message).finish()
+    };
   }
 };
 function createBaseEventYAssetSwap(): EventYAssetSwap {
@@ -2803,6 +4675,7 @@ function createBaseEventYAssetSwap(): EventYAssetSwap {
   };
 }
 export const EventYAssetSwap = {
+  typeUrl: "/pryzm.amm.v1.EventYAssetSwap",
   encode(message: EventYAssetSwap, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.poolId !== BigInt(0)) {
       writer.uint32(8).uint64(message.poolId);
@@ -2867,6 +4740,45 @@ export const EventYAssetSwap = {
     message.refractorAction = object.refractorAction !== undefined && object.refractorAction !== null ? EventYAssetSwapRefractorAction.fromPartial(object.refractorAction) : undefined;
     message.fee = object.fee !== undefined && object.fee !== null ? Coin.fromPartial(object.fee) : undefined;
     return message;
+  },
+  fromAmino(object: EventYAssetSwapAmino): EventYAssetSwap {
+    const message = createBaseEventYAssetSwap();
+    if (object.pool_id !== undefined && object.pool_id !== null) {
+      message.poolId = BigInt(object.pool_id);
+    }
+    if (object.summary !== undefined && object.summary !== null) {
+      message.summary = SwapSummary.fromAmino(object.summary);
+    }
+    if (object.refractor_action !== undefined && object.refractor_action !== null) {
+      message.refractorAction = EventYAssetSwapRefractorAction.fromAmino(object.refractor_action);
+    }
+    if (object.fee !== undefined && object.fee !== null) {
+      message.fee = Coin.fromAmino(object.fee);
+    }
+    return message;
+  },
+  toAmino(message: EventYAssetSwap): EventYAssetSwapAmino {
+    const obj: any = {};
+    obj.pool_id = message.poolId ? message.poolId.toString() : undefined;
+    obj.summary = message.summary ? SwapSummary.toAmino(message.summary) : undefined;
+    obj.refractor_action = message.refractorAction ? EventYAssetSwapRefractorAction.toAmino(message.refractorAction) : undefined;
+    obj.fee = message.fee ? Coin.toAmino(message.fee) : undefined;
+    return obj;
+  },
+  fromAminoMsg(object: EventYAssetSwapAminoMsg): EventYAssetSwap {
+    return EventYAssetSwap.fromAmino(object.value);
+  },
+  fromProtoMsg(message: EventYAssetSwapProtoMsg): EventYAssetSwap {
+    return EventYAssetSwap.decode(message.value);
+  },
+  toProto(message: EventYAssetSwap): Uint8Array {
+    return EventYAssetSwap.encode(message).finish();
+  },
+  toProtoMsg(message: EventYAssetSwap): EventYAssetSwapProtoMsg {
+    return {
+      typeUrl: "/pryzm.amm.v1.EventYAssetSwap",
+      value: EventYAssetSwap.encode(message).finish()
+    };
   }
 };
 function createBaseEventSetOraclePricePair(): EventSetOraclePricePair {
@@ -2875,6 +4787,7 @@ function createBaseEventSetOraclePricePair(): EventSetOraclePricePair {
   };
 }
 export const EventSetOraclePricePair = {
+  typeUrl: "/pryzm.amm.v1.EventSetOraclePricePair",
   encode(message: EventSetOraclePricePair, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.oraclePricePair !== undefined) {
       OraclePricePair.encode(message.oraclePricePair, writer.uint32(10).fork()).ldelim();
@@ -2912,6 +4825,33 @@ export const EventSetOraclePricePair = {
     const message = createBaseEventSetOraclePricePair();
     message.oraclePricePair = object.oraclePricePair !== undefined && object.oraclePricePair !== null ? OraclePricePair.fromPartial(object.oraclePricePair) : undefined;
     return message;
+  },
+  fromAmino(object: EventSetOraclePricePairAmino): EventSetOraclePricePair {
+    const message = createBaseEventSetOraclePricePair();
+    if (object.oracle_price_pair !== undefined && object.oracle_price_pair !== null) {
+      message.oraclePricePair = OraclePricePair.fromAmino(object.oracle_price_pair);
+    }
+    return message;
+  },
+  toAmino(message: EventSetOraclePricePair): EventSetOraclePricePairAmino {
+    const obj: any = {};
+    obj.oracle_price_pair = message.oraclePricePair ? OraclePricePair.toAmino(message.oraclePricePair) : undefined;
+    return obj;
+  },
+  fromAminoMsg(object: EventSetOraclePricePairAminoMsg): EventSetOraclePricePair {
+    return EventSetOraclePricePair.fromAmino(object.value);
+  },
+  fromProtoMsg(message: EventSetOraclePricePairProtoMsg): EventSetOraclePricePair {
+    return EventSetOraclePricePair.decode(message.value);
+  },
+  toProto(message: EventSetOraclePricePair): Uint8Array {
+    return EventSetOraclePricePair.encode(message).finish();
+  },
+  toProtoMsg(message: EventSetOraclePricePair): EventSetOraclePricePairProtoMsg {
+    return {
+      typeUrl: "/pryzm.amm.v1.EventSetOraclePricePair",
+      value: EventSetOraclePricePair.encode(message).finish()
+    };
   }
 };
 function createBaseEventRemoveOraclePricePair(): EventRemoveOraclePricePair {
@@ -2920,6 +4860,7 @@ function createBaseEventRemoveOraclePricePair(): EventRemoveOraclePricePair {
   };
 }
 export const EventRemoveOraclePricePair = {
+  typeUrl: "/pryzm.amm.v1.EventRemoveOraclePricePair",
   encode(message: EventRemoveOraclePricePair, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.assetId !== "") {
       writer.uint32(10).string(message.assetId);
@@ -2957,6 +4898,33 @@ export const EventRemoveOraclePricePair = {
     const message = createBaseEventRemoveOraclePricePair();
     message.assetId = object.assetId ?? "";
     return message;
+  },
+  fromAmino(object: EventRemoveOraclePricePairAmino): EventRemoveOraclePricePair {
+    const message = createBaseEventRemoveOraclePricePair();
+    if (object.asset_id !== undefined && object.asset_id !== null) {
+      message.assetId = object.asset_id;
+    }
+    return message;
+  },
+  toAmino(message: EventRemoveOraclePricePair): EventRemoveOraclePricePairAmino {
+    const obj: any = {};
+    obj.asset_id = message.assetId;
+    return obj;
+  },
+  fromAminoMsg(object: EventRemoveOraclePricePairAminoMsg): EventRemoveOraclePricePair {
+    return EventRemoveOraclePricePair.fromAmino(object.value);
+  },
+  fromProtoMsg(message: EventRemoveOraclePricePairProtoMsg): EventRemoveOraclePricePair {
+    return EventRemoveOraclePricePair.decode(message.value);
+  },
+  toProto(message: EventRemoveOraclePricePair): Uint8Array {
+    return EventRemoveOraclePricePair.encode(message).finish();
+  },
+  toProtoMsg(message: EventRemoveOraclePricePair): EventRemoveOraclePricePairProtoMsg {
+    return {
+      typeUrl: "/pryzm.amm.v1.EventRemoveOraclePricePair",
+      value: EventRemoveOraclePricePair.encode(message).finish()
+    };
   }
 };
 function createBaseEventSetPendingTokenIntroduction(): EventSetPendingTokenIntroduction {
@@ -2965,6 +4933,7 @@ function createBaseEventSetPendingTokenIntroduction(): EventSetPendingTokenIntro
   };
 }
 export const EventSetPendingTokenIntroduction = {
+  typeUrl: "/pryzm.amm.v1.EventSetPendingTokenIntroduction",
   encode(message: EventSetPendingTokenIntroduction, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.pendingTokenIntroduction !== undefined) {
       PendingTokenIntroduction.encode(message.pendingTokenIntroduction, writer.uint32(10).fork()).ldelim();
@@ -3002,6 +4971,33 @@ export const EventSetPendingTokenIntroduction = {
     const message = createBaseEventSetPendingTokenIntroduction();
     message.pendingTokenIntroduction = object.pendingTokenIntroduction !== undefined && object.pendingTokenIntroduction !== null ? PendingTokenIntroduction.fromPartial(object.pendingTokenIntroduction) : undefined;
     return message;
+  },
+  fromAmino(object: EventSetPendingTokenIntroductionAmino): EventSetPendingTokenIntroduction {
+    const message = createBaseEventSetPendingTokenIntroduction();
+    if (object.pending_token_introduction !== undefined && object.pending_token_introduction !== null) {
+      message.pendingTokenIntroduction = PendingTokenIntroduction.fromAmino(object.pending_token_introduction);
+    }
+    return message;
+  },
+  toAmino(message: EventSetPendingTokenIntroduction): EventSetPendingTokenIntroductionAmino {
+    const obj: any = {};
+    obj.pending_token_introduction = message.pendingTokenIntroduction ? PendingTokenIntroduction.toAmino(message.pendingTokenIntroduction) : undefined;
+    return obj;
+  },
+  fromAminoMsg(object: EventSetPendingTokenIntroductionAminoMsg): EventSetPendingTokenIntroduction {
+    return EventSetPendingTokenIntroduction.fromAmino(object.value);
+  },
+  fromProtoMsg(message: EventSetPendingTokenIntroductionProtoMsg): EventSetPendingTokenIntroduction {
+    return EventSetPendingTokenIntroduction.decode(message.value);
+  },
+  toProto(message: EventSetPendingTokenIntroduction): Uint8Array {
+    return EventSetPendingTokenIntroduction.encode(message).finish();
+  },
+  toProtoMsg(message: EventSetPendingTokenIntroduction): EventSetPendingTokenIntroductionProtoMsg {
+    return {
+      typeUrl: "/pryzm.amm.v1.EventSetPendingTokenIntroduction",
+      value: EventSetPendingTokenIntroduction.encode(message).finish()
+    };
   }
 };
 function createBaseEventRemovePendingTokenIntroduction(): EventRemovePendingTokenIntroduction {
@@ -3011,6 +5007,7 @@ function createBaseEventRemovePendingTokenIntroduction(): EventRemovePendingToke
   };
 }
 export const EventRemovePendingTokenIntroduction = {
+  typeUrl: "/pryzm.amm.v1.EventRemovePendingTokenIntroduction",
   encode(message: EventRemovePendingTokenIntroduction, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.assetId !== "") {
       writer.uint32(10).string(message.assetId);
@@ -3057,6 +5054,37 @@ export const EventRemovePendingTokenIntroduction = {
     message.assetId = object.assetId ?? "";
     message.targetPoolId = object.targetPoolId !== undefined && object.targetPoolId !== null ? BigInt(object.targetPoolId.toString()) : BigInt(0);
     return message;
+  },
+  fromAmino(object: EventRemovePendingTokenIntroductionAmino): EventRemovePendingTokenIntroduction {
+    const message = createBaseEventRemovePendingTokenIntroduction();
+    if (object.asset_id !== undefined && object.asset_id !== null) {
+      message.assetId = object.asset_id;
+    }
+    if (object.target_pool_id !== undefined && object.target_pool_id !== null) {
+      message.targetPoolId = BigInt(object.target_pool_id);
+    }
+    return message;
+  },
+  toAmino(message: EventRemovePendingTokenIntroduction): EventRemovePendingTokenIntroductionAmino {
+    const obj: any = {};
+    obj.asset_id = message.assetId;
+    obj.target_pool_id = message.targetPoolId ? message.targetPoolId.toString() : undefined;
+    return obj;
+  },
+  fromAminoMsg(object: EventRemovePendingTokenIntroductionAminoMsg): EventRemovePendingTokenIntroduction {
+    return EventRemovePendingTokenIntroduction.fromAmino(object.value);
+  },
+  fromProtoMsg(message: EventRemovePendingTokenIntroductionProtoMsg): EventRemovePendingTokenIntroduction {
+    return EventRemovePendingTokenIntroduction.decode(message.value);
+  },
+  toProto(message: EventRemovePendingTokenIntroduction): Uint8Array {
+    return EventRemovePendingTokenIntroduction.encode(message).finish();
+  },
+  toProtoMsg(message: EventRemovePendingTokenIntroduction): EventRemovePendingTokenIntroductionProtoMsg {
+    return {
+      typeUrl: "/pryzm.amm.v1.EventRemovePendingTokenIntroduction",
+      value: EventRemovePendingTokenIntroduction.encode(message).finish()
+    };
   }
 };
 function createBaseEventSetParams(): EventSetParams {
@@ -3065,6 +5093,7 @@ function createBaseEventSetParams(): EventSetParams {
   };
 }
 export const EventSetParams = {
+  typeUrl: "/pryzm.amm.v1.EventSetParams",
   encode(message: EventSetParams, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.params !== undefined) {
       Params.encode(message.params, writer.uint32(10).fork()).ldelim();
@@ -3102,5 +5131,32 @@ export const EventSetParams = {
     const message = createBaseEventSetParams();
     message.params = object.params !== undefined && object.params !== null ? Params.fromPartial(object.params) : undefined;
     return message;
+  },
+  fromAmino(object: EventSetParamsAmino): EventSetParams {
+    const message = createBaseEventSetParams();
+    if (object.params !== undefined && object.params !== null) {
+      message.params = Params.fromAmino(object.params);
+    }
+    return message;
+  },
+  toAmino(message: EventSetParams): EventSetParamsAmino {
+    const obj: any = {};
+    obj.params = message.params ? Params.toAmino(message.params) : undefined;
+    return obj;
+  },
+  fromAminoMsg(object: EventSetParamsAminoMsg): EventSetParams {
+    return EventSetParams.fromAmino(object.value);
+  },
+  fromProtoMsg(message: EventSetParamsProtoMsg): EventSetParams {
+    return EventSetParams.decode(message.value);
+  },
+  toProto(message: EventSetParams): Uint8Array {
+    return EventSetParams.encode(message).finish();
+  },
+  toProtoMsg(message: EventSetParams): EventSetParamsProtoMsg {
+    return {
+      typeUrl: "/pryzm.amm.v1.EventSetParams",
+      value: EventSetParams.encode(message).finish()
+    };
   }
 };

@@ -15,7 +15,7 @@ export class ServiceClientImpl implements Service {
     this.config = this.config.bind(this);
   }
   config(request: DeepPartial<ConfigRequest> = {}, metadata?: grpc.Metadata): Promise<ConfigResponse> {
-    return this.rpc.unary(ConfigDesc, ConfigRequest.fromPartial(request), metadata);
+    return this.rpc.unary(ConfigDesc, ConfigRequest.fromPartial(request as any), metadata);
   }
 }
 export const ServiceDesc = {

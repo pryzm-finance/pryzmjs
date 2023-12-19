@@ -13,6 +13,26 @@ export interface Asset {
   cAssetApy?: string;
   error: string;
 }
+export interface AssetProtoMsg {
+  typeUrl: "/pryzmatics.asset.Asset";
+  value: Uint8Array;
+}
+export interface AssetAmino {
+  id?: string;
+  token_denom?: string;
+  total_refracted_c_asset?: string;
+  total_p_asset?: string;
+  pool_id?: string;
+  exchange_rate?: string;
+  exchange_rate_block_height?: string;
+  c_p_asset_exchange_rate?: string;
+  c_asset_apy?: string;
+  error?: string;
+}
+export interface AssetAminoMsg {
+  type: "/pryzmatics.asset.Asset";
+  value: AssetAmino;
+}
 export interface AssetSDKType {
   id: string;
   token_denom: string;
@@ -40,6 +60,7 @@ function createBaseAsset(): Asset {
   };
 }
 export const Asset = {
+  typeUrl: "/pryzmatics.asset.Asset",
   encode(message: Asset, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.id !== "") {
       writer.uint32(10).string(message.id);
@@ -158,5 +179,68 @@ export const Asset = {
     message.cAssetApy = object.cAssetApy ?? undefined;
     message.error = object.error ?? "";
     return message;
+  },
+  fromAmino(object: AssetAmino): Asset {
+    const message = createBaseAsset();
+    if (object.id !== undefined && object.id !== null) {
+      message.id = object.id;
+    }
+    if (object.token_denom !== undefined && object.token_denom !== null) {
+      message.tokenDenom = object.token_denom;
+    }
+    if (object.total_refracted_c_asset !== undefined && object.total_refracted_c_asset !== null) {
+      message.totalRefractedCAsset = object.total_refracted_c_asset;
+    }
+    if (object.total_p_asset !== undefined && object.total_p_asset !== null) {
+      message.totalPAsset = object.total_p_asset;
+    }
+    if (object.pool_id !== undefined && object.pool_id !== null) {
+      message.poolId = object.pool_id;
+    }
+    if (object.exchange_rate !== undefined && object.exchange_rate !== null) {
+      message.exchangeRate = object.exchange_rate;
+    }
+    if (object.exchange_rate_block_height !== undefined && object.exchange_rate_block_height !== null) {
+      message.exchangeRateBlockHeight = object.exchange_rate_block_height;
+    }
+    if (object.c_p_asset_exchange_rate !== undefined && object.c_p_asset_exchange_rate !== null) {
+      message.cPAssetExchangeRate = object.c_p_asset_exchange_rate;
+    }
+    if (object.c_asset_apy !== undefined && object.c_asset_apy !== null) {
+      message.cAssetApy = object.c_asset_apy;
+    }
+    if (object.error !== undefined && object.error !== null) {
+      message.error = object.error;
+    }
+    return message;
+  },
+  toAmino(message: Asset): AssetAmino {
+    const obj: any = {};
+    obj.id = message.id;
+    obj.token_denom = message.tokenDenom;
+    obj.total_refracted_c_asset = message.totalRefractedCAsset;
+    obj.total_p_asset = message.totalPAsset;
+    obj.pool_id = message.poolId;
+    obj.exchange_rate = message.exchangeRate;
+    obj.exchange_rate_block_height = message.exchangeRateBlockHeight;
+    obj.c_p_asset_exchange_rate = message.cPAssetExchangeRate;
+    obj.c_asset_apy = message.cAssetApy;
+    obj.error = message.error;
+    return obj;
+  },
+  fromAminoMsg(object: AssetAminoMsg): Asset {
+    return Asset.fromAmino(object.value);
+  },
+  fromProtoMsg(message: AssetProtoMsg): Asset {
+    return Asset.decode(message.value);
+  },
+  toProto(message: Asset): Uint8Array {
+    return Asset.encode(message).finish();
+  },
+  toProtoMsg(message: Asset): AssetProtoMsg {
+    return {
+      typeUrl: "/pryzmatics.asset.Asset",
+      value: Asset.encode(message).finish()
+    };
   }
 };

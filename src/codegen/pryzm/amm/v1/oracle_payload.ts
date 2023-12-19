@@ -1,11 +1,23 @@
-import { Height, HeightSDKType } from "../../../ibc/core/client/v1/client";
-import { Pair, PairSDKType } from "./oracle_price_pair";
+import { Height, HeightAmino, HeightSDKType } from "../../../ibc/core/client/v1/client";
+import { Pair, PairAmino, PairSDKType } from "./oracle_price_pair";
 import { BinaryReader, BinaryWriter } from "../../../binary";
 import { isSet } from "../../../helpers";
 import { Decimal } from "@cosmjs/math";
 export interface OraclePayloadDataSourceBlockHeight {
   dataSource: string;
   blockHeight: Height;
+}
+export interface OraclePayloadDataSourceBlockHeightProtoMsg {
+  typeUrl: "/pryzm.amm.v1.OraclePayloadDataSourceBlockHeight";
+  value: Uint8Array;
+}
+export interface OraclePayloadDataSourceBlockHeightAmino {
+  data_source?: string;
+  block_height?: HeightAmino;
+}
+export interface OraclePayloadDataSourceBlockHeightAminoMsg {
+  type: "/pryzm.amm.v1.OraclePayloadDataSourceBlockHeight";
+  value: OraclePayloadDataSourceBlockHeightAmino;
 }
 export interface OraclePayloadDataSourceBlockHeightSDKType {
   data_source: string;
@@ -17,6 +29,21 @@ export interface OraclePayload {
   price: string;
   pairs: Pair[];
   quoteToken: string;
+}
+export interface OraclePayloadProtoMsg {
+  typeUrl: "/pryzm.amm.v1.OraclePayload";
+  value: Uint8Array;
+}
+/** OraclePayload defines the structure of oracle vote payload */
+export interface OraclePayloadAmino {
+  data_source_block_heights?: OraclePayloadDataSourceBlockHeightAmino[];
+  price?: string;
+  pairs?: PairAmino[];
+  quote_token?: string;
+}
+export interface OraclePayloadAminoMsg {
+  type: "/pryzm.amm.v1.OraclePayload";
+  value: OraclePayloadAmino;
 }
 /** OraclePayload defines the structure of oracle vote payload */
 export interface OraclePayloadSDKType {
@@ -32,6 +59,7 @@ function createBaseOraclePayloadDataSourceBlockHeight(): OraclePayloadDataSource
   };
 }
 export const OraclePayloadDataSourceBlockHeight = {
+  typeUrl: "/pryzm.amm.v1.OraclePayloadDataSourceBlockHeight",
   encode(message: OraclePayloadDataSourceBlockHeight, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.dataSource !== "") {
       writer.uint32(10).string(message.dataSource);
@@ -78,6 +106,37 @@ export const OraclePayloadDataSourceBlockHeight = {
     message.dataSource = object.dataSource ?? "";
     message.blockHeight = object.blockHeight !== undefined && object.blockHeight !== null ? Height.fromPartial(object.blockHeight) : undefined;
     return message;
+  },
+  fromAmino(object: OraclePayloadDataSourceBlockHeightAmino): OraclePayloadDataSourceBlockHeight {
+    const message = createBaseOraclePayloadDataSourceBlockHeight();
+    if (object.data_source !== undefined && object.data_source !== null) {
+      message.dataSource = object.data_source;
+    }
+    if (object.block_height !== undefined && object.block_height !== null) {
+      message.blockHeight = Height.fromAmino(object.block_height);
+    }
+    return message;
+  },
+  toAmino(message: OraclePayloadDataSourceBlockHeight): OraclePayloadDataSourceBlockHeightAmino {
+    const obj: any = {};
+    obj.data_source = message.dataSource;
+    obj.block_height = message.blockHeight ? Height.toAmino(message.blockHeight) : {};
+    return obj;
+  },
+  fromAminoMsg(object: OraclePayloadDataSourceBlockHeightAminoMsg): OraclePayloadDataSourceBlockHeight {
+    return OraclePayloadDataSourceBlockHeight.fromAmino(object.value);
+  },
+  fromProtoMsg(message: OraclePayloadDataSourceBlockHeightProtoMsg): OraclePayloadDataSourceBlockHeight {
+    return OraclePayloadDataSourceBlockHeight.decode(message.value);
+  },
+  toProto(message: OraclePayloadDataSourceBlockHeight): Uint8Array {
+    return OraclePayloadDataSourceBlockHeight.encode(message).finish();
+  },
+  toProtoMsg(message: OraclePayloadDataSourceBlockHeight): OraclePayloadDataSourceBlockHeightProtoMsg {
+    return {
+      typeUrl: "/pryzm.amm.v1.OraclePayloadDataSourceBlockHeight",
+      value: OraclePayloadDataSourceBlockHeight.encode(message).finish()
+    };
   }
 };
 function createBaseOraclePayload(): OraclePayload {
@@ -89,6 +148,7 @@ function createBaseOraclePayload(): OraclePayload {
   };
 }
 export const OraclePayload = {
+  typeUrl: "/pryzm.amm.v1.OraclePayload",
   encode(message: OraclePayload, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     for (const v of message.dataSourceBlockHeights) {
       OraclePayloadDataSourceBlockHeight.encode(v!, writer.uint32(10).fork()).ldelim();
@@ -161,5 +221,48 @@ export const OraclePayload = {
     message.pairs = object.pairs?.map(e => Pair.fromPartial(e)) || [];
     message.quoteToken = object.quoteToken ?? "";
     return message;
+  },
+  fromAmino(object: OraclePayloadAmino): OraclePayload {
+    const message = createBaseOraclePayload();
+    message.dataSourceBlockHeights = object.data_source_block_heights?.map(e => OraclePayloadDataSourceBlockHeight.fromAmino(e)) || [];
+    if (object.price !== undefined && object.price !== null) {
+      message.price = object.price;
+    }
+    message.pairs = object.pairs?.map(e => Pair.fromAmino(e)) || [];
+    if (object.quote_token !== undefined && object.quote_token !== null) {
+      message.quoteToken = object.quote_token;
+    }
+    return message;
+  },
+  toAmino(message: OraclePayload): OraclePayloadAmino {
+    const obj: any = {};
+    if (message.dataSourceBlockHeights) {
+      obj.data_source_block_heights = message.dataSourceBlockHeights.map(e => e ? OraclePayloadDataSourceBlockHeight.toAmino(e) : undefined);
+    } else {
+      obj.data_source_block_heights = [];
+    }
+    obj.price = message.price;
+    if (message.pairs) {
+      obj.pairs = message.pairs.map(e => e ? Pair.toAmino(e) : undefined);
+    } else {
+      obj.pairs = [];
+    }
+    obj.quote_token = message.quoteToken;
+    return obj;
+  },
+  fromAminoMsg(object: OraclePayloadAminoMsg): OraclePayload {
+    return OraclePayload.fromAmino(object.value);
+  },
+  fromProtoMsg(message: OraclePayloadProtoMsg): OraclePayload {
+    return OraclePayload.decode(message.value);
+  },
+  toProto(message: OraclePayload): Uint8Array {
+    return OraclePayload.encode(message).finish();
+  },
+  toProtoMsg(message: OraclePayload): OraclePayloadProtoMsg {
+    return {
+      typeUrl: "/pryzm.amm.v1.OraclePayload",
+      value: OraclePayload.encode(message).finish()
+    };
   }
 };

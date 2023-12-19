@@ -6,6 +6,19 @@ export interface QueryPriceBoundsRequest {
   from: string;
   to: string;
 }
+export interface QueryPriceBoundsRequestProtoMsg {
+  typeUrl: "/pryzmatics.server.price.QueryPriceBoundsRequest";
+  value: Uint8Array;
+}
+export interface QueryPriceBoundsRequestAmino {
+  denom?: string;
+  from?: string;
+  to?: string;
+}
+export interface QueryPriceBoundsRequestAminoMsg {
+  type: "/pryzmatics.server.price.QueryPriceBoundsRequest";
+  value: QueryPriceBoundsRequestAmino;
+}
 export interface QueryPriceBoundsRequestSDKType {
   denom: string;
   from: string;
@@ -14,6 +27,18 @@ export interface QueryPriceBoundsRequestSDKType {
 export interface QueryPriceBoundsResponse {
   min?: string;
   max?: string;
+}
+export interface QueryPriceBoundsResponseProtoMsg {
+  typeUrl: "/pryzmatics.server.price.QueryPriceBoundsResponse";
+  value: Uint8Array;
+}
+export interface QueryPriceBoundsResponseAmino {
+  min?: string;
+  max?: string;
+}
+export interface QueryPriceBoundsResponseAminoMsg {
+  type: "/pryzmatics.server.price.QueryPriceBoundsResponse";
+  value: QueryPriceBoundsResponseAmino;
 }
 export interface QueryPriceBoundsResponseSDKType {
   min?: string;
@@ -27,6 +52,7 @@ function createBaseQueryPriceBoundsRequest(): QueryPriceBoundsRequest {
   };
 }
 export const QueryPriceBoundsRequest = {
+  typeUrl: "/pryzmatics.server.price.QueryPriceBoundsRequest",
   encode(message: QueryPriceBoundsRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.denom !== "") {
       writer.uint32(10).string(message.denom);
@@ -82,6 +108,41 @@ export const QueryPriceBoundsRequest = {
     message.from = object.from ?? "";
     message.to = object.to ?? "";
     return message;
+  },
+  fromAmino(object: QueryPriceBoundsRequestAmino): QueryPriceBoundsRequest {
+    const message = createBaseQueryPriceBoundsRequest();
+    if (object.denom !== undefined && object.denom !== null) {
+      message.denom = object.denom;
+    }
+    if (object.from !== undefined && object.from !== null) {
+      message.from = object.from;
+    }
+    if (object.to !== undefined && object.to !== null) {
+      message.to = object.to;
+    }
+    return message;
+  },
+  toAmino(message: QueryPriceBoundsRequest): QueryPriceBoundsRequestAmino {
+    const obj: any = {};
+    obj.denom = message.denom;
+    obj.from = message.from;
+    obj.to = message.to;
+    return obj;
+  },
+  fromAminoMsg(object: QueryPriceBoundsRequestAminoMsg): QueryPriceBoundsRequest {
+    return QueryPriceBoundsRequest.fromAmino(object.value);
+  },
+  fromProtoMsg(message: QueryPriceBoundsRequestProtoMsg): QueryPriceBoundsRequest {
+    return QueryPriceBoundsRequest.decode(message.value);
+  },
+  toProto(message: QueryPriceBoundsRequest): Uint8Array {
+    return QueryPriceBoundsRequest.encode(message).finish();
+  },
+  toProtoMsg(message: QueryPriceBoundsRequest): QueryPriceBoundsRequestProtoMsg {
+    return {
+      typeUrl: "/pryzmatics.server.price.QueryPriceBoundsRequest",
+      value: QueryPriceBoundsRequest.encode(message).finish()
+    };
   }
 };
 function createBaseQueryPriceBoundsResponse(): QueryPriceBoundsResponse {
@@ -91,6 +152,7 @@ function createBaseQueryPriceBoundsResponse(): QueryPriceBoundsResponse {
   };
 }
 export const QueryPriceBoundsResponse = {
+  typeUrl: "/pryzmatics.server.price.QueryPriceBoundsResponse",
   encode(message: QueryPriceBoundsResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.min !== undefined) {
       writer.uint32(10).string(Decimal.fromUserInput(message.min, 18).atomics);
@@ -137,5 +199,36 @@ export const QueryPriceBoundsResponse = {
     message.min = object.min ?? undefined;
     message.max = object.max ?? undefined;
     return message;
+  },
+  fromAmino(object: QueryPriceBoundsResponseAmino): QueryPriceBoundsResponse {
+    const message = createBaseQueryPriceBoundsResponse();
+    if (object.min !== undefined && object.min !== null) {
+      message.min = object.min;
+    }
+    if (object.max !== undefined && object.max !== null) {
+      message.max = object.max;
+    }
+    return message;
+  },
+  toAmino(message: QueryPriceBoundsResponse): QueryPriceBoundsResponseAmino {
+    const obj: any = {};
+    obj.min = message.min;
+    obj.max = message.max;
+    return obj;
+  },
+  fromAminoMsg(object: QueryPriceBoundsResponseAminoMsg): QueryPriceBoundsResponse {
+    return QueryPriceBoundsResponse.fromAmino(object.value);
+  },
+  fromProtoMsg(message: QueryPriceBoundsResponseProtoMsg): QueryPriceBoundsResponse {
+    return QueryPriceBoundsResponse.decode(message.value);
+  },
+  toProto(message: QueryPriceBoundsResponse): Uint8Array {
+    return QueryPriceBoundsResponse.encode(message).finish();
+  },
+  toProtoMsg(message: QueryPriceBoundsResponse): QueryPriceBoundsResponseProtoMsg {
+    return {
+      typeUrl: "/pryzmatics.server.price.QueryPriceBoundsResponse",
+      value: QueryPriceBoundsResponse.encode(message).finish()
+    };
   }
 };

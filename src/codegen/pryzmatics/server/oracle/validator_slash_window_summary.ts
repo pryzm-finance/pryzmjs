@@ -1,5 +1,5 @@
-import { PageRequest, PageRequestSDKType, PageResponse, PageResponseSDKType } from "../../../cosmos/base/query/v1beta1/pagination";
-import { ValidatorSlashWindowSummary, ValidatorSlashWindowSummarySDKType } from "../../oracle/validator_slash_window_summary";
+import { PageRequest, PageRequestAmino, PageRequestSDKType, PageResponse, PageResponseAmino, PageResponseSDKType } from "../../../cosmos/base/query/v1beta1/pagination";
+import { ValidatorSlashWindowSummary, ValidatorSlashWindowSummaryAmino, ValidatorSlashWindowSummarySDKType } from "../../oracle/validator_slash_window_summary";
 import { BinaryReader, BinaryWriter } from "../../../binary";
 import { isSet } from "../../../helpers";
 export interface QueryValidatorSlashWindowSummariesRequest {
@@ -7,6 +7,20 @@ export interface QueryValidatorSlashWindowSummariesRequest {
   fromBlockHeight?: string;
   toBlockHeight?: string;
   pagination?: PageRequest;
+}
+export interface QueryValidatorSlashWindowSummariesRequestProtoMsg {
+  typeUrl: "/pryzmatics.server.oracle.QueryValidatorSlashWindowSummariesRequest";
+  value: Uint8Array;
+}
+export interface QueryValidatorSlashWindowSummariesRequestAmino {
+  operator_address?: string;
+  from_block_height?: string;
+  to_block_height?: string;
+  pagination?: PageRequestAmino;
+}
+export interface QueryValidatorSlashWindowSummariesRequestAminoMsg {
+  type: "/pryzmatics.server.oracle.QueryValidatorSlashWindowSummariesRequest";
+  value: QueryValidatorSlashWindowSummariesRequestAmino;
 }
 export interface QueryValidatorSlashWindowSummariesRequestSDKType {
   operator_address: string;
@@ -17,6 +31,18 @@ export interface QueryValidatorSlashWindowSummariesRequestSDKType {
 export interface QueryValidatorSlashWindowSummariesResponse {
   summaries: ValidatorSlashWindowSummary[];
   pagination?: PageResponse;
+}
+export interface QueryValidatorSlashWindowSummariesResponseProtoMsg {
+  typeUrl: "/pryzmatics.server.oracle.QueryValidatorSlashWindowSummariesResponse";
+  value: Uint8Array;
+}
+export interface QueryValidatorSlashWindowSummariesResponseAmino {
+  summaries?: ValidatorSlashWindowSummaryAmino[];
+  pagination?: PageResponseAmino;
+}
+export interface QueryValidatorSlashWindowSummariesResponseAminoMsg {
+  type: "/pryzmatics.server.oracle.QueryValidatorSlashWindowSummariesResponse";
+  value: QueryValidatorSlashWindowSummariesResponseAmino;
 }
 export interface QueryValidatorSlashWindowSummariesResponseSDKType {
   summaries: ValidatorSlashWindowSummarySDKType[];
@@ -31,6 +57,7 @@ function createBaseQueryValidatorSlashWindowSummariesRequest(): QueryValidatorSl
   };
 }
 export const QueryValidatorSlashWindowSummariesRequest = {
+  typeUrl: "/pryzmatics.server.oracle.QueryValidatorSlashWindowSummariesRequest",
   encode(message: QueryValidatorSlashWindowSummariesRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.operatorAddress !== "") {
       writer.uint32(10).string(message.operatorAddress);
@@ -95,6 +122,45 @@ export const QueryValidatorSlashWindowSummariesRequest = {
     message.toBlockHeight = object.toBlockHeight ?? undefined;
     message.pagination = object.pagination !== undefined && object.pagination !== null ? PageRequest.fromPartial(object.pagination) : undefined;
     return message;
+  },
+  fromAmino(object: QueryValidatorSlashWindowSummariesRequestAmino): QueryValidatorSlashWindowSummariesRequest {
+    const message = createBaseQueryValidatorSlashWindowSummariesRequest();
+    if (object.operator_address !== undefined && object.operator_address !== null) {
+      message.operatorAddress = object.operator_address;
+    }
+    if (object.from_block_height !== undefined && object.from_block_height !== null) {
+      message.fromBlockHeight = object.from_block_height;
+    }
+    if (object.to_block_height !== undefined && object.to_block_height !== null) {
+      message.toBlockHeight = object.to_block_height;
+    }
+    if (object.pagination !== undefined && object.pagination !== null) {
+      message.pagination = PageRequest.fromAmino(object.pagination);
+    }
+    return message;
+  },
+  toAmino(message: QueryValidatorSlashWindowSummariesRequest): QueryValidatorSlashWindowSummariesRequestAmino {
+    const obj: any = {};
+    obj.operator_address = message.operatorAddress;
+    obj.from_block_height = message.fromBlockHeight;
+    obj.to_block_height = message.toBlockHeight;
+    obj.pagination = message.pagination ? PageRequest.toAmino(message.pagination) : undefined;
+    return obj;
+  },
+  fromAminoMsg(object: QueryValidatorSlashWindowSummariesRequestAminoMsg): QueryValidatorSlashWindowSummariesRequest {
+    return QueryValidatorSlashWindowSummariesRequest.fromAmino(object.value);
+  },
+  fromProtoMsg(message: QueryValidatorSlashWindowSummariesRequestProtoMsg): QueryValidatorSlashWindowSummariesRequest {
+    return QueryValidatorSlashWindowSummariesRequest.decode(message.value);
+  },
+  toProto(message: QueryValidatorSlashWindowSummariesRequest): Uint8Array {
+    return QueryValidatorSlashWindowSummariesRequest.encode(message).finish();
+  },
+  toProtoMsg(message: QueryValidatorSlashWindowSummariesRequest): QueryValidatorSlashWindowSummariesRequestProtoMsg {
+    return {
+      typeUrl: "/pryzmatics.server.oracle.QueryValidatorSlashWindowSummariesRequest",
+      value: QueryValidatorSlashWindowSummariesRequest.encode(message).finish()
+    };
   }
 };
 function createBaseQueryValidatorSlashWindowSummariesResponse(): QueryValidatorSlashWindowSummariesResponse {
@@ -104,6 +170,7 @@ function createBaseQueryValidatorSlashWindowSummariesResponse(): QueryValidatorS
   };
 }
 export const QueryValidatorSlashWindowSummariesResponse = {
+  typeUrl: "/pryzmatics.server.oracle.QueryValidatorSlashWindowSummariesResponse",
   encode(message: QueryValidatorSlashWindowSummariesResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     for (const v of message.summaries) {
       ValidatorSlashWindowSummary.encode(v!, writer.uint32(10).fork()).ldelim();
@@ -154,5 +221,38 @@ export const QueryValidatorSlashWindowSummariesResponse = {
     message.summaries = object.summaries?.map(e => ValidatorSlashWindowSummary.fromPartial(e)) || [];
     message.pagination = object.pagination !== undefined && object.pagination !== null ? PageResponse.fromPartial(object.pagination) : undefined;
     return message;
+  },
+  fromAmino(object: QueryValidatorSlashWindowSummariesResponseAmino): QueryValidatorSlashWindowSummariesResponse {
+    const message = createBaseQueryValidatorSlashWindowSummariesResponse();
+    message.summaries = object.summaries?.map(e => ValidatorSlashWindowSummary.fromAmino(e)) || [];
+    if (object.pagination !== undefined && object.pagination !== null) {
+      message.pagination = PageResponse.fromAmino(object.pagination);
+    }
+    return message;
+  },
+  toAmino(message: QueryValidatorSlashWindowSummariesResponse): QueryValidatorSlashWindowSummariesResponseAmino {
+    const obj: any = {};
+    if (message.summaries) {
+      obj.summaries = message.summaries.map(e => e ? ValidatorSlashWindowSummary.toAmino(e) : undefined);
+    } else {
+      obj.summaries = [];
+    }
+    obj.pagination = message.pagination ? PageResponse.toAmino(message.pagination) : undefined;
+    return obj;
+  },
+  fromAminoMsg(object: QueryValidatorSlashWindowSummariesResponseAminoMsg): QueryValidatorSlashWindowSummariesResponse {
+    return QueryValidatorSlashWindowSummariesResponse.fromAmino(object.value);
+  },
+  fromProtoMsg(message: QueryValidatorSlashWindowSummariesResponseProtoMsg): QueryValidatorSlashWindowSummariesResponse {
+    return QueryValidatorSlashWindowSummariesResponse.decode(message.value);
+  },
+  toProto(message: QueryValidatorSlashWindowSummariesResponse): Uint8Array {
+    return QueryValidatorSlashWindowSummariesResponse.encode(message).finish();
+  },
+  toProtoMsg(message: QueryValidatorSlashWindowSummariesResponse): QueryValidatorSlashWindowSummariesResponseProtoMsg {
+    return {
+      typeUrl: "/pryzmatics.server.oracle.QueryValidatorSlashWindowSummariesResponse",
+      value: QueryValidatorSlashWindowSummariesResponse.encode(message).finish()
+    };
   }
 };

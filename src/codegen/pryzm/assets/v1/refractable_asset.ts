@@ -15,6 +15,28 @@ export interface RefractableAsset {
   /** The amount of fee for each operation on the asset. */
   feeRatios: FeeRatios;
 }
+export interface RefractableAssetProtoMsg {
+  typeUrl: "/pryzm.assets.v1.RefractableAsset";
+  value: Uint8Array;
+}
+/** The properties of a supported asset */
+export interface RefractableAssetAmino {
+  /** A unique user-provided identifier. Is used in the p/y token denom */
+  id?: string;
+  /** The denomination of the token on Pryzm. This may be an icstaking cToken or an IBC transferred token denom for external assets. */
+  token_denom?: string;
+  /** The id for the host chain on which the asset is staked. This is empty if the asset is external. */
+  host_chain_id?: string;
+  /** Disabled assets cannot be refracted, but can still be redeemed. */
+  disabled?: boolean;
+  maturity_params?: MaturityParamsAmino;
+  /** The amount of fee for each operation on the asset. */
+  fee_ratios?: FeeRatiosAmino;
+}
+export interface RefractableAssetAminoMsg {
+  type: "/pryzm.assets.v1.RefractableAsset";
+  value: RefractableAssetAmino;
+}
 /** The properties of a supported asset */
 export interface RefractableAssetSDKType {
   id: string;
@@ -31,6 +53,21 @@ export interface MaturityParams {
   /** The number of years in advance that maturities are made available for */
   years: number;
 }
+export interface MaturityParamsProtoMsg {
+  typeUrl: "/pryzm.assets.v1.MaturityParams";
+  value: Uint8Array;
+}
+/** The parameters based on which new maturities are introduced */
+export interface MaturityParamsAmino {
+  /** The number of maturities per year: can be 1, 2, 4, 12 */
+  levels_per_year?: number;
+  /** The number of years in advance that maturities are made available for */
+  years?: number;
+}
+export interface MaturityParamsAminoMsg {
+  type: "/pryzm.assets.v1.MaturityParams";
+  value: MaturityParamsAmino;
+}
 /** The parameters based on which new maturities are introduced */
 export interface MaturityParamsSDKType {
   levels_per_year: number;
@@ -43,6 +80,22 @@ export interface FeeRatios {
   refractorMerge?: string;
   refractorRedeem?: string;
   yStakingClaimReward?: string;
+}
+export interface FeeRatiosProtoMsg {
+  typeUrl: "/pryzm.assets.v1.FeeRatios";
+  value: Uint8Array;
+}
+/** Fee ratio per each operation */
+export interface FeeRatiosAmino {
+  yield?: string;
+  refractor_refract?: string;
+  refractor_merge?: string;
+  refractor_redeem?: string;
+  y_staking_claim_reward?: string;
+}
+export interface FeeRatiosAminoMsg {
+  type: "/pryzm.assets.v1.FeeRatios";
+  value: FeeRatiosAmino;
 }
 /** Fee ratio per each operation */
 export interface FeeRatiosSDKType {
@@ -63,6 +116,7 @@ function createBaseRefractableAsset(): RefractableAsset {
   };
 }
 export const RefractableAsset = {
+  typeUrl: "/pryzm.assets.v1.RefractableAsset",
   encode(message: RefractableAsset, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.id !== "") {
       writer.uint32(10).string(message.id);
@@ -145,6 +199,53 @@ export const RefractableAsset = {
     message.maturityParams = object.maturityParams !== undefined && object.maturityParams !== null ? MaturityParams.fromPartial(object.maturityParams) : undefined;
     message.feeRatios = object.feeRatios !== undefined && object.feeRatios !== null ? FeeRatios.fromPartial(object.feeRatios) : undefined;
     return message;
+  },
+  fromAmino(object: RefractableAssetAmino): RefractableAsset {
+    const message = createBaseRefractableAsset();
+    if (object.id !== undefined && object.id !== null) {
+      message.id = object.id;
+    }
+    if (object.token_denom !== undefined && object.token_denom !== null) {
+      message.tokenDenom = object.token_denom;
+    }
+    if (object.host_chain_id !== undefined && object.host_chain_id !== null) {
+      message.hostChainId = object.host_chain_id;
+    }
+    if (object.disabled !== undefined && object.disabled !== null) {
+      message.disabled = object.disabled;
+    }
+    if (object.maturity_params !== undefined && object.maturity_params !== null) {
+      message.maturityParams = MaturityParams.fromAmino(object.maturity_params);
+    }
+    if (object.fee_ratios !== undefined && object.fee_ratios !== null) {
+      message.feeRatios = FeeRatios.fromAmino(object.fee_ratios);
+    }
+    return message;
+  },
+  toAmino(message: RefractableAsset): RefractableAssetAmino {
+    const obj: any = {};
+    obj.id = message.id;
+    obj.token_denom = message.tokenDenom;
+    obj.host_chain_id = message.hostChainId;
+    obj.disabled = message.disabled;
+    obj.maturity_params = message.maturityParams ? MaturityParams.toAmino(message.maturityParams) : undefined;
+    obj.fee_ratios = message.feeRatios ? FeeRatios.toAmino(message.feeRatios) : undefined;
+    return obj;
+  },
+  fromAminoMsg(object: RefractableAssetAminoMsg): RefractableAsset {
+    return RefractableAsset.fromAmino(object.value);
+  },
+  fromProtoMsg(message: RefractableAssetProtoMsg): RefractableAsset {
+    return RefractableAsset.decode(message.value);
+  },
+  toProto(message: RefractableAsset): Uint8Array {
+    return RefractableAsset.encode(message).finish();
+  },
+  toProtoMsg(message: RefractableAsset): RefractableAssetProtoMsg {
+    return {
+      typeUrl: "/pryzm.assets.v1.RefractableAsset",
+      value: RefractableAsset.encode(message).finish()
+    };
   }
 };
 function createBaseMaturityParams(): MaturityParams {
@@ -154,6 +255,7 @@ function createBaseMaturityParams(): MaturityParams {
   };
 }
 export const MaturityParams = {
+  typeUrl: "/pryzm.assets.v1.MaturityParams",
   encode(message: MaturityParams, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.levelsPerYear !== 0) {
       writer.uint32(8).int32(message.levelsPerYear);
@@ -200,6 +302,37 @@ export const MaturityParams = {
     message.levelsPerYear = object.levelsPerYear ?? 0;
     message.years = object.years ?? 0;
     return message;
+  },
+  fromAmino(object: MaturityParamsAmino): MaturityParams {
+    const message = createBaseMaturityParams();
+    if (object.levels_per_year !== undefined && object.levels_per_year !== null) {
+      message.levelsPerYear = object.levels_per_year;
+    }
+    if (object.years !== undefined && object.years !== null) {
+      message.years = object.years;
+    }
+    return message;
+  },
+  toAmino(message: MaturityParams): MaturityParamsAmino {
+    const obj: any = {};
+    obj.levels_per_year = message.levelsPerYear;
+    obj.years = message.years;
+    return obj;
+  },
+  fromAminoMsg(object: MaturityParamsAminoMsg): MaturityParams {
+    return MaturityParams.fromAmino(object.value);
+  },
+  fromProtoMsg(message: MaturityParamsProtoMsg): MaturityParams {
+    return MaturityParams.decode(message.value);
+  },
+  toProto(message: MaturityParams): Uint8Array {
+    return MaturityParams.encode(message).finish();
+  },
+  toProtoMsg(message: MaturityParams): MaturityParamsProtoMsg {
+    return {
+      typeUrl: "/pryzm.assets.v1.MaturityParams",
+      value: MaturityParams.encode(message).finish()
+    };
   }
 };
 function createBaseFeeRatios(): FeeRatios {
@@ -212,6 +345,7 @@ function createBaseFeeRatios(): FeeRatios {
   };
 }
 export const FeeRatios = {
+  typeUrl: "/pryzm.assets.v1.FeeRatios",
   encode(message: FeeRatios, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.yield !== undefined) {
       writer.uint32(10).string(Decimal.fromUserInput(message.yield, 18).atomics);
@@ -285,5 +419,48 @@ export const FeeRatios = {
     message.refractorRedeem = object.refractorRedeem ?? undefined;
     message.yStakingClaimReward = object.yStakingClaimReward ?? undefined;
     return message;
+  },
+  fromAmino(object: FeeRatiosAmino): FeeRatios {
+    const message = createBaseFeeRatios();
+    if (object.yield !== undefined && object.yield !== null) {
+      message.yield = object.yield;
+    }
+    if (object.refractor_refract !== undefined && object.refractor_refract !== null) {
+      message.refractorRefract = object.refractor_refract;
+    }
+    if (object.refractor_merge !== undefined && object.refractor_merge !== null) {
+      message.refractorMerge = object.refractor_merge;
+    }
+    if (object.refractor_redeem !== undefined && object.refractor_redeem !== null) {
+      message.refractorRedeem = object.refractor_redeem;
+    }
+    if (object.y_staking_claim_reward !== undefined && object.y_staking_claim_reward !== null) {
+      message.yStakingClaimReward = object.y_staking_claim_reward;
+    }
+    return message;
+  },
+  toAmino(message: FeeRatios): FeeRatiosAmino {
+    const obj: any = {};
+    obj.yield = message.yield;
+    obj.refractor_refract = message.refractorRefract;
+    obj.refractor_merge = message.refractorMerge;
+    obj.refractor_redeem = message.refractorRedeem;
+    obj.y_staking_claim_reward = message.yStakingClaimReward;
+    return obj;
+  },
+  fromAminoMsg(object: FeeRatiosAminoMsg): FeeRatios {
+    return FeeRatios.fromAmino(object.value);
+  },
+  fromProtoMsg(message: FeeRatiosProtoMsg): FeeRatios {
+    return FeeRatios.decode(message.value);
+  },
+  toProto(message: FeeRatios): Uint8Array {
+    return FeeRatios.encode(message).finish();
+  },
+  toProtoMsg(message: FeeRatios): FeeRatiosProtoMsg {
+    return {
+      typeUrl: "/pryzm.assets.v1.FeeRatios",
+      value: FeeRatios.encode(message).finish()
+    };
   }
 };

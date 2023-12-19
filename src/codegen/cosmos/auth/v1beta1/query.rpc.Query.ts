@@ -1,4 +1,3 @@
-//@ts-nocheck
 import { grpc } from "@improbable-eng/grpc-web";
 import { UnaryMethodDefinitionish } from "../../../grpc-web";
 import { DeepPartial } from "../../../helpers";
@@ -76,34 +75,34 @@ export class QueryClientImpl implements Query {
   accounts(request: DeepPartial<QueryAccountsRequest> = {
     pagination: undefined
   }, metadata?: grpc.Metadata): Promise<QueryAccountsResponse> {
-    return this.rpc.unary(QueryAccountsDesc, QueryAccountsRequest.fromPartial(request), metadata);
+    return this.rpc.unary(QueryAccountsDesc, QueryAccountsRequest.fromPartial(request as any), metadata);
   }
   account(request: DeepPartial<QueryAccountRequest>, metadata?: grpc.Metadata): Promise<QueryAccountResponse> {
-    return this.rpc.unary(QueryAccountDesc, QueryAccountRequest.fromPartial(request), metadata);
+    return this.rpc.unary(QueryAccountDesc, QueryAccountRequest.fromPartial(request as any), metadata);
   }
   accountAddressByID(request: DeepPartial<QueryAccountAddressByIDRequest>, metadata?: grpc.Metadata): Promise<QueryAccountAddressByIDResponse> {
-    return this.rpc.unary(QueryAccountAddressByIDDesc, QueryAccountAddressByIDRequest.fromPartial(request), metadata);
+    return this.rpc.unary(QueryAccountAddressByIDDesc, QueryAccountAddressByIDRequest.fromPartial(request as any), metadata);
   }
   params(request: DeepPartial<QueryParamsRequest> = {}, metadata?: grpc.Metadata): Promise<QueryParamsResponse> {
-    return this.rpc.unary(QueryParamsDesc, QueryParamsRequest.fromPartial(request), metadata);
+    return this.rpc.unary(QueryParamsDesc, QueryParamsRequest.fromPartial(request as any), metadata);
   }
   moduleAccounts(request: DeepPartial<QueryModuleAccountsRequest> = {}, metadata?: grpc.Metadata): Promise<QueryModuleAccountsResponse> {
-    return this.rpc.unary(QueryModuleAccountsDesc, QueryModuleAccountsRequest.fromPartial(request), metadata);
+    return this.rpc.unary(QueryModuleAccountsDesc, QueryModuleAccountsRequest.fromPartial(request as any), metadata);
   }
   moduleAccountByName(request: DeepPartial<QueryModuleAccountByNameRequest>, metadata?: grpc.Metadata): Promise<QueryModuleAccountByNameResponse> {
-    return this.rpc.unary(QueryModuleAccountByNameDesc, QueryModuleAccountByNameRequest.fromPartial(request), metadata);
+    return this.rpc.unary(QueryModuleAccountByNameDesc, QueryModuleAccountByNameRequest.fromPartial(request as any), metadata);
   }
   bech32Prefix(request: DeepPartial<Bech32PrefixRequest> = {}, metadata?: grpc.Metadata): Promise<Bech32PrefixResponse> {
-    return this.rpc.unary(QueryBech32PrefixDesc, Bech32PrefixRequest.fromPartial(request), metadata);
+    return this.rpc.unary(QueryBech32PrefixDesc, Bech32PrefixRequest.fromPartial(request as any), metadata);
   }
   addressBytesToString(request: DeepPartial<AddressBytesToStringRequest>, metadata?: grpc.Metadata): Promise<AddressBytesToStringResponse> {
-    return this.rpc.unary(QueryAddressBytesToStringDesc, AddressBytesToStringRequest.fromPartial(request), metadata);
+    return this.rpc.unary(QueryAddressBytesToStringDesc, AddressBytesToStringRequest.fromPartial(request as any), metadata);
   }
   addressStringToBytes(request: DeepPartial<AddressStringToBytesRequest>, metadata?: grpc.Metadata): Promise<AddressStringToBytesResponse> {
-    return this.rpc.unary(QueryAddressStringToBytesDesc, AddressStringToBytesRequest.fromPartial(request), metadata);
+    return this.rpc.unary(QueryAddressStringToBytesDesc, AddressStringToBytesRequest.fromPartial(request as any), metadata);
   }
   accountInfo(request: DeepPartial<QueryAccountInfoRequest>, metadata?: grpc.Metadata): Promise<QueryAccountInfoResponse> {
-    return this.rpc.unary(QueryAccountInfoDesc, QueryAccountInfoRequest.fromPartial(request), metadata);
+    return this.rpc.unary(QueryAccountInfoDesc, QueryAccountInfoRequest.fromPartial(request as any), metadata);
   }
 }
 export const QueryDesc = {

@@ -6,6 +6,19 @@ export interface QueryPriceChangeRequest {
   from: string;
   to: string;
 }
+export interface QueryPriceChangeRequestProtoMsg {
+  typeUrl: "/pryzmatics.server.price.QueryPriceChangeRequest";
+  value: Uint8Array;
+}
+export interface QueryPriceChangeRequestAmino {
+  denom?: string;
+  from?: string;
+  to?: string;
+}
+export interface QueryPriceChangeRequestAminoMsg {
+  type: "/pryzmatics.server.price.QueryPriceChangeRequest";
+  value: QueryPriceChangeRequestAmino;
+}
 export interface QueryPriceChangeRequestSDKType {
   denom: string;
   from: string;
@@ -13,6 +26,17 @@ export interface QueryPriceChangeRequestSDKType {
 }
 export interface QueryPriceChangeResponse {
   changePercentage?: string;
+}
+export interface QueryPriceChangeResponseProtoMsg {
+  typeUrl: "/pryzmatics.server.price.QueryPriceChangeResponse";
+  value: Uint8Array;
+}
+export interface QueryPriceChangeResponseAmino {
+  change_percentage?: string;
+}
+export interface QueryPriceChangeResponseAminoMsg {
+  type: "/pryzmatics.server.price.QueryPriceChangeResponse";
+  value: QueryPriceChangeResponseAmino;
 }
 export interface QueryPriceChangeResponseSDKType {
   change_percentage?: string;
@@ -25,6 +49,7 @@ function createBaseQueryPriceChangeRequest(): QueryPriceChangeRequest {
   };
 }
 export const QueryPriceChangeRequest = {
+  typeUrl: "/pryzmatics.server.price.QueryPriceChangeRequest",
   encode(message: QueryPriceChangeRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.denom !== "") {
       writer.uint32(10).string(message.denom);
@@ -80,6 +105,41 @@ export const QueryPriceChangeRequest = {
     message.from = object.from ?? "";
     message.to = object.to ?? "";
     return message;
+  },
+  fromAmino(object: QueryPriceChangeRequestAmino): QueryPriceChangeRequest {
+    const message = createBaseQueryPriceChangeRequest();
+    if (object.denom !== undefined && object.denom !== null) {
+      message.denom = object.denom;
+    }
+    if (object.from !== undefined && object.from !== null) {
+      message.from = object.from;
+    }
+    if (object.to !== undefined && object.to !== null) {
+      message.to = object.to;
+    }
+    return message;
+  },
+  toAmino(message: QueryPriceChangeRequest): QueryPriceChangeRequestAmino {
+    const obj: any = {};
+    obj.denom = message.denom;
+    obj.from = message.from;
+    obj.to = message.to;
+    return obj;
+  },
+  fromAminoMsg(object: QueryPriceChangeRequestAminoMsg): QueryPriceChangeRequest {
+    return QueryPriceChangeRequest.fromAmino(object.value);
+  },
+  fromProtoMsg(message: QueryPriceChangeRequestProtoMsg): QueryPriceChangeRequest {
+    return QueryPriceChangeRequest.decode(message.value);
+  },
+  toProto(message: QueryPriceChangeRequest): Uint8Array {
+    return QueryPriceChangeRequest.encode(message).finish();
+  },
+  toProtoMsg(message: QueryPriceChangeRequest): QueryPriceChangeRequestProtoMsg {
+    return {
+      typeUrl: "/pryzmatics.server.price.QueryPriceChangeRequest",
+      value: QueryPriceChangeRequest.encode(message).finish()
+    };
   }
 };
 function createBaseQueryPriceChangeResponse(): QueryPriceChangeResponse {
@@ -88,6 +148,7 @@ function createBaseQueryPriceChangeResponse(): QueryPriceChangeResponse {
   };
 }
 export const QueryPriceChangeResponse = {
+  typeUrl: "/pryzmatics.server.price.QueryPriceChangeResponse",
   encode(message: QueryPriceChangeResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.changePercentage !== undefined) {
       writer.uint32(10).string(Decimal.fromUserInput(message.changePercentage, 18).atomics);
@@ -125,5 +186,32 @@ export const QueryPriceChangeResponse = {
     const message = createBaseQueryPriceChangeResponse();
     message.changePercentage = object.changePercentage ?? undefined;
     return message;
+  },
+  fromAmino(object: QueryPriceChangeResponseAmino): QueryPriceChangeResponse {
+    const message = createBaseQueryPriceChangeResponse();
+    if (object.change_percentage !== undefined && object.change_percentage !== null) {
+      message.changePercentage = object.change_percentage;
+    }
+    return message;
+  },
+  toAmino(message: QueryPriceChangeResponse): QueryPriceChangeResponseAmino {
+    const obj: any = {};
+    obj.change_percentage = message.changePercentage;
+    return obj;
+  },
+  fromAminoMsg(object: QueryPriceChangeResponseAminoMsg): QueryPriceChangeResponse {
+    return QueryPriceChangeResponse.fromAmino(object.value);
+  },
+  fromProtoMsg(message: QueryPriceChangeResponseProtoMsg): QueryPriceChangeResponse {
+    return QueryPriceChangeResponse.decode(message.value);
+  },
+  toProto(message: QueryPriceChangeResponse): Uint8Array {
+    return QueryPriceChangeResponse.encode(message).finish();
+  },
+  toProtoMsg(message: QueryPriceChangeResponse): QueryPriceChangeResponseProtoMsg {
+    return {
+      typeUrl: "/pryzmatics.server.price.QueryPriceChangeResponse",
+      value: QueryPriceChangeResponse.encode(message).finish()
+    };
   }
 };

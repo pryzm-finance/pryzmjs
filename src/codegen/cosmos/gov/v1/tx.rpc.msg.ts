@@ -1,4 +1,3 @@
-//@ts-nocheck
 import { UnaryMethodDefinitionish } from "../../../grpc-web";
 import { DeepPartial } from "../../../helpers";
 import { grpc } from "@improbable-eng/grpc-web";
@@ -39,22 +38,22 @@ export class MsgClientImpl implements Msg {
     this.updateParams = this.updateParams.bind(this);
   }
   submitProposal(request: DeepPartial<MsgSubmitProposal>, metadata?: grpc.Metadata): Promise<MsgSubmitProposalResponse> {
-    return this.rpc.unary(MsgSubmitProposalDesc, MsgSubmitProposal.fromPartial(request), metadata);
+    return this.rpc.unary(MsgSubmitProposalDesc, MsgSubmitProposal.fromPartial(request as any), metadata);
   }
   execLegacyContent(request: DeepPartial<MsgExecLegacyContent>, metadata?: grpc.Metadata): Promise<MsgExecLegacyContentResponse> {
-    return this.rpc.unary(MsgExecLegacyContentDesc, MsgExecLegacyContent.fromPartial(request), metadata);
+    return this.rpc.unary(MsgExecLegacyContentDesc, MsgExecLegacyContent.fromPartial(request as any), metadata);
   }
   vote(request: DeepPartial<MsgVote>, metadata?: grpc.Metadata): Promise<MsgVoteResponse> {
-    return this.rpc.unary(MsgVoteDesc, MsgVote.fromPartial(request), metadata);
+    return this.rpc.unary(MsgVoteDesc, MsgVote.fromPartial(request as any), metadata);
   }
   voteWeighted(request: DeepPartial<MsgVoteWeighted>, metadata?: grpc.Metadata): Promise<MsgVoteWeightedResponse> {
-    return this.rpc.unary(MsgVoteWeightedDesc, MsgVoteWeighted.fromPartial(request), metadata);
+    return this.rpc.unary(MsgVoteWeightedDesc, MsgVoteWeighted.fromPartial(request as any), metadata);
   }
   deposit(request: DeepPartial<MsgDeposit>, metadata?: grpc.Metadata): Promise<MsgDepositResponse> {
-    return this.rpc.unary(MsgDepositDesc, MsgDeposit.fromPartial(request), metadata);
+    return this.rpc.unary(MsgDepositDesc, MsgDeposit.fromPartial(request as any), metadata);
   }
   updateParams(request: DeepPartial<MsgUpdateParams>, metadata?: grpc.Metadata): Promise<MsgUpdateParamsResponse> {
-    return this.rpc.unary(MsgUpdateParamsDesc, MsgUpdateParams.fromPartial(request), metadata);
+    return this.rpc.unary(MsgUpdateParamsDesc, MsgUpdateParams.fromPartial(request as any), metadata);
   }
 }
 export const MsgDesc = {

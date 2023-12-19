@@ -1,4 +1,3 @@
-//@ts-nocheck
 import { QueryAllFlowRequest, QueryAllFlowResponseSDKType, QueryFlowRequest, QueryFlowResponseSDKType } from "./flowtrade/flowtrade";
 import { setPaginationParams } from "../../helpers";
 import { LCDClient } from "@refractedlabs/cosmology-lcd-fork";
@@ -43,6 +42,7 @@ import { QueryVoteIntervalReportRequest, QueryVoteIntervalReportResponseSDKType 
 import { QueryUserStakesRequest, QueryUserStakesResponseSDKType } from "./ystaking/user_stake";
 import { QueryClaimRequest, QueryClaimResponseSDKType } from "./faucet/claim";
 import { QueryFlowHistoricalPriceRequest, QueryFlowHistoricalPriceResponseSDKType } from "./flowtrade/flow_historical_price";
+import { QueryConfigRequest, QueryConfigResponseSDKType } from "./common/config";
 export class LCDQueryClient {
   req: LCDClient;
   constructor({
@@ -104,6 +104,7 @@ export class LCDQueryClient {
     this.allFlow = this.allFlow.bind(this);
     this.flow = this.flow.bind(this);
     this.flowHistoricalPrice = this.flowHistoricalPrice.bind(this);
+    this.config = this.config.bind(this);
   }
   /* Asset */
   async asset(params: QueryAssetRequest): Promise<QueryAssetResponseSDKType> {
@@ -819,5 +820,10 @@ export class LCDQueryClient {
     }
     const endpoint = `pryzmatics/flowtrade/flow/historical_price/${params.flowId}`;
     return await this.req.get<QueryFlowHistoricalPriceResponseSDKType>(endpoint, options);
+  }
+  /* Config */
+  async config(_params: QueryConfigRequest = {}): Promise<QueryConfigResponseSDKType> {
+    const endpoint = `pryzmatics/config`;
+    return await this.req.get<QueryConfigResponseSDKType>(endpoint);
   }
 }

@@ -1,4 +1,3 @@
-//@ts-nocheck
 import { UnaryMethodDefinitionish } from "../../../../grpc-web";
 import { DeepPartial } from "../../../../helpers";
 import { grpc } from "@improbable-eng/grpc-web";
@@ -46,34 +45,34 @@ export class MsgClientImpl implements Msg {
     this.acknowledgement = this.acknowledgement.bind(this);
   }
   channelOpenInit(request: DeepPartial<MsgChannelOpenInit>, metadata?: grpc.Metadata): Promise<MsgChannelOpenInitResponse> {
-    return this.rpc.unary(MsgChannelOpenInitDesc, MsgChannelOpenInit.fromPartial(request), metadata);
+    return this.rpc.unary(MsgChannelOpenInitDesc, MsgChannelOpenInit.fromPartial(request as any), metadata);
   }
   channelOpenTry(request: DeepPartial<MsgChannelOpenTry>, metadata?: grpc.Metadata): Promise<MsgChannelOpenTryResponse> {
-    return this.rpc.unary(MsgChannelOpenTryDesc, MsgChannelOpenTry.fromPartial(request), metadata);
+    return this.rpc.unary(MsgChannelOpenTryDesc, MsgChannelOpenTry.fromPartial(request as any), metadata);
   }
   channelOpenAck(request: DeepPartial<MsgChannelOpenAck>, metadata?: grpc.Metadata): Promise<MsgChannelOpenAckResponse> {
-    return this.rpc.unary(MsgChannelOpenAckDesc, MsgChannelOpenAck.fromPartial(request), metadata);
+    return this.rpc.unary(MsgChannelOpenAckDesc, MsgChannelOpenAck.fromPartial(request as any), metadata);
   }
   channelOpenConfirm(request: DeepPartial<MsgChannelOpenConfirm>, metadata?: grpc.Metadata): Promise<MsgChannelOpenConfirmResponse> {
-    return this.rpc.unary(MsgChannelOpenConfirmDesc, MsgChannelOpenConfirm.fromPartial(request), metadata);
+    return this.rpc.unary(MsgChannelOpenConfirmDesc, MsgChannelOpenConfirm.fromPartial(request as any), metadata);
   }
   channelCloseInit(request: DeepPartial<MsgChannelCloseInit>, metadata?: grpc.Metadata): Promise<MsgChannelCloseInitResponse> {
-    return this.rpc.unary(MsgChannelCloseInitDesc, MsgChannelCloseInit.fromPartial(request), metadata);
+    return this.rpc.unary(MsgChannelCloseInitDesc, MsgChannelCloseInit.fromPartial(request as any), metadata);
   }
   channelCloseConfirm(request: DeepPartial<MsgChannelCloseConfirm>, metadata?: grpc.Metadata): Promise<MsgChannelCloseConfirmResponse> {
-    return this.rpc.unary(MsgChannelCloseConfirmDesc, MsgChannelCloseConfirm.fromPartial(request), metadata);
+    return this.rpc.unary(MsgChannelCloseConfirmDesc, MsgChannelCloseConfirm.fromPartial(request as any), metadata);
   }
   recvPacket(request: DeepPartial<MsgRecvPacket>, metadata?: grpc.Metadata): Promise<MsgRecvPacketResponse> {
-    return this.rpc.unary(MsgRecvPacketDesc, MsgRecvPacket.fromPartial(request), metadata);
+    return this.rpc.unary(MsgRecvPacketDesc, MsgRecvPacket.fromPartial(request as any), metadata);
   }
   timeout(request: DeepPartial<MsgTimeout>, metadata?: grpc.Metadata): Promise<MsgTimeoutResponse> {
-    return this.rpc.unary(MsgTimeoutDesc, MsgTimeout.fromPartial(request), metadata);
+    return this.rpc.unary(MsgTimeoutDesc, MsgTimeout.fromPartial(request as any), metadata);
   }
   timeoutOnClose(request: DeepPartial<MsgTimeoutOnClose>, metadata?: grpc.Metadata): Promise<MsgTimeoutOnCloseResponse> {
-    return this.rpc.unary(MsgTimeoutOnCloseDesc, MsgTimeoutOnClose.fromPartial(request), metadata);
+    return this.rpc.unary(MsgTimeoutOnCloseDesc, MsgTimeoutOnClose.fromPartial(request as any), metadata);
   }
   acknowledgement(request: DeepPartial<MsgAcknowledgement>, metadata?: grpc.Metadata): Promise<MsgAcknowledgementResponse> {
-    return this.rpc.unary(MsgAcknowledgementDesc, MsgAcknowledgement.fromPartial(request), metadata);
+    return this.rpc.unary(MsgAcknowledgementDesc, MsgAcknowledgement.fromPartial(request as any), metadata);
   }
 }
 export const MsgDesc = {

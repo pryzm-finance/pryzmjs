@@ -1,4 +1,3 @@
-//@ts-nocheck
 import { grpc } from "@improbable-eng/grpc-web";
 import { UnaryMethodDefinitionish } from "../../../grpc-web";
 import { DeepPartial } from "../../../helpers";
@@ -49,44 +48,44 @@ export class QueryClientImpl implements Query {
     this.epochInfo = this.epochInfo.bind(this);
   }
   params(request: DeepPartial<QueryParamsRequest> = {}, metadata?: grpc.Metadata): Promise<QueryParamsResponse> {
-    return this.rpc.unary(QueryParamsDesc, QueryParamsRequest.fromPartial(request), metadata);
+    return this.rpc.unary(QueryParamsDesc, QueryParamsRequest.fromPartial(request as any), metadata);
   }
   hostChain(request: DeepPartial<QueryGetHostChainRequest>, metadata?: grpc.Metadata): Promise<QueryGetHostChainResponse> {
-    return this.rpc.unary(QueryHostChainDesc, QueryGetHostChainRequest.fromPartial(request), metadata);
+    return this.rpc.unary(QueryHostChainDesc, QueryGetHostChainRequest.fromPartial(request as any), metadata);
   }
   hostChainAll(request: DeepPartial<QueryAllHostChainRequest> = {
     pagination: undefined
   }, metadata?: grpc.Metadata): Promise<QueryAllHostChainResponse> {
-    return this.rpc.unary(QueryHostChainAllDesc, QueryAllHostChainRequest.fromPartial(request), metadata);
+    return this.rpc.unary(QueryHostChainAllDesc, QueryAllHostChainRequest.fromPartial(request as any), metadata);
   }
   hostChainState(request: DeepPartial<QueryGetHostChainStateRequest>, metadata?: grpc.Metadata): Promise<QueryGetHostChainStateResponse> {
-    return this.rpc.unary(QueryHostChainStateDesc, QueryGetHostChainStateRequest.fromPartial(request), metadata);
+    return this.rpc.unary(QueryHostChainStateDesc, QueryGetHostChainStateRequest.fromPartial(request as any), metadata);
   }
   hostChainStateAll(request: DeepPartial<QueryAllHostChainStateRequest> = {
     pagination: undefined
   }, metadata?: grpc.Metadata): Promise<QueryAllHostChainStateResponse> {
-    return this.rpc.unary(QueryHostChainStateAllDesc, QueryAllHostChainStateRequest.fromPartial(request), metadata);
+    return this.rpc.unary(QueryHostChainStateAllDesc, QueryAllHostChainStateRequest.fromPartial(request as any), metadata);
   }
   undelegation(request: DeepPartial<QueryGetUndelegationRequest>, metadata?: grpc.Metadata): Promise<QueryGetUndelegationResponse> {
-    return this.rpc.unary(QueryUndelegationDesc, QueryGetUndelegationRequest.fromPartial(request), metadata);
+    return this.rpc.unary(QueryUndelegationDesc, QueryGetUndelegationRequest.fromPartial(request as any), metadata);
   }
   undelegationAll(request: DeepPartial<QueryAllUndelegationRequest>, metadata?: grpc.Metadata): Promise<QueryAllUndelegationResponse> {
-    return this.rpc.unary(QueryUndelegationAllDesc, QueryAllUndelegationRequest.fromPartial(request), metadata);
+    return this.rpc.unary(QueryUndelegationAllDesc, QueryAllUndelegationRequest.fromPartial(request as any), metadata);
   }
   incompleteUndelegationAll(request: DeepPartial<QueryIncompleteUndelegationRequest>, metadata?: grpc.Metadata): Promise<QueryIncompleteUndelegationResponse> {
-    return this.rpc.unary(QueryIncompleteUndelegationAllDesc, QueryIncompleteUndelegationRequest.fromPartial(request), metadata);
+    return this.rpc.unary(QueryIncompleteUndelegationAllDesc, QueryIncompleteUndelegationRequest.fromPartial(request as any), metadata);
   }
   channelUndelegation(request: DeepPartial<QueryGetChannelUndelegationRequest>, metadata?: grpc.Metadata): Promise<QueryGetChannelUndelegationResponse> {
-    return this.rpc.unary(QueryChannelUndelegationDesc, QueryGetChannelUndelegationRequest.fromPartial(request), metadata);
+    return this.rpc.unary(QueryChannelUndelegationDesc, QueryGetChannelUndelegationRequest.fromPartial(request as any), metadata);
   }
   channelUndelegationAll(request: DeepPartial<QueryAllChannelUndelegationRequest>, metadata?: grpc.Metadata): Promise<QueryAllChannelUndelegationResponse> {
-    return this.rpc.unary(QueryChannelUndelegationAllDesc, QueryAllChannelUndelegationRequest.fromPartial(request), metadata);
+    return this.rpc.unary(QueryChannelUndelegationAllDesc, QueryAllChannelUndelegationRequest.fromPartial(request as any), metadata);
   }
   delegationQueueBalance(request: DeepPartial<QueryDelegationQueueBalanceRequest>, metadata?: grpc.Metadata): Promise<QueryDelegationQueueBalanceResponse> {
-    return this.rpc.unary(QueryDelegationQueueBalanceDesc, QueryDelegationQueueBalanceRequest.fromPartial(request), metadata);
+    return this.rpc.unary(QueryDelegationQueueBalanceDesc, QueryDelegationQueueBalanceRequest.fromPartial(request as any), metadata);
   }
   epochInfo(request: DeepPartial<QueryEpochInfoRequest>, metadata?: grpc.Metadata): Promise<QueryEpochInfoResponse> {
-    return this.rpc.unary(QueryEpochInfoDesc, QueryEpochInfoRequest.fromPartial(request), metadata);
+    return this.rpc.unary(QueryEpochInfoDesc, QueryEpochInfoRequest.fromPartial(request as any), metadata);
   }
 }
 export const QueryDesc = {

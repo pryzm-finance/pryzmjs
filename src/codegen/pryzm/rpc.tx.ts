@@ -8,7 +8,7 @@ export const createRPCMsgClient = async ({
   endpoint = endpoint.replace(/\/*$/, "");
   const {
     GrpcWebImpl
-  } = await import("../cosmos/app/v1alpha1/query.rpc.Query");
+  } = await await import("../../default.grpc.impl");
   let grpcWeb;
   if (typeof document !== "undefined") {
     grpcWeb = new GrpcWebImpl(endpoint, {
@@ -25,86 +25,5 @@ export const createRPCMsgClient = async ({
       transport: NodeHttpTransport()
     });
   }
-  return {
-    cosmos: {
-      auth: {
-        v1beta1: new (await import("../cosmos/auth/v1beta1/tx.rpc.msg")).MsgClientImpl(grpcWeb)
-      },
-      authz: {
-        v1beta1: new (await import("../cosmos/authz/v1beta1/tx.rpc.msg")).MsgClientImpl(grpcWeb)
-      },
-      bank: {
-        v1beta1: new (await import("../cosmos/bank/v1beta1/tx.rpc.msg")).MsgClientImpl(grpcWeb)
-      },
-      consensus: {
-        v1: new (await import("../cosmos/consensus/v1/tx.rpc.msg")).MsgClientImpl(grpcWeb)
-      },
-      crisis: {
-        v1beta1: new (await import("../cosmos/crisis/v1beta1/tx.rpc.msg")).MsgClientImpl(grpcWeb)
-      },
-      distribution: {
-        v1beta1: new (await import("../cosmos/distribution/v1beta1/tx.rpc.msg")).MsgClientImpl(grpcWeb)
-      },
-      evidence: {
-        v1beta1: new (await import("../cosmos/evidence/v1beta1/tx.rpc.msg")).MsgClientImpl(grpcWeb)
-      },
-      feegrant: {
-        v1beta1: new (await import("../cosmos/feegrant/v1beta1/tx.rpc.msg")).MsgClientImpl(grpcWeb)
-      },
-      gov: {
-        v1: new (await import("../cosmos/gov/v1/tx.rpc.msg")).MsgClientImpl(grpcWeb),
-        v1beta1: new (await import("../cosmos/gov/v1beta1/tx.rpc.msg")).MsgClientImpl(grpcWeb)
-      },
-      group: {
-        v1: new (await import("../cosmos/group/v1/tx.rpc.msg")).MsgClientImpl(grpcWeb)
-      },
-      mint: {
-        v1beta1: new (await import("../cosmos/mint/v1beta1/tx.rpc.msg")).MsgClientImpl(grpcWeb)
-      },
-      nft: {
-        v1beta1: new (await import("../cosmos/nft/v1beta1/tx.rpc.msg")).MsgClientImpl(grpcWeb)
-      },
-      slashing: {
-        v1beta1: new (await import("../cosmos/slashing/v1beta1/tx.rpc.msg")).MsgClientImpl(grpcWeb)
-      },
-      staking: {
-        v1beta1: new (await import("../cosmos/staking/v1beta1/tx.rpc.msg")).MsgClientImpl(grpcWeb)
-      },
-      upgrade: {
-        v1beta1: new (await import("../cosmos/upgrade/v1beta1/tx.rpc.msg")).MsgClientImpl(grpcWeb)
-      },
-      vesting: {
-        v1beta1: new (await import("../cosmos/vesting/v1beta1/tx.rpc.msg")).MsgClientImpl(grpcWeb)
-      }
-    },
-    pryzm: {
-      amm: {
-        v1: new (await import("./amm/v1/tx.rpc.msg")).MsgClientImpl(grpcWeb)
-      },
-      assets: {
-        v1: new (await import("./assets/v1/tx.rpc.msg")).MsgClientImpl(grpcWeb)
-      },
-      icstaking: {
-        v1: new (await import("./icstaking/v1/tx.rpc.msg")).MsgClientImpl(grpcWeb)
-      },
-      incentives: {
-        v1: new (await import("./incentives/v1/tx.rpc.msg")).MsgClientImpl(grpcWeb)
-      },
-      mint: {
-        v1: new (await import("./mint/v1/tx.rpc.msg")).MsgClientImpl(grpcWeb)
-      },
-      pgov: {
-        v1: new (await import("./pgov/v1/tx.rpc.msg")).MsgClientImpl(grpcWeb)
-      },
-      refractor: {
-        v1: new (await import("./refractor/v1/tx.rpc.msg")).MsgClientImpl(grpcWeb)
-      },
-      treasury: {
-        v1: new (await import("./treasury/v1/tx.rpc.msg")).MsgClientImpl(grpcWeb)
-      },
-      ystaking: {
-        v1: new (await import("./ystaking/v1/tx.rpc.msg")).MsgClientImpl(grpcWeb)
-      }
-    }
-  };
+  return {};
 };

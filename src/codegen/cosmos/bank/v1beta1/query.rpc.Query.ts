@@ -1,4 +1,3 @@
-//@ts-nocheck
 import { Metadata } from "./bank";
 import { grpc } from "@improbable-eng/grpc-web";
 import { UnaryMethodDefinitionish } from "../../../grpc-web";
@@ -97,41 +96,41 @@ export class QueryClientImpl implements Query {
     this.sendEnabled = this.sendEnabled.bind(this);
   }
   balance(request: DeepPartial<QueryBalanceRequest>, metadata?: grpc.Metadata): Promise<QueryBalanceResponse> {
-    return this.rpc.unary(QueryBalanceDesc, QueryBalanceRequest.fromPartial(request), metadata);
+    return this.rpc.unary(QueryBalanceDesc, QueryBalanceRequest.fromPartial(request as any), metadata);
   }
   allBalances(request: DeepPartial<QueryAllBalancesRequest>, metadata?: grpc.Metadata): Promise<QueryAllBalancesResponse> {
-    return this.rpc.unary(QueryAllBalancesDesc, QueryAllBalancesRequest.fromPartial(request), metadata);
+    return this.rpc.unary(QueryAllBalancesDesc, QueryAllBalancesRequest.fromPartial(request as any), metadata);
   }
   spendableBalances(request: DeepPartial<QuerySpendableBalancesRequest>, metadata?: grpc.Metadata): Promise<QuerySpendableBalancesResponse> {
-    return this.rpc.unary(QuerySpendableBalancesDesc, QuerySpendableBalancesRequest.fromPartial(request), metadata);
+    return this.rpc.unary(QuerySpendableBalancesDesc, QuerySpendableBalancesRequest.fromPartial(request as any), metadata);
   }
   spendableBalanceByDenom(request: DeepPartial<QuerySpendableBalanceByDenomRequest>, metadata?: grpc.Metadata): Promise<QuerySpendableBalanceByDenomResponse> {
-    return this.rpc.unary(QuerySpendableBalanceByDenomDesc, QuerySpendableBalanceByDenomRequest.fromPartial(request), metadata);
+    return this.rpc.unary(QuerySpendableBalanceByDenomDesc, QuerySpendableBalanceByDenomRequest.fromPartial(request as any), metadata);
   }
   totalSupply(request: DeepPartial<QueryTotalSupplyRequest> = {
     pagination: undefined
   }, metadata?: grpc.Metadata): Promise<QueryTotalSupplyResponse> {
-    return this.rpc.unary(QueryTotalSupplyDesc, QueryTotalSupplyRequest.fromPartial(request), metadata);
+    return this.rpc.unary(QueryTotalSupplyDesc, QueryTotalSupplyRequest.fromPartial(request as any), metadata);
   }
   supplyOf(request: DeepPartial<QuerySupplyOfRequest>, metadata?: grpc.Metadata): Promise<QuerySupplyOfResponse> {
-    return this.rpc.unary(QuerySupplyOfDesc, QuerySupplyOfRequest.fromPartial(request), metadata);
+    return this.rpc.unary(QuerySupplyOfDesc, QuerySupplyOfRequest.fromPartial(request as any), metadata);
   }
   params(request: DeepPartial<QueryParamsRequest> = {}, metadata?: grpc.Metadata): Promise<QueryParamsResponse> {
-    return this.rpc.unary(QueryParamsDesc, QueryParamsRequest.fromPartial(request), metadata);
+    return this.rpc.unary(QueryParamsDesc, QueryParamsRequest.fromPartial(request as any), metadata);
   }
   denomMetadata(request: DeepPartial<QueryDenomMetadataRequest>, metadata?: grpc.Metadata): Promise<QueryDenomMetadataResponse> {
-    return this.rpc.unary(QueryDenomMetadataDesc, QueryDenomMetadataRequest.fromPartial(request), metadata);
+    return this.rpc.unary(QueryDenomMetadataDesc, QueryDenomMetadataRequest.fromPartial(request as any), metadata);
   }
   denomsMetadata(request: DeepPartial<QueryDenomsMetadataRequest> = {
     pagination: undefined
   }, metadata?: grpc.Metadata): Promise<QueryDenomsMetadataResponse> {
-    return this.rpc.unary(QueryDenomsMetadataDesc, QueryDenomsMetadataRequest.fromPartial(request), metadata);
+    return this.rpc.unary(QueryDenomsMetadataDesc, QueryDenomsMetadataRequest.fromPartial(request as any), metadata);
   }
   denomOwners(request: DeepPartial<QueryDenomOwnersRequest>, metadata?: grpc.Metadata): Promise<QueryDenomOwnersResponse> {
-    return this.rpc.unary(QueryDenomOwnersDesc, QueryDenomOwnersRequest.fromPartial(request), metadata);
+    return this.rpc.unary(QueryDenomOwnersDesc, QueryDenomOwnersRequest.fromPartial(request as any), metadata);
   }
   sendEnabled(request: DeepPartial<QuerySendEnabledRequest>, metadata?: grpc.Metadata): Promise<QuerySendEnabledResponse> {
-    return this.rpc.unary(QuerySendEnabledDesc, QuerySendEnabledRequest.fromPartial(request), metadata);
+    return this.rpc.unary(QuerySendEnabledDesc, QuerySendEnabledRequest.fromPartial(request as any), metadata);
   }
 }
 export const QueryDesc = {

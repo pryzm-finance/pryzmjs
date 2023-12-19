@@ -1,5 +1,5 @@
-import { Coin, CoinSDKType } from "../../cosmos/base/v1beta1/coin";
-import { SwapStep, SwapStepSDKType } from "../../pryzm/amm/v1/operations";
+import { Coin, CoinAmino, CoinSDKType } from "../../cosmos/base/v1beta1/coin";
+import { SwapStep, SwapStepAmino, SwapStepSDKType } from "../../pryzm/amm/v1/operations";
 import { Timestamp, TimestampSDKType } from "../../google/protobuf/timestamp";
 import { BinaryReader, BinaryWriter } from "../../binary";
 import { isSet, fromJsonTimestamp, fromTimestamp } from "../../helpers";
@@ -12,6 +12,7 @@ export enum OperationType {
   UNRECOGNIZED = -1,
 }
 export const OperationTypeSDKType = OperationType;
+export const OperationTypeAmino = OperationType;
 export function operationTypeFromJSON(object: any): OperationType {
   switch (object) {
     case 0:
@@ -64,6 +65,26 @@ export interface UserTradeHistory {
   swapProtocolFee: Coin[];
   blockTime: Timestamp;
 }
+export interface UserTradeHistoryProtoMsg {
+  typeUrl: "/pryzmatics.trade.UserTradeHistory";
+  value: Uint8Array;
+}
+export interface UserTradeHistoryAmino {
+  amounts_in?: CoinAmino[];
+  amounts_out?: CoinAmino[];
+  address?: string;
+  pool_id?: string;
+  path?: SwapStepAmino[];
+  operation_type?: OperationType;
+  swap_fee?: CoinAmino[];
+  join_exit_protocol_fee?: CoinAmino[];
+  swap_protocol_fee?: CoinAmino[];
+  block_time?: string;
+}
+export interface UserTradeHistoryAminoMsg {
+  type: "/pryzmatics.trade.UserTradeHistory";
+  value: UserTradeHistoryAmino;
+}
 export interface UserTradeHistorySDKType {
   amounts_in: CoinSDKType[];
   amounts_out: CoinSDKType[];
@@ -91,6 +112,7 @@ function createBaseUserTradeHistory(): UserTradeHistory {
   };
 }
 export const UserTradeHistory = {
+  typeUrl: "/pryzmatics.trade.UserTradeHistory",
   encode(message: UserTradeHistory, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     for (const v of message.amountsIn) {
       Coin.encode(v!, writer.uint32(10).fork()).ldelim();
@@ -233,5 +255,80 @@ export const UserTradeHistory = {
     message.swapProtocolFee = object.swapProtocolFee?.map(e => Coin.fromPartial(e)) || [];
     message.blockTime = object.blockTime !== undefined && object.blockTime !== null ? Timestamp.fromPartial(object.blockTime) : undefined;
     return message;
+  },
+  fromAmino(object: UserTradeHistoryAmino): UserTradeHistory {
+    const message = createBaseUserTradeHistory();
+    message.amountsIn = object.amounts_in?.map(e => Coin.fromAmino(e)) || [];
+    message.amountsOut = object.amounts_out?.map(e => Coin.fromAmino(e)) || [];
+    if (object.address !== undefined && object.address !== null) {
+      message.address = object.address;
+    }
+    if (object.pool_id !== undefined && object.pool_id !== null) {
+      message.poolId = BigInt(object.pool_id);
+    }
+    message.path = object.path?.map(e => SwapStep.fromAmino(e)) || [];
+    if (object.operation_type !== undefined && object.operation_type !== null) {
+      message.operationType = operationTypeFromJSON(object.operation_type);
+    }
+    message.swapFee = object.swap_fee?.map(e => Coin.fromAmino(e)) || [];
+    message.joinExitProtocolFee = object.join_exit_protocol_fee?.map(e => Coin.fromAmino(e)) || [];
+    message.swapProtocolFee = object.swap_protocol_fee?.map(e => Coin.fromAmino(e)) || [];
+    if (object.block_time !== undefined && object.block_time !== null) {
+      message.blockTime = Timestamp.fromAmino(object.block_time);
+    }
+    return message;
+  },
+  toAmino(message: UserTradeHistory): UserTradeHistoryAmino {
+    const obj: any = {};
+    if (message.amountsIn) {
+      obj.amounts_in = message.amountsIn.map(e => e ? Coin.toAmino(e) : undefined);
+    } else {
+      obj.amounts_in = [];
+    }
+    if (message.amountsOut) {
+      obj.amounts_out = message.amountsOut.map(e => e ? Coin.toAmino(e) : undefined);
+    } else {
+      obj.amounts_out = [];
+    }
+    obj.address = message.address;
+    obj.pool_id = message.poolId ? message.poolId.toString() : undefined;
+    if (message.path) {
+      obj.path = message.path.map(e => e ? SwapStep.toAmino(e) : undefined);
+    } else {
+      obj.path = [];
+    }
+    obj.operation_type = operationTypeToJSON(message.operationType);
+    if (message.swapFee) {
+      obj.swap_fee = message.swapFee.map(e => e ? Coin.toAmino(e) : undefined);
+    } else {
+      obj.swap_fee = [];
+    }
+    if (message.joinExitProtocolFee) {
+      obj.join_exit_protocol_fee = message.joinExitProtocolFee.map(e => e ? Coin.toAmino(e) : undefined);
+    } else {
+      obj.join_exit_protocol_fee = [];
+    }
+    if (message.swapProtocolFee) {
+      obj.swap_protocol_fee = message.swapProtocolFee.map(e => e ? Coin.toAmino(e) : undefined);
+    } else {
+      obj.swap_protocol_fee = [];
+    }
+    obj.block_time = message.blockTime ? Timestamp.toAmino(message.blockTime) : undefined;
+    return obj;
+  },
+  fromAminoMsg(object: UserTradeHistoryAminoMsg): UserTradeHistory {
+    return UserTradeHistory.fromAmino(object.value);
+  },
+  fromProtoMsg(message: UserTradeHistoryProtoMsg): UserTradeHistory {
+    return UserTradeHistory.decode(message.value);
+  },
+  toProto(message: UserTradeHistory): Uint8Array {
+    return UserTradeHistory.encode(message).finish();
+  },
+  toProtoMsg(message: UserTradeHistory): UserTradeHistoryProtoMsg {
+    return {
+      typeUrl: "/pryzmatics.trade.UserTradeHistory",
+      value: UserTradeHistory.encode(message).finish()
+    };
   }
 };

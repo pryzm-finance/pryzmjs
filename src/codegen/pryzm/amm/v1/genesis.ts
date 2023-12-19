@@ -1,20 +1,33 @@
-import { Pool, PoolSDKType } from "./pool";
-import { PoolToken, PoolTokenSDKType } from "./pool_token";
-import { Params, ParamsSDKType } from "./params";
-import { WeightedPoolProperties, WeightedPoolPropertiesSDKType } from "./weighted_token";
-import { VirtualBalancePoolToken, VirtualBalancePoolTokenSDKType } from "./virtual_balance_pool_token";
-import { YammConfiguration, YammConfigurationSDKType } from "./yamm_configuration";
-import { WhitelistedRoute, WhitelistedRouteSDKType } from "./whitelisted_route";
-import { Order, OrderSDKType } from "./order";
-import { ScheduleOrder, ScheduleOrderSDKType } from "./schedule_order";
-import { OraclePricePair, OraclePricePairSDKType } from "./oracle_price_pair";
-import { PendingTokenIntroduction, PendingTokenIntroductionSDKType } from "./pending_token_introduction";
+import { Pool, PoolAmino, PoolSDKType } from "./pool";
+import { PoolToken, PoolTokenAmino, PoolTokenSDKType } from "./pool_token";
+import { Params, ParamsAmino, ParamsSDKType } from "./params";
+import { WeightedPoolProperties, WeightedPoolPropertiesAmino, WeightedPoolPropertiesSDKType } from "./weighted_token";
+import { VirtualBalancePoolToken, VirtualBalancePoolTokenAmino, VirtualBalancePoolTokenSDKType } from "./virtual_balance_pool_token";
+import { YammConfiguration, YammConfigurationAmino, YammConfigurationSDKType } from "./yamm_configuration";
+import { WhitelistedRoute, WhitelistedRouteAmino, WhitelistedRouteSDKType } from "./whitelisted_route";
+import { Order, OrderAmino, OrderSDKType } from "./order";
+import { ScheduleOrder, ScheduleOrderAmino, ScheduleOrderSDKType } from "./schedule_order";
+import { OraclePricePair, OraclePricePairAmino, OraclePricePairSDKType } from "./oracle_price_pair";
+import { PendingTokenIntroduction, PendingTokenIntroductionAmino, PendingTokenIntroductionSDKType } from "./pending_token_introduction";
 import { BinaryReader, BinaryWriter } from "../../../binary";
 import { isSet } from "../../../helpers";
 export interface GenesisPoolData {
   pool: Pool;
   totalLpTokenSupply: string;
   poolTokenList: PoolToken[];
+}
+export interface GenesisPoolDataProtoMsg {
+  typeUrl: "/pryzm.amm.v1.GenesisPoolData";
+  value: Uint8Array;
+}
+export interface GenesisPoolDataAmino {
+  pool?: PoolAmino;
+  total_lp_token_supply?: string;
+  pool_token_list?: PoolTokenAmino[];
+}
+export interface GenesisPoolDataAminoMsg {
+  type: "/pryzm.amm.v1.GenesisPoolData";
+  value: GenesisPoolDataAmino;
 }
 export interface GenesisPoolDataSDKType {
   pool: PoolSDKType;
@@ -24,6 +37,18 @@ export interface GenesisPoolDataSDKType {
 export interface YammPoolAssetId {
   poolId: bigint;
   assetId: string;
+}
+export interface YammPoolAssetIdProtoMsg {
+  typeUrl: "/pryzm.amm.v1.YammPoolAssetId";
+  value: Uint8Array;
+}
+export interface YammPoolAssetIdAmino {
+  pool_id?: string;
+  asset_id?: string;
+}
+export interface YammPoolAssetIdAminoMsg {
+  type: "/pryzm.amm.v1.YammPoolAssetId";
+  value: YammPoolAssetIdAmino;
 }
 export interface YammPoolAssetIdSDKType {
   pool_id: bigint;
@@ -46,6 +71,32 @@ export interface GenesisState {
   vaultPaused: boolean;
   oraclePricePairList: OraclePricePair[];
   pendingTokenIntroductionList: PendingTokenIntroduction[];
+}
+export interface GenesisStateProtoMsg {
+  typeUrl: "/pryzm.amm.v1.GenesisState";
+  value: Uint8Array;
+}
+/** GenesisState defines the amm module's genesis state. */
+export interface GenesisStateAmino {
+  params?: ParamsAmino;
+  pool_list?: GenesisPoolDataAmino[];
+  weighted_pool_properties_list?: WeightedPoolPropertiesAmino[];
+  yamm_pool_asset_id_list?: YammPoolAssetIdAmino[];
+  introducing_pool_token_list?: VirtualBalancePoolTokenAmino[];
+  expiring_pool_token_list?: VirtualBalancePoolTokenAmino[];
+  yamm_configuration_list?: YammConfigurationAmino[];
+  whitelisted_route_list?: WhitelistedRouteAmino[];
+  order_list?: OrderAmino[];
+  order_count?: string;
+  executable_order_list?: string[];
+  schedule_order_list?: ScheduleOrderAmino[];
+  vault_paused?: boolean;
+  oracle_price_pair_list?: OraclePricePairAmino[];
+  pending_token_introduction_list?: PendingTokenIntroductionAmino[];
+}
+export interface GenesisStateAminoMsg {
+  type: "/pryzm.amm.v1.GenesisState";
+  value: GenesisStateAmino;
 }
 /** GenesisState defines the amm module's genesis state. */
 export interface GenesisStateSDKType {
@@ -73,6 +124,7 @@ function createBaseGenesisPoolData(): GenesisPoolData {
   };
 }
 export const GenesisPoolData = {
+  typeUrl: "/pryzm.amm.v1.GenesisPoolData",
   encode(message: GenesisPoolData, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.pool !== undefined) {
       Pool.encode(message.pool, writer.uint32(10).fork()).ldelim();
@@ -132,6 +184,43 @@ export const GenesisPoolData = {
     message.totalLpTokenSupply = object.totalLpTokenSupply ?? "";
     message.poolTokenList = object.poolTokenList?.map(e => PoolToken.fromPartial(e)) || [];
     return message;
+  },
+  fromAmino(object: GenesisPoolDataAmino): GenesisPoolData {
+    const message = createBaseGenesisPoolData();
+    if (object.pool !== undefined && object.pool !== null) {
+      message.pool = Pool.fromAmino(object.pool);
+    }
+    if (object.total_lp_token_supply !== undefined && object.total_lp_token_supply !== null) {
+      message.totalLpTokenSupply = object.total_lp_token_supply;
+    }
+    message.poolTokenList = object.pool_token_list?.map(e => PoolToken.fromAmino(e)) || [];
+    return message;
+  },
+  toAmino(message: GenesisPoolData): GenesisPoolDataAmino {
+    const obj: any = {};
+    obj.pool = message.pool ? Pool.toAmino(message.pool) : undefined;
+    obj.total_lp_token_supply = message.totalLpTokenSupply;
+    if (message.poolTokenList) {
+      obj.pool_token_list = message.poolTokenList.map(e => e ? PoolToken.toAmino(e) : undefined);
+    } else {
+      obj.pool_token_list = [];
+    }
+    return obj;
+  },
+  fromAminoMsg(object: GenesisPoolDataAminoMsg): GenesisPoolData {
+    return GenesisPoolData.fromAmino(object.value);
+  },
+  fromProtoMsg(message: GenesisPoolDataProtoMsg): GenesisPoolData {
+    return GenesisPoolData.decode(message.value);
+  },
+  toProto(message: GenesisPoolData): Uint8Array {
+    return GenesisPoolData.encode(message).finish();
+  },
+  toProtoMsg(message: GenesisPoolData): GenesisPoolDataProtoMsg {
+    return {
+      typeUrl: "/pryzm.amm.v1.GenesisPoolData",
+      value: GenesisPoolData.encode(message).finish()
+    };
   }
 };
 function createBaseYammPoolAssetId(): YammPoolAssetId {
@@ -141,6 +230,7 @@ function createBaseYammPoolAssetId(): YammPoolAssetId {
   };
 }
 export const YammPoolAssetId = {
+  typeUrl: "/pryzm.amm.v1.YammPoolAssetId",
   encode(message: YammPoolAssetId, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.poolId !== BigInt(0)) {
       writer.uint32(8).uint64(message.poolId);
@@ -187,6 +277,37 @@ export const YammPoolAssetId = {
     message.poolId = object.poolId !== undefined && object.poolId !== null ? BigInt(object.poolId.toString()) : BigInt(0);
     message.assetId = object.assetId ?? "";
     return message;
+  },
+  fromAmino(object: YammPoolAssetIdAmino): YammPoolAssetId {
+    const message = createBaseYammPoolAssetId();
+    if (object.pool_id !== undefined && object.pool_id !== null) {
+      message.poolId = BigInt(object.pool_id);
+    }
+    if (object.asset_id !== undefined && object.asset_id !== null) {
+      message.assetId = object.asset_id;
+    }
+    return message;
+  },
+  toAmino(message: YammPoolAssetId): YammPoolAssetIdAmino {
+    const obj: any = {};
+    obj.pool_id = message.poolId ? message.poolId.toString() : undefined;
+    obj.asset_id = message.assetId;
+    return obj;
+  },
+  fromAminoMsg(object: YammPoolAssetIdAminoMsg): YammPoolAssetId {
+    return YammPoolAssetId.fromAmino(object.value);
+  },
+  fromProtoMsg(message: YammPoolAssetIdProtoMsg): YammPoolAssetId {
+    return YammPoolAssetId.decode(message.value);
+  },
+  toProto(message: YammPoolAssetId): Uint8Array {
+    return YammPoolAssetId.encode(message).finish();
+  },
+  toProtoMsg(message: YammPoolAssetId): YammPoolAssetIdProtoMsg {
+    return {
+      typeUrl: "/pryzm.amm.v1.YammPoolAssetId",
+      value: YammPoolAssetId.encode(message).finish()
+    };
   }
 };
 function createBaseGenesisState(): GenesisState {
@@ -209,6 +330,7 @@ function createBaseGenesisState(): GenesisState {
   };
 }
 export const GenesisState = {
+  typeUrl: "/pryzm.amm.v1.GenesisState",
   encode(message: GenesisState, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.params !== undefined) {
       Params.encode(message.params, writer.uint32(10).fork()).ldelim();
@@ -429,5 +551,112 @@ export const GenesisState = {
     message.oraclePricePairList = object.oraclePricePairList?.map(e => OraclePricePair.fromPartial(e)) || [];
     message.pendingTokenIntroductionList = object.pendingTokenIntroductionList?.map(e => PendingTokenIntroduction.fromPartial(e)) || [];
     return message;
+  },
+  fromAmino(object: GenesisStateAmino): GenesisState {
+    const message = createBaseGenesisState();
+    if (object.params !== undefined && object.params !== null) {
+      message.params = Params.fromAmino(object.params);
+    }
+    message.poolList = object.pool_list?.map(e => GenesisPoolData.fromAmino(e)) || [];
+    message.weightedPoolPropertiesList = object.weighted_pool_properties_list?.map(e => WeightedPoolProperties.fromAmino(e)) || [];
+    message.yammPoolAssetIdList = object.yamm_pool_asset_id_list?.map(e => YammPoolAssetId.fromAmino(e)) || [];
+    message.introducingPoolTokenList = object.introducing_pool_token_list?.map(e => VirtualBalancePoolToken.fromAmino(e)) || [];
+    message.expiringPoolTokenList = object.expiring_pool_token_list?.map(e => VirtualBalancePoolToken.fromAmino(e)) || [];
+    message.yammConfigurationList = object.yamm_configuration_list?.map(e => YammConfiguration.fromAmino(e)) || [];
+    message.whitelistedRouteList = object.whitelisted_route_list?.map(e => WhitelistedRoute.fromAmino(e)) || [];
+    message.orderList = object.order_list?.map(e => Order.fromAmino(e)) || [];
+    if (object.order_count !== undefined && object.order_count !== null) {
+      message.orderCount = BigInt(object.order_count);
+    }
+    message.executableOrderList = object.executable_order_list?.map(e => BigInt(e)) || [];
+    message.scheduleOrderList = object.schedule_order_list?.map(e => ScheduleOrder.fromAmino(e)) || [];
+    if (object.vault_paused !== undefined && object.vault_paused !== null) {
+      message.vaultPaused = object.vault_paused;
+    }
+    message.oraclePricePairList = object.oracle_price_pair_list?.map(e => OraclePricePair.fromAmino(e)) || [];
+    message.pendingTokenIntroductionList = object.pending_token_introduction_list?.map(e => PendingTokenIntroduction.fromAmino(e)) || [];
+    return message;
+  },
+  toAmino(message: GenesisState): GenesisStateAmino {
+    const obj: any = {};
+    obj.params = message.params ? Params.toAmino(message.params) : undefined;
+    if (message.poolList) {
+      obj.pool_list = message.poolList.map(e => e ? GenesisPoolData.toAmino(e) : undefined);
+    } else {
+      obj.pool_list = [];
+    }
+    if (message.weightedPoolPropertiesList) {
+      obj.weighted_pool_properties_list = message.weightedPoolPropertiesList.map(e => e ? WeightedPoolProperties.toAmino(e) : undefined);
+    } else {
+      obj.weighted_pool_properties_list = [];
+    }
+    if (message.yammPoolAssetIdList) {
+      obj.yamm_pool_asset_id_list = message.yammPoolAssetIdList.map(e => e ? YammPoolAssetId.toAmino(e) : undefined);
+    } else {
+      obj.yamm_pool_asset_id_list = [];
+    }
+    if (message.introducingPoolTokenList) {
+      obj.introducing_pool_token_list = message.introducingPoolTokenList.map(e => e ? VirtualBalancePoolToken.toAmino(e) : undefined);
+    } else {
+      obj.introducing_pool_token_list = [];
+    }
+    if (message.expiringPoolTokenList) {
+      obj.expiring_pool_token_list = message.expiringPoolTokenList.map(e => e ? VirtualBalancePoolToken.toAmino(e) : undefined);
+    } else {
+      obj.expiring_pool_token_list = [];
+    }
+    if (message.yammConfigurationList) {
+      obj.yamm_configuration_list = message.yammConfigurationList.map(e => e ? YammConfiguration.toAmino(e) : undefined);
+    } else {
+      obj.yamm_configuration_list = [];
+    }
+    if (message.whitelistedRouteList) {
+      obj.whitelisted_route_list = message.whitelistedRouteList.map(e => e ? WhitelistedRoute.toAmino(e) : undefined);
+    } else {
+      obj.whitelisted_route_list = [];
+    }
+    if (message.orderList) {
+      obj.order_list = message.orderList.map(e => e ? Order.toAmino(e) : undefined);
+    } else {
+      obj.order_list = [];
+    }
+    obj.order_count = message.orderCount ? message.orderCount.toString() : undefined;
+    if (message.executableOrderList) {
+      obj.executable_order_list = message.executableOrderList.map(e => e.toString());
+    } else {
+      obj.executable_order_list = [];
+    }
+    if (message.scheduleOrderList) {
+      obj.schedule_order_list = message.scheduleOrderList.map(e => e ? ScheduleOrder.toAmino(e) : undefined);
+    } else {
+      obj.schedule_order_list = [];
+    }
+    obj.vault_paused = message.vaultPaused;
+    if (message.oraclePricePairList) {
+      obj.oracle_price_pair_list = message.oraclePricePairList.map(e => e ? OraclePricePair.toAmino(e) : undefined);
+    } else {
+      obj.oracle_price_pair_list = [];
+    }
+    if (message.pendingTokenIntroductionList) {
+      obj.pending_token_introduction_list = message.pendingTokenIntroductionList.map(e => e ? PendingTokenIntroduction.toAmino(e) : undefined);
+    } else {
+      obj.pending_token_introduction_list = [];
+    }
+    return obj;
+  },
+  fromAminoMsg(object: GenesisStateAminoMsg): GenesisState {
+    return GenesisState.fromAmino(object.value);
+  },
+  fromProtoMsg(message: GenesisStateProtoMsg): GenesisState {
+    return GenesisState.decode(message.value);
+  },
+  toProto(message: GenesisState): Uint8Array {
+    return GenesisState.encode(message).finish();
+  },
+  toProtoMsg(message: GenesisState): GenesisStateProtoMsg {
+    return {
+      typeUrl: "/pryzm.amm.v1.GenesisState",
+      value: GenesisState.encode(message).finish()
+    };
   }
 };

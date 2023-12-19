@@ -8,6 +8,21 @@ export interface PendingTokenIntroduction {
   tokenNormalizedWeight: string;
   virtualBalanceIntervalMillis: bigint;
 }
+export interface PendingTokenIntroductionProtoMsg {
+  typeUrl: "/pryzm.amm.v1.PendingTokenIntroduction";
+  value: Uint8Array;
+}
+export interface PendingTokenIntroductionAmino {
+  asset_id?: string;
+  target_pool_id?: string;
+  token_denom?: string;
+  token_normalized_weight?: string;
+  virtual_balance_interval_millis?: string;
+}
+export interface PendingTokenIntroductionAminoMsg {
+  type: "/pryzm.amm.v1.PendingTokenIntroduction";
+  value: PendingTokenIntroductionAmino;
+}
 export interface PendingTokenIntroductionSDKType {
   asset_id: string;
   target_pool_id: bigint;
@@ -25,6 +40,7 @@ function createBasePendingTokenIntroduction(): PendingTokenIntroduction {
   };
 }
 export const PendingTokenIntroduction = {
+  typeUrl: "/pryzm.amm.v1.PendingTokenIntroduction",
   encode(message: PendingTokenIntroduction, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.assetId !== "") {
       writer.uint32(10).string(message.assetId);
@@ -98,5 +114,48 @@ export const PendingTokenIntroduction = {
     message.tokenNormalizedWeight = object.tokenNormalizedWeight ?? "";
     message.virtualBalanceIntervalMillis = object.virtualBalanceIntervalMillis !== undefined && object.virtualBalanceIntervalMillis !== null ? BigInt(object.virtualBalanceIntervalMillis.toString()) : BigInt(0);
     return message;
+  },
+  fromAmino(object: PendingTokenIntroductionAmino): PendingTokenIntroduction {
+    const message = createBasePendingTokenIntroduction();
+    if (object.asset_id !== undefined && object.asset_id !== null) {
+      message.assetId = object.asset_id;
+    }
+    if (object.target_pool_id !== undefined && object.target_pool_id !== null) {
+      message.targetPoolId = BigInt(object.target_pool_id);
+    }
+    if (object.token_denom !== undefined && object.token_denom !== null) {
+      message.tokenDenom = object.token_denom;
+    }
+    if (object.token_normalized_weight !== undefined && object.token_normalized_weight !== null) {
+      message.tokenNormalizedWeight = object.token_normalized_weight;
+    }
+    if (object.virtual_balance_interval_millis !== undefined && object.virtual_balance_interval_millis !== null) {
+      message.virtualBalanceIntervalMillis = BigInt(object.virtual_balance_interval_millis);
+    }
+    return message;
+  },
+  toAmino(message: PendingTokenIntroduction): PendingTokenIntroductionAmino {
+    const obj: any = {};
+    obj.asset_id = message.assetId;
+    obj.target_pool_id = message.targetPoolId ? message.targetPoolId.toString() : undefined;
+    obj.token_denom = message.tokenDenom;
+    obj.token_normalized_weight = message.tokenNormalizedWeight;
+    obj.virtual_balance_interval_millis = message.virtualBalanceIntervalMillis ? message.virtualBalanceIntervalMillis.toString() : undefined;
+    return obj;
+  },
+  fromAminoMsg(object: PendingTokenIntroductionAminoMsg): PendingTokenIntroduction {
+    return PendingTokenIntroduction.fromAmino(object.value);
+  },
+  fromProtoMsg(message: PendingTokenIntroductionProtoMsg): PendingTokenIntroduction {
+    return PendingTokenIntroduction.decode(message.value);
+  },
+  toProto(message: PendingTokenIntroduction): Uint8Array {
+    return PendingTokenIntroduction.encode(message).finish();
+  },
+  toProtoMsg(message: PendingTokenIntroduction): PendingTokenIntroductionProtoMsg {
+    return {
+      typeUrl: "/pryzm.amm.v1.PendingTokenIntroduction",
+      value: PendingTokenIntroduction.encode(message).finish()
+    };
   }
 };

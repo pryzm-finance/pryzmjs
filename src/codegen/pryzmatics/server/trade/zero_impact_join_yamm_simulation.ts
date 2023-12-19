@@ -1,9 +1,20 @@
-import { Coin, CoinSDKType } from "../../../cosmos/base/v1beta1/coin";
+import { Coin, CoinAmino, CoinSDKType } from "../../../cosmos/base/v1beta1/coin";
 import { BinaryReader, BinaryWriter } from "../../../binary";
 import { isSet } from "../../../helpers";
 import { Decimal } from "@cosmjs/math";
 export interface QueryZeroImpactJoinYammSimulationRequest {
   cAmountIn: Coin;
+}
+export interface QueryZeroImpactJoinYammSimulationRequestProtoMsg {
+  typeUrl: "/pryzmatics.server.trade.QueryZeroImpactJoinYammSimulationRequest";
+  value: Uint8Array;
+}
+export interface QueryZeroImpactJoinYammSimulationRequestAmino {
+  c_amount_in?: CoinAmino;
+}
+export interface QueryZeroImpactJoinYammSimulationRequestAminoMsg {
+  type: "/pryzmatics.server.trade.QueryZeroImpactJoinYammSimulationRequest";
+  value: QueryZeroImpactJoinYammSimulationRequestAmino;
 }
 export interface QueryZeroImpactJoinYammSimulationRequestSDKType {
   c_amount_in: CoinSDKType;
@@ -14,6 +25,21 @@ export interface QueryZeroImpactJoinYammSimulationResponse {
   yOut: Coin[];
   feeAmount: Coin;
   feePercentage: string;
+}
+export interface QueryZeroImpactJoinYammSimulationResponseProtoMsg {
+  typeUrl: "/pryzmatics.server.trade.QueryZeroImpactJoinYammSimulationResponse";
+  value: Uint8Array;
+}
+export interface QueryZeroImpactJoinYammSimulationResponseAmino {
+  c_amount_in?: CoinAmino;
+  lpt_out?: CoinAmino;
+  y_out?: CoinAmino[];
+  fee_amount?: CoinAmino;
+  fee_percentage?: string;
+}
+export interface QueryZeroImpactJoinYammSimulationResponseAminoMsg {
+  type: "/pryzmatics.server.trade.QueryZeroImpactJoinYammSimulationResponse";
+  value: QueryZeroImpactJoinYammSimulationResponseAmino;
 }
 export interface QueryZeroImpactJoinYammSimulationResponseSDKType {
   c_amount_in: CoinSDKType;
@@ -28,6 +54,7 @@ function createBaseQueryZeroImpactJoinYammSimulationRequest(): QueryZeroImpactJo
   };
 }
 export const QueryZeroImpactJoinYammSimulationRequest = {
+  typeUrl: "/pryzmatics.server.trade.QueryZeroImpactJoinYammSimulationRequest",
   encode(message: QueryZeroImpactJoinYammSimulationRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.cAmountIn !== undefined) {
       Coin.encode(message.cAmountIn, writer.uint32(10).fork()).ldelim();
@@ -65,6 +92,33 @@ export const QueryZeroImpactJoinYammSimulationRequest = {
     const message = createBaseQueryZeroImpactJoinYammSimulationRequest();
     message.cAmountIn = object.cAmountIn !== undefined && object.cAmountIn !== null ? Coin.fromPartial(object.cAmountIn) : undefined;
     return message;
+  },
+  fromAmino(object: QueryZeroImpactJoinYammSimulationRequestAmino): QueryZeroImpactJoinYammSimulationRequest {
+    const message = createBaseQueryZeroImpactJoinYammSimulationRequest();
+    if (object.c_amount_in !== undefined && object.c_amount_in !== null) {
+      message.cAmountIn = Coin.fromAmino(object.c_amount_in);
+    }
+    return message;
+  },
+  toAmino(message: QueryZeroImpactJoinYammSimulationRequest): QueryZeroImpactJoinYammSimulationRequestAmino {
+    const obj: any = {};
+    obj.c_amount_in = message.cAmountIn ? Coin.toAmino(message.cAmountIn) : undefined;
+    return obj;
+  },
+  fromAminoMsg(object: QueryZeroImpactJoinYammSimulationRequestAminoMsg): QueryZeroImpactJoinYammSimulationRequest {
+    return QueryZeroImpactJoinYammSimulationRequest.fromAmino(object.value);
+  },
+  fromProtoMsg(message: QueryZeroImpactJoinYammSimulationRequestProtoMsg): QueryZeroImpactJoinYammSimulationRequest {
+    return QueryZeroImpactJoinYammSimulationRequest.decode(message.value);
+  },
+  toProto(message: QueryZeroImpactJoinYammSimulationRequest): Uint8Array {
+    return QueryZeroImpactJoinYammSimulationRequest.encode(message).finish();
+  },
+  toProtoMsg(message: QueryZeroImpactJoinYammSimulationRequest): QueryZeroImpactJoinYammSimulationRequestProtoMsg {
+    return {
+      typeUrl: "/pryzmatics.server.trade.QueryZeroImpactJoinYammSimulationRequest",
+      value: QueryZeroImpactJoinYammSimulationRequest.encode(message).finish()
+    };
   }
 };
 function createBaseQueryZeroImpactJoinYammSimulationResponse(): QueryZeroImpactJoinYammSimulationResponse {
@@ -77,6 +131,7 @@ function createBaseQueryZeroImpactJoinYammSimulationResponse(): QueryZeroImpactJ
   };
 }
 export const QueryZeroImpactJoinYammSimulationResponse = {
+  typeUrl: "/pryzmatics.server.trade.QueryZeroImpactJoinYammSimulationResponse",
   encode(message: QueryZeroImpactJoinYammSimulationResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.cAmountIn !== undefined) {
       Coin.encode(message.cAmountIn, writer.uint32(10).fork()).ldelim();
@@ -154,5 +209,50 @@ export const QueryZeroImpactJoinYammSimulationResponse = {
     message.feeAmount = object.feeAmount !== undefined && object.feeAmount !== null ? Coin.fromPartial(object.feeAmount) : undefined;
     message.feePercentage = object.feePercentage ?? "";
     return message;
+  },
+  fromAmino(object: QueryZeroImpactJoinYammSimulationResponseAmino): QueryZeroImpactJoinYammSimulationResponse {
+    const message = createBaseQueryZeroImpactJoinYammSimulationResponse();
+    if (object.c_amount_in !== undefined && object.c_amount_in !== null) {
+      message.cAmountIn = Coin.fromAmino(object.c_amount_in);
+    }
+    if (object.lpt_out !== undefined && object.lpt_out !== null) {
+      message.lptOut = Coin.fromAmino(object.lpt_out);
+    }
+    message.yOut = object.y_out?.map(e => Coin.fromAmino(e)) || [];
+    if (object.fee_amount !== undefined && object.fee_amount !== null) {
+      message.feeAmount = Coin.fromAmino(object.fee_amount);
+    }
+    if (object.fee_percentage !== undefined && object.fee_percentage !== null) {
+      message.feePercentage = object.fee_percentage;
+    }
+    return message;
+  },
+  toAmino(message: QueryZeroImpactJoinYammSimulationResponse): QueryZeroImpactJoinYammSimulationResponseAmino {
+    const obj: any = {};
+    obj.c_amount_in = message.cAmountIn ? Coin.toAmino(message.cAmountIn) : undefined;
+    obj.lpt_out = message.lptOut ? Coin.toAmino(message.lptOut) : undefined;
+    if (message.yOut) {
+      obj.y_out = message.yOut.map(e => e ? Coin.toAmino(e) : undefined);
+    } else {
+      obj.y_out = [];
+    }
+    obj.fee_amount = message.feeAmount ? Coin.toAmino(message.feeAmount) : undefined;
+    obj.fee_percentage = message.feePercentage;
+    return obj;
+  },
+  fromAminoMsg(object: QueryZeroImpactJoinYammSimulationResponseAminoMsg): QueryZeroImpactJoinYammSimulationResponse {
+    return QueryZeroImpactJoinYammSimulationResponse.fromAmino(object.value);
+  },
+  fromProtoMsg(message: QueryZeroImpactJoinYammSimulationResponseProtoMsg): QueryZeroImpactJoinYammSimulationResponse {
+    return QueryZeroImpactJoinYammSimulationResponse.decode(message.value);
+  },
+  toProto(message: QueryZeroImpactJoinYammSimulationResponse): Uint8Array {
+    return QueryZeroImpactJoinYammSimulationResponse.encode(message).finish();
+  },
+  toProtoMsg(message: QueryZeroImpactJoinYammSimulationResponse): QueryZeroImpactJoinYammSimulationResponseProtoMsg {
+    return {
+      typeUrl: "/pryzmatics.server.trade.QueryZeroImpactJoinYammSimulationResponse",
+      value: QueryZeroImpactJoinYammSimulationResponse.encode(message).finish()
+    };
   }
 };

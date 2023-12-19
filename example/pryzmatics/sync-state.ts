@@ -1,9 +1,9 @@
-import {cosmatics} from "@pryzm-finance/pryzmjs/lib";
+import { createPryzmaticsClient } from "@pryzm-finance/pryzmjs";
 import * as console from "console";
-import {PRYZMATICS_ENDPOINT} from "./config";
+import { PRYZMATICS_ENDPOINT } from "./config";
 
 async function main() {
-    const cosmaticsClient = await cosmatics.ClientFactory.createClient({restEndpoint: PRYZMATICS_ENDPOINT})
+    const cosmaticsClient = await createPryzmaticsClient({restEndpoint: PRYZMATICS_ENDPOINT})
     const syncState = (await cosmaticsClient.cosmatics.syncState()).sync_state
     console.log(syncState)
 }

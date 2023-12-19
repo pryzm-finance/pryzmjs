@@ -4,6 +4,18 @@ export interface MissCounter {
   validator: string;
   counter: bigint;
 }
+export interface MissCounterProtoMsg {
+  typeUrl: "/refractedlabs.oracle.v1.MissCounter";
+  value: Uint8Array;
+}
+export interface MissCounterAmino {
+  validator?: string;
+  counter?: string;
+}
+export interface MissCounterAminoMsg {
+  type: "/refractedlabs.oracle.v1.MissCounter";
+  value: MissCounterAmino;
+}
 export interface MissCounterSDKType {
   validator: string;
   counter: bigint;
@@ -15,6 +27,7 @@ function createBaseMissCounter(): MissCounter {
   };
 }
 export const MissCounter = {
+  typeUrl: "/refractedlabs.oracle.v1.MissCounter",
   encode(message: MissCounter, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.validator !== "") {
       writer.uint32(10).string(message.validator);
@@ -61,5 +74,36 @@ export const MissCounter = {
     message.validator = object.validator ?? "";
     message.counter = object.counter !== undefined && object.counter !== null ? BigInt(object.counter.toString()) : BigInt(0);
     return message;
+  },
+  fromAmino(object: MissCounterAmino): MissCounter {
+    const message = createBaseMissCounter();
+    if (object.validator !== undefined && object.validator !== null) {
+      message.validator = object.validator;
+    }
+    if (object.counter !== undefined && object.counter !== null) {
+      message.counter = BigInt(object.counter);
+    }
+    return message;
+  },
+  toAmino(message: MissCounter): MissCounterAmino {
+    const obj: any = {};
+    obj.validator = message.validator;
+    obj.counter = message.counter ? message.counter.toString() : undefined;
+    return obj;
+  },
+  fromAminoMsg(object: MissCounterAminoMsg): MissCounter {
+    return MissCounter.fromAmino(object.value);
+  },
+  fromProtoMsg(message: MissCounterProtoMsg): MissCounter {
+    return MissCounter.decode(message.value);
+  },
+  toProto(message: MissCounter): Uint8Array {
+    return MissCounter.encode(message).finish();
+  },
+  toProtoMsg(message: MissCounter): MissCounterProtoMsg {
+    return {
+      typeUrl: "/refractedlabs.oracle.v1.MissCounter",
+      value: MissCounter.encode(message).finish()
+    };
   }
 };

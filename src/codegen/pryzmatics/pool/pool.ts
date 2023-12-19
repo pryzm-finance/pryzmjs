@@ -1,5 +1,5 @@
 import { PoolType, poolTypeFromJSON, poolTypeToJSON } from "../../pryzm/amm/v1/pool";
-import { PoolApr, PoolAprSDKType } from "./pool_apr";
+import { PoolApr, PoolAprAmino, PoolAprSDKType } from "./pool_apr";
 import { BinaryReader, BinaryWriter } from "../../binary";
 import { Decimal } from "@cosmjs/math";
 import { isSet } from "../../helpers";
@@ -13,6 +13,25 @@ export interface PoolMetrics {
   joinExitSwapFeeVolume24h: string;
   joinExitSwapFeeVolume7d: string;
   joinExitSwapFeeVolume30d: string;
+}
+export interface PoolMetricsProtoMsg {
+  typeUrl: "/pryzmatics.pool.PoolMetrics";
+  value: Uint8Array;
+}
+export interface PoolMetricsAmino {
+  trade_volume_24h?: string;
+  trade_volume_7d?: string;
+  trade_volume_30d?: string;
+  swap_fee_volume_24h?: string;
+  swap_fee_volume_7d?: string;
+  swap_fee_volume_30d?: string;
+  join_exit_swap_fee_volume_24h?: string;
+  join_exit_swap_fee_volume_7d?: string;
+  join_exit_swap_fee_volume_30d?: string;
+}
+export interface PoolMetricsAminoMsg {
+  type: "/pryzmatics.pool.PoolMetrics";
+  value: PoolMetricsAmino;
 }
 export interface PoolMetricsSDKType {
   trade_volume_24h: string;
@@ -32,6 +51,22 @@ export interface Pool {
   lpDenom: string;
   apr?: PoolApr;
   metrics: PoolMetrics;
+}
+export interface PoolProtoMsg {
+  typeUrl: "/pryzmatics.pool.Pool";
+  value: Uint8Array;
+}
+export interface PoolAmino {
+  id?: string;
+  name?: string;
+  pool_type?: PoolType;
+  lp_denom?: string;
+  apr?: PoolAprAmino;
+  metrics?: PoolMetricsAmino;
+}
+export interface PoolAminoMsg {
+  type: "/pryzmatics.pool.Pool";
+  value: PoolAmino;
 }
 export interface PoolSDKType {
   id: bigint;
@@ -55,6 +90,7 @@ function createBasePoolMetrics(): PoolMetrics {
   };
 }
 export const PoolMetrics = {
+  typeUrl: "/pryzmatics.pool.PoolMetrics",
   encode(message: PoolMetrics, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.tradeVolume24h !== "") {
       writer.uint32(10).string(Decimal.fromUserInput(message.tradeVolume24h, 18).atomics);
@@ -164,6 +200,65 @@ export const PoolMetrics = {
     message.joinExitSwapFeeVolume7d = object.joinExitSwapFeeVolume7d ?? "";
     message.joinExitSwapFeeVolume30d = object.joinExitSwapFeeVolume30d ?? "";
     return message;
+  },
+  fromAmino(object: PoolMetricsAmino): PoolMetrics {
+    const message = createBasePoolMetrics();
+    if (object.trade_volume_24h !== undefined && object.trade_volume_24h !== null) {
+      message.tradeVolume24h = object.trade_volume_24h;
+    }
+    if (object.trade_volume_7d !== undefined && object.trade_volume_7d !== null) {
+      message.tradeVolume7d = object.trade_volume_7d;
+    }
+    if (object.trade_volume_30d !== undefined && object.trade_volume_30d !== null) {
+      message.tradeVolume30d = object.trade_volume_30d;
+    }
+    if (object.swap_fee_volume_24h !== undefined && object.swap_fee_volume_24h !== null) {
+      message.swapFeeVolume24h = object.swap_fee_volume_24h;
+    }
+    if (object.swap_fee_volume_7d !== undefined && object.swap_fee_volume_7d !== null) {
+      message.swapFeeVolume7d = object.swap_fee_volume_7d;
+    }
+    if (object.swap_fee_volume_30d !== undefined && object.swap_fee_volume_30d !== null) {
+      message.swapFeeVolume30d = object.swap_fee_volume_30d;
+    }
+    if (object.join_exit_swap_fee_volume_24h !== undefined && object.join_exit_swap_fee_volume_24h !== null) {
+      message.joinExitSwapFeeVolume24h = object.join_exit_swap_fee_volume_24h;
+    }
+    if (object.join_exit_swap_fee_volume_7d !== undefined && object.join_exit_swap_fee_volume_7d !== null) {
+      message.joinExitSwapFeeVolume7d = object.join_exit_swap_fee_volume_7d;
+    }
+    if (object.join_exit_swap_fee_volume_30d !== undefined && object.join_exit_swap_fee_volume_30d !== null) {
+      message.joinExitSwapFeeVolume30d = object.join_exit_swap_fee_volume_30d;
+    }
+    return message;
+  },
+  toAmino(message: PoolMetrics): PoolMetricsAmino {
+    const obj: any = {};
+    obj.trade_volume_24h = message.tradeVolume24h;
+    obj.trade_volume_7d = message.tradeVolume7d;
+    obj.trade_volume_30d = message.tradeVolume30d;
+    obj.swap_fee_volume_24h = message.swapFeeVolume24h;
+    obj.swap_fee_volume_7d = message.swapFeeVolume7d;
+    obj.swap_fee_volume_30d = message.swapFeeVolume30d;
+    obj.join_exit_swap_fee_volume_24h = message.joinExitSwapFeeVolume24h;
+    obj.join_exit_swap_fee_volume_7d = message.joinExitSwapFeeVolume7d;
+    obj.join_exit_swap_fee_volume_30d = message.joinExitSwapFeeVolume30d;
+    return obj;
+  },
+  fromAminoMsg(object: PoolMetricsAminoMsg): PoolMetrics {
+    return PoolMetrics.fromAmino(object.value);
+  },
+  fromProtoMsg(message: PoolMetricsProtoMsg): PoolMetrics {
+    return PoolMetrics.decode(message.value);
+  },
+  toProto(message: PoolMetrics): Uint8Array {
+    return PoolMetrics.encode(message).finish();
+  },
+  toProtoMsg(message: PoolMetrics): PoolMetricsProtoMsg {
+    return {
+      typeUrl: "/pryzmatics.pool.PoolMetrics",
+      value: PoolMetrics.encode(message).finish()
+    };
   }
 };
 function createBasePool(): Pool {
@@ -177,6 +272,7 @@ function createBasePool(): Pool {
   };
 }
 export const Pool = {
+  typeUrl: "/pryzmatics.pool.Pool",
   encode(message: Pool, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.id !== BigInt(0)) {
       writer.uint32(8).uint64(message.id);
@@ -259,5 +355,52 @@ export const Pool = {
     message.apr = object.apr !== undefined && object.apr !== null ? PoolApr.fromPartial(object.apr) : undefined;
     message.metrics = object.metrics !== undefined && object.metrics !== null ? PoolMetrics.fromPartial(object.metrics) : undefined;
     return message;
+  },
+  fromAmino(object: PoolAmino): Pool {
+    const message = createBasePool();
+    if (object.id !== undefined && object.id !== null) {
+      message.id = BigInt(object.id);
+    }
+    if (object.name !== undefined && object.name !== null) {
+      message.name = object.name;
+    }
+    if (object.pool_type !== undefined && object.pool_type !== null) {
+      message.poolType = poolTypeFromJSON(object.pool_type);
+    }
+    if (object.lp_denom !== undefined && object.lp_denom !== null) {
+      message.lpDenom = object.lp_denom;
+    }
+    if (object.apr !== undefined && object.apr !== null) {
+      message.apr = PoolApr.fromAmino(object.apr);
+    }
+    if (object.metrics !== undefined && object.metrics !== null) {
+      message.metrics = PoolMetrics.fromAmino(object.metrics);
+    }
+    return message;
+  },
+  toAmino(message: Pool): PoolAmino {
+    const obj: any = {};
+    obj.id = message.id ? message.id.toString() : undefined;
+    obj.name = message.name;
+    obj.pool_type = poolTypeToJSON(message.poolType);
+    obj.lp_denom = message.lpDenom;
+    obj.apr = message.apr ? PoolApr.toAmino(message.apr) : undefined;
+    obj.metrics = message.metrics ? PoolMetrics.toAmino(message.metrics) : undefined;
+    return obj;
+  },
+  fromAminoMsg(object: PoolAminoMsg): Pool {
+    return Pool.fromAmino(object.value);
+  },
+  fromProtoMsg(message: PoolProtoMsg): Pool {
+    return Pool.decode(message.value);
+  },
+  toProto(message: Pool): Uint8Array {
+    return Pool.encode(message).finish();
+  },
+  toProtoMsg(message: Pool): PoolProtoMsg {
+    return {
+      typeUrl: "/pryzmatics.pool.Pool",
+      value: Pool.encode(message).finish()
+    };
   }
 };

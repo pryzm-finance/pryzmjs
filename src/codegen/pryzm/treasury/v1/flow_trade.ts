@@ -7,6 +7,19 @@ export interface FlowTrade {
   flowId: bigint;
   actionType: ActionType;
 }
+export interface FlowTradeProtoMsg {
+  typeUrl: "/pryzm.treasury.v1.FlowTrade";
+  value: Uint8Array;
+}
+export interface FlowTradeAmino {
+  end_time?: string;
+  flow_id?: string;
+  action_type?: ActionType;
+}
+export interface FlowTradeAminoMsg {
+  type: "/pryzm.treasury.v1.FlowTrade";
+  value: FlowTradeAmino;
+}
 export interface FlowTradeSDKType {
   end_time: TimestampSDKType;
   flow_id: bigint;
@@ -20,6 +33,7 @@ function createBaseFlowTrade(): FlowTrade {
   };
 }
 export const FlowTrade = {
+  typeUrl: "/pryzm.treasury.v1.FlowTrade",
   encode(message: FlowTrade, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.endTime !== undefined) {
       Timestamp.encode(message.endTime, writer.uint32(10).fork()).ldelim();
@@ -75,5 +89,40 @@ export const FlowTrade = {
     message.flowId = object.flowId !== undefined && object.flowId !== null ? BigInt(object.flowId.toString()) : BigInt(0);
     message.actionType = object.actionType ?? 0;
     return message;
+  },
+  fromAmino(object: FlowTradeAmino): FlowTrade {
+    const message = createBaseFlowTrade();
+    if (object.end_time !== undefined && object.end_time !== null) {
+      message.endTime = Timestamp.fromAmino(object.end_time);
+    }
+    if (object.flow_id !== undefined && object.flow_id !== null) {
+      message.flowId = BigInt(object.flow_id);
+    }
+    if (object.action_type !== undefined && object.action_type !== null) {
+      message.actionType = actionTypeFromJSON(object.action_type);
+    }
+    return message;
+  },
+  toAmino(message: FlowTrade): FlowTradeAmino {
+    const obj: any = {};
+    obj.end_time = message.endTime ? Timestamp.toAmino(message.endTime) : undefined;
+    obj.flow_id = message.flowId ? message.flowId.toString() : undefined;
+    obj.action_type = actionTypeToJSON(message.actionType);
+    return obj;
+  },
+  fromAminoMsg(object: FlowTradeAminoMsg): FlowTrade {
+    return FlowTrade.fromAmino(object.value);
+  },
+  fromProtoMsg(message: FlowTradeProtoMsg): FlowTrade {
+    return FlowTrade.decode(message.value);
+  },
+  toProto(message: FlowTrade): Uint8Array {
+    return FlowTrade.encode(message).finish();
+  },
+  toProtoMsg(message: FlowTrade): FlowTradeProtoMsg {
+    return {
+      typeUrl: "/pryzm.treasury.v1.FlowTrade",
+      value: FlowTrade.encode(message).finish()
+    };
   }
 };

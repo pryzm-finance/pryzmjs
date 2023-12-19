@@ -1,4 +1,3 @@
-//@ts-nocheck
 import { grpc } from "@improbable-eng/grpc-web";
 import { UnaryMethodDefinitionish } from "../../../grpc-web";
 import { DeepPartial } from "../../../helpers";
@@ -34,27 +33,27 @@ export class QueryClientImpl implements Query {
     this.unbondingAll = this.unbondingAll.bind(this);
   }
   params(request: DeepPartial<QueryParamsRequest> = {}, metadata?: grpc.Metadata): Promise<QueryParamsResponse> {
-    return this.rpc.unary(QueryParamsDesc, QueryParamsRequest.fromPartial(request), metadata);
+    return this.rpc.unary(QueryParamsDesc, QueryParamsRequest.fromPartial(request as any), metadata);
   }
   pool(request: DeepPartial<QueryGetPoolRequest>, metadata?: grpc.Metadata): Promise<QueryGetPoolResponse> {
-    return this.rpc.unary(QueryPoolDesc, QueryGetPoolRequest.fromPartial(request), metadata);
+    return this.rpc.unary(QueryPoolDesc, QueryGetPoolRequest.fromPartial(request as any), metadata);
   }
   poolAll(request: DeepPartial<QueryAllPoolRequest> = {
     pagination: undefined
   }, metadata?: grpc.Metadata): Promise<QueryAllPoolResponse> {
-    return this.rpc.unary(QueryPoolAllDesc, QueryAllPoolRequest.fromPartial(request), metadata);
+    return this.rpc.unary(QueryPoolAllDesc, QueryAllPoolRequest.fromPartial(request as any), metadata);
   }
   bond(request: DeepPartial<QueryGetBondRequest>, metadata?: grpc.Metadata): Promise<QueryGetBondResponse> {
-    return this.rpc.unary(QueryBondDesc, QueryGetBondRequest.fromPartial(request), metadata);
+    return this.rpc.unary(QueryBondDesc, QueryGetBondRequest.fromPartial(request as any), metadata);
   }
   bondAll(request: DeepPartial<QueryAllBondRequest>, metadata?: grpc.Metadata): Promise<QueryAllBondResponse> {
-    return this.rpc.unary(QueryBondAllDesc, QueryAllBondRequest.fromPartial(request), metadata);
+    return this.rpc.unary(QueryBondAllDesc, QueryAllBondRequest.fromPartial(request as any), metadata);
   }
   unbonding(request: DeepPartial<QueryGetUnbondingRequest>, metadata?: grpc.Metadata): Promise<QueryGetUnbondingResponse> {
-    return this.rpc.unary(QueryUnbondingDesc, QueryGetUnbondingRequest.fromPartial(request), metadata);
+    return this.rpc.unary(QueryUnbondingDesc, QueryGetUnbondingRequest.fromPartial(request as any), metadata);
   }
   unbondingAll(request: DeepPartial<QueryAllUnbondingRequest>, metadata?: grpc.Metadata): Promise<QueryAllUnbondingResponse> {
-    return this.rpc.unary(QueryUnbondingAllDesc, QueryAllUnbondingRequest.fromPartial(request), metadata);
+    return this.rpc.unary(QueryUnbondingAllDesc, QueryAllUnbondingRequest.fromPartial(request as any), metadata);
   }
 }
 export const QueryDesc = {

@@ -1,4 +1,4 @@
-import { pryzmatics } from "@pryzm-finance/pryzmjs/lib";
+import { createPryzmaticsClient } from "@pryzm-finance/pryzmjs";
 import * as console from "console";
 import { PRYZMATICS_ENDPOINT } from "./config";
 import {
@@ -8,7 +8,7 @@ import {
 import { ParticipationType } from "@pryzm-finance/pryzmjs/lib/codegen/pryzmatics/flowtrade/participation_type";
 
 async function main() {
-    const pryzmaticsClient = await pryzmatics.ClientFactory.createClient({ restEndpoint: PRYZMATICS_ENDPOINT })
+    const pryzmaticsClient = await createPryzmaticsClient({ restEndpoint: PRYZMATICS_ENDPOINT })
 
     // list of all flows
     let flows = (await pryzmaticsClient.pryzmatics.allFlow({

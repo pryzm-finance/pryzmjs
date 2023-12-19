@@ -13,6 +13,26 @@ export interface BallotVoteResult {
   /** error returned by a call to the corresponding module's OnMajorityVote callback method */
   callbackError: string;
 }
+export interface BallotVoteResultProtoMsg {
+  typeUrl: "/pryzmatics.oracle.BallotVoteResult";
+  value: Uint8Array;
+}
+export interface BallotVoteResultAmino {
+  namespace?: string;
+  module?: string;
+  vote_interval_close_block_height?: string;
+  quorum_reached?: boolean;
+  ballot_power?: string;
+  majority_achieved?: boolean;
+  majority_vote_type?: VoteType;
+  majority_vote_payload?: string;
+  /** error returned by a call to the corresponding module's OnMajorityVote callback method */
+  callback_error?: string;
+}
+export interface BallotVoteResultAminoMsg {
+  type: "/pryzmatics.oracle.BallotVoteResult";
+  value: BallotVoteResultAmino;
+}
 export interface BallotVoteResultSDKType {
   namespace: string;
   module: string;
@@ -38,6 +58,7 @@ function createBaseBallotVoteResult(): BallotVoteResult {
   };
 }
 export const BallotVoteResult = {
+  typeUrl: "/pryzmatics.oracle.BallotVoteResult",
   encode(message: BallotVoteResult, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.namespace !== "") {
       writer.uint32(10).string(message.namespace);
@@ -147,5 +168,64 @@ export const BallotVoteResult = {
     message.majorityVotePayload = object.majorityVotePayload ?? "";
     message.callbackError = object.callbackError ?? "";
     return message;
+  },
+  fromAmino(object: BallotVoteResultAmino): BallotVoteResult {
+    const message = createBaseBallotVoteResult();
+    if (object.namespace !== undefined && object.namespace !== null) {
+      message.namespace = object.namespace;
+    }
+    if (object.module !== undefined && object.module !== null) {
+      message.module = object.module;
+    }
+    if (object.vote_interval_close_block_height !== undefined && object.vote_interval_close_block_height !== null) {
+      message.voteIntervalCloseBlockHeight = BigInt(object.vote_interval_close_block_height);
+    }
+    if (object.quorum_reached !== undefined && object.quorum_reached !== null) {
+      message.quorumReached = object.quorum_reached;
+    }
+    if (object.ballot_power !== undefined && object.ballot_power !== null) {
+      message.ballotPower = BigInt(object.ballot_power);
+    }
+    if (object.majority_achieved !== undefined && object.majority_achieved !== null) {
+      message.majorityAchieved = object.majority_achieved;
+    }
+    if (object.majority_vote_type !== undefined && object.majority_vote_type !== null) {
+      message.majorityVoteType = voteTypeFromJSON(object.majority_vote_type);
+    }
+    if (object.majority_vote_payload !== undefined && object.majority_vote_payload !== null) {
+      message.majorityVotePayload = object.majority_vote_payload;
+    }
+    if (object.callback_error !== undefined && object.callback_error !== null) {
+      message.callbackError = object.callback_error;
+    }
+    return message;
+  },
+  toAmino(message: BallotVoteResult): BallotVoteResultAmino {
+    const obj: any = {};
+    obj.namespace = message.namespace;
+    obj.module = message.module;
+    obj.vote_interval_close_block_height = message.voteIntervalCloseBlockHeight ? message.voteIntervalCloseBlockHeight.toString() : undefined;
+    obj.quorum_reached = message.quorumReached;
+    obj.ballot_power = message.ballotPower ? message.ballotPower.toString() : undefined;
+    obj.majority_achieved = message.majorityAchieved;
+    obj.majority_vote_type = voteTypeToJSON(message.majorityVoteType);
+    obj.majority_vote_payload = message.majorityVotePayload;
+    obj.callback_error = message.callbackError;
+    return obj;
+  },
+  fromAminoMsg(object: BallotVoteResultAminoMsg): BallotVoteResult {
+    return BallotVoteResult.fromAmino(object.value);
+  },
+  fromProtoMsg(message: BallotVoteResultProtoMsg): BallotVoteResult {
+    return BallotVoteResult.decode(message.value);
+  },
+  toProto(message: BallotVoteResult): Uint8Array {
+    return BallotVoteResult.encode(message).finish();
+  },
+  toProtoMsg(message: BallotVoteResult): BallotVoteResultProtoMsg {
+    return {
+      typeUrl: "/pryzmatics.oracle.BallotVoteResult",
+      value: BallotVoteResult.encode(message).finish()
+    };
   }
 };

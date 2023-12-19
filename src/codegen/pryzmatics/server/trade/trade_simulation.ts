@@ -1,6 +1,6 @@
-import { SwapType, SwapStep, SwapStepSDKType, swapTypeFromJSON, swapTypeToJSON } from "../../../pryzm/amm/v1/operations";
-import { RouteStep, RouteStepSDKType } from "../../../pryzm/amm/v1/route_step";
-import { Coin, CoinSDKType } from "../../../cosmos/base/v1beta1/coin";
+import { SwapType, SwapStep, SwapStepAmino, SwapStepSDKType, swapTypeFromJSON, swapTypeToJSON } from "../../../pryzm/amm/v1/operations";
+import { RouteStep, RouteStepAmino, RouteStepSDKType } from "../../../pryzm/amm/v1/route_step";
+import { Coin, CoinAmino, CoinSDKType } from "../../../cosmos/base/v1beta1/coin";
 import { BinaryReader, BinaryWriter } from "../../../binary";
 import { isSet } from "../../../helpers";
 import { Decimal } from "@cosmjs/math";
@@ -10,6 +10,21 @@ export interface QueryTradeSimulationRequest {
   tokenOut: string;
   amount: string;
   steps: RouteStep[];
+}
+export interface QueryTradeSimulationRequestProtoMsg {
+  typeUrl: "/pryzmatics.server.trade.QueryTradeSimulationRequest";
+  value: Uint8Array;
+}
+export interface QueryTradeSimulationRequestAmino {
+  swap_type?: SwapType;
+  token_in?: string;
+  token_out?: string;
+  amount?: string;
+  steps?: RouteStepAmino[];
+}
+export interface QueryTradeSimulationRequestAminoMsg {
+  type: "/pryzmatics.server.trade.QueryTradeSimulationRequest";
+  value: QueryTradeSimulationRequestAmino;
 }
 export interface QueryTradeSimulationRequestSDKType {
   swap_type: SwapType;
@@ -27,6 +42,24 @@ export interface QueryTradeSimulationResponse {
   effectivePrice: string;
   priceImpact: string;
   swapSteps: SwapStep[];
+}
+export interface QueryTradeSimulationResponseProtoMsg {
+  typeUrl: "/pryzmatics.server.trade.QueryTradeSimulationResponse";
+  value: Uint8Array;
+}
+export interface QueryTradeSimulationResponseAmino {
+  price_token_in_token_out_terms?: string;
+  amount_in?: CoinAmino;
+  amount_out?: CoinAmino;
+  fee?: CoinAmino[];
+  feeTokenInTerms?: CoinAmino;
+  effective_price?: string;
+  price_impact?: string;
+  swap_steps?: SwapStepAmino[];
+}
+export interface QueryTradeSimulationResponseAminoMsg {
+  type: "/pryzmatics.server.trade.QueryTradeSimulationResponse";
+  value: QueryTradeSimulationResponseAmino;
 }
 export interface QueryTradeSimulationResponseSDKType {
   price_token_in_token_out_terms: string;
@@ -48,6 +81,7 @@ function createBaseQueryTradeSimulationRequest(): QueryTradeSimulationRequest {
   };
 }
 export const QueryTradeSimulationRequest = {
+  typeUrl: "/pryzmatics.server.trade.QueryTradeSimulationRequest",
   encode(message: QueryTradeSimulationRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.swapType !== 0) {
       writer.uint32(8).int32(message.swapType);
@@ -125,6 +159,51 @@ export const QueryTradeSimulationRequest = {
     message.amount = object.amount ?? "";
     message.steps = object.steps?.map(e => RouteStep.fromPartial(e)) || [];
     return message;
+  },
+  fromAmino(object: QueryTradeSimulationRequestAmino): QueryTradeSimulationRequest {
+    const message = createBaseQueryTradeSimulationRequest();
+    if (object.swap_type !== undefined && object.swap_type !== null) {
+      message.swapType = swapTypeFromJSON(object.swap_type);
+    }
+    if (object.token_in !== undefined && object.token_in !== null) {
+      message.tokenIn = object.token_in;
+    }
+    if (object.token_out !== undefined && object.token_out !== null) {
+      message.tokenOut = object.token_out;
+    }
+    if (object.amount !== undefined && object.amount !== null) {
+      message.amount = object.amount;
+    }
+    message.steps = object.steps?.map(e => RouteStep.fromAmino(e)) || [];
+    return message;
+  },
+  toAmino(message: QueryTradeSimulationRequest): QueryTradeSimulationRequestAmino {
+    const obj: any = {};
+    obj.swap_type = swapTypeToJSON(message.swapType);
+    obj.token_in = message.tokenIn;
+    obj.token_out = message.tokenOut;
+    obj.amount = message.amount;
+    if (message.steps) {
+      obj.steps = message.steps.map(e => e ? RouteStep.toAmino(e) : undefined);
+    } else {
+      obj.steps = [];
+    }
+    return obj;
+  },
+  fromAminoMsg(object: QueryTradeSimulationRequestAminoMsg): QueryTradeSimulationRequest {
+    return QueryTradeSimulationRequest.fromAmino(object.value);
+  },
+  fromProtoMsg(message: QueryTradeSimulationRequestProtoMsg): QueryTradeSimulationRequest {
+    return QueryTradeSimulationRequest.decode(message.value);
+  },
+  toProto(message: QueryTradeSimulationRequest): Uint8Array {
+    return QueryTradeSimulationRequest.encode(message).finish();
+  },
+  toProtoMsg(message: QueryTradeSimulationRequest): QueryTradeSimulationRequestProtoMsg {
+    return {
+      typeUrl: "/pryzmatics.server.trade.QueryTradeSimulationRequest",
+      value: QueryTradeSimulationRequest.encode(message).finish()
+    };
   }
 };
 function createBaseQueryTradeSimulationResponse(): QueryTradeSimulationResponse {
@@ -140,6 +219,7 @@ function createBaseQueryTradeSimulationResponse(): QueryTradeSimulationResponse 
   };
 }
 export const QueryTradeSimulationResponse = {
+  typeUrl: "/pryzmatics.server.trade.QueryTradeSimulationResponse",
   encode(message: QueryTradeSimulationResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.priceTokenInTokenOutTerms !== "") {
       writer.uint32(10).string(Decimal.fromUserInput(message.priceTokenInTokenOutTerms, 18).atomics);
@@ -248,5 +328,64 @@ export const QueryTradeSimulationResponse = {
     message.priceImpact = object.priceImpact ?? "";
     message.swapSteps = object.swapSteps?.map(e => SwapStep.fromPartial(e)) || [];
     return message;
+  },
+  fromAmino(object: QueryTradeSimulationResponseAmino): QueryTradeSimulationResponse {
+    const message = createBaseQueryTradeSimulationResponse();
+    if (object.price_token_in_token_out_terms !== undefined && object.price_token_in_token_out_terms !== null) {
+      message.priceTokenInTokenOutTerms = object.price_token_in_token_out_terms;
+    }
+    if (object.amount_in !== undefined && object.amount_in !== null) {
+      message.amountIn = Coin.fromAmino(object.amount_in);
+    }
+    if (object.amount_out !== undefined && object.amount_out !== null) {
+      message.amountOut = Coin.fromAmino(object.amount_out);
+    }
+    message.fee = object.fee?.map(e => Coin.fromAmino(e)) || [];
+    if (object.feeTokenInTerms !== undefined && object.feeTokenInTerms !== null) {
+      message.feeTokenInTerms = Coin.fromAmino(object.feeTokenInTerms);
+    }
+    if (object.effective_price !== undefined && object.effective_price !== null) {
+      message.effectivePrice = object.effective_price;
+    }
+    if (object.price_impact !== undefined && object.price_impact !== null) {
+      message.priceImpact = object.price_impact;
+    }
+    message.swapSteps = object.swap_steps?.map(e => SwapStep.fromAmino(e)) || [];
+    return message;
+  },
+  toAmino(message: QueryTradeSimulationResponse): QueryTradeSimulationResponseAmino {
+    const obj: any = {};
+    obj.price_token_in_token_out_terms = message.priceTokenInTokenOutTerms;
+    obj.amount_in = message.amountIn ? Coin.toAmino(message.amountIn) : undefined;
+    obj.amount_out = message.amountOut ? Coin.toAmino(message.amountOut) : undefined;
+    if (message.fee) {
+      obj.fee = message.fee.map(e => e ? Coin.toAmino(e) : undefined);
+    } else {
+      obj.fee = [];
+    }
+    obj.feeTokenInTerms = message.feeTokenInTerms ? Coin.toAmino(message.feeTokenInTerms) : undefined;
+    obj.effective_price = message.effectivePrice;
+    obj.price_impact = message.priceImpact;
+    if (message.swapSteps) {
+      obj.swap_steps = message.swapSteps.map(e => e ? SwapStep.toAmino(e) : undefined);
+    } else {
+      obj.swap_steps = [];
+    }
+    return obj;
+  },
+  fromAminoMsg(object: QueryTradeSimulationResponseAminoMsg): QueryTradeSimulationResponse {
+    return QueryTradeSimulationResponse.fromAmino(object.value);
+  },
+  fromProtoMsg(message: QueryTradeSimulationResponseProtoMsg): QueryTradeSimulationResponse {
+    return QueryTradeSimulationResponse.decode(message.value);
+  },
+  toProto(message: QueryTradeSimulationResponse): Uint8Array {
+    return QueryTradeSimulationResponse.encode(message).finish();
+  },
+  toProtoMsg(message: QueryTradeSimulationResponse): QueryTradeSimulationResponseProtoMsg {
+    return {
+      typeUrl: "/pryzmatics.server.trade.QueryTradeSimulationResponse",
+      value: QueryTradeSimulationResponse.encode(message).finish()
+    };
   }
 };

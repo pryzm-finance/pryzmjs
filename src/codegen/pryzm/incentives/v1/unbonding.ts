@@ -1,5 +1,5 @@
 import { Timestamp, TimestampSDKType } from "../../../google/protobuf/timestamp";
-import { Coin, CoinSDKType } from "../../../cosmos/base/v1beta1/coin";
+import { Coin, CoinAmino, CoinSDKType } from "../../../cosmos/base/v1beta1/coin";
 import { BinaryReader, BinaryWriter } from "../../../binary";
 import { isSet, fromJsonTimestamp, fromTimestamp } from "../../../helpers";
 export interface Unbonding {
@@ -9,6 +9,22 @@ export interface Unbonding {
   treasuryAddress: string;
   amount: Coin;
   autoClaim: boolean;
+}
+export interface UnbondingProtoMsg {
+  typeUrl: "/pryzm.incentives.v1.Unbonding";
+  value: Uint8Array;
+}
+export interface UnbondingAmino {
+  id?: string;
+  completion_time?: string;
+  address?: string;
+  treasury_address?: string;
+  amount?: CoinAmino;
+  auto_claim?: boolean;
+}
+export interface UnbondingAminoMsg {
+  type: "/pryzm.incentives.v1.Unbonding";
+  value: UnbondingAmino;
 }
 export interface UnbondingSDKType {
   id: bigint;
@@ -29,6 +45,7 @@ function createBaseUnbonding(): Unbonding {
   };
 }
 export const Unbonding = {
+  typeUrl: "/pryzm.incentives.v1.Unbonding",
   encode(message: Unbonding, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.id !== BigInt(0)) {
       writer.uint32(8).uint64(message.id);
@@ -111,5 +128,52 @@ export const Unbonding = {
     message.amount = object.amount !== undefined && object.amount !== null ? Coin.fromPartial(object.amount) : undefined;
     message.autoClaim = object.autoClaim ?? false;
     return message;
+  },
+  fromAmino(object: UnbondingAmino): Unbonding {
+    const message = createBaseUnbonding();
+    if (object.id !== undefined && object.id !== null) {
+      message.id = BigInt(object.id);
+    }
+    if (object.completion_time !== undefined && object.completion_time !== null) {
+      message.completionTime = Timestamp.fromAmino(object.completion_time);
+    }
+    if (object.address !== undefined && object.address !== null) {
+      message.address = object.address;
+    }
+    if (object.treasury_address !== undefined && object.treasury_address !== null) {
+      message.treasuryAddress = object.treasury_address;
+    }
+    if (object.amount !== undefined && object.amount !== null) {
+      message.amount = Coin.fromAmino(object.amount);
+    }
+    if (object.auto_claim !== undefined && object.auto_claim !== null) {
+      message.autoClaim = object.auto_claim;
+    }
+    return message;
+  },
+  toAmino(message: Unbonding): UnbondingAmino {
+    const obj: any = {};
+    obj.id = message.id ? message.id.toString() : undefined;
+    obj.completion_time = message.completionTime ? Timestamp.toAmino(message.completionTime) : undefined;
+    obj.address = message.address;
+    obj.treasury_address = message.treasuryAddress;
+    obj.amount = message.amount ? Coin.toAmino(message.amount) : undefined;
+    obj.auto_claim = message.autoClaim;
+    return obj;
+  },
+  fromAminoMsg(object: UnbondingAminoMsg): Unbonding {
+    return Unbonding.fromAmino(object.value);
+  },
+  fromProtoMsg(message: UnbondingProtoMsg): Unbonding {
+    return Unbonding.decode(message.value);
+  },
+  toProto(message: Unbonding): Uint8Array {
+    return Unbonding.encode(message).finish();
+  },
+  toProtoMsg(message: Unbonding): UnbondingProtoMsg {
+    return {
+      typeUrl: "/pryzm.incentives.v1.Unbonding",
+      value: Unbonding.encode(message).finish()
+    };
   }
 };

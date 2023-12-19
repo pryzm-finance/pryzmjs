@@ -7,6 +7,20 @@ export interface Minter {
   /** current annual expected provisions */
   annualProvisions: string;
 }
+export interface MinterProtoMsg {
+  typeUrl: "/pryzm.mint.v1.Minter";
+  value: Uint8Array;
+}
+/** Minter represents the minting state. */
+export interface MinterAmino {
+  inflation?: string;
+  /** current annual expected provisions */
+  annual_provisions?: string;
+}
+export interface MinterAminoMsg {
+  type: "/pryzm.mint.v1.Minter";
+  value: MinterAmino;
+}
 /** Minter represents the minting state. */
 export interface MinterSDKType {
   inflation: string;
@@ -19,6 +33,7 @@ function createBaseMinter(): Minter {
   };
 }
 export const Minter = {
+  typeUrl: "/pryzm.mint.v1.Minter",
   encode(message: Minter, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.inflation !== "") {
       writer.uint32(10).string(Decimal.fromUserInput(message.inflation, 18).atomics);
@@ -65,5 +80,36 @@ export const Minter = {
     message.inflation = object.inflation ?? "";
     message.annualProvisions = object.annualProvisions ?? "";
     return message;
+  },
+  fromAmino(object: MinterAmino): Minter {
+    const message = createBaseMinter();
+    if (object.inflation !== undefined && object.inflation !== null) {
+      message.inflation = object.inflation;
+    }
+    if (object.annual_provisions !== undefined && object.annual_provisions !== null) {
+      message.annualProvisions = object.annual_provisions;
+    }
+    return message;
+  },
+  toAmino(message: Minter): MinterAmino {
+    const obj: any = {};
+    obj.inflation = message.inflation;
+    obj.annual_provisions = message.annualProvisions;
+    return obj;
+  },
+  fromAminoMsg(object: MinterAminoMsg): Minter {
+    return Minter.fromAmino(object.value);
+  },
+  fromProtoMsg(message: MinterProtoMsg): Minter {
+    return Minter.decode(message.value);
+  },
+  toProto(message: Minter): Uint8Array {
+    return Minter.encode(message).finish();
+  },
+  toProtoMsg(message: Minter): MinterProtoMsg {
+    return {
+      typeUrl: "/pryzm.mint.v1.Minter",
+      value: Minter.encode(message).finish()
+    };
   }
 };

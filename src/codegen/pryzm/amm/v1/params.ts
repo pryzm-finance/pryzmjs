@@ -12,6 +12,25 @@ export interface OrderParameters {
   maxOrderStepRatio: string;
   minOrderStepRatio: string;
 }
+export interface OrderParametersProtoMsg {
+  typeUrl: "/pryzm.amm.v1.OrderParameters";
+  value: Uint8Array;
+}
+export interface OrderParametersAmino {
+  step_matching_fee_ratio?: string;
+  step_swap_fee_ratio?: string;
+  matching_protocol_fee_ratio?: string;
+  matching_solver_fee_ratio?: string;
+  max_orders_per_block?: number;
+  max_schedule_per_block?: number;
+  max_exec_order_trade_ratio?: string;
+  max_order_step_ratio?: string;
+  min_order_step_ratio?: string;
+}
+export interface OrderParametersAminoMsg {
+  type: "/pryzm.amm.v1.OrderParameters";
+  value: OrderParametersAmino;
+}
 export interface OrderParametersSDKType {
   step_matching_fee_ratio: string;
   step_swap_fee_ratio: string;
@@ -45,6 +64,36 @@ export interface YammParameters {
   /** this will be set to newly created yamm pools */
   defaultPauseAllowList: string[];
 }
+export interface YammParametersProtoMsg {
+  typeUrl: "/pryzm.amm.v1.YammParameters";
+  value: Uint8Array;
+}
+export interface YammParametersAmino {
+  lambda?: string;
+  /** duration (milliseconds) for virtual balance when adding new pAssets to yamm pools */
+  maturity_introduction_interval_millis?: string;
+  maturity_expiration_interval_millis?: string;
+  introduction_virtual_balance_scaler?: string;
+  expiration_virtual_balance_scaler?: string;
+  buy_y_given_in_loan_fee_ratio?: string;
+  sell_y_given_out_fee_ratio?: string;
+  max_alpha?: string;
+  /**
+   * this will be set to newly created yamm pools
+   * if not empty, only these addresses can initialize the pools
+   */
+  default_initialization_allow_list?: string[];
+  avg_monthly_yield_rate?: string;
+  yield_fee_scaler?: string;
+  /** this will be set to newly created yamm pools */
+  default_admins?: string[];
+  /** this will be set to newly created yamm pools */
+  default_pause_allow_list?: string[];
+}
+export interface YammParametersAminoMsg {
+  type: "/pryzm.amm.v1.YammParameters";
+  value: YammParametersAmino;
+}
 export interface YammParametersSDKType {
   lambda: string;
   maturity_introduction_interval_millis: bigint;
@@ -66,6 +115,20 @@ export interface GeneralPoolParameters {
   swapProtocolFeeRatio: string;
   joinExitProtocolFeeRatio: string;
 }
+export interface GeneralPoolParametersProtoMsg {
+  typeUrl: "/pryzm.amm.v1.GeneralPoolParameters";
+  value: Uint8Array;
+}
+export interface GeneralPoolParametersAmino {
+  allow_public_pool_creation?: boolean;
+  default_swap_fee_ratio?: string;
+  swap_protocol_fee_ratio?: string;
+  join_exit_protocol_fee_ratio?: string;
+}
+export interface GeneralPoolParametersAminoMsg {
+  type: "/pryzm.amm.v1.GeneralPoolParameters";
+  value: GeneralPoolParametersAmino;
+}
 export interface GeneralPoolParametersSDKType {
   allow_public_pool_creation: boolean;
   default_swap_fee_ratio: string;
@@ -81,6 +144,23 @@ export interface AuthorizationParameters {
    */
   pauseAllowList: string[];
 }
+export interface AuthorizationParametersProtoMsg {
+  typeUrl: "/pryzm.amm.v1.AuthorizationParameters";
+  value: Uint8Array;
+}
+export interface AuthorizationParametersAmino {
+  admin_list?: string[];
+  /**
+   * can pause the vault and also set pools to paused_by_gov mode which
+   * is a special mode where only the gov can unpause and does not have a window
+   * these cannot unpause anything
+   */
+  pause_allow_list?: string[];
+}
+export interface AuthorizationParametersAminoMsg {
+  type: "/pryzm.amm.v1.AuthorizationParameters";
+  value: AuthorizationParametersAmino;
+}
 export interface AuthorizationParametersSDKType {
   admin_list: string[];
   pause_allow_list: string[];
@@ -91,6 +171,21 @@ export interface Params {
   yammParameters: YammParameters;
   orderParameters: OrderParameters;
   authorizationParameters: AuthorizationParameters;
+}
+export interface ParamsProtoMsg {
+  typeUrl: "/pryzm.amm.v1.Params";
+  value: Uint8Array;
+}
+/** Params defines the parameters for the module. */
+export interface ParamsAmino {
+  general_pool_parameters?: GeneralPoolParametersAmino;
+  yamm_parameters?: YammParametersAmino;
+  order_parameters?: OrderParametersAmino;
+  authorization_parameters?: AuthorizationParametersAmino;
+}
+export interface ParamsAminoMsg {
+  type: "/pryzm.amm.v1.Params";
+  value: ParamsAmino;
 }
 /** Params defines the parameters for the module. */
 export interface ParamsSDKType {
@@ -113,6 +208,7 @@ function createBaseOrderParameters(): OrderParameters {
   };
 }
 export const OrderParameters = {
+  typeUrl: "/pryzm.amm.v1.OrderParameters",
   encode(message: OrderParameters, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.stepMatchingFeeRatio !== "") {
       writer.uint32(10).string(Decimal.fromUserInput(message.stepMatchingFeeRatio, 18).atomics);
@@ -222,6 +318,65 @@ export const OrderParameters = {
     message.maxOrderStepRatio = object.maxOrderStepRatio ?? "";
     message.minOrderStepRatio = object.minOrderStepRatio ?? "";
     return message;
+  },
+  fromAmino(object: OrderParametersAmino): OrderParameters {
+    const message = createBaseOrderParameters();
+    if (object.step_matching_fee_ratio !== undefined && object.step_matching_fee_ratio !== null) {
+      message.stepMatchingFeeRatio = object.step_matching_fee_ratio;
+    }
+    if (object.step_swap_fee_ratio !== undefined && object.step_swap_fee_ratio !== null) {
+      message.stepSwapFeeRatio = object.step_swap_fee_ratio;
+    }
+    if (object.matching_protocol_fee_ratio !== undefined && object.matching_protocol_fee_ratio !== null) {
+      message.matchingProtocolFeeRatio = object.matching_protocol_fee_ratio;
+    }
+    if (object.matching_solver_fee_ratio !== undefined && object.matching_solver_fee_ratio !== null) {
+      message.matchingSolverFeeRatio = object.matching_solver_fee_ratio;
+    }
+    if (object.max_orders_per_block !== undefined && object.max_orders_per_block !== null) {
+      message.maxOrdersPerBlock = object.max_orders_per_block;
+    }
+    if (object.max_schedule_per_block !== undefined && object.max_schedule_per_block !== null) {
+      message.maxSchedulePerBlock = object.max_schedule_per_block;
+    }
+    if (object.max_exec_order_trade_ratio !== undefined && object.max_exec_order_trade_ratio !== null) {
+      message.maxExecOrderTradeRatio = object.max_exec_order_trade_ratio;
+    }
+    if (object.max_order_step_ratio !== undefined && object.max_order_step_ratio !== null) {
+      message.maxOrderStepRatio = object.max_order_step_ratio;
+    }
+    if (object.min_order_step_ratio !== undefined && object.min_order_step_ratio !== null) {
+      message.minOrderStepRatio = object.min_order_step_ratio;
+    }
+    return message;
+  },
+  toAmino(message: OrderParameters): OrderParametersAmino {
+    const obj: any = {};
+    obj.step_matching_fee_ratio = message.stepMatchingFeeRatio;
+    obj.step_swap_fee_ratio = message.stepSwapFeeRatio;
+    obj.matching_protocol_fee_ratio = message.matchingProtocolFeeRatio;
+    obj.matching_solver_fee_ratio = message.matchingSolverFeeRatio;
+    obj.max_orders_per_block = message.maxOrdersPerBlock;
+    obj.max_schedule_per_block = message.maxSchedulePerBlock;
+    obj.max_exec_order_trade_ratio = message.maxExecOrderTradeRatio;
+    obj.max_order_step_ratio = message.maxOrderStepRatio;
+    obj.min_order_step_ratio = message.minOrderStepRatio;
+    return obj;
+  },
+  fromAminoMsg(object: OrderParametersAminoMsg): OrderParameters {
+    return OrderParameters.fromAmino(object.value);
+  },
+  fromProtoMsg(message: OrderParametersProtoMsg): OrderParameters {
+    return OrderParameters.decode(message.value);
+  },
+  toProto(message: OrderParameters): Uint8Array {
+    return OrderParameters.encode(message).finish();
+  },
+  toProtoMsg(message: OrderParameters): OrderParametersProtoMsg {
+    return {
+      typeUrl: "/pryzm.amm.v1.OrderParameters",
+      value: OrderParameters.encode(message).finish()
+    };
   }
 };
 function createBaseYammParameters(): YammParameters {
@@ -242,6 +397,7 @@ function createBaseYammParameters(): YammParameters {
   };
 }
 export const YammParameters = {
+  typeUrl: "/pryzm.amm.v1.YammParameters",
   encode(message: YammParameters, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.lambda !== "") {
       writer.uint32(10).string(Decimal.fromUserInput(message.lambda, 18).atomics);
@@ -399,6 +555,87 @@ export const YammParameters = {
     message.defaultAdmins = object.defaultAdmins?.map(e => e) || [];
     message.defaultPauseAllowList = object.defaultPauseAllowList?.map(e => e) || [];
     return message;
+  },
+  fromAmino(object: YammParametersAmino): YammParameters {
+    const message = createBaseYammParameters();
+    if (object.lambda !== undefined && object.lambda !== null) {
+      message.lambda = object.lambda;
+    }
+    if (object.maturity_introduction_interval_millis !== undefined && object.maturity_introduction_interval_millis !== null) {
+      message.maturityIntroductionIntervalMillis = BigInt(object.maturity_introduction_interval_millis);
+    }
+    if (object.maturity_expiration_interval_millis !== undefined && object.maturity_expiration_interval_millis !== null) {
+      message.maturityExpirationIntervalMillis = BigInt(object.maturity_expiration_interval_millis);
+    }
+    if (object.introduction_virtual_balance_scaler !== undefined && object.introduction_virtual_balance_scaler !== null) {
+      message.introductionVirtualBalanceScaler = object.introduction_virtual_balance_scaler;
+    }
+    if (object.expiration_virtual_balance_scaler !== undefined && object.expiration_virtual_balance_scaler !== null) {
+      message.expirationVirtualBalanceScaler = object.expiration_virtual_balance_scaler;
+    }
+    if (object.buy_y_given_in_loan_fee_ratio !== undefined && object.buy_y_given_in_loan_fee_ratio !== null) {
+      message.buyYGivenInLoanFeeRatio = object.buy_y_given_in_loan_fee_ratio;
+    }
+    if (object.sell_y_given_out_fee_ratio !== undefined && object.sell_y_given_out_fee_ratio !== null) {
+      message.sellYGivenOutFeeRatio = object.sell_y_given_out_fee_ratio;
+    }
+    if (object.max_alpha !== undefined && object.max_alpha !== null) {
+      message.maxAlpha = object.max_alpha;
+    }
+    message.defaultInitializationAllowList = object.default_initialization_allow_list?.map(e => e) || [];
+    if (object.avg_monthly_yield_rate !== undefined && object.avg_monthly_yield_rate !== null) {
+      message.avgMonthlyYieldRate = object.avg_monthly_yield_rate;
+    }
+    if (object.yield_fee_scaler !== undefined && object.yield_fee_scaler !== null) {
+      message.yieldFeeScaler = object.yield_fee_scaler;
+    }
+    message.defaultAdmins = object.default_admins?.map(e => e) || [];
+    message.defaultPauseAllowList = object.default_pause_allow_list?.map(e => e) || [];
+    return message;
+  },
+  toAmino(message: YammParameters): YammParametersAmino {
+    const obj: any = {};
+    obj.lambda = message.lambda;
+    obj.maturity_introduction_interval_millis = message.maturityIntroductionIntervalMillis ? message.maturityIntroductionIntervalMillis.toString() : undefined;
+    obj.maturity_expiration_interval_millis = message.maturityExpirationIntervalMillis ? message.maturityExpirationIntervalMillis.toString() : undefined;
+    obj.introduction_virtual_balance_scaler = message.introductionVirtualBalanceScaler;
+    obj.expiration_virtual_balance_scaler = message.expirationVirtualBalanceScaler;
+    obj.buy_y_given_in_loan_fee_ratio = message.buyYGivenInLoanFeeRatio;
+    obj.sell_y_given_out_fee_ratio = message.sellYGivenOutFeeRatio;
+    obj.max_alpha = message.maxAlpha;
+    if (message.defaultInitializationAllowList) {
+      obj.default_initialization_allow_list = message.defaultInitializationAllowList.map(e => e);
+    } else {
+      obj.default_initialization_allow_list = [];
+    }
+    obj.avg_monthly_yield_rate = message.avgMonthlyYieldRate;
+    obj.yield_fee_scaler = message.yieldFeeScaler;
+    if (message.defaultAdmins) {
+      obj.default_admins = message.defaultAdmins.map(e => e);
+    } else {
+      obj.default_admins = [];
+    }
+    if (message.defaultPauseAllowList) {
+      obj.default_pause_allow_list = message.defaultPauseAllowList.map(e => e);
+    } else {
+      obj.default_pause_allow_list = [];
+    }
+    return obj;
+  },
+  fromAminoMsg(object: YammParametersAminoMsg): YammParameters {
+    return YammParameters.fromAmino(object.value);
+  },
+  fromProtoMsg(message: YammParametersProtoMsg): YammParameters {
+    return YammParameters.decode(message.value);
+  },
+  toProto(message: YammParameters): Uint8Array {
+    return YammParameters.encode(message).finish();
+  },
+  toProtoMsg(message: YammParameters): YammParametersProtoMsg {
+    return {
+      typeUrl: "/pryzm.amm.v1.YammParameters",
+      value: YammParameters.encode(message).finish()
+    };
   }
 };
 function createBaseGeneralPoolParameters(): GeneralPoolParameters {
@@ -410,6 +647,7 @@ function createBaseGeneralPoolParameters(): GeneralPoolParameters {
   };
 }
 export const GeneralPoolParameters = {
+  typeUrl: "/pryzm.amm.v1.GeneralPoolParameters",
   encode(message: GeneralPoolParameters, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.allowPublicPoolCreation === true) {
       writer.uint32(8).bool(message.allowPublicPoolCreation);
@@ -474,6 +712,45 @@ export const GeneralPoolParameters = {
     message.swapProtocolFeeRatio = object.swapProtocolFeeRatio ?? "";
     message.joinExitProtocolFeeRatio = object.joinExitProtocolFeeRatio ?? "";
     return message;
+  },
+  fromAmino(object: GeneralPoolParametersAmino): GeneralPoolParameters {
+    const message = createBaseGeneralPoolParameters();
+    if (object.allow_public_pool_creation !== undefined && object.allow_public_pool_creation !== null) {
+      message.allowPublicPoolCreation = object.allow_public_pool_creation;
+    }
+    if (object.default_swap_fee_ratio !== undefined && object.default_swap_fee_ratio !== null) {
+      message.defaultSwapFeeRatio = object.default_swap_fee_ratio;
+    }
+    if (object.swap_protocol_fee_ratio !== undefined && object.swap_protocol_fee_ratio !== null) {
+      message.swapProtocolFeeRatio = object.swap_protocol_fee_ratio;
+    }
+    if (object.join_exit_protocol_fee_ratio !== undefined && object.join_exit_protocol_fee_ratio !== null) {
+      message.joinExitProtocolFeeRatio = object.join_exit_protocol_fee_ratio;
+    }
+    return message;
+  },
+  toAmino(message: GeneralPoolParameters): GeneralPoolParametersAmino {
+    const obj: any = {};
+    obj.allow_public_pool_creation = message.allowPublicPoolCreation;
+    obj.default_swap_fee_ratio = message.defaultSwapFeeRatio;
+    obj.swap_protocol_fee_ratio = message.swapProtocolFeeRatio;
+    obj.join_exit_protocol_fee_ratio = message.joinExitProtocolFeeRatio;
+    return obj;
+  },
+  fromAminoMsg(object: GeneralPoolParametersAminoMsg): GeneralPoolParameters {
+    return GeneralPoolParameters.fromAmino(object.value);
+  },
+  fromProtoMsg(message: GeneralPoolParametersProtoMsg): GeneralPoolParameters {
+    return GeneralPoolParameters.decode(message.value);
+  },
+  toProto(message: GeneralPoolParameters): Uint8Array {
+    return GeneralPoolParameters.encode(message).finish();
+  },
+  toProtoMsg(message: GeneralPoolParameters): GeneralPoolParametersProtoMsg {
+    return {
+      typeUrl: "/pryzm.amm.v1.GeneralPoolParameters",
+      value: GeneralPoolParameters.encode(message).finish()
+    };
   }
 };
 function createBaseAuthorizationParameters(): AuthorizationParameters {
@@ -483,6 +760,7 @@ function createBaseAuthorizationParameters(): AuthorizationParameters {
   };
 }
 export const AuthorizationParameters = {
+  typeUrl: "/pryzm.amm.v1.AuthorizationParameters",
   encode(message: AuthorizationParameters, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     for (const v of message.adminList) {
       writer.uint32(10).string(v!);
@@ -537,6 +815,41 @@ export const AuthorizationParameters = {
     message.adminList = object.adminList?.map(e => e) || [];
     message.pauseAllowList = object.pauseAllowList?.map(e => e) || [];
     return message;
+  },
+  fromAmino(object: AuthorizationParametersAmino): AuthorizationParameters {
+    const message = createBaseAuthorizationParameters();
+    message.adminList = object.admin_list?.map(e => e) || [];
+    message.pauseAllowList = object.pause_allow_list?.map(e => e) || [];
+    return message;
+  },
+  toAmino(message: AuthorizationParameters): AuthorizationParametersAmino {
+    const obj: any = {};
+    if (message.adminList) {
+      obj.admin_list = message.adminList.map(e => e);
+    } else {
+      obj.admin_list = [];
+    }
+    if (message.pauseAllowList) {
+      obj.pause_allow_list = message.pauseAllowList.map(e => e);
+    } else {
+      obj.pause_allow_list = [];
+    }
+    return obj;
+  },
+  fromAminoMsg(object: AuthorizationParametersAminoMsg): AuthorizationParameters {
+    return AuthorizationParameters.fromAmino(object.value);
+  },
+  fromProtoMsg(message: AuthorizationParametersProtoMsg): AuthorizationParameters {
+    return AuthorizationParameters.decode(message.value);
+  },
+  toProto(message: AuthorizationParameters): Uint8Array {
+    return AuthorizationParameters.encode(message).finish();
+  },
+  toProtoMsg(message: AuthorizationParameters): AuthorizationParametersProtoMsg {
+    return {
+      typeUrl: "/pryzm.amm.v1.AuthorizationParameters",
+      value: AuthorizationParameters.encode(message).finish()
+    };
   }
 };
 function createBaseParams(): Params {
@@ -548,6 +861,7 @@ function createBaseParams(): Params {
   };
 }
 export const Params = {
+  typeUrl: "/pryzm.amm.v1.Params",
   encode(message: Params, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.generalPoolParameters !== undefined) {
       GeneralPoolParameters.encode(message.generalPoolParameters, writer.uint32(10).fork()).ldelim();
@@ -612,5 +926,44 @@ export const Params = {
     message.orderParameters = object.orderParameters !== undefined && object.orderParameters !== null ? OrderParameters.fromPartial(object.orderParameters) : undefined;
     message.authorizationParameters = object.authorizationParameters !== undefined && object.authorizationParameters !== null ? AuthorizationParameters.fromPartial(object.authorizationParameters) : undefined;
     return message;
+  },
+  fromAmino(object: ParamsAmino): Params {
+    const message = createBaseParams();
+    if (object.general_pool_parameters !== undefined && object.general_pool_parameters !== null) {
+      message.generalPoolParameters = GeneralPoolParameters.fromAmino(object.general_pool_parameters);
+    }
+    if (object.yamm_parameters !== undefined && object.yamm_parameters !== null) {
+      message.yammParameters = YammParameters.fromAmino(object.yamm_parameters);
+    }
+    if (object.order_parameters !== undefined && object.order_parameters !== null) {
+      message.orderParameters = OrderParameters.fromAmino(object.order_parameters);
+    }
+    if (object.authorization_parameters !== undefined && object.authorization_parameters !== null) {
+      message.authorizationParameters = AuthorizationParameters.fromAmino(object.authorization_parameters);
+    }
+    return message;
+  },
+  toAmino(message: Params): ParamsAmino {
+    const obj: any = {};
+    obj.general_pool_parameters = message.generalPoolParameters ? GeneralPoolParameters.toAmino(message.generalPoolParameters) : undefined;
+    obj.yamm_parameters = message.yammParameters ? YammParameters.toAmino(message.yammParameters) : undefined;
+    obj.order_parameters = message.orderParameters ? OrderParameters.toAmino(message.orderParameters) : undefined;
+    obj.authorization_parameters = message.authorizationParameters ? AuthorizationParameters.toAmino(message.authorizationParameters) : undefined;
+    return obj;
+  },
+  fromAminoMsg(object: ParamsAminoMsg): Params {
+    return Params.fromAmino(object.value);
+  },
+  fromProtoMsg(message: ParamsProtoMsg): Params {
+    return Params.decode(message.value);
+  },
+  toProto(message: Params): Uint8Array {
+    return Params.encode(message).finish();
+  },
+  toProtoMsg(message: Params): ParamsProtoMsg {
+    return {
+      typeUrl: "/pryzm.amm.v1.Params",
+      value: Params.encode(message).finish()
+    };
   }
 };

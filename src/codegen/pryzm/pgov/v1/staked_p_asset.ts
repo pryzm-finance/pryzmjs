@@ -9,6 +9,23 @@ export interface StakedPAsset {
   /** staked amount */
   amount: string;
 }
+export interface StakedPAssetProtoMsg {
+  typeUrl: "/pryzm.pgov.v1.StakedPAsset";
+  value: Uint8Array;
+}
+/** StakedPAsset stores the amount of pAssets staked for an account */
+export interface StakedPAssetAmino {
+  /** the address of owner */
+  account?: string;
+  /** pAsset denom */
+  p_asset?: string;
+  /** staked amount */
+  amount?: string;
+}
+export interface StakedPAssetAminoMsg {
+  type: "/pryzm.pgov.v1.StakedPAsset";
+  value: StakedPAssetAmino;
+}
 /** StakedPAsset stores the amount of pAssets staked for an account */
 export interface StakedPAssetSDKType {
   account: string;
@@ -23,6 +40,22 @@ export interface TotalStakedPAsset {
   /** staked amount */
   amount: string;
 }
+export interface TotalStakedPAssetProtoMsg {
+  typeUrl: "/pryzm.pgov.v1.TotalStakedPAsset";
+  value: Uint8Array;
+}
+export interface TotalStakedPAssetAmino {
+  /** the address of owner */
+  account?: string;
+  /** asset denom */
+  asset?: string;
+  /** staked amount */
+  amount?: string;
+}
+export interface TotalStakedPAssetAminoMsg {
+  type: "/pryzm.pgov.v1.TotalStakedPAsset";
+  value: TotalStakedPAssetAmino;
+}
 export interface TotalStakedPAssetSDKType {
   account: string;
   asset: string;
@@ -36,6 +69,7 @@ function createBaseStakedPAsset(): StakedPAsset {
   };
 }
 export const StakedPAsset = {
+  typeUrl: "/pryzm.pgov.v1.StakedPAsset",
   encode(message: StakedPAsset, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.account !== "") {
       writer.uint32(10).string(message.account);
@@ -91,6 +125,41 @@ export const StakedPAsset = {
     message.pAsset = object.pAsset ?? "";
     message.amount = object.amount ?? "";
     return message;
+  },
+  fromAmino(object: StakedPAssetAmino): StakedPAsset {
+    const message = createBaseStakedPAsset();
+    if (object.account !== undefined && object.account !== null) {
+      message.account = object.account;
+    }
+    if (object.p_asset !== undefined && object.p_asset !== null) {
+      message.pAsset = object.p_asset;
+    }
+    if (object.amount !== undefined && object.amount !== null) {
+      message.amount = object.amount;
+    }
+    return message;
+  },
+  toAmino(message: StakedPAsset): StakedPAssetAmino {
+    const obj: any = {};
+    obj.account = message.account;
+    obj.p_asset = message.pAsset;
+    obj.amount = message.amount;
+    return obj;
+  },
+  fromAminoMsg(object: StakedPAssetAminoMsg): StakedPAsset {
+    return StakedPAsset.fromAmino(object.value);
+  },
+  fromProtoMsg(message: StakedPAssetProtoMsg): StakedPAsset {
+    return StakedPAsset.decode(message.value);
+  },
+  toProto(message: StakedPAsset): Uint8Array {
+    return StakedPAsset.encode(message).finish();
+  },
+  toProtoMsg(message: StakedPAsset): StakedPAssetProtoMsg {
+    return {
+      typeUrl: "/pryzm.pgov.v1.StakedPAsset",
+      value: StakedPAsset.encode(message).finish()
+    };
   }
 };
 function createBaseTotalStakedPAsset(): TotalStakedPAsset {
@@ -101,6 +170,7 @@ function createBaseTotalStakedPAsset(): TotalStakedPAsset {
   };
 }
 export const TotalStakedPAsset = {
+  typeUrl: "/pryzm.pgov.v1.TotalStakedPAsset",
   encode(message: TotalStakedPAsset, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.account !== "") {
       writer.uint32(10).string(message.account);
@@ -156,5 +226,40 @@ export const TotalStakedPAsset = {
     message.asset = object.asset ?? "";
     message.amount = object.amount ?? "";
     return message;
+  },
+  fromAmino(object: TotalStakedPAssetAmino): TotalStakedPAsset {
+    const message = createBaseTotalStakedPAsset();
+    if (object.account !== undefined && object.account !== null) {
+      message.account = object.account;
+    }
+    if (object.asset !== undefined && object.asset !== null) {
+      message.asset = object.asset;
+    }
+    if (object.amount !== undefined && object.amount !== null) {
+      message.amount = object.amount;
+    }
+    return message;
+  },
+  toAmino(message: TotalStakedPAsset): TotalStakedPAssetAmino {
+    const obj: any = {};
+    obj.account = message.account;
+    obj.asset = message.asset;
+    obj.amount = message.amount;
+    return obj;
+  },
+  fromAminoMsg(object: TotalStakedPAssetAminoMsg): TotalStakedPAsset {
+    return TotalStakedPAsset.fromAmino(object.value);
+  },
+  fromProtoMsg(message: TotalStakedPAssetProtoMsg): TotalStakedPAsset {
+    return TotalStakedPAsset.decode(message.value);
+  },
+  toProto(message: TotalStakedPAsset): Uint8Array {
+    return TotalStakedPAsset.encode(message).finish();
+  },
+  toProtoMsg(message: TotalStakedPAsset): TotalStakedPAssetProtoMsg {
+    return {
+      typeUrl: "/pryzm.pgov.v1.TotalStakedPAsset",
+      value: TotalStakedPAsset.encode(message).finish()
+    };
   }
 };

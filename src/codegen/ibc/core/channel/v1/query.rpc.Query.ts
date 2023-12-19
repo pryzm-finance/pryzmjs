@@ -1,4 +1,3 @@
-//@ts-nocheck
 import { grpc } from "@improbable-eng/grpc-web";
 import { UnaryMethodDefinitionish } from "../../../../grpc-web";
 import { DeepPartial } from "../../../../helpers";
@@ -76,45 +75,45 @@ export class QueryClientImpl implements Query {
     this.nextSequenceReceive = this.nextSequenceReceive.bind(this);
   }
   channel(request: DeepPartial<QueryChannelRequest>, metadata?: grpc.Metadata): Promise<QueryChannelResponse> {
-    return this.rpc.unary(QueryChannelDesc, QueryChannelRequest.fromPartial(request), metadata);
+    return this.rpc.unary(QueryChannelDesc, QueryChannelRequest.fromPartial(request as any), metadata);
   }
   channels(request: DeepPartial<QueryChannelsRequest> = {
     pagination: undefined
   }, metadata?: grpc.Metadata): Promise<QueryChannelsResponse> {
-    return this.rpc.unary(QueryChannelsDesc, QueryChannelsRequest.fromPartial(request), metadata);
+    return this.rpc.unary(QueryChannelsDesc, QueryChannelsRequest.fromPartial(request as any), metadata);
   }
   connectionChannels(request: DeepPartial<QueryConnectionChannelsRequest>, metadata?: grpc.Metadata): Promise<QueryConnectionChannelsResponse> {
-    return this.rpc.unary(QueryConnectionChannelsDesc, QueryConnectionChannelsRequest.fromPartial(request), metadata);
+    return this.rpc.unary(QueryConnectionChannelsDesc, QueryConnectionChannelsRequest.fromPartial(request as any), metadata);
   }
   channelClientState(request: DeepPartial<QueryChannelClientStateRequest>, metadata?: grpc.Metadata): Promise<QueryChannelClientStateResponse> {
-    return this.rpc.unary(QueryChannelClientStateDesc, QueryChannelClientStateRequest.fromPartial(request), metadata);
+    return this.rpc.unary(QueryChannelClientStateDesc, QueryChannelClientStateRequest.fromPartial(request as any), metadata);
   }
   channelConsensusState(request: DeepPartial<QueryChannelConsensusStateRequest>, metadata?: grpc.Metadata): Promise<QueryChannelConsensusStateResponse> {
-    return this.rpc.unary(QueryChannelConsensusStateDesc, QueryChannelConsensusStateRequest.fromPartial(request), metadata);
+    return this.rpc.unary(QueryChannelConsensusStateDesc, QueryChannelConsensusStateRequest.fromPartial(request as any), metadata);
   }
   packetCommitment(request: DeepPartial<QueryPacketCommitmentRequest>, metadata?: grpc.Metadata): Promise<QueryPacketCommitmentResponse> {
-    return this.rpc.unary(QueryPacketCommitmentDesc, QueryPacketCommitmentRequest.fromPartial(request), metadata);
+    return this.rpc.unary(QueryPacketCommitmentDesc, QueryPacketCommitmentRequest.fromPartial(request as any), metadata);
   }
   packetCommitments(request: DeepPartial<QueryPacketCommitmentsRequest>, metadata?: grpc.Metadata): Promise<QueryPacketCommitmentsResponse> {
-    return this.rpc.unary(QueryPacketCommitmentsDesc, QueryPacketCommitmentsRequest.fromPartial(request), metadata);
+    return this.rpc.unary(QueryPacketCommitmentsDesc, QueryPacketCommitmentsRequest.fromPartial(request as any), metadata);
   }
   packetReceipt(request: DeepPartial<QueryPacketReceiptRequest>, metadata?: grpc.Metadata): Promise<QueryPacketReceiptResponse> {
-    return this.rpc.unary(QueryPacketReceiptDesc, QueryPacketReceiptRequest.fromPartial(request), metadata);
+    return this.rpc.unary(QueryPacketReceiptDesc, QueryPacketReceiptRequest.fromPartial(request as any), metadata);
   }
   packetAcknowledgement(request: DeepPartial<QueryPacketAcknowledgementRequest>, metadata?: grpc.Metadata): Promise<QueryPacketAcknowledgementResponse> {
-    return this.rpc.unary(QueryPacketAcknowledgementDesc, QueryPacketAcknowledgementRequest.fromPartial(request), metadata);
+    return this.rpc.unary(QueryPacketAcknowledgementDesc, QueryPacketAcknowledgementRequest.fromPartial(request as any), metadata);
   }
   packetAcknowledgements(request: DeepPartial<QueryPacketAcknowledgementsRequest>, metadata?: grpc.Metadata): Promise<QueryPacketAcknowledgementsResponse> {
-    return this.rpc.unary(QueryPacketAcknowledgementsDesc, QueryPacketAcknowledgementsRequest.fromPartial(request), metadata);
+    return this.rpc.unary(QueryPacketAcknowledgementsDesc, QueryPacketAcknowledgementsRequest.fromPartial(request as any), metadata);
   }
   unreceivedPackets(request: DeepPartial<QueryUnreceivedPacketsRequest>, metadata?: grpc.Metadata): Promise<QueryUnreceivedPacketsResponse> {
-    return this.rpc.unary(QueryUnreceivedPacketsDesc, QueryUnreceivedPacketsRequest.fromPartial(request), metadata);
+    return this.rpc.unary(QueryUnreceivedPacketsDesc, QueryUnreceivedPacketsRequest.fromPartial(request as any), metadata);
   }
   unreceivedAcks(request: DeepPartial<QueryUnreceivedAcksRequest>, metadata?: grpc.Metadata): Promise<QueryUnreceivedAcksResponse> {
-    return this.rpc.unary(QueryUnreceivedAcksDesc, QueryUnreceivedAcksRequest.fromPartial(request), metadata);
+    return this.rpc.unary(QueryUnreceivedAcksDesc, QueryUnreceivedAcksRequest.fromPartial(request as any), metadata);
   }
   nextSequenceReceive(request: DeepPartial<QueryNextSequenceReceiveRequest>, metadata?: grpc.Metadata): Promise<QueryNextSequenceReceiveResponse> {
-    return this.rpc.unary(QueryNextSequenceReceiveDesc, QueryNextSequenceReceiveRequest.fromPartial(request), metadata);
+    return this.rpc.unary(QueryNextSequenceReceiveDesc, QueryNextSequenceReceiveRequest.fromPartial(request as any), metadata);
   }
 }
 export const QueryDesc = {

@@ -8,6 +8,20 @@ export interface TokenPrice {
   blockTime: Timestamp;
   price: string;
 }
+export interface TokenPriceProtoMsg {
+  typeUrl: "/pryzmatics.price.TokenPrice";
+  value: Uint8Array;
+}
+export interface TokenPriceAmino {
+  denom?: string;
+  quote?: string;
+  block_time?: string;
+  price?: string;
+}
+export interface TokenPriceAminoMsg {
+  type: "/pryzmatics.price.TokenPrice";
+  value: TokenPriceAmino;
+}
 export interface TokenPriceSDKType {
   denom: string;
   quote: string;
@@ -23,6 +37,7 @@ function createBaseTokenPrice(): TokenPrice {
   };
 }
 export const TokenPrice = {
+  typeUrl: "/pryzmatics.price.TokenPrice",
   encode(message: TokenPrice, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.denom !== "") {
       writer.uint32(10).string(message.denom);
@@ -87,5 +102,44 @@ export const TokenPrice = {
     message.blockTime = object.blockTime !== undefined && object.blockTime !== null ? Timestamp.fromPartial(object.blockTime) : undefined;
     message.price = object.price ?? "";
     return message;
+  },
+  fromAmino(object: TokenPriceAmino): TokenPrice {
+    const message = createBaseTokenPrice();
+    if (object.denom !== undefined && object.denom !== null) {
+      message.denom = object.denom;
+    }
+    if (object.quote !== undefined && object.quote !== null) {
+      message.quote = object.quote;
+    }
+    if (object.block_time !== undefined && object.block_time !== null) {
+      message.blockTime = Timestamp.fromAmino(object.block_time);
+    }
+    if (object.price !== undefined && object.price !== null) {
+      message.price = object.price;
+    }
+    return message;
+  },
+  toAmino(message: TokenPrice): TokenPriceAmino {
+    const obj: any = {};
+    obj.denom = message.denom;
+    obj.quote = message.quote;
+    obj.block_time = message.blockTime ? Timestamp.toAmino(message.blockTime) : undefined;
+    obj.price = message.price;
+    return obj;
+  },
+  fromAminoMsg(object: TokenPriceAminoMsg): TokenPrice {
+    return TokenPrice.fromAmino(object.value);
+  },
+  fromProtoMsg(message: TokenPriceProtoMsg): TokenPrice {
+    return TokenPrice.decode(message.value);
+  },
+  toProto(message: TokenPrice): Uint8Array {
+    return TokenPrice.encode(message).finish();
+  },
+  toProtoMsg(message: TokenPrice): TokenPriceProtoMsg {
+    return {
+      typeUrl: "/pryzmatics.price.TokenPrice",
+      value: TokenPrice.encode(message).finish()
+    };
   }
 };

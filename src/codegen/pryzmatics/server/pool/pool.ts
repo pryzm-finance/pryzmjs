@@ -1,9 +1,20 @@
-import { ExtendedPool, ExtendedPoolSDKType } from "../../pool/extended_pool";
-import { PageRequest, PageRequestSDKType, PageResponse, PageResponseSDKType } from "../../../cosmos/base/query/v1beta1/pagination";
+import { ExtendedPool, ExtendedPoolAmino, ExtendedPoolSDKType } from "../../pool/extended_pool";
+import { PageRequest, PageRequestAmino, PageRequestSDKType, PageResponse, PageResponseAmino, PageResponseSDKType } from "../../../cosmos/base/query/v1beta1/pagination";
 import { BinaryReader, BinaryWriter } from "../../../binary";
 import { isSet } from "../../../helpers";
 export interface QueryPoolRequest {
   poolId: bigint;
+}
+export interface QueryPoolRequestProtoMsg {
+  typeUrl: "/pryzmatics.server.pool.QueryPoolRequest";
+  value: Uint8Array;
+}
+export interface QueryPoolRequestAmino {
+  pool_id?: string;
+}
+export interface QueryPoolRequestAminoMsg {
+  type: "/pryzmatics.server.pool.QueryPoolRequest";
+  value: QueryPoolRequestAmino;
 }
 export interface QueryPoolRequestSDKType {
   pool_id: bigint;
@@ -11,11 +22,33 @@ export interface QueryPoolRequestSDKType {
 export interface QueryPoolResponse {
   pool: ExtendedPool;
 }
+export interface QueryPoolResponseProtoMsg {
+  typeUrl: "/pryzmatics.server.pool.QueryPoolResponse";
+  value: Uint8Array;
+}
+export interface QueryPoolResponseAmino {
+  pool?: ExtendedPoolAmino;
+}
+export interface QueryPoolResponseAminoMsg {
+  type: "/pryzmatics.server.pool.QueryPoolResponse";
+  value: QueryPoolResponseAmino;
+}
 export interface QueryPoolResponseSDKType {
   pool: ExtendedPoolSDKType;
 }
 export interface QueryPoolsRequest {
   pagination?: PageRequest;
+}
+export interface QueryPoolsRequestProtoMsg {
+  typeUrl: "/pryzmatics.server.pool.QueryPoolsRequest";
+  value: Uint8Array;
+}
+export interface QueryPoolsRequestAmino {
+  pagination?: PageRequestAmino;
+}
+export interface QueryPoolsRequestAminoMsg {
+  type: "/pryzmatics.server.pool.QueryPoolsRequest";
+  value: QueryPoolsRequestAmino;
 }
 export interface QueryPoolsRequestSDKType {
   pagination?: PageRequestSDKType;
@@ -23,6 +56,18 @@ export interface QueryPoolsRequestSDKType {
 export interface QueryPoolsResponse {
   pools: ExtendedPool[];
   pagination?: PageResponse;
+}
+export interface QueryPoolsResponseProtoMsg {
+  typeUrl: "/pryzmatics.server.pool.QueryPoolsResponse";
+  value: Uint8Array;
+}
+export interface QueryPoolsResponseAmino {
+  pools?: ExtendedPoolAmino[];
+  pagination?: PageResponseAmino;
+}
+export interface QueryPoolsResponseAminoMsg {
+  type: "/pryzmatics.server.pool.QueryPoolsResponse";
+  value: QueryPoolsResponseAmino;
 }
 export interface QueryPoolsResponseSDKType {
   pools: ExtendedPoolSDKType[];
@@ -34,6 +79,7 @@ function createBaseQueryPoolRequest(): QueryPoolRequest {
   };
 }
 export const QueryPoolRequest = {
+  typeUrl: "/pryzmatics.server.pool.QueryPoolRequest",
   encode(message: QueryPoolRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.poolId !== BigInt(0)) {
       writer.uint32(8).uint64(message.poolId);
@@ -71,6 +117,33 @@ export const QueryPoolRequest = {
     const message = createBaseQueryPoolRequest();
     message.poolId = object.poolId !== undefined && object.poolId !== null ? BigInt(object.poolId.toString()) : BigInt(0);
     return message;
+  },
+  fromAmino(object: QueryPoolRequestAmino): QueryPoolRequest {
+    const message = createBaseQueryPoolRequest();
+    if (object.pool_id !== undefined && object.pool_id !== null) {
+      message.poolId = BigInt(object.pool_id);
+    }
+    return message;
+  },
+  toAmino(message: QueryPoolRequest): QueryPoolRequestAmino {
+    const obj: any = {};
+    obj.pool_id = message.poolId ? message.poolId.toString() : undefined;
+    return obj;
+  },
+  fromAminoMsg(object: QueryPoolRequestAminoMsg): QueryPoolRequest {
+    return QueryPoolRequest.fromAmino(object.value);
+  },
+  fromProtoMsg(message: QueryPoolRequestProtoMsg): QueryPoolRequest {
+    return QueryPoolRequest.decode(message.value);
+  },
+  toProto(message: QueryPoolRequest): Uint8Array {
+    return QueryPoolRequest.encode(message).finish();
+  },
+  toProtoMsg(message: QueryPoolRequest): QueryPoolRequestProtoMsg {
+    return {
+      typeUrl: "/pryzmatics.server.pool.QueryPoolRequest",
+      value: QueryPoolRequest.encode(message).finish()
+    };
   }
 };
 function createBaseQueryPoolResponse(): QueryPoolResponse {
@@ -79,6 +152,7 @@ function createBaseQueryPoolResponse(): QueryPoolResponse {
   };
 }
 export const QueryPoolResponse = {
+  typeUrl: "/pryzmatics.server.pool.QueryPoolResponse",
   encode(message: QueryPoolResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.pool !== undefined) {
       ExtendedPool.encode(message.pool, writer.uint32(10).fork()).ldelim();
@@ -116,6 +190,33 @@ export const QueryPoolResponse = {
     const message = createBaseQueryPoolResponse();
     message.pool = object.pool !== undefined && object.pool !== null ? ExtendedPool.fromPartial(object.pool) : undefined;
     return message;
+  },
+  fromAmino(object: QueryPoolResponseAmino): QueryPoolResponse {
+    const message = createBaseQueryPoolResponse();
+    if (object.pool !== undefined && object.pool !== null) {
+      message.pool = ExtendedPool.fromAmino(object.pool);
+    }
+    return message;
+  },
+  toAmino(message: QueryPoolResponse): QueryPoolResponseAmino {
+    const obj: any = {};
+    obj.pool = message.pool ? ExtendedPool.toAmino(message.pool) : undefined;
+    return obj;
+  },
+  fromAminoMsg(object: QueryPoolResponseAminoMsg): QueryPoolResponse {
+    return QueryPoolResponse.fromAmino(object.value);
+  },
+  fromProtoMsg(message: QueryPoolResponseProtoMsg): QueryPoolResponse {
+    return QueryPoolResponse.decode(message.value);
+  },
+  toProto(message: QueryPoolResponse): Uint8Array {
+    return QueryPoolResponse.encode(message).finish();
+  },
+  toProtoMsg(message: QueryPoolResponse): QueryPoolResponseProtoMsg {
+    return {
+      typeUrl: "/pryzmatics.server.pool.QueryPoolResponse",
+      value: QueryPoolResponse.encode(message).finish()
+    };
   }
 };
 function createBaseQueryPoolsRequest(): QueryPoolsRequest {
@@ -124,6 +225,7 @@ function createBaseQueryPoolsRequest(): QueryPoolsRequest {
   };
 }
 export const QueryPoolsRequest = {
+  typeUrl: "/pryzmatics.server.pool.QueryPoolsRequest",
   encode(message: QueryPoolsRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.pagination !== undefined) {
       PageRequest.encode(message.pagination, writer.uint32(10).fork()).ldelim();
@@ -161,6 +263,33 @@ export const QueryPoolsRequest = {
     const message = createBaseQueryPoolsRequest();
     message.pagination = object.pagination !== undefined && object.pagination !== null ? PageRequest.fromPartial(object.pagination) : undefined;
     return message;
+  },
+  fromAmino(object: QueryPoolsRequestAmino): QueryPoolsRequest {
+    const message = createBaseQueryPoolsRequest();
+    if (object.pagination !== undefined && object.pagination !== null) {
+      message.pagination = PageRequest.fromAmino(object.pagination);
+    }
+    return message;
+  },
+  toAmino(message: QueryPoolsRequest): QueryPoolsRequestAmino {
+    const obj: any = {};
+    obj.pagination = message.pagination ? PageRequest.toAmino(message.pagination) : undefined;
+    return obj;
+  },
+  fromAminoMsg(object: QueryPoolsRequestAminoMsg): QueryPoolsRequest {
+    return QueryPoolsRequest.fromAmino(object.value);
+  },
+  fromProtoMsg(message: QueryPoolsRequestProtoMsg): QueryPoolsRequest {
+    return QueryPoolsRequest.decode(message.value);
+  },
+  toProto(message: QueryPoolsRequest): Uint8Array {
+    return QueryPoolsRequest.encode(message).finish();
+  },
+  toProtoMsg(message: QueryPoolsRequest): QueryPoolsRequestProtoMsg {
+    return {
+      typeUrl: "/pryzmatics.server.pool.QueryPoolsRequest",
+      value: QueryPoolsRequest.encode(message).finish()
+    };
   }
 };
 function createBaseQueryPoolsResponse(): QueryPoolsResponse {
@@ -170,6 +299,7 @@ function createBaseQueryPoolsResponse(): QueryPoolsResponse {
   };
 }
 export const QueryPoolsResponse = {
+  typeUrl: "/pryzmatics.server.pool.QueryPoolsResponse",
   encode(message: QueryPoolsResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     for (const v of message.pools) {
       ExtendedPool.encode(v!, writer.uint32(10).fork()).ldelim();
@@ -220,5 +350,38 @@ export const QueryPoolsResponse = {
     message.pools = object.pools?.map(e => ExtendedPool.fromPartial(e)) || [];
     message.pagination = object.pagination !== undefined && object.pagination !== null ? PageResponse.fromPartial(object.pagination) : undefined;
     return message;
+  },
+  fromAmino(object: QueryPoolsResponseAmino): QueryPoolsResponse {
+    const message = createBaseQueryPoolsResponse();
+    message.pools = object.pools?.map(e => ExtendedPool.fromAmino(e)) || [];
+    if (object.pagination !== undefined && object.pagination !== null) {
+      message.pagination = PageResponse.fromAmino(object.pagination);
+    }
+    return message;
+  },
+  toAmino(message: QueryPoolsResponse): QueryPoolsResponseAmino {
+    const obj: any = {};
+    if (message.pools) {
+      obj.pools = message.pools.map(e => e ? ExtendedPool.toAmino(e) : undefined);
+    } else {
+      obj.pools = [];
+    }
+    obj.pagination = message.pagination ? PageResponse.toAmino(message.pagination) : undefined;
+    return obj;
+  },
+  fromAminoMsg(object: QueryPoolsResponseAminoMsg): QueryPoolsResponse {
+    return QueryPoolsResponse.fromAmino(object.value);
+  },
+  fromProtoMsg(message: QueryPoolsResponseProtoMsg): QueryPoolsResponse {
+    return QueryPoolsResponse.decode(message.value);
+  },
+  toProto(message: QueryPoolsResponse): Uint8Array {
+    return QueryPoolsResponse.encode(message).finish();
+  },
+  toProtoMsg(message: QueryPoolsResponse): QueryPoolsResponseProtoMsg {
+    return {
+      typeUrl: "/pryzmatics.server.pool.QueryPoolsResponse",
+      value: QueryPoolsResponse.encode(message).finish()
+    };
   }
 };

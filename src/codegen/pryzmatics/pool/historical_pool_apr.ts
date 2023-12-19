@@ -10,6 +10,22 @@ export interface HistoricalPoolApr {
   incentivesApr?: string;
   allianceApr?: string;
 }
+export interface HistoricalPoolAprProtoMsg {
+  typeUrl: "/pryzmatics.pool.HistoricalPoolApr";
+  value: Uint8Array;
+}
+export interface HistoricalPoolAprAmino {
+  time?: string;
+  apr?: string;
+  swap_fee_apr?: string;
+  token_yield?: string;
+  incentives_apr?: string;
+  alliance_apr?: string;
+}
+export interface HistoricalPoolAprAminoMsg {
+  type: "/pryzmatics.pool.HistoricalPoolApr";
+  value: HistoricalPoolAprAmino;
+}
 export interface HistoricalPoolAprSDKType {
   time: TimestampSDKType;
   apr?: string;
@@ -29,6 +45,7 @@ function createBaseHistoricalPoolApr(): HistoricalPoolApr {
   };
 }
 export const HistoricalPoolApr = {
+  typeUrl: "/pryzmatics.pool.HistoricalPoolApr",
   encode(message: HistoricalPoolApr, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.time !== undefined) {
       Timestamp.encode(message.time, writer.uint32(10).fork()).ldelim();
@@ -111,5 +128,52 @@ export const HistoricalPoolApr = {
     message.incentivesApr = object.incentivesApr ?? undefined;
     message.allianceApr = object.allianceApr ?? undefined;
     return message;
+  },
+  fromAmino(object: HistoricalPoolAprAmino): HistoricalPoolApr {
+    const message = createBaseHistoricalPoolApr();
+    if (object.time !== undefined && object.time !== null) {
+      message.time = Timestamp.fromAmino(object.time);
+    }
+    if (object.apr !== undefined && object.apr !== null) {
+      message.apr = object.apr;
+    }
+    if (object.swap_fee_apr !== undefined && object.swap_fee_apr !== null) {
+      message.swapFeeApr = object.swap_fee_apr;
+    }
+    if (object.token_yield !== undefined && object.token_yield !== null) {
+      message.tokenYield = object.token_yield;
+    }
+    if (object.incentives_apr !== undefined && object.incentives_apr !== null) {
+      message.incentivesApr = object.incentives_apr;
+    }
+    if (object.alliance_apr !== undefined && object.alliance_apr !== null) {
+      message.allianceApr = object.alliance_apr;
+    }
+    return message;
+  },
+  toAmino(message: HistoricalPoolApr): HistoricalPoolAprAmino {
+    const obj: any = {};
+    obj.time = message.time ? Timestamp.toAmino(message.time) : undefined;
+    obj.apr = message.apr;
+    obj.swap_fee_apr = message.swapFeeApr;
+    obj.token_yield = message.tokenYield;
+    obj.incentives_apr = message.incentivesApr;
+    obj.alliance_apr = message.allianceApr;
+    return obj;
+  },
+  fromAminoMsg(object: HistoricalPoolAprAminoMsg): HistoricalPoolApr {
+    return HistoricalPoolApr.fromAmino(object.value);
+  },
+  fromProtoMsg(message: HistoricalPoolAprProtoMsg): HistoricalPoolApr {
+    return HistoricalPoolApr.decode(message.value);
+  },
+  toProto(message: HistoricalPoolApr): Uint8Array {
+    return HistoricalPoolApr.encode(message).finish();
+  },
+  toProtoMsg(message: HistoricalPoolApr): HistoricalPoolAprProtoMsg {
+    return {
+      typeUrl: "/pryzmatics.pool.HistoricalPoolApr",
+      value: HistoricalPoolApr.encode(message).finish()
+    };
   }
 };

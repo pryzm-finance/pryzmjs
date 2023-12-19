@@ -1,11 +1,24 @@
-import { PageRequest, PageRequestSDKType, PageResponse, PageResponseSDKType } from "../../../cosmos/base/query/v1beta1/pagination";
-import { SlashWindow, SlashWindowSDKType } from "../../oracle/slash_window";
+import { PageRequest, PageRequestAmino, PageRequestSDKType, PageResponse, PageResponseAmino, PageResponseSDKType } from "../../../cosmos/base/query/v1beta1/pagination";
+import { SlashWindow, SlashWindowAmino, SlashWindowSDKType } from "../../oracle/slash_window";
 import { BinaryReader, BinaryWriter } from "../../../binary";
 import { isSet } from "../../../helpers";
 export interface QuerySlashWindowsRequest {
   fromBlockHeight?: string;
   toBlockHeight?: string;
   pagination?: PageRequest;
+}
+export interface QuerySlashWindowsRequestProtoMsg {
+  typeUrl: "/pryzmatics.server.oracle.QuerySlashWindowsRequest";
+  value: Uint8Array;
+}
+export interface QuerySlashWindowsRequestAmino {
+  from_block_height?: string;
+  to_block_height?: string;
+  pagination?: PageRequestAmino;
+}
+export interface QuerySlashWindowsRequestAminoMsg {
+  type: "/pryzmatics.server.oracle.QuerySlashWindowsRequest";
+  value: QuerySlashWindowsRequestAmino;
 }
 export interface QuerySlashWindowsRequestSDKType {
   from_block_height?: string;
@@ -15,6 +28,18 @@ export interface QuerySlashWindowsRequestSDKType {
 export interface QuerySlashWindowsResponse {
   windows: SlashWindow[];
   pagination?: PageResponse;
+}
+export interface QuerySlashWindowsResponseProtoMsg {
+  typeUrl: "/pryzmatics.server.oracle.QuerySlashWindowsResponse";
+  value: Uint8Array;
+}
+export interface QuerySlashWindowsResponseAmino {
+  windows?: SlashWindowAmino[];
+  pagination?: PageResponseAmino;
+}
+export interface QuerySlashWindowsResponseAminoMsg {
+  type: "/pryzmatics.server.oracle.QuerySlashWindowsResponse";
+  value: QuerySlashWindowsResponseAmino;
 }
 export interface QuerySlashWindowsResponseSDKType {
   windows: SlashWindowSDKType[];
@@ -28,6 +53,7 @@ function createBaseQuerySlashWindowsRequest(): QuerySlashWindowsRequest {
   };
 }
 export const QuerySlashWindowsRequest = {
+  typeUrl: "/pryzmatics.server.oracle.QuerySlashWindowsRequest",
   encode(message: QuerySlashWindowsRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.fromBlockHeight !== undefined) {
       writer.uint32(10).string(message.fromBlockHeight);
@@ -83,6 +109,41 @@ export const QuerySlashWindowsRequest = {
     message.toBlockHeight = object.toBlockHeight ?? undefined;
     message.pagination = object.pagination !== undefined && object.pagination !== null ? PageRequest.fromPartial(object.pagination) : undefined;
     return message;
+  },
+  fromAmino(object: QuerySlashWindowsRequestAmino): QuerySlashWindowsRequest {
+    const message = createBaseQuerySlashWindowsRequest();
+    if (object.from_block_height !== undefined && object.from_block_height !== null) {
+      message.fromBlockHeight = object.from_block_height;
+    }
+    if (object.to_block_height !== undefined && object.to_block_height !== null) {
+      message.toBlockHeight = object.to_block_height;
+    }
+    if (object.pagination !== undefined && object.pagination !== null) {
+      message.pagination = PageRequest.fromAmino(object.pagination);
+    }
+    return message;
+  },
+  toAmino(message: QuerySlashWindowsRequest): QuerySlashWindowsRequestAmino {
+    const obj: any = {};
+    obj.from_block_height = message.fromBlockHeight;
+    obj.to_block_height = message.toBlockHeight;
+    obj.pagination = message.pagination ? PageRequest.toAmino(message.pagination) : undefined;
+    return obj;
+  },
+  fromAminoMsg(object: QuerySlashWindowsRequestAminoMsg): QuerySlashWindowsRequest {
+    return QuerySlashWindowsRequest.fromAmino(object.value);
+  },
+  fromProtoMsg(message: QuerySlashWindowsRequestProtoMsg): QuerySlashWindowsRequest {
+    return QuerySlashWindowsRequest.decode(message.value);
+  },
+  toProto(message: QuerySlashWindowsRequest): Uint8Array {
+    return QuerySlashWindowsRequest.encode(message).finish();
+  },
+  toProtoMsg(message: QuerySlashWindowsRequest): QuerySlashWindowsRequestProtoMsg {
+    return {
+      typeUrl: "/pryzmatics.server.oracle.QuerySlashWindowsRequest",
+      value: QuerySlashWindowsRequest.encode(message).finish()
+    };
   }
 };
 function createBaseQuerySlashWindowsResponse(): QuerySlashWindowsResponse {
@@ -92,6 +153,7 @@ function createBaseQuerySlashWindowsResponse(): QuerySlashWindowsResponse {
   };
 }
 export const QuerySlashWindowsResponse = {
+  typeUrl: "/pryzmatics.server.oracle.QuerySlashWindowsResponse",
   encode(message: QuerySlashWindowsResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     for (const v of message.windows) {
       SlashWindow.encode(v!, writer.uint32(10).fork()).ldelim();
@@ -142,5 +204,38 @@ export const QuerySlashWindowsResponse = {
     message.windows = object.windows?.map(e => SlashWindow.fromPartial(e)) || [];
     message.pagination = object.pagination !== undefined && object.pagination !== null ? PageResponse.fromPartial(object.pagination) : undefined;
     return message;
+  },
+  fromAmino(object: QuerySlashWindowsResponseAmino): QuerySlashWindowsResponse {
+    const message = createBaseQuerySlashWindowsResponse();
+    message.windows = object.windows?.map(e => SlashWindow.fromAmino(e)) || [];
+    if (object.pagination !== undefined && object.pagination !== null) {
+      message.pagination = PageResponse.fromAmino(object.pagination);
+    }
+    return message;
+  },
+  toAmino(message: QuerySlashWindowsResponse): QuerySlashWindowsResponseAmino {
+    const obj: any = {};
+    if (message.windows) {
+      obj.windows = message.windows.map(e => e ? SlashWindow.toAmino(e) : undefined);
+    } else {
+      obj.windows = [];
+    }
+    obj.pagination = message.pagination ? PageResponse.toAmino(message.pagination) : undefined;
+    return obj;
+  },
+  fromAminoMsg(object: QuerySlashWindowsResponseAminoMsg): QuerySlashWindowsResponse {
+    return QuerySlashWindowsResponse.fromAmino(object.value);
+  },
+  fromProtoMsg(message: QuerySlashWindowsResponseProtoMsg): QuerySlashWindowsResponse {
+    return QuerySlashWindowsResponse.decode(message.value);
+  },
+  toProto(message: QuerySlashWindowsResponse): Uint8Array {
+    return QuerySlashWindowsResponse.encode(message).finish();
+  },
+  toProtoMsg(message: QuerySlashWindowsResponse): QuerySlashWindowsResponseProtoMsg {
+    return {
+      typeUrl: "/pryzmatics.server.oracle.QuerySlashWindowsResponse",
+      value: QuerySlashWindowsResponse.encode(message).finish()
+    };
   }
 };

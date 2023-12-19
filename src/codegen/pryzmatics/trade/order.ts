@@ -1,4 +1,5 @@
 import { Order as Order1 } from "../../pryzm/amm/v1/order";
+import { OrderAmino as Order1Amino } from "../../pryzm/amm/v1/order";
 import { OrderSDKType as Order1SDKType } from "../../pryzm/amm/v1/order";
 import { Timestamp, TimestampSDKType } from "../../google/protobuf/timestamp";
 import { BinaryReader, BinaryWriter } from "../../binary";
@@ -9,6 +10,20 @@ export interface Order {
   creationTime: Timestamp;
   totalAmount: string;
   progress: string;
+}
+export interface OrderProtoMsg {
+  typeUrl: "/pryzmatics.trade.Order";
+  value: Uint8Array;
+}
+export interface OrderAmino {
+  amm_order?: Order1Amino;
+  creation_time?: string;
+  total_amount?: string;
+  progress?: string;
+}
+export interface OrderAminoMsg {
+  type: "/pryzmatics.trade.Order";
+  value: OrderAmino;
 }
 export interface OrderSDKType {
   amm_order: Order1SDKType;
@@ -25,6 +40,7 @@ function createBaseOrder(): Order {
   };
 }
 export const Order = {
+  typeUrl: "/pryzmatics.trade.Order",
   encode(message: Order, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.ammOrder !== undefined) {
       Order1.encode(message.ammOrder, writer.uint32(10).fork()).ldelim();
@@ -89,5 +105,44 @@ export const Order = {
     message.totalAmount = object.totalAmount ?? "";
     message.progress = object.progress ?? "";
     return message;
+  },
+  fromAmino(object: OrderAmino): Order {
+    const message = createBaseOrder();
+    if (object.amm_order !== undefined && object.amm_order !== null) {
+      message.ammOrder = Order1.fromAmino(object.amm_order);
+    }
+    if (object.creation_time !== undefined && object.creation_time !== null) {
+      message.creationTime = Timestamp.fromAmino(object.creation_time);
+    }
+    if (object.total_amount !== undefined && object.total_amount !== null) {
+      message.totalAmount = object.total_amount;
+    }
+    if (object.progress !== undefined && object.progress !== null) {
+      message.progress = object.progress;
+    }
+    return message;
+  },
+  toAmino(message: Order): OrderAmino {
+    const obj: any = {};
+    obj.amm_order = message.ammOrder ? Order1.toAmino(message.ammOrder) : undefined;
+    obj.creation_time = message.creationTime ? Timestamp.toAmino(message.creationTime) : undefined;
+    obj.total_amount = message.totalAmount;
+    obj.progress = message.progress;
+    return obj;
+  },
+  fromAminoMsg(object: OrderAminoMsg): Order {
+    return Order.fromAmino(object.value);
+  },
+  fromProtoMsg(message: OrderProtoMsg): Order {
+    return Order.decode(message.value);
+  },
+  toProto(message: Order): Uint8Array {
+    return Order.encode(message).finish();
+  },
+  toProtoMsg(message: Order): OrderProtoMsg {
+    return {
+      typeUrl: "/pryzmatics.trade.Order",
+      value: Order.encode(message).finish()
+    };
   }
 };

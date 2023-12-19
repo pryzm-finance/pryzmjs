@@ -1,15 +1,37 @@
-import { Order, OrderSDKType } from "../../trade/order";
-import { PageRequest, PageRequestSDKType, PageResponse, PageResponseSDKType } from "../../../cosmos/base/query/v1beta1/pagination";
+import { Order, OrderAmino, OrderSDKType } from "../../trade/order";
+import { PageRequest, PageRequestAmino, PageRequestSDKType, PageResponse, PageResponseAmino, PageResponseSDKType } from "../../../cosmos/base/query/v1beta1/pagination";
 import { BinaryReader, BinaryWriter } from "../../../binary";
 import { isSet } from "../../../helpers";
 export interface QueryOrderRequest {
   id: bigint;
+}
+export interface QueryOrderRequestProtoMsg {
+  typeUrl: "/pryzmatics.server.trade.QueryOrderRequest";
+  value: Uint8Array;
+}
+export interface QueryOrderRequestAmino {
+  id?: string;
+}
+export interface QueryOrderRequestAminoMsg {
+  type: "/pryzmatics.server.trade.QueryOrderRequest";
+  value: QueryOrderRequestAmino;
 }
 export interface QueryOrderRequestSDKType {
   id: bigint;
 }
 export interface QueryOrderResponse {
   order: Order;
+}
+export interface QueryOrderResponseProtoMsg {
+  typeUrl: "/pryzmatics.server.trade.QueryOrderResponse";
+  value: Uint8Array;
+}
+export interface QueryOrderResponseAmino {
+  order?: OrderAmino;
+}
+export interface QueryOrderResponseAminoMsg {
+  type: "/pryzmatics.server.trade.QueryOrderResponse";
+  value: QueryOrderResponseAmino;
 }
 export interface QueryOrderResponseSDKType {
   order: OrderSDKType;
@@ -20,6 +42,21 @@ export interface QueryOrdersRequest {
   tokenIn: string;
   tokenOut: string;
   pagination?: PageRequest;
+}
+export interface QueryOrdersRequestProtoMsg {
+  typeUrl: "/pryzmatics.server.trade.QueryOrdersRequest";
+  value: Uint8Array;
+}
+export interface QueryOrdersRequestAmino {
+  creator?: string;
+  pool_id?: string;
+  token_in?: string;
+  token_out?: string;
+  pagination?: PageRequestAmino;
+}
+export interface QueryOrdersRequestAminoMsg {
+  type: "/pryzmatics.server.trade.QueryOrdersRequest";
+  value: QueryOrdersRequestAmino;
 }
 export interface QueryOrdersRequestSDKType {
   creator: string;
@@ -32,6 +69,18 @@ export interface QueryOrdersResponse {
   orders: Order[];
   pagination?: PageResponse;
 }
+export interface QueryOrdersResponseProtoMsg {
+  typeUrl: "/pryzmatics.server.trade.QueryOrdersResponse";
+  value: Uint8Array;
+}
+export interface QueryOrdersResponseAmino {
+  orders?: OrderAmino[];
+  pagination?: PageResponseAmino;
+}
+export interface QueryOrdersResponseAminoMsg {
+  type: "/pryzmatics.server.trade.QueryOrdersResponse";
+  value: QueryOrdersResponseAmino;
+}
 export interface QueryOrdersResponseSDKType {
   orders: OrderSDKType[];
   pagination?: PageResponseSDKType;
@@ -42,6 +91,7 @@ function createBaseQueryOrderRequest(): QueryOrderRequest {
   };
 }
 export const QueryOrderRequest = {
+  typeUrl: "/pryzmatics.server.trade.QueryOrderRequest",
   encode(message: QueryOrderRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.id !== BigInt(0)) {
       writer.uint32(8).uint64(message.id);
@@ -79,6 +129,33 @@ export const QueryOrderRequest = {
     const message = createBaseQueryOrderRequest();
     message.id = object.id !== undefined && object.id !== null ? BigInt(object.id.toString()) : BigInt(0);
     return message;
+  },
+  fromAmino(object: QueryOrderRequestAmino): QueryOrderRequest {
+    const message = createBaseQueryOrderRequest();
+    if (object.id !== undefined && object.id !== null) {
+      message.id = BigInt(object.id);
+    }
+    return message;
+  },
+  toAmino(message: QueryOrderRequest): QueryOrderRequestAmino {
+    const obj: any = {};
+    obj.id = message.id ? message.id.toString() : undefined;
+    return obj;
+  },
+  fromAminoMsg(object: QueryOrderRequestAminoMsg): QueryOrderRequest {
+    return QueryOrderRequest.fromAmino(object.value);
+  },
+  fromProtoMsg(message: QueryOrderRequestProtoMsg): QueryOrderRequest {
+    return QueryOrderRequest.decode(message.value);
+  },
+  toProto(message: QueryOrderRequest): Uint8Array {
+    return QueryOrderRequest.encode(message).finish();
+  },
+  toProtoMsg(message: QueryOrderRequest): QueryOrderRequestProtoMsg {
+    return {
+      typeUrl: "/pryzmatics.server.trade.QueryOrderRequest",
+      value: QueryOrderRequest.encode(message).finish()
+    };
   }
 };
 function createBaseQueryOrderResponse(): QueryOrderResponse {
@@ -87,6 +164,7 @@ function createBaseQueryOrderResponse(): QueryOrderResponse {
   };
 }
 export const QueryOrderResponse = {
+  typeUrl: "/pryzmatics.server.trade.QueryOrderResponse",
   encode(message: QueryOrderResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.order !== undefined) {
       Order.encode(message.order, writer.uint32(10).fork()).ldelim();
@@ -124,6 +202,33 @@ export const QueryOrderResponse = {
     const message = createBaseQueryOrderResponse();
     message.order = object.order !== undefined && object.order !== null ? Order.fromPartial(object.order) : undefined;
     return message;
+  },
+  fromAmino(object: QueryOrderResponseAmino): QueryOrderResponse {
+    const message = createBaseQueryOrderResponse();
+    if (object.order !== undefined && object.order !== null) {
+      message.order = Order.fromAmino(object.order);
+    }
+    return message;
+  },
+  toAmino(message: QueryOrderResponse): QueryOrderResponseAmino {
+    const obj: any = {};
+    obj.order = message.order ? Order.toAmino(message.order) : undefined;
+    return obj;
+  },
+  fromAminoMsg(object: QueryOrderResponseAminoMsg): QueryOrderResponse {
+    return QueryOrderResponse.fromAmino(object.value);
+  },
+  fromProtoMsg(message: QueryOrderResponseProtoMsg): QueryOrderResponse {
+    return QueryOrderResponse.decode(message.value);
+  },
+  toProto(message: QueryOrderResponse): Uint8Array {
+    return QueryOrderResponse.encode(message).finish();
+  },
+  toProtoMsg(message: QueryOrderResponse): QueryOrderResponseProtoMsg {
+    return {
+      typeUrl: "/pryzmatics.server.trade.QueryOrderResponse",
+      value: QueryOrderResponse.encode(message).finish()
+    };
   }
 };
 function createBaseQueryOrdersRequest(): QueryOrdersRequest {
@@ -136,6 +241,7 @@ function createBaseQueryOrdersRequest(): QueryOrdersRequest {
   };
 }
 export const QueryOrdersRequest = {
+  typeUrl: "/pryzmatics.server.trade.QueryOrdersRequest",
   encode(message: QueryOrdersRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.creator !== "") {
       writer.uint32(10).string(message.creator);
@@ -209,6 +315,49 @@ export const QueryOrdersRequest = {
     message.tokenOut = object.tokenOut ?? "";
     message.pagination = object.pagination !== undefined && object.pagination !== null ? PageRequest.fromPartial(object.pagination) : undefined;
     return message;
+  },
+  fromAmino(object: QueryOrdersRequestAmino): QueryOrdersRequest {
+    const message = createBaseQueryOrdersRequest();
+    if (object.creator !== undefined && object.creator !== null) {
+      message.creator = object.creator;
+    }
+    if (object.pool_id !== undefined && object.pool_id !== null) {
+      message.poolId = object.pool_id;
+    }
+    if (object.token_in !== undefined && object.token_in !== null) {
+      message.tokenIn = object.token_in;
+    }
+    if (object.token_out !== undefined && object.token_out !== null) {
+      message.tokenOut = object.token_out;
+    }
+    if (object.pagination !== undefined && object.pagination !== null) {
+      message.pagination = PageRequest.fromAmino(object.pagination);
+    }
+    return message;
+  },
+  toAmino(message: QueryOrdersRequest): QueryOrdersRequestAmino {
+    const obj: any = {};
+    obj.creator = message.creator;
+    obj.pool_id = message.poolId;
+    obj.token_in = message.tokenIn;
+    obj.token_out = message.tokenOut;
+    obj.pagination = message.pagination ? PageRequest.toAmino(message.pagination) : undefined;
+    return obj;
+  },
+  fromAminoMsg(object: QueryOrdersRequestAminoMsg): QueryOrdersRequest {
+    return QueryOrdersRequest.fromAmino(object.value);
+  },
+  fromProtoMsg(message: QueryOrdersRequestProtoMsg): QueryOrdersRequest {
+    return QueryOrdersRequest.decode(message.value);
+  },
+  toProto(message: QueryOrdersRequest): Uint8Array {
+    return QueryOrdersRequest.encode(message).finish();
+  },
+  toProtoMsg(message: QueryOrdersRequest): QueryOrdersRequestProtoMsg {
+    return {
+      typeUrl: "/pryzmatics.server.trade.QueryOrdersRequest",
+      value: QueryOrdersRequest.encode(message).finish()
+    };
   }
 };
 function createBaseQueryOrdersResponse(): QueryOrdersResponse {
@@ -218,6 +367,7 @@ function createBaseQueryOrdersResponse(): QueryOrdersResponse {
   };
 }
 export const QueryOrdersResponse = {
+  typeUrl: "/pryzmatics.server.trade.QueryOrdersResponse",
   encode(message: QueryOrdersResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     for (const v of message.orders) {
       Order.encode(v!, writer.uint32(10).fork()).ldelim();
@@ -268,5 +418,38 @@ export const QueryOrdersResponse = {
     message.orders = object.orders?.map(e => Order.fromPartial(e)) || [];
     message.pagination = object.pagination !== undefined && object.pagination !== null ? PageResponse.fromPartial(object.pagination) : undefined;
     return message;
+  },
+  fromAmino(object: QueryOrdersResponseAmino): QueryOrdersResponse {
+    const message = createBaseQueryOrdersResponse();
+    message.orders = object.orders?.map(e => Order.fromAmino(e)) || [];
+    if (object.pagination !== undefined && object.pagination !== null) {
+      message.pagination = PageResponse.fromAmino(object.pagination);
+    }
+    return message;
+  },
+  toAmino(message: QueryOrdersResponse): QueryOrdersResponseAmino {
+    const obj: any = {};
+    if (message.orders) {
+      obj.orders = message.orders.map(e => e ? Order.toAmino(e) : undefined);
+    } else {
+      obj.orders = [];
+    }
+    obj.pagination = message.pagination ? PageResponse.toAmino(message.pagination) : undefined;
+    return obj;
+  },
+  fromAminoMsg(object: QueryOrdersResponseAminoMsg): QueryOrdersResponse {
+    return QueryOrdersResponse.fromAmino(object.value);
+  },
+  fromProtoMsg(message: QueryOrdersResponseProtoMsg): QueryOrdersResponse {
+    return QueryOrdersResponse.decode(message.value);
+  },
+  toProto(message: QueryOrdersResponse): Uint8Array {
+    return QueryOrdersResponse.encode(message).finish();
+  },
+  toProtoMsg(message: QueryOrdersResponse): QueryOrdersResponseProtoMsg {
+    return {
+      typeUrl: "/pryzmatics.server.trade.QueryOrdersResponse",
+      value: QueryOrdersResponse.encode(message).finish()
+    };
   }
 };

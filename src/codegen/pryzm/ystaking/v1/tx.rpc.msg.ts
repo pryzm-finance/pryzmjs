@@ -1,4 +1,3 @@
-//@ts-nocheck
 import { UnaryMethodDefinitionish } from "../../../grpc-web";
 import { DeepPartial } from "../../../helpers";
 import { grpc } from "@improbable-eng/grpc-web";
@@ -21,16 +20,16 @@ export class MsgClientImpl implements Msg {
     this.exitPool = this.exitPool.bind(this);
   }
   bond(request: DeepPartial<MsgBond>, metadata?: grpc.Metadata): Promise<MsgBondResponse> {
-    return this.rpc.unary(MsgBondDesc, MsgBond.fromPartial(request), metadata);
+    return this.rpc.unary(MsgBondDesc, MsgBond.fromPartial(request as any), metadata);
   }
   unbond(request: DeepPartial<MsgUnbond>, metadata?: grpc.Metadata): Promise<MsgUnbondResponse> {
-    return this.rpc.unary(MsgUnbondDesc, MsgUnbond.fromPartial(request), metadata);
+    return this.rpc.unary(MsgUnbondDesc, MsgUnbond.fromPartial(request as any), metadata);
   }
   claimReward(request: DeepPartial<MsgClaimReward>, metadata?: grpc.Metadata): Promise<MsgClaimRewardResponse> {
-    return this.rpc.unary(MsgClaimRewardDesc, MsgClaimReward.fromPartial(request), metadata);
+    return this.rpc.unary(MsgClaimRewardDesc, MsgClaimReward.fromPartial(request as any), metadata);
   }
   exitPool(request: DeepPartial<MsgExitPool>, metadata?: grpc.Metadata): Promise<MsgExitPoolResponse> {
-    return this.rpc.unary(MsgExitPoolDesc, MsgExitPool.fromPartial(request), metadata);
+    return this.rpc.unary(MsgExitPoolDesc, MsgExitPool.fromPartial(request as any), metadata);
   }
 }
 export const MsgDesc = {

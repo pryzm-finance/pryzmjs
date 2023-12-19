@@ -1,13 +1,26 @@
-import { PageRequest, PageRequestSDKType, PageResponse, PageResponseSDKType } from "../../../cosmos/base/query/v1beta1/pagination";
-import { Coin, CoinSDKType } from "../../../cosmos/base/v1beta1/coin";
-import { UserStakeState, UserStakeStateSDKType } from "./user_stake_state";
-import { AssetPoolState, AssetPoolStateSDKType, AssetMaturityPoolState, AssetMaturityPoolStateSDKType } from "./asset_pool_state";
+import { PageRequest, PageRequestAmino, PageRequestSDKType, PageResponse, PageResponseAmino, PageResponseSDKType } from "../../../cosmos/base/query/v1beta1/pagination";
+import { Coin, CoinAmino, CoinSDKType } from "../../../cosmos/base/v1beta1/coin";
+import { UserStakeState, UserStakeStateAmino, UserStakeStateSDKType } from "./user_stake_state";
+import { AssetPoolState, AssetPoolStateAmino, AssetPoolStateSDKType, AssetMaturityPoolState, AssetMaturityPoolStateAmino, AssetMaturityPoolStateSDKType } from "./asset_pool_state";
 import { BinaryReader, BinaryWriter } from "../../../binary";
 import { isSet } from "../../../helpers";
 export interface QueryBondedAmountRequest {
   assetId: string;
   maturity: string;
   address: string;
+}
+export interface QueryBondedAmountRequestProtoMsg {
+  typeUrl: "/pryzm.ystaking.v1.QueryBondedAmountRequest";
+  value: Uint8Array;
+}
+export interface QueryBondedAmountRequestAmino {
+  asset_id?: string;
+  maturity?: string;
+  address?: string;
+}
+export interface QueryBondedAmountRequestAminoMsg {
+  type: "/pryzm.ystaking.v1.QueryBondedAmountRequest";
+  value: QueryBondedAmountRequestAmino;
 }
 export interface QueryBondedAmountRequestSDKType {
   asset_id: string;
@@ -17,6 +30,17 @@ export interface QueryBondedAmountRequestSDKType {
 export interface QueryBondedAmountResponse {
   amount: string;
 }
+export interface QueryBondedAmountResponseProtoMsg {
+  typeUrl: "/pryzm.ystaking.v1.QueryBondedAmountResponse";
+  value: Uint8Array;
+}
+export interface QueryBondedAmountResponseAmino {
+  amount?: string;
+}
+export interface QueryBondedAmountResponseAminoMsg {
+  type: "/pryzm.ystaking.v1.QueryBondedAmountResponse";
+  value: QueryBondedAmountResponseAmino;
+}
 export interface QueryBondedAmountResponseSDKType {
   amount: string;
 }
@@ -24,12 +48,35 @@ export interface QueryRewardRequest {
   denom: string;
   address: string;
 }
+export interface QueryRewardRequestProtoMsg {
+  typeUrl: "/pryzm.ystaking.v1.QueryRewardRequest";
+  value: Uint8Array;
+}
+export interface QueryRewardRequestAmino {
+  denom?: string;
+  address?: string;
+}
+export interface QueryRewardRequestAminoMsg {
+  type: "/pryzm.ystaking.v1.QueryRewardRequest";
+  value: QueryRewardRequestAmino;
+}
 export interface QueryRewardRequestSDKType {
   denom: string;
   address: string;
 }
 export interface QueryRewardResponse {
   amount: Coin;
+}
+export interface QueryRewardResponseProtoMsg {
+  typeUrl: "/pryzm.ystaking.v1.QueryRewardResponse";
+  value: Uint8Array;
+}
+export interface QueryRewardResponseAmino {
+  amount?: CoinAmino;
+}
+export interface QueryRewardResponseAminoMsg {
+  type: "/pryzm.ystaking.v1.QueryRewardResponse";
+  value: QueryRewardResponseAmino;
 }
 export interface QueryRewardResponseSDKType {
   amount: CoinSDKType;
@@ -39,6 +86,19 @@ export interface QueryGetUserStakeStateRequest {
   assetId: string;
   maturitySymbol: string;
 }
+export interface QueryGetUserStakeStateRequestProtoMsg {
+  typeUrl: "/pryzm.ystaking.v1.QueryGetUserStakeStateRequest";
+  value: Uint8Array;
+}
+export interface QueryGetUserStakeStateRequestAmino {
+  address?: string;
+  asset_id?: string;
+  maturity_symbol?: string;
+}
+export interface QueryGetUserStakeStateRequestAminoMsg {
+  type: "/pryzm.ystaking.v1.QueryGetUserStakeStateRequest";
+  value: QueryGetUserStakeStateRequestAmino;
+}
 export interface QueryGetUserStakeStateRequestSDKType {
   address: string;
   asset_id: string;
@@ -47,6 +107,17 @@ export interface QueryGetUserStakeStateRequestSDKType {
 export interface QueryGetUserStakeStateResponse {
   userStakeState: UserStakeState;
 }
+export interface QueryGetUserStakeStateResponseProtoMsg {
+  typeUrl: "/pryzm.ystaking.v1.QueryGetUserStakeStateResponse";
+  value: Uint8Array;
+}
+export interface QueryGetUserStakeStateResponseAmino {
+  user_stake_state?: UserStakeStateAmino;
+}
+export interface QueryGetUserStakeStateResponseAminoMsg {
+  type: "/pryzm.ystaking.v1.QueryGetUserStakeStateResponse";
+  value: QueryGetUserStakeStateResponseAmino;
+}
 export interface QueryGetUserStakeStateResponseSDKType {
   user_stake_state: UserStakeStateSDKType;
 }
@@ -54,6 +125,19 @@ export interface QueryAllUserStakeStateRequest {
   pagination?: PageRequest;
   address: string;
   assetId: string;
+}
+export interface QueryAllUserStakeStateRequestProtoMsg {
+  typeUrl: "/pryzm.ystaking.v1.QueryAllUserStakeStateRequest";
+  value: Uint8Array;
+}
+export interface QueryAllUserStakeStateRequestAmino {
+  pagination?: PageRequestAmino;
+  address?: string;
+  asset_id?: string;
+}
+export interface QueryAllUserStakeStateRequestAminoMsg {
+  type: "/pryzm.ystaking.v1.QueryAllUserStakeStateRequest";
+  value: QueryAllUserStakeStateRequestAmino;
 }
 export interface QueryAllUserStakeStateRequestSDKType {
   pagination?: PageRequestSDKType;
@@ -64,6 +148,18 @@ export interface QueryAllUserStakeStateResponse {
   userStakeState: UserStakeState[];
   pagination?: PageResponse;
 }
+export interface QueryAllUserStakeStateResponseProtoMsg {
+  typeUrl: "/pryzm.ystaking.v1.QueryAllUserStakeStateResponse";
+  value: Uint8Array;
+}
+export interface QueryAllUserStakeStateResponseAmino {
+  user_stake_state?: UserStakeStateAmino[];
+  pagination?: PageResponseAmino;
+}
+export interface QueryAllUserStakeStateResponseAminoMsg {
+  type: "/pryzm.ystaking.v1.QueryAllUserStakeStateResponse";
+  value: QueryAllUserStakeStateResponseAmino;
+}
 export interface QueryAllUserStakeStateResponseSDKType {
   user_stake_state: UserStakeStateSDKType[];
   pagination?: PageResponseSDKType;
@@ -71,11 +167,33 @@ export interface QueryAllUserStakeStateResponseSDKType {
 export interface QueryGetAssetPoolStateRequest {
   assetId: string;
 }
+export interface QueryGetAssetPoolStateRequestProtoMsg {
+  typeUrl: "/pryzm.ystaking.v1.QueryGetAssetPoolStateRequest";
+  value: Uint8Array;
+}
+export interface QueryGetAssetPoolStateRequestAmino {
+  asset_id?: string;
+}
+export interface QueryGetAssetPoolStateRequestAminoMsg {
+  type: "/pryzm.ystaking.v1.QueryGetAssetPoolStateRequest";
+  value: QueryGetAssetPoolStateRequestAmino;
+}
 export interface QueryGetAssetPoolStateRequestSDKType {
   asset_id: string;
 }
 export interface QueryGetAssetPoolStateResponse {
   assetPoolState: AssetPoolState;
+}
+export interface QueryGetAssetPoolStateResponseProtoMsg {
+  typeUrl: "/pryzm.ystaking.v1.QueryGetAssetPoolStateResponse";
+  value: Uint8Array;
+}
+export interface QueryGetAssetPoolStateResponseAmino {
+  asset_pool_state?: AssetPoolStateAmino;
+}
+export interface QueryGetAssetPoolStateResponseAminoMsg {
+  type: "/pryzm.ystaking.v1.QueryGetAssetPoolStateResponse";
+  value: QueryGetAssetPoolStateResponseAmino;
 }
 export interface QueryGetAssetPoolStateResponseSDKType {
   asset_pool_state: AssetPoolStateSDKType;
@@ -83,12 +201,35 @@ export interface QueryGetAssetPoolStateResponseSDKType {
 export interface QueryAllAssetPoolStateRequest {
   pagination?: PageRequest;
 }
+export interface QueryAllAssetPoolStateRequestProtoMsg {
+  typeUrl: "/pryzm.ystaking.v1.QueryAllAssetPoolStateRequest";
+  value: Uint8Array;
+}
+export interface QueryAllAssetPoolStateRequestAmino {
+  pagination?: PageRequestAmino;
+}
+export interface QueryAllAssetPoolStateRequestAminoMsg {
+  type: "/pryzm.ystaking.v1.QueryAllAssetPoolStateRequest";
+  value: QueryAllAssetPoolStateRequestAmino;
+}
 export interface QueryAllAssetPoolStateRequestSDKType {
   pagination?: PageRequestSDKType;
 }
 export interface QueryAllAssetPoolStateResponse {
   assetPoolState: AssetPoolState[];
   pagination?: PageResponse;
+}
+export interface QueryAllAssetPoolStateResponseProtoMsg {
+  typeUrl: "/pryzm.ystaking.v1.QueryAllAssetPoolStateResponse";
+  value: Uint8Array;
+}
+export interface QueryAllAssetPoolStateResponseAmino {
+  asset_pool_state?: AssetPoolStateAmino[];
+  pagination?: PageResponseAmino;
+}
+export interface QueryAllAssetPoolStateResponseAminoMsg {
+  type: "/pryzm.ystaking.v1.QueryAllAssetPoolStateResponse";
+  value: QueryAllAssetPoolStateResponseAmino;
 }
 export interface QueryAllAssetPoolStateResponseSDKType {
   asset_pool_state: AssetPoolStateSDKType[];
@@ -98,6 +239,18 @@ export interface QueryGetAssetMaturityPoolStateRequest {
   assetId: string;
   maturitySymbol: string;
 }
+export interface QueryGetAssetMaturityPoolStateRequestProtoMsg {
+  typeUrl: "/pryzm.ystaking.v1.QueryGetAssetMaturityPoolStateRequest";
+  value: Uint8Array;
+}
+export interface QueryGetAssetMaturityPoolStateRequestAmino {
+  asset_id?: string;
+  maturity_symbol?: string;
+}
+export interface QueryGetAssetMaturityPoolStateRequestAminoMsg {
+  type: "/pryzm.ystaking.v1.QueryGetAssetMaturityPoolStateRequest";
+  value: QueryGetAssetMaturityPoolStateRequestAmino;
+}
 export interface QueryGetAssetMaturityPoolStateRequestSDKType {
   asset_id: string;
   maturity_symbol: string;
@@ -105,11 +258,33 @@ export interface QueryGetAssetMaturityPoolStateRequestSDKType {
 export interface QueryGetAssetMaturityPoolStateResponse {
   assetMaturityPoolState: AssetMaturityPoolState;
 }
+export interface QueryGetAssetMaturityPoolStateResponseProtoMsg {
+  typeUrl: "/pryzm.ystaking.v1.QueryGetAssetMaturityPoolStateResponse";
+  value: Uint8Array;
+}
+export interface QueryGetAssetMaturityPoolStateResponseAmino {
+  asset_maturity_pool_state?: AssetMaturityPoolStateAmino;
+}
+export interface QueryGetAssetMaturityPoolStateResponseAminoMsg {
+  type: "/pryzm.ystaking.v1.QueryGetAssetMaturityPoolStateResponse";
+  value: QueryGetAssetMaturityPoolStateResponseAmino;
+}
 export interface QueryGetAssetMaturityPoolStateResponseSDKType {
   asset_maturity_pool_state: AssetMaturityPoolStateSDKType;
 }
 export interface QueryAllAssetMaturityPoolStateRequest {
   pagination?: PageRequest;
+}
+export interface QueryAllAssetMaturityPoolStateRequestProtoMsg {
+  typeUrl: "/pryzm.ystaking.v1.QueryAllAssetMaturityPoolStateRequest";
+  value: Uint8Array;
+}
+export interface QueryAllAssetMaturityPoolStateRequestAmino {
+  pagination?: PageRequestAmino;
+}
+export interface QueryAllAssetMaturityPoolStateRequestAminoMsg {
+  type: "/pryzm.ystaking.v1.QueryAllAssetMaturityPoolStateRequest";
+  value: QueryAllAssetMaturityPoolStateRequestAmino;
 }
 export interface QueryAllAssetMaturityPoolStateRequestSDKType {
   pagination?: PageRequestSDKType;
@@ -117,6 +292,18 @@ export interface QueryAllAssetMaturityPoolStateRequestSDKType {
 export interface QueryAllAssetMaturityPoolStateResponse {
   assetMaturityPoolState: AssetMaturityPoolState[];
   pagination?: PageResponse;
+}
+export interface QueryAllAssetMaturityPoolStateResponseProtoMsg {
+  typeUrl: "/pryzm.ystaking.v1.QueryAllAssetMaturityPoolStateResponse";
+  value: Uint8Array;
+}
+export interface QueryAllAssetMaturityPoolStateResponseAmino {
+  asset_maturity_pool_state?: AssetMaturityPoolStateAmino[];
+  pagination?: PageResponseAmino;
+}
+export interface QueryAllAssetMaturityPoolStateResponseAminoMsg {
+  type: "/pryzm.ystaking.v1.QueryAllAssetMaturityPoolStateResponse";
+  value: QueryAllAssetMaturityPoolStateResponseAmino;
 }
 export interface QueryAllAssetMaturityPoolStateResponseSDKType {
   asset_maturity_pool_state: AssetMaturityPoolStateSDKType[];
@@ -130,6 +317,7 @@ function createBaseQueryBondedAmountRequest(): QueryBondedAmountRequest {
   };
 }
 export const QueryBondedAmountRequest = {
+  typeUrl: "/pryzm.ystaking.v1.QueryBondedAmountRequest",
   encode(message: QueryBondedAmountRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.assetId !== "") {
       writer.uint32(10).string(message.assetId);
@@ -185,6 +373,41 @@ export const QueryBondedAmountRequest = {
     message.maturity = object.maturity ?? "";
     message.address = object.address ?? "";
     return message;
+  },
+  fromAmino(object: QueryBondedAmountRequestAmino): QueryBondedAmountRequest {
+    const message = createBaseQueryBondedAmountRequest();
+    if (object.asset_id !== undefined && object.asset_id !== null) {
+      message.assetId = object.asset_id;
+    }
+    if (object.maturity !== undefined && object.maturity !== null) {
+      message.maturity = object.maturity;
+    }
+    if (object.address !== undefined && object.address !== null) {
+      message.address = object.address;
+    }
+    return message;
+  },
+  toAmino(message: QueryBondedAmountRequest): QueryBondedAmountRequestAmino {
+    const obj: any = {};
+    obj.asset_id = message.assetId;
+    obj.maturity = message.maturity;
+    obj.address = message.address;
+    return obj;
+  },
+  fromAminoMsg(object: QueryBondedAmountRequestAminoMsg): QueryBondedAmountRequest {
+    return QueryBondedAmountRequest.fromAmino(object.value);
+  },
+  fromProtoMsg(message: QueryBondedAmountRequestProtoMsg): QueryBondedAmountRequest {
+    return QueryBondedAmountRequest.decode(message.value);
+  },
+  toProto(message: QueryBondedAmountRequest): Uint8Array {
+    return QueryBondedAmountRequest.encode(message).finish();
+  },
+  toProtoMsg(message: QueryBondedAmountRequest): QueryBondedAmountRequestProtoMsg {
+    return {
+      typeUrl: "/pryzm.ystaking.v1.QueryBondedAmountRequest",
+      value: QueryBondedAmountRequest.encode(message).finish()
+    };
   }
 };
 function createBaseQueryBondedAmountResponse(): QueryBondedAmountResponse {
@@ -193,6 +416,7 @@ function createBaseQueryBondedAmountResponse(): QueryBondedAmountResponse {
   };
 }
 export const QueryBondedAmountResponse = {
+  typeUrl: "/pryzm.ystaking.v1.QueryBondedAmountResponse",
   encode(message: QueryBondedAmountResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.amount !== "") {
       writer.uint32(10).string(message.amount);
@@ -230,6 +454,33 @@ export const QueryBondedAmountResponse = {
     const message = createBaseQueryBondedAmountResponse();
     message.amount = object.amount ?? "";
     return message;
+  },
+  fromAmino(object: QueryBondedAmountResponseAmino): QueryBondedAmountResponse {
+    const message = createBaseQueryBondedAmountResponse();
+    if (object.amount !== undefined && object.amount !== null) {
+      message.amount = object.amount;
+    }
+    return message;
+  },
+  toAmino(message: QueryBondedAmountResponse): QueryBondedAmountResponseAmino {
+    const obj: any = {};
+    obj.amount = message.amount;
+    return obj;
+  },
+  fromAminoMsg(object: QueryBondedAmountResponseAminoMsg): QueryBondedAmountResponse {
+    return QueryBondedAmountResponse.fromAmino(object.value);
+  },
+  fromProtoMsg(message: QueryBondedAmountResponseProtoMsg): QueryBondedAmountResponse {
+    return QueryBondedAmountResponse.decode(message.value);
+  },
+  toProto(message: QueryBondedAmountResponse): Uint8Array {
+    return QueryBondedAmountResponse.encode(message).finish();
+  },
+  toProtoMsg(message: QueryBondedAmountResponse): QueryBondedAmountResponseProtoMsg {
+    return {
+      typeUrl: "/pryzm.ystaking.v1.QueryBondedAmountResponse",
+      value: QueryBondedAmountResponse.encode(message).finish()
+    };
   }
 };
 function createBaseQueryRewardRequest(): QueryRewardRequest {
@@ -239,6 +490,7 @@ function createBaseQueryRewardRequest(): QueryRewardRequest {
   };
 }
 export const QueryRewardRequest = {
+  typeUrl: "/pryzm.ystaking.v1.QueryRewardRequest",
   encode(message: QueryRewardRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.denom !== "") {
       writer.uint32(10).string(message.denom);
@@ -285,6 +537,37 @@ export const QueryRewardRequest = {
     message.denom = object.denom ?? "";
     message.address = object.address ?? "";
     return message;
+  },
+  fromAmino(object: QueryRewardRequestAmino): QueryRewardRequest {
+    const message = createBaseQueryRewardRequest();
+    if (object.denom !== undefined && object.denom !== null) {
+      message.denom = object.denom;
+    }
+    if (object.address !== undefined && object.address !== null) {
+      message.address = object.address;
+    }
+    return message;
+  },
+  toAmino(message: QueryRewardRequest): QueryRewardRequestAmino {
+    const obj: any = {};
+    obj.denom = message.denom;
+    obj.address = message.address;
+    return obj;
+  },
+  fromAminoMsg(object: QueryRewardRequestAminoMsg): QueryRewardRequest {
+    return QueryRewardRequest.fromAmino(object.value);
+  },
+  fromProtoMsg(message: QueryRewardRequestProtoMsg): QueryRewardRequest {
+    return QueryRewardRequest.decode(message.value);
+  },
+  toProto(message: QueryRewardRequest): Uint8Array {
+    return QueryRewardRequest.encode(message).finish();
+  },
+  toProtoMsg(message: QueryRewardRequest): QueryRewardRequestProtoMsg {
+    return {
+      typeUrl: "/pryzm.ystaking.v1.QueryRewardRequest",
+      value: QueryRewardRequest.encode(message).finish()
+    };
   }
 };
 function createBaseQueryRewardResponse(): QueryRewardResponse {
@@ -293,6 +576,7 @@ function createBaseQueryRewardResponse(): QueryRewardResponse {
   };
 }
 export const QueryRewardResponse = {
+  typeUrl: "/pryzm.ystaking.v1.QueryRewardResponse",
   encode(message: QueryRewardResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.amount !== undefined) {
       Coin.encode(message.amount, writer.uint32(10).fork()).ldelim();
@@ -330,6 +614,33 @@ export const QueryRewardResponse = {
     const message = createBaseQueryRewardResponse();
     message.amount = object.amount !== undefined && object.amount !== null ? Coin.fromPartial(object.amount) : undefined;
     return message;
+  },
+  fromAmino(object: QueryRewardResponseAmino): QueryRewardResponse {
+    const message = createBaseQueryRewardResponse();
+    if (object.amount !== undefined && object.amount !== null) {
+      message.amount = Coin.fromAmino(object.amount);
+    }
+    return message;
+  },
+  toAmino(message: QueryRewardResponse): QueryRewardResponseAmino {
+    const obj: any = {};
+    obj.amount = message.amount ? Coin.toAmino(message.amount) : undefined;
+    return obj;
+  },
+  fromAminoMsg(object: QueryRewardResponseAminoMsg): QueryRewardResponse {
+    return QueryRewardResponse.fromAmino(object.value);
+  },
+  fromProtoMsg(message: QueryRewardResponseProtoMsg): QueryRewardResponse {
+    return QueryRewardResponse.decode(message.value);
+  },
+  toProto(message: QueryRewardResponse): Uint8Array {
+    return QueryRewardResponse.encode(message).finish();
+  },
+  toProtoMsg(message: QueryRewardResponse): QueryRewardResponseProtoMsg {
+    return {
+      typeUrl: "/pryzm.ystaking.v1.QueryRewardResponse",
+      value: QueryRewardResponse.encode(message).finish()
+    };
   }
 };
 function createBaseQueryGetUserStakeStateRequest(): QueryGetUserStakeStateRequest {
@@ -340,6 +651,7 @@ function createBaseQueryGetUserStakeStateRequest(): QueryGetUserStakeStateReques
   };
 }
 export const QueryGetUserStakeStateRequest = {
+  typeUrl: "/pryzm.ystaking.v1.QueryGetUserStakeStateRequest",
   encode(message: QueryGetUserStakeStateRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.address !== "") {
       writer.uint32(10).string(message.address);
@@ -395,6 +707,41 @@ export const QueryGetUserStakeStateRequest = {
     message.assetId = object.assetId ?? "";
     message.maturitySymbol = object.maturitySymbol ?? "";
     return message;
+  },
+  fromAmino(object: QueryGetUserStakeStateRequestAmino): QueryGetUserStakeStateRequest {
+    const message = createBaseQueryGetUserStakeStateRequest();
+    if (object.address !== undefined && object.address !== null) {
+      message.address = object.address;
+    }
+    if (object.asset_id !== undefined && object.asset_id !== null) {
+      message.assetId = object.asset_id;
+    }
+    if (object.maturity_symbol !== undefined && object.maturity_symbol !== null) {
+      message.maturitySymbol = object.maturity_symbol;
+    }
+    return message;
+  },
+  toAmino(message: QueryGetUserStakeStateRequest): QueryGetUserStakeStateRequestAmino {
+    const obj: any = {};
+    obj.address = message.address;
+    obj.asset_id = message.assetId;
+    obj.maturity_symbol = message.maturitySymbol;
+    return obj;
+  },
+  fromAminoMsg(object: QueryGetUserStakeStateRequestAminoMsg): QueryGetUserStakeStateRequest {
+    return QueryGetUserStakeStateRequest.fromAmino(object.value);
+  },
+  fromProtoMsg(message: QueryGetUserStakeStateRequestProtoMsg): QueryGetUserStakeStateRequest {
+    return QueryGetUserStakeStateRequest.decode(message.value);
+  },
+  toProto(message: QueryGetUserStakeStateRequest): Uint8Array {
+    return QueryGetUserStakeStateRequest.encode(message).finish();
+  },
+  toProtoMsg(message: QueryGetUserStakeStateRequest): QueryGetUserStakeStateRequestProtoMsg {
+    return {
+      typeUrl: "/pryzm.ystaking.v1.QueryGetUserStakeStateRequest",
+      value: QueryGetUserStakeStateRequest.encode(message).finish()
+    };
   }
 };
 function createBaseQueryGetUserStakeStateResponse(): QueryGetUserStakeStateResponse {
@@ -403,6 +750,7 @@ function createBaseQueryGetUserStakeStateResponse(): QueryGetUserStakeStateRespo
   };
 }
 export const QueryGetUserStakeStateResponse = {
+  typeUrl: "/pryzm.ystaking.v1.QueryGetUserStakeStateResponse",
   encode(message: QueryGetUserStakeStateResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.userStakeState !== undefined) {
       UserStakeState.encode(message.userStakeState, writer.uint32(10).fork()).ldelim();
@@ -440,6 +788,33 @@ export const QueryGetUserStakeStateResponse = {
     const message = createBaseQueryGetUserStakeStateResponse();
     message.userStakeState = object.userStakeState !== undefined && object.userStakeState !== null ? UserStakeState.fromPartial(object.userStakeState) : undefined;
     return message;
+  },
+  fromAmino(object: QueryGetUserStakeStateResponseAmino): QueryGetUserStakeStateResponse {
+    const message = createBaseQueryGetUserStakeStateResponse();
+    if (object.user_stake_state !== undefined && object.user_stake_state !== null) {
+      message.userStakeState = UserStakeState.fromAmino(object.user_stake_state);
+    }
+    return message;
+  },
+  toAmino(message: QueryGetUserStakeStateResponse): QueryGetUserStakeStateResponseAmino {
+    const obj: any = {};
+    obj.user_stake_state = message.userStakeState ? UserStakeState.toAmino(message.userStakeState) : undefined;
+    return obj;
+  },
+  fromAminoMsg(object: QueryGetUserStakeStateResponseAminoMsg): QueryGetUserStakeStateResponse {
+    return QueryGetUserStakeStateResponse.fromAmino(object.value);
+  },
+  fromProtoMsg(message: QueryGetUserStakeStateResponseProtoMsg): QueryGetUserStakeStateResponse {
+    return QueryGetUserStakeStateResponse.decode(message.value);
+  },
+  toProto(message: QueryGetUserStakeStateResponse): Uint8Array {
+    return QueryGetUserStakeStateResponse.encode(message).finish();
+  },
+  toProtoMsg(message: QueryGetUserStakeStateResponse): QueryGetUserStakeStateResponseProtoMsg {
+    return {
+      typeUrl: "/pryzm.ystaking.v1.QueryGetUserStakeStateResponse",
+      value: QueryGetUserStakeStateResponse.encode(message).finish()
+    };
   }
 };
 function createBaseQueryAllUserStakeStateRequest(): QueryAllUserStakeStateRequest {
@@ -450,6 +825,7 @@ function createBaseQueryAllUserStakeStateRequest(): QueryAllUserStakeStateReques
   };
 }
 export const QueryAllUserStakeStateRequest = {
+  typeUrl: "/pryzm.ystaking.v1.QueryAllUserStakeStateRequest",
   encode(message: QueryAllUserStakeStateRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.pagination !== undefined) {
       PageRequest.encode(message.pagination, writer.uint32(10).fork()).ldelim();
@@ -505,6 +881,41 @@ export const QueryAllUserStakeStateRequest = {
     message.address = object.address ?? "";
     message.assetId = object.assetId ?? "";
     return message;
+  },
+  fromAmino(object: QueryAllUserStakeStateRequestAmino): QueryAllUserStakeStateRequest {
+    const message = createBaseQueryAllUserStakeStateRequest();
+    if (object.pagination !== undefined && object.pagination !== null) {
+      message.pagination = PageRequest.fromAmino(object.pagination);
+    }
+    if (object.address !== undefined && object.address !== null) {
+      message.address = object.address;
+    }
+    if (object.asset_id !== undefined && object.asset_id !== null) {
+      message.assetId = object.asset_id;
+    }
+    return message;
+  },
+  toAmino(message: QueryAllUserStakeStateRequest): QueryAllUserStakeStateRequestAmino {
+    const obj: any = {};
+    obj.pagination = message.pagination ? PageRequest.toAmino(message.pagination) : undefined;
+    obj.address = message.address;
+    obj.asset_id = message.assetId;
+    return obj;
+  },
+  fromAminoMsg(object: QueryAllUserStakeStateRequestAminoMsg): QueryAllUserStakeStateRequest {
+    return QueryAllUserStakeStateRequest.fromAmino(object.value);
+  },
+  fromProtoMsg(message: QueryAllUserStakeStateRequestProtoMsg): QueryAllUserStakeStateRequest {
+    return QueryAllUserStakeStateRequest.decode(message.value);
+  },
+  toProto(message: QueryAllUserStakeStateRequest): Uint8Array {
+    return QueryAllUserStakeStateRequest.encode(message).finish();
+  },
+  toProtoMsg(message: QueryAllUserStakeStateRequest): QueryAllUserStakeStateRequestProtoMsg {
+    return {
+      typeUrl: "/pryzm.ystaking.v1.QueryAllUserStakeStateRequest",
+      value: QueryAllUserStakeStateRequest.encode(message).finish()
+    };
   }
 };
 function createBaseQueryAllUserStakeStateResponse(): QueryAllUserStakeStateResponse {
@@ -514,6 +925,7 @@ function createBaseQueryAllUserStakeStateResponse(): QueryAllUserStakeStateRespo
   };
 }
 export const QueryAllUserStakeStateResponse = {
+  typeUrl: "/pryzm.ystaking.v1.QueryAllUserStakeStateResponse",
   encode(message: QueryAllUserStakeStateResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     for (const v of message.userStakeState) {
       UserStakeState.encode(v!, writer.uint32(10).fork()).ldelim();
@@ -564,6 +976,39 @@ export const QueryAllUserStakeStateResponse = {
     message.userStakeState = object.userStakeState?.map(e => UserStakeState.fromPartial(e)) || [];
     message.pagination = object.pagination !== undefined && object.pagination !== null ? PageResponse.fromPartial(object.pagination) : undefined;
     return message;
+  },
+  fromAmino(object: QueryAllUserStakeStateResponseAmino): QueryAllUserStakeStateResponse {
+    const message = createBaseQueryAllUserStakeStateResponse();
+    message.userStakeState = object.user_stake_state?.map(e => UserStakeState.fromAmino(e)) || [];
+    if (object.pagination !== undefined && object.pagination !== null) {
+      message.pagination = PageResponse.fromAmino(object.pagination);
+    }
+    return message;
+  },
+  toAmino(message: QueryAllUserStakeStateResponse): QueryAllUserStakeStateResponseAmino {
+    const obj: any = {};
+    if (message.userStakeState) {
+      obj.user_stake_state = message.userStakeState.map(e => e ? UserStakeState.toAmino(e) : undefined);
+    } else {
+      obj.user_stake_state = [];
+    }
+    obj.pagination = message.pagination ? PageResponse.toAmino(message.pagination) : undefined;
+    return obj;
+  },
+  fromAminoMsg(object: QueryAllUserStakeStateResponseAminoMsg): QueryAllUserStakeStateResponse {
+    return QueryAllUserStakeStateResponse.fromAmino(object.value);
+  },
+  fromProtoMsg(message: QueryAllUserStakeStateResponseProtoMsg): QueryAllUserStakeStateResponse {
+    return QueryAllUserStakeStateResponse.decode(message.value);
+  },
+  toProto(message: QueryAllUserStakeStateResponse): Uint8Array {
+    return QueryAllUserStakeStateResponse.encode(message).finish();
+  },
+  toProtoMsg(message: QueryAllUserStakeStateResponse): QueryAllUserStakeStateResponseProtoMsg {
+    return {
+      typeUrl: "/pryzm.ystaking.v1.QueryAllUserStakeStateResponse",
+      value: QueryAllUserStakeStateResponse.encode(message).finish()
+    };
   }
 };
 function createBaseQueryGetAssetPoolStateRequest(): QueryGetAssetPoolStateRequest {
@@ -572,6 +1017,7 @@ function createBaseQueryGetAssetPoolStateRequest(): QueryGetAssetPoolStateReques
   };
 }
 export const QueryGetAssetPoolStateRequest = {
+  typeUrl: "/pryzm.ystaking.v1.QueryGetAssetPoolStateRequest",
   encode(message: QueryGetAssetPoolStateRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.assetId !== "") {
       writer.uint32(10).string(message.assetId);
@@ -609,6 +1055,33 @@ export const QueryGetAssetPoolStateRequest = {
     const message = createBaseQueryGetAssetPoolStateRequest();
     message.assetId = object.assetId ?? "";
     return message;
+  },
+  fromAmino(object: QueryGetAssetPoolStateRequestAmino): QueryGetAssetPoolStateRequest {
+    const message = createBaseQueryGetAssetPoolStateRequest();
+    if (object.asset_id !== undefined && object.asset_id !== null) {
+      message.assetId = object.asset_id;
+    }
+    return message;
+  },
+  toAmino(message: QueryGetAssetPoolStateRequest): QueryGetAssetPoolStateRequestAmino {
+    const obj: any = {};
+    obj.asset_id = message.assetId;
+    return obj;
+  },
+  fromAminoMsg(object: QueryGetAssetPoolStateRequestAminoMsg): QueryGetAssetPoolStateRequest {
+    return QueryGetAssetPoolStateRequest.fromAmino(object.value);
+  },
+  fromProtoMsg(message: QueryGetAssetPoolStateRequestProtoMsg): QueryGetAssetPoolStateRequest {
+    return QueryGetAssetPoolStateRequest.decode(message.value);
+  },
+  toProto(message: QueryGetAssetPoolStateRequest): Uint8Array {
+    return QueryGetAssetPoolStateRequest.encode(message).finish();
+  },
+  toProtoMsg(message: QueryGetAssetPoolStateRequest): QueryGetAssetPoolStateRequestProtoMsg {
+    return {
+      typeUrl: "/pryzm.ystaking.v1.QueryGetAssetPoolStateRequest",
+      value: QueryGetAssetPoolStateRequest.encode(message).finish()
+    };
   }
 };
 function createBaseQueryGetAssetPoolStateResponse(): QueryGetAssetPoolStateResponse {
@@ -617,6 +1090,7 @@ function createBaseQueryGetAssetPoolStateResponse(): QueryGetAssetPoolStateRespo
   };
 }
 export const QueryGetAssetPoolStateResponse = {
+  typeUrl: "/pryzm.ystaking.v1.QueryGetAssetPoolStateResponse",
   encode(message: QueryGetAssetPoolStateResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.assetPoolState !== undefined) {
       AssetPoolState.encode(message.assetPoolState, writer.uint32(10).fork()).ldelim();
@@ -654,6 +1128,33 @@ export const QueryGetAssetPoolStateResponse = {
     const message = createBaseQueryGetAssetPoolStateResponse();
     message.assetPoolState = object.assetPoolState !== undefined && object.assetPoolState !== null ? AssetPoolState.fromPartial(object.assetPoolState) : undefined;
     return message;
+  },
+  fromAmino(object: QueryGetAssetPoolStateResponseAmino): QueryGetAssetPoolStateResponse {
+    const message = createBaseQueryGetAssetPoolStateResponse();
+    if (object.asset_pool_state !== undefined && object.asset_pool_state !== null) {
+      message.assetPoolState = AssetPoolState.fromAmino(object.asset_pool_state);
+    }
+    return message;
+  },
+  toAmino(message: QueryGetAssetPoolStateResponse): QueryGetAssetPoolStateResponseAmino {
+    const obj: any = {};
+    obj.asset_pool_state = message.assetPoolState ? AssetPoolState.toAmino(message.assetPoolState) : undefined;
+    return obj;
+  },
+  fromAminoMsg(object: QueryGetAssetPoolStateResponseAminoMsg): QueryGetAssetPoolStateResponse {
+    return QueryGetAssetPoolStateResponse.fromAmino(object.value);
+  },
+  fromProtoMsg(message: QueryGetAssetPoolStateResponseProtoMsg): QueryGetAssetPoolStateResponse {
+    return QueryGetAssetPoolStateResponse.decode(message.value);
+  },
+  toProto(message: QueryGetAssetPoolStateResponse): Uint8Array {
+    return QueryGetAssetPoolStateResponse.encode(message).finish();
+  },
+  toProtoMsg(message: QueryGetAssetPoolStateResponse): QueryGetAssetPoolStateResponseProtoMsg {
+    return {
+      typeUrl: "/pryzm.ystaking.v1.QueryGetAssetPoolStateResponse",
+      value: QueryGetAssetPoolStateResponse.encode(message).finish()
+    };
   }
 };
 function createBaseQueryAllAssetPoolStateRequest(): QueryAllAssetPoolStateRequest {
@@ -662,6 +1163,7 @@ function createBaseQueryAllAssetPoolStateRequest(): QueryAllAssetPoolStateReques
   };
 }
 export const QueryAllAssetPoolStateRequest = {
+  typeUrl: "/pryzm.ystaking.v1.QueryAllAssetPoolStateRequest",
   encode(message: QueryAllAssetPoolStateRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.pagination !== undefined) {
       PageRequest.encode(message.pagination, writer.uint32(10).fork()).ldelim();
@@ -699,6 +1201,33 @@ export const QueryAllAssetPoolStateRequest = {
     const message = createBaseQueryAllAssetPoolStateRequest();
     message.pagination = object.pagination !== undefined && object.pagination !== null ? PageRequest.fromPartial(object.pagination) : undefined;
     return message;
+  },
+  fromAmino(object: QueryAllAssetPoolStateRequestAmino): QueryAllAssetPoolStateRequest {
+    const message = createBaseQueryAllAssetPoolStateRequest();
+    if (object.pagination !== undefined && object.pagination !== null) {
+      message.pagination = PageRequest.fromAmino(object.pagination);
+    }
+    return message;
+  },
+  toAmino(message: QueryAllAssetPoolStateRequest): QueryAllAssetPoolStateRequestAmino {
+    const obj: any = {};
+    obj.pagination = message.pagination ? PageRequest.toAmino(message.pagination) : undefined;
+    return obj;
+  },
+  fromAminoMsg(object: QueryAllAssetPoolStateRequestAminoMsg): QueryAllAssetPoolStateRequest {
+    return QueryAllAssetPoolStateRequest.fromAmino(object.value);
+  },
+  fromProtoMsg(message: QueryAllAssetPoolStateRequestProtoMsg): QueryAllAssetPoolStateRequest {
+    return QueryAllAssetPoolStateRequest.decode(message.value);
+  },
+  toProto(message: QueryAllAssetPoolStateRequest): Uint8Array {
+    return QueryAllAssetPoolStateRequest.encode(message).finish();
+  },
+  toProtoMsg(message: QueryAllAssetPoolStateRequest): QueryAllAssetPoolStateRequestProtoMsg {
+    return {
+      typeUrl: "/pryzm.ystaking.v1.QueryAllAssetPoolStateRequest",
+      value: QueryAllAssetPoolStateRequest.encode(message).finish()
+    };
   }
 };
 function createBaseQueryAllAssetPoolStateResponse(): QueryAllAssetPoolStateResponse {
@@ -708,6 +1237,7 @@ function createBaseQueryAllAssetPoolStateResponse(): QueryAllAssetPoolStateRespo
   };
 }
 export const QueryAllAssetPoolStateResponse = {
+  typeUrl: "/pryzm.ystaking.v1.QueryAllAssetPoolStateResponse",
   encode(message: QueryAllAssetPoolStateResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     for (const v of message.assetPoolState) {
       AssetPoolState.encode(v!, writer.uint32(10).fork()).ldelim();
@@ -758,6 +1288,39 @@ export const QueryAllAssetPoolStateResponse = {
     message.assetPoolState = object.assetPoolState?.map(e => AssetPoolState.fromPartial(e)) || [];
     message.pagination = object.pagination !== undefined && object.pagination !== null ? PageResponse.fromPartial(object.pagination) : undefined;
     return message;
+  },
+  fromAmino(object: QueryAllAssetPoolStateResponseAmino): QueryAllAssetPoolStateResponse {
+    const message = createBaseQueryAllAssetPoolStateResponse();
+    message.assetPoolState = object.asset_pool_state?.map(e => AssetPoolState.fromAmino(e)) || [];
+    if (object.pagination !== undefined && object.pagination !== null) {
+      message.pagination = PageResponse.fromAmino(object.pagination);
+    }
+    return message;
+  },
+  toAmino(message: QueryAllAssetPoolStateResponse): QueryAllAssetPoolStateResponseAmino {
+    const obj: any = {};
+    if (message.assetPoolState) {
+      obj.asset_pool_state = message.assetPoolState.map(e => e ? AssetPoolState.toAmino(e) : undefined);
+    } else {
+      obj.asset_pool_state = [];
+    }
+    obj.pagination = message.pagination ? PageResponse.toAmino(message.pagination) : undefined;
+    return obj;
+  },
+  fromAminoMsg(object: QueryAllAssetPoolStateResponseAminoMsg): QueryAllAssetPoolStateResponse {
+    return QueryAllAssetPoolStateResponse.fromAmino(object.value);
+  },
+  fromProtoMsg(message: QueryAllAssetPoolStateResponseProtoMsg): QueryAllAssetPoolStateResponse {
+    return QueryAllAssetPoolStateResponse.decode(message.value);
+  },
+  toProto(message: QueryAllAssetPoolStateResponse): Uint8Array {
+    return QueryAllAssetPoolStateResponse.encode(message).finish();
+  },
+  toProtoMsg(message: QueryAllAssetPoolStateResponse): QueryAllAssetPoolStateResponseProtoMsg {
+    return {
+      typeUrl: "/pryzm.ystaking.v1.QueryAllAssetPoolStateResponse",
+      value: QueryAllAssetPoolStateResponse.encode(message).finish()
+    };
   }
 };
 function createBaseQueryGetAssetMaturityPoolStateRequest(): QueryGetAssetMaturityPoolStateRequest {
@@ -767,6 +1330,7 @@ function createBaseQueryGetAssetMaturityPoolStateRequest(): QueryGetAssetMaturit
   };
 }
 export const QueryGetAssetMaturityPoolStateRequest = {
+  typeUrl: "/pryzm.ystaking.v1.QueryGetAssetMaturityPoolStateRequest",
   encode(message: QueryGetAssetMaturityPoolStateRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.assetId !== "") {
       writer.uint32(10).string(message.assetId);
@@ -813,6 +1377,37 @@ export const QueryGetAssetMaturityPoolStateRequest = {
     message.assetId = object.assetId ?? "";
     message.maturitySymbol = object.maturitySymbol ?? "";
     return message;
+  },
+  fromAmino(object: QueryGetAssetMaturityPoolStateRequestAmino): QueryGetAssetMaturityPoolStateRequest {
+    const message = createBaseQueryGetAssetMaturityPoolStateRequest();
+    if (object.asset_id !== undefined && object.asset_id !== null) {
+      message.assetId = object.asset_id;
+    }
+    if (object.maturity_symbol !== undefined && object.maturity_symbol !== null) {
+      message.maturitySymbol = object.maturity_symbol;
+    }
+    return message;
+  },
+  toAmino(message: QueryGetAssetMaturityPoolStateRequest): QueryGetAssetMaturityPoolStateRequestAmino {
+    const obj: any = {};
+    obj.asset_id = message.assetId;
+    obj.maturity_symbol = message.maturitySymbol;
+    return obj;
+  },
+  fromAminoMsg(object: QueryGetAssetMaturityPoolStateRequestAminoMsg): QueryGetAssetMaturityPoolStateRequest {
+    return QueryGetAssetMaturityPoolStateRequest.fromAmino(object.value);
+  },
+  fromProtoMsg(message: QueryGetAssetMaturityPoolStateRequestProtoMsg): QueryGetAssetMaturityPoolStateRequest {
+    return QueryGetAssetMaturityPoolStateRequest.decode(message.value);
+  },
+  toProto(message: QueryGetAssetMaturityPoolStateRequest): Uint8Array {
+    return QueryGetAssetMaturityPoolStateRequest.encode(message).finish();
+  },
+  toProtoMsg(message: QueryGetAssetMaturityPoolStateRequest): QueryGetAssetMaturityPoolStateRequestProtoMsg {
+    return {
+      typeUrl: "/pryzm.ystaking.v1.QueryGetAssetMaturityPoolStateRequest",
+      value: QueryGetAssetMaturityPoolStateRequest.encode(message).finish()
+    };
   }
 };
 function createBaseQueryGetAssetMaturityPoolStateResponse(): QueryGetAssetMaturityPoolStateResponse {
@@ -821,6 +1416,7 @@ function createBaseQueryGetAssetMaturityPoolStateResponse(): QueryGetAssetMaturi
   };
 }
 export const QueryGetAssetMaturityPoolStateResponse = {
+  typeUrl: "/pryzm.ystaking.v1.QueryGetAssetMaturityPoolStateResponse",
   encode(message: QueryGetAssetMaturityPoolStateResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.assetMaturityPoolState !== undefined) {
       AssetMaturityPoolState.encode(message.assetMaturityPoolState, writer.uint32(10).fork()).ldelim();
@@ -858,6 +1454,33 @@ export const QueryGetAssetMaturityPoolStateResponse = {
     const message = createBaseQueryGetAssetMaturityPoolStateResponse();
     message.assetMaturityPoolState = object.assetMaturityPoolState !== undefined && object.assetMaturityPoolState !== null ? AssetMaturityPoolState.fromPartial(object.assetMaturityPoolState) : undefined;
     return message;
+  },
+  fromAmino(object: QueryGetAssetMaturityPoolStateResponseAmino): QueryGetAssetMaturityPoolStateResponse {
+    const message = createBaseQueryGetAssetMaturityPoolStateResponse();
+    if (object.asset_maturity_pool_state !== undefined && object.asset_maturity_pool_state !== null) {
+      message.assetMaturityPoolState = AssetMaturityPoolState.fromAmino(object.asset_maturity_pool_state);
+    }
+    return message;
+  },
+  toAmino(message: QueryGetAssetMaturityPoolStateResponse): QueryGetAssetMaturityPoolStateResponseAmino {
+    const obj: any = {};
+    obj.asset_maturity_pool_state = message.assetMaturityPoolState ? AssetMaturityPoolState.toAmino(message.assetMaturityPoolState) : undefined;
+    return obj;
+  },
+  fromAminoMsg(object: QueryGetAssetMaturityPoolStateResponseAminoMsg): QueryGetAssetMaturityPoolStateResponse {
+    return QueryGetAssetMaturityPoolStateResponse.fromAmino(object.value);
+  },
+  fromProtoMsg(message: QueryGetAssetMaturityPoolStateResponseProtoMsg): QueryGetAssetMaturityPoolStateResponse {
+    return QueryGetAssetMaturityPoolStateResponse.decode(message.value);
+  },
+  toProto(message: QueryGetAssetMaturityPoolStateResponse): Uint8Array {
+    return QueryGetAssetMaturityPoolStateResponse.encode(message).finish();
+  },
+  toProtoMsg(message: QueryGetAssetMaturityPoolStateResponse): QueryGetAssetMaturityPoolStateResponseProtoMsg {
+    return {
+      typeUrl: "/pryzm.ystaking.v1.QueryGetAssetMaturityPoolStateResponse",
+      value: QueryGetAssetMaturityPoolStateResponse.encode(message).finish()
+    };
   }
 };
 function createBaseQueryAllAssetMaturityPoolStateRequest(): QueryAllAssetMaturityPoolStateRequest {
@@ -866,6 +1489,7 @@ function createBaseQueryAllAssetMaturityPoolStateRequest(): QueryAllAssetMaturit
   };
 }
 export const QueryAllAssetMaturityPoolStateRequest = {
+  typeUrl: "/pryzm.ystaking.v1.QueryAllAssetMaturityPoolStateRequest",
   encode(message: QueryAllAssetMaturityPoolStateRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.pagination !== undefined) {
       PageRequest.encode(message.pagination, writer.uint32(10).fork()).ldelim();
@@ -903,6 +1527,33 @@ export const QueryAllAssetMaturityPoolStateRequest = {
     const message = createBaseQueryAllAssetMaturityPoolStateRequest();
     message.pagination = object.pagination !== undefined && object.pagination !== null ? PageRequest.fromPartial(object.pagination) : undefined;
     return message;
+  },
+  fromAmino(object: QueryAllAssetMaturityPoolStateRequestAmino): QueryAllAssetMaturityPoolStateRequest {
+    const message = createBaseQueryAllAssetMaturityPoolStateRequest();
+    if (object.pagination !== undefined && object.pagination !== null) {
+      message.pagination = PageRequest.fromAmino(object.pagination);
+    }
+    return message;
+  },
+  toAmino(message: QueryAllAssetMaturityPoolStateRequest): QueryAllAssetMaturityPoolStateRequestAmino {
+    const obj: any = {};
+    obj.pagination = message.pagination ? PageRequest.toAmino(message.pagination) : undefined;
+    return obj;
+  },
+  fromAminoMsg(object: QueryAllAssetMaturityPoolStateRequestAminoMsg): QueryAllAssetMaturityPoolStateRequest {
+    return QueryAllAssetMaturityPoolStateRequest.fromAmino(object.value);
+  },
+  fromProtoMsg(message: QueryAllAssetMaturityPoolStateRequestProtoMsg): QueryAllAssetMaturityPoolStateRequest {
+    return QueryAllAssetMaturityPoolStateRequest.decode(message.value);
+  },
+  toProto(message: QueryAllAssetMaturityPoolStateRequest): Uint8Array {
+    return QueryAllAssetMaturityPoolStateRequest.encode(message).finish();
+  },
+  toProtoMsg(message: QueryAllAssetMaturityPoolStateRequest): QueryAllAssetMaturityPoolStateRequestProtoMsg {
+    return {
+      typeUrl: "/pryzm.ystaking.v1.QueryAllAssetMaturityPoolStateRequest",
+      value: QueryAllAssetMaturityPoolStateRequest.encode(message).finish()
+    };
   }
 };
 function createBaseQueryAllAssetMaturityPoolStateResponse(): QueryAllAssetMaturityPoolStateResponse {
@@ -912,6 +1563,7 @@ function createBaseQueryAllAssetMaturityPoolStateResponse(): QueryAllAssetMaturi
   };
 }
 export const QueryAllAssetMaturityPoolStateResponse = {
+  typeUrl: "/pryzm.ystaking.v1.QueryAllAssetMaturityPoolStateResponse",
   encode(message: QueryAllAssetMaturityPoolStateResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     for (const v of message.assetMaturityPoolState) {
       AssetMaturityPoolState.encode(v!, writer.uint32(10).fork()).ldelim();
@@ -962,5 +1614,38 @@ export const QueryAllAssetMaturityPoolStateResponse = {
     message.assetMaturityPoolState = object.assetMaturityPoolState?.map(e => AssetMaturityPoolState.fromPartial(e)) || [];
     message.pagination = object.pagination !== undefined && object.pagination !== null ? PageResponse.fromPartial(object.pagination) : undefined;
     return message;
+  },
+  fromAmino(object: QueryAllAssetMaturityPoolStateResponseAmino): QueryAllAssetMaturityPoolStateResponse {
+    const message = createBaseQueryAllAssetMaturityPoolStateResponse();
+    message.assetMaturityPoolState = object.asset_maturity_pool_state?.map(e => AssetMaturityPoolState.fromAmino(e)) || [];
+    if (object.pagination !== undefined && object.pagination !== null) {
+      message.pagination = PageResponse.fromAmino(object.pagination);
+    }
+    return message;
+  },
+  toAmino(message: QueryAllAssetMaturityPoolStateResponse): QueryAllAssetMaturityPoolStateResponseAmino {
+    const obj: any = {};
+    if (message.assetMaturityPoolState) {
+      obj.asset_maturity_pool_state = message.assetMaturityPoolState.map(e => e ? AssetMaturityPoolState.toAmino(e) : undefined);
+    } else {
+      obj.asset_maturity_pool_state = [];
+    }
+    obj.pagination = message.pagination ? PageResponse.toAmino(message.pagination) : undefined;
+    return obj;
+  },
+  fromAminoMsg(object: QueryAllAssetMaturityPoolStateResponseAminoMsg): QueryAllAssetMaturityPoolStateResponse {
+    return QueryAllAssetMaturityPoolStateResponse.fromAmino(object.value);
+  },
+  fromProtoMsg(message: QueryAllAssetMaturityPoolStateResponseProtoMsg): QueryAllAssetMaturityPoolStateResponse {
+    return QueryAllAssetMaturityPoolStateResponse.decode(message.value);
+  },
+  toProto(message: QueryAllAssetMaturityPoolStateResponse): Uint8Array {
+    return QueryAllAssetMaturityPoolStateResponse.encode(message).finish();
+  },
+  toProtoMsg(message: QueryAllAssetMaturityPoolStateResponse): QueryAllAssetMaturityPoolStateResponseProtoMsg {
+    return {
+      typeUrl: "/pryzm.ystaking.v1.QueryAllAssetMaturityPoolStateResponse",
+      value: QueryAllAssetMaturityPoolStateResponse.encode(message).finish()
+    };
   }
 };

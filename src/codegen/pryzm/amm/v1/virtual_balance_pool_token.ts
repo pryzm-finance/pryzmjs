@@ -8,6 +8,21 @@ export interface VirtualBalancePoolToken {
   startUnixMillis: bigint;
   endUnixMillis: bigint;
 }
+export interface VirtualBalancePoolTokenProtoMsg {
+  typeUrl: "/pryzm.amm.v1.VirtualBalancePoolToken";
+  value: Uint8Array;
+}
+export interface VirtualBalancePoolTokenAmino {
+  pool_id?: string;
+  denom?: string;
+  target_virtual_balance?: string;
+  start_unix_millis?: string;
+  end_unix_millis?: string;
+}
+export interface VirtualBalancePoolTokenAminoMsg {
+  type: "/pryzm.amm.v1.VirtualBalancePoolToken";
+  value: VirtualBalancePoolTokenAmino;
+}
 export interface VirtualBalancePoolTokenSDKType {
   pool_id: bigint;
   denom: string;
@@ -25,6 +40,7 @@ function createBaseVirtualBalancePoolToken(): VirtualBalancePoolToken {
   };
 }
 export const VirtualBalancePoolToken = {
+  typeUrl: "/pryzm.amm.v1.VirtualBalancePoolToken",
   encode(message: VirtualBalancePoolToken, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.poolId !== BigInt(0)) {
       writer.uint32(8).uint64(message.poolId);
@@ -98,5 +114,48 @@ export const VirtualBalancePoolToken = {
     message.startUnixMillis = object.startUnixMillis !== undefined && object.startUnixMillis !== null ? BigInt(object.startUnixMillis.toString()) : BigInt(0);
     message.endUnixMillis = object.endUnixMillis !== undefined && object.endUnixMillis !== null ? BigInt(object.endUnixMillis.toString()) : BigInt(0);
     return message;
+  },
+  fromAmino(object: VirtualBalancePoolTokenAmino): VirtualBalancePoolToken {
+    const message = createBaseVirtualBalancePoolToken();
+    if (object.pool_id !== undefined && object.pool_id !== null) {
+      message.poolId = BigInt(object.pool_id);
+    }
+    if (object.denom !== undefined && object.denom !== null) {
+      message.denom = object.denom;
+    }
+    if (object.target_virtual_balance !== undefined && object.target_virtual_balance !== null) {
+      message.targetVirtualBalance = object.target_virtual_balance;
+    }
+    if (object.start_unix_millis !== undefined && object.start_unix_millis !== null) {
+      message.startUnixMillis = BigInt(object.start_unix_millis);
+    }
+    if (object.end_unix_millis !== undefined && object.end_unix_millis !== null) {
+      message.endUnixMillis = BigInt(object.end_unix_millis);
+    }
+    return message;
+  },
+  toAmino(message: VirtualBalancePoolToken): VirtualBalancePoolTokenAmino {
+    const obj: any = {};
+    obj.pool_id = message.poolId ? message.poolId.toString() : undefined;
+    obj.denom = message.denom;
+    obj.target_virtual_balance = message.targetVirtualBalance;
+    obj.start_unix_millis = message.startUnixMillis ? message.startUnixMillis.toString() : undefined;
+    obj.end_unix_millis = message.endUnixMillis ? message.endUnixMillis.toString() : undefined;
+    return obj;
+  },
+  fromAminoMsg(object: VirtualBalancePoolTokenAminoMsg): VirtualBalancePoolToken {
+    return VirtualBalancePoolToken.fromAmino(object.value);
+  },
+  fromProtoMsg(message: VirtualBalancePoolTokenProtoMsg): VirtualBalancePoolToken {
+    return VirtualBalancePoolToken.decode(message.value);
+  },
+  toProto(message: VirtualBalancePoolToken): Uint8Array {
+    return VirtualBalancePoolToken.encode(message).finish();
+  },
+  toProtoMsg(message: VirtualBalancePoolToken): VirtualBalancePoolTokenProtoMsg {
+    return {
+      typeUrl: "/pryzm.amm.v1.VirtualBalancePoolToken",
+      value: VirtualBalancePoolToken.encode(message).finish()
+    };
   }
 };

@@ -1,6 +1,6 @@
-import { OracleVote, OracleVoteSDKType } from "./oracle_vote";
-import { Coin, CoinSDKType } from "../../../cosmos/base/v1beta1/coin";
-import { Params, ParamsSDKType } from "./params";
+import { OracleVote, OracleVoteAmino, OracleVoteSDKType } from "./oracle_vote";
+import { Coin, CoinAmino, CoinSDKType } from "../../../cosmos/base/v1beta1/coin";
+import { Params, ParamsAmino, ParamsSDKType } from "./params";
 import { BinaryReader, BinaryWriter } from "../../../binary";
 import { isSet } from "../../../helpers";
 export enum VoteType {
@@ -10,6 +10,7 @@ export enum VoteType {
   UNRECOGNIZED = -1,
 }
 export const VoteTypeSDKType = VoteType;
+export const VoteTypeAmino = VoteType;
 export function voteTypeFromJSON(object: any): VoteType {
   switch (object) {
     case 0:
@@ -44,6 +45,18 @@ export interface EventDelegateFeedConsent {
   validator: string;
   feeder: string;
 }
+export interface EventDelegateFeedConsentProtoMsg {
+  typeUrl: "/refractedlabs.oracle.v1.EventDelegateFeedConsent";
+  value: Uint8Array;
+}
+export interface EventDelegateFeedConsentAmino {
+  validator?: string;
+  feeder?: string;
+}
+export interface EventDelegateFeedConsentAminoMsg {
+  type: "/refractedlabs.oracle.v1.EventDelegateFeedConsent";
+  value: EventDelegateFeedConsentAmino;
+}
 export interface EventDelegateFeedConsentSDKType {
   validator: string;
   feeder: string;
@@ -52,6 +65,18 @@ export interface EventOraclePreVote {
   validator: string;
   feeder: string;
 }
+export interface EventOraclePreVoteProtoMsg {
+  typeUrl: "/refractedlabs.oracle.v1.EventOraclePreVote";
+  value: Uint8Array;
+}
+export interface EventOraclePreVoteAmino {
+  validator?: string;
+  feeder?: string;
+}
+export interface EventOraclePreVoteAminoMsg {
+  type: "/refractedlabs.oracle.v1.EventOraclePreVote";
+  value: EventOraclePreVoteAmino;
+}
 export interface EventOraclePreVoteSDKType {
   validator: string;
   feeder: string;
@@ -59,6 +84,18 @@ export interface EventOraclePreVoteSDKType {
 export interface EventOracleVote {
   feeder: string;
   oracleVote: OracleVote;
+}
+export interface EventOracleVoteProtoMsg {
+  typeUrl: "/refractedlabs.oracle.v1.EventOracleVote";
+  value: Uint8Array;
+}
+export interface EventOracleVoteAmino {
+  feeder?: string;
+  oracle_vote?: OracleVoteAmino;
+}
+export interface EventOracleVoteAminoMsg {
+  type: "/refractedlabs.oracle.v1.EventOracleVote";
+  value: EventOracleVoteAmino;
 }
 export interface EventOracleVoteSDKType {
   feeder: string;
@@ -74,6 +111,25 @@ export interface BallotVoteResult {
   majorityVotePayload: string;
   /** error returned by a call to the corresponding module's OnMajorityVote callback method */
   callbackError: string;
+}
+export interface BallotVoteResultProtoMsg {
+  typeUrl: "/refractedlabs.oracle.v1.BallotVoteResult";
+  value: Uint8Array;
+}
+export interface BallotVoteResultAmino {
+  namespace?: string;
+  module?: string;
+  quorum_reached?: boolean;
+  ballot_power?: string;
+  majority_achieved?: boolean;
+  majority_vote_type?: VoteType;
+  majority_vote_payload?: string;
+  /** error returned by a call to the corresponding module's OnMajorityVote callback method */
+  callback_error?: string;
+}
+export interface BallotVoteResultAminoMsg {
+  type: "/refractedlabs.oracle.v1.BallotVoteResult";
+  value: BallotVoteResultAmino;
 }
 export interface BallotVoteResultSDKType {
   namespace: string;
@@ -93,6 +149,22 @@ export interface ValidatorVoteIntervalSummary {
   slashWindowMissCounter: bigint;
   rewards: Coin[];
 }
+export interface ValidatorVoteIntervalSummaryProtoMsg {
+  typeUrl: "/refractedlabs.oracle.v1.ValidatorVoteIntervalSummary";
+  value: Uint8Array;
+}
+export interface ValidatorVoteIntervalSummaryAmino {
+  validator?: string;
+  validator_power?: string;
+  voted?: boolean;
+  vote_interval_miss_counter?: string;
+  slash_window_miss_counter?: string;
+  rewards?: CoinAmino[];
+}
+export interface ValidatorVoteIntervalSummaryAminoMsg {
+  type: "/refractedlabs.oracle.v1.ValidatorVoteIntervalSummary";
+  value: ValidatorVoteIntervalSummaryAmino;
+}
 export interface ValidatorVoteIntervalSummarySDKType {
   validator: string;
   validator_power: bigint;
@@ -109,6 +181,22 @@ export interface EventVoteIntervalEnds {
   previousVoteIntervalEndTimeMillis: bigint;
   ballotVoteResults: BallotVoteResult[];
 }
+export interface EventVoteIntervalEndsProtoMsg {
+  typeUrl: "/refractedlabs.oracle.v1.EventVoteIntervalEnds";
+  value: Uint8Array;
+}
+export interface EventVoteIntervalEndsAmino {
+  time_millis?: string;
+  block_height?: string;
+  vote_period?: string;
+  validator_summaries?: ValidatorVoteIntervalSummaryAmino[];
+  previous_vote_interval_end_time_millis?: string;
+  ballot_vote_results?: BallotVoteResultAmino[];
+}
+export interface EventVoteIntervalEndsAminoMsg {
+  type: "/refractedlabs.oracle.v1.EventVoteIntervalEnds";
+  value: EventVoteIntervalEndsAmino;
+}
 export interface EventVoteIntervalEndsSDKType {
   time_millis: bigint;
   block_height: bigint;
@@ -124,6 +212,21 @@ export interface ValidatorSlashWindowSummary {
   jailed: boolean;
   slashAmount: string;
 }
+export interface ValidatorSlashWindowSummaryProtoMsg {
+  typeUrl: "/refractedlabs.oracle.v1.ValidatorSlashWindowSummary";
+  value: Uint8Array;
+}
+export interface ValidatorSlashWindowSummaryAmino {
+  validator?: string;
+  validator_power?: string;
+  miss_counter?: string;
+  jailed?: boolean;
+  slash_amount?: string;
+}
+export interface ValidatorSlashWindowSummaryAminoMsg {
+  type: "/refractedlabs.oracle.v1.ValidatorSlashWindowSummary";
+  value: ValidatorSlashWindowSummaryAmino;
+}
 export interface ValidatorSlashWindowSummarySDKType {
   validator: string;
   validator_power: bigint;
@@ -135,12 +238,35 @@ export interface EventSlashWindowEnds {
   slashWindow: bigint;
   validatorSummaries: ValidatorSlashWindowSummary[];
 }
+export interface EventSlashWindowEndsProtoMsg {
+  typeUrl: "/refractedlabs.oracle.v1.EventSlashWindowEnds";
+  value: Uint8Array;
+}
+export interface EventSlashWindowEndsAmino {
+  slash_window?: string;
+  validator_summaries?: ValidatorSlashWindowSummaryAmino[];
+}
+export interface EventSlashWindowEndsAminoMsg {
+  type: "/refractedlabs.oracle.v1.EventSlashWindowEnds";
+  value: EventSlashWindowEndsAmino;
+}
 export interface EventSlashWindowEndsSDKType {
   slash_window: bigint;
   validator_summaries: ValidatorSlashWindowSummarySDKType[];
 }
 export interface EventSetParams {
   params: Params;
+}
+export interface EventSetParamsProtoMsg {
+  typeUrl: "/refractedlabs.oracle.v1.EventSetParams";
+  value: Uint8Array;
+}
+export interface EventSetParamsAmino {
+  params?: ParamsAmino;
+}
+export interface EventSetParamsAminoMsg {
+  type: "/refractedlabs.oracle.v1.EventSetParams";
+  value: EventSetParamsAmino;
 }
 export interface EventSetParamsSDKType {
   params: ParamsSDKType;
@@ -152,6 +278,7 @@ function createBaseEventDelegateFeedConsent(): EventDelegateFeedConsent {
   };
 }
 export const EventDelegateFeedConsent = {
+  typeUrl: "/refractedlabs.oracle.v1.EventDelegateFeedConsent",
   encode(message: EventDelegateFeedConsent, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.validator !== "") {
       writer.uint32(10).string(message.validator);
@@ -198,6 +325,37 @@ export const EventDelegateFeedConsent = {
     message.validator = object.validator ?? "";
     message.feeder = object.feeder ?? "";
     return message;
+  },
+  fromAmino(object: EventDelegateFeedConsentAmino): EventDelegateFeedConsent {
+    const message = createBaseEventDelegateFeedConsent();
+    if (object.validator !== undefined && object.validator !== null) {
+      message.validator = object.validator;
+    }
+    if (object.feeder !== undefined && object.feeder !== null) {
+      message.feeder = object.feeder;
+    }
+    return message;
+  },
+  toAmino(message: EventDelegateFeedConsent): EventDelegateFeedConsentAmino {
+    const obj: any = {};
+    obj.validator = message.validator;
+    obj.feeder = message.feeder;
+    return obj;
+  },
+  fromAminoMsg(object: EventDelegateFeedConsentAminoMsg): EventDelegateFeedConsent {
+    return EventDelegateFeedConsent.fromAmino(object.value);
+  },
+  fromProtoMsg(message: EventDelegateFeedConsentProtoMsg): EventDelegateFeedConsent {
+    return EventDelegateFeedConsent.decode(message.value);
+  },
+  toProto(message: EventDelegateFeedConsent): Uint8Array {
+    return EventDelegateFeedConsent.encode(message).finish();
+  },
+  toProtoMsg(message: EventDelegateFeedConsent): EventDelegateFeedConsentProtoMsg {
+    return {
+      typeUrl: "/refractedlabs.oracle.v1.EventDelegateFeedConsent",
+      value: EventDelegateFeedConsent.encode(message).finish()
+    };
   }
 };
 function createBaseEventOraclePreVote(): EventOraclePreVote {
@@ -207,6 +365,7 @@ function createBaseEventOraclePreVote(): EventOraclePreVote {
   };
 }
 export const EventOraclePreVote = {
+  typeUrl: "/refractedlabs.oracle.v1.EventOraclePreVote",
   encode(message: EventOraclePreVote, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.validator !== "") {
       writer.uint32(10).string(message.validator);
@@ -253,6 +412,37 @@ export const EventOraclePreVote = {
     message.validator = object.validator ?? "";
     message.feeder = object.feeder ?? "";
     return message;
+  },
+  fromAmino(object: EventOraclePreVoteAmino): EventOraclePreVote {
+    const message = createBaseEventOraclePreVote();
+    if (object.validator !== undefined && object.validator !== null) {
+      message.validator = object.validator;
+    }
+    if (object.feeder !== undefined && object.feeder !== null) {
+      message.feeder = object.feeder;
+    }
+    return message;
+  },
+  toAmino(message: EventOraclePreVote): EventOraclePreVoteAmino {
+    const obj: any = {};
+    obj.validator = message.validator;
+    obj.feeder = message.feeder;
+    return obj;
+  },
+  fromAminoMsg(object: EventOraclePreVoteAminoMsg): EventOraclePreVote {
+    return EventOraclePreVote.fromAmino(object.value);
+  },
+  fromProtoMsg(message: EventOraclePreVoteProtoMsg): EventOraclePreVote {
+    return EventOraclePreVote.decode(message.value);
+  },
+  toProto(message: EventOraclePreVote): Uint8Array {
+    return EventOraclePreVote.encode(message).finish();
+  },
+  toProtoMsg(message: EventOraclePreVote): EventOraclePreVoteProtoMsg {
+    return {
+      typeUrl: "/refractedlabs.oracle.v1.EventOraclePreVote",
+      value: EventOraclePreVote.encode(message).finish()
+    };
   }
 };
 function createBaseEventOracleVote(): EventOracleVote {
@@ -262,6 +452,7 @@ function createBaseEventOracleVote(): EventOracleVote {
   };
 }
 export const EventOracleVote = {
+  typeUrl: "/refractedlabs.oracle.v1.EventOracleVote",
   encode(message: EventOracleVote, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.feeder !== "") {
       writer.uint32(10).string(message.feeder);
@@ -308,6 +499,37 @@ export const EventOracleVote = {
     message.feeder = object.feeder ?? "";
     message.oracleVote = object.oracleVote !== undefined && object.oracleVote !== null ? OracleVote.fromPartial(object.oracleVote) : undefined;
     return message;
+  },
+  fromAmino(object: EventOracleVoteAmino): EventOracleVote {
+    const message = createBaseEventOracleVote();
+    if (object.feeder !== undefined && object.feeder !== null) {
+      message.feeder = object.feeder;
+    }
+    if (object.oracle_vote !== undefined && object.oracle_vote !== null) {
+      message.oracleVote = OracleVote.fromAmino(object.oracle_vote);
+    }
+    return message;
+  },
+  toAmino(message: EventOracleVote): EventOracleVoteAmino {
+    const obj: any = {};
+    obj.feeder = message.feeder;
+    obj.oracle_vote = message.oracleVote ? OracleVote.toAmino(message.oracleVote) : undefined;
+    return obj;
+  },
+  fromAminoMsg(object: EventOracleVoteAminoMsg): EventOracleVote {
+    return EventOracleVote.fromAmino(object.value);
+  },
+  fromProtoMsg(message: EventOracleVoteProtoMsg): EventOracleVote {
+    return EventOracleVote.decode(message.value);
+  },
+  toProto(message: EventOracleVote): Uint8Array {
+    return EventOracleVote.encode(message).finish();
+  },
+  toProtoMsg(message: EventOracleVote): EventOracleVoteProtoMsg {
+    return {
+      typeUrl: "/refractedlabs.oracle.v1.EventOracleVote",
+      value: EventOracleVote.encode(message).finish()
+    };
   }
 };
 function createBaseBallotVoteResult(): BallotVoteResult {
@@ -323,6 +545,7 @@ function createBaseBallotVoteResult(): BallotVoteResult {
   };
 }
 export const BallotVoteResult = {
+  typeUrl: "/refractedlabs.oracle.v1.BallotVoteResult",
   encode(message: BallotVoteResult, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.namespace !== "") {
       writer.uint32(10).string(message.namespace);
@@ -423,6 +646,61 @@ export const BallotVoteResult = {
     message.majorityVotePayload = object.majorityVotePayload ?? "";
     message.callbackError = object.callbackError ?? "";
     return message;
+  },
+  fromAmino(object: BallotVoteResultAmino): BallotVoteResult {
+    const message = createBaseBallotVoteResult();
+    if (object.namespace !== undefined && object.namespace !== null) {
+      message.namespace = object.namespace;
+    }
+    if (object.module !== undefined && object.module !== null) {
+      message.module = object.module;
+    }
+    if (object.quorum_reached !== undefined && object.quorum_reached !== null) {
+      message.quorumReached = object.quorum_reached;
+    }
+    if (object.ballot_power !== undefined && object.ballot_power !== null) {
+      message.ballotPower = BigInt(object.ballot_power);
+    }
+    if (object.majority_achieved !== undefined && object.majority_achieved !== null) {
+      message.majorityAchieved = object.majority_achieved;
+    }
+    if (object.majority_vote_type !== undefined && object.majority_vote_type !== null) {
+      message.majorityVoteType = voteTypeFromJSON(object.majority_vote_type);
+    }
+    if (object.majority_vote_payload !== undefined && object.majority_vote_payload !== null) {
+      message.majorityVotePayload = object.majority_vote_payload;
+    }
+    if (object.callback_error !== undefined && object.callback_error !== null) {
+      message.callbackError = object.callback_error;
+    }
+    return message;
+  },
+  toAmino(message: BallotVoteResult): BallotVoteResultAmino {
+    const obj: any = {};
+    obj.namespace = message.namespace;
+    obj.module = message.module;
+    obj.quorum_reached = message.quorumReached;
+    obj.ballot_power = message.ballotPower ? message.ballotPower.toString() : undefined;
+    obj.majority_achieved = message.majorityAchieved;
+    obj.majority_vote_type = voteTypeToJSON(message.majorityVoteType);
+    obj.majority_vote_payload = message.majorityVotePayload;
+    obj.callback_error = message.callbackError;
+    return obj;
+  },
+  fromAminoMsg(object: BallotVoteResultAminoMsg): BallotVoteResult {
+    return BallotVoteResult.fromAmino(object.value);
+  },
+  fromProtoMsg(message: BallotVoteResultProtoMsg): BallotVoteResult {
+    return BallotVoteResult.decode(message.value);
+  },
+  toProto(message: BallotVoteResult): Uint8Array {
+    return BallotVoteResult.encode(message).finish();
+  },
+  toProtoMsg(message: BallotVoteResult): BallotVoteResultProtoMsg {
+    return {
+      typeUrl: "/refractedlabs.oracle.v1.BallotVoteResult",
+      value: BallotVoteResult.encode(message).finish()
+    };
   }
 };
 function createBaseValidatorVoteIntervalSummary(): ValidatorVoteIntervalSummary {
@@ -436,6 +714,7 @@ function createBaseValidatorVoteIntervalSummary(): ValidatorVoteIntervalSummary 
   };
 }
 export const ValidatorVoteIntervalSummary = {
+  typeUrl: "/refractedlabs.oracle.v1.ValidatorVoteIntervalSummary",
   encode(message: ValidatorVoteIntervalSummary, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.validator !== "") {
       writer.uint32(10).string(message.validator);
@@ -522,6 +801,55 @@ export const ValidatorVoteIntervalSummary = {
     message.slashWindowMissCounter = object.slashWindowMissCounter !== undefined && object.slashWindowMissCounter !== null ? BigInt(object.slashWindowMissCounter.toString()) : BigInt(0);
     message.rewards = object.rewards?.map(e => Coin.fromPartial(e)) || [];
     return message;
+  },
+  fromAmino(object: ValidatorVoteIntervalSummaryAmino): ValidatorVoteIntervalSummary {
+    const message = createBaseValidatorVoteIntervalSummary();
+    if (object.validator !== undefined && object.validator !== null) {
+      message.validator = object.validator;
+    }
+    if (object.validator_power !== undefined && object.validator_power !== null) {
+      message.validatorPower = BigInt(object.validator_power);
+    }
+    if (object.voted !== undefined && object.voted !== null) {
+      message.voted = object.voted;
+    }
+    if (object.vote_interval_miss_counter !== undefined && object.vote_interval_miss_counter !== null) {
+      message.voteIntervalMissCounter = BigInt(object.vote_interval_miss_counter);
+    }
+    if (object.slash_window_miss_counter !== undefined && object.slash_window_miss_counter !== null) {
+      message.slashWindowMissCounter = BigInt(object.slash_window_miss_counter);
+    }
+    message.rewards = object.rewards?.map(e => Coin.fromAmino(e)) || [];
+    return message;
+  },
+  toAmino(message: ValidatorVoteIntervalSummary): ValidatorVoteIntervalSummaryAmino {
+    const obj: any = {};
+    obj.validator = message.validator;
+    obj.validator_power = message.validatorPower ? message.validatorPower.toString() : undefined;
+    obj.voted = message.voted;
+    obj.vote_interval_miss_counter = message.voteIntervalMissCounter ? message.voteIntervalMissCounter.toString() : undefined;
+    obj.slash_window_miss_counter = message.slashWindowMissCounter ? message.slashWindowMissCounter.toString() : undefined;
+    if (message.rewards) {
+      obj.rewards = message.rewards.map(e => e ? Coin.toAmino(e) : undefined);
+    } else {
+      obj.rewards = [];
+    }
+    return obj;
+  },
+  fromAminoMsg(object: ValidatorVoteIntervalSummaryAminoMsg): ValidatorVoteIntervalSummary {
+    return ValidatorVoteIntervalSummary.fromAmino(object.value);
+  },
+  fromProtoMsg(message: ValidatorVoteIntervalSummaryProtoMsg): ValidatorVoteIntervalSummary {
+    return ValidatorVoteIntervalSummary.decode(message.value);
+  },
+  toProto(message: ValidatorVoteIntervalSummary): Uint8Array {
+    return ValidatorVoteIntervalSummary.encode(message).finish();
+  },
+  toProtoMsg(message: ValidatorVoteIntervalSummary): ValidatorVoteIntervalSummaryProtoMsg {
+    return {
+      typeUrl: "/refractedlabs.oracle.v1.ValidatorVoteIntervalSummary",
+      value: ValidatorVoteIntervalSummary.encode(message).finish()
+    };
   }
 };
 function createBaseEventVoteIntervalEnds(): EventVoteIntervalEnds {
@@ -535,6 +863,7 @@ function createBaseEventVoteIntervalEnds(): EventVoteIntervalEnds {
   };
 }
 export const EventVoteIntervalEnds = {
+  typeUrl: "/refractedlabs.oracle.v1.EventVoteIntervalEnds",
   encode(message: EventVoteIntervalEnds, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.timeMillis !== BigInt(0)) {
       writer.uint32(8).int64(message.timeMillis);
@@ -625,6 +954,57 @@ export const EventVoteIntervalEnds = {
     message.previousVoteIntervalEndTimeMillis = object.previousVoteIntervalEndTimeMillis !== undefined && object.previousVoteIntervalEndTimeMillis !== null ? BigInt(object.previousVoteIntervalEndTimeMillis.toString()) : BigInt(0);
     message.ballotVoteResults = object.ballotVoteResults?.map(e => BallotVoteResult.fromPartial(e)) || [];
     return message;
+  },
+  fromAmino(object: EventVoteIntervalEndsAmino): EventVoteIntervalEnds {
+    const message = createBaseEventVoteIntervalEnds();
+    if (object.time_millis !== undefined && object.time_millis !== null) {
+      message.timeMillis = BigInt(object.time_millis);
+    }
+    if (object.block_height !== undefined && object.block_height !== null) {
+      message.blockHeight = BigInt(object.block_height);
+    }
+    if (object.vote_period !== undefined && object.vote_period !== null) {
+      message.votePeriod = BigInt(object.vote_period);
+    }
+    message.validatorSummaries = object.validator_summaries?.map(e => ValidatorVoteIntervalSummary.fromAmino(e)) || [];
+    if (object.previous_vote_interval_end_time_millis !== undefined && object.previous_vote_interval_end_time_millis !== null) {
+      message.previousVoteIntervalEndTimeMillis = BigInt(object.previous_vote_interval_end_time_millis);
+    }
+    message.ballotVoteResults = object.ballot_vote_results?.map(e => BallotVoteResult.fromAmino(e)) || [];
+    return message;
+  },
+  toAmino(message: EventVoteIntervalEnds): EventVoteIntervalEndsAmino {
+    const obj: any = {};
+    obj.time_millis = message.timeMillis ? message.timeMillis.toString() : undefined;
+    obj.block_height = message.blockHeight ? message.blockHeight.toString() : undefined;
+    obj.vote_period = message.votePeriod ? message.votePeriod.toString() : undefined;
+    if (message.validatorSummaries) {
+      obj.validator_summaries = message.validatorSummaries.map(e => e ? ValidatorVoteIntervalSummary.toAmino(e) : undefined);
+    } else {
+      obj.validator_summaries = [];
+    }
+    obj.previous_vote_interval_end_time_millis = message.previousVoteIntervalEndTimeMillis ? message.previousVoteIntervalEndTimeMillis.toString() : undefined;
+    if (message.ballotVoteResults) {
+      obj.ballot_vote_results = message.ballotVoteResults.map(e => e ? BallotVoteResult.toAmino(e) : undefined);
+    } else {
+      obj.ballot_vote_results = [];
+    }
+    return obj;
+  },
+  fromAminoMsg(object: EventVoteIntervalEndsAminoMsg): EventVoteIntervalEnds {
+    return EventVoteIntervalEnds.fromAmino(object.value);
+  },
+  fromProtoMsg(message: EventVoteIntervalEndsProtoMsg): EventVoteIntervalEnds {
+    return EventVoteIntervalEnds.decode(message.value);
+  },
+  toProto(message: EventVoteIntervalEnds): Uint8Array {
+    return EventVoteIntervalEnds.encode(message).finish();
+  },
+  toProtoMsg(message: EventVoteIntervalEnds): EventVoteIntervalEndsProtoMsg {
+    return {
+      typeUrl: "/refractedlabs.oracle.v1.EventVoteIntervalEnds",
+      value: EventVoteIntervalEnds.encode(message).finish()
+    };
   }
 };
 function createBaseValidatorSlashWindowSummary(): ValidatorSlashWindowSummary {
@@ -637,6 +1017,7 @@ function createBaseValidatorSlashWindowSummary(): ValidatorSlashWindowSummary {
   };
 }
 export const ValidatorSlashWindowSummary = {
+  typeUrl: "/refractedlabs.oracle.v1.ValidatorSlashWindowSummary",
   encode(message: ValidatorSlashWindowSummary, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.validator !== "") {
       writer.uint32(10).string(message.validator);
@@ -710,6 +1091,49 @@ export const ValidatorSlashWindowSummary = {
     message.jailed = object.jailed ?? false;
     message.slashAmount = object.slashAmount ?? "";
     return message;
+  },
+  fromAmino(object: ValidatorSlashWindowSummaryAmino): ValidatorSlashWindowSummary {
+    const message = createBaseValidatorSlashWindowSummary();
+    if (object.validator !== undefined && object.validator !== null) {
+      message.validator = object.validator;
+    }
+    if (object.validator_power !== undefined && object.validator_power !== null) {
+      message.validatorPower = BigInt(object.validator_power);
+    }
+    if (object.miss_counter !== undefined && object.miss_counter !== null) {
+      message.missCounter = BigInt(object.miss_counter);
+    }
+    if (object.jailed !== undefined && object.jailed !== null) {
+      message.jailed = object.jailed;
+    }
+    if (object.slash_amount !== undefined && object.slash_amount !== null) {
+      message.slashAmount = object.slash_amount;
+    }
+    return message;
+  },
+  toAmino(message: ValidatorSlashWindowSummary): ValidatorSlashWindowSummaryAmino {
+    const obj: any = {};
+    obj.validator = message.validator;
+    obj.validator_power = message.validatorPower ? message.validatorPower.toString() : undefined;
+    obj.miss_counter = message.missCounter ? message.missCounter.toString() : undefined;
+    obj.jailed = message.jailed;
+    obj.slash_amount = message.slashAmount;
+    return obj;
+  },
+  fromAminoMsg(object: ValidatorSlashWindowSummaryAminoMsg): ValidatorSlashWindowSummary {
+    return ValidatorSlashWindowSummary.fromAmino(object.value);
+  },
+  fromProtoMsg(message: ValidatorSlashWindowSummaryProtoMsg): ValidatorSlashWindowSummary {
+    return ValidatorSlashWindowSummary.decode(message.value);
+  },
+  toProto(message: ValidatorSlashWindowSummary): Uint8Array {
+    return ValidatorSlashWindowSummary.encode(message).finish();
+  },
+  toProtoMsg(message: ValidatorSlashWindowSummary): ValidatorSlashWindowSummaryProtoMsg {
+    return {
+      typeUrl: "/refractedlabs.oracle.v1.ValidatorSlashWindowSummary",
+      value: ValidatorSlashWindowSummary.encode(message).finish()
+    };
   }
 };
 function createBaseEventSlashWindowEnds(): EventSlashWindowEnds {
@@ -719,6 +1143,7 @@ function createBaseEventSlashWindowEnds(): EventSlashWindowEnds {
   };
 }
 export const EventSlashWindowEnds = {
+  typeUrl: "/refractedlabs.oracle.v1.EventSlashWindowEnds",
   encode(message: EventSlashWindowEnds, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.slashWindow !== BigInt(0)) {
       writer.uint32(8).int64(message.slashWindow);
@@ -769,6 +1194,39 @@ export const EventSlashWindowEnds = {
     message.slashWindow = object.slashWindow !== undefined && object.slashWindow !== null ? BigInt(object.slashWindow.toString()) : BigInt(0);
     message.validatorSummaries = object.validatorSummaries?.map(e => ValidatorSlashWindowSummary.fromPartial(e)) || [];
     return message;
+  },
+  fromAmino(object: EventSlashWindowEndsAmino): EventSlashWindowEnds {
+    const message = createBaseEventSlashWindowEnds();
+    if (object.slash_window !== undefined && object.slash_window !== null) {
+      message.slashWindow = BigInt(object.slash_window);
+    }
+    message.validatorSummaries = object.validator_summaries?.map(e => ValidatorSlashWindowSummary.fromAmino(e)) || [];
+    return message;
+  },
+  toAmino(message: EventSlashWindowEnds): EventSlashWindowEndsAmino {
+    const obj: any = {};
+    obj.slash_window = message.slashWindow ? message.slashWindow.toString() : undefined;
+    if (message.validatorSummaries) {
+      obj.validator_summaries = message.validatorSummaries.map(e => e ? ValidatorSlashWindowSummary.toAmino(e) : undefined);
+    } else {
+      obj.validator_summaries = [];
+    }
+    return obj;
+  },
+  fromAminoMsg(object: EventSlashWindowEndsAminoMsg): EventSlashWindowEnds {
+    return EventSlashWindowEnds.fromAmino(object.value);
+  },
+  fromProtoMsg(message: EventSlashWindowEndsProtoMsg): EventSlashWindowEnds {
+    return EventSlashWindowEnds.decode(message.value);
+  },
+  toProto(message: EventSlashWindowEnds): Uint8Array {
+    return EventSlashWindowEnds.encode(message).finish();
+  },
+  toProtoMsg(message: EventSlashWindowEnds): EventSlashWindowEndsProtoMsg {
+    return {
+      typeUrl: "/refractedlabs.oracle.v1.EventSlashWindowEnds",
+      value: EventSlashWindowEnds.encode(message).finish()
+    };
   }
 };
 function createBaseEventSetParams(): EventSetParams {
@@ -777,6 +1235,7 @@ function createBaseEventSetParams(): EventSetParams {
   };
 }
 export const EventSetParams = {
+  typeUrl: "/refractedlabs.oracle.v1.EventSetParams",
   encode(message: EventSetParams, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.params !== undefined) {
       Params.encode(message.params, writer.uint32(10).fork()).ldelim();
@@ -814,5 +1273,32 @@ export const EventSetParams = {
     const message = createBaseEventSetParams();
     message.params = object.params !== undefined && object.params !== null ? Params.fromPartial(object.params) : undefined;
     return message;
+  },
+  fromAmino(object: EventSetParamsAmino): EventSetParams {
+    const message = createBaseEventSetParams();
+    if (object.params !== undefined && object.params !== null) {
+      message.params = Params.fromAmino(object.params);
+    }
+    return message;
+  },
+  toAmino(message: EventSetParams): EventSetParamsAmino {
+    const obj: any = {};
+    obj.params = message.params ? Params.toAmino(message.params) : undefined;
+    return obj;
+  },
+  fromAminoMsg(object: EventSetParamsAminoMsg): EventSetParams {
+    return EventSetParams.fromAmino(object.value);
+  },
+  fromProtoMsg(message: EventSetParamsProtoMsg): EventSetParams {
+    return EventSetParams.decode(message.value);
+  },
+  toProto(message: EventSetParams): Uint8Array {
+    return EventSetParams.encode(message).finish();
+  },
+  toProtoMsg(message: EventSetParams): EventSetParamsProtoMsg {
+    return {
+      typeUrl: "/refractedlabs.oracle.v1.EventSetParams",
+      value: EventSetParams.encode(message).finish()
+    };
   }
 };

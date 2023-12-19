@@ -1,10 +1,10 @@
-import { pryzmatics } from "@pryzm-finance/pryzmjs/lib";
+import { createPryzmaticsClient } from "@pryzm-finance/pryzmjs";
 import * as console from "console";
 import { TimeResolutionType } from "@pryzm-finance/pryzmjs/lib/codegen/pryzmatics/common/time_resolution";
 import { PRYZMATICS_ENDPOINT } from "./config";
 
 async function main() {
-    const pryzmaticsClient = await pryzmatics.ClientFactory.createClient({ restEndpoint: PRYZMATICS_ENDPOINT })
+    const pryzmaticsClient = await createPryzmaticsClient({ restEndpoint: PRYZMATICS_ENDPOINT })
 
     const aprs = (await pryzmaticsClient.pryzmatics.historicalPoolApr({
         poolId: 0n,

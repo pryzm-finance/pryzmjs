@@ -16,6 +16,29 @@ export interface Order {
   maxStepSpotPrice: string;
   maxMatchingSpotPrice?: string;
 }
+export interface OrderProtoMsg {
+  typeUrl: "/pryzm.amm.v1.Order";
+  value: Uint8Array;
+}
+export interface OrderAmino {
+  id?: string;
+  creator?: string;
+  pool_id?: string;
+  token_in?: string;
+  token_out?: string;
+  whitelisted_route?: boolean;
+  allow_matching?: boolean;
+  amount_per_step?: string;
+  remaining_amount?: string;
+  deposited_amount?: string;
+  min_millis_interval?: string;
+  max_step_spot_price?: string;
+  max_matching_spot_price?: string;
+}
+export interface OrderAminoMsg {
+  type: "/pryzm.amm.v1.Order";
+  value: OrderAmino;
+}
 export interface OrderSDKType {
   id: bigint;
   creator: string;
@@ -49,6 +72,7 @@ function createBaseOrder(): Order {
   };
 }
 export const Order = {
+  typeUrl: "/pryzm.amm.v1.Order",
   encode(message: Order, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.id !== BigInt(0)) {
       writer.uint32(8).uint64(message.id);
@@ -194,5 +218,80 @@ export const Order = {
     message.maxStepSpotPrice = object.maxStepSpotPrice ?? "";
     message.maxMatchingSpotPrice = object.maxMatchingSpotPrice ?? undefined;
     return message;
+  },
+  fromAmino(object: OrderAmino): Order {
+    const message = createBaseOrder();
+    if (object.id !== undefined && object.id !== null) {
+      message.id = BigInt(object.id);
+    }
+    if (object.creator !== undefined && object.creator !== null) {
+      message.creator = object.creator;
+    }
+    if (object.pool_id !== undefined && object.pool_id !== null) {
+      message.poolId = BigInt(object.pool_id);
+    }
+    if (object.token_in !== undefined && object.token_in !== null) {
+      message.tokenIn = object.token_in;
+    }
+    if (object.token_out !== undefined && object.token_out !== null) {
+      message.tokenOut = object.token_out;
+    }
+    if (object.whitelisted_route !== undefined && object.whitelisted_route !== null) {
+      message.whitelistedRoute = object.whitelisted_route;
+    }
+    if (object.allow_matching !== undefined && object.allow_matching !== null) {
+      message.allowMatching = object.allow_matching;
+    }
+    if (object.amount_per_step !== undefined && object.amount_per_step !== null) {
+      message.amountPerStep = object.amount_per_step;
+    }
+    if (object.remaining_amount !== undefined && object.remaining_amount !== null) {
+      message.remainingAmount = object.remaining_amount;
+    }
+    if (object.deposited_amount !== undefined && object.deposited_amount !== null) {
+      message.depositedAmount = object.deposited_amount;
+    }
+    if (object.min_millis_interval !== undefined && object.min_millis_interval !== null) {
+      message.minMillisInterval = BigInt(object.min_millis_interval);
+    }
+    if (object.max_step_spot_price !== undefined && object.max_step_spot_price !== null) {
+      message.maxStepSpotPrice = object.max_step_spot_price;
+    }
+    if (object.max_matching_spot_price !== undefined && object.max_matching_spot_price !== null) {
+      message.maxMatchingSpotPrice = object.max_matching_spot_price;
+    }
+    return message;
+  },
+  toAmino(message: Order): OrderAmino {
+    const obj: any = {};
+    obj.id = message.id ? message.id.toString() : undefined;
+    obj.creator = message.creator;
+    obj.pool_id = message.poolId ? message.poolId.toString() : undefined;
+    obj.token_in = message.tokenIn;
+    obj.token_out = message.tokenOut;
+    obj.whitelisted_route = message.whitelistedRoute;
+    obj.allow_matching = message.allowMatching;
+    obj.amount_per_step = message.amountPerStep;
+    obj.remaining_amount = message.remainingAmount;
+    obj.deposited_amount = message.depositedAmount;
+    obj.min_millis_interval = message.minMillisInterval ? message.minMillisInterval.toString() : undefined;
+    obj.max_step_spot_price = message.maxStepSpotPrice;
+    obj.max_matching_spot_price = message.maxMatchingSpotPrice;
+    return obj;
+  },
+  fromAminoMsg(object: OrderAminoMsg): Order {
+    return Order.fromAmino(object.value);
+  },
+  fromProtoMsg(message: OrderProtoMsg): Order {
+    return Order.decode(message.value);
+  },
+  toProto(message: Order): Uint8Array {
+    return Order.encode(message).finish();
+  },
+  toProtoMsg(message: Order): OrderProtoMsg {
+    return {
+      typeUrl: "/pryzm.amm.v1.Order",
+      value: Order.encode(message).finish()
+    };
   }
 };

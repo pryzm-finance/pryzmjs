@@ -1,4 +1,3 @@
-//@ts-nocheck
 import { grpc } from "@improbable-eng/grpc-web";
 import { UnaryMethodDefinitionish } from "../../../grpc-web";
 import { DeepPartial } from "../../../helpers";
@@ -17,10 +16,10 @@ export class QueryClientImpl implements Query {
     this.cPExchangeRate = this.cPExchangeRate.bind(this);
   }
   assetState(request: DeepPartial<QueryGetAssetStateRequest>, metadata?: grpc.Metadata): Promise<QueryGetAssetStateResponse> {
-    return this.rpc.unary(QueryAssetStateDesc, QueryGetAssetStateRequest.fromPartial(request), metadata);
+    return this.rpc.unary(QueryAssetStateDesc, QueryGetAssetStateRequest.fromPartial(request as any), metadata);
   }
   cPExchangeRate(request: DeepPartial<QueryGetCPExchangeRateRequest>, metadata?: grpc.Metadata): Promise<QueryGetCPExchangeRateResponse> {
-    return this.rpc.unary(QueryCPExchangeRateDesc, QueryGetCPExchangeRateRequest.fromPartial(request), metadata);
+    return this.rpc.unary(QueryCPExchangeRateDesc, QueryGetCPExchangeRateRequest.fromPartial(request as any), metadata);
   }
 }
 export const QueryDesc = {

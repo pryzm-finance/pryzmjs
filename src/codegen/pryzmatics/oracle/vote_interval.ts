@@ -8,6 +8,21 @@ export interface VoteInterval {
   closeBlockTime: Timestamp;
   slashWindowCloseBlockHeight?: string;
 }
+export interface VoteIntervalProtoMsg {
+  typeUrl: "/pryzmatics.oracle.VoteInterval";
+  value: Uint8Array;
+}
+export interface VoteIntervalAmino {
+  id?: string;
+  vote_period?: string;
+  close_block_height?: string;
+  close_block_time?: string;
+  slash_window_close_block_height?: string;
+}
+export interface VoteIntervalAminoMsg {
+  type: "/pryzmatics.oracle.VoteInterval";
+  value: VoteIntervalAmino;
+}
 export interface VoteIntervalSDKType {
   id: bigint;
   vote_period: bigint;
@@ -25,6 +40,7 @@ function createBaseVoteInterval(): VoteInterval {
   };
 }
 export const VoteInterval = {
+  typeUrl: "/pryzmatics.oracle.VoteInterval",
   encode(message: VoteInterval, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.id !== BigInt(0)) {
       writer.uint32(8).uint64(message.id);
@@ -98,5 +114,48 @@ export const VoteInterval = {
     message.closeBlockTime = object.closeBlockTime !== undefined && object.closeBlockTime !== null ? Timestamp.fromPartial(object.closeBlockTime) : undefined;
     message.slashWindowCloseBlockHeight = object.slashWindowCloseBlockHeight ?? undefined;
     return message;
+  },
+  fromAmino(object: VoteIntervalAmino): VoteInterval {
+    const message = createBaseVoteInterval();
+    if (object.id !== undefined && object.id !== null) {
+      message.id = BigInt(object.id);
+    }
+    if (object.vote_period !== undefined && object.vote_period !== null) {
+      message.votePeriod = BigInt(object.vote_period);
+    }
+    if (object.close_block_height !== undefined && object.close_block_height !== null) {
+      message.closeBlockHeight = BigInt(object.close_block_height);
+    }
+    if (object.close_block_time !== undefined && object.close_block_time !== null) {
+      message.closeBlockTime = Timestamp.fromAmino(object.close_block_time);
+    }
+    if (object.slash_window_close_block_height !== undefined && object.slash_window_close_block_height !== null) {
+      message.slashWindowCloseBlockHeight = object.slash_window_close_block_height;
+    }
+    return message;
+  },
+  toAmino(message: VoteInterval): VoteIntervalAmino {
+    const obj: any = {};
+    obj.id = message.id ? message.id.toString() : undefined;
+    obj.vote_period = message.votePeriod ? message.votePeriod.toString() : undefined;
+    obj.close_block_height = message.closeBlockHeight ? message.closeBlockHeight.toString() : undefined;
+    obj.close_block_time = message.closeBlockTime ? Timestamp.toAmino(message.closeBlockTime) : undefined;
+    obj.slash_window_close_block_height = message.slashWindowCloseBlockHeight;
+    return obj;
+  },
+  fromAminoMsg(object: VoteIntervalAminoMsg): VoteInterval {
+    return VoteInterval.fromAmino(object.value);
+  },
+  fromProtoMsg(message: VoteIntervalProtoMsg): VoteInterval {
+    return VoteInterval.decode(message.value);
+  },
+  toProto(message: VoteInterval): Uint8Array {
+    return VoteInterval.encode(message).finish();
+  },
+  toProtoMsg(message: VoteInterval): VoteIntervalProtoMsg {
+    return {
+      typeUrl: "/pryzmatics.oracle.VoteInterval",
+      value: VoteInterval.encode(message).finish()
+    };
   }
 };

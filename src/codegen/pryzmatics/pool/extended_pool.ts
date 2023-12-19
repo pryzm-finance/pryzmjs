@@ -1,7 +1,7 @@
 import { PoolType, poolTypeFromJSON, poolTypeToJSON } from "../../pryzm/amm/v1/pool";
-import { PoolApr, PoolAprSDKType } from "./pool_apr";
-import { PoolMetrics, PoolMetricsSDKType } from "./pool";
-import { PoolToken, PoolTokenSDKType } from "./pool_token";
+import { PoolApr, PoolAprAmino, PoolAprSDKType } from "./pool_apr";
+import { PoolMetrics, PoolMetricsAmino, PoolMetricsSDKType } from "./pool";
+import { PoolToken, PoolTokenAmino, PoolTokenSDKType } from "./pool_token";
 import { BinaryReader, BinaryWriter } from "../../binary";
 import { Decimal } from "@cosmjs/math";
 import { isSet } from "../../helpers";
@@ -16,6 +16,26 @@ export interface ExtendedPool {
   apr?: PoolApr;
   metrics: PoolMetrics;
   tokens: PoolToken[];
+}
+export interface ExtendedPoolProtoMsg {
+  typeUrl: "/pryzmatics.pool.ExtendedPool";
+  value: Uint8Array;
+}
+export interface ExtendedPoolAmino {
+  id?: string;
+  name?: string;
+  pool_type?: PoolType;
+  lp_denom?: string;
+  lp_supply?: string;
+  lp_price?: string;
+  total_liquidity?: string;
+  apr?: PoolAprAmino;
+  metrics?: PoolMetricsAmino;
+  tokens?: PoolTokenAmino[];
+}
+export interface ExtendedPoolAminoMsg {
+  type: "/pryzmatics.pool.ExtendedPool";
+  value: ExtendedPoolAmino;
 }
 export interface ExtendedPoolSDKType {
   id: bigint;
@@ -44,6 +64,7 @@ function createBaseExtendedPool(): ExtendedPool {
   };
 }
 export const ExtendedPool = {
+  typeUrl: "/pryzmatics.pool.ExtendedPool",
   encode(message: ExtendedPool, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.id !== BigInt(0)) {
       writer.uint32(8).uint64(message.id);
@@ -166,5 +187,70 @@ export const ExtendedPool = {
     message.metrics = object.metrics !== undefined && object.metrics !== null ? PoolMetrics.fromPartial(object.metrics) : undefined;
     message.tokens = object.tokens?.map(e => PoolToken.fromPartial(e)) || [];
     return message;
+  },
+  fromAmino(object: ExtendedPoolAmino): ExtendedPool {
+    const message = createBaseExtendedPool();
+    if (object.id !== undefined && object.id !== null) {
+      message.id = BigInt(object.id);
+    }
+    if (object.name !== undefined && object.name !== null) {
+      message.name = object.name;
+    }
+    if (object.pool_type !== undefined && object.pool_type !== null) {
+      message.poolType = poolTypeFromJSON(object.pool_type);
+    }
+    if (object.lp_denom !== undefined && object.lp_denom !== null) {
+      message.lpDenom = object.lp_denom;
+    }
+    if (object.lp_supply !== undefined && object.lp_supply !== null) {
+      message.lpSupply = object.lp_supply;
+    }
+    if (object.lp_price !== undefined && object.lp_price !== null) {
+      message.lpPrice = object.lp_price;
+    }
+    if (object.total_liquidity !== undefined && object.total_liquidity !== null) {
+      message.totalLiquidity = object.total_liquidity;
+    }
+    if (object.apr !== undefined && object.apr !== null) {
+      message.apr = PoolApr.fromAmino(object.apr);
+    }
+    if (object.metrics !== undefined && object.metrics !== null) {
+      message.metrics = PoolMetrics.fromAmino(object.metrics);
+    }
+    message.tokens = object.tokens?.map(e => PoolToken.fromAmino(e)) || [];
+    return message;
+  },
+  toAmino(message: ExtendedPool): ExtendedPoolAmino {
+    const obj: any = {};
+    obj.id = message.id ? message.id.toString() : undefined;
+    obj.name = message.name;
+    obj.pool_type = poolTypeToJSON(message.poolType);
+    obj.lp_denom = message.lpDenom;
+    obj.lp_supply = message.lpSupply;
+    obj.lp_price = message.lpPrice;
+    obj.total_liquidity = message.totalLiquidity;
+    obj.apr = message.apr ? PoolApr.toAmino(message.apr) : undefined;
+    obj.metrics = message.metrics ? PoolMetrics.toAmino(message.metrics) : undefined;
+    if (message.tokens) {
+      obj.tokens = message.tokens.map(e => e ? PoolToken.toAmino(e) : undefined);
+    } else {
+      obj.tokens = [];
+    }
+    return obj;
+  },
+  fromAminoMsg(object: ExtendedPoolAminoMsg): ExtendedPool {
+    return ExtendedPool.fromAmino(object.value);
+  },
+  fromProtoMsg(message: ExtendedPoolProtoMsg): ExtendedPool {
+    return ExtendedPool.decode(message.value);
+  },
+  toProto(message: ExtendedPool): Uint8Array {
+    return ExtendedPool.encode(message).finish();
+  },
+  toProtoMsg(message: ExtendedPool): ExtendedPoolProtoMsg {
+    return {
+      typeUrl: "/pryzmatics.pool.ExtendedPool",
+      value: ExtendedPool.encode(message).finish()
+    };
   }
 };

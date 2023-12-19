@@ -1,4 +1,3 @@
-//@ts-nocheck
 import { UnaryMethodDefinitionish } from "../../../grpc-web";
 import { DeepPartial } from "../../../helpers";
 import { grpc } from "@improbable-eng/grpc-web";
@@ -31,31 +30,31 @@ export class MsgClientImpl implements Msg {
     this.registerInterchainAccount = this.registerInterchainAccount.bind(this);
   }
   updateParams(request: DeepPartial<MsgUpdateParams>, metadata?: grpc.Metadata): Promise<MsgUpdateParamsResponse> {
-    return this.rpc.unary(MsgUpdateParamsDesc, MsgUpdateParams.fromPartial(request), metadata);
+    return this.rpc.unary(MsgUpdateParamsDesc, MsgUpdateParams.fromPartial(request as any), metadata);
   }
   registerHostChain(request: DeepPartial<MsgRegisterHostChain>, metadata?: grpc.Metadata): Promise<MsgRegisterHostChainResponse> {
-    return this.rpc.unary(MsgRegisterHostChainDesc, MsgRegisterHostChain.fromPartial(request), metadata);
+    return this.rpc.unary(MsgRegisterHostChainDesc, MsgRegisterHostChain.fromPartial(request as any), metadata);
   }
   updateHostChain(request: DeepPartial<MsgUpdateHostChain>, metadata?: grpc.Metadata): Promise<MsgUpdateHostChainResponse> {
-    return this.rpc.unary(MsgUpdateHostChainDesc, MsgUpdateHostChain.fromPartial(request), metadata);
+    return this.rpc.unary(MsgUpdateHostChainDesc, MsgUpdateHostChain.fromPartial(request as any), metadata);
   }
   stake(request: DeepPartial<MsgStake>, metadata?: grpc.Metadata): Promise<MsgStakeResponse> {
-    return this.rpc.unary(MsgStakeDesc, MsgStake.fromPartial(request), metadata);
+    return this.rpc.unary(MsgStakeDesc, MsgStake.fromPartial(request as any), metadata);
   }
   unstake(request: DeepPartial<MsgUnstake>, metadata?: grpc.Metadata): Promise<MsgUnstakeResponse> {
-    return this.rpc.unary(MsgUnstakeDesc, MsgUnstake.fromPartial(request), metadata);
+    return this.rpc.unary(MsgUnstakeDesc, MsgUnstake.fromPartial(request as any), metadata);
   }
   redeemUnstaked(request: DeepPartial<MsgRedeemUnstaked>, metadata?: grpc.Metadata): Promise<MsgRedeemUnstakedResponse> {
-    return this.rpc.unary(MsgRedeemUnstakedDesc, MsgRedeemUnstaked.fromPartial(request), metadata);
+    return this.rpc.unary(MsgRedeemUnstakedDesc, MsgRedeemUnstaked.fromPartial(request as any), metadata);
   }
   instantUnstake(request: DeepPartial<MsgInstantUnstake>, metadata?: grpc.Metadata): Promise<MsgInstantUnstakeResponse> {
-    return this.rpc.unary(MsgInstantUnstakeDesc, MsgInstantUnstake.fromPartial(request), metadata);
+    return this.rpc.unary(MsgInstantUnstakeDesc, MsgInstantUnstake.fromPartial(request as any), metadata);
   }
   rebalanceDelegations(request: DeepPartial<MsgRebalanceDelegations>, metadata?: grpc.Metadata): Promise<MsgRebalanceDelegationsResponse> {
-    return this.rpc.unary(MsgRebalanceDelegationsDesc, MsgRebalanceDelegations.fromPartial(request), metadata);
+    return this.rpc.unary(MsgRebalanceDelegationsDesc, MsgRebalanceDelegations.fromPartial(request as any), metadata);
   }
   registerInterchainAccount(request: DeepPartial<MsgRegisterInterchainAccount>, metadata?: grpc.Metadata): Promise<MsgRegisterInterchainAccountResponse> {
-    return this.rpc.unary(MsgRegisterInterchainAccountDesc, MsgRegisterInterchainAccount.fromPartial(request), metadata);
+    return this.rpc.unary(MsgRegisterInterchainAccountDesc, MsgRegisterInterchainAccount.fromPartial(request as any), metadata);
   }
 }
 export const MsgDesc = {

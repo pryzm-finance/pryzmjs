@@ -1,4 +1,3 @@
-//@ts-nocheck
 import { grpc } from "@improbable-eng/grpc-web";
 import { UnaryMethodDefinitionish } from "../../../grpc-web";
 import { DeepPartial } from "../../../helpers";
@@ -60,31 +59,31 @@ export class ServiceClientImpl implements Service {
     this.txDecodeAmino = this.txDecodeAmino.bind(this);
   }
   simulate(request: DeepPartial<SimulateRequest>, metadata?: grpc.Metadata): Promise<SimulateResponse> {
-    return this.rpc.unary(SimulateDesc, SimulateRequest.fromPartial(request), metadata);
+    return this.rpc.unary(SimulateDesc, SimulateRequest.fromPartial(request as any), metadata);
   }
   getTx(request: DeepPartial<GetTxRequest>, metadata?: grpc.Metadata): Promise<GetTxResponse> {
-    return this.rpc.unary(GetTxDesc, GetTxRequest.fromPartial(request), metadata);
+    return this.rpc.unary(GetTxDesc, GetTxRequest.fromPartial(request as any), metadata);
   }
   broadcastTx(request: DeepPartial<BroadcastTxRequest>, metadata?: grpc.Metadata): Promise<BroadcastTxResponse> {
-    return this.rpc.unary(BroadcastTxDesc, BroadcastTxRequest.fromPartial(request), metadata);
+    return this.rpc.unary(BroadcastTxDesc, BroadcastTxRequest.fromPartial(request as any), metadata);
   }
   getTxsEvent(request: DeepPartial<GetTxsEventRequest>, metadata?: grpc.Metadata): Promise<GetTxsEventResponse> {
-    return this.rpc.unary(GetTxsEventDesc, GetTxsEventRequest.fromPartial(request), metadata);
+    return this.rpc.unary(GetTxsEventDesc, GetTxsEventRequest.fromPartial(request as any), metadata);
   }
   getBlockWithTxs(request: DeepPartial<GetBlockWithTxsRequest>, metadata?: grpc.Metadata): Promise<GetBlockWithTxsResponse> {
-    return this.rpc.unary(GetBlockWithTxsDesc, GetBlockWithTxsRequest.fromPartial(request), metadata);
+    return this.rpc.unary(GetBlockWithTxsDesc, GetBlockWithTxsRequest.fromPartial(request as any), metadata);
   }
   txDecode(request: DeepPartial<TxDecodeRequest>, metadata?: grpc.Metadata): Promise<TxDecodeResponse> {
-    return this.rpc.unary(TxDecodeDesc, TxDecodeRequest.fromPartial(request), metadata);
+    return this.rpc.unary(TxDecodeDesc, TxDecodeRequest.fromPartial(request as any), metadata);
   }
   txEncode(request: DeepPartial<TxEncodeRequest>, metadata?: grpc.Metadata): Promise<TxEncodeResponse> {
-    return this.rpc.unary(TxEncodeDesc, TxEncodeRequest.fromPartial(request), metadata);
+    return this.rpc.unary(TxEncodeDesc, TxEncodeRequest.fromPartial(request as any), metadata);
   }
   txEncodeAmino(request: DeepPartial<TxEncodeAminoRequest>, metadata?: grpc.Metadata): Promise<TxEncodeAminoResponse> {
-    return this.rpc.unary(TxEncodeAminoDesc, TxEncodeAminoRequest.fromPartial(request), metadata);
+    return this.rpc.unary(TxEncodeAminoDesc, TxEncodeAminoRequest.fromPartial(request as any), metadata);
   }
   txDecodeAmino(request: DeepPartial<TxDecodeAminoRequest>, metadata?: grpc.Metadata): Promise<TxDecodeAminoResponse> {
-    return this.rpc.unary(TxDecodeAminoDesc, TxDecodeAminoRequest.fromPartial(request), metadata);
+    return this.rpc.unary(TxDecodeAminoDesc, TxDecodeAminoRequest.fromPartial(request as any), metadata);
   }
 }
 export const ServiceDesc = {

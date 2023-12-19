@@ -1,4 +1,3 @@
-//@ts-nocheck
 import { UnaryMethodDefinitionish } from "../../../grpc-web";
 import { DeepPartial } from "../../../helpers";
 import { grpc } from "@improbable-eng/grpc-web";
@@ -37,16 +36,16 @@ export class MsgClientImpl implements Msg {
     this.setSendEnabled = this.setSendEnabled.bind(this);
   }
   send(request: DeepPartial<MsgSend>, metadata?: grpc.Metadata): Promise<MsgSendResponse> {
-    return this.rpc.unary(MsgSendDesc, MsgSend.fromPartial(request), metadata);
+    return this.rpc.unary(MsgSendDesc, MsgSend.fromPartial(request as any), metadata);
   }
   multiSend(request: DeepPartial<MsgMultiSend>, metadata?: grpc.Metadata): Promise<MsgMultiSendResponse> {
-    return this.rpc.unary(MsgMultiSendDesc, MsgMultiSend.fromPartial(request), metadata);
+    return this.rpc.unary(MsgMultiSendDesc, MsgMultiSend.fromPartial(request as any), metadata);
   }
   updateParams(request: DeepPartial<MsgUpdateParams>, metadata?: grpc.Metadata): Promise<MsgUpdateParamsResponse> {
-    return this.rpc.unary(MsgUpdateParamsDesc, MsgUpdateParams.fromPartial(request), metadata);
+    return this.rpc.unary(MsgUpdateParamsDesc, MsgUpdateParams.fromPartial(request as any), metadata);
   }
   setSendEnabled(request: DeepPartial<MsgSetSendEnabled>, metadata?: grpc.Metadata): Promise<MsgSetSendEnabledResponse> {
-    return this.rpc.unary(MsgSetSendEnabledDesc, MsgSetSendEnabled.fromPartial(request), metadata);
+    return this.rpc.unary(MsgSetSendEnabledDesc, MsgSetSendEnabled.fromPartial(request as any), metadata);
   }
 }
 export const MsgDesc = {

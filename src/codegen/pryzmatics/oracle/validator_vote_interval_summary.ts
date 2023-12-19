@@ -1,4 +1,4 @@
-import { Coin, CoinSDKType } from "../../cosmos/base/v1beta1/coin";
+import { Coin, CoinAmino, CoinSDKType } from "../../cosmos/base/v1beta1/coin";
 import { BinaryReader, BinaryWriter } from "../../binary";
 import { isSet } from "../../helpers";
 export interface ValidatorVoteIntervalSummary {
@@ -8,6 +8,22 @@ export interface ValidatorVoteIntervalSummary {
   voteIntervalMissCounter: bigint;
   slashWindowMissCounter: bigint;
   rewards: Coin[];
+}
+export interface ValidatorVoteIntervalSummaryProtoMsg {
+  typeUrl: "/pryzmatics.oracle.ValidatorVoteIntervalSummary";
+  value: Uint8Array;
+}
+export interface ValidatorVoteIntervalSummaryAmino {
+  validator?: string;
+  vote_interval_close_block_height?: string;
+  validator_power?: string;
+  vote_interval_miss_counter?: string;
+  slash_window_miss_counter?: string;
+  rewards?: CoinAmino[];
+}
+export interface ValidatorVoteIntervalSummaryAminoMsg {
+  type: "/pryzmatics.oracle.ValidatorVoteIntervalSummary";
+  value: ValidatorVoteIntervalSummaryAmino;
 }
 export interface ValidatorVoteIntervalSummarySDKType {
   validator: string;
@@ -28,6 +44,7 @@ function createBaseValidatorVoteIntervalSummary(): ValidatorVoteIntervalSummary 
   };
 }
 export const ValidatorVoteIntervalSummary = {
+  typeUrl: "/pryzmatics.oracle.ValidatorVoteIntervalSummary",
   encode(message: ValidatorVoteIntervalSummary, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.validator !== "") {
       writer.uint32(10).string(message.validator);
@@ -114,5 +131,54 @@ export const ValidatorVoteIntervalSummary = {
     message.slashWindowMissCounter = object.slashWindowMissCounter !== undefined && object.slashWindowMissCounter !== null ? BigInt(object.slashWindowMissCounter.toString()) : BigInt(0);
     message.rewards = object.rewards?.map(e => Coin.fromPartial(e)) || [];
     return message;
+  },
+  fromAmino(object: ValidatorVoteIntervalSummaryAmino): ValidatorVoteIntervalSummary {
+    const message = createBaseValidatorVoteIntervalSummary();
+    if (object.validator !== undefined && object.validator !== null) {
+      message.validator = object.validator;
+    }
+    if (object.vote_interval_close_block_height !== undefined && object.vote_interval_close_block_height !== null) {
+      message.voteIntervalCloseBlockHeight = BigInt(object.vote_interval_close_block_height);
+    }
+    if (object.validator_power !== undefined && object.validator_power !== null) {
+      message.validatorPower = BigInt(object.validator_power);
+    }
+    if (object.vote_interval_miss_counter !== undefined && object.vote_interval_miss_counter !== null) {
+      message.voteIntervalMissCounter = BigInt(object.vote_interval_miss_counter);
+    }
+    if (object.slash_window_miss_counter !== undefined && object.slash_window_miss_counter !== null) {
+      message.slashWindowMissCounter = BigInt(object.slash_window_miss_counter);
+    }
+    message.rewards = object.rewards?.map(e => Coin.fromAmino(e)) || [];
+    return message;
+  },
+  toAmino(message: ValidatorVoteIntervalSummary): ValidatorVoteIntervalSummaryAmino {
+    const obj: any = {};
+    obj.validator = message.validator;
+    obj.vote_interval_close_block_height = message.voteIntervalCloseBlockHeight ? message.voteIntervalCloseBlockHeight.toString() : undefined;
+    obj.validator_power = message.validatorPower ? message.validatorPower.toString() : undefined;
+    obj.vote_interval_miss_counter = message.voteIntervalMissCounter ? message.voteIntervalMissCounter.toString() : undefined;
+    obj.slash_window_miss_counter = message.slashWindowMissCounter ? message.slashWindowMissCounter.toString() : undefined;
+    if (message.rewards) {
+      obj.rewards = message.rewards.map(e => e ? Coin.toAmino(e) : undefined);
+    } else {
+      obj.rewards = [];
+    }
+    return obj;
+  },
+  fromAminoMsg(object: ValidatorVoteIntervalSummaryAminoMsg): ValidatorVoteIntervalSummary {
+    return ValidatorVoteIntervalSummary.fromAmino(object.value);
+  },
+  fromProtoMsg(message: ValidatorVoteIntervalSummaryProtoMsg): ValidatorVoteIntervalSummary {
+    return ValidatorVoteIntervalSummary.decode(message.value);
+  },
+  toProto(message: ValidatorVoteIntervalSummary): Uint8Array {
+    return ValidatorVoteIntervalSummary.encode(message).finish();
+  },
+  toProtoMsg(message: ValidatorVoteIntervalSummary): ValidatorVoteIntervalSummaryProtoMsg {
+    return {
+      typeUrl: "/pryzmatics.oracle.ValidatorVoteIntervalSummary",
+      value: ValidatorVoteIntervalSummary.encode(message).finish()
+    };
   }
 };

@@ -14,6 +14,25 @@ export interface PoolToken {
   priceLpTerms?: string;
   virtual: boolean;
 }
+export interface PoolTokenProtoMsg {
+  typeUrl: "/pryzmatics.pool.PoolToken";
+  value: Uint8Array;
+}
+export interface PoolTokenAmino {
+  denom?: string;
+  type?: TokenType;
+  pool_id?: string;
+  pool_type?: PoolType;
+  pool_lp_denom?: string;
+  balance?: string;
+  weight?: string;
+  price_lp_terms?: string;
+  virtual?: boolean;
+}
+export interface PoolTokenAminoMsg {
+  type: "/pryzmatics.pool.PoolToken";
+  value: PoolTokenAmino;
+}
 export interface PoolTokenSDKType {
   denom: string;
   type: TokenType;
@@ -39,6 +58,7 @@ function createBasePoolToken(): PoolToken {
   };
 }
 export const PoolToken = {
+  typeUrl: "/pryzmatics.pool.PoolToken",
   encode(message: PoolToken, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.denom !== "") {
       writer.uint32(10).string(message.denom);
@@ -148,5 +168,64 @@ export const PoolToken = {
     message.priceLpTerms = object.priceLpTerms ?? undefined;
     message.virtual = object.virtual ?? false;
     return message;
+  },
+  fromAmino(object: PoolTokenAmino): PoolToken {
+    const message = createBasePoolToken();
+    if (object.denom !== undefined && object.denom !== null) {
+      message.denom = object.denom;
+    }
+    if (object.type !== undefined && object.type !== null) {
+      message.type = tokenTypeFromJSON(object.type);
+    }
+    if (object.pool_id !== undefined && object.pool_id !== null) {
+      message.poolId = BigInt(object.pool_id);
+    }
+    if (object.pool_type !== undefined && object.pool_type !== null) {
+      message.poolType = poolTypeFromJSON(object.pool_type);
+    }
+    if (object.pool_lp_denom !== undefined && object.pool_lp_denom !== null) {
+      message.poolLpDenom = object.pool_lp_denom;
+    }
+    if (object.balance !== undefined && object.balance !== null) {
+      message.balance = object.balance;
+    }
+    if (object.weight !== undefined && object.weight !== null) {
+      message.weight = object.weight;
+    }
+    if (object.price_lp_terms !== undefined && object.price_lp_terms !== null) {
+      message.priceLpTerms = object.price_lp_terms;
+    }
+    if (object.virtual !== undefined && object.virtual !== null) {
+      message.virtual = object.virtual;
+    }
+    return message;
+  },
+  toAmino(message: PoolToken): PoolTokenAmino {
+    const obj: any = {};
+    obj.denom = message.denom;
+    obj.type = tokenTypeToJSON(message.type);
+    obj.pool_id = message.poolId ? message.poolId.toString() : undefined;
+    obj.pool_type = poolTypeToJSON(message.poolType);
+    obj.pool_lp_denom = message.poolLpDenom;
+    obj.balance = message.balance;
+    obj.weight = message.weight;
+    obj.price_lp_terms = message.priceLpTerms;
+    obj.virtual = message.virtual;
+    return obj;
+  },
+  fromAminoMsg(object: PoolTokenAminoMsg): PoolToken {
+    return PoolToken.fromAmino(object.value);
+  },
+  fromProtoMsg(message: PoolTokenProtoMsg): PoolToken {
+    return PoolToken.decode(message.value);
+  },
+  toProto(message: PoolToken): Uint8Array {
+    return PoolToken.encode(message).finish();
+  },
+  toProtoMsg(message: PoolToken): PoolTokenProtoMsg {
+    return {
+      typeUrl: "/pryzmatics.pool.PoolToken",
+      value: PoolToken.encode(message).finish()
+    };
   }
 };

@@ -1,4 +1,3 @@
-//@ts-nocheck
 import { UnaryMethodDefinitionish } from "../../../grpc-web";
 import { DeepPartial } from "../../../helpers";
 import { grpc } from "@improbable-eng/grpc-web";
@@ -33,34 +32,34 @@ export class MsgClientImpl implements Msg {
     this.incentivizePool = this.incentivizePool.bind(this);
   }
   updateParams(request: DeepPartial<MsgUpdateParams>, metadata?: grpc.Metadata): Promise<MsgUpdateParamsResponse> {
-    return this.rpc.unary(MsgUpdateParamsDesc, MsgUpdateParams.fromPartial(request), metadata);
+    return this.rpc.unary(MsgUpdateParamsDesc, MsgUpdateParams.fromPartial(request as any), metadata);
   }
   createPool(request: DeepPartial<MsgCreatePool>, metadata?: grpc.Metadata): Promise<MsgCreatePoolResponse> {
-    return this.rpc.unary(MsgCreatePoolDesc, MsgCreatePool.fromPartial(request), metadata);
+    return this.rpc.unary(MsgCreatePoolDesc, MsgCreatePool.fromPartial(request as any), metadata);
   }
   updateRewardTokenWeight(request: DeepPartial<MsgUpdateRewardTokenWeight>, metadata?: grpc.Metadata): Promise<MsgUpdateRewardTokenWeightResponse> {
-    return this.rpc.unary(MsgUpdateRewardTokenWeightDesc, MsgUpdateRewardTokenWeight.fromPartial(request), metadata);
+    return this.rpc.unary(MsgUpdateRewardTokenWeightDesc, MsgUpdateRewardTokenWeight.fromPartial(request as any), metadata);
   }
   addRewardTokenToPool(request: DeepPartial<MsgAddRewardTokenToPool>, metadata?: grpc.Metadata): Promise<MsgAddRewardTokenToPoolResponse> {
-    return this.rpc.unary(MsgAddRewardTokenToPoolDesc, MsgAddRewardTokenToPool.fromPartial(request), metadata);
+    return this.rpc.unary(MsgAddRewardTokenToPoolDesc, MsgAddRewardTokenToPool.fromPartial(request as any), metadata);
   }
   bond(request: DeepPartial<MsgBond>, metadata?: grpc.Metadata): Promise<MsgBondResponse> {
-    return this.rpc.unary(MsgBondDesc, MsgBond.fromPartial(request), metadata);
+    return this.rpc.unary(MsgBondDesc, MsgBond.fromPartial(request as any), metadata);
   }
   unbond(request: DeepPartial<MsgUnbond>, metadata?: grpc.Metadata): Promise<MsgUnbondResponse> {
-    return this.rpc.unary(MsgUnbondDesc, MsgUnbond.fromPartial(request), metadata);
+    return this.rpc.unary(MsgUnbondDesc, MsgUnbond.fromPartial(request as any), metadata);
   }
   claimReward(request: DeepPartial<MsgClaimReward>, metadata?: grpc.Metadata): Promise<MsgClaimRewardResponse> {
-    return this.rpc.unary(MsgClaimRewardDesc, MsgClaimReward.fromPartial(request), metadata);
+    return this.rpc.unary(MsgClaimRewardDesc, MsgClaimReward.fromPartial(request as any), metadata);
   }
   claimUnbonding(request: DeepPartial<MsgClaimUnbonding>, metadata?: grpc.Metadata): Promise<MsgClaimUnbondingResponse> {
-    return this.rpc.unary(MsgClaimUnbondingDesc, MsgClaimUnbonding.fromPartial(request), metadata);
+    return this.rpc.unary(MsgClaimUnbondingDesc, MsgClaimUnbonding.fromPartial(request as any), metadata);
   }
   cancelUnbonding(request: DeepPartial<MsgCancelUnbonding>, metadata?: grpc.Metadata): Promise<MsgCancelUnbondingResponse> {
-    return this.rpc.unary(MsgCancelUnbondingDesc, MsgCancelUnbonding.fromPartial(request), metadata);
+    return this.rpc.unary(MsgCancelUnbondingDesc, MsgCancelUnbonding.fromPartial(request as any), metadata);
   }
   incentivizePool(request: DeepPartial<MsgIncentivizePool>, metadata?: grpc.Metadata): Promise<MsgIncentivizePoolResponse> {
-    return this.rpc.unary(MsgIncentivizePoolDesc, MsgIncentivizePool.fromPartial(request), metadata);
+    return this.rpc.unary(MsgIncentivizePoolDesc, MsgIncentivizePool.fromPartial(request as any), metadata);
   }
 }
 export const MsgDesc = {

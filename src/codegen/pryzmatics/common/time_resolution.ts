@@ -8,6 +8,7 @@ export enum TimeResolutionType {
   UNRECOGNIZED = -1,
 }
 export const TimeResolutionTypeSDKType = TimeResolutionType;
+export const TimeResolutionTypeAmino = TimeResolutionType;
 export function timeResolutionTypeFromJSON(object: any): TimeResolutionType {
   switch (object) {
     case 0:

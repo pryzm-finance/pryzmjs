@@ -1,6 +1,6 @@
 import { Timestamp, TimestampSDKType } from "../../../google/protobuf/timestamp";
-import { Duration, DurationSDKType } from "../../../google/protobuf/duration";
-import { Coin, CoinSDKType } from "../../../cosmos/base/v1beta1/coin";
+import { Duration, DurationAmino, DurationSDKType } from "../../../google/protobuf/duration";
+import { Coin, CoinAmino, CoinSDKType } from "../../../cosmos/base/v1beta1/coin";
 import { BinaryReader, BinaryWriter } from "../../../binary";
 import { Decimal } from "@cosmjs/math";
 import { isSet, fromJsonTimestamp, fromTimestamp } from "../../../helpers";
@@ -16,6 +16,7 @@ export enum FlowStatus {
   UNRECOGNIZED = -1,
 }
 export const FlowStatusSDKType = FlowStatus;
+export const FlowStatusAmino = FlowStatus;
 export function flowStatusFromJSON(object: any): FlowStatus {
   switch (object) {
     case 0:
@@ -129,6 +130,92 @@ export interface Flow {
    */
   exitWindowDuration: Duration;
 }
+export interface FlowProtoMsg {
+  typeUrl: "/refractedlabs.flowtrade.v1.Flow";
+  value: Uint8Array;
+}
+/** Flow holds information and price calculations for a flow trade */
+export interface FlowAmino {
+  /** auto-generated identifier for a flow */
+  id?: string;
+  /** the address of flow creator and owner */
+  creator?: string;
+  /** informational data about the flow */
+  flow_info?: FlowInfoAmino;
+  /** the time that swap distribution starts */
+  start_time?: string;
+  /** the time that flow is ended */
+  end_time?: string;
+  /**
+   * the interval in which the distribution index is updated and hence tokens are swapped
+   * if dist_interval is 0, the flow is updated every time in or out tokens are increased or decreased
+   * if dist_interval is equal to the duration of flow, it means that all of the tokens are swapped once after the flow ends
+   */
+  dist_interval?: DurationAmino;
+  /** the address that the swapped tokens are sent to after the flow ends */
+  treasury_address?: string;
+  /** total amount creator provided to be swapped */
+  total_token_out?: CoinAmino;
+  /** the accepted token to buy the out tokens */
+  token_in_denom?: string;
+  /** the time from then the buyers can claim their purchased tokens */
+  token_out_claimable_after?: string;
+  /** the time from then the flow creator can claim the swapped tokens */
+  token_in_claimable_after?: string;
+  /** whether the flow can be stopped by the flow's creator */
+  stoppable?: boolean;
+  /** whether to allow buyers to claim their tokens immediately after the flow is stopped */
+  allow_immediate_token_out_claim_if_stopped?: boolean;
+  /** whether to allow flow's creator to claim tokens immediately after the flow is stopped */
+  allow_immediate_token_in_claim_if_stopped?: boolean;
+  /** a global index for the amount of purchase that has already been applied */
+  dist_index?: string;
+  /** the last time the dist index is updated */
+  last_dist_update?: string;
+  /** the amount of remaining out tokens to sell */
+  token_out_balance?: string;
+  /** the current amount of token-in provided to buy token-out */
+  token_in_balance?: string;
+  /** the amount of already spent in tokens */
+  spent_token_in?: string;
+  /** the total number of users shares */
+  total_shares?: string;
+  /** the latest price of token-out in terms of token-in */
+  live_price?: string;
+  /** the current status of flow */
+  status?: FlowStatus;
+  /** the amount of creation deposit that should be revenue to the flow creator */
+  creation_deposit?: CoinAmino;
+  /** the fee ratio taken from token-out, this is copied from module params at the time of flow creation */
+  token_out_fee_ratio?: string;
+  /** the fee ratio taken from token-in, this is copied from module params at the time of flow creation */
+  token_in_fee_ratio?: string;
+  /**
+   * if true, the swapped tokens are automatically sent to the treasury address when the flow ends
+   * this option is only available when another module creates a flow using keeper api
+   */
+  automatic_treasury_collection?: boolean;
+  /** the amount of spent in tokens that have been claimed by the flow's creator */
+  claimed_token_in?: string;
+  /** whether the flow is checked out, meaning the creation deposit and any remaining out tokens are transferred back to the creator */
+  checked_out?: boolean;
+  /**
+   * the minimum price for the token-out in terms of token-in.
+   * in each swap interval, if the calculated price is less than this limit, the swap doesn't happen in that turn
+   * Since: v0.4
+   */
+  limit_price?: string;
+  /**
+   * the duration of the exit window before swap interval, in which users can only exit the flow and joining is not permitted
+   * this duration is used to protect joiners from buying the token-out with a higher price when someone joins with a huge amount of token-in
+   * Since: v0.4
+   */
+  exit_window_duration?: DurationAmino;
+}
+export interface FlowAminoMsg {
+  type: "/refractedlabs.flowtrade.v1.Flow";
+  value: FlowAmino;
+}
 /** Flow holds information and price calculations for a flow trade */
 export interface FlowSDKType {
   id: bigint;
@@ -170,6 +257,23 @@ export interface FlowInfo {
   description: string;
   /** a referring url */
   url: string;
+}
+export interface FlowInfoProtoMsg {
+  typeUrl: "/refractedlabs.flowtrade.v1.FlowInfo";
+  value: Uint8Array;
+}
+/** Informational data about the flow */
+export interface FlowInfoAmino {
+  /** a name of the flow */
+  name?: string;
+  /** a short description about the flow */
+  description?: string;
+  /** a referring url */
+  url?: string;
+}
+export interface FlowInfoAminoMsg {
+  type: "/refractedlabs.flowtrade.v1.FlowInfo";
+  value: FlowInfoAmino;
 }
 /** Informational data about the flow */
 export interface FlowInfoSDKType {
@@ -219,6 +323,57 @@ export interface FlowCreationRequest {
    * Since: v0.4
    */
   exitWindowDuration: Duration;
+}
+export interface FlowCreationRequestProtoMsg {
+  typeUrl: "/refractedlabs.flowtrade.v1.FlowCreationRequest";
+  value: Uint8Array;
+}
+/** a structure for requesting a new flow's creation */
+export interface FlowCreationRequestAmino {
+  /** informational data about the flow */
+  flow_info?: FlowInfoAmino;
+  /** the time that swap distribution starts */
+  start_time?: string;
+  /** the time that flow is ended */
+  end_time?: string;
+  /**
+   * the interval in which the distribution index is updated and hence tokens are swapped
+   * if dist_interval is 0, the flow is updated every time in or out tokens are increased or decreased
+   * if dist_interval is equal to the duration of flow, it means that all of the tokens are swapped once after the flow ends
+   */
+  dist_interval?: DurationAmino;
+  /** the address that the swapped tokens are sent to after the flow ends */
+  treasury_address?: string;
+  /** total amount creator provided to be swapped */
+  tokens_out?: CoinAmino;
+  /** the accepted token to buy the out tokens */
+  token_in_denom?: string;
+  /** the time from then the flow buyers can claim their purchased tokens */
+  token_out_claimable_after?: string;
+  /** the time from then the flow creator can claim the swapped tokens */
+  token_in_claimable_after?: string;
+  /** whether the flow can be stopped by the flow's creator */
+  stoppable?: boolean;
+  /** whether to allow buyers to claim their tokens immediately after the flow is stopped */
+  allow_immediate_token_out_claim_if_stopped?: boolean;
+  /** whether to allow flow's creator to claim tokens immediately after the flow is stopped */
+  allow_immediate_token_in_claim_if_stopped?: boolean;
+  /**
+   * the minimum price for the token-out in terms of token-in.
+   * in each swap interval, if the calculated price is less than this limit, the swap doesn't happen in that turn
+   * Since: v0.4
+   */
+  limit_price?: string;
+  /**
+   * the duration of the exit window before swap interval, in which users can only exit the flow and joining is not permitted
+   * this duration is used to protect joiners from buying the token-out with a higher price when someone joins with a huge amount of token-in
+   * Since: v0.4
+   */
+  exit_window_duration?: DurationAmino;
+}
+export interface FlowCreationRequestAminoMsg {
+  type: "/refractedlabs.flowtrade.v1.FlowCreationRequest";
+  value: FlowCreationRequestAmino;
 }
 /** a structure for requesting a new flow's creation */
 export interface FlowCreationRequestSDKType {
@@ -272,6 +427,7 @@ function createBaseFlow(): Flow {
   };
 }
 export const Flow = {
+  typeUrl: "/refractedlabs.flowtrade.v1.Flow",
   encode(message: Flow, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.id !== BigInt(0)) {
       writer.uint32(8).uint64(message.id);
@@ -570,6 +726,149 @@ export const Flow = {
     message.limitPrice = object.limitPrice ?? "";
     message.exitWindowDuration = object.exitWindowDuration !== undefined && object.exitWindowDuration !== null ? Duration.fromPartial(object.exitWindowDuration) : undefined;
     return message;
+  },
+  fromAmino(object: FlowAmino): Flow {
+    const message = createBaseFlow();
+    if (object.id !== undefined && object.id !== null) {
+      message.id = BigInt(object.id);
+    }
+    if (object.creator !== undefined && object.creator !== null) {
+      message.creator = object.creator;
+    }
+    if (object.flow_info !== undefined && object.flow_info !== null) {
+      message.flowInfo = FlowInfo.fromAmino(object.flow_info);
+    }
+    if (object.start_time !== undefined && object.start_time !== null) {
+      message.startTime = Timestamp.fromAmino(object.start_time);
+    }
+    if (object.end_time !== undefined && object.end_time !== null) {
+      message.endTime = Timestamp.fromAmino(object.end_time);
+    }
+    if (object.dist_interval !== undefined && object.dist_interval !== null) {
+      message.distInterval = Duration.fromAmino(object.dist_interval);
+    }
+    if (object.treasury_address !== undefined && object.treasury_address !== null) {
+      message.treasuryAddress = object.treasury_address;
+    }
+    if (object.total_token_out !== undefined && object.total_token_out !== null) {
+      message.totalTokenOut = Coin.fromAmino(object.total_token_out);
+    }
+    if (object.token_in_denom !== undefined && object.token_in_denom !== null) {
+      message.tokenInDenom = object.token_in_denom;
+    }
+    if (object.token_out_claimable_after !== undefined && object.token_out_claimable_after !== null) {
+      message.tokenOutClaimableAfter = Timestamp.fromAmino(object.token_out_claimable_after);
+    }
+    if (object.token_in_claimable_after !== undefined && object.token_in_claimable_after !== null) {
+      message.tokenInClaimableAfter = Timestamp.fromAmino(object.token_in_claimable_after);
+    }
+    if (object.stoppable !== undefined && object.stoppable !== null) {
+      message.stoppable = object.stoppable;
+    }
+    if (object.allow_immediate_token_out_claim_if_stopped !== undefined && object.allow_immediate_token_out_claim_if_stopped !== null) {
+      message.allowImmediateTokenOutClaimIfStopped = object.allow_immediate_token_out_claim_if_stopped;
+    }
+    if (object.allow_immediate_token_in_claim_if_stopped !== undefined && object.allow_immediate_token_in_claim_if_stopped !== null) {
+      message.allowImmediateTokenInClaimIfStopped = object.allow_immediate_token_in_claim_if_stopped;
+    }
+    if (object.dist_index !== undefined && object.dist_index !== null) {
+      message.distIndex = object.dist_index;
+    }
+    if (object.last_dist_update !== undefined && object.last_dist_update !== null) {
+      message.lastDistUpdate = Timestamp.fromAmino(object.last_dist_update);
+    }
+    if (object.token_out_balance !== undefined && object.token_out_balance !== null) {
+      message.tokenOutBalance = object.token_out_balance;
+    }
+    if (object.token_in_balance !== undefined && object.token_in_balance !== null) {
+      message.tokenInBalance = object.token_in_balance;
+    }
+    if (object.spent_token_in !== undefined && object.spent_token_in !== null) {
+      message.spentTokenIn = object.spent_token_in;
+    }
+    if (object.total_shares !== undefined && object.total_shares !== null) {
+      message.totalShares = object.total_shares;
+    }
+    if (object.live_price !== undefined && object.live_price !== null) {
+      message.livePrice = object.live_price;
+    }
+    if (object.status !== undefined && object.status !== null) {
+      message.status = flowStatusFromJSON(object.status);
+    }
+    if (object.creation_deposit !== undefined && object.creation_deposit !== null) {
+      message.creationDeposit = Coin.fromAmino(object.creation_deposit);
+    }
+    if (object.token_out_fee_ratio !== undefined && object.token_out_fee_ratio !== null) {
+      message.tokenOutFeeRatio = object.token_out_fee_ratio;
+    }
+    if (object.token_in_fee_ratio !== undefined && object.token_in_fee_ratio !== null) {
+      message.tokenInFeeRatio = object.token_in_fee_ratio;
+    }
+    if (object.automatic_treasury_collection !== undefined && object.automatic_treasury_collection !== null) {
+      message.automaticTreasuryCollection = object.automatic_treasury_collection;
+    }
+    if (object.claimed_token_in !== undefined && object.claimed_token_in !== null) {
+      message.claimedTokenIn = object.claimed_token_in;
+    }
+    if (object.checked_out !== undefined && object.checked_out !== null) {
+      message.checkedOut = object.checked_out;
+    }
+    if (object.limit_price !== undefined && object.limit_price !== null) {
+      message.limitPrice = object.limit_price;
+    }
+    if (object.exit_window_duration !== undefined && object.exit_window_duration !== null) {
+      message.exitWindowDuration = Duration.fromAmino(object.exit_window_duration);
+    }
+    return message;
+  },
+  toAmino(message: Flow): FlowAmino {
+    const obj: any = {};
+    obj.id = message.id ? message.id.toString() : undefined;
+    obj.creator = message.creator;
+    obj.flow_info = message.flowInfo ? FlowInfo.toAmino(message.flowInfo) : undefined;
+    obj.start_time = message.startTime ? Timestamp.toAmino(message.startTime) : undefined;
+    obj.end_time = message.endTime ? Timestamp.toAmino(message.endTime) : undefined;
+    obj.dist_interval = message.distInterval ? Duration.toAmino(message.distInterval) : undefined;
+    obj.treasury_address = message.treasuryAddress;
+    obj.total_token_out = message.totalTokenOut ? Coin.toAmino(message.totalTokenOut) : undefined;
+    obj.token_in_denom = message.tokenInDenom;
+    obj.token_out_claimable_after = message.tokenOutClaimableAfter ? Timestamp.toAmino(message.tokenOutClaimableAfter) : undefined;
+    obj.token_in_claimable_after = message.tokenInClaimableAfter ? Timestamp.toAmino(message.tokenInClaimableAfter) : undefined;
+    obj.stoppable = message.stoppable;
+    obj.allow_immediate_token_out_claim_if_stopped = message.allowImmediateTokenOutClaimIfStopped;
+    obj.allow_immediate_token_in_claim_if_stopped = message.allowImmediateTokenInClaimIfStopped;
+    obj.dist_index = message.distIndex;
+    obj.last_dist_update = message.lastDistUpdate ? Timestamp.toAmino(message.lastDistUpdate) : undefined;
+    obj.token_out_balance = message.tokenOutBalance;
+    obj.token_in_balance = message.tokenInBalance;
+    obj.spent_token_in = message.spentTokenIn;
+    obj.total_shares = message.totalShares;
+    obj.live_price = message.livePrice;
+    obj.status = flowStatusToJSON(message.status);
+    obj.creation_deposit = message.creationDeposit ? Coin.toAmino(message.creationDeposit) : undefined;
+    obj.token_out_fee_ratio = message.tokenOutFeeRatio;
+    obj.token_in_fee_ratio = message.tokenInFeeRatio;
+    obj.automatic_treasury_collection = message.automaticTreasuryCollection;
+    obj.claimed_token_in = message.claimedTokenIn;
+    obj.checked_out = message.checkedOut;
+    obj.limit_price = message.limitPrice;
+    obj.exit_window_duration = message.exitWindowDuration ? Duration.toAmino(message.exitWindowDuration) : undefined;
+    return obj;
+  },
+  fromAminoMsg(object: FlowAminoMsg): Flow {
+    return Flow.fromAmino(object.value);
+  },
+  fromProtoMsg(message: FlowProtoMsg): Flow {
+    return Flow.decode(message.value);
+  },
+  toProto(message: Flow): Uint8Array {
+    return Flow.encode(message).finish();
+  },
+  toProtoMsg(message: Flow): FlowProtoMsg {
+    return {
+      typeUrl: "/refractedlabs.flowtrade.v1.Flow",
+      value: Flow.encode(message).finish()
+    };
   }
 };
 function createBaseFlowInfo(): FlowInfo {
@@ -580,6 +879,7 @@ function createBaseFlowInfo(): FlowInfo {
   };
 }
 export const FlowInfo = {
+  typeUrl: "/refractedlabs.flowtrade.v1.FlowInfo",
   encode(message: FlowInfo, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.name !== "") {
       writer.uint32(10).string(message.name);
@@ -635,6 +935,41 @@ export const FlowInfo = {
     message.description = object.description ?? "";
     message.url = object.url ?? "";
     return message;
+  },
+  fromAmino(object: FlowInfoAmino): FlowInfo {
+    const message = createBaseFlowInfo();
+    if (object.name !== undefined && object.name !== null) {
+      message.name = object.name;
+    }
+    if (object.description !== undefined && object.description !== null) {
+      message.description = object.description;
+    }
+    if (object.url !== undefined && object.url !== null) {
+      message.url = object.url;
+    }
+    return message;
+  },
+  toAmino(message: FlowInfo): FlowInfoAmino {
+    const obj: any = {};
+    obj.name = message.name;
+    obj.description = message.description;
+    obj.url = message.url;
+    return obj;
+  },
+  fromAminoMsg(object: FlowInfoAminoMsg): FlowInfo {
+    return FlowInfo.fromAmino(object.value);
+  },
+  fromProtoMsg(message: FlowInfoProtoMsg): FlowInfo {
+    return FlowInfo.decode(message.value);
+  },
+  toProto(message: FlowInfo): Uint8Array {
+    return FlowInfo.encode(message).finish();
+  },
+  toProtoMsg(message: FlowInfo): FlowInfoProtoMsg {
+    return {
+      typeUrl: "/refractedlabs.flowtrade.v1.FlowInfo",
+      value: FlowInfo.encode(message).finish()
+    };
   }
 };
 function createBaseFlowCreationRequest(): FlowCreationRequest {
@@ -656,6 +991,7 @@ function createBaseFlowCreationRequest(): FlowCreationRequest {
   };
 }
 export const FlowCreationRequest = {
+  typeUrl: "/refractedlabs.flowtrade.v1.FlowCreationRequest",
   encode(message: FlowCreationRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.flowInfo !== undefined) {
       FlowInfo.encode(message.flowInfo, writer.uint32(10).fork()).ldelim();
@@ -810,5 +1146,84 @@ export const FlowCreationRequest = {
     message.limitPrice = object.limitPrice ?? "";
     message.exitWindowDuration = object.exitWindowDuration !== undefined && object.exitWindowDuration !== null ? Duration.fromPartial(object.exitWindowDuration) : undefined;
     return message;
+  },
+  fromAmino(object: FlowCreationRequestAmino): FlowCreationRequest {
+    const message = createBaseFlowCreationRequest();
+    if (object.flow_info !== undefined && object.flow_info !== null) {
+      message.flowInfo = FlowInfo.fromAmino(object.flow_info);
+    }
+    if (object.start_time !== undefined && object.start_time !== null) {
+      message.startTime = Timestamp.fromAmino(object.start_time);
+    }
+    if (object.end_time !== undefined && object.end_time !== null) {
+      message.endTime = Timestamp.fromAmino(object.end_time);
+    }
+    if (object.dist_interval !== undefined && object.dist_interval !== null) {
+      message.distInterval = Duration.fromAmino(object.dist_interval);
+    }
+    if (object.treasury_address !== undefined && object.treasury_address !== null) {
+      message.treasuryAddress = object.treasury_address;
+    }
+    if (object.tokens_out !== undefined && object.tokens_out !== null) {
+      message.tokensOut = Coin.fromAmino(object.tokens_out);
+    }
+    if (object.token_in_denom !== undefined && object.token_in_denom !== null) {
+      message.tokenInDenom = object.token_in_denom;
+    }
+    if (object.token_out_claimable_after !== undefined && object.token_out_claimable_after !== null) {
+      message.tokenOutClaimableAfter = Timestamp.fromAmino(object.token_out_claimable_after);
+    }
+    if (object.token_in_claimable_after !== undefined && object.token_in_claimable_after !== null) {
+      message.tokenInClaimableAfter = Timestamp.fromAmino(object.token_in_claimable_after);
+    }
+    if (object.stoppable !== undefined && object.stoppable !== null) {
+      message.stoppable = object.stoppable;
+    }
+    if (object.allow_immediate_token_out_claim_if_stopped !== undefined && object.allow_immediate_token_out_claim_if_stopped !== null) {
+      message.allowImmediateTokenOutClaimIfStopped = object.allow_immediate_token_out_claim_if_stopped;
+    }
+    if (object.allow_immediate_token_in_claim_if_stopped !== undefined && object.allow_immediate_token_in_claim_if_stopped !== null) {
+      message.allowImmediateTokenInClaimIfStopped = object.allow_immediate_token_in_claim_if_stopped;
+    }
+    if (object.limit_price !== undefined && object.limit_price !== null) {
+      message.limitPrice = object.limit_price;
+    }
+    if (object.exit_window_duration !== undefined && object.exit_window_duration !== null) {
+      message.exitWindowDuration = Duration.fromAmino(object.exit_window_duration);
+    }
+    return message;
+  },
+  toAmino(message: FlowCreationRequest): FlowCreationRequestAmino {
+    const obj: any = {};
+    obj.flow_info = message.flowInfo ? FlowInfo.toAmino(message.flowInfo) : undefined;
+    obj.start_time = message.startTime ? Timestamp.toAmino(message.startTime) : undefined;
+    obj.end_time = message.endTime ? Timestamp.toAmino(message.endTime) : undefined;
+    obj.dist_interval = message.distInterval ? Duration.toAmino(message.distInterval) : undefined;
+    obj.treasury_address = message.treasuryAddress;
+    obj.tokens_out = message.tokensOut ? Coin.toAmino(message.tokensOut) : undefined;
+    obj.token_in_denom = message.tokenInDenom;
+    obj.token_out_claimable_after = message.tokenOutClaimableAfter ? Timestamp.toAmino(message.tokenOutClaimableAfter) : undefined;
+    obj.token_in_claimable_after = message.tokenInClaimableAfter ? Timestamp.toAmino(message.tokenInClaimableAfter) : undefined;
+    obj.stoppable = message.stoppable;
+    obj.allow_immediate_token_out_claim_if_stopped = message.allowImmediateTokenOutClaimIfStopped;
+    obj.allow_immediate_token_in_claim_if_stopped = message.allowImmediateTokenInClaimIfStopped;
+    obj.limit_price = message.limitPrice;
+    obj.exit_window_duration = message.exitWindowDuration ? Duration.toAmino(message.exitWindowDuration) : undefined;
+    return obj;
+  },
+  fromAminoMsg(object: FlowCreationRequestAminoMsg): FlowCreationRequest {
+    return FlowCreationRequest.fromAmino(object.value);
+  },
+  fromProtoMsg(message: FlowCreationRequestProtoMsg): FlowCreationRequest {
+    return FlowCreationRequest.decode(message.value);
+  },
+  toProto(message: FlowCreationRequest): Uint8Array {
+    return FlowCreationRequest.encode(message).finish();
+  },
+  toProtoMsg(message: FlowCreationRequest): FlowCreationRequestProtoMsg {
+    return {
+      typeUrl: "/refractedlabs.flowtrade.v1.FlowCreationRequest",
+      value: FlowCreationRequest.encode(message).finish()
+    };
   }
 };

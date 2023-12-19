@@ -1,9 +1,20 @@
-import { Validator, ValidatorSDKType } from "../../oracle/validator";
-import { PageRequest, PageRequestSDKType, PageResponse, PageResponseSDKType } from "../../../cosmos/base/query/v1beta1/pagination";
+import { Validator, ValidatorAmino, ValidatorSDKType } from "../../oracle/validator";
+import { PageRequest, PageRequestAmino, PageRequestSDKType, PageResponse, PageResponseAmino, PageResponseSDKType } from "../../../cosmos/base/query/v1beta1/pagination";
 import { BinaryReader, BinaryWriter } from "../../../binary";
 import { isSet } from "../../../helpers";
 export interface QueryValidatorRequest {
   operatorAddress: string;
+}
+export interface QueryValidatorRequestProtoMsg {
+  typeUrl: "/pryzmatics.server.oracle.QueryValidatorRequest";
+  value: Uint8Array;
+}
+export interface QueryValidatorRequestAmino {
+  operator_address?: string;
+}
+export interface QueryValidatorRequestAminoMsg {
+  type: "/pryzmatics.server.oracle.QueryValidatorRequest";
+  value: QueryValidatorRequestAmino;
 }
 export interface QueryValidatorRequestSDKType {
   operator_address: string;
@@ -11,11 +22,33 @@ export interface QueryValidatorRequestSDKType {
 export interface QueryValidatorResponse {
   validator: Validator;
 }
+export interface QueryValidatorResponseProtoMsg {
+  typeUrl: "/pryzmatics.server.oracle.QueryValidatorResponse";
+  value: Uint8Array;
+}
+export interface QueryValidatorResponseAmino {
+  validator?: ValidatorAmino;
+}
+export interface QueryValidatorResponseAminoMsg {
+  type: "/pryzmatics.server.oracle.QueryValidatorResponse";
+  value: QueryValidatorResponseAmino;
+}
 export interface QueryValidatorResponseSDKType {
   validator: ValidatorSDKType;
 }
 export interface QueryValidatorsRequest {
   pagination?: PageRequest;
+}
+export interface QueryValidatorsRequestProtoMsg {
+  typeUrl: "/pryzmatics.server.oracle.QueryValidatorsRequest";
+  value: Uint8Array;
+}
+export interface QueryValidatorsRequestAmino {
+  pagination?: PageRequestAmino;
+}
+export interface QueryValidatorsRequestAminoMsg {
+  type: "/pryzmatics.server.oracle.QueryValidatorsRequest";
+  value: QueryValidatorsRequestAmino;
 }
 export interface QueryValidatorsRequestSDKType {
   pagination?: PageRequestSDKType;
@@ -23,6 +56,18 @@ export interface QueryValidatorsRequestSDKType {
 export interface QueryValidatorsResponse {
   validators: Validator[];
   pagination?: PageResponse;
+}
+export interface QueryValidatorsResponseProtoMsg {
+  typeUrl: "/pryzmatics.server.oracle.QueryValidatorsResponse";
+  value: Uint8Array;
+}
+export interface QueryValidatorsResponseAmino {
+  validators?: ValidatorAmino[];
+  pagination?: PageResponseAmino;
+}
+export interface QueryValidatorsResponseAminoMsg {
+  type: "/pryzmatics.server.oracle.QueryValidatorsResponse";
+  value: QueryValidatorsResponseAmino;
 }
 export interface QueryValidatorsResponseSDKType {
   validators: ValidatorSDKType[];
@@ -34,6 +79,7 @@ function createBaseQueryValidatorRequest(): QueryValidatorRequest {
   };
 }
 export const QueryValidatorRequest = {
+  typeUrl: "/pryzmatics.server.oracle.QueryValidatorRequest",
   encode(message: QueryValidatorRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.operatorAddress !== "") {
       writer.uint32(10).string(message.operatorAddress);
@@ -71,6 +117,33 @@ export const QueryValidatorRequest = {
     const message = createBaseQueryValidatorRequest();
     message.operatorAddress = object.operatorAddress ?? "";
     return message;
+  },
+  fromAmino(object: QueryValidatorRequestAmino): QueryValidatorRequest {
+    const message = createBaseQueryValidatorRequest();
+    if (object.operator_address !== undefined && object.operator_address !== null) {
+      message.operatorAddress = object.operator_address;
+    }
+    return message;
+  },
+  toAmino(message: QueryValidatorRequest): QueryValidatorRequestAmino {
+    const obj: any = {};
+    obj.operator_address = message.operatorAddress;
+    return obj;
+  },
+  fromAminoMsg(object: QueryValidatorRequestAminoMsg): QueryValidatorRequest {
+    return QueryValidatorRequest.fromAmino(object.value);
+  },
+  fromProtoMsg(message: QueryValidatorRequestProtoMsg): QueryValidatorRequest {
+    return QueryValidatorRequest.decode(message.value);
+  },
+  toProto(message: QueryValidatorRequest): Uint8Array {
+    return QueryValidatorRequest.encode(message).finish();
+  },
+  toProtoMsg(message: QueryValidatorRequest): QueryValidatorRequestProtoMsg {
+    return {
+      typeUrl: "/pryzmatics.server.oracle.QueryValidatorRequest",
+      value: QueryValidatorRequest.encode(message).finish()
+    };
   }
 };
 function createBaseQueryValidatorResponse(): QueryValidatorResponse {
@@ -79,6 +152,7 @@ function createBaseQueryValidatorResponse(): QueryValidatorResponse {
   };
 }
 export const QueryValidatorResponse = {
+  typeUrl: "/pryzmatics.server.oracle.QueryValidatorResponse",
   encode(message: QueryValidatorResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.validator !== undefined) {
       Validator.encode(message.validator, writer.uint32(10).fork()).ldelim();
@@ -116,6 +190,33 @@ export const QueryValidatorResponse = {
     const message = createBaseQueryValidatorResponse();
     message.validator = object.validator !== undefined && object.validator !== null ? Validator.fromPartial(object.validator) : undefined;
     return message;
+  },
+  fromAmino(object: QueryValidatorResponseAmino): QueryValidatorResponse {
+    const message = createBaseQueryValidatorResponse();
+    if (object.validator !== undefined && object.validator !== null) {
+      message.validator = Validator.fromAmino(object.validator);
+    }
+    return message;
+  },
+  toAmino(message: QueryValidatorResponse): QueryValidatorResponseAmino {
+    const obj: any = {};
+    obj.validator = message.validator ? Validator.toAmino(message.validator) : undefined;
+    return obj;
+  },
+  fromAminoMsg(object: QueryValidatorResponseAminoMsg): QueryValidatorResponse {
+    return QueryValidatorResponse.fromAmino(object.value);
+  },
+  fromProtoMsg(message: QueryValidatorResponseProtoMsg): QueryValidatorResponse {
+    return QueryValidatorResponse.decode(message.value);
+  },
+  toProto(message: QueryValidatorResponse): Uint8Array {
+    return QueryValidatorResponse.encode(message).finish();
+  },
+  toProtoMsg(message: QueryValidatorResponse): QueryValidatorResponseProtoMsg {
+    return {
+      typeUrl: "/pryzmatics.server.oracle.QueryValidatorResponse",
+      value: QueryValidatorResponse.encode(message).finish()
+    };
   }
 };
 function createBaseQueryValidatorsRequest(): QueryValidatorsRequest {
@@ -124,6 +225,7 @@ function createBaseQueryValidatorsRequest(): QueryValidatorsRequest {
   };
 }
 export const QueryValidatorsRequest = {
+  typeUrl: "/pryzmatics.server.oracle.QueryValidatorsRequest",
   encode(message: QueryValidatorsRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.pagination !== undefined) {
       PageRequest.encode(message.pagination, writer.uint32(10).fork()).ldelim();
@@ -161,6 +263,33 @@ export const QueryValidatorsRequest = {
     const message = createBaseQueryValidatorsRequest();
     message.pagination = object.pagination !== undefined && object.pagination !== null ? PageRequest.fromPartial(object.pagination) : undefined;
     return message;
+  },
+  fromAmino(object: QueryValidatorsRequestAmino): QueryValidatorsRequest {
+    const message = createBaseQueryValidatorsRequest();
+    if (object.pagination !== undefined && object.pagination !== null) {
+      message.pagination = PageRequest.fromAmino(object.pagination);
+    }
+    return message;
+  },
+  toAmino(message: QueryValidatorsRequest): QueryValidatorsRequestAmino {
+    const obj: any = {};
+    obj.pagination = message.pagination ? PageRequest.toAmino(message.pagination) : undefined;
+    return obj;
+  },
+  fromAminoMsg(object: QueryValidatorsRequestAminoMsg): QueryValidatorsRequest {
+    return QueryValidatorsRequest.fromAmino(object.value);
+  },
+  fromProtoMsg(message: QueryValidatorsRequestProtoMsg): QueryValidatorsRequest {
+    return QueryValidatorsRequest.decode(message.value);
+  },
+  toProto(message: QueryValidatorsRequest): Uint8Array {
+    return QueryValidatorsRequest.encode(message).finish();
+  },
+  toProtoMsg(message: QueryValidatorsRequest): QueryValidatorsRequestProtoMsg {
+    return {
+      typeUrl: "/pryzmatics.server.oracle.QueryValidatorsRequest",
+      value: QueryValidatorsRequest.encode(message).finish()
+    };
   }
 };
 function createBaseQueryValidatorsResponse(): QueryValidatorsResponse {
@@ -170,6 +299,7 @@ function createBaseQueryValidatorsResponse(): QueryValidatorsResponse {
   };
 }
 export const QueryValidatorsResponse = {
+  typeUrl: "/pryzmatics.server.oracle.QueryValidatorsResponse",
   encode(message: QueryValidatorsResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     for (const v of message.validators) {
       Validator.encode(v!, writer.uint32(10).fork()).ldelim();
@@ -220,5 +350,38 @@ export const QueryValidatorsResponse = {
     message.validators = object.validators?.map(e => Validator.fromPartial(e)) || [];
     message.pagination = object.pagination !== undefined && object.pagination !== null ? PageResponse.fromPartial(object.pagination) : undefined;
     return message;
+  },
+  fromAmino(object: QueryValidatorsResponseAmino): QueryValidatorsResponse {
+    const message = createBaseQueryValidatorsResponse();
+    message.validators = object.validators?.map(e => Validator.fromAmino(e)) || [];
+    if (object.pagination !== undefined && object.pagination !== null) {
+      message.pagination = PageResponse.fromAmino(object.pagination);
+    }
+    return message;
+  },
+  toAmino(message: QueryValidatorsResponse): QueryValidatorsResponseAmino {
+    const obj: any = {};
+    if (message.validators) {
+      obj.validators = message.validators.map(e => e ? Validator.toAmino(e) : undefined);
+    } else {
+      obj.validators = [];
+    }
+    obj.pagination = message.pagination ? PageResponse.toAmino(message.pagination) : undefined;
+    return obj;
+  },
+  fromAminoMsg(object: QueryValidatorsResponseAminoMsg): QueryValidatorsResponse {
+    return QueryValidatorsResponse.fromAmino(object.value);
+  },
+  fromProtoMsg(message: QueryValidatorsResponseProtoMsg): QueryValidatorsResponse {
+    return QueryValidatorsResponse.decode(message.value);
+  },
+  toProto(message: QueryValidatorsResponse): Uint8Array {
+    return QueryValidatorsResponse.encode(message).finish();
+  },
+  toProtoMsg(message: QueryValidatorsResponse): QueryValidatorsResponseProtoMsg {
+    return {
+      typeUrl: "/pryzmatics.server.oracle.QueryValidatorsResponse",
+      value: QueryValidatorsResponse.encode(message).finish()
+    };
   }
 };

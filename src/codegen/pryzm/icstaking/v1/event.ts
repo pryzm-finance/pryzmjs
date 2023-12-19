@@ -1,11 +1,22 @@
-import { HostChain, HostChainSDKType, HostChainState, HostChainStateSDKType } from "./host_chain";
-import { Params, ParamsSDKType } from "./params";
-import { Undelegation, UndelegationSDKType, ChannelUndelegation, ChannelUndelegationSDKType } from "./undelegation";
-import { Coin, CoinSDKType } from "../../../cosmos/base/v1beta1/coin";
+import { HostChain, HostChainAmino, HostChainSDKType, HostChainState, HostChainStateAmino, HostChainStateSDKType } from "./host_chain";
+import { Params, ParamsAmino, ParamsSDKType } from "./params";
+import { Undelegation, UndelegationAmino, UndelegationSDKType, ChannelUndelegation, ChannelUndelegationAmino, ChannelUndelegationSDKType } from "./undelegation";
+import { Coin, CoinAmino, CoinSDKType } from "../../../cosmos/base/v1beta1/coin";
 import { BinaryReader, BinaryWriter } from "../../../binary";
 import { isSet } from "../../../helpers";
 export interface EventSetHostChain {
   hostChain: HostChain;
+}
+export interface EventSetHostChainProtoMsg {
+  typeUrl: "/pryzm.icstaking.v1.EventSetHostChain";
+  value: Uint8Array;
+}
+export interface EventSetHostChainAmino {
+  host_chain?: HostChainAmino;
+}
+export interface EventSetHostChainAminoMsg {
+  type: "/pryzm.icstaking.v1.EventSetHostChain";
+  value: EventSetHostChainAmino;
 }
 export interface EventSetHostChainSDKType {
   host_chain: HostChainSDKType;
@@ -13,11 +24,33 @@ export interface EventSetHostChainSDKType {
 export interface EventSetHostChainState {
   hostChainState: HostChainState;
 }
+export interface EventSetHostChainStateProtoMsg {
+  typeUrl: "/pryzm.icstaking.v1.EventSetHostChainState";
+  value: Uint8Array;
+}
+export interface EventSetHostChainStateAmino {
+  host_chain_state?: HostChainStateAmino;
+}
+export interface EventSetHostChainStateAminoMsg {
+  type: "/pryzm.icstaking.v1.EventSetHostChainState";
+  value: EventSetHostChainStateAmino;
+}
 export interface EventSetHostChainStateSDKType {
   host_chain_state: HostChainStateSDKType;
 }
 export interface EventSetParams {
   params: Params;
+}
+export interface EventSetParamsProtoMsg {
+  typeUrl: "/pryzm.icstaking.v1.EventSetParams";
+  value: Uint8Array;
+}
+export interface EventSetParamsAmino {
+  params?: ParamsAmino;
+}
+export interface EventSetParamsAminoMsg {
+  type: "/pryzm.icstaking.v1.EventSetParams";
+  value: EventSetParamsAmino;
 }
 export interface EventSetParamsSDKType {
   params: ParamsSDKType;
@@ -25,11 +58,33 @@ export interface EventSetParamsSDKType {
 export interface EventSetUndelegation {
   undelegation: Undelegation;
 }
+export interface EventSetUndelegationProtoMsg {
+  typeUrl: "/pryzm.icstaking.v1.EventSetUndelegation";
+  value: Uint8Array;
+}
+export interface EventSetUndelegationAmino {
+  undelegation?: UndelegationAmino;
+}
+export interface EventSetUndelegationAminoMsg {
+  type: "/pryzm.icstaking.v1.EventSetUndelegation";
+  value: EventSetUndelegationAmino;
+}
 export interface EventSetUndelegationSDKType {
   undelegation: UndelegationSDKType;
 }
 export interface EventSetChannelUndelegation {
   channelUndelegation: ChannelUndelegation;
+}
+export interface EventSetChannelUndelegationProtoMsg {
+  typeUrl: "/pryzm.icstaking.v1.EventSetChannelUndelegation";
+  value: Uint8Array;
+}
+export interface EventSetChannelUndelegationAmino {
+  channel_undelegation?: ChannelUndelegationAmino;
+}
+export interface EventSetChannelUndelegationAminoMsg {
+  type: "/pryzm.icstaking.v1.EventSetChannelUndelegation";
+  value: EventSetChannelUndelegationAmino;
 }
 export interface EventSetChannelUndelegationSDKType {
   channel_undelegation: ChannelUndelegationSDKType;
@@ -41,6 +96,22 @@ export interface EventStake {
   amount: string;
   fee: Coin;
   cAmount: Coin;
+}
+export interface EventStakeProtoMsg {
+  typeUrl: "/pryzm.icstaking.v1.EventStake";
+  value: Uint8Array;
+}
+export interface EventStakeAmino {
+  creator?: string;
+  host_chain?: string;
+  transfer_channel?: string;
+  amount?: string;
+  fee?: CoinAmino;
+  c_amount?: CoinAmino;
+}
+export interface EventStakeAminoMsg {
+  type: "/pryzm.icstaking.v1.EventStake";
+  value: EventStakeAmino;
 }
 export interface EventStakeSDKType {
   creator: string;
@@ -57,6 +128,21 @@ export interface EventUnstake {
   cAmount: string;
   uAmount: Coin;
 }
+export interface EventUnstakeProtoMsg {
+  typeUrl: "/pryzm.icstaking.v1.EventUnstake";
+  value: Uint8Array;
+}
+export interface EventUnstakeAmino {
+  creator?: string;
+  host_chain?: string;
+  transfer_channel?: string;
+  c_amount?: string;
+  u_amount?: CoinAmino;
+}
+export interface EventUnstakeAminoMsg {
+  type: "/pryzm.icstaking.v1.EventUnstake";
+  value: EventUnstakeAmino;
+}
 export interface EventUnstakeSDKType {
   creator: string;
   host_chain: string;
@@ -72,6 +158,23 @@ export interface EventRedeemUnstaked {
   uAmount: string;
   amount: Coin;
   fee: Coin;
+}
+export interface EventRedeemUnstakedProtoMsg {
+  typeUrl: "/pryzm.icstaking.v1.EventRedeemUnstaked";
+  value: Uint8Array;
+}
+export interface EventRedeemUnstakedAmino {
+  creator?: string;
+  host_chain?: string;
+  transfer_channel?: string;
+  epoch?: string;
+  u_amount?: string;
+  amount?: CoinAmino;
+  fee?: CoinAmino;
+}
+export interface EventRedeemUnstakedAminoMsg {
+  type: "/pryzm.icstaking.v1.EventRedeemUnstaked";
+  value: EventRedeemUnstakedAmino;
 }
 export interface EventRedeemUnstakedSDKType {
   creator: string;
@@ -91,6 +194,23 @@ export interface EventInstantUnstake {
   amount: Coin;
   fee: Coin;
 }
+export interface EventInstantUnstakeProtoMsg {
+  typeUrl: "/pryzm.icstaking.v1.EventInstantUnstake";
+  value: Uint8Array;
+}
+export interface EventInstantUnstakeAmino {
+  creator?: string;
+  host_chain?: string;
+  transfer_channel?: string;
+  min_c_amount?: string;
+  max_c_amount?: string;
+  amount?: CoinAmino;
+  fee?: CoinAmino;
+}
+export interface EventInstantUnstakeAminoMsg {
+  type: "/pryzm.icstaking.v1.EventInstantUnstake";
+  value: EventInstantUnstakeAmino;
+}
 export interface EventInstantUnstakeSDKType {
   creator: string;
   host_chain: string;
@@ -106,6 +226,7 @@ function createBaseEventSetHostChain(): EventSetHostChain {
   };
 }
 export const EventSetHostChain = {
+  typeUrl: "/pryzm.icstaking.v1.EventSetHostChain",
   encode(message: EventSetHostChain, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.hostChain !== undefined) {
       HostChain.encode(message.hostChain, writer.uint32(10).fork()).ldelim();
@@ -143,6 +264,33 @@ export const EventSetHostChain = {
     const message = createBaseEventSetHostChain();
     message.hostChain = object.hostChain !== undefined && object.hostChain !== null ? HostChain.fromPartial(object.hostChain) : undefined;
     return message;
+  },
+  fromAmino(object: EventSetHostChainAmino): EventSetHostChain {
+    const message = createBaseEventSetHostChain();
+    if (object.host_chain !== undefined && object.host_chain !== null) {
+      message.hostChain = HostChain.fromAmino(object.host_chain);
+    }
+    return message;
+  },
+  toAmino(message: EventSetHostChain): EventSetHostChainAmino {
+    const obj: any = {};
+    obj.host_chain = message.hostChain ? HostChain.toAmino(message.hostChain) : undefined;
+    return obj;
+  },
+  fromAminoMsg(object: EventSetHostChainAminoMsg): EventSetHostChain {
+    return EventSetHostChain.fromAmino(object.value);
+  },
+  fromProtoMsg(message: EventSetHostChainProtoMsg): EventSetHostChain {
+    return EventSetHostChain.decode(message.value);
+  },
+  toProto(message: EventSetHostChain): Uint8Array {
+    return EventSetHostChain.encode(message).finish();
+  },
+  toProtoMsg(message: EventSetHostChain): EventSetHostChainProtoMsg {
+    return {
+      typeUrl: "/pryzm.icstaking.v1.EventSetHostChain",
+      value: EventSetHostChain.encode(message).finish()
+    };
   }
 };
 function createBaseEventSetHostChainState(): EventSetHostChainState {
@@ -151,6 +299,7 @@ function createBaseEventSetHostChainState(): EventSetHostChainState {
   };
 }
 export const EventSetHostChainState = {
+  typeUrl: "/pryzm.icstaking.v1.EventSetHostChainState",
   encode(message: EventSetHostChainState, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.hostChainState !== undefined) {
       HostChainState.encode(message.hostChainState, writer.uint32(10).fork()).ldelim();
@@ -188,6 +337,33 @@ export const EventSetHostChainState = {
     const message = createBaseEventSetHostChainState();
     message.hostChainState = object.hostChainState !== undefined && object.hostChainState !== null ? HostChainState.fromPartial(object.hostChainState) : undefined;
     return message;
+  },
+  fromAmino(object: EventSetHostChainStateAmino): EventSetHostChainState {
+    const message = createBaseEventSetHostChainState();
+    if (object.host_chain_state !== undefined && object.host_chain_state !== null) {
+      message.hostChainState = HostChainState.fromAmino(object.host_chain_state);
+    }
+    return message;
+  },
+  toAmino(message: EventSetHostChainState): EventSetHostChainStateAmino {
+    const obj: any = {};
+    obj.host_chain_state = message.hostChainState ? HostChainState.toAmino(message.hostChainState) : undefined;
+    return obj;
+  },
+  fromAminoMsg(object: EventSetHostChainStateAminoMsg): EventSetHostChainState {
+    return EventSetHostChainState.fromAmino(object.value);
+  },
+  fromProtoMsg(message: EventSetHostChainStateProtoMsg): EventSetHostChainState {
+    return EventSetHostChainState.decode(message.value);
+  },
+  toProto(message: EventSetHostChainState): Uint8Array {
+    return EventSetHostChainState.encode(message).finish();
+  },
+  toProtoMsg(message: EventSetHostChainState): EventSetHostChainStateProtoMsg {
+    return {
+      typeUrl: "/pryzm.icstaking.v1.EventSetHostChainState",
+      value: EventSetHostChainState.encode(message).finish()
+    };
   }
 };
 function createBaseEventSetParams(): EventSetParams {
@@ -196,6 +372,7 @@ function createBaseEventSetParams(): EventSetParams {
   };
 }
 export const EventSetParams = {
+  typeUrl: "/pryzm.icstaking.v1.EventSetParams",
   encode(message: EventSetParams, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.params !== undefined) {
       Params.encode(message.params, writer.uint32(10).fork()).ldelim();
@@ -233,6 +410,33 @@ export const EventSetParams = {
     const message = createBaseEventSetParams();
     message.params = object.params !== undefined && object.params !== null ? Params.fromPartial(object.params) : undefined;
     return message;
+  },
+  fromAmino(object: EventSetParamsAmino): EventSetParams {
+    const message = createBaseEventSetParams();
+    if (object.params !== undefined && object.params !== null) {
+      message.params = Params.fromAmino(object.params);
+    }
+    return message;
+  },
+  toAmino(message: EventSetParams): EventSetParamsAmino {
+    const obj: any = {};
+    obj.params = message.params ? Params.toAmino(message.params) : undefined;
+    return obj;
+  },
+  fromAminoMsg(object: EventSetParamsAminoMsg): EventSetParams {
+    return EventSetParams.fromAmino(object.value);
+  },
+  fromProtoMsg(message: EventSetParamsProtoMsg): EventSetParams {
+    return EventSetParams.decode(message.value);
+  },
+  toProto(message: EventSetParams): Uint8Array {
+    return EventSetParams.encode(message).finish();
+  },
+  toProtoMsg(message: EventSetParams): EventSetParamsProtoMsg {
+    return {
+      typeUrl: "/pryzm.icstaking.v1.EventSetParams",
+      value: EventSetParams.encode(message).finish()
+    };
   }
 };
 function createBaseEventSetUndelegation(): EventSetUndelegation {
@@ -241,6 +445,7 @@ function createBaseEventSetUndelegation(): EventSetUndelegation {
   };
 }
 export const EventSetUndelegation = {
+  typeUrl: "/pryzm.icstaking.v1.EventSetUndelegation",
   encode(message: EventSetUndelegation, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.undelegation !== undefined) {
       Undelegation.encode(message.undelegation, writer.uint32(10).fork()).ldelim();
@@ -278,6 +483,33 @@ export const EventSetUndelegation = {
     const message = createBaseEventSetUndelegation();
     message.undelegation = object.undelegation !== undefined && object.undelegation !== null ? Undelegation.fromPartial(object.undelegation) : undefined;
     return message;
+  },
+  fromAmino(object: EventSetUndelegationAmino): EventSetUndelegation {
+    const message = createBaseEventSetUndelegation();
+    if (object.undelegation !== undefined && object.undelegation !== null) {
+      message.undelegation = Undelegation.fromAmino(object.undelegation);
+    }
+    return message;
+  },
+  toAmino(message: EventSetUndelegation): EventSetUndelegationAmino {
+    const obj: any = {};
+    obj.undelegation = message.undelegation ? Undelegation.toAmino(message.undelegation) : undefined;
+    return obj;
+  },
+  fromAminoMsg(object: EventSetUndelegationAminoMsg): EventSetUndelegation {
+    return EventSetUndelegation.fromAmino(object.value);
+  },
+  fromProtoMsg(message: EventSetUndelegationProtoMsg): EventSetUndelegation {
+    return EventSetUndelegation.decode(message.value);
+  },
+  toProto(message: EventSetUndelegation): Uint8Array {
+    return EventSetUndelegation.encode(message).finish();
+  },
+  toProtoMsg(message: EventSetUndelegation): EventSetUndelegationProtoMsg {
+    return {
+      typeUrl: "/pryzm.icstaking.v1.EventSetUndelegation",
+      value: EventSetUndelegation.encode(message).finish()
+    };
   }
 };
 function createBaseEventSetChannelUndelegation(): EventSetChannelUndelegation {
@@ -286,6 +518,7 @@ function createBaseEventSetChannelUndelegation(): EventSetChannelUndelegation {
   };
 }
 export const EventSetChannelUndelegation = {
+  typeUrl: "/pryzm.icstaking.v1.EventSetChannelUndelegation",
   encode(message: EventSetChannelUndelegation, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.channelUndelegation !== undefined) {
       ChannelUndelegation.encode(message.channelUndelegation, writer.uint32(10).fork()).ldelim();
@@ -323,6 +556,33 @@ export const EventSetChannelUndelegation = {
     const message = createBaseEventSetChannelUndelegation();
     message.channelUndelegation = object.channelUndelegation !== undefined && object.channelUndelegation !== null ? ChannelUndelegation.fromPartial(object.channelUndelegation) : undefined;
     return message;
+  },
+  fromAmino(object: EventSetChannelUndelegationAmino): EventSetChannelUndelegation {
+    const message = createBaseEventSetChannelUndelegation();
+    if (object.channel_undelegation !== undefined && object.channel_undelegation !== null) {
+      message.channelUndelegation = ChannelUndelegation.fromAmino(object.channel_undelegation);
+    }
+    return message;
+  },
+  toAmino(message: EventSetChannelUndelegation): EventSetChannelUndelegationAmino {
+    const obj: any = {};
+    obj.channel_undelegation = message.channelUndelegation ? ChannelUndelegation.toAmino(message.channelUndelegation) : undefined;
+    return obj;
+  },
+  fromAminoMsg(object: EventSetChannelUndelegationAminoMsg): EventSetChannelUndelegation {
+    return EventSetChannelUndelegation.fromAmino(object.value);
+  },
+  fromProtoMsg(message: EventSetChannelUndelegationProtoMsg): EventSetChannelUndelegation {
+    return EventSetChannelUndelegation.decode(message.value);
+  },
+  toProto(message: EventSetChannelUndelegation): Uint8Array {
+    return EventSetChannelUndelegation.encode(message).finish();
+  },
+  toProtoMsg(message: EventSetChannelUndelegation): EventSetChannelUndelegationProtoMsg {
+    return {
+      typeUrl: "/pryzm.icstaking.v1.EventSetChannelUndelegation",
+      value: EventSetChannelUndelegation.encode(message).finish()
+    };
   }
 };
 function createBaseEventStake(): EventStake {
@@ -336,6 +596,7 @@ function createBaseEventStake(): EventStake {
   };
 }
 export const EventStake = {
+  typeUrl: "/pryzm.icstaking.v1.EventStake",
   encode(message: EventStake, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.creator !== "") {
       writer.uint32(10).string(message.creator);
@@ -418,6 +679,53 @@ export const EventStake = {
     message.fee = object.fee !== undefined && object.fee !== null ? Coin.fromPartial(object.fee) : undefined;
     message.cAmount = object.cAmount !== undefined && object.cAmount !== null ? Coin.fromPartial(object.cAmount) : undefined;
     return message;
+  },
+  fromAmino(object: EventStakeAmino): EventStake {
+    const message = createBaseEventStake();
+    if (object.creator !== undefined && object.creator !== null) {
+      message.creator = object.creator;
+    }
+    if (object.host_chain !== undefined && object.host_chain !== null) {
+      message.hostChain = object.host_chain;
+    }
+    if (object.transfer_channel !== undefined && object.transfer_channel !== null) {
+      message.transferChannel = object.transfer_channel;
+    }
+    if (object.amount !== undefined && object.amount !== null) {
+      message.amount = object.amount;
+    }
+    if (object.fee !== undefined && object.fee !== null) {
+      message.fee = Coin.fromAmino(object.fee);
+    }
+    if (object.c_amount !== undefined && object.c_amount !== null) {
+      message.cAmount = Coin.fromAmino(object.c_amount);
+    }
+    return message;
+  },
+  toAmino(message: EventStake): EventStakeAmino {
+    const obj: any = {};
+    obj.creator = message.creator;
+    obj.host_chain = message.hostChain;
+    obj.transfer_channel = message.transferChannel;
+    obj.amount = message.amount;
+    obj.fee = message.fee ? Coin.toAmino(message.fee) : undefined;
+    obj.c_amount = message.cAmount ? Coin.toAmino(message.cAmount) : undefined;
+    return obj;
+  },
+  fromAminoMsg(object: EventStakeAminoMsg): EventStake {
+    return EventStake.fromAmino(object.value);
+  },
+  fromProtoMsg(message: EventStakeProtoMsg): EventStake {
+    return EventStake.decode(message.value);
+  },
+  toProto(message: EventStake): Uint8Array {
+    return EventStake.encode(message).finish();
+  },
+  toProtoMsg(message: EventStake): EventStakeProtoMsg {
+    return {
+      typeUrl: "/pryzm.icstaking.v1.EventStake",
+      value: EventStake.encode(message).finish()
+    };
   }
 };
 function createBaseEventUnstake(): EventUnstake {
@@ -430,6 +738,7 @@ function createBaseEventUnstake(): EventUnstake {
   };
 }
 export const EventUnstake = {
+  typeUrl: "/pryzm.icstaking.v1.EventUnstake",
   encode(message: EventUnstake, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.creator !== "") {
       writer.uint32(10).string(message.creator);
@@ -503,6 +812,49 @@ export const EventUnstake = {
     message.cAmount = object.cAmount ?? "";
     message.uAmount = object.uAmount !== undefined && object.uAmount !== null ? Coin.fromPartial(object.uAmount) : undefined;
     return message;
+  },
+  fromAmino(object: EventUnstakeAmino): EventUnstake {
+    const message = createBaseEventUnstake();
+    if (object.creator !== undefined && object.creator !== null) {
+      message.creator = object.creator;
+    }
+    if (object.host_chain !== undefined && object.host_chain !== null) {
+      message.hostChain = object.host_chain;
+    }
+    if (object.transfer_channel !== undefined && object.transfer_channel !== null) {
+      message.transferChannel = object.transfer_channel;
+    }
+    if (object.c_amount !== undefined && object.c_amount !== null) {
+      message.cAmount = object.c_amount;
+    }
+    if (object.u_amount !== undefined && object.u_amount !== null) {
+      message.uAmount = Coin.fromAmino(object.u_amount);
+    }
+    return message;
+  },
+  toAmino(message: EventUnstake): EventUnstakeAmino {
+    const obj: any = {};
+    obj.creator = message.creator;
+    obj.host_chain = message.hostChain;
+    obj.transfer_channel = message.transferChannel;
+    obj.c_amount = message.cAmount;
+    obj.u_amount = message.uAmount ? Coin.toAmino(message.uAmount) : undefined;
+    return obj;
+  },
+  fromAminoMsg(object: EventUnstakeAminoMsg): EventUnstake {
+    return EventUnstake.fromAmino(object.value);
+  },
+  fromProtoMsg(message: EventUnstakeProtoMsg): EventUnstake {
+    return EventUnstake.decode(message.value);
+  },
+  toProto(message: EventUnstake): Uint8Array {
+    return EventUnstake.encode(message).finish();
+  },
+  toProtoMsg(message: EventUnstake): EventUnstakeProtoMsg {
+    return {
+      typeUrl: "/pryzm.icstaking.v1.EventUnstake",
+      value: EventUnstake.encode(message).finish()
+    };
   }
 };
 function createBaseEventRedeemUnstaked(): EventRedeemUnstaked {
@@ -517,6 +869,7 @@ function createBaseEventRedeemUnstaked(): EventRedeemUnstaked {
   };
 }
 export const EventRedeemUnstaked = {
+  typeUrl: "/pryzm.icstaking.v1.EventRedeemUnstaked",
   encode(message: EventRedeemUnstaked, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.creator !== "") {
       writer.uint32(10).string(message.creator);
@@ -608,6 +961,57 @@ export const EventRedeemUnstaked = {
     message.amount = object.amount !== undefined && object.amount !== null ? Coin.fromPartial(object.amount) : undefined;
     message.fee = object.fee !== undefined && object.fee !== null ? Coin.fromPartial(object.fee) : undefined;
     return message;
+  },
+  fromAmino(object: EventRedeemUnstakedAmino): EventRedeemUnstaked {
+    const message = createBaseEventRedeemUnstaked();
+    if (object.creator !== undefined && object.creator !== null) {
+      message.creator = object.creator;
+    }
+    if (object.host_chain !== undefined && object.host_chain !== null) {
+      message.hostChain = object.host_chain;
+    }
+    if (object.transfer_channel !== undefined && object.transfer_channel !== null) {
+      message.transferChannel = object.transfer_channel;
+    }
+    if (object.epoch !== undefined && object.epoch !== null) {
+      message.epoch = BigInt(object.epoch);
+    }
+    if (object.u_amount !== undefined && object.u_amount !== null) {
+      message.uAmount = object.u_amount;
+    }
+    if (object.amount !== undefined && object.amount !== null) {
+      message.amount = Coin.fromAmino(object.amount);
+    }
+    if (object.fee !== undefined && object.fee !== null) {
+      message.fee = Coin.fromAmino(object.fee);
+    }
+    return message;
+  },
+  toAmino(message: EventRedeemUnstaked): EventRedeemUnstakedAmino {
+    const obj: any = {};
+    obj.creator = message.creator;
+    obj.host_chain = message.hostChain;
+    obj.transfer_channel = message.transferChannel;
+    obj.epoch = message.epoch ? message.epoch.toString() : undefined;
+    obj.u_amount = message.uAmount;
+    obj.amount = message.amount ? Coin.toAmino(message.amount) : undefined;
+    obj.fee = message.fee ? Coin.toAmino(message.fee) : undefined;
+    return obj;
+  },
+  fromAminoMsg(object: EventRedeemUnstakedAminoMsg): EventRedeemUnstaked {
+    return EventRedeemUnstaked.fromAmino(object.value);
+  },
+  fromProtoMsg(message: EventRedeemUnstakedProtoMsg): EventRedeemUnstaked {
+    return EventRedeemUnstaked.decode(message.value);
+  },
+  toProto(message: EventRedeemUnstaked): Uint8Array {
+    return EventRedeemUnstaked.encode(message).finish();
+  },
+  toProtoMsg(message: EventRedeemUnstaked): EventRedeemUnstakedProtoMsg {
+    return {
+      typeUrl: "/pryzm.icstaking.v1.EventRedeemUnstaked",
+      value: EventRedeemUnstaked.encode(message).finish()
+    };
   }
 };
 function createBaseEventInstantUnstake(): EventInstantUnstake {
@@ -622,6 +1026,7 @@ function createBaseEventInstantUnstake(): EventInstantUnstake {
   };
 }
 export const EventInstantUnstake = {
+  typeUrl: "/pryzm.icstaking.v1.EventInstantUnstake",
   encode(message: EventInstantUnstake, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.creator !== "") {
       writer.uint32(10).string(message.creator);
@@ -713,5 +1118,56 @@ export const EventInstantUnstake = {
     message.amount = object.amount !== undefined && object.amount !== null ? Coin.fromPartial(object.amount) : undefined;
     message.fee = object.fee !== undefined && object.fee !== null ? Coin.fromPartial(object.fee) : undefined;
     return message;
+  },
+  fromAmino(object: EventInstantUnstakeAmino): EventInstantUnstake {
+    const message = createBaseEventInstantUnstake();
+    if (object.creator !== undefined && object.creator !== null) {
+      message.creator = object.creator;
+    }
+    if (object.host_chain !== undefined && object.host_chain !== null) {
+      message.hostChain = object.host_chain;
+    }
+    if (object.transfer_channel !== undefined && object.transfer_channel !== null) {
+      message.transferChannel = object.transfer_channel;
+    }
+    if (object.min_c_amount !== undefined && object.min_c_amount !== null) {
+      message.minCAmount = object.min_c_amount;
+    }
+    if (object.max_c_amount !== undefined && object.max_c_amount !== null) {
+      message.maxCAmount = object.max_c_amount;
+    }
+    if (object.amount !== undefined && object.amount !== null) {
+      message.amount = Coin.fromAmino(object.amount);
+    }
+    if (object.fee !== undefined && object.fee !== null) {
+      message.fee = Coin.fromAmino(object.fee);
+    }
+    return message;
+  },
+  toAmino(message: EventInstantUnstake): EventInstantUnstakeAmino {
+    const obj: any = {};
+    obj.creator = message.creator;
+    obj.host_chain = message.hostChain;
+    obj.transfer_channel = message.transferChannel;
+    obj.min_c_amount = message.minCAmount;
+    obj.max_c_amount = message.maxCAmount;
+    obj.amount = message.amount ? Coin.toAmino(message.amount) : undefined;
+    obj.fee = message.fee ? Coin.toAmino(message.fee) : undefined;
+    return obj;
+  },
+  fromAminoMsg(object: EventInstantUnstakeAminoMsg): EventInstantUnstake {
+    return EventInstantUnstake.fromAmino(object.value);
+  },
+  fromProtoMsg(message: EventInstantUnstakeProtoMsg): EventInstantUnstake {
+    return EventInstantUnstake.decode(message.value);
+  },
+  toProto(message: EventInstantUnstake): Uint8Array {
+    return EventInstantUnstake.encode(message).finish();
+  },
+  toProtoMsg(message: EventInstantUnstake): EventInstantUnstakeProtoMsg {
+    return {
+      typeUrl: "/pryzm.icstaking.v1.EventInstantUnstake",
+      value: EventInstantUnstake.encode(message).finish()
+    };
   }
 };

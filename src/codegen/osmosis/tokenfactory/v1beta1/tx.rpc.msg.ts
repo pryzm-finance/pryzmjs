@@ -1,4 +1,3 @@
-//@ts-nocheck
 import { Metadata } from "../../../cosmos/bank/v1beta1/bank";
 import { UnaryMethodDefinitionish } from "../../../grpc-web";
 import { DeepPartial } from "../../../helpers";
@@ -26,22 +25,22 @@ export class MsgClientImpl implements Msg {
     this.forceTransfer = this.forceTransfer.bind(this);
   }
   createDenom(request: DeepPartial<MsgCreateDenom>, metadata?: grpc.Metadata): Promise<MsgCreateDenomResponse> {
-    return this.rpc.unary(MsgCreateDenomDesc, MsgCreateDenom.fromPartial(request), metadata);
+    return this.rpc.unary(MsgCreateDenomDesc, MsgCreateDenom.fromPartial(request as any), metadata);
   }
   mint(request: DeepPartial<MsgMint>, metadata?: grpc.Metadata): Promise<MsgMintResponse> {
-    return this.rpc.unary(MsgMintDesc, MsgMint.fromPartial(request), metadata);
+    return this.rpc.unary(MsgMintDesc, MsgMint.fromPartial(request as any), metadata);
   }
   burn(request: DeepPartial<MsgBurn>, metadata?: grpc.Metadata): Promise<MsgBurnResponse> {
-    return this.rpc.unary(MsgBurnDesc, MsgBurn.fromPartial(request), metadata);
+    return this.rpc.unary(MsgBurnDesc, MsgBurn.fromPartial(request as any), metadata);
   }
   changeAdmin(request: DeepPartial<MsgChangeAdmin>, metadata?: grpc.Metadata): Promise<MsgChangeAdminResponse> {
-    return this.rpc.unary(MsgChangeAdminDesc, MsgChangeAdmin.fromPartial(request), metadata);
+    return this.rpc.unary(MsgChangeAdminDesc, MsgChangeAdmin.fromPartial(request as any), metadata);
   }
   setDenomMetadata(request: DeepPartial<MsgSetDenomMetadata>, metadata?: grpc.Metadata): Promise<MsgSetDenomMetadataResponse> {
-    return this.rpc.unary(MsgSetDenomMetadataDesc, MsgSetDenomMetadata.fromPartial(request), metadata);
+    return this.rpc.unary(MsgSetDenomMetadataDesc, MsgSetDenomMetadata.fromPartial(request as any), metadata);
   }
   forceTransfer(request: DeepPartial<MsgForceTransfer>, metadata?: grpc.Metadata): Promise<MsgForceTransferResponse> {
-    return this.rpc.unary(MsgForceTransferDesc, MsgForceTransfer.fromPartial(request), metadata);
+    return this.rpc.unary(MsgForceTransferDesc, MsgForceTransfer.fromPartial(request as any), metadata);
   }
 }
 export const MsgDesc = {

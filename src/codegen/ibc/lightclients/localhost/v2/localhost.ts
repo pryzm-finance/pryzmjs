@@ -1,10 +1,23 @@
-import { Height, HeightSDKType } from "../../../core/client/v1/client";
+import { Height, HeightAmino, HeightSDKType } from "../../../core/client/v1/client";
 import { BinaryReader, BinaryWriter } from "../../../../binary";
 import { isSet } from "../../../../helpers";
 /** ClientState defines the 09-localhost client state */
 export interface ClientState {
   /** the latest block height */
   latestHeight: Height;
+}
+export interface ClientStateProtoMsg {
+  typeUrl: "/ibc.lightclients.localhost.v2.ClientState";
+  value: Uint8Array;
+}
+/** ClientState defines the 09-localhost client state */
+export interface ClientStateAmino {
+  /** the latest block height */
+  latest_height?: HeightAmino;
+}
+export interface ClientStateAminoMsg {
+  type: "cosmos-sdk/ClientState";
+  value: ClientStateAmino;
 }
 /** ClientState defines the 09-localhost client state */
 export interface ClientStateSDKType {
@@ -16,6 +29,7 @@ function createBaseClientState(): ClientState {
   };
 }
 export const ClientState = {
+  typeUrl: "/ibc.lightclients.localhost.v2.ClientState",
   encode(message: ClientState, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.latestHeight !== undefined) {
       Height.encode(message.latestHeight, writer.uint32(10).fork()).ldelim();
@@ -53,5 +67,38 @@ export const ClientState = {
     const message = createBaseClientState();
     message.latestHeight = object.latestHeight !== undefined && object.latestHeight !== null ? Height.fromPartial(object.latestHeight) : undefined;
     return message;
+  },
+  fromAmino(object: ClientStateAmino): ClientState {
+    const message = createBaseClientState();
+    if (object.latest_height !== undefined && object.latest_height !== null) {
+      message.latestHeight = Height.fromAmino(object.latest_height);
+    }
+    return message;
+  },
+  toAmino(message: ClientState): ClientStateAmino {
+    const obj: any = {};
+    obj.latest_height = message.latestHeight ? Height.toAmino(message.latestHeight) : {};
+    return obj;
+  },
+  fromAminoMsg(object: ClientStateAminoMsg): ClientState {
+    return ClientState.fromAmino(object.value);
+  },
+  toAminoMsg(message: ClientState): ClientStateAminoMsg {
+    return {
+      type: "cosmos-sdk/ClientState",
+      value: ClientState.toAmino(message)
+    };
+  },
+  fromProtoMsg(message: ClientStateProtoMsg): ClientState {
+    return ClientState.decode(message.value);
+  },
+  toProto(message: ClientState): Uint8Array {
+    return ClientState.encode(message).finish();
+  },
+  toProtoMsg(message: ClientState): ClientStateProtoMsg {
+    return {
+      typeUrl: "/ibc.lightclients.localhost.v2.ClientState",
+      value: ClientState.encode(message).finish()
+    };
   }
 };
