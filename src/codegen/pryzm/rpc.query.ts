@@ -42,6 +42,9 @@ export const createGrpcWebClient = async ({
       base: {
         node: {
           v1beta1: new (await import("../cosmos/base/node/v1beta1/query.rpc.Service")).ServiceClientImpl(grpcWeb)
+        },
+        tendermint: {
+          v1beta1: new (await import("../cosmos/base/tendermint/v1beta1/query.rpc.Service")).ServiceClientImpl(grpcWeb)
         }
       },
       consensus: {
