@@ -1,12 +1,12 @@
 lockfileVersion: 5.4
 
 specifiers:
-  '@pryzm-finance/pryzmjs': 0.16.0-rc5
+  '@pryzm-finance/pryzmjs': 0.16.1
   '@refractedlabs/utils': 0.1.9
   typescript: ^5.1.6
 
 dependencies:
-  '@pryzm-finance/pryzmjs': 0.16.0-rc5_google-protobuf@3.21.2
+  '@pryzm-finance/pryzmjs': 0.16.1_google-protobuf@3.21.2
   '@refractedlabs/utils': 0.1.9
 
 devDependencies:
@@ -237,17 +237,10 @@ packages:
     resolution: {integrity: sha512-Vvn3zZrhQZkkBE8LSuW3em98c0FwgO4nxzv6OdSxPKJIEKY2bGbHn+mhGIPerzI4twdxaP8/0+06HBpwf345Lw==}
     dev: false
 
-  /@pryzm-finance/pryzmjs/0.16.0-rc5_google-protobuf@3.21.2:
-    resolution: {integrity: sha512-/tJHP4DPbztC7m+awp1vB6gzh4VHmya93aTBAf7kexjPI0O64olkvjXSlpwjt90KUalOX1mheIBiwSMoSjud8g==, tarball: download/@pryzm-finance/pryzmjs/0.16.0-rc5/84d414323c7d7ec7dda88b3fff5b128b35908e97}
+  /@pryzm-finance/pryzmjs/0.16.1_google-protobuf@3.21.2:
+    resolution: {integrity: sha512-DZu6mxU45NFtxbWVxG9/1ttHZDR5qVNCPLIlqtZV5Et2N9ILdJiFZT2xTZA4QCWTSBCXmxwWXeE8pnaYXXOm8Q==, tarball: download/@pryzm-finance/pryzmjs/0.16.1/01b0247938415ab71188d740d43dd7bfc602255e}
     dependencies:
-      '@cosmjs/amino': 0.32.1
-      '@cosmjs/proto-signing': 0.32.1
-      '@cosmjs/stargate': 0.32.1
-      '@cosmjs/tendermint-rpc': 0.32.1
-      '@improbable-eng/grpc-web': 0.15.0_google-protobuf@3.21.2
-      '@improbable-eng/grpc-web-node-http-transport': 0.15.0_fng5pv4qmdetiqq66m6yjkaacu
-      '@refractedlabs/cosmology-lcd-fork': 0.13.3
-      browser-headers: 0.4.1
+      '@refractedlabs/utils': 0.3.1_google-protobuf@3.21.2
     transitivePeerDependencies:
       - bufferutil
       - debug
@@ -278,8 +271,36 @@ packages:
       - utf-8-validate
     dev: false
 
+  /@refractedlabs/utils/0.3.1_google-protobuf@3.21.2:
+    resolution: {integrity: sha512-8pHCW07VdX3j9INAJreGiFA5Jp09Dq2fidif2Z3nwh77GVd/fW91qYJo4kvfEiVULRrEkMLFGYwrCkEK4uaa0w==, tarball: download/@refractedlabs/utils/0.3.1/03100f1d4cbec911ab99e9d7be3cc6bfb1f4af51}
+    dependencies:
+      '@cosmjs/amino': 0.32.1
+      '@cosmjs/proto-signing': 0.32.1
+      '@cosmjs/stargate': 0.32.1
+      '@cosmjs/tendermint-rpc': 0.32.1
+      '@improbable-eng/grpc-web': 0.15.0_google-protobuf@3.21.2
+      '@improbable-eng/grpc-web-node-http-transport': 0.15.0_fng5pv4qmdetiqq66m6yjkaacu
+      '@refractedlabs/cosmology-lcd-fork': 0.13.3
+      '@types/js-yaml': 4.0.9
+      browser-headers: 0.4.1
+      jackson-js: 1.1.0
+      js-yaml: 4.1.0
+      winston: 3.11.0
+      winston-daily-rotate-file: 4.7.1_winston@3.11.0
+      winston-syslog: 2.7.0_winston@3.11.0
+    transitivePeerDependencies:
+      - bufferutil
+      - debug
+      - google-protobuf
+      - utf-8-validate
+    dev: false
+
   /@types/js-yaml/4.0.8:
     resolution: {integrity: sha512-m6jnPk1VhlYRiLFm3f8X9Uep761f+CK8mHyS65LutH2OhmBF0BeMEjHgg05usH8PLZMWWc/BUR9RPmkvpWnyRA==}
+    dev: false
+
+  /@types/js-yaml/4.0.9:
+    resolution: {integrity: sha512-k4MGaQl5TGo/iipqb2UDG2UwjXziSWkh0uysQelTlJpX1qGlpUZYm8PnO4DxG1qBomtJUdYJ6qR6xdIah10JLg==}
     dev: false
 
   /@types/long/4.0.2:
@@ -576,6 +597,15 @@ packages:
       ws: 7.5.9
     dev: false
 
+  /jackson-js/1.1.0:
+    resolution: {integrity: sha512-EDKwt9U6dd/zNW/7p3VejSYUYgUkZ5c7v4gGAO7KhA1qLp6DXPpBjIx9ELI9LzQjpFtoL8g6CAQAhBuDmzkYMw==}
+    dependencies:
+      lodash.clone: 4.5.0
+      lodash.clonedeep: 4.5.0
+      meriyah: 1.9.15
+      reflect-metadata: 0.1.14
+    dev: false
+
   /js-yaml/4.1.0:
     resolution: {integrity: sha512-wpxZs9NoxZaJESJGIZTyDEaYpl0FKSA+FB9aJiyemKhMwkxQg63h4T1KJgUGHpTqPDNRcmmYLugrRjJlBtWvRA==}
     hasBin: true
@@ -597,6 +627,14 @@ packages:
       libsodium-sumo: 0.7.13
     dev: false
 
+  /lodash.clone/4.5.0:
+    resolution: {integrity: sha512-GhrVeweiTD6uTmmn5hV/lzgCQhccwReIVRLHp7LT4SopOjqEZ5BbX8b5WWEtAKasjmy8hR7ZPwsYlxRCku5odg==}
+    dev: false
+
+  /lodash.clonedeep/4.5.0:
+    resolution: {integrity: sha512-H5ZhCF25riFd9uB5UCkVKo61m3S/xZk1x4wA6yp/L3RFP6Z/eHH1ymQcGLo7J3GMPfm0V/7m1tryHuGVxpqEBQ==}
+    dev: false
+
   /logform/2.6.0:
     resolution: {integrity: sha512-1ulHeNPp6k/LD8H91o7VYFBng5i1BDE7HoKxVbZiGFidS1Rj65qcywLxX+pVfAPoQJEjRdvKcusKwOupHCVOVQ==}
     engines: {node: '>= 12.0.0'}
@@ -611,6 +649,11 @@ packages:
 
   /long/4.0.0:
     resolution: {integrity: sha512-XsP+KhQif4bjX1kbuSiySJFNAehNxgLb6hPRGJ9QsUr8ajHkuXGdrHmFUTUUXhDwVX2R5bY4JNZEwbUiMhV+MA==}
+    dev: false
+
+  /meriyah/1.9.15:
+    resolution: {integrity: sha512-D4rT6XIYGqZab0EI/xbihUpwh0WbNRVQ35l2J/5QC2atxaI8h3KvA55DEJLBB/FRdaji7JwkNehfCRjCyjCjqw==}
+    engines: {node: '>=6.0.0'}
     dev: false
 
   /mime-db/1.52.0:
@@ -697,6 +740,10 @@ packages:
 
   /readonly-date/1.0.0:
     resolution: {integrity: sha512-tMKIV7hlk0h4mO3JTmmVuIlJVXjKk3Sep9Bf5OH0O+758ruuVkUy2J9SttDLm91IEX/WHlXPSpxMGjPj4beMIQ==}
+    dev: false
+
+  /reflect-metadata/0.1.14:
+    resolution: {integrity: sha512-ZhYeb6nRaXCfhnndflDK8qI6ZQ/YcWZCISRAWICW9XYqMUwjZM9Z0DveWX/ABN01oxSHwVxKQmxeYZSsm0jh5A==}
     dev: false
 
   /safe-buffer/5.2.1:
