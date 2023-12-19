@@ -156,7 +156,7 @@ message MsgRebalanceDelegationsResponse {}
 
 message MsgRegisterInterchainAccount {
   option (cosmos.msg.v1.signer) = "creator";
-  option (amino.name) = "pryzm/icstaking/v1/RegisterInterchainAccount";
+  option (amino.name) = "pryzm/icstaking/v1/RegInterchainAccount";
 
   string creator = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
   string host_chain = 2;

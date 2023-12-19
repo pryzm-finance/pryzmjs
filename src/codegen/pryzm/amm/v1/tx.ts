@@ -1296,7 +1296,7 @@ export interface MsgIntroduceYammLpToWeightedPoolAmino {
   virtual_balance_interval_millis?: string;
 }
 export interface MsgIntroduceYammLpToWeightedPoolAminoMsg {
-  type: "pryzm/amm/v1/IntroduceYammLpToWeightedPool";
+  type: "pryzm/amm/v1/IntroYammLpToWeighted";
   value: MsgIntroduceYammLpToWeightedPoolAmino;
 }
 export interface MsgIntroduceYammLpToWeightedPoolSDKType {
@@ -1338,7 +1338,7 @@ export interface MsgIntroduceAssetBaseTokenToWeightedPoolAmino {
   virtual_balance_interval_millis?: string;
 }
 export interface MsgIntroduceAssetBaseTokenToWeightedPoolAminoMsg {
-  type: "pryzm/amm/v1/IntroduceAssetBaseTokenToWeightedPool";
+  type: "pryzm/amm/v1/IntroBaseTokenToWeighted";
   value: MsgIntroduceAssetBaseTokenToWeightedPoolAmino;
 }
 export interface MsgIntroduceAssetBaseTokenToWeightedPoolSDKType {
@@ -1375,7 +1375,7 @@ export interface MsgCancelPendingTokenIntroductionAmino {
   target_pool_id?: string;
 }
 export interface MsgCancelPendingTokenIntroductionAminoMsg {
-  type: "pryzm/amm/v1/CancelPendingTokenIntroduction";
+  type: "pryzm/amm/v1/CancelPendingTokenIntro";
   value: MsgCancelPendingTokenIntroductionAmino;
 }
 export interface MsgCancelPendingTokenIntroductionSDKType {
@@ -1411,7 +1411,7 @@ export interface MsgRemoveTokenFromWeightedPoolAmino {
   virtual_balance_interval_millis?: string;
 }
 export interface MsgRemoveTokenFromWeightedPoolAminoMsg {
-  type: "pryzm/amm/v1/RemoveTokenFromWeightedPool";
+  type: "pryzm/amm/v1/RemoveTokenFromWeighted";
   value: MsgRemoveTokenFromWeightedPoolAmino;
 }
 export interface MsgRemoveTokenFromWeightedPoolSDKType {
@@ -7732,7 +7732,7 @@ export const MsgIntroduceYammLpToWeightedPool = {
   },
   toAminoMsg(message: MsgIntroduceYammLpToWeightedPool): MsgIntroduceYammLpToWeightedPoolAminoMsg {
     return {
-      type: "pryzm/amm/v1/IntroduceYammLpToWeightedPool",
+      type: "pryzm/amm/v1/IntroYammLpToWeighted",
       value: MsgIntroduceYammLpToWeightedPool.toAmino(message)
     };
   },
@@ -7938,7 +7938,7 @@ export const MsgIntroduceAssetBaseTokenToWeightedPool = {
   },
   toAminoMsg(message: MsgIntroduceAssetBaseTokenToWeightedPool): MsgIntroduceAssetBaseTokenToWeightedPoolAminoMsg {
     return {
-      type: "pryzm/amm/v1/IntroduceAssetBaseTokenToWeightedPool",
+      type: "pryzm/amm/v1/IntroBaseTokenToWeighted",
       value: MsgIntroduceAssetBaseTokenToWeightedPool.toAmino(message)
     };
   },
@@ -8102,7 +8102,7 @@ export const MsgCancelPendingTokenIntroduction = {
   },
   toAminoMsg(message: MsgCancelPendingTokenIntroduction): MsgCancelPendingTokenIntroductionAminoMsg {
     return {
-      type: "pryzm/amm/v1/CancelPendingTokenIntroduction",
+      type: "pryzm/amm/v1/CancelPendingTokenIntro",
       value: MsgCancelPendingTokenIntroduction.toAmino(message)
     };
   },
@@ -8280,7 +8280,7 @@ export const MsgRemoveTokenFromWeightedPool = {
   },
   toAminoMsg(message: MsgRemoveTokenFromWeightedPool): MsgRemoveTokenFromWeightedPoolAminoMsg {
     return {
-      type: "pryzm/amm/v1/RemoveTokenFromWeightedPool",
+      type: "pryzm/amm/v1/RemoveTokenFromWeighted",
       value: MsgRemoveTokenFromWeightedPool.toAmino(message)
     };
   },

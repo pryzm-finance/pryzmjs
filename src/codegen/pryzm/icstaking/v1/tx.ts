@@ -383,7 +383,7 @@ export interface MsgRegisterInterchainAccountAmino {
   registration_type?: ICARegistrationType;
 }
 export interface MsgRegisterInterchainAccountAminoMsg {
-  type: "pryzm/icstaking/v1/RegisterInterchainAccount";
+  type: "pryzm/icstaking/v1/RegInterchainAccount";
   value: MsgRegisterInterchainAccountAmino;
 }
 export interface MsgRegisterInterchainAccountSDKType {
@@ -1972,7 +1972,7 @@ export const MsgRegisterInterchainAccount = {
   },
   toAminoMsg(message: MsgRegisterInterchainAccount): MsgRegisterInterchainAccountAminoMsg {
     return {
-      type: "pryzm/icstaking/v1/RegisterInterchainAccount",
+      type: "pryzm/icstaking/v1/RegInterchainAccount",
       value: MsgRegisterInterchainAccount.toAmino(message)
     };
   },

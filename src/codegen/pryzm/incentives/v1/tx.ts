@@ -113,7 +113,7 @@ export interface MsgUpdateRewardTokenWeightAmino {
   reward_token?: WeightedRewardTokenAmino;
 }
 export interface MsgUpdateRewardTokenWeightAminoMsg {
-  type: "pryzm/incentives/v1/UpdateRewardTokenWeight";
+  type: "pryzm/incentives/v1/UpdateRewardWeight";
   value: MsgUpdateRewardTokenWeightAmino;
 }
 export interface MsgUpdateRewardTokenWeightSDKType {
@@ -147,7 +147,7 @@ export interface MsgAddRewardTokenToPoolAmino {
   reward_token?: WeightedRewardTokenAmino;
 }
 export interface MsgAddRewardTokenToPoolAminoMsg {
-  type: "pryzm/incentives/v1/AddRewardTokenToPool";
+  type: "pryzm/incentives/v1/AddRewardToken";
   value: MsgAddRewardTokenToPoolAmino;
 }
 export interface MsgAddRewardTokenToPoolSDKType {
@@ -900,7 +900,7 @@ export const MsgUpdateRewardTokenWeight = {
   },
   toAminoMsg(message: MsgUpdateRewardTokenWeight): MsgUpdateRewardTokenWeightAminoMsg {
     return {
-      type: "pryzm/incentives/v1/UpdateRewardTokenWeight",
+      type: "pryzm/incentives/v1/UpdateRewardWeight",
       value: MsgUpdateRewardTokenWeight.toAmino(message)
     };
   },
@@ -1064,7 +1064,7 @@ export const MsgAddRewardTokenToPool = {
   },
   toAminoMsg(message: MsgAddRewardTokenToPool): MsgAddRewardTokenToPoolAminoMsg {
     return {
-      type: "pryzm/incentives/v1/AddRewardTokenToPool",
+      type: "pryzm/incentives/v1/AddRewardToken",
       value: MsgAddRewardTokenToPool.toAmino(message)
     };
   },

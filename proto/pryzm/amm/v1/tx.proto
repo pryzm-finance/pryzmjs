@@ -646,7 +646,7 @@ message MsgSetJoinExitProtocolFeeResponse {}
 
 message MsgIntroduceYammLpToWeightedPool {
   option (cosmos.msg.v1.signer) = "creator";
-  option (amino.name) = "pryzm/amm/v1/IntroduceYammLpToWeightedPool";
+  option (amino.name) = "pryzm/amm/v1/IntroYammLpToWeighted";
 
   string creator = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
   uint64 weighted_pool_id = 2;
@@ -663,7 +663,7 @@ message MsgIntroduceYammLpToWeightedPoolResponse {}
 
 message MsgIntroduceAssetBaseTokenToWeightedPool {
   option (cosmos.msg.v1.signer) = "creator";
-  option (amino.name) = "pryzm/amm/v1/IntroduceAssetBaseTokenToWeightedPool";
+  option (amino.name) = "pryzm/amm/v1/IntroBaseTokenToWeighted";
 
   string creator = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
   uint64 weighted_pool_id = 2;
@@ -681,7 +681,7 @@ message MsgIntroduceAssetBaseTokenToWeightedPoolResponse {}
 
 message MsgCancelPendingTokenIntroduction {
   option (cosmos.msg.v1.signer) = "creator";
-  option (amino.name) = "pryzm/amm/v1/CancelPendingTokenIntroduction";
+  option (amino.name) = "pryzm/amm/v1/CancelPendingTokenIntro";
 
   string creator = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
   string asset_id = 2;
@@ -692,7 +692,7 @@ message MsgCancelPendingTokenIntroductionResponse {}
 
 message MsgRemoveTokenFromWeightedPool {
   option (cosmos.msg.v1.signer) = "creator";
-  option (amino.name) = "pryzm/amm/v1/RemoveTokenFromWeightedPool";
+  option (amino.name) = "pryzm/amm/v1/RemoveTokenFromWeighted";
 
   string creator = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
   uint64 pool_id = 2;

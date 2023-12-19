@@ -42,7 +42,7 @@ export const AminoConverter = {
     fromAmino: MsgRebalanceDelegations.fromAmino
   },
   "/pryzm.icstaking.v1.MsgRegisterInterchainAccount": {
-    aminoType: "pryzm/icstaking/v1/RegisterInterchainAccount",
+    aminoType: "pryzm/icstaking/v1/RegInterchainAccount",
     toAmino: MsgRegisterInterchainAccount.toAmino,
     fromAmino: MsgRegisterInterchainAccount.fromAmino
   }
