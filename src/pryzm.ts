@@ -1,4 +1,4 @@
-import { getSigningPryzmClientOptions, pryzm } from "./codegen"
+import { getSigningPryzmClientOptions } from "./codegen"
 import { OfflineSigner } from "@cosmjs/proto-signing";
 import { SigningStargateClient } from "@cosmjs/stargate";
 import { HttpEndpoint } from "@cosmjs/tendermint-rpc";
@@ -6,9 +6,35 @@ import { GasPrice } from "@cosmjs/stargate/build/fee";
 import { defaultPageRequestProvider } from "./index";
 import { PageRequest } from "./codegen/cosmos/base/query/v1beta1/pagination";
 import { createGrpcWebClient } from "./codegen/pryzm/rpc.query";
+import { createLCDClient } from "./codegen/pryzm/lcd";
 
 export type PryzmGrpcWebClient = Awaited<ReturnType<typeof createGrpcWebClient>>
+export type PryzmLCDClient = Awaited<ReturnType<typeof createLCDClient>>
 export const createPryzmGrpcWebClient = createGrpcWebClient
+export const createPryzmLCDClient = createLCDClient
+
+/**
+ * example:
+ * ```ts
+ *    const balances = await lcdFetchAll(lcdClient, async (client, pageRequest) => {
+ *         const result = await client.cosmos.bank.v1beta1.allBalances({
+ *             address: "pryzm156pcgs3faegfte0vuaykr9az3hh9kx2e2qfwvu",
+ *             pagination: pageRequest
+ *         })
+ *         return [result.pagination.next_key, result.balances]
+ *     })
+ * ```
+ */
+export async function lcdFetchAll<Type>(client: PryzmLCDClient, fetch: (client: PryzmLCDClient, request: PageRequest) =>
+    Promise<[Uint8Array, Type[]]>, pageRequest = defaultPageRequestProvider()): Promise<Type[]> {
+    const result: Type[] = []
+    do {
+        const [nextKey, r] = await fetch(client, pageRequest);
+        if (r) result.push(...r)
+        pageRequest.key = nextKey ? new Uint8Array(Buffer.from(nextKey as any, 'base64')) : null
+    } while (pageRequest.key)
+    return result;
+}
 
 /**
  * ```ts

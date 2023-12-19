@@ -1,12 +1,12 @@
 lockfileVersion: 5.4
 
 specifiers:
-  '@pryzm-finance/pryzmjs': 0.16.0-rc2
+  '@pryzm-finance/pryzmjs': 0.16.0-rc4
   '@refractedlabs/utils': 0.1.9
   typescript: ^5.1.6
 
 dependencies:
-  '@pryzm-finance/pryzmjs': 0.16.0-rc2_google-protobuf@3.21.2
+  '@pryzm-finance/pryzmjs': 0.16.0-rc4_google-protobuf@3.21.2
   '@refractedlabs/utils': 0.1.9
 
 devDependencies:
@@ -22,7 +22,7 @@ packages:
   /@confio/ics23/0.6.8:
     resolution: {integrity: sha512-wB6uo+3A50m0sW/EWcU64xpV/8wShZ6bMTa7pF8eYsTrSkQA7oLUIJcs/wb8g4y2Oyq701BaGiO6n/ak5WXO1w==}
     dependencies:
-      '@noble/hashes': 1.3.2
+      '@noble/hashes': 1.3.3
       protobufjs: 6.11.4
     dev: false
 
@@ -189,11 +189,6 @@ packages:
       google-protobuf: 3.21.2
     dev: false
 
-  /@noble/hashes/1.3.2:
-    resolution: {integrity: sha512-MVC8EAQp7MvEcm30KWENFjgR+Mkmf+D189XJTkFIlwohU5hcBbn1ZkKq7KVTi2Hme3PMGF390DaL52beVrIihQ==}
-    engines: {node: '>= 16'}
-    dev: false
-
   /@noble/hashes/1.3.3:
     resolution: {integrity: sha512-V7/fPHgl+jsVPXqqeOzT8egNj2iBIVt+ECeMMG8TdcnTikP3oaBtUVqpT/gYCR68aEBJSF+XbYUxStjbFMqIIA==}
     engines: {node: '>= 16'}
@@ -242,8 +237,8 @@ packages:
     resolution: {integrity: sha512-Vvn3zZrhQZkkBE8LSuW3em98c0FwgO4nxzv6OdSxPKJIEKY2bGbHn+mhGIPerzI4twdxaP8/0+06HBpwf345Lw==}
     dev: false
 
-  /@pryzm-finance/pryzmjs/0.16.0-rc2_google-protobuf@3.21.2:
-    resolution: {integrity: sha512-IPNgRxqJTs1OzOhxRaQ+CtYG3VgiDkWCuQZmNKpJdVcm7Zv0seelQGZZv03MddVpg5o1YdOCDmGclyhFD4ox9w==, tarball: download/@pryzm-finance/pryzmjs/0.16.0-rc2/2dfec19a27b24311cc407d7548b99806a7df8c85}
+  /@pryzm-finance/pryzmjs/0.16.0-rc4_google-protobuf@3.21.2:
+    resolution: {integrity: sha512-DMLvz5cXLCQwLF6LwIzUVp01zSGrBgCVebJ0qJ2qsitTNOFOdh4izPfpoBKqutKgn4rLh3pgf3ztdlrNh31EJQ==, tarball: download/@pryzm-finance/pryzmjs/0.16.0-rc4/1af6763aee50ecc02355ea17ee093d0a2b7a32e9}
     dependencies:
       '@cosmjs/amino': 0.32.1
       '@cosmjs/proto-signing': 0.32.1
@@ -291,8 +286,10 @@ packages:
     resolution: {integrity: sha512-MqTGEo5bj5t157U6fA/BiDynNkn0YknVdh48CMPkTSpFTVmvao5UQmm7uEF6xBEo7qIMAlY/JSleYaE6VOdpaA==}
     dev: false
 
-  /@types/node/20.6.2:
-    resolution: {integrity: sha512-Y+/1vGBHV/cYk6OI1Na/LHzwnlNCAfU3ZNGrc1LdRe/LAIbdDPTTv/HU3M7yXN448aTVDq3eKRm2cg7iKLb8gw==}
+  /@types/node/20.10.5:
+    resolution: {integrity: sha512-nNPsNE65wjMxEKI93yOP+NPGGBJz/PoN3kZsVLee0XMiJolxSekEVD8wRwBUBqkwc7UWop0edW50yrCQW4CyRw==}
+    dependencies:
+      undici-types: 5.26.5
     dev: false
 
   /@types/triple-beam/1.3.4:
@@ -681,7 +678,7 @@ packages:
       '@protobufjs/pool': 1.1.0
       '@protobufjs/utf8': 1.1.0
       '@types/long': 4.0.2
-      '@types/node': 20.6.2
+      '@types/node': 20.10.5
       long: 4.0.0
     dev: false
 
@@ -746,6 +743,10 @@ packages:
     engines: {node: '>=14.17'}
     hasBin: true
     dev: true
+
+  /undici-types/5.26.5:
+    resolution: {integrity: sha512-JlCMO+ehdEIKqlFxk6IfVoAUVmgz7cU7zD/h9XZ0qzeosSHmUJVOzSQvvYSYWXkFXC+IfLKSIffhv0sVZup6pA==}
+    dev: false
 
   /unix-dgram/2.0.6:
     resolution: {integrity: sha512-AURroAsb73BZ6CdAyMrTk/hYKNj3DuYYEuOaB8bYMOHGKupRNScw90Q5C71tWJc3uE7dIeXRyuwN0xLLq3vDTg==}

@@ -90,6 +90,7 @@ async function main() {
                 scopedIsExclusive: true,
                 scoped: [
                     {dir: 'pryzmatics', packages: ['cosmatics', 'pryzmatics.*']},
+                    {dir: 'pryzm', packages: ['alliance.*', 'cosmos.*', 'ibc.*', 'osmosis.*', 'pryzm.*']},
                 ],
             },
             rpcClients: {
