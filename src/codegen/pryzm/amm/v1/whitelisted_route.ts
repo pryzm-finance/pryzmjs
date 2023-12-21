@@ -11,7 +11,7 @@ export interface WhitelistedRouteProtoMsg {
 }
 export interface WhitelistedRouteAmino {
   steps?: RouteStepAmino[];
-  enabled?: boolean;
+  enabled: boolean;
 }
 export interface WhitelistedRouteAminoMsg {
   type: "/pryzm.amm.v1.WhitelistedRoute";
@@ -95,7 +95,7 @@ export const WhitelistedRoute = {
     } else {
       obj.steps = [];
     }
-    obj.enabled = message.enabled;
+    obj.enabled = message.enabled ?? false;
     return obj;
   },
   fromAminoMsg(object: WhitelistedRouteAminoMsg): WhitelistedRoute {

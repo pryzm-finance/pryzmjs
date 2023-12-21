@@ -26,12 +26,12 @@ export interface RefractableAssetAmino {
   /** The denomination of the token on Pryzm. This may be an icstaking cToken or an IBC transferred token denom for external assets. */
   token_denom?: string;
   /** The id for the host chain on which the asset is staked. This is empty if the asset is external. */
-  host_chain_id?: string;
+  host_chain_id: string;
   /** Disabled assets cannot be refracted, but can still be redeemed. */
-  disabled?: boolean;
-  maturity_params?: MaturityParamsAmino;
+  disabled: boolean;
+  maturity_params: MaturityParamsAmino;
   /** The amount of fee for each operation on the asset. */
-  fee_ratios?: FeeRatiosAmino;
+  fee_ratios: FeeRatiosAmino;
 }
 export interface RefractableAssetAminoMsg {
   type: "/pryzm.assets.v1.RefractableAsset";
@@ -60,9 +60,9 @@ export interface MaturityParamsProtoMsg {
 /** The parameters based on which new maturities are introduced */
 export interface MaturityParamsAmino {
   /** The number of maturities per year: can be 1, 2, 4, 12 */
-  levels_per_year?: number;
+  levels_per_year: number;
   /** The number of years in advance that maturities are made available for */
-  years?: number;
+  years: number;
 }
 export interface MaturityParamsAminoMsg {
   type: "/pryzm.assets.v1.MaturityParams";
@@ -226,10 +226,10 @@ export const RefractableAsset = {
     const obj: any = {};
     obj.id = message.id;
     obj.token_denom = message.tokenDenom;
-    obj.host_chain_id = message.hostChainId;
-    obj.disabled = message.disabled;
-    obj.maturity_params = message.maturityParams ? MaturityParams.toAmino(message.maturityParams) : undefined;
-    obj.fee_ratios = message.feeRatios ? FeeRatios.toAmino(message.feeRatios) : undefined;
+    obj.host_chain_id = message.hostChainId ?? "";
+    obj.disabled = message.disabled ?? false;
+    obj.maturity_params = message.maturityParams ? MaturityParams.toAmino(message.maturityParams) : MaturityParams.fromPartial({});
+    obj.fee_ratios = message.feeRatios ? FeeRatios.toAmino(message.feeRatios) : FeeRatios.fromPartial({});
     return obj;
   },
   fromAminoMsg(object: RefractableAssetAminoMsg): RefractableAsset {
@@ -315,8 +315,8 @@ export const MaturityParams = {
   },
   toAmino(message: MaturityParams): MaturityParamsAmino {
     const obj: any = {};
-    obj.levels_per_year = message.levelsPerYear;
-    obj.years = message.years;
+    obj.levels_per_year = message.levelsPerYear ?? 0;
+    obj.years = message.years ?? 0;
     return obj;
   },
   fromAminoMsg(object: MaturityParamsAminoMsg): MaturityParams {

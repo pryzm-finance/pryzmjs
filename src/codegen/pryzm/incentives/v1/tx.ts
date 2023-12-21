@@ -15,7 +15,7 @@ export interface MsgUpdateParamsProtoMsg {
 }
 export interface MsgUpdateParamsAmino {
   authority?: string;
-  params?: ParamsAmino;
+  params: ParamsAmino;
 }
 export interface MsgUpdateParamsAminoMsg {
   type: "pryzm/incentives/v1/UpdateParams";
@@ -113,7 +113,7 @@ export interface MsgUpdateRewardTokenWeightAmino {
   reward_token?: WeightedRewardTokenAmino;
 }
 export interface MsgUpdateRewardTokenWeightAminoMsg {
-  type: "pryzm/incentives/v1/UpdateRewardTokenWeight";
+  type: "pryzm/incentives/v1/UpdateRewardWeight";
   value: MsgUpdateRewardTokenWeightAmino;
 }
 export interface MsgUpdateRewardTokenWeightSDKType {
@@ -147,7 +147,7 @@ export interface MsgAddRewardTokenToPoolAmino {
   reward_token?: WeightedRewardTokenAmino;
 }
 export interface MsgAddRewardTokenToPoolAminoMsg {
-  type: "pryzm/incentives/v1/AddRewardTokenToPool";
+  type: "pryzm/incentives/v1/AddRewardToken";
   value: MsgAddRewardTokenToPoolAmino;
 }
 export interface MsgAddRewardTokenToPoolSDKType {
@@ -219,7 +219,7 @@ export interface MsgUnbondAmino {
   amount?: CoinAmino;
   unbond_treasury?: string;
   reward_treasury?: string;
-  auto_claim?: boolean;
+  auto_claim: boolean;
 }
 export interface MsgUnbondAminoMsg {
   type: "pryzm/incentives/v1/Unbond";
@@ -302,7 +302,7 @@ export interface MsgClaimUnbondingProtoMsg {
 }
 export interface MsgClaimUnbondingAmino {
   creator?: string;
-  unbonding_id?: string;
+  unbonding_id: string;
 }
 export interface MsgClaimUnbondingAminoMsg {
   type: "pryzm/incentives/v1/ClaimUnbonding";
@@ -340,7 +340,7 @@ export interface MsgCancelUnbondingProtoMsg {
 }
 export interface MsgCancelUnbondingAmino {
   creator?: string;
-  unbonding_id?: string;
+  unbonding_id: string;
   amount?: CoinAmino;
 }
 export interface MsgCancelUnbondingAminoMsg {
@@ -381,7 +381,7 @@ export interface MsgIncentivizePoolProtoMsg {
 export interface MsgIncentivizePoolAmino {
   creator?: string;
   bond_denom?: string;
-  amount?: CoinAmino[];
+  amount: CoinAmino[];
 }
 export interface MsgIncentivizePoolAminoMsg {
   type: "pryzm/incentives/v1/IncentivizePool";
@@ -471,7 +471,7 @@ export const MsgUpdateParams = {
   toAmino(message: MsgUpdateParams): MsgUpdateParamsAmino {
     const obj: any = {};
     obj.authority = message.authority;
-    obj.params = message.params ? Params.toAmino(message.params) : undefined;
+    obj.params = message.params ? Params.toAmino(message.params) : Params.fromPartial({});
     return obj;
   },
   fromAminoMsg(object: MsgUpdateParamsAminoMsg): MsgUpdateParams {
@@ -900,7 +900,7 @@ export const MsgUpdateRewardTokenWeight = {
   },
   toAminoMsg(message: MsgUpdateRewardTokenWeight): MsgUpdateRewardTokenWeightAminoMsg {
     return {
-      type: "pryzm/incentives/v1/UpdateRewardTokenWeight",
+      type: "pryzm/incentives/v1/UpdateRewardWeight",
       value: MsgUpdateRewardTokenWeight.toAmino(message)
     };
   },
@@ -1064,7 +1064,7 @@ export const MsgAddRewardTokenToPool = {
   },
   toAminoMsg(message: MsgAddRewardTokenToPool): MsgAddRewardTokenToPoolAminoMsg {
     return {
-      type: "pryzm/incentives/v1/AddRewardTokenToPool",
+      type: "pryzm/incentives/v1/AddRewardToken",
       value: MsgAddRewardTokenToPool.toAmino(message)
     };
   },
@@ -1414,7 +1414,7 @@ export const MsgUnbond = {
     obj.amount = message.amount ? Coin.toAmino(message.amount) : undefined;
     obj.unbond_treasury = message.unbondTreasury;
     obj.reward_treasury = message.rewardTreasury;
-    obj.auto_claim = message.autoClaim;
+    obj.auto_claim = message.autoClaim ?? false;
     return obj;
   },
   fromAminoMsg(object: MsgUnbondAminoMsg): MsgUnbond {
@@ -1786,7 +1786,7 @@ export const MsgClaimUnbonding = {
   toAmino(message: MsgClaimUnbonding): MsgClaimUnbondingAmino {
     const obj: any = {};
     obj.creator = message.creator;
-    obj.unbonding_id = message.unbondingId ? message.unbondingId.toString() : undefined;
+    obj.unbonding_id = message.unbondingId ? message.unbondingId.toString() : "0";
     return obj;
   },
   fromAminoMsg(object: MsgClaimUnbondingAminoMsg): MsgClaimUnbonding {
@@ -1965,7 +1965,7 @@ export const MsgCancelUnbonding = {
   toAmino(message: MsgCancelUnbonding): MsgCancelUnbondingAmino {
     const obj: any = {};
     obj.creator = message.creator;
-    obj.unbonding_id = message.unbondingId ? message.unbondingId.toString() : undefined;
+    obj.unbonding_id = message.unbondingId ? message.unbondingId.toString() : "0";
     obj.amount = message.amount ? Coin.toAmino(message.amount) : undefined;
     return obj;
   },

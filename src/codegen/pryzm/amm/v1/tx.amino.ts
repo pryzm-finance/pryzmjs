@@ -147,22 +147,22 @@ export const AminoConverter = {
     fromAmino: MsgSetJoinExitProtocolFee.fromAmino
   },
   "/pryzm.amm.v1.MsgIntroduceYammLpToWeightedPool": {
-    aminoType: "pryzm/amm/v1/IntroduceYammLpToWeightedPool",
+    aminoType: "pryzm/amm/v1/IntroYammLpToWeighted",
     toAmino: MsgIntroduceYammLpToWeightedPool.toAmino,
     fromAmino: MsgIntroduceYammLpToWeightedPool.fromAmino
   },
   "/pryzm.amm.v1.MsgIntroduceAssetBaseTokenToWeightedPool": {
-    aminoType: "pryzm/amm/v1/IntroduceAssetBaseTokenToWeightedPool",
+    aminoType: "pryzm/amm/v1/IntroBaseTokenToWeighted",
     toAmino: MsgIntroduceAssetBaseTokenToWeightedPool.toAmino,
     fromAmino: MsgIntroduceAssetBaseTokenToWeightedPool.fromAmino
   },
   "/pryzm.amm.v1.MsgCancelPendingTokenIntroduction": {
-    aminoType: "pryzm/amm/v1/CancelPendingTokenIntroduction",
+    aminoType: "pryzm/amm/v1/CancelPendingTokenIntro",
     toAmino: MsgCancelPendingTokenIntroduction.toAmino,
     fromAmino: MsgCancelPendingTokenIntroduction.fromAmino
   },
   "/pryzm.amm.v1.MsgRemoveTokenFromWeightedPool": {
-    aminoType: "pryzm/amm/v1/RemoveTokenFromWeightedPool",
+    aminoType: "pryzm/amm/v1/RemoveTokenFromWeighted",
     toAmino: MsgRemoveTokenFromWeightedPool.toAmino,
     fromAmino: MsgRemoveTokenFromWeightedPool.fromAmino
   },

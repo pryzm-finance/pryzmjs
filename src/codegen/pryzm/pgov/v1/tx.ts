@@ -13,7 +13,7 @@ export interface MsgUpdateParamsProtoMsg {
 }
 export interface MsgUpdateParamsAmino {
   authority?: string;
-  params?: ParamsAmino;
+  params: ParamsAmino;
 }
 export interface MsgUpdateParamsAminoMsg {
   type: "pryzm/pgov/v1/UpdateParams";
@@ -44,7 +44,7 @@ export interface MsgStakePAssetsProtoMsg {
 }
 export interface MsgStakePAssetsAmino {
   creator?: string;
-  amount?: CoinAmino[];
+  amount: CoinAmino[];
 }
 export interface MsgStakePAssetsAminoMsg {
   type: "pryzm/pgov/v1/StakePAssets";
@@ -81,7 +81,7 @@ export interface MsgUnstakePAssetsProtoMsg {
 }
 export interface MsgUnstakePAssetsAmino {
   creator?: string;
-  amount?: CoinAmino[];
+  amount: CoinAmino[];
 }
 export interface MsgUnstakePAssetsAminoMsg {
   type: "pryzm/pgov/v1/UnstakePAssets";
@@ -121,8 +121,8 @@ export interface MsgSubmitVoteProtoMsg {
 export interface MsgSubmitVoteAmino {
   voter?: string;
   asset?: string;
-  proposal?: string;
-  options?: WeightedVoteOptionAmino[];
+  proposal: string;
+  options: WeightedVoteOptionAmino[];
 }
 export interface MsgSubmitVoteAminoMsg {
   type: "pryzm/pgov/v1/SubmitVote";
@@ -159,9 +159,9 @@ export interface MsgSubmitProposalProtoMsg {
 export interface MsgSubmitProposalAmino {
   creator?: string;
   asset?: string;
-  proposal?: string;
-  height?: string;
-  proof?: ProofOpsAmino;
+  proposal: string;
+  height: string;
+  proof: ProofOpsAmino;
 }
 export interface MsgSubmitProposalAminoMsg {
   type: "pryzm/pgov/v1/SubmitProposal";
@@ -203,7 +203,7 @@ export interface MsgRetryVoteTransmitProtoMsg {
 export interface MsgRetryVoteTransmitAmino {
   creator?: string;
   asset?: string;
-  proposal?: string;
+  proposal: string;
 }
 export interface MsgRetryVoteTransmitAminoMsg {
   type: "pryzm/pgov/v1/RetryVoteTransmit";
@@ -293,7 +293,7 @@ export const MsgUpdateParams = {
   toAmino(message: MsgUpdateParams): MsgUpdateParamsAmino {
     const obj: any = {};
     obj.authority = message.authority;
-    obj.params = message.params ? Params.toAmino(message.params) : undefined;
+    obj.params = message.params ? Params.toAmino(message.params) : Params.fromPartial({});
     return obj;
   },
   fromAminoMsg(object: MsgUpdateParamsAminoMsg): MsgUpdateParams {
@@ -816,7 +816,7 @@ export const MsgSubmitVote = {
     const obj: any = {};
     obj.voter = message.voter;
     obj.asset = message.asset;
-    obj.proposal = message.proposal ? message.proposal.toString() : undefined;
+    obj.proposal = message.proposal ? message.proposal.toString() : "0";
     if (message.options) {
       obj.options = message.options.map(e => e ? WeightedVoteOption.toAmino(e) : undefined);
     } else {
@@ -1011,8 +1011,8 @@ export const MsgSubmitProposal = {
     const obj: any = {};
     obj.creator = message.creator;
     obj.asset = message.asset;
-    obj.proposal = message.proposal ? base64FromBytes(message.proposal) : undefined;
-    obj.height = message.height ? message.height.toString() : undefined;
+    obj.proposal = message.proposal ? base64FromBytes(message.proposal) : "";
+    obj.height = message.height ? message.height.toString() : "0";
     obj.proof = message.proof ? ProofOps.toAmino(message.proof) : undefined;
     return obj;
   },
@@ -1193,7 +1193,7 @@ export const MsgRetryVoteTransmit = {
     const obj: any = {};
     obj.creator = message.creator;
     obj.asset = message.asset;
-    obj.proposal = message.proposal ? message.proposal.toString() : undefined;
+    obj.proposal = message.proposal ? message.proposal.toString() : "0";
     return obj;
   },
   fromAminoMsg(object: MsgRetryVoteTransmitAminoMsg): MsgRetryVoteTransmit {

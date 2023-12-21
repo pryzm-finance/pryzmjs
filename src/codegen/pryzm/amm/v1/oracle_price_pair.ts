@@ -91,10 +91,10 @@ export interface OraclePricePairAmino {
    * for example usdc token might have contract or ibc denom on different chains with different channel and ids
    */
   quote_token?: string;
-  twap_duration_millis?: string;
-  twap_algorithm?: TwapAlgorithm;
-  disabled?: boolean;
-  pairs?: PairAmino[];
+  twap_duration_millis: string;
+  twap_algorithm: TwapAlgorithm;
+  disabled: boolean;
+  pairs: PairAmino[];
   /**
    * this is the denom of the base token on this chain
    * should be ibc denom for most cases
@@ -365,9 +365,9 @@ export const OraclePricePair = {
     const obj: any = {};
     obj.asset_id = message.assetId;
     obj.quote_token = message.quoteToken;
-    obj.twap_duration_millis = message.twapDurationMillis ? message.twapDurationMillis.toString() : undefined;
+    obj.twap_duration_millis = message.twapDurationMillis ? message.twapDurationMillis.toString() : "0";
     obj.twap_algorithm = twapAlgorithmToJSON(message.twapAlgorithm);
-    obj.disabled = message.disabled;
+    obj.disabled = message.disabled ?? false;
     if (message.pairs) {
       obj.pairs = message.pairs.map(e => e ? Pair.toAmino(e) : undefined);
     } else {

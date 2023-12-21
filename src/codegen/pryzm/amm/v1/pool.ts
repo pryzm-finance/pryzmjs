@@ -43,8 +43,8 @@ export interface PoolPauseWindowProtoMsg {
   value: Uint8Array;
 }
 export interface PoolPauseWindowAmino {
-  pause_window_end_unix_millis?: string;
-  buffer_period_end_unix_millis?: string;
+  pause_window_end_unix_millis: string;
+  buffer_period_end_unix_millis: string;
 }
 export interface PoolPauseWindowAminoMsg {
   type: "/pryzm.amm.v1.PoolPauseWindow";
@@ -197,8 +197,8 @@ export const PoolPauseWindow = {
   },
   toAmino(message: PoolPauseWindow): PoolPauseWindowAmino {
     const obj: any = {};
-    obj.pause_window_end_unix_millis = message.pauseWindowEndUnixMillis ? message.pauseWindowEndUnixMillis.toString() : undefined;
-    obj.buffer_period_end_unix_millis = message.bufferPeriodEndUnixMillis ? message.bufferPeriodEndUnixMillis.toString() : undefined;
+    obj.pause_window_end_unix_millis = message.pauseWindowEndUnixMillis ? message.pauseWindowEndUnixMillis.toString() : "0";
+    obj.buffer_period_end_unix_millis = message.bufferPeriodEndUnixMillis ? message.bufferPeriodEndUnixMillis.toString() : "0";
     return obj;
   },
   fromAminoMsg(object: PoolPauseWindowAminoMsg): PoolPauseWindow {

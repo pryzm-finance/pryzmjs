@@ -13,9 +13,9 @@ export interface ParamsProtoMsg {
 }
 /** Params defines the parameters for the module. */
 export interface ParamsAmino {
-  default_fee_ratios?: FeeRatiosAmino;
+  default_fee_ratios: FeeRatiosAmino;
   /** the list of admin addresses, able to register new assets or disable an existing asset */
-  admins?: string[];
+  admins: string[];
 }
 export interface ParamsAminoMsg {
   type: "/pryzm.assets.v1.Params";
@@ -95,7 +95,7 @@ export const Params = {
   },
   toAmino(message: Params): ParamsAmino {
     const obj: any = {};
-    obj.default_fee_ratios = message.defaultFeeRatios ? FeeRatios.toAmino(message.defaultFeeRatios) : undefined;
+    obj.default_fee_ratios = message.defaultFeeRatios ? FeeRatios.toAmino(message.defaultFeeRatios) : FeeRatios.fromPartial({});
     if (message.admins) {
       obj.admins = message.admins.map(e => e);
     } else {

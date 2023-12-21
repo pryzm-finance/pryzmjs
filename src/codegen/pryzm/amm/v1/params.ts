@@ -21,8 +21,8 @@ export interface OrderParametersAmino {
   step_swap_fee_ratio?: string;
   matching_protocol_fee_ratio?: string;
   matching_solver_fee_ratio?: string;
-  max_orders_per_block?: number;
-  max_schedule_per_block?: number;
+  max_orders_per_block: number;
+  max_schedule_per_block: number;
   max_exec_order_trade_ratio?: string;
   max_order_step_ratio?: string;
   min_order_step_ratio?: string;
@@ -71,8 +71,8 @@ export interface YammParametersProtoMsg {
 export interface YammParametersAmino {
   lambda?: string;
   /** duration (milliseconds) for virtual balance when adding new pAssets to yamm pools */
-  maturity_introduction_interval_millis?: string;
-  maturity_expiration_interval_millis?: string;
+  maturity_introduction_interval_millis: string;
+  maturity_expiration_interval_millis: string;
   introduction_virtual_balance_scaler?: string;
   expiration_virtual_balance_scaler?: string;
   buy_y_given_in_loan_fee_ratio?: string;
@@ -82,13 +82,13 @@ export interface YammParametersAmino {
    * this will be set to newly created yamm pools
    * if not empty, only these addresses can initialize the pools
    */
-  default_initialization_allow_list?: string[];
+  default_initialization_allow_list: string[];
   avg_monthly_yield_rate?: string;
   yield_fee_scaler?: string;
   /** this will be set to newly created yamm pools */
-  default_admins?: string[];
+  default_admins: string[];
   /** this will be set to newly created yamm pools */
-  default_pause_allow_list?: string[];
+  default_pause_allow_list: string[];
 }
 export interface YammParametersAminoMsg {
   type: "/pryzm.amm.v1.YammParameters";
@@ -120,7 +120,7 @@ export interface GeneralPoolParametersProtoMsg {
   value: Uint8Array;
 }
 export interface GeneralPoolParametersAmino {
-  allow_public_pool_creation?: boolean;
+  allow_public_pool_creation: boolean;
   default_swap_fee_ratio?: string;
   swap_protocol_fee_ratio?: string;
   join_exit_protocol_fee_ratio?: string;
@@ -149,13 +149,13 @@ export interface AuthorizationParametersProtoMsg {
   value: Uint8Array;
 }
 export interface AuthorizationParametersAmino {
-  admin_list?: string[];
+  admin_list: string[];
   /**
    * can pause the vault and also set pools to paused_by_gov mode which
    * is a special mode where only the gov can unpause and does not have a window
    * these cannot unpause anything
    */
-  pause_allow_list?: string[];
+  pause_allow_list: string[];
 }
 export interface AuthorizationParametersAminoMsg {
   type: "/pryzm.amm.v1.AuthorizationParameters";
@@ -356,8 +356,8 @@ export const OrderParameters = {
     obj.step_swap_fee_ratio = message.stepSwapFeeRatio;
     obj.matching_protocol_fee_ratio = message.matchingProtocolFeeRatio;
     obj.matching_solver_fee_ratio = message.matchingSolverFeeRatio;
-    obj.max_orders_per_block = message.maxOrdersPerBlock;
-    obj.max_schedule_per_block = message.maxSchedulePerBlock;
+    obj.max_orders_per_block = message.maxOrdersPerBlock ?? 0;
+    obj.max_schedule_per_block = message.maxSchedulePerBlock ?? 0;
     obj.max_exec_order_trade_ratio = message.maxExecOrderTradeRatio;
     obj.max_order_step_ratio = message.maxOrderStepRatio;
     obj.min_order_step_ratio = message.minOrderStepRatio;
@@ -596,8 +596,8 @@ export const YammParameters = {
   toAmino(message: YammParameters): YammParametersAmino {
     const obj: any = {};
     obj.lambda = message.lambda;
-    obj.maturity_introduction_interval_millis = message.maturityIntroductionIntervalMillis ? message.maturityIntroductionIntervalMillis.toString() : undefined;
-    obj.maturity_expiration_interval_millis = message.maturityExpirationIntervalMillis ? message.maturityExpirationIntervalMillis.toString() : undefined;
+    obj.maturity_introduction_interval_millis = message.maturityIntroductionIntervalMillis ? message.maturityIntroductionIntervalMillis.toString() : "0";
+    obj.maturity_expiration_interval_millis = message.maturityExpirationIntervalMillis ? message.maturityExpirationIntervalMillis.toString() : "0";
     obj.introduction_virtual_balance_scaler = message.introductionVirtualBalanceScaler;
     obj.expiration_virtual_balance_scaler = message.expirationVirtualBalanceScaler;
     obj.buy_y_given_in_loan_fee_ratio = message.buyYGivenInLoanFeeRatio;
@@ -731,7 +731,7 @@ export const GeneralPoolParameters = {
   },
   toAmino(message: GeneralPoolParameters): GeneralPoolParametersAmino {
     const obj: any = {};
-    obj.allow_public_pool_creation = message.allowPublicPoolCreation;
+    obj.allow_public_pool_creation = message.allowPublicPoolCreation ?? false;
     obj.default_swap_fee_ratio = message.defaultSwapFeeRatio;
     obj.swap_protocol_fee_ratio = message.swapProtocolFeeRatio;
     obj.join_exit_protocol_fee_ratio = message.joinExitProtocolFeeRatio;

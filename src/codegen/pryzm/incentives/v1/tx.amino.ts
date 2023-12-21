@@ -12,12 +12,12 @@ export const AminoConverter = {
     fromAmino: MsgCreatePool.fromAmino
   },
   "/pryzm.incentives.v1.MsgUpdateRewardTokenWeight": {
-    aminoType: "pryzm/incentives/v1/UpdateRewardTokenWeight",
+    aminoType: "pryzm/incentives/v1/UpdateRewardWeight",
     toAmino: MsgUpdateRewardTokenWeight.toAmino,
     fromAmino: MsgUpdateRewardTokenWeight.fromAmino
   },
   "/pryzm.incentives.v1.MsgAddRewardTokenToPool": {
-    aminoType: "pryzm/incentives/v1/AddRewardTokenToPool",
+    aminoType: "pryzm/incentives/v1/AddRewardToken",
     toAmino: MsgAddRewardTokenToPool.toAmino,
     fromAmino: MsgAddRewardTokenToPool.fromAmino
   },

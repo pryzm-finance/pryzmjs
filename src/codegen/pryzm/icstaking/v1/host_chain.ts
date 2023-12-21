@@ -207,7 +207,7 @@ export interface HostChainAmino {
   /** list of supported transfer channels for transferring the base_denom tokens between the host chain and Pryzm */
   transfer_channels?: TransferChannelAmino[];
   /** Parameters for staking/unstaking on the host chain */
-  params?: StakingParamsAmino;
+  params: StakingParamsAmino;
   /** list of whitelisted validators to which Pryzm sends the staked funds. */
   validators?: ValidatorAmino[];
 }
@@ -588,7 +588,7 @@ export const HostChain = {
     } else {
       obj.transfer_channels = [];
     }
-    obj.params = message.params ? StakingParams.toAmino(message.params) : undefined;
+    obj.params = message.params ? StakingParams.toAmino(message.params) : StakingParams.fromPartial({});
     if (message.validators) {
       obj.validators = message.validators.map(e => e ? Validator.toAmino(e) : undefined);
     } else {

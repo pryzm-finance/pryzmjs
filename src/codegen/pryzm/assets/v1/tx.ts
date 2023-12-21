@@ -12,7 +12,7 @@ export interface MsgRegisterAssetProtoMsg {
 }
 export interface MsgRegisterAssetAmino {
   creator?: string;
-  asset?: RefractableAssetAmino;
+  asset: RefractableAssetAmino;
 }
 export interface MsgRegisterAssetAminoMsg {
   type: "pryzm/assets/v1/RegisterAsset";
@@ -76,7 +76,7 @@ export interface MsgUpdateMaturityParamsProtoMsg {
 export interface MsgUpdateMaturityParamsAmino {
   authority?: string;
   asset_id?: string;
-  params?: MaturityParamsAmino;
+  params: MaturityParamsAmino;
 }
 export interface MsgUpdateMaturityParamsAminoMsg {
   type: "pryzm/assets/v1/UpdateMaturityParams";
@@ -110,7 +110,7 @@ export interface MsgUpdateFeeRatiosProtoMsg {
 export interface MsgUpdateFeeRatiosAmino {
   authority?: string;
   asset_id?: string;
-  fee_ratios?: FeeRatiosAmino;
+  fee_ratios: FeeRatiosAmino;
 }
 export interface MsgUpdateFeeRatiosAminoMsg {
   type: "pryzm/assets/v1/UpdateFeeRatios";
@@ -142,7 +142,7 @@ export interface MsgUpdateParamsProtoMsg {
 }
 export interface MsgUpdateParamsAmino {
   authority?: string;
-  params?: ParamsAmino;
+  params: ParamsAmino;
 }
 export interface MsgUpdateParamsAminoMsg {
   type: "pryzm/assets/v1/UpdateParams";
@@ -231,7 +231,7 @@ export const MsgRegisterAsset = {
   toAmino(message: MsgRegisterAsset): MsgRegisterAssetAmino {
     const obj: any = {};
     obj.creator = message.creator;
-    obj.asset = message.asset ? RefractableAsset.toAmino(message.asset) : undefined;
+    obj.asset = message.asset ? RefractableAsset.toAmino(message.asset) : RefractableAsset.fromPartial({});
     return obj;
   },
   fromAminoMsg(object: MsgRegisterAssetAminoMsg): MsgRegisterAsset {
@@ -545,7 +545,7 @@ export const MsgUpdateMaturityParams = {
     const obj: any = {};
     obj.authority = message.authority;
     obj.asset_id = message.assetId;
-    obj.params = message.params ? MaturityParams.toAmino(message.params) : undefined;
+    obj.params = message.params ? MaturityParams.toAmino(message.params) : MaturityParams.fromPartial({});
     return obj;
   },
   fromAminoMsg(object: MsgUpdateMaturityParamsAminoMsg): MsgUpdateMaturityParams {
@@ -709,7 +709,7 @@ export const MsgUpdateFeeRatios = {
     const obj: any = {};
     obj.authority = message.authority;
     obj.asset_id = message.assetId;
-    obj.fee_ratios = message.feeRatios ? FeeRatios.toAmino(message.feeRatios) : undefined;
+    obj.fee_ratios = message.feeRatios ? FeeRatios.toAmino(message.feeRatios) : FeeRatios.fromPartial({});
     return obj;
   },
   fromAminoMsg(object: MsgUpdateFeeRatiosAminoMsg): MsgUpdateFeeRatios {
@@ -859,7 +859,7 @@ export const MsgUpdateParams = {
   toAmino(message: MsgUpdateParams): MsgUpdateParamsAmino {
     const obj: any = {};
     obj.authority = message.authority;
-    obj.params = message.params ? Params.toAmino(message.params) : undefined;
+    obj.params = message.params ? Params.toAmino(message.params) : Params.fromPartial({});
     return obj;
   },
   fromAminoMsg(object: MsgUpdateParamsAminoMsg): MsgUpdateParams {
