@@ -1,12 +1,12 @@
 lockfileVersion: 5.4
 
 specifiers:
-  '@pryzm-finance/pryzmjs': 0.16.1
+  '@pryzm-finance/pryzmjs': 0.16.2
   '@refractedlabs/utils': 0.1.9
   typescript: ^5.1.6
 
 dependencies:
-  '@pryzm-finance/pryzmjs': 0.16.1_google-protobuf@3.21.2
+  '@pryzm-finance/pryzmjs': 0.16.2_google-protobuf@3.21.2
   '@refractedlabs/utils': 0.1.9
 
 devDependencies:
@@ -29,26 +29,26 @@ packages:
   /@cosmjs/amino/0.32.1:
     resolution: {integrity: sha512-5l2xQ2XuAhV/B3kTIMPBcVZ/OQ+9Yyddzw/lIVs4qE5e/oBI0PVNWXw1oyR0wgfGHrMUxgKjsoOOqE2IbXVyCw==}
     dependencies:
-      '@cosmjs/crypto': 0.32.1
-      '@cosmjs/encoding': 0.32.1
-      '@cosmjs/math': 0.32.1
-      '@cosmjs/utils': 0.32.1
+      '@cosmjs/crypto': 0.32.2
+      '@cosmjs/encoding': 0.32.2
+      '@cosmjs/math': 0.32.2
+      '@cosmjs/utils': 0.32.2
     dev: false
 
-  /@cosmjs/crypto/0.32.1:
-    resolution: {integrity: sha512-AsKucEg5o8evU0wXF/lDwX+ZSwCKF4bbc57nFzraHywlp3sNu4dfPPURoMrT0r7kT7wQZAy4Pdnvmm9nnCCm/Q==}
+  /@cosmjs/crypto/0.32.2:
+    resolution: {integrity: sha512-RuxrYKzhrPF9g6NmU7VEq++Hn1vZJjqqJpZ9Tmw9lOYOV8BUsv+j/0BE86kmWi7xVJ7EwxiuxYsKuM8IR18CIA==}
     dependencies:
-      '@cosmjs/encoding': 0.32.1
-      '@cosmjs/math': 0.32.1
-      '@cosmjs/utils': 0.32.1
+      '@cosmjs/encoding': 0.32.2
+      '@cosmjs/math': 0.32.2
+      '@cosmjs/utils': 0.32.2
       '@noble/hashes': 1.3.3
       bn.js: 5.2.1
       elliptic: 6.5.4
       libsodium-wrappers-sumo: 0.7.13
     dev: false
 
-  /@cosmjs/encoding/0.32.1:
-    resolution: {integrity: sha512-x60Lfds+Eq42rVV29NaoIAson3kBhATBI3zPp7X3GJTryBc5HFHQ6L/976tE1WB2DrvkfUdWS3ayCMVOY/qm1g==}
+  /@cosmjs/encoding/0.32.2:
+    resolution: {integrity: sha512-WX7m1wLpA9V/zH0zRcz4EmgZdAv1F44g4dbXOgNj1eXZw1PIGR12p58OEkLN51Ha3S4DKRtCv5CkhK1KHEvQtg==}
     dependencies:
       base64-js: 1.5.1
       bech32: 1.1.4
@@ -62,15 +62,15 @@ packages:
       xstream: 11.14.0
     dev: false
 
-  /@cosmjs/json-rpc/0.32.1:
-    resolution: {integrity: sha512-Hsj3Sg+m/JF8qfISp/G4TXQ0FAO01mzDKtNcgKufIHCrvJNDiE69xGyGgSm/qKwsXLBmzRTSxHWK0+yZef3LNQ==}
+  /@cosmjs/json-rpc/0.32.2:
+    resolution: {integrity: sha512-lan2lOgmz4yVE/HR8eCOSiII/1OudIulk8836koyIDCsPEpt6eKBuctnAD168vABGArKccLAo7Mr2gy9nrKrOQ==}
     dependencies:
-      '@cosmjs/stream': 0.32.1
+      '@cosmjs/stream': 0.32.2
       xstream: 11.14.0
     dev: false
 
-  /@cosmjs/math/0.32.1:
-    resolution: {integrity: sha512-sqJgDjPh49rxe06apzwKYLxAw4LLFKmEd4yQtHqH16BxVVUrvK5UH9TEBpUrRErdjqENowekecDCDBZspGXHNA==}
+  /@cosmjs/math/0.32.2:
+    resolution: {integrity: sha512-b8+ruAAY8aKtVKWSft2IvtCVCUH1LigIlf9ALIiY8n9jtM4kMASiaRbQ/27etnSAInV88IaezKK9rQZrtxTjcw==}
     dependencies:
       bn.js: 5.2.1
     dev: false
@@ -79,10 +79,10 @@ packages:
     resolution: {integrity: sha512-IHJMXQ8XnfzR5K1hWb8VV/jEfJof6BL2mgGIA7X4hSPegwoVfb9hnFKPEPgFjGCTTvGZ8SfnCdXxpsOjianVIA==}
     dependencies:
       '@cosmjs/amino': 0.32.1
-      '@cosmjs/crypto': 0.32.1
-      '@cosmjs/encoding': 0.32.1
-      '@cosmjs/math': 0.32.1
-      '@cosmjs/utils': 0.32.1
+      '@cosmjs/crypto': 0.32.2
+      '@cosmjs/encoding': 0.32.2
+      '@cosmjs/math': 0.32.2
+      '@cosmjs/utils': 0.32.2
       cosmjs-types: 0.9.0
     dev: false
 
@@ -98,10 +98,10 @@ packages:
       - utf-8-validate
     dev: false
 
-  /@cosmjs/socket/0.32.1:
-    resolution: {integrity: sha512-thPCLCmnCuZvrsDW4YmsADI/MliOXWuMnflbzX+3OhoTuEav2I4/1aOXY0jdy0bbqL0l1opx+JfmwdWptMgKzg==}
+  /@cosmjs/socket/0.32.2:
+    resolution: {integrity: sha512-Qc8jaw4uSBJm09UwPgkqe3g9TBFx4ZR9HkXpwT6Z9I+6kbLerXPR0Gy3NSJFSUgxIfTpO8O1yqoWAyf0Ay17Mw==}
     dependencies:
-      '@cosmjs/stream': 0.32.1
+      '@cosmjs/stream': 0.32.2
       isomorphic-ws: 4.0.1_ws@7.5.9
       ws: 7.5.9
       xstream: 11.14.0
@@ -115,12 +115,12 @@ packages:
     dependencies:
       '@confio/ics23': 0.6.8
       '@cosmjs/amino': 0.32.1
-      '@cosmjs/encoding': 0.32.1
-      '@cosmjs/math': 0.32.1
+      '@cosmjs/encoding': 0.32.2
+      '@cosmjs/math': 0.32.2
       '@cosmjs/proto-signing': 0.32.1
-      '@cosmjs/stream': 0.32.1
+      '@cosmjs/stream': 0.32.2
       '@cosmjs/tendermint-rpc': 0.32.1
-      '@cosmjs/utils': 0.32.1
+      '@cosmjs/utils': 0.32.2
       cosmjs-types: 0.9.0
       xstream: 11.14.0
     transitivePeerDependencies:
@@ -135,8 +135,8 @@ packages:
       xstream: 11.14.0
     dev: false
 
-  /@cosmjs/stream/0.32.1:
-    resolution: {integrity: sha512-6RwHaGxWbIG0y++aCYP/doa4ex/Up8Q8G+ehwDzAq3aKl3zbDe9L0FmycclnMuwPm/baPIkEZ6+IVmJoNLX79Q==}
+  /@cosmjs/stream/0.32.2:
+    resolution: {integrity: sha512-gpCufLfHAD8Zp1ZKge7AHbDf4RA0TZp66wZY6JaQR5bSiEF2Drjtp4mwXZPGejtaUMnaAgff3LrUzPJfKYdQwg==}
     dependencies:
       xstream: 11.14.0
     dev: false
@@ -144,13 +144,13 @@ packages:
   /@cosmjs/tendermint-rpc/0.32.1:
     resolution: {integrity: sha512-4uGSxB2JejWhwBUgxca4GqcK/BGnCFMIP7ptwEledrC3AY/shPeIYcPXWEBwO7sfwCta8DhAOCLrc9zhVC+VAQ==}
     dependencies:
-      '@cosmjs/crypto': 0.32.1
-      '@cosmjs/encoding': 0.32.1
-      '@cosmjs/json-rpc': 0.32.1
-      '@cosmjs/math': 0.32.1
-      '@cosmjs/socket': 0.32.1
-      '@cosmjs/stream': 0.32.1
-      '@cosmjs/utils': 0.32.1
+      '@cosmjs/crypto': 0.32.2
+      '@cosmjs/encoding': 0.32.2
+      '@cosmjs/json-rpc': 0.32.2
+      '@cosmjs/math': 0.32.2
+      '@cosmjs/socket': 0.32.2
+      '@cosmjs/stream': 0.32.2
+      '@cosmjs/utils': 0.32.2
       axios: 1.6.2
       readonly-date: 1.0.0
       xstream: 11.14.0
@@ -160,8 +160,8 @@ packages:
       - utf-8-validate
     dev: false
 
-  /@cosmjs/utils/0.32.1:
-    resolution: {integrity: sha512-PV9pa0cVPFCNgfQKEOc6RcNFHr5wMQLcDqWoo/ekIoj1AfzAaqnojdnL80u1C9Qf+vOfRGIXubqiU7Tl7QZuig==}
+  /@cosmjs/utils/0.32.2:
+    resolution: {integrity: sha512-Gg5t+eR7vPJMAmhkFt6CZrzPd0EKpAslWwk5rFVYZpJsM8JG5KT9XQ99hgNM3Ov6ScNoIWbXkpX27F6A9cXR4Q==}
     dev: false
 
   /@dabh/diagnostics/2.0.3:
@@ -237,8 +237,8 @@ packages:
     resolution: {integrity: sha512-Vvn3zZrhQZkkBE8LSuW3em98c0FwgO4nxzv6OdSxPKJIEKY2bGbHn+mhGIPerzI4twdxaP8/0+06HBpwf345Lw==}
     dev: false
 
-  /@pryzm-finance/pryzmjs/0.16.1_google-protobuf@3.21.2:
-    resolution: {integrity: sha512-DZu6mxU45NFtxbWVxG9/1ttHZDR5qVNCPLIlqtZV5Et2N9ILdJiFZT2xTZA4QCWTSBCXmxwWXeE8pnaYXXOm8Q==, tarball: download/@pryzm-finance/pryzmjs/0.16.1/01b0247938415ab71188d740d43dd7bfc602255e}
+  /@pryzm-finance/pryzmjs/0.16.2_google-protobuf@3.21.2:
+    resolution: {integrity: sha512-ZVn5u+VM+H90FeE50y6pMGDZGFHGu2fhCzmEe0AE7CdbsjhtuxBP4LDbfcD4EwvwVHf4509ej0d53Y31pinC6A==, tarball: download/@pryzm-finance/pryzmjs/0.16.2/bd03093135095b437325abd8768c4bda9902b7aa}
     dependencies:
       '@refractedlabs/utils': 0.3.1_google-protobuf@3.21.2
     transitivePeerDependencies:

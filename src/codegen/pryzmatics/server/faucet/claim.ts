@@ -3,6 +3,7 @@ import { isSet } from "../../../helpers";
 export interface QueryClaimRequest {
   address: string;
   recaptchaResponse: string;
+  recaptchaVersion: string;
 }
 export interface QueryClaimRequestProtoMsg {
   typeUrl: "/pryzmatics.server.faucet.QueryClaimRequest";
@@ -11,6 +12,7 @@ export interface QueryClaimRequestProtoMsg {
 export interface QueryClaimRequestAmino {
   address?: string;
   recaptcha_response?: string;
+  recaptcha_version?: string;
 }
 export interface QueryClaimRequestAminoMsg {
   type: "/pryzmatics.server.faucet.QueryClaimRequest";
@@ -19,6 +21,7 @@ export interface QueryClaimRequestAminoMsg {
 export interface QueryClaimRequestSDKType {
   address: string;
   recaptcha_response: string;
+  recaptcha_version: string;
 }
 export interface QueryClaimResponse {}
 export interface QueryClaimResponseProtoMsg {
@@ -34,7 +37,8 @@ export interface QueryClaimResponseSDKType {}
 function createBaseQueryClaimRequest(): QueryClaimRequest {
   return {
     address: "",
-    recaptchaResponse: ""
+    recaptchaResponse: "",
+    recaptchaVersion: ""
   };
 }
 export const QueryClaimRequest = {
@@ -45,6 +49,9 @@ export const QueryClaimRequest = {
     }
     if (message.recaptchaResponse !== "") {
       writer.uint32(18).string(message.recaptchaResponse);
+    }
+    if (message.recaptchaVersion !== "") {
+      writer.uint32(26).string(message.recaptchaVersion);
     }
     return writer;
   },
@@ -61,6 +68,9 @@ export const QueryClaimRequest = {
         case 2:
           message.recaptchaResponse = reader.string();
           break;
+        case 3:
+          message.recaptchaVersion = reader.string();
+          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -71,19 +81,22 @@ export const QueryClaimRequest = {
   fromJSON(object: any): QueryClaimRequest {
     return {
       address: isSet(object.address) ? String(object.address) : "",
-      recaptchaResponse: isSet(object.recaptchaResponse) ? String(object.recaptchaResponse) : ""
+      recaptchaResponse: isSet(object.recaptchaResponse) ? String(object.recaptchaResponse) : "",
+      recaptchaVersion: isSet(object.recaptchaVersion) ? String(object.recaptchaVersion) : ""
     };
   },
   toJSON(message: QueryClaimRequest): unknown {
     const obj: any = {};
     message.address !== undefined && (obj.address = message.address);
     message.recaptchaResponse !== undefined && (obj.recaptchaResponse = message.recaptchaResponse);
+    message.recaptchaVersion !== undefined && (obj.recaptchaVersion = message.recaptchaVersion);
     return obj;
   },
   fromPartial(object: Partial<QueryClaimRequest>): QueryClaimRequest {
     const message = createBaseQueryClaimRequest();
     message.address = object.address ?? "";
     message.recaptchaResponse = object.recaptchaResponse ?? "";
+    message.recaptchaVersion = object.recaptchaVersion ?? "";
     return message;
   },
   fromAmino(object: QueryClaimRequestAmino): QueryClaimRequest {
@@ -94,12 +107,16 @@ export const QueryClaimRequest = {
     if (object.recaptcha_response !== undefined && object.recaptcha_response !== null) {
       message.recaptchaResponse = object.recaptcha_response;
     }
+    if (object.recaptcha_version !== undefined && object.recaptcha_version !== null) {
+      message.recaptchaVersion = object.recaptcha_version;
+    }
     return message;
   },
   toAmino(message: QueryClaimRequest): QueryClaimRequestAmino {
     const obj: any = {};
     obj.address = message.address;
     obj.recaptcha_response = message.recaptchaResponse;
+    obj.recaptcha_version = message.recaptchaVersion;
     return obj;
   },
   fromAminoMsg(object: QueryClaimRequestAminoMsg): QueryClaimRequest {
