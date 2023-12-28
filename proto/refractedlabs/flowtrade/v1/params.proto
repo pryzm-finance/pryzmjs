@@ -1,6 +1,7 @@
 syntax = "proto3";
 package refractedlabs.flowtrade.v1;
 
+import "amino/amino.proto";
 import "cosmos/base/v1beta1/coin.proto";
 import "cosmos_proto/cosmos.proto";
 import "gogoproto/gogo.proto";
@@ -11,31 +12,38 @@ option go_package = "github.com/refractedlabs/flowtrade/x/flowtrade/types/v1";
 // Params defines the parameters for the module.
 message Params {
   // The deposit amount taken from flow creator and transferred back after the flow ends
-  cosmos.base.v1beta1.Coin flow_creation_deposit = 1 [(gogoproto.nullable) = false];
+  cosmos.base.v1beta1.Coin flow_creation_deposit = 1 [
+    (gogoproto.nullable) = false,
+    (amino.dont_omitempty) = true
+  ];
 
   // The minimum possible duration a flow can have
   google.protobuf.Duration min_flow_duration = 2 [
     (gogoproto.stdduration) = true,
-    (gogoproto.nullable) = false
+    (gogoproto.nullable) = false,
+    (amino.dont_omitempty) = true
   ];
 
   // The minimum possible duration from the flow creation time to its start time
   google.protobuf.Duration min_duration_to_flow_start = 3 [
     (gogoproto.stdduration) = true,
-    (gogoproto.nullable) = false
+    (gogoproto.nullable) = false,
+    (amino.dont_omitempty) = true
   ];
 
   // the protocol fee ratio taken from token-out
   string token_out_fee_ratio = 4 [
     (cosmos_proto.scalar) = "cosmos.Dec",
     (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Dec",
-    (gogoproto.nullable) = false
+    (gogoproto.nullable) = false,
+    (amino.dont_omitempty) = true
   ];
 
   // the protocol fee ratio taken from token-in
   string token_in_fee_ratio = 5 [
     (cosmos_proto.scalar) = "cosmos.Dec",
     (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Dec",
-    (gogoproto.nullable) = false
+    (gogoproto.nullable) = false,
+    (amino.dont_omitempty) = true
   ];
 }

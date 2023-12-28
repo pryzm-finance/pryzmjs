@@ -19,15 +19,15 @@ export interface ParamsProtoMsg {
 }
 /** Params defines the parameters for the module. */
 export interface ParamsAmino {
-  vote_period?: string;
-  quorum?: string;
-  vote_threshold?: string;
-  slash_fraction?: string;
+  vote_period: string;
+  quorum: string;
+  vote_threshold: string;
+  slash_fraction: string;
   slash_window?: string;
-  max_miss_rate_per_slash_window?: string;
-  max_miss_rate_per_vote_period?: string;
+  max_miss_rate_per_slash_window: string;
+  max_miss_rate_per_vote_period: string;
   /** ratio in range [0, 1] which determines the amount of collected fees that is supposed to be distributed among validators as oracle reward */
-  fee_collector_reward_ratio?: string;
+  fee_collector_reward_ratio: string;
 }
 export interface ParamsAminoMsg {
   type: "/refractedlabs.oracle.v1.Params";
@@ -189,14 +189,14 @@ export const Params = {
   },
   toAmino(message: Params): ParamsAmino {
     const obj: any = {};
-    obj.vote_period = message.votePeriod ? message.votePeriod.toString() : undefined;
-    obj.quorum = message.quorum;
-    obj.vote_threshold = message.voteThreshold;
-    obj.slash_fraction = message.slashFraction;
+    obj.vote_period = message.votePeriod ? message.votePeriod.toString() : "0";
+    obj.quorum = message.quorum ?? "";
+    obj.vote_threshold = message.voteThreshold ?? "";
+    obj.slash_fraction = message.slashFraction ?? "";
     obj.slash_window = message.slashWindow ? message.slashWindow.toString() : undefined;
-    obj.max_miss_rate_per_slash_window = message.maxMissRatePerSlashWindow;
-    obj.max_miss_rate_per_vote_period = message.maxMissRatePerVotePeriod;
-    obj.fee_collector_reward_ratio = message.feeCollectorRewardRatio;
+    obj.max_miss_rate_per_slash_window = message.maxMissRatePerSlashWindow ?? "";
+    obj.max_miss_rate_per_vote_period = message.maxMissRatePerVotePeriod ?? "";
+    obj.fee_collector_reward_ratio = message.feeCollectorRewardRatio ?? "";
     return obj;
   },
   fromAminoMsg(object: ParamsAminoMsg): Params {

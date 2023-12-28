@@ -12,7 +12,7 @@ export interface MsgUpdateParamsProtoMsg {
 }
 export interface MsgUpdateParamsAmino {
   authority?: string;
-  params?: ParamsAmino;
+  params: ParamsAmino;
 }
 export interface MsgUpdateParamsAminoMsg {
   type: "pryzm/mint/v1/UpdateParams";
@@ -46,10 +46,10 @@ export interface MsgDappAccountSpendProtoMsg {
 }
 export interface MsgDappAccountSpendAmino {
   authority?: string;
-  title?: string;
-  description?: string;
+  title: string;
+  description: string;
   recipient?: string;
-  amount?: CoinAmino[];
+  amount: CoinAmino[];
 }
 export interface MsgDappAccountSpendAminoMsg {
   type: "pryzm/mint/v1/DappAccountSpend";
@@ -141,7 +141,7 @@ export const MsgUpdateParams = {
   toAmino(message: MsgUpdateParams): MsgUpdateParamsAmino {
     const obj: any = {};
     obj.authority = message.authority;
-    obj.params = message.params ? Params.toAmino(message.params) : undefined;
+    obj.params = message.params ? Params.toAmino(message.params) : Params.fromPartial({});
     return obj;
   },
   fromAminoMsg(object: MsgUpdateParamsAminoMsg): MsgUpdateParams {
@@ -332,8 +332,8 @@ export const MsgDappAccountSpend = {
   toAmino(message: MsgDappAccountSpend): MsgDappAccountSpendAmino {
     const obj: any = {};
     obj.authority = message.authority;
-    obj.title = message.title;
-    obj.description = message.description;
+    obj.title = message.title ?? "";
+    obj.description = message.description ?? "";
     obj.recipient = message.recipient;
     if (message.amount) {
       obj.amount = message.amount.map(e => e ? Coin.toAmino(e) : undefined);

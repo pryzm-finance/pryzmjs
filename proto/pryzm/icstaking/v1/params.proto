@@ -1,6 +1,7 @@
 syntax = "proto3";
 package pryzm.icstaking.v1;
 
+import "amino/amino.proto";
 import "cosmos_proto/cosmos.proto";
 import "gogoproto/gogo.proto";
 import "google/protobuf/duration.proto";
@@ -10,15 +11,21 @@ option go_package = "github.com/pryzm-finance/pryzm-core/x/icstaking/types/v1";
 // Params defines the parameters for the module.
 message Params {
   // the default staking parameters. properties of HostChain.staking_params are overridden to this default params if provided
-  StakingParams staking_params = 1 [(gogoproto.nullable) = false];
+  StakingParams staking_params = 1 [
+    (gogoproto.nullable) = false,
+    (amino.dont_omitempty) = true
+  ];
   // the list of admin addresses, able to register a new host chain or update an existing host chain
-  repeated string admins = 2;
+  repeated string admins = 2 [(amino.dont_omitempty) = true];
 }
 
 // StakingParams defines the parameters related to staking on each host chain
 message StakingParams {
   // the amount of operation fees
-  FeeRatios fee_ratios = 1 [(gogoproto.nullable) = false];
+  FeeRatios fee_ratios = 1 [
+    (gogoproto.nullable) = false,
+    (amino.dont_omitempty) = true
+  ];
 
   // the interval in which PRYZM sends delegation messages to the host chain
   google.protobuf.Duration delegation_interval = 2 [
@@ -44,7 +51,10 @@ message StakingParams {
     (gogoproto.nullable) = true
   ];
 
-  RebalanceParams rebalance_params = 6 [(gogoproto.nullable) = false];
+  RebalanceParams rebalance_params = 6 [
+    (gogoproto.nullable) = false,
+    (amino.dont_omitempty) = true
+  ];
 }
 
 // FeeRatios defines the fee ratio operations supported by icstaking
@@ -81,7 +91,7 @@ message FeeRatios {
 // RebalanceParams contains the parameters for re-balancing a host chain's validator delegation weights
 message RebalanceParams {
   // the maximum number of redelegation messages sent to the host chain in each rebalance operation
-  int32 max_msgs = 1;
+  int32 max_msgs = 1 [(amino.dont_omitempty) = true];
 
   // the minimum divergence a validator delegation weight must have with the expected weight to start rebalance operation
   string rebalance_threshold = 2 [

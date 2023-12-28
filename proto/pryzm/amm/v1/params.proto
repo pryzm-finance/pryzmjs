@@ -1,6 +1,7 @@
 syntax = "proto3";
 package pryzm.amm.v1;
 
+import "amino/amino.proto";
 import "cosmos_proto/cosmos.proto";
 import "gogoproto/gogo.proto";
 
@@ -27,8 +28,8 @@ message OrderParameters {
     (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Dec",
     (gogoproto.nullable) = false
   ];
-  int32 max_orders_per_block = 5;
-  int32 max_schedule_per_block = 6;
+  int32 max_orders_per_block = 5 [(amino.dont_omitempty) = true];
+  int32 max_schedule_per_block = 6 [(amino.dont_omitempty) = true];
   string max_exec_order_trade_ratio = 7 [
     (cosmos_proto.scalar) = "cosmos.Dec",
     (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Dec",
@@ -54,8 +55,8 @@ message YammParameters {
   ];
 
   // duration (milliseconds) for virtual balance when adding new pAssets to yamm pools
-  int64 maturity_introduction_interval_millis = 2;
-  int64 maturity_expiration_interval_millis = 3;
+  int64 maturity_introduction_interval_millis = 2 [(amino.dont_omitempty) = true];
+  int64 maturity_expiration_interval_millis = 3 [(amino.dont_omitempty) = true];
 
   string introduction_virtual_balance_scaler = 4 [
     (cosmos_proto.scalar) = "cosmos.Dec",
@@ -89,7 +90,7 @@ message YammParameters {
 
   // this will be set to newly created yamm pools
   // if not empty, only these addresses can initialize the pools
-  repeated string default_initialization_allow_list = 9;
+  repeated string default_initialization_allow_list = 9 [(amino.dont_omitempty) = true];
 
   string avg_monthly_yield_rate = 10 [
     (cosmos_proto.scalar) = "cosmos.Dec",
@@ -104,13 +105,13 @@ message YammParameters {
   ];
 
   // this will be set to newly created yamm pools
-  repeated string default_admins = 12;
+  repeated string default_admins = 12 [(amino.dont_omitempty) = true];
   // this will be set to newly created yamm pools
-  repeated string default_pause_allow_list = 13;
+  repeated string default_pause_allow_list = 13 [(amino.dont_omitempty) = true];
 }
 
 message GeneralPoolParameters {
-  bool allow_public_pool_creation = 1;
+  bool allow_public_pool_creation = 1 [(amino.dont_omitempty) = true];
   string default_swap_fee_ratio = 2 [
     (cosmos_proto.scalar) = "cosmos.Dec",
     (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Dec",
@@ -129,11 +130,11 @@ message GeneralPoolParameters {
 }
 
 message AuthorizationParameters {
-  repeated string admin_list = 1;
+  repeated string admin_list = 1 [(amino.dont_omitempty) = true];
   // can pause the vault and also set pools to paused_by_gov mode which
   // is a special mode where only the gov can unpause and does not have a window
   // these cannot unpause anything
-  repeated string pause_allow_list = 2;
+  repeated string pause_allow_list = 2 [(amino.dont_omitempty) = true];
 }
 
 // Params defines the parameters for the module.

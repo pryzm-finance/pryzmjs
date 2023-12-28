@@ -15,9 +15,9 @@ export interface ParamsProtoMsg {
 /** Params defines the parameters for the module. */
 export interface ParamsAmino {
   /** (Host chain proposal end time) - (Pryzm proposal end time) */
-  voting_result_submission_window?: DurationAmino;
+  voting_result_submission_window: DurationAmino;
   /** Zero value means default timeout */
-  voting_result_submission_timeout?: DurationAmino;
+  voting_result_submission_timeout: DurationAmino;
 }
 export interface ParamsAminoMsg {
   type: "/pryzm.pgov.v1.Params";
@@ -95,8 +95,8 @@ export const Params = {
   },
   toAmino(message: Params): ParamsAmino {
     const obj: any = {};
-    obj.voting_result_submission_window = message.votingResultSubmissionWindow ? Duration.toAmino(message.votingResultSubmissionWindow) : undefined;
-    obj.voting_result_submission_timeout = message.votingResultSubmissionTimeout ? Duration.toAmino(message.votingResultSubmissionTimeout) : undefined;
+    obj.voting_result_submission_window = message.votingResultSubmissionWindow ? Duration.toAmino(message.votingResultSubmissionWindow) : Duration.fromPartial({});
+    obj.voting_result_submission_timeout = message.votingResultSubmissionTimeout ? Duration.toAmino(message.votingResultSubmissionTimeout) : Duration.fromPartial({});
     return obj;
   },
   fromAminoMsg(object: ParamsAminoMsg): Params {

@@ -1,6 +1,7 @@
 syntax = "proto3";
 package pryzm.pgov.v1;
 
+import "amino/amino.proto";
 import "gogoproto/gogo.proto";
 import "google/protobuf/duration.proto";
 
@@ -11,12 +12,14 @@ message Params {
   // (Host chain proposal end time) - (Pryzm proposal end time)
   google.protobuf.Duration voting_result_submission_window = 1 [
     (gogoproto.stdduration) = true,
-    (gogoproto.nullable) = false
+    (gogoproto.nullable) = false,
+    (amino.dont_omitempty) = true
   ];
 
   // Zero value means default timeout
   google.protobuf.Duration voting_result_submission_timeout = 2 [
     (gogoproto.stdduration) = true,
-    (gogoproto.nullable) = false
+    (gogoproto.nullable) = false,
+    (amino.dont_omitempty) = true
   ];
 }

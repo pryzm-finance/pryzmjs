@@ -75,8 +75,16 @@ message EventSetOrderCount {
   uint64 order_count = 1;
 }
 
+enum RemoveOrderReason {
+  option (gogoproto.goproto_enum_prefix) = false;
+  ORDER_CANCELED = 0 [(gogoproto.enumvalue_customname) = "ORDER_CANCELED"];
+  ORDER_DEPOSIT_FAILED = 1 [(gogoproto.enumvalue_customname) = "ORDER_DEPOSIT_FAILED"];
+  ORDER_FINISHED = 3 [(gogoproto.enumvalue_customname) = "ORDER_FINISHED"];
+}
+
 message EventRemoveOrder {
   uint64 id = 1;
+  RemoveOrderReason reason = 2;
 }
 
 message EventCancelOrder {
@@ -140,6 +148,11 @@ message EventExecuteOrder {
     (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Int",
     (gogoproto.nullable) = false
   ];
+  string output_amount = 4 [
+    (cosmos_proto.scalar) = "cosmos.Int",
+    (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Int",
+    (gogoproto.nullable) = false
+  ];
 }
 
 message EventExecuteOrdersForPair {
@@ -199,6 +212,11 @@ message EventExecuteOrdersForPair {
 message EventExecuteMatchProposalOrder {
   uint64 order_id = 1;
   string match_amount = 3 [
+    (cosmos_proto.scalar) = "cosmos.Int",
+    (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Int",
+    (gogoproto.nullable) = false
+  ];
+  string output_amount = 4 [
     (cosmos_proto.scalar) = "cosmos.Int",
     (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Int",
     (gogoproto.nullable) = false

@@ -1,13 +1,14 @@
 syntax = "proto3";
 package pryzm.amm.v1;
 
+import "amino/amino.proto";
 import "cosmos_proto/cosmos.proto";
 import "gogoproto/gogo.proto";
 
 option go_package = "github.com/pryzm-finance/pryzm-core/x/amm/types/v1";
 
 message YammConfiguration {
-  uint64 pool_id = 1;
+  uint64 pool_id = 1 [(amino.dont_omitempty) = true];
 
   string lambda = 2 [
     (cosmos_proto.scalar) = "cosmos.Dec",

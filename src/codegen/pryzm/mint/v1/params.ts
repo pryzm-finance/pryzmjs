@@ -115,7 +115,7 @@ export interface ParamsAmino {
   /** mint epoch identifier e.g. (day, week). */
   epoch_identifier?: string;
   /** start epoch to distribute minting rewards */
-  minting_rewards_distribution_start_epoch?: string;
+  minting_rewards_distribution_start_epoch: string;
   /**
    * defines the distribution proportions of the minted
    * denom, i.e, which stakeholders will receive the minted
@@ -449,7 +449,7 @@ export const Params = {
     obj.inflation_min = message.inflationMin;
     obj.goal_bonded = message.goalBonded;
     obj.epoch_identifier = message.epochIdentifier;
-    obj.minting_rewards_distribution_start_epoch = message.mintingRewardsDistributionStartEpoch ? message.mintingRewardsDistributionStartEpoch.toString() : undefined;
+    obj.minting_rewards_distribution_start_epoch = message.mintingRewardsDistributionStartEpoch ? message.mintingRewardsDistributionStartEpoch.toString() : "0";
     obj.distribution_proportions = message.distributionProportions ? DistributionProportions.toAmino(message.distributionProportions) : undefined;
     obj.genesis_epoch_provisions = message.genesisEpochProvisions;
     obj.development_account_address = message.developmentAccountAddress;

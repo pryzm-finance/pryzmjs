@@ -11,7 +11,7 @@ export interface ParamsProtoMsg {
 }
 /** Params defines the parameters for the module. */
 export interface ParamsAmino {
-  unbonding_period?: DurationAmino;
+  unbonding_period: DurationAmino;
 }
 export interface ParamsAminoMsg {
   type: "/pryzm.incentives.v1.Params";
@@ -75,7 +75,7 @@ export const Params = {
   },
   toAmino(message: Params): ParamsAmino {
     const obj: any = {};
-    obj.unbonding_period = message.unbondingPeriod ? Duration.toAmino(message.unbondingPeriod) : undefined;
+    obj.unbonding_period = message.unbondingPeriod ? Duration.toAmino(message.unbondingPeriod) : Duration.fromPartial({});
     return obj;
   },
   fromAminoMsg(object: ParamsAminoMsg): Params {

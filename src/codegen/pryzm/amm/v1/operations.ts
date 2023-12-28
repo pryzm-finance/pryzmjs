@@ -134,9 +134,9 @@ export interface SwapProtoMsg {
   value: Uint8Array;
 }
 export interface SwapAmino {
-  pool_id?: string;
+  pool_id: string;
   amount?: string;
-  swap_type?: SwapType;
+  swap_type: SwapType;
   token_in?: string;
   token_out?: string;
 }
@@ -162,7 +162,7 @@ export interface SwapStepProtoMsg {
   value: Uint8Array;
 }
 export interface SwapStepAmino {
-  pool_id?: string;
+  pool_id: string;
   amount?: string;
   token_in?: string;
   token_out?: string;
@@ -370,7 +370,7 @@ export const Swap = {
   },
   toAmino(message: Swap): SwapAmino {
     const obj: any = {};
-    obj.pool_id = message.poolId ? message.poolId.toString() : undefined;
+    obj.pool_id = message.poolId ? message.poolId.toString() : "0";
     obj.amount = message.amount;
     obj.swap_type = swapTypeToJSON(message.swapType);
     obj.token_in = message.tokenIn;
@@ -486,7 +486,7 @@ export const SwapStep = {
   },
   toAmino(message: SwapStep): SwapStepAmino {
     const obj: any = {};
-    obj.pool_id = message.poolId ? message.poolId.toString() : undefined;
+    obj.pool_id = message.poolId ? message.poolId.toString() : "0";
     obj.amount = message.amount;
     obj.token_in = message.tokenIn;
     obj.token_out = message.tokenOut;

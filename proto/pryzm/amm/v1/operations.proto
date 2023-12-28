@@ -1,6 +1,7 @@
 syntax = "proto3";
 package pryzm.amm.v1;
 
+import "amino/amino.proto";
 import "cosmos/base/v1beta1/coin.proto";
 import "cosmos_proto/cosmos.proto";
 import "gogoproto/gogo.proto";
@@ -31,19 +32,19 @@ enum ExitType {
 }
 
 message Swap {
-  uint64 pool_id = 1;
+  uint64 pool_id = 1 [(amino.dont_omitempty) = true];
   string amount = 2 [
     (cosmos_proto.scalar) = "cosmos.Int",
     (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Int",
     (gogoproto.nullable) = false
   ];
-  SwapType swap_type = 3;
+  SwapType swap_type = 3 [(amino.dont_omitempty) = true];
   string token_in = 4;
   string token_out = 5;
 }
 
 message SwapStep {
-  uint64 pool_id = 1;
+  uint64 pool_id = 1 [(amino.dont_omitempty) = true];
   string amount = 2 [
     (cosmos_proto.scalar) = "cosmos.Int",
     (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Int",

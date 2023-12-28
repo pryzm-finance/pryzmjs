@@ -82,15 +82,15 @@ export interface ActionFlowTradeSettingsAmino {
    * given the occurrence of an action, this is used to compute the start of the flow
    * NOTE: the flowtrade library has a parameter for minimum start delay
    */
-  start_delay?: DurationAmino;
+  start_delay: DurationAmino;
   /** given the start of the flow, this is used to compute the end of the flow */
-  duration?: DurationAmino;
+  duration: DurationAmino;
   /**
    * the interval in which the distribution index is updated and hence tokens are swapped
    * if dist_interval is 0, the flow is updated every time in or out tokens are increased or decreased
    * if dist_interval is equal to the duration of flow, it means that all of the tokens are swapped once after the flow ends
    */
-  dist_interval?: DurationAmino;
+  dist_interval: DurationAmino;
   /**
    * the minimum price for the token-out in terms of token-in.
    * in each swap interval, if the calculated price is less than this limit, the swap doesn't happen in that turn
@@ -100,7 +100,7 @@ export interface ActionFlowTradeSettingsAmino {
    * the duration of the exit window before swap interval, in which users can only exit the flow and joining is not permitted
    * this duration is used to protect joiners from buying the token-out with a higher price when someone joins with a huge amount of token-in
    */
-  exit_window_duration?: DurationAmino;
+  exit_window_duration: DurationAmino;
 }
 export interface ActionFlowTradeSettingsAminoMsg {
   type: "/pryzm.treasury.v1.ActionFlowTradeSettings";
@@ -130,7 +130,7 @@ export interface ActionProtoMsg {
   value: Uint8Array;
 }
 export interface ActionAmino {
-  action_type?: ActionType;
+  action_type: ActionType;
   occurrence?: string;
   /** if expiration is not set, then the action will never expire and is executed forever unless gov decides to set another action. */
   expiration?: string;
@@ -139,7 +139,7 @@ export interface ActionAmino {
   /** this is nil if the action is of type HOLD */
   flow_trade_settings?: ActionFlowTradeSettingsAmino;
   /** denoms in this list will not be affected by the action */
-  excluded_denoms?: string[];
+  excluded_denoms: string[];
 }
 export interface ActionAminoMsg {
   type: "/pryzm.treasury.v1.Action";
@@ -259,11 +259,11 @@ export const ActionFlowTradeSettings = {
   },
   toAmino(message: ActionFlowTradeSettings): ActionFlowTradeSettingsAmino {
     const obj: any = {};
-    obj.start_delay = message.startDelay ? Duration.toAmino(message.startDelay) : undefined;
-    obj.duration = message.duration ? Duration.toAmino(message.duration) : undefined;
-    obj.dist_interval = message.distInterval ? Duration.toAmino(message.distInterval) : undefined;
+    obj.start_delay = message.startDelay ? Duration.toAmino(message.startDelay) : Duration.fromPartial({});
+    obj.duration = message.duration ? Duration.toAmino(message.duration) : Duration.fromPartial({});
+    obj.dist_interval = message.distInterval ? Duration.toAmino(message.distInterval) : Duration.fromPartial({});
     obj.limit_price = message.limitPrice;
-    obj.exit_window_duration = message.exitWindowDuration ? Duration.toAmino(message.exitWindowDuration) : undefined;
+    obj.exit_window_duration = message.exitWindowDuration ? Duration.toAmino(message.exitWindowDuration) : Duration.fromPartial({});
     return obj;
   },
   fromAminoMsg(object: ActionFlowTradeSettingsAminoMsg): ActionFlowTradeSettings {

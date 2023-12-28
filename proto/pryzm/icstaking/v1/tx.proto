@@ -33,7 +33,10 @@ message MsgUpdateParams {
   option (amino.name) = "pryzm/icstaking/v1/UpdateParams";
 
   string authority = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
-  Params params = 2 [(gogoproto.nullable) = false];
+  Params params = 2 [
+    (gogoproto.nullable) = false,
+    (amino.dont_omitempty) = true
+  ];
 }
 
 message MsgUpdateParamsResponse {}
@@ -43,7 +46,10 @@ message MsgRegisterHostChain {
   option (amino.name) = "pryzm/icstaking/v1/RegisterHostChain";
 
   string creator = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
-  HostChain host_chain = 2 [(gogoproto.nullable) = false];
+  HostChain host_chain = 2 [
+    (gogoproto.nullable) = false,
+    (amino.dont_omitempty) = true
+  ];
 }
 
 message MsgRegisterHostChainResponse {}
@@ -56,9 +62,13 @@ message MsgUpdateHostChain {
   string host_chain_id = 2;
   repeated Validator validators = 3 [
     (gogoproto.nullable) = false,
-    (gogoproto.castrepeated) = "Validators"
+    (gogoproto.castrepeated) = "Validators",
+    (amino.dont_omitempty) = true
   ];
-  StakingParams params = 4 [(gogoproto.nullable) = true];
+  StakingParams params = 4 [
+    (gogoproto.nullable) = true,
+    (amino.dont_omitempty) = true
+  ];
 }
 
 message MsgUpdateHostChainResponse {}
@@ -73,7 +83,8 @@ message MsgStake {
   string amount = 4 [
     (cosmos_proto.scalar) = "cosmos.Int",
     (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Int",
-    (gogoproto.nullable) = false
+    (gogoproto.nullable) = false,
+    (amino.dont_omitempty) = true
   ];
 }
 
@@ -92,7 +103,8 @@ message MsgUnstake {
   string c_amount = 4 [
     (cosmos_proto.scalar) = "cosmos.Int",
     (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Int",
-    (gogoproto.nullable) = false
+    (gogoproto.nullable) = false,
+    (amino.dont_omitempty) = true
   ];
 }
 
@@ -110,9 +122,10 @@ message MsgRedeemUnstaked {
   string u_amount = 4 [
     (cosmos_proto.scalar) = "cosmos.Int",
     (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Int",
-    (gogoproto.nullable) = false
+    (gogoproto.nullable) = false,
+    (amino.dont_omitempty) = true
   ];
-  uint64 epoch = 5;
+  uint64 epoch = 5 [(amino.dont_omitempty) = true];
 }
 
 message MsgRedeemUnstakedResponse {
@@ -130,12 +143,14 @@ message MsgInstantUnstake {
   string min_c_amount = 4 [
     (cosmos_proto.scalar) = "cosmos.Int",
     (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Int",
-    (gogoproto.nullable) = false
+    (gogoproto.nullable) = false,
+    (amino.dont_omitempty) = true
   ];
   string max_c_amount = 5 [
     (cosmos_proto.scalar) = "cosmos.Int",
     (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Int",
-    (gogoproto.nullable) = false
+    (gogoproto.nullable) = false,
+    (amino.dont_omitempty) = true
   ];
 }
 
@@ -156,11 +171,11 @@ message MsgRebalanceDelegationsResponse {}
 
 message MsgRegisterInterchainAccount {
   option (cosmos.msg.v1.signer) = "creator";
-  option (amino.name) = "pryzm/icstaking/v1/RegisterInterchainAccount";
+  option (amino.name) = "pryzm/icstaking/v1/RegInterchainAccount";
 
   string creator = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
   string host_chain = 2;
-  ICARegistrationType registration_type = 3;
+  ICARegistrationType registration_type = 3 [(amino.dont_omitempty) = true];
 }
 
 message MsgRegisterInterchainAccountResponse {}

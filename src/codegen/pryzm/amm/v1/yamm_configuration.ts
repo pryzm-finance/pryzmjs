@@ -22,7 +22,7 @@ export interface YammConfigurationProtoMsg {
   value: Uint8Array;
 }
 export interface YammConfigurationAmino {
-  pool_id?: string;
+  pool_id: string;
   lambda?: string;
   /** duration (milliseconds) for virtual balance when adding new pAssets to yamm pools */
   maturity_introduction_interval_millis?: string;
@@ -238,7 +238,7 @@ export const YammConfiguration = {
   },
   toAmino(message: YammConfiguration): YammConfigurationAmino {
     const obj: any = {};
-    obj.pool_id = message.poolId ? message.poolId.toString() : undefined;
+    obj.pool_id = message.poolId ? message.poolId.toString() : "0";
     obj.lambda = message.lambda;
     obj.maturity_introduction_interval_millis = message.maturityIntroductionIntervalMillis;
     obj.maturity_expiration_interval_millis = message.maturityExpirationIntervalMillis;

@@ -13,12 +13,12 @@ export interface PairMatchProposalProtoMsg {
   value: Uint8Array;
 }
 export interface PairMatchProposalAmino {
-  pool_id?: string;
-  whitelisted_route?: boolean;
+  pool_id: string;
+  whitelisted_route: boolean;
   token_in?: string;
   token_out?: string;
-  buy_orders?: string[];
-  sell_orders?: string[];
+  buy_orders: string[];
+  sell_orders: string[];
 }
 export interface PairMatchProposalAminoMsg {
   type: "/pryzm.amm.v1.PairMatchProposal";
@@ -173,8 +173,8 @@ export const PairMatchProposal = {
   },
   toAmino(message: PairMatchProposal): PairMatchProposalAmino {
     const obj: any = {};
-    obj.pool_id = message.poolId ? message.poolId.toString() : undefined;
-    obj.whitelisted_route = message.whitelistedRoute;
+    obj.pool_id = message.poolId ? message.poolId.toString() : "0";
+    obj.whitelisted_route = message.whitelistedRoute ?? false;
     obj.token_in = message.tokenIn;
     obj.token_out = message.tokenOut;
     if (message.buyOrders) {

@@ -10,7 +10,7 @@ export interface RouteStepProtoMsg {
   value: Uint8Array;
 }
 export interface RouteStepAmino {
-  pool_id?: string;
+  pool_id: string;
   token_in?: string;
   token_out?: string;
 }
@@ -103,7 +103,7 @@ export const RouteStep = {
   },
   toAmino(message: RouteStep): RouteStepAmino {
     const obj: any = {};
-    obj.pool_id = message.poolId ? message.poolId.toString() : undefined;
+    obj.pool_id = message.poolId ? message.poolId.toString() : "0";
     obj.token_in = message.tokenIn;
     obj.token_out = message.tokenOut;
     return obj;
