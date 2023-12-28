@@ -1,6 +1,6 @@
 {
   "name": "@pryzm-finance/pryzmjs",
-  "version": "0.16.3",
+  "version": "0.16.4",
   "description": "Javascript SDK for Pryzm",
   "author": "amin <amin@refractedlabs.com>",
   "homepage": "https://github.com/pryzm-finance/pryzmjs#readme",
@@ -32,6 +32,6 @@
     "typescript": "^5.3.3"
   },
   "dependencies": {
-    "@refractedlabs/utils": "0.3.1"
+    "@refractedlabs/utils": "0.3.2"
   }
 }
