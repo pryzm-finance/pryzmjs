@@ -1,6 +1,10 @@
 lockfileVersion: 5.4
 
 specifiers:
+  '@cosmjs/amino': 0.32.2
+  '@cosmjs/proto-signing': 0.32.2
+  '@cosmjs/stargate': 0.32.2
+  '@cosmjs/tendermint-rpc': 0.32.2
   '@cosmology/telescope': ^1.3.3
   '@refractedlabs/utils': 0.3.2
   '@types/node': ^20.10.5
@@ -9,6 +13,10 @@ specifiers:
   typescript: ^5.3.3
 
 dependencies:
+  '@cosmjs/amino': 0.32.2
+  '@cosmjs/proto-signing': 0.32.2
+  '@cosmjs/stargate': 0.32.2
+  '@cosmjs/tendermint-rpc': 0.32.2
   '@refractedlabs/utils': 0.3.2_google-protobuf@3.21.2
 
 devDependencies:
