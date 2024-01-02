@@ -1,6 +1,7 @@
 import { BinaryReader, BinaryWriter } from "../../../binary";
 import { Decimal } from "@cosmjs/math";
-import { isSet } from "../../../helpers";
+import { isSet, padDecimal } from "../../../helpers";
+import { GlobalDecoderRegistry } from "../../../registry";
 export interface DistributionProportions {
   /**
    * defines the proportion of the minted mint_denom that is to be
@@ -154,6 +155,15 @@ function createBaseDistributionProportions(): DistributionProportions {
 }
 export const DistributionProportions = {
   typeUrl: "/pryzm.mint.v1.DistributionProportions",
+  is(o: any): o is DistributionProportions {
+    return o && (o.$typeUrl === DistributionProportions.typeUrl || typeof o.staking === "string" && typeof o.poolIncentives === "string" && typeof o.development === "string" && typeof o.dapp === "string" && typeof o.oracle === "string");
+  },
+  isSDK(o: any): o is DistributionProportionsSDKType {
+    return o && (o.$typeUrl === DistributionProportions.typeUrl || typeof o.staking === "string" && typeof o.pool_incentives === "string" && typeof o.development === "string" && typeof o.dapp === "string" && typeof o.oracle === "string");
+  },
+  isAmino(o: any): o is DistributionProportionsAmino {
+    return o && (o.$typeUrl === DistributionProportions.typeUrl || typeof o.staking === "string" && typeof o.pool_incentives === "string" && typeof o.development === "string" && typeof o.dapp === "string" && typeof o.oracle === "string");
+  },
   encode(message: DistributionProportions, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.staking !== "") {
       writer.uint32(10).string(Decimal.fromUserInput(message.staking, 18).atomics);
@@ -172,7 +182,7 @@ export const DistributionProportions = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): DistributionProportions {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): DistributionProportions {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseDistributionProportions();
@@ -247,20 +257,20 @@ export const DistributionProportions = {
     }
     return message;
   },
-  toAmino(message: DistributionProportions): DistributionProportionsAmino {
+  toAmino(message: DistributionProportions, useInterfaces: boolean = true): DistributionProportionsAmino {
     const obj: any = {};
-    obj.staking = message.staking;
-    obj.pool_incentives = message.poolIncentives;
-    obj.development = message.development;
-    obj.dapp = message.dapp;
-    obj.oracle = message.oracle;
+    obj.staking = padDecimal(message.staking) === "" ? undefined : padDecimal(message.staking);
+    obj.pool_incentives = padDecimal(message.poolIncentives) === "" ? undefined : padDecimal(message.poolIncentives);
+    obj.development = padDecimal(message.development) === "" ? undefined : padDecimal(message.development);
+    obj.dapp = padDecimal(message.dapp) === "" ? undefined : padDecimal(message.dapp);
+    obj.oracle = padDecimal(message.oracle) === "" ? undefined : padDecimal(message.oracle);
     return obj;
   },
   fromAminoMsg(object: DistributionProportionsAminoMsg): DistributionProportions {
     return DistributionProportions.fromAmino(object.value);
   },
-  fromProtoMsg(message: DistributionProportionsProtoMsg): DistributionProportions {
-    return DistributionProportions.decode(message.value);
+  fromProtoMsg(message: DistributionProportionsProtoMsg, useInterfaces: boolean = true): DistributionProportions {
+    return DistributionProportions.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: DistributionProportions): Uint8Array {
     return DistributionProportions.encode(message).finish();
@@ -272,6 +282,7 @@ export const DistributionProportions = {
     };
   }
 };
+GlobalDecoderRegistry.register(DistributionProportions.typeUrl, DistributionProportions);
 function createBaseParams(): Params {
   return {
     mintDenom: "",
@@ -288,6 +299,15 @@ function createBaseParams(): Params {
 }
 export const Params = {
   typeUrl: "/pryzm.mint.v1.Params",
+  is(o: any): o is Params {
+    return o && (o.$typeUrl === Params.typeUrl || typeof o.mintDenom === "string" && typeof o.inflationRateChange === "string" && typeof o.inflationMax === "string" && typeof o.inflationMin === "string" && typeof o.goalBonded === "string" && typeof o.epochIdentifier === "string" && typeof o.mintingRewardsDistributionStartEpoch === "bigint" && DistributionProportions.is(o.distributionProportions) && typeof o.genesisEpochProvisions === "string" && typeof o.developmentAccountAddress === "string");
+  },
+  isSDK(o: any): o is ParamsSDKType {
+    return o && (o.$typeUrl === Params.typeUrl || typeof o.mint_denom === "string" && typeof o.inflation_rate_change === "string" && typeof o.inflation_max === "string" && typeof o.inflation_min === "string" && typeof o.goal_bonded === "string" && typeof o.epoch_identifier === "string" && typeof o.minting_rewards_distribution_start_epoch === "bigint" && DistributionProportions.isSDK(o.distribution_proportions) && typeof o.genesis_epoch_provisions === "string" && typeof o.development_account_address === "string");
+  },
+  isAmino(o: any): o is ParamsAmino {
+    return o && (o.$typeUrl === Params.typeUrl || typeof o.mint_denom === "string" && typeof o.inflation_rate_change === "string" && typeof o.inflation_max === "string" && typeof o.inflation_min === "string" && typeof o.goal_bonded === "string" && typeof o.epoch_identifier === "string" && typeof o.minting_rewards_distribution_start_epoch === "bigint" && DistributionProportions.isAmino(o.distribution_proportions) && typeof o.genesis_epoch_provisions === "string" && typeof o.development_account_address === "string");
+  },
   encode(message: Params, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.mintDenom !== "") {
       writer.uint32(10).string(message.mintDenom);
@@ -321,7 +341,7 @@ export const Params = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): Params {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): Params {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseParams();
@@ -350,7 +370,7 @@ export const Params = {
           message.mintingRewardsDistributionStartEpoch = reader.int64();
           break;
         case 8:
-          message.distributionProportions = DistributionProportions.decode(reader, reader.uint32());
+          message.distributionProportions = DistributionProportions.decode(reader, reader.uint32(), useInterfaces);
           break;
         case 9:
           message.genesisEpochProvisions = Decimal.fromAtomics(reader.string(), 18).toString();
@@ -441,25 +461,25 @@ export const Params = {
     }
     return message;
   },
-  toAmino(message: Params): ParamsAmino {
+  toAmino(message: Params, useInterfaces: boolean = true): ParamsAmino {
     const obj: any = {};
-    obj.mint_denom = message.mintDenom;
-    obj.inflation_rate_change = message.inflationRateChange;
-    obj.inflation_max = message.inflationMax;
-    obj.inflation_min = message.inflationMin;
-    obj.goal_bonded = message.goalBonded;
-    obj.epoch_identifier = message.epochIdentifier;
+    obj.mint_denom = message.mintDenom === "" ? undefined : message.mintDenom;
+    obj.inflation_rate_change = padDecimal(message.inflationRateChange) === "" ? undefined : padDecimal(message.inflationRateChange);
+    obj.inflation_max = padDecimal(message.inflationMax) === "" ? undefined : padDecimal(message.inflationMax);
+    obj.inflation_min = padDecimal(message.inflationMin) === "" ? undefined : padDecimal(message.inflationMin);
+    obj.goal_bonded = padDecimal(message.goalBonded) === "" ? undefined : padDecimal(message.goalBonded);
+    obj.epoch_identifier = message.epochIdentifier === "" ? undefined : message.epochIdentifier;
     obj.minting_rewards_distribution_start_epoch = message.mintingRewardsDistributionStartEpoch ? message.mintingRewardsDistributionStartEpoch.toString() : undefined;
-    obj.distribution_proportions = message.distributionProportions ? DistributionProportions.toAmino(message.distributionProportions) : undefined;
-    obj.genesis_epoch_provisions = message.genesisEpochProvisions;
-    obj.development_account_address = message.developmentAccountAddress;
+    obj.distribution_proportions = message.distributionProportions ? DistributionProportions.toAmino(message.distributionProportions, useInterfaces) : undefined;
+    obj.genesis_epoch_provisions = padDecimal(message.genesisEpochProvisions) === "" ? undefined : padDecimal(message.genesisEpochProvisions);
+    obj.development_account_address = message.developmentAccountAddress === "" ? undefined : message.developmentAccountAddress;
     return obj;
   },
   fromAminoMsg(object: ParamsAminoMsg): Params {
     return Params.fromAmino(object.value);
   },
-  fromProtoMsg(message: ParamsProtoMsg): Params {
-    return Params.decode(message.value);
+  fromProtoMsg(message: ParamsProtoMsg, useInterfaces: boolean = true): Params {
+    return Params.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: Params): Uint8Array {
     return Params.encode(message).finish();
@@ -471,3 +491,4 @@ export const Params = {
     };
   }
 };
+GlobalDecoderRegistry.register(Params.typeUrl, Params);

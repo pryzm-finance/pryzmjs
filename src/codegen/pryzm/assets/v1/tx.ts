@@ -2,6 +2,7 @@ import { Params, ParamsAmino, ParamsSDKType } from "./params";
 import { RefractableAsset, RefractableAssetAmino, RefractableAssetSDKType, MaturityParams, MaturityParamsAmino, MaturityParamsSDKType, FeeRatios, FeeRatiosAmino, FeeRatiosSDKType } from "./refractable_asset";
 import { BinaryReader, BinaryWriter } from "../../../binary";
 import { isSet } from "../../../helpers";
+import { GlobalDecoderRegistry } from "../../../registry";
 export interface MsgRegisterAsset {
   creator: string;
   asset: RefractableAsset;
@@ -171,6 +172,16 @@ function createBaseMsgRegisterAsset(): MsgRegisterAsset {
 }
 export const MsgRegisterAsset = {
   typeUrl: "/pryzm.assets.v1.MsgRegisterAsset",
+  aminoType: "pryzm/assets/v1/RegisterAsset",
+  is(o: any): o is MsgRegisterAsset {
+    return o && (o.$typeUrl === MsgRegisterAsset.typeUrl || typeof o.creator === "string" && RefractableAsset.is(o.asset));
+  },
+  isSDK(o: any): o is MsgRegisterAssetSDKType {
+    return o && (o.$typeUrl === MsgRegisterAsset.typeUrl || typeof o.creator === "string" && RefractableAsset.isSDK(o.asset));
+  },
+  isAmino(o: any): o is MsgRegisterAssetAmino {
+    return o && (o.$typeUrl === MsgRegisterAsset.typeUrl || typeof o.creator === "string" && RefractableAsset.isAmino(o.asset));
+  },
   encode(message: MsgRegisterAsset, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.creator !== "") {
       writer.uint32(10).string(message.creator);
@@ -180,7 +191,7 @@ export const MsgRegisterAsset = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): MsgRegisterAsset {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): MsgRegisterAsset {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgRegisterAsset();
@@ -191,7 +202,7 @@ export const MsgRegisterAsset = {
           message.creator = reader.string();
           break;
         case 2:
-          message.asset = RefractableAsset.decode(reader, reader.uint32());
+          message.asset = RefractableAsset.decode(reader, reader.uint32(), useInterfaces);
           break;
         default:
           reader.skipType(tag & 7);
@@ -228,23 +239,23 @@ export const MsgRegisterAsset = {
     }
     return message;
   },
-  toAmino(message: MsgRegisterAsset): MsgRegisterAssetAmino {
+  toAmino(message: MsgRegisterAsset, useInterfaces: boolean = true): MsgRegisterAssetAmino {
     const obj: any = {};
-    obj.creator = message.creator;
-    obj.asset = message.asset ? RefractableAsset.toAmino(message.asset) : undefined;
+    obj.creator = message.creator === "" ? undefined : message.creator;
+    obj.asset = message.asset ? RefractableAsset.toAmino(message.asset, useInterfaces) : undefined;
     return obj;
   },
   fromAminoMsg(object: MsgRegisterAssetAminoMsg): MsgRegisterAsset {
     return MsgRegisterAsset.fromAmino(object.value);
   },
-  toAminoMsg(message: MsgRegisterAsset): MsgRegisterAssetAminoMsg {
+  toAminoMsg(message: MsgRegisterAsset, useInterfaces: boolean = true): MsgRegisterAssetAminoMsg {
     return {
       type: "pryzm/assets/v1/RegisterAsset",
-      value: MsgRegisterAsset.toAmino(message)
+      value: MsgRegisterAsset.toAmino(message, useInterfaces)
     };
   },
-  fromProtoMsg(message: MsgRegisterAssetProtoMsg): MsgRegisterAsset {
-    return MsgRegisterAsset.decode(message.value);
+  fromProtoMsg(message: MsgRegisterAssetProtoMsg, useInterfaces: boolean = true): MsgRegisterAsset {
+    return MsgRegisterAsset.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: MsgRegisterAsset): Uint8Array {
     return MsgRegisterAsset.encode(message).finish();
@@ -256,15 +267,26 @@ export const MsgRegisterAsset = {
     };
   }
 };
+GlobalDecoderRegistry.register(MsgRegisterAsset.typeUrl, MsgRegisterAsset);
+GlobalDecoderRegistry.registerAminoProtoMapping(MsgRegisterAsset.aminoType, MsgRegisterAsset.typeUrl);
 function createBaseMsgRegisterAssetResponse(): MsgRegisterAssetResponse {
   return {};
 }
 export const MsgRegisterAssetResponse = {
   typeUrl: "/pryzm.assets.v1.MsgRegisterAssetResponse",
+  is(o: any): o is MsgRegisterAssetResponse {
+    return o && o.$typeUrl === MsgRegisterAssetResponse.typeUrl;
+  },
+  isSDK(o: any): o is MsgRegisterAssetResponseSDKType {
+    return o && o.$typeUrl === MsgRegisterAssetResponse.typeUrl;
+  },
+  isAmino(o: any): o is MsgRegisterAssetResponseAmino {
+    return o && o.$typeUrl === MsgRegisterAssetResponse.typeUrl;
+  },
   encode(_: MsgRegisterAssetResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): MsgRegisterAssetResponse {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): MsgRegisterAssetResponse {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgRegisterAssetResponse();
@@ -293,15 +315,15 @@ export const MsgRegisterAssetResponse = {
     const message = createBaseMsgRegisterAssetResponse();
     return message;
   },
-  toAmino(_: MsgRegisterAssetResponse): MsgRegisterAssetResponseAmino {
+  toAmino(_: MsgRegisterAssetResponse, useInterfaces: boolean = true): MsgRegisterAssetResponseAmino {
     const obj: any = {};
     return obj;
   },
   fromAminoMsg(object: MsgRegisterAssetResponseAminoMsg): MsgRegisterAssetResponse {
     return MsgRegisterAssetResponse.fromAmino(object.value);
   },
-  fromProtoMsg(message: MsgRegisterAssetResponseProtoMsg): MsgRegisterAssetResponse {
-    return MsgRegisterAssetResponse.decode(message.value);
+  fromProtoMsg(message: MsgRegisterAssetResponseProtoMsg, useInterfaces: boolean = true): MsgRegisterAssetResponse {
+    return MsgRegisterAssetResponse.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: MsgRegisterAssetResponse): Uint8Array {
     return MsgRegisterAssetResponse.encode(message).finish();
@@ -313,6 +335,7 @@ export const MsgRegisterAssetResponse = {
     };
   }
 };
+GlobalDecoderRegistry.register(MsgRegisterAssetResponse.typeUrl, MsgRegisterAssetResponse);
 function createBaseMsgDisableAsset(): MsgDisableAsset {
   return {
     creator: "",
@@ -321,6 +344,16 @@ function createBaseMsgDisableAsset(): MsgDisableAsset {
 }
 export const MsgDisableAsset = {
   typeUrl: "/pryzm.assets.v1.MsgDisableAsset",
+  aminoType: "pryzm/assets/v1/DisableAsset",
+  is(o: any): o is MsgDisableAsset {
+    return o && (o.$typeUrl === MsgDisableAsset.typeUrl || typeof o.creator === "string" && typeof o.assetId === "string");
+  },
+  isSDK(o: any): o is MsgDisableAssetSDKType {
+    return o && (o.$typeUrl === MsgDisableAsset.typeUrl || typeof o.creator === "string" && typeof o.asset_id === "string");
+  },
+  isAmino(o: any): o is MsgDisableAssetAmino {
+    return o && (o.$typeUrl === MsgDisableAsset.typeUrl || typeof o.creator === "string" && typeof o.asset_id === "string");
+  },
   encode(message: MsgDisableAsset, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.creator !== "") {
       writer.uint32(10).string(message.creator);
@@ -330,7 +363,7 @@ export const MsgDisableAsset = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): MsgDisableAsset {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): MsgDisableAsset {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgDisableAsset();
@@ -378,23 +411,23 @@ export const MsgDisableAsset = {
     }
     return message;
   },
-  toAmino(message: MsgDisableAsset): MsgDisableAssetAmino {
+  toAmino(message: MsgDisableAsset, useInterfaces: boolean = true): MsgDisableAssetAmino {
     const obj: any = {};
-    obj.creator = message.creator;
-    obj.asset_id = message.assetId;
+    obj.creator = message.creator === "" ? undefined : message.creator;
+    obj.asset_id = message.assetId === "" ? undefined : message.assetId;
     return obj;
   },
   fromAminoMsg(object: MsgDisableAssetAminoMsg): MsgDisableAsset {
     return MsgDisableAsset.fromAmino(object.value);
   },
-  toAminoMsg(message: MsgDisableAsset): MsgDisableAssetAminoMsg {
+  toAminoMsg(message: MsgDisableAsset, useInterfaces: boolean = true): MsgDisableAssetAminoMsg {
     return {
       type: "pryzm/assets/v1/DisableAsset",
-      value: MsgDisableAsset.toAmino(message)
+      value: MsgDisableAsset.toAmino(message, useInterfaces)
     };
   },
-  fromProtoMsg(message: MsgDisableAssetProtoMsg): MsgDisableAsset {
-    return MsgDisableAsset.decode(message.value);
+  fromProtoMsg(message: MsgDisableAssetProtoMsg, useInterfaces: boolean = true): MsgDisableAsset {
+    return MsgDisableAsset.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: MsgDisableAsset): Uint8Array {
     return MsgDisableAsset.encode(message).finish();
@@ -406,15 +439,26 @@ export const MsgDisableAsset = {
     };
   }
 };
+GlobalDecoderRegistry.register(MsgDisableAsset.typeUrl, MsgDisableAsset);
+GlobalDecoderRegistry.registerAminoProtoMapping(MsgDisableAsset.aminoType, MsgDisableAsset.typeUrl);
 function createBaseMsgDisableAssetResponse(): MsgDisableAssetResponse {
   return {};
 }
 export const MsgDisableAssetResponse = {
   typeUrl: "/pryzm.assets.v1.MsgDisableAssetResponse",
+  is(o: any): o is MsgDisableAssetResponse {
+    return o && o.$typeUrl === MsgDisableAssetResponse.typeUrl;
+  },
+  isSDK(o: any): o is MsgDisableAssetResponseSDKType {
+    return o && o.$typeUrl === MsgDisableAssetResponse.typeUrl;
+  },
+  isAmino(o: any): o is MsgDisableAssetResponseAmino {
+    return o && o.$typeUrl === MsgDisableAssetResponse.typeUrl;
+  },
   encode(_: MsgDisableAssetResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): MsgDisableAssetResponse {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): MsgDisableAssetResponse {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgDisableAssetResponse();
@@ -443,15 +487,15 @@ export const MsgDisableAssetResponse = {
     const message = createBaseMsgDisableAssetResponse();
     return message;
   },
-  toAmino(_: MsgDisableAssetResponse): MsgDisableAssetResponseAmino {
+  toAmino(_: MsgDisableAssetResponse, useInterfaces: boolean = true): MsgDisableAssetResponseAmino {
     const obj: any = {};
     return obj;
   },
   fromAminoMsg(object: MsgDisableAssetResponseAminoMsg): MsgDisableAssetResponse {
     return MsgDisableAssetResponse.fromAmino(object.value);
   },
-  fromProtoMsg(message: MsgDisableAssetResponseProtoMsg): MsgDisableAssetResponse {
-    return MsgDisableAssetResponse.decode(message.value);
+  fromProtoMsg(message: MsgDisableAssetResponseProtoMsg, useInterfaces: boolean = true): MsgDisableAssetResponse {
+    return MsgDisableAssetResponse.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: MsgDisableAssetResponse): Uint8Array {
     return MsgDisableAssetResponse.encode(message).finish();
@@ -463,6 +507,7 @@ export const MsgDisableAssetResponse = {
     };
   }
 };
+GlobalDecoderRegistry.register(MsgDisableAssetResponse.typeUrl, MsgDisableAssetResponse);
 function createBaseMsgUpdateMaturityParams(): MsgUpdateMaturityParams {
   return {
     authority: "",
@@ -472,6 +517,16 @@ function createBaseMsgUpdateMaturityParams(): MsgUpdateMaturityParams {
 }
 export const MsgUpdateMaturityParams = {
   typeUrl: "/pryzm.assets.v1.MsgUpdateMaturityParams",
+  aminoType: "pryzm/assets/v1/UpdateMaturityParams",
+  is(o: any): o is MsgUpdateMaturityParams {
+    return o && (o.$typeUrl === MsgUpdateMaturityParams.typeUrl || typeof o.authority === "string" && typeof o.assetId === "string" && MaturityParams.is(o.params));
+  },
+  isSDK(o: any): o is MsgUpdateMaturityParamsSDKType {
+    return o && (o.$typeUrl === MsgUpdateMaturityParams.typeUrl || typeof o.authority === "string" && typeof o.asset_id === "string" && MaturityParams.isSDK(o.params));
+  },
+  isAmino(o: any): o is MsgUpdateMaturityParamsAmino {
+    return o && (o.$typeUrl === MsgUpdateMaturityParams.typeUrl || typeof o.authority === "string" && typeof o.asset_id === "string" && MaturityParams.isAmino(o.params));
+  },
   encode(message: MsgUpdateMaturityParams, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.authority !== "") {
       writer.uint32(10).string(message.authority);
@@ -484,7 +539,7 @@ export const MsgUpdateMaturityParams = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): MsgUpdateMaturityParams {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): MsgUpdateMaturityParams {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgUpdateMaturityParams();
@@ -498,7 +553,7 @@ export const MsgUpdateMaturityParams = {
           message.assetId = reader.string();
           break;
         case 3:
-          message.params = MaturityParams.decode(reader, reader.uint32());
+          message.params = MaturityParams.decode(reader, reader.uint32(), useInterfaces);
           break;
         default:
           reader.skipType(tag & 7);
@@ -541,24 +596,24 @@ export const MsgUpdateMaturityParams = {
     }
     return message;
   },
-  toAmino(message: MsgUpdateMaturityParams): MsgUpdateMaturityParamsAmino {
+  toAmino(message: MsgUpdateMaturityParams, useInterfaces: boolean = true): MsgUpdateMaturityParamsAmino {
     const obj: any = {};
-    obj.authority = message.authority;
-    obj.asset_id = message.assetId;
-    obj.params = message.params ? MaturityParams.toAmino(message.params) : undefined;
+    obj.authority = message.authority === "" ? undefined : message.authority;
+    obj.asset_id = message.assetId === "" ? undefined : message.assetId;
+    obj.params = message.params ? MaturityParams.toAmino(message.params, useInterfaces) : undefined;
     return obj;
   },
   fromAminoMsg(object: MsgUpdateMaturityParamsAminoMsg): MsgUpdateMaturityParams {
     return MsgUpdateMaturityParams.fromAmino(object.value);
   },
-  toAminoMsg(message: MsgUpdateMaturityParams): MsgUpdateMaturityParamsAminoMsg {
+  toAminoMsg(message: MsgUpdateMaturityParams, useInterfaces: boolean = true): MsgUpdateMaturityParamsAminoMsg {
     return {
       type: "pryzm/assets/v1/UpdateMaturityParams",
-      value: MsgUpdateMaturityParams.toAmino(message)
+      value: MsgUpdateMaturityParams.toAmino(message, useInterfaces)
     };
   },
-  fromProtoMsg(message: MsgUpdateMaturityParamsProtoMsg): MsgUpdateMaturityParams {
-    return MsgUpdateMaturityParams.decode(message.value);
+  fromProtoMsg(message: MsgUpdateMaturityParamsProtoMsg, useInterfaces: boolean = true): MsgUpdateMaturityParams {
+    return MsgUpdateMaturityParams.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: MsgUpdateMaturityParams): Uint8Array {
     return MsgUpdateMaturityParams.encode(message).finish();
@@ -570,15 +625,26 @@ export const MsgUpdateMaturityParams = {
     };
   }
 };
+GlobalDecoderRegistry.register(MsgUpdateMaturityParams.typeUrl, MsgUpdateMaturityParams);
+GlobalDecoderRegistry.registerAminoProtoMapping(MsgUpdateMaturityParams.aminoType, MsgUpdateMaturityParams.typeUrl);
 function createBaseMsgUpdateMaturityParamsResponse(): MsgUpdateMaturityParamsResponse {
   return {};
 }
 export const MsgUpdateMaturityParamsResponse = {
   typeUrl: "/pryzm.assets.v1.MsgUpdateMaturityParamsResponse",
+  is(o: any): o is MsgUpdateMaturityParamsResponse {
+    return o && o.$typeUrl === MsgUpdateMaturityParamsResponse.typeUrl;
+  },
+  isSDK(o: any): o is MsgUpdateMaturityParamsResponseSDKType {
+    return o && o.$typeUrl === MsgUpdateMaturityParamsResponse.typeUrl;
+  },
+  isAmino(o: any): o is MsgUpdateMaturityParamsResponseAmino {
+    return o && o.$typeUrl === MsgUpdateMaturityParamsResponse.typeUrl;
+  },
   encode(_: MsgUpdateMaturityParamsResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): MsgUpdateMaturityParamsResponse {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): MsgUpdateMaturityParamsResponse {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgUpdateMaturityParamsResponse();
@@ -607,15 +673,15 @@ export const MsgUpdateMaturityParamsResponse = {
     const message = createBaseMsgUpdateMaturityParamsResponse();
     return message;
   },
-  toAmino(_: MsgUpdateMaturityParamsResponse): MsgUpdateMaturityParamsResponseAmino {
+  toAmino(_: MsgUpdateMaturityParamsResponse, useInterfaces: boolean = true): MsgUpdateMaturityParamsResponseAmino {
     const obj: any = {};
     return obj;
   },
   fromAminoMsg(object: MsgUpdateMaturityParamsResponseAminoMsg): MsgUpdateMaturityParamsResponse {
     return MsgUpdateMaturityParamsResponse.fromAmino(object.value);
   },
-  fromProtoMsg(message: MsgUpdateMaturityParamsResponseProtoMsg): MsgUpdateMaturityParamsResponse {
-    return MsgUpdateMaturityParamsResponse.decode(message.value);
+  fromProtoMsg(message: MsgUpdateMaturityParamsResponseProtoMsg, useInterfaces: boolean = true): MsgUpdateMaturityParamsResponse {
+    return MsgUpdateMaturityParamsResponse.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: MsgUpdateMaturityParamsResponse): Uint8Array {
     return MsgUpdateMaturityParamsResponse.encode(message).finish();
@@ -627,6 +693,7 @@ export const MsgUpdateMaturityParamsResponse = {
     };
   }
 };
+GlobalDecoderRegistry.register(MsgUpdateMaturityParamsResponse.typeUrl, MsgUpdateMaturityParamsResponse);
 function createBaseMsgUpdateFeeRatios(): MsgUpdateFeeRatios {
   return {
     authority: "",
@@ -636,6 +703,16 @@ function createBaseMsgUpdateFeeRatios(): MsgUpdateFeeRatios {
 }
 export const MsgUpdateFeeRatios = {
   typeUrl: "/pryzm.assets.v1.MsgUpdateFeeRatios",
+  aminoType: "pryzm/assets/v1/UpdateFeeRatios",
+  is(o: any): o is MsgUpdateFeeRatios {
+    return o && (o.$typeUrl === MsgUpdateFeeRatios.typeUrl || typeof o.authority === "string" && typeof o.assetId === "string" && FeeRatios.is(o.feeRatios));
+  },
+  isSDK(o: any): o is MsgUpdateFeeRatiosSDKType {
+    return o && (o.$typeUrl === MsgUpdateFeeRatios.typeUrl || typeof o.authority === "string" && typeof o.asset_id === "string" && FeeRatios.isSDK(o.fee_ratios));
+  },
+  isAmino(o: any): o is MsgUpdateFeeRatiosAmino {
+    return o && (o.$typeUrl === MsgUpdateFeeRatios.typeUrl || typeof o.authority === "string" && typeof o.asset_id === "string" && FeeRatios.isAmino(o.fee_ratios));
+  },
   encode(message: MsgUpdateFeeRatios, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.authority !== "") {
       writer.uint32(10).string(message.authority);
@@ -648,7 +725,7 @@ export const MsgUpdateFeeRatios = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): MsgUpdateFeeRatios {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): MsgUpdateFeeRatios {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgUpdateFeeRatios();
@@ -662,7 +739,7 @@ export const MsgUpdateFeeRatios = {
           message.assetId = reader.string();
           break;
         case 3:
-          message.feeRatios = FeeRatios.decode(reader, reader.uint32());
+          message.feeRatios = FeeRatios.decode(reader, reader.uint32(), useInterfaces);
           break;
         default:
           reader.skipType(tag & 7);
@@ -705,24 +782,24 @@ export const MsgUpdateFeeRatios = {
     }
     return message;
   },
-  toAmino(message: MsgUpdateFeeRatios): MsgUpdateFeeRatiosAmino {
+  toAmino(message: MsgUpdateFeeRatios, useInterfaces: boolean = true): MsgUpdateFeeRatiosAmino {
     const obj: any = {};
-    obj.authority = message.authority;
-    obj.asset_id = message.assetId;
-    obj.fee_ratios = message.feeRatios ? FeeRatios.toAmino(message.feeRatios) : undefined;
+    obj.authority = message.authority === "" ? undefined : message.authority;
+    obj.asset_id = message.assetId === "" ? undefined : message.assetId;
+    obj.fee_ratios = message.feeRatios ? FeeRatios.toAmino(message.feeRatios, useInterfaces) : undefined;
     return obj;
   },
   fromAminoMsg(object: MsgUpdateFeeRatiosAminoMsg): MsgUpdateFeeRatios {
     return MsgUpdateFeeRatios.fromAmino(object.value);
   },
-  toAminoMsg(message: MsgUpdateFeeRatios): MsgUpdateFeeRatiosAminoMsg {
+  toAminoMsg(message: MsgUpdateFeeRatios, useInterfaces: boolean = true): MsgUpdateFeeRatiosAminoMsg {
     return {
       type: "pryzm/assets/v1/UpdateFeeRatios",
-      value: MsgUpdateFeeRatios.toAmino(message)
+      value: MsgUpdateFeeRatios.toAmino(message, useInterfaces)
     };
   },
-  fromProtoMsg(message: MsgUpdateFeeRatiosProtoMsg): MsgUpdateFeeRatios {
-    return MsgUpdateFeeRatios.decode(message.value);
+  fromProtoMsg(message: MsgUpdateFeeRatiosProtoMsg, useInterfaces: boolean = true): MsgUpdateFeeRatios {
+    return MsgUpdateFeeRatios.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: MsgUpdateFeeRatios): Uint8Array {
     return MsgUpdateFeeRatios.encode(message).finish();
@@ -734,15 +811,26 @@ export const MsgUpdateFeeRatios = {
     };
   }
 };
+GlobalDecoderRegistry.register(MsgUpdateFeeRatios.typeUrl, MsgUpdateFeeRatios);
+GlobalDecoderRegistry.registerAminoProtoMapping(MsgUpdateFeeRatios.aminoType, MsgUpdateFeeRatios.typeUrl);
 function createBaseMsgUpdateFeeRatiosResponse(): MsgUpdateFeeRatiosResponse {
   return {};
 }
 export const MsgUpdateFeeRatiosResponse = {
   typeUrl: "/pryzm.assets.v1.MsgUpdateFeeRatiosResponse",
+  is(o: any): o is MsgUpdateFeeRatiosResponse {
+    return o && o.$typeUrl === MsgUpdateFeeRatiosResponse.typeUrl;
+  },
+  isSDK(o: any): o is MsgUpdateFeeRatiosResponseSDKType {
+    return o && o.$typeUrl === MsgUpdateFeeRatiosResponse.typeUrl;
+  },
+  isAmino(o: any): o is MsgUpdateFeeRatiosResponseAmino {
+    return o && o.$typeUrl === MsgUpdateFeeRatiosResponse.typeUrl;
+  },
   encode(_: MsgUpdateFeeRatiosResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): MsgUpdateFeeRatiosResponse {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): MsgUpdateFeeRatiosResponse {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgUpdateFeeRatiosResponse();
@@ -771,15 +859,15 @@ export const MsgUpdateFeeRatiosResponse = {
     const message = createBaseMsgUpdateFeeRatiosResponse();
     return message;
   },
-  toAmino(_: MsgUpdateFeeRatiosResponse): MsgUpdateFeeRatiosResponseAmino {
+  toAmino(_: MsgUpdateFeeRatiosResponse, useInterfaces: boolean = true): MsgUpdateFeeRatiosResponseAmino {
     const obj: any = {};
     return obj;
   },
   fromAminoMsg(object: MsgUpdateFeeRatiosResponseAminoMsg): MsgUpdateFeeRatiosResponse {
     return MsgUpdateFeeRatiosResponse.fromAmino(object.value);
   },
-  fromProtoMsg(message: MsgUpdateFeeRatiosResponseProtoMsg): MsgUpdateFeeRatiosResponse {
-    return MsgUpdateFeeRatiosResponse.decode(message.value);
+  fromProtoMsg(message: MsgUpdateFeeRatiosResponseProtoMsg, useInterfaces: boolean = true): MsgUpdateFeeRatiosResponse {
+    return MsgUpdateFeeRatiosResponse.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: MsgUpdateFeeRatiosResponse): Uint8Array {
     return MsgUpdateFeeRatiosResponse.encode(message).finish();
@@ -791,6 +879,7 @@ export const MsgUpdateFeeRatiosResponse = {
     };
   }
 };
+GlobalDecoderRegistry.register(MsgUpdateFeeRatiosResponse.typeUrl, MsgUpdateFeeRatiosResponse);
 function createBaseMsgUpdateParams(): MsgUpdateParams {
   return {
     authority: "",
@@ -799,6 +888,16 @@ function createBaseMsgUpdateParams(): MsgUpdateParams {
 }
 export const MsgUpdateParams = {
   typeUrl: "/pryzm.assets.v1.MsgUpdateParams",
+  aminoType: "pryzm/assets/v1/UpdateParams",
+  is(o: any): o is MsgUpdateParams {
+    return o && (o.$typeUrl === MsgUpdateParams.typeUrl || typeof o.authority === "string" && Params.is(o.params));
+  },
+  isSDK(o: any): o is MsgUpdateParamsSDKType {
+    return o && (o.$typeUrl === MsgUpdateParams.typeUrl || typeof o.authority === "string" && Params.isSDK(o.params));
+  },
+  isAmino(o: any): o is MsgUpdateParamsAmino {
+    return o && (o.$typeUrl === MsgUpdateParams.typeUrl || typeof o.authority === "string" && Params.isAmino(o.params));
+  },
   encode(message: MsgUpdateParams, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.authority !== "") {
       writer.uint32(10).string(message.authority);
@@ -808,7 +907,7 @@ export const MsgUpdateParams = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): MsgUpdateParams {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): MsgUpdateParams {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgUpdateParams();
@@ -819,7 +918,7 @@ export const MsgUpdateParams = {
           message.authority = reader.string();
           break;
         case 2:
-          message.params = Params.decode(reader, reader.uint32());
+          message.params = Params.decode(reader, reader.uint32(), useInterfaces);
           break;
         default:
           reader.skipType(tag & 7);
@@ -856,23 +955,23 @@ export const MsgUpdateParams = {
     }
     return message;
   },
-  toAmino(message: MsgUpdateParams): MsgUpdateParamsAmino {
+  toAmino(message: MsgUpdateParams, useInterfaces: boolean = true): MsgUpdateParamsAmino {
     const obj: any = {};
-    obj.authority = message.authority;
-    obj.params = message.params ? Params.toAmino(message.params) : undefined;
+    obj.authority = message.authority === "" ? undefined : message.authority;
+    obj.params = message.params ? Params.toAmino(message.params, useInterfaces) : undefined;
     return obj;
   },
   fromAminoMsg(object: MsgUpdateParamsAminoMsg): MsgUpdateParams {
     return MsgUpdateParams.fromAmino(object.value);
   },
-  toAminoMsg(message: MsgUpdateParams): MsgUpdateParamsAminoMsg {
+  toAminoMsg(message: MsgUpdateParams, useInterfaces: boolean = true): MsgUpdateParamsAminoMsg {
     return {
       type: "pryzm/assets/v1/UpdateParams",
-      value: MsgUpdateParams.toAmino(message)
+      value: MsgUpdateParams.toAmino(message, useInterfaces)
     };
   },
-  fromProtoMsg(message: MsgUpdateParamsProtoMsg): MsgUpdateParams {
-    return MsgUpdateParams.decode(message.value);
+  fromProtoMsg(message: MsgUpdateParamsProtoMsg, useInterfaces: boolean = true): MsgUpdateParams {
+    return MsgUpdateParams.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: MsgUpdateParams): Uint8Array {
     return MsgUpdateParams.encode(message).finish();
@@ -884,15 +983,26 @@ export const MsgUpdateParams = {
     };
   }
 };
+GlobalDecoderRegistry.register(MsgUpdateParams.typeUrl, MsgUpdateParams);
+GlobalDecoderRegistry.registerAminoProtoMapping(MsgUpdateParams.aminoType, MsgUpdateParams.typeUrl);
 function createBaseMsgUpdateParamsResponse(): MsgUpdateParamsResponse {
   return {};
 }
 export const MsgUpdateParamsResponse = {
   typeUrl: "/pryzm.assets.v1.MsgUpdateParamsResponse",
+  is(o: any): o is MsgUpdateParamsResponse {
+    return o && o.$typeUrl === MsgUpdateParamsResponse.typeUrl;
+  },
+  isSDK(o: any): o is MsgUpdateParamsResponseSDKType {
+    return o && o.$typeUrl === MsgUpdateParamsResponse.typeUrl;
+  },
+  isAmino(o: any): o is MsgUpdateParamsResponseAmino {
+    return o && o.$typeUrl === MsgUpdateParamsResponse.typeUrl;
+  },
   encode(_: MsgUpdateParamsResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): MsgUpdateParamsResponse {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): MsgUpdateParamsResponse {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgUpdateParamsResponse();
@@ -921,15 +1031,15 @@ export const MsgUpdateParamsResponse = {
     const message = createBaseMsgUpdateParamsResponse();
     return message;
   },
-  toAmino(_: MsgUpdateParamsResponse): MsgUpdateParamsResponseAmino {
+  toAmino(_: MsgUpdateParamsResponse, useInterfaces: boolean = true): MsgUpdateParamsResponseAmino {
     const obj: any = {};
     return obj;
   },
   fromAminoMsg(object: MsgUpdateParamsResponseAminoMsg): MsgUpdateParamsResponse {
     return MsgUpdateParamsResponse.fromAmino(object.value);
   },
-  fromProtoMsg(message: MsgUpdateParamsResponseProtoMsg): MsgUpdateParamsResponse {
-    return MsgUpdateParamsResponse.decode(message.value);
+  fromProtoMsg(message: MsgUpdateParamsResponseProtoMsg, useInterfaces: boolean = true): MsgUpdateParamsResponse {
+    return MsgUpdateParamsResponse.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: MsgUpdateParamsResponse): Uint8Array {
     return MsgUpdateParamsResponse.encode(message).finish();
@@ -941,3 +1051,4 @@ export const MsgUpdateParamsResponse = {
     };
   }
 };
+GlobalDecoderRegistry.register(MsgUpdateParamsResponse.typeUrl, MsgUpdateParamsResponse);

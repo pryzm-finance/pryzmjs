@@ -1,7 +1,8 @@
 import { Timestamp, TimestampSDKType } from "../google/protobuf/timestamp";
 import { PageRequest, PageRequestAmino, PageRequestSDKType } from "../cosmos/base/query/v1beta1/pagination";
-import { BinaryReader, BinaryWriter } from "../binary";
 import { isSet, fromJsonTimestamp, fromTimestamp } from "../helpers";
+import { BinaryReader, BinaryWriter } from "../binary";
+import { GlobalDecoderRegistry } from "../registry";
 export enum MetricType {
   ANY = 0,
   LST = 1,
@@ -148,6 +149,15 @@ function createBaseMetric(): Metric {
 }
 export const Metric = {
   typeUrl: "/cosmatics.Metric",
+  is(o: any): o is Metric {
+    return o && (o.$typeUrl === Metric.typeUrl || typeof o.id === "string" && isSet(o.type) && Timestamp.is(o.blockTime) && typeof o.blockHeight === "bigint" && Timestamp.is(o.time) && typeof o.value === "number");
+  },
+  isSDK(o: any): o is MetricSDKType {
+    return o && (o.$typeUrl === Metric.typeUrl || typeof o.id === "string" && isSet(o.type) && Timestamp.isSDK(o.block_time) && typeof o.block_height === "bigint" && Timestamp.isSDK(o.time) && typeof o.value === "number");
+  },
+  isAmino(o: any): o is MetricAmino {
+    return o && (o.$typeUrl === Metric.typeUrl || typeof o.id === "string" && isSet(o.type) && Timestamp.isAmino(o.block_time) && typeof o.block_height === "bigint" && Timestamp.isAmino(o.time) && typeof o.value === "number");
+  },
   encode(message: Metric, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.id !== "") {
       writer.uint32(10).string(message.id);
@@ -169,7 +179,7 @@ export const Metric = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): Metric {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): Metric {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMetric();
@@ -237,7 +247,7 @@ export const Metric = {
       message.id = object.id;
     }
     if (object.type !== undefined && object.type !== null) {
-      message.type = metricTypeFromJSON(object.type);
+      message.type = object.type;
     }
     if (object.block_time !== undefined && object.block_time !== null) {
       message.blockTime = Timestamp.fromAmino(object.block_time);
@@ -253,21 +263,21 @@ export const Metric = {
     }
     return message;
   },
-  toAmino(message: Metric): MetricAmino {
+  toAmino(message: Metric, useInterfaces: boolean = true): MetricAmino {
     const obj: any = {};
-    obj.id = message.id;
-    obj.type = metricTypeToJSON(message.type);
-    obj.block_time = message.blockTime ? Timestamp.toAmino(message.blockTime) : undefined;
+    obj.id = message.id === "" ? undefined : message.id;
+    obj.type = message.type === 0 ? undefined : message.type;
+    obj.block_time = message.blockTime ? Timestamp.toAmino(message.blockTime, useInterfaces) : undefined;
     obj.block_height = message.blockHeight ? message.blockHeight.toString() : undefined;
-    obj.time = message.time ? Timestamp.toAmino(message.time) : undefined;
-    obj.value = message.value;
+    obj.time = message.time ? Timestamp.toAmino(message.time, useInterfaces) : undefined;
+    obj.value = message.value === 0 ? undefined : message.value;
     return obj;
   },
   fromAminoMsg(object: MetricAminoMsg): Metric {
     return Metric.fromAmino(object.value);
   },
-  fromProtoMsg(message: MetricProtoMsg): Metric {
-    return Metric.decode(message.value);
+  fromProtoMsg(message: MetricProtoMsg, useInterfaces: boolean = true): Metric {
+    return Metric.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: Metric): Uint8Array {
     return Metric.encode(message).finish();
@@ -279,6 +289,7 @@ export const Metric = {
     };
   }
 };
+GlobalDecoderRegistry.register(Metric.typeUrl, Metric);
 function createBaseQueryMetricsRequest(): QueryMetricsRequest {
   return {
     metricId: "",
@@ -292,6 +303,15 @@ function createBaseQueryMetricsRequest(): QueryMetricsRequest {
 }
 export const QueryMetricsRequest = {
   typeUrl: "/cosmatics.QueryMetricsRequest",
+  is(o: any): o is QueryMetricsRequest {
+    return o && (o.$typeUrl === QueryMetricsRequest.typeUrl || typeof o.metricId === "string" && isSet(o.metricType));
+  },
+  isSDK(o: any): o is QueryMetricsRequestSDKType {
+    return o && (o.$typeUrl === QueryMetricsRequest.typeUrl || typeof o.metric_id === "string" && isSet(o.metric_type));
+  },
+  isAmino(o: any): o is QueryMetricsRequestAmino {
+    return o && (o.$typeUrl === QueryMetricsRequest.typeUrl || typeof o.metric_id === "string" && isSet(o.metric_type));
+  },
   encode(message: QueryMetricsRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.metricId !== "") {
       writer.uint32(10).string(message.metricId);
@@ -316,7 +336,7 @@ export const QueryMetricsRequest = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): QueryMetricsRequest {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): QueryMetricsRequest {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryMetricsRequest();
@@ -342,7 +362,7 @@ export const QueryMetricsRequest = {
           message.toTime = reader.string();
           break;
         case 7:
-          message.pagination = PageRequest.decode(reader, reader.uint32());
+          message.pagination = PageRequest.decode(reader, reader.uint32(), useInterfaces);
           break;
         default:
           reader.skipType(tag & 7);
@@ -390,7 +410,7 @@ export const QueryMetricsRequest = {
       message.metricId = object.metric_id;
     }
     if (object.metric_type !== undefined && object.metric_type !== null) {
-      message.metricType = metricTypeFromJSON(object.metric_type);
+      message.metricType = object.metric_type;
     }
     if (object.from_block_height !== undefined && object.from_block_height !== null) {
       message.fromBlockHeight = object.from_block_height;
@@ -409,22 +429,22 @@ export const QueryMetricsRequest = {
     }
     return message;
   },
-  toAmino(message: QueryMetricsRequest): QueryMetricsRequestAmino {
+  toAmino(message: QueryMetricsRequest, useInterfaces: boolean = true): QueryMetricsRequestAmino {
     const obj: any = {};
-    obj.metric_id = message.metricId;
-    obj.metric_type = metricTypeToJSON(message.metricType);
-    obj.from_block_height = message.fromBlockHeight;
-    obj.to_block_height = message.toBlockHeight;
-    obj.from_time = message.fromTime;
-    obj.to_time = message.toTime;
-    obj.pagination = message.pagination ? PageRequest.toAmino(message.pagination) : undefined;
+    obj.metric_id = message.metricId === "" ? undefined : message.metricId;
+    obj.metric_type = message.metricType === 0 ? undefined : message.metricType;
+    obj.from_block_height = message.fromBlockHeight === null ? undefined : message.fromBlockHeight;
+    obj.to_block_height = message.toBlockHeight === null ? undefined : message.toBlockHeight;
+    obj.from_time = message.fromTime === null ? undefined : message.fromTime;
+    obj.to_time = message.toTime === null ? undefined : message.toTime;
+    obj.pagination = message.pagination ? PageRequest.toAmino(message.pagination, useInterfaces) : undefined;
     return obj;
   },
   fromAminoMsg(object: QueryMetricsRequestAminoMsg): QueryMetricsRequest {
     return QueryMetricsRequest.fromAmino(object.value);
   },
-  fromProtoMsg(message: QueryMetricsRequestProtoMsg): QueryMetricsRequest {
-    return QueryMetricsRequest.decode(message.value);
+  fromProtoMsg(message: QueryMetricsRequestProtoMsg, useInterfaces: boolean = true): QueryMetricsRequest {
+    return QueryMetricsRequest.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: QueryMetricsRequest): Uint8Array {
     return QueryMetricsRequest.encode(message).finish();
@@ -436,6 +456,7 @@ export const QueryMetricsRequest = {
     };
   }
 };
+GlobalDecoderRegistry.register(QueryMetricsRequest.typeUrl, QueryMetricsRequest);
 function createBaseQueryMetricsResponse(): QueryMetricsResponse {
   return {
     metrics: []
@@ -443,13 +464,22 @@ function createBaseQueryMetricsResponse(): QueryMetricsResponse {
 }
 export const QueryMetricsResponse = {
   typeUrl: "/cosmatics.QueryMetricsResponse",
+  is(o: any): o is QueryMetricsResponse {
+    return o && (o.$typeUrl === QueryMetricsResponse.typeUrl || Array.isArray(o.metrics) && (!o.metrics.length || Metric.is(o.metrics[0])));
+  },
+  isSDK(o: any): o is QueryMetricsResponseSDKType {
+    return o && (o.$typeUrl === QueryMetricsResponse.typeUrl || Array.isArray(o.metrics) && (!o.metrics.length || Metric.isSDK(o.metrics[0])));
+  },
+  isAmino(o: any): o is QueryMetricsResponseAmino {
+    return o && (o.$typeUrl === QueryMetricsResponse.typeUrl || Array.isArray(o.metrics) && (!o.metrics.length || Metric.isAmino(o.metrics[0])));
+  },
   encode(message: QueryMetricsResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     for (const v of message.metrics) {
       Metric.encode(v!, writer.uint32(10).fork()).ldelim();
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): QueryMetricsResponse {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): QueryMetricsResponse {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryMetricsResponse();
@@ -457,7 +487,7 @@ export const QueryMetricsResponse = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.metrics.push(Metric.decode(reader, reader.uint32()));
+          message.metrics.push(Metric.decode(reader, reader.uint32(), useInterfaces));
           break;
         default:
           reader.skipType(tag & 7);
@@ -490,20 +520,20 @@ export const QueryMetricsResponse = {
     message.metrics = object.metrics?.map(e => Metric.fromAmino(e)) || [];
     return message;
   },
-  toAmino(message: QueryMetricsResponse): QueryMetricsResponseAmino {
+  toAmino(message: QueryMetricsResponse, useInterfaces: boolean = true): QueryMetricsResponseAmino {
     const obj: any = {};
     if (message.metrics) {
-      obj.metrics = message.metrics.map(e => e ? Metric.toAmino(e) : undefined);
+      obj.metrics = message.metrics.map(e => e ? Metric.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.metrics = [];
+      obj.metrics = null;
     }
     return obj;
   },
   fromAminoMsg(object: QueryMetricsResponseAminoMsg): QueryMetricsResponse {
     return QueryMetricsResponse.fromAmino(object.value);
   },
-  fromProtoMsg(message: QueryMetricsResponseProtoMsg): QueryMetricsResponse {
-    return QueryMetricsResponse.decode(message.value);
+  fromProtoMsg(message: QueryMetricsResponseProtoMsg, useInterfaces: boolean = true): QueryMetricsResponse {
+    return QueryMetricsResponse.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: QueryMetricsResponse): Uint8Array {
     return QueryMetricsResponse.encode(message).finish();
@@ -515,3 +545,4 @@ export const QueryMetricsResponse = {
     };
   }
 };
+GlobalDecoderRegistry.register(QueryMetricsResponse.typeUrl, QueryMetricsResponse);

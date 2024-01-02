@@ -10,7 +10,8 @@ import { GeneralPoolParameters, GeneralPoolParametersAmino, GeneralPoolParameter
 import { PoolPauseWindow, PoolPauseWindowAmino, PoolPauseWindowSDKType } from "./pool";
 import { Order, OrderAmino, OrderSDKType } from "./order";
 import { BinaryReader, BinaryWriter } from "../../../binary";
-import { isSet } from "../../../helpers";
+import { isSet, padDecimal } from "../../../helpers";
+import { GlobalDecoderRegistry } from "../../../registry";
 import { Decimal } from "@cosmjs/math";
 export interface MsgSingleSwap {
   creator: string;
@@ -1651,6 +1652,16 @@ function createBaseMsgSingleSwap(): MsgSingleSwap {
 }
 export const MsgSingleSwap = {
   typeUrl: "/pryzm.amm.v1.MsgSingleSwap",
+  aminoType: "pryzm/amm/v1/SingleSwap",
+  is(o: any): o is MsgSingleSwap {
+    return o && (o.$typeUrl === MsgSingleSwap.typeUrl || typeof o.creator === "string" && Swap.is(o.swap));
+  },
+  isSDK(o: any): o is MsgSingleSwapSDKType {
+    return o && (o.$typeUrl === MsgSingleSwap.typeUrl || typeof o.creator === "string" && Swap.isSDK(o.swap));
+  },
+  isAmino(o: any): o is MsgSingleSwapAmino {
+    return o && (o.$typeUrl === MsgSingleSwap.typeUrl || typeof o.creator === "string" && Swap.isAmino(o.swap));
+  },
   encode(message: MsgSingleSwap, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.creator !== "") {
       writer.uint32(10).string(message.creator);
@@ -1666,7 +1677,7 @@ export const MsgSingleSwap = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): MsgSingleSwap {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): MsgSingleSwap {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgSingleSwap();
@@ -1677,7 +1688,7 @@ export const MsgSingleSwap = {
           message.creator = reader.string();
           break;
         case 2:
-          message.swap = Swap.decode(reader, reader.uint32());
+          message.swap = Swap.decode(reader, reader.uint32(), useInterfaces);
           break;
         case 3:
           message.maxAmountIn = reader.string();
@@ -1732,25 +1743,25 @@ export const MsgSingleSwap = {
     }
     return message;
   },
-  toAmino(message: MsgSingleSwap): MsgSingleSwapAmino {
+  toAmino(message: MsgSingleSwap, useInterfaces: boolean = true): MsgSingleSwapAmino {
     const obj: any = {};
-    obj.creator = message.creator;
-    obj.swap = message.swap ? Swap.toAmino(message.swap) : undefined;
-    obj.max_amount_in = message.maxAmountIn;
-    obj.min_amount_out = message.minAmountOut;
+    obj.creator = message.creator === "" ? undefined : message.creator;
+    obj.swap = message.swap ? Swap.toAmino(message.swap, useInterfaces) : undefined;
+    obj.max_amount_in = message.maxAmountIn === null ? undefined : message.maxAmountIn;
+    obj.min_amount_out = message.minAmountOut === null ? undefined : message.minAmountOut;
     return obj;
   },
   fromAminoMsg(object: MsgSingleSwapAminoMsg): MsgSingleSwap {
     return MsgSingleSwap.fromAmino(object.value);
   },
-  toAminoMsg(message: MsgSingleSwap): MsgSingleSwapAminoMsg {
+  toAminoMsg(message: MsgSingleSwap, useInterfaces: boolean = true): MsgSingleSwapAminoMsg {
     return {
       type: "pryzm/amm/v1/SingleSwap",
-      value: MsgSingleSwap.toAmino(message)
+      value: MsgSingleSwap.toAmino(message, useInterfaces)
     };
   },
-  fromProtoMsg(message: MsgSingleSwapProtoMsg): MsgSingleSwap {
-    return MsgSingleSwap.decode(message.value);
+  fromProtoMsg(message: MsgSingleSwapProtoMsg, useInterfaces: boolean = true): MsgSingleSwap {
+    return MsgSingleSwap.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: MsgSingleSwap): Uint8Array {
     return MsgSingleSwap.encode(message).finish();
@@ -1762,6 +1773,8 @@ export const MsgSingleSwap = {
     };
   }
 };
+GlobalDecoderRegistry.register(MsgSingleSwap.typeUrl, MsgSingleSwap);
+GlobalDecoderRegistry.registerAminoProtoMapping(MsgSingleSwap.aminoType, MsgSingleSwap.typeUrl);
 function createBaseMsgSingleSwapResponse(): MsgSingleSwapResponse {
   return {
     amountOut: Coin.fromPartial({}),
@@ -1772,6 +1785,15 @@ function createBaseMsgSingleSwapResponse(): MsgSingleSwapResponse {
 }
 export const MsgSingleSwapResponse = {
   typeUrl: "/pryzm.amm.v1.MsgSingleSwapResponse",
+  is(o: any): o is MsgSingleSwapResponse {
+    return o && (o.$typeUrl === MsgSingleSwapResponse.typeUrl || Coin.is(o.amountOut) && Coin.is(o.amountIn) && Coin.is(o.protocolFee) && Coin.is(o.swapFee));
+  },
+  isSDK(o: any): o is MsgSingleSwapResponseSDKType {
+    return o && (o.$typeUrl === MsgSingleSwapResponse.typeUrl || Coin.isSDK(o.amount_out) && Coin.isSDK(o.amount_in) && Coin.isSDK(o.protocol_fee) && Coin.isSDK(o.swap_fee));
+  },
+  isAmino(o: any): o is MsgSingleSwapResponseAmino {
+    return o && (o.$typeUrl === MsgSingleSwapResponse.typeUrl || Coin.isAmino(o.amount_out) && Coin.isAmino(o.amount_in) && Coin.isAmino(o.protocol_fee) && Coin.isAmino(o.swap_fee));
+  },
   encode(message: MsgSingleSwapResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.amountOut !== undefined) {
       Coin.encode(message.amountOut, writer.uint32(10).fork()).ldelim();
@@ -1787,7 +1809,7 @@ export const MsgSingleSwapResponse = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): MsgSingleSwapResponse {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): MsgSingleSwapResponse {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgSingleSwapResponse();
@@ -1795,16 +1817,16 @@ export const MsgSingleSwapResponse = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.amountOut = Coin.decode(reader, reader.uint32());
+          message.amountOut = Coin.decode(reader, reader.uint32(), useInterfaces);
           break;
         case 2:
-          message.amountIn = Coin.decode(reader, reader.uint32());
+          message.amountIn = Coin.decode(reader, reader.uint32(), useInterfaces);
           break;
         case 3:
-          message.protocolFee = Coin.decode(reader, reader.uint32());
+          message.protocolFee = Coin.decode(reader, reader.uint32(), useInterfaces);
           break;
         case 4:
-          message.swapFee = Coin.decode(reader, reader.uint32());
+          message.swapFee = Coin.decode(reader, reader.uint32(), useInterfaces);
           break;
         default:
           reader.skipType(tag & 7);
@@ -1853,19 +1875,19 @@ export const MsgSingleSwapResponse = {
     }
     return message;
   },
-  toAmino(message: MsgSingleSwapResponse): MsgSingleSwapResponseAmino {
+  toAmino(message: MsgSingleSwapResponse, useInterfaces: boolean = true): MsgSingleSwapResponseAmino {
     const obj: any = {};
-    obj.amount_out = message.amountOut ? Coin.toAmino(message.amountOut) : undefined;
-    obj.amount_in = message.amountIn ? Coin.toAmino(message.amountIn) : undefined;
-    obj.protocol_fee = message.protocolFee ? Coin.toAmino(message.protocolFee) : undefined;
-    obj.swap_fee = message.swapFee ? Coin.toAmino(message.swapFee) : undefined;
+    obj.amount_out = message.amountOut ? Coin.toAmino(message.amountOut, useInterfaces) : undefined;
+    obj.amount_in = message.amountIn ? Coin.toAmino(message.amountIn, useInterfaces) : undefined;
+    obj.protocol_fee = message.protocolFee ? Coin.toAmino(message.protocolFee, useInterfaces) : undefined;
+    obj.swap_fee = message.swapFee ? Coin.toAmino(message.swapFee, useInterfaces) : undefined;
     return obj;
   },
   fromAminoMsg(object: MsgSingleSwapResponseAminoMsg): MsgSingleSwapResponse {
     return MsgSingleSwapResponse.fromAmino(object.value);
   },
-  fromProtoMsg(message: MsgSingleSwapResponseProtoMsg): MsgSingleSwapResponse {
-    return MsgSingleSwapResponse.decode(message.value);
+  fromProtoMsg(message: MsgSingleSwapResponseProtoMsg, useInterfaces: boolean = true): MsgSingleSwapResponse {
+    return MsgSingleSwapResponse.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: MsgSingleSwapResponse): Uint8Array {
     return MsgSingleSwapResponse.encode(message).finish();
@@ -1877,6 +1899,7 @@ export const MsgSingleSwapResponse = {
     };
   }
 };
+GlobalDecoderRegistry.register(MsgSingleSwapResponse.typeUrl, MsgSingleSwapResponse);
 function createBaseMsgJoinAllTokensExactLpt(): MsgJoinAllTokensExactLpt {
   return {
     creator: "",
@@ -1887,6 +1910,16 @@ function createBaseMsgJoinAllTokensExactLpt(): MsgJoinAllTokensExactLpt {
 }
 export const MsgJoinAllTokensExactLpt = {
   typeUrl: "/pryzm.amm.v1.MsgJoinAllTokensExactLpt",
+  aminoType: "pryzm/amm/v1/JoinAllTokensExactLpt",
+  is(o: any): o is MsgJoinAllTokensExactLpt {
+    return o && (o.$typeUrl === MsgJoinAllTokensExactLpt.typeUrl || typeof o.creator === "string" && typeof o.poolId === "bigint" && typeof o.lptOut === "string" && Array.isArray(o.maxAmountsIn) && (!o.maxAmountsIn.length || Coin.is(o.maxAmountsIn[0])));
+  },
+  isSDK(o: any): o is MsgJoinAllTokensExactLptSDKType {
+    return o && (o.$typeUrl === MsgJoinAllTokensExactLpt.typeUrl || typeof o.creator === "string" && typeof o.pool_id === "bigint" && typeof o.lpt_out === "string" && Array.isArray(o.max_amounts_in) && (!o.max_amounts_in.length || Coin.isSDK(o.max_amounts_in[0])));
+  },
+  isAmino(o: any): o is MsgJoinAllTokensExactLptAmino {
+    return o && (o.$typeUrl === MsgJoinAllTokensExactLpt.typeUrl || typeof o.creator === "string" && typeof o.pool_id === "bigint" && typeof o.lpt_out === "string" && Array.isArray(o.max_amounts_in) && (!o.max_amounts_in.length || Coin.isAmino(o.max_amounts_in[0])));
+  },
   encode(message: MsgJoinAllTokensExactLpt, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.creator !== "") {
       writer.uint32(10).string(message.creator);
@@ -1902,7 +1935,7 @@ export const MsgJoinAllTokensExactLpt = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): MsgJoinAllTokensExactLpt {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): MsgJoinAllTokensExactLpt {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgJoinAllTokensExactLpt();
@@ -1919,7 +1952,7 @@ export const MsgJoinAllTokensExactLpt = {
           message.lptOut = reader.string();
           break;
         case 4:
-          message.maxAmountsIn.push(Coin.decode(reader, reader.uint32()));
+          message.maxAmountsIn.push(Coin.decode(reader, reader.uint32(), useInterfaces));
           break;
         default:
           reader.skipType(tag & 7);
@@ -1970,29 +2003,29 @@ export const MsgJoinAllTokensExactLpt = {
     message.maxAmountsIn = object.max_amounts_in?.map(e => Coin.fromAmino(e)) || [];
     return message;
   },
-  toAmino(message: MsgJoinAllTokensExactLpt): MsgJoinAllTokensExactLptAmino {
+  toAmino(message: MsgJoinAllTokensExactLpt, useInterfaces: boolean = true): MsgJoinAllTokensExactLptAmino {
     const obj: any = {};
-    obj.creator = message.creator;
+    obj.creator = message.creator === "" ? undefined : message.creator;
     obj.pool_id = message.poolId ? message.poolId.toString() : undefined;
-    obj.lpt_out = message.lptOut;
+    obj.lpt_out = message.lptOut === "" ? undefined : message.lptOut;
     if (message.maxAmountsIn) {
-      obj.max_amounts_in = message.maxAmountsIn.map(e => e ? Coin.toAmino(e) : undefined);
+      obj.max_amounts_in = message.maxAmountsIn.map(e => e ? Coin.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.max_amounts_in = [];
+      obj.max_amounts_in = null;
     }
     return obj;
   },
   fromAminoMsg(object: MsgJoinAllTokensExactLptAminoMsg): MsgJoinAllTokensExactLpt {
     return MsgJoinAllTokensExactLpt.fromAmino(object.value);
   },
-  toAminoMsg(message: MsgJoinAllTokensExactLpt): MsgJoinAllTokensExactLptAminoMsg {
+  toAminoMsg(message: MsgJoinAllTokensExactLpt, useInterfaces: boolean = true): MsgJoinAllTokensExactLptAminoMsg {
     return {
       type: "pryzm/amm/v1/JoinAllTokensExactLpt",
-      value: MsgJoinAllTokensExactLpt.toAmino(message)
+      value: MsgJoinAllTokensExactLpt.toAmino(message, useInterfaces)
     };
   },
-  fromProtoMsg(message: MsgJoinAllTokensExactLptProtoMsg): MsgJoinAllTokensExactLpt {
-    return MsgJoinAllTokensExactLpt.decode(message.value);
+  fromProtoMsg(message: MsgJoinAllTokensExactLptProtoMsg, useInterfaces: boolean = true): MsgJoinAllTokensExactLpt {
+    return MsgJoinAllTokensExactLpt.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: MsgJoinAllTokensExactLpt): Uint8Array {
     return MsgJoinAllTokensExactLpt.encode(message).finish();
@@ -2004,6 +2037,8 @@ export const MsgJoinAllTokensExactLpt = {
     };
   }
 };
+GlobalDecoderRegistry.register(MsgJoinAllTokensExactLpt.typeUrl, MsgJoinAllTokensExactLpt);
+GlobalDecoderRegistry.registerAminoProtoMapping(MsgJoinAllTokensExactLpt.aminoType, MsgJoinAllTokensExactLpt.typeUrl);
 function createBaseMsgJoinAllTokensExactLptResponse(): MsgJoinAllTokensExactLptResponse {
   return {
     lptOut: Coin.fromPartial({}),
@@ -2013,6 +2048,15 @@ function createBaseMsgJoinAllTokensExactLptResponse(): MsgJoinAllTokensExactLptR
 }
 export const MsgJoinAllTokensExactLptResponse = {
   typeUrl: "/pryzm.amm.v1.MsgJoinAllTokensExactLptResponse",
+  is(o: any): o is MsgJoinAllTokensExactLptResponse {
+    return o && (o.$typeUrl === MsgJoinAllTokensExactLptResponse.typeUrl || Coin.is(o.lptOut) && Array.isArray(o.amountsIn) && (!o.amountsIn.length || Coin.is(o.amountsIn[0])) && Array.isArray(o.protocolFee) && (!o.protocolFee.length || Coin.is(o.protocolFee[0])));
+  },
+  isSDK(o: any): o is MsgJoinAllTokensExactLptResponseSDKType {
+    return o && (o.$typeUrl === MsgJoinAllTokensExactLptResponse.typeUrl || Coin.isSDK(o.lpt_out) && Array.isArray(o.amounts_in) && (!o.amounts_in.length || Coin.isSDK(o.amounts_in[0])) && Array.isArray(o.protocol_fee) && (!o.protocol_fee.length || Coin.isSDK(o.protocol_fee[0])));
+  },
+  isAmino(o: any): o is MsgJoinAllTokensExactLptResponseAmino {
+    return o && (o.$typeUrl === MsgJoinAllTokensExactLptResponse.typeUrl || Coin.isAmino(o.lpt_out) && Array.isArray(o.amounts_in) && (!o.amounts_in.length || Coin.isAmino(o.amounts_in[0])) && Array.isArray(o.protocol_fee) && (!o.protocol_fee.length || Coin.isAmino(o.protocol_fee[0])));
+  },
   encode(message: MsgJoinAllTokensExactLptResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.lptOut !== undefined) {
       Coin.encode(message.lptOut, writer.uint32(10).fork()).ldelim();
@@ -2025,7 +2069,7 @@ export const MsgJoinAllTokensExactLptResponse = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): MsgJoinAllTokensExactLptResponse {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): MsgJoinAllTokensExactLptResponse {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgJoinAllTokensExactLptResponse();
@@ -2033,13 +2077,13 @@ export const MsgJoinAllTokensExactLptResponse = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.lptOut = Coin.decode(reader, reader.uint32());
+          message.lptOut = Coin.decode(reader, reader.uint32(), useInterfaces);
           break;
         case 2:
-          message.amountsIn.push(Coin.decode(reader, reader.uint32()));
+          message.amountsIn.push(Coin.decode(reader, reader.uint32(), useInterfaces));
           break;
         case 3:
-          message.protocolFee.push(Coin.decode(reader, reader.uint32()));
+          message.protocolFee.push(Coin.decode(reader, reader.uint32(), useInterfaces));
           break;
         default:
           reader.skipType(tag & 7);
@@ -2086,26 +2130,26 @@ export const MsgJoinAllTokensExactLptResponse = {
     message.protocolFee = object.protocol_fee?.map(e => Coin.fromAmino(e)) || [];
     return message;
   },
-  toAmino(message: MsgJoinAllTokensExactLptResponse): MsgJoinAllTokensExactLptResponseAmino {
+  toAmino(message: MsgJoinAllTokensExactLptResponse, useInterfaces: boolean = true): MsgJoinAllTokensExactLptResponseAmino {
     const obj: any = {};
-    obj.lpt_out = message.lptOut ? Coin.toAmino(message.lptOut) : undefined;
+    obj.lpt_out = message.lptOut ? Coin.toAmino(message.lptOut, useInterfaces) : undefined;
     if (message.amountsIn) {
-      obj.amounts_in = message.amountsIn.map(e => e ? Coin.toAmino(e) : undefined);
+      obj.amounts_in = message.amountsIn.map(e => e ? Coin.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.amounts_in = [];
+      obj.amounts_in = null;
     }
     if (message.protocolFee) {
-      obj.protocol_fee = message.protocolFee.map(e => e ? Coin.toAmino(e) : undefined);
+      obj.protocol_fee = message.protocolFee.map(e => e ? Coin.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.protocol_fee = [];
+      obj.protocol_fee = null;
     }
     return obj;
   },
   fromAminoMsg(object: MsgJoinAllTokensExactLptResponseAminoMsg): MsgJoinAllTokensExactLptResponse {
     return MsgJoinAllTokensExactLptResponse.fromAmino(object.value);
   },
-  fromProtoMsg(message: MsgJoinAllTokensExactLptResponseProtoMsg): MsgJoinAllTokensExactLptResponse {
-    return MsgJoinAllTokensExactLptResponse.decode(message.value);
+  fromProtoMsg(message: MsgJoinAllTokensExactLptResponseProtoMsg, useInterfaces: boolean = true): MsgJoinAllTokensExactLptResponse {
+    return MsgJoinAllTokensExactLptResponse.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: MsgJoinAllTokensExactLptResponse): Uint8Array {
     return MsgJoinAllTokensExactLptResponse.encode(message).finish();
@@ -2117,6 +2161,7 @@ export const MsgJoinAllTokensExactLptResponse = {
     };
   }
 };
+GlobalDecoderRegistry.register(MsgJoinAllTokensExactLptResponse.typeUrl, MsgJoinAllTokensExactLptResponse);
 function createBaseMsgJoinTokenExactLpt(): MsgJoinTokenExactLpt {
   return {
     creator: "",
@@ -2128,6 +2173,16 @@ function createBaseMsgJoinTokenExactLpt(): MsgJoinTokenExactLpt {
 }
 export const MsgJoinTokenExactLpt = {
   typeUrl: "/pryzm.amm.v1.MsgJoinTokenExactLpt",
+  aminoType: "pryzm/amm/v1/JoinTokenExactLpt",
+  is(o: any): o is MsgJoinTokenExactLpt {
+    return o && (o.$typeUrl === MsgJoinTokenExactLpt.typeUrl || typeof o.creator === "string" && typeof o.poolId === "bigint" && typeof o.lptOut === "string" && typeof o.tokenIn === "string");
+  },
+  isSDK(o: any): o is MsgJoinTokenExactLptSDKType {
+    return o && (o.$typeUrl === MsgJoinTokenExactLpt.typeUrl || typeof o.creator === "string" && typeof o.pool_id === "bigint" && typeof o.lpt_out === "string" && typeof o.token_in === "string");
+  },
+  isAmino(o: any): o is MsgJoinTokenExactLptAmino {
+    return o && (o.$typeUrl === MsgJoinTokenExactLpt.typeUrl || typeof o.creator === "string" && typeof o.pool_id === "bigint" && typeof o.lpt_out === "string" && typeof o.token_in === "string");
+  },
   encode(message: MsgJoinTokenExactLpt, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.creator !== "") {
       writer.uint32(10).string(message.creator);
@@ -2146,7 +2201,7 @@ export const MsgJoinTokenExactLpt = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): MsgJoinTokenExactLpt {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): MsgJoinTokenExactLpt {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgJoinTokenExactLpt();
@@ -2221,26 +2276,26 @@ export const MsgJoinTokenExactLpt = {
     }
     return message;
   },
-  toAmino(message: MsgJoinTokenExactLpt): MsgJoinTokenExactLptAmino {
+  toAmino(message: MsgJoinTokenExactLpt, useInterfaces: boolean = true): MsgJoinTokenExactLptAmino {
     const obj: any = {};
-    obj.creator = message.creator;
+    obj.creator = message.creator === "" ? undefined : message.creator;
     obj.pool_id = message.poolId ? message.poolId.toString() : undefined;
-    obj.lpt_out = message.lptOut;
-    obj.token_in = message.tokenIn;
-    obj.max_amount_in = message.maxAmountIn;
+    obj.lpt_out = message.lptOut === "" ? undefined : message.lptOut;
+    obj.token_in = message.tokenIn === "" ? undefined : message.tokenIn;
+    obj.max_amount_in = message.maxAmountIn === null ? undefined : message.maxAmountIn;
     return obj;
   },
   fromAminoMsg(object: MsgJoinTokenExactLptAminoMsg): MsgJoinTokenExactLpt {
     return MsgJoinTokenExactLpt.fromAmino(object.value);
   },
-  toAminoMsg(message: MsgJoinTokenExactLpt): MsgJoinTokenExactLptAminoMsg {
+  toAminoMsg(message: MsgJoinTokenExactLpt, useInterfaces: boolean = true): MsgJoinTokenExactLptAminoMsg {
     return {
       type: "pryzm/amm/v1/JoinTokenExactLpt",
-      value: MsgJoinTokenExactLpt.toAmino(message)
+      value: MsgJoinTokenExactLpt.toAmino(message, useInterfaces)
     };
   },
-  fromProtoMsg(message: MsgJoinTokenExactLptProtoMsg): MsgJoinTokenExactLpt {
-    return MsgJoinTokenExactLpt.decode(message.value);
+  fromProtoMsg(message: MsgJoinTokenExactLptProtoMsg, useInterfaces: boolean = true): MsgJoinTokenExactLpt {
+    return MsgJoinTokenExactLpt.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: MsgJoinTokenExactLpt): Uint8Array {
     return MsgJoinTokenExactLpt.encode(message).finish();
@@ -2252,6 +2307,8 @@ export const MsgJoinTokenExactLpt = {
     };
   }
 };
+GlobalDecoderRegistry.register(MsgJoinTokenExactLpt.typeUrl, MsgJoinTokenExactLpt);
+GlobalDecoderRegistry.registerAminoProtoMapping(MsgJoinTokenExactLpt.aminoType, MsgJoinTokenExactLpt.typeUrl);
 function createBaseMsgJoinTokenExactLptResponse(): MsgJoinTokenExactLptResponse {
   return {
     lptOut: Coin.fromPartial({}),
@@ -2262,6 +2319,15 @@ function createBaseMsgJoinTokenExactLptResponse(): MsgJoinTokenExactLptResponse 
 }
 export const MsgJoinTokenExactLptResponse = {
   typeUrl: "/pryzm.amm.v1.MsgJoinTokenExactLptResponse",
+  is(o: any): o is MsgJoinTokenExactLptResponse {
+    return o && (o.$typeUrl === MsgJoinTokenExactLptResponse.typeUrl || Coin.is(o.lptOut) && Coin.is(o.amountIn) && Coin.is(o.protocolFee) && Coin.is(o.swapFee));
+  },
+  isSDK(o: any): o is MsgJoinTokenExactLptResponseSDKType {
+    return o && (o.$typeUrl === MsgJoinTokenExactLptResponse.typeUrl || Coin.isSDK(o.lpt_out) && Coin.isSDK(o.amount_in) && Coin.isSDK(o.protocol_fee) && Coin.isSDK(o.swap_fee));
+  },
+  isAmino(o: any): o is MsgJoinTokenExactLptResponseAmino {
+    return o && (o.$typeUrl === MsgJoinTokenExactLptResponse.typeUrl || Coin.isAmino(o.lpt_out) && Coin.isAmino(o.amount_in) && Coin.isAmino(o.protocol_fee) && Coin.isAmino(o.swap_fee));
+  },
   encode(message: MsgJoinTokenExactLptResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.lptOut !== undefined) {
       Coin.encode(message.lptOut, writer.uint32(10).fork()).ldelim();
@@ -2277,7 +2343,7 @@ export const MsgJoinTokenExactLptResponse = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): MsgJoinTokenExactLptResponse {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): MsgJoinTokenExactLptResponse {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgJoinTokenExactLptResponse();
@@ -2285,16 +2351,16 @@ export const MsgJoinTokenExactLptResponse = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.lptOut = Coin.decode(reader, reader.uint32());
+          message.lptOut = Coin.decode(reader, reader.uint32(), useInterfaces);
           break;
         case 2:
-          message.amountIn = Coin.decode(reader, reader.uint32());
+          message.amountIn = Coin.decode(reader, reader.uint32(), useInterfaces);
           break;
         case 3:
-          message.protocolFee = Coin.decode(reader, reader.uint32());
+          message.protocolFee = Coin.decode(reader, reader.uint32(), useInterfaces);
           break;
         case 4:
-          message.swapFee = Coin.decode(reader, reader.uint32());
+          message.swapFee = Coin.decode(reader, reader.uint32(), useInterfaces);
           break;
         default:
           reader.skipType(tag & 7);
@@ -2343,19 +2409,19 @@ export const MsgJoinTokenExactLptResponse = {
     }
     return message;
   },
-  toAmino(message: MsgJoinTokenExactLptResponse): MsgJoinTokenExactLptResponseAmino {
+  toAmino(message: MsgJoinTokenExactLptResponse, useInterfaces: boolean = true): MsgJoinTokenExactLptResponseAmino {
     const obj: any = {};
-    obj.lpt_out = message.lptOut ? Coin.toAmino(message.lptOut) : undefined;
-    obj.amount_in = message.amountIn ? Coin.toAmino(message.amountIn) : undefined;
-    obj.protocol_fee = message.protocolFee ? Coin.toAmino(message.protocolFee) : undefined;
-    obj.swap_fee = message.swapFee ? Coin.toAmino(message.swapFee) : undefined;
+    obj.lpt_out = message.lptOut ? Coin.toAmino(message.lptOut, useInterfaces) : undefined;
+    obj.amount_in = message.amountIn ? Coin.toAmino(message.amountIn, useInterfaces) : undefined;
+    obj.protocol_fee = message.protocolFee ? Coin.toAmino(message.protocolFee, useInterfaces) : undefined;
+    obj.swap_fee = message.swapFee ? Coin.toAmino(message.swapFee, useInterfaces) : undefined;
     return obj;
   },
   fromAminoMsg(object: MsgJoinTokenExactLptResponseAminoMsg): MsgJoinTokenExactLptResponse {
     return MsgJoinTokenExactLptResponse.fromAmino(object.value);
   },
-  fromProtoMsg(message: MsgJoinTokenExactLptResponseProtoMsg): MsgJoinTokenExactLptResponse {
-    return MsgJoinTokenExactLptResponse.decode(message.value);
+  fromProtoMsg(message: MsgJoinTokenExactLptResponseProtoMsg, useInterfaces: boolean = true): MsgJoinTokenExactLptResponse {
+    return MsgJoinTokenExactLptResponse.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: MsgJoinTokenExactLptResponse): Uint8Array {
     return MsgJoinTokenExactLptResponse.encode(message).finish();
@@ -2367,6 +2433,7 @@ export const MsgJoinTokenExactLptResponse = {
     };
   }
 };
+GlobalDecoderRegistry.register(MsgJoinTokenExactLptResponse.typeUrl, MsgJoinTokenExactLptResponse);
 function createBaseMsgJoinExactTokens(): MsgJoinExactTokens {
   return {
     creator: "",
@@ -2377,6 +2444,16 @@ function createBaseMsgJoinExactTokens(): MsgJoinExactTokens {
 }
 export const MsgJoinExactTokens = {
   typeUrl: "/pryzm.amm.v1.MsgJoinExactTokens",
+  aminoType: "pryzm/amm/v1/JoinExactTokens",
+  is(o: any): o is MsgJoinExactTokens {
+    return o && (o.$typeUrl === MsgJoinExactTokens.typeUrl || typeof o.creator === "string" && typeof o.poolId === "bigint" && Array.isArray(o.amountsIn) && (!o.amountsIn.length || Coin.is(o.amountsIn[0])));
+  },
+  isSDK(o: any): o is MsgJoinExactTokensSDKType {
+    return o && (o.$typeUrl === MsgJoinExactTokens.typeUrl || typeof o.creator === "string" && typeof o.pool_id === "bigint" && Array.isArray(o.amounts_in) && (!o.amounts_in.length || Coin.isSDK(o.amounts_in[0])));
+  },
+  isAmino(o: any): o is MsgJoinExactTokensAmino {
+    return o && (o.$typeUrl === MsgJoinExactTokens.typeUrl || typeof o.creator === "string" && typeof o.pool_id === "bigint" && Array.isArray(o.amounts_in) && (!o.amounts_in.length || Coin.isAmino(o.amounts_in[0])));
+  },
   encode(message: MsgJoinExactTokens, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.creator !== "") {
       writer.uint32(10).string(message.creator);
@@ -2392,7 +2469,7 @@ export const MsgJoinExactTokens = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): MsgJoinExactTokens {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): MsgJoinExactTokens {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgJoinExactTokens();
@@ -2406,7 +2483,7 @@ export const MsgJoinExactTokens = {
           message.poolId = reader.uint64();
           break;
         case 3:
-          message.amountsIn.push(Coin.decode(reader, reader.uint32()));
+          message.amountsIn.push(Coin.decode(reader, reader.uint32(), useInterfaces));
           break;
         case 4:
           message.minLptOut = reader.string();
@@ -2460,29 +2537,29 @@ export const MsgJoinExactTokens = {
     }
     return message;
   },
-  toAmino(message: MsgJoinExactTokens): MsgJoinExactTokensAmino {
+  toAmino(message: MsgJoinExactTokens, useInterfaces: boolean = true): MsgJoinExactTokensAmino {
     const obj: any = {};
-    obj.creator = message.creator;
+    obj.creator = message.creator === "" ? undefined : message.creator;
     obj.pool_id = message.poolId ? message.poolId.toString() : undefined;
     if (message.amountsIn) {
-      obj.amounts_in = message.amountsIn.map(e => e ? Coin.toAmino(e) : undefined);
+      obj.amounts_in = message.amountsIn.map(e => e ? Coin.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.amounts_in = [];
+      obj.amounts_in = null;
     }
-    obj.min_lpt_out = message.minLptOut;
+    obj.min_lpt_out = message.minLptOut === null ? undefined : message.minLptOut;
     return obj;
   },
   fromAminoMsg(object: MsgJoinExactTokensAminoMsg): MsgJoinExactTokens {
     return MsgJoinExactTokens.fromAmino(object.value);
   },
-  toAminoMsg(message: MsgJoinExactTokens): MsgJoinExactTokensAminoMsg {
+  toAminoMsg(message: MsgJoinExactTokens, useInterfaces: boolean = true): MsgJoinExactTokensAminoMsg {
     return {
       type: "pryzm/amm/v1/JoinExactTokens",
-      value: MsgJoinExactTokens.toAmino(message)
+      value: MsgJoinExactTokens.toAmino(message, useInterfaces)
     };
   },
-  fromProtoMsg(message: MsgJoinExactTokensProtoMsg): MsgJoinExactTokens {
-    return MsgJoinExactTokens.decode(message.value);
+  fromProtoMsg(message: MsgJoinExactTokensProtoMsg, useInterfaces: boolean = true): MsgJoinExactTokens {
+    return MsgJoinExactTokens.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: MsgJoinExactTokens): Uint8Array {
     return MsgJoinExactTokens.encode(message).finish();
@@ -2494,6 +2571,8 @@ export const MsgJoinExactTokens = {
     };
   }
 };
+GlobalDecoderRegistry.register(MsgJoinExactTokens.typeUrl, MsgJoinExactTokens);
+GlobalDecoderRegistry.registerAminoProtoMapping(MsgJoinExactTokens.aminoType, MsgJoinExactTokens.typeUrl);
 function createBaseMsgJoinExactTokensResponse(): MsgJoinExactTokensResponse {
   return {
     lptOut: Coin.fromPartial({}),
@@ -2504,6 +2583,15 @@ function createBaseMsgJoinExactTokensResponse(): MsgJoinExactTokensResponse {
 }
 export const MsgJoinExactTokensResponse = {
   typeUrl: "/pryzm.amm.v1.MsgJoinExactTokensResponse",
+  is(o: any): o is MsgJoinExactTokensResponse {
+    return o && (o.$typeUrl === MsgJoinExactTokensResponse.typeUrl || Coin.is(o.lptOut) && Array.isArray(o.amountsIn) && (!o.amountsIn.length || Coin.is(o.amountsIn[0])) && Array.isArray(o.protocolFee) && (!o.protocolFee.length || Coin.is(o.protocolFee[0])) && Array.isArray(o.swapFee) && (!o.swapFee.length || Coin.is(o.swapFee[0])));
+  },
+  isSDK(o: any): o is MsgJoinExactTokensResponseSDKType {
+    return o && (o.$typeUrl === MsgJoinExactTokensResponse.typeUrl || Coin.isSDK(o.lpt_out) && Array.isArray(o.amounts_in) && (!o.amounts_in.length || Coin.isSDK(o.amounts_in[0])) && Array.isArray(o.protocol_fee) && (!o.protocol_fee.length || Coin.isSDK(o.protocol_fee[0])) && Array.isArray(o.swap_fee) && (!o.swap_fee.length || Coin.isSDK(o.swap_fee[0])));
+  },
+  isAmino(o: any): o is MsgJoinExactTokensResponseAmino {
+    return o && (o.$typeUrl === MsgJoinExactTokensResponse.typeUrl || Coin.isAmino(o.lpt_out) && Array.isArray(o.amounts_in) && (!o.amounts_in.length || Coin.isAmino(o.amounts_in[0])) && Array.isArray(o.protocol_fee) && (!o.protocol_fee.length || Coin.isAmino(o.protocol_fee[0])) && Array.isArray(o.swap_fee) && (!o.swap_fee.length || Coin.isAmino(o.swap_fee[0])));
+  },
   encode(message: MsgJoinExactTokensResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.lptOut !== undefined) {
       Coin.encode(message.lptOut, writer.uint32(10).fork()).ldelim();
@@ -2519,7 +2607,7 @@ export const MsgJoinExactTokensResponse = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): MsgJoinExactTokensResponse {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): MsgJoinExactTokensResponse {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgJoinExactTokensResponse();
@@ -2527,16 +2615,16 @@ export const MsgJoinExactTokensResponse = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.lptOut = Coin.decode(reader, reader.uint32());
+          message.lptOut = Coin.decode(reader, reader.uint32(), useInterfaces);
           break;
         case 2:
-          message.amountsIn.push(Coin.decode(reader, reader.uint32()));
+          message.amountsIn.push(Coin.decode(reader, reader.uint32(), useInterfaces));
           break;
         case 3:
-          message.protocolFee.push(Coin.decode(reader, reader.uint32()));
+          message.protocolFee.push(Coin.decode(reader, reader.uint32(), useInterfaces));
           break;
         case 4:
-          message.swapFee.push(Coin.decode(reader, reader.uint32()));
+          message.swapFee.push(Coin.decode(reader, reader.uint32(), useInterfaces));
           break;
         default:
           reader.skipType(tag & 7);
@@ -2591,31 +2679,31 @@ export const MsgJoinExactTokensResponse = {
     message.swapFee = object.swap_fee?.map(e => Coin.fromAmino(e)) || [];
     return message;
   },
-  toAmino(message: MsgJoinExactTokensResponse): MsgJoinExactTokensResponseAmino {
+  toAmino(message: MsgJoinExactTokensResponse, useInterfaces: boolean = true): MsgJoinExactTokensResponseAmino {
     const obj: any = {};
-    obj.lpt_out = message.lptOut ? Coin.toAmino(message.lptOut) : undefined;
+    obj.lpt_out = message.lptOut ? Coin.toAmino(message.lptOut, useInterfaces) : undefined;
     if (message.amountsIn) {
-      obj.amounts_in = message.amountsIn.map(e => e ? Coin.toAmino(e) : undefined);
+      obj.amounts_in = message.amountsIn.map(e => e ? Coin.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.amounts_in = [];
+      obj.amounts_in = null;
     }
     if (message.protocolFee) {
-      obj.protocol_fee = message.protocolFee.map(e => e ? Coin.toAmino(e) : undefined);
+      obj.protocol_fee = message.protocolFee.map(e => e ? Coin.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.protocol_fee = [];
+      obj.protocol_fee = null;
     }
     if (message.swapFee) {
-      obj.swap_fee = message.swapFee.map(e => e ? Coin.toAmino(e) : undefined);
+      obj.swap_fee = message.swapFee.map(e => e ? Coin.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.swap_fee = [];
+      obj.swap_fee = null;
     }
     return obj;
   },
   fromAminoMsg(object: MsgJoinExactTokensResponseAminoMsg): MsgJoinExactTokensResponse {
     return MsgJoinExactTokensResponse.fromAmino(object.value);
   },
-  fromProtoMsg(message: MsgJoinExactTokensResponseProtoMsg): MsgJoinExactTokensResponse {
-    return MsgJoinExactTokensResponse.decode(message.value);
+  fromProtoMsg(message: MsgJoinExactTokensResponseProtoMsg, useInterfaces: boolean = true): MsgJoinExactTokensResponse {
+    return MsgJoinExactTokensResponse.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: MsgJoinExactTokensResponse): Uint8Array {
     return MsgJoinExactTokensResponse.encode(message).finish();
@@ -2627,6 +2715,7 @@ export const MsgJoinExactTokensResponse = {
     };
   }
 };
+GlobalDecoderRegistry.register(MsgJoinExactTokensResponse.typeUrl, MsgJoinExactTokensResponse);
 function createBaseMsgZeroImpactJoinYamm(): MsgZeroImpactJoinYamm {
   return {
     creator: "",
@@ -2636,6 +2725,16 @@ function createBaseMsgZeroImpactJoinYamm(): MsgZeroImpactJoinYamm {
 }
 export const MsgZeroImpactJoinYamm = {
   typeUrl: "/pryzm.amm.v1.MsgZeroImpactJoinYamm",
+  aminoType: "pryzm/amm/v1/ZeroImpactJoinYamm",
+  is(o: any): o is MsgZeroImpactJoinYamm {
+    return o && (o.$typeUrl === MsgZeroImpactJoinYamm.typeUrl || typeof o.creator === "string" && Coin.is(o.cAmountIn));
+  },
+  isSDK(o: any): o is MsgZeroImpactJoinYammSDKType {
+    return o && (o.$typeUrl === MsgZeroImpactJoinYamm.typeUrl || typeof o.creator === "string" && Coin.isSDK(o.c_amount_in));
+  },
+  isAmino(o: any): o is MsgZeroImpactJoinYammAmino {
+    return o && (o.$typeUrl === MsgZeroImpactJoinYamm.typeUrl || typeof o.creator === "string" && Coin.isAmino(o.c_amount_in));
+  },
   encode(message: MsgZeroImpactJoinYamm, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.creator !== "") {
       writer.uint32(10).string(message.creator);
@@ -2648,7 +2747,7 @@ export const MsgZeroImpactJoinYamm = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): MsgZeroImpactJoinYamm {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): MsgZeroImpactJoinYamm {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgZeroImpactJoinYamm();
@@ -2659,7 +2758,7 @@ export const MsgZeroImpactJoinYamm = {
           message.creator = reader.string();
           break;
         case 2:
-          message.cAmountIn = Coin.decode(reader, reader.uint32());
+          message.cAmountIn = Coin.decode(reader, reader.uint32(), useInterfaces);
           break;
         case 3:
           message.minLptOut = reader.string();
@@ -2705,24 +2804,24 @@ export const MsgZeroImpactJoinYamm = {
     }
     return message;
   },
-  toAmino(message: MsgZeroImpactJoinYamm): MsgZeroImpactJoinYammAmino {
+  toAmino(message: MsgZeroImpactJoinYamm, useInterfaces: boolean = true): MsgZeroImpactJoinYammAmino {
     const obj: any = {};
-    obj.creator = message.creator;
-    obj.c_amount_in = message.cAmountIn ? Coin.toAmino(message.cAmountIn) : undefined;
-    obj.min_lpt_out = message.minLptOut;
+    obj.creator = message.creator === "" ? undefined : message.creator;
+    obj.c_amount_in = message.cAmountIn ? Coin.toAmino(message.cAmountIn, useInterfaces) : undefined;
+    obj.min_lpt_out = message.minLptOut === null ? undefined : message.minLptOut;
     return obj;
   },
   fromAminoMsg(object: MsgZeroImpactJoinYammAminoMsg): MsgZeroImpactJoinYamm {
     return MsgZeroImpactJoinYamm.fromAmino(object.value);
   },
-  toAminoMsg(message: MsgZeroImpactJoinYamm): MsgZeroImpactJoinYammAminoMsg {
+  toAminoMsg(message: MsgZeroImpactJoinYamm, useInterfaces: boolean = true): MsgZeroImpactJoinYammAminoMsg {
     return {
       type: "pryzm/amm/v1/ZeroImpactJoinYamm",
-      value: MsgZeroImpactJoinYamm.toAmino(message)
+      value: MsgZeroImpactJoinYamm.toAmino(message, useInterfaces)
     };
   },
-  fromProtoMsg(message: MsgZeroImpactJoinYammProtoMsg): MsgZeroImpactJoinYamm {
-    return MsgZeroImpactJoinYamm.decode(message.value);
+  fromProtoMsg(message: MsgZeroImpactJoinYammProtoMsg, useInterfaces: boolean = true): MsgZeroImpactJoinYamm {
+    return MsgZeroImpactJoinYamm.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: MsgZeroImpactJoinYamm): Uint8Array {
     return MsgZeroImpactJoinYamm.encode(message).finish();
@@ -2734,6 +2833,8 @@ export const MsgZeroImpactJoinYamm = {
     };
   }
 };
+GlobalDecoderRegistry.register(MsgZeroImpactJoinYamm.typeUrl, MsgZeroImpactJoinYamm);
+GlobalDecoderRegistry.registerAminoProtoMapping(MsgZeroImpactJoinYamm.aminoType, MsgZeroImpactJoinYamm.typeUrl);
 function createBaseMsgZeroImpactJoinYammResponse(): MsgZeroImpactJoinYammResponse {
   return {
     lptOut: Coin.fromPartial({}),
@@ -2745,6 +2846,15 @@ function createBaseMsgZeroImpactJoinYammResponse(): MsgZeroImpactJoinYammRespons
 }
 export const MsgZeroImpactJoinYammResponse = {
   typeUrl: "/pryzm.amm.v1.MsgZeroImpactJoinYammResponse",
+  is(o: any): o is MsgZeroImpactJoinYammResponse {
+    return o && (o.$typeUrl === MsgZeroImpactJoinYammResponse.typeUrl || Coin.is(o.lptOut) && Array.isArray(o.yOut) && (!o.yOut.length || Coin.is(o.yOut[0])) && Coin.is(o.refractFee) && Array.isArray(o.joinProtocolFee) && (!o.joinProtocolFee.length || Coin.is(o.joinProtocolFee[0])) && Array.isArray(o.swapFee) && (!o.swapFee.length || Coin.is(o.swapFee[0])));
+  },
+  isSDK(o: any): o is MsgZeroImpactJoinYammResponseSDKType {
+    return o && (o.$typeUrl === MsgZeroImpactJoinYammResponse.typeUrl || Coin.isSDK(o.lpt_out) && Array.isArray(o.y_out) && (!o.y_out.length || Coin.isSDK(o.y_out[0])) && Coin.isSDK(o.refract_fee) && Array.isArray(o.join_protocol_fee) && (!o.join_protocol_fee.length || Coin.isSDK(o.join_protocol_fee[0])) && Array.isArray(o.swap_fee) && (!o.swap_fee.length || Coin.isSDK(o.swap_fee[0])));
+  },
+  isAmino(o: any): o is MsgZeroImpactJoinYammResponseAmino {
+    return o && (o.$typeUrl === MsgZeroImpactJoinYammResponse.typeUrl || Coin.isAmino(o.lpt_out) && Array.isArray(o.y_out) && (!o.y_out.length || Coin.isAmino(o.y_out[0])) && Coin.isAmino(o.refract_fee) && Array.isArray(o.join_protocol_fee) && (!o.join_protocol_fee.length || Coin.isAmino(o.join_protocol_fee[0])) && Array.isArray(o.swap_fee) && (!o.swap_fee.length || Coin.isAmino(o.swap_fee[0])));
+  },
   encode(message: MsgZeroImpactJoinYammResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.lptOut !== undefined) {
       Coin.encode(message.lptOut, writer.uint32(10).fork()).ldelim();
@@ -2763,7 +2873,7 @@ export const MsgZeroImpactJoinYammResponse = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): MsgZeroImpactJoinYammResponse {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): MsgZeroImpactJoinYammResponse {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgZeroImpactJoinYammResponse();
@@ -2771,19 +2881,19 @@ export const MsgZeroImpactJoinYammResponse = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.lptOut = Coin.decode(reader, reader.uint32());
+          message.lptOut = Coin.decode(reader, reader.uint32(), useInterfaces);
           break;
         case 2:
-          message.yOut.push(Coin.decode(reader, reader.uint32()));
+          message.yOut.push(Coin.decode(reader, reader.uint32(), useInterfaces));
           break;
         case 3:
-          message.refractFee = Coin.decode(reader, reader.uint32());
+          message.refractFee = Coin.decode(reader, reader.uint32(), useInterfaces);
           break;
         case 4:
-          message.joinProtocolFee.push(Coin.decode(reader, reader.uint32()));
+          message.joinProtocolFee.push(Coin.decode(reader, reader.uint32(), useInterfaces));
           break;
         case 5:
-          message.swapFee.push(Coin.decode(reader, reader.uint32()));
+          message.swapFee.push(Coin.decode(reader, reader.uint32(), useInterfaces));
           break;
         default:
           reader.skipType(tag & 7);
@@ -2844,32 +2954,32 @@ export const MsgZeroImpactJoinYammResponse = {
     message.swapFee = object.swap_fee?.map(e => Coin.fromAmino(e)) || [];
     return message;
   },
-  toAmino(message: MsgZeroImpactJoinYammResponse): MsgZeroImpactJoinYammResponseAmino {
+  toAmino(message: MsgZeroImpactJoinYammResponse, useInterfaces: boolean = true): MsgZeroImpactJoinYammResponseAmino {
     const obj: any = {};
-    obj.lpt_out = message.lptOut ? Coin.toAmino(message.lptOut) : undefined;
+    obj.lpt_out = message.lptOut ? Coin.toAmino(message.lptOut, useInterfaces) : undefined;
     if (message.yOut) {
-      obj.y_out = message.yOut.map(e => e ? Coin.toAmino(e) : undefined);
+      obj.y_out = message.yOut.map(e => e ? Coin.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.y_out = [];
+      obj.y_out = null;
     }
-    obj.refract_fee = message.refractFee ? Coin.toAmino(message.refractFee) : undefined;
+    obj.refract_fee = message.refractFee ? Coin.toAmino(message.refractFee, useInterfaces) : undefined;
     if (message.joinProtocolFee) {
-      obj.join_protocol_fee = message.joinProtocolFee.map(e => e ? Coin.toAmino(e) : undefined);
+      obj.join_protocol_fee = message.joinProtocolFee.map(e => e ? Coin.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.join_protocol_fee = [];
+      obj.join_protocol_fee = null;
     }
     if (message.swapFee) {
-      obj.swap_fee = message.swapFee.map(e => e ? Coin.toAmino(e) : undefined);
+      obj.swap_fee = message.swapFee.map(e => e ? Coin.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.swap_fee = [];
+      obj.swap_fee = null;
     }
     return obj;
   },
   fromAminoMsg(object: MsgZeroImpactJoinYammResponseAminoMsg): MsgZeroImpactJoinYammResponse {
     return MsgZeroImpactJoinYammResponse.fromAmino(object.value);
   },
-  fromProtoMsg(message: MsgZeroImpactJoinYammResponseProtoMsg): MsgZeroImpactJoinYammResponse {
-    return MsgZeroImpactJoinYammResponse.decode(message.value);
+  fromProtoMsg(message: MsgZeroImpactJoinYammResponseProtoMsg, useInterfaces: boolean = true): MsgZeroImpactJoinYammResponse {
+    return MsgZeroImpactJoinYammResponse.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: MsgZeroImpactJoinYammResponse): Uint8Array {
     return MsgZeroImpactJoinYammResponse.encode(message).finish();
@@ -2881,6 +2991,7 @@ export const MsgZeroImpactJoinYammResponse = {
     };
   }
 };
+GlobalDecoderRegistry.register(MsgZeroImpactJoinYammResponse.typeUrl, MsgZeroImpactJoinYammResponse);
 function createBaseMsgExitExactTokens(): MsgExitExactTokens {
   return {
     creator: "",
@@ -2891,6 +3002,16 @@ function createBaseMsgExitExactTokens(): MsgExitExactTokens {
 }
 export const MsgExitExactTokens = {
   typeUrl: "/pryzm.amm.v1.MsgExitExactTokens",
+  aminoType: "pryzm/amm/v1/ExitExactTokens",
+  is(o: any): o is MsgExitExactTokens {
+    return o && (o.$typeUrl === MsgExitExactTokens.typeUrl || typeof o.creator === "string" && typeof o.poolId === "bigint" && Array.isArray(o.amountsOut) && (!o.amountsOut.length || Coin.is(o.amountsOut[0])));
+  },
+  isSDK(o: any): o is MsgExitExactTokensSDKType {
+    return o && (o.$typeUrl === MsgExitExactTokens.typeUrl || typeof o.creator === "string" && typeof o.pool_id === "bigint" && Array.isArray(o.amounts_out) && (!o.amounts_out.length || Coin.isSDK(o.amounts_out[0])));
+  },
+  isAmino(o: any): o is MsgExitExactTokensAmino {
+    return o && (o.$typeUrl === MsgExitExactTokens.typeUrl || typeof o.creator === "string" && typeof o.pool_id === "bigint" && Array.isArray(o.amounts_out) && (!o.amounts_out.length || Coin.isAmino(o.amounts_out[0])));
+  },
   encode(message: MsgExitExactTokens, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.creator !== "") {
       writer.uint32(10).string(message.creator);
@@ -2906,7 +3027,7 @@ export const MsgExitExactTokens = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): MsgExitExactTokens {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): MsgExitExactTokens {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgExitExactTokens();
@@ -2920,7 +3041,7 @@ export const MsgExitExactTokens = {
           message.poolId = reader.uint64();
           break;
         case 3:
-          message.amountsOut.push(Coin.decode(reader, reader.uint32()));
+          message.amountsOut.push(Coin.decode(reader, reader.uint32(), useInterfaces));
           break;
         case 4:
           message.maxLptIn = reader.string();
@@ -2974,29 +3095,29 @@ export const MsgExitExactTokens = {
     }
     return message;
   },
-  toAmino(message: MsgExitExactTokens): MsgExitExactTokensAmino {
+  toAmino(message: MsgExitExactTokens, useInterfaces: boolean = true): MsgExitExactTokensAmino {
     const obj: any = {};
-    obj.creator = message.creator;
+    obj.creator = message.creator === "" ? undefined : message.creator;
     obj.pool_id = message.poolId ? message.poolId.toString() : undefined;
     if (message.amountsOut) {
-      obj.amounts_out = message.amountsOut.map(e => e ? Coin.toAmino(e) : undefined);
+      obj.amounts_out = message.amountsOut.map(e => e ? Coin.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.amounts_out = [];
+      obj.amounts_out = null;
     }
-    obj.max_lpt_in = message.maxLptIn;
+    obj.max_lpt_in = message.maxLptIn === null ? undefined : message.maxLptIn;
     return obj;
   },
   fromAminoMsg(object: MsgExitExactTokensAminoMsg): MsgExitExactTokens {
     return MsgExitExactTokens.fromAmino(object.value);
   },
-  toAminoMsg(message: MsgExitExactTokens): MsgExitExactTokensAminoMsg {
+  toAminoMsg(message: MsgExitExactTokens, useInterfaces: boolean = true): MsgExitExactTokensAminoMsg {
     return {
       type: "pryzm/amm/v1/ExitExactTokens",
-      value: MsgExitExactTokens.toAmino(message)
+      value: MsgExitExactTokens.toAmino(message, useInterfaces)
     };
   },
-  fromProtoMsg(message: MsgExitExactTokensProtoMsg): MsgExitExactTokens {
-    return MsgExitExactTokens.decode(message.value);
+  fromProtoMsg(message: MsgExitExactTokensProtoMsg, useInterfaces: boolean = true): MsgExitExactTokens {
+    return MsgExitExactTokens.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: MsgExitExactTokens): Uint8Array {
     return MsgExitExactTokens.encode(message).finish();
@@ -3008,6 +3129,8 @@ export const MsgExitExactTokens = {
     };
   }
 };
+GlobalDecoderRegistry.register(MsgExitExactTokens.typeUrl, MsgExitExactTokens);
+GlobalDecoderRegistry.registerAminoProtoMapping(MsgExitExactTokens.aminoType, MsgExitExactTokens.typeUrl);
 function createBaseMsgExitExactTokensResponse(): MsgExitExactTokensResponse {
   return {
     lptIn: Coin.fromPartial({}),
@@ -3018,6 +3141,15 @@ function createBaseMsgExitExactTokensResponse(): MsgExitExactTokensResponse {
 }
 export const MsgExitExactTokensResponse = {
   typeUrl: "/pryzm.amm.v1.MsgExitExactTokensResponse",
+  is(o: any): o is MsgExitExactTokensResponse {
+    return o && (o.$typeUrl === MsgExitExactTokensResponse.typeUrl || Coin.is(o.lptIn) && Array.isArray(o.amountsOut) && (!o.amountsOut.length || Coin.is(o.amountsOut[0])) && Coin.is(o.protocolFee) && Array.isArray(o.swapFee) && (!o.swapFee.length || Coin.is(o.swapFee[0])));
+  },
+  isSDK(o: any): o is MsgExitExactTokensResponseSDKType {
+    return o && (o.$typeUrl === MsgExitExactTokensResponse.typeUrl || Coin.isSDK(o.lpt_in) && Array.isArray(o.amounts_out) && (!o.amounts_out.length || Coin.isSDK(o.amounts_out[0])) && Coin.isSDK(o.protocol_fee) && Array.isArray(o.swap_fee) && (!o.swap_fee.length || Coin.isSDK(o.swap_fee[0])));
+  },
+  isAmino(o: any): o is MsgExitExactTokensResponseAmino {
+    return o && (o.$typeUrl === MsgExitExactTokensResponse.typeUrl || Coin.isAmino(o.lpt_in) && Array.isArray(o.amounts_out) && (!o.amounts_out.length || Coin.isAmino(o.amounts_out[0])) && Coin.isAmino(o.protocol_fee) && Array.isArray(o.swap_fee) && (!o.swap_fee.length || Coin.isAmino(o.swap_fee[0])));
+  },
   encode(message: MsgExitExactTokensResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.lptIn !== undefined) {
       Coin.encode(message.lptIn, writer.uint32(10).fork()).ldelim();
@@ -3033,7 +3165,7 @@ export const MsgExitExactTokensResponse = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): MsgExitExactTokensResponse {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): MsgExitExactTokensResponse {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgExitExactTokensResponse();
@@ -3041,16 +3173,16 @@ export const MsgExitExactTokensResponse = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.lptIn = Coin.decode(reader, reader.uint32());
+          message.lptIn = Coin.decode(reader, reader.uint32(), useInterfaces);
           break;
         case 2:
-          message.amountsOut.push(Coin.decode(reader, reader.uint32()));
+          message.amountsOut.push(Coin.decode(reader, reader.uint32(), useInterfaces));
           break;
         case 3:
-          message.protocolFee = Coin.decode(reader, reader.uint32());
+          message.protocolFee = Coin.decode(reader, reader.uint32(), useInterfaces);
           break;
         case 4:
-          message.swapFee.push(Coin.decode(reader, reader.uint32()));
+          message.swapFee.push(Coin.decode(reader, reader.uint32(), useInterfaces));
           break;
         default:
           reader.skipType(tag & 7);
@@ -3103,27 +3235,27 @@ export const MsgExitExactTokensResponse = {
     message.swapFee = object.swap_fee?.map(e => Coin.fromAmino(e)) || [];
     return message;
   },
-  toAmino(message: MsgExitExactTokensResponse): MsgExitExactTokensResponseAmino {
+  toAmino(message: MsgExitExactTokensResponse, useInterfaces: boolean = true): MsgExitExactTokensResponseAmino {
     const obj: any = {};
-    obj.lpt_in = message.lptIn ? Coin.toAmino(message.lptIn) : undefined;
+    obj.lpt_in = message.lptIn ? Coin.toAmino(message.lptIn, useInterfaces) : undefined;
     if (message.amountsOut) {
-      obj.amounts_out = message.amountsOut.map(e => e ? Coin.toAmino(e) : undefined);
+      obj.amounts_out = message.amountsOut.map(e => e ? Coin.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.amounts_out = [];
+      obj.amounts_out = null;
     }
-    obj.protocol_fee = message.protocolFee ? Coin.toAmino(message.protocolFee) : undefined;
+    obj.protocol_fee = message.protocolFee ? Coin.toAmino(message.protocolFee, useInterfaces) : undefined;
     if (message.swapFee) {
-      obj.swap_fee = message.swapFee.map(e => e ? Coin.toAmino(e) : undefined);
+      obj.swap_fee = message.swapFee.map(e => e ? Coin.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.swap_fee = [];
+      obj.swap_fee = null;
     }
     return obj;
   },
   fromAminoMsg(object: MsgExitExactTokensResponseAminoMsg): MsgExitExactTokensResponse {
     return MsgExitExactTokensResponse.fromAmino(object.value);
   },
-  fromProtoMsg(message: MsgExitExactTokensResponseProtoMsg): MsgExitExactTokensResponse {
-    return MsgExitExactTokensResponse.decode(message.value);
+  fromProtoMsg(message: MsgExitExactTokensResponseProtoMsg, useInterfaces: boolean = true): MsgExitExactTokensResponse {
+    return MsgExitExactTokensResponse.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: MsgExitExactTokensResponse): Uint8Array {
     return MsgExitExactTokensResponse.encode(message).finish();
@@ -3135,6 +3267,7 @@ export const MsgExitExactTokensResponse = {
     };
   }
 };
+GlobalDecoderRegistry.register(MsgExitExactTokensResponse.typeUrl, MsgExitExactTokensResponse);
 function createBaseMsgExitTokenExactLpt(): MsgExitTokenExactLpt {
   return {
     creator: "",
@@ -3146,6 +3279,16 @@ function createBaseMsgExitTokenExactLpt(): MsgExitTokenExactLpt {
 }
 export const MsgExitTokenExactLpt = {
   typeUrl: "/pryzm.amm.v1.MsgExitTokenExactLpt",
+  aminoType: "pryzm/amm/v1/ExitTokenExactLpt",
+  is(o: any): o is MsgExitTokenExactLpt {
+    return o && (o.$typeUrl === MsgExitTokenExactLpt.typeUrl || typeof o.creator === "string" && typeof o.poolId === "bigint" && typeof o.lptIn === "string" && typeof o.tokenOut === "string");
+  },
+  isSDK(o: any): o is MsgExitTokenExactLptSDKType {
+    return o && (o.$typeUrl === MsgExitTokenExactLpt.typeUrl || typeof o.creator === "string" && typeof o.pool_id === "bigint" && typeof o.lpt_in === "string" && typeof o.token_out === "string");
+  },
+  isAmino(o: any): o is MsgExitTokenExactLptAmino {
+    return o && (o.$typeUrl === MsgExitTokenExactLpt.typeUrl || typeof o.creator === "string" && typeof o.pool_id === "bigint" && typeof o.lpt_in === "string" && typeof o.token_out === "string");
+  },
   encode(message: MsgExitTokenExactLpt, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.creator !== "") {
       writer.uint32(10).string(message.creator);
@@ -3164,7 +3307,7 @@ export const MsgExitTokenExactLpt = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): MsgExitTokenExactLpt {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): MsgExitTokenExactLpt {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgExitTokenExactLpt();
@@ -3239,26 +3382,26 @@ export const MsgExitTokenExactLpt = {
     }
     return message;
   },
-  toAmino(message: MsgExitTokenExactLpt): MsgExitTokenExactLptAmino {
+  toAmino(message: MsgExitTokenExactLpt, useInterfaces: boolean = true): MsgExitTokenExactLptAmino {
     const obj: any = {};
-    obj.creator = message.creator;
+    obj.creator = message.creator === "" ? undefined : message.creator;
     obj.pool_id = message.poolId ? message.poolId.toString() : undefined;
-    obj.lpt_in = message.lptIn;
-    obj.token_out = message.tokenOut;
-    obj.min_amount_out = message.minAmountOut;
+    obj.lpt_in = message.lptIn === "" ? undefined : message.lptIn;
+    obj.token_out = message.tokenOut === "" ? undefined : message.tokenOut;
+    obj.min_amount_out = message.minAmountOut === null ? undefined : message.minAmountOut;
     return obj;
   },
   fromAminoMsg(object: MsgExitTokenExactLptAminoMsg): MsgExitTokenExactLpt {
     return MsgExitTokenExactLpt.fromAmino(object.value);
   },
-  toAminoMsg(message: MsgExitTokenExactLpt): MsgExitTokenExactLptAminoMsg {
+  toAminoMsg(message: MsgExitTokenExactLpt, useInterfaces: boolean = true): MsgExitTokenExactLptAminoMsg {
     return {
       type: "pryzm/amm/v1/ExitTokenExactLpt",
-      value: MsgExitTokenExactLpt.toAmino(message)
+      value: MsgExitTokenExactLpt.toAmino(message, useInterfaces)
     };
   },
-  fromProtoMsg(message: MsgExitTokenExactLptProtoMsg): MsgExitTokenExactLpt {
-    return MsgExitTokenExactLpt.decode(message.value);
+  fromProtoMsg(message: MsgExitTokenExactLptProtoMsg, useInterfaces: boolean = true): MsgExitTokenExactLpt {
+    return MsgExitTokenExactLpt.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: MsgExitTokenExactLpt): Uint8Array {
     return MsgExitTokenExactLpt.encode(message).finish();
@@ -3270,6 +3413,8 @@ export const MsgExitTokenExactLpt = {
     };
   }
 };
+GlobalDecoderRegistry.register(MsgExitTokenExactLpt.typeUrl, MsgExitTokenExactLpt);
+GlobalDecoderRegistry.registerAminoProtoMapping(MsgExitTokenExactLpt.aminoType, MsgExitTokenExactLpt.typeUrl);
 function createBaseMsgExitTokenExactLptResponse(): MsgExitTokenExactLptResponse {
   return {
     lptIn: Coin.fromPartial({}),
@@ -3280,6 +3425,15 @@ function createBaseMsgExitTokenExactLptResponse(): MsgExitTokenExactLptResponse 
 }
 export const MsgExitTokenExactLptResponse = {
   typeUrl: "/pryzm.amm.v1.MsgExitTokenExactLptResponse",
+  is(o: any): o is MsgExitTokenExactLptResponse {
+    return o && (o.$typeUrl === MsgExitTokenExactLptResponse.typeUrl || Coin.is(o.lptIn) && Coin.is(o.amountOut) && Coin.is(o.protocolFee) && Coin.is(o.swapFee));
+  },
+  isSDK(o: any): o is MsgExitTokenExactLptResponseSDKType {
+    return o && (o.$typeUrl === MsgExitTokenExactLptResponse.typeUrl || Coin.isSDK(o.lpt_in) && Coin.isSDK(o.amount_out) && Coin.isSDK(o.protocol_fee) && Coin.isSDK(o.swap_fee));
+  },
+  isAmino(o: any): o is MsgExitTokenExactLptResponseAmino {
+    return o && (o.$typeUrl === MsgExitTokenExactLptResponse.typeUrl || Coin.isAmino(o.lpt_in) && Coin.isAmino(o.amount_out) && Coin.isAmino(o.protocol_fee) && Coin.isAmino(o.swap_fee));
+  },
   encode(message: MsgExitTokenExactLptResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.lptIn !== undefined) {
       Coin.encode(message.lptIn, writer.uint32(10).fork()).ldelim();
@@ -3295,7 +3449,7 @@ export const MsgExitTokenExactLptResponse = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): MsgExitTokenExactLptResponse {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): MsgExitTokenExactLptResponse {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgExitTokenExactLptResponse();
@@ -3303,16 +3457,16 @@ export const MsgExitTokenExactLptResponse = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.lptIn = Coin.decode(reader, reader.uint32());
+          message.lptIn = Coin.decode(reader, reader.uint32(), useInterfaces);
           break;
         case 2:
-          message.amountOut = Coin.decode(reader, reader.uint32());
+          message.amountOut = Coin.decode(reader, reader.uint32(), useInterfaces);
           break;
         case 3:
-          message.protocolFee = Coin.decode(reader, reader.uint32());
+          message.protocolFee = Coin.decode(reader, reader.uint32(), useInterfaces);
           break;
         case 4:
-          message.swapFee = Coin.decode(reader, reader.uint32());
+          message.swapFee = Coin.decode(reader, reader.uint32(), useInterfaces);
           break;
         default:
           reader.skipType(tag & 7);
@@ -3361,19 +3515,19 @@ export const MsgExitTokenExactLptResponse = {
     }
     return message;
   },
-  toAmino(message: MsgExitTokenExactLptResponse): MsgExitTokenExactLptResponseAmino {
+  toAmino(message: MsgExitTokenExactLptResponse, useInterfaces: boolean = true): MsgExitTokenExactLptResponseAmino {
     const obj: any = {};
-    obj.lpt_in = message.lptIn ? Coin.toAmino(message.lptIn) : undefined;
-    obj.amount_out = message.amountOut ? Coin.toAmino(message.amountOut) : undefined;
-    obj.protocol_fee = message.protocolFee ? Coin.toAmino(message.protocolFee) : undefined;
-    obj.swap_fee = message.swapFee ? Coin.toAmino(message.swapFee) : undefined;
+    obj.lpt_in = message.lptIn ? Coin.toAmino(message.lptIn, useInterfaces) : undefined;
+    obj.amount_out = message.amountOut ? Coin.toAmino(message.amountOut, useInterfaces) : undefined;
+    obj.protocol_fee = message.protocolFee ? Coin.toAmino(message.protocolFee, useInterfaces) : undefined;
+    obj.swap_fee = message.swapFee ? Coin.toAmino(message.swapFee, useInterfaces) : undefined;
     return obj;
   },
   fromAminoMsg(object: MsgExitTokenExactLptResponseAminoMsg): MsgExitTokenExactLptResponse {
     return MsgExitTokenExactLptResponse.fromAmino(object.value);
   },
-  fromProtoMsg(message: MsgExitTokenExactLptResponseProtoMsg): MsgExitTokenExactLptResponse {
-    return MsgExitTokenExactLptResponse.decode(message.value);
+  fromProtoMsg(message: MsgExitTokenExactLptResponseProtoMsg, useInterfaces: boolean = true): MsgExitTokenExactLptResponse {
+    return MsgExitTokenExactLptResponse.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: MsgExitTokenExactLptResponse): Uint8Array {
     return MsgExitTokenExactLptResponse.encode(message).finish();
@@ -3385,6 +3539,7 @@ export const MsgExitTokenExactLptResponse = {
     };
   }
 };
+GlobalDecoderRegistry.register(MsgExitTokenExactLptResponse.typeUrl, MsgExitTokenExactLptResponse);
 function createBaseMsgExitAllTokensExactLpt(): MsgExitAllTokensExactLpt {
   return {
     creator: "",
@@ -3395,6 +3550,16 @@ function createBaseMsgExitAllTokensExactLpt(): MsgExitAllTokensExactLpt {
 }
 export const MsgExitAllTokensExactLpt = {
   typeUrl: "/pryzm.amm.v1.MsgExitAllTokensExactLpt",
+  aminoType: "pryzm/amm/v1/ExitAllTokensExactLpt",
+  is(o: any): o is MsgExitAllTokensExactLpt {
+    return o && (o.$typeUrl === MsgExitAllTokensExactLpt.typeUrl || typeof o.creator === "string" && typeof o.poolId === "bigint" && typeof o.lptIn === "string" && Array.isArray(o.minAmountsOut) && (!o.minAmountsOut.length || Coin.is(o.minAmountsOut[0])));
+  },
+  isSDK(o: any): o is MsgExitAllTokensExactLptSDKType {
+    return o && (o.$typeUrl === MsgExitAllTokensExactLpt.typeUrl || typeof o.creator === "string" && typeof o.pool_id === "bigint" && typeof o.lpt_in === "string" && Array.isArray(o.min_amounts_out) && (!o.min_amounts_out.length || Coin.isSDK(o.min_amounts_out[0])));
+  },
+  isAmino(o: any): o is MsgExitAllTokensExactLptAmino {
+    return o && (o.$typeUrl === MsgExitAllTokensExactLpt.typeUrl || typeof o.creator === "string" && typeof o.pool_id === "bigint" && typeof o.lpt_in === "string" && Array.isArray(o.min_amounts_out) && (!o.min_amounts_out.length || Coin.isAmino(o.min_amounts_out[0])));
+  },
   encode(message: MsgExitAllTokensExactLpt, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.creator !== "") {
       writer.uint32(10).string(message.creator);
@@ -3410,7 +3575,7 @@ export const MsgExitAllTokensExactLpt = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): MsgExitAllTokensExactLpt {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): MsgExitAllTokensExactLpt {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgExitAllTokensExactLpt();
@@ -3427,7 +3592,7 @@ export const MsgExitAllTokensExactLpt = {
           message.lptIn = reader.string();
           break;
         case 4:
-          message.minAmountsOut.push(Coin.decode(reader, reader.uint32()));
+          message.minAmountsOut.push(Coin.decode(reader, reader.uint32(), useInterfaces));
           break;
         default:
           reader.skipType(tag & 7);
@@ -3478,29 +3643,29 @@ export const MsgExitAllTokensExactLpt = {
     message.minAmountsOut = object.min_amounts_out?.map(e => Coin.fromAmino(e)) || [];
     return message;
   },
-  toAmino(message: MsgExitAllTokensExactLpt): MsgExitAllTokensExactLptAmino {
+  toAmino(message: MsgExitAllTokensExactLpt, useInterfaces: boolean = true): MsgExitAllTokensExactLptAmino {
     const obj: any = {};
-    obj.creator = message.creator;
+    obj.creator = message.creator === "" ? undefined : message.creator;
     obj.pool_id = message.poolId ? message.poolId.toString() : undefined;
-    obj.lpt_in = message.lptIn;
+    obj.lpt_in = message.lptIn === "" ? undefined : message.lptIn;
     if (message.minAmountsOut) {
-      obj.min_amounts_out = message.minAmountsOut.map(e => e ? Coin.toAmino(e) : undefined);
+      obj.min_amounts_out = message.minAmountsOut.map(e => e ? Coin.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.min_amounts_out = [];
+      obj.min_amounts_out = null;
     }
     return obj;
   },
   fromAminoMsg(object: MsgExitAllTokensExactLptAminoMsg): MsgExitAllTokensExactLpt {
     return MsgExitAllTokensExactLpt.fromAmino(object.value);
   },
-  toAminoMsg(message: MsgExitAllTokensExactLpt): MsgExitAllTokensExactLptAminoMsg {
+  toAminoMsg(message: MsgExitAllTokensExactLpt, useInterfaces: boolean = true): MsgExitAllTokensExactLptAminoMsg {
     return {
       type: "pryzm/amm/v1/ExitAllTokensExactLpt",
-      value: MsgExitAllTokensExactLpt.toAmino(message)
+      value: MsgExitAllTokensExactLpt.toAmino(message, useInterfaces)
     };
   },
-  fromProtoMsg(message: MsgExitAllTokensExactLptProtoMsg): MsgExitAllTokensExactLpt {
-    return MsgExitAllTokensExactLpt.decode(message.value);
+  fromProtoMsg(message: MsgExitAllTokensExactLptProtoMsg, useInterfaces: boolean = true): MsgExitAllTokensExactLpt {
+    return MsgExitAllTokensExactLpt.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: MsgExitAllTokensExactLpt): Uint8Array {
     return MsgExitAllTokensExactLpt.encode(message).finish();
@@ -3512,6 +3677,8 @@ export const MsgExitAllTokensExactLpt = {
     };
   }
 };
+GlobalDecoderRegistry.register(MsgExitAllTokensExactLpt.typeUrl, MsgExitAllTokensExactLpt);
+GlobalDecoderRegistry.registerAminoProtoMapping(MsgExitAllTokensExactLpt.aminoType, MsgExitAllTokensExactLpt.typeUrl);
 function createBaseMsgExitAllTokensExactLptResponse(): MsgExitAllTokensExactLptResponse {
   return {
     lptIn: Coin.fromPartial({}),
@@ -3521,6 +3688,15 @@ function createBaseMsgExitAllTokensExactLptResponse(): MsgExitAllTokensExactLptR
 }
 export const MsgExitAllTokensExactLptResponse = {
   typeUrl: "/pryzm.amm.v1.MsgExitAllTokensExactLptResponse",
+  is(o: any): o is MsgExitAllTokensExactLptResponse {
+    return o && (o.$typeUrl === MsgExitAllTokensExactLptResponse.typeUrl || Coin.is(o.lptIn) && Array.isArray(o.amountsOut) && (!o.amountsOut.length || Coin.is(o.amountsOut[0])) && Coin.is(o.protocolFee));
+  },
+  isSDK(o: any): o is MsgExitAllTokensExactLptResponseSDKType {
+    return o && (o.$typeUrl === MsgExitAllTokensExactLptResponse.typeUrl || Coin.isSDK(o.lpt_in) && Array.isArray(o.amounts_out) && (!o.amounts_out.length || Coin.isSDK(o.amounts_out[0])) && Coin.isSDK(o.protocol_fee));
+  },
+  isAmino(o: any): o is MsgExitAllTokensExactLptResponseAmino {
+    return o && (o.$typeUrl === MsgExitAllTokensExactLptResponse.typeUrl || Coin.isAmino(o.lpt_in) && Array.isArray(o.amounts_out) && (!o.amounts_out.length || Coin.isAmino(o.amounts_out[0])) && Coin.isAmino(o.protocol_fee));
+  },
   encode(message: MsgExitAllTokensExactLptResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.lptIn !== undefined) {
       Coin.encode(message.lptIn, writer.uint32(10).fork()).ldelim();
@@ -3533,7 +3709,7 @@ export const MsgExitAllTokensExactLptResponse = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): MsgExitAllTokensExactLptResponse {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): MsgExitAllTokensExactLptResponse {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgExitAllTokensExactLptResponse();
@@ -3541,13 +3717,13 @@ export const MsgExitAllTokensExactLptResponse = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.lptIn = Coin.decode(reader, reader.uint32());
+          message.lptIn = Coin.decode(reader, reader.uint32(), useInterfaces);
           break;
         case 2:
-          message.amountsOut.push(Coin.decode(reader, reader.uint32()));
+          message.amountsOut.push(Coin.decode(reader, reader.uint32(), useInterfaces));
           break;
         case 3:
-          message.protocolFee = Coin.decode(reader, reader.uint32());
+          message.protocolFee = Coin.decode(reader, reader.uint32(), useInterfaces);
           break;
         default:
           reader.skipType(tag & 7);
@@ -3592,22 +3768,22 @@ export const MsgExitAllTokensExactLptResponse = {
     }
     return message;
   },
-  toAmino(message: MsgExitAllTokensExactLptResponse): MsgExitAllTokensExactLptResponseAmino {
+  toAmino(message: MsgExitAllTokensExactLptResponse, useInterfaces: boolean = true): MsgExitAllTokensExactLptResponseAmino {
     const obj: any = {};
-    obj.lpt_in = message.lptIn ? Coin.toAmino(message.lptIn) : undefined;
+    obj.lpt_in = message.lptIn ? Coin.toAmino(message.lptIn, useInterfaces) : undefined;
     if (message.amountsOut) {
-      obj.amounts_out = message.amountsOut.map(e => e ? Coin.toAmino(e) : undefined);
+      obj.amounts_out = message.amountsOut.map(e => e ? Coin.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.amounts_out = [];
+      obj.amounts_out = null;
     }
-    obj.protocol_fee = message.protocolFee ? Coin.toAmino(message.protocolFee) : undefined;
+    obj.protocol_fee = message.protocolFee ? Coin.toAmino(message.protocolFee, useInterfaces) : undefined;
     return obj;
   },
   fromAminoMsg(object: MsgExitAllTokensExactLptResponseAminoMsg): MsgExitAllTokensExactLptResponse {
     return MsgExitAllTokensExactLptResponse.fromAmino(object.value);
   },
-  fromProtoMsg(message: MsgExitAllTokensExactLptResponseProtoMsg): MsgExitAllTokensExactLptResponse {
-    return MsgExitAllTokensExactLptResponse.decode(message.value);
+  fromProtoMsg(message: MsgExitAllTokensExactLptResponseProtoMsg, useInterfaces: boolean = true): MsgExitAllTokensExactLptResponse {
+    return MsgExitAllTokensExactLptResponse.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: MsgExitAllTokensExactLptResponse): Uint8Array {
     return MsgExitAllTokensExactLptResponse.encode(message).finish();
@@ -3619,6 +3795,7 @@ export const MsgExitAllTokensExactLptResponse = {
     };
   }
 };
+GlobalDecoderRegistry.register(MsgExitAllTokensExactLptResponse.typeUrl, MsgExitAllTokensExactLptResponse);
 function createBaseCreateWeightedPoolToken(): CreateWeightedPoolToken {
   return {
     denom: "",
@@ -3627,6 +3804,15 @@ function createBaseCreateWeightedPoolToken(): CreateWeightedPoolToken {
 }
 export const CreateWeightedPoolToken = {
   typeUrl: "/pryzm.amm.v1.CreateWeightedPoolToken",
+  is(o: any): o is CreateWeightedPoolToken {
+    return o && (o.$typeUrl === CreateWeightedPoolToken.typeUrl || typeof o.denom === "string" && typeof o.normalizedWeight === "string");
+  },
+  isSDK(o: any): o is CreateWeightedPoolTokenSDKType {
+    return o && (o.$typeUrl === CreateWeightedPoolToken.typeUrl || typeof o.denom === "string" && typeof o.normalized_weight === "string");
+  },
+  isAmino(o: any): o is CreateWeightedPoolTokenAmino {
+    return o && (o.$typeUrl === CreateWeightedPoolToken.typeUrl || typeof o.denom === "string" && typeof o.normalized_weight === "string");
+  },
   encode(message: CreateWeightedPoolToken, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.denom !== "") {
       writer.uint32(10).string(message.denom);
@@ -3636,7 +3822,7 @@ export const CreateWeightedPoolToken = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): CreateWeightedPoolToken {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): CreateWeightedPoolToken {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseCreateWeightedPoolToken();
@@ -3684,17 +3870,17 @@ export const CreateWeightedPoolToken = {
     }
     return message;
   },
-  toAmino(message: CreateWeightedPoolToken): CreateWeightedPoolTokenAmino {
+  toAmino(message: CreateWeightedPoolToken, useInterfaces: boolean = true): CreateWeightedPoolTokenAmino {
     const obj: any = {};
-    obj.denom = message.denom;
-    obj.normalized_weight = message.normalizedWeight;
+    obj.denom = message.denom === "" ? undefined : message.denom;
+    obj.normalized_weight = padDecimal(message.normalizedWeight) === "" ? undefined : padDecimal(message.normalizedWeight);
     return obj;
   },
   fromAminoMsg(object: CreateWeightedPoolTokenAminoMsg): CreateWeightedPoolToken {
     return CreateWeightedPoolToken.fromAmino(object.value);
   },
-  fromProtoMsg(message: CreateWeightedPoolTokenProtoMsg): CreateWeightedPoolToken {
-    return CreateWeightedPoolToken.decode(message.value);
+  fromProtoMsg(message: CreateWeightedPoolTokenProtoMsg, useInterfaces: boolean = true): CreateWeightedPoolToken {
+    return CreateWeightedPoolToken.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: CreateWeightedPoolToken): Uint8Array {
     return CreateWeightedPoolToken.encode(message).finish();
@@ -3706,6 +3892,7 @@ export const CreateWeightedPoolToken = {
     };
   }
 };
+GlobalDecoderRegistry.register(CreateWeightedPoolToken.typeUrl, CreateWeightedPoolToken);
 function createBaseMsgCreateWeightedPool(): MsgCreateWeightedPool {
   return {
     creator: "",
@@ -3719,6 +3906,16 @@ function createBaseMsgCreateWeightedPool(): MsgCreateWeightedPool {
 }
 export const MsgCreateWeightedPool = {
   typeUrl: "/pryzm.amm.v1.MsgCreateWeightedPool",
+  aminoType: "pryzm/amm/v1/CreateWeightedPool",
+  is(o: any): o is MsgCreateWeightedPool {
+    return o && (o.$typeUrl === MsgCreateWeightedPool.typeUrl || typeof o.creator === "string" && typeof o.name === "string" && typeof o.swapFeeRatio === "string" && typeof o.pauseWindowDurationMillis === "bigint" && typeof o.pauseBufferDurationMillis === "bigint" && Array.isArray(o.tokens) && (!o.tokens.length || CreateWeightedPoolToken.is(o.tokens[0])) && Array.isArray(o.initializationAllowList) && (!o.initializationAllowList.length || typeof o.initializationAllowList[0] === "string"));
+  },
+  isSDK(o: any): o is MsgCreateWeightedPoolSDKType {
+    return o && (o.$typeUrl === MsgCreateWeightedPool.typeUrl || typeof o.creator === "string" && typeof o.name === "string" && typeof o.swap_fee_ratio === "string" && typeof o.pause_window_duration_millis === "bigint" && typeof o.pause_buffer_duration_millis === "bigint" && Array.isArray(o.tokens) && (!o.tokens.length || CreateWeightedPoolToken.isSDK(o.tokens[0])) && Array.isArray(o.initialization_allow_list) && (!o.initialization_allow_list.length || typeof o.initialization_allow_list[0] === "string"));
+  },
+  isAmino(o: any): o is MsgCreateWeightedPoolAmino {
+    return o && (o.$typeUrl === MsgCreateWeightedPool.typeUrl || typeof o.creator === "string" && typeof o.name === "string" && typeof o.swap_fee_ratio === "string" && typeof o.pause_window_duration_millis === "bigint" && typeof o.pause_buffer_duration_millis === "bigint" && Array.isArray(o.tokens) && (!o.tokens.length || CreateWeightedPoolToken.isAmino(o.tokens[0])) && Array.isArray(o.initialization_allow_list) && (!o.initialization_allow_list.length || typeof o.initialization_allow_list[0] === "string"));
+  },
   encode(message: MsgCreateWeightedPool, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.creator !== "") {
       writer.uint32(10).string(message.creator);
@@ -3743,7 +3940,7 @@ export const MsgCreateWeightedPool = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): MsgCreateWeightedPool {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): MsgCreateWeightedPool {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgCreateWeightedPool();
@@ -3766,7 +3963,7 @@ export const MsgCreateWeightedPool = {
           message.pauseBufferDurationMillis = reader.int64();
           break;
         case 6:
-          message.tokens.push(CreateWeightedPoolToken.decode(reader, reader.uint32()));
+          message.tokens.push(CreateWeightedPoolToken.decode(reader, reader.uint32(), useInterfaces));
           break;
         case 12:
           message.initializationAllowList.push(reader.string());
@@ -3840,36 +4037,36 @@ export const MsgCreateWeightedPool = {
     message.initializationAllowList = object.initialization_allow_list?.map(e => e) || [];
     return message;
   },
-  toAmino(message: MsgCreateWeightedPool): MsgCreateWeightedPoolAmino {
+  toAmino(message: MsgCreateWeightedPool, useInterfaces: boolean = true): MsgCreateWeightedPoolAmino {
     const obj: any = {};
-    obj.creator = message.creator;
-    obj.name = message.name;
-    obj.swap_fee_ratio = message.swapFeeRatio;
+    obj.creator = message.creator === "" ? undefined : message.creator;
+    obj.name = message.name === "" ? undefined : message.name;
+    obj.swap_fee_ratio = padDecimal(message.swapFeeRatio) === "" ? undefined : padDecimal(message.swapFeeRatio);
     obj.pause_window_duration_millis = message.pauseWindowDurationMillis ? message.pauseWindowDurationMillis.toString() : undefined;
     obj.pause_buffer_duration_millis = message.pauseBufferDurationMillis ? message.pauseBufferDurationMillis.toString() : undefined;
     if (message.tokens) {
-      obj.tokens = message.tokens.map(e => e ? CreateWeightedPoolToken.toAmino(e) : undefined);
+      obj.tokens = message.tokens.map(e => e ? CreateWeightedPoolToken.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.tokens = [];
+      obj.tokens = null;
     }
     if (message.initializationAllowList) {
       obj.initialization_allow_list = message.initializationAllowList.map(e => e);
     } else {
-      obj.initialization_allow_list = [];
+      obj.initialization_allow_list = null;
     }
     return obj;
   },
   fromAminoMsg(object: MsgCreateWeightedPoolAminoMsg): MsgCreateWeightedPool {
     return MsgCreateWeightedPool.fromAmino(object.value);
   },
-  toAminoMsg(message: MsgCreateWeightedPool): MsgCreateWeightedPoolAminoMsg {
+  toAminoMsg(message: MsgCreateWeightedPool, useInterfaces: boolean = true): MsgCreateWeightedPoolAminoMsg {
     return {
       type: "pryzm/amm/v1/CreateWeightedPool",
-      value: MsgCreateWeightedPool.toAmino(message)
+      value: MsgCreateWeightedPool.toAmino(message, useInterfaces)
     };
   },
-  fromProtoMsg(message: MsgCreateWeightedPoolProtoMsg): MsgCreateWeightedPool {
-    return MsgCreateWeightedPool.decode(message.value);
+  fromProtoMsg(message: MsgCreateWeightedPoolProtoMsg, useInterfaces: boolean = true): MsgCreateWeightedPool {
+    return MsgCreateWeightedPool.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: MsgCreateWeightedPool): Uint8Array {
     return MsgCreateWeightedPool.encode(message).finish();
@@ -3881,6 +4078,8 @@ export const MsgCreateWeightedPool = {
     };
   }
 };
+GlobalDecoderRegistry.register(MsgCreateWeightedPool.typeUrl, MsgCreateWeightedPool);
+GlobalDecoderRegistry.registerAminoProtoMapping(MsgCreateWeightedPool.aminoType, MsgCreateWeightedPool.typeUrl);
 function createBaseMsgCreateWeightedPoolResponse(): MsgCreateWeightedPoolResponse {
   return {
     poolId: BigInt(0)
@@ -3888,13 +4087,22 @@ function createBaseMsgCreateWeightedPoolResponse(): MsgCreateWeightedPoolRespons
 }
 export const MsgCreateWeightedPoolResponse = {
   typeUrl: "/pryzm.amm.v1.MsgCreateWeightedPoolResponse",
+  is(o: any): o is MsgCreateWeightedPoolResponse {
+    return o && (o.$typeUrl === MsgCreateWeightedPoolResponse.typeUrl || typeof o.poolId === "bigint");
+  },
+  isSDK(o: any): o is MsgCreateWeightedPoolResponseSDKType {
+    return o && (o.$typeUrl === MsgCreateWeightedPoolResponse.typeUrl || typeof o.pool_id === "bigint");
+  },
+  isAmino(o: any): o is MsgCreateWeightedPoolResponseAmino {
+    return o && (o.$typeUrl === MsgCreateWeightedPoolResponse.typeUrl || typeof o.pool_id === "bigint");
+  },
   encode(message: MsgCreateWeightedPoolResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.poolId !== BigInt(0)) {
       writer.uint32(8).uint64(message.poolId);
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): MsgCreateWeightedPoolResponse {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): MsgCreateWeightedPoolResponse {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgCreateWeightedPoolResponse();
@@ -3933,7 +4141,7 @@ export const MsgCreateWeightedPoolResponse = {
     }
     return message;
   },
-  toAmino(message: MsgCreateWeightedPoolResponse): MsgCreateWeightedPoolResponseAmino {
+  toAmino(message: MsgCreateWeightedPoolResponse, useInterfaces: boolean = true): MsgCreateWeightedPoolResponseAmino {
     const obj: any = {};
     obj.pool_id = message.poolId ? message.poolId.toString() : undefined;
     return obj;
@@ -3941,8 +4149,8 @@ export const MsgCreateWeightedPoolResponse = {
   fromAminoMsg(object: MsgCreateWeightedPoolResponseAminoMsg): MsgCreateWeightedPoolResponse {
     return MsgCreateWeightedPoolResponse.fromAmino(object.value);
   },
-  fromProtoMsg(message: MsgCreateWeightedPoolResponseProtoMsg): MsgCreateWeightedPoolResponse {
-    return MsgCreateWeightedPoolResponse.decode(message.value);
+  fromProtoMsg(message: MsgCreateWeightedPoolResponseProtoMsg, useInterfaces: boolean = true): MsgCreateWeightedPoolResponse {
+    return MsgCreateWeightedPoolResponse.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: MsgCreateWeightedPoolResponse): Uint8Array {
     return MsgCreateWeightedPoolResponse.encode(message).finish();
@@ -3954,6 +4162,7 @@ export const MsgCreateWeightedPoolResponse = {
     };
   }
 };
+GlobalDecoderRegistry.register(MsgCreateWeightedPoolResponse.typeUrl, MsgCreateWeightedPoolResponse);
 function createBaseMsgUpdateSwapFee(): MsgUpdateSwapFee {
   return {
     creator: "",
@@ -3963,6 +4172,16 @@ function createBaseMsgUpdateSwapFee(): MsgUpdateSwapFee {
 }
 export const MsgUpdateSwapFee = {
   typeUrl: "/pryzm.amm.v1.MsgUpdateSwapFee",
+  aminoType: "pryzm/amm/v1/UpdateSwapFee",
+  is(o: any): o is MsgUpdateSwapFee {
+    return o && (o.$typeUrl === MsgUpdateSwapFee.typeUrl || typeof o.creator === "string" && typeof o.poolId === "bigint" && typeof o.swapFeeRatio === "string");
+  },
+  isSDK(o: any): o is MsgUpdateSwapFeeSDKType {
+    return o && (o.$typeUrl === MsgUpdateSwapFee.typeUrl || typeof o.creator === "string" && typeof o.pool_id === "bigint" && typeof o.swap_fee_ratio === "string");
+  },
+  isAmino(o: any): o is MsgUpdateSwapFeeAmino {
+    return o && (o.$typeUrl === MsgUpdateSwapFee.typeUrl || typeof o.creator === "string" && typeof o.pool_id === "bigint" && typeof o.swap_fee_ratio === "string");
+  },
   encode(message: MsgUpdateSwapFee, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.creator !== "") {
       writer.uint32(10).string(message.creator);
@@ -3975,7 +4194,7 @@ export const MsgUpdateSwapFee = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): MsgUpdateSwapFee {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): MsgUpdateSwapFee {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgUpdateSwapFee();
@@ -4032,24 +4251,24 @@ export const MsgUpdateSwapFee = {
     }
     return message;
   },
-  toAmino(message: MsgUpdateSwapFee): MsgUpdateSwapFeeAmino {
+  toAmino(message: MsgUpdateSwapFee, useInterfaces: boolean = true): MsgUpdateSwapFeeAmino {
     const obj: any = {};
-    obj.creator = message.creator;
+    obj.creator = message.creator === "" ? undefined : message.creator;
     obj.pool_id = message.poolId ? message.poolId.toString() : undefined;
-    obj.swap_fee_ratio = message.swapFeeRatio;
+    obj.swap_fee_ratio = padDecimal(message.swapFeeRatio) === "" ? undefined : padDecimal(message.swapFeeRatio);
     return obj;
   },
   fromAminoMsg(object: MsgUpdateSwapFeeAminoMsg): MsgUpdateSwapFee {
     return MsgUpdateSwapFee.fromAmino(object.value);
   },
-  toAminoMsg(message: MsgUpdateSwapFee): MsgUpdateSwapFeeAminoMsg {
+  toAminoMsg(message: MsgUpdateSwapFee, useInterfaces: boolean = true): MsgUpdateSwapFeeAminoMsg {
     return {
       type: "pryzm/amm/v1/UpdateSwapFee",
-      value: MsgUpdateSwapFee.toAmino(message)
+      value: MsgUpdateSwapFee.toAmino(message, useInterfaces)
     };
   },
-  fromProtoMsg(message: MsgUpdateSwapFeeProtoMsg): MsgUpdateSwapFee {
-    return MsgUpdateSwapFee.decode(message.value);
+  fromProtoMsg(message: MsgUpdateSwapFeeProtoMsg, useInterfaces: boolean = true): MsgUpdateSwapFee {
+    return MsgUpdateSwapFee.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: MsgUpdateSwapFee): Uint8Array {
     return MsgUpdateSwapFee.encode(message).finish();
@@ -4061,15 +4280,26 @@ export const MsgUpdateSwapFee = {
     };
   }
 };
+GlobalDecoderRegistry.register(MsgUpdateSwapFee.typeUrl, MsgUpdateSwapFee);
+GlobalDecoderRegistry.registerAminoProtoMapping(MsgUpdateSwapFee.aminoType, MsgUpdateSwapFee.typeUrl);
 function createBaseMsgUpdateSwapFeeResponse(): MsgUpdateSwapFeeResponse {
   return {};
 }
 export const MsgUpdateSwapFeeResponse = {
   typeUrl: "/pryzm.amm.v1.MsgUpdateSwapFeeResponse",
+  is(o: any): o is MsgUpdateSwapFeeResponse {
+    return o && o.$typeUrl === MsgUpdateSwapFeeResponse.typeUrl;
+  },
+  isSDK(o: any): o is MsgUpdateSwapFeeResponseSDKType {
+    return o && o.$typeUrl === MsgUpdateSwapFeeResponse.typeUrl;
+  },
+  isAmino(o: any): o is MsgUpdateSwapFeeResponseAmino {
+    return o && o.$typeUrl === MsgUpdateSwapFeeResponse.typeUrl;
+  },
   encode(_: MsgUpdateSwapFeeResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): MsgUpdateSwapFeeResponse {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): MsgUpdateSwapFeeResponse {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgUpdateSwapFeeResponse();
@@ -4098,15 +4328,15 @@ export const MsgUpdateSwapFeeResponse = {
     const message = createBaseMsgUpdateSwapFeeResponse();
     return message;
   },
-  toAmino(_: MsgUpdateSwapFeeResponse): MsgUpdateSwapFeeResponseAmino {
+  toAmino(_: MsgUpdateSwapFeeResponse, useInterfaces: boolean = true): MsgUpdateSwapFeeResponseAmino {
     const obj: any = {};
     return obj;
   },
   fromAminoMsg(object: MsgUpdateSwapFeeResponseAminoMsg): MsgUpdateSwapFeeResponse {
     return MsgUpdateSwapFeeResponse.fromAmino(object.value);
   },
-  fromProtoMsg(message: MsgUpdateSwapFeeResponseProtoMsg): MsgUpdateSwapFeeResponse {
-    return MsgUpdateSwapFeeResponse.decode(message.value);
+  fromProtoMsg(message: MsgUpdateSwapFeeResponseProtoMsg, useInterfaces: boolean = true): MsgUpdateSwapFeeResponse {
+    return MsgUpdateSwapFeeResponse.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: MsgUpdateSwapFeeResponse): Uint8Array {
     return MsgUpdateSwapFeeResponse.encode(message).finish();
@@ -4118,6 +4348,7 @@ export const MsgUpdateSwapFeeResponse = {
     };
   }
 };
+GlobalDecoderRegistry.register(MsgUpdateSwapFeeResponse.typeUrl, MsgUpdateSwapFeeResponse);
 function createBaseMsgInitializePool(): MsgInitializePool {
   return {
     creator: "",
@@ -4127,6 +4358,16 @@ function createBaseMsgInitializePool(): MsgInitializePool {
 }
 export const MsgInitializePool = {
   typeUrl: "/pryzm.amm.v1.MsgInitializePool",
+  aminoType: "pryzm/amm/v1/InitializePool",
+  is(o: any): o is MsgInitializePool {
+    return o && (o.$typeUrl === MsgInitializePool.typeUrl || typeof o.creator === "string" && typeof o.poolId === "bigint" && Array.isArray(o.amountsIn) && (!o.amountsIn.length || Coin.is(o.amountsIn[0])));
+  },
+  isSDK(o: any): o is MsgInitializePoolSDKType {
+    return o && (o.$typeUrl === MsgInitializePool.typeUrl || typeof o.creator === "string" && typeof o.pool_id === "bigint" && Array.isArray(o.amounts_in) && (!o.amounts_in.length || Coin.isSDK(o.amounts_in[0])));
+  },
+  isAmino(o: any): o is MsgInitializePoolAmino {
+    return o && (o.$typeUrl === MsgInitializePool.typeUrl || typeof o.creator === "string" && typeof o.pool_id === "bigint" && Array.isArray(o.amounts_in) && (!o.amounts_in.length || Coin.isAmino(o.amounts_in[0])));
+  },
   encode(message: MsgInitializePool, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.creator !== "") {
       writer.uint32(10).string(message.creator);
@@ -4139,7 +4380,7 @@ export const MsgInitializePool = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): MsgInitializePool {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): MsgInitializePool {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgInitializePool();
@@ -4153,7 +4394,7 @@ export const MsgInitializePool = {
           message.poolId = reader.uint64();
           break;
         case 3:
-          message.amountsIn.push(Coin.decode(reader, reader.uint32()));
+          message.amountsIn.push(Coin.decode(reader, reader.uint32(), useInterfaces));
           break;
         default:
           reader.skipType(tag & 7);
@@ -4198,28 +4439,28 @@ export const MsgInitializePool = {
     message.amountsIn = object.amounts_in?.map(e => Coin.fromAmino(e)) || [];
     return message;
   },
-  toAmino(message: MsgInitializePool): MsgInitializePoolAmino {
+  toAmino(message: MsgInitializePool, useInterfaces: boolean = true): MsgInitializePoolAmino {
     const obj: any = {};
-    obj.creator = message.creator;
+    obj.creator = message.creator === "" ? undefined : message.creator;
     obj.pool_id = message.poolId ? message.poolId.toString() : undefined;
     if (message.amountsIn) {
-      obj.amounts_in = message.amountsIn.map(e => e ? Coin.toAmino(e) : undefined);
+      obj.amounts_in = message.amountsIn.map(e => e ? Coin.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.amounts_in = [];
+      obj.amounts_in = null;
     }
     return obj;
   },
   fromAminoMsg(object: MsgInitializePoolAminoMsg): MsgInitializePool {
     return MsgInitializePool.fromAmino(object.value);
   },
-  toAminoMsg(message: MsgInitializePool): MsgInitializePoolAminoMsg {
+  toAminoMsg(message: MsgInitializePool, useInterfaces: boolean = true): MsgInitializePoolAminoMsg {
     return {
       type: "pryzm/amm/v1/InitializePool",
-      value: MsgInitializePool.toAmino(message)
+      value: MsgInitializePool.toAmino(message, useInterfaces)
     };
   },
-  fromProtoMsg(message: MsgInitializePoolProtoMsg): MsgInitializePool {
-    return MsgInitializePool.decode(message.value);
+  fromProtoMsg(message: MsgInitializePoolProtoMsg, useInterfaces: boolean = true): MsgInitializePool {
+    return MsgInitializePool.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: MsgInitializePool): Uint8Array {
     return MsgInitializePool.encode(message).finish();
@@ -4231,6 +4472,8 @@ export const MsgInitializePool = {
     };
   }
 };
+GlobalDecoderRegistry.register(MsgInitializePool.typeUrl, MsgInitializePool);
+GlobalDecoderRegistry.registerAminoProtoMapping(MsgInitializePool.aminoType, MsgInitializePool.typeUrl);
 function createBaseMsgInitializePoolResponse(): MsgInitializePoolResponse {
   return {
     lptOut: Coin.fromPartial({}),
@@ -4240,6 +4483,15 @@ function createBaseMsgInitializePoolResponse(): MsgInitializePoolResponse {
 }
 export const MsgInitializePoolResponse = {
   typeUrl: "/pryzm.amm.v1.MsgInitializePoolResponse",
+  is(o: any): o is MsgInitializePoolResponse {
+    return o && (o.$typeUrl === MsgInitializePoolResponse.typeUrl || Coin.is(o.lptOut) && Array.isArray(o.amountsIn) && (!o.amountsIn.length || Coin.is(o.amountsIn[0])) && Array.isArray(o.protocolFee) && (!o.protocolFee.length || Coin.is(o.protocolFee[0])));
+  },
+  isSDK(o: any): o is MsgInitializePoolResponseSDKType {
+    return o && (o.$typeUrl === MsgInitializePoolResponse.typeUrl || Coin.isSDK(o.lpt_out) && Array.isArray(o.amounts_in) && (!o.amounts_in.length || Coin.isSDK(o.amounts_in[0])) && Array.isArray(o.protocol_fee) && (!o.protocol_fee.length || Coin.isSDK(o.protocol_fee[0])));
+  },
+  isAmino(o: any): o is MsgInitializePoolResponseAmino {
+    return o && (o.$typeUrl === MsgInitializePoolResponse.typeUrl || Coin.isAmino(o.lpt_out) && Array.isArray(o.amounts_in) && (!o.amounts_in.length || Coin.isAmino(o.amounts_in[0])) && Array.isArray(o.protocol_fee) && (!o.protocol_fee.length || Coin.isAmino(o.protocol_fee[0])));
+  },
   encode(message: MsgInitializePoolResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.lptOut !== undefined) {
       Coin.encode(message.lptOut, writer.uint32(10).fork()).ldelim();
@@ -4252,7 +4504,7 @@ export const MsgInitializePoolResponse = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): MsgInitializePoolResponse {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): MsgInitializePoolResponse {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgInitializePoolResponse();
@@ -4260,13 +4512,13 @@ export const MsgInitializePoolResponse = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.lptOut = Coin.decode(reader, reader.uint32());
+          message.lptOut = Coin.decode(reader, reader.uint32(), useInterfaces);
           break;
         case 2:
-          message.amountsIn.push(Coin.decode(reader, reader.uint32()));
+          message.amountsIn.push(Coin.decode(reader, reader.uint32(), useInterfaces));
           break;
         case 3:
-          message.protocolFee.push(Coin.decode(reader, reader.uint32()));
+          message.protocolFee.push(Coin.decode(reader, reader.uint32(), useInterfaces));
           break;
         default:
           reader.skipType(tag & 7);
@@ -4313,26 +4565,26 @@ export const MsgInitializePoolResponse = {
     message.protocolFee = object.protocol_fee?.map(e => Coin.fromAmino(e)) || [];
     return message;
   },
-  toAmino(message: MsgInitializePoolResponse): MsgInitializePoolResponseAmino {
+  toAmino(message: MsgInitializePoolResponse, useInterfaces: boolean = true): MsgInitializePoolResponseAmino {
     const obj: any = {};
-    obj.lpt_out = message.lptOut ? Coin.toAmino(message.lptOut) : undefined;
+    obj.lpt_out = message.lptOut ? Coin.toAmino(message.lptOut, useInterfaces) : undefined;
     if (message.amountsIn) {
-      obj.amounts_in = message.amountsIn.map(e => e ? Coin.toAmino(e) : undefined);
+      obj.amounts_in = message.amountsIn.map(e => e ? Coin.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.amounts_in = [];
+      obj.amounts_in = null;
     }
     if (message.protocolFee) {
-      obj.protocol_fee = message.protocolFee.map(e => e ? Coin.toAmino(e) : undefined);
+      obj.protocol_fee = message.protocolFee.map(e => e ? Coin.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.protocol_fee = [];
+      obj.protocol_fee = null;
     }
     return obj;
   },
   fromAminoMsg(object: MsgInitializePoolResponseAminoMsg): MsgInitializePoolResponse {
     return MsgInitializePoolResponse.fromAmino(object.value);
   },
-  fromProtoMsg(message: MsgInitializePoolResponseProtoMsg): MsgInitializePoolResponse {
-    return MsgInitializePoolResponse.decode(message.value);
+  fromProtoMsg(message: MsgInitializePoolResponseProtoMsg, useInterfaces: boolean = true): MsgInitializePoolResponse {
+    return MsgInitializePoolResponse.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: MsgInitializePoolResponse): Uint8Array {
     return MsgInitializePoolResponse.encode(message).finish();
@@ -4344,6 +4596,7 @@ export const MsgInitializePoolResponse = {
     };
   }
 };
+GlobalDecoderRegistry.register(MsgInitializePoolResponse.typeUrl, MsgInitializePoolResponse);
 function createBaseMsgUpdateWeights(): MsgUpdateWeights {
   return {
     creator: "",
@@ -4355,6 +4608,16 @@ function createBaseMsgUpdateWeights(): MsgUpdateWeights {
 }
 export const MsgUpdateWeights = {
   typeUrl: "/pryzm.amm.v1.MsgUpdateWeights",
+  aminoType: "pryzm/amm/v1/UpdateWeights",
+  is(o: any): o is MsgUpdateWeights {
+    return o && (o.$typeUrl === MsgUpdateWeights.typeUrl || typeof o.creator === "string" && typeof o.poolId === "bigint" && Array.isArray(o.tokenWeights) && (!o.tokenWeights.length || TokenWeight.is(o.tokenWeights[0])) && typeof o.startTimeUnixMillis === "bigint" && typeof o.endTimeUnixMillis === "bigint");
+  },
+  isSDK(o: any): o is MsgUpdateWeightsSDKType {
+    return o && (o.$typeUrl === MsgUpdateWeights.typeUrl || typeof o.creator === "string" && typeof o.pool_id === "bigint" && Array.isArray(o.token_weights) && (!o.token_weights.length || TokenWeight.isSDK(o.token_weights[0])) && typeof o.start_time_unix_millis === "bigint" && typeof o.end_time_unix_millis === "bigint");
+  },
+  isAmino(o: any): o is MsgUpdateWeightsAmino {
+    return o && (o.$typeUrl === MsgUpdateWeights.typeUrl || typeof o.creator === "string" && typeof o.pool_id === "bigint" && Array.isArray(o.token_weights) && (!o.token_weights.length || TokenWeight.isAmino(o.token_weights[0])) && typeof o.start_time_unix_millis === "bigint" && typeof o.end_time_unix_millis === "bigint");
+  },
   encode(message: MsgUpdateWeights, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.creator !== "") {
       writer.uint32(10).string(message.creator);
@@ -4373,7 +4636,7 @@ export const MsgUpdateWeights = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): MsgUpdateWeights {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): MsgUpdateWeights {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgUpdateWeights();
@@ -4387,7 +4650,7 @@ export const MsgUpdateWeights = {
           message.poolId = reader.uint64();
           break;
         case 3:
-          message.tokenWeights.push(TokenWeight.decode(reader, reader.uint32()));
+          message.tokenWeights.push(TokenWeight.decode(reader, reader.uint32(), useInterfaces));
           break;
         case 4:
           message.startTimeUnixMillis = reader.int64();
@@ -4450,14 +4713,14 @@ export const MsgUpdateWeights = {
     }
     return message;
   },
-  toAmino(message: MsgUpdateWeights): MsgUpdateWeightsAmino {
+  toAmino(message: MsgUpdateWeights, useInterfaces: boolean = true): MsgUpdateWeightsAmino {
     const obj: any = {};
-    obj.creator = message.creator;
+    obj.creator = message.creator === "" ? undefined : message.creator;
     obj.pool_id = message.poolId ? message.poolId.toString() : undefined;
     if (message.tokenWeights) {
-      obj.token_weights = message.tokenWeights.map(e => e ? TokenWeight.toAmino(e) : undefined);
+      obj.token_weights = message.tokenWeights.map(e => e ? TokenWeight.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.token_weights = [];
+      obj.token_weights = null;
     }
     obj.start_time_unix_millis = message.startTimeUnixMillis ? message.startTimeUnixMillis.toString() : undefined;
     obj.end_time_unix_millis = message.endTimeUnixMillis ? message.endTimeUnixMillis.toString() : undefined;
@@ -4466,14 +4729,14 @@ export const MsgUpdateWeights = {
   fromAminoMsg(object: MsgUpdateWeightsAminoMsg): MsgUpdateWeights {
     return MsgUpdateWeights.fromAmino(object.value);
   },
-  toAminoMsg(message: MsgUpdateWeights): MsgUpdateWeightsAminoMsg {
+  toAminoMsg(message: MsgUpdateWeights, useInterfaces: boolean = true): MsgUpdateWeightsAminoMsg {
     return {
       type: "pryzm/amm/v1/UpdateWeights",
-      value: MsgUpdateWeights.toAmino(message)
+      value: MsgUpdateWeights.toAmino(message, useInterfaces)
     };
   },
-  fromProtoMsg(message: MsgUpdateWeightsProtoMsg): MsgUpdateWeights {
-    return MsgUpdateWeights.decode(message.value);
+  fromProtoMsg(message: MsgUpdateWeightsProtoMsg, useInterfaces: boolean = true): MsgUpdateWeights {
+    return MsgUpdateWeights.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: MsgUpdateWeights): Uint8Array {
     return MsgUpdateWeights.encode(message).finish();
@@ -4485,15 +4748,26 @@ export const MsgUpdateWeights = {
     };
   }
 };
+GlobalDecoderRegistry.register(MsgUpdateWeights.typeUrl, MsgUpdateWeights);
+GlobalDecoderRegistry.registerAminoProtoMapping(MsgUpdateWeights.aminoType, MsgUpdateWeights.typeUrl);
 function createBaseMsgUpdateWeightsResponse(): MsgUpdateWeightsResponse {
   return {};
 }
 export const MsgUpdateWeightsResponse = {
   typeUrl: "/pryzm.amm.v1.MsgUpdateWeightsResponse",
+  is(o: any): o is MsgUpdateWeightsResponse {
+    return o && o.$typeUrl === MsgUpdateWeightsResponse.typeUrl;
+  },
+  isSDK(o: any): o is MsgUpdateWeightsResponseSDKType {
+    return o && o.$typeUrl === MsgUpdateWeightsResponse.typeUrl;
+  },
+  isAmino(o: any): o is MsgUpdateWeightsResponseAmino {
+    return o && o.$typeUrl === MsgUpdateWeightsResponse.typeUrl;
+  },
   encode(_: MsgUpdateWeightsResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): MsgUpdateWeightsResponse {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): MsgUpdateWeightsResponse {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgUpdateWeightsResponse();
@@ -4522,15 +4796,15 @@ export const MsgUpdateWeightsResponse = {
     const message = createBaseMsgUpdateWeightsResponse();
     return message;
   },
-  toAmino(_: MsgUpdateWeightsResponse): MsgUpdateWeightsResponseAmino {
+  toAmino(_: MsgUpdateWeightsResponse, useInterfaces: boolean = true): MsgUpdateWeightsResponseAmino {
     const obj: any = {};
     return obj;
   },
   fromAminoMsg(object: MsgUpdateWeightsResponseAminoMsg): MsgUpdateWeightsResponse {
     return MsgUpdateWeightsResponse.fromAmino(object.value);
   },
-  fromProtoMsg(message: MsgUpdateWeightsResponseProtoMsg): MsgUpdateWeightsResponse {
-    return MsgUpdateWeightsResponse.decode(message.value);
+  fromProtoMsg(message: MsgUpdateWeightsResponseProtoMsg, useInterfaces: boolean = true): MsgUpdateWeightsResponse {
+    return MsgUpdateWeightsResponse.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: MsgUpdateWeightsResponse): Uint8Array {
     return MsgUpdateWeightsResponse.encode(message).finish();
@@ -4542,6 +4816,7 @@ export const MsgUpdateWeightsResponse = {
     };
   }
 };
+GlobalDecoderRegistry.register(MsgUpdateWeightsResponse.typeUrl, MsgUpdateWeightsResponse);
 function createBaseMsgBatchSwap(): MsgBatchSwap {
   return {
     creator: "",
@@ -4553,6 +4828,16 @@ function createBaseMsgBatchSwap(): MsgBatchSwap {
 }
 export const MsgBatchSwap = {
   typeUrl: "/pryzm.amm.v1.MsgBatchSwap",
+  aminoType: "pryzm/amm/v1/BatchSwap",
+  is(o: any): o is MsgBatchSwap {
+    return o && (o.$typeUrl === MsgBatchSwap.typeUrl || typeof o.creator === "string" && isSet(o.swapType) && Array.isArray(o.steps) && (!o.steps.length || SwapStep.is(o.steps[0])) && Array.isArray(o.minAmountsOut) && (!o.minAmountsOut.length || Coin.is(o.minAmountsOut[0])) && Array.isArray(o.maxAmountsIn) && (!o.maxAmountsIn.length || Coin.is(o.maxAmountsIn[0])));
+  },
+  isSDK(o: any): o is MsgBatchSwapSDKType {
+    return o && (o.$typeUrl === MsgBatchSwap.typeUrl || typeof o.creator === "string" && isSet(o.swap_type) && Array.isArray(o.steps) && (!o.steps.length || SwapStep.isSDK(o.steps[0])) && Array.isArray(o.min_amounts_out) && (!o.min_amounts_out.length || Coin.isSDK(o.min_amounts_out[0])) && Array.isArray(o.max_amounts_in) && (!o.max_amounts_in.length || Coin.isSDK(o.max_amounts_in[0])));
+  },
+  isAmino(o: any): o is MsgBatchSwapAmino {
+    return o && (o.$typeUrl === MsgBatchSwap.typeUrl || typeof o.creator === "string" && isSet(o.swap_type) && Array.isArray(o.steps) && (!o.steps.length || SwapStep.isAmino(o.steps[0])) && Array.isArray(o.min_amounts_out) && (!o.min_amounts_out.length || Coin.isAmino(o.min_amounts_out[0])) && Array.isArray(o.max_amounts_in) && (!o.max_amounts_in.length || Coin.isAmino(o.max_amounts_in[0])));
+  },
   encode(message: MsgBatchSwap, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.creator !== "") {
       writer.uint32(10).string(message.creator);
@@ -4571,7 +4856,7 @@ export const MsgBatchSwap = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): MsgBatchSwap {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): MsgBatchSwap {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgBatchSwap();
@@ -4585,13 +4870,13 @@ export const MsgBatchSwap = {
           message.swapType = (reader.int32() as any);
           break;
         case 3:
-          message.steps.push(SwapStep.decode(reader, reader.uint32()));
+          message.steps.push(SwapStep.decode(reader, reader.uint32(), useInterfaces));
           break;
         case 4:
-          message.minAmountsOut.push(Coin.decode(reader, reader.uint32()));
+          message.minAmountsOut.push(Coin.decode(reader, reader.uint32(), useInterfaces));
           break;
         case 5:
-          message.maxAmountsIn.push(Coin.decode(reader, reader.uint32()));
+          message.maxAmountsIn.push(Coin.decode(reader, reader.uint32(), useInterfaces));
           break;
         default:
           reader.skipType(tag & 7);
@@ -4645,45 +4930,45 @@ export const MsgBatchSwap = {
       message.creator = object.creator;
     }
     if (object.swap_type !== undefined && object.swap_type !== null) {
-      message.swapType = swapTypeFromJSON(object.swap_type);
+      message.swapType = object.swap_type;
     }
     message.steps = object.steps?.map(e => SwapStep.fromAmino(e)) || [];
     message.minAmountsOut = object.min_amounts_out?.map(e => Coin.fromAmino(e)) || [];
     message.maxAmountsIn = object.max_amounts_in?.map(e => Coin.fromAmino(e)) || [];
     return message;
   },
-  toAmino(message: MsgBatchSwap): MsgBatchSwapAmino {
+  toAmino(message: MsgBatchSwap, useInterfaces: boolean = true): MsgBatchSwapAmino {
     const obj: any = {};
-    obj.creator = message.creator;
-    obj.swap_type = swapTypeToJSON(message.swapType);
+    obj.creator = message.creator === "" ? undefined : message.creator;
+    obj.swap_type = message.swapType === 0 ? undefined : message.swapType;
     if (message.steps) {
-      obj.steps = message.steps.map(e => e ? SwapStep.toAmino(e) : undefined);
+      obj.steps = message.steps.map(e => e ? SwapStep.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.steps = [];
+      obj.steps = null;
     }
     if (message.minAmountsOut) {
-      obj.min_amounts_out = message.minAmountsOut.map(e => e ? Coin.toAmino(e) : undefined);
+      obj.min_amounts_out = message.minAmountsOut.map(e => e ? Coin.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.min_amounts_out = [];
+      obj.min_amounts_out = null;
     }
     if (message.maxAmountsIn) {
-      obj.max_amounts_in = message.maxAmountsIn.map(e => e ? Coin.toAmino(e) : undefined);
+      obj.max_amounts_in = message.maxAmountsIn.map(e => e ? Coin.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.max_amounts_in = [];
+      obj.max_amounts_in = null;
     }
     return obj;
   },
   fromAminoMsg(object: MsgBatchSwapAminoMsg): MsgBatchSwap {
     return MsgBatchSwap.fromAmino(object.value);
   },
-  toAminoMsg(message: MsgBatchSwap): MsgBatchSwapAminoMsg {
+  toAminoMsg(message: MsgBatchSwap, useInterfaces: boolean = true): MsgBatchSwapAminoMsg {
     return {
       type: "pryzm/amm/v1/BatchSwap",
-      value: MsgBatchSwap.toAmino(message)
+      value: MsgBatchSwap.toAmino(message, useInterfaces)
     };
   },
-  fromProtoMsg(message: MsgBatchSwapProtoMsg): MsgBatchSwap {
-    return MsgBatchSwap.decode(message.value);
+  fromProtoMsg(message: MsgBatchSwapProtoMsg, useInterfaces: boolean = true): MsgBatchSwap {
+    return MsgBatchSwap.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: MsgBatchSwap): Uint8Array {
     return MsgBatchSwap.encode(message).finish();
@@ -4695,6 +4980,8 @@ export const MsgBatchSwap = {
     };
   }
 };
+GlobalDecoderRegistry.register(MsgBatchSwap.typeUrl, MsgBatchSwap);
+GlobalDecoderRegistry.registerAminoProtoMapping(MsgBatchSwap.aminoType, MsgBatchSwap.typeUrl);
 function createBaseMsgBatchSwapResponse(): MsgBatchSwapResponse {
   return {
     amountsIn: [],
@@ -4706,6 +4993,15 @@ function createBaseMsgBatchSwapResponse(): MsgBatchSwapResponse {
 }
 export const MsgBatchSwapResponse = {
   typeUrl: "/pryzm.amm.v1.MsgBatchSwapResponse",
+  is(o: any): o is MsgBatchSwapResponse {
+    return o && (o.$typeUrl === MsgBatchSwapResponse.typeUrl || Array.isArray(o.amountsIn) && (!o.amountsIn.length || Coin.is(o.amountsIn[0])) && Array.isArray(o.amountsOut) && (!o.amountsOut.length || Coin.is(o.amountsOut[0])) && Array.isArray(o.swapProtocolFee) && (!o.swapProtocolFee.length || Coin.is(o.swapProtocolFee[0])) && Array.isArray(o.joinExitProtocolFee) && (!o.joinExitProtocolFee.length || Coin.is(o.joinExitProtocolFee[0])) && Array.isArray(o.swapFee) && (!o.swapFee.length || Coin.is(o.swapFee[0])));
+  },
+  isSDK(o: any): o is MsgBatchSwapResponseSDKType {
+    return o && (o.$typeUrl === MsgBatchSwapResponse.typeUrl || Array.isArray(o.amounts_in) && (!o.amounts_in.length || Coin.isSDK(o.amounts_in[0])) && Array.isArray(o.amounts_out) && (!o.amounts_out.length || Coin.isSDK(o.amounts_out[0])) && Array.isArray(o.swap_protocol_fee) && (!o.swap_protocol_fee.length || Coin.isSDK(o.swap_protocol_fee[0])) && Array.isArray(o.join_exit_protocol_fee) && (!o.join_exit_protocol_fee.length || Coin.isSDK(o.join_exit_protocol_fee[0])) && Array.isArray(o.swap_fee) && (!o.swap_fee.length || Coin.isSDK(o.swap_fee[0])));
+  },
+  isAmino(o: any): o is MsgBatchSwapResponseAmino {
+    return o && (o.$typeUrl === MsgBatchSwapResponse.typeUrl || Array.isArray(o.amounts_in) && (!o.amounts_in.length || Coin.isAmino(o.amounts_in[0])) && Array.isArray(o.amounts_out) && (!o.amounts_out.length || Coin.isAmino(o.amounts_out[0])) && Array.isArray(o.swap_protocol_fee) && (!o.swap_protocol_fee.length || Coin.isAmino(o.swap_protocol_fee[0])) && Array.isArray(o.join_exit_protocol_fee) && (!o.join_exit_protocol_fee.length || Coin.isAmino(o.join_exit_protocol_fee[0])) && Array.isArray(o.swap_fee) && (!o.swap_fee.length || Coin.isAmino(o.swap_fee[0])));
+  },
   encode(message: MsgBatchSwapResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     for (const v of message.amountsIn) {
       Coin.encode(v!, writer.uint32(10).fork()).ldelim();
@@ -4724,7 +5020,7 @@ export const MsgBatchSwapResponse = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): MsgBatchSwapResponse {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): MsgBatchSwapResponse {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgBatchSwapResponse();
@@ -4732,19 +5028,19 @@ export const MsgBatchSwapResponse = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.amountsIn.push(Coin.decode(reader, reader.uint32()));
+          message.amountsIn.push(Coin.decode(reader, reader.uint32(), useInterfaces));
           break;
         case 2:
-          message.amountsOut.push(Coin.decode(reader, reader.uint32()));
+          message.amountsOut.push(Coin.decode(reader, reader.uint32(), useInterfaces));
           break;
         case 3:
-          message.swapProtocolFee.push(Coin.decode(reader, reader.uint32()));
+          message.swapProtocolFee.push(Coin.decode(reader, reader.uint32(), useInterfaces));
           break;
         case 4:
-          message.joinExitProtocolFee.push(Coin.decode(reader, reader.uint32()));
+          message.joinExitProtocolFee.push(Coin.decode(reader, reader.uint32(), useInterfaces));
           break;
         case 5:
-          message.swapFee.push(Coin.decode(reader, reader.uint32()));
+          message.swapFee.push(Coin.decode(reader, reader.uint32(), useInterfaces));
           break;
         default:
           reader.skipType(tag & 7);
@@ -4809,40 +5105,40 @@ export const MsgBatchSwapResponse = {
     message.swapFee = object.swap_fee?.map(e => Coin.fromAmino(e)) || [];
     return message;
   },
-  toAmino(message: MsgBatchSwapResponse): MsgBatchSwapResponseAmino {
+  toAmino(message: MsgBatchSwapResponse, useInterfaces: boolean = true): MsgBatchSwapResponseAmino {
     const obj: any = {};
     if (message.amountsIn) {
-      obj.amounts_in = message.amountsIn.map(e => e ? Coin.toAmino(e) : undefined);
+      obj.amounts_in = message.amountsIn.map(e => e ? Coin.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.amounts_in = [];
+      obj.amounts_in = null;
     }
     if (message.amountsOut) {
-      obj.amounts_out = message.amountsOut.map(e => e ? Coin.toAmino(e) : undefined);
+      obj.amounts_out = message.amountsOut.map(e => e ? Coin.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.amounts_out = [];
+      obj.amounts_out = null;
     }
     if (message.swapProtocolFee) {
-      obj.swap_protocol_fee = message.swapProtocolFee.map(e => e ? Coin.toAmino(e) : undefined);
+      obj.swap_protocol_fee = message.swapProtocolFee.map(e => e ? Coin.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.swap_protocol_fee = [];
+      obj.swap_protocol_fee = null;
     }
     if (message.joinExitProtocolFee) {
-      obj.join_exit_protocol_fee = message.joinExitProtocolFee.map(e => e ? Coin.toAmino(e) : undefined);
+      obj.join_exit_protocol_fee = message.joinExitProtocolFee.map(e => e ? Coin.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.join_exit_protocol_fee = [];
+      obj.join_exit_protocol_fee = null;
     }
     if (message.swapFee) {
-      obj.swap_fee = message.swapFee.map(e => e ? Coin.toAmino(e) : undefined);
+      obj.swap_fee = message.swapFee.map(e => e ? Coin.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.swap_fee = [];
+      obj.swap_fee = null;
     }
     return obj;
   },
   fromAminoMsg(object: MsgBatchSwapResponseAminoMsg): MsgBatchSwapResponse {
     return MsgBatchSwapResponse.fromAmino(object.value);
   },
-  fromProtoMsg(message: MsgBatchSwapResponseProtoMsg): MsgBatchSwapResponse {
-    return MsgBatchSwapResponse.decode(message.value);
+  fromProtoMsg(message: MsgBatchSwapResponseProtoMsg, useInterfaces: boolean = true): MsgBatchSwapResponse {
+    return MsgBatchSwapResponse.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: MsgBatchSwapResponse): Uint8Array {
     return MsgBatchSwapResponse.encode(message).finish();
@@ -4854,6 +5150,7 @@ export const MsgBatchSwapResponse = {
     };
   }
 };
+GlobalDecoderRegistry.register(MsgBatchSwapResponse.typeUrl, MsgBatchSwapResponse);
 function createBaseMsgSetYammConfiguration(): MsgSetYammConfiguration {
   return {
     creator: "",
@@ -4862,6 +5159,16 @@ function createBaseMsgSetYammConfiguration(): MsgSetYammConfiguration {
 }
 export const MsgSetYammConfiguration = {
   typeUrl: "/pryzm.amm.v1.MsgSetYammConfiguration",
+  aminoType: "pryzm/amm/v1/SetYammConfiguration",
+  is(o: any): o is MsgSetYammConfiguration {
+    return o && (o.$typeUrl === MsgSetYammConfiguration.typeUrl || typeof o.creator === "string" && YammConfiguration.is(o.configuration));
+  },
+  isSDK(o: any): o is MsgSetYammConfigurationSDKType {
+    return o && (o.$typeUrl === MsgSetYammConfiguration.typeUrl || typeof o.creator === "string" && YammConfiguration.isSDK(o.configuration));
+  },
+  isAmino(o: any): o is MsgSetYammConfigurationAmino {
+    return o && (o.$typeUrl === MsgSetYammConfiguration.typeUrl || typeof o.creator === "string" && YammConfiguration.isAmino(o.configuration));
+  },
   encode(message: MsgSetYammConfiguration, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.creator !== "") {
       writer.uint32(10).string(message.creator);
@@ -4871,7 +5178,7 @@ export const MsgSetYammConfiguration = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): MsgSetYammConfiguration {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): MsgSetYammConfiguration {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgSetYammConfiguration();
@@ -4882,7 +5189,7 @@ export const MsgSetYammConfiguration = {
           message.creator = reader.string();
           break;
         case 2:
-          message.configuration = YammConfiguration.decode(reader, reader.uint32());
+          message.configuration = YammConfiguration.decode(reader, reader.uint32(), useInterfaces);
           break;
         default:
           reader.skipType(tag & 7);
@@ -4919,23 +5226,23 @@ export const MsgSetYammConfiguration = {
     }
     return message;
   },
-  toAmino(message: MsgSetYammConfiguration): MsgSetYammConfigurationAmino {
+  toAmino(message: MsgSetYammConfiguration, useInterfaces: boolean = true): MsgSetYammConfigurationAmino {
     const obj: any = {};
-    obj.creator = message.creator;
-    obj.configuration = message.configuration ? YammConfiguration.toAmino(message.configuration) : undefined;
+    obj.creator = message.creator === "" ? undefined : message.creator;
+    obj.configuration = message.configuration ? YammConfiguration.toAmino(message.configuration, useInterfaces) : undefined;
     return obj;
   },
   fromAminoMsg(object: MsgSetYammConfigurationAminoMsg): MsgSetYammConfiguration {
     return MsgSetYammConfiguration.fromAmino(object.value);
   },
-  toAminoMsg(message: MsgSetYammConfiguration): MsgSetYammConfigurationAminoMsg {
+  toAminoMsg(message: MsgSetYammConfiguration, useInterfaces: boolean = true): MsgSetYammConfigurationAminoMsg {
     return {
       type: "pryzm/amm/v1/SetYammConfiguration",
-      value: MsgSetYammConfiguration.toAmino(message)
+      value: MsgSetYammConfiguration.toAmino(message, useInterfaces)
     };
   },
-  fromProtoMsg(message: MsgSetYammConfigurationProtoMsg): MsgSetYammConfiguration {
-    return MsgSetYammConfiguration.decode(message.value);
+  fromProtoMsg(message: MsgSetYammConfigurationProtoMsg, useInterfaces: boolean = true): MsgSetYammConfiguration {
+    return MsgSetYammConfiguration.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: MsgSetYammConfiguration): Uint8Array {
     return MsgSetYammConfiguration.encode(message).finish();
@@ -4947,15 +5254,26 @@ export const MsgSetYammConfiguration = {
     };
   }
 };
+GlobalDecoderRegistry.register(MsgSetYammConfiguration.typeUrl, MsgSetYammConfiguration);
+GlobalDecoderRegistry.registerAminoProtoMapping(MsgSetYammConfiguration.aminoType, MsgSetYammConfiguration.typeUrl);
 function createBaseMsgSetYammConfigurationResponse(): MsgSetYammConfigurationResponse {
   return {};
 }
 export const MsgSetYammConfigurationResponse = {
   typeUrl: "/pryzm.amm.v1.MsgSetYammConfigurationResponse",
+  is(o: any): o is MsgSetYammConfigurationResponse {
+    return o && o.$typeUrl === MsgSetYammConfigurationResponse.typeUrl;
+  },
+  isSDK(o: any): o is MsgSetYammConfigurationResponseSDKType {
+    return o && o.$typeUrl === MsgSetYammConfigurationResponse.typeUrl;
+  },
+  isAmino(o: any): o is MsgSetYammConfigurationResponseAmino {
+    return o && o.$typeUrl === MsgSetYammConfigurationResponse.typeUrl;
+  },
   encode(_: MsgSetYammConfigurationResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): MsgSetYammConfigurationResponse {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): MsgSetYammConfigurationResponse {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgSetYammConfigurationResponse();
@@ -4984,15 +5302,15 @@ export const MsgSetYammConfigurationResponse = {
     const message = createBaseMsgSetYammConfigurationResponse();
     return message;
   },
-  toAmino(_: MsgSetYammConfigurationResponse): MsgSetYammConfigurationResponseAmino {
+  toAmino(_: MsgSetYammConfigurationResponse, useInterfaces: boolean = true): MsgSetYammConfigurationResponseAmino {
     const obj: any = {};
     return obj;
   },
   fromAminoMsg(object: MsgSetYammConfigurationResponseAminoMsg): MsgSetYammConfigurationResponse {
     return MsgSetYammConfigurationResponse.fromAmino(object.value);
   },
-  fromProtoMsg(message: MsgSetYammConfigurationResponseProtoMsg): MsgSetYammConfigurationResponse {
-    return MsgSetYammConfigurationResponse.decode(message.value);
+  fromProtoMsg(message: MsgSetYammConfigurationResponseProtoMsg, useInterfaces: boolean = true): MsgSetYammConfigurationResponse {
+    return MsgSetYammConfigurationResponse.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: MsgSetYammConfigurationResponse): Uint8Array {
     return MsgSetYammConfigurationResponse.encode(message).finish();
@@ -5004,6 +5322,7 @@ export const MsgSetYammConfigurationResponse = {
     };
   }
 };
+GlobalDecoderRegistry.register(MsgSetYammConfigurationResponse.typeUrl, MsgSetYammConfigurationResponse);
 function createBaseMsgWhitelistRoute(): MsgWhitelistRoute {
   return {
     authority: "",
@@ -5012,6 +5331,16 @@ function createBaseMsgWhitelistRoute(): MsgWhitelistRoute {
 }
 export const MsgWhitelistRoute = {
   typeUrl: "/pryzm.amm.v1.MsgWhitelistRoute",
+  aminoType: "pryzm/amm/v1/WhitelistRoute",
+  is(o: any): o is MsgWhitelistRoute {
+    return o && (o.$typeUrl === MsgWhitelistRoute.typeUrl || typeof o.authority === "string" && WhitelistedRoute.is(o.whitelistedRoute));
+  },
+  isSDK(o: any): o is MsgWhitelistRouteSDKType {
+    return o && (o.$typeUrl === MsgWhitelistRoute.typeUrl || typeof o.authority === "string" && WhitelistedRoute.isSDK(o.whitelisted_route));
+  },
+  isAmino(o: any): o is MsgWhitelistRouteAmino {
+    return o && (o.$typeUrl === MsgWhitelistRoute.typeUrl || typeof o.authority === "string" && WhitelistedRoute.isAmino(o.whitelisted_route));
+  },
   encode(message: MsgWhitelistRoute, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.authority !== "") {
       writer.uint32(10).string(message.authority);
@@ -5021,7 +5350,7 @@ export const MsgWhitelistRoute = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): MsgWhitelistRoute {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): MsgWhitelistRoute {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgWhitelistRoute();
@@ -5032,7 +5361,7 @@ export const MsgWhitelistRoute = {
           message.authority = reader.string();
           break;
         case 2:
-          message.whitelistedRoute = WhitelistedRoute.decode(reader, reader.uint32());
+          message.whitelistedRoute = WhitelistedRoute.decode(reader, reader.uint32(), useInterfaces);
           break;
         default:
           reader.skipType(tag & 7);
@@ -5069,23 +5398,23 @@ export const MsgWhitelistRoute = {
     }
     return message;
   },
-  toAmino(message: MsgWhitelistRoute): MsgWhitelistRouteAmino {
+  toAmino(message: MsgWhitelistRoute, useInterfaces: boolean = true): MsgWhitelistRouteAmino {
     const obj: any = {};
-    obj.authority = message.authority;
-    obj.whitelisted_route = message.whitelistedRoute ? WhitelistedRoute.toAmino(message.whitelistedRoute) : undefined;
+    obj.authority = message.authority === "" ? undefined : message.authority;
+    obj.whitelisted_route = message.whitelistedRoute ? WhitelistedRoute.toAmino(message.whitelistedRoute, useInterfaces) : undefined;
     return obj;
   },
   fromAminoMsg(object: MsgWhitelistRouteAminoMsg): MsgWhitelistRoute {
     return MsgWhitelistRoute.fromAmino(object.value);
   },
-  toAminoMsg(message: MsgWhitelistRoute): MsgWhitelistRouteAminoMsg {
+  toAminoMsg(message: MsgWhitelistRoute, useInterfaces: boolean = true): MsgWhitelistRouteAminoMsg {
     return {
       type: "pryzm/amm/v1/WhitelistRoute",
-      value: MsgWhitelistRoute.toAmino(message)
+      value: MsgWhitelistRoute.toAmino(message, useInterfaces)
     };
   },
-  fromProtoMsg(message: MsgWhitelistRouteProtoMsg): MsgWhitelistRoute {
-    return MsgWhitelistRoute.decode(message.value);
+  fromProtoMsg(message: MsgWhitelistRouteProtoMsg, useInterfaces: boolean = true): MsgWhitelistRoute {
+    return MsgWhitelistRoute.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: MsgWhitelistRoute): Uint8Array {
     return MsgWhitelistRoute.encode(message).finish();
@@ -5097,15 +5426,26 @@ export const MsgWhitelistRoute = {
     };
   }
 };
+GlobalDecoderRegistry.register(MsgWhitelistRoute.typeUrl, MsgWhitelistRoute);
+GlobalDecoderRegistry.registerAminoProtoMapping(MsgWhitelistRoute.aminoType, MsgWhitelistRoute.typeUrl);
 function createBaseMsgWhitelistRouteResponse(): MsgWhitelistRouteResponse {
   return {};
 }
 export const MsgWhitelistRouteResponse = {
   typeUrl: "/pryzm.amm.v1.MsgWhitelistRouteResponse",
+  is(o: any): o is MsgWhitelistRouteResponse {
+    return o && o.$typeUrl === MsgWhitelistRouteResponse.typeUrl;
+  },
+  isSDK(o: any): o is MsgWhitelistRouteResponseSDKType {
+    return o && o.$typeUrl === MsgWhitelistRouteResponse.typeUrl;
+  },
+  isAmino(o: any): o is MsgWhitelistRouteResponseAmino {
+    return o && o.$typeUrl === MsgWhitelistRouteResponse.typeUrl;
+  },
   encode(_: MsgWhitelistRouteResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): MsgWhitelistRouteResponse {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): MsgWhitelistRouteResponse {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgWhitelistRouteResponse();
@@ -5134,15 +5474,15 @@ export const MsgWhitelistRouteResponse = {
     const message = createBaseMsgWhitelistRouteResponse();
     return message;
   },
-  toAmino(_: MsgWhitelistRouteResponse): MsgWhitelistRouteResponseAmino {
+  toAmino(_: MsgWhitelistRouteResponse, useInterfaces: boolean = true): MsgWhitelistRouteResponseAmino {
     const obj: any = {};
     return obj;
   },
   fromAminoMsg(object: MsgWhitelistRouteResponseAminoMsg): MsgWhitelistRouteResponse {
     return MsgWhitelistRouteResponse.fromAmino(object.value);
   },
-  fromProtoMsg(message: MsgWhitelistRouteResponseProtoMsg): MsgWhitelistRouteResponse {
-    return MsgWhitelistRouteResponse.decode(message.value);
+  fromProtoMsg(message: MsgWhitelistRouteResponseProtoMsg, useInterfaces: boolean = true): MsgWhitelistRouteResponse {
+    return MsgWhitelistRouteResponse.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: MsgWhitelistRouteResponse): Uint8Array {
     return MsgWhitelistRouteResponse.encode(message).finish();
@@ -5154,6 +5494,7 @@ export const MsgWhitelistRouteResponse = {
     };
   }
 };
+GlobalDecoderRegistry.register(MsgWhitelistRouteResponse.typeUrl, MsgWhitelistRouteResponse);
 function createBaseMsgSetWhitelistedRouteEnabled(): MsgSetWhitelistedRouteEnabled {
   return {
     authority: "",
@@ -5164,6 +5505,16 @@ function createBaseMsgSetWhitelistedRouteEnabled(): MsgSetWhitelistedRouteEnable
 }
 export const MsgSetWhitelistedRouteEnabled = {
   typeUrl: "/pryzm.amm.v1.MsgSetWhitelistedRouteEnabled",
+  aminoType: "pryzm/amm/v1/SetWhitelistedRouteEnabled",
+  is(o: any): o is MsgSetWhitelistedRouteEnabled {
+    return o && (o.$typeUrl === MsgSetWhitelistedRouteEnabled.typeUrl || typeof o.authority === "string" && typeof o.tokenIn === "string" && typeof o.tokenOut === "string" && typeof o.enabled === "boolean");
+  },
+  isSDK(o: any): o is MsgSetWhitelistedRouteEnabledSDKType {
+    return o && (o.$typeUrl === MsgSetWhitelistedRouteEnabled.typeUrl || typeof o.authority === "string" && typeof o.token_in === "string" && typeof o.token_out === "string" && typeof o.enabled === "boolean");
+  },
+  isAmino(o: any): o is MsgSetWhitelistedRouteEnabledAmino {
+    return o && (o.$typeUrl === MsgSetWhitelistedRouteEnabled.typeUrl || typeof o.authority === "string" && typeof o.token_in === "string" && typeof o.token_out === "string" && typeof o.enabled === "boolean");
+  },
   encode(message: MsgSetWhitelistedRouteEnabled, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.authority !== "") {
       writer.uint32(10).string(message.authority);
@@ -5179,7 +5530,7 @@ export const MsgSetWhitelistedRouteEnabled = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): MsgSetWhitelistedRouteEnabled {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): MsgSetWhitelistedRouteEnabled {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgSetWhitelistedRouteEnabled();
@@ -5245,25 +5596,25 @@ export const MsgSetWhitelistedRouteEnabled = {
     }
     return message;
   },
-  toAmino(message: MsgSetWhitelistedRouteEnabled): MsgSetWhitelistedRouteEnabledAmino {
+  toAmino(message: MsgSetWhitelistedRouteEnabled, useInterfaces: boolean = true): MsgSetWhitelistedRouteEnabledAmino {
     const obj: any = {};
-    obj.authority = message.authority;
-    obj.token_in = message.tokenIn;
-    obj.token_out = message.tokenOut;
-    obj.enabled = message.enabled;
+    obj.authority = message.authority === "" ? undefined : message.authority;
+    obj.token_in = message.tokenIn === "" ? undefined : message.tokenIn;
+    obj.token_out = message.tokenOut === "" ? undefined : message.tokenOut;
+    obj.enabled = message.enabled === false ? undefined : message.enabled;
     return obj;
   },
   fromAminoMsg(object: MsgSetWhitelistedRouteEnabledAminoMsg): MsgSetWhitelistedRouteEnabled {
     return MsgSetWhitelistedRouteEnabled.fromAmino(object.value);
   },
-  toAminoMsg(message: MsgSetWhitelistedRouteEnabled): MsgSetWhitelistedRouteEnabledAminoMsg {
+  toAminoMsg(message: MsgSetWhitelistedRouteEnabled, useInterfaces: boolean = true): MsgSetWhitelistedRouteEnabledAminoMsg {
     return {
       type: "pryzm/amm/v1/SetWhitelistedRouteEnabled",
-      value: MsgSetWhitelistedRouteEnabled.toAmino(message)
+      value: MsgSetWhitelistedRouteEnabled.toAmino(message, useInterfaces)
     };
   },
-  fromProtoMsg(message: MsgSetWhitelistedRouteEnabledProtoMsg): MsgSetWhitelistedRouteEnabled {
-    return MsgSetWhitelistedRouteEnabled.decode(message.value);
+  fromProtoMsg(message: MsgSetWhitelistedRouteEnabledProtoMsg, useInterfaces: boolean = true): MsgSetWhitelistedRouteEnabled {
+    return MsgSetWhitelistedRouteEnabled.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: MsgSetWhitelistedRouteEnabled): Uint8Array {
     return MsgSetWhitelistedRouteEnabled.encode(message).finish();
@@ -5275,15 +5626,26 @@ export const MsgSetWhitelistedRouteEnabled = {
     };
   }
 };
+GlobalDecoderRegistry.register(MsgSetWhitelistedRouteEnabled.typeUrl, MsgSetWhitelistedRouteEnabled);
+GlobalDecoderRegistry.registerAminoProtoMapping(MsgSetWhitelistedRouteEnabled.aminoType, MsgSetWhitelistedRouteEnabled.typeUrl);
 function createBaseMsgSetWhitelistedRouteEnabledResponse(): MsgSetWhitelistedRouteEnabledResponse {
   return {};
 }
 export const MsgSetWhitelistedRouteEnabledResponse = {
   typeUrl: "/pryzm.amm.v1.MsgSetWhitelistedRouteEnabledResponse",
+  is(o: any): o is MsgSetWhitelistedRouteEnabledResponse {
+    return o && o.$typeUrl === MsgSetWhitelistedRouteEnabledResponse.typeUrl;
+  },
+  isSDK(o: any): o is MsgSetWhitelistedRouteEnabledResponseSDKType {
+    return o && o.$typeUrl === MsgSetWhitelistedRouteEnabledResponse.typeUrl;
+  },
+  isAmino(o: any): o is MsgSetWhitelistedRouteEnabledResponseAmino {
+    return o && o.$typeUrl === MsgSetWhitelistedRouteEnabledResponse.typeUrl;
+  },
   encode(_: MsgSetWhitelistedRouteEnabledResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): MsgSetWhitelistedRouteEnabledResponse {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): MsgSetWhitelistedRouteEnabledResponse {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgSetWhitelistedRouteEnabledResponse();
@@ -5312,15 +5674,15 @@ export const MsgSetWhitelistedRouteEnabledResponse = {
     const message = createBaseMsgSetWhitelistedRouteEnabledResponse();
     return message;
   },
-  toAmino(_: MsgSetWhitelistedRouteEnabledResponse): MsgSetWhitelistedRouteEnabledResponseAmino {
+  toAmino(_: MsgSetWhitelistedRouteEnabledResponse, useInterfaces: boolean = true): MsgSetWhitelistedRouteEnabledResponseAmino {
     const obj: any = {};
     return obj;
   },
   fromAminoMsg(object: MsgSetWhitelistedRouteEnabledResponseAminoMsg): MsgSetWhitelistedRouteEnabledResponse {
     return MsgSetWhitelistedRouteEnabledResponse.fromAmino(object.value);
   },
-  fromProtoMsg(message: MsgSetWhitelistedRouteEnabledResponseProtoMsg): MsgSetWhitelistedRouteEnabledResponse {
-    return MsgSetWhitelistedRouteEnabledResponse.decode(message.value);
+  fromProtoMsg(message: MsgSetWhitelistedRouteEnabledResponseProtoMsg, useInterfaces: boolean = true): MsgSetWhitelistedRouteEnabledResponse {
+    return MsgSetWhitelistedRouteEnabledResponse.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: MsgSetWhitelistedRouteEnabledResponse): Uint8Array {
     return MsgSetWhitelistedRouteEnabledResponse.encode(message).finish();
@@ -5332,6 +5694,7 @@ export const MsgSetWhitelistedRouteEnabledResponse = {
     };
   }
 };
+GlobalDecoderRegistry.register(MsgSetWhitelistedRouteEnabledResponse.typeUrl, MsgSetWhitelistedRouteEnabledResponse);
 function createBaseMsgSubmitOrder(): MsgSubmitOrder {
   return {
     creator: "",
@@ -5349,6 +5712,16 @@ function createBaseMsgSubmitOrder(): MsgSubmitOrder {
 }
 export const MsgSubmitOrder = {
   typeUrl: "/pryzm.amm.v1.MsgSubmitOrder",
+  aminoType: "pryzm/amm/v1/SubmitOrder",
+  is(o: any): o is MsgSubmitOrder {
+    return o && (o.$typeUrl === MsgSubmitOrder.typeUrl || typeof o.creator === "string" && typeof o.poolId === "bigint" && typeof o.tokenIn === "string" && typeof o.tokenOut === "string" && typeof o.whitelistedRoute === "boolean" && typeof o.allowMatching === "boolean" && typeof o.amountPerStep === "string" && typeof o.totalAmount === "string" && typeof o.millisInterval === "bigint" && typeof o.maxStepSpotPrice === "string");
+  },
+  isSDK(o: any): o is MsgSubmitOrderSDKType {
+    return o && (o.$typeUrl === MsgSubmitOrder.typeUrl || typeof o.creator === "string" && typeof o.pool_id === "bigint" && typeof o.token_in === "string" && typeof o.token_out === "string" && typeof o.whitelisted_route === "boolean" && typeof o.allow_matching === "boolean" && typeof o.amount_per_step === "string" && typeof o.total_amount === "string" && typeof o.millis_interval === "bigint" && typeof o.max_step_spot_price === "string");
+  },
+  isAmino(o: any): o is MsgSubmitOrderAmino {
+    return o && (o.$typeUrl === MsgSubmitOrder.typeUrl || typeof o.creator === "string" && typeof o.pool_id === "bigint" && typeof o.token_in === "string" && typeof o.token_out === "string" && typeof o.whitelisted_route === "boolean" && typeof o.allow_matching === "boolean" && typeof o.amount_per_step === "string" && typeof o.total_amount === "string" && typeof o.millis_interval === "bigint" && typeof o.max_step_spot_price === "string");
+  },
   encode(message: MsgSubmitOrder, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.creator !== "") {
       writer.uint32(10).string(message.creator);
@@ -5385,7 +5758,7 @@ export const MsgSubmitOrder = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): MsgSubmitOrder {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): MsgSubmitOrder {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgSubmitOrder();
@@ -5514,32 +5887,32 @@ export const MsgSubmitOrder = {
     }
     return message;
   },
-  toAmino(message: MsgSubmitOrder): MsgSubmitOrderAmino {
+  toAmino(message: MsgSubmitOrder, useInterfaces: boolean = true): MsgSubmitOrderAmino {
     const obj: any = {};
-    obj.creator = message.creator;
+    obj.creator = message.creator === "" ? undefined : message.creator;
     obj.pool_id = message.poolId ? message.poolId.toString() : undefined;
-    obj.token_in = message.tokenIn;
-    obj.token_out = message.tokenOut;
-    obj.whitelisted_route = message.whitelistedRoute;
-    obj.allow_matching = message.allowMatching;
-    obj.amount_per_step = message.amountPerStep;
-    obj.total_amount = message.totalAmount;
+    obj.token_in = message.tokenIn === "" ? undefined : message.tokenIn;
+    obj.token_out = message.tokenOut === "" ? undefined : message.tokenOut;
+    obj.whitelisted_route = message.whitelistedRoute === false ? undefined : message.whitelistedRoute;
+    obj.allow_matching = message.allowMatching === false ? undefined : message.allowMatching;
+    obj.amount_per_step = message.amountPerStep === "" ? undefined : message.amountPerStep;
+    obj.total_amount = message.totalAmount === "" ? undefined : message.totalAmount;
     obj.millis_interval = message.millisInterval ? message.millisInterval.toString() : undefined;
-    obj.max_step_spot_price = message.maxStepSpotPrice;
-    obj.max_matching_spot_price = message.maxMatchingSpotPrice;
+    obj.max_step_spot_price = padDecimal(message.maxStepSpotPrice) === "" ? undefined : padDecimal(message.maxStepSpotPrice);
+    obj.max_matching_spot_price = padDecimal(message.maxMatchingSpotPrice) === null ? undefined : padDecimal(message.maxMatchingSpotPrice);
     return obj;
   },
   fromAminoMsg(object: MsgSubmitOrderAminoMsg): MsgSubmitOrder {
     return MsgSubmitOrder.fromAmino(object.value);
   },
-  toAminoMsg(message: MsgSubmitOrder): MsgSubmitOrderAminoMsg {
+  toAminoMsg(message: MsgSubmitOrder, useInterfaces: boolean = true): MsgSubmitOrderAminoMsg {
     return {
       type: "pryzm/amm/v1/SubmitOrder",
-      value: MsgSubmitOrder.toAmino(message)
+      value: MsgSubmitOrder.toAmino(message, useInterfaces)
     };
   },
-  fromProtoMsg(message: MsgSubmitOrderProtoMsg): MsgSubmitOrder {
-    return MsgSubmitOrder.decode(message.value);
+  fromProtoMsg(message: MsgSubmitOrderProtoMsg, useInterfaces: boolean = true): MsgSubmitOrder {
+    return MsgSubmitOrder.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: MsgSubmitOrder): Uint8Array {
     return MsgSubmitOrder.encode(message).finish();
@@ -5551,6 +5924,8 @@ export const MsgSubmitOrder = {
     };
   }
 };
+GlobalDecoderRegistry.register(MsgSubmitOrder.typeUrl, MsgSubmitOrder);
+GlobalDecoderRegistry.registerAminoProtoMapping(MsgSubmitOrder.aminoType, MsgSubmitOrder.typeUrl);
 function createBaseMsgSubmitOrderResponse(): MsgSubmitOrderResponse {
   return {
     order: Order.fromPartial({})
@@ -5558,13 +5933,22 @@ function createBaseMsgSubmitOrderResponse(): MsgSubmitOrderResponse {
 }
 export const MsgSubmitOrderResponse = {
   typeUrl: "/pryzm.amm.v1.MsgSubmitOrderResponse",
+  is(o: any): o is MsgSubmitOrderResponse {
+    return o && (o.$typeUrl === MsgSubmitOrderResponse.typeUrl || Order.is(o.order));
+  },
+  isSDK(o: any): o is MsgSubmitOrderResponseSDKType {
+    return o && (o.$typeUrl === MsgSubmitOrderResponse.typeUrl || Order.isSDK(o.order));
+  },
+  isAmino(o: any): o is MsgSubmitOrderResponseAmino {
+    return o && (o.$typeUrl === MsgSubmitOrderResponse.typeUrl || Order.isAmino(o.order));
+  },
   encode(message: MsgSubmitOrderResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.order !== undefined) {
       Order.encode(message.order, writer.uint32(10).fork()).ldelim();
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): MsgSubmitOrderResponse {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): MsgSubmitOrderResponse {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgSubmitOrderResponse();
@@ -5572,7 +5956,7 @@ export const MsgSubmitOrderResponse = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.order = Order.decode(reader, reader.uint32());
+          message.order = Order.decode(reader, reader.uint32(), useInterfaces);
           break;
         default:
           reader.skipType(tag & 7);
@@ -5603,16 +5987,16 @@ export const MsgSubmitOrderResponse = {
     }
     return message;
   },
-  toAmino(message: MsgSubmitOrderResponse): MsgSubmitOrderResponseAmino {
+  toAmino(message: MsgSubmitOrderResponse, useInterfaces: boolean = true): MsgSubmitOrderResponseAmino {
     const obj: any = {};
-    obj.order = message.order ? Order.toAmino(message.order) : undefined;
+    obj.order = message.order ? Order.toAmino(message.order, useInterfaces) : undefined;
     return obj;
   },
   fromAminoMsg(object: MsgSubmitOrderResponseAminoMsg): MsgSubmitOrderResponse {
     return MsgSubmitOrderResponse.fromAmino(object.value);
   },
-  fromProtoMsg(message: MsgSubmitOrderResponseProtoMsg): MsgSubmitOrderResponse {
-    return MsgSubmitOrderResponse.decode(message.value);
+  fromProtoMsg(message: MsgSubmitOrderResponseProtoMsg, useInterfaces: boolean = true): MsgSubmitOrderResponse {
+    return MsgSubmitOrderResponse.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: MsgSubmitOrderResponse): Uint8Array {
     return MsgSubmitOrderResponse.encode(message).finish();
@@ -5624,6 +6008,7 @@ export const MsgSubmitOrderResponse = {
     };
   }
 };
+GlobalDecoderRegistry.register(MsgSubmitOrderResponse.typeUrl, MsgSubmitOrderResponse);
 function createBaseMsgCancelOrder(): MsgCancelOrder {
   return {
     creator: "",
@@ -5632,6 +6017,16 @@ function createBaseMsgCancelOrder(): MsgCancelOrder {
 }
 export const MsgCancelOrder = {
   typeUrl: "/pryzm.amm.v1.MsgCancelOrder",
+  aminoType: "pryzm/amm/v1/CancelOrder",
+  is(o: any): o is MsgCancelOrder {
+    return o && (o.$typeUrl === MsgCancelOrder.typeUrl || typeof o.creator === "string" && typeof o.id === "bigint");
+  },
+  isSDK(o: any): o is MsgCancelOrderSDKType {
+    return o && (o.$typeUrl === MsgCancelOrder.typeUrl || typeof o.creator === "string" && typeof o.id === "bigint");
+  },
+  isAmino(o: any): o is MsgCancelOrderAmino {
+    return o && (o.$typeUrl === MsgCancelOrder.typeUrl || typeof o.creator === "string" && typeof o.id === "bigint");
+  },
   encode(message: MsgCancelOrder, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.creator !== "") {
       writer.uint32(10).string(message.creator);
@@ -5641,7 +6036,7 @@ export const MsgCancelOrder = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): MsgCancelOrder {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): MsgCancelOrder {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgCancelOrder();
@@ -5689,23 +6084,23 @@ export const MsgCancelOrder = {
     }
     return message;
   },
-  toAmino(message: MsgCancelOrder): MsgCancelOrderAmino {
+  toAmino(message: MsgCancelOrder, useInterfaces: boolean = true): MsgCancelOrderAmino {
     const obj: any = {};
-    obj.creator = message.creator;
+    obj.creator = message.creator === "" ? undefined : message.creator;
     obj.id = message.id ? message.id.toString() : undefined;
     return obj;
   },
   fromAminoMsg(object: MsgCancelOrderAminoMsg): MsgCancelOrder {
     return MsgCancelOrder.fromAmino(object.value);
   },
-  toAminoMsg(message: MsgCancelOrder): MsgCancelOrderAminoMsg {
+  toAminoMsg(message: MsgCancelOrder, useInterfaces: boolean = true): MsgCancelOrderAminoMsg {
     return {
       type: "pryzm/amm/v1/CancelOrder",
-      value: MsgCancelOrder.toAmino(message)
+      value: MsgCancelOrder.toAmino(message, useInterfaces)
     };
   },
-  fromProtoMsg(message: MsgCancelOrderProtoMsg): MsgCancelOrder {
-    return MsgCancelOrder.decode(message.value);
+  fromProtoMsg(message: MsgCancelOrderProtoMsg, useInterfaces: boolean = true): MsgCancelOrder {
+    return MsgCancelOrder.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: MsgCancelOrder): Uint8Array {
     return MsgCancelOrder.encode(message).finish();
@@ -5717,6 +6112,8 @@ export const MsgCancelOrder = {
     };
   }
 };
+GlobalDecoderRegistry.register(MsgCancelOrder.typeUrl, MsgCancelOrder);
+GlobalDecoderRegistry.registerAminoProtoMapping(MsgCancelOrder.aminoType, MsgCancelOrder.typeUrl);
 function createBaseMsgCancelOrderResponse(): MsgCancelOrderResponse {
   return {
     withdrawnDeposit: Coin.fromPartial({})
@@ -5724,13 +6121,22 @@ function createBaseMsgCancelOrderResponse(): MsgCancelOrderResponse {
 }
 export const MsgCancelOrderResponse = {
   typeUrl: "/pryzm.amm.v1.MsgCancelOrderResponse",
+  is(o: any): o is MsgCancelOrderResponse {
+    return o && (o.$typeUrl === MsgCancelOrderResponse.typeUrl || Coin.is(o.withdrawnDeposit));
+  },
+  isSDK(o: any): o is MsgCancelOrderResponseSDKType {
+    return o && (o.$typeUrl === MsgCancelOrderResponse.typeUrl || Coin.isSDK(o.withdrawn_deposit));
+  },
+  isAmino(o: any): o is MsgCancelOrderResponseAmino {
+    return o && (o.$typeUrl === MsgCancelOrderResponse.typeUrl || Coin.isAmino(o.withdrawn_deposit));
+  },
   encode(message: MsgCancelOrderResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.withdrawnDeposit !== undefined) {
       Coin.encode(message.withdrawnDeposit, writer.uint32(10).fork()).ldelim();
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): MsgCancelOrderResponse {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): MsgCancelOrderResponse {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgCancelOrderResponse();
@@ -5738,7 +6144,7 @@ export const MsgCancelOrderResponse = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.withdrawnDeposit = Coin.decode(reader, reader.uint32());
+          message.withdrawnDeposit = Coin.decode(reader, reader.uint32(), useInterfaces);
           break;
         default:
           reader.skipType(tag & 7);
@@ -5769,16 +6175,16 @@ export const MsgCancelOrderResponse = {
     }
     return message;
   },
-  toAmino(message: MsgCancelOrderResponse): MsgCancelOrderResponseAmino {
+  toAmino(message: MsgCancelOrderResponse, useInterfaces: boolean = true): MsgCancelOrderResponseAmino {
     const obj: any = {};
-    obj.withdrawn_deposit = message.withdrawnDeposit ? Coin.toAmino(message.withdrawnDeposit) : undefined;
+    obj.withdrawn_deposit = message.withdrawnDeposit ? Coin.toAmino(message.withdrawnDeposit, useInterfaces) : undefined;
     return obj;
   },
   fromAminoMsg(object: MsgCancelOrderResponseAminoMsg): MsgCancelOrderResponse {
     return MsgCancelOrderResponse.fromAmino(object.value);
   },
-  fromProtoMsg(message: MsgCancelOrderResponseProtoMsg): MsgCancelOrderResponse {
-    return MsgCancelOrderResponse.decode(message.value);
+  fromProtoMsg(message: MsgCancelOrderResponseProtoMsg, useInterfaces: boolean = true): MsgCancelOrderResponse {
+    return MsgCancelOrderResponse.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: MsgCancelOrderResponse): Uint8Array {
     return MsgCancelOrderResponse.encode(message).finish();
@@ -5790,6 +6196,7 @@ export const MsgCancelOrderResponse = {
     };
   }
 };
+GlobalDecoderRegistry.register(MsgCancelOrderResponse.typeUrl, MsgCancelOrderResponse);
 function createBaseMsgProposeMatch(): MsgProposeMatch {
   return {
     creator: "",
@@ -5798,6 +6205,16 @@ function createBaseMsgProposeMatch(): MsgProposeMatch {
 }
 export const MsgProposeMatch = {
   typeUrl: "/pryzm.amm.v1.MsgProposeMatch",
+  aminoType: "pryzm/amm/v1/ProposeMatch",
+  is(o: any): o is MsgProposeMatch {
+    return o && (o.$typeUrl === MsgProposeMatch.typeUrl || typeof o.creator === "string" && Array.isArray(o.pairs) && (!o.pairs.length || PairMatchProposal.is(o.pairs[0])));
+  },
+  isSDK(o: any): o is MsgProposeMatchSDKType {
+    return o && (o.$typeUrl === MsgProposeMatch.typeUrl || typeof o.creator === "string" && Array.isArray(o.pairs) && (!o.pairs.length || PairMatchProposal.isSDK(o.pairs[0])));
+  },
+  isAmino(o: any): o is MsgProposeMatchAmino {
+    return o && (o.$typeUrl === MsgProposeMatch.typeUrl || typeof o.creator === "string" && Array.isArray(o.pairs) && (!o.pairs.length || PairMatchProposal.isAmino(o.pairs[0])));
+  },
   encode(message: MsgProposeMatch, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.creator !== "") {
       writer.uint32(10).string(message.creator);
@@ -5807,7 +6224,7 @@ export const MsgProposeMatch = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): MsgProposeMatch {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): MsgProposeMatch {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgProposeMatch();
@@ -5818,7 +6235,7 @@ export const MsgProposeMatch = {
           message.creator = reader.string();
           break;
         case 2:
-          message.pairs.push(PairMatchProposal.decode(reader, reader.uint32()));
+          message.pairs.push(PairMatchProposal.decode(reader, reader.uint32(), useInterfaces));
           break;
         default:
           reader.skipType(tag & 7);
@@ -5857,27 +6274,27 @@ export const MsgProposeMatch = {
     message.pairs = object.pairs?.map(e => PairMatchProposal.fromAmino(e)) || [];
     return message;
   },
-  toAmino(message: MsgProposeMatch): MsgProposeMatchAmino {
+  toAmino(message: MsgProposeMatch, useInterfaces: boolean = true): MsgProposeMatchAmino {
     const obj: any = {};
-    obj.creator = message.creator;
+    obj.creator = message.creator === "" ? undefined : message.creator;
     if (message.pairs) {
-      obj.pairs = message.pairs.map(e => e ? PairMatchProposal.toAmino(e) : undefined);
+      obj.pairs = message.pairs.map(e => e ? PairMatchProposal.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.pairs = [];
+      obj.pairs = null;
     }
     return obj;
   },
   fromAminoMsg(object: MsgProposeMatchAminoMsg): MsgProposeMatch {
     return MsgProposeMatch.fromAmino(object.value);
   },
-  toAminoMsg(message: MsgProposeMatch): MsgProposeMatchAminoMsg {
+  toAminoMsg(message: MsgProposeMatch, useInterfaces: boolean = true): MsgProposeMatchAminoMsg {
     return {
       type: "pryzm/amm/v1/ProposeMatch",
-      value: MsgProposeMatch.toAmino(message)
+      value: MsgProposeMatch.toAmino(message, useInterfaces)
     };
   },
-  fromProtoMsg(message: MsgProposeMatchProtoMsg): MsgProposeMatch {
-    return MsgProposeMatch.decode(message.value);
+  fromProtoMsg(message: MsgProposeMatchProtoMsg, useInterfaces: boolean = true): MsgProposeMatch {
+    return MsgProposeMatch.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: MsgProposeMatch): Uint8Array {
     return MsgProposeMatch.encode(message).finish();
@@ -5889,6 +6306,8 @@ export const MsgProposeMatch = {
     };
   }
 };
+GlobalDecoderRegistry.register(MsgProposeMatch.typeUrl, MsgProposeMatch);
+GlobalDecoderRegistry.registerAminoProtoMapping(MsgProposeMatch.aminoType, MsgProposeMatch.typeUrl);
 function createBaseMsgProposeMatchResponse(): MsgProposeMatchResponse {
   return {
     proposerReward: []
@@ -5896,13 +6315,22 @@ function createBaseMsgProposeMatchResponse(): MsgProposeMatchResponse {
 }
 export const MsgProposeMatchResponse = {
   typeUrl: "/pryzm.amm.v1.MsgProposeMatchResponse",
+  is(o: any): o is MsgProposeMatchResponse {
+    return o && (o.$typeUrl === MsgProposeMatchResponse.typeUrl || Array.isArray(o.proposerReward) && (!o.proposerReward.length || Coin.is(o.proposerReward[0])));
+  },
+  isSDK(o: any): o is MsgProposeMatchResponseSDKType {
+    return o && (o.$typeUrl === MsgProposeMatchResponse.typeUrl || Array.isArray(o.proposer_reward) && (!o.proposer_reward.length || Coin.isSDK(o.proposer_reward[0])));
+  },
+  isAmino(o: any): o is MsgProposeMatchResponseAmino {
+    return o && (o.$typeUrl === MsgProposeMatchResponse.typeUrl || Array.isArray(o.proposer_reward) && (!o.proposer_reward.length || Coin.isAmino(o.proposer_reward[0])));
+  },
   encode(message: MsgProposeMatchResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     for (const v of message.proposerReward) {
       Coin.encode(v!, writer.uint32(10).fork()).ldelim();
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): MsgProposeMatchResponse {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): MsgProposeMatchResponse {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgProposeMatchResponse();
@@ -5910,7 +6338,7 @@ export const MsgProposeMatchResponse = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.proposerReward.push(Coin.decode(reader, reader.uint32()));
+          message.proposerReward.push(Coin.decode(reader, reader.uint32(), useInterfaces));
           break;
         default:
           reader.skipType(tag & 7);
@@ -5943,20 +6371,20 @@ export const MsgProposeMatchResponse = {
     message.proposerReward = object.proposer_reward?.map(e => Coin.fromAmino(e)) || [];
     return message;
   },
-  toAmino(message: MsgProposeMatchResponse): MsgProposeMatchResponseAmino {
+  toAmino(message: MsgProposeMatchResponse, useInterfaces: boolean = true): MsgProposeMatchResponseAmino {
     const obj: any = {};
     if (message.proposerReward) {
-      obj.proposer_reward = message.proposerReward.map(e => e ? Coin.toAmino(e) : undefined);
+      obj.proposer_reward = message.proposerReward.map(e => e ? Coin.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.proposer_reward = [];
+      obj.proposer_reward = null;
     }
     return obj;
   },
   fromAminoMsg(object: MsgProposeMatchResponseAminoMsg): MsgProposeMatchResponse {
     return MsgProposeMatchResponse.fromAmino(object.value);
   },
-  fromProtoMsg(message: MsgProposeMatchResponseProtoMsg): MsgProposeMatchResponse {
-    return MsgProposeMatchResponse.decode(message.value);
+  fromProtoMsg(message: MsgProposeMatchResponseProtoMsg, useInterfaces: boolean = true): MsgProposeMatchResponse {
+    return MsgProposeMatchResponse.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: MsgProposeMatchResponse): Uint8Array {
     return MsgProposeMatchResponse.encode(message).finish();
@@ -5968,6 +6396,7 @@ export const MsgProposeMatchResponse = {
     };
   }
 };
+GlobalDecoderRegistry.register(MsgProposeMatchResponse.typeUrl, MsgProposeMatchResponse);
 function createBaseMsgSetCircuitBreakers(): MsgSetCircuitBreakers {
   return {
     creator: "",
@@ -5977,6 +6406,16 @@ function createBaseMsgSetCircuitBreakers(): MsgSetCircuitBreakers {
 }
 export const MsgSetCircuitBreakers = {
   typeUrl: "/pryzm.amm.v1.MsgSetCircuitBreakers",
+  aminoType: "pryzm/amm/v1/SetCircuitBreakers",
+  is(o: any): o is MsgSetCircuitBreakers {
+    return o && (o.$typeUrl === MsgSetCircuitBreakers.typeUrl || typeof o.creator === "string" && typeof o.poolId === "bigint" && Array.isArray(o.tokenCircuitBreakers) && (!o.tokenCircuitBreakers.length || TokenCircuitBreakerSettings.is(o.tokenCircuitBreakers[0])));
+  },
+  isSDK(o: any): o is MsgSetCircuitBreakersSDKType {
+    return o && (o.$typeUrl === MsgSetCircuitBreakers.typeUrl || typeof o.creator === "string" && typeof o.pool_id === "bigint" && Array.isArray(o.token_circuit_breakers) && (!o.token_circuit_breakers.length || TokenCircuitBreakerSettings.isSDK(o.token_circuit_breakers[0])));
+  },
+  isAmino(o: any): o is MsgSetCircuitBreakersAmino {
+    return o && (o.$typeUrl === MsgSetCircuitBreakers.typeUrl || typeof o.creator === "string" && typeof o.pool_id === "bigint" && Array.isArray(o.token_circuit_breakers) && (!o.token_circuit_breakers.length || TokenCircuitBreakerSettings.isAmino(o.token_circuit_breakers[0])));
+  },
   encode(message: MsgSetCircuitBreakers, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.creator !== "") {
       writer.uint32(10).string(message.creator);
@@ -5989,7 +6428,7 @@ export const MsgSetCircuitBreakers = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): MsgSetCircuitBreakers {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): MsgSetCircuitBreakers {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgSetCircuitBreakers();
@@ -6003,7 +6442,7 @@ export const MsgSetCircuitBreakers = {
           message.poolId = reader.uint64();
           break;
         case 3:
-          message.tokenCircuitBreakers.push(TokenCircuitBreakerSettings.decode(reader, reader.uint32()));
+          message.tokenCircuitBreakers.push(TokenCircuitBreakerSettings.decode(reader, reader.uint32(), useInterfaces));
           break;
         default:
           reader.skipType(tag & 7);
@@ -6048,28 +6487,28 @@ export const MsgSetCircuitBreakers = {
     message.tokenCircuitBreakers = object.token_circuit_breakers?.map(e => TokenCircuitBreakerSettings.fromAmino(e)) || [];
     return message;
   },
-  toAmino(message: MsgSetCircuitBreakers): MsgSetCircuitBreakersAmino {
+  toAmino(message: MsgSetCircuitBreakers, useInterfaces: boolean = true): MsgSetCircuitBreakersAmino {
     const obj: any = {};
-    obj.creator = message.creator;
+    obj.creator = message.creator === "" ? undefined : message.creator;
     obj.pool_id = message.poolId ? message.poolId.toString() : undefined;
     if (message.tokenCircuitBreakers) {
-      obj.token_circuit_breakers = message.tokenCircuitBreakers.map(e => e ? TokenCircuitBreakerSettings.toAmino(e) : undefined);
+      obj.token_circuit_breakers = message.tokenCircuitBreakers.map(e => e ? TokenCircuitBreakerSettings.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.token_circuit_breakers = [];
+      obj.token_circuit_breakers = null;
     }
     return obj;
   },
   fromAminoMsg(object: MsgSetCircuitBreakersAminoMsg): MsgSetCircuitBreakers {
     return MsgSetCircuitBreakers.fromAmino(object.value);
   },
-  toAminoMsg(message: MsgSetCircuitBreakers): MsgSetCircuitBreakersAminoMsg {
+  toAminoMsg(message: MsgSetCircuitBreakers, useInterfaces: boolean = true): MsgSetCircuitBreakersAminoMsg {
     return {
       type: "pryzm/amm/v1/SetCircuitBreakers",
-      value: MsgSetCircuitBreakers.toAmino(message)
+      value: MsgSetCircuitBreakers.toAmino(message, useInterfaces)
     };
   },
-  fromProtoMsg(message: MsgSetCircuitBreakersProtoMsg): MsgSetCircuitBreakers {
-    return MsgSetCircuitBreakers.decode(message.value);
+  fromProtoMsg(message: MsgSetCircuitBreakersProtoMsg, useInterfaces: boolean = true): MsgSetCircuitBreakers {
+    return MsgSetCircuitBreakers.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: MsgSetCircuitBreakers): Uint8Array {
     return MsgSetCircuitBreakers.encode(message).finish();
@@ -6081,15 +6520,26 @@ export const MsgSetCircuitBreakers = {
     };
   }
 };
+GlobalDecoderRegistry.register(MsgSetCircuitBreakers.typeUrl, MsgSetCircuitBreakers);
+GlobalDecoderRegistry.registerAminoProtoMapping(MsgSetCircuitBreakers.aminoType, MsgSetCircuitBreakers.typeUrl);
 function createBaseMsgSetCircuitBreakersResponse(): MsgSetCircuitBreakersResponse {
   return {};
 }
 export const MsgSetCircuitBreakersResponse = {
   typeUrl: "/pryzm.amm.v1.MsgSetCircuitBreakersResponse",
+  is(o: any): o is MsgSetCircuitBreakersResponse {
+    return o && o.$typeUrl === MsgSetCircuitBreakersResponse.typeUrl;
+  },
+  isSDK(o: any): o is MsgSetCircuitBreakersResponseSDKType {
+    return o && o.$typeUrl === MsgSetCircuitBreakersResponse.typeUrl;
+  },
+  isAmino(o: any): o is MsgSetCircuitBreakersResponseAmino {
+    return o && o.$typeUrl === MsgSetCircuitBreakersResponse.typeUrl;
+  },
   encode(_: MsgSetCircuitBreakersResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): MsgSetCircuitBreakersResponse {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): MsgSetCircuitBreakersResponse {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgSetCircuitBreakersResponse();
@@ -6118,15 +6568,15 @@ export const MsgSetCircuitBreakersResponse = {
     const message = createBaseMsgSetCircuitBreakersResponse();
     return message;
   },
-  toAmino(_: MsgSetCircuitBreakersResponse): MsgSetCircuitBreakersResponseAmino {
+  toAmino(_: MsgSetCircuitBreakersResponse, useInterfaces: boolean = true): MsgSetCircuitBreakersResponseAmino {
     const obj: any = {};
     return obj;
   },
   fromAminoMsg(object: MsgSetCircuitBreakersResponseAminoMsg): MsgSetCircuitBreakersResponse {
     return MsgSetCircuitBreakersResponse.fromAmino(object.value);
   },
-  fromProtoMsg(message: MsgSetCircuitBreakersResponseProtoMsg): MsgSetCircuitBreakersResponse {
-    return MsgSetCircuitBreakersResponse.decode(message.value);
+  fromProtoMsg(message: MsgSetCircuitBreakersResponseProtoMsg, useInterfaces: boolean = true): MsgSetCircuitBreakersResponse {
+    return MsgSetCircuitBreakersResponse.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: MsgSetCircuitBreakersResponse): Uint8Array {
     return MsgSetCircuitBreakersResponse.encode(message).finish();
@@ -6138,6 +6588,7 @@ export const MsgSetCircuitBreakersResponse = {
     };
   }
 };
+GlobalDecoderRegistry.register(MsgSetCircuitBreakersResponse.typeUrl, MsgSetCircuitBreakersResponse);
 function createBaseMsgSetRecoveryMode(): MsgSetRecoveryMode {
   return {
     authority: "",
@@ -6147,6 +6598,16 @@ function createBaseMsgSetRecoveryMode(): MsgSetRecoveryMode {
 }
 export const MsgSetRecoveryMode = {
   typeUrl: "/pryzm.amm.v1.MsgSetRecoveryMode",
+  aminoType: "pryzm/amm/v1/SetRecoveryMode",
+  is(o: any): o is MsgSetRecoveryMode {
+    return o && (o.$typeUrl === MsgSetRecoveryMode.typeUrl || typeof o.authority === "string" && typeof o.poolId === "bigint" && typeof o.recoveryMode === "boolean");
+  },
+  isSDK(o: any): o is MsgSetRecoveryModeSDKType {
+    return o && (o.$typeUrl === MsgSetRecoveryMode.typeUrl || typeof o.authority === "string" && typeof o.pool_id === "bigint" && typeof o.recovery_mode === "boolean");
+  },
+  isAmino(o: any): o is MsgSetRecoveryModeAmino {
+    return o && (o.$typeUrl === MsgSetRecoveryMode.typeUrl || typeof o.authority === "string" && typeof o.pool_id === "bigint" && typeof o.recovery_mode === "boolean");
+  },
   encode(message: MsgSetRecoveryMode, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.authority !== "") {
       writer.uint32(10).string(message.authority);
@@ -6159,7 +6620,7 @@ export const MsgSetRecoveryMode = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): MsgSetRecoveryMode {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): MsgSetRecoveryMode {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgSetRecoveryMode();
@@ -6216,24 +6677,24 @@ export const MsgSetRecoveryMode = {
     }
     return message;
   },
-  toAmino(message: MsgSetRecoveryMode): MsgSetRecoveryModeAmino {
+  toAmino(message: MsgSetRecoveryMode, useInterfaces: boolean = true): MsgSetRecoveryModeAmino {
     const obj: any = {};
-    obj.authority = message.authority;
+    obj.authority = message.authority === "" ? undefined : message.authority;
     obj.pool_id = message.poolId ? message.poolId.toString() : undefined;
-    obj.recovery_mode = message.recoveryMode;
+    obj.recovery_mode = message.recoveryMode === false ? undefined : message.recoveryMode;
     return obj;
   },
   fromAminoMsg(object: MsgSetRecoveryModeAminoMsg): MsgSetRecoveryMode {
     return MsgSetRecoveryMode.fromAmino(object.value);
   },
-  toAminoMsg(message: MsgSetRecoveryMode): MsgSetRecoveryModeAminoMsg {
+  toAminoMsg(message: MsgSetRecoveryMode, useInterfaces: boolean = true): MsgSetRecoveryModeAminoMsg {
     return {
       type: "pryzm/amm/v1/SetRecoveryMode",
-      value: MsgSetRecoveryMode.toAmino(message)
+      value: MsgSetRecoveryMode.toAmino(message, useInterfaces)
     };
   },
-  fromProtoMsg(message: MsgSetRecoveryModeProtoMsg): MsgSetRecoveryMode {
-    return MsgSetRecoveryMode.decode(message.value);
+  fromProtoMsg(message: MsgSetRecoveryModeProtoMsg, useInterfaces: boolean = true): MsgSetRecoveryMode {
+    return MsgSetRecoveryMode.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: MsgSetRecoveryMode): Uint8Array {
     return MsgSetRecoveryMode.encode(message).finish();
@@ -6245,15 +6706,26 @@ export const MsgSetRecoveryMode = {
     };
   }
 };
+GlobalDecoderRegistry.register(MsgSetRecoveryMode.typeUrl, MsgSetRecoveryMode);
+GlobalDecoderRegistry.registerAminoProtoMapping(MsgSetRecoveryMode.aminoType, MsgSetRecoveryMode.typeUrl);
 function createBaseMsgSetRecoveryModeResponse(): MsgSetRecoveryModeResponse {
   return {};
 }
 export const MsgSetRecoveryModeResponse = {
   typeUrl: "/pryzm.amm.v1.MsgSetRecoveryModeResponse",
+  is(o: any): o is MsgSetRecoveryModeResponse {
+    return o && o.$typeUrl === MsgSetRecoveryModeResponse.typeUrl;
+  },
+  isSDK(o: any): o is MsgSetRecoveryModeResponseSDKType {
+    return o && o.$typeUrl === MsgSetRecoveryModeResponse.typeUrl;
+  },
+  isAmino(o: any): o is MsgSetRecoveryModeResponseAmino {
+    return o && o.$typeUrl === MsgSetRecoveryModeResponse.typeUrl;
+  },
   encode(_: MsgSetRecoveryModeResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): MsgSetRecoveryModeResponse {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): MsgSetRecoveryModeResponse {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgSetRecoveryModeResponse();
@@ -6282,15 +6754,15 @@ export const MsgSetRecoveryModeResponse = {
     const message = createBaseMsgSetRecoveryModeResponse();
     return message;
   },
-  toAmino(_: MsgSetRecoveryModeResponse): MsgSetRecoveryModeResponseAmino {
+  toAmino(_: MsgSetRecoveryModeResponse, useInterfaces: boolean = true): MsgSetRecoveryModeResponseAmino {
     const obj: any = {};
     return obj;
   },
   fromAminoMsg(object: MsgSetRecoveryModeResponseAminoMsg): MsgSetRecoveryModeResponse {
     return MsgSetRecoveryModeResponse.fromAmino(object.value);
   },
-  fromProtoMsg(message: MsgSetRecoveryModeResponseProtoMsg): MsgSetRecoveryModeResponse {
-    return MsgSetRecoveryModeResponse.decode(message.value);
+  fromProtoMsg(message: MsgSetRecoveryModeResponseProtoMsg, useInterfaces: boolean = true): MsgSetRecoveryModeResponse {
+    return MsgSetRecoveryModeResponse.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: MsgSetRecoveryModeResponse): Uint8Array {
     return MsgSetRecoveryModeResponse.encode(message).finish();
@@ -6302,6 +6774,7 @@ export const MsgSetRecoveryModeResponse = {
     };
   }
 };
+GlobalDecoderRegistry.register(MsgSetRecoveryModeResponse.typeUrl, MsgSetRecoveryModeResponse);
 function createBaseMsgRecoveryExit(): MsgRecoveryExit {
   return {
     creator: "",
@@ -6312,6 +6785,16 @@ function createBaseMsgRecoveryExit(): MsgRecoveryExit {
 }
 export const MsgRecoveryExit = {
   typeUrl: "/pryzm.amm.v1.MsgRecoveryExit",
+  aminoType: "pryzm/amm/v1/RecoveryExit",
+  is(o: any): o is MsgRecoveryExit {
+    return o && (o.$typeUrl === MsgRecoveryExit.typeUrl || typeof o.creator === "string" && typeof o.poolId === "bigint" && typeof o.lptIn === "string" && Array.isArray(o.minAmountsOut) && (!o.minAmountsOut.length || Coin.is(o.minAmountsOut[0])));
+  },
+  isSDK(o: any): o is MsgRecoveryExitSDKType {
+    return o && (o.$typeUrl === MsgRecoveryExit.typeUrl || typeof o.creator === "string" && typeof o.pool_id === "bigint" && typeof o.lpt_in === "string" && Array.isArray(o.min_amounts_out) && (!o.min_amounts_out.length || Coin.isSDK(o.min_amounts_out[0])));
+  },
+  isAmino(o: any): o is MsgRecoveryExitAmino {
+    return o && (o.$typeUrl === MsgRecoveryExit.typeUrl || typeof o.creator === "string" && typeof o.pool_id === "bigint" && typeof o.lpt_in === "string" && Array.isArray(o.min_amounts_out) && (!o.min_amounts_out.length || Coin.isAmino(o.min_amounts_out[0])));
+  },
   encode(message: MsgRecoveryExit, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.creator !== "") {
       writer.uint32(10).string(message.creator);
@@ -6327,7 +6810,7 @@ export const MsgRecoveryExit = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): MsgRecoveryExit {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): MsgRecoveryExit {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgRecoveryExit();
@@ -6344,7 +6827,7 @@ export const MsgRecoveryExit = {
           message.lptIn = reader.string();
           break;
         case 4:
-          message.minAmountsOut.push(Coin.decode(reader, reader.uint32()));
+          message.minAmountsOut.push(Coin.decode(reader, reader.uint32(), useInterfaces));
           break;
         default:
           reader.skipType(tag & 7);
@@ -6395,29 +6878,29 @@ export const MsgRecoveryExit = {
     message.minAmountsOut = object.min_amounts_out?.map(e => Coin.fromAmino(e)) || [];
     return message;
   },
-  toAmino(message: MsgRecoveryExit): MsgRecoveryExitAmino {
+  toAmino(message: MsgRecoveryExit, useInterfaces: boolean = true): MsgRecoveryExitAmino {
     const obj: any = {};
-    obj.creator = message.creator;
+    obj.creator = message.creator === "" ? undefined : message.creator;
     obj.pool_id = message.poolId ? message.poolId.toString() : undefined;
-    obj.lpt_in = message.lptIn;
+    obj.lpt_in = message.lptIn === "" ? undefined : message.lptIn;
     if (message.minAmountsOut) {
-      obj.min_amounts_out = message.minAmountsOut.map(e => e ? Coin.toAmino(e) : undefined);
+      obj.min_amounts_out = message.minAmountsOut.map(e => e ? Coin.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.min_amounts_out = [];
+      obj.min_amounts_out = null;
     }
     return obj;
   },
   fromAminoMsg(object: MsgRecoveryExitAminoMsg): MsgRecoveryExit {
     return MsgRecoveryExit.fromAmino(object.value);
   },
-  toAminoMsg(message: MsgRecoveryExit): MsgRecoveryExitAminoMsg {
+  toAminoMsg(message: MsgRecoveryExit, useInterfaces: boolean = true): MsgRecoveryExitAminoMsg {
     return {
       type: "pryzm/amm/v1/RecoveryExit",
-      value: MsgRecoveryExit.toAmino(message)
+      value: MsgRecoveryExit.toAmino(message, useInterfaces)
     };
   },
-  fromProtoMsg(message: MsgRecoveryExitProtoMsg): MsgRecoveryExit {
-    return MsgRecoveryExit.decode(message.value);
+  fromProtoMsg(message: MsgRecoveryExitProtoMsg, useInterfaces: boolean = true): MsgRecoveryExit {
+    return MsgRecoveryExit.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: MsgRecoveryExit): Uint8Array {
     return MsgRecoveryExit.encode(message).finish();
@@ -6429,6 +6912,8 @@ export const MsgRecoveryExit = {
     };
   }
 };
+GlobalDecoderRegistry.register(MsgRecoveryExit.typeUrl, MsgRecoveryExit);
+GlobalDecoderRegistry.registerAminoProtoMapping(MsgRecoveryExit.aminoType, MsgRecoveryExit.typeUrl);
 function createBaseMsgRecoveryExitResponse(): MsgRecoveryExitResponse {
   return {
     lptIn: Coin.fromPartial({}),
@@ -6437,6 +6922,15 @@ function createBaseMsgRecoveryExitResponse(): MsgRecoveryExitResponse {
 }
 export const MsgRecoveryExitResponse = {
   typeUrl: "/pryzm.amm.v1.MsgRecoveryExitResponse",
+  is(o: any): o is MsgRecoveryExitResponse {
+    return o && (o.$typeUrl === MsgRecoveryExitResponse.typeUrl || Coin.is(o.lptIn) && Array.isArray(o.amountsOut) && (!o.amountsOut.length || Coin.is(o.amountsOut[0])));
+  },
+  isSDK(o: any): o is MsgRecoveryExitResponseSDKType {
+    return o && (o.$typeUrl === MsgRecoveryExitResponse.typeUrl || Coin.isSDK(o.lpt_in) && Array.isArray(o.amounts_out) && (!o.amounts_out.length || Coin.isSDK(o.amounts_out[0])));
+  },
+  isAmino(o: any): o is MsgRecoveryExitResponseAmino {
+    return o && (o.$typeUrl === MsgRecoveryExitResponse.typeUrl || Coin.isAmino(o.lpt_in) && Array.isArray(o.amounts_out) && (!o.amounts_out.length || Coin.isAmino(o.amounts_out[0])));
+  },
   encode(message: MsgRecoveryExitResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.lptIn !== undefined) {
       Coin.encode(message.lptIn, writer.uint32(10).fork()).ldelim();
@@ -6446,7 +6940,7 @@ export const MsgRecoveryExitResponse = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): MsgRecoveryExitResponse {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): MsgRecoveryExitResponse {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgRecoveryExitResponse();
@@ -6454,10 +6948,10 @@ export const MsgRecoveryExitResponse = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.lptIn = Coin.decode(reader, reader.uint32());
+          message.lptIn = Coin.decode(reader, reader.uint32(), useInterfaces);
           break;
         case 2:
-          message.amountsOut.push(Coin.decode(reader, reader.uint32()));
+          message.amountsOut.push(Coin.decode(reader, reader.uint32(), useInterfaces));
           break;
         default:
           reader.skipType(tag & 7);
@@ -6496,21 +6990,21 @@ export const MsgRecoveryExitResponse = {
     message.amountsOut = object.amounts_out?.map(e => Coin.fromAmino(e)) || [];
     return message;
   },
-  toAmino(message: MsgRecoveryExitResponse): MsgRecoveryExitResponseAmino {
+  toAmino(message: MsgRecoveryExitResponse, useInterfaces: boolean = true): MsgRecoveryExitResponseAmino {
     const obj: any = {};
-    obj.lpt_in = message.lptIn ? Coin.toAmino(message.lptIn) : undefined;
+    obj.lpt_in = message.lptIn ? Coin.toAmino(message.lptIn, useInterfaces) : undefined;
     if (message.amountsOut) {
-      obj.amounts_out = message.amountsOut.map(e => e ? Coin.toAmino(e) : undefined);
+      obj.amounts_out = message.amountsOut.map(e => e ? Coin.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.amounts_out = [];
+      obj.amounts_out = null;
     }
     return obj;
   },
   fromAminoMsg(object: MsgRecoveryExitResponseAminoMsg): MsgRecoveryExitResponse {
     return MsgRecoveryExitResponse.fromAmino(object.value);
   },
-  fromProtoMsg(message: MsgRecoveryExitResponseProtoMsg): MsgRecoveryExitResponse {
-    return MsgRecoveryExitResponse.decode(message.value);
+  fromProtoMsg(message: MsgRecoveryExitResponseProtoMsg, useInterfaces: boolean = true): MsgRecoveryExitResponse {
+    return MsgRecoveryExitResponse.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: MsgRecoveryExitResponse): Uint8Array {
     return MsgRecoveryExitResponse.encode(message).finish();
@@ -6522,6 +7016,7 @@ export const MsgRecoveryExitResponse = {
     };
   }
 };
+GlobalDecoderRegistry.register(MsgRecoveryExitResponse.typeUrl, MsgRecoveryExitResponse);
 function createBaseMsgSetPauseMode(): MsgSetPauseMode {
   return {
     creator: "",
@@ -6531,6 +7026,16 @@ function createBaseMsgSetPauseMode(): MsgSetPauseMode {
 }
 export const MsgSetPauseMode = {
   typeUrl: "/pryzm.amm.v1.MsgSetPauseMode",
+  aminoType: "pryzm/amm/v1/SetPauseMode",
+  is(o: any): o is MsgSetPauseMode {
+    return o && (o.$typeUrl === MsgSetPauseMode.typeUrl || typeof o.creator === "string" && typeof o.poolId === "bigint" && typeof o.pauseMode === "boolean");
+  },
+  isSDK(o: any): o is MsgSetPauseModeSDKType {
+    return o && (o.$typeUrl === MsgSetPauseMode.typeUrl || typeof o.creator === "string" && typeof o.pool_id === "bigint" && typeof o.pause_mode === "boolean");
+  },
+  isAmino(o: any): o is MsgSetPauseModeAmino {
+    return o && (o.$typeUrl === MsgSetPauseMode.typeUrl || typeof o.creator === "string" && typeof o.pool_id === "bigint" && typeof o.pause_mode === "boolean");
+  },
   encode(message: MsgSetPauseMode, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.creator !== "") {
       writer.uint32(10).string(message.creator);
@@ -6543,7 +7048,7 @@ export const MsgSetPauseMode = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): MsgSetPauseMode {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): MsgSetPauseMode {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgSetPauseMode();
@@ -6600,24 +7105,24 @@ export const MsgSetPauseMode = {
     }
     return message;
   },
-  toAmino(message: MsgSetPauseMode): MsgSetPauseModeAmino {
+  toAmino(message: MsgSetPauseMode, useInterfaces: boolean = true): MsgSetPauseModeAmino {
     const obj: any = {};
-    obj.creator = message.creator;
+    obj.creator = message.creator === "" ? undefined : message.creator;
     obj.pool_id = message.poolId ? message.poolId.toString() : undefined;
-    obj.pause_mode = message.pauseMode;
+    obj.pause_mode = message.pauseMode === false ? undefined : message.pauseMode;
     return obj;
   },
   fromAminoMsg(object: MsgSetPauseModeAminoMsg): MsgSetPauseMode {
     return MsgSetPauseMode.fromAmino(object.value);
   },
-  toAminoMsg(message: MsgSetPauseMode): MsgSetPauseModeAminoMsg {
+  toAminoMsg(message: MsgSetPauseMode, useInterfaces: boolean = true): MsgSetPauseModeAminoMsg {
     return {
       type: "pryzm/amm/v1/SetPauseMode",
-      value: MsgSetPauseMode.toAmino(message)
+      value: MsgSetPauseMode.toAmino(message, useInterfaces)
     };
   },
-  fromProtoMsg(message: MsgSetPauseModeProtoMsg): MsgSetPauseMode {
-    return MsgSetPauseMode.decode(message.value);
+  fromProtoMsg(message: MsgSetPauseModeProtoMsg, useInterfaces: boolean = true): MsgSetPauseMode {
+    return MsgSetPauseMode.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: MsgSetPauseMode): Uint8Array {
     return MsgSetPauseMode.encode(message).finish();
@@ -6629,15 +7134,26 @@ export const MsgSetPauseMode = {
     };
   }
 };
+GlobalDecoderRegistry.register(MsgSetPauseMode.typeUrl, MsgSetPauseMode);
+GlobalDecoderRegistry.registerAminoProtoMapping(MsgSetPauseMode.aminoType, MsgSetPauseMode.typeUrl);
 function createBaseMsgSetPauseModeResponse(): MsgSetPauseModeResponse {
   return {};
 }
 export const MsgSetPauseModeResponse = {
   typeUrl: "/pryzm.amm.v1.MsgSetPauseModeResponse",
+  is(o: any): o is MsgSetPauseModeResponse {
+    return o && o.$typeUrl === MsgSetPauseModeResponse.typeUrl;
+  },
+  isSDK(o: any): o is MsgSetPauseModeResponseSDKType {
+    return o && o.$typeUrl === MsgSetPauseModeResponse.typeUrl;
+  },
+  isAmino(o: any): o is MsgSetPauseModeResponseAmino {
+    return o && o.$typeUrl === MsgSetPauseModeResponse.typeUrl;
+  },
   encode(_: MsgSetPauseModeResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): MsgSetPauseModeResponse {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): MsgSetPauseModeResponse {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgSetPauseModeResponse();
@@ -6666,15 +7182,15 @@ export const MsgSetPauseModeResponse = {
     const message = createBaseMsgSetPauseModeResponse();
     return message;
   },
-  toAmino(_: MsgSetPauseModeResponse): MsgSetPauseModeResponseAmino {
+  toAmino(_: MsgSetPauseModeResponse, useInterfaces: boolean = true): MsgSetPauseModeResponseAmino {
     const obj: any = {};
     return obj;
   },
   fromAminoMsg(object: MsgSetPauseModeResponseAminoMsg): MsgSetPauseModeResponse {
     return MsgSetPauseModeResponse.fromAmino(object.value);
   },
-  fromProtoMsg(message: MsgSetPauseModeResponseProtoMsg): MsgSetPauseModeResponse {
-    return MsgSetPauseModeResponse.decode(message.value);
+  fromProtoMsg(message: MsgSetPauseModeResponseProtoMsg, useInterfaces: boolean = true): MsgSetPauseModeResponse {
+    return MsgSetPauseModeResponse.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: MsgSetPauseModeResponse): Uint8Array {
     return MsgSetPauseModeResponse.encode(message).finish();
@@ -6686,6 +7202,7 @@ export const MsgSetPauseModeResponse = {
     };
   }
 };
+GlobalDecoderRegistry.register(MsgSetPauseModeResponse.typeUrl, MsgSetPauseModeResponse);
 function createBaseMsgSetVaultPauseMode(): MsgSetVaultPauseMode {
   return {
     authority: "",
@@ -6694,6 +7211,16 @@ function createBaseMsgSetVaultPauseMode(): MsgSetVaultPauseMode {
 }
 export const MsgSetVaultPauseMode = {
   typeUrl: "/pryzm.amm.v1.MsgSetVaultPauseMode",
+  aminoType: "pryzm/amm/v1/SetVaultPauseMode",
+  is(o: any): o is MsgSetVaultPauseMode {
+    return o && (o.$typeUrl === MsgSetVaultPauseMode.typeUrl || typeof o.authority === "string" && typeof o.pauseMode === "boolean");
+  },
+  isSDK(o: any): o is MsgSetVaultPauseModeSDKType {
+    return o && (o.$typeUrl === MsgSetVaultPauseMode.typeUrl || typeof o.authority === "string" && typeof o.pause_mode === "boolean");
+  },
+  isAmino(o: any): o is MsgSetVaultPauseModeAmino {
+    return o && (o.$typeUrl === MsgSetVaultPauseMode.typeUrl || typeof o.authority === "string" && typeof o.pause_mode === "boolean");
+  },
   encode(message: MsgSetVaultPauseMode, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.authority !== "") {
       writer.uint32(10).string(message.authority);
@@ -6703,7 +7230,7 @@ export const MsgSetVaultPauseMode = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): MsgSetVaultPauseMode {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): MsgSetVaultPauseMode {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgSetVaultPauseMode();
@@ -6751,23 +7278,23 @@ export const MsgSetVaultPauseMode = {
     }
     return message;
   },
-  toAmino(message: MsgSetVaultPauseMode): MsgSetVaultPauseModeAmino {
+  toAmino(message: MsgSetVaultPauseMode, useInterfaces: boolean = true): MsgSetVaultPauseModeAmino {
     const obj: any = {};
-    obj.authority = message.authority;
-    obj.pause_mode = message.pauseMode;
+    obj.authority = message.authority === "" ? undefined : message.authority;
+    obj.pause_mode = message.pauseMode === false ? undefined : message.pauseMode;
     return obj;
   },
   fromAminoMsg(object: MsgSetVaultPauseModeAminoMsg): MsgSetVaultPauseMode {
     return MsgSetVaultPauseMode.fromAmino(object.value);
   },
-  toAminoMsg(message: MsgSetVaultPauseMode): MsgSetVaultPauseModeAminoMsg {
+  toAminoMsg(message: MsgSetVaultPauseMode, useInterfaces: boolean = true): MsgSetVaultPauseModeAminoMsg {
     return {
       type: "pryzm/amm/v1/SetVaultPauseMode",
-      value: MsgSetVaultPauseMode.toAmino(message)
+      value: MsgSetVaultPauseMode.toAmino(message, useInterfaces)
     };
   },
-  fromProtoMsg(message: MsgSetVaultPauseModeProtoMsg): MsgSetVaultPauseMode {
-    return MsgSetVaultPauseMode.decode(message.value);
+  fromProtoMsg(message: MsgSetVaultPauseModeProtoMsg, useInterfaces: boolean = true): MsgSetVaultPauseMode {
+    return MsgSetVaultPauseMode.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: MsgSetVaultPauseMode): Uint8Array {
     return MsgSetVaultPauseMode.encode(message).finish();
@@ -6779,15 +7306,26 @@ export const MsgSetVaultPauseMode = {
     };
   }
 };
+GlobalDecoderRegistry.register(MsgSetVaultPauseMode.typeUrl, MsgSetVaultPauseMode);
+GlobalDecoderRegistry.registerAminoProtoMapping(MsgSetVaultPauseMode.aminoType, MsgSetVaultPauseMode.typeUrl);
 function createBaseMsgSetVaultPauseModeResponse(): MsgSetVaultPauseModeResponse {
   return {};
 }
 export const MsgSetVaultPauseModeResponse = {
   typeUrl: "/pryzm.amm.v1.MsgSetVaultPauseModeResponse",
+  is(o: any): o is MsgSetVaultPauseModeResponse {
+    return o && o.$typeUrl === MsgSetVaultPauseModeResponse.typeUrl;
+  },
+  isSDK(o: any): o is MsgSetVaultPauseModeResponseSDKType {
+    return o && o.$typeUrl === MsgSetVaultPauseModeResponse.typeUrl;
+  },
+  isAmino(o: any): o is MsgSetVaultPauseModeResponseAmino {
+    return o && o.$typeUrl === MsgSetVaultPauseModeResponse.typeUrl;
+  },
   encode(_: MsgSetVaultPauseModeResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): MsgSetVaultPauseModeResponse {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): MsgSetVaultPauseModeResponse {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgSetVaultPauseModeResponse();
@@ -6816,15 +7354,15 @@ export const MsgSetVaultPauseModeResponse = {
     const message = createBaseMsgSetVaultPauseModeResponse();
     return message;
   },
-  toAmino(_: MsgSetVaultPauseModeResponse): MsgSetVaultPauseModeResponseAmino {
+  toAmino(_: MsgSetVaultPauseModeResponse, useInterfaces: boolean = true): MsgSetVaultPauseModeResponseAmino {
     const obj: any = {};
     return obj;
   },
   fromAminoMsg(object: MsgSetVaultPauseModeResponseAminoMsg): MsgSetVaultPauseModeResponse {
     return MsgSetVaultPauseModeResponse.fromAmino(object.value);
   },
-  fromProtoMsg(message: MsgSetVaultPauseModeResponseProtoMsg): MsgSetVaultPauseModeResponse {
-    return MsgSetVaultPauseModeResponse.decode(message.value);
+  fromProtoMsg(message: MsgSetVaultPauseModeResponseProtoMsg, useInterfaces: boolean = true): MsgSetVaultPauseModeResponse {
+    return MsgSetVaultPauseModeResponse.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: MsgSetVaultPauseModeResponse): Uint8Array {
     return MsgSetVaultPauseModeResponse.encode(message).finish();
@@ -6836,6 +7374,7 @@ export const MsgSetVaultPauseModeResponse = {
     };
   }
 };
+GlobalDecoderRegistry.register(MsgSetVaultPauseModeResponse.typeUrl, MsgSetVaultPauseModeResponse);
 function createBaseMsgCreateOraclePricePair(): MsgCreateOraclePricePair {
   return {
     authority: "",
@@ -6844,6 +7383,16 @@ function createBaseMsgCreateOraclePricePair(): MsgCreateOraclePricePair {
 }
 export const MsgCreateOraclePricePair = {
   typeUrl: "/pryzm.amm.v1.MsgCreateOraclePricePair",
+  aminoType: "pryzm/amm/v1/CreateOraclePricePair",
+  is(o: any): o is MsgCreateOraclePricePair {
+    return o && (o.$typeUrl === MsgCreateOraclePricePair.typeUrl || typeof o.authority === "string" && OraclePricePair.is(o.oraclePricePair));
+  },
+  isSDK(o: any): o is MsgCreateOraclePricePairSDKType {
+    return o && (o.$typeUrl === MsgCreateOraclePricePair.typeUrl || typeof o.authority === "string" && OraclePricePair.isSDK(o.oracle_price_pair));
+  },
+  isAmino(o: any): o is MsgCreateOraclePricePairAmino {
+    return o && (o.$typeUrl === MsgCreateOraclePricePair.typeUrl || typeof o.authority === "string" && OraclePricePair.isAmino(o.oracle_price_pair));
+  },
   encode(message: MsgCreateOraclePricePair, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.authority !== "") {
       writer.uint32(10).string(message.authority);
@@ -6853,7 +7402,7 @@ export const MsgCreateOraclePricePair = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): MsgCreateOraclePricePair {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): MsgCreateOraclePricePair {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgCreateOraclePricePair();
@@ -6864,7 +7413,7 @@ export const MsgCreateOraclePricePair = {
           message.authority = reader.string();
           break;
         case 2:
-          message.oraclePricePair = OraclePricePair.decode(reader, reader.uint32());
+          message.oraclePricePair = OraclePricePair.decode(reader, reader.uint32(), useInterfaces);
           break;
         default:
           reader.skipType(tag & 7);
@@ -6901,23 +7450,23 @@ export const MsgCreateOraclePricePair = {
     }
     return message;
   },
-  toAmino(message: MsgCreateOraclePricePair): MsgCreateOraclePricePairAmino {
+  toAmino(message: MsgCreateOraclePricePair, useInterfaces: boolean = true): MsgCreateOraclePricePairAmino {
     const obj: any = {};
-    obj.authority = message.authority;
-    obj.oracle_price_pair = message.oraclePricePair ? OraclePricePair.toAmino(message.oraclePricePair) : undefined;
+    obj.authority = message.authority === "" ? undefined : message.authority;
+    obj.oracle_price_pair = message.oraclePricePair ? OraclePricePair.toAmino(message.oraclePricePair, useInterfaces) : undefined;
     return obj;
   },
   fromAminoMsg(object: MsgCreateOraclePricePairAminoMsg): MsgCreateOraclePricePair {
     return MsgCreateOraclePricePair.fromAmino(object.value);
   },
-  toAminoMsg(message: MsgCreateOraclePricePair): MsgCreateOraclePricePairAminoMsg {
+  toAminoMsg(message: MsgCreateOraclePricePair, useInterfaces: boolean = true): MsgCreateOraclePricePairAminoMsg {
     return {
       type: "pryzm/amm/v1/CreateOraclePricePair",
-      value: MsgCreateOraclePricePair.toAmino(message)
+      value: MsgCreateOraclePricePair.toAmino(message, useInterfaces)
     };
   },
-  fromProtoMsg(message: MsgCreateOraclePricePairProtoMsg): MsgCreateOraclePricePair {
-    return MsgCreateOraclePricePair.decode(message.value);
+  fromProtoMsg(message: MsgCreateOraclePricePairProtoMsg, useInterfaces: boolean = true): MsgCreateOraclePricePair {
+    return MsgCreateOraclePricePair.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: MsgCreateOraclePricePair): Uint8Array {
     return MsgCreateOraclePricePair.encode(message).finish();
@@ -6929,15 +7478,26 @@ export const MsgCreateOraclePricePair = {
     };
   }
 };
+GlobalDecoderRegistry.register(MsgCreateOraclePricePair.typeUrl, MsgCreateOraclePricePair);
+GlobalDecoderRegistry.registerAminoProtoMapping(MsgCreateOraclePricePair.aminoType, MsgCreateOraclePricePair.typeUrl);
 function createBaseMsgCreateOraclePricePairResponse(): MsgCreateOraclePricePairResponse {
   return {};
 }
 export const MsgCreateOraclePricePairResponse = {
   typeUrl: "/pryzm.amm.v1.MsgCreateOraclePricePairResponse",
+  is(o: any): o is MsgCreateOraclePricePairResponse {
+    return o && o.$typeUrl === MsgCreateOraclePricePairResponse.typeUrl;
+  },
+  isSDK(o: any): o is MsgCreateOraclePricePairResponseSDKType {
+    return o && o.$typeUrl === MsgCreateOraclePricePairResponse.typeUrl;
+  },
+  isAmino(o: any): o is MsgCreateOraclePricePairResponseAmino {
+    return o && o.$typeUrl === MsgCreateOraclePricePairResponse.typeUrl;
+  },
   encode(_: MsgCreateOraclePricePairResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): MsgCreateOraclePricePairResponse {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): MsgCreateOraclePricePairResponse {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgCreateOraclePricePairResponse();
@@ -6966,15 +7526,15 @@ export const MsgCreateOraclePricePairResponse = {
     const message = createBaseMsgCreateOraclePricePairResponse();
     return message;
   },
-  toAmino(_: MsgCreateOraclePricePairResponse): MsgCreateOraclePricePairResponseAmino {
+  toAmino(_: MsgCreateOraclePricePairResponse, useInterfaces: boolean = true): MsgCreateOraclePricePairResponseAmino {
     const obj: any = {};
     return obj;
   },
   fromAminoMsg(object: MsgCreateOraclePricePairResponseAminoMsg): MsgCreateOraclePricePairResponse {
     return MsgCreateOraclePricePairResponse.fromAmino(object.value);
   },
-  fromProtoMsg(message: MsgCreateOraclePricePairResponseProtoMsg): MsgCreateOraclePricePairResponse {
-    return MsgCreateOraclePricePairResponse.decode(message.value);
+  fromProtoMsg(message: MsgCreateOraclePricePairResponseProtoMsg, useInterfaces: boolean = true): MsgCreateOraclePricePairResponse {
+    return MsgCreateOraclePricePairResponse.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: MsgCreateOraclePricePairResponse): Uint8Array {
     return MsgCreateOraclePricePairResponse.encode(message).finish();
@@ -6986,6 +7546,7 @@ export const MsgCreateOraclePricePairResponse = {
     };
   }
 };
+GlobalDecoderRegistry.register(MsgCreateOraclePricePairResponse.typeUrl, MsgCreateOraclePricePairResponse);
 function createBaseMsgUpdateOraclePricePair(): MsgUpdateOraclePricePair {
   return {
     authority: "",
@@ -6994,6 +7555,16 @@ function createBaseMsgUpdateOraclePricePair(): MsgUpdateOraclePricePair {
 }
 export const MsgUpdateOraclePricePair = {
   typeUrl: "/pryzm.amm.v1.MsgUpdateOraclePricePair",
+  aminoType: "pryzm/amm/v1/UpdateOraclePricePair",
+  is(o: any): o is MsgUpdateOraclePricePair {
+    return o && (o.$typeUrl === MsgUpdateOraclePricePair.typeUrl || typeof o.authority === "string" && OraclePricePair.is(o.oraclePricePair));
+  },
+  isSDK(o: any): o is MsgUpdateOraclePricePairSDKType {
+    return o && (o.$typeUrl === MsgUpdateOraclePricePair.typeUrl || typeof o.authority === "string" && OraclePricePair.isSDK(o.oracle_price_pair));
+  },
+  isAmino(o: any): o is MsgUpdateOraclePricePairAmino {
+    return o && (o.$typeUrl === MsgUpdateOraclePricePair.typeUrl || typeof o.authority === "string" && OraclePricePair.isAmino(o.oracle_price_pair));
+  },
   encode(message: MsgUpdateOraclePricePair, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.authority !== "") {
       writer.uint32(10).string(message.authority);
@@ -7003,7 +7574,7 @@ export const MsgUpdateOraclePricePair = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): MsgUpdateOraclePricePair {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): MsgUpdateOraclePricePair {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgUpdateOraclePricePair();
@@ -7014,7 +7585,7 @@ export const MsgUpdateOraclePricePair = {
           message.authority = reader.string();
           break;
         case 2:
-          message.oraclePricePair = OraclePricePair.decode(reader, reader.uint32());
+          message.oraclePricePair = OraclePricePair.decode(reader, reader.uint32(), useInterfaces);
           break;
         default:
           reader.skipType(tag & 7);
@@ -7051,23 +7622,23 @@ export const MsgUpdateOraclePricePair = {
     }
     return message;
   },
-  toAmino(message: MsgUpdateOraclePricePair): MsgUpdateOraclePricePairAmino {
+  toAmino(message: MsgUpdateOraclePricePair, useInterfaces: boolean = true): MsgUpdateOraclePricePairAmino {
     const obj: any = {};
-    obj.authority = message.authority;
-    obj.oracle_price_pair = message.oraclePricePair ? OraclePricePair.toAmino(message.oraclePricePair) : undefined;
+    obj.authority = message.authority === "" ? undefined : message.authority;
+    obj.oracle_price_pair = message.oraclePricePair ? OraclePricePair.toAmino(message.oraclePricePair, useInterfaces) : undefined;
     return obj;
   },
   fromAminoMsg(object: MsgUpdateOraclePricePairAminoMsg): MsgUpdateOraclePricePair {
     return MsgUpdateOraclePricePair.fromAmino(object.value);
   },
-  toAminoMsg(message: MsgUpdateOraclePricePair): MsgUpdateOraclePricePairAminoMsg {
+  toAminoMsg(message: MsgUpdateOraclePricePair, useInterfaces: boolean = true): MsgUpdateOraclePricePairAminoMsg {
     return {
       type: "pryzm/amm/v1/UpdateOraclePricePair",
-      value: MsgUpdateOraclePricePair.toAmino(message)
+      value: MsgUpdateOraclePricePair.toAmino(message, useInterfaces)
     };
   },
-  fromProtoMsg(message: MsgUpdateOraclePricePairProtoMsg): MsgUpdateOraclePricePair {
-    return MsgUpdateOraclePricePair.decode(message.value);
+  fromProtoMsg(message: MsgUpdateOraclePricePairProtoMsg, useInterfaces: boolean = true): MsgUpdateOraclePricePair {
+    return MsgUpdateOraclePricePair.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: MsgUpdateOraclePricePair): Uint8Array {
     return MsgUpdateOraclePricePair.encode(message).finish();
@@ -7079,15 +7650,26 @@ export const MsgUpdateOraclePricePair = {
     };
   }
 };
+GlobalDecoderRegistry.register(MsgUpdateOraclePricePair.typeUrl, MsgUpdateOraclePricePair);
+GlobalDecoderRegistry.registerAminoProtoMapping(MsgUpdateOraclePricePair.aminoType, MsgUpdateOraclePricePair.typeUrl);
 function createBaseMsgUpdateOraclePricePairResponse(): MsgUpdateOraclePricePairResponse {
   return {};
 }
 export const MsgUpdateOraclePricePairResponse = {
   typeUrl: "/pryzm.amm.v1.MsgUpdateOraclePricePairResponse",
+  is(o: any): o is MsgUpdateOraclePricePairResponse {
+    return o && o.$typeUrl === MsgUpdateOraclePricePairResponse.typeUrl;
+  },
+  isSDK(o: any): o is MsgUpdateOraclePricePairResponseSDKType {
+    return o && o.$typeUrl === MsgUpdateOraclePricePairResponse.typeUrl;
+  },
+  isAmino(o: any): o is MsgUpdateOraclePricePairResponseAmino {
+    return o && o.$typeUrl === MsgUpdateOraclePricePairResponse.typeUrl;
+  },
   encode(_: MsgUpdateOraclePricePairResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): MsgUpdateOraclePricePairResponse {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): MsgUpdateOraclePricePairResponse {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgUpdateOraclePricePairResponse();
@@ -7116,15 +7698,15 @@ export const MsgUpdateOraclePricePairResponse = {
     const message = createBaseMsgUpdateOraclePricePairResponse();
     return message;
   },
-  toAmino(_: MsgUpdateOraclePricePairResponse): MsgUpdateOraclePricePairResponseAmino {
+  toAmino(_: MsgUpdateOraclePricePairResponse, useInterfaces: boolean = true): MsgUpdateOraclePricePairResponseAmino {
     const obj: any = {};
     return obj;
   },
   fromAminoMsg(object: MsgUpdateOraclePricePairResponseAminoMsg): MsgUpdateOraclePricePairResponse {
     return MsgUpdateOraclePricePairResponse.fromAmino(object.value);
   },
-  fromProtoMsg(message: MsgUpdateOraclePricePairResponseProtoMsg): MsgUpdateOraclePricePairResponse {
-    return MsgUpdateOraclePricePairResponse.decode(message.value);
+  fromProtoMsg(message: MsgUpdateOraclePricePairResponseProtoMsg, useInterfaces: boolean = true): MsgUpdateOraclePricePairResponse {
+    return MsgUpdateOraclePricePairResponse.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: MsgUpdateOraclePricePairResponse): Uint8Array {
     return MsgUpdateOraclePricePairResponse.encode(message).finish();
@@ -7136,6 +7718,7 @@ export const MsgUpdateOraclePricePairResponse = {
     };
   }
 };
+GlobalDecoderRegistry.register(MsgUpdateOraclePricePairResponse.typeUrl, MsgUpdateOraclePricePairResponse);
 function createBaseMsgDeleteOraclePricePair(): MsgDeleteOraclePricePair {
   return {
     authority: "",
@@ -7144,6 +7727,16 @@ function createBaseMsgDeleteOraclePricePair(): MsgDeleteOraclePricePair {
 }
 export const MsgDeleteOraclePricePair = {
   typeUrl: "/pryzm.amm.v1.MsgDeleteOraclePricePair",
+  aminoType: "pryzm/amm/v1/DeleteOraclePricePair",
+  is(o: any): o is MsgDeleteOraclePricePair {
+    return o && (o.$typeUrl === MsgDeleteOraclePricePair.typeUrl || typeof o.authority === "string" && typeof o.assetId === "string");
+  },
+  isSDK(o: any): o is MsgDeleteOraclePricePairSDKType {
+    return o && (o.$typeUrl === MsgDeleteOraclePricePair.typeUrl || typeof o.authority === "string" && typeof o.asset_id === "string");
+  },
+  isAmino(o: any): o is MsgDeleteOraclePricePairAmino {
+    return o && (o.$typeUrl === MsgDeleteOraclePricePair.typeUrl || typeof o.authority === "string" && typeof o.asset_id === "string");
+  },
   encode(message: MsgDeleteOraclePricePair, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.authority !== "") {
       writer.uint32(10).string(message.authority);
@@ -7153,7 +7746,7 @@ export const MsgDeleteOraclePricePair = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): MsgDeleteOraclePricePair {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): MsgDeleteOraclePricePair {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgDeleteOraclePricePair();
@@ -7201,23 +7794,23 @@ export const MsgDeleteOraclePricePair = {
     }
     return message;
   },
-  toAmino(message: MsgDeleteOraclePricePair): MsgDeleteOraclePricePairAmino {
+  toAmino(message: MsgDeleteOraclePricePair, useInterfaces: boolean = true): MsgDeleteOraclePricePairAmino {
     const obj: any = {};
-    obj.authority = message.authority;
-    obj.asset_id = message.assetId;
+    obj.authority = message.authority === "" ? undefined : message.authority;
+    obj.asset_id = message.assetId === "" ? undefined : message.assetId;
     return obj;
   },
   fromAminoMsg(object: MsgDeleteOraclePricePairAminoMsg): MsgDeleteOraclePricePair {
     return MsgDeleteOraclePricePair.fromAmino(object.value);
   },
-  toAminoMsg(message: MsgDeleteOraclePricePair): MsgDeleteOraclePricePairAminoMsg {
+  toAminoMsg(message: MsgDeleteOraclePricePair, useInterfaces: boolean = true): MsgDeleteOraclePricePairAminoMsg {
     return {
       type: "pryzm/amm/v1/DeleteOraclePricePair",
-      value: MsgDeleteOraclePricePair.toAmino(message)
+      value: MsgDeleteOraclePricePair.toAmino(message, useInterfaces)
     };
   },
-  fromProtoMsg(message: MsgDeleteOraclePricePairProtoMsg): MsgDeleteOraclePricePair {
-    return MsgDeleteOraclePricePair.decode(message.value);
+  fromProtoMsg(message: MsgDeleteOraclePricePairProtoMsg, useInterfaces: boolean = true): MsgDeleteOraclePricePair {
+    return MsgDeleteOraclePricePair.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: MsgDeleteOraclePricePair): Uint8Array {
     return MsgDeleteOraclePricePair.encode(message).finish();
@@ -7229,15 +7822,26 @@ export const MsgDeleteOraclePricePair = {
     };
   }
 };
+GlobalDecoderRegistry.register(MsgDeleteOraclePricePair.typeUrl, MsgDeleteOraclePricePair);
+GlobalDecoderRegistry.registerAminoProtoMapping(MsgDeleteOraclePricePair.aminoType, MsgDeleteOraclePricePair.typeUrl);
 function createBaseMsgDeleteOraclePricePairResponse(): MsgDeleteOraclePricePairResponse {
   return {};
 }
 export const MsgDeleteOraclePricePairResponse = {
   typeUrl: "/pryzm.amm.v1.MsgDeleteOraclePricePairResponse",
+  is(o: any): o is MsgDeleteOraclePricePairResponse {
+    return o && o.$typeUrl === MsgDeleteOraclePricePairResponse.typeUrl;
+  },
+  isSDK(o: any): o is MsgDeleteOraclePricePairResponseSDKType {
+    return o && o.$typeUrl === MsgDeleteOraclePricePairResponse.typeUrl;
+  },
+  isAmino(o: any): o is MsgDeleteOraclePricePairResponseAmino {
+    return o && o.$typeUrl === MsgDeleteOraclePricePairResponse.typeUrl;
+  },
   encode(_: MsgDeleteOraclePricePairResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): MsgDeleteOraclePricePairResponse {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): MsgDeleteOraclePricePairResponse {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgDeleteOraclePricePairResponse();
@@ -7266,15 +7870,15 @@ export const MsgDeleteOraclePricePairResponse = {
     const message = createBaseMsgDeleteOraclePricePairResponse();
     return message;
   },
-  toAmino(_: MsgDeleteOraclePricePairResponse): MsgDeleteOraclePricePairResponseAmino {
+  toAmino(_: MsgDeleteOraclePricePairResponse, useInterfaces: boolean = true): MsgDeleteOraclePricePairResponseAmino {
     const obj: any = {};
     return obj;
   },
   fromAminoMsg(object: MsgDeleteOraclePricePairResponseAminoMsg): MsgDeleteOraclePricePairResponse {
     return MsgDeleteOraclePricePairResponse.fromAmino(object.value);
   },
-  fromProtoMsg(message: MsgDeleteOraclePricePairResponseProtoMsg): MsgDeleteOraclePricePairResponse {
-    return MsgDeleteOraclePricePairResponse.decode(message.value);
+  fromProtoMsg(message: MsgDeleteOraclePricePairResponseProtoMsg, useInterfaces: boolean = true): MsgDeleteOraclePricePairResponse {
+    return MsgDeleteOraclePricePairResponse.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: MsgDeleteOraclePricePairResponse): Uint8Array {
     return MsgDeleteOraclePricePairResponse.encode(message).finish();
@@ -7286,6 +7890,7 @@ export const MsgDeleteOraclePricePairResponse = {
     };
   }
 };
+GlobalDecoderRegistry.register(MsgDeleteOraclePricePairResponse.typeUrl, MsgDeleteOraclePricePairResponse);
 function createBaseMsgSetSwapProtocolFee(): MsgSetSwapProtocolFee {
   return {
     authority: "",
@@ -7295,6 +7900,16 @@ function createBaseMsgSetSwapProtocolFee(): MsgSetSwapProtocolFee {
 }
 export const MsgSetSwapProtocolFee = {
   typeUrl: "/pryzm.amm.v1.MsgSetSwapProtocolFee",
+  aminoType: "pryzm/amm/v1/SetSwapProtocolFee",
+  is(o: any): o is MsgSetSwapProtocolFee {
+    return o && (o.$typeUrl === MsgSetSwapProtocolFee.typeUrl || typeof o.authority === "string" && typeof o.poolId === "bigint");
+  },
+  isSDK(o: any): o is MsgSetSwapProtocolFeeSDKType {
+    return o && (o.$typeUrl === MsgSetSwapProtocolFee.typeUrl || typeof o.authority === "string" && typeof o.pool_id === "bigint");
+  },
+  isAmino(o: any): o is MsgSetSwapProtocolFeeAmino {
+    return o && (o.$typeUrl === MsgSetSwapProtocolFee.typeUrl || typeof o.authority === "string" && typeof o.pool_id === "bigint");
+  },
   encode(message: MsgSetSwapProtocolFee, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.authority !== "") {
       writer.uint32(10).string(message.authority);
@@ -7307,7 +7922,7 @@ export const MsgSetSwapProtocolFee = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): MsgSetSwapProtocolFee {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): MsgSetSwapProtocolFee {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgSetSwapProtocolFee();
@@ -7364,24 +7979,24 @@ export const MsgSetSwapProtocolFee = {
     }
     return message;
   },
-  toAmino(message: MsgSetSwapProtocolFee): MsgSetSwapProtocolFeeAmino {
+  toAmino(message: MsgSetSwapProtocolFee, useInterfaces: boolean = true): MsgSetSwapProtocolFeeAmino {
     const obj: any = {};
-    obj.authority = message.authority;
+    obj.authority = message.authority === "" ? undefined : message.authority;
     obj.pool_id = message.poolId ? message.poolId.toString() : undefined;
-    obj.swap_protocol_fee = message.swapProtocolFee;
+    obj.swap_protocol_fee = padDecimal(message.swapProtocolFee) === null ? undefined : padDecimal(message.swapProtocolFee);
     return obj;
   },
   fromAminoMsg(object: MsgSetSwapProtocolFeeAminoMsg): MsgSetSwapProtocolFee {
     return MsgSetSwapProtocolFee.fromAmino(object.value);
   },
-  toAminoMsg(message: MsgSetSwapProtocolFee): MsgSetSwapProtocolFeeAminoMsg {
+  toAminoMsg(message: MsgSetSwapProtocolFee, useInterfaces: boolean = true): MsgSetSwapProtocolFeeAminoMsg {
     return {
       type: "pryzm/amm/v1/SetSwapProtocolFee",
-      value: MsgSetSwapProtocolFee.toAmino(message)
+      value: MsgSetSwapProtocolFee.toAmino(message, useInterfaces)
     };
   },
-  fromProtoMsg(message: MsgSetSwapProtocolFeeProtoMsg): MsgSetSwapProtocolFee {
-    return MsgSetSwapProtocolFee.decode(message.value);
+  fromProtoMsg(message: MsgSetSwapProtocolFeeProtoMsg, useInterfaces: boolean = true): MsgSetSwapProtocolFee {
+    return MsgSetSwapProtocolFee.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: MsgSetSwapProtocolFee): Uint8Array {
     return MsgSetSwapProtocolFee.encode(message).finish();
@@ -7393,15 +8008,26 @@ export const MsgSetSwapProtocolFee = {
     };
   }
 };
+GlobalDecoderRegistry.register(MsgSetSwapProtocolFee.typeUrl, MsgSetSwapProtocolFee);
+GlobalDecoderRegistry.registerAminoProtoMapping(MsgSetSwapProtocolFee.aminoType, MsgSetSwapProtocolFee.typeUrl);
 function createBaseMsgSetSwapProtocolFeeResponse(): MsgSetSwapProtocolFeeResponse {
   return {};
 }
 export const MsgSetSwapProtocolFeeResponse = {
   typeUrl: "/pryzm.amm.v1.MsgSetSwapProtocolFeeResponse",
+  is(o: any): o is MsgSetSwapProtocolFeeResponse {
+    return o && o.$typeUrl === MsgSetSwapProtocolFeeResponse.typeUrl;
+  },
+  isSDK(o: any): o is MsgSetSwapProtocolFeeResponseSDKType {
+    return o && o.$typeUrl === MsgSetSwapProtocolFeeResponse.typeUrl;
+  },
+  isAmino(o: any): o is MsgSetSwapProtocolFeeResponseAmino {
+    return o && o.$typeUrl === MsgSetSwapProtocolFeeResponse.typeUrl;
+  },
   encode(_: MsgSetSwapProtocolFeeResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): MsgSetSwapProtocolFeeResponse {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): MsgSetSwapProtocolFeeResponse {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgSetSwapProtocolFeeResponse();
@@ -7430,15 +8056,15 @@ export const MsgSetSwapProtocolFeeResponse = {
     const message = createBaseMsgSetSwapProtocolFeeResponse();
     return message;
   },
-  toAmino(_: MsgSetSwapProtocolFeeResponse): MsgSetSwapProtocolFeeResponseAmino {
+  toAmino(_: MsgSetSwapProtocolFeeResponse, useInterfaces: boolean = true): MsgSetSwapProtocolFeeResponseAmino {
     const obj: any = {};
     return obj;
   },
   fromAminoMsg(object: MsgSetSwapProtocolFeeResponseAminoMsg): MsgSetSwapProtocolFeeResponse {
     return MsgSetSwapProtocolFeeResponse.fromAmino(object.value);
   },
-  fromProtoMsg(message: MsgSetSwapProtocolFeeResponseProtoMsg): MsgSetSwapProtocolFeeResponse {
-    return MsgSetSwapProtocolFeeResponse.decode(message.value);
+  fromProtoMsg(message: MsgSetSwapProtocolFeeResponseProtoMsg, useInterfaces: boolean = true): MsgSetSwapProtocolFeeResponse {
+    return MsgSetSwapProtocolFeeResponse.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: MsgSetSwapProtocolFeeResponse): Uint8Array {
     return MsgSetSwapProtocolFeeResponse.encode(message).finish();
@@ -7450,6 +8076,7 @@ export const MsgSetSwapProtocolFeeResponse = {
     };
   }
 };
+GlobalDecoderRegistry.register(MsgSetSwapProtocolFeeResponse.typeUrl, MsgSetSwapProtocolFeeResponse);
 function createBaseMsgSetJoinExitProtocolFee(): MsgSetJoinExitProtocolFee {
   return {
     authority: "",
@@ -7459,6 +8086,16 @@ function createBaseMsgSetJoinExitProtocolFee(): MsgSetJoinExitProtocolFee {
 }
 export const MsgSetJoinExitProtocolFee = {
   typeUrl: "/pryzm.amm.v1.MsgSetJoinExitProtocolFee",
+  aminoType: "pryzm/amm/v1/SetJoinExitProtocolFee",
+  is(o: any): o is MsgSetJoinExitProtocolFee {
+    return o && (o.$typeUrl === MsgSetJoinExitProtocolFee.typeUrl || typeof o.authority === "string" && typeof o.poolId === "bigint");
+  },
+  isSDK(o: any): o is MsgSetJoinExitProtocolFeeSDKType {
+    return o && (o.$typeUrl === MsgSetJoinExitProtocolFee.typeUrl || typeof o.authority === "string" && typeof o.pool_id === "bigint");
+  },
+  isAmino(o: any): o is MsgSetJoinExitProtocolFeeAmino {
+    return o && (o.$typeUrl === MsgSetJoinExitProtocolFee.typeUrl || typeof o.authority === "string" && typeof o.pool_id === "bigint");
+  },
   encode(message: MsgSetJoinExitProtocolFee, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.authority !== "") {
       writer.uint32(10).string(message.authority);
@@ -7471,7 +8108,7 @@ export const MsgSetJoinExitProtocolFee = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): MsgSetJoinExitProtocolFee {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): MsgSetJoinExitProtocolFee {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgSetJoinExitProtocolFee();
@@ -7528,24 +8165,24 @@ export const MsgSetJoinExitProtocolFee = {
     }
     return message;
   },
-  toAmino(message: MsgSetJoinExitProtocolFee): MsgSetJoinExitProtocolFeeAmino {
+  toAmino(message: MsgSetJoinExitProtocolFee, useInterfaces: boolean = true): MsgSetJoinExitProtocolFeeAmino {
     const obj: any = {};
-    obj.authority = message.authority;
+    obj.authority = message.authority === "" ? undefined : message.authority;
     obj.pool_id = message.poolId ? message.poolId.toString() : undefined;
-    obj.join_exit_protocol_fee = message.joinExitProtocolFee;
+    obj.join_exit_protocol_fee = padDecimal(message.joinExitProtocolFee) === null ? undefined : padDecimal(message.joinExitProtocolFee);
     return obj;
   },
   fromAminoMsg(object: MsgSetJoinExitProtocolFeeAminoMsg): MsgSetJoinExitProtocolFee {
     return MsgSetJoinExitProtocolFee.fromAmino(object.value);
   },
-  toAminoMsg(message: MsgSetJoinExitProtocolFee): MsgSetJoinExitProtocolFeeAminoMsg {
+  toAminoMsg(message: MsgSetJoinExitProtocolFee, useInterfaces: boolean = true): MsgSetJoinExitProtocolFeeAminoMsg {
     return {
       type: "pryzm/amm/v1/SetJoinExitProtocolFee",
-      value: MsgSetJoinExitProtocolFee.toAmino(message)
+      value: MsgSetJoinExitProtocolFee.toAmino(message, useInterfaces)
     };
   },
-  fromProtoMsg(message: MsgSetJoinExitProtocolFeeProtoMsg): MsgSetJoinExitProtocolFee {
-    return MsgSetJoinExitProtocolFee.decode(message.value);
+  fromProtoMsg(message: MsgSetJoinExitProtocolFeeProtoMsg, useInterfaces: boolean = true): MsgSetJoinExitProtocolFee {
+    return MsgSetJoinExitProtocolFee.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: MsgSetJoinExitProtocolFee): Uint8Array {
     return MsgSetJoinExitProtocolFee.encode(message).finish();
@@ -7557,15 +8194,26 @@ export const MsgSetJoinExitProtocolFee = {
     };
   }
 };
+GlobalDecoderRegistry.register(MsgSetJoinExitProtocolFee.typeUrl, MsgSetJoinExitProtocolFee);
+GlobalDecoderRegistry.registerAminoProtoMapping(MsgSetJoinExitProtocolFee.aminoType, MsgSetJoinExitProtocolFee.typeUrl);
 function createBaseMsgSetJoinExitProtocolFeeResponse(): MsgSetJoinExitProtocolFeeResponse {
   return {};
 }
 export const MsgSetJoinExitProtocolFeeResponse = {
   typeUrl: "/pryzm.amm.v1.MsgSetJoinExitProtocolFeeResponse",
+  is(o: any): o is MsgSetJoinExitProtocolFeeResponse {
+    return o && o.$typeUrl === MsgSetJoinExitProtocolFeeResponse.typeUrl;
+  },
+  isSDK(o: any): o is MsgSetJoinExitProtocolFeeResponseSDKType {
+    return o && o.$typeUrl === MsgSetJoinExitProtocolFeeResponse.typeUrl;
+  },
+  isAmino(o: any): o is MsgSetJoinExitProtocolFeeResponseAmino {
+    return o && o.$typeUrl === MsgSetJoinExitProtocolFeeResponse.typeUrl;
+  },
   encode(_: MsgSetJoinExitProtocolFeeResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): MsgSetJoinExitProtocolFeeResponse {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): MsgSetJoinExitProtocolFeeResponse {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgSetJoinExitProtocolFeeResponse();
@@ -7594,15 +8242,15 @@ export const MsgSetJoinExitProtocolFeeResponse = {
     const message = createBaseMsgSetJoinExitProtocolFeeResponse();
     return message;
   },
-  toAmino(_: MsgSetJoinExitProtocolFeeResponse): MsgSetJoinExitProtocolFeeResponseAmino {
+  toAmino(_: MsgSetJoinExitProtocolFeeResponse, useInterfaces: boolean = true): MsgSetJoinExitProtocolFeeResponseAmino {
     const obj: any = {};
     return obj;
   },
   fromAminoMsg(object: MsgSetJoinExitProtocolFeeResponseAminoMsg): MsgSetJoinExitProtocolFeeResponse {
     return MsgSetJoinExitProtocolFeeResponse.fromAmino(object.value);
   },
-  fromProtoMsg(message: MsgSetJoinExitProtocolFeeResponseProtoMsg): MsgSetJoinExitProtocolFeeResponse {
-    return MsgSetJoinExitProtocolFeeResponse.decode(message.value);
+  fromProtoMsg(message: MsgSetJoinExitProtocolFeeResponseProtoMsg, useInterfaces: boolean = true): MsgSetJoinExitProtocolFeeResponse {
+    return MsgSetJoinExitProtocolFeeResponse.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: MsgSetJoinExitProtocolFeeResponse): Uint8Array {
     return MsgSetJoinExitProtocolFeeResponse.encode(message).finish();
@@ -7614,6 +8262,7 @@ export const MsgSetJoinExitProtocolFeeResponse = {
     };
   }
 };
+GlobalDecoderRegistry.register(MsgSetJoinExitProtocolFeeResponse.typeUrl, MsgSetJoinExitProtocolFeeResponse);
 function createBaseMsgIntroduceYammLpToWeightedPool(): MsgIntroduceYammLpToWeightedPool {
   return {
     creator: "",
@@ -7625,6 +8274,16 @@ function createBaseMsgIntroduceYammLpToWeightedPool(): MsgIntroduceYammLpToWeigh
 }
 export const MsgIntroduceYammLpToWeightedPool = {
   typeUrl: "/pryzm.amm.v1.MsgIntroduceYammLpToWeightedPool",
+  aminoType: "pryzm/amm/v1/IntroYammLpToWeighted",
+  is(o: any): o is MsgIntroduceYammLpToWeightedPool {
+    return o && (o.$typeUrl === MsgIntroduceYammLpToWeightedPool.typeUrl || typeof o.creator === "string" && typeof o.weightedPoolId === "bigint" && typeof o.yammPoolId === "bigint" && typeof o.tokenNormalizedWeight === "string" && typeof o.virtualBalanceIntervalMillis === "bigint");
+  },
+  isSDK(o: any): o is MsgIntroduceYammLpToWeightedPoolSDKType {
+    return o && (o.$typeUrl === MsgIntroduceYammLpToWeightedPool.typeUrl || typeof o.creator === "string" && typeof o.weighted_pool_id === "bigint" && typeof o.yamm_pool_id === "bigint" && typeof o.token_normalized_weight === "string" && typeof o.virtual_balance_interval_millis === "bigint");
+  },
+  isAmino(o: any): o is MsgIntroduceYammLpToWeightedPoolAmino {
+    return o && (o.$typeUrl === MsgIntroduceYammLpToWeightedPool.typeUrl || typeof o.creator === "string" && typeof o.weighted_pool_id === "bigint" && typeof o.yamm_pool_id === "bigint" && typeof o.token_normalized_weight === "string" && typeof o.virtual_balance_interval_millis === "bigint");
+  },
   encode(message: MsgIntroduceYammLpToWeightedPool, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.creator !== "") {
       writer.uint32(10).string(message.creator);
@@ -7643,7 +8302,7 @@ export const MsgIntroduceYammLpToWeightedPool = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): MsgIntroduceYammLpToWeightedPool {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): MsgIntroduceYammLpToWeightedPool {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgIntroduceYammLpToWeightedPool();
@@ -7718,26 +8377,26 @@ export const MsgIntroduceYammLpToWeightedPool = {
     }
     return message;
   },
-  toAmino(message: MsgIntroduceYammLpToWeightedPool): MsgIntroduceYammLpToWeightedPoolAmino {
+  toAmino(message: MsgIntroduceYammLpToWeightedPool, useInterfaces: boolean = true): MsgIntroduceYammLpToWeightedPoolAmino {
     const obj: any = {};
-    obj.creator = message.creator;
+    obj.creator = message.creator === "" ? undefined : message.creator;
     obj.weighted_pool_id = message.weightedPoolId ? message.weightedPoolId.toString() : undefined;
     obj.yamm_pool_id = message.yammPoolId ? message.yammPoolId.toString() : undefined;
-    obj.token_normalized_weight = message.tokenNormalizedWeight;
+    obj.token_normalized_weight = padDecimal(message.tokenNormalizedWeight) === "" ? undefined : padDecimal(message.tokenNormalizedWeight);
     obj.virtual_balance_interval_millis = message.virtualBalanceIntervalMillis ? message.virtualBalanceIntervalMillis.toString() : undefined;
     return obj;
   },
   fromAminoMsg(object: MsgIntroduceYammLpToWeightedPoolAminoMsg): MsgIntroduceYammLpToWeightedPool {
     return MsgIntroduceYammLpToWeightedPool.fromAmino(object.value);
   },
-  toAminoMsg(message: MsgIntroduceYammLpToWeightedPool): MsgIntroduceYammLpToWeightedPoolAminoMsg {
+  toAminoMsg(message: MsgIntroduceYammLpToWeightedPool, useInterfaces: boolean = true): MsgIntroduceYammLpToWeightedPoolAminoMsg {
     return {
       type: "pryzm/amm/v1/IntroYammLpToWeighted",
-      value: MsgIntroduceYammLpToWeightedPool.toAmino(message)
+      value: MsgIntroduceYammLpToWeightedPool.toAmino(message, useInterfaces)
     };
   },
-  fromProtoMsg(message: MsgIntroduceYammLpToWeightedPoolProtoMsg): MsgIntroduceYammLpToWeightedPool {
-    return MsgIntroduceYammLpToWeightedPool.decode(message.value);
+  fromProtoMsg(message: MsgIntroduceYammLpToWeightedPoolProtoMsg, useInterfaces: boolean = true): MsgIntroduceYammLpToWeightedPool {
+    return MsgIntroduceYammLpToWeightedPool.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: MsgIntroduceYammLpToWeightedPool): Uint8Array {
     return MsgIntroduceYammLpToWeightedPool.encode(message).finish();
@@ -7749,15 +8408,26 @@ export const MsgIntroduceYammLpToWeightedPool = {
     };
   }
 };
+GlobalDecoderRegistry.register(MsgIntroduceYammLpToWeightedPool.typeUrl, MsgIntroduceYammLpToWeightedPool);
+GlobalDecoderRegistry.registerAminoProtoMapping(MsgIntroduceYammLpToWeightedPool.aminoType, MsgIntroduceYammLpToWeightedPool.typeUrl);
 function createBaseMsgIntroduceYammLpToWeightedPoolResponse(): MsgIntroduceYammLpToWeightedPoolResponse {
   return {};
 }
 export const MsgIntroduceYammLpToWeightedPoolResponse = {
   typeUrl: "/pryzm.amm.v1.MsgIntroduceYammLpToWeightedPoolResponse",
+  is(o: any): o is MsgIntroduceYammLpToWeightedPoolResponse {
+    return o && o.$typeUrl === MsgIntroduceYammLpToWeightedPoolResponse.typeUrl;
+  },
+  isSDK(o: any): o is MsgIntroduceYammLpToWeightedPoolResponseSDKType {
+    return o && o.$typeUrl === MsgIntroduceYammLpToWeightedPoolResponse.typeUrl;
+  },
+  isAmino(o: any): o is MsgIntroduceYammLpToWeightedPoolResponseAmino {
+    return o && o.$typeUrl === MsgIntroduceYammLpToWeightedPoolResponse.typeUrl;
+  },
   encode(_: MsgIntroduceYammLpToWeightedPoolResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): MsgIntroduceYammLpToWeightedPoolResponse {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): MsgIntroduceYammLpToWeightedPoolResponse {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgIntroduceYammLpToWeightedPoolResponse();
@@ -7786,15 +8456,15 @@ export const MsgIntroduceYammLpToWeightedPoolResponse = {
     const message = createBaseMsgIntroduceYammLpToWeightedPoolResponse();
     return message;
   },
-  toAmino(_: MsgIntroduceYammLpToWeightedPoolResponse): MsgIntroduceYammLpToWeightedPoolResponseAmino {
+  toAmino(_: MsgIntroduceYammLpToWeightedPoolResponse, useInterfaces: boolean = true): MsgIntroduceYammLpToWeightedPoolResponseAmino {
     const obj: any = {};
     return obj;
   },
   fromAminoMsg(object: MsgIntroduceYammLpToWeightedPoolResponseAminoMsg): MsgIntroduceYammLpToWeightedPoolResponse {
     return MsgIntroduceYammLpToWeightedPoolResponse.fromAmino(object.value);
   },
-  fromProtoMsg(message: MsgIntroduceYammLpToWeightedPoolResponseProtoMsg): MsgIntroduceYammLpToWeightedPoolResponse {
-    return MsgIntroduceYammLpToWeightedPoolResponse.decode(message.value);
+  fromProtoMsg(message: MsgIntroduceYammLpToWeightedPoolResponseProtoMsg, useInterfaces: boolean = true): MsgIntroduceYammLpToWeightedPoolResponse {
+    return MsgIntroduceYammLpToWeightedPoolResponse.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: MsgIntroduceYammLpToWeightedPoolResponse): Uint8Array {
     return MsgIntroduceYammLpToWeightedPoolResponse.encode(message).finish();
@@ -7806,6 +8476,7 @@ export const MsgIntroduceYammLpToWeightedPoolResponse = {
     };
   }
 };
+GlobalDecoderRegistry.register(MsgIntroduceYammLpToWeightedPoolResponse.typeUrl, MsgIntroduceYammLpToWeightedPoolResponse);
 function createBaseMsgIntroduceAssetBaseTokenToWeightedPool(): MsgIntroduceAssetBaseTokenToWeightedPool {
   return {
     creator: "",
@@ -7818,6 +8489,16 @@ function createBaseMsgIntroduceAssetBaseTokenToWeightedPool(): MsgIntroduceAsset
 }
 export const MsgIntroduceAssetBaseTokenToWeightedPool = {
   typeUrl: "/pryzm.amm.v1.MsgIntroduceAssetBaseTokenToWeightedPool",
+  aminoType: "pryzm/amm/v1/IntroBaseTokenToWeighted",
+  is(o: any): o is MsgIntroduceAssetBaseTokenToWeightedPool {
+    return o && (o.$typeUrl === MsgIntroduceAssetBaseTokenToWeightedPool.typeUrl || typeof o.creator === "string" && typeof o.weightedPoolId === "bigint" && typeof o.tokenDenom === "string" && typeof o.assetId === "string" && typeof o.tokenNormalizedWeight === "string" && typeof o.virtualBalanceIntervalMillis === "bigint");
+  },
+  isSDK(o: any): o is MsgIntroduceAssetBaseTokenToWeightedPoolSDKType {
+    return o && (o.$typeUrl === MsgIntroduceAssetBaseTokenToWeightedPool.typeUrl || typeof o.creator === "string" && typeof o.weighted_pool_id === "bigint" && typeof o.token_denom === "string" && typeof o.asset_id === "string" && typeof o.token_normalized_weight === "string" && typeof o.virtual_balance_interval_millis === "bigint");
+  },
+  isAmino(o: any): o is MsgIntroduceAssetBaseTokenToWeightedPoolAmino {
+    return o && (o.$typeUrl === MsgIntroduceAssetBaseTokenToWeightedPool.typeUrl || typeof o.creator === "string" && typeof o.weighted_pool_id === "bigint" && typeof o.token_denom === "string" && typeof o.asset_id === "string" && typeof o.token_normalized_weight === "string" && typeof o.virtual_balance_interval_millis === "bigint");
+  },
   encode(message: MsgIntroduceAssetBaseTokenToWeightedPool, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.creator !== "") {
       writer.uint32(10).string(message.creator);
@@ -7839,7 +8520,7 @@ export const MsgIntroduceAssetBaseTokenToWeightedPool = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): MsgIntroduceAssetBaseTokenToWeightedPool {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): MsgIntroduceAssetBaseTokenToWeightedPool {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgIntroduceAssetBaseTokenToWeightedPool();
@@ -7923,27 +8604,27 @@ export const MsgIntroduceAssetBaseTokenToWeightedPool = {
     }
     return message;
   },
-  toAmino(message: MsgIntroduceAssetBaseTokenToWeightedPool): MsgIntroduceAssetBaseTokenToWeightedPoolAmino {
+  toAmino(message: MsgIntroduceAssetBaseTokenToWeightedPool, useInterfaces: boolean = true): MsgIntroduceAssetBaseTokenToWeightedPoolAmino {
     const obj: any = {};
-    obj.creator = message.creator;
+    obj.creator = message.creator === "" ? undefined : message.creator;
     obj.weighted_pool_id = message.weightedPoolId ? message.weightedPoolId.toString() : undefined;
-    obj.token_denom = message.tokenDenom;
-    obj.asset_id = message.assetId;
-    obj.token_normalized_weight = message.tokenNormalizedWeight;
+    obj.token_denom = message.tokenDenom === "" ? undefined : message.tokenDenom;
+    obj.asset_id = message.assetId === "" ? undefined : message.assetId;
+    obj.token_normalized_weight = padDecimal(message.tokenNormalizedWeight) === "" ? undefined : padDecimal(message.tokenNormalizedWeight);
     obj.virtual_balance_interval_millis = message.virtualBalanceIntervalMillis ? message.virtualBalanceIntervalMillis.toString() : undefined;
     return obj;
   },
   fromAminoMsg(object: MsgIntroduceAssetBaseTokenToWeightedPoolAminoMsg): MsgIntroduceAssetBaseTokenToWeightedPool {
     return MsgIntroduceAssetBaseTokenToWeightedPool.fromAmino(object.value);
   },
-  toAminoMsg(message: MsgIntroduceAssetBaseTokenToWeightedPool): MsgIntroduceAssetBaseTokenToWeightedPoolAminoMsg {
+  toAminoMsg(message: MsgIntroduceAssetBaseTokenToWeightedPool, useInterfaces: boolean = true): MsgIntroduceAssetBaseTokenToWeightedPoolAminoMsg {
     return {
       type: "pryzm/amm/v1/IntroBaseTokenToWeighted",
-      value: MsgIntroduceAssetBaseTokenToWeightedPool.toAmino(message)
+      value: MsgIntroduceAssetBaseTokenToWeightedPool.toAmino(message, useInterfaces)
     };
   },
-  fromProtoMsg(message: MsgIntroduceAssetBaseTokenToWeightedPoolProtoMsg): MsgIntroduceAssetBaseTokenToWeightedPool {
-    return MsgIntroduceAssetBaseTokenToWeightedPool.decode(message.value);
+  fromProtoMsg(message: MsgIntroduceAssetBaseTokenToWeightedPoolProtoMsg, useInterfaces: boolean = true): MsgIntroduceAssetBaseTokenToWeightedPool {
+    return MsgIntroduceAssetBaseTokenToWeightedPool.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: MsgIntroduceAssetBaseTokenToWeightedPool): Uint8Array {
     return MsgIntroduceAssetBaseTokenToWeightedPool.encode(message).finish();
@@ -7955,15 +8636,26 @@ export const MsgIntroduceAssetBaseTokenToWeightedPool = {
     };
   }
 };
+GlobalDecoderRegistry.register(MsgIntroduceAssetBaseTokenToWeightedPool.typeUrl, MsgIntroduceAssetBaseTokenToWeightedPool);
+GlobalDecoderRegistry.registerAminoProtoMapping(MsgIntroduceAssetBaseTokenToWeightedPool.aminoType, MsgIntroduceAssetBaseTokenToWeightedPool.typeUrl);
 function createBaseMsgIntroduceAssetBaseTokenToWeightedPoolResponse(): MsgIntroduceAssetBaseTokenToWeightedPoolResponse {
   return {};
 }
 export const MsgIntroduceAssetBaseTokenToWeightedPoolResponse = {
   typeUrl: "/pryzm.amm.v1.MsgIntroduceAssetBaseTokenToWeightedPoolResponse",
+  is(o: any): o is MsgIntroduceAssetBaseTokenToWeightedPoolResponse {
+    return o && o.$typeUrl === MsgIntroduceAssetBaseTokenToWeightedPoolResponse.typeUrl;
+  },
+  isSDK(o: any): o is MsgIntroduceAssetBaseTokenToWeightedPoolResponseSDKType {
+    return o && o.$typeUrl === MsgIntroduceAssetBaseTokenToWeightedPoolResponse.typeUrl;
+  },
+  isAmino(o: any): o is MsgIntroduceAssetBaseTokenToWeightedPoolResponseAmino {
+    return o && o.$typeUrl === MsgIntroduceAssetBaseTokenToWeightedPoolResponse.typeUrl;
+  },
   encode(_: MsgIntroduceAssetBaseTokenToWeightedPoolResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): MsgIntroduceAssetBaseTokenToWeightedPoolResponse {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): MsgIntroduceAssetBaseTokenToWeightedPoolResponse {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgIntroduceAssetBaseTokenToWeightedPoolResponse();
@@ -7992,15 +8684,15 @@ export const MsgIntroduceAssetBaseTokenToWeightedPoolResponse = {
     const message = createBaseMsgIntroduceAssetBaseTokenToWeightedPoolResponse();
     return message;
   },
-  toAmino(_: MsgIntroduceAssetBaseTokenToWeightedPoolResponse): MsgIntroduceAssetBaseTokenToWeightedPoolResponseAmino {
+  toAmino(_: MsgIntroduceAssetBaseTokenToWeightedPoolResponse, useInterfaces: boolean = true): MsgIntroduceAssetBaseTokenToWeightedPoolResponseAmino {
     const obj: any = {};
     return obj;
   },
   fromAminoMsg(object: MsgIntroduceAssetBaseTokenToWeightedPoolResponseAminoMsg): MsgIntroduceAssetBaseTokenToWeightedPoolResponse {
     return MsgIntroduceAssetBaseTokenToWeightedPoolResponse.fromAmino(object.value);
   },
-  fromProtoMsg(message: MsgIntroduceAssetBaseTokenToWeightedPoolResponseProtoMsg): MsgIntroduceAssetBaseTokenToWeightedPoolResponse {
-    return MsgIntroduceAssetBaseTokenToWeightedPoolResponse.decode(message.value);
+  fromProtoMsg(message: MsgIntroduceAssetBaseTokenToWeightedPoolResponseProtoMsg, useInterfaces: boolean = true): MsgIntroduceAssetBaseTokenToWeightedPoolResponse {
+    return MsgIntroduceAssetBaseTokenToWeightedPoolResponse.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: MsgIntroduceAssetBaseTokenToWeightedPoolResponse): Uint8Array {
     return MsgIntroduceAssetBaseTokenToWeightedPoolResponse.encode(message).finish();
@@ -8012,6 +8704,7 @@ export const MsgIntroduceAssetBaseTokenToWeightedPoolResponse = {
     };
   }
 };
+GlobalDecoderRegistry.register(MsgIntroduceAssetBaseTokenToWeightedPoolResponse.typeUrl, MsgIntroduceAssetBaseTokenToWeightedPoolResponse);
 function createBaseMsgCancelPendingTokenIntroduction(): MsgCancelPendingTokenIntroduction {
   return {
     creator: "",
@@ -8021,6 +8714,16 @@ function createBaseMsgCancelPendingTokenIntroduction(): MsgCancelPendingTokenInt
 }
 export const MsgCancelPendingTokenIntroduction = {
   typeUrl: "/pryzm.amm.v1.MsgCancelPendingTokenIntroduction",
+  aminoType: "pryzm/amm/v1/CancelPendingTokenIntro",
+  is(o: any): o is MsgCancelPendingTokenIntroduction {
+    return o && (o.$typeUrl === MsgCancelPendingTokenIntroduction.typeUrl || typeof o.creator === "string" && typeof o.assetId === "string" && typeof o.targetPoolId === "bigint");
+  },
+  isSDK(o: any): o is MsgCancelPendingTokenIntroductionSDKType {
+    return o && (o.$typeUrl === MsgCancelPendingTokenIntroduction.typeUrl || typeof o.creator === "string" && typeof o.asset_id === "string" && typeof o.target_pool_id === "bigint");
+  },
+  isAmino(o: any): o is MsgCancelPendingTokenIntroductionAmino {
+    return o && (o.$typeUrl === MsgCancelPendingTokenIntroduction.typeUrl || typeof o.creator === "string" && typeof o.asset_id === "string" && typeof o.target_pool_id === "bigint");
+  },
   encode(message: MsgCancelPendingTokenIntroduction, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.creator !== "") {
       writer.uint32(10).string(message.creator);
@@ -8033,7 +8736,7 @@ export const MsgCancelPendingTokenIntroduction = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): MsgCancelPendingTokenIntroduction {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): MsgCancelPendingTokenIntroduction {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgCancelPendingTokenIntroduction();
@@ -8090,24 +8793,24 @@ export const MsgCancelPendingTokenIntroduction = {
     }
     return message;
   },
-  toAmino(message: MsgCancelPendingTokenIntroduction): MsgCancelPendingTokenIntroductionAmino {
+  toAmino(message: MsgCancelPendingTokenIntroduction, useInterfaces: boolean = true): MsgCancelPendingTokenIntroductionAmino {
     const obj: any = {};
-    obj.creator = message.creator;
-    obj.asset_id = message.assetId;
+    obj.creator = message.creator === "" ? undefined : message.creator;
+    obj.asset_id = message.assetId === "" ? undefined : message.assetId;
     obj.target_pool_id = message.targetPoolId ? message.targetPoolId.toString() : undefined;
     return obj;
   },
   fromAminoMsg(object: MsgCancelPendingTokenIntroductionAminoMsg): MsgCancelPendingTokenIntroduction {
     return MsgCancelPendingTokenIntroduction.fromAmino(object.value);
   },
-  toAminoMsg(message: MsgCancelPendingTokenIntroduction): MsgCancelPendingTokenIntroductionAminoMsg {
+  toAminoMsg(message: MsgCancelPendingTokenIntroduction, useInterfaces: boolean = true): MsgCancelPendingTokenIntroductionAminoMsg {
     return {
       type: "pryzm/amm/v1/CancelPendingTokenIntro",
-      value: MsgCancelPendingTokenIntroduction.toAmino(message)
+      value: MsgCancelPendingTokenIntroduction.toAmino(message, useInterfaces)
     };
   },
-  fromProtoMsg(message: MsgCancelPendingTokenIntroductionProtoMsg): MsgCancelPendingTokenIntroduction {
-    return MsgCancelPendingTokenIntroduction.decode(message.value);
+  fromProtoMsg(message: MsgCancelPendingTokenIntroductionProtoMsg, useInterfaces: boolean = true): MsgCancelPendingTokenIntroduction {
+    return MsgCancelPendingTokenIntroduction.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: MsgCancelPendingTokenIntroduction): Uint8Array {
     return MsgCancelPendingTokenIntroduction.encode(message).finish();
@@ -8119,15 +8822,26 @@ export const MsgCancelPendingTokenIntroduction = {
     };
   }
 };
+GlobalDecoderRegistry.register(MsgCancelPendingTokenIntroduction.typeUrl, MsgCancelPendingTokenIntroduction);
+GlobalDecoderRegistry.registerAminoProtoMapping(MsgCancelPendingTokenIntroduction.aminoType, MsgCancelPendingTokenIntroduction.typeUrl);
 function createBaseMsgCancelPendingTokenIntroductionResponse(): MsgCancelPendingTokenIntroductionResponse {
   return {};
 }
 export const MsgCancelPendingTokenIntroductionResponse = {
   typeUrl: "/pryzm.amm.v1.MsgCancelPendingTokenIntroductionResponse",
+  is(o: any): o is MsgCancelPendingTokenIntroductionResponse {
+    return o && o.$typeUrl === MsgCancelPendingTokenIntroductionResponse.typeUrl;
+  },
+  isSDK(o: any): o is MsgCancelPendingTokenIntroductionResponseSDKType {
+    return o && o.$typeUrl === MsgCancelPendingTokenIntroductionResponse.typeUrl;
+  },
+  isAmino(o: any): o is MsgCancelPendingTokenIntroductionResponseAmino {
+    return o && o.$typeUrl === MsgCancelPendingTokenIntroductionResponse.typeUrl;
+  },
   encode(_: MsgCancelPendingTokenIntroductionResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): MsgCancelPendingTokenIntroductionResponse {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): MsgCancelPendingTokenIntroductionResponse {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgCancelPendingTokenIntroductionResponse();
@@ -8156,15 +8870,15 @@ export const MsgCancelPendingTokenIntroductionResponse = {
     const message = createBaseMsgCancelPendingTokenIntroductionResponse();
     return message;
   },
-  toAmino(_: MsgCancelPendingTokenIntroductionResponse): MsgCancelPendingTokenIntroductionResponseAmino {
+  toAmino(_: MsgCancelPendingTokenIntroductionResponse, useInterfaces: boolean = true): MsgCancelPendingTokenIntroductionResponseAmino {
     const obj: any = {};
     return obj;
   },
   fromAminoMsg(object: MsgCancelPendingTokenIntroductionResponseAminoMsg): MsgCancelPendingTokenIntroductionResponse {
     return MsgCancelPendingTokenIntroductionResponse.fromAmino(object.value);
   },
-  fromProtoMsg(message: MsgCancelPendingTokenIntroductionResponseProtoMsg): MsgCancelPendingTokenIntroductionResponse {
-    return MsgCancelPendingTokenIntroductionResponse.decode(message.value);
+  fromProtoMsg(message: MsgCancelPendingTokenIntroductionResponseProtoMsg, useInterfaces: boolean = true): MsgCancelPendingTokenIntroductionResponse {
+    return MsgCancelPendingTokenIntroductionResponse.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: MsgCancelPendingTokenIntroductionResponse): Uint8Array {
     return MsgCancelPendingTokenIntroductionResponse.encode(message).finish();
@@ -8176,6 +8890,7 @@ export const MsgCancelPendingTokenIntroductionResponse = {
     };
   }
 };
+GlobalDecoderRegistry.register(MsgCancelPendingTokenIntroductionResponse.typeUrl, MsgCancelPendingTokenIntroductionResponse);
 function createBaseMsgRemoveTokenFromWeightedPool(): MsgRemoveTokenFromWeightedPool {
   return {
     creator: "",
@@ -8186,6 +8901,16 @@ function createBaseMsgRemoveTokenFromWeightedPool(): MsgRemoveTokenFromWeightedP
 }
 export const MsgRemoveTokenFromWeightedPool = {
   typeUrl: "/pryzm.amm.v1.MsgRemoveTokenFromWeightedPool",
+  aminoType: "pryzm/amm/v1/RemoveTokenFromWeighted",
+  is(o: any): o is MsgRemoveTokenFromWeightedPool {
+    return o && (o.$typeUrl === MsgRemoveTokenFromWeightedPool.typeUrl || typeof o.creator === "string" && typeof o.poolId === "bigint" && typeof o.tokenDenom === "string" && typeof o.virtualBalanceIntervalMillis === "bigint");
+  },
+  isSDK(o: any): o is MsgRemoveTokenFromWeightedPoolSDKType {
+    return o && (o.$typeUrl === MsgRemoveTokenFromWeightedPool.typeUrl || typeof o.creator === "string" && typeof o.pool_id === "bigint" && typeof o.token_denom === "string" && typeof o.virtual_balance_interval_millis === "bigint");
+  },
+  isAmino(o: any): o is MsgRemoveTokenFromWeightedPoolAmino {
+    return o && (o.$typeUrl === MsgRemoveTokenFromWeightedPool.typeUrl || typeof o.creator === "string" && typeof o.pool_id === "bigint" && typeof o.token_denom === "string" && typeof o.virtual_balance_interval_millis === "bigint");
+  },
   encode(message: MsgRemoveTokenFromWeightedPool, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.creator !== "") {
       writer.uint32(10).string(message.creator);
@@ -8201,7 +8926,7 @@ export const MsgRemoveTokenFromWeightedPool = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): MsgRemoveTokenFromWeightedPool {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): MsgRemoveTokenFromWeightedPool {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgRemoveTokenFromWeightedPool();
@@ -8267,25 +8992,25 @@ export const MsgRemoveTokenFromWeightedPool = {
     }
     return message;
   },
-  toAmino(message: MsgRemoveTokenFromWeightedPool): MsgRemoveTokenFromWeightedPoolAmino {
+  toAmino(message: MsgRemoveTokenFromWeightedPool, useInterfaces: boolean = true): MsgRemoveTokenFromWeightedPoolAmino {
     const obj: any = {};
-    obj.creator = message.creator;
+    obj.creator = message.creator === "" ? undefined : message.creator;
     obj.pool_id = message.poolId ? message.poolId.toString() : undefined;
-    obj.token_denom = message.tokenDenom;
+    obj.token_denom = message.tokenDenom === "" ? undefined : message.tokenDenom;
     obj.virtual_balance_interval_millis = message.virtualBalanceIntervalMillis ? message.virtualBalanceIntervalMillis.toString() : undefined;
     return obj;
   },
   fromAminoMsg(object: MsgRemoveTokenFromWeightedPoolAminoMsg): MsgRemoveTokenFromWeightedPool {
     return MsgRemoveTokenFromWeightedPool.fromAmino(object.value);
   },
-  toAminoMsg(message: MsgRemoveTokenFromWeightedPool): MsgRemoveTokenFromWeightedPoolAminoMsg {
+  toAminoMsg(message: MsgRemoveTokenFromWeightedPool, useInterfaces: boolean = true): MsgRemoveTokenFromWeightedPoolAminoMsg {
     return {
       type: "pryzm/amm/v1/RemoveTokenFromWeighted",
-      value: MsgRemoveTokenFromWeightedPool.toAmino(message)
+      value: MsgRemoveTokenFromWeightedPool.toAmino(message, useInterfaces)
     };
   },
-  fromProtoMsg(message: MsgRemoveTokenFromWeightedPoolProtoMsg): MsgRemoveTokenFromWeightedPool {
-    return MsgRemoveTokenFromWeightedPool.decode(message.value);
+  fromProtoMsg(message: MsgRemoveTokenFromWeightedPoolProtoMsg, useInterfaces: boolean = true): MsgRemoveTokenFromWeightedPool {
+    return MsgRemoveTokenFromWeightedPool.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: MsgRemoveTokenFromWeightedPool): Uint8Array {
     return MsgRemoveTokenFromWeightedPool.encode(message).finish();
@@ -8297,15 +9022,26 @@ export const MsgRemoveTokenFromWeightedPool = {
     };
   }
 };
+GlobalDecoderRegistry.register(MsgRemoveTokenFromWeightedPool.typeUrl, MsgRemoveTokenFromWeightedPool);
+GlobalDecoderRegistry.registerAminoProtoMapping(MsgRemoveTokenFromWeightedPool.aminoType, MsgRemoveTokenFromWeightedPool.typeUrl);
 function createBaseMsgRemoveTokenFromWeightedPoolResponse(): MsgRemoveTokenFromWeightedPoolResponse {
   return {};
 }
 export const MsgRemoveTokenFromWeightedPoolResponse = {
   typeUrl: "/pryzm.amm.v1.MsgRemoveTokenFromWeightedPoolResponse",
+  is(o: any): o is MsgRemoveTokenFromWeightedPoolResponse {
+    return o && o.$typeUrl === MsgRemoveTokenFromWeightedPoolResponse.typeUrl;
+  },
+  isSDK(o: any): o is MsgRemoveTokenFromWeightedPoolResponseSDKType {
+    return o && o.$typeUrl === MsgRemoveTokenFromWeightedPoolResponse.typeUrl;
+  },
+  isAmino(o: any): o is MsgRemoveTokenFromWeightedPoolResponseAmino {
+    return o && o.$typeUrl === MsgRemoveTokenFromWeightedPoolResponse.typeUrl;
+  },
   encode(_: MsgRemoveTokenFromWeightedPoolResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): MsgRemoveTokenFromWeightedPoolResponse {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): MsgRemoveTokenFromWeightedPoolResponse {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgRemoveTokenFromWeightedPoolResponse();
@@ -8334,15 +9070,15 @@ export const MsgRemoveTokenFromWeightedPoolResponse = {
     const message = createBaseMsgRemoveTokenFromWeightedPoolResponse();
     return message;
   },
-  toAmino(_: MsgRemoveTokenFromWeightedPoolResponse): MsgRemoveTokenFromWeightedPoolResponseAmino {
+  toAmino(_: MsgRemoveTokenFromWeightedPoolResponse, useInterfaces: boolean = true): MsgRemoveTokenFromWeightedPoolResponseAmino {
     const obj: any = {};
     return obj;
   },
   fromAminoMsg(object: MsgRemoveTokenFromWeightedPoolResponseAminoMsg): MsgRemoveTokenFromWeightedPoolResponse {
     return MsgRemoveTokenFromWeightedPoolResponse.fromAmino(object.value);
   },
-  fromProtoMsg(message: MsgRemoveTokenFromWeightedPoolResponseProtoMsg): MsgRemoveTokenFromWeightedPoolResponse {
-    return MsgRemoveTokenFromWeightedPoolResponse.decode(message.value);
+  fromProtoMsg(message: MsgRemoveTokenFromWeightedPoolResponseProtoMsg, useInterfaces: boolean = true): MsgRemoveTokenFromWeightedPoolResponse {
+    return MsgRemoveTokenFromWeightedPoolResponse.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: MsgRemoveTokenFromWeightedPoolResponse): Uint8Array {
     return MsgRemoveTokenFromWeightedPoolResponse.encode(message).finish();
@@ -8354,6 +9090,7 @@ export const MsgRemoveTokenFromWeightedPoolResponse = {
     };
   }
 };
+GlobalDecoderRegistry.register(MsgRemoveTokenFromWeightedPoolResponse.typeUrl, MsgRemoveTokenFromWeightedPoolResponse);
 function createBaseMsgUpdateParams(): MsgUpdateParams {
   return {
     authority: "",
@@ -8365,6 +9102,16 @@ function createBaseMsgUpdateParams(): MsgUpdateParams {
 }
 export const MsgUpdateParams = {
   typeUrl: "/pryzm.amm.v1.MsgUpdateParams",
+  aminoType: "pryzm/amm/v1/UpdateParams",
+  is(o: any): o is MsgUpdateParams {
+    return o && (o.$typeUrl === MsgUpdateParams.typeUrl || typeof o.authority === "string");
+  },
+  isSDK(o: any): o is MsgUpdateParamsSDKType {
+    return o && (o.$typeUrl === MsgUpdateParams.typeUrl || typeof o.authority === "string");
+  },
+  isAmino(o: any): o is MsgUpdateParamsAmino {
+    return o && (o.$typeUrl === MsgUpdateParams.typeUrl || typeof o.authority === "string");
+  },
   encode(message: MsgUpdateParams, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.authority !== "") {
       writer.uint32(10).string(message.authority);
@@ -8383,7 +9130,7 @@ export const MsgUpdateParams = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): MsgUpdateParams {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): MsgUpdateParams {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgUpdateParams();
@@ -8394,16 +9141,16 @@ export const MsgUpdateParams = {
           message.authority = reader.string();
           break;
         case 2:
-          message.generalPoolParameters = GeneralPoolParameters.decode(reader, reader.uint32());
+          message.generalPoolParameters = GeneralPoolParameters.decode(reader, reader.uint32(), useInterfaces);
           break;
         case 3:
-          message.yammParameters = YammParameters.decode(reader, reader.uint32());
+          message.yammParameters = YammParameters.decode(reader, reader.uint32(), useInterfaces);
           break;
         case 4:
-          message.orderParameters = OrderParameters.decode(reader, reader.uint32());
+          message.orderParameters = OrderParameters.decode(reader, reader.uint32(), useInterfaces);
           break;
         case 5:
-          message.authorizationParameters = AuthorizationParameters.decode(reader, reader.uint32());
+          message.authorizationParameters = AuthorizationParameters.decode(reader, reader.uint32(), useInterfaces);
           break;
         default:
           reader.skipType(tag & 7);
@@ -8458,26 +9205,26 @@ export const MsgUpdateParams = {
     }
     return message;
   },
-  toAmino(message: MsgUpdateParams): MsgUpdateParamsAmino {
+  toAmino(message: MsgUpdateParams, useInterfaces: boolean = true): MsgUpdateParamsAmino {
     const obj: any = {};
-    obj.authority = message.authority;
-    obj.general_pool_parameters = message.generalPoolParameters ? GeneralPoolParameters.toAmino(message.generalPoolParameters) : undefined;
-    obj.yamm_parameters = message.yammParameters ? YammParameters.toAmino(message.yammParameters) : undefined;
-    obj.order_parameters = message.orderParameters ? OrderParameters.toAmino(message.orderParameters) : undefined;
-    obj.authorization_parameters = message.authorizationParameters ? AuthorizationParameters.toAmino(message.authorizationParameters) : undefined;
+    obj.authority = message.authority === "" ? undefined : message.authority;
+    obj.general_pool_parameters = message.generalPoolParameters ? GeneralPoolParameters.toAmino(message.generalPoolParameters, useInterfaces) : undefined;
+    obj.yamm_parameters = message.yammParameters ? YammParameters.toAmino(message.yammParameters, useInterfaces) : undefined;
+    obj.order_parameters = message.orderParameters ? OrderParameters.toAmino(message.orderParameters, useInterfaces) : undefined;
+    obj.authorization_parameters = message.authorizationParameters ? AuthorizationParameters.toAmino(message.authorizationParameters, useInterfaces) : undefined;
     return obj;
   },
   fromAminoMsg(object: MsgUpdateParamsAminoMsg): MsgUpdateParams {
     return MsgUpdateParams.fromAmino(object.value);
   },
-  toAminoMsg(message: MsgUpdateParams): MsgUpdateParamsAminoMsg {
+  toAminoMsg(message: MsgUpdateParams, useInterfaces: boolean = true): MsgUpdateParamsAminoMsg {
     return {
       type: "pryzm/amm/v1/UpdateParams",
-      value: MsgUpdateParams.toAmino(message)
+      value: MsgUpdateParams.toAmino(message, useInterfaces)
     };
   },
-  fromProtoMsg(message: MsgUpdateParamsProtoMsg): MsgUpdateParams {
-    return MsgUpdateParams.decode(message.value);
+  fromProtoMsg(message: MsgUpdateParamsProtoMsg, useInterfaces: boolean = true): MsgUpdateParams {
+    return MsgUpdateParams.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: MsgUpdateParams): Uint8Array {
     return MsgUpdateParams.encode(message).finish();
@@ -8489,15 +9236,26 @@ export const MsgUpdateParams = {
     };
   }
 };
+GlobalDecoderRegistry.register(MsgUpdateParams.typeUrl, MsgUpdateParams);
+GlobalDecoderRegistry.registerAminoProtoMapping(MsgUpdateParams.aminoType, MsgUpdateParams.typeUrl);
 function createBaseMsgUpdateParamsResponse(): MsgUpdateParamsResponse {
   return {};
 }
 export const MsgUpdateParamsResponse = {
   typeUrl: "/pryzm.amm.v1.MsgUpdateParamsResponse",
+  is(o: any): o is MsgUpdateParamsResponse {
+    return o && o.$typeUrl === MsgUpdateParamsResponse.typeUrl;
+  },
+  isSDK(o: any): o is MsgUpdateParamsResponseSDKType {
+    return o && o.$typeUrl === MsgUpdateParamsResponse.typeUrl;
+  },
+  isAmino(o: any): o is MsgUpdateParamsResponseAmino {
+    return o && o.$typeUrl === MsgUpdateParamsResponse.typeUrl;
+  },
   encode(_: MsgUpdateParamsResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): MsgUpdateParamsResponse {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): MsgUpdateParamsResponse {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgUpdateParamsResponse();
@@ -8526,15 +9284,15 @@ export const MsgUpdateParamsResponse = {
     const message = createBaseMsgUpdateParamsResponse();
     return message;
   },
-  toAmino(_: MsgUpdateParamsResponse): MsgUpdateParamsResponseAmino {
+  toAmino(_: MsgUpdateParamsResponse, useInterfaces: boolean = true): MsgUpdateParamsResponseAmino {
     const obj: any = {};
     return obj;
   },
   fromAminoMsg(object: MsgUpdateParamsResponseAminoMsg): MsgUpdateParamsResponse {
     return MsgUpdateParamsResponse.fromAmino(object.value);
   },
-  fromProtoMsg(message: MsgUpdateParamsResponseProtoMsg): MsgUpdateParamsResponse {
-    return MsgUpdateParamsResponse.decode(message.value);
+  fromProtoMsg(message: MsgUpdateParamsResponseProtoMsg, useInterfaces: boolean = true): MsgUpdateParamsResponse {
+    return MsgUpdateParamsResponse.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: MsgUpdateParamsResponse): Uint8Array {
     return MsgUpdateParamsResponse.encode(message).finish();
@@ -8546,6 +9304,7 @@ export const MsgUpdateParamsResponse = {
     };
   }
 };
+GlobalDecoderRegistry.register(MsgUpdateParamsResponse.typeUrl, MsgUpdateParamsResponse);
 function createBaseMsgAddMaturityToYamm(): MsgAddMaturityToYamm {
   return {
     authority: "",
@@ -8555,6 +9314,16 @@ function createBaseMsgAddMaturityToYamm(): MsgAddMaturityToYamm {
 }
 export const MsgAddMaturityToYamm = {
   typeUrl: "/pryzm.amm.v1.MsgAddMaturityToYamm",
+  aminoType: "pryzm/amm/v1/AddMaturityToYamm",
+  is(o: any): o is MsgAddMaturityToYamm {
+    return o && (o.$typeUrl === MsgAddMaturityToYamm.typeUrl || typeof o.authority === "string" && typeof o.assetId === "string" && typeof o.maturitySymbol === "string");
+  },
+  isSDK(o: any): o is MsgAddMaturityToYammSDKType {
+    return o && (o.$typeUrl === MsgAddMaturityToYamm.typeUrl || typeof o.authority === "string" && typeof o.assetId === "string" && typeof o.maturitySymbol === "string");
+  },
+  isAmino(o: any): o is MsgAddMaturityToYammAmino {
+    return o && (o.$typeUrl === MsgAddMaturityToYamm.typeUrl || typeof o.authority === "string" && typeof o.assetId === "string" && typeof o.maturitySymbol === "string");
+  },
   encode(message: MsgAddMaturityToYamm, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.authority !== "") {
       writer.uint32(10).string(message.authority);
@@ -8567,7 +9336,7 @@ export const MsgAddMaturityToYamm = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): MsgAddMaturityToYamm {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): MsgAddMaturityToYamm {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgAddMaturityToYamm();
@@ -8624,24 +9393,24 @@ export const MsgAddMaturityToYamm = {
     }
     return message;
   },
-  toAmino(message: MsgAddMaturityToYamm): MsgAddMaturityToYammAmino {
+  toAmino(message: MsgAddMaturityToYamm, useInterfaces: boolean = true): MsgAddMaturityToYammAmino {
     const obj: any = {};
-    obj.authority = message.authority;
-    obj.assetId = message.assetId;
-    obj.maturitySymbol = message.maturitySymbol;
+    obj.authority = message.authority === "" ? undefined : message.authority;
+    obj.assetId = message.assetId === "" ? undefined : message.assetId;
+    obj.maturitySymbol = message.maturitySymbol === "" ? undefined : message.maturitySymbol;
     return obj;
   },
   fromAminoMsg(object: MsgAddMaturityToYammAminoMsg): MsgAddMaturityToYamm {
     return MsgAddMaturityToYamm.fromAmino(object.value);
   },
-  toAminoMsg(message: MsgAddMaturityToYamm): MsgAddMaturityToYammAminoMsg {
+  toAminoMsg(message: MsgAddMaturityToYamm, useInterfaces: boolean = true): MsgAddMaturityToYammAminoMsg {
     return {
       type: "pryzm/amm/v1/AddMaturityToYamm",
-      value: MsgAddMaturityToYamm.toAmino(message)
+      value: MsgAddMaturityToYamm.toAmino(message, useInterfaces)
     };
   },
-  fromProtoMsg(message: MsgAddMaturityToYammProtoMsg): MsgAddMaturityToYamm {
-    return MsgAddMaturityToYamm.decode(message.value);
+  fromProtoMsg(message: MsgAddMaturityToYammProtoMsg, useInterfaces: boolean = true): MsgAddMaturityToYamm {
+    return MsgAddMaturityToYamm.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: MsgAddMaturityToYamm): Uint8Array {
     return MsgAddMaturityToYamm.encode(message).finish();
@@ -8653,15 +9422,26 @@ export const MsgAddMaturityToYamm = {
     };
   }
 };
+GlobalDecoderRegistry.register(MsgAddMaturityToYamm.typeUrl, MsgAddMaturityToYamm);
+GlobalDecoderRegistry.registerAminoProtoMapping(MsgAddMaturityToYamm.aminoType, MsgAddMaturityToYamm.typeUrl);
 function createBaseMsgAddMaturityToYammResponse(): MsgAddMaturityToYammResponse {
   return {};
 }
 export const MsgAddMaturityToYammResponse = {
   typeUrl: "/pryzm.amm.v1.MsgAddMaturityToYammResponse",
+  is(o: any): o is MsgAddMaturityToYammResponse {
+    return o && o.$typeUrl === MsgAddMaturityToYammResponse.typeUrl;
+  },
+  isSDK(o: any): o is MsgAddMaturityToYammResponseSDKType {
+    return o && o.$typeUrl === MsgAddMaturityToYammResponse.typeUrl;
+  },
+  isAmino(o: any): o is MsgAddMaturityToYammResponseAmino {
+    return o && o.$typeUrl === MsgAddMaturityToYammResponse.typeUrl;
+  },
   encode(_: MsgAddMaturityToYammResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): MsgAddMaturityToYammResponse {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): MsgAddMaturityToYammResponse {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgAddMaturityToYammResponse();
@@ -8690,15 +9470,15 @@ export const MsgAddMaturityToYammResponse = {
     const message = createBaseMsgAddMaturityToYammResponse();
     return message;
   },
-  toAmino(_: MsgAddMaturityToYammResponse): MsgAddMaturityToYammResponseAmino {
+  toAmino(_: MsgAddMaturityToYammResponse, useInterfaces: boolean = true): MsgAddMaturityToYammResponseAmino {
     const obj: any = {};
     return obj;
   },
   fromAminoMsg(object: MsgAddMaturityToYammResponseAminoMsg): MsgAddMaturityToYammResponse {
     return MsgAddMaturityToYammResponse.fromAmino(object.value);
   },
-  fromProtoMsg(message: MsgAddMaturityToYammResponseProtoMsg): MsgAddMaturityToYammResponse {
-    return MsgAddMaturityToYammResponse.decode(message.value);
+  fromProtoMsg(message: MsgAddMaturityToYammResponseProtoMsg, useInterfaces: boolean = true): MsgAddMaturityToYammResponse {
+    return MsgAddMaturityToYammResponse.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: MsgAddMaturityToYammResponse): Uint8Array {
     return MsgAddMaturityToYammResponse.encode(message).finish();
@@ -8710,6 +9490,7 @@ export const MsgAddMaturityToYammResponse = {
     };
   }
 };
+GlobalDecoderRegistry.register(MsgAddMaturityToYammResponse.typeUrl, MsgAddMaturityToYammResponse);
 function createBaseMsgSetInitializationAllowList(): MsgSetInitializationAllowList {
   return {
     creator: "",
@@ -8719,6 +9500,16 @@ function createBaseMsgSetInitializationAllowList(): MsgSetInitializationAllowLis
 }
 export const MsgSetInitializationAllowList = {
   typeUrl: "/pryzm.amm.v1.MsgSetInitializationAllowList",
+  aminoType: "pryzm/amm/v1/SetInitializationAllowList",
+  is(o: any): o is MsgSetInitializationAllowList {
+    return o && (o.$typeUrl === MsgSetInitializationAllowList.typeUrl || typeof o.creator === "string" && typeof o.poolId === "bigint" && Array.isArray(o.initializationAllowList) && (!o.initializationAllowList.length || typeof o.initializationAllowList[0] === "string"));
+  },
+  isSDK(o: any): o is MsgSetInitializationAllowListSDKType {
+    return o && (o.$typeUrl === MsgSetInitializationAllowList.typeUrl || typeof o.creator === "string" && typeof o.pool_id === "bigint" && Array.isArray(o.initialization_allow_list) && (!o.initialization_allow_list.length || typeof o.initialization_allow_list[0] === "string"));
+  },
+  isAmino(o: any): o is MsgSetInitializationAllowListAmino {
+    return o && (o.$typeUrl === MsgSetInitializationAllowList.typeUrl || typeof o.creator === "string" && typeof o.pool_id === "bigint" && Array.isArray(o.initialization_allow_list) && (!o.initialization_allow_list.length || typeof o.initialization_allow_list[0] === "string"));
+  },
   encode(message: MsgSetInitializationAllowList, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.creator !== "") {
       writer.uint32(10).string(message.creator);
@@ -8731,7 +9522,7 @@ export const MsgSetInitializationAllowList = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): MsgSetInitializationAllowList {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): MsgSetInitializationAllowList {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgSetInitializationAllowList();
@@ -8790,28 +9581,28 @@ export const MsgSetInitializationAllowList = {
     message.initializationAllowList = object.initialization_allow_list?.map(e => e) || [];
     return message;
   },
-  toAmino(message: MsgSetInitializationAllowList): MsgSetInitializationAllowListAmino {
+  toAmino(message: MsgSetInitializationAllowList, useInterfaces: boolean = true): MsgSetInitializationAllowListAmino {
     const obj: any = {};
-    obj.creator = message.creator;
+    obj.creator = message.creator === "" ? undefined : message.creator;
     obj.pool_id = message.poolId ? message.poolId.toString() : undefined;
     if (message.initializationAllowList) {
       obj.initialization_allow_list = message.initializationAllowList.map(e => e);
     } else {
-      obj.initialization_allow_list = [];
+      obj.initialization_allow_list = null;
     }
     return obj;
   },
   fromAminoMsg(object: MsgSetInitializationAllowListAminoMsg): MsgSetInitializationAllowList {
     return MsgSetInitializationAllowList.fromAmino(object.value);
   },
-  toAminoMsg(message: MsgSetInitializationAllowList): MsgSetInitializationAllowListAminoMsg {
+  toAminoMsg(message: MsgSetInitializationAllowList, useInterfaces: boolean = true): MsgSetInitializationAllowListAminoMsg {
     return {
       type: "pryzm/amm/v1/SetInitializationAllowList",
-      value: MsgSetInitializationAllowList.toAmino(message)
+      value: MsgSetInitializationAllowList.toAmino(message, useInterfaces)
     };
   },
-  fromProtoMsg(message: MsgSetInitializationAllowListProtoMsg): MsgSetInitializationAllowList {
-    return MsgSetInitializationAllowList.decode(message.value);
+  fromProtoMsg(message: MsgSetInitializationAllowListProtoMsg, useInterfaces: boolean = true): MsgSetInitializationAllowList {
+    return MsgSetInitializationAllowList.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: MsgSetInitializationAllowList): Uint8Array {
     return MsgSetInitializationAllowList.encode(message).finish();
@@ -8823,15 +9614,26 @@ export const MsgSetInitializationAllowList = {
     };
   }
 };
+GlobalDecoderRegistry.register(MsgSetInitializationAllowList.typeUrl, MsgSetInitializationAllowList);
+GlobalDecoderRegistry.registerAminoProtoMapping(MsgSetInitializationAllowList.aminoType, MsgSetInitializationAllowList.typeUrl);
 function createBaseMsgSetInitializationAllowListResponse(): MsgSetInitializationAllowListResponse {
   return {};
 }
 export const MsgSetInitializationAllowListResponse = {
   typeUrl: "/pryzm.amm.v1.MsgSetInitializationAllowListResponse",
+  is(o: any): o is MsgSetInitializationAllowListResponse {
+    return o && o.$typeUrl === MsgSetInitializationAllowListResponse.typeUrl;
+  },
+  isSDK(o: any): o is MsgSetInitializationAllowListResponseSDKType {
+    return o && o.$typeUrl === MsgSetInitializationAllowListResponse.typeUrl;
+  },
+  isAmino(o: any): o is MsgSetInitializationAllowListResponseAmino {
+    return o && o.$typeUrl === MsgSetInitializationAllowListResponse.typeUrl;
+  },
   encode(_: MsgSetInitializationAllowListResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): MsgSetInitializationAllowListResponse {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): MsgSetInitializationAllowListResponse {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgSetInitializationAllowListResponse();
@@ -8860,15 +9662,15 @@ export const MsgSetInitializationAllowListResponse = {
     const message = createBaseMsgSetInitializationAllowListResponse();
     return message;
   },
-  toAmino(_: MsgSetInitializationAllowListResponse): MsgSetInitializationAllowListResponseAmino {
+  toAmino(_: MsgSetInitializationAllowListResponse, useInterfaces: boolean = true): MsgSetInitializationAllowListResponseAmino {
     const obj: any = {};
     return obj;
   },
   fromAminoMsg(object: MsgSetInitializationAllowListResponseAminoMsg): MsgSetInitializationAllowListResponse {
     return MsgSetInitializationAllowListResponse.fromAmino(object.value);
   },
-  fromProtoMsg(message: MsgSetInitializationAllowListResponseProtoMsg): MsgSetInitializationAllowListResponse {
-    return MsgSetInitializationAllowListResponse.decode(message.value);
+  fromProtoMsg(message: MsgSetInitializationAllowListResponseProtoMsg, useInterfaces: boolean = true): MsgSetInitializationAllowListResponse {
+    return MsgSetInitializationAllowListResponse.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: MsgSetInitializationAllowListResponse): Uint8Array {
     return MsgSetInitializationAllowListResponse.encode(message).finish();
@@ -8880,6 +9682,7 @@ export const MsgSetInitializationAllowListResponse = {
     };
   }
 };
+GlobalDecoderRegistry.register(MsgSetInitializationAllowListResponse.typeUrl, MsgSetInitializationAllowListResponse);
 function createBaseMsgSetPoolAdmins(): MsgSetPoolAdmins {
   return {
     creator: "",
@@ -8889,6 +9692,16 @@ function createBaseMsgSetPoolAdmins(): MsgSetPoolAdmins {
 }
 export const MsgSetPoolAdmins = {
   typeUrl: "/pryzm.amm.v1.MsgSetPoolAdmins",
+  aminoType: "pryzm/amm/v1/SetPoolAdmins",
+  is(o: any): o is MsgSetPoolAdmins {
+    return o && (o.$typeUrl === MsgSetPoolAdmins.typeUrl || typeof o.creator === "string" && typeof o.poolId === "bigint" && Array.isArray(o.admins) && (!o.admins.length || typeof o.admins[0] === "string"));
+  },
+  isSDK(o: any): o is MsgSetPoolAdminsSDKType {
+    return o && (o.$typeUrl === MsgSetPoolAdmins.typeUrl || typeof o.creator === "string" && typeof o.pool_id === "bigint" && Array.isArray(o.admins) && (!o.admins.length || typeof o.admins[0] === "string"));
+  },
+  isAmino(o: any): o is MsgSetPoolAdminsAmino {
+    return o && (o.$typeUrl === MsgSetPoolAdmins.typeUrl || typeof o.creator === "string" && typeof o.pool_id === "bigint" && Array.isArray(o.admins) && (!o.admins.length || typeof o.admins[0] === "string"));
+  },
   encode(message: MsgSetPoolAdmins, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.creator !== "") {
       writer.uint32(10).string(message.creator);
@@ -8901,7 +9714,7 @@ export const MsgSetPoolAdmins = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): MsgSetPoolAdmins {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): MsgSetPoolAdmins {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgSetPoolAdmins();
@@ -8960,28 +9773,28 @@ export const MsgSetPoolAdmins = {
     message.admins = object.admins?.map(e => e) || [];
     return message;
   },
-  toAmino(message: MsgSetPoolAdmins): MsgSetPoolAdminsAmino {
+  toAmino(message: MsgSetPoolAdmins, useInterfaces: boolean = true): MsgSetPoolAdminsAmino {
     const obj: any = {};
-    obj.creator = message.creator;
+    obj.creator = message.creator === "" ? undefined : message.creator;
     obj.pool_id = message.poolId ? message.poolId.toString() : undefined;
     if (message.admins) {
       obj.admins = message.admins.map(e => e);
     } else {
-      obj.admins = [];
+      obj.admins = null;
     }
     return obj;
   },
   fromAminoMsg(object: MsgSetPoolAdminsAminoMsg): MsgSetPoolAdmins {
     return MsgSetPoolAdmins.fromAmino(object.value);
   },
-  toAminoMsg(message: MsgSetPoolAdmins): MsgSetPoolAdminsAminoMsg {
+  toAminoMsg(message: MsgSetPoolAdmins, useInterfaces: boolean = true): MsgSetPoolAdminsAminoMsg {
     return {
       type: "pryzm/amm/v1/SetPoolAdmins",
-      value: MsgSetPoolAdmins.toAmino(message)
+      value: MsgSetPoolAdmins.toAmino(message, useInterfaces)
     };
   },
-  fromProtoMsg(message: MsgSetPoolAdminsProtoMsg): MsgSetPoolAdmins {
-    return MsgSetPoolAdmins.decode(message.value);
+  fromProtoMsg(message: MsgSetPoolAdminsProtoMsg, useInterfaces: boolean = true): MsgSetPoolAdmins {
+    return MsgSetPoolAdmins.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: MsgSetPoolAdmins): Uint8Array {
     return MsgSetPoolAdmins.encode(message).finish();
@@ -8993,15 +9806,26 @@ export const MsgSetPoolAdmins = {
     };
   }
 };
+GlobalDecoderRegistry.register(MsgSetPoolAdmins.typeUrl, MsgSetPoolAdmins);
+GlobalDecoderRegistry.registerAminoProtoMapping(MsgSetPoolAdmins.aminoType, MsgSetPoolAdmins.typeUrl);
 function createBaseMsgSetPoolAdminsResponse(): MsgSetPoolAdminsResponse {
   return {};
 }
 export const MsgSetPoolAdminsResponse = {
   typeUrl: "/pryzm.amm.v1.MsgSetPoolAdminsResponse",
+  is(o: any): o is MsgSetPoolAdminsResponse {
+    return o && o.$typeUrl === MsgSetPoolAdminsResponse.typeUrl;
+  },
+  isSDK(o: any): o is MsgSetPoolAdminsResponseSDKType {
+    return o && o.$typeUrl === MsgSetPoolAdminsResponse.typeUrl;
+  },
+  isAmino(o: any): o is MsgSetPoolAdminsResponseAmino {
+    return o && o.$typeUrl === MsgSetPoolAdminsResponse.typeUrl;
+  },
   encode(_: MsgSetPoolAdminsResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): MsgSetPoolAdminsResponse {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): MsgSetPoolAdminsResponse {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgSetPoolAdminsResponse();
@@ -9030,15 +9854,15 @@ export const MsgSetPoolAdminsResponse = {
     const message = createBaseMsgSetPoolAdminsResponse();
     return message;
   },
-  toAmino(_: MsgSetPoolAdminsResponse): MsgSetPoolAdminsResponseAmino {
+  toAmino(_: MsgSetPoolAdminsResponse, useInterfaces: boolean = true): MsgSetPoolAdminsResponseAmino {
     const obj: any = {};
     return obj;
   },
   fromAminoMsg(object: MsgSetPoolAdminsResponseAminoMsg): MsgSetPoolAdminsResponse {
     return MsgSetPoolAdminsResponse.fromAmino(object.value);
   },
-  fromProtoMsg(message: MsgSetPoolAdminsResponseProtoMsg): MsgSetPoolAdminsResponse {
-    return MsgSetPoolAdminsResponse.decode(message.value);
+  fromProtoMsg(message: MsgSetPoolAdminsResponseProtoMsg, useInterfaces: boolean = true): MsgSetPoolAdminsResponse {
+    return MsgSetPoolAdminsResponse.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: MsgSetPoolAdminsResponse): Uint8Array {
     return MsgSetPoolAdminsResponse.encode(message).finish();
@@ -9050,6 +9874,7 @@ export const MsgSetPoolAdminsResponse = {
     };
   }
 };
+GlobalDecoderRegistry.register(MsgSetPoolAdminsResponse.typeUrl, MsgSetPoolAdminsResponse);
 function createBaseMsgSetPauseAllowList(): MsgSetPauseAllowList {
   return {
     creator: "",
@@ -9059,6 +9884,16 @@ function createBaseMsgSetPauseAllowList(): MsgSetPauseAllowList {
 }
 export const MsgSetPauseAllowList = {
   typeUrl: "/pryzm.amm.v1.MsgSetPauseAllowList",
+  aminoType: "pryzm/amm/v1/SetPauseAllowList",
+  is(o: any): o is MsgSetPauseAllowList {
+    return o && (o.$typeUrl === MsgSetPauseAllowList.typeUrl || typeof o.creator === "string" && typeof o.poolId === "bigint" && Array.isArray(o.pauseAllowList) && (!o.pauseAllowList.length || typeof o.pauseAllowList[0] === "string"));
+  },
+  isSDK(o: any): o is MsgSetPauseAllowListSDKType {
+    return o && (o.$typeUrl === MsgSetPauseAllowList.typeUrl || typeof o.creator === "string" && typeof o.pool_id === "bigint" && Array.isArray(o.pause_allow_list) && (!o.pause_allow_list.length || typeof o.pause_allow_list[0] === "string"));
+  },
+  isAmino(o: any): o is MsgSetPauseAllowListAmino {
+    return o && (o.$typeUrl === MsgSetPauseAllowList.typeUrl || typeof o.creator === "string" && typeof o.pool_id === "bigint" && Array.isArray(o.pause_allow_list) && (!o.pause_allow_list.length || typeof o.pause_allow_list[0] === "string"));
+  },
   encode(message: MsgSetPauseAllowList, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.creator !== "") {
       writer.uint32(10).string(message.creator);
@@ -9071,7 +9906,7 @@ export const MsgSetPauseAllowList = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): MsgSetPauseAllowList {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): MsgSetPauseAllowList {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgSetPauseAllowList();
@@ -9130,28 +9965,28 @@ export const MsgSetPauseAllowList = {
     message.pauseAllowList = object.pause_allow_list?.map(e => e) || [];
     return message;
   },
-  toAmino(message: MsgSetPauseAllowList): MsgSetPauseAllowListAmino {
+  toAmino(message: MsgSetPauseAllowList, useInterfaces: boolean = true): MsgSetPauseAllowListAmino {
     const obj: any = {};
-    obj.creator = message.creator;
+    obj.creator = message.creator === "" ? undefined : message.creator;
     obj.pool_id = message.poolId ? message.poolId.toString() : undefined;
     if (message.pauseAllowList) {
       obj.pause_allow_list = message.pauseAllowList.map(e => e);
     } else {
-      obj.pause_allow_list = [];
+      obj.pause_allow_list = null;
     }
     return obj;
   },
   fromAminoMsg(object: MsgSetPauseAllowListAminoMsg): MsgSetPauseAllowList {
     return MsgSetPauseAllowList.fromAmino(object.value);
   },
-  toAminoMsg(message: MsgSetPauseAllowList): MsgSetPauseAllowListAminoMsg {
+  toAminoMsg(message: MsgSetPauseAllowList, useInterfaces: boolean = true): MsgSetPauseAllowListAminoMsg {
     return {
       type: "pryzm/amm/v1/SetPauseAllowList",
-      value: MsgSetPauseAllowList.toAmino(message)
+      value: MsgSetPauseAllowList.toAmino(message, useInterfaces)
     };
   },
-  fromProtoMsg(message: MsgSetPauseAllowListProtoMsg): MsgSetPauseAllowList {
-    return MsgSetPauseAllowList.decode(message.value);
+  fromProtoMsg(message: MsgSetPauseAllowListProtoMsg, useInterfaces: boolean = true): MsgSetPauseAllowList {
+    return MsgSetPauseAllowList.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: MsgSetPauseAllowList): Uint8Array {
     return MsgSetPauseAllowList.encode(message).finish();
@@ -9163,15 +9998,26 @@ export const MsgSetPauseAllowList = {
     };
   }
 };
+GlobalDecoderRegistry.register(MsgSetPauseAllowList.typeUrl, MsgSetPauseAllowList);
+GlobalDecoderRegistry.registerAminoProtoMapping(MsgSetPauseAllowList.aminoType, MsgSetPauseAllowList.typeUrl);
 function createBaseMsgSetPauseAllowListResponse(): MsgSetPauseAllowListResponse {
   return {};
 }
 export const MsgSetPauseAllowListResponse = {
   typeUrl: "/pryzm.amm.v1.MsgSetPauseAllowListResponse",
+  is(o: any): o is MsgSetPauseAllowListResponse {
+    return o && o.$typeUrl === MsgSetPauseAllowListResponse.typeUrl;
+  },
+  isSDK(o: any): o is MsgSetPauseAllowListResponseSDKType {
+    return o && o.$typeUrl === MsgSetPauseAllowListResponse.typeUrl;
+  },
+  isAmino(o: any): o is MsgSetPauseAllowListResponseAmino {
+    return o && o.$typeUrl === MsgSetPauseAllowListResponse.typeUrl;
+  },
   encode(_: MsgSetPauseAllowListResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): MsgSetPauseAllowListResponse {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): MsgSetPauseAllowListResponse {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgSetPauseAllowListResponse();
@@ -9200,15 +10046,15 @@ export const MsgSetPauseAllowListResponse = {
     const message = createBaseMsgSetPauseAllowListResponse();
     return message;
   },
-  toAmino(_: MsgSetPauseAllowListResponse): MsgSetPauseAllowListResponseAmino {
+  toAmino(_: MsgSetPauseAllowListResponse, useInterfaces: boolean = true): MsgSetPauseAllowListResponseAmino {
     const obj: any = {};
     return obj;
   },
   fromAminoMsg(object: MsgSetPauseAllowListResponseAminoMsg): MsgSetPauseAllowListResponse {
     return MsgSetPauseAllowListResponse.fromAmino(object.value);
   },
-  fromProtoMsg(message: MsgSetPauseAllowListResponseProtoMsg): MsgSetPauseAllowListResponse {
-    return MsgSetPauseAllowListResponse.decode(message.value);
+  fromProtoMsg(message: MsgSetPauseAllowListResponseProtoMsg, useInterfaces: boolean = true): MsgSetPauseAllowListResponse {
+    return MsgSetPauseAllowListResponse.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: MsgSetPauseAllowListResponse): Uint8Array {
     return MsgSetPauseAllowListResponse.encode(message).finish();
@@ -9220,6 +10066,7 @@ export const MsgSetPauseAllowListResponse = {
     };
   }
 };
+GlobalDecoderRegistry.register(MsgSetPauseAllowListResponse.typeUrl, MsgSetPauseAllowListResponse);
 function createBaseMsgSetPauseWindow(): MsgSetPauseWindow {
   return {
     authority: "",
@@ -9229,6 +10076,16 @@ function createBaseMsgSetPauseWindow(): MsgSetPauseWindow {
 }
 export const MsgSetPauseWindow = {
   typeUrl: "/pryzm.amm.v1.MsgSetPauseWindow",
+  aminoType: "pryzm/amm/v1/SetPauseWindow",
+  is(o: any): o is MsgSetPauseWindow {
+    return o && (o.$typeUrl === MsgSetPauseWindow.typeUrl || typeof o.authority === "string" && typeof o.poolId === "bigint" && PoolPauseWindow.is(o.pauseWindow));
+  },
+  isSDK(o: any): o is MsgSetPauseWindowSDKType {
+    return o && (o.$typeUrl === MsgSetPauseWindow.typeUrl || typeof o.authority === "string" && typeof o.pool_id === "bigint" && PoolPauseWindow.isSDK(o.pause_window));
+  },
+  isAmino(o: any): o is MsgSetPauseWindowAmino {
+    return o && (o.$typeUrl === MsgSetPauseWindow.typeUrl || typeof o.authority === "string" && typeof o.pool_id === "bigint" && PoolPauseWindow.isAmino(o.pause_window));
+  },
   encode(message: MsgSetPauseWindow, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.authority !== "") {
       writer.uint32(10).string(message.authority);
@@ -9241,7 +10098,7 @@ export const MsgSetPauseWindow = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): MsgSetPauseWindow {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): MsgSetPauseWindow {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgSetPauseWindow();
@@ -9255,7 +10112,7 @@ export const MsgSetPauseWindow = {
           message.poolId = reader.uint64();
           break;
         case 3:
-          message.pauseWindow = PoolPauseWindow.decode(reader, reader.uint32());
+          message.pauseWindow = PoolPauseWindow.decode(reader, reader.uint32(), useInterfaces);
           break;
         default:
           reader.skipType(tag & 7);
@@ -9298,24 +10155,24 @@ export const MsgSetPauseWindow = {
     }
     return message;
   },
-  toAmino(message: MsgSetPauseWindow): MsgSetPauseWindowAmino {
+  toAmino(message: MsgSetPauseWindow, useInterfaces: boolean = true): MsgSetPauseWindowAmino {
     const obj: any = {};
-    obj.authority = message.authority;
+    obj.authority = message.authority === "" ? undefined : message.authority;
     obj.pool_id = message.poolId ? message.poolId.toString() : undefined;
-    obj.pause_window = message.pauseWindow ? PoolPauseWindow.toAmino(message.pauseWindow) : undefined;
+    obj.pause_window = message.pauseWindow ? PoolPauseWindow.toAmino(message.pauseWindow, useInterfaces) : undefined;
     return obj;
   },
   fromAminoMsg(object: MsgSetPauseWindowAminoMsg): MsgSetPauseWindow {
     return MsgSetPauseWindow.fromAmino(object.value);
   },
-  toAminoMsg(message: MsgSetPauseWindow): MsgSetPauseWindowAminoMsg {
+  toAminoMsg(message: MsgSetPauseWindow, useInterfaces: boolean = true): MsgSetPauseWindowAminoMsg {
     return {
       type: "pryzm/amm/v1/SetPauseWindow",
-      value: MsgSetPauseWindow.toAmino(message)
+      value: MsgSetPauseWindow.toAmino(message, useInterfaces)
     };
   },
-  fromProtoMsg(message: MsgSetPauseWindowProtoMsg): MsgSetPauseWindow {
-    return MsgSetPauseWindow.decode(message.value);
+  fromProtoMsg(message: MsgSetPauseWindowProtoMsg, useInterfaces: boolean = true): MsgSetPauseWindow {
+    return MsgSetPauseWindow.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: MsgSetPauseWindow): Uint8Array {
     return MsgSetPauseWindow.encode(message).finish();
@@ -9327,15 +10184,26 @@ export const MsgSetPauseWindow = {
     };
   }
 };
+GlobalDecoderRegistry.register(MsgSetPauseWindow.typeUrl, MsgSetPauseWindow);
+GlobalDecoderRegistry.registerAminoProtoMapping(MsgSetPauseWindow.aminoType, MsgSetPauseWindow.typeUrl);
 function createBaseMsgSetPauseWindowResponse(): MsgSetPauseWindowResponse {
   return {};
 }
 export const MsgSetPauseWindowResponse = {
   typeUrl: "/pryzm.amm.v1.MsgSetPauseWindowResponse",
+  is(o: any): o is MsgSetPauseWindowResponse {
+    return o && o.$typeUrl === MsgSetPauseWindowResponse.typeUrl;
+  },
+  isSDK(o: any): o is MsgSetPauseWindowResponseSDKType {
+    return o && o.$typeUrl === MsgSetPauseWindowResponse.typeUrl;
+  },
+  isAmino(o: any): o is MsgSetPauseWindowResponseAmino {
+    return o && o.$typeUrl === MsgSetPauseWindowResponse.typeUrl;
+  },
   encode(_: MsgSetPauseWindowResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): MsgSetPauseWindowResponse {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): MsgSetPauseWindowResponse {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgSetPauseWindowResponse();
@@ -9364,15 +10232,15 @@ export const MsgSetPauseWindowResponse = {
     const message = createBaseMsgSetPauseWindowResponse();
     return message;
   },
-  toAmino(_: MsgSetPauseWindowResponse): MsgSetPauseWindowResponseAmino {
+  toAmino(_: MsgSetPauseWindowResponse, useInterfaces: boolean = true): MsgSetPauseWindowResponseAmino {
     const obj: any = {};
     return obj;
   },
   fromAminoMsg(object: MsgSetPauseWindowResponseAminoMsg): MsgSetPauseWindowResponse {
     return MsgSetPauseWindowResponse.fromAmino(object.value);
   },
-  fromProtoMsg(message: MsgSetPauseWindowResponseProtoMsg): MsgSetPauseWindowResponse {
-    return MsgSetPauseWindowResponse.decode(message.value);
+  fromProtoMsg(message: MsgSetPauseWindowResponseProtoMsg, useInterfaces: boolean = true): MsgSetPauseWindowResponse {
+    return MsgSetPauseWindowResponse.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: MsgSetPauseWindowResponse): Uint8Array {
     return MsgSetPauseWindowResponse.encode(message).finish();
@@ -9384,3 +10252,4 @@ export const MsgSetPauseWindowResponse = {
     };
   }
 };
+GlobalDecoderRegistry.register(MsgSetPauseWindowResponse.typeUrl, MsgSetPauseWindowResponse);

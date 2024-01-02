@@ -2,7 +2,8 @@ import { Duration, DurationAmino, DurationSDKType } from "../../google/protobuf/
 import { RewardWeightRange, RewardWeightRangeAmino, RewardWeightRangeSDKType } from "./alliance";
 import { BinaryReader, BinaryWriter } from "../../binary";
 import { Decimal } from "@cosmjs/math";
-import { isSet } from "../../helpers";
+import { isSet, padDecimal } from "../../helpers";
+import { GlobalDecoderRegistry } from "../../registry";
 export interface MsgCreateAllianceProposal {
   /** the title of the update proposal */
   title: string;
@@ -159,6 +160,15 @@ function createBaseMsgCreateAllianceProposal(): MsgCreateAllianceProposal {
 }
 export const MsgCreateAllianceProposal = {
   typeUrl: "/alliance.alliance.MsgCreateAllianceProposal",
+  is(o: any): o is MsgCreateAllianceProposal {
+    return o && (o.$typeUrl === MsgCreateAllianceProposal.typeUrl || typeof o.title === "string" && typeof o.description === "string" && typeof o.denom === "string" && typeof o.rewardWeight === "string" && typeof o.takeRate === "string" && typeof o.rewardChangeRate === "string" && Duration.is(o.rewardChangeInterval) && RewardWeightRange.is(o.rewardWeightRange));
+  },
+  isSDK(o: any): o is MsgCreateAllianceProposalSDKType {
+    return o && (o.$typeUrl === MsgCreateAllianceProposal.typeUrl || typeof o.title === "string" && typeof o.description === "string" && typeof o.denom === "string" && typeof o.reward_weight === "string" && typeof o.take_rate === "string" && typeof o.reward_change_rate === "string" && Duration.isSDK(o.reward_change_interval) && RewardWeightRange.isSDK(o.reward_weight_range));
+  },
+  isAmino(o: any): o is MsgCreateAllianceProposalAmino {
+    return o && (o.$typeUrl === MsgCreateAllianceProposal.typeUrl || typeof o.title === "string" && typeof o.description === "string" && typeof o.denom === "string" && typeof o.reward_weight === "string" && typeof o.take_rate === "string" && typeof o.reward_change_rate === "string" && Duration.isAmino(o.reward_change_interval) && RewardWeightRange.isAmino(o.reward_weight_range));
+  },
   encode(message: MsgCreateAllianceProposal, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.title !== "") {
       writer.uint32(10).string(message.title);
@@ -186,7 +196,7 @@ export const MsgCreateAllianceProposal = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): MsgCreateAllianceProposal {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): MsgCreateAllianceProposal {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgCreateAllianceProposal();
@@ -212,10 +222,10 @@ export const MsgCreateAllianceProposal = {
           message.rewardChangeRate = Decimal.fromAtomics(reader.string(), 18).toString();
           break;
         case 7:
-          message.rewardChangeInterval = Duration.decode(reader, reader.uint32());
+          message.rewardChangeInterval = Duration.decode(reader, reader.uint32(), useInterfaces);
           break;
         case 8:
-          message.rewardWeightRange = RewardWeightRange.decode(reader, reader.uint32());
+          message.rewardWeightRange = RewardWeightRange.decode(reader, reader.uint32(), useInterfaces);
           break;
         default:
           reader.skipType(tag & 7);
@@ -288,23 +298,23 @@ export const MsgCreateAllianceProposal = {
     }
     return message;
   },
-  toAmino(message: MsgCreateAllianceProposal): MsgCreateAllianceProposalAmino {
+  toAmino(message: MsgCreateAllianceProposal, useInterfaces: boolean = true): MsgCreateAllianceProposalAmino {
     const obj: any = {};
-    obj.title = message.title;
-    obj.description = message.description;
-    obj.denom = message.denom;
-    obj.reward_weight = message.rewardWeight;
-    obj.take_rate = message.takeRate;
-    obj.reward_change_rate = message.rewardChangeRate;
-    obj.reward_change_interval = message.rewardChangeInterval ? Duration.toAmino(message.rewardChangeInterval) : undefined;
-    obj.reward_weight_range = message.rewardWeightRange ? RewardWeightRange.toAmino(message.rewardWeightRange) : undefined;
+    obj.title = message.title === "" ? undefined : message.title;
+    obj.description = message.description === "" ? undefined : message.description;
+    obj.denom = message.denom === "" ? undefined : message.denom;
+    obj.reward_weight = padDecimal(message.rewardWeight) === "" ? undefined : padDecimal(message.rewardWeight);
+    obj.take_rate = padDecimal(message.takeRate) === "" ? undefined : padDecimal(message.takeRate);
+    obj.reward_change_rate = padDecimal(message.rewardChangeRate) === "" ? undefined : padDecimal(message.rewardChangeRate);
+    obj.reward_change_interval = message.rewardChangeInterval ? Duration.toAmino(message.rewardChangeInterval, useInterfaces) : undefined;
+    obj.reward_weight_range = message.rewardWeightRange ? RewardWeightRange.toAmino(message.rewardWeightRange, useInterfaces) : undefined;
     return obj;
   },
   fromAminoMsg(object: MsgCreateAllianceProposalAminoMsg): MsgCreateAllianceProposal {
     return MsgCreateAllianceProposal.fromAmino(object.value);
   },
-  fromProtoMsg(message: MsgCreateAllianceProposalProtoMsg): MsgCreateAllianceProposal {
-    return MsgCreateAllianceProposal.decode(message.value);
+  fromProtoMsg(message: MsgCreateAllianceProposalProtoMsg, useInterfaces: boolean = true): MsgCreateAllianceProposal {
+    return MsgCreateAllianceProposal.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: MsgCreateAllianceProposal): Uint8Array {
     return MsgCreateAllianceProposal.encode(message).finish();
@@ -316,6 +326,7 @@ export const MsgCreateAllianceProposal = {
     };
   }
 };
+GlobalDecoderRegistry.register(MsgCreateAllianceProposal.typeUrl, MsgCreateAllianceProposal);
 function createBaseMsgUpdateAllianceProposal(): MsgUpdateAllianceProposal {
   return {
     title: "",
@@ -329,6 +340,15 @@ function createBaseMsgUpdateAllianceProposal(): MsgUpdateAllianceProposal {
 }
 export const MsgUpdateAllianceProposal = {
   typeUrl: "/alliance.alliance.MsgUpdateAllianceProposal",
+  is(o: any): o is MsgUpdateAllianceProposal {
+    return o && (o.$typeUrl === MsgUpdateAllianceProposal.typeUrl || typeof o.title === "string" && typeof o.description === "string" && typeof o.denom === "string" && typeof o.rewardWeight === "string" && typeof o.takeRate === "string" && typeof o.rewardChangeRate === "string" && Duration.is(o.rewardChangeInterval));
+  },
+  isSDK(o: any): o is MsgUpdateAllianceProposalSDKType {
+    return o && (o.$typeUrl === MsgUpdateAllianceProposal.typeUrl || typeof o.title === "string" && typeof o.description === "string" && typeof o.denom === "string" && typeof o.reward_weight === "string" && typeof o.take_rate === "string" && typeof o.reward_change_rate === "string" && Duration.isSDK(o.reward_change_interval));
+  },
+  isAmino(o: any): o is MsgUpdateAllianceProposalAmino {
+    return o && (o.$typeUrl === MsgUpdateAllianceProposal.typeUrl || typeof o.title === "string" && typeof o.description === "string" && typeof o.denom === "string" && typeof o.reward_weight === "string" && typeof o.take_rate === "string" && typeof o.reward_change_rate === "string" && Duration.isAmino(o.reward_change_interval));
+  },
   encode(message: MsgUpdateAllianceProposal, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.title !== "") {
       writer.uint32(10).string(message.title);
@@ -353,7 +373,7 @@ export const MsgUpdateAllianceProposal = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): MsgUpdateAllianceProposal {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): MsgUpdateAllianceProposal {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgUpdateAllianceProposal();
@@ -379,7 +399,7 @@ export const MsgUpdateAllianceProposal = {
           message.rewardChangeRate = Decimal.fromAtomics(reader.string(), 18).toString();
           break;
         case 7:
-          message.rewardChangeInterval = Duration.decode(reader, reader.uint32());
+          message.rewardChangeInterval = Duration.decode(reader, reader.uint32(), useInterfaces);
           break;
         default:
           reader.skipType(tag & 7);
@@ -446,22 +466,22 @@ export const MsgUpdateAllianceProposal = {
     }
     return message;
   },
-  toAmino(message: MsgUpdateAllianceProposal): MsgUpdateAllianceProposalAmino {
+  toAmino(message: MsgUpdateAllianceProposal, useInterfaces: boolean = true): MsgUpdateAllianceProposalAmino {
     const obj: any = {};
-    obj.title = message.title;
-    obj.description = message.description;
-    obj.denom = message.denom;
-    obj.reward_weight = message.rewardWeight;
-    obj.take_rate = message.takeRate;
-    obj.reward_change_rate = message.rewardChangeRate;
-    obj.reward_change_interval = message.rewardChangeInterval ? Duration.toAmino(message.rewardChangeInterval) : undefined;
+    obj.title = message.title === "" ? undefined : message.title;
+    obj.description = message.description === "" ? undefined : message.description;
+    obj.denom = message.denom === "" ? undefined : message.denom;
+    obj.reward_weight = padDecimal(message.rewardWeight) === "" ? undefined : padDecimal(message.rewardWeight);
+    obj.take_rate = padDecimal(message.takeRate) === "" ? undefined : padDecimal(message.takeRate);
+    obj.reward_change_rate = padDecimal(message.rewardChangeRate) === "" ? undefined : padDecimal(message.rewardChangeRate);
+    obj.reward_change_interval = message.rewardChangeInterval ? Duration.toAmino(message.rewardChangeInterval, useInterfaces) : undefined;
     return obj;
   },
   fromAminoMsg(object: MsgUpdateAllianceProposalAminoMsg): MsgUpdateAllianceProposal {
     return MsgUpdateAllianceProposal.fromAmino(object.value);
   },
-  fromProtoMsg(message: MsgUpdateAllianceProposalProtoMsg): MsgUpdateAllianceProposal {
-    return MsgUpdateAllianceProposal.decode(message.value);
+  fromProtoMsg(message: MsgUpdateAllianceProposalProtoMsg, useInterfaces: boolean = true): MsgUpdateAllianceProposal {
+    return MsgUpdateAllianceProposal.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: MsgUpdateAllianceProposal): Uint8Array {
     return MsgUpdateAllianceProposal.encode(message).finish();
@@ -473,6 +493,7 @@ export const MsgUpdateAllianceProposal = {
     };
   }
 };
+GlobalDecoderRegistry.register(MsgUpdateAllianceProposal.typeUrl, MsgUpdateAllianceProposal);
 function createBaseMsgDeleteAllianceProposal(): MsgDeleteAllianceProposal {
   return {
     title: "",
@@ -482,6 +503,15 @@ function createBaseMsgDeleteAllianceProposal(): MsgDeleteAllianceProposal {
 }
 export const MsgDeleteAllianceProposal = {
   typeUrl: "/alliance.alliance.MsgDeleteAllianceProposal",
+  is(o: any): o is MsgDeleteAllianceProposal {
+    return o && (o.$typeUrl === MsgDeleteAllianceProposal.typeUrl || typeof o.title === "string" && typeof o.description === "string" && typeof o.denom === "string");
+  },
+  isSDK(o: any): o is MsgDeleteAllianceProposalSDKType {
+    return o && (o.$typeUrl === MsgDeleteAllianceProposal.typeUrl || typeof o.title === "string" && typeof o.description === "string" && typeof o.denom === "string");
+  },
+  isAmino(o: any): o is MsgDeleteAllianceProposalAmino {
+    return o && (o.$typeUrl === MsgDeleteAllianceProposal.typeUrl || typeof o.title === "string" && typeof o.description === "string" && typeof o.denom === "string");
+  },
   encode(message: MsgDeleteAllianceProposal, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.title !== "") {
       writer.uint32(10).string(message.title);
@@ -494,7 +524,7 @@ export const MsgDeleteAllianceProposal = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): MsgDeleteAllianceProposal {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): MsgDeleteAllianceProposal {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgDeleteAllianceProposal();
@@ -551,18 +581,18 @@ export const MsgDeleteAllianceProposal = {
     }
     return message;
   },
-  toAmino(message: MsgDeleteAllianceProposal): MsgDeleteAllianceProposalAmino {
+  toAmino(message: MsgDeleteAllianceProposal, useInterfaces: boolean = true): MsgDeleteAllianceProposalAmino {
     const obj: any = {};
-    obj.title = message.title;
-    obj.description = message.description;
-    obj.denom = message.denom;
+    obj.title = message.title === "" ? undefined : message.title;
+    obj.description = message.description === "" ? undefined : message.description;
+    obj.denom = message.denom === "" ? undefined : message.denom;
     return obj;
   },
   fromAminoMsg(object: MsgDeleteAllianceProposalAminoMsg): MsgDeleteAllianceProposal {
     return MsgDeleteAllianceProposal.fromAmino(object.value);
   },
-  fromProtoMsg(message: MsgDeleteAllianceProposalProtoMsg): MsgDeleteAllianceProposal {
-    return MsgDeleteAllianceProposal.decode(message.value);
+  fromProtoMsg(message: MsgDeleteAllianceProposalProtoMsg, useInterfaces: boolean = true): MsgDeleteAllianceProposal {
+    return MsgDeleteAllianceProposal.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: MsgDeleteAllianceProposal): Uint8Array {
     return MsgDeleteAllianceProposal.encode(message).finish();
@@ -574,3 +604,4 @@ export const MsgDeleteAllianceProposal = {
     };
   }
 };
+GlobalDecoderRegistry.register(MsgDeleteAllianceProposal.typeUrl, MsgDeleteAllianceProposal);

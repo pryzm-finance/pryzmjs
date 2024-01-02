@@ -1,6 +1,7 @@
 import { Timestamp, TimestampSDKType } from "../../../google/protobuf/timestamp";
 import { BinaryReader, BinaryWriter } from "../../../binary";
 import { isSet, fromJsonTimestamp, fromTimestamp } from "../../../helpers";
+import { GlobalDecoderRegistry } from "../../../registry";
 export interface MaturityLevel {
   active: boolean;
   assetId: string;
@@ -41,6 +42,15 @@ function createBaseMaturityLevel(): MaturityLevel {
 }
 export const MaturityLevel = {
   typeUrl: "/pryzm.assets.v1.MaturityLevel",
+  is(o: any): o is MaturityLevel {
+    return o && (o.$typeUrl === MaturityLevel.typeUrl || typeof o.active === "boolean" && typeof o.assetId === "string" && typeof o.symbol === "string" && Timestamp.is(o.introductionTime) && Timestamp.is(o.expirationTime));
+  },
+  isSDK(o: any): o is MaturityLevelSDKType {
+    return o && (o.$typeUrl === MaturityLevel.typeUrl || typeof o.active === "boolean" && typeof o.asset_id === "string" && typeof o.symbol === "string" && Timestamp.isSDK(o.introduction_time) && Timestamp.isSDK(o.expiration_time));
+  },
+  isAmino(o: any): o is MaturityLevelAmino {
+    return o && (o.$typeUrl === MaturityLevel.typeUrl || typeof o.active === "boolean" && typeof o.asset_id === "string" && typeof o.symbol === "string" && Timestamp.isAmino(o.introduction_time) && Timestamp.isAmino(o.expiration_time));
+  },
   encode(message: MaturityLevel, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.active === true) {
       writer.uint32(8).bool(message.active);
@@ -59,7 +69,7 @@ export const MaturityLevel = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): MaturityLevel {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): MaturityLevel {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMaturityLevel();
@@ -134,20 +144,20 @@ export const MaturityLevel = {
     }
     return message;
   },
-  toAmino(message: MaturityLevel): MaturityLevelAmino {
+  toAmino(message: MaturityLevel, useInterfaces: boolean = true): MaturityLevelAmino {
     const obj: any = {};
-    obj.active = message.active;
-    obj.asset_id = message.assetId;
-    obj.symbol = message.symbol;
-    obj.introduction_time = message.introductionTime ? Timestamp.toAmino(message.introductionTime) : undefined;
-    obj.expiration_time = message.expirationTime ? Timestamp.toAmino(message.expirationTime) : undefined;
+    obj.active = message.active === false ? undefined : message.active;
+    obj.asset_id = message.assetId === "" ? undefined : message.assetId;
+    obj.symbol = message.symbol === "" ? undefined : message.symbol;
+    obj.introduction_time = message.introductionTime ? Timestamp.toAmino(message.introductionTime, useInterfaces) : undefined;
+    obj.expiration_time = message.expirationTime ? Timestamp.toAmino(message.expirationTime, useInterfaces) : undefined;
     return obj;
   },
   fromAminoMsg(object: MaturityLevelAminoMsg): MaturityLevel {
     return MaturityLevel.fromAmino(object.value);
   },
-  fromProtoMsg(message: MaturityLevelProtoMsg): MaturityLevel {
-    return MaturityLevel.decode(message.value);
+  fromProtoMsg(message: MaturityLevelProtoMsg, useInterfaces: boolean = true): MaturityLevel {
+    return MaturityLevel.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: MaturityLevel): Uint8Array {
     return MaturityLevel.encode(message).finish();
@@ -159,3 +169,4 @@ export const MaturityLevel = {
     };
   }
 };
+GlobalDecoderRegistry.register(MaturityLevel.typeUrl, MaturityLevel);

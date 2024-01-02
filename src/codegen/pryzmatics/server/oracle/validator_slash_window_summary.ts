@@ -2,6 +2,7 @@ import { PageRequest, PageRequestAmino, PageRequestSDKType, PageResponse, PageRe
 import { ValidatorSlashWindowSummary, ValidatorSlashWindowSummaryAmino, ValidatorSlashWindowSummarySDKType } from "../../oracle/validator_slash_window_summary";
 import { BinaryReader, BinaryWriter } from "../../../binary";
 import { isSet } from "../../../helpers";
+import { GlobalDecoderRegistry } from "../../../registry";
 export interface QueryValidatorSlashWindowSummariesRequest {
   operatorAddress: string;
   fromBlockHeight?: string;
@@ -58,6 +59,15 @@ function createBaseQueryValidatorSlashWindowSummariesRequest(): QueryValidatorSl
 }
 export const QueryValidatorSlashWindowSummariesRequest = {
   typeUrl: "/pryzmatics.server.oracle.QueryValidatorSlashWindowSummariesRequest",
+  is(o: any): o is QueryValidatorSlashWindowSummariesRequest {
+    return o && (o.$typeUrl === QueryValidatorSlashWindowSummariesRequest.typeUrl || typeof o.operatorAddress === "string");
+  },
+  isSDK(o: any): o is QueryValidatorSlashWindowSummariesRequestSDKType {
+    return o && (o.$typeUrl === QueryValidatorSlashWindowSummariesRequest.typeUrl || typeof o.operator_address === "string");
+  },
+  isAmino(o: any): o is QueryValidatorSlashWindowSummariesRequestAmino {
+    return o && (o.$typeUrl === QueryValidatorSlashWindowSummariesRequest.typeUrl || typeof o.operator_address === "string");
+  },
   encode(message: QueryValidatorSlashWindowSummariesRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.operatorAddress !== "") {
       writer.uint32(10).string(message.operatorAddress);
@@ -73,7 +83,7 @@ export const QueryValidatorSlashWindowSummariesRequest = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): QueryValidatorSlashWindowSummariesRequest {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): QueryValidatorSlashWindowSummariesRequest {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryValidatorSlashWindowSummariesRequest();
@@ -90,7 +100,7 @@ export const QueryValidatorSlashWindowSummariesRequest = {
           message.toBlockHeight = reader.string();
           break;
         case 4:
-          message.pagination = PageRequest.decode(reader, reader.uint32());
+          message.pagination = PageRequest.decode(reader, reader.uint32(), useInterfaces);
           break;
         default:
           reader.skipType(tag & 7);
@@ -139,19 +149,19 @@ export const QueryValidatorSlashWindowSummariesRequest = {
     }
     return message;
   },
-  toAmino(message: QueryValidatorSlashWindowSummariesRequest): QueryValidatorSlashWindowSummariesRequestAmino {
+  toAmino(message: QueryValidatorSlashWindowSummariesRequest, useInterfaces: boolean = true): QueryValidatorSlashWindowSummariesRequestAmino {
     const obj: any = {};
-    obj.operator_address = message.operatorAddress;
-    obj.from_block_height = message.fromBlockHeight;
-    obj.to_block_height = message.toBlockHeight;
-    obj.pagination = message.pagination ? PageRequest.toAmino(message.pagination) : undefined;
+    obj.operator_address = message.operatorAddress === "" ? undefined : message.operatorAddress;
+    obj.from_block_height = message.fromBlockHeight === null ? undefined : message.fromBlockHeight;
+    obj.to_block_height = message.toBlockHeight === null ? undefined : message.toBlockHeight;
+    obj.pagination = message.pagination ? PageRequest.toAmino(message.pagination, useInterfaces) : undefined;
     return obj;
   },
   fromAminoMsg(object: QueryValidatorSlashWindowSummariesRequestAminoMsg): QueryValidatorSlashWindowSummariesRequest {
     return QueryValidatorSlashWindowSummariesRequest.fromAmino(object.value);
   },
-  fromProtoMsg(message: QueryValidatorSlashWindowSummariesRequestProtoMsg): QueryValidatorSlashWindowSummariesRequest {
-    return QueryValidatorSlashWindowSummariesRequest.decode(message.value);
+  fromProtoMsg(message: QueryValidatorSlashWindowSummariesRequestProtoMsg, useInterfaces: boolean = true): QueryValidatorSlashWindowSummariesRequest {
+    return QueryValidatorSlashWindowSummariesRequest.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: QueryValidatorSlashWindowSummariesRequest): Uint8Array {
     return QueryValidatorSlashWindowSummariesRequest.encode(message).finish();
@@ -163,6 +173,7 @@ export const QueryValidatorSlashWindowSummariesRequest = {
     };
   }
 };
+GlobalDecoderRegistry.register(QueryValidatorSlashWindowSummariesRequest.typeUrl, QueryValidatorSlashWindowSummariesRequest);
 function createBaseQueryValidatorSlashWindowSummariesResponse(): QueryValidatorSlashWindowSummariesResponse {
   return {
     summaries: [],
@@ -171,6 +182,15 @@ function createBaseQueryValidatorSlashWindowSummariesResponse(): QueryValidatorS
 }
 export const QueryValidatorSlashWindowSummariesResponse = {
   typeUrl: "/pryzmatics.server.oracle.QueryValidatorSlashWindowSummariesResponse",
+  is(o: any): o is QueryValidatorSlashWindowSummariesResponse {
+    return o && (o.$typeUrl === QueryValidatorSlashWindowSummariesResponse.typeUrl || Array.isArray(o.summaries) && (!o.summaries.length || ValidatorSlashWindowSummary.is(o.summaries[0])));
+  },
+  isSDK(o: any): o is QueryValidatorSlashWindowSummariesResponseSDKType {
+    return o && (o.$typeUrl === QueryValidatorSlashWindowSummariesResponse.typeUrl || Array.isArray(o.summaries) && (!o.summaries.length || ValidatorSlashWindowSummary.isSDK(o.summaries[0])));
+  },
+  isAmino(o: any): o is QueryValidatorSlashWindowSummariesResponseAmino {
+    return o && (o.$typeUrl === QueryValidatorSlashWindowSummariesResponse.typeUrl || Array.isArray(o.summaries) && (!o.summaries.length || ValidatorSlashWindowSummary.isAmino(o.summaries[0])));
+  },
   encode(message: QueryValidatorSlashWindowSummariesResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     for (const v of message.summaries) {
       ValidatorSlashWindowSummary.encode(v!, writer.uint32(10).fork()).ldelim();
@@ -180,7 +200,7 @@ export const QueryValidatorSlashWindowSummariesResponse = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): QueryValidatorSlashWindowSummariesResponse {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): QueryValidatorSlashWindowSummariesResponse {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryValidatorSlashWindowSummariesResponse();
@@ -188,10 +208,10 @@ export const QueryValidatorSlashWindowSummariesResponse = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.summaries.push(ValidatorSlashWindowSummary.decode(reader, reader.uint32()));
+          message.summaries.push(ValidatorSlashWindowSummary.decode(reader, reader.uint32(), useInterfaces));
           break;
         case 2:
-          message.pagination = PageResponse.decode(reader, reader.uint32());
+          message.pagination = PageResponse.decode(reader, reader.uint32(), useInterfaces);
           break;
         default:
           reader.skipType(tag & 7);
@@ -230,21 +250,21 @@ export const QueryValidatorSlashWindowSummariesResponse = {
     }
     return message;
   },
-  toAmino(message: QueryValidatorSlashWindowSummariesResponse): QueryValidatorSlashWindowSummariesResponseAmino {
+  toAmino(message: QueryValidatorSlashWindowSummariesResponse, useInterfaces: boolean = true): QueryValidatorSlashWindowSummariesResponseAmino {
     const obj: any = {};
     if (message.summaries) {
-      obj.summaries = message.summaries.map(e => e ? ValidatorSlashWindowSummary.toAmino(e) : undefined);
+      obj.summaries = message.summaries.map(e => e ? ValidatorSlashWindowSummary.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.summaries = [];
+      obj.summaries = null;
     }
-    obj.pagination = message.pagination ? PageResponse.toAmino(message.pagination) : undefined;
+    obj.pagination = message.pagination ? PageResponse.toAmino(message.pagination, useInterfaces) : undefined;
     return obj;
   },
   fromAminoMsg(object: QueryValidatorSlashWindowSummariesResponseAminoMsg): QueryValidatorSlashWindowSummariesResponse {
     return QueryValidatorSlashWindowSummariesResponse.fromAmino(object.value);
   },
-  fromProtoMsg(message: QueryValidatorSlashWindowSummariesResponseProtoMsg): QueryValidatorSlashWindowSummariesResponse {
-    return QueryValidatorSlashWindowSummariesResponse.decode(message.value);
+  fromProtoMsg(message: QueryValidatorSlashWindowSummariesResponseProtoMsg, useInterfaces: boolean = true): QueryValidatorSlashWindowSummariesResponse {
+    return QueryValidatorSlashWindowSummariesResponse.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: QueryValidatorSlashWindowSummariesResponse): Uint8Array {
     return QueryValidatorSlashWindowSummariesResponse.encode(message).finish();
@@ -256,3 +276,4 @@ export const QueryValidatorSlashWindowSummariesResponse = {
     };
   }
 };
+GlobalDecoderRegistry.register(QueryValidatorSlashWindowSummariesResponse.typeUrl, QueryValidatorSlashWindowSummariesResponse);

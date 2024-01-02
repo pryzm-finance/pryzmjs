@@ -1,6 +1,7 @@
 import { BinaryReader, BinaryWriter } from "../../../binary";
 import { Decimal } from "@cosmjs/math";
-import { isSet } from "../../../helpers";
+import { isSet, padDecimal } from "../../../helpers";
+import { GlobalDecoderRegistry } from "../../../registry";
 export interface CircuitBreaker {
   referenceLptPrice: string;
   lowerBound: string;
@@ -91,6 +92,15 @@ function createBaseCircuitBreaker(): CircuitBreaker {
 }
 export const CircuitBreaker = {
   typeUrl: "/pryzm.amm.v1.CircuitBreaker",
+  is(o: any): o is CircuitBreaker {
+    return o && (o.$typeUrl === CircuitBreaker.typeUrl || typeof o.referenceLptPrice === "string" && typeof o.lowerBound === "string" && typeof o.upperBound === "string" && typeof o.referenceNormalizedWeight === "string" && typeof o.adjustedUpperBound === "string" && typeof o.adjustedLowerBound === "string");
+  },
+  isSDK(o: any): o is CircuitBreakerSDKType {
+    return o && (o.$typeUrl === CircuitBreaker.typeUrl || typeof o.reference_lpt_price === "string" && typeof o.lower_bound === "string" && typeof o.upper_bound === "string" && typeof o.reference_normalized_weight === "string" && typeof o.adjusted_upper_bound === "string" && typeof o.adjusted_lower_bound === "string");
+  },
+  isAmino(o: any): o is CircuitBreakerAmino {
+    return o && (o.$typeUrl === CircuitBreaker.typeUrl || typeof o.reference_lpt_price === "string" && typeof o.lower_bound === "string" && typeof o.upper_bound === "string" && typeof o.reference_normalized_weight === "string" && typeof o.adjusted_upper_bound === "string" && typeof o.adjusted_lower_bound === "string");
+  },
   encode(message: CircuitBreaker, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.referenceLptPrice !== "") {
       writer.uint32(10).string(Decimal.fromUserInput(message.referenceLptPrice, 18).atomics);
@@ -112,7 +122,7 @@ export const CircuitBreaker = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): CircuitBreaker {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): CircuitBreaker {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseCircuitBreaker();
@@ -196,21 +206,21 @@ export const CircuitBreaker = {
     }
     return message;
   },
-  toAmino(message: CircuitBreaker): CircuitBreakerAmino {
+  toAmino(message: CircuitBreaker, useInterfaces: boolean = true): CircuitBreakerAmino {
     const obj: any = {};
-    obj.reference_lpt_price = message.referenceLptPrice;
-    obj.lower_bound = message.lowerBound;
-    obj.upper_bound = message.upperBound;
-    obj.reference_normalized_weight = message.referenceNormalizedWeight;
-    obj.adjusted_upper_bound = message.adjustedUpperBound;
-    obj.adjusted_lower_bound = message.adjustedLowerBound;
+    obj.reference_lpt_price = padDecimal(message.referenceLptPrice) === "" ? undefined : padDecimal(message.referenceLptPrice);
+    obj.lower_bound = padDecimal(message.lowerBound) === "" ? undefined : padDecimal(message.lowerBound);
+    obj.upper_bound = padDecimal(message.upperBound) === "" ? undefined : padDecimal(message.upperBound);
+    obj.reference_normalized_weight = padDecimal(message.referenceNormalizedWeight) === "" ? undefined : padDecimal(message.referenceNormalizedWeight);
+    obj.adjusted_upper_bound = padDecimal(message.adjustedUpperBound) === "" ? undefined : padDecimal(message.adjustedUpperBound);
+    obj.adjusted_lower_bound = padDecimal(message.adjustedLowerBound) === "" ? undefined : padDecimal(message.adjustedLowerBound);
     return obj;
   },
   fromAminoMsg(object: CircuitBreakerAminoMsg): CircuitBreaker {
     return CircuitBreaker.fromAmino(object.value);
   },
-  fromProtoMsg(message: CircuitBreakerProtoMsg): CircuitBreaker {
-    return CircuitBreaker.decode(message.value);
+  fromProtoMsg(message: CircuitBreakerProtoMsg, useInterfaces: boolean = true): CircuitBreaker {
+    return CircuitBreaker.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: CircuitBreaker): Uint8Array {
     return CircuitBreaker.encode(message).finish();
@@ -222,6 +232,7 @@ export const CircuitBreaker = {
     };
   }
 };
+GlobalDecoderRegistry.register(CircuitBreaker.typeUrl, CircuitBreaker);
 function createBasePoolToken(): PoolToken {
   return {
     poolId: BigInt(0),
@@ -232,6 +243,15 @@ function createBasePoolToken(): PoolToken {
 }
 export const PoolToken = {
   typeUrl: "/pryzm.amm.v1.PoolToken",
+  is(o: any): o is PoolToken {
+    return o && (o.$typeUrl === PoolToken.typeUrl || typeof o.poolId === "bigint" && typeof o.denom === "string" && typeof o.balance === "string");
+  },
+  isSDK(o: any): o is PoolTokenSDKType {
+    return o && (o.$typeUrl === PoolToken.typeUrl || typeof o.pool_id === "bigint" && typeof o.denom === "string" && typeof o.balance === "string");
+  },
+  isAmino(o: any): o is PoolTokenAmino {
+    return o && (o.$typeUrl === PoolToken.typeUrl || typeof o.pool_id === "bigint" && typeof o.denom === "string" && typeof o.balance === "string");
+  },
   encode(message: PoolToken, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.poolId !== BigInt(0)) {
       writer.uint32(8).uint64(message.poolId);
@@ -247,7 +267,7 @@ export const PoolToken = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): PoolToken {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): PoolToken {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBasePoolToken();
@@ -264,7 +284,7 @@ export const PoolToken = {
           message.balance = reader.string();
           break;
         case 4:
-          message.circuitBreaker = CircuitBreaker.decode(reader, reader.uint32());
+          message.circuitBreaker = CircuitBreaker.decode(reader, reader.uint32(), useInterfaces);
           break;
         default:
           reader.skipType(tag & 7);
@@ -313,19 +333,19 @@ export const PoolToken = {
     }
     return message;
   },
-  toAmino(message: PoolToken): PoolTokenAmino {
+  toAmino(message: PoolToken, useInterfaces: boolean = true): PoolTokenAmino {
     const obj: any = {};
     obj.pool_id = message.poolId ? message.poolId.toString() : undefined;
-    obj.denom = message.denom;
-    obj.balance = message.balance;
-    obj.circuit_breaker = message.circuitBreaker ? CircuitBreaker.toAmino(message.circuitBreaker) : undefined;
+    obj.denom = message.denom === "" ? undefined : message.denom;
+    obj.balance = message.balance === "" ? undefined : message.balance;
+    obj.circuit_breaker = message.circuitBreaker ? CircuitBreaker.toAmino(message.circuitBreaker, useInterfaces) : undefined;
     return obj;
   },
   fromAminoMsg(object: PoolTokenAminoMsg): PoolToken {
     return PoolToken.fromAmino(object.value);
   },
-  fromProtoMsg(message: PoolTokenProtoMsg): PoolToken {
-    return PoolToken.decode(message.value);
+  fromProtoMsg(message: PoolTokenProtoMsg, useInterfaces: boolean = true): PoolToken {
+    return PoolToken.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: PoolToken): Uint8Array {
     return PoolToken.encode(message).finish();
@@ -337,6 +357,7 @@ export const PoolToken = {
     };
   }
 };
+GlobalDecoderRegistry.register(PoolToken.typeUrl, PoolToken);
 function createBaseTokenAmount(): TokenAmount {
   return {
     token: PoolToken.fromPartial({}),
@@ -345,6 +366,15 @@ function createBaseTokenAmount(): TokenAmount {
 }
 export const TokenAmount = {
   typeUrl: "/pryzm.amm.v1.TokenAmount",
+  is(o: any): o is TokenAmount {
+    return o && (o.$typeUrl === TokenAmount.typeUrl || PoolToken.is(o.token) && typeof o.amount === "string");
+  },
+  isSDK(o: any): o is TokenAmountSDKType {
+    return o && (o.$typeUrl === TokenAmount.typeUrl || PoolToken.isSDK(o.token) && typeof o.amount === "string");
+  },
+  isAmino(o: any): o is TokenAmountAmino {
+    return o && (o.$typeUrl === TokenAmount.typeUrl || PoolToken.isAmino(o.token) && typeof o.amount === "string");
+  },
   encode(message: TokenAmount, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.token !== undefined) {
       PoolToken.encode(message.token, writer.uint32(10).fork()).ldelim();
@@ -354,7 +384,7 @@ export const TokenAmount = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): TokenAmount {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): TokenAmount {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseTokenAmount();
@@ -362,7 +392,7 @@ export const TokenAmount = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.token = PoolToken.decode(reader, reader.uint32());
+          message.token = PoolToken.decode(reader, reader.uint32(), useInterfaces);
           break;
         case 2:
           message.amount = reader.string();
@@ -402,17 +432,17 @@ export const TokenAmount = {
     }
     return message;
   },
-  toAmino(message: TokenAmount): TokenAmountAmino {
+  toAmino(message: TokenAmount, useInterfaces: boolean = true): TokenAmountAmino {
     const obj: any = {};
-    obj.token = message.token ? PoolToken.toAmino(message.token) : undefined;
-    obj.amount = message.amount;
+    obj.token = message.token ? PoolToken.toAmino(message.token, useInterfaces) : undefined;
+    obj.amount = message.amount === "" ? undefined : message.amount;
     return obj;
   },
   fromAminoMsg(object: TokenAmountAminoMsg): TokenAmount {
     return TokenAmount.fromAmino(object.value);
   },
-  fromProtoMsg(message: TokenAmountProtoMsg): TokenAmount {
-    return TokenAmount.decode(message.value);
+  fromProtoMsg(message: TokenAmountProtoMsg, useInterfaces: boolean = true): TokenAmount {
+    return TokenAmount.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: TokenAmount): Uint8Array {
     return TokenAmount.encode(message).finish();
@@ -424,3 +454,4 @@ export const TokenAmount = {
     };
   }
 };
+GlobalDecoderRegistry.register(TokenAmount.typeUrl, TokenAmount);

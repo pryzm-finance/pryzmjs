@@ -1,6 +1,7 @@
 import { RouteStep, RouteStepAmino, RouteStepSDKType } from "./route_step";
 import { BinaryReader, BinaryWriter } from "../../../binary";
 import { isSet } from "../../../helpers";
+import { GlobalDecoderRegistry } from "../../../registry";
 export interface WhitelistedRoute {
   steps: RouteStep[];
   enabled: boolean;
@@ -29,6 +30,15 @@ function createBaseWhitelistedRoute(): WhitelistedRoute {
 }
 export const WhitelistedRoute = {
   typeUrl: "/pryzm.amm.v1.WhitelistedRoute",
+  is(o: any): o is WhitelistedRoute {
+    return o && (o.$typeUrl === WhitelistedRoute.typeUrl || Array.isArray(o.steps) && (!o.steps.length || RouteStep.is(o.steps[0])) && typeof o.enabled === "boolean");
+  },
+  isSDK(o: any): o is WhitelistedRouteSDKType {
+    return o && (o.$typeUrl === WhitelistedRoute.typeUrl || Array.isArray(o.steps) && (!o.steps.length || RouteStep.isSDK(o.steps[0])) && typeof o.enabled === "boolean");
+  },
+  isAmino(o: any): o is WhitelistedRouteAmino {
+    return o && (o.$typeUrl === WhitelistedRoute.typeUrl || Array.isArray(o.steps) && (!o.steps.length || RouteStep.isAmino(o.steps[0])) && typeof o.enabled === "boolean");
+  },
   encode(message: WhitelistedRoute, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     for (const v of message.steps) {
       RouteStep.encode(v!, writer.uint32(10).fork()).ldelim();
@@ -38,7 +48,7 @@ export const WhitelistedRoute = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): WhitelistedRoute {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): WhitelistedRoute {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseWhitelistedRoute();
@@ -46,7 +56,7 @@ export const WhitelistedRoute = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.steps.push(RouteStep.decode(reader, reader.uint32()));
+          message.steps.push(RouteStep.decode(reader, reader.uint32(), useInterfaces));
           break;
         case 2:
           message.enabled = reader.bool();
@@ -88,21 +98,21 @@ export const WhitelistedRoute = {
     }
     return message;
   },
-  toAmino(message: WhitelistedRoute): WhitelistedRouteAmino {
+  toAmino(message: WhitelistedRoute, useInterfaces: boolean = true): WhitelistedRouteAmino {
     const obj: any = {};
     if (message.steps) {
-      obj.steps = message.steps.map(e => e ? RouteStep.toAmino(e) : undefined);
+      obj.steps = message.steps.map(e => e ? RouteStep.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.steps = [];
+      obj.steps = null;
     }
-    obj.enabled = message.enabled;
+    obj.enabled = message.enabled === false ? undefined : message.enabled;
     return obj;
   },
   fromAminoMsg(object: WhitelistedRouteAminoMsg): WhitelistedRoute {
     return WhitelistedRoute.fromAmino(object.value);
   },
-  fromProtoMsg(message: WhitelistedRouteProtoMsg): WhitelistedRoute {
-    return WhitelistedRoute.decode(message.value);
+  fromProtoMsg(message: WhitelistedRouteProtoMsg, useInterfaces: boolean = true): WhitelistedRoute {
+    return WhitelistedRoute.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: WhitelistedRoute): Uint8Array {
     return WhitelistedRoute.encode(message).finish();
@@ -114,3 +124,4 @@ export const WhitelistedRoute = {
     };
   }
 };
+GlobalDecoderRegistry.register(WhitelistedRoute.typeUrl, WhitelistedRoute);

@@ -1,6 +1,7 @@
 import { WeightedVoteOption, WeightedVoteOptionAmino, WeightedVoteOptionSDKType } from "../../../cosmos/gov/v1/gov";
 import { BinaryReader, BinaryWriter } from "../../../binary";
 import { isSet } from "../../../helpers";
+import { GlobalDecoderRegistry } from "../../../registry";
 /** Vote stores the information for a user's vote for a proposal */
 export interface Vote {
   asset: string;
@@ -40,6 +41,15 @@ function createBaseVote(): Vote {
 }
 export const Vote = {
   typeUrl: "/pryzm.pgov.v1.Vote",
+  is(o: any): o is Vote {
+    return o && (o.$typeUrl === Vote.typeUrl || typeof o.asset === "string" && typeof o.proposal === "bigint" && typeof o.voter === "string" && Array.isArray(o.options) && (!o.options.length || WeightedVoteOption.is(o.options[0])));
+  },
+  isSDK(o: any): o is VoteSDKType {
+    return o && (o.$typeUrl === Vote.typeUrl || typeof o.asset === "string" && typeof o.proposal === "bigint" && typeof o.voter === "string" && Array.isArray(o.options) && (!o.options.length || WeightedVoteOption.isSDK(o.options[0])));
+  },
+  isAmino(o: any): o is VoteAmino {
+    return o && (o.$typeUrl === Vote.typeUrl || typeof o.asset === "string" && typeof o.proposal === "bigint" && typeof o.voter === "string" && Array.isArray(o.options) && (!o.options.length || WeightedVoteOption.isAmino(o.options[0])));
+  },
   encode(message: Vote, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.asset !== "") {
       writer.uint32(10).string(message.asset);
@@ -55,7 +65,7 @@ export const Vote = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): Vote {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): Vote {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseVote();
@@ -72,7 +82,7 @@ export const Vote = {
           message.voter = reader.string();
           break;
         case 4:
-          message.options.push(WeightedVoteOption.decode(reader, reader.uint32()));
+          message.options.push(WeightedVoteOption.decode(reader, reader.uint32(), useInterfaces));
           break;
         default:
           reader.skipType(tag & 7);
@@ -123,23 +133,23 @@ export const Vote = {
     message.options = object.options?.map(e => WeightedVoteOption.fromAmino(e)) || [];
     return message;
   },
-  toAmino(message: Vote): VoteAmino {
+  toAmino(message: Vote, useInterfaces: boolean = true): VoteAmino {
     const obj: any = {};
-    obj.asset = message.asset;
+    obj.asset = message.asset === "" ? undefined : message.asset;
     obj.proposal = message.proposal ? message.proposal.toString() : undefined;
-    obj.voter = message.voter;
+    obj.voter = message.voter === "" ? undefined : message.voter;
     if (message.options) {
-      obj.options = message.options.map(e => e ? WeightedVoteOption.toAmino(e) : undefined);
+      obj.options = message.options.map(e => e ? WeightedVoteOption.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.options = [];
+      obj.options = null;
     }
     return obj;
   },
   fromAminoMsg(object: VoteAminoMsg): Vote {
     return Vote.fromAmino(object.value);
   },
-  fromProtoMsg(message: VoteProtoMsg): Vote {
-    return Vote.decode(message.value);
+  fromProtoMsg(message: VoteProtoMsg, useInterfaces: boolean = true): Vote {
+    return Vote.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: Vote): Uint8Array {
     return Vote.encode(message).finish();
@@ -151,3 +161,4 @@ export const Vote = {
     };
   }
 };
+GlobalDecoderRegistry.register(Vote.typeUrl, Vote);

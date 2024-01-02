@@ -1,5 +1,6 @@
 import { BinaryReader, BinaryWriter } from "../../binary";
 import { isSet } from "../../helpers";
+import { GlobalDecoderRegistry } from "../../registry";
 /**
  * Defines the HTTP configuration for an API service. It contains a list of
  * [HttpRule][google.api.HttpRule], each specifying the mapping of an RPC method
@@ -1033,6 +1034,15 @@ function createBaseHttp(): Http {
 }
 export const Http = {
   typeUrl: "/google.api.Http",
+  is(o: any): o is Http {
+    return o && (o.$typeUrl === Http.typeUrl || Array.isArray(o.rules) && (!o.rules.length || HttpRule.is(o.rules[0])) && typeof o.fullyDecodeReservedExpansion === "boolean");
+  },
+  isSDK(o: any): o is HttpSDKType {
+    return o && (o.$typeUrl === Http.typeUrl || Array.isArray(o.rules) && (!o.rules.length || HttpRule.isSDK(o.rules[0])) && typeof o.fully_decode_reserved_expansion === "boolean");
+  },
+  isAmino(o: any): o is HttpAmino {
+    return o && (o.$typeUrl === Http.typeUrl || Array.isArray(o.rules) && (!o.rules.length || HttpRule.isAmino(o.rules[0])) && typeof o.fully_decode_reserved_expansion === "boolean");
+  },
   encode(message: Http, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     for (const v of message.rules) {
       HttpRule.encode(v!, writer.uint32(10).fork()).ldelim();
@@ -1042,7 +1052,7 @@ export const Http = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): Http {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): Http {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseHttp();
@@ -1050,7 +1060,7 @@ export const Http = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.rules.push(HttpRule.decode(reader, reader.uint32()));
+          message.rules.push(HttpRule.decode(reader, reader.uint32(), useInterfaces));
           break;
         case 2:
           message.fullyDecodeReservedExpansion = reader.bool();
@@ -1092,21 +1102,21 @@ export const Http = {
     }
     return message;
   },
-  toAmino(message: Http): HttpAmino {
+  toAmino(message: Http, useInterfaces: boolean = true): HttpAmino {
     const obj: any = {};
     if (message.rules) {
-      obj.rules = message.rules.map(e => e ? HttpRule.toAmino(e) : undefined);
+      obj.rules = message.rules.map(e => e ? HttpRule.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.rules = [];
+      obj.rules = null;
     }
-    obj.fully_decode_reserved_expansion = message.fullyDecodeReservedExpansion;
+    obj.fully_decode_reserved_expansion = message.fullyDecodeReservedExpansion === false ? undefined : message.fullyDecodeReservedExpansion;
     return obj;
   },
   fromAminoMsg(object: HttpAminoMsg): Http {
     return Http.fromAmino(object.value);
   },
-  fromProtoMsg(message: HttpProtoMsg): Http {
-    return Http.decode(message.value);
+  fromProtoMsg(message: HttpProtoMsg, useInterfaces: boolean = true): Http {
+    return Http.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: Http): Uint8Array {
     return Http.encode(message).finish();
@@ -1118,6 +1128,7 @@ export const Http = {
     };
   }
 };
+GlobalDecoderRegistry.register(Http.typeUrl, Http);
 function createBaseHttpRule(): HttpRule {
   return {
     selector: "",
@@ -1134,6 +1145,15 @@ function createBaseHttpRule(): HttpRule {
 }
 export const HttpRule = {
   typeUrl: "/google.api.HttpRule",
+  is(o: any): o is HttpRule {
+    return o && (o.$typeUrl === HttpRule.typeUrl || typeof o.selector === "string" && typeof o.body === "string" && typeof o.responseBody === "string" && Array.isArray(o.additionalBindings) && (!o.additionalBindings.length || HttpRule.is(o.additionalBindings[0])));
+  },
+  isSDK(o: any): o is HttpRuleSDKType {
+    return o && (o.$typeUrl === HttpRule.typeUrl || typeof o.selector === "string" && typeof o.body === "string" && typeof o.response_body === "string" && Array.isArray(o.additional_bindings) && (!o.additional_bindings.length || HttpRule.isSDK(o.additional_bindings[0])));
+  },
+  isAmino(o: any): o is HttpRuleAmino {
+    return o && (o.$typeUrl === HttpRule.typeUrl || typeof o.selector === "string" && typeof o.body === "string" && typeof o.response_body === "string" && Array.isArray(o.additional_bindings) && (!o.additional_bindings.length || HttpRule.isAmino(o.additional_bindings[0])));
+  },
   encode(message: HttpRule, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.selector !== "") {
       writer.uint32(10).string(message.selector);
@@ -1167,7 +1187,7 @@ export const HttpRule = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): HttpRule {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): HttpRule {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseHttpRule();
@@ -1193,7 +1213,7 @@ export const HttpRule = {
           message.patch = reader.string();
           break;
         case 8:
-          message.custom = CustomHttpPattern.decode(reader, reader.uint32());
+          message.custom = CustomHttpPattern.decode(reader, reader.uint32(), useInterfaces);
           break;
         case 7:
           message.body = reader.string();
@@ -1202,7 +1222,7 @@ export const HttpRule = {
           message.responseBody = reader.string();
           break;
         case 11:
-          message.additionalBindings.push(HttpRule.decode(reader, reader.uint32()));
+          message.additionalBindings.push(HttpRule.decode(reader, reader.uint32(), useInterfaces));
           break;
         default:
           reader.skipType(tag & 7);
@@ -1289,29 +1309,29 @@ export const HttpRule = {
     message.additionalBindings = object.additional_bindings?.map(e => HttpRule.fromAmino(e)) || [];
     return message;
   },
-  toAmino(message: HttpRule): HttpRuleAmino {
+  toAmino(message: HttpRule, useInterfaces: boolean = true): HttpRuleAmino {
     const obj: any = {};
-    obj.selector = message.selector;
-    obj.get = message.get;
-    obj.put = message.put;
-    obj.post = message.post;
-    obj.delete = message.delete;
-    obj.patch = message.patch;
-    obj.custom = message.custom ? CustomHttpPattern.toAmino(message.custom) : undefined;
-    obj.body = message.body;
-    obj.response_body = message.responseBody;
+    obj.selector = message.selector === "" ? undefined : message.selector;
+    obj.get = message.get === null ? undefined : message.get;
+    obj.put = message.put === null ? undefined : message.put;
+    obj.post = message.post === null ? undefined : message.post;
+    obj.delete = message.delete === null ? undefined : message.delete;
+    obj.patch = message.patch === null ? undefined : message.patch;
+    obj.custom = message.custom ? CustomHttpPattern.toAmino(message.custom, useInterfaces) : undefined;
+    obj.body = message.body === "" ? undefined : message.body;
+    obj.response_body = message.responseBody === "" ? undefined : message.responseBody;
     if (message.additionalBindings) {
-      obj.additional_bindings = message.additionalBindings.map(e => e ? HttpRule.toAmino(e) : undefined);
+      obj.additional_bindings = message.additionalBindings.map(e => e ? HttpRule.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.additional_bindings = [];
+      obj.additional_bindings = null;
     }
     return obj;
   },
   fromAminoMsg(object: HttpRuleAminoMsg): HttpRule {
     return HttpRule.fromAmino(object.value);
   },
-  fromProtoMsg(message: HttpRuleProtoMsg): HttpRule {
-    return HttpRule.decode(message.value);
+  fromProtoMsg(message: HttpRuleProtoMsg, useInterfaces: boolean = true): HttpRule {
+    return HttpRule.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: HttpRule): Uint8Array {
     return HttpRule.encode(message).finish();
@@ -1323,6 +1343,7 @@ export const HttpRule = {
     };
   }
 };
+GlobalDecoderRegistry.register(HttpRule.typeUrl, HttpRule);
 function createBaseCustomHttpPattern(): CustomHttpPattern {
   return {
     kind: "",
@@ -1331,6 +1352,15 @@ function createBaseCustomHttpPattern(): CustomHttpPattern {
 }
 export const CustomHttpPattern = {
   typeUrl: "/google.api.CustomHttpPattern",
+  is(o: any): o is CustomHttpPattern {
+    return o && (o.$typeUrl === CustomHttpPattern.typeUrl || typeof o.kind === "string" && typeof o.path === "string");
+  },
+  isSDK(o: any): o is CustomHttpPatternSDKType {
+    return o && (o.$typeUrl === CustomHttpPattern.typeUrl || typeof o.kind === "string" && typeof o.path === "string");
+  },
+  isAmino(o: any): o is CustomHttpPatternAmino {
+    return o && (o.$typeUrl === CustomHttpPattern.typeUrl || typeof o.kind === "string" && typeof o.path === "string");
+  },
   encode(message: CustomHttpPattern, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.kind !== "") {
       writer.uint32(10).string(message.kind);
@@ -1340,7 +1370,7 @@ export const CustomHttpPattern = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): CustomHttpPattern {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): CustomHttpPattern {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseCustomHttpPattern();
@@ -1388,17 +1418,17 @@ export const CustomHttpPattern = {
     }
     return message;
   },
-  toAmino(message: CustomHttpPattern): CustomHttpPatternAmino {
+  toAmino(message: CustomHttpPattern, useInterfaces: boolean = true): CustomHttpPatternAmino {
     const obj: any = {};
-    obj.kind = message.kind;
-    obj.path = message.path;
+    obj.kind = message.kind === "" ? undefined : message.kind;
+    obj.path = message.path === "" ? undefined : message.path;
     return obj;
   },
   fromAminoMsg(object: CustomHttpPatternAminoMsg): CustomHttpPattern {
     return CustomHttpPattern.fromAmino(object.value);
   },
-  fromProtoMsg(message: CustomHttpPatternProtoMsg): CustomHttpPattern {
-    return CustomHttpPattern.decode(message.value);
+  fromProtoMsg(message: CustomHttpPatternProtoMsg, useInterfaces: boolean = true): CustomHttpPattern {
+    return CustomHttpPattern.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: CustomHttpPattern): Uint8Array {
     return CustomHttpPattern.encode(message).finish();
@@ -1410,3 +1440,4 @@ export const CustomHttpPattern = {
     };
   }
 };
+GlobalDecoderRegistry.register(CustomHttpPattern.typeUrl, CustomHttpPattern);

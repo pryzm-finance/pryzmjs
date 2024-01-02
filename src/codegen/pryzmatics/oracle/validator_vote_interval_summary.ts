@@ -1,6 +1,7 @@
 import { Coin, CoinAmino, CoinSDKType } from "../../cosmos/base/v1beta1/coin";
 import { BinaryReader, BinaryWriter } from "../../binary";
 import { isSet } from "../../helpers";
+import { GlobalDecoderRegistry } from "../../registry";
 export interface ValidatorVoteIntervalSummary {
   validator: string;
   voteIntervalCloseBlockHeight: bigint;
@@ -45,6 +46,15 @@ function createBaseValidatorVoteIntervalSummary(): ValidatorVoteIntervalSummary 
 }
 export const ValidatorVoteIntervalSummary = {
   typeUrl: "/pryzmatics.oracle.ValidatorVoteIntervalSummary",
+  is(o: any): o is ValidatorVoteIntervalSummary {
+    return o && (o.$typeUrl === ValidatorVoteIntervalSummary.typeUrl || typeof o.validator === "string" && typeof o.voteIntervalCloseBlockHeight === "bigint" && typeof o.validatorPower === "bigint" && typeof o.voteIntervalMissCounter === "bigint" && typeof o.slashWindowMissCounter === "bigint" && Array.isArray(o.rewards) && (!o.rewards.length || Coin.is(o.rewards[0])));
+  },
+  isSDK(o: any): o is ValidatorVoteIntervalSummarySDKType {
+    return o && (o.$typeUrl === ValidatorVoteIntervalSummary.typeUrl || typeof o.validator === "string" && typeof o.vote_interval_close_block_height === "bigint" && typeof o.validator_power === "bigint" && typeof o.vote_interval_miss_counter === "bigint" && typeof o.slash_window_miss_counter === "bigint" && Array.isArray(o.rewards) && (!o.rewards.length || Coin.isSDK(o.rewards[0])));
+  },
+  isAmino(o: any): o is ValidatorVoteIntervalSummaryAmino {
+    return o && (o.$typeUrl === ValidatorVoteIntervalSummary.typeUrl || typeof o.validator === "string" && typeof o.vote_interval_close_block_height === "bigint" && typeof o.validator_power === "bigint" && typeof o.vote_interval_miss_counter === "bigint" && typeof o.slash_window_miss_counter === "bigint" && Array.isArray(o.rewards) && (!o.rewards.length || Coin.isAmino(o.rewards[0])));
+  },
   encode(message: ValidatorVoteIntervalSummary, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.validator !== "") {
       writer.uint32(10).string(message.validator);
@@ -66,7 +76,7 @@ export const ValidatorVoteIntervalSummary = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): ValidatorVoteIntervalSummary {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): ValidatorVoteIntervalSummary {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseValidatorVoteIntervalSummary();
@@ -89,7 +99,7 @@ export const ValidatorVoteIntervalSummary = {
           message.slashWindowMissCounter = reader.int64();
           break;
         case 6:
-          message.rewards.push(Coin.decode(reader, reader.uint32()));
+          message.rewards.push(Coin.decode(reader, reader.uint32(), useInterfaces));
           break;
         default:
           reader.skipType(tag & 7);
@@ -152,25 +162,25 @@ export const ValidatorVoteIntervalSummary = {
     message.rewards = object.rewards?.map(e => Coin.fromAmino(e)) || [];
     return message;
   },
-  toAmino(message: ValidatorVoteIntervalSummary): ValidatorVoteIntervalSummaryAmino {
+  toAmino(message: ValidatorVoteIntervalSummary, useInterfaces: boolean = true): ValidatorVoteIntervalSummaryAmino {
     const obj: any = {};
-    obj.validator = message.validator;
+    obj.validator = message.validator === "" ? undefined : message.validator;
     obj.vote_interval_close_block_height = message.voteIntervalCloseBlockHeight ? message.voteIntervalCloseBlockHeight.toString() : undefined;
     obj.validator_power = message.validatorPower ? message.validatorPower.toString() : undefined;
     obj.vote_interval_miss_counter = message.voteIntervalMissCounter ? message.voteIntervalMissCounter.toString() : undefined;
     obj.slash_window_miss_counter = message.slashWindowMissCounter ? message.slashWindowMissCounter.toString() : undefined;
     if (message.rewards) {
-      obj.rewards = message.rewards.map(e => e ? Coin.toAmino(e) : undefined);
+      obj.rewards = message.rewards.map(e => e ? Coin.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.rewards = [];
+      obj.rewards = null;
     }
     return obj;
   },
   fromAminoMsg(object: ValidatorVoteIntervalSummaryAminoMsg): ValidatorVoteIntervalSummary {
     return ValidatorVoteIntervalSummary.fromAmino(object.value);
   },
-  fromProtoMsg(message: ValidatorVoteIntervalSummaryProtoMsg): ValidatorVoteIntervalSummary {
-    return ValidatorVoteIntervalSummary.decode(message.value);
+  fromProtoMsg(message: ValidatorVoteIntervalSummaryProtoMsg, useInterfaces: boolean = true): ValidatorVoteIntervalSummary {
+    return ValidatorVoteIntervalSummary.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: ValidatorVoteIntervalSummary): Uint8Array {
     return ValidatorVoteIntervalSummary.encode(message).finish();
@@ -182,3 +192,4 @@ export const ValidatorVoteIntervalSummary = {
     };
   }
 };
+GlobalDecoderRegistry.register(ValidatorVoteIntervalSummary.typeUrl, ValidatorVoteIntervalSummary);

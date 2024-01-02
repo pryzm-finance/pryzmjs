@@ -2,6 +2,7 @@ import { Params, ParamsAmino, ParamsSDKType } from "./params";
 import { Coin, CoinAmino, CoinSDKType } from "../../../cosmos/base/v1beta1/coin";
 import { BinaryReader, BinaryWriter } from "../../../binary";
 import { isSet } from "../../../helpers";
+import { GlobalDecoderRegistry } from "../../../registry";
 export interface MsgUpdateParams {
   authority: string;
   params: Params;
@@ -81,6 +82,16 @@ function createBaseMsgUpdateParams(): MsgUpdateParams {
 }
 export const MsgUpdateParams = {
   typeUrl: "/pryzm.mint.v1.MsgUpdateParams",
+  aminoType: "pryzm/mint/v1/UpdateParams",
+  is(o: any): o is MsgUpdateParams {
+    return o && (o.$typeUrl === MsgUpdateParams.typeUrl || typeof o.authority === "string" && Params.is(o.params));
+  },
+  isSDK(o: any): o is MsgUpdateParamsSDKType {
+    return o && (o.$typeUrl === MsgUpdateParams.typeUrl || typeof o.authority === "string" && Params.isSDK(o.params));
+  },
+  isAmino(o: any): o is MsgUpdateParamsAmino {
+    return o && (o.$typeUrl === MsgUpdateParams.typeUrl || typeof o.authority === "string" && Params.isAmino(o.params));
+  },
   encode(message: MsgUpdateParams, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.authority !== "") {
       writer.uint32(10).string(message.authority);
@@ -90,7 +101,7 @@ export const MsgUpdateParams = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): MsgUpdateParams {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): MsgUpdateParams {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgUpdateParams();
@@ -101,7 +112,7 @@ export const MsgUpdateParams = {
           message.authority = reader.string();
           break;
         case 2:
-          message.params = Params.decode(reader, reader.uint32());
+          message.params = Params.decode(reader, reader.uint32(), useInterfaces);
           break;
         default:
           reader.skipType(tag & 7);
@@ -138,23 +149,23 @@ export const MsgUpdateParams = {
     }
     return message;
   },
-  toAmino(message: MsgUpdateParams): MsgUpdateParamsAmino {
+  toAmino(message: MsgUpdateParams, useInterfaces: boolean = true): MsgUpdateParamsAmino {
     const obj: any = {};
-    obj.authority = message.authority;
-    obj.params = message.params ? Params.toAmino(message.params) : undefined;
+    obj.authority = message.authority === "" ? undefined : message.authority;
+    obj.params = message.params ? Params.toAmino(message.params, useInterfaces) : undefined;
     return obj;
   },
   fromAminoMsg(object: MsgUpdateParamsAminoMsg): MsgUpdateParams {
     return MsgUpdateParams.fromAmino(object.value);
   },
-  toAminoMsg(message: MsgUpdateParams): MsgUpdateParamsAminoMsg {
+  toAminoMsg(message: MsgUpdateParams, useInterfaces: boolean = true): MsgUpdateParamsAminoMsg {
     return {
       type: "pryzm/mint/v1/UpdateParams",
-      value: MsgUpdateParams.toAmino(message)
+      value: MsgUpdateParams.toAmino(message, useInterfaces)
     };
   },
-  fromProtoMsg(message: MsgUpdateParamsProtoMsg): MsgUpdateParams {
-    return MsgUpdateParams.decode(message.value);
+  fromProtoMsg(message: MsgUpdateParamsProtoMsg, useInterfaces: boolean = true): MsgUpdateParams {
+    return MsgUpdateParams.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: MsgUpdateParams): Uint8Array {
     return MsgUpdateParams.encode(message).finish();
@@ -166,15 +177,26 @@ export const MsgUpdateParams = {
     };
   }
 };
+GlobalDecoderRegistry.register(MsgUpdateParams.typeUrl, MsgUpdateParams);
+GlobalDecoderRegistry.registerAminoProtoMapping(MsgUpdateParams.aminoType, MsgUpdateParams.typeUrl);
 function createBaseMsgUpdateParamsResponse(): MsgUpdateParamsResponse {
   return {};
 }
 export const MsgUpdateParamsResponse = {
   typeUrl: "/pryzm.mint.v1.MsgUpdateParamsResponse",
+  is(o: any): o is MsgUpdateParamsResponse {
+    return o && o.$typeUrl === MsgUpdateParamsResponse.typeUrl;
+  },
+  isSDK(o: any): o is MsgUpdateParamsResponseSDKType {
+    return o && o.$typeUrl === MsgUpdateParamsResponse.typeUrl;
+  },
+  isAmino(o: any): o is MsgUpdateParamsResponseAmino {
+    return o && o.$typeUrl === MsgUpdateParamsResponse.typeUrl;
+  },
   encode(_: MsgUpdateParamsResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): MsgUpdateParamsResponse {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): MsgUpdateParamsResponse {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgUpdateParamsResponse();
@@ -203,15 +225,15 @@ export const MsgUpdateParamsResponse = {
     const message = createBaseMsgUpdateParamsResponse();
     return message;
   },
-  toAmino(_: MsgUpdateParamsResponse): MsgUpdateParamsResponseAmino {
+  toAmino(_: MsgUpdateParamsResponse, useInterfaces: boolean = true): MsgUpdateParamsResponseAmino {
     const obj: any = {};
     return obj;
   },
   fromAminoMsg(object: MsgUpdateParamsResponseAminoMsg): MsgUpdateParamsResponse {
     return MsgUpdateParamsResponse.fromAmino(object.value);
   },
-  fromProtoMsg(message: MsgUpdateParamsResponseProtoMsg): MsgUpdateParamsResponse {
-    return MsgUpdateParamsResponse.decode(message.value);
+  fromProtoMsg(message: MsgUpdateParamsResponseProtoMsg, useInterfaces: boolean = true): MsgUpdateParamsResponse {
+    return MsgUpdateParamsResponse.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: MsgUpdateParamsResponse): Uint8Array {
     return MsgUpdateParamsResponse.encode(message).finish();
@@ -223,6 +245,7 @@ export const MsgUpdateParamsResponse = {
     };
   }
 };
+GlobalDecoderRegistry.register(MsgUpdateParamsResponse.typeUrl, MsgUpdateParamsResponse);
 function createBaseMsgDappAccountSpend(): MsgDappAccountSpend {
   return {
     authority: "",
@@ -234,6 +257,16 @@ function createBaseMsgDappAccountSpend(): MsgDappAccountSpend {
 }
 export const MsgDappAccountSpend = {
   typeUrl: "/pryzm.mint.v1.MsgDappAccountSpend",
+  aminoType: "pryzm/mint/v1/DappAccountSpend",
+  is(o: any): o is MsgDappAccountSpend {
+    return o && (o.$typeUrl === MsgDappAccountSpend.typeUrl || typeof o.authority === "string" && typeof o.title === "string" && typeof o.description === "string" && typeof o.recipient === "string" && Array.isArray(o.amount) && (!o.amount.length || Coin.is(o.amount[0])));
+  },
+  isSDK(o: any): o is MsgDappAccountSpendSDKType {
+    return o && (o.$typeUrl === MsgDappAccountSpend.typeUrl || typeof o.authority === "string" && typeof o.title === "string" && typeof o.description === "string" && typeof o.recipient === "string" && Array.isArray(o.amount) && (!o.amount.length || Coin.isSDK(o.amount[0])));
+  },
+  isAmino(o: any): o is MsgDappAccountSpendAmino {
+    return o && (o.$typeUrl === MsgDappAccountSpend.typeUrl || typeof o.authority === "string" && typeof o.title === "string" && typeof o.description === "string" && typeof o.recipient === "string" && Array.isArray(o.amount) && (!o.amount.length || Coin.isAmino(o.amount[0])));
+  },
   encode(message: MsgDappAccountSpend, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.authority !== "") {
       writer.uint32(10).string(message.authority);
@@ -252,7 +285,7 @@ export const MsgDappAccountSpend = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): MsgDappAccountSpend {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): MsgDappAccountSpend {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgDappAccountSpend();
@@ -272,7 +305,7 @@ export const MsgDappAccountSpend = {
           message.recipient = reader.string();
           break;
         case 5:
-          message.amount.push(Coin.decode(reader, reader.uint32()));
+          message.amount.push(Coin.decode(reader, reader.uint32(), useInterfaces));
           break;
         default:
           reader.skipType(tag & 7);
@@ -329,30 +362,30 @@ export const MsgDappAccountSpend = {
     message.amount = object.amount?.map(e => Coin.fromAmino(e)) || [];
     return message;
   },
-  toAmino(message: MsgDappAccountSpend): MsgDappAccountSpendAmino {
+  toAmino(message: MsgDappAccountSpend, useInterfaces: boolean = true): MsgDappAccountSpendAmino {
     const obj: any = {};
-    obj.authority = message.authority;
-    obj.title = message.title;
-    obj.description = message.description;
-    obj.recipient = message.recipient;
+    obj.authority = message.authority === "" ? undefined : message.authority;
+    obj.title = message.title === "" ? undefined : message.title;
+    obj.description = message.description === "" ? undefined : message.description;
+    obj.recipient = message.recipient === "" ? undefined : message.recipient;
     if (message.amount) {
-      obj.amount = message.amount.map(e => e ? Coin.toAmino(e) : undefined);
+      obj.amount = message.amount.map(e => e ? Coin.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.amount = [];
+      obj.amount = null;
     }
     return obj;
   },
   fromAminoMsg(object: MsgDappAccountSpendAminoMsg): MsgDappAccountSpend {
     return MsgDappAccountSpend.fromAmino(object.value);
   },
-  toAminoMsg(message: MsgDappAccountSpend): MsgDappAccountSpendAminoMsg {
+  toAminoMsg(message: MsgDappAccountSpend, useInterfaces: boolean = true): MsgDappAccountSpendAminoMsg {
     return {
       type: "pryzm/mint/v1/DappAccountSpend",
-      value: MsgDappAccountSpend.toAmino(message)
+      value: MsgDappAccountSpend.toAmino(message, useInterfaces)
     };
   },
-  fromProtoMsg(message: MsgDappAccountSpendProtoMsg): MsgDappAccountSpend {
-    return MsgDappAccountSpend.decode(message.value);
+  fromProtoMsg(message: MsgDappAccountSpendProtoMsg, useInterfaces: boolean = true): MsgDappAccountSpend {
+    return MsgDappAccountSpend.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: MsgDappAccountSpend): Uint8Array {
     return MsgDappAccountSpend.encode(message).finish();
@@ -364,15 +397,26 @@ export const MsgDappAccountSpend = {
     };
   }
 };
+GlobalDecoderRegistry.register(MsgDappAccountSpend.typeUrl, MsgDappAccountSpend);
+GlobalDecoderRegistry.registerAminoProtoMapping(MsgDappAccountSpend.aminoType, MsgDappAccountSpend.typeUrl);
 function createBaseMsgDappAccountSpendResponse(): MsgDappAccountSpendResponse {
   return {};
 }
 export const MsgDappAccountSpendResponse = {
   typeUrl: "/pryzm.mint.v1.MsgDappAccountSpendResponse",
+  is(o: any): o is MsgDappAccountSpendResponse {
+    return o && o.$typeUrl === MsgDappAccountSpendResponse.typeUrl;
+  },
+  isSDK(o: any): o is MsgDappAccountSpendResponseSDKType {
+    return o && o.$typeUrl === MsgDappAccountSpendResponse.typeUrl;
+  },
+  isAmino(o: any): o is MsgDappAccountSpendResponseAmino {
+    return o && o.$typeUrl === MsgDappAccountSpendResponse.typeUrl;
+  },
   encode(_: MsgDappAccountSpendResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): MsgDappAccountSpendResponse {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): MsgDappAccountSpendResponse {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgDappAccountSpendResponse();
@@ -401,15 +445,15 @@ export const MsgDappAccountSpendResponse = {
     const message = createBaseMsgDappAccountSpendResponse();
     return message;
   },
-  toAmino(_: MsgDappAccountSpendResponse): MsgDappAccountSpendResponseAmino {
+  toAmino(_: MsgDappAccountSpendResponse, useInterfaces: boolean = true): MsgDappAccountSpendResponseAmino {
     const obj: any = {};
     return obj;
   },
   fromAminoMsg(object: MsgDappAccountSpendResponseAminoMsg): MsgDappAccountSpendResponse {
     return MsgDappAccountSpendResponse.fromAmino(object.value);
   },
-  fromProtoMsg(message: MsgDappAccountSpendResponseProtoMsg): MsgDappAccountSpendResponse {
-    return MsgDappAccountSpendResponse.decode(message.value);
+  fromProtoMsg(message: MsgDappAccountSpendResponseProtoMsg, useInterfaces: boolean = true): MsgDappAccountSpendResponse {
+    return MsgDappAccountSpendResponse.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: MsgDappAccountSpendResponse): Uint8Array {
     return MsgDappAccountSpendResponse.encode(message).finish();
@@ -421,3 +465,4 @@ export const MsgDappAccountSpendResponse = {
     };
   }
 };
+GlobalDecoderRegistry.register(MsgDappAccountSpendResponse.typeUrl, MsgDappAccountSpendResponse);

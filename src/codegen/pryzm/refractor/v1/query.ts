@@ -1,6 +1,7 @@
 import { AssetState, AssetStateAmino, AssetStateSDKType } from "./asset_state";
 import { BinaryReader, BinaryWriter } from "../../../binary";
-import { isSet } from "../../../helpers";
+import { isSet, padDecimal } from "../../../helpers";
+import { GlobalDecoderRegistry } from "../../../registry";
 import { Decimal } from "@cosmjs/math";
 export interface QueryGetAssetStateRequest {
   assetId: string;
@@ -77,13 +78,22 @@ function createBaseQueryGetAssetStateRequest(): QueryGetAssetStateRequest {
 }
 export const QueryGetAssetStateRequest = {
   typeUrl: "/pryzm.refractor.v1.QueryGetAssetStateRequest",
+  is(o: any): o is QueryGetAssetStateRequest {
+    return o && (o.$typeUrl === QueryGetAssetStateRequest.typeUrl || typeof o.assetId === "string");
+  },
+  isSDK(o: any): o is QueryGetAssetStateRequestSDKType {
+    return o && (o.$typeUrl === QueryGetAssetStateRequest.typeUrl || typeof o.asset_id === "string");
+  },
+  isAmino(o: any): o is QueryGetAssetStateRequestAmino {
+    return o && (o.$typeUrl === QueryGetAssetStateRequest.typeUrl || typeof o.asset_id === "string");
+  },
   encode(message: QueryGetAssetStateRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.assetId !== "") {
       writer.uint32(10).string(message.assetId);
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): QueryGetAssetStateRequest {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): QueryGetAssetStateRequest {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryGetAssetStateRequest();
@@ -122,16 +132,16 @@ export const QueryGetAssetStateRequest = {
     }
     return message;
   },
-  toAmino(message: QueryGetAssetStateRequest): QueryGetAssetStateRequestAmino {
+  toAmino(message: QueryGetAssetStateRequest, useInterfaces: boolean = true): QueryGetAssetStateRequestAmino {
     const obj: any = {};
-    obj.asset_id = message.assetId;
+    obj.asset_id = message.assetId === "" ? undefined : message.assetId;
     return obj;
   },
   fromAminoMsg(object: QueryGetAssetStateRequestAminoMsg): QueryGetAssetStateRequest {
     return QueryGetAssetStateRequest.fromAmino(object.value);
   },
-  fromProtoMsg(message: QueryGetAssetStateRequestProtoMsg): QueryGetAssetStateRequest {
-    return QueryGetAssetStateRequest.decode(message.value);
+  fromProtoMsg(message: QueryGetAssetStateRequestProtoMsg, useInterfaces: boolean = true): QueryGetAssetStateRequest {
+    return QueryGetAssetStateRequest.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: QueryGetAssetStateRequest): Uint8Array {
     return QueryGetAssetStateRequest.encode(message).finish();
@@ -143,6 +153,7 @@ export const QueryGetAssetStateRequest = {
     };
   }
 };
+GlobalDecoderRegistry.register(QueryGetAssetStateRequest.typeUrl, QueryGetAssetStateRequest);
 function createBaseQueryGetAssetStateResponse(): QueryGetAssetStateResponse {
   return {
     assetState: AssetState.fromPartial({})
@@ -150,13 +161,22 @@ function createBaseQueryGetAssetStateResponse(): QueryGetAssetStateResponse {
 }
 export const QueryGetAssetStateResponse = {
   typeUrl: "/pryzm.refractor.v1.QueryGetAssetStateResponse",
+  is(o: any): o is QueryGetAssetStateResponse {
+    return o && (o.$typeUrl === QueryGetAssetStateResponse.typeUrl || AssetState.is(o.assetState));
+  },
+  isSDK(o: any): o is QueryGetAssetStateResponseSDKType {
+    return o && (o.$typeUrl === QueryGetAssetStateResponse.typeUrl || AssetState.isSDK(o.asset_state));
+  },
+  isAmino(o: any): o is QueryGetAssetStateResponseAmino {
+    return o && (o.$typeUrl === QueryGetAssetStateResponse.typeUrl || AssetState.isAmino(o.asset_state));
+  },
   encode(message: QueryGetAssetStateResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.assetState !== undefined) {
       AssetState.encode(message.assetState, writer.uint32(10).fork()).ldelim();
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): QueryGetAssetStateResponse {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): QueryGetAssetStateResponse {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryGetAssetStateResponse();
@@ -164,7 +184,7 @@ export const QueryGetAssetStateResponse = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.assetState = AssetState.decode(reader, reader.uint32());
+          message.assetState = AssetState.decode(reader, reader.uint32(), useInterfaces);
           break;
         default:
           reader.skipType(tag & 7);
@@ -195,16 +215,16 @@ export const QueryGetAssetStateResponse = {
     }
     return message;
   },
-  toAmino(message: QueryGetAssetStateResponse): QueryGetAssetStateResponseAmino {
+  toAmino(message: QueryGetAssetStateResponse, useInterfaces: boolean = true): QueryGetAssetStateResponseAmino {
     const obj: any = {};
-    obj.asset_state = message.assetState ? AssetState.toAmino(message.assetState) : undefined;
+    obj.asset_state = message.assetState ? AssetState.toAmino(message.assetState, useInterfaces) : undefined;
     return obj;
   },
   fromAminoMsg(object: QueryGetAssetStateResponseAminoMsg): QueryGetAssetStateResponse {
     return QueryGetAssetStateResponse.fromAmino(object.value);
   },
-  fromProtoMsg(message: QueryGetAssetStateResponseProtoMsg): QueryGetAssetStateResponse {
-    return QueryGetAssetStateResponse.decode(message.value);
+  fromProtoMsg(message: QueryGetAssetStateResponseProtoMsg, useInterfaces: boolean = true): QueryGetAssetStateResponse {
+    return QueryGetAssetStateResponse.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: QueryGetAssetStateResponse): Uint8Array {
     return QueryGetAssetStateResponse.encode(message).finish();
@@ -216,6 +236,7 @@ export const QueryGetAssetStateResponse = {
     };
   }
 };
+GlobalDecoderRegistry.register(QueryGetAssetStateResponse.typeUrl, QueryGetAssetStateResponse);
 function createBaseQueryGetCPExchangeRateRequest(): QueryGetCPExchangeRateRequest {
   return {
     assetId: ""
@@ -223,13 +244,22 @@ function createBaseQueryGetCPExchangeRateRequest(): QueryGetCPExchangeRateReques
 }
 export const QueryGetCPExchangeRateRequest = {
   typeUrl: "/pryzm.refractor.v1.QueryGetCPExchangeRateRequest",
+  is(o: any): o is QueryGetCPExchangeRateRequest {
+    return o && (o.$typeUrl === QueryGetCPExchangeRateRequest.typeUrl || typeof o.assetId === "string");
+  },
+  isSDK(o: any): o is QueryGetCPExchangeRateRequestSDKType {
+    return o && (o.$typeUrl === QueryGetCPExchangeRateRequest.typeUrl || typeof o.asset_id === "string");
+  },
+  isAmino(o: any): o is QueryGetCPExchangeRateRequestAmino {
+    return o && (o.$typeUrl === QueryGetCPExchangeRateRequest.typeUrl || typeof o.asset_id === "string");
+  },
   encode(message: QueryGetCPExchangeRateRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.assetId !== "") {
       writer.uint32(10).string(message.assetId);
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): QueryGetCPExchangeRateRequest {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): QueryGetCPExchangeRateRequest {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryGetCPExchangeRateRequest();
@@ -268,16 +298,16 @@ export const QueryGetCPExchangeRateRequest = {
     }
     return message;
   },
-  toAmino(message: QueryGetCPExchangeRateRequest): QueryGetCPExchangeRateRequestAmino {
+  toAmino(message: QueryGetCPExchangeRateRequest, useInterfaces: boolean = true): QueryGetCPExchangeRateRequestAmino {
     const obj: any = {};
-    obj.asset_id = message.assetId;
+    obj.asset_id = message.assetId === "" ? undefined : message.assetId;
     return obj;
   },
   fromAminoMsg(object: QueryGetCPExchangeRateRequestAminoMsg): QueryGetCPExchangeRateRequest {
     return QueryGetCPExchangeRateRequest.fromAmino(object.value);
   },
-  fromProtoMsg(message: QueryGetCPExchangeRateRequestProtoMsg): QueryGetCPExchangeRateRequest {
-    return QueryGetCPExchangeRateRequest.decode(message.value);
+  fromProtoMsg(message: QueryGetCPExchangeRateRequestProtoMsg, useInterfaces: boolean = true): QueryGetCPExchangeRateRequest {
+    return QueryGetCPExchangeRateRequest.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: QueryGetCPExchangeRateRequest): Uint8Array {
     return QueryGetCPExchangeRateRequest.encode(message).finish();
@@ -289,6 +319,7 @@ export const QueryGetCPExchangeRateRequest = {
     };
   }
 };
+GlobalDecoderRegistry.register(QueryGetCPExchangeRateRequest.typeUrl, QueryGetCPExchangeRateRequest);
 function createBaseQueryGetCPExchangeRateResponse(): QueryGetCPExchangeRateResponse {
   return {
     exchangeRate: ""
@@ -296,13 +327,22 @@ function createBaseQueryGetCPExchangeRateResponse(): QueryGetCPExchangeRateRespo
 }
 export const QueryGetCPExchangeRateResponse = {
   typeUrl: "/pryzm.refractor.v1.QueryGetCPExchangeRateResponse",
+  is(o: any): o is QueryGetCPExchangeRateResponse {
+    return o && (o.$typeUrl === QueryGetCPExchangeRateResponse.typeUrl || typeof o.exchangeRate === "string");
+  },
+  isSDK(o: any): o is QueryGetCPExchangeRateResponseSDKType {
+    return o && (o.$typeUrl === QueryGetCPExchangeRateResponse.typeUrl || typeof o.exchange_rate === "string");
+  },
+  isAmino(o: any): o is QueryGetCPExchangeRateResponseAmino {
+    return o && (o.$typeUrl === QueryGetCPExchangeRateResponse.typeUrl || typeof o.exchange_rate === "string");
+  },
   encode(message: QueryGetCPExchangeRateResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.exchangeRate !== "") {
       writer.uint32(10).string(Decimal.fromUserInput(message.exchangeRate, 18).atomics);
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): QueryGetCPExchangeRateResponse {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): QueryGetCPExchangeRateResponse {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryGetCPExchangeRateResponse();
@@ -341,16 +381,16 @@ export const QueryGetCPExchangeRateResponse = {
     }
     return message;
   },
-  toAmino(message: QueryGetCPExchangeRateResponse): QueryGetCPExchangeRateResponseAmino {
+  toAmino(message: QueryGetCPExchangeRateResponse, useInterfaces: boolean = true): QueryGetCPExchangeRateResponseAmino {
     const obj: any = {};
-    obj.exchange_rate = message.exchangeRate;
+    obj.exchange_rate = padDecimal(message.exchangeRate) === "" ? undefined : padDecimal(message.exchangeRate);
     return obj;
   },
   fromAminoMsg(object: QueryGetCPExchangeRateResponseAminoMsg): QueryGetCPExchangeRateResponse {
     return QueryGetCPExchangeRateResponse.fromAmino(object.value);
   },
-  fromProtoMsg(message: QueryGetCPExchangeRateResponseProtoMsg): QueryGetCPExchangeRateResponse {
-    return QueryGetCPExchangeRateResponse.decode(message.value);
+  fromProtoMsg(message: QueryGetCPExchangeRateResponseProtoMsg, useInterfaces: boolean = true): QueryGetCPExchangeRateResponse {
+    return QueryGetCPExchangeRateResponse.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: QueryGetCPExchangeRateResponse): Uint8Array {
     return QueryGetCPExchangeRateResponse.encode(message).finish();
@@ -362,3 +402,4 @@ export const QueryGetCPExchangeRateResponse = {
     };
   }
 };
+GlobalDecoderRegistry.register(QueryGetCPExchangeRateResponse.typeUrl, QueryGetCPExchangeRateResponse);

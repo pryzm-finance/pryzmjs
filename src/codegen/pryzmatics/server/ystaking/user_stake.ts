@@ -1,6 +1,7 @@
 import { UserStake, UserStakeAmino, UserStakeSDKType } from "../../ystaking/user_stake";
 import { BinaryReader, BinaryWriter } from "../../../binary";
 import { isSet } from "../../../helpers";
+import { GlobalDecoderRegistry } from "../../../registry";
 export interface QueryUserStakesRequest {
   address: string;
   denom: string;
@@ -46,6 +47,15 @@ function createBaseQueryUserStakesRequest(): QueryUserStakesRequest {
 }
 export const QueryUserStakesRequest = {
   typeUrl: "/pryzmatics.server.ystaking.QueryUserStakesRequest",
+  is(o: any): o is QueryUserStakesRequest {
+    return o && (o.$typeUrl === QueryUserStakesRequest.typeUrl || typeof o.address === "string" && typeof o.denom === "string");
+  },
+  isSDK(o: any): o is QueryUserStakesRequestSDKType {
+    return o && (o.$typeUrl === QueryUserStakesRequest.typeUrl || typeof o.address === "string" && typeof o.denom === "string");
+  },
+  isAmino(o: any): o is QueryUserStakesRequestAmino {
+    return o && (o.$typeUrl === QueryUserStakesRequest.typeUrl || typeof o.address === "string" && typeof o.denom === "string");
+  },
   encode(message: QueryUserStakesRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.address !== "") {
       writer.uint32(10).string(message.address);
@@ -55,7 +65,7 @@ export const QueryUserStakesRequest = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): QueryUserStakesRequest {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): QueryUserStakesRequest {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryUserStakesRequest();
@@ -103,17 +113,17 @@ export const QueryUserStakesRequest = {
     }
     return message;
   },
-  toAmino(message: QueryUserStakesRequest): QueryUserStakesRequestAmino {
+  toAmino(message: QueryUserStakesRequest, useInterfaces: boolean = true): QueryUserStakesRequestAmino {
     const obj: any = {};
-    obj.address = message.address;
-    obj.denom = message.denom;
+    obj.address = message.address === "" ? undefined : message.address;
+    obj.denom = message.denom === "" ? undefined : message.denom;
     return obj;
   },
   fromAminoMsg(object: QueryUserStakesRequestAminoMsg): QueryUserStakesRequest {
     return QueryUserStakesRequest.fromAmino(object.value);
   },
-  fromProtoMsg(message: QueryUserStakesRequestProtoMsg): QueryUserStakesRequest {
-    return QueryUserStakesRequest.decode(message.value);
+  fromProtoMsg(message: QueryUserStakesRequestProtoMsg, useInterfaces: boolean = true): QueryUserStakesRequest {
+    return QueryUserStakesRequest.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: QueryUserStakesRequest): Uint8Array {
     return QueryUserStakesRequest.encode(message).finish();
@@ -125,6 +135,7 @@ export const QueryUserStakesRequest = {
     };
   }
 };
+GlobalDecoderRegistry.register(QueryUserStakesRequest.typeUrl, QueryUserStakesRequest);
 function createBaseQueryUserStakesResponse(): QueryUserStakesResponse {
   return {
     userStakes: []
@@ -132,13 +143,22 @@ function createBaseQueryUserStakesResponse(): QueryUserStakesResponse {
 }
 export const QueryUserStakesResponse = {
   typeUrl: "/pryzmatics.server.ystaking.QueryUserStakesResponse",
+  is(o: any): o is QueryUserStakesResponse {
+    return o && (o.$typeUrl === QueryUserStakesResponse.typeUrl || Array.isArray(o.userStakes) && (!o.userStakes.length || UserStake.is(o.userStakes[0])));
+  },
+  isSDK(o: any): o is QueryUserStakesResponseSDKType {
+    return o && (o.$typeUrl === QueryUserStakesResponse.typeUrl || Array.isArray(o.user_stakes) && (!o.user_stakes.length || UserStake.isSDK(o.user_stakes[0])));
+  },
+  isAmino(o: any): o is QueryUserStakesResponseAmino {
+    return o && (o.$typeUrl === QueryUserStakesResponse.typeUrl || Array.isArray(o.user_stakes) && (!o.user_stakes.length || UserStake.isAmino(o.user_stakes[0])));
+  },
   encode(message: QueryUserStakesResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     for (const v of message.userStakes) {
       UserStake.encode(v!, writer.uint32(10).fork()).ldelim();
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): QueryUserStakesResponse {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): QueryUserStakesResponse {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryUserStakesResponse();
@@ -146,7 +166,7 @@ export const QueryUserStakesResponse = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.userStakes.push(UserStake.decode(reader, reader.uint32()));
+          message.userStakes.push(UserStake.decode(reader, reader.uint32(), useInterfaces));
           break;
         default:
           reader.skipType(tag & 7);
@@ -179,20 +199,20 @@ export const QueryUserStakesResponse = {
     message.userStakes = object.user_stakes?.map(e => UserStake.fromAmino(e)) || [];
     return message;
   },
-  toAmino(message: QueryUserStakesResponse): QueryUserStakesResponseAmino {
+  toAmino(message: QueryUserStakesResponse, useInterfaces: boolean = true): QueryUserStakesResponseAmino {
     const obj: any = {};
     if (message.userStakes) {
-      obj.user_stakes = message.userStakes.map(e => e ? UserStake.toAmino(e) : undefined);
+      obj.user_stakes = message.userStakes.map(e => e ? UserStake.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.user_stakes = [];
+      obj.user_stakes = null;
     }
     return obj;
   },
   fromAminoMsg(object: QueryUserStakesResponseAminoMsg): QueryUserStakesResponse {
     return QueryUserStakesResponse.fromAmino(object.value);
   },
-  fromProtoMsg(message: QueryUserStakesResponseProtoMsg): QueryUserStakesResponse {
-    return QueryUserStakesResponse.decode(message.value);
+  fromProtoMsg(message: QueryUserStakesResponseProtoMsg, useInterfaces: boolean = true): QueryUserStakesResponse {
+    return QueryUserStakesResponse.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: QueryUserStakesResponse): Uint8Array {
     return QueryUserStakesResponse.encode(message).finish();
@@ -204,3 +224,4 @@ export const QueryUserStakesResponse = {
     };
   }
 };
+GlobalDecoderRegistry.register(QueryUserStakesResponse.typeUrl, QueryUserStakesResponse);

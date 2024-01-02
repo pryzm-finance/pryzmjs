@@ -1,6 +1,7 @@
 import { FavoritePair, FavoritePairAmino, FavoritePairSDKType } from "../../trade/trade_volume";
 import { BinaryReader, BinaryWriter } from "../../../binary";
-import { isSet } from "../../../helpers";
+import { isSet, padDecimal } from "../../../helpers";
+import { GlobalDecoderRegistry } from "../../../registry";
 import { Decimal } from "@cosmjs/math";
 export interface QueryPoolTradeVolumeRequest {
   poolId: bigint;
@@ -137,6 +138,15 @@ function createBaseQueryPoolTradeVolumeRequest(): QueryPoolTradeVolumeRequest {
 }
 export const QueryPoolTradeVolumeRequest = {
   typeUrl: "/pryzmatics.server.trade.QueryPoolTradeVolumeRequest",
+  is(o: any): o is QueryPoolTradeVolumeRequest {
+    return o && (o.$typeUrl === QueryPoolTradeVolumeRequest.typeUrl || typeof o.poolId === "bigint" && typeof o.from === "string" && typeof o.to === "string");
+  },
+  isSDK(o: any): o is QueryPoolTradeVolumeRequestSDKType {
+    return o && (o.$typeUrl === QueryPoolTradeVolumeRequest.typeUrl || typeof o.pool_id === "bigint" && typeof o.from === "string" && typeof o.to === "string");
+  },
+  isAmino(o: any): o is QueryPoolTradeVolumeRequestAmino {
+    return o && (o.$typeUrl === QueryPoolTradeVolumeRequest.typeUrl || typeof o.pool_id === "bigint" && typeof o.from === "string" && typeof o.to === "string");
+  },
   encode(message: QueryPoolTradeVolumeRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.poolId !== BigInt(0)) {
       writer.uint32(8).uint64(message.poolId);
@@ -149,7 +159,7 @@ export const QueryPoolTradeVolumeRequest = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): QueryPoolTradeVolumeRequest {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): QueryPoolTradeVolumeRequest {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryPoolTradeVolumeRequest();
@@ -206,18 +216,18 @@ export const QueryPoolTradeVolumeRequest = {
     }
     return message;
   },
-  toAmino(message: QueryPoolTradeVolumeRequest): QueryPoolTradeVolumeRequestAmino {
+  toAmino(message: QueryPoolTradeVolumeRequest, useInterfaces: boolean = true): QueryPoolTradeVolumeRequestAmino {
     const obj: any = {};
     obj.pool_id = message.poolId ? message.poolId.toString() : undefined;
-    obj.from = message.from;
-    obj.to = message.to;
+    obj.from = message.from === "" ? undefined : message.from;
+    obj.to = message.to === "" ? undefined : message.to;
     return obj;
   },
   fromAminoMsg(object: QueryPoolTradeVolumeRequestAminoMsg): QueryPoolTradeVolumeRequest {
     return QueryPoolTradeVolumeRequest.fromAmino(object.value);
   },
-  fromProtoMsg(message: QueryPoolTradeVolumeRequestProtoMsg): QueryPoolTradeVolumeRequest {
-    return QueryPoolTradeVolumeRequest.decode(message.value);
+  fromProtoMsg(message: QueryPoolTradeVolumeRequestProtoMsg, useInterfaces: boolean = true): QueryPoolTradeVolumeRequest {
+    return QueryPoolTradeVolumeRequest.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: QueryPoolTradeVolumeRequest): Uint8Array {
     return QueryPoolTradeVolumeRequest.encode(message).finish();
@@ -229,6 +239,7 @@ export const QueryPoolTradeVolumeRequest = {
     };
   }
 };
+GlobalDecoderRegistry.register(QueryPoolTradeVolumeRequest.typeUrl, QueryPoolTradeVolumeRequest);
 function createBaseQueryPoolTradeVolumeResponse(): QueryPoolTradeVolumeResponse {
   return {
     volume: "",
@@ -238,6 +249,15 @@ function createBaseQueryPoolTradeVolumeResponse(): QueryPoolTradeVolumeResponse 
 }
 export const QueryPoolTradeVolumeResponse = {
   typeUrl: "/pryzmatics.server.trade.QueryPoolTradeVolumeResponse",
+  is(o: any): o is QueryPoolTradeVolumeResponse {
+    return o && (o.$typeUrl === QueryPoolTradeVolumeResponse.typeUrl || typeof o.volume === "string" && typeof o.swapFeeVolume === "string" && typeof o.joinExitSwapFeeVolume === "string");
+  },
+  isSDK(o: any): o is QueryPoolTradeVolumeResponseSDKType {
+    return o && (o.$typeUrl === QueryPoolTradeVolumeResponse.typeUrl || typeof o.volume === "string" && typeof o.swap_fee_volume === "string" && typeof o.join_exit_swap_fee_volume === "string");
+  },
+  isAmino(o: any): o is QueryPoolTradeVolumeResponseAmino {
+    return o && (o.$typeUrl === QueryPoolTradeVolumeResponse.typeUrl || typeof o.volume === "string" && typeof o.swap_fee_volume === "string" && typeof o.join_exit_swap_fee_volume === "string");
+  },
   encode(message: QueryPoolTradeVolumeResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.volume !== "") {
       writer.uint32(10).string(Decimal.fromUserInput(message.volume, 18).atomics);
@@ -250,7 +270,7 @@ export const QueryPoolTradeVolumeResponse = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): QueryPoolTradeVolumeResponse {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): QueryPoolTradeVolumeResponse {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryPoolTradeVolumeResponse();
@@ -307,18 +327,18 @@ export const QueryPoolTradeVolumeResponse = {
     }
     return message;
   },
-  toAmino(message: QueryPoolTradeVolumeResponse): QueryPoolTradeVolumeResponseAmino {
+  toAmino(message: QueryPoolTradeVolumeResponse, useInterfaces: boolean = true): QueryPoolTradeVolumeResponseAmino {
     const obj: any = {};
-    obj.volume = message.volume;
-    obj.swap_fee_volume = message.swapFeeVolume;
-    obj.join_exit_swap_fee_volume = message.joinExitSwapFeeVolume;
+    obj.volume = padDecimal(message.volume) === "" ? undefined : padDecimal(message.volume);
+    obj.swap_fee_volume = padDecimal(message.swapFeeVolume) === "" ? undefined : padDecimal(message.swapFeeVolume);
+    obj.join_exit_swap_fee_volume = padDecimal(message.joinExitSwapFeeVolume) === "" ? undefined : padDecimal(message.joinExitSwapFeeVolume);
     return obj;
   },
   fromAminoMsg(object: QueryPoolTradeVolumeResponseAminoMsg): QueryPoolTradeVolumeResponse {
     return QueryPoolTradeVolumeResponse.fromAmino(object.value);
   },
-  fromProtoMsg(message: QueryPoolTradeVolumeResponseProtoMsg): QueryPoolTradeVolumeResponse {
-    return QueryPoolTradeVolumeResponse.decode(message.value);
+  fromProtoMsg(message: QueryPoolTradeVolumeResponseProtoMsg, useInterfaces: boolean = true): QueryPoolTradeVolumeResponse {
+    return QueryPoolTradeVolumeResponse.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: QueryPoolTradeVolumeResponse): Uint8Array {
     return QueryPoolTradeVolumeResponse.encode(message).finish();
@@ -330,6 +350,7 @@ export const QueryPoolTradeVolumeResponse = {
     };
   }
 };
+GlobalDecoderRegistry.register(QueryPoolTradeVolumeResponse.typeUrl, QueryPoolTradeVolumeResponse);
 function createBaseQueryTokenTradeVolumeRequest(): QueryTokenTradeVolumeRequest {
   return {
     denom: "",
@@ -340,6 +361,15 @@ function createBaseQueryTokenTradeVolumeRequest(): QueryTokenTradeVolumeRequest 
 }
 export const QueryTokenTradeVolumeRequest = {
   typeUrl: "/pryzmatics.server.trade.QueryTokenTradeVolumeRequest",
+  is(o: any): o is QueryTokenTradeVolumeRequest {
+    return o && (o.$typeUrl === QueryTokenTradeVolumeRequest.typeUrl || typeof o.denom === "string" && typeof o.from === "string" && typeof o.to === "string");
+  },
+  isSDK(o: any): o is QueryTokenTradeVolumeRequestSDKType {
+    return o && (o.$typeUrl === QueryTokenTradeVolumeRequest.typeUrl || typeof o.denom === "string" && typeof o.from === "string" && typeof o.to === "string");
+  },
+  isAmino(o: any): o is QueryTokenTradeVolumeRequestAmino {
+    return o && (o.$typeUrl === QueryTokenTradeVolumeRequest.typeUrl || typeof o.denom === "string" && typeof o.from === "string" && typeof o.to === "string");
+  },
   encode(message: QueryTokenTradeVolumeRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.denom !== "") {
       writer.uint32(10).string(message.denom);
@@ -355,7 +385,7 @@ export const QueryTokenTradeVolumeRequest = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): QueryTokenTradeVolumeRequest {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): QueryTokenTradeVolumeRequest {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryTokenTradeVolumeRequest();
@@ -421,19 +451,19 @@ export const QueryTokenTradeVolumeRequest = {
     }
     return message;
   },
-  toAmino(message: QueryTokenTradeVolumeRequest): QueryTokenTradeVolumeRequestAmino {
+  toAmino(message: QueryTokenTradeVolumeRequest, useInterfaces: boolean = true): QueryTokenTradeVolumeRequestAmino {
     const obj: any = {};
-    obj.denom = message.denom;
-    obj.pool_id = message.poolId;
-    obj.from = message.from;
-    obj.to = message.to;
+    obj.denom = message.denom === "" ? undefined : message.denom;
+    obj.pool_id = message.poolId === null ? undefined : message.poolId;
+    obj.from = message.from === "" ? undefined : message.from;
+    obj.to = message.to === "" ? undefined : message.to;
     return obj;
   },
   fromAminoMsg(object: QueryTokenTradeVolumeRequestAminoMsg): QueryTokenTradeVolumeRequest {
     return QueryTokenTradeVolumeRequest.fromAmino(object.value);
   },
-  fromProtoMsg(message: QueryTokenTradeVolumeRequestProtoMsg): QueryTokenTradeVolumeRequest {
-    return QueryTokenTradeVolumeRequest.decode(message.value);
+  fromProtoMsg(message: QueryTokenTradeVolumeRequestProtoMsg, useInterfaces: boolean = true): QueryTokenTradeVolumeRequest {
+    return QueryTokenTradeVolumeRequest.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: QueryTokenTradeVolumeRequest): Uint8Array {
     return QueryTokenTradeVolumeRequest.encode(message).finish();
@@ -445,6 +475,7 @@ export const QueryTokenTradeVolumeRequest = {
     };
   }
 };
+GlobalDecoderRegistry.register(QueryTokenTradeVolumeRequest.typeUrl, QueryTokenTradeVolumeRequest);
 function createBaseQueryTokenTradeVolumeResponse(): QueryTokenTradeVolumeResponse {
   return {
     volume: ""
@@ -452,13 +483,22 @@ function createBaseQueryTokenTradeVolumeResponse(): QueryTokenTradeVolumeRespons
 }
 export const QueryTokenTradeVolumeResponse = {
   typeUrl: "/pryzmatics.server.trade.QueryTokenTradeVolumeResponse",
+  is(o: any): o is QueryTokenTradeVolumeResponse {
+    return o && (o.$typeUrl === QueryTokenTradeVolumeResponse.typeUrl || typeof o.volume === "string");
+  },
+  isSDK(o: any): o is QueryTokenTradeVolumeResponseSDKType {
+    return o && (o.$typeUrl === QueryTokenTradeVolumeResponse.typeUrl || typeof o.volume === "string");
+  },
+  isAmino(o: any): o is QueryTokenTradeVolumeResponseAmino {
+    return o && (o.$typeUrl === QueryTokenTradeVolumeResponse.typeUrl || typeof o.volume === "string");
+  },
   encode(message: QueryTokenTradeVolumeResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.volume !== "") {
       writer.uint32(10).string(Decimal.fromUserInput(message.volume, 18).atomics);
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): QueryTokenTradeVolumeResponse {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): QueryTokenTradeVolumeResponse {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryTokenTradeVolumeResponse();
@@ -497,16 +537,16 @@ export const QueryTokenTradeVolumeResponse = {
     }
     return message;
   },
-  toAmino(message: QueryTokenTradeVolumeResponse): QueryTokenTradeVolumeResponseAmino {
+  toAmino(message: QueryTokenTradeVolumeResponse, useInterfaces: boolean = true): QueryTokenTradeVolumeResponseAmino {
     const obj: any = {};
-    obj.volume = message.volume;
+    obj.volume = padDecimal(message.volume) === "" ? undefined : padDecimal(message.volume);
     return obj;
   },
   fromAminoMsg(object: QueryTokenTradeVolumeResponseAminoMsg): QueryTokenTradeVolumeResponse {
     return QueryTokenTradeVolumeResponse.fromAmino(object.value);
   },
-  fromProtoMsg(message: QueryTokenTradeVolumeResponseProtoMsg): QueryTokenTradeVolumeResponse {
-    return QueryTokenTradeVolumeResponse.decode(message.value);
+  fromProtoMsg(message: QueryTokenTradeVolumeResponseProtoMsg, useInterfaces: boolean = true): QueryTokenTradeVolumeResponse {
+    return QueryTokenTradeVolumeResponse.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: QueryTokenTradeVolumeResponse): Uint8Array {
     return QueryTokenTradeVolumeResponse.encode(message).finish();
@@ -518,6 +558,7 @@ export const QueryTokenTradeVolumeResponse = {
     };
   }
 };
+GlobalDecoderRegistry.register(QueryTokenTradeVolumeResponse.typeUrl, QueryTokenTradeVolumeResponse);
 function createBaseQueryFavoritePairsRequest(): QueryFavoritePairsRequest {
   return {
     from: "",
@@ -526,6 +567,15 @@ function createBaseQueryFavoritePairsRequest(): QueryFavoritePairsRequest {
 }
 export const QueryFavoritePairsRequest = {
   typeUrl: "/pryzmatics.server.trade.QueryFavoritePairsRequest",
+  is(o: any): o is QueryFavoritePairsRequest {
+    return o && (o.$typeUrl === QueryFavoritePairsRequest.typeUrl || typeof o.from === "string" && typeof o.to === "string");
+  },
+  isSDK(o: any): o is QueryFavoritePairsRequestSDKType {
+    return o && (o.$typeUrl === QueryFavoritePairsRequest.typeUrl || typeof o.from === "string" && typeof o.to === "string");
+  },
+  isAmino(o: any): o is QueryFavoritePairsRequestAmino {
+    return o && (o.$typeUrl === QueryFavoritePairsRequest.typeUrl || typeof o.from === "string" && typeof o.to === "string");
+  },
   encode(message: QueryFavoritePairsRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.from !== "") {
       writer.uint32(10).string(message.from);
@@ -535,7 +585,7 @@ export const QueryFavoritePairsRequest = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): QueryFavoritePairsRequest {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): QueryFavoritePairsRequest {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryFavoritePairsRequest();
@@ -583,17 +633,17 @@ export const QueryFavoritePairsRequest = {
     }
     return message;
   },
-  toAmino(message: QueryFavoritePairsRequest): QueryFavoritePairsRequestAmino {
+  toAmino(message: QueryFavoritePairsRequest, useInterfaces: boolean = true): QueryFavoritePairsRequestAmino {
     const obj: any = {};
-    obj.from = message.from;
-    obj.to = message.to;
+    obj.from = message.from === "" ? undefined : message.from;
+    obj.to = message.to === "" ? undefined : message.to;
     return obj;
   },
   fromAminoMsg(object: QueryFavoritePairsRequestAminoMsg): QueryFavoritePairsRequest {
     return QueryFavoritePairsRequest.fromAmino(object.value);
   },
-  fromProtoMsg(message: QueryFavoritePairsRequestProtoMsg): QueryFavoritePairsRequest {
-    return QueryFavoritePairsRequest.decode(message.value);
+  fromProtoMsg(message: QueryFavoritePairsRequestProtoMsg, useInterfaces: boolean = true): QueryFavoritePairsRequest {
+    return QueryFavoritePairsRequest.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: QueryFavoritePairsRequest): Uint8Array {
     return QueryFavoritePairsRequest.encode(message).finish();
@@ -605,6 +655,7 @@ export const QueryFavoritePairsRequest = {
     };
   }
 };
+GlobalDecoderRegistry.register(QueryFavoritePairsRequest.typeUrl, QueryFavoritePairsRequest);
 function createBaseQueryFavoritePairsResponse(): QueryFavoritePairsResponse {
   return {
     pairs: []
@@ -612,13 +663,22 @@ function createBaseQueryFavoritePairsResponse(): QueryFavoritePairsResponse {
 }
 export const QueryFavoritePairsResponse = {
   typeUrl: "/pryzmatics.server.trade.QueryFavoritePairsResponse",
+  is(o: any): o is QueryFavoritePairsResponse {
+    return o && (o.$typeUrl === QueryFavoritePairsResponse.typeUrl || Array.isArray(o.pairs) && (!o.pairs.length || FavoritePair.is(o.pairs[0])));
+  },
+  isSDK(o: any): o is QueryFavoritePairsResponseSDKType {
+    return o && (o.$typeUrl === QueryFavoritePairsResponse.typeUrl || Array.isArray(o.pairs) && (!o.pairs.length || FavoritePair.isSDK(o.pairs[0])));
+  },
+  isAmino(o: any): o is QueryFavoritePairsResponseAmino {
+    return o && (o.$typeUrl === QueryFavoritePairsResponse.typeUrl || Array.isArray(o.pairs) && (!o.pairs.length || FavoritePair.isAmino(o.pairs[0])));
+  },
   encode(message: QueryFavoritePairsResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     for (const v of message.pairs) {
       FavoritePair.encode(v!, writer.uint32(10).fork()).ldelim();
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): QueryFavoritePairsResponse {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): QueryFavoritePairsResponse {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryFavoritePairsResponse();
@@ -626,7 +686,7 @@ export const QueryFavoritePairsResponse = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.pairs.push(FavoritePair.decode(reader, reader.uint32()));
+          message.pairs.push(FavoritePair.decode(reader, reader.uint32(), useInterfaces));
           break;
         default:
           reader.skipType(tag & 7);
@@ -659,20 +719,20 @@ export const QueryFavoritePairsResponse = {
     message.pairs = object.pairs?.map(e => FavoritePair.fromAmino(e)) || [];
     return message;
   },
-  toAmino(message: QueryFavoritePairsResponse): QueryFavoritePairsResponseAmino {
+  toAmino(message: QueryFavoritePairsResponse, useInterfaces: boolean = true): QueryFavoritePairsResponseAmino {
     const obj: any = {};
     if (message.pairs) {
-      obj.pairs = message.pairs.map(e => e ? FavoritePair.toAmino(e) : undefined);
+      obj.pairs = message.pairs.map(e => e ? FavoritePair.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.pairs = [];
+      obj.pairs = null;
     }
     return obj;
   },
   fromAminoMsg(object: QueryFavoritePairsResponseAminoMsg): QueryFavoritePairsResponse {
     return QueryFavoritePairsResponse.fromAmino(object.value);
   },
-  fromProtoMsg(message: QueryFavoritePairsResponseProtoMsg): QueryFavoritePairsResponse {
-    return QueryFavoritePairsResponse.decode(message.value);
+  fromProtoMsg(message: QueryFavoritePairsResponseProtoMsg, useInterfaces: boolean = true): QueryFavoritePairsResponse {
+    return QueryFavoritePairsResponse.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: QueryFavoritePairsResponse): Uint8Array {
     return QueryFavoritePairsResponse.encode(message).finish();
@@ -684,3 +744,4 @@ export const QueryFavoritePairsResponse = {
     };
   }
 };
+GlobalDecoderRegistry.register(QueryFavoritePairsResponse.typeUrl, QueryFavoritePairsResponse);

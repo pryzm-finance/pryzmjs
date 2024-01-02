@@ -2,7 +2,8 @@ import { PoolType, poolTypeFromJSON, poolTypeToJSON } from "../../pryzm/amm/v1/p
 import { PoolApr, PoolAprAmino, PoolAprSDKType } from "./pool_apr";
 import { BinaryReader, BinaryWriter } from "../../binary";
 import { Decimal } from "@cosmjs/math";
-import { isSet } from "../../helpers";
+import { isSet, padDecimal } from "../../helpers";
+import { GlobalDecoderRegistry } from "../../registry";
 export interface PoolMetrics {
   tradeVolume24h: string;
   tradeVolume7d: string;
@@ -91,6 +92,15 @@ function createBasePoolMetrics(): PoolMetrics {
 }
 export const PoolMetrics = {
   typeUrl: "/pryzmatics.pool.PoolMetrics",
+  is(o: any): o is PoolMetrics {
+    return o && (o.$typeUrl === PoolMetrics.typeUrl || typeof o.tradeVolume24h === "string" && typeof o.tradeVolume7d === "string" && typeof o.tradeVolume30d === "string" && typeof o.swapFeeVolume24h === "string" && typeof o.swapFeeVolume7d === "string" && typeof o.swapFeeVolume30d === "string" && typeof o.joinExitSwapFeeVolume24h === "string" && typeof o.joinExitSwapFeeVolume7d === "string" && typeof o.joinExitSwapFeeVolume30d === "string");
+  },
+  isSDK(o: any): o is PoolMetricsSDKType {
+    return o && (o.$typeUrl === PoolMetrics.typeUrl || typeof o.trade_volume_24h === "string" && typeof o.trade_volume_7d === "string" && typeof o.trade_volume_30d === "string" && typeof o.swap_fee_volume_24h === "string" && typeof o.swap_fee_volume_7d === "string" && typeof o.swap_fee_volume_30d === "string" && typeof o.join_exit_swap_fee_volume_24h === "string" && typeof o.join_exit_swap_fee_volume_7d === "string" && typeof o.join_exit_swap_fee_volume_30d === "string");
+  },
+  isAmino(o: any): o is PoolMetricsAmino {
+    return o && (o.$typeUrl === PoolMetrics.typeUrl || typeof o.trade_volume_24h === "string" && typeof o.trade_volume_7d === "string" && typeof o.trade_volume_30d === "string" && typeof o.swap_fee_volume_24h === "string" && typeof o.swap_fee_volume_7d === "string" && typeof o.swap_fee_volume_30d === "string" && typeof o.join_exit_swap_fee_volume_24h === "string" && typeof o.join_exit_swap_fee_volume_7d === "string" && typeof o.join_exit_swap_fee_volume_30d === "string");
+  },
   encode(message: PoolMetrics, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.tradeVolume24h !== "") {
       writer.uint32(10).string(Decimal.fromUserInput(message.tradeVolume24h, 18).atomics);
@@ -121,7 +131,7 @@ export const PoolMetrics = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): PoolMetrics {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): PoolMetrics {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBasePoolMetrics();
@@ -232,24 +242,24 @@ export const PoolMetrics = {
     }
     return message;
   },
-  toAmino(message: PoolMetrics): PoolMetricsAmino {
+  toAmino(message: PoolMetrics, useInterfaces: boolean = true): PoolMetricsAmino {
     const obj: any = {};
-    obj.trade_volume_24h = message.tradeVolume24h;
-    obj.trade_volume_7d = message.tradeVolume7d;
-    obj.trade_volume_30d = message.tradeVolume30d;
-    obj.swap_fee_volume_24h = message.swapFeeVolume24h;
-    obj.swap_fee_volume_7d = message.swapFeeVolume7d;
-    obj.swap_fee_volume_30d = message.swapFeeVolume30d;
-    obj.join_exit_swap_fee_volume_24h = message.joinExitSwapFeeVolume24h;
-    obj.join_exit_swap_fee_volume_7d = message.joinExitSwapFeeVolume7d;
-    obj.join_exit_swap_fee_volume_30d = message.joinExitSwapFeeVolume30d;
+    obj.trade_volume_24h = padDecimal(message.tradeVolume24h) === "" ? undefined : padDecimal(message.tradeVolume24h);
+    obj.trade_volume_7d = padDecimal(message.tradeVolume7d) === "" ? undefined : padDecimal(message.tradeVolume7d);
+    obj.trade_volume_30d = padDecimal(message.tradeVolume30d) === "" ? undefined : padDecimal(message.tradeVolume30d);
+    obj.swap_fee_volume_24h = padDecimal(message.swapFeeVolume24h) === "" ? undefined : padDecimal(message.swapFeeVolume24h);
+    obj.swap_fee_volume_7d = padDecimal(message.swapFeeVolume7d) === "" ? undefined : padDecimal(message.swapFeeVolume7d);
+    obj.swap_fee_volume_30d = padDecimal(message.swapFeeVolume30d) === "" ? undefined : padDecimal(message.swapFeeVolume30d);
+    obj.join_exit_swap_fee_volume_24h = padDecimal(message.joinExitSwapFeeVolume24h) === "" ? undefined : padDecimal(message.joinExitSwapFeeVolume24h);
+    obj.join_exit_swap_fee_volume_7d = padDecimal(message.joinExitSwapFeeVolume7d) === "" ? undefined : padDecimal(message.joinExitSwapFeeVolume7d);
+    obj.join_exit_swap_fee_volume_30d = padDecimal(message.joinExitSwapFeeVolume30d) === "" ? undefined : padDecimal(message.joinExitSwapFeeVolume30d);
     return obj;
   },
   fromAminoMsg(object: PoolMetricsAminoMsg): PoolMetrics {
     return PoolMetrics.fromAmino(object.value);
   },
-  fromProtoMsg(message: PoolMetricsProtoMsg): PoolMetrics {
-    return PoolMetrics.decode(message.value);
+  fromProtoMsg(message: PoolMetricsProtoMsg, useInterfaces: boolean = true): PoolMetrics {
+    return PoolMetrics.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: PoolMetrics): Uint8Array {
     return PoolMetrics.encode(message).finish();
@@ -261,6 +271,7 @@ export const PoolMetrics = {
     };
   }
 };
+GlobalDecoderRegistry.register(PoolMetrics.typeUrl, PoolMetrics);
 function createBasePool(): Pool {
   return {
     id: BigInt(0),
@@ -273,6 +284,15 @@ function createBasePool(): Pool {
 }
 export const Pool = {
   typeUrl: "/pryzmatics.pool.Pool",
+  is(o: any): o is Pool {
+    return o && (o.$typeUrl === Pool.typeUrl || typeof o.id === "bigint" && typeof o.name === "string" && isSet(o.poolType) && typeof o.lpDenom === "string" && PoolMetrics.is(o.metrics));
+  },
+  isSDK(o: any): o is PoolSDKType {
+    return o && (o.$typeUrl === Pool.typeUrl || typeof o.id === "bigint" && typeof o.name === "string" && isSet(o.pool_type) && typeof o.lp_denom === "string" && PoolMetrics.isSDK(o.metrics));
+  },
+  isAmino(o: any): o is PoolAmino {
+    return o && (o.$typeUrl === Pool.typeUrl || typeof o.id === "bigint" && typeof o.name === "string" && isSet(o.pool_type) && typeof o.lp_denom === "string" && PoolMetrics.isAmino(o.metrics));
+  },
   encode(message: Pool, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.id !== BigInt(0)) {
       writer.uint32(8).uint64(message.id);
@@ -294,7 +314,7 @@ export const Pool = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): Pool {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): Pool {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBasePool();
@@ -314,10 +334,10 @@ export const Pool = {
           message.lpDenom = reader.string();
           break;
         case 5:
-          message.apr = PoolApr.decode(reader, reader.uint32());
+          message.apr = PoolApr.decode(reader, reader.uint32(), useInterfaces);
           break;
         case 6:
-          message.metrics = PoolMetrics.decode(reader, reader.uint32());
+          message.metrics = PoolMetrics.decode(reader, reader.uint32(), useInterfaces);
           break;
         default:
           reader.skipType(tag & 7);
@@ -365,7 +385,7 @@ export const Pool = {
       message.name = object.name;
     }
     if (object.pool_type !== undefined && object.pool_type !== null) {
-      message.poolType = poolTypeFromJSON(object.pool_type);
+      message.poolType = object.pool_type;
     }
     if (object.lp_denom !== undefined && object.lp_denom !== null) {
       message.lpDenom = object.lp_denom;
@@ -378,21 +398,21 @@ export const Pool = {
     }
     return message;
   },
-  toAmino(message: Pool): PoolAmino {
+  toAmino(message: Pool, useInterfaces: boolean = true): PoolAmino {
     const obj: any = {};
     obj.id = message.id ? message.id.toString() : undefined;
-    obj.name = message.name;
-    obj.pool_type = poolTypeToJSON(message.poolType);
-    obj.lp_denom = message.lpDenom;
-    obj.apr = message.apr ? PoolApr.toAmino(message.apr) : undefined;
-    obj.metrics = message.metrics ? PoolMetrics.toAmino(message.metrics) : undefined;
+    obj.name = message.name === "" ? undefined : message.name;
+    obj.pool_type = message.poolType === 0 ? undefined : message.poolType;
+    obj.lp_denom = message.lpDenom === "" ? undefined : message.lpDenom;
+    obj.apr = message.apr ? PoolApr.toAmino(message.apr, useInterfaces) : undefined;
+    obj.metrics = message.metrics ? PoolMetrics.toAmino(message.metrics, useInterfaces) : undefined;
     return obj;
   },
   fromAminoMsg(object: PoolAminoMsg): Pool {
     return Pool.fromAmino(object.value);
   },
-  fromProtoMsg(message: PoolProtoMsg): Pool {
-    return Pool.decode(message.value);
+  fromProtoMsg(message: PoolProtoMsg, useInterfaces: boolean = true): Pool {
+    return Pool.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: Pool): Uint8Array {
     return Pool.encode(message).finish();
@@ -404,3 +424,4 @@ export const Pool = {
     };
   }
 };
+GlobalDecoderRegistry.register(Pool.typeUrl, Pool);

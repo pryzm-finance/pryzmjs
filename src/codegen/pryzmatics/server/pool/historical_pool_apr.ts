@@ -1,7 +1,8 @@
 import { TimeResolutionType, timeResolutionTypeFromJSON, timeResolutionTypeToJSON } from "../../common/time_resolution";
 import { HistoricalPoolApr, HistoricalPoolAprAmino, HistoricalPoolAprSDKType } from "../../pool/historical_pool_apr";
-import { BinaryReader, BinaryWriter } from "../../../binary";
 import { isSet } from "../../../helpers";
+import { BinaryReader, BinaryWriter } from "../../../binary";
+import { GlobalDecoderRegistry } from "../../../registry";
 export interface QueryHistoricalPoolAprRequest {
   poolId: bigint;
   timeResolutionType: TimeResolutionType;
@@ -59,6 +60,15 @@ function createBaseQueryHistoricalPoolAprRequest(): QueryHistoricalPoolAprReques
 }
 export const QueryHistoricalPoolAprRequest = {
   typeUrl: "/pryzmatics.server.pool.QueryHistoricalPoolAprRequest",
+  is(o: any): o is QueryHistoricalPoolAprRequest {
+    return o && (o.$typeUrl === QueryHistoricalPoolAprRequest.typeUrl || typeof o.poolId === "bigint" && isSet(o.timeResolutionType) && typeof o.timeResolutionValue === "number" && typeof o.from === "string" && typeof o.to === "string");
+  },
+  isSDK(o: any): o is QueryHistoricalPoolAprRequestSDKType {
+    return o && (o.$typeUrl === QueryHistoricalPoolAprRequest.typeUrl || typeof o.pool_id === "bigint" && isSet(o.time_resolution_type) && typeof o.time_resolution_value === "number" && typeof o.from === "string" && typeof o.to === "string");
+  },
+  isAmino(o: any): o is QueryHistoricalPoolAprRequestAmino {
+    return o && (o.$typeUrl === QueryHistoricalPoolAprRequest.typeUrl || typeof o.pool_id === "bigint" && isSet(o.time_resolution_type) && typeof o.time_resolution_value === "number" && typeof o.from === "string" && typeof o.to === "string");
+  },
   encode(message: QueryHistoricalPoolAprRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.poolId !== BigInt(0)) {
       writer.uint32(8).uint64(message.poolId);
@@ -77,7 +87,7 @@ export const QueryHistoricalPoolAprRequest = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): QueryHistoricalPoolAprRequest {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): QueryHistoricalPoolAprRequest {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryHistoricalPoolAprRequest();
@@ -139,7 +149,7 @@ export const QueryHistoricalPoolAprRequest = {
       message.poolId = BigInt(object.pool_id);
     }
     if (object.time_resolution_type !== undefined && object.time_resolution_type !== null) {
-      message.timeResolutionType = timeResolutionTypeFromJSON(object.time_resolution_type);
+      message.timeResolutionType = object.time_resolution_type;
     }
     if (object.time_resolution_value !== undefined && object.time_resolution_value !== null) {
       message.timeResolutionValue = object.time_resolution_value;
@@ -152,20 +162,20 @@ export const QueryHistoricalPoolAprRequest = {
     }
     return message;
   },
-  toAmino(message: QueryHistoricalPoolAprRequest): QueryHistoricalPoolAprRequestAmino {
+  toAmino(message: QueryHistoricalPoolAprRequest, useInterfaces: boolean = true): QueryHistoricalPoolAprRequestAmino {
     const obj: any = {};
     obj.pool_id = message.poolId ? message.poolId.toString() : undefined;
-    obj.time_resolution_type = timeResolutionTypeToJSON(message.timeResolutionType);
-    obj.time_resolution_value = message.timeResolutionValue;
-    obj.from = message.from;
-    obj.to = message.to;
+    obj.time_resolution_type = message.timeResolutionType === 0 ? undefined : message.timeResolutionType;
+    obj.time_resolution_value = message.timeResolutionValue === 0 ? undefined : message.timeResolutionValue;
+    obj.from = message.from === "" ? undefined : message.from;
+    obj.to = message.to === "" ? undefined : message.to;
     return obj;
   },
   fromAminoMsg(object: QueryHistoricalPoolAprRequestAminoMsg): QueryHistoricalPoolAprRequest {
     return QueryHistoricalPoolAprRequest.fromAmino(object.value);
   },
-  fromProtoMsg(message: QueryHistoricalPoolAprRequestProtoMsg): QueryHistoricalPoolAprRequest {
-    return QueryHistoricalPoolAprRequest.decode(message.value);
+  fromProtoMsg(message: QueryHistoricalPoolAprRequestProtoMsg, useInterfaces: boolean = true): QueryHistoricalPoolAprRequest {
+    return QueryHistoricalPoolAprRequest.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: QueryHistoricalPoolAprRequest): Uint8Array {
     return QueryHistoricalPoolAprRequest.encode(message).finish();
@@ -177,6 +187,7 @@ export const QueryHistoricalPoolAprRequest = {
     };
   }
 };
+GlobalDecoderRegistry.register(QueryHistoricalPoolAprRequest.typeUrl, QueryHistoricalPoolAprRequest);
 function createBaseQueryHistoricalPoolAprResponse(): QueryHistoricalPoolAprResponse {
   return {
     historicalPoolAprs: []
@@ -184,13 +195,22 @@ function createBaseQueryHistoricalPoolAprResponse(): QueryHistoricalPoolAprRespo
 }
 export const QueryHistoricalPoolAprResponse = {
   typeUrl: "/pryzmatics.server.pool.QueryHistoricalPoolAprResponse",
+  is(o: any): o is QueryHistoricalPoolAprResponse {
+    return o && (o.$typeUrl === QueryHistoricalPoolAprResponse.typeUrl || Array.isArray(o.historicalPoolAprs) && (!o.historicalPoolAprs.length || HistoricalPoolApr.is(o.historicalPoolAprs[0])));
+  },
+  isSDK(o: any): o is QueryHistoricalPoolAprResponseSDKType {
+    return o && (o.$typeUrl === QueryHistoricalPoolAprResponse.typeUrl || Array.isArray(o.historical_pool_aprs) && (!o.historical_pool_aprs.length || HistoricalPoolApr.isSDK(o.historical_pool_aprs[0])));
+  },
+  isAmino(o: any): o is QueryHistoricalPoolAprResponseAmino {
+    return o && (o.$typeUrl === QueryHistoricalPoolAprResponse.typeUrl || Array.isArray(o.historical_pool_aprs) && (!o.historical_pool_aprs.length || HistoricalPoolApr.isAmino(o.historical_pool_aprs[0])));
+  },
   encode(message: QueryHistoricalPoolAprResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     for (const v of message.historicalPoolAprs) {
       HistoricalPoolApr.encode(v!, writer.uint32(10).fork()).ldelim();
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): QueryHistoricalPoolAprResponse {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): QueryHistoricalPoolAprResponse {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryHistoricalPoolAprResponse();
@@ -198,7 +218,7 @@ export const QueryHistoricalPoolAprResponse = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.historicalPoolAprs.push(HistoricalPoolApr.decode(reader, reader.uint32()));
+          message.historicalPoolAprs.push(HistoricalPoolApr.decode(reader, reader.uint32(), useInterfaces));
           break;
         default:
           reader.skipType(tag & 7);
@@ -231,20 +251,20 @@ export const QueryHistoricalPoolAprResponse = {
     message.historicalPoolAprs = object.historical_pool_aprs?.map(e => HistoricalPoolApr.fromAmino(e)) || [];
     return message;
   },
-  toAmino(message: QueryHistoricalPoolAprResponse): QueryHistoricalPoolAprResponseAmino {
+  toAmino(message: QueryHistoricalPoolAprResponse, useInterfaces: boolean = true): QueryHistoricalPoolAprResponseAmino {
     const obj: any = {};
     if (message.historicalPoolAprs) {
-      obj.historical_pool_aprs = message.historicalPoolAprs.map(e => e ? HistoricalPoolApr.toAmino(e) : undefined);
+      obj.historical_pool_aprs = message.historicalPoolAprs.map(e => e ? HistoricalPoolApr.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.historical_pool_aprs = [];
+      obj.historical_pool_aprs = null;
     }
     return obj;
   },
   fromAminoMsg(object: QueryHistoricalPoolAprResponseAminoMsg): QueryHistoricalPoolAprResponse {
     return QueryHistoricalPoolAprResponse.fromAmino(object.value);
   },
-  fromProtoMsg(message: QueryHistoricalPoolAprResponseProtoMsg): QueryHistoricalPoolAprResponse {
-    return QueryHistoricalPoolAprResponse.decode(message.value);
+  fromProtoMsg(message: QueryHistoricalPoolAprResponseProtoMsg, useInterfaces: boolean = true): QueryHistoricalPoolAprResponse {
+    return QueryHistoricalPoolAprResponse.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: QueryHistoricalPoolAprResponse): Uint8Array {
     return QueryHistoricalPoolAprResponse.encode(message).finish();
@@ -256,3 +276,4 @@ export const QueryHistoricalPoolAprResponse = {
     };
   }
 };
+GlobalDecoderRegistry.register(QueryHistoricalPoolAprResponse.typeUrl, QueryHistoricalPoolAprResponse);

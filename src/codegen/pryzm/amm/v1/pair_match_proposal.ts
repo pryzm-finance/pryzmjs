@@ -1,5 +1,6 @@
 import { BinaryReader, BinaryWriter } from "../../../binary";
 import { isSet } from "../../../helpers";
+import { GlobalDecoderRegistry } from "../../../registry";
 export interface PairMatchProposal {
   poolId: bigint;
   whitelistedRoute: boolean;
@@ -44,6 +45,15 @@ function createBasePairMatchProposal(): PairMatchProposal {
 }
 export const PairMatchProposal = {
   typeUrl: "/pryzm.amm.v1.PairMatchProposal",
+  is(o: any): o is PairMatchProposal {
+    return o && (o.$typeUrl === PairMatchProposal.typeUrl || typeof o.poolId === "bigint" && typeof o.whitelistedRoute === "boolean" && typeof o.tokenIn === "string" && typeof o.tokenOut === "string" && Array.isArray(o.buyOrders) && (!o.buyOrders.length || typeof o.buyOrders[0] === "bigint") && Array.isArray(o.sellOrders) && (!o.sellOrders.length || typeof o.sellOrders[0] === "bigint"));
+  },
+  isSDK(o: any): o is PairMatchProposalSDKType {
+    return o && (o.$typeUrl === PairMatchProposal.typeUrl || typeof o.pool_id === "bigint" && typeof o.whitelisted_route === "boolean" && typeof o.token_in === "string" && typeof o.token_out === "string" && Array.isArray(o.buy_orders) && (!o.buy_orders.length || typeof o.buy_orders[0] === "bigint") && Array.isArray(o.sell_orders) && (!o.sell_orders.length || typeof o.sell_orders[0] === "bigint"));
+  },
+  isAmino(o: any): o is PairMatchProposalAmino {
+    return o && (o.$typeUrl === PairMatchProposal.typeUrl || typeof o.pool_id === "bigint" && typeof o.whitelisted_route === "boolean" && typeof o.token_in === "string" && typeof o.token_out === "string" && Array.isArray(o.buy_orders) && (!o.buy_orders.length || typeof o.buy_orders[0] === "bigint") && Array.isArray(o.sell_orders) && (!o.sell_orders.length || typeof o.sell_orders[0] === "bigint"));
+  },
   encode(message: PairMatchProposal, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.poolId !== BigInt(0)) {
       writer.uint32(8).uint64(message.poolId);
@@ -69,7 +79,7 @@ export const PairMatchProposal = {
     writer.ldelim();
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): PairMatchProposal {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): PairMatchProposal {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBasePairMatchProposal();
@@ -171,29 +181,29 @@ export const PairMatchProposal = {
     message.sellOrders = object.sell_orders?.map(e => BigInt(e)) || [];
     return message;
   },
-  toAmino(message: PairMatchProposal): PairMatchProposalAmino {
+  toAmino(message: PairMatchProposal, useInterfaces: boolean = true): PairMatchProposalAmino {
     const obj: any = {};
     obj.pool_id = message.poolId ? message.poolId.toString() : undefined;
-    obj.whitelisted_route = message.whitelistedRoute;
-    obj.token_in = message.tokenIn;
-    obj.token_out = message.tokenOut;
+    obj.whitelisted_route = message.whitelistedRoute === false ? undefined : message.whitelistedRoute;
+    obj.token_in = message.tokenIn === "" ? undefined : message.tokenIn;
+    obj.token_out = message.tokenOut === "" ? undefined : message.tokenOut;
     if (message.buyOrders) {
       obj.buy_orders = message.buyOrders.map(e => e.toString());
     } else {
-      obj.buy_orders = [];
+      obj.buy_orders = null;
     }
     if (message.sellOrders) {
       obj.sell_orders = message.sellOrders.map(e => e.toString());
     } else {
-      obj.sell_orders = [];
+      obj.sell_orders = null;
     }
     return obj;
   },
   fromAminoMsg(object: PairMatchProposalAminoMsg): PairMatchProposal {
     return PairMatchProposal.fromAmino(object.value);
   },
-  fromProtoMsg(message: PairMatchProposalProtoMsg): PairMatchProposal {
-    return PairMatchProposal.decode(message.value);
+  fromProtoMsg(message: PairMatchProposalProtoMsg, useInterfaces: boolean = true): PairMatchProposal {
+    return PairMatchProposal.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: PairMatchProposal): Uint8Array {
     return PairMatchProposal.encode(message).finish();
@@ -205,3 +215,4 @@ export const PairMatchProposal = {
     };
   }
 };
+GlobalDecoderRegistry.register(PairMatchProposal.typeUrl, PairMatchProposal);

@@ -3,7 +3,8 @@ import { Params, ParamsAmino, ParamsSDKType } from "./params";
 import { Duration, DurationAmino, DurationSDKType } from "../../google/protobuf/duration";
 import { RewardWeightRange, RewardWeightRangeAmino, RewardWeightRangeSDKType } from "./alliance";
 import { BinaryReader, BinaryWriter } from "../../binary";
-import { isSet } from "../../helpers";
+import { isSet, padDecimal } from "../../helpers";
+import { GlobalDecoderRegistry } from "../../registry";
 import { Decimal } from "@cosmjs/math";
 export interface MsgDelegate {
   delegatorAddress: string;
@@ -338,6 +339,15 @@ function createBaseMsgDelegate(): MsgDelegate {
 }
 export const MsgDelegate = {
   typeUrl: "/alliance.alliance.MsgDelegate",
+  is(o: any): o is MsgDelegate {
+    return o && (o.$typeUrl === MsgDelegate.typeUrl || typeof o.delegatorAddress === "string" && typeof o.validatorAddress === "string" && Coin.is(o.amount));
+  },
+  isSDK(o: any): o is MsgDelegateSDKType {
+    return o && (o.$typeUrl === MsgDelegate.typeUrl || typeof o.delegator_address === "string" && typeof o.validator_address === "string" && Coin.isSDK(o.amount));
+  },
+  isAmino(o: any): o is MsgDelegateAmino {
+    return o && (o.$typeUrl === MsgDelegate.typeUrl || typeof o.delegator_address === "string" && typeof o.validator_address === "string" && Coin.isAmino(o.amount));
+  },
   encode(message: MsgDelegate, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.delegatorAddress !== "") {
       writer.uint32(10).string(message.delegatorAddress);
@@ -350,7 +360,7 @@ export const MsgDelegate = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): MsgDelegate {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): MsgDelegate {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgDelegate();
@@ -364,7 +374,7 @@ export const MsgDelegate = {
           message.validatorAddress = reader.string();
           break;
         case 3:
-          message.amount = Coin.decode(reader, reader.uint32());
+          message.amount = Coin.decode(reader, reader.uint32(), useInterfaces);
           break;
         default:
           reader.skipType(tag & 7);
@@ -407,18 +417,18 @@ export const MsgDelegate = {
     }
     return message;
   },
-  toAmino(message: MsgDelegate): MsgDelegateAmino {
+  toAmino(message: MsgDelegate, useInterfaces: boolean = true): MsgDelegateAmino {
     const obj: any = {};
-    obj.delegator_address = message.delegatorAddress;
-    obj.validator_address = message.validatorAddress;
-    obj.amount = message.amount ? Coin.toAmino(message.amount) : undefined;
+    obj.delegator_address = message.delegatorAddress === "" ? undefined : message.delegatorAddress;
+    obj.validator_address = message.validatorAddress === "" ? undefined : message.validatorAddress;
+    obj.amount = message.amount ? Coin.toAmino(message.amount, useInterfaces) : undefined;
     return obj;
   },
   fromAminoMsg(object: MsgDelegateAminoMsg): MsgDelegate {
     return MsgDelegate.fromAmino(object.value);
   },
-  fromProtoMsg(message: MsgDelegateProtoMsg): MsgDelegate {
-    return MsgDelegate.decode(message.value);
+  fromProtoMsg(message: MsgDelegateProtoMsg, useInterfaces: boolean = true): MsgDelegate {
+    return MsgDelegate.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: MsgDelegate): Uint8Array {
     return MsgDelegate.encode(message).finish();
@@ -430,15 +440,25 @@ export const MsgDelegate = {
     };
   }
 };
+GlobalDecoderRegistry.register(MsgDelegate.typeUrl, MsgDelegate);
 function createBaseMsgDelegateResponse(): MsgDelegateResponse {
   return {};
 }
 export const MsgDelegateResponse = {
   typeUrl: "/alliance.alliance.MsgDelegateResponse",
+  is(o: any): o is MsgDelegateResponse {
+    return o && o.$typeUrl === MsgDelegateResponse.typeUrl;
+  },
+  isSDK(o: any): o is MsgDelegateResponseSDKType {
+    return o && o.$typeUrl === MsgDelegateResponse.typeUrl;
+  },
+  isAmino(o: any): o is MsgDelegateResponseAmino {
+    return o && o.$typeUrl === MsgDelegateResponse.typeUrl;
+  },
   encode(_: MsgDelegateResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): MsgDelegateResponse {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): MsgDelegateResponse {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgDelegateResponse();
@@ -467,15 +487,15 @@ export const MsgDelegateResponse = {
     const message = createBaseMsgDelegateResponse();
     return message;
   },
-  toAmino(_: MsgDelegateResponse): MsgDelegateResponseAmino {
+  toAmino(_: MsgDelegateResponse, useInterfaces: boolean = true): MsgDelegateResponseAmino {
     const obj: any = {};
     return obj;
   },
   fromAminoMsg(object: MsgDelegateResponseAminoMsg): MsgDelegateResponse {
     return MsgDelegateResponse.fromAmino(object.value);
   },
-  fromProtoMsg(message: MsgDelegateResponseProtoMsg): MsgDelegateResponse {
-    return MsgDelegateResponse.decode(message.value);
+  fromProtoMsg(message: MsgDelegateResponseProtoMsg, useInterfaces: boolean = true): MsgDelegateResponse {
+    return MsgDelegateResponse.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: MsgDelegateResponse): Uint8Array {
     return MsgDelegateResponse.encode(message).finish();
@@ -487,6 +507,7 @@ export const MsgDelegateResponse = {
     };
   }
 };
+GlobalDecoderRegistry.register(MsgDelegateResponse.typeUrl, MsgDelegateResponse);
 function createBaseMsgUndelegate(): MsgUndelegate {
   return {
     delegatorAddress: "",
@@ -496,6 +517,15 @@ function createBaseMsgUndelegate(): MsgUndelegate {
 }
 export const MsgUndelegate = {
   typeUrl: "/alliance.alliance.MsgUndelegate",
+  is(o: any): o is MsgUndelegate {
+    return o && (o.$typeUrl === MsgUndelegate.typeUrl || typeof o.delegatorAddress === "string" && typeof o.validatorAddress === "string" && Coin.is(o.amount));
+  },
+  isSDK(o: any): o is MsgUndelegateSDKType {
+    return o && (o.$typeUrl === MsgUndelegate.typeUrl || typeof o.delegator_address === "string" && typeof o.validator_address === "string" && Coin.isSDK(o.amount));
+  },
+  isAmino(o: any): o is MsgUndelegateAmino {
+    return o && (o.$typeUrl === MsgUndelegate.typeUrl || typeof o.delegator_address === "string" && typeof o.validator_address === "string" && Coin.isAmino(o.amount));
+  },
   encode(message: MsgUndelegate, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.delegatorAddress !== "") {
       writer.uint32(10).string(message.delegatorAddress);
@@ -508,7 +538,7 @@ export const MsgUndelegate = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): MsgUndelegate {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): MsgUndelegate {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgUndelegate();
@@ -522,7 +552,7 @@ export const MsgUndelegate = {
           message.validatorAddress = reader.string();
           break;
         case 3:
-          message.amount = Coin.decode(reader, reader.uint32());
+          message.amount = Coin.decode(reader, reader.uint32(), useInterfaces);
           break;
         default:
           reader.skipType(tag & 7);
@@ -565,18 +595,18 @@ export const MsgUndelegate = {
     }
     return message;
   },
-  toAmino(message: MsgUndelegate): MsgUndelegateAmino {
+  toAmino(message: MsgUndelegate, useInterfaces: boolean = true): MsgUndelegateAmino {
     const obj: any = {};
-    obj.delegator_address = message.delegatorAddress;
-    obj.validator_address = message.validatorAddress;
-    obj.amount = message.amount ? Coin.toAmino(message.amount) : undefined;
+    obj.delegator_address = message.delegatorAddress === "" ? undefined : message.delegatorAddress;
+    obj.validator_address = message.validatorAddress === "" ? undefined : message.validatorAddress;
+    obj.amount = message.amount ? Coin.toAmino(message.amount, useInterfaces) : undefined;
     return obj;
   },
   fromAminoMsg(object: MsgUndelegateAminoMsg): MsgUndelegate {
     return MsgUndelegate.fromAmino(object.value);
   },
-  fromProtoMsg(message: MsgUndelegateProtoMsg): MsgUndelegate {
-    return MsgUndelegate.decode(message.value);
+  fromProtoMsg(message: MsgUndelegateProtoMsg, useInterfaces: boolean = true): MsgUndelegate {
+    return MsgUndelegate.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: MsgUndelegate): Uint8Array {
     return MsgUndelegate.encode(message).finish();
@@ -588,15 +618,25 @@ export const MsgUndelegate = {
     };
   }
 };
+GlobalDecoderRegistry.register(MsgUndelegate.typeUrl, MsgUndelegate);
 function createBaseMsgUndelegateResponse(): MsgUndelegateResponse {
   return {};
 }
 export const MsgUndelegateResponse = {
   typeUrl: "/alliance.alliance.MsgUndelegateResponse",
+  is(o: any): o is MsgUndelegateResponse {
+    return o && o.$typeUrl === MsgUndelegateResponse.typeUrl;
+  },
+  isSDK(o: any): o is MsgUndelegateResponseSDKType {
+    return o && o.$typeUrl === MsgUndelegateResponse.typeUrl;
+  },
+  isAmino(o: any): o is MsgUndelegateResponseAmino {
+    return o && o.$typeUrl === MsgUndelegateResponse.typeUrl;
+  },
   encode(_: MsgUndelegateResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): MsgUndelegateResponse {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): MsgUndelegateResponse {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgUndelegateResponse();
@@ -625,15 +665,15 @@ export const MsgUndelegateResponse = {
     const message = createBaseMsgUndelegateResponse();
     return message;
   },
-  toAmino(_: MsgUndelegateResponse): MsgUndelegateResponseAmino {
+  toAmino(_: MsgUndelegateResponse, useInterfaces: boolean = true): MsgUndelegateResponseAmino {
     const obj: any = {};
     return obj;
   },
   fromAminoMsg(object: MsgUndelegateResponseAminoMsg): MsgUndelegateResponse {
     return MsgUndelegateResponse.fromAmino(object.value);
   },
-  fromProtoMsg(message: MsgUndelegateResponseProtoMsg): MsgUndelegateResponse {
-    return MsgUndelegateResponse.decode(message.value);
+  fromProtoMsg(message: MsgUndelegateResponseProtoMsg, useInterfaces: boolean = true): MsgUndelegateResponse {
+    return MsgUndelegateResponse.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: MsgUndelegateResponse): Uint8Array {
     return MsgUndelegateResponse.encode(message).finish();
@@ -645,6 +685,7 @@ export const MsgUndelegateResponse = {
     };
   }
 };
+GlobalDecoderRegistry.register(MsgUndelegateResponse.typeUrl, MsgUndelegateResponse);
 function createBaseMsgRedelegate(): MsgRedelegate {
   return {
     delegatorAddress: "",
@@ -655,6 +696,15 @@ function createBaseMsgRedelegate(): MsgRedelegate {
 }
 export const MsgRedelegate = {
   typeUrl: "/alliance.alliance.MsgRedelegate",
+  is(o: any): o is MsgRedelegate {
+    return o && (o.$typeUrl === MsgRedelegate.typeUrl || typeof o.delegatorAddress === "string" && typeof o.validatorSrcAddress === "string" && typeof o.validatorDstAddress === "string" && Coin.is(o.amount));
+  },
+  isSDK(o: any): o is MsgRedelegateSDKType {
+    return o && (o.$typeUrl === MsgRedelegate.typeUrl || typeof o.delegator_address === "string" && typeof o.validator_src_address === "string" && typeof o.validator_dst_address === "string" && Coin.isSDK(o.amount));
+  },
+  isAmino(o: any): o is MsgRedelegateAmino {
+    return o && (o.$typeUrl === MsgRedelegate.typeUrl || typeof o.delegator_address === "string" && typeof o.validator_src_address === "string" && typeof o.validator_dst_address === "string" && Coin.isAmino(o.amount));
+  },
   encode(message: MsgRedelegate, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.delegatorAddress !== "") {
       writer.uint32(10).string(message.delegatorAddress);
@@ -670,7 +720,7 @@ export const MsgRedelegate = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): MsgRedelegate {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): MsgRedelegate {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgRedelegate();
@@ -687,7 +737,7 @@ export const MsgRedelegate = {
           message.validatorDstAddress = reader.string();
           break;
         case 4:
-          message.amount = Coin.decode(reader, reader.uint32());
+          message.amount = Coin.decode(reader, reader.uint32(), useInterfaces);
           break;
         default:
           reader.skipType(tag & 7);
@@ -736,19 +786,19 @@ export const MsgRedelegate = {
     }
     return message;
   },
-  toAmino(message: MsgRedelegate): MsgRedelegateAmino {
+  toAmino(message: MsgRedelegate, useInterfaces: boolean = true): MsgRedelegateAmino {
     const obj: any = {};
-    obj.delegator_address = message.delegatorAddress;
-    obj.validator_src_address = message.validatorSrcAddress;
-    obj.validator_dst_address = message.validatorDstAddress;
-    obj.amount = message.amount ? Coin.toAmino(message.amount) : undefined;
+    obj.delegator_address = message.delegatorAddress === "" ? undefined : message.delegatorAddress;
+    obj.validator_src_address = message.validatorSrcAddress === "" ? undefined : message.validatorSrcAddress;
+    obj.validator_dst_address = message.validatorDstAddress === "" ? undefined : message.validatorDstAddress;
+    obj.amount = message.amount ? Coin.toAmino(message.amount, useInterfaces) : undefined;
     return obj;
   },
   fromAminoMsg(object: MsgRedelegateAminoMsg): MsgRedelegate {
     return MsgRedelegate.fromAmino(object.value);
   },
-  fromProtoMsg(message: MsgRedelegateProtoMsg): MsgRedelegate {
-    return MsgRedelegate.decode(message.value);
+  fromProtoMsg(message: MsgRedelegateProtoMsg, useInterfaces: boolean = true): MsgRedelegate {
+    return MsgRedelegate.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: MsgRedelegate): Uint8Array {
     return MsgRedelegate.encode(message).finish();
@@ -760,15 +810,25 @@ export const MsgRedelegate = {
     };
   }
 };
+GlobalDecoderRegistry.register(MsgRedelegate.typeUrl, MsgRedelegate);
 function createBaseMsgRedelegateResponse(): MsgRedelegateResponse {
   return {};
 }
 export const MsgRedelegateResponse = {
   typeUrl: "/alliance.alliance.MsgRedelegateResponse",
+  is(o: any): o is MsgRedelegateResponse {
+    return o && o.$typeUrl === MsgRedelegateResponse.typeUrl;
+  },
+  isSDK(o: any): o is MsgRedelegateResponseSDKType {
+    return o && o.$typeUrl === MsgRedelegateResponse.typeUrl;
+  },
+  isAmino(o: any): o is MsgRedelegateResponseAmino {
+    return o && o.$typeUrl === MsgRedelegateResponse.typeUrl;
+  },
   encode(_: MsgRedelegateResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): MsgRedelegateResponse {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): MsgRedelegateResponse {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgRedelegateResponse();
@@ -797,15 +857,15 @@ export const MsgRedelegateResponse = {
     const message = createBaseMsgRedelegateResponse();
     return message;
   },
-  toAmino(_: MsgRedelegateResponse): MsgRedelegateResponseAmino {
+  toAmino(_: MsgRedelegateResponse, useInterfaces: boolean = true): MsgRedelegateResponseAmino {
     const obj: any = {};
     return obj;
   },
   fromAminoMsg(object: MsgRedelegateResponseAminoMsg): MsgRedelegateResponse {
     return MsgRedelegateResponse.fromAmino(object.value);
   },
-  fromProtoMsg(message: MsgRedelegateResponseProtoMsg): MsgRedelegateResponse {
-    return MsgRedelegateResponse.decode(message.value);
+  fromProtoMsg(message: MsgRedelegateResponseProtoMsg, useInterfaces: boolean = true): MsgRedelegateResponse {
+    return MsgRedelegateResponse.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: MsgRedelegateResponse): Uint8Array {
     return MsgRedelegateResponse.encode(message).finish();
@@ -817,6 +877,7 @@ export const MsgRedelegateResponse = {
     };
   }
 };
+GlobalDecoderRegistry.register(MsgRedelegateResponse.typeUrl, MsgRedelegateResponse);
 function createBaseMsgClaimDelegationRewards(): MsgClaimDelegationRewards {
   return {
     delegatorAddress: "",
@@ -826,6 +887,15 @@ function createBaseMsgClaimDelegationRewards(): MsgClaimDelegationRewards {
 }
 export const MsgClaimDelegationRewards = {
   typeUrl: "/alliance.alliance.MsgClaimDelegationRewards",
+  is(o: any): o is MsgClaimDelegationRewards {
+    return o && (o.$typeUrl === MsgClaimDelegationRewards.typeUrl || typeof o.delegatorAddress === "string" && typeof o.validatorAddress === "string" && typeof o.denom === "string");
+  },
+  isSDK(o: any): o is MsgClaimDelegationRewardsSDKType {
+    return o && (o.$typeUrl === MsgClaimDelegationRewards.typeUrl || typeof o.delegator_address === "string" && typeof o.validator_address === "string" && typeof o.denom === "string");
+  },
+  isAmino(o: any): o is MsgClaimDelegationRewardsAmino {
+    return o && (o.$typeUrl === MsgClaimDelegationRewards.typeUrl || typeof o.delegator_address === "string" && typeof o.validator_address === "string" && typeof o.denom === "string");
+  },
   encode(message: MsgClaimDelegationRewards, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.delegatorAddress !== "") {
       writer.uint32(10).string(message.delegatorAddress);
@@ -838,7 +908,7 @@ export const MsgClaimDelegationRewards = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): MsgClaimDelegationRewards {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): MsgClaimDelegationRewards {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgClaimDelegationRewards();
@@ -895,18 +965,18 @@ export const MsgClaimDelegationRewards = {
     }
     return message;
   },
-  toAmino(message: MsgClaimDelegationRewards): MsgClaimDelegationRewardsAmino {
+  toAmino(message: MsgClaimDelegationRewards, useInterfaces: boolean = true): MsgClaimDelegationRewardsAmino {
     const obj: any = {};
-    obj.delegator_address = message.delegatorAddress;
-    obj.validator_address = message.validatorAddress;
-    obj.denom = message.denom;
+    obj.delegator_address = message.delegatorAddress === "" ? undefined : message.delegatorAddress;
+    obj.validator_address = message.validatorAddress === "" ? undefined : message.validatorAddress;
+    obj.denom = message.denom === "" ? undefined : message.denom;
     return obj;
   },
   fromAminoMsg(object: MsgClaimDelegationRewardsAminoMsg): MsgClaimDelegationRewards {
     return MsgClaimDelegationRewards.fromAmino(object.value);
   },
-  fromProtoMsg(message: MsgClaimDelegationRewardsProtoMsg): MsgClaimDelegationRewards {
-    return MsgClaimDelegationRewards.decode(message.value);
+  fromProtoMsg(message: MsgClaimDelegationRewardsProtoMsg, useInterfaces: boolean = true): MsgClaimDelegationRewards {
+    return MsgClaimDelegationRewards.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: MsgClaimDelegationRewards): Uint8Array {
     return MsgClaimDelegationRewards.encode(message).finish();
@@ -918,15 +988,25 @@ export const MsgClaimDelegationRewards = {
     };
   }
 };
+GlobalDecoderRegistry.register(MsgClaimDelegationRewards.typeUrl, MsgClaimDelegationRewards);
 function createBaseMsgClaimDelegationRewardsResponse(): MsgClaimDelegationRewardsResponse {
   return {};
 }
 export const MsgClaimDelegationRewardsResponse = {
   typeUrl: "/alliance.alliance.MsgClaimDelegationRewardsResponse",
+  is(o: any): o is MsgClaimDelegationRewardsResponse {
+    return o && o.$typeUrl === MsgClaimDelegationRewardsResponse.typeUrl;
+  },
+  isSDK(o: any): o is MsgClaimDelegationRewardsResponseSDKType {
+    return o && o.$typeUrl === MsgClaimDelegationRewardsResponse.typeUrl;
+  },
+  isAmino(o: any): o is MsgClaimDelegationRewardsResponseAmino {
+    return o && o.$typeUrl === MsgClaimDelegationRewardsResponse.typeUrl;
+  },
   encode(_: MsgClaimDelegationRewardsResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): MsgClaimDelegationRewardsResponse {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): MsgClaimDelegationRewardsResponse {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgClaimDelegationRewardsResponse();
@@ -955,15 +1035,15 @@ export const MsgClaimDelegationRewardsResponse = {
     const message = createBaseMsgClaimDelegationRewardsResponse();
     return message;
   },
-  toAmino(_: MsgClaimDelegationRewardsResponse): MsgClaimDelegationRewardsResponseAmino {
+  toAmino(_: MsgClaimDelegationRewardsResponse, useInterfaces: boolean = true): MsgClaimDelegationRewardsResponseAmino {
     const obj: any = {};
     return obj;
   },
   fromAminoMsg(object: MsgClaimDelegationRewardsResponseAminoMsg): MsgClaimDelegationRewardsResponse {
     return MsgClaimDelegationRewardsResponse.fromAmino(object.value);
   },
-  fromProtoMsg(message: MsgClaimDelegationRewardsResponseProtoMsg): MsgClaimDelegationRewardsResponse {
-    return MsgClaimDelegationRewardsResponse.decode(message.value);
+  fromProtoMsg(message: MsgClaimDelegationRewardsResponseProtoMsg, useInterfaces: boolean = true): MsgClaimDelegationRewardsResponse {
+    return MsgClaimDelegationRewardsResponse.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: MsgClaimDelegationRewardsResponse): Uint8Array {
     return MsgClaimDelegationRewardsResponse.encode(message).finish();
@@ -975,6 +1055,7 @@ export const MsgClaimDelegationRewardsResponse = {
     };
   }
 };
+GlobalDecoderRegistry.register(MsgClaimDelegationRewardsResponse.typeUrl, MsgClaimDelegationRewardsResponse);
 function createBaseMsgUpdateParams(): MsgUpdateParams {
   return {
     authority: "",
@@ -983,6 +1064,15 @@ function createBaseMsgUpdateParams(): MsgUpdateParams {
 }
 export const MsgUpdateParams = {
   typeUrl: "/alliance.alliance.MsgUpdateParams",
+  is(o: any): o is MsgUpdateParams {
+    return o && (o.$typeUrl === MsgUpdateParams.typeUrl || typeof o.authority === "string" && Params.is(o.params));
+  },
+  isSDK(o: any): o is MsgUpdateParamsSDKType {
+    return o && (o.$typeUrl === MsgUpdateParams.typeUrl || typeof o.authority === "string" && Params.isSDK(o.params));
+  },
+  isAmino(o: any): o is MsgUpdateParamsAmino {
+    return o && (o.$typeUrl === MsgUpdateParams.typeUrl || typeof o.authority === "string" && Params.isAmino(o.params));
+  },
   encode(message: MsgUpdateParams, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.authority !== "") {
       writer.uint32(10).string(message.authority);
@@ -992,7 +1082,7 @@ export const MsgUpdateParams = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): MsgUpdateParams {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): MsgUpdateParams {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgUpdateParams();
@@ -1003,7 +1093,7 @@ export const MsgUpdateParams = {
           message.authority = reader.string();
           break;
         case 2:
-          message.params = Params.decode(reader, reader.uint32());
+          message.params = Params.decode(reader, reader.uint32(), useInterfaces);
           break;
         default:
           reader.skipType(tag & 7);
@@ -1040,17 +1130,17 @@ export const MsgUpdateParams = {
     }
     return message;
   },
-  toAmino(message: MsgUpdateParams): MsgUpdateParamsAmino {
+  toAmino(message: MsgUpdateParams, useInterfaces: boolean = true): MsgUpdateParamsAmino {
     const obj: any = {};
-    obj.authority = message.authority;
-    obj.params = message.params ? Params.toAmino(message.params) : undefined;
+    obj.authority = message.authority === "" ? undefined : message.authority;
+    obj.params = message.params ? Params.toAmino(message.params, useInterfaces) : undefined;
     return obj;
   },
   fromAminoMsg(object: MsgUpdateParamsAminoMsg): MsgUpdateParams {
     return MsgUpdateParams.fromAmino(object.value);
   },
-  fromProtoMsg(message: MsgUpdateParamsProtoMsg): MsgUpdateParams {
-    return MsgUpdateParams.decode(message.value);
+  fromProtoMsg(message: MsgUpdateParamsProtoMsg, useInterfaces: boolean = true): MsgUpdateParams {
+    return MsgUpdateParams.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: MsgUpdateParams): Uint8Array {
     return MsgUpdateParams.encode(message).finish();
@@ -1062,15 +1152,25 @@ export const MsgUpdateParams = {
     };
   }
 };
+GlobalDecoderRegistry.register(MsgUpdateParams.typeUrl, MsgUpdateParams);
 function createBaseMsgUpdateParamsResponse(): MsgUpdateParamsResponse {
   return {};
 }
 export const MsgUpdateParamsResponse = {
   typeUrl: "/alliance.alliance.MsgUpdateParamsResponse",
+  is(o: any): o is MsgUpdateParamsResponse {
+    return o && o.$typeUrl === MsgUpdateParamsResponse.typeUrl;
+  },
+  isSDK(o: any): o is MsgUpdateParamsResponseSDKType {
+    return o && o.$typeUrl === MsgUpdateParamsResponse.typeUrl;
+  },
+  isAmino(o: any): o is MsgUpdateParamsResponseAmino {
+    return o && o.$typeUrl === MsgUpdateParamsResponse.typeUrl;
+  },
   encode(_: MsgUpdateParamsResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): MsgUpdateParamsResponse {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): MsgUpdateParamsResponse {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgUpdateParamsResponse();
@@ -1099,15 +1199,15 @@ export const MsgUpdateParamsResponse = {
     const message = createBaseMsgUpdateParamsResponse();
     return message;
   },
-  toAmino(_: MsgUpdateParamsResponse): MsgUpdateParamsResponseAmino {
+  toAmino(_: MsgUpdateParamsResponse, useInterfaces: boolean = true): MsgUpdateParamsResponseAmino {
     const obj: any = {};
     return obj;
   },
   fromAminoMsg(object: MsgUpdateParamsResponseAminoMsg): MsgUpdateParamsResponse {
     return MsgUpdateParamsResponse.fromAmino(object.value);
   },
-  fromProtoMsg(message: MsgUpdateParamsResponseProtoMsg): MsgUpdateParamsResponse {
-    return MsgUpdateParamsResponse.decode(message.value);
+  fromProtoMsg(message: MsgUpdateParamsResponseProtoMsg, useInterfaces: boolean = true): MsgUpdateParamsResponse {
+    return MsgUpdateParamsResponse.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: MsgUpdateParamsResponse): Uint8Array {
     return MsgUpdateParamsResponse.encode(message).finish();
@@ -1119,6 +1219,7 @@ export const MsgUpdateParamsResponse = {
     };
   }
 };
+GlobalDecoderRegistry.register(MsgUpdateParamsResponse.typeUrl, MsgUpdateParamsResponse);
 function createBaseMsgCreateAlliance(): MsgCreateAlliance {
   return {
     authority: "",
@@ -1132,6 +1233,15 @@ function createBaseMsgCreateAlliance(): MsgCreateAlliance {
 }
 export const MsgCreateAlliance = {
   typeUrl: "/alliance.alliance.MsgCreateAlliance",
+  is(o: any): o is MsgCreateAlliance {
+    return o && (o.$typeUrl === MsgCreateAlliance.typeUrl || typeof o.authority === "string" && typeof o.denom === "string" && typeof o.rewardWeight === "string" && typeof o.takeRate === "string" && typeof o.rewardChangeRate === "string" && Duration.is(o.rewardChangeInterval) && RewardWeightRange.is(o.rewardWeightRange));
+  },
+  isSDK(o: any): o is MsgCreateAllianceSDKType {
+    return o && (o.$typeUrl === MsgCreateAlliance.typeUrl || typeof o.authority === "string" && typeof o.denom === "string" && typeof o.reward_weight === "string" && typeof o.take_rate === "string" && typeof o.reward_change_rate === "string" && Duration.isSDK(o.reward_change_interval) && RewardWeightRange.isSDK(o.reward_weight_range));
+  },
+  isAmino(o: any): o is MsgCreateAllianceAmino {
+    return o && (o.$typeUrl === MsgCreateAlliance.typeUrl || typeof o.authority === "string" && typeof o.denom === "string" && typeof o.reward_weight === "string" && typeof o.take_rate === "string" && typeof o.reward_change_rate === "string" && Duration.isAmino(o.reward_change_interval) && RewardWeightRange.isAmino(o.reward_weight_range));
+  },
   encode(message: MsgCreateAlliance, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.authority !== "") {
       writer.uint32(10).string(message.authority);
@@ -1156,7 +1266,7 @@ export const MsgCreateAlliance = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): MsgCreateAlliance {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): MsgCreateAlliance {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgCreateAlliance();
@@ -1179,10 +1289,10 @@ export const MsgCreateAlliance = {
           message.rewardChangeRate = Decimal.fromAtomics(reader.string(), 18).toString();
           break;
         case 6:
-          message.rewardChangeInterval = Duration.decode(reader, reader.uint32());
+          message.rewardChangeInterval = Duration.decode(reader, reader.uint32(), useInterfaces);
           break;
         case 7:
-          message.rewardWeightRange = RewardWeightRange.decode(reader, reader.uint32());
+          message.rewardWeightRange = RewardWeightRange.decode(reader, reader.uint32(), useInterfaces);
           break;
         default:
           reader.skipType(tag & 7);
@@ -1249,22 +1359,22 @@ export const MsgCreateAlliance = {
     }
     return message;
   },
-  toAmino(message: MsgCreateAlliance): MsgCreateAllianceAmino {
+  toAmino(message: MsgCreateAlliance, useInterfaces: boolean = true): MsgCreateAllianceAmino {
     const obj: any = {};
-    obj.authority = message.authority;
-    obj.denom = message.denom;
-    obj.reward_weight = message.rewardWeight;
-    obj.take_rate = message.takeRate;
-    obj.reward_change_rate = message.rewardChangeRate;
-    obj.reward_change_interval = message.rewardChangeInterval ? Duration.toAmino(message.rewardChangeInterval) : undefined;
-    obj.reward_weight_range = message.rewardWeightRange ? RewardWeightRange.toAmino(message.rewardWeightRange) : undefined;
+    obj.authority = message.authority === "" ? undefined : message.authority;
+    obj.denom = message.denom === "" ? undefined : message.denom;
+    obj.reward_weight = padDecimal(message.rewardWeight) === "" ? undefined : padDecimal(message.rewardWeight);
+    obj.take_rate = padDecimal(message.takeRate) === "" ? undefined : padDecimal(message.takeRate);
+    obj.reward_change_rate = padDecimal(message.rewardChangeRate) === "" ? undefined : padDecimal(message.rewardChangeRate);
+    obj.reward_change_interval = message.rewardChangeInterval ? Duration.toAmino(message.rewardChangeInterval, useInterfaces) : undefined;
+    obj.reward_weight_range = message.rewardWeightRange ? RewardWeightRange.toAmino(message.rewardWeightRange, useInterfaces) : undefined;
     return obj;
   },
   fromAminoMsg(object: MsgCreateAllianceAminoMsg): MsgCreateAlliance {
     return MsgCreateAlliance.fromAmino(object.value);
   },
-  fromProtoMsg(message: MsgCreateAllianceProtoMsg): MsgCreateAlliance {
-    return MsgCreateAlliance.decode(message.value);
+  fromProtoMsg(message: MsgCreateAllianceProtoMsg, useInterfaces: boolean = true): MsgCreateAlliance {
+    return MsgCreateAlliance.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: MsgCreateAlliance): Uint8Array {
     return MsgCreateAlliance.encode(message).finish();
@@ -1276,15 +1386,25 @@ export const MsgCreateAlliance = {
     };
   }
 };
+GlobalDecoderRegistry.register(MsgCreateAlliance.typeUrl, MsgCreateAlliance);
 function createBaseMsgCreateAllianceResponse(): MsgCreateAllianceResponse {
   return {};
 }
 export const MsgCreateAllianceResponse = {
   typeUrl: "/alliance.alliance.MsgCreateAllianceResponse",
+  is(o: any): o is MsgCreateAllianceResponse {
+    return o && o.$typeUrl === MsgCreateAllianceResponse.typeUrl;
+  },
+  isSDK(o: any): o is MsgCreateAllianceResponseSDKType {
+    return o && o.$typeUrl === MsgCreateAllianceResponse.typeUrl;
+  },
+  isAmino(o: any): o is MsgCreateAllianceResponseAmino {
+    return o && o.$typeUrl === MsgCreateAllianceResponse.typeUrl;
+  },
   encode(_: MsgCreateAllianceResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): MsgCreateAllianceResponse {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): MsgCreateAllianceResponse {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgCreateAllianceResponse();
@@ -1313,15 +1433,15 @@ export const MsgCreateAllianceResponse = {
     const message = createBaseMsgCreateAllianceResponse();
     return message;
   },
-  toAmino(_: MsgCreateAllianceResponse): MsgCreateAllianceResponseAmino {
+  toAmino(_: MsgCreateAllianceResponse, useInterfaces: boolean = true): MsgCreateAllianceResponseAmino {
     const obj: any = {};
     return obj;
   },
   fromAminoMsg(object: MsgCreateAllianceResponseAminoMsg): MsgCreateAllianceResponse {
     return MsgCreateAllianceResponse.fromAmino(object.value);
   },
-  fromProtoMsg(message: MsgCreateAllianceResponseProtoMsg): MsgCreateAllianceResponse {
-    return MsgCreateAllianceResponse.decode(message.value);
+  fromProtoMsg(message: MsgCreateAllianceResponseProtoMsg, useInterfaces: boolean = true): MsgCreateAllianceResponse {
+    return MsgCreateAllianceResponse.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: MsgCreateAllianceResponse): Uint8Array {
     return MsgCreateAllianceResponse.encode(message).finish();
@@ -1333,6 +1453,7 @@ export const MsgCreateAllianceResponse = {
     };
   }
 };
+GlobalDecoderRegistry.register(MsgCreateAllianceResponse.typeUrl, MsgCreateAllianceResponse);
 function createBaseMsgUpdateAlliance(): MsgUpdateAlliance {
   return {
     authority: "",
@@ -1345,6 +1466,15 @@ function createBaseMsgUpdateAlliance(): MsgUpdateAlliance {
 }
 export const MsgUpdateAlliance = {
   typeUrl: "/alliance.alliance.MsgUpdateAlliance",
+  is(o: any): o is MsgUpdateAlliance {
+    return o && (o.$typeUrl === MsgUpdateAlliance.typeUrl || typeof o.authority === "string" && typeof o.denom === "string" && typeof o.rewardWeight === "string" && typeof o.takeRate === "string" && typeof o.rewardChangeRate === "string" && Duration.is(o.rewardChangeInterval));
+  },
+  isSDK(o: any): o is MsgUpdateAllianceSDKType {
+    return o && (o.$typeUrl === MsgUpdateAlliance.typeUrl || typeof o.authority === "string" && typeof o.denom === "string" && typeof o.reward_weight === "string" && typeof o.take_rate === "string" && typeof o.reward_change_rate === "string" && Duration.isSDK(o.reward_change_interval));
+  },
+  isAmino(o: any): o is MsgUpdateAllianceAmino {
+    return o && (o.$typeUrl === MsgUpdateAlliance.typeUrl || typeof o.authority === "string" && typeof o.denom === "string" && typeof o.reward_weight === "string" && typeof o.take_rate === "string" && typeof o.reward_change_rate === "string" && Duration.isAmino(o.reward_change_interval));
+  },
   encode(message: MsgUpdateAlliance, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.authority !== "") {
       writer.uint32(10).string(message.authority);
@@ -1366,7 +1496,7 @@ export const MsgUpdateAlliance = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): MsgUpdateAlliance {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): MsgUpdateAlliance {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgUpdateAlliance();
@@ -1389,7 +1519,7 @@ export const MsgUpdateAlliance = {
           message.rewardChangeRate = Decimal.fromAtomics(reader.string(), 18).toString();
           break;
         case 6:
-          message.rewardChangeInterval = Duration.decode(reader, reader.uint32());
+          message.rewardChangeInterval = Duration.decode(reader, reader.uint32(), useInterfaces);
           break;
         default:
           reader.skipType(tag & 7);
@@ -1450,21 +1580,21 @@ export const MsgUpdateAlliance = {
     }
     return message;
   },
-  toAmino(message: MsgUpdateAlliance): MsgUpdateAllianceAmino {
+  toAmino(message: MsgUpdateAlliance, useInterfaces: boolean = true): MsgUpdateAllianceAmino {
     const obj: any = {};
-    obj.authority = message.authority;
-    obj.denom = message.denom;
-    obj.reward_weight = message.rewardWeight;
-    obj.take_rate = message.takeRate;
-    obj.reward_change_rate = message.rewardChangeRate;
-    obj.reward_change_interval = message.rewardChangeInterval ? Duration.toAmino(message.rewardChangeInterval) : undefined;
+    obj.authority = message.authority === "" ? undefined : message.authority;
+    obj.denom = message.denom === "" ? undefined : message.denom;
+    obj.reward_weight = padDecimal(message.rewardWeight) === "" ? undefined : padDecimal(message.rewardWeight);
+    obj.take_rate = padDecimal(message.takeRate) === "" ? undefined : padDecimal(message.takeRate);
+    obj.reward_change_rate = padDecimal(message.rewardChangeRate) === "" ? undefined : padDecimal(message.rewardChangeRate);
+    obj.reward_change_interval = message.rewardChangeInterval ? Duration.toAmino(message.rewardChangeInterval, useInterfaces) : undefined;
     return obj;
   },
   fromAminoMsg(object: MsgUpdateAllianceAminoMsg): MsgUpdateAlliance {
     return MsgUpdateAlliance.fromAmino(object.value);
   },
-  fromProtoMsg(message: MsgUpdateAllianceProtoMsg): MsgUpdateAlliance {
-    return MsgUpdateAlliance.decode(message.value);
+  fromProtoMsg(message: MsgUpdateAllianceProtoMsg, useInterfaces: boolean = true): MsgUpdateAlliance {
+    return MsgUpdateAlliance.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: MsgUpdateAlliance): Uint8Array {
     return MsgUpdateAlliance.encode(message).finish();
@@ -1476,15 +1606,25 @@ export const MsgUpdateAlliance = {
     };
   }
 };
+GlobalDecoderRegistry.register(MsgUpdateAlliance.typeUrl, MsgUpdateAlliance);
 function createBaseMsgUpdateAllianceResponse(): MsgUpdateAllianceResponse {
   return {};
 }
 export const MsgUpdateAllianceResponse = {
   typeUrl: "/alliance.alliance.MsgUpdateAllianceResponse",
+  is(o: any): o is MsgUpdateAllianceResponse {
+    return o && o.$typeUrl === MsgUpdateAllianceResponse.typeUrl;
+  },
+  isSDK(o: any): o is MsgUpdateAllianceResponseSDKType {
+    return o && o.$typeUrl === MsgUpdateAllianceResponse.typeUrl;
+  },
+  isAmino(o: any): o is MsgUpdateAllianceResponseAmino {
+    return o && o.$typeUrl === MsgUpdateAllianceResponse.typeUrl;
+  },
   encode(_: MsgUpdateAllianceResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): MsgUpdateAllianceResponse {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): MsgUpdateAllianceResponse {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgUpdateAllianceResponse();
@@ -1513,15 +1653,15 @@ export const MsgUpdateAllianceResponse = {
     const message = createBaseMsgUpdateAllianceResponse();
     return message;
   },
-  toAmino(_: MsgUpdateAllianceResponse): MsgUpdateAllianceResponseAmino {
+  toAmino(_: MsgUpdateAllianceResponse, useInterfaces: boolean = true): MsgUpdateAllianceResponseAmino {
     const obj: any = {};
     return obj;
   },
   fromAminoMsg(object: MsgUpdateAllianceResponseAminoMsg): MsgUpdateAllianceResponse {
     return MsgUpdateAllianceResponse.fromAmino(object.value);
   },
-  fromProtoMsg(message: MsgUpdateAllianceResponseProtoMsg): MsgUpdateAllianceResponse {
-    return MsgUpdateAllianceResponse.decode(message.value);
+  fromProtoMsg(message: MsgUpdateAllianceResponseProtoMsg, useInterfaces: boolean = true): MsgUpdateAllianceResponse {
+    return MsgUpdateAllianceResponse.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: MsgUpdateAllianceResponse): Uint8Array {
     return MsgUpdateAllianceResponse.encode(message).finish();
@@ -1533,6 +1673,7 @@ export const MsgUpdateAllianceResponse = {
     };
   }
 };
+GlobalDecoderRegistry.register(MsgUpdateAllianceResponse.typeUrl, MsgUpdateAllianceResponse);
 function createBaseMsgDeleteAlliance(): MsgDeleteAlliance {
   return {
     authority: "",
@@ -1541,6 +1682,15 @@ function createBaseMsgDeleteAlliance(): MsgDeleteAlliance {
 }
 export const MsgDeleteAlliance = {
   typeUrl: "/alliance.alliance.MsgDeleteAlliance",
+  is(o: any): o is MsgDeleteAlliance {
+    return o && (o.$typeUrl === MsgDeleteAlliance.typeUrl || typeof o.authority === "string" && typeof o.denom === "string");
+  },
+  isSDK(o: any): o is MsgDeleteAllianceSDKType {
+    return o && (o.$typeUrl === MsgDeleteAlliance.typeUrl || typeof o.authority === "string" && typeof o.denom === "string");
+  },
+  isAmino(o: any): o is MsgDeleteAllianceAmino {
+    return o && (o.$typeUrl === MsgDeleteAlliance.typeUrl || typeof o.authority === "string" && typeof o.denom === "string");
+  },
   encode(message: MsgDeleteAlliance, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.authority !== "") {
       writer.uint32(10).string(message.authority);
@@ -1550,7 +1700,7 @@ export const MsgDeleteAlliance = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): MsgDeleteAlliance {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): MsgDeleteAlliance {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgDeleteAlliance();
@@ -1598,17 +1748,17 @@ export const MsgDeleteAlliance = {
     }
     return message;
   },
-  toAmino(message: MsgDeleteAlliance): MsgDeleteAllianceAmino {
+  toAmino(message: MsgDeleteAlliance, useInterfaces: boolean = true): MsgDeleteAllianceAmino {
     const obj: any = {};
-    obj.authority = message.authority;
-    obj.denom = message.denom;
+    obj.authority = message.authority === "" ? undefined : message.authority;
+    obj.denom = message.denom === "" ? undefined : message.denom;
     return obj;
   },
   fromAminoMsg(object: MsgDeleteAllianceAminoMsg): MsgDeleteAlliance {
     return MsgDeleteAlliance.fromAmino(object.value);
   },
-  fromProtoMsg(message: MsgDeleteAllianceProtoMsg): MsgDeleteAlliance {
-    return MsgDeleteAlliance.decode(message.value);
+  fromProtoMsg(message: MsgDeleteAllianceProtoMsg, useInterfaces: boolean = true): MsgDeleteAlliance {
+    return MsgDeleteAlliance.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: MsgDeleteAlliance): Uint8Array {
     return MsgDeleteAlliance.encode(message).finish();
@@ -1620,15 +1770,25 @@ export const MsgDeleteAlliance = {
     };
   }
 };
+GlobalDecoderRegistry.register(MsgDeleteAlliance.typeUrl, MsgDeleteAlliance);
 function createBaseMsgDeleteAllianceResponse(): MsgDeleteAllianceResponse {
   return {};
 }
 export const MsgDeleteAllianceResponse = {
   typeUrl: "/alliance.alliance.MsgDeleteAllianceResponse",
+  is(o: any): o is MsgDeleteAllianceResponse {
+    return o && o.$typeUrl === MsgDeleteAllianceResponse.typeUrl;
+  },
+  isSDK(o: any): o is MsgDeleteAllianceResponseSDKType {
+    return o && o.$typeUrl === MsgDeleteAllianceResponse.typeUrl;
+  },
+  isAmino(o: any): o is MsgDeleteAllianceResponseAmino {
+    return o && o.$typeUrl === MsgDeleteAllianceResponse.typeUrl;
+  },
   encode(_: MsgDeleteAllianceResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): MsgDeleteAllianceResponse {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): MsgDeleteAllianceResponse {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgDeleteAllianceResponse();
@@ -1657,15 +1817,15 @@ export const MsgDeleteAllianceResponse = {
     const message = createBaseMsgDeleteAllianceResponse();
     return message;
   },
-  toAmino(_: MsgDeleteAllianceResponse): MsgDeleteAllianceResponseAmino {
+  toAmino(_: MsgDeleteAllianceResponse, useInterfaces: boolean = true): MsgDeleteAllianceResponseAmino {
     const obj: any = {};
     return obj;
   },
   fromAminoMsg(object: MsgDeleteAllianceResponseAminoMsg): MsgDeleteAllianceResponse {
     return MsgDeleteAllianceResponse.fromAmino(object.value);
   },
-  fromProtoMsg(message: MsgDeleteAllianceResponseProtoMsg): MsgDeleteAllianceResponse {
-    return MsgDeleteAllianceResponse.decode(message.value);
+  fromProtoMsg(message: MsgDeleteAllianceResponseProtoMsg, useInterfaces: boolean = true): MsgDeleteAllianceResponse {
+    return MsgDeleteAllianceResponse.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: MsgDeleteAllianceResponse): Uint8Array {
     return MsgDeleteAllianceResponse.encode(message).finish();
@@ -1677,3 +1837,4 @@ export const MsgDeleteAllianceResponse = {
     };
   }
 };
+GlobalDecoderRegistry.register(MsgDeleteAllianceResponse.typeUrl, MsgDeleteAllianceResponse);

@@ -1,7 +1,8 @@
 import { Timestamp, TimestampSDKType } from "../../google/protobuf/timestamp";
 import { BinaryReader, BinaryWriter } from "../../binary";
 import { Decimal } from "@cosmjs/math";
-import { isSet, fromJsonTimestamp, fromTimestamp } from "../../helpers";
+import { isSet, fromJsonTimestamp, fromTimestamp, padDecimal } from "../../helpers";
+import { GlobalDecoderRegistry } from "../../registry";
 export interface HistoricalPrice {
   time: Timestamp;
   low?: string;
@@ -46,6 +47,15 @@ function createBaseHistoricalPrice(): HistoricalPrice {
 }
 export const HistoricalPrice = {
   typeUrl: "/pryzmatics.price.HistoricalPrice",
+  is(o: any): o is HistoricalPrice {
+    return o && (o.$typeUrl === HistoricalPrice.typeUrl || Timestamp.is(o.time));
+  },
+  isSDK(o: any): o is HistoricalPriceSDKType {
+    return o && (o.$typeUrl === HistoricalPrice.typeUrl || Timestamp.isSDK(o.time));
+  },
+  isAmino(o: any): o is HistoricalPriceAmino {
+    return o && (o.$typeUrl === HistoricalPrice.typeUrl || Timestamp.isAmino(o.time));
+  },
   encode(message: HistoricalPrice, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.time !== undefined) {
       Timestamp.encode(message.time, writer.uint32(10).fork()).ldelim();
@@ -67,7 +77,7 @@ export const HistoricalPrice = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): HistoricalPrice {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): HistoricalPrice {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseHistoricalPrice();
@@ -151,21 +161,21 @@ export const HistoricalPrice = {
     }
     return message;
   },
-  toAmino(message: HistoricalPrice): HistoricalPriceAmino {
+  toAmino(message: HistoricalPrice, useInterfaces: boolean = true): HistoricalPriceAmino {
     const obj: any = {};
-    obj.time = message.time ? Timestamp.toAmino(message.time) : undefined;
-    obj.low = message.low;
-    obj.high = message.high;
-    obj.avg = message.avg;
-    obj.open = message.open;
-    obj.close = message.close;
+    obj.time = message.time ? Timestamp.toAmino(message.time, useInterfaces) : undefined;
+    obj.low = padDecimal(message.low) === null ? undefined : padDecimal(message.low);
+    obj.high = padDecimal(message.high) === null ? undefined : padDecimal(message.high);
+    obj.avg = padDecimal(message.avg) === null ? undefined : padDecimal(message.avg);
+    obj.open = padDecimal(message.open) === null ? undefined : padDecimal(message.open);
+    obj.close = padDecimal(message.close) === null ? undefined : padDecimal(message.close);
     return obj;
   },
   fromAminoMsg(object: HistoricalPriceAminoMsg): HistoricalPrice {
     return HistoricalPrice.fromAmino(object.value);
   },
-  fromProtoMsg(message: HistoricalPriceProtoMsg): HistoricalPrice {
-    return HistoricalPrice.decode(message.value);
+  fromProtoMsg(message: HistoricalPriceProtoMsg, useInterfaces: boolean = true): HistoricalPrice {
+    return HistoricalPrice.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: HistoricalPrice): Uint8Array {
     return HistoricalPrice.encode(message).finish();
@@ -177,3 +187,4 @@ export const HistoricalPrice = {
     };
   }
 };
+GlobalDecoderRegistry.register(HistoricalPrice.typeUrl, HistoricalPrice);

@@ -1,5 +1,6 @@
 import { BinaryReader, BinaryWriter } from "../../../../binary";
 import { isSet } from "../../../../helpers";
+import { GlobalDecoderRegistry } from "../../../../registry";
 /** BIP44Params is used as path field in ledger item in Record. */
 export interface BIP44Params {
   /** purpose is a constant set to 44' (or 0x8000002C) following the BIP43 recommendation */
@@ -59,6 +60,16 @@ function createBaseBIP44Params(): BIP44Params {
 }
 export const BIP44Params = {
   typeUrl: "/cosmos.crypto.hd.v1.BIP44Params",
+  aminoType: "crypto/keys/hd/BIP44Params",
+  is(o: any): o is BIP44Params {
+    return o && (o.$typeUrl === BIP44Params.typeUrl || typeof o.purpose === "number" && typeof o.coinType === "number" && typeof o.account === "number" && typeof o.change === "boolean" && typeof o.addressIndex === "number");
+  },
+  isSDK(o: any): o is BIP44ParamsSDKType {
+    return o && (o.$typeUrl === BIP44Params.typeUrl || typeof o.purpose === "number" && typeof o.coin_type === "number" && typeof o.account === "number" && typeof o.change === "boolean" && typeof o.address_index === "number");
+  },
+  isAmino(o: any): o is BIP44ParamsAmino {
+    return o && (o.$typeUrl === BIP44Params.typeUrl || typeof o.purpose === "number" && typeof o.coin_type === "number" && typeof o.account === "number" && typeof o.change === "boolean" && typeof o.address_index === "number");
+  },
   encode(message: BIP44Params, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.purpose !== 0) {
       writer.uint32(8).uint32(message.purpose);
@@ -77,7 +88,7 @@ export const BIP44Params = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): BIP44Params {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): BIP44Params {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseBIP44Params();
@@ -152,26 +163,26 @@ export const BIP44Params = {
     }
     return message;
   },
-  toAmino(message: BIP44Params): BIP44ParamsAmino {
+  toAmino(message: BIP44Params, useInterfaces: boolean = true): BIP44ParamsAmino {
     const obj: any = {};
-    obj.purpose = message.purpose;
-    obj.coin_type = message.coinType;
-    obj.account = message.account;
-    obj.change = message.change;
-    obj.address_index = message.addressIndex;
+    obj.purpose = message.purpose === 0 ? undefined : message.purpose;
+    obj.coin_type = message.coinType === 0 ? undefined : message.coinType;
+    obj.account = message.account === 0 ? undefined : message.account;
+    obj.change = message.change === false ? undefined : message.change;
+    obj.address_index = message.addressIndex === 0 ? undefined : message.addressIndex;
     return obj;
   },
   fromAminoMsg(object: BIP44ParamsAminoMsg): BIP44Params {
     return BIP44Params.fromAmino(object.value);
   },
-  toAminoMsg(message: BIP44Params): BIP44ParamsAminoMsg {
+  toAminoMsg(message: BIP44Params, useInterfaces: boolean = true): BIP44ParamsAminoMsg {
     return {
       type: "crypto/keys/hd/BIP44Params",
-      value: BIP44Params.toAmino(message)
+      value: BIP44Params.toAmino(message, useInterfaces)
     };
   },
-  fromProtoMsg(message: BIP44ParamsProtoMsg): BIP44Params {
-    return BIP44Params.decode(message.value);
+  fromProtoMsg(message: BIP44ParamsProtoMsg, useInterfaces: boolean = true): BIP44Params {
+    return BIP44Params.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: BIP44Params): Uint8Array {
     return BIP44Params.encode(message).finish();
@@ -183,3 +194,5 @@ export const BIP44Params = {
     };
   }
 };
+GlobalDecoderRegistry.register(BIP44Params.typeUrl, BIP44Params);
+GlobalDecoderRegistry.registerAminoProtoMapping(BIP44Params.aminoType, BIP44Params.typeUrl);

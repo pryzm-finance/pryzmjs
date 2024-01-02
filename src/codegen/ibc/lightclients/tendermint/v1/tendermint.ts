@@ -7,6 +7,7 @@ import { SignedHeader, SignedHeaderAmino, SignedHeaderSDKType } from "../../../.
 import { ValidatorSet, ValidatorSetAmino, ValidatorSetSDKType } from "../../../../tendermint/types/validator";
 import { BinaryReader, BinaryWriter } from "../../../../binary";
 import { isSet, fromJsonTimestamp, bytesFromBase64, fromTimestamp, base64FromBytes } from "../../../../helpers";
+import { GlobalDecoderRegistry } from "../../../../registry";
 /**
  * ClientState from Tendermint tracks the current validator set, latest height,
  * and a possible frozen height.
@@ -305,6 +306,16 @@ function createBaseClientState(): ClientState {
 }
 export const ClientState = {
   typeUrl: "/ibc.lightclients.tendermint.v1.ClientState",
+  aminoType: "cosmos-sdk/ClientState",
+  is(o: any): o is ClientState {
+    return o && (o.$typeUrl === ClientState.typeUrl || typeof o.chainId === "string" && Fraction.is(o.trustLevel) && Duration.is(o.trustingPeriod) && Duration.is(o.unbondingPeriod) && Duration.is(o.maxClockDrift) && Height.is(o.frozenHeight) && Height.is(o.latestHeight) && Array.isArray(o.proofSpecs) && (!o.proofSpecs.length || ProofSpec.is(o.proofSpecs[0])) && Array.isArray(o.upgradePath) && (!o.upgradePath.length || typeof o.upgradePath[0] === "string") && typeof o.allowUpdateAfterExpiry === "boolean" && typeof o.allowUpdateAfterMisbehaviour === "boolean");
+  },
+  isSDK(o: any): o is ClientStateSDKType {
+    return o && (o.$typeUrl === ClientState.typeUrl || typeof o.chain_id === "string" && Fraction.isSDK(o.trust_level) && Duration.isSDK(o.trusting_period) && Duration.isSDK(o.unbonding_period) && Duration.isSDK(o.max_clock_drift) && Height.isSDK(o.frozen_height) && Height.isSDK(o.latest_height) && Array.isArray(o.proof_specs) && (!o.proof_specs.length || ProofSpec.isSDK(o.proof_specs[0])) && Array.isArray(o.upgrade_path) && (!o.upgrade_path.length || typeof o.upgrade_path[0] === "string") && typeof o.allow_update_after_expiry === "boolean" && typeof o.allow_update_after_misbehaviour === "boolean");
+  },
+  isAmino(o: any): o is ClientStateAmino {
+    return o && (o.$typeUrl === ClientState.typeUrl || typeof o.chain_id === "string" && Fraction.isAmino(o.trust_level) && Duration.isAmino(o.trusting_period) && Duration.isAmino(o.unbonding_period) && Duration.isAmino(o.max_clock_drift) && Height.isAmino(o.frozen_height) && Height.isAmino(o.latest_height) && Array.isArray(o.proof_specs) && (!o.proof_specs.length || ProofSpec.isAmino(o.proof_specs[0])) && Array.isArray(o.upgrade_path) && (!o.upgrade_path.length || typeof o.upgrade_path[0] === "string") && typeof o.allow_update_after_expiry === "boolean" && typeof o.allow_update_after_misbehaviour === "boolean");
+  },
   encode(message: ClientState, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.chainId !== "") {
       writer.uint32(10).string(message.chainId);
@@ -341,7 +352,7 @@ export const ClientState = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): ClientState {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): ClientState {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseClientState();
@@ -352,25 +363,25 @@ export const ClientState = {
           message.chainId = reader.string();
           break;
         case 2:
-          message.trustLevel = Fraction.decode(reader, reader.uint32());
+          message.trustLevel = Fraction.decode(reader, reader.uint32(), useInterfaces);
           break;
         case 3:
-          message.trustingPeriod = Duration.decode(reader, reader.uint32());
+          message.trustingPeriod = Duration.decode(reader, reader.uint32(), useInterfaces);
           break;
         case 4:
-          message.unbondingPeriod = Duration.decode(reader, reader.uint32());
+          message.unbondingPeriod = Duration.decode(reader, reader.uint32(), useInterfaces);
           break;
         case 5:
-          message.maxClockDrift = Duration.decode(reader, reader.uint32());
+          message.maxClockDrift = Duration.decode(reader, reader.uint32(), useInterfaces);
           break;
         case 6:
-          message.frozenHeight = Height.decode(reader, reader.uint32());
+          message.frozenHeight = Height.decode(reader, reader.uint32(), useInterfaces);
           break;
         case 7:
-          message.latestHeight = Height.decode(reader, reader.uint32());
+          message.latestHeight = Height.decode(reader, reader.uint32(), useInterfaces);
           break;
         case 8:
-          message.proofSpecs.push(ProofSpec.decode(reader, reader.uint32()));
+          message.proofSpecs.push(ProofSpec.decode(reader, reader.uint32(), useInterfaces));
           break;
         case 9:
           message.upgradePath.push(reader.string());
@@ -474,40 +485,40 @@ export const ClientState = {
     }
     return message;
   },
-  toAmino(message: ClientState): ClientStateAmino {
+  toAmino(message: ClientState, useInterfaces: boolean = true): ClientStateAmino {
     const obj: any = {};
-    obj.chain_id = message.chainId;
-    obj.trust_level = message.trustLevel ? Fraction.toAmino(message.trustLevel) : undefined;
-    obj.trusting_period = message.trustingPeriod ? Duration.toAmino(message.trustingPeriod) : undefined;
-    obj.unbonding_period = message.unbondingPeriod ? Duration.toAmino(message.unbondingPeriod) : undefined;
-    obj.max_clock_drift = message.maxClockDrift ? Duration.toAmino(message.maxClockDrift) : undefined;
-    obj.frozen_height = message.frozenHeight ? Height.toAmino(message.frozenHeight) : {};
-    obj.latest_height = message.latestHeight ? Height.toAmino(message.latestHeight) : {};
+    obj.chain_id = message.chainId === "" ? undefined : message.chainId;
+    obj.trust_level = message.trustLevel ? Fraction.toAmino(message.trustLevel, useInterfaces) : undefined;
+    obj.trusting_period = message.trustingPeriod ? Duration.toAmino(message.trustingPeriod, useInterfaces) : undefined;
+    obj.unbonding_period = message.unbondingPeriod ? Duration.toAmino(message.unbondingPeriod, useInterfaces) : undefined;
+    obj.max_clock_drift = message.maxClockDrift ? Duration.toAmino(message.maxClockDrift, useInterfaces) : undefined;
+    obj.frozen_height = message.frozenHeight ? Height.toAmino(message.frozenHeight, useInterfaces) : {};
+    obj.latest_height = message.latestHeight ? Height.toAmino(message.latestHeight, useInterfaces) : {};
     if (message.proofSpecs) {
-      obj.proof_specs = message.proofSpecs.map(e => e ? ProofSpec.toAmino(e) : undefined);
+      obj.proof_specs = message.proofSpecs.map(e => e ? ProofSpec.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.proof_specs = [];
+      obj.proof_specs = null;
     }
     if (message.upgradePath) {
       obj.upgrade_path = message.upgradePath.map(e => e);
     } else {
-      obj.upgrade_path = [];
+      obj.upgrade_path = null;
     }
-    obj.allow_update_after_expiry = message.allowUpdateAfterExpiry;
-    obj.allow_update_after_misbehaviour = message.allowUpdateAfterMisbehaviour;
+    obj.allow_update_after_expiry = message.allowUpdateAfterExpiry === false ? undefined : message.allowUpdateAfterExpiry;
+    obj.allow_update_after_misbehaviour = message.allowUpdateAfterMisbehaviour === false ? undefined : message.allowUpdateAfterMisbehaviour;
     return obj;
   },
   fromAminoMsg(object: ClientStateAminoMsg): ClientState {
     return ClientState.fromAmino(object.value);
   },
-  toAminoMsg(message: ClientState): ClientStateAminoMsg {
+  toAminoMsg(message: ClientState, useInterfaces: boolean = true): ClientStateAminoMsg {
     return {
       type: "cosmos-sdk/ClientState",
-      value: ClientState.toAmino(message)
+      value: ClientState.toAmino(message, useInterfaces)
     };
   },
-  fromProtoMsg(message: ClientStateProtoMsg): ClientState {
-    return ClientState.decode(message.value);
+  fromProtoMsg(message: ClientStateProtoMsg, useInterfaces: boolean = true): ClientState {
+    return ClientState.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: ClientState): Uint8Array {
     return ClientState.encode(message).finish();
@@ -519,6 +530,8 @@ export const ClientState = {
     };
   }
 };
+GlobalDecoderRegistry.register(ClientState.typeUrl, ClientState);
+GlobalDecoderRegistry.registerAminoProtoMapping(ClientState.aminoType, ClientState.typeUrl);
 function createBaseConsensusState(): ConsensusState {
   return {
     timestamp: Timestamp.fromPartial({}),
@@ -528,6 +541,16 @@ function createBaseConsensusState(): ConsensusState {
 }
 export const ConsensusState = {
   typeUrl: "/ibc.lightclients.tendermint.v1.ConsensusState",
+  aminoType: "cosmos-sdk/ConsensusState",
+  is(o: any): o is ConsensusState {
+    return o && (o.$typeUrl === ConsensusState.typeUrl || Timestamp.is(o.timestamp) && MerkleRoot.is(o.root) && (o.nextValidatorsHash instanceof Uint8Array || typeof o.nextValidatorsHash === "string"));
+  },
+  isSDK(o: any): o is ConsensusStateSDKType {
+    return o && (o.$typeUrl === ConsensusState.typeUrl || Timestamp.isSDK(o.timestamp) && MerkleRoot.isSDK(o.root) && (o.next_validators_hash instanceof Uint8Array || typeof o.next_validators_hash === "string"));
+  },
+  isAmino(o: any): o is ConsensusStateAmino {
+    return o && (o.$typeUrl === ConsensusState.typeUrl || Timestamp.isAmino(o.timestamp) && MerkleRoot.isAmino(o.root) && (o.next_validators_hash instanceof Uint8Array || typeof o.next_validators_hash === "string"));
+  },
   encode(message: ConsensusState, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.timestamp !== undefined) {
       Timestamp.encode(message.timestamp, writer.uint32(10).fork()).ldelim();
@@ -540,7 +563,7 @@ export const ConsensusState = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): ConsensusState {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): ConsensusState {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseConsensusState();
@@ -551,7 +574,7 @@ export const ConsensusState = {
           message.timestamp = Timestamp.decode(reader, reader.uint32());
           break;
         case 2:
-          message.root = MerkleRoot.decode(reader, reader.uint32());
+          message.root = MerkleRoot.decode(reader, reader.uint32(), useInterfaces);
           break;
         case 3:
           message.nextValidatorsHash = reader.bytes();
@@ -597,24 +620,24 @@ export const ConsensusState = {
     }
     return message;
   },
-  toAmino(message: ConsensusState): ConsensusStateAmino {
+  toAmino(message: ConsensusState, useInterfaces: boolean = true): ConsensusStateAmino {
     const obj: any = {};
-    obj.timestamp = message.timestamp ? Timestamp.toAmino(message.timestamp) : undefined;
-    obj.root = message.root ? MerkleRoot.toAmino(message.root) : undefined;
+    obj.timestamp = message.timestamp ? Timestamp.toAmino(message.timestamp, useInterfaces) : undefined;
+    obj.root = message.root ? MerkleRoot.toAmino(message.root, useInterfaces) : undefined;
     obj.next_validators_hash = message.nextValidatorsHash ? base64FromBytes(message.nextValidatorsHash) : undefined;
     return obj;
   },
   fromAminoMsg(object: ConsensusStateAminoMsg): ConsensusState {
     return ConsensusState.fromAmino(object.value);
   },
-  toAminoMsg(message: ConsensusState): ConsensusStateAminoMsg {
+  toAminoMsg(message: ConsensusState, useInterfaces: boolean = true): ConsensusStateAminoMsg {
     return {
       type: "cosmos-sdk/ConsensusState",
-      value: ConsensusState.toAmino(message)
+      value: ConsensusState.toAmino(message, useInterfaces)
     };
   },
-  fromProtoMsg(message: ConsensusStateProtoMsg): ConsensusState {
-    return ConsensusState.decode(message.value);
+  fromProtoMsg(message: ConsensusStateProtoMsg, useInterfaces: boolean = true): ConsensusState {
+    return ConsensusState.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: ConsensusState): Uint8Array {
     return ConsensusState.encode(message).finish();
@@ -626,6 +649,8 @@ export const ConsensusState = {
     };
   }
 };
+GlobalDecoderRegistry.register(ConsensusState.typeUrl, ConsensusState);
+GlobalDecoderRegistry.registerAminoProtoMapping(ConsensusState.aminoType, ConsensusState.typeUrl);
 function createBaseMisbehaviour(): Misbehaviour {
   return {
     clientId: "",
@@ -635,6 +660,16 @@ function createBaseMisbehaviour(): Misbehaviour {
 }
 export const Misbehaviour = {
   typeUrl: "/ibc.lightclients.tendermint.v1.Misbehaviour",
+  aminoType: "cosmos-sdk/Misbehaviour",
+  is(o: any): o is Misbehaviour {
+    return o && (o.$typeUrl === Misbehaviour.typeUrl || typeof o.clientId === "string");
+  },
+  isSDK(o: any): o is MisbehaviourSDKType {
+    return o && (o.$typeUrl === Misbehaviour.typeUrl || typeof o.client_id === "string");
+  },
+  isAmino(o: any): o is MisbehaviourAmino {
+    return o && (o.$typeUrl === Misbehaviour.typeUrl || typeof o.client_id === "string");
+  },
   encode(message: Misbehaviour, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.clientId !== "") {
       writer.uint32(10).string(message.clientId);
@@ -647,7 +682,7 @@ export const Misbehaviour = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): Misbehaviour {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): Misbehaviour {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMisbehaviour();
@@ -658,10 +693,10 @@ export const Misbehaviour = {
           message.clientId = reader.string();
           break;
         case 2:
-          message.header1 = Header.decode(reader, reader.uint32());
+          message.header1 = Header.decode(reader, reader.uint32(), useInterfaces);
           break;
         case 3:
-          message.header2 = Header.decode(reader, reader.uint32());
+          message.header2 = Header.decode(reader, reader.uint32(), useInterfaces);
           break;
         default:
           reader.skipType(tag & 7);
@@ -704,24 +739,24 @@ export const Misbehaviour = {
     }
     return message;
   },
-  toAmino(message: Misbehaviour): MisbehaviourAmino {
+  toAmino(message: Misbehaviour, useInterfaces: boolean = true): MisbehaviourAmino {
     const obj: any = {};
-    obj.client_id = message.clientId;
-    obj.header_1 = message.header1 ? Header.toAmino(message.header1) : undefined;
-    obj.header_2 = message.header2 ? Header.toAmino(message.header2) : undefined;
+    obj.client_id = message.clientId === "" ? undefined : message.clientId;
+    obj.header_1 = message.header1 ? Header.toAmino(message.header1, useInterfaces) : undefined;
+    obj.header_2 = message.header2 ? Header.toAmino(message.header2, useInterfaces) : undefined;
     return obj;
   },
   fromAminoMsg(object: MisbehaviourAminoMsg): Misbehaviour {
     return Misbehaviour.fromAmino(object.value);
   },
-  toAminoMsg(message: Misbehaviour): MisbehaviourAminoMsg {
+  toAminoMsg(message: Misbehaviour, useInterfaces: boolean = true): MisbehaviourAminoMsg {
     return {
       type: "cosmos-sdk/Misbehaviour",
-      value: Misbehaviour.toAmino(message)
+      value: Misbehaviour.toAmino(message, useInterfaces)
     };
   },
-  fromProtoMsg(message: MisbehaviourProtoMsg): Misbehaviour {
-    return Misbehaviour.decode(message.value);
+  fromProtoMsg(message: MisbehaviourProtoMsg, useInterfaces: boolean = true): Misbehaviour {
+    return Misbehaviour.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: Misbehaviour): Uint8Array {
     return Misbehaviour.encode(message).finish();
@@ -733,6 +768,8 @@ export const Misbehaviour = {
     };
   }
 };
+GlobalDecoderRegistry.register(Misbehaviour.typeUrl, Misbehaviour);
+GlobalDecoderRegistry.registerAminoProtoMapping(Misbehaviour.aminoType, Misbehaviour.typeUrl);
 function createBaseHeader(): Header {
   return {
     signedHeader: undefined,
@@ -743,6 +780,16 @@ function createBaseHeader(): Header {
 }
 export const Header = {
   typeUrl: "/ibc.lightclients.tendermint.v1.Header",
+  aminoType: "cosmos-sdk/Header",
+  is(o: any): o is Header {
+    return o && (o.$typeUrl === Header.typeUrl || Height.is(o.trustedHeight));
+  },
+  isSDK(o: any): o is HeaderSDKType {
+    return o && (o.$typeUrl === Header.typeUrl || Height.isSDK(o.trusted_height));
+  },
+  isAmino(o: any): o is HeaderAmino {
+    return o && (o.$typeUrl === Header.typeUrl || Height.isAmino(o.trusted_height));
+  },
   encode(message: Header, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.signedHeader !== undefined) {
       SignedHeader.encode(message.signedHeader, writer.uint32(10).fork()).ldelim();
@@ -758,7 +805,7 @@ export const Header = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): Header {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): Header {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseHeader();
@@ -766,16 +813,16 @@ export const Header = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.signedHeader = SignedHeader.decode(reader, reader.uint32());
+          message.signedHeader = SignedHeader.decode(reader, reader.uint32(), useInterfaces);
           break;
         case 2:
-          message.validatorSet = ValidatorSet.decode(reader, reader.uint32());
+          message.validatorSet = ValidatorSet.decode(reader, reader.uint32(), useInterfaces);
           break;
         case 3:
-          message.trustedHeight = Height.decode(reader, reader.uint32());
+          message.trustedHeight = Height.decode(reader, reader.uint32(), useInterfaces);
           break;
         case 4:
-          message.trustedValidators = ValidatorSet.decode(reader, reader.uint32());
+          message.trustedValidators = ValidatorSet.decode(reader, reader.uint32(), useInterfaces);
           break;
         default:
           reader.skipType(tag & 7);
@@ -824,25 +871,25 @@ export const Header = {
     }
     return message;
   },
-  toAmino(message: Header): HeaderAmino {
+  toAmino(message: Header, useInterfaces: boolean = true): HeaderAmino {
     const obj: any = {};
-    obj.signed_header = message.signedHeader ? SignedHeader.toAmino(message.signedHeader) : undefined;
-    obj.validator_set = message.validatorSet ? ValidatorSet.toAmino(message.validatorSet) : undefined;
-    obj.trusted_height = message.trustedHeight ? Height.toAmino(message.trustedHeight) : {};
-    obj.trusted_validators = message.trustedValidators ? ValidatorSet.toAmino(message.trustedValidators) : undefined;
+    obj.signed_header = message.signedHeader ? SignedHeader.toAmino(message.signedHeader, useInterfaces) : undefined;
+    obj.validator_set = message.validatorSet ? ValidatorSet.toAmino(message.validatorSet, useInterfaces) : undefined;
+    obj.trusted_height = message.trustedHeight ? Height.toAmino(message.trustedHeight, useInterfaces) : {};
+    obj.trusted_validators = message.trustedValidators ? ValidatorSet.toAmino(message.trustedValidators, useInterfaces) : undefined;
     return obj;
   },
   fromAminoMsg(object: HeaderAminoMsg): Header {
     return Header.fromAmino(object.value);
   },
-  toAminoMsg(message: Header): HeaderAminoMsg {
+  toAminoMsg(message: Header, useInterfaces: boolean = true): HeaderAminoMsg {
     return {
       type: "cosmos-sdk/Header",
-      value: Header.toAmino(message)
+      value: Header.toAmino(message, useInterfaces)
     };
   },
-  fromProtoMsg(message: HeaderProtoMsg): Header {
-    return Header.decode(message.value);
+  fromProtoMsg(message: HeaderProtoMsg, useInterfaces: boolean = true): Header {
+    return Header.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: Header): Uint8Array {
     return Header.encode(message).finish();
@@ -854,6 +901,8 @@ export const Header = {
     };
   }
 };
+GlobalDecoderRegistry.register(Header.typeUrl, Header);
+GlobalDecoderRegistry.registerAminoProtoMapping(Header.aminoType, Header.typeUrl);
 function createBaseFraction(): Fraction {
   return {
     numerator: BigInt(0),
@@ -862,6 +911,16 @@ function createBaseFraction(): Fraction {
 }
 export const Fraction = {
   typeUrl: "/ibc.lightclients.tendermint.v1.Fraction",
+  aminoType: "cosmos-sdk/Fraction",
+  is(o: any): o is Fraction {
+    return o && (o.$typeUrl === Fraction.typeUrl || typeof o.numerator === "bigint" && typeof o.denominator === "bigint");
+  },
+  isSDK(o: any): o is FractionSDKType {
+    return o && (o.$typeUrl === Fraction.typeUrl || typeof o.numerator === "bigint" && typeof o.denominator === "bigint");
+  },
+  isAmino(o: any): o is FractionAmino {
+    return o && (o.$typeUrl === Fraction.typeUrl || typeof o.numerator === "bigint" && typeof o.denominator === "bigint");
+  },
   encode(message: Fraction, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.numerator !== BigInt(0)) {
       writer.uint32(8).uint64(message.numerator);
@@ -871,7 +930,7 @@ export const Fraction = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): Fraction {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): Fraction {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseFraction();
@@ -919,7 +978,7 @@ export const Fraction = {
     }
     return message;
   },
-  toAmino(message: Fraction): FractionAmino {
+  toAmino(message: Fraction, useInterfaces: boolean = true): FractionAmino {
     const obj: any = {};
     obj.numerator = message.numerator ? message.numerator.toString() : undefined;
     obj.denominator = message.denominator ? message.denominator.toString() : undefined;
@@ -928,14 +987,14 @@ export const Fraction = {
   fromAminoMsg(object: FractionAminoMsg): Fraction {
     return Fraction.fromAmino(object.value);
   },
-  toAminoMsg(message: Fraction): FractionAminoMsg {
+  toAminoMsg(message: Fraction, useInterfaces: boolean = true): FractionAminoMsg {
     return {
       type: "cosmos-sdk/Fraction",
-      value: Fraction.toAmino(message)
+      value: Fraction.toAmino(message, useInterfaces)
     };
   },
-  fromProtoMsg(message: FractionProtoMsg): Fraction {
-    return Fraction.decode(message.value);
+  fromProtoMsg(message: FractionProtoMsg, useInterfaces: boolean = true): Fraction {
+    return Fraction.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: Fraction): Uint8Array {
     return Fraction.encode(message).finish();
@@ -947,3 +1006,5 @@ export const Fraction = {
     };
   }
 };
+GlobalDecoderRegistry.register(Fraction.typeUrl, Fraction);
+GlobalDecoderRegistry.registerAminoProtoMapping(Fraction.aminoType, Fraction.typeUrl);

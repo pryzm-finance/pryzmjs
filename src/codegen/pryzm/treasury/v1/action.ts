@@ -2,7 +2,8 @@ import { Duration, DurationAmino, DurationSDKType } from "../../../google/protob
 import { Timestamp, TimestampSDKType } from "../../../google/protobuf/timestamp";
 import { BinaryReader, BinaryWriter } from "../../../binary";
 import { Decimal } from "@cosmjs/math";
-import { isSet, fromJsonTimestamp, fromTimestamp } from "../../../helpers";
+import { isSet, padDecimal, fromJsonTimestamp, fromTimestamp } from "../../../helpers";
+import { GlobalDecoderRegistry } from "../../../registry";
 /** FeeType enumerates the valid types for feeType. */
 export enum ActionType {
   ACTION_TYPE_HOLD = 0,
@@ -164,6 +165,15 @@ function createBaseActionFlowTradeSettings(): ActionFlowTradeSettings {
 }
 export const ActionFlowTradeSettings = {
   typeUrl: "/pryzm.treasury.v1.ActionFlowTradeSettings",
+  is(o: any): o is ActionFlowTradeSettings {
+    return o && (o.$typeUrl === ActionFlowTradeSettings.typeUrl || Duration.is(o.startDelay) && Duration.is(o.duration) && Duration.is(o.distInterval) && typeof o.limitPrice === "string" && Duration.is(o.exitWindowDuration));
+  },
+  isSDK(o: any): o is ActionFlowTradeSettingsSDKType {
+    return o && (o.$typeUrl === ActionFlowTradeSettings.typeUrl || Duration.isSDK(o.start_delay) && Duration.isSDK(o.duration) && Duration.isSDK(o.dist_interval) && typeof o.limit_price === "string" && Duration.isSDK(o.exit_window_duration));
+  },
+  isAmino(o: any): o is ActionFlowTradeSettingsAmino {
+    return o && (o.$typeUrl === ActionFlowTradeSettings.typeUrl || Duration.isAmino(o.start_delay) && Duration.isAmino(o.duration) && Duration.isAmino(o.dist_interval) && typeof o.limit_price === "string" && Duration.isAmino(o.exit_window_duration));
+  },
   encode(message: ActionFlowTradeSettings, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.startDelay !== undefined) {
       Duration.encode(message.startDelay, writer.uint32(10).fork()).ldelim();
@@ -182,7 +192,7 @@ export const ActionFlowTradeSettings = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): ActionFlowTradeSettings {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): ActionFlowTradeSettings {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseActionFlowTradeSettings();
@@ -190,19 +200,19 @@ export const ActionFlowTradeSettings = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.startDelay = Duration.decode(reader, reader.uint32());
+          message.startDelay = Duration.decode(reader, reader.uint32(), useInterfaces);
           break;
         case 2:
-          message.duration = Duration.decode(reader, reader.uint32());
+          message.duration = Duration.decode(reader, reader.uint32(), useInterfaces);
           break;
         case 3:
-          message.distInterval = Duration.decode(reader, reader.uint32());
+          message.distInterval = Duration.decode(reader, reader.uint32(), useInterfaces);
           break;
         case 4:
           message.limitPrice = Decimal.fromAtomics(reader.string(), 18).toString();
           break;
         case 5:
-          message.exitWindowDuration = Duration.decode(reader, reader.uint32());
+          message.exitWindowDuration = Duration.decode(reader, reader.uint32(), useInterfaces);
           break;
         default:
           reader.skipType(tag & 7);
@@ -257,20 +267,20 @@ export const ActionFlowTradeSettings = {
     }
     return message;
   },
-  toAmino(message: ActionFlowTradeSettings): ActionFlowTradeSettingsAmino {
+  toAmino(message: ActionFlowTradeSettings, useInterfaces: boolean = true): ActionFlowTradeSettingsAmino {
     const obj: any = {};
-    obj.start_delay = message.startDelay ? Duration.toAmino(message.startDelay) : undefined;
-    obj.duration = message.duration ? Duration.toAmino(message.duration) : undefined;
-    obj.dist_interval = message.distInterval ? Duration.toAmino(message.distInterval) : undefined;
-    obj.limit_price = message.limitPrice;
-    obj.exit_window_duration = message.exitWindowDuration ? Duration.toAmino(message.exitWindowDuration) : undefined;
+    obj.start_delay = message.startDelay ? Duration.toAmino(message.startDelay, useInterfaces) : undefined;
+    obj.duration = message.duration ? Duration.toAmino(message.duration, useInterfaces) : undefined;
+    obj.dist_interval = message.distInterval ? Duration.toAmino(message.distInterval, useInterfaces) : undefined;
+    obj.limit_price = padDecimal(message.limitPrice) === "" ? undefined : padDecimal(message.limitPrice);
+    obj.exit_window_duration = message.exitWindowDuration ? Duration.toAmino(message.exitWindowDuration, useInterfaces) : undefined;
     return obj;
   },
   fromAminoMsg(object: ActionFlowTradeSettingsAminoMsg): ActionFlowTradeSettings {
     return ActionFlowTradeSettings.fromAmino(object.value);
   },
-  fromProtoMsg(message: ActionFlowTradeSettingsProtoMsg): ActionFlowTradeSettings {
-    return ActionFlowTradeSettings.decode(message.value);
+  fromProtoMsg(message: ActionFlowTradeSettingsProtoMsg, useInterfaces: boolean = true): ActionFlowTradeSettings {
+    return ActionFlowTradeSettings.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: ActionFlowTradeSettings): Uint8Array {
     return ActionFlowTradeSettings.encode(message).finish();
@@ -282,6 +292,7 @@ export const ActionFlowTradeSettings = {
     };
   }
 };
+GlobalDecoderRegistry.register(ActionFlowTradeSettings.typeUrl, ActionFlowTradeSettings);
 function createBaseAction(): Action {
   return {
     actionType: 0,
@@ -294,6 +305,15 @@ function createBaseAction(): Action {
 }
 export const Action = {
   typeUrl: "/pryzm.treasury.v1.Action",
+  is(o: any): o is Action {
+    return o && (o.$typeUrl === Action.typeUrl || isSet(o.actionType) && Array.isArray(o.excludedDenoms) && (!o.excludedDenoms.length || typeof o.excludedDenoms[0] === "string"));
+  },
+  isSDK(o: any): o is ActionSDKType {
+    return o && (o.$typeUrl === Action.typeUrl || isSet(o.action_type) && Array.isArray(o.excluded_denoms) && (!o.excluded_denoms.length || typeof o.excluded_denoms[0] === "string"));
+  },
+  isAmino(o: any): o is ActionAmino {
+    return o && (o.$typeUrl === Action.typeUrl || isSet(o.action_type) && Array.isArray(o.excluded_denoms) && (!o.excluded_denoms.length || typeof o.excluded_denoms[0] === "string"));
+  },
   encode(message: Action, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.actionType !== 0) {
       writer.uint32(8).int32(message.actionType);
@@ -315,7 +335,7 @@ export const Action = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): Action {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): Action {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseAction();
@@ -332,10 +352,10 @@ export const Action = {
           message.expiration = Timestamp.decode(reader, reader.uint32());
           break;
         case 4:
-          message.period = Duration.decode(reader, reader.uint32());
+          message.period = Duration.decode(reader, reader.uint32(), useInterfaces);
           break;
         case 5:
-          message.flowTradeSettings = ActionFlowTradeSettings.decode(reader, reader.uint32());
+          message.flowTradeSettings = ActionFlowTradeSettings.decode(reader, reader.uint32(), useInterfaces);
           break;
         case 6:
           message.excludedDenoms.push(reader.string());
@@ -384,7 +404,7 @@ export const Action = {
   fromAmino(object: ActionAmino): Action {
     const message = createBaseAction();
     if (object.action_type !== undefined && object.action_type !== null) {
-      message.actionType = actionTypeFromJSON(object.action_type);
+      message.actionType = object.action_type;
     }
     if (object.occurrence !== undefined && object.occurrence !== null) {
       message.occurrence = Timestamp.fromAmino(object.occurrence);
@@ -401,25 +421,25 @@ export const Action = {
     message.excludedDenoms = object.excluded_denoms?.map(e => e) || [];
     return message;
   },
-  toAmino(message: Action): ActionAmino {
+  toAmino(message: Action, useInterfaces: boolean = true): ActionAmino {
     const obj: any = {};
-    obj.action_type = actionTypeToJSON(message.actionType);
-    obj.occurrence = message.occurrence ? Timestamp.toAmino(message.occurrence) : undefined;
-    obj.expiration = message.expiration ? Timestamp.toAmino(message.expiration) : undefined;
-    obj.period = message.period ? Duration.toAmino(message.period) : undefined;
-    obj.flow_trade_settings = message.flowTradeSettings ? ActionFlowTradeSettings.toAmino(message.flowTradeSettings) : undefined;
+    obj.action_type = message.actionType === 0 ? undefined : message.actionType;
+    obj.occurrence = message.occurrence ? Timestamp.toAmino(message.occurrence, useInterfaces) : undefined;
+    obj.expiration = message.expiration ? Timestamp.toAmino(message.expiration, useInterfaces) : undefined;
+    obj.period = message.period ? Duration.toAmino(message.period, useInterfaces) : undefined;
+    obj.flow_trade_settings = message.flowTradeSettings ? ActionFlowTradeSettings.toAmino(message.flowTradeSettings, useInterfaces) : undefined;
     if (message.excludedDenoms) {
       obj.excluded_denoms = message.excludedDenoms.map(e => e);
     } else {
-      obj.excluded_denoms = [];
+      obj.excluded_denoms = null;
     }
     return obj;
   },
   fromAminoMsg(object: ActionAminoMsg): Action {
     return Action.fromAmino(object.value);
   },
-  fromProtoMsg(message: ActionProtoMsg): Action {
-    return Action.decode(message.value);
+  fromProtoMsg(message: ActionProtoMsg, useInterfaces: boolean = true): Action {
+    return Action.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: Action): Uint8Array {
     return Action.encode(message).finish();
@@ -431,3 +451,4 @@ export const Action = {
     };
   }
 };
+GlobalDecoderRegistry.register(Action.typeUrl, Action);

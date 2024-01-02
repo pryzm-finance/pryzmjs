@@ -4,6 +4,7 @@ import { Coin, CoinAmino, CoinSDKType } from "../../../cosmos/base/v1beta1/coin"
 import { Position, PositionAmino, PositionSDKType } from "./position";
 import { BinaryReader, BinaryWriter } from "../../../binary";
 import { isSet } from "../../../helpers";
+import { GlobalDecoderRegistry } from "../../../registry";
 export interface EventSetParams {
   params: Params;
 }
@@ -257,13 +258,22 @@ function createBaseEventSetParams(): EventSetParams {
 }
 export const EventSetParams = {
   typeUrl: "/refractedlabs.flowtrade.v1.EventSetParams",
+  is(o: any): o is EventSetParams {
+    return o && (o.$typeUrl === EventSetParams.typeUrl || Params.is(o.params));
+  },
+  isSDK(o: any): o is EventSetParamsSDKType {
+    return o && (o.$typeUrl === EventSetParams.typeUrl || Params.isSDK(o.params));
+  },
+  isAmino(o: any): o is EventSetParamsAmino {
+    return o && (o.$typeUrl === EventSetParams.typeUrl || Params.isAmino(o.params));
+  },
   encode(message: EventSetParams, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.params !== undefined) {
       Params.encode(message.params, writer.uint32(10).fork()).ldelim();
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): EventSetParams {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): EventSetParams {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseEventSetParams();
@@ -271,7 +281,7 @@ export const EventSetParams = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.params = Params.decode(reader, reader.uint32());
+          message.params = Params.decode(reader, reader.uint32(), useInterfaces);
           break;
         default:
           reader.skipType(tag & 7);
@@ -302,16 +312,16 @@ export const EventSetParams = {
     }
     return message;
   },
-  toAmino(message: EventSetParams): EventSetParamsAmino {
+  toAmino(message: EventSetParams, useInterfaces: boolean = true): EventSetParamsAmino {
     const obj: any = {};
-    obj.params = message.params ? Params.toAmino(message.params) : undefined;
+    obj.params = message.params ? Params.toAmino(message.params, useInterfaces) : undefined;
     return obj;
   },
   fromAminoMsg(object: EventSetParamsAminoMsg): EventSetParams {
     return EventSetParams.fromAmino(object.value);
   },
-  fromProtoMsg(message: EventSetParamsProtoMsg): EventSetParams {
-    return EventSetParams.decode(message.value);
+  fromProtoMsg(message: EventSetParamsProtoMsg, useInterfaces: boolean = true): EventSetParams {
+    return EventSetParams.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: EventSetParams): Uint8Array {
     return EventSetParams.encode(message).finish();
@@ -323,6 +333,7 @@ export const EventSetParams = {
     };
   }
 };
+GlobalDecoderRegistry.register(EventSetParams.typeUrl, EventSetParams);
 function createBaseEventFlowCreated(): EventFlowCreated {
   return {
     flow: Flow.fromPartial({})
@@ -330,13 +341,22 @@ function createBaseEventFlowCreated(): EventFlowCreated {
 }
 export const EventFlowCreated = {
   typeUrl: "/refractedlabs.flowtrade.v1.EventFlowCreated",
+  is(o: any): o is EventFlowCreated {
+    return o && (o.$typeUrl === EventFlowCreated.typeUrl || Flow.is(o.flow));
+  },
+  isSDK(o: any): o is EventFlowCreatedSDKType {
+    return o && (o.$typeUrl === EventFlowCreated.typeUrl || Flow.isSDK(o.flow));
+  },
+  isAmino(o: any): o is EventFlowCreatedAmino {
+    return o && (o.$typeUrl === EventFlowCreated.typeUrl || Flow.isAmino(o.flow));
+  },
   encode(message: EventFlowCreated, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.flow !== undefined) {
       Flow.encode(message.flow, writer.uint32(10).fork()).ldelim();
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): EventFlowCreated {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): EventFlowCreated {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseEventFlowCreated();
@@ -344,7 +364,7 @@ export const EventFlowCreated = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.flow = Flow.decode(reader, reader.uint32());
+          message.flow = Flow.decode(reader, reader.uint32(), useInterfaces);
           break;
         default:
           reader.skipType(tag & 7);
@@ -375,16 +395,16 @@ export const EventFlowCreated = {
     }
     return message;
   },
-  toAmino(message: EventFlowCreated): EventFlowCreatedAmino {
+  toAmino(message: EventFlowCreated, useInterfaces: boolean = true): EventFlowCreatedAmino {
     const obj: any = {};
-    obj.flow = message.flow ? Flow.toAmino(message.flow) : undefined;
+    obj.flow = message.flow ? Flow.toAmino(message.flow, useInterfaces) : undefined;
     return obj;
   },
   fromAminoMsg(object: EventFlowCreatedAminoMsg): EventFlowCreated {
     return EventFlowCreated.fromAmino(object.value);
   },
-  fromProtoMsg(message: EventFlowCreatedProtoMsg): EventFlowCreated {
-    return EventFlowCreated.decode(message.value);
+  fromProtoMsg(message: EventFlowCreatedProtoMsg, useInterfaces: boolean = true): EventFlowCreated {
+    return EventFlowCreated.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: EventFlowCreated): Uint8Array {
     return EventFlowCreated.encode(message).finish();
@@ -396,6 +416,7 @@ export const EventFlowCreated = {
     };
   }
 };
+GlobalDecoderRegistry.register(EventFlowCreated.typeUrl, EventFlowCreated);
 function createBaseEventFlowEnded(): EventFlowEnded {
   return {
     flowId: BigInt(0)
@@ -403,13 +424,22 @@ function createBaseEventFlowEnded(): EventFlowEnded {
 }
 export const EventFlowEnded = {
   typeUrl: "/refractedlabs.flowtrade.v1.EventFlowEnded",
+  is(o: any): o is EventFlowEnded {
+    return o && (o.$typeUrl === EventFlowEnded.typeUrl || typeof o.flowId === "bigint");
+  },
+  isSDK(o: any): o is EventFlowEndedSDKType {
+    return o && (o.$typeUrl === EventFlowEnded.typeUrl || typeof o.flow_id === "bigint");
+  },
+  isAmino(o: any): o is EventFlowEndedAmino {
+    return o && (o.$typeUrl === EventFlowEnded.typeUrl || typeof o.flow_id === "bigint");
+  },
   encode(message: EventFlowEnded, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.flowId !== BigInt(0)) {
       writer.uint32(8).uint64(message.flowId);
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): EventFlowEnded {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): EventFlowEnded {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseEventFlowEnded();
@@ -448,7 +478,7 @@ export const EventFlowEnded = {
     }
     return message;
   },
-  toAmino(message: EventFlowEnded): EventFlowEndedAmino {
+  toAmino(message: EventFlowEnded, useInterfaces: boolean = true): EventFlowEndedAmino {
     const obj: any = {};
     obj.flow_id = message.flowId ? message.flowId.toString() : undefined;
     return obj;
@@ -456,8 +486,8 @@ export const EventFlowEnded = {
   fromAminoMsg(object: EventFlowEndedAminoMsg): EventFlowEnded {
     return EventFlowEnded.fromAmino(object.value);
   },
-  fromProtoMsg(message: EventFlowEndedProtoMsg): EventFlowEnded {
-    return EventFlowEnded.decode(message.value);
+  fromProtoMsg(message: EventFlowEndedProtoMsg, useInterfaces: boolean = true): EventFlowEnded {
+    return EventFlowEnded.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: EventFlowEnded): Uint8Array {
     return EventFlowEnded.encode(message).finish();
@@ -469,6 +499,7 @@ export const EventFlowEnded = {
     };
   }
 };
+GlobalDecoderRegistry.register(EventFlowEnded.typeUrl, EventFlowEnded);
 function createBaseEventFlowStopped(): EventFlowStopped {
   return {
     flowId: BigInt(0)
@@ -476,13 +507,22 @@ function createBaseEventFlowStopped(): EventFlowStopped {
 }
 export const EventFlowStopped = {
   typeUrl: "/refractedlabs.flowtrade.v1.EventFlowStopped",
+  is(o: any): o is EventFlowStopped {
+    return o && (o.$typeUrl === EventFlowStopped.typeUrl || typeof o.flowId === "bigint");
+  },
+  isSDK(o: any): o is EventFlowStoppedSDKType {
+    return o && (o.$typeUrl === EventFlowStopped.typeUrl || typeof o.flow_id === "bigint");
+  },
+  isAmino(o: any): o is EventFlowStoppedAmino {
+    return o && (o.$typeUrl === EventFlowStopped.typeUrl || typeof o.flow_id === "bigint");
+  },
   encode(message: EventFlowStopped, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.flowId !== BigInt(0)) {
       writer.uint32(8).uint64(message.flowId);
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): EventFlowStopped {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): EventFlowStopped {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseEventFlowStopped();
@@ -521,7 +561,7 @@ export const EventFlowStopped = {
     }
     return message;
   },
-  toAmino(message: EventFlowStopped): EventFlowStoppedAmino {
+  toAmino(message: EventFlowStopped, useInterfaces: boolean = true): EventFlowStoppedAmino {
     const obj: any = {};
     obj.flow_id = message.flowId ? message.flowId.toString() : undefined;
     return obj;
@@ -529,8 +569,8 @@ export const EventFlowStopped = {
   fromAminoMsg(object: EventFlowStoppedAminoMsg): EventFlowStopped {
     return EventFlowStopped.fromAmino(object.value);
   },
-  fromProtoMsg(message: EventFlowStoppedProtoMsg): EventFlowStopped {
-    return EventFlowStopped.decode(message.value);
+  fromProtoMsg(message: EventFlowStoppedProtoMsg, useInterfaces: boolean = true): EventFlowStopped {
+    return EventFlowStopped.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: EventFlowStopped): Uint8Array {
     return EventFlowStopped.encode(message).finish();
@@ -542,6 +582,7 @@ export const EventFlowStopped = {
     };
   }
 };
+GlobalDecoderRegistry.register(EventFlowStopped.typeUrl, EventFlowStopped);
 function createBaseEventFlowCheckedOut(): EventFlowCheckedOut {
   return {
     flowId: BigInt(0),
@@ -551,6 +592,15 @@ function createBaseEventFlowCheckedOut(): EventFlowCheckedOut {
 }
 export const EventFlowCheckedOut = {
   typeUrl: "/refractedlabs.flowtrade.v1.EventFlowCheckedOut",
+  is(o: any): o is EventFlowCheckedOut {
+    return o && (o.$typeUrl === EventFlowCheckedOut.typeUrl || typeof o.flowId === "bigint");
+  },
+  isSDK(o: any): o is EventFlowCheckedOutSDKType {
+    return o && (o.$typeUrl === EventFlowCheckedOut.typeUrl || typeof o.flow_id === "bigint");
+  },
+  isAmino(o: any): o is EventFlowCheckedOutAmino {
+    return o && (o.$typeUrl === EventFlowCheckedOut.typeUrl || typeof o.flow_id === "bigint");
+  },
   encode(message: EventFlowCheckedOut, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.flowId !== BigInt(0)) {
       writer.uint32(8).uint64(message.flowId);
@@ -563,7 +613,7 @@ export const EventFlowCheckedOut = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): EventFlowCheckedOut {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): EventFlowCheckedOut {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseEventFlowCheckedOut();
@@ -574,10 +624,10 @@ export const EventFlowCheckedOut = {
           message.flowId = reader.uint64();
           break;
         case 2:
-          message.returnedDeposit = Coin.decode(reader, reader.uint32());
+          message.returnedDeposit = Coin.decode(reader, reader.uint32(), useInterfaces);
           break;
         case 3:
-          message.returnedTokenOut = Coin.decode(reader, reader.uint32());
+          message.returnedTokenOut = Coin.decode(reader, reader.uint32(), useInterfaces);
           break;
         default:
           reader.skipType(tag & 7);
@@ -620,18 +670,18 @@ export const EventFlowCheckedOut = {
     }
     return message;
   },
-  toAmino(message: EventFlowCheckedOut): EventFlowCheckedOutAmino {
+  toAmino(message: EventFlowCheckedOut, useInterfaces: boolean = true): EventFlowCheckedOutAmino {
     const obj: any = {};
     obj.flow_id = message.flowId ? message.flowId.toString() : undefined;
-    obj.returned_deposit = message.returnedDeposit ? Coin.toAmino(message.returnedDeposit) : undefined;
-    obj.returned_token_out = message.returnedTokenOut ? Coin.toAmino(message.returnedTokenOut) : undefined;
+    obj.returned_deposit = message.returnedDeposit ? Coin.toAmino(message.returnedDeposit, useInterfaces) : undefined;
+    obj.returned_token_out = message.returnedTokenOut ? Coin.toAmino(message.returnedTokenOut, useInterfaces) : undefined;
     return obj;
   },
   fromAminoMsg(object: EventFlowCheckedOutAminoMsg): EventFlowCheckedOut {
     return EventFlowCheckedOut.fromAmino(object.value);
   },
-  fromProtoMsg(message: EventFlowCheckedOutProtoMsg): EventFlowCheckedOut {
-    return EventFlowCheckedOut.decode(message.value);
+  fromProtoMsg(message: EventFlowCheckedOutProtoMsg, useInterfaces: boolean = true): EventFlowCheckedOut {
+    return EventFlowCheckedOut.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: EventFlowCheckedOut): Uint8Array {
     return EventFlowCheckedOut.encode(message).finish();
@@ -643,6 +693,7 @@ export const EventFlowCheckedOut = {
     };
   }
 };
+GlobalDecoderRegistry.register(EventFlowCheckedOut.typeUrl, EventFlowCheckedOut);
 function createBaseEventFlowTokenInClaimed(): EventFlowTokenInClaimed {
   return {
     flowId: BigInt(0),
@@ -653,6 +704,15 @@ function createBaseEventFlowTokenInClaimed(): EventFlowTokenInClaimed {
 }
 export const EventFlowTokenInClaimed = {
   typeUrl: "/refractedlabs.flowtrade.v1.EventFlowTokenInClaimed",
+  is(o: any): o is EventFlowTokenInClaimed {
+    return o && (o.$typeUrl === EventFlowTokenInClaimed.typeUrl || typeof o.flowId === "bigint" && Coin.is(o.amount) && Coin.is(o.fee) && typeof o.treasury === "string");
+  },
+  isSDK(o: any): o is EventFlowTokenInClaimedSDKType {
+    return o && (o.$typeUrl === EventFlowTokenInClaimed.typeUrl || typeof o.flow_id === "bigint" && Coin.isSDK(o.amount) && Coin.isSDK(o.fee) && typeof o.treasury === "string");
+  },
+  isAmino(o: any): o is EventFlowTokenInClaimedAmino {
+    return o && (o.$typeUrl === EventFlowTokenInClaimed.typeUrl || typeof o.flow_id === "bigint" && Coin.isAmino(o.amount) && Coin.isAmino(o.fee) && typeof o.treasury === "string");
+  },
   encode(message: EventFlowTokenInClaimed, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.flowId !== BigInt(0)) {
       writer.uint32(8).uint64(message.flowId);
@@ -668,7 +728,7 @@ export const EventFlowTokenInClaimed = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): EventFlowTokenInClaimed {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): EventFlowTokenInClaimed {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseEventFlowTokenInClaimed();
@@ -679,10 +739,10 @@ export const EventFlowTokenInClaimed = {
           message.flowId = reader.uint64();
           break;
         case 2:
-          message.amount = Coin.decode(reader, reader.uint32());
+          message.amount = Coin.decode(reader, reader.uint32(), useInterfaces);
           break;
         case 3:
-          message.fee = Coin.decode(reader, reader.uint32());
+          message.fee = Coin.decode(reader, reader.uint32(), useInterfaces);
           break;
         case 4:
           message.treasury = reader.string();
@@ -734,19 +794,19 @@ export const EventFlowTokenInClaimed = {
     }
     return message;
   },
-  toAmino(message: EventFlowTokenInClaimed): EventFlowTokenInClaimedAmino {
+  toAmino(message: EventFlowTokenInClaimed, useInterfaces: boolean = true): EventFlowTokenInClaimedAmino {
     const obj: any = {};
     obj.flow_id = message.flowId ? message.flowId.toString() : undefined;
-    obj.amount = message.amount ? Coin.toAmino(message.amount) : undefined;
-    obj.fee = message.fee ? Coin.toAmino(message.fee) : undefined;
-    obj.treasury = message.treasury;
+    obj.amount = message.amount ? Coin.toAmino(message.amount, useInterfaces) : undefined;
+    obj.fee = message.fee ? Coin.toAmino(message.fee, useInterfaces) : undefined;
+    obj.treasury = message.treasury === "" ? undefined : message.treasury;
     return obj;
   },
   fromAminoMsg(object: EventFlowTokenInClaimedAminoMsg): EventFlowTokenInClaimed {
     return EventFlowTokenInClaimed.fromAmino(object.value);
   },
-  fromProtoMsg(message: EventFlowTokenInClaimedProtoMsg): EventFlowTokenInClaimed {
-    return EventFlowTokenInClaimed.decode(message.value);
+  fromProtoMsg(message: EventFlowTokenInClaimedProtoMsg, useInterfaces: boolean = true): EventFlowTokenInClaimed {
+    return EventFlowTokenInClaimed.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: EventFlowTokenInClaimed): Uint8Array {
     return EventFlowTokenInClaimed.encode(message).finish();
@@ -758,6 +818,7 @@ export const EventFlowTokenInClaimed = {
     };
   }
 };
+GlobalDecoderRegistry.register(EventFlowTokenInClaimed.typeUrl, EventFlowTokenInClaimed);
 function createBaseEventFlowTokenOutClaimed(): EventFlowTokenOutClaimed {
   return {
     flowId: BigInt(0),
@@ -768,6 +829,15 @@ function createBaseEventFlowTokenOutClaimed(): EventFlowTokenOutClaimed {
 }
 export const EventFlowTokenOutClaimed = {
   typeUrl: "/refractedlabs.flowtrade.v1.EventFlowTokenOutClaimed",
+  is(o: any): o is EventFlowTokenOutClaimed {
+    return o && (o.$typeUrl === EventFlowTokenOutClaimed.typeUrl || typeof o.flowId === "bigint" && typeof o.owner === "string" && Coin.is(o.amount) && Coin.is(o.fee));
+  },
+  isSDK(o: any): o is EventFlowTokenOutClaimedSDKType {
+    return o && (o.$typeUrl === EventFlowTokenOutClaimed.typeUrl || typeof o.flow_id === "bigint" && typeof o.owner === "string" && Coin.isSDK(o.amount) && Coin.isSDK(o.fee));
+  },
+  isAmino(o: any): o is EventFlowTokenOutClaimedAmino {
+    return o && (o.$typeUrl === EventFlowTokenOutClaimed.typeUrl || typeof o.flow_id === "bigint" && typeof o.owner === "string" && Coin.isAmino(o.amount) && Coin.isAmino(o.fee));
+  },
   encode(message: EventFlowTokenOutClaimed, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.flowId !== BigInt(0)) {
       writer.uint32(8).uint64(message.flowId);
@@ -783,7 +853,7 @@ export const EventFlowTokenOutClaimed = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): EventFlowTokenOutClaimed {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): EventFlowTokenOutClaimed {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseEventFlowTokenOutClaimed();
@@ -797,10 +867,10 @@ export const EventFlowTokenOutClaimed = {
           message.owner = reader.string();
           break;
         case 3:
-          message.amount = Coin.decode(reader, reader.uint32());
+          message.amount = Coin.decode(reader, reader.uint32(), useInterfaces);
           break;
         case 4:
-          message.fee = Coin.decode(reader, reader.uint32());
+          message.fee = Coin.decode(reader, reader.uint32(), useInterfaces);
           break;
         default:
           reader.skipType(tag & 7);
@@ -849,19 +919,19 @@ export const EventFlowTokenOutClaimed = {
     }
     return message;
   },
-  toAmino(message: EventFlowTokenOutClaimed): EventFlowTokenOutClaimedAmino {
+  toAmino(message: EventFlowTokenOutClaimed, useInterfaces: boolean = true): EventFlowTokenOutClaimedAmino {
     const obj: any = {};
     obj.flow_id = message.flowId ? message.flowId.toString() : undefined;
-    obj.owner = message.owner;
-    obj.amount = message.amount ? Coin.toAmino(message.amount) : undefined;
-    obj.fee = message.fee ? Coin.toAmino(message.fee) : undefined;
+    obj.owner = message.owner === "" ? undefined : message.owner;
+    obj.amount = message.amount ? Coin.toAmino(message.amount, useInterfaces) : undefined;
+    obj.fee = message.fee ? Coin.toAmino(message.fee, useInterfaces) : undefined;
     return obj;
   },
   fromAminoMsg(object: EventFlowTokenOutClaimedAminoMsg): EventFlowTokenOutClaimed {
     return EventFlowTokenOutClaimed.fromAmino(object.value);
   },
-  fromProtoMsg(message: EventFlowTokenOutClaimedProtoMsg): EventFlowTokenOutClaimed {
-    return EventFlowTokenOutClaimed.decode(message.value);
+  fromProtoMsg(message: EventFlowTokenOutClaimedProtoMsg, useInterfaces: boolean = true): EventFlowTokenOutClaimed {
+    return EventFlowTokenOutClaimed.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: EventFlowTokenOutClaimed): Uint8Array {
     return EventFlowTokenOutClaimed.encode(message).finish();
@@ -873,6 +943,7 @@ export const EventFlowTokenOutClaimed = {
     };
   }
 };
+GlobalDecoderRegistry.register(EventFlowTokenOutClaimed.typeUrl, EventFlowTokenOutClaimed);
 function createBaseEventJoinFlow(): EventJoinFlow {
   return {
     flowId: BigInt(0),
@@ -882,6 +953,15 @@ function createBaseEventJoinFlow(): EventJoinFlow {
 }
 export const EventJoinFlow = {
   typeUrl: "/refractedlabs.flowtrade.v1.EventJoinFlow",
+  is(o: any): o is EventJoinFlow {
+    return o && (o.$typeUrl === EventJoinFlow.typeUrl || typeof o.flowId === "bigint" && typeof o.address === "string" && Coin.is(o.amount));
+  },
+  isSDK(o: any): o is EventJoinFlowSDKType {
+    return o && (o.$typeUrl === EventJoinFlow.typeUrl || typeof o.flow_id === "bigint" && typeof o.address === "string" && Coin.isSDK(o.amount));
+  },
+  isAmino(o: any): o is EventJoinFlowAmino {
+    return o && (o.$typeUrl === EventJoinFlow.typeUrl || typeof o.flow_id === "bigint" && typeof o.address === "string" && Coin.isAmino(o.amount));
+  },
   encode(message: EventJoinFlow, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.flowId !== BigInt(0)) {
       writer.uint32(8).uint64(message.flowId);
@@ -894,7 +974,7 @@ export const EventJoinFlow = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): EventJoinFlow {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): EventJoinFlow {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseEventJoinFlow();
@@ -908,7 +988,7 @@ export const EventJoinFlow = {
           message.address = reader.string();
           break;
         case 3:
-          message.amount = Coin.decode(reader, reader.uint32());
+          message.amount = Coin.decode(reader, reader.uint32(), useInterfaces);
           break;
         default:
           reader.skipType(tag & 7);
@@ -951,18 +1031,18 @@ export const EventJoinFlow = {
     }
     return message;
   },
-  toAmino(message: EventJoinFlow): EventJoinFlowAmino {
+  toAmino(message: EventJoinFlow, useInterfaces: boolean = true): EventJoinFlowAmino {
     const obj: any = {};
     obj.flow_id = message.flowId ? message.flowId.toString() : undefined;
-    obj.address = message.address;
-    obj.amount = message.amount ? Coin.toAmino(message.amount) : undefined;
+    obj.address = message.address === "" ? undefined : message.address;
+    obj.amount = message.amount ? Coin.toAmino(message.amount, useInterfaces) : undefined;
     return obj;
   },
   fromAminoMsg(object: EventJoinFlowAminoMsg): EventJoinFlow {
     return EventJoinFlow.fromAmino(object.value);
   },
-  fromProtoMsg(message: EventJoinFlowProtoMsg): EventJoinFlow {
-    return EventJoinFlow.decode(message.value);
+  fromProtoMsg(message: EventJoinFlowProtoMsg, useInterfaces: boolean = true): EventJoinFlow {
+    return EventJoinFlow.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: EventJoinFlow): Uint8Array {
     return EventJoinFlow.encode(message).finish();
@@ -974,6 +1054,7 @@ export const EventJoinFlow = {
     };
   }
 };
+GlobalDecoderRegistry.register(EventJoinFlow.typeUrl, EventJoinFlow);
 function createBaseEventExitFlow(): EventExitFlow {
   return {
     flowId: BigInt(0),
@@ -983,6 +1064,15 @@ function createBaseEventExitFlow(): EventExitFlow {
 }
 export const EventExitFlow = {
   typeUrl: "/refractedlabs.flowtrade.v1.EventExitFlow",
+  is(o: any): o is EventExitFlow {
+    return o && (o.$typeUrl === EventExitFlow.typeUrl || typeof o.flowId === "bigint" && typeof o.address === "string" && Coin.is(o.amount));
+  },
+  isSDK(o: any): o is EventExitFlowSDKType {
+    return o && (o.$typeUrl === EventExitFlow.typeUrl || typeof o.flow_id === "bigint" && typeof o.address === "string" && Coin.isSDK(o.amount));
+  },
+  isAmino(o: any): o is EventExitFlowAmino {
+    return o && (o.$typeUrl === EventExitFlow.typeUrl || typeof o.flow_id === "bigint" && typeof o.address === "string" && Coin.isAmino(o.amount));
+  },
   encode(message: EventExitFlow, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.flowId !== BigInt(0)) {
       writer.uint32(8).uint64(message.flowId);
@@ -995,7 +1085,7 @@ export const EventExitFlow = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): EventExitFlow {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): EventExitFlow {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseEventExitFlow();
@@ -1009,7 +1099,7 @@ export const EventExitFlow = {
           message.address = reader.string();
           break;
         case 3:
-          message.amount = Coin.decode(reader, reader.uint32());
+          message.amount = Coin.decode(reader, reader.uint32(), useInterfaces);
           break;
         default:
           reader.skipType(tag & 7);
@@ -1052,18 +1142,18 @@ export const EventExitFlow = {
     }
     return message;
   },
-  toAmino(message: EventExitFlow): EventExitFlowAmino {
+  toAmino(message: EventExitFlow, useInterfaces: boolean = true): EventExitFlowAmino {
     const obj: any = {};
     obj.flow_id = message.flowId ? message.flowId.toString() : undefined;
-    obj.address = message.address;
-    obj.amount = message.amount ? Coin.toAmino(message.amount) : undefined;
+    obj.address = message.address === "" ? undefined : message.address;
+    obj.amount = message.amount ? Coin.toAmino(message.amount, useInterfaces) : undefined;
     return obj;
   },
   fromAminoMsg(object: EventExitFlowAminoMsg): EventExitFlow {
     return EventExitFlow.fromAmino(object.value);
   },
-  fromProtoMsg(message: EventExitFlowProtoMsg): EventExitFlow {
-    return EventExitFlow.decode(message.value);
+  fromProtoMsg(message: EventExitFlowProtoMsg, useInterfaces: boolean = true): EventExitFlow {
+    return EventExitFlow.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: EventExitFlow): Uint8Array {
     return EventExitFlow.encode(message).finish();
@@ -1075,6 +1165,7 @@ export const EventExitFlow = {
     };
   }
 };
+GlobalDecoderRegistry.register(EventExitFlow.typeUrl, EventExitFlow);
 function createBaseEventSetOperator(): EventSetOperator {
   return {
     flowId: BigInt(0),
@@ -1084,6 +1175,15 @@ function createBaseEventSetOperator(): EventSetOperator {
 }
 export const EventSetOperator = {
   typeUrl: "/refractedlabs.flowtrade.v1.EventSetOperator",
+  is(o: any): o is EventSetOperator {
+    return o && (o.$typeUrl === EventSetOperator.typeUrl || typeof o.flowId === "bigint" && typeof o.owner === "string" && typeof o.operator === "string");
+  },
+  isSDK(o: any): o is EventSetOperatorSDKType {
+    return o && (o.$typeUrl === EventSetOperator.typeUrl || typeof o.flow_id === "bigint" && typeof o.owner === "string" && typeof o.operator === "string");
+  },
+  isAmino(o: any): o is EventSetOperatorAmino {
+    return o && (o.$typeUrl === EventSetOperator.typeUrl || typeof o.flow_id === "bigint" && typeof o.owner === "string" && typeof o.operator === "string");
+  },
   encode(message: EventSetOperator, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.flowId !== BigInt(0)) {
       writer.uint32(8).uint64(message.flowId);
@@ -1096,7 +1196,7 @@ export const EventSetOperator = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): EventSetOperator {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): EventSetOperator {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseEventSetOperator();
@@ -1153,18 +1253,18 @@ export const EventSetOperator = {
     }
     return message;
   },
-  toAmino(message: EventSetOperator): EventSetOperatorAmino {
+  toAmino(message: EventSetOperator, useInterfaces: boolean = true): EventSetOperatorAmino {
     const obj: any = {};
     obj.flow_id = message.flowId ? message.flowId.toString() : undefined;
-    obj.owner = message.owner;
-    obj.operator = message.operator;
+    obj.owner = message.owner === "" ? undefined : message.owner;
+    obj.operator = message.operator === "" ? undefined : message.operator;
     return obj;
   },
   fromAminoMsg(object: EventSetOperatorAminoMsg): EventSetOperator {
     return EventSetOperator.fromAmino(object.value);
   },
-  fromProtoMsg(message: EventSetOperatorProtoMsg): EventSetOperator {
-    return EventSetOperator.decode(message.value);
+  fromProtoMsg(message: EventSetOperatorProtoMsg, useInterfaces: boolean = true): EventSetOperator {
+    return EventSetOperator.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: EventSetOperator): Uint8Array {
     return EventSetOperator.encode(message).finish();
@@ -1176,6 +1276,7 @@ export const EventSetOperator = {
     };
   }
 };
+GlobalDecoderRegistry.register(EventSetOperator.typeUrl, EventSetOperator);
 function createBaseEventSetFlow(): EventSetFlow {
   return {
     flow: Flow.fromPartial({})
@@ -1183,13 +1284,22 @@ function createBaseEventSetFlow(): EventSetFlow {
 }
 export const EventSetFlow = {
   typeUrl: "/refractedlabs.flowtrade.v1.EventSetFlow",
+  is(o: any): o is EventSetFlow {
+    return o && (o.$typeUrl === EventSetFlow.typeUrl || Flow.is(o.flow));
+  },
+  isSDK(o: any): o is EventSetFlowSDKType {
+    return o && (o.$typeUrl === EventSetFlow.typeUrl || Flow.isSDK(o.flow));
+  },
+  isAmino(o: any): o is EventSetFlowAmino {
+    return o && (o.$typeUrl === EventSetFlow.typeUrl || Flow.isAmino(o.flow));
+  },
   encode(message: EventSetFlow, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.flow !== undefined) {
       Flow.encode(message.flow, writer.uint32(10).fork()).ldelim();
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): EventSetFlow {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): EventSetFlow {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseEventSetFlow();
@@ -1197,7 +1307,7 @@ export const EventSetFlow = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.flow = Flow.decode(reader, reader.uint32());
+          message.flow = Flow.decode(reader, reader.uint32(), useInterfaces);
           break;
         default:
           reader.skipType(tag & 7);
@@ -1228,16 +1338,16 @@ export const EventSetFlow = {
     }
     return message;
   },
-  toAmino(message: EventSetFlow): EventSetFlowAmino {
+  toAmino(message: EventSetFlow, useInterfaces: boolean = true): EventSetFlowAmino {
     const obj: any = {};
-    obj.flow = message.flow ? Flow.toAmino(message.flow) : undefined;
+    obj.flow = message.flow ? Flow.toAmino(message.flow, useInterfaces) : undefined;
     return obj;
   },
   fromAminoMsg(object: EventSetFlowAminoMsg): EventSetFlow {
     return EventSetFlow.fromAmino(object.value);
   },
-  fromProtoMsg(message: EventSetFlowProtoMsg): EventSetFlow {
-    return EventSetFlow.decode(message.value);
+  fromProtoMsg(message: EventSetFlowProtoMsg, useInterfaces: boolean = true): EventSetFlow {
+    return EventSetFlow.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: EventSetFlow): Uint8Array {
     return EventSetFlow.encode(message).finish();
@@ -1249,6 +1359,7 @@ export const EventSetFlow = {
     };
   }
 };
+GlobalDecoderRegistry.register(EventSetFlow.typeUrl, EventSetFlow);
 function createBaseEventSetPosition(): EventSetPosition {
   return {
     position: Position.fromPartial({})
@@ -1256,13 +1367,22 @@ function createBaseEventSetPosition(): EventSetPosition {
 }
 export const EventSetPosition = {
   typeUrl: "/refractedlabs.flowtrade.v1.EventSetPosition",
+  is(o: any): o is EventSetPosition {
+    return o && (o.$typeUrl === EventSetPosition.typeUrl || Position.is(o.position));
+  },
+  isSDK(o: any): o is EventSetPositionSDKType {
+    return o && (o.$typeUrl === EventSetPosition.typeUrl || Position.isSDK(o.position));
+  },
+  isAmino(o: any): o is EventSetPositionAmino {
+    return o && (o.$typeUrl === EventSetPosition.typeUrl || Position.isAmino(o.position));
+  },
   encode(message: EventSetPosition, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.position !== undefined) {
       Position.encode(message.position, writer.uint32(10).fork()).ldelim();
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): EventSetPosition {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): EventSetPosition {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseEventSetPosition();
@@ -1270,7 +1390,7 @@ export const EventSetPosition = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.position = Position.decode(reader, reader.uint32());
+          message.position = Position.decode(reader, reader.uint32(), useInterfaces);
           break;
         default:
           reader.skipType(tag & 7);
@@ -1301,16 +1421,16 @@ export const EventSetPosition = {
     }
     return message;
   },
-  toAmino(message: EventSetPosition): EventSetPositionAmino {
+  toAmino(message: EventSetPosition, useInterfaces: boolean = true): EventSetPositionAmino {
     const obj: any = {};
-    obj.position = message.position ? Position.toAmino(message.position) : undefined;
+    obj.position = message.position ? Position.toAmino(message.position, useInterfaces) : undefined;
     return obj;
   },
   fromAminoMsg(object: EventSetPositionAminoMsg): EventSetPosition {
     return EventSetPosition.fromAmino(object.value);
   },
-  fromProtoMsg(message: EventSetPositionProtoMsg): EventSetPosition {
-    return EventSetPosition.decode(message.value);
+  fromProtoMsg(message: EventSetPositionProtoMsg, useInterfaces: boolean = true): EventSetPosition {
+    return EventSetPosition.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: EventSetPosition): Uint8Array {
     return EventSetPosition.encode(message).finish();
@@ -1322,3 +1442,4 @@ export const EventSetPosition = {
     };
   }
 };
+GlobalDecoderRegistry.register(EventSetPosition.typeUrl, EventSetPosition);

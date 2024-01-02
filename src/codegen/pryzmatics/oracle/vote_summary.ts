@@ -1,5 +1,6 @@
 import { BinaryReader, BinaryWriter } from "../../binary";
 import { isSet } from "../../helpers";
+import { GlobalDecoderRegistry } from "../../registry";
 export interface VoteSummary {
   totalVotePeriods: bigint;
   totalSlashWindows: bigint;
@@ -28,6 +29,15 @@ function createBaseVoteSummary(): VoteSummary {
 }
 export const VoteSummary = {
   typeUrl: "/pryzmatics.oracle.VoteSummary",
+  is(o: any): o is VoteSummary {
+    return o && (o.$typeUrl === VoteSummary.typeUrl || typeof o.totalVotePeriods === "bigint" && typeof o.totalSlashWindows === "bigint");
+  },
+  isSDK(o: any): o is VoteSummarySDKType {
+    return o && (o.$typeUrl === VoteSummary.typeUrl || typeof o.total_vote_periods === "bigint" && typeof o.total_slash_windows === "bigint");
+  },
+  isAmino(o: any): o is VoteSummaryAmino {
+    return o && (o.$typeUrl === VoteSummary.typeUrl || typeof o.total_vote_periods === "bigint" && typeof o.total_slash_windows === "bigint");
+  },
   encode(message: VoteSummary, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.totalVotePeriods !== BigInt(0)) {
       writer.uint32(16).int64(message.totalVotePeriods);
@@ -37,7 +47,7 @@ export const VoteSummary = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): VoteSummary {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): VoteSummary {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseVoteSummary();
@@ -85,7 +95,7 @@ export const VoteSummary = {
     }
     return message;
   },
-  toAmino(message: VoteSummary): VoteSummaryAmino {
+  toAmino(message: VoteSummary, useInterfaces: boolean = true): VoteSummaryAmino {
     const obj: any = {};
     obj.total_vote_periods = message.totalVotePeriods ? message.totalVotePeriods.toString() : undefined;
     obj.total_slash_windows = message.totalSlashWindows ? message.totalSlashWindows.toString() : undefined;
@@ -94,8 +104,8 @@ export const VoteSummary = {
   fromAminoMsg(object: VoteSummaryAminoMsg): VoteSummary {
     return VoteSummary.fromAmino(object.value);
   },
-  fromProtoMsg(message: VoteSummaryProtoMsg): VoteSummary {
-    return VoteSummary.decode(message.value);
+  fromProtoMsg(message: VoteSummaryProtoMsg, useInterfaces: boolean = true): VoteSummary {
+    return VoteSummary.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: VoteSummary): Uint8Array {
     return VoteSummary.encode(message).finish();
@@ -107,3 +117,4 @@ export const VoteSummary = {
     };
   }
 };
+GlobalDecoderRegistry.register(VoteSummary.typeUrl, VoteSummary);

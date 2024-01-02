@@ -1,7 +1,8 @@
 import { Coin, CoinAmino, CoinSDKType } from "../../../cosmos/base/v1beta1/coin";
 import { BinaryReader, BinaryWriter } from "../../../binary";
 import { Decimal } from "@cosmjs/math";
-import { isSet } from "../../../helpers";
+import { isSet, padDecimal } from "../../../helpers";
+import { GlobalDecoderRegistry } from "../../../registry";
 export interface BondRewardToken {
   denom: string;
   pendingAmount: string;
@@ -57,6 +58,15 @@ function createBaseBondRewardToken(): BondRewardToken {
 }
 export const BondRewardToken = {
   typeUrl: "/pryzm.incentives.v1.BondRewardToken",
+  is(o: any): o is BondRewardToken {
+    return o && (o.$typeUrl === BondRewardToken.typeUrl || typeof o.denom === "string" && typeof o.pendingAmount === "string" && typeof o.userIndex === "string");
+  },
+  isSDK(o: any): o is BondRewardTokenSDKType {
+    return o && (o.$typeUrl === BondRewardToken.typeUrl || typeof o.denom === "string" && typeof o.pending_amount === "string" && typeof o.user_index === "string");
+  },
+  isAmino(o: any): o is BondRewardTokenAmino {
+    return o && (o.$typeUrl === BondRewardToken.typeUrl || typeof o.denom === "string" && typeof o.pending_amount === "string" && typeof o.user_index === "string");
+  },
   encode(message: BondRewardToken, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.denom !== "") {
       writer.uint32(10).string(message.denom);
@@ -69,7 +79,7 @@ export const BondRewardToken = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): BondRewardToken {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): BondRewardToken {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseBondRewardToken();
@@ -126,18 +136,18 @@ export const BondRewardToken = {
     }
     return message;
   },
-  toAmino(message: BondRewardToken): BondRewardTokenAmino {
+  toAmino(message: BondRewardToken, useInterfaces: boolean = true): BondRewardTokenAmino {
     const obj: any = {};
-    obj.denom = message.denom;
-    obj.pending_amount = message.pendingAmount;
-    obj.user_index = message.userIndex;
+    obj.denom = message.denom === "" ? undefined : message.denom;
+    obj.pending_amount = message.pendingAmount === "" ? undefined : message.pendingAmount;
+    obj.user_index = padDecimal(message.userIndex) === "" ? undefined : padDecimal(message.userIndex);
     return obj;
   },
   fromAminoMsg(object: BondRewardTokenAminoMsg): BondRewardToken {
     return BondRewardToken.fromAmino(object.value);
   },
-  fromProtoMsg(message: BondRewardTokenProtoMsg): BondRewardToken {
-    return BondRewardToken.decode(message.value);
+  fromProtoMsg(message: BondRewardTokenProtoMsg, useInterfaces: boolean = true): BondRewardToken {
+    return BondRewardToken.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: BondRewardToken): Uint8Array {
     return BondRewardToken.encode(message).finish();
@@ -149,6 +159,7 @@ export const BondRewardToken = {
     };
   }
 };
+GlobalDecoderRegistry.register(BondRewardToken.typeUrl, BondRewardToken);
 function createBaseBond(): Bond {
   return {
     address: "",
@@ -158,6 +169,15 @@ function createBaseBond(): Bond {
 }
 export const Bond = {
   typeUrl: "/pryzm.incentives.v1.Bond",
+  is(o: any): o is Bond {
+    return o && (o.$typeUrl === Bond.typeUrl || typeof o.address === "string" && Coin.is(o.token) && Array.isArray(o.rewards) && (!o.rewards.length || BondRewardToken.is(o.rewards[0])));
+  },
+  isSDK(o: any): o is BondSDKType {
+    return o && (o.$typeUrl === Bond.typeUrl || typeof o.address === "string" && Coin.isSDK(o.token) && Array.isArray(o.rewards) && (!o.rewards.length || BondRewardToken.isSDK(o.rewards[0])));
+  },
+  isAmino(o: any): o is BondAmino {
+    return o && (o.$typeUrl === Bond.typeUrl || typeof o.address === "string" && Coin.isAmino(o.token) && Array.isArray(o.rewards) && (!o.rewards.length || BondRewardToken.isAmino(o.rewards[0])));
+  },
   encode(message: Bond, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.address !== "") {
       writer.uint32(10).string(message.address);
@@ -170,7 +190,7 @@ export const Bond = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): Bond {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): Bond {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseBond();
@@ -181,10 +201,10 @@ export const Bond = {
           message.address = reader.string();
           break;
         case 2:
-          message.token = Coin.decode(reader, reader.uint32());
+          message.token = Coin.decode(reader, reader.uint32(), useInterfaces);
           break;
         case 3:
-          message.rewards.push(BondRewardToken.decode(reader, reader.uint32()));
+          message.rewards.push(BondRewardToken.decode(reader, reader.uint32(), useInterfaces));
           break;
         default:
           reader.skipType(tag & 7);
@@ -229,22 +249,22 @@ export const Bond = {
     message.rewards = object.rewards?.map(e => BondRewardToken.fromAmino(e)) || [];
     return message;
   },
-  toAmino(message: Bond): BondAmino {
+  toAmino(message: Bond, useInterfaces: boolean = true): BondAmino {
     const obj: any = {};
-    obj.address = message.address;
-    obj.token = message.token ? Coin.toAmino(message.token) : undefined;
+    obj.address = message.address === "" ? undefined : message.address;
+    obj.token = message.token ? Coin.toAmino(message.token, useInterfaces) : undefined;
     if (message.rewards) {
-      obj.rewards = message.rewards.map(e => e ? BondRewardToken.toAmino(e) : undefined);
+      obj.rewards = message.rewards.map(e => e ? BondRewardToken.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.rewards = [];
+      obj.rewards = null;
     }
     return obj;
   },
   fromAminoMsg(object: BondAminoMsg): Bond {
     return Bond.fromAmino(object.value);
   },
-  fromProtoMsg(message: BondProtoMsg): Bond {
-    return Bond.decode(message.value);
+  fromProtoMsg(message: BondProtoMsg, useInterfaces: boolean = true): Bond {
+    return Bond.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: Bond): Uint8Array {
     return Bond.encode(message).finish();
@@ -256,3 +276,4 @@ export const Bond = {
     };
   }
 };
+GlobalDecoderRegistry.register(Bond.typeUrl, Bond);

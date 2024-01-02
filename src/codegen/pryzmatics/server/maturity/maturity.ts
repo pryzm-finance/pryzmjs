@@ -2,6 +2,7 @@ import { PageRequest, PageRequestAmino, PageRequestSDKType, PageResponse, PageRe
 import { Maturity, MaturityAmino, MaturitySDKType } from "../../maturity/maturity";
 import { BinaryReader, BinaryWriter } from "../../../binary";
 import { isSet } from "../../../helpers";
+import { GlobalDecoderRegistry } from "../../../registry";
 export interface QueryAllMaturitiesRequest {
   assetId: string;
   active: string;
@@ -54,6 +55,15 @@ function createBaseQueryAllMaturitiesRequest(): QueryAllMaturitiesRequest {
 }
 export const QueryAllMaturitiesRequest = {
   typeUrl: "/pryzmatics.server.maturity.QueryAllMaturitiesRequest",
+  is(o: any): o is QueryAllMaturitiesRequest {
+    return o && (o.$typeUrl === QueryAllMaturitiesRequest.typeUrl || typeof o.assetId === "string" && typeof o.active === "string");
+  },
+  isSDK(o: any): o is QueryAllMaturitiesRequestSDKType {
+    return o && (o.$typeUrl === QueryAllMaturitiesRequest.typeUrl || typeof o.asset_id === "string" && typeof o.active === "string");
+  },
+  isAmino(o: any): o is QueryAllMaturitiesRequestAmino {
+    return o && (o.$typeUrl === QueryAllMaturitiesRequest.typeUrl || typeof o.asset_id === "string" && typeof o.active === "string");
+  },
   encode(message: QueryAllMaturitiesRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.assetId !== "") {
       writer.uint32(10).string(message.assetId);
@@ -66,7 +76,7 @@ export const QueryAllMaturitiesRequest = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): QueryAllMaturitiesRequest {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): QueryAllMaturitiesRequest {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryAllMaturitiesRequest();
@@ -80,7 +90,7 @@ export const QueryAllMaturitiesRequest = {
           message.active = reader.string();
           break;
         case 3:
-          message.pagination = PageRequest.decode(reader, reader.uint32());
+          message.pagination = PageRequest.decode(reader, reader.uint32(), useInterfaces);
           break;
         default:
           reader.skipType(tag & 7);
@@ -123,18 +133,18 @@ export const QueryAllMaturitiesRequest = {
     }
     return message;
   },
-  toAmino(message: QueryAllMaturitiesRequest): QueryAllMaturitiesRequestAmino {
+  toAmino(message: QueryAllMaturitiesRequest, useInterfaces: boolean = true): QueryAllMaturitiesRequestAmino {
     const obj: any = {};
-    obj.asset_id = message.assetId;
-    obj.active = message.active;
-    obj.pagination = message.pagination ? PageRequest.toAmino(message.pagination) : undefined;
+    obj.asset_id = message.assetId === "" ? undefined : message.assetId;
+    obj.active = message.active === "" ? undefined : message.active;
+    obj.pagination = message.pagination ? PageRequest.toAmino(message.pagination, useInterfaces) : undefined;
     return obj;
   },
   fromAminoMsg(object: QueryAllMaturitiesRequestAminoMsg): QueryAllMaturitiesRequest {
     return QueryAllMaturitiesRequest.fromAmino(object.value);
   },
-  fromProtoMsg(message: QueryAllMaturitiesRequestProtoMsg): QueryAllMaturitiesRequest {
-    return QueryAllMaturitiesRequest.decode(message.value);
+  fromProtoMsg(message: QueryAllMaturitiesRequestProtoMsg, useInterfaces: boolean = true): QueryAllMaturitiesRequest {
+    return QueryAllMaturitiesRequest.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: QueryAllMaturitiesRequest): Uint8Array {
     return QueryAllMaturitiesRequest.encode(message).finish();
@@ -146,6 +156,7 @@ export const QueryAllMaturitiesRequest = {
     };
   }
 };
+GlobalDecoderRegistry.register(QueryAllMaturitiesRequest.typeUrl, QueryAllMaturitiesRequest);
 function createBaseQueryAllMaturitiesResponse(): QueryAllMaturitiesResponse {
   return {
     maturities: [],
@@ -154,6 +165,15 @@ function createBaseQueryAllMaturitiesResponse(): QueryAllMaturitiesResponse {
 }
 export const QueryAllMaturitiesResponse = {
   typeUrl: "/pryzmatics.server.maturity.QueryAllMaturitiesResponse",
+  is(o: any): o is QueryAllMaturitiesResponse {
+    return o && (o.$typeUrl === QueryAllMaturitiesResponse.typeUrl || Array.isArray(o.maturities) && (!o.maturities.length || Maturity.is(o.maturities[0])));
+  },
+  isSDK(o: any): o is QueryAllMaturitiesResponseSDKType {
+    return o && (o.$typeUrl === QueryAllMaturitiesResponse.typeUrl || Array.isArray(o.maturities) && (!o.maturities.length || Maturity.isSDK(o.maturities[0])));
+  },
+  isAmino(o: any): o is QueryAllMaturitiesResponseAmino {
+    return o && (o.$typeUrl === QueryAllMaturitiesResponse.typeUrl || Array.isArray(o.maturities) && (!o.maturities.length || Maturity.isAmino(o.maturities[0])));
+  },
   encode(message: QueryAllMaturitiesResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     for (const v of message.maturities) {
       Maturity.encode(v!, writer.uint32(10).fork()).ldelim();
@@ -163,7 +183,7 @@ export const QueryAllMaturitiesResponse = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): QueryAllMaturitiesResponse {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): QueryAllMaturitiesResponse {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryAllMaturitiesResponse();
@@ -171,10 +191,10 @@ export const QueryAllMaturitiesResponse = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.maturities.push(Maturity.decode(reader, reader.uint32()));
+          message.maturities.push(Maturity.decode(reader, reader.uint32(), useInterfaces));
           break;
         case 2:
-          message.pagination = PageResponse.decode(reader, reader.uint32());
+          message.pagination = PageResponse.decode(reader, reader.uint32(), useInterfaces);
           break;
         default:
           reader.skipType(tag & 7);
@@ -213,21 +233,21 @@ export const QueryAllMaturitiesResponse = {
     }
     return message;
   },
-  toAmino(message: QueryAllMaturitiesResponse): QueryAllMaturitiesResponseAmino {
+  toAmino(message: QueryAllMaturitiesResponse, useInterfaces: boolean = true): QueryAllMaturitiesResponseAmino {
     const obj: any = {};
     if (message.maturities) {
-      obj.maturities = message.maturities.map(e => e ? Maturity.toAmino(e) : undefined);
+      obj.maturities = message.maturities.map(e => e ? Maturity.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.maturities = [];
+      obj.maturities = null;
     }
-    obj.pagination = message.pagination ? PageResponse.toAmino(message.pagination) : undefined;
+    obj.pagination = message.pagination ? PageResponse.toAmino(message.pagination, useInterfaces) : undefined;
     return obj;
   },
   fromAminoMsg(object: QueryAllMaturitiesResponseAminoMsg): QueryAllMaturitiesResponse {
     return QueryAllMaturitiesResponse.fromAmino(object.value);
   },
-  fromProtoMsg(message: QueryAllMaturitiesResponseProtoMsg): QueryAllMaturitiesResponse {
-    return QueryAllMaturitiesResponse.decode(message.value);
+  fromProtoMsg(message: QueryAllMaturitiesResponseProtoMsg, useInterfaces: boolean = true): QueryAllMaturitiesResponse {
+    return QueryAllMaturitiesResponse.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: QueryAllMaturitiesResponse): Uint8Array {
     return QueryAllMaturitiesResponse.encode(message).finish();
@@ -239,3 +259,4 @@ export const QueryAllMaturitiesResponse = {
     };
   }
 };
+GlobalDecoderRegistry.register(QueryAllMaturitiesResponse.typeUrl, QueryAllMaturitiesResponse);

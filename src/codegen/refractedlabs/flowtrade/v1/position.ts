@@ -1,6 +1,7 @@
 import { BinaryReader, BinaryWriter } from "../../../binary";
 import { Decimal } from "@cosmjs/math";
-import { isSet } from "../../../helpers";
+import { isSet, padDecimal } from "../../../helpers";
+import { GlobalDecoderRegistry } from "../../../registry";
 export interface Position {
   /** the flow for which this position is created */
   flow: bigint;
@@ -87,6 +88,15 @@ function createBasePosition(): Position {
 }
 export const Position = {
   typeUrl: "/refractedlabs.flowtrade.v1.Position",
+  is(o: any): o is Position {
+    return o && (o.$typeUrl === Position.typeUrl || typeof o.flow === "bigint" && typeof o.owner === "string" && typeof o.operator === "string" && typeof o.distIndex === "string" && typeof o.tokenInBalance === "string" && typeof o.spentTokenIn === "string" && typeof o.shares === "string" && typeof o.purchasedTokenOut === "string" && typeof o.pendingPurchase === "string" && typeof o.claimedAmount === "string");
+  },
+  isSDK(o: any): o is PositionSDKType {
+    return o && (o.$typeUrl === Position.typeUrl || typeof o.flow === "bigint" && typeof o.owner === "string" && typeof o.operator === "string" && typeof o.dist_index === "string" && typeof o.token_in_balance === "string" && typeof o.spent_token_in === "string" && typeof o.shares === "string" && typeof o.purchased_token_out === "string" && typeof o.pending_purchase === "string" && typeof o.claimed_amount === "string");
+  },
+  isAmino(o: any): o is PositionAmino {
+    return o && (o.$typeUrl === Position.typeUrl || typeof o.flow === "bigint" && typeof o.owner === "string" && typeof o.operator === "string" && typeof o.dist_index === "string" && typeof o.token_in_balance === "string" && typeof o.spent_token_in === "string" && typeof o.shares === "string" && typeof o.purchased_token_out === "string" && typeof o.pending_purchase === "string" && typeof o.claimed_amount === "string");
+  },
   encode(message: Position, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.flow !== BigInt(0)) {
       writer.uint32(8).uint64(message.flow);
@@ -120,7 +130,7 @@ export const Position = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): Position {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): Position {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBasePosition();
@@ -240,25 +250,25 @@ export const Position = {
     }
     return message;
   },
-  toAmino(message: Position): PositionAmino {
+  toAmino(message: Position, useInterfaces: boolean = true): PositionAmino {
     const obj: any = {};
     obj.flow = message.flow ? message.flow.toString() : undefined;
-    obj.owner = message.owner;
-    obj.operator = message.operator;
-    obj.dist_index = message.distIndex;
-    obj.token_in_balance = message.tokenInBalance;
-    obj.spent_token_in = message.spentTokenIn;
-    obj.shares = message.shares;
-    obj.purchased_token_out = message.purchasedTokenOut;
-    obj.pending_purchase = message.pendingPurchase;
-    obj.claimed_amount = message.claimedAmount;
+    obj.owner = message.owner === "" ? undefined : message.owner;
+    obj.operator = message.operator === "" ? undefined : message.operator;
+    obj.dist_index = padDecimal(message.distIndex) === "" ? undefined : padDecimal(message.distIndex);
+    obj.token_in_balance = message.tokenInBalance === "" ? undefined : message.tokenInBalance;
+    obj.spent_token_in = message.spentTokenIn === "" ? undefined : message.spentTokenIn;
+    obj.shares = message.shares === "" ? undefined : message.shares;
+    obj.purchased_token_out = message.purchasedTokenOut === "" ? undefined : message.purchasedTokenOut;
+    obj.pending_purchase = padDecimal(message.pendingPurchase) === "" ? undefined : padDecimal(message.pendingPurchase);
+    obj.claimed_amount = message.claimedAmount === "" ? undefined : message.claimedAmount;
     return obj;
   },
   fromAminoMsg(object: PositionAminoMsg): Position {
     return Position.fromAmino(object.value);
   },
-  fromProtoMsg(message: PositionProtoMsg): Position {
-    return Position.decode(message.value);
+  fromProtoMsg(message: PositionProtoMsg, useInterfaces: boolean = true): Position {
+    return Position.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: Position): Uint8Array {
     return Position.encode(message).finish();
@@ -270,3 +280,4 @@ export const Position = {
     };
   }
 };
+GlobalDecoderRegistry.register(Position.typeUrl, Position);

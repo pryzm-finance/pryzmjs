@@ -1,7 +1,8 @@
 import { Timestamp, TimestampSDKType } from "../../../google/protobuf/timestamp";
 import { ActionType, actionTypeFromJSON, actionTypeToJSON } from "./action";
-import { BinaryReader, BinaryWriter } from "../../../binary";
 import { isSet, fromJsonTimestamp, fromTimestamp } from "../../../helpers";
+import { BinaryReader, BinaryWriter } from "../../../binary";
+import { GlobalDecoderRegistry } from "../../../registry";
 export interface FlowTrade {
   endTime: Timestamp;
   flowId: bigint;
@@ -34,6 +35,15 @@ function createBaseFlowTrade(): FlowTrade {
 }
 export const FlowTrade = {
   typeUrl: "/pryzm.treasury.v1.FlowTrade",
+  is(o: any): o is FlowTrade {
+    return o && (o.$typeUrl === FlowTrade.typeUrl || Timestamp.is(o.endTime) && typeof o.flowId === "bigint" && isSet(o.actionType));
+  },
+  isSDK(o: any): o is FlowTradeSDKType {
+    return o && (o.$typeUrl === FlowTrade.typeUrl || Timestamp.isSDK(o.end_time) && typeof o.flow_id === "bigint" && isSet(o.action_type));
+  },
+  isAmino(o: any): o is FlowTradeAmino {
+    return o && (o.$typeUrl === FlowTrade.typeUrl || Timestamp.isAmino(o.end_time) && typeof o.flow_id === "bigint" && isSet(o.action_type));
+  },
   encode(message: FlowTrade, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.endTime !== undefined) {
       Timestamp.encode(message.endTime, writer.uint32(10).fork()).ldelim();
@@ -46,7 +56,7 @@ export const FlowTrade = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): FlowTrade {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): FlowTrade {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseFlowTrade();
@@ -99,22 +109,22 @@ export const FlowTrade = {
       message.flowId = BigInt(object.flow_id);
     }
     if (object.action_type !== undefined && object.action_type !== null) {
-      message.actionType = actionTypeFromJSON(object.action_type);
+      message.actionType = object.action_type;
     }
     return message;
   },
-  toAmino(message: FlowTrade): FlowTradeAmino {
+  toAmino(message: FlowTrade, useInterfaces: boolean = true): FlowTradeAmino {
     const obj: any = {};
-    obj.end_time = message.endTime ? Timestamp.toAmino(message.endTime) : undefined;
+    obj.end_time = message.endTime ? Timestamp.toAmino(message.endTime, useInterfaces) : undefined;
     obj.flow_id = message.flowId ? message.flowId.toString() : undefined;
-    obj.action_type = actionTypeToJSON(message.actionType);
+    obj.action_type = message.actionType === 0 ? undefined : message.actionType;
     return obj;
   },
   fromAminoMsg(object: FlowTradeAminoMsg): FlowTrade {
     return FlowTrade.fromAmino(object.value);
   },
-  fromProtoMsg(message: FlowTradeProtoMsg): FlowTrade {
-    return FlowTrade.decode(message.value);
+  fromProtoMsg(message: FlowTradeProtoMsg, useInterfaces: boolean = true): FlowTrade {
+    return FlowTrade.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: FlowTrade): Uint8Array {
     return FlowTrade.encode(message).finish();
@@ -126,3 +136,4 @@ export const FlowTrade = {
     };
   }
 };
+GlobalDecoderRegistry.register(FlowTrade.typeUrl, FlowTrade);

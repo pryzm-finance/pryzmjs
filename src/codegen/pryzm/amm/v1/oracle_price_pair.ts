@@ -1,5 +1,6 @@
 import { BinaryReader, BinaryWriter } from "../../../binary";
 import { isSet } from "../../../helpers";
+import { GlobalDecoderRegistry } from "../../../registry";
 /** TwapAlgorithm enumerates the valid algorithms for twap_algorithm. */
 export enum TwapAlgorithm {
   TWAP_ALGORITHM_ARITHMETIC = 0,
@@ -124,6 +125,15 @@ function createBasePair(): Pair {
 }
 export const Pair = {
   typeUrl: "/pryzm.amm.v1.Pair",
+  is(o: any): o is Pair {
+    return o && (o.$typeUrl === Pair.typeUrl || typeof o.base === "string" && typeof o.quote === "string" && typeof o.poolId === "string" && typeof o.dataSource === "string");
+  },
+  isSDK(o: any): o is PairSDKType {
+    return o && (o.$typeUrl === Pair.typeUrl || typeof o.base === "string" && typeof o.quote === "string" && typeof o.pool_id === "string" && typeof o.data_source === "string");
+  },
+  isAmino(o: any): o is PairAmino {
+    return o && (o.$typeUrl === Pair.typeUrl || typeof o.base === "string" && typeof o.quote === "string" && typeof o.pool_id === "string" && typeof o.data_source === "string");
+  },
   encode(message: Pair, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.base !== "") {
       writer.uint32(10).string(message.base);
@@ -139,7 +149,7 @@ export const Pair = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): Pair {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): Pair {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBasePair();
@@ -205,19 +215,19 @@ export const Pair = {
     }
     return message;
   },
-  toAmino(message: Pair): PairAmino {
+  toAmino(message: Pair, useInterfaces: boolean = true): PairAmino {
     const obj: any = {};
-    obj.base = message.base;
-    obj.quote = message.quote;
-    obj.pool_id = message.poolId;
-    obj.data_source = message.dataSource;
+    obj.base = message.base === "" ? undefined : message.base;
+    obj.quote = message.quote === "" ? undefined : message.quote;
+    obj.pool_id = message.poolId === "" ? undefined : message.poolId;
+    obj.data_source = message.dataSource === "" ? undefined : message.dataSource;
     return obj;
   },
   fromAminoMsg(object: PairAminoMsg): Pair {
     return Pair.fromAmino(object.value);
   },
-  fromProtoMsg(message: PairProtoMsg): Pair {
-    return Pair.decode(message.value);
+  fromProtoMsg(message: PairProtoMsg, useInterfaces: boolean = true): Pair {
+    return Pair.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: Pair): Uint8Array {
     return Pair.encode(message).finish();
@@ -229,6 +239,7 @@ export const Pair = {
     };
   }
 };
+GlobalDecoderRegistry.register(Pair.typeUrl, Pair);
 function createBaseOraclePricePair(): OraclePricePair {
   return {
     assetId: "",
@@ -242,6 +253,15 @@ function createBaseOraclePricePair(): OraclePricePair {
 }
 export const OraclePricePair = {
   typeUrl: "/pryzm.amm.v1.OraclePricePair",
+  is(o: any): o is OraclePricePair {
+    return o && (o.$typeUrl === OraclePricePair.typeUrl || typeof o.assetId === "string" && typeof o.quoteToken === "string" && typeof o.twapDurationMillis === "bigint" && isSet(o.twapAlgorithm) && typeof o.disabled === "boolean" && Array.isArray(o.pairs) && (!o.pairs.length || Pair.is(o.pairs[0])) && typeof o.baseDenom === "string");
+  },
+  isSDK(o: any): o is OraclePricePairSDKType {
+    return o && (o.$typeUrl === OraclePricePair.typeUrl || typeof o.asset_id === "string" && typeof o.quote_token === "string" && typeof o.twap_duration_millis === "bigint" && isSet(o.twap_algorithm) && typeof o.disabled === "boolean" && Array.isArray(o.pairs) && (!o.pairs.length || Pair.isSDK(o.pairs[0])) && typeof o.base_denom === "string");
+  },
+  isAmino(o: any): o is OraclePricePairAmino {
+    return o && (o.$typeUrl === OraclePricePair.typeUrl || typeof o.asset_id === "string" && typeof o.quote_token === "string" && typeof o.twap_duration_millis === "bigint" && isSet(o.twap_algorithm) && typeof o.disabled === "boolean" && Array.isArray(o.pairs) && (!o.pairs.length || Pair.isAmino(o.pairs[0])) && typeof o.base_denom === "string");
+  },
   encode(message: OraclePricePair, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.assetId !== "") {
       writer.uint32(10).string(message.assetId);
@@ -266,7 +286,7 @@ export const OraclePricePair = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): OraclePricePair {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): OraclePricePair {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseOraclePricePair();
@@ -289,7 +309,7 @@ export const OraclePricePair = {
           message.disabled = reader.bool();
           break;
         case 6:
-          message.pairs.push(Pair.decode(reader, reader.uint32()));
+          message.pairs.push(Pair.decode(reader, reader.uint32(), useInterfaces));
           break;
         case 7:
           message.baseDenom = reader.string();
@@ -350,7 +370,7 @@ export const OraclePricePair = {
       message.twapDurationMillis = BigInt(object.twap_duration_millis);
     }
     if (object.twap_algorithm !== undefined && object.twap_algorithm !== null) {
-      message.twapAlgorithm = twapAlgorithmFromJSON(object.twap_algorithm);
+      message.twapAlgorithm = object.twap_algorithm;
     }
     if (object.disabled !== undefined && object.disabled !== null) {
       message.disabled = object.disabled;
@@ -361,26 +381,26 @@ export const OraclePricePair = {
     }
     return message;
   },
-  toAmino(message: OraclePricePair): OraclePricePairAmino {
+  toAmino(message: OraclePricePair, useInterfaces: boolean = true): OraclePricePairAmino {
     const obj: any = {};
-    obj.asset_id = message.assetId;
-    obj.quote_token = message.quoteToken;
+    obj.asset_id = message.assetId === "" ? undefined : message.assetId;
+    obj.quote_token = message.quoteToken === "" ? undefined : message.quoteToken;
     obj.twap_duration_millis = message.twapDurationMillis ? message.twapDurationMillis.toString() : undefined;
-    obj.twap_algorithm = twapAlgorithmToJSON(message.twapAlgorithm);
-    obj.disabled = message.disabled;
+    obj.twap_algorithm = message.twapAlgorithm === 0 ? undefined : message.twapAlgorithm;
+    obj.disabled = message.disabled === false ? undefined : message.disabled;
     if (message.pairs) {
-      obj.pairs = message.pairs.map(e => e ? Pair.toAmino(e) : undefined);
+      obj.pairs = message.pairs.map(e => e ? Pair.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.pairs = [];
+      obj.pairs = null;
     }
-    obj.base_denom = message.baseDenom;
+    obj.base_denom = message.baseDenom === "" ? undefined : message.baseDenom;
     return obj;
   },
   fromAminoMsg(object: OraclePricePairAminoMsg): OraclePricePair {
     return OraclePricePair.fromAmino(object.value);
   },
-  fromProtoMsg(message: OraclePricePairProtoMsg): OraclePricePair {
-    return OraclePricePair.decode(message.value);
+  fromProtoMsg(message: OraclePricePairProtoMsg, useInterfaces: boolean = true): OraclePricePair {
+    return OraclePricePair.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: OraclePricePair): Uint8Array {
     return OraclePricePair.encode(message).finish();
@@ -392,3 +412,4 @@ export const OraclePricePair = {
     };
   }
 };
+GlobalDecoderRegistry.register(OraclePricePair.typeUrl, OraclePricePair);

@@ -1,5 +1,6 @@
 import { BinaryReader, BinaryWriter } from "../../../../binary";
 import { isSet } from "../../../../helpers";
+import { GlobalDecoderRegistry } from "../../../../registry";
 /** Config is the config object of the x/auth/tx package. */
 export interface Config {
   /**
@@ -47,6 +48,16 @@ function createBaseConfig(): Config {
 }
 export const Config = {
   typeUrl: "/cosmos.tx.config.v1.Config",
+  aminoType: "cosmos-sdk/Config",
+  is(o: any): o is Config {
+    return o && (o.$typeUrl === Config.typeUrl || typeof o.skipAnteHandler === "boolean" && typeof o.skipPostHandler === "boolean");
+  },
+  isSDK(o: any): o is ConfigSDKType {
+    return o && (o.$typeUrl === Config.typeUrl || typeof o.skip_ante_handler === "boolean" && typeof o.skip_post_handler === "boolean");
+  },
+  isAmino(o: any): o is ConfigAmino {
+    return o && (o.$typeUrl === Config.typeUrl || typeof o.skip_ante_handler === "boolean" && typeof o.skip_post_handler === "boolean");
+  },
   encode(message: Config, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.skipAnteHandler === true) {
       writer.uint32(8).bool(message.skipAnteHandler);
@@ -56,7 +67,7 @@ export const Config = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): Config {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): Config {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseConfig();
@@ -104,23 +115,23 @@ export const Config = {
     }
     return message;
   },
-  toAmino(message: Config): ConfigAmino {
+  toAmino(message: Config, useInterfaces: boolean = true): ConfigAmino {
     const obj: any = {};
-    obj.skip_ante_handler = message.skipAnteHandler;
-    obj.skip_post_handler = message.skipPostHandler;
+    obj.skip_ante_handler = message.skipAnteHandler === false ? undefined : message.skipAnteHandler;
+    obj.skip_post_handler = message.skipPostHandler === false ? undefined : message.skipPostHandler;
     return obj;
   },
   fromAminoMsg(object: ConfigAminoMsg): Config {
     return Config.fromAmino(object.value);
   },
-  toAminoMsg(message: Config): ConfigAminoMsg {
+  toAminoMsg(message: Config, useInterfaces: boolean = true): ConfigAminoMsg {
     return {
       type: "cosmos-sdk/Config",
-      value: Config.toAmino(message)
+      value: Config.toAmino(message, useInterfaces)
     };
   },
-  fromProtoMsg(message: ConfigProtoMsg): Config {
-    return Config.decode(message.value);
+  fromProtoMsg(message: ConfigProtoMsg, useInterfaces: boolean = true): Config {
+    return Config.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: Config): Uint8Array {
     return Config.encode(message).finish();
@@ -132,3 +143,5 @@ export const Config = {
     };
   }
 };
+GlobalDecoderRegistry.register(Config.typeUrl, Config);
+GlobalDecoderRegistry.registerAminoProtoMapping(Config.aminoType, Config.typeUrl);

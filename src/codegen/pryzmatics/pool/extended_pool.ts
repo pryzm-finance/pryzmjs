@@ -2,9 +2,10 @@ import { PoolType, poolTypeFromJSON, poolTypeToJSON } from "../../pryzm/amm/v1/p
 import { PoolApr, PoolAprAmino, PoolAprSDKType } from "./pool_apr";
 import { PoolMetrics, PoolMetricsAmino, PoolMetricsSDKType } from "./pool";
 import { PoolToken, PoolTokenAmino, PoolTokenSDKType } from "./pool_token";
+import { isSet, padDecimal } from "../../helpers";
 import { BinaryReader, BinaryWriter } from "../../binary";
 import { Decimal } from "@cosmjs/math";
-import { isSet } from "../../helpers";
+import { GlobalDecoderRegistry } from "../../registry";
 export interface ExtendedPool {
   id: bigint;
   name: string;
@@ -65,6 +66,15 @@ function createBaseExtendedPool(): ExtendedPool {
 }
 export const ExtendedPool = {
   typeUrl: "/pryzmatics.pool.ExtendedPool",
+  is(o: any): o is ExtendedPool {
+    return o && (o.$typeUrl === ExtendedPool.typeUrl || typeof o.id === "bigint" && typeof o.name === "string" && isSet(o.poolType) && typeof o.lpDenom === "string" && typeof o.lpSupply === "string" && PoolMetrics.is(o.metrics) && Array.isArray(o.tokens) && (!o.tokens.length || PoolToken.is(o.tokens[0])));
+  },
+  isSDK(o: any): o is ExtendedPoolSDKType {
+    return o && (o.$typeUrl === ExtendedPool.typeUrl || typeof o.id === "bigint" && typeof o.name === "string" && isSet(o.pool_type) && typeof o.lp_denom === "string" && typeof o.lp_supply === "string" && PoolMetrics.isSDK(o.metrics) && Array.isArray(o.tokens) && (!o.tokens.length || PoolToken.isSDK(o.tokens[0])));
+  },
+  isAmino(o: any): o is ExtendedPoolAmino {
+    return o && (o.$typeUrl === ExtendedPool.typeUrl || typeof o.id === "bigint" && typeof o.name === "string" && isSet(o.pool_type) && typeof o.lp_denom === "string" && typeof o.lp_supply === "string" && PoolMetrics.isAmino(o.metrics) && Array.isArray(o.tokens) && (!o.tokens.length || PoolToken.isAmino(o.tokens[0])));
+  },
   encode(message: ExtendedPool, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.id !== BigInt(0)) {
       writer.uint32(8).uint64(message.id);
@@ -98,7 +108,7 @@ export const ExtendedPool = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): ExtendedPool {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): ExtendedPool {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseExtendedPool();
@@ -127,13 +137,13 @@ export const ExtendedPool = {
           message.totalLiquidity = Decimal.fromAtomics(reader.string(), 18).toString();
           break;
         case 8:
-          message.apr = PoolApr.decode(reader, reader.uint32());
+          message.apr = PoolApr.decode(reader, reader.uint32(), useInterfaces);
           break;
         case 9:
-          message.metrics = PoolMetrics.decode(reader, reader.uint32());
+          message.metrics = PoolMetrics.decode(reader, reader.uint32(), useInterfaces);
           break;
         case 10:
-          message.tokens.push(PoolToken.decode(reader, reader.uint32()));
+          message.tokens.push(PoolToken.decode(reader, reader.uint32(), useInterfaces));
           break;
         default:
           reader.skipType(tag & 7);
@@ -197,7 +207,7 @@ export const ExtendedPool = {
       message.name = object.name;
     }
     if (object.pool_type !== undefined && object.pool_type !== null) {
-      message.poolType = poolTypeFromJSON(object.pool_type);
+      message.poolType = object.pool_type;
     }
     if (object.lp_denom !== undefined && object.lp_denom !== null) {
       message.lpDenom = object.lp_denom;
@@ -220,29 +230,29 @@ export const ExtendedPool = {
     message.tokens = object.tokens?.map(e => PoolToken.fromAmino(e)) || [];
     return message;
   },
-  toAmino(message: ExtendedPool): ExtendedPoolAmino {
+  toAmino(message: ExtendedPool, useInterfaces: boolean = true): ExtendedPoolAmino {
     const obj: any = {};
     obj.id = message.id ? message.id.toString() : undefined;
-    obj.name = message.name;
-    obj.pool_type = poolTypeToJSON(message.poolType);
-    obj.lp_denom = message.lpDenom;
-    obj.lp_supply = message.lpSupply;
-    obj.lp_price = message.lpPrice;
-    obj.total_liquidity = message.totalLiquidity;
-    obj.apr = message.apr ? PoolApr.toAmino(message.apr) : undefined;
-    obj.metrics = message.metrics ? PoolMetrics.toAmino(message.metrics) : undefined;
+    obj.name = message.name === "" ? undefined : message.name;
+    obj.pool_type = message.poolType === 0 ? undefined : message.poolType;
+    obj.lp_denom = message.lpDenom === "" ? undefined : message.lpDenom;
+    obj.lp_supply = message.lpSupply === "" ? undefined : message.lpSupply;
+    obj.lp_price = padDecimal(message.lpPrice) === null ? undefined : padDecimal(message.lpPrice);
+    obj.total_liquidity = padDecimal(message.totalLiquidity) === null ? undefined : padDecimal(message.totalLiquidity);
+    obj.apr = message.apr ? PoolApr.toAmino(message.apr, useInterfaces) : undefined;
+    obj.metrics = message.metrics ? PoolMetrics.toAmino(message.metrics, useInterfaces) : undefined;
     if (message.tokens) {
-      obj.tokens = message.tokens.map(e => e ? PoolToken.toAmino(e) : undefined);
+      obj.tokens = message.tokens.map(e => e ? PoolToken.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.tokens = [];
+      obj.tokens = null;
     }
     return obj;
   },
   fromAminoMsg(object: ExtendedPoolAminoMsg): ExtendedPool {
     return ExtendedPool.fromAmino(object.value);
   },
-  fromProtoMsg(message: ExtendedPoolProtoMsg): ExtendedPool {
-    return ExtendedPool.decode(message.value);
+  fromProtoMsg(message: ExtendedPoolProtoMsg, useInterfaces: boolean = true): ExtendedPool {
+    return ExtendedPool.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: ExtendedPool): Uint8Array {
     return ExtendedPool.encode(message).finish();
@@ -254,3 +264,4 @@ export const ExtendedPool = {
     };
   }
 };
+GlobalDecoderRegistry.register(ExtendedPool.typeUrl, ExtendedPool);

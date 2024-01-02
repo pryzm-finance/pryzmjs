@@ -4,6 +4,7 @@ import { UserStakeState, UserStakeStateAmino, UserStakeStateSDKType } from "./us
 import { AssetPoolState, AssetPoolStateAmino, AssetPoolStateSDKType, AssetMaturityPoolState, AssetMaturityPoolStateAmino, AssetMaturityPoolStateSDKType } from "./asset_pool_state";
 import { BinaryReader, BinaryWriter } from "../../../binary";
 import { isSet } from "../../../helpers";
+import { GlobalDecoderRegistry } from "../../../registry";
 export interface QueryBondedAmountRequest {
   assetId: string;
   maturity: string;
@@ -318,6 +319,15 @@ function createBaseQueryBondedAmountRequest(): QueryBondedAmountRequest {
 }
 export const QueryBondedAmountRequest = {
   typeUrl: "/pryzm.ystaking.v1.QueryBondedAmountRequest",
+  is(o: any): o is QueryBondedAmountRequest {
+    return o && (o.$typeUrl === QueryBondedAmountRequest.typeUrl || typeof o.assetId === "string" && typeof o.maturity === "string" && typeof o.address === "string");
+  },
+  isSDK(o: any): o is QueryBondedAmountRequestSDKType {
+    return o && (o.$typeUrl === QueryBondedAmountRequest.typeUrl || typeof o.asset_id === "string" && typeof o.maturity === "string" && typeof o.address === "string");
+  },
+  isAmino(o: any): o is QueryBondedAmountRequestAmino {
+    return o && (o.$typeUrl === QueryBondedAmountRequest.typeUrl || typeof o.asset_id === "string" && typeof o.maturity === "string" && typeof o.address === "string");
+  },
   encode(message: QueryBondedAmountRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.assetId !== "") {
       writer.uint32(10).string(message.assetId);
@@ -330,7 +340,7 @@ export const QueryBondedAmountRequest = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): QueryBondedAmountRequest {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): QueryBondedAmountRequest {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryBondedAmountRequest();
@@ -387,18 +397,18 @@ export const QueryBondedAmountRequest = {
     }
     return message;
   },
-  toAmino(message: QueryBondedAmountRequest): QueryBondedAmountRequestAmino {
+  toAmino(message: QueryBondedAmountRequest, useInterfaces: boolean = true): QueryBondedAmountRequestAmino {
     const obj: any = {};
-    obj.asset_id = message.assetId;
-    obj.maturity = message.maturity;
-    obj.address = message.address;
+    obj.asset_id = message.assetId === "" ? undefined : message.assetId;
+    obj.maturity = message.maturity === "" ? undefined : message.maturity;
+    obj.address = message.address === "" ? undefined : message.address;
     return obj;
   },
   fromAminoMsg(object: QueryBondedAmountRequestAminoMsg): QueryBondedAmountRequest {
     return QueryBondedAmountRequest.fromAmino(object.value);
   },
-  fromProtoMsg(message: QueryBondedAmountRequestProtoMsg): QueryBondedAmountRequest {
-    return QueryBondedAmountRequest.decode(message.value);
+  fromProtoMsg(message: QueryBondedAmountRequestProtoMsg, useInterfaces: boolean = true): QueryBondedAmountRequest {
+    return QueryBondedAmountRequest.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: QueryBondedAmountRequest): Uint8Array {
     return QueryBondedAmountRequest.encode(message).finish();
@@ -410,6 +420,7 @@ export const QueryBondedAmountRequest = {
     };
   }
 };
+GlobalDecoderRegistry.register(QueryBondedAmountRequest.typeUrl, QueryBondedAmountRequest);
 function createBaseQueryBondedAmountResponse(): QueryBondedAmountResponse {
   return {
     amount: ""
@@ -417,13 +428,22 @@ function createBaseQueryBondedAmountResponse(): QueryBondedAmountResponse {
 }
 export const QueryBondedAmountResponse = {
   typeUrl: "/pryzm.ystaking.v1.QueryBondedAmountResponse",
+  is(o: any): o is QueryBondedAmountResponse {
+    return o && (o.$typeUrl === QueryBondedAmountResponse.typeUrl || typeof o.amount === "string");
+  },
+  isSDK(o: any): o is QueryBondedAmountResponseSDKType {
+    return o && (o.$typeUrl === QueryBondedAmountResponse.typeUrl || typeof o.amount === "string");
+  },
+  isAmino(o: any): o is QueryBondedAmountResponseAmino {
+    return o && (o.$typeUrl === QueryBondedAmountResponse.typeUrl || typeof o.amount === "string");
+  },
   encode(message: QueryBondedAmountResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.amount !== "") {
       writer.uint32(10).string(message.amount);
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): QueryBondedAmountResponse {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): QueryBondedAmountResponse {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryBondedAmountResponse();
@@ -462,16 +482,16 @@ export const QueryBondedAmountResponse = {
     }
     return message;
   },
-  toAmino(message: QueryBondedAmountResponse): QueryBondedAmountResponseAmino {
+  toAmino(message: QueryBondedAmountResponse, useInterfaces: boolean = true): QueryBondedAmountResponseAmino {
     const obj: any = {};
-    obj.amount = message.amount;
+    obj.amount = message.amount === "" ? undefined : message.amount;
     return obj;
   },
   fromAminoMsg(object: QueryBondedAmountResponseAminoMsg): QueryBondedAmountResponse {
     return QueryBondedAmountResponse.fromAmino(object.value);
   },
-  fromProtoMsg(message: QueryBondedAmountResponseProtoMsg): QueryBondedAmountResponse {
-    return QueryBondedAmountResponse.decode(message.value);
+  fromProtoMsg(message: QueryBondedAmountResponseProtoMsg, useInterfaces: boolean = true): QueryBondedAmountResponse {
+    return QueryBondedAmountResponse.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: QueryBondedAmountResponse): Uint8Array {
     return QueryBondedAmountResponse.encode(message).finish();
@@ -483,6 +503,7 @@ export const QueryBondedAmountResponse = {
     };
   }
 };
+GlobalDecoderRegistry.register(QueryBondedAmountResponse.typeUrl, QueryBondedAmountResponse);
 function createBaseQueryRewardRequest(): QueryRewardRequest {
   return {
     denom: "",
@@ -491,6 +512,15 @@ function createBaseQueryRewardRequest(): QueryRewardRequest {
 }
 export const QueryRewardRequest = {
   typeUrl: "/pryzm.ystaking.v1.QueryRewardRequest",
+  is(o: any): o is QueryRewardRequest {
+    return o && (o.$typeUrl === QueryRewardRequest.typeUrl || typeof o.denom === "string" && typeof o.address === "string");
+  },
+  isSDK(o: any): o is QueryRewardRequestSDKType {
+    return o && (o.$typeUrl === QueryRewardRequest.typeUrl || typeof o.denom === "string" && typeof o.address === "string");
+  },
+  isAmino(o: any): o is QueryRewardRequestAmino {
+    return o && (o.$typeUrl === QueryRewardRequest.typeUrl || typeof o.denom === "string" && typeof o.address === "string");
+  },
   encode(message: QueryRewardRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.denom !== "") {
       writer.uint32(10).string(message.denom);
@@ -500,7 +530,7 @@ export const QueryRewardRequest = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): QueryRewardRequest {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): QueryRewardRequest {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryRewardRequest();
@@ -548,17 +578,17 @@ export const QueryRewardRequest = {
     }
     return message;
   },
-  toAmino(message: QueryRewardRequest): QueryRewardRequestAmino {
+  toAmino(message: QueryRewardRequest, useInterfaces: boolean = true): QueryRewardRequestAmino {
     const obj: any = {};
-    obj.denom = message.denom;
-    obj.address = message.address;
+    obj.denom = message.denom === "" ? undefined : message.denom;
+    obj.address = message.address === "" ? undefined : message.address;
     return obj;
   },
   fromAminoMsg(object: QueryRewardRequestAminoMsg): QueryRewardRequest {
     return QueryRewardRequest.fromAmino(object.value);
   },
-  fromProtoMsg(message: QueryRewardRequestProtoMsg): QueryRewardRequest {
-    return QueryRewardRequest.decode(message.value);
+  fromProtoMsg(message: QueryRewardRequestProtoMsg, useInterfaces: boolean = true): QueryRewardRequest {
+    return QueryRewardRequest.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: QueryRewardRequest): Uint8Array {
     return QueryRewardRequest.encode(message).finish();
@@ -570,6 +600,7 @@ export const QueryRewardRequest = {
     };
   }
 };
+GlobalDecoderRegistry.register(QueryRewardRequest.typeUrl, QueryRewardRequest);
 function createBaseQueryRewardResponse(): QueryRewardResponse {
   return {
     amount: Coin.fromPartial({})
@@ -577,13 +608,22 @@ function createBaseQueryRewardResponse(): QueryRewardResponse {
 }
 export const QueryRewardResponse = {
   typeUrl: "/pryzm.ystaking.v1.QueryRewardResponse",
+  is(o: any): o is QueryRewardResponse {
+    return o && (o.$typeUrl === QueryRewardResponse.typeUrl || Coin.is(o.amount));
+  },
+  isSDK(o: any): o is QueryRewardResponseSDKType {
+    return o && (o.$typeUrl === QueryRewardResponse.typeUrl || Coin.isSDK(o.amount));
+  },
+  isAmino(o: any): o is QueryRewardResponseAmino {
+    return o && (o.$typeUrl === QueryRewardResponse.typeUrl || Coin.isAmino(o.amount));
+  },
   encode(message: QueryRewardResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.amount !== undefined) {
       Coin.encode(message.amount, writer.uint32(10).fork()).ldelim();
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): QueryRewardResponse {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): QueryRewardResponse {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryRewardResponse();
@@ -591,7 +631,7 @@ export const QueryRewardResponse = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.amount = Coin.decode(reader, reader.uint32());
+          message.amount = Coin.decode(reader, reader.uint32(), useInterfaces);
           break;
         default:
           reader.skipType(tag & 7);
@@ -622,16 +662,16 @@ export const QueryRewardResponse = {
     }
     return message;
   },
-  toAmino(message: QueryRewardResponse): QueryRewardResponseAmino {
+  toAmino(message: QueryRewardResponse, useInterfaces: boolean = true): QueryRewardResponseAmino {
     const obj: any = {};
-    obj.amount = message.amount ? Coin.toAmino(message.amount) : undefined;
+    obj.amount = message.amount ? Coin.toAmino(message.amount, useInterfaces) : undefined;
     return obj;
   },
   fromAminoMsg(object: QueryRewardResponseAminoMsg): QueryRewardResponse {
     return QueryRewardResponse.fromAmino(object.value);
   },
-  fromProtoMsg(message: QueryRewardResponseProtoMsg): QueryRewardResponse {
-    return QueryRewardResponse.decode(message.value);
+  fromProtoMsg(message: QueryRewardResponseProtoMsg, useInterfaces: boolean = true): QueryRewardResponse {
+    return QueryRewardResponse.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: QueryRewardResponse): Uint8Array {
     return QueryRewardResponse.encode(message).finish();
@@ -643,6 +683,7 @@ export const QueryRewardResponse = {
     };
   }
 };
+GlobalDecoderRegistry.register(QueryRewardResponse.typeUrl, QueryRewardResponse);
 function createBaseQueryGetUserStakeStateRequest(): QueryGetUserStakeStateRequest {
   return {
     address: "",
@@ -652,6 +693,15 @@ function createBaseQueryGetUserStakeStateRequest(): QueryGetUserStakeStateReques
 }
 export const QueryGetUserStakeStateRequest = {
   typeUrl: "/pryzm.ystaking.v1.QueryGetUserStakeStateRequest",
+  is(o: any): o is QueryGetUserStakeStateRequest {
+    return o && (o.$typeUrl === QueryGetUserStakeStateRequest.typeUrl || typeof o.address === "string" && typeof o.assetId === "string" && typeof o.maturitySymbol === "string");
+  },
+  isSDK(o: any): o is QueryGetUserStakeStateRequestSDKType {
+    return o && (o.$typeUrl === QueryGetUserStakeStateRequest.typeUrl || typeof o.address === "string" && typeof o.asset_id === "string" && typeof o.maturity_symbol === "string");
+  },
+  isAmino(o: any): o is QueryGetUserStakeStateRequestAmino {
+    return o && (o.$typeUrl === QueryGetUserStakeStateRequest.typeUrl || typeof o.address === "string" && typeof o.asset_id === "string" && typeof o.maturity_symbol === "string");
+  },
   encode(message: QueryGetUserStakeStateRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.address !== "") {
       writer.uint32(10).string(message.address);
@@ -664,7 +714,7 @@ export const QueryGetUserStakeStateRequest = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): QueryGetUserStakeStateRequest {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): QueryGetUserStakeStateRequest {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryGetUserStakeStateRequest();
@@ -721,18 +771,18 @@ export const QueryGetUserStakeStateRequest = {
     }
     return message;
   },
-  toAmino(message: QueryGetUserStakeStateRequest): QueryGetUserStakeStateRequestAmino {
+  toAmino(message: QueryGetUserStakeStateRequest, useInterfaces: boolean = true): QueryGetUserStakeStateRequestAmino {
     const obj: any = {};
-    obj.address = message.address;
-    obj.asset_id = message.assetId;
-    obj.maturity_symbol = message.maturitySymbol;
+    obj.address = message.address === "" ? undefined : message.address;
+    obj.asset_id = message.assetId === "" ? undefined : message.assetId;
+    obj.maturity_symbol = message.maturitySymbol === "" ? undefined : message.maturitySymbol;
     return obj;
   },
   fromAminoMsg(object: QueryGetUserStakeStateRequestAminoMsg): QueryGetUserStakeStateRequest {
     return QueryGetUserStakeStateRequest.fromAmino(object.value);
   },
-  fromProtoMsg(message: QueryGetUserStakeStateRequestProtoMsg): QueryGetUserStakeStateRequest {
-    return QueryGetUserStakeStateRequest.decode(message.value);
+  fromProtoMsg(message: QueryGetUserStakeStateRequestProtoMsg, useInterfaces: boolean = true): QueryGetUserStakeStateRequest {
+    return QueryGetUserStakeStateRequest.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: QueryGetUserStakeStateRequest): Uint8Array {
     return QueryGetUserStakeStateRequest.encode(message).finish();
@@ -744,6 +794,7 @@ export const QueryGetUserStakeStateRequest = {
     };
   }
 };
+GlobalDecoderRegistry.register(QueryGetUserStakeStateRequest.typeUrl, QueryGetUserStakeStateRequest);
 function createBaseQueryGetUserStakeStateResponse(): QueryGetUserStakeStateResponse {
   return {
     userStakeState: UserStakeState.fromPartial({})
@@ -751,13 +802,22 @@ function createBaseQueryGetUserStakeStateResponse(): QueryGetUserStakeStateRespo
 }
 export const QueryGetUserStakeStateResponse = {
   typeUrl: "/pryzm.ystaking.v1.QueryGetUserStakeStateResponse",
+  is(o: any): o is QueryGetUserStakeStateResponse {
+    return o && (o.$typeUrl === QueryGetUserStakeStateResponse.typeUrl || UserStakeState.is(o.userStakeState));
+  },
+  isSDK(o: any): o is QueryGetUserStakeStateResponseSDKType {
+    return o && (o.$typeUrl === QueryGetUserStakeStateResponse.typeUrl || UserStakeState.isSDK(o.user_stake_state));
+  },
+  isAmino(o: any): o is QueryGetUserStakeStateResponseAmino {
+    return o && (o.$typeUrl === QueryGetUserStakeStateResponse.typeUrl || UserStakeState.isAmino(o.user_stake_state));
+  },
   encode(message: QueryGetUserStakeStateResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.userStakeState !== undefined) {
       UserStakeState.encode(message.userStakeState, writer.uint32(10).fork()).ldelim();
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): QueryGetUserStakeStateResponse {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): QueryGetUserStakeStateResponse {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryGetUserStakeStateResponse();
@@ -765,7 +825,7 @@ export const QueryGetUserStakeStateResponse = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.userStakeState = UserStakeState.decode(reader, reader.uint32());
+          message.userStakeState = UserStakeState.decode(reader, reader.uint32(), useInterfaces);
           break;
         default:
           reader.skipType(tag & 7);
@@ -796,16 +856,16 @@ export const QueryGetUserStakeStateResponse = {
     }
     return message;
   },
-  toAmino(message: QueryGetUserStakeStateResponse): QueryGetUserStakeStateResponseAmino {
+  toAmino(message: QueryGetUserStakeStateResponse, useInterfaces: boolean = true): QueryGetUserStakeStateResponseAmino {
     const obj: any = {};
-    obj.user_stake_state = message.userStakeState ? UserStakeState.toAmino(message.userStakeState) : undefined;
+    obj.user_stake_state = message.userStakeState ? UserStakeState.toAmino(message.userStakeState, useInterfaces) : undefined;
     return obj;
   },
   fromAminoMsg(object: QueryGetUserStakeStateResponseAminoMsg): QueryGetUserStakeStateResponse {
     return QueryGetUserStakeStateResponse.fromAmino(object.value);
   },
-  fromProtoMsg(message: QueryGetUserStakeStateResponseProtoMsg): QueryGetUserStakeStateResponse {
-    return QueryGetUserStakeStateResponse.decode(message.value);
+  fromProtoMsg(message: QueryGetUserStakeStateResponseProtoMsg, useInterfaces: boolean = true): QueryGetUserStakeStateResponse {
+    return QueryGetUserStakeStateResponse.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: QueryGetUserStakeStateResponse): Uint8Array {
     return QueryGetUserStakeStateResponse.encode(message).finish();
@@ -817,6 +877,7 @@ export const QueryGetUserStakeStateResponse = {
     };
   }
 };
+GlobalDecoderRegistry.register(QueryGetUserStakeStateResponse.typeUrl, QueryGetUserStakeStateResponse);
 function createBaseQueryAllUserStakeStateRequest(): QueryAllUserStakeStateRequest {
   return {
     pagination: undefined,
@@ -826,6 +887,15 @@ function createBaseQueryAllUserStakeStateRequest(): QueryAllUserStakeStateReques
 }
 export const QueryAllUserStakeStateRequest = {
   typeUrl: "/pryzm.ystaking.v1.QueryAllUserStakeStateRequest",
+  is(o: any): o is QueryAllUserStakeStateRequest {
+    return o && (o.$typeUrl === QueryAllUserStakeStateRequest.typeUrl || typeof o.address === "string" && typeof o.assetId === "string");
+  },
+  isSDK(o: any): o is QueryAllUserStakeStateRequestSDKType {
+    return o && (o.$typeUrl === QueryAllUserStakeStateRequest.typeUrl || typeof o.address === "string" && typeof o.asset_id === "string");
+  },
+  isAmino(o: any): o is QueryAllUserStakeStateRequestAmino {
+    return o && (o.$typeUrl === QueryAllUserStakeStateRequest.typeUrl || typeof o.address === "string" && typeof o.asset_id === "string");
+  },
   encode(message: QueryAllUserStakeStateRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.pagination !== undefined) {
       PageRequest.encode(message.pagination, writer.uint32(10).fork()).ldelim();
@@ -838,7 +908,7 @@ export const QueryAllUserStakeStateRequest = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): QueryAllUserStakeStateRequest {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): QueryAllUserStakeStateRequest {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryAllUserStakeStateRequest();
@@ -846,7 +916,7 @@ export const QueryAllUserStakeStateRequest = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.pagination = PageRequest.decode(reader, reader.uint32());
+          message.pagination = PageRequest.decode(reader, reader.uint32(), useInterfaces);
           break;
         case 2:
           message.address = reader.string();
@@ -895,18 +965,18 @@ export const QueryAllUserStakeStateRequest = {
     }
     return message;
   },
-  toAmino(message: QueryAllUserStakeStateRequest): QueryAllUserStakeStateRequestAmino {
+  toAmino(message: QueryAllUserStakeStateRequest, useInterfaces: boolean = true): QueryAllUserStakeStateRequestAmino {
     const obj: any = {};
-    obj.pagination = message.pagination ? PageRequest.toAmino(message.pagination) : undefined;
-    obj.address = message.address;
-    obj.asset_id = message.assetId;
+    obj.pagination = message.pagination ? PageRequest.toAmino(message.pagination, useInterfaces) : undefined;
+    obj.address = message.address === "" ? undefined : message.address;
+    obj.asset_id = message.assetId === "" ? undefined : message.assetId;
     return obj;
   },
   fromAminoMsg(object: QueryAllUserStakeStateRequestAminoMsg): QueryAllUserStakeStateRequest {
     return QueryAllUserStakeStateRequest.fromAmino(object.value);
   },
-  fromProtoMsg(message: QueryAllUserStakeStateRequestProtoMsg): QueryAllUserStakeStateRequest {
-    return QueryAllUserStakeStateRequest.decode(message.value);
+  fromProtoMsg(message: QueryAllUserStakeStateRequestProtoMsg, useInterfaces: boolean = true): QueryAllUserStakeStateRequest {
+    return QueryAllUserStakeStateRequest.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: QueryAllUserStakeStateRequest): Uint8Array {
     return QueryAllUserStakeStateRequest.encode(message).finish();
@@ -918,6 +988,7 @@ export const QueryAllUserStakeStateRequest = {
     };
   }
 };
+GlobalDecoderRegistry.register(QueryAllUserStakeStateRequest.typeUrl, QueryAllUserStakeStateRequest);
 function createBaseQueryAllUserStakeStateResponse(): QueryAllUserStakeStateResponse {
   return {
     userStakeState: [],
@@ -926,6 +997,15 @@ function createBaseQueryAllUserStakeStateResponse(): QueryAllUserStakeStateRespo
 }
 export const QueryAllUserStakeStateResponse = {
   typeUrl: "/pryzm.ystaking.v1.QueryAllUserStakeStateResponse",
+  is(o: any): o is QueryAllUserStakeStateResponse {
+    return o && (o.$typeUrl === QueryAllUserStakeStateResponse.typeUrl || Array.isArray(o.userStakeState) && (!o.userStakeState.length || UserStakeState.is(o.userStakeState[0])));
+  },
+  isSDK(o: any): o is QueryAllUserStakeStateResponseSDKType {
+    return o && (o.$typeUrl === QueryAllUserStakeStateResponse.typeUrl || Array.isArray(o.user_stake_state) && (!o.user_stake_state.length || UserStakeState.isSDK(o.user_stake_state[0])));
+  },
+  isAmino(o: any): o is QueryAllUserStakeStateResponseAmino {
+    return o && (o.$typeUrl === QueryAllUserStakeStateResponse.typeUrl || Array.isArray(o.user_stake_state) && (!o.user_stake_state.length || UserStakeState.isAmino(o.user_stake_state[0])));
+  },
   encode(message: QueryAllUserStakeStateResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     for (const v of message.userStakeState) {
       UserStakeState.encode(v!, writer.uint32(10).fork()).ldelim();
@@ -935,7 +1015,7 @@ export const QueryAllUserStakeStateResponse = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): QueryAllUserStakeStateResponse {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): QueryAllUserStakeStateResponse {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryAllUserStakeStateResponse();
@@ -943,10 +1023,10 @@ export const QueryAllUserStakeStateResponse = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.userStakeState.push(UserStakeState.decode(reader, reader.uint32()));
+          message.userStakeState.push(UserStakeState.decode(reader, reader.uint32(), useInterfaces));
           break;
         case 2:
-          message.pagination = PageResponse.decode(reader, reader.uint32());
+          message.pagination = PageResponse.decode(reader, reader.uint32(), useInterfaces);
           break;
         default:
           reader.skipType(tag & 7);
@@ -985,21 +1065,21 @@ export const QueryAllUserStakeStateResponse = {
     }
     return message;
   },
-  toAmino(message: QueryAllUserStakeStateResponse): QueryAllUserStakeStateResponseAmino {
+  toAmino(message: QueryAllUserStakeStateResponse, useInterfaces: boolean = true): QueryAllUserStakeStateResponseAmino {
     const obj: any = {};
     if (message.userStakeState) {
-      obj.user_stake_state = message.userStakeState.map(e => e ? UserStakeState.toAmino(e) : undefined);
+      obj.user_stake_state = message.userStakeState.map(e => e ? UserStakeState.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.user_stake_state = [];
+      obj.user_stake_state = null;
     }
-    obj.pagination = message.pagination ? PageResponse.toAmino(message.pagination) : undefined;
+    obj.pagination = message.pagination ? PageResponse.toAmino(message.pagination, useInterfaces) : undefined;
     return obj;
   },
   fromAminoMsg(object: QueryAllUserStakeStateResponseAminoMsg): QueryAllUserStakeStateResponse {
     return QueryAllUserStakeStateResponse.fromAmino(object.value);
   },
-  fromProtoMsg(message: QueryAllUserStakeStateResponseProtoMsg): QueryAllUserStakeStateResponse {
-    return QueryAllUserStakeStateResponse.decode(message.value);
+  fromProtoMsg(message: QueryAllUserStakeStateResponseProtoMsg, useInterfaces: boolean = true): QueryAllUserStakeStateResponse {
+    return QueryAllUserStakeStateResponse.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: QueryAllUserStakeStateResponse): Uint8Array {
     return QueryAllUserStakeStateResponse.encode(message).finish();
@@ -1011,6 +1091,7 @@ export const QueryAllUserStakeStateResponse = {
     };
   }
 };
+GlobalDecoderRegistry.register(QueryAllUserStakeStateResponse.typeUrl, QueryAllUserStakeStateResponse);
 function createBaseQueryGetAssetPoolStateRequest(): QueryGetAssetPoolStateRequest {
   return {
     assetId: ""
@@ -1018,13 +1099,22 @@ function createBaseQueryGetAssetPoolStateRequest(): QueryGetAssetPoolStateReques
 }
 export const QueryGetAssetPoolStateRequest = {
   typeUrl: "/pryzm.ystaking.v1.QueryGetAssetPoolStateRequest",
+  is(o: any): o is QueryGetAssetPoolStateRequest {
+    return o && (o.$typeUrl === QueryGetAssetPoolStateRequest.typeUrl || typeof o.assetId === "string");
+  },
+  isSDK(o: any): o is QueryGetAssetPoolStateRequestSDKType {
+    return o && (o.$typeUrl === QueryGetAssetPoolStateRequest.typeUrl || typeof o.asset_id === "string");
+  },
+  isAmino(o: any): o is QueryGetAssetPoolStateRequestAmino {
+    return o && (o.$typeUrl === QueryGetAssetPoolStateRequest.typeUrl || typeof o.asset_id === "string");
+  },
   encode(message: QueryGetAssetPoolStateRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.assetId !== "") {
       writer.uint32(10).string(message.assetId);
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): QueryGetAssetPoolStateRequest {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): QueryGetAssetPoolStateRequest {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryGetAssetPoolStateRequest();
@@ -1063,16 +1153,16 @@ export const QueryGetAssetPoolStateRequest = {
     }
     return message;
   },
-  toAmino(message: QueryGetAssetPoolStateRequest): QueryGetAssetPoolStateRequestAmino {
+  toAmino(message: QueryGetAssetPoolStateRequest, useInterfaces: boolean = true): QueryGetAssetPoolStateRequestAmino {
     const obj: any = {};
-    obj.asset_id = message.assetId;
+    obj.asset_id = message.assetId === "" ? undefined : message.assetId;
     return obj;
   },
   fromAminoMsg(object: QueryGetAssetPoolStateRequestAminoMsg): QueryGetAssetPoolStateRequest {
     return QueryGetAssetPoolStateRequest.fromAmino(object.value);
   },
-  fromProtoMsg(message: QueryGetAssetPoolStateRequestProtoMsg): QueryGetAssetPoolStateRequest {
-    return QueryGetAssetPoolStateRequest.decode(message.value);
+  fromProtoMsg(message: QueryGetAssetPoolStateRequestProtoMsg, useInterfaces: boolean = true): QueryGetAssetPoolStateRequest {
+    return QueryGetAssetPoolStateRequest.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: QueryGetAssetPoolStateRequest): Uint8Array {
     return QueryGetAssetPoolStateRequest.encode(message).finish();
@@ -1084,6 +1174,7 @@ export const QueryGetAssetPoolStateRequest = {
     };
   }
 };
+GlobalDecoderRegistry.register(QueryGetAssetPoolStateRequest.typeUrl, QueryGetAssetPoolStateRequest);
 function createBaseQueryGetAssetPoolStateResponse(): QueryGetAssetPoolStateResponse {
   return {
     assetPoolState: AssetPoolState.fromPartial({})
@@ -1091,13 +1182,22 @@ function createBaseQueryGetAssetPoolStateResponse(): QueryGetAssetPoolStateRespo
 }
 export const QueryGetAssetPoolStateResponse = {
   typeUrl: "/pryzm.ystaking.v1.QueryGetAssetPoolStateResponse",
+  is(o: any): o is QueryGetAssetPoolStateResponse {
+    return o && (o.$typeUrl === QueryGetAssetPoolStateResponse.typeUrl || AssetPoolState.is(o.assetPoolState));
+  },
+  isSDK(o: any): o is QueryGetAssetPoolStateResponseSDKType {
+    return o && (o.$typeUrl === QueryGetAssetPoolStateResponse.typeUrl || AssetPoolState.isSDK(o.asset_pool_state));
+  },
+  isAmino(o: any): o is QueryGetAssetPoolStateResponseAmino {
+    return o && (o.$typeUrl === QueryGetAssetPoolStateResponse.typeUrl || AssetPoolState.isAmino(o.asset_pool_state));
+  },
   encode(message: QueryGetAssetPoolStateResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.assetPoolState !== undefined) {
       AssetPoolState.encode(message.assetPoolState, writer.uint32(10).fork()).ldelim();
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): QueryGetAssetPoolStateResponse {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): QueryGetAssetPoolStateResponse {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryGetAssetPoolStateResponse();
@@ -1105,7 +1205,7 @@ export const QueryGetAssetPoolStateResponse = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.assetPoolState = AssetPoolState.decode(reader, reader.uint32());
+          message.assetPoolState = AssetPoolState.decode(reader, reader.uint32(), useInterfaces);
           break;
         default:
           reader.skipType(tag & 7);
@@ -1136,16 +1236,16 @@ export const QueryGetAssetPoolStateResponse = {
     }
     return message;
   },
-  toAmino(message: QueryGetAssetPoolStateResponse): QueryGetAssetPoolStateResponseAmino {
+  toAmino(message: QueryGetAssetPoolStateResponse, useInterfaces: boolean = true): QueryGetAssetPoolStateResponseAmino {
     const obj: any = {};
-    obj.asset_pool_state = message.assetPoolState ? AssetPoolState.toAmino(message.assetPoolState) : undefined;
+    obj.asset_pool_state = message.assetPoolState ? AssetPoolState.toAmino(message.assetPoolState, useInterfaces) : undefined;
     return obj;
   },
   fromAminoMsg(object: QueryGetAssetPoolStateResponseAminoMsg): QueryGetAssetPoolStateResponse {
     return QueryGetAssetPoolStateResponse.fromAmino(object.value);
   },
-  fromProtoMsg(message: QueryGetAssetPoolStateResponseProtoMsg): QueryGetAssetPoolStateResponse {
-    return QueryGetAssetPoolStateResponse.decode(message.value);
+  fromProtoMsg(message: QueryGetAssetPoolStateResponseProtoMsg, useInterfaces: boolean = true): QueryGetAssetPoolStateResponse {
+    return QueryGetAssetPoolStateResponse.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: QueryGetAssetPoolStateResponse): Uint8Array {
     return QueryGetAssetPoolStateResponse.encode(message).finish();
@@ -1157,6 +1257,7 @@ export const QueryGetAssetPoolStateResponse = {
     };
   }
 };
+GlobalDecoderRegistry.register(QueryGetAssetPoolStateResponse.typeUrl, QueryGetAssetPoolStateResponse);
 function createBaseQueryAllAssetPoolStateRequest(): QueryAllAssetPoolStateRequest {
   return {
     pagination: undefined
@@ -1164,13 +1265,22 @@ function createBaseQueryAllAssetPoolStateRequest(): QueryAllAssetPoolStateReques
 }
 export const QueryAllAssetPoolStateRequest = {
   typeUrl: "/pryzm.ystaking.v1.QueryAllAssetPoolStateRequest",
+  is(o: any): o is QueryAllAssetPoolStateRequest {
+    return o && o.$typeUrl === QueryAllAssetPoolStateRequest.typeUrl;
+  },
+  isSDK(o: any): o is QueryAllAssetPoolStateRequestSDKType {
+    return o && o.$typeUrl === QueryAllAssetPoolStateRequest.typeUrl;
+  },
+  isAmino(o: any): o is QueryAllAssetPoolStateRequestAmino {
+    return o && o.$typeUrl === QueryAllAssetPoolStateRequest.typeUrl;
+  },
   encode(message: QueryAllAssetPoolStateRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.pagination !== undefined) {
       PageRequest.encode(message.pagination, writer.uint32(10).fork()).ldelim();
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): QueryAllAssetPoolStateRequest {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): QueryAllAssetPoolStateRequest {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryAllAssetPoolStateRequest();
@@ -1178,7 +1288,7 @@ export const QueryAllAssetPoolStateRequest = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.pagination = PageRequest.decode(reader, reader.uint32());
+          message.pagination = PageRequest.decode(reader, reader.uint32(), useInterfaces);
           break;
         default:
           reader.skipType(tag & 7);
@@ -1209,16 +1319,16 @@ export const QueryAllAssetPoolStateRequest = {
     }
     return message;
   },
-  toAmino(message: QueryAllAssetPoolStateRequest): QueryAllAssetPoolStateRequestAmino {
+  toAmino(message: QueryAllAssetPoolStateRequest, useInterfaces: boolean = true): QueryAllAssetPoolStateRequestAmino {
     const obj: any = {};
-    obj.pagination = message.pagination ? PageRequest.toAmino(message.pagination) : undefined;
+    obj.pagination = message.pagination ? PageRequest.toAmino(message.pagination, useInterfaces) : undefined;
     return obj;
   },
   fromAminoMsg(object: QueryAllAssetPoolStateRequestAminoMsg): QueryAllAssetPoolStateRequest {
     return QueryAllAssetPoolStateRequest.fromAmino(object.value);
   },
-  fromProtoMsg(message: QueryAllAssetPoolStateRequestProtoMsg): QueryAllAssetPoolStateRequest {
-    return QueryAllAssetPoolStateRequest.decode(message.value);
+  fromProtoMsg(message: QueryAllAssetPoolStateRequestProtoMsg, useInterfaces: boolean = true): QueryAllAssetPoolStateRequest {
+    return QueryAllAssetPoolStateRequest.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: QueryAllAssetPoolStateRequest): Uint8Array {
     return QueryAllAssetPoolStateRequest.encode(message).finish();
@@ -1230,6 +1340,7 @@ export const QueryAllAssetPoolStateRequest = {
     };
   }
 };
+GlobalDecoderRegistry.register(QueryAllAssetPoolStateRequest.typeUrl, QueryAllAssetPoolStateRequest);
 function createBaseQueryAllAssetPoolStateResponse(): QueryAllAssetPoolStateResponse {
   return {
     assetPoolState: [],
@@ -1238,6 +1349,15 @@ function createBaseQueryAllAssetPoolStateResponse(): QueryAllAssetPoolStateRespo
 }
 export const QueryAllAssetPoolStateResponse = {
   typeUrl: "/pryzm.ystaking.v1.QueryAllAssetPoolStateResponse",
+  is(o: any): o is QueryAllAssetPoolStateResponse {
+    return o && (o.$typeUrl === QueryAllAssetPoolStateResponse.typeUrl || Array.isArray(o.assetPoolState) && (!o.assetPoolState.length || AssetPoolState.is(o.assetPoolState[0])));
+  },
+  isSDK(o: any): o is QueryAllAssetPoolStateResponseSDKType {
+    return o && (o.$typeUrl === QueryAllAssetPoolStateResponse.typeUrl || Array.isArray(o.asset_pool_state) && (!o.asset_pool_state.length || AssetPoolState.isSDK(o.asset_pool_state[0])));
+  },
+  isAmino(o: any): o is QueryAllAssetPoolStateResponseAmino {
+    return o && (o.$typeUrl === QueryAllAssetPoolStateResponse.typeUrl || Array.isArray(o.asset_pool_state) && (!o.asset_pool_state.length || AssetPoolState.isAmino(o.asset_pool_state[0])));
+  },
   encode(message: QueryAllAssetPoolStateResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     for (const v of message.assetPoolState) {
       AssetPoolState.encode(v!, writer.uint32(10).fork()).ldelim();
@@ -1247,7 +1367,7 @@ export const QueryAllAssetPoolStateResponse = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): QueryAllAssetPoolStateResponse {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): QueryAllAssetPoolStateResponse {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryAllAssetPoolStateResponse();
@@ -1255,10 +1375,10 @@ export const QueryAllAssetPoolStateResponse = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.assetPoolState.push(AssetPoolState.decode(reader, reader.uint32()));
+          message.assetPoolState.push(AssetPoolState.decode(reader, reader.uint32(), useInterfaces));
           break;
         case 2:
-          message.pagination = PageResponse.decode(reader, reader.uint32());
+          message.pagination = PageResponse.decode(reader, reader.uint32(), useInterfaces);
           break;
         default:
           reader.skipType(tag & 7);
@@ -1297,21 +1417,21 @@ export const QueryAllAssetPoolStateResponse = {
     }
     return message;
   },
-  toAmino(message: QueryAllAssetPoolStateResponse): QueryAllAssetPoolStateResponseAmino {
+  toAmino(message: QueryAllAssetPoolStateResponse, useInterfaces: boolean = true): QueryAllAssetPoolStateResponseAmino {
     const obj: any = {};
     if (message.assetPoolState) {
-      obj.asset_pool_state = message.assetPoolState.map(e => e ? AssetPoolState.toAmino(e) : undefined);
+      obj.asset_pool_state = message.assetPoolState.map(e => e ? AssetPoolState.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.asset_pool_state = [];
+      obj.asset_pool_state = null;
     }
-    obj.pagination = message.pagination ? PageResponse.toAmino(message.pagination) : undefined;
+    obj.pagination = message.pagination ? PageResponse.toAmino(message.pagination, useInterfaces) : undefined;
     return obj;
   },
   fromAminoMsg(object: QueryAllAssetPoolStateResponseAminoMsg): QueryAllAssetPoolStateResponse {
     return QueryAllAssetPoolStateResponse.fromAmino(object.value);
   },
-  fromProtoMsg(message: QueryAllAssetPoolStateResponseProtoMsg): QueryAllAssetPoolStateResponse {
-    return QueryAllAssetPoolStateResponse.decode(message.value);
+  fromProtoMsg(message: QueryAllAssetPoolStateResponseProtoMsg, useInterfaces: boolean = true): QueryAllAssetPoolStateResponse {
+    return QueryAllAssetPoolStateResponse.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: QueryAllAssetPoolStateResponse): Uint8Array {
     return QueryAllAssetPoolStateResponse.encode(message).finish();
@@ -1323,6 +1443,7 @@ export const QueryAllAssetPoolStateResponse = {
     };
   }
 };
+GlobalDecoderRegistry.register(QueryAllAssetPoolStateResponse.typeUrl, QueryAllAssetPoolStateResponse);
 function createBaseQueryGetAssetMaturityPoolStateRequest(): QueryGetAssetMaturityPoolStateRequest {
   return {
     assetId: "",
@@ -1331,6 +1452,15 @@ function createBaseQueryGetAssetMaturityPoolStateRequest(): QueryGetAssetMaturit
 }
 export const QueryGetAssetMaturityPoolStateRequest = {
   typeUrl: "/pryzm.ystaking.v1.QueryGetAssetMaturityPoolStateRequest",
+  is(o: any): o is QueryGetAssetMaturityPoolStateRequest {
+    return o && (o.$typeUrl === QueryGetAssetMaturityPoolStateRequest.typeUrl || typeof o.assetId === "string" && typeof o.maturitySymbol === "string");
+  },
+  isSDK(o: any): o is QueryGetAssetMaturityPoolStateRequestSDKType {
+    return o && (o.$typeUrl === QueryGetAssetMaturityPoolStateRequest.typeUrl || typeof o.asset_id === "string" && typeof o.maturity_symbol === "string");
+  },
+  isAmino(o: any): o is QueryGetAssetMaturityPoolStateRequestAmino {
+    return o && (o.$typeUrl === QueryGetAssetMaturityPoolStateRequest.typeUrl || typeof o.asset_id === "string" && typeof o.maturity_symbol === "string");
+  },
   encode(message: QueryGetAssetMaturityPoolStateRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.assetId !== "") {
       writer.uint32(10).string(message.assetId);
@@ -1340,7 +1470,7 @@ export const QueryGetAssetMaturityPoolStateRequest = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): QueryGetAssetMaturityPoolStateRequest {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): QueryGetAssetMaturityPoolStateRequest {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryGetAssetMaturityPoolStateRequest();
@@ -1388,17 +1518,17 @@ export const QueryGetAssetMaturityPoolStateRequest = {
     }
     return message;
   },
-  toAmino(message: QueryGetAssetMaturityPoolStateRequest): QueryGetAssetMaturityPoolStateRequestAmino {
+  toAmino(message: QueryGetAssetMaturityPoolStateRequest, useInterfaces: boolean = true): QueryGetAssetMaturityPoolStateRequestAmino {
     const obj: any = {};
-    obj.asset_id = message.assetId;
-    obj.maturity_symbol = message.maturitySymbol;
+    obj.asset_id = message.assetId === "" ? undefined : message.assetId;
+    obj.maturity_symbol = message.maturitySymbol === "" ? undefined : message.maturitySymbol;
     return obj;
   },
   fromAminoMsg(object: QueryGetAssetMaturityPoolStateRequestAminoMsg): QueryGetAssetMaturityPoolStateRequest {
     return QueryGetAssetMaturityPoolStateRequest.fromAmino(object.value);
   },
-  fromProtoMsg(message: QueryGetAssetMaturityPoolStateRequestProtoMsg): QueryGetAssetMaturityPoolStateRequest {
-    return QueryGetAssetMaturityPoolStateRequest.decode(message.value);
+  fromProtoMsg(message: QueryGetAssetMaturityPoolStateRequestProtoMsg, useInterfaces: boolean = true): QueryGetAssetMaturityPoolStateRequest {
+    return QueryGetAssetMaturityPoolStateRequest.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: QueryGetAssetMaturityPoolStateRequest): Uint8Array {
     return QueryGetAssetMaturityPoolStateRequest.encode(message).finish();
@@ -1410,6 +1540,7 @@ export const QueryGetAssetMaturityPoolStateRequest = {
     };
   }
 };
+GlobalDecoderRegistry.register(QueryGetAssetMaturityPoolStateRequest.typeUrl, QueryGetAssetMaturityPoolStateRequest);
 function createBaseQueryGetAssetMaturityPoolStateResponse(): QueryGetAssetMaturityPoolStateResponse {
   return {
     assetMaturityPoolState: AssetMaturityPoolState.fromPartial({})
@@ -1417,13 +1548,22 @@ function createBaseQueryGetAssetMaturityPoolStateResponse(): QueryGetAssetMaturi
 }
 export const QueryGetAssetMaturityPoolStateResponse = {
   typeUrl: "/pryzm.ystaking.v1.QueryGetAssetMaturityPoolStateResponse",
+  is(o: any): o is QueryGetAssetMaturityPoolStateResponse {
+    return o && (o.$typeUrl === QueryGetAssetMaturityPoolStateResponse.typeUrl || AssetMaturityPoolState.is(o.assetMaturityPoolState));
+  },
+  isSDK(o: any): o is QueryGetAssetMaturityPoolStateResponseSDKType {
+    return o && (o.$typeUrl === QueryGetAssetMaturityPoolStateResponse.typeUrl || AssetMaturityPoolState.isSDK(o.asset_maturity_pool_state));
+  },
+  isAmino(o: any): o is QueryGetAssetMaturityPoolStateResponseAmino {
+    return o && (o.$typeUrl === QueryGetAssetMaturityPoolStateResponse.typeUrl || AssetMaturityPoolState.isAmino(o.asset_maturity_pool_state));
+  },
   encode(message: QueryGetAssetMaturityPoolStateResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.assetMaturityPoolState !== undefined) {
       AssetMaturityPoolState.encode(message.assetMaturityPoolState, writer.uint32(10).fork()).ldelim();
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): QueryGetAssetMaturityPoolStateResponse {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): QueryGetAssetMaturityPoolStateResponse {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryGetAssetMaturityPoolStateResponse();
@@ -1431,7 +1571,7 @@ export const QueryGetAssetMaturityPoolStateResponse = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.assetMaturityPoolState = AssetMaturityPoolState.decode(reader, reader.uint32());
+          message.assetMaturityPoolState = AssetMaturityPoolState.decode(reader, reader.uint32(), useInterfaces);
           break;
         default:
           reader.skipType(tag & 7);
@@ -1462,16 +1602,16 @@ export const QueryGetAssetMaturityPoolStateResponse = {
     }
     return message;
   },
-  toAmino(message: QueryGetAssetMaturityPoolStateResponse): QueryGetAssetMaturityPoolStateResponseAmino {
+  toAmino(message: QueryGetAssetMaturityPoolStateResponse, useInterfaces: boolean = true): QueryGetAssetMaturityPoolStateResponseAmino {
     const obj: any = {};
-    obj.asset_maturity_pool_state = message.assetMaturityPoolState ? AssetMaturityPoolState.toAmino(message.assetMaturityPoolState) : undefined;
+    obj.asset_maturity_pool_state = message.assetMaturityPoolState ? AssetMaturityPoolState.toAmino(message.assetMaturityPoolState, useInterfaces) : undefined;
     return obj;
   },
   fromAminoMsg(object: QueryGetAssetMaturityPoolStateResponseAminoMsg): QueryGetAssetMaturityPoolStateResponse {
     return QueryGetAssetMaturityPoolStateResponse.fromAmino(object.value);
   },
-  fromProtoMsg(message: QueryGetAssetMaturityPoolStateResponseProtoMsg): QueryGetAssetMaturityPoolStateResponse {
-    return QueryGetAssetMaturityPoolStateResponse.decode(message.value);
+  fromProtoMsg(message: QueryGetAssetMaturityPoolStateResponseProtoMsg, useInterfaces: boolean = true): QueryGetAssetMaturityPoolStateResponse {
+    return QueryGetAssetMaturityPoolStateResponse.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: QueryGetAssetMaturityPoolStateResponse): Uint8Array {
     return QueryGetAssetMaturityPoolStateResponse.encode(message).finish();
@@ -1483,6 +1623,7 @@ export const QueryGetAssetMaturityPoolStateResponse = {
     };
   }
 };
+GlobalDecoderRegistry.register(QueryGetAssetMaturityPoolStateResponse.typeUrl, QueryGetAssetMaturityPoolStateResponse);
 function createBaseQueryAllAssetMaturityPoolStateRequest(): QueryAllAssetMaturityPoolStateRequest {
   return {
     pagination: undefined
@@ -1490,13 +1631,22 @@ function createBaseQueryAllAssetMaturityPoolStateRequest(): QueryAllAssetMaturit
 }
 export const QueryAllAssetMaturityPoolStateRequest = {
   typeUrl: "/pryzm.ystaking.v1.QueryAllAssetMaturityPoolStateRequest",
+  is(o: any): o is QueryAllAssetMaturityPoolStateRequest {
+    return o && o.$typeUrl === QueryAllAssetMaturityPoolStateRequest.typeUrl;
+  },
+  isSDK(o: any): o is QueryAllAssetMaturityPoolStateRequestSDKType {
+    return o && o.$typeUrl === QueryAllAssetMaturityPoolStateRequest.typeUrl;
+  },
+  isAmino(o: any): o is QueryAllAssetMaturityPoolStateRequestAmino {
+    return o && o.$typeUrl === QueryAllAssetMaturityPoolStateRequest.typeUrl;
+  },
   encode(message: QueryAllAssetMaturityPoolStateRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.pagination !== undefined) {
       PageRequest.encode(message.pagination, writer.uint32(10).fork()).ldelim();
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): QueryAllAssetMaturityPoolStateRequest {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): QueryAllAssetMaturityPoolStateRequest {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryAllAssetMaturityPoolStateRequest();
@@ -1504,7 +1654,7 @@ export const QueryAllAssetMaturityPoolStateRequest = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.pagination = PageRequest.decode(reader, reader.uint32());
+          message.pagination = PageRequest.decode(reader, reader.uint32(), useInterfaces);
           break;
         default:
           reader.skipType(tag & 7);
@@ -1535,16 +1685,16 @@ export const QueryAllAssetMaturityPoolStateRequest = {
     }
     return message;
   },
-  toAmino(message: QueryAllAssetMaturityPoolStateRequest): QueryAllAssetMaturityPoolStateRequestAmino {
+  toAmino(message: QueryAllAssetMaturityPoolStateRequest, useInterfaces: boolean = true): QueryAllAssetMaturityPoolStateRequestAmino {
     const obj: any = {};
-    obj.pagination = message.pagination ? PageRequest.toAmino(message.pagination) : undefined;
+    obj.pagination = message.pagination ? PageRequest.toAmino(message.pagination, useInterfaces) : undefined;
     return obj;
   },
   fromAminoMsg(object: QueryAllAssetMaturityPoolStateRequestAminoMsg): QueryAllAssetMaturityPoolStateRequest {
     return QueryAllAssetMaturityPoolStateRequest.fromAmino(object.value);
   },
-  fromProtoMsg(message: QueryAllAssetMaturityPoolStateRequestProtoMsg): QueryAllAssetMaturityPoolStateRequest {
-    return QueryAllAssetMaturityPoolStateRequest.decode(message.value);
+  fromProtoMsg(message: QueryAllAssetMaturityPoolStateRequestProtoMsg, useInterfaces: boolean = true): QueryAllAssetMaturityPoolStateRequest {
+    return QueryAllAssetMaturityPoolStateRequest.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: QueryAllAssetMaturityPoolStateRequest): Uint8Array {
     return QueryAllAssetMaturityPoolStateRequest.encode(message).finish();
@@ -1556,6 +1706,7 @@ export const QueryAllAssetMaturityPoolStateRequest = {
     };
   }
 };
+GlobalDecoderRegistry.register(QueryAllAssetMaturityPoolStateRequest.typeUrl, QueryAllAssetMaturityPoolStateRequest);
 function createBaseQueryAllAssetMaturityPoolStateResponse(): QueryAllAssetMaturityPoolStateResponse {
   return {
     assetMaturityPoolState: [],
@@ -1564,6 +1715,15 @@ function createBaseQueryAllAssetMaturityPoolStateResponse(): QueryAllAssetMaturi
 }
 export const QueryAllAssetMaturityPoolStateResponse = {
   typeUrl: "/pryzm.ystaking.v1.QueryAllAssetMaturityPoolStateResponse",
+  is(o: any): o is QueryAllAssetMaturityPoolStateResponse {
+    return o && (o.$typeUrl === QueryAllAssetMaturityPoolStateResponse.typeUrl || Array.isArray(o.assetMaturityPoolState) && (!o.assetMaturityPoolState.length || AssetMaturityPoolState.is(o.assetMaturityPoolState[0])));
+  },
+  isSDK(o: any): o is QueryAllAssetMaturityPoolStateResponseSDKType {
+    return o && (o.$typeUrl === QueryAllAssetMaturityPoolStateResponse.typeUrl || Array.isArray(o.asset_maturity_pool_state) && (!o.asset_maturity_pool_state.length || AssetMaturityPoolState.isSDK(o.asset_maturity_pool_state[0])));
+  },
+  isAmino(o: any): o is QueryAllAssetMaturityPoolStateResponseAmino {
+    return o && (o.$typeUrl === QueryAllAssetMaturityPoolStateResponse.typeUrl || Array.isArray(o.asset_maturity_pool_state) && (!o.asset_maturity_pool_state.length || AssetMaturityPoolState.isAmino(o.asset_maturity_pool_state[0])));
+  },
   encode(message: QueryAllAssetMaturityPoolStateResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     for (const v of message.assetMaturityPoolState) {
       AssetMaturityPoolState.encode(v!, writer.uint32(10).fork()).ldelim();
@@ -1573,7 +1733,7 @@ export const QueryAllAssetMaturityPoolStateResponse = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): QueryAllAssetMaturityPoolStateResponse {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): QueryAllAssetMaturityPoolStateResponse {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryAllAssetMaturityPoolStateResponse();
@@ -1581,10 +1741,10 @@ export const QueryAllAssetMaturityPoolStateResponse = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.assetMaturityPoolState.push(AssetMaturityPoolState.decode(reader, reader.uint32()));
+          message.assetMaturityPoolState.push(AssetMaturityPoolState.decode(reader, reader.uint32(), useInterfaces));
           break;
         case 2:
-          message.pagination = PageResponse.decode(reader, reader.uint32());
+          message.pagination = PageResponse.decode(reader, reader.uint32(), useInterfaces);
           break;
         default:
           reader.skipType(tag & 7);
@@ -1623,21 +1783,21 @@ export const QueryAllAssetMaturityPoolStateResponse = {
     }
     return message;
   },
-  toAmino(message: QueryAllAssetMaturityPoolStateResponse): QueryAllAssetMaturityPoolStateResponseAmino {
+  toAmino(message: QueryAllAssetMaturityPoolStateResponse, useInterfaces: boolean = true): QueryAllAssetMaturityPoolStateResponseAmino {
     const obj: any = {};
     if (message.assetMaturityPoolState) {
-      obj.asset_maturity_pool_state = message.assetMaturityPoolState.map(e => e ? AssetMaturityPoolState.toAmino(e) : undefined);
+      obj.asset_maturity_pool_state = message.assetMaturityPoolState.map(e => e ? AssetMaturityPoolState.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.asset_maturity_pool_state = [];
+      obj.asset_maturity_pool_state = null;
     }
-    obj.pagination = message.pagination ? PageResponse.toAmino(message.pagination) : undefined;
+    obj.pagination = message.pagination ? PageResponse.toAmino(message.pagination, useInterfaces) : undefined;
     return obj;
   },
   fromAminoMsg(object: QueryAllAssetMaturityPoolStateResponseAminoMsg): QueryAllAssetMaturityPoolStateResponse {
     return QueryAllAssetMaturityPoolStateResponse.fromAmino(object.value);
   },
-  fromProtoMsg(message: QueryAllAssetMaturityPoolStateResponseProtoMsg): QueryAllAssetMaturityPoolStateResponse {
-    return QueryAllAssetMaturityPoolStateResponse.decode(message.value);
+  fromProtoMsg(message: QueryAllAssetMaturityPoolStateResponseProtoMsg, useInterfaces: boolean = true): QueryAllAssetMaturityPoolStateResponse {
+    return QueryAllAssetMaturityPoolStateResponse.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: QueryAllAssetMaturityPoolStateResponse): Uint8Array {
     return QueryAllAssetMaturityPoolStateResponse.encode(message).finish();
@@ -1649,3 +1809,4 @@ export const QueryAllAssetMaturityPoolStateResponse = {
     };
   }
 };
+GlobalDecoderRegistry.register(QueryAllAssetMaturityPoolStateResponse.typeUrl, QueryAllAssetMaturityPoolStateResponse);

@@ -1,7 +1,8 @@
 import { TimeResolutionType, timeResolutionTypeFromJSON, timeResolutionTypeToJSON } from "../../common/time_resolution";
 import { HistoricalPrice, HistoricalPriceAmino, HistoricalPriceSDKType } from "../../price/historical_price";
-import { BinaryReader, BinaryWriter } from "../../../binary";
 import { isSet } from "../../../helpers";
+import { BinaryReader, BinaryWriter } from "../../../binary";
+import { GlobalDecoderRegistry } from "../../../registry";
 export interface QueryFlowHistoricalPriceRequest {
   flowId: bigint;
   timeResolutionType: TimeResolutionType;
@@ -59,6 +60,15 @@ function createBaseQueryFlowHistoricalPriceRequest(): QueryFlowHistoricalPriceRe
 }
 export const QueryFlowHistoricalPriceRequest = {
   typeUrl: "/pryzmatics.server.flowtrade.QueryFlowHistoricalPriceRequest",
+  is(o: any): o is QueryFlowHistoricalPriceRequest {
+    return o && (o.$typeUrl === QueryFlowHistoricalPriceRequest.typeUrl || typeof o.flowId === "bigint" && isSet(o.timeResolutionType) && typeof o.timeResolutionValue === "number" && typeof o.from === "string" && typeof o.to === "string");
+  },
+  isSDK(o: any): o is QueryFlowHistoricalPriceRequestSDKType {
+    return o && (o.$typeUrl === QueryFlowHistoricalPriceRequest.typeUrl || typeof o.flow_id === "bigint" && isSet(o.time_resolution_type) && typeof o.time_resolution_value === "number" && typeof o.from === "string" && typeof o.to === "string");
+  },
+  isAmino(o: any): o is QueryFlowHistoricalPriceRequestAmino {
+    return o && (o.$typeUrl === QueryFlowHistoricalPriceRequest.typeUrl || typeof o.flow_id === "bigint" && isSet(o.time_resolution_type) && typeof o.time_resolution_value === "number" && typeof o.from === "string" && typeof o.to === "string");
+  },
   encode(message: QueryFlowHistoricalPriceRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.flowId !== BigInt(0)) {
       writer.uint32(8).uint64(message.flowId);
@@ -77,7 +87,7 @@ export const QueryFlowHistoricalPriceRequest = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): QueryFlowHistoricalPriceRequest {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): QueryFlowHistoricalPriceRequest {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryFlowHistoricalPriceRequest();
@@ -139,7 +149,7 @@ export const QueryFlowHistoricalPriceRequest = {
       message.flowId = BigInt(object.flow_id);
     }
     if (object.time_resolution_type !== undefined && object.time_resolution_type !== null) {
-      message.timeResolutionType = timeResolutionTypeFromJSON(object.time_resolution_type);
+      message.timeResolutionType = object.time_resolution_type;
     }
     if (object.time_resolution_value !== undefined && object.time_resolution_value !== null) {
       message.timeResolutionValue = object.time_resolution_value;
@@ -152,20 +162,20 @@ export const QueryFlowHistoricalPriceRequest = {
     }
     return message;
   },
-  toAmino(message: QueryFlowHistoricalPriceRequest): QueryFlowHistoricalPriceRequestAmino {
+  toAmino(message: QueryFlowHistoricalPriceRequest, useInterfaces: boolean = true): QueryFlowHistoricalPriceRequestAmino {
     const obj: any = {};
     obj.flow_id = message.flowId ? message.flowId.toString() : undefined;
-    obj.time_resolution_type = timeResolutionTypeToJSON(message.timeResolutionType);
-    obj.time_resolution_value = message.timeResolutionValue;
-    obj.from = message.from;
-    obj.to = message.to;
+    obj.time_resolution_type = message.timeResolutionType === 0 ? undefined : message.timeResolutionType;
+    obj.time_resolution_value = message.timeResolutionValue === 0 ? undefined : message.timeResolutionValue;
+    obj.from = message.from === "" ? undefined : message.from;
+    obj.to = message.to === "" ? undefined : message.to;
     return obj;
   },
   fromAminoMsg(object: QueryFlowHistoricalPriceRequestAminoMsg): QueryFlowHistoricalPriceRequest {
     return QueryFlowHistoricalPriceRequest.fromAmino(object.value);
   },
-  fromProtoMsg(message: QueryFlowHistoricalPriceRequestProtoMsg): QueryFlowHistoricalPriceRequest {
-    return QueryFlowHistoricalPriceRequest.decode(message.value);
+  fromProtoMsg(message: QueryFlowHistoricalPriceRequestProtoMsg, useInterfaces: boolean = true): QueryFlowHistoricalPriceRequest {
+    return QueryFlowHistoricalPriceRequest.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: QueryFlowHistoricalPriceRequest): Uint8Array {
     return QueryFlowHistoricalPriceRequest.encode(message).finish();
@@ -177,6 +187,7 @@ export const QueryFlowHistoricalPriceRequest = {
     };
   }
 };
+GlobalDecoderRegistry.register(QueryFlowHistoricalPriceRequest.typeUrl, QueryFlowHistoricalPriceRequest);
 function createBaseQueryFlowHistoricalPriceResponse(): QueryFlowHistoricalPriceResponse {
   return {
     historicalPrices: []
@@ -184,13 +195,22 @@ function createBaseQueryFlowHistoricalPriceResponse(): QueryFlowHistoricalPriceR
 }
 export const QueryFlowHistoricalPriceResponse = {
   typeUrl: "/pryzmatics.server.flowtrade.QueryFlowHistoricalPriceResponse",
+  is(o: any): o is QueryFlowHistoricalPriceResponse {
+    return o && (o.$typeUrl === QueryFlowHistoricalPriceResponse.typeUrl || Array.isArray(o.historicalPrices) && (!o.historicalPrices.length || HistoricalPrice.is(o.historicalPrices[0])));
+  },
+  isSDK(o: any): o is QueryFlowHistoricalPriceResponseSDKType {
+    return o && (o.$typeUrl === QueryFlowHistoricalPriceResponse.typeUrl || Array.isArray(o.historical_prices) && (!o.historical_prices.length || HistoricalPrice.isSDK(o.historical_prices[0])));
+  },
+  isAmino(o: any): o is QueryFlowHistoricalPriceResponseAmino {
+    return o && (o.$typeUrl === QueryFlowHistoricalPriceResponse.typeUrl || Array.isArray(o.historical_prices) && (!o.historical_prices.length || HistoricalPrice.isAmino(o.historical_prices[0])));
+  },
   encode(message: QueryFlowHistoricalPriceResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     for (const v of message.historicalPrices) {
       HistoricalPrice.encode(v!, writer.uint32(10).fork()).ldelim();
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): QueryFlowHistoricalPriceResponse {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): QueryFlowHistoricalPriceResponse {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryFlowHistoricalPriceResponse();
@@ -198,7 +218,7 @@ export const QueryFlowHistoricalPriceResponse = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.historicalPrices.push(HistoricalPrice.decode(reader, reader.uint32()));
+          message.historicalPrices.push(HistoricalPrice.decode(reader, reader.uint32(), useInterfaces));
           break;
         default:
           reader.skipType(tag & 7);
@@ -231,20 +251,20 @@ export const QueryFlowHistoricalPriceResponse = {
     message.historicalPrices = object.historical_prices?.map(e => HistoricalPrice.fromAmino(e)) || [];
     return message;
   },
-  toAmino(message: QueryFlowHistoricalPriceResponse): QueryFlowHistoricalPriceResponseAmino {
+  toAmino(message: QueryFlowHistoricalPriceResponse, useInterfaces: boolean = true): QueryFlowHistoricalPriceResponseAmino {
     const obj: any = {};
     if (message.historicalPrices) {
-      obj.historical_prices = message.historicalPrices.map(e => e ? HistoricalPrice.toAmino(e) : undefined);
+      obj.historical_prices = message.historicalPrices.map(e => e ? HistoricalPrice.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.historical_prices = [];
+      obj.historical_prices = null;
     }
     return obj;
   },
   fromAminoMsg(object: QueryFlowHistoricalPriceResponseAminoMsg): QueryFlowHistoricalPriceResponse {
     return QueryFlowHistoricalPriceResponse.fromAmino(object.value);
   },
-  fromProtoMsg(message: QueryFlowHistoricalPriceResponseProtoMsg): QueryFlowHistoricalPriceResponse {
-    return QueryFlowHistoricalPriceResponse.decode(message.value);
+  fromProtoMsg(message: QueryFlowHistoricalPriceResponseProtoMsg, useInterfaces: boolean = true): QueryFlowHistoricalPriceResponse {
+    return QueryFlowHistoricalPriceResponse.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: QueryFlowHistoricalPriceResponse): Uint8Array {
     return QueryFlowHistoricalPriceResponse.encode(message).finish();
@@ -256,3 +276,4 @@ export const QueryFlowHistoricalPriceResponse = {
     };
   }
 };
+GlobalDecoderRegistry.register(QueryFlowHistoricalPriceResponse.typeUrl, QueryFlowHistoricalPriceResponse);

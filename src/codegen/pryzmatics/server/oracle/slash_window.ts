@@ -2,6 +2,7 @@ import { PageRequest, PageRequestAmino, PageRequestSDKType, PageResponse, PageRe
 import { SlashWindow, SlashWindowAmino, SlashWindowSDKType } from "../../oracle/slash_window";
 import { BinaryReader, BinaryWriter } from "../../../binary";
 import { isSet } from "../../../helpers";
+import { GlobalDecoderRegistry } from "../../../registry";
 export interface QuerySlashWindowsRequest {
   fromBlockHeight?: string;
   toBlockHeight?: string;
@@ -54,6 +55,15 @@ function createBaseQuerySlashWindowsRequest(): QuerySlashWindowsRequest {
 }
 export const QuerySlashWindowsRequest = {
   typeUrl: "/pryzmatics.server.oracle.QuerySlashWindowsRequest",
+  is(o: any): o is QuerySlashWindowsRequest {
+    return o && o.$typeUrl === QuerySlashWindowsRequest.typeUrl;
+  },
+  isSDK(o: any): o is QuerySlashWindowsRequestSDKType {
+    return o && o.$typeUrl === QuerySlashWindowsRequest.typeUrl;
+  },
+  isAmino(o: any): o is QuerySlashWindowsRequestAmino {
+    return o && o.$typeUrl === QuerySlashWindowsRequest.typeUrl;
+  },
   encode(message: QuerySlashWindowsRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.fromBlockHeight !== undefined) {
       writer.uint32(10).string(message.fromBlockHeight);
@@ -66,7 +76,7 @@ export const QuerySlashWindowsRequest = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): QuerySlashWindowsRequest {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): QuerySlashWindowsRequest {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQuerySlashWindowsRequest();
@@ -80,7 +90,7 @@ export const QuerySlashWindowsRequest = {
           message.toBlockHeight = reader.string();
           break;
         case 3:
-          message.pagination = PageRequest.decode(reader, reader.uint32());
+          message.pagination = PageRequest.decode(reader, reader.uint32(), useInterfaces);
           break;
         default:
           reader.skipType(tag & 7);
@@ -123,18 +133,18 @@ export const QuerySlashWindowsRequest = {
     }
     return message;
   },
-  toAmino(message: QuerySlashWindowsRequest): QuerySlashWindowsRequestAmino {
+  toAmino(message: QuerySlashWindowsRequest, useInterfaces: boolean = true): QuerySlashWindowsRequestAmino {
     const obj: any = {};
-    obj.from_block_height = message.fromBlockHeight;
-    obj.to_block_height = message.toBlockHeight;
-    obj.pagination = message.pagination ? PageRequest.toAmino(message.pagination) : undefined;
+    obj.from_block_height = message.fromBlockHeight === null ? undefined : message.fromBlockHeight;
+    obj.to_block_height = message.toBlockHeight === null ? undefined : message.toBlockHeight;
+    obj.pagination = message.pagination ? PageRequest.toAmino(message.pagination, useInterfaces) : undefined;
     return obj;
   },
   fromAminoMsg(object: QuerySlashWindowsRequestAminoMsg): QuerySlashWindowsRequest {
     return QuerySlashWindowsRequest.fromAmino(object.value);
   },
-  fromProtoMsg(message: QuerySlashWindowsRequestProtoMsg): QuerySlashWindowsRequest {
-    return QuerySlashWindowsRequest.decode(message.value);
+  fromProtoMsg(message: QuerySlashWindowsRequestProtoMsg, useInterfaces: boolean = true): QuerySlashWindowsRequest {
+    return QuerySlashWindowsRequest.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: QuerySlashWindowsRequest): Uint8Array {
     return QuerySlashWindowsRequest.encode(message).finish();
@@ -146,6 +156,7 @@ export const QuerySlashWindowsRequest = {
     };
   }
 };
+GlobalDecoderRegistry.register(QuerySlashWindowsRequest.typeUrl, QuerySlashWindowsRequest);
 function createBaseQuerySlashWindowsResponse(): QuerySlashWindowsResponse {
   return {
     windows: [],
@@ -154,6 +165,15 @@ function createBaseQuerySlashWindowsResponse(): QuerySlashWindowsResponse {
 }
 export const QuerySlashWindowsResponse = {
   typeUrl: "/pryzmatics.server.oracle.QuerySlashWindowsResponse",
+  is(o: any): o is QuerySlashWindowsResponse {
+    return o && (o.$typeUrl === QuerySlashWindowsResponse.typeUrl || Array.isArray(o.windows) && (!o.windows.length || SlashWindow.is(o.windows[0])));
+  },
+  isSDK(o: any): o is QuerySlashWindowsResponseSDKType {
+    return o && (o.$typeUrl === QuerySlashWindowsResponse.typeUrl || Array.isArray(o.windows) && (!o.windows.length || SlashWindow.isSDK(o.windows[0])));
+  },
+  isAmino(o: any): o is QuerySlashWindowsResponseAmino {
+    return o && (o.$typeUrl === QuerySlashWindowsResponse.typeUrl || Array.isArray(o.windows) && (!o.windows.length || SlashWindow.isAmino(o.windows[0])));
+  },
   encode(message: QuerySlashWindowsResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     for (const v of message.windows) {
       SlashWindow.encode(v!, writer.uint32(10).fork()).ldelim();
@@ -163,7 +183,7 @@ export const QuerySlashWindowsResponse = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): QuerySlashWindowsResponse {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): QuerySlashWindowsResponse {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQuerySlashWindowsResponse();
@@ -171,10 +191,10 @@ export const QuerySlashWindowsResponse = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.windows.push(SlashWindow.decode(reader, reader.uint32()));
+          message.windows.push(SlashWindow.decode(reader, reader.uint32(), useInterfaces));
           break;
         case 2:
-          message.pagination = PageResponse.decode(reader, reader.uint32());
+          message.pagination = PageResponse.decode(reader, reader.uint32(), useInterfaces);
           break;
         default:
           reader.skipType(tag & 7);
@@ -213,21 +233,21 @@ export const QuerySlashWindowsResponse = {
     }
     return message;
   },
-  toAmino(message: QuerySlashWindowsResponse): QuerySlashWindowsResponseAmino {
+  toAmino(message: QuerySlashWindowsResponse, useInterfaces: boolean = true): QuerySlashWindowsResponseAmino {
     const obj: any = {};
     if (message.windows) {
-      obj.windows = message.windows.map(e => e ? SlashWindow.toAmino(e) : undefined);
+      obj.windows = message.windows.map(e => e ? SlashWindow.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.windows = [];
+      obj.windows = null;
     }
-    obj.pagination = message.pagination ? PageResponse.toAmino(message.pagination) : undefined;
+    obj.pagination = message.pagination ? PageResponse.toAmino(message.pagination, useInterfaces) : undefined;
     return obj;
   },
   fromAminoMsg(object: QuerySlashWindowsResponseAminoMsg): QuerySlashWindowsResponse {
     return QuerySlashWindowsResponse.fromAmino(object.value);
   },
-  fromProtoMsg(message: QuerySlashWindowsResponseProtoMsg): QuerySlashWindowsResponse {
-    return QuerySlashWindowsResponse.decode(message.value);
+  fromProtoMsg(message: QuerySlashWindowsResponseProtoMsg, useInterfaces: boolean = true): QuerySlashWindowsResponse {
+    return QuerySlashWindowsResponse.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: QuerySlashWindowsResponse): Uint8Array {
     return QuerySlashWindowsResponse.encode(message).finish();
@@ -239,3 +259,4 @@ export const QuerySlashWindowsResponse = {
     };
   }
 };
+GlobalDecoderRegistry.register(QuerySlashWindowsResponse.typeUrl, QuerySlashWindowsResponse);

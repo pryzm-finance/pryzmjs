@@ -13,7 +13,8 @@ import { OraclePricePair, OraclePricePairAmino, OraclePricePairSDKType } from ".
 import { PendingTokenIntroduction, PendingTokenIntroductionAmino, PendingTokenIntroductionSDKType } from "./pending_token_introduction";
 import { Params, ParamsAmino, ParamsSDKType } from "./params";
 import { BinaryReader, BinaryWriter } from "../../../binary";
-import { isSet } from "../../../helpers";
+import { isSet, padDecimal } from "../../../helpers";
+import { GlobalDecoderRegistry } from "../../../registry";
 import { Decimal } from "@cosmjs/math";
 export interface EventSetPool {
   pool: Pool;
@@ -960,13 +961,22 @@ function createBaseEventSetPool(): EventSetPool {
 }
 export const EventSetPool = {
   typeUrl: "/pryzm.amm.v1.EventSetPool",
+  is(o: any): o is EventSetPool {
+    return o && (o.$typeUrl === EventSetPool.typeUrl || Pool.is(o.pool));
+  },
+  isSDK(o: any): o is EventSetPoolSDKType {
+    return o && (o.$typeUrl === EventSetPool.typeUrl || Pool.isSDK(o.pool));
+  },
+  isAmino(o: any): o is EventSetPoolAmino {
+    return o && (o.$typeUrl === EventSetPool.typeUrl || Pool.isAmino(o.pool));
+  },
   encode(message: EventSetPool, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.pool !== undefined) {
       Pool.encode(message.pool, writer.uint32(10).fork()).ldelim();
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): EventSetPool {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): EventSetPool {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseEventSetPool();
@@ -974,7 +984,7 @@ export const EventSetPool = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.pool = Pool.decode(reader, reader.uint32());
+          message.pool = Pool.decode(reader, reader.uint32(), useInterfaces);
           break;
         default:
           reader.skipType(tag & 7);
@@ -1005,16 +1015,16 @@ export const EventSetPool = {
     }
     return message;
   },
-  toAmino(message: EventSetPool): EventSetPoolAmino {
+  toAmino(message: EventSetPool, useInterfaces: boolean = true): EventSetPoolAmino {
     const obj: any = {};
-    obj.pool = message.pool ? Pool.toAmino(message.pool) : undefined;
+    obj.pool = message.pool ? Pool.toAmino(message.pool, useInterfaces) : undefined;
     return obj;
   },
   fromAminoMsg(object: EventSetPoolAminoMsg): EventSetPool {
     return EventSetPool.fromAmino(object.value);
   },
-  fromProtoMsg(message: EventSetPoolProtoMsg): EventSetPool {
-    return EventSetPool.decode(message.value);
+  fromProtoMsg(message: EventSetPoolProtoMsg, useInterfaces: boolean = true): EventSetPool {
+    return EventSetPool.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: EventSetPool): Uint8Array {
     return EventSetPool.encode(message).finish();
@@ -1026,6 +1036,7 @@ export const EventSetPool = {
     };
   }
 };
+GlobalDecoderRegistry.register(EventSetPool.typeUrl, EventSetPool);
 function createBaseEventSetPoolCount(): EventSetPoolCount {
   return {
     poolCount: BigInt(0)
@@ -1033,13 +1044,22 @@ function createBaseEventSetPoolCount(): EventSetPoolCount {
 }
 export const EventSetPoolCount = {
   typeUrl: "/pryzm.amm.v1.EventSetPoolCount",
+  is(o: any): o is EventSetPoolCount {
+    return o && (o.$typeUrl === EventSetPoolCount.typeUrl || typeof o.poolCount === "bigint");
+  },
+  isSDK(o: any): o is EventSetPoolCountSDKType {
+    return o && (o.$typeUrl === EventSetPoolCount.typeUrl || typeof o.pool_count === "bigint");
+  },
+  isAmino(o: any): o is EventSetPoolCountAmino {
+    return o && (o.$typeUrl === EventSetPoolCount.typeUrl || typeof o.pool_count === "bigint");
+  },
   encode(message: EventSetPoolCount, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.poolCount !== BigInt(0)) {
       writer.uint32(8).uint64(message.poolCount);
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): EventSetPoolCount {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): EventSetPoolCount {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseEventSetPoolCount();
@@ -1078,7 +1098,7 @@ export const EventSetPoolCount = {
     }
     return message;
   },
-  toAmino(message: EventSetPoolCount): EventSetPoolCountAmino {
+  toAmino(message: EventSetPoolCount, useInterfaces: boolean = true): EventSetPoolCountAmino {
     const obj: any = {};
     obj.pool_count = message.poolCount ? message.poolCount.toString() : undefined;
     return obj;
@@ -1086,8 +1106,8 @@ export const EventSetPoolCount = {
   fromAminoMsg(object: EventSetPoolCountAminoMsg): EventSetPoolCount {
     return EventSetPoolCount.fromAmino(object.value);
   },
-  fromProtoMsg(message: EventSetPoolCountProtoMsg): EventSetPoolCount {
-    return EventSetPoolCount.decode(message.value);
+  fromProtoMsg(message: EventSetPoolCountProtoMsg, useInterfaces: boolean = true): EventSetPoolCount {
+    return EventSetPoolCount.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: EventSetPoolCount): Uint8Array {
     return EventSetPoolCount.encode(message).finish();
@@ -1099,6 +1119,7 @@ export const EventSetPoolCount = {
     };
   }
 };
+GlobalDecoderRegistry.register(EventSetPoolCount.typeUrl, EventSetPoolCount);
 function createBaseEventSetLpTokenSupply(): EventSetLpTokenSupply {
   return {
     poolId: BigInt(0),
@@ -1107,6 +1128,15 @@ function createBaseEventSetLpTokenSupply(): EventSetLpTokenSupply {
 }
 export const EventSetLpTokenSupply = {
   typeUrl: "/pryzm.amm.v1.EventSetLpTokenSupply",
+  is(o: any): o is EventSetLpTokenSupply {
+    return o && (o.$typeUrl === EventSetLpTokenSupply.typeUrl || typeof o.poolId === "bigint" && typeof o.supply === "string");
+  },
+  isSDK(o: any): o is EventSetLpTokenSupplySDKType {
+    return o && (o.$typeUrl === EventSetLpTokenSupply.typeUrl || typeof o.pool_id === "bigint" && typeof o.supply === "string");
+  },
+  isAmino(o: any): o is EventSetLpTokenSupplyAmino {
+    return o && (o.$typeUrl === EventSetLpTokenSupply.typeUrl || typeof o.pool_id === "bigint" && typeof o.supply === "string");
+  },
   encode(message: EventSetLpTokenSupply, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.poolId !== BigInt(0)) {
       writer.uint32(8).uint64(message.poolId);
@@ -1116,7 +1146,7 @@ export const EventSetLpTokenSupply = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): EventSetLpTokenSupply {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): EventSetLpTokenSupply {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseEventSetLpTokenSupply();
@@ -1164,17 +1194,17 @@ export const EventSetLpTokenSupply = {
     }
     return message;
   },
-  toAmino(message: EventSetLpTokenSupply): EventSetLpTokenSupplyAmino {
+  toAmino(message: EventSetLpTokenSupply, useInterfaces: boolean = true): EventSetLpTokenSupplyAmino {
     const obj: any = {};
     obj.pool_id = message.poolId ? message.poolId.toString() : undefined;
-    obj.supply = message.supply;
+    obj.supply = message.supply === "" ? undefined : message.supply;
     return obj;
   },
   fromAminoMsg(object: EventSetLpTokenSupplyAminoMsg): EventSetLpTokenSupply {
     return EventSetLpTokenSupply.fromAmino(object.value);
   },
-  fromProtoMsg(message: EventSetLpTokenSupplyProtoMsg): EventSetLpTokenSupply {
-    return EventSetLpTokenSupply.decode(message.value);
+  fromProtoMsg(message: EventSetLpTokenSupplyProtoMsg, useInterfaces: boolean = true): EventSetLpTokenSupply {
+    return EventSetLpTokenSupply.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: EventSetLpTokenSupply): Uint8Array {
     return EventSetLpTokenSupply.encode(message).finish();
@@ -1186,6 +1216,7 @@ export const EventSetLpTokenSupply = {
     };
   }
 };
+GlobalDecoderRegistry.register(EventSetLpTokenSupply.typeUrl, EventSetLpTokenSupply);
 function createBaseEventSetPoolToken(): EventSetPoolToken {
   return {
     poolToken: PoolToken.fromPartial({})
@@ -1193,13 +1224,22 @@ function createBaseEventSetPoolToken(): EventSetPoolToken {
 }
 export const EventSetPoolToken = {
   typeUrl: "/pryzm.amm.v1.EventSetPoolToken",
+  is(o: any): o is EventSetPoolToken {
+    return o && (o.$typeUrl === EventSetPoolToken.typeUrl || PoolToken.is(o.poolToken));
+  },
+  isSDK(o: any): o is EventSetPoolTokenSDKType {
+    return o && (o.$typeUrl === EventSetPoolToken.typeUrl || PoolToken.isSDK(o.pool_token));
+  },
+  isAmino(o: any): o is EventSetPoolTokenAmino {
+    return o && (o.$typeUrl === EventSetPoolToken.typeUrl || PoolToken.isAmino(o.pool_token));
+  },
   encode(message: EventSetPoolToken, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.poolToken !== undefined) {
       PoolToken.encode(message.poolToken, writer.uint32(10).fork()).ldelim();
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): EventSetPoolToken {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): EventSetPoolToken {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseEventSetPoolToken();
@@ -1207,7 +1247,7 @@ export const EventSetPoolToken = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.poolToken = PoolToken.decode(reader, reader.uint32());
+          message.poolToken = PoolToken.decode(reader, reader.uint32(), useInterfaces);
           break;
         default:
           reader.skipType(tag & 7);
@@ -1238,16 +1278,16 @@ export const EventSetPoolToken = {
     }
     return message;
   },
-  toAmino(message: EventSetPoolToken): EventSetPoolTokenAmino {
+  toAmino(message: EventSetPoolToken, useInterfaces: boolean = true): EventSetPoolTokenAmino {
     const obj: any = {};
-    obj.pool_token = message.poolToken ? PoolToken.toAmino(message.poolToken) : undefined;
+    obj.pool_token = message.poolToken ? PoolToken.toAmino(message.poolToken, useInterfaces) : undefined;
     return obj;
   },
   fromAminoMsg(object: EventSetPoolTokenAminoMsg): EventSetPoolToken {
     return EventSetPoolToken.fromAmino(object.value);
   },
-  fromProtoMsg(message: EventSetPoolTokenProtoMsg): EventSetPoolToken {
-    return EventSetPoolToken.decode(message.value);
+  fromProtoMsg(message: EventSetPoolTokenProtoMsg, useInterfaces: boolean = true): EventSetPoolToken {
+    return EventSetPoolToken.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: EventSetPoolToken): Uint8Array {
     return EventSetPoolToken.encode(message).finish();
@@ -1259,6 +1299,7 @@ export const EventSetPoolToken = {
     };
   }
 };
+GlobalDecoderRegistry.register(EventSetPoolToken.typeUrl, EventSetPoolToken);
 function createBaseEventRemovePoolToken(): EventRemovePoolToken {
   return {
     poolId: BigInt(0),
@@ -1267,6 +1308,15 @@ function createBaseEventRemovePoolToken(): EventRemovePoolToken {
 }
 export const EventRemovePoolToken = {
   typeUrl: "/pryzm.amm.v1.EventRemovePoolToken",
+  is(o: any): o is EventRemovePoolToken {
+    return o && (o.$typeUrl === EventRemovePoolToken.typeUrl || typeof o.poolId === "bigint" && typeof o.denom === "string");
+  },
+  isSDK(o: any): o is EventRemovePoolTokenSDKType {
+    return o && (o.$typeUrl === EventRemovePoolToken.typeUrl || typeof o.pool_id === "bigint" && typeof o.denom === "string");
+  },
+  isAmino(o: any): o is EventRemovePoolTokenAmino {
+    return o && (o.$typeUrl === EventRemovePoolToken.typeUrl || typeof o.pool_id === "bigint" && typeof o.denom === "string");
+  },
   encode(message: EventRemovePoolToken, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.poolId !== BigInt(0)) {
       writer.uint32(8).uint64(message.poolId);
@@ -1276,7 +1326,7 @@ export const EventRemovePoolToken = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): EventRemovePoolToken {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): EventRemovePoolToken {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseEventRemovePoolToken();
@@ -1324,17 +1374,17 @@ export const EventRemovePoolToken = {
     }
     return message;
   },
-  toAmino(message: EventRemovePoolToken): EventRemovePoolTokenAmino {
+  toAmino(message: EventRemovePoolToken, useInterfaces: boolean = true): EventRemovePoolTokenAmino {
     const obj: any = {};
     obj.pool_id = message.poolId ? message.poolId.toString() : undefined;
-    obj.denom = message.denom;
+    obj.denom = message.denom === "" ? undefined : message.denom;
     return obj;
   },
   fromAminoMsg(object: EventRemovePoolTokenAminoMsg): EventRemovePoolToken {
     return EventRemovePoolToken.fromAmino(object.value);
   },
-  fromProtoMsg(message: EventRemovePoolTokenProtoMsg): EventRemovePoolToken {
-    return EventRemovePoolToken.decode(message.value);
+  fromProtoMsg(message: EventRemovePoolTokenProtoMsg, useInterfaces: boolean = true): EventRemovePoolToken {
+    return EventRemovePoolToken.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: EventRemovePoolToken): Uint8Array {
     return EventRemovePoolToken.encode(message).finish();
@@ -1346,6 +1396,7 @@ export const EventRemovePoolToken = {
     };
   }
 };
+GlobalDecoderRegistry.register(EventRemovePoolToken.typeUrl, EventRemovePoolToken);
 function createBaseEventSetWeightedToken(): EventSetWeightedToken {
   return {
     weightedToken: WeightedToken.fromPartial({})
@@ -1353,13 +1404,22 @@ function createBaseEventSetWeightedToken(): EventSetWeightedToken {
 }
 export const EventSetWeightedToken = {
   typeUrl: "/pryzm.amm.v1.EventSetWeightedToken",
+  is(o: any): o is EventSetWeightedToken {
+    return o && (o.$typeUrl === EventSetWeightedToken.typeUrl || WeightedToken.is(o.weightedToken));
+  },
+  isSDK(o: any): o is EventSetWeightedTokenSDKType {
+    return o && (o.$typeUrl === EventSetWeightedToken.typeUrl || WeightedToken.isSDK(o.weighted_token));
+  },
+  isAmino(o: any): o is EventSetWeightedTokenAmino {
+    return o && (o.$typeUrl === EventSetWeightedToken.typeUrl || WeightedToken.isAmino(o.weighted_token));
+  },
   encode(message: EventSetWeightedToken, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.weightedToken !== undefined) {
       WeightedToken.encode(message.weightedToken, writer.uint32(10).fork()).ldelim();
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): EventSetWeightedToken {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): EventSetWeightedToken {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseEventSetWeightedToken();
@@ -1367,7 +1427,7 @@ export const EventSetWeightedToken = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.weightedToken = WeightedToken.decode(reader, reader.uint32());
+          message.weightedToken = WeightedToken.decode(reader, reader.uint32(), useInterfaces);
           break;
         default:
           reader.skipType(tag & 7);
@@ -1398,16 +1458,16 @@ export const EventSetWeightedToken = {
     }
     return message;
   },
-  toAmino(message: EventSetWeightedToken): EventSetWeightedTokenAmino {
+  toAmino(message: EventSetWeightedToken, useInterfaces: boolean = true): EventSetWeightedTokenAmino {
     const obj: any = {};
-    obj.weighted_token = message.weightedToken ? WeightedToken.toAmino(message.weightedToken) : undefined;
+    obj.weighted_token = message.weightedToken ? WeightedToken.toAmino(message.weightedToken, useInterfaces) : undefined;
     return obj;
   },
   fromAminoMsg(object: EventSetWeightedTokenAminoMsg): EventSetWeightedToken {
     return EventSetWeightedToken.fromAmino(object.value);
   },
-  fromProtoMsg(message: EventSetWeightedTokenProtoMsg): EventSetWeightedToken {
-    return EventSetWeightedToken.decode(message.value);
+  fromProtoMsg(message: EventSetWeightedTokenProtoMsg, useInterfaces: boolean = true): EventSetWeightedToken {
+    return EventSetWeightedToken.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: EventSetWeightedToken): Uint8Array {
     return EventSetWeightedToken.encode(message).finish();
@@ -1419,6 +1479,7 @@ export const EventSetWeightedToken = {
     };
   }
 };
+GlobalDecoderRegistry.register(EventSetWeightedToken.typeUrl, EventSetWeightedToken);
 function createBaseEventRemoveWeightedToken(): EventRemoveWeightedToken {
   return {
     poolId: BigInt(0),
@@ -1427,6 +1488,15 @@ function createBaseEventRemoveWeightedToken(): EventRemoveWeightedToken {
 }
 export const EventRemoveWeightedToken = {
   typeUrl: "/pryzm.amm.v1.EventRemoveWeightedToken",
+  is(o: any): o is EventRemoveWeightedToken {
+    return o && (o.$typeUrl === EventRemoveWeightedToken.typeUrl || typeof o.poolId === "bigint" && typeof o.denom === "string");
+  },
+  isSDK(o: any): o is EventRemoveWeightedTokenSDKType {
+    return o && (o.$typeUrl === EventRemoveWeightedToken.typeUrl || typeof o.pool_id === "bigint" && typeof o.denom === "string");
+  },
+  isAmino(o: any): o is EventRemoveWeightedTokenAmino {
+    return o && (o.$typeUrl === EventRemoveWeightedToken.typeUrl || typeof o.pool_id === "bigint" && typeof o.denom === "string");
+  },
   encode(message: EventRemoveWeightedToken, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.poolId !== BigInt(0)) {
       writer.uint32(8).uint64(message.poolId);
@@ -1436,7 +1506,7 @@ export const EventRemoveWeightedToken = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): EventRemoveWeightedToken {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): EventRemoveWeightedToken {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseEventRemoveWeightedToken();
@@ -1484,17 +1554,17 @@ export const EventRemoveWeightedToken = {
     }
     return message;
   },
-  toAmino(message: EventRemoveWeightedToken): EventRemoveWeightedTokenAmino {
+  toAmino(message: EventRemoveWeightedToken, useInterfaces: boolean = true): EventRemoveWeightedTokenAmino {
     const obj: any = {};
     obj.pool_id = message.poolId ? message.poolId.toString() : undefined;
-    obj.denom = message.denom;
+    obj.denom = message.denom === "" ? undefined : message.denom;
     return obj;
   },
   fromAminoMsg(object: EventRemoveWeightedTokenAminoMsg): EventRemoveWeightedToken {
     return EventRemoveWeightedToken.fromAmino(object.value);
   },
-  fromProtoMsg(message: EventRemoveWeightedTokenProtoMsg): EventRemoveWeightedToken {
-    return EventRemoveWeightedToken.decode(message.value);
+  fromProtoMsg(message: EventRemoveWeightedTokenProtoMsg, useInterfaces: boolean = true): EventRemoveWeightedToken {
+    return EventRemoveWeightedToken.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: EventRemoveWeightedToken): Uint8Array {
     return EventRemoveWeightedToken.encode(message).finish();
@@ -1506,6 +1576,7 @@ export const EventRemoveWeightedToken = {
     };
   }
 };
+GlobalDecoderRegistry.register(EventRemoveWeightedToken.typeUrl, EventRemoveWeightedToken);
 function createBaseEventSetWeightUpdateTiming(): EventSetWeightUpdateTiming {
   return {
     weightUpdateTiming: WeightUpdateTiming.fromPartial({})
@@ -1513,13 +1584,22 @@ function createBaseEventSetWeightUpdateTiming(): EventSetWeightUpdateTiming {
 }
 export const EventSetWeightUpdateTiming = {
   typeUrl: "/pryzm.amm.v1.EventSetWeightUpdateTiming",
+  is(o: any): o is EventSetWeightUpdateTiming {
+    return o && (o.$typeUrl === EventSetWeightUpdateTiming.typeUrl || WeightUpdateTiming.is(o.weightUpdateTiming));
+  },
+  isSDK(o: any): o is EventSetWeightUpdateTimingSDKType {
+    return o && (o.$typeUrl === EventSetWeightUpdateTiming.typeUrl || WeightUpdateTiming.isSDK(o.weight_update_timing));
+  },
+  isAmino(o: any): o is EventSetWeightUpdateTimingAmino {
+    return o && (o.$typeUrl === EventSetWeightUpdateTiming.typeUrl || WeightUpdateTiming.isAmino(o.weight_update_timing));
+  },
   encode(message: EventSetWeightUpdateTiming, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.weightUpdateTiming !== undefined) {
       WeightUpdateTiming.encode(message.weightUpdateTiming, writer.uint32(10).fork()).ldelim();
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): EventSetWeightUpdateTiming {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): EventSetWeightUpdateTiming {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseEventSetWeightUpdateTiming();
@@ -1527,7 +1607,7 @@ export const EventSetWeightUpdateTiming = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.weightUpdateTiming = WeightUpdateTiming.decode(reader, reader.uint32());
+          message.weightUpdateTiming = WeightUpdateTiming.decode(reader, reader.uint32(), useInterfaces);
           break;
         default:
           reader.skipType(tag & 7);
@@ -1558,16 +1638,16 @@ export const EventSetWeightUpdateTiming = {
     }
     return message;
   },
-  toAmino(message: EventSetWeightUpdateTiming): EventSetWeightUpdateTimingAmino {
+  toAmino(message: EventSetWeightUpdateTiming, useInterfaces: boolean = true): EventSetWeightUpdateTimingAmino {
     const obj: any = {};
-    obj.weight_update_timing = message.weightUpdateTiming ? WeightUpdateTiming.toAmino(message.weightUpdateTiming) : undefined;
+    obj.weight_update_timing = message.weightUpdateTiming ? WeightUpdateTiming.toAmino(message.weightUpdateTiming, useInterfaces) : undefined;
     return obj;
   },
   fromAminoMsg(object: EventSetWeightUpdateTimingAminoMsg): EventSetWeightUpdateTiming {
     return EventSetWeightUpdateTiming.fromAmino(object.value);
   },
-  fromProtoMsg(message: EventSetWeightUpdateTimingProtoMsg): EventSetWeightUpdateTiming {
-    return EventSetWeightUpdateTiming.decode(message.value);
+  fromProtoMsg(message: EventSetWeightUpdateTimingProtoMsg, useInterfaces: boolean = true): EventSetWeightUpdateTiming {
+    return EventSetWeightUpdateTiming.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: EventSetWeightUpdateTiming): Uint8Array {
     return EventSetWeightUpdateTiming.encode(message).finish();
@@ -1579,6 +1659,7 @@ export const EventSetWeightUpdateTiming = {
     };
   }
 };
+GlobalDecoderRegistry.register(EventSetWeightUpdateTiming.typeUrl, EventSetWeightUpdateTiming);
 function createBaseEventSetWhitelistedRoute(): EventSetWhitelistedRoute {
   return {
     whitelistedRoute: WhitelistedRoute.fromPartial({})
@@ -1586,13 +1667,22 @@ function createBaseEventSetWhitelistedRoute(): EventSetWhitelistedRoute {
 }
 export const EventSetWhitelistedRoute = {
   typeUrl: "/pryzm.amm.v1.EventSetWhitelistedRoute",
+  is(o: any): o is EventSetWhitelistedRoute {
+    return o && (o.$typeUrl === EventSetWhitelistedRoute.typeUrl || WhitelistedRoute.is(o.whitelistedRoute));
+  },
+  isSDK(o: any): o is EventSetWhitelistedRouteSDKType {
+    return o && (o.$typeUrl === EventSetWhitelistedRoute.typeUrl || WhitelistedRoute.isSDK(o.whitelisted_route));
+  },
+  isAmino(o: any): o is EventSetWhitelistedRouteAmino {
+    return o && (o.$typeUrl === EventSetWhitelistedRoute.typeUrl || WhitelistedRoute.isAmino(o.whitelisted_route));
+  },
   encode(message: EventSetWhitelistedRoute, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.whitelistedRoute !== undefined) {
       WhitelistedRoute.encode(message.whitelistedRoute, writer.uint32(10).fork()).ldelim();
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): EventSetWhitelistedRoute {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): EventSetWhitelistedRoute {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseEventSetWhitelistedRoute();
@@ -1600,7 +1690,7 @@ export const EventSetWhitelistedRoute = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.whitelistedRoute = WhitelistedRoute.decode(reader, reader.uint32());
+          message.whitelistedRoute = WhitelistedRoute.decode(reader, reader.uint32(), useInterfaces);
           break;
         default:
           reader.skipType(tag & 7);
@@ -1631,16 +1721,16 @@ export const EventSetWhitelistedRoute = {
     }
     return message;
   },
-  toAmino(message: EventSetWhitelistedRoute): EventSetWhitelistedRouteAmino {
+  toAmino(message: EventSetWhitelistedRoute, useInterfaces: boolean = true): EventSetWhitelistedRouteAmino {
     const obj: any = {};
-    obj.whitelisted_route = message.whitelistedRoute ? WhitelistedRoute.toAmino(message.whitelistedRoute) : undefined;
+    obj.whitelisted_route = message.whitelistedRoute ? WhitelistedRoute.toAmino(message.whitelistedRoute, useInterfaces) : undefined;
     return obj;
   },
   fromAminoMsg(object: EventSetWhitelistedRouteAminoMsg): EventSetWhitelistedRoute {
     return EventSetWhitelistedRoute.fromAmino(object.value);
   },
-  fromProtoMsg(message: EventSetWhitelistedRouteProtoMsg): EventSetWhitelistedRoute {
-    return EventSetWhitelistedRoute.decode(message.value);
+  fromProtoMsg(message: EventSetWhitelistedRouteProtoMsg, useInterfaces: boolean = true): EventSetWhitelistedRoute {
+    return EventSetWhitelistedRoute.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: EventSetWhitelistedRoute): Uint8Array {
     return EventSetWhitelistedRoute.encode(message).finish();
@@ -1652,6 +1742,7 @@ export const EventSetWhitelistedRoute = {
     };
   }
 };
+GlobalDecoderRegistry.register(EventSetWhitelistedRoute.typeUrl, EventSetWhitelistedRoute);
 function createBaseEventSetYammConfiguration(): EventSetYammConfiguration {
   return {
     yammConfiguration: YammConfiguration.fromPartial({})
@@ -1659,13 +1750,22 @@ function createBaseEventSetYammConfiguration(): EventSetYammConfiguration {
 }
 export const EventSetYammConfiguration = {
   typeUrl: "/pryzm.amm.v1.EventSetYammConfiguration",
+  is(o: any): o is EventSetYammConfiguration {
+    return o && (o.$typeUrl === EventSetYammConfiguration.typeUrl || YammConfiguration.is(o.yammConfiguration));
+  },
+  isSDK(o: any): o is EventSetYammConfigurationSDKType {
+    return o && (o.$typeUrl === EventSetYammConfiguration.typeUrl || YammConfiguration.isSDK(o.yamm_configuration));
+  },
+  isAmino(o: any): o is EventSetYammConfigurationAmino {
+    return o && (o.$typeUrl === EventSetYammConfiguration.typeUrl || YammConfiguration.isAmino(o.yamm_configuration));
+  },
   encode(message: EventSetYammConfiguration, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.yammConfiguration !== undefined) {
       YammConfiguration.encode(message.yammConfiguration, writer.uint32(10).fork()).ldelim();
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): EventSetYammConfiguration {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): EventSetYammConfiguration {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseEventSetYammConfiguration();
@@ -1673,7 +1773,7 @@ export const EventSetYammConfiguration = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.yammConfiguration = YammConfiguration.decode(reader, reader.uint32());
+          message.yammConfiguration = YammConfiguration.decode(reader, reader.uint32(), useInterfaces);
           break;
         default:
           reader.skipType(tag & 7);
@@ -1704,16 +1804,16 @@ export const EventSetYammConfiguration = {
     }
     return message;
   },
-  toAmino(message: EventSetYammConfiguration): EventSetYammConfigurationAmino {
+  toAmino(message: EventSetYammConfiguration, useInterfaces: boolean = true): EventSetYammConfigurationAmino {
     const obj: any = {};
-    obj.yamm_configuration = message.yammConfiguration ? YammConfiguration.toAmino(message.yammConfiguration) : undefined;
+    obj.yamm_configuration = message.yammConfiguration ? YammConfiguration.toAmino(message.yammConfiguration, useInterfaces) : undefined;
     return obj;
   },
   fromAminoMsg(object: EventSetYammConfigurationAminoMsg): EventSetYammConfiguration {
     return EventSetYammConfiguration.fromAmino(object.value);
   },
-  fromProtoMsg(message: EventSetYammConfigurationProtoMsg): EventSetYammConfiguration {
-    return EventSetYammConfiguration.decode(message.value);
+  fromProtoMsg(message: EventSetYammConfigurationProtoMsg, useInterfaces: boolean = true): EventSetYammConfiguration {
+    return EventSetYammConfiguration.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: EventSetYammConfiguration): Uint8Array {
     return EventSetYammConfiguration.encode(message).finish();
@@ -1725,6 +1825,7 @@ export const EventSetYammConfiguration = {
     };
   }
 };
+GlobalDecoderRegistry.register(EventSetYammConfiguration.typeUrl, EventSetYammConfiguration);
 function createBaseEventSetOrder(): EventSetOrder {
   return {
     order: Order.fromPartial({})
@@ -1732,13 +1833,22 @@ function createBaseEventSetOrder(): EventSetOrder {
 }
 export const EventSetOrder = {
   typeUrl: "/pryzm.amm.v1.EventSetOrder",
+  is(o: any): o is EventSetOrder {
+    return o && (o.$typeUrl === EventSetOrder.typeUrl || Order.is(o.order));
+  },
+  isSDK(o: any): o is EventSetOrderSDKType {
+    return o && (o.$typeUrl === EventSetOrder.typeUrl || Order.isSDK(o.order));
+  },
+  isAmino(o: any): o is EventSetOrderAmino {
+    return o && (o.$typeUrl === EventSetOrder.typeUrl || Order.isAmino(o.order));
+  },
   encode(message: EventSetOrder, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.order !== undefined) {
       Order.encode(message.order, writer.uint32(10).fork()).ldelim();
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): EventSetOrder {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): EventSetOrder {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseEventSetOrder();
@@ -1746,7 +1856,7 @@ export const EventSetOrder = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.order = Order.decode(reader, reader.uint32());
+          message.order = Order.decode(reader, reader.uint32(), useInterfaces);
           break;
         default:
           reader.skipType(tag & 7);
@@ -1777,16 +1887,16 @@ export const EventSetOrder = {
     }
     return message;
   },
-  toAmino(message: EventSetOrder): EventSetOrderAmino {
+  toAmino(message: EventSetOrder, useInterfaces: boolean = true): EventSetOrderAmino {
     const obj: any = {};
-    obj.order = message.order ? Order.toAmino(message.order) : undefined;
+    obj.order = message.order ? Order.toAmino(message.order, useInterfaces) : undefined;
     return obj;
   },
   fromAminoMsg(object: EventSetOrderAminoMsg): EventSetOrder {
     return EventSetOrder.fromAmino(object.value);
   },
-  fromProtoMsg(message: EventSetOrderProtoMsg): EventSetOrder {
-    return EventSetOrder.decode(message.value);
+  fromProtoMsg(message: EventSetOrderProtoMsg, useInterfaces: boolean = true): EventSetOrder {
+    return EventSetOrder.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: EventSetOrder): Uint8Array {
     return EventSetOrder.encode(message).finish();
@@ -1798,6 +1908,7 @@ export const EventSetOrder = {
     };
   }
 };
+GlobalDecoderRegistry.register(EventSetOrder.typeUrl, EventSetOrder);
 function createBaseEventSetOrderCount(): EventSetOrderCount {
   return {
     orderCount: BigInt(0)
@@ -1805,13 +1916,22 @@ function createBaseEventSetOrderCount(): EventSetOrderCount {
 }
 export const EventSetOrderCount = {
   typeUrl: "/pryzm.amm.v1.EventSetOrderCount",
+  is(o: any): o is EventSetOrderCount {
+    return o && (o.$typeUrl === EventSetOrderCount.typeUrl || typeof o.orderCount === "bigint");
+  },
+  isSDK(o: any): o is EventSetOrderCountSDKType {
+    return o && (o.$typeUrl === EventSetOrderCount.typeUrl || typeof o.order_count === "bigint");
+  },
+  isAmino(o: any): o is EventSetOrderCountAmino {
+    return o && (o.$typeUrl === EventSetOrderCount.typeUrl || typeof o.order_count === "bigint");
+  },
   encode(message: EventSetOrderCount, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.orderCount !== BigInt(0)) {
       writer.uint32(8).uint64(message.orderCount);
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): EventSetOrderCount {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): EventSetOrderCount {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseEventSetOrderCount();
@@ -1850,7 +1970,7 @@ export const EventSetOrderCount = {
     }
     return message;
   },
-  toAmino(message: EventSetOrderCount): EventSetOrderCountAmino {
+  toAmino(message: EventSetOrderCount, useInterfaces: boolean = true): EventSetOrderCountAmino {
     const obj: any = {};
     obj.order_count = message.orderCount ? message.orderCount.toString() : undefined;
     return obj;
@@ -1858,8 +1978,8 @@ export const EventSetOrderCount = {
   fromAminoMsg(object: EventSetOrderCountAminoMsg): EventSetOrderCount {
     return EventSetOrderCount.fromAmino(object.value);
   },
-  fromProtoMsg(message: EventSetOrderCountProtoMsg): EventSetOrderCount {
-    return EventSetOrderCount.decode(message.value);
+  fromProtoMsg(message: EventSetOrderCountProtoMsg, useInterfaces: boolean = true): EventSetOrderCount {
+    return EventSetOrderCount.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: EventSetOrderCount): Uint8Array {
     return EventSetOrderCount.encode(message).finish();
@@ -1871,6 +1991,7 @@ export const EventSetOrderCount = {
     };
   }
 };
+GlobalDecoderRegistry.register(EventSetOrderCount.typeUrl, EventSetOrderCount);
 function createBaseEventRemoveOrder(): EventRemoveOrder {
   return {
     id: BigInt(0)
@@ -1878,13 +1999,22 @@ function createBaseEventRemoveOrder(): EventRemoveOrder {
 }
 export const EventRemoveOrder = {
   typeUrl: "/pryzm.amm.v1.EventRemoveOrder",
+  is(o: any): o is EventRemoveOrder {
+    return o && (o.$typeUrl === EventRemoveOrder.typeUrl || typeof o.id === "bigint");
+  },
+  isSDK(o: any): o is EventRemoveOrderSDKType {
+    return o && (o.$typeUrl === EventRemoveOrder.typeUrl || typeof o.id === "bigint");
+  },
+  isAmino(o: any): o is EventRemoveOrderAmino {
+    return o && (o.$typeUrl === EventRemoveOrder.typeUrl || typeof o.id === "bigint");
+  },
   encode(message: EventRemoveOrder, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.id !== BigInt(0)) {
       writer.uint32(8).uint64(message.id);
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): EventRemoveOrder {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): EventRemoveOrder {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseEventRemoveOrder();
@@ -1923,7 +2053,7 @@ export const EventRemoveOrder = {
     }
     return message;
   },
-  toAmino(message: EventRemoveOrder): EventRemoveOrderAmino {
+  toAmino(message: EventRemoveOrder, useInterfaces: boolean = true): EventRemoveOrderAmino {
     const obj: any = {};
     obj.id = message.id ? message.id.toString() : undefined;
     return obj;
@@ -1931,8 +2061,8 @@ export const EventRemoveOrder = {
   fromAminoMsg(object: EventRemoveOrderAminoMsg): EventRemoveOrder {
     return EventRemoveOrder.fromAmino(object.value);
   },
-  fromProtoMsg(message: EventRemoveOrderProtoMsg): EventRemoveOrder {
-    return EventRemoveOrder.decode(message.value);
+  fromProtoMsg(message: EventRemoveOrderProtoMsg, useInterfaces: boolean = true): EventRemoveOrder {
+    return EventRemoveOrder.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: EventRemoveOrder): Uint8Array {
     return EventRemoveOrder.encode(message).finish();
@@ -1944,6 +2074,7 @@ export const EventRemoveOrder = {
     };
   }
 };
+GlobalDecoderRegistry.register(EventRemoveOrder.typeUrl, EventRemoveOrder);
 function createBaseEventCancelOrder(): EventCancelOrder {
   return {
     id: BigInt(0),
@@ -1952,6 +2083,15 @@ function createBaseEventCancelOrder(): EventCancelOrder {
 }
 export const EventCancelOrder = {
   typeUrl: "/pryzm.amm.v1.EventCancelOrder",
+  is(o: any): o is EventCancelOrder {
+    return o && (o.$typeUrl === EventCancelOrder.typeUrl || typeof o.id === "bigint" && Coin.is(o.withdrawnAmount));
+  },
+  isSDK(o: any): o is EventCancelOrderSDKType {
+    return o && (o.$typeUrl === EventCancelOrder.typeUrl || typeof o.id === "bigint" && Coin.isSDK(o.withdrawn_amount));
+  },
+  isAmino(o: any): o is EventCancelOrderAmino {
+    return o && (o.$typeUrl === EventCancelOrder.typeUrl || typeof o.id === "bigint" && Coin.isAmino(o.withdrawn_amount));
+  },
   encode(message: EventCancelOrder, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.id !== BigInt(0)) {
       writer.uint32(8).uint64(message.id);
@@ -1961,7 +2101,7 @@ export const EventCancelOrder = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): EventCancelOrder {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): EventCancelOrder {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseEventCancelOrder();
@@ -1972,7 +2112,7 @@ export const EventCancelOrder = {
           message.id = reader.uint64();
           break;
         case 2:
-          message.withdrawnAmount = Coin.decode(reader, reader.uint32());
+          message.withdrawnAmount = Coin.decode(reader, reader.uint32(), useInterfaces);
           break;
         default:
           reader.skipType(tag & 7);
@@ -2009,17 +2149,17 @@ export const EventCancelOrder = {
     }
     return message;
   },
-  toAmino(message: EventCancelOrder): EventCancelOrderAmino {
+  toAmino(message: EventCancelOrder, useInterfaces: boolean = true): EventCancelOrderAmino {
     const obj: any = {};
     obj.id = message.id ? message.id.toString() : undefined;
-    obj.withdrawn_amount = message.withdrawnAmount ? Coin.toAmino(message.withdrawnAmount) : undefined;
+    obj.withdrawn_amount = message.withdrawnAmount ? Coin.toAmino(message.withdrawnAmount, useInterfaces) : undefined;
     return obj;
   },
   fromAminoMsg(object: EventCancelOrderAminoMsg): EventCancelOrder {
     return EventCancelOrder.fromAmino(object.value);
   },
-  fromProtoMsg(message: EventCancelOrderProtoMsg): EventCancelOrder {
-    return EventCancelOrder.decode(message.value);
+  fromProtoMsg(message: EventCancelOrderProtoMsg, useInterfaces: boolean = true): EventCancelOrder {
+    return EventCancelOrder.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: EventCancelOrder): Uint8Array {
     return EventCancelOrder.encode(message).finish();
@@ -2031,6 +2171,7 @@ export const EventCancelOrder = {
     };
   }
 };
+GlobalDecoderRegistry.register(EventCancelOrder.typeUrl, EventCancelOrder);
 function createBaseEventSetScheduleOrder(): EventSetScheduleOrder {
   return {
     scheduleOrder: ScheduleOrder.fromPartial({})
@@ -2038,13 +2179,22 @@ function createBaseEventSetScheduleOrder(): EventSetScheduleOrder {
 }
 export const EventSetScheduleOrder = {
   typeUrl: "/pryzm.amm.v1.EventSetScheduleOrder",
+  is(o: any): o is EventSetScheduleOrder {
+    return o && (o.$typeUrl === EventSetScheduleOrder.typeUrl || ScheduleOrder.is(o.scheduleOrder));
+  },
+  isSDK(o: any): o is EventSetScheduleOrderSDKType {
+    return o && (o.$typeUrl === EventSetScheduleOrder.typeUrl || ScheduleOrder.isSDK(o.schedule_order));
+  },
+  isAmino(o: any): o is EventSetScheduleOrderAmino {
+    return o && (o.$typeUrl === EventSetScheduleOrder.typeUrl || ScheduleOrder.isAmino(o.schedule_order));
+  },
   encode(message: EventSetScheduleOrder, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.scheduleOrder !== undefined) {
       ScheduleOrder.encode(message.scheduleOrder, writer.uint32(10).fork()).ldelim();
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): EventSetScheduleOrder {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): EventSetScheduleOrder {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseEventSetScheduleOrder();
@@ -2052,7 +2202,7 @@ export const EventSetScheduleOrder = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.scheduleOrder = ScheduleOrder.decode(reader, reader.uint32());
+          message.scheduleOrder = ScheduleOrder.decode(reader, reader.uint32(), useInterfaces);
           break;
         default:
           reader.skipType(tag & 7);
@@ -2083,16 +2233,16 @@ export const EventSetScheduleOrder = {
     }
     return message;
   },
-  toAmino(message: EventSetScheduleOrder): EventSetScheduleOrderAmino {
+  toAmino(message: EventSetScheduleOrder, useInterfaces: boolean = true): EventSetScheduleOrderAmino {
     const obj: any = {};
-    obj.schedule_order = message.scheduleOrder ? ScheduleOrder.toAmino(message.scheduleOrder) : undefined;
+    obj.schedule_order = message.scheduleOrder ? ScheduleOrder.toAmino(message.scheduleOrder, useInterfaces) : undefined;
     return obj;
   },
   fromAminoMsg(object: EventSetScheduleOrderAminoMsg): EventSetScheduleOrder {
     return EventSetScheduleOrder.fromAmino(object.value);
   },
-  fromProtoMsg(message: EventSetScheduleOrderProtoMsg): EventSetScheduleOrder {
-    return EventSetScheduleOrder.decode(message.value);
+  fromProtoMsg(message: EventSetScheduleOrderProtoMsg, useInterfaces: boolean = true): EventSetScheduleOrder {
+    return EventSetScheduleOrder.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: EventSetScheduleOrder): Uint8Array {
     return EventSetScheduleOrder.encode(message).finish();
@@ -2104,6 +2254,7 @@ export const EventSetScheduleOrder = {
     };
   }
 };
+GlobalDecoderRegistry.register(EventSetScheduleOrder.typeUrl, EventSetScheduleOrder);
 function createBaseEventRemoveScheduleOrder(): EventRemoveScheduleOrder {
   return {
     orderId: BigInt(0),
@@ -2112,6 +2263,15 @@ function createBaseEventRemoveScheduleOrder(): EventRemoveScheduleOrder {
 }
 export const EventRemoveScheduleOrder = {
   typeUrl: "/pryzm.amm.v1.EventRemoveScheduleOrder",
+  is(o: any): o is EventRemoveScheduleOrder {
+    return o && (o.$typeUrl === EventRemoveScheduleOrder.typeUrl || typeof o.orderId === "bigint" && typeof o.timeMillis === "bigint");
+  },
+  isSDK(o: any): o is EventRemoveScheduleOrderSDKType {
+    return o && (o.$typeUrl === EventRemoveScheduleOrder.typeUrl || typeof o.order_id === "bigint" && typeof o.time_millis === "bigint");
+  },
+  isAmino(o: any): o is EventRemoveScheduleOrderAmino {
+    return o && (o.$typeUrl === EventRemoveScheduleOrder.typeUrl || typeof o.order_id === "bigint" && typeof o.time_millis === "bigint");
+  },
   encode(message: EventRemoveScheduleOrder, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.orderId !== BigInt(0)) {
       writer.uint32(8).uint64(message.orderId);
@@ -2121,7 +2281,7 @@ export const EventRemoveScheduleOrder = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): EventRemoveScheduleOrder {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): EventRemoveScheduleOrder {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseEventRemoveScheduleOrder();
@@ -2169,7 +2329,7 @@ export const EventRemoveScheduleOrder = {
     }
     return message;
   },
-  toAmino(message: EventRemoveScheduleOrder): EventRemoveScheduleOrderAmino {
+  toAmino(message: EventRemoveScheduleOrder, useInterfaces: boolean = true): EventRemoveScheduleOrderAmino {
     const obj: any = {};
     obj.order_id = message.orderId ? message.orderId.toString() : undefined;
     obj.time_millis = message.timeMillis ? message.timeMillis.toString() : undefined;
@@ -2178,8 +2338,8 @@ export const EventRemoveScheduleOrder = {
   fromAminoMsg(object: EventRemoveScheduleOrderAminoMsg): EventRemoveScheduleOrder {
     return EventRemoveScheduleOrder.fromAmino(object.value);
   },
-  fromProtoMsg(message: EventRemoveScheduleOrderProtoMsg): EventRemoveScheduleOrder {
-    return EventRemoveScheduleOrder.decode(message.value);
+  fromProtoMsg(message: EventRemoveScheduleOrderProtoMsg, useInterfaces: boolean = true): EventRemoveScheduleOrder {
+    return EventRemoveScheduleOrder.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: EventRemoveScheduleOrder): Uint8Array {
     return EventRemoveScheduleOrder.encode(message).finish();
@@ -2191,6 +2351,7 @@ export const EventRemoveScheduleOrder = {
     };
   }
 };
+GlobalDecoderRegistry.register(EventRemoveScheduleOrder.typeUrl, EventRemoveScheduleOrder);
 function createBaseEventSetExecutableOrder(): EventSetExecutableOrder {
   return {
     orderId: BigInt(0)
@@ -2198,13 +2359,22 @@ function createBaseEventSetExecutableOrder(): EventSetExecutableOrder {
 }
 export const EventSetExecutableOrder = {
   typeUrl: "/pryzm.amm.v1.EventSetExecutableOrder",
+  is(o: any): o is EventSetExecutableOrder {
+    return o && (o.$typeUrl === EventSetExecutableOrder.typeUrl || typeof o.orderId === "bigint");
+  },
+  isSDK(o: any): o is EventSetExecutableOrderSDKType {
+    return o && (o.$typeUrl === EventSetExecutableOrder.typeUrl || typeof o.order_id === "bigint");
+  },
+  isAmino(o: any): o is EventSetExecutableOrderAmino {
+    return o && (o.$typeUrl === EventSetExecutableOrder.typeUrl || typeof o.order_id === "bigint");
+  },
   encode(message: EventSetExecutableOrder, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.orderId !== BigInt(0)) {
       writer.uint32(8).uint64(message.orderId);
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): EventSetExecutableOrder {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): EventSetExecutableOrder {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseEventSetExecutableOrder();
@@ -2243,7 +2413,7 @@ export const EventSetExecutableOrder = {
     }
     return message;
   },
-  toAmino(message: EventSetExecutableOrder): EventSetExecutableOrderAmino {
+  toAmino(message: EventSetExecutableOrder, useInterfaces: boolean = true): EventSetExecutableOrderAmino {
     const obj: any = {};
     obj.order_id = message.orderId ? message.orderId.toString() : undefined;
     return obj;
@@ -2251,8 +2421,8 @@ export const EventSetExecutableOrder = {
   fromAminoMsg(object: EventSetExecutableOrderAminoMsg): EventSetExecutableOrder {
     return EventSetExecutableOrder.fromAmino(object.value);
   },
-  fromProtoMsg(message: EventSetExecutableOrderProtoMsg): EventSetExecutableOrder {
-    return EventSetExecutableOrder.decode(message.value);
+  fromProtoMsg(message: EventSetExecutableOrderProtoMsg, useInterfaces: boolean = true): EventSetExecutableOrder {
+    return EventSetExecutableOrder.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: EventSetExecutableOrder): Uint8Array {
     return EventSetExecutableOrder.encode(message).finish();
@@ -2264,6 +2434,7 @@ export const EventSetExecutableOrder = {
     };
   }
 };
+GlobalDecoderRegistry.register(EventSetExecutableOrder.typeUrl, EventSetExecutableOrder);
 function createBaseEventRemoveExecutableOrder(): EventRemoveExecutableOrder {
   return {
     orderId: BigInt(0)
@@ -2271,13 +2442,22 @@ function createBaseEventRemoveExecutableOrder(): EventRemoveExecutableOrder {
 }
 export const EventRemoveExecutableOrder = {
   typeUrl: "/pryzm.amm.v1.EventRemoveExecutableOrder",
+  is(o: any): o is EventRemoveExecutableOrder {
+    return o && (o.$typeUrl === EventRemoveExecutableOrder.typeUrl || typeof o.orderId === "bigint");
+  },
+  isSDK(o: any): o is EventRemoveExecutableOrderSDKType {
+    return o && (o.$typeUrl === EventRemoveExecutableOrder.typeUrl || typeof o.order_id === "bigint");
+  },
+  isAmino(o: any): o is EventRemoveExecutableOrderAmino {
+    return o && (o.$typeUrl === EventRemoveExecutableOrder.typeUrl || typeof o.order_id === "bigint");
+  },
   encode(message: EventRemoveExecutableOrder, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.orderId !== BigInt(0)) {
       writer.uint32(8).uint64(message.orderId);
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): EventRemoveExecutableOrder {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): EventRemoveExecutableOrder {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseEventRemoveExecutableOrder();
@@ -2316,7 +2496,7 @@ export const EventRemoveExecutableOrder = {
     }
     return message;
   },
-  toAmino(message: EventRemoveExecutableOrder): EventRemoveExecutableOrderAmino {
+  toAmino(message: EventRemoveExecutableOrder, useInterfaces: boolean = true): EventRemoveExecutableOrderAmino {
     const obj: any = {};
     obj.order_id = message.orderId ? message.orderId.toString() : undefined;
     return obj;
@@ -2324,8 +2504,8 @@ export const EventRemoveExecutableOrder = {
   fromAminoMsg(object: EventRemoveExecutableOrderAminoMsg): EventRemoveExecutableOrder {
     return EventRemoveExecutableOrder.fromAmino(object.value);
   },
-  fromProtoMsg(message: EventRemoveExecutableOrderProtoMsg): EventRemoveExecutableOrder {
-    return EventRemoveExecutableOrder.decode(message.value);
+  fromProtoMsg(message: EventRemoveExecutableOrderProtoMsg, useInterfaces: boolean = true): EventRemoveExecutableOrder {
+    return EventRemoveExecutableOrder.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: EventRemoveExecutableOrder): Uint8Array {
     return EventRemoveExecutableOrder.encode(message).finish();
@@ -2337,6 +2517,7 @@ export const EventRemoveExecutableOrder = {
     };
   }
 };
+GlobalDecoderRegistry.register(EventRemoveExecutableOrder.typeUrl, EventRemoveExecutableOrder);
 function createBaseEventSetIntroducingPoolToken(): EventSetIntroducingPoolToken {
   return {
     virtualBalanceToken: VirtualBalancePoolToken.fromPartial({})
@@ -2344,13 +2525,22 @@ function createBaseEventSetIntroducingPoolToken(): EventSetIntroducingPoolToken 
 }
 export const EventSetIntroducingPoolToken = {
   typeUrl: "/pryzm.amm.v1.EventSetIntroducingPoolToken",
+  is(o: any): o is EventSetIntroducingPoolToken {
+    return o && (o.$typeUrl === EventSetIntroducingPoolToken.typeUrl || VirtualBalancePoolToken.is(o.virtualBalanceToken));
+  },
+  isSDK(o: any): o is EventSetIntroducingPoolTokenSDKType {
+    return o && (o.$typeUrl === EventSetIntroducingPoolToken.typeUrl || VirtualBalancePoolToken.isSDK(o.virtual_balance_token));
+  },
+  isAmino(o: any): o is EventSetIntroducingPoolTokenAmino {
+    return o && (o.$typeUrl === EventSetIntroducingPoolToken.typeUrl || VirtualBalancePoolToken.isAmino(o.virtual_balance_token));
+  },
   encode(message: EventSetIntroducingPoolToken, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.virtualBalanceToken !== undefined) {
       VirtualBalancePoolToken.encode(message.virtualBalanceToken, writer.uint32(10).fork()).ldelim();
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): EventSetIntroducingPoolToken {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): EventSetIntroducingPoolToken {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseEventSetIntroducingPoolToken();
@@ -2358,7 +2548,7 @@ export const EventSetIntroducingPoolToken = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.virtualBalanceToken = VirtualBalancePoolToken.decode(reader, reader.uint32());
+          message.virtualBalanceToken = VirtualBalancePoolToken.decode(reader, reader.uint32(), useInterfaces);
           break;
         default:
           reader.skipType(tag & 7);
@@ -2389,16 +2579,16 @@ export const EventSetIntroducingPoolToken = {
     }
     return message;
   },
-  toAmino(message: EventSetIntroducingPoolToken): EventSetIntroducingPoolTokenAmino {
+  toAmino(message: EventSetIntroducingPoolToken, useInterfaces: boolean = true): EventSetIntroducingPoolTokenAmino {
     const obj: any = {};
-    obj.virtual_balance_token = message.virtualBalanceToken ? VirtualBalancePoolToken.toAmino(message.virtualBalanceToken) : undefined;
+    obj.virtual_balance_token = message.virtualBalanceToken ? VirtualBalancePoolToken.toAmino(message.virtualBalanceToken, useInterfaces) : undefined;
     return obj;
   },
   fromAminoMsg(object: EventSetIntroducingPoolTokenAminoMsg): EventSetIntroducingPoolToken {
     return EventSetIntroducingPoolToken.fromAmino(object.value);
   },
-  fromProtoMsg(message: EventSetIntroducingPoolTokenProtoMsg): EventSetIntroducingPoolToken {
-    return EventSetIntroducingPoolToken.decode(message.value);
+  fromProtoMsg(message: EventSetIntroducingPoolTokenProtoMsg, useInterfaces: boolean = true): EventSetIntroducingPoolToken {
+    return EventSetIntroducingPoolToken.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: EventSetIntroducingPoolToken): Uint8Array {
     return EventSetIntroducingPoolToken.encode(message).finish();
@@ -2410,6 +2600,7 @@ export const EventSetIntroducingPoolToken = {
     };
   }
 };
+GlobalDecoderRegistry.register(EventSetIntroducingPoolToken.typeUrl, EventSetIntroducingPoolToken);
 function createBaseEventRemoveIntroducingPoolToken(): EventRemoveIntroducingPoolToken {
   return {
     poolId: BigInt(0),
@@ -2418,6 +2609,15 @@ function createBaseEventRemoveIntroducingPoolToken(): EventRemoveIntroducingPool
 }
 export const EventRemoveIntroducingPoolToken = {
   typeUrl: "/pryzm.amm.v1.EventRemoveIntroducingPoolToken",
+  is(o: any): o is EventRemoveIntroducingPoolToken {
+    return o && (o.$typeUrl === EventRemoveIntroducingPoolToken.typeUrl || typeof o.poolId === "bigint" && typeof o.denom === "string");
+  },
+  isSDK(o: any): o is EventRemoveIntroducingPoolTokenSDKType {
+    return o && (o.$typeUrl === EventRemoveIntroducingPoolToken.typeUrl || typeof o.pool_id === "bigint" && typeof o.denom === "string");
+  },
+  isAmino(o: any): o is EventRemoveIntroducingPoolTokenAmino {
+    return o && (o.$typeUrl === EventRemoveIntroducingPoolToken.typeUrl || typeof o.pool_id === "bigint" && typeof o.denom === "string");
+  },
   encode(message: EventRemoveIntroducingPoolToken, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.poolId !== BigInt(0)) {
       writer.uint32(8).uint64(message.poolId);
@@ -2427,7 +2627,7 @@ export const EventRemoveIntroducingPoolToken = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): EventRemoveIntroducingPoolToken {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): EventRemoveIntroducingPoolToken {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseEventRemoveIntroducingPoolToken();
@@ -2475,17 +2675,17 @@ export const EventRemoveIntroducingPoolToken = {
     }
     return message;
   },
-  toAmino(message: EventRemoveIntroducingPoolToken): EventRemoveIntroducingPoolTokenAmino {
+  toAmino(message: EventRemoveIntroducingPoolToken, useInterfaces: boolean = true): EventRemoveIntroducingPoolTokenAmino {
     const obj: any = {};
     obj.pool_id = message.poolId ? message.poolId.toString() : undefined;
-    obj.denom = message.denom;
+    obj.denom = message.denom === "" ? undefined : message.denom;
     return obj;
   },
   fromAminoMsg(object: EventRemoveIntroducingPoolTokenAminoMsg): EventRemoveIntroducingPoolToken {
     return EventRemoveIntroducingPoolToken.fromAmino(object.value);
   },
-  fromProtoMsg(message: EventRemoveIntroducingPoolTokenProtoMsg): EventRemoveIntroducingPoolToken {
-    return EventRemoveIntroducingPoolToken.decode(message.value);
+  fromProtoMsg(message: EventRemoveIntroducingPoolTokenProtoMsg, useInterfaces: boolean = true): EventRemoveIntroducingPoolToken {
+    return EventRemoveIntroducingPoolToken.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: EventRemoveIntroducingPoolToken): Uint8Array {
     return EventRemoveIntroducingPoolToken.encode(message).finish();
@@ -2497,6 +2697,7 @@ export const EventRemoveIntroducingPoolToken = {
     };
   }
 };
+GlobalDecoderRegistry.register(EventRemoveIntroducingPoolToken.typeUrl, EventRemoveIntroducingPoolToken);
 function createBaseEventSetExpiringPoolToken(): EventSetExpiringPoolToken {
   return {
     virtualBalanceToken: VirtualBalancePoolToken.fromPartial({})
@@ -2504,13 +2705,22 @@ function createBaseEventSetExpiringPoolToken(): EventSetExpiringPoolToken {
 }
 export const EventSetExpiringPoolToken = {
   typeUrl: "/pryzm.amm.v1.EventSetExpiringPoolToken",
+  is(o: any): o is EventSetExpiringPoolToken {
+    return o && (o.$typeUrl === EventSetExpiringPoolToken.typeUrl || VirtualBalancePoolToken.is(o.virtualBalanceToken));
+  },
+  isSDK(o: any): o is EventSetExpiringPoolTokenSDKType {
+    return o && (o.$typeUrl === EventSetExpiringPoolToken.typeUrl || VirtualBalancePoolToken.isSDK(o.virtual_balance_token));
+  },
+  isAmino(o: any): o is EventSetExpiringPoolTokenAmino {
+    return o && (o.$typeUrl === EventSetExpiringPoolToken.typeUrl || VirtualBalancePoolToken.isAmino(o.virtual_balance_token));
+  },
   encode(message: EventSetExpiringPoolToken, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.virtualBalanceToken !== undefined) {
       VirtualBalancePoolToken.encode(message.virtualBalanceToken, writer.uint32(10).fork()).ldelim();
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): EventSetExpiringPoolToken {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): EventSetExpiringPoolToken {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseEventSetExpiringPoolToken();
@@ -2518,7 +2728,7 @@ export const EventSetExpiringPoolToken = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.virtualBalanceToken = VirtualBalancePoolToken.decode(reader, reader.uint32());
+          message.virtualBalanceToken = VirtualBalancePoolToken.decode(reader, reader.uint32(), useInterfaces);
           break;
         default:
           reader.skipType(tag & 7);
@@ -2549,16 +2759,16 @@ export const EventSetExpiringPoolToken = {
     }
     return message;
   },
-  toAmino(message: EventSetExpiringPoolToken): EventSetExpiringPoolTokenAmino {
+  toAmino(message: EventSetExpiringPoolToken, useInterfaces: boolean = true): EventSetExpiringPoolTokenAmino {
     const obj: any = {};
-    obj.virtual_balance_token = message.virtualBalanceToken ? VirtualBalancePoolToken.toAmino(message.virtualBalanceToken) : undefined;
+    obj.virtual_balance_token = message.virtualBalanceToken ? VirtualBalancePoolToken.toAmino(message.virtualBalanceToken, useInterfaces) : undefined;
     return obj;
   },
   fromAminoMsg(object: EventSetExpiringPoolTokenAminoMsg): EventSetExpiringPoolToken {
     return EventSetExpiringPoolToken.fromAmino(object.value);
   },
-  fromProtoMsg(message: EventSetExpiringPoolTokenProtoMsg): EventSetExpiringPoolToken {
-    return EventSetExpiringPoolToken.decode(message.value);
+  fromProtoMsg(message: EventSetExpiringPoolTokenProtoMsg, useInterfaces: boolean = true): EventSetExpiringPoolToken {
+    return EventSetExpiringPoolToken.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: EventSetExpiringPoolToken): Uint8Array {
     return EventSetExpiringPoolToken.encode(message).finish();
@@ -2570,6 +2780,7 @@ export const EventSetExpiringPoolToken = {
     };
   }
 };
+GlobalDecoderRegistry.register(EventSetExpiringPoolToken.typeUrl, EventSetExpiringPoolToken);
 function createBaseEventRemoveExpiringPoolToken(): EventRemoveExpiringPoolToken {
   return {
     poolId: BigInt(0),
@@ -2578,6 +2789,15 @@ function createBaseEventRemoveExpiringPoolToken(): EventRemoveExpiringPoolToken 
 }
 export const EventRemoveExpiringPoolToken = {
   typeUrl: "/pryzm.amm.v1.EventRemoveExpiringPoolToken",
+  is(o: any): o is EventRemoveExpiringPoolToken {
+    return o && (o.$typeUrl === EventRemoveExpiringPoolToken.typeUrl || typeof o.poolId === "bigint" && typeof o.denom === "string");
+  },
+  isSDK(o: any): o is EventRemoveExpiringPoolTokenSDKType {
+    return o && (o.$typeUrl === EventRemoveExpiringPoolToken.typeUrl || typeof o.pool_id === "bigint" && typeof o.denom === "string");
+  },
+  isAmino(o: any): o is EventRemoveExpiringPoolTokenAmino {
+    return o && (o.$typeUrl === EventRemoveExpiringPoolToken.typeUrl || typeof o.pool_id === "bigint" && typeof o.denom === "string");
+  },
   encode(message: EventRemoveExpiringPoolToken, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.poolId !== BigInt(0)) {
       writer.uint32(8).uint64(message.poolId);
@@ -2587,7 +2807,7 @@ export const EventRemoveExpiringPoolToken = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): EventRemoveExpiringPoolToken {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): EventRemoveExpiringPoolToken {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseEventRemoveExpiringPoolToken();
@@ -2635,17 +2855,17 @@ export const EventRemoveExpiringPoolToken = {
     }
     return message;
   },
-  toAmino(message: EventRemoveExpiringPoolToken): EventRemoveExpiringPoolTokenAmino {
+  toAmino(message: EventRemoveExpiringPoolToken, useInterfaces: boolean = true): EventRemoveExpiringPoolTokenAmino {
     const obj: any = {};
     obj.pool_id = message.poolId ? message.poolId.toString() : undefined;
-    obj.denom = message.denom;
+    obj.denom = message.denom === "" ? undefined : message.denom;
     return obj;
   },
   fromAminoMsg(object: EventRemoveExpiringPoolTokenAminoMsg): EventRemoveExpiringPoolToken {
     return EventRemoveExpiringPoolToken.fromAmino(object.value);
   },
-  fromProtoMsg(message: EventRemoveExpiringPoolTokenProtoMsg): EventRemoveExpiringPoolToken {
-    return EventRemoveExpiringPoolToken.decode(message.value);
+  fromProtoMsg(message: EventRemoveExpiringPoolTokenProtoMsg, useInterfaces: boolean = true): EventRemoveExpiringPoolToken {
+    return EventRemoveExpiringPoolToken.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: EventRemoveExpiringPoolToken): Uint8Array {
     return EventRemoveExpiringPoolToken.encode(message).finish();
@@ -2657,6 +2877,7 @@ export const EventRemoveExpiringPoolToken = {
     };
   }
 };
+GlobalDecoderRegistry.register(EventRemoveExpiringPoolToken.typeUrl, EventRemoveExpiringPoolToken);
 function createBaseEventSetYammPoolForAssetId(): EventSetYammPoolForAssetId {
   return {
     poolId: BigInt(0),
@@ -2665,6 +2886,15 @@ function createBaseEventSetYammPoolForAssetId(): EventSetYammPoolForAssetId {
 }
 export const EventSetYammPoolForAssetId = {
   typeUrl: "/pryzm.amm.v1.EventSetYammPoolForAssetId",
+  is(o: any): o is EventSetYammPoolForAssetId {
+    return o && (o.$typeUrl === EventSetYammPoolForAssetId.typeUrl || typeof o.poolId === "bigint" && typeof o.assetId === "string");
+  },
+  isSDK(o: any): o is EventSetYammPoolForAssetIdSDKType {
+    return o && (o.$typeUrl === EventSetYammPoolForAssetId.typeUrl || typeof o.pool_id === "bigint" && typeof o.asset_id === "string");
+  },
+  isAmino(o: any): o is EventSetYammPoolForAssetIdAmino {
+    return o && (o.$typeUrl === EventSetYammPoolForAssetId.typeUrl || typeof o.pool_id === "bigint" && typeof o.asset_id === "string");
+  },
   encode(message: EventSetYammPoolForAssetId, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.poolId !== BigInt(0)) {
       writer.uint32(8).uint64(message.poolId);
@@ -2674,7 +2904,7 @@ export const EventSetYammPoolForAssetId = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): EventSetYammPoolForAssetId {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): EventSetYammPoolForAssetId {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseEventSetYammPoolForAssetId();
@@ -2722,17 +2952,17 @@ export const EventSetYammPoolForAssetId = {
     }
     return message;
   },
-  toAmino(message: EventSetYammPoolForAssetId): EventSetYammPoolForAssetIdAmino {
+  toAmino(message: EventSetYammPoolForAssetId, useInterfaces: boolean = true): EventSetYammPoolForAssetIdAmino {
     const obj: any = {};
     obj.pool_id = message.poolId ? message.poolId.toString() : undefined;
-    obj.asset_id = message.assetId;
+    obj.asset_id = message.assetId === "" ? undefined : message.assetId;
     return obj;
   },
   fromAminoMsg(object: EventSetYammPoolForAssetIdAminoMsg): EventSetYammPoolForAssetId {
     return EventSetYammPoolForAssetId.fromAmino(object.value);
   },
-  fromProtoMsg(message: EventSetYammPoolForAssetIdProtoMsg): EventSetYammPoolForAssetId {
-    return EventSetYammPoolForAssetId.decode(message.value);
+  fromProtoMsg(message: EventSetYammPoolForAssetIdProtoMsg, useInterfaces: boolean = true): EventSetYammPoolForAssetId {
+    return EventSetYammPoolForAssetId.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: EventSetYammPoolForAssetId): Uint8Array {
     return EventSetYammPoolForAssetId.encode(message).finish();
@@ -2744,6 +2974,7 @@ export const EventSetYammPoolForAssetId = {
     };
   }
 };
+GlobalDecoderRegistry.register(EventSetYammPoolForAssetId.typeUrl, EventSetYammPoolForAssetId);
 function createBaseEventSetVaultPaused(): EventSetVaultPaused {
   return {
     paused: false
@@ -2751,13 +2982,22 @@ function createBaseEventSetVaultPaused(): EventSetVaultPaused {
 }
 export const EventSetVaultPaused = {
   typeUrl: "/pryzm.amm.v1.EventSetVaultPaused",
+  is(o: any): o is EventSetVaultPaused {
+    return o && (o.$typeUrl === EventSetVaultPaused.typeUrl || typeof o.paused === "boolean");
+  },
+  isSDK(o: any): o is EventSetVaultPausedSDKType {
+    return o && (o.$typeUrl === EventSetVaultPaused.typeUrl || typeof o.paused === "boolean");
+  },
+  isAmino(o: any): o is EventSetVaultPausedAmino {
+    return o && (o.$typeUrl === EventSetVaultPaused.typeUrl || typeof o.paused === "boolean");
+  },
   encode(message: EventSetVaultPaused, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.paused === true) {
       writer.uint32(8).bool(message.paused);
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): EventSetVaultPaused {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): EventSetVaultPaused {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseEventSetVaultPaused();
@@ -2796,16 +3036,16 @@ export const EventSetVaultPaused = {
     }
     return message;
   },
-  toAmino(message: EventSetVaultPaused): EventSetVaultPausedAmino {
+  toAmino(message: EventSetVaultPaused, useInterfaces: boolean = true): EventSetVaultPausedAmino {
     const obj: any = {};
-    obj.paused = message.paused;
+    obj.paused = message.paused === false ? undefined : message.paused;
     return obj;
   },
   fromAminoMsg(object: EventSetVaultPausedAminoMsg): EventSetVaultPaused {
     return EventSetVaultPaused.fromAmino(object.value);
   },
-  fromProtoMsg(message: EventSetVaultPausedProtoMsg): EventSetVaultPaused {
-    return EventSetVaultPaused.decode(message.value);
+  fromProtoMsg(message: EventSetVaultPausedProtoMsg, useInterfaces: boolean = true): EventSetVaultPaused {
+    return EventSetVaultPaused.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: EventSetVaultPaused): Uint8Array {
     return EventSetVaultPaused.encode(message).finish();
@@ -2817,6 +3057,7 @@ export const EventSetVaultPaused = {
     };
   }
 };
+GlobalDecoderRegistry.register(EventSetVaultPaused.typeUrl, EventSetVaultPaused);
 function createBaseEventExecuteOrder(): EventExecuteOrder {
   return {
     orderId: BigInt(0),
@@ -2826,6 +3067,15 @@ function createBaseEventExecuteOrder(): EventExecuteOrder {
 }
 export const EventExecuteOrder = {
   typeUrl: "/pryzm.amm.v1.EventExecuteOrder",
+  is(o: any): o is EventExecuteOrder {
+    return o && (o.$typeUrl === EventExecuteOrder.typeUrl || typeof o.orderId === "bigint" && typeof o.tradeAmount === "string" && typeof o.matchAmount === "string");
+  },
+  isSDK(o: any): o is EventExecuteOrderSDKType {
+    return o && (o.$typeUrl === EventExecuteOrder.typeUrl || typeof o.order_id === "bigint" && typeof o.trade_amount === "string" && typeof o.match_amount === "string");
+  },
+  isAmino(o: any): o is EventExecuteOrderAmino {
+    return o && (o.$typeUrl === EventExecuteOrder.typeUrl || typeof o.order_id === "bigint" && typeof o.trade_amount === "string" && typeof o.match_amount === "string");
+  },
   encode(message: EventExecuteOrder, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.orderId !== BigInt(0)) {
       writer.uint32(8).uint64(message.orderId);
@@ -2838,7 +3088,7 @@ export const EventExecuteOrder = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): EventExecuteOrder {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): EventExecuteOrder {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseEventExecuteOrder();
@@ -2895,18 +3145,18 @@ export const EventExecuteOrder = {
     }
     return message;
   },
-  toAmino(message: EventExecuteOrder): EventExecuteOrderAmino {
+  toAmino(message: EventExecuteOrder, useInterfaces: boolean = true): EventExecuteOrderAmino {
     const obj: any = {};
     obj.order_id = message.orderId ? message.orderId.toString() : undefined;
-    obj.trade_amount = message.tradeAmount;
-    obj.match_amount = message.matchAmount;
+    obj.trade_amount = message.tradeAmount === "" ? undefined : message.tradeAmount;
+    obj.match_amount = message.matchAmount === "" ? undefined : message.matchAmount;
     return obj;
   },
   fromAminoMsg(object: EventExecuteOrderAminoMsg): EventExecuteOrder {
     return EventExecuteOrder.fromAmino(object.value);
   },
-  fromProtoMsg(message: EventExecuteOrderProtoMsg): EventExecuteOrder {
-    return EventExecuteOrder.decode(message.value);
+  fromProtoMsg(message: EventExecuteOrderProtoMsg, useInterfaces: boolean = true): EventExecuteOrder {
+    return EventExecuteOrder.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: EventExecuteOrder): Uint8Array {
     return EventExecuteOrder.encode(message).finish();
@@ -2918,6 +3168,7 @@ export const EventExecuteOrder = {
     };
   }
 };
+GlobalDecoderRegistry.register(EventExecuteOrder.typeUrl, EventExecuteOrder);
 function createBaseEventExecuteOrdersForPair(): EventExecuteOrdersForPair {
   return {
     poolId: BigInt(0),
@@ -2938,6 +3189,15 @@ function createBaseEventExecuteOrdersForPair(): EventExecuteOrdersForPair {
 }
 export const EventExecuteOrdersForPair = {
   typeUrl: "/pryzm.amm.v1.EventExecuteOrdersForPair",
+  is(o: any): o is EventExecuteOrdersForPair {
+    return o && (o.$typeUrl === EventExecuteOrdersForPair.typeUrl || typeof o.poolId === "bigint" && typeof o.tokenIn === "string" && typeof o.tokenOut === "string" && typeof o.whitelistedRoute === "boolean" && typeof o.buyPrice === "string" && typeof o.sellPrice === "string" && Array.isArray(o.buyOrders) && (!o.buyOrders.length || EventExecuteOrder.is(o.buyOrders[0])) && Array.isArray(o.sellOrders) && (!o.sellOrders.length || EventExecuteOrder.is(o.sellOrders[0])) && typeof o.buyTradeAmount === "string" && typeof o.buyMatchAmount === "string" && typeof o.sellTradeAmount === "string" && typeof o.sellMatchAmount === "string" && typeof o.sellTradeOutput === "string" && typeof o.buyTradeOutput === "string");
+  },
+  isSDK(o: any): o is EventExecuteOrdersForPairSDKType {
+    return o && (o.$typeUrl === EventExecuteOrdersForPair.typeUrl || typeof o.pool_id === "bigint" && typeof o.token_in === "string" && typeof o.token_out === "string" && typeof o.whitelisted_route === "boolean" && typeof o.buy_price === "string" && typeof o.sell_price === "string" && Array.isArray(o.buy_orders) && (!o.buy_orders.length || EventExecuteOrder.isSDK(o.buy_orders[0])) && Array.isArray(o.sell_orders) && (!o.sell_orders.length || EventExecuteOrder.isSDK(o.sell_orders[0])) && typeof o.buy_trade_amount === "string" && typeof o.buy_match_amount === "string" && typeof o.sell_trade_amount === "string" && typeof o.sell_match_amount === "string" && typeof o.sell_trade_output === "string" && typeof o.buy_trade_output === "string");
+  },
+  isAmino(o: any): o is EventExecuteOrdersForPairAmino {
+    return o && (o.$typeUrl === EventExecuteOrdersForPair.typeUrl || typeof o.pool_id === "bigint" && typeof o.token_in === "string" && typeof o.token_out === "string" && typeof o.whitelisted_route === "boolean" && typeof o.buy_price === "string" && typeof o.sell_price === "string" && Array.isArray(o.buy_orders) && (!o.buy_orders.length || EventExecuteOrder.isAmino(o.buy_orders[0])) && Array.isArray(o.sell_orders) && (!o.sell_orders.length || EventExecuteOrder.isAmino(o.sell_orders[0])) && typeof o.buy_trade_amount === "string" && typeof o.buy_match_amount === "string" && typeof o.sell_trade_amount === "string" && typeof o.sell_match_amount === "string" && typeof o.sell_trade_output === "string" && typeof o.buy_trade_output === "string");
+  },
   encode(message: EventExecuteOrdersForPair, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.poolId !== BigInt(0)) {
       writer.uint32(8).uint64(message.poolId);
@@ -2983,7 +3243,7 @@ export const EventExecuteOrdersForPair = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): EventExecuteOrdersForPair {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): EventExecuteOrdersForPair {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseEventExecuteOrdersForPair();
@@ -3009,10 +3269,10 @@ export const EventExecuteOrdersForPair = {
           message.sellPrice = Decimal.fromAtomics(reader.string(), 18).toString();
           break;
         case 7:
-          message.buyOrders.push(EventExecuteOrder.decode(reader, reader.uint32()));
+          message.buyOrders.push(EventExecuteOrder.decode(reader, reader.uint32(), useInterfaces));
           break;
         case 8:
-          message.sellOrders.push(EventExecuteOrder.decode(reader, reader.uint32()));
+          message.sellOrders.push(EventExecuteOrder.decode(reader, reader.uint32(), useInterfaces));
           break;
         case 9:
           message.buyTradeAmount = reader.string();
@@ -3143,37 +3403,37 @@ export const EventExecuteOrdersForPair = {
     }
     return message;
   },
-  toAmino(message: EventExecuteOrdersForPair): EventExecuteOrdersForPairAmino {
+  toAmino(message: EventExecuteOrdersForPair, useInterfaces: boolean = true): EventExecuteOrdersForPairAmino {
     const obj: any = {};
     obj.pool_id = message.poolId ? message.poolId.toString() : undefined;
-    obj.token_in = message.tokenIn;
-    obj.token_out = message.tokenOut;
-    obj.whitelisted_route = message.whitelistedRoute;
-    obj.buy_price = message.buyPrice;
-    obj.sell_price = message.sellPrice;
+    obj.token_in = message.tokenIn === "" ? undefined : message.tokenIn;
+    obj.token_out = message.tokenOut === "" ? undefined : message.tokenOut;
+    obj.whitelisted_route = message.whitelistedRoute === false ? undefined : message.whitelistedRoute;
+    obj.buy_price = padDecimal(message.buyPrice) === "" ? undefined : padDecimal(message.buyPrice);
+    obj.sell_price = padDecimal(message.sellPrice) === "" ? undefined : padDecimal(message.sellPrice);
     if (message.buyOrders) {
-      obj.buy_orders = message.buyOrders.map(e => e ? EventExecuteOrder.toAmino(e) : undefined);
+      obj.buy_orders = message.buyOrders.map(e => e ? EventExecuteOrder.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.buy_orders = [];
+      obj.buy_orders = null;
     }
     if (message.sellOrders) {
-      obj.sell_orders = message.sellOrders.map(e => e ? EventExecuteOrder.toAmino(e) : undefined);
+      obj.sell_orders = message.sellOrders.map(e => e ? EventExecuteOrder.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.sell_orders = [];
+      obj.sell_orders = null;
     }
-    obj.buy_trade_amount = message.buyTradeAmount;
-    obj.buy_match_amount = message.buyMatchAmount;
-    obj.sell_trade_amount = message.sellTradeAmount;
-    obj.sell_match_amount = message.sellMatchAmount;
-    obj.sell_trade_output = message.sellTradeOutput;
-    obj.buy_trade_output = message.buyTradeOutput;
+    obj.buy_trade_amount = message.buyTradeAmount === "" ? undefined : message.buyTradeAmount;
+    obj.buy_match_amount = message.buyMatchAmount === "" ? undefined : message.buyMatchAmount;
+    obj.sell_trade_amount = message.sellTradeAmount === "" ? undefined : message.sellTradeAmount;
+    obj.sell_match_amount = message.sellMatchAmount === "" ? undefined : message.sellMatchAmount;
+    obj.sell_trade_output = message.sellTradeOutput === "" ? undefined : message.sellTradeOutput;
+    obj.buy_trade_output = message.buyTradeOutput === "" ? undefined : message.buyTradeOutput;
     return obj;
   },
   fromAminoMsg(object: EventExecuteOrdersForPairAminoMsg): EventExecuteOrdersForPair {
     return EventExecuteOrdersForPair.fromAmino(object.value);
   },
-  fromProtoMsg(message: EventExecuteOrdersForPairProtoMsg): EventExecuteOrdersForPair {
-    return EventExecuteOrdersForPair.decode(message.value);
+  fromProtoMsg(message: EventExecuteOrdersForPairProtoMsg, useInterfaces: boolean = true): EventExecuteOrdersForPair {
+    return EventExecuteOrdersForPair.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: EventExecuteOrdersForPair): Uint8Array {
     return EventExecuteOrdersForPair.encode(message).finish();
@@ -3185,6 +3445,7 @@ export const EventExecuteOrdersForPair = {
     };
   }
 };
+GlobalDecoderRegistry.register(EventExecuteOrdersForPair.typeUrl, EventExecuteOrdersForPair);
 function createBaseEventExecuteMatchProposalOrder(): EventExecuteMatchProposalOrder {
   return {
     orderId: BigInt(0),
@@ -3193,6 +3454,15 @@ function createBaseEventExecuteMatchProposalOrder(): EventExecuteMatchProposalOr
 }
 export const EventExecuteMatchProposalOrder = {
   typeUrl: "/pryzm.amm.v1.EventExecuteMatchProposalOrder",
+  is(o: any): o is EventExecuteMatchProposalOrder {
+    return o && (o.$typeUrl === EventExecuteMatchProposalOrder.typeUrl || typeof o.orderId === "bigint" && typeof o.matchAmount === "string");
+  },
+  isSDK(o: any): o is EventExecuteMatchProposalOrderSDKType {
+    return o && (o.$typeUrl === EventExecuteMatchProposalOrder.typeUrl || typeof o.order_id === "bigint" && typeof o.match_amount === "string");
+  },
+  isAmino(o: any): o is EventExecuteMatchProposalOrderAmino {
+    return o && (o.$typeUrl === EventExecuteMatchProposalOrder.typeUrl || typeof o.order_id === "bigint" && typeof o.match_amount === "string");
+  },
   encode(message: EventExecuteMatchProposalOrder, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.orderId !== BigInt(0)) {
       writer.uint32(8).uint64(message.orderId);
@@ -3202,7 +3472,7 @@ export const EventExecuteMatchProposalOrder = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): EventExecuteMatchProposalOrder {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): EventExecuteMatchProposalOrder {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseEventExecuteMatchProposalOrder();
@@ -3250,17 +3520,17 @@ export const EventExecuteMatchProposalOrder = {
     }
     return message;
   },
-  toAmino(message: EventExecuteMatchProposalOrder): EventExecuteMatchProposalOrderAmino {
+  toAmino(message: EventExecuteMatchProposalOrder, useInterfaces: boolean = true): EventExecuteMatchProposalOrderAmino {
     const obj: any = {};
     obj.order_id = message.orderId ? message.orderId.toString() : undefined;
-    obj.match_amount = message.matchAmount;
+    obj.match_amount = message.matchAmount === "" ? undefined : message.matchAmount;
     return obj;
   },
   fromAminoMsg(object: EventExecuteMatchProposalOrderAminoMsg): EventExecuteMatchProposalOrder {
     return EventExecuteMatchProposalOrder.fromAmino(object.value);
   },
-  fromProtoMsg(message: EventExecuteMatchProposalOrderProtoMsg): EventExecuteMatchProposalOrder {
-    return EventExecuteMatchProposalOrder.decode(message.value);
+  fromProtoMsg(message: EventExecuteMatchProposalOrderProtoMsg, useInterfaces: boolean = true): EventExecuteMatchProposalOrder {
+    return EventExecuteMatchProposalOrder.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: EventExecuteMatchProposalOrder): Uint8Array {
     return EventExecuteMatchProposalOrder.encode(message).finish();
@@ -3272,6 +3542,7 @@ export const EventExecuteMatchProposalOrder = {
     };
   }
 };
+GlobalDecoderRegistry.register(EventExecuteMatchProposalOrder.typeUrl, EventExecuteMatchProposalOrder);
 function createBaseEventExecuteMatchProposalPair(): EventExecuteMatchProposalPair {
   return {
     poolId: BigInt(0),
@@ -3288,6 +3559,15 @@ function createBaseEventExecuteMatchProposalPair(): EventExecuteMatchProposalPai
 }
 export const EventExecuteMatchProposalPair = {
   typeUrl: "/pryzm.amm.v1.EventExecuteMatchProposalPair",
+  is(o: any): o is EventExecuteMatchProposalPair {
+    return o && (o.$typeUrl === EventExecuteMatchProposalPair.typeUrl || typeof o.poolId === "bigint" && typeof o.tokenIn === "string" && typeof o.tokenOut === "string" && typeof o.whitelistedRoute === "boolean" && typeof o.buyPrice === "string" && typeof o.sellPrice === "string" && Array.isArray(o.buyOrders) && (!o.buyOrders.length || EventExecuteMatchProposalOrder.is(o.buyOrders[0])) && Array.isArray(o.sellOrders) && (!o.sellOrders.length || EventExecuteMatchProposalOrder.is(o.sellOrders[0])) && typeof o.buyMatchAmount === "string" && typeof o.sellMatchAmount === "string");
+  },
+  isSDK(o: any): o is EventExecuteMatchProposalPairSDKType {
+    return o && (o.$typeUrl === EventExecuteMatchProposalPair.typeUrl || typeof o.pool_id === "bigint" && typeof o.token_in === "string" && typeof o.token_out === "string" && typeof o.whitelisted_route === "boolean" && typeof o.buy_price === "string" && typeof o.sell_price === "string" && Array.isArray(o.buy_orders) && (!o.buy_orders.length || EventExecuteMatchProposalOrder.isSDK(o.buy_orders[0])) && Array.isArray(o.sell_orders) && (!o.sell_orders.length || EventExecuteMatchProposalOrder.isSDK(o.sell_orders[0])) && typeof o.buy_match_amount === "string" && typeof o.sell_match_amount === "string");
+  },
+  isAmino(o: any): o is EventExecuteMatchProposalPairAmino {
+    return o && (o.$typeUrl === EventExecuteMatchProposalPair.typeUrl || typeof o.pool_id === "bigint" && typeof o.token_in === "string" && typeof o.token_out === "string" && typeof o.whitelisted_route === "boolean" && typeof o.buy_price === "string" && typeof o.sell_price === "string" && Array.isArray(o.buy_orders) && (!o.buy_orders.length || EventExecuteMatchProposalOrder.isAmino(o.buy_orders[0])) && Array.isArray(o.sell_orders) && (!o.sell_orders.length || EventExecuteMatchProposalOrder.isAmino(o.sell_orders[0])) && typeof o.buy_match_amount === "string" && typeof o.sell_match_amount === "string");
+  },
   encode(message: EventExecuteMatchProposalPair, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.poolId !== BigInt(0)) {
       writer.uint32(8).uint64(message.poolId);
@@ -3321,7 +3601,7 @@ export const EventExecuteMatchProposalPair = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): EventExecuteMatchProposalPair {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): EventExecuteMatchProposalPair {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseEventExecuteMatchProposalPair();
@@ -3347,10 +3627,10 @@ export const EventExecuteMatchProposalPair = {
           message.sellPrice = Decimal.fromAtomics(reader.string(), 18).toString();
           break;
         case 7:
-          message.buyOrders.push(EventExecuteMatchProposalOrder.decode(reader, reader.uint32()));
+          message.buyOrders.push(EventExecuteMatchProposalOrder.decode(reader, reader.uint32(), useInterfaces));
           break;
         case 8:
-          message.sellOrders.push(EventExecuteMatchProposalOrder.decode(reader, reader.uint32()));
+          message.sellOrders.push(EventExecuteMatchProposalOrder.decode(reader, reader.uint32(), useInterfaces));
           break;
         case 9:
           message.buyMatchAmount = reader.string();
@@ -3445,33 +3725,33 @@ export const EventExecuteMatchProposalPair = {
     }
     return message;
   },
-  toAmino(message: EventExecuteMatchProposalPair): EventExecuteMatchProposalPairAmino {
+  toAmino(message: EventExecuteMatchProposalPair, useInterfaces: boolean = true): EventExecuteMatchProposalPairAmino {
     const obj: any = {};
     obj.pool_id = message.poolId ? message.poolId.toString() : undefined;
-    obj.token_in = message.tokenIn;
-    obj.token_out = message.tokenOut;
-    obj.whitelisted_route = message.whitelistedRoute;
-    obj.buy_price = message.buyPrice;
-    obj.sell_price = message.sellPrice;
+    obj.token_in = message.tokenIn === "" ? undefined : message.tokenIn;
+    obj.token_out = message.tokenOut === "" ? undefined : message.tokenOut;
+    obj.whitelisted_route = message.whitelistedRoute === false ? undefined : message.whitelistedRoute;
+    obj.buy_price = padDecimal(message.buyPrice) === "" ? undefined : padDecimal(message.buyPrice);
+    obj.sell_price = padDecimal(message.sellPrice) === "" ? undefined : padDecimal(message.sellPrice);
     if (message.buyOrders) {
-      obj.buy_orders = message.buyOrders.map(e => e ? EventExecuteMatchProposalOrder.toAmino(e) : undefined);
+      obj.buy_orders = message.buyOrders.map(e => e ? EventExecuteMatchProposalOrder.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.buy_orders = [];
+      obj.buy_orders = null;
     }
     if (message.sellOrders) {
-      obj.sell_orders = message.sellOrders.map(e => e ? EventExecuteMatchProposalOrder.toAmino(e) : undefined);
+      obj.sell_orders = message.sellOrders.map(e => e ? EventExecuteMatchProposalOrder.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.sell_orders = [];
+      obj.sell_orders = null;
     }
-    obj.buy_match_amount = message.buyMatchAmount;
-    obj.sell_match_amount = message.sellMatchAmount;
+    obj.buy_match_amount = message.buyMatchAmount === "" ? undefined : message.buyMatchAmount;
+    obj.sell_match_amount = message.sellMatchAmount === "" ? undefined : message.sellMatchAmount;
     return obj;
   },
   fromAminoMsg(object: EventExecuteMatchProposalPairAminoMsg): EventExecuteMatchProposalPair {
     return EventExecuteMatchProposalPair.fromAmino(object.value);
   },
-  fromProtoMsg(message: EventExecuteMatchProposalPairProtoMsg): EventExecuteMatchProposalPair {
-    return EventExecuteMatchProposalPair.decode(message.value);
+  fromProtoMsg(message: EventExecuteMatchProposalPairProtoMsg, useInterfaces: boolean = true): EventExecuteMatchProposalPair {
+    return EventExecuteMatchProposalPair.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: EventExecuteMatchProposalPair): Uint8Array {
     return EventExecuteMatchProposalPair.encode(message).finish();
@@ -3483,6 +3763,7 @@ export const EventExecuteMatchProposalPair = {
     };
   }
 };
+GlobalDecoderRegistry.register(EventExecuteMatchProposalPair.typeUrl, EventExecuteMatchProposalPair);
 function createBaseEventExecuteMatchProposal(): EventExecuteMatchProposal {
   return {
     proposer: "",
@@ -3492,6 +3773,15 @@ function createBaseEventExecuteMatchProposal(): EventExecuteMatchProposal {
 }
 export const EventExecuteMatchProposal = {
   typeUrl: "/pryzm.amm.v1.EventExecuteMatchProposal",
+  is(o: any): o is EventExecuteMatchProposal {
+    return o && (o.$typeUrl === EventExecuteMatchProposal.typeUrl || typeof o.proposer === "string" && Array.isArray(o.pairs) && (!o.pairs.length || EventExecuteMatchProposalPair.is(o.pairs[0])) && Array.isArray(o.proposerReward) && (!o.proposerReward.length || Coin.is(o.proposerReward[0])));
+  },
+  isSDK(o: any): o is EventExecuteMatchProposalSDKType {
+    return o && (o.$typeUrl === EventExecuteMatchProposal.typeUrl || typeof o.proposer === "string" && Array.isArray(o.pairs) && (!o.pairs.length || EventExecuteMatchProposalPair.isSDK(o.pairs[0])) && Array.isArray(o.proposer_reward) && (!o.proposer_reward.length || Coin.isSDK(o.proposer_reward[0])));
+  },
+  isAmino(o: any): o is EventExecuteMatchProposalAmino {
+    return o && (o.$typeUrl === EventExecuteMatchProposal.typeUrl || typeof o.proposer === "string" && Array.isArray(o.pairs) && (!o.pairs.length || EventExecuteMatchProposalPair.isAmino(o.pairs[0])) && Array.isArray(o.proposer_reward) && (!o.proposer_reward.length || Coin.isAmino(o.proposer_reward[0])));
+  },
   encode(message: EventExecuteMatchProposal, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.proposer !== "") {
       writer.uint32(10).string(message.proposer);
@@ -3504,7 +3794,7 @@ export const EventExecuteMatchProposal = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): EventExecuteMatchProposal {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): EventExecuteMatchProposal {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseEventExecuteMatchProposal();
@@ -3515,10 +3805,10 @@ export const EventExecuteMatchProposal = {
           message.proposer = reader.string();
           break;
         case 2:
-          message.pairs.push(EventExecuteMatchProposalPair.decode(reader, reader.uint32()));
+          message.pairs.push(EventExecuteMatchProposalPair.decode(reader, reader.uint32(), useInterfaces));
           break;
         case 3:
-          message.proposerReward.push(Coin.decode(reader, reader.uint32()));
+          message.proposerReward.push(Coin.decode(reader, reader.uint32(), useInterfaces));
           break;
         default:
           reader.skipType(tag & 7);
@@ -3565,26 +3855,26 @@ export const EventExecuteMatchProposal = {
     message.proposerReward = object.proposer_reward?.map(e => Coin.fromAmino(e)) || [];
     return message;
   },
-  toAmino(message: EventExecuteMatchProposal): EventExecuteMatchProposalAmino {
+  toAmino(message: EventExecuteMatchProposal, useInterfaces: boolean = true): EventExecuteMatchProposalAmino {
     const obj: any = {};
-    obj.proposer = message.proposer;
+    obj.proposer = message.proposer === "" ? undefined : message.proposer;
     if (message.pairs) {
-      obj.pairs = message.pairs.map(e => e ? EventExecuteMatchProposalPair.toAmino(e) : undefined);
+      obj.pairs = message.pairs.map(e => e ? EventExecuteMatchProposalPair.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.pairs = [];
+      obj.pairs = null;
     }
     if (message.proposerReward) {
-      obj.proposer_reward = message.proposerReward.map(e => e ? Coin.toAmino(e) : undefined);
+      obj.proposer_reward = message.proposerReward.map(e => e ? Coin.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.proposer_reward = [];
+      obj.proposer_reward = null;
     }
     return obj;
   },
   fromAminoMsg(object: EventExecuteMatchProposalAminoMsg): EventExecuteMatchProposal {
     return EventExecuteMatchProposal.fromAmino(object.value);
   },
-  fromProtoMsg(message: EventExecuteMatchProposalProtoMsg): EventExecuteMatchProposal {
-    return EventExecuteMatchProposal.decode(message.value);
+  fromProtoMsg(message: EventExecuteMatchProposalProtoMsg, useInterfaces: boolean = true): EventExecuteMatchProposal {
+    return EventExecuteMatchProposal.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: EventExecuteMatchProposal): Uint8Array {
     return EventExecuteMatchProposal.encode(message).finish();
@@ -3596,6 +3886,7 @@ export const EventExecuteMatchProposal = {
     };
   }
 };
+GlobalDecoderRegistry.register(EventExecuteMatchProposal.typeUrl, EventExecuteMatchProposal);
 function createBaseEventExitPool(): EventExitPool {
   return {
     poolId: BigInt(0),
@@ -3604,6 +3895,15 @@ function createBaseEventExitPool(): EventExitPool {
 }
 export const EventExitPool = {
   typeUrl: "/pryzm.amm.v1.EventExitPool",
+  is(o: any): o is EventExitPool {
+    return o && (o.$typeUrl === EventExitPool.typeUrl || typeof o.poolId === "bigint" && ExitSummary.is(o.summary));
+  },
+  isSDK(o: any): o is EventExitPoolSDKType {
+    return o && (o.$typeUrl === EventExitPool.typeUrl || typeof o.pool_id === "bigint" && ExitSummary.isSDK(o.summary));
+  },
+  isAmino(o: any): o is EventExitPoolAmino {
+    return o && (o.$typeUrl === EventExitPool.typeUrl || typeof o.pool_id === "bigint" && ExitSummary.isAmino(o.summary));
+  },
   encode(message: EventExitPool, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.poolId !== BigInt(0)) {
       writer.uint32(8).uint64(message.poolId);
@@ -3613,7 +3913,7 @@ export const EventExitPool = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): EventExitPool {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): EventExitPool {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseEventExitPool();
@@ -3624,7 +3924,7 @@ export const EventExitPool = {
           message.poolId = reader.uint64();
           break;
         case 2:
-          message.summary = ExitSummary.decode(reader, reader.uint32());
+          message.summary = ExitSummary.decode(reader, reader.uint32(), useInterfaces);
           break;
         default:
           reader.skipType(tag & 7);
@@ -3661,17 +3961,17 @@ export const EventExitPool = {
     }
     return message;
   },
-  toAmino(message: EventExitPool): EventExitPoolAmino {
+  toAmino(message: EventExitPool, useInterfaces: boolean = true): EventExitPoolAmino {
     const obj: any = {};
     obj.pool_id = message.poolId ? message.poolId.toString() : undefined;
-    obj.summary = message.summary ? ExitSummary.toAmino(message.summary) : undefined;
+    obj.summary = message.summary ? ExitSummary.toAmino(message.summary, useInterfaces) : undefined;
     return obj;
   },
   fromAminoMsg(object: EventExitPoolAminoMsg): EventExitPool {
     return EventExitPool.fromAmino(object.value);
   },
-  fromProtoMsg(message: EventExitPoolProtoMsg): EventExitPool {
-    return EventExitPool.decode(message.value);
+  fromProtoMsg(message: EventExitPoolProtoMsg, useInterfaces: boolean = true): EventExitPool {
+    return EventExitPool.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: EventExitPool): Uint8Array {
     return EventExitPool.encode(message).finish();
@@ -3683,6 +3983,7 @@ export const EventExitPool = {
     };
   }
 };
+GlobalDecoderRegistry.register(EventExitPool.typeUrl, EventExitPool);
 function createBaseEventJoinPool(): EventJoinPool {
   return {
     poolId: BigInt(0),
@@ -3691,6 +3992,15 @@ function createBaseEventJoinPool(): EventJoinPool {
 }
 export const EventJoinPool = {
   typeUrl: "/pryzm.amm.v1.EventJoinPool",
+  is(o: any): o is EventJoinPool {
+    return o && (o.$typeUrl === EventJoinPool.typeUrl || typeof o.poolId === "bigint" && JoinSummary.is(o.summary));
+  },
+  isSDK(o: any): o is EventJoinPoolSDKType {
+    return o && (o.$typeUrl === EventJoinPool.typeUrl || typeof o.pool_id === "bigint" && JoinSummary.isSDK(o.summary));
+  },
+  isAmino(o: any): o is EventJoinPoolAmino {
+    return o && (o.$typeUrl === EventJoinPool.typeUrl || typeof o.pool_id === "bigint" && JoinSummary.isAmino(o.summary));
+  },
   encode(message: EventJoinPool, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.poolId !== BigInt(0)) {
       writer.uint32(8).uint64(message.poolId);
@@ -3700,7 +4010,7 @@ export const EventJoinPool = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): EventJoinPool {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): EventJoinPool {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseEventJoinPool();
@@ -3711,7 +4021,7 @@ export const EventJoinPool = {
           message.poolId = reader.uint64();
           break;
         case 2:
-          message.summary = JoinSummary.decode(reader, reader.uint32());
+          message.summary = JoinSummary.decode(reader, reader.uint32(), useInterfaces);
           break;
         default:
           reader.skipType(tag & 7);
@@ -3748,17 +4058,17 @@ export const EventJoinPool = {
     }
     return message;
   },
-  toAmino(message: EventJoinPool): EventJoinPoolAmino {
+  toAmino(message: EventJoinPool, useInterfaces: boolean = true): EventJoinPoolAmino {
     const obj: any = {};
     obj.pool_id = message.poolId ? message.poolId.toString() : undefined;
-    obj.summary = message.summary ? JoinSummary.toAmino(message.summary) : undefined;
+    obj.summary = message.summary ? JoinSummary.toAmino(message.summary, useInterfaces) : undefined;
     return obj;
   },
   fromAminoMsg(object: EventJoinPoolAminoMsg): EventJoinPool {
     return EventJoinPool.fromAmino(object.value);
   },
-  fromProtoMsg(message: EventJoinPoolProtoMsg): EventJoinPool {
-    return EventJoinPool.decode(message.value);
+  fromProtoMsg(message: EventJoinPoolProtoMsg, useInterfaces: boolean = true): EventJoinPool {
+    return EventJoinPool.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: EventJoinPool): Uint8Array {
     return EventJoinPool.encode(message).finish();
@@ -3770,6 +4080,7 @@ export const EventJoinPool = {
     };
   }
 };
+GlobalDecoderRegistry.register(EventJoinPool.typeUrl, EventJoinPool);
 function createBaseEventSwap(): EventSwap {
   return {
     poolId: BigInt(0),
@@ -3778,6 +4089,15 @@ function createBaseEventSwap(): EventSwap {
 }
 export const EventSwap = {
   typeUrl: "/pryzm.amm.v1.EventSwap",
+  is(o: any): o is EventSwap {
+    return o && (o.$typeUrl === EventSwap.typeUrl || typeof o.poolId === "bigint" && SwapSummary.is(o.summary));
+  },
+  isSDK(o: any): o is EventSwapSDKType {
+    return o && (o.$typeUrl === EventSwap.typeUrl || typeof o.pool_id === "bigint" && SwapSummary.isSDK(o.summary));
+  },
+  isAmino(o: any): o is EventSwapAmino {
+    return o && (o.$typeUrl === EventSwap.typeUrl || typeof o.pool_id === "bigint" && SwapSummary.isAmino(o.summary));
+  },
   encode(message: EventSwap, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.poolId !== BigInt(0)) {
       writer.uint32(8).uint64(message.poolId);
@@ -3787,7 +4107,7 @@ export const EventSwap = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): EventSwap {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): EventSwap {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseEventSwap();
@@ -3798,7 +4118,7 @@ export const EventSwap = {
           message.poolId = reader.uint64();
           break;
         case 2:
-          message.summary = SwapSummary.decode(reader, reader.uint32());
+          message.summary = SwapSummary.decode(reader, reader.uint32(), useInterfaces);
           break;
         default:
           reader.skipType(tag & 7);
@@ -3835,17 +4155,17 @@ export const EventSwap = {
     }
     return message;
   },
-  toAmino(message: EventSwap): EventSwapAmino {
+  toAmino(message: EventSwap, useInterfaces: boolean = true): EventSwapAmino {
     const obj: any = {};
     obj.pool_id = message.poolId ? message.poolId.toString() : undefined;
-    obj.summary = message.summary ? SwapSummary.toAmino(message.summary) : undefined;
+    obj.summary = message.summary ? SwapSummary.toAmino(message.summary, useInterfaces) : undefined;
     return obj;
   },
   fromAminoMsg(object: EventSwapAminoMsg): EventSwap {
     return EventSwap.fromAmino(object.value);
   },
-  fromProtoMsg(message: EventSwapProtoMsg): EventSwap {
-    return EventSwap.decode(message.value);
+  fromProtoMsg(message: EventSwapProtoMsg, useInterfaces: boolean = true): EventSwap {
+    return EventSwap.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: EventSwap): Uint8Array {
     return EventSwap.encode(message).finish();
@@ -3857,6 +4177,7 @@ export const EventSwap = {
     };
   }
 };
+GlobalDecoderRegistry.register(EventSwap.typeUrl, EventSwap);
 function createBaseEventExitPoolRequest(): EventExitPoolRequest {
   return {
     creator: "",
@@ -3870,6 +4191,15 @@ function createBaseEventExitPoolRequest(): EventExitPoolRequest {
 }
 export const EventExitPoolRequest = {
   typeUrl: "/pryzm.amm.v1.EventExitPoolRequest",
+  is(o: any): o is EventExitPoolRequest {
+    return o && (o.$typeUrl === EventExitPoolRequest.typeUrl || typeof o.creator === "string" && typeof o.poolId === "bigint" && Coin.is(o.lptIn) && Array.isArray(o.amountsOut) && (!o.amountsOut.length || Coin.is(o.amountsOut[0])) && Coin.is(o.protocolFee) && Array.isArray(o.swapFee) && (!o.swapFee.length || Coin.is(o.swapFee[0])) && isSet(o.exitType));
+  },
+  isSDK(o: any): o is EventExitPoolRequestSDKType {
+    return o && (o.$typeUrl === EventExitPoolRequest.typeUrl || typeof o.creator === "string" && typeof o.pool_id === "bigint" && Coin.isSDK(o.lpt_in) && Array.isArray(o.amounts_out) && (!o.amounts_out.length || Coin.isSDK(o.amounts_out[0])) && Coin.isSDK(o.protocol_fee) && Array.isArray(o.swap_fee) && (!o.swap_fee.length || Coin.isSDK(o.swap_fee[0])) && isSet(o.exit_type));
+  },
+  isAmino(o: any): o is EventExitPoolRequestAmino {
+    return o && (o.$typeUrl === EventExitPoolRequest.typeUrl || typeof o.creator === "string" && typeof o.pool_id === "bigint" && Coin.isAmino(o.lpt_in) && Array.isArray(o.amounts_out) && (!o.amounts_out.length || Coin.isAmino(o.amounts_out[0])) && Coin.isAmino(o.protocol_fee) && Array.isArray(o.swap_fee) && (!o.swap_fee.length || Coin.isAmino(o.swap_fee[0])) && isSet(o.exit_type));
+  },
   encode(message: EventExitPoolRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.creator !== "") {
       writer.uint32(10).string(message.creator);
@@ -3894,7 +4224,7 @@ export const EventExitPoolRequest = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): EventExitPoolRequest {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): EventExitPoolRequest {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseEventExitPoolRequest();
@@ -3908,16 +4238,16 @@ export const EventExitPoolRequest = {
           message.poolId = reader.uint64();
           break;
         case 3:
-          message.lptIn = Coin.decode(reader, reader.uint32());
+          message.lptIn = Coin.decode(reader, reader.uint32(), useInterfaces);
           break;
         case 4:
-          message.amountsOut.push(Coin.decode(reader, reader.uint32()));
+          message.amountsOut.push(Coin.decode(reader, reader.uint32(), useInterfaces));
           break;
         case 5:
-          message.protocolFee = Coin.decode(reader, reader.uint32());
+          message.protocolFee = Coin.decode(reader, reader.uint32(), useInterfaces);
           break;
         case 6:
-          message.swapFee.push(Coin.decode(reader, reader.uint32()));
+          message.swapFee.push(Coin.decode(reader, reader.uint32(), useInterfaces));
           break;
         case 7:
           message.exitType = (reader.int32() as any);
@@ -3987,34 +4317,34 @@ export const EventExitPoolRequest = {
     }
     message.swapFee = object.swap_fee?.map(e => Coin.fromAmino(e)) || [];
     if (object.exit_type !== undefined && object.exit_type !== null) {
-      message.exitType = exitTypeFromJSON(object.exit_type);
+      message.exitType = object.exit_type;
     }
     return message;
   },
-  toAmino(message: EventExitPoolRequest): EventExitPoolRequestAmino {
+  toAmino(message: EventExitPoolRequest, useInterfaces: boolean = true): EventExitPoolRequestAmino {
     const obj: any = {};
-    obj.creator = message.creator;
+    obj.creator = message.creator === "" ? undefined : message.creator;
     obj.pool_id = message.poolId ? message.poolId.toString() : undefined;
-    obj.lpt_in = message.lptIn ? Coin.toAmino(message.lptIn) : undefined;
+    obj.lpt_in = message.lptIn ? Coin.toAmino(message.lptIn, useInterfaces) : undefined;
     if (message.amountsOut) {
-      obj.amounts_out = message.amountsOut.map(e => e ? Coin.toAmino(e) : undefined);
+      obj.amounts_out = message.amountsOut.map(e => e ? Coin.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.amounts_out = [];
+      obj.amounts_out = null;
     }
-    obj.protocol_fee = message.protocolFee ? Coin.toAmino(message.protocolFee) : undefined;
+    obj.protocol_fee = message.protocolFee ? Coin.toAmino(message.protocolFee, useInterfaces) : undefined;
     if (message.swapFee) {
-      obj.swap_fee = message.swapFee.map(e => e ? Coin.toAmino(e) : undefined);
+      obj.swap_fee = message.swapFee.map(e => e ? Coin.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.swap_fee = [];
+      obj.swap_fee = null;
     }
-    obj.exit_type = exitTypeToJSON(message.exitType);
+    obj.exit_type = message.exitType === 0 ? undefined : message.exitType;
     return obj;
   },
   fromAminoMsg(object: EventExitPoolRequestAminoMsg): EventExitPoolRequest {
     return EventExitPoolRequest.fromAmino(object.value);
   },
-  fromProtoMsg(message: EventExitPoolRequestProtoMsg): EventExitPoolRequest {
-    return EventExitPoolRequest.decode(message.value);
+  fromProtoMsg(message: EventExitPoolRequestProtoMsg, useInterfaces: boolean = true): EventExitPoolRequest {
+    return EventExitPoolRequest.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: EventExitPoolRequest): Uint8Array {
     return EventExitPoolRequest.encode(message).finish();
@@ -4026,6 +4356,7 @@ export const EventExitPoolRequest = {
     };
   }
 };
+GlobalDecoderRegistry.register(EventExitPoolRequest.typeUrl, EventExitPoolRequest);
 function createBaseEventJoinPoolRequest(): EventJoinPoolRequest {
   return {
     creator: "",
@@ -4039,6 +4370,15 @@ function createBaseEventJoinPoolRequest(): EventJoinPoolRequest {
 }
 export const EventJoinPoolRequest = {
   typeUrl: "/pryzm.amm.v1.EventJoinPoolRequest",
+  is(o: any): o is EventJoinPoolRequest {
+    return o && (o.$typeUrl === EventJoinPoolRequest.typeUrl || typeof o.creator === "string" && typeof o.poolId === "bigint" && Coin.is(o.lptOut) && Array.isArray(o.amountsIn) && (!o.amountsIn.length || Coin.is(o.amountsIn[0])) && Array.isArray(o.protocolFee) && (!o.protocolFee.length || Coin.is(o.protocolFee[0])) && Array.isArray(o.swapFee) && (!o.swapFee.length || Coin.is(o.swapFee[0])) && isSet(o.joinType));
+  },
+  isSDK(o: any): o is EventJoinPoolRequestSDKType {
+    return o && (o.$typeUrl === EventJoinPoolRequest.typeUrl || typeof o.creator === "string" && typeof o.pool_id === "bigint" && Coin.isSDK(o.lpt_out) && Array.isArray(o.amounts_in) && (!o.amounts_in.length || Coin.isSDK(o.amounts_in[0])) && Array.isArray(o.protocol_fee) && (!o.protocol_fee.length || Coin.isSDK(o.protocol_fee[0])) && Array.isArray(o.swap_fee) && (!o.swap_fee.length || Coin.isSDK(o.swap_fee[0])) && isSet(o.join_type));
+  },
+  isAmino(o: any): o is EventJoinPoolRequestAmino {
+    return o && (o.$typeUrl === EventJoinPoolRequest.typeUrl || typeof o.creator === "string" && typeof o.pool_id === "bigint" && Coin.isAmino(o.lpt_out) && Array.isArray(o.amounts_in) && (!o.amounts_in.length || Coin.isAmino(o.amounts_in[0])) && Array.isArray(o.protocol_fee) && (!o.protocol_fee.length || Coin.isAmino(o.protocol_fee[0])) && Array.isArray(o.swap_fee) && (!o.swap_fee.length || Coin.isAmino(o.swap_fee[0])) && isSet(o.join_type));
+  },
   encode(message: EventJoinPoolRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.creator !== "") {
       writer.uint32(10).string(message.creator);
@@ -4063,7 +4403,7 @@ export const EventJoinPoolRequest = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): EventJoinPoolRequest {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): EventJoinPoolRequest {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseEventJoinPoolRequest();
@@ -4077,16 +4417,16 @@ export const EventJoinPoolRequest = {
           message.poolId = reader.uint64();
           break;
         case 3:
-          message.lptOut = Coin.decode(reader, reader.uint32());
+          message.lptOut = Coin.decode(reader, reader.uint32(), useInterfaces);
           break;
         case 4:
-          message.amountsIn.push(Coin.decode(reader, reader.uint32()));
+          message.amountsIn.push(Coin.decode(reader, reader.uint32(), useInterfaces));
           break;
         case 5:
-          message.protocolFee.push(Coin.decode(reader, reader.uint32()));
+          message.protocolFee.push(Coin.decode(reader, reader.uint32(), useInterfaces));
           break;
         case 6:
-          message.swapFee.push(Coin.decode(reader, reader.uint32()));
+          message.swapFee.push(Coin.decode(reader, reader.uint32(), useInterfaces));
           break;
         case 7:
           message.joinType = (reader.int32() as any);
@@ -4158,38 +4498,38 @@ export const EventJoinPoolRequest = {
     message.protocolFee = object.protocol_fee?.map(e => Coin.fromAmino(e)) || [];
     message.swapFee = object.swap_fee?.map(e => Coin.fromAmino(e)) || [];
     if (object.join_type !== undefined && object.join_type !== null) {
-      message.joinType = joinTypeFromJSON(object.join_type);
+      message.joinType = object.join_type;
     }
     return message;
   },
-  toAmino(message: EventJoinPoolRequest): EventJoinPoolRequestAmino {
+  toAmino(message: EventJoinPoolRequest, useInterfaces: boolean = true): EventJoinPoolRequestAmino {
     const obj: any = {};
-    obj.creator = message.creator;
+    obj.creator = message.creator === "" ? undefined : message.creator;
     obj.pool_id = message.poolId ? message.poolId.toString() : undefined;
-    obj.lpt_out = message.lptOut ? Coin.toAmino(message.lptOut) : undefined;
+    obj.lpt_out = message.lptOut ? Coin.toAmino(message.lptOut, useInterfaces) : undefined;
     if (message.amountsIn) {
-      obj.amounts_in = message.amountsIn.map(e => e ? Coin.toAmino(e) : undefined);
+      obj.amounts_in = message.amountsIn.map(e => e ? Coin.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.amounts_in = [];
+      obj.amounts_in = null;
     }
     if (message.protocolFee) {
-      obj.protocol_fee = message.protocolFee.map(e => e ? Coin.toAmino(e) : undefined);
+      obj.protocol_fee = message.protocolFee.map(e => e ? Coin.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.protocol_fee = [];
+      obj.protocol_fee = null;
     }
     if (message.swapFee) {
-      obj.swap_fee = message.swapFee.map(e => e ? Coin.toAmino(e) : undefined);
+      obj.swap_fee = message.swapFee.map(e => e ? Coin.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.swap_fee = [];
+      obj.swap_fee = null;
     }
-    obj.join_type = joinTypeToJSON(message.joinType);
+    obj.join_type = message.joinType === 0 ? undefined : message.joinType;
     return obj;
   },
   fromAminoMsg(object: EventJoinPoolRequestAminoMsg): EventJoinPoolRequest {
     return EventJoinPoolRequest.fromAmino(object.value);
   },
-  fromProtoMsg(message: EventJoinPoolRequestProtoMsg): EventJoinPoolRequest {
-    return EventJoinPoolRequest.decode(message.value);
+  fromProtoMsg(message: EventJoinPoolRequestProtoMsg, useInterfaces: boolean = true): EventJoinPoolRequest {
+    return EventJoinPoolRequest.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: EventJoinPoolRequest): Uint8Array {
     return EventJoinPoolRequest.encode(message).finish();
@@ -4201,6 +4541,7 @@ export const EventJoinPoolRequest = {
     };
   }
 };
+GlobalDecoderRegistry.register(EventJoinPoolRequest.typeUrl, EventJoinPoolRequest);
 function createBaseEventSingleSwapRequest(): EventSingleSwapRequest {
   return {
     creator: "",
@@ -4214,6 +4555,15 @@ function createBaseEventSingleSwapRequest(): EventSingleSwapRequest {
 }
 export const EventSingleSwapRequest = {
   typeUrl: "/pryzm.amm.v1.EventSingleSwapRequest",
+  is(o: any): o is EventSingleSwapRequest {
+    return o && (o.$typeUrl === EventSingleSwapRequest.typeUrl || typeof o.creator === "string" && typeof o.poolId === "bigint" && Coin.is(o.amountOut) && Coin.is(o.amountIn) && Coin.is(o.protocolFee) && Coin.is(o.swapFee) && isSet(o.swapType));
+  },
+  isSDK(o: any): o is EventSingleSwapRequestSDKType {
+    return o && (o.$typeUrl === EventSingleSwapRequest.typeUrl || typeof o.creator === "string" && typeof o.pool_id === "bigint" && Coin.isSDK(o.amount_out) && Coin.isSDK(o.amount_in) && Coin.isSDK(o.protocol_fee) && Coin.isSDK(o.swap_fee) && isSet(o.swap_type));
+  },
+  isAmino(o: any): o is EventSingleSwapRequestAmino {
+    return o && (o.$typeUrl === EventSingleSwapRequest.typeUrl || typeof o.creator === "string" && typeof o.pool_id === "bigint" && Coin.isAmino(o.amount_out) && Coin.isAmino(o.amount_in) && Coin.isAmino(o.protocol_fee) && Coin.isAmino(o.swap_fee) && isSet(o.swap_type));
+  },
   encode(message: EventSingleSwapRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.creator !== "") {
       writer.uint32(10).string(message.creator);
@@ -4238,7 +4588,7 @@ export const EventSingleSwapRequest = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): EventSingleSwapRequest {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): EventSingleSwapRequest {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseEventSingleSwapRequest();
@@ -4252,16 +4602,16 @@ export const EventSingleSwapRequest = {
           message.poolId = reader.uint64();
           break;
         case 3:
-          message.amountOut = Coin.decode(reader, reader.uint32());
+          message.amountOut = Coin.decode(reader, reader.uint32(), useInterfaces);
           break;
         case 4:
-          message.amountIn = Coin.decode(reader, reader.uint32());
+          message.amountIn = Coin.decode(reader, reader.uint32(), useInterfaces);
           break;
         case 5:
-          message.protocolFee = Coin.decode(reader, reader.uint32());
+          message.protocolFee = Coin.decode(reader, reader.uint32(), useInterfaces);
           break;
         case 6:
-          message.swapFee = Coin.decode(reader, reader.uint32());
+          message.swapFee = Coin.decode(reader, reader.uint32(), useInterfaces);
           break;
         case 7:
           message.swapType = (reader.int32() as any);
@@ -4327,26 +4677,26 @@ export const EventSingleSwapRequest = {
       message.swapFee = Coin.fromAmino(object.swap_fee);
     }
     if (object.swap_type !== undefined && object.swap_type !== null) {
-      message.swapType = swapTypeFromJSON(object.swap_type);
+      message.swapType = object.swap_type;
     }
     return message;
   },
-  toAmino(message: EventSingleSwapRequest): EventSingleSwapRequestAmino {
+  toAmino(message: EventSingleSwapRequest, useInterfaces: boolean = true): EventSingleSwapRequestAmino {
     const obj: any = {};
-    obj.creator = message.creator;
+    obj.creator = message.creator === "" ? undefined : message.creator;
     obj.pool_id = message.poolId ? message.poolId.toString() : undefined;
-    obj.amount_out = message.amountOut ? Coin.toAmino(message.amountOut) : undefined;
-    obj.amount_in = message.amountIn ? Coin.toAmino(message.amountIn) : undefined;
-    obj.protocol_fee = message.protocolFee ? Coin.toAmino(message.protocolFee) : undefined;
-    obj.swap_fee = message.swapFee ? Coin.toAmino(message.swapFee) : undefined;
-    obj.swap_type = swapTypeToJSON(message.swapType);
+    obj.amount_out = message.amountOut ? Coin.toAmino(message.amountOut, useInterfaces) : undefined;
+    obj.amount_in = message.amountIn ? Coin.toAmino(message.amountIn, useInterfaces) : undefined;
+    obj.protocol_fee = message.protocolFee ? Coin.toAmino(message.protocolFee, useInterfaces) : undefined;
+    obj.swap_fee = message.swapFee ? Coin.toAmino(message.swapFee, useInterfaces) : undefined;
+    obj.swap_type = message.swapType === 0 ? undefined : message.swapType;
     return obj;
   },
   fromAminoMsg(object: EventSingleSwapRequestAminoMsg): EventSingleSwapRequest {
     return EventSingleSwapRequest.fromAmino(object.value);
   },
-  fromProtoMsg(message: EventSingleSwapRequestProtoMsg): EventSingleSwapRequest {
-    return EventSingleSwapRequest.decode(message.value);
+  fromProtoMsg(message: EventSingleSwapRequestProtoMsg, useInterfaces: boolean = true): EventSingleSwapRequest {
+    return EventSingleSwapRequest.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: EventSingleSwapRequest): Uint8Array {
     return EventSingleSwapRequest.encode(message).finish();
@@ -4358,6 +4708,7 @@ export const EventSingleSwapRequest = {
     };
   }
 };
+GlobalDecoderRegistry.register(EventSingleSwapRequest.typeUrl, EventSingleSwapRequest);
 function createBaseEventBatchSwapRequest(): EventBatchSwapRequest {
   return {
     creator: "",
@@ -4372,6 +4723,15 @@ function createBaseEventBatchSwapRequest(): EventBatchSwapRequest {
 }
 export const EventBatchSwapRequest = {
   typeUrl: "/pryzm.amm.v1.EventBatchSwapRequest",
+  is(o: any): o is EventBatchSwapRequest {
+    return o && (o.$typeUrl === EventBatchSwapRequest.typeUrl || typeof o.creator === "string" && Array.isArray(o.steps) && (!o.steps.length || SwapStep.is(o.steps[0])) && Array.isArray(o.amountsIn) && (!o.amountsIn.length || Coin.is(o.amountsIn[0])) && Array.isArray(o.amountsOut) && (!o.amountsOut.length || Coin.is(o.amountsOut[0])) && Array.isArray(o.swapProtocolFee) && (!o.swapProtocolFee.length || Coin.is(o.swapProtocolFee[0])) && Array.isArray(o.joinExitProtocolFee) && (!o.joinExitProtocolFee.length || Coin.is(o.joinExitProtocolFee[0])) && Array.isArray(o.swapFee) && (!o.swapFee.length || Coin.is(o.swapFee[0])) && isSet(o.swapType));
+  },
+  isSDK(o: any): o is EventBatchSwapRequestSDKType {
+    return o && (o.$typeUrl === EventBatchSwapRequest.typeUrl || typeof o.creator === "string" && Array.isArray(o.steps) && (!o.steps.length || SwapStep.isSDK(o.steps[0])) && Array.isArray(o.amounts_in) && (!o.amounts_in.length || Coin.isSDK(o.amounts_in[0])) && Array.isArray(o.amounts_out) && (!o.amounts_out.length || Coin.isSDK(o.amounts_out[0])) && Array.isArray(o.swap_protocol_fee) && (!o.swap_protocol_fee.length || Coin.isSDK(o.swap_protocol_fee[0])) && Array.isArray(o.join_exit_protocol_fee) && (!o.join_exit_protocol_fee.length || Coin.isSDK(o.join_exit_protocol_fee[0])) && Array.isArray(o.swap_fee) && (!o.swap_fee.length || Coin.isSDK(o.swap_fee[0])) && isSet(o.swap_type));
+  },
+  isAmino(o: any): o is EventBatchSwapRequestAmino {
+    return o && (o.$typeUrl === EventBatchSwapRequest.typeUrl || typeof o.creator === "string" && Array.isArray(o.steps) && (!o.steps.length || SwapStep.isAmino(o.steps[0])) && Array.isArray(o.amounts_in) && (!o.amounts_in.length || Coin.isAmino(o.amounts_in[0])) && Array.isArray(o.amounts_out) && (!o.amounts_out.length || Coin.isAmino(o.amounts_out[0])) && Array.isArray(o.swap_protocol_fee) && (!o.swap_protocol_fee.length || Coin.isAmino(o.swap_protocol_fee[0])) && Array.isArray(o.join_exit_protocol_fee) && (!o.join_exit_protocol_fee.length || Coin.isAmino(o.join_exit_protocol_fee[0])) && Array.isArray(o.swap_fee) && (!o.swap_fee.length || Coin.isAmino(o.swap_fee[0])) && isSet(o.swap_type));
+  },
   encode(message: EventBatchSwapRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.creator !== "") {
       writer.uint32(10).string(message.creator);
@@ -4399,7 +4759,7 @@ export const EventBatchSwapRequest = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): EventBatchSwapRequest {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): EventBatchSwapRequest {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseEventBatchSwapRequest();
@@ -4410,22 +4770,22 @@ export const EventBatchSwapRequest = {
           message.creator = reader.string();
           break;
         case 2:
-          message.steps.push(SwapStep.decode(reader, reader.uint32()));
+          message.steps.push(SwapStep.decode(reader, reader.uint32(), useInterfaces));
           break;
         case 3:
-          message.amountsIn.push(Coin.decode(reader, reader.uint32()));
+          message.amountsIn.push(Coin.decode(reader, reader.uint32(), useInterfaces));
           break;
         case 4:
-          message.amountsOut.push(Coin.decode(reader, reader.uint32()));
+          message.amountsOut.push(Coin.decode(reader, reader.uint32(), useInterfaces));
           break;
         case 5:
-          message.swapProtocolFee.push(Coin.decode(reader, reader.uint32()));
+          message.swapProtocolFee.push(Coin.decode(reader, reader.uint32(), useInterfaces));
           break;
         case 6:
-          message.joinExitProtocolFee.push(Coin.decode(reader, reader.uint32()));
+          message.joinExitProtocolFee.push(Coin.decode(reader, reader.uint32(), useInterfaces));
           break;
         case 7:
-          message.swapFee.push(Coin.decode(reader, reader.uint32()));
+          message.swapFee.push(Coin.decode(reader, reader.uint32(), useInterfaces));
           break;
         case 8:
           message.swapType = (reader.int32() as any);
@@ -4509,51 +4869,51 @@ export const EventBatchSwapRequest = {
     message.joinExitProtocolFee = object.join_exit_protocol_fee?.map(e => Coin.fromAmino(e)) || [];
     message.swapFee = object.swap_fee?.map(e => Coin.fromAmino(e)) || [];
     if (object.swap_type !== undefined && object.swap_type !== null) {
-      message.swapType = swapTypeFromJSON(object.swap_type);
+      message.swapType = object.swap_type;
     }
     return message;
   },
-  toAmino(message: EventBatchSwapRequest): EventBatchSwapRequestAmino {
+  toAmino(message: EventBatchSwapRequest, useInterfaces: boolean = true): EventBatchSwapRequestAmino {
     const obj: any = {};
-    obj.creator = message.creator;
+    obj.creator = message.creator === "" ? undefined : message.creator;
     if (message.steps) {
-      obj.steps = message.steps.map(e => e ? SwapStep.toAmino(e) : undefined);
+      obj.steps = message.steps.map(e => e ? SwapStep.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.steps = [];
+      obj.steps = null;
     }
     if (message.amountsIn) {
-      obj.amounts_in = message.amountsIn.map(e => e ? Coin.toAmino(e) : undefined);
+      obj.amounts_in = message.amountsIn.map(e => e ? Coin.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.amounts_in = [];
+      obj.amounts_in = null;
     }
     if (message.amountsOut) {
-      obj.amounts_out = message.amountsOut.map(e => e ? Coin.toAmino(e) : undefined);
+      obj.amounts_out = message.amountsOut.map(e => e ? Coin.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.amounts_out = [];
+      obj.amounts_out = null;
     }
     if (message.swapProtocolFee) {
-      obj.swap_protocol_fee = message.swapProtocolFee.map(e => e ? Coin.toAmino(e) : undefined);
+      obj.swap_protocol_fee = message.swapProtocolFee.map(e => e ? Coin.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.swap_protocol_fee = [];
+      obj.swap_protocol_fee = null;
     }
     if (message.joinExitProtocolFee) {
-      obj.join_exit_protocol_fee = message.joinExitProtocolFee.map(e => e ? Coin.toAmino(e) : undefined);
+      obj.join_exit_protocol_fee = message.joinExitProtocolFee.map(e => e ? Coin.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.join_exit_protocol_fee = [];
+      obj.join_exit_protocol_fee = null;
     }
     if (message.swapFee) {
-      obj.swap_fee = message.swapFee.map(e => e ? Coin.toAmino(e) : undefined);
+      obj.swap_fee = message.swapFee.map(e => e ? Coin.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.swap_fee = [];
+      obj.swap_fee = null;
     }
-    obj.swap_type = swapTypeToJSON(message.swapType);
+    obj.swap_type = message.swapType === 0 ? undefined : message.swapType;
     return obj;
   },
   fromAminoMsg(object: EventBatchSwapRequestAminoMsg): EventBatchSwapRequest {
     return EventBatchSwapRequest.fromAmino(object.value);
   },
-  fromProtoMsg(message: EventBatchSwapRequestProtoMsg): EventBatchSwapRequest {
-    return EventBatchSwapRequest.decode(message.value);
+  fromProtoMsg(message: EventBatchSwapRequestProtoMsg, useInterfaces: boolean = true): EventBatchSwapRequest {
+    return EventBatchSwapRequest.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: EventBatchSwapRequest): Uint8Array {
     return EventBatchSwapRequest.encode(message).finish();
@@ -4565,6 +4925,7 @@ export const EventBatchSwapRequest = {
     };
   }
 };
+GlobalDecoderRegistry.register(EventBatchSwapRequest.typeUrl, EventBatchSwapRequest);
 function createBaseEventYAssetSwapRefractorAction(): EventYAssetSwapRefractorAction {
   return {
     yAmount: "",
@@ -4574,6 +4935,15 @@ function createBaseEventYAssetSwapRefractorAction(): EventYAssetSwapRefractorAct
 }
 export const EventYAssetSwapRefractorAction = {
   typeUrl: "/pryzm.amm.v1.EventYAssetSwapRefractorAction",
+  is(o: any): o is EventYAssetSwapRefractorAction {
+    return o && (o.$typeUrl === EventYAssetSwapRefractorAction.typeUrl || typeof o.yAmount === "string" && typeof o.cAmountAfterFee === "string" && typeof o.feeAmount === "string");
+  },
+  isSDK(o: any): o is EventYAssetSwapRefractorActionSDKType {
+    return o && (o.$typeUrl === EventYAssetSwapRefractorAction.typeUrl || typeof o.y_amount === "string" && typeof o.c_amount_after_fee === "string" && typeof o.fee_amount === "string");
+  },
+  isAmino(o: any): o is EventYAssetSwapRefractorActionAmino {
+    return o && (o.$typeUrl === EventYAssetSwapRefractorAction.typeUrl || typeof o.y_amount === "string" && typeof o.c_amount_after_fee === "string" && typeof o.fee_amount === "string");
+  },
   encode(message: EventYAssetSwapRefractorAction, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.yAmount !== "") {
       writer.uint32(10).string(message.yAmount);
@@ -4586,7 +4956,7 @@ export const EventYAssetSwapRefractorAction = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): EventYAssetSwapRefractorAction {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): EventYAssetSwapRefractorAction {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseEventYAssetSwapRefractorAction();
@@ -4643,18 +5013,18 @@ export const EventYAssetSwapRefractorAction = {
     }
     return message;
   },
-  toAmino(message: EventYAssetSwapRefractorAction): EventYAssetSwapRefractorActionAmino {
+  toAmino(message: EventYAssetSwapRefractorAction, useInterfaces: boolean = true): EventYAssetSwapRefractorActionAmino {
     const obj: any = {};
-    obj.y_amount = message.yAmount;
-    obj.c_amount_after_fee = message.cAmountAfterFee;
-    obj.fee_amount = message.feeAmount;
+    obj.y_amount = message.yAmount === "" ? undefined : message.yAmount;
+    obj.c_amount_after_fee = message.cAmountAfterFee === "" ? undefined : message.cAmountAfterFee;
+    obj.fee_amount = message.feeAmount === "" ? undefined : message.feeAmount;
     return obj;
   },
   fromAminoMsg(object: EventYAssetSwapRefractorActionAminoMsg): EventYAssetSwapRefractorAction {
     return EventYAssetSwapRefractorAction.fromAmino(object.value);
   },
-  fromProtoMsg(message: EventYAssetSwapRefractorActionProtoMsg): EventYAssetSwapRefractorAction {
-    return EventYAssetSwapRefractorAction.decode(message.value);
+  fromProtoMsg(message: EventYAssetSwapRefractorActionProtoMsg, useInterfaces: boolean = true): EventYAssetSwapRefractorAction {
+    return EventYAssetSwapRefractorAction.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: EventYAssetSwapRefractorAction): Uint8Array {
     return EventYAssetSwapRefractorAction.encode(message).finish();
@@ -4666,6 +5036,7 @@ export const EventYAssetSwapRefractorAction = {
     };
   }
 };
+GlobalDecoderRegistry.register(EventYAssetSwapRefractorAction.typeUrl, EventYAssetSwapRefractorAction);
 function createBaseEventYAssetSwap(): EventYAssetSwap {
   return {
     poolId: BigInt(0),
@@ -4676,6 +5047,15 @@ function createBaseEventYAssetSwap(): EventYAssetSwap {
 }
 export const EventYAssetSwap = {
   typeUrl: "/pryzm.amm.v1.EventYAssetSwap",
+  is(o: any): o is EventYAssetSwap {
+    return o && (o.$typeUrl === EventYAssetSwap.typeUrl || typeof o.poolId === "bigint" && SwapSummary.is(o.summary) && EventYAssetSwapRefractorAction.is(o.refractorAction));
+  },
+  isSDK(o: any): o is EventYAssetSwapSDKType {
+    return o && (o.$typeUrl === EventYAssetSwap.typeUrl || typeof o.pool_id === "bigint" && SwapSummary.isSDK(o.summary) && EventYAssetSwapRefractorAction.isSDK(o.refractor_action));
+  },
+  isAmino(o: any): o is EventYAssetSwapAmino {
+    return o && (o.$typeUrl === EventYAssetSwap.typeUrl || typeof o.pool_id === "bigint" && SwapSummary.isAmino(o.summary) && EventYAssetSwapRefractorAction.isAmino(o.refractor_action));
+  },
   encode(message: EventYAssetSwap, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.poolId !== BigInt(0)) {
       writer.uint32(8).uint64(message.poolId);
@@ -4691,7 +5071,7 @@ export const EventYAssetSwap = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): EventYAssetSwap {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): EventYAssetSwap {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseEventYAssetSwap();
@@ -4702,13 +5082,13 @@ export const EventYAssetSwap = {
           message.poolId = reader.uint64();
           break;
         case 2:
-          message.summary = SwapSummary.decode(reader, reader.uint32());
+          message.summary = SwapSummary.decode(reader, reader.uint32(), useInterfaces);
           break;
         case 3:
-          message.refractorAction = EventYAssetSwapRefractorAction.decode(reader, reader.uint32());
+          message.refractorAction = EventYAssetSwapRefractorAction.decode(reader, reader.uint32(), useInterfaces);
           break;
         case 4:
-          message.fee = Coin.decode(reader, reader.uint32());
+          message.fee = Coin.decode(reader, reader.uint32(), useInterfaces);
           break;
         default:
           reader.skipType(tag & 7);
@@ -4757,19 +5137,19 @@ export const EventYAssetSwap = {
     }
     return message;
   },
-  toAmino(message: EventYAssetSwap): EventYAssetSwapAmino {
+  toAmino(message: EventYAssetSwap, useInterfaces: boolean = true): EventYAssetSwapAmino {
     const obj: any = {};
     obj.pool_id = message.poolId ? message.poolId.toString() : undefined;
-    obj.summary = message.summary ? SwapSummary.toAmino(message.summary) : undefined;
-    obj.refractor_action = message.refractorAction ? EventYAssetSwapRefractorAction.toAmino(message.refractorAction) : undefined;
-    obj.fee = message.fee ? Coin.toAmino(message.fee) : undefined;
+    obj.summary = message.summary ? SwapSummary.toAmino(message.summary, useInterfaces) : undefined;
+    obj.refractor_action = message.refractorAction ? EventYAssetSwapRefractorAction.toAmino(message.refractorAction, useInterfaces) : undefined;
+    obj.fee = message.fee ? Coin.toAmino(message.fee, useInterfaces) : undefined;
     return obj;
   },
   fromAminoMsg(object: EventYAssetSwapAminoMsg): EventYAssetSwap {
     return EventYAssetSwap.fromAmino(object.value);
   },
-  fromProtoMsg(message: EventYAssetSwapProtoMsg): EventYAssetSwap {
-    return EventYAssetSwap.decode(message.value);
+  fromProtoMsg(message: EventYAssetSwapProtoMsg, useInterfaces: boolean = true): EventYAssetSwap {
+    return EventYAssetSwap.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: EventYAssetSwap): Uint8Array {
     return EventYAssetSwap.encode(message).finish();
@@ -4781,6 +5161,7 @@ export const EventYAssetSwap = {
     };
   }
 };
+GlobalDecoderRegistry.register(EventYAssetSwap.typeUrl, EventYAssetSwap);
 function createBaseEventSetOraclePricePair(): EventSetOraclePricePair {
   return {
     oraclePricePair: OraclePricePair.fromPartial({})
@@ -4788,13 +5169,22 @@ function createBaseEventSetOraclePricePair(): EventSetOraclePricePair {
 }
 export const EventSetOraclePricePair = {
   typeUrl: "/pryzm.amm.v1.EventSetOraclePricePair",
+  is(o: any): o is EventSetOraclePricePair {
+    return o && (o.$typeUrl === EventSetOraclePricePair.typeUrl || OraclePricePair.is(o.oraclePricePair));
+  },
+  isSDK(o: any): o is EventSetOraclePricePairSDKType {
+    return o && (o.$typeUrl === EventSetOraclePricePair.typeUrl || OraclePricePair.isSDK(o.oracle_price_pair));
+  },
+  isAmino(o: any): o is EventSetOraclePricePairAmino {
+    return o && (o.$typeUrl === EventSetOraclePricePair.typeUrl || OraclePricePair.isAmino(o.oracle_price_pair));
+  },
   encode(message: EventSetOraclePricePair, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.oraclePricePair !== undefined) {
       OraclePricePair.encode(message.oraclePricePair, writer.uint32(10).fork()).ldelim();
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): EventSetOraclePricePair {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): EventSetOraclePricePair {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseEventSetOraclePricePair();
@@ -4802,7 +5192,7 @@ export const EventSetOraclePricePair = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.oraclePricePair = OraclePricePair.decode(reader, reader.uint32());
+          message.oraclePricePair = OraclePricePair.decode(reader, reader.uint32(), useInterfaces);
           break;
         default:
           reader.skipType(tag & 7);
@@ -4833,16 +5223,16 @@ export const EventSetOraclePricePair = {
     }
     return message;
   },
-  toAmino(message: EventSetOraclePricePair): EventSetOraclePricePairAmino {
+  toAmino(message: EventSetOraclePricePair, useInterfaces: boolean = true): EventSetOraclePricePairAmino {
     const obj: any = {};
-    obj.oracle_price_pair = message.oraclePricePair ? OraclePricePair.toAmino(message.oraclePricePair) : undefined;
+    obj.oracle_price_pair = message.oraclePricePair ? OraclePricePair.toAmino(message.oraclePricePair, useInterfaces) : undefined;
     return obj;
   },
   fromAminoMsg(object: EventSetOraclePricePairAminoMsg): EventSetOraclePricePair {
     return EventSetOraclePricePair.fromAmino(object.value);
   },
-  fromProtoMsg(message: EventSetOraclePricePairProtoMsg): EventSetOraclePricePair {
-    return EventSetOraclePricePair.decode(message.value);
+  fromProtoMsg(message: EventSetOraclePricePairProtoMsg, useInterfaces: boolean = true): EventSetOraclePricePair {
+    return EventSetOraclePricePair.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: EventSetOraclePricePair): Uint8Array {
     return EventSetOraclePricePair.encode(message).finish();
@@ -4854,6 +5244,7 @@ export const EventSetOraclePricePair = {
     };
   }
 };
+GlobalDecoderRegistry.register(EventSetOraclePricePair.typeUrl, EventSetOraclePricePair);
 function createBaseEventRemoveOraclePricePair(): EventRemoveOraclePricePair {
   return {
     assetId: ""
@@ -4861,13 +5252,22 @@ function createBaseEventRemoveOraclePricePair(): EventRemoveOraclePricePair {
 }
 export const EventRemoveOraclePricePair = {
   typeUrl: "/pryzm.amm.v1.EventRemoveOraclePricePair",
+  is(o: any): o is EventRemoveOraclePricePair {
+    return o && (o.$typeUrl === EventRemoveOraclePricePair.typeUrl || typeof o.assetId === "string");
+  },
+  isSDK(o: any): o is EventRemoveOraclePricePairSDKType {
+    return o && (o.$typeUrl === EventRemoveOraclePricePair.typeUrl || typeof o.asset_id === "string");
+  },
+  isAmino(o: any): o is EventRemoveOraclePricePairAmino {
+    return o && (o.$typeUrl === EventRemoveOraclePricePair.typeUrl || typeof o.asset_id === "string");
+  },
   encode(message: EventRemoveOraclePricePair, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.assetId !== "") {
       writer.uint32(10).string(message.assetId);
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): EventRemoveOraclePricePair {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): EventRemoveOraclePricePair {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseEventRemoveOraclePricePair();
@@ -4906,16 +5306,16 @@ export const EventRemoveOraclePricePair = {
     }
     return message;
   },
-  toAmino(message: EventRemoveOraclePricePair): EventRemoveOraclePricePairAmino {
+  toAmino(message: EventRemoveOraclePricePair, useInterfaces: boolean = true): EventRemoveOraclePricePairAmino {
     const obj: any = {};
-    obj.asset_id = message.assetId;
+    obj.asset_id = message.assetId === "" ? undefined : message.assetId;
     return obj;
   },
   fromAminoMsg(object: EventRemoveOraclePricePairAminoMsg): EventRemoveOraclePricePair {
     return EventRemoveOraclePricePair.fromAmino(object.value);
   },
-  fromProtoMsg(message: EventRemoveOraclePricePairProtoMsg): EventRemoveOraclePricePair {
-    return EventRemoveOraclePricePair.decode(message.value);
+  fromProtoMsg(message: EventRemoveOraclePricePairProtoMsg, useInterfaces: boolean = true): EventRemoveOraclePricePair {
+    return EventRemoveOraclePricePair.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: EventRemoveOraclePricePair): Uint8Array {
     return EventRemoveOraclePricePair.encode(message).finish();
@@ -4927,6 +5327,7 @@ export const EventRemoveOraclePricePair = {
     };
   }
 };
+GlobalDecoderRegistry.register(EventRemoveOraclePricePair.typeUrl, EventRemoveOraclePricePair);
 function createBaseEventSetPendingTokenIntroduction(): EventSetPendingTokenIntroduction {
   return {
     pendingTokenIntroduction: PendingTokenIntroduction.fromPartial({})
@@ -4934,13 +5335,22 @@ function createBaseEventSetPendingTokenIntroduction(): EventSetPendingTokenIntro
 }
 export const EventSetPendingTokenIntroduction = {
   typeUrl: "/pryzm.amm.v1.EventSetPendingTokenIntroduction",
+  is(o: any): o is EventSetPendingTokenIntroduction {
+    return o && (o.$typeUrl === EventSetPendingTokenIntroduction.typeUrl || PendingTokenIntroduction.is(o.pendingTokenIntroduction));
+  },
+  isSDK(o: any): o is EventSetPendingTokenIntroductionSDKType {
+    return o && (o.$typeUrl === EventSetPendingTokenIntroduction.typeUrl || PendingTokenIntroduction.isSDK(o.pending_token_introduction));
+  },
+  isAmino(o: any): o is EventSetPendingTokenIntroductionAmino {
+    return o && (o.$typeUrl === EventSetPendingTokenIntroduction.typeUrl || PendingTokenIntroduction.isAmino(o.pending_token_introduction));
+  },
   encode(message: EventSetPendingTokenIntroduction, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.pendingTokenIntroduction !== undefined) {
       PendingTokenIntroduction.encode(message.pendingTokenIntroduction, writer.uint32(10).fork()).ldelim();
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): EventSetPendingTokenIntroduction {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): EventSetPendingTokenIntroduction {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseEventSetPendingTokenIntroduction();
@@ -4948,7 +5358,7 @@ export const EventSetPendingTokenIntroduction = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.pendingTokenIntroduction = PendingTokenIntroduction.decode(reader, reader.uint32());
+          message.pendingTokenIntroduction = PendingTokenIntroduction.decode(reader, reader.uint32(), useInterfaces);
           break;
         default:
           reader.skipType(tag & 7);
@@ -4979,16 +5389,16 @@ export const EventSetPendingTokenIntroduction = {
     }
     return message;
   },
-  toAmino(message: EventSetPendingTokenIntroduction): EventSetPendingTokenIntroductionAmino {
+  toAmino(message: EventSetPendingTokenIntroduction, useInterfaces: boolean = true): EventSetPendingTokenIntroductionAmino {
     const obj: any = {};
-    obj.pending_token_introduction = message.pendingTokenIntroduction ? PendingTokenIntroduction.toAmino(message.pendingTokenIntroduction) : undefined;
+    obj.pending_token_introduction = message.pendingTokenIntroduction ? PendingTokenIntroduction.toAmino(message.pendingTokenIntroduction, useInterfaces) : undefined;
     return obj;
   },
   fromAminoMsg(object: EventSetPendingTokenIntroductionAminoMsg): EventSetPendingTokenIntroduction {
     return EventSetPendingTokenIntroduction.fromAmino(object.value);
   },
-  fromProtoMsg(message: EventSetPendingTokenIntroductionProtoMsg): EventSetPendingTokenIntroduction {
-    return EventSetPendingTokenIntroduction.decode(message.value);
+  fromProtoMsg(message: EventSetPendingTokenIntroductionProtoMsg, useInterfaces: boolean = true): EventSetPendingTokenIntroduction {
+    return EventSetPendingTokenIntroduction.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: EventSetPendingTokenIntroduction): Uint8Array {
     return EventSetPendingTokenIntroduction.encode(message).finish();
@@ -5000,6 +5410,7 @@ export const EventSetPendingTokenIntroduction = {
     };
   }
 };
+GlobalDecoderRegistry.register(EventSetPendingTokenIntroduction.typeUrl, EventSetPendingTokenIntroduction);
 function createBaseEventRemovePendingTokenIntroduction(): EventRemovePendingTokenIntroduction {
   return {
     assetId: "",
@@ -5008,6 +5419,15 @@ function createBaseEventRemovePendingTokenIntroduction(): EventRemovePendingToke
 }
 export const EventRemovePendingTokenIntroduction = {
   typeUrl: "/pryzm.amm.v1.EventRemovePendingTokenIntroduction",
+  is(o: any): o is EventRemovePendingTokenIntroduction {
+    return o && (o.$typeUrl === EventRemovePendingTokenIntroduction.typeUrl || typeof o.assetId === "string" && typeof o.targetPoolId === "bigint");
+  },
+  isSDK(o: any): o is EventRemovePendingTokenIntroductionSDKType {
+    return o && (o.$typeUrl === EventRemovePendingTokenIntroduction.typeUrl || typeof o.asset_id === "string" && typeof o.target_pool_id === "bigint");
+  },
+  isAmino(o: any): o is EventRemovePendingTokenIntroductionAmino {
+    return o && (o.$typeUrl === EventRemovePendingTokenIntroduction.typeUrl || typeof o.asset_id === "string" && typeof o.target_pool_id === "bigint");
+  },
   encode(message: EventRemovePendingTokenIntroduction, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.assetId !== "") {
       writer.uint32(10).string(message.assetId);
@@ -5017,7 +5437,7 @@ export const EventRemovePendingTokenIntroduction = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): EventRemovePendingTokenIntroduction {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): EventRemovePendingTokenIntroduction {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseEventRemovePendingTokenIntroduction();
@@ -5065,17 +5485,17 @@ export const EventRemovePendingTokenIntroduction = {
     }
     return message;
   },
-  toAmino(message: EventRemovePendingTokenIntroduction): EventRemovePendingTokenIntroductionAmino {
+  toAmino(message: EventRemovePendingTokenIntroduction, useInterfaces: boolean = true): EventRemovePendingTokenIntroductionAmino {
     const obj: any = {};
-    obj.asset_id = message.assetId;
+    obj.asset_id = message.assetId === "" ? undefined : message.assetId;
     obj.target_pool_id = message.targetPoolId ? message.targetPoolId.toString() : undefined;
     return obj;
   },
   fromAminoMsg(object: EventRemovePendingTokenIntroductionAminoMsg): EventRemovePendingTokenIntroduction {
     return EventRemovePendingTokenIntroduction.fromAmino(object.value);
   },
-  fromProtoMsg(message: EventRemovePendingTokenIntroductionProtoMsg): EventRemovePendingTokenIntroduction {
-    return EventRemovePendingTokenIntroduction.decode(message.value);
+  fromProtoMsg(message: EventRemovePendingTokenIntroductionProtoMsg, useInterfaces: boolean = true): EventRemovePendingTokenIntroduction {
+    return EventRemovePendingTokenIntroduction.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: EventRemovePendingTokenIntroduction): Uint8Array {
     return EventRemovePendingTokenIntroduction.encode(message).finish();
@@ -5087,6 +5507,7 @@ export const EventRemovePendingTokenIntroduction = {
     };
   }
 };
+GlobalDecoderRegistry.register(EventRemovePendingTokenIntroduction.typeUrl, EventRemovePendingTokenIntroduction);
 function createBaseEventSetParams(): EventSetParams {
   return {
     params: Params.fromPartial({})
@@ -5094,13 +5515,22 @@ function createBaseEventSetParams(): EventSetParams {
 }
 export const EventSetParams = {
   typeUrl: "/pryzm.amm.v1.EventSetParams",
+  is(o: any): o is EventSetParams {
+    return o && (o.$typeUrl === EventSetParams.typeUrl || Params.is(o.params));
+  },
+  isSDK(o: any): o is EventSetParamsSDKType {
+    return o && (o.$typeUrl === EventSetParams.typeUrl || Params.isSDK(o.params));
+  },
+  isAmino(o: any): o is EventSetParamsAmino {
+    return o && (o.$typeUrl === EventSetParams.typeUrl || Params.isAmino(o.params));
+  },
   encode(message: EventSetParams, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.params !== undefined) {
       Params.encode(message.params, writer.uint32(10).fork()).ldelim();
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): EventSetParams {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): EventSetParams {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseEventSetParams();
@@ -5108,7 +5538,7 @@ export const EventSetParams = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.params = Params.decode(reader, reader.uint32());
+          message.params = Params.decode(reader, reader.uint32(), useInterfaces);
           break;
         default:
           reader.skipType(tag & 7);
@@ -5139,16 +5569,16 @@ export const EventSetParams = {
     }
     return message;
   },
-  toAmino(message: EventSetParams): EventSetParamsAmino {
+  toAmino(message: EventSetParams, useInterfaces: boolean = true): EventSetParamsAmino {
     const obj: any = {};
-    obj.params = message.params ? Params.toAmino(message.params) : undefined;
+    obj.params = message.params ? Params.toAmino(message.params, useInterfaces) : undefined;
     return obj;
   },
   fromAminoMsg(object: EventSetParamsAminoMsg): EventSetParams {
     return EventSetParams.fromAmino(object.value);
   },
-  fromProtoMsg(message: EventSetParamsProtoMsg): EventSetParams {
-    return EventSetParams.decode(message.value);
+  fromProtoMsg(message: EventSetParamsProtoMsg, useInterfaces: boolean = true): EventSetParams {
+    return EventSetParams.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: EventSetParams): Uint8Array {
     return EventSetParams.encode(message).finish();
@@ -5160,3 +5590,4 @@ export const EventSetParams = {
     };
   }
 };
+GlobalDecoderRegistry.register(EventSetParams.typeUrl, EventSetParams);

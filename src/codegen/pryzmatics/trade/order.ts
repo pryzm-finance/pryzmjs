@@ -4,7 +4,8 @@ import { OrderSDKType as Order1SDKType } from "../../pryzm/amm/v1/order";
 import { Timestamp, TimestampSDKType } from "../../google/protobuf/timestamp";
 import { BinaryReader, BinaryWriter } from "../../binary";
 import { Decimal } from "@cosmjs/math";
-import { isSet, fromJsonTimestamp, fromTimestamp } from "../../helpers";
+import { isSet, fromJsonTimestamp, fromTimestamp, padDecimal } from "../../helpers";
+import { GlobalDecoderRegistry } from "../../registry";
 export interface Order {
   ammOrder: Order1;
   creationTime: Timestamp;
@@ -41,6 +42,15 @@ function createBaseOrder(): Order {
 }
 export const Order = {
   typeUrl: "/pryzmatics.trade.Order",
+  is(o: any): o is Order {
+    return o && (o.$typeUrl === Order.typeUrl || Order1.is(o.ammOrder) && Timestamp.is(o.creationTime) && typeof o.totalAmount === "string" && typeof o.progress === "string");
+  },
+  isSDK(o: any): o is OrderSDKType {
+    return o && (o.$typeUrl === Order.typeUrl || Order1.isSDK(o.amm_order) && Timestamp.isSDK(o.creation_time) && typeof o.total_amount === "string" && typeof o.progress === "string");
+  },
+  isAmino(o: any): o is OrderAmino {
+    return o && (o.$typeUrl === Order.typeUrl || Order1.isAmino(o.amm_order) && Timestamp.isAmino(o.creation_time) && typeof o.total_amount === "string" && typeof o.progress === "string");
+  },
   encode(message: Order, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.ammOrder !== undefined) {
       Order1.encode(message.ammOrder, writer.uint32(10).fork()).ldelim();
@@ -56,7 +66,7 @@ export const Order = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): Order {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): Order {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseOrder();
@@ -64,7 +74,7 @@ export const Order = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.ammOrder = Order1.decode(reader, reader.uint32());
+          message.ammOrder = Order1.decode(reader, reader.uint32(), useInterfaces);
           break;
         case 2:
           message.creationTime = Timestamp.decode(reader, reader.uint32());
@@ -122,19 +132,19 @@ export const Order = {
     }
     return message;
   },
-  toAmino(message: Order): OrderAmino {
+  toAmino(message: Order, useInterfaces: boolean = true): OrderAmino {
     const obj: any = {};
-    obj.amm_order = message.ammOrder ? Order1.toAmino(message.ammOrder) : undefined;
-    obj.creation_time = message.creationTime ? Timestamp.toAmino(message.creationTime) : undefined;
-    obj.total_amount = message.totalAmount;
-    obj.progress = message.progress;
+    obj.amm_order = message.ammOrder ? Order1.toAmino(message.ammOrder, useInterfaces) : undefined;
+    obj.creation_time = message.creationTime ? Timestamp.toAmino(message.creationTime, useInterfaces) : undefined;
+    obj.total_amount = message.totalAmount === "" ? undefined : message.totalAmount;
+    obj.progress = padDecimal(message.progress) === "" ? undefined : padDecimal(message.progress);
     return obj;
   },
   fromAminoMsg(object: OrderAminoMsg): Order {
     return Order.fromAmino(object.value);
   },
-  fromProtoMsg(message: OrderProtoMsg): Order {
-    return Order.decode(message.value);
+  fromProtoMsg(message: OrderProtoMsg, useInterfaces: boolean = true): Order {
+    return Order.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: Order): Uint8Array {
     return Order.encode(message).finish();
@@ -146,3 +156,4 @@ export const Order = {
     };
   }
 };
+GlobalDecoderRegistry.register(Order.typeUrl, Order);

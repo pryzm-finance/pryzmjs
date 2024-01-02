@@ -1,5 +1,6 @@
 import { BinaryReader, BinaryWriter } from "../binary";
 import { isSet } from "../helpers";
+import { GlobalDecoderRegistry } from "../registry";
 export enum ScalarType {
   SCALAR_TYPE_UNSPECIFIED = 0,
   SCALAR_TYPE_STRING = 1,
@@ -182,6 +183,15 @@ function createBaseInterfaceDescriptor(): InterfaceDescriptor {
 }
 export const InterfaceDescriptor = {
   typeUrl: "/cosmos_proto.InterfaceDescriptor",
+  is(o: any): o is InterfaceDescriptor {
+    return o && (o.$typeUrl === InterfaceDescriptor.typeUrl || typeof o.name === "string" && typeof o.description === "string");
+  },
+  isSDK(o: any): o is InterfaceDescriptorSDKType {
+    return o && (o.$typeUrl === InterfaceDescriptor.typeUrl || typeof o.name === "string" && typeof o.description === "string");
+  },
+  isAmino(o: any): o is InterfaceDescriptorAmino {
+    return o && (o.$typeUrl === InterfaceDescriptor.typeUrl || typeof o.name === "string" && typeof o.description === "string");
+  },
   encode(message: InterfaceDescriptor, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.name !== "") {
       writer.uint32(10).string(message.name);
@@ -191,7 +201,7 @@ export const InterfaceDescriptor = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): InterfaceDescriptor {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): InterfaceDescriptor {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseInterfaceDescriptor();
@@ -239,17 +249,17 @@ export const InterfaceDescriptor = {
     }
     return message;
   },
-  toAmino(message: InterfaceDescriptor): InterfaceDescriptorAmino {
+  toAmino(message: InterfaceDescriptor, useInterfaces: boolean = true): InterfaceDescriptorAmino {
     const obj: any = {};
-    obj.name = message.name;
-    obj.description = message.description;
+    obj.name = message.name === "" ? undefined : message.name;
+    obj.description = message.description === "" ? undefined : message.description;
     return obj;
   },
   fromAminoMsg(object: InterfaceDescriptorAminoMsg): InterfaceDescriptor {
     return InterfaceDescriptor.fromAmino(object.value);
   },
-  fromProtoMsg(message: InterfaceDescriptorProtoMsg): InterfaceDescriptor {
-    return InterfaceDescriptor.decode(message.value);
+  fromProtoMsg(message: InterfaceDescriptorProtoMsg, useInterfaces: boolean = true): InterfaceDescriptor {
+    return InterfaceDescriptor.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: InterfaceDescriptor): Uint8Array {
     return InterfaceDescriptor.encode(message).finish();
@@ -261,6 +271,7 @@ export const InterfaceDescriptor = {
     };
   }
 };
+GlobalDecoderRegistry.register(InterfaceDescriptor.typeUrl, InterfaceDescriptor);
 function createBaseScalarDescriptor(): ScalarDescriptor {
   return {
     name: "",
@@ -270,6 +281,15 @@ function createBaseScalarDescriptor(): ScalarDescriptor {
 }
 export const ScalarDescriptor = {
   typeUrl: "/cosmos_proto.ScalarDescriptor",
+  is(o: any): o is ScalarDescriptor {
+    return o && (o.$typeUrl === ScalarDescriptor.typeUrl || typeof o.name === "string" && typeof o.description === "string" && Array.isArray(o.fieldType));
+  },
+  isSDK(o: any): o is ScalarDescriptorSDKType {
+    return o && (o.$typeUrl === ScalarDescriptor.typeUrl || typeof o.name === "string" && typeof o.description === "string" && Array.isArray(o.field_type));
+  },
+  isAmino(o: any): o is ScalarDescriptorAmino {
+    return o && (o.$typeUrl === ScalarDescriptor.typeUrl || typeof o.name === "string" && typeof o.description === "string" && Array.isArray(o.field_type));
+  },
   encode(message: ScalarDescriptor, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.name !== "") {
       writer.uint32(10).string(message.name);
@@ -284,7 +304,7 @@ export const ScalarDescriptor = {
     writer.ldelim();
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): ScalarDescriptor {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): ScalarDescriptor {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseScalarDescriptor();
@@ -347,25 +367,25 @@ export const ScalarDescriptor = {
     if (object.description !== undefined && object.description !== null) {
       message.description = object.description;
     }
-    message.fieldType = object.field_type?.map(e => scalarTypeFromJSON(e)) || [];
+    message.fieldType = object.field_type?.map(e => e) || [];
     return message;
   },
-  toAmino(message: ScalarDescriptor): ScalarDescriptorAmino {
+  toAmino(message: ScalarDescriptor, useInterfaces: boolean = true): ScalarDescriptorAmino {
     const obj: any = {};
-    obj.name = message.name;
-    obj.description = message.description;
+    obj.name = message.name === "" ? undefined : message.name;
+    obj.description = message.description === "" ? undefined : message.description;
     if (message.fieldType) {
-      obj.field_type = message.fieldType.map(e => scalarTypeToJSON(e));
+      obj.field_type = message.fieldType.map(e => e);
     } else {
-      obj.field_type = [];
+      obj.field_type = null;
     }
     return obj;
   },
   fromAminoMsg(object: ScalarDescriptorAminoMsg): ScalarDescriptor {
     return ScalarDescriptor.fromAmino(object.value);
   },
-  fromProtoMsg(message: ScalarDescriptorProtoMsg): ScalarDescriptor {
-    return ScalarDescriptor.decode(message.value);
+  fromProtoMsg(message: ScalarDescriptorProtoMsg, useInterfaces: boolean = true): ScalarDescriptor {
+    return ScalarDescriptor.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: ScalarDescriptor): Uint8Array {
     return ScalarDescriptor.encode(message).finish();
@@ -377,3 +397,4 @@ export const ScalarDescriptor = {
     };
   }
 };
+GlobalDecoderRegistry.register(ScalarDescriptor.typeUrl, ScalarDescriptor);

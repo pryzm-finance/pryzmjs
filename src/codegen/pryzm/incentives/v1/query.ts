@@ -4,6 +4,7 @@ import { Pool, PoolAmino, PoolSDKType } from "./pool";
 import { Bond, BondAmino, BondSDKType } from "./bond";
 import { Unbonding, UnbondingAmino, UnbondingSDKType } from "./unbonding";
 import { BinaryReader, BinaryWriter } from "../../../binary";
+import { GlobalDecoderRegistry } from "../../../registry";
 import { isSet } from "../../../helpers";
 /** QueryParamsRequest is request type for the Query/Params RPC method. */
 export interface QueryParamsRequest {}
@@ -268,10 +269,19 @@ function createBaseQueryParamsRequest(): QueryParamsRequest {
 }
 export const QueryParamsRequest = {
   typeUrl: "/pryzm.incentives.v1.QueryParamsRequest",
+  is(o: any): o is QueryParamsRequest {
+    return o && o.$typeUrl === QueryParamsRequest.typeUrl;
+  },
+  isSDK(o: any): o is QueryParamsRequestSDKType {
+    return o && o.$typeUrl === QueryParamsRequest.typeUrl;
+  },
+  isAmino(o: any): o is QueryParamsRequestAmino {
+    return o && o.$typeUrl === QueryParamsRequest.typeUrl;
+  },
   encode(_: QueryParamsRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): QueryParamsRequest {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): QueryParamsRequest {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryParamsRequest();
@@ -300,15 +310,15 @@ export const QueryParamsRequest = {
     const message = createBaseQueryParamsRequest();
     return message;
   },
-  toAmino(_: QueryParamsRequest): QueryParamsRequestAmino {
+  toAmino(_: QueryParamsRequest, useInterfaces: boolean = true): QueryParamsRequestAmino {
     const obj: any = {};
     return obj;
   },
   fromAminoMsg(object: QueryParamsRequestAminoMsg): QueryParamsRequest {
     return QueryParamsRequest.fromAmino(object.value);
   },
-  fromProtoMsg(message: QueryParamsRequestProtoMsg): QueryParamsRequest {
-    return QueryParamsRequest.decode(message.value);
+  fromProtoMsg(message: QueryParamsRequestProtoMsg, useInterfaces: boolean = true): QueryParamsRequest {
+    return QueryParamsRequest.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: QueryParamsRequest): Uint8Array {
     return QueryParamsRequest.encode(message).finish();
@@ -320,6 +330,7 @@ export const QueryParamsRequest = {
     };
   }
 };
+GlobalDecoderRegistry.register(QueryParamsRequest.typeUrl, QueryParamsRequest);
 function createBaseQueryParamsResponse(): QueryParamsResponse {
   return {
     params: Params.fromPartial({})
@@ -327,13 +338,22 @@ function createBaseQueryParamsResponse(): QueryParamsResponse {
 }
 export const QueryParamsResponse = {
   typeUrl: "/pryzm.incentives.v1.QueryParamsResponse",
+  is(o: any): o is QueryParamsResponse {
+    return o && (o.$typeUrl === QueryParamsResponse.typeUrl || Params.is(o.params));
+  },
+  isSDK(o: any): o is QueryParamsResponseSDKType {
+    return o && (o.$typeUrl === QueryParamsResponse.typeUrl || Params.isSDK(o.params));
+  },
+  isAmino(o: any): o is QueryParamsResponseAmino {
+    return o && (o.$typeUrl === QueryParamsResponse.typeUrl || Params.isAmino(o.params));
+  },
   encode(message: QueryParamsResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.params !== undefined) {
       Params.encode(message.params, writer.uint32(10).fork()).ldelim();
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): QueryParamsResponse {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): QueryParamsResponse {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryParamsResponse();
@@ -341,7 +361,7 @@ export const QueryParamsResponse = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.params = Params.decode(reader, reader.uint32());
+          message.params = Params.decode(reader, reader.uint32(), useInterfaces);
           break;
         default:
           reader.skipType(tag & 7);
@@ -372,16 +392,16 @@ export const QueryParamsResponse = {
     }
     return message;
   },
-  toAmino(message: QueryParamsResponse): QueryParamsResponseAmino {
+  toAmino(message: QueryParamsResponse, useInterfaces: boolean = true): QueryParamsResponseAmino {
     const obj: any = {};
-    obj.params = message.params ? Params.toAmino(message.params) : undefined;
+    obj.params = message.params ? Params.toAmino(message.params, useInterfaces) : undefined;
     return obj;
   },
   fromAminoMsg(object: QueryParamsResponseAminoMsg): QueryParamsResponse {
     return QueryParamsResponse.fromAmino(object.value);
   },
-  fromProtoMsg(message: QueryParamsResponseProtoMsg): QueryParamsResponse {
-    return QueryParamsResponse.decode(message.value);
+  fromProtoMsg(message: QueryParamsResponseProtoMsg, useInterfaces: boolean = true): QueryParamsResponse {
+    return QueryParamsResponse.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: QueryParamsResponse): Uint8Array {
     return QueryParamsResponse.encode(message).finish();
@@ -393,6 +413,7 @@ export const QueryParamsResponse = {
     };
   }
 };
+GlobalDecoderRegistry.register(QueryParamsResponse.typeUrl, QueryParamsResponse);
 function createBaseQueryGetPoolRequest(): QueryGetPoolRequest {
   return {
     bondDenom: ""
@@ -400,13 +421,22 @@ function createBaseQueryGetPoolRequest(): QueryGetPoolRequest {
 }
 export const QueryGetPoolRequest = {
   typeUrl: "/pryzm.incentives.v1.QueryGetPoolRequest",
+  is(o: any): o is QueryGetPoolRequest {
+    return o && (o.$typeUrl === QueryGetPoolRequest.typeUrl || typeof o.bondDenom === "string");
+  },
+  isSDK(o: any): o is QueryGetPoolRequestSDKType {
+    return o && (o.$typeUrl === QueryGetPoolRequest.typeUrl || typeof o.bond_denom === "string");
+  },
+  isAmino(o: any): o is QueryGetPoolRequestAmino {
+    return o && (o.$typeUrl === QueryGetPoolRequest.typeUrl || typeof o.bond_denom === "string");
+  },
   encode(message: QueryGetPoolRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.bondDenom !== "") {
       writer.uint32(10).string(message.bondDenom);
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): QueryGetPoolRequest {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): QueryGetPoolRequest {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryGetPoolRequest();
@@ -445,16 +475,16 @@ export const QueryGetPoolRequest = {
     }
     return message;
   },
-  toAmino(message: QueryGetPoolRequest): QueryGetPoolRequestAmino {
+  toAmino(message: QueryGetPoolRequest, useInterfaces: boolean = true): QueryGetPoolRequestAmino {
     const obj: any = {};
-    obj.bond_denom = message.bondDenom;
+    obj.bond_denom = message.bondDenom === "" ? undefined : message.bondDenom;
     return obj;
   },
   fromAminoMsg(object: QueryGetPoolRequestAminoMsg): QueryGetPoolRequest {
     return QueryGetPoolRequest.fromAmino(object.value);
   },
-  fromProtoMsg(message: QueryGetPoolRequestProtoMsg): QueryGetPoolRequest {
-    return QueryGetPoolRequest.decode(message.value);
+  fromProtoMsg(message: QueryGetPoolRequestProtoMsg, useInterfaces: boolean = true): QueryGetPoolRequest {
+    return QueryGetPoolRequest.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: QueryGetPoolRequest): Uint8Array {
     return QueryGetPoolRequest.encode(message).finish();
@@ -466,6 +496,7 @@ export const QueryGetPoolRequest = {
     };
   }
 };
+GlobalDecoderRegistry.register(QueryGetPoolRequest.typeUrl, QueryGetPoolRequest);
 function createBaseQueryGetPoolResponse(): QueryGetPoolResponse {
   return {
     pool: Pool.fromPartial({})
@@ -473,13 +504,22 @@ function createBaseQueryGetPoolResponse(): QueryGetPoolResponse {
 }
 export const QueryGetPoolResponse = {
   typeUrl: "/pryzm.incentives.v1.QueryGetPoolResponse",
+  is(o: any): o is QueryGetPoolResponse {
+    return o && (o.$typeUrl === QueryGetPoolResponse.typeUrl || Pool.is(o.pool));
+  },
+  isSDK(o: any): o is QueryGetPoolResponseSDKType {
+    return o && (o.$typeUrl === QueryGetPoolResponse.typeUrl || Pool.isSDK(o.pool));
+  },
+  isAmino(o: any): o is QueryGetPoolResponseAmino {
+    return o && (o.$typeUrl === QueryGetPoolResponse.typeUrl || Pool.isAmino(o.pool));
+  },
   encode(message: QueryGetPoolResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.pool !== undefined) {
       Pool.encode(message.pool, writer.uint32(10).fork()).ldelim();
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): QueryGetPoolResponse {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): QueryGetPoolResponse {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryGetPoolResponse();
@@ -487,7 +527,7 @@ export const QueryGetPoolResponse = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.pool = Pool.decode(reader, reader.uint32());
+          message.pool = Pool.decode(reader, reader.uint32(), useInterfaces);
           break;
         default:
           reader.skipType(tag & 7);
@@ -518,16 +558,16 @@ export const QueryGetPoolResponse = {
     }
     return message;
   },
-  toAmino(message: QueryGetPoolResponse): QueryGetPoolResponseAmino {
+  toAmino(message: QueryGetPoolResponse, useInterfaces: boolean = true): QueryGetPoolResponseAmino {
     const obj: any = {};
-    obj.pool = message.pool ? Pool.toAmino(message.pool) : undefined;
+    obj.pool = message.pool ? Pool.toAmino(message.pool, useInterfaces) : undefined;
     return obj;
   },
   fromAminoMsg(object: QueryGetPoolResponseAminoMsg): QueryGetPoolResponse {
     return QueryGetPoolResponse.fromAmino(object.value);
   },
-  fromProtoMsg(message: QueryGetPoolResponseProtoMsg): QueryGetPoolResponse {
-    return QueryGetPoolResponse.decode(message.value);
+  fromProtoMsg(message: QueryGetPoolResponseProtoMsg, useInterfaces: boolean = true): QueryGetPoolResponse {
+    return QueryGetPoolResponse.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: QueryGetPoolResponse): Uint8Array {
     return QueryGetPoolResponse.encode(message).finish();
@@ -539,6 +579,7 @@ export const QueryGetPoolResponse = {
     };
   }
 };
+GlobalDecoderRegistry.register(QueryGetPoolResponse.typeUrl, QueryGetPoolResponse);
 function createBaseQueryAllPoolRequest(): QueryAllPoolRequest {
   return {
     pagination: undefined
@@ -546,13 +587,22 @@ function createBaseQueryAllPoolRequest(): QueryAllPoolRequest {
 }
 export const QueryAllPoolRequest = {
   typeUrl: "/pryzm.incentives.v1.QueryAllPoolRequest",
+  is(o: any): o is QueryAllPoolRequest {
+    return o && o.$typeUrl === QueryAllPoolRequest.typeUrl;
+  },
+  isSDK(o: any): o is QueryAllPoolRequestSDKType {
+    return o && o.$typeUrl === QueryAllPoolRequest.typeUrl;
+  },
+  isAmino(o: any): o is QueryAllPoolRequestAmino {
+    return o && o.$typeUrl === QueryAllPoolRequest.typeUrl;
+  },
   encode(message: QueryAllPoolRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.pagination !== undefined) {
       PageRequest.encode(message.pagination, writer.uint32(10).fork()).ldelim();
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): QueryAllPoolRequest {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): QueryAllPoolRequest {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryAllPoolRequest();
@@ -560,7 +610,7 @@ export const QueryAllPoolRequest = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.pagination = PageRequest.decode(reader, reader.uint32());
+          message.pagination = PageRequest.decode(reader, reader.uint32(), useInterfaces);
           break;
         default:
           reader.skipType(tag & 7);
@@ -591,16 +641,16 @@ export const QueryAllPoolRequest = {
     }
     return message;
   },
-  toAmino(message: QueryAllPoolRequest): QueryAllPoolRequestAmino {
+  toAmino(message: QueryAllPoolRequest, useInterfaces: boolean = true): QueryAllPoolRequestAmino {
     const obj: any = {};
-    obj.pagination = message.pagination ? PageRequest.toAmino(message.pagination) : undefined;
+    obj.pagination = message.pagination ? PageRequest.toAmino(message.pagination, useInterfaces) : undefined;
     return obj;
   },
   fromAminoMsg(object: QueryAllPoolRequestAminoMsg): QueryAllPoolRequest {
     return QueryAllPoolRequest.fromAmino(object.value);
   },
-  fromProtoMsg(message: QueryAllPoolRequestProtoMsg): QueryAllPoolRequest {
-    return QueryAllPoolRequest.decode(message.value);
+  fromProtoMsg(message: QueryAllPoolRequestProtoMsg, useInterfaces: boolean = true): QueryAllPoolRequest {
+    return QueryAllPoolRequest.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: QueryAllPoolRequest): Uint8Array {
     return QueryAllPoolRequest.encode(message).finish();
@@ -612,6 +662,7 @@ export const QueryAllPoolRequest = {
     };
   }
 };
+GlobalDecoderRegistry.register(QueryAllPoolRequest.typeUrl, QueryAllPoolRequest);
 function createBaseQueryAllPoolResponse(): QueryAllPoolResponse {
   return {
     pool: [],
@@ -620,6 +671,15 @@ function createBaseQueryAllPoolResponse(): QueryAllPoolResponse {
 }
 export const QueryAllPoolResponse = {
   typeUrl: "/pryzm.incentives.v1.QueryAllPoolResponse",
+  is(o: any): o is QueryAllPoolResponse {
+    return o && (o.$typeUrl === QueryAllPoolResponse.typeUrl || Array.isArray(o.pool) && (!o.pool.length || Pool.is(o.pool[0])));
+  },
+  isSDK(o: any): o is QueryAllPoolResponseSDKType {
+    return o && (o.$typeUrl === QueryAllPoolResponse.typeUrl || Array.isArray(o.pool) && (!o.pool.length || Pool.isSDK(o.pool[0])));
+  },
+  isAmino(o: any): o is QueryAllPoolResponseAmino {
+    return o && (o.$typeUrl === QueryAllPoolResponse.typeUrl || Array.isArray(o.pool) && (!o.pool.length || Pool.isAmino(o.pool[0])));
+  },
   encode(message: QueryAllPoolResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     for (const v of message.pool) {
       Pool.encode(v!, writer.uint32(10).fork()).ldelim();
@@ -629,7 +689,7 @@ export const QueryAllPoolResponse = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): QueryAllPoolResponse {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): QueryAllPoolResponse {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryAllPoolResponse();
@@ -637,10 +697,10 @@ export const QueryAllPoolResponse = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.pool.push(Pool.decode(reader, reader.uint32()));
+          message.pool.push(Pool.decode(reader, reader.uint32(), useInterfaces));
           break;
         case 2:
-          message.pagination = PageResponse.decode(reader, reader.uint32());
+          message.pagination = PageResponse.decode(reader, reader.uint32(), useInterfaces);
           break;
         default:
           reader.skipType(tag & 7);
@@ -679,21 +739,21 @@ export const QueryAllPoolResponse = {
     }
     return message;
   },
-  toAmino(message: QueryAllPoolResponse): QueryAllPoolResponseAmino {
+  toAmino(message: QueryAllPoolResponse, useInterfaces: boolean = true): QueryAllPoolResponseAmino {
     const obj: any = {};
     if (message.pool) {
-      obj.pool = message.pool.map(e => e ? Pool.toAmino(e) : undefined);
+      obj.pool = message.pool.map(e => e ? Pool.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.pool = [];
+      obj.pool = null;
     }
-    obj.pagination = message.pagination ? PageResponse.toAmino(message.pagination) : undefined;
+    obj.pagination = message.pagination ? PageResponse.toAmino(message.pagination, useInterfaces) : undefined;
     return obj;
   },
   fromAminoMsg(object: QueryAllPoolResponseAminoMsg): QueryAllPoolResponse {
     return QueryAllPoolResponse.fromAmino(object.value);
   },
-  fromProtoMsg(message: QueryAllPoolResponseProtoMsg): QueryAllPoolResponse {
-    return QueryAllPoolResponse.decode(message.value);
+  fromProtoMsg(message: QueryAllPoolResponseProtoMsg, useInterfaces: boolean = true): QueryAllPoolResponse {
+    return QueryAllPoolResponse.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: QueryAllPoolResponse): Uint8Array {
     return QueryAllPoolResponse.encode(message).finish();
@@ -705,6 +765,7 @@ export const QueryAllPoolResponse = {
     };
   }
 };
+GlobalDecoderRegistry.register(QueryAllPoolResponse.typeUrl, QueryAllPoolResponse);
 function createBaseQueryGetBondRequest(): QueryGetBondRequest {
   return {
     address: "",
@@ -713,6 +774,15 @@ function createBaseQueryGetBondRequest(): QueryGetBondRequest {
 }
 export const QueryGetBondRequest = {
   typeUrl: "/pryzm.incentives.v1.QueryGetBondRequest",
+  is(o: any): o is QueryGetBondRequest {
+    return o && (o.$typeUrl === QueryGetBondRequest.typeUrl || typeof o.address === "string" && typeof o.bondDenom === "string");
+  },
+  isSDK(o: any): o is QueryGetBondRequestSDKType {
+    return o && (o.$typeUrl === QueryGetBondRequest.typeUrl || typeof o.address === "string" && typeof o.bond_denom === "string");
+  },
+  isAmino(o: any): o is QueryGetBondRequestAmino {
+    return o && (o.$typeUrl === QueryGetBondRequest.typeUrl || typeof o.address === "string" && typeof o.bond_denom === "string");
+  },
   encode(message: QueryGetBondRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.address !== "") {
       writer.uint32(10).string(message.address);
@@ -722,7 +792,7 @@ export const QueryGetBondRequest = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): QueryGetBondRequest {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): QueryGetBondRequest {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryGetBondRequest();
@@ -770,17 +840,17 @@ export const QueryGetBondRequest = {
     }
     return message;
   },
-  toAmino(message: QueryGetBondRequest): QueryGetBondRequestAmino {
+  toAmino(message: QueryGetBondRequest, useInterfaces: boolean = true): QueryGetBondRequestAmino {
     const obj: any = {};
-    obj.address = message.address;
-    obj.bond_denom = message.bondDenom;
+    obj.address = message.address === "" ? undefined : message.address;
+    obj.bond_denom = message.bondDenom === "" ? undefined : message.bondDenom;
     return obj;
   },
   fromAminoMsg(object: QueryGetBondRequestAminoMsg): QueryGetBondRequest {
     return QueryGetBondRequest.fromAmino(object.value);
   },
-  fromProtoMsg(message: QueryGetBondRequestProtoMsg): QueryGetBondRequest {
-    return QueryGetBondRequest.decode(message.value);
+  fromProtoMsg(message: QueryGetBondRequestProtoMsg, useInterfaces: boolean = true): QueryGetBondRequest {
+    return QueryGetBondRequest.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: QueryGetBondRequest): Uint8Array {
     return QueryGetBondRequest.encode(message).finish();
@@ -792,6 +862,7 @@ export const QueryGetBondRequest = {
     };
   }
 };
+GlobalDecoderRegistry.register(QueryGetBondRequest.typeUrl, QueryGetBondRequest);
 function createBaseQueryGetBondResponse(): QueryGetBondResponse {
   return {
     bond: Bond.fromPartial({})
@@ -799,13 +870,22 @@ function createBaseQueryGetBondResponse(): QueryGetBondResponse {
 }
 export const QueryGetBondResponse = {
   typeUrl: "/pryzm.incentives.v1.QueryGetBondResponse",
+  is(o: any): o is QueryGetBondResponse {
+    return o && (o.$typeUrl === QueryGetBondResponse.typeUrl || Bond.is(o.bond));
+  },
+  isSDK(o: any): o is QueryGetBondResponseSDKType {
+    return o && (o.$typeUrl === QueryGetBondResponse.typeUrl || Bond.isSDK(o.bond));
+  },
+  isAmino(o: any): o is QueryGetBondResponseAmino {
+    return o && (o.$typeUrl === QueryGetBondResponse.typeUrl || Bond.isAmino(o.bond));
+  },
   encode(message: QueryGetBondResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.bond !== undefined) {
       Bond.encode(message.bond, writer.uint32(10).fork()).ldelim();
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): QueryGetBondResponse {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): QueryGetBondResponse {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryGetBondResponse();
@@ -813,7 +893,7 @@ export const QueryGetBondResponse = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.bond = Bond.decode(reader, reader.uint32());
+          message.bond = Bond.decode(reader, reader.uint32(), useInterfaces);
           break;
         default:
           reader.skipType(tag & 7);
@@ -844,16 +924,16 @@ export const QueryGetBondResponse = {
     }
     return message;
   },
-  toAmino(message: QueryGetBondResponse): QueryGetBondResponseAmino {
+  toAmino(message: QueryGetBondResponse, useInterfaces: boolean = true): QueryGetBondResponseAmino {
     const obj: any = {};
-    obj.bond = message.bond ? Bond.toAmino(message.bond) : undefined;
+    obj.bond = message.bond ? Bond.toAmino(message.bond, useInterfaces) : undefined;
     return obj;
   },
   fromAminoMsg(object: QueryGetBondResponseAminoMsg): QueryGetBondResponse {
     return QueryGetBondResponse.fromAmino(object.value);
   },
-  fromProtoMsg(message: QueryGetBondResponseProtoMsg): QueryGetBondResponse {
-    return QueryGetBondResponse.decode(message.value);
+  fromProtoMsg(message: QueryGetBondResponseProtoMsg, useInterfaces: boolean = true): QueryGetBondResponse {
+    return QueryGetBondResponse.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: QueryGetBondResponse): Uint8Array {
     return QueryGetBondResponse.encode(message).finish();
@@ -865,6 +945,7 @@ export const QueryGetBondResponse = {
     };
   }
 };
+GlobalDecoderRegistry.register(QueryGetBondResponse.typeUrl, QueryGetBondResponse);
 function createBaseQueryAllBondRequest(): QueryAllBondRequest {
   return {
     pagination: undefined,
@@ -873,6 +954,15 @@ function createBaseQueryAllBondRequest(): QueryAllBondRequest {
 }
 export const QueryAllBondRequest = {
   typeUrl: "/pryzm.incentives.v1.QueryAllBondRequest",
+  is(o: any): o is QueryAllBondRequest {
+    return o && (o.$typeUrl === QueryAllBondRequest.typeUrl || typeof o.address === "string");
+  },
+  isSDK(o: any): o is QueryAllBondRequestSDKType {
+    return o && (o.$typeUrl === QueryAllBondRequest.typeUrl || typeof o.address === "string");
+  },
+  isAmino(o: any): o is QueryAllBondRequestAmino {
+    return o && (o.$typeUrl === QueryAllBondRequest.typeUrl || typeof o.address === "string");
+  },
   encode(message: QueryAllBondRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.pagination !== undefined) {
       PageRequest.encode(message.pagination, writer.uint32(10).fork()).ldelim();
@@ -882,7 +972,7 @@ export const QueryAllBondRequest = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): QueryAllBondRequest {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): QueryAllBondRequest {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryAllBondRequest();
@@ -890,7 +980,7 @@ export const QueryAllBondRequest = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.pagination = PageRequest.decode(reader, reader.uint32());
+          message.pagination = PageRequest.decode(reader, reader.uint32(), useInterfaces);
           break;
         case 2:
           message.address = reader.string();
@@ -930,17 +1020,17 @@ export const QueryAllBondRequest = {
     }
     return message;
   },
-  toAmino(message: QueryAllBondRequest): QueryAllBondRequestAmino {
+  toAmino(message: QueryAllBondRequest, useInterfaces: boolean = true): QueryAllBondRequestAmino {
     const obj: any = {};
-    obj.pagination = message.pagination ? PageRequest.toAmino(message.pagination) : undefined;
-    obj.address = message.address;
+    obj.pagination = message.pagination ? PageRequest.toAmino(message.pagination, useInterfaces) : undefined;
+    obj.address = message.address === "" ? undefined : message.address;
     return obj;
   },
   fromAminoMsg(object: QueryAllBondRequestAminoMsg): QueryAllBondRequest {
     return QueryAllBondRequest.fromAmino(object.value);
   },
-  fromProtoMsg(message: QueryAllBondRequestProtoMsg): QueryAllBondRequest {
-    return QueryAllBondRequest.decode(message.value);
+  fromProtoMsg(message: QueryAllBondRequestProtoMsg, useInterfaces: boolean = true): QueryAllBondRequest {
+    return QueryAllBondRequest.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: QueryAllBondRequest): Uint8Array {
     return QueryAllBondRequest.encode(message).finish();
@@ -952,6 +1042,7 @@ export const QueryAllBondRequest = {
     };
   }
 };
+GlobalDecoderRegistry.register(QueryAllBondRequest.typeUrl, QueryAllBondRequest);
 function createBaseQueryAllBondResponse(): QueryAllBondResponse {
   return {
     bond: [],
@@ -960,6 +1051,15 @@ function createBaseQueryAllBondResponse(): QueryAllBondResponse {
 }
 export const QueryAllBondResponse = {
   typeUrl: "/pryzm.incentives.v1.QueryAllBondResponse",
+  is(o: any): o is QueryAllBondResponse {
+    return o && (o.$typeUrl === QueryAllBondResponse.typeUrl || Array.isArray(o.bond) && (!o.bond.length || Bond.is(o.bond[0])));
+  },
+  isSDK(o: any): o is QueryAllBondResponseSDKType {
+    return o && (o.$typeUrl === QueryAllBondResponse.typeUrl || Array.isArray(o.bond) && (!o.bond.length || Bond.isSDK(o.bond[0])));
+  },
+  isAmino(o: any): o is QueryAllBondResponseAmino {
+    return o && (o.$typeUrl === QueryAllBondResponse.typeUrl || Array.isArray(o.bond) && (!o.bond.length || Bond.isAmino(o.bond[0])));
+  },
   encode(message: QueryAllBondResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     for (const v of message.bond) {
       Bond.encode(v!, writer.uint32(10).fork()).ldelim();
@@ -969,7 +1069,7 @@ export const QueryAllBondResponse = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): QueryAllBondResponse {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): QueryAllBondResponse {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryAllBondResponse();
@@ -977,10 +1077,10 @@ export const QueryAllBondResponse = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.bond.push(Bond.decode(reader, reader.uint32()));
+          message.bond.push(Bond.decode(reader, reader.uint32(), useInterfaces));
           break;
         case 2:
-          message.pagination = PageResponse.decode(reader, reader.uint32());
+          message.pagination = PageResponse.decode(reader, reader.uint32(), useInterfaces);
           break;
         default:
           reader.skipType(tag & 7);
@@ -1019,21 +1119,21 @@ export const QueryAllBondResponse = {
     }
     return message;
   },
-  toAmino(message: QueryAllBondResponse): QueryAllBondResponseAmino {
+  toAmino(message: QueryAllBondResponse, useInterfaces: boolean = true): QueryAllBondResponseAmino {
     const obj: any = {};
     if (message.bond) {
-      obj.bond = message.bond.map(e => e ? Bond.toAmino(e) : undefined);
+      obj.bond = message.bond.map(e => e ? Bond.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.bond = [];
+      obj.bond = null;
     }
-    obj.pagination = message.pagination ? PageResponse.toAmino(message.pagination) : undefined;
+    obj.pagination = message.pagination ? PageResponse.toAmino(message.pagination, useInterfaces) : undefined;
     return obj;
   },
   fromAminoMsg(object: QueryAllBondResponseAminoMsg): QueryAllBondResponse {
     return QueryAllBondResponse.fromAmino(object.value);
   },
-  fromProtoMsg(message: QueryAllBondResponseProtoMsg): QueryAllBondResponse {
-    return QueryAllBondResponse.decode(message.value);
+  fromProtoMsg(message: QueryAllBondResponseProtoMsg, useInterfaces: boolean = true): QueryAllBondResponse {
+    return QueryAllBondResponse.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: QueryAllBondResponse): Uint8Array {
     return QueryAllBondResponse.encode(message).finish();
@@ -1045,6 +1145,7 @@ export const QueryAllBondResponse = {
     };
   }
 };
+GlobalDecoderRegistry.register(QueryAllBondResponse.typeUrl, QueryAllBondResponse);
 function createBaseQueryGetUnbondingRequest(): QueryGetUnbondingRequest {
   return {
     id: BigInt(0)
@@ -1052,13 +1153,22 @@ function createBaseQueryGetUnbondingRequest(): QueryGetUnbondingRequest {
 }
 export const QueryGetUnbondingRequest = {
   typeUrl: "/pryzm.incentives.v1.QueryGetUnbondingRequest",
+  is(o: any): o is QueryGetUnbondingRequest {
+    return o && (o.$typeUrl === QueryGetUnbondingRequest.typeUrl || typeof o.id === "bigint");
+  },
+  isSDK(o: any): o is QueryGetUnbondingRequestSDKType {
+    return o && (o.$typeUrl === QueryGetUnbondingRequest.typeUrl || typeof o.id === "bigint");
+  },
+  isAmino(o: any): o is QueryGetUnbondingRequestAmino {
+    return o && (o.$typeUrl === QueryGetUnbondingRequest.typeUrl || typeof o.id === "bigint");
+  },
   encode(message: QueryGetUnbondingRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.id !== BigInt(0)) {
       writer.uint32(8).uint64(message.id);
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): QueryGetUnbondingRequest {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): QueryGetUnbondingRequest {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryGetUnbondingRequest();
@@ -1097,7 +1207,7 @@ export const QueryGetUnbondingRequest = {
     }
     return message;
   },
-  toAmino(message: QueryGetUnbondingRequest): QueryGetUnbondingRequestAmino {
+  toAmino(message: QueryGetUnbondingRequest, useInterfaces: boolean = true): QueryGetUnbondingRequestAmino {
     const obj: any = {};
     obj.id = message.id ? message.id.toString() : undefined;
     return obj;
@@ -1105,8 +1215,8 @@ export const QueryGetUnbondingRequest = {
   fromAminoMsg(object: QueryGetUnbondingRequestAminoMsg): QueryGetUnbondingRequest {
     return QueryGetUnbondingRequest.fromAmino(object.value);
   },
-  fromProtoMsg(message: QueryGetUnbondingRequestProtoMsg): QueryGetUnbondingRequest {
-    return QueryGetUnbondingRequest.decode(message.value);
+  fromProtoMsg(message: QueryGetUnbondingRequestProtoMsg, useInterfaces: boolean = true): QueryGetUnbondingRequest {
+    return QueryGetUnbondingRequest.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: QueryGetUnbondingRequest): Uint8Array {
     return QueryGetUnbondingRequest.encode(message).finish();
@@ -1118,6 +1228,7 @@ export const QueryGetUnbondingRequest = {
     };
   }
 };
+GlobalDecoderRegistry.register(QueryGetUnbondingRequest.typeUrl, QueryGetUnbondingRequest);
 function createBaseQueryGetUnbondingResponse(): QueryGetUnbondingResponse {
   return {
     unbonding: Unbonding.fromPartial({})
@@ -1125,13 +1236,22 @@ function createBaseQueryGetUnbondingResponse(): QueryGetUnbondingResponse {
 }
 export const QueryGetUnbondingResponse = {
   typeUrl: "/pryzm.incentives.v1.QueryGetUnbondingResponse",
+  is(o: any): o is QueryGetUnbondingResponse {
+    return o && (o.$typeUrl === QueryGetUnbondingResponse.typeUrl || Unbonding.is(o.unbonding));
+  },
+  isSDK(o: any): o is QueryGetUnbondingResponseSDKType {
+    return o && (o.$typeUrl === QueryGetUnbondingResponse.typeUrl || Unbonding.isSDK(o.unbonding));
+  },
+  isAmino(o: any): o is QueryGetUnbondingResponseAmino {
+    return o && (o.$typeUrl === QueryGetUnbondingResponse.typeUrl || Unbonding.isAmino(o.unbonding));
+  },
   encode(message: QueryGetUnbondingResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.unbonding !== undefined) {
       Unbonding.encode(message.unbonding, writer.uint32(10).fork()).ldelim();
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): QueryGetUnbondingResponse {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): QueryGetUnbondingResponse {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryGetUnbondingResponse();
@@ -1139,7 +1259,7 @@ export const QueryGetUnbondingResponse = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.unbonding = Unbonding.decode(reader, reader.uint32());
+          message.unbonding = Unbonding.decode(reader, reader.uint32(), useInterfaces);
           break;
         default:
           reader.skipType(tag & 7);
@@ -1170,16 +1290,16 @@ export const QueryGetUnbondingResponse = {
     }
     return message;
   },
-  toAmino(message: QueryGetUnbondingResponse): QueryGetUnbondingResponseAmino {
+  toAmino(message: QueryGetUnbondingResponse, useInterfaces: boolean = true): QueryGetUnbondingResponseAmino {
     const obj: any = {};
-    obj.unbonding = message.unbonding ? Unbonding.toAmino(message.unbonding) : undefined;
+    obj.unbonding = message.unbonding ? Unbonding.toAmino(message.unbonding, useInterfaces) : undefined;
     return obj;
   },
   fromAminoMsg(object: QueryGetUnbondingResponseAminoMsg): QueryGetUnbondingResponse {
     return QueryGetUnbondingResponse.fromAmino(object.value);
   },
-  fromProtoMsg(message: QueryGetUnbondingResponseProtoMsg): QueryGetUnbondingResponse {
-    return QueryGetUnbondingResponse.decode(message.value);
+  fromProtoMsg(message: QueryGetUnbondingResponseProtoMsg, useInterfaces: boolean = true): QueryGetUnbondingResponse {
+    return QueryGetUnbondingResponse.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: QueryGetUnbondingResponse): Uint8Array {
     return QueryGetUnbondingResponse.encode(message).finish();
@@ -1191,6 +1311,7 @@ export const QueryGetUnbondingResponse = {
     };
   }
 };
+GlobalDecoderRegistry.register(QueryGetUnbondingResponse.typeUrl, QueryGetUnbondingResponse);
 function createBaseQueryAllUnbondingRequest(): QueryAllUnbondingRequest {
   return {
     pagination: undefined,
@@ -1199,6 +1320,15 @@ function createBaseQueryAllUnbondingRequest(): QueryAllUnbondingRequest {
 }
 export const QueryAllUnbondingRequest = {
   typeUrl: "/pryzm.incentives.v1.QueryAllUnbondingRequest",
+  is(o: any): o is QueryAllUnbondingRequest {
+    return o && (o.$typeUrl === QueryAllUnbondingRequest.typeUrl || typeof o.address === "string");
+  },
+  isSDK(o: any): o is QueryAllUnbondingRequestSDKType {
+    return o && (o.$typeUrl === QueryAllUnbondingRequest.typeUrl || typeof o.address === "string");
+  },
+  isAmino(o: any): o is QueryAllUnbondingRequestAmino {
+    return o && (o.$typeUrl === QueryAllUnbondingRequest.typeUrl || typeof o.address === "string");
+  },
   encode(message: QueryAllUnbondingRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.pagination !== undefined) {
       PageRequest.encode(message.pagination, writer.uint32(10).fork()).ldelim();
@@ -1208,7 +1338,7 @@ export const QueryAllUnbondingRequest = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): QueryAllUnbondingRequest {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): QueryAllUnbondingRequest {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryAllUnbondingRequest();
@@ -1216,7 +1346,7 @@ export const QueryAllUnbondingRequest = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.pagination = PageRequest.decode(reader, reader.uint32());
+          message.pagination = PageRequest.decode(reader, reader.uint32(), useInterfaces);
           break;
         case 2:
           message.address = reader.string();
@@ -1256,17 +1386,17 @@ export const QueryAllUnbondingRequest = {
     }
     return message;
   },
-  toAmino(message: QueryAllUnbondingRequest): QueryAllUnbondingRequestAmino {
+  toAmino(message: QueryAllUnbondingRequest, useInterfaces: boolean = true): QueryAllUnbondingRequestAmino {
     const obj: any = {};
-    obj.pagination = message.pagination ? PageRequest.toAmino(message.pagination) : undefined;
-    obj.address = message.address;
+    obj.pagination = message.pagination ? PageRequest.toAmino(message.pagination, useInterfaces) : undefined;
+    obj.address = message.address === "" ? undefined : message.address;
     return obj;
   },
   fromAminoMsg(object: QueryAllUnbondingRequestAminoMsg): QueryAllUnbondingRequest {
     return QueryAllUnbondingRequest.fromAmino(object.value);
   },
-  fromProtoMsg(message: QueryAllUnbondingRequestProtoMsg): QueryAllUnbondingRequest {
-    return QueryAllUnbondingRequest.decode(message.value);
+  fromProtoMsg(message: QueryAllUnbondingRequestProtoMsg, useInterfaces: boolean = true): QueryAllUnbondingRequest {
+    return QueryAllUnbondingRequest.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: QueryAllUnbondingRequest): Uint8Array {
     return QueryAllUnbondingRequest.encode(message).finish();
@@ -1278,6 +1408,7 @@ export const QueryAllUnbondingRequest = {
     };
   }
 };
+GlobalDecoderRegistry.register(QueryAllUnbondingRequest.typeUrl, QueryAllUnbondingRequest);
 function createBaseQueryAllUnbondingResponse(): QueryAllUnbondingResponse {
   return {
     unbonding: [],
@@ -1286,6 +1417,15 @@ function createBaseQueryAllUnbondingResponse(): QueryAllUnbondingResponse {
 }
 export const QueryAllUnbondingResponse = {
   typeUrl: "/pryzm.incentives.v1.QueryAllUnbondingResponse",
+  is(o: any): o is QueryAllUnbondingResponse {
+    return o && (o.$typeUrl === QueryAllUnbondingResponse.typeUrl || Array.isArray(o.unbonding) && (!o.unbonding.length || Unbonding.is(o.unbonding[0])));
+  },
+  isSDK(o: any): o is QueryAllUnbondingResponseSDKType {
+    return o && (o.$typeUrl === QueryAllUnbondingResponse.typeUrl || Array.isArray(o.unbonding) && (!o.unbonding.length || Unbonding.isSDK(o.unbonding[0])));
+  },
+  isAmino(o: any): o is QueryAllUnbondingResponseAmino {
+    return o && (o.$typeUrl === QueryAllUnbondingResponse.typeUrl || Array.isArray(o.unbonding) && (!o.unbonding.length || Unbonding.isAmino(o.unbonding[0])));
+  },
   encode(message: QueryAllUnbondingResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     for (const v of message.unbonding) {
       Unbonding.encode(v!, writer.uint32(10).fork()).ldelim();
@@ -1295,7 +1435,7 @@ export const QueryAllUnbondingResponse = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): QueryAllUnbondingResponse {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): QueryAllUnbondingResponse {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryAllUnbondingResponse();
@@ -1303,10 +1443,10 @@ export const QueryAllUnbondingResponse = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.unbonding.push(Unbonding.decode(reader, reader.uint32()));
+          message.unbonding.push(Unbonding.decode(reader, reader.uint32(), useInterfaces));
           break;
         case 2:
-          message.pagination = PageResponse.decode(reader, reader.uint32());
+          message.pagination = PageResponse.decode(reader, reader.uint32(), useInterfaces);
           break;
         default:
           reader.skipType(tag & 7);
@@ -1345,21 +1485,21 @@ export const QueryAllUnbondingResponse = {
     }
     return message;
   },
-  toAmino(message: QueryAllUnbondingResponse): QueryAllUnbondingResponseAmino {
+  toAmino(message: QueryAllUnbondingResponse, useInterfaces: boolean = true): QueryAllUnbondingResponseAmino {
     const obj: any = {};
     if (message.unbonding) {
-      obj.unbonding = message.unbonding.map(e => e ? Unbonding.toAmino(e) : undefined);
+      obj.unbonding = message.unbonding.map(e => e ? Unbonding.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.unbonding = [];
+      obj.unbonding = null;
     }
-    obj.pagination = message.pagination ? PageResponse.toAmino(message.pagination) : undefined;
+    obj.pagination = message.pagination ? PageResponse.toAmino(message.pagination, useInterfaces) : undefined;
     return obj;
   },
   fromAminoMsg(object: QueryAllUnbondingResponseAminoMsg): QueryAllUnbondingResponse {
     return QueryAllUnbondingResponse.fromAmino(object.value);
   },
-  fromProtoMsg(message: QueryAllUnbondingResponseProtoMsg): QueryAllUnbondingResponse {
-    return QueryAllUnbondingResponse.decode(message.value);
+  fromProtoMsg(message: QueryAllUnbondingResponseProtoMsg, useInterfaces: boolean = true): QueryAllUnbondingResponse {
+    return QueryAllUnbondingResponse.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: QueryAllUnbondingResponse): Uint8Array {
     return QueryAllUnbondingResponse.encode(message).finish();
@@ -1371,3 +1511,4 @@ export const QueryAllUnbondingResponse = {
     };
   }
 };
+GlobalDecoderRegistry.register(QueryAllUnbondingResponse.typeUrl, QueryAllUnbondingResponse);

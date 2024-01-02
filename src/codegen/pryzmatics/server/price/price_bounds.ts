@@ -1,5 +1,6 @@
 import { BinaryReader, BinaryWriter } from "../../../binary";
-import { isSet } from "../../../helpers";
+import { isSet, padDecimal } from "../../../helpers";
+import { GlobalDecoderRegistry } from "../../../registry";
 import { Decimal } from "@cosmjs/math";
 export interface QueryPriceBoundsRequest {
   denom: string;
@@ -53,6 +54,15 @@ function createBaseQueryPriceBoundsRequest(): QueryPriceBoundsRequest {
 }
 export const QueryPriceBoundsRequest = {
   typeUrl: "/pryzmatics.server.price.QueryPriceBoundsRequest",
+  is(o: any): o is QueryPriceBoundsRequest {
+    return o && (o.$typeUrl === QueryPriceBoundsRequest.typeUrl || typeof o.denom === "string" && typeof o.from === "string" && typeof o.to === "string");
+  },
+  isSDK(o: any): o is QueryPriceBoundsRequestSDKType {
+    return o && (o.$typeUrl === QueryPriceBoundsRequest.typeUrl || typeof o.denom === "string" && typeof o.from === "string" && typeof o.to === "string");
+  },
+  isAmino(o: any): o is QueryPriceBoundsRequestAmino {
+    return o && (o.$typeUrl === QueryPriceBoundsRequest.typeUrl || typeof o.denom === "string" && typeof o.from === "string" && typeof o.to === "string");
+  },
   encode(message: QueryPriceBoundsRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.denom !== "") {
       writer.uint32(10).string(message.denom);
@@ -65,7 +75,7 @@ export const QueryPriceBoundsRequest = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): QueryPriceBoundsRequest {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): QueryPriceBoundsRequest {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryPriceBoundsRequest();
@@ -122,18 +132,18 @@ export const QueryPriceBoundsRequest = {
     }
     return message;
   },
-  toAmino(message: QueryPriceBoundsRequest): QueryPriceBoundsRequestAmino {
+  toAmino(message: QueryPriceBoundsRequest, useInterfaces: boolean = true): QueryPriceBoundsRequestAmino {
     const obj: any = {};
-    obj.denom = message.denom;
-    obj.from = message.from;
-    obj.to = message.to;
+    obj.denom = message.denom === "" ? undefined : message.denom;
+    obj.from = message.from === "" ? undefined : message.from;
+    obj.to = message.to === "" ? undefined : message.to;
     return obj;
   },
   fromAminoMsg(object: QueryPriceBoundsRequestAminoMsg): QueryPriceBoundsRequest {
     return QueryPriceBoundsRequest.fromAmino(object.value);
   },
-  fromProtoMsg(message: QueryPriceBoundsRequestProtoMsg): QueryPriceBoundsRequest {
-    return QueryPriceBoundsRequest.decode(message.value);
+  fromProtoMsg(message: QueryPriceBoundsRequestProtoMsg, useInterfaces: boolean = true): QueryPriceBoundsRequest {
+    return QueryPriceBoundsRequest.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: QueryPriceBoundsRequest): Uint8Array {
     return QueryPriceBoundsRequest.encode(message).finish();
@@ -145,6 +155,7 @@ export const QueryPriceBoundsRequest = {
     };
   }
 };
+GlobalDecoderRegistry.register(QueryPriceBoundsRequest.typeUrl, QueryPriceBoundsRequest);
 function createBaseQueryPriceBoundsResponse(): QueryPriceBoundsResponse {
   return {
     min: undefined,
@@ -153,6 +164,15 @@ function createBaseQueryPriceBoundsResponse(): QueryPriceBoundsResponse {
 }
 export const QueryPriceBoundsResponse = {
   typeUrl: "/pryzmatics.server.price.QueryPriceBoundsResponse",
+  is(o: any): o is QueryPriceBoundsResponse {
+    return o && o.$typeUrl === QueryPriceBoundsResponse.typeUrl;
+  },
+  isSDK(o: any): o is QueryPriceBoundsResponseSDKType {
+    return o && o.$typeUrl === QueryPriceBoundsResponse.typeUrl;
+  },
+  isAmino(o: any): o is QueryPriceBoundsResponseAmino {
+    return o && o.$typeUrl === QueryPriceBoundsResponse.typeUrl;
+  },
   encode(message: QueryPriceBoundsResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.min !== undefined) {
       writer.uint32(10).string(Decimal.fromUserInput(message.min, 18).atomics);
@@ -162,7 +182,7 @@ export const QueryPriceBoundsResponse = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): QueryPriceBoundsResponse {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): QueryPriceBoundsResponse {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryPriceBoundsResponse();
@@ -210,17 +230,17 @@ export const QueryPriceBoundsResponse = {
     }
     return message;
   },
-  toAmino(message: QueryPriceBoundsResponse): QueryPriceBoundsResponseAmino {
+  toAmino(message: QueryPriceBoundsResponse, useInterfaces: boolean = true): QueryPriceBoundsResponseAmino {
     const obj: any = {};
-    obj.min = message.min;
-    obj.max = message.max;
+    obj.min = padDecimal(message.min) === null ? undefined : padDecimal(message.min);
+    obj.max = padDecimal(message.max) === null ? undefined : padDecimal(message.max);
     return obj;
   },
   fromAminoMsg(object: QueryPriceBoundsResponseAminoMsg): QueryPriceBoundsResponse {
     return QueryPriceBoundsResponse.fromAmino(object.value);
   },
-  fromProtoMsg(message: QueryPriceBoundsResponseProtoMsg): QueryPriceBoundsResponse {
-    return QueryPriceBoundsResponse.decode(message.value);
+  fromProtoMsg(message: QueryPriceBoundsResponseProtoMsg, useInterfaces: boolean = true): QueryPriceBoundsResponse {
+    return QueryPriceBoundsResponse.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: QueryPriceBoundsResponse): Uint8Array {
     return QueryPriceBoundsResponse.encode(message).finish();
@@ -232,3 +252,4 @@ export const QueryPriceBoundsResponse = {
     };
   }
 };
+GlobalDecoderRegistry.register(QueryPriceBoundsResponse.typeUrl, QueryPriceBoundsResponse);

@@ -1,6 +1,7 @@
 import { WeightUpdateTiming, WeightUpdateTimingAmino, WeightUpdateTimingSDKType } from "./weight_update_timing";
 import { BinaryReader, BinaryWriter } from "../../../binary";
-import { isSet } from "../../../helpers";
+import { isSet, padDecimal } from "../../../helpers";
+import { GlobalDecoderRegistry } from "../../../registry";
 import { Decimal } from "@cosmjs/math";
 export interface WeightedPoolProperties {
   poolId: bigint;
@@ -60,6 +61,15 @@ function createBaseWeightedPoolProperties(): WeightedPoolProperties {
 }
 export const WeightedPoolProperties = {
   typeUrl: "/pryzm.amm.v1.WeightedPoolProperties",
+  is(o: any): o is WeightedPoolProperties {
+    return o && (o.$typeUrl === WeightedPoolProperties.typeUrl || typeof o.poolId === "bigint" && WeightUpdateTiming.is(o.weightUpdateTiming) && Array.isArray(o.tokenList) && (!o.tokenList.length || WeightedToken.is(o.tokenList[0])));
+  },
+  isSDK(o: any): o is WeightedPoolPropertiesSDKType {
+    return o && (o.$typeUrl === WeightedPoolProperties.typeUrl || typeof o.pool_id === "bigint" && WeightUpdateTiming.isSDK(o.weight_update_timing) && Array.isArray(o.token_list) && (!o.token_list.length || WeightedToken.isSDK(o.token_list[0])));
+  },
+  isAmino(o: any): o is WeightedPoolPropertiesAmino {
+    return o && (o.$typeUrl === WeightedPoolProperties.typeUrl || typeof o.pool_id === "bigint" && WeightUpdateTiming.isAmino(o.weight_update_timing) && Array.isArray(o.token_list) && (!o.token_list.length || WeightedToken.isAmino(o.token_list[0])));
+  },
   encode(message: WeightedPoolProperties, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.poolId !== BigInt(0)) {
       writer.uint32(8).uint64(message.poolId);
@@ -72,7 +82,7 @@ export const WeightedPoolProperties = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): WeightedPoolProperties {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): WeightedPoolProperties {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseWeightedPoolProperties();
@@ -83,10 +93,10 @@ export const WeightedPoolProperties = {
           message.poolId = reader.uint64();
           break;
         case 2:
-          message.weightUpdateTiming = WeightUpdateTiming.decode(reader, reader.uint32());
+          message.weightUpdateTiming = WeightUpdateTiming.decode(reader, reader.uint32(), useInterfaces);
           break;
         case 3:
-          message.tokenList.push(WeightedToken.decode(reader, reader.uint32()));
+          message.tokenList.push(WeightedToken.decode(reader, reader.uint32(), useInterfaces));
           break;
         default:
           reader.skipType(tag & 7);
@@ -131,22 +141,22 @@ export const WeightedPoolProperties = {
     message.tokenList = object.token_list?.map(e => WeightedToken.fromAmino(e)) || [];
     return message;
   },
-  toAmino(message: WeightedPoolProperties): WeightedPoolPropertiesAmino {
+  toAmino(message: WeightedPoolProperties, useInterfaces: boolean = true): WeightedPoolPropertiesAmino {
     const obj: any = {};
     obj.pool_id = message.poolId ? message.poolId.toString() : undefined;
-    obj.weight_update_timing = message.weightUpdateTiming ? WeightUpdateTiming.toAmino(message.weightUpdateTiming) : undefined;
+    obj.weight_update_timing = message.weightUpdateTiming ? WeightUpdateTiming.toAmino(message.weightUpdateTiming, useInterfaces) : undefined;
     if (message.tokenList) {
-      obj.token_list = message.tokenList.map(e => e ? WeightedToken.toAmino(e) : undefined);
+      obj.token_list = message.tokenList.map(e => e ? WeightedToken.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.token_list = [];
+      obj.token_list = null;
     }
     return obj;
   },
   fromAminoMsg(object: WeightedPoolPropertiesAminoMsg): WeightedPoolProperties {
     return WeightedPoolProperties.fromAmino(object.value);
   },
-  fromProtoMsg(message: WeightedPoolPropertiesProtoMsg): WeightedPoolProperties {
-    return WeightedPoolProperties.decode(message.value);
+  fromProtoMsg(message: WeightedPoolPropertiesProtoMsg, useInterfaces: boolean = true): WeightedPoolProperties {
+    return WeightedPoolProperties.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: WeightedPoolProperties): Uint8Array {
     return WeightedPoolProperties.encode(message).finish();
@@ -158,6 +168,7 @@ export const WeightedPoolProperties = {
     };
   }
 };
+GlobalDecoderRegistry.register(WeightedPoolProperties.typeUrl, WeightedPoolProperties);
 function createBaseWeightedToken(): WeightedToken {
   return {
     poolId: BigInt(0),
@@ -168,6 +179,15 @@ function createBaseWeightedToken(): WeightedToken {
 }
 export const WeightedToken = {
   typeUrl: "/pryzm.amm.v1.WeightedToken",
+  is(o: any): o is WeightedToken {
+    return o && (o.$typeUrl === WeightedToken.typeUrl || typeof o.poolId === "bigint" && typeof o.denom === "string" && typeof o.normalizedStartWeight === "string" && typeof o.normalizedEndWeight === "string");
+  },
+  isSDK(o: any): o is WeightedTokenSDKType {
+    return o && (o.$typeUrl === WeightedToken.typeUrl || typeof o.pool_id === "bigint" && typeof o.denom === "string" && typeof o.normalized_start_weight === "string" && typeof o.normalized_end_weight === "string");
+  },
+  isAmino(o: any): o is WeightedTokenAmino {
+    return o && (o.$typeUrl === WeightedToken.typeUrl || typeof o.pool_id === "bigint" && typeof o.denom === "string" && typeof o.normalized_start_weight === "string" && typeof o.normalized_end_weight === "string");
+  },
   encode(message: WeightedToken, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.poolId !== BigInt(0)) {
       writer.uint32(8).uint64(message.poolId);
@@ -183,7 +203,7 @@ export const WeightedToken = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): WeightedToken {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): WeightedToken {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseWeightedToken();
@@ -249,19 +269,19 @@ export const WeightedToken = {
     }
     return message;
   },
-  toAmino(message: WeightedToken): WeightedTokenAmino {
+  toAmino(message: WeightedToken, useInterfaces: boolean = true): WeightedTokenAmino {
     const obj: any = {};
     obj.pool_id = message.poolId ? message.poolId.toString() : undefined;
-    obj.denom = message.denom;
-    obj.normalized_start_weight = message.normalizedStartWeight;
-    obj.normalized_end_weight = message.normalizedEndWeight;
+    obj.denom = message.denom === "" ? undefined : message.denom;
+    obj.normalized_start_weight = padDecimal(message.normalizedStartWeight) === "" ? undefined : padDecimal(message.normalizedStartWeight);
+    obj.normalized_end_weight = padDecimal(message.normalizedEndWeight) === "" ? undefined : padDecimal(message.normalizedEndWeight);
     return obj;
   },
   fromAminoMsg(object: WeightedTokenAminoMsg): WeightedToken {
     return WeightedToken.fromAmino(object.value);
   },
-  fromProtoMsg(message: WeightedTokenProtoMsg): WeightedToken {
-    return WeightedToken.decode(message.value);
+  fromProtoMsg(message: WeightedTokenProtoMsg, useInterfaces: boolean = true): WeightedToken {
+    return WeightedToken.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: WeightedToken): Uint8Array {
     return WeightedToken.encode(message).finish();
@@ -273,3 +293,4 @@ export const WeightedToken = {
     };
   }
 };
+GlobalDecoderRegistry.register(WeightedToken.typeUrl, WeightedToken);

@@ -1,5 +1,6 @@
 import { BinaryReader, BinaryWriter } from "../../../binary";
 import { isSet } from "../../../helpers";
+import { GlobalDecoderRegistry } from "../../../registry";
 export interface OraclePreVote {
   validator: string;
   hash: string;
@@ -32,6 +33,15 @@ function createBaseOraclePreVote(): OraclePreVote {
 }
 export const OraclePreVote = {
   typeUrl: "/refractedlabs.oracle.v1.OraclePreVote",
+  is(o: any): o is OraclePreVote {
+    return o && (o.$typeUrl === OraclePreVote.typeUrl || typeof o.validator === "string" && typeof o.hash === "string" && typeof o.submitBlock === "bigint");
+  },
+  isSDK(o: any): o is OraclePreVoteSDKType {
+    return o && (o.$typeUrl === OraclePreVote.typeUrl || typeof o.validator === "string" && typeof o.hash === "string" && typeof o.submit_block === "bigint");
+  },
+  isAmino(o: any): o is OraclePreVoteAmino {
+    return o && (o.$typeUrl === OraclePreVote.typeUrl || typeof o.validator === "string" && typeof o.hash === "string" && typeof o.submit_block === "bigint");
+  },
   encode(message: OraclePreVote, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.validator !== "") {
       writer.uint32(10).string(message.validator);
@@ -44,7 +54,7 @@ export const OraclePreVote = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): OraclePreVote {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): OraclePreVote {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseOraclePreVote();
@@ -101,18 +111,18 @@ export const OraclePreVote = {
     }
     return message;
   },
-  toAmino(message: OraclePreVote): OraclePreVoteAmino {
+  toAmino(message: OraclePreVote, useInterfaces: boolean = true): OraclePreVoteAmino {
     const obj: any = {};
-    obj.validator = message.validator;
-    obj.hash = message.hash;
+    obj.validator = message.validator === "" ? undefined : message.validator;
+    obj.hash = message.hash === "" ? undefined : message.hash;
     obj.submit_block = message.submitBlock ? message.submitBlock.toString() : undefined;
     return obj;
   },
   fromAminoMsg(object: OraclePreVoteAminoMsg): OraclePreVote {
     return OraclePreVote.fromAmino(object.value);
   },
-  fromProtoMsg(message: OraclePreVoteProtoMsg): OraclePreVote {
-    return OraclePreVote.decode(message.value);
+  fromProtoMsg(message: OraclePreVoteProtoMsg, useInterfaces: boolean = true): OraclePreVote {
+    return OraclePreVote.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: OraclePreVote): Uint8Array {
     return OraclePreVote.encode(message).finish();
@@ -124,3 +134,4 @@ export const OraclePreVote = {
     };
   }
 };
+GlobalDecoderRegistry.register(OraclePreVote.typeUrl, OraclePreVote);

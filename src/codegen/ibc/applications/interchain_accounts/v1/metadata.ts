@@ -1,5 +1,6 @@
 import { BinaryReader, BinaryWriter } from "../../../../binary";
 import { isSet } from "../../../../helpers";
+import { GlobalDecoderRegistry } from "../../../../registry";
 /**
  * Metadata defines a set of protocol specific data encoded into the ICS27 channel version bytestring
  * See ICS004: https://github.com/cosmos/ibc/tree/master/spec/core/ics-004-channel-and-packet-semantics#Versioning
@@ -74,6 +75,16 @@ function createBaseMetadata(): Metadata {
 }
 export const Metadata = {
   typeUrl: "/ibc.applications.interchain_accounts.v1.Metadata",
+  aminoType: "cosmos-sdk/Metadata",
+  is(o: any): o is Metadata {
+    return o && (o.$typeUrl === Metadata.typeUrl || typeof o.version === "string" && typeof o.controllerConnectionId === "string" && typeof o.hostConnectionId === "string" && typeof o.address === "string" && typeof o.encoding === "string" && typeof o.txType === "string");
+  },
+  isSDK(o: any): o is MetadataSDKType {
+    return o && (o.$typeUrl === Metadata.typeUrl || typeof o.version === "string" && typeof o.controller_connection_id === "string" && typeof o.host_connection_id === "string" && typeof o.address === "string" && typeof o.encoding === "string" && typeof o.tx_type === "string");
+  },
+  isAmino(o: any): o is MetadataAmino {
+    return o && (o.$typeUrl === Metadata.typeUrl || typeof o.version === "string" && typeof o.controller_connection_id === "string" && typeof o.host_connection_id === "string" && typeof o.address === "string" && typeof o.encoding === "string" && typeof o.tx_type === "string");
+  },
   encode(message: Metadata, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.version !== "") {
       writer.uint32(10).string(message.version);
@@ -95,7 +106,7 @@ export const Metadata = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): Metadata {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): Metadata {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMetadata();
@@ -179,27 +190,27 @@ export const Metadata = {
     }
     return message;
   },
-  toAmino(message: Metadata): MetadataAmino {
+  toAmino(message: Metadata, useInterfaces: boolean = true): MetadataAmino {
     const obj: any = {};
-    obj.version = message.version;
-    obj.controller_connection_id = message.controllerConnectionId;
-    obj.host_connection_id = message.hostConnectionId;
-    obj.address = message.address;
-    obj.encoding = message.encoding;
-    obj.tx_type = message.txType;
+    obj.version = message.version === "" ? undefined : message.version;
+    obj.controller_connection_id = message.controllerConnectionId === "" ? undefined : message.controllerConnectionId;
+    obj.host_connection_id = message.hostConnectionId === "" ? undefined : message.hostConnectionId;
+    obj.address = message.address === "" ? undefined : message.address;
+    obj.encoding = message.encoding === "" ? undefined : message.encoding;
+    obj.tx_type = message.txType === "" ? undefined : message.txType;
     return obj;
   },
   fromAminoMsg(object: MetadataAminoMsg): Metadata {
     return Metadata.fromAmino(object.value);
   },
-  toAminoMsg(message: Metadata): MetadataAminoMsg {
+  toAminoMsg(message: Metadata, useInterfaces: boolean = true): MetadataAminoMsg {
     return {
       type: "cosmos-sdk/Metadata",
-      value: Metadata.toAmino(message)
+      value: Metadata.toAmino(message, useInterfaces)
     };
   },
-  fromProtoMsg(message: MetadataProtoMsg): Metadata {
-    return Metadata.decode(message.value);
+  fromProtoMsg(message: MetadataProtoMsg, useInterfaces: boolean = true): Metadata {
+    return Metadata.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: Metadata): Uint8Array {
     return Metadata.encode(message).finish();
@@ -211,3 +222,5 @@ export const Metadata = {
     };
   }
 };
+GlobalDecoderRegistry.register(Metadata.typeUrl, Metadata);
+GlobalDecoderRegistry.registerAminoProtoMapping(Metadata.aminoType, Metadata.typeUrl);

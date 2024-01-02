@@ -1,5 +1,6 @@
 import { BinaryReader, BinaryWriter } from "../../binary";
 import { isSet } from "../../helpers";
+import { GlobalDecoderRegistry } from "../../registry";
 export interface UserStake {
   address: string;
   denom: string;
@@ -32,6 +33,15 @@ function createBaseUserStake(): UserStake {
 }
 export const UserStake = {
   typeUrl: "/pryzmatics.ystaking.UserStake",
+  is(o: any): o is UserStake {
+    return o && (o.$typeUrl === UserStake.typeUrl || typeof o.address === "string" && typeof o.denom === "string" && typeof o.bondedAmount === "string");
+  },
+  isSDK(o: any): o is UserStakeSDKType {
+    return o && (o.$typeUrl === UserStake.typeUrl || typeof o.address === "string" && typeof o.denom === "string" && typeof o.bonded_amount === "string");
+  },
+  isAmino(o: any): o is UserStakeAmino {
+    return o && (o.$typeUrl === UserStake.typeUrl || typeof o.address === "string" && typeof o.denom === "string" && typeof o.bonded_amount === "string");
+  },
   encode(message: UserStake, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.address !== "") {
       writer.uint32(10).string(message.address);
@@ -44,7 +54,7 @@ export const UserStake = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): UserStake {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): UserStake {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseUserStake();
@@ -101,18 +111,18 @@ export const UserStake = {
     }
     return message;
   },
-  toAmino(message: UserStake): UserStakeAmino {
+  toAmino(message: UserStake, useInterfaces: boolean = true): UserStakeAmino {
     const obj: any = {};
-    obj.address = message.address;
-    obj.denom = message.denom;
-    obj.bonded_amount = message.bondedAmount;
+    obj.address = message.address === "" ? undefined : message.address;
+    obj.denom = message.denom === "" ? undefined : message.denom;
+    obj.bonded_amount = message.bondedAmount === "" ? undefined : message.bondedAmount;
     return obj;
   },
   fromAminoMsg(object: UserStakeAminoMsg): UserStake {
     return UserStake.fromAmino(object.value);
   },
-  fromProtoMsg(message: UserStakeProtoMsg): UserStake {
-    return UserStake.decode(message.value);
+  fromProtoMsg(message: UserStakeProtoMsg, useInterfaces: boolean = true): UserStake {
+    return UserStake.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: UserStake): Uint8Array {
     return UserStake.encode(message).finish();
@@ -124,3 +134,4 @@ export const UserStake = {
     };
   }
 };
+GlobalDecoderRegistry.register(UserStake.typeUrl, UserStake);

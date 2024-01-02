@@ -1,6 +1,7 @@
 import { BinaryReader, BinaryWriter } from "../../../binary";
 import { Decimal } from "@cosmjs/math";
-import { isSet } from "../../../helpers";
+import { isSet, padDecimal } from "../../../helpers";
+import { GlobalDecoderRegistry } from "../../../registry";
 export interface TokenWeight {
   denom: string;
   normalizedWeight: string;
@@ -29,6 +30,15 @@ function createBaseTokenWeight(): TokenWeight {
 }
 export const TokenWeight = {
   typeUrl: "/pryzm.amm.v1.TokenWeight",
+  is(o: any): o is TokenWeight {
+    return o && (o.$typeUrl === TokenWeight.typeUrl || typeof o.denom === "string" && typeof o.normalizedWeight === "string");
+  },
+  isSDK(o: any): o is TokenWeightSDKType {
+    return o && (o.$typeUrl === TokenWeight.typeUrl || typeof o.denom === "string" && typeof o.normalized_weight === "string");
+  },
+  isAmino(o: any): o is TokenWeightAmino {
+    return o && (o.$typeUrl === TokenWeight.typeUrl || typeof o.denom === "string" && typeof o.normalized_weight === "string");
+  },
   encode(message: TokenWeight, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.denom !== "") {
       writer.uint32(10).string(message.denom);
@@ -38,7 +48,7 @@ export const TokenWeight = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): TokenWeight {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): TokenWeight {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseTokenWeight();
@@ -86,17 +96,17 @@ export const TokenWeight = {
     }
     return message;
   },
-  toAmino(message: TokenWeight): TokenWeightAmino {
+  toAmino(message: TokenWeight, useInterfaces: boolean = true): TokenWeightAmino {
     const obj: any = {};
-    obj.denom = message.denom;
-    obj.normalized_weight = message.normalizedWeight;
+    obj.denom = message.denom === "" ? undefined : message.denom;
+    obj.normalized_weight = padDecimal(message.normalizedWeight) === "" ? undefined : padDecimal(message.normalizedWeight);
     return obj;
   },
   fromAminoMsg(object: TokenWeightAminoMsg): TokenWeight {
     return TokenWeight.fromAmino(object.value);
   },
-  fromProtoMsg(message: TokenWeightProtoMsg): TokenWeight {
-    return TokenWeight.decode(message.value);
+  fromProtoMsg(message: TokenWeightProtoMsg, useInterfaces: boolean = true): TokenWeight {
+    return TokenWeight.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: TokenWeight): Uint8Array {
     return TokenWeight.encode(message).finish();
@@ -108,3 +118,4 @@ export const TokenWeight = {
     };
   }
 };
+GlobalDecoderRegistry.register(TokenWeight.typeUrl, TokenWeight);

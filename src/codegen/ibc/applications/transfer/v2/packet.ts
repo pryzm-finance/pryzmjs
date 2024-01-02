@@ -1,5 +1,6 @@
 import { BinaryReader, BinaryWriter } from "../../../../binary";
 import { isSet } from "../../../../helpers";
+import { GlobalDecoderRegistry } from "../../../../registry";
 /**
  * FungibleTokenPacketData defines a struct for the packet payload
  * See FungibleTokenPacketData spec:
@@ -65,6 +66,16 @@ function createBaseFungibleTokenPacketData(): FungibleTokenPacketData {
 }
 export const FungibleTokenPacketData = {
   typeUrl: "/ibc.applications.transfer.v2.FungibleTokenPacketData",
+  aminoType: "cosmos-sdk/FungibleTokenPacketData",
+  is(o: any): o is FungibleTokenPacketData {
+    return o && (o.$typeUrl === FungibleTokenPacketData.typeUrl || typeof o.denom === "string" && typeof o.amount === "string" && typeof o.sender === "string" && typeof o.receiver === "string" && typeof o.memo === "string");
+  },
+  isSDK(o: any): o is FungibleTokenPacketDataSDKType {
+    return o && (o.$typeUrl === FungibleTokenPacketData.typeUrl || typeof o.denom === "string" && typeof o.amount === "string" && typeof o.sender === "string" && typeof o.receiver === "string" && typeof o.memo === "string");
+  },
+  isAmino(o: any): o is FungibleTokenPacketDataAmino {
+    return o && (o.$typeUrl === FungibleTokenPacketData.typeUrl || typeof o.denom === "string" && typeof o.amount === "string" && typeof o.sender === "string" && typeof o.receiver === "string" && typeof o.memo === "string");
+  },
   encode(message: FungibleTokenPacketData, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.denom !== "") {
       writer.uint32(10).string(message.denom);
@@ -83,7 +94,7 @@ export const FungibleTokenPacketData = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): FungibleTokenPacketData {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): FungibleTokenPacketData {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseFungibleTokenPacketData();
@@ -158,26 +169,26 @@ export const FungibleTokenPacketData = {
     }
     return message;
   },
-  toAmino(message: FungibleTokenPacketData): FungibleTokenPacketDataAmino {
+  toAmino(message: FungibleTokenPacketData, useInterfaces: boolean = true): FungibleTokenPacketDataAmino {
     const obj: any = {};
-    obj.denom = message.denom;
-    obj.amount = message.amount;
-    obj.sender = message.sender;
-    obj.receiver = message.receiver;
-    obj.memo = message.memo;
+    obj.denom = message.denom === "" ? undefined : message.denom;
+    obj.amount = message.amount === "" ? undefined : message.amount;
+    obj.sender = message.sender === "" ? undefined : message.sender;
+    obj.receiver = message.receiver === "" ? undefined : message.receiver;
+    obj.memo = message.memo === "" ? undefined : message.memo;
     return obj;
   },
   fromAminoMsg(object: FungibleTokenPacketDataAminoMsg): FungibleTokenPacketData {
     return FungibleTokenPacketData.fromAmino(object.value);
   },
-  toAminoMsg(message: FungibleTokenPacketData): FungibleTokenPacketDataAminoMsg {
+  toAminoMsg(message: FungibleTokenPacketData, useInterfaces: boolean = true): FungibleTokenPacketDataAminoMsg {
     return {
       type: "cosmos-sdk/FungibleTokenPacketData",
-      value: FungibleTokenPacketData.toAmino(message)
+      value: FungibleTokenPacketData.toAmino(message, useInterfaces)
     };
   },
-  fromProtoMsg(message: FungibleTokenPacketDataProtoMsg): FungibleTokenPacketData {
-    return FungibleTokenPacketData.decode(message.value);
+  fromProtoMsg(message: FungibleTokenPacketDataProtoMsg, useInterfaces: boolean = true): FungibleTokenPacketData {
+    return FungibleTokenPacketData.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: FungibleTokenPacketData): Uint8Array {
     return FungibleTokenPacketData.encode(message).finish();
@@ -189,3 +200,5 @@ export const FungibleTokenPacketData = {
     };
   }
 };
+GlobalDecoderRegistry.register(FungibleTokenPacketData.typeUrl, FungibleTokenPacketData);
+GlobalDecoderRegistry.registerAminoProtoMapping(FungibleTokenPacketData.aminoType, FungibleTokenPacketData.typeUrl);

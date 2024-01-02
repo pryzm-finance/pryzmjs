@@ -1,5 +1,6 @@
 import { BinaryReader, BinaryWriter } from "../../binary";
 import { isSet, bytesFromBase64, base64FromBytes } from "../../helpers";
+import { GlobalDecoderRegistry } from "../../registry";
 /** PublicKey defines the keys available for use with Validators */
 export interface PublicKey {
   ed25519?: Uint8Array;
@@ -31,6 +32,15 @@ function createBasePublicKey(): PublicKey {
 }
 export const PublicKey = {
   typeUrl: "/tendermint.crypto.PublicKey",
+  is(o: any): o is PublicKey {
+    return o && o.$typeUrl === PublicKey.typeUrl;
+  },
+  isSDK(o: any): o is PublicKeySDKType {
+    return o && o.$typeUrl === PublicKey.typeUrl;
+  },
+  isAmino(o: any): o is PublicKeyAmino {
+    return o && o.$typeUrl === PublicKey.typeUrl;
+  },
   encode(message: PublicKey, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.ed25519 !== undefined) {
       writer.uint32(10).bytes(message.ed25519);
@@ -40,7 +50,7 @@ export const PublicKey = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): PublicKey {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): PublicKey {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBasePublicKey();
@@ -88,7 +98,7 @@ export const PublicKey = {
     }
     return message;
   },
-  toAmino(message: PublicKey): PublicKeyAmino {
+  toAmino(message: PublicKey, useInterfaces: boolean = true): PublicKeyAmino {
     const obj: any = {};
     obj.ed25519 = message.ed25519 ? base64FromBytes(message.ed25519) : undefined;
     obj.secp256k1 = message.secp256k1 ? base64FromBytes(message.secp256k1) : undefined;
@@ -97,8 +107,8 @@ export const PublicKey = {
   fromAminoMsg(object: PublicKeyAminoMsg): PublicKey {
     return PublicKey.fromAmino(object.value);
   },
-  fromProtoMsg(message: PublicKeyProtoMsg): PublicKey {
-    return PublicKey.decode(message.value);
+  fromProtoMsg(message: PublicKeyProtoMsg, useInterfaces: boolean = true): PublicKey {
+    return PublicKey.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: PublicKey): Uint8Array {
     return PublicKey.encode(message).finish();
@@ -110,3 +120,4 @@ export const PublicKey = {
     };
   }
 };
+GlobalDecoderRegistry.register(PublicKey.typeUrl, PublicKey);

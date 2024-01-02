@@ -1,7 +1,8 @@
 import { Timestamp, TimestampSDKType } from "../../google/protobuf/timestamp";
 import { BinaryReader, BinaryWriter } from "../../binary";
 import { Decimal } from "@cosmjs/math";
-import { isSet, fromJsonTimestamp, fromTimestamp } from "../../helpers";
+import { isSet, fromJsonTimestamp, fromTimestamp, padDecimal } from "../../helpers";
+import { GlobalDecoderRegistry } from "../../registry";
 export interface FlowHistoricalPrice {
   time: Timestamp;
   low?: string;
@@ -46,6 +47,15 @@ function createBaseFlowHistoricalPrice(): FlowHistoricalPrice {
 }
 export const FlowHistoricalPrice = {
   typeUrl: "/pryzmatics.flowtrade.FlowHistoricalPrice",
+  is(o: any): o is FlowHistoricalPrice {
+    return o && (o.$typeUrl === FlowHistoricalPrice.typeUrl || Timestamp.is(o.time));
+  },
+  isSDK(o: any): o is FlowHistoricalPriceSDKType {
+    return o && (o.$typeUrl === FlowHistoricalPrice.typeUrl || Timestamp.isSDK(o.time));
+  },
+  isAmino(o: any): o is FlowHistoricalPriceAmino {
+    return o && (o.$typeUrl === FlowHistoricalPrice.typeUrl || Timestamp.isAmino(o.time));
+  },
   encode(message: FlowHistoricalPrice, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.time !== undefined) {
       Timestamp.encode(message.time, writer.uint32(10).fork()).ldelim();
@@ -67,7 +77,7 @@ export const FlowHistoricalPrice = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): FlowHistoricalPrice {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): FlowHistoricalPrice {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseFlowHistoricalPrice();
@@ -151,21 +161,21 @@ export const FlowHistoricalPrice = {
     }
     return message;
   },
-  toAmino(message: FlowHistoricalPrice): FlowHistoricalPriceAmino {
+  toAmino(message: FlowHistoricalPrice, useInterfaces: boolean = true): FlowHistoricalPriceAmino {
     const obj: any = {};
-    obj.time = message.time ? Timestamp.toAmino(message.time) : undefined;
-    obj.low = message.low;
-    obj.high = message.high;
-    obj.avg = message.avg;
-    obj.open = message.open;
-    obj.close = message.close;
+    obj.time = message.time ? Timestamp.toAmino(message.time, useInterfaces) : undefined;
+    obj.low = padDecimal(message.low) === null ? undefined : padDecimal(message.low);
+    obj.high = padDecimal(message.high) === null ? undefined : padDecimal(message.high);
+    obj.avg = padDecimal(message.avg) === null ? undefined : padDecimal(message.avg);
+    obj.open = padDecimal(message.open) === null ? undefined : padDecimal(message.open);
+    obj.close = padDecimal(message.close) === null ? undefined : padDecimal(message.close);
     return obj;
   },
   fromAminoMsg(object: FlowHistoricalPriceAminoMsg): FlowHistoricalPrice {
     return FlowHistoricalPrice.fromAmino(object.value);
   },
-  fromProtoMsg(message: FlowHistoricalPriceProtoMsg): FlowHistoricalPrice {
-    return FlowHistoricalPrice.decode(message.value);
+  fromProtoMsg(message: FlowHistoricalPriceProtoMsg, useInterfaces: boolean = true): FlowHistoricalPrice {
+    return FlowHistoricalPrice.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: FlowHistoricalPrice): Uint8Array {
     return FlowHistoricalPrice.encode(message).finish();
@@ -177,3 +187,4 @@ export const FlowHistoricalPrice = {
     };
   }
 };
+GlobalDecoderRegistry.register(FlowHistoricalPrice.typeUrl, FlowHistoricalPrice);

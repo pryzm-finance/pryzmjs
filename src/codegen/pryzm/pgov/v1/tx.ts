@@ -3,6 +3,7 @@ import { Coin, CoinAmino, CoinSDKType } from "../../../cosmos/base/v1beta1/coin"
 import { ProofOps, ProofOpsAmino, ProofOpsSDKType } from "../../../tendermint/crypto/proof";
 import { BinaryReader, BinaryWriter } from "../../../binary";
 import { isSet, bytesFromBase64, base64FromBytes } from "../../../helpers";
+import { GlobalDecoderRegistry } from "../../../registry";
 export interface MsgUpdateParams {
   authority: string;
   params: Params;
@@ -233,6 +234,16 @@ function createBaseMsgUpdateParams(): MsgUpdateParams {
 }
 export const MsgUpdateParams = {
   typeUrl: "/pryzm.pgov.v1.MsgUpdateParams",
+  aminoType: "pryzm/pgov/v1/UpdateParams",
+  is(o: any): o is MsgUpdateParams {
+    return o && (o.$typeUrl === MsgUpdateParams.typeUrl || typeof o.authority === "string" && Params.is(o.params));
+  },
+  isSDK(o: any): o is MsgUpdateParamsSDKType {
+    return o && (o.$typeUrl === MsgUpdateParams.typeUrl || typeof o.authority === "string" && Params.isSDK(o.params));
+  },
+  isAmino(o: any): o is MsgUpdateParamsAmino {
+    return o && (o.$typeUrl === MsgUpdateParams.typeUrl || typeof o.authority === "string" && Params.isAmino(o.params));
+  },
   encode(message: MsgUpdateParams, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.authority !== "") {
       writer.uint32(10).string(message.authority);
@@ -242,7 +253,7 @@ export const MsgUpdateParams = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): MsgUpdateParams {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): MsgUpdateParams {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgUpdateParams();
@@ -253,7 +264,7 @@ export const MsgUpdateParams = {
           message.authority = reader.string();
           break;
         case 2:
-          message.params = Params.decode(reader, reader.uint32());
+          message.params = Params.decode(reader, reader.uint32(), useInterfaces);
           break;
         default:
           reader.skipType(tag & 7);
@@ -290,23 +301,23 @@ export const MsgUpdateParams = {
     }
     return message;
   },
-  toAmino(message: MsgUpdateParams): MsgUpdateParamsAmino {
+  toAmino(message: MsgUpdateParams, useInterfaces: boolean = true): MsgUpdateParamsAmino {
     const obj: any = {};
-    obj.authority = message.authority;
-    obj.params = message.params ? Params.toAmino(message.params) : undefined;
+    obj.authority = message.authority === "" ? undefined : message.authority;
+    obj.params = message.params ? Params.toAmino(message.params, useInterfaces) : undefined;
     return obj;
   },
   fromAminoMsg(object: MsgUpdateParamsAminoMsg): MsgUpdateParams {
     return MsgUpdateParams.fromAmino(object.value);
   },
-  toAminoMsg(message: MsgUpdateParams): MsgUpdateParamsAminoMsg {
+  toAminoMsg(message: MsgUpdateParams, useInterfaces: boolean = true): MsgUpdateParamsAminoMsg {
     return {
       type: "pryzm/pgov/v1/UpdateParams",
-      value: MsgUpdateParams.toAmino(message)
+      value: MsgUpdateParams.toAmino(message, useInterfaces)
     };
   },
-  fromProtoMsg(message: MsgUpdateParamsProtoMsg): MsgUpdateParams {
-    return MsgUpdateParams.decode(message.value);
+  fromProtoMsg(message: MsgUpdateParamsProtoMsg, useInterfaces: boolean = true): MsgUpdateParams {
+    return MsgUpdateParams.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: MsgUpdateParams): Uint8Array {
     return MsgUpdateParams.encode(message).finish();
@@ -318,15 +329,26 @@ export const MsgUpdateParams = {
     };
   }
 };
+GlobalDecoderRegistry.register(MsgUpdateParams.typeUrl, MsgUpdateParams);
+GlobalDecoderRegistry.registerAminoProtoMapping(MsgUpdateParams.aminoType, MsgUpdateParams.typeUrl);
 function createBaseMsgUpdateParamsResponse(): MsgUpdateParamsResponse {
   return {};
 }
 export const MsgUpdateParamsResponse = {
   typeUrl: "/pryzm.pgov.v1.MsgUpdateParamsResponse",
+  is(o: any): o is MsgUpdateParamsResponse {
+    return o && o.$typeUrl === MsgUpdateParamsResponse.typeUrl;
+  },
+  isSDK(o: any): o is MsgUpdateParamsResponseSDKType {
+    return o && o.$typeUrl === MsgUpdateParamsResponse.typeUrl;
+  },
+  isAmino(o: any): o is MsgUpdateParamsResponseAmino {
+    return o && o.$typeUrl === MsgUpdateParamsResponse.typeUrl;
+  },
   encode(_: MsgUpdateParamsResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): MsgUpdateParamsResponse {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): MsgUpdateParamsResponse {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgUpdateParamsResponse();
@@ -355,15 +377,15 @@ export const MsgUpdateParamsResponse = {
     const message = createBaseMsgUpdateParamsResponse();
     return message;
   },
-  toAmino(_: MsgUpdateParamsResponse): MsgUpdateParamsResponseAmino {
+  toAmino(_: MsgUpdateParamsResponse, useInterfaces: boolean = true): MsgUpdateParamsResponseAmino {
     const obj: any = {};
     return obj;
   },
   fromAminoMsg(object: MsgUpdateParamsResponseAminoMsg): MsgUpdateParamsResponse {
     return MsgUpdateParamsResponse.fromAmino(object.value);
   },
-  fromProtoMsg(message: MsgUpdateParamsResponseProtoMsg): MsgUpdateParamsResponse {
-    return MsgUpdateParamsResponse.decode(message.value);
+  fromProtoMsg(message: MsgUpdateParamsResponseProtoMsg, useInterfaces: boolean = true): MsgUpdateParamsResponse {
+    return MsgUpdateParamsResponse.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: MsgUpdateParamsResponse): Uint8Array {
     return MsgUpdateParamsResponse.encode(message).finish();
@@ -375,6 +397,7 @@ export const MsgUpdateParamsResponse = {
     };
   }
 };
+GlobalDecoderRegistry.register(MsgUpdateParamsResponse.typeUrl, MsgUpdateParamsResponse);
 function createBaseMsgStakePAssets(): MsgStakePAssets {
   return {
     creator: "",
@@ -383,6 +406,16 @@ function createBaseMsgStakePAssets(): MsgStakePAssets {
 }
 export const MsgStakePAssets = {
   typeUrl: "/pryzm.pgov.v1.MsgStakePAssets",
+  aminoType: "pryzm/pgov/v1/StakePAssets",
+  is(o: any): o is MsgStakePAssets {
+    return o && (o.$typeUrl === MsgStakePAssets.typeUrl || typeof o.creator === "string" && Array.isArray(o.amount) && (!o.amount.length || Coin.is(o.amount[0])));
+  },
+  isSDK(o: any): o is MsgStakePAssetsSDKType {
+    return o && (o.$typeUrl === MsgStakePAssets.typeUrl || typeof o.creator === "string" && Array.isArray(o.amount) && (!o.amount.length || Coin.isSDK(o.amount[0])));
+  },
+  isAmino(o: any): o is MsgStakePAssetsAmino {
+    return o && (o.$typeUrl === MsgStakePAssets.typeUrl || typeof o.creator === "string" && Array.isArray(o.amount) && (!o.amount.length || Coin.isAmino(o.amount[0])));
+  },
   encode(message: MsgStakePAssets, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.creator !== "") {
       writer.uint32(10).string(message.creator);
@@ -392,7 +425,7 @@ export const MsgStakePAssets = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): MsgStakePAssets {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): MsgStakePAssets {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgStakePAssets();
@@ -403,7 +436,7 @@ export const MsgStakePAssets = {
           message.creator = reader.string();
           break;
         case 2:
-          message.amount.push(Coin.decode(reader, reader.uint32()));
+          message.amount.push(Coin.decode(reader, reader.uint32(), useInterfaces));
           break;
         default:
           reader.skipType(tag & 7);
@@ -442,27 +475,27 @@ export const MsgStakePAssets = {
     message.amount = object.amount?.map(e => Coin.fromAmino(e)) || [];
     return message;
   },
-  toAmino(message: MsgStakePAssets): MsgStakePAssetsAmino {
+  toAmino(message: MsgStakePAssets, useInterfaces: boolean = true): MsgStakePAssetsAmino {
     const obj: any = {};
-    obj.creator = message.creator;
+    obj.creator = message.creator === "" ? undefined : message.creator;
     if (message.amount) {
-      obj.amount = message.amount.map(e => e ? Coin.toAmino(e) : undefined);
+      obj.amount = message.amount.map(e => e ? Coin.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.amount = [];
+      obj.amount = null;
     }
     return obj;
   },
   fromAminoMsg(object: MsgStakePAssetsAminoMsg): MsgStakePAssets {
     return MsgStakePAssets.fromAmino(object.value);
   },
-  toAminoMsg(message: MsgStakePAssets): MsgStakePAssetsAminoMsg {
+  toAminoMsg(message: MsgStakePAssets, useInterfaces: boolean = true): MsgStakePAssetsAminoMsg {
     return {
       type: "pryzm/pgov/v1/StakePAssets",
-      value: MsgStakePAssets.toAmino(message)
+      value: MsgStakePAssets.toAmino(message, useInterfaces)
     };
   },
-  fromProtoMsg(message: MsgStakePAssetsProtoMsg): MsgStakePAssets {
-    return MsgStakePAssets.decode(message.value);
+  fromProtoMsg(message: MsgStakePAssetsProtoMsg, useInterfaces: boolean = true): MsgStakePAssets {
+    return MsgStakePAssets.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: MsgStakePAssets): Uint8Array {
     return MsgStakePAssets.encode(message).finish();
@@ -474,6 +507,8 @@ export const MsgStakePAssets = {
     };
   }
 };
+GlobalDecoderRegistry.register(MsgStakePAssets.typeUrl, MsgStakePAssets);
+GlobalDecoderRegistry.registerAminoProtoMapping(MsgStakePAssets.aminoType, MsgStakePAssets.typeUrl);
 function createBaseMsgStakePAssetsResponse(): MsgStakePAssetsResponse {
   return {
     totalStakedPAssets: ""
@@ -481,13 +516,22 @@ function createBaseMsgStakePAssetsResponse(): MsgStakePAssetsResponse {
 }
 export const MsgStakePAssetsResponse = {
   typeUrl: "/pryzm.pgov.v1.MsgStakePAssetsResponse",
+  is(o: any): o is MsgStakePAssetsResponse {
+    return o && (o.$typeUrl === MsgStakePAssetsResponse.typeUrl || typeof o.totalStakedPAssets === "string");
+  },
+  isSDK(o: any): o is MsgStakePAssetsResponseSDKType {
+    return o && (o.$typeUrl === MsgStakePAssetsResponse.typeUrl || typeof o.total_staked_p_assets === "string");
+  },
+  isAmino(o: any): o is MsgStakePAssetsResponseAmino {
+    return o && (o.$typeUrl === MsgStakePAssetsResponse.typeUrl || typeof o.total_staked_p_assets === "string");
+  },
   encode(message: MsgStakePAssetsResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.totalStakedPAssets !== "") {
       writer.uint32(10).string(message.totalStakedPAssets);
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): MsgStakePAssetsResponse {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): MsgStakePAssetsResponse {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgStakePAssetsResponse();
@@ -526,16 +570,16 @@ export const MsgStakePAssetsResponse = {
     }
     return message;
   },
-  toAmino(message: MsgStakePAssetsResponse): MsgStakePAssetsResponseAmino {
+  toAmino(message: MsgStakePAssetsResponse, useInterfaces: boolean = true): MsgStakePAssetsResponseAmino {
     const obj: any = {};
-    obj.total_staked_p_assets = message.totalStakedPAssets;
+    obj.total_staked_p_assets = message.totalStakedPAssets === "" ? undefined : message.totalStakedPAssets;
     return obj;
   },
   fromAminoMsg(object: MsgStakePAssetsResponseAminoMsg): MsgStakePAssetsResponse {
     return MsgStakePAssetsResponse.fromAmino(object.value);
   },
-  fromProtoMsg(message: MsgStakePAssetsResponseProtoMsg): MsgStakePAssetsResponse {
-    return MsgStakePAssetsResponse.decode(message.value);
+  fromProtoMsg(message: MsgStakePAssetsResponseProtoMsg, useInterfaces: boolean = true): MsgStakePAssetsResponse {
+    return MsgStakePAssetsResponse.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: MsgStakePAssetsResponse): Uint8Array {
     return MsgStakePAssetsResponse.encode(message).finish();
@@ -547,6 +591,7 @@ export const MsgStakePAssetsResponse = {
     };
   }
 };
+GlobalDecoderRegistry.register(MsgStakePAssetsResponse.typeUrl, MsgStakePAssetsResponse);
 function createBaseMsgUnstakePAssets(): MsgUnstakePAssets {
   return {
     creator: "",
@@ -555,6 +600,16 @@ function createBaseMsgUnstakePAssets(): MsgUnstakePAssets {
 }
 export const MsgUnstakePAssets = {
   typeUrl: "/pryzm.pgov.v1.MsgUnstakePAssets",
+  aminoType: "pryzm/pgov/v1/UnstakePAssets",
+  is(o: any): o is MsgUnstakePAssets {
+    return o && (o.$typeUrl === MsgUnstakePAssets.typeUrl || typeof o.creator === "string" && Array.isArray(o.amount) && (!o.amount.length || Coin.is(o.amount[0])));
+  },
+  isSDK(o: any): o is MsgUnstakePAssetsSDKType {
+    return o && (o.$typeUrl === MsgUnstakePAssets.typeUrl || typeof o.creator === "string" && Array.isArray(o.amount) && (!o.amount.length || Coin.isSDK(o.amount[0])));
+  },
+  isAmino(o: any): o is MsgUnstakePAssetsAmino {
+    return o && (o.$typeUrl === MsgUnstakePAssets.typeUrl || typeof o.creator === "string" && Array.isArray(o.amount) && (!o.amount.length || Coin.isAmino(o.amount[0])));
+  },
   encode(message: MsgUnstakePAssets, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.creator !== "") {
       writer.uint32(10).string(message.creator);
@@ -564,7 +619,7 @@ export const MsgUnstakePAssets = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): MsgUnstakePAssets {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): MsgUnstakePAssets {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgUnstakePAssets();
@@ -575,7 +630,7 @@ export const MsgUnstakePAssets = {
           message.creator = reader.string();
           break;
         case 2:
-          message.amount.push(Coin.decode(reader, reader.uint32()));
+          message.amount.push(Coin.decode(reader, reader.uint32(), useInterfaces));
           break;
         default:
           reader.skipType(tag & 7);
@@ -614,27 +669,27 @@ export const MsgUnstakePAssets = {
     message.amount = object.amount?.map(e => Coin.fromAmino(e)) || [];
     return message;
   },
-  toAmino(message: MsgUnstakePAssets): MsgUnstakePAssetsAmino {
+  toAmino(message: MsgUnstakePAssets, useInterfaces: boolean = true): MsgUnstakePAssetsAmino {
     const obj: any = {};
-    obj.creator = message.creator;
+    obj.creator = message.creator === "" ? undefined : message.creator;
     if (message.amount) {
-      obj.amount = message.amount.map(e => e ? Coin.toAmino(e) : undefined);
+      obj.amount = message.amount.map(e => e ? Coin.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.amount = [];
+      obj.amount = null;
     }
     return obj;
   },
   fromAminoMsg(object: MsgUnstakePAssetsAminoMsg): MsgUnstakePAssets {
     return MsgUnstakePAssets.fromAmino(object.value);
   },
-  toAminoMsg(message: MsgUnstakePAssets): MsgUnstakePAssetsAminoMsg {
+  toAminoMsg(message: MsgUnstakePAssets, useInterfaces: boolean = true): MsgUnstakePAssetsAminoMsg {
     return {
       type: "pryzm/pgov/v1/UnstakePAssets",
-      value: MsgUnstakePAssets.toAmino(message)
+      value: MsgUnstakePAssets.toAmino(message, useInterfaces)
     };
   },
-  fromProtoMsg(message: MsgUnstakePAssetsProtoMsg): MsgUnstakePAssets {
-    return MsgUnstakePAssets.decode(message.value);
+  fromProtoMsg(message: MsgUnstakePAssetsProtoMsg, useInterfaces: boolean = true): MsgUnstakePAssets {
+    return MsgUnstakePAssets.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: MsgUnstakePAssets): Uint8Array {
     return MsgUnstakePAssets.encode(message).finish();
@@ -646,6 +701,8 @@ export const MsgUnstakePAssets = {
     };
   }
 };
+GlobalDecoderRegistry.register(MsgUnstakePAssets.typeUrl, MsgUnstakePAssets);
+GlobalDecoderRegistry.registerAminoProtoMapping(MsgUnstakePAssets.aminoType, MsgUnstakePAssets.typeUrl);
 function createBaseMsgUnstakePAssetsResponse(): MsgUnstakePAssetsResponse {
   return {
     totalStakedPAssets: ""
@@ -653,13 +710,22 @@ function createBaseMsgUnstakePAssetsResponse(): MsgUnstakePAssetsResponse {
 }
 export const MsgUnstakePAssetsResponse = {
   typeUrl: "/pryzm.pgov.v1.MsgUnstakePAssetsResponse",
+  is(o: any): o is MsgUnstakePAssetsResponse {
+    return o && (o.$typeUrl === MsgUnstakePAssetsResponse.typeUrl || typeof o.totalStakedPAssets === "string");
+  },
+  isSDK(o: any): o is MsgUnstakePAssetsResponseSDKType {
+    return o && (o.$typeUrl === MsgUnstakePAssetsResponse.typeUrl || typeof o.total_staked_p_assets === "string");
+  },
+  isAmino(o: any): o is MsgUnstakePAssetsResponseAmino {
+    return o && (o.$typeUrl === MsgUnstakePAssetsResponse.typeUrl || typeof o.total_staked_p_assets === "string");
+  },
   encode(message: MsgUnstakePAssetsResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.totalStakedPAssets !== "") {
       writer.uint32(10).string(message.totalStakedPAssets);
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): MsgUnstakePAssetsResponse {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): MsgUnstakePAssetsResponse {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgUnstakePAssetsResponse();
@@ -698,16 +764,16 @@ export const MsgUnstakePAssetsResponse = {
     }
     return message;
   },
-  toAmino(message: MsgUnstakePAssetsResponse): MsgUnstakePAssetsResponseAmino {
+  toAmino(message: MsgUnstakePAssetsResponse, useInterfaces: boolean = true): MsgUnstakePAssetsResponseAmino {
     const obj: any = {};
-    obj.total_staked_p_assets = message.totalStakedPAssets;
+    obj.total_staked_p_assets = message.totalStakedPAssets === "" ? undefined : message.totalStakedPAssets;
     return obj;
   },
   fromAminoMsg(object: MsgUnstakePAssetsResponseAminoMsg): MsgUnstakePAssetsResponse {
     return MsgUnstakePAssetsResponse.fromAmino(object.value);
   },
-  fromProtoMsg(message: MsgUnstakePAssetsResponseProtoMsg): MsgUnstakePAssetsResponse {
-    return MsgUnstakePAssetsResponse.decode(message.value);
+  fromProtoMsg(message: MsgUnstakePAssetsResponseProtoMsg, useInterfaces: boolean = true): MsgUnstakePAssetsResponse {
+    return MsgUnstakePAssetsResponse.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: MsgUnstakePAssetsResponse): Uint8Array {
     return MsgUnstakePAssetsResponse.encode(message).finish();
@@ -719,6 +785,7 @@ export const MsgUnstakePAssetsResponse = {
     };
   }
 };
+GlobalDecoderRegistry.register(MsgUnstakePAssetsResponse.typeUrl, MsgUnstakePAssetsResponse);
 function createBaseMsgSubmitVote(): MsgSubmitVote {
   return {
     voter: "",
@@ -729,6 +796,16 @@ function createBaseMsgSubmitVote(): MsgSubmitVote {
 }
 export const MsgSubmitVote = {
   typeUrl: "/pryzm.pgov.v1.MsgSubmitVote",
+  aminoType: "pryzm/pgov/v1/SubmitVote",
+  is(o: any): o is MsgSubmitVote {
+    return o && (o.$typeUrl === MsgSubmitVote.typeUrl || typeof o.voter === "string" && typeof o.asset === "string" && typeof o.proposal === "bigint" && Array.isArray(o.options) && (!o.options.length || WeightedVoteOption.is(o.options[0])));
+  },
+  isSDK(o: any): o is MsgSubmitVoteSDKType {
+    return o && (o.$typeUrl === MsgSubmitVote.typeUrl || typeof o.voter === "string" && typeof o.asset === "string" && typeof o.proposal === "bigint" && Array.isArray(o.options) && (!o.options.length || WeightedVoteOption.isSDK(o.options[0])));
+  },
+  isAmino(o: any): o is MsgSubmitVoteAmino {
+    return o && (o.$typeUrl === MsgSubmitVote.typeUrl || typeof o.voter === "string" && typeof o.asset === "string" && typeof o.proposal === "bigint" && Array.isArray(o.options) && (!o.options.length || WeightedVoteOption.isAmino(o.options[0])));
+  },
   encode(message: MsgSubmitVote, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.voter !== "") {
       writer.uint32(10).string(message.voter);
@@ -744,7 +821,7 @@ export const MsgSubmitVote = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): MsgSubmitVote {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): MsgSubmitVote {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgSubmitVote();
@@ -761,7 +838,7 @@ export const MsgSubmitVote = {
           message.proposal = reader.uint64();
           break;
         case 4:
-          message.options.push(WeightedVoteOption.decode(reader, reader.uint32()));
+          message.options.push(WeightedVoteOption.decode(reader, reader.uint32(), useInterfaces));
           break;
         default:
           reader.skipType(tag & 7);
@@ -812,29 +889,29 @@ export const MsgSubmitVote = {
     message.options = object.options?.map(e => WeightedVoteOption.fromAmino(e)) || [];
     return message;
   },
-  toAmino(message: MsgSubmitVote): MsgSubmitVoteAmino {
+  toAmino(message: MsgSubmitVote, useInterfaces: boolean = true): MsgSubmitVoteAmino {
     const obj: any = {};
-    obj.voter = message.voter;
-    obj.asset = message.asset;
+    obj.voter = message.voter === "" ? undefined : message.voter;
+    obj.asset = message.asset === "" ? undefined : message.asset;
     obj.proposal = message.proposal ? message.proposal.toString() : undefined;
     if (message.options) {
-      obj.options = message.options.map(e => e ? WeightedVoteOption.toAmino(e) : undefined);
+      obj.options = message.options.map(e => e ? WeightedVoteOption.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.options = [];
+      obj.options = null;
     }
     return obj;
   },
   fromAminoMsg(object: MsgSubmitVoteAminoMsg): MsgSubmitVote {
     return MsgSubmitVote.fromAmino(object.value);
   },
-  toAminoMsg(message: MsgSubmitVote): MsgSubmitVoteAminoMsg {
+  toAminoMsg(message: MsgSubmitVote, useInterfaces: boolean = true): MsgSubmitVoteAminoMsg {
     return {
       type: "pryzm/pgov/v1/SubmitVote",
-      value: MsgSubmitVote.toAmino(message)
+      value: MsgSubmitVote.toAmino(message, useInterfaces)
     };
   },
-  fromProtoMsg(message: MsgSubmitVoteProtoMsg): MsgSubmitVote {
-    return MsgSubmitVote.decode(message.value);
+  fromProtoMsg(message: MsgSubmitVoteProtoMsg, useInterfaces: boolean = true): MsgSubmitVote {
+    return MsgSubmitVote.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: MsgSubmitVote): Uint8Array {
     return MsgSubmitVote.encode(message).finish();
@@ -846,15 +923,26 @@ export const MsgSubmitVote = {
     };
   }
 };
+GlobalDecoderRegistry.register(MsgSubmitVote.typeUrl, MsgSubmitVote);
+GlobalDecoderRegistry.registerAminoProtoMapping(MsgSubmitVote.aminoType, MsgSubmitVote.typeUrl);
 function createBaseMsgSubmitVoteResponse(): MsgSubmitVoteResponse {
   return {};
 }
 export const MsgSubmitVoteResponse = {
   typeUrl: "/pryzm.pgov.v1.MsgSubmitVoteResponse",
+  is(o: any): o is MsgSubmitVoteResponse {
+    return o && o.$typeUrl === MsgSubmitVoteResponse.typeUrl;
+  },
+  isSDK(o: any): o is MsgSubmitVoteResponseSDKType {
+    return o && o.$typeUrl === MsgSubmitVoteResponse.typeUrl;
+  },
+  isAmino(o: any): o is MsgSubmitVoteResponseAmino {
+    return o && o.$typeUrl === MsgSubmitVoteResponse.typeUrl;
+  },
   encode(_: MsgSubmitVoteResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): MsgSubmitVoteResponse {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): MsgSubmitVoteResponse {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgSubmitVoteResponse();
@@ -883,15 +971,15 @@ export const MsgSubmitVoteResponse = {
     const message = createBaseMsgSubmitVoteResponse();
     return message;
   },
-  toAmino(_: MsgSubmitVoteResponse): MsgSubmitVoteResponseAmino {
+  toAmino(_: MsgSubmitVoteResponse, useInterfaces: boolean = true): MsgSubmitVoteResponseAmino {
     const obj: any = {};
     return obj;
   },
   fromAminoMsg(object: MsgSubmitVoteResponseAminoMsg): MsgSubmitVoteResponse {
     return MsgSubmitVoteResponse.fromAmino(object.value);
   },
-  fromProtoMsg(message: MsgSubmitVoteResponseProtoMsg): MsgSubmitVoteResponse {
-    return MsgSubmitVoteResponse.decode(message.value);
+  fromProtoMsg(message: MsgSubmitVoteResponseProtoMsg, useInterfaces: boolean = true): MsgSubmitVoteResponse {
+    return MsgSubmitVoteResponse.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: MsgSubmitVoteResponse): Uint8Array {
     return MsgSubmitVoteResponse.encode(message).finish();
@@ -903,6 +991,7 @@ export const MsgSubmitVoteResponse = {
     };
   }
 };
+GlobalDecoderRegistry.register(MsgSubmitVoteResponse.typeUrl, MsgSubmitVoteResponse);
 function createBaseMsgSubmitProposal(): MsgSubmitProposal {
   return {
     creator: "",
@@ -914,6 +1003,16 @@ function createBaseMsgSubmitProposal(): MsgSubmitProposal {
 }
 export const MsgSubmitProposal = {
   typeUrl: "/pryzm.pgov.v1.MsgSubmitProposal",
+  aminoType: "pryzm/pgov/v1/SubmitProposal",
+  is(o: any): o is MsgSubmitProposal {
+    return o && (o.$typeUrl === MsgSubmitProposal.typeUrl || typeof o.creator === "string" && typeof o.asset === "string" && (o.proposal instanceof Uint8Array || typeof o.proposal === "string") && typeof o.height === "bigint");
+  },
+  isSDK(o: any): o is MsgSubmitProposalSDKType {
+    return o && (o.$typeUrl === MsgSubmitProposal.typeUrl || typeof o.creator === "string" && typeof o.asset === "string" && (o.proposal instanceof Uint8Array || typeof o.proposal === "string") && typeof o.height === "bigint");
+  },
+  isAmino(o: any): o is MsgSubmitProposalAmino {
+    return o && (o.$typeUrl === MsgSubmitProposal.typeUrl || typeof o.creator === "string" && typeof o.asset === "string" && (o.proposal instanceof Uint8Array || typeof o.proposal === "string") && typeof o.height === "bigint");
+  },
   encode(message: MsgSubmitProposal, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.creator !== "") {
       writer.uint32(10).string(message.creator);
@@ -932,7 +1031,7 @@ export const MsgSubmitProposal = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): MsgSubmitProposal {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): MsgSubmitProposal {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgSubmitProposal();
@@ -952,7 +1051,7 @@ export const MsgSubmitProposal = {
           message.height = reader.uint64();
           break;
         case 5:
-          message.proof = ProofOps.decode(reader, reader.uint32());
+          message.proof = ProofOps.decode(reader, reader.uint32(), useInterfaces);
           break;
         default:
           reader.skipType(tag & 7);
@@ -1007,26 +1106,26 @@ export const MsgSubmitProposal = {
     }
     return message;
   },
-  toAmino(message: MsgSubmitProposal): MsgSubmitProposalAmino {
+  toAmino(message: MsgSubmitProposal, useInterfaces: boolean = true): MsgSubmitProposalAmino {
     const obj: any = {};
-    obj.creator = message.creator;
-    obj.asset = message.asset;
+    obj.creator = message.creator === "" ? undefined : message.creator;
+    obj.asset = message.asset === "" ? undefined : message.asset;
     obj.proposal = message.proposal ? base64FromBytes(message.proposal) : undefined;
     obj.height = message.height ? message.height.toString() : undefined;
-    obj.proof = message.proof ? ProofOps.toAmino(message.proof) : undefined;
+    obj.proof = message.proof ? ProofOps.toAmino(message.proof, useInterfaces) : undefined;
     return obj;
   },
   fromAminoMsg(object: MsgSubmitProposalAminoMsg): MsgSubmitProposal {
     return MsgSubmitProposal.fromAmino(object.value);
   },
-  toAminoMsg(message: MsgSubmitProposal): MsgSubmitProposalAminoMsg {
+  toAminoMsg(message: MsgSubmitProposal, useInterfaces: boolean = true): MsgSubmitProposalAminoMsg {
     return {
       type: "pryzm/pgov/v1/SubmitProposal",
-      value: MsgSubmitProposal.toAmino(message)
+      value: MsgSubmitProposal.toAmino(message, useInterfaces)
     };
   },
-  fromProtoMsg(message: MsgSubmitProposalProtoMsg): MsgSubmitProposal {
-    return MsgSubmitProposal.decode(message.value);
+  fromProtoMsg(message: MsgSubmitProposalProtoMsg, useInterfaces: boolean = true): MsgSubmitProposal {
+    return MsgSubmitProposal.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: MsgSubmitProposal): Uint8Array {
     return MsgSubmitProposal.encode(message).finish();
@@ -1038,6 +1137,8 @@ export const MsgSubmitProposal = {
     };
   }
 };
+GlobalDecoderRegistry.register(MsgSubmitProposal.typeUrl, MsgSubmitProposal);
+GlobalDecoderRegistry.registerAminoProtoMapping(MsgSubmitProposal.aminoType, MsgSubmitProposal.typeUrl);
 function createBaseMsgSubmitProposalResponse(): MsgSubmitProposalResponse {
   return {
     proposal: Proposal.fromPartial({})
@@ -1045,13 +1146,22 @@ function createBaseMsgSubmitProposalResponse(): MsgSubmitProposalResponse {
 }
 export const MsgSubmitProposalResponse = {
   typeUrl: "/pryzm.pgov.v1.MsgSubmitProposalResponse",
+  is(o: any): o is MsgSubmitProposalResponse {
+    return o && (o.$typeUrl === MsgSubmitProposalResponse.typeUrl || Proposal.is(o.proposal));
+  },
+  isSDK(o: any): o is MsgSubmitProposalResponseSDKType {
+    return o && (o.$typeUrl === MsgSubmitProposalResponse.typeUrl || Proposal.isSDK(o.proposal));
+  },
+  isAmino(o: any): o is MsgSubmitProposalResponseAmino {
+    return o && (o.$typeUrl === MsgSubmitProposalResponse.typeUrl || Proposal.isAmino(o.proposal));
+  },
   encode(message: MsgSubmitProposalResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.proposal !== undefined) {
       Proposal.encode(message.proposal, writer.uint32(10).fork()).ldelim();
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): MsgSubmitProposalResponse {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): MsgSubmitProposalResponse {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgSubmitProposalResponse();
@@ -1059,7 +1169,7 @@ export const MsgSubmitProposalResponse = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.proposal = Proposal.decode(reader, reader.uint32());
+          message.proposal = Proposal.decode(reader, reader.uint32(), useInterfaces);
           break;
         default:
           reader.skipType(tag & 7);
@@ -1090,16 +1200,16 @@ export const MsgSubmitProposalResponse = {
     }
     return message;
   },
-  toAmino(message: MsgSubmitProposalResponse): MsgSubmitProposalResponseAmino {
+  toAmino(message: MsgSubmitProposalResponse, useInterfaces: boolean = true): MsgSubmitProposalResponseAmino {
     const obj: any = {};
-    obj.proposal = message.proposal ? Proposal.toAmino(message.proposal) : undefined;
+    obj.proposal = message.proposal ? Proposal.toAmino(message.proposal, useInterfaces) : undefined;
     return obj;
   },
   fromAminoMsg(object: MsgSubmitProposalResponseAminoMsg): MsgSubmitProposalResponse {
     return MsgSubmitProposalResponse.fromAmino(object.value);
   },
-  fromProtoMsg(message: MsgSubmitProposalResponseProtoMsg): MsgSubmitProposalResponse {
-    return MsgSubmitProposalResponse.decode(message.value);
+  fromProtoMsg(message: MsgSubmitProposalResponseProtoMsg, useInterfaces: boolean = true): MsgSubmitProposalResponse {
+    return MsgSubmitProposalResponse.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: MsgSubmitProposalResponse): Uint8Array {
     return MsgSubmitProposalResponse.encode(message).finish();
@@ -1111,6 +1221,7 @@ export const MsgSubmitProposalResponse = {
     };
   }
 };
+GlobalDecoderRegistry.register(MsgSubmitProposalResponse.typeUrl, MsgSubmitProposalResponse);
 function createBaseMsgRetryVoteTransmit(): MsgRetryVoteTransmit {
   return {
     creator: "",
@@ -1120,6 +1231,16 @@ function createBaseMsgRetryVoteTransmit(): MsgRetryVoteTransmit {
 }
 export const MsgRetryVoteTransmit = {
   typeUrl: "/pryzm.pgov.v1.MsgRetryVoteTransmit",
+  aminoType: "pryzm/pgov/v1/RetryVoteTransmit",
+  is(o: any): o is MsgRetryVoteTransmit {
+    return o && (o.$typeUrl === MsgRetryVoteTransmit.typeUrl || typeof o.creator === "string" && typeof o.asset === "string" && typeof o.proposal === "bigint");
+  },
+  isSDK(o: any): o is MsgRetryVoteTransmitSDKType {
+    return o && (o.$typeUrl === MsgRetryVoteTransmit.typeUrl || typeof o.creator === "string" && typeof o.asset === "string" && typeof o.proposal === "bigint");
+  },
+  isAmino(o: any): o is MsgRetryVoteTransmitAmino {
+    return o && (o.$typeUrl === MsgRetryVoteTransmit.typeUrl || typeof o.creator === "string" && typeof o.asset === "string" && typeof o.proposal === "bigint");
+  },
   encode(message: MsgRetryVoteTransmit, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.creator !== "") {
       writer.uint32(10).string(message.creator);
@@ -1132,7 +1253,7 @@ export const MsgRetryVoteTransmit = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): MsgRetryVoteTransmit {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): MsgRetryVoteTransmit {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgRetryVoteTransmit();
@@ -1189,24 +1310,24 @@ export const MsgRetryVoteTransmit = {
     }
     return message;
   },
-  toAmino(message: MsgRetryVoteTransmit): MsgRetryVoteTransmitAmino {
+  toAmino(message: MsgRetryVoteTransmit, useInterfaces: boolean = true): MsgRetryVoteTransmitAmino {
     const obj: any = {};
-    obj.creator = message.creator;
-    obj.asset = message.asset;
+    obj.creator = message.creator === "" ? undefined : message.creator;
+    obj.asset = message.asset === "" ? undefined : message.asset;
     obj.proposal = message.proposal ? message.proposal.toString() : undefined;
     return obj;
   },
   fromAminoMsg(object: MsgRetryVoteTransmitAminoMsg): MsgRetryVoteTransmit {
     return MsgRetryVoteTransmit.fromAmino(object.value);
   },
-  toAminoMsg(message: MsgRetryVoteTransmit): MsgRetryVoteTransmitAminoMsg {
+  toAminoMsg(message: MsgRetryVoteTransmit, useInterfaces: boolean = true): MsgRetryVoteTransmitAminoMsg {
     return {
       type: "pryzm/pgov/v1/RetryVoteTransmit",
-      value: MsgRetryVoteTransmit.toAmino(message)
+      value: MsgRetryVoteTransmit.toAmino(message, useInterfaces)
     };
   },
-  fromProtoMsg(message: MsgRetryVoteTransmitProtoMsg): MsgRetryVoteTransmit {
-    return MsgRetryVoteTransmit.decode(message.value);
+  fromProtoMsg(message: MsgRetryVoteTransmitProtoMsg, useInterfaces: boolean = true): MsgRetryVoteTransmit {
+    return MsgRetryVoteTransmit.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: MsgRetryVoteTransmit): Uint8Array {
     return MsgRetryVoteTransmit.encode(message).finish();
@@ -1218,15 +1339,26 @@ export const MsgRetryVoteTransmit = {
     };
   }
 };
+GlobalDecoderRegistry.register(MsgRetryVoteTransmit.typeUrl, MsgRetryVoteTransmit);
+GlobalDecoderRegistry.registerAminoProtoMapping(MsgRetryVoteTransmit.aminoType, MsgRetryVoteTransmit.typeUrl);
 function createBaseMsgRetryVoteTransmitResponse(): MsgRetryVoteTransmitResponse {
   return {};
 }
 export const MsgRetryVoteTransmitResponse = {
   typeUrl: "/pryzm.pgov.v1.MsgRetryVoteTransmitResponse",
+  is(o: any): o is MsgRetryVoteTransmitResponse {
+    return o && o.$typeUrl === MsgRetryVoteTransmitResponse.typeUrl;
+  },
+  isSDK(o: any): o is MsgRetryVoteTransmitResponseSDKType {
+    return o && o.$typeUrl === MsgRetryVoteTransmitResponse.typeUrl;
+  },
+  isAmino(o: any): o is MsgRetryVoteTransmitResponseAmino {
+    return o && o.$typeUrl === MsgRetryVoteTransmitResponse.typeUrl;
+  },
   encode(_: MsgRetryVoteTransmitResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): MsgRetryVoteTransmitResponse {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): MsgRetryVoteTransmitResponse {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgRetryVoteTransmitResponse();
@@ -1255,15 +1387,15 @@ export const MsgRetryVoteTransmitResponse = {
     const message = createBaseMsgRetryVoteTransmitResponse();
     return message;
   },
-  toAmino(_: MsgRetryVoteTransmitResponse): MsgRetryVoteTransmitResponseAmino {
+  toAmino(_: MsgRetryVoteTransmitResponse, useInterfaces: boolean = true): MsgRetryVoteTransmitResponseAmino {
     const obj: any = {};
     return obj;
   },
   fromAminoMsg(object: MsgRetryVoteTransmitResponseAminoMsg): MsgRetryVoteTransmitResponse {
     return MsgRetryVoteTransmitResponse.fromAmino(object.value);
   },
-  fromProtoMsg(message: MsgRetryVoteTransmitResponseProtoMsg): MsgRetryVoteTransmitResponse {
-    return MsgRetryVoteTransmitResponse.decode(message.value);
+  fromProtoMsg(message: MsgRetryVoteTransmitResponseProtoMsg, useInterfaces: boolean = true): MsgRetryVoteTransmitResponse {
+    return MsgRetryVoteTransmitResponse.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: MsgRetryVoteTransmitResponse): Uint8Array {
     return MsgRetryVoteTransmitResponse.encode(message).finish();
@@ -1275,3 +1407,4 @@ export const MsgRetryVoteTransmitResponse = {
     };
   }
 };
+GlobalDecoderRegistry.register(MsgRetryVoteTransmitResponse.typeUrl, MsgRetryVoteTransmitResponse);

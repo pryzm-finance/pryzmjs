@@ -1,6 +1,7 @@
 import { Coin, CoinAmino, CoinSDKType } from "../../../../cosmos/base/v1beta1/coin";
 import { BinaryReader, BinaryWriter } from "../../../../binary";
 import { isSet } from "../../../../helpers";
+import { GlobalDecoderRegistry } from "../../../../registry";
 /** Allocation defines the spend limit for a particular port and channel */
 export interface Allocation {
   /** the port on which the packet will be sent */
@@ -81,6 +82,16 @@ function createBaseAllocation(): Allocation {
 }
 export const Allocation = {
   typeUrl: "/ibc.applications.transfer.v1.Allocation",
+  aminoType: "cosmos-sdk/Allocation",
+  is(o: any): o is Allocation {
+    return o && (o.$typeUrl === Allocation.typeUrl || typeof o.sourcePort === "string" && typeof o.sourceChannel === "string" && Array.isArray(o.spendLimit) && (!o.spendLimit.length || Coin.is(o.spendLimit[0])) && Array.isArray(o.allowList) && (!o.allowList.length || typeof o.allowList[0] === "string"));
+  },
+  isSDK(o: any): o is AllocationSDKType {
+    return o && (o.$typeUrl === Allocation.typeUrl || typeof o.source_port === "string" && typeof o.source_channel === "string" && Array.isArray(o.spend_limit) && (!o.spend_limit.length || Coin.isSDK(o.spend_limit[0])) && Array.isArray(o.allow_list) && (!o.allow_list.length || typeof o.allow_list[0] === "string"));
+  },
+  isAmino(o: any): o is AllocationAmino {
+    return o && (o.$typeUrl === Allocation.typeUrl || typeof o.source_port === "string" && typeof o.source_channel === "string" && Array.isArray(o.spend_limit) && (!o.spend_limit.length || Coin.isAmino(o.spend_limit[0])) && Array.isArray(o.allow_list) && (!o.allow_list.length || typeof o.allow_list[0] === "string"));
+  },
   encode(message: Allocation, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.sourcePort !== "") {
       writer.uint32(10).string(message.sourcePort);
@@ -96,7 +107,7 @@ export const Allocation = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): Allocation {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): Allocation {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseAllocation();
@@ -110,7 +121,7 @@ export const Allocation = {
           message.sourceChannel = reader.string();
           break;
         case 3:
-          message.spendLimit.push(Coin.decode(reader, reader.uint32()));
+          message.spendLimit.push(Coin.decode(reader, reader.uint32(), useInterfaces));
           break;
         case 4:
           message.allowList.push(reader.string());
@@ -166,33 +177,33 @@ export const Allocation = {
     message.allowList = object.allow_list?.map(e => e) || [];
     return message;
   },
-  toAmino(message: Allocation): AllocationAmino {
+  toAmino(message: Allocation, useInterfaces: boolean = true): AllocationAmino {
     const obj: any = {};
-    obj.source_port = message.sourcePort;
-    obj.source_channel = message.sourceChannel;
+    obj.source_port = message.sourcePort === "" ? undefined : message.sourcePort;
+    obj.source_channel = message.sourceChannel === "" ? undefined : message.sourceChannel;
     if (message.spendLimit) {
-      obj.spend_limit = message.spendLimit.map(e => e ? Coin.toAmino(e) : undefined);
+      obj.spend_limit = message.spendLimit.map(e => e ? Coin.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.spend_limit = [];
+      obj.spend_limit = null;
     }
     if (message.allowList) {
       obj.allow_list = message.allowList.map(e => e);
     } else {
-      obj.allow_list = [];
+      obj.allow_list = null;
     }
     return obj;
   },
   fromAminoMsg(object: AllocationAminoMsg): Allocation {
     return Allocation.fromAmino(object.value);
   },
-  toAminoMsg(message: Allocation): AllocationAminoMsg {
+  toAminoMsg(message: Allocation, useInterfaces: boolean = true): AllocationAminoMsg {
     return {
       type: "cosmos-sdk/Allocation",
-      value: Allocation.toAmino(message)
+      value: Allocation.toAmino(message, useInterfaces)
     };
   },
-  fromProtoMsg(message: AllocationProtoMsg): Allocation {
-    return Allocation.decode(message.value);
+  fromProtoMsg(message: AllocationProtoMsg, useInterfaces: boolean = true): Allocation {
+    return Allocation.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: Allocation): Uint8Array {
     return Allocation.encode(message).finish();
@@ -204,6 +215,8 @@ export const Allocation = {
     };
   }
 };
+GlobalDecoderRegistry.register(Allocation.typeUrl, Allocation);
+GlobalDecoderRegistry.registerAminoProtoMapping(Allocation.aminoType, Allocation.typeUrl);
 function createBaseTransferAuthorization(): TransferAuthorization {
   return {
     $typeUrl: "/ibc.applications.transfer.v1.TransferAuthorization",
@@ -212,13 +225,23 @@ function createBaseTransferAuthorization(): TransferAuthorization {
 }
 export const TransferAuthorization = {
   typeUrl: "/ibc.applications.transfer.v1.TransferAuthorization",
+  aminoType: "cosmos-sdk/TransferAuthorization",
+  is(o: any): o is TransferAuthorization {
+    return o && (o.$typeUrl === TransferAuthorization.typeUrl || Array.isArray(o.allocations) && (!o.allocations.length || Allocation.is(o.allocations[0])));
+  },
+  isSDK(o: any): o is TransferAuthorizationSDKType {
+    return o && (o.$typeUrl === TransferAuthorization.typeUrl || Array.isArray(o.allocations) && (!o.allocations.length || Allocation.isSDK(o.allocations[0])));
+  },
+  isAmino(o: any): o is TransferAuthorizationAmino {
+    return o && (o.$typeUrl === TransferAuthorization.typeUrl || Array.isArray(o.allocations) && (!o.allocations.length || Allocation.isAmino(o.allocations[0])));
+  },
   encode(message: TransferAuthorization, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     for (const v of message.allocations) {
       Allocation.encode(v!, writer.uint32(10).fork()).ldelim();
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): TransferAuthorization {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): TransferAuthorization {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseTransferAuthorization();
@@ -226,7 +249,7 @@ export const TransferAuthorization = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.allocations.push(Allocation.decode(reader, reader.uint32()));
+          message.allocations.push(Allocation.decode(reader, reader.uint32(), useInterfaces));
           break;
         default:
           reader.skipType(tag & 7);
@@ -259,26 +282,26 @@ export const TransferAuthorization = {
     message.allocations = object.allocations?.map(e => Allocation.fromAmino(e)) || [];
     return message;
   },
-  toAmino(message: TransferAuthorization): TransferAuthorizationAmino {
+  toAmino(message: TransferAuthorization, useInterfaces: boolean = true): TransferAuthorizationAmino {
     const obj: any = {};
     if (message.allocations) {
-      obj.allocations = message.allocations.map(e => e ? Allocation.toAmino(e) : undefined);
+      obj.allocations = message.allocations.map(e => e ? Allocation.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.allocations = [];
+      obj.allocations = null;
     }
     return obj;
   },
   fromAminoMsg(object: TransferAuthorizationAminoMsg): TransferAuthorization {
     return TransferAuthorization.fromAmino(object.value);
   },
-  toAminoMsg(message: TransferAuthorization): TransferAuthorizationAminoMsg {
+  toAminoMsg(message: TransferAuthorization, useInterfaces: boolean = true): TransferAuthorizationAminoMsg {
     return {
       type: "cosmos-sdk/TransferAuthorization",
-      value: TransferAuthorization.toAmino(message)
+      value: TransferAuthorization.toAmino(message, useInterfaces)
     };
   },
-  fromProtoMsg(message: TransferAuthorizationProtoMsg): TransferAuthorization {
-    return TransferAuthorization.decode(message.value);
+  fromProtoMsg(message: TransferAuthorizationProtoMsg, useInterfaces: boolean = true): TransferAuthorization {
+    return TransferAuthorization.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: TransferAuthorization): Uint8Array {
     return TransferAuthorization.encode(message).finish();
@@ -290,3 +313,5 @@ export const TransferAuthorization = {
     };
   }
 };
+GlobalDecoderRegistry.register(TransferAuthorization.typeUrl, TransferAuthorization);
+GlobalDecoderRegistry.registerAminoProtoMapping(TransferAuthorization.aminoType, TransferAuthorization.typeUrl);

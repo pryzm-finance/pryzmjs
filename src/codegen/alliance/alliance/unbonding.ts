@@ -1,6 +1,7 @@
 import { Timestamp, TimestampSDKType } from "../../google/protobuf/timestamp";
 import { BinaryReader, BinaryWriter } from "../../binary";
 import { isSet, fromJsonTimestamp, fromTimestamp } from "../../helpers";
+import { GlobalDecoderRegistry } from "../../registry";
 /** UnbondingDelegation defines an unbonding object with relevant metadata. */
 export interface UnbondingDelegation {
   /** completion_time is the unix time for unbonding completion. */
@@ -42,6 +43,15 @@ function createBaseUnbondingDelegation(): UnbondingDelegation {
 }
 export const UnbondingDelegation = {
   typeUrl: "/alliance.alliance.UnbondingDelegation",
+  is(o: any): o is UnbondingDelegation {
+    return o && (o.$typeUrl === UnbondingDelegation.typeUrl || Timestamp.is(o.completionTime) && typeof o.validatorAddress === "string" && typeof o.amount === "string");
+  },
+  isSDK(o: any): o is UnbondingDelegationSDKType {
+    return o && (o.$typeUrl === UnbondingDelegation.typeUrl || Timestamp.isSDK(o.completion_time) && typeof o.validator_address === "string" && typeof o.amount === "string");
+  },
+  isAmino(o: any): o is UnbondingDelegationAmino {
+    return o && (o.$typeUrl === UnbondingDelegation.typeUrl || Timestamp.isAmino(o.completion_time) && typeof o.validator_address === "string" && typeof o.amount === "string");
+  },
   encode(message: UnbondingDelegation, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.completionTime !== undefined) {
       Timestamp.encode(message.completionTime, writer.uint32(10).fork()).ldelim();
@@ -54,7 +64,7 @@ export const UnbondingDelegation = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): UnbondingDelegation {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): UnbondingDelegation {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseUnbondingDelegation();
@@ -111,18 +121,18 @@ export const UnbondingDelegation = {
     }
     return message;
   },
-  toAmino(message: UnbondingDelegation): UnbondingDelegationAmino {
+  toAmino(message: UnbondingDelegation, useInterfaces: boolean = true): UnbondingDelegationAmino {
     const obj: any = {};
-    obj.completion_time = message.completionTime ? Timestamp.toAmino(message.completionTime) : undefined;
-    obj.validator_address = message.validatorAddress;
-    obj.amount = message.amount;
+    obj.completion_time = message.completionTime ? Timestamp.toAmino(message.completionTime, useInterfaces) : undefined;
+    obj.validator_address = message.validatorAddress === "" ? undefined : message.validatorAddress;
+    obj.amount = message.amount === "" ? undefined : message.amount;
     return obj;
   },
   fromAminoMsg(object: UnbondingDelegationAminoMsg): UnbondingDelegation {
     return UnbondingDelegation.fromAmino(object.value);
   },
-  fromProtoMsg(message: UnbondingDelegationProtoMsg): UnbondingDelegation {
-    return UnbondingDelegation.decode(message.value);
+  fromProtoMsg(message: UnbondingDelegationProtoMsg, useInterfaces: boolean = true): UnbondingDelegation {
+    return UnbondingDelegation.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: UnbondingDelegation): Uint8Array {
     return UnbondingDelegation.encode(message).finish();
@@ -134,3 +144,4 @@ export const UnbondingDelegation = {
     };
   }
 };
+GlobalDecoderRegistry.register(UnbondingDelegation.typeUrl, UnbondingDelegation);

@@ -1,6 +1,7 @@
 import { Coin, CoinAmino, CoinSDKType } from "../../../cosmos/base/v1beta1/coin";
 import { BinaryReader, BinaryWriter } from "../../../binary";
-import { isSet } from "../../../helpers";
+import { isSet, padDecimal } from "../../../helpers";
+import { GlobalDecoderRegistry } from "../../../registry";
 import { Decimal } from "@cosmjs/math";
 export interface QueryZeroImpactJoinYammSimulationRequest {
   cAmountIn: Coin;
@@ -55,13 +56,22 @@ function createBaseQueryZeroImpactJoinYammSimulationRequest(): QueryZeroImpactJo
 }
 export const QueryZeroImpactJoinYammSimulationRequest = {
   typeUrl: "/pryzmatics.server.trade.QueryZeroImpactJoinYammSimulationRequest",
+  is(o: any): o is QueryZeroImpactJoinYammSimulationRequest {
+    return o && (o.$typeUrl === QueryZeroImpactJoinYammSimulationRequest.typeUrl || Coin.is(o.cAmountIn));
+  },
+  isSDK(o: any): o is QueryZeroImpactJoinYammSimulationRequestSDKType {
+    return o && (o.$typeUrl === QueryZeroImpactJoinYammSimulationRequest.typeUrl || Coin.isSDK(o.c_amount_in));
+  },
+  isAmino(o: any): o is QueryZeroImpactJoinYammSimulationRequestAmino {
+    return o && (o.$typeUrl === QueryZeroImpactJoinYammSimulationRequest.typeUrl || Coin.isAmino(o.c_amount_in));
+  },
   encode(message: QueryZeroImpactJoinYammSimulationRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.cAmountIn !== undefined) {
       Coin.encode(message.cAmountIn, writer.uint32(10).fork()).ldelim();
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): QueryZeroImpactJoinYammSimulationRequest {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): QueryZeroImpactJoinYammSimulationRequest {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryZeroImpactJoinYammSimulationRequest();
@@ -69,7 +79,7 @@ export const QueryZeroImpactJoinYammSimulationRequest = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.cAmountIn = Coin.decode(reader, reader.uint32());
+          message.cAmountIn = Coin.decode(reader, reader.uint32(), useInterfaces);
           break;
         default:
           reader.skipType(tag & 7);
@@ -100,16 +110,16 @@ export const QueryZeroImpactJoinYammSimulationRequest = {
     }
     return message;
   },
-  toAmino(message: QueryZeroImpactJoinYammSimulationRequest): QueryZeroImpactJoinYammSimulationRequestAmino {
+  toAmino(message: QueryZeroImpactJoinYammSimulationRequest, useInterfaces: boolean = true): QueryZeroImpactJoinYammSimulationRequestAmino {
     const obj: any = {};
-    obj.c_amount_in = message.cAmountIn ? Coin.toAmino(message.cAmountIn) : undefined;
+    obj.c_amount_in = message.cAmountIn ? Coin.toAmino(message.cAmountIn, useInterfaces) : undefined;
     return obj;
   },
   fromAminoMsg(object: QueryZeroImpactJoinYammSimulationRequestAminoMsg): QueryZeroImpactJoinYammSimulationRequest {
     return QueryZeroImpactJoinYammSimulationRequest.fromAmino(object.value);
   },
-  fromProtoMsg(message: QueryZeroImpactJoinYammSimulationRequestProtoMsg): QueryZeroImpactJoinYammSimulationRequest {
-    return QueryZeroImpactJoinYammSimulationRequest.decode(message.value);
+  fromProtoMsg(message: QueryZeroImpactJoinYammSimulationRequestProtoMsg, useInterfaces: boolean = true): QueryZeroImpactJoinYammSimulationRequest {
+    return QueryZeroImpactJoinYammSimulationRequest.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: QueryZeroImpactJoinYammSimulationRequest): Uint8Array {
     return QueryZeroImpactJoinYammSimulationRequest.encode(message).finish();
@@ -121,6 +131,7 @@ export const QueryZeroImpactJoinYammSimulationRequest = {
     };
   }
 };
+GlobalDecoderRegistry.register(QueryZeroImpactJoinYammSimulationRequest.typeUrl, QueryZeroImpactJoinYammSimulationRequest);
 function createBaseQueryZeroImpactJoinYammSimulationResponse(): QueryZeroImpactJoinYammSimulationResponse {
   return {
     cAmountIn: Coin.fromPartial({}),
@@ -132,6 +143,15 @@ function createBaseQueryZeroImpactJoinYammSimulationResponse(): QueryZeroImpactJ
 }
 export const QueryZeroImpactJoinYammSimulationResponse = {
   typeUrl: "/pryzmatics.server.trade.QueryZeroImpactJoinYammSimulationResponse",
+  is(o: any): o is QueryZeroImpactJoinYammSimulationResponse {
+    return o && (o.$typeUrl === QueryZeroImpactJoinYammSimulationResponse.typeUrl || Coin.is(o.cAmountIn) && Coin.is(o.lptOut) && Array.isArray(o.yOut) && (!o.yOut.length || Coin.is(o.yOut[0])) && Coin.is(o.feeAmount) && typeof o.feePercentage === "string");
+  },
+  isSDK(o: any): o is QueryZeroImpactJoinYammSimulationResponseSDKType {
+    return o && (o.$typeUrl === QueryZeroImpactJoinYammSimulationResponse.typeUrl || Coin.isSDK(o.c_amount_in) && Coin.isSDK(o.lpt_out) && Array.isArray(o.y_out) && (!o.y_out.length || Coin.isSDK(o.y_out[0])) && Coin.isSDK(o.fee_amount) && typeof o.fee_percentage === "string");
+  },
+  isAmino(o: any): o is QueryZeroImpactJoinYammSimulationResponseAmino {
+    return o && (o.$typeUrl === QueryZeroImpactJoinYammSimulationResponse.typeUrl || Coin.isAmino(o.c_amount_in) && Coin.isAmino(o.lpt_out) && Array.isArray(o.y_out) && (!o.y_out.length || Coin.isAmino(o.y_out[0])) && Coin.isAmino(o.fee_amount) && typeof o.fee_percentage === "string");
+  },
   encode(message: QueryZeroImpactJoinYammSimulationResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.cAmountIn !== undefined) {
       Coin.encode(message.cAmountIn, writer.uint32(10).fork()).ldelim();
@@ -150,7 +170,7 @@ export const QueryZeroImpactJoinYammSimulationResponse = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): QueryZeroImpactJoinYammSimulationResponse {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): QueryZeroImpactJoinYammSimulationResponse {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryZeroImpactJoinYammSimulationResponse();
@@ -158,16 +178,16 @@ export const QueryZeroImpactJoinYammSimulationResponse = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.cAmountIn = Coin.decode(reader, reader.uint32());
+          message.cAmountIn = Coin.decode(reader, reader.uint32(), useInterfaces);
           break;
         case 2:
-          message.lptOut = Coin.decode(reader, reader.uint32());
+          message.lptOut = Coin.decode(reader, reader.uint32(), useInterfaces);
           break;
         case 3:
-          message.yOut.push(Coin.decode(reader, reader.uint32()));
+          message.yOut.push(Coin.decode(reader, reader.uint32(), useInterfaces));
           break;
         case 4:
-          message.feeAmount = Coin.decode(reader, reader.uint32());
+          message.feeAmount = Coin.decode(reader, reader.uint32(), useInterfaces);
           break;
         case 5:
           message.feePercentage = Decimal.fromAtomics(reader.string(), 18).toString();
@@ -227,24 +247,24 @@ export const QueryZeroImpactJoinYammSimulationResponse = {
     }
     return message;
   },
-  toAmino(message: QueryZeroImpactJoinYammSimulationResponse): QueryZeroImpactJoinYammSimulationResponseAmino {
+  toAmino(message: QueryZeroImpactJoinYammSimulationResponse, useInterfaces: boolean = true): QueryZeroImpactJoinYammSimulationResponseAmino {
     const obj: any = {};
-    obj.c_amount_in = message.cAmountIn ? Coin.toAmino(message.cAmountIn) : undefined;
-    obj.lpt_out = message.lptOut ? Coin.toAmino(message.lptOut) : undefined;
+    obj.c_amount_in = message.cAmountIn ? Coin.toAmino(message.cAmountIn, useInterfaces) : undefined;
+    obj.lpt_out = message.lptOut ? Coin.toAmino(message.lptOut, useInterfaces) : undefined;
     if (message.yOut) {
-      obj.y_out = message.yOut.map(e => e ? Coin.toAmino(e) : undefined);
+      obj.y_out = message.yOut.map(e => e ? Coin.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.y_out = [];
+      obj.y_out = null;
     }
-    obj.fee_amount = message.feeAmount ? Coin.toAmino(message.feeAmount) : undefined;
-    obj.fee_percentage = message.feePercentage;
+    obj.fee_amount = message.feeAmount ? Coin.toAmino(message.feeAmount, useInterfaces) : undefined;
+    obj.fee_percentage = padDecimal(message.feePercentage) === "" ? undefined : padDecimal(message.feePercentage);
     return obj;
   },
   fromAminoMsg(object: QueryZeroImpactJoinYammSimulationResponseAminoMsg): QueryZeroImpactJoinYammSimulationResponse {
     return QueryZeroImpactJoinYammSimulationResponse.fromAmino(object.value);
   },
-  fromProtoMsg(message: QueryZeroImpactJoinYammSimulationResponseProtoMsg): QueryZeroImpactJoinYammSimulationResponse {
-    return QueryZeroImpactJoinYammSimulationResponse.decode(message.value);
+  fromProtoMsg(message: QueryZeroImpactJoinYammSimulationResponseProtoMsg, useInterfaces: boolean = true): QueryZeroImpactJoinYammSimulationResponse {
+    return QueryZeroImpactJoinYammSimulationResponse.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: QueryZeroImpactJoinYammSimulationResponse): Uint8Array {
     return QueryZeroImpactJoinYammSimulationResponse.encode(message).finish();
@@ -256,3 +276,4 @@ export const QueryZeroImpactJoinYammSimulationResponse = {
     };
   }
 };
+GlobalDecoderRegistry.register(QueryZeroImpactJoinYammSimulationResponse.typeUrl, QueryZeroImpactJoinYammSimulationResponse);

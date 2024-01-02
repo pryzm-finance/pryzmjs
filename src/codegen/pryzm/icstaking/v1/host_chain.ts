@@ -1,7 +1,8 @@
 import { StakingParams, StakingParamsAmino, StakingParamsSDKType } from "./params";
 import { Height, HeightAmino, HeightSDKType } from "../../../ibc/core/client/v1/client";
+import { isSet, padDecimal } from "../../../helpers";
 import { BinaryReader, BinaryWriter } from "../../../binary";
-import { isSet } from "../../../helpers";
+import { GlobalDecoderRegistry } from "../../../registry";
 import { Decimal } from "@cosmjs/math";
 /** The types of available connection protocols */
 export enum ConnectionType {
@@ -456,6 +457,15 @@ function createBaseHostChain(): HostChain {
 }
 export const HostChain = {
   typeUrl: "/pryzm.icstaking.v1.HostChain",
+  is(o: any): o is HostChain {
+    return o && (o.$typeUrl === HostChain.typeUrl || typeof o.id === "string" && isSet(o.connectionType) && typeof o.connectionId === "string" && typeof o.baseDenom === "string" && Array.isArray(o.transferChannels) && (!o.transferChannels.length || TransferChannel.is(o.transferChannels[0])) && StakingParams.is(o.params) && Array.isArray(o.validators) && (!o.validators.length || Validator.is(o.validators[0])));
+  },
+  isSDK(o: any): o is HostChainSDKType {
+    return o && (o.$typeUrl === HostChain.typeUrl || typeof o.id === "string" && isSet(o.connection_type) && typeof o.connection_id === "string" && typeof o.base_denom === "string" && Array.isArray(o.transfer_channels) && (!o.transfer_channels.length || TransferChannel.isSDK(o.transfer_channels[0])) && StakingParams.isSDK(o.params) && Array.isArray(o.validators) && (!o.validators.length || Validator.isSDK(o.validators[0])));
+  },
+  isAmino(o: any): o is HostChainAmino {
+    return o && (o.$typeUrl === HostChain.typeUrl || typeof o.id === "string" && isSet(o.connection_type) && typeof o.connection_id === "string" && typeof o.base_denom === "string" && Array.isArray(o.transfer_channels) && (!o.transfer_channels.length || TransferChannel.isAmino(o.transfer_channels[0])) && StakingParams.isAmino(o.params) && Array.isArray(o.validators) && (!o.validators.length || Validator.isAmino(o.validators[0])));
+  },
   encode(message: HostChain, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.id !== "") {
       writer.uint32(10).string(message.id);
@@ -480,7 +490,7 @@ export const HostChain = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): HostChain {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): HostChain {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseHostChain();
@@ -500,13 +510,13 @@ export const HostChain = {
           message.baseDenom = reader.string();
           break;
         case 5:
-          message.transferChannels.push(TransferChannel.decode(reader, reader.uint32()));
+          message.transferChannels.push(TransferChannel.decode(reader, reader.uint32(), useInterfaces));
           break;
         case 6:
-          message.params = StakingParams.decode(reader, reader.uint32());
+          message.params = StakingParams.decode(reader, reader.uint32(), useInterfaces);
           break;
         case 7:
-          message.validators.push(Validator.decode(reader, reader.uint32()));
+          message.validators.push(Validator.decode(reader, reader.uint32(), useInterfaces));
           break;
         default:
           reader.skipType(tag & 7);
@@ -562,7 +572,7 @@ export const HostChain = {
       message.id = object.id;
     }
     if (object.connection_type !== undefined && object.connection_type !== null) {
-      message.connectionType = connectionTypeFromJSON(object.connection_type);
+      message.connectionType = object.connection_type;
     }
     if (object.connection_id !== undefined && object.connection_id !== null) {
       message.connectionId = object.connection_id;
@@ -577,30 +587,30 @@ export const HostChain = {
     message.validators = object.validators?.map(e => Validator.fromAmino(e)) || [];
     return message;
   },
-  toAmino(message: HostChain): HostChainAmino {
+  toAmino(message: HostChain, useInterfaces: boolean = true): HostChainAmino {
     const obj: any = {};
-    obj.id = message.id;
-    obj.connection_type = connectionTypeToJSON(message.connectionType);
-    obj.connection_id = message.connectionId;
-    obj.base_denom = message.baseDenom;
+    obj.id = message.id === "" ? undefined : message.id;
+    obj.connection_type = message.connectionType === 0 ? undefined : message.connectionType;
+    obj.connection_id = message.connectionId === "" ? undefined : message.connectionId;
+    obj.base_denom = message.baseDenom === "" ? undefined : message.baseDenom;
     if (message.transferChannels) {
-      obj.transfer_channels = message.transferChannels.map(e => e ? TransferChannel.toAmino(e) : undefined);
+      obj.transfer_channels = message.transferChannels.map(e => e ? TransferChannel.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.transfer_channels = [];
+      obj.transfer_channels = null;
     }
-    obj.params = message.params ? StakingParams.toAmino(message.params) : undefined;
+    obj.params = message.params ? StakingParams.toAmino(message.params, useInterfaces) : undefined;
     if (message.validators) {
-      obj.validators = message.validators.map(e => e ? Validator.toAmino(e) : undefined);
+      obj.validators = message.validators.map(e => e ? Validator.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.validators = [];
+      obj.validators = null;
     }
     return obj;
   },
   fromAminoMsg(object: HostChainAminoMsg): HostChain {
     return HostChain.fromAmino(object.value);
   },
-  fromProtoMsg(message: HostChainProtoMsg): HostChain {
-    return HostChain.decode(message.value);
+  fromProtoMsg(message: HostChainProtoMsg, useInterfaces: boolean = true): HostChain {
+    return HostChain.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: HostChain): Uint8Array {
     return HostChain.encode(message).finish();
@@ -612,6 +622,7 @@ export const HostChain = {
     };
   }
 };
+GlobalDecoderRegistry.register(HostChain.typeUrl, HostChain);
 function createBaseTransferChannel(): TransferChannel {
   return {
     type: 0,
@@ -622,6 +633,15 @@ function createBaseTransferChannel(): TransferChannel {
 }
 export const TransferChannel = {
   typeUrl: "/pryzm.icstaking.v1.TransferChannel",
+  is(o: any): o is TransferChannel {
+    return o && (o.$typeUrl === TransferChannel.typeUrl || isSet(o.type) && typeof o.id === "string" && typeof o.wrappedDenom === "string" && typeof o.destinationChain === "string");
+  },
+  isSDK(o: any): o is TransferChannelSDKType {
+    return o && (o.$typeUrl === TransferChannel.typeUrl || isSet(o.type) && typeof o.id === "string" && typeof o.wrapped_denom === "string" && typeof o.destination_chain === "string");
+  },
+  isAmino(o: any): o is TransferChannelAmino {
+    return o && (o.$typeUrl === TransferChannel.typeUrl || isSet(o.type) && typeof o.id === "string" && typeof o.wrapped_denom === "string" && typeof o.destination_chain === "string");
+  },
   encode(message: TransferChannel, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.type !== 0) {
       writer.uint32(8).int32(message.type);
@@ -637,7 +657,7 @@ export const TransferChannel = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): TransferChannel {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): TransferChannel {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseTransferChannel();
@@ -690,7 +710,7 @@ export const TransferChannel = {
   fromAmino(object: TransferChannelAmino): TransferChannel {
     const message = createBaseTransferChannel();
     if (object.type !== undefined && object.type !== null) {
-      message.type = transferChannelTypeFromJSON(object.type);
+      message.type = object.type;
     }
     if (object.id !== undefined && object.id !== null) {
       message.id = object.id;
@@ -703,19 +723,19 @@ export const TransferChannel = {
     }
     return message;
   },
-  toAmino(message: TransferChannel): TransferChannelAmino {
+  toAmino(message: TransferChannel, useInterfaces: boolean = true): TransferChannelAmino {
     const obj: any = {};
-    obj.type = transferChannelTypeToJSON(message.type);
-    obj.id = message.id;
-    obj.wrapped_denom = message.wrappedDenom;
-    obj.destination_chain = message.destinationChain;
+    obj.type = message.type === 0 ? undefined : message.type;
+    obj.id = message.id === "" ? undefined : message.id;
+    obj.wrapped_denom = message.wrappedDenom === "" ? undefined : message.wrappedDenom;
+    obj.destination_chain = message.destinationChain === "" ? undefined : message.destinationChain;
     return obj;
   },
   fromAminoMsg(object: TransferChannelAminoMsg): TransferChannel {
     return TransferChannel.fromAmino(object.value);
   },
-  fromProtoMsg(message: TransferChannelProtoMsg): TransferChannel {
-    return TransferChannel.decode(message.value);
+  fromProtoMsg(message: TransferChannelProtoMsg, useInterfaces: boolean = true): TransferChannel {
+    return TransferChannel.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: TransferChannel): Uint8Array {
     return TransferChannel.encode(message).finish();
@@ -727,6 +747,7 @@ export const TransferChannel = {
     };
   }
 };
+GlobalDecoderRegistry.register(TransferChannel.typeUrl, TransferChannel);
 function createBaseValidator(): Validator {
   return {
     address: "",
@@ -735,6 +756,15 @@ function createBaseValidator(): Validator {
 }
 export const Validator = {
   typeUrl: "/pryzm.icstaking.v1.Validator",
+  is(o: any): o is Validator {
+    return o && (o.$typeUrl === Validator.typeUrl || typeof o.address === "string" && typeof o.weight === "string");
+  },
+  isSDK(o: any): o is ValidatorSDKType {
+    return o && (o.$typeUrl === Validator.typeUrl || typeof o.address === "string" && typeof o.weight === "string");
+  },
+  isAmino(o: any): o is ValidatorAmino {
+    return o && (o.$typeUrl === Validator.typeUrl || typeof o.address === "string" && typeof o.weight === "string");
+  },
   encode(message: Validator, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.address !== "") {
       writer.uint32(10).string(message.address);
@@ -744,7 +774,7 @@ export const Validator = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): Validator {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): Validator {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseValidator();
@@ -792,17 +822,17 @@ export const Validator = {
     }
     return message;
   },
-  toAmino(message: Validator): ValidatorAmino {
+  toAmino(message: Validator, useInterfaces: boolean = true): ValidatorAmino {
     const obj: any = {};
-    obj.address = message.address;
-    obj.weight = message.weight;
+    obj.address = message.address === "" ? undefined : message.address;
+    obj.weight = padDecimal(message.weight) === "" ? undefined : padDecimal(message.weight);
     return obj;
   },
   fromAminoMsg(object: ValidatorAminoMsg): Validator {
     return Validator.fromAmino(object.value);
   },
-  fromProtoMsg(message: ValidatorProtoMsg): Validator {
-    return Validator.decode(message.value);
+  fromProtoMsg(message: ValidatorProtoMsg, useInterfaces: boolean = true): Validator {
+    return Validator.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: Validator): Uint8Array {
     return Validator.encode(message).finish();
@@ -814,6 +844,7 @@ export const Validator = {
     };
   }
 };
+GlobalDecoderRegistry.register(Validator.typeUrl, Validator);
 function createBaseHostChainState(): HostChainState {
   return {
     hostChainId: "",
@@ -828,6 +859,15 @@ function createBaseHostChainState(): HostChainState {
 }
 export const HostChainState = {
   typeUrl: "/pryzm.icstaking.v1.HostChainState",
+  is(o: any): o is HostChainState {
+    return o && (o.$typeUrl === HostChainState.typeUrl || typeof o.hostChainId === "string" && HostAccounts.is(o.hostAccounts) && Array.isArray(o.validatorStates) && (!o.validatorStates.length || ValidatorState.is(o.validatorStates[0])) && typeof o.amountToBeDelegated === "string" && typeof o.undelegatedAmountToCollect === "string" && typeof o.exchangeRate === "string" && isSet(o.state) && Height.is(o.lastIdleStateHostHeight));
+  },
+  isSDK(o: any): o is HostChainStateSDKType {
+    return o && (o.$typeUrl === HostChainState.typeUrl || typeof o.host_chain_id === "string" && HostAccounts.isSDK(o.host_accounts) && Array.isArray(o.validator_states) && (!o.validator_states.length || ValidatorState.isSDK(o.validator_states[0])) && typeof o.amount_to_be_delegated === "string" && typeof o.undelegated_amount_to_collect === "string" && typeof o.exchange_rate === "string" && isSet(o.state) && Height.isSDK(o.last_idle_state_host_height));
+  },
+  isAmino(o: any): o is HostChainStateAmino {
+    return o && (o.$typeUrl === HostChainState.typeUrl || typeof o.host_chain_id === "string" && HostAccounts.isAmino(o.host_accounts) && Array.isArray(o.validator_states) && (!o.validator_states.length || ValidatorState.isAmino(o.validator_states[0])) && typeof o.amount_to_be_delegated === "string" && typeof o.undelegated_amount_to_collect === "string" && typeof o.exchange_rate === "string" && isSet(o.state) && Height.isAmino(o.last_idle_state_host_height));
+  },
   encode(message: HostChainState, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.hostChainId !== "") {
       writer.uint32(10).string(message.hostChainId);
@@ -855,7 +895,7 @@ export const HostChainState = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): HostChainState {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): HostChainState {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseHostChainState();
@@ -866,10 +906,10 @@ export const HostChainState = {
           message.hostChainId = reader.string();
           break;
         case 2:
-          message.hostAccounts = HostAccounts.decode(reader, reader.uint32());
+          message.hostAccounts = HostAccounts.decode(reader, reader.uint32(), useInterfaces);
           break;
         case 3:
-          message.validatorStates.push(ValidatorState.decode(reader, reader.uint32()));
+          message.validatorStates.push(ValidatorState.decode(reader, reader.uint32(), useInterfaces));
           break;
         case 4:
           message.amountToBeDelegated = reader.string();
@@ -884,7 +924,7 @@ export const HostChainState = {
           message.state = (reader.int32() as any);
           break;
         case 8:
-          message.lastIdleStateHostHeight = Height.decode(reader, reader.uint32());
+          message.lastIdleStateHostHeight = Height.decode(reader, reader.uint32(), useInterfaces);
           break;
         default:
           reader.skipType(tag & 7);
@@ -952,34 +992,34 @@ export const HostChainState = {
       message.exchangeRate = object.exchange_rate;
     }
     if (object.state !== undefined && object.state !== null) {
-      message.state = stateFromJSON(object.state);
+      message.state = object.state;
     }
     if (object.last_idle_state_host_height !== undefined && object.last_idle_state_host_height !== null) {
       message.lastIdleStateHostHeight = Height.fromAmino(object.last_idle_state_host_height);
     }
     return message;
   },
-  toAmino(message: HostChainState): HostChainStateAmino {
+  toAmino(message: HostChainState, useInterfaces: boolean = true): HostChainStateAmino {
     const obj: any = {};
-    obj.host_chain_id = message.hostChainId;
-    obj.host_accounts = message.hostAccounts ? HostAccounts.toAmino(message.hostAccounts) : undefined;
+    obj.host_chain_id = message.hostChainId === "" ? undefined : message.hostChainId;
+    obj.host_accounts = message.hostAccounts ? HostAccounts.toAmino(message.hostAccounts, useInterfaces) : undefined;
     if (message.validatorStates) {
-      obj.validator_states = message.validatorStates.map(e => e ? ValidatorState.toAmino(e) : undefined);
+      obj.validator_states = message.validatorStates.map(e => e ? ValidatorState.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.validator_states = [];
+      obj.validator_states = null;
     }
-    obj.amount_to_be_delegated = message.amountToBeDelegated;
-    obj.undelegated_amount_to_collect = message.undelegatedAmountToCollect;
-    obj.exchange_rate = message.exchangeRate;
-    obj.state = stateToJSON(message.state);
-    obj.last_idle_state_host_height = message.lastIdleStateHostHeight ? Height.toAmino(message.lastIdleStateHostHeight) : {};
+    obj.amount_to_be_delegated = message.amountToBeDelegated === "" ? undefined : message.amountToBeDelegated;
+    obj.undelegated_amount_to_collect = message.undelegatedAmountToCollect === "" ? undefined : message.undelegatedAmountToCollect;
+    obj.exchange_rate = padDecimal(message.exchangeRate) === "" ? undefined : padDecimal(message.exchangeRate);
+    obj.state = message.state === 0 ? undefined : message.state;
+    obj.last_idle_state_host_height = message.lastIdleStateHostHeight ? Height.toAmino(message.lastIdleStateHostHeight, useInterfaces) : {};
     return obj;
   },
   fromAminoMsg(object: HostChainStateAminoMsg): HostChainState {
     return HostChainState.fromAmino(object.value);
   },
-  fromProtoMsg(message: HostChainStateProtoMsg): HostChainState {
-    return HostChainState.decode(message.value);
+  fromProtoMsg(message: HostChainStateProtoMsg, useInterfaces: boolean = true): HostChainState {
+    return HostChainState.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: HostChainState): Uint8Array {
     return HostChainState.encode(message).finish();
@@ -991,6 +1031,7 @@ export const HostChainState = {
     };
   }
 };
+GlobalDecoderRegistry.register(HostChainState.typeUrl, HostChainState);
 function createBaseHostAccounts(): HostAccounts {
   return {
     delegation: HostAccount.fromPartial({}),
@@ -1001,6 +1042,15 @@ function createBaseHostAccounts(): HostAccounts {
 }
 export const HostAccounts = {
   typeUrl: "/pryzm.icstaking.v1.HostAccounts",
+  is(o: any): o is HostAccounts {
+    return o && (o.$typeUrl === HostAccounts.typeUrl || HostAccount.is(o.delegation) && HostAccount.is(o.reward) && HostAccount.is(o.sweep) && isSet(o.rewardAccountClaimingState));
+  },
+  isSDK(o: any): o is HostAccountsSDKType {
+    return o && (o.$typeUrl === HostAccounts.typeUrl || HostAccount.isSDK(o.delegation) && HostAccount.isSDK(o.reward) && HostAccount.isSDK(o.sweep) && isSet(o.reward_account_claiming_state));
+  },
+  isAmino(o: any): o is HostAccountsAmino {
+    return o && (o.$typeUrl === HostAccounts.typeUrl || HostAccount.isAmino(o.delegation) && HostAccount.isAmino(o.reward) && HostAccount.isAmino(o.sweep) && isSet(o.reward_account_claiming_state));
+  },
   encode(message: HostAccounts, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.delegation !== undefined) {
       HostAccount.encode(message.delegation, writer.uint32(10).fork()).ldelim();
@@ -1016,7 +1066,7 @@ export const HostAccounts = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): HostAccounts {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): HostAccounts {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseHostAccounts();
@@ -1024,13 +1074,13 @@ export const HostAccounts = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.delegation = HostAccount.decode(reader, reader.uint32());
+          message.delegation = HostAccount.decode(reader, reader.uint32(), useInterfaces);
           break;
         case 2:
-          message.reward = HostAccount.decode(reader, reader.uint32());
+          message.reward = HostAccount.decode(reader, reader.uint32(), useInterfaces);
           break;
         case 3:
-          message.sweep = HostAccount.decode(reader, reader.uint32());
+          message.sweep = HostAccount.decode(reader, reader.uint32(), useInterfaces);
           break;
         case 4:
           message.rewardAccountClaimingState = (reader.int32() as any);
@@ -1078,23 +1128,23 @@ export const HostAccounts = {
       message.sweep = HostAccount.fromAmino(object.sweep);
     }
     if (object.reward_account_claiming_state !== undefined && object.reward_account_claiming_state !== null) {
-      message.rewardAccountClaimingState = accountStateFromJSON(object.reward_account_claiming_state);
+      message.rewardAccountClaimingState = object.reward_account_claiming_state;
     }
     return message;
   },
-  toAmino(message: HostAccounts): HostAccountsAmino {
+  toAmino(message: HostAccounts, useInterfaces: boolean = true): HostAccountsAmino {
     const obj: any = {};
-    obj.delegation = message.delegation ? HostAccount.toAmino(message.delegation) : undefined;
-    obj.reward = message.reward ? HostAccount.toAmino(message.reward) : undefined;
-    obj.sweep = message.sweep ? HostAccount.toAmino(message.sweep) : undefined;
-    obj.reward_account_claiming_state = accountStateToJSON(message.rewardAccountClaimingState);
+    obj.delegation = message.delegation ? HostAccount.toAmino(message.delegation, useInterfaces) : undefined;
+    obj.reward = message.reward ? HostAccount.toAmino(message.reward, useInterfaces) : undefined;
+    obj.sweep = message.sweep ? HostAccount.toAmino(message.sweep, useInterfaces) : undefined;
+    obj.reward_account_claiming_state = message.rewardAccountClaimingState === 0 ? undefined : message.rewardAccountClaimingState;
     return obj;
   },
   fromAminoMsg(object: HostAccountsAminoMsg): HostAccounts {
     return HostAccounts.fromAmino(object.value);
   },
-  fromProtoMsg(message: HostAccountsProtoMsg): HostAccounts {
-    return HostAccounts.decode(message.value);
+  fromProtoMsg(message: HostAccountsProtoMsg, useInterfaces: boolean = true): HostAccounts {
+    return HostAccounts.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: HostAccounts): Uint8Array {
     return HostAccounts.encode(message).finish();
@@ -1106,6 +1156,7 @@ export const HostAccounts = {
     };
   }
 };
+GlobalDecoderRegistry.register(HostAccounts.typeUrl, HostAccounts);
 function createBaseHostAccount(): HostAccount {
   return {
     address: "",
@@ -1115,6 +1166,15 @@ function createBaseHostAccount(): HostAccount {
 }
 export const HostAccount = {
   typeUrl: "/pryzm.icstaking.v1.HostAccount",
+  is(o: any): o is HostAccount {
+    return o && (o.$typeUrl === HostAccount.typeUrl || typeof o.address === "string" && typeof o.balance === "string" && isSet(o.state));
+  },
+  isSDK(o: any): o is HostAccountSDKType {
+    return o && (o.$typeUrl === HostAccount.typeUrl || typeof o.address === "string" && typeof o.balance === "string" && isSet(o.state));
+  },
+  isAmino(o: any): o is HostAccountAmino {
+    return o && (o.$typeUrl === HostAccount.typeUrl || typeof o.address === "string" && typeof o.balance === "string" && isSet(o.state));
+  },
   encode(message: HostAccount, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.address !== "") {
       writer.uint32(10).string(message.address);
@@ -1127,7 +1187,7 @@ export const HostAccount = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): HostAccount {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): HostAccount {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseHostAccount();
@@ -1180,22 +1240,22 @@ export const HostAccount = {
       message.balance = object.balance;
     }
     if (object.state !== undefined && object.state !== null) {
-      message.state = accountStateFromJSON(object.state);
+      message.state = object.state;
     }
     return message;
   },
-  toAmino(message: HostAccount): HostAccountAmino {
+  toAmino(message: HostAccount, useInterfaces: boolean = true): HostAccountAmino {
     const obj: any = {};
-    obj.address = message.address;
-    obj.balance = message.balance;
-    obj.state = accountStateToJSON(message.state);
+    obj.address = message.address === "" ? undefined : message.address;
+    obj.balance = message.balance === "" ? undefined : message.balance;
+    obj.state = message.state === 0 ? undefined : message.state;
     return obj;
   },
   fromAminoMsg(object: HostAccountAminoMsg): HostAccount {
     return HostAccount.fromAmino(object.value);
   },
-  fromProtoMsg(message: HostAccountProtoMsg): HostAccount {
-    return HostAccount.decode(message.value);
+  fromProtoMsg(message: HostAccountProtoMsg, useInterfaces: boolean = true): HostAccount {
+    return HostAccount.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: HostAccount): Uint8Array {
     return HostAccount.encode(message).finish();
@@ -1207,6 +1267,7 @@ export const HostAccount = {
     };
   }
 };
+GlobalDecoderRegistry.register(HostAccount.typeUrl, HostAccount);
 function createBaseValidatorState(): ValidatorState {
   return {
     validatorAddress: "",
@@ -1215,6 +1276,15 @@ function createBaseValidatorState(): ValidatorState {
 }
 export const ValidatorState = {
   typeUrl: "/pryzm.icstaking.v1.ValidatorState",
+  is(o: any): o is ValidatorState {
+    return o && (o.$typeUrl === ValidatorState.typeUrl || typeof o.validatorAddress === "string" && typeof o.delegatedAmount === "string");
+  },
+  isSDK(o: any): o is ValidatorStateSDKType {
+    return o && (o.$typeUrl === ValidatorState.typeUrl || typeof o.validator_address === "string" && typeof o.delegated_amount === "string");
+  },
+  isAmino(o: any): o is ValidatorStateAmino {
+    return o && (o.$typeUrl === ValidatorState.typeUrl || typeof o.validator_address === "string" && typeof o.delegated_amount === "string");
+  },
   encode(message: ValidatorState, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.validatorAddress !== "") {
       writer.uint32(10).string(message.validatorAddress);
@@ -1224,7 +1294,7 @@ export const ValidatorState = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): ValidatorState {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): ValidatorState {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseValidatorState();
@@ -1272,17 +1342,17 @@ export const ValidatorState = {
     }
     return message;
   },
-  toAmino(message: ValidatorState): ValidatorStateAmino {
+  toAmino(message: ValidatorState, useInterfaces: boolean = true): ValidatorStateAmino {
     const obj: any = {};
-    obj.validator_address = message.validatorAddress;
-    obj.delegated_amount = message.delegatedAmount;
+    obj.validator_address = message.validatorAddress === "" ? undefined : message.validatorAddress;
+    obj.delegated_amount = message.delegatedAmount === "" ? undefined : message.delegatedAmount;
     return obj;
   },
   fromAminoMsg(object: ValidatorStateAminoMsg): ValidatorState {
     return ValidatorState.fromAmino(object.value);
   },
-  fromProtoMsg(message: ValidatorStateProtoMsg): ValidatorState {
-    return ValidatorState.decode(message.value);
+  fromProtoMsg(message: ValidatorStateProtoMsg, useInterfaces: boolean = true): ValidatorState {
+    return ValidatorState.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: ValidatorState): Uint8Array {
     return ValidatorState.encode(message).finish();
@@ -1294,3 +1364,4 @@ export const ValidatorState = {
     };
   }
 };
+GlobalDecoderRegistry.register(ValidatorState.typeUrl, ValidatorState);

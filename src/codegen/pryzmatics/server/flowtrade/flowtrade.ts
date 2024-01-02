@@ -4,6 +4,7 @@ import { PageRequest, PageRequestAmino, PageRequestSDKType, PageResponse, PageRe
 import { FlowPositionPair, FlowPositionPairAmino, FlowPositionPairSDKType } from "../../flowtrade/flow_position_pair";
 import { BinaryReader, BinaryWriter } from "../../../binary";
 import { isSet } from "../../../helpers";
+import { GlobalDecoderRegistry } from "../../../registry";
 export enum FlowStatus {
   FLOW_STATUS_ANY = 0,
   FLOW_STATUS_ACTIVE = 1,
@@ -176,13 +177,22 @@ function createBaseQueryFlowRequest(): QueryFlowRequest {
 }
 export const QueryFlowRequest = {
   typeUrl: "/pryzmatics.server.flowtrade.QueryFlowRequest",
+  is(o: any): o is QueryFlowRequest {
+    return o && (o.$typeUrl === QueryFlowRequest.typeUrl || typeof o.id === "bigint");
+  },
+  isSDK(o: any): o is QueryFlowRequestSDKType {
+    return o && (o.$typeUrl === QueryFlowRequest.typeUrl || typeof o.id === "bigint");
+  },
+  isAmino(o: any): o is QueryFlowRequestAmino {
+    return o && (o.$typeUrl === QueryFlowRequest.typeUrl || typeof o.id === "bigint");
+  },
   encode(message: QueryFlowRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.id !== BigInt(0)) {
       writer.uint32(8).uint64(message.id);
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): QueryFlowRequest {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): QueryFlowRequest {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryFlowRequest();
@@ -221,7 +231,7 @@ export const QueryFlowRequest = {
     }
     return message;
   },
-  toAmino(message: QueryFlowRequest): QueryFlowRequestAmino {
+  toAmino(message: QueryFlowRequest, useInterfaces: boolean = true): QueryFlowRequestAmino {
     const obj: any = {};
     obj.id = message.id ? message.id.toString() : undefined;
     return obj;
@@ -229,8 +239,8 @@ export const QueryFlowRequest = {
   fromAminoMsg(object: QueryFlowRequestAminoMsg): QueryFlowRequest {
     return QueryFlowRequest.fromAmino(object.value);
   },
-  fromProtoMsg(message: QueryFlowRequestProtoMsg): QueryFlowRequest {
-    return QueryFlowRequest.decode(message.value);
+  fromProtoMsg(message: QueryFlowRequestProtoMsg, useInterfaces: boolean = true): QueryFlowRequest {
+    return QueryFlowRequest.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: QueryFlowRequest): Uint8Array {
     return QueryFlowRequest.encode(message).finish();
@@ -242,6 +252,7 @@ export const QueryFlowRequest = {
     };
   }
 };
+GlobalDecoderRegistry.register(QueryFlowRequest.typeUrl, QueryFlowRequest);
 function createBaseQueryFlowResponse(): QueryFlowResponse {
   return {
     flow: Flow.fromPartial({})
@@ -249,13 +260,22 @@ function createBaseQueryFlowResponse(): QueryFlowResponse {
 }
 export const QueryFlowResponse = {
   typeUrl: "/pryzmatics.server.flowtrade.QueryFlowResponse",
+  is(o: any): o is QueryFlowResponse {
+    return o && (o.$typeUrl === QueryFlowResponse.typeUrl || Flow.is(o.flow));
+  },
+  isSDK(o: any): o is QueryFlowResponseSDKType {
+    return o && (o.$typeUrl === QueryFlowResponse.typeUrl || Flow.isSDK(o.flow));
+  },
+  isAmino(o: any): o is QueryFlowResponseAmino {
+    return o && (o.$typeUrl === QueryFlowResponse.typeUrl || Flow.isAmino(o.flow));
+  },
   encode(message: QueryFlowResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.flow !== undefined) {
       Flow.encode(message.flow, writer.uint32(10).fork()).ldelim();
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): QueryFlowResponse {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): QueryFlowResponse {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryFlowResponse();
@@ -263,7 +283,7 @@ export const QueryFlowResponse = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.flow = Flow.decode(reader, reader.uint32());
+          message.flow = Flow.decode(reader, reader.uint32(), useInterfaces);
           break;
         default:
           reader.skipType(tag & 7);
@@ -294,16 +314,16 @@ export const QueryFlowResponse = {
     }
     return message;
   },
-  toAmino(message: QueryFlowResponse): QueryFlowResponseAmino {
+  toAmino(message: QueryFlowResponse, useInterfaces: boolean = true): QueryFlowResponseAmino {
     const obj: any = {};
-    obj.flow = message.flow ? Flow.toAmino(message.flow) : undefined;
+    obj.flow = message.flow ? Flow.toAmino(message.flow, useInterfaces) : undefined;
     return obj;
   },
   fromAminoMsg(object: QueryFlowResponseAminoMsg): QueryFlowResponse {
     return QueryFlowResponse.fromAmino(object.value);
   },
-  fromProtoMsg(message: QueryFlowResponseProtoMsg): QueryFlowResponse {
-    return QueryFlowResponse.decode(message.value);
+  fromProtoMsg(message: QueryFlowResponseProtoMsg, useInterfaces: boolean = true): QueryFlowResponse {
+    return QueryFlowResponse.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: QueryFlowResponse): Uint8Array {
     return QueryFlowResponse.encode(message).finish();
@@ -315,6 +335,7 @@ export const QueryFlowResponse = {
     };
   }
 };
+GlobalDecoderRegistry.register(QueryFlowResponse.typeUrl, QueryFlowResponse);
 function createBaseQueryAllFlowRequest(): QueryAllFlowRequest {
   return {
     status: 0,
@@ -328,6 +349,15 @@ function createBaseQueryAllFlowRequest(): QueryAllFlowRequest {
 }
 export const QueryAllFlowRequest = {
   typeUrl: "/pryzmatics.server.flowtrade.QueryAllFlowRequest",
+  is(o: any): o is QueryAllFlowRequest {
+    return o && (o.$typeUrl === QueryAllFlowRequest.typeUrl || isSet(o.status) && typeof o.creator === "string" && isSet(o.tokenInClaimability) && typeof o.participant === "string" && isSet(o.participationType) && isSet(o.tokenOutClaimability));
+  },
+  isSDK(o: any): o is QueryAllFlowRequestSDKType {
+    return o && (o.$typeUrl === QueryAllFlowRequest.typeUrl || isSet(o.status) && typeof o.creator === "string" && isSet(o.token_in_claimability) && typeof o.participant === "string" && isSet(o.participation_type) && isSet(o.token_out_claimability));
+  },
+  isAmino(o: any): o is QueryAllFlowRequestAmino {
+    return o && (o.$typeUrl === QueryAllFlowRequest.typeUrl || isSet(o.status) && typeof o.creator === "string" && isSet(o.token_in_claimability) && typeof o.participant === "string" && isSet(o.participation_type) && isSet(o.token_out_claimability));
+  },
   encode(message: QueryAllFlowRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.status !== 0) {
       writer.uint32(8).int32(message.status);
@@ -352,7 +382,7 @@ export const QueryAllFlowRequest = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): QueryAllFlowRequest {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): QueryAllFlowRequest {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryAllFlowRequest();
@@ -378,7 +408,7 @@ export const QueryAllFlowRequest = {
           message.tokenOutClaimability = (reader.int32() as any);
           break;
         case 7:
-          message.pagination = PageRequest.decode(reader, reader.uint32());
+          message.pagination = PageRequest.decode(reader, reader.uint32(), useInterfaces);
           break;
         default:
           reader.skipType(tag & 7);
@@ -423,44 +453,44 @@ export const QueryAllFlowRequest = {
   fromAmino(object: QueryAllFlowRequestAmino): QueryAllFlowRequest {
     const message = createBaseQueryAllFlowRequest();
     if (object.status !== undefined && object.status !== null) {
-      message.status = flowStatusFromJSON(object.status);
+      message.status = object.status;
     }
     if (object.creator !== undefined && object.creator !== null) {
       message.creator = object.creator;
     }
     if (object.token_in_claimability !== undefined && object.token_in_claimability !== null) {
-      message.tokenInClaimability = tokenClaimabilityFromJSON(object.token_in_claimability);
+      message.tokenInClaimability = object.token_in_claimability;
     }
     if (object.participant !== undefined && object.participant !== null) {
       message.participant = object.participant;
     }
     if (object.participation_type !== undefined && object.participation_type !== null) {
-      message.participationType = participationTypeFromJSON(object.participation_type);
+      message.participationType = object.participation_type;
     }
     if (object.token_out_claimability !== undefined && object.token_out_claimability !== null) {
-      message.tokenOutClaimability = tokenClaimabilityFromJSON(object.token_out_claimability);
+      message.tokenOutClaimability = object.token_out_claimability;
     }
     if (object.pagination !== undefined && object.pagination !== null) {
       message.pagination = PageRequest.fromAmino(object.pagination);
     }
     return message;
   },
-  toAmino(message: QueryAllFlowRequest): QueryAllFlowRequestAmino {
+  toAmino(message: QueryAllFlowRequest, useInterfaces: boolean = true): QueryAllFlowRequestAmino {
     const obj: any = {};
-    obj.status = flowStatusToJSON(message.status);
-    obj.creator = message.creator;
-    obj.token_in_claimability = tokenClaimabilityToJSON(message.tokenInClaimability);
-    obj.participant = message.participant;
-    obj.participation_type = participationTypeToJSON(message.participationType);
-    obj.token_out_claimability = tokenClaimabilityToJSON(message.tokenOutClaimability);
-    obj.pagination = message.pagination ? PageRequest.toAmino(message.pagination) : undefined;
+    obj.status = message.status === 0 ? undefined : message.status;
+    obj.creator = message.creator === "" ? undefined : message.creator;
+    obj.token_in_claimability = message.tokenInClaimability === 0 ? undefined : message.tokenInClaimability;
+    obj.participant = message.participant === "" ? undefined : message.participant;
+    obj.participation_type = message.participationType === 0 ? undefined : message.participationType;
+    obj.token_out_claimability = message.tokenOutClaimability === 0 ? undefined : message.tokenOutClaimability;
+    obj.pagination = message.pagination ? PageRequest.toAmino(message.pagination, useInterfaces) : undefined;
     return obj;
   },
   fromAminoMsg(object: QueryAllFlowRequestAminoMsg): QueryAllFlowRequest {
     return QueryAllFlowRequest.fromAmino(object.value);
   },
-  fromProtoMsg(message: QueryAllFlowRequestProtoMsg): QueryAllFlowRequest {
-    return QueryAllFlowRequest.decode(message.value);
+  fromProtoMsg(message: QueryAllFlowRequestProtoMsg, useInterfaces: boolean = true): QueryAllFlowRequest {
+    return QueryAllFlowRequest.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: QueryAllFlowRequest): Uint8Array {
     return QueryAllFlowRequest.encode(message).finish();
@@ -472,6 +502,7 @@ export const QueryAllFlowRequest = {
     };
   }
 };
+GlobalDecoderRegistry.register(QueryAllFlowRequest.typeUrl, QueryAllFlowRequest);
 function createBaseQueryAllFlowResponse(): QueryAllFlowResponse {
   return {
     flows: [],
@@ -480,6 +511,15 @@ function createBaseQueryAllFlowResponse(): QueryAllFlowResponse {
 }
 export const QueryAllFlowResponse = {
   typeUrl: "/pryzmatics.server.flowtrade.QueryAllFlowResponse",
+  is(o: any): o is QueryAllFlowResponse {
+    return o && (o.$typeUrl === QueryAllFlowResponse.typeUrl || Array.isArray(o.flows) && (!o.flows.length || FlowPositionPair.is(o.flows[0])));
+  },
+  isSDK(o: any): o is QueryAllFlowResponseSDKType {
+    return o && (o.$typeUrl === QueryAllFlowResponse.typeUrl || Array.isArray(o.flows) && (!o.flows.length || FlowPositionPair.isSDK(o.flows[0])));
+  },
+  isAmino(o: any): o is QueryAllFlowResponseAmino {
+    return o && (o.$typeUrl === QueryAllFlowResponse.typeUrl || Array.isArray(o.flows) && (!o.flows.length || FlowPositionPair.isAmino(o.flows[0])));
+  },
   encode(message: QueryAllFlowResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     for (const v of message.flows) {
       FlowPositionPair.encode(v!, writer.uint32(10).fork()).ldelim();
@@ -489,7 +529,7 @@ export const QueryAllFlowResponse = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): QueryAllFlowResponse {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): QueryAllFlowResponse {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryAllFlowResponse();
@@ -497,10 +537,10 @@ export const QueryAllFlowResponse = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.flows.push(FlowPositionPair.decode(reader, reader.uint32()));
+          message.flows.push(FlowPositionPair.decode(reader, reader.uint32(), useInterfaces));
           break;
         case 2:
-          message.pagination = PageResponse.decode(reader, reader.uint32());
+          message.pagination = PageResponse.decode(reader, reader.uint32(), useInterfaces);
           break;
         default:
           reader.skipType(tag & 7);
@@ -539,21 +579,21 @@ export const QueryAllFlowResponse = {
     }
     return message;
   },
-  toAmino(message: QueryAllFlowResponse): QueryAllFlowResponseAmino {
+  toAmino(message: QueryAllFlowResponse, useInterfaces: boolean = true): QueryAllFlowResponseAmino {
     const obj: any = {};
     if (message.flows) {
-      obj.flows = message.flows.map(e => e ? FlowPositionPair.toAmino(e) : undefined);
+      obj.flows = message.flows.map(e => e ? FlowPositionPair.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.flows = [];
+      obj.flows = null;
     }
-    obj.pagination = message.pagination ? PageResponse.toAmino(message.pagination) : undefined;
+    obj.pagination = message.pagination ? PageResponse.toAmino(message.pagination, useInterfaces) : undefined;
     return obj;
   },
   fromAminoMsg(object: QueryAllFlowResponseAminoMsg): QueryAllFlowResponse {
     return QueryAllFlowResponse.fromAmino(object.value);
   },
-  fromProtoMsg(message: QueryAllFlowResponseProtoMsg): QueryAllFlowResponse {
-    return QueryAllFlowResponse.decode(message.value);
+  fromProtoMsg(message: QueryAllFlowResponseProtoMsg, useInterfaces: boolean = true): QueryAllFlowResponse {
+    return QueryAllFlowResponse.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: QueryAllFlowResponse): Uint8Array {
     return QueryAllFlowResponse.encode(message).finish();
@@ -565,3 +605,4 @@ export const QueryAllFlowResponse = {
     };
   }
 };
+GlobalDecoderRegistry.register(QueryAllFlowResponse.typeUrl, QueryAllFlowResponse);

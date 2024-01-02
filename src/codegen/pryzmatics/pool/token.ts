@@ -1,7 +1,8 @@
 import { TokenYield, TokenYieldAmino, TokenYieldSDKType } from "./token_yield";
 import { BinaryReader, BinaryWriter } from "../../binary";
 import { Decimal } from "@cosmjs/math";
-import { isSet } from "../../helpers";
+import { isSet, padDecimal } from "../../helpers";
+import { GlobalDecoderRegistry } from "../../registry";
 export enum TokenType {
   TOKEN_TYPE_ANY = 0,
   TOKEN_TYPE_P = 1,
@@ -142,6 +143,15 @@ function createBaseTokenMetrics(): TokenMetrics {
 }
 export const TokenMetrics = {
   typeUrl: "/pryzmatics.pool.TokenMetrics",
+  is(o: any): o is TokenMetrics {
+    return o && (o.$typeUrl === TokenMetrics.typeUrl || typeof o.tradeVolume24h === "string" && typeof o.tradeVolume7d === "string" && typeof o.tradeVolume30d === "string");
+  },
+  isSDK(o: any): o is TokenMetricsSDKType {
+    return o && (o.$typeUrl === TokenMetrics.typeUrl || typeof o.trade_volume_24h === "string" && typeof o.trade_volume_7d === "string" && typeof o.trade_volume_30d === "string");
+  },
+  isAmino(o: any): o is TokenMetricsAmino {
+    return o && (o.$typeUrl === TokenMetrics.typeUrl || typeof o.trade_volume_24h === "string" && typeof o.trade_volume_7d === "string" && typeof o.trade_volume_30d === "string");
+  },
   encode(message: TokenMetrics, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.priceChangePercentage24h !== undefined) {
       writer.uint32(10).string(Decimal.fromUserInput(message.priceChangePercentage24h, 18).atomics);
@@ -169,7 +179,7 @@ export const TokenMetrics = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): TokenMetrics {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): TokenMetrics {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseTokenMetrics();
@@ -271,23 +281,23 @@ export const TokenMetrics = {
     }
     return message;
   },
-  toAmino(message: TokenMetrics): TokenMetricsAmino {
+  toAmino(message: TokenMetrics, useInterfaces: boolean = true): TokenMetricsAmino {
     const obj: any = {};
-    obj.price_change_percentage_24h = message.priceChangePercentage24h;
-    obj.price_change_percentage_7d = message.priceChangePercentage7d;
-    obj.price_change_percentage_30d = message.priceChangePercentage30d;
-    obj.trade_volume_24h = message.tradeVolume24h;
-    obj.trade_volume_7d = message.tradeVolume7d;
-    obj.trade_volume_30d = message.tradeVolume30d;
-    obj.price_52w_low = message.price52wLow;
-    obj.price_52w_high = message.price52wHigh;
+    obj.price_change_percentage_24h = padDecimal(message.priceChangePercentage24h) === null ? undefined : padDecimal(message.priceChangePercentage24h);
+    obj.price_change_percentage_7d = padDecimal(message.priceChangePercentage7d) === null ? undefined : padDecimal(message.priceChangePercentage7d);
+    obj.price_change_percentage_30d = padDecimal(message.priceChangePercentage30d) === null ? undefined : padDecimal(message.priceChangePercentage30d);
+    obj.trade_volume_24h = padDecimal(message.tradeVolume24h) === "" ? undefined : padDecimal(message.tradeVolume24h);
+    obj.trade_volume_7d = padDecimal(message.tradeVolume7d) === "" ? undefined : padDecimal(message.tradeVolume7d);
+    obj.trade_volume_30d = padDecimal(message.tradeVolume30d) === "" ? undefined : padDecimal(message.tradeVolume30d);
+    obj.price_52w_low = padDecimal(message.price52wLow) === null ? undefined : padDecimal(message.price52wLow);
+    obj.price_52w_high = padDecimal(message.price52wHigh) === null ? undefined : padDecimal(message.price52wHigh);
     return obj;
   },
   fromAminoMsg(object: TokenMetricsAminoMsg): TokenMetrics {
     return TokenMetrics.fromAmino(object.value);
   },
-  fromProtoMsg(message: TokenMetricsProtoMsg): TokenMetrics {
-    return TokenMetrics.decode(message.value);
+  fromProtoMsg(message: TokenMetricsProtoMsg, useInterfaces: boolean = true): TokenMetrics {
+    return TokenMetrics.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: TokenMetrics): Uint8Array {
     return TokenMetrics.encode(message).finish();
@@ -299,6 +309,7 @@ export const TokenMetrics = {
     };
   }
 };
+GlobalDecoderRegistry.register(TokenMetrics.typeUrl, TokenMetrics);
 function createBaseToken(): Token {
   return {
     denom: "",
@@ -311,6 +322,15 @@ function createBaseToken(): Token {
 }
 export const Token = {
   typeUrl: "/pryzmatics.pool.Token",
+  is(o: any): o is Token {
+    return o && (o.$typeUrl === Token.typeUrl || typeof o.denom === "string" && isSet(o.type) && TokenMetrics.is(o.metrics) && typeof o.error === "string");
+  },
+  isSDK(o: any): o is TokenSDKType {
+    return o && (o.$typeUrl === Token.typeUrl || typeof o.denom === "string" && isSet(o.type) && TokenMetrics.isSDK(o.metrics) && typeof o.error === "string");
+  },
+  isAmino(o: any): o is TokenAmino {
+    return o && (o.$typeUrl === Token.typeUrl || typeof o.denom === "string" && isSet(o.type) && TokenMetrics.isAmino(o.metrics) && typeof o.error === "string");
+  },
   encode(message: Token, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.denom !== "") {
       writer.uint32(10).string(message.denom);
@@ -332,7 +352,7 @@ export const Token = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): Token {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): Token {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseToken();
@@ -346,13 +366,13 @@ export const Token = {
           message.type = (reader.int32() as any);
           break;
         case 3:
-          message.yield = TokenYield.decode(reader, reader.uint32());
+          message.yield = TokenYield.decode(reader, reader.uint32(), useInterfaces);
           break;
         case 4:
           message.price = Decimal.fromAtomics(reader.string(), 18).toString();
           break;
         case 5:
-          message.metrics = TokenMetrics.decode(reader, reader.uint32());
+          message.metrics = TokenMetrics.decode(reader, reader.uint32(), useInterfaces);
           break;
         case 6:
           message.error = reader.string();
@@ -400,7 +420,7 @@ export const Token = {
       message.denom = object.denom;
     }
     if (object.type !== undefined && object.type !== null) {
-      message.type = tokenTypeFromJSON(object.type);
+      message.type = object.type;
     }
     if (object.yield !== undefined && object.yield !== null) {
       message.yield = TokenYield.fromAmino(object.yield);
@@ -416,21 +436,21 @@ export const Token = {
     }
     return message;
   },
-  toAmino(message: Token): TokenAmino {
+  toAmino(message: Token, useInterfaces: boolean = true): TokenAmino {
     const obj: any = {};
-    obj.denom = message.denom;
-    obj.type = tokenTypeToJSON(message.type);
-    obj.yield = message.yield ? TokenYield.toAmino(message.yield) : undefined;
-    obj.price = message.price;
-    obj.metrics = message.metrics ? TokenMetrics.toAmino(message.metrics) : undefined;
-    obj.error = message.error;
+    obj.denom = message.denom === "" ? undefined : message.denom;
+    obj.type = message.type === 0 ? undefined : message.type;
+    obj.yield = message.yield ? TokenYield.toAmino(message.yield, useInterfaces) : undefined;
+    obj.price = padDecimal(message.price) === null ? undefined : padDecimal(message.price);
+    obj.metrics = message.metrics ? TokenMetrics.toAmino(message.metrics, useInterfaces) : undefined;
+    obj.error = message.error === "" ? undefined : message.error;
     return obj;
   },
   fromAminoMsg(object: TokenAminoMsg): Token {
     return Token.fromAmino(object.value);
   },
-  fromProtoMsg(message: TokenProtoMsg): Token {
-    return Token.decode(message.value);
+  fromProtoMsg(message: TokenProtoMsg, useInterfaces: boolean = true): Token {
+    return Token.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: Token): Uint8Array {
     return Token.encode(message).finish();
@@ -442,3 +462,4 @@ export const Token = {
     };
   }
 };
+GlobalDecoderRegistry.register(Token.typeUrl, Token);

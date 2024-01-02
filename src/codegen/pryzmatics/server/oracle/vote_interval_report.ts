@@ -1,6 +1,7 @@
 import { VoteIntervalReport, VoteIntervalReportAmino, VoteIntervalReportSDKType } from "../../oracle/vote_interval_report";
 import { BinaryReader, BinaryWriter } from "../../../binary";
 import { isSet } from "../../../helpers";
+import { GlobalDecoderRegistry } from "../../../registry";
 export interface QueryVoteIntervalReportRequest {
   voteIntervalCloseBlockHeight: bigint;
 }
@@ -48,13 +49,22 @@ function createBaseQueryVoteIntervalReportRequest(): QueryVoteIntervalReportRequ
 }
 export const QueryVoteIntervalReportRequest = {
   typeUrl: "/pryzmatics.server.oracle.QueryVoteIntervalReportRequest",
+  is(o: any): o is QueryVoteIntervalReportRequest {
+    return o && (o.$typeUrl === QueryVoteIntervalReportRequest.typeUrl || typeof o.voteIntervalCloseBlockHeight === "bigint");
+  },
+  isSDK(o: any): o is QueryVoteIntervalReportRequestSDKType {
+    return o && (o.$typeUrl === QueryVoteIntervalReportRequest.typeUrl || typeof o.vote_interval_close_block_height === "bigint");
+  },
+  isAmino(o: any): o is QueryVoteIntervalReportRequestAmino {
+    return o && (o.$typeUrl === QueryVoteIntervalReportRequest.typeUrl || typeof o.vote_interval_close_block_height === "bigint");
+  },
   encode(message: QueryVoteIntervalReportRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.voteIntervalCloseBlockHeight !== BigInt(0)) {
       writer.uint32(8).int64(message.voteIntervalCloseBlockHeight);
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): QueryVoteIntervalReportRequest {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): QueryVoteIntervalReportRequest {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryVoteIntervalReportRequest();
@@ -93,7 +103,7 @@ export const QueryVoteIntervalReportRequest = {
     }
     return message;
   },
-  toAmino(message: QueryVoteIntervalReportRequest): QueryVoteIntervalReportRequestAmino {
+  toAmino(message: QueryVoteIntervalReportRequest, useInterfaces: boolean = true): QueryVoteIntervalReportRequestAmino {
     const obj: any = {};
     obj.vote_interval_close_block_height = message.voteIntervalCloseBlockHeight ? message.voteIntervalCloseBlockHeight.toString() : undefined;
     return obj;
@@ -101,8 +111,8 @@ export const QueryVoteIntervalReportRequest = {
   fromAminoMsg(object: QueryVoteIntervalReportRequestAminoMsg): QueryVoteIntervalReportRequest {
     return QueryVoteIntervalReportRequest.fromAmino(object.value);
   },
-  fromProtoMsg(message: QueryVoteIntervalReportRequestProtoMsg): QueryVoteIntervalReportRequest {
-    return QueryVoteIntervalReportRequest.decode(message.value);
+  fromProtoMsg(message: QueryVoteIntervalReportRequestProtoMsg, useInterfaces: boolean = true): QueryVoteIntervalReportRequest {
+    return QueryVoteIntervalReportRequest.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: QueryVoteIntervalReportRequest): Uint8Array {
     return QueryVoteIntervalReportRequest.encode(message).finish();
@@ -114,6 +124,7 @@ export const QueryVoteIntervalReportRequest = {
     };
   }
 };
+GlobalDecoderRegistry.register(QueryVoteIntervalReportRequest.typeUrl, QueryVoteIntervalReportRequest);
 function createBaseQueryVoteIntervalReportResponse(): QueryVoteIntervalReportResponse {
   return {
     voteIntervalReport: undefined,
@@ -123,6 +134,15 @@ function createBaseQueryVoteIntervalReportResponse(): QueryVoteIntervalReportRes
 }
 export const QueryVoteIntervalReportResponse = {
   typeUrl: "/pryzmatics.server.oracle.QueryVoteIntervalReportResponse",
+  is(o: any): o is QueryVoteIntervalReportResponse {
+    return o && (o.$typeUrl === QueryVoteIntervalReportResponse.typeUrl || typeof o.ballotVoteResultCsv === "string" && typeof o.validatorVoteIntervalReportCsv === "string");
+  },
+  isSDK(o: any): o is QueryVoteIntervalReportResponseSDKType {
+    return o && (o.$typeUrl === QueryVoteIntervalReportResponse.typeUrl || typeof o.ballot_vote_result_csv === "string" && typeof o.validator_vote_interval_report_csv === "string");
+  },
+  isAmino(o: any): o is QueryVoteIntervalReportResponseAmino {
+    return o && (o.$typeUrl === QueryVoteIntervalReportResponse.typeUrl || typeof o.ballot_vote_result_csv === "string" && typeof o.validator_vote_interval_report_csv === "string");
+  },
   encode(message: QueryVoteIntervalReportResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.voteIntervalReport !== undefined) {
       VoteIntervalReport.encode(message.voteIntervalReport, writer.uint32(10).fork()).ldelim();
@@ -135,7 +155,7 @@ export const QueryVoteIntervalReportResponse = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): QueryVoteIntervalReportResponse {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): QueryVoteIntervalReportResponse {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryVoteIntervalReportResponse();
@@ -143,7 +163,7 @@ export const QueryVoteIntervalReportResponse = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.voteIntervalReport = VoteIntervalReport.decode(reader, reader.uint32());
+          message.voteIntervalReport = VoteIntervalReport.decode(reader, reader.uint32(), useInterfaces);
           break;
         case 2:
           message.ballotVoteResultCsv = reader.string();
@@ -192,18 +212,18 @@ export const QueryVoteIntervalReportResponse = {
     }
     return message;
   },
-  toAmino(message: QueryVoteIntervalReportResponse): QueryVoteIntervalReportResponseAmino {
+  toAmino(message: QueryVoteIntervalReportResponse, useInterfaces: boolean = true): QueryVoteIntervalReportResponseAmino {
     const obj: any = {};
-    obj.vote_interval_report = message.voteIntervalReport ? VoteIntervalReport.toAmino(message.voteIntervalReport) : undefined;
-    obj.ballot_vote_result_csv = message.ballotVoteResultCsv;
-    obj.validator_vote_interval_report_csv = message.validatorVoteIntervalReportCsv;
+    obj.vote_interval_report = message.voteIntervalReport ? VoteIntervalReport.toAmino(message.voteIntervalReport, useInterfaces) : undefined;
+    obj.ballot_vote_result_csv = message.ballotVoteResultCsv === "" ? undefined : message.ballotVoteResultCsv;
+    obj.validator_vote_interval_report_csv = message.validatorVoteIntervalReportCsv === "" ? undefined : message.validatorVoteIntervalReportCsv;
     return obj;
   },
   fromAminoMsg(object: QueryVoteIntervalReportResponseAminoMsg): QueryVoteIntervalReportResponse {
     return QueryVoteIntervalReportResponse.fromAmino(object.value);
   },
-  fromProtoMsg(message: QueryVoteIntervalReportResponseProtoMsg): QueryVoteIntervalReportResponse {
-    return QueryVoteIntervalReportResponse.decode(message.value);
+  fromProtoMsg(message: QueryVoteIntervalReportResponseProtoMsg, useInterfaces: boolean = true): QueryVoteIntervalReportResponse {
+    return QueryVoteIntervalReportResponse.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: QueryVoteIntervalReportResponse): Uint8Array {
     return QueryVoteIntervalReportResponse.encode(message).finish();
@@ -215,3 +235,4 @@ export const QueryVoteIntervalReportResponse = {
     };
   }
 };
+GlobalDecoderRegistry.register(QueryVoteIntervalReportResponse.typeUrl, QueryVoteIntervalReportResponse);

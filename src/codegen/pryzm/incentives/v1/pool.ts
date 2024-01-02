@@ -1,7 +1,8 @@
 import { Coin, CoinAmino, CoinSDKType } from "../../../cosmos/base/v1beta1/coin";
 import { BinaryReader, BinaryWriter } from "../../../binary";
 import { Decimal } from "@cosmjs/math";
-import { isSet } from "../../../helpers";
+import { isSet, padDecimal } from "../../../helpers";
+import { GlobalDecoderRegistry } from "../../../registry";
 export interface PoolRewardToken {
   denom: string;
   amount: string;
@@ -58,6 +59,15 @@ function createBasePoolRewardToken(): PoolRewardToken {
 }
 export const PoolRewardToken = {
   typeUrl: "/pryzm.incentives.v1.PoolRewardToken",
+  is(o: any): o is PoolRewardToken {
+    return o && (o.$typeUrl === PoolRewardToken.typeUrl || typeof o.denom === "string" && typeof o.amount === "string" && typeof o.globalIndex === "string" && typeof o.weight === "string");
+  },
+  isSDK(o: any): o is PoolRewardTokenSDKType {
+    return o && (o.$typeUrl === PoolRewardToken.typeUrl || typeof o.denom === "string" && typeof o.amount === "string" && typeof o.global_index === "string" && typeof o.weight === "string");
+  },
+  isAmino(o: any): o is PoolRewardTokenAmino {
+    return o && (o.$typeUrl === PoolRewardToken.typeUrl || typeof o.denom === "string" && typeof o.amount === "string" && typeof o.global_index === "string" && typeof o.weight === "string");
+  },
   encode(message: PoolRewardToken, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.denom !== "") {
       writer.uint32(10).string(message.denom);
@@ -73,7 +83,7 @@ export const PoolRewardToken = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): PoolRewardToken {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): PoolRewardToken {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBasePoolRewardToken();
@@ -139,19 +149,19 @@ export const PoolRewardToken = {
     }
     return message;
   },
-  toAmino(message: PoolRewardToken): PoolRewardTokenAmino {
+  toAmino(message: PoolRewardToken, useInterfaces: boolean = true): PoolRewardTokenAmino {
     const obj: any = {};
-    obj.denom = message.denom;
-    obj.amount = message.amount;
-    obj.global_index = message.globalIndex;
-    obj.weight = message.weight;
+    obj.denom = message.denom === "" ? undefined : message.denom;
+    obj.amount = message.amount === "" ? undefined : message.amount;
+    obj.global_index = padDecimal(message.globalIndex) === "" ? undefined : padDecimal(message.globalIndex);
+    obj.weight = padDecimal(message.weight) === "" ? undefined : padDecimal(message.weight);
     return obj;
   },
   fromAminoMsg(object: PoolRewardTokenAminoMsg): PoolRewardToken {
     return PoolRewardToken.fromAmino(object.value);
   },
-  fromProtoMsg(message: PoolRewardTokenProtoMsg): PoolRewardToken {
-    return PoolRewardToken.decode(message.value);
+  fromProtoMsg(message: PoolRewardTokenProtoMsg, useInterfaces: boolean = true): PoolRewardToken {
+    return PoolRewardToken.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: PoolRewardToken): Uint8Array {
     return PoolRewardToken.encode(message).finish();
@@ -163,6 +173,7 @@ export const PoolRewardToken = {
     };
   }
 };
+GlobalDecoderRegistry.register(PoolRewardToken.typeUrl, PoolRewardToken);
 function createBasePool(): Pool {
   return {
     bondedToken: Coin.fromPartial({}),
@@ -171,6 +182,15 @@ function createBasePool(): Pool {
 }
 export const Pool = {
   typeUrl: "/pryzm.incentives.v1.Pool",
+  is(o: any): o is Pool {
+    return o && (o.$typeUrl === Pool.typeUrl || Coin.is(o.bondedToken) && Array.isArray(o.rewards) && (!o.rewards.length || PoolRewardToken.is(o.rewards[0])));
+  },
+  isSDK(o: any): o is PoolSDKType {
+    return o && (o.$typeUrl === Pool.typeUrl || Coin.isSDK(o.bonded_token) && Array.isArray(o.rewards) && (!o.rewards.length || PoolRewardToken.isSDK(o.rewards[0])));
+  },
+  isAmino(o: any): o is PoolAmino {
+    return o && (o.$typeUrl === Pool.typeUrl || Coin.isAmino(o.bonded_token) && Array.isArray(o.rewards) && (!o.rewards.length || PoolRewardToken.isAmino(o.rewards[0])));
+  },
   encode(message: Pool, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.bondedToken !== undefined) {
       Coin.encode(message.bondedToken, writer.uint32(10).fork()).ldelim();
@@ -180,7 +200,7 @@ export const Pool = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): Pool {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): Pool {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBasePool();
@@ -188,10 +208,10 @@ export const Pool = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.bondedToken = Coin.decode(reader, reader.uint32());
+          message.bondedToken = Coin.decode(reader, reader.uint32(), useInterfaces);
           break;
         case 2:
-          message.rewards.push(PoolRewardToken.decode(reader, reader.uint32()));
+          message.rewards.push(PoolRewardToken.decode(reader, reader.uint32(), useInterfaces));
           break;
         default:
           reader.skipType(tag & 7);
@@ -230,21 +250,21 @@ export const Pool = {
     message.rewards = object.rewards?.map(e => PoolRewardToken.fromAmino(e)) || [];
     return message;
   },
-  toAmino(message: Pool): PoolAmino {
+  toAmino(message: Pool, useInterfaces: boolean = true): PoolAmino {
     const obj: any = {};
-    obj.bonded_token = message.bondedToken ? Coin.toAmino(message.bondedToken) : undefined;
+    obj.bonded_token = message.bondedToken ? Coin.toAmino(message.bondedToken, useInterfaces) : undefined;
     if (message.rewards) {
-      obj.rewards = message.rewards.map(e => e ? PoolRewardToken.toAmino(e) : undefined);
+      obj.rewards = message.rewards.map(e => e ? PoolRewardToken.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.rewards = [];
+      obj.rewards = null;
     }
     return obj;
   },
   fromAminoMsg(object: PoolAminoMsg): Pool {
     return Pool.fromAmino(object.value);
   },
-  fromProtoMsg(message: PoolProtoMsg): Pool {
-    return Pool.decode(message.value);
+  fromProtoMsg(message: PoolProtoMsg, useInterfaces: boolean = true): Pool {
+    return Pool.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: Pool): Uint8Array {
     return Pool.encode(message).finish();
@@ -256,3 +276,4 @@ export const Pool = {
     };
   }
 };
+GlobalDecoderRegistry.register(Pool.typeUrl, Pool);

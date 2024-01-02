@@ -1,6 +1,7 @@
 import { Timestamp, TimestampSDKType } from "../../google/protobuf/timestamp";
 import { BinaryReader, BinaryWriter } from "../../binary";
 import { isSet, fromJsonTimestamp, fromTimestamp } from "../../helpers";
+import { GlobalDecoderRegistry } from "../../registry";
 export interface PreVote {
   id: bigint;
   feeder: string;
@@ -45,6 +46,15 @@ function createBasePreVote(): PreVote {
 }
 export const PreVote = {
   typeUrl: "/pryzmatics.oracle.PreVote",
+  is(o: any): o is PreVote {
+    return o && (o.$typeUrl === PreVote.typeUrl || typeof o.id === "bigint" && typeof o.feeder === "string" && typeof o.validator === "string" && typeof o.blockHeight === "bigint" && Timestamp.is(o.blockTime));
+  },
+  isSDK(o: any): o is PreVoteSDKType {
+    return o && (o.$typeUrl === PreVote.typeUrl || typeof o.id === "bigint" && typeof o.feeder === "string" && typeof o.validator === "string" && typeof o.block_height === "bigint" && Timestamp.isSDK(o.block_time));
+  },
+  isAmino(o: any): o is PreVoteAmino {
+    return o && (o.$typeUrl === PreVote.typeUrl || typeof o.id === "bigint" && typeof o.feeder === "string" && typeof o.validator === "string" && typeof o.block_height === "bigint" && Timestamp.isAmino(o.block_time));
+  },
   encode(message: PreVote, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.id !== BigInt(0)) {
       writer.uint32(8).uint64(message.id);
@@ -66,7 +76,7 @@ export const PreVote = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): PreVote {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): PreVote {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBasePreVote();
@@ -150,21 +160,21 @@ export const PreVote = {
     }
     return message;
   },
-  toAmino(message: PreVote): PreVoteAmino {
+  toAmino(message: PreVote, useInterfaces: boolean = true): PreVoteAmino {
     const obj: any = {};
     obj.id = message.id ? message.id.toString() : undefined;
-    obj.feeder = message.feeder;
-    obj.validator = message.validator;
+    obj.feeder = message.feeder === "" ? undefined : message.feeder;
+    obj.validator = message.validator === "" ? undefined : message.validator;
     obj.block_height = message.blockHeight ? message.blockHeight.toString() : undefined;
-    obj.block_time = message.blockTime ? Timestamp.toAmino(message.blockTime) : undefined;
-    obj.vote_interval_close_block_height = message.voteIntervalCloseBlockHeight;
+    obj.block_time = message.blockTime ? Timestamp.toAmino(message.blockTime, useInterfaces) : undefined;
+    obj.vote_interval_close_block_height = message.voteIntervalCloseBlockHeight === null ? undefined : message.voteIntervalCloseBlockHeight;
     return obj;
   },
   fromAminoMsg(object: PreVoteAminoMsg): PreVote {
     return PreVote.fromAmino(object.value);
   },
-  fromProtoMsg(message: PreVoteProtoMsg): PreVote {
-    return PreVote.decode(message.value);
+  fromProtoMsg(message: PreVoteProtoMsg, useInterfaces: boolean = true): PreVote {
+    return PreVote.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: PreVote): Uint8Array {
     return PreVote.encode(message).finish();
@@ -176,3 +186,4 @@ export const PreVote = {
     };
   }
 };
+GlobalDecoderRegistry.register(PreVote.typeUrl, PreVote);

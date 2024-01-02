@@ -1,5 +1,6 @@
 import { FileDescriptorProto, FileDescriptorProtoAmino, FileDescriptorProtoSDKType } from "../../../google/protobuf/descriptor";
 import { BinaryReader, BinaryWriter } from "../../../binary";
+import { GlobalDecoderRegistry } from "../../../registry";
 /** FileDescriptorsRequest is the Query/FileDescriptors request type. */
 export interface FileDescriptorsRequest {}
 export interface FileDescriptorsRequestProtoMsg {
@@ -41,10 +42,20 @@ function createBaseFileDescriptorsRequest(): FileDescriptorsRequest {
 }
 export const FileDescriptorsRequest = {
   typeUrl: "/cosmos.reflection.v1.FileDescriptorsRequest",
+  aminoType: "cosmos-sdk/FileDescriptorsRequest",
+  is(o: any): o is FileDescriptorsRequest {
+    return o && o.$typeUrl === FileDescriptorsRequest.typeUrl;
+  },
+  isSDK(o: any): o is FileDescriptorsRequestSDKType {
+    return o && o.$typeUrl === FileDescriptorsRequest.typeUrl;
+  },
+  isAmino(o: any): o is FileDescriptorsRequestAmino {
+    return o && o.$typeUrl === FileDescriptorsRequest.typeUrl;
+  },
   encode(_: FileDescriptorsRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): FileDescriptorsRequest {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): FileDescriptorsRequest {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseFileDescriptorsRequest();
@@ -73,21 +84,21 @@ export const FileDescriptorsRequest = {
     const message = createBaseFileDescriptorsRequest();
     return message;
   },
-  toAmino(_: FileDescriptorsRequest): FileDescriptorsRequestAmino {
+  toAmino(_: FileDescriptorsRequest, useInterfaces: boolean = true): FileDescriptorsRequestAmino {
     const obj: any = {};
     return obj;
   },
   fromAminoMsg(object: FileDescriptorsRequestAminoMsg): FileDescriptorsRequest {
     return FileDescriptorsRequest.fromAmino(object.value);
   },
-  toAminoMsg(message: FileDescriptorsRequest): FileDescriptorsRequestAminoMsg {
+  toAminoMsg(message: FileDescriptorsRequest, useInterfaces: boolean = true): FileDescriptorsRequestAminoMsg {
     return {
       type: "cosmos-sdk/FileDescriptorsRequest",
-      value: FileDescriptorsRequest.toAmino(message)
+      value: FileDescriptorsRequest.toAmino(message, useInterfaces)
     };
   },
-  fromProtoMsg(message: FileDescriptorsRequestProtoMsg): FileDescriptorsRequest {
-    return FileDescriptorsRequest.decode(message.value);
+  fromProtoMsg(message: FileDescriptorsRequestProtoMsg, useInterfaces: boolean = true): FileDescriptorsRequest {
+    return FileDescriptorsRequest.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: FileDescriptorsRequest): Uint8Array {
     return FileDescriptorsRequest.encode(message).finish();
@@ -99,6 +110,8 @@ export const FileDescriptorsRequest = {
     };
   }
 };
+GlobalDecoderRegistry.register(FileDescriptorsRequest.typeUrl, FileDescriptorsRequest);
+GlobalDecoderRegistry.registerAminoProtoMapping(FileDescriptorsRequest.aminoType, FileDescriptorsRequest.typeUrl);
 function createBaseFileDescriptorsResponse(): FileDescriptorsResponse {
   return {
     files: []
@@ -106,13 +119,23 @@ function createBaseFileDescriptorsResponse(): FileDescriptorsResponse {
 }
 export const FileDescriptorsResponse = {
   typeUrl: "/cosmos.reflection.v1.FileDescriptorsResponse",
+  aminoType: "cosmos-sdk/FileDescriptorsResponse",
+  is(o: any): o is FileDescriptorsResponse {
+    return o && (o.$typeUrl === FileDescriptorsResponse.typeUrl || Array.isArray(o.files) && (!o.files.length || FileDescriptorProto.is(o.files[0])));
+  },
+  isSDK(o: any): o is FileDescriptorsResponseSDKType {
+    return o && (o.$typeUrl === FileDescriptorsResponse.typeUrl || Array.isArray(o.files) && (!o.files.length || FileDescriptorProto.isSDK(o.files[0])));
+  },
+  isAmino(o: any): o is FileDescriptorsResponseAmino {
+    return o && (o.$typeUrl === FileDescriptorsResponse.typeUrl || Array.isArray(o.files) && (!o.files.length || FileDescriptorProto.isAmino(o.files[0])));
+  },
   encode(message: FileDescriptorsResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     for (const v of message.files) {
       FileDescriptorProto.encode(v!, writer.uint32(10).fork()).ldelim();
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): FileDescriptorsResponse {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): FileDescriptorsResponse {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseFileDescriptorsResponse();
@@ -120,7 +143,7 @@ export const FileDescriptorsResponse = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.files.push(FileDescriptorProto.decode(reader, reader.uint32()));
+          message.files.push(FileDescriptorProto.decode(reader, reader.uint32(), useInterfaces));
           break;
         default:
           reader.skipType(tag & 7);
@@ -153,26 +176,26 @@ export const FileDescriptorsResponse = {
     message.files = object.files?.map(e => FileDescriptorProto.fromAmino(e)) || [];
     return message;
   },
-  toAmino(message: FileDescriptorsResponse): FileDescriptorsResponseAmino {
+  toAmino(message: FileDescriptorsResponse, useInterfaces: boolean = true): FileDescriptorsResponseAmino {
     const obj: any = {};
     if (message.files) {
-      obj.files = message.files.map(e => e ? FileDescriptorProto.toAmino(e) : undefined);
+      obj.files = message.files.map(e => e ? FileDescriptorProto.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.files = [];
+      obj.files = null;
     }
     return obj;
   },
   fromAminoMsg(object: FileDescriptorsResponseAminoMsg): FileDescriptorsResponse {
     return FileDescriptorsResponse.fromAmino(object.value);
   },
-  toAminoMsg(message: FileDescriptorsResponse): FileDescriptorsResponseAminoMsg {
+  toAminoMsg(message: FileDescriptorsResponse, useInterfaces: boolean = true): FileDescriptorsResponseAminoMsg {
     return {
       type: "cosmos-sdk/FileDescriptorsResponse",
-      value: FileDescriptorsResponse.toAmino(message)
+      value: FileDescriptorsResponse.toAmino(message, useInterfaces)
     };
   },
-  fromProtoMsg(message: FileDescriptorsResponseProtoMsg): FileDescriptorsResponse {
-    return FileDescriptorsResponse.decode(message.value);
+  fromProtoMsg(message: FileDescriptorsResponseProtoMsg, useInterfaces: boolean = true): FileDescriptorsResponse {
+    return FileDescriptorsResponse.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: FileDescriptorsResponse): Uint8Array {
     return FileDescriptorsResponse.encode(message).finish();
@@ -184,3 +207,5 @@ export const FileDescriptorsResponse = {
     };
   }
 };
+GlobalDecoderRegistry.register(FileDescriptorsResponse.typeUrl, FileDescriptorsResponse);
+GlobalDecoderRegistry.registerAminoProtoMapping(FileDescriptorsResponse.aminoType, FileDescriptorsResponse.typeUrl);

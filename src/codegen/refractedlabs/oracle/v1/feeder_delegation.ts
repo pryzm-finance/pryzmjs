@@ -1,5 +1,6 @@
 import { BinaryReader, BinaryWriter } from "../../../binary";
 import { isSet } from "../../../helpers";
+import { GlobalDecoderRegistry } from "../../../registry";
 export interface FeederDelegation {
   validator: string;
   feeder: string;
@@ -28,6 +29,15 @@ function createBaseFeederDelegation(): FeederDelegation {
 }
 export const FeederDelegation = {
   typeUrl: "/refractedlabs.oracle.v1.FeederDelegation",
+  is(o: any): o is FeederDelegation {
+    return o && (o.$typeUrl === FeederDelegation.typeUrl || typeof o.validator === "string" && typeof o.feeder === "string");
+  },
+  isSDK(o: any): o is FeederDelegationSDKType {
+    return o && (o.$typeUrl === FeederDelegation.typeUrl || typeof o.validator === "string" && typeof o.feeder === "string");
+  },
+  isAmino(o: any): o is FeederDelegationAmino {
+    return o && (o.$typeUrl === FeederDelegation.typeUrl || typeof o.validator === "string" && typeof o.feeder === "string");
+  },
   encode(message: FeederDelegation, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.validator !== "") {
       writer.uint32(10).string(message.validator);
@@ -37,7 +47,7 @@ export const FeederDelegation = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): FeederDelegation {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): FeederDelegation {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseFeederDelegation();
@@ -85,17 +95,17 @@ export const FeederDelegation = {
     }
     return message;
   },
-  toAmino(message: FeederDelegation): FeederDelegationAmino {
+  toAmino(message: FeederDelegation, useInterfaces: boolean = true): FeederDelegationAmino {
     const obj: any = {};
-    obj.validator = message.validator;
-    obj.feeder = message.feeder;
+    obj.validator = message.validator === "" ? undefined : message.validator;
+    obj.feeder = message.feeder === "" ? undefined : message.feeder;
     return obj;
   },
   fromAminoMsg(object: FeederDelegationAminoMsg): FeederDelegation {
     return FeederDelegation.fromAmino(object.value);
   },
-  fromProtoMsg(message: FeederDelegationProtoMsg): FeederDelegation {
-    return FeederDelegation.decode(message.value);
+  fromProtoMsg(message: FeederDelegationProtoMsg, useInterfaces: boolean = true): FeederDelegation {
+    return FeederDelegation.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: FeederDelegation): Uint8Array {
     return FeederDelegation.encode(message).finish();
@@ -107,3 +117,4 @@ export const FeederDelegation = {
     };
   }
 };
+GlobalDecoderRegistry.register(FeederDelegation.typeUrl, FeederDelegation);

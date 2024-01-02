@@ -1,5 +1,6 @@
 import { BinaryReader, BinaryWriter } from "../../../binary";
 import { isSet, bytesFromBase64, base64FromBytes } from "../../../helpers";
+import { GlobalDecoderRegistry } from "../../../registry";
 export enum HashOp {
   /** NO_HASH - NO_HASH is the default if no data passed. Note this is an illegal argument some places. */
   NO_HASH = 0,
@@ -782,6 +783,16 @@ function createBaseExistenceProof(): ExistenceProof {
 }
 export const ExistenceProof = {
   typeUrl: "/cosmos.ics23.v1.ExistenceProof",
+  aminoType: "cosmos-sdk/ExistenceProof",
+  is(o: any): o is ExistenceProof {
+    return o && (o.$typeUrl === ExistenceProof.typeUrl || (o.key instanceof Uint8Array || typeof o.key === "string") && (o.value instanceof Uint8Array || typeof o.value === "string") && Array.isArray(o.path) && (!o.path.length || InnerOp.is(o.path[0])));
+  },
+  isSDK(o: any): o is ExistenceProofSDKType {
+    return o && (o.$typeUrl === ExistenceProof.typeUrl || (o.key instanceof Uint8Array || typeof o.key === "string") && (o.value instanceof Uint8Array || typeof o.value === "string") && Array.isArray(o.path) && (!o.path.length || InnerOp.isSDK(o.path[0])));
+  },
+  isAmino(o: any): o is ExistenceProofAmino {
+    return o && (o.$typeUrl === ExistenceProof.typeUrl || (o.key instanceof Uint8Array || typeof o.key === "string") && (o.value instanceof Uint8Array || typeof o.value === "string") && Array.isArray(o.path) && (!o.path.length || InnerOp.isAmino(o.path[0])));
+  },
   encode(message: ExistenceProof, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.key.length !== 0) {
       writer.uint32(10).bytes(message.key);
@@ -797,7 +808,7 @@ export const ExistenceProof = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): ExistenceProof {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): ExistenceProof {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseExistenceProof();
@@ -811,10 +822,10 @@ export const ExistenceProof = {
           message.value = reader.bytes();
           break;
         case 3:
-          message.leaf = LeafOp.decode(reader, reader.uint32());
+          message.leaf = LeafOp.decode(reader, reader.uint32(), useInterfaces);
           break;
         case 4:
-          message.path.push(InnerOp.decode(reader, reader.uint32()));
+          message.path.push(InnerOp.decode(reader, reader.uint32(), useInterfaces));
           break;
         default:
           reader.skipType(tag & 7);
@@ -865,29 +876,29 @@ export const ExistenceProof = {
     message.path = object.path?.map(e => InnerOp.fromAmino(e)) || [];
     return message;
   },
-  toAmino(message: ExistenceProof): ExistenceProofAmino {
+  toAmino(message: ExistenceProof, useInterfaces: boolean = true): ExistenceProofAmino {
     const obj: any = {};
     obj.key = message.key ? base64FromBytes(message.key) : undefined;
     obj.value = message.value ? base64FromBytes(message.value) : undefined;
-    obj.leaf = message.leaf ? LeafOp.toAmino(message.leaf) : undefined;
+    obj.leaf = message.leaf ? LeafOp.toAmino(message.leaf, useInterfaces) : undefined;
     if (message.path) {
-      obj.path = message.path.map(e => e ? InnerOp.toAmino(e) : undefined);
+      obj.path = message.path.map(e => e ? InnerOp.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.path = [];
+      obj.path = null;
     }
     return obj;
   },
   fromAminoMsg(object: ExistenceProofAminoMsg): ExistenceProof {
     return ExistenceProof.fromAmino(object.value);
   },
-  toAminoMsg(message: ExistenceProof): ExistenceProofAminoMsg {
+  toAminoMsg(message: ExistenceProof, useInterfaces: boolean = true): ExistenceProofAminoMsg {
     return {
       type: "cosmos-sdk/ExistenceProof",
-      value: ExistenceProof.toAmino(message)
+      value: ExistenceProof.toAmino(message, useInterfaces)
     };
   },
-  fromProtoMsg(message: ExistenceProofProtoMsg): ExistenceProof {
-    return ExistenceProof.decode(message.value);
+  fromProtoMsg(message: ExistenceProofProtoMsg, useInterfaces: boolean = true): ExistenceProof {
+    return ExistenceProof.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: ExistenceProof): Uint8Array {
     return ExistenceProof.encode(message).finish();
@@ -899,6 +910,8 @@ export const ExistenceProof = {
     };
   }
 };
+GlobalDecoderRegistry.register(ExistenceProof.typeUrl, ExistenceProof);
+GlobalDecoderRegistry.registerAminoProtoMapping(ExistenceProof.aminoType, ExistenceProof.typeUrl);
 function createBaseNonExistenceProof(): NonExistenceProof {
   return {
     key: new Uint8Array(),
@@ -908,6 +921,16 @@ function createBaseNonExistenceProof(): NonExistenceProof {
 }
 export const NonExistenceProof = {
   typeUrl: "/cosmos.ics23.v1.NonExistenceProof",
+  aminoType: "cosmos-sdk/NonExistenceProof",
+  is(o: any): o is NonExistenceProof {
+    return o && (o.$typeUrl === NonExistenceProof.typeUrl || o.key instanceof Uint8Array || typeof o.key === "string");
+  },
+  isSDK(o: any): o is NonExistenceProofSDKType {
+    return o && (o.$typeUrl === NonExistenceProof.typeUrl || o.key instanceof Uint8Array || typeof o.key === "string");
+  },
+  isAmino(o: any): o is NonExistenceProofAmino {
+    return o && (o.$typeUrl === NonExistenceProof.typeUrl || o.key instanceof Uint8Array || typeof o.key === "string");
+  },
   encode(message: NonExistenceProof, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.key.length !== 0) {
       writer.uint32(10).bytes(message.key);
@@ -920,7 +943,7 @@ export const NonExistenceProof = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): NonExistenceProof {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): NonExistenceProof {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseNonExistenceProof();
@@ -931,10 +954,10 @@ export const NonExistenceProof = {
           message.key = reader.bytes();
           break;
         case 2:
-          message.left = ExistenceProof.decode(reader, reader.uint32());
+          message.left = ExistenceProof.decode(reader, reader.uint32(), useInterfaces);
           break;
         case 3:
-          message.right = ExistenceProof.decode(reader, reader.uint32());
+          message.right = ExistenceProof.decode(reader, reader.uint32(), useInterfaces);
           break;
         default:
           reader.skipType(tag & 7);
@@ -977,24 +1000,24 @@ export const NonExistenceProof = {
     }
     return message;
   },
-  toAmino(message: NonExistenceProof): NonExistenceProofAmino {
+  toAmino(message: NonExistenceProof, useInterfaces: boolean = true): NonExistenceProofAmino {
     const obj: any = {};
     obj.key = message.key ? base64FromBytes(message.key) : undefined;
-    obj.left = message.left ? ExistenceProof.toAmino(message.left) : undefined;
-    obj.right = message.right ? ExistenceProof.toAmino(message.right) : undefined;
+    obj.left = message.left ? ExistenceProof.toAmino(message.left, useInterfaces) : undefined;
+    obj.right = message.right ? ExistenceProof.toAmino(message.right, useInterfaces) : undefined;
     return obj;
   },
   fromAminoMsg(object: NonExistenceProofAminoMsg): NonExistenceProof {
     return NonExistenceProof.fromAmino(object.value);
   },
-  toAminoMsg(message: NonExistenceProof): NonExistenceProofAminoMsg {
+  toAminoMsg(message: NonExistenceProof, useInterfaces: boolean = true): NonExistenceProofAminoMsg {
     return {
       type: "cosmos-sdk/NonExistenceProof",
-      value: NonExistenceProof.toAmino(message)
+      value: NonExistenceProof.toAmino(message, useInterfaces)
     };
   },
-  fromProtoMsg(message: NonExistenceProofProtoMsg): NonExistenceProof {
-    return NonExistenceProof.decode(message.value);
+  fromProtoMsg(message: NonExistenceProofProtoMsg, useInterfaces: boolean = true): NonExistenceProof {
+    return NonExistenceProof.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: NonExistenceProof): Uint8Array {
     return NonExistenceProof.encode(message).finish();
@@ -1006,6 +1029,8 @@ export const NonExistenceProof = {
     };
   }
 };
+GlobalDecoderRegistry.register(NonExistenceProof.typeUrl, NonExistenceProof);
+GlobalDecoderRegistry.registerAminoProtoMapping(NonExistenceProof.aminoType, NonExistenceProof.typeUrl);
 function createBaseCommitmentProof(): CommitmentProof {
   return {
     exist: undefined,
@@ -1016,6 +1041,16 @@ function createBaseCommitmentProof(): CommitmentProof {
 }
 export const CommitmentProof = {
   typeUrl: "/cosmos.ics23.v1.CommitmentProof",
+  aminoType: "cosmos-sdk/CommitmentProof",
+  is(o: any): o is CommitmentProof {
+    return o && o.$typeUrl === CommitmentProof.typeUrl;
+  },
+  isSDK(o: any): o is CommitmentProofSDKType {
+    return o && o.$typeUrl === CommitmentProof.typeUrl;
+  },
+  isAmino(o: any): o is CommitmentProofAmino {
+    return o && o.$typeUrl === CommitmentProof.typeUrl;
+  },
   encode(message: CommitmentProof, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.exist !== undefined) {
       ExistenceProof.encode(message.exist, writer.uint32(10).fork()).ldelim();
@@ -1031,7 +1066,7 @@ export const CommitmentProof = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): CommitmentProof {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): CommitmentProof {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseCommitmentProof();
@@ -1039,16 +1074,16 @@ export const CommitmentProof = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.exist = ExistenceProof.decode(reader, reader.uint32());
+          message.exist = ExistenceProof.decode(reader, reader.uint32(), useInterfaces);
           break;
         case 2:
-          message.nonexist = NonExistenceProof.decode(reader, reader.uint32());
+          message.nonexist = NonExistenceProof.decode(reader, reader.uint32(), useInterfaces);
           break;
         case 3:
-          message.batch = BatchProof.decode(reader, reader.uint32());
+          message.batch = BatchProof.decode(reader, reader.uint32(), useInterfaces);
           break;
         case 4:
-          message.compressed = CompressedBatchProof.decode(reader, reader.uint32());
+          message.compressed = CompressedBatchProof.decode(reader, reader.uint32(), useInterfaces);
           break;
         default:
           reader.skipType(tag & 7);
@@ -1097,25 +1132,25 @@ export const CommitmentProof = {
     }
     return message;
   },
-  toAmino(message: CommitmentProof): CommitmentProofAmino {
+  toAmino(message: CommitmentProof, useInterfaces: boolean = true): CommitmentProofAmino {
     const obj: any = {};
-    obj.exist = message.exist ? ExistenceProof.toAmino(message.exist) : undefined;
-    obj.nonexist = message.nonexist ? NonExistenceProof.toAmino(message.nonexist) : undefined;
-    obj.batch = message.batch ? BatchProof.toAmino(message.batch) : undefined;
-    obj.compressed = message.compressed ? CompressedBatchProof.toAmino(message.compressed) : undefined;
+    obj.exist = message.exist ? ExistenceProof.toAmino(message.exist, useInterfaces) : undefined;
+    obj.nonexist = message.nonexist ? NonExistenceProof.toAmino(message.nonexist, useInterfaces) : undefined;
+    obj.batch = message.batch ? BatchProof.toAmino(message.batch, useInterfaces) : undefined;
+    obj.compressed = message.compressed ? CompressedBatchProof.toAmino(message.compressed, useInterfaces) : undefined;
     return obj;
   },
   fromAminoMsg(object: CommitmentProofAminoMsg): CommitmentProof {
     return CommitmentProof.fromAmino(object.value);
   },
-  toAminoMsg(message: CommitmentProof): CommitmentProofAminoMsg {
+  toAminoMsg(message: CommitmentProof, useInterfaces: boolean = true): CommitmentProofAminoMsg {
     return {
       type: "cosmos-sdk/CommitmentProof",
-      value: CommitmentProof.toAmino(message)
+      value: CommitmentProof.toAmino(message, useInterfaces)
     };
   },
-  fromProtoMsg(message: CommitmentProofProtoMsg): CommitmentProof {
-    return CommitmentProof.decode(message.value);
+  fromProtoMsg(message: CommitmentProofProtoMsg, useInterfaces: boolean = true): CommitmentProof {
+    return CommitmentProof.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: CommitmentProof): Uint8Array {
     return CommitmentProof.encode(message).finish();
@@ -1127,6 +1162,8 @@ export const CommitmentProof = {
     };
   }
 };
+GlobalDecoderRegistry.register(CommitmentProof.typeUrl, CommitmentProof);
+GlobalDecoderRegistry.registerAminoProtoMapping(CommitmentProof.aminoType, CommitmentProof.typeUrl);
 function createBaseLeafOp(): LeafOp {
   return {
     hash: 0,
@@ -1138,6 +1175,16 @@ function createBaseLeafOp(): LeafOp {
 }
 export const LeafOp = {
   typeUrl: "/cosmos.ics23.v1.LeafOp",
+  aminoType: "cosmos-sdk/LeafOp",
+  is(o: any): o is LeafOp {
+    return o && (o.$typeUrl === LeafOp.typeUrl || isSet(o.hash) && isSet(o.prehashKey) && isSet(o.prehashValue) && isSet(o.length) && (o.prefix instanceof Uint8Array || typeof o.prefix === "string"));
+  },
+  isSDK(o: any): o is LeafOpSDKType {
+    return o && (o.$typeUrl === LeafOp.typeUrl || isSet(o.hash) && isSet(o.prehash_key) && isSet(o.prehash_value) && isSet(o.length) && (o.prefix instanceof Uint8Array || typeof o.prefix === "string"));
+  },
+  isAmino(o: any): o is LeafOpAmino {
+    return o && (o.$typeUrl === LeafOp.typeUrl || isSet(o.hash) && isSet(o.prehash_key) && isSet(o.prehash_value) && isSet(o.length) && (o.prefix instanceof Uint8Array || typeof o.prefix === "string"));
+  },
   encode(message: LeafOp, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.hash !== 0) {
       writer.uint32(8).int32(message.hash);
@@ -1156,7 +1203,7 @@ export const LeafOp = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): LeafOp {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): LeafOp {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseLeafOp();
@@ -1215,42 +1262,42 @@ export const LeafOp = {
   fromAmino(object: LeafOpAmino): LeafOp {
     const message = createBaseLeafOp();
     if (object.hash !== undefined && object.hash !== null) {
-      message.hash = hashOpFromJSON(object.hash);
+      message.hash = object.hash;
     }
     if (object.prehash_key !== undefined && object.prehash_key !== null) {
-      message.prehashKey = hashOpFromJSON(object.prehash_key);
+      message.prehashKey = object.prehash_key;
     }
     if (object.prehash_value !== undefined && object.prehash_value !== null) {
-      message.prehashValue = hashOpFromJSON(object.prehash_value);
+      message.prehashValue = object.prehash_value;
     }
     if (object.length !== undefined && object.length !== null) {
-      message.length = lengthOpFromJSON(object.length);
+      message.length = object.length;
     }
     if (object.prefix !== undefined && object.prefix !== null) {
       message.prefix = bytesFromBase64(object.prefix);
     }
     return message;
   },
-  toAmino(message: LeafOp): LeafOpAmino {
+  toAmino(message: LeafOp, useInterfaces: boolean = true): LeafOpAmino {
     const obj: any = {};
-    obj.hash = hashOpToJSON(message.hash);
-    obj.prehash_key = hashOpToJSON(message.prehashKey);
-    obj.prehash_value = hashOpToJSON(message.prehashValue);
-    obj.length = lengthOpToJSON(message.length);
+    obj.hash = message.hash === 0 ? undefined : message.hash;
+    obj.prehash_key = message.prehashKey === 0 ? undefined : message.prehashKey;
+    obj.prehash_value = message.prehashValue === 0 ? undefined : message.prehashValue;
+    obj.length = message.length === 0 ? undefined : message.length;
     obj.prefix = message.prefix ? base64FromBytes(message.prefix) : undefined;
     return obj;
   },
   fromAminoMsg(object: LeafOpAminoMsg): LeafOp {
     return LeafOp.fromAmino(object.value);
   },
-  toAminoMsg(message: LeafOp): LeafOpAminoMsg {
+  toAminoMsg(message: LeafOp, useInterfaces: boolean = true): LeafOpAminoMsg {
     return {
       type: "cosmos-sdk/LeafOp",
-      value: LeafOp.toAmino(message)
+      value: LeafOp.toAmino(message, useInterfaces)
     };
   },
-  fromProtoMsg(message: LeafOpProtoMsg): LeafOp {
-    return LeafOp.decode(message.value);
+  fromProtoMsg(message: LeafOpProtoMsg, useInterfaces: boolean = true): LeafOp {
+    return LeafOp.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: LeafOp): Uint8Array {
     return LeafOp.encode(message).finish();
@@ -1262,6 +1309,8 @@ export const LeafOp = {
     };
   }
 };
+GlobalDecoderRegistry.register(LeafOp.typeUrl, LeafOp);
+GlobalDecoderRegistry.registerAminoProtoMapping(LeafOp.aminoType, LeafOp.typeUrl);
 function createBaseInnerOp(): InnerOp {
   return {
     hash: 0,
@@ -1271,6 +1320,16 @@ function createBaseInnerOp(): InnerOp {
 }
 export const InnerOp = {
   typeUrl: "/cosmos.ics23.v1.InnerOp",
+  aminoType: "cosmos-sdk/InnerOp",
+  is(o: any): o is InnerOp {
+    return o && (o.$typeUrl === InnerOp.typeUrl || isSet(o.hash) && (o.prefix instanceof Uint8Array || typeof o.prefix === "string") && (o.suffix instanceof Uint8Array || typeof o.suffix === "string"));
+  },
+  isSDK(o: any): o is InnerOpSDKType {
+    return o && (o.$typeUrl === InnerOp.typeUrl || isSet(o.hash) && (o.prefix instanceof Uint8Array || typeof o.prefix === "string") && (o.suffix instanceof Uint8Array || typeof o.suffix === "string"));
+  },
+  isAmino(o: any): o is InnerOpAmino {
+    return o && (o.$typeUrl === InnerOp.typeUrl || isSet(o.hash) && (o.prefix instanceof Uint8Array || typeof o.prefix === "string") && (o.suffix instanceof Uint8Array || typeof o.suffix === "string"));
+  },
   encode(message: InnerOp, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.hash !== 0) {
       writer.uint32(8).int32(message.hash);
@@ -1283,7 +1342,7 @@ export const InnerOp = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): InnerOp {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): InnerOp {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseInnerOp();
@@ -1330,7 +1389,7 @@ export const InnerOp = {
   fromAmino(object: InnerOpAmino): InnerOp {
     const message = createBaseInnerOp();
     if (object.hash !== undefined && object.hash !== null) {
-      message.hash = hashOpFromJSON(object.hash);
+      message.hash = object.hash;
     }
     if (object.prefix !== undefined && object.prefix !== null) {
       message.prefix = bytesFromBase64(object.prefix);
@@ -1340,9 +1399,9 @@ export const InnerOp = {
     }
     return message;
   },
-  toAmino(message: InnerOp): InnerOpAmino {
+  toAmino(message: InnerOp, useInterfaces: boolean = true): InnerOpAmino {
     const obj: any = {};
-    obj.hash = hashOpToJSON(message.hash);
+    obj.hash = message.hash === 0 ? undefined : message.hash;
     obj.prefix = message.prefix ? base64FromBytes(message.prefix) : undefined;
     obj.suffix = message.suffix ? base64FromBytes(message.suffix) : undefined;
     return obj;
@@ -1350,14 +1409,14 @@ export const InnerOp = {
   fromAminoMsg(object: InnerOpAminoMsg): InnerOp {
     return InnerOp.fromAmino(object.value);
   },
-  toAminoMsg(message: InnerOp): InnerOpAminoMsg {
+  toAminoMsg(message: InnerOp, useInterfaces: boolean = true): InnerOpAminoMsg {
     return {
       type: "cosmos-sdk/InnerOp",
-      value: InnerOp.toAmino(message)
+      value: InnerOp.toAmino(message, useInterfaces)
     };
   },
-  fromProtoMsg(message: InnerOpProtoMsg): InnerOp {
-    return InnerOp.decode(message.value);
+  fromProtoMsg(message: InnerOpProtoMsg, useInterfaces: boolean = true): InnerOp {
+    return InnerOp.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: InnerOp): Uint8Array {
     return InnerOp.encode(message).finish();
@@ -1369,6 +1428,8 @@ export const InnerOp = {
     };
   }
 };
+GlobalDecoderRegistry.register(InnerOp.typeUrl, InnerOp);
+GlobalDecoderRegistry.registerAminoProtoMapping(InnerOp.aminoType, InnerOp.typeUrl);
 function createBaseProofSpec(): ProofSpec {
   return {
     leafSpec: undefined,
@@ -1380,6 +1441,16 @@ function createBaseProofSpec(): ProofSpec {
 }
 export const ProofSpec = {
   typeUrl: "/cosmos.ics23.v1.ProofSpec",
+  aminoType: "cosmos-sdk/ProofSpec",
+  is(o: any): o is ProofSpec {
+    return o && (o.$typeUrl === ProofSpec.typeUrl || typeof o.maxDepth === "number" && typeof o.minDepth === "number" && typeof o.prehashKeyBeforeComparison === "boolean");
+  },
+  isSDK(o: any): o is ProofSpecSDKType {
+    return o && (o.$typeUrl === ProofSpec.typeUrl || typeof o.max_depth === "number" && typeof o.min_depth === "number" && typeof o.prehash_key_before_comparison === "boolean");
+  },
+  isAmino(o: any): o is ProofSpecAmino {
+    return o && (o.$typeUrl === ProofSpec.typeUrl || typeof o.max_depth === "number" && typeof o.min_depth === "number" && typeof o.prehash_key_before_comparison === "boolean");
+  },
   encode(message: ProofSpec, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.leafSpec !== undefined) {
       LeafOp.encode(message.leafSpec, writer.uint32(10).fork()).ldelim();
@@ -1398,7 +1469,7 @@ export const ProofSpec = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): ProofSpec {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): ProofSpec {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseProofSpec();
@@ -1406,10 +1477,10 @@ export const ProofSpec = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.leafSpec = LeafOp.decode(reader, reader.uint32());
+          message.leafSpec = LeafOp.decode(reader, reader.uint32(), useInterfaces);
           break;
         case 2:
-          message.innerSpec = InnerSpec.decode(reader, reader.uint32());
+          message.innerSpec = InnerSpec.decode(reader, reader.uint32(), useInterfaces);
           break;
         case 3:
           message.maxDepth = reader.int32();
@@ -1473,26 +1544,26 @@ export const ProofSpec = {
     }
     return message;
   },
-  toAmino(message: ProofSpec): ProofSpecAmino {
+  toAmino(message: ProofSpec, useInterfaces: boolean = true): ProofSpecAmino {
     const obj: any = {};
-    obj.leaf_spec = message.leafSpec ? LeafOp.toAmino(message.leafSpec) : undefined;
-    obj.inner_spec = message.innerSpec ? InnerSpec.toAmino(message.innerSpec) : undefined;
-    obj.max_depth = message.maxDepth;
-    obj.min_depth = message.minDepth;
-    obj.prehash_key_before_comparison = message.prehashKeyBeforeComparison;
+    obj.leaf_spec = message.leafSpec ? LeafOp.toAmino(message.leafSpec, useInterfaces) : undefined;
+    obj.inner_spec = message.innerSpec ? InnerSpec.toAmino(message.innerSpec, useInterfaces) : undefined;
+    obj.max_depth = message.maxDepth === 0 ? undefined : message.maxDepth;
+    obj.min_depth = message.minDepth === 0 ? undefined : message.minDepth;
+    obj.prehash_key_before_comparison = message.prehashKeyBeforeComparison === false ? undefined : message.prehashKeyBeforeComparison;
     return obj;
   },
   fromAminoMsg(object: ProofSpecAminoMsg): ProofSpec {
     return ProofSpec.fromAmino(object.value);
   },
-  toAminoMsg(message: ProofSpec): ProofSpecAminoMsg {
+  toAminoMsg(message: ProofSpec, useInterfaces: boolean = true): ProofSpecAminoMsg {
     return {
       type: "cosmos-sdk/ProofSpec",
-      value: ProofSpec.toAmino(message)
+      value: ProofSpec.toAmino(message, useInterfaces)
     };
   },
-  fromProtoMsg(message: ProofSpecProtoMsg): ProofSpec {
-    return ProofSpec.decode(message.value);
+  fromProtoMsg(message: ProofSpecProtoMsg, useInterfaces: boolean = true): ProofSpec {
+    return ProofSpec.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: ProofSpec): Uint8Array {
     return ProofSpec.encode(message).finish();
@@ -1504,6 +1575,8 @@ export const ProofSpec = {
     };
   }
 };
+GlobalDecoderRegistry.register(ProofSpec.typeUrl, ProofSpec);
+GlobalDecoderRegistry.registerAminoProtoMapping(ProofSpec.aminoType, ProofSpec.typeUrl);
 function createBaseInnerSpec(): InnerSpec {
   return {
     childOrder: [],
@@ -1516,6 +1589,16 @@ function createBaseInnerSpec(): InnerSpec {
 }
 export const InnerSpec = {
   typeUrl: "/cosmos.ics23.v1.InnerSpec",
+  aminoType: "cosmos-sdk/InnerSpec",
+  is(o: any): o is InnerSpec {
+    return o && (o.$typeUrl === InnerSpec.typeUrl || Array.isArray(o.childOrder) && (!o.childOrder.length || typeof o.childOrder[0] === "number") && typeof o.childSize === "number" && typeof o.minPrefixLength === "number" && typeof o.maxPrefixLength === "number" && (o.emptyChild instanceof Uint8Array || typeof o.emptyChild === "string") && isSet(o.hash));
+  },
+  isSDK(o: any): o is InnerSpecSDKType {
+    return o && (o.$typeUrl === InnerSpec.typeUrl || Array.isArray(o.child_order) && (!o.child_order.length || typeof o.child_order[0] === "number") && typeof o.child_size === "number" && typeof o.min_prefix_length === "number" && typeof o.max_prefix_length === "number" && (o.empty_child instanceof Uint8Array || typeof o.empty_child === "string") && isSet(o.hash));
+  },
+  isAmino(o: any): o is InnerSpecAmino {
+    return o && (o.$typeUrl === InnerSpec.typeUrl || Array.isArray(o.child_order) && (!o.child_order.length || typeof o.child_order[0] === "number") && typeof o.child_size === "number" && typeof o.min_prefix_length === "number" && typeof o.max_prefix_length === "number" && (o.empty_child instanceof Uint8Array || typeof o.empty_child === "string") && isSet(o.hash));
+  },
   encode(message: InnerSpec, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     writer.uint32(10).fork();
     for (const v of message.childOrder) {
@@ -1539,7 +1622,7 @@ export const InnerSpec = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): InnerSpec {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): InnerSpec {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseInnerSpec();
@@ -1628,35 +1711,35 @@ export const InnerSpec = {
       message.emptyChild = bytesFromBase64(object.empty_child);
     }
     if (object.hash !== undefined && object.hash !== null) {
-      message.hash = hashOpFromJSON(object.hash);
+      message.hash = object.hash;
     }
     return message;
   },
-  toAmino(message: InnerSpec): InnerSpecAmino {
+  toAmino(message: InnerSpec, useInterfaces: boolean = true): InnerSpecAmino {
     const obj: any = {};
     if (message.childOrder) {
       obj.child_order = message.childOrder.map(e => e);
     } else {
-      obj.child_order = [];
+      obj.child_order = null;
     }
-    obj.child_size = message.childSize;
-    obj.min_prefix_length = message.minPrefixLength;
-    obj.max_prefix_length = message.maxPrefixLength;
+    obj.child_size = message.childSize === 0 ? undefined : message.childSize;
+    obj.min_prefix_length = message.minPrefixLength === 0 ? undefined : message.minPrefixLength;
+    obj.max_prefix_length = message.maxPrefixLength === 0 ? undefined : message.maxPrefixLength;
     obj.empty_child = message.emptyChild ? base64FromBytes(message.emptyChild) : undefined;
-    obj.hash = hashOpToJSON(message.hash);
+    obj.hash = message.hash === 0 ? undefined : message.hash;
     return obj;
   },
   fromAminoMsg(object: InnerSpecAminoMsg): InnerSpec {
     return InnerSpec.fromAmino(object.value);
   },
-  toAminoMsg(message: InnerSpec): InnerSpecAminoMsg {
+  toAminoMsg(message: InnerSpec, useInterfaces: boolean = true): InnerSpecAminoMsg {
     return {
       type: "cosmos-sdk/InnerSpec",
-      value: InnerSpec.toAmino(message)
+      value: InnerSpec.toAmino(message, useInterfaces)
     };
   },
-  fromProtoMsg(message: InnerSpecProtoMsg): InnerSpec {
-    return InnerSpec.decode(message.value);
+  fromProtoMsg(message: InnerSpecProtoMsg, useInterfaces: boolean = true): InnerSpec {
+    return InnerSpec.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: InnerSpec): Uint8Array {
     return InnerSpec.encode(message).finish();
@@ -1668,6 +1751,8 @@ export const InnerSpec = {
     };
   }
 };
+GlobalDecoderRegistry.register(InnerSpec.typeUrl, InnerSpec);
+GlobalDecoderRegistry.registerAminoProtoMapping(InnerSpec.aminoType, InnerSpec.typeUrl);
 function createBaseBatchProof(): BatchProof {
   return {
     entries: []
@@ -1675,13 +1760,23 @@ function createBaseBatchProof(): BatchProof {
 }
 export const BatchProof = {
   typeUrl: "/cosmos.ics23.v1.BatchProof",
+  aminoType: "cosmos-sdk/BatchProof",
+  is(o: any): o is BatchProof {
+    return o && (o.$typeUrl === BatchProof.typeUrl || Array.isArray(o.entries) && (!o.entries.length || BatchEntry.is(o.entries[0])));
+  },
+  isSDK(o: any): o is BatchProofSDKType {
+    return o && (o.$typeUrl === BatchProof.typeUrl || Array.isArray(o.entries) && (!o.entries.length || BatchEntry.isSDK(o.entries[0])));
+  },
+  isAmino(o: any): o is BatchProofAmino {
+    return o && (o.$typeUrl === BatchProof.typeUrl || Array.isArray(o.entries) && (!o.entries.length || BatchEntry.isAmino(o.entries[0])));
+  },
   encode(message: BatchProof, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     for (const v of message.entries) {
       BatchEntry.encode(v!, writer.uint32(10).fork()).ldelim();
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): BatchProof {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): BatchProof {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseBatchProof();
@@ -1689,7 +1784,7 @@ export const BatchProof = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.entries.push(BatchEntry.decode(reader, reader.uint32()));
+          message.entries.push(BatchEntry.decode(reader, reader.uint32(), useInterfaces));
           break;
         default:
           reader.skipType(tag & 7);
@@ -1722,26 +1817,26 @@ export const BatchProof = {
     message.entries = object.entries?.map(e => BatchEntry.fromAmino(e)) || [];
     return message;
   },
-  toAmino(message: BatchProof): BatchProofAmino {
+  toAmino(message: BatchProof, useInterfaces: boolean = true): BatchProofAmino {
     const obj: any = {};
     if (message.entries) {
-      obj.entries = message.entries.map(e => e ? BatchEntry.toAmino(e) : undefined);
+      obj.entries = message.entries.map(e => e ? BatchEntry.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.entries = [];
+      obj.entries = null;
     }
     return obj;
   },
   fromAminoMsg(object: BatchProofAminoMsg): BatchProof {
     return BatchProof.fromAmino(object.value);
   },
-  toAminoMsg(message: BatchProof): BatchProofAminoMsg {
+  toAminoMsg(message: BatchProof, useInterfaces: boolean = true): BatchProofAminoMsg {
     return {
       type: "cosmos-sdk/BatchProof",
-      value: BatchProof.toAmino(message)
+      value: BatchProof.toAmino(message, useInterfaces)
     };
   },
-  fromProtoMsg(message: BatchProofProtoMsg): BatchProof {
-    return BatchProof.decode(message.value);
+  fromProtoMsg(message: BatchProofProtoMsg, useInterfaces: boolean = true): BatchProof {
+    return BatchProof.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: BatchProof): Uint8Array {
     return BatchProof.encode(message).finish();
@@ -1753,6 +1848,8 @@ export const BatchProof = {
     };
   }
 };
+GlobalDecoderRegistry.register(BatchProof.typeUrl, BatchProof);
+GlobalDecoderRegistry.registerAminoProtoMapping(BatchProof.aminoType, BatchProof.typeUrl);
 function createBaseBatchEntry(): BatchEntry {
   return {
     exist: undefined,
@@ -1761,6 +1858,16 @@ function createBaseBatchEntry(): BatchEntry {
 }
 export const BatchEntry = {
   typeUrl: "/cosmos.ics23.v1.BatchEntry",
+  aminoType: "cosmos-sdk/BatchEntry",
+  is(o: any): o is BatchEntry {
+    return o && o.$typeUrl === BatchEntry.typeUrl;
+  },
+  isSDK(o: any): o is BatchEntrySDKType {
+    return o && o.$typeUrl === BatchEntry.typeUrl;
+  },
+  isAmino(o: any): o is BatchEntryAmino {
+    return o && o.$typeUrl === BatchEntry.typeUrl;
+  },
   encode(message: BatchEntry, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.exist !== undefined) {
       ExistenceProof.encode(message.exist, writer.uint32(10).fork()).ldelim();
@@ -1770,7 +1877,7 @@ export const BatchEntry = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): BatchEntry {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): BatchEntry {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseBatchEntry();
@@ -1778,10 +1885,10 @@ export const BatchEntry = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.exist = ExistenceProof.decode(reader, reader.uint32());
+          message.exist = ExistenceProof.decode(reader, reader.uint32(), useInterfaces);
           break;
         case 2:
-          message.nonexist = NonExistenceProof.decode(reader, reader.uint32());
+          message.nonexist = NonExistenceProof.decode(reader, reader.uint32(), useInterfaces);
           break;
         default:
           reader.skipType(tag & 7);
@@ -1818,23 +1925,23 @@ export const BatchEntry = {
     }
     return message;
   },
-  toAmino(message: BatchEntry): BatchEntryAmino {
+  toAmino(message: BatchEntry, useInterfaces: boolean = true): BatchEntryAmino {
     const obj: any = {};
-    obj.exist = message.exist ? ExistenceProof.toAmino(message.exist) : undefined;
-    obj.nonexist = message.nonexist ? NonExistenceProof.toAmino(message.nonexist) : undefined;
+    obj.exist = message.exist ? ExistenceProof.toAmino(message.exist, useInterfaces) : undefined;
+    obj.nonexist = message.nonexist ? NonExistenceProof.toAmino(message.nonexist, useInterfaces) : undefined;
     return obj;
   },
   fromAminoMsg(object: BatchEntryAminoMsg): BatchEntry {
     return BatchEntry.fromAmino(object.value);
   },
-  toAminoMsg(message: BatchEntry): BatchEntryAminoMsg {
+  toAminoMsg(message: BatchEntry, useInterfaces: boolean = true): BatchEntryAminoMsg {
     return {
       type: "cosmos-sdk/BatchEntry",
-      value: BatchEntry.toAmino(message)
+      value: BatchEntry.toAmino(message, useInterfaces)
     };
   },
-  fromProtoMsg(message: BatchEntryProtoMsg): BatchEntry {
-    return BatchEntry.decode(message.value);
+  fromProtoMsg(message: BatchEntryProtoMsg, useInterfaces: boolean = true): BatchEntry {
+    return BatchEntry.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: BatchEntry): Uint8Array {
     return BatchEntry.encode(message).finish();
@@ -1846,6 +1953,8 @@ export const BatchEntry = {
     };
   }
 };
+GlobalDecoderRegistry.register(BatchEntry.typeUrl, BatchEntry);
+GlobalDecoderRegistry.registerAminoProtoMapping(BatchEntry.aminoType, BatchEntry.typeUrl);
 function createBaseCompressedBatchProof(): CompressedBatchProof {
   return {
     entries: [],
@@ -1854,6 +1963,16 @@ function createBaseCompressedBatchProof(): CompressedBatchProof {
 }
 export const CompressedBatchProof = {
   typeUrl: "/cosmos.ics23.v1.CompressedBatchProof",
+  aminoType: "cosmos-sdk/CompressedBatchProof",
+  is(o: any): o is CompressedBatchProof {
+    return o && (o.$typeUrl === CompressedBatchProof.typeUrl || Array.isArray(o.entries) && (!o.entries.length || CompressedBatchEntry.is(o.entries[0])) && Array.isArray(o.lookupInners) && (!o.lookupInners.length || InnerOp.is(o.lookupInners[0])));
+  },
+  isSDK(o: any): o is CompressedBatchProofSDKType {
+    return o && (o.$typeUrl === CompressedBatchProof.typeUrl || Array.isArray(o.entries) && (!o.entries.length || CompressedBatchEntry.isSDK(o.entries[0])) && Array.isArray(o.lookup_inners) && (!o.lookup_inners.length || InnerOp.isSDK(o.lookup_inners[0])));
+  },
+  isAmino(o: any): o is CompressedBatchProofAmino {
+    return o && (o.$typeUrl === CompressedBatchProof.typeUrl || Array.isArray(o.entries) && (!o.entries.length || CompressedBatchEntry.isAmino(o.entries[0])) && Array.isArray(o.lookup_inners) && (!o.lookup_inners.length || InnerOp.isAmino(o.lookup_inners[0])));
+  },
   encode(message: CompressedBatchProof, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     for (const v of message.entries) {
       CompressedBatchEntry.encode(v!, writer.uint32(10).fork()).ldelim();
@@ -1863,7 +1982,7 @@ export const CompressedBatchProof = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): CompressedBatchProof {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): CompressedBatchProof {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseCompressedBatchProof();
@@ -1871,10 +1990,10 @@ export const CompressedBatchProof = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.entries.push(CompressedBatchEntry.decode(reader, reader.uint32()));
+          message.entries.push(CompressedBatchEntry.decode(reader, reader.uint32(), useInterfaces));
           break;
         case 2:
-          message.lookupInners.push(InnerOp.decode(reader, reader.uint32()));
+          message.lookupInners.push(InnerOp.decode(reader, reader.uint32(), useInterfaces));
           break;
         default:
           reader.skipType(tag & 7);
@@ -1915,31 +2034,31 @@ export const CompressedBatchProof = {
     message.lookupInners = object.lookup_inners?.map(e => InnerOp.fromAmino(e)) || [];
     return message;
   },
-  toAmino(message: CompressedBatchProof): CompressedBatchProofAmino {
+  toAmino(message: CompressedBatchProof, useInterfaces: boolean = true): CompressedBatchProofAmino {
     const obj: any = {};
     if (message.entries) {
-      obj.entries = message.entries.map(e => e ? CompressedBatchEntry.toAmino(e) : undefined);
+      obj.entries = message.entries.map(e => e ? CompressedBatchEntry.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.entries = [];
+      obj.entries = null;
     }
     if (message.lookupInners) {
-      obj.lookup_inners = message.lookupInners.map(e => e ? InnerOp.toAmino(e) : undefined);
+      obj.lookup_inners = message.lookupInners.map(e => e ? InnerOp.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.lookup_inners = [];
+      obj.lookup_inners = null;
     }
     return obj;
   },
   fromAminoMsg(object: CompressedBatchProofAminoMsg): CompressedBatchProof {
     return CompressedBatchProof.fromAmino(object.value);
   },
-  toAminoMsg(message: CompressedBatchProof): CompressedBatchProofAminoMsg {
+  toAminoMsg(message: CompressedBatchProof, useInterfaces: boolean = true): CompressedBatchProofAminoMsg {
     return {
       type: "cosmos-sdk/CompressedBatchProof",
-      value: CompressedBatchProof.toAmino(message)
+      value: CompressedBatchProof.toAmino(message, useInterfaces)
     };
   },
-  fromProtoMsg(message: CompressedBatchProofProtoMsg): CompressedBatchProof {
-    return CompressedBatchProof.decode(message.value);
+  fromProtoMsg(message: CompressedBatchProofProtoMsg, useInterfaces: boolean = true): CompressedBatchProof {
+    return CompressedBatchProof.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: CompressedBatchProof): Uint8Array {
     return CompressedBatchProof.encode(message).finish();
@@ -1951,6 +2070,8 @@ export const CompressedBatchProof = {
     };
   }
 };
+GlobalDecoderRegistry.register(CompressedBatchProof.typeUrl, CompressedBatchProof);
+GlobalDecoderRegistry.registerAminoProtoMapping(CompressedBatchProof.aminoType, CompressedBatchProof.typeUrl);
 function createBaseCompressedBatchEntry(): CompressedBatchEntry {
   return {
     exist: undefined,
@@ -1959,6 +2080,16 @@ function createBaseCompressedBatchEntry(): CompressedBatchEntry {
 }
 export const CompressedBatchEntry = {
   typeUrl: "/cosmos.ics23.v1.CompressedBatchEntry",
+  aminoType: "cosmos-sdk/CompressedBatchEntry",
+  is(o: any): o is CompressedBatchEntry {
+    return o && o.$typeUrl === CompressedBatchEntry.typeUrl;
+  },
+  isSDK(o: any): o is CompressedBatchEntrySDKType {
+    return o && o.$typeUrl === CompressedBatchEntry.typeUrl;
+  },
+  isAmino(o: any): o is CompressedBatchEntryAmino {
+    return o && o.$typeUrl === CompressedBatchEntry.typeUrl;
+  },
   encode(message: CompressedBatchEntry, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.exist !== undefined) {
       CompressedExistenceProof.encode(message.exist, writer.uint32(10).fork()).ldelim();
@@ -1968,7 +2099,7 @@ export const CompressedBatchEntry = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): CompressedBatchEntry {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): CompressedBatchEntry {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseCompressedBatchEntry();
@@ -1976,10 +2107,10 @@ export const CompressedBatchEntry = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.exist = CompressedExistenceProof.decode(reader, reader.uint32());
+          message.exist = CompressedExistenceProof.decode(reader, reader.uint32(), useInterfaces);
           break;
         case 2:
-          message.nonexist = CompressedNonExistenceProof.decode(reader, reader.uint32());
+          message.nonexist = CompressedNonExistenceProof.decode(reader, reader.uint32(), useInterfaces);
           break;
         default:
           reader.skipType(tag & 7);
@@ -2016,23 +2147,23 @@ export const CompressedBatchEntry = {
     }
     return message;
   },
-  toAmino(message: CompressedBatchEntry): CompressedBatchEntryAmino {
+  toAmino(message: CompressedBatchEntry, useInterfaces: boolean = true): CompressedBatchEntryAmino {
     const obj: any = {};
-    obj.exist = message.exist ? CompressedExistenceProof.toAmino(message.exist) : undefined;
-    obj.nonexist = message.nonexist ? CompressedNonExistenceProof.toAmino(message.nonexist) : undefined;
+    obj.exist = message.exist ? CompressedExistenceProof.toAmino(message.exist, useInterfaces) : undefined;
+    obj.nonexist = message.nonexist ? CompressedNonExistenceProof.toAmino(message.nonexist, useInterfaces) : undefined;
     return obj;
   },
   fromAminoMsg(object: CompressedBatchEntryAminoMsg): CompressedBatchEntry {
     return CompressedBatchEntry.fromAmino(object.value);
   },
-  toAminoMsg(message: CompressedBatchEntry): CompressedBatchEntryAminoMsg {
+  toAminoMsg(message: CompressedBatchEntry, useInterfaces: boolean = true): CompressedBatchEntryAminoMsg {
     return {
       type: "cosmos-sdk/CompressedBatchEntry",
-      value: CompressedBatchEntry.toAmino(message)
+      value: CompressedBatchEntry.toAmino(message, useInterfaces)
     };
   },
-  fromProtoMsg(message: CompressedBatchEntryProtoMsg): CompressedBatchEntry {
-    return CompressedBatchEntry.decode(message.value);
+  fromProtoMsg(message: CompressedBatchEntryProtoMsg, useInterfaces: boolean = true): CompressedBatchEntry {
+    return CompressedBatchEntry.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: CompressedBatchEntry): Uint8Array {
     return CompressedBatchEntry.encode(message).finish();
@@ -2044,6 +2175,8 @@ export const CompressedBatchEntry = {
     };
   }
 };
+GlobalDecoderRegistry.register(CompressedBatchEntry.typeUrl, CompressedBatchEntry);
+GlobalDecoderRegistry.registerAminoProtoMapping(CompressedBatchEntry.aminoType, CompressedBatchEntry.typeUrl);
 function createBaseCompressedExistenceProof(): CompressedExistenceProof {
   return {
     key: new Uint8Array(),
@@ -2054,6 +2187,16 @@ function createBaseCompressedExistenceProof(): CompressedExistenceProof {
 }
 export const CompressedExistenceProof = {
   typeUrl: "/cosmos.ics23.v1.CompressedExistenceProof",
+  aminoType: "cosmos-sdk/CompressedExistenceProof",
+  is(o: any): o is CompressedExistenceProof {
+    return o && (o.$typeUrl === CompressedExistenceProof.typeUrl || (o.key instanceof Uint8Array || typeof o.key === "string") && (o.value instanceof Uint8Array || typeof o.value === "string") && Array.isArray(o.path) && (!o.path.length || typeof o.path[0] === "number"));
+  },
+  isSDK(o: any): o is CompressedExistenceProofSDKType {
+    return o && (o.$typeUrl === CompressedExistenceProof.typeUrl || (o.key instanceof Uint8Array || typeof o.key === "string") && (o.value instanceof Uint8Array || typeof o.value === "string") && Array.isArray(o.path) && (!o.path.length || typeof o.path[0] === "number"));
+  },
+  isAmino(o: any): o is CompressedExistenceProofAmino {
+    return o && (o.$typeUrl === CompressedExistenceProof.typeUrl || (o.key instanceof Uint8Array || typeof o.key === "string") && (o.value instanceof Uint8Array || typeof o.value === "string") && Array.isArray(o.path) && (!o.path.length || typeof o.path[0] === "number"));
+  },
   encode(message: CompressedExistenceProof, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.key.length !== 0) {
       writer.uint32(10).bytes(message.key);
@@ -2071,7 +2214,7 @@ export const CompressedExistenceProof = {
     writer.ldelim();
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): CompressedExistenceProof {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): CompressedExistenceProof {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseCompressedExistenceProof();
@@ -2085,7 +2228,7 @@ export const CompressedExistenceProof = {
           message.value = reader.bytes();
           break;
         case 3:
-          message.leaf = LeafOp.decode(reader, reader.uint32());
+          message.leaf = LeafOp.decode(reader, reader.uint32(), useInterfaces);
           break;
         case 4:
           if ((tag & 7) === 2) {
@@ -2146,29 +2289,29 @@ export const CompressedExistenceProof = {
     message.path = object.path?.map(e => e) || [];
     return message;
   },
-  toAmino(message: CompressedExistenceProof): CompressedExistenceProofAmino {
+  toAmino(message: CompressedExistenceProof, useInterfaces: boolean = true): CompressedExistenceProofAmino {
     const obj: any = {};
     obj.key = message.key ? base64FromBytes(message.key) : undefined;
     obj.value = message.value ? base64FromBytes(message.value) : undefined;
-    obj.leaf = message.leaf ? LeafOp.toAmino(message.leaf) : undefined;
+    obj.leaf = message.leaf ? LeafOp.toAmino(message.leaf, useInterfaces) : undefined;
     if (message.path) {
       obj.path = message.path.map(e => e);
     } else {
-      obj.path = [];
+      obj.path = null;
     }
     return obj;
   },
   fromAminoMsg(object: CompressedExistenceProofAminoMsg): CompressedExistenceProof {
     return CompressedExistenceProof.fromAmino(object.value);
   },
-  toAminoMsg(message: CompressedExistenceProof): CompressedExistenceProofAminoMsg {
+  toAminoMsg(message: CompressedExistenceProof, useInterfaces: boolean = true): CompressedExistenceProofAminoMsg {
     return {
       type: "cosmos-sdk/CompressedExistenceProof",
-      value: CompressedExistenceProof.toAmino(message)
+      value: CompressedExistenceProof.toAmino(message, useInterfaces)
     };
   },
-  fromProtoMsg(message: CompressedExistenceProofProtoMsg): CompressedExistenceProof {
-    return CompressedExistenceProof.decode(message.value);
+  fromProtoMsg(message: CompressedExistenceProofProtoMsg, useInterfaces: boolean = true): CompressedExistenceProof {
+    return CompressedExistenceProof.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: CompressedExistenceProof): Uint8Array {
     return CompressedExistenceProof.encode(message).finish();
@@ -2180,6 +2323,8 @@ export const CompressedExistenceProof = {
     };
   }
 };
+GlobalDecoderRegistry.register(CompressedExistenceProof.typeUrl, CompressedExistenceProof);
+GlobalDecoderRegistry.registerAminoProtoMapping(CompressedExistenceProof.aminoType, CompressedExistenceProof.typeUrl);
 function createBaseCompressedNonExistenceProof(): CompressedNonExistenceProof {
   return {
     key: new Uint8Array(),
@@ -2189,6 +2334,16 @@ function createBaseCompressedNonExistenceProof(): CompressedNonExistenceProof {
 }
 export const CompressedNonExistenceProof = {
   typeUrl: "/cosmos.ics23.v1.CompressedNonExistenceProof",
+  aminoType: "cosmos-sdk/CompressedNonExistenceProof",
+  is(o: any): o is CompressedNonExistenceProof {
+    return o && (o.$typeUrl === CompressedNonExistenceProof.typeUrl || o.key instanceof Uint8Array || typeof o.key === "string");
+  },
+  isSDK(o: any): o is CompressedNonExistenceProofSDKType {
+    return o && (o.$typeUrl === CompressedNonExistenceProof.typeUrl || o.key instanceof Uint8Array || typeof o.key === "string");
+  },
+  isAmino(o: any): o is CompressedNonExistenceProofAmino {
+    return o && (o.$typeUrl === CompressedNonExistenceProof.typeUrl || o.key instanceof Uint8Array || typeof o.key === "string");
+  },
   encode(message: CompressedNonExistenceProof, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.key.length !== 0) {
       writer.uint32(10).bytes(message.key);
@@ -2201,7 +2356,7 @@ export const CompressedNonExistenceProof = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): CompressedNonExistenceProof {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): CompressedNonExistenceProof {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseCompressedNonExistenceProof();
@@ -2212,10 +2367,10 @@ export const CompressedNonExistenceProof = {
           message.key = reader.bytes();
           break;
         case 2:
-          message.left = CompressedExistenceProof.decode(reader, reader.uint32());
+          message.left = CompressedExistenceProof.decode(reader, reader.uint32(), useInterfaces);
           break;
         case 3:
-          message.right = CompressedExistenceProof.decode(reader, reader.uint32());
+          message.right = CompressedExistenceProof.decode(reader, reader.uint32(), useInterfaces);
           break;
         default:
           reader.skipType(tag & 7);
@@ -2258,24 +2413,24 @@ export const CompressedNonExistenceProof = {
     }
     return message;
   },
-  toAmino(message: CompressedNonExistenceProof): CompressedNonExistenceProofAmino {
+  toAmino(message: CompressedNonExistenceProof, useInterfaces: boolean = true): CompressedNonExistenceProofAmino {
     const obj: any = {};
     obj.key = message.key ? base64FromBytes(message.key) : undefined;
-    obj.left = message.left ? CompressedExistenceProof.toAmino(message.left) : undefined;
-    obj.right = message.right ? CompressedExistenceProof.toAmino(message.right) : undefined;
+    obj.left = message.left ? CompressedExistenceProof.toAmino(message.left, useInterfaces) : undefined;
+    obj.right = message.right ? CompressedExistenceProof.toAmino(message.right, useInterfaces) : undefined;
     return obj;
   },
   fromAminoMsg(object: CompressedNonExistenceProofAminoMsg): CompressedNonExistenceProof {
     return CompressedNonExistenceProof.fromAmino(object.value);
   },
-  toAminoMsg(message: CompressedNonExistenceProof): CompressedNonExistenceProofAminoMsg {
+  toAminoMsg(message: CompressedNonExistenceProof, useInterfaces: boolean = true): CompressedNonExistenceProofAminoMsg {
     return {
       type: "cosmos-sdk/CompressedNonExistenceProof",
-      value: CompressedNonExistenceProof.toAmino(message)
+      value: CompressedNonExistenceProof.toAmino(message, useInterfaces)
     };
   },
-  fromProtoMsg(message: CompressedNonExistenceProofProtoMsg): CompressedNonExistenceProof {
-    return CompressedNonExistenceProof.decode(message.value);
+  fromProtoMsg(message: CompressedNonExistenceProofProtoMsg, useInterfaces: boolean = true): CompressedNonExistenceProof {
+    return CompressedNonExistenceProof.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: CompressedNonExistenceProof): Uint8Array {
     return CompressedNonExistenceProof.encode(message).finish();
@@ -2287,3 +2442,5 @@ export const CompressedNonExistenceProof = {
     };
   }
 };
+GlobalDecoderRegistry.register(CompressedNonExistenceProof.typeUrl, CompressedNonExistenceProof);
+GlobalDecoderRegistry.registerAminoProtoMapping(CompressedNonExistenceProof.aminoType, CompressedNonExistenceProof.typeUrl);

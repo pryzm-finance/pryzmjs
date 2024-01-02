@@ -1,5 +1,6 @@
 import { BinaryReader, BinaryWriter } from "../../binary";
 import { isSet } from "../../helpers";
+import { GlobalDecoderRegistry } from "../../registry";
 /**
  * A Duration represents a signed, fixed-length span of time represented
  * as a count of seconds and fractions of seconds at nanosecond
@@ -218,6 +219,15 @@ function createBaseDuration(): Duration {
 }
 export const Duration = {
   typeUrl: "/google.protobuf.Duration",
+  is(o: any): o is Duration {
+    return o && (o.$typeUrl === Duration.typeUrl || typeof o.seconds === "bigint" && typeof o.nanos === "number");
+  },
+  isSDK(o: any): o is DurationSDKType {
+    return o && (o.$typeUrl === Duration.typeUrl || typeof o.seconds === "bigint" && typeof o.nanos === "number");
+  },
+  isAmino(o: any): o is DurationAmino {
+    return o && (o.$typeUrl === Duration.typeUrl || typeof o.seconds === "bigint" && typeof o.nanos === "number");
+  },
   encode(message: Duration, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.seconds !== BigInt(0)) {
       writer.uint32(8).int64(message.seconds);
@@ -227,7 +237,7 @@ export const Duration = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): Duration {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): Duration {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseDuration();
@@ -272,14 +282,14 @@ export const Duration = {
       nanos: Number(value % BigInt("1000000000"))
     };
   },
-  toAmino(message: Duration): DurationAmino {
+  toAmino(message: Duration, useInterfaces: boolean = true): DurationAmino {
     return (message.seconds * BigInt("1000000000") + BigInt(message.nanos)).toString();
   },
   fromAminoMsg(object: DurationAminoMsg): Duration {
     return Duration.fromAmino(object.value);
   },
-  fromProtoMsg(message: DurationProtoMsg): Duration {
-    return Duration.decode(message.value);
+  fromProtoMsg(message: DurationProtoMsg, useInterfaces: boolean = true): Duration {
+    return Duration.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: Duration): Uint8Array {
     return Duration.encode(message).finish();
@@ -291,3 +301,4 @@ export const Duration = {
     };
   }
 };
+GlobalDecoderRegistry.register(Duration.typeUrl, Duration);

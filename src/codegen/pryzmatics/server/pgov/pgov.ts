@@ -1,6 +1,7 @@
 import { AssetProposal, AssetProposalAmino, AssetProposalSDKType } from "../../pgov/pgov";
 import { BinaryReader, BinaryWriter } from "../../../binary";
 import { isSet, bytesFromBase64, base64FromBytes } from "../../../helpers";
+import { GlobalDecoderRegistry } from "../../../registry";
 export interface QueryAssetProposalRequest {
   assetId: string;
 }
@@ -102,13 +103,22 @@ function createBaseQueryAssetProposalRequest(): QueryAssetProposalRequest {
 }
 export const QueryAssetProposalRequest = {
   typeUrl: "/pryzmatics.server.pgov.QueryAssetProposalRequest",
+  is(o: any): o is QueryAssetProposalRequest {
+    return o && (o.$typeUrl === QueryAssetProposalRequest.typeUrl || typeof o.assetId === "string");
+  },
+  isSDK(o: any): o is QueryAssetProposalRequestSDKType {
+    return o && (o.$typeUrl === QueryAssetProposalRequest.typeUrl || typeof o.asset_id === "string");
+  },
+  isAmino(o: any): o is QueryAssetProposalRequestAmino {
+    return o && (o.$typeUrl === QueryAssetProposalRequest.typeUrl || typeof o.asset_id === "string");
+  },
   encode(message: QueryAssetProposalRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.assetId !== "") {
       writer.uint32(10).string(message.assetId);
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): QueryAssetProposalRequest {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): QueryAssetProposalRequest {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryAssetProposalRequest();
@@ -147,16 +157,16 @@ export const QueryAssetProposalRequest = {
     }
     return message;
   },
-  toAmino(message: QueryAssetProposalRequest): QueryAssetProposalRequestAmino {
+  toAmino(message: QueryAssetProposalRequest, useInterfaces: boolean = true): QueryAssetProposalRequestAmino {
     const obj: any = {};
-    obj.asset_id = message.assetId;
+    obj.asset_id = message.assetId === "" ? undefined : message.assetId;
     return obj;
   },
   fromAminoMsg(object: QueryAssetProposalRequestAminoMsg): QueryAssetProposalRequest {
     return QueryAssetProposalRequest.fromAmino(object.value);
   },
-  fromProtoMsg(message: QueryAssetProposalRequestProtoMsg): QueryAssetProposalRequest {
-    return QueryAssetProposalRequest.decode(message.value);
+  fromProtoMsg(message: QueryAssetProposalRequestProtoMsg, useInterfaces: boolean = true): QueryAssetProposalRequest {
+    return QueryAssetProposalRequest.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: QueryAssetProposalRequest): Uint8Array {
     return QueryAssetProposalRequest.encode(message).finish();
@@ -168,6 +178,7 @@ export const QueryAssetProposalRequest = {
     };
   }
 };
+GlobalDecoderRegistry.register(QueryAssetProposalRequest.typeUrl, QueryAssetProposalRequest);
 function createBaseQueryAssetProposalResponse(): QueryAssetProposalResponse {
   return {
     proposals: []
@@ -175,13 +186,22 @@ function createBaseQueryAssetProposalResponse(): QueryAssetProposalResponse {
 }
 export const QueryAssetProposalResponse = {
   typeUrl: "/pryzmatics.server.pgov.QueryAssetProposalResponse",
+  is(o: any): o is QueryAssetProposalResponse {
+    return o && (o.$typeUrl === QueryAssetProposalResponse.typeUrl || Array.isArray(o.proposals) && (!o.proposals.length || AssetProposal.is(o.proposals[0])));
+  },
+  isSDK(o: any): o is QueryAssetProposalResponseSDKType {
+    return o && (o.$typeUrl === QueryAssetProposalResponse.typeUrl || Array.isArray(o.proposals) && (!o.proposals.length || AssetProposal.isSDK(o.proposals[0])));
+  },
+  isAmino(o: any): o is QueryAssetProposalResponseAmino {
+    return o && (o.$typeUrl === QueryAssetProposalResponse.typeUrl || Array.isArray(o.proposals) && (!o.proposals.length || AssetProposal.isAmino(o.proposals[0])));
+  },
   encode(message: QueryAssetProposalResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     for (const v of message.proposals) {
       AssetProposal.encode(v!, writer.uint32(10).fork()).ldelim();
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): QueryAssetProposalResponse {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): QueryAssetProposalResponse {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryAssetProposalResponse();
@@ -189,7 +209,7 @@ export const QueryAssetProposalResponse = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.proposals.push(AssetProposal.decode(reader, reader.uint32()));
+          message.proposals.push(AssetProposal.decode(reader, reader.uint32(), useInterfaces));
           break;
         default:
           reader.skipType(tag & 7);
@@ -222,20 +242,20 @@ export const QueryAssetProposalResponse = {
     message.proposals = object.proposals?.map(e => AssetProposal.fromAmino(e)) || [];
     return message;
   },
-  toAmino(message: QueryAssetProposalResponse): QueryAssetProposalResponseAmino {
+  toAmino(message: QueryAssetProposalResponse, useInterfaces: boolean = true): QueryAssetProposalResponseAmino {
     const obj: any = {};
     if (message.proposals) {
-      obj.proposals = message.proposals.map(e => e ? AssetProposal.toAmino(e) : undefined);
+      obj.proposals = message.proposals.map(e => e ? AssetProposal.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.proposals = [];
+      obj.proposals = null;
     }
     return obj;
   },
   fromAminoMsg(object: QueryAssetProposalResponseAminoMsg): QueryAssetProposalResponse {
     return QueryAssetProposalResponse.fromAmino(object.value);
   },
-  fromProtoMsg(message: QueryAssetProposalResponseProtoMsg): QueryAssetProposalResponse {
-    return QueryAssetProposalResponse.decode(message.value);
+  fromProtoMsg(message: QueryAssetProposalResponseProtoMsg, useInterfaces: boolean = true): QueryAssetProposalResponse {
+    return QueryAssetProposalResponse.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: QueryAssetProposalResponse): Uint8Array {
     return QueryAssetProposalResponse.encode(message).finish();
@@ -247,6 +267,7 @@ export const QueryAssetProposalResponse = {
     };
   }
 };
+GlobalDecoderRegistry.register(QueryAssetProposalResponse.typeUrl, QueryAssetProposalResponse);
 function createBaseQueryProposalSubmissionMsgsRequest(): QueryProposalSubmissionMsgsRequest {
   return {
     assetId: "",
@@ -256,6 +277,15 @@ function createBaseQueryProposalSubmissionMsgsRequest(): QueryProposalSubmission
 }
 export const QueryProposalSubmissionMsgsRequest = {
   typeUrl: "/pryzmatics.server.pgov.QueryProposalSubmissionMsgsRequest",
+  is(o: any): o is QueryProposalSubmissionMsgsRequest {
+    return o && (o.$typeUrl === QueryProposalSubmissionMsgsRequest.typeUrl || typeof o.assetId === "string" && typeof o.proposalId === "bigint" && typeof o.creator === "string");
+  },
+  isSDK(o: any): o is QueryProposalSubmissionMsgsRequestSDKType {
+    return o && (o.$typeUrl === QueryProposalSubmissionMsgsRequest.typeUrl || typeof o.asset_id === "string" && typeof o.proposal_id === "bigint" && typeof o.creator === "string");
+  },
+  isAmino(o: any): o is QueryProposalSubmissionMsgsRequestAmino {
+    return o && (o.$typeUrl === QueryProposalSubmissionMsgsRequest.typeUrl || typeof o.asset_id === "string" && typeof o.proposal_id === "bigint" && typeof o.creator === "string");
+  },
   encode(message: QueryProposalSubmissionMsgsRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.assetId !== "") {
       writer.uint32(10).string(message.assetId);
@@ -268,7 +298,7 @@ export const QueryProposalSubmissionMsgsRequest = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): QueryProposalSubmissionMsgsRequest {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): QueryProposalSubmissionMsgsRequest {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryProposalSubmissionMsgsRequest();
@@ -325,18 +355,18 @@ export const QueryProposalSubmissionMsgsRequest = {
     }
     return message;
   },
-  toAmino(message: QueryProposalSubmissionMsgsRequest): QueryProposalSubmissionMsgsRequestAmino {
+  toAmino(message: QueryProposalSubmissionMsgsRequest, useInterfaces: boolean = true): QueryProposalSubmissionMsgsRequestAmino {
     const obj: any = {};
-    obj.asset_id = message.assetId;
+    obj.asset_id = message.assetId === "" ? undefined : message.assetId;
     obj.proposal_id = message.proposalId ? message.proposalId.toString() : undefined;
-    obj.creator = message.creator;
+    obj.creator = message.creator === "" ? undefined : message.creator;
     return obj;
   },
   fromAminoMsg(object: QueryProposalSubmissionMsgsRequestAminoMsg): QueryProposalSubmissionMsgsRequest {
     return QueryProposalSubmissionMsgsRequest.fromAmino(object.value);
   },
-  fromProtoMsg(message: QueryProposalSubmissionMsgsRequestProtoMsg): QueryProposalSubmissionMsgsRequest {
-    return QueryProposalSubmissionMsgsRequest.decode(message.value);
+  fromProtoMsg(message: QueryProposalSubmissionMsgsRequestProtoMsg, useInterfaces: boolean = true): QueryProposalSubmissionMsgsRequest {
+    return QueryProposalSubmissionMsgsRequest.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: QueryProposalSubmissionMsgsRequest): Uint8Array {
     return QueryProposalSubmissionMsgsRequest.encode(message).finish();
@@ -348,6 +378,7 @@ export const QueryProposalSubmissionMsgsRequest = {
     };
   }
 };
+GlobalDecoderRegistry.register(QueryProposalSubmissionMsgsRequest.typeUrl, QueryProposalSubmissionMsgsRequest);
 function createBaseQueryProposalSubmissionMsgsResponse(): QueryProposalSubmissionMsgsResponse {
   return {
     messages: []
@@ -355,13 +386,22 @@ function createBaseQueryProposalSubmissionMsgsResponse(): QueryProposalSubmissio
 }
 export const QueryProposalSubmissionMsgsResponse = {
   typeUrl: "/pryzmatics.server.pgov.QueryProposalSubmissionMsgsResponse",
+  is(o: any): o is QueryProposalSubmissionMsgsResponse {
+    return o && o.$typeUrl === QueryProposalSubmissionMsgsResponse.typeUrl;
+  },
+  isSDK(o: any): o is QueryProposalSubmissionMsgsResponseSDKType {
+    return o && o.$typeUrl === QueryProposalSubmissionMsgsResponse.typeUrl;
+  },
+  isAmino(o: any): o is QueryProposalSubmissionMsgsResponseAmino {
+    return o && o.$typeUrl === QueryProposalSubmissionMsgsResponse.typeUrl;
+  },
   encode(message: QueryProposalSubmissionMsgsResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     for (const v of message.messages) {
       EncodeObject.encode(v!, writer.uint32(10).fork()).ldelim();
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): QueryProposalSubmissionMsgsResponse {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): QueryProposalSubmissionMsgsResponse {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryProposalSubmissionMsgsResponse();
@@ -369,7 +409,7 @@ export const QueryProposalSubmissionMsgsResponse = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.messages.push(EncodeObject.decode(reader, reader.uint32()));
+          message.messages.push(EncodeObject.decode(reader, reader.uint32(), useInterfaces));
           break;
         default:
           reader.skipType(tag & 7);
@@ -402,20 +442,20 @@ export const QueryProposalSubmissionMsgsResponse = {
     message.messages = object.messages?.map(e => EncodeObject.fromAmino(e)) || [];
     return message;
   },
-  toAmino(message: QueryProposalSubmissionMsgsResponse): QueryProposalSubmissionMsgsResponseAmino {
+  toAmino(message: QueryProposalSubmissionMsgsResponse, useInterfaces: boolean = true): QueryProposalSubmissionMsgsResponseAmino {
     const obj: any = {};
     if (message.messages) {
-      obj.messages = message.messages.map(e => e ? EncodeObject.toAmino(e) : undefined);
+      obj.messages = message.messages.map(e => e ? EncodeObject.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.messages = [];
+      obj.messages = null;
     }
     return obj;
   },
   fromAminoMsg(object: QueryProposalSubmissionMsgsResponseAminoMsg): QueryProposalSubmissionMsgsResponse {
     return QueryProposalSubmissionMsgsResponse.fromAmino(object.value);
   },
-  fromProtoMsg(message: QueryProposalSubmissionMsgsResponseProtoMsg): QueryProposalSubmissionMsgsResponse {
-    return QueryProposalSubmissionMsgsResponse.decode(message.value);
+  fromProtoMsg(message: QueryProposalSubmissionMsgsResponseProtoMsg, useInterfaces: boolean = true): QueryProposalSubmissionMsgsResponse {
+    return QueryProposalSubmissionMsgsResponse.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: QueryProposalSubmissionMsgsResponse): Uint8Array {
     return QueryProposalSubmissionMsgsResponse.encode(message).finish();
@@ -427,6 +467,7 @@ export const QueryProposalSubmissionMsgsResponse = {
     };
   }
 };
+GlobalDecoderRegistry.register(QueryProposalSubmissionMsgsResponse.typeUrl, QueryProposalSubmissionMsgsResponse);
 function createBaseEncodeObject(): EncodeObject {
   return {
     typeUrl: "",
@@ -435,6 +476,15 @@ function createBaseEncodeObject(): EncodeObject {
 }
 export const EncodeObject = {
   typeUrl: "/pryzmatics.server.pgov.EncodeObject",
+  is(o: any): o is EncodeObject {
+    return o && (o.$typeUrl === EncodeObject.typeUrl || typeof o.typeUrl === "string" && (o.value instanceof Uint8Array || typeof o.value === "string"));
+  },
+  isSDK(o: any): o is EncodeObjectSDKType {
+    return o && (o.$typeUrl === EncodeObject.typeUrl || typeof o.typeUrl === "string" && (o.value instanceof Uint8Array || typeof o.value === "string"));
+  },
+  isAmino(o: any): o is EncodeObjectAmino {
+    return o && (o.$typeUrl === EncodeObject.typeUrl || typeof o.typeUrl === "string" && (o.value instanceof Uint8Array || typeof o.value === "string"));
+  },
   encode(message: EncodeObject, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.typeUrl !== "") {
       writer.uint32(10).string(message.typeUrl);
@@ -444,7 +494,7 @@ export const EncodeObject = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): EncodeObject {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): EncodeObject {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseEncodeObject();
@@ -492,17 +542,17 @@ export const EncodeObject = {
     }
     return message;
   },
-  toAmino(message: EncodeObject): EncodeObjectAmino {
+  toAmino(message: EncodeObject, useInterfaces: boolean = true): EncodeObjectAmino {
     const obj: any = {};
-    obj.typeUrl = message.typeUrl;
+    obj.typeUrl = message.typeUrl === "" ? undefined : message.typeUrl;
     obj.value = message.value ? base64FromBytes(message.value) : undefined;
     return obj;
   },
   fromAminoMsg(object: EncodeObjectAminoMsg): EncodeObject {
     return EncodeObject.fromAmino(object.value);
   },
-  fromProtoMsg(message: EncodeObjectProtoMsg): EncodeObject {
-    return EncodeObject.decode(message.value);
+  fromProtoMsg(message: EncodeObjectProtoMsg, useInterfaces: boolean = true): EncodeObject {
+    return EncodeObject.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: EncodeObject): Uint8Array {
     return EncodeObject.encode(message).finish();
@@ -514,3 +564,4 @@ export const EncodeObject = {
     };
   }
 };
+GlobalDecoderRegistry.register(EncodeObject.typeUrl, EncodeObject);

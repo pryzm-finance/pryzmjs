@@ -1,7 +1,8 @@
 import { Timestamp, TimestampSDKType } from "../../google/protobuf/timestamp";
 import { BinaryReader, BinaryWriter } from "../../binary";
 import { Decimal } from "@cosmjs/math";
-import { isSet, fromJsonTimestamp, fromTimestamp } from "../../helpers";
+import { isSet, fromJsonTimestamp, fromTimestamp, padDecimal } from "../../helpers";
+import { GlobalDecoderRegistry } from "../../registry";
 export interface PoolApr {
   poolId: bigint;
   time: Timestamp;
@@ -54,6 +55,15 @@ function createBasePoolApr(): PoolApr {
 }
 export const PoolApr = {
   typeUrl: "/pryzmatics.pool.PoolApr",
+  is(o: any): o is PoolApr {
+    return o && (o.$typeUrl === PoolApr.typeUrl || typeof o.poolId === "bigint" && Timestamp.is(o.time) && typeof o.error === "string");
+  },
+  isSDK(o: any): o is PoolAprSDKType {
+    return o && (o.$typeUrl === PoolApr.typeUrl || typeof o.pool_id === "bigint" && Timestamp.isSDK(o.time) && typeof o.error === "string");
+  },
+  isAmino(o: any): o is PoolAprAmino {
+    return o && (o.$typeUrl === PoolApr.typeUrl || typeof o.pool_id === "bigint" && Timestamp.isAmino(o.time) && typeof o.error === "string");
+  },
   encode(message: PoolApr, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.poolId !== BigInt(0)) {
       writer.uint32(8).uint64(message.poolId);
@@ -81,7 +91,7 @@ export const PoolApr = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): PoolApr {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): PoolApr {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBasePoolApr();
@@ -183,23 +193,23 @@ export const PoolApr = {
     }
     return message;
   },
-  toAmino(message: PoolApr): PoolAprAmino {
+  toAmino(message: PoolApr, useInterfaces: boolean = true): PoolAprAmino {
     const obj: any = {};
     obj.pool_id = message.poolId ? message.poolId.toString() : undefined;
-    obj.time = message.time ? Timestamp.toAmino(message.time) : undefined;
-    obj.apr = message.apr;
-    obj.swap_fee_apr = message.swapFeeApr;
-    obj.token_yield = message.tokenYield;
-    obj.incentives_apr = message.incentivesApr;
-    obj.alliance_apr = message.allianceApr;
-    obj.error = message.error;
+    obj.time = message.time ? Timestamp.toAmino(message.time, useInterfaces) : undefined;
+    obj.apr = padDecimal(message.apr) === null ? undefined : padDecimal(message.apr);
+    obj.swap_fee_apr = padDecimal(message.swapFeeApr) === null ? undefined : padDecimal(message.swapFeeApr);
+    obj.token_yield = padDecimal(message.tokenYield) === null ? undefined : padDecimal(message.tokenYield);
+    obj.incentives_apr = padDecimal(message.incentivesApr) === null ? undefined : padDecimal(message.incentivesApr);
+    obj.alliance_apr = padDecimal(message.allianceApr) === null ? undefined : padDecimal(message.allianceApr);
+    obj.error = message.error === "" ? undefined : message.error;
     return obj;
   },
   fromAminoMsg(object: PoolAprAminoMsg): PoolApr {
     return PoolApr.fromAmino(object.value);
   },
-  fromProtoMsg(message: PoolAprProtoMsg): PoolApr {
-    return PoolApr.decode(message.value);
+  fromProtoMsg(message: PoolAprProtoMsg, useInterfaces: boolean = true): PoolApr {
+    return PoolApr.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: PoolApr): Uint8Array {
     return PoolApr.encode(message).finish();
@@ -211,3 +221,4 @@ export const PoolApr = {
     };
   }
 };
+GlobalDecoderRegistry.register(PoolApr.typeUrl, PoolApr);

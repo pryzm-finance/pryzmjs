@@ -1,5 +1,6 @@
 import { BinaryReader, BinaryWriter } from "../../../binary";
 import { isSet } from "../../../helpers";
+import { GlobalDecoderRegistry } from "../../../registry";
 export interface BitArray {
   bits: bigint;
   elems: bigint[];
@@ -28,6 +29,15 @@ function createBaseBitArray(): BitArray {
 }
 export const BitArray = {
   typeUrl: "/tendermint.libs.bits.BitArray",
+  is(o: any): o is BitArray {
+    return o && (o.$typeUrl === BitArray.typeUrl || typeof o.bits === "bigint" && Array.isArray(o.elems) && (!o.elems.length || typeof o.elems[0] === "bigint"));
+  },
+  isSDK(o: any): o is BitArraySDKType {
+    return o && (o.$typeUrl === BitArray.typeUrl || typeof o.bits === "bigint" && Array.isArray(o.elems) && (!o.elems.length || typeof o.elems[0] === "bigint"));
+  },
+  isAmino(o: any): o is BitArrayAmino {
+    return o && (o.$typeUrl === BitArray.typeUrl || typeof o.bits === "bigint" && Array.isArray(o.elems) && (!o.elems.length || typeof o.elems[0] === "bigint"));
+  },
   encode(message: BitArray, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.bits !== BigInt(0)) {
       writer.uint32(8).int64(message.bits);
@@ -39,7 +49,7 @@ export const BitArray = {
     writer.ldelim();
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): BitArray {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): BitArray {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseBitArray();
@@ -96,21 +106,21 @@ export const BitArray = {
     message.elems = object.elems?.map(e => BigInt(e)) || [];
     return message;
   },
-  toAmino(message: BitArray): BitArrayAmino {
+  toAmino(message: BitArray, useInterfaces: boolean = true): BitArrayAmino {
     const obj: any = {};
     obj.bits = message.bits ? message.bits.toString() : undefined;
     if (message.elems) {
       obj.elems = message.elems.map(e => e.toString());
     } else {
-      obj.elems = [];
+      obj.elems = null;
     }
     return obj;
   },
   fromAminoMsg(object: BitArrayAminoMsg): BitArray {
     return BitArray.fromAmino(object.value);
   },
-  fromProtoMsg(message: BitArrayProtoMsg): BitArray {
-    return BitArray.decode(message.value);
+  fromProtoMsg(message: BitArrayProtoMsg, useInterfaces: boolean = true): BitArray {
+    return BitArray.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: BitArray): Uint8Array {
     return BitArray.encode(message).finish();
@@ -122,3 +132,4 @@ export const BitArray = {
     };
   }
 };
+GlobalDecoderRegistry.register(BitArray.typeUrl, BitArray);

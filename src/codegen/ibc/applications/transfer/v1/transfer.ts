@@ -1,5 +1,6 @@
 import { BinaryReader, BinaryWriter } from "../../../../binary";
 import { isSet } from "../../../../helpers";
+import { GlobalDecoderRegistry } from "../../../../registry";
 /**
  * DenomTrace contains the base denomination for ICS20 fungible tokens and the
  * source tracing information path.
@@ -104,6 +105,16 @@ function createBaseDenomTrace(): DenomTrace {
 }
 export const DenomTrace = {
   typeUrl: "/ibc.applications.transfer.v1.DenomTrace",
+  aminoType: "cosmos-sdk/DenomTrace",
+  is(o: any): o is DenomTrace {
+    return o && (o.$typeUrl === DenomTrace.typeUrl || typeof o.path === "string" && typeof o.baseDenom === "string");
+  },
+  isSDK(o: any): o is DenomTraceSDKType {
+    return o && (o.$typeUrl === DenomTrace.typeUrl || typeof o.path === "string" && typeof o.base_denom === "string");
+  },
+  isAmino(o: any): o is DenomTraceAmino {
+    return o && (o.$typeUrl === DenomTrace.typeUrl || typeof o.path === "string" && typeof o.base_denom === "string");
+  },
   encode(message: DenomTrace, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.path !== "") {
       writer.uint32(10).string(message.path);
@@ -113,7 +124,7 @@ export const DenomTrace = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): DenomTrace {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): DenomTrace {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseDenomTrace();
@@ -161,23 +172,23 @@ export const DenomTrace = {
     }
     return message;
   },
-  toAmino(message: DenomTrace): DenomTraceAmino {
+  toAmino(message: DenomTrace, useInterfaces: boolean = true): DenomTraceAmino {
     const obj: any = {};
-    obj.path = message.path;
-    obj.base_denom = message.baseDenom;
+    obj.path = message.path === "" ? undefined : message.path;
+    obj.base_denom = message.baseDenom === "" ? undefined : message.baseDenom;
     return obj;
   },
   fromAminoMsg(object: DenomTraceAminoMsg): DenomTrace {
     return DenomTrace.fromAmino(object.value);
   },
-  toAminoMsg(message: DenomTrace): DenomTraceAminoMsg {
+  toAminoMsg(message: DenomTrace, useInterfaces: boolean = true): DenomTraceAminoMsg {
     return {
       type: "cosmos-sdk/DenomTrace",
-      value: DenomTrace.toAmino(message)
+      value: DenomTrace.toAmino(message, useInterfaces)
     };
   },
-  fromProtoMsg(message: DenomTraceProtoMsg): DenomTrace {
-    return DenomTrace.decode(message.value);
+  fromProtoMsg(message: DenomTraceProtoMsg, useInterfaces: boolean = true): DenomTrace {
+    return DenomTrace.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: DenomTrace): Uint8Array {
     return DenomTrace.encode(message).finish();
@@ -189,6 +200,8 @@ export const DenomTrace = {
     };
   }
 };
+GlobalDecoderRegistry.register(DenomTrace.typeUrl, DenomTrace);
+GlobalDecoderRegistry.registerAminoProtoMapping(DenomTrace.aminoType, DenomTrace.typeUrl);
 function createBaseParams(): Params {
   return {
     sendEnabled: false,
@@ -197,6 +210,16 @@ function createBaseParams(): Params {
 }
 export const Params = {
   typeUrl: "/ibc.applications.transfer.v1.Params",
+  aminoType: "cosmos-sdk/Params",
+  is(o: any): o is Params {
+    return o && (o.$typeUrl === Params.typeUrl || typeof o.sendEnabled === "boolean" && typeof o.receiveEnabled === "boolean");
+  },
+  isSDK(o: any): o is ParamsSDKType {
+    return o && (o.$typeUrl === Params.typeUrl || typeof o.send_enabled === "boolean" && typeof o.receive_enabled === "boolean");
+  },
+  isAmino(o: any): o is ParamsAmino {
+    return o && (o.$typeUrl === Params.typeUrl || typeof o.send_enabled === "boolean" && typeof o.receive_enabled === "boolean");
+  },
   encode(message: Params, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.sendEnabled === true) {
       writer.uint32(8).bool(message.sendEnabled);
@@ -206,7 +229,7 @@ export const Params = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): Params {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): Params {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseParams();
@@ -254,23 +277,23 @@ export const Params = {
     }
     return message;
   },
-  toAmino(message: Params): ParamsAmino {
+  toAmino(message: Params, useInterfaces: boolean = true): ParamsAmino {
     const obj: any = {};
-    obj.send_enabled = message.sendEnabled;
-    obj.receive_enabled = message.receiveEnabled;
+    obj.send_enabled = message.sendEnabled === false ? undefined : message.sendEnabled;
+    obj.receive_enabled = message.receiveEnabled === false ? undefined : message.receiveEnabled;
     return obj;
   },
   fromAminoMsg(object: ParamsAminoMsg): Params {
     return Params.fromAmino(object.value);
   },
-  toAminoMsg(message: Params): ParamsAminoMsg {
+  toAminoMsg(message: Params, useInterfaces: boolean = true): ParamsAminoMsg {
     return {
       type: "cosmos-sdk/Params",
-      value: Params.toAmino(message)
+      value: Params.toAmino(message, useInterfaces)
     };
   },
-  fromProtoMsg(message: ParamsProtoMsg): Params {
-    return Params.decode(message.value);
+  fromProtoMsg(message: ParamsProtoMsg, useInterfaces: boolean = true): Params {
+    return Params.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: Params): Uint8Array {
     return Params.encode(message).finish();
@@ -282,3 +305,5 @@ export const Params = {
     };
   }
 };
+GlobalDecoderRegistry.register(Params.typeUrl, Params);
+GlobalDecoderRegistry.registerAminoProtoMapping(Params.aminoType, Params.typeUrl);

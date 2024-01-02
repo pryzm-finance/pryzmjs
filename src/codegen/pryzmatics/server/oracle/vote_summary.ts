@@ -1,5 +1,6 @@
 import { VoteSummary, VoteSummaryAmino, VoteSummarySDKType } from "../../oracle/vote_summary";
 import { BinaryReader, BinaryWriter } from "../../../binary";
+import { GlobalDecoderRegistry } from "../../../registry";
 import { isSet } from "../../../helpers";
 export interface QueryVoteSummaryRequest {}
 export interface QueryVoteSummaryRequestProtoMsg {
@@ -34,10 +35,19 @@ function createBaseQueryVoteSummaryRequest(): QueryVoteSummaryRequest {
 }
 export const QueryVoteSummaryRequest = {
   typeUrl: "/pryzmatics.server.oracle.QueryVoteSummaryRequest",
+  is(o: any): o is QueryVoteSummaryRequest {
+    return o && o.$typeUrl === QueryVoteSummaryRequest.typeUrl;
+  },
+  isSDK(o: any): o is QueryVoteSummaryRequestSDKType {
+    return o && o.$typeUrl === QueryVoteSummaryRequest.typeUrl;
+  },
+  isAmino(o: any): o is QueryVoteSummaryRequestAmino {
+    return o && o.$typeUrl === QueryVoteSummaryRequest.typeUrl;
+  },
   encode(_: QueryVoteSummaryRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): QueryVoteSummaryRequest {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): QueryVoteSummaryRequest {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryVoteSummaryRequest();
@@ -66,15 +76,15 @@ export const QueryVoteSummaryRequest = {
     const message = createBaseQueryVoteSummaryRequest();
     return message;
   },
-  toAmino(_: QueryVoteSummaryRequest): QueryVoteSummaryRequestAmino {
+  toAmino(_: QueryVoteSummaryRequest, useInterfaces: boolean = true): QueryVoteSummaryRequestAmino {
     const obj: any = {};
     return obj;
   },
   fromAminoMsg(object: QueryVoteSummaryRequestAminoMsg): QueryVoteSummaryRequest {
     return QueryVoteSummaryRequest.fromAmino(object.value);
   },
-  fromProtoMsg(message: QueryVoteSummaryRequestProtoMsg): QueryVoteSummaryRequest {
-    return QueryVoteSummaryRequest.decode(message.value);
+  fromProtoMsg(message: QueryVoteSummaryRequestProtoMsg, useInterfaces: boolean = true): QueryVoteSummaryRequest {
+    return QueryVoteSummaryRequest.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: QueryVoteSummaryRequest): Uint8Array {
     return QueryVoteSummaryRequest.encode(message).finish();
@@ -86,6 +96,7 @@ export const QueryVoteSummaryRequest = {
     };
   }
 };
+GlobalDecoderRegistry.register(QueryVoteSummaryRequest.typeUrl, QueryVoteSummaryRequest);
 function createBaseQueryVoteSummaryResponse(): QueryVoteSummaryResponse {
   return {
     summary: VoteSummary.fromPartial({})
@@ -93,13 +104,22 @@ function createBaseQueryVoteSummaryResponse(): QueryVoteSummaryResponse {
 }
 export const QueryVoteSummaryResponse = {
   typeUrl: "/pryzmatics.server.oracle.QueryVoteSummaryResponse",
+  is(o: any): o is QueryVoteSummaryResponse {
+    return o && (o.$typeUrl === QueryVoteSummaryResponse.typeUrl || VoteSummary.is(o.summary));
+  },
+  isSDK(o: any): o is QueryVoteSummaryResponseSDKType {
+    return o && (o.$typeUrl === QueryVoteSummaryResponse.typeUrl || VoteSummary.isSDK(o.summary));
+  },
+  isAmino(o: any): o is QueryVoteSummaryResponseAmino {
+    return o && (o.$typeUrl === QueryVoteSummaryResponse.typeUrl || VoteSummary.isAmino(o.summary));
+  },
   encode(message: QueryVoteSummaryResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.summary !== undefined) {
       VoteSummary.encode(message.summary, writer.uint32(10).fork()).ldelim();
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): QueryVoteSummaryResponse {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): QueryVoteSummaryResponse {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryVoteSummaryResponse();
@@ -107,7 +127,7 @@ export const QueryVoteSummaryResponse = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.summary = VoteSummary.decode(reader, reader.uint32());
+          message.summary = VoteSummary.decode(reader, reader.uint32(), useInterfaces);
           break;
         default:
           reader.skipType(tag & 7);
@@ -138,16 +158,16 @@ export const QueryVoteSummaryResponse = {
     }
     return message;
   },
-  toAmino(message: QueryVoteSummaryResponse): QueryVoteSummaryResponseAmino {
+  toAmino(message: QueryVoteSummaryResponse, useInterfaces: boolean = true): QueryVoteSummaryResponseAmino {
     const obj: any = {};
-    obj.summary = message.summary ? VoteSummary.toAmino(message.summary) : undefined;
+    obj.summary = message.summary ? VoteSummary.toAmino(message.summary, useInterfaces) : undefined;
     return obj;
   },
   fromAminoMsg(object: QueryVoteSummaryResponseAminoMsg): QueryVoteSummaryResponse {
     return QueryVoteSummaryResponse.fromAmino(object.value);
   },
-  fromProtoMsg(message: QueryVoteSummaryResponseProtoMsg): QueryVoteSummaryResponse {
-    return QueryVoteSummaryResponse.decode(message.value);
+  fromProtoMsg(message: QueryVoteSummaryResponseProtoMsg, useInterfaces: boolean = true): QueryVoteSummaryResponse {
+    return QueryVoteSummaryResponse.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: QueryVoteSummaryResponse): Uint8Array {
     return QueryVoteSummaryResponse.encode(message).finish();
@@ -159,3 +179,4 @@ export const QueryVoteSummaryResponse = {
     };
   }
 };
+GlobalDecoderRegistry.register(QueryVoteSummaryResponse.typeUrl, QueryVoteSummaryResponse);

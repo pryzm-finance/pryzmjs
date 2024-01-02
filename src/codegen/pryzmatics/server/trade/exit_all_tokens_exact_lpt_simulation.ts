@@ -1,6 +1,7 @@
 import { Coin, CoinAmino, CoinSDKType } from "../../../cosmos/base/v1beta1/coin";
 import { BinaryReader, BinaryWriter } from "../../../binary";
-import { isSet } from "../../../helpers";
+import { isSet, padDecimal } from "../../../helpers";
+import { GlobalDecoderRegistry } from "../../../registry";
 import { Decimal } from "@cosmjs/math";
 export interface QueryExitAllTokensExactLptSimulationRequest {
   poolId: bigint;
@@ -59,6 +60,15 @@ function createBaseQueryExitAllTokensExactLptSimulationRequest(): QueryExitAllTo
 }
 export const QueryExitAllTokensExactLptSimulationRequest = {
   typeUrl: "/pryzmatics.server.trade.QueryExitAllTokensExactLptSimulationRequest",
+  is(o: any): o is QueryExitAllTokensExactLptSimulationRequest {
+    return o && (o.$typeUrl === QueryExitAllTokensExactLptSimulationRequest.typeUrl || typeof o.poolId === "bigint" && typeof o.lptInAmount === "string");
+  },
+  isSDK(o: any): o is QueryExitAllTokensExactLptSimulationRequestSDKType {
+    return o && (o.$typeUrl === QueryExitAllTokensExactLptSimulationRequest.typeUrl || typeof o.pool_id === "bigint" && typeof o.lpt_in_amount === "string");
+  },
+  isAmino(o: any): o is QueryExitAllTokensExactLptSimulationRequestAmino {
+    return o && (o.$typeUrl === QueryExitAllTokensExactLptSimulationRequest.typeUrl || typeof o.pool_id === "bigint" && typeof o.lpt_in_amount === "string");
+  },
   encode(message: QueryExitAllTokensExactLptSimulationRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.poolId !== BigInt(0)) {
       writer.uint32(8).uint64(message.poolId);
@@ -68,7 +78,7 @@ export const QueryExitAllTokensExactLptSimulationRequest = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): QueryExitAllTokensExactLptSimulationRequest {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): QueryExitAllTokensExactLptSimulationRequest {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryExitAllTokensExactLptSimulationRequest();
@@ -116,17 +126,17 @@ export const QueryExitAllTokensExactLptSimulationRequest = {
     }
     return message;
   },
-  toAmino(message: QueryExitAllTokensExactLptSimulationRequest): QueryExitAllTokensExactLptSimulationRequestAmino {
+  toAmino(message: QueryExitAllTokensExactLptSimulationRequest, useInterfaces: boolean = true): QueryExitAllTokensExactLptSimulationRequestAmino {
     const obj: any = {};
     obj.pool_id = message.poolId ? message.poolId.toString() : undefined;
-    obj.lpt_in_amount = message.lptInAmount;
+    obj.lpt_in_amount = message.lptInAmount === "" ? undefined : message.lptInAmount;
     return obj;
   },
   fromAminoMsg(object: QueryExitAllTokensExactLptSimulationRequestAminoMsg): QueryExitAllTokensExactLptSimulationRequest {
     return QueryExitAllTokensExactLptSimulationRequest.fromAmino(object.value);
   },
-  fromProtoMsg(message: QueryExitAllTokensExactLptSimulationRequestProtoMsg): QueryExitAllTokensExactLptSimulationRequest {
-    return QueryExitAllTokensExactLptSimulationRequest.decode(message.value);
+  fromProtoMsg(message: QueryExitAllTokensExactLptSimulationRequestProtoMsg, useInterfaces: boolean = true): QueryExitAllTokensExactLptSimulationRequest {
+    return QueryExitAllTokensExactLptSimulationRequest.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: QueryExitAllTokensExactLptSimulationRequest): Uint8Array {
     return QueryExitAllTokensExactLptSimulationRequest.encode(message).finish();
@@ -138,6 +148,7 @@ export const QueryExitAllTokensExactLptSimulationRequest = {
     };
   }
 };
+GlobalDecoderRegistry.register(QueryExitAllTokensExactLptSimulationRequest.typeUrl, QueryExitAllTokensExactLptSimulationRequest);
 function createBaseQueryExitAllTokensExactLptSimulationResponse(): QueryExitAllTokensExactLptSimulationResponse {
   return {
     amountIn: Coin.fromPartial({}),
@@ -149,6 +160,15 @@ function createBaseQueryExitAllTokensExactLptSimulationResponse(): QueryExitAllT
 }
 export const QueryExitAllTokensExactLptSimulationResponse = {
   typeUrl: "/pryzmatics.server.trade.QueryExitAllTokensExactLptSimulationResponse",
+  is(o: any): o is QueryExitAllTokensExactLptSimulationResponse {
+    return o && (o.$typeUrl === QueryExitAllTokensExactLptSimulationResponse.typeUrl || Coin.is(o.amountIn) && Array.isArray(o.amountsOut) && (!o.amountsOut.length || Coin.is(o.amountsOut[0])) && Coin.is(o.protocolFee) && Coin.is(o.protocolFeeLpTerms) && typeof o.priceImpact === "string");
+  },
+  isSDK(o: any): o is QueryExitAllTokensExactLptSimulationResponseSDKType {
+    return o && (o.$typeUrl === QueryExitAllTokensExactLptSimulationResponse.typeUrl || Coin.isSDK(o.amount_in) && Array.isArray(o.amounts_out) && (!o.amounts_out.length || Coin.isSDK(o.amounts_out[0])) && Coin.isSDK(o.protocol_fee) && Coin.isSDK(o.protocol_fee_lp_terms) && typeof o.price_impact === "string");
+  },
+  isAmino(o: any): o is QueryExitAllTokensExactLptSimulationResponseAmino {
+    return o && (o.$typeUrl === QueryExitAllTokensExactLptSimulationResponse.typeUrl || Coin.isAmino(o.amount_in) && Array.isArray(o.amounts_out) && (!o.amounts_out.length || Coin.isAmino(o.amounts_out[0])) && Coin.isAmino(o.protocol_fee) && Coin.isAmino(o.protocol_fee_lp_terms) && typeof o.price_impact === "string");
+  },
   encode(message: QueryExitAllTokensExactLptSimulationResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.amountIn !== undefined) {
       Coin.encode(message.amountIn, writer.uint32(10).fork()).ldelim();
@@ -167,7 +187,7 @@ export const QueryExitAllTokensExactLptSimulationResponse = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): QueryExitAllTokensExactLptSimulationResponse {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): QueryExitAllTokensExactLptSimulationResponse {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryExitAllTokensExactLptSimulationResponse();
@@ -175,16 +195,16 @@ export const QueryExitAllTokensExactLptSimulationResponse = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.amountIn = Coin.decode(reader, reader.uint32());
+          message.amountIn = Coin.decode(reader, reader.uint32(), useInterfaces);
           break;
         case 2:
-          message.amountsOut.push(Coin.decode(reader, reader.uint32()));
+          message.amountsOut.push(Coin.decode(reader, reader.uint32(), useInterfaces));
           break;
         case 3:
-          message.protocolFee = Coin.decode(reader, reader.uint32());
+          message.protocolFee = Coin.decode(reader, reader.uint32(), useInterfaces);
           break;
         case 4:
-          message.protocolFeeLpTerms = Coin.decode(reader, reader.uint32());
+          message.protocolFeeLpTerms = Coin.decode(reader, reader.uint32(), useInterfaces);
           break;
         case 5:
           message.priceImpact = Decimal.fromAtomics(reader.string(), 18).toString();
@@ -244,24 +264,24 @@ export const QueryExitAllTokensExactLptSimulationResponse = {
     }
     return message;
   },
-  toAmino(message: QueryExitAllTokensExactLptSimulationResponse): QueryExitAllTokensExactLptSimulationResponseAmino {
+  toAmino(message: QueryExitAllTokensExactLptSimulationResponse, useInterfaces: boolean = true): QueryExitAllTokensExactLptSimulationResponseAmino {
     const obj: any = {};
-    obj.amount_in = message.amountIn ? Coin.toAmino(message.amountIn) : undefined;
+    obj.amount_in = message.amountIn ? Coin.toAmino(message.amountIn, useInterfaces) : undefined;
     if (message.amountsOut) {
-      obj.amounts_out = message.amountsOut.map(e => e ? Coin.toAmino(e) : undefined);
+      obj.amounts_out = message.amountsOut.map(e => e ? Coin.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.amounts_out = [];
+      obj.amounts_out = null;
     }
-    obj.protocol_fee = message.protocolFee ? Coin.toAmino(message.protocolFee) : undefined;
-    obj.protocol_fee_lp_terms = message.protocolFeeLpTerms ? Coin.toAmino(message.protocolFeeLpTerms) : undefined;
-    obj.price_impact = message.priceImpact;
+    obj.protocol_fee = message.protocolFee ? Coin.toAmino(message.protocolFee, useInterfaces) : undefined;
+    obj.protocol_fee_lp_terms = message.protocolFeeLpTerms ? Coin.toAmino(message.protocolFeeLpTerms, useInterfaces) : undefined;
+    obj.price_impact = padDecimal(message.priceImpact) === "" ? undefined : padDecimal(message.priceImpact);
     return obj;
   },
   fromAminoMsg(object: QueryExitAllTokensExactLptSimulationResponseAminoMsg): QueryExitAllTokensExactLptSimulationResponse {
     return QueryExitAllTokensExactLptSimulationResponse.fromAmino(object.value);
   },
-  fromProtoMsg(message: QueryExitAllTokensExactLptSimulationResponseProtoMsg): QueryExitAllTokensExactLptSimulationResponse {
-    return QueryExitAllTokensExactLptSimulationResponse.decode(message.value);
+  fromProtoMsg(message: QueryExitAllTokensExactLptSimulationResponseProtoMsg, useInterfaces: boolean = true): QueryExitAllTokensExactLptSimulationResponse {
+    return QueryExitAllTokensExactLptSimulationResponse.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: QueryExitAllTokensExactLptSimulationResponse): Uint8Array {
     return QueryExitAllTokensExactLptSimulationResponse.encode(message).finish();
@@ -273,3 +293,4 @@ export const QueryExitAllTokensExactLptSimulationResponse = {
     };
   }
 };
+GlobalDecoderRegistry.register(QueryExitAllTokensExactLptSimulationResponse.typeUrl, QueryExitAllTokensExactLptSimulationResponse);

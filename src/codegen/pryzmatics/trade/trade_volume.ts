@@ -1,6 +1,7 @@
 import { BinaryReader, BinaryWriter } from "../../binary";
 import { Decimal } from "@cosmjs/math";
-import { isSet } from "../../helpers";
+import { isSet, padDecimal } from "../../helpers";
+import { GlobalDecoderRegistry } from "../../registry";
 export interface FavoritePair {
   tokenIn: string;
   tokenOut: string;
@@ -33,6 +34,15 @@ function createBaseFavoritePair(): FavoritePair {
 }
 export const FavoritePair = {
   typeUrl: "/pryzmatics.trade.FavoritePair",
+  is(o: any): o is FavoritePair {
+    return o && (o.$typeUrl === FavoritePair.typeUrl || typeof o.tokenIn === "string" && typeof o.tokenOut === "string" && typeof o.volume === "string");
+  },
+  isSDK(o: any): o is FavoritePairSDKType {
+    return o && (o.$typeUrl === FavoritePair.typeUrl || typeof o.token_in === "string" && typeof o.token_out === "string" && typeof o.volume === "string");
+  },
+  isAmino(o: any): o is FavoritePairAmino {
+    return o && (o.$typeUrl === FavoritePair.typeUrl || typeof o.token_in === "string" && typeof o.token_out === "string" && typeof o.volume === "string");
+  },
   encode(message: FavoritePair, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.tokenIn !== "") {
       writer.uint32(10).string(message.tokenIn);
@@ -45,7 +55,7 @@ export const FavoritePair = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): FavoritePair {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): FavoritePair {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseFavoritePair();
@@ -102,18 +112,18 @@ export const FavoritePair = {
     }
     return message;
   },
-  toAmino(message: FavoritePair): FavoritePairAmino {
+  toAmino(message: FavoritePair, useInterfaces: boolean = true): FavoritePairAmino {
     const obj: any = {};
-    obj.token_in = message.tokenIn;
-    obj.token_out = message.tokenOut;
-    obj.volume = message.volume;
+    obj.token_in = message.tokenIn === "" ? undefined : message.tokenIn;
+    obj.token_out = message.tokenOut === "" ? undefined : message.tokenOut;
+    obj.volume = padDecimal(message.volume) === "" ? undefined : padDecimal(message.volume);
     return obj;
   },
   fromAminoMsg(object: FavoritePairAminoMsg): FavoritePair {
     return FavoritePair.fromAmino(object.value);
   },
-  fromProtoMsg(message: FavoritePairProtoMsg): FavoritePair {
-    return FavoritePair.decode(message.value);
+  fromProtoMsg(message: FavoritePairProtoMsg, useInterfaces: boolean = true): FavoritePair {
+    return FavoritePair.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: FavoritePair): Uint8Array {
     return FavoritePair.encode(message).finish();
@@ -125,3 +135,4 @@ export const FavoritePair = {
     };
   }
 };
+GlobalDecoderRegistry.register(FavoritePair.typeUrl, FavoritePair);

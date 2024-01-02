@@ -1,6 +1,7 @@
 import { VoteType, voteTypeFromJSON, voteTypeToJSON } from "../../refractedlabs/oracle/v1/event";
-import { BinaryReader, BinaryWriter } from "../../binary";
 import { isSet } from "../../helpers";
+import { BinaryReader, BinaryWriter } from "../../binary";
+import { GlobalDecoderRegistry } from "../../registry";
 export interface BallotVoteResult {
   namespace: string;
   module: string;
@@ -59,6 +60,15 @@ function createBaseBallotVoteResult(): BallotVoteResult {
 }
 export const BallotVoteResult = {
   typeUrl: "/pryzmatics.oracle.BallotVoteResult",
+  is(o: any): o is BallotVoteResult {
+    return o && (o.$typeUrl === BallotVoteResult.typeUrl || typeof o.namespace === "string" && typeof o.module === "string" && typeof o.voteIntervalCloseBlockHeight === "bigint" && typeof o.quorumReached === "boolean" && typeof o.ballotPower === "bigint" && typeof o.majorityAchieved === "boolean" && isSet(o.majorityVoteType) && typeof o.majorityVotePayload === "string" && typeof o.callbackError === "string");
+  },
+  isSDK(o: any): o is BallotVoteResultSDKType {
+    return o && (o.$typeUrl === BallotVoteResult.typeUrl || typeof o.namespace === "string" && typeof o.module === "string" && typeof o.vote_interval_close_block_height === "bigint" && typeof o.quorum_reached === "boolean" && typeof o.ballot_power === "bigint" && typeof o.majority_achieved === "boolean" && isSet(o.majority_vote_type) && typeof o.majority_vote_payload === "string" && typeof o.callback_error === "string");
+  },
+  isAmino(o: any): o is BallotVoteResultAmino {
+    return o && (o.$typeUrl === BallotVoteResult.typeUrl || typeof o.namespace === "string" && typeof o.module === "string" && typeof o.vote_interval_close_block_height === "bigint" && typeof o.quorum_reached === "boolean" && typeof o.ballot_power === "bigint" && typeof o.majority_achieved === "boolean" && isSet(o.majority_vote_type) && typeof o.majority_vote_payload === "string" && typeof o.callback_error === "string");
+  },
   encode(message: BallotVoteResult, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.namespace !== "") {
       writer.uint32(10).string(message.namespace);
@@ -89,7 +99,7 @@ export const BallotVoteResult = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): BallotVoteResult {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): BallotVoteResult {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseBallotVoteResult();
@@ -190,7 +200,7 @@ export const BallotVoteResult = {
       message.majorityAchieved = object.majority_achieved;
     }
     if (object.majority_vote_type !== undefined && object.majority_vote_type !== null) {
-      message.majorityVoteType = voteTypeFromJSON(object.majority_vote_type);
+      message.majorityVoteType = object.majority_vote_type;
     }
     if (object.majority_vote_payload !== undefined && object.majority_vote_payload !== null) {
       message.majorityVotePayload = object.majority_vote_payload;
@@ -200,24 +210,24 @@ export const BallotVoteResult = {
     }
     return message;
   },
-  toAmino(message: BallotVoteResult): BallotVoteResultAmino {
+  toAmino(message: BallotVoteResult, useInterfaces: boolean = true): BallotVoteResultAmino {
     const obj: any = {};
-    obj.namespace = message.namespace;
-    obj.module = message.module;
+    obj.namespace = message.namespace === "" ? undefined : message.namespace;
+    obj.module = message.module === "" ? undefined : message.module;
     obj.vote_interval_close_block_height = message.voteIntervalCloseBlockHeight ? message.voteIntervalCloseBlockHeight.toString() : undefined;
-    obj.quorum_reached = message.quorumReached;
+    obj.quorum_reached = message.quorumReached === false ? undefined : message.quorumReached;
     obj.ballot_power = message.ballotPower ? message.ballotPower.toString() : undefined;
-    obj.majority_achieved = message.majorityAchieved;
-    obj.majority_vote_type = voteTypeToJSON(message.majorityVoteType);
-    obj.majority_vote_payload = message.majorityVotePayload;
-    obj.callback_error = message.callbackError;
+    obj.majority_achieved = message.majorityAchieved === false ? undefined : message.majorityAchieved;
+    obj.majority_vote_type = message.majorityVoteType === 0 ? undefined : message.majorityVoteType;
+    obj.majority_vote_payload = message.majorityVotePayload === "" ? undefined : message.majorityVotePayload;
+    obj.callback_error = message.callbackError === "" ? undefined : message.callbackError;
     return obj;
   },
   fromAminoMsg(object: BallotVoteResultAminoMsg): BallotVoteResult {
     return BallotVoteResult.fromAmino(object.value);
   },
-  fromProtoMsg(message: BallotVoteResultProtoMsg): BallotVoteResult {
-    return BallotVoteResult.decode(message.value);
+  fromProtoMsg(message: BallotVoteResultProtoMsg, useInterfaces: boolean = true): BallotVoteResult {
+    return BallotVoteResult.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: BallotVoteResult): Uint8Array {
     return BallotVoteResult.encode(message).finish();
@@ -229,3 +239,4 @@ export const BallotVoteResult = {
     };
   }
 };
+GlobalDecoderRegistry.register(BallotVoteResult.typeUrl, BallotVoteResult);

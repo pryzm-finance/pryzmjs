@@ -1,6 +1,7 @@
 import { AssetState, AssetStateAmino, AssetStateSDKType } from "./asset_state";
 import { BinaryReader, BinaryWriter } from "../../../binary";
 import { isSet } from "../../../helpers";
+import { GlobalDecoderRegistry } from "../../../registry";
 export interface EventRefract {
   creator: string;
   cAmount: string;
@@ -123,6 +124,15 @@ function createBaseEventRefract(): EventRefract {
 }
 export const EventRefract = {
   typeUrl: "/pryzm.refractor.v1.EventRefract",
+  is(o: any): o is EventRefract {
+    return o && (o.$typeUrl === EventRefract.typeUrl || typeof o.creator === "string" && typeof o.cAmount === "string" && typeof o.maturity === "string" && typeof o.refractedPAmount === "string" && typeof o.refractedYAmount === "string" && typeof o.fee === "string");
+  },
+  isSDK(o: any): o is EventRefractSDKType {
+    return o && (o.$typeUrl === EventRefract.typeUrl || typeof o.creator === "string" && typeof o.c_amount === "string" && typeof o.maturity === "string" && typeof o.refracted_p_amount === "string" && typeof o.refracted_y_amount === "string" && typeof o.fee === "string");
+  },
+  isAmino(o: any): o is EventRefractAmino {
+    return o && (o.$typeUrl === EventRefract.typeUrl || typeof o.creator === "string" && typeof o.c_amount === "string" && typeof o.maturity === "string" && typeof o.refracted_p_amount === "string" && typeof o.refracted_y_amount === "string" && typeof o.fee === "string");
+  },
   encode(message: EventRefract, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.creator !== "") {
       writer.uint32(10).string(message.creator);
@@ -144,7 +154,7 @@ export const EventRefract = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): EventRefract {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): EventRefract {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseEventRefract();
@@ -228,21 +238,21 @@ export const EventRefract = {
     }
     return message;
   },
-  toAmino(message: EventRefract): EventRefractAmino {
+  toAmino(message: EventRefract, useInterfaces: boolean = true): EventRefractAmino {
     const obj: any = {};
-    obj.creator = message.creator;
-    obj.c_amount = message.cAmount;
-    obj.maturity = message.maturity;
-    obj.refracted_p_amount = message.refractedPAmount;
-    obj.refracted_y_amount = message.refractedYAmount;
-    obj.fee = message.fee;
+    obj.creator = message.creator === "" ? undefined : message.creator;
+    obj.c_amount = message.cAmount === "" ? undefined : message.cAmount;
+    obj.maturity = message.maturity === "" ? undefined : message.maturity;
+    obj.refracted_p_amount = message.refractedPAmount === "" ? undefined : message.refractedPAmount;
+    obj.refracted_y_amount = message.refractedYAmount === "" ? undefined : message.refractedYAmount;
+    obj.fee = message.fee === "" ? undefined : message.fee;
     return obj;
   },
   fromAminoMsg(object: EventRefractAminoMsg): EventRefract {
     return EventRefract.fromAmino(object.value);
   },
-  fromProtoMsg(message: EventRefractProtoMsg): EventRefract {
-    return EventRefract.decode(message.value);
+  fromProtoMsg(message: EventRefractProtoMsg, useInterfaces: boolean = true): EventRefract {
+    return EventRefract.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: EventRefract): Uint8Array {
     return EventRefract.encode(message).finish();
@@ -254,6 +264,7 @@ export const EventRefract = {
     };
   }
 };
+GlobalDecoderRegistry.register(EventRefract.typeUrl, EventRefract);
 function createBaseEventRedeem(): EventRedeem {
   return {
     creator: "",
@@ -266,6 +277,15 @@ function createBaseEventRedeem(): EventRedeem {
 }
 export const EventRedeem = {
   typeUrl: "/pryzm.refractor.v1.EventRedeem",
+  is(o: any): o is EventRedeem {
+    return o && (o.$typeUrl === EventRedeem.typeUrl || typeof o.creator === "string" && typeof o.pAmount === "string" && typeof o.yAmount === "string" && typeof o.maturity === "string" && typeof o.redeemedCAmount === "string" && typeof o.fee === "string");
+  },
+  isSDK(o: any): o is EventRedeemSDKType {
+    return o && (o.$typeUrl === EventRedeem.typeUrl || typeof o.creator === "string" && typeof o.p_amount === "string" && typeof o.y_amount === "string" && typeof o.maturity === "string" && typeof o.redeemed_c_amount === "string" && typeof o.fee === "string");
+  },
+  isAmino(o: any): o is EventRedeemAmino {
+    return o && (o.$typeUrl === EventRedeem.typeUrl || typeof o.creator === "string" && typeof o.p_amount === "string" && typeof o.y_amount === "string" && typeof o.maturity === "string" && typeof o.redeemed_c_amount === "string" && typeof o.fee === "string");
+  },
   encode(message: EventRedeem, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.creator !== "") {
       writer.uint32(10).string(message.creator);
@@ -287,7 +307,7 @@ export const EventRedeem = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): EventRedeem {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): EventRedeem {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseEventRedeem();
@@ -371,21 +391,21 @@ export const EventRedeem = {
     }
     return message;
   },
-  toAmino(message: EventRedeem): EventRedeemAmino {
+  toAmino(message: EventRedeem, useInterfaces: boolean = true): EventRedeemAmino {
     const obj: any = {};
-    obj.creator = message.creator;
-    obj.p_amount = message.pAmount;
-    obj.y_amount = message.yAmount;
-    obj.maturity = message.maturity;
-    obj.redeemed_c_amount = message.redeemedCAmount;
-    obj.fee = message.fee;
+    obj.creator = message.creator === "" ? undefined : message.creator;
+    obj.p_amount = message.pAmount === "" ? undefined : message.pAmount;
+    obj.y_amount = message.yAmount === "" ? undefined : message.yAmount;
+    obj.maturity = message.maturity === "" ? undefined : message.maturity;
+    obj.redeemed_c_amount = message.redeemedCAmount === "" ? undefined : message.redeemedCAmount;
+    obj.fee = message.fee === "" ? undefined : message.fee;
     return obj;
   },
   fromAminoMsg(object: EventRedeemAminoMsg): EventRedeem {
     return EventRedeem.fromAmino(object.value);
   },
-  fromProtoMsg(message: EventRedeemProtoMsg): EventRedeem {
-    return EventRedeem.decode(message.value);
+  fromProtoMsg(message: EventRedeemProtoMsg, useInterfaces: boolean = true): EventRedeem {
+    return EventRedeem.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: EventRedeem): Uint8Array {
     return EventRedeem.encode(message).finish();
@@ -397,6 +417,7 @@ export const EventRedeem = {
     };
   }
 };
+GlobalDecoderRegistry.register(EventRedeem.typeUrl, EventRedeem);
 function createBaseEventRefractorYieldDistribution(): EventRefractorYieldDistribution {
   return {
     assetId: "",
@@ -408,6 +429,15 @@ function createBaseEventRefractorYieldDistribution(): EventRefractorYieldDistrib
 }
 export const EventRefractorYieldDistribution = {
   typeUrl: "/pryzm.refractor.v1.EventRefractorYieldDistribution",
+  is(o: any): o is EventRefractorYieldDistribution {
+    return o && (o.$typeUrl === EventRefractorYieldDistribution.typeUrl || typeof o.assetId === "string" && typeof o.totalYield === "string" && typeof o.protocolFee === "string" && typeof o.stakeYield === "string" && typeof o.excessYield === "string");
+  },
+  isSDK(o: any): o is EventRefractorYieldDistributionSDKType {
+    return o && (o.$typeUrl === EventRefractorYieldDistribution.typeUrl || typeof o.asset_id === "string" && typeof o.total_yield === "string" && typeof o.protocol_fee === "string" && typeof o.stake_yield === "string" && typeof o.excess_yield === "string");
+  },
+  isAmino(o: any): o is EventRefractorYieldDistributionAmino {
+    return o && (o.$typeUrl === EventRefractorYieldDistribution.typeUrl || typeof o.asset_id === "string" && typeof o.total_yield === "string" && typeof o.protocol_fee === "string" && typeof o.stake_yield === "string" && typeof o.excess_yield === "string");
+  },
   encode(message: EventRefractorYieldDistribution, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.assetId !== "") {
       writer.uint32(10).string(message.assetId);
@@ -426,7 +456,7 @@ export const EventRefractorYieldDistribution = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): EventRefractorYieldDistribution {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): EventRefractorYieldDistribution {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseEventRefractorYieldDistribution();
@@ -501,20 +531,20 @@ export const EventRefractorYieldDistribution = {
     }
     return message;
   },
-  toAmino(message: EventRefractorYieldDistribution): EventRefractorYieldDistributionAmino {
+  toAmino(message: EventRefractorYieldDistribution, useInterfaces: boolean = true): EventRefractorYieldDistributionAmino {
     const obj: any = {};
-    obj.asset_id = message.assetId;
-    obj.total_yield = message.totalYield;
-    obj.protocol_fee = message.protocolFee;
-    obj.stake_yield = message.stakeYield;
-    obj.excess_yield = message.excessYield;
+    obj.asset_id = message.assetId === "" ? undefined : message.assetId;
+    obj.total_yield = message.totalYield === "" ? undefined : message.totalYield;
+    obj.protocol_fee = message.protocolFee === "" ? undefined : message.protocolFee;
+    obj.stake_yield = message.stakeYield === "" ? undefined : message.stakeYield;
+    obj.excess_yield = message.excessYield === "" ? undefined : message.excessYield;
     return obj;
   },
   fromAminoMsg(object: EventRefractorYieldDistributionAminoMsg): EventRefractorYieldDistribution {
     return EventRefractorYieldDistribution.fromAmino(object.value);
   },
-  fromProtoMsg(message: EventRefractorYieldDistributionProtoMsg): EventRefractorYieldDistribution {
-    return EventRefractorYieldDistribution.decode(message.value);
+  fromProtoMsg(message: EventRefractorYieldDistributionProtoMsg, useInterfaces: boolean = true): EventRefractorYieldDistribution {
+    return EventRefractorYieldDistribution.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: EventRefractorYieldDistribution): Uint8Array {
     return EventRefractorYieldDistribution.encode(message).finish();
@@ -526,6 +556,7 @@ export const EventRefractorYieldDistribution = {
     };
   }
 };
+GlobalDecoderRegistry.register(EventRefractorYieldDistribution.typeUrl, EventRefractorYieldDistribution);
 function createBaseEventSetAssetState(): EventSetAssetState {
   return {
     assetState: AssetState.fromPartial({})
@@ -533,13 +564,22 @@ function createBaseEventSetAssetState(): EventSetAssetState {
 }
 export const EventSetAssetState = {
   typeUrl: "/pryzm.refractor.v1.EventSetAssetState",
+  is(o: any): o is EventSetAssetState {
+    return o && (o.$typeUrl === EventSetAssetState.typeUrl || AssetState.is(o.assetState));
+  },
+  isSDK(o: any): o is EventSetAssetStateSDKType {
+    return o && (o.$typeUrl === EventSetAssetState.typeUrl || AssetState.isSDK(o.asset_state));
+  },
+  isAmino(o: any): o is EventSetAssetStateAmino {
+    return o && (o.$typeUrl === EventSetAssetState.typeUrl || AssetState.isAmino(o.asset_state));
+  },
   encode(message: EventSetAssetState, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.assetState !== undefined) {
       AssetState.encode(message.assetState, writer.uint32(10).fork()).ldelim();
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): EventSetAssetState {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): EventSetAssetState {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseEventSetAssetState();
@@ -547,7 +587,7 @@ export const EventSetAssetState = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.assetState = AssetState.decode(reader, reader.uint32());
+          message.assetState = AssetState.decode(reader, reader.uint32(), useInterfaces);
           break;
         default:
           reader.skipType(tag & 7);
@@ -578,16 +618,16 @@ export const EventSetAssetState = {
     }
     return message;
   },
-  toAmino(message: EventSetAssetState): EventSetAssetStateAmino {
+  toAmino(message: EventSetAssetState, useInterfaces: boolean = true): EventSetAssetStateAmino {
     const obj: any = {};
-    obj.asset_state = message.assetState ? AssetState.toAmino(message.assetState) : undefined;
+    obj.asset_state = message.assetState ? AssetState.toAmino(message.assetState, useInterfaces) : undefined;
     return obj;
   },
   fromAminoMsg(object: EventSetAssetStateAminoMsg): EventSetAssetState {
     return EventSetAssetState.fromAmino(object.value);
   },
-  fromProtoMsg(message: EventSetAssetStateProtoMsg): EventSetAssetState {
-    return EventSetAssetState.decode(message.value);
+  fromProtoMsg(message: EventSetAssetStateProtoMsg, useInterfaces: boolean = true): EventSetAssetState {
+    return EventSetAssetState.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: EventSetAssetState): Uint8Array {
     return EventSetAssetState.encode(message).finish();
@@ -599,3 +639,4 @@ export const EventSetAssetState = {
     };
   }
 };
+GlobalDecoderRegistry.register(EventSetAssetState.typeUrl, EventSetAssetState);

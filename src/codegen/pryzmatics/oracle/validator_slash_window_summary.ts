@@ -1,5 +1,6 @@
 import { BinaryReader, BinaryWriter } from "../../binary";
 import { isSet } from "../../helpers";
+import { GlobalDecoderRegistry } from "../../registry";
 export interface ValidatorSlashWindowSummary {
   validator: string;
   slashWindowCloseBlockHeight: bigint;
@@ -44,6 +45,15 @@ function createBaseValidatorSlashWindowSummary(): ValidatorSlashWindowSummary {
 }
 export const ValidatorSlashWindowSummary = {
   typeUrl: "/pryzmatics.oracle.ValidatorSlashWindowSummary",
+  is(o: any): o is ValidatorSlashWindowSummary {
+    return o && (o.$typeUrl === ValidatorSlashWindowSummary.typeUrl || typeof o.validator === "string" && typeof o.slashWindowCloseBlockHeight === "bigint" && typeof o.validatorPower === "bigint" && typeof o.missCounter === "bigint" && typeof o.jailed === "boolean" && typeof o.slashAmount === "string");
+  },
+  isSDK(o: any): o is ValidatorSlashWindowSummarySDKType {
+    return o && (o.$typeUrl === ValidatorSlashWindowSummary.typeUrl || typeof o.validator === "string" && typeof o.slash_window_close_block_height === "bigint" && typeof o.validator_power === "bigint" && typeof o.miss_counter === "bigint" && typeof o.jailed === "boolean" && typeof o.slash_amount === "string");
+  },
+  isAmino(o: any): o is ValidatorSlashWindowSummaryAmino {
+    return o && (o.$typeUrl === ValidatorSlashWindowSummary.typeUrl || typeof o.validator === "string" && typeof o.slash_window_close_block_height === "bigint" && typeof o.validator_power === "bigint" && typeof o.miss_counter === "bigint" && typeof o.jailed === "boolean" && typeof o.slash_amount === "string");
+  },
   encode(message: ValidatorSlashWindowSummary, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.validator !== "") {
       writer.uint32(10).string(message.validator);
@@ -65,7 +75,7 @@ export const ValidatorSlashWindowSummary = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): ValidatorSlashWindowSummary {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): ValidatorSlashWindowSummary {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseValidatorSlashWindowSummary();
@@ -149,21 +159,21 @@ export const ValidatorSlashWindowSummary = {
     }
     return message;
   },
-  toAmino(message: ValidatorSlashWindowSummary): ValidatorSlashWindowSummaryAmino {
+  toAmino(message: ValidatorSlashWindowSummary, useInterfaces: boolean = true): ValidatorSlashWindowSummaryAmino {
     const obj: any = {};
-    obj.validator = message.validator;
+    obj.validator = message.validator === "" ? undefined : message.validator;
     obj.slash_window_close_block_height = message.slashWindowCloseBlockHeight ? message.slashWindowCloseBlockHeight.toString() : undefined;
     obj.validator_power = message.validatorPower ? message.validatorPower.toString() : undefined;
     obj.miss_counter = message.missCounter ? message.missCounter.toString() : undefined;
-    obj.jailed = message.jailed;
-    obj.slash_amount = message.slashAmount;
+    obj.jailed = message.jailed === false ? undefined : message.jailed;
+    obj.slash_amount = message.slashAmount === "" ? undefined : message.slashAmount;
     return obj;
   },
   fromAminoMsg(object: ValidatorSlashWindowSummaryAminoMsg): ValidatorSlashWindowSummary {
     return ValidatorSlashWindowSummary.fromAmino(object.value);
   },
-  fromProtoMsg(message: ValidatorSlashWindowSummaryProtoMsg): ValidatorSlashWindowSummary {
-    return ValidatorSlashWindowSummary.decode(message.value);
+  fromProtoMsg(message: ValidatorSlashWindowSummaryProtoMsg, useInterfaces: boolean = true): ValidatorSlashWindowSummary {
+    return ValidatorSlashWindowSummary.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: ValidatorSlashWindowSummary): Uint8Array {
     return ValidatorSlashWindowSummary.encode(message).finish();
@@ -175,3 +185,4 @@ export const ValidatorSlashWindowSummary = {
     };
   }
 };
+GlobalDecoderRegistry.register(ValidatorSlashWindowSummary.typeUrl, ValidatorSlashWindowSummary);

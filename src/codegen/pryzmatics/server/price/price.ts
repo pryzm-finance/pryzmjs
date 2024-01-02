@@ -1,5 +1,6 @@
 import { BinaryReader, BinaryWriter } from "../../../binary";
-import { isSet } from "../../../helpers";
+import { isSet, padDecimal } from "../../../helpers";
+import { GlobalDecoderRegistry } from "../../../registry";
 import { Decimal } from "@cosmjs/math";
 export interface QueryPriceRequest {
   tokenIn: string;
@@ -46,6 +47,15 @@ function createBaseQueryPriceRequest(): QueryPriceRequest {
 }
 export const QueryPriceRequest = {
   typeUrl: "/pryzmatics.server.price.QueryPriceRequest",
+  is(o: any): o is QueryPriceRequest {
+    return o && (o.$typeUrl === QueryPriceRequest.typeUrl || typeof o.tokenIn === "string" && typeof o.tokenOut === "string");
+  },
+  isSDK(o: any): o is QueryPriceRequestSDKType {
+    return o && (o.$typeUrl === QueryPriceRequest.typeUrl || typeof o.token_in === "string" && typeof o.token_out === "string");
+  },
+  isAmino(o: any): o is QueryPriceRequestAmino {
+    return o && (o.$typeUrl === QueryPriceRequest.typeUrl || typeof o.token_in === "string" && typeof o.token_out === "string");
+  },
   encode(message: QueryPriceRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.tokenIn !== "") {
       writer.uint32(10).string(message.tokenIn);
@@ -55,7 +65,7 @@ export const QueryPriceRequest = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): QueryPriceRequest {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): QueryPriceRequest {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryPriceRequest();
@@ -103,17 +113,17 @@ export const QueryPriceRequest = {
     }
     return message;
   },
-  toAmino(message: QueryPriceRequest): QueryPriceRequestAmino {
+  toAmino(message: QueryPriceRequest, useInterfaces: boolean = true): QueryPriceRequestAmino {
     const obj: any = {};
-    obj.token_in = message.tokenIn;
-    obj.token_out = message.tokenOut;
+    obj.token_in = message.tokenIn === "" ? undefined : message.tokenIn;
+    obj.token_out = message.tokenOut === "" ? undefined : message.tokenOut;
     return obj;
   },
   fromAminoMsg(object: QueryPriceRequestAminoMsg): QueryPriceRequest {
     return QueryPriceRequest.fromAmino(object.value);
   },
-  fromProtoMsg(message: QueryPriceRequestProtoMsg): QueryPriceRequest {
-    return QueryPriceRequest.decode(message.value);
+  fromProtoMsg(message: QueryPriceRequestProtoMsg, useInterfaces: boolean = true): QueryPriceRequest {
+    return QueryPriceRequest.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: QueryPriceRequest): Uint8Array {
     return QueryPriceRequest.encode(message).finish();
@@ -125,6 +135,7 @@ export const QueryPriceRequest = {
     };
   }
 };
+GlobalDecoderRegistry.register(QueryPriceRequest.typeUrl, QueryPriceRequest);
 function createBaseQueryPriceResponse(): QueryPriceResponse {
   return {
     price: ""
@@ -132,13 +143,22 @@ function createBaseQueryPriceResponse(): QueryPriceResponse {
 }
 export const QueryPriceResponse = {
   typeUrl: "/pryzmatics.server.price.QueryPriceResponse",
+  is(o: any): o is QueryPriceResponse {
+    return o && (o.$typeUrl === QueryPriceResponse.typeUrl || typeof o.price === "string");
+  },
+  isSDK(o: any): o is QueryPriceResponseSDKType {
+    return o && (o.$typeUrl === QueryPriceResponse.typeUrl || typeof o.price === "string");
+  },
+  isAmino(o: any): o is QueryPriceResponseAmino {
+    return o && (o.$typeUrl === QueryPriceResponse.typeUrl || typeof o.price === "string");
+  },
   encode(message: QueryPriceResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.price !== "") {
       writer.uint32(10).string(Decimal.fromUserInput(message.price, 18).atomics);
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): QueryPriceResponse {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): QueryPriceResponse {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryPriceResponse();
@@ -177,16 +197,16 @@ export const QueryPriceResponse = {
     }
     return message;
   },
-  toAmino(message: QueryPriceResponse): QueryPriceResponseAmino {
+  toAmino(message: QueryPriceResponse, useInterfaces: boolean = true): QueryPriceResponseAmino {
     const obj: any = {};
-    obj.price = message.price;
+    obj.price = padDecimal(message.price) === "" ? undefined : padDecimal(message.price);
     return obj;
   },
   fromAminoMsg(object: QueryPriceResponseAminoMsg): QueryPriceResponse {
     return QueryPriceResponse.fromAmino(object.value);
   },
-  fromProtoMsg(message: QueryPriceResponseProtoMsg): QueryPriceResponse {
-    return QueryPriceResponse.decode(message.value);
+  fromProtoMsg(message: QueryPriceResponseProtoMsg, useInterfaces: boolean = true): QueryPriceResponse {
+    return QueryPriceResponse.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: QueryPriceResponse): Uint8Array {
     return QueryPriceResponse.encode(message).finish();
@@ -198,3 +218,4 @@ export const QueryPriceResponse = {
     };
   }
 };
+GlobalDecoderRegistry.register(QueryPriceResponse.typeUrl, QueryPriceResponse);

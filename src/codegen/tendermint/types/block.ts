@@ -2,6 +2,7 @@ import { Header, HeaderAmino, HeaderSDKType, Data, DataAmino, DataSDKType, Commi
 import { EvidenceList, EvidenceListAmino, EvidenceListSDKType } from "./evidence";
 import { BinaryReader, BinaryWriter } from "../../binary";
 import { isSet } from "../../helpers";
+import { GlobalDecoderRegistry } from "../../registry";
 export interface Block {
   header: Header;
   data: Data;
@@ -38,6 +39,15 @@ function createBaseBlock(): Block {
 }
 export const Block = {
   typeUrl: "/tendermint.types.Block",
+  is(o: any): o is Block {
+    return o && (o.$typeUrl === Block.typeUrl || Header.is(o.header) && Data.is(o.data) && EvidenceList.is(o.evidence));
+  },
+  isSDK(o: any): o is BlockSDKType {
+    return o && (o.$typeUrl === Block.typeUrl || Header.isSDK(o.header) && Data.isSDK(o.data) && EvidenceList.isSDK(o.evidence));
+  },
+  isAmino(o: any): o is BlockAmino {
+    return o && (o.$typeUrl === Block.typeUrl || Header.isAmino(o.header) && Data.isAmino(o.data) && EvidenceList.isAmino(o.evidence));
+  },
   encode(message: Block, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.header !== undefined) {
       Header.encode(message.header, writer.uint32(10).fork()).ldelim();
@@ -53,7 +63,7 @@ export const Block = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): Block {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): Block {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseBlock();
@@ -61,16 +71,16 @@ export const Block = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.header = Header.decode(reader, reader.uint32());
+          message.header = Header.decode(reader, reader.uint32(), useInterfaces);
           break;
         case 2:
-          message.data = Data.decode(reader, reader.uint32());
+          message.data = Data.decode(reader, reader.uint32(), useInterfaces);
           break;
         case 3:
-          message.evidence = EvidenceList.decode(reader, reader.uint32());
+          message.evidence = EvidenceList.decode(reader, reader.uint32(), useInterfaces);
           break;
         case 4:
-          message.lastCommit = Commit.decode(reader, reader.uint32());
+          message.lastCommit = Commit.decode(reader, reader.uint32(), useInterfaces);
           break;
         default:
           reader.skipType(tag & 7);
@@ -119,19 +129,19 @@ export const Block = {
     }
     return message;
   },
-  toAmino(message: Block): BlockAmino {
+  toAmino(message: Block, useInterfaces: boolean = true): BlockAmino {
     const obj: any = {};
-    obj.header = message.header ? Header.toAmino(message.header) : undefined;
-    obj.data = message.data ? Data.toAmino(message.data) : undefined;
-    obj.evidence = message.evidence ? EvidenceList.toAmino(message.evidence) : undefined;
-    obj.last_commit = message.lastCommit ? Commit.toAmino(message.lastCommit) : undefined;
+    obj.header = message.header ? Header.toAmino(message.header, useInterfaces) : undefined;
+    obj.data = message.data ? Data.toAmino(message.data, useInterfaces) : undefined;
+    obj.evidence = message.evidence ? EvidenceList.toAmino(message.evidence, useInterfaces) : undefined;
+    obj.last_commit = message.lastCommit ? Commit.toAmino(message.lastCommit, useInterfaces) : undefined;
     return obj;
   },
   fromAminoMsg(object: BlockAminoMsg): Block {
     return Block.fromAmino(object.value);
   },
-  fromProtoMsg(message: BlockProtoMsg): Block {
-    return Block.decode(message.value);
+  fromProtoMsg(message: BlockProtoMsg, useInterfaces: boolean = true): Block {
+    return Block.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: Block): Uint8Array {
     return Block.encode(message).finish();
@@ -143,3 +153,4 @@ export const Block = {
     };
   }
 };
+GlobalDecoderRegistry.register(Block.typeUrl, Block);

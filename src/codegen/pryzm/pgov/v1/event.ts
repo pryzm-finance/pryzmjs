@@ -4,6 +4,7 @@ import { Coin, CoinAmino, CoinSDKType } from "../../../cosmos/base/v1beta1/coin"
 import { Vote, VoteAmino, VoteSDKType } from "./vote";
 import { BinaryReader, BinaryWriter } from "../../../binary";
 import { isSet } from "../../../helpers";
+import { GlobalDecoderRegistry } from "../../../registry";
 export interface EventSetParams {
   params: Params;
 }
@@ -237,13 +238,22 @@ function createBaseEventSetParams(): EventSetParams {
 }
 export const EventSetParams = {
   typeUrl: "/pryzm.pgov.v1.EventSetParams",
+  is(o: any): o is EventSetParams {
+    return o && (o.$typeUrl === EventSetParams.typeUrl || Params.is(o.params));
+  },
+  isSDK(o: any): o is EventSetParamsSDKType {
+    return o && (o.$typeUrl === EventSetParams.typeUrl || Params.isSDK(o.params));
+  },
+  isAmino(o: any): o is EventSetParamsAmino {
+    return o && (o.$typeUrl === EventSetParams.typeUrl || Params.isAmino(o.params));
+  },
   encode(message: EventSetParams, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.params !== undefined) {
       Params.encode(message.params, writer.uint32(10).fork()).ldelim();
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): EventSetParams {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): EventSetParams {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseEventSetParams();
@@ -251,7 +261,7 @@ export const EventSetParams = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.params = Params.decode(reader, reader.uint32());
+          message.params = Params.decode(reader, reader.uint32(), useInterfaces);
           break;
         default:
           reader.skipType(tag & 7);
@@ -282,16 +292,16 @@ export const EventSetParams = {
     }
     return message;
   },
-  toAmino(message: EventSetParams): EventSetParamsAmino {
+  toAmino(message: EventSetParams, useInterfaces: boolean = true): EventSetParamsAmino {
     const obj: any = {};
-    obj.params = message.params ? Params.toAmino(message.params) : undefined;
+    obj.params = message.params ? Params.toAmino(message.params, useInterfaces) : undefined;
     return obj;
   },
   fromAminoMsg(object: EventSetParamsAminoMsg): EventSetParams {
     return EventSetParams.fromAmino(object.value);
   },
-  fromProtoMsg(message: EventSetParamsProtoMsg): EventSetParams {
-    return EventSetParams.decode(message.value);
+  fromProtoMsg(message: EventSetParamsProtoMsg, useInterfaces: boolean = true): EventSetParams {
+    return EventSetParams.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: EventSetParams): Uint8Array {
     return EventSetParams.encode(message).finish();
@@ -303,6 +313,7 @@ export const EventSetParams = {
     };
   }
 };
+GlobalDecoderRegistry.register(EventSetParams.typeUrl, EventSetParams);
 function createBaseEventSetProposal(): EventSetProposal {
   return {
     proposal: Proposal.fromPartial({})
@@ -310,13 +321,22 @@ function createBaseEventSetProposal(): EventSetProposal {
 }
 export const EventSetProposal = {
   typeUrl: "/pryzm.pgov.v1.EventSetProposal",
+  is(o: any): o is EventSetProposal {
+    return o && (o.$typeUrl === EventSetProposal.typeUrl || Proposal.is(o.proposal));
+  },
+  isSDK(o: any): o is EventSetProposalSDKType {
+    return o && (o.$typeUrl === EventSetProposal.typeUrl || Proposal.isSDK(o.proposal));
+  },
+  isAmino(o: any): o is EventSetProposalAmino {
+    return o && (o.$typeUrl === EventSetProposal.typeUrl || Proposal.isAmino(o.proposal));
+  },
   encode(message: EventSetProposal, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.proposal !== undefined) {
       Proposal.encode(message.proposal, writer.uint32(10).fork()).ldelim();
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): EventSetProposal {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): EventSetProposal {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseEventSetProposal();
@@ -324,7 +344,7 @@ export const EventSetProposal = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.proposal = Proposal.decode(reader, reader.uint32());
+          message.proposal = Proposal.decode(reader, reader.uint32(), useInterfaces);
           break;
         default:
           reader.skipType(tag & 7);
@@ -355,16 +375,16 @@ export const EventSetProposal = {
     }
     return message;
   },
-  toAmino(message: EventSetProposal): EventSetProposalAmino {
+  toAmino(message: EventSetProposal, useInterfaces: boolean = true): EventSetProposalAmino {
     const obj: any = {};
-    obj.proposal = message.proposal ? Proposal.toAmino(message.proposal) : undefined;
+    obj.proposal = message.proposal ? Proposal.toAmino(message.proposal, useInterfaces) : undefined;
     return obj;
   },
   fromAminoMsg(object: EventSetProposalAminoMsg): EventSetProposal {
     return EventSetProposal.fromAmino(object.value);
   },
-  fromProtoMsg(message: EventSetProposalProtoMsg): EventSetProposal {
-    return EventSetProposal.decode(message.value);
+  fromProtoMsg(message: EventSetProposalProtoMsg, useInterfaces: boolean = true): EventSetProposal {
+    return EventSetProposal.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: EventSetProposal): Uint8Array {
     return EventSetProposal.encode(message).finish();
@@ -376,6 +396,7 @@ export const EventSetProposal = {
     };
   }
 };
+GlobalDecoderRegistry.register(EventSetProposal.typeUrl, EventSetProposal);
 function createBaseEventPAssetStake(): EventPAssetStake {
   return {
     address: "",
@@ -386,6 +407,15 @@ function createBaseEventPAssetStake(): EventPAssetStake {
 }
 export const EventPAssetStake = {
   typeUrl: "/pryzm.pgov.v1.EventPAssetStake",
+  is(o: any): o is EventPAssetStake {
+    return o && (o.$typeUrl === EventPAssetStake.typeUrl || typeof o.address === "string" && typeof o.asset === "string" && Array.isArray(o.amount) && (!o.amount.length || Coin.is(o.amount[0])) && typeof o.totalStakedPAsset === "string");
+  },
+  isSDK(o: any): o is EventPAssetStakeSDKType {
+    return o && (o.$typeUrl === EventPAssetStake.typeUrl || typeof o.address === "string" && typeof o.asset === "string" && Array.isArray(o.amount) && (!o.amount.length || Coin.isSDK(o.amount[0])) && typeof o.total_staked_p_asset === "string");
+  },
+  isAmino(o: any): o is EventPAssetStakeAmino {
+    return o && (o.$typeUrl === EventPAssetStake.typeUrl || typeof o.address === "string" && typeof o.asset === "string" && Array.isArray(o.amount) && (!o.amount.length || Coin.isAmino(o.amount[0])) && typeof o.total_staked_p_asset === "string");
+  },
   encode(message: EventPAssetStake, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.address !== "") {
       writer.uint32(10).string(message.address);
@@ -401,7 +431,7 @@ export const EventPAssetStake = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): EventPAssetStake {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): EventPAssetStake {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseEventPAssetStake();
@@ -415,7 +445,7 @@ export const EventPAssetStake = {
           message.asset = reader.string();
           break;
         case 3:
-          message.amount.push(Coin.decode(reader, reader.uint32()));
+          message.amount.push(Coin.decode(reader, reader.uint32(), useInterfaces));
           break;
         case 4:
           message.totalStakedPAsset = reader.string();
@@ -469,23 +499,23 @@ export const EventPAssetStake = {
     }
     return message;
   },
-  toAmino(message: EventPAssetStake): EventPAssetStakeAmino {
+  toAmino(message: EventPAssetStake, useInterfaces: boolean = true): EventPAssetStakeAmino {
     const obj: any = {};
-    obj.address = message.address;
-    obj.asset = message.asset;
+    obj.address = message.address === "" ? undefined : message.address;
+    obj.asset = message.asset === "" ? undefined : message.asset;
     if (message.amount) {
-      obj.amount = message.amount.map(e => e ? Coin.toAmino(e) : undefined);
+      obj.amount = message.amount.map(e => e ? Coin.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.amount = [];
+      obj.amount = null;
     }
-    obj.total_staked_p_asset = message.totalStakedPAsset;
+    obj.total_staked_p_asset = message.totalStakedPAsset === "" ? undefined : message.totalStakedPAsset;
     return obj;
   },
   fromAminoMsg(object: EventPAssetStakeAminoMsg): EventPAssetStake {
     return EventPAssetStake.fromAmino(object.value);
   },
-  fromProtoMsg(message: EventPAssetStakeProtoMsg): EventPAssetStake {
-    return EventPAssetStake.decode(message.value);
+  fromProtoMsg(message: EventPAssetStakeProtoMsg, useInterfaces: boolean = true): EventPAssetStake {
+    return EventPAssetStake.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: EventPAssetStake): Uint8Array {
     return EventPAssetStake.encode(message).finish();
@@ -497,6 +527,7 @@ export const EventPAssetStake = {
     };
   }
 };
+GlobalDecoderRegistry.register(EventPAssetStake.typeUrl, EventPAssetStake);
 function createBaseEventPAssetUnstake(): EventPAssetUnstake {
   return {
     address: "",
@@ -507,6 +538,15 @@ function createBaseEventPAssetUnstake(): EventPAssetUnstake {
 }
 export const EventPAssetUnstake = {
   typeUrl: "/pryzm.pgov.v1.EventPAssetUnstake",
+  is(o: any): o is EventPAssetUnstake {
+    return o && (o.$typeUrl === EventPAssetUnstake.typeUrl || typeof o.address === "string" && typeof o.asset === "string" && Array.isArray(o.amount) && (!o.amount.length || Coin.is(o.amount[0])) && typeof o.totalStakedPAsset === "string");
+  },
+  isSDK(o: any): o is EventPAssetUnstakeSDKType {
+    return o && (o.$typeUrl === EventPAssetUnstake.typeUrl || typeof o.address === "string" && typeof o.asset === "string" && Array.isArray(o.amount) && (!o.amount.length || Coin.isSDK(o.amount[0])) && typeof o.total_staked_p_asset === "string");
+  },
+  isAmino(o: any): o is EventPAssetUnstakeAmino {
+    return o && (o.$typeUrl === EventPAssetUnstake.typeUrl || typeof o.address === "string" && typeof o.asset === "string" && Array.isArray(o.amount) && (!o.amount.length || Coin.isAmino(o.amount[0])) && typeof o.total_staked_p_asset === "string");
+  },
   encode(message: EventPAssetUnstake, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.address !== "") {
       writer.uint32(10).string(message.address);
@@ -522,7 +562,7 @@ export const EventPAssetUnstake = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): EventPAssetUnstake {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): EventPAssetUnstake {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseEventPAssetUnstake();
@@ -536,7 +576,7 @@ export const EventPAssetUnstake = {
           message.asset = reader.string();
           break;
         case 3:
-          message.amount.push(Coin.decode(reader, reader.uint32()));
+          message.amount.push(Coin.decode(reader, reader.uint32(), useInterfaces));
           break;
         case 4:
           message.totalStakedPAsset = reader.string();
@@ -590,23 +630,23 @@ export const EventPAssetUnstake = {
     }
     return message;
   },
-  toAmino(message: EventPAssetUnstake): EventPAssetUnstakeAmino {
+  toAmino(message: EventPAssetUnstake, useInterfaces: boolean = true): EventPAssetUnstakeAmino {
     const obj: any = {};
-    obj.address = message.address;
-    obj.asset = message.asset;
+    obj.address = message.address === "" ? undefined : message.address;
+    obj.asset = message.asset === "" ? undefined : message.asset;
     if (message.amount) {
-      obj.amount = message.amount.map(e => e ? Coin.toAmino(e) : undefined);
+      obj.amount = message.amount.map(e => e ? Coin.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.amount = [];
+      obj.amount = null;
     }
-    obj.total_staked_p_asset = message.totalStakedPAsset;
+    obj.total_staked_p_asset = message.totalStakedPAsset === "" ? undefined : message.totalStakedPAsset;
     return obj;
   },
   fromAminoMsg(object: EventPAssetUnstakeAminoMsg): EventPAssetUnstake {
     return EventPAssetUnstake.fromAmino(object.value);
   },
-  fromProtoMsg(message: EventPAssetUnstakeProtoMsg): EventPAssetUnstake {
-    return EventPAssetUnstake.decode(message.value);
+  fromProtoMsg(message: EventPAssetUnstakeProtoMsg, useInterfaces: boolean = true): EventPAssetUnstake {
+    return EventPAssetUnstake.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: EventPAssetUnstake): Uint8Array {
     return EventPAssetUnstake.encode(message).finish();
@@ -618,6 +658,7 @@ export const EventPAssetUnstake = {
     };
   }
 };
+GlobalDecoderRegistry.register(EventPAssetUnstake.typeUrl, EventPAssetUnstake);
 function createBaseEventVoteSubmit(): EventVoteSubmit {
   return {
     vote: undefined
@@ -625,13 +666,22 @@ function createBaseEventVoteSubmit(): EventVoteSubmit {
 }
 export const EventVoteSubmit = {
   typeUrl: "/pryzm.pgov.v1.EventVoteSubmit",
+  is(o: any): o is EventVoteSubmit {
+    return o && o.$typeUrl === EventVoteSubmit.typeUrl;
+  },
+  isSDK(o: any): o is EventVoteSubmitSDKType {
+    return o && o.$typeUrl === EventVoteSubmit.typeUrl;
+  },
+  isAmino(o: any): o is EventVoteSubmitAmino {
+    return o && o.$typeUrl === EventVoteSubmit.typeUrl;
+  },
   encode(message: EventVoteSubmit, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.vote !== undefined) {
       Vote.encode(message.vote, writer.uint32(10).fork()).ldelim();
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): EventVoteSubmit {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): EventVoteSubmit {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseEventVoteSubmit();
@@ -639,7 +689,7 @@ export const EventVoteSubmit = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.vote = Vote.decode(reader, reader.uint32());
+          message.vote = Vote.decode(reader, reader.uint32(), useInterfaces);
           break;
         default:
           reader.skipType(tag & 7);
@@ -670,16 +720,16 @@ export const EventVoteSubmit = {
     }
     return message;
   },
-  toAmino(message: EventVoteSubmit): EventVoteSubmitAmino {
+  toAmino(message: EventVoteSubmit, useInterfaces: boolean = true): EventVoteSubmitAmino {
     const obj: any = {};
-    obj.vote = message.vote ? Vote.toAmino(message.vote) : undefined;
+    obj.vote = message.vote ? Vote.toAmino(message.vote, useInterfaces) : undefined;
     return obj;
   },
   fromAminoMsg(object: EventVoteSubmitAminoMsg): EventVoteSubmit {
     return EventVoteSubmit.fromAmino(object.value);
   },
-  fromProtoMsg(message: EventVoteSubmitProtoMsg): EventVoteSubmit {
-    return EventVoteSubmit.decode(message.value);
+  fromProtoMsg(message: EventVoteSubmitProtoMsg, useInterfaces: boolean = true): EventVoteSubmit {
+    return EventVoteSubmit.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: EventVoteSubmit): Uint8Array {
     return EventVoteSubmit.encode(message).finish();
@@ -691,6 +741,7 @@ export const EventVoteSubmit = {
     };
   }
 };
+GlobalDecoderRegistry.register(EventVoteSubmit.typeUrl, EventVoteSubmit);
 function createBaseEventProposalEnd(): EventProposalEnd {
   return {
     proposal: undefined
@@ -698,13 +749,22 @@ function createBaseEventProposalEnd(): EventProposalEnd {
 }
 export const EventProposalEnd = {
   typeUrl: "/pryzm.pgov.v1.EventProposalEnd",
+  is(o: any): o is EventProposalEnd {
+    return o && o.$typeUrl === EventProposalEnd.typeUrl;
+  },
+  isSDK(o: any): o is EventProposalEndSDKType {
+    return o && o.$typeUrl === EventProposalEnd.typeUrl;
+  },
+  isAmino(o: any): o is EventProposalEndAmino {
+    return o && o.$typeUrl === EventProposalEnd.typeUrl;
+  },
   encode(message: EventProposalEnd, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.proposal !== undefined) {
       Proposal.encode(message.proposal, writer.uint32(10).fork()).ldelim();
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): EventProposalEnd {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): EventProposalEnd {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseEventProposalEnd();
@@ -712,7 +772,7 @@ export const EventProposalEnd = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.proposal = Proposal.decode(reader, reader.uint32());
+          message.proposal = Proposal.decode(reader, reader.uint32(), useInterfaces);
           break;
         default:
           reader.skipType(tag & 7);
@@ -743,16 +803,16 @@ export const EventProposalEnd = {
     }
     return message;
   },
-  toAmino(message: EventProposalEnd): EventProposalEndAmino {
+  toAmino(message: EventProposalEnd, useInterfaces: boolean = true): EventProposalEndAmino {
     const obj: any = {};
-    obj.proposal = message.proposal ? Proposal.toAmino(message.proposal) : undefined;
+    obj.proposal = message.proposal ? Proposal.toAmino(message.proposal, useInterfaces) : undefined;
     return obj;
   },
   fromAminoMsg(object: EventProposalEndAminoMsg): EventProposalEnd {
     return EventProposalEnd.fromAmino(object.value);
   },
-  fromProtoMsg(message: EventProposalEndProtoMsg): EventProposalEnd {
-    return EventProposalEnd.decode(message.value);
+  fromProtoMsg(message: EventProposalEndProtoMsg, useInterfaces: boolean = true): EventProposalEnd {
+    return EventProposalEnd.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: EventProposalEnd): Uint8Array {
     return EventProposalEnd.encode(message).finish();
@@ -764,6 +824,7 @@ export const EventProposalEnd = {
     };
   }
 };
+GlobalDecoderRegistry.register(EventProposalEnd.typeUrl, EventProposalEnd);
 function createBaseEventVoteTransmit(): EventVoteTransmit {
   return {
     proposalId: BigInt(0),
@@ -772,6 +833,15 @@ function createBaseEventVoteTransmit(): EventVoteTransmit {
 }
 export const EventVoteTransmit = {
   typeUrl: "/pryzm.pgov.v1.EventVoteTransmit",
+  is(o: any): o is EventVoteTransmit {
+    return o && (o.$typeUrl === EventVoteTransmit.typeUrl || typeof o.proposalId === "bigint" && typeof o.asset === "string");
+  },
+  isSDK(o: any): o is EventVoteTransmitSDKType {
+    return o && (o.$typeUrl === EventVoteTransmit.typeUrl || typeof o.proposal_id === "bigint" && typeof o.asset === "string");
+  },
+  isAmino(o: any): o is EventVoteTransmitAmino {
+    return o && (o.$typeUrl === EventVoteTransmit.typeUrl || typeof o.proposal_id === "bigint" && typeof o.asset === "string");
+  },
   encode(message: EventVoteTransmit, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.proposalId !== BigInt(0)) {
       writer.uint32(8).uint64(message.proposalId);
@@ -781,7 +851,7 @@ export const EventVoteTransmit = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): EventVoteTransmit {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): EventVoteTransmit {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseEventVoteTransmit();
@@ -829,17 +899,17 @@ export const EventVoteTransmit = {
     }
     return message;
   },
-  toAmino(message: EventVoteTransmit): EventVoteTransmitAmino {
+  toAmino(message: EventVoteTransmit, useInterfaces: boolean = true): EventVoteTransmitAmino {
     const obj: any = {};
     obj.proposal_id = message.proposalId ? message.proposalId.toString() : undefined;
-    obj.asset = message.asset;
+    obj.asset = message.asset === "" ? undefined : message.asset;
     return obj;
   },
   fromAminoMsg(object: EventVoteTransmitAminoMsg): EventVoteTransmit {
     return EventVoteTransmit.fromAmino(object.value);
   },
-  fromProtoMsg(message: EventVoteTransmitProtoMsg): EventVoteTransmit {
-    return EventVoteTransmit.decode(message.value);
+  fromProtoMsg(message: EventVoteTransmitProtoMsg, useInterfaces: boolean = true): EventVoteTransmit {
+    return EventVoteTransmit.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: EventVoteTransmit): Uint8Array {
     return EventVoteTransmit.encode(message).finish();
@@ -851,6 +921,7 @@ export const EventVoteTransmit = {
     };
   }
 };
+GlobalDecoderRegistry.register(EventVoteTransmit.typeUrl, EventVoteTransmit);
 function createBaseEventVoteTransmitFailure(): EventVoteTransmitFailure {
   return {
     proposalId: BigInt(0),
@@ -860,6 +931,15 @@ function createBaseEventVoteTransmitFailure(): EventVoteTransmitFailure {
 }
 export const EventVoteTransmitFailure = {
   typeUrl: "/pryzm.pgov.v1.EventVoteTransmitFailure",
+  is(o: any): o is EventVoteTransmitFailure {
+    return o && (o.$typeUrl === EventVoteTransmitFailure.typeUrl || typeof o.proposalId === "bigint" && typeof o.asset === "string" && typeof o.error === "string");
+  },
+  isSDK(o: any): o is EventVoteTransmitFailureSDKType {
+    return o && (o.$typeUrl === EventVoteTransmitFailure.typeUrl || typeof o.proposal_id === "bigint" && typeof o.asset === "string" && typeof o.error === "string");
+  },
+  isAmino(o: any): o is EventVoteTransmitFailureAmino {
+    return o && (o.$typeUrl === EventVoteTransmitFailure.typeUrl || typeof o.proposal_id === "bigint" && typeof o.asset === "string" && typeof o.error === "string");
+  },
   encode(message: EventVoteTransmitFailure, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.proposalId !== BigInt(0)) {
       writer.uint32(8).uint64(message.proposalId);
@@ -872,7 +952,7 @@ export const EventVoteTransmitFailure = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): EventVoteTransmitFailure {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): EventVoteTransmitFailure {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseEventVoteTransmitFailure();
@@ -929,18 +1009,18 @@ export const EventVoteTransmitFailure = {
     }
     return message;
   },
-  toAmino(message: EventVoteTransmitFailure): EventVoteTransmitFailureAmino {
+  toAmino(message: EventVoteTransmitFailure, useInterfaces: boolean = true): EventVoteTransmitFailureAmino {
     const obj: any = {};
     obj.proposal_id = message.proposalId ? message.proposalId.toString() : undefined;
-    obj.asset = message.asset;
-    obj.error = message.error;
+    obj.asset = message.asset === "" ? undefined : message.asset;
+    obj.error = message.error === "" ? undefined : message.error;
     return obj;
   },
   fromAminoMsg(object: EventVoteTransmitFailureAminoMsg): EventVoteTransmitFailure {
     return EventVoteTransmitFailure.fromAmino(object.value);
   },
-  fromProtoMsg(message: EventVoteTransmitFailureProtoMsg): EventVoteTransmitFailure {
-    return EventVoteTransmitFailure.decode(message.value);
+  fromProtoMsg(message: EventVoteTransmitFailureProtoMsg, useInterfaces: boolean = true): EventVoteTransmitFailure {
+    return EventVoteTransmitFailure.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: EventVoteTransmitFailure): Uint8Array {
     return EventVoteTransmitFailure.encode(message).finish();
@@ -952,6 +1032,7 @@ export const EventVoteTransmitFailure = {
     };
   }
 };
+GlobalDecoderRegistry.register(EventVoteTransmitFailure.typeUrl, EventVoteTransmitFailure);
 function createBaseEventVoteAckSuccess(): EventVoteAckSuccess {
   return {
     proposalId: BigInt(0),
@@ -960,6 +1041,15 @@ function createBaseEventVoteAckSuccess(): EventVoteAckSuccess {
 }
 export const EventVoteAckSuccess = {
   typeUrl: "/pryzm.pgov.v1.EventVoteAckSuccess",
+  is(o: any): o is EventVoteAckSuccess {
+    return o && (o.$typeUrl === EventVoteAckSuccess.typeUrl || typeof o.proposalId === "bigint" && typeof o.asset === "string");
+  },
+  isSDK(o: any): o is EventVoteAckSuccessSDKType {
+    return o && (o.$typeUrl === EventVoteAckSuccess.typeUrl || typeof o.proposal_id === "bigint" && typeof o.asset === "string");
+  },
+  isAmino(o: any): o is EventVoteAckSuccessAmino {
+    return o && (o.$typeUrl === EventVoteAckSuccess.typeUrl || typeof o.proposal_id === "bigint" && typeof o.asset === "string");
+  },
   encode(message: EventVoteAckSuccess, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.proposalId !== BigInt(0)) {
       writer.uint32(8).uint64(message.proposalId);
@@ -969,7 +1059,7 @@ export const EventVoteAckSuccess = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): EventVoteAckSuccess {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): EventVoteAckSuccess {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseEventVoteAckSuccess();
@@ -1017,17 +1107,17 @@ export const EventVoteAckSuccess = {
     }
     return message;
   },
-  toAmino(message: EventVoteAckSuccess): EventVoteAckSuccessAmino {
+  toAmino(message: EventVoteAckSuccess, useInterfaces: boolean = true): EventVoteAckSuccessAmino {
     const obj: any = {};
     obj.proposal_id = message.proposalId ? message.proposalId.toString() : undefined;
-    obj.asset = message.asset;
+    obj.asset = message.asset === "" ? undefined : message.asset;
     return obj;
   },
   fromAminoMsg(object: EventVoteAckSuccessAminoMsg): EventVoteAckSuccess {
     return EventVoteAckSuccess.fromAmino(object.value);
   },
-  fromProtoMsg(message: EventVoteAckSuccessProtoMsg): EventVoteAckSuccess {
-    return EventVoteAckSuccess.decode(message.value);
+  fromProtoMsg(message: EventVoteAckSuccessProtoMsg, useInterfaces: boolean = true): EventVoteAckSuccess {
+    return EventVoteAckSuccess.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: EventVoteAckSuccess): Uint8Array {
     return EventVoteAckSuccess.encode(message).finish();
@@ -1039,6 +1129,7 @@ export const EventVoteAckSuccess = {
     };
   }
 };
+GlobalDecoderRegistry.register(EventVoteAckSuccess.typeUrl, EventVoteAckSuccess);
 function createBaseEventVoteAckFailure(): EventVoteAckFailure {
   return {
     proposalId: BigInt(0),
@@ -1048,6 +1139,15 @@ function createBaseEventVoteAckFailure(): EventVoteAckFailure {
 }
 export const EventVoteAckFailure = {
   typeUrl: "/pryzm.pgov.v1.EventVoteAckFailure",
+  is(o: any): o is EventVoteAckFailure {
+    return o && (o.$typeUrl === EventVoteAckFailure.typeUrl || typeof o.proposalId === "bigint" && typeof o.asset === "string" && typeof o.error === "string");
+  },
+  isSDK(o: any): o is EventVoteAckFailureSDKType {
+    return o && (o.$typeUrl === EventVoteAckFailure.typeUrl || typeof o.proposal_id === "bigint" && typeof o.asset === "string" && typeof o.error === "string");
+  },
+  isAmino(o: any): o is EventVoteAckFailureAmino {
+    return o && (o.$typeUrl === EventVoteAckFailure.typeUrl || typeof o.proposal_id === "bigint" && typeof o.asset === "string" && typeof o.error === "string");
+  },
   encode(message: EventVoteAckFailure, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.proposalId !== BigInt(0)) {
       writer.uint32(8).uint64(message.proposalId);
@@ -1060,7 +1160,7 @@ export const EventVoteAckFailure = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): EventVoteAckFailure {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): EventVoteAckFailure {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseEventVoteAckFailure();
@@ -1117,18 +1217,18 @@ export const EventVoteAckFailure = {
     }
     return message;
   },
-  toAmino(message: EventVoteAckFailure): EventVoteAckFailureAmino {
+  toAmino(message: EventVoteAckFailure, useInterfaces: boolean = true): EventVoteAckFailureAmino {
     const obj: any = {};
     obj.proposal_id = message.proposalId ? message.proposalId.toString() : undefined;
-    obj.asset = message.asset;
-    obj.error = message.error;
+    obj.asset = message.asset === "" ? undefined : message.asset;
+    obj.error = message.error === "" ? undefined : message.error;
     return obj;
   },
   fromAminoMsg(object: EventVoteAckFailureAminoMsg): EventVoteAckFailure {
     return EventVoteAckFailure.fromAmino(object.value);
   },
-  fromProtoMsg(message: EventVoteAckFailureProtoMsg): EventVoteAckFailure {
-    return EventVoteAckFailure.decode(message.value);
+  fromProtoMsg(message: EventVoteAckFailureProtoMsg, useInterfaces: boolean = true): EventVoteAckFailure {
+    return EventVoteAckFailure.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: EventVoteAckFailure): Uint8Array {
     return EventVoteAckFailure.encode(message).finish();
@@ -1140,6 +1240,7 @@ export const EventVoteAckFailure = {
     };
   }
 };
+GlobalDecoderRegistry.register(EventVoteAckFailure.typeUrl, EventVoteAckFailure);
 function createBaseEventVoteTimeout(): EventVoteTimeout {
   return {
     proposalId: BigInt(0),
@@ -1148,6 +1249,15 @@ function createBaseEventVoteTimeout(): EventVoteTimeout {
 }
 export const EventVoteTimeout = {
   typeUrl: "/pryzm.pgov.v1.EventVoteTimeout",
+  is(o: any): o is EventVoteTimeout {
+    return o && (o.$typeUrl === EventVoteTimeout.typeUrl || typeof o.proposalId === "bigint" && typeof o.asset === "string");
+  },
+  isSDK(o: any): o is EventVoteTimeoutSDKType {
+    return o && (o.$typeUrl === EventVoteTimeout.typeUrl || typeof o.proposal_id === "bigint" && typeof o.asset === "string");
+  },
+  isAmino(o: any): o is EventVoteTimeoutAmino {
+    return o && (o.$typeUrl === EventVoteTimeout.typeUrl || typeof o.proposal_id === "bigint" && typeof o.asset === "string");
+  },
   encode(message: EventVoteTimeout, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.proposalId !== BigInt(0)) {
       writer.uint32(8).uint64(message.proposalId);
@@ -1157,7 +1267,7 @@ export const EventVoteTimeout = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): EventVoteTimeout {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): EventVoteTimeout {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseEventVoteTimeout();
@@ -1205,17 +1315,17 @@ export const EventVoteTimeout = {
     }
     return message;
   },
-  toAmino(message: EventVoteTimeout): EventVoteTimeoutAmino {
+  toAmino(message: EventVoteTimeout, useInterfaces: boolean = true): EventVoteTimeoutAmino {
     const obj: any = {};
     obj.proposal_id = message.proposalId ? message.proposalId.toString() : undefined;
-    obj.asset = message.asset;
+    obj.asset = message.asset === "" ? undefined : message.asset;
     return obj;
   },
   fromAminoMsg(object: EventVoteTimeoutAminoMsg): EventVoteTimeout {
     return EventVoteTimeout.fromAmino(object.value);
   },
-  fromProtoMsg(message: EventVoteTimeoutProtoMsg): EventVoteTimeout {
-    return EventVoteTimeout.decode(message.value);
+  fromProtoMsg(message: EventVoteTimeoutProtoMsg, useInterfaces: boolean = true): EventVoteTimeout {
+    return EventVoteTimeout.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: EventVoteTimeout): Uint8Array {
     return EventVoteTimeout.encode(message).finish();
@@ -1227,3 +1337,4 @@ export const EventVoteTimeout = {
     };
   }
 };
+GlobalDecoderRegistry.register(EventVoteTimeout.typeUrl, EventVoteTimeout);

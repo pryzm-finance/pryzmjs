@@ -1,6 +1,7 @@
 import { Coin, CoinAmino, CoinSDKType } from "../../../cosmos/base/v1beta1/coin";
 import { BinaryReader, BinaryWriter } from "../../../binary";
-import { isSet } from "../../../helpers";
+import { isSet, padDecimal } from "../../../helpers";
+import { GlobalDecoderRegistry } from "../../../registry";
 import { Decimal } from "@cosmjs/math";
 export interface QueryExitTokenExactLptSimulationRequest {
   poolId: bigint;
@@ -69,6 +70,15 @@ function createBaseQueryExitTokenExactLptSimulationRequest(): QueryExitTokenExac
 }
 export const QueryExitTokenExactLptSimulationRequest = {
   typeUrl: "/pryzmatics.server.trade.QueryExitTokenExactLptSimulationRequest",
+  is(o: any): o is QueryExitTokenExactLptSimulationRequest {
+    return o && (o.$typeUrl === QueryExitTokenExactLptSimulationRequest.typeUrl || typeof o.poolId === "bigint" && typeof o.lptInAmount === "string" && typeof o.tokenOut === "string");
+  },
+  isSDK(o: any): o is QueryExitTokenExactLptSimulationRequestSDKType {
+    return o && (o.$typeUrl === QueryExitTokenExactLptSimulationRequest.typeUrl || typeof o.pool_id === "bigint" && typeof o.lpt_in_amount === "string" && typeof o.token_out === "string");
+  },
+  isAmino(o: any): o is QueryExitTokenExactLptSimulationRequestAmino {
+    return o && (o.$typeUrl === QueryExitTokenExactLptSimulationRequest.typeUrl || typeof o.pool_id === "bigint" && typeof o.lpt_in_amount === "string" && typeof o.token_out === "string");
+  },
   encode(message: QueryExitTokenExactLptSimulationRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.poolId !== BigInt(0)) {
       writer.uint32(8).uint64(message.poolId);
@@ -81,7 +91,7 @@ export const QueryExitTokenExactLptSimulationRequest = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): QueryExitTokenExactLptSimulationRequest {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): QueryExitTokenExactLptSimulationRequest {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryExitTokenExactLptSimulationRequest();
@@ -138,18 +148,18 @@ export const QueryExitTokenExactLptSimulationRequest = {
     }
     return message;
   },
-  toAmino(message: QueryExitTokenExactLptSimulationRequest): QueryExitTokenExactLptSimulationRequestAmino {
+  toAmino(message: QueryExitTokenExactLptSimulationRequest, useInterfaces: boolean = true): QueryExitTokenExactLptSimulationRequestAmino {
     const obj: any = {};
     obj.pool_id = message.poolId ? message.poolId.toString() : undefined;
-    obj.lpt_in_amount = message.lptInAmount;
-    obj.token_out = message.tokenOut;
+    obj.lpt_in_amount = message.lptInAmount === "" ? undefined : message.lptInAmount;
+    obj.token_out = message.tokenOut === "" ? undefined : message.tokenOut;
     return obj;
   },
   fromAminoMsg(object: QueryExitTokenExactLptSimulationRequestAminoMsg): QueryExitTokenExactLptSimulationRequest {
     return QueryExitTokenExactLptSimulationRequest.fromAmino(object.value);
   },
-  fromProtoMsg(message: QueryExitTokenExactLptSimulationRequestProtoMsg): QueryExitTokenExactLptSimulationRequest {
-    return QueryExitTokenExactLptSimulationRequest.decode(message.value);
+  fromProtoMsg(message: QueryExitTokenExactLptSimulationRequestProtoMsg, useInterfaces: boolean = true): QueryExitTokenExactLptSimulationRequest {
+    return QueryExitTokenExactLptSimulationRequest.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: QueryExitTokenExactLptSimulationRequest): Uint8Array {
     return QueryExitTokenExactLptSimulationRequest.encode(message).finish();
@@ -161,6 +171,7 @@ export const QueryExitTokenExactLptSimulationRequest = {
     };
   }
 };
+GlobalDecoderRegistry.register(QueryExitTokenExactLptSimulationRequest.typeUrl, QueryExitTokenExactLptSimulationRequest);
 function createBaseQueryExitTokenExactLptSimulationResponse(): QueryExitTokenExactLptSimulationResponse {
   return {
     amountIn: Coin.fromPartial({}),
@@ -174,6 +185,15 @@ function createBaseQueryExitTokenExactLptSimulationResponse(): QueryExitTokenExa
 }
 export const QueryExitTokenExactLptSimulationResponse = {
   typeUrl: "/pryzmatics.server.trade.QueryExitTokenExactLptSimulationResponse",
+  is(o: any): o is QueryExitTokenExactLptSimulationResponse {
+    return o && (o.$typeUrl === QueryExitTokenExactLptSimulationResponse.typeUrl || Coin.is(o.amountIn) && Coin.is(o.amountOut) && Coin.is(o.protocolFee) && Coin.is(o.protocolFeeLpTerms) && Coin.is(o.swapFee) && Coin.is(o.swapFeeLpTerms) && typeof o.priceImpact === "string");
+  },
+  isSDK(o: any): o is QueryExitTokenExactLptSimulationResponseSDKType {
+    return o && (o.$typeUrl === QueryExitTokenExactLptSimulationResponse.typeUrl || Coin.isSDK(o.amount_in) && Coin.isSDK(o.amount_out) && Coin.isSDK(o.protocol_fee) && Coin.isSDK(o.protocol_fee_lp_terms) && Coin.isSDK(o.swap_fee) && Coin.isSDK(o.swap_fee_lp_terms) && typeof o.price_impact === "string");
+  },
+  isAmino(o: any): o is QueryExitTokenExactLptSimulationResponseAmino {
+    return o && (o.$typeUrl === QueryExitTokenExactLptSimulationResponse.typeUrl || Coin.isAmino(o.amount_in) && Coin.isAmino(o.amount_out) && Coin.isAmino(o.protocol_fee) && Coin.isAmino(o.protocol_fee_lp_terms) && Coin.isAmino(o.swap_fee) && Coin.isAmino(o.swap_fee_lp_terms) && typeof o.price_impact === "string");
+  },
   encode(message: QueryExitTokenExactLptSimulationResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.amountIn !== undefined) {
       Coin.encode(message.amountIn, writer.uint32(10).fork()).ldelim();
@@ -198,7 +218,7 @@ export const QueryExitTokenExactLptSimulationResponse = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): QueryExitTokenExactLptSimulationResponse {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): QueryExitTokenExactLptSimulationResponse {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryExitTokenExactLptSimulationResponse();
@@ -206,22 +226,22 @@ export const QueryExitTokenExactLptSimulationResponse = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.amountIn = Coin.decode(reader, reader.uint32());
+          message.amountIn = Coin.decode(reader, reader.uint32(), useInterfaces);
           break;
         case 2:
-          message.amountOut = Coin.decode(reader, reader.uint32());
+          message.amountOut = Coin.decode(reader, reader.uint32(), useInterfaces);
           break;
         case 3:
-          message.protocolFee = Coin.decode(reader, reader.uint32());
+          message.protocolFee = Coin.decode(reader, reader.uint32(), useInterfaces);
           break;
         case 4:
-          message.protocolFeeLpTerms = Coin.decode(reader, reader.uint32());
+          message.protocolFeeLpTerms = Coin.decode(reader, reader.uint32(), useInterfaces);
           break;
         case 5:
-          message.swapFee = Coin.decode(reader, reader.uint32());
+          message.swapFee = Coin.decode(reader, reader.uint32(), useInterfaces);
           break;
         case 6:
-          message.swapFeeLpTerms = Coin.decode(reader, reader.uint32());
+          message.swapFeeLpTerms = Coin.decode(reader, reader.uint32(), useInterfaces);
           break;
         case 7:
           message.priceImpact = Decimal.fromAtomics(reader.string(), 18).toString();
@@ -291,22 +311,22 @@ export const QueryExitTokenExactLptSimulationResponse = {
     }
     return message;
   },
-  toAmino(message: QueryExitTokenExactLptSimulationResponse): QueryExitTokenExactLptSimulationResponseAmino {
+  toAmino(message: QueryExitTokenExactLptSimulationResponse, useInterfaces: boolean = true): QueryExitTokenExactLptSimulationResponseAmino {
     const obj: any = {};
-    obj.amount_in = message.amountIn ? Coin.toAmino(message.amountIn) : undefined;
-    obj.amount_out = message.amountOut ? Coin.toAmino(message.amountOut) : undefined;
-    obj.protocol_fee = message.protocolFee ? Coin.toAmino(message.protocolFee) : undefined;
-    obj.protocol_fee_lp_terms = message.protocolFeeLpTerms ? Coin.toAmino(message.protocolFeeLpTerms) : undefined;
-    obj.swap_fee = message.swapFee ? Coin.toAmino(message.swapFee) : undefined;
-    obj.swap_fee_lp_terms = message.swapFeeLpTerms ? Coin.toAmino(message.swapFeeLpTerms) : undefined;
-    obj.price_impact = message.priceImpact;
+    obj.amount_in = message.amountIn ? Coin.toAmino(message.amountIn, useInterfaces) : undefined;
+    obj.amount_out = message.amountOut ? Coin.toAmino(message.amountOut, useInterfaces) : undefined;
+    obj.protocol_fee = message.protocolFee ? Coin.toAmino(message.protocolFee, useInterfaces) : undefined;
+    obj.protocol_fee_lp_terms = message.protocolFeeLpTerms ? Coin.toAmino(message.protocolFeeLpTerms, useInterfaces) : undefined;
+    obj.swap_fee = message.swapFee ? Coin.toAmino(message.swapFee, useInterfaces) : undefined;
+    obj.swap_fee_lp_terms = message.swapFeeLpTerms ? Coin.toAmino(message.swapFeeLpTerms, useInterfaces) : undefined;
+    obj.price_impact = padDecimal(message.priceImpact) === "" ? undefined : padDecimal(message.priceImpact);
     return obj;
   },
   fromAminoMsg(object: QueryExitTokenExactLptSimulationResponseAminoMsg): QueryExitTokenExactLptSimulationResponse {
     return QueryExitTokenExactLptSimulationResponse.fromAmino(object.value);
   },
-  fromProtoMsg(message: QueryExitTokenExactLptSimulationResponseProtoMsg): QueryExitTokenExactLptSimulationResponse {
-    return QueryExitTokenExactLptSimulationResponse.decode(message.value);
+  fromProtoMsg(message: QueryExitTokenExactLptSimulationResponseProtoMsg, useInterfaces: boolean = true): QueryExitTokenExactLptSimulationResponse {
+    return QueryExitTokenExactLptSimulationResponse.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: QueryExitTokenExactLptSimulationResponse): Uint8Array {
     return QueryExitTokenExactLptSimulationResponse.encode(message).finish();
@@ -318,3 +338,4 @@ export const QueryExitTokenExactLptSimulationResponse = {
     };
   }
 };
+GlobalDecoderRegistry.register(QueryExitTokenExactLptSimulationResponse.typeUrl, QueryExitTokenExactLptSimulationResponse);

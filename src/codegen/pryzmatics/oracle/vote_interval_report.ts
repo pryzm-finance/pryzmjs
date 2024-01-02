@@ -2,8 +2,9 @@ import { VoteType, voteTypeFromJSON, voteTypeToJSON } from "../../refractedlabs/
 import { Coin, CoinAmino, CoinSDKType } from "../../cosmos/base/v1beta1/coin";
 import { VoteInterval, VoteIntervalAmino, VoteIntervalSDKType } from "./vote_interval";
 import { BallotVoteResult, BallotVoteResultAmino, BallotVoteResultSDKType } from "./ballot_vote_result";
-import { BinaryReader, BinaryWriter } from "../../binary";
 import { isSet } from "../../helpers";
+import { BinaryReader, BinaryWriter } from "../../binary";
+import { GlobalDecoderRegistry } from "../../registry";
 export interface VotePayloadReport {
   module: string;
   namespace: string;
@@ -95,6 +96,15 @@ function createBaseVotePayloadReport(): VotePayloadReport {
 }
 export const VotePayloadReport = {
   typeUrl: "/pryzmatics.oracle.VotePayloadReport",
+  is(o: any): o is VotePayloadReport {
+    return o && (o.$typeUrl === VotePayloadReport.typeUrl || typeof o.module === "string" && typeof o.namespace === "string" && typeof o.payload === "string" && isSet(o.type));
+  },
+  isSDK(o: any): o is VotePayloadReportSDKType {
+    return o && (o.$typeUrl === VotePayloadReport.typeUrl || typeof o.module === "string" && typeof o.namespace === "string" && typeof o.payload === "string" && isSet(o.type));
+  },
+  isAmino(o: any): o is VotePayloadReportAmino {
+    return o && (o.$typeUrl === VotePayloadReport.typeUrl || typeof o.module === "string" && typeof o.namespace === "string" && typeof o.payload === "string" && isSet(o.type));
+  },
   encode(message: VotePayloadReport, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.module !== "") {
       writer.uint32(10).string(message.module);
@@ -110,7 +120,7 @@ export const VotePayloadReport = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): VotePayloadReport {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): VotePayloadReport {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseVotePayloadReport();
@@ -172,23 +182,23 @@ export const VotePayloadReport = {
       message.payload = object.payload;
     }
     if (object.type !== undefined && object.type !== null) {
-      message.type = voteTypeFromJSON(object.type);
+      message.type = object.type;
     }
     return message;
   },
-  toAmino(message: VotePayloadReport): VotePayloadReportAmino {
+  toAmino(message: VotePayloadReport, useInterfaces: boolean = true): VotePayloadReportAmino {
     const obj: any = {};
-    obj.module = message.module;
-    obj.namespace = message.namespace;
-    obj.payload = message.payload;
-    obj.type = voteTypeToJSON(message.type);
+    obj.module = message.module === "" ? undefined : message.module;
+    obj.namespace = message.namespace === "" ? undefined : message.namespace;
+    obj.payload = message.payload === "" ? undefined : message.payload;
+    obj.type = message.type === 0 ? undefined : message.type;
     return obj;
   },
   fromAminoMsg(object: VotePayloadReportAminoMsg): VotePayloadReport {
     return VotePayloadReport.fromAmino(object.value);
   },
-  fromProtoMsg(message: VotePayloadReportProtoMsg): VotePayloadReport {
-    return VotePayloadReport.decode(message.value);
+  fromProtoMsg(message: VotePayloadReportProtoMsg, useInterfaces: boolean = true): VotePayloadReport {
+    return VotePayloadReport.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: VotePayloadReport): Uint8Array {
     return VotePayloadReport.encode(message).finish();
@@ -200,6 +210,7 @@ export const VotePayloadReport = {
     };
   }
 };
+GlobalDecoderRegistry.register(VotePayloadReport.typeUrl, VotePayloadReport);
 function createBaseValidatorVoteIntervalReport(): ValidatorVoteIntervalReport {
   return {
     validator: "",
@@ -212,6 +223,15 @@ function createBaseValidatorVoteIntervalReport(): ValidatorVoteIntervalReport {
 }
 export const ValidatorVoteIntervalReport = {
   typeUrl: "/pryzmatics.oracle.ValidatorVoteIntervalReport",
+  is(o: any): o is ValidatorVoteIntervalReport {
+    return o && (o.$typeUrl === ValidatorVoteIntervalReport.typeUrl || typeof o.validator === "string" && typeof o.preVoted === "boolean" && typeof o.voted === "boolean" && typeof o.missCounter === "bigint" && Array.isArray(o.rewards) && (!o.rewards.length || Coin.is(o.rewards[0])) && Array.isArray(o.payloads) && (!o.payloads.length || VotePayloadReport.is(o.payloads[0])));
+  },
+  isSDK(o: any): o is ValidatorVoteIntervalReportSDKType {
+    return o && (o.$typeUrl === ValidatorVoteIntervalReport.typeUrl || typeof o.validator === "string" && typeof o.pre_voted === "boolean" && typeof o.voted === "boolean" && typeof o.miss_counter === "bigint" && Array.isArray(o.rewards) && (!o.rewards.length || Coin.isSDK(o.rewards[0])) && Array.isArray(o.payloads) && (!o.payloads.length || VotePayloadReport.isSDK(o.payloads[0])));
+  },
+  isAmino(o: any): o is ValidatorVoteIntervalReportAmino {
+    return o && (o.$typeUrl === ValidatorVoteIntervalReport.typeUrl || typeof o.validator === "string" && typeof o.pre_voted === "boolean" && typeof o.voted === "boolean" && typeof o.miss_counter === "bigint" && Array.isArray(o.rewards) && (!o.rewards.length || Coin.isAmino(o.rewards[0])) && Array.isArray(o.payloads) && (!o.payloads.length || VotePayloadReport.isAmino(o.payloads[0])));
+  },
   encode(message: ValidatorVoteIntervalReport, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.validator !== "") {
       writer.uint32(10).string(message.validator);
@@ -233,7 +253,7 @@ export const ValidatorVoteIntervalReport = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): ValidatorVoteIntervalReport {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): ValidatorVoteIntervalReport {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseValidatorVoteIntervalReport();
@@ -253,10 +273,10 @@ export const ValidatorVoteIntervalReport = {
           message.missCounter = reader.int64();
           break;
         case 5:
-          message.rewards.push(Coin.decode(reader, reader.uint32()));
+          message.rewards.push(Coin.decode(reader, reader.uint32(), useInterfaces));
           break;
         case 6:
-          message.payloads.push(VotePayloadReport.decode(reader, reader.uint32()));
+          message.payloads.push(VotePayloadReport.decode(reader, reader.uint32(), useInterfaces));
           break;
         default:
           reader.skipType(tag & 7);
@@ -321,29 +341,29 @@ export const ValidatorVoteIntervalReport = {
     message.payloads = object.payloads?.map(e => VotePayloadReport.fromAmino(e)) || [];
     return message;
   },
-  toAmino(message: ValidatorVoteIntervalReport): ValidatorVoteIntervalReportAmino {
+  toAmino(message: ValidatorVoteIntervalReport, useInterfaces: boolean = true): ValidatorVoteIntervalReportAmino {
     const obj: any = {};
-    obj.validator = message.validator;
-    obj.pre_voted = message.preVoted;
-    obj.voted = message.voted;
+    obj.validator = message.validator === "" ? undefined : message.validator;
+    obj.pre_voted = message.preVoted === false ? undefined : message.preVoted;
+    obj.voted = message.voted === false ? undefined : message.voted;
     obj.miss_counter = message.missCounter ? message.missCounter.toString() : undefined;
     if (message.rewards) {
-      obj.rewards = message.rewards.map(e => e ? Coin.toAmino(e) : undefined);
+      obj.rewards = message.rewards.map(e => e ? Coin.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.rewards = [];
+      obj.rewards = null;
     }
     if (message.payloads) {
-      obj.payloads = message.payloads.map(e => e ? VotePayloadReport.toAmino(e) : undefined);
+      obj.payloads = message.payloads.map(e => e ? VotePayloadReport.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.payloads = [];
+      obj.payloads = null;
     }
     return obj;
   },
   fromAminoMsg(object: ValidatorVoteIntervalReportAminoMsg): ValidatorVoteIntervalReport {
     return ValidatorVoteIntervalReport.fromAmino(object.value);
   },
-  fromProtoMsg(message: ValidatorVoteIntervalReportProtoMsg): ValidatorVoteIntervalReport {
-    return ValidatorVoteIntervalReport.decode(message.value);
+  fromProtoMsg(message: ValidatorVoteIntervalReportProtoMsg, useInterfaces: boolean = true): ValidatorVoteIntervalReport {
+    return ValidatorVoteIntervalReport.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: ValidatorVoteIntervalReport): Uint8Array {
     return ValidatorVoteIntervalReport.encode(message).finish();
@@ -355,6 +375,7 @@ export const ValidatorVoteIntervalReport = {
     };
   }
 };
+GlobalDecoderRegistry.register(ValidatorVoteIntervalReport.typeUrl, ValidatorVoteIntervalReport);
 function createBaseVoteIntervalReport(): VoteIntervalReport {
   return {
     voteInterval: VoteInterval.fromPartial({}),
@@ -364,6 +385,15 @@ function createBaseVoteIntervalReport(): VoteIntervalReport {
 }
 export const VoteIntervalReport = {
   typeUrl: "/pryzmatics.oracle.VoteIntervalReport",
+  is(o: any): o is VoteIntervalReport {
+    return o && (o.$typeUrl === VoteIntervalReport.typeUrl || VoteInterval.is(o.voteInterval) && Array.isArray(o.ballotVoteResults) && (!o.ballotVoteResults.length || BallotVoteResult.is(o.ballotVoteResults[0])) && Array.isArray(o.validatorReports) && (!o.validatorReports.length || ValidatorVoteIntervalReport.is(o.validatorReports[0])));
+  },
+  isSDK(o: any): o is VoteIntervalReportSDKType {
+    return o && (o.$typeUrl === VoteIntervalReport.typeUrl || VoteInterval.isSDK(o.vote_interval) && Array.isArray(o.ballot_vote_results) && (!o.ballot_vote_results.length || BallotVoteResult.isSDK(o.ballot_vote_results[0])) && Array.isArray(o.validator_reports) && (!o.validator_reports.length || ValidatorVoteIntervalReport.isSDK(o.validator_reports[0])));
+  },
+  isAmino(o: any): o is VoteIntervalReportAmino {
+    return o && (o.$typeUrl === VoteIntervalReport.typeUrl || VoteInterval.isAmino(o.vote_interval) && Array.isArray(o.ballot_vote_results) && (!o.ballot_vote_results.length || BallotVoteResult.isAmino(o.ballot_vote_results[0])) && Array.isArray(o.validator_reports) && (!o.validator_reports.length || ValidatorVoteIntervalReport.isAmino(o.validator_reports[0])));
+  },
   encode(message: VoteIntervalReport, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.voteInterval !== undefined) {
       VoteInterval.encode(message.voteInterval, writer.uint32(10).fork()).ldelim();
@@ -376,7 +406,7 @@ export const VoteIntervalReport = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): VoteIntervalReport {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): VoteIntervalReport {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseVoteIntervalReport();
@@ -384,13 +414,13 @@ export const VoteIntervalReport = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.voteInterval = VoteInterval.decode(reader, reader.uint32());
+          message.voteInterval = VoteInterval.decode(reader, reader.uint32(), useInterfaces);
           break;
         case 2:
-          message.ballotVoteResults.push(BallotVoteResult.decode(reader, reader.uint32()));
+          message.ballotVoteResults.push(BallotVoteResult.decode(reader, reader.uint32(), useInterfaces));
           break;
         case 3:
-          message.validatorReports.push(ValidatorVoteIntervalReport.decode(reader, reader.uint32()));
+          message.validatorReports.push(ValidatorVoteIntervalReport.decode(reader, reader.uint32(), useInterfaces));
           break;
         default:
           reader.skipType(tag & 7);
@@ -437,26 +467,26 @@ export const VoteIntervalReport = {
     message.validatorReports = object.validator_reports?.map(e => ValidatorVoteIntervalReport.fromAmino(e)) || [];
     return message;
   },
-  toAmino(message: VoteIntervalReport): VoteIntervalReportAmino {
+  toAmino(message: VoteIntervalReport, useInterfaces: boolean = true): VoteIntervalReportAmino {
     const obj: any = {};
-    obj.vote_interval = message.voteInterval ? VoteInterval.toAmino(message.voteInterval) : undefined;
+    obj.vote_interval = message.voteInterval ? VoteInterval.toAmino(message.voteInterval, useInterfaces) : undefined;
     if (message.ballotVoteResults) {
-      obj.ballot_vote_results = message.ballotVoteResults.map(e => e ? BallotVoteResult.toAmino(e) : undefined);
+      obj.ballot_vote_results = message.ballotVoteResults.map(e => e ? BallotVoteResult.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.ballot_vote_results = [];
+      obj.ballot_vote_results = null;
     }
     if (message.validatorReports) {
-      obj.validator_reports = message.validatorReports.map(e => e ? ValidatorVoteIntervalReport.toAmino(e) : undefined);
+      obj.validator_reports = message.validatorReports.map(e => e ? ValidatorVoteIntervalReport.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.validator_reports = [];
+      obj.validator_reports = null;
     }
     return obj;
   },
   fromAminoMsg(object: VoteIntervalReportAminoMsg): VoteIntervalReport {
     return VoteIntervalReport.fromAmino(object.value);
   },
-  fromProtoMsg(message: VoteIntervalReportProtoMsg): VoteIntervalReport {
-    return VoteIntervalReport.decode(message.value);
+  fromProtoMsg(message: VoteIntervalReportProtoMsg, useInterfaces: boolean = true): VoteIntervalReport {
+    return VoteIntervalReport.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: VoteIntervalReport): Uint8Array {
     return VoteIntervalReport.encode(message).finish();
@@ -468,3 +498,4 @@ export const VoteIntervalReport = {
     };
   }
 };
+GlobalDecoderRegistry.register(VoteIntervalReport.typeUrl, VoteIntervalReport);

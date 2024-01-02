@@ -1,6 +1,7 @@
 import { Duration, DurationAmino, DurationSDKType } from "../../../google/protobuf/duration";
 import { BinaryReader, BinaryWriter } from "../../../binary";
-import { isSet } from "../../../helpers";
+import { isSet, padDecimal } from "../../../helpers";
+import { GlobalDecoderRegistry } from "../../../registry";
 import { Decimal } from "@cosmjs/math";
 /** Params defines the parameters for the module. */
 export interface Params {
@@ -162,6 +163,15 @@ function createBaseParams(): Params {
 }
 export const Params = {
   typeUrl: "/pryzm.icstaking.v1.Params",
+  is(o: any): o is Params {
+    return o && (o.$typeUrl === Params.typeUrl || StakingParams.is(o.stakingParams) && Array.isArray(o.admins) && (!o.admins.length || typeof o.admins[0] === "string"));
+  },
+  isSDK(o: any): o is ParamsSDKType {
+    return o && (o.$typeUrl === Params.typeUrl || StakingParams.isSDK(o.staking_params) && Array.isArray(o.admins) && (!o.admins.length || typeof o.admins[0] === "string"));
+  },
+  isAmino(o: any): o is ParamsAmino {
+    return o && (o.$typeUrl === Params.typeUrl || StakingParams.isAmino(o.staking_params) && Array.isArray(o.admins) && (!o.admins.length || typeof o.admins[0] === "string"));
+  },
   encode(message: Params, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.stakingParams !== undefined) {
       StakingParams.encode(message.stakingParams, writer.uint32(10).fork()).ldelim();
@@ -171,7 +181,7 @@ export const Params = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): Params {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): Params {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseParams();
@@ -179,7 +189,7 @@ export const Params = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.stakingParams = StakingParams.decode(reader, reader.uint32());
+          message.stakingParams = StakingParams.decode(reader, reader.uint32(), useInterfaces);
           break;
         case 2:
           message.admins.push(reader.string());
@@ -221,21 +231,21 @@ export const Params = {
     message.admins = object.admins?.map(e => e) || [];
     return message;
   },
-  toAmino(message: Params): ParamsAmino {
+  toAmino(message: Params, useInterfaces: boolean = true): ParamsAmino {
     const obj: any = {};
-    obj.staking_params = message.stakingParams ? StakingParams.toAmino(message.stakingParams) : undefined;
+    obj.staking_params = message.stakingParams ? StakingParams.toAmino(message.stakingParams, useInterfaces) : undefined;
     if (message.admins) {
       obj.admins = message.admins.map(e => e);
     } else {
-      obj.admins = [];
+      obj.admins = null;
     }
     return obj;
   },
   fromAminoMsg(object: ParamsAminoMsg): Params {
     return Params.fromAmino(object.value);
   },
-  fromProtoMsg(message: ParamsProtoMsg): Params {
-    return Params.decode(message.value);
+  fromProtoMsg(message: ParamsProtoMsg, useInterfaces: boolean = true): Params {
+    return Params.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: Params): Uint8Array {
     return Params.encode(message).finish();
@@ -247,6 +257,7 @@ export const Params = {
     };
   }
 };
+GlobalDecoderRegistry.register(Params.typeUrl, Params);
 function createBaseStakingParams(): StakingParams {
   return {
     feeRatios: FeeRatios.fromPartial({}),
@@ -259,6 +270,15 @@ function createBaseStakingParams(): StakingParams {
 }
 export const StakingParams = {
   typeUrl: "/pryzm.icstaking.v1.StakingParams",
+  is(o: any): o is StakingParams {
+    return o && (o.$typeUrl === StakingParams.typeUrl || FeeRatios.is(o.feeRatios) && RebalanceParams.is(o.rebalanceParams));
+  },
+  isSDK(o: any): o is StakingParamsSDKType {
+    return o && (o.$typeUrl === StakingParams.typeUrl || FeeRatios.isSDK(o.fee_ratios) && RebalanceParams.isSDK(o.rebalance_params));
+  },
+  isAmino(o: any): o is StakingParamsAmino {
+    return o && (o.$typeUrl === StakingParams.typeUrl || FeeRatios.isAmino(o.fee_ratios) && RebalanceParams.isAmino(o.rebalance_params));
+  },
   encode(message: StakingParams, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.feeRatios !== undefined) {
       FeeRatios.encode(message.feeRatios, writer.uint32(10).fork()).ldelim();
@@ -280,7 +300,7 @@ export const StakingParams = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): StakingParams {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): StakingParams {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseStakingParams();
@@ -288,22 +308,22 @@ export const StakingParams = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.feeRatios = FeeRatios.decode(reader, reader.uint32());
+          message.feeRatios = FeeRatios.decode(reader, reader.uint32(), useInterfaces);
           break;
         case 2:
-          message.delegationInterval = Duration.decode(reader, reader.uint32());
+          message.delegationInterval = Duration.decode(reader, reader.uint32(), useInterfaces);
           break;
         case 3:
-          message.undelegationInterval = Duration.decode(reader, reader.uint32());
+          message.undelegationInterval = Duration.decode(reader, reader.uint32(), useInterfaces);
           break;
         case 4:
-          message.ibcTransferTimeout = Duration.decode(reader, reader.uint32());
+          message.ibcTransferTimeout = Duration.decode(reader, reader.uint32(), useInterfaces);
           break;
         case 5:
-          message.icaTimeout = Duration.decode(reader, reader.uint32());
+          message.icaTimeout = Duration.decode(reader, reader.uint32(), useInterfaces);
           break;
         case 6:
-          message.rebalanceParams = RebalanceParams.decode(reader, reader.uint32());
+          message.rebalanceParams = RebalanceParams.decode(reader, reader.uint32(), useInterfaces);
           break;
         default:
           reader.skipType(tag & 7);
@@ -364,21 +384,21 @@ export const StakingParams = {
     }
     return message;
   },
-  toAmino(message: StakingParams): StakingParamsAmino {
+  toAmino(message: StakingParams, useInterfaces: boolean = true): StakingParamsAmino {
     const obj: any = {};
-    obj.fee_ratios = message.feeRatios ? FeeRatios.toAmino(message.feeRatios) : undefined;
-    obj.delegation_interval = message.delegationInterval ? Duration.toAmino(message.delegationInterval) : undefined;
-    obj.undelegation_interval = message.undelegationInterval ? Duration.toAmino(message.undelegationInterval) : undefined;
-    obj.ibc_transfer_timeout = message.ibcTransferTimeout ? Duration.toAmino(message.ibcTransferTimeout) : undefined;
-    obj.ica_timeout = message.icaTimeout ? Duration.toAmino(message.icaTimeout) : undefined;
-    obj.rebalance_params = message.rebalanceParams ? RebalanceParams.toAmino(message.rebalanceParams) : undefined;
+    obj.fee_ratios = message.feeRatios ? FeeRatios.toAmino(message.feeRatios, useInterfaces) : undefined;
+    obj.delegation_interval = message.delegationInterval ? Duration.toAmino(message.delegationInterval, useInterfaces) : undefined;
+    obj.undelegation_interval = message.undelegationInterval ? Duration.toAmino(message.undelegationInterval, useInterfaces) : undefined;
+    obj.ibc_transfer_timeout = message.ibcTransferTimeout ? Duration.toAmino(message.ibcTransferTimeout, useInterfaces) : undefined;
+    obj.ica_timeout = message.icaTimeout ? Duration.toAmino(message.icaTimeout, useInterfaces) : undefined;
+    obj.rebalance_params = message.rebalanceParams ? RebalanceParams.toAmino(message.rebalanceParams, useInterfaces) : undefined;
     return obj;
   },
   fromAminoMsg(object: StakingParamsAminoMsg): StakingParams {
     return StakingParams.fromAmino(object.value);
   },
-  fromProtoMsg(message: StakingParamsProtoMsg): StakingParams {
-    return StakingParams.decode(message.value);
+  fromProtoMsg(message: StakingParamsProtoMsg, useInterfaces: boolean = true): StakingParams {
+    return StakingParams.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: StakingParams): Uint8Array {
     return StakingParams.encode(message).finish();
@@ -390,6 +410,7 @@ export const StakingParams = {
     };
   }
 };
+GlobalDecoderRegistry.register(StakingParams.typeUrl, StakingParams);
 function createBaseFeeRatios(): FeeRatios {
   return {
     yield: undefined,
@@ -400,6 +421,15 @@ function createBaseFeeRatios(): FeeRatios {
 }
 export const FeeRatios = {
   typeUrl: "/pryzm.icstaking.v1.FeeRatios",
+  is(o: any): o is FeeRatios {
+    return o && o.$typeUrl === FeeRatios.typeUrl;
+  },
+  isSDK(o: any): o is FeeRatiosSDKType {
+    return o && o.$typeUrl === FeeRatios.typeUrl;
+  },
+  isAmino(o: any): o is FeeRatiosAmino {
+    return o && o.$typeUrl === FeeRatios.typeUrl;
+  },
   encode(message: FeeRatios, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.yield !== undefined) {
       writer.uint32(10).string(Decimal.fromUserInput(message.yield, 18).atomics);
@@ -415,7 +445,7 @@ export const FeeRatios = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): FeeRatios {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): FeeRatios {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseFeeRatios();
@@ -481,19 +511,19 @@ export const FeeRatios = {
     }
     return message;
   },
-  toAmino(message: FeeRatios): FeeRatiosAmino {
+  toAmino(message: FeeRatios, useInterfaces: boolean = true): FeeRatiosAmino {
     const obj: any = {};
-    obj.yield = message.yield;
-    obj.staking = message.staking;
-    obj.unstaking = message.unstaking;
-    obj.instant_unstaking = message.instantUnstaking;
+    obj.yield = padDecimal(message.yield) === null ? undefined : padDecimal(message.yield);
+    obj.staking = padDecimal(message.staking) === null ? undefined : padDecimal(message.staking);
+    obj.unstaking = padDecimal(message.unstaking) === null ? undefined : padDecimal(message.unstaking);
+    obj.instant_unstaking = padDecimal(message.instantUnstaking) === null ? undefined : padDecimal(message.instantUnstaking);
     return obj;
   },
   fromAminoMsg(object: FeeRatiosAminoMsg): FeeRatios {
     return FeeRatios.fromAmino(object.value);
   },
-  fromProtoMsg(message: FeeRatiosProtoMsg): FeeRatios {
-    return FeeRatios.decode(message.value);
+  fromProtoMsg(message: FeeRatiosProtoMsg, useInterfaces: boolean = true): FeeRatios {
+    return FeeRatios.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: FeeRatios): Uint8Array {
     return FeeRatios.encode(message).finish();
@@ -505,6 +535,7 @@ export const FeeRatios = {
     };
   }
 };
+GlobalDecoderRegistry.register(FeeRatios.typeUrl, FeeRatios);
 function createBaseRebalanceParams(): RebalanceParams {
   return {
     maxMsgs: 0,
@@ -515,6 +546,15 @@ function createBaseRebalanceParams(): RebalanceParams {
 }
 export const RebalanceParams = {
   typeUrl: "/pryzm.icstaking.v1.RebalanceParams",
+  is(o: any): o is RebalanceParams {
+    return o && (o.$typeUrl === RebalanceParams.typeUrl || typeof o.maxMsgs === "number");
+  },
+  isSDK(o: any): o is RebalanceParamsSDKType {
+    return o && (o.$typeUrl === RebalanceParams.typeUrl || typeof o.max_msgs === "number");
+  },
+  isAmino(o: any): o is RebalanceParamsAmino {
+    return o && (o.$typeUrl === RebalanceParams.typeUrl || typeof o.max_msgs === "number");
+  },
   encode(message: RebalanceParams, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.maxMsgs !== 0) {
       writer.uint32(8).int32(message.maxMsgs);
@@ -530,7 +570,7 @@ export const RebalanceParams = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): RebalanceParams {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): RebalanceParams {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseRebalanceParams();
@@ -547,7 +587,7 @@ export const RebalanceParams = {
           message.minRebalanceAmount = reader.string();
           break;
         case 4:
-          message.minRebalanceInterval = Duration.decode(reader, reader.uint32());
+          message.minRebalanceInterval = Duration.decode(reader, reader.uint32(), useInterfaces);
           break;
         default:
           reader.skipType(tag & 7);
@@ -596,19 +636,19 @@ export const RebalanceParams = {
     }
     return message;
   },
-  toAmino(message: RebalanceParams): RebalanceParamsAmino {
+  toAmino(message: RebalanceParams, useInterfaces: boolean = true): RebalanceParamsAmino {
     const obj: any = {};
-    obj.max_msgs = message.maxMsgs;
-    obj.rebalance_threshold = message.rebalanceThreshold;
-    obj.min_rebalance_amount = message.minRebalanceAmount;
-    obj.min_rebalance_interval = message.minRebalanceInterval ? Duration.toAmino(message.minRebalanceInterval) : undefined;
+    obj.max_msgs = message.maxMsgs === 0 ? undefined : message.maxMsgs;
+    obj.rebalance_threshold = padDecimal(message.rebalanceThreshold) === null ? undefined : padDecimal(message.rebalanceThreshold);
+    obj.min_rebalance_amount = message.minRebalanceAmount === null ? undefined : message.minRebalanceAmount;
+    obj.min_rebalance_interval = message.minRebalanceInterval ? Duration.toAmino(message.minRebalanceInterval, useInterfaces) : undefined;
     return obj;
   },
   fromAminoMsg(object: RebalanceParamsAminoMsg): RebalanceParams {
     return RebalanceParams.fromAmino(object.value);
   },
-  fromProtoMsg(message: RebalanceParamsProtoMsg): RebalanceParams {
-    return RebalanceParams.decode(message.value);
+  fromProtoMsg(message: RebalanceParamsProtoMsg, useInterfaces: boolean = true): RebalanceParams {
+    return RebalanceParams.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: RebalanceParams): Uint8Array {
     return RebalanceParams.encode(message).finish();
@@ -620,3 +660,4 @@ export const RebalanceParams = {
     };
   }
 };
+GlobalDecoderRegistry.register(RebalanceParams.typeUrl, RebalanceParams);

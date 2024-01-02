@@ -1,6 +1,7 @@
 import { BinaryReader, BinaryWriter } from "../../../binary";
 import { Decimal } from "@cosmjs/math";
-import { isSet } from "../../../helpers";
+import { isSet, padDecimal } from "../../../helpers";
+import { GlobalDecoderRegistry } from "../../../registry";
 /** Minter represents the minting state. */
 export interface Minter {
   inflation: string;
@@ -34,6 +35,15 @@ function createBaseMinter(): Minter {
 }
 export const Minter = {
   typeUrl: "/pryzm.mint.v1.Minter",
+  is(o: any): o is Minter {
+    return o && (o.$typeUrl === Minter.typeUrl || typeof o.inflation === "string" && typeof o.annualProvisions === "string");
+  },
+  isSDK(o: any): o is MinterSDKType {
+    return o && (o.$typeUrl === Minter.typeUrl || typeof o.inflation === "string" && typeof o.annual_provisions === "string");
+  },
+  isAmino(o: any): o is MinterAmino {
+    return o && (o.$typeUrl === Minter.typeUrl || typeof o.inflation === "string" && typeof o.annual_provisions === "string");
+  },
   encode(message: Minter, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.inflation !== "") {
       writer.uint32(10).string(Decimal.fromUserInput(message.inflation, 18).atomics);
@@ -43,7 +53,7 @@ export const Minter = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): Minter {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): Minter {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMinter();
@@ -91,17 +101,17 @@ export const Minter = {
     }
     return message;
   },
-  toAmino(message: Minter): MinterAmino {
+  toAmino(message: Minter, useInterfaces: boolean = true): MinterAmino {
     const obj: any = {};
-    obj.inflation = message.inflation;
-    obj.annual_provisions = message.annualProvisions;
+    obj.inflation = padDecimal(message.inflation) === "" ? undefined : padDecimal(message.inflation);
+    obj.annual_provisions = padDecimal(message.annualProvisions) === "" ? undefined : padDecimal(message.annualProvisions);
     return obj;
   },
   fromAminoMsg(object: MinterAminoMsg): Minter {
     return Minter.fromAmino(object.value);
   },
-  fromProtoMsg(message: MinterProtoMsg): Minter {
-    return Minter.decode(message.value);
+  fromProtoMsg(message: MinterProtoMsg, useInterfaces: boolean = true): Minter {
+    return Minter.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: Minter): Uint8Array {
     return Minter.encode(message).finish();
@@ -113,3 +123,4 @@ export const Minter = {
     };
   }
 };
+GlobalDecoderRegistry.register(Minter.typeUrl, Minter);

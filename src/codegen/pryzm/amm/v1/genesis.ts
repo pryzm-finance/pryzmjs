@@ -11,6 +11,7 @@ import { OraclePricePair, OraclePricePairAmino, OraclePricePairSDKType } from ".
 import { PendingTokenIntroduction, PendingTokenIntroductionAmino, PendingTokenIntroductionSDKType } from "./pending_token_introduction";
 import { BinaryReader, BinaryWriter } from "../../../binary";
 import { isSet } from "../../../helpers";
+import { GlobalDecoderRegistry } from "../../../registry";
 export interface GenesisPoolData {
   pool: Pool;
   totalLpTokenSupply: string;
@@ -125,6 +126,15 @@ function createBaseGenesisPoolData(): GenesisPoolData {
 }
 export const GenesisPoolData = {
   typeUrl: "/pryzm.amm.v1.GenesisPoolData",
+  is(o: any): o is GenesisPoolData {
+    return o && (o.$typeUrl === GenesisPoolData.typeUrl || Pool.is(o.pool) && typeof o.totalLpTokenSupply === "string" && Array.isArray(o.poolTokenList) && (!o.poolTokenList.length || PoolToken.is(o.poolTokenList[0])));
+  },
+  isSDK(o: any): o is GenesisPoolDataSDKType {
+    return o && (o.$typeUrl === GenesisPoolData.typeUrl || Pool.isSDK(o.pool) && typeof o.total_lp_token_supply === "string" && Array.isArray(o.pool_token_list) && (!o.pool_token_list.length || PoolToken.isSDK(o.pool_token_list[0])));
+  },
+  isAmino(o: any): o is GenesisPoolDataAmino {
+    return o && (o.$typeUrl === GenesisPoolData.typeUrl || Pool.isAmino(o.pool) && typeof o.total_lp_token_supply === "string" && Array.isArray(o.pool_token_list) && (!o.pool_token_list.length || PoolToken.isAmino(o.pool_token_list[0])));
+  },
   encode(message: GenesisPoolData, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.pool !== undefined) {
       Pool.encode(message.pool, writer.uint32(10).fork()).ldelim();
@@ -137,7 +147,7 @@ export const GenesisPoolData = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): GenesisPoolData {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): GenesisPoolData {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseGenesisPoolData();
@@ -145,13 +155,13 @@ export const GenesisPoolData = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.pool = Pool.decode(reader, reader.uint32());
+          message.pool = Pool.decode(reader, reader.uint32(), useInterfaces);
           break;
         case 2:
           message.totalLpTokenSupply = reader.string();
           break;
         case 3:
-          message.poolTokenList.push(PoolToken.decode(reader, reader.uint32()));
+          message.poolTokenList.push(PoolToken.decode(reader, reader.uint32(), useInterfaces));
           break;
         default:
           reader.skipType(tag & 7);
@@ -196,22 +206,22 @@ export const GenesisPoolData = {
     message.poolTokenList = object.pool_token_list?.map(e => PoolToken.fromAmino(e)) || [];
     return message;
   },
-  toAmino(message: GenesisPoolData): GenesisPoolDataAmino {
+  toAmino(message: GenesisPoolData, useInterfaces: boolean = true): GenesisPoolDataAmino {
     const obj: any = {};
-    obj.pool = message.pool ? Pool.toAmino(message.pool) : undefined;
-    obj.total_lp_token_supply = message.totalLpTokenSupply;
+    obj.pool = message.pool ? Pool.toAmino(message.pool, useInterfaces) : undefined;
+    obj.total_lp_token_supply = message.totalLpTokenSupply === "" ? undefined : message.totalLpTokenSupply;
     if (message.poolTokenList) {
-      obj.pool_token_list = message.poolTokenList.map(e => e ? PoolToken.toAmino(e) : undefined);
+      obj.pool_token_list = message.poolTokenList.map(e => e ? PoolToken.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.pool_token_list = [];
+      obj.pool_token_list = null;
     }
     return obj;
   },
   fromAminoMsg(object: GenesisPoolDataAminoMsg): GenesisPoolData {
     return GenesisPoolData.fromAmino(object.value);
   },
-  fromProtoMsg(message: GenesisPoolDataProtoMsg): GenesisPoolData {
-    return GenesisPoolData.decode(message.value);
+  fromProtoMsg(message: GenesisPoolDataProtoMsg, useInterfaces: boolean = true): GenesisPoolData {
+    return GenesisPoolData.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: GenesisPoolData): Uint8Array {
     return GenesisPoolData.encode(message).finish();
@@ -223,6 +233,7 @@ export const GenesisPoolData = {
     };
   }
 };
+GlobalDecoderRegistry.register(GenesisPoolData.typeUrl, GenesisPoolData);
 function createBaseYammPoolAssetId(): YammPoolAssetId {
   return {
     poolId: BigInt(0),
@@ -231,6 +242,15 @@ function createBaseYammPoolAssetId(): YammPoolAssetId {
 }
 export const YammPoolAssetId = {
   typeUrl: "/pryzm.amm.v1.YammPoolAssetId",
+  is(o: any): o is YammPoolAssetId {
+    return o && (o.$typeUrl === YammPoolAssetId.typeUrl || typeof o.poolId === "bigint" && typeof o.assetId === "string");
+  },
+  isSDK(o: any): o is YammPoolAssetIdSDKType {
+    return o && (o.$typeUrl === YammPoolAssetId.typeUrl || typeof o.pool_id === "bigint" && typeof o.asset_id === "string");
+  },
+  isAmino(o: any): o is YammPoolAssetIdAmino {
+    return o && (o.$typeUrl === YammPoolAssetId.typeUrl || typeof o.pool_id === "bigint" && typeof o.asset_id === "string");
+  },
   encode(message: YammPoolAssetId, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.poolId !== BigInt(0)) {
       writer.uint32(8).uint64(message.poolId);
@@ -240,7 +260,7 @@ export const YammPoolAssetId = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): YammPoolAssetId {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): YammPoolAssetId {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseYammPoolAssetId();
@@ -288,17 +308,17 @@ export const YammPoolAssetId = {
     }
     return message;
   },
-  toAmino(message: YammPoolAssetId): YammPoolAssetIdAmino {
+  toAmino(message: YammPoolAssetId, useInterfaces: boolean = true): YammPoolAssetIdAmino {
     const obj: any = {};
     obj.pool_id = message.poolId ? message.poolId.toString() : undefined;
-    obj.asset_id = message.assetId;
+    obj.asset_id = message.assetId === "" ? undefined : message.assetId;
     return obj;
   },
   fromAminoMsg(object: YammPoolAssetIdAminoMsg): YammPoolAssetId {
     return YammPoolAssetId.fromAmino(object.value);
   },
-  fromProtoMsg(message: YammPoolAssetIdProtoMsg): YammPoolAssetId {
-    return YammPoolAssetId.decode(message.value);
+  fromProtoMsg(message: YammPoolAssetIdProtoMsg, useInterfaces: boolean = true): YammPoolAssetId {
+    return YammPoolAssetId.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: YammPoolAssetId): Uint8Array {
     return YammPoolAssetId.encode(message).finish();
@@ -310,6 +330,7 @@ export const YammPoolAssetId = {
     };
   }
 };
+GlobalDecoderRegistry.register(YammPoolAssetId.typeUrl, YammPoolAssetId);
 function createBaseGenesisState(): GenesisState {
   return {
     params: Params.fromPartial({}),
@@ -331,6 +352,15 @@ function createBaseGenesisState(): GenesisState {
 }
 export const GenesisState = {
   typeUrl: "/pryzm.amm.v1.GenesisState",
+  is(o: any): o is GenesisState {
+    return o && (o.$typeUrl === GenesisState.typeUrl || Params.is(o.params) && Array.isArray(o.poolList) && (!o.poolList.length || GenesisPoolData.is(o.poolList[0])) && Array.isArray(o.weightedPoolPropertiesList) && (!o.weightedPoolPropertiesList.length || WeightedPoolProperties.is(o.weightedPoolPropertiesList[0])) && Array.isArray(o.yammPoolAssetIdList) && (!o.yammPoolAssetIdList.length || YammPoolAssetId.is(o.yammPoolAssetIdList[0])) && Array.isArray(o.introducingPoolTokenList) && (!o.introducingPoolTokenList.length || VirtualBalancePoolToken.is(o.introducingPoolTokenList[0])) && Array.isArray(o.expiringPoolTokenList) && (!o.expiringPoolTokenList.length || VirtualBalancePoolToken.is(o.expiringPoolTokenList[0])) && Array.isArray(o.yammConfigurationList) && (!o.yammConfigurationList.length || YammConfiguration.is(o.yammConfigurationList[0])) && Array.isArray(o.whitelistedRouteList) && (!o.whitelistedRouteList.length || WhitelistedRoute.is(o.whitelistedRouteList[0])) && Array.isArray(o.orderList) && (!o.orderList.length || Order.is(o.orderList[0])) && typeof o.orderCount === "bigint" && Array.isArray(o.executableOrderList) && (!o.executableOrderList.length || typeof o.executableOrderList[0] === "bigint") && Array.isArray(o.scheduleOrderList) && (!o.scheduleOrderList.length || ScheduleOrder.is(o.scheduleOrderList[0])) && typeof o.vaultPaused === "boolean" && Array.isArray(o.oraclePricePairList) && (!o.oraclePricePairList.length || OraclePricePair.is(o.oraclePricePairList[0])) && Array.isArray(o.pendingTokenIntroductionList) && (!o.pendingTokenIntroductionList.length || PendingTokenIntroduction.is(o.pendingTokenIntroductionList[0])));
+  },
+  isSDK(o: any): o is GenesisStateSDKType {
+    return o && (o.$typeUrl === GenesisState.typeUrl || Params.isSDK(o.params) && Array.isArray(o.pool_list) && (!o.pool_list.length || GenesisPoolData.isSDK(o.pool_list[0])) && Array.isArray(o.weighted_pool_properties_list) && (!o.weighted_pool_properties_list.length || WeightedPoolProperties.isSDK(o.weighted_pool_properties_list[0])) && Array.isArray(o.yamm_pool_asset_id_list) && (!o.yamm_pool_asset_id_list.length || YammPoolAssetId.isSDK(o.yamm_pool_asset_id_list[0])) && Array.isArray(o.introducing_pool_token_list) && (!o.introducing_pool_token_list.length || VirtualBalancePoolToken.isSDK(o.introducing_pool_token_list[0])) && Array.isArray(o.expiring_pool_token_list) && (!o.expiring_pool_token_list.length || VirtualBalancePoolToken.isSDK(o.expiring_pool_token_list[0])) && Array.isArray(o.yamm_configuration_list) && (!o.yamm_configuration_list.length || YammConfiguration.isSDK(o.yamm_configuration_list[0])) && Array.isArray(o.whitelisted_route_list) && (!o.whitelisted_route_list.length || WhitelistedRoute.isSDK(o.whitelisted_route_list[0])) && Array.isArray(o.order_list) && (!o.order_list.length || Order.isSDK(o.order_list[0])) && typeof o.order_count === "bigint" && Array.isArray(o.executable_order_list) && (!o.executable_order_list.length || typeof o.executable_order_list[0] === "bigint") && Array.isArray(o.schedule_order_list) && (!o.schedule_order_list.length || ScheduleOrder.isSDK(o.schedule_order_list[0])) && typeof o.vault_paused === "boolean" && Array.isArray(o.oracle_price_pair_list) && (!o.oracle_price_pair_list.length || OraclePricePair.isSDK(o.oracle_price_pair_list[0])) && Array.isArray(o.pending_token_introduction_list) && (!o.pending_token_introduction_list.length || PendingTokenIntroduction.isSDK(o.pending_token_introduction_list[0])));
+  },
+  isAmino(o: any): o is GenesisStateAmino {
+    return o && (o.$typeUrl === GenesisState.typeUrl || Params.isAmino(o.params) && Array.isArray(o.pool_list) && (!o.pool_list.length || GenesisPoolData.isAmino(o.pool_list[0])) && Array.isArray(o.weighted_pool_properties_list) && (!o.weighted_pool_properties_list.length || WeightedPoolProperties.isAmino(o.weighted_pool_properties_list[0])) && Array.isArray(o.yamm_pool_asset_id_list) && (!o.yamm_pool_asset_id_list.length || YammPoolAssetId.isAmino(o.yamm_pool_asset_id_list[0])) && Array.isArray(o.introducing_pool_token_list) && (!o.introducing_pool_token_list.length || VirtualBalancePoolToken.isAmino(o.introducing_pool_token_list[0])) && Array.isArray(o.expiring_pool_token_list) && (!o.expiring_pool_token_list.length || VirtualBalancePoolToken.isAmino(o.expiring_pool_token_list[0])) && Array.isArray(o.yamm_configuration_list) && (!o.yamm_configuration_list.length || YammConfiguration.isAmino(o.yamm_configuration_list[0])) && Array.isArray(o.whitelisted_route_list) && (!o.whitelisted_route_list.length || WhitelistedRoute.isAmino(o.whitelisted_route_list[0])) && Array.isArray(o.order_list) && (!o.order_list.length || Order.isAmino(o.order_list[0])) && typeof o.order_count === "bigint" && Array.isArray(o.executable_order_list) && (!o.executable_order_list.length || typeof o.executable_order_list[0] === "bigint") && Array.isArray(o.schedule_order_list) && (!o.schedule_order_list.length || ScheduleOrder.isAmino(o.schedule_order_list[0])) && typeof o.vault_paused === "boolean" && Array.isArray(o.oracle_price_pair_list) && (!o.oracle_price_pair_list.length || OraclePricePair.isAmino(o.oracle_price_pair_list[0])) && Array.isArray(o.pending_token_introduction_list) && (!o.pending_token_introduction_list.length || PendingTokenIntroduction.isAmino(o.pending_token_introduction_list[0])));
+  },
   encode(message: GenesisState, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.params !== undefined) {
       Params.encode(message.params, writer.uint32(10).fork()).ldelim();
@@ -381,7 +411,7 @@ export const GenesisState = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): GenesisState {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): GenesisState {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseGenesisState();
@@ -389,31 +419,31 @@ export const GenesisState = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.params = Params.decode(reader, reader.uint32());
+          message.params = Params.decode(reader, reader.uint32(), useInterfaces);
           break;
         case 2:
-          message.poolList.push(GenesisPoolData.decode(reader, reader.uint32()));
+          message.poolList.push(GenesisPoolData.decode(reader, reader.uint32(), useInterfaces));
           break;
         case 3:
-          message.weightedPoolPropertiesList.push(WeightedPoolProperties.decode(reader, reader.uint32()));
+          message.weightedPoolPropertiesList.push(WeightedPoolProperties.decode(reader, reader.uint32(), useInterfaces));
           break;
         case 4:
-          message.yammPoolAssetIdList.push(YammPoolAssetId.decode(reader, reader.uint32()));
+          message.yammPoolAssetIdList.push(YammPoolAssetId.decode(reader, reader.uint32(), useInterfaces));
           break;
         case 5:
-          message.introducingPoolTokenList.push(VirtualBalancePoolToken.decode(reader, reader.uint32()));
+          message.introducingPoolTokenList.push(VirtualBalancePoolToken.decode(reader, reader.uint32(), useInterfaces));
           break;
         case 6:
-          message.expiringPoolTokenList.push(VirtualBalancePoolToken.decode(reader, reader.uint32()));
+          message.expiringPoolTokenList.push(VirtualBalancePoolToken.decode(reader, reader.uint32(), useInterfaces));
           break;
         case 7:
-          message.yammConfigurationList.push(YammConfiguration.decode(reader, reader.uint32()));
+          message.yammConfigurationList.push(YammConfiguration.decode(reader, reader.uint32(), useInterfaces));
           break;
         case 8:
-          message.whitelistedRouteList.push(WhitelistedRoute.decode(reader, reader.uint32()));
+          message.whitelistedRouteList.push(WhitelistedRoute.decode(reader, reader.uint32(), useInterfaces));
           break;
         case 9:
-          message.orderList.push(Order.decode(reader, reader.uint32()));
+          message.orderList.push(Order.decode(reader, reader.uint32(), useInterfaces));
           break;
         case 10:
           message.orderCount = reader.uint64();
@@ -429,16 +459,16 @@ export const GenesisState = {
           }
           break;
         case 12:
-          message.scheduleOrderList.push(ScheduleOrder.decode(reader, reader.uint32()));
+          message.scheduleOrderList.push(ScheduleOrder.decode(reader, reader.uint32(), useInterfaces));
           break;
         case 13:
           message.vaultPaused = reader.bool();
           break;
         case 14:
-          message.oraclePricePairList.push(OraclePricePair.decode(reader, reader.uint32()));
+          message.oraclePricePairList.push(OraclePricePair.decode(reader, reader.uint32(), useInterfaces));
           break;
         case 15:
-          message.pendingTokenIntroductionList.push(PendingTokenIntroduction.decode(reader, reader.uint32()));
+          message.pendingTokenIntroductionList.push(PendingTokenIntroduction.decode(reader, reader.uint32(), useInterfaces));
           break;
         default:
           reader.skipType(tag & 7);
@@ -577,78 +607,78 @@ export const GenesisState = {
     message.pendingTokenIntroductionList = object.pending_token_introduction_list?.map(e => PendingTokenIntroduction.fromAmino(e)) || [];
     return message;
   },
-  toAmino(message: GenesisState): GenesisStateAmino {
+  toAmino(message: GenesisState, useInterfaces: boolean = true): GenesisStateAmino {
     const obj: any = {};
-    obj.params = message.params ? Params.toAmino(message.params) : undefined;
+    obj.params = message.params ? Params.toAmino(message.params, useInterfaces) : undefined;
     if (message.poolList) {
-      obj.pool_list = message.poolList.map(e => e ? GenesisPoolData.toAmino(e) : undefined);
+      obj.pool_list = message.poolList.map(e => e ? GenesisPoolData.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.pool_list = [];
+      obj.pool_list = null;
     }
     if (message.weightedPoolPropertiesList) {
-      obj.weighted_pool_properties_list = message.weightedPoolPropertiesList.map(e => e ? WeightedPoolProperties.toAmino(e) : undefined);
+      obj.weighted_pool_properties_list = message.weightedPoolPropertiesList.map(e => e ? WeightedPoolProperties.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.weighted_pool_properties_list = [];
+      obj.weighted_pool_properties_list = null;
     }
     if (message.yammPoolAssetIdList) {
-      obj.yamm_pool_asset_id_list = message.yammPoolAssetIdList.map(e => e ? YammPoolAssetId.toAmino(e) : undefined);
+      obj.yamm_pool_asset_id_list = message.yammPoolAssetIdList.map(e => e ? YammPoolAssetId.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.yamm_pool_asset_id_list = [];
+      obj.yamm_pool_asset_id_list = null;
     }
     if (message.introducingPoolTokenList) {
-      obj.introducing_pool_token_list = message.introducingPoolTokenList.map(e => e ? VirtualBalancePoolToken.toAmino(e) : undefined);
+      obj.introducing_pool_token_list = message.introducingPoolTokenList.map(e => e ? VirtualBalancePoolToken.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.introducing_pool_token_list = [];
+      obj.introducing_pool_token_list = null;
     }
     if (message.expiringPoolTokenList) {
-      obj.expiring_pool_token_list = message.expiringPoolTokenList.map(e => e ? VirtualBalancePoolToken.toAmino(e) : undefined);
+      obj.expiring_pool_token_list = message.expiringPoolTokenList.map(e => e ? VirtualBalancePoolToken.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.expiring_pool_token_list = [];
+      obj.expiring_pool_token_list = null;
     }
     if (message.yammConfigurationList) {
-      obj.yamm_configuration_list = message.yammConfigurationList.map(e => e ? YammConfiguration.toAmino(e) : undefined);
+      obj.yamm_configuration_list = message.yammConfigurationList.map(e => e ? YammConfiguration.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.yamm_configuration_list = [];
+      obj.yamm_configuration_list = null;
     }
     if (message.whitelistedRouteList) {
-      obj.whitelisted_route_list = message.whitelistedRouteList.map(e => e ? WhitelistedRoute.toAmino(e) : undefined);
+      obj.whitelisted_route_list = message.whitelistedRouteList.map(e => e ? WhitelistedRoute.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.whitelisted_route_list = [];
+      obj.whitelisted_route_list = null;
     }
     if (message.orderList) {
-      obj.order_list = message.orderList.map(e => e ? Order.toAmino(e) : undefined);
+      obj.order_list = message.orderList.map(e => e ? Order.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.order_list = [];
+      obj.order_list = null;
     }
     obj.order_count = message.orderCount ? message.orderCount.toString() : undefined;
     if (message.executableOrderList) {
       obj.executable_order_list = message.executableOrderList.map(e => e.toString());
     } else {
-      obj.executable_order_list = [];
+      obj.executable_order_list = null;
     }
     if (message.scheduleOrderList) {
-      obj.schedule_order_list = message.scheduleOrderList.map(e => e ? ScheduleOrder.toAmino(e) : undefined);
+      obj.schedule_order_list = message.scheduleOrderList.map(e => e ? ScheduleOrder.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.schedule_order_list = [];
+      obj.schedule_order_list = null;
     }
-    obj.vault_paused = message.vaultPaused;
+    obj.vault_paused = message.vaultPaused === false ? undefined : message.vaultPaused;
     if (message.oraclePricePairList) {
-      obj.oracle_price_pair_list = message.oraclePricePairList.map(e => e ? OraclePricePair.toAmino(e) : undefined);
+      obj.oracle_price_pair_list = message.oraclePricePairList.map(e => e ? OraclePricePair.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.oracle_price_pair_list = [];
+      obj.oracle_price_pair_list = null;
     }
     if (message.pendingTokenIntroductionList) {
-      obj.pending_token_introduction_list = message.pendingTokenIntroductionList.map(e => e ? PendingTokenIntroduction.toAmino(e) : undefined);
+      obj.pending_token_introduction_list = message.pendingTokenIntroductionList.map(e => e ? PendingTokenIntroduction.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.pending_token_introduction_list = [];
+      obj.pending_token_introduction_list = null;
     }
     return obj;
   },
   fromAminoMsg(object: GenesisStateAminoMsg): GenesisState {
     return GenesisState.fromAmino(object.value);
   },
-  fromProtoMsg(message: GenesisStateProtoMsg): GenesisState {
-    return GenesisState.decode(message.value);
+  fromProtoMsg(message: GenesisStateProtoMsg, useInterfaces: boolean = true): GenesisState {
+    return GenesisState.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: GenesisState): Uint8Array {
     return GenesisState.encode(message).finish();
@@ -660,3 +690,4 @@ export const GenesisState = {
     };
   }
 };
+GlobalDecoderRegistry.register(GenesisState.typeUrl, GenesisState);

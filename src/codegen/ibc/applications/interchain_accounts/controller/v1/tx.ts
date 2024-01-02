@@ -1,6 +1,7 @@
 import { InterchainAccountPacketData, InterchainAccountPacketDataAmino, InterchainAccountPacketDataSDKType } from "../../v1/packet";
 import { BinaryReader, BinaryWriter } from "../../../../../binary";
 import { isSet } from "../../../../../helpers";
+import { GlobalDecoderRegistry } from "../../../../../registry";
 /** MsgRegisterInterchainAccount defines the payload for Msg/RegisterAccount */
 export interface MsgRegisterInterchainAccount {
   owner: string;
@@ -116,6 +117,16 @@ function createBaseMsgRegisterInterchainAccount(): MsgRegisterInterchainAccount 
 }
 export const MsgRegisterInterchainAccount = {
   typeUrl: "/ibc.applications.interchain_accounts.controller.v1.MsgRegisterInterchainAccount",
+  aminoType: "cosmos-sdk/MsgRegisterInterchainAccount",
+  is(o: any): o is MsgRegisterInterchainAccount {
+    return o && (o.$typeUrl === MsgRegisterInterchainAccount.typeUrl || typeof o.owner === "string" && typeof o.connectionId === "string" && typeof o.version === "string");
+  },
+  isSDK(o: any): o is MsgRegisterInterchainAccountSDKType {
+    return o && (o.$typeUrl === MsgRegisterInterchainAccount.typeUrl || typeof o.owner === "string" && typeof o.connection_id === "string" && typeof o.version === "string");
+  },
+  isAmino(o: any): o is MsgRegisterInterchainAccountAmino {
+    return o && (o.$typeUrl === MsgRegisterInterchainAccount.typeUrl || typeof o.owner === "string" && typeof o.connection_id === "string" && typeof o.version === "string");
+  },
   encode(message: MsgRegisterInterchainAccount, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.owner !== "") {
       writer.uint32(10).string(message.owner);
@@ -128,7 +139,7 @@ export const MsgRegisterInterchainAccount = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): MsgRegisterInterchainAccount {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): MsgRegisterInterchainAccount {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgRegisterInterchainAccount();
@@ -185,24 +196,24 @@ export const MsgRegisterInterchainAccount = {
     }
     return message;
   },
-  toAmino(message: MsgRegisterInterchainAccount): MsgRegisterInterchainAccountAmino {
+  toAmino(message: MsgRegisterInterchainAccount, useInterfaces: boolean = true): MsgRegisterInterchainAccountAmino {
     const obj: any = {};
-    obj.owner = message.owner;
-    obj.connection_id = message.connectionId;
-    obj.version = message.version;
+    obj.owner = message.owner === "" ? undefined : message.owner;
+    obj.connection_id = message.connectionId === "" ? undefined : message.connectionId;
+    obj.version = message.version === "" ? undefined : message.version;
     return obj;
   },
   fromAminoMsg(object: MsgRegisterInterchainAccountAminoMsg): MsgRegisterInterchainAccount {
     return MsgRegisterInterchainAccount.fromAmino(object.value);
   },
-  toAminoMsg(message: MsgRegisterInterchainAccount): MsgRegisterInterchainAccountAminoMsg {
+  toAminoMsg(message: MsgRegisterInterchainAccount, useInterfaces: boolean = true): MsgRegisterInterchainAccountAminoMsg {
     return {
       type: "cosmos-sdk/MsgRegisterInterchainAccount",
-      value: MsgRegisterInterchainAccount.toAmino(message)
+      value: MsgRegisterInterchainAccount.toAmino(message, useInterfaces)
     };
   },
-  fromProtoMsg(message: MsgRegisterInterchainAccountProtoMsg): MsgRegisterInterchainAccount {
-    return MsgRegisterInterchainAccount.decode(message.value);
+  fromProtoMsg(message: MsgRegisterInterchainAccountProtoMsg, useInterfaces: boolean = true): MsgRegisterInterchainAccount {
+    return MsgRegisterInterchainAccount.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: MsgRegisterInterchainAccount): Uint8Array {
     return MsgRegisterInterchainAccount.encode(message).finish();
@@ -214,6 +225,8 @@ export const MsgRegisterInterchainAccount = {
     };
   }
 };
+GlobalDecoderRegistry.register(MsgRegisterInterchainAccount.typeUrl, MsgRegisterInterchainAccount);
+GlobalDecoderRegistry.registerAminoProtoMapping(MsgRegisterInterchainAccount.aminoType, MsgRegisterInterchainAccount.typeUrl);
 function createBaseMsgRegisterInterchainAccountResponse(): MsgRegisterInterchainAccountResponse {
   return {
     channelId: "",
@@ -222,6 +235,16 @@ function createBaseMsgRegisterInterchainAccountResponse(): MsgRegisterInterchain
 }
 export const MsgRegisterInterchainAccountResponse = {
   typeUrl: "/ibc.applications.interchain_accounts.controller.v1.MsgRegisterInterchainAccountResponse",
+  aminoType: "cosmos-sdk/MsgRegisterInterchainAccountResponse",
+  is(o: any): o is MsgRegisterInterchainAccountResponse {
+    return o && (o.$typeUrl === MsgRegisterInterchainAccountResponse.typeUrl || typeof o.channelId === "string" && typeof o.portId === "string");
+  },
+  isSDK(o: any): o is MsgRegisterInterchainAccountResponseSDKType {
+    return o && (o.$typeUrl === MsgRegisterInterchainAccountResponse.typeUrl || typeof o.channel_id === "string" && typeof o.port_id === "string");
+  },
+  isAmino(o: any): o is MsgRegisterInterchainAccountResponseAmino {
+    return o && (o.$typeUrl === MsgRegisterInterchainAccountResponse.typeUrl || typeof o.channel_id === "string" && typeof o.port_id === "string");
+  },
   encode(message: MsgRegisterInterchainAccountResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.channelId !== "") {
       writer.uint32(10).string(message.channelId);
@@ -231,7 +254,7 @@ export const MsgRegisterInterchainAccountResponse = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): MsgRegisterInterchainAccountResponse {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): MsgRegisterInterchainAccountResponse {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgRegisterInterchainAccountResponse();
@@ -279,23 +302,23 @@ export const MsgRegisterInterchainAccountResponse = {
     }
     return message;
   },
-  toAmino(message: MsgRegisterInterchainAccountResponse): MsgRegisterInterchainAccountResponseAmino {
+  toAmino(message: MsgRegisterInterchainAccountResponse, useInterfaces: boolean = true): MsgRegisterInterchainAccountResponseAmino {
     const obj: any = {};
-    obj.channel_id = message.channelId;
-    obj.port_id = message.portId;
+    obj.channel_id = message.channelId === "" ? undefined : message.channelId;
+    obj.port_id = message.portId === "" ? undefined : message.portId;
     return obj;
   },
   fromAminoMsg(object: MsgRegisterInterchainAccountResponseAminoMsg): MsgRegisterInterchainAccountResponse {
     return MsgRegisterInterchainAccountResponse.fromAmino(object.value);
   },
-  toAminoMsg(message: MsgRegisterInterchainAccountResponse): MsgRegisterInterchainAccountResponseAminoMsg {
+  toAminoMsg(message: MsgRegisterInterchainAccountResponse, useInterfaces: boolean = true): MsgRegisterInterchainAccountResponseAminoMsg {
     return {
       type: "cosmos-sdk/MsgRegisterInterchainAccountResponse",
-      value: MsgRegisterInterchainAccountResponse.toAmino(message)
+      value: MsgRegisterInterchainAccountResponse.toAmino(message, useInterfaces)
     };
   },
-  fromProtoMsg(message: MsgRegisterInterchainAccountResponseProtoMsg): MsgRegisterInterchainAccountResponse {
-    return MsgRegisterInterchainAccountResponse.decode(message.value);
+  fromProtoMsg(message: MsgRegisterInterchainAccountResponseProtoMsg, useInterfaces: boolean = true): MsgRegisterInterchainAccountResponse {
+    return MsgRegisterInterchainAccountResponse.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: MsgRegisterInterchainAccountResponse): Uint8Array {
     return MsgRegisterInterchainAccountResponse.encode(message).finish();
@@ -307,6 +330,8 @@ export const MsgRegisterInterchainAccountResponse = {
     };
   }
 };
+GlobalDecoderRegistry.register(MsgRegisterInterchainAccountResponse.typeUrl, MsgRegisterInterchainAccountResponse);
+GlobalDecoderRegistry.registerAminoProtoMapping(MsgRegisterInterchainAccountResponse.aminoType, MsgRegisterInterchainAccountResponse.typeUrl);
 function createBaseMsgSendTx(): MsgSendTx {
   return {
     owner: "",
@@ -317,6 +342,16 @@ function createBaseMsgSendTx(): MsgSendTx {
 }
 export const MsgSendTx = {
   typeUrl: "/ibc.applications.interchain_accounts.controller.v1.MsgSendTx",
+  aminoType: "cosmos-sdk/MsgSendTx",
+  is(o: any): o is MsgSendTx {
+    return o && (o.$typeUrl === MsgSendTx.typeUrl || typeof o.owner === "string" && typeof o.connectionId === "string" && InterchainAccountPacketData.is(o.packetData) && typeof o.relativeTimeout === "bigint");
+  },
+  isSDK(o: any): o is MsgSendTxSDKType {
+    return o && (o.$typeUrl === MsgSendTx.typeUrl || typeof o.owner === "string" && typeof o.connection_id === "string" && InterchainAccountPacketData.isSDK(o.packet_data) && typeof o.relative_timeout === "bigint");
+  },
+  isAmino(o: any): o is MsgSendTxAmino {
+    return o && (o.$typeUrl === MsgSendTx.typeUrl || typeof o.owner === "string" && typeof o.connection_id === "string" && InterchainAccountPacketData.isAmino(o.packet_data) && typeof o.relative_timeout === "bigint");
+  },
   encode(message: MsgSendTx, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.owner !== "") {
       writer.uint32(10).string(message.owner);
@@ -332,7 +367,7 @@ export const MsgSendTx = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): MsgSendTx {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): MsgSendTx {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgSendTx();
@@ -346,7 +381,7 @@ export const MsgSendTx = {
           message.connectionId = reader.string();
           break;
         case 3:
-          message.packetData = InterchainAccountPacketData.decode(reader, reader.uint32());
+          message.packetData = InterchainAccountPacketData.decode(reader, reader.uint32(), useInterfaces);
           break;
         case 4:
           message.relativeTimeout = reader.uint64();
@@ -398,25 +433,25 @@ export const MsgSendTx = {
     }
     return message;
   },
-  toAmino(message: MsgSendTx): MsgSendTxAmino {
+  toAmino(message: MsgSendTx, useInterfaces: boolean = true): MsgSendTxAmino {
     const obj: any = {};
-    obj.owner = message.owner;
-    obj.connection_id = message.connectionId;
-    obj.packet_data = message.packetData ? InterchainAccountPacketData.toAmino(message.packetData) : undefined;
+    obj.owner = message.owner === "" ? undefined : message.owner;
+    obj.connection_id = message.connectionId === "" ? undefined : message.connectionId;
+    obj.packet_data = message.packetData ? InterchainAccountPacketData.toAmino(message.packetData, useInterfaces) : undefined;
     obj.relative_timeout = message.relativeTimeout ? message.relativeTimeout.toString() : undefined;
     return obj;
   },
   fromAminoMsg(object: MsgSendTxAminoMsg): MsgSendTx {
     return MsgSendTx.fromAmino(object.value);
   },
-  toAminoMsg(message: MsgSendTx): MsgSendTxAminoMsg {
+  toAminoMsg(message: MsgSendTx, useInterfaces: boolean = true): MsgSendTxAminoMsg {
     return {
       type: "cosmos-sdk/MsgSendTx",
-      value: MsgSendTx.toAmino(message)
+      value: MsgSendTx.toAmino(message, useInterfaces)
     };
   },
-  fromProtoMsg(message: MsgSendTxProtoMsg): MsgSendTx {
-    return MsgSendTx.decode(message.value);
+  fromProtoMsg(message: MsgSendTxProtoMsg, useInterfaces: boolean = true): MsgSendTx {
+    return MsgSendTx.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: MsgSendTx): Uint8Array {
     return MsgSendTx.encode(message).finish();
@@ -428,6 +463,8 @@ export const MsgSendTx = {
     };
   }
 };
+GlobalDecoderRegistry.register(MsgSendTx.typeUrl, MsgSendTx);
+GlobalDecoderRegistry.registerAminoProtoMapping(MsgSendTx.aminoType, MsgSendTx.typeUrl);
 function createBaseMsgSendTxResponse(): MsgSendTxResponse {
   return {
     sequence: BigInt(0)
@@ -435,13 +472,23 @@ function createBaseMsgSendTxResponse(): MsgSendTxResponse {
 }
 export const MsgSendTxResponse = {
   typeUrl: "/ibc.applications.interchain_accounts.controller.v1.MsgSendTxResponse",
+  aminoType: "cosmos-sdk/MsgSendTxResponse",
+  is(o: any): o is MsgSendTxResponse {
+    return o && (o.$typeUrl === MsgSendTxResponse.typeUrl || typeof o.sequence === "bigint");
+  },
+  isSDK(o: any): o is MsgSendTxResponseSDKType {
+    return o && (o.$typeUrl === MsgSendTxResponse.typeUrl || typeof o.sequence === "bigint");
+  },
+  isAmino(o: any): o is MsgSendTxResponseAmino {
+    return o && (o.$typeUrl === MsgSendTxResponse.typeUrl || typeof o.sequence === "bigint");
+  },
   encode(message: MsgSendTxResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.sequence !== BigInt(0)) {
       writer.uint32(8).uint64(message.sequence);
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): MsgSendTxResponse {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): MsgSendTxResponse {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgSendTxResponse();
@@ -480,7 +527,7 @@ export const MsgSendTxResponse = {
     }
     return message;
   },
-  toAmino(message: MsgSendTxResponse): MsgSendTxResponseAmino {
+  toAmino(message: MsgSendTxResponse, useInterfaces: boolean = true): MsgSendTxResponseAmino {
     const obj: any = {};
     obj.sequence = message.sequence ? message.sequence.toString() : undefined;
     return obj;
@@ -488,14 +535,14 @@ export const MsgSendTxResponse = {
   fromAminoMsg(object: MsgSendTxResponseAminoMsg): MsgSendTxResponse {
     return MsgSendTxResponse.fromAmino(object.value);
   },
-  toAminoMsg(message: MsgSendTxResponse): MsgSendTxResponseAminoMsg {
+  toAminoMsg(message: MsgSendTxResponse, useInterfaces: boolean = true): MsgSendTxResponseAminoMsg {
     return {
       type: "cosmos-sdk/MsgSendTxResponse",
-      value: MsgSendTxResponse.toAmino(message)
+      value: MsgSendTxResponse.toAmino(message, useInterfaces)
     };
   },
-  fromProtoMsg(message: MsgSendTxResponseProtoMsg): MsgSendTxResponse {
-    return MsgSendTxResponse.decode(message.value);
+  fromProtoMsg(message: MsgSendTxResponseProtoMsg, useInterfaces: boolean = true): MsgSendTxResponse {
+    return MsgSendTxResponse.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: MsgSendTxResponse): Uint8Array {
     return MsgSendTxResponse.encode(message).finish();
@@ -507,3 +554,5 @@ export const MsgSendTxResponse = {
     };
   }
 };
+GlobalDecoderRegistry.register(MsgSendTxResponse.typeUrl, MsgSendTxResponse);
+GlobalDecoderRegistry.registerAminoProtoMapping(MsgSendTxResponse.aminoType, MsgSendTxResponse.typeUrl);

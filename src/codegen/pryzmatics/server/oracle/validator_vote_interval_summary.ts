@@ -2,6 +2,7 @@ import { PageRequest, PageRequestAmino, PageRequestSDKType, PageResponse, PageRe
 import { ValidatorVoteIntervalSummary, ValidatorVoteIntervalSummaryAmino, ValidatorVoteIntervalSummarySDKType } from "../../oracle/validator_vote_interval_summary";
 import { BinaryReader, BinaryWriter } from "../../../binary";
 import { isSet } from "../../../helpers";
+import { GlobalDecoderRegistry } from "../../../registry";
 export interface QueryValidatorVoteIntervalSummariesRequest {
   operatorAddress: string;
   fromBlockHeight?: string;
@@ -58,6 +59,15 @@ function createBaseQueryValidatorVoteIntervalSummariesRequest(): QueryValidatorV
 }
 export const QueryValidatorVoteIntervalSummariesRequest = {
   typeUrl: "/pryzmatics.server.oracle.QueryValidatorVoteIntervalSummariesRequest",
+  is(o: any): o is QueryValidatorVoteIntervalSummariesRequest {
+    return o && (o.$typeUrl === QueryValidatorVoteIntervalSummariesRequest.typeUrl || typeof o.operatorAddress === "string");
+  },
+  isSDK(o: any): o is QueryValidatorVoteIntervalSummariesRequestSDKType {
+    return o && (o.$typeUrl === QueryValidatorVoteIntervalSummariesRequest.typeUrl || typeof o.operator_address === "string");
+  },
+  isAmino(o: any): o is QueryValidatorVoteIntervalSummariesRequestAmino {
+    return o && (o.$typeUrl === QueryValidatorVoteIntervalSummariesRequest.typeUrl || typeof o.operator_address === "string");
+  },
   encode(message: QueryValidatorVoteIntervalSummariesRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.operatorAddress !== "") {
       writer.uint32(10).string(message.operatorAddress);
@@ -73,7 +83,7 @@ export const QueryValidatorVoteIntervalSummariesRequest = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): QueryValidatorVoteIntervalSummariesRequest {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): QueryValidatorVoteIntervalSummariesRequest {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryValidatorVoteIntervalSummariesRequest();
@@ -90,7 +100,7 @@ export const QueryValidatorVoteIntervalSummariesRequest = {
           message.toBlockHeight = reader.string();
           break;
         case 4:
-          message.pagination = PageRequest.decode(reader, reader.uint32());
+          message.pagination = PageRequest.decode(reader, reader.uint32(), useInterfaces);
           break;
         default:
           reader.skipType(tag & 7);
@@ -139,19 +149,19 @@ export const QueryValidatorVoteIntervalSummariesRequest = {
     }
     return message;
   },
-  toAmino(message: QueryValidatorVoteIntervalSummariesRequest): QueryValidatorVoteIntervalSummariesRequestAmino {
+  toAmino(message: QueryValidatorVoteIntervalSummariesRequest, useInterfaces: boolean = true): QueryValidatorVoteIntervalSummariesRequestAmino {
     const obj: any = {};
-    obj.operator_address = message.operatorAddress;
-    obj.from_block_height = message.fromBlockHeight;
-    obj.to_block_height = message.toBlockHeight;
-    obj.pagination = message.pagination ? PageRequest.toAmino(message.pagination) : undefined;
+    obj.operator_address = message.operatorAddress === "" ? undefined : message.operatorAddress;
+    obj.from_block_height = message.fromBlockHeight === null ? undefined : message.fromBlockHeight;
+    obj.to_block_height = message.toBlockHeight === null ? undefined : message.toBlockHeight;
+    obj.pagination = message.pagination ? PageRequest.toAmino(message.pagination, useInterfaces) : undefined;
     return obj;
   },
   fromAminoMsg(object: QueryValidatorVoteIntervalSummariesRequestAminoMsg): QueryValidatorVoteIntervalSummariesRequest {
     return QueryValidatorVoteIntervalSummariesRequest.fromAmino(object.value);
   },
-  fromProtoMsg(message: QueryValidatorVoteIntervalSummariesRequestProtoMsg): QueryValidatorVoteIntervalSummariesRequest {
-    return QueryValidatorVoteIntervalSummariesRequest.decode(message.value);
+  fromProtoMsg(message: QueryValidatorVoteIntervalSummariesRequestProtoMsg, useInterfaces: boolean = true): QueryValidatorVoteIntervalSummariesRequest {
+    return QueryValidatorVoteIntervalSummariesRequest.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: QueryValidatorVoteIntervalSummariesRequest): Uint8Array {
     return QueryValidatorVoteIntervalSummariesRequest.encode(message).finish();
@@ -163,6 +173,7 @@ export const QueryValidatorVoteIntervalSummariesRequest = {
     };
   }
 };
+GlobalDecoderRegistry.register(QueryValidatorVoteIntervalSummariesRequest.typeUrl, QueryValidatorVoteIntervalSummariesRequest);
 function createBaseQueryValidatorVoteIntervalSummariesResponse(): QueryValidatorVoteIntervalSummariesResponse {
   return {
     summaries: [],
@@ -171,6 +182,15 @@ function createBaseQueryValidatorVoteIntervalSummariesResponse(): QueryValidator
 }
 export const QueryValidatorVoteIntervalSummariesResponse = {
   typeUrl: "/pryzmatics.server.oracle.QueryValidatorVoteIntervalSummariesResponse",
+  is(o: any): o is QueryValidatorVoteIntervalSummariesResponse {
+    return o && (o.$typeUrl === QueryValidatorVoteIntervalSummariesResponse.typeUrl || Array.isArray(o.summaries) && (!o.summaries.length || ValidatorVoteIntervalSummary.is(o.summaries[0])));
+  },
+  isSDK(o: any): o is QueryValidatorVoteIntervalSummariesResponseSDKType {
+    return o && (o.$typeUrl === QueryValidatorVoteIntervalSummariesResponse.typeUrl || Array.isArray(o.summaries) && (!o.summaries.length || ValidatorVoteIntervalSummary.isSDK(o.summaries[0])));
+  },
+  isAmino(o: any): o is QueryValidatorVoteIntervalSummariesResponseAmino {
+    return o && (o.$typeUrl === QueryValidatorVoteIntervalSummariesResponse.typeUrl || Array.isArray(o.summaries) && (!o.summaries.length || ValidatorVoteIntervalSummary.isAmino(o.summaries[0])));
+  },
   encode(message: QueryValidatorVoteIntervalSummariesResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     for (const v of message.summaries) {
       ValidatorVoteIntervalSummary.encode(v!, writer.uint32(10).fork()).ldelim();
@@ -180,7 +200,7 @@ export const QueryValidatorVoteIntervalSummariesResponse = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): QueryValidatorVoteIntervalSummariesResponse {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): QueryValidatorVoteIntervalSummariesResponse {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryValidatorVoteIntervalSummariesResponse();
@@ -188,10 +208,10 @@ export const QueryValidatorVoteIntervalSummariesResponse = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.summaries.push(ValidatorVoteIntervalSummary.decode(reader, reader.uint32()));
+          message.summaries.push(ValidatorVoteIntervalSummary.decode(reader, reader.uint32(), useInterfaces));
           break;
         case 2:
-          message.pagination = PageResponse.decode(reader, reader.uint32());
+          message.pagination = PageResponse.decode(reader, reader.uint32(), useInterfaces);
           break;
         default:
           reader.skipType(tag & 7);
@@ -230,21 +250,21 @@ export const QueryValidatorVoteIntervalSummariesResponse = {
     }
     return message;
   },
-  toAmino(message: QueryValidatorVoteIntervalSummariesResponse): QueryValidatorVoteIntervalSummariesResponseAmino {
+  toAmino(message: QueryValidatorVoteIntervalSummariesResponse, useInterfaces: boolean = true): QueryValidatorVoteIntervalSummariesResponseAmino {
     const obj: any = {};
     if (message.summaries) {
-      obj.summaries = message.summaries.map(e => e ? ValidatorVoteIntervalSummary.toAmino(e) : undefined);
+      obj.summaries = message.summaries.map(e => e ? ValidatorVoteIntervalSummary.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.summaries = [];
+      obj.summaries = null;
     }
-    obj.pagination = message.pagination ? PageResponse.toAmino(message.pagination) : undefined;
+    obj.pagination = message.pagination ? PageResponse.toAmino(message.pagination, useInterfaces) : undefined;
     return obj;
   },
   fromAminoMsg(object: QueryValidatorVoteIntervalSummariesResponseAminoMsg): QueryValidatorVoteIntervalSummariesResponse {
     return QueryValidatorVoteIntervalSummariesResponse.fromAmino(object.value);
   },
-  fromProtoMsg(message: QueryValidatorVoteIntervalSummariesResponseProtoMsg): QueryValidatorVoteIntervalSummariesResponse {
-    return QueryValidatorVoteIntervalSummariesResponse.decode(message.value);
+  fromProtoMsg(message: QueryValidatorVoteIntervalSummariesResponseProtoMsg, useInterfaces: boolean = true): QueryValidatorVoteIntervalSummariesResponse {
+    return QueryValidatorVoteIntervalSummariesResponse.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: QueryValidatorVoteIntervalSummariesResponse): Uint8Array {
     return QueryValidatorVoteIntervalSummariesResponse.encode(message).finish();
@@ -256,3 +276,4 @@ export const QueryValidatorVoteIntervalSummariesResponse = {
     };
   }
 };
+GlobalDecoderRegistry.register(QueryValidatorVoteIntervalSummariesResponse.typeUrl, QueryValidatorVoteIntervalSummariesResponse);

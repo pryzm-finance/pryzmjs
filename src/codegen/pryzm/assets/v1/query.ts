@@ -3,6 +3,7 @@ import { Params, ParamsAmino, ParamsSDKType } from "./params";
 import { RefractableAsset, RefractableAssetAmino, RefractableAssetSDKType } from "./refractable_asset";
 import { MaturityLevel, MaturityLevelAmino, MaturityLevelSDKType } from "./maturity_level";
 import { BinaryReader, BinaryWriter } from "../../../binary";
+import { GlobalDecoderRegistry } from "../../../registry";
 import { isSet } from "../../../helpers";
 /** QueryParamsRequest is request type for the Query/Params RPC method. */
 export interface QueryParamsRequest {}
@@ -202,10 +203,19 @@ function createBaseQueryParamsRequest(): QueryParamsRequest {
 }
 export const QueryParamsRequest = {
   typeUrl: "/pryzm.assets.v1.QueryParamsRequest",
+  is(o: any): o is QueryParamsRequest {
+    return o && o.$typeUrl === QueryParamsRequest.typeUrl;
+  },
+  isSDK(o: any): o is QueryParamsRequestSDKType {
+    return o && o.$typeUrl === QueryParamsRequest.typeUrl;
+  },
+  isAmino(o: any): o is QueryParamsRequestAmino {
+    return o && o.$typeUrl === QueryParamsRequest.typeUrl;
+  },
   encode(_: QueryParamsRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): QueryParamsRequest {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): QueryParamsRequest {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryParamsRequest();
@@ -234,15 +244,15 @@ export const QueryParamsRequest = {
     const message = createBaseQueryParamsRequest();
     return message;
   },
-  toAmino(_: QueryParamsRequest): QueryParamsRequestAmino {
+  toAmino(_: QueryParamsRequest, useInterfaces: boolean = true): QueryParamsRequestAmino {
     const obj: any = {};
     return obj;
   },
   fromAminoMsg(object: QueryParamsRequestAminoMsg): QueryParamsRequest {
     return QueryParamsRequest.fromAmino(object.value);
   },
-  fromProtoMsg(message: QueryParamsRequestProtoMsg): QueryParamsRequest {
-    return QueryParamsRequest.decode(message.value);
+  fromProtoMsg(message: QueryParamsRequestProtoMsg, useInterfaces: boolean = true): QueryParamsRequest {
+    return QueryParamsRequest.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: QueryParamsRequest): Uint8Array {
     return QueryParamsRequest.encode(message).finish();
@@ -254,6 +264,7 @@ export const QueryParamsRequest = {
     };
   }
 };
+GlobalDecoderRegistry.register(QueryParamsRequest.typeUrl, QueryParamsRequest);
 function createBaseQueryParamsResponse(): QueryParamsResponse {
   return {
     params: Params.fromPartial({})
@@ -261,13 +272,22 @@ function createBaseQueryParamsResponse(): QueryParamsResponse {
 }
 export const QueryParamsResponse = {
   typeUrl: "/pryzm.assets.v1.QueryParamsResponse",
+  is(o: any): o is QueryParamsResponse {
+    return o && (o.$typeUrl === QueryParamsResponse.typeUrl || Params.is(o.params));
+  },
+  isSDK(o: any): o is QueryParamsResponseSDKType {
+    return o && (o.$typeUrl === QueryParamsResponse.typeUrl || Params.isSDK(o.params));
+  },
+  isAmino(o: any): o is QueryParamsResponseAmino {
+    return o && (o.$typeUrl === QueryParamsResponse.typeUrl || Params.isAmino(o.params));
+  },
   encode(message: QueryParamsResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.params !== undefined) {
       Params.encode(message.params, writer.uint32(10).fork()).ldelim();
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): QueryParamsResponse {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): QueryParamsResponse {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryParamsResponse();
@@ -275,7 +295,7 @@ export const QueryParamsResponse = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.params = Params.decode(reader, reader.uint32());
+          message.params = Params.decode(reader, reader.uint32(), useInterfaces);
           break;
         default:
           reader.skipType(tag & 7);
@@ -306,16 +326,16 @@ export const QueryParamsResponse = {
     }
     return message;
   },
-  toAmino(message: QueryParamsResponse): QueryParamsResponseAmino {
+  toAmino(message: QueryParamsResponse, useInterfaces: boolean = true): QueryParamsResponseAmino {
     const obj: any = {};
-    obj.params = message.params ? Params.toAmino(message.params) : undefined;
+    obj.params = message.params ? Params.toAmino(message.params, useInterfaces) : undefined;
     return obj;
   },
   fromAminoMsg(object: QueryParamsResponseAminoMsg): QueryParamsResponse {
     return QueryParamsResponse.fromAmino(object.value);
   },
-  fromProtoMsg(message: QueryParamsResponseProtoMsg): QueryParamsResponse {
-    return QueryParamsResponse.decode(message.value);
+  fromProtoMsg(message: QueryParamsResponseProtoMsg, useInterfaces: boolean = true): QueryParamsResponse {
+    return QueryParamsResponse.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: QueryParamsResponse): Uint8Array {
     return QueryParamsResponse.encode(message).finish();
@@ -327,6 +347,7 @@ export const QueryParamsResponse = {
     };
   }
 };
+GlobalDecoderRegistry.register(QueryParamsResponse.typeUrl, QueryParamsResponse);
 function createBaseQueryGetRefractableAssetRequest(): QueryGetRefractableAssetRequest {
   return {
     assetId: ""
@@ -334,13 +355,22 @@ function createBaseQueryGetRefractableAssetRequest(): QueryGetRefractableAssetRe
 }
 export const QueryGetRefractableAssetRequest = {
   typeUrl: "/pryzm.assets.v1.QueryGetRefractableAssetRequest",
+  is(o: any): o is QueryGetRefractableAssetRequest {
+    return o && (o.$typeUrl === QueryGetRefractableAssetRequest.typeUrl || typeof o.assetId === "string");
+  },
+  isSDK(o: any): o is QueryGetRefractableAssetRequestSDKType {
+    return o && (o.$typeUrl === QueryGetRefractableAssetRequest.typeUrl || typeof o.asset_id === "string");
+  },
+  isAmino(o: any): o is QueryGetRefractableAssetRequestAmino {
+    return o && (o.$typeUrl === QueryGetRefractableAssetRequest.typeUrl || typeof o.asset_id === "string");
+  },
   encode(message: QueryGetRefractableAssetRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.assetId !== "") {
       writer.uint32(10).string(message.assetId);
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): QueryGetRefractableAssetRequest {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): QueryGetRefractableAssetRequest {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryGetRefractableAssetRequest();
@@ -379,16 +409,16 @@ export const QueryGetRefractableAssetRequest = {
     }
     return message;
   },
-  toAmino(message: QueryGetRefractableAssetRequest): QueryGetRefractableAssetRequestAmino {
+  toAmino(message: QueryGetRefractableAssetRequest, useInterfaces: boolean = true): QueryGetRefractableAssetRequestAmino {
     const obj: any = {};
-    obj.asset_id = message.assetId;
+    obj.asset_id = message.assetId === "" ? undefined : message.assetId;
     return obj;
   },
   fromAminoMsg(object: QueryGetRefractableAssetRequestAminoMsg): QueryGetRefractableAssetRequest {
     return QueryGetRefractableAssetRequest.fromAmino(object.value);
   },
-  fromProtoMsg(message: QueryGetRefractableAssetRequestProtoMsg): QueryGetRefractableAssetRequest {
-    return QueryGetRefractableAssetRequest.decode(message.value);
+  fromProtoMsg(message: QueryGetRefractableAssetRequestProtoMsg, useInterfaces: boolean = true): QueryGetRefractableAssetRequest {
+    return QueryGetRefractableAssetRequest.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: QueryGetRefractableAssetRequest): Uint8Array {
     return QueryGetRefractableAssetRequest.encode(message).finish();
@@ -400,6 +430,7 @@ export const QueryGetRefractableAssetRequest = {
     };
   }
 };
+GlobalDecoderRegistry.register(QueryGetRefractableAssetRequest.typeUrl, QueryGetRefractableAssetRequest);
 function createBaseQueryGetRefractableAssetResponse(): QueryGetRefractableAssetResponse {
   return {
     asset: RefractableAsset.fromPartial({})
@@ -407,13 +438,22 @@ function createBaseQueryGetRefractableAssetResponse(): QueryGetRefractableAssetR
 }
 export const QueryGetRefractableAssetResponse = {
   typeUrl: "/pryzm.assets.v1.QueryGetRefractableAssetResponse",
+  is(o: any): o is QueryGetRefractableAssetResponse {
+    return o && (o.$typeUrl === QueryGetRefractableAssetResponse.typeUrl || RefractableAsset.is(o.asset));
+  },
+  isSDK(o: any): o is QueryGetRefractableAssetResponseSDKType {
+    return o && (o.$typeUrl === QueryGetRefractableAssetResponse.typeUrl || RefractableAsset.isSDK(o.asset));
+  },
+  isAmino(o: any): o is QueryGetRefractableAssetResponseAmino {
+    return o && (o.$typeUrl === QueryGetRefractableAssetResponse.typeUrl || RefractableAsset.isAmino(o.asset));
+  },
   encode(message: QueryGetRefractableAssetResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.asset !== undefined) {
       RefractableAsset.encode(message.asset, writer.uint32(10).fork()).ldelim();
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): QueryGetRefractableAssetResponse {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): QueryGetRefractableAssetResponse {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryGetRefractableAssetResponse();
@@ -421,7 +461,7 @@ export const QueryGetRefractableAssetResponse = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.asset = RefractableAsset.decode(reader, reader.uint32());
+          message.asset = RefractableAsset.decode(reader, reader.uint32(), useInterfaces);
           break;
         default:
           reader.skipType(tag & 7);
@@ -452,16 +492,16 @@ export const QueryGetRefractableAssetResponse = {
     }
     return message;
   },
-  toAmino(message: QueryGetRefractableAssetResponse): QueryGetRefractableAssetResponseAmino {
+  toAmino(message: QueryGetRefractableAssetResponse, useInterfaces: boolean = true): QueryGetRefractableAssetResponseAmino {
     const obj: any = {};
-    obj.asset = message.asset ? RefractableAsset.toAmino(message.asset) : undefined;
+    obj.asset = message.asset ? RefractableAsset.toAmino(message.asset, useInterfaces) : undefined;
     return obj;
   },
   fromAminoMsg(object: QueryGetRefractableAssetResponseAminoMsg): QueryGetRefractableAssetResponse {
     return QueryGetRefractableAssetResponse.fromAmino(object.value);
   },
-  fromProtoMsg(message: QueryGetRefractableAssetResponseProtoMsg): QueryGetRefractableAssetResponse {
-    return QueryGetRefractableAssetResponse.decode(message.value);
+  fromProtoMsg(message: QueryGetRefractableAssetResponseProtoMsg, useInterfaces: boolean = true): QueryGetRefractableAssetResponse {
+    return QueryGetRefractableAssetResponse.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: QueryGetRefractableAssetResponse): Uint8Array {
     return QueryGetRefractableAssetResponse.encode(message).finish();
@@ -473,6 +513,7 @@ export const QueryGetRefractableAssetResponse = {
     };
   }
 };
+GlobalDecoderRegistry.register(QueryGetRefractableAssetResponse.typeUrl, QueryGetRefractableAssetResponse);
 function createBaseQueryAllRefractableAssetRequest(): QueryAllRefractableAssetRequest {
   return {
     enabled: "",
@@ -481,6 +522,15 @@ function createBaseQueryAllRefractableAssetRequest(): QueryAllRefractableAssetRe
 }
 export const QueryAllRefractableAssetRequest = {
   typeUrl: "/pryzm.assets.v1.QueryAllRefractableAssetRequest",
+  is(o: any): o is QueryAllRefractableAssetRequest {
+    return o && (o.$typeUrl === QueryAllRefractableAssetRequest.typeUrl || typeof o.enabled === "string");
+  },
+  isSDK(o: any): o is QueryAllRefractableAssetRequestSDKType {
+    return o && (o.$typeUrl === QueryAllRefractableAssetRequest.typeUrl || typeof o.enabled === "string");
+  },
+  isAmino(o: any): o is QueryAllRefractableAssetRequestAmino {
+    return o && (o.$typeUrl === QueryAllRefractableAssetRequest.typeUrl || typeof o.enabled === "string");
+  },
   encode(message: QueryAllRefractableAssetRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.enabled !== "") {
       writer.uint32(10).string(message.enabled);
@@ -490,7 +540,7 @@ export const QueryAllRefractableAssetRequest = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): QueryAllRefractableAssetRequest {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): QueryAllRefractableAssetRequest {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryAllRefractableAssetRequest();
@@ -501,7 +551,7 @@ export const QueryAllRefractableAssetRequest = {
           message.enabled = reader.string();
           break;
         case 2:
-          message.pagination = PageRequest.decode(reader, reader.uint32());
+          message.pagination = PageRequest.decode(reader, reader.uint32(), useInterfaces);
           break;
         default:
           reader.skipType(tag & 7);
@@ -538,17 +588,17 @@ export const QueryAllRefractableAssetRequest = {
     }
     return message;
   },
-  toAmino(message: QueryAllRefractableAssetRequest): QueryAllRefractableAssetRequestAmino {
+  toAmino(message: QueryAllRefractableAssetRequest, useInterfaces: boolean = true): QueryAllRefractableAssetRequestAmino {
     const obj: any = {};
-    obj.enabled = message.enabled;
-    obj.pagination = message.pagination ? PageRequest.toAmino(message.pagination) : undefined;
+    obj.enabled = message.enabled === "" ? undefined : message.enabled;
+    obj.pagination = message.pagination ? PageRequest.toAmino(message.pagination, useInterfaces) : undefined;
     return obj;
   },
   fromAminoMsg(object: QueryAllRefractableAssetRequestAminoMsg): QueryAllRefractableAssetRequest {
     return QueryAllRefractableAssetRequest.fromAmino(object.value);
   },
-  fromProtoMsg(message: QueryAllRefractableAssetRequestProtoMsg): QueryAllRefractableAssetRequest {
-    return QueryAllRefractableAssetRequest.decode(message.value);
+  fromProtoMsg(message: QueryAllRefractableAssetRequestProtoMsg, useInterfaces: boolean = true): QueryAllRefractableAssetRequest {
+    return QueryAllRefractableAssetRequest.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: QueryAllRefractableAssetRequest): Uint8Array {
     return QueryAllRefractableAssetRequest.encode(message).finish();
@@ -560,6 +610,7 @@ export const QueryAllRefractableAssetRequest = {
     };
   }
 };
+GlobalDecoderRegistry.register(QueryAllRefractableAssetRequest.typeUrl, QueryAllRefractableAssetRequest);
 function createBaseQueryAllRefractableAssetResponse(): QueryAllRefractableAssetResponse {
   return {
     assets: [],
@@ -568,6 +619,15 @@ function createBaseQueryAllRefractableAssetResponse(): QueryAllRefractableAssetR
 }
 export const QueryAllRefractableAssetResponse = {
   typeUrl: "/pryzm.assets.v1.QueryAllRefractableAssetResponse",
+  is(o: any): o is QueryAllRefractableAssetResponse {
+    return o && (o.$typeUrl === QueryAllRefractableAssetResponse.typeUrl || Array.isArray(o.assets) && (!o.assets.length || RefractableAsset.is(o.assets[0])));
+  },
+  isSDK(o: any): o is QueryAllRefractableAssetResponseSDKType {
+    return o && (o.$typeUrl === QueryAllRefractableAssetResponse.typeUrl || Array.isArray(o.assets) && (!o.assets.length || RefractableAsset.isSDK(o.assets[0])));
+  },
+  isAmino(o: any): o is QueryAllRefractableAssetResponseAmino {
+    return o && (o.$typeUrl === QueryAllRefractableAssetResponse.typeUrl || Array.isArray(o.assets) && (!o.assets.length || RefractableAsset.isAmino(o.assets[0])));
+  },
   encode(message: QueryAllRefractableAssetResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     for (const v of message.assets) {
       RefractableAsset.encode(v!, writer.uint32(10).fork()).ldelim();
@@ -577,7 +637,7 @@ export const QueryAllRefractableAssetResponse = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): QueryAllRefractableAssetResponse {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): QueryAllRefractableAssetResponse {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryAllRefractableAssetResponse();
@@ -585,10 +645,10 @@ export const QueryAllRefractableAssetResponse = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.assets.push(RefractableAsset.decode(reader, reader.uint32()));
+          message.assets.push(RefractableAsset.decode(reader, reader.uint32(), useInterfaces));
           break;
         case 2:
-          message.pagination = PageResponse.decode(reader, reader.uint32());
+          message.pagination = PageResponse.decode(reader, reader.uint32(), useInterfaces);
           break;
         default:
           reader.skipType(tag & 7);
@@ -627,21 +687,21 @@ export const QueryAllRefractableAssetResponse = {
     }
     return message;
   },
-  toAmino(message: QueryAllRefractableAssetResponse): QueryAllRefractableAssetResponseAmino {
+  toAmino(message: QueryAllRefractableAssetResponse, useInterfaces: boolean = true): QueryAllRefractableAssetResponseAmino {
     const obj: any = {};
     if (message.assets) {
-      obj.assets = message.assets.map(e => e ? RefractableAsset.toAmino(e) : undefined);
+      obj.assets = message.assets.map(e => e ? RefractableAsset.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.assets = [];
+      obj.assets = null;
     }
-    obj.pagination = message.pagination ? PageResponse.toAmino(message.pagination) : undefined;
+    obj.pagination = message.pagination ? PageResponse.toAmino(message.pagination, useInterfaces) : undefined;
     return obj;
   },
   fromAminoMsg(object: QueryAllRefractableAssetResponseAminoMsg): QueryAllRefractableAssetResponse {
     return QueryAllRefractableAssetResponse.fromAmino(object.value);
   },
-  fromProtoMsg(message: QueryAllRefractableAssetResponseProtoMsg): QueryAllRefractableAssetResponse {
-    return QueryAllRefractableAssetResponse.decode(message.value);
+  fromProtoMsg(message: QueryAllRefractableAssetResponseProtoMsg, useInterfaces: boolean = true): QueryAllRefractableAssetResponse {
+    return QueryAllRefractableAssetResponse.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: QueryAllRefractableAssetResponse): Uint8Array {
     return QueryAllRefractableAssetResponse.encode(message).finish();
@@ -653,6 +713,7 @@ export const QueryAllRefractableAssetResponse = {
     };
   }
 };
+GlobalDecoderRegistry.register(QueryAllRefractableAssetResponse.typeUrl, QueryAllRefractableAssetResponse);
 function createBaseQueryGetMaturityLevelRequest(): QueryGetMaturityLevelRequest {
   return {
     assetId: "",
@@ -661,6 +722,15 @@ function createBaseQueryGetMaturityLevelRequest(): QueryGetMaturityLevelRequest 
 }
 export const QueryGetMaturityLevelRequest = {
   typeUrl: "/pryzm.assets.v1.QueryGetMaturityLevelRequest",
+  is(o: any): o is QueryGetMaturityLevelRequest {
+    return o && (o.$typeUrl === QueryGetMaturityLevelRequest.typeUrl || typeof o.assetId === "string" && typeof o.symbol === "string");
+  },
+  isSDK(o: any): o is QueryGetMaturityLevelRequestSDKType {
+    return o && (o.$typeUrl === QueryGetMaturityLevelRequest.typeUrl || typeof o.asset_id === "string" && typeof o.symbol === "string");
+  },
+  isAmino(o: any): o is QueryGetMaturityLevelRequestAmino {
+    return o && (o.$typeUrl === QueryGetMaturityLevelRequest.typeUrl || typeof o.asset_id === "string" && typeof o.symbol === "string");
+  },
   encode(message: QueryGetMaturityLevelRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.assetId !== "") {
       writer.uint32(10).string(message.assetId);
@@ -670,7 +740,7 @@ export const QueryGetMaturityLevelRequest = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): QueryGetMaturityLevelRequest {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): QueryGetMaturityLevelRequest {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryGetMaturityLevelRequest();
@@ -718,17 +788,17 @@ export const QueryGetMaturityLevelRequest = {
     }
     return message;
   },
-  toAmino(message: QueryGetMaturityLevelRequest): QueryGetMaturityLevelRequestAmino {
+  toAmino(message: QueryGetMaturityLevelRequest, useInterfaces: boolean = true): QueryGetMaturityLevelRequestAmino {
     const obj: any = {};
-    obj.asset_id = message.assetId;
-    obj.symbol = message.symbol;
+    obj.asset_id = message.assetId === "" ? undefined : message.assetId;
+    obj.symbol = message.symbol === "" ? undefined : message.symbol;
     return obj;
   },
   fromAminoMsg(object: QueryGetMaturityLevelRequestAminoMsg): QueryGetMaturityLevelRequest {
     return QueryGetMaturityLevelRequest.fromAmino(object.value);
   },
-  fromProtoMsg(message: QueryGetMaturityLevelRequestProtoMsg): QueryGetMaturityLevelRequest {
-    return QueryGetMaturityLevelRequest.decode(message.value);
+  fromProtoMsg(message: QueryGetMaturityLevelRequestProtoMsg, useInterfaces: boolean = true): QueryGetMaturityLevelRequest {
+    return QueryGetMaturityLevelRequest.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: QueryGetMaturityLevelRequest): Uint8Array {
     return QueryGetMaturityLevelRequest.encode(message).finish();
@@ -740,6 +810,7 @@ export const QueryGetMaturityLevelRequest = {
     };
   }
 };
+GlobalDecoderRegistry.register(QueryGetMaturityLevelRequest.typeUrl, QueryGetMaturityLevelRequest);
 function createBaseQueryGetMaturityLevelResponse(): QueryGetMaturityLevelResponse {
   return {
     maturityLevel: MaturityLevel.fromPartial({})
@@ -747,13 +818,22 @@ function createBaseQueryGetMaturityLevelResponse(): QueryGetMaturityLevelRespons
 }
 export const QueryGetMaturityLevelResponse = {
   typeUrl: "/pryzm.assets.v1.QueryGetMaturityLevelResponse",
+  is(o: any): o is QueryGetMaturityLevelResponse {
+    return o && (o.$typeUrl === QueryGetMaturityLevelResponse.typeUrl || MaturityLevel.is(o.maturityLevel));
+  },
+  isSDK(o: any): o is QueryGetMaturityLevelResponseSDKType {
+    return o && (o.$typeUrl === QueryGetMaturityLevelResponse.typeUrl || MaturityLevel.isSDK(o.maturity_level));
+  },
+  isAmino(o: any): o is QueryGetMaturityLevelResponseAmino {
+    return o && (o.$typeUrl === QueryGetMaturityLevelResponse.typeUrl || MaturityLevel.isAmino(o.maturity_level));
+  },
   encode(message: QueryGetMaturityLevelResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.maturityLevel !== undefined) {
       MaturityLevel.encode(message.maturityLevel, writer.uint32(10).fork()).ldelim();
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): QueryGetMaturityLevelResponse {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): QueryGetMaturityLevelResponse {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryGetMaturityLevelResponse();
@@ -761,7 +841,7 @@ export const QueryGetMaturityLevelResponse = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.maturityLevel = MaturityLevel.decode(reader, reader.uint32());
+          message.maturityLevel = MaturityLevel.decode(reader, reader.uint32(), useInterfaces);
           break;
         default:
           reader.skipType(tag & 7);
@@ -792,16 +872,16 @@ export const QueryGetMaturityLevelResponse = {
     }
     return message;
   },
-  toAmino(message: QueryGetMaturityLevelResponse): QueryGetMaturityLevelResponseAmino {
+  toAmino(message: QueryGetMaturityLevelResponse, useInterfaces: boolean = true): QueryGetMaturityLevelResponseAmino {
     const obj: any = {};
-    obj.maturity_level = message.maturityLevel ? MaturityLevel.toAmino(message.maturityLevel) : undefined;
+    obj.maturity_level = message.maturityLevel ? MaturityLevel.toAmino(message.maturityLevel, useInterfaces) : undefined;
     return obj;
   },
   fromAminoMsg(object: QueryGetMaturityLevelResponseAminoMsg): QueryGetMaturityLevelResponse {
     return QueryGetMaturityLevelResponse.fromAmino(object.value);
   },
-  fromProtoMsg(message: QueryGetMaturityLevelResponseProtoMsg): QueryGetMaturityLevelResponse {
-    return QueryGetMaturityLevelResponse.decode(message.value);
+  fromProtoMsg(message: QueryGetMaturityLevelResponseProtoMsg, useInterfaces: boolean = true): QueryGetMaturityLevelResponse {
+    return QueryGetMaturityLevelResponse.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: QueryGetMaturityLevelResponse): Uint8Array {
     return QueryGetMaturityLevelResponse.encode(message).finish();
@@ -813,6 +893,7 @@ export const QueryGetMaturityLevelResponse = {
     };
   }
 };
+GlobalDecoderRegistry.register(QueryGetMaturityLevelResponse.typeUrl, QueryGetMaturityLevelResponse);
 function createBaseQueryAllMaturityLevelRequest(): QueryAllMaturityLevelRequest {
   return {
     active: false,
@@ -823,6 +904,15 @@ function createBaseQueryAllMaturityLevelRequest(): QueryAllMaturityLevelRequest 
 }
 export const QueryAllMaturityLevelRequest = {
   typeUrl: "/pryzm.assets.v1.QueryAllMaturityLevelRequest",
+  is(o: any): o is QueryAllMaturityLevelRequest {
+    return o && (o.$typeUrl === QueryAllMaturityLevelRequest.typeUrl || typeof o.active === "boolean" && typeof o.assetId === "string" && typeof o.assetEnabled === "string");
+  },
+  isSDK(o: any): o is QueryAllMaturityLevelRequestSDKType {
+    return o && (o.$typeUrl === QueryAllMaturityLevelRequest.typeUrl || typeof o.active === "boolean" && typeof o.asset_id === "string" && typeof o.asset_enabled === "string");
+  },
+  isAmino(o: any): o is QueryAllMaturityLevelRequestAmino {
+    return o && (o.$typeUrl === QueryAllMaturityLevelRequest.typeUrl || typeof o.active === "boolean" && typeof o.asset_id === "string" && typeof o.asset_enabled === "string");
+  },
   encode(message: QueryAllMaturityLevelRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.active === true) {
       writer.uint32(8).bool(message.active);
@@ -838,7 +928,7 @@ export const QueryAllMaturityLevelRequest = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): QueryAllMaturityLevelRequest {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): QueryAllMaturityLevelRequest {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryAllMaturityLevelRequest();
@@ -855,7 +945,7 @@ export const QueryAllMaturityLevelRequest = {
           message.assetEnabled = reader.string();
           break;
         case 4:
-          message.pagination = PageRequest.decode(reader, reader.uint32());
+          message.pagination = PageRequest.decode(reader, reader.uint32(), useInterfaces);
           break;
         default:
           reader.skipType(tag & 7);
@@ -904,19 +994,19 @@ export const QueryAllMaturityLevelRequest = {
     }
     return message;
   },
-  toAmino(message: QueryAllMaturityLevelRequest): QueryAllMaturityLevelRequestAmino {
+  toAmino(message: QueryAllMaturityLevelRequest, useInterfaces: boolean = true): QueryAllMaturityLevelRequestAmino {
     const obj: any = {};
-    obj.active = message.active;
-    obj.asset_id = message.assetId;
-    obj.asset_enabled = message.assetEnabled;
-    obj.pagination = message.pagination ? PageRequest.toAmino(message.pagination) : undefined;
+    obj.active = message.active === false ? undefined : message.active;
+    obj.asset_id = message.assetId === "" ? undefined : message.assetId;
+    obj.asset_enabled = message.assetEnabled === "" ? undefined : message.assetEnabled;
+    obj.pagination = message.pagination ? PageRequest.toAmino(message.pagination, useInterfaces) : undefined;
     return obj;
   },
   fromAminoMsg(object: QueryAllMaturityLevelRequestAminoMsg): QueryAllMaturityLevelRequest {
     return QueryAllMaturityLevelRequest.fromAmino(object.value);
   },
-  fromProtoMsg(message: QueryAllMaturityLevelRequestProtoMsg): QueryAllMaturityLevelRequest {
-    return QueryAllMaturityLevelRequest.decode(message.value);
+  fromProtoMsg(message: QueryAllMaturityLevelRequestProtoMsg, useInterfaces: boolean = true): QueryAllMaturityLevelRequest {
+    return QueryAllMaturityLevelRequest.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: QueryAllMaturityLevelRequest): Uint8Array {
     return QueryAllMaturityLevelRequest.encode(message).finish();
@@ -928,6 +1018,7 @@ export const QueryAllMaturityLevelRequest = {
     };
   }
 };
+GlobalDecoderRegistry.register(QueryAllMaturityLevelRequest.typeUrl, QueryAllMaturityLevelRequest);
 function createBaseQueryAllMaturityLevelResponse(): QueryAllMaturityLevelResponse {
   return {
     maturityLevel: [],
@@ -936,6 +1027,15 @@ function createBaseQueryAllMaturityLevelResponse(): QueryAllMaturityLevelRespons
 }
 export const QueryAllMaturityLevelResponse = {
   typeUrl: "/pryzm.assets.v1.QueryAllMaturityLevelResponse",
+  is(o: any): o is QueryAllMaturityLevelResponse {
+    return o && (o.$typeUrl === QueryAllMaturityLevelResponse.typeUrl || Array.isArray(o.maturityLevel) && (!o.maturityLevel.length || MaturityLevel.is(o.maturityLevel[0])));
+  },
+  isSDK(o: any): o is QueryAllMaturityLevelResponseSDKType {
+    return o && (o.$typeUrl === QueryAllMaturityLevelResponse.typeUrl || Array.isArray(o.maturity_level) && (!o.maturity_level.length || MaturityLevel.isSDK(o.maturity_level[0])));
+  },
+  isAmino(o: any): o is QueryAllMaturityLevelResponseAmino {
+    return o && (o.$typeUrl === QueryAllMaturityLevelResponse.typeUrl || Array.isArray(o.maturity_level) && (!o.maturity_level.length || MaturityLevel.isAmino(o.maturity_level[0])));
+  },
   encode(message: QueryAllMaturityLevelResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     for (const v of message.maturityLevel) {
       MaturityLevel.encode(v!, writer.uint32(10).fork()).ldelim();
@@ -945,7 +1045,7 @@ export const QueryAllMaturityLevelResponse = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): QueryAllMaturityLevelResponse {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): QueryAllMaturityLevelResponse {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryAllMaturityLevelResponse();
@@ -953,10 +1053,10 @@ export const QueryAllMaturityLevelResponse = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.maturityLevel.push(MaturityLevel.decode(reader, reader.uint32()));
+          message.maturityLevel.push(MaturityLevel.decode(reader, reader.uint32(), useInterfaces));
           break;
         case 2:
-          message.pagination = PageResponse.decode(reader, reader.uint32());
+          message.pagination = PageResponse.decode(reader, reader.uint32(), useInterfaces);
           break;
         default:
           reader.skipType(tag & 7);
@@ -995,21 +1095,21 @@ export const QueryAllMaturityLevelResponse = {
     }
     return message;
   },
-  toAmino(message: QueryAllMaturityLevelResponse): QueryAllMaturityLevelResponseAmino {
+  toAmino(message: QueryAllMaturityLevelResponse, useInterfaces: boolean = true): QueryAllMaturityLevelResponseAmino {
     const obj: any = {};
     if (message.maturityLevel) {
-      obj.maturity_level = message.maturityLevel.map(e => e ? MaturityLevel.toAmino(e) : undefined);
+      obj.maturity_level = message.maturityLevel.map(e => e ? MaturityLevel.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.maturity_level = [];
+      obj.maturity_level = null;
     }
-    obj.pagination = message.pagination ? PageResponse.toAmino(message.pagination) : undefined;
+    obj.pagination = message.pagination ? PageResponse.toAmino(message.pagination, useInterfaces) : undefined;
     return obj;
   },
   fromAminoMsg(object: QueryAllMaturityLevelResponseAminoMsg): QueryAllMaturityLevelResponse {
     return QueryAllMaturityLevelResponse.fromAmino(object.value);
   },
-  fromProtoMsg(message: QueryAllMaturityLevelResponseProtoMsg): QueryAllMaturityLevelResponse {
-    return QueryAllMaturityLevelResponse.decode(message.value);
+  fromProtoMsg(message: QueryAllMaturityLevelResponseProtoMsg, useInterfaces: boolean = true): QueryAllMaturityLevelResponse {
+    return QueryAllMaturityLevelResponse.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: QueryAllMaturityLevelResponse): Uint8Array {
     return QueryAllMaturityLevelResponse.encode(message).finish();
@@ -1021,3 +1121,4 @@ export const QueryAllMaturityLevelResponse = {
     };
   }
 };
+GlobalDecoderRegistry.register(QueryAllMaturityLevelResponse.typeUrl, QueryAllMaturityLevelResponse);

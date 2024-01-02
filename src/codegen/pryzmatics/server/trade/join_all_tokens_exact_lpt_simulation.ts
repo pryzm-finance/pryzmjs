@@ -1,6 +1,7 @@
 import { Coin, CoinAmino, CoinSDKType } from "../../../cosmos/base/v1beta1/coin";
 import { BinaryReader, BinaryWriter } from "../../../binary";
-import { isSet } from "../../../helpers";
+import { isSet, padDecimal } from "../../../helpers";
+import { GlobalDecoderRegistry } from "../../../registry";
 import { Decimal } from "@cosmjs/math";
 export interface QueryJoinAllTokensExactLptSimulationRequest {
   poolId: bigint;
@@ -59,6 +60,15 @@ function createBaseQueryJoinAllTokensExactLptSimulationRequest(): QueryJoinAllTo
 }
 export const QueryJoinAllTokensExactLptSimulationRequest = {
   typeUrl: "/pryzmatics.server.trade.QueryJoinAllTokensExactLptSimulationRequest",
+  is(o: any): o is QueryJoinAllTokensExactLptSimulationRequest {
+    return o && (o.$typeUrl === QueryJoinAllTokensExactLptSimulationRequest.typeUrl || typeof o.poolId === "bigint" && typeof o.lptOutAmount === "string");
+  },
+  isSDK(o: any): o is QueryJoinAllTokensExactLptSimulationRequestSDKType {
+    return o && (o.$typeUrl === QueryJoinAllTokensExactLptSimulationRequest.typeUrl || typeof o.pool_id === "bigint" && typeof o.lpt_out_amount === "string");
+  },
+  isAmino(o: any): o is QueryJoinAllTokensExactLptSimulationRequestAmino {
+    return o && (o.$typeUrl === QueryJoinAllTokensExactLptSimulationRequest.typeUrl || typeof o.pool_id === "bigint" && typeof o.lpt_out_amount === "string");
+  },
   encode(message: QueryJoinAllTokensExactLptSimulationRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.poolId !== BigInt(0)) {
       writer.uint32(8).uint64(message.poolId);
@@ -68,7 +78,7 @@ export const QueryJoinAllTokensExactLptSimulationRequest = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): QueryJoinAllTokensExactLptSimulationRequest {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): QueryJoinAllTokensExactLptSimulationRequest {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryJoinAllTokensExactLptSimulationRequest();
@@ -116,17 +126,17 @@ export const QueryJoinAllTokensExactLptSimulationRequest = {
     }
     return message;
   },
-  toAmino(message: QueryJoinAllTokensExactLptSimulationRequest): QueryJoinAllTokensExactLptSimulationRequestAmino {
+  toAmino(message: QueryJoinAllTokensExactLptSimulationRequest, useInterfaces: boolean = true): QueryJoinAllTokensExactLptSimulationRequestAmino {
     const obj: any = {};
     obj.pool_id = message.poolId ? message.poolId.toString() : undefined;
-    obj.lpt_out_amount = message.lptOutAmount;
+    obj.lpt_out_amount = message.lptOutAmount === "" ? undefined : message.lptOutAmount;
     return obj;
   },
   fromAminoMsg(object: QueryJoinAllTokensExactLptSimulationRequestAminoMsg): QueryJoinAllTokensExactLptSimulationRequest {
     return QueryJoinAllTokensExactLptSimulationRequest.fromAmino(object.value);
   },
-  fromProtoMsg(message: QueryJoinAllTokensExactLptSimulationRequestProtoMsg): QueryJoinAllTokensExactLptSimulationRequest {
-    return QueryJoinAllTokensExactLptSimulationRequest.decode(message.value);
+  fromProtoMsg(message: QueryJoinAllTokensExactLptSimulationRequestProtoMsg, useInterfaces: boolean = true): QueryJoinAllTokensExactLptSimulationRequest {
+    return QueryJoinAllTokensExactLptSimulationRequest.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: QueryJoinAllTokensExactLptSimulationRequest): Uint8Array {
     return QueryJoinAllTokensExactLptSimulationRequest.encode(message).finish();
@@ -138,6 +148,7 @@ export const QueryJoinAllTokensExactLptSimulationRequest = {
     };
   }
 };
+GlobalDecoderRegistry.register(QueryJoinAllTokensExactLptSimulationRequest.typeUrl, QueryJoinAllTokensExactLptSimulationRequest);
 function createBaseQueryJoinAllTokensExactLptSimulationResponse(): QueryJoinAllTokensExactLptSimulationResponse {
   return {
     amountsIn: [],
@@ -149,6 +160,15 @@ function createBaseQueryJoinAllTokensExactLptSimulationResponse(): QueryJoinAllT
 }
 export const QueryJoinAllTokensExactLptSimulationResponse = {
   typeUrl: "/pryzmatics.server.trade.QueryJoinAllTokensExactLptSimulationResponse",
+  is(o: any): o is QueryJoinAllTokensExactLptSimulationResponse {
+    return o && (o.$typeUrl === QueryJoinAllTokensExactLptSimulationResponse.typeUrl || Array.isArray(o.amountsIn) && (!o.amountsIn.length || Coin.is(o.amountsIn[0])) && Coin.is(o.amountOut) && Array.isArray(o.protocolFee) && (!o.protocolFee.length || Coin.is(o.protocolFee[0])) && Coin.is(o.protocolFeeLpTerms) && typeof o.priceImpact === "string");
+  },
+  isSDK(o: any): o is QueryJoinAllTokensExactLptSimulationResponseSDKType {
+    return o && (o.$typeUrl === QueryJoinAllTokensExactLptSimulationResponse.typeUrl || Array.isArray(o.amounts_in) && (!o.amounts_in.length || Coin.isSDK(o.amounts_in[0])) && Coin.isSDK(o.amount_out) && Array.isArray(o.protocol_fee) && (!o.protocol_fee.length || Coin.isSDK(o.protocol_fee[0])) && Coin.isSDK(o.protocol_fee_lp_terms) && typeof o.price_impact === "string");
+  },
+  isAmino(o: any): o is QueryJoinAllTokensExactLptSimulationResponseAmino {
+    return o && (o.$typeUrl === QueryJoinAllTokensExactLptSimulationResponse.typeUrl || Array.isArray(o.amounts_in) && (!o.amounts_in.length || Coin.isAmino(o.amounts_in[0])) && Coin.isAmino(o.amount_out) && Array.isArray(o.protocol_fee) && (!o.protocol_fee.length || Coin.isAmino(o.protocol_fee[0])) && Coin.isAmino(o.protocol_fee_lp_terms) && typeof o.price_impact === "string");
+  },
   encode(message: QueryJoinAllTokensExactLptSimulationResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     for (const v of message.amountsIn) {
       Coin.encode(v!, writer.uint32(10).fork()).ldelim();
@@ -167,7 +187,7 @@ export const QueryJoinAllTokensExactLptSimulationResponse = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): QueryJoinAllTokensExactLptSimulationResponse {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): QueryJoinAllTokensExactLptSimulationResponse {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryJoinAllTokensExactLptSimulationResponse();
@@ -175,16 +195,16 @@ export const QueryJoinAllTokensExactLptSimulationResponse = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.amountsIn.push(Coin.decode(reader, reader.uint32()));
+          message.amountsIn.push(Coin.decode(reader, reader.uint32(), useInterfaces));
           break;
         case 2:
-          message.amountOut = Coin.decode(reader, reader.uint32());
+          message.amountOut = Coin.decode(reader, reader.uint32(), useInterfaces);
           break;
         case 3:
-          message.protocolFee.push(Coin.decode(reader, reader.uint32()));
+          message.protocolFee.push(Coin.decode(reader, reader.uint32(), useInterfaces));
           break;
         case 4:
-          message.protocolFeeLpTerms = Coin.decode(reader, reader.uint32());
+          message.protocolFeeLpTerms = Coin.decode(reader, reader.uint32(), useInterfaces);
           break;
         case 5:
           message.priceImpact = Decimal.fromAtomics(reader.string(), 18).toString();
@@ -246,28 +266,28 @@ export const QueryJoinAllTokensExactLptSimulationResponse = {
     }
     return message;
   },
-  toAmino(message: QueryJoinAllTokensExactLptSimulationResponse): QueryJoinAllTokensExactLptSimulationResponseAmino {
+  toAmino(message: QueryJoinAllTokensExactLptSimulationResponse, useInterfaces: boolean = true): QueryJoinAllTokensExactLptSimulationResponseAmino {
     const obj: any = {};
     if (message.amountsIn) {
-      obj.amounts_in = message.amountsIn.map(e => e ? Coin.toAmino(e) : undefined);
+      obj.amounts_in = message.amountsIn.map(e => e ? Coin.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.amounts_in = [];
+      obj.amounts_in = null;
     }
-    obj.amount_out = message.amountOut ? Coin.toAmino(message.amountOut) : undefined;
+    obj.amount_out = message.amountOut ? Coin.toAmino(message.amountOut, useInterfaces) : undefined;
     if (message.protocolFee) {
-      obj.protocol_fee = message.protocolFee.map(e => e ? Coin.toAmino(e) : undefined);
+      obj.protocol_fee = message.protocolFee.map(e => e ? Coin.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.protocol_fee = [];
+      obj.protocol_fee = null;
     }
-    obj.protocol_fee_lp_terms = message.protocolFeeLpTerms ? Coin.toAmino(message.protocolFeeLpTerms) : undefined;
-    obj.price_impact = message.priceImpact;
+    obj.protocol_fee_lp_terms = message.protocolFeeLpTerms ? Coin.toAmino(message.protocolFeeLpTerms, useInterfaces) : undefined;
+    obj.price_impact = padDecimal(message.priceImpact) === "" ? undefined : padDecimal(message.priceImpact);
     return obj;
   },
   fromAminoMsg(object: QueryJoinAllTokensExactLptSimulationResponseAminoMsg): QueryJoinAllTokensExactLptSimulationResponse {
     return QueryJoinAllTokensExactLptSimulationResponse.fromAmino(object.value);
   },
-  fromProtoMsg(message: QueryJoinAllTokensExactLptSimulationResponseProtoMsg): QueryJoinAllTokensExactLptSimulationResponse {
-    return QueryJoinAllTokensExactLptSimulationResponse.decode(message.value);
+  fromProtoMsg(message: QueryJoinAllTokensExactLptSimulationResponseProtoMsg, useInterfaces: boolean = true): QueryJoinAllTokensExactLptSimulationResponse {
+    return QueryJoinAllTokensExactLptSimulationResponse.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: QueryJoinAllTokensExactLptSimulationResponse): Uint8Array {
     return QueryJoinAllTokensExactLptSimulationResponse.encode(message).finish();
@@ -279,3 +299,4 @@ export const QueryJoinAllTokensExactLptSimulationResponse = {
     };
   }
 };
+GlobalDecoderRegistry.register(QueryJoinAllTokensExactLptSimulationResponse.typeUrl, QueryJoinAllTokensExactLptSimulationResponse);

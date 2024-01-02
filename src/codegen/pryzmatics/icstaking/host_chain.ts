@@ -3,7 +3,8 @@ import { HostChainAmino as HostChain1Amino } from "../../pryzm/icstaking/v1/host
 import { HostChainSDKType as HostChain1SDKType } from "../../pryzm/icstaking/v1/host_chain";
 import { BinaryReader, BinaryWriter } from "../../binary";
 import { Decimal } from "@cosmjs/math";
-import { isSet } from "../../helpers";
+import { isSet, padDecimal } from "../../helpers";
+import { GlobalDecoderRegistry } from "../../registry";
 export interface HostChain {
   hostChain: HostChain1;
   cAssetMarketCap?: string;
@@ -44,6 +45,15 @@ function createBaseHostChain(): HostChain {
 }
 export const HostChain = {
   typeUrl: "/pryzmatics.icstaking.HostChain",
+  is(o: any): o is HostChain {
+    return o && (o.$typeUrl === HostChain.typeUrl || HostChain1.is(o.hostChain) && typeof o.assetInVault === "string" && typeof o.error === "string");
+  },
+  isSDK(o: any): o is HostChainSDKType {
+    return o && (o.$typeUrl === HostChain.typeUrl || HostChain1.isSDK(o.host_chain) && typeof o.asset_in_vault === "string" && typeof o.error === "string");
+  },
+  isAmino(o: any): o is HostChainAmino {
+    return o && (o.$typeUrl === HostChain.typeUrl || HostChain1.isAmino(o.host_chain) && typeof o.asset_in_vault === "string" && typeof o.error === "string");
+  },
   encode(message: HostChain, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.hostChain !== undefined) {
       HostChain1.encode(message.hostChain, writer.uint32(10).fork()).ldelim();
@@ -62,7 +72,7 @@ export const HostChain = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): HostChain {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): HostChain {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseHostChain();
@@ -70,7 +80,7 @@ export const HostChain = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.hostChain = HostChain1.decode(reader, reader.uint32());
+          message.hostChain = HostChain1.decode(reader, reader.uint32(), useInterfaces);
           break;
         case 2:
           message.cAssetMarketCap = Decimal.fromAtomics(reader.string(), 18).toString();
@@ -137,20 +147,20 @@ export const HostChain = {
     }
     return message;
   },
-  toAmino(message: HostChain): HostChainAmino {
+  toAmino(message: HostChain, useInterfaces: boolean = true): HostChainAmino {
     const obj: any = {};
-    obj.host_chain = message.hostChain ? HostChain1.toAmino(message.hostChain) : undefined;
-    obj.c_asset_market_cap = message.cAssetMarketCap;
-    obj.c_asset_apy = message.cAssetApy;
-    obj.asset_in_vault = message.assetInVault;
-    obj.error = message.error;
+    obj.host_chain = message.hostChain ? HostChain1.toAmino(message.hostChain, useInterfaces) : undefined;
+    obj.c_asset_market_cap = padDecimal(message.cAssetMarketCap) === null ? undefined : padDecimal(message.cAssetMarketCap);
+    obj.c_asset_apy = padDecimal(message.cAssetApy) === null ? undefined : padDecimal(message.cAssetApy);
+    obj.asset_in_vault = message.assetInVault === "" ? undefined : message.assetInVault;
+    obj.error = message.error === "" ? undefined : message.error;
     return obj;
   },
   fromAminoMsg(object: HostChainAminoMsg): HostChain {
     return HostChain.fromAmino(object.value);
   },
-  fromProtoMsg(message: HostChainProtoMsg): HostChain {
-    return HostChain.decode(message.value);
+  fromProtoMsg(message: HostChainProtoMsg, useInterfaces: boolean = true): HostChain {
+    return HostChain.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: HostChain): Uint8Array {
     return HostChain.encode(message).finish();
@@ -162,3 +172,4 @@ export const HostChain = {
     };
   }
 };
+GlobalDecoderRegistry.register(HostChain.typeUrl, HostChain);

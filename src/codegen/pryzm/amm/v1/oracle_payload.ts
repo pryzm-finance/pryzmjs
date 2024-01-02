@@ -1,7 +1,8 @@
 import { Height, HeightAmino, HeightSDKType } from "../../../ibc/core/client/v1/client";
 import { Pair, PairAmino, PairSDKType } from "./oracle_price_pair";
 import { BinaryReader, BinaryWriter } from "../../../binary";
-import { isSet } from "../../../helpers";
+import { isSet, padDecimal } from "../../../helpers";
+import { GlobalDecoderRegistry } from "../../../registry";
 import { Decimal } from "@cosmjs/math";
 export interface OraclePayloadDataSourceBlockHeight {
   dataSource: string;
@@ -60,6 +61,15 @@ function createBaseOraclePayloadDataSourceBlockHeight(): OraclePayloadDataSource
 }
 export const OraclePayloadDataSourceBlockHeight = {
   typeUrl: "/pryzm.amm.v1.OraclePayloadDataSourceBlockHeight",
+  is(o: any): o is OraclePayloadDataSourceBlockHeight {
+    return o && (o.$typeUrl === OraclePayloadDataSourceBlockHeight.typeUrl || typeof o.dataSource === "string" && Height.is(o.blockHeight));
+  },
+  isSDK(o: any): o is OraclePayloadDataSourceBlockHeightSDKType {
+    return o && (o.$typeUrl === OraclePayloadDataSourceBlockHeight.typeUrl || typeof o.data_source === "string" && Height.isSDK(o.block_height));
+  },
+  isAmino(o: any): o is OraclePayloadDataSourceBlockHeightAmino {
+    return o && (o.$typeUrl === OraclePayloadDataSourceBlockHeight.typeUrl || typeof o.data_source === "string" && Height.isAmino(o.block_height));
+  },
   encode(message: OraclePayloadDataSourceBlockHeight, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.dataSource !== "") {
       writer.uint32(10).string(message.dataSource);
@@ -69,7 +79,7 @@ export const OraclePayloadDataSourceBlockHeight = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): OraclePayloadDataSourceBlockHeight {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): OraclePayloadDataSourceBlockHeight {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseOraclePayloadDataSourceBlockHeight();
@@ -80,7 +90,7 @@ export const OraclePayloadDataSourceBlockHeight = {
           message.dataSource = reader.string();
           break;
         case 2:
-          message.blockHeight = Height.decode(reader, reader.uint32());
+          message.blockHeight = Height.decode(reader, reader.uint32(), useInterfaces);
           break;
         default:
           reader.skipType(tag & 7);
@@ -117,17 +127,17 @@ export const OraclePayloadDataSourceBlockHeight = {
     }
     return message;
   },
-  toAmino(message: OraclePayloadDataSourceBlockHeight): OraclePayloadDataSourceBlockHeightAmino {
+  toAmino(message: OraclePayloadDataSourceBlockHeight, useInterfaces: boolean = true): OraclePayloadDataSourceBlockHeightAmino {
     const obj: any = {};
-    obj.data_source = message.dataSource;
-    obj.block_height = message.blockHeight ? Height.toAmino(message.blockHeight) : {};
+    obj.data_source = message.dataSource === "" ? undefined : message.dataSource;
+    obj.block_height = message.blockHeight ? Height.toAmino(message.blockHeight, useInterfaces) : {};
     return obj;
   },
   fromAminoMsg(object: OraclePayloadDataSourceBlockHeightAminoMsg): OraclePayloadDataSourceBlockHeight {
     return OraclePayloadDataSourceBlockHeight.fromAmino(object.value);
   },
-  fromProtoMsg(message: OraclePayloadDataSourceBlockHeightProtoMsg): OraclePayloadDataSourceBlockHeight {
-    return OraclePayloadDataSourceBlockHeight.decode(message.value);
+  fromProtoMsg(message: OraclePayloadDataSourceBlockHeightProtoMsg, useInterfaces: boolean = true): OraclePayloadDataSourceBlockHeight {
+    return OraclePayloadDataSourceBlockHeight.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: OraclePayloadDataSourceBlockHeight): Uint8Array {
     return OraclePayloadDataSourceBlockHeight.encode(message).finish();
@@ -139,6 +149,7 @@ export const OraclePayloadDataSourceBlockHeight = {
     };
   }
 };
+GlobalDecoderRegistry.register(OraclePayloadDataSourceBlockHeight.typeUrl, OraclePayloadDataSourceBlockHeight);
 function createBaseOraclePayload(): OraclePayload {
   return {
     dataSourceBlockHeights: [],
@@ -149,6 +160,15 @@ function createBaseOraclePayload(): OraclePayload {
 }
 export const OraclePayload = {
   typeUrl: "/pryzm.amm.v1.OraclePayload",
+  is(o: any): o is OraclePayload {
+    return o && (o.$typeUrl === OraclePayload.typeUrl || Array.isArray(o.dataSourceBlockHeights) && (!o.dataSourceBlockHeights.length || OraclePayloadDataSourceBlockHeight.is(o.dataSourceBlockHeights[0])) && typeof o.price === "string" && Array.isArray(o.pairs) && (!o.pairs.length || Pair.is(o.pairs[0])) && typeof o.quoteToken === "string");
+  },
+  isSDK(o: any): o is OraclePayloadSDKType {
+    return o && (o.$typeUrl === OraclePayload.typeUrl || Array.isArray(o.data_source_block_heights) && (!o.data_source_block_heights.length || OraclePayloadDataSourceBlockHeight.isSDK(o.data_source_block_heights[0])) && typeof o.price === "string" && Array.isArray(o.pairs) && (!o.pairs.length || Pair.isSDK(o.pairs[0])) && typeof o.quote_token === "string");
+  },
+  isAmino(o: any): o is OraclePayloadAmino {
+    return o && (o.$typeUrl === OraclePayload.typeUrl || Array.isArray(o.data_source_block_heights) && (!o.data_source_block_heights.length || OraclePayloadDataSourceBlockHeight.isAmino(o.data_source_block_heights[0])) && typeof o.price === "string" && Array.isArray(o.pairs) && (!o.pairs.length || Pair.isAmino(o.pairs[0])) && typeof o.quote_token === "string");
+  },
   encode(message: OraclePayload, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     for (const v of message.dataSourceBlockHeights) {
       OraclePayloadDataSourceBlockHeight.encode(v!, writer.uint32(10).fork()).ldelim();
@@ -164,7 +184,7 @@ export const OraclePayload = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): OraclePayload {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): OraclePayload {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseOraclePayload();
@@ -172,13 +192,13 @@ export const OraclePayload = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.dataSourceBlockHeights.push(OraclePayloadDataSourceBlockHeight.decode(reader, reader.uint32()));
+          message.dataSourceBlockHeights.push(OraclePayloadDataSourceBlockHeight.decode(reader, reader.uint32(), useInterfaces));
           break;
         case 2:
           message.price = Decimal.fromAtomics(reader.string(), 18).toString();
           break;
         case 3:
-          message.pairs.push(Pair.decode(reader, reader.uint32()));
+          message.pairs.push(Pair.decode(reader, reader.uint32(), useInterfaces));
           break;
         case 4:
           message.quoteToken = reader.string();
@@ -234,27 +254,27 @@ export const OraclePayload = {
     }
     return message;
   },
-  toAmino(message: OraclePayload): OraclePayloadAmino {
+  toAmino(message: OraclePayload, useInterfaces: boolean = true): OraclePayloadAmino {
     const obj: any = {};
     if (message.dataSourceBlockHeights) {
-      obj.data_source_block_heights = message.dataSourceBlockHeights.map(e => e ? OraclePayloadDataSourceBlockHeight.toAmino(e) : undefined);
+      obj.data_source_block_heights = message.dataSourceBlockHeights.map(e => e ? OraclePayloadDataSourceBlockHeight.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.data_source_block_heights = [];
+      obj.data_source_block_heights = null;
     }
-    obj.price = message.price;
+    obj.price = padDecimal(message.price) === "" ? undefined : padDecimal(message.price);
     if (message.pairs) {
-      obj.pairs = message.pairs.map(e => e ? Pair.toAmino(e) : undefined);
+      obj.pairs = message.pairs.map(e => e ? Pair.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.pairs = [];
+      obj.pairs = null;
     }
-    obj.quote_token = message.quoteToken;
+    obj.quote_token = message.quoteToken === "" ? undefined : message.quoteToken;
     return obj;
   },
   fromAminoMsg(object: OraclePayloadAminoMsg): OraclePayload {
     return OraclePayload.fromAmino(object.value);
   },
-  fromProtoMsg(message: OraclePayloadProtoMsg): OraclePayload {
-    return OraclePayload.decode(message.value);
+  fromProtoMsg(message: OraclePayloadProtoMsg, useInterfaces: boolean = true): OraclePayload {
+    return OraclePayload.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: OraclePayload): Uint8Array {
     return OraclePayload.encode(message).finish();
@@ -266,3 +286,4 @@ export const OraclePayload = {
     };
   }
 };
+GlobalDecoderRegistry.register(OraclePayload.typeUrl, OraclePayload);

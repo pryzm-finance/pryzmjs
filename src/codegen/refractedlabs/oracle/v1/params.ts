@@ -1,6 +1,7 @@
 import { BinaryReader, BinaryWriter } from "../../../binary";
 import { Decimal } from "@cosmjs/math";
-import { isSet } from "../../../helpers";
+import { isSet, padDecimal } from "../../../helpers";
+import { GlobalDecoderRegistry } from "../../../registry";
 /** Params defines the parameters for the module. */
 export interface Params {
   votePeriod: bigint;
@@ -58,6 +59,15 @@ function createBaseParams(): Params {
 }
 export const Params = {
   typeUrl: "/refractedlabs.oracle.v1.Params",
+  is(o: any): o is Params {
+    return o && (o.$typeUrl === Params.typeUrl || typeof o.votePeriod === "bigint" && typeof o.quorum === "string" && typeof o.voteThreshold === "string" && typeof o.slashFraction === "string" && typeof o.slashWindow === "bigint" && typeof o.maxMissRatePerSlashWindow === "string" && typeof o.maxMissRatePerVotePeriod === "string" && typeof o.feeCollectorRewardRatio === "string");
+  },
+  isSDK(o: any): o is ParamsSDKType {
+    return o && (o.$typeUrl === Params.typeUrl || typeof o.vote_period === "bigint" && typeof o.quorum === "string" && typeof o.vote_threshold === "string" && typeof o.slash_fraction === "string" && typeof o.slash_window === "bigint" && typeof o.max_miss_rate_per_slash_window === "string" && typeof o.max_miss_rate_per_vote_period === "string" && typeof o.fee_collector_reward_ratio === "string");
+  },
+  isAmino(o: any): o is ParamsAmino {
+    return o && (o.$typeUrl === Params.typeUrl || typeof o.vote_period === "bigint" && typeof o.quorum === "string" && typeof o.vote_threshold === "string" && typeof o.slash_fraction === "string" && typeof o.slash_window === "bigint" && typeof o.max_miss_rate_per_slash_window === "string" && typeof o.max_miss_rate_per_vote_period === "string" && typeof o.fee_collector_reward_ratio === "string");
+  },
   encode(message: Params, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.votePeriod !== BigInt(0)) {
       writer.uint32(8).int64(message.votePeriod);
@@ -85,7 +95,7 @@ export const Params = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): Params {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): Params {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseParams();
@@ -187,23 +197,23 @@ export const Params = {
     }
     return message;
   },
-  toAmino(message: Params): ParamsAmino {
+  toAmino(message: Params, useInterfaces: boolean = true): ParamsAmino {
     const obj: any = {};
     obj.vote_period = message.votePeriod ? message.votePeriod.toString() : undefined;
-    obj.quorum = message.quorum;
-    obj.vote_threshold = message.voteThreshold;
-    obj.slash_fraction = message.slashFraction;
+    obj.quorum = padDecimal(message.quorum) === "" ? undefined : padDecimal(message.quorum);
+    obj.vote_threshold = padDecimal(message.voteThreshold) === "" ? undefined : padDecimal(message.voteThreshold);
+    obj.slash_fraction = padDecimal(message.slashFraction) === "" ? undefined : padDecimal(message.slashFraction);
     obj.slash_window = message.slashWindow ? message.slashWindow.toString() : undefined;
-    obj.max_miss_rate_per_slash_window = message.maxMissRatePerSlashWindow;
-    obj.max_miss_rate_per_vote_period = message.maxMissRatePerVotePeriod;
-    obj.fee_collector_reward_ratio = message.feeCollectorRewardRatio;
+    obj.max_miss_rate_per_slash_window = padDecimal(message.maxMissRatePerSlashWindow) === "" ? undefined : padDecimal(message.maxMissRatePerSlashWindow);
+    obj.max_miss_rate_per_vote_period = padDecimal(message.maxMissRatePerVotePeriod) === "" ? undefined : padDecimal(message.maxMissRatePerVotePeriod);
+    obj.fee_collector_reward_ratio = padDecimal(message.feeCollectorRewardRatio) === "" ? undefined : padDecimal(message.feeCollectorRewardRatio);
     return obj;
   },
   fromAminoMsg(object: ParamsAminoMsg): Params {
     return Params.fromAmino(object.value);
   },
-  fromProtoMsg(message: ParamsProtoMsg): Params {
-    return Params.decode(message.value);
+  fromProtoMsg(message: ParamsProtoMsg, useInterfaces: boolean = true): Params {
+    return Params.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: Params): Uint8Array {
     return Params.encode(message).finish();
@@ -215,3 +225,4 @@ export const Params = {
     };
   }
 };
+GlobalDecoderRegistry.register(Params.typeUrl, Params);

@@ -1,6 +1,7 @@
 import { Coin, CoinAmino, CoinSDKType } from "../../../cosmos/base/v1beta1/coin";
 import { BinaryReader, BinaryWriter } from "../../../binary";
-import { isSet } from "../../../helpers";
+import { isSet, padDecimal } from "../../../helpers";
+import { GlobalDecoderRegistry } from "../../../registry";
 import { Decimal } from "@cosmjs/math";
 export interface QueryJoinTokenExactLptSimulationRequest {
   poolId: bigint;
@@ -69,6 +70,15 @@ function createBaseQueryJoinTokenExactLptSimulationRequest(): QueryJoinTokenExac
 }
 export const QueryJoinTokenExactLptSimulationRequest = {
   typeUrl: "/pryzmatics.server.trade.QueryJoinTokenExactLptSimulationRequest",
+  is(o: any): o is QueryJoinTokenExactLptSimulationRequest {
+    return o && (o.$typeUrl === QueryJoinTokenExactLptSimulationRequest.typeUrl || typeof o.poolId === "bigint" && typeof o.lptOutAmount === "string" && typeof o.tokenIn === "string");
+  },
+  isSDK(o: any): o is QueryJoinTokenExactLptSimulationRequestSDKType {
+    return o && (o.$typeUrl === QueryJoinTokenExactLptSimulationRequest.typeUrl || typeof o.pool_id === "bigint" && typeof o.lpt_out_amount === "string" && typeof o.token_in === "string");
+  },
+  isAmino(o: any): o is QueryJoinTokenExactLptSimulationRequestAmino {
+    return o && (o.$typeUrl === QueryJoinTokenExactLptSimulationRequest.typeUrl || typeof o.pool_id === "bigint" && typeof o.lpt_out_amount === "string" && typeof o.token_in === "string");
+  },
   encode(message: QueryJoinTokenExactLptSimulationRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.poolId !== BigInt(0)) {
       writer.uint32(8).uint64(message.poolId);
@@ -81,7 +91,7 @@ export const QueryJoinTokenExactLptSimulationRequest = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): QueryJoinTokenExactLptSimulationRequest {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): QueryJoinTokenExactLptSimulationRequest {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryJoinTokenExactLptSimulationRequest();
@@ -138,18 +148,18 @@ export const QueryJoinTokenExactLptSimulationRequest = {
     }
     return message;
   },
-  toAmino(message: QueryJoinTokenExactLptSimulationRequest): QueryJoinTokenExactLptSimulationRequestAmino {
+  toAmino(message: QueryJoinTokenExactLptSimulationRequest, useInterfaces: boolean = true): QueryJoinTokenExactLptSimulationRequestAmino {
     const obj: any = {};
     obj.pool_id = message.poolId ? message.poolId.toString() : undefined;
-    obj.lpt_out_amount = message.lptOutAmount;
-    obj.token_in = message.tokenIn;
+    obj.lpt_out_amount = message.lptOutAmount === "" ? undefined : message.lptOutAmount;
+    obj.token_in = message.tokenIn === "" ? undefined : message.tokenIn;
     return obj;
   },
   fromAminoMsg(object: QueryJoinTokenExactLptSimulationRequestAminoMsg): QueryJoinTokenExactLptSimulationRequest {
     return QueryJoinTokenExactLptSimulationRequest.fromAmino(object.value);
   },
-  fromProtoMsg(message: QueryJoinTokenExactLptSimulationRequestProtoMsg): QueryJoinTokenExactLptSimulationRequest {
-    return QueryJoinTokenExactLptSimulationRequest.decode(message.value);
+  fromProtoMsg(message: QueryJoinTokenExactLptSimulationRequestProtoMsg, useInterfaces: boolean = true): QueryJoinTokenExactLptSimulationRequest {
+    return QueryJoinTokenExactLptSimulationRequest.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: QueryJoinTokenExactLptSimulationRequest): Uint8Array {
     return QueryJoinTokenExactLptSimulationRequest.encode(message).finish();
@@ -161,6 +171,7 @@ export const QueryJoinTokenExactLptSimulationRequest = {
     };
   }
 };
+GlobalDecoderRegistry.register(QueryJoinTokenExactLptSimulationRequest.typeUrl, QueryJoinTokenExactLptSimulationRequest);
 function createBaseQueryJoinTokenExactLptSimulationResponse(): QueryJoinTokenExactLptSimulationResponse {
   return {
     amountIn: Coin.fromPartial({}),
@@ -174,6 +185,15 @@ function createBaseQueryJoinTokenExactLptSimulationResponse(): QueryJoinTokenExa
 }
 export const QueryJoinTokenExactLptSimulationResponse = {
   typeUrl: "/pryzmatics.server.trade.QueryJoinTokenExactLptSimulationResponse",
+  is(o: any): o is QueryJoinTokenExactLptSimulationResponse {
+    return o && (o.$typeUrl === QueryJoinTokenExactLptSimulationResponse.typeUrl || Coin.is(o.amountIn) && Coin.is(o.amountOut) && Coin.is(o.protocolFee) && Coin.is(o.protocolFeeLpTerms) && Coin.is(o.swapFee) && Coin.is(o.swapFeeLpTerms) && typeof o.priceImpact === "string");
+  },
+  isSDK(o: any): o is QueryJoinTokenExactLptSimulationResponseSDKType {
+    return o && (o.$typeUrl === QueryJoinTokenExactLptSimulationResponse.typeUrl || Coin.isSDK(o.amount_in) && Coin.isSDK(o.amount_out) && Coin.isSDK(o.protocol_fee) && Coin.isSDK(o.protocol_fee_lp_terms) && Coin.isSDK(o.swap_fee) && Coin.isSDK(o.swap_fee_lp_terms) && typeof o.price_impact === "string");
+  },
+  isAmino(o: any): o is QueryJoinTokenExactLptSimulationResponseAmino {
+    return o && (o.$typeUrl === QueryJoinTokenExactLptSimulationResponse.typeUrl || Coin.isAmino(o.amount_in) && Coin.isAmino(o.amount_out) && Coin.isAmino(o.protocol_fee) && Coin.isAmino(o.protocol_fee_lp_terms) && Coin.isAmino(o.swap_fee) && Coin.isAmino(o.swap_fee_lp_terms) && typeof o.price_impact === "string");
+  },
   encode(message: QueryJoinTokenExactLptSimulationResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.amountIn !== undefined) {
       Coin.encode(message.amountIn, writer.uint32(10).fork()).ldelim();
@@ -198,7 +218,7 @@ export const QueryJoinTokenExactLptSimulationResponse = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): QueryJoinTokenExactLptSimulationResponse {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): QueryJoinTokenExactLptSimulationResponse {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryJoinTokenExactLptSimulationResponse();
@@ -206,22 +226,22 @@ export const QueryJoinTokenExactLptSimulationResponse = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.amountIn = Coin.decode(reader, reader.uint32());
+          message.amountIn = Coin.decode(reader, reader.uint32(), useInterfaces);
           break;
         case 2:
-          message.amountOut = Coin.decode(reader, reader.uint32());
+          message.amountOut = Coin.decode(reader, reader.uint32(), useInterfaces);
           break;
         case 3:
-          message.protocolFee = Coin.decode(reader, reader.uint32());
+          message.protocolFee = Coin.decode(reader, reader.uint32(), useInterfaces);
           break;
         case 4:
-          message.protocolFeeLpTerms = Coin.decode(reader, reader.uint32());
+          message.protocolFeeLpTerms = Coin.decode(reader, reader.uint32(), useInterfaces);
           break;
         case 5:
-          message.swapFee = Coin.decode(reader, reader.uint32());
+          message.swapFee = Coin.decode(reader, reader.uint32(), useInterfaces);
           break;
         case 6:
-          message.swapFeeLpTerms = Coin.decode(reader, reader.uint32());
+          message.swapFeeLpTerms = Coin.decode(reader, reader.uint32(), useInterfaces);
           break;
         case 7:
           message.priceImpact = Decimal.fromAtomics(reader.string(), 18).toString();
@@ -291,22 +311,22 @@ export const QueryJoinTokenExactLptSimulationResponse = {
     }
     return message;
   },
-  toAmino(message: QueryJoinTokenExactLptSimulationResponse): QueryJoinTokenExactLptSimulationResponseAmino {
+  toAmino(message: QueryJoinTokenExactLptSimulationResponse, useInterfaces: boolean = true): QueryJoinTokenExactLptSimulationResponseAmino {
     const obj: any = {};
-    obj.amount_in = message.amountIn ? Coin.toAmino(message.amountIn) : undefined;
-    obj.amount_out = message.amountOut ? Coin.toAmino(message.amountOut) : undefined;
-    obj.protocol_fee = message.protocolFee ? Coin.toAmino(message.protocolFee) : undefined;
-    obj.protocol_fee_lp_terms = message.protocolFeeLpTerms ? Coin.toAmino(message.protocolFeeLpTerms) : undefined;
-    obj.swap_fee = message.swapFee ? Coin.toAmino(message.swapFee) : undefined;
-    obj.swap_fee_lp_terms = message.swapFeeLpTerms ? Coin.toAmino(message.swapFeeLpTerms) : undefined;
-    obj.price_impact = message.priceImpact;
+    obj.amount_in = message.amountIn ? Coin.toAmino(message.amountIn, useInterfaces) : undefined;
+    obj.amount_out = message.amountOut ? Coin.toAmino(message.amountOut, useInterfaces) : undefined;
+    obj.protocol_fee = message.protocolFee ? Coin.toAmino(message.protocolFee, useInterfaces) : undefined;
+    obj.protocol_fee_lp_terms = message.protocolFeeLpTerms ? Coin.toAmino(message.protocolFeeLpTerms, useInterfaces) : undefined;
+    obj.swap_fee = message.swapFee ? Coin.toAmino(message.swapFee, useInterfaces) : undefined;
+    obj.swap_fee_lp_terms = message.swapFeeLpTerms ? Coin.toAmino(message.swapFeeLpTerms, useInterfaces) : undefined;
+    obj.price_impact = padDecimal(message.priceImpact) === "" ? undefined : padDecimal(message.priceImpact);
     return obj;
   },
   fromAminoMsg(object: QueryJoinTokenExactLptSimulationResponseAminoMsg): QueryJoinTokenExactLptSimulationResponse {
     return QueryJoinTokenExactLptSimulationResponse.fromAmino(object.value);
   },
-  fromProtoMsg(message: QueryJoinTokenExactLptSimulationResponseProtoMsg): QueryJoinTokenExactLptSimulationResponse {
-    return QueryJoinTokenExactLptSimulationResponse.decode(message.value);
+  fromProtoMsg(message: QueryJoinTokenExactLptSimulationResponseProtoMsg, useInterfaces: boolean = true): QueryJoinTokenExactLptSimulationResponse {
+    return QueryJoinTokenExactLptSimulationResponse.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: QueryJoinTokenExactLptSimulationResponse): Uint8Array {
     return QueryJoinTokenExactLptSimulationResponse.encode(message).finish();
@@ -318,3 +338,4 @@ export const QueryJoinTokenExactLptSimulationResponse = {
     };
   }
 };
+GlobalDecoderRegistry.register(QueryJoinTokenExactLptSimulationResponse.typeUrl, QueryJoinTokenExactLptSimulationResponse);

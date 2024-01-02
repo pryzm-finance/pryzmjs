@@ -1,5 +1,6 @@
 import { BinaryReader, BinaryWriter } from "../../../binary";
 import { isSet } from "../../../helpers";
+import { GlobalDecoderRegistry } from "../../../registry";
 export interface WeightUpdateTiming {
   poolId: bigint;
   startUnixMillis: bigint;
@@ -32,6 +33,15 @@ function createBaseWeightUpdateTiming(): WeightUpdateTiming {
 }
 export const WeightUpdateTiming = {
   typeUrl: "/pryzm.amm.v1.WeightUpdateTiming",
+  is(o: any): o is WeightUpdateTiming {
+    return o && (o.$typeUrl === WeightUpdateTiming.typeUrl || typeof o.poolId === "bigint" && typeof o.startUnixMillis === "bigint" && typeof o.endUnixMillis === "bigint");
+  },
+  isSDK(o: any): o is WeightUpdateTimingSDKType {
+    return o && (o.$typeUrl === WeightUpdateTiming.typeUrl || typeof o.pool_id === "bigint" && typeof o.start_unix_millis === "bigint" && typeof o.end_unix_millis === "bigint");
+  },
+  isAmino(o: any): o is WeightUpdateTimingAmino {
+    return o && (o.$typeUrl === WeightUpdateTiming.typeUrl || typeof o.pool_id === "bigint" && typeof o.start_unix_millis === "bigint" && typeof o.end_unix_millis === "bigint");
+  },
   encode(message: WeightUpdateTiming, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.poolId !== BigInt(0)) {
       writer.uint32(8).uint64(message.poolId);
@@ -44,7 +54,7 @@ export const WeightUpdateTiming = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): WeightUpdateTiming {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): WeightUpdateTiming {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseWeightUpdateTiming();
@@ -101,7 +111,7 @@ export const WeightUpdateTiming = {
     }
     return message;
   },
-  toAmino(message: WeightUpdateTiming): WeightUpdateTimingAmino {
+  toAmino(message: WeightUpdateTiming, useInterfaces: boolean = true): WeightUpdateTimingAmino {
     const obj: any = {};
     obj.pool_id = message.poolId ? message.poolId.toString() : undefined;
     obj.start_unix_millis = message.startUnixMillis ? message.startUnixMillis.toString() : undefined;
@@ -111,8 +121,8 @@ export const WeightUpdateTiming = {
   fromAminoMsg(object: WeightUpdateTimingAminoMsg): WeightUpdateTiming {
     return WeightUpdateTiming.fromAmino(object.value);
   },
-  fromProtoMsg(message: WeightUpdateTimingProtoMsg): WeightUpdateTiming {
-    return WeightUpdateTiming.decode(message.value);
+  fromProtoMsg(message: WeightUpdateTimingProtoMsg, useInterfaces: boolean = true): WeightUpdateTiming {
+    return WeightUpdateTiming.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: WeightUpdateTiming): Uint8Array {
     return WeightUpdateTiming.encode(message).finish();
@@ -124,3 +134,4 @@ export const WeightUpdateTiming = {
     };
   }
 };
+GlobalDecoderRegistry.register(WeightUpdateTiming.typeUrl, WeightUpdateTiming);

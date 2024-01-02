@@ -1,7 +1,8 @@
 import { Timestamp, TimestampSDKType } from "../../google/protobuf/timestamp";
 import { BinaryReader, BinaryWriter } from "../../binary";
 import { Decimal } from "@cosmjs/math";
-import { isSet, fromJsonTimestamp, fromTimestamp } from "../../helpers";
+import { isSet, fromJsonTimestamp, fromTimestamp, padDecimal } from "../../helpers";
+import { GlobalDecoderRegistry } from "../../registry";
 export interface HistoricalTokenYield {
   time: Timestamp;
   yield?: string;
@@ -30,6 +31,15 @@ function createBaseHistoricalTokenYield(): HistoricalTokenYield {
 }
 export const HistoricalTokenYield = {
   typeUrl: "/pryzmatics.pool.HistoricalTokenYield",
+  is(o: any): o is HistoricalTokenYield {
+    return o && (o.$typeUrl === HistoricalTokenYield.typeUrl || Timestamp.is(o.time));
+  },
+  isSDK(o: any): o is HistoricalTokenYieldSDKType {
+    return o && (o.$typeUrl === HistoricalTokenYield.typeUrl || Timestamp.isSDK(o.time));
+  },
+  isAmino(o: any): o is HistoricalTokenYieldAmino {
+    return o && (o.$typeUrl === HistoricalTokenYield.typeUrl || Timestamp.isAmino(o.time));
+  },
   encode(message: HistoricalTokenYield, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.time !== undefined) {
       Timestamp.encode(message.time, writer.uint32(10).fork()).ldelim();
@@ -39,7 +49,7 @@ export const HistoricalTokenYield = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): HistoricalTokenYield {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): HistoricalTokenYield {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseHistoricalTokenYield();
@@ -87,17 +97,17 @@ export const HistoricalTokenYield = {
     }
     return message;
   },
-  toAmino(message: HistoricalTokenYield): HistoricalTokenYieldAmino {
+  toAmino(message: HistoricalTokenYield, useInterfaces: boolean = true): HistoricalTokenYieldAmino {
     const obj: any = {};
-    obj.time = message.time ? Timestamp.toAmino(message.time) : undefined;
-    obj.yield = message.yield;
+    obj.time = message.time ? Timestamp.toAmino(message.time, useInterfaces) : undefined;
+    obj.yield = padDecimal(message.yield) === null ? undefined : padDecimal(message.yield);
     return obj;
   },
   fromAminoMsg(object: HistoricalTokenYieldAminoMsg): HistoricalTokenYield {
     return HistoricalTokenYield.fromAmino(object.value);
   },
-  fromProtoMsg(message: HistoricalTokenYieldProtoMsg): HistoricalTokenYield {
-    return HistoricalTokenYield.decode(message.value);
+  fromProtoMsg(message: HistoricalTokenYieldProtoMsg, useInterfaces: boolean = true): HistoricalTokenYield {
+    return HistoricalTokenYield.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: HistoricalTokenYield): Uint8Array {
     return HistoricalTokenYield.encode(message).finish();
@@ -109,3 +119,4 @@ export const HistoricalTokenYield = {
     };
   }
 };
+GlobalDecoderRegistry.register(HistoricalTokenYield.typeUrl, HistoricalTokenYield);

@@ -1,6 +1,7 @@
 import { Timestamp, TimestampSDKType } from "../../google/protobuf/timestamp";
 import { BinaryReader, BinaryWriter } from "../../binary";
 import { isSet, fromJsonTimestamp, fromTimestamp } from "../../helpers";
+import { GlobalDecoderRegistry } from "../../registry";
 export interface VoteInterval {
   id: bigint;
   votePeriod: bigint;
@@ -41,6 +42,15 @@ function createBaseVoteInterval(): VoteInterval {
 }
 export const VoteInterval = {
   typeUrl: "/pryzmatics.oracle.VoteInterval",
+  is(o: any): o is VoteInterval {
+    return o && (o.$typeUrl === VoteInterval.typeUrl || typeof o.id === "bigint" && typeof o.votePeriod === "bigint" && typeof o.closeBlockHeight === "bigint" && Timestamp.is(o.closeBlockTime));
+  },
+  isSDK(o: any): o is VoteIntervalSDKType {
+    return o && (o.$typeUrl === VoteInterval.typeUrl || typeof o.id === "bigint" && typeof o.vote_period === "bigint" && typeof o.close_block_height === "bigint" && Timestamp.isSDK(o.close_block_time));
+  },
+  isAmino(o: any): o is VoteIntervalAmino {
+    return o && (o.$typeUrl === VoteInterval.typeUrl || typeof o.id === "bigint" && typeof o.vote_period === "bigint" && typeof o.close_block_height === "bigint" && Timestamp.isAmino(o.close_block_time));
+  },
   encode(message: VoteInterval, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.id !== BigInt(0)) {
       writer.uint32(8).uint64(message.id);
@@ -59,7 +69,7 @@ export const VoteInterval = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): VoteInterval {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): VoteInterval {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseVoteInterval();
@@ -134,20 +144,20 @@ export const VoteInterval = {
     }
     return message;
   },
-  toAmino(message: VoteInterval): VoteIntervalAmino {
+  toAmino(message: VoteInterval, useInterfaces: boolean = true): VoteIntervalAmino {
     const obj: any = {};
     obj.id = message.id ? message.id.toString() : undefined;
     obj.vote_period = message.votePeriod ? message.votePeriod.toString() : undefined;
     obj.close_block_height = message.closeBlockHeight ? message.closeBlockHeight.toString() : undefined;
-    obj.close_block_time = message.closeBlockTime ? Timestamp.toAmino(message.closeBlockTime) : undefined;
-    obj.slash_window_close_block_height = message.slashWindowCloseBlockHeight;
+    obj.close_block_time = message.closeBlockTime ? Timestamp.toAmino(message.closeBlockTime, useInterfaces) : undefined;
+    obj.slash_window_close_block_height = message.slashWindowCloseBlockHeight === null ? undefined : message.slashWindowCloseBlockHeight;
     return obj;
   },
   fromAminoMsg(object: VoteIntervalAminoMsg): VoteInterval {
     return VoteInterval.fromAmino(object.value);
   },
-  fromProtoMsg(message: VoteIntervalProtoMsg): VoteInterval {
-    return VoteInterval.decode(message.value);
+  fromProtoMsg(message: VoteIntervalProtoMsg, useInterfaces: boolean = true): VoteInterval {
+    return VoteInterval.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: VoteInterval): Uint8Array {
     return VoteInterval.encode(message).finish();
@@ -159,3 +169,4 @@ export const VoteInterval = {
     };
   }
 };
+GlobalDecoderRegistry.register(VoteInterval.typeUrl, VoteInterval);

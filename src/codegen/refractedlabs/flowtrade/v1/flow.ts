@@ -1,9 +1,10 @@
 import { Timestamp, TimestampSDKType } from "../../../google/protobuf/timestamp";
 import { Duration, DurationAmino, DurationSDKType } from "../../../google/protobuf/duration";
 import { Coin, CoinAmino, CoinSDKType } from "../../../cosmos/base/v1beta1/coin";
+import { isSet, fromJsonTimestamp, fromTimestamp, padDecimal } from "../../../helpers";
 import { BinaryReader, BinaryWriter } from "../../../binary";
 import { Decimal } from "@cosmjs/math";
-import { isSet, fromJsonTimestamp, fromTimestamp } from "../../../helpers";
+import { GlobalDecoderRegistry } from "../../../registry";
 export enum FlowStatus {
   /** WAITING - the flow is waiting to be started */
   WAITING = 0,
@@ -428,6 +429,15 @@ function createBaseFlow(): Flow {
 }
 export const Flow = {
   typeUrl: "/refractedlabs.flowtrade.v1.Flow",
+  is(o: any): o is Flow {
+    return o && (o.$typeUrl === Flow.typeUrl || typeof o.id === "bigint" && typeof o.creator === "string" && FlowInfo.is(o.flowInfo) && Timestamp.is(o.startTime) && Timestamp.is(o.endTime) && Duration.is(o.distInterval) && typeof o.treasuryAddress === "string" && Coin.is(o.totalTokenOut) && typeof o.tokenInDenom === "string" && Timestamp.is(o.tokenOutClaimableAfter) && Timestamp.is(o.tokenInClaimableAfter) && typeof o.stoppable === "boolean" && typeof o.allowImmediateTokenOutClaimIfStopped === "boolean" && typeof o.allowImmediateTokenInClaimIfStopped === "boolean" && typeof o.distIndex === "string" && Timestamp.is(o.lastDistUpdate) && typeof o.tokenOutBalance === "string" && typeof o.tokenInBalance === "string" && typeof o.spentTokenIn === "string" && typeof o.totalShares === "string" && typeof o.livePrice === "string" && isSet(o.status) && typeof o.tokenOutFeeRatio === "string" && typeof o.tokenInFeeRatio === "string" && typeof o.automaticTreasuryCollection === "boolean" && typeof o.claimedTokenIn === "string" && typeof o.checkedOut === "boolean" && typeof o.limitPrice === "string" && Duration.is(o.exitWindowDuration));
+  },
+  isSDK(o: any): o is FlowSDKType {
+    return o && (o.$typeUrl === Flow.typeUrl || typeof o.id === "bigint" && typeof o.creator === "string" && FlowInfo.isSDK(o.flow_info) && Timestamp.isSDK(o.start_time) && Timestamp.isSDK(o.end_time) && Duration.isSDK(o.dist_interval) && typeof o.treasury_address === "string" && Coin.isSDK(o.total_token_out) && typeof o.token_in_denom === "string" && Timestamp.isSDK(o.token_out_claimable_after) && Timestamp.isSDK(o.token_in_claimable_after) && typeof o.stoppable === "boolean" && typeof o.allow_immediate_token_out_claim_if_stopped === "boolean" && typeof o.allow_immediate_token_in_claim_if_stopped === "boolean" && typeof o.dist_index === "string" && Timestamp.isSDK(o.last_dist_update) && typeof o.token_out_balance === "string" && typeof o.token_in_balance === "string" && typeof o.spent_token_in === "string" && typeof o.total_shares === "string" && typeof o.live_price === "string" && isSet(o.status) && typeof o.token_out_fee_ratio === "string" && typeof o.token_in_fee_ratio === "string" && typeof o.automatic_treasury_collection === "boolean" && typeof o.claimed_token_in === "string" && typeof o.checked_out === "boolean" && typeof o.limit_price === "string" && Duration.isSDK(o.exit_window_duration));
+  },
+  isAmino(o: any): o is FlowAmino {
+    return o && (o.$typeUrl === Flow.typeUrl || typeof o.id === "bigint" && typeof o.creator === "string" && FlowInfo.isAmino(o.flow_info) && Timestamp.isAmino(o.start_time) && Timestamp.isAmino(o.end_time) && Duration.isAmino(o.dist_interval) && typeof o.treasury_address === "string" && Coin.isAmino(o.total_token_out) && typeof o.token_in_denom === "string" && Timestamp.isAmino(o.token_out_claimable_after) && Timestamp.isAmino(o.token_in_claimable_after) && typeof o.stoppable === "boolean" && typeof o.allow_immediate_token_out_claim_if_stopped === "boolean" && typeof o.allow_immediate_token_in_claim_if_stopped === "boolean" && typeof o.dist_index === "string" && Timestamp.isAmino(o.last_dist_update) && typeof o.token_out_balance === "string" && typeof o.token_in_balance === "string" && typeof o.spent_token_in === "string" && typeof o.total_shares === "string" && typeof o.live_price === "string" && isSet(o.status) && typeof o.token_out_fee_ratio === "string" && typeof o.token_in_fee_ratio === "string" && typeof o.automatic_treasury_collection === "boolean" && typeof o.claimed_token_in === "string" && typeof o.checked_out === "boolean" && typeof o.limit_price === "string" && Duration.isAmino(o.exit_window_duration));
+  },
   encode(message: Flow, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.id !== BigInt(0)) {
       writer.uint32(8).uint64(message.id);
@@ -521,7 +531,7 @@ export const Flow = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): Flow {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): Flow {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseFlow();
@@ -535,7 +545,7 @@ export const Flow = {
           message.creator = reader.string();
           break;
         case 3:
-          message.flowInfo = FlowInfo.decode(reader, reader.uint32());
+          message.flowInfo = FlowInfo.decode(reader, reader.uint32(), useInterfaces);
           break;
         case 4:
           message.startTime = Timestamp.decode(reader, reader.uint32());
@@ -544,13 +554,13 @@ export const Flow = {
           message.endTime = Timestamp.decode(reader, reader.uint32());
           break;
         case 6:
-          message.distInterval = Duration.decode(reader, reader.uint32());
+          message.distInterval = Duration.decode(reader, reader.uint32(), useInterfaces);
           break;
         case 7:
           message.treasuryAddress = reader.string();
           break;
         case 8:
-          message.totalTokenOut = Coin.decode(reader, reader.uint32());
+          message.totalTokenOut = Coin.decode(reader, reader.uint32(), useInterfaces);
           break;
         case 9:
           message.tokenInDenom = reader.string();
@@ -595,7 +605,7 @@ export const Flow = {
           message.status = (reader.int32() as any);
           break;
         case 23:
-          message.creationDeposit = Coin.decode(reader, reader.uint32());
+          message.creationDeposit = Coin.decode(reader, reader.uint32(), useInterfaces);
           break;
         case 24:
           message.tokenOutFeeRatio = Decimal.fromAtomics(reader.string(), 18).toString();
@@ -616,7 +626,7 @@ export const Flow = {
           message.limitPrice = Decimal.fromAtomics(reader.string(), 18).toString();
           break;
         case 30:
-          message.exitWindowDuration = Duration.decode(reader, reader.uint32());
+          message.exitWindowDuration = Duration.decode(reader, reader.uint32(), useInterfaces);
           break;
         default:
           reader.skipType(tag & 7);
@@ -793,7 +803,7 @@ export const Flow = {
       message.livePrice = object.live_price;
     }
     if (object.status !== undefined && object.status !== null) {
-      message.status = flowStatusFromJSON(object.status);
+      message.status = object.status;
     }
     if (object.creation_deposit !== undefined && object.creation_deposit !== null) {
       message.creationDeposit = Coin.fromAmino(object.creation_deposit);
@@ -821,45 +831,45 @@ export const Flow = {
     }
     return message;
   },
-  toAmino(message: Flow): FlowAmino {
+  toAmino(message: Flow, useInterfaces: boolean = true): FlowAmino {
     const obj: any = {};
     obj.id = message.id ? message.id.toString() : undefined;
-    obj.creator = message.creator;
-    obj.flow_info = message.flowInfo ? FlowInfo.toAmino(message.flowInfo) : undefined;
-    obj.start_time = message.startTime ? Timestamp.toAmino(message.startTime) : undefined;
-    obj.end_time = message.endTime ? Timestamp.toAmino(message.endTime) : undefined;
-    obj.dist_interval = message.distInterval ? Duration.toAmino(message.distInterval) : undefined;
-    obj.treasury_address = message.treasuryAddress;
-    obj.total_token_out = message.totalTokenOut ? Coin.toAmino(message.totalTokenOut) : undefined;
-    obj.token_in_denom = message.tokenInDenom;
-    obj.token_out_claimable_after = message.tokenOutClaimableAfter ? Timestamp.toAmino(message.tokenOutClaimableAfter) : undefined;
-    obj.token_in_claimable_after = message.tokenInClaimableAfter ? Timestamp.toAmino(message.tokenInClaimableAfter) : undefined;
-    obj.stoppable = message.stoppable;
-    obj.allow_immediate_token_out_claim_if_stopped = message.allowImmediateTokenOutClaimIfStopped;
-    obj.allow_immediate_token_in_claim_if_stopped = message.allowImmediateTokenInClaimIfStopped;
-    obj.dist_index = message.distIndex;
-    obj.last_dist_update = message.lastDistUpdate ? Timestamp.toAmino(message.lastDistUpdate) : undefined;
-    obj.token_out_balance = message.tokenOutBalance;
-    obj.token_in_balance = message.tokenInBalance;
-    obj.spent_token_in = message.spentTokenIn;
-    obj.total_shares = message.totalShares;
-    obj.live_price = message.livePrice;
-    obj.status = flowStatusToJSON(message.status);
-    obj.creation_deposit = message.creationDeposit ? Coin.toAmino(message.creationDeposit) : undefined;
-    obj.token_out_fee_ratio = message.tokenOutFeeRatio;
-    obj.token_in_fee_ratio = message.tokenInFeeRatio;
-    obj.automatic_treasury_collection = message.automaticTreasuryCollection;
-    obj.claimed_token_in = message.claimedTokenIn;
-    obj.checked_out = message.checkedOut;
-    obj.limit_price = message.limitPrice;
-    obj.exit_window_duration = message.exitWindowDuration ? Duration.toAmino(message.exitWindowDuration) : undefined;
+    obj.creator = message.creator === "" ? undefined : message.creator;
+    obj.flow_info = message.flowInfo ? FlowInfo.toAmino(message.flowInfo, useInterfaces) : undefined;
+    obj.start_time = message.startTime ? Timestamp.toAmino(message.startTime, useInterfaces) : undefined;
+    obj.end_time = message.endTime ? Timestamp.toAmino(message.endTime, useInterfaces) : undefined;
+    obj.dist_interval = message.distInterval ? Duration.toAmino(message.distInterval, useInterfaces) : undefined;
+    obj.treasury_address = message.treasuryAddress === "" ? undefined : message.treasuryAddress;
+    obj.total_token_out = message.totalTokenOut ? Coin.toAmino(message.totalTokenOut, useInterfaces) : undefined;
+    obj.token_in_denom = message.tokenInDenom === "" ? undefined : message.tokenInDenom;
+    obj.token_out_claimable_after = message.tokenOutClaimableAfter ? Timestamp.toAmino(message.tokenOutClaimableAfter, useInterfaces) : undefined;
+    obj.token_in_claimable_after = message.tokenInClaimableAfter ? Timestamp.toAmino(message.tokenInClaimableAfter, useInterfaces) : undefined;
+    obj.stoppable = message.stoppable === false ? undefined : message.stoppable;
+    obj.allow_immediate_token_out_claim_if_stopped = message.allowImmediateTokenOutClaimIfStopped === false ? undefined : message.allowImmediateTokenOutClaimIfStopped;
+    obj.allow_immediate_token_in_claim_if_stopped = message.allowImmediateTokenInClaimIfStopped === false ? undefined : message.allowImmediateTokenInClaimIfStopped;
+    obj.dist_index = padDecimal(message.distIndex) === "" ? undefined : padDecimal(message.distIndex);
+    obj.last_dist_update = message.lastDistUpdate ? Timestamp.toAmino(message.lastDistUpdate, useInterfaces) : undefined;
+    obj.token_out_balance = message.tokenOutBalance === "" ? undefined : message.tokenOutBalance;
+    obj.token_in_balance = message.tokenInBalance === "" ? undefined : message.tokenInBalance;
+    obj.spent_token_in = message.spentTokenIn === "" ? undefined : message.spentTokenIn;
+    obj.total_shares = message.totalShares === "" ? undefined : message.totalShares;
+    obj.live_price = padDecimal(message.livePrice) === "" ? undefined : padDecimal(message.livePrice);
+    obj.status = message.status === 0 ? undefined : message.status;
+    obj.creation_deposit = message.creationDeposit ? Coin.toAmino(message.creationDeposit, useInterfaces) : undefined;
+    obj.token_out_fee_ratio = padDecimal(message.tokenOutFeeRatio) === "" ? undefined : padDecimal(message.tokenOutFeeRatio);
+    obj.token_in_fee_ratio = padDecimal(message.tokenInFeeRatio) === "" ? undefined : padDecimal(message.tokenInFeeRatio);
+    obj.automatic_treasury_collection = message.automaticTreasuryCollection === false ? undefined : message.automaticTreasuryCollection;
+    obj.claimed_token_in = message.claimedTokenIn === "" ? undefined : message.claimedTokenIn;
+    obj.checked_out = message.checkedOut === false ? undefined : message.checkedOut;
+    obj.limit_price = padDecimal(message.limitPrice) === "" ? undefined : padDecimal(message.limitPrice);
+    obj.exit_window_duration = message.exitWindowDuration ? Duration.toAmino(message.exitWindowDuration, useInterfaces) : undefined;
     return obj;
   },
   fromAminoMsg(object: FlowAminoMsg): Flow {
     return Flow.fromAmino(object.value);
   },
-  fromProtoMsg(message: FlowProtoMsg): Flow {
-    return Flow.decode(message.value);
+  fromProtoMsg(message: FlowProtoMsg, useInterfaces: boolean = true): Flow {
+    return Flow.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: Flow): Uint8Array {
     return Flow.encode(message).finish();
@@ -871,6 +881,7 @@ export const Flow = {
     };
   }
 };
+GlobalDecoderRegistry.register(Flow.typeUrl, Flow);
 function createBaseFlowInfo(): FlowInfo {
   return {
     name: "",
@@ -880,6 +891,15 @@ function createBaseFlowInfo(): FlowInfo {
 }
 export const FlowInfo = {
   typeUrl: "/refractedlabs.flowtrade.v1.FlowInfo",
+  is(o: any): o is FlowInfo {
+    return o && (o.$typeUrl === FlowInfo.typeUrl || typeof o.name === "string" && typeof o.description === "string" && typeof o.url === "string");
+  },
+  isSDK(o: any): o is FlowInfoSDKType {
+    return o && (o.$typeUrl === FlowInfo.typeUrl || typeof o.name === "string" && typeof o.description === "string" && typeof o.url === "string");
+  },
+  isAmino(o: any): o is FlowInfoAmino {
+    return o && (o.$typeUrl === FlowInfo.typeUrl || typeof o.name === "string" && typeof o.description === "string" && typeof o.url === "string");
+  },
   encode(message: FlowInfo, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.name !== "") {
       writer.uint32(10).string(message.name);
@@ -892,7 +912,7 @@ export const FlowInfo = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): FlowInfo {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): FlowInfo {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseFlowInfo();
@@ -949,18 +969,18 @@ export const FlowInfo = {
     }
     return message;
   },
-  toAmino(message: FlowInfo): FlowInfoAmino {
+  toAmino(message: FlowInfo, useInterfaces: boolean = true): FlowInfoAmino {
     const obj: any = {};
-    obj.name = message.name;
-    obj.description = message.description;
-    obj.url = message.url;
+    obj.name = message.name === "" ? undefined : message.name;
+    obj.description = message.description === "" ? undefined : message.description;
+    obj.url = message.url === "" ? undefined : message.url;
     return obj;
   },
   fromAminoMsg(object: FlowInfoAminoMsg): FlowInfo {
     return FlowInfo.fromAmino(object.value);
   },
-  fromProtoMsg(message: FlowInfoProtoMsg): FlowInfo {
-    return FlowInfo.decode(message.value);
+  fromProtoMsg(message: FlowInfoProtoMsg, useInterfaces: boolean = true): FlowInfo {
+    return FlowInfo.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: FlowInfo): Uint8Array {
     return FlowInfo.encode(message).finish();
@@ -972,6 +992,7 @@ export const FlowInfo = {
     };
   }
 };
+GlobalDecoderRegistry.register(FlowInfo.typeUrl, FlowInfo);
 function createBaseFlowCreationRequest(): FlowCreationRequest {
   return {
     flowInfo: FlowInfo.fromPartial({}),
@@ -992,6 +1013,15 @@ function createBaseFlowCreationRequest(): FlowCreationRequest {
 }
 export const FlowCreationRequest = {
   typeUrl: "/refractedlabs.flowtrade.v1.FlowCreationRequest",
+  is(o: any): o is FlowCreationRequest {
+    return o && (o.$typeUrl === FlowCreationRequest.typeUrl || FlowInfo.is(o.flowInfo) && Timestamp.is(o.startTime) && Timestamp.is(o.endTime) && Duration.is(o.distInterval) && typeof o.treasuryAddress === "string" && Coin.is(o.tokensOut) && typeof o.tokenInDenom === "string" && Timestamp.is(o.tokenOutClaimableAfter) && Timestamp.is(o.tokenInClaimableAfter) && typeof o.stoppable === "boolean" && typeof o.allowImmediateTokenOutClaimIfStopped === "boolean" && typeof o.allowImmediateTokenInClaimIfStopped === "boolean" && typeof o.limitPrice === "string" && Duration.is(o.exitWindowDuration));
+  },
+  isSDK(o: any): o is FlowCreationRequestSDKType {
+    return o && (o.$typeUrl === FlowCreationRequest.typeUrl || FlowInfo.isSDK(o.flow_info) && Timestamp.isSDK(o.start_time) && Timestamp.isSDK(o.end_time) && Duration.isSDK(o.dist_interval) && typeof o.treasury_address === "string" && Coin.isSDK(o.tokens_out) && typeof o.token_in_denom === "string" && Timestamp.isSDK(o.token_out_claimable_after) && Timestamp.isSDK(o.token_in_claimable_after) && typeof o.stoppable === "boolean" && typeof o.allow_immediate_token_out_claim_if_stopped === "boolean" && typeof o.allow_immediate_token_in_claim_if_stopped === "boolean" && typeof o.limit_price === "string" && Duration.isSDK(o.exit_window_duration));
+  },
+  isAmino(o: any): o is FlowCreationRequestAmino {
+    return o && (o.$typeUrl === FlowCreationRequest.typeUrl || FlowInfo.isAmino(o.flow_info) && Timestamp.isAmino(o.start_time) && Timestamp.isAmino(o.end_time) && Duration.isAmino(o.dist_interval) && typeof o.treasury_address === "string" && Coin.isAmino(o.tokens_out) && typeof o.token_in_denom === "string" && Timestamp.isAmino(o.token_out_claimable_after) && Timestamp.isAmino(o.token_in_claimable_after) && typeof o.stoppable === "boolean" && typeof o.allow_immediate_token_out_claim_if_stopped === "boolean" && typeof o.allow_immediate_token_in_claim_if_stopped === "boolean" && typeof o.limit_price === "string" && Duration.isAmino(o.exit_window_duration));
+  },
   encode(message: FlowCreationRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.flowInfo !== undefined) {
       FlowInfo.encode(message.flowInfo, writer.uint32(10).fork()).ldelim();
@@ -1037,7 +1067,7 @@ export const FlowCreationRequest = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): FlowCreationRequest {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): FlowCreationRequest {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseFlowCreationRequest();
@@ -1045,7 +1075,7 @@ export const FlowCreationRequest = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.flowInfo = FlowInfo.decode(reader, reader.uint32());
+          message.flowInfo = FlowInfo.decode(reader, reader.uint32(), useInterfaces);
           break;
         case 2:
           message.startTime = Timestamp.decode(reader, reader.uint32());
@@ -1054,13 +1084,13 @@ export const FlowCreationRequest = {
           message.endTime = Timestamp.decode(reader, reader.uint32());
           break;
         case 4:
-          message.distInterval = Duration.decode(reader, reader.uint32());
+          message.distInterval = Duration.decode(reader, reader.uint32(), useInterfaces);
           break;
         case 5:
           message.treasuryAddress = reader.string();
           break;
         case 6:
-          message.tokensOut = Coin.decode(reader, reader.uint32());
+          message.tokensOut = Coin.decode(reader, reader.uint32(), useInterfaces);
           break;
         case 7:
           message.tokenInDenom = reader.string();
@@ -1084,7 +1114,7 @@ export const FlowCreationRequest = {
           message.limitPrice = Decimal.fromAtomics(reader.string(), 18).toString();
           break;
         case 14:
-          message.exitWindowDuration = Duration.decode(reader, reader.uint32());
+          message.exitWindowDuration = Duration.decode(reader, reader.uint32(), useInterfaces);
           break;
         default:
           reader.skipType(tag & 7);
@@ -1193,29 +1223,29 @@ export const FlowCreationRequest = {
     }
     return message;
   },
-  toAmino(message: FlowCreationRequest): FlowCreationRequestAmino {
+  toAmino(message: FlowCreationRequest, useInterfaces: boolean = true): FlowCreationRequestAmino {
     const obj: any = {};
-    obj.flow_info = message.flowInfo ? FlowInfo.toAmino(message.flowInfo) : undefined;
-    obj.start_time = message.startTime ? Timestamp.toAmino(message.startTime) : undefined;
-    obj.end_time = message.endTime ? Timestamp.toAmino(message.endTime) : undefined;
-    obj.dist_interval = message.distInterval ? Duration.toAmino(message.distInterval) : undefined;
-    obj.treasury_address = message.treasuryAddress;
-    obj.tokens_out = message.tokensOut ? Coin.toAmino(message.tokensOut) : undefined;
-    obj.token_in_denom = message.tokenInDenom;
-    obj.token_out_claimable_after = message.tokenOutClaimableAfter ? Timestamp.toAmino(message.tokenOutClaimableAfter) : undefined;
-    obj.token_in_claimable_after = message.tokenInClaimableAfter ? Timestamp.toAmino(message.tokenInClaimableAfter) : undefined;
-    obj.stoppable = message.stoppable;
-    obj.allow_immediate_token_out_claim_if_stopped = message.allowImmediateTokenOutClaimIfStopped;
-    obj.allow_immediate_token_in_claim_if_stopped = message.allowImmediateTokenInClaimIfStopped;
-    obj.limit_price = message.limitPrice;
-    obj.exit_window_duration = message.exitWindowDuration ? Duration.toAmino(message.exitWindowDuration) : undefined;
+    obj.flow_info = message.flowInfo ? FlowInfo.toAmino(message.flowInfo, useInterfaces) : undefined;
+    obj.start_time = message.startTime ? Timestamp.toAmino(message.startTime, useInterfaces) : undefined;
+    obj.end_time = message.endTime ? Timestamp.toAmino(message.endTime, useInterfaces) : undefined;
+    obj.dist_interval = message.distInterval ? Duration.toAmino(message.distInterval, useInterfaces) : undefined;
+    obj.treasury_address = message.treasuryAddress === "" ? undefined : message.treasuryAddress;
+    obj.tokens_out = message.tokensOut ? Coin.toAmino(message.tokensOut, useInterfaces) : undefined;
+    obj.token_in_denom = message.tokenInDenom === "" ? undefined : message.tokenInDenom;
+    obj.token_out_claimable_after = message.tokenOutClaimableAfter ? Timestamp.toAmino(message.tokenOutClaimableAfter, useInterfaces) : undefined;
+    obj.token_in_claimable_after = message.tokenInClaimableAfter ? Timestamp.toAmino(message.tokenInClaimableAfter, useInterfaces) : undefined;
+    obj.stoppable = message.stoppable === false ? undefined : message.stoppable;
+    obj.allow_immediate_token_out_claim_if_stopped = message.allowImmediateTokenOutClaimIfStopped === false ? undefined : message.allowImmediateTokenOutClaimIfStopped;
+    obj.allow_immediate_token_in_claim_if_stopped = message.allowImmediateTokenInClaimIfStopped === false ? undefined : message.allowImmediateTokenInClaimIfStopped;
+    obj.limit_price = padDecimal(message.limitPrice) === "" ? undefined : padDecimal(message.limitPrice);
+    obj.exit_window_duration = message.exitWindowDuration ? Duration.toAmino(message.exitWindowDuration, useInterfaces) : undefined;
     return obj;
   },
   fromAminoMsg(object: FlowCreationRequestAminoMsg): FlowCreationRequest {
     return FlowCreationRequest.fromAmino(object.value);
   },
-  fromProtoMsg(message: FlowCreationRequestProtoMsg): FlowCreationRequest {
-    return FlowCreationRequest.decode(message.value);
+  fromProtoMsg(message: FlowCreationRequestProtoMsg, useInterfaces: boolean = true): FlowCreationRequest {
+    return FlowCreationRequest.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: FlowCreationRequest): Uint8Array {
     return FlowCreationRequest.encode(message).finish();
@@ -1227,3 +1257,4 @@ export const FlowCreationRequest = {
     };
   }
 };
+GlobalDecoderRegistry.register(FlowCreationRequest.typeUrl, FlowCreationRequest);

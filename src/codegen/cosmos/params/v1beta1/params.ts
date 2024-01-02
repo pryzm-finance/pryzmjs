@@ -1,5 +1,6 @@
 import { BinaryReader, BinaryWriter } from "../../../binary";
 import { isSet } from "../../../helpers";
+import { GlobalDecoderRegistry } from "../../../registry";
 /** ParameterChangeProposal defines a proposal to change one or more parameters. */
 export interface ParameterChangeProposal {
   $typeUrl?: "/cosmos.params.v1beta1.ParameterChangeProposal";
@@ -73,6 +74,16 @@ function createBaseParameterChangeProposal(): ParameterChangeProposal {
 }
 export const ParameterChangeProposal = {
   typeUrl: "/cosmos.params.v1beta1.ParameterChangeProposal",
+  aminoType: "cosmos-sdk/ParameterChangeProposal",
+  is(o: any): o is ParameterChangeProposal {
+    return o && (o.$typeUrl === ParameterChangeProposal.typeUrl || typeof o.title === "string" && typeof o.description === "string" && Array.isArray(o.changes) && (!o.changes.length || ParamChange.is(o.changes[0])));
+  },
+  isSDK(o: any): o is ParameterChangeProposalSDKType {
+    return o && (o.$typeUrl === ParameterChangeProposal.typeUrl || typeof o.title === "string" && typeof o.description === "string" && Array.isArray(o.changes) && (!o.changes.length || ParamChange.isSDK(o.changes[0])));
+  },
+  isAmino(o: any): o is ParameterChangeProposalAmino {
+    return o && (o.$typeUrl === ParameterChangeProposal.typeUrl || typeof o.title === "string" && typeof o.description === "string" && Array.isArray(o.changes) && (!o.changes.length || ParamChange.isAmino(o.changes[0])));
+  },
   encode(message: ParameterChangeProposal, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.title !== "") {
       writer.uint32(10).string(message.title);
@@ -85,7 +96,7 @@ export const ParameterChangeProposal = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): ParameterChangeProposal {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): ParameterChangeProposal {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseParameterChangeProposal();
@@ -99,7 +110,7 @@ export const ParameterChangeProposal = {
           message.description = reader.string();
           break;
         case 3:
-          message.changes.push(ParamChange.decode(reader, reader.uint32()));
+          message.changes.push(ParamChange.decode(reader, reader.uint32(), useInterfaces));
           break;
         default:
           reader.skipType(tag & 7);
@@ -144,28 +155,28 @@ export const ParameterChangeProposal = {
     message.changes = object.changes?.map(e => ParamChange.fromAmino(e)) || [];
     return message;
   },
-  toAmino(message: ParameterChangeProposal): ParameterChangeProposalAmino {
+  toAmino(message: ParameterChangeProposal, useInterfaces: boolean = true): ParameterChangeProposalAmino {
     const obj: any = {};
-    obj.title = message.title;
-    obj.description = message.description;
+    obj.title = message.title === "" ? undefined : message.title;
+    obj.description = message.description === "" ? undefined : message.description;
     if (message.changes) {
-      obj.changes = message.changes.map(e => e ? ParamChange.toAmino(e) : undefined);
+      obj.changes = message.changes.map(e => e ? ParamChange.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.changes = [];
+      obj.changes = null;
     }
     return obj;
   },
   fromAminoMsg(object: ParameterChangeProposalAminoMsg): ParameterChangeProposal {
     return ParameterChangeProposal.fromAmino(object.value);
   },
-  toAminoMsg(message: ParameterChangeProposal): ParameterChangeProposalAminoMsg {
+  toAminoMsg(message: ParameterChangeProposal, useInterfaces: boolean = true): ParameterChangeProposalAminoMsg {
     return {
       type: "cosmos-sdk/ParameterChangeProposal",
-      value: ParameterChangeProposal.toAmino(message)
+      value: ParameterChangeProposal.toAmino(message, useInterfaces)
     };
   },
-  fromProtoMsg(message: ParameterChangeProposalProtoMsg): ParameterChangeProposal {
-    return ParameterChangeProposal.decode(message.value);
+  fromProtoMsg(message: ParameterChangeProposalProtoMsg, useInterfaces: boolean = true): ParameterChangeProposal {
+    return ParameterChangeProposal.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: ParameterChangeProposal): Uint8Array {
     return ParameterChangeProposal.encode(message).finish();
@@ -177,6 +188,8 @@ export const ParameterChangeProposal = {
     };
   }
 };
+GlobalDecoderRegistry.register(ParameterChangeProposal.typeUrl, ParameterChangeProposal);
+GlobalDecoderRegistry.registerAminoProtoMapping(ParameterChangeProposal.aminoType, ParameterChangeProposal.typeUrl);
 function createBaseParamChange(): ParamChange {
   return {
     subspace: "",
@@ -186,6 +199,16 @@ function createBaseParamChange(): ParamChange {
 }
 export const ParamChange = {
   typeUrl: "/cosmos.params.v1beta1.ParamChange",
+  aminoType: "cosmos-sdk/ParamChange",
+  is(o: any): o is ParamChange {
+    return o && (o.$typeUrl === ParamChange.typeUrl || typeof o.subspace === "string" && typeof o.key === "string" && typeof o.value === "string");
+  },
+  isSDK(o: any): o is ParamChangeSDKType {
+    return o && (o.$typeUrl === ParamChange.typeUrl || typeof o.subspace === "string" && typeof o.key === "string" && typeof o.value === "string");
+  },
+  isAmino(o: any): o is ParamChangeAmino {
+    return o && (o.$typeUrl === ParamChange.typeUrl || typeof o.subspace === "string" && typeof o.key === "string" && typeof o.value === "string");
+  },
   encode(message: ParamChange, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.subspace !== "") {
       writer.uint32(10).string(message.subspace);
@@ -198,7 +221,7 @@ export const ParamChange = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): ParamChange {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): ParamChange {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseParamChange();
@@ -255,24 +278,24 @@ export const ParamChange = {
     }
     return message;
   },
-  toAmino(message: ParamChange): ParamChangeAmino {
+  toAmino(message: ParamChange, useInterfaces: boolean = true): ParamChangeAmino {
     const obj: any = {};
-    obj.subspace = message.subspace;
-    obj.key = message.key;
-    obj.value = message.value;
+    obj.subspace = message.subspace === "" ? undefined : message.subspace;
+    obj.key = message.key === "" ? undefined : message.key;
+    obj.value = message.value === "" ? undefined : message.value;
     return obj;
   },
   fromAminoMsg(object: ParamChangeAminoMsg): ParamChange {
     return ParamChange.fromAmino(object.value);
   },
-  toAminoMsg(message: ParamChange): ParamChangeAminoMsg {
+  toAminoMsg(message: ParamChange, useInterfaces: boolean = true): ParamChangeAminoMsg {
     return {
       type: "cosmos-sdk/ParamChange",
-      value: ParamChange.toAmino(message)
+      value: ParamChange.toAmino(message, useInterfaces)
     };
   },
-  fromProtoMsg(message: ParamChangeProtoMsg): ParamChange {
-    return ParamChange.decode(message.value);
+  fromProtoMsg(message: ParamChangeProtoMsg, useInterfaces: boolean = true): ParamChange {
+    return ParamChange.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: ParamChange): Uint8Array {
     return ParamChange.encode(message).finish();
@@ -284,3 +307,5 @@ export const ParamChange = {
     };
   }
 };
+GlobalDecoderRegistry.register(ParamChange.typeUrl, ParamChange);
+GlobalDecoderRegistry.registerAminoProtoMapping(ParamChange.aminoType, ParamChange.typeUrl);

@@ -4,6 +4,7 @@ import { StakedPAsset, StakedPAssetAmino, StakedPAssetSDKType, TotalStakedPAsset
 import { Vote, VoteAmino, VoteSDKType } from "./vote";
 import { Proposal, ProposalAmino, ProposalSDKType } from "./proposal";
 import { BinaryReader, BinaryWriter } from "../../../binary";
+import { GlobalDecoderRegistry } from "../../../registry";
 import { isSet } from "../../../helpers";
 /** QueryParamsRequest is request type for the Query/Params RPC method. */
 export interface QueryParamsRequest {}
@@ -354,10 +355,19 @@ function createBaseQueryParamsRequest(): QueryParamsRequest {
 }
 export const QueryParamsRequest = {
   typeUrl: "/pryzm.pgov.v1.QueryParamsRequest",
+  is(o: any): o is QueryParamsRequest {
+    return o && o.$typeUrl === QueryParamsRequest.typeUrl;
+  },
+  isSDK(o: any): o is QueryParamsRequestSDKType {
+    return o && o.$typeUrl === QueryParamsRequest.typeUrl;
+  },
+  isAmino(o: any): o is QueryParamsRequestAmino {
+    return o && o.$typeUrl === QueryParamsRequest.typeUrl;
+  },
   encode(_: QueryParamsRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): QueryParamsRequest {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): QueryParamsRequest {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryParamsRequest();
@@ -386,15 +396,15 @@ export const QueryParamsRequest = {
     const message = createBaseQueryParamsRequest();
     return message;
   },
-  toAmino(_: QueryParamsRequest): QueryParamsRequestAmino {
+  toAmino(_: QueryParamsRequest, useInterfaces: boolean = true): QueryParamsRequestAmino {
     const obj: any = {};
     return obj;
   },
   fromAminoMsg(object: QueryParamsRequestAminoMsg): QueryParamsRequest {
     return QueryParamsRequest.fromAmino(object.value);
   },
-  fromProtoMsg(message: QueryParamsRequestProtoMsg): QueryParamsRequest {
-    return QueryParamsRequest.decode(message.value);
+  fromProtoMsg(message: QueryParamsRequestProtoMsg, useInterfaces: boolean = true): QueryParamsRequest {
+    return QueryParamsRequest.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: QueryParamsRequest): Uint8Array {
     return QueryParamsRequest.encode(message).finish();
@@ -406,6 +416,7 @@ export const QueryParamsRequest = {
     };
   }
 };
+GlobalDecoderRegistry.register(QueryParamsRequest.typeUrl, QueryParamsRequest);
 function createBaseQueryParamsResponse(): QueryParamsResponse {
   return {
     params: Params.fromPartial({})
@@ -413,13 +424,22 @@ function createBaseQueryParamsResponse(): QueryParamsResponse {
 }
 export const QueryParamsResponse = {
   typeUrl: "/pryzm.pgov.v1.QueryParamsResponse",
+  is(o: any): o is QueryParamsResponse {
+    return o && (o.$typeUrl === QueryParamsResponse.typeUrl || Params.is(o.params));
+  },
+  isSDK(o: any): o is QueryParamsResponseSDKType {
+    return o && (o.$typeUrl === QueryParamsResponse.typeUrl || Params.isSDK(o.params));
+  },
+  isAmino(o: any): o is QueryParamsResponseAmino {
+    return o && (o.$typeUrl === QueryParamsResponse.typeUrl || Params.isAmino(o.params));
+  },
   encode(message: QueryParamsResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.params !== undefined) {
       Params.encode(message.params, writer.uint32(10).fork()).ldelim();
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): QueryParamsResponse {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): QueryParamsResponse {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryParamsResponse();
@@ -427,7 +447,7 @@ export const QueryParamsResponse = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.params = Params.decode(reader, reader.uint32());
+          message.params = Params.decode(reader, reader.uint32(), useInterfaces);
           break;
         default:
           reader.skipType(tag & 7);
@@ -458,16 +478,16 @@ export const QueryParamsResponse = {
     }
     return message;
   },
-  toAmino(message: QueryParamsResponse): QueryParamsResponseAmino {
+  toAmino(message: QueryParamsResponse, useInterfaces: boolean = true): QueryParamsResponseAmino {
     const obj: any = {};
-    obj.params = message.params ? Params.toAmino(message.params) : undefined;
+    obj.params = message.params ? Params.toAmino(message.params, useInterfaces) : undefined;
     return obj;
   },
   fromAminoMsg(object: QueryParamsResponseAminoMsg): QueryParamsResponse {
     return QueryParamsResponse.fromAmino(object.value);
   },
-  fromProtoMsg(message: QueryParamsResponseProtoMsg): QueryParamsResponse {
-    return QueryParamsResponse.decode(message.value);
+  fromProtoMsg(message: QueryParamsResponseProtoMsg, useInterfaces: boolean = true): QueryParamsResponse {
+    return QueryParamsResponse.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: QueryParamsResponse): Uint8Array {
     return QueryParamsResponse.encode(message).finish();
@@ -479,6 +499,7 @@ export const QueryParamsResponse = {
     };
   }
 };
+GlobalDecoderRegistry.register(QueryParamsResponse.typeUrl, QueryParamsResponse);
 function createBaseQueryGetStakedPAssetRequest(): QueryGetStakedPAssetRequest {
   return {
     account: "",
@@ -487,6 +508,15 @@ function createBaseQueryGetStakedPAssetRequest(): QueryGetStakedPAssetRequest {
 }
 export const QueryGetStakedPAssetRequest = {
   typeUrl: "/pryzm.pgov.v1.QueryGetStakedPAssetRequest",
+  is(o: any): o is QueryGetStakedPAssetRequest {
+    return o && (o.$typeUrl === QueryGetStakedPAssetRequest.typeUrl || typeof o.account === "string" && typeof o.pAsset === "string");
+  },
+  isSDK(o: any): o is QueryGetStakedPAssetRequestSDKType {
+    return o && (o.$typeUrl === QueryGetStakedPAssetRequest.typeUrl || typeof o.account === "string" && typeof o.p_asset === "string");
+  },
+  isAmino(o: any): o is QueryGetStakedPAssetRequestAmino {
+    return o && (o.$typeUrl === QueryGetStakedPAssetRequest.typeUrl || typeof o.account === "string" && typeof o.p_asset === "string");
+  },
   encode(message: QueryGetStakedPAssetRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.account !== "") {
       writer.uint32(10).string(message.account);
@@ -496,7 +526,7 @@ export const QueryGetStakedPAssetRequest = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): QueryGetStakedPAssetRequest {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): QueryGetStakedPAssetRequest {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryGetStakedPAssetRequest();
@@ -544,17 +574,17 @@ export const QueryGetStakedPAssetRequest = {
     }
     return message;
   },
-  toAmino(message: QueryGetStakedPAssetRequest): QueryGetStakedPAssetRequestAmino {
+  toAmino(message: QueryGetStakedPAssetRequest, useInterfaces: boolean = true): QueryGetStakedPAssetRequestAmino {
     const obj: any = {};
-    obj.account = message.account;
-    obj.p_asset = message.pAsset;
+    obj.account = message.account === "" ? undefined : message.account;
+    obj.p_asset = message.pAsset === "" ? undefined : message.pAsset;
     return obj;
   },
   fromAminoMsg(object: QueryGetStakedPAssetRequestAminoMsg): QueryGetStakedPAssetRequest {
     return QueryGetStakedPAssetRequest.fromAmino(object.value);
   },
-  fromProtoMsg(message: QueryGetStakedPAssetRequestProtoMsg): QueryGetStakedPAssetRequest {
-    return QueryGetStakedPAssetRequest.decode(message.value);
+  fromProtoMsg(message: QueryGetStakedPAssetRequestProtoMsg, useInterfaces: boolean = true): QueryGetStakedPAssetRequest {
+    return QueryGetStakedPAssetRequest.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: QueryGetStakedPAssetRequest): Uint8Array {
     return QueryGetStakedPAssetRequest.encode(message).finish();
@@ -566,6 +596,7 @@ export const QueryGetStakedPAssetRequest = {
     };
   }
 };
+GlobalDecoderRegistry.register(QueryGetStakedPAssetRequest.typeUrl, QueryGetStakedPAssetRequest);
 function createBaseQueryGetStakedPAssetResponse(): QueryGetStakedPAssetResponse {
   return {
     stakedPAsset: StakedPAsset.fromPartial({})
@@ -573,13 +604,22 @@ function createBaseQueryGetStakedPAssetResponse(): QueryGetStakedPAssetResponse 
 }
 export const QueryGetStakedPAssetResponse = {
   typeUrl: "/pryzm.pgov.v1.QueryGetStakedPAssetResponse",
+  is(o: any): o is QueryGetStakedPAssetResponse {
+    return o && (o.$typeUrl === QueryGetStakedPAssetResponse.typeUrl || StakedPAsset.is(o.stakedPAsset));
+  },
+  isSDK(o: any): o is QueryGetStakedPAssetResponseSDKType {
+    return o && (o.$typeUrl === QueryGetStakedPAssetResponse.typeUrl || StakedPAsset.isSDK(o.staked_p_asset));
+  },
+  isAmino(o: any): o is QueryGetStakedPAssetResponseAmino {
+    return o && (o.$typeUrl === QueryGetStakedPAssetResponse.typeUrl || StakedPAsset.isAmino(o.staked_p_asset));
+  },
   encode(message: QueryGetStakedPAssetResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.stakedPAsset !== undefined) {
       StakedPAsset.encode(message.stakedPAsset, writer.uint32(10).fork()).ldelim();
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): QueryGetStakedPAssetResponse {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): QueryGetStakedPAssetResponse {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryGetStakedPAssetResponse();
@@ -587,7 +627,7 @@ export const QueryGetStakedPAssetResponse = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.stakedPAsset = StakedPAsset.decode(reader, reader.uint32());
+          message.stakedPAsset = StakedPAsset.decode(reader, reader.uint32(), useInterfaces);
           break;
         default:
           reader.skipType(tag & 7);
@@ -618,16 +658,16 @@ export const QueryGetStakedPAssetResponse = {
     }
     return message;
   },
-  toAmino(message: QueryGetStakedPAssetResponse): QueryGetStakedPAssetResponseAmino {
+  toAmino(message: QueryGetStakedPAssetResponse, useInterfaces: boolean = true): QueryGetStakedPAssetResponseAmino {
     const obj: any = {};
-    obj.staked_p_asset = message.stakedPAsset ? StakedPAsset.toAmino(message.stakedPAsset) : undefined;
+    obj.staked_p_asset = message.stakedPAsset ? StakedPAsset.toAmino(message.stakedPAsset, useInterfaces) : undefined;
     return obj;
   },
   fromAminoMsg(object: QueryGetStakedPAssetResponseAminoMsg): QueryGetStakedPAssetResponse {
     return QueryGetStakedPAssetResponse.fromAmino(object.value);
   },
-  fromProtoMsg(message: QueryGetStakedPAssetResponseProtoMsg): QueryGetStakedPAssetResponse {
-    return QueryGetStakedPAssetResponse.decode(message.value);
+  fromProtoMsg(message: QueryGetStakedPAssetResponseProtoMsg, useInterfaces: boolean = true): QueryGetStakedPAssetResponse {
+    return QueryGetStakedPAssetResponse.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: QueryGetStakedPAssetResponse): Uint8Array {
     return QueryGetStakedPAssetResponse.encode(message).finish();
@@ -639,6 +679,7 @@ export const QueryGetStakedPAssetResponse = {
     };
   }
 };
+GlobalDecoderRegistry.register(QueryGetStakedPAssetResponse.typeUrl, QueryGetStakedPAssetResponse);
 function createBaseQueryAllStakedPAssetRequest(): QueryAllStakedPAssetRequest {
   return {
     account: "",
@@ -647,6 +688,15 @@ function createBaseQueryAllStakedPAssetRequest(): QueryAllStakedPAssetRequest {
 }
 export const QueryAllStakedPAssetRequest = {
   typeUrl: "/pryzm.pgov.v1.QueryAllStakedPAssetRequest",
+  is(o: any): o is QueryAllStakedPAssetRequest {
+    return o && (o.$typeUrl === QueryAllStakedPAssetRequest.typeUrl || typeof o.account === "string");
+  },
+  isSDK(o: any): o is QueryAllStakedPAssetRequestSDKType {
+    return o && (o.$typeUrl === QueryAllStakedPAssetRequest.typeUrl || typeof o.account === "string");
+  },
+  isAmino(o: any): o is QueryAllStakedPAssetRequestAmino {
+    return o && (o.$typeUrl === QueryAllStakedPAssetRequest.typeUrl || typeof o.account === "string");
+  },
   encode(message: QueryAllStakedPAssetRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.account !== "") {
       writer.uint32(10).string(message.account);
@@ -656,7 +706,7 @@ export const QueryAllStakedPAssetRequest = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): QueryAllStakedPAssetRequest {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): QueryAllStakedPAssetRequest {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryAllStakedPAssetRequest();
@@ -667,7 +717,7 @@ export const QueryAllStakedPAssetRequest = {
           message.account = reader.string();
           break;
         case 2:
-          message.pagination = PageRequest.decode(reader, reader.uint32());
+          message.pagination = PageRequest.decode(reader, reader.uint32(), useInterfaces);
           break;
         default:
           reader.skipType(tag & 7);
@@ -704,17 +754,17 @@ export const QueryAllStakedPAssetRequest = {
     }
     return message;
   },
-  toAmino(message: QueryAllStakedPAssetRequest): QueryAllStakedPAssetRequestAmino {
+  toAmino(message: QueryAllStakedPAssetRequest, useInterfaces: boolean = true): QueryAllStakedPAssetRequestAmino {
     const obj: any = {};
-    obj.account = message.account;
-    obj.pagination = message.pagination ? PageRequest.toAmino(message.pagination) : undefined;
+    obj.account = message.account === "" ? undefined : message.account;
+    obj.pagination = message.pagination ? PageRequest.toAmino(message.pagination, useInterfaces) : undefined;
     return obj;
   },
   fromAminoMsg(object: QueryAllStakedPAssetRequestAminoMsg): QueryAllStakedPAssetRequest {
     return QueryAllStakedPAssetRequest.fromAmino(object.value);
   },
-  fromProtoMsg(message: QueryAllStakedPAssetRequestProtoMsg): QueryAllStakedPAssetRequest {
-    return QueryAllStakedPAssetRequest.decode(message.value);
+  fromProtoMsg(message: QueryAllStakedPAssetRequestProtoMsg, useInterfaces: boolean = true): QueryAllStakedPAssetRequest {
+    return QueryAllStakedPAssetRequest.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: QueryAllStakedPAssetRequest): Uint8Array {
     return QueryAllStakedPAssetRequest.encode(message).finish();
@@ -726,6 +776,7 @@ export const QueryAllStakedPAssetRequest = {
     };
   }
 };
+GlobalDecoderRegistry.register(QueryAllStakedPAssetRequest.typeUrl, QueryAllStakedPAssetRequest);
 function createBaseQueryAllStakedPAssetResponse(): QueryAllStakedPAssetResponse {
   return {
     stakedPAsset: [],
@@ -734,6 +785,15 @@ function createBaseQueryAllStakedPAssetResponse(): QueryAllStakedPAssetResponse 
 }
 export const QueryAllStakedPAssetResponse = {
   typeUrl: "/pryzm.pgov.v1.QueryAllStakedPAssetResponse",
+  is(o: any): o is QueryAllStakedPAssetResponse {
+    return o && (o.$typeUrl === QueryAllStakedPAssetResponse.typeUrl || Array.isArray(o.stakedPAsset) && (!o.stakedPAsset.length || StakedPAsset.is(o.stakedPAsset[0])));
+  },
+  isSDK(o: any): o is QueryAllStakedPAssetResponseSDKType {
+    return o && (o.$typeUrl === QueryAllStakedPAssetResponse.typeUrl || Array.isArray(o.staked_p_asset) && (!o.staked_p_asset.length || StakedPAsset.isSDK(o.staked_p_asset[0])));
+  },
+  isAmino(o: any): o is QueryAllStakedPAssetResponseAmino {
+    return o && (o.$typeUrl === QueryAllStakedPAssetResponse.typeUrl || Array.isArray(o.staked_p_asset) && (!o.staked_p_asset.length || StakedPAsset.isAmino(o.staked_p_asset[0])));
+  },
   encode(message: QueryAllStakedPAssetResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     for (const v of message.stakedPAsset) {
       StakedPAsset.encode(v!, writer.uint32(10).fork()).ldelim();
@@ -743,7 +803,7 @@ export const QueryAllStakedPAssetResponse = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): QueryAllStakedPAssetResponse {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): QueryAllStakedPAssetResponse {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryAllStakedPAssetResponse();
@@ -751,10 +811,10 @@ export const QueryAllStakedPAssetResponse = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.stakedPAsset.push(StakedPAsset.decode(reader, reader.uint32()));
+          message.stakedPAsset.push(StakedPAsset.decode(reader, reader.uint32(), useInterfaces));
           break;
         case 2:
-          message.pagination = PageResponse.decode(reader, reader.uint32());
+          message.pagination = PageResponse.decode(reader, reader.uint32(), useInterfaces);
           break;
         default:
           reader.skipType(tag & 7);
@@ -793,21 +853,21 @@ export const QueryAllStakedPAssetResponse = {
     }
     return message;
   },
-  toAmino(message: QueryAllStakedPAssetResponse): QueryAllStakedPAssetResponseAmino {
+  toAmino(message: QueryAllStakedPAssetResponse, useInterfaces: boolean = true): QueryAllStakedPAssetResponseAmino {
     const obj: any = {};
     if (message.stakedPAsset) {
-      obj.staked_p_asset = message.stakedPAsset.map(e => e ? StakedPAsset.toAmino(e) : undefined);
+      obj.staked_p_asset = message.stakedPAsset.map(e => e ? StakedPAsset.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.staked_p_asset = [];
+      obj.staked_p_asset = null;
     }
-    obj.pagination = message.pagination ? PageResponse.toAmino(message.pagination) : undefined;
+    obj.pagination = message.pagination ? PageResponse.toAmino(message.pagination, useInterfaces) : undefined;
     return obj;
   },
   fromAminoMsg(object: QueryAllStakedPAssetResponseAminoMsg): QueryAllStakedPAssetResponse {
     return QueryAllStakedPAssetResponse.fromAmino(object.value);
   },
-  fromProtoMsg(message: QueryAllStakedPAssetResponseProtoMsg): QueryAllStakedPAssetResponse {
-    return QueryAllStakedPAssetResponse.decode(message.value);
+  fromProtoMsg(message: QueryAllStakedPAssetResponseProtoMsg, useInterfaces: boolean = true): QueryAllStakedPAssetResponse {
+    return QueryAllStakedPAssetResponse.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: QueryAllStakedPAssetResponse): Uint8Array {
     return QueryAllStakedPAssetResponse.encode(message).finish();
@@ -819,6 +879,7 @@ export const QueryAllStakedPAssetResponse = {
     };
   }
 };
+GlobalDecoderRegistry.register(QueryAllStakedPAssetResponse.typeUrl, QueryAllStakedPAssetResponse);
 function createBaseQueryAllTotalStakedPAssetRequest(): QueryAllTotalStakedPAssetRequest {
   return {
     account: "",
@@ -827,6 +888,15 @@ function createBaseQueryAllTotalStakedPAssetRequest(): QueryAllTotalStakedPAsset
 }
 export const QueryAllTotalStakedPAssetRequest = {
   typeUrl: "/pryzm.pgov.v1.QueryAllTotalStakedPAssetRequest",
+  is(o: any): o is QueryAllTotalStakedPAssetRequest {
+    return o && (o.$typeUrl === QueryAllTotalStakedPAssetRequest.typeUrl || typeof o.account === "string");
+  },
+  isSDK(o: any): o is QueryAllTotalStakedPAssetRequestSDKType {
+    return o && (o.$typeUrl === QueryAllTotalStakedPAssetRequest.typeUrl || typeof o.account === "string");
+  },
+  isAmino(o: any): o is QueryAllTotalStakedPAssetRequestAmino {
+    return o && (o.$typeUrl === QueryAllTotalStakedPAssetRequest.typeUrl || typeof o.account === "string");
+  },
   encode(message: QueryAllTotalStakedPAssetRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.account !== "") {
       writer.uint32(10).string(message.account);
@@ -836,7 +906,7 @@ export const QueryAllTotalStakedPAssetRequest = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): QueryAllTotalStakedPAssetRequest {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): QueryAllTotalStakedPAssetRequest {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryAllTotalStakedPAssetRequest();
@@ -847,7 +917,7 @@ export const QueryAllTotalStakedPAssetRequest = {
           message.account = reader.string();
           break;
         case 2:
-          message.pagination = PageRequest.decode(reader, reader.uint32());
+          message.pagination = PageRequest.decode(reader, reader.uint32(), useInterfaces);
           break;
         default:
           reader.skipType(tag & 7);
@@ -884,17 +954,17 @@ export const QueryAllTotalStakedPAssetRequest = {
     }
     return message;
   },
-  toAmino(message: QueryAllTotalStakedPAssetRequest): QueryAllTotalStakedPAssetRequestAmino {
+  toAmino(message: QueryAllTotalStakedPAssetRequest, useInterfaces: boolean = true): QueryAllTotalStakedPAssetRequestAmino {
     const obj: any = {};
-    obj.account = message.account;
-    obj.pagination = message.pagination ? PageRequest.toAmino(message.pagination) : undefined;
+    obj.account = message.account === "" ? undefined : message.account;
+    obj.pagination = message.pagination ? PageRequest.toAmino(message.pagination, useInterfaces) : undefined;
     return obj;
   },
   fromAminoMsg(object: QueryAllTotalStakedPAssetRequestAminoMsg): QueryAllTotalStakedPAssetRequest {
     return QueryAllTotalStakedPAssetRequest.fromAmino(object.value);
   },
-  fromProtoMsg(message: QueryAllTotalStakedPAssetRequestProtoMsg): QueryAllTotalStakedPAssetRequest {
-    return QueryAllTotalStakedPAssetRequest.decode(message.value);
+  fromProtoMsg(message: QueryAllTotalStakedPAssetRequestProtoMsg, useInterfaces: boolean = true): QueryAllTotalStakedPAssetRequest {
+    return QueryAllTotalStakedPAssetRequest.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: QueryAllTotalStakedPAssetRequest): Uint8Array {
     return QueryAllTotalStakedPAssetRequest.encode(message).finish();
@@ -906,6 +976,7 @@ export const QueryAllTotalStakedPAssetRequest = {
     };
   }
 };
+GlobalDecoderRegistry.register(QueryAllTotalStakedPAssetRequest.typeUrl, QueryAllTotalStakedPAssetRequest);
 function createBaseQueryAllTotalStakedPAssetResponse(): QueryAllTotalStakedPAssetResponse {
   return {
     totalStakedPAsset: [],
@@ -914,6 +985,15 @@ function createBaseQueryAllTotalStakedPAssetResponse(): QueryAllTotalStakedPAsse
 }
 export const QueryAllTotalStakedPAssetResponse = {
   typeUrl: "/pryzm.pgov.v1.QueryAllTotalStakedPAssetResponse",
+  is(o: any): o is QueryAllTotalStakedPAssetResponse {
+    return o && (o.$typeUrl === QueryAllTotalStakedPAssetResponse.typeUrl || Array.isArray(o.totalStakedPAsset) && (!o.totalStakedPAsset.length || TotalStakedPAsset.is(o.totalStakedPAsset[0])));
+  },
+  isSDK(o: any): o is QueryAllTotalStakedPAssetResponseSDKType {
+    return o && (o.$typeUrl === QueryAllTotalStakedPAssetResponse.typeUrl || Array.isArray(o.total_staked_p_asset) && (!o.total_staked_p_asset.length || TotalStakedPAsset.isSDK(o.total_staked_p_asset[0])));
+  },
+  isAmino(o: any): o is QueryAllTotalStakedPAssetResponseAmino {
+    return o && (o.$typeUrl === QueryAllTotalStakedPAssetResponse.typeUrl || Array.isArray(o.total_staked_p_asset) && (!o.total_staked_p_asset.length || TotalStakedPAsset.isAmino(o.total_staked_p_asset[0])));
+  },
   encode(message: QueryAllTotalStakedPAssetResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     for (const v of message.totalStakedPAsset) {
       TotalStakedPAsset.encode(v!, writer.uint32(10).fork()).ldelim();
@@ -923,7 +1003,7 @@ export const QueryAllTotalStakedPAssetResponse = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): QueryAllTotalStakedPAssetResponse {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): QueryAllTotalStakedPAssetResponse {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryAllTotalStakedPAssetResponse();
@@ -931,10 +1011,10 @@ export const QueryAllTotalStakedPAssetResponse = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.totalStakedPAsset.push(TotalStakedPAsset.decode(reader, reader.uint32()));
+          message.totalStakedPAsset.push(TotalStakedPAsset.decode(reader, reader.uint32(), useInterfaces));
           break;
         case 2:
-          message.pagination = PageResponse.decode(reader, reader.uint32());
+          message.pagination = PageResponse.decode(reader, reader.uint32(), useInterfaces);
           break;
         default:
           reader.skipType(tag & 7);
@@ -973,21 +1053,21 @@ export const QueryAllTotalStakedPAssetResponse = {
     }
     return message;
   },
-  toAmino(message: QueryAllTotalStakedPAssetResponse): QueryAllTotalStakedPAssetResponseAmino {
+  toAmino(message: QueryAllTotalStakedPAssetResponse, useInterfaces: boolean = true): QueryAllTotalStakedPAssetResponseAmino {
     const obj: any = {};
     if (message.totalStakedPAsset) {
-      obj.total_staked_p_asset = message.totalStakedPAsset.map(e => e ? TotalStakedPAsset.toAmino(e) : undefined);
+      obj.total_staked_p_asset = message.totalStakedPAsset.map(e => e ? TotalStakedPAsset.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.total_staked_p_asset = [];
+      obj.total_staked_p_asset = null;
     }
-    obj.pagination = message.pagination ? PageResponse.toAmino(message.pagination) : undefined;
+    obj.pagination = message.pagination ? PageResponse.toAmino(message.pagination, useInterfaces) : undefined;
     return obj;
   },
   fromAminoMsg(object: QueryAllTotalStakedPAssetResponseAminoMsg): QueryAllTotalStakedPAssetResponse {
     return QueryAllTotalStakedPAssetResponse.fromAmino(object.value);
   },
-  fromProtoMsg(message: QueryAllTotalStakedPAssetResponseProtoMsg): QueryAllTotalStakedPAssetResponse {
-    return QueryAllTotalStakedPAssetResponse.decode(message.value);
+  fromProtoMsg(message: QueryAllTotalStakedPAssetResponseProtoMsg, useInterfaces: boolean = true): QueryAllTotalStakedPAssetResponse {
+    return QueryAllTotalStakedPAssetResponse.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: QueryAllTotalStakedPAssetResponse): Uint8Array {
     return QueryAllTotalStakedPAssetResponse.encode(message).finish();
@@ -999,6 +1079,7 @@ export const QueryAllTotalStakedPAssetResponse = {
     };
   }
 };
+GlobalDecoderRegistry.register(QueryAllTotalStakedPAssetResponse.typeUrl, QueryAllTotalStakedPAssetResponse);
 function createBaseQueryGetTotalStakedPAssetRequest(): QueryGetTotalStakedPAssetRequest {
   return {
     account: "",
@@ -1007,6 +1088,15 @@ function createBaseQueryGetTotalStakedPAssetRequest(): QueryGetTotalStakedPAsset
 }
 export const QueryGetTotalStakedPAssetRequest = {
   typeUrl: "/pryzm.pgov.v1.QueryGetTotalStakedPAssetRequest",
+  is(o: any): o is QueryGetTotalStakedPAssetRequest {
+    return o && (o.$typeUrl === QueryGetTotalStakedPAssetRequest.typeUrl || typeof o.account === "string" && typeof o.asset === "string");
+  },
+  isSDK(o: any): o is QueryGetTotalStakedPAssetRequestSDKType {
+    return o && (o.$typeUrl === QueryGetTotalStakedPAssetRequest.typeUrl || typeof o.account === "string" && typeof o.asset === "string");
+  },
+  isAmino(o: any): o is QueryGetTotalStakedPAssetRequestAmino {
+    return o && (o.$typeUrl === QueryGetTotalStakedPAssetRequest.typeUrl || typeof o.account === "string" && typeof o.asset === "string");
+  },
   encode(message: QueryGetTotalStakedPAssetRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.account !== "") {
       writer.uint32(10).string(message.account);
@@ -1016,7 +1106,7 @@ export const QueryGetTotalStakedPAssetRequest = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): QueryGetTotalStakedPAssetRequest {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): QueryGetTotalStakedPAssetRequest {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryGetTotalStakedPAssetRequest();
@@ -1064,17 +1154,17 @@ export const QueryGetTotalStakedPAssetRequest = {
     }
     return message;
   },
-  toAmino(message: QueryGetTotalStakedPAssetRequest): QueryGetTotalStakedPAssetRequestAmino {
+  toAmino(message: QueryGetTotalStakedPAssetRequest, useInterfaces: boolean = true): QueryGetTotalStakedPAssetRequestAmino {
     const obj: any = {};
-    obj.account = message.account;
-    obj.asset = message.asset;
+    obj.account = message.account === "" ? undefined : message.account;
+    obj.asset = message.asset === "" ? undefined : message.asset;
     return obj;
   },
   fromAminoMsg(object: QueryGetTotalStakedPAssetRequestAminoMsg): QueryGetTotalStakedPAssetRequest {
     return QueryGetTotalStakedPAssetRequest.fromAmino(object.value);
   },
-  fromProtoMsg(message: QueryGetTotalStakedPAssetRequestProtoMsg): QueryGetTotalStakedPAssetRequest {
-    return QueryGetTotalStakedPAssetRequest.decode(message.value);
+  fromProtoMsg(message: QueryGetTotalStakedPAssetRequestProtoMsg, useInterfaces: boolean = true): QueryGetTotalStakedPAssetRequest {
+    return QueryGetTotalStakedPAssetRequest.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: QueryGetTotalStakedPAssetRequest): Uint8Array {
     return QueryGetTotalStakedPAssetRequest.encode(message).finish();
@@ -1086,6 +1176,7 @@ export const QueryGetTotalStakedPAssetRequest = {
     };
   }
 };
+GlobalDecoderRegistry.register(QueryGetTotalStakedPAssetRequest.typeUrl, QueryGetTotalStakedPAssetRequest);
 function createBaseQueryGetTotalStakedPAssetResponse(): QueryGetTotalStakedPAssetResponse {
   return {
     totalStakedPAsset: TotalStakedPAsset.fromPartial({})
@@ -1093,13 +1184,22 @@ function createBaseQueryGetTotalStakedPAssetResponse(): QueryGetTotalStakedPAsse
 }
 export const QueryGetTotalStakedPAssetResponse = {
   typeUrl: "/pryzm.pgov.v1.QueryGetTotalStakedPAssetResponse",
+  is(o: any): o is QueryGetTotalStakedPAssetResponse {
+    return o && (o.$typeUrl === QueryGetTotalStakedPAssetResponse.typeUrl || TotalStakedPAsset.is(o.totalStakedPAsset));
+  },
+  isSDK(o: any): o is QueryGetTotalStakedPAssetResponseSDKType {
+    return o && (o.$typeUrl === QueryGetTotalStakedPAssetResponse.typeUrl || TotalStakedPAsset.isSDK(o.total_staked_p_asset));
+  },
+  isAmino(o: any): o is QueryGetTotalStakedPAssetResponseAmino {
+    return o && (o.$typeUrl === QueryGetTotalStakedPAssetResponse.typeUrl || TotalStakedPAsset.isAmino(o.total_staked_p_asset));
+  },
   encode(message: QueryGetTotalStakedPAssetResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.totalStakedPAsset !== undefined) {
       TotalStakedPAsset.encode(message.totalStakedPAsset, writer.uint32(10).fork()).ldelim();
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): QueryGetTotalStakedPAssetResponse {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): QueryGetTotalStakedPAssetResponse {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryGetTotalStakedPAssetResponse();
@@ -1107,7 +1207,7 @@ export const QueryGetTotalStakedPAssetResponse = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.totalStakedPAsset = TotalStakedPAsset.decode(reader, reader.uint32());
+          message.totalStakedPAsset = TotalStakedPAsset.decode(reader, reader.uint32(), useInterfaces);
           break;
         default:
           reader.skipType(tag & 7);
@@ -1138,16 +1238,16 @@ export const QueryGetTotalStakedPAssetResponse = {
     }
     return message;
   },
-  toAmino(message: QueryGetTotalStakedPAssetResponse): QueryGetTotalStakedPAssetResponseAmino {
+  toAmino(message: QueryGetTotalStakedPAssetResponse, useInterfaces: boolean = true): QueryGetTotalStakedPAssetResponseAmino {
     const obj: any = {};
-    obj.total_staked_p_asset = message.totalStakedPAsset ? TotalStakedPAsset.toAmino(message.totalStakedPAsset) : undefined;
+    obj.total_staked_p_asset = message.totalStakedPAsset ? TotalStakedPAsset.toAmino(message.totalStakedPAsset, useInterfaces) : undefined;
     return obj;
   },
   fromAminoMsg(object: QueryGetTotalStakedPAssetResponseAminoMsg): QueryGetTotalStakedPAssetResponse {
     return QueryGetTotalStakedPAssetResponse.fromAmino(object.value);
   },
-  fromProtoMsg(message: QueryGetTotalStakedPAssetResponseProtoMsg): QueryGetTotalStakedPAssetResponse {
-    return QueryGetTotalStakedPAssetResponse.decode(message.value);
+  fromProtoMsg(message: QueryGetTotalStakedPAssetResponseProtoMsg, useInterfaces: boolean = true): QueryGetTotalStakedPAssetResponse {
+    return QueryGetTotalStakedPAssetResponse.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: QueryGetTotalStakedPAssetResponse): Uint8Array {
     return QueryGetTotalStakedPAssetResponse.encode(message).finish();
@@ -1159,6 +1259,7 @@ export const QueryGetTotalStakedPAssetResponse = {
     };
   }
 };
+GlobalDecoderRegistry.register(QueryGetTotalStakedPAssetResponse.typeUrl, QueryGetTotalStakedPAssetResponse);
 function createBaseQueryGetVoteRequest(): QueryGetVoteRequest {
   return {
     asset: "",
@@ -1168,6 +1269,15 @@ function createBaseQueryGetVoteRequest(): QueryGetVoteRequest {
 }
 export const QueryGetVoteRequest = {
   typeUrl: "/pryzm.pgov.v1.QueryGetVoteRequest",
+  is(o: any): o is QueryGetVoteRequest {
+    return o && (o.$typeUrl === QueryGetVoteRequest.typeUrl || typeof o.asset === "string" && typeof o.proposal === "bigint" && typeof o.voter === "string");
+  },
+  isSDK(o: any): o is QueryGetVoteRequestSDKType {
+    return o && (o.$typeUrl === QueryGetVoteRequest.typeUrl || typeof o.asset === "string" && typeof o.proposal === "bigint" && typeof o.voter === "string");
+  },
+  isAmino(o: any): o is QueryGetVoteRequestAmino {
+    return o && (o.$typeUrl === QueryGetVoteRequest.typeUrl || typeof o.asset === "string" && typeof o.proposal === "bigint" && typeof o.voter === "string");
+  },
   encode(message: QueryGetVoteRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.asset !== "") {
       writer.uint32(10).string(message.asset);
@@ -1180,7 +1290,7 @@ export const QueryGetVoteRequest = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): QueryGetVoteRequest {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): QueryGetVoteRequest {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryGetVoteRequest();
@@ -1237,18 +1347,18 @@ export const QueryGetVoteRequest = {
     }
     return message;
   },
-  toAmino(message: QueryGetVoteRequest): QueryGetVoteRequestAmino {
+  toAmino(message: QueryGetVoteRequest, useInterfaces: boolean = true): QueryGetVoteRequestAmino {
     const obj: any = {};
-    obj.asset = message.asset;
+    obj.asset = message.asset === "" ? undefined : message.asset;
     obj.proposal = message.proposal ? message.proposal.toString() : undefined;
-    obj.voter = message.voter;
+    obj.voter = message.voter === "" ? undefined : message.voter;
     return obj;
   },
   fromAminoMsg(object: QueryGetVoteRequestAminoMsg): QueryGetVoteRequest {
     return QueryGetVoteRequest.fromAmino(object.value);
   },
-  fromProtoMsg(message: QueryGetVoteRequestProtoMsg): QueryGetVoteRequest {
-    return QueryGetVoteRequest.decode(message.value);
+  fromProtoMsg(message: QueryGetVoteRequestProtoMsg, useInterfaces: boolean = true): QueryGetVoteRequest {
+    return QueryGetVoteRequest.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: QueryGetVoteRequest): Uint8Array {
     return QueryGetVoteRequest.encode(message).finish();
@@ -1260,6 +1370,7 @@ export const QueryGetVoteRequest = {
     };
   }
 };
+GlobalDecoderRegistry.register(QueryGetVoteRequest.typeUrl, QueryGetVoteRequest);
 function createBaseQueryGetVoteResponse(): QueryGetVoteResponse {
   return {
     vote: Vote.fromPartial({})
@@ -1267,13 +1378,22 @@ function createBaseQueryGetVoteResponse(): QueryGetVoteResponse {
 }
 export const QueryGetVoteResponse = {
   typeUrl: "/pryzm.pgov.v1.QueryGetVoteResponse",
+  is(o: any): o is QueryGetVoteResponse {
+    return o && (o.$typeUrl === QueryGetVoteResponse.typeUrl || Vote.is(o.vote));
+  },
+  isSDK(o: any): o is QueryGetVoteResponseSDKType {
+    return o && (o.$typeUrl === QueryGetVoteResponse.typeUrl || Vote.isSDK(o.vote));
+  },
+  isAmino(o: any): o is QueryGetVoteResponseAmino {
+    return o && (o.$typeUrl === QueryGetVoteResponse.typeUrl || Vote.isAmino(o.vote));
+  },
   encode(message: QueryGetVoteResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.vote !== undefined) {
       Vote.encode(message.vote, writer.uint32(10).fork()).ldelim();
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): QueryGetVoteResponse {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): QueryGetVoteResponse {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryGetVoteResponse();
@@ -1281,7 +1401,7 @@ export const QueryGetVoteResponse = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.vote = Vote.decode(reader, reader.uint32());
+          message.vote = Vote.decode(reader, reader.uint32(), useInterfaces);
           break;
         default:
           reader.skipType(tag & 7);
@@ -1312,16 +1432,16 @@ export const QueryGetVoteResponse = {
     }
     return message;
   },
-  toAmino(message: QueryGetVoteResponse): QueryGetVoteResponseAmino {
+  toAmino(message: QueryGetVoteResponse, useInterfaces: boolean = true): QueryGetVoteResponseAmino {
     const obj: any = {};
-    obj.vote = message.vote ? Vote.toAmino(message.vote) : undefined;
+    obj.vote = message.vote ? Vote.toAmino(message.vote, useInterfaces) : undefined;
     return obj;
   },
   fromAminoMsg(object: QueryGetVoteResponseAminoMsg): QueryGetVoteResponse {
     return QueryGetVoteResponse.fromAmino(object.value);
   },
-  fromProtoMsg(message: QueryGetVoteResponseProtoMsg): QueryGetVoteResponse {
-    return QueryGetVoteResponse.decode(message.value);
+  fromProtoMsg(message: QueryGetVoteResponseProtoMsg, useInterfaces: boolean = true): QueryGetVoteResponse {
+    return QueryGetVoteResponse.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: QueryGetVoteResponse): Uint8Array {
     return QueryGetVoteResponse.encode(message).finish();
@@ -1333,6 +1453,7 @@ export const QueryGetVoteResponse = {
     };
   }
 };
+GlobalDecoderRegistry.register(QueryGetVoteResponse.typeUrl, QueryGetVoteResponse);
 function createBaseQueryAllVoteRequest(): QueryAllVoteRequest {
   return {
     pagination: undefined
@@ -1340,13 +1461,22 @@ function createBaseQueryAllVoteRequest(): QueryAllVoteRequest {
 }
 export const QueryAllVoteRequest = {
   typeUrl: "/pryzm.pgov.v1.QueryAllVoteRequest",
+  is(o: any): o is QueryAllVoteRequest {
+    return o && o.$typeUrl === QueryAllVoteRequest.typeUrl;
+  },
+  isSDK(o: any): o is QueryAllVoteRequestSDKType {
+    return o && o.$typeUrl === QueryAllVoteRequest.typeUrl;
+  },
+  isAmino(o: any): o is QueryAllVoteRequestAmino {
+    return o && o.$typeUrl === QueryAllVoteRequest.typeUrl;
+  },
   encode(message: QueryAllVoteRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.pagination !== undefined) {
       PageRequest.encode(message.pagination, writer.uint32(10).fork()).ldelim();
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): QueryAllVoteRequest {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): QueryAllVoteRequest {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryAllVoteRequest();
@@ -1354,7 +1484,7 @@ export const QueryAllVoteRequest = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.pagination = PageRequest.decode(reader, reader.uint32());
+          message.pagination = PageRequest.decode(reader, reader.uint32(), useInterfaces);
           break;
         default:
           reader.skipType(tag & 7);
@@ -1385,16 +1515,16 @@ export const QueryAllVoteRequest = {
     }
     return message;
   },
-  toAmino(message: QueryAllVoteRequest): QueryAllVoteRequestAmino {
+  toAmino(message: QueryAllVoteRequest, useInterfaces: boolean = true): QueryAllVoteRequestAmino {
     const obj: any = {};
-    obj.pagination = message.pagination ? PageRequest.toAmino(message.pagination) : undefined;
+    obj.pagination = message.pagination ? PageRequest.toAmino(message.pagination, useInterfaces) : undefined;
     return obj;
   },
   fromAminoMsg(object: QueryAllVoteRequestAminoMsg): QueryAllVoteRequest {
     return QueryAllVoteRequest.fromAmino(object.value);
   },
-  fromProtoMsg(message: QueryAllVoteRequestProtoMsg): QueryAllVoteRequest {
-    return QueryAllVoteRequest.decode(message.value);
+  fromProtoMsg(message: QueryAllVoteRequestProtoMsg, useInterfaces: boolean = true): QueryAllVoteRequest {
+    return QueryAllVoteRequest.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: QueryAllVoteRequest): Uint8Array {
     return QueryAllVoteRequest.encode(message).finish();
@@ -1406,6 +1536,7 @@ export const QueryAllVoteRequest = {
     };
   }
 };
+GlobalDecoderRegistry.register(QueryAllVoteRequest.typeUrl, QueryAllVoteRequest);
 function createBaseQueryAllVoteResponse(): QueryAllVoteResponse {
   return {
     vote: [],
@@ -1414,6 +1545,15 @@ function createBaseQueryAllVoteResponse(): QueryAllVoteResponse {
 }
 export const QueryAllVoteResponse = {
   typeUrl: "/pryzm.pgov.v1.QueryAllVoteResponse",
+  is(o: any): o is QueryAllVoteResponse {
+    return o && (o.$typeUrl === QueryAllVoteResponse.typeUrl || Array.isArray(o.vote) && (!o.vote.length || Vote.is(o.vote[0])));
+  },
+  isSDK(o: any): o is QueryAllVoteResponseSDKType {
+    return o && (o.$typeUrl === QueryAllVoteResponse.typeUrl || Array.isArray(o.vote) && (!o.vote.length || Vote.isSDK(o.vote[0])));
+  },
+  isAmino(o: any): o is QueryAllVoteResponseAmino {
+    return o && (o.$typeUrl === QueryAllVoteResponse.typeUrl || Array.isArray(o.vote) && (!o.vote.length || Vote.isAmino(o.vote[0])));
+  },
   encode(message: QueryAllVoteResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     for (const v of message.vote) {
       Vote.encode(v!, writer.uint32(10).fork()).ldelim();
@@ -1423,7 +1563,7 @@ export const QueryAllVoteResponse = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): QueryAllVoteResponse {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): QueryAllVoteResponse {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryAllVoteResponse();
@@ -1431,10 +1571,10 @@ export const QueryAllVoteResponse = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.vote.push(Vote.decode(reader, reader.uint32()));
+          message.vote.push(Vote.decode(reader, reader.uint32(), useInterfaces));
           break;
         case 2:
-          message.pagination = PageResponse.decode(reader, reader.uint32());
+          message.pagination = PageResponse.decode(reader, reader.uint32(), useInterfaces);
           break;
         default:
           reader.skipType(tag & 7);
@@ -1473,21 +1613,21 @@ export const QueryAllVoteResponse = {
     }
     return message;
   },
-  toAmino(message: QueryAllVoteResponse): QueryAllVoteResponseAmino {
+  toAmino(message: QueryAllVoteResponse, useInterfaces: boolean = true): QueryAllVoteResponseAmino {
     const obj: any = {};
     if (message.vote) {
-      obj.vote = message.vote.map(e => e ? Vote.toAmino(e) : undefined);
+      obj.vote = message.vote.map(e => e ? Vote.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.vote = [];
+      obj.vote = null;
     }
-    obj.pagination = message.pagination ? PageResponse.toAmino(message.pagination) : undefined;
+    obj.pagination = message.pagination ? PageResponse.toAmino(message.pagination, useInterfaces) : undefined;
     return obj;
   },
   fromAminoMsg(object: QueryAllVoteResponseAminoMsg): QueryAllVoteResponse {
     return QueryAllVoteResponse.fromAmino(object.value);
   },
-  fromProtoMsg(message: QueryAllVoteResponseProtoMsg): QueryAllVoteResponse {
-    return QueryAllVoteResponse.decode(message.value);
+  fromProtoMsg(message: QueryAllVoteResponseProtoMsg, useInterfaces: boolean = true): QueryAllVoteResponse {
+    return QueryAllVoteResponse.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: QueryAllVoteResponse): Uint8Array {
     return QueryAllVoteResponse.encode(message).finish();
@@ -1499,6 +1639,7 @@ export const QueryAllVoteResponse = {
     };
   }
 };
+GlobalDecoderRegistry.register(QueryAllVoteResponse.typeUrl, QueryAllVoteResponse);
 function createBaseQueryGetProposalRequest(): QueryGetProposalRequest {
   return {
     asset: "",
@@ -1507,6 +1648,15 @@ function createBaseQueryGetProposalRequest(): QueryGetProposalRequest {
 }
 export const QueryGetProposalRequest = {
   typeUrl: "/pryzm.pgov.v1.QueryGetProposalRequest",
+  is(o: any): o is QueryGetProposalRequest {
+    return o && (o.$typeUrl === QueryGetProposalRequest.typeUrl || typeof o.asset === "string" && typeof o.proposalId === "bigint");
+  },
+  isSDK(o: any): o is QueryGetProposalRequestSDKType {
+    return o && (o.$typeUrl === QueryGetProposalRequest.typeUrl || typeof o.asset === "string" && typeof o.proposal_id === "bigint");
+  },
+  isAmino(o: any): o is QueryGetProposalRequestAmino {
+    return o && (o.$typeUrl === QueryGetProposalRequest.typeUrl || typeof o.asset === "string" && typeof o.proposal_id === "bigint");
+  },
   encode(message: QueryGetProposalRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.asset !== "") {
       writer.uint32(10).string(message.asset);
@@ -1516,7 +1666,7 @@ export const QueryGetProposalRequest = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): QueryGetProposalRequest {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): QueryGetProposalRequest {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryGetProposalRequest();
@@ -1564,17 +1714,17 @@ export const QueryGetProposalRequest = {
     }
     return message;
   },
-  toAmino(message: QueryGetProposalRequest): QueryGetProposalRequestAmino {
+  toAmino(message: QueryGetProposalRequest, useInterfaces: boolean = true): QueryGetProposalRequestAmino {
     const obj: any = {};
-    obj.asset = message.asset;
+    obj.asset = message.asset === "" ? undefined : message.asset;
     obj.proposal_id = message.proposalId ? message.proposalId.toString() : undefined;
     return obj;
   },
   fromAminoMsg(object: QueryGetProposalRequestAminoMsg): QueryGetProposalRequest {
     return QueryGetProposalRequest.fromAmino(object.value);
   },
-  fromProtoMsg(message: QueryGetProposalRequestProtoMsg): QueryGetProposalRequest {
-    return QueryGetProposalRequest.decode(message.value);
+  fromProtoMsg(message: QueryGetProposalRequestProtoMsg, useInterfaces: boolean = true): QueryGetProposalRequest {
+    return QueryGetProposalRequest.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: QueryGetProposalRequest): Uint8Array {
     return QueryGetProposalRequest.encode(message).finish();
@@ -1586,6 +1736,7 @@ export const QueryGetProposalRequest = {
     };
   }
 };
+GlobalDecoderRegistry.register(QueryGetProposalRequest.typeUrl, QueryGetProposalRequest);
 function createBaseQueryGetProposalResponse(): QueryGetProposalResponse {
   return {
     proposal: Proposal.fromPartial({})
@@ -1593,13 +1744,22 @@ function createBaseQueryGetProposalResponse(): QueryGetProposalResponse {
 }
 export const QueryGetProposalResponse = {
   typeUrl: "/pryzm.pgov.v1.QueryGetProposalResponse",
+  is(o: any): o is QueryGetProposalResponse {
+    return o && (o.$typeUrl === QueryGetProposalResponse.typeUrl || Proposal.is(o.proposal));
+  },
+  isSDK(o: any): o is QueryGetProposalResponseSDKType {
+    return o && (o.$typeUrl === QueryGetProposalResponse.typeUrl || Proposal.isSDK(o.proposal));
+  },
+  isAmino(o: any): o is QueryGetProposalResponseAmino {
+    return o && (o.$typeUrl === QueryGetProposalResponse.typeUrl || Proposal.isAmino(o.proposal));
+  },
   encode(message: QueryGetProposalResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.proposal !== undefined) {
       Proposal.encode(message.proposal, writer.uint32(10).fork()).ldelim();
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): QueryGetProposalResponse {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): QueryGetProposalResponse {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryGetProposalResponse();
@@ -1607,7 +1767,7 @@ export const QueryGetProposalResponse = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.proposal = Proposal.decode(reader, reader.uint32());
+          message.proposal = Proposal.decode(reader, reader.uint32(), useInterfaces);
           break;
         default:
           reader.skipType(tag & 7);
@@ -1638,16 +1798,16 @@ export const QueryGetProposalResponse = {
     }
     return message;
   },
-  toAmino(message: QueryGetProposalResponse): QueryGetProposalResponseAmino {
+  toAmino(message: QueryGetProposalResponse, useInterfaces: boolean = true): QueryGetProposalResponseAmino {
     const obj: any = {};
-    obj.proposal = message.proposal ? Proposal.toAmino(message.proposal) : undefined;
+    obj.proposal = message.proposal ? Proposal.toAmino(message.proposal, useInterfaces) : undefined;
     return obj;
   },
   fromAminoMsg(object: QueryGetProposalResponseAminoMsg): QueryGetProposalResponse {
     return QueryGetProposalResponse.fromAmino(object.value);
   },
-  fromProtoMsg(message: QueryGetProposalResponseProtoMsg): QueryGetProposalResponse {
-    return QueryGetProposalResponse.decode(message.value);
+  fromProtoMsg(message: QueryGetProposalResponseProtoMsg, useInterfaces: boolean = true): QueryGetProposalResponse {
+    return QueryGetProposalResponse.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: QueryGetProposalResponse): Uint8Array {
     return QueryGetProposalResponse.encode(message).finish();
@@ -1659,6 +1819,7 @@ export const QueryGetProposalResponse = {
     };
   }
 };
+GlobalDecoderRegistry.register(QueryGetProposalResponse.typeUrl, QueryGetProposalResponse);
 function createBaseQueryAllProposalRequest(): QueryAllProposalRequest {
   return {
     asset: "",
@@ -1667,6 +1828,15 @@ function createBaseQueryAllProposalRequest(): QueryAllProposalRequest {
 }
 export const QueryAllProposalRequest = {
   typeUrl: "/pryzm.pgov.v1.QueryAllProposalRequest",
+  is(o: any): o is QueryAllProposalRequest {
+    return o && (o.$typeUrl === QueryAllProposalRequest.typeUrl || typeof o.asset === "string");
+  },
+  isSDK(o: any): o is QueryAllProposalRequestSDKType {
+    return o && (o.$typeUrl === QueryAllProposalRequest.typeUrl || typeof o.asset === "string");
+  },
+  isAmino(o: any): o is QueryAllProposalRequestAmino {
+    return o && (o.$typeUrl === QueryAllProposalRequest.typeUrl || typeof o.asset === "string");
+  },
   encode(message: QueryAllProposalRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.asset !== "") {
       writer.uint32(10).string(message.asset);
@@ -1676,7 +1846,7 @@ export const QueryAllProposalRequest = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): QueryAllProposalRequest {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): QueryAllProposalRequest {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryAllProposalRequest();
@@ -1687,7 +1857,7 @@ export const QueryAllProposalRequest = {
           message.asset = reader.string();
           break;
         case 2:
-          message.pagination = PageRequest.decode(reader, reader.uint32());
+          message.pagination = PageRequest.decode(reader, reader.uint32(), useInterfaces);
           break;
         default:
           reader.skipType(tag & 7);
@@ -1724,17 +1894,17 @@ export const QueryAllProposalRequest = {
     }
     return message;
   },
-  toAmino(message: QueryAllProposalRequest): QueryAllProposalRequestAmino {
+  toAmino(message: QueryAllProposalRequest, useInterfaces: boolean = true): QueryAllProposalRequestAmino {
     const obj: any = {};
-    obj.asset = message.asset;
-    obj.pagination = message.pagination ? PageRequest.toAmino(message.pagination) : undefined;
+    obj.asset = message.asset === "" ? undefined : message.asset;
+    obj.pagination = message.pagination ? PageRequest.toAmino(message.pagination, useInterfaces) : undefined;
     return obj;
   },
   fromAminoMsg(object: QueryAllProposalRequestAminoMsg): QueryAllProposalRequest {
     return QueryAllProposalRequest.fromAmino(object.value);
   },
-  fromProtoMsg(message: QueryAllProposalRequestProtoMsg): QueryAllProposalRequest {
-    return QueryAllProposalRequest.decode(message.value);
+  fromProtoMsg(message: QueryAllProposalRequestProtoMsg, useInterfaces: boolean = true): QueryAllProposalRequest {
+    return QueryAllProposalRequest.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: QueryAllProposalRequest): Uint8Array {
     return QueryAllProposalRequest.encode(message).finish();
@@ -1746,6 +1916,7 @@ export const QueryAllProposalRequest = {
     };
   }
 };
+GlobalDecoderRegistry.register(QueryAllProposalRequest.typeUrl, QueryAllProposalRequest);
 function createBaseQueryAllProposalResponse(): QueryAllProposalResponse {
   return {
     proposal: [],
@@ -1754,6 +1925,15 @@ function createBaseQueryAllProposalResponse(): QueryAllProposalResponse {
 }
 export const QueryAllProposalResponse = {
   typeUrl: "/pryzm.pgov.v1.QueryAllProposalResponse",
+  is(o: any): o is QueryAllProposalResponse {
+    return o && (o.$typeUrl === QueryAllProposalResponse.typeUrl || Array.isArray(o.proposal) && (!o.proposal.length || Proposal.is(o.proposal[0])));
+  },
+  isSDK(o: any): o is QueryAllProposalResponseSDKType {
+    return o && (o.$typeUrl === QueryAllProposalResponse.typeUrl || Array.isArray(o.proposal) && (!o.proposal.length || Proposal.isSDK(o.proposal[0])));
+  },
+  isAmino(o: any): o is QueryAllProposalResponseAmino {
+    return o && (o.$typeUrl === QueryAllProposalResponse.typeUrl || Array.isArray(o.proposal) && (!o.proposal.length || Proposal.isAmino(o.proposal[0])));
+  },
   encode(message: QueryAllProposalResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     for (const v of message.proposal) {
       Proposal.encode(v!, writer.uint32(10).fork()).ldelim();
@@ -1763,7 +1943,7 @@ export const QueryAllProposalResponse = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): QueryAllProposalResponse {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): QueryAllProposalResponse {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryAllProposalResponse();
@@ -1771,10 +1951,10 @@ export const QueryAllProposalResponse = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.proposal.push(Proposal.decode(reader, reader.uint32()));
+          message.proposal.push(Proposal.decode(reader, reader.uint32(), useInterfaces));
           break;
         case 2:
-          message.pagination = PageResponse.decode(reader, reader.uint32());
+          message.pagination = PageResponse.decode(reader, reader.uint32(), useInterfaces);
           break;
         default:
           reader.skipType(tag & 7);
@@ -1813,21 +1993,21 @@ export const QueryAllProposalResponse = {
     }
     return message;
   },
-  toAmino(message: QueryAllProposalResponse): QueryAllProposalResponseAmino {
+  toAmino(message: QueryAllProposalResponse, useInterfaces: boolean = true): QueryAllProposalResponseAmino {
     const obj: any = {};
     if (message.proposal) {
-      obj.proposal = message.proposal.map(e => e ? Proposal.toAmino(e) : undefined);
+      obj.proposal = message.proposal.map(e => e ? Proposal.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.proposal = [];
+      obj.proposal = null;
     }
-    obj.pagination = message.pagination ? PageResponse.toAmino(message.pagination) : undefined;
+    obj.pagination = message.pagination ? PageResponse.toAmino(message.pagination, useInterfaces) : undefined;
     return obj;
   },
   fromAminoMsg(object: QueryAllProposalResponseAminoMsg): QueryAllProposalResponse {
     return QueryAllProposalResponse.fromAmino(object.value);
   },
-  fromProtoMsg(message: QueryAllProposalResponseProtoMsg): QueryAllProposalResponse {
-    return QueryAllProposalResponse.decode(message.value);
+  fromProtoMsg(message: QueryAllProposalResponseProtoMsg, useInterfaces: boolean = true): QueryAllProposalResponse {
+    return QueryAllProposalResponse.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: QueryAllProposalResponse): Uint8Array {
     return QueryAllProposalResponse.encode(message).finish();
@@ -1839,3 +2019,4 @@ export const QueryAllProposalResponse = {
     };
   }
 };
+GlobalDecoderRegistry.register(QueryAllProposalResponse.typeUrl, QueryAllProposalResponse);

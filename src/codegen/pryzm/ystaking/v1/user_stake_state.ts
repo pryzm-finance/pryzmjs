@@ -1,6 +1,7 @@
 import { BinaryReader, BinaryWriter } from "../../../binary";
 import { Decimal } from "@cosmjs/math";
-import { isSet } from "../../../helpers";
+import { isSet, padDecimal } from "../../../helpers";
+import { GlobalDecoderRegistry } from "../../../registry";
 export interface UserStakeState {
   address: string;
   assetId: string;
@@ -45,6 +46,15 @@ function createBaseUserStakeState(): UserStakeState {
 }
 export const UserStakeState = {
   typeUrl: "/pryzm.ystaking.v1.UserStakeState",
+  is(o: any): o is UserStakeState {
+    return o && (o.$typeUrl === UserStakeState.typeUrl || typeof o.address === "string" && typeof o.assetId === "string" && typeof o.maturitySymbol === "string" && typeof o.bondedAmount === "string" && typeof o.userIndex === "string" && typeof o.pendingReward === "string");
+  },
+  isSDK(o: any): o is UserStakeStateSDKType {
+    return o && (o.$typeUrl === UserStakeState.typeUrl || typeof o.address === "string" && typeof o.asset_id === "string" && typeof o.maturity_symbol === "string" && typeof o.bonded_amount === "string" && typeof o.user_index === "string" && typeof o.pending_reward === "string");
+  },
+  isAmino(o: any): o is UserStakeStateAmino {
+    return o && (o.$typeUrl === UserStakeState.typeUrl || typeof o.address === "string" && typeof o.asset_id === "string" && typeof o.maturity_symbol === "string" && typeof o.bonded_amount === "string" && typeof o.user_index === "string" && typeof o.pending_reward === "string");
+  },
   encode(message: UserStakeState, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.address !== "") {
       writer.uint32(10).string(message.address);
@@ -66,7 +76,7 @@ export const UserStakeState = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): UserStakeState {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): UserStakeState {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseUserStakeState();
@@ -150,21 +160,21 @@ export const UserStakeState = {
     }
     return message;
   },
-  toAmino(message: UserStakeState): UserStakeStateAmino {
+  toAmino(message: UserStakeState, useInterfaces: boolean = true): UserStakeStateAmino {
     const obj: any = {};
-    obj.address = message.address;
-    obj.asset_id = message.assetId;
-    obj.maturity_symbol = message.maturitySymbol;
-    obj.bonded_amount = message.bondedAmount;
-    obj.user_index = message.userIndex;
-    obj.pending_reward = message.pendingReward;
+    obj.address = message.address === "" ? undefined : message.address;
+    obj.asset_id = message.assetId === "" ? undefined : message.assetId;
+    obj.maturity_symbol = message.maturitySymbol === "" ? undefined : message.maturitySymbol;
+    obj.bonded_amount = message.bondedAmount === "" ? undefined : message.bondedAmount;
+    obj.user_index = padDecimal(message.userIndex) === "" ? undefined : padDecimal(message.userIndex);
+    obj.pending_reward = message.pendingReward === "" ? undefined : message.pendingReward;
     return obj;
   },
   fromAminoMsg(object: UserStakeStateAminoMsg): UserStakeState {
     return UserStakeState.fromAmino(object.value);
   },
-  fromProtoMsg(message: UserStakeStateProtoMsg): UserStakeState {
-    return UserStakeState.decode(message.value);
+  fromProtoMsg(message: UserStakeStateProtoMsg, useInterfaces: boolean = true): UserStakeState {
+    return UserStakeState.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: UserStakeState): Uint8Array {
     return UserStakeState.encode(message).finish();
@@ -176,3 +186,4 @@ export const UserStakeState = {
     };
   }
 };
+GlobalDecoderRegistry.register(UserStakeState.typeUrl, UserStakeState);
