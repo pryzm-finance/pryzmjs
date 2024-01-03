@@ -113,7 +113,7 @@ export const GenesisState = {
     if (message.accounts) {
       obj.accounts = message.accounts.map(e => e ? Any.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.accounts = null;
+      obj.accounts = message.accounts;
     }
     return obj;
   },

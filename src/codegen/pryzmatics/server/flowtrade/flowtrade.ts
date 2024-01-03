@@ -584,7 +584,7 @@ export const QueryAllFlowResponse = {
     if (message.flows) {
       obj.flows = message.flows.map(e => e ? FlowPositionPair.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.flows = null;
+      obj.flows = message.flows;
     }
     obj.pagination = message.pagination ? PageResponse.toAmino(message.pagination, useInterfaces) : undefined;
     return obj;

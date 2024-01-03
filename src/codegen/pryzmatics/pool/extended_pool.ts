@@ -244,7 +244,7 @@ export const ExtendedPool = {
     if (message.tokens) {
       obj.tokens = message.tokens.map(e => e ? PoolToken.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.tokens = null;
+      obj.tokens = message.tokens;
     }
     return obj;
   },

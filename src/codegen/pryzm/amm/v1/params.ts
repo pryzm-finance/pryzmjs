@@ -626,19 +626,19 @@ export const YammParameters = {
     if (message.defaultInitializationAllowList) {
       obj.default_initialization_allow_list = message.defaultInitializationAllowList.map(e => e);
     } else {
-      obj.default_initialization_allow_list = null;
+      obj.default_initialization_allow_list = message.defaultInitializationAllowList;
     }
     obj.avg_monthly_yield_rate = padDecimal(message.avgMonthlyYieldRate) === "" ? undefined : padDecimal(message.avgMonthlyYieldRate);
     obj.yield_fee_scaler = padDecimal(message.yieldFeeScaler) === "" ? undefined : padDecimal(message.yieldFeeScaler);
     if (message.defaultAdmins) {
       obj.default_admins = message.defaultAdmins.map(e => e);
     } else {
-      obj.default_admins = null;
+      obj.default_admins = message.defaultAdmins;
     }
     if (message.defaultPauseAllowList) {
       obj.default_pause_allow_list = message.defaultPauseAllowList.map(e => e);
     } else {
-      obj.default_pause_allow_list = null;
+      obj.default_pause_allow_list = message.defaultPauseAllowList;
     }
     return obj;
   },
@@ -867,12 +867,12 @@ export const AuthorizationParameters = {
     if (message.adminList) {
       obj.admin_list = message.adminList.map(e => e);
     } else {
-      obj.admin_list = null;
+      obj.admin_list = message.adminList;
     }
     if (message.pauseAllowList) {
       obj.pause_allow_list = message.pauseAllowList.map(e => e);
     } else {
-      obj.pause_allow_list = null;
+      obj.pause_allow_list = message.pauseAllowList;
     }
     return obj;
   },

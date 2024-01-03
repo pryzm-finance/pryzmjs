@@ -143,13 +143,13 @@ export const GenesisState = {
     if (message.flowList) {
       obj.flow_list = message.flowList.map(e => e ? Flow.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.flow_list = null;
+      obj.flow_list = message.flowList;
     }
     obj.flow_count = message.flowCount ? message.flowCount.toString() : undefined;
     if (message.positionList) {
       obj.position_list = message.positionList.map(e => e ? Position.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.position_list = null;
+      obj.position_list = message.positionList;
     }
     return obj;
   },

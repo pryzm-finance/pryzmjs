@@ -724,7 +724,7 @@ export const QueryFavoritePairsResponse = {
     if (message.pairs) {
       obj.pairs = message.pairs.map(e => e ? FavoritePair.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.pairs = null;
+      obj.pairs = message.pairs;
     }
     return obj;
   },

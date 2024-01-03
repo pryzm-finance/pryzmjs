@@ -1437,7 +1437,7 @@ export const QueryChannelsResponse = {
     if (message.channels) {
       obj.channels = message.channels.map(e => e ? IdentifiedChannel.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.channels = null;
+      obj.channels = message.channels;
     }
     obj.pagination = message.pagination ? PageResponse.toAmino(message.pagination, useInterfaces) : undefined;
     obj.height = message.height ? Height.toAmino(message.height, useInterfaces) : {};
@@ -1667,7 +1667,7 @@ export const QueryConnectionChannelsResponse = {
     if (message.channels) {
       obj.channels = message.channels.map(e => e ? IdentifiedChannel.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.channels = null;
+      obj.channels = message.channels;
     }
     obj.pagination = message.pagination ? PageResponse.toAmino(message.pagination, useInterfaces) : undefined;
     obj.height = message.height ? Height.toAmino(message.height, useInterfaces) : {};
@@ -2639,7 +2639,7 @@ export const QueryPacketCommitmentsResponse = {
     if (message.commitments) {
       obj.commitments = message.commitments.map(e => e ? PacketState.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.commitments = null;
+      obj.commitments = message.commitments;
     }
     obj.pagination = message.pagination ? PageResponse.toAmino(message.pagination, useInterfaces) : undefined;
     obj.height = message.height ? Height.toAmino(message.height, useInterfaces) : {};
@@ -3265,7 +3265,7 @@ export const QueryPacketAcknowledgementsRequest = {
     if (message.packetCommitmentSequences) {
       obj.packet_commitment_sequences = message.packetCommitmentSequences.map(e => e.toString());
     } else {
-      obj.packet_commitment_sequences = null;
+      obj.packet_commitment_sequences = message.packetCommitmentSequences;
     }
     return obj;
   },
@@ -3388,7 +3388,7 @@ export const QueryPacketAcknowledgementsResponse = {
     if (message.acknowledgements) {
       obj.acknowledgements = message.acknowledgements.map(e => e ? PacketState.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.acknowledgements = null;
+      obj.acknowledgements = message.acknowledgements;
     }
     obj.pagination = message.pagination ? PageResponse.toAmino(message.pagination, useInterfaces) : undefined;
     obj.height = message.height ? Height.toAmino(message.height, useInterfaces) : {};
@@ -3524,7 +3524,7 @@ export const QueryUnreceivedPacketsRequest = {
     if (message.packetCommitmentSequences) {
       obj.packet_commitment_sequences = message.packetCommitmentSequences.map(e => e.toString());
     } else {
-      obj.packet_commitment_sequences = null;
+      obj.packet_commitment_sequences = message.packetCommitmentSequences;
     }
     return obj;
   },
@@ -3643,7 +3643,7 @@ export const QueryUnreceivedPacketsResponse = {
     if (message.sequences) {
       obj.sequences = message.sequences.map(e => e.toString());
     } else {
-      obj.sequences = null;
+      obj.sequences = message.sequences;
     }
     obj.height = message.height ? Height.toAmino(message.height, useInterfaces) : {};
     return obj;
@@ -3778,7 +3778,7 @@ export const QueryUnreceivedAcksRequest = {
     if (message.packetAckSequences) {
       obj.packet_ack_sequences = message.packetAckSequences.map(e => e.toString());
     } else {
-      obj.packet_ack_sequences = null;
+      obj.packet_ack_sequences = message.packetAckSequences;
     }
     return obj;
   },
@@ -3897,7 +3897,7 @@ export const QueryUnreceivedAcksResponse = {
     if (message.sequences) {
       obj.sequences = message.sequences.map(e => e.toString());
     } else {
-      obj.sequences = null;
+      obj.sequences = message.sequences;
     }
     obj.height = message.height ? Height.toAmino(message.height, useInterfaces) : {};
     return obj;

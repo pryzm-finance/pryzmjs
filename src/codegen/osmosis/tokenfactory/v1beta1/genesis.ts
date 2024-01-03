@@ -146,7 +146,7 @@ export const GenesisState = {
     if (message.factoryDenoms) {
       obj.factory_denoms = message.factoryDenoms.map(e => e ? GenesisDenom.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.factory_denoms = null;
+      obj.factory_denoms = message.factoryDenoms;
     }
     return obj;
   },

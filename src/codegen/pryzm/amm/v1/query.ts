@@ -2265,7 +2265,7 @@ export const QueryAllPoolTokenResponse = {
     if (message.poolToken) {
       obj.pool_token = message.poolToken.map(e => e ? PoolToken.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.pool_token = null;
+      obj.pool_token = message.poolToken;
     }
     obj.pagination = message.pagination ? PageResponse.toAmino(message.pagination, useInterfaces) : undefined;
     return obj;
@@ -2438,7 +2438,7 @@ export const QueryAllPoolTokenWeightResponse = {
     if (message.tokenWeight) {
       obj.token_weight = message.tokenWeight.map(e => e ? TokenWeight.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.token_weight = null;
+      obj.token_weight = message.tokenWeight;
     }
     return obj;
   },
@@ -2969,7 +2969,7 @@ export const QueryAllPoolResponse = {
     if (message.pool) {
       obj.pool = message.pool.map(e => e ? Pool.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.pool = null;
+      obj.pool = message.pool;
     }
     obj.pagination = message.pagination ? PageResponse.toAmino(message.pagination, useInterfaces) : undefined;
     return obj;
@@ -3335,7 +3335,7 @@ export const QueryAllWeightedTokenResponse = {
     if (message.weightedToken) {
       obj.weighted_token = message.weightedToken.map(e => e ? WeightedToken.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.weighted_token = null;
+      obj.weighted_token = message.weightedToken;
     }
     obj.pagination = message.pagination ? PageResponse.toAmino(message.pagination, useInterfaces) : undefined;
     return obj;
@@ -3687,7 +3687,7 @@ export const QueryAllWeightUpdateTimingResponse = {
     if (message.weightUpdateTiming) {
       obj.weight_update_timing = message.weightUpdateTiming.map(e => e ? WeightUpdateTiming.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.weight_update_timing = null;
+      obj.weight_update_timing = message.weightUpdateTiming;
     }
     obj.pagination = message.pagination ? PageResponse.toAmino(message.pagination, useInterfaces) : undefined;
     return obj;
@@ -3999,7 +3999,7 @@ export const QuerySimulateInitializePoolRequest = {
     if (message.amountsIn) {
       obj.amounts_in = message.amountsIn.map(e => e ? Coin.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.amounts_in = null;
+      obj.amounts_in = message.amountsIn;
     }
     return obj;
   },
@@ -4117,12 +4117,12 @@ export const QuerySimulateInitializePoolResponse = {
     if (message.amountsIn) {
       obj.amounts_in = message.amountsIn.map(e => e ? Coin.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.amounts_in = null;
+      obj.amounts_in = message.amountsIn;
     }
     if (message.protocolFee) {
       obj.protocol_fee = message.protocolFee.map(e => e ? Coin.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.protocol_fee = null;
+      obj.protocol_fee = message.protocolFee;
     }
     return obj;
   },
@@ -4337,12 +4337,12 @@ export const QuerySimulateJoinAllTokensExactLptResponse = {
     if (message.amountsIn) {
       obj.amounts_in = message.amountsIn.map(e => e ? Coin.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.amounts_in = null;
+      obj.amounts_in = message.amountsIn;
     }
     if (message.protocolFee) {
       obj.protocol_fee = message.protocolFee.map(e => e ? Coin.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.protocol_fee = null;
+      obj.protocol_fee = message.protocolFee;
     }
     return obj;
   },
@@ -4445,7 +4445,7 @@ export const QuerySimulateJoinExactTokensRequest = {
     if (message.amountsIn) {
       obj.amounts_in = message.amountsIn.map(e => e ? Coin.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.amounts_in = null;
+      obj.amounts_in = message.amountsIn;
     }
     return obj;
   },
@@ -4578,17 +4578,17 @@ export const QuerySimulateJoinExactTokensResponse = {
     if (message.amountsIn) {
       obj.amounts_in = message.amountsIn.map(e => e ? Coin.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.amounts_in = null;
+      obj.amounts_in = message.amountsIn;
     }
     if (message.protocolFee) {
       obj.protocol_fee = message.protocolFee.map(e => e ? Coin.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.protocol_fee = null;
+      obj.protocol_fee = message.protocolFee;
     }
     if (message.swapFee) {
       obj.swap_fee = message.swapFee.map(e => e ? Coin.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.swap_fee = null;
+      obj.swap_fee = message.swapFee;
     }
     return obj;
   },
@@ -4817,18 +4817,18 @@ export const QuerySimulateZeroImpactJoinYammResponse = {
     if (message.yOut) {
       obj.y_out = message.yOut.map(e => e ? Coin.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.y_out = null;
+      obj.y_out = message.yOut;
     }
     obj.refract_fee = message.refractFee ? Coin.toAmino(message.refractFee, useInterfaces) : undefined;
     if (message.joinProtocolFee) {
       obj.join_protocol_fee = message.joinProtocolFee.map(e => e ? Coin.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.join_protocol_fee = null;
+      obj.join_protocol_fee = message.joinProtocolFee;
     }
     if (message.swapFee) {
       obj.swap_fee = message.swapFee.map(e => e ? Coin.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.swap_fee = null;
+      obj.swap_fee = message.swapFee;
     }
     return obj;
   },
@@ -5403,7 +5403,7 @@ export const QuerySimulateExitExactTokensRequest = {
     if (message.amountsOut) {
       obj.amounts_out = message.amountsOut.map(e => e ? Coin.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.amounts_out = null;
+      obj.amounts_out = message.amountsOut;
     }
     return obj;
   },
@@ -5534,13 +5534,13 @@ export const QuerySimulateExitExactTokensResponse = {
     if (message.amountsOut) {
       obj.amounts_out = message.amountsOut.map(e => e ? Coin.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.amounts_out = null;
+      obj.amounts_out = message.amountsOut;
     }
     obj.protocol_fee = message.protocolFee ? Coin.toAmino(message.protocolFee, useInterfaces) : undefined;
     if (message.swapFee) {
       obj.swap_fee = message.swapFee.map(e => e ? Coin.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.swap_fee = null;
+      obj.swap_fee = message.swapFee;
     }
     return obj;
   },
@@ -5753,7 +5753,7 @@ export const QuerySimulateExitAllTokensExactLptResponse = {
     if (message.amountsOut) {
       obj.amounts_out = message.amountsOut.map(e => e ? Coin.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.amounts_out = null;
+      obj.amounts_out = message.amountsOut;
     }
     obj.protocol_fee = message.protocolFee ? Coin.toAmino(message.protocolFee, useInterfaces) : undefined;
     return obj;
@@ -6327,7 +6327,7 @@ export const QueryAllIntroducingPoolTokenResponse = {
     if (message.introducingPoolToken) {
       obj.introducing_pool_token = message.introducingPoolToken.map(e => e ? VirtualBalancePoolToken.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.introducing_pool_token = null;
+      obj.introducing_pool_token = message.introducingPoolToken;
     }
     obj.pagination = message.pagination ? PageResponse.toAmino(message.pagination, useInterfaces) : undefined;
     return obj;
@@ -6693,7 +6693,7 @@ export const QueryAllExpiringPoolTokenResponse = {
     if (message.expiringPoolToken) {
       obj.expiring_pool_token = message.expiringPoolToken.map(e => e ? VirtualBalancePoolToken.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.expiring_pool_token = null;
+      obj.expiring_pool_token = message.expiringPoolToken;
     }
     obj.pagination = message.pagination ? PageResponse.toAmino(message.pagination, useInterfaces) : undefined;
     return obj;
@@ -6963,7 +6963,7 @@ export const QuerySimulateBatchSwapRequest = {
     if (message.steps) {
       obj.steps = message.steps.map(e => e ? SwapStep.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.steps = null;
+      obj.steps = message.steps;
     }
     return obj;
   },
@@ -7112,27 +7112,27 @@ export const QuerySimulateBatchSwapResponse = {
     if (message.amountsIn) {
       obj.amounts_in = message.amountsIn.map(e => e ? Coin.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.amounts_in = null;
+      obj.amounts_in = message.amountsIn;
     }
     if (message.amountsOut) {
       obj.amounts_out = message.amountsOut.map(e => e ? Coin.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.amounts_out = null;
+      obj.amounts_out = message.amountsOut;
     }
     if (message.swapProtocolFee) {
       obj.swap_protocol_fee = message.swapProtocolFee.map(e => e ? Coin.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.swap_protocol_fee = null;
+      obj.swap_protocol_fee = message.swapProtocolFee;
     }
     if (message.joinExitProtocolFee) {
       obj.join_exit_protocol_fee = message.joinExitProtocolFee.map(e => e ? Coin.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.join_exit_protocol_fee = null;
+      obj.join_exit_protocol_fee = message.joinExitProtocolFee;
     }
     if (message.swapFee) {
       obj.swap_fee = message.swapFee.map(e => e ? Coin.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.swap_fee = null;
+      obj.swap_fee = message.swapFee;
     }
     return obj;
   },
@@ -7483,7 +7483,7 @@ export const QueryAllYammConfigurationResponse = {
     if (message.yammConfiguration) {
       obj.yamm_configuration = message.yammConfiguration.map(e => e ? YammConfiguration.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.yamm_configuration = null;
+      obj.yamm_configuration = message.yammConfiguration;
     }
     obj.pagination = message.pagination ? PageResponse.toAmino(message.pagination, useInterfaces) : undefined;
     return obj;
@@ -7849,7 +7849,7 @@ export const QueryAllWhitelistedRouteResponse = {
     if (message.whitelistedRoute) {
       obj.whitelisted_route = message.whitelistedRoute.map(e => e ? WhitelistedRoute.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.whitelisted_route = null;
+      obj.whitelisted_route = message.whitelistedRoute;
     }
     obj.pagination = message.pagination ? PageResponse.toAmino(message.pagination, useInterfaces) : undefined;
     return obj;
@@ -8201,7 +8201,7 @@ export const QueryAllOrderResponse = {
     if (message.order) {
       obj.order = message.order.map(e => e ? Order.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.order = null;
+      obj.order = message.order;
     }
     obj.pagination = message.pagination ? PageResponse.toAmino(message.pagination, useInterfaces) : undefined;
     return obj;
@@ -8553,7 +8553,7 @@ export const QueryAllExecutableOrderResponse = {
     if (message.executableOrder) {
       obj.executable_order = message.executableOrder.map(e => e ? Order.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.executable_order = null;
+      obj.executable_order = message.executableOrder;
     }
     obj.pagination = message.pagination ? PageResponse.toAmino(message.pagination, useInterfaces) : undefined;
     return obj;
@@ -8905,7 +8905,7 @@ export const QueryAllScheduleOrderResponse = {
     if (message.scheduleOrder) {
       obj.schedule_order = message.scheduleOrder.map(e => e ? ScheduleOrder.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.schedule_order = null;
+      obj.schedule_order = message.scheduleOrder;
     }
     obj.pagination = message.pagination ? PageResponse.toAmino(message.pagination, useInterfaces) : undefined;
     return obj;
@@ -9257,7 +9257,7 @@ export const QueryAllOraclePricePairResponse = {
     if (message.oraclePricePair) {
       obj.oracle_price_pair = message.oraclePricePair.map(e => e ? OraclePricePair.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.oracle_price_pair = null;
+      obj.oracle_price_pair = message.oraclePricePair;
     }
     obj.pagination = message.pagination ? PageResponse.toAmino(message.pagination, useInterfaces) : undefined;
     return obj;
@@ -9773,7 +9773,7 @@ export const QueryAllPendingTokenIntroductionResponse = {
     if (message.pendingTokenIntroduction) {
       obj.pending_token_introduction = message.pendingTokenIntroduction.map(e => e ? PendingTokenIntroduction.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.pending_token_introduction = null;
+      obj.pending_token_introduction = message.pendingTokenIntroduction;
     }
     obj.pagination = message.pagination ? PageResponse.toAmino(message.pagination, useInterfaces) : undefined;
     return obj;

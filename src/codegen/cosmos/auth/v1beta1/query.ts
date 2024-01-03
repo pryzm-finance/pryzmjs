@@ -788,7 +788,7 @@ export const QueryAccountsResponse = {
     if (message.accounts) {
       obj.accounts = message.accounts.map(e => e ? GlobalDecoderRegistry.toAminoMsg(e) : undefined);
     } else {
-      obj.accounts = null;
+      obj.accounts = message.accounts;
     }
     obj.pagination = message.pagination ? PageResponse.toAmino(message.pagination, useInterfaces) : undefined;
     return obj;
@@ -1309,7 +1309,7 @@ export const QueryModuleAccountsResponse = {
     if (message.accounts) {
       obj.accounts = message.accounts.map(e => e ? GlobalDecoderRegistry.toAminoMsg(e) : undefined);
     } else {
-      obj.accounts = null;
+      obj.accounts = message.accounts;
     }
     return obj;
   },

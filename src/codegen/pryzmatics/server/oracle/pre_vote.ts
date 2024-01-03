@@ -272,7 +272,7 @@ export const QueryPreVotesResponse = {
     if (message.preVotes) {
       obj.preVotes = message.preVotes.map(e => e ? PreVote.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.preVotes = null;
+      obj.preVotes = message.preVotes;
     }
     obj.pagination = message.pagination ? PageResponse.toAmino(message.pagination, useInterfaces) : undefined;
     return obj;

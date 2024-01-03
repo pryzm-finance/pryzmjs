@@ -1107,7 +1107,7 @@ export const Http = {
     if (message.rules) {
       obj.rules = message.rules.map(e => e ? HttpRule.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.rules = null;
+      obj.rules = message.rules;
     }
     obj.fully_decode_reserved_expansion = message.fullyDecodeReservedExpansion === false ? undefined : message.fullyDecodeReservedExpansion;
     return obj;
@@ -1323,7 +1323,7 @@ export const HttpRule = {
     if (message.additionalBindings) {
       obj.additional_bindings = message.additionalBindings.map(e => e ? HttpRule.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.additional_bindings = null;
+      obj.additional_bindings = message.additionalBindings;
     }
     return obj;
   },

@@ -703,32 +703,32 @@ export const GenesisState = {
     if (message.assets) {
       obj.assets = message.assets.map(e => e ? AllianceAsset.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.assets = null;
+      obj.assets = message.assets;
     }
     if (message.validatorInfos) {
       obj.validator_infos = message.validatorInfos.map(e => e ? ValidatorInfoState.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.validator_infos = null;
+      obj.validator_infos = message.validatorInfos;
     }
     if (message.rewardWeightChangeSnaphots) {
       obj.reward_weight_change_snaphots = message.rewardWeightChangeSnaphots.map(e => e ? RewardWeightChangeSnapshotState.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.reward_weight_change_snaphots = null;
+      obj.reward_weight_change_snaphots = message.rewardWeightChangeSnaphots;
     }
     if (message.delegations) {
       obj.delegations = message.delegations.map(e => e ? Delegation.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.delegations = null;
+      obj.delegations = message.delegations;
     }
     if (message.redelegations) {
       obj.redelegations = message.redelegations.map(e => e ? RedelegationState.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.redelegations = null;
+      obj.redelegations = message.redelegations;
     }
     if (message.undelegations) {
       obj.undelegations = message.undelegations.map(e => e ? UndelegationState.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.undelegations = null;
+      obj.undelegations = message.undelegations;
     }
     return obj;
   },

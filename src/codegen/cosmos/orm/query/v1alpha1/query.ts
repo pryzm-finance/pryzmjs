@@ -395,7 +395,7 @@ export const GetRequest = {
     if (message.values) {
       obj.values = message.values.map(e => e ? IndexValue.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.values = null;
+      obj.values = message.values;
     }
     return obj;
   },
@@ -730,7 +730,7 @@ export const ListRequest_Prefix = {
     if (message.values) {
       obj.values = message.values.map(e => e ? IndexValue.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.values = null;
+      obj.values = message.values;
     }
     return obj;
   },
@@ -842,12 +842,12 @@ export const ListRequest_Range = {
     if (message.start) {
       obj.start = message.start.map(e => e ? IndexValue.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.start = null;
+      obj.start = message.start;
     }
     if (message.end) {
       obj.end = message.end.map(e => e ? IndexValue.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.end = null;
+      obj.end = message.end;
     }
     return obj;
   },
@@ -957,7 +957,7 @@ export const ListResponse = {
     if (message.results) {
       obj.results = message.results.map(e => e ? Any.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.results = null;
+      obj.results = message.results;
     }
     obj.pagination = message.pagination ? PageResponse.toAmino(message.pagination, useInterfaces) : undefined;
     return obj;

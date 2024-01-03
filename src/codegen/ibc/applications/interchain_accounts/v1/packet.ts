@@ -274,7 +274,7 @@ export const CosmosTx = {
     if (message.messages) {
       obj.messages = message.messages.map(e => e ? Any.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.messages = null;
+      obj.messages = message.messages;
     }
     return obj;
   },

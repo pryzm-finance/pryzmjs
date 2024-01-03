@@ -1022,7 +1022,7 @@ export const HistoricalInfo = {
     if (message.valset) {
       obj.valset = message.valset.map(e => e ? Validator.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.valset = null;
+      obj.valset = message.valset;
     }
     return obj;
   },
@@ -1667,7 +1667,7 @@ export const Validator = {
     if (message.unbondingIds) {
       obj.unbonding_ids = message.unbondingIds.map(e => e.toString());
     } else {
-      obj.unbonding_ids = null;
+      obj.unbonding_ids = message.unbondingIds;
     }
     return obj;
   },
@@ -1764,7 +1764,7 @@ export const ValAddresses = {
     if (message.addresses) {
       obj.addresses = message.addresses.map(e => e);
     } else {
-      obj.addresses = null;
+      obj.addresses = message.addresses;
     }
     return obj;
   },
@@ -1966,7 +1966,7 @@ export const DVPairs = {
     if (message.pairs) {
       obj.pairs = message.pairs.map(e => e ? DVPair.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.pairs = null;
+      obj.pairs = message.pairs;
     }
     return obj;
   },
@@ -2182,7 +2182,7 @@ export const DVVTriplets = {
     if (message.triplets) {
       obj.triplets = message.triplets.map(e => e ? DVVTriplet.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.triplets = null;
+      obj.triplets = message.triplets;
     }
     return obj;
   },
@@ -2426,7 +2426,7 @@ export const UnbondingDelegation = {
     if (message.entries) {
       obj.entries = message.entries.map(e => e ? UnbondingDelegationEntry.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.entries = null;
+      obj.entries = message.entries;
     }
     return obj;
   },
@@ -2887,7 +2887,7 @@ export const Redelegation = {
     if (message.entries) {
       obj.entries = message.entries.map(e => e ? RedelegationEntry.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.entries = null;
+      obj.entries = message.entries;
     }
     return obj;
   },
@@ -3369,7 +3369,7 @@ export const RedelegationResponse = {
     if (message.entries) {
       obj.entries = message.entries.map(e => e ? RedelegationEntryResponse.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.entries = null;
+      obj.entries = message.entries;
     }
     return obj;
   },
@@ -3571,7 +3571,7 @@ export const ValidatorUpdates = {
     if (message.updates) {
       obj.updates = message.updates.map(e => e ? ValidatorUpdate.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.updates = null;
+      obj.updates = message.updates;
     }
     return obj;
   },

@@ -472,7 +472,7 @@ export const QueryOrdersResponse = {
     if (message.orders) {
       obj.orders = message.orders.map(e => e ? Order.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.orders = null;
+      obj.orders = message.orders;
     }
     obj.pagination = message.pagination ? PageResponse.toAmino(message.pagination, useInterfaces) : undefined;
     return obj;

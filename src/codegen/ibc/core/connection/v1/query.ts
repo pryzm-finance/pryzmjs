@@ -809,7 +809,7 @@ export const QueryConnectionsResponse = {
     if (message.connections) {
       obj.connections = message.connections.map(e => e ? IdentifiedConnection.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.connections = null;
+      obj.connections = message.connections;
     }
     obj.pagination = message.pagination ? PageResponse.toAmino(message.pagination, useInterfaces) : undefined;
     obj.height = message.height ? Height.toAmino(message.height, useInterfaces) : {};
@@ -1025,7 +1025,7 @@ export const QueryClientConnectionsResponse = {
     if (message.connectionPaths) {
       obj.connection_paths = message.connectionPaths.map(e => e);
     } else {
-      obj.connection_paths = null;
+      obj.connection_paths = message.connectionPaths;
     }
     obj.proof = message.proof ? base64FromBytes(message.proof) : undefined;
     obj.proof_height = message.proofHeight ? Height.toAmino(message.proofHeight, useInterfaces) : {};

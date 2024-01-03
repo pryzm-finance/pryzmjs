@@ -180,22 +180,22 @@ export const GenesisState = {
     if (message.hostChainList) {
       obj.host_chain_list = message.hostChainList.map(e => e ? HostChain.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.host_chain_list = null;
+      obj.host_chain_list = message.hostChainList;
     }
     if (message.hostChainStateList) {
       obj.host_chain_state_list = message.hostChainStateList.map(e => e ? HostChainState.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.host_chain_state_list = null;
+      obj.host_chain_state_list = message.hostChainStateList;
     }
     if (message.undelegationList) {
       obj.undelegation_list = message.undelegationList.map(e => e ? Undelegation.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.undelegation_list = null;
+      obj.undelegation_list = message.undelegationList;
     }
     if (message.channelUndelegationList) {
       obj.channel_undelegation_list = message.channelUndelegationList.map(e => e ? ChannelUndelegation.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.channel_undelegation_list = null;
+      obj.channel_undelegation_list = message.channelUndelegationList;
     }
     return obj;
   },

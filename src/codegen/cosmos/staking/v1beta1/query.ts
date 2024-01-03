@@ -1039,7 +1039,7 @@ export const QueryValidatorsResponse = {
     if (message.validators) {
       obj.validators = message.validators.map(e => e ? Validator.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.validators = null;
+      obj.validators = message.validators;
     }
     obj.pagination = message.pagination ? PageResponse.toAmino(message.pagination, useInterfaces) : undefined;
     return obj;
@@ -1437,7 +1437,7 @@ export const QueryValidatorDelegationsResponse = {
     if (message.delegationResponses) {
       obj.delegation_responses = message.delegationResponses.map(e => e ? DelegationResponse.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.delegation_responses = null;
+      obj.delegation_responses = message.delegationResponses;
     }
     obj.pagination = message.pagination ? PageResponse.toAmino(message.pagination, useInterfaces) : undefined;
     return obj;
@@ -1653,7 +1653,7 @@ export const QueryValidatorUnbondingDelegationsResponse = {
     if (message.unbondingResponses) {
       obj.unbonding_responses = message.unbondingResponses.map(e => e ? UnbondingDelegation.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.unbonding_responses = null;
+      obj.unbonding_responses = message.unbondingResponses;
     }
     obj.pagination = message.pagination ? PageResponse.toAmino(message.pagination, useInterfaces) : undefined;
     return obj;
@@ -2261,7 +2261,7 @@ export const QueryDelegatorDelegationsResponse = {
     if (message.delegationResponses) {
       obj.delegation_responses = message.delegationResponses.map(e => e ? DelegationResponse.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.delegation_responses = null;
+      obj.delegation_responses = message.delegationResponses;
     }
     obj.pagination = message.pagination ? PageResponse.toAmino(message.pagination, useInterfaces) : undefined;
     return obj;
@@ -2477,7 +2477,7 @@ export const QueryDelegatorUnbondingDelegationsResponse = {
     if (message.unbondingResponses) {
       obj.unbonding_responses = message.unbondingResponses.map(e => e ? UnbondingDelegation.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.unbonding_responses = null;
+      obj.unbonding_responses = message.unbondingResponses;
     }
     obj.pagination = message.pagination ? PageResponse.toAmino(message.pagination, useInterfaces) : undefined;
     return obj;
@@ -2721,7 +2721,7 @@ export const QueryRedelegationsResponse = {
     if (message.redelegationResponses) {
       obj.redelegation_responses = message.redelegationResponses.map(e => e ? RedelegationResponse.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.redelegation_responses = null;
+      obj.redelegation_responses = message.redelegationResponses;
     }
     obj.pagination = message.pagination ? PageResponse.toAmino(message.pagination, useInterfaces) : undefined;
     return obj;
@@ -2937,7 +2937,7 @@ export const QueryDelegatorValidatorsResponse = {
     if (message.validators) {
       obj.validators = message.validators.map(e => e ? Validator.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.validators = null;
+      obj.validators = message.validators;
     }
     obj.pagination = message.pagination ? PageResponse.toAmino(message.pagination, useInterfaces) : undefined;
     return obj;

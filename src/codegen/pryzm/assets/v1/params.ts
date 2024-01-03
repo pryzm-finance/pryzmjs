@@ -109,7 +109,7 @@ export const Params = {
     if (message.admins) {
       obj.admins = message.admins.map(e => e);
     } else {
-      obj.admins = null;
+      obj.admins = message.admins;
     }
     return obj;
   },

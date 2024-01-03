@@ -293,35 +293,35 @@ export const UserTradeHistory = {
     if (message.amountsIn) {
       obj.amounts_in = message.amountsIn.map(e => e ? Coin.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.amounts_in = null;
+      obj.amounts_in = message.amountsIn;
     }
     if (message.amountsOut) {
       obj.amounts_out = message.amountsOut.map(e => e ? Coin.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.amounts_out = null;
+      obj.amounts_out = message.amountsOut;
     }
     obj.address = message.address === "" ? undefined : message.address;
     obj.pool_id = message.poolId ? message.poolId.toString() : undefined;
     if (message.path) {
       obj.path = message.path.map(e => e ? SwapStep.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.path = null;
+      obj.path = message.path;
     }
     obj.operation_type = message.operationType === 0 ? undefined : message.operationType;
     if (message.swapFee) {
       obj.swap_fee = message.swapFee.map(e => e ? Coin.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.swap_fee = null;
+      obj.swap_fee = message.swapFee;
     }
     if (message.joinExitProtocolFee) {
       obj.join_exit_protocol_fee = message.joinExitProtocolFee.map(e => e ? Coin.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.join_exit_protocol_fee = null;
+      obj.join_exit_protocol_fee = message.joinExitProtocolFee;
     }
     if (message.swapProtocolFee) {
       obj.swap_protocol_fee = message.swapProtocolFee.map(e => e ? Coin.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.swap_protocol_fee = null;
+      obj.swap_protocol_fee = message.swapProtocolFee;
     }
     obj.block_time = message.blockTime ? Timestamp.toAmino(message.blockTime, useInterfaces) : undefined;
     return obj;

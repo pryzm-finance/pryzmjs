@@ -626,7 +626,7 @@ export const ValidatorParams = {
     if (message.pubKeyTypes) {
       obj.pub_key_types = message.pubKeyTypes.map(e => e);
     } else {
-      obj.pub_key_types = null;
+      obj.pub_key_types = message.pubKeyTypes;
     }
     return obj;
   },

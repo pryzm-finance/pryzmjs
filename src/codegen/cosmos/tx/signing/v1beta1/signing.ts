@@ -331,7 +331,7 @@ export const SignatureDescriptors = {
     if (message.signatures) {
       obj.signatures = message.signatures.map(e => e ? SignatureDescriptor.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.signatures = null;
+      obj.signatures = message.signatures;
     }
     return obj;
   },
@@ -771,7 +771,7 @@ export const SignatureDescriptor_Data_Multi = {
     if (message.signatures) {
       obj.signatures = message.signatures.map(e => e ? SignatureDescriptor_Data.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.signatures = null;
+      obj.signatures = message.signatures;
     }
     return obj;
   },

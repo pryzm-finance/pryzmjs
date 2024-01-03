@@ -140,7 +140,7 @@ export const QueryExitExactTokensSimulationRequest = {
     if (message.amountsOut) {
       obj.amounts_out = message.amountsOut.map(e => e ? Coin.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.amounts_out = null;
+      obj.amounts_out = message.amountsOut;
     }
     return obj;
   },
@@ -310,14 +310,14 @@ export const QueryExitExactTokensSimulationResponse = {
     if (message.amountsOut) {
       obj.amounts_out = message.amountsOut.map(e => e ? Coin.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.amounts_out = null;
+      obj.amounts_out = message.amountsOut;
     }
     obj.protocol_fee = message.protocolFee ? Coin.toAmino(message.protocolFee, useInterfaces) : undefined;
     obj.protocol_fee_lp_terms = message.protocolFeeLpTerms ? Coin.toAmino(message.protocolFeeLpTerms, useInterfaces) : undefined;
     if (message.swapFee) {
       obj.swap_fee = message.swapFee.map(e => e ? Coin.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.swap_fee = null;
+      obj.swap_fee = message.swapFee;
     }
     obj.swap_fee_lp_terms = message.swapFeeLpTerms ? Coin.toAmino(message.swapFeeLpTerms, useInterfaces) : undefined;
     obj.price_impact = padDecimal(message.priceImpact) === "" ? undefined : padDecimal(message.priceImpact);

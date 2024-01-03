@@ -965,12 +965,12 @@ export const QueryValidatorDistributionInfoResponse = {
     if (message.selfBondRewards) {
       obj.self_bond_rewards = message.selfBondRewards.map(e => e ? DecCoin.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.self_bond_rewards = null;
+      obj.self_bond_rewards = message.selfBondRewards;
     }
     if (message.commission) {
       obj.commission = message.commission.map(e => e ? DecCoin.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.commission = null;
+      obj.commission = message.commission;
     }
     return obj;
   },
@@ -1577,7 +1577,7 @@ export const QueryValidatorSlashesResponse = {
     if (message.slashes) {
       obj.slashes = message.slashes.map(e => e ? ValidatorSlashEvent.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.slashes = null;
+      obj.slashes = message.slashes;
     }
     obj.pagination = message.pagination ? PageResponse.toAmino(message.pagination, useInterfaces) : undefined;
     return obj;
@@ -1780,7 +1780,7 @@ export const QueryDelegationRewardsResponse = {
     if (message.rewards) {
       obj.rewards = message.rewards.map(e => e ? DecCoin.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.rewards = null;
+      obj.rewards = message.rewards;
     }
     return obj;
   },
@@ -1983,12 +1983,12 @@ export const QueryDelegationTotalRewardsResponse = {
     if (message.rewards) {
       obj.rewards = message.rewards.map(e => e ? DelegationDelegatorReward.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.rewards = null;
+      obj.rewards = message.rewards;
     }
     if (message.total) {
       obj.total = message.total.map(e => e ? DecCoin.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.total = null;
+      obj.total = message.total;
     }
     return obj;
   },
@@ -2176,7 +2176,7 @@ export const QueryDelegatorValidatorsResponse = {
     if (message.validators) {
       obj.validators = message.validators.map(e => e);
     } else {
-      obj.validators = null;
+      obj.validators = message.validators;
     }
     return obj;
   },
@@ -2530,7 +2530,7 @@ export const QueryCommunityPoolResponse = {
     if (message.pool) {
       obj.pool = message.pool.map(e => e ? DecCoin.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.pool = null;
+      obj.pool = message.pool;
     }
     return obj;
   },

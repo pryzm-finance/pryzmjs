@@ -165,22 +165,22 @@ export const GenesisState = {
     if (message.feederDelegationList) {
       obj.feeder_delegation_list = message.feederDelegationList.map(e => e ? FeederDelegation.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.feeder_delegation_list = null;
+      obj.feeder_delegation_list = message.feederDelegationList;
     }
     if (message.oraclePreVoteList) {
       obj.oracle_pre_vote_list = message.oraclePreVoteList.map(e => e ? OraclePreVote.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.oracle_pre_vote_list = null;
+      obj.oracle_pre_vote_list = message.oraclePreVoteList;
     }
     if (message.oracleVoteList) {
       obj.oracle_vote_list = message.oracleVoteList.map(e => e ? OracleVote.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.oracle_vote_list = null;
+      obj.oracle_vote_list = message.oracleVoteList;
     }
     if (message.missCounterList) {
       obj.miss_counter_list = message.missCounterList.map(e => e ? MissCounter.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.miss_counter_list = null;
+      obj.miss_counter_list = message.missCounterList;
     }
     return obj;
   },

@@ -206,17 +206,17 @@ export const GenesisState = {
     if (message.deposits) {
       obj.deposits = message.deposits.map(e => e ? Deposit.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.deposits = null;
+      obj.deposits = message.deposits;
     }
     if (message.votes) {
       obj.votes = message.votes.map(e => e ? Vote.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.votes = null;
+      obj.votes = message.votes;
     }
     if (message.proposals) {
       obj.proposals = message.proposals.map(e => e ? Proposal.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.proposals = null;
+      obj.proposals = message.proposals;
     }
     obj.deposit_params = message.depositParams ? DepositParams.toAmino(message.depositParams, useInterfaces) : undefined;
     obj.voting_params = message.votingParams ? VotingParams.toAmino(message.votingParams, useInterfaces) : undefined;

@@ -791,7 +791,7 @@ export const DelegateTransferSession = {
     if (message.packetStates) {
       obj.packet_states = message.packetStates.map(e => e ? TransferPacketState.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.packet_states = null;
+      obj.packet_states = message.packetStates;
     }
     return obj;
   },
@@ -977,7 +977,7 @@ export const DelegateReplyData = {
     if (message.delegations) {
       obj.delegations = message.delegations.map(e => e ? DelegationEntry.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.delegations = null;
+      obj.delegations = message.delegations;
     }
     return obj;
   },
@@ -1201,12 +1201,12 @@ export const UndelegateReplyData = {
     if (message.undelegations) {
       obj.undelegations = message.undelegations.map(e => e ? UndelegationEntry.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.undelegations = null;
+      obj.undelegations = message.undelegations;
     }
     if (message.epochs) {
       obj.epochs = message.epochs.map(e => e.toString());
     } else {
-      obj.epochs = null;
+      obj.epochs = message.epochs;
     }
     return obj;
   },
@@ -1392,7 +1392,7 @@ export const RedelegateReplyData = {
     if (message.redelegations) {
       obj.redelegations = message.redelegations.map(e => e ? RedelegationEntry.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.redelegations = null;
+      obj.redelegations = message.redelegations;
     }
     return obj;
   },
@@ -1772,7 +1772,7 @@ export const SweepData = {
     if (message.channelSweeps) {
       obj.channel_sweeps = message.channelSweeps.map(e => e ? ChannelSweep.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.channel_sweeps = null;
+      obj.channel_sweeps = message.channelSweeps;
     }
     return obj;
   },
@@ -1897,7 +1897,7 @@ export const ChannelSweep = {
     if (message.epochs) {
       obj.epochs = message.epochs.map(e => e.toString());
     } else {
-      obj.epochs = null;
+      obj.epochs = message.epochs;
     }
     obj.amount = message.amount === "" ? undefined : message.amount;
     return obj;

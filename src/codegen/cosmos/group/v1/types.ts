@@ -2095,7 +2095,7 @@ export const Proposal = {
     if (message.proposers) {
       obj.proposers = message.proposers.map(e => e);
     } else {
-      obj.proposers = null;
+      obj.proposers = message.proposers;
     }
     obj.submit_time = message.submitTime ? Timestamp.toAmino(message.submitTime, useInterfaces) : undefined;
     obj.group_version = message.groupVersion ? message.groupVersion.toString() : undefined;
@@ -2107,7 +2107,7 @@ export const Proposal = {
     if (message.messages) {
       obj.messages = message.messages.map(e => e ? Any.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.messages = null;
+      obj.messages = message.messages;
     }
     obj.title = message.title === "" ? undefined : message.title;
     obj.summary = message.summary === "" ? undefined : message.summary;

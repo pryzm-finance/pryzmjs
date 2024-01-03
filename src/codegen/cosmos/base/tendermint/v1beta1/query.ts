@@ -752,7 +752,7 @@ export const GetValidatorSetByHeightResponse = {
     if (message.validators) {
       obj.validators = message.validators.map(e => e ? Validator.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.validators = null;
+      obj.validators = message.validators;
     }
     obj.pagination = message.pagination ? PageResponse.toAmino(message.pagination, useInterfaces) : undefined;
     return obj;
@@ -968,7 +968,7 @@ export const GetLatestValidatorSetResponse = {
     if (message.validators) {
       obj.validators = message.validators.map(e => e ? Validator.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.validators = null;
+      obj.validators = message.validators;
     }
     obj.pagination = message.pagination ? PageResponse.toAmino(message.pagination, useInterfaces) : undefined;
     return obj;
@@ -2046,7 +2046,7 @@ export const VersionInfo = {
     if (message.buildDeps) {
       obj.build_deps = message.buildDeps.map(e => e ? Module.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.build_deps = null;
+      obj.build_deps = message.buildDeps;
     }
     obj.cosmos_sdk_version = message.cosmosSdkVersion === "" ? undefined : message.cosmosSdkVersion;
     return obj;
@@ -2718,7 +2718,7 @@ export const ProofOps = {
     if (message.ops) {
       obj.ops = message.ops.map(e => e ? ProofOp.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.ops = null;
+      obj.ops = message.ops;
     }
     return obj;
   },

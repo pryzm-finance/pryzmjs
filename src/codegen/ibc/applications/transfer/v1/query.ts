@@ -675,7 +675,7 @@ export const QueryDenomTracesResponse = {
     if (message.denomTraces) {
       obj.denom_traces = message.denomTraces.map(e => e ? DenomTrace.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.denom_traces = null;
+      obj.denom_traces = message.denomTraces;
     }
     obj.pagination = message.pagination ? PageResponse.toAmino(message.pagination, useInterfaces) : undefined;
     return obj;

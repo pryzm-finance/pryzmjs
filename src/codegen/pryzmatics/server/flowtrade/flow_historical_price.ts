@@ -256,7 +256,7 @@ export const QueryFlowHistoricalPriceResponse = {
     if (message.historicalPrices) {
       obj.historical_prices = message.historicalPrices.map(e => e ? HistoricalPrice.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.historical_prices = null;
+      obj.historical_prices = message.historicalPrices;
     }
     return obj;
   },

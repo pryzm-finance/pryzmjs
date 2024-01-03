@@ -610,7 +610,7 @@ export const ClientConsensusStates = {
     if (message.consensusStates) {
       obj.consensus_states = message.consensusStates.map(e => e ? ConsensusStateWithHeight.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.consensus_states = null;
+      obj.consensus_states = message.consensusStates;
     }
     return obj;
   },
@@ -1076,7 +1076,7 @@ export const Params = {
     if (message.allowedClients) {
       obj.allowed_clients = message.allowedClients.map(e => e);
     } else {
-      obj.allowed_clients = null;
+      obj.allowed_clients = message.allowedClients;
     }
     return obj;
   },

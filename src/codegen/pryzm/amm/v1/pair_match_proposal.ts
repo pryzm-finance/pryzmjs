@@ -190,12 +190,12 @@ export const PairMatchProposal = {
     if (message.buyOrders) {
       obj.buy_orders = message.buyOrders.map(e => e.toString());
     } else {
-      obj.buy_orders = null;
+      obj.buy_orders = message.buyOrders;
     }
     if (message.sellOrders) {
       obj.sell_orders = message.sellOrders.map(e => e.toString());
     } else {
-      obj.sell_orders = null;
+      obj.sell_orders = message.sellOrders;
     }
     return obj;
   },

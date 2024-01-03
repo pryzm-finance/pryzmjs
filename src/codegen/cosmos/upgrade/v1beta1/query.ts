@@ -1022,7 +1022,7 @@ export const QueryModuleVersionsResponse = {
     if (message.moduleVersions) {
       obj.module_versions = message.moduleVersions.map(e => e ? ModuleVersion.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.module_versions = null;
+      obj.module_versions = message.moduleVersions;
     }
     return obj;
   },

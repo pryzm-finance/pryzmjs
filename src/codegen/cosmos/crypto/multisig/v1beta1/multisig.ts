@@ -140,7 +140,7 @@ export const MultiSignature = {
     if (message.signatures) {
       obj.signatures = message.signatures.map(e => base64FromBytes(e));
     } else {
-      obj.signatures = null;
+      obj.signatures = message.signatures;
     }
     return obj;
   },

@@ -120,7 +120,7 @@ export const LegacyAminoPubKey = {
     if (message.publicKeys) {
       obj.public_keys = message.publicKeys.map(e => e ? Any.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.public_keys = null;
+      obj.public_keys = message.publicKeys;
     }
     return obj;
   },

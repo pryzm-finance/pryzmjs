@@ -259,13 +259,13 @@ export const OraclePayload = {
     if (message.dataSourceBlockHeights) {
       obj.data_source_block_heights = message.dataSourceBlockHeights.map(e => e ? OraclePayloadDataSourceBlockHeight.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.data_source_block_heights = null;
+      obj.data_source_block_heights = message.dataSourceBlockHeights;
     }
     obj.price = padDecimal(message.price) === "" ? undefined : padDecimal(message.price);
     if (message.pairs) {
       obj.pairs = message.pairs.map(e => e ? Pair.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.pairs = null;
+      obj.pairs = message.pairs;
     }
     obj.quote_token = message.quoteToken === "" ? undefined : message.quoteToken;
     return obj;

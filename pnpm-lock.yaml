@@ -26,8 +26,8 @@ dependencies:
 
 devDependencies:
   '@refractedlabs/telescope':
-    specifier: 1.4.1-rc22
-    version: 1.4.1-rc22
+    specifier: 1.4.1-rc24
+    version: 1.4.1-rc24
   '@types/node':
     specifier: ^20.10.5
     version: 20.10.6
@@ -1750,8 +1750,8 @@ packages:
       prettier: 2.8.8
     dev: true
 
-  /@refractedlabs/ast@1.4.1-rc21:
-    resolution: {integrity: sha512-ci2JEJgM8SQ7xWi0IGhv1UOqK6Zs8RM1zicvD5+d1m781pOKqyS3AwpjmthT+lEBTnwOuXsLUbZy0x2qyMamqw==, tarball: https://npm.pkg.github.com/download/@refractedlabs/ast/1.4.1-rc21/50d31997004eff07750fc8e1218aff41ab55b7e8}
+  /@refractedlabs/ast@1.4.1-rc23:
+    resolution: {integrity: sha512-ysGCTVSYsOofsILKLIObu73O8KmSC51ii1ya4Evh9Rq3GZz2MJZ2x+E/q0JCxn3Zbb60J97hfTd9KKt9cvX8MQ==, tarball: https://npm.pkg.github.com/download/@refractedlabs/ast/1.4.1-rc23/4d82a60aa5396f2121f0cd25341f83c1c1bb895c}
     dependencies:
       '@babel/parser': 7.23.6
       '@babel/types': 7.23.6
@@ -1781,8 +1781,8 @@ packages:
       mkdirp: 3.0.0
     dev: true
 
-  /@refractedlabs/telescope@1.4.1-rc22:
-    resolution: {integrity: sha512-owPYResjzAEZm0JvGRYSc/I0/tb08TqCPoil1jOkT6Qepuz13PU/UHhDGWm7HVspeMpP1Q1QVa9a7cAOsDjDSA==, tarball: https://npm.pkg.github.com/download/@refractedlabs/telescope/1.4.1-rc22/05db2b0f05b8ad54e3d075e3880fb8bcd0baf66e}
+  /@refractedlabs/telescope@1.4.1-rc24:
+    resolution: {integrity: sha512-kQNSGEQslft4hxVWg466Vf/YE7yaJdUdlitoz2mWa8XnO1/Qppvmj1Gn/QSDHSB6CmZRkQmG6H0iO9SRdhFdxw==, tarball: https://npm.pkg.github.com/download/@refractedlabs/telescope/1.4.1-rc24/ffaf5c92c10f9863b3bc68a542491882331926fe}
     hasBin: true
     dependencies:
       '@babel/generator': 7.23.6
@@ -1793,7 +1793,7 @@ packages:
       '@cosmology/utils': 1.4.0
       '@cosmwasm/ts-codegen': 0.34.0
       '@keplr-wallet/unit': 0.12.55
-      '@refractedlabs/ast': 1.4.1-rc21
+      '@refractedlabs/ast': 1.4.1-rc23
       '@refractedlabs/proto-parser': 1.4.1-rc1
       '@types/parse-package-name': 0.1.0
       case: 1.6.3

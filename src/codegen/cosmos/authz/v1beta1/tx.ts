@@ -362,7 +362,7 @@ export const MsgExecResponse = {
     if (message.results) {
       obj.results = message.results.map(e => base64FromBytes(e));
     } else {
-      obj.results = null;
+      obj.results = message.results;
     }
     return obj;
   },
@@ -473,7 +473,7 @@ export const MsgExec = {
     if (message.msgs) {
       obj.msgs = message.msgs.map(e => e ? GlobalDecoderRegistry.toAminoMsg(e) : undefined);
     } else {
-      obj.msgs = null;
+      obj.msgs = message.msgs;
     }
     return obj;
   },

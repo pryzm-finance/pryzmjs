@@ -89,7 +89,7 @@ export const GenesisState = {
     if (message.assetStateList) {
       obj.asset_state_list = message.assetStateList.map(e => e ? AssetState.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.asset_state_list = null;
+      obj.asset_state_list = message.assetStateList;
     }
     return obj;
   },

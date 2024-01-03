@@ -120,7 +120,7 @@ export const Params = {
     if (message.allowMessages) {
       obj.allow_messages = message.allowMessages.map(e => e);
     } else {
-      obj.allow_messages = null;
+      obj.allow_messages = message.allowMessages;
     }
     return obj;
   },

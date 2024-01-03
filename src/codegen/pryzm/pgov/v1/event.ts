@@ -506,7 +506,7 @@ export const EventPAssetStake = {
     if (message.amount) {
       obj.amount = message.amount.map(e => e ? Coin.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.amount = null;
+      obj.amount = message.amount;
     }
     obj.total_staked_p_asset = message.totalStakedPAsset === "" ? undefined : message.totalStakedPAsset;
     return obj;
@@ -637,7 +637,7 @@ export const EventPAssetUnstake = {
     if (message.amount) {
       obj.amount = message.amount.map(e => e ? Coin.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.amount = null;
+      obj.amount = message.amount;
     }
     obj.total_staked_p_asset = message.totalStakedPAsset === "" ? undefined : message.totalStakedPAsset;
     return obj;

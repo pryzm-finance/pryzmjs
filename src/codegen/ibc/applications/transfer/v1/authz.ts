@@ -184,12 +184,12 @@ export const Allocation = {
     if (message.spendLimit) {
       obj.spend_limit = message.spendLimit.map(e => e ? Coin.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.spend_limit = null;
+      obj.spend_limit = message.spendLimit;
     }
     if (message.allowList) {
       obj.allow_list = message.allowList.map(e => e);
     } else {
-      obj.allow_list = null;
+      obj.allow_list = message.allowList;
     }
     return obj;
   },
@@ -287,7 +287,7 @@ export const TransferAuthorization = {
     if (message.allocations) {
       obj.allocations = message.allocations.map(e => e ? Allocation.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.allocations = null;
+      obj.allocations = message.allocations;
     }
     return obj;
   },

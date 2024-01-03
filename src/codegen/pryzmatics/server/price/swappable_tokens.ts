@@ -163,7 +163,7 @@ export const QuerySwappableTokensResponse = {
     if (message.tokens) {
       obj.tokens = message.tokens.map(e => e);
     } else {
-      obj.tokens = null;
+      obj.tokens = message.tokens;
     }
     return obj;
   },

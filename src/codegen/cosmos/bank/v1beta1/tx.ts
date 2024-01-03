@@ -351,7 +351,7 @@ export const MsgSend = {
     if (message.amount) {
       obj.amount = message.amount.map(e => e ? Coin.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.amount = null;
+      obj.amount = message.amount;
     }
     return obj;
   },
@@ -538,12 +538,12 @@ export const MsgMultiSend = {
     if (message.inputs) {
       obj.inputs = message.inputs.map(e => e ? Input.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.inputs = null;
+      obj.inputs = message.inputs;
     }
     if (message.outputs) {
       obj.outputs = message.outputs.map(e => e ? Output.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.outputs = null;
+      obj.outputs = message.outputs;
     }
     return obj;
   },
@@ -924,12 +924,12 @@ export const MsgSetSendEnabled = {
     if (message.sendEnabled) {
       obj.send_enabled = message.sendEnabled.map(e => e ? SendEnabled.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.send_enabled = null;
+      obj.send_enabled = message.sendEnabled;
     }
     if (message.useDefaultFor) {
       obj.use_default_for = message.useDefaultFor.map(e => e);
     } else {
-      obj.use_default_for = null;
+      obj.use_default_for = message.useDefaultFor;
     }
     return obj;
   },

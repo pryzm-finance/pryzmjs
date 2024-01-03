@@ -1143,7 +1143,7 @@ export const QueryAllBalancesResponse = {
     if (message.balances) {
       obj.balances = message.balances.map(e => e ? Coin.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.balances = null;
+      obj.balances = message.balances;
     }
     obj.pagination = message.pagination ? PageResponse.toAmino(message.pagination, useInterfaces) : undefined;
     return obj;
@@ -1359,7 +1359,7 @@ export const QuerySpendableBalancesResponse = {
     if (message.balances) {
       obj.balances = message.balances.map(e => e ? Coin.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.balances = null;
+      obj.balances = message.balances;
     }
     obj.pagination = message.pagination ? PageResponse.toAmino(message.pagination, useInterfaces) : undefined;
     return obj;
@@ -1757,7 +1757,7 @@ export const QueryTotalSupplyResponse = {
     if (message.supply) {
       obj.supply = message.supply.map(e => e ? Coin.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.supply = null;
+      obj.supply = message.supply;
     }
     obj.pagination = message.pagination ? PageResponse.toAmino(message.pagination, useInterfaces) : undefined;
     return obj;
@@ -2307,7 +2307,7 @@ export const QueryDenomsMetadataResponse = {
     if (message.metadatas) {
       obj.metadatas = message.metadatas.map(e => e ? Metadata.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.metadatas = null;
+      obj.metadatas = message.metadatas;
     }
     obj.pagination = message.pagination ? PageResponse.toAmino(message.pagination, useInterfaces) : undefined;
     return obj;
@@ -2810,7 +2810,7 @@ export const QueryDenomOwnersResponse = {
     if (message.denomOwners) {
       obj.denom_owners = message.denomOwners.map(e => e ? DenomOwner.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.denom_owners = null;
+      obj.denom_owners = message.denomOwners;
     }
     obj.pagination = message.pagination ? PageResponse.toAmino(message.pagination, useInterfaces) : undefined;
     return obj;
@@ -2921,7 +2921,7 @@ export const QuerySendEnabledRequest = {
     if (message.denoms) {
       obj.denoms = message.denoms.map(e => e);
     } else {
-      obj.denoms = null;
+      obj.denoms = message.denoms;
     }
     obj.pagination = message.pagination ? PageRequest.toAmino(message.pagination, useInterfaces) : undefined;
     return obj;
@@ -3032,7 +3032,7 @@ export const QuerySendEnabledResponse = {
     if (message.sendEnabled) {
       obj.send_enabled = message.sendEnabled.map(e => e ? SendEnabled.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.send_enabled = null;
+      obj.send_enabled = message.sendEnabled;
     }
     obj.pagination = message.pagination ? PageResponse.toAmino(message.pagination, useInterfaces) : undefined;
     return obj;

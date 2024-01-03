@@ -685,7 +685,7 @@ export const ValidatorHistoricalRewards = {
     if (message.cumulativeRewardRatio) {
       obj.cumulative_reward_ratio = message.cumulativeRewardRatio.map(e => e ? DecCoin.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.cumulative_reward_ratio = null;
+      obj.cumulative_reward_ratio = message.cumulativeRewardRatio;
     }
     obj.reference_count = message.referenceCount === 0 ? undefined : message.referenceCount;
     return obj;
@@ -796,7 +796,7 @@ export const ValidatorCurrentRewards = {
     if (message.rewards) {
       obj.rewards = message.rewards.map(e => e ? DecCoin.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.rewards = null;
+      obj.rewards = message.rewards;
     }
     obj.period = message.period ? message.period.toString() : undefined;
     return obj;
@@ -894,7 +894,7 @@ export const ValidatorAccumulatedCommission = {
     if (message.commission) {
       obj.commission = message.commission.map(e => e ? DecCoin.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.commission = null;
+      obj.commission = message.commission;
     }
     return obj;
   },
@@ -991,7 +991,7 @@ export const ValidatorOutstandingRewards = {
     if (message.rewards) {
       obj.rewards = message.rewards.map(e => e ? DecCoin.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.rewards = null;
+      obj.rewards = message.rewards;
     }
     return obj;
   },
@@ -1193,7 +1193,7 @@ export const ValidatorSlashEvents = {
     if (message.validatorSlashEvents) {
       obj.validator_slash_events = message.validatorSlashEvents.map(e => e ? ValidatorSlashEvent.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.validator_slash_events = null;
+      obj.validator_slash_events = message.validatorSlashEvents;
     }
     return obj;
   },
@@ -1290,7 +1290,7 @@ export const FeePool = {
     if (message.communityPool) {
       obj.community_pool = message.communityPool.map(e => e ? DecCoin.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.community_pool = null;
+      obj.community_pool = message.communityPool;
     }
     return obj;
   },
@@ -1430,7 +1430,7 @@ export const CommunityPoolSpendProposal = {
     if (message.amount) {
       obj.amount = message.amount.map(e => e ? Coin.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.amount = null;
+      obj.amount = message.amount;
     }
     return obj;
   },
@@ -1660,7 +1660,7 @@ export const DelegationDelegatorReward = {
     if (message.reward) {
       obj.reward = message.reward.map(e => e ? DecCoin.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.reward = null;
+      obj.reward = message.reward;
     }
     return obj;
   },

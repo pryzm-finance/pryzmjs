@@ -238,7 +238,7 @@ export const QueryPoolTradeHistoryResponse = {
     if (message.poolTradeHistoryRecords) {
       obj.pool_trade_history_records = message.poolTradeHistoryRecords.map(e => e ? PoolTradeHistory.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.pool_trade_history_records = null;
+      obj.pool_trade_history_records = message.poolTradeHistoryRecords;
     }
     return obj;
   },

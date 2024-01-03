@@ -240,7 +240,7 @@ export const ModuleVote = {
     if (message.namespaceVotes) {
       obj.namespace_votes = message.namespaceVotes.map(e => e ? NamespaceVote.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.namespace_votes = null;
+      obj.namespace_votes = message.namespaceVotes;
     }
     return obj;
   },
@@ -343,7 +343,7 @@ export const OracleVote = {
     if (message.moduleVotes) {
       obj.module_votes = message.moduleVotes.map(e => e ? ModuleVote.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.module_votes = null;
+      obj.module_votes = message.moduleVotes;
     }
     return obj;
   },

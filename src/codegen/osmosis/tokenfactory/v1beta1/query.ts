@@ -663,7 +663,7 @@ export const QueryDenomsFromCreatorResponse = {
     if (message.denoms) {
       obj.denoms = message.denoms.map(e => e);
     } else {
-      obj.denoms = null;
+      obj.denoms = message.denoms;
     }
     return obj;
   },

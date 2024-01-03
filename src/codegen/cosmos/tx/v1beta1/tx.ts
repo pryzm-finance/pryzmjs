@@ -869,7 +869,7 @@ export const Tx = {
     if (message.signatures) {
       obj.signatures = message.signatures.map(e => base64FromBytes(e));
     } else {
-      obj.signatures = null;
+      obj.signatures = message.signatures;
     }
     return obj;
   },
@@ -994,7 +994,7 @@ export const TxRaw = {
     if (message.signatures) {
       obj.signatures = message.signatures.map(e => base64FromBytes(e));
     } else {
-      obj.signatures = null;
+      obj.signatures = message.signatures;
     }
     return obj;
   },
@@ -1441,19 +1441,19 @@ export const TxBody = {
     if (message.messages) {
       obj.messages = message.messages.map(e => e ? Any.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.messages = null;
+      obj.messages = message.messages;
     }
     obj.memo = message.memo === "" ? undefined : message.memo;
     obj.timeout_height = message.timeoutHeight ? message.timeoutHeight.toString() : undefined;
     if (message.extensionOptions) {
       obj.extension_options = message.extensionOptions.map(e => e ? Any.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.extension_options = null;
+      obj.extension_options = message.extensionOptions;
     }
     if (message.nonCriticalExtensionOptions) {
       obj.non_critical_extension_options = message.nonCriticalExtensionOptions.map(e => e ? Any.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.non_critical_extension_options = null;
+      obj.non_critical_extension_options = message.nonCriticalExtensionOptions;
     }
     return obj;
   },
@@ -1576,7 +1576,7 @@ export const AuthInfo = {
     if (message.signerInfos) {
       obj.signer_infos = message.signerInfos.map(e => e ? SignerInfo.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.signer_infos = null;
+      obj.signer_infos = message.signerInfos;
     }
     obj.fee = message.fee ? Fee.toAmino(message.fee, useInterfaces) : undefined;
     obj.tip = message.tip ? Tip.toAmino(message.tip, useInterfaces) : undefined;
@@ -2004,7 +2004,7 @@ export const ModeInfo_Multi = {
     if (message.modeInfos) {
       obj.mode_infos = message.modeInfos.map(e => e ? ModeInfo.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.mode_infos = null;
+      obj.mode_infos = message.modeInfos;
     }
     return obj;
   },
@@ -2140,7 +2140,7 @@ export const Fee = {
     if (message.amount) {
       obj.amount = message.amount.map(e => e ? Coin.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.amount = null;
+      obj.amount = message.amount;
     }
     obj.gas_limit = message.gasLimit ? message.gasLimit.toString() : undefined;
     obj.payer = message.payer === "" ? undefined : message.payer;
@@ -2253,7 +2253,7 @@ export const Tip = {
     if (message.amount) {
       obj.amount = message.amount.map(e => e ? Coin.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.amount = null;
+      obj.amount = message.amount;
     }
     obj.tipper = message.tipper === "" ? undefined : message.tipper;
     return obj;

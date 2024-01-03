@@ -868,7 +868,7 @@ export const EventClaimReward = {
     if (message.rewards) {
       obj.rewards = message.rewards.map(e => e ? Coin.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.rewards = null;
+      obj.rewards = message.rewards;
     }
     return obj;
   },
@@ -1121,7 +1121,7 @@ export const EventUnbond = {
     if (message.rewards) {
       obj.rewards = message.rewards.map(e => e ? Coin.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.rewards = null;
+      obj.rewards = message.rewards;
     }
     obj.unbonding = message.unbonding ? Unbonding.toAmino(message.unbonding, useInterfaces) : undefined;
     obj.reward_treasury = message.rewardTreasury === "" ? undefined : message.rewardTreasury;
@@ -1407,7 +1407,7 @@ export const EventIncentivizePool = {
     if (message.amount) {
       obj.amount = message.amount.map(e => e ? Coin.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.amount = null;
+      obj.amount = message.amount;
     }
     return obj;
   },

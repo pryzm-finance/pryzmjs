@@ -858,7 +858,7 @@ export const QueryAllStakedPAssetResponse = {
     if (message.stakedPAsset) {
       obj.staked_p_asset = message.stakedPAsset.map(e => e ? StakedPAsset.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.staked_p_asset = null;
+      obj.staked_p_asset = message.stakedPAsset;
     }
     obj.pagination = message.pagination ? PageResponse.toAmino(message.pagination, useInterfaces) : undefined;
     return obj;
@@ -1058,7 +1058,7 @@ export const QueryAllTotalStakedPAssetResponse = {
     if (message.totalStakedPAsset) {
       obj.total_staked_p_asset = message.totalStakedPAsset.map(e => e ? TotalStakedPAsset.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.total_staked_p_asset = null;
+      obj.total_staked_p_asset = message.totalStakedPAsset;
     }
     obj.pagination = message.pagination ? PageResponse.toAmino(message.pagination, useInterfaces) : undefined;
     return obj;
@@ -1618,7 +1618,7 @@ export const QueryAllVoteResponse = {
     if (message.vote) {
       obj.vote = message.vote.map(e => e ? Vote.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.vote = null;
+      obj.vote = message.vote;
     }
     obj.pagination = message.pagination ? PageResponse.toAmino(message.pagination, useInterfaces) : undefined;
     return obj;
@@ -1998,7 +1998,7 @@ export const QueryAllProposalResponse = {
     if (message.proposal) {
       obj.proposal = message.proposal.map(e => e ? Proposal.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.proposal = null;
+      obj.proposal = message.proposal;
     }
     obj.pagination = message.pagination ? PageResponse.toAmino(message.pagination, useInterfaces) : undefined;
     return obj;

@@ -942,7 +942,7 @@ export const QueryAllHostChainResponse = {
     if (message.hostChain) {
       obj.host_chain = message.hostChain.map(e => e ? HostChain.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.host_chain = null;
+      obj.host_chain = message.hostChain;
     }
     obj.pagination = message.pagination ? PageResponse.toAmino(message.pagination, useInterfaces) : undefined;
     return obj;
@@ -1294,7 +1294,7 @@ export const QueryAllHostChainStateResponse = {
     if (message.hostChainState) {
       obj.host_chain_state = message.hostChainState.map(e => e ? HostChainState.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.host_chain_state = null;
+      obj.host_chain_state = message.hostChainState;
     }
     obj.pagination = message.pagination ? PageResponse.toAmino(message.pagination, useInterfaces) : undefined;
     return obj;
@@ -1674,7 +1674,7 @@ export const QueryAllUndelegationResponse = {
     if (message.undelegation) {
       obj.undelegation = message.undelegation.map(e => e ? Undelegation.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.undelegation = null;
+      obj.undelegation = message.undelegation;
     }
     obj.pagination = message.pagination ? PageResponse.toAmino(message.pagination, useInterfaces) : undefined;
     return obj;
@@ -1874,7 +1874,7 @@ export const QueryIncompleteUndelegationResponse = {
     if (message.undelegation) {
       obj.undelegation = message.undelegation.map(e => e ? Undelegation.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.undelegation = null;
+      obj.undelegation = message.undelegation;
     }
     obj.pagination = message.pagination ? PageResponse.toAmino(message.pagination, useInterfaces) : undefined;
     return obj;
@@ -2282,7 +2282,7 @@ export const QueryAllChannelUndelegationResponse = {
     if (message.channelUndelegation) {
       obj.channel_undelegation = message.channelUndelegation.map(e => e ? ChannelUndelegation.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.channel_undelegation = null;
+      obj.channel_undelegation = message.channelUndelegation;
     }
     obj.pagination = message.pagination ? PageResponse.toAmino(message.pagination, useInterfaces) : undefined;
     return obj;

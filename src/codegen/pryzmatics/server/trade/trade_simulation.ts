@@ -196,7 +196,7 @@ export const QueryTradeSimulationRequest = {
     if (message.steps) {
       obj.steps = message.steps.map(e => e ? RouteStep.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.steps = null;
+      obj.steps = message.steps;
     }
     return obj;
   },
@@ -381,7 +381,7 @@ export const QueryTradeSimulationResponse = {
     if (message.fee) {
       obj.fee = message.fee.map(e => e ? Coin.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.fee = null;
+      obj.fee = message.fee;
     }
     obj.feeTokenInTerms = message.feeTokenInTerms ? Coin.toAmino(message.feeTokenInTerms, useInterfaces) : undefined;
     obj.effective_price = padDecimal(message.effectivePrice) === "" ? undefined : padDecimal(message.effectivePrice);
@@ -389,7 +389,7 @@ export const QueryTradeSimulationResponse = {
     if (message.swapSteps) {
       obj.swap_steps = message.swapSteps.map(e => e ? SwapStep.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.swap_steps = null;
+      obj.swap_steps = message.swapSteps;
     }
     return obj;
   },

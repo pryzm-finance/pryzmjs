@@ -301,12 +301,12 @@ export const ModuleDescriptor = {
     if (message.usePackage) {
       obj.use_package = message.usePackage.map(e => e ? PackageReference.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.use_package = null;
+      obj.use_package = message.usePackage;
     }
     if (message.canMigrateFrom) {
       obj.can_migrate_from = message.canMigrateFrom.map(e => e ? MigrateFromInfo.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.can_migrate_from = null;
+      obj.can_migrate_from = message.canMigrateFrom;
     }
     return obj;
   },

@@ -546,7 +546,7 @@ export const GrantQueueItem = {
     if (message.msgTypeUrls) {
       obj.msg_type_urls = message.msgTypeUrls.map(e => e);
     } else {
-      obj.msg_type_urls = null;
+      obj.msg_type_urls = message.msgTypeUrls;
     }
     return obj;
   },

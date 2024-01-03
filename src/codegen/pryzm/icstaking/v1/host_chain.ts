@@ -596,13 +596,13 @@ export const HostChain = {
     if (message.transferChannels) {
       obj.transfer_channels = message.transferChannels.map(e => e ? TransferChannel.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.transfer_channels = null;
+      obj.transfer_channels = message.transferChannels;
     }
     obj.params = message.params ? StakingParams.toAmino(message.params, useInterfaces) : undefined;
     if (message.validators) {
       obj.validators = message.validators.map(e => e ? Validator.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.validators = null;
+      obj.validators = message.validators;
     }
     return obj;
   },
@@ -1006,7 +1006,7 @@ export const HostChainState = {
     if (message.validatorStates) {
       obj.validator_states = message.validatorStates.map(e => e ? ValidatorState.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.validator_states = null;
+      obj.validator_states = message.validatorStates;
     }
     obj.amount_to_be_delegated = message.amountToBeDelegated === "" ? undefined : message.amountToBeDelegated;
     obj.undelegated_amount_to_collect = message.undelegatedAmountToCollect === "" ? undefined : message.undelegatedAmountToCollect;

@@ -391,7 +391,7 @@ export const OraclePricePair = {
     if (message.pairs) {
       obj.pairs = message.pairs.map(e => e ? Pair.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.pairs = null;
+      obj.pairs = message.pairs;
     }
     obj.base_denom = message.baseDenom === "" ? undefined : message.baseDenom;
     return obj;

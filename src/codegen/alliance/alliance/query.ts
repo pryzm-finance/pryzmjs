@@ -936,7 +936,7 @@ export const QueryAlliancesResponse = {
     if (message.alliances) {
       obj.alliances = message.alliances.map(e => e ? AllianceAsset.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.alliances = null;
+      obj.alliances = message.alliances;
     }
     obj.pagination = message.pagination ? PageResponse.toAmino(message.pagination, useInterfaces) : undefined;
     return obj;
@@ -1842,7 +1842,7 @@ export const QueryAlliancesDelegationsResponse = {
     if (message.delegations) {
       obj.delegations = message.delegations.map(e => e ? DelegationResponse.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.delegations = null;
+      obj.delegations = message.delegations;
     }
     obj.pagination = message.pagination ? PageResponse.toAmino(message.pagination, useInterfaces) : undefined;
     return obj;
@@ -2515,7 +2515,7 @@ export const QueryAllianceDelegationRewardsResponse = {
     if (message.rewards) {
       obj.rewards = message.rewards.map(e => e ? Coin.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.rewards = null;
+      obj.rewards = message.rewards;
     }
     return obj;
   },
@@ -2648,17 +2648,17 @@ export const QueryAllianceValidatorResponse = {
     if (message.totalDelegationShares) {
       obj.total_delegation_shares = message.totalDelegationShares.map(e => e ? DecCoin.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.total_delegation_shares = null;
+      obj.total_delegation_shares = message.totalDelegationShares;
     }
     if (message.validatorShares) {
       obj.validator_shares = message.validatorShares.map(e => e ? DecCoin.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.validator_shares = null;
+      obj.validator_shares = message.validatorShares;
     }
     if (message.totalStaked) {
       obj.total_staked = message.totalStaked.map(e => e ? DecCoin.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.total_staked = null;
+      obj.total_staked = message.totalStaked;
     }
     return obj;
   },
@@ -2760,7 +2760,7 @@ export const QueryAllianceValidatorsResponse = {
     if (message.validators) {
       obj.validators = message.validators.map(e => e ? QueryAllianceValidatorResponse.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.validators = null;
+      obj.validators = message.validators;
     }
     obj.pagination = message.pagination ? PageResponse.toAmino(message.pagination, useInterfaces) : undefined;
     return obj;
@@ -2974,7 +2974,7 @@ export const QueryAllianceUnbondingsByDenomAndDelegatorResponse = {
     if (message.unbondings) {
       obj.unbondings = message.unbondings.map(e => e ? UnbondingDelegation.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.unbondings = null;
+      obj.unbondings = message.unbondings;
     }
     obj.pagination = message.pagination ? PageResponse.toAmino(message.pagination, useInterfaces) : undefined;
     return obj;
@@ -3202,7 +3202,7 @@ export const QueryAllianceUnbondingsResponse = {
     if (message.unbondings) {
       obj.unbondings = message.unbondings.map(e => e ? UnbondingDelegation.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.unbondings = null;
+      obj.unbondings = message.unbondings;
     }
     obj.pagination = message.pagination ? PageResponse.toAmino(message.pagination, useInterfaces) : undefined;
     return obj;
@@ -3416,7 +3416,7 @@ export const QueryAllianceRedelegationsResponse = {
     if (message.redelegations) {
       obj.redelegations = message.redelegations.map(e => e ? RedelegationEntry.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.redelegations = null;
+      obj.redelegations = message.redelegations;
     }
     obj.pagination = message.pagination ? PageResponse.toAmino(message.pagination, useInterfaces) : undefined;
     return obj;

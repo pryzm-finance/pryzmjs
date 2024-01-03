@@ -141,7 +141,7 @@ export const Vote = {
     if (message.options) {
       obj.options = message.options.map(e => e ? WeightedVoteOption.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.options = null;
+      obj.options = message.options;
     }
     return obj;
   },

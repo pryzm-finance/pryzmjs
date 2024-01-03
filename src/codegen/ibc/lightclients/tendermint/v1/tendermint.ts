@@ -497,12 +497,12 @@ export const ClientState = {
     if (message.proofSpecs) {
       obj.proof_specs = message.proofSpecs.map(e => e ? ProofSpec.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.proof_specs = null;
+      obj.proof_specs = message.proofSpecs;
     }
     if (message.upgradePath) {
       obj.upgrade_path = message.upgradePath.map(e => e);
     } else {
-      obj.upgrade_path = null;
+      obj.upgrade_path = message.upgradePath;
     }
     obj.allow_update_after_expiry = message.allowUpdateAfterExpiry === false ? undefined : message.allowUpdateAfterExpiry;
     obj.allow_update_after_misbehaviour = message.allowUpdateAfterMisbehaviour === false ? undefined : message.allowUpdateAfterMisbehaviour;

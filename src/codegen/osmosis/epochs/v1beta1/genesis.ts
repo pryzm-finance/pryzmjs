@@ -404,7 +404,7 @@ export const GenesisState = {
     if (message.epochs) {
       obj.epochs = message.epochs.map(e => e ? EpochInfo.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.epochs = null;
+      obj.epochs = message.epochs;
     }
     return obj;
   },

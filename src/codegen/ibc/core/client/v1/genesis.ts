@@ -253,17 +253,17 @@ export const GenesisState = {
     if (message.clients) {
       obj.clients = message.clients.map(e => e ? IdentifiedClientState.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.clients = null;
+      obj.clients = message.clients;
     }
     if (message.clientsConsensus) {
       obj.clients_consensus = message.clientsConsensus.map(e => e ? ClientConsensusStates.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.clients_consensus = null;
+      obj.clients_consensus = message.clientsConsensus;
     }
     if (message.clientsMetadata) {
       obj.clients_metadata = message.clientsMetadata.map(e => e ? IdentifiedGenesisMetadata.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.clients_metadata = null;
+      obj.clients_metadata = message.clientsMetadata;
     }
     obj.params = message.params ? Params.toAmino(message.params, useInterfaces) : undefined;
     obj.create_localhost = message.createLocalhost === false ? undefined : message.createLocalhost;
@@ -482,7 +482,7 @@ export const IdentifiedGenesisMetadata = {
     if (message.clientMetadata) {
       obj.client_metadata = message.clientMetadata.map(e => e ? GenesisMetadata.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.client_metadata = null;
+      obj.client_metadata = message.clientMetadata;
     }
     return obj;
   },

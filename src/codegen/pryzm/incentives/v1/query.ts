@@ -744,7 +744,7 @@ export const QueryAllPoolResponse = {
     if (message.pool) {
       obj.pool = message.pool.map(e => e ? Pool.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.pool = null;
+      obj.pool = message.pool;
     }
     obj.pagination = message.pagination ? PageResponse.toAmino(message.pagination, useInterfaces) : undefined;
     return obj;
@@ -1124,7 +1124,7 @@ export const QueryAllBondResponse = {
     if (message.bond) {
       obj.bond = message.bond.map(e => e ? Bond.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.bond = null;
+      obj.bond = message.bond;
     }
     obj.pagination = message.pagination ? PageResponse.toAmino(message.pagination, useInterfaces) : undefined;
     return obj;
@@ -1490,7 +1490,7 @@ export const QueryAllUnbondingResponse = {
     if (message.unbonding) {
       obj.unbonding = message.unbonding.map(e => e ? Unbonding.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.unbonding = null;
+      obj.unbonding = message.unbonding;
     }
     obj.pagination = message.pagination ? PageResponse.toAmino(message.pagination, useInterfaces) : undefined;
     return obj;

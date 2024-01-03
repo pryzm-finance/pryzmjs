@@ -148,7 +148,7 @@ export const WeightedPoolProperties = {
     if (message.tokenList) {
       obj.token_list = message.tokenList.map(e => e ? WeightedToken.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.token_list = null;
+      obj.token_list = message.tokenList;
     }
     return obj;
   },

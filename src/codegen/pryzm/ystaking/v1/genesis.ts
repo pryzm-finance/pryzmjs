@@ -126,17 +126,17 @@ export const GenesisState = {
     if (message.assetPoolStateList) {
       obj.asset_pool_state_list = message.assetPoolStateList.map(e => e ? AssetPoolState.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.asset_pool_state_list = null;
+      obj.asset_pool_state_list = message.assetPoolStateList;
     }
     if (message.maturityPoolStateList) {
       obj.maturity_pool_state_list = message.maturityPoolStateList.map(e => e ? AssetMaturityPoolState.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.maturity_pool_state_list = null;
+      obj.maturity_pool_state_list = message.maturityPoolStateList;
     }
     if (message.userStakeStateList) {
       obj.user_stake_state_list = message.userStakeStateList.map(e => e ? UserStakeState.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.user_stake_state_list = null;
+      obj.user_stake_state_list = message.userStakeStateList;
     }
     return obj;
   },

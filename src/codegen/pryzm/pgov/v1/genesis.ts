@@ -146,17 +146,17 @@ export const GenesisState = {
     if (message.stakedPAssetList) {
       obj.staked_p_asset_list = message.stakedPAssetList.map(e => e ? StakedPAsset.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.staked_p_asset_list = null;
+      obj.staked_p_asset_list = message.stakedPAssetList;
     }
     if (message.proposalList) {
       obj.proposal_list = message.proposalList.map(e => e ? Proposal.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.proposal_list = null;
+      obj.proposal_list = message.proposalList;
     }
     if (message.voteList) {
       obj.vote_list = message.voteList.map(e => e ? Vote.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.vote_list = null;
+      obj.vote_list = message.voteList;
     }
     return obj;
   },

@@ -350,12 +350,12 @@ export const ValidatorVoteIntervalReport = {
     if (message.rewards) {
       obj.rewards = message.rewards.map(e => e ? Coin.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.rewards = null;
+      obj.rewards = message.rewards;
     }
     if (message.payloads) {
       obj.payloads = message.payloads.map(e => e ? VotePayloadReport.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.payloads = null;
+      obj.payloads = message.payloads;
     }
     return obj;
   },
@@ -473,12 +473,12 @@ export const VoteIntervalReport = {
     if (message.ballotVoteResults) {
       obj.ballot_vote_results = message.ballotVoteResults.map(e => e ? BallotVoteResult.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.ballot_vote_results = null;
+      obj.ballot_vote_results = message.ballotVoteResults;
     }
     if (message.validatorReports) {
       obj.validator_reports = message.validatorReports.map(e => e ? ValidatorVoteIntervalReport.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.validator_reports = null;
+      obj.validator_reports = message.validatorReports;
     }
     return obj;
   },

@@ -770,7 +770,7 @@ export const QueryAllFlowTradeResponse = {
     if (message.flowTrade) {
       obj.flow_trade = message.flowTrade.map(e => e ? FlowTrade.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.flow_trade = null;
+      obj.flow_trade = message.flowTrade;
     }
     obj.pagination = message.pagination ? PageResponse.toAmino(message.pagination, useInterfaces) : undefined;
     return obj;

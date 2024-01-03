@@ -213,7 +213,7 @@ export const GenesisPoolData = {
     if (message.poolTokenList) {
       obj.pool_token_list = message.poolTokenList.map(e => e ? PoolToken.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.pool_token_list = null;
+      obj.pool_token_list = message.poolTokenList;
     }
     return obj;
   },
@@ -613,64 +613,64 @@ export const GenesisState = {
     if (message.poolList) {
       obj.pool_list = message.poolList.map(e => e ? GenesisPoolData.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.pool_list = null;
+      obj.pool_list = message.poolList;
     }
     if (message.weightedPoolPropertiesList) {
       obj.weighted_pool_properties_list = message.weightedPoolPropertiesList.map(e => e ? WeightedPoolProperties.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.weighted_pool_properties_list = null;
+      obj.weighted_pool_properties_list = message.weightedPoolPropertiesList;
     }
     if (message.yammPoolAssetIdList) {
       obj.yamm_pool_asset_id_list = message.yammPoolAssetIdList.map(e => e ? YammPoolAssetId.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.yamm_pool_asset_id_list = null;
+      obj.yamm_pool_asset_id_list = message.yammPoolAssetIdList;
     }
     if (message.introducingPoolTokenList) {
       obj.introducing_pool_token_list = message.introducingPoolTokenList.map(e => e ? VirtualBalancePoolToken.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.introducing_pool_token_list = null;
+      obj.introducing_pool_token_list = message.introducingPoolTokenList;
     }
     if (message.expiringPoolTokenList) {
       obj.expiring_pool_token_list = message.expiringPoolTokenList.map(e => e ? VirtualBalancePoolToken.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.expiring_pool_token_list = null;
+      obj.expiring_pool_token_list = message.expiringPoolTokenList;
     }
     if (message.yammConfigurationList) {
       obj.yamm_configuration_list = message.yammConfigurationList.map(e => e ? YammConfiguration.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.yamm_configuration_list = null;
+      obj.yamm_configuration_list = message.yammConfigurationList;
     }
     if (message.whitelistedRouteList) {
       obj.whitelisted_route_list = message.whitelistedRouteList.map(e => e ? WhitelistedRoute.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.whitelisted_route_list = null;
+      obj.whitelisted_route_list = message.whitelistedRouteList;
     }
     if (message.orderList) {
       obj.order_list = message.orderList.map(e => e ? Order.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.order_list = null;
+      obj.order_list = message.orderList;
     }
     obj.order_count = message.orderCount ? message.orderCount.toString() : undefined;
     if (message.executableOrderList) {
       obj.executable_order_list = message.executableOrderList.map(e => e.toString());
     } else {
-      obj.executable_order_list = null;
+      obj.executable_order_list = message.executableOrderList;
     }
     if (message.scheduleOrderList) {
       obj.schedule_order_list = message.scheduleOrderList.map(e => e ? ScheduleOrder.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.schedule_order_list = null;
+      obj.schedule_order_list = message.scheduleOrderList;
     }
     obj.vault_paused = message.vaultPaused === false ? undefined : message.vaultPaused;
     if (message.oraclePricePairList) {
       obj.oracle_price_pair_list = message.oraclePricePairList.map(e => e ? OraclePricePair.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.oracle_price_pair_list = null;
+      obj.oracle_price_pair_list = message.oraclePricePairList;
     }
     if (message.pendingTokenIntroductionList) {
       obj.pending_token_introduction_list = message.pendingTokenIntroductionList.map(e => e ? PendingTokenIntroduction.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.pending_token_introduction_list = null;
+      obj.pending_token_introduction_list = message.pendingTokenIntroductionList;
     }
     return obj;
   },

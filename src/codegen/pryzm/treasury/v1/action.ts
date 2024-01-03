@@ -431,7 +431,7 @@ export const Action = {
     if (message.excludedDenoms) {
       obj.excluded_denoms = message.excludedDenoms.map(e => e);
     } else {
-      obj.excluded_denoms = null;
+      obj.excluded_denoms = message.excludedDenoms;
     }
     return obj;
   },

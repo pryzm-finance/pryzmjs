@@ -274,7 +274,7 @@ export const BasicAllowance = {
     if (message.spendLimit) {
       obj.spend_limit = message.spendLimit.map(e => e ? Coin.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.spend_limit = null;
+      obj.spend_limit = message.spendLimit;
     }
     obj.expiration = message.expiration ? Timestamp.toAmino(message.expiration, useInterfaces) : undefined;
     return obj;
@@ -429,12 +429,12 @@ export const PeriodicAllowance = {
     if (message.periodSpendLimit) {
       obj.period_spend_limit = message.periodSpendLimit.map(e => e ? Coin.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.period_spend_limit = null;
+      obj.period_spend_limit = message.periodSpendLimit;
     }
     if (message.periodCanSpend) {
       obj.period_can_spend = message.periodCanSpend.map(e => e ? Coin.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.period_can_spend = null;
+      obj.period_can_spend = message.periodCanSpend;
     }
     obj.period_reset = message.periodReset ? Timestamp.toAmino(message.periodReset, useInterfaces) : undefined;
     return obj;
@@ -547,7 +547,7 @@ export const AllowedMsgAllowance = {
     if (message.allowedMessages) {
       obj.allowed_messages = message.allowedMessages.map(e => e);
     } else {
-      obj.allowed_messages = null;
+      obj.allowed_messages = message.allowedMessages;
     }
     return obj;
   },

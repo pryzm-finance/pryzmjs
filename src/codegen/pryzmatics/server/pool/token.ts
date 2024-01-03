@@ -455,7 +455,7 @@ export const QueryTokensResponse = {
     if (message.tokens) {
       obj.tokens = message.tokens.map(e => e ? Token.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.tokens = null;
+      obj.tokens = message.tokens;
     }
     obj.pagination = message.pagination ? PageResponse.toAmino(message.pagination, useInterfaces) : undefined;
     return obj;

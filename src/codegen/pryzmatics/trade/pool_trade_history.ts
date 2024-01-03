@@ -259,29 +259,29 @@ export const PoolTradeHistory = {
     if (message.tokensIn) {
       obj.tokens_in = message.tokensIn.map(e => e ? TokenAmount.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.tokens_in = null;
+      obj.tokens_in = message.tokensIn;
     }
     if (message.tokensOut) {
       obj.tokens_out = message.tokensOut.map(e => e ? TokenAmount.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.tokens_out = null;
+      obj.tokens_out = message.tokensOut;
     }
     obj.pool_id = message.poolId ? message.poolId.toString() : undefined;
     obj.operation_type = message.operationType === 0 ? undefined : message.operationType;
     if (message.swapFee) {
       obj.swap_fee = message.swapFee.map(e => e ? Coin.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.swap_fee = null;
+      obj.swap_fee = message.swapFee;
     }
     if (message.joinExitSwapFee) {
       obj.join_exit_swap_fee = message.joinExitSwapFee.map(e => e ? Coin.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.join_exit_swap_fee = null;
+      obj.join_exit_swap_fee = message.joinExitSwapFee;
     }
     if (message.protocolFee) {
       obj.protocol_fee = message.protocolFee.map(e => e ? Coin.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.protocol_fee = null;
+      obj.protocol_fee = message.protocolFee;
     }
     obj.block_time = message.blockTime ? Timestamp.toAmino(message.blockTime, useInterfaces) : undefined;
     return obj;

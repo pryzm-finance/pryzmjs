@@ -3489,12 +3489,12 @@ export const EventExecuteOrdersForPair = {
     if (message.buyOrders) {
       obj.buy_orders = message.buyOrders.map(e => e ? EventExecuteOrder.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.buy_orders = null;
+      obj.buy_orders = message.buyOrders;
     }
     if (message.sellOrders) {
       obj.sell_orders = message.sellOrders.map(e => e ? EventExecuteOrder.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.sell_orders = null;
+      obj.sell_orders = message.sellOrders;
     }
     obj.buy_trade_amount = message.buyTradeAmount === "" ? undefined : message.buyTradeAmount;
     obj.buy_match_amount = message.buyMatchAmount === "" ? undefined : message.buyMatchAmount;
@@ -3825,12 +3825,12 @@ export const EventExecuteMatchProposalPair = {
     if (message.buyOrders) {
       obj.buy_orders = message.buyOrders.map(e => e ? EventExecuteMatchProposalOrder.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.buy_orders = null;
+      obj.buy_orders = message.buyOrders;
     }
     if (message.sellOrders) {
       obj.sell_orders = message.sellOrders.map(e => e ? EventExecuteMatchProposalOrder.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.sell_orders = null;
+      obj.sell_orders = message.sellOrders;
     }
     obj.buy_match_amount = message.buyMatchAmount === "" ? undefined : message.buyMatchAmount;
     obj.sell_match_amount = message.sellMatchAmount === "" ? undefined : message.sellMatchAmount;
@@ -3950,12 +3950,12 @@ export const EventExecuteMatchProposal = {
     if (message.pairs) {
       obj.pairs = message.pairs.map(e => e ? EventExecuteMatchProposalPair.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.pairs = null;
+      obj.pairs = message.pairs;
     }
     if (message.proposerReward) {
       obj.proposer_reward = message.proposerReward.map(e => e ? Coin.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.proposer_reward = null;
+      obj.proposer_reward = message.proposerReward;
     }
     return obj;
   },
@@ -4418,13 +4418,13 @@ export const EventExitPoolRequest = {
     if (message.amountsOut) {
       obj.amounts_out = message.amountsOut.map(e => e ? Coin.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.amounts_out = null;
+      obj.amounts_out = message.amountsOut;
     }
     obj.protocol_fee = message.protocolFee ? Coin.toAmino(message.protocolFee, useInterfaces) : undefined;
     if (message.swapFee) {
       obj.swap_fee = message.swapFee.map(e => e ? Coin.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.swap_fee = null;
+      obj.swap_fee = message.swapFee;
     }
     obj.exit_type = message.exitType === 0 ? undefined : message.exitType;
     return obj;
@@ -4599,17 +4599,17 @@ export const EventJoinPoolRequest = {
     if (message.amountsIn) {
       obj.amounts_in = message.amountsIn.map(e => e ? Coin.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.amounts_in = null;
+      obj.amounts_in = message.amountsIn;
     }
     if (message.protocolFee) {
       obj.protocol_fee = message.protocolFee.map(e => e ? Coin.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.protocol_fee = null;
+      obj.protocol_fee = message.protocolFee;
     }
     if (message.swapFee) {
       obj.swap_fee = message.swapFee.map(e => e ? Coin.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.swap_fee = null;
+      obj.swap_fee = message.swapFee;
     }
     obj.join_type = message.joinType === 0 ? undefined : message.joinType;
     return obj;
@@ -4968,32 +4968,32 @@ export const EventBatchSwapRequest = {
     if (message.steps) {
       obj.steps = message.steps.map(e => e ? SwapStep.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.steps = null;
+      obj.steps = message.steps;
     }
     if (message.amountsIn) {
       obj.amounts_in = message.amountsIn.map(e => e ? Coin.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.amounts_in = null;
+      obj.amounts_in = message.amountsIn;
     }
     if (message.amountsOut) {
       obj.amounts_out = message.amountsOut.map(e => e ? Coin.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.amounts_out = null;
+      obj.amounts_out = message.amountsOut;
     }
     if (message.swapProtocolFee) {
       obj.swap_protocol_fee = message.swapProtocolFee.map(e => e ? Coin.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.swap_protocol_fee = null;
+      obj.swap_protocol_fee = message.swapProtocolFee;
     }
     if (message.joinExitProtocolFee) {
       obj.join_exit_protocol_fee = message.joinExitProtocolFee.map(e => e ? Coin.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.join_exit_protocol_fee = null;
+      obj.join_exit_protocol_fee = message.joinExitProtocolFee;
     }
     if (message.swapFee) {
       obj.swap_fee = message.swapFee.map(e => e ? Coin.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.swap_fee = null;
+      obj.swap_fee = message.swapFee;
     }
     obj.swap_type = message.swapType === 0 ? undefined : message.swapType;
     return obj;

@@ -238,7 +238,7 @@ export const QuerySlashWindowsResponse = {
     if (message.windows) {
       obj.windows = message.windows.map(e => e ? SlashWindow.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.windows = null;
+      obj.windows = message.windows;
     }
     obj.pagination = message.pagination ? PageResponse.toAmino(message.pagination, useInterfaces) : undefined;
     return obj;

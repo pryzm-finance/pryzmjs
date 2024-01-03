@@ -493,7 +493,7 @@ export const QuerySubspacesResponse = {
     if (message.subspaces) {
       obj.subspaces = message.subspaces.map(e => e ? Subspace.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.subspaces = null;
+      obj.subspaces = message.subspaces;
     }
     return obj;
   },
@@ -604,7 +604,7 @@ export const Subspace = {
     if (message.keys) {
       obj.keys = message.keys.map(e => e);
     } else {
-      obj.keys = null;
+      obj.keys = message.keys;
     }
     return obj;
   },

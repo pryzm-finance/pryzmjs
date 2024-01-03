@@ -238,7 +238,7 @@ export const QueryAllMaturitiesResponse = {
     if (message.maturities) {
       obj.maturities = message.maturities.map(e => e ? Maturity.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.maturities = null;
+      obj.maturities = message.maturities;
     }
     obj.pagination = message.pagination ? PageResponse.toAmino(message.pagination, useInterfaces) : undefined;
     return obj;

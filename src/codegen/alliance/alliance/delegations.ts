@@ -244,7 +244,7 @@ export const Delegation = {
     if (message.rewardHistory) {
       obj.reward_history = message.rewardHistory.map(e => e ? RewardHistory.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.reward_history = null;
+      obj.reward_history = message.rewardHistory;
     }
     obj.last_reward_claim_height = message.lastRewardClaimHeight ? message.lastRewardClaimHeight.toString() : undefined;
     return obj;
@@ -445,7 +445,7 @@ export const QueuedUndelegation = {
     if (message.entries) {
       obj.entries = message.entries.map(e => e ? Undelegation.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.entries = null;
+      obj.entries = message.entries;
     }
     return obj;
   },
@@ -564,17 +564,17 @@ export const AllianceValidatorInfo = {
     if (message.globalRewardHistory) {
       obj.global_reward_history = message.globalRewardHistory.map(e => e ? RewardHistory.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.global_reward_history = null;
+      obj.global_reward_history = message.globalRewardHistory;
     }
     if (message.totalDelegatorShares) {
       obj.total_delegator_shares = message.totalDelegatorShares.map(e => e ? DecCoin.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.total_delegator_shares = null;
+      obj.total_delegator_shares = message.totalDelegatorShares;
     }
     if (message.validatorShares) {
       obj.validator_shares = message.validatorShares.map(e => e ? DecCoin.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.validator_shares = null;
+      obj.validator_shares = message.validatorShares;
     }
     return obj;
   },

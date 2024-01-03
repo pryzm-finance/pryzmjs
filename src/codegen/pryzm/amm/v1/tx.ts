@@ -2015,7 +2015,7 @@ export const MsgJoinAllTokensExactLpt = {
     if (message.maxAmountsIn) {
       obj.max_amounts_in = message.maxAmountsIn.map(e => e ? Coin.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.max_amounts_in = null;
+      obj.max_amounts_in = message.maxAmountsIn;
     }
     return obj;
   },
@@ -2140,12 +2140,12 @@ export const MsgJoinAllTokensExactLptResponse = {
     if (message.amountsIn) {
       obj.amounts_in = message.amountsIn.map(e => e ? Coin.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.amounts_in = null;
+      obj.amounts_in = message.amountsIn;
     }
     if (message.protocolFee) {
       obj.protocol_fee = message.protocolFee.map(e => e ? Coin.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.protocol_fee = null;
+      obj.protocol_fee = message.protocolFee;
     }
     return obj;
   },
@@ -2548,7 +2548,7 @@ export const MsgJoinExactTokens = {
     if (message.amountsIn) {
       obj.amounts_in = message.amountsIn.map(e => e ? Coin.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.amounts_in = null;
+      obj.amounts_in = message.amountsIn;
     }
     obj.min_lpt_out = message.minLptOut === null ? undefined : message.minLptOut;
     return obj;
@@ -2689,17 +2689,17 @@ export const MsgJoinExactTokensResponse = {
     if (message.amountsIn) {
       obj.amounts_in = message.amountsIn.map(e => e ? Coin.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.amounts_in = null;
+      obj.amounts_in = message.amountsIn;
     }
     if (message.protocolFee) {
       obj.protocol_fee = message.protocolFee.map(e => e ? Coin.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.protocol_fee = null;
+      obj.protocol_fee = message.protocolFee;
     }
     if (message.swapFee) {
       obj.swap_fee = message.swapFee.map(e => e ? Coin.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.swap_fee = null;
+      obj.swap_fee = message.swapFee;
     }
     return obj;
   },
@@ -2964,18 +2964,18 @@ export const MsgZeroImpactJoinYammResponse = {
     if (message.yOut) {
       obj.y_out = message.yOut.map(e => e ? Coin.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.y_out = null;
+      obj.y_out = message.yOut;
     }
     obj.refract_fee = message.refractFee ? Coin.toAmino(message.refractFee, useInterfaces) : undefined;
     if (message.joinProtocolFee) {
       obj.join_protocol_fee = message.joinProtocolFee.map(e => e ? Coin.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.join_protocol_fee = null;
+      obj.join_protocol_fee = message.joinProtocolFee;
     }
     if (message.swapFee) {
       obj.swap_fee = message.swapFee.map(e => e ? Coin.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.swap_fee = null;
+      obj.swap_fee = message.swapFee;
     }
     return obj;
   },
@@ -3106,7 +3106,7 @@ export const MsgExitExactTokens = {
     if (message.amountsOut) {
       obj.amounts_out = message.amountsOut.map(e => e ? Coin.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.amounts_out = null;
+      obj.amounts_out = message.amountsOut;
     }
     obj.max_lpt_in = message.maxLptIn === null ? undefined : message.maxLptIn;
     return obj;
@@ -3245,13 +3245,13 @@ export const MsgExitExactTokensResponse = {
     if (message.amountsOut) {
       obj.amounts_out = message.amountsOut.map(e => e ? Coin.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.amounts_out = null;
+      obj.amounts_out = message.amountsOut;
     }
     obj.protocol_fee = message.protocolFee ? Coin.toAmino(message.protocolFee, useInterfaces) : undefined;
     if (message.swapFee) {
       obj.swap_fee = message.swapFee.map(e => e ? Coin.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.swap_fee = null;
+      obj.swap_fee = message.swapFee;
     }
     return obj;
   },
@@ -3655,7 +3655,7 @@ export const MsgExitAllTokensExactLpt = {
     if (message.minAmountsOut) {
       obj.min_amounts_out = message.minAmountsOut.map(e => e ? Coin.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.min_amounts_out = null;
+      obj.min_amounts_out = message.minAmountsOut;
     }
     return obj;
   },
@@ -3778,7 +3778,7 @@ export const MsgExitAllTokensExactLptResponse = {
     if (message.amountsOut) {
       obj.amounts_out = message.amountsOut.map(e => e ? Coin.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.amounts_out = null;
+      obj.amounts_out = message.amountsOut;
     }
     obj.protocol_fee = message.protocolFee ? Coin.toAmino(message.protocolFee, useInterfaces) : undefined;
     return obj;
@@ -4051,12 +4051,12 @@ export const MsgCreateWeightedPool = {
     if (message.tokens) {
       obj.tokens = message.tokens.map(e => e ? CreateWeightedPoolToken.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.tokens = null;
+      obj.tokens = message.tokens;
     }
     if (message.initializationAllowList) {
       obj.initialization_allow_list = message.initializationAllowList.map(e => e);
     } else {
-      obj.initialization_allow_list = null;
+      obj.initialization_allow_list = message.initializationAllowList;
     }
     return obj;
   },
@@ -4450,7 +4450,7 @@ export const MsgInitializePool = {
     if (message.amountsIn) {
       obj.amounts_in = message.amountsIn.map(e => e ? Coin.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.amounts_in = null;
+      obj.amounts_in = message.amountsIn;
     }
     return obj;
   },
@@ -4575,12 +4575,12 @@ export const MsgInitializePoolResponse = {
     if (message.amountsIn) {
       obj.amounts_in = message.amountsIn.map(e => e ? Coin.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.amounts_in = null;
+      obj.amounts_in = message.amountsIn;
     }
     if (message.protocolFee) {
       obj.protocol_fee = message.protocolFee.map(e => e ? Coin.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.protocol_fee = null;
+      obj.protocol_fee = message.protocolFee;
     }
     return obj;
   },
@@ -4724,7 +4724,7 @@ export const MsgUpdateWeights = {
     if (message.tokenWeights) {
       obj.token_weights = message.tokenWeights.map(e => e ? TokenWeight.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.token_weights = null;
+      obj.token_weights = message.tokenWeights;
     }
     obj.start_time_unix_millis = message.startTimeUnixMillis ? message.startTimeUnixMillis.toString() : undefined;
     obj.end_time_unix_millis = message.endTimeUnixMillis ? message.endTimeUnixMillis.toString() : undefined;
@@ -4948,17 +4948,17 @@ export const MsgBatchSwap = {
     if (message.steps) {
       obj.steps = message.steps.map(e => e ? SwapStep.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.steps = null;
+      obj.steps = message.steps;
     }
     if (message.minAmountsOut) {
       obj.min_amounts_out = message.minAmountsOut.map(e => e ? Coin.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.min_amounts_out = null;
+      obj.min_amounts_out = message.minAmountsOut;
     }
     if (message.maxAmountsIn) {
       obj.max_amounts_in = message.maxAmountsIn.map(e => e ? Coin.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.max_amounts_in = null;
+      obj.max_amounts_in = message.maxAmountsIn;
     }
     return obj;
   },
@@ -5114,27 +5114,27 @@ export const MsgBatchSwapResponse = {
     if (message.amountsIn) {
       obj.amounts_in = message.amountsIn.map(e => e ? Coin.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.amounts_in = null;
+      obj.amounts_in = message.amountsIn;
     }
     if (message.amountsOut) {
       obj.amounts_out = message.amountsOut.map(e => e ? Coin.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.amounts_out = null;
+      obj.amounts_out = message.amountsOut;
     }
     if (message.swapProtocolFee) {
       obj.swap_protocol_fee = message.swapProtocolFee.map(e => e ? Coin.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.swap_protocol_fee = null;
+      obj.swap_protocol_fee = message.swapProtocolFee;
     }
     if (message.joinExitProtocolFee) {
       obj.join_exit_protocol_fee = message.joinExitProtocolFee.map(e => e ? Coin.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.join_exit_protocol_fee = null;
+      obj.join_exit_protocol_fee = message.joinExitProtocolFee;
     }
     if (message.swapFee) {
       obj.swap_fee = message.swapFee.map(e => e ? Coin.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.swap_fee = null;
+      obj.swap_fee = message.swapFee;
     }
     return obj;
   },
@@ -6284,7 +6284,7 @@ export const MsgProposeMatch = {
     if (message.pairs) {
       obj.pairs = message.pairs.map(e => e ? PairMatchProposal.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.pairs = null;
+      obj.pairs = message.pairs;
     }
     return obj;
   },
@@ -6380,7 +6380,7 @@ export const MsgProposeMatchResponse = {
     if (message.proposerReward) {
       obj.proposer_reward = message.proposerReward.map(e => e ? Coin.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.proposer_reward = null;
+      obj.proposer_reward = message.proposerReward;
     }
     return obj;
   },
@@ -6498,7 +6498,7 @@ export const MsgSetCircuitBreakers = {
     if (message.tokenCircuitBreakers) {
       obj.token_circuit_breakers = message.tokenCircuitBreakers.map(e => e ? TokenCircuitBreakerSettings.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.token_circuit_breakers = null;
+      obj.token_circuit_breakers = message.tokenCircuitBreakers;
     }
     return obj;
   },
@@ -6890,7 +6890,7 @@ export const MsgRecoveryExit = {
     if (message.minAmountsOut) {
       obj.min_amounts_out = message.minAmountsOut.map(e => e ? Coin.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.min_amounts_out = null;
+      obj.min_amounts_out = message.minAmountsOut;
     }
     return obj;
   },
@@ -7000,7 +7000,7 @@ export const MsgRecoveryExitResponse = {
     if (message.amountsOut) {
       obj.amounts_out = message.amountsOut.map(e => e ? Coin.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.amounts_out = null;
+      obj.amounts_out = message.amountsOut;
     }
     return obj;
   },
@@ -9592,7 +9592,7 @@ export const MsgSetInitializationAllowList = {
     if (message.initializationAllowList) {
       obj.initialization_allow_list = message.initializationAllowList.map(e => e);
     } else {
-      obj.initialization_allow_list = null;
+      obj.initialization_allow_list = message.initializationAllowList;
     }
     return obj;
   },
@@ -9784,7 +9784,7 @@ export const MsgSetPoolAdmins = {
     if (message.admins) {
       obj.admins = message.admins.map(e => e);
     } else {
-      obj.admins = null;
+      obj.admins = message.admins;
     }
     return obj;
   },
@@ -9976,7 +9976,7 @@ export const MsgSetPauseAllowList = {
     if (message.pauseAllowList) {
       obj.pause_allow_list = message.pauseAllowList.map(e => e);
     } else {
-      obj.pause_allow_list = null;
+      obj.pause_allow_list = message.pauseAllowList;
     }
     return obj;
   },

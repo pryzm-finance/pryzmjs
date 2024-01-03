@@ -2265,7 +2265,7 @@ export const FileDescriptorSet = {
     if (message.file) {
       obj.file = message.file.map(e => e ? FileDescriptorProto.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.file = null;
+      obj.file = message.file;
     }
     return obj;
   },
@@ -2529,37 +2529,37 @@ export const FileDescriptorProto = {
     if (message.dependency) {
       obj.dependency = message.dependency.map(e => e);
     } else {
-      obj.dependency = null;
+      obj.dependency = message.dependency;
     }
     if (message.publicDependency) {
       obj.public_dependency = message.publicDependency.map(e => e);
     } else {
-      obj.public_dependency = null;
+      obj.public_dependency = message.publicDependency;
     }
     if (message.weakDependency) {
       obj.weak_dependency = message.weakDependency.map(e => e);
     } else {
-      obj.weak_dependency = null;
+      obj.weak_dependency = message.weakDependency;
     }
     if (message.messageType) {
       obj.message_type = message.messageType.map(e => e ? DescriptorProto.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.message_type = null;
+      obj.message_type = message.messageType;
     }
     if (message.enumType) {
       obj.enum_type = message.enumType.map(e => e ? EnumDescriptorProto.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.enum_type = null;
+      obj.enum_type = message.enumType;
     }
     if (message.service) {
       obj.service = message.service.map(e => e ? ServiceDescriptorProto.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.service = null;
+      obj.service = message.service;
     }
     if (message.extension) {
       obj.extension = message.extension.map(e => e ? FieldDescriptorProto.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.extension = null;
+      obj.extension = message.extension;
     }
     obj.options = message.options ? FileOptions.toAmino(message.options, useInterfaces) : undefined;
     obj.source_code_info = message.sourceCodeInfo ? SourceCodeInfo.toAmino(message.sourceCodeInfo, useInterfaces) : undefined;
@@ -2783,43 +2783,43 @@ export const DescriptorProto = {
     if (message.field) {
       obj.field = message.field.map(e => e ? FieldDescriptorProto.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.field = null;
+      obj.field = message.field;
     }
     if (message.extension) {
       obj.extension = message.extension.map(e => e ? FieldDescriptorProto.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.extension = null;
+      obj.extension = message.extension;
     }
     if (message.nestedType) {
       obj.nested_type = message.nestedType.map(e => e ? DescriptorProto.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.nested_type = null;
+      obj.nested_type = message.nestedType;
     }
     if (message.enumType) {
       obj.enum_type = message.enumType.map(e => e ? EnumDescriptorProto.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.enum_type = null;
+      obj.enum_type = message.enumType;
     }
     if (message.extensionRange) {
       obj.extension_range = message.extensionRange.map(e => e ? DescriptorProto_ExtensionRange.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.extension_range = null;
+      obj.extension_range = message.extensionRange;
     }
     if (message.oneofDecl) {
       obj.oneof_decl = message.oneofDecl.map(e => e ? OneofDescriptorProto.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.oneof_decl = null;
+      obj.oneof_decl = message.oneofDecl;
     }
     obj.options = message.options ? MessageOptions.toAmino(message.options, useInterfaces) : undefined;
     if (message.reservedRange) {
       obj.reserved_range = message.reservedRange.map(e => e ? DescriptorProto_ReservedRange.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.reserved_range = null;
+      obj.reserved_range = message.reservedRange;
     }
     if (message.reservedName) {
       obj.reserved_name = message.reservedName.map(e => e);
     } else {
-      obj.reserved_name = null;
+      obj.reserved_name = message.reservedName;
     }
     return obj;
   },
@@ -3116,7 +3116,7 @@ export const ExtensionRangeOptions = {
     if (message.uninterpretedOption) {
       obj.uninterpreted_option = message.uninterpretedOption.map(e => e ? UninterpretedOption.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.uninterpreted_option = null;
+      obj.uninterpreted_option = message.uninterpretedOption;
     }
     return obj;
   },
@@ -3568,18 +3568,18 @@ export const EnumDescriptorProto = {
     if (message.value) {
       obj.value = message.value.map(e => e ? EnumValueDescriptorProto.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.value = null;
+      obj.value = message.value;
     }
     obj.options = message.options ? EnumOptions.toAmino(message.options, useInterfaces) : undefined;
     if (message.reservedRange) {
       obj.reserved_range = message.reservedRange.map(e => e ? EnumDescriptorProto_EnumReservedRange.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.reserved_range = null;
+      obj.reserved_range = message.reservedRange;
     }
     if (message.reservedName) {
       obj.reserved_name = message.reservedName.map(e => e);
     } else {
-      obj.reserved_name = null;
+      obj.reserved_name = message.reservedName;
     }
     return obj;
   },
@@ -3903,7 +3903,7 @@ export const ServiceDescriptorProto = {
     if (message.method) {
       obj.method = message.method.map(e => e ? MethodDescriptorProto.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.method = null;
+      obj.method = message.method;
     }
     obj.options = message.options ? ServiceOptions.toAmino(message.options, useInterfaces) : undefined;
     return obj;
@@ -4426,7 +4426,7 @@ export const FileOptions = {
     if (message.uninterpretedOption) {
       obj.uninterpreted_option = message.uninterpretedOption.map(e => e ? UninterpretedOption.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.uninterpreted_option = null;
+      obj.uninterpreted_option = message.uninterpretedOption;
     }
     return obj;
   },
@@ -4571,7 +4571,7 @@ export const MessageOptions = {
     if (message.uninterpretedOption) {
       obj.uninterpreted_option = message.uninterpretedOption.map(e => e ? UninterpretedOption.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.uninterpreted_option = null;
+      obj.uninterpreted_option = message.uninterpretedOption;
     }
     return obj;
   },
@@ -4744,7 +4744,7 @@ export const FieldOptions = {
     if (message.uninterpretedOption) {
       obj.uninterpreted_option = message.uninterpretedOption.map(e => e ? UninterpretedOption.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.uninterpreted_option = null;
+      obj.uninterpreted_option = message.uninterpretedOption;
     }
     return obj;
   },
@@ -4833,7 +4833,7 @@ export const OneofOptions = {
     if (message.uninterpretedOption) {
       obj.uninterpreted_option = message.uninterpretedOption.map(e => e ? UninterpretedOption.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.uninterpreted_option = null;
+      obj.uninterpreted_option = message.uninterpretedOption;
     }
     return obj;
   },
@@ -4950,7 +4950,7 @@ export const EnumOptions = {
     if (message.uninterpretedOption) {
       obj.uninterpreted_option = message.uninterpretedOption.map(e => e ? UninterpretedOption.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.uninterpreted_option = null;
+      obj.uninterpreted_option = message.uninterpretedOption;
     }
     return obj;
   },
@@ -5053,7 +5053,7 @@ export const EnumValueOptions = {
     if (message.uninterpretedOption) {
       obj.uninterpreted_option = message.uninterpretedOption.map(e => e ? UninterpretedOption.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.uninterpreted_option = null;
+      obj.uninterpreted_option = message.uninterpretedOption;
     }
     return obj;
   },
@@ -5156,7 +5156,7 @@ export const ServiceOptions = {
     if (message.uninterpretedOption) {
       obj.uninterpreted_option = message.uninterpretedOption.map(e => e ? UninterpretedOption.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.uninterpreted_option = null;
+      obj.uninterpreted_option = message.uninterpretedOption;
     }
     return obj;
   },
@@ -5273,7 +5273,7 @@ export const MethodOptions = {
     if (message.uninterpretedOption) {
       obj.uninterpreted_option = message.uninterpretedOption.map(e => e ? UninterpretedOption.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.uninterpreted_option = null;
+      obj.uninterpreted_option = message.uninterpretedOption;
     }
     return obj;
   },
@@ -5440,7 +5440,7 @@ export const UninterpretedOption = {
     if (message.name) {
       obj.name = message.name.map(e => e ? UninterpretedOption_NamePart.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.name = null;
+      obj.name = message.name;
     }
     obj.identifier_value = message.identifierValue === "" ? undefined : message.identifierValue;
     obj.positive_int_value = message.positiveIntValue ? message.positiveIntValue.toString() : undefined;
@@ -5632,7 +5632,7 @@ export const SourceCodeInfo = {
     if (message.location) {
       obj.location = message.location.map(e => e ? SourceCodeInfo_Location.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.location = null;
+      obj.location = message.location;
     }
     return obj;
   },
@@ -5795,19 +5795,19 @@ export const SourceCodeInfo_Location = {
     if (message.path) {
       obj.path = message.path.map(e => e);
     } else {
-      obj.path = null;
+      obj.path = message.path;
     }
     if (message.span) {
       obj.span = message.span.map(e => e);
     } else {
-      obj.span = null;
+      obj.span = message.span;
     }
     obj.leading_comments = message.leadingComments === "" ? undefined : message.leadingComments;
     obj.trailing_comments = message.trailingComments === "" ? undefined : message.trailingComments;
     if (message.leadingDetachedComments) {
       obj.leading_detached_comments = message.leadingDetachedComments.map(e => e);
     } else {
-      obj.leading_detached_comments = null;
+      obj.leading_detached_comments = message.leadingDetachedComments;
     }
     return obj;
   },
@@ -5896,7 +5896,7 @@ export const GeneratedCodeInfo = {
     if (message.annotation) {
       obj.annotation = message.annotation.map(e => e ? GeneratedCodeInfo_Annotation.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.annotation = null;
+      obj.annotation = message.annotation;
     }
     return obj;
   },
@@ -6033,7 +6033,7 @@ export const GeneratedCodeInfo_Annotation = {
     if (message.path) {
       obj.path = message.path.map(e => e);
     } else {
-      obj.path = null;
+      obj.path = message.path;
     }
     obj.source_file = message.sourceFile === "" ? undefined : message.sourceFile;
     obj.begin = message.begin === 0 ? undefined : message.begin;

@@ -610,7 +610,7 @@ export const ClaimAllianceRewardsEvent = {
     if (message.coins) {
       obj.coins = message.coins.map(e => e ? Coin.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.coins = null;
+      obj.coins = message.coins;
     }
     return obj;
   },
@@ -699,7 +699,7 @@ export const DeductAllianceAssetsEvent = {
     if (message.coins) {
       obj.coins = message.coins.map(e => e ? Coin.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.coins = null;
+      obj.coins = message.coins;
     }
     return obj;
   },

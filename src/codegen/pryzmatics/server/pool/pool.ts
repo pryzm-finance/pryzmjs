@@ -404,7 +404,7 @@ export const QueryPoolsResponse = {
     if (message.pools) {
       obj.pools = message.pools.map(e => e ? ExtendedPool.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.pools = null;
+      obj.pools = message.pools;
     }
     obj.pagination = message.pagination ? PageResponse.toAmino(message.pagination, useInterfaces) : undefined;
     return obj;

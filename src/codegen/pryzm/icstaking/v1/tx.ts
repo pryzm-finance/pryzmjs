@@ -857,7 +857,7 @@ export const MsgUpdateHostChain = {
     if (message.validators) {
       obj.validators = message.validators.map(e => e ? Validator.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.validators = null;
+      obj.validators = message.validators;
     }
     obj.params = message.params ? StakingParams.toAmino(message.params, useInterfaces) : undefined;
     return obj;

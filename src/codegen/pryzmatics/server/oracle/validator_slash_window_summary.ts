@@ -255,7 +255,7 @@ export const QueryValidatorSlashWindowSummariesResponse = {
     if (message.summaries) {
       obj.summaries = message.summaries.map(e => e ? ValidatorSlashWindowSummary.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.summaries = null;
+      obj.summaries = message.summaries;
     }
     obj.pagination = message.pagination ? PageResponse.toAmino(message.pagination, useInterfaces) : undefined;
     return obj;

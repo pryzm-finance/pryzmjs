@@ -884,7 +884,7 @@ export const ExistenceProof = {
     if (message.path) {
       obj.path = message.path.map(e => e ? InnerOp.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.path = null;
+      obj.path = message.path;
     }
     return obj;
   },
@@ -1720,7 +1720,7 @@ export const InnerSpec = {
     if (message.childOrder) {
       obj.child_order = message.childOrder.map(e => e);
     } else {
-      obj.child_order = null;
+      obj.child_order = message.childOrder;
     }
     obj.child_size = message.childSize === 0 ? undefined : message.childSize;
     obj.min_prefix_length = message.minPrefixLength === 0 ? undefined : message.minPrefixLength;
@@ -1822,7 +1822,7 @@ export const BatchProof = {
     if (message.entries) {
       obj.entries = message.entries.map(e => e ? BatchEntry.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.entries = null;
+      obj.entries = message.entries;
     }
     return obj;
   },
@@ -2039,12 +2039,12 @@ export const CompressedBatchProof = {
     if (message.entries) {
       obj.entries = message.entries.map(e => e ? CompressedBatchEntry.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.entries = null;
+      obj.entries = message.entries;
     }
     if (message.lookupInners) {
       obj.lookup_inners = message.lookupInners.map(e => e ? InnerOp.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.lookup_inners = null;
+      obj.lookup_inners = message.lookupInners;
     }
     return obj;
   },
@@ -2297,7 +2297,7 @@ export const CompressedExistenceProof = {
     if (message.path) {
       obj.path = message.path.map(e => e);
     } else {
-      obj.path = null;
+      obj.path = message.path;
     }
     return obj;
   },

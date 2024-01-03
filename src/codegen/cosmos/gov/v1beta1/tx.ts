@@ -332,7 +332,7 @@ export const MsgSubmitProposal = {
     if (message.initialDeposit) {
       obj.initial_deposit = message.initialDeposit.map(e => e ? Coin.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.initial_deposit = null;
+      obj.initial_deposit = message.initialDeposit;
     }
     obj.proposer = message.proposer === "" ? undefined : message.proposer;
     return obj;
@@ -743,7 +743,7 @@ export const MsgVoteWeighted = {
     if (message.options) {
       obj.options = message.options.map(e => e ? WeightedVoteOption.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.options = null;
+      obj.options = message.options;
     }
     return obj;
   },
@@ -943,7 +943,7 @@ export const MsgDeposit = {
     if (message.amount) {
       obj.amount = message.amount.map(e => e ? Coin.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.amount = null;
+      obj.amount = message.amount;
     }
     return obj;
   },

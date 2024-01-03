@@ -768,7 +768,7 @@ export const MsgConnectionOpenTry = {
     if (message.counterpartyVersions) {
       obj.counterparty_versions = message.counterpartyVersions.map(e => e ? Version.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.counterparty_versions = null;
+      obj.counterparty_versions = message.counterpartyVersions;
     }
     obj.proof_height = message.proofHeight ? Height.toAmino(message.proofHeight, useInterfaces) : {};
     obj.proof_init = message.proofInit ? base64FromBytes(message.proofInit) : undefined;

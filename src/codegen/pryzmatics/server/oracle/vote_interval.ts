@@ -238,7 +238,7 @@ export const QueryVoteIntervalsResponse = {
     if (message.intervals) {
       obj.intervals = message.intervals.map(e => e ? VoteInterval.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.intervals = null;
+      obj.intervals = message.intervals;
     }
     obj.pagination = message.pagination ? PageResponse.toAmino(message.pagination, useInterfaces) : undefined;
     return obj;

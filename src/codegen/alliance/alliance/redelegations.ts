@@ -167,7 +167,7 @@ export const QueuedRedelegation = {
     if (message.entries) {
       obj.entries = message.entries.map(e => e ? Redelegation.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.entries = null;
+      obj.entries = message.entries;
     }
     return obj;
   },

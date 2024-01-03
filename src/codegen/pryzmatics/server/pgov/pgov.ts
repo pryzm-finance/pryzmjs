@@ -247,7 +247,7 @@ export const QueryAssetProposalResponse = {
     if (message.proposals) {
       obj.proposals = message.proposals.map(e => e ? AssetProposal.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.proposals = null;
+      obj.proposals = message.proposals;
     }
     return obj;
   },
@@ -447,7 +447,7 @@ export const QueryProposalSubmissionMsgsResponse = {
     if (message.messages) {
       obj.messages = message.messages.map(e => e ? EncodeObject.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.messages = null;
+      obj.messages = message.messages;
     }
     return obj;
   },

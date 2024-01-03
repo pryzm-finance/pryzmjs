@@ -471,7 +471,7 @@ export const ConnectionEnd = {
     if (message.versions) {
       obj.versions = message.versions.map(e => e ? Version.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.versions = null;
+      obj.versions = message.versions;
     }
     obj.state = message.state === 0 ? undefined : message.state;
     obj.counterparty = message.counterparty ? Counterparty.toAmino(message.counterparty, useInterfaces) : undefined;
@@ -638,7 +638,7 @@ export const IdentifiedConnection = {
     if (message.versions) {
       obj.versions = message.versions.map(e => e ? Version.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.versions = null;
+      obj.versions = message.versions;
     }
     obj.state = message.state === 0 ? undefined : message.state;
     obj.counterparty = message.counterparty ? Counterparty.toAmino(message.counterparty, useInterfaces) : undefined;
@@ -857,7 +857,7 @@ export const ClientPaths = {
     if (message.paths) {
       obj.paths = message.paths.map(e => e);
     } else {
-      obj.paths = null;
+      obj.paths = message.paths;
     }
     return obj;
   },
@@ -968,7 +968,7 @@ export const ConnectionPaths = {
     if (message.paths) {
       obj.paths = message.paths.map(e => e);
     } else {
-      obj.paths = null;
+      obj.paths = message.paths;
     }
     return obj;
   },
@@ -1079,7 +1079,7 @@ export const Version = {
     if (message.features) {
       obj.features = message.features.map(e => e);
     } else {
-      obj.features = null;
+      obj.features = message.features;
     }
     return obj;
   },

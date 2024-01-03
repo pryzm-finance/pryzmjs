@@ -325,7 +325,7 @@ export const MsgCreateVestingAccount = {
     if (message.amount) {
       obj.amount = message.amount.map(e => e ? Coin.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.amount = null;
+      obj.amount = message.amount;
     }
     obj.end_time = message.endTime ? message.endTime.toString() : undefined;
     obj.delayed = message.delayed === false ? undefined : message.delayed;
@@ -527,7 +527,7 @@ export const MsgCreatePermanentLockedAccount = {
     if (message.amount) {
       obj.amount = message.amount.map(e => e ? Coin.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.amount = null;
+      obj.amount = message.amount;
     }
     return obj;
   },
@@ -741,7 +741,7 @@ export const MsgCreatePeriodicVestingAccount = {
     if (message.vestingPeriods) {
       obj.vesting_periods = message.vestingPeriods.map(e => e ? Period.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.vesting_periods = null;
+      obj.vesting_periods = message.vestingPeriods;
     }
     return obj;
   },

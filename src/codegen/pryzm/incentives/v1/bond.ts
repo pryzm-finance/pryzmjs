@@ -256,7 +256,7 @@ export const Bond = {
     if (message.rewards) {
       obj.rewards = message.rewards.map(e => e ? BondRewardToken.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.rewards = null;
+      obj.rewards = message.rewards;
     }
     return obj;
   },

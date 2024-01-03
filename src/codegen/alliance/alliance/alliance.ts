@@ -521,7 +521,7 @@ export const RewardWeightChangeSnapshot = {
     if (message.rewardHistories) {
       obj.reward_histories = message.rewardHistories.map(e => e ? RewardHistory.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.reward_histories = null;
+      obj.reward_histories = message.rewardHistories;
     }
     return obj;
   },

@@ -525,7 +525,7 @@ export const QueryMetricsResponse = {
     if (message.metrics) {
       obj.metrics = message.metrics.map(e => e ? Metric.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.metrics = null;
+      obj.metrics = message.metrics;
     }
     return obj;
   },

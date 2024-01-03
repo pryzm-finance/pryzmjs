@@ -404,7 +404,7 @@ export const QueryAllPoolTokenResponse = {
     if (message.poolTokens) {
       obj.pool_tokens = message.poolTokens.map(e => e ? PoolToken.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.pool_tokens = null;
+      obj.pool_tokens = message.poolTokens;
     }
     return obj;
   },

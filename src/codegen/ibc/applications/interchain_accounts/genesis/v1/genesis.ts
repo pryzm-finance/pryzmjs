@@ -369,17 +369,17 @@ export const ControllerGenesisState = {
     if (message.activeChannels) {
       obj.active_channels = message.activeChannels.map(e => e ? ActiveChannel.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.active_channels = null;
+      obj.active_channels = message.activeChannels;
     }
     if (message.interchainAccounts) {
       obj.interchain_accounts = message.interchainAccounts.map(e => e ? RegisteredInterchainAccount.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.interchain_accounts = null;
+      obj.interchain_accounts = message.interchainAccounts;
     }
     if (message.ports) {
       obj.ports = message.ports.map(e => e);
     } else {
-      obj.ports = null;
+      obj.ports = message.ports;
     }
     obj.params = message.params ? Params1.toAmino(message.params, useInterfaces) : undefined;
     return obj;
@@ -518,12 +518,12 @@ export const HostGenesisState = {
     if (message.activeChannels) {
       obj.active_channels = message.activeChannels.map(e => e ? ActiveChannel.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.active_channels = null;
+      obj.active_channels = message.activeChannels;
     }
     if (message.interchainAccounts) {
       obj.interchain_accounts = message.interchainAccounts.map(e => e ? RegisteredInterchainAccount.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.interchain_accounts = null;
+      obj.interchain_accounts = message.interchainAccounts;
     }
     obj.port = message.port === "" ? undefined : message.port;
     obj.params = message.params ? Params2.toAmino(message.params, useInterfaces) : undefined;

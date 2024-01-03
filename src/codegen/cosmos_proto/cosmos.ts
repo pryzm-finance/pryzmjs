@@ -377,7 +377,7 @@ export const ScalarDescriptor = {
     if (message.fieldType) {
       obj.field_type = message.fieldType.map(e => e);
     } else {
-      obj.field_type = null;
+      obj.field_type = message.fieldType;
     }
     return obj;
   },

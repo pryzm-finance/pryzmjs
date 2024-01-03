@@ -266,27 +266,27 @@ export const GenesisState = {
     if (message.lastValidatorPowers) {
       obj.last_validator_powers = message.lastValidatorPowers.map(e => e ? LastValidatorPower.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.last_validator_powers = null;
+      obj.last_validator_powers = message.lastValidatorPowers;
     }
     if (message.validators) {
       obj.validators = message.validators.map(e => e ? Validator.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.validators = null;
+      obj.validators = message.validators;
     }
     if (message.delegations) {
       obj.delegations = message.delegations.map(e => e ? Delegation.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.delegations = null;
+      obj.delegations = message.delegations;
     }
     if (message.unbondingDelegations) {
       obj.unbonding_delegations = message.unbondingDelegations.map(e => e ? UnbondingDelegation.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.unbonding_delegations = null;
+      obj.unbonding_delegations = message.unbondingDelegations;
     }
     if (message.redelegations) {
       obj.redelegations = message.redelegations.map(e => e ? Redelegation.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.redelegations = null;
+      obj.redelegations = message.redelegations;
     }
     obj.exported = message.exported === false ? undefined : message.exported;
     return obj;

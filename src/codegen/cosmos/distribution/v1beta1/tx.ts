@@ -732,7 +732,7 @@ export const MsgWithdrawDelegatorRewardResponse = {
     if (message.amount) {
       obj.amount = message.amount.map(e => e ? Coin.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.amount = null;
+      obj.amount = message.amount;
     }
     return obj;
   },
@@ -920,7 +920,7 @@ export const MsgWithdrawValidatorCommissionResponse = {
     if (message.amount) {
       obj.amount = message.amount.map(e => e ? Coin.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.amount = null;
+      obj.amount = message.amount;
     }
     return obj;
   },
@@ -1030,7 +1030,7 @@ export const MsgFundCommunityPool = {
     if (message.amount) {
       obj.amount = message.amount.map(e => e ? Coin.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.amount = null;
+      obj.amount = message.amount;
     }
     obj.depositor = message.depositor === "" ? undefined : message.depositor;
     return obj;
@@ -1411,7 +1411,7 @@ export const MsgCommunityPoolSpend = {
     if (message.amount) {
       obj.amount = message.amount.map(e => e ? Coin.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.amount = null;
+      obj.amount = message.amount;
     }
     return obj;
   },

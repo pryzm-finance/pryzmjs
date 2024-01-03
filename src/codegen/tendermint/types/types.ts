@@ -1146,7 +1146,7 @@ export const Data = {
     if (message.txs) {
       obj.txs = message.txs.map(e => base64FromBytes(e));
     } else {
-      obj.txs = null;
+      obj.txs = message.txs;
     }
     return obj;
   },
@@ -1458,7 +1458,7 @@ export const Commit = {
     if (message.signatures) {
       obj.signatures = message.signatures.map(e => e ? CommitSig.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.signatures = null;
+      obj.signatures = message.signatures;
     }
     return obj;
   },

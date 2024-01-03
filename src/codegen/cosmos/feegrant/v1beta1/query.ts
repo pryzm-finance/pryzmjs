@@ -563,7 +563,7 @@ export const QueryAllowancesResponse = {
     if (message.allowances) {
       obj.allowances = message.allowances.map(e => e ? Grant.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.allowances = null;
+      obj.allowances = message.allowances;
     }
     obj.pagination = message.pagination ? PageResponse.toAmino(message.pagination, useInterfaces) : undefined;
     return obj;
@@ -779,7 +779,7 @@ export const QueryAllowancesByGranterResponse = {
     if (message.allowances) {
       obj.allowances = message.allowances.map(e => e ? Grant.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.allowances = null;
+      obj.allowances = message.allowances;
     }
     obj.pagination = message.pagination ? PageResponse.toAmino(message.pagination, useInterfaces) : undefined;
     return obj;

@@ -127,12 +127,12 @@ export const GenesisState = {
     if (message.assets) {
       obj.assets = message.assets.map(e => e ? RefractableAsset.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.assets = null;
+      obj.assets = message.assets;
     }
     if (message.maturityLevelList) {
       obj.maturity_level_list = message.maturityLevelList.map(e => e ? MaturityLevel.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.maturity_level_list = null;
+      obj.maturity_level_list = message.maturityLevelList;
     }
     return obj;
   },

@@ -238,7 +238,7 @@ export const QueryUserTradeHistoryResponse = {
     if (message.userTradeHistoryRecords) {
       obj.user_trade_history_records = message.userTradeHistoryRecords.map(e => e ? UserTradeHistory.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.user_trade_history_records = null;
+      obj.user_trade_history_records = message.userTradeHistoryRecords;
     }
     return obj;
   },

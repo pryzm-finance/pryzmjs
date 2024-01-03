@@ -692,7 +692,7 @@ export const QueryAllRefractableAssetResponse = {
     if (message.assets) {
       obj.assets = message.assets.map(e => e ? RefractableAsset.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.assets = null;
+      obj.assets = message.assets;
     }
     obj.pagination = message.pagination ? PageResponse.toAmino(message.pagination, useInterfaces) : undefined;
     return obj;
@@ -1100,7 +1100,7 @@ export const QueryAllMaturityLevelResponse = {
     if (message.maturityLevel) {
       obj.maturity_level = message.maturityLevel.map(e => e ? MaturityLevel.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.maturity_level = null;
+      obj.maturity_level = message.maturityLevel;
     }
     obj.pagination = message.pagination ? PageResponse.toAmino(message.pagination, useInterfaces) : undefined;
     return obj;

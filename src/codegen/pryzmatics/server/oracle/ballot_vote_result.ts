@@ -272,7 +272,7 @@ export const QueryBallotVoteResultsResponse = {
     if (message.results) {
       obj.results = message.results.map(e => e ? BallotVoteResult.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.results = null;
+      obj.results = message.results;
     }
     obj.pagination = message.pagination ? PageResponse.toAmino(message.pagination, useInterfaces) : undefined;
     return obj;

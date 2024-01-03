@@ -252,37 +252,37 @@ export const GenesisState = {
     if (message.channels) {
       obj.channels = message.channels.map(e => e ? IdentifiedChannel.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.channels = null;
+      obj.channels = message.channels;
     }
     if (message.acknowledgements) {
       obj.acknowledgements = message.acknowledgements.map(e => e ? PacketState.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.acknowledgements = null;
+      obj.acknowledgements = message.acknowledgements;
     }
     if (message.commitments) {
       obj.commitments = message.commitments.map(e => e ? PacketState.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.commitments = null;
+      obj.commitments = message.commitments;
     }
     if (message.receipts) {
       obj.receipts = message.receipts.map(e => e ? PacketState.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.receipts = null;
+      obj.receipts = message.receipts;
     }
     if (message.sendSequences) {
       obj.send_sequences = message.sendSequences.map(e => e ? PacketSequence.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.send_sequences = null;
+      obj.send_sequences = message.sendSequences;
     }
     if (message.recvSequences) {
       obj.recv_sequences = message.recvSequences.map(e => e ? PacketSequence.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.recv_sequences = null;
+      obj.recv_sequences = message.recvSequences;
     }
     if (message.ackSequences) {
       obj.ack_sequences = message.ackSequences.map(e => e ? PacketSequence.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.ack_sequences = null;
+      obj.ack_sequences = message.ackSequences;
     }
     obj.next_channel_sequence = message.nextChannelSequence ? message.nextChannelSequence.toString() : undefined;
     return obj;

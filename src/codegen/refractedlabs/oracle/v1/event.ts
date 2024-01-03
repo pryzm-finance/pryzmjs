@@ -882,7 +882,7 @@ export const ValidatorVoteIntervalSummary = {
     if (message.rewards) {
       obj.rewards = message.rewards.map(e => e ? Coin.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.rewards = null;
+      obj.rewards = message.rewards;
     }
     return obj;
   },
@@ -1041,13 +1041,13 @@ export const EventVoteIntervalEnds = {
     if (message.validatorSummaries) {
       obj.validator_summaries = message.validatorSummaries.map(e => e ? ValidatorVoteIntervalSummary.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.validator_summaries = null;
+      obj.validator_summaries = message.validatorSummaries;
     }
     obj.previous_vote_interval_end_time_millis = message.previousVoteIntervalEndTimeMillis ? message.previousVoteIntervalEndTimeMillis.toString() : undefined;
     if (message.ballotVoteResults) {
       obj.ballot_vote_results = message.ballotVoteResults.map(e => e ? BallotVoteResult.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.ballot_vote_results = null;
+      obj.ballot_vote_results = message.ballotVoteResults;
     }
     return obj;
   },
@@ -1289,7 +1289,7 @@ export const EventSlashWindowEnds = {
     if (message.validatorSummaries) {
       obj.validator_summaries = message.validatorSummaries.map(e => e ? ValidatorSlashWindowSummary.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.validator_summaries = null;
+      obj.validator_summaries = message.validatorSummaries;
     }
     return obj;
   },

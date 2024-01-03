@@ -2219,7 +2219,7 @@ export const RequestInitChain = {
     if (message.validators) {
       obj.validators = message.validators.map(e => e ? ValidatorUpdate.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.validators = null;
+      obj.validators = message.validators;
     }
     obj.app_state_bytes = message.appStateBytes ? base64FromBytes(message.appStateBytes) : undefined;
     obj.initial_height = message.initialHeight ? message.initialHeight.toString() : undefined;
@@ -2477,7 +2477,7 @@ export const RequestBeginBlock = {
     if (message.byzantineValidators) {
       obj.byzantine_validators = message.byzantineValidators.map(e => e ? Misbehavior.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.byzantine_validators = null;
+      obj.byzantine_validators = message.byzantineValidators;
     }
     return obj;
   },
@@ -3376,13 +3376,13 @@ export const RequestPrepareProposal = {
     if (message.txs) {
       obj.txs = message.txs.map(e => base64FromBytes(e));
     } else {
-      obj.txs = null;
+      obj.txs = message.txs;
     }
     obj.local_last_commit = message.localLastCommit ? ExtendedCommitInfo.toAmino(message.localLastCommit, useInterfaces) : undefined;
     if (message.misbehavior) {
       obj.misbehavior = message.misbehavior.map(e => e ? Misbehavior.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.misbehavior = null;
+      obj.misbehavior = message.misbehavior;
     }
     obj.height = message.height ? message.height.toString() : undefined;
     obj.time = message.time ? Timestamp.toAmino(message.time, useInterfaces) : undefined;
@@ -3568,13 +3568,13 @@ export const RequestProcessProposal = {
     if (message.txs) {
       obj.txs = message.txs.map(e => base64FromBytes(e));
     } else {
-      obj.txs = null;
+      obj.txs = message.txs;
     }
     obj.proposed_last_commit = message.proposedLastCommit ? CommitInfo.toAmino(message.proposedLastCommit, useInterfaces) : undefined;
     if (message.misbehavior) {
       obj.misbehavior = message.misbehavior.map(e => e ? Misbehavior.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.misbehavior = null;
+      obj.misbehavior = message.misbehavior;
     }
     obj.hash = message.hash ? base64FromBytes(message.hash) : undefined;
     obj.height = message.height ? message.height.toString() : undefined;
@@ -4374,7 +4374,7 @@ export const ResponseInitChain = {
     if (message.validators) {
       obj.validators = message.validators.map(e => e ? ValidatorUpdate.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.validators = null;
+      obj.validators = message.validators;
     }
     obj.app_hash = message.appHash ? base64FromBytes(message.appHash) : undefined;
     return obj;
@@ -4659,7 +4659,7 @@ export const ResponseBeginBlock = {
     if (message.events) {
       obj.events = message.events.map(e => e ? Event.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.events = null;
+      obj.events = message.events;
     }
     return obj;
   },
@@ -4884,7 +4884,7 @@ export const ResponseCheckTx = {
     if (message.events) {
       obj.events = message.events.map(e => e ? Event.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.events = null;
+      obj.events = message.events;
     }
     obj.codespace = message.codespace === "" ? undefined : message.codespace;
     obj.sender = message.sender === "" ? undefined : message.sender;
@@ -5074,7 +5074,7 @@ export const ResponseDeliverTx = {
     if (message.events) {
       obj.events = message.events.map(e => e ? Event.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.events = null;
+      obj.events = message.events;
     }
     obj.codespace = message.codespace === "" ? undefined : message.codespace;
     return obj;
@@ -5192,13 +5192,13 @@ export const ResponseEndBlock = {
     if (message.validatorUpdates) {
       obj.validator_updates = message.validatorUpdates.map(e => e ? ValidatorUpdate.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.validator_updates = null;
+      obj.validator_updates = message.validatorUpdates;
     }
     obj.consensus_param_updates = message.consensusParamUpdates ? ConsensusParams.toAmino(message.consensusParamUpdates, useInterfaces) : undefined;
     if (message.events) {
       obj.events = message.events.map(e => e ? Event.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.events = null;
+      obj.events = message.events;
     }
     return obj;
   },
@@ -5384,7 +5384,7 @@ export const ResponseListSnapshots = {
     if (message.snapshots) {
       obj.snapshots = message.snapshots.map(e => e ? Snapshot.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.snapshots = null;
+      obj.snapshots = message.snapshots;
     }
     return obj;
   },
@@ -5677,12 +5677,12 @@ export const ResponseApplySnapshotChunk = {
     if (message.refetchChunks) {
       obj.refetch_chunks = message.refetchChunks.map(e => e);
     } else {
-      obj.refetch_chunks = null;
+      obj.refetch_chunks = message.refetchChunks;
     }
     if (message.rejectSenders) {
       obj.reject_senders = message.rejectSenders.map(e => e);
     } else {
-      obj.reject_senders = null;
+      obj.reject_senders = message.rejectSenders;
     }
     return obj;
   },
@@ -5771,7 +5771,7 @@ export const ResponsePrepareProposal = {
     if (message.txs) {
       obj.txs = message.txs.map(e => base64FromBytes(e));
     } else {
-      obj.txs = null;
+      obj.txs = message.txs;
     }
     return obj;
   },
@@ -5957,7 +5957,7 @@ export const CommitInfo = {
     if (message.votes) {
       obj.votes = message.votes.map(e => e ? VoteInfo.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.votes = null;
+      obj.votes = message.votes;
     }
     return obj;
   },
@@ -6060,7 +6060,7 @@ export const ExtendedCommitInfo = {
     if (message.votes) {
       obj.votes = message.votes.map(e => e ? ExtendedVoteInfo.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.votes = null;
+      obj.votes = message.votes;
     }
     return obj;
   },
@@ -6163,7 +6163,7 @@ export const Event = {
     if (message.attributes) {
       obj.attributes = message.attributes.map(e => e ? EventAttribute.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.attributes = null;
+      obj.attributes = message.attributes;
     }
     return obj;
   },

@@ -1070,7 +1070,7 @@ export const QueryAllUserStakeStateResponse = {
     if (message.userStakeState) {
       obj.user_stake_state = message.userStakeState.map(e => e ? UserStakeState.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.user_stake_state = null;
+      obj.user_stake_state = message.userStakeState;
     }
     obj.pagination = message.pagination ? PageResponse.toAmino(message.pagination, useInterfaces) : undefined;
     return obj;
@@ -1422,7 +1422,7 @@ export const QueryAllAssetPoolStateResponse = {
     if (message.assetPoolState) {
       obj.asset_pool_state = message.assetPoolState.map(e => e ? AssetPoolState.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.asset_pool_state = null;
+      obj.asset_pool_state = message.assetPoolState;
     }
     obj.pagination = message.pagination ? PageResponse.toAmino(message.pagination, useInterfaces) : undefined;
     return obj;
@@ -1788,7 +1788,7 @@ export const QueryAllAssetMaturityPoolStateResponse = {
     if (message.assetMaturityPoolState) {
       obj.asset_maturity_pool_state = message.assetMaturityPoolState.map(e => e ? AssetMaturityPoolState.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.asset_maturity_pool_state = null;
+      obj.asset_maturity_pool_state = message.assetMaturityPoolState;
     }
     obj.pagination = message.pagination ? PageResponse.toAmino(message.pagination, useInterfaces) : undefined;
     return obj;

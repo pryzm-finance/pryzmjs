@@ -204,7 +204,7 @@ export const QueryUserStakesResponse = {
     if (message.userStakes) {
       obj.user_stakes = message.userStakes.map(e => e ? UserStake.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.user_stakes = null;
+      obj.user_stakes = message.userStakes;
     }
     return obj;
   },

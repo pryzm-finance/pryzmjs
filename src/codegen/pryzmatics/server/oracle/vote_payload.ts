@@ -255,7 +255,7 @@ export const QueryVotePayloadsResponse = {
     if (message.payloads) {
       obj.payloads = message.payloads.map(e => e ? VotePayload.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.payloads = null;
+      obj.payloads = message.payloads;
     }
     obj.pagination = message.pagination ? PageResponse.toAmino(message.pagination, useInterfaces) : undefined;
     return obj;

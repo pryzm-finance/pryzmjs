@@ -125,7 +125,7 @@ export const GenesisState = {
     if (message.flowTradeList) {
       obj.flow_trade_list = message.flowTradeList.map(e => e ? FlowTrade.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.flow_trade_list = null;
+      obj.flow_trade_list = message.flowTradeList;
     }
     obj.params = message.params ? Params.toAmino(message.params, useInterfaces) : undefined;
     return obj;

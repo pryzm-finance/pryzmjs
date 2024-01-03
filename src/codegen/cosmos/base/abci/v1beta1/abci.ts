@@ -705,7 +705,7 @@ export const TxResponse = {
     if (message.logs) {
       obj.logs = message.logs.map(e => e ? ABCIMessageLog.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.logs = null;
+      obj.logs = message.logs;
     }
     obj.info = message.info === "" ? undefined : message.info;
     obj.gas_wanted = message.gasWanted ? message.gasWanted.toString() : undefined;
@@ -715,7 +715,7 @@ export const TxResponse = {
     if (message.events) {
       obj.events = message.events.map(e => e ? Event.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.events = null;
+      obj.events = message.events;
     }
     return obj;
   },
@@ -840,7 +840,7 @@ export const ABCIMessageLog = {
     if (message.events) {
       obj.events = message.events.map(e => e ? StringEvent.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.events = null;
+      obj.events = message.events;
     }
     return obj;
   },
@@ -951,7 +951,7 @@ export const StringEvent = {
     if (message.attributes) {
       obj.attributes = message.attributes.map(e => e ? Attribute.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.attributes = null;
+      obj.attributes = message.attributes;
     }
     return obj;
   },
@@ -1301,12 +1301,12 @@ export const Result = {
     if (message.events) {
       obj.events = message.events.map(e => e ? Event.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.events = null;
+      obj.events = message.events;
     }
     if (message.msgResponses) {
       obj.msg_responses = message.msgResponses.map(e => e ? Any.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.msg_responses = null;
+      obj.msg_responses = message.msgResponses;
     }
     return obj;
   },
@@ -1628,12 +1628,12 @@ export const TxMsgData = {
     if (message.data) {
       obj.data = message.data.map(e => e ? MsgData.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.data = null;
+      obj.data = message.data;
     }
     if (message.msgResponses) {
       obj.msg_responses = message.msgResponses.map(e => e ? Any.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.msg_responses = null;
+      obj.msg_responses = message.msgResponses;
     }
     return obj;
   },
@@ -1800,7 +1800,7 @@ export const SearchTxsResult = {
     if (message.txs) {
       obj.txs = message.txs.map(e => e ? TxResponse.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.txs = null;
+      obj.txs = message.txs;
     }
     return obj;
   },

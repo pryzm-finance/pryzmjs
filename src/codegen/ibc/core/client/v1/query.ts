@@ -991,7 +991,7 @@ export const QueryClientStatesResponse = {
     if (message.clientStates) {
       obj.client_states = message.clientStates.map(e => e ? IdentifiedClientState.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.client_states = null;
+      obj.client_states = message.clientStates;
     }
     obj.pagination = message.pagination ? PageResponse.toAmino(message.pagination, useInterfaces) : undefined;
     return obj;
@@ -1459,7 +1459,7 @@ export const QueryConsensusStatesResponse = {
     if (message.consensusStates) {
       obj.consensus_states = message.consensusStates.map(e => e ? ConsensusStateWithHeight.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.consensus_states = null;
+      obj.consensus_states = message.consensusStates;
     }
     obj.pagination = message.pagination ? PageResponse.toAmino(message.pagination, useInterfaces) : undefined;
     return obj;
@@ -1675,7 +1675,7 @@ export const QueryConsensusStateHeightsResponse = {
     if (message.consensusStateHeights) {
       obj.consensus_state_heights = message.consensusStateHeights.map(e => e ? Height.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.consensus_state_heights = null;
+      obj.consensus_state_heights = message.consensusStateHeights;
     }
     obj.pagination = message.pagination ? PageResponse.toAmino(message.pagination, useInterfaces) : undefined;
     return obj;

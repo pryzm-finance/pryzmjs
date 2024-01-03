@@ -598,7 +598,7 @@ export const Channel = {
     if (message.connectionHops) {
       obj.connection_hops = message.connectionHops.map(e => e);
     } else {
-      obj.connection_hops = null;
+      obj.connection_hops = message.connectionHops;
     }
     obj.version = message.version === "" ? undefined : message.version;
     return obj;
@@ -777,7 +777,7 @@ export const IdentifiedChannel = {
     if (message.connectionHops) {
       obj.connection_hops = message.connectionHops.map(e => e);
     } else {
-      obj.connection_hops = null;
+      obj.connection_hops = message.connectionHops;
     }
     obj.version = message.version === "" ? undefined : message.version;
     obj.port_id = message.portId === "" ? undefined : message.portId;

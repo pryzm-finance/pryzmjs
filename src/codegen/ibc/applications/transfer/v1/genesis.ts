@@ -151,13 +151,13 @@ export const GenesisState = {
     if (message.denomTraces) {
       obj.denom_traces = message.denomTraces.map(e => e ? DenomTrace.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.denom_traces = null;
+      obj.denom_traces = message.denomTraces;
     }
     obj.params = message.params ? Params.toAmino(message.params, useInterfaces) : undefined;
     if (message.totalEscrowed) {
       obj.total_escrowed = message.totalEscrowed.map(e => e ? Coin.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.total_escrowed = null;
+      obj.total_escrowed = message.totalEscrowed;
     }
     return obj;
   },

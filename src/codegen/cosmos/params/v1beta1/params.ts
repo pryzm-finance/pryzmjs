@@ -162,7 +162,7 @@ export const ParameterChangeProposal = {
     if (message.changes) {
       obj.changes = message.changes.map(e => e ? ParamChange.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.changes = null;
+      obj.changes = message.changes;
     }
     return obj;
   },

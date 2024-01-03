@@ -398,7 +398,7 @@ export const Params = {
     if (message.sendEnabled) {
       obj.send_enabled = message.sendEnabled.map(e => e ? SendEnabled.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.send_enabled = null;
+      obj.send_enabled = message.sendEnabled;
     }
     obj.default_send_enabled = message.defaultSendEnabled === false ? undefined : message.defaultSendEnabled;
     return obj;
@@ -615,7 +615,7 @@ export const Input = {
     if (message.coins) {
       obj.coins = message.coins.map(e => e ? Coin.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.coins = null;
+      obj.coins = message.coins;
     }
     return obj;
   },
@@ -726,7 +726,7 @@ export const Output = {
     if (message.coins) {
       obj.coins = message.coins.map(e => e ? Coin.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.coins = null;
+      obj.coins = message.coins;
     }
     return obj;
   },
@@ -824,7 +824,7 @@ export const Supply = {
     if (message.total) {
       obj.total = message.total.map(e => e ? Coin.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.total = null;
+      obj.total = message.total;
     }
     return obj;
   },
@@ -949,7 +949,7 @@ export const DenomUnit = {
     if (message.aliases) {
       obj.aliases = message.aliases.map(e => e);
     } else {
-      obj.aliases = null;
+      obj.aliases = message.aliases;
     }
     return obj;
   },
@@ -1138,7 +1138,7 @@ export const Metadata = {
     if (message.denomUnits) {
       obj.denom_units = message.denomUnits.map(e => e ? DenomUnit.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.denom_units = null;
+      obj.denom_units = message.denomUnits;
     }
     obj.base = message.base === "" ? undefined : message.base;
     obj.display = message.display === "" ? undefined : message.display;

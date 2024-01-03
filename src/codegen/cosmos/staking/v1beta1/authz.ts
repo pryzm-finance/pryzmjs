@@ -341,7 +341,7 @@ export const StakeAuthorization_Validators = {
     if (message.address) {
       obj.address = message.address.map(e => e);
     } else {
-      obj.address = null;
+      obj.address = message.address;
     }
     return obj;
   },

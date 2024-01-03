@@ -231,7 +231,7 @@ export const Proposal = {
     if (message.finalVote) {
       obj.final_vote = message.finalVote.map(e => e ? WeightedVoteOption.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.final_vote = null;
+      obj.final_vote = message.finalVote;
     }
     obj.status = message.status === 0 ? undefined : message.status;
     return obj;

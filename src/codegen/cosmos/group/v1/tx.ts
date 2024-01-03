@@ -923,7 +923,7 @@ export const MsgCreateGroup = {
     if (message.members) {
       obj.members = message.members.map(e => e ? MemberRequest.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.members = null;
+      obj.members = message.members;
     }
     obj.metadata = message.metadata === "" ? undefined : message.metadata;
     return obj;
@@ -1140,7 +1140,7 @@ export const MsgUpdateGroupMembers = {
     if (message.memberUpdates) {
       obj.member_updates = message.memberUpdates.map(e => e ? MemberRequest.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.member_updates = null;
+      obj.member_updates = message.memberUpdates;
     }
     return obj;
   },
@@ -2184,7 +2184,7 @@ export const MsgCreateGroupWithPolicy = {
     if (message.members) {
       obj.members = message.members.map(e => e ? MemberRequest.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.members = null;
+      obj.members = message.members;
     }
     obj.group_metadata = message.groupMetadata === "" ? undefined : message.groupMetadata;
     obj.group_policy_metadata = message.groupPolicyMetadata === "" ? undefined : message.groupPolicyMetadata;
@@ -2859,13 +2859,13 @@ export const MsgSubmitProposal = {
     if (message.proposers) {
       obj.proposers = message.proposers.map(e => e);
     } else {
-      obj.proposers = null;
+      obj.proposers = message.proposers;
     }
     obj.metadata = message.metadata === "" ? undefined : message.metadata;
     if (message.messages) {
       obj.messages = message.messages.map(e => e ? Any.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.messages = null;
+      obj.messages = message.messages;
     }
     obj.exec = message.exec === 0 ? undefined : message.exec;
     obj.title = message.title === "" ? undefined : message.title;

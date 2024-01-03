@@ -382,7 +382,7 @@ export const QueryGrantsResponse = {
     if (message.grants) {
       obj.grants = message.grants.map(e => e ? Grant.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.grants = null;
+      obj.grants = message.grants;
     }
     obj.pagination = message.pagination ? PageResponse.toAmino(message.pagination, useInterfaces) : undefined;
     return obj;
@@ -598,7 +598,7 @@ export const QueryGranterGrantsResponse = {
     if (message.grants) {
       obj.grants = message.grants.map(e => e ? GrantAuthorization.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.grants = null;
+      obj.grants = message.grants;
     }
     obj.pagination = message.pagination ? PageResponse.toAmino(message.pagination, useInterfaces) : undefined;
     return obj;
@@ -814,7 +814,7 @@ export const QueryGranteeGrantsResponse = {
     if (message.grants) {
       obj.grants = message.grants.map(e => e ? GrantAuthorization.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.grants = null;
+      obj.grants = message.grants;
     }
     obj.pagination = message.pagination ? PageResponse.toAmino(message.pagination, useInterfaces) : undefined;
     return obj;

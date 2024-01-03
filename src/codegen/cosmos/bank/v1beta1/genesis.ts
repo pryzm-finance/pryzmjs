@@ -223,22 +223,22 @@ export const GenesisState = {
     if (message.balances) {
       obj.balances = message.balances.map(e => e ? Balance.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.balances = null;
+      obj.balances = message.balances;
     }
     if (message.supply) {
       obj.supply = message.supply.map(e => e ? Coin.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.supply = null;
+      obj.supply = message.supply;
     }
     if (message.denomMetadata) {
       obj.denom_metadata = message.denomMetadata.map(e => e ? Metadata.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.denom_metadata = null;
+      obj.denom_metadata = message.denomMetadata;
     }
     if (message.sendEnabled) {
       obj.send_enabled = message.sendEnabled.map(e => e ? SendEnabled.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.send_enabled = null;
+      obj.send_enabled = message.sendEnabled;
     }
     return obj;
   },
@@ -349,7 +349,7 @@ export const Balance = {
     if (message.coins) {
       obj.coins = message.coins.map(e => e ? Coin.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.coins = null;
+      obj.coins = message.coins;
     }
     return obj;
   },

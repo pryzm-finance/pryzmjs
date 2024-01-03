@@ -933,7 +933,7 @@ export const GetTxsEventRequest = {
     if (message.events) {
       obj.events = message.events.map(e => e);
     } else {
-      obj.events = null;
+      obj.events = message.events;
     }
     obj.pagination = message.pagination ? PageRequest.toAmino(message.pagination, useInterfaces) : undefined;
     obj.order_by = message.orderBy === 0 ? undefined : message.orderBy;
@@ -1075,12 +1075,12 @@ export const GetTxsEventResponse = {
     if (message.txs) {
       obj.txs = message.txs.map(e => e ? Tx.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.txs = null;
+      obj.txs = message.txs;
     }
     if (message.txResponses) {
       obj.tx_responses = message.txResponses.map(e => e ? TxResponse.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.tx_responses = null;
+      obj.tx_responses = message.txResponses;
     }
     obj.pagination = message.pagination ? PageResponse.toAmino(message.pagination, useInterfaces) : undefined;
     obj.total = message.total ? message.total.toString() : undefined;
@@ -1925,7 +1925,7 @@ export const GetBlockWithTxsResponse = {
     if (message.txs) {
       obj.txs = message.txs.map(e => e ? Tx.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.txs = null;
+      obj.txs = message.txs;
     }
     obj.block_id = message.blockId ? BlockID.toAmino(message.blockId, useInterfaces) : undefined;
     obj.block = message.block ? Block.toAmino(message.block, useInterfaces) : undefined;

@@ -254,7 +254,7 @@ export const QueryZeroImpactJoinYammSimulationResponse = {
     if (message.yOut) {
       obj.y_out = message.yOut.map(e => e ? Coin.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.y_out = null;
+      obj.y_out = message.yOut;
     }
     obj.fee_amount = message.feeAmount ? Coin.toAmino(message.feeAmount, useInterfaces) : undefined;
     obj.fee_percentage = padDecimal(message.feePercentage) === "" ? undefined : padDecimal(message.feePercentage);

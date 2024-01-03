@@ -439,7 +439,7 @@ export const QueryHostChainsResponse = {
     if (message.hostChains) {
       obj.host_chains = message.hostChains.map(e => e ? HostChain.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.host_chains = null;
+      obj.host_chains = message.hostChains;
     }
     obj.pagination = message.pagination ? PageResponse.toAmino(message.pagination, useInterfaces) : undefined;
     return obj;

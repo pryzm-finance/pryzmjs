@@ -1,6 +1,6 @@
 {
   "name": "@pryzm-finance/pryzmjs",
-  "version": "0.17.1-rc2",
+  "version": "0.17.1-rc3",
   "description": "Javascript SDK for Pryzm",
   "author": "amin <amin@refractedlabs.com>",
   "homepage": "https://github.com/pryzm-finance/pryzmjs#readme",
@@ -25,7 +25,7 @@
     "url": "https://github.com/pryzm-finance/pryzmjs"
   },
   "devDependencies": {
-    "@refractedlabs/telescope": "1.4.1-rc22",
+    "@refractedlabs/telescope": "1.4.1-rc24",
     "@types/node": "^20.10.5",
     "rimraf": "^5.0.5",
     "ts-node": "^10.9.2",

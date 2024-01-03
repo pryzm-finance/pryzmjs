@@ -198,7 +198,7 @@ export const OraclePayload = {
     if (message.validatorStates) {
       obj.validator_states = message.validatorStates.map(e => e ? ValidatorState.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.validator_states = null;
+      obj.validator_states = message.validatorStates;
     }
     obj.delegation_account_balance = message.delegationAccountBalance === "" ? undefined : message.delegationAccountBalance;
     obj.reward_account_balance = message.rewardAccountBalance === "" ? undefined : message.rewardAccountBalance;

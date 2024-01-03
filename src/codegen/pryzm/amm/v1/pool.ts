@@ -480,17 +480,17 @@ export const Pool = {
     if (message.initializationAllowList) {
       obj.initialization_allow_list = message.initializationAllowList.map(e => e);
     } else {
-      obj.initialization_allow_list = null;
+      obj.initialization_allow_list = message.initializationAllowList;
     }
     if (message.admins) {
       obj.admins = message.admins.map(e => e);
     } else {
-      obj.admins = null;
+      obj.admins = message.admins;
     }
     if (message.pauseAllowList) {
       obj.pause_allow_list = message.pauseAllowList.map(e => e);
     } else {
-      obj.pause_allow_list = null;
+      obj.pause_allow_list = message.pauseAllowList;
     }
     return obj;
   },

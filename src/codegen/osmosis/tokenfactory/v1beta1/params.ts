@@ -131,7 +131,7 @@ export const Params = {
     if (message.denomCreationFee) {
       obj.denom_creation_fee = message.denomCreationFee.map(e => e ? Coin.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.denom_creation_fee = null;
+      obj.denom_creation_fee = message.denomCreationFee;
     }
     obj.denom_creation_gas_consume = message.denomCreationGasConsume ? message.denomCreationGasConsume.toString() : undefined;
     return obj;

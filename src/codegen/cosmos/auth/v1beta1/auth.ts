@@ -382,7 +382,7 @@ export const ModuleAccount = {
     if (message.permissions) {
       obj.permissions = message.permissions.map(e => e);
     } else {
-      obj.permissions = null;
+      obj.permissions = message.permissions;
     }
     return obj;
   },
@@ -493,7 +493,7 @@ export const ModuleCredential = {
     if (message.derivationKeys) {
       obj.derivation_keys = message.derivationKeys.map(e => base64FromBytes(e));
     } else {
-      obj.derivation_keys = null;
+      obj.derivation_keys = message.derivationKeys;
     }
     return obj;
   },

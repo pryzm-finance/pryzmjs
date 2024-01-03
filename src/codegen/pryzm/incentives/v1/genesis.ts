@@ -162,17 +162,17 @@ export const GenesisState = {
     if (message.poolList) {
       obj.pool_list = message.poolList.map(e => e ? Pool.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.pool_list = null;
+      obj.pool_list = message.poolList;
     }
     if (message.bondList) {
       obj.bond_list = message.bondList.map(e => e ? Bond.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.bond_list = null;
+      obj.bond_list = message.bondList;
     }
     if (message.unbondingList) {
       obj.unbonding_list = message.unbondingList.map(e => e ? Unbonding.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.unbonding_list = null;
+      obj.unbonding_list = message.unbondingList;
     }
     obj.unbonding_count = message.unbondingCount ? message.unbondingCount.toString() : undefined;
     return obj;

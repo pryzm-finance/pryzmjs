@@ -945,7 +945,7 @@ export const TxDescriptor = {
     if (message.msgs) {
       obj.msgs = message.msgs.map(e => e ? MsgDescriptor.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.msgs = null;
+      obj.msgs = message.msgs;
     }
     return obj;
   },
@@ -1042,7 +1042,7 @@ export const AuthnDescriptor = {
     if (message.signModes) {
       obj.sign_modes = message.signModes.map(e => e ? SigningModeDescriptor.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.sign_modes = null;
+      obj.sign_modes = message.signModes;
     }
     return obj;
   },
@@ -1349,7 +1349,7 @@ export const CodecDescriptor = {
     if (message.interfaces) {
       obj.interfaces = message.interfaces.map(e => e ? InterfaceDescriptor.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.interfaces = null;
+      obj.interfaces = message.interfaces;
     }
     return obj;
   },
@@ -1475,12 +1475,12 @@ export const InterfaceDescriptor = {
     if (message.interfaceAcceptingMessages) {
       obj.interface_accepting_messages = message.interfaceAcceptingMessages.map(e => e ? InterfaceAcceptingMessageDescriptor.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.interface_accepting_messages = null;
+      obj.interface_accepting_messages = message.interfaceAcceptingMessages;
     }
     if (message.interfaceImplementers) {
       obj.interface_implementers = message.interfaceImplementers.map(e => e ? InterfaceImplementerDescriptor.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.interface_implementers = null;
+      obj.interface_implementers = message.interfaceImplementers;
     }
     return obj;
   },
@@ -1696,7 +1696,7 @@ export const InterfaceAcceptingMessageDescriptor = {
     if (message.fieldDescriptorNames) {
       obj.field_descriptor_names = message.fieldDescriptorNames.map(e => e);
     } else {
-      obj.field_descriptor_names = null;
+      obj.field_descriptor_names = message.fieldDescriptorNames;
     }
     return obj;
   },
@@ -2971,7 +2971,7 @@ export const QueryServicesDescriptor = {
     if (message.queryServices) {
       obj.query_services = message.queryServices.map(e => e ? QueryServiceDescriptor.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.query_services = null;
+      obj.query_services = message.queryServices;
     }
     return obj;
   },
@@ -3096,7 +3096,7 @@ export const QueryServiceDescriptor = {
     if (message.methods) {
       obj.methods = message.methods.map(e => e ? QueryMethodDescriptor.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.methods = null;
+      obj.methods = message.methods;
     }
     return obj;
   },

@@ -256,7 +256,7 @@ export const QueryHistoricalPoolAprResponse = {
     if (message.historicalPoolAprs) {
       obj.historical_pool_aprs = message.historicalPoolAprs.map(e => e ? HistoricalPoolApr.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.historical_pool_aprs = null;
+      obj.historical_pool_aprs = message.historicalPoolAprs;
     }
     return obj;
   },

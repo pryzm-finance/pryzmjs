@@ -1284,7 +1284,7 @@ export const QueryGroupMembersResponse = {
     if (message.members) {
       obj.members = message.members.map(e => e ? GroupMember.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.members = null;
+      obj.members = message.members;
     }
     obj.pagination = message.pagination ? PageResponse.toAmino(message.pagination, useInterfaces) : undefined;
     return obj;
@@ -1500,7 +1500,7 @@ export const QueryGroupsByAdminResponse = {
     if (message.groups) {
       obj.groups = message.groups.map(e => e ? GroupInfo.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.groups = null;
+      obj.groups = message.groups;
     }
     obj.pagination = message.pagination ? PageResponse.toAmino(message.pagination, useInterfaces) : undefined;
     return obj;
@@ -1716,7 +1716,7 @@ export const QueryGroupPoliciesByGroupResponse = {
     if (message.groupPolicies) {
       obj.group_policies = message.groupPolicies.map(e => e ? GroupPolicyInfo.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.group_policies = null;
+      obj.group_policies = message.groupPolicies;
     }
     obj.pagination = message.pagination ? PageResponse.toAmino(message.pagination, useInterfaces) : undefined;
     return obj;
@@ -1932,7 +1932,7 @@ export const QueryGroupPoliciesByAdminResponse = {
     if (message.groupPolicies) {
       obj.group_policies = message.groupPolicies.map(e => e ? GroupPolicyInfo.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.group_policies = null;
+      obj.group_policies = message.groupPolicies;
     }
     obj.pagination = message.pagination ? PageResponse.toAmino(message.pagination, useInterfaces) : undefined;
     return obj;
@@ -2330,7 +2330,7 @@ export const QueryProposalsByGroupPolicyResponse = {
     if (message.proposals) {
       obj.proposals = message.proposals.map(e => e ? Proposal.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.proposals = null;
+      obj.proposals = message.proposals;
     }
     obj.pagination = message.pagination ? PageResponse.toAmino(message.pagination, useInterfaces) : undefined;
     return obj;
@@ -2742,7 +2742,7 @@ export const QueryVotesByProposalResponse = {
     if (message.votes) {
       obj.votes = message.votes.map(e => e ? Vote.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.votes = null;
+      obj.votes = message.votes;
     }
     obj.pagination = message.pagination ? PageResponse.toAmino(message.pagination, useInterfaces) : undefined;
     return obj;
@@ -2958,7 +2958,7 @@ export const QueryVotesByVoterResponse = {
     if (message.votes) {
       obj.votes = message.votes.map(e => e ? Vote.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.votes = null;
+      obj.votes = message.votes;
     }
     obj.pagination = message.pagination ? PageResponse.toAmino(message.pagination, useInterfaces) : undefined;
     return obj;
@@ -3174,7 +3174,7 @@ export const QueryGroupsByMemberResponse = {
     if (message.groups) {
       obj.groups = message.groups.map(e => e ? GroupInfo.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.groups = null;
+      obj.groups = message.groups;
     }
     obj.pagination = message.pagination ? PageResponse.toAmino(message.pagination, useInterfaces) : undefined;
     return obj;
@@ -3558,7 +3558,7 @@ export const QueryGroupsResponse = {
     if (message.groups) {
       obj.groups = message.groups.map(e => e ? GroupInfo.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.groups = null;
+      obj.groups = message.groups;
     }
     obj.pagination = message.pagination ? PageResponse.toAmino(message.pagination, useInterfaces) : undefined;
     return obj;

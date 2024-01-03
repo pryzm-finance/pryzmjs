@@ -242,7 +242,7 @@ export const Proof = {
     if (message.aunts) {
       obj.aunts = message.aunts.map(e => base64FromBytes(e));
     } else {
-      obj.aunts = null;
+      obj.aunts = message.aunts;
     }
     return obj;
   },
@@ -650,7 +650,7 @@ export const ProofOps = {
     if (message.ops) {
       obj.ops = message.ops.map(e => e ? ProofOp.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.ops = null;
+      obj.ops = message.ops;
     }
     return obj;
   },

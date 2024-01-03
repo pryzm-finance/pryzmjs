@@ -265,27 +265,27 @@ export const Module = {
     if (message.beginBlockers) {
       obj.begin_blockers = message.beginBlockers.map(e => e);
     } else {
-      obj.begin_blockers = null;
+      obj.begin_blockers = message.beginBlockers;
     }
     if (message.endBlockers) {
       obj.end_blockers = message.endBlockers.map(e => e);
     } else {
-      obj.end_blockers = null;
+      obj.end_blockers = message.endBlockers;
     }
     if (message.initGenesis) {
       obj.init_genesis = message.initGenesis.map(e => e);
     } else {
-      obj.init_genesis = null;
+      obj.init_genesis = message.initGenesis;
     }
     if (message.exportGenesis) {
       obj.export_genesis = message.exportGenesis.map(e => e);
     } else {
-      obj.export_genesis = null;
+      obj.export_genesis = message.exportGenesis;
     }
     if (message.overrideStoreKeys) {
       obj.override_store_keys = message.overrideStoreKeys.map(e => e ? StoreKeyConfig.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.override_store_keys = null;
+      obj.override_store_keys = message.overrideStoreKeys;
     }
     return obj;
   },

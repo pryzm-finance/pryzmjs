@@ -256,7 +256,7 @@ export const QueryHistoricalTokenYieldResponse = {
     if (message.historicalTokenYields) {
       obj.historical_token_yields = message.historicalTokenYields.map(e => e ? HistoricalTokenYield.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.historical_token_yields = null;
+      obj.historical_token_yields = message.historicalTokenYields;
     }
     return obj;
   },

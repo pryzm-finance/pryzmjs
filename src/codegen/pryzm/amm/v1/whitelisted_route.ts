@@ -103,7 +103,7 @@ export const WhitelistedRoute = {
     if (message.steps) {
       obj.steps = message.steps.map(e => e ? RouteStep.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.steps = null;
+      obj.steps = message.steps;
     }
     obj.enabled = message.enabled === false ? undefined : message.enabled;
     return obj;

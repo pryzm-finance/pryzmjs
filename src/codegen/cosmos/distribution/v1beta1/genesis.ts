@@ -497,7 +497,7 @@ export const ValidatorOutstandingRewardsRecord = {
     if (message.outstandingRewards) {
       obj.outstanding_rewards = message.outstandingRewards.map(e => e ? DecCoin.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.outstanding_rewards = null;
+      obj.outstanding_rewards = message.outstandingRewards;
     }
     return obj;
   },
@@ -1306,38 +1306,38 @@ export const GenesisState = {
     if (message.delegatorWithdrawInfos) {
       obj.delegator_withdraw_infos = message.delegatorWithdrawInfos.map(e => e ? DelegatorWithdrawInfo.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.delegator_withdraw_infos = null;
+      obj.delegator_withdraw_infos = message.delegatorWithdrawInfos;
     }
     obj.previous_proposer = message.previousProposer === "" ? undefined : message.previousProposer;
     if (message.outstandingRewards) {
       obj.outstanding_rewards = message.outstandingRewards.map(e => e ? ValidatorOutstandingRewardsRecord.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.outstanding_rewards = null;
+      obj.outstanding_rewards = message.outstandingRewards;
     }
     if (message.validatorAccumulatedCommissions) {
       obj.validator_accumulated_commissions = message.validatorAccumulatedCommissions.map(e => e ? ValidatorAccumulatedCommissionRecord.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.validator_accumulated_commissions = null;
+      obj.validator_accumulated_commissions = message.validatorAccumulatedCommissions;
     }
     if (message.validatorHistoricalRewards) {
       obj.validator_historical_rewards = message.validatorHistoricalRewards.map(e => e ? ValidatorHistoricalRewardsRecord.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.validator_historical_rewards = null;
+      obj.validator_historical_rewards = message.validatorHistoricalRewards;
     }
     if (message.validatorCurrentRewards) {
       obj.validator_current_rewards = message.validatorCurrentRewards.map(e => e ? ValidatorCurrentRewardsRecord.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.validator_current_rewards = null;
+      obj.validator_current_rewards = message.validatorCurrentRewards;
     }
     if (message.delegatorStartingInfos) {
       obj.delegator_starting_infos = message.delegatorStartingInfos.map(e => e ? DelegatorStartingInfoRecord.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.delegator_starting_infos = null;
+      obj.delegator_starting_infos = message.delegatorStartingInfos;
     }
     if (message.validatorSlashEvents) {
       obj.validator_slash_events = message.validatorSlashEvents.map(e => e ? ValidatorSlashEventRecord.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.validator_slash_events = null;
+      obj.validator_slash_events = message.validatorSlashEvents;
     }
     return obj;
   },

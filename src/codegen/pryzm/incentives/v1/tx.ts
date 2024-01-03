@@ -770,7 +770,7 @@ export const MsgCreatePool = {
     if (message.rewardTokens) {
       obj.reward_tokens = message.rewardTokens.map(e => e ? WeightedRewardToken.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.reward_tokens = null;
+      obj.reward_tokens = message.rewardTokens;
     }
     return obj;
   },
@@ -1654,7 +1654,7 @@ export const MsgUnbondResponse = {
     if (message.rewards) {
       obj.rewards = message.rewards.map(e => e ? Coin.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.rewards = null;
+      obj.rewards = message.rewards;
     }
     return obj;
   },
@@ -1862,7 +1862,7 @@ export const MsgClaimRewardResponse = {
     if (message.rewards) {
       obj.rewards = message.rewards.map(e => e ? Coin.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.rewards = null;
+      obj.rewards = message.rewards;
     }
     return obj;
   },
@@ -2370,7 +2370,7 @@ export const MsgIncentivizePool = {
     if (message.amount) {
       obj.amount = message.amount.map(e => e ? Coin.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.amount = null;
+      obj.amount = message.amount;
     }
     return obj;
   },
