@@ -16,7 +16,7 @@ export interface MsgUpdateParamsProtoMsg {
 }
 export interface MsgUpdateParamsAmino {
   authority?: string;
-  params?: ParamsAmino;
+  params: ParamsAmino;
 }
 export interface MsgUpdateParamsAminoMsg {
   type: "pryzm/incentives/v1/UpdateParams";
@@ -220,7 +220,7 @@ export interface MsgUnbondAmino {
   amount?: CoinAmino;
   unbond_treasury?: string;
   reward_treasury?: string;
-  auto_claim?: boolean;
+  auto_claim: boolean;
 }
 export interface MsgUnbondAminoMsg {
   type: "pryzm/incentives/v1/Unbond";
@@ -303,7 +303,7 @@ export interface MsgClaimUnbondingProtoMsg {
 }
 export interface MsgClaimUnbondingAmino {
   creator?: string;
-  unbonding_id?: string;
+  unbonding_id: string;
 }
 export interface MsgClaimUnbondingAminoMsg {
   type: "pryzm/incentives/v1/ClaimUnbonding";
@@ -341,7 +341,7 @@ export interface MsgCancelUnbondingProtoMsg {
 }
 export interface MsgCancelUnbondingAmino {
   creator?: string;
-  unbonding_id?: string;
+  unbonding_id: string;
   amount?: CoinAmino;
 }
 export interface MsgCancelUnbondingAminoMsg {
@@ -382,7 +382,7 @@ export interface MsgIncentivizePoolProtoMsg {
 export interface MsgIncentivizePoolAmino {
   creator?: string;
   bond_denom?: string;
-  amount?: CoinAmino[];
+  amount: CoinAmino[];
 }
 export interface MsgIncentivizePoolAminoMsg {
   type: "pryzm/incentives/v1/IncentivizePool";

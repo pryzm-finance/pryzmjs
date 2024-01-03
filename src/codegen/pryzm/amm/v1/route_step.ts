@@ -11,7 +11,7 @@ export interface RouteStepProtoMsg {
   value: Uint8Array;
 }
 export interface RouteStepAmino {
-  pool_id?: string;
+  pool_id: string;
   token_in?: string;
   token_out?: string;
 }

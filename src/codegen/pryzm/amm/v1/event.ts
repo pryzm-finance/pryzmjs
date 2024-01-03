@@ -16,6 +16,44 @@ import { BinaryReader, BinaryWriter } from "../../../binary";
 import { isSet, padDecimal } from "../../../helpers";
 import { GlobalDecoderRegistry } from "../../../registry";
 import { Decimal } from "@cosmjs/math";
+export enum RemoveOrderReason {
+  ORDER_CANCELED = 0,
+  ORDER_DEPOSIT_FAILED = 1,
+  ORDER_FINISHED = 3,
+  UNRECOGNIZED = -1,
+}
+export const RemoveOrderReasonSDKType = RemoveOrderReason;
+export const RemoveOrderReasonAmino = RemoveOrderReason;
+export function removeOrderReasonFromJSON(object: any): RemoveOrderReason {
+  switch (object) {
+    case 0:
+    case "ORDER_CANCELED":
+      return RemoveOrderReason.ORDER_CANCELED;
+    case 1:
+    case "ORDER_DEPOSIT_FAILED":
+      return RemoveOrderReason.ORDER_DEPOSIT_FAILED;
+    case 3:
+    case "ORDER_FINISHED":
+      return RemoveOrderReason.ORDER_FINISHED;
+    case -1:
+    case "UNRECOGNIZED":
+    default:
+      return RemoveOrderReason.UNRECOGNIZED;
+  }
+}
+export function removeOrderReasonToJSON(object: RemoveOrderReason): string {
+  switch (object) {
+    case RemoveOrderReason.ORDER_CANCELED:
+      return "ORDER_CANCELED";
+    case RemoveOrderReason.ORDER_DEPOSIT_FAILED:
+      return "ORDER_DEPOSIT_FAILED";
+    case RemoveOrderReason.ORDER_FINISHED:
+      return "ORDER_FINISHED";
+    case RemoveOrderReason.UNRECOGNIZED:
+    default:
+      return "UNRECOGNIZED";
+  }
+}
 export interface EventSetPool {
   pool: Pool;
 }
@@ -231,6 +269,7 @@ export interface EventSetOrderCountSDKType {
 }
 export interface EventRemoveOrder {
   id: bigint;
+  reason: RemoveOrderReason;
 }
 export interface EventRemoveOrderProtoMsg {
   typeUrl: "/pryzm.amm.v1.EventRemoveOrder";
@@ -238,6 +277,7 @@ export interface EventRemoveOrderProtoMsg {
 }
 export interface EventRemoveOrderAmino {
   id?: string;
+  reason?: RemoveOrderReason;
 }
 export interface EventRemoveOrderAminoMsg {
   type: "/pryzm.amm.v1.EventRemoveOrder";
@@ -245,6 +285,7 @@ export interface EventRemoveOrderAminoMsg {
 }
 export interface EventRemoveOrderSDKType {
   id: bigint;
+  reason: RemoveOrderReason;
 }
 export interface EventCancelOrder {
   id: bigint;
@@ -452,6 +493,7 @@ export interface EventExecuteOrder {
   orderId: bigint;
   tradeAmount: string;
   matchAmount: string;
+  outputAmount: string;
 }
 export interface EventExecuteOrderProtoMsg {
   typeUrl: "/pryzm.amm.v1.EventExecuteOrder";
@@ -461,6 +503,7 @@ export interface EventExecuteOrderAmino {
   order_id?: string;
   trade_amount?: string;
   match_amount?: string;
+  output_amount?: string;
 }
 export interface EventExecuteOrderAminoMsg {
   type: "/pryzm.amm.v1.EventExecuteOrder";
@@ -470,6 +513,7 @@ export interface EventExecuteOrderSDKType {
   order_id: bigint;
   trade_amount: string;
   match_amount: string;
+  output_amount: string;
 }
 export interface EventExecuteOrdersForPair {
   poolId: bigint;
@@ -530,6 +574,7 @@ export interface EventExecuteOrdersForPairSDKType {
 export interface EventExecuteMatchProposalOrder {
   orderId: bigint;
   matchAmount: string;
+  outputAmount: string;
 }
 export interface EventExecuteMatchProposalOrderProtoMsg {
   typeUrl: "/pryzm.amm.v1.EventExecuteMatchProposalOrder";
@@ -538,6 +583,7 @@ export interface EventExecuteMatchProposalOrderProtoMsg {
 export interface EventExecuteMatchProposalOrderAmino {
   order_id?: string;
   match_amount?: string;
+  output_amount?: string;
 }
 export interface EventExecuteMatchProposalOrderAminoMsg {
   type: "/pryzm.amm.v1.EventExecuteMatchProposalOrder";
@@ -546,6 +592,7 @@ export interface EventExecuteMatchProposalOrderAminoMsg {
 export interface EventExecuteMatchProposalOrderSDKType {
   order_id: bigint;
   match_amount: string;
+  output_amount: string;
 }
 export interface EventExecuteMatchProposalPair {
   poolId: bigint;
@@ -1994,23 +2041,27 @@ export const EventSetOrderCount = {
 GlobalDecoderRegistry.register(EventSetOrderCount.typeUrl, EventSetOrderCount);
 function createBaseEventRemoveOrder(): EventRemoveOrder {
   return {
-    id: BigInt(0)
+    id: BigInt(0),
+    reason: 0
   };
 }
 export const EventRemoveOrder = {
   typeUrl: "/pryzm.amm.v1.EventRemoveOrder",
   is(o: any): o is EventRemoveOrder {
-    return o && (o.$typeUrl === EventRemoveOrder.typeUrl || typeof o.id === "bigint");
+    return o && (o.$typeUrl === EventRemoveOrder.typeUrl || typeof o.id === "bigint" && isSet(o.reason));
   },
   isSDK(o: any): o is EventRemoveOrderSDKType {
-    return o && (o.$typeUrl === EventRemoveOrder.typeUrl || typeof o.id === "bigint");
+    return o && (o.$typeUrl === EventRemoveOrder.typeUrl || typeof o.id === "bigint" && isSet(o.reason));
   },
   isAmino(o: any): o is EventRemoveOrderAmino {
-    return o && (o.$typeUrl === EventRemoveOrder.typeUrl || typeof o.id === "bigint");
+    return o && (o.$typeUrl === EventRemoveOrder.typeUrl || typeof o.id === "bigint" && isSet(o.reason));
   },
   encode(message: EventRemoveOrder, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.id !== BigInt(0)) {
       writer.uint32(8).uint64(message.id);
+    }
+    if (message.reason !== 0) {
+      writer.uint32(16).int32(message.reason);
     }
     return writer;
   },
@@ -2024,6 +2075,9 @@ export const EventRemoveOrder = {
         case 1:
           message.id = reader.uint64();
           break;
+        case 2:
+          message.reason = (reader.int32() as any);
+          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -2033,17 +2087,20 @@ export const EventRemoveOrder = {
   },
   fromJSON(object: any): EventRemoveOrder {
     return {
-      id: isSet(object.id) ? BigInt(object.id.toString()) : BigInt(0)
+      id: isSet(object.id) ? BigInt(object.id.toString()) : BigInt(0),
+      reason: isSet(object.reason) ? removeOrderReasonFromJSON(object.reason) : -1
     };
   },
   toJSON(message: EventRemoveOrder): unknown {
     const obj: any = {};
     message.id !== undefined && (obj.id = (message.id || BigInt(0)).toString());
+    message.reason !== undefined && (obj.reason = removeOrderReasonToJSON(message.reason));
     return obj;
   },
   fromPartial(object: Partial<EventRemoveOrder>): EventRemoveOrder {
     const message = createBaseEventRemoveOrder();
     message.id = object.id !== undefined && object.id !== null ? BigInt(object.id.toString()) : BigInt(0);
+    message.reason = object.reason ?? 0;
     return message;
   },
   fromAmino(object: EventRemoveOrderAmino): EventRemoveOrder {
@@ -2051,11 +2108,15 @@ export const EventRemoveOrder = {
     if (object.id !== undefined && object.id !== null) {
       message.id = BigInt(object.id);
     }
+    if (object.reason !== undefined && object.reason !== null) {
+      message.reason = object.reason;
+    }
     return message;
   },
   toAmino(message: EventRemoveOrder, useInterfaces: boolean = true): EventRemoveOrderAmino {
     const obj: any = {};
     obj.id = message.id ? message.id.toString() : undefined;
+    obj.reason = message.reason === 0 ? undefined : message.reason;
     return obj;
   },
   fromAminoMsg(object: EventRemoveOrderAminoMsg): EventRemoveOrder {
@@ -3062,19 +3123,20 @@ function createBaseEventExecuteOrder(): EventExecuteOrder {
   return {
     orderId: BigInt(0),
     tradeAmount: "",
-    matchAmount: ""
+    matchAmount: "",
+    outputAmount: ""
   };
 }
 export const EventExecuteOrder = {
   typeUrl: "/pryzm.amm.v1.EventExecuteOrder",
   is(o: any): o is EventExecuteOrder {
-    return o && (o.$typeUrl === EventExecuteOrder.typeUrl || typeof o.orderId === "bigint" && typeof o.tradeAmount === "string" && typeof o.matchAmount === "string");
+    return o && (o.$typeUrl === EventExecuteOrder.typeUrl || typeof o.orderId === "bigint" && typeof o.tradeAmount === "string" && typeof o.matchAmount === "string" && typeof o.outputAmount === "string");
   },
   isSDK(o: any): o is EventExecuteOrderSDKType {
-    return o && (o.$typeUrl === EventExecuteOrder.typeUrl || typeof o.order_id === "bigint" && typeof o.trade_amount === "string" && typeof o.match_amount === "string");
+    return o && (o.$typeUrl === EventExecuteOrder.typeUrl || typeof o.order_id === "bigint" && typeof o.trade_amount === "string" && typeof o.match_amount === "string" && typeof o.output_amount === "string");
   },
   isAmino(o: any): o is EventExecuteOrderAmino {
-    return o && (o.$typeUrl === EventExecuteOrder.typeUrl || typeof o.order_id === "bigint" && typeof o.trade_amount === "string" && typeof o.match_amount === "string");
+    return o && (o.$typeUrl === EventExecuteOrder.typeUrl || typeof o.order_id === "bigint" && typeof o.trade_amount === "string" && typeof o.match_amount === "string" && typeof o.output_amount === "string");
   },
   encode(message: EventExecuteOrder, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.orderId !== BigInt(0)) {
@@ -3085,6 +3147,9 @@ export const EventExecuteOrder = {
     }
     if (message.matchAmount !== "") {
       writer.uint32(26).string(message.matchAmount);
+    }
+    if (message.outputAmount !== "") {
+      writer.uint32(34).string(message.outputAmount);
     }
     return writer;
   },
@@ -3104,6 +3169,9 @@ export const EventExecuteOrder = {
         case 3:
           message.matchAmount = reader.string();
           break;
+        case 4:
+          message.outputAmount = reader.string();
+          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -3115,7 +3183,8 @@ export const EventExecuteOrder = {
     return {
       orderId: isSet(object.orderId) ? BigInt(object.orderId.toString()) : BigInt(0),
       tradeAmount: isSet(object.tradeAmount) ? String(object.tradeAmount) : "",
-      matchAmount: isSet(object.matchAmount) ? String(object.matchAmount) : ""
+      matchAmount: isSet(object.matchAmount) ? String(object.matchAmount) : "",
+      outputAmount: isSet(object.outputAmount) ? String(object.outputAmount) : ""
     };
   },
   toJSON(message: EventExecuteOrder): unknown {
@@ -3123,6 +3192,7 @@ export const EventExecuteOrder = {
     message.orderId !== undefined && (obj.orderId = (message.orderId || BigInt(0)).toString());
     message.tradeAmount !== undefined && (obj.tradeAmount = message.tradeAmount);
     message.matchAmount !== undefined && (obj.matchAmount = message.matchAmount);
+    message.outputAmount !== undefined && (obj.outputAmount = message.outputAmount);
     return obj;
   },
   fromPartial(object: Partial<EventExecuteOrder>): EventExecuteOrder {
@@ -3130,6 +3200,7 @@ export const EventExecuteOrder = {
     message.orderId = object.orderId !== undefined && object.orderId !== null ? BigInt(object.orderId.toString()) : BigInt(0);
     message.tradeAmount = object.tradeAmount ?? "";
     message.matchAmount = object.matchAmount ?? "";
+    message.outputAmount = object.outputAmount ?? "";
     return message;
   },
   fromAmino(object: EventExecuteOrderAmino): EventExecuteOrder {
@@ -3143,6 +3214,9 @@ export const EventExecuteOrder = {
     if (object.match_amount !== undefined && object.match_amount !== null) {
       message.matchAmount = object.match_amount;
     }
+    if (object.output_amount !== undefined && object.output_amount !== null) {
+      message.outputAmount = object.output_amount;
+    }
     return message;
   },
   toAmino(message: EventExecuteOrder, useInterfaces: boolean = true): EventExecuteOrderAmino {
@@ -3150,6 +3224,7 @@ export const EventExecuteOrder = {
     obj.order_id = message.orderId ? message.orderId.toString() : undefined;
     obj.trade_amount = message.tradeAmount === "" ? undefined : message.tradeAmount;
     obj.match_amount = message.matchAmount === "" ? undefined : message.matchAmount;
+    obj.output_amount = message.outputAmount === "" ? undefined : message.outputAmount;
     return obj;
   },
   fromAminoMsg(object: EventExecuteOrderAminoMsg): EventExecuteOrder {
@@ -3449,19 +3524,20 @@ GlobalDecoderRegistry.register(EventExecuteOrdersForPair.typeUrl, EventExecuteOr
 function createBaseEventExecuteMatchProposalOrder(): EventExecuteMatchProposalOrder {
   return {
     orderId: BigInt(0),
-    matchAmount: ""
+    matchAmount: "",
+    outputAmount: ""
   };
 }
 export const EventExecuteMatchProposalOrder = {
   typeUrl: "/pryzm.amm.v1.EventExecuteMatchProposalOrder",
   is(o: any): o is EventExecuteMatchProposalOrder {
-    return o && (o.$typeUrl === EventExecuteMatchProposalOrder.typeUrl || typeof o.orderId === "bigint" && typeof o.matchAmount === "string");
+    return o && (o.$typeUrl === EventExecuteMatchProposalOrder.typeUrl || typeof o.orderId === "bigint" && typeof o.matchAmount === "string" && typeof o.outputAmount === "string");
   },
   isSDK(o: any): o is EventExecuteMatchProposalOrderSDKType {
-    return o && (o.$typeUrl === EventExecuteMatchProposalOrder.typeUrl || typeof o.order_id === "bigint" && typeof o.match_amount === "string");
+    return o && (o.$typeUrl === EventExecuteMatchProposalOrder.typeUrl || typeof o.order_id === "bigint" && typeof o.match_amount === "string" && typeof o.output_amount === "string");
   },
   isAmino(o: any): o is EventExecuteMatchProposalOrderAmino {
-    return o && (o.$typeUrl === EventExecuteMatchProposalOrder.typeUrl || typeof o.order_id === "bigint" && typeof o.match_amount === "string");
+    return o && (o.$typeUrl === EventExecuteMatchProposalOrder.typeUrl || typeof o.order_id === "bigint" && typeof o.match_amount === "string" && typeof o.output_amount === "string");
   },
   encode(message: EventExecuteMatchProposalOrder, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.orderId !== BigInt(0)) {
@@ -3469,6 +3545,9 @@ export const EventExecuteMatchProposalOrder = {
     }
     if (message.matchAmount !== "") {
       writer.uint32(26).string(message.matchAmount);
+    }
+    if (message.outputAmount !== "") {
+      writer.uint32(34).string(message.outputAmount);
     }
     return writer;
   },
@@ -3485,6 +3564,9 @@ export const EventExecuteMatchProposalOrder = {
         case 3:
           message.matchAmount = reader.string();
           break;
+        case 4:
+          message.outputAmount = reader.string();
+          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -3495,19 +3577,22 @@ export const EventExecuteMatchProposalOrder = {
   fromJSON(object: any): EventExecuteMatchProposalOrder {
     return {
       orderId: isSet(object.orderId) ? BigInt(object.orderId.toString()) : BigInt(0),
-      matchAmount: isSet(object.matchAmount) ? String(object.matchAmount) : ""
+      matchAmount: isSet(object.matchAmount) ? String(object.matchAmount) : "",
+      outputAmount: isSet(object.outputAmount) ? String(object.outputAmount) : ""
     };
   },
   toJSON(message: EventExecuteMatchProposalOrder): unknown {
     const obj: any = {};
     message.orderId !== undefined && (obj.orderId = (message.orderId || BigInt(0)).toString());
     message.matchAmount !== undefined && (obj.matchAmount = message.matchAmount);
+    message.outputAmount !== undefined && (obj.outputAmount = message.outputAmount);
     return obj;
   },
   fromPartial(object: Partial<EventExecuteMatchProposalOrder>): EventExecuteMatchProposalOrder {
     const message = createBaseEventExecuteMatchProposalOrder();
     message.orderId = object.orderId !== undefined && object.orderId !== null ? BigInt(object.orderId.toString()) : BigInt(0);
     message.matchAmount = object.matchAmount ?? "";
+    message.outputAmount = object.outputAmount ?? "";
     return message;
   },
   fromAmino(object: EventExecuteMatchProposalOrderAmino): EventExecuteMatchProposalOrder {
@@ -3518,12 +3603,16 @@ export const EventExecuteMatchProposalOrder = {
     if (object.match_amount !== undefined && object.match_amount !== null) {
       message.matchAmount = object.match_amount;
     }
+    if (object.output_amount !== undefined && object.output_amount !== null) {
+      message.outputAmount = object.output_amount;
+    }
     return message;
   },
   toAmino(message: EventExecuteMatchProposalOrder, useInterfaces: boolean = true): EventExecuteMatchProposalOrderAmino {
     const obj: any = {};
     obj.order_id = message.orderId ? message.orderId.toString() : undefined;
     obj.match_amount = message.matchAmount === "" ? undefined : message.matchAmount;
+    obj.output_amount = message.outputAmount === "" ? undefined : message.outputAmount;
     return obj;
   },
   fromAminoMsg(object: EventExecuteMatchProposalOrderAminoMsg): EventExecuteMatchProposalOrder {

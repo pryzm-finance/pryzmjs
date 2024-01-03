@@ -16,9 +16,9 @@ export interface ParamsProtoMsg {
 /** Params defines the parameters for the module. */
 export interface ParamsAmino {
   /** (Host chain proposal end time) - (Pryzm proposal end time) */
-  voting_result_submission_window?: DurationAmino;
+  voting_result_submission_window: DurationAmino;
   /** Zero value means default timeout */
-  voting_result_submission_timeout?: DurationAmino;
+  voting_result_submission_timeout: DurationAmino;
 }
 export interface ParamsAminoMsg {
   type: "/pryzm.pgov.v1.Params";

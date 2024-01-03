@@ -20,15 +20,15 @@ export interface ParamsProtoMsg {
 }
 /** Params defines the parameters for the module. */
 export interface ParamsAmino {
-  vote_period?: string;
-  quorum?: string;
-  vote_threshold?: string;
-  slash_fraction?: string;
+  vote_period: string;
+  quorum: string;
+  vote_threshold: string;
+  slash_fraction: string;
   slash_window?: string;
-  max_miss_rate_per_slash_window?: string;
-  max_miss_rate_per_vote_period?: string;
+  max_miss_rate_per_slash_window: string;
+  max_miss_rate_per_vote_period: string;
   /** ratio in range [0, 1] which determines the amount of collected fees that is supposed to be distributed among validators as oracle reward */
-  fee_collector_reward_ratio?: string;
+  fee_collector_reward_ratio: string;
 }
 export interface ParamsAminoMsg {
   type: "/refractedlabs.oracle.v1.Params";

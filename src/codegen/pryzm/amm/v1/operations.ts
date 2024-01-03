@@ -135,9 +135,9 @@ export interface SwapProtoMsg {
   value: Uint8Array;
 }
 export interface SwapAmino {
-  pool_id?: string;
+  pool_id: string;
   amount?: string;
-  swap_type?: SwapType;
+  swap_type: SwapType;
   token_in?: string;
   token_out?: string;
 }
@@ -163,7 +163,7 @@ export interface SwapStepProtoMsg {
   value: Uint8Array;
 }
 export interface SwapStepAmino {
-  pool_id?: string;
+  pool_id: string;
   amount?: string;
   token_in?: string;
   token_out?: string;

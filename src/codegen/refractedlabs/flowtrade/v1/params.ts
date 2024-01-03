@@ -24,15 +24,15 @@ export interface ParamsProtoMsg {
 /** Params defines the parameters for the module. */
 export interface ParamsAmino {
   /** The deposit amount taken from flow creator and transferred back after the flow ends */
-  flow_creation_deposit?: CoinAmino;
+  flow_creation_deposit: CoinAmino;
   /** The minimum possible duration a flow can have */
-  min_flow_duration?: DurationAmino;
+  min_flow_duration: DurationAmino;
   /** The minimum possible duration from the flow creation time to its start time */
-  min_duration_to_flow_start?: DurationAmino;
+  min_duration_to_flow_start: DurationAmino;
   /** the protocol fee ratio taken from token-out */
-  token_out_fee_ratio?: string;
+  token_out_fee_ratio: string;
   /** the protocol fee ratio taken from token-in */
-  token_in_fee_ratio?: string;
+  token_in_fee_ratio: string;
 }
 export interface ParamsAminoMsg {
   type: "/refractedlabs.flowtrade.v1.Params";

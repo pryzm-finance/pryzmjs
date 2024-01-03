@@ -92,10 +92,10 @@ export interface OraclePricePairAmino {
    * for example usdc token might have contract or ibc denom on different chains with different channel and ids
    */
   quote_token?: string;
-  twap_duration_millis?: string;
-  twap_algorithm?: TwapAlgorithm;
-  disabled?: boolean;
-  pairs?: PairAmino[];
+  twap_duration_millis: string;
+  twap_algorithm: TwapAlgorithm;
+  disabled: boolean;
+  pairs: PairAmino[];
   /**
    * this is the denom of the base token on this chain
    * should be ibc denom for most cases

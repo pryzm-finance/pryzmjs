@@ -13,7 +13,7 @@ export interface MsgRegisterAssetProtoMsg {
 }
 export interface MsgRegisterAssetAmino {
   creator?: string;
-  asset?: RefractableAssetAmino;
+  asset: RefractableAssetAmino;
 }
 export interface MsgRegisterAssetAminoMsg {
   type: "pryzm/assets/v1/RegisterAsset";
@@ -77,7 +77,7 @@ export interface MsgUpdateMaturityParamsProtoMsg {
 export interface MsgUpdateMaturityParamsAmino {
   authority?: string;
   asset_id?: string;
-  params?: MaturityParamsAmino;
+  params: MaturityParamsAmino;
 }
 export interface MsgUpdateMaturityParamsAminoMsg {
   type: "pryzm/assets/v1/UpdateMaturityParams";
@@ -111,7 +111,7 @@ export interface MsgUpdateFeeRatiosProtoMsg {
 export interface MsgUpdateFeeRatiosAmino {
   authority?: string;
   asset_id?: string;
-  fee_ratios?: FeeRatiosAmino;
+  fee_ratios: FeeRatiosAmino;
 }
 export interface MsgUpdateFeeRatiosAminoMsg {
   type: "pryzm/assets/v1/UpdateFeeRatios";
@@ -143,7 +143,7 @@ export interface MsgUpdateParamsProtoMsg {
 }
 export interface MsgUpdateParamsAmino {
   authority?: string;
-  params?: ParamsAmino;
+  params: ParamsAmino;
 }
 export interface MsgUpdateParamsAminoMsg {
   type: "pryzm/assets/v1/UpdateParams";

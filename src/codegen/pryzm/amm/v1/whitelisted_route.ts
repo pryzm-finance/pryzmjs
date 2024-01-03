@@ -12,7 +12,7 @@ export interface WhitelistedRouteProtoMsg {
 }
 export interface WhitelistedRouteAmino {
   steps?: RouteStepAmino[];
-  enabled?: boolean;
+  enabled: boolean;
 }
 export interface WhitelistedRouteAminoMsg {
   type: "/pryzm.amm.v1.WhitelistedRoute";

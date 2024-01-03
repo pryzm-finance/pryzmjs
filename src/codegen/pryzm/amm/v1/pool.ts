@@ -207,8 +207,8 @@ export const PoolPauseWindow = {
   },
   toAmino(message: PoolPauseWindow, useInterfaces: boolean = true): PoolPauseWindowAmino {
     const obj: any = {};
-    obj.pause_window_end_unix_millis = message.pauseWindowEndUnixMillis ? message.pauseWindowEndUnixMillis.toString() : "0";
-    obj.buffer_period_end_unix_millis = message.bufferPeriodEndUnixMillis ? message.bufferPeriodEndUnixMillis.toString() : "0";
+    obj.pause_window_end_unix_millis = message.pauseWindowEndUnixMillis ? message.pauseWindowEndUnixMillis.toString() : undefined;
+    obj.buffer_period_end_unix_millis = message.bufferPeriodEndUnixMillis ? message.bufferPeriodEndUnixMillis.toString() : undefined;
     return obj;
   },
   fromAminoMsg(object: PoolPauseWindowAminoMsg): PoolPauseWindow {

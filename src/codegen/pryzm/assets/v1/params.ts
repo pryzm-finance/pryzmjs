@@ -14,9 +14,9 @@ export interface ParamsProtoMsg {
 }
 /** Params defines the parameters for the module. */
 export interface ParamsAmino {
-  default_fee_ratios?: FeeRatiosAmino;
+  default_fee_ratios: FeeRatiosAmino;
   /** the list of admin addresses, able to register new assets or disable an existing asset */
-  admins?: string[];
+  admins: string[];
 }
 export interface ParamsAminoMsg {
   type: "/pryzm.assets.v1.Params";

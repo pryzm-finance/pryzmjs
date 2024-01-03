@@ -17,9 +17,9 @@ export interface ParamsProtoMsg {
 /** Params defines the parameters for the module. */
 export interface ParamsAmino {
   /** the default staking parameters. properties of HostChain.staking_params are overridden to this default params if provided */
-  staking_params?: StakingParamsAmino;
+  staking_params: StakingParamsAmino;
   /** the list of admin addresses, able to register a new host chain or update an existing host chain */
-  admins?: string[];
+  admins: string[];
 }
 export interface ParamsAminoMsg {
   type: "/pryzm.icstaking.v1.Params";
@@ -54,7 +54,7 @@ export interface StakingParamsProtoMsg {
 /** StakingParams defines the parameters related to staking on each host chain */
 export interface StakingParamsAmino {
   /** the amount of operation fees */
-  fee_ratios?: FeeRatiosAmino;
+  fee_ratios: FeeRatiosAmino;
   /** the interval in which PRYZM sends delegation messages to the host chain */
   delegation_interval?: DurationAmino;
   /**
@@ -66,7 +66,7 @@ export interface StakingParamsAmino {
   ibc_transfer_timeout?: DurationAmino;
   /** the time-out value being set on ica messages */
   ica_timeout?: DurationAmino;
-  rebalance_params?: RebalanceParamsAmino;
+  rebalance_params: RebalanceParamsAmino;
 }
 export interface StakingParamsAminoMsg {
   type: "/pryzm.icstaking.v1.StakingParams";
@@ -136,7 +136,7 @@ export interface RebalanceParamsProtoMsg {
 /** RebalanceParams contains the parameters for re-balancing a host chain's validator delegation weights */
 export interface RebalanceParamsAmino {
   /** the maximum number of redelegation messages sent to the host chain in each rebalance operation */
-  max_msgs?: number;
+  max_msgs: number;
   /** the minimum divergence a validator delegation weight must have with the expected weight to start rebalance operation */
   rebalance_threshold?: string;
   /** the minimum amount of assets for each redelegation message sent to a host chain */

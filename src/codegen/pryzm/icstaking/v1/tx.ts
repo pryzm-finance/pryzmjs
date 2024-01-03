@@ -62,7 +62,7 @@ export interface MsgUpdateParamsProtoMsg {
 }
 export interface MsgUpdateParamsAmino {
   authority?: string;
-  params?: ParamsAmino;
+  params: ParamsAmino;
 }
 export interface MsgUpdateParamsAminoMsg {
   type: "pryzm/icstaking/v1/UpdateParams";
@@ -93,7 +93,7 @@ export interface MsgRegisterHostChainProtoMsg {
 }
 export interface MsgRegisterHostChainAmino {
   creator?: string;
-  host_chain?: HostChainAmino;
+  host_chain: HostChainAmino;
 }
 export interface MsgRegisterHostChainAminoMsg {
   type: "pryzm/icstaking/v1/RegisterHostChain";
@@ -127,8 +127,8 @@ export interface MsgUpdateHostChainProtoMsg {
 export interface MsgUpdateHostChainAmino {
   creator?: string;
   host_chain_id?: string;
-  validators?: ValidatorAmino[];
-  params?: StakingParamsAmino;
+  validators: ValidatorAmino[];
+  params: StakingParamsAmino;
 }
 export interface MsgUpdateHostChainAminoMsg {
   type: "pryzm/icstaking/v1/UpdateHostChain";
@@ -165,7 +165,7 @@ export interface MsgStakeAmino {
   creator?: string;
   host_chain?: string;
   transfer_channel?: string;
-  amount?: string;
+  amount: string;
 }
 export interface MsgStakeAminoMsg {
   type: "pryzm/icstaking/v1/Stake";
@@ -211,7 +211,7 @@ export interface MsgUnstakeAmino {
   creator?: string;
   host_chain?: string;
   transfer_channel?: string;
-  c_amount?: string;
+  c_amount: string;
 }
 export interface MsgUnstakeAminoMsg {
   type: "pryzm/icstaking/v1/Unstake";
@@ -255,8 +255,8 @@ export interface MsgRedeemUnstakedAmino {
   creator?: string;
   host_chain?: string;
   transfer_channel?: string;
-  u_amount?: string;
-  epoch?: string;
+  u_amount: string;
+  epoch: string;
 }
 export interface MsgRedeemUnstakedAminoMsg {
   type: "pryzm/icstaking/v1/RedeemUnstaked";
@@ -304,8 +304,8 @@ export interface MsgInstantUnstakeAmino {
   creator?: string;
   host_chain?: string;
   transfer_channel?: string;
-  min_c_amount?: string;
-  max_c_amount?: string;
+  min_c_amount: string;
+  max_c_amount: string;
 }
 export interface MsgInstantUnstakeAminoMsg {
   type: "pryzm/icstaking/v1/InstantUnstake";
@@ -381,7 +381,7 @@ export interface MsgRegisterInterchainAccountProtoMsg {
 export interface MsgRegisterInterchainAccountAmino {
   creator?: string;
   host_chain?: string;
-  registration_type?: ICARegistrationType;
+  registration_type: ICARegistrationType;
 }
 export interface MsgRegisterInterchainAccountAminoMsg {
   type: "pryzm/icstaking/v1/RegInterchainAccount";

@@ -12,7 +12,7 @@ export interface ParamsProtoMsg {
 }
 /** Params defines the parameters for the module. */
 export interface ParamsAmino {
-  unbonding_period?: DurationAmino;
+  unbonding_period: DurationAmino;
 }
 export interface ParamsAminoMsg {
   type: "/pryzm.incentives.v1.Params";

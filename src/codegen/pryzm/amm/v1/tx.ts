@@ -25,7 +25,7 @@ export interface MsgSingleSwapProtoMsg {
 }
 export interface MsgSingleSwapAmino {
   creator?: string;
-  swap?: SwapAmino;
+  swap: SwapAmino;
   max_amount_in?: string;
   min_amount_out?: string;
 }
@@ -77,6 +77,7 @@ export interface MsgJoinAllTokensExactLpt {
   creator: string;
   poolId: bigint;
   lptOut: string;
+  /** is not casted to coins, to allow for zero limits */
   maxAmountsIn: Coin[];
 }
 export interface MsgJoinAllTokensExactLptProtoMsg {
@@ -85,9 +86,10 @@ export interface MsgJoinAllTokensExactLptProtoMsg {
 }
 export interface MsgJoinAllTokensExactLptAmino {
   creator?: string;
-  pool_id?: string;
+  pool_id: string;
   lpt_out?: string;
-  max_amounts_in?: CoinAmino[];
+  /** is not casted to coins, to allow for zero limits */
+  max_amounts_in: CoinAmino[];
 }
 export interface MsgJoinAllTokensExactLptAminoMsg {
   type: "pryzm/amm/v1/JoinAllTokensExactLpt";
@@ -135,7 +137,7 @@ export interface MsgJoinTokenExactLptProtoMsg {
 }
 export interface MsgJoinTokenExactLptAmino {
   creator?: string;
-  pool_id?: string;
+  pool_id: string;
   lpt_out?: string;
   token_in?: string;
   max_amount_in?: string;
@@ -189,7 +191,7 @@ export interface MsgJoinExactTokensProtoMsg {
 }
 export interface MsgJoinExactTokensAmino {
   creator?: string;
-  pool_id?: string;
+  pool_id: string;
   amounts_in?: CoinAmino[];
   min_lpt_out?: string;
 }
@@ -293,7 +295,7 @@ export interface MsgExitExactTokensProtoMsg {
 }
 export interface MsgExitExactTokensAmino {
   creator?: string;
-  pool_id?: string;
+  pool_id: string;
   amounts_out?: CoinAmino[];
   max_lpt_in?: string;
 }
@@ -346,7 +348,7 @@ export interface MsgExitTokenExactLptProtoMsg {
 }
 export interface MsgExitTokenExactLptAmino {
   creator?: string;
-  pool_id?: string;
+  pool_id: string;
   lpt_in?: string;
   token_out?: string;
   min_amount_out?: string;
@@ -400,9 +402,9 @@ export interface MsgExitAllTokensExactLptProtoMsg {
 }
 export interface MsgExitAllTokensExactLptAmino {
   creator?: string;
-  pool_id?: string;
+  pool_id: string;
   lpt_in?: string;
-  min_amounts_out?: CoinAmino[];
+  min_amounts_out: CoinAmino[];
 }
 export interface MsgExitAllTokensExactLptAminoMsg {
   type: "pryzm/amm/v1/ExitAllTokensExactLpt";
@@ -475,11 +477,11 @@ export interface MsgCreateWeightedPoolAmino {
   creator?: string;
   name?: string;
   swap_fee_ratio?: string;
-  pause_window_duration_millis?: string;
-  pause_buffer_duration_millis?: string;
+  pause_window_duration_millis: string;
+  pause_buffer_duration_millis: string;
   tokens?: CreateWeightedPoolTokenAmino[];
   /** if not empty, only these addresses can initialize the pool */
-  initialization_allow_list?: string[];
+  initialization_allow_list: string[];
 }
 export interface MsgCreateWeightedPoolAminoMsg {
   type: "pryzm/amm/v1/CreateWeightedPool";
@@ -522,7 +524,7 @@ export interface MsgUpdateSwapFeeProtoMsg {
 }
 export interface MsgUpdateSwapFeeAmino {
   creator?: string;
-  pool_id?: string;
+  pool_id: string;
   swap_fee_ratio?: string;
 }
 export interface MsgUpdateSwapFeeAminoMsg {
@@ -556,7 +558,7 @@ export interface MsgInitializePoolProtoMsg {
 }
 export interface MsgInitializePoolAmino {
   creator?: string;
-  pool_id?: string;
+  pool_id: string;
   amounts_in?: CoinAmino[];
 }
 export interface MsgInitializePoolAminoMsg {
@@ -604,10 +606,10 @@ export interface MsgUpdateWeightsProtoMsg {
 }
 export interface MsgUpdateWeightsAmino {
   creator?: string;
-  pool_id?: string;
+  pool_id: string;
   token_weights?: TokenWeightAmino[];
-  start_time_unix_millis?: string;
-  end_time_unix_millis?: string;
+  start_time_unix_millis: string;
+  end_time_unix_millis: string;
 }
 export interface MsgUpdateWeightsAminoMsg {
   type: "pryzm/amm/v1/UpdateWeights";
@@ -636,6 +638,7 @@ export interface MsgBatchSwap {
   swapType: SwapType;
   steps: SwapStep[];
   minAmountsOut: Coin[];
+  /** is not casted to coins, to allow for zero limits */
   maxAmountsIn: Coin[];
 }
 export interface MsgBatchSwapProtoMsg {
@@ -644,10 +647,11 @@ export interface MsgBatchSwapProtoMsg {
 }
 export interface MsgBatchSwapAmino {
   creator?: string;
-  swap_type?: SwapType;
+  swap_type: SwapType;
   steps?: SwapStepAmino[];
-  min_amounts_out?: CoinAmino[];
-  max_amounts_in?: CoinAmino[];
+  min_amounts_out: CoinAmino[];
+  /** is not casted to coins, to allow for zero limits */
+  max_amounts_in: CoinAmino[];
 }
 export interface MsgBatchSwapAminoMsg {
   type: "pryzm/amm/v1/BatchSwap";
@@ -707,7 +711,7 @@ export interface MsgSetYammConfigurationProtoMsg {
 }
 export interface MsgSetYammConfigurationAmino {
   creator?: string;
-  configuration?: YammConfigurationAmino;
+  configuration: YammConfigurationAmino;
 }
 export interface MsgSetYammConfigurationAminoMsg {
   type: "pryzm/amm/v1/SetYammConfiguration";
@@ -738,7 +742,7 @@ export interface MsgWhitelistRouteProtoMsg {
 }
 export interface MsgWhitelistRouteAmino {
   authority?: string;
-  whitelisted_route?: WhitelistedRouteAmino;
+  whitelisted_route: WhitelistedRouteAmino;
 }
 export interface MsgWhitelistRouteAminoMsg {
   type: "pryzm/amm/v1/WhitelistRoute";
@@ -773,7 +777,7 @@ export interface MsgSetWhitelistedRouteEnabledAmino {
   authority?: string;
   token_in?: string;
   token_out?: string;
-  enabled?: boolean;
+  enabled: boolean;
 }
 export interface MsgSetWhitelistedRouteEnabledAminoMsg {
   type: "pryzm/amm/v1/SetWhitelistedRouteEnabled";
@@ -815,14 +819,14 @@ export interface MsgSubmitOrderProtoMsg {
 }
 export interface MsgSubmitOrderAmino {
   creator?: string;
-  pool_id?: string;
+  pool_id: string;
   token_in?: string;
   token_out?: string;
-  whitelisted_route?: boolean;
-  allow_matching?: boolean;
+  whitelisted_route: boolean;
+  allow_matching: boolean;
   amount_per_step?: string;
   total_amount?: string;
-  millis_interval?: string;
+  millis_interval: string;
   max_step_spot_price?: string;
   max_matching_spot_price?: string;
 }
@@ -870,7 +874,7 @@ export interface MsgCancelOrderProtoMsg {
 }
 export interface MsgCancelOrderAmino {
   creator?: string;
-  id?: string;
+  id: string;
 }
 export interface MsgCancelOrderAminoMsg {
   type: "pryzm/amm/v1/CancelOrder";
@@ -907,7 +911,7 @@ export interface MsgProposeMatchProtoMsg {
 }
 export interface MsgProposeMatchAmino {
   creator?: string;
-  pairs?: PairMatchProposalAmino[];
+  pairs: PairMatchProposalAmino[];
 }
 export interface MsgProposeMatchAminoMsg {
   type: "pryzm/amm/v1/ProposeMatch";
@@ -945,8 +949,8 @@ export interface MsgSetCircuitBreakersProtoMsg {
 }
 export interface MsgSetCircuitBreakersAmino {
   creator?: string;
-  pool_id?: string;
-  token_circuit_breakers?: TokenCircuitBreakerSettingsAmino[];
+  pool_id: string;
+  token_circuit_breakers: TokenCircuitBreakerSettingsAmino[];
 }
 export interface MsgSetCircuitBreakersAminoMsg {
   type: "pryzm/amm/v1/SetCircuitBreakers";
@@ -979,8 +983,8 @@ export interface MsgSetRecoveryModeProtoMsg {
 }
 export interface MsgSetRecoveryModeAmino {
   authority?: string;
-  pool_id?: string;
-  recovery_mode?: boolean;
+  pool_id: string;
+  recovery_mode: boolean;
 }
 export interface MsgSetRecoveryModeAminoMsg {
   type: "pryzm/amm/v1/SetRecoveryMode";
@@ -1014,9 +1018,9 @@ export interface MsgRecoveryExitProtoMsg {
 }
 export interface MsgRecoveryExitAmino {
   creator?: string;
-  pool_id?: string;
+  pool_id: string;
   lpt_in?: string;
-  min_amounts_out?: CoinAmino[];
+  min_amounts_out: CoinAmino[];
 }
 export interface MsgRecoveryExitAminoMsg {
   type: "pryzm/amm/v1/RecoveryExit";
@@ -1059,8 +1063,8 @@ export interface MsgSetPauseModeProtoMsg {
 }
 export interface MsgSetPauseModeAmino {
   creator?: string;
-  pool_id?: string;
-  pause_mode?: boolean;
+  pool_id: string;
+  pause_mode: boolean;
 }
 export interface MsgSetPauseModeAminoMsg {
   type: "pryzm/amm/v1/SetPauseMode";
@@ -1092,7 +1096,7 @@ export interface MsgSetVaultPauseModeProtoMsg {
 }
 export interface MsgSetVaultPauseModeAmino {
   authority?: string;
-  pause_mode?: boolean;
+  pause_mode: boolean;
 }
 export interface MsgSetVaultPauseModeAminoMsg {
   type: "pryzm/amm/v1/SetVaultPauseMode";
@@ -1123,7 +1127,7 @@ export interface MsgCreateOraclePricePairProtoMsg {
 }
 export interface MsgCreateOraclePricePairAmino {
   authority?: string;
-  oracle_price_pair?: OraclePricePairAmino;
+  oracle_price_pair: OraclePricePairAmino;
 }
 export interface MsgCreateOraclePricePairAminoMsg {
   type: "pryzm/amm/v1/CreateOraclePricePair";
@@ -1154,7 +1158,7 @@ export interface MsgUpdateOraclePricePairProtoMsg {
 }
 export interface MsgUpdateOraclePricePairAmino {
   authority?: string;
-  oracle_price_pair?: OraclePricePairAmino;
+  oracle_price_pair: OraclePricePairAmino;
 }
 export interface MsgUpdateOraclePricePairAminoMsg {
   type: "pryzm/amm/v1/UpdateOraclePricePair";
@@ -1218,7 +1222,7 @@ export interface MsgSetSwapProtocolFeeProtoMsg {
 }
 export interface MsgSetSwapProtocolFeeAmino {
   authority?: string;
-  pool_id?: string;
+  pool_id: string;
   /** if protocol fee parameters are nil, then the values are read from treasury module parameters */
   swap_protocol_fee?: string;
 }
@@ -1254,7 +1258,7 @@ export interface MsgSetJoinExitProtocolFeeProtoMsg {
 }
 export interface MsgSetJoinExitProtocolFeeAmino {
   authority?: string;
-  pool_id?: string;
+  pool_id: string;
   /** if protocol fee parameters are nil, then the values are read from treasury module parameters */
   join_exit_protocol_fee?: string;
 }
@@ -1291,10 +1295,10 @@ export interface MsgIntroduceYammLpToWeightedPoolProtoMsg {
 }
 export interface MsgIntroduceYammLpToWeightedPoolAmino {
   creator?: string;
-  weighted_pool_id?: string;
-  yamm_pool_id?: string;
+  weighted_pool_id: string;
+  yamm_pool_id: string;
   token_normalized_weight?: string;
-  virtual_balance_interval_millis?: string;
+  virtual_balance_interval_millis: string;
 }
 export interface MsgIntroduceYammLpToWeightedPoolAminoMsg {
   type: "pryzm/amm/v1/IntroYammLpToWeighted";
@@ -1332,11 +1336,11 @@ export interface MsgIntroduceAssetBaseTokenToWeightedPoolProtoMsg {
 }
 export interface MsgIntroduceAssetBaseTokenToWeightedPoolAmino {
   creator?: string;
-  weighted_pool_id?: string;
+  weighted_pool_id: string;
   token_denom?: string;
   asset_id?: string;
   token_normalized_weight?: string;
-  virtual_balance_interval_millis?: string;
+  virtual_balance_interval_millis: string;
 }
 export interface MsgIntroduceAssetBaseTokenToWeightedPoolAminoMsg {
   type: "pryzm/amm/v1/IntroBaseTokenToWeighted";
@@ -1373,7 +1377,7 @@ export interface MsgCancelPendingTokenIntroductionProtoMsg {
 export interface MsgCancelPendingTokenIntroductionAmino {
   creator?: string;
   asset_id?: string;
-  target_pool_id?: string;
+  target_pool_id: string;
 }
 export interface MsgCancelPendingTokenIntroductionAminoMsg {
   type: "pryzm/amm/v1/CancelPendingTokenIntro";
@@ -1407,9 +1411,9 @@ export interface MsgRemoveTokenFromWeightedPoolProtoMsg {
 }
 export interface MsgRemoveTokenFromWeightedPoolAmino {
   creator?: string;
-  pool_id?: string;
+  pool_id: string;
   token_denom?: string;
-  virtual_balance_interval_millis?: string;
+  virtual_balance_interval_millis: string;
 }
 export interface MsgRemoveTokenFromWeightedPoolAminoMsg {
   type: "pryzm/amm/v1/RemoveTokenFromWeighted";
@@ -1517,8 +1521,8 @@ export interface MsgSetInitializationAllowListProtoMsg {
 }
 export interface MsgSetInitializationAllowListAmino {
   creator?: string;
-  pool_id?: string;
-  initialization_allow_list?: string[];
+  pool_id: string;
+  initialization_allow_list: string[];
 }
 export interface MsgSetInitializationAllowListAminoMsg {
   type: "pryzm/amm/v1/SetInitializationAllowList";
@@ -1551,8 +1555,8 @@ export interface MsgSetPoolAdminsProtoMsg {
 }
 export interface MsgSetPoolAdminsAmino {
   creator?: string;
-  pool_id?: string;
-  admins?: string[];
+  pool_id: string;
+  admins: string[];
 }
 export interface MsgSetPoolAdminsAminoMsg {
   type: "pryzm/amm/v1/SetPoolAdmins";
@@ -1585,8 +1589,8 @@ export interface MsgSetPauseAllowListProtoMsg {
 }
 export interface MsgSetPauseAllowListAmino {
   creator?: string;
-  pool_id?: string;
-  pause_allow_list?: string[];
+  pool_id: string;
+  pause_allow_list: string[];
 }
 export interface MsgSetPauseAllowListAminoMsg {
   type: "pryzm/amm/v1/SetPauseAllowList";
@@ -1619,8 +1623,8 @@ export interface MsgSetPauseWindowProtoMsg {
 }
 export interface MsgSetPauseWindowAmino {
   authority?: string;
-  pool_id?: string;
-  pause_window?: PoolPauseWindowAmino;
+  pool_id: string;
+  pause_window: PoolPauseWindowAmino;
 }
 export interface MsgSetPauseWindowAminoMsg {
   type: "pryzm/amm/v1/SetPauseWindow";

@@ -27,12 +27,12 @@ export interface RefractableAssetAmino {
   /** The denomination of the token on Pryzm. This may be an icstaking cToken or an IBC transferred token denom for external assets. */
   token_denom?: string;
   /** The id for the host chain on which the asset is staked. This is empty if the asset is external. */
-  host_chain_id?: string;
+  host_chain_id: string;
   /** Disabled assets cannot be refracted, but can still be redeemed. */
-  disabled?: boolean;
-  maturity_params?: MaturityParamsAmino;
+  disabled: boolean;
+  maturity_params: MaturityParamsAmino;
   /** The amount of fee for each operation on the asset. */
-  fee_ratios?: FeeRatiosAmino;
+  fee_ratios: FeeRatiosAmino;
 }
 export interface RefractableAssetAminoMsg {
   type: "/pryzm.assets.v1.RefractableAsset";
@@ -61,9 +61,9 @@ export interface MaturityParamsProtoMsg {
 /** The parameters based on which new maturities are introduced */
 export interface MaturityParamsAmino {
   /** The number of maturities per year: can be 1, 2, 4, 12 */
-  levels_per_year?: number;
+  levels_per_year: number;
   /** The number of years in advance that maturities are made available for */
-  years?: number;
+  years: number;
 }
 export interface MaturityParamsAminoMsg {
   type: "/pryzm.assets.v1.MaturityParams";

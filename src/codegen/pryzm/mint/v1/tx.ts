@@ -13,7 +13,7 @@ export interface MsgUpdateParamsProtoMsg {
 }
 export interface MsgUpdateParamsAmino {
   authority?: string;
-  params?: ParamsAmino;
+  params: ParamsAmino;
 }
 export interface MsgUpdateParamsAminoMsg {
   type: "pryzm/mint/v1/UpdateParams";
@@ -47,10 +47,10 @@ export interface MsgDappAccountSpendProtoMsg {
 }
 export interface MsgDappAccountSpendAmino {
   authority?: string;
-  title?: string;
-  description?: string;
+  title: string;
+  description: string;
   recipient?: string;
-  amount?: CoinAmino[];
+  amount: CoinAmino[];
 }
 export interface MsgDappAccountSpendAminoMsg {
   type: "pryzm/mint/v1/DappAccountSpend";

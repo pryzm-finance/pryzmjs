@@ -116,7 +116,7 @@ export interface ParamsAmino {
   /** mint epoch identifier e.g. (day, week). */
   epoch_identifier?: string;
   /** start epoch to distribute minting rewards */
-  minting_rewards_distribution_start_epoch?: string;
+  minting_rewards_distribution_start_epoch: string;
   /**
    * defines the distribution proportions of the minted
    * denom, i.e, which stakeholders will receive the minted

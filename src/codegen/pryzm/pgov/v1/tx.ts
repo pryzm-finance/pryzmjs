@@ -14,7 +14,7 @@ export interface MsgUpdateParamsProtoMsg {
 }
 export interface MsgUpdateParamsAmino {
   authority?: string;
-  params?: ParamsAmino;
+  params: ParamsAmino;
 }
 export interface MsgUpdateParamsAminoMsg {
   type: "pryzm/pgov/v1/UpdateParams";
@@ -45,7 +45,7 @@ export interface MsgStakePAssetsProtoMsg {
 }
 export interface MsgStakePAssetsAmino {
   creator?: string;
-  amount?: CoinAmino[];
+  amount: CoinAmino[];
 }
 export interface MsgStakePAssetsAminoMsg {
   type: "pryzm/pgov/v1/StakePAssets";
@@ -82,7 +82,7 @@ export interface MsgUnstakePAssetsProtoMsg {
 }
 export interface MsgUnstakePAssetsAmino {
   creator?: string;
-  amount?: CoinAmino[];
+  amount: CoinAmino[];
 }
 export interface MsgUnstakePAssetsAminoMsg {
   type: "pryzm/pgov/v1/UnstakePAssets";
@@ -122,8 +122,8 @@ export interface MsgSubmitVoteProtoMsg {
 export interface MsgSubmitVoteAmino {
   voter?: string;
   asset?: string;
-  proposal?: string;
-  options?: WeightedVoteOptionAmino[];
+  proposal: string;
+  options: WeightedVoteOptionAmino[];
 }
 export interface MsgSubmitVoteAminoMsg {
   type: "pryzm/pgov/v1/SubmitVote";
@@ -160,9 +160,9 @@ export interface MsgSubmitProposalProtoMsg {
 export interface MsgSubmitProposalAmino {
   creator?: string;
   asset?: string;
-  proposal?: string;
-  height?: string;
-  proof?: ProofOpsAmino;
+  proposal: string;
+  height: string;
+  proof: ProofOpsAmino;
 }
 export interface MsgSubmitProposalAminoMsg {
   type: "pryzm/pgov/v1/SubmitProposal";
@@ -204,7 +204,7 @@ export interface MsgRetryVoteTransmitProtoMsg {
 export interface MsgRetryVoteTransmitAmino {
   creator?: string;
   asset?: string;
-  proposal?: string;
+  proposal: string;
 }
 export interface MsgRetryVoteTransmitAminoMsg {
   type: "pryzm/pgov/v1/RetryVoteTransmit";

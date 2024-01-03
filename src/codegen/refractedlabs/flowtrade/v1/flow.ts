@@ -266,11 +266,11 @@ export interface FlowInfoProtoMsg {
 /** Informational data about the flow */
 export interface FlowInfoAmino {
   /** a name of the flow */
-  name?: string;
+  name: string;
   /** a short description about the flow */
-  description?: string;
+  description: string;
   /** a referring url */
-  url?: string;
+  url: string;
 }
 export interface FlowInfoAminoMsg {
   type: "/refractedlabs.flowtrade.v1.FlowInfo";
@@ -332,45 +332,45 @@ export interface FlowCreationRequestProtoMsg {
 /** a structure for requesting a new flow's creation */
 export interface FlowCreationRequestAmino {
   /** informational data about the flow */
-  flow_info?: FlowInfoAmino;
+  flow_info: FlowInfoAmino;
   /** the time that swap distribution starts */
-  start_time?: string;
+  start_time: string;
   /** the time that flow is ended */
-  end_time?: string;
+  end_time: string;
   /**
    * the interval in which the distribution index is updated and hence tokens are swapped
    * if dist_interval is 0, the flow is updated every time in or out tokens are increased or decreased
    * if dist_interval is equal to the duration of flow, it means that all of the tokens are swapped once after the flow ends
    */
-  dist_interval?: DurationAmino;
+  dist_interval: DurationAmino;
   /** the address that the swapped tokens are sent to after the flow ends */
-  treasury_address?: string;
+  treasury_address: string;
   /** total amount creator provided to be swapped */
-  tokens_out?: CoinAmino;
+  tokens_out: CoinAmino;
   /** the accepted token to buy the out tokens */
   token_in_denom?: string;
   /** the time from then the flow buyers can claim their purchased tokens */
-  token_out_claimable_after?: string;
+  token_out_claimable_after: string;
   /** the time from then the flow creator can claim the swapped tokens */
-  token_in_claimable_after?: string;
+  token_in_claimable_after: string;
   /** whether the flow can be stopped by the flow's creator */
-  stoppable?: boolean;
+  stoppable: boolean;
   /** whether to allow buyers to claim their tokens immediately after the flow is stopped */
-  allow_immediate_token_out_claim_if_stopped?: boolean;
+  allow_immediate_token_out_claim_if_stopped: boolean;
   /** whether to allow flow's creator to claim tokens immediately after the flow is stopped */
-  allow_immediate_token_in_claim_if_stopped?: boolean;
+  allow_immediate_token_in_claim_if_stopped: boolean;
   /**
    * the minimum price for the token-out in terms of token-in.
    * in each swap interval, if the calculated price is less than this limit, the swap doesn't happen in that turn
    * Since: v0.4
    */
-  limit_price?: string;
+  limit_price: string;
   /**
    * the duration of the exit window before swap interval, in which users can only exit the flow and joining is not permitted
    * this duration is used to protect joiners from buying the token-out with a higher price when someone joins with a huge amount of token-in
    * Since: v0.4
    */
-  exit_window_duration?: DurationAmino;
+  exit_window_duration: DurationAmino;
 }
 export interface FlowCreationRequestAminoMsg {
   type: "/refractedlabs.flowtrade.v1.FlowCreationRequest";
