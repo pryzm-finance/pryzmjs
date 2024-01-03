@@ -13,8 +13,8 @@ option go_package = "github.com/pryzm-finance/pryzmatics/server/flowtrade";
 enum FlowStatus {
   option (gogoproto.goproto_enum_prefix) = false;
   FLOW_STATUS_ANY = 0;
-  FLOW_STATUS_ACTIVE = 1;
-  FLOW_STATUS_ENDED = 2;
+  FLOW_STATUS_LIVE = 1;
+  FLOW_STATUS_DEAD = 2;
 }
 
 enum TokenClaimability {

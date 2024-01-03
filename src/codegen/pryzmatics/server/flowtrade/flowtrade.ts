@@ -7,8 +7,8 @@ import { isSet } from "../../../helpers";
 import { GlobalDecoderRegistry } from "../../../registry";
 export enum FlowStatus {
   FLOW_STATUS_ANY = 0,
-  FLOW_STATUS_ACTIVE = 1,
-  FLOW_STATUS_ENDED = 2,
+  FLOW_STATUS_LIVE = 1,
+  FLOW_STATUS_DEAD = 2,
   UNRECOGNIZED = -1,
 }
 export const FlowStatusSDKType = FlowStatus;
@@ -19,11 +19,11 @@ export function flowStatusFromJSON(object: any): FlowStatus {
     case "FLOW_STATUS_ANY":
       return FlowStatus.FLOW_STATUS_ANY;
     case 1:
-    case "FLOW_STATUS_ACTIVE":
-      return FlowStatus.FLOW_STATUS_ACTIVE;
+    case "FLOW_STATUS_LIVE":
+      return FlowStatus.FLOW_STATUS_LIVE;
     case 2:
-    case "FLOW_STATUS_ENDED":
-      return FlowStatus.FLOW_STATUS_ENDED;
+    case "FLOW_STATUS_DEAD":
+      return FlowStatus.FLOW_STATUS_DEAD;
     case -1:
     case "UNRECOGNIZED":
     default:
@@ -34,10 +34,10 @@ export function flowStatusToJSON(object: FlowStatus): string {
   switch (object) {
     case FlowStatus.FLOW_STATUS_ANY:
       return "FLOW_STATUS_ANY";
-    case FlowStatus.FLOW_STATUS_ACTIVE:
-      return "FLOW_STATUS_ACTIVE";
-    case FlowStatus.FLOW_STATUS_ENDED:
-      return "FLOW_STATUS_ENDED";
+    case FlowStatus.FLOW_STATUS_LIVE:
+      return "FLOW_STATUS_LIVE";
+    case FlowStatus.FLOW_STATUS_DEAD:
+      return "FLOW_STATUS_DEAD";
     case FlowStatus.UNRECOGNIZED:
     default:
       return "UNRECOGNIZED";
