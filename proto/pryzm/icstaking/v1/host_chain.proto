@@ -1,6 +1,7 @@
 syntax = "proto3";
 package pryzm.icstaking.v1;
 
+import "amino/amino.proto";
 import "cosmos_proto/cosmos.proto";
 import "gogoproto/gogo.proto";
 import "ibc/core/client/v1/client.proto";
@@ -35,7 +36,10 @@ message HostChain {
   ];
 
   // Parameters for staking/unstaking on the host chain
-  StakingParams params = 6 [(gogoproto.nullable) = false];
+  StakingParams params = 6 [
+    (gogoproto.nullable) = false,
+    (amino.dont_omitempty) = true
+  ];
 
   // list of whitelisted validators to which Pryzm sends the staked funds.
   repeated Validator validators = 7 [

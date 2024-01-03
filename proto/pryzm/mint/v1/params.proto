@@ -1,6 +1,7 @@
 syntax = "proto3";
 package pryzm.mint.v1;
 
+import "amino/amino.proto";
 import "cosmos_proto/cosmos.proto";
 import "gogoproto/gogo.proto";
 
@@ -81,7 +82,7 @@ message Params {
   string epoch_identifier = 6;
 
   // start epoch to distribute minting rewards
-  int64 minting_rewards_distribution_start_epoch = 7;
+  int64 minting_rewards_distribution_start_epoch = 7 [(amino.dont_omitempty) = true];
 
   // defines the distribution proportions of the minted
   // denom, i.e, which stakeholders will receive the minted

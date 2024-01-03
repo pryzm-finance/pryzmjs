@@ -1,13 +1,15 @@
 syntax = "proto3";
 package pryzm.amm.v1;
 
+import "amino/amino.proto";
+
 option go_package = "github.com/pryzm-finance/pryzm-core/x/amm/types/v1";
 
 message PairMatchProposal {
-  uint64 pool_id = 1;
-  bool whitelisted_route = 2;
+  uint64 pool_id = 1 [(amino.dont_omitempty) = true];
+  bool whitelisted_route = 2 [(amino.dont_omitempty) = true];
   string token_in = 3;
   string token_out = 4;
-  repeated uint64 buy_orders = 5;
-  repeated uint64 sell_orders = 6;
+  repeated uint64 buy_orders = 5 [(amino.dont_omitempty) = true];
+  repeated uint64 sell_orders = 6 [(amino.dont_omitempty) = true];
 }

@@ -1,6 +1,7 @@
 syntax = "proto3";
 package pryzm.amm.v1;
 
+import "amino/amino.proto";
 import "cosmos_proto/cosmos.proto";
 import "gogoproto/gogo.proto";
 
@@ -14,8 +15,8 @@ enum PoolType {
 }
 
 message PoolPauseWindow {
-  int64 pause_window_end_unix_millis = 1;
-  int64 buffer_period_end_unix_millis = 2;
+  int64 pause_window_end_unix_millis = 1 [(amino.dont_omitempty) = true];
+  int64 buffer_period_end_unix_millis = 2 [(amino.dont_omitempty) = true];
 }
 
 message Pool {

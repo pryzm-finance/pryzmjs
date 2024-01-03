@@ -1,6 +1,7 @@
 syntax = "proto3";
 package pryzm.treasury.v1;
 
+import "amino/amino.proto";
 import "cosmos_proto/cosmos.proto";
 import "gogoproto/gogo.proto";
 import "google/protobuf/duration.proto";
@@ -22,13 +23,15 @@ message ActionFlowTradeSettings {
   // NOTE: the flowtrade library has a parameter for minimum start delay
   google.protobuf.Duration start_delay = 1 [
     (gogoproto.nullable) = false,
-    (gogoproto.stdduration) = true
+    (gogoproto.stdduration) = true,
+    (amino.dont_omitempty) = true
   ];
 
   // given the start of the flow, this is used to compute the end of the flow
   google.protobuf.Duration duration = 2 [
     (gogoproto.nullable) = false,
-    (gogoproto.stdduration) = true
+    (gogoproto.stdduration) = true,
+    (amino.dont_omitempty) = true
   ];
 
   // the interval in which the distribution index is updated and hence tokens are swapped
@@ -36,7 +39,8 @@ message ActionFlowTradeSettings {
   // if dist_interval is equal to the duration of flow, it means that all of the tokens are swapped once after the flow ends
   google.protobuf.Duration dist_interval = 3 [
     (gogoproto.stdduration) = true,
-    (gogoproto.nullable) = false
+    (gogoproto.nullable) = false,
+    (amino.dont_omitempty) = true
   ];
 
   // the minimum price for the token-out in terms of token-in.
@@ -51,12 +55,13 @@ message ActionFlowTradeSettings {
   // this duration is used to protect joiners from buying the token-out with a higher price when someone joins with a huge amount of token-in
   google.protobuf.Duration exit_window_duration = 5 [
     (gogoproto.stdduration) = true,
-    (gogoproto.nullable) = false
+    (gogoproto.nullable) = false,
+    (amino.dont_omitempty) = true
   ];
 }
 
 message Action {
-  ActionType action_type = 1;
+  ActionType action_type = 1 [(amino.dont_omitempty) = true];
   google.protobuf.Timestamp occurrence = 2 [
     (gogoproto.stdtime) = true,
     (gogoproto.nullable) = true
@@ -76,5 +81,5 @@ message Action {
   ActionFlowTradeSettings flow_trade_settings = 5 [(gogoproto.nullable) = true];
 
   // denoms in this list will not be affected by the action
-  repeated string excluded_denoms = 6;
+  repeated string excluded_denoms = 6 [(amino.dont_omitempty) = true];
 }
