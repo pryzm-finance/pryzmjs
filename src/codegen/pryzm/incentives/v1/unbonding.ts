@@ -2,6 +2,7 @@ import { Timestamp, TimestampSDKType } from "../../../google/protobuf/timestamp"
 import { Coin, CoinAmino, CoinSDKType } from "../../../cosmos/base/v1beta1/coin";
 import { BinaryReader, BinaryWriter } from "../../../binary";
 import { isSet, fromJsonTimestamp, fromTimestamp } from "../../../helpers";
+import { GlobalDecoderRegistry } from "../../../registry";
 export interface Unbonding {
   id: bigint;
   completionTime: Timestamp;
@@ -46,6 +47,15 @@ function createBaseUnbonding(): Unbonding {
 }
 export const Unbonding = {
   typeUrl: "/pryzm.incentives.v1.Unbonding",
+  is(o: any): o is Unbonding {
+    return o && (o.$typeUrl === Unbonding.typeUrl || typeof o.id === "bigint" && Timestamp.is(o.completionTime) && typeof o.address === "string" && typeof o.treasuryAddress === "string" && Coin.is(o.amount) && typeof o.autoClaim === "boolean");
+  },
+  isSDK(o: any): o is UnbondingSDKType {
+    return o && (o.$typeUrl === Unbonding.typeUrl || typeof o.id === "bigint" && Timestamp.isSDK(o.completion_time) && typeof o.address === "string" && typeof o.treasury_address === "string" && Coin.isSDK(o.amount) && typeof o.auto_claim === "boolean");
+  },
+  isAmino(o: any): o is UnbondingAmino {
+    return o && (o.$typeUrl === Unbonding.typeUrl || typeof o.id === "bigint" && Timestamp.isAmino(o.completion_time) && typeof o.address === "string" && typeof o.treasury_address === "string" && Coin.isAmino(o.amount) && typeof o.auto_claim === "boolean");
+  },
   encode(message: Unbonding, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.id !== BigInt(0)) {
       writer.uint32(8).uint64(message.id);
@@ -67,7 +77,7 @@ export const Unbonding = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): Unbonding {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): Unbonding {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseUnbonding();
@@ -87,7 +97,7 @@ export const Unbonding = {
           message.treasuryAddress = reader.string();
           break;
         case 5:
-          message.amount = Coin.decode(reader, reader.uint32());
+          message.amount = Coin.decode(reader, reader.uint32(), useInterfaces);
           break;
         case 6:
           message.autoClaim = reader.bool();
@@ -151,21 +161,21 @@ export const Unbonding = {
     }
     return message;
   },
-  toAmino(message: Unbonding): UnbondingAmino {
+  toAmino(message: Unbonding, useInterfaces: boolean = true): UnbondingAmino {
     const obj: any = {};
     obj.id = message.id ? message.id.toString() : undefined;
-    obj.completion_time = message.completionTime ? Timestamp.toAmino(message.completionTime) : undefined;
-    obj.address = message.address;
-    obj.treasury_address = message.treasuryAddress;
-    obj.amount = message.amount ? Coin.toAmino(message.amount) : undefined;
-    obj.auto_claim = message.autoClaim;
+    obj.completion_time = message.completionTime ? Timestamp.toAmino(message.completionTime, useInterfaces) : undefined;
+    obj.address = message.address === "" ? undefined : message.address;
+    obj.treasury_address = message.treasuryAddress === "" ? undefined : message.treasuryAddress;
+    obj.amount = message.amount ? Coin.toAmino(message.amount, useInterfaces) : undefined;
+    obj.auto_claim = message.autoClaim === false ? undefined : message.autoClaim;
     return obj;
   },
   fromAminoMsg(object: UnbondingAminoMsg): Unbonding {
     return Unbonding.fromAmino(object.value);
   },
-  fromProtoMsg(message: UnbondingProtoMsg): Unbonding {
-    return Unbonding.decode(message.value);
+  fromProtoMsg(message: UnbondingProtoMsg, useInterfaces: boolean = true): Unbonding {
+    return Unbonding.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: Unbonding): Uint8Array {
     return Unbonding.encode(message).finish();
@@ -177,3 +187,4 @@ export const Unbonding = {
     };
   }
 };
+GlobalDecoderRegistry.register(Unbonding.typeUrl, Unbonding);

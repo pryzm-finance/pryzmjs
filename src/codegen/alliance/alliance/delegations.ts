@@ -2,7 +2,8 @@ import { RewardHistory, RewardHistoryAmino, RewardHistorySDKType } from "./param
 import { Coin, CoinAmino, CoinSDKType, DecCoin, DecCoinAmino, DecCoinSDKType } from "../../cosmos/base/v1beta1/coin";
 import { BinaryReader, BinaryWriter } from "../../binary";
 import { Decimal } from "@cosmjs/math";
-import { isSet } from "../../helpers";
+import { isSet, padDecimal } from "../../helpers";
+import { GlobalDecoderRegistry } from "../../registry";
 export interface Delegation {
   /** delegator_address is the bech32-encoded address of the delegator. */
   delegatorAddress: string;
@@ -118,6 +119,15 @@ function createBaseDelegation(): Delegation {
 }
 export const Delegation = {
   typeUrl: "/alliance.alliance.Delegation",
+  is(o: any): o is Delegation {
+    return o && (o.$typeUrl === Delegation.typeUrl || typeof o.delegatorAddress === "string" && typeof o.validatorAddress === "string" && typeof o.denom === "string" && typeof o.shares === "string" && Array.isArray(o.rewardHistory) && (!o.rewardHistory.length || RewardHistory.is(o.rewardHistory[0])) && typeof o.lastRewardClaimHeight === "bigint");
+  },
+  isSDK(o: any): o is DelegationSDKType {
+    return o && (o.$typeUrl === Delegation.typeUrl || typeof o.delegator_address === "string" && typeof o.validator_address === "string" && typeof o.denom === "string" && typeof o.shares === "string" && Array.isArray(o.reward_history) && (!o.reward_history.length || RewardHistory.isSDK(o.reward_history[0])) && typeof o.last_reward_claim_height === "bigint");
+  },
+  isAmino(o: any): o is DelegationAmino {
+    return o && (o.$typeUrl === Delegation.typeUrl || typeof o.delegator_address === "string" && typeof o.validator_address === "string" && typeof o.denom === "string" && typeof o.shares === "string" && Array.isArray(o.reward_history) && (!o.reward_history.length || RewardHistory.isAmino(o.reward_history[0])) && typeof o.last_reward_claim_height === "bigint");
+  },
   encode(message: Delegation, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.delegatorAddress !== "") {
       writer.uint32(10).string(message.delegatorAddress);
@@ -139,7 +149,7 @@ export const Delegation = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): Delegation {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): Delegation {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseDelegation();
@@ -159,7 +169,7 @@ export const Delegation = {
           message.shares = Decimal.fromAtomics(reader.string(), 18).toString();
           break;
         case 5:
-          message.rewardHistory.push(RewardHistory.decode(reader, reader.uint32()));
+          message.rewardHistory.push(RewardHistory.decode(reader, reader.uint32(), useInterfaces));
           break;
         case 6:
           message.lastRewardClaimHeight = reader.uint64();
@@ -225,16 +235,16 @@ export const Delegation = {
     }
     return message;
   },
-  toAmino(message: Delegation): DelegationAmino {
+  toAmino(message: Delegation, useInterfaces: boolean = true): DelegationAmino {
     const obj: any = {};
-    obj.delegator_address = message.delegatorAddress;
-    obj.validator_address = message.validatorAddress;
-    obj.denom = message.denom;
-    obj.shares = message.shares;
+    obj.delegator_address = message.delegatorAddress === "" ? undefined : message.delegatorAddress;
+    obj.validator_address = message.validatorAddress === "" ? undefined : message.validatorAddress;
+    obj.denom = message.denom === "" ? undefined : message.denom;
+    obj.shares = padDecimal(message.shares) === "" ? undefined : padDecimal(message.shares);
     if (message.rewardHistory) {
-      obj.reward_history = message.rewardHistory.map(e => e ? RewardHistory.toAmino(e) : undefined);
+      obj.reward_history = message.rewardHistory.map(e => e ? RewardHistory.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.reward_history = [];
+      obj.reward_history = message.rewardHistory;
     }
     obj.last_reward_claim_height = message.lastRewardClaimHeight ? message.lastRewardClaimHeight.toString() : undefined;
     return obj;
@@ -242,8 +252,8 @@ export const Delegation = {
   fromAminoMsg(object: DelegationAminoMsg): Delegation {
     return Delegation.fromAmino(object.value);
   },
-  fromProtoMsg(message: DelegationProtoMsg): Delegation {
-    return Delegation.decode(message.value);
+  fromProtoMsg(message: DelegationProtoMsg, useInterfaces: boolean = true): Delegation {
+    return Delegation.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: Delegation): Uint8Array {
     return Delegation.encode(message).finish();
@@ -255,6 +265,7 @@ export const Delegation = {
     };
   }
 };
+GlobalDecoderRegistry.register(Delegation.typeUrl, Delegation);
 function createBaseUndelegation(): Undelegation {
   return {
     delegatorAddress: "",
@@ -264,6 +275,15 @@ function createBaseUndelegation(): Undelegation {
 }
 export const Undelegation = {
   typeUrl: "/alliance.alliance.Undelegation",
+  is(o: any): o is Undelegation {
+    return o && (o.$typeUrl === Undelegation.typeUrl || typeof o.delegatorAddress === "string" && typeof o.validatorAddress === "string" && Coin.is(o.balance));
+  },
+  isSDK(o: any): o is UndelegationSDKType {
+    return o && (o.$typeUrl === Undelegation.typeUrl || typeof o.delegator_address === "string" && typeof o.validator_address === "string" && Coin.isSDK(o.balance));
+  },
+  isAmino(o: any): o is UndelegationAmino {
+    return o && (o.$typeUrl === Undelegation.typeUrl || typeof o.delegator_address === "string" && typeof o.validator_address === "string" && Coin.isAmino(o.balance));
+  },
   encode(message: Undelegation, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.delegatorAddress !== "") {
       writer.uint32(10).string(message.delegatorAddress);
@@ -276,7 +296,7 @@ export const Undelegation = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): Undelegation {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): Undelegation {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseUndelegation();
@@ -290,7 +310,7 @@ export const Undelegation = {
           message.validatorAddress = reader.string();
           break;
         case 3:
-          message.balance = Coin.decode(reader, reader.uint32());
+          message.balance = Coin.decode(reader, reader.uint32(), useInterfaces);
           break;
         default:
           reader.skipType(tag & 7);
@@ -333,18 +353,18 @@ export const Undelegation = {
     }
     return message;
   },
-  toAmino(message: Undelegation): UndelegationAmino {
+  toAmino(message: Undelegation, useInterfaces: boolean = true): UndelegationAmino {
     const obj: any = {};
-    obj.delegator_address = message.delegatorAddress;
-    obj.validator_address = message.validatorAddress;
-    obj.balance = message.balance ? Coin.toAmino(message.balance) : undefined;
+    obj.delegator_address = message.delegatorAddress === "" ? undefined : message.delegatorAddress;
+    obj.validator_address = message.validatorAddress === "" ? undefined : message.validatorAddress;
+    obj.balance = message.balance ? Coin.toAmino(message.balance, useInterfaces) : undefined;
     return obj;
   },
   fromAminoMsg(object: UndelegationAminoMsg): Undelegation {
     return Undelegation.fromAmino(object.value);
   },
-  fromProtoMsg(message: UndelegationProtoMsg): Undelegation {
-    return Undelegation.decode(message.value);
+  fromProtoMsg(message: UndelegationProtoMsg, useInterfaces: boolean = true): Undelegation {
+    return Undelegation.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: Undelegation): Uint8Array {
     return Undelegation.encode(message).finish();
@@ -356,6 +376,7 @@ export const Undelegation = {
     };
   }
 };
+GlobalDecoderRegistry.register(Undelegation.typeUrl, Undelegation);
 function createBaseQueuedUndelegation(): QueuedUndelegation {
   return {
     entries: []
@@ -363,13 +384,22 @@ function createBaseQueuedUndelegation(): QueuedUndelegation {
 }
 export const QueuedUndelegation = {
   typeUrl: "/alliance.alliance.QueuedUndelegation",
+  is(o: any): o is QueuedUndelegation {
+    return o && (o.$typeUrl === QueuedUndelegation.typeUrl || Array.isArray(o.entries) && (!o.entries.length || Undelegation.is(o.entries[0])));
+  },
+  isSDK(o: any): o is QueuedUndelegationSDKType {
+    return o && (o.$typeUrl === QueuedUndelegation.typeUrl || Array.isArray(o.entries) && (!o.entries.length || Undelegation.isSDK(o.entries[0])));
+  },
+  isAmino(o: any): o is QueuedUndelegationAmino {
+    return o && (o.$typeUrl === QueuedUndelegation.typeUrl || Array.isArray(o.entries) && (!o.entries.length || Undelegation.isAmino(o.entries[0])));
+  },
   encode(message: QueuedUndelegation, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     for (const v of message.entries) {
       Undelegation.encode(v!, writer.uint32(10).fork()).ldelim();
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): QueuedUndelegation {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): QueuedUndelegation {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueuedUndelegation();
@@ -377,7 +407,7 @@ export const QueuedUndelegation = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.entries.push(Undelegation.decode(reader, reader.uint32()));
+          message.entries.push(Undelegation.decode(reader, reader.uint32(), useInterfaces));
           break;
         default:
           reader.skipType(tag & 7);
@@ -410,20 +440,20 @@ export const QueuedUndelegation = {
     message.entries = object.entries?.map(e => Undelegation.fromAmino(e)) || [];
     return message;
   },
-  toAmino(message: QueuedUndelegation): QueuedUndelegationAmino {
+  toAmino(message: QueuedUndelegation, useInterfaces: boolean = true): QueuedUndelegationAmino {
     const obj: any = {};
     if (message.entries) {
-      obj.entries = message.entries.map(e => e ? Undelegation.toAmino(e) : undefined);
+      obj.entries = message.entries.map(e => e ? Undelegation.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.entries = [];
+      obj.entries = message.entries;
     }
     return obj;
   },
   fromAminoMsg(object: QueuedUndelegationAminoMsg): QueuedUndelegation {
     return QueuedUndelegation.fromAmino(object.value);
   },
-  fromProtoMsg(message: QueuedUndelegationProtoMsg): QueuedUndelegation {
-    return QueuedUndelegation.decode(message.value);
+  fromProtoMsg(message: QueuedUndelegationProtoMsg, useInterfaces: boolean = true): QueuedUndelegation {
+    return QueuedUndelegation.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: QueuedUndelegation): Uint8Array {
     return QueuedUndelegation.encode(message).finish();
@@ -435,6 +465,7 @@ export const QueuedUndelegation = {
     };
   }
 };
+GlobalDecoderRegistry.register(QueuedUndelegation.typeUrl, QueuedUndelegation);
 function createBaseAllianceValidatorInfo(): AllianceValidatorInfo {
   return {
     globalRewardHistory: [],
@@ -444,6 +475,15 @@ function createBaseAllianceValidatorInfo(): AllianceValidatorInfo {
 }
 export const AllianceValidatorInfo = {
   typeUrl: "/alliance.alliance.AllianceValidatorInfo",
+  is(o: any): o is AllianceValidatorInfo {
+    return o && (o.$typeUrl === AllianceValidatorInfo.typeUrl || Array.isArray(o.globalRewardHistory) && (!o.globalRewardHistory.length || RewardHistory.is(o.globalRewardHistory[0])) && Array.isArray(o.totalDelegatorShares) && (!o.totalDelegatorShares.length || DecCoin.is(o.totalDelegatorShares[0])) && Array.isArray(o.validatorShares) && (!o.validatorShares.length || DecCoin.is(o.validatorShares[0])));
+  },
+  isSDK(o: any): o is AllianceValidatorInfoSDKType {
+    return o && (o.$typeUrl === AllianceValidatorInfo.typeUrl || Array.isArray(o.global_reward_history) && (!o.global_reward_history.length || RewardHistory.isSDK(o.global_reward_history[0])) && Array.isArray(o.total_delegator_shares) && (!o.total_delegator_shares.length || DecCoin.isSDK(o.total_delegator_shares[0])) && Array.isArray(o.validator_shares) && (!o.validator_shares.length || DecCoin.isSDK(o.validator_shares[0])));
+  },
+  isAmino(o: any): o is AllianceValidatorInfoAmino {
+    return o && (o.$typeUrl === AllianceValidatorInfo.typeUrl || Array.isArray(o.global_reward_history) && (!o.global_reward_history.length || RewardHistory.isAmino(o.global_reward_history[0])) && Array.isArray(o.total_delegator_shares) && (!o.total_delegator_shares.length || DecCoin.isAmino(o.total_delegator_shares[0])) && Array.isArray(o.validator_shares) && (!o.validator_shares.length || DecCoin.isAmino(o.validator_shares[0])));
+  },
   encode(message: AllianceValidatorInfo, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     for (const v of message.globalRewardHistory) {
       RewardHistory.encode(v!, writer.uint32(10).fork()).ldelim();
@@ -456,7 +496,7 @@ export const AllianceValidatorInfo = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): AllianceValidatorInfo {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): AllianceValidatorInfo {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseAllianceValidatorInfo();
@@ -464,13 +504,13 @@ export const AllianceValidatorInfo = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.globalRewardHistory.push(RewardHistory.decode(reader, reader.uint32()));
+          message.globalRewardHistory.push(RewardHistory.decode(reader, reader.uint32(), useInterfaces));
           break;
         case 2:
-          message.totalDelegatorShares.push(DecCoin.decode(reader, reader.uint32()));
+          message.totalDelegatorShares.push(DecCoin.decode(reader, reader.uint32(), useInterfaces));
           break;
         case 3:
-          message.validatorShares.push(DecCoin.decode(reader, reader.uint32()));
+          message.validatorShares.push(DecCoin.decode(reader, reader.uint32(), useInterfaces));
           break;
         default:
           reader.skipType(tag & 7);
@@ -519,30 +559,30 @@ export const AllianceValidatorInfo = {
     message.validatorShares = object.validator_shares?.map(e => DecCoin.fromAmino(e)) || [];
     return message;
   },
-  toAmino(message: AllianceValidatorInfo): AllianceValidatorInfoAmino {
+  toAmino(message: AllianceValidatorInfo, useInterfaces: boolean = true): AllianceValidatorInfoAmino {
     const obj: any = {};
     if (message.globalRewardHistory) {
-      obj.global_reward_history = message.globalRewardHistory.map(e => e ? RewardHistory.toAmino(e) : undefined);
+      obj.global_reward_history = message.globalRewardHistory.map(e => e ? RewardHistory.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.global_reward_history = [];
+      obj.global_reward_history = message.globalRewardHistory;
     }
     if (message.totalDelegatorShares) {
-      obj.total_delegator_shares = message.totalDelegatorShares.map(e => e ? DecCoin.toAmino(e) : undefined);
+      obj.total_delegator_shares = message.totalDelegatorShares.map(e => e ? DecCoin.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.total_delegator_shares = [];
+      obj.total_delegator_shares = message.totalDelegatorShares;
     }
     if (message.validatorShares) {
-      obj.validator_shares = message.validatorShares.map(e => e ? DecCoin.toAmino(e) : undefined);
+      obj.validator_shares = message.validatorShares.map(e => e ? DecCoin.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.validator_shares = [];
+      obj.validator_shares = message.validatorShares;
     }
     return obj;
   },
   fromAminoMsg(object: AllianceValidatorInfoAminoMsg): AllianceValidatorInfo {
     return AllianceValidatorInfo.fromAmino(object.value);
   },
-  fromProtoMsg(message: AllianceValidatorInfoProtoMsg): AllianceValidatorInfo {
-    return AllianceValidatorInfo.decode(message.value);
+  fromProtoMsg(message: AllianceValidatorInfoProtoMsg, useInterfaces: boolean = true): AllianceValidatorInfo {
+    return AllianceValidatorInfo.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: AllianceValidatorInfo): Uint8Array {
     return AllianceValidatorInfo.encode(message).finish();
@@ -554,3 +594,4 @@ export const AllianceValidatorInfo = {
     };
   }
 };
+GlobalDecoderRegistry.register(AllianceValidatorInfo.typeUrl, AllianceValidatorInfo);

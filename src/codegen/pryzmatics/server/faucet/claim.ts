@@ -1,8 +1,10 @@
 import { BinaryReader, BinaryWriter } from "../../../binary";
 import { isSet } from "../../../helpers";
+import { GlobalDecoderRegistry } from "../../../registry";
 export interface QueryClaimRequest {
   address: string;
   recaptchaResponse: string;
+  recaptchaVersion: string;
 }
 export interface QueryClaimRequestProtoMsg {
   typeUrl: "/pryzmatics.server.faucet.QueryClaimRequest";
@@ -11,6 +13,7 @@ export interface QueryClaimRequestProtoMsg {
 export interface QueryClaimRequestAmino {
   address?: string;
   recaptcha_response?: string;
+  recaptcha_version?: string;
 }
 export interface QueryClaimRequestAminoMsg {
   type: "/pryzmatics.server.faucet.QueryClaimRequest";
@@ -19,6 +22,7 @@ export interface QueryClaimRequestAminoMsg {
 export interface QueryClaimRequestSDKType {
   address: string;
   recaptcha_response: string;
+  recaptcha_version: string;
 }
 export interface QueryClaimResponse {}
 export interface QueryClaimResponseProtoMsg {
@@ -34,11 +38,21 @@ export interface QueryClaimResponseSDKType {}
 function createBaseQueryClaimRequest(): QueryClaimRequest {
   return {
     address: "",
-    recaptchaResponse: ""
+    recaptchaResponse: "",
+    recaptchaVersion: ""
   };
 }
 export const QueryClaimRequest = {
   typeUrl: "/pryzmatics.server.faucet.QueryClaimRequest",
+  is(o: any): o is QueryClaimRequest {
+    return o && (o.$typeUrl === QueryClaimRequest.typeUrl || typeof o.address === "string" && typeof o.recaptchaResponse === "string" && typeof o.recaptchaVersion === "string");
+  },
+  isSDK(o: any): o is QueryClaimRequestSDKType {
+    return o && (o.$typeUrl === QueryClaimRequest.typeUrl || typeof o.address === "string" && typeof o.recaptcha_response === "string" && typeof o.recaptcha_version === "string");
+  },
+  isAmino(o: any): o is QueryClaimRequestAmino {
+    return o && (o.$typeUrl === QueryClaimRequest.typeUrl || typeof o.address === "string" && typeof o.recaptcha_response === "string" && typeof o.recaptcha_version === "string");
+  },
   encode(message: QueryClaimRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.address !== "") {
       writer.uint32(10).string(message.address);
@@ -46,9 +60,12 @@ export const QueryClaimRequest = {
     if (message.recaptchaResponse !== "") {
       writer.uint32(18).string(message.recaptchaResponse);
     }
+    if (message.recaptchaVersion !== "") {
+      writer.uint32(26).string(message.recaptchaVersion);
+    }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): QueryClaimRequest {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): QueryClaimRequest {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryClaimRequest();
@@ -61,6 +78,9 @@ export const QueryClaimRequest = {
         case 2:
           message.recaptchaResponse = reader.string();
           break;
+        case 3:
+          message.recaptchaVersion = reader.string();
+          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -71,19 +91,22 @@ export const QueryClaimRequest = {
   fromJSON(object: any): QueryClaimRequest {
     return {
       address: isSet(object.address) ? String(object.address) : "",
-      recaptchaResponse: isSet(object.recaptchaResponse) ? String(object.recaptchaResponse) : ""
+      recaptchaResponse: isSet(object.recaptchaResponse) ? String(object.recaptchaResponse) : "",
+      recaptchaVersion: isSet(object.recaptchaVersion) ? String(object.recaptchaVersion) : ""
     };
   },
   toJSON(message: QueryClaimRequest): unknown {
     const obj: any = {};
     message.address !== undefined && (obj.address = message.address);
     message.recaptchaResponse !== undefined && (obj.recaptchaResponse = message.recaptchaResponse);
+    message.recaptchaVersion !== undefined && (obj.recaptchaVersion = message.recaptchaVersion);
     return obj;
   },
   fromPartial(object: Partial<QueryClaimRequest>): QueryClaimRequest {
     const message = createBaseQueryClaimRequest();
     message.address = object.address ?? "";
     message.recaptchaResponse = object.recaptchaResponse ?? "";
+    message.recaptchaVersion = object.recaptchaVersion ?? "";
     return message;
   },
   fromAmino(object: QueryClaimRequestAmino): QueryClaimRequest {
@@ -94,19 +117,23 @@ export const QueryClaimRequest = {
     if (object.recaptcha_response !== undefined && object.recaptcha_response !== null) {
       message.recaptchaResponse = object.recaptcha_response;
     }
+    if (object.recaptcha_version !== undefined && object.recaptcha_version !== null) {
+      message.recaptchaVersion = object.recaptcha_version;
+    }
     return message;
   },
-  toAmino(message: QueryClaimRequest): QueryClaimRequestAmino {
+  toAmino(message: QueryClaimRequest, useInterfaces: boolean = true): QueryClaimRequestAmino {
     const obj: any = {};
-    obj.address = message.address;
-    obj.recaptcha_response = message.recaptchaResponse;
+    obj.address = message.address === "" ? undefined : message.address;
+    obj.recaptcha_response = message.recaptchaResponse === "" ? undefined : message.recaptchaResponse;
+    obj.recaptcha_version = message.recaptchaVersion === "" ? undefined : message.recaptchaVersion;
     return obj;
   },
   fromAminoMsg(object: QueryClaimRequestAminoMsg): QueryClaimRequest {
     return QueryClaimRequest.fromAmino(object.value);
   },
-  fromProtoMsg(message: QueryClaimRequestProtoMsg): QueryClaimRequest {
-    return QueryClaimRequest.decode(message.value);
+  fromProtoMsg(message: QueryClaimRequestProtoMsg, useInterfaces: boolean = true): QueryClaimRequest {
+    return QueryClaimRequest.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: QueryClaimRequest): Uint8Array {
     return QueryClaimRequest.encode(message).finish();
@@ -118,15 +145,25 @@ export const QueryClaimRequest = {
     };
   }
 };
+GlobalDecoderRegistry.register(QueryClaimRequest.typeUrl, QueryClaimRequest);
 function createBaseQueryClaimResponse(): QueryClaimResponse {
   return {};
 }
 export const QueryClaimResponse = {
   typeUrl: "/pryzmatics.server.faucet.QueryClaimResponse",
+  is(o: any): o is QueryClaimResponse {
+    return o && o.$typeUrl === QueryClaimResponse.typeUrl;
+  },
+  isSDK(o: any): o is QueryClaimResponseSDKType {
+    return o && o.$typeUrl === QueryClaimResponse.typeUrl;
+  },
+  isAmino(o: any): o is QueryClaimResponseAmino {
+    return o && o.$typeUrl === QueryClaimResponse.typeUrl;
+  },
   encode(_: QueryClaimResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): QueryClaimResponse {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): QueryClaimResponse {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryClaimResponse();
@@ -155,15 +192,15 @@ export const QueryClaimResponse = {
     const message = createBaseQueryClaimResponse();
     return message;
   },
-  toAmino(_: QueryClaimResponse): QueryClaimResponseAmino {
+  toAmino(_: QueryClaimResponse, useInterfaces: boolean = true): QueryClaimResponseAmino {
     const obj: any = {};
     return obj;
   },
   fromAminoMsg(object: QueryClaimResponseAminoMsg): QueryClaimResponse {
     return QueryClaimResponse.fromAmino(object.value);
   },
-  fromProtoMsg(message: QueryClaimResponseProtoMsg): QueryClaimResponse {
-    return QueryClaimResponse.decode(message.value);
+  fromProtoMsg(message: QueryClaimResponseProtoMsg, useInterfaces: boolean = true): QueryClaimResponse {
+    return QueryClaimResponse.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: QueryClaimResponse): Uint8Array {
     return QueryClaimResponse.encode(message).finish();
@@ -175,3 +212,4 @@ export const QueryClaimResponse = {
     };
   }
 };
+GlobalDecoderRegistry.register(QueryClaimResponse.typeUrl, QueryClaimResponse);

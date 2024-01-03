@@ -1,5 +1,6 @@
 import { BinaryReader, BinaryWriter } from "../../../binary";
 import { isSet } from "../../../helpers";
+import { GlobalDecoderRegistry } from "../../../registry";
 export interface ExecutableOrderCount {
   poolId: bigint;
   tokenIn: string;
@@ -40,6 +41,15 @@ function createBaseExecutableOrderCount(): ExecutableOrderCount {
 }
 export const ExecutableOrderCount = {
   typeUrl: "/pryzm.amm.v1.ExecutableOrderCount",
+  is(o: any): o is ExecutableOrderCount {
+    return o && (o.$typeUrl === ExecutableOrderCount.typeUrl || typeof o.poolId === "bigint" && typeof o.tokenIn === "string" && typeof o.tokenOut === "string" && typeof o.whitelistedRoute === "boolean" && typeof o.count === "bigint");
+  },
+  isSDK(o: any): o is ExecutableOrderCountSDKType {
+    return o && (o.$typeUrl === ExecutableOrderCount.typeUrl || typeof o.pool_id === "bigint" && typeof o.token_in === "string" && typeof o.token_out === "string" && typeof o.whitelisted_route === "boolean" && typeof o.count === "bigint");
+  },
+  isAmino(o: any): o is ExecutableOrderCountAmino {
+    return o && (o.$typeUrl === ExecutableOrderCount.typeUrl || typeof o.pool_id === "bigint" && typeof o.token_in === "string" && typeof o.token_out === "string" && typeof o.whitelisted_route === "boolean" && typeof o.count === "bigint");
+  },
   encode(message: ExecutableOrderCount, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.poolId !== BigInt(0)) {
       writer.uint32(8).uint64(message.poolId);
@@ -58,7 +68,7 @@ export const ExecutableOrderCount = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): ExecutableOrderCount {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): ExecutableOrderCount {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseExecutableOrderCount();
@@ -133,20 +143,20 @@ export const ExecutableOrderCount = {
     }
     return message;
   },
-  toAmino(message: ExecutableOrderCount): ExecutableOrderCountAmino {
+  toAmino(message: ExecutableOrderCount, useInterfaces: boolean = true): ExecutableOrderCountAmino {
     const obj: any = {};
     obj.pool_id = message.poolId ? message.poolId.toString() : undefined;
-    obj.token_in = message.tokenIn;
-    obj.token_out = message.tokenOut;
-    obj.whitelisted_route = message.whitelistedRoute;
+    obj.token_in = message.tokenIn === "" ? undefined : message.tokenIn;
+    obj.token_out = message.tokenOut === "" ? undefined : message.tokenOut;
+    obj.whitelisted_route = message.whitelistedRoute === false ? undefined : message.whitelistedRoute;
     obj.count = message.count ? message.count.toString() : undefined;
     return obj;
   },
   fromAminoMsg(object: ExecutableOrderCountAminoMsg): ExecutableOrderCount {
     return ExecutableOrderCount.fromAmino(object.value);
   },
-  fromProtoMsg(message: ExecutableOrderCountProtoMsg): ExecutableOrderCount {
-    return ExecutableOrderCount.decode(message.value);
+  fromProtoMsg(message: ExecutableOrderCountProtoMsg, useInterfaces: boolean = true): ExecutableOrderCount {
+    return ExecutableOrderCount.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: ExecutableOrderCount): Uint8Array {
     return ExecutableOrderCount.encode(message).finish();
@@ -158,3 +168,4 @@ export const ExecutableOrderCount = {
     };
   }
 };
+GlobalDecoderRegistry.register(ExecutableOrderCount.typeUrl, ExecutableOrderCount);

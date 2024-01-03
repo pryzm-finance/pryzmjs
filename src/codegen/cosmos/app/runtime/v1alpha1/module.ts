@@ -1,5 +1,6 @@
 import { BinaryReader, BinaryWriter } from "../../../../binary";
 import { isSet } from "../../../../helpers";
+import { GlobalDecoderRegistry } from "../../../../registry";
 /** Module is the config object for the runtime module. */
 export interface Module {
   /** app_name is the name of the app. */
@@ -133,6 +134,16 @@ function createBaseModule(): Module {
 }
 export const Module = {
   typeUrl: "/cosmos.app.runtime.v1alpha1.Module",
+  aminoType: "cosmos-sdk/Module",
+  is(o: any): o is Module {
+    return o && (o.$typeUrl === Module.typeUrl || typeof o.appName === "string" && Array.isArray(o.beginBlockers) && (!o.beginBlockers.length || typeof o.beginBlockers[0] === "string") && Array.isArray(o.endBlockers) && (!o.endBlockers.length || typeof o.endBlockers[0] === "string") && Array.isArray(o.initGenesis) && (!o.initGenesis.length || typeof o.initGenesis[0] === "string") && Array.isArray(o.exportGenesis) && (!o.exportGenesis.length || typeof o.exportGenesis[0] === "string") && Array.isArray(o.overrideStoreKeys) && (!o.overrideStoreKeys.length || StoreKeyConfig.is(o.overrideStoreKeys[0])));
+  },
+  isSDK(o: any): o is ModuleSDKType {
+    return o && (o.$typeUrl === Module.typeUrl || typeof o.app_name === "string" && Array.isArray(o.begin_blockers) && (!o.begin_blockers.length || typeof o.begin_blockers[0] === "string") && Array.isArray(o.end_blockers) && (!o.end_blockers.length || typeof o.end_blockers[0] === "string") && Array.isArray(o.init_genesis) && (!o.init_genesis.length || typeof o.init_genesis[0] === "string") && Array.isArray(o.export_genesis) && (!o.export_genesis.length || typeof o.export_genesis[0] === "string") && Array.isArray(o.override_store_keys) && (!o.override_store_keys.length || StoreKeyConfig.isSDK(o.override_store_keys[0])));
+  },
+  isAmino(o: any): o is ModuleAmino {
+    return o && (o.$typeUrl === Module.typeUrl || typeof o.app_name === "string" && Array.isArray(o.begin_blockers) && (!o.begin_blockers.length || typeof o.begin_blockers[0] === "string") && Array.isArray(o.end_blockers) && (!o.end_blockers.length || typeof o.end_blockers[0] === "string") && Array.isArray(o.init_genesis) && (!o.init_genesis.length || typeof o.init_genesis[0] === "string") && Array.isArray(o.export_genesis) && (!o.export_genesis.length || typeof o.export_genesis[0] === "string") && Array.isArray(o.override_store_keys) && (!o.override_store_keys.length || StoreKeyConfig.isAmino(o.override_store_keys[0])));
+  },
   encode(message: Module, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.appName !== "") {
       writer.uint32(10).string(message.appName);
@@ -154,7 +165,7 @@ export const Module = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): Module {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): Module {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseModule();
@@ -177,7 +188,7 @@ export const Module = {
           message.exportGenesis.push(reader.string());
           break;
         case 6:
-          message.overrideStoreKeys.push(StoreKeyConfig.decode(reader, reader.uint32()));
+          message.overrideStoreKeys.push(StoreKeyConfig.decode(reader, reader.uint32(), useInterfaces));
           break;
         default:
           reader.skipType(tag & 7);
@@ -248,47 +259,47 @@ export const Module = {
     message.overrideStoreKeys = object.override_store_keys?.map(e => StoreKeyConfig.fromAmino(e)) || [];
     return message;
   },
-  toAmino(message: Module): ModuleAmino {
+  toAmino(message: Module, useInterfaces: boolean = true): ModuleAmino {
     const obj: any = {};
-    obj.app_name = message.appName;
+    obj.app_name = message.appName === "" ? undefined : message.appName;
     if (message.beginBlockers) {
       obj.begin_blockers = message.beginBlockers.map(e => e);
     } else {
-      obj.begin_blockers = [];
+      obj.begin_blockers = message.beginBlockers;
     }
     if (message.endBlockers) {
       obj.end_blockers = message.endBlockers.map(e => e);
     } else {
-      obj.end_blockers = [];
+      obj.end_blockers = message.endBlockers;
     }
     if (message.initGenesis) {
       obj.init_genesis = message.initGenesis.map(e => e);
     } else {
-      obj.init_genesis = [];
+      obj.init_genesis = message.initGenesis;
     }
     if (message.exportGenesis) {
       obj.export_genesis = message.exportGenesis.map(e => e);
     } else {
-      obj.export_genesis = [];
+      obj.export_genesis = message.exportGenesis;
     }
     if (message.overrideStoreKeys) {
-      obj.override_store_keys = message.overrideStoreKeys.map(e => e ? StoreKeyConfig.toAmino(e) : undefined);
+      obj.override_store_keys = message.overrideStoreKeys.map(e => e ? StoreKeyConfig.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.override_store_keys = [];
+      obj.override_store_keys = message.overrideStoreKeys;
     }
     return obj;
   },
   fromAminoMsg(object: ModuleAminoMsg): Module {
     return Module.fromAmino(object.value);
   },
-  toAminoMsg(message: Module): ModuleAminoMsg {
+  toAminoMsg(message: Module, useInterfaces: boolean = true): ModuleAminoMsg {
     return {
       type: "cosmos-sdk/Module",
-      value: Module.toAmino(message)
+      value: Module.toAmino(message, useInterfaces)
     };
   },
-  fromProtoMsg(message: ModuleProtoMsg): Module {
-    return Module.decode(message.value);
+  fromProtoMsg(message: ModuleProtoMsg, useInterfaces: boolean = true): Module {
+    return Module.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: Module): Uint8Array {
     return Module.encode(message).finish();
@@ -300,6 +311,8 @@ export const Module = {
     };
   }
 };
+GlobalDecoderRegistry.register(Module.typeUrl, Module);
+GlobalDecoderRegistry.registerAminoProtoMapping(Module.aminoType, Module.typeUrl);
 function createBaseStoreKeyConfig(): StoreKeyConfig {
   return {
     moduleName: "",
@@ -308,6 +321,16 @@ function createBaseStoreKeyConfig(): StoreKeyConfig {
 }
 export const StoreKeyConfig = {
   typeUrl: "/cosmos.app.runtime.v1alpha1.StoreKeyConfig",
+  aminoType: "cosmos-sdk/StoreKeyConfig",
+  is(o: any): o is StoreKeyConfig {
+    return o && (o.$typeUrl === StoreKeyConfig.typeUrl || typeof o.moduleName === "string" && typeof o.kvStoreKey === "string");
+  },
+  isSDK(o: any): o is StoreKeyConfigSDKType {
+    return o && (o.$typeUrl === StoreKeyConfig.typeUrl || typeof o.module_name === "string" && typeof o.kv_store_key === "string");
+  },
+  isAmino(o: any): o is StoreKeyConfigAmino {
+    return o && (o.$typeUrl === StoreKeyConfig.typeUrl || typeof o.module_name === "string" && typeof o.kv_store_key === "string");
+  },
   encode(message: StoreKeyConfig, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.moduleName !== "") {
       writer.uint32(10).string(message.moduleName);
@@ -317,7 +340,7 @@ export const StoreKeyConfig = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): StoreKeyConfig {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): StoreKeyConfig {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseStoreKeyConfig();
@@ -365,23 +388,23 @@ export const StoreKeyConfig = {
     }
     return message;
   },
-  toAmino(message: StoreKeyConfig): StoreKeyConfigAmino {
+  toAmino(message: StoreKeyConfig, useInterfaces: boolean = true): StoreKeyConfigAmino {
     const obj: any = {};
-    obj.module_name = message.moduleName;
-    obj.kv_store_key = message.kvStoreKey;
+    obj.module_name = message.moduleName === "" ? undefined : message.moduleName;
+    obj.kv_store_key = message.kvStoreKey === "" ? undefined : message.kvStoreKey;
     return obj;
   },
   fromAminoMsg(object: StoreKeyConfigAminoMsg): StoreKeyConfig {
     return StoreKeyConfig.fromAmino(object.value);
   },
-  toAminoMsg(message: StoreKeyConfig): StoreKeyConfigAminoMsg {
+  toAminoMsg(message: StoreKeyConfig, useInterfaces: boolean = true): StoreKeyConfigAminoMsg {
     return {
       type: "cosmos-sdk/StoreKeyConfig",
-      value: StoreKeyConfig.toAmino(message)
+      value: StoreKeyConfig.toAmino(message, useInterfaces)
     };
   },
-  fromProtoMsg(message: StoreKeyConfigProtoMsg): StoreKeyConfig {
-    return StoreKeyConfig.decode(message.value);
+  fromProtoMsg(message: StoreKeyConfigProtoMsg, useInterfaces: boolean = true): StoreKeyConfig {
+    return StoreKeyConfig.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: StoreKeyConfig): Uint8Array {
     return StoreKeyConfig.encode(message).finish();
@@ -393,3 +416,5 @@ export const StoreKeyConfig = {
     };
   }
 };
+GlobalDecoderRegistry.register(StoreKeyConfig.typeUrl, StoreKeyConfig);
+GlobalDecoderRegistry.registerAminoProtoMapping(StoreKeyConfig.aminoType, StoreKeyConfig.typeUrl);

@@ -1,5 +1,6 @@
 import { BinaryReader, BinaryWriter } from "../../../binary";
-import { isSet } from "../../../helpers";
+import { isSet, padDecimal } from "../../../helpers";
+import { GlobalDecoderRegistry } from "../../../registry";
 import { Decimal } from "@cosmjs/math";
 /** The properties of a supported asset */
 export interface RefractableAsset {
@@ -117,6 +118,15 @@ function createBaseRefractableAsset(): RefractableAsset {
 }
 export const RefractableAsset = {
   typeUrl: "/pryzm.assets.v1.RefractableAsset",
+  is(o: any): o is RefractableAsset {
+    return o && (o.$typeUrl === RefractableAsset.typeUrl || typeof o.id === "string" && typeof o.tokenDenom === "string" && typeof o.hostChainId === "string" && typeof o.disabled === "boolean" && MaturityParams.is(o.maturityParams) && FeeRatios.is(o.feeRatios));
+  },
+  isSDK(o: any): o is RefractableAssetSDKType {
+    return o && (o.$typeUrl === RefractableAsset.typeUrl || typeof o.id === "string" && typeof o.token_denom === "string" && typeof o.host_chain_id === "string" && typeof o.disabled === "boolean" && MaturityParams.isSDK(o.maturity_params) && FeeRatios.isSDK(o.fee_ratios));
+  },
+  isAmino(o: any): o is RefractableAssetAmino {
+    return o && (o.$typeUrl === RefractableAsset.typeUrl || typeof o.id === "string" && typeof o.token_denom === "string" && typeof o.host_chain_id === "string" && typeof o.disabled === "boolean" && MaturityParams.isAmino(o.maturity_params) && FeeRatios.isAmino(o.fee_ratios));
+  },
   encode(message: RefractableAsset, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.id !== "") {
       writer.uint32(10).string(message.id);
@@ -138,7 +148,7 @@ export const RefractableAsset = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): RefractableAsset {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): RefractableAsset {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseRefractableAsset();
@@ -158,10 +168,10 @@ export const RefractableAsset = {
           message.disabled = reader.bool();
           break;
         case 5:
-          message.maturityParams = MaturityParams.decode(reader, reader.uint32());
+          message.maturityParams = MaturityParams.decode(reader, reader.uint32(), useInterfaces);
           break;
         case 6:
-          message.feeRatios = FeeRatios.decode(reader, reader.uint32());
+          message.feeRatios = FeeRatios.decode(reader, reader.uint32(), useInterfaces);
           break;
         default:
           reader.skipType(tag & 7);
@@ -222,21 +232,21 @@ export const RefractableAsset = {
     }
     return message;
   },
-  toAmino(message: RefractableAsset): RefractableAssetAmino {
+  toAmino(message: RefractableAsset, useInterfaces: boolean = true): RefractableAssetAmino {
     const obj: any = {};
-    obj.id = message.id;
-    obj.token_denom = message.tokenDenom;
-    obj.host_chain_id = message.hostChainId ?? "";
-    obj.disabled = message.disabled ?? false;
-    obj.maturity_params = message.maturityParams ? MaturityParams.toAmino(message.maturityParams) : MaturityParams.fromPartial({});
-    obj.fee_ratios = message.feeRatios ? FeeRatios.toAmino(message.feeRatios) : FeeRatios.fromPartial({});
+    obj.id = message.id === "" ? undefined : message.id;
+    obj.token_denom = message.tokenDenom === "" ? undefined : message.tokenDenom;
+    obj.host_chain_id = message.hostChainId === "" ? undefined : message.hostChainId;
+    obj.disabled = message.disabled === false ? undefined : message.disabled;
+    obj.maturity_params = message.maturityParams ? MaturityParams.toAmino(message.maturityParams, useInterfaces) : undefined;
+    obj.fee_ratios = message.feeRatios ? FeeRatios.toAmino(message.feeRatios, useInterfaces) : undefined;
     return obj;
   },
   fromAminoMsg(object: RefractableAssetAminoMsg): RefractableAsset {
     return RefractableAsset.fromAmino(object.value);
   },
-  fromProtoMsg(message: RefractableAssetProtoMsg): RefractableAsset {
-    return RefractableAsset.decode(message.value);
+  fromProtoMsg(message: RefractableAssetProtoMsg, useInterfaces: boolean = true): RefractableAsset {
+    return RefractableAsset.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: RefractableAsset): Uint8Array {
     return RefractableAsset.encode(message).finish();
@@ -248,6 +258,7 @@ export const RefractableAsset = {
     };
   }
 };
+GlobalDecoderRegistry.register(RefractableAsset.typeUrl, RefractableAsset);
 function createBaseMaturityParams(): MaturityParams {
   return {
     levelsPerYear: 0,
@@ -256,6 +267,15 @@ function createBaseMaturityParams(): MaturityParams {
 }
 export const MaturityParams = {
   typeUrl: "/pryzm.assets.v1.MaturityParams",
+  is(o: any): o is MaturityParams {
+    return o && (o.$typeUrl === MaturityParams.typeUrl || typeof o.levelsPerYear === "number" && typeof o.years === "number");
+  },
+  isSDK(o: any): o is MaturityParamsSDKType {
+    return o && (o.$typeUrl === MaturityParams.typeUrl || typeof o.levels_per_year === "number" && typeof o.years === "number");
+  },
+  isAmino(o: any): o is MaturityParamsAmino {
+    return o && (o.$typeUrl === MaturityParams.typeUrl || typeof o.levels_per_year === "number" && typeof o.years === "number");
+  },
   encode(message: MaturityParams, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.levelsPerYear !== 0) {
       writer.uint32(8).int32(message.levelsPerYear);
@@ -265,7 +285,7 @@ export const MaturityParams = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): MaturityParams {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): MaturityParams {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMaturityParams();
@@ -313,17 +333,17 @@ export const MaturityParams = {
     }
     return message;
   },
-  toAmino(message: MaturityParams): MaturityParamsAmino {
+  toAmino(message: MaturityParams, useInterfaces: boolean = true): MaturityParamsAmino {
     const obj: any = {};
-    obj.levels_per_year = message.levelsPerYear ?? 0;
-    obj.years = message.years ?? 0;
+    obj.levels_per_year = message.levelsPerYear === 0 ? undefined : message.levelsPerYear;
+    obj.years = message.years === 0 ? undefined : message.years;
     return obj;
   },
   fromAminoMsg(object: MaturityParamsAminoMsg): MaturityParams {
     return MaturityParams.fromAmino(object.value);
   },
-  fromProtoMsg(message: MaturityParamsProtoMsg): MaturityParams {
-    return MaturityParams.decode(message.value);
+  fromProtoMsg(message: MaturityParamsProtoMsg, useInterfaces: boolean = true): MaturityParams {
+    return MaturityParams.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: MaturityParams): Uint8Array {
     return MaturityParams.encode(message).finish();
@@ -335,6 +355,7 @@ export const MaturityParams = {
     };
   }
 };
+GlobalDecoderRegistry.register(MaturityParams.typeUrl, MaturityParams);
 function createBaseFeeRatios(): FeeRatios {
   return {
     yield: undefined,
@@ -346,6 +367,15 @@ function createBaseFeeRatios(): FeeRatios {
 }
 export const FeeRatios = {
   typeUrl: "/pryzm.assets.v1.FeeRatios",
+  is(o: any): o is FeeRatios {
+    return o && o.$typeUrl === FeeRatios.typeUrl;
+  },
+  isSDK(o: any): o is FeeRatiosSDKType {
+    return o && o.$typeUrl === FeeRatios.typeUrl;
+  },
+  isAmino(o: any): o is FeeRatiosAmino {
+    return o && o.$typeUrl === FeeRatios.typeUrl;
+  },
   encode(message: FeeRatios, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.yield !== undefined) {
       writer.uint32(10).string(Decimal.fromUserInput(message.yield, 18).atomics);
@@ -364,7 +394,7 @@ export const FeeRatios = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): FeeRatios {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): FeeRatios {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseFeeRatios();
@@ -439,20 +469,20 @@ export const FeeRatios = {
     }
     return message;
   },
-  toAmino(message: FeeRatios): FeeRatiosAmino {
+  toAmino(message: FeeRatios, useInterfaces: boolean = true): FeeRatiosAmino {
     const obj: any = {};
-    obj.yield = message.yield;
-    obj.refractor_refract = message.refractorRefract;
-    obj.refractor_merge = message.refractorMerge;
-    obj.refractor_redeem = message.refractorRedeem;
-    obj.y_staking_claim_reward = message.yStakingClaimReward;
+    obj.yield = padDecimal(message.yield) === null ? undefined : padDecimal(message.yield);
+    obj.refractor_refract = padDecimal(message.refractorRefract) === null ? undefined : padDecimal(message.refractorRefract);
+    obj.refractor_merge = padDecimal(message.refractorMerge) === null ? undefined : padDecimal(message.refractorMerge);
+    obj.refractor_redeem = padDecimal(message.refractorRedeem) === null ? undefined : padDecimal(message.refractorRedeem);
+    obj.y_staking_claim_reward = padDecimal(message.yStakingClaimReward) === null ? undefined : padDecimal(message.yStakingClaimReward);
     return obj;
   },
   fromAminoMsg(object: FeeRatiosAminoMsg): FeeRatios {
     return FeeRatios.fromAmino(object.value);
   },
-  fromProtoMsg(message: FeeRatiosProtoMsg): FeeRatios {
-    return FeeRatios.decode(message.value);
+  fromProtoMsg(message: FeeRatiosProtoMsg, useInterfaces: boolean = true): FeeRatios {
+    return FeeRatios.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: FeeRatios): Uint8Array {
     return FeeRatios.encode(message).finish();
@@ -464,3 +494,4 @@ export const FeeRatios = {
     };
   }
 };
+GlobalDecoderRegistry.register(FeeRatios.typeUrl, FeeRatios);

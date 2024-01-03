@@ -1,5 +1,6 @@
 import { BinaryReader, BinaryWriter } from "../../../binary";
 import { isSet } from "../../../helpers";
+import { GlobalDecoderRegistry } from "../../../registry";
 export interface ScheduleOrder {
   timeMillis: bigint;
   orderId: bigint;
@@ -28,6 +29,15 @@ function createBaseScheduleOrder(): ScheduleOrder {
 }
 export const ScheduleOrder = {
   typeUrl: "/pryzm.amm.v1.ScheduleOrder",
+  is(o: any): o is ScheduleOrder {
+    return o && (o.$typeUrl === ScheduleOrder.typeUrl || typeof o.timeMillis === "bigint" && typeof o.orderId === "bigint");
+  },
+  isSDK(o: any): o is ScheduleOrderSDKType {
+    return o && (o.$typeUrl === ScheduleOrder.typeUrl || typeof o.time_millis === "bigint" && typeof o.order_id === "bigint");
+  },
+  isAmino(o: any): o is ScheduleOrderAmino {
+    return o && (o.$typeUrl === ScheduleOrder.typeUrl || typeof o.time_millis === "bigint" && typeof o.order_id === "bigint");
+  },
   encode(message: ScheduleOrder, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.timeMillis !== BigInt(0)) {
       writer.uint32(8).int64(message.timeMillis);
@@ -37,7 +47,7 @@ export const ScheduleOrder = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): ScheduleOrder {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): ScheduleOrder {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseScheduleOrder();
@@ -85,7 +95,7 @@ export const ScheduleOrder = {
     }
     return message;
   },
-  toAmino(message: ScheduleOrder): ScheduleOrderAmino {
+  toAmino(message: ScheduleOrder, useInterfaces: boolean = true): ScheduleOrderAmino {
     const obj: any = {};
     obj.time_millis = message.timeMillis ? message.timeMillis.toString() : undefined;
     obj.order_id = message.orderId ? message.orderId.toString() : undefined;
@@ -94,8 +104,8 @@ export const ScheduleOrder = {
   fromAminoMsg(object: ScheduleOrderAminoMsg): ScheduleOrder {
     return ScheduleOrder.fromAmino(object.value);
   },
-  fromProtoMsg(message: ScheduleOrderProtoMsg): ScheduleOrder {
-    return ScheduleOrder.decode(message.value);
+  fromProtoMsg(message: ScheduleOrderProtoMsg, useInterfaces: boolean = true): ScheduleOrder {
+    return ScheduleOrder.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: ScheduleOrder): Uint8Array {
     return ScheduleOrder.encode(message).finish();
@@ -107,3 +117,4 @@ export const ScheduleOrder = {
     };
   }
 };
+GlobalDecoderRegistry.register(ScheduleOrder.typeUrl, ScheduleOrder);

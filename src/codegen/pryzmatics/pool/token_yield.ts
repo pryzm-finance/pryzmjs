@@ -1,7 +1,8 @@
 import { Timestamp, TimestampSDKType } from "../../google/protobuf/timestamp";
 import { BinaryReader, BinaryWriter } from "../../binary";
 import { Decimal } from "@cosmjs/math";
-import { isSet, fromJsonTimestamp, fromTimestamp } from "../../helpers";
+import { isSet, fromJsonTimestamp, fromTimestamp, padDecimal } from "../../helpers";
+import { GlobalDecoderRegistry } from "../../registry";
 export interface TokenYield {
   tokenDenom: string;
   time: Timestamp;
@@ -58,6 +59,15 @@ function createBaseTokenYield(): TokenYield {
 }
 export const TokenYield = {
   typeUrl: "/pryzmatics.pool.TokenYield",
+  is(o: any): o is TokenYield {
+    return o && (o.$typeUrl === TokenYield.typeUrl || typeof o.tokenDenom === "string" && Timestamp.is(o.time) && typeof o.error === "string");
+  },
+  isSDK(o: any): o is TokenYieldSDKType {
+    return o && (o.$typeUrl === TokenYield.typeUrl || typeof o.token_denom === "string" && Timestamp.isSDK(o.time) && typeof o.error === "string");
+  },
+  isAmino(o: any): o is TokenYieldAmino {
+    return o && (o.$typeUrl === TokenYield.typeUrl || typeof o.token_denom === "string" && Timestamp.isAmino(o.time) && typeof o.error === "string");
+  },
   encode(message: TokenYield, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.tokenDenom !== "") {
       writer.uint32(10).string(message.tokenDenom);
@@ -88,7 +98,7 @@ export const TokenYield = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): TokenYield {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): TokenYield {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseTokenYield();
@@ -199,24 +209,24 @@ export const TokenYield = {
     }
     return message;
   },
-  toAmino(message: TokenYield): TokenYieldAmino {
+  toAmino(message: TokenYield, useInterfaces: boolean = true): TokenYieldAmino {
     const obj: any = {};
-    obj.token_denom = message.tokenDenom;
-    obj.time = message.time ? Timestamp.toAmino(message.time) : undefined;
-    obj.total_yield = message.totalYield;
-    obj.internal_yield = message.internalYield;
-    obj.incentives_apr = message.incentivesApr;
-    obj.alliance_apr = message.allianceApr;
-    obj.y_staking_yield = message.yStakingYield;
-    obj.y_roi = message.yRoi;
-    obj.error = message.error;
+    obj.token_denom = message.tokenDenom === "" ? undefined : message.tokenDenom;
+    obj.time = message.time ? Timestamp.toAmino(message.time, useInterfaces) : undefined;
+    obj.total_yield = padDecimal(message.totalYield) === null ? undefined : padDecimal(message.totalYield);
+    obj.internal_yield = padDecimal(message.internalYield) === null ? undefined : padDecimal(message.internalYield);
+    obj.incentives_apr = padDecimal(message.incentivesApr) === null ? undefined : padDecimal(message.incentivesApr);
+    obj.alliance_apr = padDecimal(message.allianceApr) === null ? undefined : padDecimal(message.allianceApr);
+    obj.y_staking_yield = padDecimal(message.yStakingYield) === null ? undefined : padDecimal(message.yStakingYield);
+    obj.y_roi = padDecimal(message.yRoi) === null ? undefined : padDecimal(message.yRoi);
+    obj.error = message.error === "" ? undefined : message.error;
     return obj;
   },
   fromAminoMsg(object: TokenYieldAminoMsg): TokenYield {
     return TokenYield.fromAmino(object.value);
   },
-  fromProtoMsg(message: TokenYieldProtoMsg): TokenYield {
-    return TokenYield.decode(message.value);
+  fromProtoMsg(message: TokenYieldProtoMsg, useInterfaces: boolean = true): TokenYield {
+    return TokenYield.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: TokenYield): Uint8Array {
     return TokenYield.encode(message).finish();
@@ -228,3 +238,4 @@ export const TokenYield = {
     };
   }
 };
+GlobalDecoderRegistry.register(TokenYield.typeUrl, TokenYield);

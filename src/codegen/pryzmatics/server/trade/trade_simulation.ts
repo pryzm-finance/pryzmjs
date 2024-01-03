@@ -1,8 +1,9 @@
 import { SwapType, SwapStep, SwapStepAmino, SwapStepSDKType, swapTypeFromJSON, swapTypeToJSON } from "../../../pryzm/amm/v1/operations";
 import { RouteStep, RouteStepAmino, RouteStepSDKType } from "../../../pryzm/amm/v1/route_step";
 import { Coin, CoinAmino, CoinSDKType } from "../../../cosmos/base/v1beta1/coin";
+import { isSet, padDecimal } from "../../../helpers";
 import { BinaryReader, BinaryWriter } from "../../../binary";
-import { isSet } from "../../../helpers";
+import { GlobalDecoderRegistry } from "../../../registry";
 import { Decimal } from "@cosmjs/math";
 export interface QueryTradeSimulationRequest {
   swapType: SwapType;
@@ -82,6 +83,15 @@ function createBaseQueryTradeSimulationRequest(): QueryTradeSimulationRequest {
 }
 export const QueryTradeSimulationRequest = {
   typeUrl: "/pryzmatics.server.trade.QueryTradeSimulationRequest",
+  is(o: any): o is QueryTradeSimulationRequest {
+    return o && (o.$typeUrl === QueryTradeSimulationRequest.typeUrl || isSet(o.swapType) && typeof o.tokenIn === "string" && typeof o.tokenOut === "string" && typeof o.amount === "string" && Array.isArray(o.steps) && (!o.steps.length || RouteStep.is(o.steps[0])));
+  },
+  isSDK(o: any): o is QueryTradeSimulationRequestSDKType {
+    return o && (o.$typeUrl === QueryTradeSimulationRequest.typeUrl || isSet(o.swap_type) && typeof o.token_in === "string" && typeof o.token_out === "string" && typeof o.amount === "string" && Array.isArray(o.steps) && (!o.steps.length || RouteStep.isSDK(o.steps[0])));
+  },
+  isAmino(o: any): o is QueryTradeSimulationRequestAmino {
+    return o && (o.$typeUrl === QueryTradeSimulationRequest.typeUrl || isSet(o.swap_type) && typeof o.token_in === "string" && typeof o.token_out === "string" && typeof o.amount === "string" && Array.isArray(o.steps) && (!o.steps.length || RouteStep.isAmino(o.steps[0])));
+  },
   encode(message: QueryTradeSimulationRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.swapType !== 0) {
       writer.uint32(8).int32(message.swapType);
@@ -100,7 +110,7 @@ export const QueryTradeSimulationRequest = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): QueryTradeSimulationRequest {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): QueryTradeSimulationRequest {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryTradeSimulationRequest();
@@ -120,7 +130,7 @@ export const QueryTradeSimulationRequest = {
           message.amount = reader.string();
           break;
         case 5:
-          message.steps.push(RouteStep.decode(reader, reader.uint32()));
+          message.steps.push(RouteStep.decode(reader, reader.uint32(), useInterfaces));
           break;
         default:
           reader.skipType(tag & 7);
@@ -163,7 +173,7 @@ export const QueryTradeSimulationRequest = {
   fromAmino(object: QueryTradeSimulationRequestAmino): QueryTradeSimulationRequest {
     const message = createBaseQueryTradeSimulationRequest();
     if (object.swap_type !== undefined && object.swap_type !== null) {
-      message.swapType = swapTypeFromJSON(object.swap_type);
+      message.swapType = object.swap_type;
     }
     if (object.token_in !== undefined && object.token_in !== null) {
       message.tokenIn = object.token_in;
@@ -177,24 +187,24 @@ export const QueryTradeSimulationRequest = {
     message.steps = object.steps?.map(e => RouteStep.fromAmino(e)) || [];
     return message;
   },
-  toAmino(message: QueryTradeSimulationRequest): QueryTradeSimulationRequestAmino {
+  toAmino(message: QueryTradeSimulationRequest, useInterfaces: boolean = true): QueryTradeSimulationRequestAmino {
     const obj: any = {};
-    obj.swap_type = swapTypeToJSON(message.swapType);
-    obj.token_in = message.tokenIn;
-    obj.token_out = message.tokenOut;
-    obj.amount = message.amount;
+    obj.swap_type = message.swapType === 0 ? undefined : message.swapType;
+    obj.token_in = message.tokenIn === "" ? undefined : message.tokenIn;
+    obj.token_out = message.tokenOut === "" ? undefined : message.tokenOut;
+    obj.amount = message.amount === "" ? undefined : message.amount;
     if (message.steps) {
-      obj.steps = message.steps.map(e => e ? RouteStep.toAmino(e) : undefined);
+      obj.steps = message.steps.map(e => e ? RouteStep.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.steps = [];
+      obj.steps = message.steps;
     }
     return obj;
   },
   fromAminoMsg(object: QueryTradeSimulationRequestAminoMsg): QueryTradeSimulationRequest {
     return QueryTradeSimulationRequest.fromAmino(object.value);
   },
-  fromProtoMsg(message: QueryTradeSimulationRequestProtoMsg): QueryTradeSimulationRequest {
-    return QueryTradeSimulationRequest.decode(message.value);
+  fromProtoMsg(message: QueryTradeSimulationRequestProtoMsg, useInterfaces: boolean = true): QueryTradeSimulationRequest {
+    return QueryTradeSimulationRequest.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: QueryTradeSimulationRequest): Uint8Array {
     return QueryTradeSimulationRequest.encode(message).finish();
@@ -206,6 +216,7 @@ export const QueryTradeSimulationRequest = {
     };
   }
 };
+GlobalDecoderRegistry.register(QueryTradeSimulationRequest.typeUrl, QueryTradeSimulationRequest);
 function createBaseQueryTradeSimulationResponse(): QueryTradeSimulationResponse {
   return {
     priceTokenInTokenOutTerms: "",
@@ -220,6 +231,15 @@ function createBaseQueryTradeSimulationResponse(): QueryTradeSimulationResponse 
 }
 export const QueryTradeSimulationResponse = {
   typeUrl: "/pryzmatics.server.trade.QueryTradeSimulationResponse",
+  is(o: any): o is QueryTradeSimulationResponse {
+    return o && (o.$typeUrl === QueryTradeSimulationResponse.typeUrl || typeof o.priceTokenInTokenOutTerms === "string" && Coin.is(o.amountIn) && Coin.is(o.amountOut) && Array.isArray(o.fee) && (!o.fee.length || Coin.is(o.fee[0])) && Coin.is(o.feeTokenInTerms) && typeof o.effectivePrice === "string" && typeof o.priceImpact === "string" && Array.isArray(o.swapSteps) && (!o.swapSteps.length || SwapStep.is(o.swapSteps[0])));
+  },
+  isSDK(o: any): o is QueryTradeSimulationResponseSDKType {
+    return o && (o.$typeUrl === QueryTradeSimulationResponse.typeUrl || typeof o.price_token_in_token_out_terms === "string" && Coin.isSDK(o.amount_in) && Coin.isSDK(o.amount_out) && Array.isArray(o.fee) && (!o.fee.length || Coin.isSDK(o.fee[0])) && Coin.isSDK(o.feeTokenInTerms) && typeof o.effective_price === "string" && typeof o.price_impact === "string" && Array.isArray(o.swap_steps) && (!o.swap_steps.length || SwapStep.isSDK(o.swap_steps[0])));
+  },
+  isAmino(o: any): o is QueryTradeSimulationResponseAmino {
+    return o && (o.$typeUrl === QueryTradeSimulationResponse.typeUrl || typeof o.price_token_in_token_out_terms === "string" && Coin.isAmino(o.amount_in) && Coin.isAmino(o.amount_out) && Array.isArray(o.fee) && (!o.fee.length || Coin.isAmino(o.fee[0])) && Coin.isAmino(o.feeTokenInTerms) && typeof o.effective_price === "string" && typeof o.price_impact === "string" && Array.isArray(o.swap_steps) && (!o.swap_steps.length || SwapStep.isAmino(o.swap_steps[0])));
+  },
   encode(message: QueryTradeSimulationResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.priceTokenInTokenOutTerms !== "") {
       writer.uint32(10).string(Decimal.fromUserInput(message.priceTokenInTokenOutTerms, 18).atomics);
@@ -247,7 +267,7 @@ export const QueryTradeSimulationResponse = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): QueryTradeSimulationResponse {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): QueryTradeSimulationResponse {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryTradeSimulationResponse();
@@ -258,16 +278,16 @@ export const QueryTradeSimulationResponse = {
           message.priceTokenInTokenOutTerms = Decimal.fromAtomics(reader.string(), 18).toString();
           break;
         case 2:
-          message.amountIn = Coin.decode(reader, reader.uint32());
+          message.amountIn = Coin.decode(reader, reader.uint32(), useInterfaces);
           break;
         case 3:
-          message.amountOut = Coin.decode(reader, reader.uint32());
+          message.amountOut = Coin.decode(reader, reader.uint32(), useInterfaces);
           break;
         case 4:
-          message.fee.push(Coin.decode(reader, reader.uint32()));
+          message.fee.push(Coin.decode(reader, reader.uint32(), useInterfaces));
           break;
         case 5:
-          message.feeTokenInTerms = Coin.decode(reader, reader.uint32());
+          message.feeTokenInTerms = Coin.decode(reader, reader.uint32(), useInterfaces);
           break;
         case 6:
           message.effectivePrice = Decimal.fromAtomics(reader.string(), 18).toString();
@@ -276,7 +296,7 @@ export const QueryTradeSimulationResponse = {
           message.priceImpact = Decimal.fromAtomics(reader.string(), 18).toString();
           break;
         case 8:
-          message.swapSteps.push(SwapStep.decode(reader, reader.uint32()));
+          message.swapSteps.push(SwapStep.decode(reader, reader.uint32(), useInterfaces));
           break;
         default:
           reader.skipType(tag & 7);
@@ -353,31 +373,31 @@ export const QueryTradeSimulationResponse = {
     message.swapSteps = object.swap_steps?.map(e => SwapStep.fromAmino(e)) || [];
     return message;
   },
-  toAmino(message: QueryTradeSimulationResponse): QueryTradeSimulationResponseAmino {
+  toAmino(message: QueryTradeSimulationResponse, useInterfaces: boolean = true): QueryTradeSimulationResponseAmino {
     const obj: any = {};
-    obj.price_token_in_token_out_terms = message.priceTokenInTokenOutTerms;
-    obj.amount_in = message.amountIn ? Coin.toAmino(message.amountIn) : undefined;
-    obj.amount_out = message.amountOut ? Coin.toAmino(message.amountOut) : undefined;
+    obj.price_token_in_token_out_terms = padDecimal(message.priceTokenInTokenOutTerms) === "" ? undefined : padDecimal(message.priceTokenInTokenOutTerms);
+    obj.amount_in = message.amountIn ? Coin.toAmino(message.amountIn, useInterfaces) : undefined;
+    obj.amount_out = message.amountOut ? Coin.toAmino(message.amountOut, useInterfaces) : undefined;
     if (message.fee) {
-      obj.fee = message.fee.map(e => e ? Coin.toAmino(e) : undefined);
+      obj.fee = message.fee.map(e => e ? Coin.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.fee = [];
+      obj.fee = message.fee;
     }
-    obj.feeTokenInTerms = message.feeTokenInTerms ? Coin.toAmino(message.feeTokenInTerms) : undefined;
-    obj.effective_price = message.effectivePrice;
-    obj.price_impact = message.priceImpact;
+    obj.feeTokenInTerms = message.feeTokenInTerms ? Coin.toAmino(message.feeTokenInTerms, useInterfaces) : undefined;
+    obj.effective_price = padDecimal(message.effectivePrice) === "" ? undefined : padDecimal(message.effectivePrice);
+    obj.price_impact = padDecimal(message.priceImpact) === "" ? undefined : padDecimal(message.priceImpact);
     if (message.swapSteps) {
-      obj.swap_steps = message.swapSteps.map(e => e ? SwapStep.toAmino(e) : undefined);
+      obj.swap_steps = message.swapSteps.map(e => e ? SwapStep.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.swap_steps = [];
+      obj.swap_steps = message.swapSteps;
     }
     return obj;
   },
   fromAminoMsg(object: QueryTradeSimulationResponseAminoMsg): QueryTradeSimulationResponse {
     return QueryTradeSimulationResponse.fromAmino(object.value);
   },
-  fromProtoMsg(message: QueryTradeSimulationResponseProtoMsg): QueryTradeSimulationResponse {
-    return QueryTradeSimulationResponse.decode(message.value);
+  fromProtoMsg(message: QueryTradeSimulationResponseProtoMsg, useInterfaces: boolean = true): QueryTradeSimulationResponse {
+    return QueryTradeSimulationResponse.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: QueryTradeSimulationResponse): Uint8Array {
     return QueryTradeSimulationResponse.encode(message).finish();
@@ -389,3 +409,4 @@ export const QueryTradeSimulationResponse = {
     };
   }
 };
+GlobalDecoderRegistry.register(QueryTradeSimulationResponse.typeUrl, QueryTradeSimulationResponse);

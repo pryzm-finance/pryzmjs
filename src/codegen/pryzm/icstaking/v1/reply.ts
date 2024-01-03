@@ -1,6 +1,7 @@
 import { Coin, CoinAmino, CoinSDKType } from "../../../cosmos/base/v1beta1/coin";
 import { BinaryReader, BinaryWriter } from "../../../binary";
 import { isSet, bytesFromBase64, base64FromBytes } from "../../../helpers";
+import { GlobalDecoderRegistry } from "../../../registry";
 /** the stored data for handling the reply of a sent ibc packet */
 export interface ReplyData {
   /** the identifier of the bridge */
@@ -385,6 +386,15 @@ function createBaseReplyData(): ReplyData {
 }
 export const ReplyData = {
   typeUrl: "/pryzm.icstaking.v1.ReplyData",
+  is(o: any): o is ReplyData {
+    return o && (o.$typeUrl === ReplyData.typeUrl || typeof o.bridgeId === "string" && PacketId.is(o.packetId) && typeof o.hostChainId === "string" && (o.data instanceof Uint8Array || typeof o.data === "string"));
+  },
+  isSDK(o: any): o is ReplyDataSDKType {
+    return o && (o.$typeUrl === ReplyData.typeUrl || typeof o.bridge_id === "string" && PacketId.isSDK(o.packet_id) && typeof o.host_chain_id === "string" && (o.data instanceof Uint8Array || typeof o.data === "string"));
+  },
+  isAmino(o: any): o is ReplyDataAmino {
+    return o && (o.$typeUrl === ReplyData.typeUrl || typeof o.bridge_id === "string" && PacketId.isAmino(o.packet_id) && typeof o.host_chain_id === "string" && (o.data instanceof Uint8Array || typeof o.data === "string"));
+  },
   encode(message: ReplyData, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.bridgeId !== "") {
       writer.uint32(10).string(message.bridgeId);
@@ -400,7 +410,7 @@ export const ReplyData = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): ReplyData {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): ReplyData {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseReplyData();
@@ -411,7 +421,7 @@ export const ReplyData = {
           message.bridgeId = reader.string();
           break;
         case 2:
-          message.packetId = PacketId.decode(reader, reader.uint32());
+          message.packetId = PacketId.decode(reader, reader.uint32(), useInterfaces);
           break;
         case 3:
           message.hostChainId = reader.string();
@@ -466,19 +476,19 @@ export const ReplyData = {
     }
     return message;
   },
-  toAmino(message: ReplyData): ReplyDataAmino {
+  toAmino(message: ReplyData, useInterfaces: boolean = true): ReplyDataAmino {
     const obj: any = {};
-    obj.bridge_id = message.bridgeId;
-    obj.packet_id = message.packetId ? PacketId.toAmino(message.packetId) : undefined;
-    obj.host_chain_id = message.hostChainId;
+    obj.bridge_id = message.bridgeId === "" ? undefined : message.bridgeId;
+    obj.packet_id = message.packetId ? PacketId.toAmino(message.packetId, useInterfaces) : undefined;
+    obj.host_chain_id = message.hostChainId === "" ? undefined : message.hostChainId;
     obj.data = message.data ? base64FromBytes(message.data) : undefined;
     return obj;
   },
   fromAminoMsg(object: ReplyDataAminoMsg): ReplyData {
     return ReplyData.fromAmino(object.value);
   },
-  fromProtoMsg(message: ReplyDataProtoMsg): ReplyData {
-    return ReplyData.decode(message.value);
+  fromProtoMsg(message: ReplyDataProtoMsg, useInterfaces: boolean = true): ReplyData {
+    return ReplyData.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: ReplyData): Uint8Array {
     return ReplyData.encode(message).finish();
@@ -490,6 +500,7 @@ export const ReplyData = {
     };
   }
 };
+GlobalDecoderRegistry.register(ReplyData.typeUrl, ReplyData);
 function createBasePacketId(): PacketId {
   return {
     portId: "",
@@ -499,6 +510,15 @@ function createBasePacketId(): PacketId {
 }
 export const PacketId = {
   typeUrl: "/pryzm.icstaking.v1.PacketId",
+  is(o: any): o is PacketId {
+    return o && (o.$typeUrl === PacketId.typeUrl || typeof o.portId === "string" && typeof o.channelId === "string" && typeof o.sequence === "bigint");
+  },
+  isSDK(o: any): o is PacketIdSDKType {
+    return o && (o.$typeUrl === PacketId.typeUrl || typeof o.port_id === "string" && typeof o.channel_id === "string" && typeof o.sequence === "bigint");
+  },
+  isAmino(o: any): o is PacketIdAmino {
+    return o && (o.$typeUrl === PacketId.typeUrl || typeof o.port_id === "string" && typeof o.channel_id === "string" && typeof o.sequence === "bigint");
+  },
   encode(message: PacketId, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.portId !== "") {
       writer.uint32(10).string(message.portId);
@@ -511,7 +531,7 @@ export const PacketId = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): PacketId {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): PacketId {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBasePacketId();
@@ -568,18 +588,18 @@ export const PacketId = {
     }
     return message;
   },
-  toAmino(message: PacketId): PacketIdAmino {
+  toAmino(message: PacketId, useInterfaces: boolean = true): PacketIdAmino {
     const obj: any = {};
-    obj.port_id = message.portId;
-    obj.channel_id = message.channelId;
+    obj.port_id = message.portId === "" ? undefined : message.portId;
+    obj.channel_id = message.channelId === "" ? undefined : message.channelId;
     obj.sequence = message.sequence ? message.sequence.toString() : undefined;
     return obj;
   },
   fromAminoMsg(object: PacketIdAminoMsg): PacketId {
     return PacketId.fromAmino(object.value);
   },
-  fromProtoMsg(message: PacketIdProtoMsg): PacketId {
-    return PacketId.decode(message.value);
+  fromProtoMsg(message: PacketIdProtoMsg, useInterfaces: boolean = true): PacketId {
+    return PacketId.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: PacketId): Uint8Array {
     return PacketId.encode(message).finish();
@@ -591,6 +611,7 @@ export const PacketId = {
     };
   }
 };
+GlobalDecoderRegistry.register(PacketId.typeUrl, PacketId);
 function createBaseDelegateTransferReplyData(): DelegateTransferReplyData {
   return {
     transferSession: "",
@@ -599,6 +620,15 @@ function createBaseDelegateTransferReplyData(): DelegateTransferReplyData {
 }
 export const DelegateTransferReplyData = {
   typeUrl: "/pryzm.icstaking.v1.DelegateTransferReplyData",
+  is(o: any): o is DelegateTransferReplyData {
+    return o && (o.$typeUrl === DelegateTransferReplyData.typeUrl || typeof o.transferSession === "string" && Coin.is(o.amount));
+  },
+  isSDK(o: any): o is DelegateTransferReplyDataSDKType {
+    return o && (o.$typeUrl === DelegateTransferReplyData.typeUrl || typeof o.transfer_session === "string" && Coin.isSDK(o.amount));
+  },
+  isAmino(o: any): o is DelegateTransferReplyDataAmino {
+    return o && (o.$typeUrl === DelegateTransferReplyData.typeUrl || typeof o.transfer_session === "string" && Coin.isAmino(o.amount));
+  },
   encode(message: DelegateTransferReplyData, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.transferSession !== "") {
       writer.uint32(10).string(message.transferSession);
@@ -608,7 +638,7 @@ export const DelegateTransferReplyData = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): DelegateTransferReplyData {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): DelegateTransferReplyData {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseDelegateTransferReplyData();
@@ -619,7 +649,7 @@ export const DelegateTransferReplyData = {
           message.transferSession = reader.string();
           break;
         case 2:
-          message.amount = Coin.decode(reader, reader.uint32());
+          message.amount = Coin.decode(reader, reader.uint32(), useInterfaces);
           break;
         default:
           reader.skipType(tag & 7);
@@ -656,17 +686,17 @@ export const DelegateTransferReplyData = {
     }
     return message;
   },
-  toAmino(message: DelegateTransferReplyData): DelegateTransferReplyDataAmino {
+  toAmino(message: DelegateTransferReplyData, useInterfaces: boolean = true): DelegateTransferReplyDataAmino {
     const obj: any = {};
-    obj.transfer_session = message.transferSession;
-    obj.amount = message.amount ? Coin.toAmino(message.amount) : undefined;
+    obj.transfer_session = message.transferSession === "" ? undefined : message.transferSession;
+    obj.amount = message.amount ? Coin.toAmino(message.amount, useInterfaces) : undefined;
     return obj;
   },
   fromAminoMsg(object: DelegateTransferReplyDataAminoMsg): DelegateTransferReplyData {
     return DelegateTransferReplyData.fromAmino(object.value);
   },
-  fromProtoMsg(message: DelegateTransferReplyDataProtoMsg): DelegateTransferReplyData {
-    return DelegateTransferReplyData.decode(message.value);
+  fromProtoMsg(message: DelegateTransferReplyDataProtoMsg, useInterfaces: boolean = true): DelegateTransferReplyData {
+    return DelegateTransferReplyData.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: DelegateTransferReplyData): Uint8Array {
     return DelegateTransferReplyData.encode(message).finish();
@@ -678,6 +708,7 @@ export const DelegateTransferReplyData = {
     };
   }
 };
+GlobalDecoderRegistry.register(DelegateTransferReplyData.typeUrl, DelegateTransferReplyData);
 function createBaseDelegateTransferSession(): DelegateTransferSession {
   return {
     id: "",
@@ -686,6 +717,15 @@ function createBaseDelegateTransferSession(): DelegateTransferSession {
 }
 export const DelegateTransferSession = {
   typeUrl: "/pryzm.icstaking.v1.DelegateTransferSession",
+  is(o: any): o is DelegateTransferSession {
+    return o && (o.$typeUrl === DelegateTransferSession.typeUrl || typeof o.id === "string" && Array.isArray(o.packetStates) && (!o.packetStates.length || TransferPacketState.is(o.packetStates[0])));
+  },
+  isSDK(o: any): o is DelegateTransferSessionSDKType {
+    return o && (o.$typeUrl === DelegateTransferSession.typeUrl || typeof o.id === "string" && Array.isArray(o.packet_states) && (!o.packet_states.length || TransferPacketState.isSDK(o.packet_states[0])));
+  },
+  isAmino(o: any): o is DelegateTransferSessionAmino {
+    return o && (o.$typeUrl === DelegateTransferSession.typeUrl || typeof o.id === "string" && Array.isArray(o.packet_states) && (!o.packet_states.length || TransferPacketState.isAmino(o.packet_states[0])));
+  },
   encode(message: DelegateTransferSession, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.id !== "") {
       writer.uint32(10).string(message.id);
@@ -695,7 +735,7 @@ export const DelegateTransferSession = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): DelegateTransferSession {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): DelegateTransferSession {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseDelegateTransferSession();
@@ -706,7 +746,7 @@ export const DelegateTransferSession = {
           message.id = reader.string();
           break;
         case 2:
-          message.packetStates.push(TransferPacketState.decode(reader, reader.uint32()));
+          message.packetStates.push(TransferPacketState.decode(reader, reader.uint32(), useInterfaces));
           break;
         default:
           reader.skipType(tag & 7);
@@ -745,21 +785,21 @@ export const DelegateTransferSession = {
     message.packetStates = object.packet_states?.map(e => TransferPacketState.fromAmino(e)) || [];
     return message;
   },
-  toAmino(message: DelegateTransferSession): DelegateTransferSessionAmino {
+  toAmino(message: DelegateTransferSession, useInterfaces: boolean = true): DelegateTransferSessionAmino {
     const obj: any = {};
-    obj.id = message.id;
+    obj.id = message.id === "" ? undefined : message.id;
     if (message.packetStates) {
-      obj.packet_states = message.packetStates.map(e => e ? TransferPacketState.toAmino(e) : undefined);
+      obj.packet_states = message.packetStates.map(e => e ? TransferPacketState.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.packet_states = [];
+      obj.packet_states = message.packetStates;
     }
     return obj;
   },
   fromAminoMsg(object: DelegateTransferSessionAminoMsg): DelegateTransferSession {
     return DelegateTransferSession.fromAmino(object.value);
   },
-  fromProtoMsg(message: DelegateTransferSessionProtoMsg): DelegateTransferSession {
-    return DelegateTransferSession.decode(message.value);
+  fromProtoMsg(message: DelegateTransferSessionProtoMsg, useInterfaces: boolean = true): DelegateTransferSession {
+    return DelegateTransferSession.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: DelegateTransferSession): Uint8Array {
     return DelegateTransferSession.encode(message).finish();
@@ -771,6 +811,7 @@ export const DelegateTransferSession = {
     };
   }
 };
+GlobalDecoderRegistry.register(DelegateTransferSession.typeUrl, DelegateTransferSession);
 function createBaseTransferPacketState(): TransferPacketState {
   return {
     packetId: "",
@@ -779,6 +820,15 @@ function createBaseTransferPacketState(): TransferPacketState {
 }
 export const TransferPacketState = {
   typeUrl: "/pryzm.icstaking.v1.TransferPacketState",
+  is(o: any): o is TransferPacketState {
+    return o && (o.$typeUrl === TransferPacketState.typeUrl || typeof o.packetId === "string" && typeof o.finalized === "boolean");
+  },
+  isSDK(o: any): o is TransferPacketStateSDKType {
+    return o && (o.$typeUrl === TransferPacketState.typeUrl || typeof o.packet_id === "string" && typeof o.finalized === "boolean");
+  },
+  isAmino(o: any): o is TransferPacketStateAmino {
+    return o && (o.$typeUrl === TransferPacketState.typeUrl || typeof o.packet_id === "string" && typeof o.finalized === "boolean");
+  },
   encode(message: TransferPacketState, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.packetId !== "") {
       writer.uint32(10).string(message.packetId);
@@ -788,7 +838,7 @@ export const TransferPacketState = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): TransferPacketState {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): TransferPacketState {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseTransferPacketState();
@@ -836,17 +886,17 @@ export const TransferPacketState = {
     }
     return message;
   },
-  toAmino(message: TransferPacketState): TransferPacketStateAmino {
+  toAmino(message: TransferPacketState, useInterfaces: boolean = true): TransferPacketStateAmino {
     const obj: any = {};
-    obj.packet_id = message.packetId;
-    obj.finalized = message.finalized;
+    obj.packet_id = message.packetId === "" ? undefined : message.packetId;
+    obj.finalized = message.finalized === false ? undefined : message.finalized;
     return obj;
   },
   fromAminoMsg(object: TransferPacketStateAminoMsg): TransferPacketState {
     return TransferPacketState.fromAmino(object.value);
   },
-  fromProtoMsg(message: TransferPacketStateProtoMsg): TransferPacketState {
-    return TransferPacketState.decode(message.value);
+  fromProtoMsg(message: TransferPacketStateProtoMsg, useInterfaces: boolean = true): TransferPacketState {
+    return TransferPacketState.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: TransferPacketState): Uint8Array {
     return TransferPacketState.encode(message).finish();
@@ -858,6 +908,7 @@ export const TransferPacketState = {
     };
   }
 };
+GlobalDecoderRegistry.register(TransferPacketState.typeUrl, TransferPacketState);
 function createBaseDelegateReplyData(): DelegateReplyData {
   return {
     delegations: []
@@ -865,13 +916,22 @@ function createBaseDelegateReplyData(): DelegateReplyData {
 }
 export const DelegateReplyData = {
   typeUrl: "/pryzm.icstaking.v1.DelegateReplyData",
+  is(o: any): o is DelegateReplyData {
+    return o && (o.$typeUrl === DelegateReplyData.typeUrl || Array.isArray(o.delegations) && (!o.delegations.length || DelegationEntry.is(o.delegations[0])));
+  },
+  isSDK(o: any): o is DelegateReplyDataSDKType {
+    return o && (o.$typeUrl === DelegateReplyData.typeUrl || Array.isArray(o.delegations) && (!o.delegations.length || DelegationEntry.isSDK(o.delegations[0])));
+  },
+  isAmino(o: any): o is DelegateReplyDataAmino {
+    return o && (o.$typeUrl === DelegateReplyData.typeUrl || Array.isArray(o.delegations) && (!o.delegations.length || DelegationEntry.isAmino(o.delegations[0])));
+  },
   encode(message: DelegateReplyData, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     for (const v of message.delegations) {
       DelegationEntry.encode(v!, writer.uint32(10).fork()).ldelim();
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): DelegateReplyData {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): DelegateReplyData {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseDelegateReplyData();
@@ -879,7 +939,7 @@ export const DelegateReplyData = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.delegations.push(DelegationEntry.decode(reader, reader.uint32()));
+          message.delegations.push(DelegationEntry.decode(reader, reader.uint32(), useInterfaces));
           break;
         default:
           reader.skipType(tag & 7);
@@ -912,20 +972,20 @@ export const DelegateReplyData = {
     message.delegations = object.delegations?.map(e => DelegationEntry.fromAmino(e)) || [];
     return message;
   },
-  toAmino(message: DelegateReplyData): DelegateReplyDataAmino {
+  toAmino(message: DelegateReplyData, useInterfaces: boolean = true): DelegateReplyDataAmino {
     const obj: any = {};
     if (message.delegations) {
-      obj.delegations = message.delegations.map(e => e ? DelegationEntry.toAmino(e) : undefined);
+      obj.delegations = message.delegations.map(e => e ? DelegationEntry.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.delegations = [];
+      obj.delegations = message.delegations;
     }
     return obj;
   },
   fromAminoMsg(object: DelegateReplyDataAminoMsg): DelegateReplyData {
     return DelegateReplyData.fromAmino(object.value);
   },
-  fromProtoMsg(message: DelegateReplyDataProtoMsg): DelegateReplyData {
-    return DelegateReplyData.decode(message.value);
+  fromProtoMsg(message: DelegateReplyDataProtoMsg, useInterfaces: boolean = true): DelegateReplyData {
+    return DelegateReplyData.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: DelegateReplyData): Uint8Array {
     return DelegateReplyData.encode(message).finish();
@@ -937,6 +997,7 @@ export const DelegateReplyData = {
     };
   }
 };
+GlobalDecoderRegistry.register(DelegateReplyData.typeUrl, DelegateReplyData);
 function createBaseDelegationEntry(): DelegationEntry {
   return {
     validator: "",
@@ -945,6 +1006,15 @@ function createBaseDelegationEntry(): DelegationEntry {
 }
 export const DelegationEntry = {
   typeUrl: "/pryzm.icstaking.v1.DelegationEntry",
+  is(o: any): o is DelegationEntry {
+    return o && (o.$typeUrl === DelegationEntry.typeUrl || typeof o.validator === "string" && typeof o.amount === "string");
+  },
+  isSDK(o: any): o is DelegationEntrySDKType {
+    return o && (o.$typeUrl === DelegationEntry.typeUrl || typeof o.validator === "string" && typeof o.amount === "string");
+  },
+  isAmino(o: any): o is DelegationEntryAmino {
+    return o && (o.$typeUrl === DelegationEntry.typeUrl || typeof o.validator === "string" && typeof o.amount === "string");
+  },
   encode(message: DelegationEntry, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.validator !== "") {
       writer.uint32(10).string(message.validator);
@@ -954,7 +1024,7 @@ export const DelegationEntry = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): DelegationEntry {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): DelegationEntry {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseDelegationEntry();
@@ -1002,17 +1072,17 @@ export const DelegationEntry = {
     }
     return message;
   },
-  toAmino(message: DelegationEntry): DelegationEntryAmino {
+  toAmino(message: DelegationEntry, useInterfaces: boolean = true): DelegationEntryAmino {
     const obj: any = {};
-    obj.validator = message.validator;
-    obj.amount = message.amount;
+    obj.validator = message.validator === "" ? undefined : message.validator;
+    obj.amount = message.amount === "" ? undefined : message.amount;
     return obj;
   },
   fromAminoMsg(object: DelegationEntryAminoMsg): DelegationEntry {
     return DelegationEntry.fromAmino(object.value);
   },
-  fromProtoMsg(message: DelegationEntryProtoMsg): DelegationEntry {
-    return DelegationEntry.decode(message.value);
+  fromProtoMsg(message: DelegationEntryProtoMsg, useInterfaces: boolean = true): DelegationEntry {
+    return DelegationEntry.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: DelegationEntry): Uint8Array {
     return DelegationEntry.encode(message).finish();
@@ -1024,6 +1094,7 @@ export const DelegationEntry = {
     };
   }
 };
+GlobalDecoderRegistry.register(DelegationEntry.typeUrl, DelegationEntry);
 function createBaseUndelegateReplyData(): UndelegateReplyData {
   return {
     totalCAmount: "",
@@ -1033,6 +1104,15 @@ function createBaseUndelegateReplyData(): UndelegateReplyData {
 }
 export const UndelegateReplyData = {
   typeUrl: "/pryzm.icstaking.v1.UndelegateReplyData",
+  is(o: any): o is UndelegateReplyData {
+    return o && (o.$typeUrl === UndelegateReplyData.typeUrl || typeof o.totalCAmount === "string" && Array.isArray(o.undelegations) && (!o.undelegations.length || UndelegationEntry.is(o.undelegations[0])) && Array.isArray(o.epochs) && (!o.epochs.length || typeof o.epochs[0] === "bigint"));
+  },
+  isSDK(o: any): o is UndelegateReplyDataSDKType {
+    return o && (o.$typeUrl === UndelegateReplyData.typeUrl || typeof o.total_c_amount === "string" && Array.isArray(o.undelegations) && (!o.undelegations.length || UndelegationEntry.isSDK(o.undelegations[0])) && Array.isArray(o.epochs) && (!o.epochs.length || typeof o.epochs[0] === "bigint"));
+  },
+  isAmino(o: any): o is UndelegateReplyDataAmino {
+    return o && (o.$typeUrl === UndelegateReplyData.typeUrl || typeof o.total_c_amount === "string" && Array.isArray(o.undelegations) && (!o.undelegations.length || UndelegationEntry.isAmino(o.undelegations[0])) && Array.isArray(o.epochs) && (!o.epochs.length || typeof o.epochs[0] === "bigint"));
+  },
   encode(message: UndelegateReplyData, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.totalCAmount !== "") {
       writer.uint32(10).string(message.totalCAmount);
@@ -1047,7 +1127,7 @@ export const UndelegateReplyData = {
     writer.ldelim();
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): UndelegateReplyData {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): UndelegateReplyData {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseUndelegateReplyData();
@@ -1058,7 +1138,7 @@ export const UndelegateReplyData = {
           message.totalCAmount = reader.string();
           break;
         case 2:
-          message.undelegations.push(UndelegationEntry.decode(reader, reader.uint32()));
+          message.undelegations.push(UndelegationEntry.decode(reader, reader.uint32(), useInterfaces));
           break;
         case 3:
           if ((tag & 7) === 2) {
@@ -1115,26 +1195,26 @@ export const UndelegateReplyData = {
     message.epochs = object.epochs?.map(e => BigInt(e)) || [];
     return message;
   },
-  toAmino(message: UndelegateReplyData): UndelegateReplyDataAmino {
+  toAmino(message: UndelegateReplyData, useInterfaces: boolean = true): UndelegateReplyDataAmino {
     const obj: any = {};
-    obj.total_c_amount = message.totalCAmount;
+    obj.total_c_amount = message.totalCAmount === "" ? undefined : message.totalCAmount;
     if (message.undelegations) {
-      obj.undelegations = message.undelegations.map(e => e ? UndelegationEntry.toAmino(e) : undefined);
+      obj.undelegations = message.undelegations.map(e => e ? UndelegationEntry.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.undelegations = [];
+      obj.undelegations = message.undelegations;
     }
     if (message.epochs) {
       obj.epochs = message.epochs.map(e => e.toString());
     } else {
-      obj.epochs = [];
+      obj.epochs = message.epochs;
     }
     return obj;
   },
   fromAminoMsg(object: UndelegateReplyDataAminoMsg): UndelegateReplyData {
     return UndelegateReplyData.fromAmino(object.value);
   },
-  fromProtoMsg(message: UndelegateReplyDataProtoMsg): UndelegateReplyData {
-    return UndelegateReplyData.decode(message.value);
+  fromProtoMsg(message: UndelegateReplyDataProtoMsg, useInterfaces: boolean = true): UndelegateReplyData {
+    return UndelegateReplyData.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: UndelegateReplyData): Uint8Array {
     return UndelegateReplyData.encode(message).finish();
@@ -1146,6 +1226,7 @@ export const UndelegateReplyData = {
     };
   }
 };
+GlobalDecoderRegistry.register(UndelegateReplyData.typeUrl, UndelegateReplyData);
 function createBaseUndelegationEntry(): UndelegationEntry {
   return {
     validator: "",
@@ -1154,6 +1235,15 @@ function createBaseUndelegationEntry(): UndelegationEntry {
 }
 export const UndelegationEntry = {
   typeUrl: "/pryzm.icstaking.v1.UndelegationEntry",
+  is(o: any): o is UndelegationEntry {
+    return o && (o.$typeUrl === UndelegationEntry.typeUrl || typeof o.validator === "string" && typeof o.amount === "string");
+  },
+  isSDK(o: any): o is UndelegationEntrySDKType {
+    return o && (o.$typeUrl === UndelegationEntry.typeUrl || typeof o.validator === "string" && typeof o.amount === "string");
+  },
+  isAmino(o: any): o is UndelegationEntryAmino {
+    return o && (o.$typeUrl === UndelegationEntry.typeUrl || typeof o.validator === "string" && typeof o.amount === "string");
+  },
   encode(message: UndelegationEntry, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.validator !== "") {
       writer.uint32(10).string(message.validator);
@@ -1163,7 +1253,7 @@ export const UndelegationEntry = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): UndelegationEntry {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): UndelegationEntry {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseUndelegationEntry();
@@ -1211,17 +1301,17 @@ export const UndelegationEntry = {
     }
     return message;
   },
-  toAmino(message: UndelegationEntry): UndelegationEntryAmino {
+  toAmino(message: UndelegationEntry, useInterfaces: boolean = true): UndelegationEntryAmino {
     const obj: any = {};
-    obj.validator = message.validator;
-    obj.amount = message.amount;
+    obj.validator = message.validator === "" ? undefined : message.validator;
+    obj.amount = message.amount === "" ? undefined : message.amount;
     return obj;
   },
   fromAminoMsg(object: UndelegationEntryAminoMsg): UndelegationEntry {
     return UndelegationEntry.fromAmino(object.value);
   },
-  fromProtoMsg(message: UndelegationEntryProtoMsg): UndelegationEntry {
-    return UndelegationEntry.decode(message.value);
+  fromProtoMsg(message: UndelegationEntryProtoMsg, useInterfaces: boolean = true): UndelegationEntry {
+    return UndelegationEntry.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: UndelegationEntry): Uint8Array {
     return UndelegationEntry.encode(message).finish();
@@ -1233,6 +1323,7 @@ export const UndelegationEntry = {
     };
   }
 };
+GlobalDecoderRegistry.register(UndelegationEntry.typeUrl, UndelegationEntry);
 function createBaseRedelegateReplyData(): RedelegateReplyData {
   return {
     redelegations: []
@@ -1240,13 +1331,22 @@ function createBaseRedelegateReplyData(): RedelegateReplyData {
 }
 export const RedelegateReplyData = {
   typeUrl: "/pryzm.icstaking.v1.RedelegateReplyData",
+  is(o: any): o is RedelegateReplyData {
+    return o && (o.$typeUrl === RedelegateReplyData.typeUrl || Array.isArray(o.redelegations) && (!o.redelegations.length || RedelegationEntry.is(o.redelegations[0])));
+  },
+  isSDK(o: any): o is RedelegateReplyDataSDKType {
+    return o && (o.$typeUrl === RedelegateReplyData.typeUrl || Array.isArray(o.redelegations) && (!o.redelegations.length || RedelegationEntry.isSDK(o.redelegations[0])));
+  },
+  isAmino(o: any): o is RedelegateReplyDataAmino {
+    return o && (o.$typeUrl === RedelegateReplyData.typeUrl || Array.isArray(o.redelegations) && (!o.redelegations.length || RedelegationEntry.isAmino(o.redelegations[0])));
+  },
   encode(message: RedelegateReplyData, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     for (const v of message.redelegations) {
       RedelegationEntry.encode(v!, writer.uint32(10).fork()).ldelim();
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): RedelegateReplyData {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): RedelegateReplyData {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseRedelegateReplyData();
@@ -1254,7 +1354,7 @@ export const RedelegateReplyData = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.redelegations.push(RedelegationEntry.decode(reader, reader.uint32()));
+          message.redelegations.push(RedelegationEntry.decode(reader, reader.uint32(), useInterfaces));
           break;
         default:
           reader.skipType(tag & 7);
@@ -1287,20 +1387,20 @@ export const RedelegateReplyData = {
     message.redelegations = object.redelegations?.map(e => RedelegationEntry.fromAmino(e)) || [];
     return message;
   },
-  toAmino(message: RedelegateReplyData): RedelegateReplyDataAmino {
+  toAmino(message: RedelegateReplyData, useInterfaces: boolean = true): RedelegateReplyDataAmino {
     const obj: any = {};
     if (message.redelegations) {
-      obj.redelegations = message.redelegations.map(e => e ? RedelegationEntry.toAmino(e) : undefined);
+      obj.redelegations = message.redelegations.map(e => e ? RedelegationEntry.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.redelegations = [];
+      obj.redelegations = message.redelegations;
     }
     return obj;
   },
   fromAminoMsg(object: RedelegateReplyDataAminoMsg): RedelegateReplyData {
     return RedelegateReplyData.fromAmino(object.value);
   },
-  fromProtoMsg(message: RedelegateReplyDataProtoMsg): RedelegateReplyData {
-    return RedelegateReplyData.decode(message.value);
+  fromProtoMsg(message: RedelegateReplyDataProtoMsg, useInterfaces: boolean = true): RedelegateReplyData {
+    return RedelegateReplyData.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: RedelegateReplyData): Uint8Array {
     return RedelegateReplyData.encode(message).finish();
@@ -1312,6 +1412,7 @@ export const RedelegateReplyData = {
     };
   }
 };
+GlobalDecoderRegistry.register(RedelegateReplyData.typeUrl, RedelegateReplyData);
 function createBaseRedelegationEntry(): RedelegationEntry {
   return {
     srcValidator: "",
@@ -1321,6 +1422,15 @@ function createBaseRedelegationEntry(): RedelegationEntry {
 }
 export const RedelegationEntry = {
   typeUrl: "/pryzm.icstaking.v1.RedelegationEntry",
+  is(o: any): o is RedelegationEntry {
+    return o && (o.$typeUrl === RedelegationEntry.typeUrl || typeof o.srcValidator === "string" && typeof o.dstValidator === "string" && typeof o.amount === "string");
+  },
+  isSDK(o: any): o is RedelegationEntrySDKType {
+    return o && (o.$typeUrl === RedelegationEntry.typeUrl || typeof o.src_validator === "string" && typeof o.dst_validator === "string" && typeof o.amount === "string");
+  },
+  isAmino(o: any): o is RedelegationEntryAmino {
+    return o && (o.$typeUrl === RedelegationEntry.typeUrl || typeof o.src_validator === "string" && typeof o.dst_validator === "string" && typeof o.amount === "string");
+  },
   encode(message: RedelegationEntry, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.srcValidator !== "") {
       writer.uint32(10).string(message.srcValidator);
@@ -1333,7 +1443,7 @@ export const RedelegationEntry = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): RedelegationEntry {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): RedelegationEntry {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseRedelegationEntry();
@@ -1390,18 +1500,18 @@ export const RedelegationEntry = {
     }
     return message;
   },
-  toAmino(message: RedelegationEntry): RedelegationEntryAmino {
+  toAmino(message: RedelegationEntry, useInterfaces: boolean = true): RedelegationEntryAmino {
     const obj: any = {};
-    obj.src_validator = message.srcValidator;
-    obj.dst_validator = message.dstValidator;
-    obj.amount = message.amount;
+    obj.src_validator = message.srcValidator === "" ? undefined : message.srcValidator;
+    obj.dst_validator = message.dstValidator === "" ? undefined : message.dstValidator;
+    obj.amount = message.amount === "" ? undefined : message.amount;
     return obj;
   },
   fromAminoMsg(object: RedelegationEntryAminoMsg): RedelegationEntry {
     return RedelegationEntry.fromAmino(object.value);
   },
-  fromProtoMsg(message: RedelegationEntryProtoMsg): RedelegationEntry {
-    return RedelegationEntry.decode(message.value);
+  fromProtoMsg(message: RedelegationEntryProtoMsg, useInterfaces: boolean = true): RedelegationEntry {
+    return RedelegationEntry.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: RedelegationEntry): Uint8Array {
     return RedelegationEntry.encode(message).finish();
@@ -1413,6 +1523,7 @@ export const RedelegationEntry = {
     };
   }
 };
+GlobalDecoderRegistry.register(RedelegationEntry.typeUrl, RedelegationEntry);
 function createBaseCompoundData(): CompoundData {
   return {
     feeAmount: "",
@@ -1421,6 +1532,15 @@ function createBaseCompoundData(): CompoundData {
 }
 export const CompoundData = {
   typeUrl: "/pryzm.icstaking.v1.CompoundData",
+  is(o: any): o is CompoundData {
+    return o && (o.$typeUrl === CompoundData.typeUrl || typeof o.feeAmount === "string" && typeof o.compoundAmount === "string");
+  },
+  isSDK(o: any): o is CompoundDataSDKType {
+    return o && (o.$typeUrl === CompoundData.typeUrl || typeof o.fee_amount === "string" && typeof o.compound_amount === "string");
+  },
+  isAmino(o: any): o is CompoundDataAmino {
+    return o && (o.$typeUrl === CompoundData.typeUrl || typeof o.fee_amount === "string" && typeof o.compound_amount === "string");
+  },
   encode(message: CompoundData, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.feeAmount !== "") {
       writer.uint32(10).string(message.feeAmount);
@@ -1430,7 +1550,7 @@ export const CompoundData = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): CompoundData {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): CompoundData {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseCompoundData();
@@ -1478,17 +1598,17 @@ export const CompoundData = {
     }
     return message;
   },
-  toAmino(message: CompoundData): CompoundDataAmino {
+  toAmino(message: CompoundData, useInterfaces: boolean = true): CompoundDataAmino {
     const obj: any = {};
-    obj.fee_amount = message.feeAmount;
-    obj.compound_amount = message.compoundAmount;
+    obj.fee_amount = message.feeAmount === "" ? undefined : message.feeAmount;
+    obj.compound_amount = message.compoundAmount === "" ? undefined : message.compoundAmount;
     return obj;
   },
   fromAminoMsg(object: CompoundDataAminoMsg): CompoundData {
     return CompoundData.fromAmino(object.value);
   },
-  fromProtoMsg(message: CompoundDataProtoMsg): CompoundData {
-    return CompoundData.decode(message.value);
+  fromProtoMsg(message: CompoundDataProtoMsg, useInterfaces: boolean = true): CompoundData {
+    return CompoundData.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: CompoundData): Uint8Array {
     return CompoundData.encode(message).finish();
@@ -1500,6 +1620,7 @@ export const CompoundData = {
     };
   }
 };
+GlobalDecoderRegistry.register(CompoundData.typeUrl, CompoundData);
 function createBaseCollectUndelegatedReplyData(): CollectUndelegatedReplyData {
   return {
     undelegatedAmount: ""
@@ -1507,13 +1628,22 @@ function createBaseCollectUndelegatedReplyData(): CollectUndelegatedReplyData {
 }
 export const CollectUndelegatedReplyData = {
   typeUrl: "/pryzm.icstaking.v1.CollectUndelegatedReplyData",
+  is(o: any): o is CollectUndelegatedReplyData {
+    return o && (o.$typeUrl === CollectUndelegatedReplyData.typeUrl || typeof o.undelegatedAmount === "string");
+  },
+  isSDK(o: any): o is CollectUndelegatedReplyDataSDKType {
+    return o && (o.$typeUrl === CollectUndelegatedReplyData.typeUrl || typeof o.undelegated_amount === "string");
+  },
+  isAmino(o: any): o is CollectUndelegatedReplyDataAmino {
+    return o && (o.$typeUrl === CollectUndelegatedReplyData.typeUrl || typeof o.undelegated_amount === "string");
+  },
   encode(message: CollectUndelegatedReplyData, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.undelegatedAmount !== "") {
       writer.uint32(10).string(message.undelegatedAmount);
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): CollectUndelegatedReplyData {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): CollectUndelegatedReplyData {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseCollectUndelegatedReplyData();
@@ -1552,16 +1682,16 @@ export const CollectUndelegatedReplyData = {
     }
     return message;
   },
-  toAmino(message: CollectUndelegatedReplyData): CollectUndelegatedReplyDataAmino {
+  toAmino(message: CollectUndelegatedReplyData, useInterfaces: boolean = true): CollectUndelegatedReplyDataAmino {
     const obj: any = {};
-    obj.undelegated_amount = message.undelegatedAmount;
+    obj.undelegated_amount = message.undelegatedAmount === "" ? undefined : message.undelegatedAmount;
     return obj;
   },
   fromAminoMsg(object: CollectUndelegatedReplyDataAminoMsg): CollectUndelegatedReplyData {
     return CollectUndelegatedReplyData.fromAmino(object.value);
   },
-  fromProtoMsg(message: CollectUndelegatedReplyDataProtoMsg): CollectUndelegatedReplyData {
-    return CollectUndelegatedReplyData.decode(message.value);
+  fromProtoMsg(message: CollectUndelegatedReplyDataProtoMsg, useInterfaces: boolean = true): CollectUndelegatedReplyData {
+    return CollectUndelegatedReplyData.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: CollectUndelegatedReplyData): Uint8Array {
     return CollectUndelegatedReplyData.encode(message).finish();
@@ -1573,6 +1703,7 @@ export const CollectUndelegatedReplyData = {
     };
   }
 };
+GlobalDecoderRegistry.register(CollectUndelegatedReplyData.typeUrl, CollectUndelegatedReplyData);
 function createBaseSweepData(): SweepData {
   return {
     channelSweeps: []
@@ -1580,13 +1711,22 @@ function createBaseSweepData(): SweepData {
 }
 export const SweepData = {
   typeUrl: "/pryzm.icstaking.v1.SweepData",
+  is(o: any): o is SweepData {
+    return o && (o.$typeUrl === SweepData.typeUrl || Array.isArray(o.channelSweeps) && (!o.channelSweeps.length || ChannelSweep.is(o.channelSweeps[0])));
+  },
+  isSDK(o: any): o is SweepDataSDKType {
+    return o && (o.$typeUrl === SweepData.typeUrl || Array.isArray(o.channel_sweeps) && (!o.channel_sweeps.length || ChannelSweep.isSDK(o.channel_sweeps[0])));
+  },
+  isAmino(o: any): o is SweepDataAmino {
+    return o && (o.$typeUrl === SweepData.typeUrl || Array.isArray(o.channel_sweeps) && (!o.channel_sweeps.length || ChannelSweep.isAmino(o.channel_sweeps[0])));
+  },
   encode(message: SweepData, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     for (const v of message.channelSweeps) {
       ChannelSweep.encode(v!, writer.uint32(10).fork()).ldelim();
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): SweepData {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): SweepData {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseSweepData();
@@ -1594,7 +1734,7 @@ export const SweepData = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.channelSweeps.push(ChannelSweep.decode(reader, reader.uint32()));
+          message.channelSweeps.push(ChannelSweep.decode(reader, reader.uint32(), useInterfaces));
           break;
         default:
           reader.skipType(tag & 7);
@@ -1627,20 +1767,20 @@ export const SweepData = {
     message.channelSweeps = object.channel_sweeps?.map(e => ChannelSweep.fromAmino(e)) || [];
     return message;
   },
-  toAmino(message: SweepData): SweepDataAmino {
+  toAmino(message: SweepData, useInterfaces: boolean = true): SweepDataAmino {
     const obj: any = {};
     if (message.channelSweeps) {
-      obj.channel_sweeps = message.channelSweeps.map(e => e ? ChannelSweep.toAmino(e) : undefined);
+      obj.channel_sweeps = message.channelSweeps.map(e => e ? ChannelSweep.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.channel_sweeps = [];
+      obj.channel_sweeps = message.channelSweeps;
     }
     return obj;
   },
   fromAminoMsg(object: SweepDataAminoMsg): SweepData {
     return SweepData.fromAmino(object.value);
   },
-  fromProtoMsg(message: SweepDataProtoMsg): SweepData {
-    return SweepData.decode(message.value);
+  fromProtoMsg(message: SweepDataProtoMsg, useInterfaces: boolean = true): SweepData {
+    return SweepData.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: SweepData): Uint8Array {
     return SweepData.encode(message).finish();
@@ -1652,6 +1792,7 @@ export const SweepData = {
     };
   }
 };
+GlobalDecoderRegistry.register(SweepData.typeUrl, SweepData);
 function createBaseChannelSweep(): ChannelSweep {
   return {
     channel: "",
@@ -1661,6 +1802,15 @@ function createBaseChannelSweep(): ChannelSweep {
 }
 export const ChannelSweep = {
   typeUrl: "/pryzm.icstaking.v1.ChannelSweep",
+  is(o: any): o is ChannelSweep {
+    return o && (o.$typeUrl === ChannelSweep.typeUrl || typeof o.channel === "string" && Array.isArray(o.epochs) && (!o.epochs.length || typeof o.epochs[0] === "bigint") && typeof o.amount === "string");
+  },
+  isSDK(o: any): o is ChannelSweepSDKType {
+    return o && (o.$typeUrl === ChannelSweep.typeUrl || typeof o.channel === "string" && Array.isArray(o.epochs) && (!o.epochs.length || typeof o.epochs[0] === "bigint") && typeof o.amount === "string");
+  },
+  isAmino(o: any): o is ChannelSweepAmino {
+    return o && (o.$typeUrl === ChannelSweep.typeUrl || typeof o.channel === "string" && Array.isArray(o.epochs) && (!o.epochs.length || typeof o.epochs[0] === "bigint") && typeof o.amount === "string");
+  },
   encode(message: ChannelSweep, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.channel !== "") {
       writer.uint32(10).string(message.channel);
@@ -1675,7 +1825,7 @@ export const ChannelSweep = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): ChannelSweep {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): ChannelSweep {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseChannelSweep();
@@ -1741,22 +1891,22 @@ export const ChannelSweep = {
     }
     return message;
   },
-  toAmino(message: ChannelSweep): ChannelSweepAmino {
+  toAmino(message: ChannelSweep, useInterfaces: boolean = true): ChannelSweepAmino {
     const obj: any = {};
-    obj.channel = message.channel;
+    obj.channel = message.channel === "" ? undefined : message.channel;
     if (message.epochs) {
       obj.epochs = message.epochs.map(e => e.toString());
     } else {
-      obj.epochs = [];
+      obj.epochs = message.epochs;
     }
-    obj.amount = message.amount;
+    obj.amount = message.amount === "" ? undefined : message.amount;
     return obj;
   },
   fromAminoMsg(object: ChannelSweepAminoMsg): ChannelSweep {
     return ChannelSweep.fromAmino(object.value);
   },
-  fromProtoMsg(message: ChannelSweepProtoMsg): ChannelSweep {
-    return ChannelSweep.decode(message.value);
+  fromProtoMsg(message: ChannelSweepProtoMsg, useInterfaces: boolean = true): ChannelSweep {
+    return ChannelSweep.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: ChannelSweep): Uint8Array {
     return ChannelSweep.encode(message).finish();
@@ -1768,3 +1918,4 @@ export const ChannelSweep = {
     };
   }
 };
+GlobalDecoderRegistry.register(ChannelSweep.typeUrl, ChannelSweep);

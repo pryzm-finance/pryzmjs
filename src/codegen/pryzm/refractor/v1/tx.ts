@@ -1,6 +1,7 @@
 import { Coin, CoinAmino, CoinSDKType } from "../../../cosmos/base/v1beta1/coin";
 import { BinaryReader, BinaryWriter } from "../../../binary";
 import { isSet } from "../../../helpers";
+import { GlobalDecoderRegistry } from "../../../registry";
 export interface MsgRefract {
   creator: string;
   amount: Coin;
@@ -99,6 +100,16 @@ function createBaseMsgRefract(): MsgRefract {
 }
 export const MsgRefract = {
   typeUrl: "/pryzm.refractor.v1.MsgRefract",
+  aminoType: "pryzm/refractor/v1/Refract",
+  is(o: any): o is MsgRefract {
+    return o && (o.$typeUrl === MsgRefract.typeUrl || typeof o.creator === "string" && Coin.is(o.amount) && typeof o.maturity === "string");
+  },
+  isSDK(o: any): o is MsgRefractSDKType {
+    return o && (o.$typeUrl === MsgRefract.typeUrl || typeof o.creator === "string" && Coin.isSDK(o.amount) && typeof o.maturity === "string");
+  },
+  isAmino(o: any): o is MsgRefractAmino {
+    return o && (o.$typeUrl === MsgRefract.typeUrl || typeof o.creator === "string" && Coin.isAmino(o.amount) && typeof o.maturity === "string");
+  },
   encode(message: MsgRefract, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.creator !== "") {
       writer.uint32(10).string(message.creator);
@@ -111,7 +122,7 @@ export const MsgRefract = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): MsgRefract {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): MsgRefract {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgRefract();
@@ -122,7 +133,7 @@ export const MsgRefract = {
           message.creator = reader.string();
           break;
         case 2:
-          message.amount = Coin.decode(reader, reader.uint32());
+          message.amount = Coin.decode(reader, reader.uint32(), useInterfaces);
           break;
         case 3:
           message.maturity = reader.string();
@@ -168,24 +179,24 @@ export const MsgRefract = {
     }
     return message;
   },
-  toAmino(message: MsgRefract): MsgRefractAmino {
+  toAmino(message: MsgRefract, useInterfaces: boolean = true): MsgRefractAmino {
     const obj: any = {};
-    obj.creator = message.creator;
-    obj.amount = message.amount ? Coin.toAmino(message.amount) : undefined;
-    obj.maturity = message.maturity;
+    obj.creator = message.creator === "" ? undefined : message.creator;
+    obj.amount = message.amount ? Coin.toAmino(message.amount, useInterfaces) : undefined;
+    obj.maturity = message.maturity === "" ? undefined : message.maturity;
     return obj;
   },
   fromAminoMsg(object: MsgRefractAminoMsg): MsgRefract {
     return MsgRefract.fromAmino(object.value);
   },
-  toAminoMsg(message: MsgRefract): MsgRefractAminoMsg {
+  toAminoMsg(message: MsgRefract, useInterfaces: boolean = true): MsgRefractAminoMsg {
     return {
       type: "pryzm/refractor/v1/Refract",
-      value: MsgRefract.toAmino(message)
+      value: MsgRefract.toAmino(message, useInterfaces)
     };
   },
-  fromProtoMsg(message: MsgRefractProtoMsg): MsgRefract {
-    return MsgRefract.decode(message.value);
+  fromProtoMsg(message: MsgRefractProtoMsg, useInterfaces: boolean = true): MsgRefract {
+    return MsgRefract.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: MsgRefract): Uint8Array {
     return MsgRefract.encode(message).finish();
@@ -197,6 +208,8 @@ export const MsgRefract = {
     };
   }
 };
+GlobalDecoderRegistry.register(MsgRefract.typeUrl, MsgRefract);
+GlobalDecoderRegistry.registerAminoProtoMapping(MsgRefract.aminoType, MsgRefract.typeUrl);
 function createBaseMsgRefractResponse(): MsgRefractResponse {
   return {
     pAmount: Coin.fromPartial({}),
@@ -206,6 +219,15 @@ function createBaseMsgRefractResponse(): MsgRefractResponse {
 }
 export const MsgRefractResponse = {
   typeUrl: "/pryzm.refractor.v1.MsgRefractResponse",
+  is(o: any): o is MsgRefractResponse {
+    return o && (o.$typeUrl === MsgRefractResponse.typeUrl || Coin.is(o.pAmount) && Coin.is(o.yAmount) && Coin.is(o.fee));
+  },
+  isSDK(o: any): o is MsgRefractResponseSDKType {
+    return o && (o.$typeUrl === MsgRefractResponse.typeUrl || Coin.isSDK(o.p_amount) && Coin.isSDK(o.y_amount) && Coin.isSDK(o.fee));
+  },
+  isAmino(o: any): o is MsgRefractResponseAmino {
+    return o && (o.$typeUrl === MsgRefractResponse.typeUrl || Coin.isAmino(o.p_amount) && Coin.isAmino(o.y_amount) && Coin.isAmino(o.fee));
+  },
   encode(message: MsgRefractResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.pAmount !== undefined) {
       Coin.encode(message.pAmount, writer.uint32(10).fork()).ldelim();
@@ -218,7 +240,7 @@ export const MsgRefractResponse = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): MsgRefractResponse {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): MsgRefractResponse {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgRefractResponse();
@@ -226,13 +248,13 @@ export const MsgRefractResponse = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.pAmount = Coin.decode(reader, reader.uint32());
+          message.pAmount = Coin.decode(reader, reader.uint32(), useInterfaces);
           break;
         case 2:
-          message.yAmount = Coin.decode(reader, reader.uint32());
+          message.yAmount = Coin.decode(reader, reader.uint32(), useInterfaces);
           break;
         case 3:
-          message.fee = Coin.decode(reader, reader.uint32());
+          message.fee = Coin.decode(reader, reader.uint32(), useInterfaces);
           break;
         default:
           reader.skipType(tag & 7);
@@ -275,18 +297,18 @@ export const MsgRefractResponse = {
     }
     return message;
   },
-  toAmino(message: MsgRefractResponse): MsgRefractResponseAmino {
+  toAmino(message: MsgRefractResponse, useInterfaces: boolean = true): MsgRefractResponseAmino {
     const obj: any = {};
-    obj.p_amount = message.pAmount ? Coin.toAmino(message.pAmount) : undefined;
-    obj.y_amount = message.yAmount ? Coin.toAmino(message.yAmount) : undefined;
-    obj.fee = message.fee ? Coin.toAmino(message.fee) : undefined;
+    obj.p_amount = message.pAmount ? Coin.toAmino(message.pAmount, useInterfaces) : undefined;
+    obj.y_amount = message.yAmount ? Coin.toAmino(message.yAmount, useInterfaces) : undefined;
+    obj.fee = message.fee ? Coin.toAmino(message.fee, useInterfaces) : undefined;
     return obj;
   },
   fromAminoMsg(object: MsgRefractResponseAminoMsg): MsgRefractResponse {
     return MsgRefractResponse.fromAmino(object.value);
   },
-  fromProtoMsg(message: MsgRefractResponseProtoMsg): MsgRefractResponse {
-    return MsgRefractResponse.decode(message.value);
+  fromProtoMsg(message: MsgRefractResponseProtoMsg, useInterfaces: boolean = true): MsgRefractResponse {
+    return MsgRefractResponse.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: MsgRefractResponse): Uint8Array {
     return MsgRefractResponse.encode(message).finish();
@@ -298,6 +320,7 @@ export const MsgRefractResponse = {
     };
   }
 };
+GlobalDecoderRegistry.register(MsgRefractResponse.typeUrl, MsgRefractResponse);
 function createBaseMsgRedeem(): MsgRedeem {
   return {
     creator: "",
@@ -307,6 +330,16 @@ function createBaseMsgRedeem(): MsgRedeem {
 }
 export const MsgRedeem = {
   typeUrl: "/pryzm.refractor.v1.MsgRedeem",
+  aminoType: "pryzm/refractor/v1/Redeem",
+  is(o: any): o is MsgRedeem {
+    return o && (o.$typeUrl === MsgRedeem.typeUrl || typeof o.creator === "string" && Coin.is(o.pAmount));
+  },
+  isSDK(o: any): o is MsgRedeemSDKType {
+    return o && (o.$typeUrl === MsgRedeem.typeUrl || typeof o.creator === "string" && Coin.isSDK(o.p_amount));
+  },
+  isAmino(o: any): o is MsgRedeemAmino {
+    return o && (o.$typeUrl === MsgRedeem.typeUrl || typeof o.creator === "string" && Coin.isAmino(o.p_amount));
+  },
   encode(message: MsgRedeem, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.creator !== "") {
       writer.uint32(10).string(message.creator);
@@ -319,7 +352,7 @@ export const MsgRedeem = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): MsgRedeem {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): MsgRedeem {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgRedeem();
@@ -330,10 +363,10 @@ export const MsgRedeem = {
           message.creator = reader.string();
           break;
         case 2:
-          message.pAmount = Coin.decode(reader, reader.uint32());
+          message.pAmount = Coin.decode(reader, reader.uint32(), useInterfaces);
           break;
         case 3:
-          message.yAmount = Coin.decode(reader, reader.uint32());
+          message.yAmount = Coin.decode(reader, reader.uint32(), useInterfaces);
           break;
         default:
           reader.skipType(tag & 7);
@@ -376,24 +409,24 @@ export const MsgRedeem = {
     }
     return message;
   },
-  toAmino(message: MsgRedeem): MsgRedeemAmino {
+  toAmino(message: MsgRedeem, useInterfaces: boolean = true): MsgRedeemAmino {
     const obj: any = {};
-    obj.creator = message.creator;
-    obj.p_amount = message.pAmount ? Coin.toAmino(message.pAmount) : undefined;
-    obj.y_amount = message.yAmount ? Coin.toAmino(message.yAmount) : undefined;
+    obj.creator = message.creator === "" ? undefined : message.creator;
+    obj.p_amount = message.pAmount ? Coin.toAmino(message.pAmount, useInterfaces) : undefined;
+    obj.y_amount = message.yAmount ? Coin.toAmino(message.yAmount, useInterfaces) : undefined;
     return obj;
   },
   fromAminoMsg(object: MsgRedeemAminoMsg): MsgRedeem {
     return MsgRedeem.fromAmino(object.value);
   },
-  toAminoMsg(message: MsgRedeem): MsgRedeemAminoMsg {
+  toAminoMsg(message: MsgRedeem, useInterfaces: boolean = true): MsgRedeemAminoMsg {
     return {
       type: "pryzm/refractor/v1/Redeem",
-      value: MsgRedeem.toAmino(message)
+      value: MsgRedeem.toAmino(message, useInterfaces)
     };
   },
-  fromProtoMsg(message: MsgRedeemProtoMsg): MsgRedeem {
-    return MsgRedeem.decode(message.value);
+  fromProtoMsg(message: MsgRedeemProtoMsg, useInterfaces: boolean = true): MsgRedeem {
+    return MsgRedeem.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: MsgRedeem): Uint8Array {
     return MsgRedeem.encode(message).finish();
@@ -405,6 +438,8 @@ export const MsgRedeem = {
     };
   }
 };
+GlobalDecoderRegistry.register(MsgRedeem.typeUrl, MsgRedeem);
+GlobalDecoderRegistry.registerAminoProtoMapping(MsgRedeem.aminoType, MsgRedeem.typeUrl);
 function createBaseMsgRedeemResponse(): MsgRedeemResponse {
   return {
     cAmount: Coin.fromPartial({}),
@@ -413,6 +448,15 @@ function createBaseMsgRedeemResponse(): MsgRedeemResponse {
 }
 export const MsgRedeemResponse = {
   typeUrl: "/pryzm.refractor.v1.MsgRedeemResponse",
+  is(o: any): o is MsgRedeemResponse {
+    return o && (o.$typeUrl === MsgRedeemResponse.typeUrl || Coin.is(o.cAmount) && Coin.is(o.fee));
+  },
+  isSDK(o: any): o is MsgRedeemResponseSDKType {
+    return o && (o.$typeUrl === MsgRedeemResponse.typeUrl || Coin.isSDK(o.c_amount) && Coin.isSDK(o.fee));
+  },
+  isAmino(o: any): o is MsgRedeemResponseAmino {
+    return o && (o.$typeUrl === MsgRedeemResponse.typeUrl || Coin.isAmino(o.c_amount) && Coin.isAmino(o.fee));
+  },
   encode(message: MsgRedeemResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.cAmount !== undefined) {
       Coin.encode(message.cAmount, writer.uint32(10).fork()).ldelim();
@@ -422,7 +466,7 @@ export const MsgRedeemResponse = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): MsgRedeemResponse {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): MsgRedeemResponse {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgRedeemResponse();
@@ -430,10 +474,10 @@ export const MsgRedeemResponse = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.cAmount = Coin.decode(reader, reader.uint32());
+          message.cAmount = Coin.decode(reader, reader.uint32(), useInterfaces);
           break;
         case 2:
-          message.fee = Coin.decode(reader, reader.uint32());
+          message.fee = Coin.decode(reader, reader.uint32(), useInterfaces);
           break;
         default:
           reader.skipType(tag & 7);
@@ -470,17 +514,17 @@ export const MsgRedeemResponse = {
     }
     return message;
   },
-  toAmino(message: MsgRedeemResponse): MsgRedeemResponseAmino {
+  toAmino(message: MsgRedeemResponse, useInterfaces: boolean = true): MsgRedeemResponseAmino {
     const obj: any = {};
-    obj.c_amount = message.cAmount ? Coin.toAmino(message.cAmount) : undefined;
-    obj.fee = message.fee ? Coin.toAmino(message.fee) : undefined;
+    obj.c_amount = message.cAmount ? Coin.toAmino(message.cAmount, useInterfaces) : undefined;
+    obj.fee = message.fee ? Coin.toAmino(message.fee, useInterfaces) : undefined;
     return obj;
   },
   fromAminoMsg(object: MsgRedeemResponseAminoMsg): MsgRedeemResponse {
     return MsgRedeemResponse.fromAmino(object.value);
   },
-  fromProtoMsg(message: MsgRedeemResponseProtoMsg): MsgRedeemResponse {
-    return MsgRedeemResponse.decode(message.value);
+  fromProtoMsg(message: MsgRedeemResponseProtoMsg, useInterfaces: boolean = true): MsgRedeemResponse {
+    return MsgRedeemResponse.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: MsgRedeemResponse): Uint8Array {
     return MsgRedeemResponse.encode(message).finish();
@@ -492,3 +536,4 @@ export const MsgRedeemResponse = {
     };
   }
 };
+GlobalDecoderRegistry.register(MsgRedeemResponse.typeUrl, MsgRedeemResponse);

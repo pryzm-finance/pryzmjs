@@ -1,6 +1,7 @@
 import { FeeRatios, FeeRatiosAmino, FeeRatiosSDKType } from "./refractable_asset";
 import { BinaryReader, BinaryWriter } from "../../../binary";
 import { isSet } from "../../../helpers";
+import { GlobalDecoderRegistry } from "../../../registry";
 /** Params defines the parameters for the module. */
 export interface Params {
   defaultFeeRatios: FeeRatios;
@@ -34,6 +35,15 @@ function createBaseParams(): Params {
 }
 export const Params = {
   typeUrl: "/pryzm.assets.v1.Params",
+  is(o: any): o is Params {
+    return o && (o.$typeUrl === Params.typeUrl || FeeRatios.is(o.defaultFeeRatios) && Array.isArray(o.admins) && (!o.admins.length || typeof o.admins[0] === "string"));
+  },
+  isSDK(o: any): o is ParamsSDKType {
+    return o && (o.$typeUrl === Params.typeUrl || FeeRatios.isSDK(o.default_fee_ratios) && Array.isArray(o.admins) && (!o.admins.length || typeof o.admins[0] === "string"));
+  },
+  isAmino(o: any): o is ParamsAmino {
+    return o && (o.$typeUrl === Params.typeUrl || FeeRatios.isAmino(o.default_fee_ratios) && Array.isArray(o.admins) && (!o.admins.length || typeof o.admins[0] === "string"));
+  },
   encode(message: Params, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.defaultFeeRatios !== undefined) {
       FeeRatios.encode(message.defaultFeeRatios, writer.uint32(10).fork()).ldelim();
@@ -43,7 +53,7 @@ export const Params = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): Params {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): Params {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseParams();
@@ -51,7 +61,7 @@ export const Params = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.defaultFeeRatios = FeeRatios.decode(reader, reader.uint32());
+          message.defaultFeeRatios = FeeRatios.decode(reader, reader.uint32(), useInterfaces);
           break;
         case 2:
           message.admins.push(reader.string());
@@ -93,21 +103,21 @@ export const Params = {
     message.admins = object.admins?.map(e => e) || [];
     return message;
   },
-  toAmino(message: Params): ParamsAmino {
+  toAmino(message: Params, useInterfaces: boolean = true): ParamsAmino {
     const obj: any = {};
-    obj.default_fee_ratios = message.defaultFeeRatios ? FeeRatios.toAmino(message.defaultFeeRatios) : FeeRatios.fromPartial({});
+    obj.default_fee_ratios = message.defaultFeeRatios ? FeeRatios.toAmino(message.defaultFeeRatios, useInterfaces) : undefined;
     if (message.admins) {
       obj.admins = message.admins.map(e => e);
     } else {
-      obj.admins = [];
+      obj.admins = message.admins;
     }
     return obj;
   },
   fromAminoMsg(object: ParamsAminoMsg): Params {
     return Params.fromAmino(object.value);
   },
-  fromProtoMsg(message: ParamsProtoMsg): Params {
-    return Params.decode(message.value);
+  fromProtoMsg(message: ParamsProtoMsg, useInterfaces: boolean = true): Params {
+    return Params.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: Params): Uint8Array {
     return Params.encode(message).finish();
@@ -119,3 +129,4 @@ export const Params = {
     };
   }
 };
+GlobalDecoderRegistry.register(Params.typeUrl, Params);

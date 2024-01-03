@@ -1,5 +1,6 @@
 import { BinaryReader, BinaryWriter } from "../../../binary";
-import { isSet } from "../../../helpers";
+import { isSet, padDecimal } from "../../../helpers";
+import { GlobalDecoderRegistry } from "../../../registry";
 import { Decimal } from "@cosmjs/math";
 /** PoolType enumerates the valid types for pool_type. */
 export enum PoolType {
@@ -138,6 +139,15 @@ function createBasePoolPauseWindow(): PoolPauseWindow {
 }
 export const PoolPauseWindow = {
   typeUrl: "/pryzm.amm.v1.PoolPauseWindow",
+  is(o: any): o is PoolPauseWindow {
+    return o && (o.$typeUrl === PoolPauseWindow.typeUrl || typeof o.pauseWindowEndUnixMillis === "bigint" && typeof o.bufferPeriodEndUnixMillis === "bigint");
+  },
+  isSDK(o: any): o is PoolPauseWindowSDKType {
+    return o && (o.$typeUrl === PoolPauseWindow.typeUrl || typeof o.pause_window_end_unix_millis === "bigint" && typeof o.buffer_period_end_unix_millis === "bigint");
+  },
+  isAmino(o: any): o is PoolPauseWindowAmino {
+    return o && (o.$typeUrl === PoolPauseWindow.typeUrl || typeof o.pause_window_end_unix_millis === "bigint" && typeof o.buffer_period_end_unix_millis === "bigint");
+  },
   encode(message: PoolPauseWindow, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.pauseWindowEndUnixMillis !== BigInt(0)) {
       writer.uint32(8).int64(message.pauseWindowEndUnixMillis);
@@ -147,7 +157,7 @@ export const PoolPauseWindow = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): PoolPauseWindow {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): PoolPauseWindow {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBasePoolPauseWindow();
@@ -195,17 +205,17 @@ export const PoolPauseWindow = {
     }
     return message;
   },
-  toAmino(message: PoolPauseWindow): PoolPauseWindowAmino {
+  toAmino(message: PoolPauseWindow, useInterfaces: boolean = true): PoolPauseWindowAmino {
     const obj: any = {};
-    obj.pause_window_end_unix_millis = message.pauseWindowEndUnixMillis ? message.pauseWindowEndUnixMillis.toString() : "0";
-    obj.buffer_period_end_unix_millis = message.bufferPeriodEndUnixMillis ? message.bufferPeriodEndUnixMillis.toString() : "0";
+    obj.pause_window_end_unix_millis = message.pauseWindowEndUnixMillis ? message.pauseWindowEndUnixMillis.toString() : undefined;
+    obj.buffer_period_end_unix_millis = message.bufferPeriodEndUnixMillis ? message.bufferPeriodEndUnixMillis.toString() : undefined;
     return obj;
   },
   fromAminoMsg(object: PoolPauseWindowAminoMsg): PoolPauseWindow {
     return PoolPauseWindow.fromAmino(object.value);
   },
-  fromProtoMsg(message: PoolPauseWindowProtoMsg): PoolPauseWindow {
-    return PoolPauseWindow.decode(message.value);
+  fromProtoMsg(message: PoolPauseWindowProtoMsg, useInterfaces: boolean = true): PoolPauseWindow {
+    return PoolPauseWindow.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: PoolPauseWindow): Uint8Array {
     return PoolPauseWindow.encode(message).finish();
@@ -217,6 +227,7 @@ export const PoolPauseWindow = {
     };
   }
 };
+GlobalDecoderRegistry.register(PoolPauseWindow.typeUrl, PoolPauseWindow);
 function createBasePool(): Pool {
   return {
     id: BigInt(0),
@@ -237,6 +248,15 @@ function createBasePool(): Pool {
 }
 export const Pool = {
   typeUrl: "/pryzm.amm.v1.Pool",
+  is(o: any): o is Pool {
+    return o && (o.$typeUrl === Pool.typeUrl || typeof o.id === "bigint" && typeof o.name === "string" && typeof o.swapFeeRatio === "string" && isSet(o.poolType) && typeof o.creator === "string" && typeof o.recoveryMode === "boolean" && typeof o.pausedByGov === "boolean" && typeof o.pausedByOwner === "boolean" && Array.isArray(o.initializationAllowList) && (!o.initializationAllowList.length || typeof o.initializationAllowList[0] === "string") && Array.isArray(o.admins) && (!o.admins.length || typeof o.admins[0] === "string") && Array.isArray(o.pauseAllowList) && (!o.pauseAllowList.length || typeof o.pauseAllowList[0] === "string"));
+  },
+  isSDK(o: any): o is PoolSDKType {
+    return o && (o.$typeUrl === Pool.typeUrl || typeof o.id === "bigint" && typeof o.name === "string" && typeof o.swap_fee_ratio === "string" && isSet(o.pool_type) && typeof o.creator === "string" && typeof o.recovery_mode === "boolean" && typeof o.paused_by_gov === "boolean" && typeof o.paused_by_owner === "boolean" && Array.isArray(o.initialization_allow_list) && (!o.initialization_allow_list.length || typeof o.initialization_allow_list[0] === "string") && Array.isArray(o.admins) && (!o.admins.length || typeof o.admins[0] === "string") && Array.isArray(o.pause_allow_list) && (!o.pause_allow_list.length || typeof o.pause_allow_list[0] === "string"));
+  },
+  isAmino(o: any): o is PoolAmino {
+    return o && (o.$typeUrl === Pool.typeUrl || typeof o.id === "bigint" && typeof o.name === "string" && typeof o.swap_fee_ratio === "string" && isSet(o.pool_type) && typeof o.creator === "string" && typeof o.recovery_mode === "boolean" && typeof o.paused_by_gov === "boolean" && typeof o.paused_by_owner === "boolean" && Array.isArray(o.initialization_allow_list) && (!o.initialization_allow_list.length || typeof o.initialization_allow_list[0] === "string") && Array.isArray(o.admins) && (!o.admins.length || typeof o.admins[0] === "string") && Array.isArray(o.pause_allow_list) && (!o.pause_allow_list.length || typeof o.pause_allow_list[0] === "string"));
+  },
   encode(message: Pool, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.id !== BigInt(0)) {
       writer.uint32(8).uint64(message.id);
@@ -282,7 +302,7 @@ export const Pool = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): Pool {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): Pool {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBasePool();
@@ -314,7 +334,7 @@ export const Pool = {
           message.pausedByOwner = reader.bool();
           break;
         case 9:
-          message.ownerPauseWindowTiming = PoolPauseWindow.decode(reader, reader.uint32());
+          message.ownerPauseWindowTiming = PoolPauseWindow.decode(reader, reader.uint32(), useInterfaces);
           break;
         case 10:
           message.swapProtocolFeeRatio = Decimal.fromAtomics(reader.string(), 18).toString();
@@ -416,7 +436,7 @@ export const Pool = {
       message.swapFeeRatio = object.swap_fee_ratio;
     }
     if (object.pool_type !== undefined && object.pool_type !== null) {
-      message.poolType = poolTypeFromJSON(object.pool_type);
+      message.poolType = object.pool_type;
     }
     if (object.creator !== undefined && object.creator !== null) {
       message.creator = object.creator;
@@ -444,41 +464,41 @@ export const Pool = {
     message.pauseAllowList = object.pause_allow_list?.map(e => e) || [];
     return message;
   },
-  toAmino(message: Pool): PoolAmino {
+  toAmino(message: Pool, useInterfaces: boolean = true): PoolAmino {
     const obj: any = {};
     obj.id = message.id ? message.id.toString() : undefined;
-    obj.name = message.name;
-    obj.swap_fee_ratio = message.swapFeeRatio;
-    obj.pool_type = poolTypeToJSON(message.poolType);
-    obj.creator = message.creator;
-    obj.recovery_mode = message.recoveryMode;
-    obj.paused_by_gov = message.pausedByGov;
-    obj.paused_by_owner = message.pausedByOwner;
-    obj.owner_pause_window_timing = message.ownerPauseWindowTiming ? PoolPauseWindow.toAmino(message.ownerPauseWindowTiming) : undefined;
-    obj.swap_protocol_fee_ratio = message.swapProtocolFeeRatio;
-    obj.join_exit_protocol_fee_ratio = message.joinExitProtocolFeeRatio;
+    obj.name = message.name === "" ? undefined : message.name;
+    obj.swap_fee_ratio = padDecimal(message.swapFeeRatio) === "" ? undefined : padDecimal(message.swapFeeRatio);
+    obj.pool_type = message.poolType === 0 ? undefined : message.poolType;
+    obj.creator = message.creator === "" ? undefined : message.creator;
+    obj.recovery_mode = message.recoveryMode === false ? undefined : message.recoveryMode;
+    obj.paused_by_gov = message.pausedByGov === false ? undefined : message.pausedByGov;
+    obj.paused_by_owner = message.pausedByOwner === false ? undefined : message.pausedByOwner;
+    obj.owner_pause_window_timing = message.ownerPauseWindowTiming ? PoolPauseWindow.toAmino(message.ownerPauseWindowTiming, useInterfaces) : undefined;
+    obj.swap_protocol_fee_ratio = padDecimal(message.swapProtocolFeeRatio) === null ? undefined : padDecimal(message.swapProtocolFeeRatio);
+    obj.join_exit_protocol_fee_ratio = padDecimal(message.joinExitProtocolFeeRatio) === null ? undefined : padDecimal(message.joinExitProtocolFeeRatio);
     if (message.initializationAllowList) {
       obj.initialization_allow_list = message.initializationAllowList.map(e => e);
     } else {
-      obj.initialization_allow_list = [];
+      obj.initialization_allow_list = message.initializationAllowList;
     }
     if (message.admins) {
       obj.admins = message.admins.map(e => e);
     } else {
-      obj.admins = [];
+      obj.admins = message.admins;
     }
     if (message.pauseAllowList) {
       obj.pause_allow_list = message.pauseAllowList.map(e => e);
     } else {
-      obj.pause_allow_list = [];
+      obj.pause_allow_list = message.pauseAllowList;
     }
     return obj;
   },
   fromAminoMsg(object: PoolAminoMsg): Pool {
     return Pool.fromAmino(object.value);
   },
-  fromProtoMsg(message: PoolProtoMsg): Pool {
-    return Pool.decode(message.value);
+  fromProtoMsg(message: PoolProtoMsg, useInterfaces: boolean = true): Pool {
+    return Pool.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: Pool): Uint8Array {
     return Pool.encode(message).finish();
@@ -490,3 +510,4 @@ export const Pool = {
     };
   }
 };
+GlobalDecoderRegistry.register(Pool.typeUrl, Pool);

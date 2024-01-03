@@ -1,5 +1,5 @@
 const {join} = require('path');
-const telescope = require('@cosmology/telescope').default;
+const telescope = require('@refractedlabs/telescope').default;
 const rimraf = require('rimraf').rimrafSync;
 const {AMINO_MAP} = require('./aminos');
 const {correctFile, correctFiles, correctDir} = require('@refractedlabs/utils/lib/file');
@@ -18,6 +18,11 @@ async function main() {
                     'cosmos/staking/v1beta1/tx.amino.ts'
                 ],
                 patterns: ['**/*amino.ts', '**/*registry.ts']
+            },
+            interfaces:{
+                enabled: true,
+                useGlobalDecoderRegistry: true,
+                useUseInterfacesParams: true,
             },
             prototypes: {
                 includePackageVar: false,
@@ -135,10 +140,10 @@ async function main() {
             regex: /_InterfaceDecoder\(reader\) as Any\)/gm,
             subst: `_InterfaceDecoder(reader) as any)`
         },
-        {
-            regex: /const Cosmos_cryptoPubKey_FromAmino = \(content: AnyAmino\) =>/gm,
-            subst: `const Cosmos_cryptoPubKey_FromAmino = (content: AnyAmino): Any =>`
-        }
+        // {
+        //     regex: /const Cosmos_cryptoPubKey_FromAmino = \(content: AnyAmino\) =>/gm,
+        //     subst: `const Cosmos_cryptoPubKey_FromAmino = (content: AnyAmino): Any =>`
+        // }
     ]);
 
     correctFiles([

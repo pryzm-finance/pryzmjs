@@ -2,6 +2,7 @@ import { Height, HeightAmino, HeightSDKType } from "../../../ibc/core/client/v1/
 import { ValidatorState, ValidatorStateAmino, ValidatorStateSDKType } from "./host_chain";
 import { BinaryReader, BinaryWriter } from "../../../binary";
 import { isSet } from "../../../helpers";
+import { GlobalDecoderRegistry } from "../../../registry";
 /** OraclePayload defines the structure of oracle vote payload */
 export interface OraclePayload {
   /**
@@ -75,6 +76,15 @@ function createBaseOraclePayload(): OraclePayload {
 }
 export const OraclePayload = {
   typeUrl: "/pryzm.icstaking.v1.OraclePayload",
+  is(o: any): o is OraclePayload {
+    return o && (o.$typeUrl === OraclePayload.typeUrl || Height.is(o.blockHeight) && Array.isArray(o.validatorStates) && (!o.validatorStates.length || ValidatorState.is(o.validatorStates[0])) && typeof o.delegationAccountBalance === "string" && typeof o.rewardAccountBalance === "string" && typeof o.sweepAccountBalance === "string" && typeof o.lastCompletedUndelegationEpoch === "bigint");
+  },
+  isSDK(o: any): o is OraclePayloadSDKType {
+    return o && (o.$typeUrl === OraclePayload.typeUrl || Height.isSDK(o.block_height) && Array.isArray(o.validator_states) && (!o.validator_states.length || ValidatorState.isSDK(o.validator_states[0])) && typeof o.delegation_account_balance === "string" && typeof o.reward_account_balance === "string" && typeof o.sweep_account_balance === "string" && typeof o.last_completed_undelegation_epoch === "bigint");
+  },
+  isAmino(o: any): o is OraclePayloadAmino {
+    return o && (o.$typeUrl === OraclePayload.typeUrl || Height.isAmino(o.block_height) && Array.isArray(o.validator_states) && (!o.validator_states.length || ValidatorState.isAmino(o.validator_states[0])) && typeof o.delegation_account_balance === "string" && typeof o.reward_account_balance === "string" && typeof o.sweep_account_balance === "string" && typeof o.last_completed_undelegation_epoch === "bigint");
+  },
   encode(message: OraclePayload, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.blockHeight !== undefined) {
       Height.encode(message.blockHeight, writer.uint32(10).fork()).ldelim();
@@ -96,7 +106,7 @@ export const OraclePayload = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): OraclePayload {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): OraclePayload {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseOraclePayload();
@@ -104,10 +114,10 @@ export const OraclePayload = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.blockHeight = Height.decode(reader, reader.uint32());
+          message.blockHeight = Height.decode(reader, reader.uint32(), useInterfaces);
           break;
         case 3:
-          message.validatorStates.push(ValidatorState.decode(reader, reader.uint32()));
+          message.validatorStates.push(ValidatorState.decode(reader, reader.uint32(), useInterfaces));
           break;
         case 4:
           message.delegationAccountBalance = reader.string();
@@ -182,25 +192,25 @@ export const OraclePayload = {
     }
     return message;
   },
-  toAmino(message: OraclePayload): OraclePayloadAmino {
+  toAmino(message: OraclePayload, useInterfaces: boolean = true): OraclePayloadAmino {
     const obj: any = {};
-    obj.block_height = message.blockHeight ? Height.toAmino(message.blockHeight) : {};
+    obj.block_height = message.blockHeight ? Height.toAmino(message.blockHeight, useInterfaces) : {};
     if (message.validatorStates) {
-      obj.validator_states = message.validatorStates.map(e => e ? ValidatorState.toAmino(e) : undefined);
+      obj.validator_states = message.validatorStates.map(e => e ? ValidatorState.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.validator_states = [];
+      obj.validator_states = message.validatorStates;
     }
-    obj.delegation_account_balance = message.delegationAccountBalance;
-    obj.reward_account_balance = message.rewardAccountBalance;
-    obj.sweep_account_balance = message.sweepAccountBalance;
+    obj.delegation_account_balance = message.delegationAccountBalance === "" ? undefined : message.delegationAccountBalance;
+    obj.reward_account_balance = message.rewardAccountBalance === "" ? undefined : message.rewardAccountBalance;
+    obj.sweep_account_balance = message.sweepAccountBalance === "" ? undefined : message.sweepAccountBalance;
     obj.last_completed_undelegation_epoch = message.lastCompletedUndelegationEpoch ? message.lastCompletedUndelegationEpoch.toString() : undefined;
     return obj;
   },
   fromAminoMsg(object: OraclePayloadAminoMsg): OraclePayload {
     return OraclePayload.fromAmino(object.value);
   },
-  fromProtoMsg(message: OraclePayloadProtoMsg): OraclePayload {
-    return OraclePayload.decode(message.value);
+  fromProtoMsg(message: OraclePayloadProtoMsg, useInterfaces: boolean = true): OraclePayload {
+    return OraclePayload.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: OraclePayload): Uint8Array {
     return OraclePayload.encode(message).finish();
@@ -212,3 +222,4 @@ export const OraclePayload = {
     };
   }
 };
+GlobalDecoderRegistry.register(OraclePayload.typeUrl, OraclePayload);

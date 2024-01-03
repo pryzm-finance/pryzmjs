@@ -1,7 +1,8 @@
 import { Timestamp, TimestampSDKType } from "../../google/protobuf/timestamp";
 import { BinaryReader, BinaryWriter } from "../../binary";
 import { Decimal } from "@cosmjs/math";
-import { isSet, fromJsonTimestamp, fromTimestamp } from "../../helpers";
+import { isSet, fromJsonTimestamp, fromTimestamp, padDecimal } from "../../helpers";
+import { GlobalDecoderRegistry } from "../../registry";
 export interface Maturity {
   assetId: string;
   symbol: string;
@@ -74,6 +75,15 @@ function createBaseMaturity(): Maturity {
 }
 export const Maturity = {
   typeUrl: "/pryzmatics.maturity.Maturity",
+  is(o: any): o is Maturity {
+    return o && (o.$typeUrl === Maturity.typeUrl || typeof o.assetId === "string" && typeof o.symbol === "string" && typeof o.active === "boolean" && Timestamp.is(o.introductionTime) && Timestamp.is(o.expirationTime) && typeof o.blockHeight === "bigint" && Timestamp.is(o.blockTime) && typeof o.error === "string");
+  },
+  isSDK(o: any): o is MaturitySDKType {
+    return o && (o.$typeUrl === Maturity.typeUrl || typeof o.asset_id === "string" && typeof o.symbol === "string" && typeof o.active === "boolean" && Timestamp.isSDK(o.introduction_time) && Timestamp.isSDK(o.expiration_time) && typeof o.block_height === "bigint" && Timestamp.isSDK(o.block_time) && typeof o.error === "string");
+  },
+  isAmino(o: any): o is MaturityAmino {
+    return o && (o.$typeUrl === Maturity.typeUrl || typeof o.asset_id === "string" && typeof o.symbol === "string" && typeof o.active === "boolean" && Timestamp.isAmino(o.introduction_time) && Timestamp.isAmino(o.expiration_time) && typeof o.block_height === "bigint" && Timestamp.isAmino(o.block_time) && typeof o.error === "string");
+  },
   encode(message: Maturity, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.assetId !== "") {
       writer.uint32(10).string(message.assetId);
@@ -116,7 +126,7 @@ export const Maturity = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): Maturity {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): Maturity {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMaturity();
@@ -263,28 +273,28 @@ export const Maturity = {
     }
     return message;
   },
-  toAmino(message: Maturity): MaturityAmino {
+  toAmino(message: Maturity, useInterfaces: boolean = true): MaturityAmino {
     const obj: any = {};
-    obj.asset_id = message.assetId;
-    obj.symbol = message.symbol;
-    obj.active = message.active;
-    obj.introduction_time = message.introductionTime ? Timestamp.toAmino(message.introductionTime) : undefined;
-    obj.expiration_time = message.expirationTime ? Timestamp.toAmino(message.expirationTime) : undefined;
+    obj.asset_id = message.assetId === "" ? undefined : message.assetId;
+    obj.symbol = message.symbol === "" ? undefined : message.symbol;
+    obj.active = message.active === false ? undefined : message.active;
+    obj.introduction_time = message.introductionTime ? Timestamp.toAmino(message.introductionTime, useInterfaces) : undefined;
+    obj.expiration_time = message.expirationTime ? Timestamp.toAmino(message.expirationTime, useInterfaces) : undefined;
     obj.block_height = message.blockHeight ? message.blockHeight.toString() : undefined;
-    obj.block_time = message.blockTime ? Timestamp.toAmino(message.blockTime) : undefined;
-    obj.roi = message.roi;
-    obj.y_apy = message.yApy;
-    obj.p_apy = message.pApy;
-    obj.y_price = message.yPrice;
-    obj.p_price = message.pPrice;
-    obj.error = message.error;
+    obj.block_time = message.blockTime ? Timestamp.toAmino(message.blockTime, useInterfaces) : undefined;
+    obj.roi = padDecimal(message.roi) === null ? undefined : padDecimal(message.roi);
+    obj.y_apy = padDecimal(message.yApy) === null ? undefined : padDecimal(message.yApy);
+    obj.p_apy = padDecimal(message.pApy) === null ? undefined : padDecimal(message.pApy);
+    obj.y_price = padDecimal(message.yPrice) === null ? undefined : padDecimal(message.yPrice);
+    obj.p_price = padDecimal(message.pPrice) === null ? undefined : padDecimal(message.pPrice);
+    obj.error = message.error === "" ? undefined : message.error;
     return obj;
   },
   fromAminoMsg(object: MaturityAminoMsg): Maturity {
     return Maturity.fromAmino(object.value);
   },
-  fromProtoMsg(message: MaturityProtoMsg): Maturity {
-    return Maturity.decode(message.value);
+  fromProtoMsg(message: MaturityProtoMsg, useInterfaces: boolean = true): Maturity {
+    return Maturity.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: Maturity): Uint8Array {
     return Maturity.encode(message).finish();
@@ -296,3 +306,4 @@ export const Maturity = {
     };
   }
 };
+GlobalDecoderRegistry.register(Maturity.typeUrl, Maturity);

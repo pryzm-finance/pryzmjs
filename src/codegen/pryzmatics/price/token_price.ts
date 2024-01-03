@@ -1,7 +1,8 @@
 import { Timestamp, TimestampSDKType } from "../../google/protobuf/timestamp";
 import { BinaryReader, BinaryWriter } from "../../binary";
 import { Decimal } from "@cosmjs/math";
-import { isSet, fromJsonTimestamp, fromTimestamp } from "../../helpers";
+import { isSet, fromJsonTimestamp, fromTimestamp, padDecimal } from "../../helpers";
+import { GlobalDecoderRegistry } from "../../registry";
 export interface TokenPrice {
   denom: string;
   quote: string;
@@ -38,6 +39,15 @@ function createBaseTokenPrice(): TokenPrice {
 }
 export const TokenPrice = {
   typeUrl: "/pryzmatics.price.TokenPrice",
+  is(o: any): o is TokenPrice {
+    return o && (o.$typeUrl === TokenPrice.typeUrl || typeof o.denom === "string" && typeof o.quote === "string" && Timestamp.is(o.blockTime) && typeof o.price === "string");
+  },
+  isSDK(o: any): o is TokenPriceSDKType {
+    return o && (o.$typeUrl === TokenPrice.typeUrl || typeof o.denom === "string" && typeof o.quote === "string" && Timestamp.isSDK(o.block_time) && typeof o.price === "string");
+  },
+  isAmino(o: any): o is TokenPriceAmino {
+    return o && (o.$typeUrl === TokenPrice.typeUrl || typeof o.denom === "string" && typeof o.quote === "string" && Timestamp.isAmino(o.block_time) && typeof o.price === "string");
+  },
   encode(message: TokenPrice, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.denom !== "") {
       writer.uint32(10).string(message.denom);
@@ -53,7 +63,7 @@ export const TokenPrice = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): TokenPrice {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): TokenPrice {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseTokenPrice();
@@ -119,19 +129,19 @@ export const TokenPrice = {
     }
     return message;
   },
-  toAmino(message: TokenPrice): TokenPriceAmino {
+  toAmino(message: TokenPrice, useInterfaces: boolean = true): TokenPriceAmino {
     const obj: any = {};
-    obj.denom = message.denom;
-    obj.quote = message.quote;
-    obj.block_time = message.blockTime ? Timestamp.toAmino(message.blockTime) : undefined;
-    obj.price = message.price;
+    obj.denom = message.denom === "" ? undefined : message.denom;
+    obj.quote = message.quote === "" ? undefined : message.quote;
+    obj.block_time = message.blockTime ? Timestamp.toAmino(message.blockTime, useInterfaces) : undefined;
+    obj.price = padDecimal(message.price) === "" ? undefined : padDecimal(message.price);
     return obj;
   },
   fromAminoMsg(object: TokenPriceAminoMsg): TokenPrice {
     return TokenPrice.fromAmino(object.value);
   },
-  fromProtoMsg(message: TokenPriceProtoMsg): TokenPrice {
-    return TokenPrice.decode(message.value);
+  fromProtoMsg(message: TokenPriceProtoMsg, useInterfaces: boolean = true): TokenPrice {
+    return TokenPrice.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: TokenPrice): Uint8Array {
     return TokenPrice.encode(message).finish();
@@ -143,3 +153,4 @@ export const TokenPrice = {
     };
   }
 };
+GlobalDecoderRegistry.register(TokenPrice.typeUrl, TokenPrice);

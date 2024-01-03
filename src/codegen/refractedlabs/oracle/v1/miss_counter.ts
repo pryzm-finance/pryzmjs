@@ -1,5 +1,6 @@
 import { BinaryReader, BinaryWriter } from "../../../binary";
 import { isSet } from "../../../helpers";
+import { GlobalDecoderRegistry } from "../../../registry";
 export interface MissCounter {
   validator: string;
   counter: bigint;
@@ -28,6 +29,15 @@ function createBaseMissCounter(): MissCounter {
 }
 export const MissCounter = {
   typeUrl: "/refractedlabs.oracle.v1.MissCounter",
+  is(o: any): o is MissCounter {
+    return o && (o.$typeUrl === MissCounter.typeUrl || typeof o.validator === "string" && typeof o.counter === "bigint");
+  },
+  isSDK(o: any): o is MissCounterSDKType {
+    return o && (o.$typeUrl === MissCounter.typeUrl || typeof o.validator === "string" && typeof o.counter === "bigint");
+  },
+  isAmino(o: any): o is MissCounterAmino {
+    return o && (o.$typeUrl === MissCounter.typeUrl || typeof o.validator === "string" && typeof o.counter === "bigint");
+  },
   encode(message: MissCounter, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.validator !== "") {
       writer.uint32(10).string(message.validator);
@@ -37,7 +47,7 @@ export const MissCounter = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): MissCounter {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): MissCounter {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMissCounter();
@@ -85,17 +95,17 @@ export const MissCounter = {
     }
     return message;
   },
-  toAmino(message: MissCounter): MissCounterAmino {
+  toAmino(message: MissCounter, useInterfaces: boolean = true): MissCounterAmino {
     const obj: any = {};
-    obj.validator = message.validator;
+    obj.validator = message.validator === "" ? undefined : message.validator;
     obj.counter = message.counter ? message.counter.toString() : undefined;
     return obj;
   },
   fromAminoMsg(object: MissCounterAminoMsg): MissCounter {
     return MissCounter.fromAmino(object.value);
   },
-  fromProtoMsg(message: MissCounterProtoMsg): MissCounter {
-    return MissCounter.decode(message.value);
+  fromProtoMsg(message: MissCounterProtoMsg, useInterfaces: boolean = true): MissCounter {
+    return MissCounter.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: MissCounter): Uint8Array {
     return MissCounter.encode(message).finish();
@@ -107,3 +117,4 @@ export const MissCounter = {
     };
   }
 };
+GlobalDecoderRegistry.register(MissCounter.typeUrl, MissCounter);

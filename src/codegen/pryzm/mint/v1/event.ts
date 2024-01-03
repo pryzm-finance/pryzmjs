@@ -2,7 +2,8 @@ import { Minter, MinterAmino, MinterSDKType } from "./minter";
 import { DistributionProportions, DistributionProportionsAmino, DistributionProportionsSDKType } from "./params";
 import { BinaryReader, BinaryWriter } from "../../../binary";
 import { Decimal } from "@cosmjs/math";
-import { isSet } from "../../../helpers";
+import { isSet, padDecimal } from "../../../helpers";
+import { GlobalDecoderRegistry } from "../../../registry";
 export interface EventMint {
   minter: Minter;
   bondedRatio: string;
@@ -43,6 +44,15 @@ function createBaseEventMint(): EventMint {
 }
 export const EventMint = {
   typeUrl: "/pryzm.mint.v1.EventMint",
+  is(o: any): o is EventMint {
+    return o && (o.$typeUrl === EventMint.typeUrl || Minter.is(o.minter) && typeof o.bondedRatio === "string" && typeof o.totalMinted === "string" && DistributionProportions.is(o.distributedAmounts) && typeof o.epochNumber === "bigint");
+  },
+  isSDK(o: any): o is EventMintSDKType {
+    return o && (o.$typeUrl === EventMint.typeUrl || Minter.isSDK(o.minter) && typeof o.bonded_ratio === "string" && typeof o.total_minted === "string" && DistributionProportions.isSDK(o.distributed_amounts) && typeof o.epoch_number === "bigint");
+  },
+  isAmino(o: any): o is EventMintAmino {
+    return o && (o.$typeUrl === EventMint.typeUrl || Minter.isAmino(o.minter) && typeof o.bonded_ratio === "string" && typeof o.total_minted === "string" && DistributionProportions.isAmino(o.distributed_amounts) && typeof o.epoch_number === "bigint");
+  },
   encode(message: EventMint, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.minter !== undefined) {
       Minter.encode(message.minter, writer.uint32(10).fork()).ldelim();
@@ -61,7 +71,7 @@ export const EventMint = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): EventMint {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): EventMint {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseEventMint();
@@ -69,7 +79,7 @@ export const EventMint = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.minter = Minter.decode(reader, reader.uint32());
+          message.minter = Minter.decode(reader, reader.uint32(), useInterfaces);
           break;
         case 2:
           message.bondedRatio = Decimal.fromAtomics(reader.string(), 18).toString();
@@ -78,7 +88,7 @@ export const EventMint = {
           message.totalMinted = reader.string();
           break;
         case 4:
-          message.distributedAmounts = DistributionProportions.decode(reader, reader.uint32());
+          message.distributedAmounts = DistributionProportions.decode(reader, reader.uint32(), useInterfaces);
           break;
         case 5:
           message.epochNumber = reader.int64();
@@ -136,20 +146,20 @@ export const EventMint = {
     }
     return message;
   },
-  toAmino(message: EventMint): EventMintAmino {
+  toAmino(message: EventMint, useInterfaces: boolean = true): EventMintAmino {
     const obj: any = {};
-    obj.minter = message.minter ? Minter.toAmino(message.minter) : undefined;
-    obj.bonded_ratio = message.bondedRatio;
-    obj.total_minted = message.totalMinted;
-    obj.distributed_amounts = message.distributedAmounts ? DistributionProportions.toAmino(message.distributedAmounts) : undefined;
+    obj.minter = message.minter ? Minter.toAmino(message.minter, useInterfaces) : undefined;
+    obj.bonded_ratio = padDecimal(message.bondedRatio) === "" ? undefined : padDecimal(message.bondedRatio);
+    obj.total_minted = message.totalMinted === "" ? undefined : message.totalMinted;
+    obj.distributed_amounts = message.distributedAmounts ? DistributionProportions.toAmino(message.distributedAmounts, useInterfaces) : undefined;
     obj.epoch_number = message.epochNumber ? message.epochNumber.toString() : undefined;
     return obj;
   },
   fromAminoMsg(object: EventMintAminoMsg): EventMint {
     return EventMint.fromAmino(object.value);
   },
-  fromProtoMsg(message: EventMintProtoMsg): EventMint {
-    return EventMint.decode(message.value);
+  fromProtoMsg(message: EventMintProtoMsg, useInterfaces: boolean = true): EventMint {
+    return EventMint.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: EventMint): Uint8Array {
     return EventMint.encode(message).finish();
@@ -161,3 +171,4 @@ export const EventMint = {
     };
   }
 };
+GlobalDecoderRegistry.register(EventMint.typeUrl, EventMint);

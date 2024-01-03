@@ -3,7 +3,8 @@ import { Duration, DurationAmino, DurationSDKType } from "../../google/protobuf/
 import { RewardHistory, RewardHistoryAmino, RewardHistorySDKType } from "./params";
 import { BinaryReader, BinaryWriter } from "../../binary";
 import { Decimal } from "@cosmjs/math";
-import { isSet, fromJsonTimestamp, fromTimestamp } from "../../helpers";
+import { isSet, padDecimal, fromJsonTimestamp, fromTimestamp } from "../../helpers";
+import { GlobalDecoderRegistry } from "../../registry";
 export interface RewardWeightRange {
   min: string;
   max: string;
@@ -126,6 +127,15 @@ function createBaseRewardWeightRange(): RewardWeightRange {
 }
 export const RewardWeightRange = {
   typeUrl: "/alliance.alliance.RewardWeightRange",
+  is(o: any): o is RewardWeightRange {
+    return o && (o.$typeUrl === RewardWeightRange.typeUrl || typeof o.min === "string" && typeof o.max === "string");
+  },
+  isSDK(o: any): o is RewardWeightRangeSDKType {
+    return o && (o.$typeUrl === RewardWeightRange.typeUrl || typeof o.min === "string" && typeof o.max === "string");
+  },
+  isAmino(o: any): o is RewardWeightRangeAmino {
+    return o && (o.$typeUrl === RewardWeightRange.typeUrl || typeof o.min === "string" && typeof o.max === "string");
+  },
   encode(message: RewardWeightRange, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.min !== "") {
       writer.uint32(10).string(Decimal.fromUserInput(message.min, 18).atomics);
@@ -135,7 +145,7 @@ export const RewardWeightRange = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): RewardWeightRange {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): RewardWeightRange {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseRewardWeightRange();
@@ -183,17 +193,17 @@ export const RewardWeightRange = {
     }
     return message;
   },
-  toAmino(message: RewardWeightRange): RewardWeightRangeAmino {
+  toAmino(message: RewardWeightRange, useInterfaces: boolean = true): RewardWeightRangeAmino {
     const obj: any = {};
-    obj.min = message.min;
-    obj.max = message.max;
+    obj.min = padDecimal(message.min) === "" ? undefined : padDecimal(message.min);
+    obj.max = padDecimal(message.max) === "" ? undefined : padDecimal(message.max);
     return obj;
   },
   fromAminoMsg(object: RewardWeightRangeAminoMsg): RewardWeightRange {
     return RewardWeightRange.fromAmino(object.value);
   },
-  fromProtoMsg(message: RewardWeightRangeProtoMsg): RewardWeightRange {
-    return RewardWeightRange.decode(message.value);
+  fromProtoMsg(message: RewardWeightRangeProtoMsg, useInterfaces: boolean = true): RewardWeightRange {
+    return RewardWeightRange.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: RewardWeightRange): Uint8Array {
     return RewardWeightRange.encode(message).finish();
@@ -205,6 +215,7 @@ export const RewardWeightRange = {
     };
   }
 };
+GlobalDecoderRegistry.register(RewardWeightRange.typeUrl, RewardWeightRange);
 function createBaseAllianceAsset(): AllianceAsset {
   return {
     denom: "",
@@ -222,6 +233,15 @@ function createBaseAllianceAsset(): AllianceAsset {
 }
 export const AllianceAsset = {
   typeUrl: "/alliance.alliance.AllianceAsset",
+  is(o: any): o is AllianceAsset {
+    return o && (o.$typeUrl === AllianceAsset.typeUrl || typeof o.denom === "string" && typeof o.rewardWeight === "string" && typeof o.takeRate === "string" && typeof o.totalTokens === "string" && typeof o.totalValidatorShares === "string" && Timestamp.is(o.rewardStartTime) && typeof o.rewardChangeRate === "string" && Duration.is(o.rewardChangeInterval) && Timestamp.is(o.lastRewardChangeTime) && RewardWeightRange.is(o.rewardWeightRange) && typeof o.isInitialized === "boolean");
+  },
+  isSDK(o: any): o is AllianceAssetSDKType {
+    return o && (o.$typeUrl === AllianceAsset.typeUrl || typeof o.denom === "string" && typeof o.reward_weight === "string" && typeof o.take_rate === "string" && typeof o.total_tokens === "string" && typeof o.total_validator_shares === "string" && Timestamp.isSDK(o.reward_start_time) && typeof o.reward_change_rate === "string" && Duration.isSDK(o.reward_change_interval) && Timestamp.isSDK(o.last_reward_change_time) && RewardWeightRange.isSDK(o.reward_weight_range) && typeof o.is_initialized === "boolean");
+  },
+  isAmino(o: any): o is AllianceAssetAmino {
+    return o && (o.$typeUrl === AllianceAsset.typeUrl || typeof o.denom === "string" && typeof o.reward_weight === "string" && typeof o.take_rate === "string" && typeof o.total_tokens === "string" && typeof o.total_validator_shares === "string" && Timestamp.isAmino(o.reward_start_time) && typeof o.reward_change_rate === "string" && Duration.isAmino(o.reward_change_interval) && Timestamp.isAmino(o.last_reward_change_time) && RewardWeightRange.isAmino(o.reward_weight_range) && typeof o.is_initialized === "boolean");
+  },
   encode(message: AllianceAsset, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.denom !== "") {
       writer.uint32(10).string(message.denom);
@@ -258,7 +278,7 @@ export const AllianceAsset = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): AllianceAsset {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): AllianceAsset {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseAllianceAsset();
@@ -287,13 +307,13 @@ export const AllianceAsset = {
           message.rewardChangeRate = Decimal.fromAtomics(reader.string(), 18).toString();
           break;
         case 8:
-          message.rewardChangeInterval = Duration.decode(reader, reader.uint32());
+          message.rewardChangeInterval = Duration.decode(reader, reader.uint32(), useInterfaces);
           break;
         case 9:
           message.lastRewardChangeTime = Timestamp.decode(reader, reader.uint32());
           break;
         case 10:
-          message.rewardWeightRange = RewardWeightRange.decode(reader, reader.uint32());
+          message.rewardWeightRange = RewardWeightRange.decode(reader, reader.uint32(), useInterfaces);
           break;
         case 11:
           message.isInitialized = reader.bool();
@@ -387,26 +407,26 @@ export const AllianceAsset = {
     }
     return message;
   },
-  toAmino(message: AllianceAsset): AllianceAssetAmino {
+  toAmino(message: AllianceAsset, useInterfaces: boolean = true): AllianceAssetAmino {
     const obj: any = {};
-    obj.denom = message.denom;
-    obj.reward_weight = message.rewardWeight;
-    obj.take_rate = message.takeRate;
-    obj.total_tokens = message.totalTokens;
-    obj.total_validator_shares = message.totalValidatorShares;
-    obj.reward_start_time = message.rewardStartTime ? Timestamp.toAmino(message.rewardStartTime) : undefined;
-    obj.reward_change_rate = message.rewardChangeRate;
-    obj.reward_change_interval = message.rewardChangeInterval ? Duration.toAmino(message.rewardChangeInterval) : undefined;
-    obj.last_reward_change_time = message.lastRewardChangeTime ? Timestamp.toAmino(message.lastRewardChangeTime) : undefined;
-    obj.reward_weight_range = message.rewardWeightRange ? RewardWeightRange.toAmino(message.rewardWeightRange) : undefined;
-    obj.is_initialized = message.isInitialized;
+    obj.denom = message.denom === "" ? undefined : message.denom;
+    obj.reward_weight = padDecimal(message.rewardWeight) === "" ? undefined : padDecimal(message.rewardWeight);
+    obj.take_rate = padDecimal(message.takeRate) === "" ? undefined : padDecimal(message.takeRate);
+    obj.total_tokens = message.totalTokens === "" ? undefined : message.totalTokens;
+    obj.total_validator_shares = padDecimal(message.totalValidatorShares) === "" ? undefined : padDecimal(message.totalValidatorShares);
+    obj.reward_start_time = message.rewardStartTime ? Timestamp.toAmino(message.rewardStartTime, useInterfaces) : undefined;
+    obj.reward_change_rate = padDecimal(message.rewardChangeRate) === "" ? undefined : padDecimal(message.rewardChangeRate);
+    obj.reward_change_interval = message.rewardChangeInterval ? Duration.toAmino(message.rewardChangeInterval, useInterfaces) : undefined;
+    obj.last_reward_change_time = message.lastRewardChangeTime ? Timestamp.toAmino(message.lastRewardChangeTime, useInterfaces) : undefined;
+    obj.reward_weight_range = message.rewardWeightRange ? RewardWeightRange.toAmino(message.rewardWeightRange, useInterfaces) : undefined;
+    obj.is_initialized = message.isInitialized === false ? undefined : message.isInitialized;
     return obj;
   },
   fromAminoMsg(object: AllianceAssetAminoMsg): AllianceAsset {
     return AllianceAsset.fromAmino(object.value);
   },
-  fromProtoMsg(message: AllianceAssetProtoMsg): AllianceAsset {
-    return AllianceAsset.decode(message.value);
+  fromProtoMsg(message: AllianceAssetProtoMsg, useInterfaces: boolean = true): AllianceAsset {
+    return AllianceAsset.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: AllianceAsset): Uint8Array {
     return AllianceAsset.encode(message).finish();
@@ -418,6 +438,7 @@ export const AllianceAsset = {
     };
   }
 };
+GlobalDecoderRegistry.register(AllianceAsset.typeUrl, AllianceAsset);
 function createBaseRewardWeightChangeSnapshot(): RewardWeightChangeSnapshot {
   return {
     prevRewardWeight: "",
@@ -426,6 +447,15 @@ function createBaseRewardWeightChangeSnapshot(): RewardWeightChangeSnapshot {
 }
 export const RewardWeightChangeSnapshot = {
   typeUrl: "/alliance.alliance.RewardWeightChangeSnapshot",
+  is(o: any): o is RewardWeightChangeSnapshot {
+    return o && (o.$typeUrl === RewardWeightChangeSnapshot.typeUrl || typeof o.prevRewardWeight === "string" && Array.isArray(o.rewardHistories) && (!o.rewardHistories.length || RewardHistory.is(o.rewardHistories[0])));
+  },
+  isSDK(o: any): o is RewardWeightChangeSnapshotSDKType {
+    return o && (o.$typeUrl === RewardWeightChangeSnapshot.typeUrl || typeof o.prev_reward_weight === "string" && Array.isArray(o.reward_histories) && (!o.reward_histories.length || RewardHistory.isSDK(o.reward_histories[0])));
+  },
+  isAmino(o: any): o is RewardWeightChangeSnapshotAmino {
+    return o && (o.$typeUrl === RewardWeightChangeSnapshot.typeUrl || typeof o.prev_reward_weight === "string" && Array.isArray(o.reward_histories) && (!o.reward_histories.length || RewardHistory.isAmino(o.reward_histories[0])));
+  },
   encode(message: RewardWeightChangeSnapshot, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.prevRewardWeight !== "") {
       writer.uint32(10).string(Decimal.fromUserInput(message.prevRewardWeight, 18).atomics);
@@ -435,7 +465,7 @@ export const RewardWeightChangeSnapshot = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): RewardWeightChangeSnapshot {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): RewardWeightChangeSnapshot {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseRewardWeightChangeSnapshot();
@@ -446,7 +476,7 @@ export const RewardWeightChangeSnapshot = {
           message.prevRewardWeight = Decimal.fromAtomics(reader.string(), 18).toString();
           break;
         case 2:
-          message.rewardHistories.push(RewardHistory.decode(reader, reader.uint32()));
+          message.rewardHistories.push(RewardHistory.decode(reader, reader.uint32(), useInterfaces));
           break;
         default:
           reader.skipType(tag & 7);
@@ -485,21 +515,21 @@ export const RewardWeightChangeSnapshot = {
     message.rewardHistories = object.reward_histories?.map(e => RewardHistory.fromAmino(e)) || [];
     return message;
   },
-  toAmino(message: RewardWeightChangeSnapshot): RewardWeightChangeSnapshotAmino {
+  toAmino(message: RewardWeightChangeSnapshot, useInterfaces: boolean = true): RewardWeightChangeSnapshotAmino {
     const obj: any = {};
-    obj.prev_reward_weight = message.prevRewardWeight;
+    obj.prev_reward_weight = padDecimal(message.prevRewardWeight) === "" ? undefined : padDecimal(message.prevRewardWeight);
     if (message.rewardHistories) {
-      obj.reward_histories = message.rewardHistories.map(e => e ? RewardHistory.toAmino(e) : undefined);
+      obj.reward_histories = message.rewardHistories.map(e => e ? RewardHistory.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.reward_histories = [];
+      obj.reward_histories = message.rewardHistories;
     }
     return obj;
   },
   fromAminoMsg(object: RewardWeightChangeSnapshotAminoMsg): RewardWeightChangeSnapshot {
     return RewardWeightChangeSnapshot.fromAmino(object.value);
   },
-  fromProtoMsg(message: RewardWeightChangeSnapshotProtoMsg): RewardWeightChangeSnapshot {
-    return RewardWeightChangeSnapshot.decode(message.value);
+  fromProtoMsg(message: RewardWeightChangeSnapshotProtoMsg, useInterfaces: boolean = true): RewardWeightChangeSnapshot {
+    return RewardWeightChangeSnapshot.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: RewardWeightChangeSnapshot): Uint8Array {
     return RewardWeightChangeSnapshot.encode(message).finish();
@@ -511,3 +541,4 @@ export const RewardWeightChangeSnapshot = {
     };
   }
 };
+GlobalDecoderRegistry.register(RewardWeightChangeSnapshot.typeUrl, RewardWeightChangeSnapshot);

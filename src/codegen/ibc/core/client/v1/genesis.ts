@@ -1,6 +1,7 @@
 import { IdentifiedClientState, IdentifiedClientStateAmino, IdentifiedClientStateSDKType, ClientConsensusStates, ClientConsensusStatesAmino, ClientConsensusStatesSDKType, Params, ParamsAmino, ParamsSDKType } from "./client";
 import { BinaryReader, BinaryWriter } from "../../../../binary";
 import { isSet, bytesFromBase64, base64FromBytes } from "../../../../helpers";
+import { GlobalDecoderRegistry } from "../../../../registry";
 /** GenesisState defines the ibc client submodule's genesis state. */
 export interface GenesisState {
   /** client states with their corresponding identifiers */
@@ -126,6 +127,16 @@ function createBaseGenesisState(): GenesisState {
 }
 export const GenesisState = {
   typeUrl: "/ibc.core.client.v1.GenesisState",
+  aminoType: "cosmos-sdk/GenesisState",
+  is(o: any): o is GenesisState {
+    return o && (o.$typeUrl === GenesisState.typeUrl || Array.isArray(o.clients) && (!o.clients.length || IdentifiedClientState.is(o.clients[0])) && Array.isArray(o.clientsConsensus) && (!o.clientsConsensus.length || ClientConsensusStates.is(o.clientsConsensus[0])) && Array.isArray(o.clientsMetadata) && (!o.clientsMetadata.length || IdentifiedGenesisMetadata.is(o.clientsMetadata[0])) && Params.is(o.params) && typeof o.createLocalhost === "boolean" && typeof o.nextClientSequence === "bigint");
+  },
+  isSDK(o: any): o is GenesisStateSDKType {
+    return o && (o.$typeUrl === GenesisState.typeUrl || Array.isArray(o.clients) && (!o.clients.length || IdentifiedClientState.isSDK(o.clients[0])) && Array.isArray(o.clients_consensus) && (!o.clients_consensus.length || ClientConsensusStates.isSDK(o.clients_consensus[0])) && Array.isArray(o.clients_metadata) && (!o.clients_metadata.length || IdentifiedGenesisMetadata.isSDK(o.clients_metadata[0])) && Params.isSDK(o.params) && typeof o.create_localhost === "boolean" && typeof o.next_client_sequence === "bigint");
+  },
+  isAmino(o: any): o is GenesisStateAmino {
+    return o && (o.$typeUrl === GenesisState.typeUrl || Array.isArray(o.clients) && (!o.clients.length || IdentifiedClientState.isAmino(o.clients[0])) && Array.isArray(o.clients_consensus) && (!o.clients_consensus.length || ClientConsensusStates.isAmino(o.clients_consensus[0])) && Array.isArray(o.clients_metadata) && (!o.clients_metadata.length || IdentifiedGenesisMetadata.isAmino(o.clients_metadata[0])) && Params.isAmino(o.params) && typeof o.create_localhost === "boolean" && typeof o.next_client_sequence === "bigint");
+  },
   encode(message: GenesisState, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     for (const v of message.clients) {
       IdentifiedClientState.encode(v!, writer.uint32(10).fork()).ldelim();
@@ -147,7 +158,7 @@ export const GenesisState = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): GenesisState {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): GenesisState {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseGenesisState();
@@ -155,16 +166,16 @@ export const GenesisState = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.clients.push(IdentifiedClientState.decode(reader, reader.uint32()));
+          message.clients.push(IdentifiedClientState.decode(reader, reader.uint32(), useInterfaces));
           break;
         case 2:
-          message.clientsConsensus.push(ClientConsensusStates.decode(reader, reader.uint32()));
+          message.clientsConsensus.push(ClientConsensusStates.decode(reader, reader.uint32(), useInterfaces));
           break;
         case 3:
-          message.clientsMetadata.push(IdentifiedGenesisMetadata.decode(reader, reader.uint32()));
+          message.clientsMetadata.push(IdentifiedGenesisMetadata.decode(reader, reader.uint32(), useInterfaces));
           break;
         case 4:
-          message.params = Params.decode(reader, reader.uint32());
+          message.params = Params.decode(reader, reader.uint32(), useInterfaces);
           break;
         case 5:
           message.createLocalhost = reader.bool();
@@ -237,39 +248,39 @@ export const GenesisState = {
     }
     return message;
   },
-  toAmino(message: GenesisState): GenesisStateAmino {
+  toAmino(message: GenesisState, useInterfaces: boolean = true): GenesisStateAmino {
     const obj: any = {};
     if (message.clients) {
-      obj.clients = message.clients.map(e => e ? IdentifiedClientState.toAmino(e) : undefined);
+      obj.clients = message.clients.map(e => e ? IdentifiedClientState.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.clients = [];
+      obj.clients = message.clients;
     }
     if (message.clientsConsensus) {
-      obj.clients_consensus = message.clientsConsensus.map(e => e ? ClientConsensusStates.toAmino(e) : undefined);
+      obj.clients_consensus = message.clientsConsensus.map(e => e ? ClientConsensusStates.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.clients_consensus = [];
+      obj.clients_consensus = message.clientsConsensus;
     }
     if (message.clientsMetadata) {
-      obj.clients_metadata = message.clientsMetadata.map(e => e ? IdentifiedGenesisMetadata.toAmino(e) : undefined);
+      obj.clients_metadata = message.clientsMetadata.map(e => e ? IdentifiedGenesisMetadata.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.clients_metadata = [];
+      obj.clients_metadata = message.clientsMetadata;
     }
-    obj.params = message.params ? Params.toAmino(message.params) : undefined;
-    obj.create_localhost = message.createLocalhost;
+    obj.params = message.params ? Params.toAmino(message.params, useInterfaces) : undefined;
+    obj.create_localhost = message.createLocalhost === false ? undefined : message.createLocalhost;
     obj.next_client_sequence = message.nextClientSequence ? message.nextClientSequence.toString() : undefined;
     return obj;
   },
   fromAminoMsg(object: GenesisStateAminoMsg): GenesisState {
     return GenesisState.fromAmino(object.value);
   },
-  toAminoMsg(message: GenesisState): GenesisStateAminoMsg {
+  toAminoMsg(message: GenesisState, useInterfaces: boolean = true): GenesisStateAminoMsg {
     return {
       type: "cosmos-sdk/GenesisState",
-      value: GenesisState.toAmino(message)
+      value: GenesisState.toAmino(message, useInterfaces)
     };
   },
-  fromProtoMsg(message: GenesisStateProtoMsg): GenesisState {
-    return GenesisState.decode(message.value);
+  fromProtoMsg(message: GenesisStateProtoMsg, useInterfaces: boolean = true): GenesisState {
+    return GenesisState.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: GenesisState): Uint8Array {
     return GenesisState.encode(message).finish();
@@ -281,6 +292,8 @@ export const GenesisState = {
     };
   }
 };
+GlobalDecoderRegistry.register(GenesisState.typeUrl, GenesisState);
+GlobalDecoderRegistry.registerAminoProtoMapping(GenesisState.aminoType, GenesisState.typeUrl);
 function createBaseGenesisMetadata(): GenesisMetadata {
   return {
     key: new Uint8Array(),
@@ -289,6 +302,16 @@ function createBaseGenesisMetadata(): GenesisMetadata {
 }
 export const GenesisMetadata = {
   typeUrl: "/ibc.core.client.v1.GenesisMetadata",
+  aminoType: "cosmos-sdk/GenesisMetadata",
+  is(o: any): o is GenesisMetadata {
+    return o && (o.$typeUrl === GenesisMetadata.typeUrl || (o.key instanceof Uint8Array || typeof o.key === "string") && (o.value instanceof Uint8Array || typeof o.value === "string"));
+  },
+  isSDK(o: any): o is GenesisMetadataSDKType {
+    return o && (o.$typeUrl === GenesisMetadata.typeUrl || (o.key instanceof Uint8Array || typeof o.key === "string") && (o.value instanceof Uint8Array || typeof o.value === "string"));
+  },
+  isAmino(o: any): o is GenesisMetadataAmino {
+    return o && (o.$typeUrl === GenesisMetadata.typeUrl || (o.key instanceof Uint8Array || typeof o.key === "string") && (o.value instanceof Uint8Array || typeof o.value === "string"));
+  },
   encode(message: GenesisMetadata, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.key.length !== 0) {
       writer.uint32(10).bytes(message.key);
@@ -298,7 +321,7 @@ export const GenesisMetadata = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): GenesisMetadata {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): GenesisMetadata {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseGenesisMetadata();
@@ -346,7 +369,7 @@ export const GenesisMetadata = {
     }
     return message;
   },
-  toAmino(message: GenesisMetadata): GenesisMetadataAmino {
+  toAmino(message: GenesisMetadata, useInterfaces: boolean = true): GenesisMetadataAmino {
     const obj: any = {};
     obj.key = message.key ? base64FromBytes(message.key) : undefined;
     obj.value = message.value ? base64FromBytes(message.value) : undefined;
@@ -355,14 +378,14 @@ export const GenesisMetadata = {
   fromAminoMsg(object: GenesisMetadataAminoMsg): GenesisMetadata {
     return GenesisMetadata.fromAmino(object.value);
   },
-  toAminoMsg(message: GenesisMetadata): GenesisMetadataAminoMsg {
+  toAminoMsg(message: GenesisMetadata, useInterfaces: boolean = true): GenesisMetadataAminoMsg {
     return {
       type: "cosmos-sdk/GenesisMetadata",
-      value: GenesisMetadata.toAmino(message)
+      value: GenesisMetadata.toAmino(message, useInterfaces)
     };
   },
-  fromProtoMsg(message: GenesisMetadataProtoMsg): GenesisMetadata {
-    return GenesisMetadata.decode(message.value);
+  fromProtoMsg(message: GenesisMetadataProtoMsg, useInterfaces: boolean = true): GenesisMetadata {
+    return GenesisMetadata.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: GenesisMetadata): Uint8Array {
     return GenesisMetadata.encode(message).finish();
@@ -374,6 +397,8 @@ export const GenesisMetadata = {
     };
   }
 };
+GlobalDecoderRegistry.register(GenesisMetadata.typeUrl, GenesisMetadata);
+GlobalDecoderRegistry.registerAminoProtoMapping(GenesisMetadata.aminoType, GenesisMetadata.typeUrl);
 function createBaseIdentifiedGenesisMetadata(): IdentifiedGenesisMetadata {
   return {
     clientId: "",
@@ -382,6 +407,16 @@ function createBaseIdentifiedGenesisMetadata(): IdentifiedGenesisMetadata {
 }
 export const IdentifiedGenesisMetadata = {
   typeUrl: "/ibc.core.client.v1.IdentifiedGenesisMetadata",
+  aminoType: "cosmos-sdk/IdentifiedGenesisMetadata",
+  is(o: any): o is IdentifiedGenesisMetadata {
+    return o && (o.$typeUrl === IdentifiedGenesisMetadata.typeUrl || typeof o.clientId === "string" && Array.isArray(o.clientMetadata) && (!o.clientMetadata.length || GenesisMetadata.is(o.clientMetadata[0])));
+  },
+  isSDK(o: any): o is IdentifiedGenesisMetadataSDKType {
+    return o && (o.$typeUrl === IdentifiedGenesisMetadata.typeUrl || typeof o.client_id === "string" && Array.isArray(o.client_metadata) && (!o.client_metadata.length || GenesisMetadata.isSDK(o.client_metadata[0])));
+  },
+  isAmino(o: any): o is IdentifiedGenesisMetadataAmino {
+    return o && (o.$typeUrl === IdentifiedGenesisMetadata.typeUrl || typeof o.client_id === "string" && Array.isArray(o.client_metadata) && (!o.client_metadata.length || GenesisMetadata.isAmino(o.client_metadata[0])));
+  },
   encode(message: IdentifiedGenesisMetadata, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.clientId !== "") {
       writer.uint32(10).string(message.clientId);
@@ -391,7 +426,7 @@ export const IdentifiedGenesisMetadata = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): IdentifiedGenesisMetadata {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): IdentifiedGenesisMetadata {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseIdentifiedGenesisMetadata();
@@ -402,7 +437,7 @@ export const IdentifiedGenesisMetadata = {
           message.clientId = reader.string();
           break;
         case 2:
-          message.clientMetadata.push(GenesisMetadata.decode(reader, reader.uint32()));
+          message.clientMetadata.push(GenesisMetadata.decode(reader, reader.uint32(), useInterfaces));
           break;
         default:
           reader.skipType(tag & 7);
@@ -441,27 +476,27 @@ export const IdentifiedGenesisMetadata = {
     message.clientMetadata = object.client_metadata?.map(e => GenesisMetadata.fromAmino(e)) || [];
     return message;
   },
-  toAmino(message: IdentifiedGenesisMetadata): IdentifiedGenesisMetadataAmino {
+  toAmino(message: IdentifiedGenesisMetadata, useInterfaces: boolean = true): IdentifiedGenesisMetadataAmino {
     const obj: any = {};
-    obj.client_id = message.clientId;
+    obj.client_id = message.clientId === "" ? undefined : message.clientId;
     if (message.clientMetadata) {
-      obj.client_metadata = message.clientMetadata.map(e => e ? GenesisMetadata.toAmino(e) : undefined);
+      obj.client_metadata = message.clientMetadata.map(e => e ? GenesisMetadata.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.client_metadata = [];
+      obj.client_metadata = message.clientMetadata;
     }
     return obj;
   },
   fromAminoMsg(object: IdentifiedGenesisMetadataAminoMsg): IdentifiedGenesisMetadata {
     return IdentifiedGenesisMetadata.fromAmino(object.value);
   },
-  toAminoMsg(message: IdentifiedGenesisMetadata): IdentifiedGenesisMetadataAminoMsg {
+  toAminoMsg(message: IdentifiedGenesisMetadata, useInterfaces: boolean = true): IdentifiedGenesisMetadataAminoMsg {
     return {
       type: "cosmos-sdk/IdentifiedGenesisMetadata",
-      value: IdentifiedGenesisMetadata.toAmino(message)
+      value: IdentifiedGenesisMetadata.toAmino(message, useInterfaces)
     };
   },
-  fromProtoMsg(message: IdentifiedGenesisMetadataProtoMsg): IdentifiedGenesisMetadata {
-    return IdentifiedGenesisMetadata.decode(message.value);
+  fromProtoMsg(message: IdentifiedGenesisMetadataProtoMsg, useInterfaces: boolean = true): IdentifiedGenesisMetadata {
+    return IdentifiedGenesisMetadata.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: IdentifiedGenesisMetadata): Uint8Array {
     return IdentifiedGenesisMetadata.encode(message).finish();
@@ -473,3 +508,5 @@ export const IdentifiedGenesisMetadata = {
     };
   }
 };
+GlobalDecoderRegistry.register(IdentifiedGenesisMetadata.typeUrl, IdentifiedGenesisMetadata);
+GlobalDecoderRegistry.registerAminoProtoMapping(IdentifiedGenesisMetadata.aminoType, IdentifiedGenesisMetadata.typeUrl);

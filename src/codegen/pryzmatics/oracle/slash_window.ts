@@ -1,6 +1,7 @@
 import { Timestamp, TimestampSDKType } from "../../google/protobuf/timestamp";
 import { BinaryReader, BinaryWriter } from "../../binary";
 import { isSet, fromJsonTimestamp, fromTimestamp } from "../../helpers";
+import { GlobalDecoderRegistry } from "../../registry";
 export interface SlashWindow {
   id: bigint;
   slashWindow: bigint;
@@ -37,6 +38,15 @@ function createBaseSlashWindow(): SlashWindow {
 }
 export const SlashWindow = {
   typeUrl: "/pryzmatics.oracle.SlashWindow",
+  is(o: any): o is SlashWindow {
+    return o && (o.$typeUrl === SlashWindow.typeUrl || typeof o.id === "bigint" && typeof o.slashWindow === "bigint" && typeof o.closeBlockHeight === "bigint" && Timestamp.is(o.closeBlockTime));
+  },
+  isSDK(o: any): o is SlashWindowSDKType {
+    return o && (o.$typeUrl === SlashWindow.typeUrl || typeof o.id === "bigint" && typeof o.slash_window === "bigint" && typeof o.close_block_height === "bigint" && Timestamp.isSDK(o.close_block_time));
+  },
+  isAmino(o: any): o is SlashWindowAmino {
+    return o && (o.$typeUrl === SlashWindow.typeUrl || typeof o.id === "bigint" && typeof o.slash_window === "bigint" && typeof o.close_block_height === "bigint" && Timestamp.isAmino(o.close_block_time));
+  },
   encode(message: SlashWindow, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.id !== BigInt(0)) {
       writer.uint32(8).uint64(message.id);
@@ -52,7 +62,7 @@ export const SlashWindow = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): SlashWindow {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): SlashWindow {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseSlashWindow();
@@ -118,19 +128,19 @@ export const SlashWindow = {
     }
     return message;
   },
-  toAmino(message: SlashWindow): SlashWindowAmino {
+  toAmino(message: SlashWindow, useInterfaces: boolean = true): SlashWindowAmino {
     const obj: any = {};
     obj.id = message.id ? message.id.toString() : undefined;
     obj.slash_window = message.slashWindow ? message.slashWindow.toString() : undefined;
     obj.close_block_height = message.closeBlockHeight ? message.closeBlockHeight.toString() : undefined;
-    obj.close_block_time = message.closeBlockTime ? Timestamp.toAmino(message.closeBlockTime) : undefined;
+    obj.close_block_time = message.closeBlockTime ? Timestamp.toAmino(message.closeBlockTime, useInterfaces) : undefined;
     return obj;
   },
   fromAminoMsg(object: SlashWindowAminoMsg): SlashWindow {
     return SlashWindow.fromAmino(object.value);
   },
-  fromProtoMsg(message: SlashWindowProtoMsg): SlashWindow {
-    return SlashWindow.decode(message.value);
+  fromProtoMsg(message: SlashWindowProtoMsg, useInterfaces: boolean = true): SlashWindow {
+    return SlashWindow.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: SlashWindow): Uint8Array {
     return SlashWindow.encode(message).finish();
@@ -142,3 +152,4 @@ export const SlashWindow = {
     };
   }
 };
+GlobalDecoderRegistry.register(SlashWindow.typeUrl, SlashWindow);

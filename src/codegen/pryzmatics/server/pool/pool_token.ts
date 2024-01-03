@@ -1,6 +1,7 @@
 import { PoolToken, PoolTokenAmino, PoolTokenSDKType } from "../../pool/pool_token";
 import { BinaryReader, BinaryWriter } from "../../../binary";
 import { isSet } from "../../../helpers";
+import { GlobalDecoderRegistry } from "../../../registry";
 export interface QueryPoolTokenRequest {
   poolId: bigint;
   denom: string;
@@ -80,6 +81,15 @@ function createBaseQueryPoolTokenRequest(): QueryPoolTokenRequest {
 }
 export const QueryPoolTokenRequest = {
   typeUrl: "/pryzmatics.server.pool.QueryPoolTokenRequest",
+  is(o: any): o is QueryPoolTokenRequest {
+    return o && (o.$typeUrl === QueryPoolTokenRequest.typeUrl || typeof o.poolId === "bigint" && typeof o.denom === "string");
+  },
+  isSDK(o: any): o is QueryPoolTokenRequestSDKType {
+    return o && (o.$typeUrl === QueryPoolTokenRequest.typeUrl || typeof o.pool_id === "bigint" && typeof o.denom === "string");
+  },
+  isAmino(o: any): o is QueryPoolTokenRequestAmino {
+    return o && (o.$typeUrl === QueryPoolTokenRequest.typeUrl || typeof o.pool_id === "bigint" && typeof o.denom === "string");
+  },
   encode(message: QueryPoolTokenRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.poolId !== BigInt(0)) {
       writer.uint32(8).uint64(message.poolId);
@@ -89,7 +99,7 @@ export const QueryPoolTokenRequest = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): QueryPoolTokenRequest {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): QueryPoolTokenRequest {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryPoolTokenRequest();
@@ -137,17 +147,17 @@ export const QueryPoolTokenRequest = {
     }
     return message;
   },
-  toAmino(message: QueryPoolTokenRequest): QueryPoolTokenRequestAmino {
+  toAmino(message: QueryPoolTokenRequest, useInterfaces: boolean = true): QueryPoolTokenRequestAmino {
     const obj: any = {};
     obj.pool_id = message.poolId ? message.poolId.toString() : undefined;
-    obj.denom = message.denom;
+    obj.denom = message.denom === "" ? undefined : message.denom;
     return obj;
   },
   fromAminoMsg(object: QueryPoolTokenRequestAminoMsg): QueryPoolTokenRequest {
     return QueryPoolTokenRequest.fromAmino(object.value);
   },
-  fromProtoMsg(message: QueryPoolTokenRequestProtoMsg): QueryPoolTokenRequest {
-    return QueryPoolTokenRequest.decode(message.value);
+  fromProtoMsg(message: QueryPoolTokenRequestProtoMsg, useInterfaces: boolean = true): QueryPoolTokenRequest {
+    return QueryPoolTokenRequest.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: QueryPoolTokenRequest): Uint8Array {
     return QueryPoolTokenRequest.encode(message).finish();
@@ -159,6 +169,7 @@ export const QueryPoolTokenRequest = {
     };
   }
 };
+GlobalDecoderRegistry.register(QueryPoolTokenRequest.typeUrl, QueryPoolTokenRequest);
 function createBaseQueryPoolTokenResponse(): QueryPoolTokenResponse {
   return {
     poolToken: PoolToken.fromPartial({})
@@ -166,13 +177,22 @@ function createBaseQueryPoolTokenResponse(): QueryPoolTokenResponse {
 }
 export const QueryPoolTokenResponse = {
   typeUrl: "/pryzmatics.server.pool.QueryPoolTokenResponse",
+  is(o: any): o is QueryPoolTokenResponse {
+    return o && (o.$typeUrl === QueryPoolTokenResponse.typeUrl || PoolToken.is(o.poolToken));
+  },
+  isSDK(o: any): o is QueryPoolTokenResponseSDKType {
+    return o && (o.$typeUrl === QueryPoolTokenResponse.typeUrl || PoolToken.isSDK(o.pool_token));
+  },
+  isAmino(o: any): o is QueryPoolTokenResponseAmino {
+    return o && (o.$typeUrl === QueryPoolTokenResponse.typeUrl || PoolToken.isAmino(o.pool_token));
+  },
   encode(message: QueryPoolTokenResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.poolToken !== undefined) {
       PoolToken.encode(message.poolToken, writer.uint32(10).fork()).ldelim();
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): QueryPoolTokenResponse {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): QueryPoolTokenResponse {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryPoolTokenResponse();
@@ -180,7 +200,7 @@ export const QueryPoolTokenResponse = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.poolToken = PoolToken.decode(reader, reader.uint32());
+          message.poolToken = PoolToken.decode(reader, reader.uint32(), useInterfaces);
           break;
         default:
           reader.skipType(tag & 7);
@@ -211,16 +231,16 @@ export const QueryPoolTokenResponse = {
     }
     return message;
   },
-  toAmino(message: QueryPoolTokenResponse): QueryPoolTokenResponseAmino {
+  toAmino(message: QueryPoolTokenResponse, useInterfaces: boolean = true): QueryPoolTokenResponseAmino {
     const obj: any = {};
-    obj.pool_token = message.poolToken ? PoolToken.toAmino(message.poolToken) : undefined;
+    obj.pool_token = message.poolToken ? PoolToken.toAmino(message.poolToken, useInterfaces) : undefined;
     return obj;
   },
   fromAminoMsg(object: QueryPoolTokenResponseAminoMsg): QueryPoolTokenResponse {
     return QueryPoolTokenResponse.fromAmino(object.value);
   },
-  fromProtoMsg(message: QueryPoolTokenResponseProtoMsg): QueryPoolTokenResponse {
-    return QueryPoolTokenResponse.decode(message.value);
+  fromProtoMsg(message: QueryPoolTokenResponseProtoMsg, useInterfaces: boolean = true): QueryPoolTokenResponse {
+    return QueryPoolTokenResponse.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: QueryPoolTokenResponse): Uint8Array {
     return QueryPoolTokenResponse.encode(message).finish();
@@ -232,6 +252,7 @@ export const QueryPoolTokenResponse = {
     };
   }
 };
+GlobalDecoderRegistry.register(QueryPoolTokenResponse.typeUrl, QueryPoolTokenResponse);
 function createBaseQueryAllPoolTokenRequest(): QueryAllPoolTokenRequest {
   return {
     poolId: BigInt(0)
@@ -239,13 +260,22 @@ function createBaseQueryAllPoolTokenRequest(): QueryAllPoolTokenRequest {
 }
 export const QueryAllPoolTokenRequest = {
   typeUrl: "/pryzmatics.server.pool.QueryAllPoolTokenRequest",
+  is(o: any): o is QueryAllPoolTokenRequest {
+    return o && (o.$typeUrl === QueryAllPoolTokenRequest.typeUrl || typeof o.poolId === "bigint");
+  },
+  isSDK(o: any): o is QueryAllPoolTokenRequestSDKType {
+    return o && (o.$typeUrl === QueryAllPoolTokenRequest.typeUrl || typeof o.pool_id === "bigint");
+  },
+  isAmino(o: any): o is QueryAllPoolTokenRequestAmino {
+    return o && (o.$typeUrl === QueryAllPoolTokenRequest.typeUrl || typeof o.pool_id === "bigint");
+  },
   encode(message: QueryAllPoolTokenRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.poolId !== BigInt(0)) {
       writer.uint32(8).uint64(message.poolId);
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): QueryAllPoolTokenRequest {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): QueryAllPoolTokenRequest {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryAllPoolTokenRequest();
@@ -284,7 +314,7 @@ export const QueryAllPoolTokenRequest = {
     }
     return message;
   },
-  toAmino(message: QueryAllPoolTokenRequest): QueryAllPoolTokenRequestAmino {
+  toAmino(message: QueryAllPoolTokenRequest, useInterfaces: boolean = true): QueryAllPoolTokenRequestAmino {
     const obj: any = {};
     obj.pool_id = message.poolId ? message.poolId.toString() : undefined;
     return obj;
@@ -292,8 +322,8 @@ export const QueryAllPoolTokenRequest = {
   fromAminoMsg(object: QueryAllPoolTokenRequestAminoMsg): QueryAllPoolTokenRequest {
     return QueryAllPoolTokenRequest.fromAmino(object.value);
   },
-  fromProtoMsg(message: QueryAllPoolTokenRequestProtoMsg): QueryAllPoolTokenRequest {
-    return QueryAllPoolTokenRequest.decode(message.value);
+  fromProtoMsg(message: QueryAllPoolTokenRequestProtoMsg, useInterfaces: boolean = true): QueryAllPoolTokenRequest {
+    return QueryAllPoolTokenRequest.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: QueryAllPoolTokenRequest): Uint8Array {
     return QueryAllPoolTokenRequest.encode(message).finish();
@@ -305,6 +335,7 @@ export const QueryAllPoolTokenRequest = {
     };
   }
 };
+GlobalDecoderRegistry.register(QueryAllPoolTokenRequest.typeUrl, QueryAllPoolTokenRequest);
 function createBaseQueryAllPoolTokenResponse(): QueryAllPoolTokenResponse {
   return {
     poolTokens: []
@@ -312,13 +343,22 @@ function createBaseQueryAllPoolTokenResponse(): QueryAllPoolTokenResponse {
 }
 export const QueryAllPoolTokenResponse = {
   typeUrl: "/pryzmatics.server.pool.QueryAllPoolTokenResponse",
+  is(o: any): o is QueryAllPoolTokenResponse {
+    return o && (o.$typeUrl === QueryAllPoolTokenResponse.typeUrl || Array.isArray(o.poolTokens) && (!o.poolTokens.length || PoolToken.is(o.poolTokens[0])));
+  },
+  isSDK(o: any): o is QueryAllPoolTokenResponseSDKType {
+    return o && (o.$typeUrl === QueryAllPoolTokenResponse.typeUrl || Array.isArray(o.pool_tokens) && (!o.pool_tokens.length || PoolToken.isSDK(o.pool_tokens[0])));
+  },
+  isAmino(o: any): o is QueryAllPoolTokenResponseAmino {
+    return o && (o.$typeUrl === QueryAllPoolTokenResponse.typeUrl || Array.isArray(o.pool_tokens) && (!o.pool_tokens.length || PoolToken.isAmino(o.pool_tokens[0])));
+  },
   encode(message: QueryAllPoolTokenResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     for (const v of message.poolTokens) {
       PoolToken.encode(v!, writer.uint32(10).fork()).ldelim();
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): QueryAllPoolTokenResponse {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): QueryAllPoolTokenResponse {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryAllPoolTokenResponse();
@@ -326,7 +366,7 @@ export const QueryAllPoolTokenResponse = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.poolTokens.push(PoolToken.decode(reader, reader.uint32()));
+          message.poolTokens.push(PoolToken.decode(reader, reader.uint32(), useInterfaces));
           break;
         default:
           reader.skipType(tag & 7);
@@ -359,20 +399,20 @@ export const QueryAllPoolTokenResponse = {
     message.poolTokens = object.pool_tokens?.map(e => PoolToken.fromAmino(e)) || [];
     return message;
   },
-  toAmino(message: QueryAllPoolTokenResponse): QueryAllPoolTokenResponseAmino {
+  toAmino(message: QueryAllPoolTokenResponse, useInterfaces: boolean = true): QueryAllPoolTokenResponseAmino {
     const obj: any = {};
     if (message.poolTokens) {
-      obj.pool_tokens = message.poolTokens.map(e => e ? PoolToken.toAmino(e) : undefined);
+      obj.pool_tokens = message.poolTokens.map(e => e ? PoolToken.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.pool_tokens = [];
+      obj.pool_tokens = message.poolTokens;
     }
     return obj;
   },
   fromAminoMsg(object: QueryAllPoolTokenResponseAminoMsg): QueryAllPoolTokenResponse {
     return QueryAllPoolTokenResponse.fromAmino(object.value);
   },
-  fromProtoMsg(message: QueryAllPoolTokenResponseProtoMsg): QueryAllPoolTokenResponse {
-    return QueryAllPoolTokenResponse.decode(message.value);
+  fromProtoMsg(message: QueryAllPoolTokenResponseProtoMsg, useInterfaces: boolean = true): QueryAllPoolTokenResponse {
+    return QueryAllPoolTokenResponse.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: QueryAllPoolTokenResponse): Uint8Array {
     return QueryAllPoolTokenResponse.encode(message).finish();
@@ -384,3 +424,4 @@ export const QueryAllPoolTokenResponse = {
     };
   }
 };
+GlobalDecoderRegistry.register(QueryAllPoolTokenResponse.typeUrl, QueryAllPoolTokenResponse);

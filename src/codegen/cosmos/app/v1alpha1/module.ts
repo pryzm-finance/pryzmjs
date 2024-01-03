@@ -1,5 +1,6 @@
 import { BinaryReader, BinaryWriter } from "../../../binary";
 import { isSet } from "../../../helpers";
+import { GlobalDecoderRegistry } from "../../../registry";
 /** ModuleDescriptor describes an app module. */
 export interface ModuleDescriptor {
   /**
@@ -211,6 +212,16 @@ function createBaseModuleDescriptor(): ModuleDescriptor {
 }
 export const ModuleDescriptor = {
   typeUrl: "/cosmos.app.v1alpha1.ModuleDescriptor",
+  aminoType: "cosmos-sdk/ModuleDescriptor",
+  is(o: any): o is ModuleDescriptor {
+    return o && (o.$typeUrl === ModuleDescriptor.typeUrl || typeof o.goImport === "string" && Array.isArray(o.usePackage) && (!o.usePackage.length || PackageReference.is(o.usePackage[0])) && Array.isArray(o.canMigrateFrom) && (!o.canMigrateFrom.length || MigrateFromInfo.is(o.canMigrateFrom[0])));
+  },
+  isSDK(o: any): o is ModuleDescriptorSDKType {
+    return o && (o.$typeUrl === ModuleDescriptor.typeUrl || typeof o.go_import === "string" && Array.isArray(o.use_package) && (!o.use_package.length || PackageReference.isSDK(o.use_package[0])) && Array.isArray(o.can_migrate_from) && (!o.can_migrate_from.length || MigrateFromInfo.isSDK(o.can_migrate_from[0])));
+  },
+  isAmino(o: any): o is ModuleDescriptorAmino {
+    return o && (o.$typeUrl === ModuleDescriptor.typeUrl || typeof o.go_import === "string" && Array.isArray(o.use_package) && (!o.use_package.length || PackageReference.isAmino(o.use_package[0])) && Array.isArray(o.can_migrate_from) && (!o.can_migrate_from.length || MigrateFromInfo.isAmino(o.can_migrate_from[0])));
+  },
   encode(message: ModuleDescriptor, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.goImport !== "") {
       writer.uint32(10).string(message.goImport);
@@ -223,7 +234,7 @@ export const ModuleDescriptor = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): ModuleDescriptor {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): ModuleDescriptor {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseModuleDescriptor();
@@ -234,10 +245,10 @@ export const ModuleDescriptor = {
           message.goImport = reader.string();
           break;
         case 2:
-          message.usePackage.push(PackageReference.decode(reader, reader.uint32()));
+          message.usePackage.push(PackageReference.decode(reader, reader.uint32(), useInterfaces));
           break;
         case 3:
-          message.canMigrateFrom.push(MigrateFromInfo.decode(reader, reader.uint32()));
+          message.canMigrateFrom.push(MigrateFromInfo.decode(reader, reader.uint32(), useInterfaces));
           break;
         default:
           reader.skipType(tag & 7);
@@ -284,32 +295,32 @@ export const ModuleDescriptor = {
     message.canMigrateFrom = object.can_migrate_from?.map(e => MigrateFromInfo.fromAmino(e)) || [];
     return message;
   },
-  toAmino(message: ModuleDescriptor): ModuleDescriptorAmino {
+  toAmino(message: ModuleDescriptor, useInterfaces: boolean = true): ModuleDescriptorAmino {
     const obj: any = {};
-    obj.go_import = message.goImport;
+    obj.go_import = message.goImport === "" ? undefined : message.goImport;
     if (message.usePackage) {
-      obj.use_package = message.usePackage.map(e => e ? PackageReference.toAmino(e) : undefined);
+      obj.use_package = message.usePackage.map(e => e ? PackageReference.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.use_package = [];
+      obj.use_package = message.usePackage;
     }
     if (message.canMigrateFrom) {
-      obj.can_migrate_from = message.canMigrateFrom.map(e => e ? MigrateFromInfo.toAmino(e) : undefined);
+      obj.can_migrate_from = message.canMigrateFrom.map(e => e ? MigrateFromInfo.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.can_migrate_from = [];
+      obj.can_migrate_from = message.canMigrateFrom;
     }
     return obj;
   },
   fromAminoMsg(object: ModuleDescriptorAminoMsg): ModuleDescriptor {
     return ModuleDescriptor.fromAmino(object.value);
   },
-  toAminoMsg(message: ModuleDescriptor): ModuleDescriptorAminoMsg {
+  toAminoMsg(message: ModuleDescriptor, useInterfaces: boolean = true): ModuleDescriptorAminoMsg {
     return {
       type: "cosmos-sdk/ModuleDescriptor",
-      value: ModuleDescriptor.toAmino(message)
+      value: ModuleDescriptor.toAmino(message, useInterfaces)
     };
   },
-  fromProtoMsg(message: ModuleDescriptorProtoMsg): ModuleDescriptor {
-    return ModuleDescriptor.decode(message.value);
+  fromProtoMsg(message: ModuleDescriptorProtoMsg, useInterfaces: boolean = true): ModuleDescriptor {
+    return ModuleDescriptor.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: ModuleDescriptor): Uint8Array {
     return ModuleDescriptor.encode(message).finish();
@@ -321,6 +332,8 @@ export const ModuleDescriptor = {
     };
   }
 };
+GlobalDecoderRegistry.register(ModuleDescriptor.typeUrl, ModuleDescriptor);
+GlobalDecoderRegistry.registerAminoProtoMapping(ModuleDescriptor.aminoType, ModuleDescriptor.typeUrl);
 function createBasePackageReference(): PackageReference {
   return {
     name: "",
@@ -329,6 +342,16 @@ function createBasePackageReference(): PackageReference {
 }
 export const PackageReference = {
   typeUrl: "/cosmos.app.v1alpha1.PackageReference",
+  aminoType: "cosmos-sdk/PackageReference",
+  is(o: any): o is PackageReference {
+    return o && (o.$typeUrl === PackageReference.typeUrl || typeof o.name === "string" && typeof o.revision === "number");
+  },
+  isSDK(o: any): o is PackageReferenceSDKType {
+    return o && (o.$typeUrl === PackageReference.typeUrl || typeof o.name === "string" && typeof o.revision === "number");
+  },
+  isAmino(o: any): o is PackageReferenceAmino {
+    return o && (o.$typeUrl === PackageReference.typeUrl || typeof o.name === "string" && typeof o.revision === "number");
+  },
   encode(message: PackageReference, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.name !== "") {
       writer.uint32(10).string(message.name);
@@ -338,7 +361,7 @@ export const PackageReference = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): PackageReference {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): PackageReference {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBasePackageReference();
@@ -386,23 +409,23 @@ export const PackageReference = {
     }
     return message;
   },
-  toAmino(message: PackageReference): PackageReferenceAmino {
+  toAmino(message: PackageReference, useInterfaces: boolean = true): PackageReferenceAmino {
     const obj: any = {};
-    obj.name = message.name;
-    obj.revision = message.revision;
+    obj.name = message.name === "" ? undefined : message.name;
+    obj.revision = message.revision === 0 ? undefined : message.revision;
     return obj;
   },
   fromAminoMsg(object: PackageReferenceAminoMsg): PackageReference {
     return PackageReference.fromAmino(object.value);
   },
-  toAminoMsg(message: PackageReference): PackageReferenceAminoMsg {
+  toAminoMsg(message: PackageReference, useInterfaces: boolean = true): PackageReferenceAminoMsg {
     return {
       type: "cosmos-sdk/PackageReference",
-      value: PackageReference.toAmino(message)
+      value: PackageReference.toAmino(message, useInterfaces)
     };
   },
-  fromProtoMsg(message: PackageReferenceProtoMsg): PackageReference {
-    return PackageReference.decode(message.value);
+  fromProtoMsg(message: PackageReferenceProtoMsg, useInterfaces: boolean = true): PackageReference {
+    return PackageReference.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: PackageReference): Uint8Array {
     return PackageReference.encode(message).finish();
@@ -414,6 +437,8 @@ export const PackageReference = {
     };
   }
 };
+GlobalDecoderRegistry.register(PackageReference.typeUrl, PackageReference);
+GlobalDecoderRegistry.registerAminoProtoMapping(PackageReference.aminoType, PackageReference.typeUrl);
 function createBaseMigrateFromInfo(): MigrateFromInfo {
   return {
     module: ""
@@ -421,13 +446,23 @@ function createBaseMigrateFromInfo(): MigrateFromInfo {
 }
 export const MigrateFromInfo = {
   typeUrl: "/cosmos.app.v1alpha1.MigrateFromInfo",
+  aminoType: "cosmos-sdk/MigrateFromInfo",
+  is(o: any): o is MigrateFromInfo {
+    return o && (o.$typeUrl === MigrateFromInfo.typeUrl || typeof o.module === "string");
+  },
+  isSDK(o: any): o is MigrateFromInfoSDKType {
+    return o && (o.$typeUrl === MigrateFromInfo.typeUrl || typeof o.module === "string");
+  },
+  isAmino(o: any): o is MigrateFromInfoAmino {
+    return o && (o.$typeUrl === MigrateFromInfo.typeUrl || typeof o.module === "string");
+  },
   encode(message: MigrateFromInfo, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.module !== "") {
       writer.uint32(10).string(message.module);
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): MigrateFromInfo {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): MigrateFromInfo {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMigrateFromInfo();
@@ -466,22 +501,22 @@ export const MigrateFromInfo = {
     }
     return message;
   },
-  toAmino(message: MigrateFromInfo): MigrateFromInfoAmino {
+  toAmino(message: MigrateFromInfo, useInterfaces: boolean = true): MigrateFromInfoAmino {
     const obj: any = {};
-    obj.module = message.module;
+    obj.module = message.module === "" ? undefined : message.module;
     return obj;
   },
   fromAminoMsg(object: MigrateFromInfoAminoMsg): MigrateFromInfo {
     return MigrateFromInfo.fromAmino(object.value);
   },
-  toAminoMsg(message: MigrateFromInfo): MigrateFromInfoAminoMsg {
+  toAminoMsg(message: MigrateFromInfo, useInterfaces: boolean = true): MigrateFromInfoAminoMsg {
     return {
       type: "cosmos-sdk/MigrateFromInfo",
-      value: MigrateFromInfo.toAmino(message)
+      value: MigrateFromInfo.toAmino(message, useInterfaces)
     };
   },
-  fromProtoMsg(message: MigrateFromInfoProtoMsg): MigrateFromInfo {
-    return MigrateFromInfo.decode(message.value);
+  fromProtoMsg(message: MigrateFromInfoProtoMsg, useInterfaces: boolean = true): MigrateFromInfo {
+    return MigrateFromInfo.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: MigrateFromInfo): Uint8Array {
     return MigrateFromInfo.encode(message).finish();
@@ -493,3 +528,5 @@ export const MigrateFromInfo = {
     };
   }
 };
+GlobalDecoderRegistry.register(MigrateFromInfo.typeUrl, MigrateFromInfo);
+GlobalDecoderRegistry.registerAminoProtoMapping(MigrateFromInfo.aminoType, MigrateFromInfo.typeUrl);

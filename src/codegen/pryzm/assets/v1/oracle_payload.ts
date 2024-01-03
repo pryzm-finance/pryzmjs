@@ -1,7 +1,8 @@
 import { Height, HeightAmino, HeightSDKType } from "../../../ibc/core/client/v1/client";
 import { BinaryReader, BinaryWriter } from "../../../binary";
 import { Decimal } from "@cosmjs/math";
-import { isSet } from "../../../helpers";
+import { isSet, padDecimal } from "../../../helpers";
+import { GlobalDecoderRegistry } from "../../../registry";
 /** OraclePayload defines the structure of oracle vote payload */
 export interface OraclePayload {
   blockHeight: Height;
@@ -33,6 +34,15 @@ function createBaseOraclePayload(): OraclePayload {
 }
 export const OraclePayload = {
   typeUrl: "/pryzm.assets.v1.OraclePayload",
+  is(o: any): o is OraclePayload {
+    return o && (o.$typeUrl === OraclePayload.typeUrl || Height.is(o.blockHeight) && typeof o.exchangeRate === "string");
+  },
+  isSDK(o: any): o is OraclePayloadSDKType {
+    return o && (o.$typeUrl === OraclePayload.typeUrl || Height.isSDK(o.block_height) && typeof o.exchange_rate === "string");
+  },
+  isAmino(o: any): o is OraclePayloadAmino {
+    return o && (o.$typeUrl === OraclePayload.typeUrl || Height.isAmino(o.block_height) && typeof o.exchange_rate === "string");
+  },
   encode(message: OraclePayload, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.blockHeight !== undefined) {
       Height.encode(message.blockHeight, writer.uint32(10).fork()).ldelim();
@@ -42,7 +52,7 @@ export const OraclePayload = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): OraclePayload {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): OraclePayload {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseOraclePayload();
@@ -50,7 +60,7 @@ export const OraclePayload = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.blockHeight = Height.decode(reader, reader.uint32());
+          message.blockHeight = Height.decode(reader, reader.uint32(), useInterfaces);
           break;
         case 2:
           message.exchangeRate = Decimal.fromAtomics(reader.string(), 18).toString();
@@ -90,17 +100,17 @@ export const OraclePayload = {
     }
     return message;
   },
-  toAmino(message: OraclePayload): OraclePayloadAmino {
+  toAmino(message: OraclePayload, useInterfaces: boolean = true): OraclePayloadAmino {
     const obj: any = {};
-    obj.block_height = message.blockHeight ? Height.toAmino(message.blockHeight) : {};
-    obj.exchange_rate = message.exchangeRate;
+    obj.block_height = message.blockHeight ? Height.toAmino(message.blockHeight, useInterfaces) : {};
+    obj.exchange_rate = padDecimal(message.exchangeRate) === "" ? undefined : padDecimal(message.exchangeRate);
     return obj;
   },
   fromAminoMsg(object: OraclePayloadAminoMsg): OraclePayload {
     return OraclePayload.fromAmino(object.value);
   },
-  fromProtoMsg(message: OraclePayloadProtoMsg): OraclePayload {
-    return OraclePayload.decode(message.value);
+  fromProtoMsg(message: OraclePayloadProtoMsg, useInterfaces: boolean = true): OraclePayload {
+    return OraclePayload.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: OraclePayload): Uint8Array {
     return OraclePayload.encode(message).finish();
@@ -112,3 +122,4 @@ export const OraclePayload = {
     };
   }
 };
+GlobalDecoderRegistry.register(OraclePayload.typeUrl, OraclePayload);

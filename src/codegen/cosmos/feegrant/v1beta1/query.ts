@@ -2,6 +2,7 @@ import { PageRequest, PageRequestAmino, PageRequestSDKType, PageResponse, PageRe
 import { Grant, GrantAmino, GrantSDKType } from "./feegrant";
 import { BinaryReader, BinaryWriter } from "../../../binary";
 import { isSet } from "../../../helpers";
+import { GlobalDecoderRegistry } from "../../../registry";
 /** QueryAllowanceRequest is the request type for the Query/Allowance RPC method. */
 export interface QueryAllowanceRequest {
   /** granter is the address of the user granting an allowance of their funds. */
@@ -187,6 +188,16 @@ function createBaseQueryAllowanceRequest(): QueryAllowanceRequest {
 }
 export const QueryAllowanceRequest = {
   typeUrl: "/cosmos.feegrant.v1beta1.QueryAllowanceRequest",
+  aminoType: "cosmos-sdk/QueryAllowanceRequest",
+  is(o: any): o is QueryAllowanceRequest {
+    return o && (o.$typeUrl === QueryAllowanceRequest.typeUrl || typeof o.granter === "string" && typeof o.grantee === "string");
+  },
+  isSDK(o: any): o is QueryAllowanceRequestSDKType {
+    return o && (o.$typeUrl === QueryAllowanceRequest.typeUrl || typeof o.granter === "string" && typeof o.grantee === "string");
+  },
+  isAmino(o: any): o is QueryAllowanceRequestAmino {
+    return o && (o.$typeUrl === QueryAllowanceRequest.typeUrl || typeof o.granter === "string" && typeof o.grantee === "string");
+  },
   encode(message: QueryAllowanceRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.granter !== "") {
       writer.uint32(10).string(message.granter);
@@ -196,7 +207,7 @@ export const QueryAllowanceRequest = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): QueryAllowanceRequest {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): QueryAllowanceRequest {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryAllowanceRequest();
@@ -244,23 +255,23 @@ export const QueryAllowanceRequest = {
     }
     return message;
   },
-  toAmino(message: QueryAllowanceRequest): QueryAllowanceRequestAmino {
+  toAmino(message: QueryAllowanceRequest, useInterfaces: boolean = true): QueryAllowanceRequestAmino {
     const obj: any = {};
-    obj.granter = message.granter;
-    obj.grantee = message.grantee;
+    obj.granter = message.granter === "" ? undefined : message.granter;
+    obj.grantee = message.grantee === "" ? undefined : message.grantee;
     return obj;
   },
   fromAminoMsg(object: QueryAllowanceRequestAminoMsg): QueryAllowanceRequest {
     return QueryAllowanceRequest.fromAmino(object.value);
   },
-  toAminoMsg(message: QueryAllowanceRequest): QueryAllowanceRequestAminoMsg {
+  toAminoMsg(message: QueryAllowanceRequest, useInterfaces: boolean = true): QueryAllowanceRequestAminoMsg {
     return {
       type: "cosmos-sdk/QueryAllowanceRequest",
-      value: QueryAllowanceRequest.toAmino(message)
+      value: QueryAllowanceRequest.toAmino(message, useInterfaces)
     };
   },
-  fromProtoMsg(message: QueryAllowanceRequestProtoMsg): QueryAllowanceRequest {
-    return QueryAllowanceRequest.decode(message.value);
+  fromProtoMsg(message: QueryAllowanceRequestProtoMsg, useInterfaces: boolean = true): QueryAllowanceRequest {
+    return QueryAllowanceRequest.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: QueryAllowanceRequest): Uint8Array {
     return QueryAllowanceRequest.encode(message).finish();
@@ -272,6 +283,8 @@ export const QueryAllowanceRequest = {
     };
   }
 };
+GlobalDecoderRegistry.register(QueryAllowanceRequest.typeUrl, QueryAllowanceRequest);
+GlobalDecoderRegistry.registerAminoProtoMapping(QueryAllowanceRequest.aminoType, QueryAllowanceRequest.typeUrl);
 function createBaseQueryAllowanceResponse(): QueryAllowanceResponse {
   return {
     allowance: undefined
@@ -279,13 +292,23 @@ function createBaseQueryAllowanceResponse(): QueryAllowanceResponse {
 }
 export const QueryAllowanceResponse = {
   typeUrl: "/cosmos.feegrant.v1beta1.QueryAllowanceResponse",
+  aminoType: "cosmos-sdk/QueryAllowanceResponse",
+  is(o: any): o is QueryAllowanceResponse {
+    return o && o.$typeUrl === QueryAllowanceResponse.typeUrl;
+  },
+  isSDK(o: any): o is QueryAllowanceResponseSDKType {
+    return o && o.$typeUrl === QueryAllowanceResponse.typeUrl;
+  },
+  isAmino(o: any): o is QueryAllowanceResponseAmino {
+    return o && o.$typeUrl === QueryAllowanceResponse.typeUrl;
+  },
   encode(message: QueryAllowanceResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.allowance !== undefined) {
       Grant.encode(message.allowance, writer.uint32(10).fork()).ldelim();
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): QueryAllowanceResponse {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): QueryAllowanceResponse {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryAllowanceResponse();
@@ -293,7 +316,7 @@ export const QueryAllowanceResponse = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.allowance = Grant.decode(reader, reader.uint32());
+          message.allowance = Grant.decode(reader, reader.uint32(), useInterfaces);
           break;
         default:
           reader.skipType(tag & 7);
@@ -324,22 +347,22 @@ export const QueryAllowanceResponse = {
     }
     return message;
   },
-  toAmino(message: QueryAllowanceResponse): QueryAllowanceResponseAmino {
+  toAmino(message: QueryAllowanceResponse, useInterfaces: boolean = true): QueryAllowanceResponseAmino {
     const obj: any = {};
-    obj.allowance = message.allowance ? Grant.toAmino(message.allowance) : undefined;
+    obj.allowance = message.allowance ? Grant.toAmino(message.allowance, useInterfaces) : undefined;
     return obj;
   },
   fromAminoMsg(object: QueryAllowanceResponseAminoMsg): QueryAllowanceResponse {
     return QueryAllowanceResponse.fromAmino(object.value);
   },
-  toAminoMsg(message: QueryAllowanceResponse): QueryAllowanceResponseAminoMsg {
+  toAminoMsg(message: QueryAllowanceResponse, useInterfaces: boolean = true): QueryAllowanceResponseAminoMsg {
     return {
       type: "cosmos-sdk/QueryAllowanceResponse",
-      value: QueryAllowanceResponse.toAmino(message)
+      value: QueryAllowanceResponse.toAmino(message, useInterfaces)
     };
   },
-  fromProtoMsg(message: QueryAllowanceResponseProtoMsg): QueryAllowanceResponse {
-    return QueryAllowanceResponse.decode(message.value);
+  fromProtoMsg(message: QueryAllowanceResponseProtoMsg, useInterfaces: boolean = true): QueryAllowanceResponse {
+    return QueryAllowanceResponse.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: QueryAllowanceResponse): Uint8Array {
     return QueryAllowanceResponse.encode(message).finish();
@@ -351,6 +374,8 @@ export const QueryAllowanceResponse = {
     };
   }
 };
+GlobalDecoderRegistry.register(QueryAllowanceResponse.typeUrl, QueryAllowanceResponse);
+GlobalDecoderRegistry.registerAminoProtoMapping(QueryAllowanceResponse.aminoType, QueryAllowanceResponse.typeUrl);
 function createBaseQueryAllowancesRequest(): QueryAllowancesRequest {
   return {
     grantee: "",
@@ -359,6 +384,16 @@ function createBaseQueryAllowancesRequest(): QueryAllowancesRequest {
 }
 export const QueryAllowancesRequest = {
   typeUrl: "/cosmos.feegrant.v1beta1.QueryAllowancesRequest",
+  aminoType: "cosmos-sdk/QueryAllowancesRequest",
+  is(o: any): o is QueryAllowancesRequest {
+    return o && (o.$typeUrl === QueryAllowancesRequest.typeUrl || typeof o.grantee === "string");
+  },
+  isSDK(o: any): o is QueryAllowancesRequestSDKType {
+    return o && (o.$typeUrl === QueryAllowancesRequest.typeUrl || typeof o.grantee === "string");
+  },
+  isAmino(o: any): o is QueryAllowancesRequestAmino {
+    return o && (o.$typeUrl === QueryAllowancesRequest.typeUrl || typeof o.grantee === "string");
+  },
   encode(message: QueryAllowancesRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.grantee !== "") {
       writer.uint32(10).string(message.grantee);
@@ -368,7 +403,7 @@ export const QueryAllowancesRequest = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): QueryAllowancesRequest {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): QueryAllowancesRequest {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryAllowancesRequest();
@@ -379,7 +414,7 @@ export const QueryAllowancesRequest = {
           message.grantee = reader.string();
           break;
         case 2:
-          message.pagination = PageRequest.decode(reader, reader.uint32());
+          message.pagination = PageRequest.decode(reader, reader.uint32(), useInterfaces);
           break;
         default:
           reader.skipType(tag & 7);
@@ -416,23 +451,23 @@ export const QueryAllowancesRequest = {
     }
     return message;
   },
-  toAmino(message: QueryAllowancesRequest): QueryAllowancesRequestAmino {
+  toAmino(message: QueryAllowancesRequest, useInterfaces: boolean = true): QueryAllowancesRequestAmino {
     const obj: any = {};
-    obj.grantee = message.grantee;
-    obj.pagination = message.pagination ? PageRequest.toAmino(message.pagination) : undefined;
+    obj.grantee = message.grantee === "" ? undefined : message.grantee;
+    obj.pagination = message.pagination ? PageRequest.toAmino(message.pagination, useInterfaces) : undefined;
     return obj;
   },
   fromAminoMsg(object: QueryAllowancesRequestAminoMsg): QueryAllowancesRequest {
     return QueryAllowancesRequest.fromAmino(object.value);
   },
-  toAminoMsg(message: QueryAllowancesRequest): QueryAllowancesRequestAminoMsg {
+  toAminoMsg(message: QueryAllowancesRequest, useInterfaces: boolean = true): QueryAllowancesRequestAminoMsg {
     return {
       type: "cosmos-sdk/QueryAllowancesRequest",
-      value: QueryAllowancesRequest.toAmino(message)
+      value: QueryAllowancesRequest.toAmino(message, useInterfaces)
     };
   },
-  fromProtoMsg(message: QueryAllowancesRequestProtoMsg): QueryAllowancesRequest {
-    return QueryAllowancesRequest.decode(message.value);
+  fromProtoMsg(message: QueryAllowancesRequestProtoMsg, useInterfaces: boolean = true): QueryAllowancesRequest {
+    return QueryAllowancesRequest.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: QueryAllowancesRequest): Uint8Array {
     return QueryAllowancesRequest.encode(message).finish();
@@ -444,6 +479,8 @@ export const QueryAllowancesRequest = {
     };
   }
 };
+GlobalDecoderRegistry.register(QueryAllowancesRequest.typeUrl, QueryAllowancesRequest);
+GlobalDecoderRegistry.registerAminoProtoMapping(QueryAllowancesRequest.aminoType, QueryAllowancesRequest.typeUrl);
 function createBaseQueryAllowancesResponse(): QueryAllowancesResponse {
   return {
     allowances: [],
@@ -452,6 +489,16 @@ function createBaseQueryAllowancesResponse(): QueryAllowancesResponse {
 }
 export const QueryAllowancesResponse = {
   typeUrl: "/cosmos.feegrant.v1beta1.QueryAllowancesResponse",
+  aminoType: "cosmos-sdk/QueryAllowancesResponse",
+  is(o: any): o is QueryAllowancesResponse {
+    return o && (o.$typeUrl === QueryAllowancesResponse.typeUrl || Array.isArray(o.allowances) && (!o.allowances.length || Grant.is(o.allowances[0])));
+  },
+  isSDK(o: any): o is QueryAllowancesResponseSDKType {
+    return o && (o.$typeUrl === QueryAllowancesResponse.typeUrl || Array.isArray(o.allowances) && (!o.allowances.length || Grant.isSDK(o.allowances[0])));
+  },
+  isAmino(o: any): o is QueryAllowancesResponseAmino {
+    return o && (o.$typeUrl === QueryAllowancesResponse.typeUrl || Array.isArray(o.allowances) && (!o.allowances.length || Grant.isAmino(o.allowances[0])));
+  },
   encode(message: QueryAllowancesResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     for (const v of message.allowances) {
       Grant.encode(v!, writer.uint32(10).fork()).ldelim();
@@ -461,7 +508,7 @@ export const QueryAllowancesResponse = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): QueryAllowancesResponse {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): QueryAllowancesResponse {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryAllowancesResponse();
@@ -469,10 +516,10 @@ export const QueryAllowancesResponse = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.allowances.push(Grant.decode(reader, reader.uint32()));
+          message.allowances.push(Grant.decode(reader, reader.uint32(), useInterfaces));
           break;
         case 2:
-          message.pagination = PageResponse.decode(reader, reader.uint32());
+          message.pagination = PageResponse.decode(reader, reader.uint32(), useInterfaces);
           break;
         default:
           reader.skipType(tag & 7);
@@ -511,27 +558,27 @@ export const QueryAllowancesResponse = {
     }
     return message;
   },
-  toAmino(message: QueryAllowancesResponse): QueryAllowancesResponseAmino {
+  toAmino(message: QueryAllowancesResponse, useInterfaces: boolean = true): QueryAllowancesResponseAmino {
     const obj: any = {};
     if (message.allowances) {
-      obj.allowances = message.allowances.map(e => e ? Grant.toAmino(e) : undefined);
+      obj.allowances = message.allowances.map(e => e ? Grant.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.allowances = [];
+      obj.allowances = message.allowances;
     }
-    obj.pagination = message.pagination ? PageResponse.toAmino(message.pagination) : undefined;
+    obj.pagination = message.pagination ? PageResponse.toAmino(message.pagination, useInterfaces) : undefined;
     return obj;
   },
   fromAminoMsg(object: QueryAllowancesResponseAminoMsg): QueryAllowancesResponse {
     return QueryAllowancesResponse.fromAmino(object.value);
   },
-  toAminoMsg(message: QueryAllowancesResponse): QueryAllowancesResponseAminoMsg {
+  toAminoMsg(message: QueryAllowancesResponse, useInterfaces: boolean = true): QueryAllowancesResponseAminoMsg {
     return {
       type: "cosmos-sdk/QueryAllowancesResponse",
-      value: QueryAllowancesResponse.toAmino(message)
+      value: QueryAllowancesResponse.toAmino(message, useInterfaces)
     };
   },
-  fromProtoMsg(message: QueryAllowancesResponseProtoMsg): QueryAllowancesResponse {
-    return QueryAllowancesResponse.decode(message.value);
+  fromProtoMsg(message: QueryAllowancesResponseProtoMsg, useInterfaces: boolean = true): QueryAllowancesResponse {
+    return QueryAllowancesResponse.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: QueryAllowancesResponse): Uint8Array {
     return QueryAllowancesResponse.encode(message).finish();
@@ -543,6 +590,8 @@ export const QueryAllowancesResponse = {
     };
   }
 };
+GlobalDecoderRegistry.register(QueryAllowancesResponse.typeUrl, QueryAllowancesResponse);
+GlobalDecoderRegistry.registerAminoProtoMapping(QueryAllowancesResponse.aminoType, QueryAllowancesResponse.typeUrl);
 function createBaseQueryAllowancesByGranterRequest(): QueryAllowancesByGranterRequest {
   return {
     granter: "",
@@ -551,6 +600,16 @@ function createBaseQueryAllowancesByGranterRequest(): QueryAllowancesByGranterRe
 }
 export const QueryAllowancesByGranterRequest = {
   typeUrl: "/cosmos.feegrant.v1beta1.QueryAllowancesByGranterRequest",
+  aminoType: "cosmos-sdk/QueryAllowancesByGranterRequest",
+  is(o: any): o is QueryAllowancesByGranterRequest {
+    return o && (o.$typeUrl === QueryAllowancesByGranterRequest.typeUrl || typeof o.granter === "string");
+  },
+  isSDK(o: any): o is QueryAllowancesByGranterRequestSDKType {
+    return o && (o.$typeUrl === QueryAllowancesByGranterRequest.typeUrl || typeof o.granter === "string");
+  },
+  isAmino(o: any): o is QueryAllowancesByGranterRequestAmino {
+    return o && (o.$typeUrl === QueryAllowancesByGranterRequest.typeUrl || typeof o.granter === "string");
+  },
   encode(message: QueryAllowancesByGranterRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.granter !== "") {
       writer.uint32(10).string(message.granter);
@@ -560,7 +619,7 @@ export const QueryAllowancesByGranterRequest = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): QueryAllowancesByGranterRequest {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): QueryAllowancesByGranterRequest {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryAllowancesByGranterRequest();
@@ -571,7 +630,7 @@ export const QueryAllowancesByGranterRequest = {
           message.granter = reader.string();
           break;
         case 2:
-          message.pagination = PageRequest.decode(reader, reader.uint32());
+          message.pagination = PageRequest.decode(reader, reader.uint32(), useInterfaces);
           break;
         default:
           reader.skipType(tag & 7);
@@ -608,23 +667,23 @@ export const QueryAllowancesByGranterRequest = {
     }
     return message;
   },
-  toAmino(message: QueryAllowancesByGranterRequest): QueryAllowancesByGranterRequestAmino {
+  toAmino(message: QueryAllowancesByGranterRequest, useInterfaces: boolean = true): QueryAllowancesByGranterRequestAmino {
     const obj: any = {};
-    obj.granter = message.granter;
-    obj.pagination = message.pagination ? PageRequest.toAmino(message.pagination) : undefined;
+    obj.granter = message.granter === "" ? undefined : message.granter;
+    obj.pagination = message.pagination ? PageRequest.toAmino(message.pagination, useInterfaces) : undefined;
     return obj;
   },
   fromAminoMsg(object: QueryAllowancesByGranterRequestAminoMsg): QueryAllowancesByGranterRequest {
     return QueryAllowancesByGranterRequest.fromAmino(object.value);
   },
-  toAminoMsg(message: QueryAllowancesByGranterRequest): QueryAllowancesByGranterRequestAminoMsg {
+  toAminoMsg(message: QueryAllowancesByGranterRequest, useInterfaces: boolean = true): QueryAllowancesByGranterRequestAminoMsg {
     return {
       type: "cosmos-sdk/QueryAllowancesByGranterRequest",
-      value: QueryAllowancesByGranterRequest.toAmino(message)
+      value: QueryAllowancesByGranterRequest.toAmino(message, useInterfaces)
     };
   },
-  fromProtoMsg(message: QueryAllowancesByGranterRequestProtoMsg): QueryAllowancesByGranterRequest {
-    return QueryAllowancesByGranterRequest.decode(message.value);
+  fromProtoMsg(message: QueryAllowancesByGranterRequestProtoMsg, useInterfaces: boolean = true): QueryAllowancesByGranterRequest {
+    return QueryAllowancesByGranterRequest.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: QueryAllowancesByGranterRequest): Uint8Array {
     return QueryAllowancesByGranterRequest.encode(message).finish();
@@ -636,6 +695,8 @@ export const QueryAllowancesByGranterRequest = {
     };
   }
 };
+GlobalDecoderRegistry.register(QueryAllowancesByGranterRequest.typeUrl, QueryAllowancesByGranterRequest);
+GlobalDecoderRegistry.registerAminoProtoMapping(QueryAllowancesByGranterRequest.aminoType, QueryAllowancesByGranterRequest.typeUrl);
 function createBaseQueryAllowancesByGranterResponse(): QueryAllowancesByGranterResponse {
   return {
     allowances: [],
@@ -644,6 +705,16 @@ function createBaseQueryAllowancesByGranterResponse(): QueryAllowancesByGranterR
 }
 export const QueryAllowancesByGranterResponse = {
   typeUrl: "/cosmos.feegrant.v1beta1.QueryAllowancesByGranterResponse",
+  aminoType: "cosmos-sdk/QueryAllowancesByGranterResponse",
+  is(o: any): o is QueryAllowancesByGranterResponse {
+    return o && (o.$typeUrl === QueryAllowancesByGranterResponse.typeUrl || Array.isArray(o.allowances) && (!o.allowances.length || Grant.is(o.allowances[0])));
+  },
+  isSDK(o: any): o is QueryAllowancesByGranterResponseSDKType {
+    return o && (o.$typeUrl === QueryAllowancesByGranterResponse.typeUrl || Array.isArray(o.allowances) && (!o.allowances.length || Grant.isSDK(o.allowances[0])));
+  },
+  isAmino(o: any): o is QueryAllowancesByGranterResponseAmino {
+    return o && (o.$typeUrl === QueryAllowancesByGranterResponse.typeUrl || Array.isArray(o.allowances) && (!o.allowances.length || Grant.isAmino(o.allowances[0])));
+  },
   encode(message: QueryAllowancesByGranterResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     for (const v of message.allowances) {
       Grant.encode(v!, writer.uint32(10).fork()).ldelim();
@@ -653,7 +724,7 @@ export const QueryAllowancesByGranterResponse = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): QueryAllowancesByGranterResponse {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): QueryAllowancesByGranterResponse {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryAllowancesByGranterResponse();
@@ -661,10 +732,10 @@ export const QueryAllowancesByGranterResponse = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.allowances.push(Grant.decode(reader, reader.uint32()));
+          message.allowances.push(Grant.decode(reader, reader.uint32(), useInterfaces));
           break;
         case 2:
-          message.pagination = PageResponse.decode(reader, reader.uint32());
+          message.pagination = PageResponse.decode(reader, reader.uint32(), useInterfaces);
           break;
         default:
           reader.skipType(tag & 7);
@@ -703,27 +774,27 @@ export const QueryAllowancesByGranterResponse = {
     }
     return message;
   },
-  toAmino(message: QueryAllowancesByGranterResponse): QueryAllowancesByGranterResponseAmino {
+  toAmino(message: QueryAllowancesByGranterResponse, useInterfaces: boolean = true): QueryAllowancesByGranterResponseAmino {
     const obj: any = {};
     if (message.allowances) {
-      obj.allowances = message.allowances.map(e => e ? Grant.toAmino(e) : undefined);
+      obj.allowances = message.allowances.map(e => e ? Grant.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.allowances = [];
+      obj.allowances = message.allowances;
     }
-    obj.pagination = message.pagination ? PageResponse.toAmino(message.pagination) : undefined;
+    obj.pagination = message.pagination ? PageResponse.toAmino(message.pagination, useInterfaces) : undefined;
     return obj;
   },
   fromAminoMsg(object: QueryAllowancesByGranterResponseAminoMsg): QueryAllowancesByGranterResponse {
     return QueryAllowancesByGranterResponse.fromAmino(object.value);
   },
-  toAminoMsg(message: QueryAllowancesByGranterResponse): QueryAllowancesByGranterResponseAminoMsg {
+  toAminoMsg(message: QueryAllowancesByGranterResponse, useInterfaces: boolean = true): QueryAllowancesByGranterResponseAminoMsg {
     return {
       type: "cosmos-sdk/QueryAllowancesByGranterResponse",
-      value: QueryAllowancesByGranterResponse.toAmino(message)
+      value: QueryAllowancesByGranterResponse.toAmino(message, useInterfaces)
     };
   },
-  fromProtoMsg(message: QueryAllowancesByGranterResponseProtoMsg): QueryAllowancesByGranterResponse {
-    return QueryAllowancesByGranterResponse.decode(message.value);
+  fromProtoMsg(message: QueryAllowancesByGranterResponseProtoMsg, useInterfaces: boolean = true): QueryAllowancesByGranterResponse {
+    return QueryAllowancesByGranterResponse.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: QueryAllowancesByGranterResponse): Uint8Array {
     return QueryAllowancesByGranterResponse.encode(message).finish();
@@ -735,3 +806,5 @@ export const QueryAllowancesByGranterResponse = {
     };
   }
 };
+GlobalDecoderRegistry.register(QueryAllowancesByGranterResponse.typeUrl, QueryAllowancesByGranterResponse);
+GlobalDecoderRegistry.registerAminoProtoMapping(QueryAllowancesByGranterResponse.aminoType, QueryAllowancesByGranterResponse.typeUrl);

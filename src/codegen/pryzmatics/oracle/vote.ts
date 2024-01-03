@@ -1,6 +1,7 @@
 import { Timestamp, TimestampSDKType } from "../../google/protobuf/timestamp";
 import { BinaryReader, BinaryWriter } from "../../binary";
 import { isSet, fromJsonTimestamp, fromTimestamp } from "../../helpers";
+import { GlobalDecoderRegistry } from "../../registry";
 export interface Vote {
   id: bigint;
   feeder: string;
@@ -71,6 +72,15 @@ function createBaseVote(): Vote {
 }
 export const Vote = {
   typeUrl: "/pryzmatics.oracle.Vote",
+  is(o: any): o is Vote {
+    return o && (o.$typeUrl === Vote.typeUrl || typeof o.id === "bigint" && typeof o.feeder === "string" && typeof o.validator === "string" && typeof o.blockHeight === "bigint" && Timestamp.is(o.blockTime));
+  },
+  isSDK(o: any): o is VoteSDKType {
+    return o && (o.$typeUrl === Vote.typeUrl || typeof o.id === "bigint" && typeof o.feeder === "string" && typeof o.validator === "string" && typeof o.block_height === "bigint" && Timestamp.isSDK(o.block_time));
+  },
+  isAmino(o: any): o is VoteAmino {
+    return o && (o.$typeUrl === Vote.typeUrl || typeof o.id === "bigint" && typeof o.feeder === "string" && typeof o.validator === "string" && typeof o.block_height === "bigint" && Timestamp.isAmino(o.block_time));
+  },
   encode(message: Vote, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.id !== BigInt(0)) {
       writer.uint32(8).uint64(message.id);
@@ -92,7 +102,7 @@ export const Vote = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): Vote {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): Vote {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseVote();
@@ -176,21 +186,21 @@ export const Vote = {
     }
     return message;
   },
-  toAmino(message: Vote): VoteAmino {
+  toAmino(message: Vote, useInterfaces: boolean = true): VoteAmino {
     const obj: any = {};
     obj.id = message.id ? message.id.toString() : undefined;
-    obj.feeder = message.feeder;
-    obj.validator = message.validator;
+    obj.feeder = message.feeder === "" ? undefined : message.feeder;
+    obj.validator = message.validator === "" ? undefined : message.validator;
     obj.block_height = message.blockHeight ? message.blockHeight.toString() : undefined;
-    obj.block_time = message.blockTime ? Timestamp.toAmino(message.blockTime) : undefined;
-    obj.vote_interval_close_block_height = message.voteIntervalCloseBlockHeight;
+    obj.block_time = message.blockTime ? Timestamp.toAmino(message.blockTime, useInterfaces) : undefined;
+    obj.vote_interval_close_block_height = message.voteIntervalCloseBlockHeight === null ? undefined : message.voteIntervalCloseBlockHeight;
     return obj;
   },
   fromAminoMsg(object: VoteAminoMsg): Vote {
     return Vote.fromAmino(object.value);
   },
-  fromProtoMsg(message: VoteProtoMsg): Vote {
-    return Vote.decode(message.value);
+  fromProtoMsg(message: VoteProtoMsg, useInterfaces: boolean = true): Vote {
+    return Vote.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: Vote): Uint8Array {
     return Vote.encode(message).finish();
@@ -202,6 +212,7 @@ export const Vote = {
     };
   }
 };
+GlobalDecoderRegistry.register(Vote.typeUrl, Vote);
 function createBaseVotePayload(): VotePayload {
   return {
     voteId: BigInt(0),
@@ -212,6 +223,15 @@ function createBaseVotePayload(): VotePayload {
 }
 export const VotePayload = {
   typeUrl: "/pryzmatics.oracle.VotePayload",
+  is(o: any): o is VotePayload {
+    return o && (o.$typeUrl === VotePayload.typeUrl || typeof o.voteId === "bigint" && typeof o.module === "string" && typeof o.namespace === "string" && typeof o.payload === "string");
+  },
+  isSDK(o: any): o is VotePayloadSDKType {
+    return o && (o.$typeUrl === VotePayload.typeUrl || typeof o.vote_id === "bigint" && typeof o.module === "string" && typeof o.namespace === "string" && typeof o.payload === "string");
+  },
+  isAmino(o: any): o is VotePayloadAmino {
+    return o && (o.$typeUrl === VotePayload.typeUrl || typeof o.vote_id === "bigint" && typeof o.module === "string" && typeof o.namespace === "string" && typeof o.payload === "string");
+  },
   encode(message: VotePayload, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.voteId !== BigInt(0)) {
       writer.uint32(8).uint64(message.voteId);
@@ -227,7 +247,7 @@ export const VotePayload = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): VotePayload {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): VotePayload {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseVotePayload();
@@ -293,19 +313,19 @@ export const VotePayload = {
     }
     return message;
   },
-  toAmino(message: VotePayload): VotePayloadAmino {
+  toAmino(message: VotePayload, useInterfaces: boolean = true): VotePayloadAmino {
     const obj: any = {};
     obj.vote_id = message.voteId ? message.voteId.toString() : undefined;
-    obj.module = message.module;
-    obj.namespace = message.namespace;
-    obj.payload = message.payload;
+    obj.module = message.module === "" ? undefined : message.module;
+    obj.namespace = message.namespace === "" ? undefined : message.namespace;
+    obj.payload = message.payload === "" ? undefined : message.payload;
     return obj;
   },
   fromAminoMsg(object: VotePayloadAminoMsg): VotePayload {
     return VotePayload.fromAmino(object.value);
   },
-  fromProtoMsg(message: VotePayloadProtoMsg): VotePayload {
-    return VotePayload.decode(message.value);
+  fromProtoMsg(message: VotePayloadProtoMsg, useInterfaces: boolean = true): VotePayload {
+    return VotePayload.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: VotePayload): Uint8Array {
     return VotePayload.encode(message).finish();
@@ -317,3 +337,4 @@ export const VotePayload = {
     };
   }
 };
+GlobalDecoderRegistry.register(VotePayload.typeUrl, VotePayload);

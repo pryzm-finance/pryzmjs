@@ -3,6 +3,7 @@ import { UserStakeState, UserStakeStateAmino, UserStakeStateSDKType } from "./us
 import { AssetPoolState, AssetPoolStateAmino, AssetPoolStateSDKType, AssetMaturityPoolState, AssetMaturityPoolStateAmino, AssetMaturityPoolStateSDKType } from "./asset_pool_state";
 import { BinaryReader, BinaryWriter } from "../../../binary";
 import { isSet } from "../../../helpers";
+import { GlobalDecoderRegistry } from "../../../registry";
 export interface EventYStakingBond {
   accountAddress: string;
   amount: Coin;
@@ -237,6 +238,15 @@ function createBaseEventYStakingBond(): EventYStakingBond {
 }
 export const EventYStakingBond = {
   typeUrl: "/pryzm.ystaking.v1.EventYStakingBond",
+  is(o: any): o is EventYStakingBond {
+    return o && (o.$typeUrl === EventYStakingBond.typeUrl || typeof o.accountAddress === "string" && Coin.is(o.amount));
+  },
+  isSDK(o: any): o is EventYStakingBondSDKType {
+    return o && (o.$typeUrl === EventYStakingBond.typeUrl || typeof o.account_address === "string" && Coin.isSDK(o.amount));
+  },
+  isAmino(o: any): o is EventYStakingBondAmino {
+    return o && (o.$typeUrl === EventYStakingBond.typeUrl || typeof o.account_address === "string" && Coin.isAmino(o.amount));
+  },
   encode(message: EventYStakingBond, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.accountAddress !== "") {
       writer.uint32(10).string(message.accountAddress);
@@ -246,7 +256,7 @@ export const EventYStakingBond = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): EventYStakingBond {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): EventYStakingBond {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseEventYStakingBond();
@@ -257,7 +267,7 @@ export const EventYStakingBond = {
           message.accountAddress = reader.string();
           break;
         case 2:
-          message.amount = Coin.decode(reader, reader.uint32());
+          message.amount = Coin.decode(reader, reader.uint32(), useInterfaces);
           break;
         default:
           reader.skipType(tag & 7);
@@ -294,17 +304,17 @@ export const EventYStakingBond = {
     }
     return message;
   },
-  toAmino(message: EventYStakingBond): EventYStakingBondAmino {
+  toAmino(message: EventYStakingBond, useInterfaces: boolean = true): EventYStakingBondAmino {
     const obj: any = {};
-    obj.account_address = message.accountAddress;
-    obj.amount = message.amount ? Coin.toAmino(message.amount) : undefined;
+    obj.account_address = message.accountAddress === "" ? undefined : message.accountAddress;
+    obj.amount = message.amount ? Coin.toAmino(message.amount, useInterfaces) : undefined;
     return obj;
   },
   fromAminoMsg(object: EventYStakingBondAminoMsg): EventYStakingBond {
     return EventYStakingBond.fromAmino(object.value);
   },
-  fromProtoMsg(message: EventYStakingBondProtoMsg): EventYStakingBond {
-    return EventYStakingBond.decode(message.value);
+  fromProtoMsg(message: EventYStakingBondProtoMsg, useInterfaces: boolean = true): EventYStakingBond {
+    return EventYStakingBond.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: EventYStakingBond): Uint8Array {
     return EventYStakingBond.encode(message).finish();
@@ -316,6 +326,7 @@ export const EventYStakingBond = {
     };
   }
 };
+GlobalDecoderRegistry.register(EventYStakingBond.typeUrl, EventYStakingBond);
 function createBaseEventYStakingUnbond(): EventYStakingUnbond {
   return {
     accountAddress: "",
@@ -326,6 +337,15 @@ function createBaseEventYStakingUnbond(): EventYStakingUnbond {
 }
 export const EventYStakingUnbond = {
   typeUrl: "/pryzm.ystaking.v1.EventYStakingUnbond",
+  is(o: any): o is EventYStakingUnbond {
+    return o && (o.$typeUrl === EventYStakingUnbond.typeUrl || typeof o.accountAddress === "string" && Coin.is(o.amount) && Coin.is(o.accruedReward) && Coin.is(o.fee));
+  },
+  isSDK(o: any): o is EventYStakingUnbondSDKType {
+    return o && (o.$typeUrl === EventYStakingUnbond.typeUrl || typeof o.account_address === "string" && Coin.isSDK(o.amount) && Coin.isSDK(o.accrued_reward) && Coin.isSDK(o.fee));
+  },
+  isAmino(o: any): o is EventYStakingUnbondAmino {
+    return o && (o.$typeUrl === EventYStakingUnbond.typeUrl || typeof o.account_address === "string" && Coin.isAmino(o.amount) && Coin.isAmino(o.accrued_reward) && Coin.isAmino(o.fee));
+  },
   encode(message: EventYStakingUnbond, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.accountAddress !== "") {
       writer.uint32(10).string(message.accountAddress);
@@ -341,7 +361,7 @@ export const EventYStakingUnbond = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): EventYStakingUnbond {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): EventYStakingUnbond {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseEventYStakingUnbond();
@@ -352,13 +372,13 @@ export const EventYStakingUnbond = {
           message.accountAddress = reader.string();
           break;
         case 2:
-          message.amount = Coin.decode(reader, reader.uint32());
+          message.amount = Coin.decode(reader, reader.uint32(), useInterfaces);
           break;
         case 3:
-          message.accruedReward = Coin.decode(reader, reader.uint32());
+          message.accruedReward = Coin.decode(reader, reader.uint32(), useInterfaces);
           break;
         case 4:
-          message.fee = Coin.decode(reader, reader.uint32());
+          message.fee = Coin.decode(reader, reader.uint32(), useInterfaces);
           break;
         default:
           reader.skipType(tag & 7);
@@ -407,19 +427,19 @@ export const EventYStakingUnbond = {
     }
     return message;
   },
-  toAmino(message: EventYStakingUnbond): EventYStakingUnbondAmino {
+  toAmino(message: EventYStakingUnbond, useInterfaces: boolean = true): EventYStakingUnbondAmino {
     const obj: any = {};
-    obj.account_address = message.accountAddress;
-    obj.amount = message.amount ? Coin.toAmino(message.amount) : undefined;
-    obj.accrued_reward = message.accruedReward ? Coin.toAmino(message.accruedReward) : undefined;
-    obj.fee = message.fee ? Coin.toAmino(message.fee) : undefined;
+    obj.account_address = message.accountAddress === "" ? undefined : message.accountAddress;
+    obj.amount = message.amount ? Coin.toAmino(message.amount, useInterfaces) : undefined;
+    obj.accrued_reward = message.accruedReward ? Coin.toAmino(message.accruedReward, useInterfaces) : undefined;
+    obj.fee = message.fee ? Coin.toAmino(message.fee, useInterfaces) : undefined;
     return obj;
   },
   fromAminoMsg(object: EventYStakingUnbondAminoMsg): EventYStakingUnbond {
     return EventYStakingUnbond.fromAmino(object.value);
   },
-  fromProtoMsg(message: EventYStakingUnbondProtoMsg): EventYStakingUnbond {
-    return EventYStakingUnbond.decode(message.value);
+  fromProtoMsg(message: EventYStakingUnbondProtoMsg, useInterfaces: boolean = true): EventYStakingUnbond {
+    return EventYStakingUnbond.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: EventYStakingUnbond): Uint8Array {
     return EventYStakingUnbond.encode(message).finish();
@@ -431,6 +451,7 @@ export const EventYStakingUnbond = {
     };
   }
 };
+GlobalDecoderRegistry.register(EventYStakingUnbond.typeUrl, EventYStakingUnbond);
 function createBaseEventYStakingExitPool(): EventYStakingExitPool {
   return {
     accountAddress: "",
@@ -440,6 +461,15 @@ function createBaseEventYStakingExitPool(): EventYStakingExitPool {
 }
 export const EventYStakingExitPool = {
   typeUrl: "/pryzm.ystaking.v1.EventYStakingExitPool",
+  is(o: any): o is EventYStakingExitPool {
+    return o && (o.$typeUrl === EventYStakingExitPool.typeUrl || typeof o.accountAddress === "string" && Coin.is(o.accruedReward) && Coin.is(o.fee));
+  },
+  isSDK(o: any): o is EventYStakingExitPoolSDKType {
+    return o && (o.$typeUrl === EventYStakingExitPool.typeUrl || typeof o.account_address === "string" && Coin.isSDK(o.accrued_reward) && Coin.isSDK(o.fee));
+  },
+  isAmino(o: any): o is EventYStakingExitPoolAmino {
+    return o && (o.$typeUrl === EventYStakingExitPool.typeUrl || typeof o.account_address === "string" && Coin.isAmino(o.accrued_reward) && Coin.isAmino(o.fee));
+  },
   encode(message: EventYStakingExitPool, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.accountAddress !== "") {
       writer.uint32(10).string(message.accountAddress);
@@ -452,7 +482,7 @@ export const EventYStakingExitPool = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): EventYStakingExitPool {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): EventYStakingExitPool {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseEventYStakingExitPool();
@@ -463,10 +493,10 @@ export const EventYStakingExitPool = {
           message.accountAddress = reader.string();
           break;
         case 2:
-          message.accruedReward = Coin.decode(reader, reader.uint32());
+          message.accruedReward = Coin.decode(reader, reader.uint32(), useInterfaces);
           break;
         case 3:
-          message.fee = Coin.decode(reader, reader.uint32());
+          message.fee = Coin.decode(reader, reader.uint32(), useInterfaces);
           break;
         default:
           reader.skipType(tag & 7);
@@ -509,18 +539,18 @@ export const EventYStakingExitPool = {
     }
     return message;
   },
-  toAmino(message: EventYStakingExitPool): EventYStakingExitPoolAmino {
+  toAmino(message: EventYStakingExitPool, useInterfaces: boolean = true): EventYStakingExitPoolAmino {
     const obj: any = {};
-    obj.account_address = message.accountAddress;
-    obj.accrued_reward = message.accruedReward ? Coin.toAmino(message.accruedReward) : undefined;
-    obj.fee = message.fee ? Coin.toAmino(message.fee) : undefined;
+    obj.account_address = message.accountAddress === "" ? undefined : message.accountAddress;
+    obj.accrued_reward = message.accruedReward ? Coin.toAmino(message.accruedReward, useInterfaces) : undefined;
+    obj.fee = message.fee ? Coin.toAmino(message.fee, useInterfaces) : undefined;
     return obj;
   },
   fromAminoMsg(object: EventYStakingExitPoolAminoMsg): EventYStakingExitPool {
     return EventYStakingExitPool.fromAmino(object.value);
   },
-  fromProtoMsg(message: EventYStakingExitPoolProtoMsg): EventYStakingExitPool {
-    return EventYStakingExitPool.decode(message.value);
+  fromProtoMsg(message: EventYStakingExitPoolProtoMsg, useInterfaces: boolean = true): EventYStakingExitPool {
+    return EventYStakingExitPool.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: EventYStakingExitPool): Uint8Array {
     return EventYStakingExitPool.encode(message).finish();
@@ -532,6 +562,7 @@ export const EventYStakingExitPool = {
     };
   }
 };
+GlobalDecoderRegistry.register(EventYStakingExitPool.typeUrl, EventYStakingExitPool);
 function createBaseEventYStakingClaimReward(): EventYStakingClaimReward {
   return {
     accountAddress: "",
@@ -541,6 +572,15 @@ function createBaseEventYStakingClaimReward(): EventYStakingClaimReward {
 }
 export const EventYStakingClaimReward = {
   typeUrl: "/pryzm.ystaking.v1.EventYStakingClaimReward",
+  is(o: any): o is EventYStakingClaimReward {
+    return o && (o.$typeUrl === EventYStakingClaimReward.typeUrl || typeof o.accountAddress === "string" && Coin.is(o.accruedReward) && Coin.is(o.fee));
+  },
+  isSDK(o: any): o is EventYStakingClaimRewardSDKType {
+    return o && (o.$typeUrl === EventYStakingClaimReward.typeUrl || typeof o.account_address === "string" && Coin.isSDK(o.accrued_reward) && Coin.isSDK(o.fee));
+  },
+  isAmino(o: any): o is EventYStakingClaimRewardAmino {
+    return o && (o.$typeUrl === EventYStakingClaimReward.typeUrl || typeof o.account_address === "string" && Coin.isAmino(o.accrued_reward) && Coin.isAmino(o.fee));
+  },
   encode(message: EventYStakingClaimReward, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.accountAddress !== "") {
       writer.uint32(10).string(message.accountAddress);
@@ -553,7 +593,7 @@ export const EventYStakingClaimReward = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): EventYStakingClaimReward {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): EventYStakingClaimReward {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseEventYStakingClaimReward();
@@ -564,10 +604,10 @@ export const EventYStakingClaimReward = {
           message.accountAddress = reader.string();
           break;
         case 2:
-          message.accruedReward = Coin.decode(reader, reader.uint32());
+          message.accruedReward = Coin.decode(reader, reader.uint32(), useInterfaces);
           break;
         case 3:
-          message.fee = Coin.decode(reader, reader.uint32());
+          message.fee = Coin.decode(reader, reader.uint32(), useInterfaces);
           break;
         default:
           reader.skipType(tag & 7);
@@ -610,18 +650,18 @@ export const EventYStakingClaimReward = {
     }
     return message;
   },
-  toAmino(message: EventYStakingClaimReward): EventYStakingClaimRewardAmino {
+  toAmino(message: EventYStakingClaimReward, useInterfaces: boolean = true): EventYStakingClaimRewardAmino {
     const obj: any = {};
-    obj.account_address = message.accountAddress;
-    obj.accrued_reward = message.accruedReward ? Coin.toAmino(message.accruedReward) : undefined;
-    obj.fee = message.fee ? Coin.toAmino(message.fee) : undefined;
+    obj.account_address = message.accountAddress === "" ? undefined : message.accountAddress;
+    obj.accrued_reward = message.accruedReward ? Coin.toAmino(message.accruedReward, useInterfaces) : undefined;
+    obj.fee = message.fee ? Coin.toAmino(message.fee, useInterfaces) : undefined;
     return obj;
   },
   fromAminoMsg(object: EventYStakingClaimRewardAminoMsg): EventYStakingClaimReward {
     return EventYStakingClaimReward.fromAmino(object.value);
   },
-  fromProtoMsg(message: EventYStakingClaimRewardProtoMsg): EventYStakingClaimReward {
-    return EventYStakingClaimReward.decode(message.value);
+  fromProtoMsg(message: EventYStakingClaimRewardProtoMsg, useInterfaces: boolean = true): EventYStakingClaimReward {
+    return EventYStakingClaimReward.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: EventYStakingClaimReward): Uint8Array {
     return EventYStakingClaimReward.encode(message).finish();
@@ -633,6 +673,7 @@ export const EventYStakingClaimReward = {
     };
   }
 };
+GlobalDecoderRegistry.register(EventYStakingClaimReward.typeUrl, EventYStakingClaimReward);
 function createBaseEventDeactivateYStakingMaturityPool(): EventDeactivateYStakingMaturityPool {
   return {
     burntBondedAmount: Coin.fromPartial({}),
@@ -642,6 +683,15 @@ function createBaseEventDeactivateYStakingMaturityPool(): EventDeactivateYStakin
 }
 export const EventDeactivateYStakingMaturityPool = {
   typeUrl: "/pryzm.ystaking.v1.EventDeactivateYStakingMaturityPool",
+  is(o: any): o is EventDeactivateYStakingMaturityPool {
+    return o && (o.$typeUrl === EventDeactivateYStakingMaturityPool.typeUrl || Coin.is(o.burntBondedAmount) && typeof o.assetId === "string" && typeof o.maturitySymbol === "string");
+  },
+  isSDK(o: any): o is EventDeactivateYStakingMaturityPoolSDKType {
+    return o && (o.$typeUrl === EventDeactivateYStakingMaturityPool.typeUrl || Coin.isSDK(o.burnt_bonded_amount) && typeof o.asset_id === "string" && typeof o.maturity_symbol === "string");
+  },
+  isAmino(o: any): o is EventDeactivateYStakingMaturityPoolAmino {
+    return o && (o.$typeUrl === EventDeactivateYStakingMaturityPool.typeUrl || Coin.isAmino(o.burnt_bonded_amount) && typeof o.asset_id === "string" && typeof o.maturity_symbol === "string");
+  },
   encode(message: EventDeactivateYStakingMaturityPool, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.burntBondedAmount !== undefined) {
       Coin.encode(message.burntBondedAmount, writer.uint32(10).fork()).ldelim();
@@ -654,7 +704,7 @@ export const EventDeactivateYStakingMaturityPool = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): EventDeactivateYStakingMaturityPool {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): EventDeactivateYStakingMaturityPool {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseEventDeactivateYStakingMaturityPool();
@@ -662,7 +712,7 @@ export const EventDeactivateYStakingMaturityPool = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.burntBondedAmount = Coin.decode(reader, reader.uint32());
+          message.burntBondedAmount = Coin.decode(reader, reader.uint32(), useInterfaces);
           break;
         case 2:
           message.assetId = reader.string();
@@ -711,18 +761,18 @@ export const EventDeactivateYStakingMaturityPool = {
     }
     return message;
   },
-  toAmino(message: EventDeactivateYStakingMaturityPool): EventDeactivateYStakingMaturityPoolAmino {
+  toAmino(message: EventDeactivateYStakingMaturityPool, useInterfaces: boolean = true): EventDeactivateYStakingMaturityPoolAmino {
     const obj: any = {};
-    obj.burnt_bonded_amount = message.burntBondedAmount ? Coin.toAmino(message.burntBondedAmount) : undefined;
-    obj.asset_id = message.assetId;
-    obj.maturity_symbol = message.maturitySymbol;
+    obj.burnt_bonded_amount = message.burntBondedAmount ? Coin.toAmino(message.burntBondedAmount, useInterfaces) : undefined;
+    obj.asset_id = message.assetId === "" ? undefined : message.assetId;
+    obj.maturity_symbol = message.maturitySymbol === "" ? undefined : message.maturitySymbol;
     return obj;
   },
   fromAminoMsg(object: EventDeactivateYStakingMaturityPoolAminoMsg): EventDeactivateYStakingMaturityPool {
     return EventDeactivateYStakingMaturityPool.fromAmino(object.value);
   },
-  fromProtoMsg(message: EventDeactivateYStakingMaturityPoolProtoMsg): EventDeactivateYStakingMaturityPool {
-    return EventDeactivateYStakingMaturityPool.decode(message.value);
+  fromProtoMsg(message: EventDeactivateYStakingMaturityPoolProtoMsg, useInterfaces: boolean = true): EventDeactivateYStakingMaturityPool {
+    return EventDeactivateYStakingMaturityPool.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: EventDeactivateYStakingMaturityPool): Uint8Array {
     return EventDeactivateYStakingMaturityPool.encode(message).finish();
@@ -734,6 +784,7 @@ export const EventDeactivateYStakingMaturityPool = {
     };
   }
 };
+GlobalDecoderRegistry.register(EventDeactivateYStakingMaturityPool.typeUrl, EventDeactivateYStakingMaturityPool);
 function createBaseEventSetUserStakeState(): EventSetUserStakeState {
   return {
     userStakeState: UserStakeState.fromPartial({})
@@ -741,13 +792,22 @@ function createBaseEventSetUserStakeState(): EventSetUserStakeState {
 }
 export const EventSetUserStakeState = {
   typeUrl: "/pryzm.ystaking.v1.EventSetUserStakeState",
+  is(o: any): o is EventSetUserStakeState {
+    return o && (o.$typeUrl === EventSetUserStakeState.typeUrl || UserStakeState.is(o.userStakeState));
+  },
+  isSDK(o: any): o is EventSetUserStakeStateSDKType {
+    return o && (o.$typeUrl === EventSetUserStakeState.typeUrl || UserStakeState.isSDK(o.user_stake_state));
+  },
+  isAmino(o: any): o is EventSetUserStakeStateAmino {
+    return o && (o.$typeUrl === EventSetUserStakeState.typeUrl || UserStakeState.isAmino(o.user_stake_state));
+  },
   encode(message: EventSetUserStakeState, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.userStakeState !== undefined) {
       UserStakeState.encode(message.userStakeState, writer.uint32(10).fork()).ldelim();
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): EventSetUserStakeState {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): EventSetUserStakeState {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseEventSetUserStakeState();
@@ -755,7 +815,7 @@ export const EventSetUserStakeState = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.userStakeState = UserStakeState.decode(reader, reader.uint32());
+          message.userStakeState = UserStakeState.decode(reader, reader.uint32(), useInterfaces);
           break;
         default:
           reader.skipType(tag & 7);
@@ -786,16 +846,16 @@ export const EventSetUserStakeState = {
     }
     return message;
   },
-  toAmino(message: EventSetUserStakeState): EventSetUserStakeStateAmino {
+  toAmino(message: EventSetUserStakeState, useInterfaces: boolean = true): EventSetUserStakeStateAmino {
     const obj: any = {};
-    obj.user_stake_state = message.userStakeState ? UserStakeState.toAmino(message.userStakeState) : undefined;
+    obj.user_stake_state = message.userStakeState ? UserStakeState.toAmino(message.userStakeState, useInterfaces) : undefined;
     return obj;
   },
   fromAminoMsg(object: EventSetUserStakeStateAminoMsg): EventSetUserStakeState {
     return EventSetUserStakeState.fromAmino(object.value);
   },
-  fromProtoMsg(message: EventSetUserStakeStateProtoMsg): EventSetUserStakeState {
-    return EventSetUserStakeState.decode(message.value);
+  fromProtoMsg(message: EventSetUserStakeStateProtoMsg, useInterfaces: boolean = true): EventSetUserStakeState {
+    return EventSetUserStakeState.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: EventSetUserStakeState): Uint8Array {
     return EventSetUserStakeState.encode(message).finish();
@@ -807,6 +867,7 @@ export const EventSetUserStakeState = {
     };
   }
 };
+GlobalDecoderRegistry.register(EventSetUserStakeState.typeUrl, EventSetUserStakeState);
 function createBaseEventSetAssetPoolState(): EventSetAssetPoolState {
   return {
     assetPoolState: AssetPoolState.fromPartial({})
@@ -814,13 +875,22 @@ function createBaseEventSetAssetPoolState(): EventSetAssetPoolState {
 }
 export const EventSetAssetPoolState = {
   typeUrl: "/pryzm.ystaking.v1.EventSetAssetPoolState",
+  is(o: any): o is EventSetAssetPoolState {
+    return o && (o.$typeUrl === EventSetAssetPoolState.typeUrl || AssetPoolState.is(o.assetPoolState));
+  },
+  isSDK(o: any): o is EventSetAssetPoolStateSDKType {
+    return o && (o.$typeUrl === EventSetAssetPoolState.typeUrl || AssetPoolState.isSDK(o.asset_pool_state));
+  },
+  isAmino(o: any): o is EventSetAssetPoolStateAmino {
+    return o && (o.$typeUrl === EventSetAssetPoolState.typeUrl || AssetPoolState.isAmino(o.asset_pool_state));
+  },
   encode(message: EventSetAssetPoolState, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.assetPoolState !== undefined) {
       AssetPoolState.encode(message.assetPoolState, writer.uint32(10).fork()).ldelim();
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): EventSetAssetPoolState {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): EventSetAssetPoolState {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseEventSetAssetPoolState();
@@ -828,7 +898,7 @@ export const EventSetAssetPoolState = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.assetPoolState = AssetPoolState.decode(reader, reader.uint32());
+          message.assetPoolState = AssetPoolState.decode(reader, reader.uint32(), useInterfaces);
           break;
         default:
           reader.skipType(tag & 7);
@@ -859,16 +929,16 @@ export const EventSetAssetPoolState = {
     }
     return message;
   },
-  toAmino(message: EventSetAssetPoolState): EventSetAssetPoolStateAmino {
+  toAmino(message: EventSetAssetPoolState, useInterfaces: boolean = true): EventSetAssetPoolStateAmino {
     const obj: any = {};
-    obj.asset_pool_state = message.assetPoolState ? AssetPoolState.toAmino(message.assetPoolState) : undefined;
+    obj.asset_pool_state = message.assetPoolState ? AssetPoolState.toAmino(message.assetPoolState, useInterfaces) : undefined;
     return obj;
   },
   fromAminoMsg(object: EventSetAssetPoolStateAminoMsg): EventSetAssetPoolState {
     return EventSetAssetPoolState.fromAmino(object.value);
   },
-  fromProtoMsg(message: EventSetAssetPoolStateProtoMsg): EventSetAssetPoolState {
-    return EventSetAssetPoolState.decode(message.value);
+  fromProtoMsg(message: EventSetAssetPoolStateProtoMsg, useInterfaces: boolean = true): EventSetAssetPoolState {
+    return EventSetAssetPoolState.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: EventSetAssetPoolState): Uint8Array {
     return EventSetAssetPoolState.encode(message).finish();
@@ -880,6 +950,7 @@ export const EventSetAssetPoolState = {
     };
   }
 };
+GlobalDecoderRegistry.register(EventSetAssetPoolState.typeUrl, EventSetAssetPoolState);
 function createBaseEventSetAssetMaturityPoolState(): EventSetAssetMaturityPoolState {
   return {
     assetMaturityPoolState: AssetMaturityPoolState.fromPartial({})
@@ -887,13 +958,22 @@ function createBaseEventSetAssetMaturityPoolState(): EventSetAssetMaturityPoolSt
 }
 export const EventSetAssetMaturityPoolState = {
   typeUrl: "/pryzm.ystaking.v1.EventSetAssetMaturityPoolState",
+  is(o: any): o is EventSetAssetMaturityPoolState {
+    return o && (o.$typeUrl === EventSetAssetMaturityPoolState.typeUrl || AssetMaturityPoolState.is(o.assetMaturityPoolState));
+  },
+  isSDK(o: any): o is EventSetAssetMaturityPoolStateSDKType {
+    return o && (o.$typeUrl === EventSetAssetMaturityPoolState.typeUrl || AssetMaturityPoolState.isSDK(o.asset_maturity_pool_state));
+  },
+  isAmino(o: any): o is EventSetAssetMaturityPoolStateAmino {
+    return o && (o.$typeUrl === EventSetAssetMaturityPoolState.typeUrl || AssetMaturityPoolState.isAmino(o.asset_maturity_pool_state));
+  },
   encode(message: EventSetAssetMaturityPoolState, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.assetMaturityPoolState !== undefined) {
       AssetMaturityPoolState.encode(message.assetMaturityPoolState, writer.uint32(10).fork()).ldelim();
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): EventSetAssetMaturityPoolState {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): EventSetAssetMaturityPoolState {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseEventSetAssetMaturityPoolState();
@@ -901,7 +981,7 @@ export const EventSetAssetMaturityPoolState = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.assetMaturityPoolState = AssetMaturityPoolState.decode(reader, reader.uint32());
+          message.assetMaturityPoolState = AssetMaturityPoolState.decode(reader, reader.uint32(), useInterfaces);
           break;
         default:
           reader.skipType(tag & 7);
@@ -932,16 +1012,16 @@ export const EventSetAssetMaturityPoolState = {
     }
     return message;
   },
-  toAmino(message: EventSetAssetMaturityPoolState): EventSetAssetMaturityPoolStateAmino {
+  toAmino(message: EventSetAssetMaturityPoolState, useInterfaces: boolean = true): EventSetAssetMaturityPoolStateAmino {
     const obj: any = {};
-    obj.asset_maturity_pool_state = message.assetMaturityPoolState ? AssetMaturityPoolState.toAmino(message.assetMaturityPoolState) : undefined;
+    obj.asset_maturity_pool_state = message.assetMaturityPoolState ? AssetMaturityPoolState.toAmino(message.assetMaturityPoolState, useInterfaces) : undefined;
     return obj;
   },
   fromAminoMsg(object: EventSetAssetMaturityPoolStateAminoMsg): EventSetAssetMaturityPoolState {
     return EventSetAssetMaturityPoolState.fromAmino(object.value);
   },
-  fromProtoMsg(message: EventSetAssetMaturityPoolStateProtoMsg): EventSetAssetMaturityPoolState {
-    return EventSetAssetMaturityPoolState.decode(message.value);
+  fromProtoMsg(message: EventSetAssetMaturityPoolStateProtoMsg, useInterfaces: boolean = true): EventSetAssetMaturityPoolState {
+    return EventSetAssetMaturityPoolState.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: EventSetAssetMaturityPoolState): Uint8Array {
     return EventSetAssetMaturityPoolState.encode(message).finish();
@@ -953,6 +1033,7 @@ export const EventSetAssetMaturityPoolState = {
     };
   }
 };
+GlobalDecoderRegistry.register(EventSetAssetMaturityPoolState.typeUrl, EventSetAssetMaturityPoolState);
 function createBaseEventDeleteUserStakeState(): EventDeleteUserStakeState {
   return {
     address: "",
@@ -962,6 +1043,15 @@ function createBaseEventDeleteUserStakeState(): EventDeleteUserStakeState {
 }
 export const EventDeleteUserStakeState = {
   typeUrl: "/pryzm.ystaking.v1.EventDeleteUserStakeState",
+  is(o: any): o is EventDeleteUserStakeState {
+    return o && (o.$typeUrl === EventDeleteUserStakeState.typeUrl || typeof o.address === "string" && typeof o.assetId === "string" && typeof o.maturitySymbol === "string");
+  },
+  isSDK(o: any): o is EventDeleteUserStakeStateSDKType {
+    return o && (o.$typeUrl === EventDeleteUserStakeState.typeUrl || typeof o.address === "string" && typeof o.asset_id === "string" && typeof o.maturity_symbol === "string");
+  },
+  isAmino(o: any): o is EventDeleteUserStakeStateAmino {
+    return o && (o.$typeUrl === EventDeleteUserStakeState.typeUrl || typeof o.address === "string" && typeof o.asset_id === "string" && typeof o.maturity_symbol === "string");
+  },
   encode(message: EventDeleteUserStakeState, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.address !== "") {
       writer.uint32(10).string(message.address);
@@ -974,7 +1064,7 @@ export const EventDeleteUserStakeState = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): EventDeleteUserStakeState {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): EventDeleteUserStakeState {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseEventDeleteUserStakeState();
@@ -1031,18 +1121,18 @@ export const EventDeleteUserStakeState = {
     }
     return message;
   },
-  toAmino(message: EventDeleteUserStakeState): EventDeleteUserStakeStateAmino {
+  toAmino(message: EventDeleteUserStakeState, useInterfaces: boolean = true): EventDeleteUserStakeStateAmino {
     const obj: any = {};
-    obj.address = message.address;
-    obj.asset_id = message.assetId;
-    obj.maturity_symbol = message.maturitySymbol;
+    obj.address = message.address === "" ? undefined : message.address;
+    obj.asset_id = message.assetId === "" ? undefined : message.assetId;
+    obj.maturity_symbol = message.maturitySymbol === "" ? undefined : message.maturitySymbol;
     return obj;
   },
   fromAminoMsg(object: EventDeleteUserStakeStateAminoMsg): EventDeleteUserStakeState {
     return EventDeleteUserStakeState.fromAmino(object.value);
   },
-  fromProtoMsg(message: EventDeleteUserStakeStateProtoMsg): EventDeleteUserStakeState {
-    return EventDeleteUserStakeState.decode(message.value);
+  fromProtoMsg(message: EventDeleteUserStakeStateProtoMsg, useInterfaces: boolean = true): EventDeleteUserStakeState {
+    return EventDeleteUserStakeState.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: EventDeleteUserStakeState): Uint8Array {
     return EventDeleteUserStakeState.encode(message).finish();
@@ -1054,6 +1144,7 @@ export const EventDeleteUserStakeState = {
     };
   }
 };
+GlobalDecoderRegistry.register(EventDeleteUserStakeState.typeUrl, EventDeleteUserStakeState);
 function createBaseEventDeleteAssetPoolState(): EventDeleteAssetPoolState {
   return {
     assetId: ""
@@ -1061,13 +1152,22 @@ function createBaseEventDeleteAssetPoolState(): EventDeleteAssetPoolState {
 }
 export const EventDeleteAssetPoolState = {
   typeUrl: "/pryzm.ystaking.v1.EventDeleteAssetPoolState",
+  is(o: any): o is EventDeleteAssetPoolState {
+    return o && (o.$typeUrl === EventDeleteAssetPoolState.typeUrl || typeof o.assetId === "string");
+  },
+  isSDK(o: any): o is EventDeleteAssetPoolStateSDKType {
+    return o && (o.$typeUrl === EventDeleteAssetPoolState.typeUrl || typeof o.asset_id === "string");
+  },
+  isAmino(o: any): o is EventDeleteAssetPoolStateAmino {
+    return o && (o.$typeUrl === EventDeleteAssetPoolState.typeUrl || typeof o.asset_id === "string");
+  },
   encode(message: EventDeleteAssetPoolState, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.assetId !== "") {
       writer.uint32(10).string(message.assetId);
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): EventDeleteAssetPoolState {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): EventDeleteAssetPoolState {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseEventDeleteAssetPoolState();
@@ -1106,16 +1206,16 @@ export const EventDeleteAssetPoolState = {
     }
     return message;
   },
-  toAmino(message: EventDeleteAssetPoolState): EventDeleteAssetPoolStateAmino {
+  toAmino(message: EventDeleteAssetPoolState, useInterfaces: boolean = true): EventDeleteAssetPoolStateAmino {
     const obj: any = {};
-    obj.asset_id = message.assetId;
+    obj.asset_id = message.assetId === "" ? undefined : message.assetId;
     return obj;
   },
   fromAminoMsg(object: EventDeleteAssetPoolStateAminoMsg): EventDeleteAssetPoolState {
     return EventDeleteAssetPoolState.fromAmino(object.value);
   },
-  fromProtoMsg(message: EventDeleteAssetPoolStateProtoMsg): EventDeleteAssetPoolState {
-    return EventDeleteAssetPoolState.decode(message.value);
+  fromProtoMsg(message: EventDeleteAssetPoolStateProtoMsg, useInterfaces: boolean = true): EventDeleteAssetPoolState {
+    return EventDeleteAssetPoolState.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: EventDeleteAssetPoolState): Uint8Array {
     return EventDeleteAssetPoolState.encode(message).finish();
@@ -1127,6 +1227,7 @@ export const EventDeleteAssetPoolState = {
     };
   }
 };
+GlobalDecoderRegistry.register(EventDeleteAssetPoolState.typeUrl, EventDeleteAssetPoolState);
 function createBaseEventDeleteAssetMaturityPoolState(): EventDeleteAssetMaturityPoolState {
   return {
     assetId: "",
@@ -1135,6 +1236,15 @@ function createBaseEventDeleteAssetMaturityPoolState(): EventDeleteAssetMaturity
 }
 export const EventDeleteAssetMaturityPoolState = {
   typeUrl: "/pryzm.ystaking.v1.EventDeleteAssetMaturityPoolState",
+  is(o: any): o is EventDeleteAssetMaturityPoolState {
+    return o && (o.$typeUrl === EventDeleteAssetMaturityPoolState.typeUrl || typeof o.assetId === "string" && typeof o.maturitySymbol === "string");
+  },
+  isSDK(o: any): o is EventDeleteAssetMaturityPoolStateSDKType {
+    return o && (o.$typeUrl === EventDeleteAssetMaturityPoolState.typeUrl || typeof o.asset_id === "string" && typeof o.maturity_symbol === "string");
+  },
+  isAmino(o: any): o is EventDeleteAssetMaturityPoolStateAmino {
+    return o && (o.$typeUrl === EventDeleteAssetMaturityPoolState.typeUrl || typeof o.asset_id === "string" && typeof o.maturity_symbol === "string");
+  },
   encode(message: EventDeleteAssetMaturityPoolState, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.assetId !== "") {
       writer.uint32(10).string(message.assetId);
@@ -1144,7 +1254,7 @@ export const EventDeleteAssetMaturityPoolState = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): EventDeleteAssetMaturityPoolState {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): EventDeleteAssetMaturityPoolState {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseEventDeleteAssetMaturityPoolState();
@@ -1192,17 +1302,17 @@ export const EventDeleteAssetMaturityPoolState = {
     }
     return message;
   },
-  toAmino(message: EventDeleteAssetMaturityPoolState): EventDeleteAssetMaturityPoolStateAmino {
+  toAmino(message: EventDeleteAssetMaturityPoolState, useInterfaces: boolean = true): EventDeleteAssetMaturityPoolStateAmino {
     const obj: any = {};
-    obj.asset_id = message.assetId;
-    obj.maturity_symbol = message.maturitySymbol;
+    obj.asset_id = message.assetId === "" ? undefined : message.assetId;
+    obj.maturity_symbol = message.maturitySymbol === "" ? undefined : message.maturitySymbol;
     return obj;
   },
   fromAminoMsg(object: EventDeleteAssetMaturityPoolStateAminoMsg): EventDeleteAssetMaturityPoolState {
     return EventDeleteAssetMaturityPoolState.fromAmino(object.value);
   },
-  fromProtoMsg(message: EventDeleteAssetMaturityPoolStateProtoMsg): EventDeleteAssetMaturityPoolState {
-    return EventDeleteAssetMaturityPoolState.decode(message.value);
+  fromProtoMsg(message: EventDeleteAssetMaturityPoolStateProtoMsg, useInterfaces: boolean = true): EventDeleteAssetMaturityPoolState {
+    return EventDeleteAssetMaturityPoolState.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: EventDeleteAssetMaturityPoolState): Uint8Array {
     return EventDeleteAssetMaturityPoolState.encode(message).finish();
@@ -1214,3 +1324,4 @@ export const EventDeleteAssetMaturityPoolState = {
     };
   }
 };
+GlobalDecoderRegistry.register(EventDeleteAssetMaturityPoolState.typeUrl, EventDeleteAssetMaturityPoolState);

@@ -2,6 +2,7 @@ import { Coin, CoinAmino, CoinSDKType } from "../../../cosmos/base/v1beta1/coin"
 import { Metadata, MetadataAmino, MetadataSDKType } from "../../../cosmos/bank/v1beta1/bank";
 import { BinaryReader, BinaryWriter } from "../../../binary";
 import { isSet } from "../../../helpers";
+import { GlobalDecoderRegistry } from "../../../registry";
 /**
  * MsgCreateDenom defines the message structure for the CreateDenom gRPC service
  * method. It allows an account to create a new denom. It requires a sender
@@ -348,6 +349,16 @@ function createBaseMsgCreateDenom(): MsgCreateDenom {
 }
 export const MsgCreateDenom = {
   typeUrl: "/osmosis.tokenfactory.v1beta1.MsgCreateDenom",
+  aminoType: "osmosis/tokenfactory/create-denom",
+  is(o: any): o is MsgCreateDenom {
+    return o && (o.$typeUrl === MsgCreateDenom.typeUrl || typeof o.sender === "string" && typeof o.subdenom === "string");
+  },
+  isSDK(o: any): o is MsgCreateDenomSDKType {
+    return o && (o.$typeUrl === MsgCreateDenom.typeUrl || typeof o.sender === "string" && typeof o.subdenom === "string");
+  },
+  isAmino(o: any): o is MsgCreateDenomAmino {
+    return o && (o.$typeUrl === MsgCreateDenom.typeUrl || typeof o.sender === "string" && typeof o.subdenom === "string");
+  },
   encode(message: MsgCreateDenom, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.sender !== "") {
       writer.uint32(10).string(message.sender);
@@ -357,7 +368,7 @@ export const MsgCreateDenom = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): MsgCreateDenom {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): MsgCreateDenom {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgCreateDenom();
@@ -405,23 +416,23 @@ export const MsgCreateDenom = {
     }
     return message;
   },
-  toAmino(message: MsgCreateDenom): MsgCreateDenomAmino {
+  toAmino(message: MsgCreateDenom, useInterfaces: boolean = true): MsgCreateDenomAmino {
     const obj: any = {};
-    obj.sender = message.sender;
-    obj.subdenom = message.subdenom;
+    obj.sender = message.sender === "" ? undefined : message.sender;
+    obj.subdenom = message.subdenom === "" ? undefined : message.subdenom;
     return obj;
   },
   fromAminoMsg(object: MsgCreateDenomAminoMsg): MsgCreateDenom {
     return MsgCreateDenom.fromAmino(object.value);
   },
-  toAminoMsg(message: MsgCreateDenom): MsgCreateDenomAminoMsg {
+  toAminoMsg(message: MsgCreateDenom, useInterfaces: boolean = true): MsgCreateDenomAminoMsg {
     return {
       type: "osmosis/tokenfactory/create-denom",
-      value: MsgCreateDenom.toAmino(message)
+      value: MsgCreateDenom.toAmino(message, useInterfaces)
     };
   },
-  fromProtoMsg(message: MsgCreateDenomProtoMsg): MsgCreateDenom {
-    return MsgCreateDenom.decode(message.value);
+  fromProtoMsg(message: MsgCreateDenomProtoMsg, useInterfaces: boolean = true): MsgCreateDenom {
+    return MsgCreateDenom.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: MsgCreateDenom): Uint8Array {
     return MsgCreateDenom.encode(message).finish();
@@ -433,6 +444,8 @@ export const MsgCreateDenom = {
     };
   }
 };
+GlobalDecoderRegistry.register(MsgCreateDenom.typeUrl, MsgCreateDenom);
+GlobalDecoderRegistry.registerAminoProtoMapping(MsgCreateDenom.aminoType, MsgCreateDenom.typeUrl);
 function createBaseMsgCreateDenomResponse(): MsgCreateDenomResponse {
   return {
     newTokenDenom: ""
@@ -440,13 +453,23 @@ function createBaseMsgCreateDenomResponse(): MsgCreateDenomResponse {
 }
 export const MsgCreateDenomResponse = {
   typeUrl: "/osmosis.tokenfactory.v1beta1.MsgCreateDenomResponse",
+  aminoType: "osmosis/tokenfactory/create-denom-response",
+  is(o: any): o is MsgCreateDenomResponse {
+    return o && (o.$typeUrl === MsgCreateDenomResponse.typeUrl || typeof o.newTokenDenom === "string");
+  },
+  isSDK(o: any): o is MsgCreateDenomResponseSDKType {
+    return o && (o.$typeUrl === MsgCreateDenomResponse.typeUrl || typeof o.new_token_denom === "string");
+  },
+  isAmino(o: any): o is MsgCreateDenomResponseAmino {
+    return o && (o.$typeUrl === MsgCreateDenomResponse.typeUrl || typeof o.new_token_denom === "string");
+  },
   encode(message: MsgCreateDenomResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.newTokenDenom !== "") {
       writer.uint32(10).string(message.newTokenDenom);
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): MsgCreateDenomResponse {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): MsgCreateDenomResponse {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgCreateDenomResponse();
@@ -485,22 +508,22 @@ export const MsgCreateDenomResponse = {
     }
     return message;
   },
-  toAmino(message: MsgCreateDenomResponse): MsgCreateDenomResponseAmino {
+  toAmino(message: MsgCreateDenomResponse, useInterfaces: boolean = true): MsgCreateDenomResponseAmino {
     const obj: any = {};
-    obj.new_token_denom = message.newTokenDenom;
+    obj.new_token_denom = message.newTokenDenom === "" ? undefined : message.newTokenDenom;
     return obj;
   },
   fromAminoMsg(object: MsgCreateDenomResponseAminoMsg): MsgCreateDenomResponse {
     return MsgCreateDenomResponse.fromAmino(object.value);
   },
-  toAminoMsg(message: MsgCreateDenomResponse): MsgCreateDenomResponseAminoMsg {
+  toAminoMsg(message: MsgCreateDenomResponse, useInterfaces: boolean = true): MsgCreateDenomResponseAminoMsg {
     return {
       type: "osmosis/tokenfactory/create-denom-response",
-      value: MsgCreateDenomResponse.toAmino(message)
+      value: MsgCreateDenomResponse.toAmino(message, useInterfaces)
     };
   },
-  fromProtoMsg(message: MsgCreateDenomResponseProtoMsg): MsgCreateDenomResponse {
-    return MsgCreateDenomResponse.decode(message.value);
+  fromProtoMsg(message: MsgCreateDenomResponseProtoMsg, useInterfaces: boolean = true): MsgCreateDenomResponse {
+    return MsgCreateDenomResponse.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: MsgCreateDenomResponse): Uint8Array {
     return MsgCreateDenomResponse.encode(message).finish();
@@ -512,6 +535,8 @@ export const MsgCreateDenomResponse = {
     };
   }
 };
+GlobalDecoderRegistry.register(MsgCreateDenomResponse.typeUrl, MsgCreateDenomResponse);
+GlobalDecoderRegistry.registerAminoProtoMapping(MsgCreateDenomResponse.aminoType, MsgCreateDenomResponse.typeUrl);
 function createBaseMsgMint(): MsgMint {
   return {
     sender: "",
@@ -521,6 +546,16 @@ function createBaseMsgMint(): MsgMint {
 }
 export const MsgMint = {
   typeUrl: "/osmosis.tokenfactory.v1beta1.MsgMint",
+  aminoType: "osmosis/tokenfactory/mint",
+  is(o: any): o is MsgMint {
+    return o && (o.$typeUrl === MsgMint.typeUrl || typeof o.sender === "string" && Coin.is(o.amount) && typeof o.mintToAddress === "string");
+  },
+  isSDK(o: any): o is MsgMintSDKType {
+    return o && (o.$typeUrl === MsgMint.typeUrl || typeof o.sender === "string" && Coin.isSDK(o.amount) && typeof o.mintToAddress === "string");
+  },
+  isAmino(o: any): o is MsgMintAmino {
+    return o && (o.$typeUrl === MsgMint.typeUrl || typeof o.sender === "string" && Coin.isAmino(o.amount) && typeof o.mintToAddress === "string");
+  },
   encode(message: MsgMint, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.sender !== "") {
       writer.uint32(10).string(message.sender);
@@ -533,7 +568,7 @@ export const MsgMint = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): MsgMint {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): MsgMint {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgMint();
@@ -544,7 +579,7 @@ export const MsgMint = {
           message.sender = reader.string();
           break;
         case 2:
-          message.amount = Coin.decode(reader, reader.uint32());
+          message.amount = Coin.decode(reader, reader.uint32(), useInterfaces);
           break;
         case 3:
           message.mintToAddress = reader.string();
@@ -590,24 +625,24 @@ export const MsgMint = {
     }
     return message;
   },
-  toAmino(message: MsgMint): MsgMintAmino {
+  toAmino(message: MsgMint, useInterfaces: boolean = true): MsgMintAmino {
     const obj: any = {};
-    obj.sender = message.sender;
-    obj.amount = message.amount ? Coin.toAmino(message.amount) : undefined;
-    obj.mintToAddress = message.mintToAddress;
+    obj.sender = message.sender === "" ? undefined : message.sender;
+    obj.amount = message.amount ? Coin.toAmino(message.amount, useInterfaces) : undefined;
+    obj.mintToAddress = message.mintToAddress === "" ? undefined : message.mintToAddress;
     return obj;
   },
   fromAminoMsg(object: MsgMintAminoMsg): MsgMint {
     return MsgMint.fromAmino(object.value);
   },
-  toAminoMsg(message: MsgMint): MsgMintAminoMsg {
+  toAminoMsg(message: MsgMint, useInterfaces: boolean = true): MsgMintAminoMsg {
     return {
       type: "osmosis/tokenfactory/mint",
-      value: MsgMint.toAmino(message)
+      value: MsgMint.toAmino(message, useInterfaces)
     };
   },
-  fromProtoMsg(message: MsgMintProtoMsg): MsgMint {
-    return MsgMint.decode(message.value);
+  fromProtoMsg(message: MsgMintProtoMsg, useInterfaces: boolean = true): MsgMint {
+    return MsgMint.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: MsgMint): Uint8Array {
     return MsgMint.encode(message).finish();
@@ -619,15 +654,27 @@ export const MsgMint = {
     };
   }
 };
+GlobalDecoderRegistry.register(MsgMint.typeUrl, MsgMint);
+GlobalDecoderRegistry.registerAminoProtoMapping(MsgMint.aminoType, MsgMint.typeUrl);
 function createBaseMsgMintResponse(): MsgMintResponse {
   return {};
 }
 export const MsgMintResponse = {
   typeUrl: "/osmosis.tokenfactory.v1beta1.MsgMintResponse",
+  aminoType: "osmosis/tokenfactory/mint-response",
+  is(o: any): o is MsgMintResponse {
+    return o && o.$typeUrl === MsgMintResponse.typeUrl;
+  },
+  isSDK(o: any): o is MsgMintResponseSDKType {
+    return o && o.$typeUrl === MsgMintResponse.typeUrl;
+  },
+  isAmino(o: any): o is MsgMintResponseAmino {
+    return o && o.$typeUrl === MsgMintResponse.typeUrl;
+  },
   encode(_: MsgMintResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): MsgMintResponse {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): MsgMintResponse {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgMintResponse();
@@ -656,21 +703,21 @@ export const MsgMintResponse = {
     const message = createBaseMsgMintResponse();
     return message;
   },
-  toAmino(_: MsgMintResponse): MsgMintResponseAmino {
+  toAmino(_: MsgMintResponse, useInterfaces: boolean = true): MsgMintResponseAmino {
     const obj: any = {};
     return obj;
   },
   fromAminoMsg(object: MsgMintResponseAminoMsg): MsgMintResponse {
     return MsgMintResponse.fromAmino(object.value);
   },
-  toAminoMsg(message: MsgMintResponse): MsgMintResponseAminoMsg {
+  toAminoMsg(message: MsgMintResponse, useInterfaces: boolean = true): MsgMintResponseAminoMsg {
     return {
       type: "osmosis/tokenfactory/mint-response",
-      value: MsgMintResponse.toAmino(message)
+      value: MsgMintResponse.toAmino(message, useInterfaces)
     };
   },
-  fromProtoMsg(message: MsgMintResponseProtoMsg): MsgMintResponse {
-    return MsgMintResponse.decode(message.value);
+  fromProtoMsg(message: MsgMintResponseProtoMsg, useInterfaces: boolean = true): MsgMintResponse {
+    return MsgMintResponse.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: MsgMintResponse): Uint8Array {
     return MsgMintResponse.encode(message).finish();
@@ -682,6 +729,8 @@ export const MsgMintResponse = {
     };
   }
 };
+GlobalDecoderRegistry.register(MsgMintResponse.typeUrl, MsgMintResponse);
+GlobalDecoderRegistry.registerAminoProtoMapping(MsgMintResponse.aminoType, MsgMintResponse.typeUrl);
 function createBaseMsgBurn(): MsgBurn {
   return {
     sender: "",
@@ -691,6 +740,16 @@ function createBaseMsgBurn(): MsgBurn {
 }
 export const MsgBurn = {
   typeUrl: "/osmosis.tokenfactory.v1beta1.MsgBurn",
+  aminoType: "osmosis/tokenfactory/burn",
+  is(o: any): o is MsgBurn {
+    return o && (o.$typeUrl === MsgBurn.typeUrl || typeof o.sender === "string" && Coin.is(o.amount) && typeof o.burnFromAddress === "string");
+  },
+  isSDK(o: any): o is MsgBurnSDKType {
+    return o && (o.$typeUrl === MsgBurn.typeUrl || typeof o.sender === "string" && Coin.isSDK(o.amount) && typeof o.burnFromAddress === "string");
+  },
+  isAmino(o: any): o is MsgBurnAmino {
+    return o && (o.$typeUrl === MsgBurn.typeUrl || typeof o.sender === "string" && Coin.isAmino(o.amount) && typeof o.burnFromAddress === "string");
+  },
   encode(message: MsgBurn, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.sender !== "") {
       writer.uint32(10).string(message.sender);
@@ -703,7 +762,7 @@ export const MsgBurn = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): MsgBurn {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): MsgBurn {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgBurn();
@@ -714,7 +773,7 @@ export const MsgBurn = {
           message.sender = reader.string();
           break;
         case 2:
-          message.amount = Coin.decode(reader, reader.uint32());
+          message.amount = Coin.decode(reader, reader.uint32(), useInterfaces);
           break;
         case 3:
           message.burnFromAddress = reader.string();
@@ -760,24 +819,24 @@ export const MsgBurn = {
     }
     return message;
   },
-  toAmino(message: MsgBurn): MsgBurnAmino {
+  toAmino(message: MsgBurn, useInterfaces: boolean = true): MsgBurnAmino {
     const obj: any = {};
-    obj.sender = message.sender;
-    obj.amount = message.amount ? Coin.toAmino(message.amount) : undefined;
-    obj.burnFromAddress = message.burnFromAddress;
+    obj.sender = message.sender === "" ? undefined : message.sender;
+    obj.amount = message.amount ? Coin.toAmino(message.amount, useInterfaces) : undefined;
+    obj.burnFromAddress = message.burnFromAddress === "" ? undefined : message.burnFromAddress;
     return obj;
   },
   fromAminoMsg(object: MsgBurnAminoMsg): MsgBurn {
     return MsgBurn.fromAmino(object.value);
   },
-  toAminoMsg(message: MsgBurn): MsgBurnAminoMsg {
+  toAminoMsg(message: MsgBurn, useInterfaces: boolean = true): MsgBurnAminoMsg {
     return {
       type: "osmosis/tokenfactory/burn",
-      value: MsgBurn.toAmino(message)
+      value: MsgBurn.toAmino(message, useInterfaces)
     };
   },
-  fromProtoMsg(message: MsgBurnProtoMsg): MsgBurn {
-    return MsgBurn.decode(message.value);
+  fromProtoMsg(message: MsgBurnProtoMsg, useInterfaces: boolean = true): MsgBurn {
+    return MsgBurn.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: MsgBurn): Uint8Array {
     return MsgBurn.encode(message).finish();
@@ -789,15 +848,27 @@ export const MsgBurn = {
     };
   }
 };
+GlobalDecoderRegistry.register(MsgBurn.typeUrl, MsgBurn);
+GlobalDecoderRegistry.registerAminoProtoMapping(MsgBurn.aminoType, MsgBurn.typeUrl);
 function createBaseMsgBurnResponse(): MsgBurnResponse {
   return {};
 }
 export const MsgBurnResponse = {
   typeUrl: "/osmosis.tokenfactory.v1beta1.MsgBurnResponse",
+  aminoType: "osmosis/tokenfactory/burn-response",
+  is(o: any): o is MsgBurnResponse {
+    return o && o.$typeUrl === MsgBurnResponse.typeUrl;
+  },
+  isSDK(o: any): o is MsgBurnResponseSDKType {
+    return o && o.$typeUrl === MsgBurnResponse.typeUrl;
+  },
+  isAmino(o: any): o is MsgBurnResponseAmino {
+    return o && o.$typeUrl === MsgBurnResponse.typeUrl;
+  },
   encode(_: MsgBurnResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): MsgBurnResponse {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): MsgBurnResponse {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgBurnResponse();
@@ -826,21 +897,21 @@ export const MsgBurnResponse = {
     const message = createBaseMsgBurnResponse();
     return message;
   },
-  toAmino(_: MsgBurnResponse): MsgBurnResponseAmino {
+  toAmino(_: MsgBurnResponse, useInterfaces: boolean = true): MsgBurnResponseAmino {
     const obj: any = {};
     return obj;
   },
   fromAminoMsg(object: MsgBurnResponseAminoMsg): MsgBurnResponse {
     return MsgBurnResponse.fromAmino(object.value);
   },
-  toAminoMsg(message: MsgBurnResponse): MsgBurnResponseAminoMsg {
+  toAminoMsg(message: MsgBurnResponse, useInterfaces: boolean = true): MsgBurnResponseAminoMsg {
     return {
       type: "osmosis/tokenfactory/burn-response",
-      value: MsgBurnResponse.toAmino(message)
+      value: MsgBurnResponse.toAmino(message, useInterfaces)
     };
   },
-  fromProtoMsg(message: MsgBurnResponseProtoMsg): MsgBurnResponse {
-    return MsgBurnResponse.decode(message.value);
+  fromProtoMsg(message: MsgBurnResponseProtoMsg, useInterfaces: boolean = true): MsgBurnResponse {
+    return MsgBurnResponse.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: MsgBurnResponse): Uint8Array {
     return MsgBurnResponse.encode(message).finish();
@@ -852,6 +923,8 @@ export const MsgBurnResponse = {
     };
   }
 };
+GlobalDecoderRegistry.register(MsgBurnResponse.typeUrl, MsgBurnResponse);
+GlobalDecoderRegistry.registerAminoProtoMapping(MsgBurnResponse.aminoType, MsgBurnResponse.typeUrl);
 function createBaseMsgChangeAdmin(): MsgChangeAdmin {
   return {
     sender: "",
@@ -861,6 +934,16 @@ function createBaseMsgChangeAdmin(): MsgChangeAdmin {
 }
 export const MsgChangeAdmin = {
   typeUrl: "/osmosis.tokenfactory.v1beta1.MsgChangeAdmin",
+  aminoType: "osmosis/tokenfactory/change-admin",
+  is(o: any): o is MsgChangeAdmin {
+    return o && (o.$typeUrl === MsgChangeAdmin.typeUrl || typeof o.sender === "string" && typeof o.denom === "string" && typeof o.newAdmin === "string");
+  },
+  isSDK(o: any): o is MsgChangeAdminSDKType {
+    return o && (o.$typeUrl === MsgChangeAdmin.typeUrl || typeof o.sender === "string" && typeof o.denom === "string" && typeof o.new_admin === "string");
+  },
+  isAmino(o: any): o is MsgChangeAdminAmino {
+    return o && (o.$typeUrl === MsgChangeAdmin.typeUrl || typeof o.sender === "string" && typeof o.denom === "string" && typeof o.new_admin === "string");
+  },
   encode(message: MsgChangeAdmin, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.sender !== "") {
       writer.uint32(10).string(message.sender);
@@ -873,7 +956,7 @@ export const MsgChangeAdmin = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): MsgChangeAdmin {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): MsgChangeAdmin {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgChangeAdmin();
@@ -930,24 +1013,24 @@ export const MsgChangeAdmin = {
     }
     return message;
   },
-  toAmino(message: MsgChangeAdmin): MsgChangeAdminAmino {
+  toAmino(message: MsgChangeAdmin, useInterfaces: boolean = true): MsgChangeAdminAmino {
     const obj: any = {};
-    obj.sender = message.sender;
-    obj.denom = message.denom;
-    obj.new_admin = message.newAdmin;
+    obj.sender = message.sender === "" ? undefined : message.sender;
+    obj.denom = message.denom === "" ? undefined : message.denom;
+    obj.new_admin = message.newAdmin === "" ? undefined : message.newAdmin;
     return obj;
   },
   fromAminoMsg(object: MsgChangeAdminAminoMsg): MsgChangeAdmin {
     return MsgChangeAdmin.fromAmino(object.value);
   },
-  toAminoMsg(message: MsgChangeAdmin): MsgChangeAdminAminoMsg {
+  toAminoMsg(message: MsgChangeAdmin, useInterfaces: boolean = true): MsgChangeAdminAminoMsg {
     return {
       type: "osmosis/tokenfactory/change-admin",
-      value: MsgChangeAdmin.toAmino(message)
+      value: MsgChangeAdmin.toAmino(message, useInterfaces)
     };
   },
-  fromProtoMsg(message: MsgChangeAdminProtoMsg): MsgChangeAdmin {
-    return MsgChangeAdmin.decode(message.value);
+  fromProtoMsg(message: MsgChangeAdminProtoMsg, useInterfaces: boolean = true): MsgChangeAdmin {
+    return MsgChangeAdmin.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: MsgChangeAdmin): Uint8Array {
     return MsgChangeAdmin.encode(message).finish();
@@ -959,15 +1042,27 @@ export const MsgChangeAdmin = {
     };
   }
 };
+GlobalDecoderRegistry.register(MsgChangeAdmin.typeUrl, MsgChangeAdmin);
+GlobalDecoderRegistry.registerAminoProtoMapping(MsgChangeAdmin.aminoType, MsgChangeAdmin.typeUrl);
 function createBaseMsgChangeAdminResponse(): MsgChangeAdminResponse {
   return {};
 }
 export const MsgChangeAdminResponse = {
   typeUrl: "/osmosis.tokenfactory.v1beta1.MsgChangeAdminResponse",
+  aminoType: "osmosis/tokenfactory/change-admin-response",
+  is(o: any): o is MsgChangeAdminResponse {
+    return o && o.$typeUrl === MsgChangeAdminResponse.typeUrl;
+  },
+  isSDK(o: any): o is MsgChangeAdminResponseSDKType {
+    return o && o.$typeUrl === MsgChangeAdminResponse.typeUrl;
+  },
+  isAmino(o: any): o is MsgChangeAdminResponseAmino {
+    return o && o.$typeUrl === MsgChangeAdminResponse.typeUrl;
+  },
   encode(_: MsgChangeAdminResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): MsgChangeAdminResponse {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): MsgChangeAdminResponse {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgChangeAdminResponse();
@@ -996,21 +1091,21 @@ export const MsgChangeAdminResponse = {
     const message = createBaseMsgChangeAdminResponse();
     return message;
   },
-  toAmino(_: MsgChangeAdminResponse): MsgChangeAdminResponseAmino {
+  toAmino(_: MsgChangeAdminResponse, useInterfaces: boolean = true): MsgChangeAdminResponseAmino {
     const obj: any = {};
     return obj;
   },
   fromAminoMsg(object: MsgChangeAdminResponseAminoMsg): MsgChangeAdminResponse {
     return MsgChangeAdminResponse.fromAmino(object.value);
   },
-  toAminoMsg(message: MsgChangeAdminResponse): MsgChangeAdminResponseAminoMsg {
+  toAminoMsg(message: MsgChangeAdminResponse, useInterfaces: boolean = true): MsgChangeAdminResponseAminoMsg {
     return {
       type: "osmosis/tokenfactory/change-admin-response",
-      value: MsgChangeAdminResponse.toAmino(message)
+      value: MsgChangeAdminResponse.toAmino(message, useInterfaces)
     };
   },
-  fromProtoMsg(message: MsgChangeAdminResponseProtoMsg): MsgChangeAdminResponse {
-    return MsgChangeAdminResponse.decode(message.value);
+  fromProtoMsg(message: MsgChangeAdminResponseProtoMsg, useInterfaces: boolean = true): MsgChangeAdminResponse {
+    return MsgChangeAdminResponse.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: MsgChangeAdminResponse): Uint8Array {
     return MsgChangeAdminResponse.encode(message).finish();
@@ -1022,6 +1117,8 @@ export const MsgChangeAdminResponse = {
     };
   }
 };
+GlobalDecoderRegistry.register(MsgChangeAdminResponse.typeUrl, MsgChangeAdminResponse);
+GlobalDecoderRegistry.registerAminoProtoMapping(MsgChangeAdminResponse.aminoType, MsgChangeAdminResponse.typeUrl);
 function createBaseMsgSetDenomMetadata(): MsgSetDenomMetadata {
   return {
     sender: "",
@@ -1030,6 +1127,16 @@ function createBaseMsgSetDenomMetadata(): MsgSetDenomMetadata {
 }
 export const MsgSetDenomMetadata = {
   typeUrl: "/osmosis.tokenfactory.v1beta1.MsgSetDenomMetadata",
+  aminoType: "osmosis/tokenfactory/set-denom-metadata",
+  is(o: any): o is MsgSetDenomMetadata {
+    return o && (o.$typeUrl === MsgSetDenomMetadata.typeUrl || typeof o.sender === "string" && Metadata.is(o.metadata));
+  },
+  isSDK(o: any): o is MsgSetDenomMetadataSDKType {
+    return o && (o.$typeUrl === MsgSetDenomMetadata.typeUrl || typeof o.sender === "string" && Metadata.isSDK(o.metadata));
+  },
+  isAmino(o: any): o is MsgSetDenomMetadataAmino {
+    return o && (o.$typeUrl === MsgSetDenomMetadata.typeUrl || typeof o.sender === "string" && Metadata.isAmino(o.metadata));
+  },
   encode(message: MsgSetDenomMetadata, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.sender !== "") {
       writer.uint32(10).string(message.sender);
@@ -1039,7 +1146,7 @@ export const MsgSetDenomMetadata = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): MsgSetDenomMetadata {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): MsgSetDenomMetadata {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgSetDenomMetadata();
@@ -1050,7 +1157,7 @@ export const MsgSetDenomMetadata = {
           message.sender = reader.string();
           break;
         case 2:
-          message.metadata = Metadata.decode(reader, reader.uint32());
+          message.metadata = Metadata.decode(reader, reader.uint32(), useInterfaces);
           break;
         default:
           reader.skipType(tag & 7);
@@ -1087,23 +1194,23 @@ export const MsgSetDenomMetadata = {
     }
     return message;
   },
-  toAmino(message: MsgSetDenomMetadata): MsgSetDenomMetadataAmino {
+  toAmino(message: MsgSetDenomMetadata, useInterfaces: boolean = true): MsgSetDenomMetadataAmino {
     const obj: any = {};
-    obj.sender = message.sender;
-    obj.metadata = message.metadata ? Metadata.toAmino(message.metadata) : undefined;
+    obj.sender = message.sender === "" ? undefined : message.sender;
+    obj.metadata = message.metadata ? Metadata.toAmino(message.metadata, useInterfaces) : undefined;
     return obj;
   },
   fromAminoMsg(object: MsgSetDenomMetadataAminoMsg): MsgSetDenomMetadata {
     return MsgSetDenomMetadata.fromAmino(object.value);
   },
-  toAminoMsg(message: MsgSetDenomMetadata): MsgSetDenomMetadataAminoMsg {
+  toAminoMsg(message: MsgSetDenomMetadata, useInterfaces: boolean = true): MsgSetDenomMetadataAminoMsg {
     return {
       type: "osmosis/tokenfactory/set-denom-metadata",
-      value: MsgSetDenomMetadata.toAmino(message)
+      value: MsgSetDenomMetadata.toAmino(message, useInterfaces)
     };
   },
-  fromProtoMsg(message: MsgSetDenomMetadataProtoMsg): MsgSetDenomMetadata {
-    return MsgSetDenomMetadata.decode(message.value);
+  fromProtoMsg(message: MsgSetDenomMetadataProtoMsg, useInterfaces: boolean = true): MsgSetDenomMetadata {
+    return MsgSetDenomMetadata.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: MsgSetDenomMetadata): Uint8Array {
     return MsgSetDenomMetadata.encode(message).finish();
@@ -1115,15 +1222,27 @@ export const MsgSetDenomMetadata = {
     };
   }
 };
+GlobalDecoderRegistry.register(MsgSetDenomMetadata.typeUrl, MsgSetDenomMetadata);
+GlobalDecoderRegistry.registerAminoProtoMapping(MsgSetDenomMetadata.aminoType, MsgSetDenomMetadata.typeUrl);
 function createBaseMsgSetDenomMetadataResponse(): MsgSetDenomMetadataResponse {
   return {};
 }
 export const MsgSetDenomMetadataResponse = {
   typeUrl: "/osmosis.tokenfactory.v1beta1.MsgSetDenomMetadataResponse",
+  aminoType: "osmosis/tokenfactory/set-denom-metadata-response",
+  is(o: any): o is MsgSetDenomMetadataResponse {
+    return o && o.$typeUrl === MsgSetDenomMetadataResponse.typeUrl;
+  },
+  isSDK(o: any): o is MsgSetDenomMetadataResponseSDKType {
+    return o && o.$typeUrl === MsgSetDenomMetadataResponse.typeUrl;
+  },
+  isAmino(o: any): o is MsgSetDenomMetadataResponseAmino {
+    return o && o.$typeUrl === MsgSetDenomMetadataResponse.typeUrl;
+  },
   encode(_: MsgSetDenomMetadataResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): MsgSetDenomMetadataResponse {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): MsgSetDenomMetadataResponse {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgSetDenomMetadataResponse();
@@ -1152,21 +1271,21 @@ export const MsgSetDenomMetadataResponse = {
     const message = createBaseMsgSetDenomMetadataResponse();
     return message;
   },
-  toAmino(_: MsgSetDenomMetadataResponse): MsgSetDenomMetadataResponseAmino {
+  toAmino(_: MsgSetDenomMetadataResponse, useInterfaces: boolean = true): MsgSetDenomMetadataResponseAmino {
     const obj: any = {};
     return obj;
   },
   fromAminoMsg(object: MsgSetDenomMetadataResponseAminoMsg): MsgSetDenomMetadataResponse {
     return MsgSetDenomMetadataResponse.fromAmino(object.value);
   },
-  toAminoMsg(message: MsgSetDenomMetadataResponse): MsgSetDenomMetadataResponseAminoMsg {
+  toAminoMsg(message: MsgSetDenomMetadataResponse, useInterfaces: boolean = true): MsgSetDenomMetadataResponseAminoMsg {
     return {
       type: "osmosis/tokenfactory/set-denom-metadata-response",
-      value: MsgSetDenomMetadataResponse.toAmino(message)
+      value: MsgSetDenomMetadataResponse.toAmino(message, useInterfaces)
     };
   },
-  fromProtoMsg(message: MsgSetDenomMetadataResponseProtoMsg): MsgSetDenomMetadataResponse {
-    return MsgSetDenomMetadataResponse.decode(message.value);
+  fromProtoMsg(message: MsgSetDenomMetadataResponseProtoMsg, useInterfaces: boolean = true): MsgSetDenomMetadataResponse {
+    return MsgSetDenomMetadataResponse.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: MsgSetDenomMetadataResponse): Uint8Array {
     return MsgSetDenomMetadataResponse.encode(message).finish();
@@ -1178,6 +1297,8 @@ export const MsgSetDenomMetadataResponse = {
     };
   }
 };
+GlobalDecoderRegistry.register(MsgSetDenomMetadataResponse.typeUrl, MsgSetDenomMetadataResponse);
+GlobalDecoderRegistry.registerAminoProtoMapping(MsgSetDenomMetadataResponse.aminoType, MsgSetDenomMetadataResponse.typeUrl);
 function createBaseMsgForceTransfer(): MsgForceTransfer {
   return {
     sender: "",
@@ -1188,6 +1309,16 @@ function createBaseMsgForceTransfer(): MsgForceTransfer {
 }
 export const MsgForceTransfer = {
   typeUrl: "/osmosis.tokenfactory.v1beta1.MsgForceTransfer",
+  aminoType: "osmosis/tokenfactory/force-transfer",
+  is(o: any): o is MsgForceTransfer {
+    return o && (o.$typeUrl === MsgForceTransfer.typeUrl || typeof o.sender === "string" && Coin.is(o.amount) && typeof o.transferFromAddress === "string" && typeof o.transferToAddress === "string");
+  },
+  isSDK(o: any): o is MsgForceTransferSDKType {
+    return o && (o.$typeUrl === MsgForceTransfer.typeUrl || typeof o.sender === "string" && Coin.isSDK(o.amount) && typeof o.transferFromAddress === "string" && typeof o.transferToAddress === "string");
+  },
+  isAmino(o: any): o is MsgForceTransferAmino {
+    return o && (o.$typeUrl === MsgForceTransfer.typeUrl || typeof o.sender === "string" && Coin.isAmino(o.amount) && typeof o.transferFromAddress === "string" && typeof o.transferToAddress === "string");
+  },
   encode(message: MsgForceTransfer, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.sender !== "") {
       writer.uint32(10).string(message.sender);
@@ -1203,7 +1334,7 @@ export const MsgForceTransfer = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): MsgForceTransfer {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): MsgForceTransfer {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgForceTransfer();
@@ -1214,7 +1345,7 @@ export const MsgForceTransfer = {
           message.sender = reader.string();
           break;
         case 2:
-          message.amount = Coin.decode(reader, reader.uint32());
+          message.amount = Coin.decode(reader, reader.uint32(), useInterfaces);
           break;
         case 3:
           message.transferFromAddress = reader.string();
@@ -1269,25 +1400,25 @@ export const MsgForceTransfer = {
     }
     return message;
   },
-  toAmino(message: MsgForceTransfer): MsgForceTransferAmino {
+  toAmino(message: MsgForceTransfer, useInterfaces: boolean = true): MsgForceTransferAmino {
     const obj: any = {};
-    obj.sender = message.sender;
-    obj.amount = message.amount ? Coin.toAmino(message.amount) : undefined;
-    obj.transferFromAddress = message.transferFromAddress;
-    obj.transferToAddress = message.transferToAddress;
+    obj.sender = message.sender === "" ? undefined : message.sender;
+    obj.amount = message.amount ? Coin.toAmino(message.amount, useInterfaces) : undefined;
+    obj.transferFromAddress = message.transferFromAddress === "" ? undefined : message.transferFromAddress;
+    obj.transferToAddress = message.transferToAddress === "" ? undefined : message.transferToAddress;
     return obj;
   },
   fromAminoMsg(object: MsgForceTransferAminoMsg): MsgForceTransfer {
     return MsgForceTransfer.fromAmino(object.value);
   },
-  toAminoMsg(message: MsgForceTransfer): MsgForceTransferAminoMsg {
+  toAminoMsg(message: MsgForceTransfer, useInterfaces: boolean = true): MsgForceTransferAminoMsg {
     return {
       type: "osmosis/tokenfactory/force-transfer",
-      value: MsgForceTransfer.toAmino(message)
+      value: MsgForceTransfer.toAmino(message, useInterfaces)
     };
   },
-  fromProtoMsg(message: MsgForceTransferProtoMsg): MsgForceTransfer {
-    return MsgForceTransfer.decode(message.value);
+  fromProtoMsg(message: MsgForceTransferProtoMsg, useInterfaces: boolean = true): MsgForceTransfer {
+    return MsgForceTransfer.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: MsgForceTransfer): Uint8Array {
     return MsgForceTransfer.encode(message).finish();
@@ -1299,15 +1430,27 @@ export const MsgForceTransfer = {
     };
   }
 };
+GlobalDecoderRegistry.register(MsgForceTransfer.typeUrl, MsgForceTransfer);
+GlobalDecoderRegistry.registerAminoProtoMapping(MsgForceTransfer.aminoType, MsgForceTransfer.typeUrl);
 function createBaseMsgForceTransferResponse(): MsgForceTransferResponse {
   return {};
 }
 export const MsgForceTransferResponse = {
   typeUrl: "/osmosis.tokenfactory.v1beta1.MsgForceTransferResponse",
+  aminoType: "osmosis/tokenfactory/force-transfer-response",
+  is(o: any): o is MsgForceTransferResponse {
+    return o && o.$typeUrl === MsgForceTransferResponse.typeUrl;
+  },
+  isSDK(o: any): o is MsgForceTransferResponseSDKType {
+    return o && o.$typeUrl === MsgForceTransferResponse.typeUrl;
+  },
+  isAmino(o: any): o is MsgForceTransferResponseAmino {
+    return o && o.$typeUrl === MsgForceTransferResponse.typeUrl;
+  },
   encode(_: MsgForceTransferResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): MsgForceTransferResponse {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): MsgForceTransferResponse {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgForceTransferResponse();
@@ -1336,21 +1479,21 @@ export const MsgForceTransferResponse = {
     const message = createBaseMsgForceTransferResponse();
     return message;
   },
-  toAmino(_: MsgForceTransferResponse): MsgForceTransferResponseAmino {
+  toAmino(_: MsgForceTransferResponse, useInterfaces: boolean = true): MsgForceTransferResponseAmino {
     const obj: any = {};
     return obj;
   },
   fromAminoMsg(object: MsgForceTransferResponseAminoMsg): MsgForceTransferResponse {
     return MsgForceTransferResponse.fromAmino(object.value);
   },
-  toAminoMsg(message: MsgForceTransferResponse): MsgForceTransferResponseAminoMsg {
+  toAminoMsg(message: MsgForceTransferResponse, useInterfaces: boolean = true): MsgForceTransferResponseAminoMsg {
     return {
       type: "osmosis/tokenfactory/force-transfer-response",
-      value: MsgForceTransferResponse.toAmino(message)
+      value: MsgForceTransferResponse.toAmino(message, useInterfaces)
     };
   },
-  fromProtoMsg(message: MsgForceTransferResponseProtoMsg): MsgForceTransferResponse {
-    return MsgForceTransferResponse.decode(message.value);
+  fromProtoMsg(message: MsgForceTransferResponseProtoMsg, useInterfaces: boolean = true): MsgForceTransferResponse {
+    return MsgForceTransferResponse.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: MsgForceTransferResponse): Uint8Array {
     return MsgForceTransferResponse.encode(message).finish();
@@ -1362,3 +1505,5 @@ export const MsgForceTransferResponse = {
     };
   }
 };
+GlobalDecoderRegistry.register(MsgForceTransferResponse.typeUrl, MsgForceTransferResponse);
+GlobalDecoderRegistry.registerAminoProtoMapping(MsgForceTransferResponse.aminoType, MsgForceTransferResponse.typeUrl);

@@ -1,5 +1,6 @@
 import { BinaryReader, BinaryWriter } from "../../../binary";
 import { isSet } from "../../../helpers";
+import { GlobalDecoderRegistry } from "../../../registry";
 /**
  * DenomAuthorityMetadata specifies metadata for addresses that have specific
  * capabilities over a token factory denom. Right now there is only one Admin
@@ -41,13 +42,23 @@ function createBaseDenomAuthorityMetadata(): DenomAuthorityMetadata {
 }
 export const DenomAuthorityMetadata = {
   typeUrl: "/osmosis.tokenfactory.v1beta1.DenomAuthorityMetadata",
+  aminoType: "osmosis/tokenfactory/denom-authority-metadata",
+  is(o: any): o is DenomAuthorityMetadata {
+    return o && (o.$typeUrl === DenomAuthorityMetadata.typeUrl || typeof o.admin === "string");
+  },
+  isSDK(o: any): o is DenomAuthorityMetadataSDKType {
+    return o && (o.$typeUrl === DenomAuthorityMetadata.typeUrl || typeof o.admin === "string");
+  },
+  isAmino(o: any): o is DenomAuthorityMetadataAmino {
+    return o && (o.$typeUrl === DenomAuthorityMetadata.typeUrl || typeof o.admin === "string");
+  },
   encode(message: DenomAuthorityMetadata, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.admin !== "") {
       writer.uint32(10).string(message.admin);
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): DenomAuthorityMetadata {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): DenomAuthorityMetadata {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseDenomAuthorityMetadata();
@@ -86,22 +97,22 @@ export const DenomAuthorityMetadata = {
     }
     return message;
   },
-  toAmino(message: DenomAuthorityMetadata): DenomAuthorityMetadataAmino {
+  toAmino(message: DenomAuthorityMetadata, useInterfaces: boolean = true): DenomAuthorityMetadataAmino {
     const obj: any = {};
-    obj.admin = message.admin;
+    obj.admin = message.admin === "" ? undefined : message.admin;
     return obj;
   },
   fromAminoMsg(object: DenomAuthorityMetadataAminoMsg): DenomAuthorityMetadata {
     return DenomAuthorityMetadata.fromAmino(object.value);
   },
-  toAminoMsg(message: DenomAuthorityMetadata): DenomAuthorityMetadataAminoMsg {
+  toAminoMsg(message: DenomAuthorityMetadata, useInterfaces: boolean = true): DenomAuthorityMetadataAminoMsg {
     return {
       type: "osmosis/tokenfactory/denom-authority-metadata",
-      value: DenomAuthorityMetadata.toAmino(message)
+      value: DenomAuthorityMetadata.toAmino(message, useInterfaces)
     };
   },
-  fromProtoMsg(message: DenomAuthorityMetadataProtoMsg): DenomAuthorityMetadata {
-    return DenomAuthorityMetadata.decode(message.value);
+  fromProtoMsg(message: DenomAuthorityMetadataProtoMsg, useInterfaces: boolean = true): DenomAuthorityMetadata {
+    return DenomAuthorityMetadata.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: DenomAuthorityMetadata): Uint8Array {
     return DenomAuthorityMetadata.encode(message).finish();
@@ -113,3 +124,5 @@ export const DenomAuthorityMetadata = {
     };
   }
 };
+GlobalDecoderRegistry.register(DenomAuthorityMetadata.typeUrl, DenomAuthorityMetadata);
+GlobalDecoderRegistry.registerAminoProtoMapping(DenomAuthorityMetadata.aminoType, DenomAuthorityMetadata.typeUrl);

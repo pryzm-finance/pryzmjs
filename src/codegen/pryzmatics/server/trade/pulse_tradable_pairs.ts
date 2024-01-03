@@ -1,6 +1,7 @@
 import { PulseTradablePair, PulseTradablePairAmino, PulseTradablePairSDKType } from "../../trade/pulse_tradable_pair";
 import { BinaryReader, BinaryWriter } from "../../../binary";
 import { isSet } from "../../../helpers";
+import { GlobalDecoderRegistry } from "../../../registry";
 export interface QueryPulseTradablePairsRequest {
   denom: string;
   /** determines whether the given denom should be considered as token_in or token_out */
@@ -48,6 +49,15 @@ function createBaseQueryPulseTradablePairsRequest(): QueryPulseTradablePairsRequ
 }
 export const QueryPulseTradablePairsRequest = {
   typeUrl: "/pryzmatics.server.trade.QueryPulseTradablePairsRequest",
+  is(o: any): o is QueryPulseTradablePairsRequest {
+    return o && (o.$typeUrl === QueryPulseTradablePairsRequest.typeUrl || typeof o.denom === "string" && typeof o.tokenIn === "boolean");
+  },
+  isSDK(o: any): o is QueryPulseTradablePairsRequestSDKType {
+    return o && (o.$typeUrl === QueryPulseTradablePairsRequest.typeUrl || typeof o.denom === "string" && typeof o.token_in === "boolean");
+  },
+  isAmino(o: any): o is QueryPulseTradablePairsRequestAmino {
+    return o && (o.$typeUrl === QueryPulseTradablePairsRequest.typeUrl || typeof o.denom === "string" && typeof o.token_in === "boolean");
+  },
   encode(message: QueryPulseTradablePairsRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.denom !== "") {
       writer.uint32(10).string(message.denom);
@@ -57,7 +67,7 @@ export const QueryPulseTradablePairsRequest = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): QueryPulseTradablePairsRequest {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): QueryPulseTradablePairsRequest {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryPulseTradablePairsRequest();
@@ -105,17 +115,17 @@ export const QueryPulseTradablePairsRequest = {
     }
     return message;
   },
-  toAmino(message: QueryPulseTradablePairsRequest): QueryPulseTradablePairsRequestAmino {
+  toAmino(message: QueryPulseTradablePairsRequest, useInterfaces: boolean = true): QueryPulseTradablePairsRequestAmino {
     const obj: any = {};
-    obj.denom = message.denom;
-    obj.token_in = message.tokenIn;
+    obj.denom = message.denom === "" ? undefined : message.denom;
+    obj.token_in = message.tokenIn === false ? undefined : message.tokenIn;
     return obj;
   },
   fromAminoMsg(object: QueryPulseTradablePairsRequestAminoMsg): QueryPulseTradablePairsRequest {
     return QueryPulseTradablePairsRequest.fromAmino(object.value);
   },
-  fromProtoMsg(message: QueryPulseTradablePairsRequestProtoMsg): QueryPulseTradablePairsRequest {
-    return QueryPulseTradablePairsRequest.decode(message.value);
+  fromProtoMsg(message: QueryPulseTradablePairsRequestProtoMsg, useInterfaces: boolean = true): QueryPulseTradablePairsRequest {
+    return QueryPulseTradablePairsRequest.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: QueryPulseTradablePairsRequest): Uint8Array {
     return QueryPulseTradablePairsRequest.encode(message).finish();
@@ -127,6 +137,7 @@ export const QueryPulseTradablePairsRequest = {
     };
   }
 };
+GlobalDecoderRegistry.register(QueryPulseTradablePairsRequest.typeUrl, QueryPulseTradablePairsRequest);
 function createBaseQueryPulseTradablePairsResponse(): QueryPulseTradablePairsResponse {
   return {
     pairs: []
@@ -134,13 +145,22 @@ function createBaseQueryPulseTradablePairsResponse(): QueryPulseTradablePairsRes
 }
 export const QueryPulseTradablePairsResponse = {
   typeUrl: "/pryzmatics.server.trade.QueryPulseTradablePairsResponse",
+  is(o: any): o is QueryPulseTradablePairsResponse {
+    return o && (o.$typeUrl === QueryPulseTradablePairsResponse.typeUrl || Array.isArray(o.pairs) && (!o.pairs.length || PulseTradablePair.is(o.pairs[0])));
+  },
+  isSDK(o: any): o is QueryPulseTradablePairsResponseSDKType {
+    return o && (o.$typeUrl === QueryPulseTradablePairsResponse.typeUrl || Array.isArray(o.pairs) && (!o.pairs.length || PulseTradablePair.isSDK(o.pairs[0])));
+  },
+  isAmino(o: any): o is QueryPulseTradablePairsResponseAmino {
+    return o && (o.$typeUrl === QueryPulseTradablePairsResponse.typeUrl || Array.isArray(o.pairs) && (!o.pairs.length || PulseTradablePair.isAmino(o.pairs[0])));
+  },
   encode(message: QueryPulseTradablePairsResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     for (const v of message.pairs) {
       PulseTradablePair.encode(v!, writer.uint32(10).fork()).ldelim();
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): QueryPulseTradablePairsResponse {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): QueryPulseTradablePairsResponse {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryPulseTradablePairsResponse();
@@ -148,7 +168,7 @@ export const QueryPulseTradablePairsResponse = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.pairs.push(PulseTradablePair.decode(reader, reader.uint32()));
+          message.pairs.push(PulseTradablePair.decode(reader, reader.uint32(), useInterfaces));
           break;
         default:
           reader.skipType(tag & 7);
@@ -181,20 +201,20 @@ export const QueryPulseTradablePairsResponse = {
     message.pairs = object.pairs?.map(e => PulseTradablePair.fromAmino(e)) || [];
     return message;
   },
-  toAmino(message: QueryPulseTradablePairsResponse): QueryPulseTradablePairsResponseAmino {
+  toAmino(message: QueryPulseTradablePairsResponse, useInterfaces: boolean = true): QueryPulseTradablePairsResponseAmino {
     const obj: any = {};
     if (message.pairs) {
-      obj.pairs = message.pairs.map(e => e ? PulseTradablePair.toAmino(e) : undefined);
+      obj.pairs = message.pairs.map(e => e ? PulseTradablePair.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.pairs = [];
+      obj.pairs = message.pairs;
     }
     return obj;
   },
   fromAminoMsg(object: QueryPulseTradablePairsResponseAminoMsg): QueryPulseTradablePairsResponse {
     return QueryPulseTradablePairsResponse.fromAmino(object.value);
   },
-  fromProtoMsg(message: QueryPulseTradablePairsResponseProtoMsg): QueryPulseTradablePairsResponse {
-    return QueryPulseTradablePairsResponse.decode(message.value);
+  fromProtoMsg(message: QueryPulseTradablePairsResponseProtoMsg, useInterfaces: boolean = true): QueryPulseTradablePairsResponse {
+    return QueryPulseTradablePairsResponse.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: QueryPulseTradablePairsResponse): Uint8Array {
     return QueryPulseTradablePairsResponse.encode(message).finish();
@@ -206,3 +226,4 @@ export const QueryPulseTradablePairsResponse = {
     };
   }
 };
+GlobalDecoderRegistry.register(QueryPulseTradablePairsResponse.typeUrl, QueryPulseTradablePairsResponse);

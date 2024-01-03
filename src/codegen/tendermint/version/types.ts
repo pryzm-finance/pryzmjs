@@ -1,5 +1,6 @@
 import { BinaryReader, BinaryWriter } from "../../binary";
 import { isSet } from "../../helpers";
+import { GlobalDecoderRegistry } from "../../registry";
 /**
  * App includes the protocol and software version for the application.
  * This information is included in ResponseInfo. The App.Protocol can be
@@ -78,6 +79,15 @@ function createBaseApp(): App {
 }
 export const App = {
   typeUrl: "/tendermint.version.App",
+  is(o: any): o is App {
+    return o && (o.$typeUrl === App.typeUrl || typeof o.protocol === "bigint" && typeof o.software === "string");
+  },
+  isSDK(o: any): o is AppSDKType {
+    return o && (o.$typeUrl === App.typeUrl || typeof o.protocol === "bigint" && typeof o.software === "string");
+  },
+  isAmino(o: any): o is AppAmino {
+    return o && (o.$typeUrl === App.typeUrl || typeof o.protocol === "bigint" && typeof o.software === "string");
+  },
   encode(message: App, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.protocol !== BigInt(0)) {
       writer.uint32(8).uint64(message.protocol);
@@ -87,7 +97,7 @@ export const App = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): App {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): App {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseApp();
@@ -135,17 +145,17 @@ export const App = {
     }
     return message;
   },
-  toAmino(message: App): AppAmino {
+  toAmino(message: App, useInterfaces: boolean = true): AppAmino {
     const obj: any = {};
     obj.protocol = message.protocol ? message.protocol.toString() : undefined;
-    obj.software = message.software;
+    obj.software = message.software === "" ? undefined : message.software;
     return obj;
   },
   fromAminoMsg(object: AppAminoMsg): App {
     return App.fromAmino(object.value);
   },
-  fromProtoMsg(message: AppProtoMsg): App {
-    return App.decode(message.value);
+  fromProtoMsg(message: AppProtoMsg, useInterfaces: boolean = true): App {
+    return App.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: App): Uint8Array {
     return App.encode(message).finish();
@@ -157,6 +167,7 @@ export const App = {
     };
   }
 };
+GlobalDecoderRegistry.register(App.typeUrl, App);
 function createBaseConsensus(): Consensus {
   return {
     block: BigInt(0),
@@ -165,6 +176,15 @@ function createBaseConsensus(): Consensus {
 }
 export const Consensus = {
   typeUrl: "/tendermint.version.Consensus",
+  is(o: any): o is Consensus {
+    return o && (o.$typeUrl === Consensus.typeUrl || typeof o.block === "bigint" && typeof o.app === "bigint");
+  },
+  isSDK(o: any): o is ConsensusSDKType {
+    return o && (o.$typeUrl === Consensus.typeUrl || typeof o.block === "bigint" && typeof o.app === "bigint");
+  },
+  isAmino(o: any): o is ConsensusAmino {
+    return o && (o.$typeUrl === Consensus.typeUrl || typeof o.block === "bigint" && typeof o.app === "bigint");
+  },
   encode(message: Consensus, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.block !== BigInt(0)) {
       writer.uint32(8).uint64(message.block);
@@ -174,7 +194,7 @@ export const Consensus = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): Consensus {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): Consensus {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseConsensus();
@@ -222,7 +242,7 @@ export const Consensus = {
     }
     return message;
   },
-  toAmino(message: Consensus): ConsensusAmino {
+  toAmino(message: Consensus, useInterfaces: boolean = true): ConsensusAmino {
     const obj: any = {};
     obj.block = message.block ? message.block.toString() : undefined;
     obj.app = message.app ? message.app.toString() : undefined;
@@ -231,8 +251,8 @@ export const Consensus = {
   fromAminoMsg(object: ConsensusAminoMsg): Consensus {
     return Consensus.fromAmino(object.value);
   },
-  fromProtoMsg(message: ConsensusProtoMsg): Consensus {
-    return Consensus.decode(message.value);
+  fromProtoMsg(message: ConsensusProtoMsg, useInterfaces: boolean = true): Consensus {
+    return Consensus.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: Consensus): Uint8Array {
     return Consensus.encode(message).finish();
@@ -244,3 +264,4 @@ export const Consensus = {
     };
   }
 };
+GlobalDecoderRegistry.register(Consensus.typeUrl, Consensus);

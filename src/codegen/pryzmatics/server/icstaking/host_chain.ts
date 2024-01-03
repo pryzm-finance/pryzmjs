@@ -3,6 +3,7 @@ import { PageRequest, PageRequestAmino, PageRequestSDKType, PageResponse, PageRe
 import { Duration, DurationAmino, DurationSDKType } from "../../../google/protobuf/duration";
 import { BinaryReader, BinaryWriter } from "../../../binary";
 import { isSet } from "../../../helpers";
+import { GlobalDecoderRegistry } from "../../../registry";
 export interface QueryHostChainRequest {
   hostChainId: string;
 }
@@ -115,13 +116,22 @@ function createBaseQueryHostChainRequest(): QueryHostChainRequest {
 }
 export const QueryHostChainRequest = {
   typeUrl: "/pryzmatics.server.icstaking.QueryHostChainRequest",
+  is(o: any): o is QueryHostChainRequest {
+    return o && (o.$typeUrl === QueryHostChainRequest.typeUrl || typeof o.hostChainId === "string");
+  },
+  isSDK(o: any): o is QueryHostChainRequestSDKType {
+    return o && (o.$typeUrl === QueryHostChainRequest.typeUrl || typeof o.host_chain_id === "string");
+  },
+  isAmino(o: any): o is QueryHostChainRequestAmino {
+    return o && (o.$typeUrl === QueryHostChainRequest.typeUrl || typeof o.host_chain_id === "string");
+  },
   encode(message: QueryHostChainRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.hostChainId !== "") {
       writer.uint32(10).string(message.hostChainId);
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): QueryHostChainRequest {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): QueryHostChainRequest {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryHostChainRequest();
@@ -160,16 +170,16 @@ export const QueryHostChainRequest = {
     }
     return message;
   },
-  toAmino(message: QueryHostChainRequest): QueryHostChainRequestAmino {
+  toAmino(message: QueryHostChainRequest, useInterfaces: boolean = true): QueryHostChainRequestAmino {
     const obj: any = {};
-    obj.host_chain_id = message.hostChainId;
+    obj.host_chain_id = message.hostChainId === "" ? undefined : message.hostChainId;
     return obj;
   },
   fromAminoMsg(object: QueryHostChainRequestAminoMsg): QueryHostChainRequest {
     return QueryHostChainRequest.fromAmino(object.value);
   },
-  fromProtoMsg(message: QueryHostChainRequestProtoMsg): QueryHostChainRequest {
-    return QueryHostChainRequest.decode(message.value);
+  fromProtoMsg(message: QueryHostChainRequestProtoMsg, useInterfaces: boolean = true): QueryHostChainRequest {
+    return QueryHostChainRequest.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: QueryHostChainRequest): Uint8Array {
     return QueryHostChainRequest.encode(message).finish();
@@ -181,6 +191,7 @@ export const QueryHostChainRequest = {
     };
   }
 };
+GlobalDecoderRegistry.register(QueryHostChainRequest.typeUrl, QueryHostChainRequest);
 function createBaseQueryHostChainResponse(): QueryHostChainResponse {
   return {
     hostChain: HostChain.fromPartial({})
@@ -188,13 +199,22 @@ function createBaseQueryHostChainResponse(): QueryHostChainResponse {
 }
 export const QueryHostChainResponse = {
   typeUrl: "/pryzmatics.server.icstaking.QueryHostChainResponse",
+  is(o: any): o is QueryHostChainResponse {
+    return o && (o.$typeUrl === QueryHostChainResponse.typeUrl || HostChain.is(o.hostChain));
+  },
+  isSDK(o: any): o is QueryHostChainResponseSDKType {
+    return o && (o.$typeUrl === QueryHostChainResponse.typeUrl || HostChain.isSDK(o.host_chain));
+  },
+  isAmino(o: any): o is QueryHostChainResponseAmino {
+    return o && (o.$typeUrl === QueryHostChainResponse.typeUrl || HostChain.isAmino(o.host_chain));
+  },
   encode(message: QueryHostChainResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.hostChain !== undefined) {
       HostChain.encode(message.hostChain, writer.uint32(10).fork()).ldelim();
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): QueryHostChainResponse {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): QueryHostChainResponse {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryHostChainResponse();
@@ -202,7 +222,7 @@ export const QueryHostChainResponse = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.hostChain = HostChain.decode(reader, reader.uint32());
+          message.hostChain = HostChain.decode(reader, reader.uint32(), useInterfaces);
           break;
         default:
           reader.skipType(tag & 7);
@@ -233,16 +253,16 @@ export const QueryHostChainResponse = {
     }
     return message;
   },
-  toAmino(message: QueryHostChainResponse): QueryHostChainResponseAmino {
+  toAmino(message: QueryHostChainResponse, useInterfaces: boolean = true): QueryHostChainResponseAmino {
     const obj: any = {};
-    obj.host_chain = message.hostChain ? HostChain.toAmino(message.hostChain) : undefined;
+    obj.host_chain = message.hostChain ? HostChain.toAmino(message.hostChain, useInterfaces) : undefined;
     return obj;
   },
   fromAminoMsg(object: QueryHostChainResponseAminoMsg): QueryHostChainResponse {
     return QueryHostChainResponse.fromAmino(object.value);
   },
-  fromProtoMsg(message: QueryHostChainResponseProtoMsg): QueryHostChainResponse {
-    return QueryHostChainResponse.decode(message.value);
+  fromProtoMsg(message: QueryHostChainResponseProtoMsg, useInterfaces: boolean = true): QueryHostChainResponse {
+    return QueryHostChainResponse.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: QueryHostChainResponse): Uint8Array {
     return QueryHostChainResponse.encode(message).finish();
@@ -254,6 +274,7 @@ export const QueryHostChainResponse = {
     };
   }
 };
+GlobalDecoderRegistry.register(QueryHostChainResponse.typeUrl, QueryHostChainResponse);
 function createBaseQueryHostChainsRequest(): QueryHostChainsRequest {
   return {
     pagination: undefined
@@ -261,13 +282,22 @@ function createBaseQueryHostChainsRequest(): QueryHostChainsRequest {
 }
 export const QueryHostChainsRequest = {
   typeUrl: "/pryzmatics.server.icstaking.QueryHostChainsRequest",
+  is(o: any): o is QueryHostChainsRequest {
+    return o && o.$typeUrl === QueryHostChainsRequest.typeUrl;
+  },
+  isSDK(o: any): o is QueryHostChainsRequestSDKType {
+    return o && o.$typeUrl === QueryHostChainsRequest.typeUrl;
+  },
+  isAmino(o: any): o is QueryHostChainsRequestAmino {
+    return o && o.$typeUrl === QueryHostChainsRequest.typeUrl;
+  },
   encode(message: QueryHostChainsRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.pagination !== undefined) {
       PageRequest.encode(message.pagination, writer.uint32(10).fork()).ldelim();
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): QueryHostChainsRequest {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): QueryHostChainsRequest {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryHostChainsRequest();
@@ -275,7 +305,7 @@ export const QueryHostChainsRequest = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.pagination = PageRequest.decode(reader, reader.uint32());
+          message.pagination = PageRequest.decode(reader, reader.uint32(), useInterfaces);
           break;
         default:
           reader.skipType(tag & 7);
@@ -306,16 +336,16 @@ export const QueryHostChainsRequest = {
     }
     return message;
   },
-  toAmino(message: QueryHostChainsRequest): QueryHostChainsRequestAmino {
+  toAmino(message: QueryHostChainsRequest, useInterfaces: boolean = true): QueryHostChainsRequestAmino {
     const obj: any = {};
-    obj.pagination = message.pagination ? PageRequest.toAmino(message.pagination) : undefined;
+    obj.pagination = message.pagination ? PageRequest.toAmino(message.pagination, useInterfaces) : undefined;
     return obj;
   },
   fromAminoMsg(object: QueryHostChainsRequestAminoMsg): QueryHostChainsRequest {
     return QueryHostChainsRequest.fromAmino(object.value);
   },
-  fromProtoMsg(message: QueryHostChainsRequestProtoMsg): QueryHostChainsRequest {
-    return QueryHostChainsRequest.decode(message.value);
+  fromProtoMsg(message: QueryHostChainsRequestProtoMsg, useInterfaces: boolean = true): QueryHostChainsRequest {
+    return QueryHostChainsRequest.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: QueryHostChainsRequest): Uint8Array {
     return QueryHostChainsRequest.encode(message).finish();
@@ -327,6 +357,7 @@ export const QueryHostChainsRequest = {
     };
   }
 };
+GlobalDecoderRegistry.register(QueryHostChainsRequest.typeUrl, QueryHostChainsRequest);
 function createBaseQueryHostChainsResponse(): QueryHostChainsResponse {
   return {
     hostChains: [],
@@ -335,6 +366,15 @@ function createBaseQueryHostChainsResponse(): QueryHostChainsResponse {
 }
 export const QueryHostChainsResponse = {
   typeUrl: "/pryzmatics.server.icstaking.QueryHostChainsResponse",
+  is(o: any): o is QueryHostChainsResponse {
+    return o && (o.$typeUrl === QueryHostChainsResponse.typeUrl || Array.isArray(o.hostChains) && (!o.hostChains.length || HostChain.is(o.hostChains[0])));
+  },
+  isSDK(o: any): o is QueryHostChainsResponseSDKType {
+    return o && (o.$typeUrl === QueryHostChainsResponse.typeUrl || Array.isArray(o.host_chains) && (!o.host_chains.length || HostChain.isSDK(o.host_chains[0])));
+  },
+  isAmino(o: any): o is QueryHostChainsResponseAmino {
+    return o && (o.$typeUrl === QueryHostChainsResponse.typeUrl || Array.isArray(o.host_chains) && (!o.host_chains.length || HostChain.isAmino(o.host_chains[0])));
+  },
   encode(message: QueryHostChainsResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     for (const v of message.hostChains) {
       HostChain.encode(v!, writer.uint32(10).fork()).ldelim();
@@ -344,7 +384,7 @@ export const QueryHostChainsResponse = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): QueryHostChainsResponse {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): QueryHostChainsResponse {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryHostChainsResponse();
@@ -352,10 +392,10 @@ export const QueryHostChainsResponse = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.hostChains.push(HostChain.decode(reader, reader.uint32()));
+          message.hostChains.push(HostChain.decode(reader, reader.uint32(), useInterfaces));
           break;
         case 2:
-          message.pagination = PageResponse.decode(reader, reader.uint32());
+          message.pagination = PageResponse.decode(reader, reader.uint32(), useInterfaces);
           break;
         default:
           reader.skipType(tag & 7);
@@ -394,21 +434,21 @@ export const QueryHostChainsResponse = {
     }
     return message;
   },
-  toAmino(message: QueryHostChainsResponse): QueryHostChainsResponseAmino {
+  toAmino(message: QueryHostChainsResponse, useInterfaces: boolean = true): QueryHostChainsResponseAmino {
     const obj: any = {};
     if (message.hostChains) {
-      obj.host_chains = message.hostChains.map(e => e ? HostChain.toAmino(e) : undefined);
+      obj.host_chains = message.hostChains.map(e => e ? HostChain.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.host_chains = [];
+      obj.host_chains = message.hostChains;
     }
-    obj.pagination = message.pagination ? PageResponse.toAmino(message.pagination) : undefined;
+    obj.pagination = message.pagination ? PageResponse.toAmino(message.pagination, useInterfaces) : undefined;
     return obj;
   },
   fromAminoMsg(object: QueryHostChainsResponseAminoMsg): QueryHostChainsResponse {
     return QueryHostChainsResponse.fromAmino(object.value);
   },
-  fromProtoMsg(message: QueryHostChainsResponseProtoMsg): QueryHostChainsResponse {
-    return QueryHostChainsResponse.decode(message.value);
+  fromProtoMsg(message: QueryHostChainsResponseProtoMsg, useInterfaces: boolean = true): QueryHostChainsResponse {
+    return QueryHostChainsResponse.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: QueryHostChainsResponse): Uint8Array {
     return QueryHostChainsResponse.encode(message).finish();
@@ -420,6 +460,7 @@ export const QueryHostChainsResponse = {
     };
   }
 };
+GlobalDecoderRegistry.register(QueryHostChainsResponse.typeUrl, QueryHostChainsResponse);
 function createBaseQueryHostChainUnbondingTimeRequest(): QueryHostChainUnbondingTimeRequest {
   return {
     hostChainId: ""
@@ -427,13 +468,22 @@ function createBaseQueryHostChainUnbondingTimeRequest(): QueryHostChainUnbonding
 }
 export const QueryHostChainUnbondingTimeRequest = {
   typeUrl: "/pryzmatics.server.icstaking.QueryHostChainUnbondingTimeRequest",
+  is(o: any): o is QueryHostChainUnbondingTimeRequest {
+    return o && (o.$typeUrl === QueryHostChainUnbondingTimeRequest.typeUrl || typeof o.hostChainId === "string");
+  },
+  isSDK(o: any): o is QueryHostChainUnbondingTimeRequestSDKType {
+    return o && (o.$typeUrl === QueryHostChainUnbondingTimeRequest.typeUrl || typeof o.host_chain_id === "string");
+  },
+  isAmino(o: any): o is QueryHostChainUnbondingTimeRequestAmino {
+    return o && (o.$typeUrl === QueryHostChainUnbondingTimeRequest.typeUrl || typeof o.host_chain_id === "string");
+  },
   encode(message: QueryHostChainUnbondingTimeRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.hostChainId !== "") {
       writer.uint32(10).string(message.hostChainId);
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): QueryHostChainUnbondingTimeRequest {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): QueryHostChainUnbondingTimeRequest {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryHostChainUnbondingTimeRequest();
@@ -472,16 +522,16 @@ export const QueryHostChainUnbondingTimeRequest = {
     }
     return message;
   },
-  toAmino(message: QueryHostChainUnbondingTimeRequest): QueryHostChainUnbondingTimeRequestAmino {
+  toAmino(message: QueryHostChainUnbondingTimeRequest, useInterfaces: boolean = true): QueryHostChainUnbondingTimeRequestAmino {
     const obj: any = {};
-    obj.host_chain_id = message.hostChainId;
+    obj.host_chain_id = message.hostChainId === "" ? undefined : message.hostChainId;
     return obj;
   },
   fromAminoMsg(object: QueryHostChainUnbondingTimeRequestAminoMsg): QueryHostChainUnbondingTimeRequest {
     return QueryHostChainUnbondingTimeRequest.fromAmino(object.value);
   },
-  fromProtoMsg(message: QueryHostChainUnbondingTimeRequestProtoMsg): QueryHostChainUnbondingTimeRequest {
-    return QueryHostChainUnbondingTimeRequest.decode(message.value);
+  fromProtoMsg(message: QueryHostChainUnbondingTimeRequestProtoMsg, useInterfaces: boolean = true): QueryHostChainUnbondingTimeRequest {
+    return QueryHostChainUnbondingTimeRequest.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: QueryHostChainUnbondingTimeRequest): Uint8Array {
     return QueryHostChainUnbondingTimeRequest.encode(message).finish();
@@ -493,6 +543,7 @@ export const QueryHostChainUnbondingTimeRequest = {
     };
   }
 };
+GlobalDecoderRegistry.register(QueryHostChainUnbondingTimeRequest.typeUrl, QueryHostChainUnbondingTimeRequest);
 function createBaseQueryHostChainUnbondingTimeResponse(): QueryHostChainUnbondingTimeResponse {
   return {
     unbondingTime: Duration.fromPartial({})
@@ -500,13 +551,22 @@ function createBaseQueryHostChainUnbondingTimeResponse(): QueryHostChainUnbondin
 }
 export const QueryHostChainUnbondingTimeResponse = {
   typeUrl: "/pryzmatics.server.icstaking.QueryHostChainUnbondingTimeResponse",
+  is(o: any): o is QueryHostChainUnbondingTimeResponse {
+    return o && (o.$typeUrl === QueryHostChainUnbondingTimeResponse.typeUrl || Duration.is(o.unbondingTime));
+  },
+  isSDK(o: any): o is QueryHostChainUnbondingTimeResponseSDKType {
+    return o && (o.$typeUrl === QueryHostChainUnbondingTimeResponse.typeUrl || Duration.isSDK(o.unbonding_time));
+  },
+  isAmino(o: any): o is QueryHostChainUnbondingTimeResponseAmino {
+    return o && (o.$typeUrl === QueryHostChainUnbondingTimeResponse.typeUrl || Duration.isAmino(o.unbonding_time));
+  },
   encode(message: QueryHostChainUnbondingTimeResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.unbondingTime !== undefined) {
       Duration.encode(message.unbondingTime, writer.uint32(10).fork()).ldelim();
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): QueryHostChainUnbondingTimeResponse {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): QueryHostChainUnbondingTimeResponse {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryHostChainUnbondingTimeResponse();
@@ -514,7 +574,7 @@ export const QueryHostChainUnbondingTimeResponse = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.unbondingTime = Duration.decode(reader, reader.uint32());
+          message.unbondingTime = Duration.decode(reader, reader.uint32(), useInterfaces);
           break;
         default:
           reader.skipType(tag & 7);
@@ -545,16 +605,16 @@ export const QueryHostChainUnbondingTimeResponse = {
     }
     return message;
   },
-  toAmino(message: QueryHostChainUnbondingTimeResponse): QueryHostChainUnbondingTimeResponseAmino {
+  toAmino(message: QueryHostChainUnbondingTimeResponse, useInterfaces: boolean = true): QueryHostChainUnbondingTimeResponseAmino {
     const obj: any = {};
-    obj.unbonding_time = message.unbondingTime ? Duration.toAmino(message.unbondingTime) : undefined;
+    obj.unbonding_time = message.unbondingTime ? Duration.toAmino(message.unbondingTime, useInterfaces) : undefined;
     return obj;
   },
   fromAminoMsg(object: QueryHostChainUnbondingTimeResponseAminoMsg): QueryHostChainUnbondingTimeResponse {
     return QueryHostChainUnbondingTimeResponse.fromAmino(object.value);
   },
-  fromProtoMsg(message: QueryHostChainUnbondingTimeResponseProtoMsg): QueryHostChainUnbondingTimeResponse {
-    return QueryHostChainUnbondingTimeResponse.decode(message.value);
+  fromProtoMsg(message: QueryHostChainUnbondingTimeResponseProtoMsg, useInterfaces: boolean = true): QueryHostChainUnbondingTimeResponse {
+    return QueryHostChainUnbondingTimeResponse.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: QueryHostChainUnbondingTimeResponse): Uint8Array {
     return QueryHostChainUnbondingTimeResponse.encode(message).finish();
@@ -566,3 +626,4 @@ export const QueryHostChainUnbondingTimeResponse = {
     };
   }
 };
+GlobalDecoderRegistry.register(QueryHostChainUnbondingTimeResponse.typeUrl, QueryHostChainUnbondingTimeResponse);

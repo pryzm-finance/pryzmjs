@@ -1,6 +1,7 @@
 import { OperationType, UserTradeHistory, UserTradeHistoryAmino, UserTradeHistorySDKType, operationTypeFromJSON, operationTypeToJSON } from "../../trade/user_trade_history";
-import { BinaryReader, BinaryWriter } from "../../../binary";
 import { isSet } from "../../../helpers";
+import { BinaryReader, BinaryWriter } from "../../../binary";
+import { GlobalDecoderRegistry } from "../../../registry";
 export interface QueryUserTradeHistoryRequest {
   firstToken: string;
   secondToken: string;
@@ -54,6 +55,15 @@ function createBaseQueryUserTradeHistoryRequest(): QueryUserTradeHistoryRequest 
 }
 export const QueryUserTradeHistoryRequest = {
   typeUrl: "/pryzmatics.server.trade.QueryUserTradeHistoryRequest",
+  is(o: any): o is QueryUserTradeHistoryRequest {
+    return o && (o.$typeUrl === QueryUserTradeHistoryRequest.typeUrl || typeof o.firstToken === "string" && typeof o.secondToken === "string" && typeof o.address === "string" && isSet(o.operationType));
+  },
+  isSDK(o: any): o is QueryUserTradeHistoryRequestSDKType {
+    return o && (o.$typeUrl === QueryUserTradeHistoryRequest.typeUrl || typeof o.first_token === "string" && typeof o.second_token === "string" && typeof o.address === "string" && isSet(o.operation_type));
+  },
+  isAmino(o: any): o is QueryUserTradeHistoryRequestAmino {
+    return o && (o.$typeUrl === QueryUserTradeHistoryRequest.typeUrl || typeof o.first_token === "string" && typeof o.second_token === "string" && typeof o.address === "string" && isSet(o.operation_type));
+  },
   encode(message: QueryUserTradeHistoryRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.firstToken !== "") {
       writer.uint32(10).string(message.firstToken);
@@ -69,7 +79,7 @@ export const QueryUserTradeHistoryRequest = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): QueryUserTradeHistoryRequest {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): QueryUserTradeHistoryRequest {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryUserTradeHistoryRequest();
@@ -131,23 +141,23 @@ export const QueryUserTradeHistoryRequest = {
       message.address = object.address;
     }
     if (object.operation_type !== undefined && object.operation_type !== null) {
-      message.operationType = operationTypeFromJSON(object.operation_type);
+      message.operationType = object.operation_type;
     }
     return message;
   },
-  toAmino(message: QueryUserTradeHistoryRequest): QueryUserTradeHistoryRequestAmino {
+  toAmino(message: QueryUserTradeHistoryRequest, useInterfaces: boolean = true): QueryUserTradeHistoryRequestAmino {
     const obj: any = {};
-    obj.first_token = message.firstToken;
-    obj.second_token = message.secondToken;
-    obj.address = message.address;
-    obj.operation_type = operationTypeToJSON(message.operationType);
+    obj.first_token = message.firstToken === "" ? undefined : message.firstToken;
+    obj.second_token = message.secondToken === "" ? undefined : message.secondToken;
+    obj.address = message.address === "" ? undefined : message.address;
+    obj.operation_type = message.operationType === 0 ? undefined : message.operationType;
     return obj;
   },
   fromAminoMsg(object: QueryUserTradeHistoryRequestAminoMsg): QueryUserTradeHistoryRequest {
     return QueryUserTradeHistoryRequest.fromAmino(object.value);
   },
-  fromProtoMsg(message: QueryUserTradeHistoryRequestProtoMsg): QueryUserTradeHistoryRequest {
-    return QueryUserTradeHistoryRequest.decode(message.value);
+  fromProtoMsg(message: QueryUserTradeHistoryRequestProtoMsg, useInterfaces: boolean = true): QueryUserTradeHistoryRequest {
+    return QueryUserTradeHistoryRequest.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: QueryUserTradeHistoryRequest): Uint8Array {
     return QueryUserTradeHistoryRequest.encode(message).finish();
@@ -159,6 +169,7 @@ export const QueryUserTradeHistoryRequest = {
     };
   }
 };
+GlobalDecoderRegistry.register(QueryUserTradeHistoryRequest.typeUrl, QueryUserTradeHistoryRequest);
 function createBaseQueryUserTradeHistoryResponse(): QueryUserTradeHistoryResponse {
   return {
     userTradeHistoryRecords: []
@@ -166,13 +177,22 @@ function createBaseQueryUserTradeHistoryResponse(): QueryUserTradeHistoryRespons
 }
 export const QueryUserTradeHistoryResponse = {
   typeUrl: "/pryzmatics.server.trade.QueryUserTradeHistoryResponse",
+  is(o: any): o is QueryUserTradeHistoryResponse {
+    return o && (o.$typeUrl === QueryUserTradeHistoryResponse.typeUrl || Array.isArray(o.userTradeHistoryRecords) && (!o.userTradeHistoryRecords.length || UserTradeHistory.is(o.userTradeHistoryRecords[0])));
+  },
+  isSDK(o: any): o is QueryUserTradeHistoryResponseSDKType {
+    return o && (o.$typeUrl === QueryUserTradeHistoryResponse.typeUrl || Array.isArray(o.user_trade_history_records) && (!o.user_trade_history_records.length || UserTradeHistory.isSDK(o.user_trade_history_records[0])));
+  },
+  isAmino(o: any): o is QueryUserTradeHistoryResponseAmino {
+    return o && (o.$typeUrl === QueryUserTradeHistoryResponse.typeUrl || Array.isArray(o.user_trade_history_records) && (!o.user_trade_history_records.length || UserTradeHistory.isAmino(o.user_trade_history_records[0])));
+  },
   encode(message: QueryUserTradeHistoryResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     for (const v of message.userTradeHistoryRecords) {
       UserTradeHistory.encode(v!, writer.uint32(10).fork()).ldelim();
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): QueryUserTradeHistoryResponse {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): QueryUserTradeHistoryResponse {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryUserTradeHistoryResponse();
@@ -180,7 +200,7 @@ export const QueryUserTradeHistoryResponse = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.userTradeHistoryRecords.push(UserTradeHistory.decode(reader, reader.uint32()));
+          message.userTradeHistoryRecords.push(UserTradeHistory.decode(reader, reader.uint32(), useInterfaces));
           break;
         default:
           reader.skipType(tag & 7);
@@ -213,20 +233,20 @@ export const QueryUserTradeHistoryResponse = {
     message.userTradeHistoryRecords = object.user_trade_history_records?.map(e => UserTradeHistory.fromAmino(e)) || [];
     return message;
   },
-  toAmino(message: QueryUserTradeHistoryResponse): QueryUserTradeHistoryResponseAmino {
+  toAmino(message: QueryUserTradeHistoryResponse, useInterfaces: boolean = true): QueryUserTradeHistoryResponseAmino {
     const obj: any = {};
     if (message.userTradeHistoryRecords) {
-      obj.user_trade_history_records = message.userTradeHistoryRecords.map(e => e ? UserTradeHistory.toAmino(e) : undefined);
+      obj.user_trade_history_records = message.userTradeHistoryRecords.map(e => e ? UserTradeHistory.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.user_trade_history_records = [];
+      obj.user_trade_history_records = message.userTradeHistoryRecords;
     }
     return obj;
   },
   fromAminoMsg(object: QueryUserTradeHistoryResponseAminoMsg): QueryUserTradeHistoryResponse {
     return QueryUserTradeHistoryResponse.fromAmino(object.value);
   },
-  fromProtoMsg(message: QueryUserTradeHistoryResponseProtoMsg): QueryUserTradeHistoryResponse {
-    return QueryUserTradeHistoryResponse.decode(message.value);
+  fromProtoMsg(message: QueryUserTradeHistoryResponseProtoMsg, useInterfaces: boolean = true): QueryUserTradeHistoryResponse {
+    return QueryUserTradeHistoryResponse.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: QueryUserTradeHistoryResponse): Uint8Array {
     return QueryUserTradeHistoryResponse.encode(message).finish();
@@ -238,3 +258,4 @@ export const QueryUserTradeHistoryResponse = {
     };
   }
 };
+GlobalDecoderRegistry.register(QueryUserTradeHistoryResponse.typeUrl, QueryUserTradeHistoryResponse);

@@ -1,7 +1,8 @@
 import { Duration, DurationAmino, DurationSDKType } from "../../google/protobuf/duration";
 import { Timestamp, TimestampSDKType } from "../../google/protobuf/timestamp";
 import { BinaryReader, BinaryWriter } from "../../binary";
-import { isSet, fromJsonTimestamp, fromTimestamp } from "../../helpers";
+import { isSet, fromJsonTimestamp, fromTimestamp, padDecimal } from "../../helpers";
+import { GlobalDecoderRegistry } from "../../registry";
 import { Decimal } from "@cosmjs/math";
 export interface Params {
   rewardDelayTime: Duration;
@@ -59,6 +60,15 @@ function createBaseParams(): Params {
 }
 export const Params = {
   typeUrl: "/alliance.alliance.Params",
+  is(o: any): o is Params {
+    return o && (o.$typeUrl === Params.typeUrl || Duration.is(o.rewardDelayTime) && Duration.is(o.takeRateClaimInterval) && Timestamp.is(o.lastTakeRateClaimTime));
+  },
+  isSDK(o: any): o is ParamsSDKType {
+    return o && (o.$typeUrl === Params.typeUrl || Duration.isSDK(o.reward_delay_time) && Duration.isSDK(o.take_rate_claim_interval) && Timestamp.isSDK(o.last_take_rate_claim_time));
+  },
+  isAmino(o: any): o is ParamsAmino {
+    return o && (o.$typeUrl === Params.typeUrl || Duration.isAmino(o.reward_delay_time) && Duration.isAmino(o.take_rate_claim_interval) && Timestamp.isAmino(o.last_take_rate_claim_time));
+  },
   encode(message: Params, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.rewardDelayTime !== undefined) {
       Duration.encode(message.rewardDelayTime, writer.uint32(10).fork()).ldelim();
@@ -71,7 +81,7 @@ export const Params = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): Params {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): Params {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseParams();
@@ -79,10 +89,10 @@ export const Params = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.rewardDelayTime = Duration.decode(reader, reader.uint32());
+          message.rewardDelayTime = Duration.decode(reader, reader.uint32(), useInterfaces);
           break;
         case 2:
-          message.takeRateClaimInterval = Duration.decode(reader, reader.uint32());
+          message.takeRateClaimInterval = Duration.decode(reader, reader.uint32(), useInterfaces);
           break;
         case 3:
           message.lastTakeRateClaimTime = Timestamp.decode(reader, reader.uint32());
@@ -128,18 +138,18 @@ export const Params = {
     }
     return message;
   },
-  toAmino(message: Params): ParamsAmino {
+  toAmino(message: Params, useInterfaces: boolean = true): ParamsAmino {
     const obj: any = {};
-    obj.reward_delay_time = message.rewardDelayTime ? Duration.toAmino(message.rewardDelayTime) : undefined;
-    obj.take_rate_claim_interval = message.takeRateClaimInterval ? Duration.toAmino(message.takeRateClaimInterval) : undefined;
-    obj.last_take_rate_claim_time = message.lastTakeRateClaimTime ? Timestamp.toAmino(message.lastTakeRateClaimTime) : undefined;
+    obj.reward_delay_time = message.rewardDelayTime ? Duration.toAmino(message.rewardDelayTime, useInterfaces) : undefined;
+    obj.take_rate_claim_interval = message.takeRateClaimInterval ? Duration.toAmino(message.takeRateClaimInterval, useInterfaces) : undefined;
+    obj.last_take_rate_claim_time = message.lastTakeRateClaimTime ? Timestamp.toAmino(message.lastTakeRateClaimTime, useInterfaces) : undefined;
     return obj;
   },
   fromAminoMsg(object: ParamsAminoMsg): Params {
     return Params.fromAmino(object.value);
   },
-  fromProtoMsg(message: ParamsProtoMsg): Params {
-    return Params.decode(message.value);
+  fromProtoMsg(message: ParamsProtoMsg, useInterfaces: boolean = true): Params {
+    return Params.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: Params): Uint8Array {
     return Params.encode(message).finish();
@@ -151,6 +161,7 @@ export const Params = {
     };
   }
 };
+GlobalDecoderRegistry.register(Params.typeUrl, Params);
 function createBaseRewardHistory(): RewardHistory {
   return {
     denom: "",
@@ -159,6 +170,15 @@ function createBaseRewardHistory(): RewardHistory {
 }
 export const RewardHistory = {
   typeUrl: "/alliance.alliance.RewardHistory",
+  is(o: any): o is RewardHistory {
+    return o && (o.$typeUrl === RewardHistory.typeUrl || typeof o.denom === "string" && typeof o.index === "string");
+  },
+  isSDK(o: any): o is RewardHistorySDKType {
+    return o && (o.$typeUrl === RewardHistory.typeUrl || typeof o.denom === "string" && typeof o.index === "string");
+  },
+  isAmino(o: any): o is RewardHistoryAmino {
+    return o && (o.$typeUrl === RewardHistory.typeUrl || typeof o.denom === "string" && typeof o.index === "string");
+  },
   encode(message: RewardHistory, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.denom !== "") {
       writer.uint32(10).string(message.denom);
@@ -168,7 +188,7 @@ export const RewardHistory = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): RewardHistory {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): RewardHistory {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseRewardHistory();
@@ -216,17 +236,17 @@ export const RewardHistory = {
     }
     return message;
   },
-  toAmino(message: RewardHistory): RewardHistoryAmino {
+  toAmino(message: RewardHistory, useInterfaces: boolean = true): RewardHistoryAmino {
     const obj: any = {};
-    obj.denom = message.denom;
-    obj.index = message.index;
+    obj.denom = message.denom === "" ? undefined : message.denom;
+    obj.index = padDecimal(message.index) === "" ? undefined : padDecimal(message.index);
     return obj;
   },
   fromAminoMsg(object: RewardHistoryAminoMsg): RewardHistory {
     return RewardHistory.fromAmino(object.value);
   },
-  fromProtoMsg(message: RewardHistoryProtoMsg): RewardHistory {
-    return RewardHistory.decode(message.value);
+  fromProtoMsg(message: RewardHistoryProtoMsg, useInterfaces: boolean = true): RewardHistory {
+    return RewardHistory.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: RewardHistory): Uint8Array {
     return RewardHistory.encode(message).finish();
@@ -238,3 +258,4 @@ export const RewardHistory = {
     };
   }
 };
+GlobalDecoderRegistry.register(RewardHistory.typeUrl, RewardHistory);

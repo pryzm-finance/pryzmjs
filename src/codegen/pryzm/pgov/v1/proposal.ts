@@ -1,7 +1,8 @@
 import { Timestamp, TimestampSDKType } from "../../../google/protobuf/timestamp";
 import { WeightedVoteOption, WeightedVoteOptionAmino, WeightedVoteOptionSDKType } from "../../../cosmos/gov/v1/gov";
-import { BinaryReader, BinaryWriter } from "../../../binary";
 import { isSet, fromJsonTimestamp, fromTimestamp } from "../../../helpers";
+import { BinaryReader, BinaryWriter } from "../../../binary";
+import { GlobalDecoderRegistry } from "../../../registry";
 export enum ProposalStatus {
   ACTIVE = 0,
   SUBMITTING = 1,
@@ -105,6 +106,15 @@ function createBaseProposal(): Proposal {
 }
 export const Proposal = {
   typeUrl: "/pryzm.pgov.v1.Proposal",
+  is(o: any): o is Proposal {
+    return o && (o.$typeUrl === Proposal.typeUrl || typeof o.proposalId === "bigint" && typeof o.asset === "string" && Timestamp.is(o.endTime) && Array.isArray(o.finalVote) && (!o.finalVote.length || WeightedVoteOption.is(o.finalVote[0])) && isSet(o.status));
+  },
+  isSDK(o: any): o is ProposalSDKType {
+    return o && (o.$typeUrl === Proposal.typeUrl || typeof o.proposal_id === "bigint" && typeof o.asset === "string" && Timestamp.isSDK(o.end_time) && Array.isArray(o.final_vote) && (!o.final_vote.length || WeightedVoteOption.isSDK(o.final_vote[0])) && isSet(o.status));
+  },
+  isAmino(o: any): o is ProposalAmino {
+    return o && (o.$typeUrl === Proposal.typeUrl || typeof o.proposal_id === "bigint" && typeof o.asset === "string" && Timestamp.isAmino(o.end_time) && Array.isArray(o.final_vote) && (!o.final_vote.length || WeightedVoteOption.isAmino(o.final_vote[0])) && isSet(o.status));
+  },
   encode(message: Proposal, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.proposalId !== BigInt(0)) {
       writer.uint32(8).uint64(message.proposalId);
@@ -126,7 +136,7 @@ export const Proposal = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): Proposal {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): Proposal {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseProposal();
@@ -146,7 +156,7 @@ export const Proposal = {
           message.endTime = Timestamp.decode(reader, reader.uint32());
           break;
         case 5:
-          message.finalVote.push(WeightedVoteOption.decode(reader, reader.uint32()));
+          message.finalVote.push(WeightedVoteOption.decode(reader, reader.uint32(), useInterfaces));
           break;
         case 6:
           message.status = (reader.int32() as any);
@@ -208,29 +218,29 @@ export const Proposal = {
     }
     message.finalVote = object.final_vote?.map(e => WeightedVoteOption.fromAmino(e)) || [];
     if (object.status !== undefined && object.status !== null) {
-      message.status = proposalStatusFromJSON(object.status);
+      message.status = object.status;
     }
     return message;
   },
-  toAmino(message: Proposal): ProposalAmino {
+  toAmino(message: Proposal, useInterfaces: boolean = true): ProposalAmino {
     const obj: any = {};
     obj.proposal_id = message.proposalId ? message.proposalId.toString() : undefined;
-    obj.asset = message.asset;
-    obj.start_time = message.startTime ? Timestamp.toAmino(message.startTime) : undefined;
-    obj.end_time = message.endTime ? Timestamp.toAmino(message.endTime) : undefined;
+    obj.asset = message.asset === "" ? undefined : message.asset;
+    obj.start_time = message.startTime ? Timestamp.toAmino(message.startTime, useInterfaces) : undefined;
+    obj.end_time = message.endTime ? Timestamp.toAmino(message.endTime, useInterfaces) : undefined;
     if (message.finalVote) {
-      obj.final_vote = message.finalVote.map(e => e ? WeightedVoteOption.toAmino(e) : undefined);
+      obj.final_vote = message.finalVote.map(e => e ? WeightedVoteOption.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.final_vote = [];
+      obj.final_vote = message.finalVote;
     }
-    obj.status = proposalStatusToJSON(message.status);
+    obj.status = message.status === 0 ? undefined : message.status;
     return obj;
   },
   fromAminoMsg(object: ProposalAminoMsg): Proposal {
     return Proposal.fromAmino(object.value);
   },
-  fromProtoMsg(message: ProposalProtoMsg): Proposal {
-    return Proposal.decode(message.value);
+  fromProtoMsg(message: ProposalProtoMsg, useInterfaces: boolean = true): Proposal {
+    return Proposal.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: Proposal): Uint8Array {
     return Proposal.encode(message).finish();
@@ -242,3 +252,4 @@ export const Proposal = {
     };
   }
 };
+GlobalDecoderRegistry.register(Proposal.typeUrl, Proposal);

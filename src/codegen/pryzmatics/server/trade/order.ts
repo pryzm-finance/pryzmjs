@@ -2,6 +2,7 @@ import { Order, OrderAmino, OrderSDKType } from "../../trade/order";
 import { PageRequest, PageRequestAmino, PageRequestSDKType, PageResponse, PageResponseAmino, PageResponseSDKType } from "../../../cosmos/base/query/v1beta1/pagination";
 import { BinaryReader, BinaryWriter } from "../../../binary";
 import { isSet } from "../../../helpers";
+import { GlobalDecoderRegistry } from "../../../registry";
 export interface QueryOrderRequest {
   id: bigint;
 }
@@ -92,13 +93,22 @@ function createBaseQueryOrderRequest(): QueryOrderRequest {
 }
 export const QueryOrderRequest = {
   typeUrl: "/pryzmatics.server.trade.QueryOrderRequest",
+  is(o: any): o is QueryOrderRequest {
+    return o && (o.$typeUrl === QueryOrderRequest.typeUrl || typeof o.id === "bigint");
+  },
+  isSDK(o: any): o is QueryOrderRequestSDKType {
+    return o && (o.$typeUrl === QueryOrderRequest.typeUrl || typeof o.id === "bigint");
+  },
+  isAmino(o: any): o is QueryOrderRequestAmino {
+    return o && (o.$typeUrl === QueryOrderRequest.typeUrl || typeof o.id === "bigint");
+  },
   encode(message: QueryOrderRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.id !== BigInt(0)) {
       writer.uint32(8).uint64(message.id);
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): QueryOrderRequest {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): QueryOrderRequest {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryOrderRequest();
@@ -137,7 +147,7 @@ export const QueryOrderRequest = {
     }
     return message;
   },
-  toAmino(message: QueryOrderRequest): QueryOrderRequestAmino {
+  toAmino(message: QueryOrderRequest, useInterfaces: boolean = true): QueryOrderRequestAmino {
     const obj: any = {};
     obj.id = message.id ? message.id.toString() : undefined;
     return obj;
@@ -145,8 +155,8 @@ export const QueryOrderRequest = {
   fromAminoMsg(object: QueryOrderRequestAminoMsg): QueryOrderRequest {
     return QueryOrderRequest.fromAmino(object.value);
   },
-  fromProtoMsg(message: QueryOrderRequestProtoMsg): QueryOrderRequest {
-    return QueryOrderRequest.decode(message.value);
+  fromProtoMsg(message: QueryOrderRequestProtoMsg, useInterfaces: boolean = true): QueryOrderRequest {
+    return QueryOrderRequest.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: QueryOrderRequest): Uint8Array {
     return QueryOrderRequest.encode(message).finish();
@@ -158,6 +168,7 @@ export const QueryOrderRequest = {
     };
   }
 };
+GlobalDecoderRegistry.register(QueryOrderRequest.typeUrl, QueryOrderRequest);
 function createBaseQueryOrderResponse(): QueryOrderResponse {
   return {
     order: Order.fromPartial({})
@@ -165,13 +176,22 @@ function createBaseQueryOrderResponse(): QueryOrderResponse {
 }
 export const QueryOrderResponse = {
   typeUrl: "/pryzmatics.server.trade.QueryOrderResponse",
+  is(o: any): o is QueryOrderResponse {
+    return o && (o.$typeUrl === QueryOrderResponse.typeUrl || Order.is(o.order));
+  },
+  isSDK(o: any): o is QueryOrderResponseSDKType {
+    return o && (o.$typeUrl === QueryOrderResponse.typeUrl || Order.isSDK(o.order));
+  },
+  isAmino(o: any): o is QueryOrderResponseAmino {
+    return o && (o.$typeUrl === QueryOrderResponse.typeUrl || Order.isAmino(o.order));
+  },
   encode(message: QueryOrderResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.order !== undefined) {
       Order.encode(message.order, writer.uint32(10).fork()).ldelim();
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): QueryOrderResponse {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): QueryOrderResponse {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryOrderResponse();
@@ -179,7 +199,7 @@ export const QueryOrderResponse = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.order = Order.decode(reader, reader.uint32());
+          message.order = Order.decode(reader, reader.uint32(), useInterfaces);
           break;
         default:
           reader.skipType(tag & 7);
@@ -210,16 +230,16 @@ export const QueryOrderResponse = {
     }
     return message;
   },
-  toAmino(message: QueryOrderResponse): QueryOrderResponseAmino {
+  toAmino(message: QueryOrderResponse, useInterfaces: boolean = true): QueryOrderResponseAmino {
     const obj: any = {};
-    obj.order = message.order ? Order.toAmino(message.order) : undefined;
+    obj.order = message.order ? Order.toAmino(message.order, useInterfaces) : undefined;
     return obj;
   },
   fromAminoMsg(object: QueryOrderResponseAminoMsg): QueryOrderResponse {
     return QueryOrderResponse.fromAmino(object.value);
   },
-  fromProtoMsg(message: QueryOrderResponseProtoMsg): QueryOrderResponse {
-    return QueryOrderResponse.decode(message.value);
+  fromProtoMsg(message: QueryOrderResponseProtoMsg, useInterfaces: boolean = true): QueryOrderResponse {
+    return QueryOrderResponse.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: QueryOrderResponse): Uint8Array {
     return QueryOrderResponse.encode(message).finish();
@@ -231,6 +251,7 @@ export const QueryOrderResponse = {
     };
   }
 };
+GlobalDecoderRegistry.register(QueryOrderResponse.typeUrl, QueryOrderResponse);
 function createBaseQueryOrdersRequest(): QueryOrdersRequest {
   return {
     creator: "",
@@ -242,6 +263,15 @@ function createBaseQueryOrdersRequest(): QueryOrdersRequest {
 }
 export const QueryOrdersRequest = {
   typeUrl: "/pryzmatics.server.trade.QueryOrdersRequest",
+  is(o: any): o is QueryOrdersRequest {
+    return o && (o.$typeUrl === QueryOrdersRequest.typeUrl || typeof o.creator === "string" && typeof o.tokenIn === "string" && typeof o.tokenOut === "string");
+  },
+  isSDK(o: any): o is QueryOrdersRequestSDKType {
+    return o && (o.$typeUrl === QueryOrdersRequest.typeUrl || typeof o.creator === "string" && typeof o.token_in === "string" && typeof o.token_out === "string");
+  },
+  isAmino(o: any): o is QueryOrdersRequestAmino {
+    return o && (o.$typeUrl === QueryOrdersRequest.typeUrl || typeof o.creator === "string" && typeof o.token_in === "string" && typeof o.token_out === "string");
+  },
   encode(message: QueryOrdersRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.creator !== "") {
       writer.uint32(10).string(message.creator);
@@ -260,7 +290,7 @@ export const QueryOrdersRequest = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): QueryOrdersRequest {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): QueryOrdersRequest {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryOrdersRequest();
@@ -280,7 +310,7 @@ export const QueryOrdersRequest = {
           message.tokenOut = reader.string();
           break;
         case 5:
-          message.pagination = PageRequest.decode(reader, reader.uint32());
+          message.pagination = PageRequest.decode(reader, reader.uint32(), useInterfaces);
           break;
         default:
           reader.skipType(tag & 7);
@@ -335,20 +365,20 @@ export const QueryOrdersRequest = {
     }
     return message;
   },
-  toAmino(message: QueryOrdersRequest): QueryOrdersRequestAmino {
+  toAmino(message: QueryOrdersRequest, useInterfaces: boolean = true): QueryOrdersRequestAmino {
     const obj: any = {};
-    obj.creator = message.creator;
-    obj.pool_id = message.poolId;
-    obj.token_in = message.tokenIn;
-    obj.token_out = message.tokenOut;
-    obj.pagination = message.pagination ? PageRequest.toAmino(message.pagination) : undefined;
+    obj.creator = message.creator === "" ? undefined : message.creator;
+    obj.pool_id = message.poolId === null ? undefined : message.poolId;
+    obj.token_in = message.tokenIn === "" ? undefined : message.tokenIn;
+    obj.token_out = message.tokenOut === "" ? undefined : message.tokenOut;
+    obj.pagination = message.pagination ? PageRequest.toAmino(message.pagination, useInterfaces) : undefined;
     return obj;
   },
   fromAminoMsg(object: QueryOrdersRequestAminoMsg): QueryOrdersRequest {
     return QueryOrdersRequest.fromAmino(object.value);
   },
-  fromProtoMsg(message: QueryOrdersRequestProtoMsg): QueryOrdersRequest {
-    return QueryOrdersRequest.decode(message.value);
+  fromProtoMsg(message: QueryOrdersRequestProtoMsg, useInterfaces: boolean = true): QueryOrdersRequest {
+    return QueryOrdersRequest.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: QueryOrdersRequest): Uint8Array {
     return QueryOrdersRequest.encode(message).finish();
@@ -360,6 +390,7 @@ export const QueryOrdersRequest = {
     };
   }
 };
+GlobalDecoderRegistry.register(QueryOrdersRequest.typeUrl, QueryOrdersRequest);
 function createBaseQueryOrdersResponse(): QueryOrdersResponse {
   return {
     orders: [],
@@ -368,6 +399,15 @@ function createBaseQueryOrdersResponse(): QueryOrdersResponse {
 }
 export const QueryOrdersResponse = {
   typeUrl: "/pryzmatics.server.trade.QueryOrdersResponse",
+  is(o: any): o is QueryOrdersResponse {
+    return o && (o.$typeUrl === QueryOrdersResponse.typeUrl || Array.isArray(o.orders) && (!o.orders.length || Order.is(o.orders[0])));
+  },
+  isSDK(o: any): o is QueryOrdersResponseSDKType {
+    return o && (o.$typeUrl === QueryOrdersResponse.typeUrl || Array.isArray(o.orders) && (!o.orders.length || Order.isSDK(o.orders[0])));
+  },
+  isAmino(o: any): o is QueryOrdersResponseAmino {
+    return o && (o.$typeUrl === QueryOrdersResponse.typeUrl || Array.isArray(o.orders) && (!o.orders.length || Order.isAmino(o.orders[0])));
+  },
   encode(message: QueryOrdersResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     for (const v of message.orders) {
       Order.encode(v!, writer.uint32(10).fork()).ldelim();
@@ -377,7 +417,7 @@ export const QueryOrdersResponse = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): QueryOrdersResponse {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): QueryOrdersResponse {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryOrdersResponse();
@@ -385,10 +425,10 @@ export const QueryOrdersResponse = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.orders.push(Order.decode(reader, reader.uint32()));
+          message.orders.push(Order.decode(reader, reader.uint32(), useInterfaces));
           break;
         case 2:
-          message.pagination = PageResponse.decode(reader, reader.uint32());
+          message.pagination = PageResponse.decode(reader, reader.uint32(), useInterfaces);
           break;
         default:
           reader.skipType(tag & 7);
@@ -427,21 +467,21 @@ export const QueryOrdersResponse = {
     }
     return message;
   },
-  toAmino(message: QueryOrdersResponse): QueryOrdersResponseAmino {
+  toAmino(message: QueryOrdersResponse, useInterfaces: boolean = true): QueryOrdersResponseAmino {
     const obj: any = {};
     if (message.orders) {
-      obj.orders = message.orders.map(e => e ? Order.toAmino(e) : undefined);
+      obj.orders = message.orders.map(e => e ? Order.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.orders = [];
+      obj.orders = message.orders;
     }
-    obj.pagination = message.pagination ? PageResponse.toAmino(message.pagination) : undefined;
+    obj.pagination = message.pagination ? PageResponse.toAmino(message.pagination, useInterfaces) : undefined;
     return obj;
   },
   fromAminoMsg(object: QueryOrdersResponseAminoMsg): QueryOrdersResponse {
     return QueryOrdersResponse.fromAmino(object.value);
   },
-  fromProtoMsg(message: QueryOrdersResponseProtoMsg): QueryOrdersResponse {
-    return QueryOrdersResponse.decode(message.value);
+  fromProtoMsg(message: QueryOrdersResponseProtoMsg, useInterfaces: boolean = true): QueryOrdersResponse {
+    return QueryOrdersResponse.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: QueryOrdersResponse): Uint8Array {
     return QueryOrdersResponse.encode(message).finish();
@@ -453,3 +493,4 @@ export const QueryOrdersResponse = {
     };
   }
 };
+GlobalDecoderRegistry.register(QueryOrdersResponse.typeUrl, QueryOrdersResponse);

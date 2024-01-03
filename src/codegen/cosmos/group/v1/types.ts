@@ -3,6 +3,7 @@ import { Duration, DurationAmino, DurationSDKType } from "../../../google/protob
 import { Any, AnyProtoMsg, AnyAmino, AnySDKType } from "../../../google/protobuf/any";
 import { BinaryReader, BinaryWriter } from "../../../binary";
 import { isSet, fromJsonTimestamp, fromTimestamp } from "../../../helpers";
+import { GlobalDecoderRegistry } from "../../../registry";
 /** VoteOption enumerates the valid vote options for a given proposal. */
 export enum VoteOption {
   /**
@@ -851,6 +852,16 @@ function createBaseMember(): Member {
 }
 export const Member = {
   typeUrl: "/cosmos.group.v1.Member",
+  aminoType: "cosmos-sdk/Member",
+  is(o: any): o is Member {
+    return o && (o.$typeUrl === Member.typeUrl || typeof o.address === "string" && typeof o.weight === "string" && typeof o.metadata === "string" && Timestamp.is(o.addedAt));
+  },
+  isSDK(o: any): o is MemberSDKType {
+    return o && (o.$typeUrl === Member.typeUrl || typeof o.address === "string" && typeof o.weight === "string" && typeof o.metadata === "string" && Timestamp.isSDK(o.added_at));
+  },
+  isAmino(o: any): o is MemberAmino {
+    return o && (o.$typeUrl === Member.typeUrl || typeof o.address === "string" && typeof o.weight === "string" && typeof o.metadata === "string" && Timestamp.isAmino(o.added_at));
+  },
   encode(message: Member, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.address !== "") {
       writer.uint32(10).string(message.address);
@@ -866,7 +877,7 @@ export const Member = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): Member {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): Member {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMember();
@@ -932,25 +943,25 @@ export const Member = {
     }
     return message;
   },
-  toAmino(message: Member): MemberAmino {
+  toAmino(message: Member, useInterfaces: boolean = true): MemberAmino {
     const obj: any = {};
-    obj.address = message.address;
-    obj.weight = message.weight;
-    obj.metadata = message.metadata;
-    obj.added_at = message.addedAt ? Timestamp.toAmino(message.addedAt) : Timestamp.fromPartial({});
+    obj.address = message.address === "" ? undefined : message.address;
+    obj.weight = message.weight === "" ? undefined : message.weight;
+    obj.metadata = message.metadata === "" ? undefined : message.metadata;
+    obj.added_at = message.addedAt ? Timestamp.toAmino(message.addedAt, useInterfaces) : undefined;
     return obj;
   },
   fromAminoMsg(object: MemberAminoMsg): Member {
     return Member.fromAmino(object.value);
   },
-  toAminoMsg(message: Member): MemberAminoMsg {
+  toAminoMsg(message: Member, useInterfaces: boolean = true): MemberAminoMsg {
     return {
       type: "cosmos-sdk/Member",
-      value: Member.toAmino(message)
+      value: Member.toAmino(message, useInterfaces)
     };
   },
-  fromProtoMsg(message: MemberProtoMsg): Member {
-    return Member.decode(message.value);
+  fromProtoMsg(message: MemberProtoMsg, useInterfaces: boolean = true): Member {
+    return Member.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: Member): Uint8Array {
     return Member.encode(message).finish();
@@ -962,6 +973,8 @@ export const Member = {
     };
   }
 };
+GlobalDecoderRegistry.register(Member.typeUrl, Member);
+GlobalDecoderRegistry.registerAminoProtoMapping(Member.aminoType, Member.typeUrl);
 function createBaseMemberRequest(): MemberRequest {
   return {
     address: "",
@@ -971,6 +984,16 @@ function createBaseMemberRequest(): MemberRequest {
 }
 export const MemberRequest = {
   typeUrl: "/cosmos.group.v1.MemberRequest",
+  aminoType: "cosmos-sdk/MemberRequest",
+  is(o: any): o is MemberRequest {
+    return o && (o.$typeUrl === MemberRequest.typeUrl || typeof o.address === "string" && typeof o.weight === "string" && typeof o.metadata === "string");
+  },
+  isSDK(o: any): o is MemberRequestSDKType {
+    return o && (o.$typeUrl === MemberRequest.typeUrl || typeof o.address === "string" && typeof o.weight === "string" && typeof o.metadata === "string");
+  },
+  isAmino(o: any): o is MemberRequestAmino {
+    return o && (o.$typeUrl === MemberRequest.typeUrl || typeof o.address === "string" && typeof o.weight === "string" && typeof o.metadata === "string");
+  },
   encode(message: MemberRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.address !== "") {
       writer.uint32(10).string(message.address);
@@ -983,7 +1006,7 @@ export const MemberRequest = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): MemberRequest {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): MemberRequest {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMemberRequest();
@@ -1040,24 +1063,24 @@ export const MemberRequest = {
     }
     return message;
   },
-  toAmino(message: MemberRequest): MemberRequestAmino {
+  toAmino(message: MemberRequest, useInterfaces: boolean = true): MemberRequestAmino {
     const obj: any = {};
-    obj.address = message.address;
-    obj.weight = message.weight;
-    obj.metadata = message.metadata;
+    obj.address = message.address === "" ? undefined : message.address;
+    obj.weight = message.weight === "" ? undefined : message.weight;
+    obj.metadata = message.metadata === "" ? undefined : message.metadata;
     return obj;
   },
   fromAminoMsg(object: MemberRequestAminoMsg): MemberRequest {
     return MemberRequest.fromAmino(object.value);
   },
-  toAminoMsg(message: MemberRequest): MemberRequestAminoMsg {
+  toAminoMsg(message: MemberRequest, useInterfaces: boolean = true): MemberRequestAminoMsg {
     return {
       type: "cosmos-sdk/MemberRequest",
-      value: MemberRequest.toAmino(message)
+      value: MemberRequest.toAmino(message, useInterfaces)
     };
   },
-  fromProtoMsg(message: MemberRequestProtoMsg): MemberRequest {
-    return MemberRequest.decode(message.value);
+  fromProtoMsg(message: MemberRequestProtoMsg, useInterfaces: boolean = true): MemberRequest {
+    return MemberRequest.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: MemberRequest): Uint8Array {
     return MemberRequest.encode(message).finish();
@@ -1069,6 +1092,8 @@ export const MemberRequest = {
     };
   }
 };
+GlobalDecoderRegistry.register(MemberRequest.typeUrl, MemberRequest);
+GlobalDecoderRegistry.registerAminoProtoMapping(MemberRequest.aminoType, MemberRequest.typeUrl);
 function createBaseThresholdDecisionPolicy(): ThresholdDecisionPolicy {
   return {
     $typeUrl: "/cosmos.group.v1.ThresholdDecisionPolicy",
@@ -1078,6 +1103,16 @@ function createBaseThresholdDecisionPolicy(): ThresholdDecisionPolicy {
 }
 export const ThresholdDecisionPolicy = {
   typeUrl: "/cosmos.group.v1.ThresholdDecisionPolicy",
+  aminoType: "cosmos-sdk/ThresholdDecisionPolicy",
+  is(o: any): o is ThresholdDecisionPolicy {
+    return o && (o.$typeUrl === ThresholdDecisionPolicy.typeUrl || typeof o.threshold === "string");
+  },
+  isSDK(o: any): o is ThresholdDecisionPolicySDKType {
+    return o && (o.$typeUrl === ThresholdDecisionPolicy.typeUrl || typeof o.threshold === "string");
+  },
+  isAmino(o: any): o is ThresholdDecisionPolicyAmino {
+    return o && (o.$typeUrl === ThresholdDecisionPolicy.typeUrl || typeof o.threshold === "string");
+  },
   encode(message: ThresholdDecisionPolicy, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.threshold !== "") {
       writer.uint32(10).string(message.threshold);
@@ -1087,7 +1122,7 @@ export const ThresholdDecisionPolicy = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): ThresholdDecisionPolicy {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): ThresholdDecisionPolicy {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseThresholdDecisionPolicy();
@@ -1098,7 +1133,7 @@ export const ThresholdDecisionPolicy = {
           message.threshold = reader.string();
           break;
         case 2:
-          message.windows = DecisionPolicyWindows.decode(reader, reader.uint32());
+          message.windows = DecisionPolicyWindows.decode(reader, reader.uint32(), useInterfaces);
           break;
         default:
           reader.skipType(tag & 7);
@@ -1135,23 +1170,23 @@ export const ThresholdDecisionPolicy = {
     }
     return message;
   },
-  toAmino(message: ThresholdDecisionPolicy): ThresholdDecisionPolicyAmino {
+  toAmino(message: ThresholdDecisionPolicy, useInterfaces: boolean = true): ThresholdDecisionPolicyAmino {
     const obj: any = {};
-    obj.threshold = message.threshold;
-    obj.windows = message.windows ? DecisionPolicyWindows.toAmino(message.windows) : undefined;
+    obj.threshold = message.threshold === "" ? undefined : message.threshold;
+    obj.windows = message.windows ? DecisionPolicyWindows.toAmino(message.windows, useInterfaces) : undefined;
     return obj;
   },
   fromAminoMsg(object: ThresholdDecisionPolicyAminoMsg): ThresholdDecisionPolicy {
     return ThresholdDecisionPolicy.fromAmino(object.value);
   },
-  toAminoMsg(message: ThresholdDecisionPolicy): ThresholdDecisionPolicyAminoMsg {
+  toAminoMsg(message: ThresholdDecisionPolicy, useInterfaces: boolean = true): ThresholdDecisionPolicyAminoMsg {
     return {
       type: "cosmos-sdk/ThresholdDecisionPolicy",
-      value: ThresholdDecisionPolicy.toAmino(message)
+      value: ThresholdDecisionPolicy.toAmino(message, useInterfaces)
     };
   },
-  fromProtoMsg(message: ThresholdDecisionPolicyProtoMsg): ThresholdDecisionPolicy {
-    return ThresholdDecisionPolicy.decode(message.value);
+  fromProtoMsg(message: ThresholdDecisionPolicyProtoMsg, useInterfaces: boolean = true): ThresholdDecisionPolicy {
+    return ThresholdDecisionPolicy.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: ThresholdDecisionPolicy): Uint8Array {
     return ThresholdDecisionPolicy.encode(message).finish();
@@ -1163,6 +1198,8 @@ export const ThresholdDecisionPolicy = {
     };
   }
 };
+GlobalDecoderRegistry.register(ThresholdDecisionPolicy.typeUrl, ThresholdDecisionPolicy);
+GlobalDecoderRegistry.registerAminoProtoMapping(ThresholdDecisionPolicy.aminoType, ThresholdDecisionPolicy.typeUrl);
 function createBasePercentageDecisionPolicy(): PercentageDecisionPolicy {
   return {
     $typeUrl: "/cosmos.group.v1.PercentageDecisionPolicy",
@@ -1172,6 +1209,16 @@ function createBasePercentageDecisionPolicy(): PercentageDecisionPolicy {
 }
 export const PercentageDecisionPolicy = {
   typeUrl: "/cosmos.group.v1.PercentageDecisionPolicy",
+  aminoType: "cosmos-sdk/PercentageDecisionPolicy",
+  is(o: any): o is PercentageDecisionPolicy {
+    return o && (o.$typeUrl === PercentageDecisionPolicy.typeUrl || typeof o.percentage === "string");
+  },
+  isSDK(o: any): o is PercentageDecisionPolicySDKType {
+    return o && (o.$typeUrl === PercentageDecisionPolicy.typeUrl || typeof o.percentage === "string");
+  },
+  isAmino(o: any): o is PercentageDecisionPolicyAmino {
+    return o && (o.$typeUrl === PercentageDecisionPolicy.typeUrl || typeof o.percentage === "string");
+  },
   encode(message: PercentageDecisionPolicy, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.percentage !== "") {
       writer.uint32(10).string(message.percentage);
@@ -1181,7 +1228,7 @@ export const PercentageDecisionPolicy = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): PercentageDecisionPolicy {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): PercentageDecisionPolicy {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBasePercentageDecisionPolicy();
@@ -1192,7 +1239,7 @@ export const PercentageDecisionPolicy = {
           message.percentage = reader.string();
           break;
         case 2:
-          message.windows = DecisionPolicyWindows.decode(reader, reader.uint32());
+          message.windows = DecisionPolicyWindows.decode(reader, reader.uint32(), useInterfaces);
           break;
         default:
           reader.skipType(tag & 7);
@@ -1229,23 +1276,23 @@ export const PercentageDecisionPolicy = {
     }
     return message;
   },
-  toAmino(message: PercentageDecisionPolicy): PercentageDecisionPolicyAmino {
+  toAmino(message: PercentageDecisionPolicy, useInterfaces: boolean = true): PercentageDecisionPolicyAmino {
     const obj: any = {};
-    obj.percentage = message.percentage;
-    obj.windows = message.windows ? DecisionPolicyWindows.toAmino(message.windows) : undefined;
+    obj.percentage = message.percentage === "" ? undefined : message.percentage;
+    obj.windows = message.windows ? DecisionPolicyWindows.toAmino(message.windows, useInterfaces) : undefined;
     return obj;
   },
   fromAminoMsg(object: PercentageDecisionPolicyAminoMsg): PercentageDecisionPolicy {
     return PercentageDecisionPolicy.fromAmino(object.value);
   },
-  toAminoMsg(message: PercentageDecisionPolicy): PercentageDecisionPolicyAminoMsg {
+  toAminoMsg(message: PercentageDecisionPolicy, useInterfaces: boolean = true): PercentageDecisionPolicyAminoMsg {
     return {
       type: "cosmos-sdk/PercentageDecisionPolicy",
-      value: PercentageDecisionPolicy.toAmino(message)
+      value: PercentageDecisionPolicy.toAmino(message, useInterfaces)
     };
   },
-  fromProtoMsg(message: PercentageDecisionPolicyProtoMsg): PercentageDecisionPolicy {
-    return PercentageDecisionPolicy.decode(message.value);
+  fromProtoMsg(message: PercentageDecisionPolicyProtoMsg, useInterfaces: boolean = true): PercentageDecisionPolicy {
+    return PercentageDecisionPolicy.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: PercentageDecisionPolicy): Uint8Array {
     return PercentageDecisionPolicy.encode(message).finish();
@@ -1257,6 +1304,8 @@ export const PercentageDecisionPolicy = {
     };
   }
 };
+GlobalDecoderRegistry.register(PercentageDecisionPolicy.typeUrl, PercentageDecisionPolicy);
+GlobalDecoderRegistry.registerAminoProtoMapping(PercentageDecisionPolicy.aminoType, PercentageDecisionPolicy.typeUrl);
 function createBaseDecisionPolicyWindows(): DecisionPolicyWindows {
   return {
     votingPeriod: Duration.fromPartial({}),
@@ -1265,6 +1314,16 @@ function createBaseDecisionPolicyWindows(): DecisionPolicyWindows {
 }
 export const DecisionPolicyWindows = {
   typeUrl: "/cosmos.group.v1.DecisionPolicyWindows",
+  aminoType: "cosmos-sdk/DecisionPolicyWindows",
+  is(o: any): o is DecisionPolicyWindows {
+    return o && (o.$typeUrl === DecisionPolicyWindows.typeUrl || Duration.is(o.votingPeriod) && Duration.is(o.minExecutionPeriod));
+  },
+  isSDK(o: any): o is DecisionPolicyWindowsSDKType {
+    return o && (o.$typeUrl === DecisionPolicyWindows.typeUrl || Duration.isSDK(o.voting_period) && Duration.isSDK(o.min_execution_period));
+  },
+  isAmino(o: any): o is DecisionPolicyWindowsAmino {
+    return o && (o.$typeUrl === DecisionPolicyWindows.typeUrl || Duration.isAmino(o.voting_period) && Duration.isAmino(o.min_execution_period));
+  },
   encode(message: DecisionPolicyWindows, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.votingPeriod !== undefined) {
       Duration.encode(message.votingPeriod, writer.uint32(10).fork()).ldelim();
@@ -1274,7 +1333,7 @@ export const DecisionPolicyWindows = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): DecisionPolicyWindows {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): DecisionPolicyWindows {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseDecisionPolicyWindows();
@@ -1282,10 +1341,10 @@ export const DecisionPolicyWindows = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.votingPeriod = Duration.decode(reader, reader.uint32());
+          message.votingPeriod = Duration.decode(reader, reader.uint32(), useInterfaces);
           break;
         case 2:
-          message.minExecutionPeriod = Duration.decode(reader, reader.uint32());
+          message.minExecutionPeriod = Duration.decode(reader, reader.uint32(), useInterfaces);
           break;
         default:
           reader.skipType(tag & 7);
@@ -1322,23 +1381,23 @@ export const DecisionPolicyWindows = {
     }
     return message;
   },
-  toAmino(message: DecisionPolicyWindows): DecisionPolicyWindowsAmino {
+  toAmino(message: DecisionPolicyWindows, useInterfaces: boolean = true): DecisionPolicyWindowsAmino {
     const obj: any = {};
-    obj.voting_period = message.votingPeriod ? Duration.toAmino(message.votingPeriod) : Duration.fromPartial({});
-    obj.min_execution_period = message.minExecutionPeriod ? Duration.toAmino(message.minExecutionPeriod) : Duration.fromPartial({});
+    obj.voting_period = message.votingPeriod ? Duration.toAmino(message.votingPeriod, useInterfaces) : undefined;
+    obj.min_execution_period = message.minExecutionPeriod ? Duration.toAmino(message.minExecutionPeriod, useInterfaces) : undefined;
     return obj;
   },
   fromAminoMsg(object: DecisionPolicyWindowsAminoMsg): DecisionPolicyWindows {
     return DecisionPolicyWindows.fromAmino(object.value);
   },
-  toAminoMsg(message: DecisionPolicyWindows): DecisionPolicyWindowsAminoMsg {
+  toAminoMsg(message: DecisionPolicyWindows, useInterfaces: boolean = true): DecisionPolicyWindowsAminoMsg {
     return {
       type: "cosmos-sdk/DecisionPolicyWindows",
-      value: DecisionPolicyWindows.toAmino(message)
+      value: DecisionPolicyWindows.toAmino(message, useInterfaces)
     };
   },
-  fromProtoMsg(message: DecisionPolicyWindowsProtoMsg): DecisionPolicyWindows {
-    return DecisionPolicyWindows.decode(message.value);
+  fromProtoMsg(message: DecisionPolicyWindowsProtoMsg, useInterfaces: boolean = true): DecisionPolicyWindows {
+    return DecisionPolicyWindows.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: DecisionPolicyWindows): Uint8Array {
     return DecisionPolicyWindows.encode(message).finish();
@@ -1350,6 +1409,8 @@ export const DecisionPolicyWindows = {
     };
   }
 };
+GlobalDecoderRegistry.register(DecisionPolicyWindows.typeUrl, DecisionPolicyWindows);
+GlobalDecoderRegistry.registerAminoProtoMapping(DecisionPolicyWindows.aminoType, DecisionPolicyWindows.typeUrl);
 function createBaseGroupInfo(): GroupInfo {
   return {
     id: BigInt(0),
@@ -1362,6 +1423,16 @@ function createBaseGroupInfo(): GroupInfo {
 }
 export const GroupInfo = {
   typeUrl: "/cosmos.group.v1.GroupInfo",
+  aminoType: "cosmos-sdk/GroupInfo",
+  is(o: any): o is GroupInfo {
+    return o && (o.$typeUrl === GroupInfo.typeUrl || typeof o.id === "bigint" && typeof o.admin === "string" && typeof o.metadata === "string" && typeof o.version === "bigint" && typeof o.totalWeight === "string" && Timestamp.is(o.createdAt));
+  },
+  isSDK(o: any): o is GroupInfoSDKType {
+    return o && (o.$typeUrl === GroupInfo.typeUrl || typeof o.id === "bigint" && typeof o.admin === "string" && typeof o.metadata === "string" && typeof o.version === "bigint" && typeof o.total_weight === "string" && Timestamp.isSDK(o.created_at));
+  },
+  isAmino(o: any): o is GroupInfoAmino {
+    return o && (o.$typeUrl === GroupInfo.typeUrl || typeof o.id === "bigint" && typeof o.admin === "string" && typeof o.metadata === "string" && typeof o.version === "bigint" && typeof o.total_weight === "string" && Timestamp.isAmino(o.created_at));
+  },
   encode(message: GroupInfo, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.id !== BigInt(0)) {
       writer.uint32(8).uint64(message.id);
@@ -1383,7 +1454,7 @@ export const GroupInfo = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): GroupInfo {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): GroupInfo {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseGroupInfo();
@@ -1467,27 +1538,27 @@ export const GroupInfo = {
     }
     return message;
   },
-  toAmino(message: GroupInfo): GroupInfoAmino {
+  toAmino(message: GroupInfo, useInterfaces: boolean = true): GroupInfoAmino {
     const obj: any = {};
     obj.id = message.id ? message.id.toString() : undefined;
-    obj.admin = message.admin;
-    obj.metadata = message.metadata;
+    obj.admin = message.admin === "" ? undefined : message.admin;
+    obj.metadata = message.metadata === "" ? undefined : message.metadata;
     obj.version = message.version ? message.version.toString() : undefined;
-    obj.total_weight = message.totalWeight;
-    obj.created_at = message.createdAt ? Timestamp.toAmino(message.createdAt) : Timestamp.fromPartial({});
+    obj.total_weight = message.totalWeight === "" ? undefined : message.totalWeight;
+    obj.created_at = message.createdAt ? Timestamp.toAmino(message.createdAt, useInterfaces) : undefined;
     return obj;
   },
   fromAminoMsg(object: GroupInfoAminoMsg): GroupInfo {
     return GroupInfo.fromAmino(object.value);
   },
-  toAminoMsg(message: GroupInfo): GroupInfoAminoMsg {
+  toAminoMsg(message: GroupInfo, useInterfaces: boolean = true): GroupInfoAminoMsg {
     return {
       type: "cosmos-sdk/GroupInfo",
-      value: GroupInfo.toAmino(message)
+      value: GroupInfo.toAmino(message, useInterfaces)
     };
   },
-  fromProtoMsg(message: GroupInfoProtoMsg): GroupInfo {
-    return GroupInfo.decode(message.value);
+  fromProtoMsg(message: GroupInfoProtoMsg, useInterfaces: boolean = true): GroupInfo {
+    return GroupInfo.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: GroupInfo): Uint8Array {
     return GroupInfo.encode(message).finish();
@@ -1499,6 +1570,8 @@ export const GroupInfo = {
     };
   }
 };
+GlobalDecoderRegistry.register(GroupInfo.typeUrl, GroupInfo);
+GlobalDecoderRegistry.registerAminoProtoMapping(GroupInfo.aminoType, GroupInfo.typeUrl);
 function createBaseGroupMember(): GroupMember {
   return {
     groupId: BigInt(0),
@@ -1507,6 +1580,16 @@ function createBaseGroupMember(): GroupMember {
 }
 export const GroupMember = {
   typeUrl: "/cosmos.group.v1.GroupMember",
+  aminoType: "cosmos-sdk/GroupMember",
+  is(o: any): o is GroupMember {
+    return o && (o.$typeUrl === GroupMember.typeUrl || typeof o.groupId === "bigint");
+  },
+  isSDK(o: any): o is GroupMemberSDKType {
+    return o && (o.$typeUrl === GroupMember.typeUrl || typeof o.group_id === "bigint");
+  },
+  isAmino(o: any): o is GroupMemberAmino {
+    return o && (o.$typeUrl === GroupMember.typeUrl || typeof o.group_id === "bigint");
+  },
   encode(message: GroupMember, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.groupId !== BigInt(0)) {
       writer.uint32(8).uint64(message.groupId);
@@ -1516,7 +1599,7 @@ export const GroupMember = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): GroupMember {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): GroupMember {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseGroupMember();
@@ -1527,7 +1610,7 @@ export const GroupMember = {
           message.groupId = reader.uint64();
           break;
         case 2:
-          message.member = Member.decode(reader, reader.uint32());
+          message.member = Member.decode(reader, reader.uint32(), useInterfaces);
           break;
         default:
           reader.skipType(tag & 7);
@@ -1564,23 +1647,23 @@ export const GroupMember = {
     }
     return message;
   },
-  toAmino(message: GroupMember): GroupMemberAmino {
+  toAmino(message: GroupMember, useInterfaces: boolean = true): GroupMemberAmino {
     const obj: any = {};
     obj.group_id = message.groupId ? message.groupId.toString() : undefined;
-    obj.member = message.member ? Member.toAmino(message.member) : undefined;
+    obj.member = message.member ? Member.toAmino(message.member, useInterfaces) : undefined;
     return obj;
   },
   fromAminoMsg(object: GroupMemberAminoMsg): GroupMember {
     return GroupMember.fromAmino(object.value);
   },
-  toAminoMsg(message: GroupMember): GroupMemberAminoMsg {
+  toAminoMsg(message: GroupMember, useInterfaces: boolean = true): GroupMemberAminoMsg {
     return {
       type: "cosmos-sdk/GroupMember",
-      value: GroupMember.toAmino(message)
+      value: GroupMember.toAmino(message, useInterfaces)
     };
   },
-  fromProtoMsg(message: GroupMemberProtoMsg): GroupMember {
-    return GroupMember.decode(message.value);
+  fromProtoMsg(message: GroupMemberProtoMsg, useInterfaces: boolean = true): GroupMember {
+    return GroupMember.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: GroupMember): Uint8Array {
     return GroupMember.encode(message).finish();
@@ -1592,6 +1675,8 @@ export const GroupMember = {
     };
   }
 };
+GlobalDecoderRegistry.register(GroupMember.typeUrl, GroupMember);
+GlobalDecoderRegistry.registerAminoProtoMapping(GroupMember.aminoType, GroupMember.typeUrl);
 function createBaseGroupPolicyInfo(): GroupPolicyInfo {
   return {
     address: "",
@@ -1605,6 +1690,16 @@ function createBaseGroupPolicyInfo(): GroupPolicyInfo {
 }
 export const GroupPolicyInfo = {
   typeUrl: "/cosmos.group.v1.GroupPolicyInfo",
+  aminoType: "cosmos-sdk/GroupPolicyInfo",
+  is(o: any): o is GroupPolicyInfo {
+    return o && (o.$typeUrl === GroupPolicyInfo.typeUrl || typeof o.address === "string" && typeof o.groupId === "bigint" && typeof o.admin === "string" && typeof o.metadata === "string" && typeof o.version === "bigint" && Timestamp.is(o.createdAt));
+  },
+  isSDK(o: any): o is GroupPolicyInfoSDKType {
+    return o && (o.$typeUrl === GroupPolicyInfo.typeUrl || typeof o.address === "string" && typeof o.group_id === "bigint" && typeof o.admin === "string" && typeof o.metadata === "string" && typeof o.version === "bigint" && Timestamp.isSDK(o.created_at));
+  },
+  isAmino(o: any): o is GroupPolicyInfoAmino {
+    return o && (o.$typeUrl === GroupPolicyInfo.typeUrl || typeof o.address === "string" && typeof o.group_id === "bigint" && typeof o.admin === "string" && typeof o.metadata === "string" && typeof o.version === "bigint" && Timestamp.isAmino(o.created_at));
+  },
   encode(message: GroupPolicyInfo, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.address !== "") {
       writer.uint32(10).string(message.address);
@@ -1622,14 +1717,14 @@ export const GroupPolicyInfo = {
       writer.uint32(40).uint64(message.version);
     }
     if (message.decisionPolicy !== undefined) {
-      Any.encode((message.decisionPolicy as Any), writer.uint32(50).fork()).ldelim();
+      Any.encode(GlobalDecoderRegistry.wrapAny(message.decisionPolicy), writer.uint32(50).fork()).ldelim();
     }
     if (message.createdAt !== undefined) {
       Timestamp.encode(message.createdAt, writer.uint32(58).fork()).ldelim();
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): GroupPolicyInfo {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): GroupPolicyInfo {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseGroupPolicyInfo();
@@ -1652,7 +1747,7 @@ export const GroupPolicyInfo = {
           message.version = reader.uint64();
           break;
         case 6:
-          message.decisionPolicy = (Cosmos_groupv1DecisionPolicy_InterfaceDecoder(reader) as any);
+          message.decisionPolicy = GlobalDecoderRegistry.unwrapAny(reader);
           break;
         case 7:
           message.createdAt = Timestamp.decode(reader, reader.uint32());
@@ -1671,7 +1766,7 @@ export const GroupPolicyInfo = {
       admin: isSet(object.admin) ? String(object.admin) : "",
       metadata: isSet(object.metadata) ? String(object.metadata) : "",
       version: isSet(object.version) ? BigInt(object.version.toString()) : BigInt(0),
-      decisionPolicy: isSet(object.decisionPolicy) ? Any.fromJSONAsAny(object.decisionPolicy) : undefined,
+      decisionPolicy: isSet(object.decisionPolicy) ? GlobalDecoderRegistry.fromJSON(object.decisionPolicy) : undefined,
       createdAt: isSet(object.createdAt) ? fromJsonTimestamp(object.createdAt) : undefined
     };
   },
@@ -1682,7 +1777,7 @@ export const GroupPolicyInfo = {
     message.admin !== undefined && (obj.admin = message.admin);
     message.metadata !== undefined && (obj.metadata = message.metadata);
     message.version !== undefined && (obj.version = (message.version || BigInt(0)).toString());
-    message.decisionPolicy !== undefined && (obj.decisionPolicy = message.decisionPolicy ? Any.toJSON(message.decisionPolicy) : undefined);
+    message.decisionPolicy !== undefined && (obj.decisionPolicy = message.decisionPolicy ? GlobalDecoderRegistry.toJSON(message.decisionPolicy) : undefined);
     message.createdAt !== undefined && (obj.createdAt = fromTimestamp(message.createdAt).toISOString());
     return obj;
   },
@@ -1693,7 +1788,7 @@ export const GroupPolicyInfo = {
     message.admin = object.admin ?? "";
     message.metadata = object.metadata ?? "";
     message.version = object.version !== undefined && object.version !== null ? BigInt(object.version.toString()) : BigInt(0);
-    message.decisionPolicy = object.decisionPolicy !== undefined && object.decisionPolicy !== null ? Any.fromPartialAsAny(object.decisionPolicy) : undefined;
+    message.decisionPolicy = object.decisionPolicy !== undefined && object.decisionPolicy !== null ? GlobalDecoderRegistry.fromPartial(object.decisionPolicy) : undefined;
     message.createdAt = object.createdAt !== undefined && object.createdAt !== null ? Timestamp.fromPartial(object.createdAt) : undefined;
     return message;
   },
@@ -1715,35 +1810,35 @@ export const GroupPolicyInfo = {
       message.version = BigInt(object.version);
     }
     if (object.decision_policy !== undefined && object.decision_policy !== null) {
-      message.decisionPolicy = Cosmos_groupv1DecisionPolicy_FromAmino(object.decision_policy);
+      message.decisionPolicy = GlobalDecoderRegistry.fromAminoMsg(object.decision_policy);
     }
     if (object.created_at !== undefined && object.created_at !== null) {
       message.createdAt = Timestamp.fromAmino(object.created_at);
     }
     return message;
   },
-  toAmino(message: GroupPolicyInfo): GroupPolicyInfoAmino {
+  toAmino(message: GroupPolicyInfo, useInterfaces: boolean = true): GroupPolicyInfoAmino {
     const obj: any = {};
-    obj.address = message.address;
+    obj.address = message.address === "" ? undefined : message.address;
     obj.group_id = message.groupId ? message.groupId.toString() : undefined;
-    obj.admin = message.admin;
-    obj.metadata = message.metadata;
+    obj.admin = message.admin === "" ? undefined : message.admin;
+    obj.metadata = message.metadata === "" ? undefined : message.metadata;
     obj.version = message.version ? message.version.toString() : undefined;
-    obj.decision_policy = message.decisionPolicy ? Cosmos_groupv1DecisionPolicy_ToAmino((message.decisionPolicy as Any)) : undefined;
-    obj.created_at = message.createdAt ? Timestamp.toAmino(message.createdAt) : Timestamp.fromPartial({});
+    obj.decision_policy = message.decisionPolicy ? GlobalDecoderRegistry.toAminoMsg(message.decisionPolicy) : undefined;
+    obj.created_at = message.createdAt ? Timestamp.toAmino(message.createdAt, useInterfaces) : undefined;
     return obj;
   },
   fromAminoMsg(object: GroupPolicyInfoAminoMsg): GroupPolicyInfo {
     return GroupPolicyInfo.fromAmino(object.value);
   },
-  toAminoMsg(message: GroupPolicyInfo): GroupPolicyInfoAminoMsg {
+  toAminoMsg(message: GroupPolicyInfo, useInterfaces: boolean = true): GroupPolicyInfoAminoMsg {
     return {
       type: "cosmos-sdk/GroupPolicyInfo",
-      value: GroupPolicyInfo.toAmino(message)
+      value: GroupPolicyInfo.toAmino(message, useInterfaces)
     };
   },
-  fromProtoMsg(message: GroupPolicyInfoProtoMsg): GroupPolicyInfo {
-    return GroupPolicyInfo.decode(message.value);
+  fromProtoMsg(message: GroupPolicyInfoProtoMsg, useInterfaces: boolean = true): GroupPolicyInfo {
+    return GroupPolicyInfo.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: GroupPolicyInfo): Uint8Array {
     return GroupPolicyInfo.encode(message).finish();
@@ -1755,6 +1850,8 @@ export const GroupPolicyInfo = {
     };
   }
 };
+GlobalDecoderRegistry.register(GroupPolicyInfo.typeUrl, GroupPolicyInfo);
+GlobalDecoderRegistry.registerAminoProtoMapping(GroupPolicyInfo.aminoType, GroupPolicyInfo.typeUrl);
 function createBaseProposal(): Proposal {
   return {
     id: BigInt(0),
@@ -1775,6 +1872,16 @@ function createBaseProposal(): Proposal {
 }
 export const Proposal = {
   typeUrl: "/cosmos.group.v1.Proposal",
+  aminoType: "cosmos-sdk/Proposal",
+  is(o: any): o is Proposal {
+    return o && (o.$typeUrl === Proposal.typeUrl || typeof o.id === "bigint" && typeof o.groupPolicyAddress === "string" && typeof o.metadata === "string" && Array.isArray(o.proposers) && (!o.proposers.length || typeof o.proposers[0] === "string") && Timestamp.is(o.submitTime) && typeof o.groupVersion === "bigint" && typeof o.groupPolicyVersion === "bigint" && isSet(o.status) && TallyResult.is(o.finalTallyResult) && Timestamp.is(o.votingPeriodEnd) && isSet(o.executorResult) && Array.isArray(o.messages) && (!o.messages.length || Any.is(o.messages[0])) && typeof o.title === "string" && typeof o.summary === "string");
+  },
+  isSDK(o: any): o is ProposalSDKType {
+    return o && (o.$typeUrl === Proposal.typeUrl || typeof o.id === "bigint" && typeof o.group_policy_address === "string" && typeof o.metadata === "string" && Array.isArray(o.proposers) && (!o.proposers.length || typeof o.proposers[0] === "string") && Timestamp.isSDK(o.submit_time) && typeof o.group_version === "bigint" && typeof o.group_policy_version === "bigint" && isSet(o.status) && TallyResult.isSDK(o.final_tally_result) && Timestamp.isSDK(o.voting_period_end) && isSet(o.executor_result) && Array.isArray(o.messages) && (!o.messages.length || Any.isSDK(o.messages[0])) && typeof o.title === "string" && typeof o.summary === "string");
+  },
+  isAmino(o: any): o is ProposalAmino {
+    return o && (o.$typeUrl === Proposal.typeUrl || typeof o.id === "bigint" && typeof o.group_policy_address === "string" && typeof o.metadata === "string" && Array.isArray(o.proposers) && (!o.proposers.length || typeof o.proposers[0] === "string") && Timestamp.isAmino(o.submit_time) && typeof o.group_version === "bigint" && typeof o.group_policy_version === "bigint" && isSet(o.status) && TallyResult.isAmino(o.final_tally_result) && Timestamp.isAmino(o.voting_period_end) && isSet(o.executor_result) && Array.isArray(o.messages) && (!o.messages.length || Any.isAmino(o.messages[0])) && typeof o.title === "string" && typeof o.summary === "string");
+  },
   encode(message: Proposal, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.id !== BigInt(0)) {
       writer.uint32(8).uint64(message.id);
@@ -1820,7 +1927,7 @@ export const Proposal = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): Proposal {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): Proposal {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseProposal();
@@ -1852,7 +1959,7 @@ export const Proposal = {
           message.status = (reader.int32() as any);
           break;
         case 9:
-          message.finalTallyResult = TallyResult.decode(reader, reader.uint32());
+          message.finalTallyResult = TallyResult.decode(reader, reader.uint32(), useInterfaces);
           break;
         case 10:
           message.votingPeriodEnd = Timestamp.decode(reader, reader.uint32());
@@ -1861,7 +1968,7 @@ export const Proposal = {
           message.executorResult = (reader.int32() as any);
           break;
         case 12:
-          message.messages.push(Any.decode(reader, reader.uint32()));
+          message.messages.push(Any.decode(reader, reader.uint32(), useInterfaces));
           break;
         case 13:
           message.title = reader.string();
@@ -1960,7 +2067,7 @@ export const Proposal = {
       message.groupPolicyVersion = BigInt(object.group_policy_version);
     }
     if (object.status !== undefined && object.status !== null) {
-      message.status = proposalStatusFromJSON(object.status);
+      message.status = object.status;
     }
     if (object.final_tally_result !== undefined && object.final_tally_result !== null) {
       message.finalTallyResult = TallyResult.fromAmino(object.final_tally_result);
@@ -1969,7 +2076,7 @@ export const Proposal = {
       message.votingPeriodEnd = Timestamp.fromAmino(object.voting_period_end);
     }
     if (object.executor_result !== undefined && object.executor_result !== null) {
-      message.executorResult = proposalExecutorResultFromJSON(object.executor_result);
+      message.executorResult = object.executor_result;
     }
     message.messages = object.messages?.map(e => Any.fromAmino(e)) || [];
     if (object.title !== undefined && object.title !== null) {
@@ -1980,43 +2087,43 @@ export const Proposal = {
     }
     return message;
   },
-  toAmino(message: Proposal): ProposalAmino {
+  toAmino(message: Proposal, useInterfaces: boolean = true): ProposalAmino {
     const obj: any = {};
     obj.id = message.id ? message.id.toString() : undefined;
-    obj.group_policy_address = message.groupPolicyAddress;
-    obj.metadata = message.metadata;
+    obj.group_policy_address = message.groupPolicyAddress === "" ? undefined : message.groupPolicyAddress;
+    obj.metadata = message.metadata === "" ? undefined : message.metadata;
     if (message.proposers) {
       obj.proposers = message.proposers.map(e => e);
     } else {
-      obj.proposers = [];
+      obj.proposers = message.proposers;
     }
-    obj.submit_time = message.submitTime ? Timestamp.toAmino(message.submitTime) : Timestamp.fromPartial({});
+    obj.submit_time = message.submitTime ? Timestamp.toAmino(message.submitTime, useInterfaces) : undefined;
     obj.group_version = message.groupVersion ? message.groupVersion.toString() : undefined;
     obj.group_policy_version = message.groupPolicyVersion ? message.groupPolicyVersion.toString() : undefined;
-    obj.status = proposalStatusToJSON(message.status);
-    obj.final_tally_result = message.finalTallyResult ? TallyResult.toAmino(message.finalTallyResult) : TallyResult.fromPartial({});
-    obj.voting_period_end = message.votingPeriodEnd ? Timestamp.toAmino(message.votingPeriodEnd) : Timestamp.fromPartial({});
-    obj.executor_result = proposalExecutorResultToJSON(message.executorResult);
+    obj.status = message.status === 0 ? undefined : message.status;
+    obj.final_tally_result = message.finalTallyResult ? TallyResult.toAmino(message.finalTallyResult, useInterfaces) : undefined;
+    obj.voting_period_end = message.votingPeriodEnd ? Timestamp.toAmino(message.votingPeriodEnd, useInterfaces) : undefined;
+    obj.executor_result = message.executorResult === 0 ? undefined : message.executorResult;
     if (message.messages) {
-      obj.messages = message.messages.map(e => e ? Any.toAmino(e) : undefined);
+      obj.messages = message.messages.map(e => e ? Any.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.messages = [];
+      obj.messages = message.messages;
     }
-    obj.title = message.title;
-    obj.summary = message.summary;
+    obj.title = message.title === "" ? undefined : message.title;
+    obj.summary = message.summary === "" ? undefined : message.summary;
     return obj;
   },
   fromAminoMsg(object: ProposalAminoMsg): Proposal {
     return Proposal.fromAmino(object.value);
   },
-  toAminoMsg(message: Proposal): ProposalAminoMsg {
+  toAminoMsg(message: Proposal, useInterfaces: boolean = true): ProposalAminoMsg {
     return {
       type: "cosmos-sdk/Proposal",
-      value: Proposal.toAmino(message)
+      value: Proposal.toAmino(message, useInterfaces)
     };
   },
-  fromProtoMsg(message: ProposalProtoMsg): Proposal {
-    return Proposal.decode(message.value);
+  fromProtoMsg(message: ProposalProtoMsg, useInterfaces: boolean = true): Proposal {
+    return Proposal.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: Proposal): Uint8Array {
     return Proposal.encode(message).finish();
@@ -2028,6 +2135,8 @@ export const Proposal = {
     };
   }
 };
+GlobalDecoderRegistry.register(Proposal.typeUrl, Proposal);
+GlobalDecoderRegistry.registerAminoProtoMapping(Proposal.aminoType, Proposal.typeUrl);
 function createBaseTallyResult(): TallyResult {
   return {
     yesCount: "",
@@ -2038,6 +2147,16 @@ function createBaseTallyResult(): TallyResult {
 }
 export const TallyResult = {
   typeUrl: "/cosmos.group.v1.TallyResult",
+  aminoType: "cosmos-sdk/TallyResult",
+  is(o: any): o is TallyResult {
+    return o && (o.$typeUrl === TallyResult.typeUrl || typeof o.yesCount === "string" && typeof o.abstainCount === "string" && typeof o.noCount === "string" && typeof o.noWithVetoCount === "string");
+  },
+  isSDK(o: any): o is TallyResultSDKType {
+    return o && (o.$typeUrl === TallyResult.typeUrl || typeof o.yes_count === "string" && typeof o.abstain_count === "string" && typeof o.no_count === "string" && typeof o.no_with_veto_count === "string");
+  },
+  isAmino(o: any): o is TallyResultAmino {
+    return o && (o.$typeUrl === TallyResult.typeUrl || typeof o.yes_count === "string" && typeof o.abstain_count === "string" && typeof o.no_count === "string" && typeof o.no_with_veto_count === "string");
+  },
   encode(message: TallyResult, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.yesCount !== "") {
       writer.uint32(10).string(message.yesCount);
@@ -2053,7 +2172,7 @@ export const TallyResult = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): TallyResult {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): TallyResult {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseTallyResult();
@@ -2119,25 +2238,25 @@ export const TallyResult = {
     }
     return message;
   },
-  toAmino(message: TallyResult): TallyResultAmino {
+  toAmino(message: TallyResult, useInterfaces: boolean = true): TallyResultAmino {
     const obj: any = {};
-    obj.yes_count = message.yesCount;
-    obj.abstain_count = message.abstainCount;
-    obj.no_count = message.noCount;
-    obj.no_with_veto_count = message.noWithVetoCount;
+    obj.yes_count = message.yesCount === "" ? undefined : message.yesCount;
+    obj.abstain_count = message.abstainCount === "" ? undefined : message.abstainCount;
+    obj.no_count = message.noCount === "" ? undefined : message.noCount;
+    obj.no_with_veto_count = message.noWithVetoCount === "" ? undefined : message.noWithVetoCount;
     return obj;
   },
   fromAminoMsg(object: TallyResultAminoMsg): TallyResult {
     return TallyResult.fromAmino(object.value);
   },
-  toAminoMsg(message: TallyResult): TallyResultAminoMsg {
+  toAminoMsg(message: TallyResult, useInterfaces: boolean = true): TallyResultAminoMsg {
     return {
       type: "cosmos-sdk/TallyResult",
-      value: TallyResult.toAmino(message)
+      value: TallyResult.toAmino(message, useInterfaces)
     };
   },
-  fromProtoMsg(message: TallyResultProtoMsg): TallyResult {
-    return TallyResult.decode(message.value);
+  fromProtoMsg(message: TallyResultProtoMsg, useInterfaces: boolean = true): TallyResult {
+    return TallyResult.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: TallyResult): Uint8Array {
     return TallyResult.encode(message).finish();
@@ -2149,6 +2268,8 @@ export const TallyResult = {
     };
   }
 };
+GlobalDecoderRegistry.register(TallyResult.typeUrl, TallyResult);
+GlobalDecoderRegistry.registerAminoProtoMapping(TallyResult.aminoType, TallyResult.typeUrl);
 function createBaseVote(): Vote {
   return {
     proposalId: BigInt(0),
@@ -2160,6 +2281,16 @@ function createBaseVote(): Vote {
 }
 export const Vote = {
   typeUrl: "/cosmos.group.v1.Vote",
+  aminoType: "cosmos-sdk/Vote",
+  is(o: any): o is Vote {
+    return o && (o.$typeUrl === Vote.typeUrl || typeof o.proposalId === "bigint" && typeof o.voter === "string" && isSet(o.option) && typeof o.metadata === "string" && Timestamp.is(o.submitTime));
+  },
+  isSDK(o: any): o is VoteSDKType {
+    return o && (o.$typeUrl === Vote.typeUrl || typeof o.proposal_id === "bigint" && typeof o.voter === "string" && isSet(o.option) && typeof o.metadata === "string" && Timestamp.isSDK(o.submit_time));
+  },
+  isAmino(o: any): o is VoteAmino {
+    return o && (o.$typeUrl === Vote.typeUrl || typeof o.proposal_id === "bigint" && typeof o.voter === "string" && isSet(o.option) && typeof o.metadata === "string" && Timestamp.isAmino(o.submit_time));
+  },
   encode(message: Vote, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.proposalId !== BigInt(0)) {
       writer.uint32(8).uint64(message.proposalId);
@@ -2178,7 +2309,7 @@ export const Vote = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): Vote {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): Vote {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseVote();
@@ -2243,7 +2374,7 @@ export const Vote = {
       message.voter = object.voter;
     }
     if (object.option !== undefined && object.option !== null) {
-      message.option = voteOptionFromJSON(object.option);
+      message.option = object.option;
     }
     if (object.metadata !== undefined && object.metadata !== null) {
       message.metadata = object.metadata;
@@ -2253,26 +2384,26 @@ export const Vote = {
     }
     return message;
   },
-  toAmino(message: Vote): VoteAmino {
+  toAmino(message: Vote, useInterfaces: boolean = true): VoteAmino {
     const obj: any = {};
     obj.proposal_id = message.proposalId ? message.proposalId.toString() : undefined;
-    obj.voter = message.voter;
-    obj.option = voteOptionToJSON(message.option);
-    obj.metadata = message.metadata;
-    obj.submit_time = message.submitTime ? Timestamp.toAmino(message.submitTime) : Timestamp.fromPartial({});
+    obj.voter = message.voter === "" ? undefined : message.voter;
+    obj.option = message.option === 0 ? undefined : message.option;
+    obj.metadata = message.metadata === "" ? undefined : message.metadata;
+    obj.submit_time = message.submitTime ? Timestamp.toAmino(message.submitTime, useInterfaces) : undefined;
     return obj;
   },
   fromAminoMsg(object: VoteAminoMsg): Vote {
     return Vote.fromAmino(object.value);
   },
-  toAminoMsg(message: Vote): VoteAminoMsg {
+  toAminoMsg(message: Vote, useInterfaces: boolean = true): VoteAminoMsg {
     return {
       type: "cosmos-sdk/Vote",
-      value: Vote.toAmino(message)
+      value: Vote.toAmino(message, useInterfaces)
     };
   },
-  fromProtoMsg(message: VoteProtoMsg): Vote {
-    return Vote.decode(message.value);
+  fromProtoMsg(message: VoteProtoMsg, useInterfaces: boolean = true): Vote {
+    return Vote.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: Vote): Uint8Array {
     return Vote.encode(message).finish();
@@ -2284,47 +2415,5 @@ export const Vote = {
     };
   }
 };
-export const Cosmos_groupv1DecisionPolicy_InterfaceDecoder = (input: BinaryReader | Uint8Array): ThresholdDecisionPolicy | PercentageDecisionPolicy | Any => {
-  const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
-  const data = Any.decode(reader, reader.uint32());
-  switch (data.typeUrl) {
-    case "/cosmos.group.v1.ThresholdDecisionPolicy":
-      return ThresholdDecisionPolicy.decode(data.value, undefined);
-    case "/cosmos.group.v1.PercentageDecisionPolicy":
-      return PercentageDecisionPolicy.decode(data.value, undefined);
-    default:
-      return data;
-  }
-};
-export const Cosmos_groupv1DecisionPolicy_FromAmino = (content: AnyAmino) => {
-  switch (content.type) {
-    case "cosmos-sdk/ThresholdDecisionPolicy":
-      return Any.fromPartialAsAny({
-        typeUrl: "/cosmos.group.v1.ThresholdDecisionPolicy",
-        value: ThresholdDecisionPolicy.encode(ThresholdDecisionPolicy.fromPartial(ThresholdDecisionPolicy.fromAmino(content.value))).finish()
-      });
-    case "cosmos-sdk/PercentageDecisionPolicy":
-      return Any.fromPartialAsAny({
-        typeUrl: "/cosmos.group.v1.PercentageDecisionPolicy",
-        value: PercentageDecisionPolicy.encode(PercentageDecisionPolicy.fromPartial(PercentageDecisionPolicy.fromAmino(content.value))).finish()
-      });
-    default:
-      return Any.fromAmino(content);
-  }
-};
-export const Cosmos_groupv1DecisionPolicy_ToAmino = (content: Any) => {
-  switch (content.typeUrl) {
-    case "/cosmos.group.v1.ThresholdDecisionPolicy":
-      return {
-        type: "cosmos-sdk/ThresholdDecisionPolicy",
-        value: ThresholdDecisionPolicy.toAmino(ThresholdDecisionPolicy.decode(content.value, undefined))
-      };
-    case "/cosmos.group.v1.PercentageDecisionPolicy":
-      return {
-        type: "cosmos-sdk/PercentageDecisionPolicy",
-        value: PercentageDecisionPolicy.toAmino(PercentageDecisionPolicy.decode(content.value, undefined))
-      };
-    default:
-      return Any.toAmino(content);
-  }
-};
+GlobalDecoderRegistry.register(Vote.typeUrl, Vote);
+GlobalDecoderRegistry.registerAminoProtoMapping(Vote.aminoType, Vote.typeUrl);

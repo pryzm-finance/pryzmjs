@@ -1,7 +1,8 @@
 import { Timestamp, TimestampSDKType } from "../../google/protobuf/timestamp";
 import { BinaryReader, BinaryWriter } from "../../binary";
 import { Decimal } from "@cosmjs/math";
-import { isSet, fromJsonTimestamp, fromTimestamp } from "../../helpers";
+import { isSet, fromJsonTimestamp, fromTimestamp, padDecimal } from "../../helpers";
+import { GlobalDecoderRegistry } from "../../registry";
 export interface HistoricalPoolApr {
   time: Timestamp;
   apr?: string;
@@ -46,6 +47,15 @@ function createBaseHistoricalPoolApr(): HistoricalPoolApr {
 }
 export const HistoricalPoolApr = {
   typeUrl: "/pryzmatics.pool.HistoricalPoolApr",
+  is(o: any): o is HistoricalPoolApr {
+    return o && (o.$typeUrl === HistoricalPoolApr.typeUrl || Timestamp.is(o.time));
+  },
+  isSDK(o: any): o is HistoricalPoolAprSDKType {
+    return o && (o.$typeUrl === HistoricalPoolApr.typeUrl || Timestamp.isSDK(o.time));
+  },
+  isAmino(o: any): o is HistoricalPoolAprAmino {
+    return o && (o.$typeUrl === HistoricalPoolApr.typeUrl || Timestamp.isAmino(o.time));
+  },
   encode(message: HistoricalPoolApr, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.time !== undefined) {
       Timestamp.encode(message.time, writer.uint32(10).fork()).ldelim();
@@ -67,7 +77,7 @@ export const HistoricalPoolApr = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): HistoricalPoolApr {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): HistoricalPoolApr {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseHistoricalPoolApr();
@@ -151,21 +161,21 @@ export const HistoricalPoolApr = {
     }
     return message;
   },
-  toAmino(message: HistoricalPoolApr): HistoricalPoolAprAmino {
+  toAmino(message: HistoricalPoolApr, useInterfaces: boolean = true): HistoricalPoolAprAmino {
     const obj: any = {};
-    obj.time = message.time ? Timestamp.toAmino(message.time) : undefined;
-    obj.apr = message.apr;
-    obj.swap_fee_apr = message.swapFeeApr;
-    obj.token_yield = message.tokenYield;
-    obj.incentives_apr = message.incentivesApr;
-    obj.alliance_apr = message.allianceApr;
+    obj.time = message.time ? Timestamp.toAmino(message.time, useInterfaces) : undefined;
+    obj.apr = padDecimal(message.apr) === null ? undefined : padDecimal(message.apr);
+    obj.swap_fee_apr = padDecimal(message.swapFeeApr) === null ? undefined : padDecimal(message.swapFeeApr);
+    obj.token_yield = padDecimal(message.tokenYield) === null ? undefined : padDecimal(message.tokenYield);
+    obj.incentives_apr = padDecimal(message.incentivesApr) === null ? undefined : padDecimal(message.incentivesApr);
+    obj.alliance_apr = padDecimal(message.allianceApr) === null ? undefined : padDecimal(message.allianceApr);
     return obj;
   },
   fromAminoMsg(object: HistoricalPoolAprAminoMsg): HistoricalPoolApr {
     return HistoricalPoolApr.fromAmino(object.value);
   },
-  fromProtoMsg(message: HistoricalPoolAprProtoMsg): HistoricalPoolApr {
-    return HistoricalPoolApr.decode(message.value);
+  fromProtoMsg(message: HistoricalPoolAprProtoMsg, useInterfaces: boolean = true): HistoricalPoolApr {
+    return HistoricalPoolApr.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: HistoricalPoolApr): Uint8Array {
     return HistoricalPoolApr.encode(message).finish();
@@ -177,3 +187,4 @@ export const HistoricalPoolApr = {
     };
   }
 };
+GlobalDecoderRegistry.register(HistoricalPoolApr.typeUrl, HistoricalPoolApr);

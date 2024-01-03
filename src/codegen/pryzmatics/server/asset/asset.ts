@@ -1,6 +1,7 @@
 import { Asset, AssetAmino, AssetSDKType } from "../../asset/asset";
 import { BinaryReader, BinaryWriter } from "../../../binary";
 import { isSet } from "../../../helpers";
+import { GlobalDecoderRegistry } from "../../../registry";
 export interface QueryAssetRequest {
   assetId: string;
 }
@@ -42,13 +43,22 @@ function createBaseQueryAssetRequest(): QueryAssetRequest {
 }
 export const QueryAssetRequest = {
   typeUrl: "/pryzmatics.server.asset.QueryAssetRequest",
+  is(o: any): o is QueryAssetRequest {
+    return o && (o.$typeUrl === QueryAssetRequest.typeUrl || typeof o.assetId === "string");
+  },
+  isSDK(o: any): o is QueryAssetRequestSDKType {
+    return o && (o.$typeUrl === QueryAssetRequest.typeUrl || typeof o.asset_id === "string");
+  },
+  isAmino(o: any): o is QueryAssetRequestAmino {
+    return o && (o.$typeUrl === QueryAssetRequest.typeUrl || typeof o.asset_id === "string");
+  },
   encode(message: QueryAssetRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.assetId !== "") {
       writer.uint32(10).string(message.assetId);
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): QueryAssetRequest {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): QueryAssetRequest {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryAssetRequest();
@@ -87,16 +97,16 @@ export const QueryAssetRequest = {
     }
     return message;
   },
-  toAmino(message: QueryAssetRequest): QueryAssetRequestAmino {
+  toAmino(message: QueryAssetRequest, useInterfaces: boolean = true): QueryAssetRequestAmino {
     const obj: any = {};
-    obj.asset_id = message.assetId;
+    obj.asset_id = message.assetId === "" ? undefined : message.assetId;
     return obj;
   },
   fromAminoMsg(object: QueryAssetRequestAminoMsg): QueryAssetRequest {
     return QueryAssetRequest.fromAmino(object.value);
   },
-  fromProtoMsg(message: QueryAssetRequestProtoMsg): QueryAssetRequest {
-    return QueryAssetRequest.decode(message.value);
+  fromProtoMsg(message: QueryAssetRequestProtoMsg, useInterfaces: boolean = true): QueryAssetRequest {
+    return QueryAssetRequest.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: QueryAssetRequest): Uint8Array {
     return QueryAssetRequest.encode(message).finish();
@@ -108,6 +118,7 @@ export const QueryAssetRequest = {
     };
   }
 };
+GlobalDecoderRegistry.register(QueryAssetRequest.typeUrl, QueryAssetRequest);
 function createBaseQueryAssetResponse(): QueryAssetResponse {
   return {
     asset: Asset.fromPartial({})
@@ -115,13 +126,22 @@ function createBaseQueryAssetResponse(): QueryAssetResponse {
 }
 export const QueryAssetResponse = {
   typeUrl: "/pryzmatics.server.asset.QueryAssetResponse",
+  is(o: any): o is QueryAssetResponse {
+    return o && (o.$typeUrl === QueryAssetResponse.typeUrl || Asset.is(o.asset));
+  },
+  isSDK(o: any): o is QueryAssetResponseSDKType {
+    return o && (o.$typeUrl === QueryAssetResponse.typeUrl || Asset.isSDK(o.asset));
+  },
+  isAmino(o: any): o is QueryAssetResponseAmino {
+    return o && (o.$typeUrl === QueryAssetResponse.typeUrl || Asset.isAmino(o.asset));
+  },
   encode(message: QueryAssetResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.asset !== undefined) {
       Asset.encode(message.asset, writer.uint32(10).fork()).ldelim();
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): QueryAssetResponse {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): QueryAssetResponse {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryAssetResponse();
@@ -129,7 +149,7 @@ export const QueryAssetResponse = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.asset = Asset.decode(reader, reader.uint32());
+          message.asset = Asset.decode(reader, reader.uint32(), useInterfaces);
           break;
         default:
           reader.skipType(tag & 7);
@@ -160,16 +180,16 @@ export const QueryAssetResponse = {
     }
     return message;
   },
-  toAmino(message: QueryAssetResponse): QueryAssetResponseAmino {
+  toAmino(message: QueryAssetResponse, useInterfaces: boolean = true): QueryAssetResponseAmino {
     const obj: any = {};
-    obj.asset = message.asset ? Asset.toAmino(message.asset) : undefined;
+    obj.asset = message.asset ? Asset.toAmino(message.asset, useInterfaces) : undefined;
     return obj;
   },
   fromAminoMsg(object: QueryAssetResponseAminoMsg): QueryAssetResponse {
     return QueryAssetResponse.fromAmino(object.value);
   },
-  fromProtoMsg(message: QueryAssetResponseProtoMsg): QueryAssetResponse {
-    return QueryAssetResponse.decode(message.value);
+  fromProtoMsg(message: QueryAssetResponseProtoMsg, useInterfaces: boolean = true): QueryAssetResponse {
+    return QueryAssetResponse.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: QueryAssetResponse): Uint8Array {
     return QueryAssetResponse.encode(message).finish();
@@ -181,3 +201,4 @@ export const QueryAssetResponse = {
     };
   }
 };
+GlobalDecoderRegistry.register(QueryAssetResponse.typeUrl, QueryAssetResponse);

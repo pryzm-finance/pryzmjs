@@ -1,5 +1,6 @@
 import { BinaryReader, BinaryWriter } from "../../../binary";
 import { isSet, bytesFromBase64, base64FromBytes } from "../../../helpers";
+import { GlobalDecoderRegistry } from "../../../registry";
 /** PubKey defines a secp256r1 ECDSA public key. */
 export interface PubKey {
   /**
@@ -57,13 +58,23 @@ function createBasePubKey(): PubKey {
 }
 export const PubKey = {
   typeUrl: "/cosmos.crypto.secp256r1.PubKey",
+  aminoType: "cosmos-sdk/PubKey",
+  is(o: any): o is PubKey {
+    return o && (o.$typeUrl === PubKey.typeUrl || o.key instanceof Uint8Array || typeof o.key === "string");
+  },
+  isSDK(o: any): o is PubKeySDKType {
+    return o && (o.$typeUrl === PubKey.typeUrl || o.key instanceof Uint8Array || typeof o.key === "string");
+  },
+  isAmino(o: any): o is PubKeyAmino {
+    return o && (o.$typeUrl === PubKey.typeUrl || o.key instanceof Uint8Array || typeof o.key === "string");
+  },
   encode(message: PubKey, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.key.length !== 0) {
       writer.uint32(10).bytes(message.key);
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): PubKey {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): PubKey {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBasePubKey();
@@ -102,7 +113,7 @@ export const PubKey = {
     }
     return message;
   },
-  toAmino(message: PubKey): PubKeyAmino {
+  toAmino(message: PubKey, useInterfaces: boolean = true): PubKeyAmino {
     const obj: any = {};
     obj.key = message.key ? base64FromBytes(message.key) : undefined;
     return obj;
@@ -110,14 +121,14 @@ export const PubKey = {
   fromAminoMsg(object: PubKeyAminoMsg): PubKey {
     return PubKey.fromAmino(object.value);
   },
-  toAminoMsg(message: PubKey): PubKeyAminoMsg {
+  toAminoMsg(message: PubKey, useInterfaces: boolean = true): PubKeyAminoMsg {
     return {
       type: "cosmos-sdk/PubKey",
-      value: PubKey.toAmino(message)
+      value: PubKey.toAmino(message, useInterfaces)
     };
   },
-  fromProtoMsg(message: PubKeyProtoMsg): PubKey {
-    return PubKey.decode(message.value);
+  fromProtoMsg(message: PubKeyProtoMsg, useInterfaces: boolean = true): PubKey {
+    return PubKey.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: PubKey): Uint8Array {
     return PubKey.encode(message).finish();
@@ -129,6 +140,8 @@ export const PubKey = {
     };
   }
 };
+GlobalDecoderRegistry.register(PubKey.typeUrl, PubKey);
+GlobalDecoderRegistry.registerAminoProtoMapping(PubKey.aminoType, PubKey.typeUrl);
 function createBasePrivKey(): PrivKey {
   return {
     secret: new Uint8Array()
@@ -136,13 +149,23 @@ function createBasePrivKey(): PrivKey {
 }
 export const PrivKey = {
   typeUrl: "/cosmos.crypto.secp256r1.PrivKey",
+  aminoType: "cosmos-sdk/PrivKey",
+  is(o: any): o is PrivKey {
+    return o && (o.$typeUrl === PrivKey.typeUrl || o.secret instanceof Uint8Array || typeof o.secret === "string");
+  },
+  isSDK(o: any): o is PrivKeySDKType {
+    return o && (o.$typeUrl === PrivKey.typeUrl || o.secret instanceof Uint8Array || typeof o.secret === "string");
+  },
+  isAmino(o: any): o is PrivKeyAmino {
+    return o && (o.$typeUrl === PrivKey.typeUrl || o.secret instanceof Uint8Array || typeof o.secret === "string");
+  },
   encode(message: PrivKey, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.secret.length !== 0) {
       writer.uint32(10).bytes(message.secret);
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): PrivKey {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): PrivKey {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBasePrivKey();
@@ -181,7 +204,7 @@ export const PrivKey = {
     }
     return message;
   },
-  toAmino(message: PrivKey): PrivKeyAmino {
+  toAmino(message: PrivKey, useInterfaces: boolean = true): PrivKeyAmino {
     const obj: any = {};
     obj.secret = message.secret ? base64FromBytes(message.secret) : undefined;
     return obj;
@@ -189,14 +212,14 @@ export const PrivKey = {
   fromAminoMsg(object: PrivKeyAminoMsg): PrivKey {
     return PrivKey.fromAmino(object.value);
   },
-  toAminoMsg(message: PrivKey): PrivKeyAminoMsg {
+  toAminoMsg(message: PrivKey, useInterfaces: boolean = true): PrivKeyAminoMsg {
     return {
       type: "cosmos-sdk/PrivKey",
-      value: PrivKey.toAmino(message)
+      value: PrivKey.toAmino(message, useInterfaces)
     };
   },
-  fromProtoMsg(message: PrivKeyProtoMsg): PrivKey {
-    return PrivKey.decode(message.value);
+  fromProtoMsg(message: PrivKeyProtoMsg, useInterfaces: boolean = true): PrivKey {
+    return PrivKey.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: PrivKey): Uint8Array {
     return PrivKey.encode(message).finish();
@@ -208,3 +231,5 @@ export const PrivKey = {
     };
   }
 };
+GlobalDecoderRegistry.register(PrivKey.typeUrl, PrivKey);
+GlobalDecoderRegistry.registerAminoProtoMapping(PrivKey.aminoType, PrivKey.typeUrl);

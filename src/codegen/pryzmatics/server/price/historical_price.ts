@@ -1,7 +1,8 @@
 import { TimeResolutionType, timeResolutionTypeFromJSON, timeResolutionTypeToJSON } from "../../common/time_resolution";
 import { HistoricalPrice, HistoricalPriceAmino, HistoricalPriceSDKType } from "../../price/historical_price";
-import { BinaryReader, BinaryWriter } from "../../../binary";
 import { isSet } from "../../../helpers";
+import { BinaryReader, BinaryWriter } from "../../../binary";
+import { GlobalDecoderRegistry } from "../../../registry";
 export interface QueryHistoricalPriceRequest {
   denom: string;
   quote: string;
@@ -63,6 +64,15 @@ function createBaseQueryHistoricalPriceRequest(): QueryHistoricalPriceRequest {
 }
 export const QueryHistoricalPriceRequest = {
   typeUrl: "/pryzmatics.server.price.QueryHistoricalPriceRequest",
+  is(o: any): o is QueryHistoricalPriceRequest {
+    return o && (o.$typeUrl === QueryHistoricalPriceRequest.typeUrl || typeof o.denom === "string" && typeof o.quote === "string" && isSet(o.timeResolutionType) && typeof o.timeResolutionValue === "number" && typeof o.from === "string" && typeof o.to === "string");
+  },
+  isSDK(o: any): o is QueryHistoricalPriceRequestSDKType {
+    return o && (o.$typeUrl === QueryHistoricalPriceRequest.typeUrl || typeof o.denom === "string" && typeof o.quote === "string" && isSet(o.time_resolution_type) && typeof o.time_resolution_value === "number" && typeof o.from === "string" && typeof o.to === "string");
+  },
+  isAmino(o: any): o is QueryHistoricalPriceRequestAmino {
+    return o && (o.$typeUrl === QueryHistoricalPriceRequest.typeUrl || typeof o.denom === "string" && typeof o.quote === "string" && isSet(o.time_resolution_type) && typeof o.time_resolution_value === "number" && typeof o.from === "string" && typeof o.to === "string");
+  },
   encode(message: QueryHistoricalPriceRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.denom !== "") {
       writer.uint32(10).string(message.denom);
@@ -84,7 +94,7 @@ export const QueryHistoricalPriceRequest = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): QueryHistoricalPriceRequest {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): QueryHistoricalPriceRequest {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryHistoricalPriceRequest();
@@ -155,7 +165,7 @@ export const QueryHistoricalPriceRequest = {
       message.quote = object.quote;
     }
     if (object.time_resolution_type !== undefined && object.time_resolution_type !== null) {
-      message.timeResolutionType = timeResolutionTypeFromJSON(object.time_resolution_type);
+      message.timeResolutionType = object.time_resolution_type;
     }
     if (object.time_resolution_value !== undefined && object.time_resolution_value !== null) {
       message.timeResolutionValue = object.time_resolution_value;
@@ -168,21 +178,21 @@ export const QueryHistoricalPriceRequest = {
     }
     return message;
   },
-  toAmino(message: QueryHistoricalPriceRequest): QueryHistoricalPriceRequestAmino {
+  toAmino(message: QueryHistoricalPriceRequest, useInterfaces: boolean = true): QueryHistoricalPriceRequestAmino {
     const obj: any = {};
-    obj.denom = message.denom;
-    obj.quote = message.quote;
-    obj.time_resolution_type = timeResolutionTypeToJSON(message.timeResolutionType);
-    obj.time_resolution_value = message.timeResolutionValue;
-    obj.from = message.from;
-    obj.to = message.to;
+    obj.denom = message.denom === "" ? undefined : message.denom;
+    obj.quote = message.quote === "" ? undefined : message.quote;
+    obj.time_resolution_type = message.timeResolutionType === 0 ? undefined : message.timeResolutionType;
+    obj.time_resolution_value = message.timeResolutionValue === 0 ? undefined : message.timeResolutionValue;
+    obj.from = message.from === "" ? undefined : message.from;
+    obj.to = message.to === "" ? undefined : message.to;
     return obj;
   },
   fromAminoMsg(object: QueryHistoricalPriceRequestAminoMsg): QueryHistoricalPriceRequest {
     return QueryHistoricalPriceRequest.fromAmino(object.value);
   },
-  fromProtoMsg(message: QueryHistoricalPriceRequestProtoMsg): QueryHistoricalPriceRequest {
-    return QueryHistoricalPriceRequest.decode(message.value);
+  fromProtoMsg(message: QueryHistoricalPriceRequestProtoMsg, useInterfaces: boolean = true): QueryHistoricalPriceRequest {
+    return QueryHistoricalPriceRequest.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: QueryHistoricalPriceRequest): Uint8Array {
     return QueryHistoricalPriceRequest.encode(message).finish();
@@ -194,6 +204,7 @@ export const QueryHistoricalPriceRequest = {
     };
   }
 };
+GlobalDecoderRegistry.register(QueryHistoricalPriceRequest.typeUrl, QueryHistoricalPriceRequest);
 function createBaseQueryHistoricalPriceResponse(): QueryHistoricalPriceResponse {
   return {
     historicalPrices: []
@@ -201,13 +212,22 @@ function createBaseQueryHistoricalPriceResponse(): QueryHistoricalPriceResponse 
 }
 export const QueryHistoricalPriceResponse = {
   typeUrl: "/pryzmatics.server.price.QueryHistoricalPriceResponse",
+  is(o: any): o is QueryHistoricalPriceResponse {
+    return o && (o.$typeUrl === QueryHistoricalPriceResponse.typeUrl || Array.isArray(o.historicalPrices) && (!o.historicalPrices.length || HistoricalPrice.is(o.historicalPrices[0])));
+  },
+  isSDK(o: any): o is QueryHistoricalPriceResponseSDKType {
+    return o && (o.$typeUrl === QueryHistoricalPriceResponse.typeUrl || Array.isArray(o.historical_prices) && (!o.historical_prices.length || HistoricalPrice.isSDK(o.historical_prices[0])));
+  },
+  isAmino(o: any): o is QueryHistoricalPriceResponseAmino {
+    return o && (o.$typeUrl === QueryHistoricalPriceResponse.typeUrl || Array.isArray(o.historical_prices) && (!o.historical_prices.length || HistoricalPrice.isAmino(o.historical_prices[0])));
+  },
   encode(message: QueryHistoricalPriceResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     for (const v of message.historicalPrices) {
       HistoricalPrice.encode(v!, writer.uint32(10).fork()).ldelim();
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): QueryHistoricalPriceResponse {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): QueryHistoricalPriceResponse {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryHistoricalPriceResponse();
@@ -215,7 +235,7 @@ export const QueryHistoricalPriceResponse = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.historicalPrices.push(HistoricalPrice.decode(reader, reader.uint32()));
+          message.historicalPrices.push(HistoricalPrice.decode(reader, reader.uint32(), useInterfaces));
           break;
         default:
           reader.skipType(tag & 7);
@@ -248,20 +268,20 @@ export const QueryHistoricalPriceResponse = {
     message.historicalPrices = object.historical_prices?.map(e => HistoricalPrice.fromAmino(e)) || [];
     return message;
   },
-  toAmino(message: QueryHistoricalPriceResponse): QueryHistoricalPriceResponseAmino {
+  toAmino(message: QueryHistoricalPriceResponse, useInterfaces: boolean = true): QueryHistoricalPriceResponseAmino {
     const obj: any = {};
     if (message.historicalPrices) {
-      obj.historical_prices = message.historicalPrices.map(e => e ? HistoricalPrice.toAmino(e) : undefined);
+      obj.historical_prices = message.historicalPrices.map(e => e ? HistoricalPrice.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.historical_prices = [];
+      obj.historical_prices = message.historicalPrices;
     }
     return obj;
   },
   fromAminoMsg(object: QueryHistoricalPriceResponseAminoMsg): QueryHistoricalPriceResponse {
     return QueryHistoricalPriceResponse.fromAmino(object.value);
   },
-  fromProtoMsg(message: QueryHistoricalPriceResponseProtoMsg): QueryHistoricalPriceResponse {
-    return QueryHistoricalPriceResponse.decode(message.value);
+  fromProtoMsg(message: QueryHistoricalPriceResponseProtoMsg, useInterfaces: boolean = true): QueryHistoricalPriceResponse {
+    return QueryHistoricalPriceResponse.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: QueryHistoricalPriceResponse): Uint8Array {
     return QueryHistoricalPriceResponse.encode(message).finish();
@@ -273,3 +293,4 @@ export const QueryHistoricalPriceResponse = {
     };
   }
 };
+GlobalDecoderRegistry.register(QueryHistoricalPriceResponse.typeUrl, QueryHistoricalPriceResponse);

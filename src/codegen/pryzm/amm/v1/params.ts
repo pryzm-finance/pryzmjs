@@ -1,6 +1,7 @@
 import { BinaryReader, BinaryWriter } from "../../../binary";
 import { Decimal } from "@cosmjs/math";
-import { isSet } from "../../../helpers";
+import { isSet, padDecimal } from "../../../helpers";
+import { GlobalDecoderRegistry } from "../../../registry";
 export interface OrderParameters {
   stepMatchingFeeRatio: string;
   stepSwapFeeRatio: string;
@@ -209,6 +210,15 @@ function createBaseOrderParameters(): OrderParameters {
 }
 export const OrderParameters = {
   typeUrl: "/pryzm.amm.v1.OrderParameters",
+  is(o: any): o is OrderParameters {
+    return o && (o.$typeUrl === OrderParameters.typeUrl || typeof o.stepMatchingFeeRatio === "string" && typeof o.stepSwapFeeRatio === "string" && typeof o.matchingProtocolFeeRatio === "string" && typeof o.matchingSolverFeeRatio === "string" && typeof o.maxOrdersPerBlock === "number" && typeof o.maxSchedulePerBlock === "number" && typeof o.maxExecOrderTradeRatio === "string" && typeof o.maxOrderStepRatio === "string" && typeof o.minOrderStepRatio === "string");
+  },
+  isSDK(o: any): o is OrderParametersSDKType {
+    return o && (o.$typeUrl === OrderParameters.typeUrl || typeof o.step_matching_fee_ratio === "string" && typeof o.step_swap_fee_ratio === "string" && typeof o.matching_protocol_fee_ratio === "string" && typeof o.matching_solver_fee_ratio === "string" && typeof o.max_orders_per_block === "number" && typeof o.max_schedule_per_block === "number" && typeof o.max_exec_order_trade_ratio === "string" && typeof o.max_order_step_ratio === "string" && typeof o.min_order_step_ratio === "string");
+  },
+  isAmino(o: any): o is OrderParametersAmino {
+    return o && (o.$typeUrl === OrderParameters.typeUrl || typeof o.step_matching_fee_ratio === "string" && typeof o.step_swap_fee_ratio === "string" && typeof o.matching_protocol_fee_ratio === "string" && typeof o.matching_solver_fee_ratio === "string" && typeof o.max_orders_per_block === "number" && typeof o.max_schedule_per_block === "number" && typeof o.max_exec_order_trade_ratio === "string" && typeof o.max_order_step_ratio === "string" && typeof o.min_order_step_ratio === "string");
+  },
   encode(message: OrderParameters, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.stepMatchingFeeRatio !== "") {
       writer.uint32(10).string(Decimal.fromUserInput(message.stepMatchingFeeRatio, 18).atomics);
@@ -239,7 +249,7 @@ export const OrderParameters = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): OrderParameters {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): OrderParameters {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseOrderParameters();
@@ -350,24 +360,24 @@ export const OrderParameters = {
     }
     return message;
   },
-  toAmino(message: OrderParameters): OrderParametersAmino {
+  toAmino(message: OrderParameters, useInterfaces: boolean = true): OrderParametersAmino {
     const obj: any = {};
-    obj.step_matching_fee_ratio = message.stepMatchingFeeRatio;
-    obj.step_swap_fee_ratio = message.stepSwapFeeRatio;
-    obj.matching_protocol_fee_ratio = message.matchingProtocolFeeRatio;
-    obj.matching_solver_fee_ratio = message.matchingSolverFeeRatio;
-    obj.max_orders_per_block = message.maxOrdersPerBlock ?? 0;
-    obj.max_schedule_per_block = message.maxSchedulePerBlock ?? 0;
-    obj.max_exec_order_trade_ratio = message.maxExecOrderTradeRatio;
-    obj.max_order_step_ratio = message.maxOrderStepRatio;
-    obj.min_order_step_ratio = message.minOrderStepRatio;
+    obj.step_matching_fee_ratio = padDecimal(message.stepMatchingFeeRatio) === "" ? undefined : padDecimal(message.stepMatchingFeeRatio);
+    obj.step_swap_fee_ratio = padDecimal(message.stepSwapFeeRatio) === "" ? undefined : padDecimal(message.stepSwapFeeRatio);
+    obj.matching_protocol_fee_ratio = padDecimal(message.matchingProtocolFeeRatio) === "" ? undefined : padDecimal(message.matchingProtocolFeeRatio);
+    obj.matching_solver_fee_ratio = padDecimal(message.matchingSolverFeeRatio) === "" ? undefined : padDecimal(message.matchingSolverFeeRatio);
+    obj.max_orders_per_block = message.maxOrdersPerBlock === 0 ? undefined : message.maxOrdersPerBlock;
+    obj.max_schedule_per_block = message.maxSchedulePerBlock === 0 ? undefined : message.maxSchedulePerBlock;
+    obj.max_exec_order_trade_ratio = padDecimal(message.maxExecOrderTradeRatio) === "" ? undefined : padDecimal(message.maxExecOrderTradeRatio);
+    obj.max_order_step_ratio = padDecimal(message.maxOrderStepRatio) === "" ? undefined : padDecimal(message.maxOrderStepRatio);
+    obj.min_order_step_ratio = padDecimal(message.minOrderStepRatio) === "" ? undefined : padDecimal(message.minOrderStepRatio);
     return obj;
   },
   fromAminoMsg(object: OrderParametersAminoMsg): OrderParameters {
     return OrderParameters.fromAmino(object.value);
   },
-  fromProtoMsg(message: OrderParametersProtoMsg): OrderParameters {
-    return OrderParameters.decode(message.value);
+  fromProtoMsg(message: OrderParametersProtoMsg, useInterfaces: boolean = true): OrderParameters {
+    return OrderParameters.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: OrderParameters): Uint8Array {
     return OrderParameters.encode(message).finish();
@@ -379,6 +389,7 @@ export const OrderParameters = {
     };
   }
 };
+GlobalDecoderRegistry.register(OrderParameters.typeUrl, OrderParameters);
 function createBaseYammParameters(): YammParameters {
   return {
     lambda: "",
@@ -398,6 +409,15 @@ function createBaseYammParameters(): YammParameters {
 }
 export const YammParameters = {
   typeUrl: "/pryzm.amm.v1.YammParameters",
+  is(o: any): o is YammParameters {
+    return o && (o.$typeUrl === YammParameters.typeUrl || typeof o.lambda === "string" && typeof o.maturityIntroductionIntervalMillis === "bigint" && typeof o.maturityExpirationIntervalMillis === "bigint" && typeof o.introductionVirtualBalanceScaler === "string" && typeof o.expirationVirtualBalanceScaler === "string" && typeof o.buyYGivenInLoanFeeRatio === "string" && typeof o.sellYGivenOutFeeRatio === "string" && typeof o.maxAlpha === "string" && Array.isArray(o.defaultInitializationAllowList) && (!o.defaultInitializationAllowList.length || typeof o.defaultInitializationAllowList[0] === "string") && typeof o.avgMonthlyYieldRate === "string" && typeof o.yieldFeeScaler === "string" && Array.isArray(o.defaultAdmins) && (!o.defaultAdmins.length || typeof o.defaultAdmins[0] === "string") && Array.isArray(o.defaultPauseAllowList) && (!o.defaultPauseAllowList.length || typeof o.defaultPauseAllowList[0] === "string"));
+  },
+  isSDK(o: any): o is YammParametersSDKType {
+    return o && (o.$typeUrl === YammParameters.typeUrl || typeof o.lambda === "string" && typeof o.maturity_introduction_interval_millis === "bigint" && typeof o.maturity_expiration_interval_millis === "bigint" && typeof o.introduction_virtual_balance_scaler === "string" && typeof o.expiration_virtual_balance_scaler === "string" && typeof o.buy_y_given_in_loan_fee_ratio === "string" && typeof o.sell_y_given_out_fee_ratio === "string" && typeof o.max_alpha === "string" && Array.isArray(o.default_initialization_allow_list) && (!o.default_initialization_allow_list.length || typeof o.default_initialization_allow_list[0] === "string") && typeof o.avg_monthly_yield_rate === "string" && typeof o.yield_fee_scaler === "string" && Array.isArray(o.default_admins) && (!o.default_admins.length || typeof o.default_admins[0] === "string") && Array.isArray(o.default_pause_allow_list) && (!o.default_pause_allow_list.length || typeof o.default_pause_allow_list[0] === "string"));
+  },
+  isAmino(o: any): o is YammParametersAmino {
+    return o && (o.$typeUrl === YammParameters.typeUrl || typeof o.lambda === "string" && typeof o.maturity_introduction_interval_millis === "bigint" && typeof o.maturity_expiration_interval_millis === "bigint" && typeof o.introduction_virtual_balance_scaler === "string" && typeof o.expiration_virtual_balance_scaler === "string" && typeof o.buy_y_given_in_loan_fee_ratio === "string" && typeof o.sell_y_given_out_fee_ratio === "string" && typeof o.max_alpha === "string" && Array.isArray(o.default_initialization_allow_list) && (!o.default_initialization_allow_list.length || typeof o.default_initialization_allow_list[0] === "string") && typeof o.avg_monthly_yield_rate === "string" && typeof o.yield_fee_scaler === "string" && Array.isArray(o.default_admins) && (!o.default_admins.length || typeof o.default_admins[0] === "string") && Array.isArray(o.default_pause_allow_list) && (!o.default_pause_allow_list.length || typeof o.default_pause_allow_list[0] === "string"));
+  },
   encode(message: YammParameters, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.lambda !== "") {
       writer.uint32(10).string(Decimal.fromUserInput(message.lambda, 18).atomics);
@@ -440,7 +460,7 @@ export const YammParameters = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): YammParameters {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): YammParameters {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseYammParameters();
@@ -593,40 +613,40 @@ export const YammParameters = {
     message.defaultPauseAllowList = object.default_pause_allow_list?.map(e => e) || [];
     return message;
   },
-  toAmino(message: YammParameters): YammParametersAmino {
+  toAmino(message: YammParameters, useInterfaces: boolean = true): YammParametersAmino {
     const obj: any = {};
-    obj.lambda = message.lambda;
-    obj.maturity_introduction_interval_millis = message.maturityIntroductionIntervalMillis ? message.maturityIntroductionIntervalMillis.toString() : "0";
-    obj.maturity_expiration_interval_millis = message.maturityExpirationIntervalMillis ? message.maturityExpirationIntervalMillis.toString() : "0";
-    obj.introduction_virtual_balance_scaler = message.introductionVirtualBalanceScaler;
-    obj.expiration_virtual_balance_scaler = message.expirationVirtualBalanceScaler;
-    obj.buy_y_given_in_loan_fee_ratio = message.buyYGivenInLoanFeeRatio;
-    obj.sell_y_given_out_fee_ratio = message.sellYGivenOutFeeRatio;
-    obj.max_alpha = message.maxAlpha;
+    obj.lambda = padDecimal(message.lambda) === "" ? undefined : padDecimal(message.lambda);
+    obj.maturity_introduction_interval_millis = message.maturityIntroductionIntervalMillis ? message.maturityIntroductionIntervalMillis.toString() : undefined;
+    obj.maturity_expiration_interval_millis = message.maturityExpirationIntervalMillis ? message.maturityExpirationIntervalMillis.toString() : undefined;
+    obj.introduction_virtual_balance_scaler = padDecimal(message.introductionVirtualBalanceScaler) === "" ? undefined : padDecimal(message.introductionVirtualBalanceScaler);
+    obj.expiration_virtual_balance_scaler = padDecimal(message.expirationVirtualBalanceScaler) === "" ? undefined : padDecimal(message.expirationVirtualBalanceScaler);
+    obj.buy_y_given_in_loan_fee_ratio = padDecimal(message.buyYGivenInLoanFeeRatio) === "" ? undefined : padDecimal(message.buyYGivenInLoanFeeRatio);
+    obj.sell_y_given_out_fee_ratio = padDecimal(message.sellYGivenOutFeeRatio) === "" ? undefined : padDecimal(message.sellYGivenOutFeeRatio);
+    obj.max_alpha = padDecimal(message.maxAlpha) === "" ? undefined : padDecimal(message.maxAlpha);
     if (message.defaultInitializationAllowList) {
       obj.default_initialization_allow_list = message.defaultInitializationAllowList.map(e => e);
     } else {
-      obj.default_initialization_allow_list = [];
+      obj.default_initialization_allow_list = message.defaultInitializationAllowList;
     }
-    obj.avg_monthly_yield_rate = message.avgMonthlyYieldRate;
-    obj.yield_fee_scaler = message.yieldFeeScaler;
+    obj.avg_monthly_yield_rate = padDecimal(message.avgMonthlyYieldRate) === "" ? undefined : padDecimal(message.avgMonthlyYieldRate);
+    obj.yield_fee_scaler = padDecimal(message.yieldFeeScaler) === "" ? undefined : padDecimal(message.yieldFeeScaler);
     if (message.defaultAdmins) {
       obj.default_admins = message.defaultAdmins.map(e => e);
     } else {
-      obj.default_admins = [];
+      obj.default_admins = message.defaultAdmins;
     }
     if (message.defaultPauseAllowList) {
       obj.default_pause_allow_list = message.defaultPauseAllowList.map(e => e);
     } else {
-      obj.default_pause_allow_list = [];
+      obj.default_pause_allow_list = message.defaultPauseAllowList;
     }
     return obj;
   },
   fromAminoMsg(object: YammParametersAminoMsg): YammParameters {
     return YammParameters.fromAmino(object.value);
   },
-  fromProtoMsg(message: YammParametersProtoMsg): YammParameters {
-    return YammParameters.decode(message.value);
+  fromProtoMsg(message: YammParametersProtoMsg, useInterfaces: boolean = true): YammParameters {
+    return YammParameters.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: YammParameters): Uint8Array {
     return YammParameters.encode(message).finish();
@@ -638,6 +658,7 @@ export const YammParameters = {
     };
   }
 };
+GlobalDecoderRegistry.register(YammParameters.typeUrl, YammParameters);
 function createBaseGeneralPoolParameters(): GeneralPoolParameters {
   return {
     allowPublicPoolCreation: false,
@@ -648,6 +669,15 @@ function createBaseGeneralPoolParameters(): GeneralPoolParameters {
 }
 export const GeneralPoolParameters = {
   typeUrl: "/pryzm.amm.v1.GeneralPoolParameters",
+  is(o: any): o is GeneralPoolParameters {
+    return o && (o.$typeUrl === GeneralPoolParameters.typeUrl || typeof o.allowPublicPoolCreation === "boolean" && typeof o.defaultSwapFeeRatio === "string" && typeof o.swapProtocolFeeRatio === "string" && typeof o.joinExitProtocolFeeRatio === "string");
+  },
+  isSDK(o: any): o is GeneralPoolParametersSDKType {
+    return o && (o.$typeUrl === GeneralPoolParameters.typeUrl || typeof o.allow_public_pool_creation === "boolean" && typeof o.default_swap_fee_ratio === "string" && typeof o.swap_protocol_fee_ratio === "string" && typeof o.join_exit_protocol_fee_ratio === "string");
+  },
+  isAmino(o: any): o is GeneralPoolParametersAmino {
+    return o && (o.$typeUrl === GeneralPoolParameters.typeUrl || typeof o.allow_public_pool_creation === "boolean" && typeof o.default_swap_fee_ratio === "string" && typeof o.swap_protocol_fee_ratio === "string" && typeof o.join_exit_protocol_fee_ratio === "string");
+  },
   encode(message: GeneralPoolParameters, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.allowPublicPoolCreation === true) {
       writer.uint32(8).bool(message.allowPublicPoolCreation);
@@ -663,7 +693,7 @@ export const GeneralPoolParameters = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): GeneralPoolParameters {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): GeneralPoolParameters {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseGeneralPoolParameters();
@@ -729,19 +759,19 @@ export const GeneralPoolParameters = {
     }
     return message;
   },
-  toAmino(message: GeneralPoolParameters): GeneralPoolParametersAmino {
+  toAmino(message: GeneralPoolParameters, useInterfaces: boolean = true): GeneralPoolParametersAmino {
     const obj: any = {};
-    obj.allow_public_pool_creation = message.allowPublicPoolCreation ?? false;
-    obj.default_swap_fee_ratio = message.defaultSwapFeeRatio;
-    obj.swap_protocol_fee_ratio = message.swapProtocolFeeRatio;
-    obj.join_exit_protocol_fee_ratio = message.joinExitProtocolFeeRatio;
+    obj.allow_public_pool_creation = message.allowPublicPoolCreation === false ? undefined : message.allowPublicPoolCreation;
+    obj.default_swap_fee_ratio = padDecimal(message.defaultSwapFeeRatio) === "" ? undefined : padDecimal(message.defaultSwapFeeRatio);
+    obj.swap_protocol_fee_ratio = padDecimal(message.swapProtocolFeeRatio) === "" ? undefined : padDecimal(message.swapProtocolFeeRatio);
+    obj.join_exit_protocol_fee_ratio = padDecimal(message.joinExitProtocolFeeRatio) === "" ? undefined : padDecimal(message.joinExitProtocolFeeRatio);
     return obj;
   },
   fromAminoMsg(object: GeneralPoolParametersAminoMsg): GeneralPoolParameters {
     return GeneralPoolParameters.fromAmino(object.value);
   },
-  fromProtoMsg(message: GeneralPoolParametersProtoMsg): GeneralPoolParameters {
-    return GeneralPoolParameters.decode(message.value);
+  fromProtoMsg(message: GeneralPoolParametersProtoMsg, useInterfaces: boolean = true): GeneralPoolParameters {
+    return GeneralPoolParameters.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: GeneralPoolParameters): Uint8Array {
     return GeneralPoolParameters.encode(message).finish();
@@ -753,6 +783,7 @@ export const GeneralPoolParameters = {
     };
   }
 };
+GlobalDecoderRegistry.register(GeneralPoolParameters.typeUrl, GeneralPoolParameters);
 function createBaseAuthorizationParameters(): AuthorizationParameters {
   return {
     adminList: [],
@@ -761,6 +792,15 @@ function createBaseAuthorizationParameters(): AuthorizationParameters {
 }
 export const AuthorizationParameters = {
   typeUrl: "/pryzm.amm.v1.AuthorizationParameters",
+  is(o: any): o is AuthorizationParameters {
+    return o && (o.$typeUrl === AuthorizationParameters.typeUrl || Array.isArray(o.adminList) && (!o.adminList.length || typeof o.adminList[0] === "string") && Array.isArray(o.pauseAllowList) && (!o.pauseAllowList.length || typeof o.pauseAllowList[0] === "string"));
+  },
+  isSDK(o: any): o is AuthorizationParametersSDKType {
+    return o && (o.$typeUrl === AuthorizationParameters.typeUrl || Array.isArray(o.admin_list) && (!o.admin_list.length || typeof o.admin_list[0] === "string") && Array.isArray(o.pause_allow_list) && (!o.pause_allow_list.length || typeof o.pause_allow_list[0] === "string"));
+  },
+  isAmino(o: any): o is AuthorizationParametersAmino {
+    return o && (o.$typeUrl === AuthorizationParameters.typeUrl || Array.isArray(o.admin_list) && (!o.admin_list.length || typeof o.admin_list[0] === "string") && Array.isArray(o.pause_allow_list) && (!o.pause_allow_list.length || typeof o.pause_allow_list[0] === "string"));
+  },
   encode(message: AuthorizationParameters, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     for (const v of message.adminList) {
       writer.uint32(10).string(v!);
@@ -770,7 +810,7 @@ export const AuthorizationParameters = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): AuthorizationParameters {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): AuthorizationParameters {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseAuthorizationParameters();
@@ -822,25 +862,25 @@ export const AuthorizationParameters = {
     message.pauseAllowList = object.pause_allow_list?.map(e => e) || [];
     return message;
   },
-  toAmino(message: AuthorizationParameters): AuthorizationParametersAmino {
+  toAmino(message: AuthorizationParameters, useInterfaces: boolean = true): AuthorizationParametersAmino {
     const obj: any = {};
     if (message.adminList) {
       obj.admin_list = message.adminList.map(e => e);
     } else {
-      obj.admin_list = [];
+      obj.admin_list = message.adminList;
     }
     if (message.pauseAllowList) {
       obj.pause_allow_list = message.pauseAllowList.map(e => e);
     } else {
-      obj.pause_allow_list = [];
+      obj.pause_allow_list = message.pauseAllowList;
     }
     return obj;
   },
   fromAminoMsg(object: AuthorizationParametersAminoMsg): AuthorizationParameters {
     return AuthorizationParameters.fromAmino(object.value);
   },
-  fromProtoMsg(message: AuthorizationParametersProtoMsg): AuthorizationParameters {
-    return AuthorizationParameters.decode(message.value);
+  fromProtoMsg(message: AuthorizationParametersProtoMsg, useInterfaces: boolean = true): AuthorizationParameters {
+    return AuthorizationParameters.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: AuthorizationParameters): Uint8Array {
     return AuthorizationParameters.encode(message).finish();
@@ -852,6 +892,7 @@ export const AuthorizationParameters = {
     };
   }
 };
+GlobalDecoderRegistry.register(AuthorizationParameters.typeUrl, AuthorizationParameters);
 function createBaseParams(): Params {
   return {
     generalPoolParameters: GeneralPoolParameters.fromPartial({}),
@@ -862,6 +903,15 @@ function createBaseParams(): Params {
 }
 export const Params = {
   typeUrl: "/pryzm.amm.v1.Params",
+  is(o: any): o is Params {
+    return o && (o.$typeUrl === Params.typeUrl || GeneralPoolParameters.is(o.generalPoolParameters) && YammParameters.is(o.yammParameters) && OrderParameters.is(o.orderParameters) && AuthorizationParameters.is(o.authorizationParameters));
+  },
+  isSDK(o: any): o is ParamsSDKType {
+    return o && (o.$typeUrl === Params.typeUrl || GeneralPoolParameters.isSDK(o.general_pool_parameters) && YammParameters.isSDK(o.yamm_parameters) && OrderParameters.isSDK(o.order_parameters) && AuthorizationParameters.isSDK(o.authorization_parameters));
+  },
+  isAmino(o: any): o is ParamsAmino {
+    return o && (o.$typeUrl === Params.typeUrl || GeneralPoolParameters.isAmino(o.general_pool_parameters) && YammParameters.isAmino(o.yamm_parameters) && OrderParameters.isAmino(o.order_parameters) && AuthorizationParameters.isAmino(o.authorization_parameters));
+  },
   encode(message: Params, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.generalPoolParameters !== undefined) {
       GeneralPoolParameters.encode(message.generalPoolParameters, writer.uint32(10).fork()).ldelim();
@@ -877,7 +927,7 @@ export const Params = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): Params {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): Params {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseParams();
@@ -885,16 +935,16 @@ export const Params = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.generalPoolParameters = GeneralPoolParameters.decode(reader, reader.uint32());
+          message.generalPoolParameters = GeneralPoolParameters.decode(reader, reader.uint32(), useInterfaces);
           break;
         case 2:
-          message.yammParameters = YammParameters.decode(reader, reader.uint32());
+          message.yammParameters = YammParameters.decode(reader, reader.uint32(), useInterfaces);
           break;
         case 3:
-          message.orderParameters = OrderParameters.decode(reader, reader.uint32());
+          message.orderParameters = OrderParameters.decode(reader, reader.uint32(), useInterfaces);
           break;
         case 4:
-          message.authorizationParameters = AuthorizationParameters.decode(reader, reader.uint32());
+          message.authorizationParameters = AuthorizationParameters.decode(reader, reader.uint32(), useInterfaces);
           break;
         default:
           reader.skipType(tag & 7);
@@ -943,19 +993,19 @@ export const Params = {
     }
     return message;
   },
-  toAmino(message: Params): ParamsAmino {
+  toAmino(message: Params, useInterfaces: boolean = true): ParamsAmino {
     const obj: any = {};
-    obj.general_pool_parameters = message.generalPoolParameters ? GeneralPoolParameters.toAmino(message.generalPoolParameters) : undefined;
-    obj.yamm_parameters = message.yammParameters ? YammParameters.toAmino(message.yammParameters) : undefined;
-    obj.order_parameters = message.orderParameters ? OrderParameters.toAmino(message.orderParameters) : undefined;
-    obj.authorization_parameters = message.authorizationParameters ? AuthorizationParameters.toAmino(message.authorizationParameters) : undefined;
+    obj.general_pool_parameters = message.generalPoolParameters ? GeneralPoolParameters.toAmino(message.generalPoolParameters, useInterfaces) : undefined;
+    obj.yamm_parameters = message.yammParameters ? YammParameters.toAmino(message.yammParameters, useInterfaces) : undefined;
+    obj.order_parameters = message.orderParameters ? OrderParameters.toAmino(message.orderParameters, useInterfaces) : undefined;
+    obj.authorization_parameters = message.authorizationParameters ? AuthorizationParameters.toAmino(message.authorizationParameters, useInterfaces) : undefined;
     return obj;
   },
   fromAminoMsg(object: ParamsAminoMsg): Params {
     return Params.fromAmino(object.value);
   },
-  fromProtoMsg(message: ParamsProtoMsg): Params {
-    return Params.decode(message.value);
+  fromProtoMsg(message: ParamsProtoMsg, useInterfaces: boolean = true): Params {
+    return Params.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: Params): Uint8Array {
     return Params.encode(message).finish();
@@ -967,3 +1017,4 @@ export const Params = {
     };
   }
 };
+GlobalDecoderRegistry.register(Params.typeUrl, Params);

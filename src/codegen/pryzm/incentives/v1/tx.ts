@@ -3,7 +3,8 @@ import { Coin, CoinAmino, CoinSDKType } from "../../../cosmos/base/v1beta1/coin"
 import { Bond, BondAmino, BondSDKType } from "./bond";
 import { Unbonding, UnbondingAmino, UnbondingSDKType } from "./unbonding";
 import { BinaryReader, BinaryWriter } from "../../../binary";
-import { isSet } from "../../../helpers";
+import { isSet, padDecimal } from "../../../helpers";
+import { GlobalDecoderRegistry } from "../../../registry";
 import { Decimal } from "@cosmjs/math";
 export interface MsgUpdateParams {
   authority: string;
@@ -411,6 +412,16 @@ function createBaseMsgUpdateParams(): MsgUpdateParams {
 }
 export const MsgUpdateParams = {
   typeUrl: "/pryzm.incentives.v1.MsgUpdateParams",
+  aminoType: "pryzm/incentives/v1/UpdateParams",
+  is(o: any): o is MsgUpdateParams {
+    return o && (o.$typeUrl === MsgUpdateParams.typeUrl || typeof o.authority === "string" && Params.is(o.params));
+  },
+  isSDK(o: any): o is MsgUpdateParamsSDKType {
+    return o && (o.$typeUrl === MsgUpdateParams.typeUrl || typeof o.authority === "string" && Params.isSDK(o.params));
+  },
+  isAmino(o: any): o is MsgUpdateParamsAmino {
+    return o && (o.$typeUrl === MsgUpdateParams.typeUrl || typeof o.authority === "string" && Params.isAmino(o.params));
+  },
   encode(message: MsgUpdateParams, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.authority !== "") {
       writer.uint32(10).string(message.authority);
@@ -420,7 +431,7 @@ export const MsgUpdateParams = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): MsgUpdateParams {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): MsgUpdateParams {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgUpdateParams();
@@ -431,7 +442,7 @@ export const MsgUpdateParams = {
           message.authority = reader.string();
           break;
         case 2:
-          message.params = Params.decode(reader, reader.uint32());
+          message.params = Params.decode(reader, reader.uint32(), useInterfaces);
           break;
         default:
           reader.skipType(tag & 7);
@@ -468,23 +479,23 @@ export const MsgUpdateParams = {
     }
     return message;
   },
-  toAmino(message: MsgUpdateParams): MsgUpdateParamsAmino {
+  toAmino(message: MsgUpdateParams, useInterfaces: boolean = true): MsgUpdateParamsAmino {
     const obj: any = {};
-    obj.authority = message.authority;
-    obj.params = message.params ? Params.toAmino(message.params) : Params.fromPartial({});
+    obj.authority = message.authority === "" ? undefined : message.authority;
+    obj.params = message.params ? Params.toAmino(message.params, useInterfaces) : undefined;
     return obj;
   },
   fromAminoMsg(object: MsgUpdateParamsAminoMsg): MsgUpdateParams {
     return MsgUpdateParams.fromAmino(object.value);
   },
-  toAminoMsg(message: MsgUpdateParams): MsgUpdateParamsAminoMsg {
+  toAminoMsg(message: MsgUpdateParams, useInterfaces: boolean = true): MsgUpdateParamsAminoMsg {
     return {
       type: "pryzm/incentives/v1/UpdateParams",
-      value: MsgUpdateParams.toAmino(message)
+      value: MsgUpdateParams.toAmino(message, useInterfaces)
     };
   },
-  fromProtoMsg(message: MsgUpdateParamsProtoMsg): MsgUpdateParams {
-    return MsgUpdateParams.decode(message.value);
+  fromProtoMsg(message: MsgUpdateParamsProtoMsg, useInterfaces: boolean = true): MsgUpdateParams {
+    return MsgUpdateParams.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: MsgUpdateParams): Uint8Array {
     return MsgUpdateParams.encode(message).finish();
@@ -496,15 +507,26 @@ export const MsgUpdateParams = {
     };
   }
 };
+GlobalDecoderRegistry.register(MsgUpdateParams.typeUrl, MsgUpdateParams);
+GlobalDecoderRegistry.registerAminoProtoMapping(MsgUpdateParams.aminoType, MsgUpdateParams.typeUrl);
 function createBaseMsgUpdateParamsResponse(): MsgUpdateParamsResponse {
   return {};
 }
 export const MsgUpdateParamsResponse = {
   typeUrl: "/pryzm.incentives.v1.MsgUpdateParamsResponse",
+  is(o: any): o is MsgUpdateParamsResponse {
+    return o && o.$typeUrl === MsgUpdateParamsResponse.typeUrl;
+  },
+  isSDK(o: any): o is MsgUpdateParamsResponseSDKType {
+    return o && o.$typeUrl === MsgUpdateParamsResponse.typeUrl;
+  },
+  isAmino(o: any): o is MsgUpdateParamsResponseAmino {
+    return o && o.$typeUrl === MsgUpdateParamsResponse.typeUrl;
+  },
   encode(_: MsgUpdateParamsResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): MsgUpdateParamsResponse {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): MsgUpdateParamsResponse {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgUpdateParamsResponse();
@@ -533,15 +555,15 @@ export const MsgUpdateParamsResponse = {
     const message = createBaseMsgUpdateParamsResponse();
     return message;
   },
-  toAmino(_: MsgUpdateParamsResponse): MsgUpdateParamsResponseAmino {
+  toAmino(_: MsgUpdateParamsResponse, useInterfaces: boolean = true): MsgUpdateParamsResponseAmino {
     const obj: any = {};
     return obj;
   },
   fromAminoMsg(object: MsgUpdateParamsResponseAminoMsg): MsgUpdateParamsResponse {
     return MsgUpdateParamsResponse.fromAmino(object.value);
   },
-  fromProtoMsg(message: MsgUpdateParamsResponseProtoMsg): MsgUpdateParamsResponse {
-    return MsgUpdateParamsResponse.decode(message.value);
+  fromProtoMsg(message: MsgUpdateParamsResponseProtoMsg, useInterfaces: boolean = true): MsgUpdateParamsResponse {
+    return MsgUpdateParamsResponse.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: MsgUpdateParamsResponse): Uint8Array {
     return MsgUpdateParamsResponse.encode(message).finish();
@@ -553,6 +575,7 @@ export const MsgUpdateParamsResponse = {
     };
   }
 };
+GlobalDecoderRegistry.register(MsgUpdateParamsResponse.typeUrl, MsgUpdateParamsResponse);
 function createBaseWeightedRewardToken(): WeightedRewardToken {
   return {
     denom: "",
@@ -561,6 +584,15 @@ function createBaseWeightedRewardToken(): WeightedRewardToken {
 }
 export const WeightedRewardToken = {
   typeUrl: "/pryzm.incentives.v1.WeightedRewardToken",
+  is(o: any): o is WeightedRewardToken {
+    return o && (o.$typeUrl === WeightedRewardToken.typeUrl || typeof o.denom === "string" && typeof o.weight === "string");
+  },
+  isSDK(o: any): o is WeightedRewardTokenSDKType {
+    return o && (o.$typeUrl === WeightedRewardToken.typeUrl || typeof o.denom === "string" && typeof o.weight === "string");
+  },
+  isAmino(o: any): o is WeightedRewardTokenAmino {
+    return o && (o.$typeUrl === WeightedRewardToken.typeUrl || typeof o.denom === "string" && typeof o.weight === "string");
+  },
   encode(message: WeightedRewardToken, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.denom !== "") {
       writer.uint32(10).string(message.denom);
@@ -570,7 +602,7 @@ export const WeightedRewardToken = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): WeightedRewardToken {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): WeightedRewardToken {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseWeightedRewardToken();
@@ -618,17 +650,17 @@ export const WeightedRewardToken = {
     }
     return message;
   },
-  toAmino(message: WeightedRewardToken): WeightedRewardTokenAmino {
+  toAmino(message: WeightedRewardToken, useInterfaces: boolean = true): WeightedRewardTokenAmino {
     const obj: any = {};
-    obj.denom = message.denom;
-    obj.weight = message.weight;
+    obj.denom = message.denom === "" ? undefined : message.denom;
+    obj.weight = padDecimal(message.weight) === "" ? undefined : padDecimal(message.weight);
     return obj;
   },
   fromAminoMsg(object: WeightedRewardTokenAminoMsg): WeightedRewardToken {
     return WeightedRewardToken.fromAmino(object.value);
   },
-  fromProtoMsg(message: WeightedRewardTokenProtoMsg): WeightedRewardToken {
-    return WeightedRewardToken.decode(message.value);
+  fromProtoMsg(message: WeightedRewardTokenProtoMsg, useInterfaces: boolean = true): WeightedRewardToken {
+    return WeightedRewardToken.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: WeightedRewardToken): Uint8Array {
     return WeightedRewardToken.encode(message).finish();
@@ -640,6 +672,7 @@ export const WeightedRewardToken = {
     };
   }
 };
+GlobalDecoderRegistry.register(WeightedRewardToken.typeUrl, WeightedRewardToken);
 function createBaseMsgCreatePool(): MsgCreatePool {
   return {
     authority: "",
@@ -649,6 +682,16 @@ function createBaseMsgCreatePool(): MsgCreatePool {
 }
 export const MsgCreatePool = {
   typeUrl: "/pryzm.incentives.v1.MsgCreatePool",
+  aminoType: "pryzm/incentives/v1/CreatePool",
+  is(o: any): o is MsgCreatePool {
+    return o && (o.$typeUrl === MsgCreatePool.typeUrl || typeof o.authority === "string" && typeof o.bondDenom === "string" && Array.isArray(o.rewardTokens) && (!o.rewardTokens.length || WeightedRewardToken.is(o.rewardTokens[0])));
+  },
+  isSDK(o: any): o is MsgCreatePoolSDKType {
+    return o && (o.$typeUrl === MsgCreatePool.typeUrl || typeof o.authority === "string" && typeof o.bond_denom === "string" && Array.isArray(o.reward_tokens) && (!o.reward_tokens.length || WeightedRewardToken.isSDK(o.reward_tokens[0])));
+  },
+  isAmino(o: any): o is MsgCreatePoolAmino {
+    return o && (o.$typeUrl === MsgCreatePool.typeUrl || typeof o.authority === "string" && typeof o.bond_denom === "string" && Array.isArray(o.reward_tokens) && (!o.reward_tokens.length || WeightedRewardToken.isAmino(o.reward_tokens[0])));
+  },
   encode(message: MsgCreatePool, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.authority !== "") {
       writer.uint32(10).string(message.authority);
@@ -661,7 +704,7 @@ export const MsgCreatePool = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): MsgCreatePool {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): MsgCreatePool {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgCreatePool();
@@ -675,7 +718,7 @@ export const MsgCreatePool = {
           message.bondDenom = reader.string();
           break;
         case 3:
-          message.rewardTokens.push(WeightedRewardToken.decode(reader, reader.uint32()));
+          message.rewardTokens.push(WeightedRewardToken.decode(reader, reader.uint32(), useInterfaces));
           break;
         default:
           reader.skipType(tag & 7);
@@ -720,28 +763,28 @@ export const MsgCreatePool = {
     message.rewardTokens = object.reward_tokens?.map(e => WeightedRewardToken.fromAmino(e)) || [];
     return message;
   },
-  toAmino(message: MsgCreatePool): MsgCreatePoolAmino {
+  toAmino(message: MsgCreatePool, useInterfaces: boolean = true): MsgCreatePoolAmino {
     const obj: any = {};
-    obj.authority = message.authority;
-    obj.bond_denom = message.bondDenom;
+    obj.authority = message.authority === "" ? undefined : message.authority;
+    obj.bond_denom = message.bondDenom === "" ? undefined : message.bondDenom;
     if (message.rewardTokens) {
-      obj.reward_tokens = message.rewardTokens.map(e => e ? WeightedRewardToken.toAmino(e) : undefined);
+      obj.reward_tokens = message.rewardTokens.map(e => e ? WeightedRewardToken.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.reward_tokens = [];
+      obj.reward_tokens = message.rewardTokens;
     }
     return obj;
   },
   fromAminoMsg(object: MsgCreatePoolAminoMsg): MsgCreatePool {
     return MsgCreatePool.fromAmino(object.value);
   },
-  toAminoMsg(message: MsgCreatePool): MsgCreatePoolAminoMsg {
+  toAminoMsg(message: MsgCreatePool, useInterfaces: boolean = true): MsgCreatePoolAminoMsg {
     return {
       type: "pryzm/incentives/v1/CreatePool",
-      value: MsgCreatePool.toAmino(message)
+      value: MsgCreatePool.toAmino(message, useInterfaces)
     };
   },
-  fromProtoMsg(message: MsgCreatePoolProtoMsg): MsgCreatePool {
-    return MsgCreatePool.decode(message.value);
+  fromProtoMsg(message: MsgCreatePoolProtoMsg, useInterfaces: boolean = true): MsgCreatePool {
+    return MsgCreatePool.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: MsgCreatePool): Uint8Array {
     return MsgCreatePool.encode(message).finish();
@@ -753,15 +796,26 @@ export const MsgCreatePool = {
     };
   }
 };
+GlobalDecoderRegistry.register(MsgCreatePool.typeUrl, MsgCreatePool);
+GlobalDecoderRegistry.registerAminoProtoMapping(MsgCreatePool.aminoType, MsgCreatePool.typeUrl);
 function createBaseMsgCreatePoolResponse(): MsgCreatePoolResponse {
   return {};
 }
 export const MsgCreatePoolResponse = {
   typeUrl: "/pryzm.incentives.v1.MsgCreatePoolResponse",
+  is(o: any): o is MsgCreatePoolResponse {
+    return o && o.$typeUrl === MsgCreatePoolResponse.typeUrl;
+  },
+  isSDK(o: any): o is MsgCreatePoolResponseSDKType {
+    return o && o.$typeUrl === MsgCreatePoolResponse.typeUrl;
+  },
+  isAmino(o: any): o is MsgCreatePoolResponseAmino {
+    return o && o.$typeUrl === MsgCreatePoolResponse.typeUrl;
+  },
   encode(_: MsgCreatePoolResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): MsgCreatePoolResponse {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): MsgCreatePoolResponse {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgCreatePoolResponse();
@@ -790,15 +844,15 @@ export const MsgCreatePoolResponse = {
     const message = createBaseMsgCreatePoolResponse();
     return message;
   },
-  toAmino(_: MsgCreatePoolResponse): MsgCreatePoolResponseAmino {
+  toAmino(_: MsgCreatePoolResponse, useInterfaces: boolean = true): MsgCreatePoolResponseAmino {
     const obj: any = {};
     return obj;
   },
   fromAminoMsg(object: MsgCreatePoolResponseAminoMsg): MsgCreatePoolResponse {
     return MsgCreatePoolResponse.fromAmino(object.value);
   },
-  fromProtoMsg(message: MsgCreatePoolResponseProtoMsg): MsgCreatePoolResponse {
-    return MsgCreatePoolResponse.decode(message.value);
+  fromProtoMsg(message: MsgCreatePoolResponseProtoMsg, useInterfaces: boolean = true): MsgCreatePoolResponse {
+    return MsgCreatePoolResponse.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: MsgCreatePoolResponse): Uint8Array {
     return MsgCreatePoolResponse.encode(message).finish();
@@ -810,6 +864,7 @@ export const MsgCreatePoolResponse = {
     };
   }
 };
+GlobalDecoderRegistry.register(MsgCreatePoolResponse.typeUrl, MsgCreatePoolResponse);
 function createBaseMsgUpdateRewardTokenWeight(): MsgUpdateRewardTokenWeight {
   return {
     authority: "",
@@ -819,6 +874,16 @@ function createBaseMsgUpdateRewardTokenWeight(): MsgUpdateRewardTokenWeight {
 }
 export const MsgUpdateRewardTokenWeight = {
   typeUrl: "/pryzm.incentives.v1.MsgUpdateRewardTokenWeight",
+  aminoType: "pryzm/incentives/v1/UpdateRewardWeight",
+  is(o: any): o is MsgUpdateRewardTokenWeight {
+    return o && (o.$typeUrl === MsgUpdateRewardTokenWeight.typeUrl || typeof o.authority === "string" && typeof o.bondDenom === "string" && WeightedRewardToken.is(o.rewardToken));
+  },
+  isSDK(o: any): o is MsgUpdateRewardTokenWeightSDKType {
+    return o && (o.$typeUrl === MsgUpdateRewardTokenWeight.typeUrl || typeof o.authority === "string" && typeof o.bond_denom === "string" && WeightedRewardToken.isSDK(o.reward_token));
+  },
+  isAmino(o: any): o is MsgUpdateRewardTokenWeightAmino {
+    return o && (o.$typeUrl === MsgUpdateRewardTokenWeight.typeUrl || typeof o.authority === "string" && typeof o.bond_denom === "string" && WeightedRewardToken.isAmino(o.reward_token));
+  },
   encode(message: MsgUpdateRewardTokenWeight, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.authority !== "") {
       writer.uint32(10).string(message.authority);
@@ -831,7 +896,7 @@ export const MsgUpdateRewardTokenWeight = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): MsgUpdateRewardTokenWeight {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): MsgUpdateRewardTokenWeight {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgUpdateRewardTokenWeight();
@@ -845,7 +910,7 @@ export const MsgUpdateRewardTokenWeight = {
           message.bondDenom = reader.string();
           break;
         case 3:
-          message.rewardToken = WeightedRewardToken.decode(reader, reader.uint32());
+          message.rewardToken = WeightedRewardToken.decode(reader, reader.uint32(), useInterfaces);
           break;
         default:
           reader.skipType(tag & 7);
@@ -888,24 +953,24 @@ export const MsgUpdateRewardTokenWeight = {
     }
     return message;
   },
-  toAmino(message: MsgUpdateRewardTokenWeight): MsgUpdateRewardTokenWeightAmino {
+  toAmino(message: MsgUpdateRewardTokenWeight, useInterfaces: boolean = true): MsgUpdateRewardTokenWeightAmino {
     const obj: any = {};
-    obj.authority = message.authority;
-    obj.bond_denom = message.bondDenom;
-    obj.reward_token = message.rewardToken ? WeightedRewardToken.toAmino(message.rewardToken) : undefined;
+    obj.authority = message.authority === "" ? undefined : message.authority;
+    obj.bond_denom = message.bondDenom === "" ? undefined : message.bondDenom;
+    obj.reward_token = message.rewardToken ? WeightedRewardToken.toAmino(message.rewardToken, useInterfaces) : undefined;
     return obj;
   },
   fromAminoMsg(object: MsgUpdateRewardTokenWeightAminoMsg): MsgUpdateRewardTokenWeight {
     return MsgUpdateRewardTokenWeight.fromAmino(object.value);
   },
-  toAminoMsg(message: MsgUpdateRewardTokenWeight): MsgUpdateRewardTokenWeightAminoMsg {
+  toAminoMsg(message: MsgUpdateRewardTokenWeight, useInterfaces: boolean = true): MsgUpdateRewardTokenWeightAminoMsg {
     return {
       type: "pryzm/incentives/v1/UpdateRewardWeight",
-      value: MsgUpdateRewardTokenWeight.toAmino(message)
+      value: MsgUpdateRewardTokenWeight.toAmino(message, useInterfaces)
     };
   },
-  fromProtoMsg(message: MsgUpdateRewardTokenWeightProtoMsg): MsgUpdateRewardTokenWeight {
-    return MsgUpdateRewardTokenWeight.decode(message.value);
+  fromProtoMsg(message: MsgUpdateRewardTokenWeightProtoMsg, useInterfaces: boolean = true): MsgUpdateRewardTokenWeight {
+    return MsgUpdateRewardTokenWeight.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: MsgUpdateRewardTokenWeight): Uint8Array {
     return MsgUpdateRewardTokenWeight.encode(message).finish();
@@ -917,15 +982,26 @@ export const MsgUpdateRewardTokenWeight = {
     };
   }
 };
+GlobalDecoderRegistry.register(MsgUpdateRewardTokenWeight.typeUrl, MsgUpdateRewardTokenWeight);
+GlobalDecoderRegistry.registerAminoProtoMapping(MsgUpdateRewardTokenWeight.aminoType, MsgUpdateRewardTokenWeight.typeUrl);
 function createBaseMsgUpdateRewardTokenWeightResponse(): MsgUpdateRewardTokenWeightResponse {
   return {};
 }
 export const MsgUpdateRewardTokenWeightResponse = {
   typeUrl: "/pryzm.incentives.v1.MsgUpdateRewardTokenWeightResponse",
+  is(o: any): o is MsgUpdateRewardTokenWeightResponse {
+    return o && o.$typeUrl === MsgUpdateRewardTokenWeightResponse.typeUrl;
+  },
+  isSDK(o: any): o is MsgUpdateRewardTokenWeightResponseSDKType {
+    return o && o.$typeUrl === MsgUpdateRewardTokenWeightResponse.typeUrl;
+  },
+  isAmino(o: any): o is MsgUpdateRewardTokenWeightResponseAmino {
+    return o && o.$typeUrl === MsgUpdateRewardTokenWeightResponse.typeUrl;
+  },
   encode(_: MsgUpdateRewardTokenWeightResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): MsgUpdateRewardTokenWeightResponse {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): MsgUpdateRewardTokenWeightResponse {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgUpdateRewardTokenWeightResponse();
@@ -954,15 +1030,15 @@ export const MsgUpdateRewardTokenWeightResponse = {
     const message = createBaseMsgUpdateRewardTokenWeightResponse();
     return message;
   },
-  toAmino(_: MsgUpdateRewardTokenWeightResponse): MsgUpdateRewardTokenWeightResponseAmino {
+  toAmino(_: MsgUpdateRewardTokenWeightResponse, useInterfaces: boolean = true): MsgUpdateRewardTokenWeightResponseAmino {
     const obj: any = {};
     return obj;
   },
   fromAminoMsg(object: MsgUpdateRewardTokenWeightResponseAminoMsg): MsgUpdateRewardTokenWeightResponse {
     return MsgUpdateRewardTokenWeightResponse.fromAmino(object.value);
   },
-  fromProtoMsg(message: MsgUpdateRewardTokenWeightResponseProtoMsg): MsgUpdateRewardTokenWeightResponse {
-    return MsgUpdateRewardTokenWeightResponse.decode(message.value);
+  fromProtoMsg(message: MsgUpdateRewardTokenWeightResponseProtoMsg, useInterfaces: boolean = true): MsgUpdateRewardTokenWeightResponse {
+    return MsgUpdateRewardTokenWeightResponse.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: MsgUpdateRewardTokenWeightResponse): Uint8Array {
     return MsgUpdateRewardTokenWeightResponse.encode(message).finish();
@@ -974,6 +1050,7 @@ export const MsgUpdateRewardTokenWeightResponse = {
     };
   }
 };
+GlobalDecoderRegistry.register(MsgUpdateRewardTokenWeightResponse.typeUrl, MsgUpdateRewardTokenWeightResponse);
 function createBaseMsgAddRewardTokenToPool(): MsgAddRewardTokenToPool {
   return {
     authority: "",
@@ -983,6 +1060,16 @@ function createBaseMsgAddRewardTokenToPool(): MsgAddRewardTokenToPool {
 }
 export const MsgAddRewardTokenToPool = {
   typeUrl: "/pryzm.incentives.v1.MsgAddRewardTokenToPool",
+  aminoType: "pryzm/incentives/v1/AddRewardToken",
+  is(o: any): o is MsgAddRewardTokenToPool {
+    return o && (o.$typeUrl === MsgAddRewardTokenToPool.typeUrl || typeof o.authority === "string" && typeof o.bondDenom === "string" && WeightedRewardToken.is(o.rewardToken));
+  },
+  isSDK(o: any): o is MsgAddRewardTokenToPoolSDKType {
+    return o && (o.$typeUrl === MsgAddRewardTokenToPool.typeUrl || typeof o.authority === "string" && typeof o.bond_denom === "string" && WeightedRewardToken.isSDK(o.reward_token));
+  },
+  isAmino(o: any): o is MsgAddRewardTokenToPoolAmino {
+    return o && (o.$typeUrl === MsgAddRewardTokenToPool.typeUrl || typeof o.authority === "string" && typeof o.bond_denom === "string" && WeightedRewardToken.isAmino(o.reward_token));
+  },
   encode(message: MsgAddRewardTokenToPool, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.authority !== "") {
       writer.uint32(10).string(message.authority);
@@ -995,7 +1082,7 @@ export const MsgAddRewardTokenToPool = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): MsgAddRewardTokenToPool {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): MsgAddRewardTokenToPool {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgAddRewardTokenToPool();
@@ -1009,7 +1096,7 @@ export const MsgAddRewardTokenToPool = {
           message.bondDenom = reader.string();
           break;
         case 3:
-          message.rewardToken = WeightedRewardToken.decode(reader, reader.uint32());
+          message.rewardToken = WeightedRewardToken.decode(reader, reader.uint32(), useInterfaces);
           break;
         default:
           reader.skipType(tag & 7);
@@ -1052,24 +1139,24 @@ export const MsgAddRewardTokenToPool = {
     }
     return message;
   },
-  toAmino(message: MsgAddRewardTokenToPool): MsgAddRewardTokenToPoolAmino {
+  toAmino(message: MsgAddRewardTokenToPool, useInterfaces: boolean = true): MsgAddRewardTokenToPoolAmino {
     const obj: any = {};
-    obj.authority = message.authority;
-    obj.bond_denom = message.bondDenom;
-    obj.reward_token = message.rewardToken ? WeightedRewardToken.toAmino(message.rewardToken) : undefined;
+    obj.authority = message.authority === "" ? undefined : message.authority;
+    obj.bond_denom = message.bondDenom === "" ? undefined : message.bondDenom;
+    obj.reward_token = message.rewardToken ? WeightedRewardToken.toAmino(message.rewardToken, useInterfaces) : undefined;
     return obj;
   },
   fromAminoMsg(object: MsgAddRewardTokenToPoolAminoMsg): MsgAddRewardTokenToPool {
     return MsgAddRewardTokenToPool.fromAmino(object.value);
   },
-  toAminoMsg(message: MsgAddRewardTokenToPool): MsgAddRewardTokenToPoolAminoMsg {
+  toAminoMsg(message: MsgAddRewardTokenToPool, useInterfaces: boolean = true): MsgAddRewardTokenToPoolAminoMsg {
     return {
       type: "pryzm/incentives/v1/AddRewardToken",
-      value: MsgAddRewardTokenToPool.toAmino(message)
+      value: MsgAddRewardTokenToPool.toAmino(message, useInterfaces)
     };
   },
-  fromProtoMsg(message: MsgAddRewardTokenToPoolProtoMsg): MsgAddRewardTokenToPool {
-    return MsgAddRewardTokenToPool.decode(message.value);
+  fromProtoMsg(message: MsgAddRewardTokenToPoolProtoMsg, useInterfaces: boolean = true): MsgAddRewardTokenToPool {
+    return MsgAddRewardTokenToPool.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: MsgAddRewardTokenToPool): Uint8Array {
     return MsgAddRewardTokenToPool.encode(message).finish();
@@ -1081,15 +1168,26 @@ export const MsgAddRewardTokenToPool = {
     };
   }
 };
+GlobalDecoderRegistry.register(MsgAddRewardTokenToPool.typeUrl, MsgAddRewardTokenToPool);
+GlobalDecoderRegistry.registerAminoProtoMapping(MsgAddRewardTokenToPool.aminoType, MsgAddRewardTokenToPool.typeUrl);
 function createBaseMsgAddRewardTokenToPoolResponse(): MsgAddRewardTokenToPoolResponse {
   return {};
 }
 export const MsgAddRewardTokenToPoolResponse = {
   typeUrl: "/pryzm.incentives.v1.MsgAddRewardTokenToPoolResponse",
+  is(o: any): o is MsgAddRewardTokenToPoolResponse {
+    return o && o.$typeUrl === MsgAddRewardTokenToPoolResponse.typeUrl;
+  },
+  isSDK(o: any): o is MsgAddRewardTokenToPoolResponseSDKType {
+    return o && o.$typeUrl === MsgAddRewardTokenToPoolResponse.typeUrl;
+  },
+  isAmino(o: any): o is MsgAddRewardTokenToPoolResponseAmino {
+    return o && o.$typeUrl === MsgAddRewardTokenToPoolResponse.typeUrl;
+  },
   encode(_: MsgAddRewardTokenToPoolResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): MsgAddRewardTokenToPoolResponse {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): MsgAddRewardTokenToPoolResponse {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgAddRewardTokenToPoolResponse();
@@ -1118,15 +1216,15 @@ export const MsgAddRewardTokenToPoolResponse = {
     const message = createBaseMsgAddRewardTokenToPoolResponse();
     return message;
   },
-  toAmino(_: MsgAddRewardTokenToPoolResponse): MsgAddRewardTokenToPoolResponseAmino {
+  toAmino(_: MsgAddRewardTokenToPoolResponse, useInterfaces: boolean = true): MsgAddRewardTokenToPoolResponseAmino {
     const obj: any = {};
     return obj;
   },
   fromAminoMsg(object: MsgAddRewardTokenToPoolResponseAminoMsg): MsgAddRewardTokenToPoolResponse {
     return MsgAddRewardTokenToPoolResponse.fromAmino(object.value);
   },
-  fromProtoMsg(message: MsgAddRewardTokenToPoolResponseProtoMsg): MsgAddRewardTokenToPoolResponse {
-    return MsgAddRewardTokenToPoolResponse.decode(message.value);
+  fromProtoMsg(message: MsgAddRewardTokenToPoolResponseProtoMsg, useInterfaces: boolean = true): MsgAddRewardTokenToPoolResponse {
+    return MsgAddRewardTokenToPoolResponse.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: MsgAddRewardTokenToPoolResponse): Uint8Array {
     return MsgAddRewardTokenToPoolResponse.encode(message).finish();
@@ -1138,6 +1236,7 @@ export const MsgAddRewardTokenToPoolResponse = {
     };
   }
 };
+GlobalDecoderRegistry.register(MsgAddRewardTokenToPoolResponse.typeUrl, MsgAddRewardTokenToPoolResponse);
 function createBaseMsgBond(): MsgBond {
   return {
     creator: "",
@@ -1146,6 +1245,16 @@ function createBaseMsgBond(): MsgBond {
 }
 export const MsgBond = {
   typeUrl: "/pryzm.incentives.v1.MsgBond",
+  aminoType: "pryzm/incentives/v1/Bond",
+  is(o: any): o is MsgBond {
+    return o && (o.$typeUrl === MsgBond.typeUrl || typeof o.creator === "string" && Coin.is(o.amount));
+  },
+  isSDK(o: any): o is MsgBondSDKType {
+    return o && (o.$typeUrl === MsgBond.typeUrl || typeof o.creator === "string" && Coin.isSDK(o.amount));
+  },
+  isAmino(o: any): o is MsgBondAmino {
+    return o && (o.$typeUrl === MsgBond.typeUrl || typeof o.creator === "string" && Coin.isAmino(o.amount));
+  },
   encode(message: MsgBond, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.creator !== "") {
       writer.uint32(10).string(message.creator);
@@ -1155,7 +1264,7 @@ export const MsgBond = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): MsgBond {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): MsgBond {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgBond();
@@ -1166,7 +1275,7 @@ export const MsgBond = {
           message.creator = reader.string();
           break;
         case 2:
-          message.amount = Coin.decode(reader, reader.uint32());
+          message.amount = Coin.decode(reader, reader.uint32(), useInterfaces);
           break;
         default:
           reader.skipType(tag & 7);
@@ -1203,23 +1312,23 @@ export const MsgBond = {
     }
     return message;
   },
-  toAmino(message: MsgBond): MsgBondAmino {
+  toAmino(message: MsgBond, useInterfaces: boolean = true): MsgBondAmino {
     const obj: any = {};
-    obj.creator = message.creator;
-    obj.amount = message.amount ? Coin.toAmino(message.amount) : undefined;
+    obj.creator = message.creator === "" ? undefined : message.creator;
+    obj.amount = message.amount ? Coin.toAmino(message.amount, useInterfaces) : undefined;
     return obj;
   },
   fromAminoMsg(object: MsgBondAminoMsg): MsgBond {
     return MsgBond.fromAmino(object.value);
   },
-  toAminoMsg(message: MsgBond): MsgBondAminoMsg {
+  toAminoMsg(message: MsgBond, useInterfaces: boolean = true): MsgBondAminoMsg {
     return {
       type: "pryzm/incentives/v1/Bond",
-      value: MsgBond.toAmino(message)
+      value: MsgBond.toAmino(message, useInterfaces)
     };
   },
-  fromProtoMsg(message: MsgBondProtoMsg): MsgBond {
-    return MsgBond.decode(message.value);
+  fromProtoMsg(message: MsgBondProtoMsg, useInterfaces: boolean = true): MsgBond {
+    return MsgBond.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: MsgBond): Uint8Array {
     return MsgBond.encode(message).finish();
@@ -1231,6 +1340,8 @@ export const MsgBond = {
     };
   }
 };
+GlobalDecoderRegistry.register(MsgBond.typeUrl, MsgBond);
+GlobalDecoderRegistry.registerAminoProtoMapping(MsgBond.aminoType, MsgBond.typeUrl);
 function createBaseMsgBondResponse(): MsgBondResponse {
   return {
     bond: Bond.fromPartial({})
@@ -1238,13 +1349,22 @@ function createBaseMsgBondResponse(): MsgBondResponse {
 }
 export const MsgBondResponse = {
   typeUrl: "/pryzm.incentives.v1.MsgBondResponse",
+  is(o: any): o is MsgBondResponse {
+    return o && (o.$typeUrl === MsgBondResponse.typeUrl || Bond.is(o.bond));
+  },
+  isSDK(o: any): o is MsgBondResponseSDKType {
+    return o && (o.$typeUrl === MsgBondResponse.typeUrl || Bond.isSDK(o.bond));
+  },
+  isAmino(o: any): o is MsgBondResponseAmino {
+    return o && (o.$typeUrl === MsgBondResponse.typeUrl || Bond.isAmino(o.bond));
+  },
   encode(message: MsgBondResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.bond !== undefined) {
       Bond.encode(message.bond, writer.uint32(10).fork()).ldelim();
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): MsgBondResponse {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): MsgBondResponse {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgBondResponse();
@@ -1252,7 +1372,7 @@ export const MsgBondResponse = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.bond = Bond.decode(reader, reader.uint32());
+          message.bond = Bond.decode(reader, reader.uint32(), useInterfaces);
           break;
         default:
           reader.skipType(tag & 7);
@@ -1283,16 +1403,16 @@ export const MsgBondResponse = {
     }
     return message;
   },
-  toAmino(message: MsgBondResponse): MsgBondResponseAmino {
+  toAmino(message: MsgBondResponse, useInterfaces: boolean = true): MsgBondResponseAmino {
     const obj: any = {};
-    obj.bond = message.bond ? Bond.toAmino(message.bond) : undefined;
+    obj.bond = message.bond ? Bond.toAmino(message.bond, useInterfaces) : undefined;
     return obj;
   },
   fromAminoMsg(object: MsgBondResponseAminoMsg): MsgBondResponse {
     return MsgBondResponse.fromAmino(object.value);
   },
-  fromProtoMsg(message: MsgBondResponseProtoMsg): MsgBondResponse {
-    return MsgBondResponse.decode(message.value);
+  fromProtoMsg(message: MsgBondResponseProtoMsg, useInterfaces: boolean = true): MsgBondResponse {
+    return MsgBondResponse.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: MsgBondResponse): Uint8Array {
     return MsgBondResponse.encode(message).finish();
@@ -1304,6 +1424,7 @@ export const MsgBondResponse = {
     };
   }
 };
+GlobalDecoderRegistry.register(MsgBondResponse.typeUrl, MsgBondResponse);
 function createBaseMsgUnbond(): MsgUnbond {
   return {
     creator: "",
@@ -1315,6 +1436,16 @@ function createBaseMsgUnbond(): MsgUnbond {
 }
 export const MsgUnbond = {
   typeUrl: "/pryzm.incentives.v1.MsgUnbond",
+  aminoType: "pryzm/incentives/v1/Unbond",
+  is(o: any): o is MsgUnbond {
+    return o && (o.$typeUrl === MsgUnbond.typeUrl || typeof o.creator === "string" && Coin.is(o.amount) && typeof o.unbondTreasury === "string" && typeof o.rewardTreasury === "string" && typeof o.autoClaim === "boolean");
+  },
+  isSDK(o: any): o is MsgUnbondSDKType {
+    return o && (o.$typeUrl === MsgUnbond.typeUrl || typeof o.creator === "string" && Coin.isSDK(o.amount) && typeof o.unbond_treasury === "string" && typeof o.reward_treasury === "string" && typeof o.auto_claim === "boolean");
+  },
+  isAmino(o: any): o is MsgUnbondAmino {
+    return o && (o.$typeUrl === MsgUnbond.typeUrl || typeof o.creator === "string" && Coin.isAmino(o.amount) && typeof o.unbond_treasury === "string" && typeof o.reward_treasury === "string" && typeof o.auto_claim === "boolean");
+  },
   encode(message: MsgUnbond, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.creator !== "") {
       writer.uint32(10).string(message.creator);
@@ -1333,7 +1464,7 @@ export const MsgUnbond = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): MsgUnbond {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): MsgUnbond {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgUnbond();
@@ -1344,7 +1475,7 @@ export const MsgUnbond = {
           message.creator = reader.string();
           break;
         case 2:
-          message.amount = Coin.decode(reader, reader.uint32());
+          message.amount = Coin.decode(reader, reader.uint32(), useInterfaces);
           break;
         case 3:
           message.unbondTreasury = reader.string();
@@ -1408,26 +1539,26 @@ export const MsgUnbond = {
     }
     return message;
   },
-  toAmino(message: MsgUnbond): MsgUnbondAmino {
+  toAmino(message: MsgUnbond, useInterfaces: boolean = true): MsgUnbondAmino {
     const obj: any = {};
-    obj.creator = message.creator;
-    obj.amount = message.amount ? Coin.toAmino(message.amount) : undefined;
-    obj.unbond_treasury = message.unbondTreasury;
-    obj.reward_treasury = message.rewardTreasury;
-    obj.auto_claim = message.autoClaim ?? false;
+    obj.creator = message.creator === "" ? undefined : message.creator;
+    obj.amount = message.amount ? Coin.toAmino(message.amount, useInterfaces) : undefined;
+    obj.unbond_treasury = message.unbondTreasury === "" ? undefined : message.unbondTreasury;
+    obj.reward_treasury = message.rewardTreasury === "" ? undefined : message.rewardTreasury;
+    obj.auto_claim = message.autoClaim === false ? undefined : message.autoClaim;
     return obj;
   },
   fromAminoMsg(object: MsgUnbondAminoMsg): MsgUnbond {
     return MsgUnbond.fromAmino(object.value);
   },
-  toAminoMsg(message: MsgUnbond): MsgUnbondAminoMsg {
+  toAminoMsg(message: MsgUnbond, useInterfaces: boolean = true): MsgUnbondAminoMsg {
     return {
       type: "pryzm/incentives/v1/Unbond",
-      value: MsgUnbond.toAmino(message)
+      value: MsgUnbond.toAmino(message, useInterfaces)
     };
   },
-  fromProtoMsg(message: MsgUnbondProtoMsg): MsgUnbond {
-    return MsgUnbond.decode(message.value);
+  fromProtoMsg(message: MsgUnbondProtoMsg, useInterfaces: boolean = true): MsgUnbond {
+    return MsgUnbond.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: MsgUnbond): Uint8Array {
     return MsgUnbond.encode(message).finish();
@@ -1439,6 +1570,8 @@ export const MsgUnbond = {
     };
   }
 };
+GlobalDecoderRegistry.register(MsgUnbond.typeUrl, MsgUnbond);
+GlobalDecoderRegistry.registerAminoProtoMapping(MsgUnbond.aminoType, MsgUnbond.typeUrl);
 function createBaseMsgUnbondResponse(): MsgUnbondResponse {
   return {
     unbonding: undefined,
@@ -1447,6 +1580,15 @@ function createBaseMsgUnbondResponse(): MsgUnbondResponse {
 }
 export const MsgUnbondResponse = {
   typeUrl: "/pryzm.incentives.v1.MsgUnbondResponse",
+  is(o: any): o is MsgUnbondResponse {
+    return o && (o.$typeUrl === MsgUnbondResponse.typeUrl || Array.isArray(o.rewards) && (!o.rewards.length || Coin.is(o.rewards[0])));
+  },
+  isSDK(o: any): o is MsgUnbondResponseSDKType {
+    return o && (o.$typeUrl === MsgUnbondResponse.typeUrl || Array.isArray(o.rewards) && (!o.rewards.length || Coin.isSDK(o.rewards[0])));
+  },
+  isAmino(o: any): o is MsgUnbondResponseAmino {
+    return o && (o.$typeUrl === MsgUnbondResponse.typeUrl || Array.isArray(o.rewards) && (!o.rewards.length || Coin.isAmino(o.rewards[0])));
+  },
   encode(message: MsgUnbondResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.unbonding !== undefined) {
       Unbonding.encode(message.unbonding, writer.uint32(10).fork()).ldelim();
@@ -1456,7 +1598,7 @@ export const MsgUnbondResponse = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): MsgUnbondResponse {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): MsgUnbondResponse {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgUnbondResponse();
@@ -1464,10 +1606,10 @@ export const MsgUnbondResponse = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.unbonding = Unbonding.decode(reader, reader.uint32());
+          message.unbonding = Unbonding.decode(reader, reader.uint32(), useInterfaces);
           break;
         case 2:
-          message.rewards.push(Coin.decode(reader, reader.uint32()));
+          message.rewards.push(Coin.decode(reader, reader.uint32(), useInterfaces));
           break;
         default:
           reader.skipType(tag & 7);
@@ -1506,21 +1648,21 @@ export const MsgUnbondResponse = {
     message.rewards = object.rewards?.map(e => Coin.fromAmino(e)) || [];
     return message;
   },
-  toAmino(message: MsgUnbondResponse): MsgUnbondResponseAmino {
+  toAmino(message: MsgUnbondResponse, useInterfaces: boolean = true): MsgUnbondResponseAmino {
     const obj: any = {};
-    obj.unbonding = message.unbonding ? Unbonding.toAmino(message.unbonding) : undefined;
+    obj.unbonding = message.unbonding ? Unbonding.toAmino(message.unbonding, useInterfaces) : undefined;
     if (message.rewards) {
-      obj.rewards = message.rewards.map(e => e ? Coin.toAmino(e) : undefined);
+      obj.rewards = message.rewards.map(e => e ? Coin.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.rewards = [];
+      obj.rewards = message.rewards;
     }
     return obj;
   },
   fromAminoMsg(object: MsgUnbondResponseAminoMsg): MsgUnbondResponse {
     return MsgUnbondResponse.fromAmino(object.value);
   },
-  fromProtoMsg(message: MsgUnbondResponseProtoMsg): MsgUnbondResponse {
-    return MsgUnbondResponse.decode(message.value);
+  fromProtoMsg(message: MsgUnbondResponseProtoMsg, useInterfaces: boolean = true): MsgUnbondResponse {
+    return MsgUnbondResponse.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: MsgUnbondResponse): Uint8Array {
     return MsgUnbondResponse.encode(message).finish();
@@ -1532,6 +1674,7 @@ export const MsgUnbondResponse = {
     };
   }
 };
+GlobalDecoderRegistry.register(MsgUnbondResponse.typeUrl, MsgUnbondResponse);
 function createBaseMsgClaimReward(): MsgClaimReward {
   return {
     creator: "",
@@ -1541,6 +1684,16 @@ function createBaseMsgClaimReward(): MsgClaimReward {
 }
 export const MsgClaimReward = {
   typeUrl: "/pryzm.incentives.v1.MsgClaimReward",
+  aminoType: "pryzm/incentives/v1/ClaimReward",
+  is(o: any): o is MsgClaimReward {
+    return o && (o.$typeUrl === MsgClaimReward.typeUrl || typeof o.creator === "string" && typeof o.bondDenom === "string" && typeof o.treasury === "string");
+  },
+  isSDK(o: any): o is MsgClaimRewardSDKType {
+    return o && (o.$typeUrl === MsgClaimReward.typeUrl || typeof o.creator === "string" && typeof o.bond_denom === "string" && typeof o.treasury === "string");
+  },
+  isAmino(o: any): o is MsgClaimRewardAmino {
+    return o && (o.$typeUrl === MsgClaimReward.typeUrl || typeof o.creator === "string" && typeof o.bond_denom === "string" && typeof o.treasury === "string");
+  },
   encode(message: MsgClaimReward, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.creator !== "") {
       writer.uint32(10).string(message.creator);
@@ -1553,7 +1706,7 @@ export const MsgClaimReward = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): MsgClaimReward {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): MsgClaimReward {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgClaimReward();
@@ -1610,24 +1763,24 @@ export const MsgClaimReward = {
     }
     return message;
   },
-  toAmino(message: MsgClaimReward): MsgClaimRewardAmino {
+  toAmino(message: MsgClaimReward, useInterfaces: boolean = true): MsgClaimRewardAmino {
     const obj: any = {};
-    obj.creator = message.creator;
-    obj.bond_denom = message.bondDenom;
-    obj.treasury = message.treasury;
+    obj.creator = message.creator === "" ? undefined : message.creator;
+    obj.bond_denom = message.bondDenom === "" ? undefined : message.bondDenom;
+    obj.treasury = message.treasury === "" ? undefined : message.treasury;
     return obj;
   },
   fromAminoMsg(object: MsgClaimRewardAminoMsg): MsgClaimReward {
     return MsgClaimReward.fromAmino(object.value);
   },
-  toAminoMsg(message: MsgClaimReward): MsgClaimRewardAminoMsg {
+  toAminoMsg(message: MsgClaimReward, useInterfaces: boolean = true): MsgClaimRewardAminoMsg {
     return {
       type: "pryzm/incentives/v1/ClaimReward",
-      value: MsgClaimReward.toAmino(message)
+      value: MsgClaimReward.toAmino(message, useInterfaces)
     };
   },
-  fromProtoMsg(message: MsgClaimRewardProtoMsg): MsgClaimReward {
-    return MsgClaimReward.decode(message.value);
+  fromProtoMsg(message: MsgClaimRewardProtoMsg, useInterfaces: boolean = true): MsgClaimReward {
+    return MsgClaimReward.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: MsgClaimReward): Uint8Array {
     return MsgClaimReward.encode(message).finish();
@@ -1639,6 +1792,8 @@ export const MsgClaimReward = {
     };
   }
 };
+GlobalDecoderRegistry.register(MsgClaimReward.typeUrl, MsgClaimReward);
+GlobalDecoderRegistry.registerAminoProtoMapping(MsgClaimReward.aminoType, MsgClaimReward.typeUrl);
 function createBaseMsgClaimRewardResponse(): MsgClaimRewardResponse {
   return {
     rewards: []
@@ -1646,13 +1801,22 @@ function createBaseMsgClaimRewardResponse(): MsgClaimRewardResponse {
 }
 export const MsgClaimRewardResponse = {
   typeUrl: "/pryzm.incentives.v1.MsgClaimRewardResponse",
+  is(o: any): o is MsgClaimRewardResponse {
+    return o && (o.$typeUrl === MsgClaimRewardResponse.typeUrl || Array.isArray(o.rewards) && (!o.rewards.length || Coin.is(o.rewards[0])));
+  },
+  isSDK(o: any): o is MsgClaimRewardResponseSDKType {
+    return o && (o.$typeUrl === MsgClaimRewardResponse.typeUrl || Array.isArray(o.rewards) && (!o.rewards.length || Coin.isSDK(o.rewards[0])));
+  },
+  isAmino(o: any): o is MsgClaimRewardResponseAmino {
+    return o && (o.$typeUrl === MsgClaimRewardResponse.typeUrl || Array.isArray(o.rewards) && (!o.rewards.length || Coin.isAmino(o.rewards[0])));
+  },
   encode(message: MsgClaimRewardResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     for (const v of message.rewards) {
       Coin.encode(v!, writer.uint32(10).fork()).ldelim();
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): MsgClaimRewardResponse {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): MsgClaimRewardResponse {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgClaimRewardResponse();
@@ -1660,7 +1824,7 @@ export const MsgClaimRewardResponse = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.rewards.push(Coin.decode(reader, reader.uint32()));
+          message.rewards.push(Coin.decode(reader, reader.uint32(), useInterfaces));
           break;
         default:
           reader.skipType(tag & 7);
@@ -1693,20 +1857,20 @@ export const MsgClaimRewardResponse = {
     message.rewards = object.rewards?.map(e => Coin.fromAmino(e)) || [];
     return message;
   },
-  toAmino(message: MsgClaimRewardResponse): MsgClaimRewardResponseAmino {
+  toAmino(message: MsgClaimRewardResponse, useInterfaces: boolean = true): MsgClaimRewardResponseAmino {
     const obj: any = {};
     if (message.rewards) {
-      obj.rewards = message.rewards.map(e => e ? Coin.toAmino(e) : undefined);
+      obj.rewards = message.rewards.map(e => e ? Coin.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.rewards = [];
+      obj.rewards = message.rewards;
     }
     return obj;
   },
   fromAminoMsg(object: MsgClaimRewardResponseAminoMsg): MsgClaimRewardResponse {
     return MsgClaimRewardResponse.fromAmino(object.value);
   },
-  fromProtoMsg(message: MsgClaimRewardResponseProtoMsg): MsgClaimRewardResponse {
-    return MsgClaimRewardResponse.decode(message.value);
+  fromProtoMsg(message: MsgClaimRewardResponseProtoMsg, useInterfaces: boolean = true): MsgClaimRewardResponse {
+    return MsgClaimRewardResponse.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: MsgClaimRewardResponse): Uint8Array {
     return MsgClaimRewardResponse.encode(message).finish();
@@ -1718,6 +1882,7 @@ export const MsgClaimRewardResponse = {
     };
   }
 };
+GlobalDecoderRegistry.register(MsgClaimRewardResponse.typeUrl, MsgClaimRewardResponse);
 function createBaseMsgClaimUnbonding(): MsgClaimUnbonding {
   return {
     creator: "",
@@ -1726,6 +1891,16 @@ function createBaseMsgClaimUnbonding(): MsgClaimUnbonding {
 }
 export const MsgClaimUnbonding = {
   typeUrl: "/pryzm.incentives.v1.MsgClaimUnbonding",
+  aminoType: "pryzm/incentives/v1/ClaimUnbonding",
+  is(o: any): o is MsgClaimUnbonding {
+    return o && (o.$typeUrl === MsgClaimUnbonding.typeUrl || typeof o.creator === "string" && typeof o.unbondingId === "bigint");
+  },
+  isSDK(o: any): o is MsgClaimUnbondingSDKType {
+    return o && (o.$typeUrl === MsgClaimUnbonding.typeUrl || typeof o.creator === "string" && typeof o.unbonding_id === "bigint");
+  },
+  isAmino(o: any): o is MsgClaimUnbondingAmino {
+    return o && (o.$typeUrl === MsgClaimUnbonding.typeUrl || typeof o.creator === "string" && typeof o.unbonding_id === "bigint");
+  },
   encode(message: MsgClaimUnbonding, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.creator !== "") {
       writer.uint32(10).string(message.creator);
@@ -1735,7 +1910,7 @@ export const MsgClaimUnbonding = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): MsgClaimUnbonding {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): MsgClaimUnbonding {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgClaimUnbonding();
@@ -1783,23 +1958,23 @@ export const MsgClaimUnbonding = {
     }
     return message;
   },
-  toAmino(message: MsgClaimUnbonding): MsgClaimUnbondingAmino {
+  toAmino(message: MsgClaimUnbonding, useInterfaces: boolean = true): MsgClaimUnbondingAmino {
     const obj: any = {};
-    obj.creator = message.creator;
-    obj.unbonding_id = message.unbondingId ? message.unbondingId.toString() : "0";
+    obj.creator = message.creator === "" ? undefined : message.creator;
+    obj.unbonding_id = message.unbondingId ? message.unbondingId.toString() : undefined;
     return obj;
   },
   fromAminoMsg(object: MsgClaimUnbondingAminoMsg): MsgClaimUnbonding {
     return MsgClaimUnbonding.fromAmino(object.value);
   },
-  toAminoMsg(message: MsgClaimUnbonding): MsgClaimUnbondingAminoMsg {
+  toAminoMsg(message: MsgClaimUnbonding, useInterfaces: boolean = true): MsgClaimUnbondingAminoMsg {
     return {
       type: "pryzm/incentives/v1/ClaimUnbonding",
-      value: MsgClaimUnbonding.toAmino(message)
+      value: MsgClaimUnbonding.toAmino(message, useInterfaces)
     };
   },
-  fromProtoMsg(message: MsgClaimUnbondingProtoMsg): MsgClaimUnbonding {
-    return MsgClaimUnbonding.decode(message.value);
+  fromProtoMsg(message: MsgClaimUnbondingProtoMsg, useInterfaces: boolean = true): MsgClaimUnbonding {
+    return MsgClaimUnbonding.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: MsgClaimUnbonding): Uint8Array {
     return MsgClaimUnbonding.encode(message).finish();
@@ -1811,6 +1986,8 @@ export const MsgClaimUnbonding = {
     };
   }
 };
+GlobalDecoderRegistry.register(MsgClaimUnbonding.typeUrl, MsgClaimUnbonding);
+GlobalDecoderRegistry.registerAminoProtoMapping(MsgClaimUnbonding.aminoType, MsgClaimUnbonding.typeUrl);
 function createBaseMsgClaimUnbondingResponse(): MsgClaimUnbondingResponse {
   return {
     amount: Coin.fromPartial({})
@@ -1818,13 +1995,22 @@ function createBaseMsgClaimUnbondingResponse(): MsgClaimUnbondingResponse {
 }
 export const MsgClaimUnbondingResponse = {
   typeUrl: "/pryzm.incentives.v1.MsgClaimUnbondingResponse",
+  is(o: any): o is MsgClaimUnbondingResponse {
+    return o && (o.$typeUrl === MsgClaimUnbondingResponse.typeUrl || Coin.is(o.amount));
+  },
+  isSDK(o: any): o is MsgClaimUnbondingResponseSDKType {
+    return o && (o.$typeUrl === MsgClaimUnbondingResponse.typeUrl || Coin.isSDK(o.amount));
+  },
+  isAmino(o: any): o is MsgClaimUnbondingResponseAmino {
+    return o && (o.$typeUrl === MsgClaimUnbondingResponse.typeUrl || Coin.isAmino(o.amount));
+  },
   encode(message: MsgClaimUnbondingResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.amount !== undefined) {
       Coin.encode(message.amount, writer.uint32(10).fork()).ldelim();
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): MsgClaimUnbondingResponse {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): MsgClaimUnbondingResponse {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgClaimUnbondingResponse();
@@ -1832,7 +2018,7 @@ export const MsgClaimUnbondingResponse = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.amount = Coin.decode(reader, reader.uint32());
+          message.amount = Coin.decode(reader, reader.uint32(), useInterfaces);
           break;
         default:
           reader.skipType(tag & 7);
@@ -1863,16 +2049,16 @@ export const MsgClaimUnbondingResponse = {
     }
     return message;
   },
-  toAmino(message: MsgClaimUnbondingResponse): MsgClaimUnbondingResponseAmino {
+  toAmino(message: MsgClaimUnbondingResponse, useInterfaces: boolean = true): MsgClaimUnbondingResponseAmino {
     const obj: any = {};
-    obj.amount = message.amount ? Coin.toAmino(message.amount) : undefined;
+    obj.amount = message.amount ? Coin.toAmino(message.amount, useInterfaces) : undefined;
     return obj;
   },
   fromAminoMsg(object: MsgClaimUnbondingResponseAminoMsg): MsgClaimUnbondingResponse {
     return MsgClaimUnbondingResponse.fromAmino(object.value);
   },
-  fromProtoMsg(message: MsgClaimUnbondingResponseProtoMsg): MsgClaimUnbondingResponse {
-    return MsgClaimUnbondingResponse.decode(message.value);
+  fromProtoMsg(message: MsgClaimUnbondingResponseProtoMsg, useInterfaces: boolean = true): MsgClaimUnbondingResponse {
+    return MsgClaimUnbondingResponse.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: MsgClaimUnbondingResponse): Uint8Array {
     return MsgClaimUnbondingResponse.encode(message).finish();
@@ -1884,6 +2070,7 @@ export const MsgClaimUnbondingResponse = {
     };
   }
 };
+GlobalDecoderRegistry.register(MsgClaimUnbondingResponse.typeUrl, MsgClaimUnbondingResponse);
 function createBaseMsgCancelUnbonding(): MsgCancelUnbonding {
   return {
     creator: "",
@@ -1893,6 +2080,16 @@ function createBaseMsgCancelUnbonding(): MsgCancelUnbonding {
 }
 export const MsgCancelUnbonding = {
   typeUrl: "/pryzm.incentives.v1.MsgCancelUnbonding",
+  aminoType: "pryzm/incentives/v1/CancelUnbonding",
+  is(o: any): o is MsgCancelUnbonding {
+    return o && (o.$typeUrl === MsgCancelUnbonding.typeUrl || typeof o.creator === "string" && typeof o.unbondingId === "bigint" && Coin.is(o.amount));
+  },
+  isSDK(o: any): o is MsgCancelUnbondingSDKType {
+    return o && (o.$typeUrl === MsgCancelUnbonding.typeUrl || typeof o.creator === "string" && typeof o.unbonding_id === "bigint" && Coin.isSDK(o.amount));
+  },
+  isAmino(o: any): o is MsgCancelUnbondingAmino {
+    return o && (o.$typeUrl === MsgCancelUnbonding.typeUrl || typeof o.creator === "string" && typeof o.unbonding_id === "bigint" && Coin.isAmino(o.amount));
+  },
   encode(message: MsgCancelUnbonding, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.creator !== "") {
       writer.uint32(10).string(message.creator);
@@ -1905,7 +2102,7 @@ export const MsgCancelUnbonding = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): MsgCancelUnbonding {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): MsgCancelUnbonding {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgCancelUnbonding();
@@ -1919,7 +2116,7 @@ export const MsgCancelUnbonding = {
           message.unbondingId = reader.uint64();
           break;
         case 3:
-          message.amount = Coin.decode(reader, reader.uint32());
+          message.amount = Coin.decode(reader, reader.uint32(), useInterfaces);
           break;
         default:
           reader.skipType(tag & 7);
@@ -1962,24 +2159,24 @@ export const MsgCancelUnbonding = {
     }
     return message;
   },
-  toAmino(message: MsgCancelUnbonding): MsgCancelUnbondingAmino {
+  toAmino(message: MsgCancelUnbonding, useInterfaces: boolean = true): MsgCancelUnbondingAmino {
     const obj: any = {};
-    obj.creator = message.creator;
-    obj.unbonding_id = message.unbondingId ? message.unbondingId.toString() : "0";
-    obj.amount = message.amount ? Coin.toAmino(message.amount) : undefined;
+    obj.creator = message.creator === "" ? undefined : message.creator;
+    obj.unbonding_id = message.unbondingId ? message.unbondingId.toString() : undefined;
+    obj.amount = message.amount ? Coin.toAmino(message.amount, useInterfaces) : undefined;
     return obj;
   },
   fromAminoMsg(object: MsgCancelUnbondingAminoMsg): MsgCancelUnbonding {
     return MsgCancelUnbonding.fromAmino(object.value);
   },
-  toAminoMsg(message: MsgCancelUnbonding): MsgCancelUnbondingAminoMsg {
+  toAminoMsg(message: MsgCancelUnbonding, useInterfaces: boolean = true): MsgCancelUnbondingAminoMsg {
     return {
       type: "pryzm/incentives/v1/CancelUnbonding",
-      value: MsgCancelUnbonding.toAmino(message)
+      value: MsgCancelUnbonding.toAmino(message, useInterfaces)
     };
   },
-  fromProtoMsg(message: MsgCancelUnbondingProtoMsg): MsgCancelUnbonding {
-    return MsgCancelUnbonding.decode(message.value);
+  fromProtoMsg(message: MsgCancelUnbondingProtoMsg, useInterfaces: boolean = true): MsgCancelUnbonding {
+    return MsgCancelUnbonding.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: MsgCancelUnbonding): Uint8Array {
     return MsgCancelUnbonding.encode(message).finish();
@@ -1991,6 +2188,8 @@ export const MsgCancelUnbonding = {
     };
   }
 };
+GlobalDecoderRegistry.register(MsgCancelUnbonding.typeUrl, MsgCancelUnbonding);
+GlobalDecoderRegistry.registerAminoProtoMapping(MsgCancelUnbonding.aminoType, MsgCancelUnbonding.typeUrl);
 function createBaseMsgCancelUnbondingResponse(): MsgCancelUnbondingResponse {
   return {
     bond: Bond.fromPartial({})
@@ -1998,13 +2197,22 @@ function createBaseMsgCancelUnbondingResponse(): MsgCancelUnbondingResponse {
 }
 export const MsgCancelUnbondingResponse = {
   typeUrl: "/pryzm.incentives.v1.MsgCancelUnbondingResponse",
+  is(o: any): o is MsgCancelUnbondingResponse {
+    return o && (o.$typeUrl === MsgCancelUnbondingResponse.typeUrl || Bond.is(o.bond));
+  },
+  isSDK(o: any): o is MsgCancelUnbondingResponseSDKType {
+    return o && (o.$typeUrl === MsgCancelUnbondingResponse.typeUrl || Bond.isSDK(o.bond));
+  },
+  isAmino(o: any): o is MsgCancelUnbondingResponseAmino {
+    return o && (o.$typeUrl === MsgCancelUnbondingResponse.typeUrl || Bond.isAmino(o.bond));
+  },
   encode(message: MsgCancelUnbondingResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.bond !== undefined) {
       Bond.encode(message.bond, writer.uint32(10).fork()).ldelim();
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): MsgCancelUnbondingResponse {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): MsgCancelUnbondingResponse {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgCancelUnbondingResponse();
@@ -2012,7 +2220,7 @@ export const MsgCancelUnbondingResponse = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.bond = Bond.decode(reader, reader.uint32());
+          message.bond = Bond.decode(reader, reader.uint32(), useInterfaces);
           break;
         default:
           reader.skipType(tag & 7);
@@ -2043,16 +2251,16 @@ export const MsgCancelUnbondingResponse = {
     }
     return message;
   },
-  toAmino(message: MsgCancelUnbondingResponse): MsgCancelUnbondingResponseAmino {
+  toAmino(message: MsgCancelUnbondingResponse, useInterfaces: boolean = true): MsgCancelUnbondingResponseAmino {
     const obj: any = {};
-    obj.bond = message.bond ? Bond.toAmino(message.bond) : undefined;
+    obj.bond = message.bond ? Bond.toAmino(message.bond, useInterfaces) : undefined;
     return obj;
   },
   fromAminoMsg(object: MsgCancelUnbondingResponseAminoMsg): MsgCancelUnbondingResponse {
     return MsgCancelUnbondingResponse.fromAmino(object.value);
   },
-  fromProtoMsg(message: MsgCancelUnbondingResponseProtoMsg): MsgCancelUnbondingResponse {
-    return MsgCancelUnbondingResponse.decode(message.value);
+  fromProtoMsg(message: MsgCancelUnbondingResponseProtoMsg, useInterfaces: boolean = true): MsgCancelUnbondingResponse {
+    return MsgCancelUnbondingResponse.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: MsgCancelUnbondingResponse): Uint8Array {
     return MsgCancelUnbondingResponse.encode(message).finish();
@@ -2064,6 +2272,7 @@ export const MsgCancelUnbondingResponse = {
     };
   }
 };
+GlobalDecoderRegistry.register(MsgCancelUnbondingResponse.typeUrl, MsgCancelUnbondingResponse);
 function createBaseMsgIncentivizePool(): MsgIncentivizePool {
   return {
     creator: "",
@@ -2073,6 +2282,16 @@ function createBaseMsgIncentivizePool(): MsgIncentivizePool {
 }
 export const MsgIncentivizePool = {
   typeUrl: "/pryzm.incentives.v1.MsgIncentivizePool",
+  aminoType: "pryzm/incentives/v1/IncentivizePool",
+  is(o: any): o is MsgIncentivizePool {
+    return o && (o.$typeUrl === MsgIncentivizePool.typeUrl || typeof o.creator === "string" && typeof o.bondDenom === "string" && Array.isArray(o.amount) && (!o.amount.length || Coin.is(o.amount[0])));
+  },
+  isSDK(o: any): o is MsgIncentivizePoolSDKType {
+    return o && (o.$typeUrl === MsgIncentivizePool.typeUrl || typeof o.creator === "string" && typeof o.bond_denom === "string" && Array.isArray(o.amount) && (!o.amount.length || Coin.isSDK(o.amount[0])));
+  },
+  isAmino(o: any): o is MsgIncentivizePoolAmino {
+    return o && (o.$typeUrl === MsgIncentivizePool.typeUrl || typeof o.creator === "string" && typeof o.bond_denom === "string" && Array.isArray(o.amount) && (!o.amount.length || Coin.isAmino(o.amount[0])));
+  },
   encode(message: MsgIncentivizePool, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.creator !== "") {
       writer.uint32(10).string(message.creator);
@@ -2085,7 +2304,7 @@ export const MsgIncentivizePool = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): MsgIncentivizePool {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): MsgIncentivizePool {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgIncentivizePool();
@@ -2099,7 +2318,7 @@ export const MsgIncentivizePool = {
           message.bondDenom = reader.string();
           break;
         case 3:
-          message.amount.push(Coin.decode(reader, reader.uint32()));
+          message.amount.push(Coin.decode(reader, reader.uint32(), useInterfaces));
           break;
         default:
           reader.skipType(tag & 7);
@@ -2144,28 +2363,28 @@ export const MsgIncentivizePool = {
     message.amount = object.amount?.map(e => Coin.fromAmino(e)) || [];
     return message;
   },
-  toAmino(message: MsgIncentivizePool): MsgIncentivizePoolAmino {
+  toAmino(message: MsgIncentivizePool, useInterfaces: boolean = true): MsgIncentivizePoolAmino {
     const obj: any = {};
-    obj.creator = message.creator;
-    obj.bond_denom = message.bondDenom;
+    obj.creator = message.creator === "" ? undefined : message.creator;
+    obj.bond_denom = message.bondDenom === "" ? undefined : message.bondDenom;
     if (message.amount) {
-      obj.amount = message.amount.map(e => e ? Coin.toAmino(e) : undefined);
+      obj.amount = message.amount.map(e => e ? Coin.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.amount = [];
+      obj.amount = message.amount;
     }
     return obj;
   },
   fromAminoMsg(object: MsgIncentivizePoolAminoMsg): MsgIncentivizePool {
     return MsgIncentivizePool.fromAmino(object.value);
   },
-  toAminoMsg(message: MsgIncentivizePool): MsgIncentivizePoolAminoMsg {
+  toAminoMsg(message: MsgIncentivizePool, useInterfaces: boolean = true): MsgIncentivizePoolAminoMsg {
     return {
       type: "pryzm/incentives/v1/IncentivizePool",
-      value: MsgIncentivizePool.toAmino(message)
+      value: MsgIncentivizePool.toAmino(message, useInterfaces)
     };
   },
-  fromProtoMsg(message: MsgIncentivizePoolProtoMsg): MsgIncentivizePool {
-    return MsgIncentivizePool.decode(message.value);
+  fromProtoMsg(message: MsgIncentivizePoolProtoMsg, useInterfaces: boolean = true): MsgIncentivizePool {
+    return MsgIncentivizePool.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: MsgIncentivizePool): Uint8Array {
     return MsgIncentivizePool.encode(message).finish();
@@ -2177,15 +2396,26 @@ export const MsgIncentivizePool = {
     };
   }
 };
+GlobalDecoderRegistry.register(MsgIncentivizePool.typeUrl, MsgIncentivizePool);
+GlobalDecoderRegistry.registerAminoProtoMapping(MsgIncentivizePool.aminoType, MsgIncentivizePool.typeUrl);
 function createBaseMsgIncentivizePoolResponse(): MsgIncentivizePoolResponse {
   return {};
 }
 export const MsgIncentivizePoolResponse = {
   typeUrl: "/pryzm.incentives.v1.MsgIncentivizePoolResponse",
+  is(o: any): o is MsgIncentivizePoolResponse {
+    return o && o.$typeUrl === MsgIncentivizePoolResponse.typeUrl;
+  },
+  isSDK(o: any): o is MsgIncentivizePoolResponseSDKType {
+    return o && o.$typeUrl === MsgIncentivizePoolResponse.typeUrl;
+  },
+  isAmino(o: any): o is MsgIncentivizePoolResponseAmino {
+    return o && o.$typeUrl === MsgIncentivizePoolResponse.typeUrl;
+  },
   encode(_: MsgIncentivizePoolResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): MsgIncentivizePoolResponse {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): MsgIncentivizePoolResponse {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgIncentivizePoolResponse();
@@ -2214,15 +2444,15 @@ export const MsgIncentivizePoolResponse = {
     const message = createBaseMsgIncentivizePoolResponse();
     return message;
   },
-  toAmino(_: MsgIncentivizePoolResponse): MsgIncentivizePoolResponseAmino {
+  toAmino(_: MsgIncentivizePoolResponse, useInterfaces: boolean = true): MsgIncentivizePoolResponseAmino {
     const obj: any = {};
     return obj;
   },
   fromAminoMsg(object: MsgIncentivizePoolResponseAminoMsg): MsgIncentivizePoolResponse {
     return MsgIncentivizePoolResponse.fromAmino(object.value);
   },
-  fromProtoMsg(message: MsgIncentivizePoolResponseProtoMsg): MsgIncentivizePoolResponse {
-    return MsgIncentivizePoolResponse.decode(message.value);
+  fromProtoMsg(message: MsgIncentivizePoolResponseProtoMsg, useInterfaces: boolean = true): MsgIncentivizePoolResponse {
+    return MsgIncentivizePoolResponse.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: MsgIncentivizePoolResponse): Uint8Array {
     return MsgIncentivizePoolResponse.encode(message).finish();
@@ -2234,3 +2464,4 @@ export const MsgIncentivizePoolResponse = {
     };
   }
 };
+GlobalDecoderRegistry.register(MsgIncentivizePoolResponse.typeUrl, MsgIncentivizePoolResponse);

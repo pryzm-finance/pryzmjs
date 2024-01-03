@@ -1,4 +1,5 @@
 import { BinaryReader, BinaryWriter } from "../../../binary";
+import { GlobalDecoderRegistry } from "../../../registry";
 import { isSet, isObject } from "../../../helpers";
 export interface QueryConfigRequest {}
 export interface QueryConfigRequestProtoMsg {
@@ -59,10 +60,19 @@ function createBaseQueryConfigRequest(): QueryConfigRequest {
 }
 export const QueryConfigRequest = {
   typeUrl: "/pryzmatics.server.common.QueryConfigRequest",
+  is(o: any): o is QueryConfigRequest {
+    return o && o.$typeUrl === QueryConfigRequest.typeUrl;
+  },
+  isSDK(o: any): o is QueryConfigRequestSDKType {
+    return o && o.$typeUrl === QueryConfigRequest.typeUrl;
+  },
+  isAmino(o: any): o is QueryConfigRequestAmino {
+    return o && o.$typeUrl === QueryConfigRequest.typeUrl;
+  },
   encode(_: QueryConfigRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): QueryConfigRequest {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): QueryConfigRequest {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryConfigRequest();
@@ -91,15 +101,15 @@ export const QueryConfigRequest = {
     const message = createBaseQueryConfigRequest();
     return message;
   },
-  toAmino(_: QueryConfigRequest): QueryConfigRequestAmino {
+  toAmino(_: QueryConfigRequest, useInterfaces: boolean = true): QueryConfigRequestAmino {
     const obj: any = {};
     return obj;
   },
   fromAminoMsg(object: QueryConfigRequestAminoMsg): QueryConfigRequest {
     return QueryConfigRequest.fromAmino(object.value);
   },
-  fromProtoMsg(message: QueryConfigRequestProtoMsg): QueryConfigRequest {
-    return QueryConfigRequest.decode(message.value);
+  fromProtoMsg(message: QueryConfigRequestProtoMsg, useInterfaces: boolean = true): QueryConfigRequest {
+    return QueryConfigRequest.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: QueryConfigRequest): Uint8Array {
     return QueryConfigRequest.encode(message).finish();
@@ -111,6 +121,7 @@ export const QueryConfigRequest = {
     };
   }
 };
+GlobalDecoderRegistry.register(QueryConfigRequest.typeUrl, QueryConfigRequest);
 function createBaseQueryConfigResponse_ConfigurationsEntry(): QueryConfigResponse_ConfigurationsEntry {
   return {
     key: "",
@@ -127,7 +138,7 @@ export const QueryConfigResponse_ConfigurationsEntry = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): QueryConfigResponse_ConfigurationsEntry {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): QueryConfigResponse_ConfigurationsEntry {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryConfigResponse_ConfigurationsEntry();
@@ -175,17 +186,17 @@ export const QueryConfigResponse_ConfigurationsEntry = {
     }
     return message;
   },
-  toAmino(message: QueryConfigResponse_ConfigurationsEntry): QueryConfigResponse_ConfigurationsEntryAmino {
+  toAmino(message: QueryConfigResponse_ConfigurationsEntry, useInterfaces: boolean = true): QueryConfigResponse_ConfigurationsEntryAmino {
     const obj: any = {};
-    obj.key = message.key;
-    obj.value = message.value;
+    obj.key = message.key === "" ? undefined : message.key;
+    obj.value = message.value === "" ? undefined : message.value;
     return obj;
   },
   fromAminoMsg(object: QueryConfigResponse_ConfigurationsEntryAminoMsg): QueryConfigResponse_ConfigurationsEntry {
     return QueryConfigResponse_ConfigurationsEntry.fromAmino(object.value);
   },
-  fromProtoMsg(message: QueryConfigResponse_ConfigurationsEntryProtoMsg): QueryConfigResponse_ConfigurationsEntry {
-    return QueryConfigResponse_ConfigurationsEntry.decode(message.value);
+  fromProtoMsg(message: QueryConfigResponse_ConfigurationsEntryProtoMsg, useInterfaces: boolean = true): QueryConfigResponse_ConfigurationsEntry {
+    return QueryConfigResponse_ConfigurationsEntry.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: QueryConfigResponse_ConfigurationsEntry): Uint8Array {
     return QueryConfigResponse_ConfigurationsEntry.encode(message).finish();
@@ -198,6 +209,15 @@ function createBaseQueryConfigResponse(): QueryConfigResponse {
 }
 export const QueryConfigResponse = {
   typeUrl: "/pryzmatics.server.common.QueryConfigResponse",
+  is(o: any): o is QueryConfigResponse {
+    return o && (o.$typeUrl === QueryConfigResponse.typeUrl || isSet(o.configurations));
+  },
+  isSDK(o: any): o is QueryConfigResponseSDKType {
+    return o && (o.$typeUrl === QueryConfigResponse.typeUrl || isSet(o.configurations));
+  },
+  isAmino(o: any): o is QueryConfigResponseAmino {
+    return o && (o.$typeUrl === QueryConfigResponse.typeUrl || isSet(o.configurations));
+  },
   encode(message: QueryConfigResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     Object.entries(message.configurations).forEach(([key, value]) => {
       QueryConfigResponse_ConfigurationsEntry.encode({
@@ -207,7 +227,7 @@ export const QueryConfigResponse = {
     });
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): QueryConfigResponse {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): QueryConfigResponse {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryConfigResponse();
@@ -271,7 +291,7 @@ export const QueryConfigResponse = {
     }, {});
     return message;
   },
-  toAmino(message: QueryConfigResponse): QueryConfigResponseAmino {
+  toAmino(message: QueryConfigResponse, useInterfaces: boolean = true): QueryConfigResponseAmino {
     const obj: any = {};
     obj.configurations = {};
     if (message.configurations) {
@@ -284,8 +304,8 @@ export const QueryConfigResponse = {
   fromAminoMsg(object: QueryConfigResponseAminoMsg): QueryConfigResponse {
     return QueryConfigResponse.fromAmino(object.value);
   },
-  fromProtoMsg(message: QueryConfigResponseProtoMsg): QueryConfigResponse {
-    return QueryConfigResponse.decode(message.value);
+  fromProtoMsg(message: QueryConfigResponseProtoMsg, useInterfaces: boolean = true): QueryConfigResponse {
+    return QueryConfigResponse.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: QueryConfigResponse): Uint8Array {
     return QueryConfigResponse.encode(message).finish();
@@ -297,3 +317,4 @@ export const QueryConfigResponse = {
     };
   }
 };
+GlobalDecoderRegistry.register(QueryConfigResponse.typeUrl, QueryConfigResponse);

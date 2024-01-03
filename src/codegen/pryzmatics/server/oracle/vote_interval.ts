@@ -2,6 +2,7 @@ import { PageRequest, PageRequestAmino, PageRequestSDKType, PageResponse, PageRe
 import { VoteInterval, VoteIntervalAmino, VoteIntervalSDKType } from "../../oracle/vote_interval";
 import { BinaryReader, BinaryWriter } from "../../../binary";
 import { isSet } from "../../../helpers";
+import { GlobalDecoderRegistry } from "../../../registry";
 export interface QueryVoteIntervalsRequest {
   fromBlockHeight?: string;
   toBlockHeight?: string;
@@ -54,6 +55,15 @@ function createBaseQueryVoteIntervalsRequest(): QueryVoteIntervalsRequest {
 }
 export const QueryVoteIntervalsRequest = {
   typeUrl: "/pryzmatics.server.oracle.QueryVoteIntervalsRequest",
+  is(o: any): o is QueryVoteIntervalsRequest {
+    return o && o.$typeUrl === QueryVoteIntervalsRequest.typeUrl;
+  },
+  isSDK(o: any): o is QueryVoteIntervalsRequestSDKType {
+    return o && o.$typeUrl === QueryVoteIntervalsRequest.typeUrl;
+  },
+  isAmino(o: any): o is QueryVoteIntervalsRequestAmino {
+    return o && o.$typeUrl === QueryVoteIntervalsRequest.typeUrl;
+  },
   encode(message: QueryVoteIntervalsRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.fromBlockHeight !== undefined) {
       writer.uint32(10).string(message.fromBlockHeight);
@@ -66,7 +76,7 @@ export const QueryVoteIntervalsRequest = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): QueryVoteIntervalsRequest {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): QueryVoteIntervalsRequest {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryVoteIntervalsRequest();
@@ -80,7 +90,7 @@ export const QueryVoteIntervalsRequest = {
           message.toBlockHeight = reader.string();
           break;
         case 3:
-          message.pagination = PageRequest.decode(reader, reader.uint32());
+          message.pagination = PageRequest.decode(reader, reader.uint32(), useInterfaces);
           break;
         default:
           reader.skipType(tag & 7);
@@ -123,18 +133,18 @@ export const QueryVoteIntervalsRequest = {
     }
     return message;
   },
-  toAmino(message: QueryVoteIntervalsRequest): QueryVoteIntervalsRequestAmino {
+  toAmino(message: QueryVoteIntervalsRequest, useInterfaces: boolean = true): QueryVoteIntervalsRequestAmino {
     const obj: any = {};
-    obj.from_block_height = message.fromBlockHeight;
-    obj.to_block_height = message.toBlockHeight;
-    obj.pagination = message.pagination ? PageRequest.toAmino(message.pagination) : undefined;
+    obj.from_block_height = message.fromBlockHeight === null ? undefined : message.fromBlockHeight;
+    obj.to_block_height = message.toBlockHeight === null ? undefined : message.toBlockHeight;
+    obj.pagination = message.pagination ? PageRequest.toAmino(message.pagination, useInterfaces) : undefined;
     return obj;
   },
   fromAminoMsg(object: QueryVoteIntervalsRequestAminoMsg): QueryVoteIntervalsRequest {
     return QueryVoteIntervalsRequest.fromAmino(object.value);
   },
-  fromProtoMsg(message: QueryVoteIntervalsRequestProtoMsg): QueryVoteIntervalsRequest {
-    return QueryVoteIntervalsRequest.decode(message.value);
+  fromProtoMsg(message: QueryVoteIntervalsRequestProtoMsg, useInterfaces: boolean = true): QueryVoteIntervalsRequest {
+    return QueryVoteIntervalsRequest.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: QueryVoteIntervalsRequest): Uint8Array {
     return QueryVoteIntervalsRequest.encode(message).finish();
@@ -146,6 +156,7 @@ export const QueryVoteIntervalsRequest = {
     };
   }
 };
+GlobalDecoderRegistry.register(QueryVoteIntervalsRequest.typeUrl, QueryVoteIntervalsRequest);
 function createBaseQueryVoteIntervalsResponse(): QueryVoteIntervalsResponse {
   return {
     intervals: [],
@@ -154,6 +165,15 @@ function createBaseQueryVoteIntervalsResponse(): QueryVoteIntervalsResponse {
 }
 export const QueryVoteIntervalsResponse = {
   typeUrl: "/pryzmatics.server.oracle.QueryVoteIntervalsResponse",
+  is(o: any): o is QueryVoteIntervalsResponse {
+    return o && (o.$typeUrl === QueryVoteIntervalsResponse.typeUrl || Array.isArray(o.intervals) && (!o.intervals.length || VoteInterval.is(o.intervals[0])));
+  },
+  isSDK(o: any): o is QueryVoteIntervalsResponseSDKType {
+    return o && (o.$typeUrl === QueryVoteIntervalsResponse.typeUrl || Array.isArray(o.intervals) && (!o.intervals.length || VoteInterval.isSDK(o.intervals[0])));
+  },
+  isAmino(o: any): o is QueryVoteIntervalsResponseAmino {
+    return o && (o.$typeUrl === QueryVoteIntervalsResponse.typeUrl || Array.isArray(o.intervals) && (!o.intervals.length || VoteInterval.isAmino(o.intervals[0])));
+  },
   encode(message: QueryVoteIntervalsResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     for (const v of message.intervals) {
       VoteInterval.encode(v!, writer.uint32(10).fork()).ldelim();
@@ -163,7 +183,7 @@ export const QueryVoteIntervalsResponse = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): QueryVoteIntervalsResponse {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): QueryVoteIntervalsResponse {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryVoteIntervalsResponse();
@@ -171,10 +191,10 @@ export const QueryVoteIntervalsResponse = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.intervals.push(VoteInterval.decode(reader, reader.uint32()));
+          message.intervals.push(VoteInterval.decode(reader, reader.uint32(), useInterfaces));
           break;
         case 2:
-          message.pagination = PageResponse.decode(reader, reader.uint32());
+          message.pagination = PageResponse.decode(reader, reader.uint32(), useInterfaces);
           break;
         default:
           reader.skipType(tag & 7);
@@ -213,21 +233,21 @@ export const QueryVoteIntervalsResponse = {
     }
     return message;
   },
-  toAmino(message: QueryVoteIntervalsResponse): QueryVoteIntervalsResponseAmino {
+  toAmino(message: QueryVoteIntervalsResponse, useInterfaces: boolean = true): QueryVoteIntervalsResponseAmino {
     const obj: any = {};
     if (message.intervals) {
-      obj.intervals = message.intervals.map(e => e ? VoteInterval.toAmino(e) : undefined);
+      obj.intervals = message.intervals.map(e => e ? VoteInterval.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.intervals = [];
+      obj.intervals = message.intervals;
     }
-    obj.pagination = message.pagination ? PageResponse.toAmino(message.pagination) : undefined;
+    obj.pagination = message.pagination ? PageResponse.toAmino(message.pagination, useInterfaces) : undefined;
     return obj;
   },
   fromAminoMsg(object: QueryVoteIntervalsResponseAminoMsg): QueryVoteIntervalsResponse {
     return QueryVoteIntervalsResponse.fromAmino(object.value);
   },
-  fromProtoMsg(message: QueryVoteIntervalsResponseProtoMsg): QueryVoteIntervalsResponse {
-    return QueryVoteIntervalsResponse.decode(message.value);
+  fromProtoMsg(message: QueryVoteIntervalsResponseProtoMsg, useInterfaces: boolean = true): QueryVoteIntervalsResponse {
+    return QueryVoteIntervalsResponse.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: QueryVoteIntervalsResponse): Uint8Array {
     return QueryVoteIntervalsResponse.encode(message).finish();
@@ -239,3 +259,4 @@ export const QueryVoteIntervalsResponse = {
     };
   }
 };
+GlobalDecoderRegistry.register(QueryVoteIntervalsResponse.typeUrl, QueryVoteIntervalsResponse);

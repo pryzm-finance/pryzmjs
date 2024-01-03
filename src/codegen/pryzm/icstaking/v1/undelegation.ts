@@ -1,7 +1,8 @@
 import { Timestamp, TimestampSDKType } from "../../../google/protobuf/timestamp";
 import { BinaryReader, BinaryWriter } from "../../../binary";
 import { Decimal } from "@cosmjs/math";
-import { isSet, fromJsonTimestamp, fromTimestamp } from "../../../helpers";
+import { isSet, fromJsonTimestamp, fromTimestamp, padDecimal } from "../../../helpers";
+import { GlobalDecoderRegistry } from "../../../registry";
 /** Information about an undelegation in a specific epoch */
 export interface Undelegation {
   /** host chain id */
@@ -145,6 +146,15 @@ function createBaseUndelegation(): Undelegation {
 }
 export const Undelegation = {
   typeUrl: "/pryzm.icstaking.v1.Undelegation",
+  is(o: any): o is Undelegation {
+    return o && (o.$typeUrl === Undelegation.typeUrl || typeof o.hostChain === "string" && typeof o.epoch === "bigint" && typeof o.exchangeRate === "string" && typeof o.started === "boolean" && typeof o.completed === "boolean" && Timestamp.is(o.completionTime));
+  },
+  isSDK(o: any): o is UndelegationSDKType {
+    return o && (o.$typeUrl === Undelegation.typeUrl || typeof o.host_chain === "string" && typeof o.epoch === "bigint" && typeof o.exchange_rate === "string" && typeof o.started === "boolean" && typeof o.completed === "boolean" && Timestamp.isSDK(o.completion_time));
+  },
+  isAmino(o: any): o is UndelegationAmino {
+    return o && (o.$typeUrl === Undelegation.typeUrl || typeof o.host_chain === "string" && typeof o.epoch === "bigint" && typeof o.exchange_rate === "string" && typeof o.started === "boolean" && typeof o.completed === "boolean" && Timestamp.isAmino(o.completion_time));
+  },
   encode(message: Undelegation, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.hostChain !== "") {
       writer.uint32(10).string(message.hostChain);
@@ -166,7 +176,7 @@ export const Undelegation = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): Undelegation {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): Undelegation {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseUndelegation();
@@ -250,21 +260,21 @@ export const Undelegation = {
     }
     return message;
   },
-  toAmino(message: Undelegation): UndelegationAmino {
+  toAmino(message: Undelegation, useInterfaces: boolean = true): UndelegationAmino {
     const obj: any = {};
-    obj.host_chain = message.hostChain;
+    obj.host_chain = message.hostChain === "" ? undefined : message.hostChain;
     obj.epoch = message.epoch ? message.epoch.toString() : undefined;
-    obj.exchange_rate = message.exchangeRate;
-    obj.started = message.started;
-    obj.completed = message.completed;
-    obj.completion_time = message.completionTime ? Timestamp.toAmino(message.completionTime) : undefined;
+    obj.exchange_rate = padDecimal(message.exchangeRate) === "" ? undefined : padDecimal(message.exchangeRate);
+    obj.started = message.started === false ? undefined : message.started;
+    obj.completed = message.completed === false ? undefined : message.completed;
+    obj.completion_time = message.completionTime ? Timestamp.toAmino(message.completionTime, useInterfaces) : undefined;
     return obj;
   },
   fromAminoMsg(object: UndelegationAminoMsg): Undelegation {
     return Undelegation.fromAmino(object.value);
   },
-  fromProtoMsg(message: UndelegationProtoMsg): Undelegation {
-    return Undelegation.decode(message.value);
+  fromProtoMsg(message: UndelegationProtoMsg, useInterfaces: boolean = true): Undelegation {
+    return Undelegation.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: Undelegation): Uint8Array {
     return Undelegation.encode(message).finish();
@@ -276,6 +286,7 @@ export const Undelegation = {
     };
   }
 };
+GlobalDecoderRegistry.register(Undelegation.typeUrl, Undelegation);
 function createBaseChannelUndelegation(): ChannelUndelegation {
   return {
     hostChain: "",
@@ -293,6 +304,15 @@ function createBaseChannelUndelegation(): ChannelUndelegation {
 }
 export const ChannelUndelegation = {
   typeUrl: "/pryzm.icstaking.v1.ChannelUndelegation",
+  is(o: any): o is ChannelUndelegation {
+    return o && (o.$typeUrl === ChannelUndelegation.typeUrl || typeof o.hostChain === "string" && typeof o.epoch === "bigint" && typeof o.transferChannel === "string" && typeof o.totalCAmount === "string" && typeof o.undelegatedCAmount === "string" && typeof o.receivedAmount === "string" && typeof o.pendingAmount === "string" && typeof o.pendingCAmount === "string" && typeof o.swept === "boolean" && typeof o.received === "boolean" && typeof o.claimedUAmount === "string");
+  },
+  isSDK(o: any): o is ChannelUndelegationSDKType {
+    return o && (o.$typeUrl === ChannelUndelegation.typeUrl || typeof o.host_chain === "string" && typeof o.epoch === "bigint" && typeof o.transfer_channel === "string" && typeof o.total_c_amount === "string" && typeof o.undelegated_c_amount === "string" && typeof o.received_amount === "string" && typeof o.pending_amount === "string" && typeof o.pending_c_amount === "string" && typeof o.swept === "boolean" && typeof o.received === "boolean" && typeof o.claimed_u_amount === "string");
+  },
+  isAmino(o: any): o is ChannelUndelegationAmino {
+    return o && (o.$typeUrl === ChannelUndelegation.typeUrl || typeof o.host_chain === "string" && typeof o.epoch === "bigint" && typeof o.transfer_channel === "string" && typeof o.total_c_amount === "string" && typeof o.undelegated_c_amount === "string" && typeof o.received_amount === "string" && typeof o.pending_amount === "string" && typeof o.pending_c_amount === "string" && typeof o.swept === "boolean" && typeof o.received === "boolean" && typeof o.claimed_u_amount === "string");
+  },
   encode(message: ChannelUndelegation, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.hostChain !== "") {
       writer.uint32(10).string(message.hostChain);
@@ -329,7 +349,7 @@ export const ChannelUndelegation = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): ChannelUndelegation {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): ChannelUndelegation {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseChannelUndelegation();
@@ -458,26 +478,26 @@ export const ChannelUndelegation = {
     }
     return message;
   },
-  toAmino(message: ChannelUndelegation): ChannelUndelegationAmino {
+  toAmino(message: ChannelUndelegation, useInterfaces: boolean = true): ChannelUndelegationAmino {
     const obj: any = {};
-    obj.host_chain = message.hostChain;
+    obj.host_chain = message.hostChain === "" ? undefined : message.hostChain;
     obj.epoch = message.epoch ? message.epoch.toString() : undefined;
-    obj.transfer_channel = message.transferChannel;
-    obj.total_c_amount = message.totalCAmount;
-    obj.undelegated_c_amount = message.undelegatedCAmount;
-    obj.received_amount = message.receivedAmount;
-    obj.pending_amount = message.pendingAmount;
-    obj.pending_c_amount = message.pendingCAmount;
-    obj.swept = message.swept;
-    obj.received = message.received;
-    obj.claimed_u_amount = message.claimedUAmount;
+    obj.transfer_channel = message.transferChannel === "" ? undefined : message.transferChannel;
+    obj.total_c_amount = message.totalCAmount === "" ? undefined : message.totalCAmount;
+    obj.undelegated_c_amount = message.undelegatedCAmount === "" ? undefined : message.undelegatedCAmount;
+    obj.received_amount = message.receivedAmount === "" ? undefined : message.receivedAmount;
+    obj.pending_amount = message.pendingAmount === "" ? undefined : message.pendingAmount;
+    obj.pending_c_amount = message.pendingCAmount === "" ? undefined : message.pendingCAmount;
+    obj.swept = message.swept === false ? undefined : message.swept;
+    obj.received = message.received === false ? undefined : message.received;
+    obj.claimed_u_amount = message.claimedUAmount === "" ? undefined : message.claimedUAmount;
     return obj;
   },
   fromAminoMsg(object: ChannelUndelegationAminoMsg): ChannelUndelegation {
     return ChannelUndelegation.fromAmino(object.value);
   },
-  fromProtoMsg(message: ChannelUndelegationProtoMsg): ChannelUndelegation {
-    return ChannelUndelegation.decode(message.value);
+  fromProtoMsg(message: ChannelUndelegationProtoMsg, useInterfaces: boolean = true): ChannelUndelegation {
+    return ChannelUndelegation.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: ChannelUndelegation): Uint8Array {
     return ChannelUndelegation.encode(message).finish();
@@ -489,3 +509,4 @@ export const ChannelUndelegation = {
     };
   }
 };
+GlobalDecoderRegistry.register(ChannelUndelegation.typeUrl, ChannelUndelegation);

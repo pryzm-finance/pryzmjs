@@ -3,6 +3,7 @@ import { Coin, CoinAmino, CoinSDKType } from "../../../cosmos/base/v1beta1/coin"
 import { Params, ParamsAmino, ParamsSDKType } from "./params";
 import { BinaryReader, BinaryWriter } from "../../../binary";
 import { isSet } from "../../../helpers";
+import { GlobalDecoderRegistry } from "../../../registry";
 export enum VoteType {
   VOTE_TYPE_ABSTAIN_VOTE = 0,
   VOTE_TYPE_NO_VOTE = 1,
@@ -279,6 +280,15 @@ function createBaseEventDelegateFeedConsent(): EventDelegateFeedConsent {
 }
 export const EventDelegateFeedConsent = {
   typeUrl: "/refractedlabs.oracle.v1.EventDelegateFeedConsent",
+  is(o: any): o is EventDelegateFeedConsent {
+    return o && (o.$typeUrl === EventDelegateFeedConsent.typeUrl || typeof o.validator === "string" && typeof o.feeder === "string");
+  },
+  isSDK(o: any): o is EventDelegateFeedConsentSDKType {
+    return o && (o.$typeUrl === EventDelegateFeedConsent.typeUrl || typeof o.validator === "string" && typeof o.feeder === "string");
+  },
+  isAmino(o: any): o is EventDelegateFeedConsentAmino {
+    return o && (o.$typeUrl === EventDelegateFeedConsent.typeUrl || typeof o.validator === "string" && typeof o.feeder === "string");
+  },
   encode(message: EventDelegateFeedConsent, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.validator !== "") {
       writer.uint32(10).string(message.validator);
@@ -288,7 +298,7 @@ export const EventDelegateFeedConsent = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): EventDelegateFeedConsent {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): EventDelegateFeedConsent {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseEventDelegateFeedConsent();
@@ -336,17 +346,17 @@ export const EventDelegateFeedConsent = {
     }
     return message;
   },
-  toAmino(message: EventDelegateFeedConsent): EventDelegateFeedConsentAmino {
+  toAmino(message: EventDelegateFeedConsent, useInterfaces: boolean = true): EventDelegateFeedConsentAmino {
     const obj: any = {};
-    obj.validator = message.validator;
-    obj.feeder = message.feeder;
+    obj.validator = message.validator === "" ? undefined : message.validator;
+    obj.feeder = message.feeder === "" ? undefined : message.feeder;
     return obj;
   },
   fromAminoMsg(object: EventDelegateFeedConsentAminoMsg): EventDelegateFeedConsent {
     return EventDelegateFeedConsent.fromAmino(object.value);
   },
-  fromProtoMsg(message: EventDelegateFeedConsentProtoMsg): EventDelegateFeedConsent {
-    return EventDelegateFeedConsent.decode(message.value);
+  fromProtoMsg(message: EventDelegateFeedConsentProtoMsg, useInterfaces: boolean = true): EventDelegateFeedConsent {
+    return EventDelegateFeedConsent.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: EventDelegateFeedConsent): Uint8Array {
     return EventDelegateFeedConsent.encode(message).finish();
@@ -358,6 +368,7 @@ export const EventDelegateFeedConsent = {
     };
   }
 };
+GlobalDecoderRegistry.register(EventDelegateFeedConsent.typeUrl, EventDelegateFeedConsent);
 function createBaseEventOraclePreVote(): EventOraclePreVote {
   return {
     validator: "",
@@ -366,6 +377,15 @@ function createBaseEventOraclePreVote(): EventOraclePreVote {
 }
 export const EventOraclePreVote = {
   typeUrl: "/refractedlabs.oracle.v1.EventOraclePreVote",
+  is(o: any): o is EventOraclePreVote {
+    return o && (o.$typeUrl === EventOraclePreVote.typeUrl || typeof o.validator === "string" && typeof o.feeder === "string");
+  },
+  isSDK(o: any): o is EventOraclePreVoteSDKType {
+    return o && (o.$typeUrl === EventOraclePreVote.typeUrl || typeof o.validator === "string" && typeof o.feeder === "string");
+  },
+  isAmino(o: any): o is EventOraclePreVoteAmino {
+    return o && (o.$typeUrl === EventOraclePreVote.typeUrl || typeof o.validator === "string" && typeof o.feeder === "string");
+  },
   encode(message: EventOraclePreVote, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.validator !== "") {
       writer.uint32(10).string(message.validator);
@@ -375,7 +395,7 @@ export const EventOraclePreVote = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): EventOraclePreVote {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): EventOraclePreVote {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseEventOraclePreVote();
@@ -423,17 +443,17 @@ export const EventOraclePreVote = {
     }
     return message;
   },
-  toAmino(message: EventOraclePreVote): EventOraclePreVoteAmino {
+  toAmino(message: EventOraclePreVote, useInterfaces: boolean = true): EventOraclePreVoteAmino {
     const obj: any = {};
-    obj.validator = message.validator;
-    obj.feeder = message.feeder;
+    obj.validator = message.validator === "" ? undefined : message.validator;
+    obj.feeder = message.feeder === "" ? undefined : message.feeder;
     return obj;
   },
   fromAminoMsg(object: EventOraclePreVoteAminoMsg): EventOraclePreVote {
     return EventOraclePreVote.fromAmino(object.value);
   },
-  fromProtoMsg(message: EventOraclePreVoteProtoMsg): EventOraclePreVote {
-    return EventOraclePreVote.decode(message.value);
+  fromProtoMsg(message: EventOraclePreVoteProtoMsg, useInterfaces: boolean = true): EventOraclePreVote {
+    return EventOraclePreVote.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: EventOraclePreVote): Uint8Array {
     return EventOraclePreVote.encode(message).finish();
@@ -445,6 +465,7 @@ export const EventOraclePreVote = {
     };
   }
 };
+GlobalDecoderRegistry.register(EventOraclePreVote.typeUrl, EventOraclePreVote);
 function createBaseEventOracleVote(): EventOracleVote {
   return {
     feeder: "",
@@ -453,6 +474,15 @@ function createBaseEventOracleVote(): EventOracleVote {
 }
 export const EventOracleVote = {
   typeUrl: "/refractedlabs.oracle.v1.EventOracleVote",
+  is(o: any): o is EventOracleVote {
+    return o && (o.$typeUrl === EventOracleVote.typeUrl || typeof o.feeder === "string" && OracleVote.is(o.oracleVote));
+  },
+  isSDK(o: any): o is EventOracleVoteSDKType {
+    return o && (o.$typeUrl === EventOracleVote.typeUrl || typeof o.feeder === "string" && OracleVote.isSDK(o.oracle_vote));
+  },
+  isAmino(o: any): o is EventOracleVoteAmino {
+    return o && (o.$typeUrl === EventOracleVote.typeUrl || typeof o.feeder === "string" && OracleVote.isAmino(o.oracle_vote));
+  },
   encode(message: EventOracleVote, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.feeder !== "") {
       writer.uint32(10).string(message.feeder);
@@ -462,7 +492,7 @@ export const EventOracleVote = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): EventOracleVote {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): EventOracleVote {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseEventOracleVote();
@@ -473,7 +503,7 @@ export const EventOracleVote = {
           message.feeder = reader.string();
           break;
         case 2:
-          message.oracleVote = OracleVote.decode(reader, reader.uint32());
+          message.oracleVote = OracleVote.decode(reader, reader.uint32(), useInterfaces);
           break;
         default:
           reader.skipType(tag & 7);
@@ -510,17 +540,17 @@ export const EventOracleVote = {
     }
     return message;
   },
-  toAmino(message: EventOracleVote): EventOracleVoteAmino {
+  toAmino(message: EventOracleVote, useInterfaces: boolean = true): EventOracleVoteAmino {
     const obj: any = {};
-    obj.feeder = message.feeder;
-    obj.oracle_vote = message.oracleVote ? OracleVote.toAmino(message.oracleVote) : undefined;
+    obj.feeder = message.feeder === "" ? undefined : message.feeder;
+    obj.oracle_vote = message.oracleVote ? OracleVote.toAmino(message.oracleVote, useInterfaces) : undefined;
     return obj;
   },
   fromAminoMsg(object: EventOracleVoteAminoMsg): EventOracleVote {
     return EventOracleVote.fromAmino(object.value);
   },
-  fromProtoMsg(message: EventOracleVoteProtoMsg): EventOracleVote {
-    return EventOracleVote.decode(message.value);
+  fromProtoMsg(message: EventOracleVoteProtoMsg, useInterfaces: boolean = true): EventOracleVote {
+    return EventOracleVote.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: EventOracleVote): Uint8Array {
     return EventOracleVote.encode(message).finish();
@@ -532,6 +562,7 @@ export const EventOracleVote = {
     };
   }
 };
+GlobalDecoderRegistry.register(EventOracleVote.typeUrl, EventOracleVote);
 function createBaseBallotVoteResult(): BallotVoteResult {
   return {
     namespace: "",
@@ -546,6 +577,15 @@ function createBaseBallotVoteResult(): BallotVoteResult {
 }
 export const BallotVoteResult = {
   typeUrl: "/refractedlabs.oracle.v1.BallotVoteResult",
+  is(o: any): o is BallotVoteResult {
+    return o && (o.$typeUrl === BallotVoteResult.typeUrl || typeof o.namespace === "string" && typeof o.module === "string" && typeof o.quorumReached === "boolean" && typeof o.ballotPower === "bigint" && typeof o.majorityAchieved === "boolean" && isSet(o.majorityVoteType) && typeof o.majorityVotePayload === "string" && typeof o.callbackError === "string");
+  },
+  isSDK(o: any): o is BallotVoteResultSDKType {
+    return o && (o.$typeUrl === BallotVoteResult.typeUrl || typeof o.namespace === "string" && typeof o.module === "string" && typeof o.quorum_reached === "boolean" && typeof o.ballot_power === "bigint" && typeof o.majority_achieved === "boolean" && isSet(o.majority_vote_type) && typeof o.majority_vote_payload === "string" && typeof o.callback_error === "string");
+  },
+  isAmino(o: any): o is BallotVoteResultAmino {
+    return o && (o.$typeUrl === BallotVoteResult.typeUrl || typeof o.namespace === "string" && typeof o.module === "string" && typeof o.quorum_reached === "boolean" && typeof o.ballot_power === "bigint" && typeof o.majority_achieved === "boolean" && isSet(o.majority_vote_type) && typeof o.majority_vote_payload === "string" && typeof o.callback_error === "string");
+  },
   encode(message: BallotVoteResult, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.namespace !== "") {
       writer.uint32(10).string(message.namespace);
@@ -573,7 +613,7 @@ export const BallotVoteResult = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): BallotVoteResult {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): BallotVoteResult {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseBallotVoteResult();
@@ -665,7 +705,7 @@ export const BallotVoteResult = {
       message.majorityAchieved = object.majority_achieved;
     }
     if (object.majority_vote_type !== undefined && object.majority_vote_type !== null) {
-      message.majorityVoteType = voteTypeFromJSON(object.majority_vote_type);
+      message.majorityVoteType = object.majority_vote_type;
     }
     if (object.majority_vote_payload !== undefined && object.majority_vote_payload !== null) {
       message.majorityVotePayload = object.majority_vote_payload;
@@ -675,23 +715,23 @@ export const BallotVoteResult = {
     }
     return message;
   },
-  toAmino(message: BallotVoteResult): BallotVoteResultAmino {
+  toAmino(message: BallotVoteResult, useInterfaces: boolean = true): BallotVoteResultAmino {
     const obj: any = {};
-    obj.namespace = message.namespace;
-    obj.module = message.module;
-    obj.quorum_reached = message.quorumReached;
+    obj.namespace = message.namespace === "" ? undefined : message.namespace;
+    obj.module = message.module === "" ? undefined : message.module;
+    obj.quorum_reached = message.quorumReached === false ? undefined : message.quorumReached;
     obj.ballot_power = message.ballotPower ? message.ballotPower.toString() : undefined;
-    obj.majority_achieved = message.majorityAchieved;
-    obj.majority_vote_type = voteTypeToJSON(message.majorityVoteType);
-    obj.majority_vote_payload = message.majorityVotePayload;
-    obj.callback_error = message.callbackError;
+    obj.majority_achieved = message.majorityAchieved === false ? undefined : message.majorityAchieved;
+    obj.majority_vote_type = message.majorityVoteType === 0 ? undefined : message.majorityVoteType;
+    obj.majority_vote_payload = message.majorityVotePayload === "" ? undefined : message.majorityVotePayload;
+    obj.callback_error = message.callbackError === "" ? undefined : message.callbackError;
     return obj;
   },
   fromAminoMsg(object: BallotVoteResultAminoMsg): BallotVoteResult {
     return BallotVoteResult.fromAmino(object.value);
   },
-  fromProtoMsg(message: BallotVoteResultProtoMsg): BallotVoteResult {
-    return BallotVoteResult.decode(message.value);
+  fromProtoMsg(message: BallotVoteResultProtoMsg, useInterfaces: boolean = true): BallotVoteResult {
+    return BallotVoteResult.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: BallotVoteResult): Uint8Array {
     return BallotVoteResult.encode(message).finish();
@@ -703,6 +743,7 @@ export const BallotVoteResult = {
     };
   }
 };
+GlobalDecoderRegistry.register(BallotVoteResult.typeUrl, BallotVoteResult);
 function createBaseValidatorVoteIntervalSummary(): ValidatorVoteIntervalSummary {
   return {
     validator: "",
@@ -715,6 +756,15 @@ function createBaseValidatorVoteIntervalSummary(): ValidatorVoteIntervalSummary 
 }
 export const ValidatorVoteIntervalSummary = {
   typeUrl: "/refractedlabs.oracle.v1.ValidatorVoteIntervalSummary",
+  is(o: any): o is ValidatorVoteIntervalSummary {
+    return o && (o.$typeUrl === ValidatorVoteIntervalSummary.typeUrl || typeof o.validator === "string" && typeof o.validatorPower === "bigint" && typeof o.voted === "boolean" && typeof o.voteIntervalMissCounter === "bigint" && typeof o.slashWindowMissCounter === "bigint" && Array.isArray(o.rewards) && (!o.rewards.length || Coin.is(o.rewards[0])));
+  },
+  isSDK(o: any): o is ValidatorVoteIntervalSummarySDKType {
+    return o && (o.$typeUrl === ValidatorVoteIntervalSummary.typeUrl || typeof o.validator === "string" && typeof o.validator_power === "bigint" && typeof o.voted === "boolean" && typeof o.vote_interval_miss_counter === "bigint" && typeof o.slash_window_miss_counter === "bigint" && Array.isArray(o.rewards) && (!o.rewards.length || Coin.isSDK(o.rewards[0])));
+  },
+  isAmino(o: any): o is ValidatorVoteIntervalSummaryAmino {
+    return o && (o.$typeUrl === ValidatorVoteIntervalSummary.typeUrl || typeof o.validator === "string" && typeof o.validator_power === "bigint" && typeof o.voted === "boolean" && typeof o.vote_interval_miss_counter === "bigint" && typeof o.slash_window_miss_counter === "bigint" && Array.isArray(o.rewards) && (!o.rewards.length || Coin.isAmino(o.rewards[0])));
+  },
   encode(message: ValidatorVoteIntervalSummary, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.validator !== "") {
       writer.uint32(10).string(message.validator);
@@ -736,7 +786,7 @@ export const ValidatorVoteIntervalSummary = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): ValidatorVoteIntervalSummary {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): ValidatorVoteIntervalSummary {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseValidatorVoteIntervalSummary();
@@ -759,7 +809,7 @@ export const ValidatorVoteIntervalSummary = {
           message.slashWindowMissCounter = reader.int64();
           break;
         case 6:
-          message.rewards.push(Coin.decode(reader, reader.uint32()));
+          message.rewards.push(Coin.decode(reader, reader.uint32(), useInterfaces));
           break;
         default:
           reader.skipType(tag & 7);
@@ -822,25 +872,25 @@ export const ValidatorVoteIntervalSummary = {
     message.rewards = object.rewards?.map(e => Coin.fromAmino(e)) || [];
     return message;
   },
-  toAmino(message: ValidatorVoteIntervalSummary): ValidatorVoteIntervalSummaryAmino {
+  toAmino(message: ValidatorVoteIntervalSummary, useInterfaces: boolean = true): ValidatorVoteIntervalSummaryAmino {
     const obj: any = {};
-    obj.validator = message.validator;
+    obj.validator = message.validator === "" ? undefined : message.validator;
     obj.validator_power = message.validatorPower ? message.validatorPower.toString() : undefined;
-    obj.voted = message.voted;
+    obj.voted = message.voted === false ? undefined : message.voted;
     obj.vote_interval_miss_counter = message.voteIntervalMissCounter ? message.voteIntervalMissCounter.toString() : undefined;
     obj.slash_window_miss_counter = message.slashWindowMissCounter ? message.slashWindowMissCounter.toString() : undefined;
     if (message.rewards) {
-      obj.rewards = message.rewards.map(e => e ? Coin.toAmino(e) : undefined);
+      obj.rewards = message.rewards.map(e => e ? Coin.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.rewards = [];
+      obj.rewards = message.rewards;
     }
     return obj;
   },
   fromAminoMsg(object: ValidatorVoteIntervalSummaryAminoMsg): ValidatorVoteIntervalSummary {
     return ValidatorVoteIntervalSummary.fromAmino(object.value);
   },
-  fromProtoMsg(message: ValidatorVoteIntervalSummaryProtoMsg): ValidatorVoteIntervalSummary {
-    return ValidatorVoteIntervalSummary.decode(message.value);
+  fromProtoMsg(message: ValidatorVoteIntervalSummaryProtoMsg, useInterfaces: boolean = true): ValidatorVoteIntervalSummary {
+    return ValidatorVoteIntervalSummary.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: ValidatorVoteIntervalSummary): Uint8Array {
     return ValidatorVoteIntervalSummary.encode(message).finish();
@@ -852,6 +902,7 @@ export const ValidatorVoteIntervalSummary = {
     };
   }
 };
+GlobalDecoderRegistry.register(ValidatorVoteIntervalSummary.typeUrl, ValidatorVoteIntervalSummary);
 function createBaseEventVoteIntervalEnds(): EventVoteIntervalEnds {
   return {
     timeMillis: BigInt(0),
@@ -864,6 +915,15 @@ function createBaseEventVoteIntervalEnds(): EventVoteIntervalEnds {
 }
 export const EventVoteIntervalEnds = {
   typeUrl: "/refractedlabs.oracle.v1.EventVoteIntervalEnds",
+  is(o: any): o is EventVoteIntervalEnds {
+    return o && (o.$typeUrl === EventVoteIntervalEnds.typeUrl || typeof o.timeMillis === "bigint" && typeof o.blockHeight === "bigint" && typeof o.votePeriod === "bigint" && Array.isArray(o.validatorSummaries) && (!o.validatorSummaries.length || ValidatorVoteIntervalSummary.is(o.validatorSummaries[0])) && typeof o.previousVoteIntervalEndTimeMillis === "bigint" && Array.isArray(o.ballotVoteResults) && (!o.ballotVoteResults.length || BallotVoteResult.is(o.ballotVoteResults[0])));
+  },
+  isSDK(o: any): o is EventVoteIntervalEndsSDKType {
+    return o && (o.$typeUrl === EventVoteIntervalEnds.typeUrl || typeof o.time_millis === "bigint" && typeof o.block_height === "bigint" && typeof o.vote_period === "bigint" && Array.isArray(o.validator_summaries) && (!o.validator_summaries.length || ValidatorVoteIntervalSummary.isSDK(o.validator_summaries[0])) && typeof o.previous_vote_interval_end_time_millis === "bigint" && Array.isArray(o.ballot_vote_results) && (!o.ballot_vote_results.length || BallotVoteResult.isSDK(o.ballot_vote_results[0])));
+  },
+  isAmino(o: any): o is EventVoteIntervalEndsAmino {
+    return o && (o.$typeUrl === EventVoteIntervalEnds.typeUrl || typeof o.time_millis === "bigint" && typeof o.block_height === "bigint" && typeof o.vote_period === "bigint" && Array.isArray(o.validator_summaries) && (!o.validator_summaries.length || ValidatorVoteIntervalSummary.isAmino(o.validator_summaries[0])) && typeof o.previous_vote_interval_end_time_millis === "bigint" && Array.isArray(o.ballot_vote_results) && (!o.ballot_vote_results.length || BallotVoteResult.isAmino(o.ballot_vote_results[0])));
+  },
   encode(message: EventVoteIntervalEnds, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.timeMillis !== BigInt(0)) {
       writer.uint32(8).int64(message.timeMillis);
@@ -885,7 +945,7 @@ export const EventVoteIntervalEnds = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): EventVoteIntervalEnds {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): EventVoteIntervalEnds {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseEventVoteIntervalEnds();
@@ -902,13 +962,13 @@ export const EventVoteIntervalEnds = {
           message.votePeriod = reader.int64();
           break;
         case 4:
-          message.validatorSummaries.push(ValidatorVoteIntervalSummary.decode(reader, reader.uint32()));
+          message.validatorSummaries.push(ValidatorVoteIntervalSummary.decode(reader, reader.uint32(), useInterfaces));
           break;
         case 5:
           message.previousVoteIntervalEndTimeMillis = reader.int64();
           break;
         case 6:
-          message.ballotVoteResults.push(BallotVoteResult.decode(reader, reader.uint32()));
+          message.ballotVoteResults.push(BallotVoteResult.decode(reader, reader.uint32(), useInterfaces));
           break;
         default:
           reader.skipType(tag & 7);
@@ -973,29 +1033,29 @@ export const EventVoteIntervalEnds = {
     message.ballotVoteResults = object.ballot_vote_results?.map(e => BallotVoteResult.fromAmino(e)) || [];
     return message;
   },
-  toAmino(message: EventVoteIntervalEnds): EventVoteIntervalEndsAmino {
+  toAmino(message: EventVoteIntervalEnds, useInterfaces: boolean = true): EventVoteIntervalEndsAmino {
     const obj: any = {};
     obj.time_millis = message.timeMillis ? message.timeMillis.toString() : undefined;
     obj.block_height = message.blockHeight ? message.blockHeight.toString() : undefined;
     obj.vote_period = message.votePeriod ? message.votePeriod.toString() : undefined;
     if (message.validatorSummaries) {
-      obj.validator_summaries = message.validatorSummaries.map(e => e ? ValidatorVoteIntervalSummary.toAmino(e) : undefined);
+      obj.validator_summaries = message.validatorSummaries.map(e => e ? ValidatorVoteIntervalSummary.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.validator_summaries = [];
+      obj.validator_summaries = message.validatorSummaries;
     }
     obj.previous_vote_interval_end_time_millis = message.previousVoteIntervalEndTimeMillis ? message.previousVoteIntervalEndTimeMillis.toString() : undefined;
     if (message.ballotVoteResults) {
-      obj.ballot_vote_results = message.ballotVoteResults.map(e => e ? BallotVoteResult.toAmino(e) : undefined);
+      obj.ballot_vote_results = message.ballotVoteResults.map(e => e ? BallotVoteResult.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.ballot_vote_results = [];
+      obj.ballot_vote_results = message.ballotVoteResults;
     }
     return obj;
   },
   fromAminoMsg(object: EventVoteIntervalEndsAminoMsg): EventVoteIntervalEnds {
     return EventVoteIntervalEnds.fromAmino(object.value);
   },
-  fromProtoMsg(message: EventVoteIntervalEndsProtoMsg): EventVoteIntervalEnds {
-    return EventVoteIntervalEnds.decode(message.value);
+  fromProtoMsg(message: EventVoteIntervalEndsProtoMsg, useInterfaces: boolean = true): EventVoteIntervalEnds {
+    return EventVoteIntervalEnds.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: EventVoteIntervalEnds): Uint8Array {
     return EventVoteIntervalEnds.encode(message).finish();
@@ -1007,6 +1067,7 @@ export const EventVoteIntervalEnds = {
     };
   }
 };
+GlobalDecoderRegistry.register(EventVoteIntervalEnds.typeUrl, EventVoteIntervalEnds);
 function createBaseValidatorSlashWindowSummary(): ValidatorSlashWindowSummary {
   return {
     validator: "",
@@ -1018,6 +1079,15 @@ function createBaseValidatorSlashWindowSummary(): ValidatorSlashWindowSummary {
 }
 export const ValidatorSlashWindowSummary = {
   typeUrl: "/refractedlabs.oracle.v1.ValidatorSlashWindowSummary",
+  is(o: any): o is ValidatorSlashWindowSummary {
+    return o && (o.$typeUrl === ValidatorSlashWindowSummary.typeUrl || typeof o.validator === "string" && typeof o.validatorPower === "bigint" && typeof o.missCounter === "bigint" && typeof o.jailed === "boolean" && typeof o.slashAmount === "string");
+  },
+  isSDK(o: any): o is ValidatorSlashWindowSummarySDKType {
+    return o && (o.$typeUrl === ValidatorSlashWindowSummary.typeUrl || typeof o.validator === "string" && typeof o.validator_power === "bigint" && typeof o.miss_counter === "bigint" && typeof o.jailed === "boolean" && typeof o.slash_amount === "string");
+  },
+  isAmino(o: any): o is ValidatorSlashWindowSummaryAmino {
+    return o && (o.$typeUrl === ValidatorSlashWindowSummary.typeUrl || typeof o.validator === "string" && typeof o.validator_power === "bigint" && typeof o.miss_counter === "bigint" && typeof o.jailed === "boolean" && typeof o.slash_amount === "string");
+  },
   encode(message: ValidatorSlashWindowSummary, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.validator !== "") {
       writer.uint32(10).string(message.validator);
@@ -1036,7 +1106,7 @@ export const ValidatorSlashWindowSummary = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): ValidatorSlashWindowSummary {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): ValidatorSlashWindowSummary {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseValidatorSlashWindowSummary();
@@ -1111,20 +1181,20 @@ export const ValidatorSlashWindowSummary = {
     }
     return message;
   },
-  toAmino(message: ValidatorSlashWindowSummary): ValidatorSlashWindowSummaryAmino {
+  toAmino(message: ValidatorSlashWindowSummary, useInterfaces: boolean = true): ValidatorSlashWindowSummaryAmino {
     const obj: any = {};
-    obj.validator = message.validator;
+    obj.validator = message.validator === "" ? undefined : message.validator;
     obj.validator_power = message.validatorPower ? message.validatorPower.toString() : undefined;
     obj.miss_counter = message.missCounter ? message.missCounter.toString() : undefined;
-    obj.jailed = message.jailed;
-    obj.slash_amount = message.slashAmount;
+    obj.jailed = message.jailed === false ? undefined : message.jailed;
+    obj.slash_amount = message.slashAmount === "" ? undefined : message.slashAmount;
     return obj;
   },
   fromAminoMsg(object: ValidatorSlashWindowSummaryAminoMsg): ValidatorSlashWindowSummary {
     return ValidatorSlashWindowSummary.fromAmino(object.value);
   },
-  fromProtoMsg(message: ValidatorSlashWindowSummaryProtoMsg): ValidatorSlashWindowSummary {
-    return ValidatorSlashWindowSummary.decode(message.value);
+  fromProtoMsg(message: ValidatorSlashWindowSummaryProtoMsg, useInterfaces: boolean = true): ValidatorSlashWindowSummary {
+    return ValidatorSlashWindowSummary.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: ValidatorSlashWindowSummary): Uint8Array {
     return ValidatorSlashWindowSummary.encode(message).finish();
@@ -1136,6 +1206,7 @@ export const ValidatorSlashWindowSummary = {
     };
   }
 };
+GlobalDecoderRegistry.register(ValidatorSlashWindowSummary.typeUrl, ValidatorSlashWindowSummary);
 function createBaseEventSlashWindowEnds(): EventSlashWindowEnds {
   return {
     slashWindow: BigInt(0),
@@ -1144,6 +1215,15 @@ function createBaseEventSlashWindowEnds(): EventSlashWindowEnds {
 }
 export const EventSlashWindowEnds = {
   typeUrl: "/refractedlabs.oracle.v1.EventSlashWindowEnds",
+  is(o: any): o is EventSlashWindowEnds {
+    return o && (o.$typeUrl === EventSlashWindowEnds.typeUrl || typeof o.slashWindow === "bigint" && Array.isArray(o.validatorSummaries) && (!o.validatorSummaries.length || ValidatorSlashWindowSummary.is(o.validatorSummaries[0])));
+  },
+  isSDK(o: any): o is EventSlashWindowEndsSDKType {
+    return o && (o.$typeUrl === EventSlashWindowEnds.typeUrl || typeof o.slash_window === "bigint" && Array.isArray(o.validator_summaries) && (!o.validator_summaries.length || ValidatorSlashWindowSummary.isSDK(o.validator_summaries[0])));
+  },
+  isAmino(o: any): o is EventSlashWindowEndsAmino {
+    return o && (o.$typeUrl === EventSlashWindowEnds.typeUrl || typeof o.slash_window === "bigint" && Array.isArray(o.validator_summaries) && (!o.validator_summaries.length || ValidatorSlashWindowSummary.isAmino(o.validator_summaries[0])));
+  },
   encode(message: EventSlashWindowEnds, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.slashWindow !== BigInt(0)) {
       writer.uint32(8).int64(message.slashWindow);
@@ -1153,7 +1233,7 @@ export const EventSlashWindowEnds = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): EventSlashWindowEnds {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): EventSlashWindowEnds {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseEventSlashWindowEnds();
@@ -1164,7 +1244,7 @@ export const EventSlashWindowEnds = {
           message.slashWindow = reader.int64();
           break;
         case 2:
-          message.validatorSummaries.push(ValidatorSlashWindowSummary.decode(reader, reader.uint32()));
+          message.validatorSummaries.push(ValidatorSlashWindowSummary.decode(reader, reader.uint32(), useInterfaces));
           break;
         default:
           reader.skipType(tag & 7);
@@ -1203,21 +1283,21 @@ export const EventSlashWindowEnds = {
     message.validatorSummaries = object.validator_summaries?.map(e => ValidatorSlashWindowSummary.fromAmino(e)) || [];
     return message;
   },
-  toAmino(message: EventSlashWindowEnds): EventSlashWindowEndsAmino {
+  toAmino(message: EventSlashWindowEnds, useInterfaces: boolean = true): EventSlashWindowEndsAmino {
     const obj: any = {};
     obj.slash_window = message.slashWindow ? message.slashWindow.toString() : undefined;
     if (message.validatorSummaries) {
-      obj.validator_summaries = message.validatorSummaries.map(e => e ? ValidatorSlashWindowSummary.toAmino(e) : undefined);
+      obj.validator_summaries = message.validatorSummaries.map(e => e ? ValidatorSlashWindowSummary.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.validator_summaries = [];
+      obj.validator_summaries = message.validatorSummaries;
     }
     return obj;
   },
   fromAminoMsg(object: EventSlashWindowEndsAminoMsg): EventSlashWindowEnds {
     return EventSlashWindowEnds.fromAmino(object.value);
   },
-  fromProtoMsg(message: EventSlashWindowEndsProtoMsg): EventSlashWindowEnds {
-    return EventSlashWindowEnds.decode(message.value);
+  fromProtoMsg(message: EventSlashWindowEndsProtoMsg, useInterfaces: boolean = true): EventSlashWindowEnds {
+    return EventSlashWindowEnds.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: EventSlashWindowEnds): Uint8Array {
     return EventSlashWindowEnds.encode(message).finish();
@@ -1229,6 +1309,7 @@ export const EventSlashWindowEnds = {
     };
   }
 };
+GlobalDecoderRegistry.register(EventSlashWindowEnds.typeUrl, EventSlashWindowEnds);
 function createBaseEventSetParams(): EventSetParams {
   return {
     params: Params.fromPartial({})
@@ -1236,13 +1317,22 @@ function createBaseEventSetParams(): EventSetParams {
 }
 export const EventSetParams = {
   typeUrl: "/refractedlabs.oracle.v1.EventSetParams",
+  is(o: any): o is EventSetParams {
+    return o && (o.$typeUrl === EventSetParams.typeUrl || Params.is(o.params));
+  },
+  isSDK(o: any): o is EventSetParamsSDKType {
+    return o && (o.$typeUrl === EventSetParams.typeUrl || Params.isSDK(o.params));
+  },
+  isAmino(o: any): o is EventSetParamsAmino {
+    return o && (o.$typeUrl === EventSetParams.typeUrl || Params.isAmino(o.params));
+  },
   encode(message: EventSetParams, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.params !== undefined) {
       Params.encode(message.params, writer.uint32(10).fork()).ldelim();
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): EventSetParams {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): EventSetParams {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseEventSetParams();
@@ -1250,7 +1340,7 @@ export const EventSetParams = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.params = Params.decode(reader, reader.uint32());
+          message.params = Params.decode(reader, reader.uint32(), useInterfaces);
           break;
         default:
           reader.skipType(tag & 7);
@@ -1281,16 +1371,16 @@ export const EventSetParams = {
     }
     return message;
   },
-  toAmino(message: EventSetParams): EventSetParamsAmino {
+  toAmino(message: EventSetParams, useInterfaces: boolean = true): EventSetParamsAmino {
     const obj: any = {};
-    obj.params = message.params ? Params.toAmino(message.params) : undefined;
+    obj.params = message.params ? Params.toAmino(message.params, useInterfaces) : undefined;
     return obj;
   },
   fromAminoMsg(object: EventSetParamsAminoMsg): EventSetParams {
     return EventSetParams.fromAmino(object.value);
   },
-  fromProtoMsg(message: EventSetParamsProtoMsg): EventSetParams {
-    return EventSetParams.decode(message.value);
+  fromProtoMsg(message: EventSetParamsProtoMsg, useInterfaces: boolean = true): EventSetParams {
+    return EventSetParams.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: EventSetParams): Uint8Array {
     return EventSetParams.encode(message).finish();
@@ -1302,3 +1392,4 @@ export const EventSetParams = {
     };
   }
 };
+GlobalDecoderRegistry.register(EventSetParams.typeUrl, EventSetParams);

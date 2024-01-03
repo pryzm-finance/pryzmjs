@@ -1,6 +1,7 @@
 import { BinaryReader, BinaryWriter } from "../../binary";
 import { Decimal } from "@cosmjs/math";
-import { isSet } from "../../helpers";
+import { isSet, padDecimal } from "../../helpers";
+import { GlobalDecoderRegistry } from "../../registry";
 export interface Asset {
   id: string;
   tokenDenom: string;
@@ -61,6 +62,15 @@ function createBaseAsset(): Asset {
 }
 export const Asset = {
   typeUrl: "/pryzmatics.asset.Asset",
+  is(o: any): o is Asset {
+    return o && (o.$typeUrl === Asset.typeUrl || typeof o.id === "string" && typeof o.tokenDenom === "string" && typeof o.totalRefractedCAsset === "string" && typeof o.totalPAsset === "string" && typeof o.error === "string");
+  },
+  isSDK(o: any): o is AssetSDKType {
+    return o && (o.$typeUrl === Asset.typeUrl || typeof o.id === "string" && typeof o.token_denom === "string" && typeof o.total_refracted_c_asset === "string" && typeof o.total_p_asset === "string" && typeof o.error === "string");
+  },
+  isAmino(o: any): o is AssetAmino {
+    return o && (o.$typeUrl === Asset.typeUrl || typeof o.id === "string" && typeof o.token_denom === "string" && typeof o.total_refracted_c_asset === "string" && typeof o.total_p_asset === "string" && typeof o.error === "string");
+  },
   encode(message: Asset, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.id !== "") {
       writer.uint32(10).string(message.id);
@@ -94,7 +104,7 @@ export const Asset = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): Asset {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): Asset {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseAsset();
@@ -214,25 +224,25 @@ export const Asset = {
     }
     return message;
   },
-  toAmino(message: Asset): AssetAmino {
+  toAmino(message: Asset, useInterfaces: boolean = true): AssetAmino {
     const obj: any = {};
-    obj.id = message.id;
-    obj.token_denom = message.tokenDenom;
-    obj.total_refracted_c_asset = message.totalRefractedCAsset;
-    obj.total_p_asset = message.totalPAsset;
-    obj.pool_id = message.poolId;
-    obj.exchange_rate = message.exchangeRate;
-    obj.exchange_rate_block_height = message.exchangeRateBlockHeight;
-    obj.c_p_asset_exchange_rate = message.cPAssetExchangeRate;
-    obj.c_asset_apy = message.cAssetApy;
-    obj.error = message.error;
+    obj.id = message.id === "" ? undefined : message.id;
+    obj.token_denom = message.tokenDenom === "" ? undefined : message.tokenDenom;
+    obj.total_refracted_c_asset = message.totalRefractedCAsset === "" ? undefined : message.totalRefractedCAsset;
+    obj.total_p_asset = message.totalPAsset === "" ? undefined : message.totalPAsset;
+    obj.pool_id = message.poolId === null ? undefined : message.poolId;
+    obj.exchange_rate = padDecimal(message.exchangeRate) === null ? undefined : padDecimal(message.exchangeRate);
+    obj.exchange_rate_block_height = message.exchangeRateBlockHeight === null ? undefined : message.exchangeRateBlockHeight;
+    obj.c_p_asset_exchange_rate = padDecimal(message.cPAssetExchangeRate) === null ? undefined : padDecimal(message.cPAssetExchangeRate);
+    obj.c_asset_apy = padDecimal(message.cAssetApy) === null ? undefined : padDecimal(message.cAssetApy);
+    obj.error = message.error === "" ? undefined : message.error;
     return obj;
   },
   fromAminoMsg(object: AssetAminoMsg): Asset {
     return Asset.fromAmino(object.value);
   },
-  fromProtoMsg(message: AssetProtoMsg): Asset {
-    return Asset.decode(message.value);
+  fromProtoMsg(message: AssetProtoMsg, useInterfaces: boolean = true): Asset {
+    return Asset.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: Asset): Uint8Array {
     return Asset.encode(message).finish();
@@ -244,3 +254,4 @@ export const Asset = {
     };
   }
 };
+GlobalDecoderRegistry.register(Asset.typeUrl, Asset);

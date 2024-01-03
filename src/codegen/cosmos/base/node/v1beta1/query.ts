@@ -1,4 +1,5 @@
 import { BinaryReader, BinaryWriter } from "../../../../binary";
+import { GlobalDecoderRegistry } from "../../../../registry";
 import { isSet } from "../../../../helpers";
 /** ConfigRequest defines the request structure for the Config gRPC query. */
 export interface ConfigRequest {}
@@ -39,10 +40,20 @@ function createBaseConfigRequest(): ConfigRequest {
 }
 export const ConfigRequest = {
   typeUrl: "/cosmos.base.node.v1beta1.ConfigRequest",
+  aminoType: "cosmos-sdk/ConfigRequest",
+  is(o: any): o is ConfigRequest {
+    return o && o.$typeUrl === ConfigRequest.typeUrl;
+  },
+  isSDK(o: any): o is ConfigRequestSDKType {
+    return o && o.$typeUrl === ConfigRequest.typeUrl;
+  },
+  isAmino(o: any): o is ConfigRequestAmino {
+    return o && o.$typeUrl === ConfigRequest.typeUrl;
+  },
   encode(_: ConfigRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): ConfigRequest {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): ConfigRequest {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseConfigRequest();
@@ -71,21 +82,21 @@ export const ConfigRequest = {
     const message = createBaseConfigRequest();
     return message;
   },
-  toAmino(_: ConfigRequest): ConfigRequestAmino {
+  toAmino(_: ConfigRequest, useInterfaces: boolean = true): ConfigRequestAmino {
     const obj: any = {};
     return obj;
   },
   fromAminoMsg(object: ConfigRequestAminoMsg): ConfigRequest {
     return ConfigRequest.fromAmino(object.value);
   },
-  toAminoMsg(message: ConfigRequest): ConfigRequestAminoMsg {
+  toAminoMsg(message: ConfigRequest, useInterfaces: boolean = true): ConfigRequestAminoMsg {
     return {
       type: "cosmos-sdk/ConfigRequest",
-      value: ConfigRequest.toAmino(message)
+      value: ConfigRequest.toAmino(message, useInterfaces)
     };
   },
-  fromProtoMsg(message: ConfigRequestProtoMsg): ConfigRequest {
-    return ConfigRequest.decode(message.value);
+  fromProtoMsg(message: ConfigRequestProtoMsg, useInterfaces: boolean = true): ConfigRequest {
+    return ConfigRequest.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: ConfigRequest): Uint8Array {
     return ConfigRequest.encode(message).finish();
@@ -97,6 +108,8 @@ export const ConfigRequest = {
     };
   }
 };
+GlobalDecoderRegistry.register(ConfigRequest.typeUrl, ConfigRequest);
+GlobalDecoderRegistry.registerAminoProtoMapping(ConfigRequest.aminoType, ConfigRequest.typeUrl);
 function createBaseConfigResponse(): ConfigResponse {
   return {
     minimumGasPrice: ""
@@ -104,13 +117,23 @@ function createBaseConfigResponse(): ConfigResponse {
 }
 export const ConfigResponse = {
   typeUrl: "/cosmos.base.node.v1beta1.ConfigResponse",
+  aminoType: "cosmos-sdk/ConfigResponse",
+  is(o: any): o is ConfigResponse {
+    return o && (o.$typeUrl === ConfigResponse.typeUrl || typeof o.minimumGasPrice === "string");
+  },
+  isSDK(o: any): o is ConfigResponseSDKType {
+    return o && (o.$typeUrl === ConfigResponse.typeUrl || typeof o.minimum_gas_price === "string");
+  },
+  isAmino(o: any): o is ConfigResponseAmino {
+    return o && (o.$typeUrl === ConfigResponse.typeUrl || typeof o.minimum_gas_price === "string");
+  },
   encode(message: ConfigResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.minimumGasPrice !== "") {
       writer.uint32(10).string(message.minimumGasPrice);
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): ConfigResponse {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): ConfigResponse {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseConfigResponse();
@@ -149,22 +172,22 @@ export const ConfigResponse = {
     }
     return message;
   },
-  toAmino(message: ConfigResponse): ConfigResponseAmino {
+  toAmino(message: ConfigResponse, useInterfaces: boolean = true): ConfigResponseAmino {
     const obj: any = {};
-    obj.minimum_gas_price = message.minimumGasPrice;
+    obj.minimum_gas_price = message.minimumGasPrice === "" ? undefined : message.minimumGasPrice;
     return obj;
   },
   fromAminoMsg(object: ConfigResponseAminoMsg): ConfigResponse {
     return ConfigResponse.fromAmino(object.value);
   },
-  toAminoMsg(message: ConfigResponse): ConfigResponseAminoMsg {
+  toAminoMsg(message: ConfigResponse, useInterfaces: boolean = true): ConfigResponseAminoMsg {
     return {
       type: "cosmos-sdk/ConfigResponse",
-      value: ConfigResponse.toAmino(message)
+      value: ConfigResponse.toAmino(message, useInterfaces)
     };
   },
-  fromProtoMsg(message: ConfigResponseProtoMsg): ConfigResponse {
-    return ConfigResponse.decode(message.value);
+  fromProtoMsg(message: ConfigResponseProtoMsg, useInterfaces: boolean = true): ConfigResponse {
+    return ConfigResponse.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: ConfigResponse): Uint8Array {
     return ConfigResponse.encode(message).finish();
@@ -176,3 +199,5 @@ export const ConfigResponse = {
     };
   }
 };
+GlobalDecoderRegistry.register(ConfigResponse.typeUrl, ConfigResponse);
+GlobalDecoderRegistry.registerAminoProtoMapping(ConfigResponse.aminoType, ConfigResponse.typeUrl);

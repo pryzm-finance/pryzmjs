@@ -764,6 +764,9 @@ export class LCDQueryClient {
     if (typeof params?.recaptchaResponse !== "undefined") {
       options.params.recaptcha_response = params.recaptchaResponse;
     }
+    if (typeof params?.recaptchaVersion !== "undefined") {
+      options.params.recaptcha_version = params.recaptchaVersion;
+    }
     const endpoint = `pryzmatics/faucet/claim`;
     return await this.req.get<QueryClaimResponseSDKType>(endpoint, options);
   }

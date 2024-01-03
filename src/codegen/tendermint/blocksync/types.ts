@@ -1,5 +1,6 @@
 import { BinaryReader, BinaryWriter } from "../../binary";
 import { isSet } from "../../helpers";
+import { GlobalDecoderRegistry } from "../../registry";
 /** BlockRequest requests a block for a specific height */
 export interface BlockRequest {
   height: bigint;
@@ -27,13 +28,22 @@ function createBaseBlockRequest(): BlockRequest {
 }
 export const BlockRequest = {
   typeUrl: "/tendermint.blocksync.BlockRequest",
+  is(o: any): o is BlockRequest {
+    return o && (o.$typeUrl === BlockRequest.typeUrl || typeof o.height === "bigint");
+  },
+  isSDK(o: any): o is BlockRequestSDKType {
+    return o && (o.$typeUrl === BlockRequest.typeUrl || typeof o.height === "bigint");
+  },
+  isAmino(o: any): o is BlockRequestAmino {
+    return o && (o.$typeUrl === BlockRequest.typeUrl || typeof o.height === "bigint");
+  },
   encode(message: BlockRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.height !== BigInt(0)) {
       writer.uint32(8).int64(message.height);
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): BlockRequest {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): BlockRequest {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseBlockRequest();
@@ -72,7 +82,7 @@ export const BlockRequest = {
     }
     return message;
   },
-  toAmino(message: BlockRequest): BlockRequestAmino {
+  toAmino(message: BlockRequest, useInterfaces: boolean = true): BlockRequestAmino {
     const obj: any = {};
     obj.height = message.height ? message.height.toString() : undefined;
     return obj;
@@ -80,8 +90,8 @@ export const BlockRequest = {
   fromAminoMsg(object: BlockRequestAminoMsg): BlockRequest {
     return BlockRequest.fromAmino(object.value);
   },
-  fromProtoMsg(message: BlockRequestProtoMsg): BlockRequest {
-    return BlockRequest.decode(message.value);
+  fromProtoMsg(message: BlockRequestProtoMsg, useInterfaces: boolean = true): BlockRequest {
+    return BlockRequest.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: BlockRequest): Uint8Array {
     return BlockRequest.encode(message).finish();
@@ -93,3 +103,4 @@ export const BlockRequest = {
     };
   }
 };
+GlobalDecoderRegistry.register(BlockRequest.typeUrl, BlockRequest);

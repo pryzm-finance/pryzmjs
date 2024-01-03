@@ -1,8 +1,9 @@
 import { TokenType, tokenTypeFromJSON, tokenTypeToJSON } from "./token";
 import { PoolType, poolTypeFromJSON, poolTypeToJSON } from "../../pryzm/amm/v1/pool";
+import { isSet, padDecimal } from "../../helpers";
 import { BinaryReader, BinaryWriter } from "../../binary";
 import { Decimal } from "@cosmjs/math";
-import { isSet } from "../../helpers";
+import { GlobalDecoderRegistry } from "../../registry";
 export interface PoolToken {
   denom: string;
   type: TokenType;
@@ -59,6 +60,15 @@ function createBasePoolToken(): PoolToken {
 }
 export const PoolToken = {
   typeUrl: "/pryzmatics.pool.PoolToken",
+  is(o: any): o is PoolToken {
+    return o && (o.$typeUrl === PoolToken.typeUrl || typeof o.denom === "string" && isSet(o.type) && typeof o.poolId === "bigint" && isSet(o.poolType) && typeof o.poolLpDenom === "string" && typeof o.balance === "string" && typeof o.weight === "string" && typeof o.virtual === "boolean");
+  },
+  isSDK(o: any): o is PoolTokenSDKType {
+    return o && (o.$typeUrl === PoolToken.typeUrl || typeof o.denom === "string" && isSet(o.type) && typeof o.pool_id === "bigint" && isSet(o.pool_type) && typeof o.pool_lp_denom === "string" && typeof o.balance === "string" && typeof o.weight === "string" && typeof o.virtual === "boolean");
+  },
+  isAmino(o: any): o is PoolTokenAmino {
+    return o && (o.$typeUrl === PoolToken.typeUrl || typeof o.denom === "string" && isSet(o.type) && typeof o.pool_id === "bigint" && isSet(o.pool_type) && typeof o.pool_lp_denom === "string" && typeof o.balance === "string" && typeof o.weight === "string" && typeof o.virtual === "boolean");
+  },
   encode(message: PoolToken, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.denom !== "") {
       writer.uint32(10).string(message.denom);
@@ -89,7 +99,7 @@ export const PoolToken = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): PoolToken {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): PoolToken {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBasePoolToken();
@@ -175,13 +185,13 @@ export const PoolToken = {
       message.denom = object.denom;
     }
     if (object.type !== undefined && object.type !== null) {
-      message.type = tokenTypeFromJSON(object.type);
+      message.type = object.type;
     }
     if (object.pool_id !== undefined && object.pool_id !== null) {
       message.poolId = BigInt(object.pool_id);
     }
     if (object.pool_type !== undefined && object.pool_type !== null) {
-      message.poolType = poolTypeFromJSON(object.pool_type);
+      message.poolType = object.pool_type;
     }
     if (object.pool_lp_denom !== undefined && object.pool_lp_denom !== null) {
       message.poolLpDenom = object.pool_lp_denom;
@@ -200,24 +210,24 @@ export const PoolToken = {
     }
     return message;
   },
-  toAmino(message: PoolToken): PoolTokenAmino {
+  toAmino(message: PoolToken, useInterfaces: boolean = true): PoolTokenAmino {
     const obj: any = {};
-    obj.denom = message.denom;
-    obj.type = tokenTypeToJSON(message.type);
+    obj.denom = message.denom === "" ? undefined : message.denom;
+    obj.type = message.type === 0 ? undefined : message.type;
     obj.pool_id = message.poolId ? message.poolId.toString() : undefined;
-    obj.pool_type = poolTypeToJSON(message.poolType);
-    obj.pool_lp_denom = message.poolLpDenom;
-    obj.balance = message.balance;
-    obj.weight = message.weight;
-    obj.price_lp_terms = message.priceLpTerms;
-    obj.virtual = message.virtual;
+    obj.pool_type = message.poolType === 0 ? undefined : message.poolType;
+    obj.pool_lp_denom = message.poolLpDenom === "" ? undefined : message.poolLpDenom;
+    obj.balance = message.balance === "" ? undefined : message.balance;
+    obj.weight = padDecimal(message.weight) === "" ? undefined : padDecimal(message.weight);
+    obj.price_lp_terms = padDecimal(message.priceLpTerms) === null ? undefined : padDecimal(message.priceLpTerms);
+    obj.virtual = message.virtual === false ? undefined : message.virtual;
     return obj;
   },
   fromAminoMsg(object: PoolTokenAminoMsg): PoolToken {
     return PoolToken.fromAmino(object.value);
   },
-  fromProtoMsg(message: PoolTokenProtoMsg): PoolToken {
-    return PoolToken.decode(message.value);
+  fromProtoMsg(message: PoolTokenProtoMsg, useInterfaces: boolean = true): PoolToken {
+    return PoolToken.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: PoolToken): Uint8Array {
     return PoolToken.encode(message).finish();
@@ -229,3 +239,4 @@ export const PoolToken = {
     };
   }
 };
+GlobalDecoderRegistry.register(PoolToken.typeUrl, PoolToken);

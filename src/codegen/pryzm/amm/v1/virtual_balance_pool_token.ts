@@ -1,6 +1,7 @@
 import { BinaryReader, BinaryWriter } from "../../../binary";
 import { Decimal } from "@cosmjs/math";
-import { isSet } from "../../../helpers";
+import { isSet, padDecimal } from "../../../helpers";
+import { GlobalDecoderRegistry } from "../../../registry";
 export interface VirtualBalancePoolToken {
   poolId: bigint;
   denom: string;
@@ -41,6 +42,15 @@ function createBaseVirtualBalancePoolToken(): VirtualBalancePoolToken {
 }
 export const VirtualBalancePoolToken = {
   typeUrl: "/pryzm.amm.v1.VirtualBalancePoolToken",
+  is(o: any): o is VirtualBalancePoolToken {
+    return o && (o.$typeUrl === VirtualBalancePoolToken.typeUrl || typeof o.poolId === "bigint" && typeof o.denom === "string" && typeof o.targetVirtualBalance === "string" && typeof o.startUnixMillis === "bigint" && typeof o.endUnixMillis === "bigint");
+  },
+  isSDK(o: any): o is VirtualBalancePoolTokenSDKType {
+    return o && (o.$typeUrl === VirtualBalancePoolToken.typeUrl || typeof o.pool_id === "bigint" && typeof o.denom === "string" && typeof o.target_virtual_balance === "string" && typeof o.start_unix_millis === "bigint" && typeof o.end_unix_millis === "bigint");
+  },
+  isAmino(o: any): o is VirtualBalancePoolTokenAmino {
+    return o && (o.$typeUrl === VirtualBalancePoolToken.typeUrl || typeof o.pool_id === "bigint" && typeof o.denom === "string" && typeof o.target_virtual_balance === "string" && typeof o.start_unix_millis === "bigint" && typeof o.end_unix_millis === "bigint");
+  },
   encode(message: VirtualBalancePoolToken, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.poolId !== BigInt(0)) {
       writer.uint32(8).uint64(message.poolId);
@@ -59,7 +69,7 @@ export const VirtualBalancePoolToken = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): VirtualBalancePoolToken {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): VirtualBalancePoolToken {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseVirtualBalancePoolToken();
@@ -134,11 +144,11 @@ export const VirtualBalancePoolToken = {
     }
     return message;
   },
-  toAmino(message: VirtualBalancePoolToken): VirtualBalancePoolTokenAmino {
+  toAmino(message: VirtualBalancePoolToken, useInterfaces: boolean = true): VirtualBalancePoolTokenAmino {
     const obj: any = {};
     obj.pool_id = message.poolId ? message.poolId.toString() : undefined;
-    obj.denom = message.denom;
-    obj.target_virtual_balance = message.targetVirtualBalance;
+    obj.denom = message.denom === "" ? undefined : message.denom;
+    obj.target_virtual_balance = padDecimal(message.targetVirtualBalance) === "" ? undefined : padDecimal(message.targetVirtualBalance);
     obj.start_unix_millis = message.startUnixMillis ? message.startUnixMillis.toString() : undefined;
     obj.end_unix_millis = message.endUnixMillis ? message.endUnixMillis.toString() : undefined;
     return obj;
@@ -146,8 +156,8 @@ export const VirtualBalancePoolToken = {
   fromAminoMsg(object: VirtualBalancePoolTokenAminoMsg): VirtualBalancePoolToken {
     return VirtualBalancePoolToken.fromAmino(object.value);
   },
-  fromProtoMsg(message: VirtualBalancePoolTokenProtoMsg): VirtualBalancePoolToken {
-    return VirtualBalancePoolToken.decode(message.value);
+  fromProtoMsg(message: VirtualBalancePoolTokenProtoMsg, useInterfaces: boolean = true): VirtualBalancePoolToken {
+    return VirtualBalancePoolToken.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: VirtualBalancePoolToken): Uint8Array {
     return VirtualBalancePoolToken.encode(message).finish();
@@ -159,3 +169,4 @@ export const VirtualBalancePoolToken = {
     };
   }
 };
+GlobalDecoderRegistry.register(VirtualBalancePoolToken.typeUrl, VirtualBalancePoolToken);

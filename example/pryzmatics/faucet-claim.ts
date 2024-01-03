@@ -7,7 +7,8 @@ async function main() {
 
     const resp = (await pryzmaticsClient.pryzmatics.faucetClaim({
         address: "pryzm156pcgs3faegfte0vuaykr9az3hh9kx2eudxks2",
-        recaptchaResponse: ""
+        recaptchaResponse: "",
+        recaptchaVersion: "v3" // or "v2",
     }))
     console.log(resp)
 }

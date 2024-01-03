@@ -1,5 +1,6 @@
 import { BinaryReader, BinaryWriter } from "../../../binary";
 import { isSet } from "../../../helpers";
+import { GlobalDecoderRegistry } from "../../../registry";
 export interface NamespaceVote {
   namespace: string;
   payload: string;
@@ -68,6 +69,15 @@ function createBaseNamespaceVote(): NamespaceVote {
 }
 export const NamespaceVote = {
   typeUrl: "/refractedlabs.oracle.v1.NamespaceVote",
+  is(o: any): o is NamespaceVote {
+    return o && (o.$typeUrl === NamespaceVote.typeUrl || typeof o.namespace === "string" && typeof o.payload === "string");
+  },
+  isSDK(o: any): o is NamespaceVoteSDKType {
+    return o && (o.$typeUrl === NamespaceVote.typeUrl || typeof o.namespace === "string" && typeof o.payload === "string");
+  },
+  isAmino(o: any): o is NamespaceVoteAmino {
+    return o && (o.$typeUrl === NamespaceVote.typeUrl || typeof o.namespace === "string" && typeof o.payload === "string");
+  },
   encode(message: NamespaceVote, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.namespace !== "") {
       writer.uint32(10).string(message.namespace);
@@ -77,7 +87,7 @@ export const NamespaceVote = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): NamespaceVote {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): NamespaceVote {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseNamespaceVote();
@@ -125,17 +135,17 @@ export const NamespaceVote = {
     }
     return message;
   },
-  toAmino(message: NamespaceVote): NamespaceVoteAmino {
+  toAmino(message: NamespaceVote, useInterfaces: boolean = true): NamespaceVoteAmino {
     const obj: any = {};
-    obj.namespace = message.namespace;
-    obj.payload = message.payload;
+    obj.namespace = message.namespace === "" ? undefined : message.namespace;
+    obj.payload = message.payload === "" ? undefined : message.payload;
     return obj;
   },
   fromAminoMsg(object: NamespaceVoteAminoMsg): NamespaceVote {
     return NamespaceVote.fromAmino(object.value);
   },
-  fromProtoMsg(message: NamespaceVoteProtoMsg): NamespaceVote {
-    return NamespaceVote.decode(message.value);
+  fromProtoMsg(message: NamespaceVoteProtoMsg, useInterfaces: boolean = true): NamespaceVote {
+    return NamespaceVote.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: NamespaceVote): Uint8Array {
     return NamespaceVote.encode(message).finish();
@@ -147,6 +157,7 @@ export const NamespaceVote = {
     };
   }
 };
+GlobalDecoderRegistry.register(NamespaceVote.typeUrl, NamespaceVote);
 function createBaseModuleVote(): ModuleVote {
   return {
     module: "",
@@ -155,6 +166,15 @@ function createBaseModuleVote(): ModuleVote {
 }
 export const ModuleVote = {
   typeUrl: "/refractedlabs.oracle.v1.ModuleVote",
+  is(o: any): o is ModuleVote {
+    return o && (o.$typeUrl === ModuleVote.typeUrl || typeof o.module === "string" && Array.isArray(o.namespaceVotes) && (!o.namespaceVotes.length || NamespaceVote.is(o.namespaceVotes[0])));
+  },
+  isSDK(o: any): o is ModuleVoteSDKType {
+    return o && (o.$typeUrl === ModuleVote.typeUrl || typeof o.module === "string" && Array.isArray(o.namespace_votes) && (!o.namespace_votes.length || NamespaceVote.isSDK(o.namespace_votes[0])));
+  },
+  isAmino(o: any): o is ModuleVoteAmino {
+    return o && (o.$typeUrl === ModuleVote.typeUrl || typeof o.module === "string" && Array.isArray(o.namespace_votes) && (!o.namespace_votes.length || NamespaceVote.isAmino(o.namespace_votes[0])));
+  },
   encode(message: ModuleVote, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.module !== "") {
       writer.uint32(10).string(message.module);
@@ -164,7 +184,7 @@ export const ModuleVote = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): ModuleVote {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): ModuleVote {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseModuleVote();
@@ -175,7 +195,7 @@ export const ModuleVote = {
           message.module = reader.string();
           break;
         case 2:
-          message.namespaceVotes.push(NamespaceVote.decode(reader, reader.uint32()));
+          message.namespaceVotes.push(NamespaceVote.decode(reader, reader.uint32(), useInterfaces));
           break;
         default:
           reader.skipType(tag & 7);
@@ -214,21 +234,21 @@ export const ModuleVote = {
     message.namespaceVotes = object.namespace_votes?.map(e => NamespaceVote.fromAmino(e)) || [];
     return message;
   },
-  toAmino(message: ModuleVote): ModuleVoteAmino {
+  toAmino(message: ModuleVote, useInterfaces: boolean = true): ModuleVoteAmino {
     const obj: any = {};
-    obj.module = message.module;
+    obj.module = message.module === "" ? undefined : message.module;
     if (message.namespaceVotes) {
-      obj.namespace_votes = message.namespaceVotes.map(e => e ? NamespaceVote.toAmino(e) : undefined);
+      obj.namespace_votes = message.namespaceVotes.map(e => e ? NamespaceVote.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.namespace_votes = [];
+      obj.namespace_votes = message.namespaceVotes;
     }
     return obj;
   },
   fromAminoMsg(object: ModuleVoteAminoMsg): ModuleVote {
     return ModuleVote.fromAmino(object.value);
   },
-  fromProtoMsg(message: ModuleVoteProtoMsg): ModuleVote {
-    return ModuleVote.decode(message.value);
+  fromProtoMsg(message: ModuleVoteProtoMsg, useInterfaces: boolean = true): ModuleVote {
+    return ModuleVote.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: ModuleVote): Uint8Array {
     return ModuleVote.encode(message).finish();
@@ -240,6 +260,7 @@ export const ModuleVote = {
     };
   }
 };
+GlobalDecoderRegistry.register(ModuleVote.typeUrl, ModuleVote);
 function createBaseOracleVote(): OracleVote {
   return {
     validator: "",
@@ -248,6 +269,15 @@ function createBaseOracleVote(): OracleVote {
 }
 export const OracleVote = {
   typeUrl: "/refractedlabs.oracle.v1.OracleVote",
+  is(o: any): o is OracleVote {
+    return o && (o.$typeUrl === OracleVote.typeUrl || typeof o.validator === "string" && Array.isArray(o.moduleVotes) && (!o.moduleVotes.length || ModuleVote.is(o.moduleVotes[0])));
+  },
+  isSDK(o: any): o is OracleVoteSDKType {
+    return o && (o.$typeUrl === OracleVote.typeUrl || typeof o.validator === "string" && Array.isArray(o.module_votes) && (!o.module_votes.length || ModuleVote.isSDK(o.module_votes[0])));
+  },
+  isAmino(o: any): o is OracleVoteAmino {
+    return o && (o.$typeUrl === OracleVote.typeUrl || typeof o.validator === "string" && Array.isArray(o.module_votes) && (!o.module_votes.length || ModuleVote.isAmino(o.module_votes[0])));
+  },
   encode(message: OracleVote, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.validator !== "") {
       writer.uint32(10).string(message.validator);
@@ -257,7 +287,7 @@ export const OracleVote = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): OracleVote {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): OracleVote {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseOracleVote();
@@ -268,7 +298,7 @@ export const OracleVote = {
           message.validator = reader.string();
           break;
         case 2:
-          message.moduleVotes.push(ModuleVote.decode(reader, reader.uint32()));
+          message.moduleVotes.push(ModuleVote.decode(reader, reader.uint32(), useInterfaces));
           break;
         default:
           reader.skipType(tag & 7);
@@ -307,21 +337,21 @@ export const OracleVote = {
     message.moduleVotes = object.module_votes?.map(e => ModuleVote.fromAmino(e)) || [];
     return message;
   },
-  toAmino(message: OracleVote): OracleVoteAmino {
+  toAmino(message: OracleVote, useInterfaces: boolean = true): OracleVoteAmino {
     const obj: any = {};
-    obj.validator = message.validator;
+    obj.validator = message.validator === "" ? undefined : message.validator;
     if (message.moduleVotes) {
-      obj.module_votes = message.moduleVotes.map(e => e ? ModuleVote.toAmino(e) : undefined);
+      obj.module_votes = message.moduleVotes.map(e => e ? ModuleVote.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.module_votes = [];
+      obj.module_votes = message.moduleVotes;
     }
     return obj;
   },
   fromAminoMsg(object: OracleVoteAminoMsg): OracleVote {
     return OracleVote.fromAmino(object.value);
   },
-  fromProtoMsg(message: OracleVoteProtoMsg): OracleVote {
-    return OracleVote.decode(message.value);
+  fromProtoMsg(message: OracleVoteProtoMsg, useInterfaces: boolean = true): OracleVote {
+    return OracleVote.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: OracleVote): Uint8Array {
     return OracleVote.encode(message).finish();
@@ -333,3 +363,4 @@ export const OracleVote = {
     };
   }
 };
+GlobalDecoderRegistry.register(OracleVote.typeUrl, OracleVote);

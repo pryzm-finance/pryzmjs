@@ -1,7 +1,8 @@
 import { TokenAmount, TokenAmountAmino, TokenAmountSDKType } from "./pool_token";
 import { Coin, CoinAmino, CoinSDKType } from "../../../cosmos/base/v1beta1/coin";
-import { BinaryReader, BinaryWriter } from "../../../binary";
 import { isSet } from "../../../helpers";
+import { BinaryReader, BinaryWriter } from "../../../binary";
+import { GlobalDecoderRegistry } from "../../../registry";
 export enum SwapType {
   SWAP_TYPE_GIVEN_IN = 0,
   SWAP_TYPE_GIVEN_OUT = 1,
@@ -275,6 +276,15 @@ function createBaseSwap(): Swap {
 }
 export const Swap = {
   typeUrl: "/pryzm.amm.v1.Swap",
+  is(o: any): o is Swap {
+    return o && (o.$typeUrl === Swap.typeUrl || typeof o.poolId === "bigint" && typeof o.amount === "string" && isSet(o.swapType) && typeof o.tokenIn === "string" && typeof o.tokenOut === "string");
+  },
+  isSDK(o: any): o is SwapSDKType {
+    return o && (o.$typeUrl === Swap.typeUrl || typeof o.pool_id === "bigint" && typeof o.amount === "string" && isSet(o.swap_type) && typeof o.token_in === "string" && typeof o.token_out === "string");
+  },
+  isAmino(o: any): o is SwapAmino {
+    return o && (o.$typeUrl === Swap.typeUrl || typeof o.pool_id === "bigint" && typeof o.amount === "string" && isSet(o.swap_type) && typeof o.token_in === "string" && typeof o.token_out === "string");
+  },
   encode(message: Swap, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.poolId !== BigInt(0)) {
       writer.uint32(8).uint64(message.poolId);
@@ -293,7 +303,7 @@ export const Swap = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): Swap {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): Swap {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseSwap();
@@ -358,7 +368,7 @@ export const Swap = {
       message.amount = object.amount;
     }
     if (object.swap_type !== undefined && object.swap_type !== null) {
-      message.swapType = swapTypeFromJSON(object.swap_type);
+      message.swapType = object.swap_type;
     }
     if (object.token_in !== undefined && object.token_in !== null) {
       message.tokenIn = object.token_in;
@@ -368,20 +378,20 @@ export const Swap = {
     }
     return message;
   },
-  toAmino(message: Swap): SwapAmino {
+  toAmino(message: Swap, useInterfaces: boolean = true): SwapAmino {
     const obj: any = {};
-    obj.pool_id = message.poolId ? message.poolId.toString() : "0";
-    obj.amount = message.amount;
-    obj.swap_type = swapTypeToJSON(message.swapType);
-    obj.token_in = message.tokenIn;
-    obj.token_out = message.tokenOut;
+    obj.pool_id = message.poolId ? message.poolId.toString() : undefined;
+    obj.amount = message.amount === "" ? undefined : message.amount;
+    obj.swap_type = message.swapType === 0 ? undefined : message.swapType;
+    obj.token_in = message.tokenIn === "" ? undefined : message.tokenIn;
+    obj.token_out = message.tokenOut === "" ? undefined : message.tokenOut;
     return obj;
   },
   fromAminoMsg(object: SwapAminoMsg): Swap {
     return Swap.fromAmino(object.value);
   },
-  fromProtoMsg(message: SwapProtoMsg): Swap {
-    return Swap.decode(message.value);
+  fromProtoMsg(message: SwapProtoMsg, useInterfaces: boolean = true): Swap {
+    return Swap.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: Swap): Uint8Array {
     return Swap.encode(message).finish();
@@ -393,6 +403,7 @@ export const Swap = {
     };
   }
 };
+GlobalDecoderRegistry.register(Swap.typeUrl, Swap);
 function createBaseSwapStep(): SwapStep {
   return {
     poolId: BigInt(0),
@@ -403,6 +414,15 @@ function createBaseSwapStep(): SwapStep {
 }
 export const SwapStep = {
   typeUrl: "/pryzm.amm.v1.SwapStep",
+  is(o: any): o is SwapStep {
+    return o && (o.$typeUrl === SwapStep.typeUrl || typeof o.poolId === "bigint" && typeof o.tokenIn === "string" && typeof o.tokenOut === "string");
+  },
+  isSDK(o: any): o is SwapStepSDKType {
+    return o && (o.$typeUrl === SwapStep.typeUrl || typeof o.pool_id === "bigint" && typeof o.token_in === "string" && typeof o.token_out === "string");
+  },
+  isAmino(o: any): o is SwapStepAmino {
+    return o && (o.$typeUrl === SwapStep.typeUrl || typeof o.pool_id === "bigint" && typeof o.token_in === "string" && typeof o.token_out === "string");
+  },
   encode(message: SwapStep, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.poolId !== BigInt(0)) {
       writer.uint32(8).uint64(message.poolId);
@@ -418,7 +438,7 @@ export const SwapStep = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): SwapStep {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): SwapStep {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseSwapStep();
@@ -484,19 +504,19 @@ export const SwapStep = {
     }
     return message;
   },
-  toAmino(message: SwapStep): SwapStepAmino {
+  toAmino(message: SwapStep, useInterfaces: boolean = true): SwapStepAmino {
     const obj: any = {};
-    obj.pool_id = message.poolId ? message.poolId.toString() : "0";
-    obj.amount = message.amount;
-    obj.token_in = message.tokenIn;
-    obj.token_out = message.tokenOut;
+    obj.pool_id = message.poolId ? message.poolId.toString() : undefined;
+    obj.amount = message.amount === null ? undefined : message.amount;
+    obj.token_in = message.tokenIn === "" ? undefined : message.tokenIn;
+    obj.token_out = message.tokenOut === "" ? undefined : message.tokenOut;
     return obj;
   },
   fromAminoMsg(object: SwapStepAminoMsg): SwapStep {
     return SwapStep.fromAmino(object.value);
   },
-  fromProtoMsg(message: SwapStepProtoMsg): SwapStep {
-    return SwapStep.decode(message.value);
+  fromProtoMsg(message: SwapStepProtoMsg, useInterfaces: boolean = true): SwapStep {
+    return SwapStep.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: SwapStep): Uint8Array {
     return SwapStep.encode(message).finish();
@@ -508,6 +528,7 @@ export const SwapStep = {
     };
   }
 };
+GlobalDecoderRegistry.register(SwapStep.typeUrl, SwapStep);
 function createBaseSwapSummary(): SwapSummary {
   return {
     tokenIn: TokenAmount.fromPartial({}),
@@ -519,6 +540,15 @@ function createBaseSwapSummary(): SwapSummary {
 }
 export const SwapSummary = {
   typeUrl: "/pryzm.amm.v1.SwapSummary",
+  is(o: any): o is SwapSummary {
+    return o && (o.$typeUrl === SwapSummary.typeUrl || TokenAmount.is(o.tokenIn) && TokenAmount.is(o.tokenOut) && isSet(o.swapType) && Coin.is(o.protocolFee) && Coin.is(o.swapFee));
+  },
+  isSDK(o: any): o is SwapSummarySDKType {
+    return o && (o.$typeUrl === SwapSummary.typeUrl || TokenAmount.isSDK(o.token_in) && TokenAmount.isSDK(o.token_out) && isSet(o.swap_type) && Coin.isSDK(o.protocol_fee) && Coin.isSDK(o.swap_fee));
+  },
+  isAmino(o: any): o is SwapSummaryAmino {
+    return o && (o.$typeUrl === SwapSummary.typeUrl || TokenAmount.isAmino(o.token_in) && TokenAmount.isAmino(o.token_out) && isSet(o.swap_type) && Coin.isAmino(o.protocol_fee) && Coin.isAmino(o.swap_fee));
+  },
   encode(message: SwapSummary, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.tokenIn !== undefined) {
       TokenAmount.encode(message.tokenIn, writer.uint32(10).fork()).ldelim();
@@ -537,7 +567,7 @@ export const SwapSummary = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): SwapSummary {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): SwapSummary {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseSwapSummary();
@@ -545,19 +575,19 @@ export const SwapSummary = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.tokenIn = TokenAmount.decode(reader, reader.uint32());
+          message.tokenIn = TokenAmount.decode(reader, reader.uint32(), useInterfaces);
           break;
         case 2:
-          message.tokenOut = TokenAmount.decode(reader, reader.uint32());
+          message.tokenOut = TokenAmount.decode(reader, reader.uint32(), useInterfaces);
           break;
         case 3:
           message.swapType = (reader.int32() as any);
           break;
         case 4:
-          message.protocolFee = Coin.decode(reader, reader.uint32());
+          message.protocolFee = Coin.decode(reader, reader.uint32(), useInterfaces);
           break;
         case 5:
-          message.swapFee = Coin.decode(reader, reader.uint32());
+          message.swapFee = Coin.decode(reader, reader.uint32(), useInterfaces);
           break;
         default:
           reader.skipType(tag & 7);
@@ -602,7 +632,7 @@ export const SwapSummary = {
       message.tokenOut = TokenAmount.fromAmino(object.token_out);
     }
     if (object.swap_type !== undefined && object.swap_type !== null) {
-      message.swapType = swapTypeFromJSON(object.swap_type);
+      message.swapType = object.swap_type;
     }
     if (object.protocol_fee !== undefined && object.protocol_fee !== null) {
       message.protocolFee = Coin.fromAmino(object.protocol_fee);
@@ -612,20 +642,20 @@ export const SwapSummary = {
     }
     return message;
   },
-  toAmino(message: SwapSummary): SwapSummaryAmino {
+  toAmino(message: SwapSummary, useInterfaces: boolean = true): SwapSummaryAmino {
     const obj: any = {};
-    obj.token_in = message.tokenIn ? TokenAmount.toAmino(message.tokenIn) : undefined;
-    obj.token_out = message.tokenOut ? TokenAmount.toAmino(message.tokenOut) : undefined;
-    obj.swap_type = swapTypeToJSON(message.swapType);
-    obj.protocol_fee = message.protocolFee ? Coin.toAmino(message.protocolFee) : undefined;
-    obj.swap_fee = message.swapFee ? Coin.toAmino(message.swapFee) : undefined;
+    obj.token_in = message.tokenIn ? TokenAmount.toAmino(message.tokenIn, useInterfaces) : undefined;
+    obj.token_out = message.tokenOut ? TokenAmount.toAmino(message.tokenOut, useInterfaces) : undefined;
+    obj.swap_type = message.swapType === 0 ? undefined : message.swapType;
+    obj.protocol_fee = message.protocolFee ? Coin.toAmino(message.protocolFee, useInterfaces) : undefined;
+    obj.swap_fee = message.swapFee ? Coin.toAmino(message.swapFee, useInterfaces) : undefined;
     return obj;
   },
   fromAminoMsg(object: SwapSummaryAminoMsg): SwapSummary {
     return SwapSummary.fromAmino(object.value);
   },
-  fromProtoMsg(message: SwapSummaryProtoMsg): SwapSummary {
-    return SwapSummary.decode(message.value);
+  fromProtoMsg(message: SwapSummaryProtoMsg, useInterfaces: boolean = true): SwapSummary {
+    return SwapSummary.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: SwapSummary): Uint8Array {
     return SwapSummary.encode(message).finish();
@@ -637,6 +667,7 @@ export const SwapSummary = {
     };
   }
 };
+GlobalDecoderRegistry.register(SwapSummary.typeUrl, SwapSummary);
 function createBaseJoinSummary(): JoinSummary {
   return {
     lpToken: TokenAmount.fromPartial({}),
@@ -648,6 +679,15 @@ function createBaseJoinSummary(): JoinSummary {
 }
 export const JoinSummary = {
   typeUrl: "/pryzm.amm.v1.JoinSummary",
+  is(o: any): o is JoinSummary {
+    return o && (o.$typeUrl === JoinSummary.typeUrl || TokenAmount.is(o.lpToken) && Array.isArray(o.tokensIn) && (!o.tokensIn.length || TokenAmount.is(o.tokensIn[0])) && isSet(o.joinType) && Array.isArray(o.protocolFee) && (!o.protocolFee.length || Coin.is(o.protocolFee[0])) && Array.isArray(o.swapFee) && (!o.swapFee.length || Coin.is(o.swapFee[0])));
+  },
+  isSDK(o: any): o is JoinSummarySDKType {
+    return o && (o.$typeUrl === JoinSummary.typeUrl || TokenAmount.isSDK(o.lp_token) && Array.isArray(o.tokens_in) && (!o.tokens_in.length || TokenAmount.isSDK(o.tokens_in[0])) && isSet(o.join_type) && Array.isArray(o.protocol_fee) && (!o.protocol_fee.length || Coin.isSDK(o.protocol_fee[0])) && Array.isArray(o.swap_fee) && (!o.swap_fee.length || Coin.isSDK(o.swap_fee[0])));
+  },
+  isAmino(o: any): o is JoinSummaryAmino {
+    return o && (o.$typeUrl === JoinSummary.typeUrl || TokenAmount.isAmino(o.lp_token) && Array.isArray(o.tokens_in) && (!o.tokens_in.length || TokenAmount.isAmino(o.tokens_in[0])) && isSet(o.join_type) && Array.isArray(o.protocol_fee) && (!o.protocol_fee.length || Coin.isAmino(o.protocol_fee[0])) && Array.isArray(o.swap_fee) && (!o.swap_fee.length || Coin.isAmino(o.swap_fee[0])));
+  },
   encode(message: JoinSummary, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.lpToken !== undefined) {
       TokenAmount.encode(message.lpToken, writer.uint32(10).fork()).ldelim();
@@ -666,7 +706,7 @@ export const JoinSummary = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): JoinSummary {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): JoinSummary {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseJoinSummary();
@@ -674,19 +714,19 @@ export const JoinSummary = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.lpToken = TokenAmount.decode(reader, reader.uint32());
+          message.lpToken = TokenAmount.decode(reader, reader.uint32(), useInterfaces);
           break;
         case 2:
-          message.tokensIn.push(TokenAmount.decode(reader, reader.uint32()));
+          message.tokensIn.push(TokenAmount.decode(reader, reader.uint32(), useInterfaces));
           break;
         case 3:
           message.joinType = (reader.int32() as any);
           break;
         case 4:
-          message.protocolFee.push(Coin.decode(reader, reader.uint32()));
+          message.protocolFee.push(Coin.decode(reader, reader.uint32(), useInterfaces));
           break;
         case 5:
-          message.swapFee.push(Coin.decode(reader, reader.uint32()));
+          message.swapFee.push(Coin.decode(reader, reader.uint32(), useInterfaces));
           break;
         default:
           reader.skipType(tag & 7);
@@ -741,38 +781,38 @@ export const JoinSummary = {
     }
     message.tokensIn = object.tokens_in?.map(e => TokenAmount.fromAmino(e)) || [];
     if (object.join_type !== undefined && object.join_type !== null) {
-      message.joinType = joinTypeFromJSON(object.join_type);
+      message.joinType = object.join_type;
     }
     message.protocolFee = object.protocol_fee?.map(e => Coin.fromAmino(e)) || [];
     message.swapFee = object.swap_fee?.map(e => Coin.fromAmino(e)) || [];
     return message;
   },
-  toAmino(message: JoinSummary): JoinSummaryAmino {
+  toAmino(message: JoinSummary, useInterfaces: boolean = true): JoinSummaryAmino {
     const obj: any = {};
-    obj.lp_token = message.lpToken ? TokenAmount.toAmino(message.lpToken) : undefined;
+    obj.lp_token = message.lpToken ? TokenAmount.toAmino(message.lpToken, useInterfaces) : undefined;
     if (message.tokensIn) {
-      obj.tokens_in = message.tokensIn.map(e => e ? TokenAmount.toAmino(e) : undefined);
+      obj.tokens_in = message.tokensIn.map(e => e ? TokenAmount.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.tokens_in = [];
+      obj.tokens_in = message.tokensIn;
     }
-    obj.join_type = joinTypeToJSON(message.joinType);
+    obj.join_type = message.joinType === 0 ? undefined : message.joinType;
     if (message.protocolFee) {
-      obj.protocol_fee = message.protocolFee.map(e => e ? Coin.toAmino(e) : undefined);
+      obj.protocol_fee = message.protocolFee.map(e => e ? Coin.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.protocol_fee = [];
+      obj.protocol_fee = message.protocolFee;
     }
     if (message.swapFee) {
-      obj.swap_fee = message.swapFee.map(e => e ? Coin.toAmino(e) : undefined);
+      obj.swap_fee = message.swapFee.map(e => e ? Coin.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.swap_fee = [];
+      obj.swap_fee = message.swapFee;
     }
     return obj;
   },
   fromAminoMsg(object: JoinSummaryAminoMsg): JoinSummary {
     return JoinSummary.fromAmino(object.value);
   },
-  fromProtoMsg(message: JoinSummaryProtoMsg): JoinSummary {
-    return JoinSummary.decode(message.value);
+  fromProtoMsg(message: JoinSummaryProtoMsg, useInterfaces: boolean = true): JoinSummary {
+    return JoinSummary.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: JoinSummary): Uint8Array {
     return JoinSummary.encode(message).finish();
@@ -784,6 +824,7 @@ export const JoinSummary = {
     };
   }
 };
+GlobalDecoderRegistry.register(JoinSummary.typeUrl, JoinSummary);
 function createBaseExitSummary(): ExitSummary {
   return {
     lpToken: TokenAmount.fromPartial({}),
@@ -795,6 +836,15 @@ function createBaseExitSummary(): ExitSummary {
 }
 export const ExitSummary = {
   typeUrl: "/pryzm.amm.v1.ExitSummary",
+  is(o: any): o is ExitSummary {
+    return o && (o.$typeUrl === ExitSummary.typeUrl || TokenAmount.is(o.lpToken) && Array.isArray(o.tokensOut) && (!o.tokensOut.length || TokenAmount.is(o.tokensOut[0])) && isSet(o.exitType) && Coin.is(o.protocolFee) && Array.isArray(o.swapFee) && (!o.swapFee.length || Coin.is(o.swapFee[0])));
+  },
+  isSDK(o: any): o is ExitSummarySDKType {
+    return o && (o.$typeUrl === ExitSummary.typeUrl || TokenAmount.isSDK(o.lp_token) && Array.isArray(o.tokens_out) && (!o.tokens_out.length || TokenAmount.isSDK(o.tokens_out[0])) && isSet(o.exit_type) && Coin.isSDK(o.protocol_fee) && Array.isArray(o.swap_fee) && (!o.swap_fee.length || Coin.isSDK(o.swap_fee[0])));
+  },
+  isAmino(o: any): o is ExitSummaryAmino {
+    return o && (o.$typeUrl === ExitSummary.typeUrl || TokenAmount.isAmino(o.lp_token) && Array.isArray(o.tokens_out) && (!o.tokens_out.length || TokenAmount.isAmino(o.tokens_out[0])) && isSet(o.exit_type) && Coin.isAmino(o.protocol_fee) && Array.isArray(o.swap_fee) && (!o.swap_fee.length || Coin.isAmino(o.swap_fee[0])));
+  },
   encode(message: ExitSummary, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.lpToken !== undefined) {
       TokenAmount.encode(message.lpToken, writer.uint32(10).fork()).ldelim();
@@ -813,7 +863,7 @@ export const ExitSummary = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): ExitSummary {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): ExitSummary {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseExitSummary();
@@ -821,19 +871,19 @@ export const ExitSummary = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.lpToken = TokenAmount.decode(reader, reader.uint32());
+          message.lpToken = TokenAmount.decode(reader, reader.uint32(), useInterfaces);
           break;
         case 2:
-          message.tokensOut.push(TokenAmount.decode(reader, reader.uint32()));
+          message.tokensOut.push(TokenAmount.decode(reader, reader.uint32(), useInterfaces));
           break;
         case 3:
           message.exitType = (reader.int32() as any);
           break;
         case 4:
-          message.protocolFee = Coin.decode(reader, reader.uint32());
+          message.protocolFee = Coin.decode(reader, reader.uint32(), useInterfaces);
           break;
         case 5:
-          message.swapFee.push(Coin.decode(reader, reader.uint32()));
+          message.swapFee.push(Coin.decode(reader, reader.uint32(), useInterfaces));
           break;
         default:
           reader.skipType(tag & 7);
@@ -884,7 +934,7 @@ export const ExitSummary = {
     }
     message.tokensOut = object.tokens_out?.map(e => TokenAmount.fromAmino(e)) || [];
     if (object.exit_type !== undefined && object.exit_type !== null) {
-      message.exitType = exitTypeFromJSON(object.exit_type);
+      message.exitType = object.exit_type;
     }
     if (object.protocol_fee !== undefined && object.protocol_fee !== null) {
       message.protocolFee = Coin.fromAmino(object.protocol_fee);
@@ -892,28 +942,28 @@ export const ExitSummary = {
     message.swapFee = object.swap_fee?.map(e => Coin.fromAmino(e)) || [];
     return message;
   },
-  toAmino(message: ExitSummary): ExitSummaryAmino {
+  toAmino(message: ExitSummary, useInterfaces: boolean = true): ExitSummaryAmino {
     const obj: any = {};
-    obj.lp_token = message.lpToken ? TokenAmount.toAmino(message.lpToken) : undefined;
+    obj.lp_token = message.lpToken ? TokenAmount.toAmino(message.lpToken, useInterfaces) : undefined;
     if (message.tokensOut) {
-      obj.tokens_out = message.tokensOut.map(e => e ? TokenAmount.toAmino(e) : undefined);
+      obj.tokens_out = message.tokensOut.map(e => e ? TokenAmount.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.tokens_out = [];
+      obj.tokens_out = message.tokensOut;
     }
-    obj.exit_type = exitTypeToJSON(message.exitType);
-    obj.protocol_fee = message.protocolFee ? Coin.toAmino(message.protocolFee) : undefined;
+    obj.exit_type = message.exitType === 0 ? undefined : message.exitType;
+    obj.protocol_fee = message.protocolFee ? Coin.toAmino(message.protocolFee, useInterfaces) : undefined;
     if (message.swapFee) {
-      obj.swap_fee = message.swapFee.map(e => e ? Coin.toAmino(e) : undefined);
+      obj.swap_fee = message.swapFee.map(e => e ? Coin.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.swap_fee = [];
+      obj.swap_fee = message.swapFee;
     }
     return obj;
   },
   fromAminoMsg(object: ExitSummaryAminoMsg): ExitSummary {
     return ExitSummary.fromAmino(object.value);
   },
-  fromProtoMsg(message: ExitSummaryProtoMsg): ExitSummary {
-    return ExitSummary.decode(message.value);
+  fromProtoMsg(message: ExitSummaryProtoMsg, useInterfaces: boolean = true): ExitSummary {
+    return ExitSummary.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: ExitSummary): Uint8Array {
     return ExitSummary.encode(message).finish();
@@ -925,3 +975,4 @@ export const ExitSummary = {
     };
   }
 };
+GlobalDecoderRegistry.register(ExitSummary.typeUrl, ExitSummary);

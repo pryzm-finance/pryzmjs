@@ -1,5 +1,6 @@
 import { BinaryReader, BinaryWriter } from "../../../binary";
-import { isSet } from "../../../helpers";
+import { isSet, padDecimal } from "../../../helpers";
+import { GlobalDecoderRegistry } from "../../../registry";
 import { Decimal } from "@cosmjs/math";
 export interface TokenCircuitBreakerSettings {
   denom: string;
@@ -52,6 +53,15 @@ function createBaseTokenCircuitBreakerSettings(): TokenCircuitBreakerSettings {
 }
 export const TokenCircuitBreakerSettings = {
   typeUrl: "/pryzm.amm.v1.TokenCircuitBreakerSettings",
+  is(o: any): o is TokenCircuitBreakerSettings {
+    return o && (o.$typeUrl === TokenCircuitBreakerSettings.typeUrl || typeof o.denom === "string");
+  },
+  isSDK(o: any): o is TokenCircuitBreakerSettingsSDKType {
+    return o && (o.$typeUrl === TokenCircuitBreakerSettings.typeUrl || typeof o.denom === "string");
+  },
+  isAmino(o: any): o is TokenCircuitBreakerSettingsAmino {
+    return o && (o.$typeUrl === TokenCircuitBreakerSettings.typeUrl || typeof o.denom === "string");
+  },
   encode(message: TokenCircuitBreakerSettings, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.denom !== "") {
       writer.uint32(10).string(message.denom);
@@ -61,7 +71,7 @@ export const TokenCircuitBreakerSettings = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): TokenCircuitBreakerSettings {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): TokenCircuitBreakerSettings {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseTokenCircuitBreakerSettings();
@@ -72,7 +82,7 @@ export const TokenCircuitBreakerSettings = {
           message.denom = reader.string();
           break;
         case 2:
-          message.circuitBreaker = CircuitBreakerSettings.decode(reader, reader.uint32());
+          message.circuitBreaker = CircuitBreakerSettings.decode(reader, reader.uint32(), useInterfaces);
           break;
         default:
           reader.skipType(tag & 7);
@@ -109,17 +119,17 @@ export const TokenCircuitBreakerSettings = {
     }
     return message;
   },
-  toAmino(message: TokenCircuitBreakerSettings): TokenCircuitBreakerSettingsAmino {
+  toAmino(message: TokenCircuitBreakerSettings, useInterfaces: boolean = true): TokenCircuitBreakerSettingsAmino {
     const obj: any = {};
-    obj.denom = message.denom;
-    obj.circuit_breaker = message.circuitBreaker ? CircuitBreakerSettings.toAmino(message.circuitBreaker) : undefined;
+    obj.denom = message.denom === "" ? undefined : message.denom;
+    obj.circuit_breaker = message.circuitBreaker ? CircuitBreakerSettings.toAmino(message.circuitBreaker, useInterfaces) : undefined;
     return obj;
   },
   fromAminoMsg(object: TokenCircuitBreakerSettingsAminoMsg): TokenCircuitBreakerSettings {
     return TokenCircuitBreakerSettings.fromAmino(object.value);
   },
-  fromProtoMsg(message: TokenCircuitBreakerSettingsProtoMsg): TokenCircuitBreakerSettings {
-    return TokenCircuitBreakerSettings.decode(message.value);
+  fromProtoMsg(message: TokenCircuitBreakerSettingsProtoMsg, useInterfaces: boolean = true): TokenCircuitBreakerSettings {
+    return TokenCircuitBreakerSettings.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: TokenCircuitBreakerSettings): Uint8Array {
     return TokenCircuitBreakerSettings.encode(message).finish();
@@ -131,6 +141,7 @@ export const TokenCircuitBreakerSettings = {
     };
   }
 };
+GlobalDecoderRegistry.register(TokenCircuitBreakerSettings.typeUrl, TokenCircuitBreakerSettings);
 function createBaseCircuitBreakerSettings(): CircuitBreakerSettings {
   return {
     referenceLptPrice: "",
@@ -140,6 +151,15 @@ function createBaseCircuitBreakerSettings(): CircuitBreakerSettings {
 }
 export const CircuitBreakerSettings = {
   typeUrl: "/pryzm.amm.v1.CircuitBreakerSettings",
+  is(o: any): o is CircuitBreakerSettings {
+    return o && (o.$typeUrl === CircuitBreakerSettings.typeUrl || typeof o.referenceLptPrice === "string" && typeof o.lowerBound === "string" && typeof o.upperBound === "string");
+  },
+  isSDK(o: any): o is CircuitBreakerSettingsSDKType {
+    return o && (o.$typeUrl === CircuitBreakerSettings.typeUrl || typeof o.reference_lpt_price === "string" && typeof o.lower_bound === "string" && typeof o.upper_bound === "string");
+  },
+  isAmino(o: any): o is CircuitBreakerSettingsAmino {
+    return o && (o.$typeUrl === CircuitBreakerSettings.typeUrl || typeof o.reference_lpt_price === "string" && typeof o.lower_bound === "string" && typeof o.upper_bound === "string");
+  },
   encode(message: CircuitBreakerSettings, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.referenceLptPrice !== "") {
       writer.uint32(10).string(Decimal.fromUserInput(message.referenceLptPrice, 18).atomics);
@@ -152,7 +172,7 @@ export const CircuitBreakerSettings = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): CircuitBreakerSettings {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): CircuitBreakerSettings {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseCircuitBreakerSettings();
@@ -209,18 +229,18 @@ export const CircuitBreakerSettings = {
     }
     return message;
   },
-  toAmino(message: CircuitBreakerSettings): CircuitBreakerSettingsAmino {
+  toAmino(message: CircuitBreakerSettings, useInterfaces: boolean = true): CircuitBreakerSettingsAmino {
     const obj: any = {};
-    obj.reference_lpt_price = message.referenceLptPrice;
-    obj.lower_bound = message.lowerBound;
-    obj.upper_bound = message.upperBound;
+    obj.reference_lpt_price = padDecimal(message.referenceLptPrice) === "" ? undefined : padDecimal(message.referenceLptPrice);
+    obj.lower_bound = padDecimal(message.lowerBound) === "" ? undefined : padDecimal(message.lowerBound);
+    obj.upper_bound = padDecimal(message.upperBound) === "" ? undefined : padDecimal(message.upperBound);
     return obj;
   },
   fromAminoMsg(object: CircuitBreakerSettingsAminoMsg): CircuitBreakerSettings {
     return CircuitBreakerSettings.fromAmino(object.value);
   },
-  fromProtoMsg(message: CircuitBreakerSettingsProtoMsg): CircuitBreakerSettings {
-    return CircuitBreakerSettings.decode(message.value);
+  fromProtoMsg(message: CircuitBreakerSettingsProtoMsg, useInterfaces: boolean = true): CircuitBreakerSettings {
+    return CircuitBreakerSettings.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: CircuitBreakerSettings): Uint8Array {
     return CircuitBreakerSettings.encode(message).finish();
@@ -232,3 +252,4 @@ export const CircuitBreakerSettings = {
     };
   }
 };
+GlobalDecoderRegistry.register(CircuitBreakerSettings.typeUrl, CircuitBreakerSettings);

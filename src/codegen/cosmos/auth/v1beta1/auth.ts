@@ -1,6 +1,7 @@
 import { Any, AnyAmino, AnySDKType } from "../../../google/protobuf/any";
 import { BinaryReader, BinaryWriter } from "../../../binary";
 import { isSet, bytesFromBase64, base64FromBytes } from "../../../helpers";
+import { GlobalDecoderRegistry } from "../../../registry";
 /**
  * BaseAccount defines a base account type. It contains all the necessary fields
  * for basic account functionality. Any custom account type should extend this
@@ -160,6 +161,16 @@ function createBaseBaseAccount(): BaseAccount {
 }
 export const BaseAccount = {
   typeUrl: "/cosmos.auth.v1beta1.BaseAccount",
+  aminoType: "cosmos-sdk/BaseAccount",
+  is(o: any): o is BaseAccount {
+    return o && (o.$typeUrl === BaseAccount.typeUrl || typeof o.address === "string" && typeof o.accountNumber === "bigint" && typeof o.sequence === "bigint");
+  },
+  isSDK(o: any): o is BaseAccountSDKType {
+    return o && (o.$typeUrl === BaseAccount.typeUrl || typeof o.address === "string" && typeof o.account_number === "bigint" && typeof o.sequence === "bigint");
+  },
+  isAmino(o: any): o is BaseAccountAmino {
+    return o && (o.$typeUrl === BaseAccount.typeUrl || typeof o.address === "string" && typeof o.account_number === "bigint" && typeof o.sequence === "bigint");
+  },
   encode(message: BaseAccount, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.address !== "") {
       writer.uint32(10).string(message.address);
@@ -175,7 +186,7 @@ export const BaseAccount = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): BaseAccount {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): BaseAccount {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseBaseAccount();
@@ -186,7 +197,7 @@ export const BaseAccount = {
           message.address = reader.string();
           break;
         case 2:
-          message.pubKey = Any.decode(reader, reader.uint32());
+          message.pubKey = Any.decode(reader, reader.uint32(), useInterfaces);
           break;
         case 3:
           message.accountNumber = reader.uint64();
@@ -241,10 +252,10 @@ export const BaseAccount = {
     }
     return message;
   },
-  toAmino(message: BaseAccount): BaseAccountAmino {
+  toAmino(message: BaseAccount, useInterfaces: boolean = true): BaseAccountAmino {
     const obj: any = {};
-    obj.address = message.address;
-    obj.pub_key = message.pubKey ? Any.toAmino(message.pubKey) : undefined;
+    obj.address = message.address === "" ? undefined : message.address;
+    obj.pub_key = message.pubKey ? Any.toAmino(message.pubKey, useInterfaces) : undefined;
     obj.account_number = message.accountNumber ? message.accountNumber.toString() : undefined;
     obj.sequence = message.sequence ? message.sequence.toString() : undefined;
     return obj;
@@ -252,14 +263,14 @@ export const BaseAccount = {
   fromAminoMsg(object: BaseAccountAminoMsg): BaseAccount {
     return BaseAccount.fromAmino(object.value);
   },
-  toAminoMsg(message: BaseAccount): BaseAccountAminoMsg {
+  toAminoMsg(message: BaseAccount, useInterfaces: boolean = true): BaseAccountAminoMsg {
     return {
       type: "cosmos-sdk/BaseAccount",
-      value: BaseAccount.toAmino(message)
+      value: BaseAccount.toAmino(message, useInterfaces)
     };
   },
-  fromProtoMsg(message: BaseAccountProtoMsg): BaseAccount {
-    return BaseAccount.decode(message.value);
+  fromProtoMsg(message: BaseAccountProtoMsg, useInterfaces: boolean = true): BaseAccount {
+    return BaseAccount.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: BaseAccount): Uint8Array {
     return BaseAccount.encode(message).finish();
@@ -271,6 +282,8 @@ export const BaseAccount = {
     };
   }
 };
+GlobalDecoderRegistry.register(BaseAccount.typeUrl, BaseAccount);
+GlobalDecoderRegistry.registerAminoProtoMapping(BaseAccount.aminoType, BaseAccount.typeUrl);
 function createBaseModuleAccount(): ModuleAccount {
   return {
     $typeUrl: "/cosmos.auth.v1beta1.ModuleAccount",
@@ -281,6 +294,16 @@ function createBaseModuleAccount(): ModuleAccount {
 }
 export const ModuleAccount = {
   typeUrl: "/cosmos.auth.v1beta1.ModuleAccount",
+  aminoType: "cosmos-sdk/ModuleAccount",
+  is(o: any): o is ModuleAccount {
+    return o && (o.$typeUrl === ModuleAccount.typeUrl || typeof o.name === "string" && Array.isArray(o.permissions) && (!o.permissions.length || typeof o.permissions[0] === "string"));
+  },
+  isSDK(o: any): o is ModuleAccountSDKType {
+    return o && (o.$typeUrl === ModuleAccount.typeUrl || typeof o.name === "string" && Array.isArray(o.permissions) && (!o.permissions.length || typeof o.permissions[0] === "string"));
+  },
+  isAmino(o: any): o is ModuleAccountAmino {
+    return o && (o.$typeUrl === ModuleAccount.typeUrl || typeof o.name === "string" && Array.isArray(o.permissions) && (!o.permissions.length || typeof o.permissions[0] === "string"));
+  },
   encode(message: ModuleAccount, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.baseAccount !== undefined) {
       BaseAccount.encode(message.baseAccount, writer.uint32(10).fork()).ldelim();
@@ -293,7 +316,7 @@ export const ModuleAccount = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): ModuleAccount {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): ModuleAccount {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseModuleAccount();
@@ -301,7 +324,7 @@ export const ModuleAccount = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.baseAccount = BaseAccount.decode(reader, reader.uint32());
+          message.baseAccount = BaseAccount.decode(reader, reader.uint32(), useInterfaces);
           break;
         case 2:
           message.name = reader.string();
@@ -352,28 +375,28 @@ export const ModuleAccount = {
     message.permissions = object.permissions?.map(e => e) || [];
     return message;
   },
-  toAmino(message: ModuleAccount): ModuleAccountAmino {
+  toAmino(message: ModuleAccount, useInterfaces: boolean = true): ModuleAccountAmino {
     const obj: any = {};
-    obj.base_account = message.baseAccount ? BaseAccount.toAmino(message.baseAccount) : undefined;
-    obj.name = message.name;
+    obj.base_account = message.baseAccount ? BaseAccount.toAmino(message.baseAccount, useInterfaces) : undefined;
+    obj.name = message.name === "" ? undefined : message.name;
     if (message.permissions) {
       obj.permissions = message.permissions.map(e => e);
     } else {
-      obj.permissions = [];
+      obj.permissions = message.permissions;
     }
     return obj;
   },
   fromAminoMsg(object: ModuleAccountAminoMsg): ModuleAccount {
     return ModuleAccount.fromAmino(object.value);
   },
-  toAminoMsg(message: ModuleAccount): ModuleAccountAminoMsg {
+  toAminoMsg(message: ModuleAccount, useInterfaces: boolean = true): ModuleAccountAminoMsg {
     return {
       type: "cosmos-sdk/ModuleAccount",
-      value: ModuleAccount.toAmino(message)
+      value: ModuleAccount.toAmino(message, useInterfaces)
     };
   },
-  fromProtoMsg(message: ModuleAccountProtoMsg): ModuleAccount {
-    return ModuleAccount.decode(message.value);
+  fromProtoMsg(message: ModuleAccountProtoMsg, useInterfaces: boolean = true): ModuleAccount {
+    return ModuleAccount.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: ModuleAccount): Uint8Array {
     return ModuleAccount.encode(message).finish();
@@ -385,6 +408,8 @@ export const ModuleAccount = {
     };
   }
 };
+GlobalDecoderRegistry.register(ModuleAccount.typeUrl, ModuleAccount);
+GlobalDecoderRegistry.registerAminoProtoMapping(ModuleAccount.aminoType, ModuleAccount.typeUrl);
 function createBaseModuleCredential(): ModuleCredential {
   return {
     moduleName: "",
@@ -393,6 +418,16 @@ function createBaseModuleCredential(): ModuleCredential {
 }
 export const ModuleCredential = {
   typeUrl: "/cosmos.auth.v1beta1.ModuleCredential",
+  aminoType: "cosmos-sdk/ModuleCredential",
+  is(o: any): o is ModuleCredential {
+    return o && (o.$typeUrl === ModuleCredential.typeUrl || typeof o.moduleName === "string" && Array.isArray(o.derivationKeys) && (!o.derivationKeys.length || o.derivationKeys[0] instanceof Uint8Array || typeof o.derivationKeys[0] === "string"));
+  },
+  isSDK(o: any): o is ModuleCredentialSDKType {
+    return o && (o.$typeUrl === ModuleCredential.typeUrl || typeof o.module_name === "string" && Array.isArray(o.derivation_keys) && (!o.derivation_keys.length || o.derivation_keys[0] instanceof Uint8Array || typeof o.derivation_keys[0] === "string"));
+  },
+  isAmino(o: any): o is ModuleCredentialAmino {
+    return o && (o.$typeUrl === ModuleCredential.typeUrl || typeof o.module_name === "string" && Array.isArray(o.derivation_keys) && (!o.derivation_keys.length || o.derivation_keys[0] instanceof Uint8Array || typeof o.derivation_keys[0] === "string"));
+  },
   encode(message: ModuleCredential, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.moduleName !== "") {
       writer.uint32(10).string(message.moduleName);
@@ -402,7 +437,7 @@ export const ModuleCredential = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): ModuleCredential {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): ModuleCredential {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseModuleCredential();
@@ -452,27 +487,27 @@ export const ModuleCredential = {
     message.derivationKeys = object.derivation_keys?.map(e => bytesFromBase64(e)) || [];
     return message;
   },
-  toAmino(message: ModuleCredential): ModuleCredentialAmino {
+  toAmino(message: ModuleCredential, useInterfaces: boolean = true): ModuleCredentialAmino {
     const obj: any = {};
-    obj.module_name = message.moduleName;
+    obj.module_name = message.moduleName === "" ? undefined : message.moduleName;
     if (message.derivationKeys) {
       obj.derivation_keys = message.derivationKeys.map(e => base64FromBytes(e));
     } else {
-      obj.derivation_keys = [];
+      obj.derivation_keys = message.derivationKeys;
     }
     return obj;
   },
   fromAminoMsg(object: ModuleCredentialAminoMsg): ModuleCredential {
     return ModuleCredential.fromAmino(object.value);
   },
-  toAminoMsg(message: ModuleCredential): ModuleCredentialAminoMsg {
+  toAminoMsg(message: ModuleCredential, useInterfaces: boolean = true): ModuleCredentialAminoMsg {
     return {
       type: "cosmos-sdk/ModuleCredential",
-      value: ModuleCredential.toAmino(message)
+      value: ModuleCredential.toAmino(message, useInterfaces)
     };
   },
-  fromProtoMsg(message: ModuleCredentialProtoMsg): ModuleCredential {
-    return ModuleCredential.decode(message.value);
+  fromProtoMsg(message: ModuleCredentialProtoMsg, useInterfaces: boolean = true): ModuleCredential {
+    return ModuleCredential.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: ModuleCredential): Uint8Array {
     return ModuleCredential.encode(message).finish();
@@ -484,6 +519,8 @@ export const ModuleCredential = {
     };
   }
 };
+GlobalDecoderRegistry.register(ModuleCredential.typeUrl, ModuleCredential);
+GlobalDecoderRegistry.registerAminoProtoMapping(ModuleCredential.aminoType, ModuleCredential.typeUrl);
 function createBaseParams(): Params {
   return {
     maxMemoCharacters: BigInt(0),
@@ -495,6 +532,16 @@ function createBaseParams(): Params {
 }
 export const Params = {
   typeUrl: "/cosmos.auth.v1beta1.Params",
+  aminoType: "cosmos-sdk/x/auth/Params",
+  is(o: any): o is Params {
+    return o && (o.$typeUrl === Params.typeUrl || typeof o.maxMemoCharacters === "bigint" && typeof o.txSigLimit === "bigint" && typeof o.txSizeCostPerByte === "bigint" && typeof o.sigVerifyCostEd25519 === "bigint" && typeof o.sigVerifyCostSecp256k1 === "bigint");
+  },
+  isSDK(o: any): o is ParamsSDKType {
+    return o && (o.$typeUrl === Params.typeUrl || typeof o.max_memo_characters === "bigint" && typeof o.tx_sig_limit === "bigint" && typeof o.tx_size_cost_per_byte === "bigint" && typeof o.sig_verify_cost_ed25519 === "bigint" && typeof o.sig_verify_cost_secp256k1 === "bigint");
+  },
+  isAmino(o: any): o is ParamsAmino {
+    return o && (o.$typeUrl === Params.typeUrl || typeof o.max_memo_characters === "bigint" && typeof o.tx_sig_limit === "bigint" && typeof o.tx_size_cost_per_byte === "bigint" && typeof o.sig_verify_cost_ed25519 === "bigint" && typeof o.sig_verify_cost_secp256k1 === "bigint");
+  },
   encode(message: Params, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.maxMemoCharacters !== BigInt(0)) {
       writer.uint32(8).uint64(message.maxMemoCharacters);
@@ -513,7 +560,7 @@ export const Params = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): Params {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): Params {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseParams();
@@ -588,7 +635,7 @@ export const Params = {
     }
     return message;
   },
-  toAmino(message: Params): ParamsAmino {
+  toAmino(message: Params, useInterfaces: boolean = true): ParamsAmino {
     const obj: any = {};
     obj.max_memo_characters = message.maxMemoCharacters ? message.maxMemoCharacters.toString() : undefined;
     obj.tx_sig_limit = message.txSigLimit ? message.txSigLimit.toString() : undefined;
@@ -600,14 +647,14 @@ export const Params = {
   fromAminoMsg(object: ParamsAminoMsg): Params {
     return Params.fromAmino(object.value);
   },
-  toAminoMsg(message: Params): ParamsAminoMsg {
+  toAminoMsg(message: Params, useInterfaces: boolean = true): ParamsAminoMsg {
     return {
       type: "cosmos-sdk/x/auth/Params",
-      value: Params.toAmino(message)
+      value: Params.toAmino(message, useInterfaces)
     };
   },
-  fromProtoMsg(message: ParamsProtoMsg): Params {
-    return Params.decode(message.value);
+  fromProtoMsg(message: ParamsProtoMsg, useInterfaces: boolean = true): Params {
+    return Params.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: Params): Uint8Array {
     return Params.encode(message).finish();
@@ -619,3 +666,5 @@ export const Params = {
     };
   }
 };
+GlobalDecoderRegistry.register(Params.typeUrl, Params);
+GlobalDecoderRegistry.registerAminoProtoMapping(Params.aminoType, Params.typeUrl);

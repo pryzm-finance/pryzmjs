@@ -1,6 +1,7 @@
 import { Params, ParamsAmino, ParamsSDKType } from "./params";
 import { Minter, MinterAmino, MinterSDKType } from "./minter";
 import { BinaryReader, BinaryWriter } from "../../../binary";
+import { GlobalDecoderRegistry } from "../../../registry";
 import { isSet } from "../../../helpers";
 /** QueryParamsRequest is request type for the Query/Params RPC method. */
 export interface QueryParamsRequest {}
@@ -71,10 +72,19 @@ function createBaseQueryParamsRequest(): QueryParamsRequest {
 }
 export const QueryParamsRequest = {
   typeUrl: "/pryzm.mint.v1.QueryParamsRequest",
+  is(o: any): o is QueryParamsRequest {
+    return o && o.$typeUrl === QueryParamsRequest.typeUrl;
+  },
+  isSDK(o: any): o is QueryParamsRequestSDKType {
+    return o && o.$typeUrl === QueryParamsRequest.typeUrl;
+  },
+  isAmino(o: any): o is QueryParamsRequestAmino {
+    return o && o.$typeUrl === QueryParamsRequest.typeUrl;
+  },
   encode(_: QueryParamsRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): QueryParamsRequest {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): QueryParamsRequest {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryParamsRequest();
@@ -103,15 +113,15 @@ export const QueryParamsRequest = {
     const message = createBaseQueryParamsRequest();
     return message;
   },
-  toAmino(_: QueryParamsRequest): QueryParamsRequestAmino {
+  toAmino(_: QueryParamsRequest, useInterfaces: boolean = true): QueryParamsRequestAmino {
     const obj: any = {};
     return obj;
   },
   fromAminoMsg(object: QueryParamsRequestAminoMsg): QueryParamsRequest {
     return QueryParamsRequest.fromAmino(object.value);
   },
-  fromProtoMsg(message: QueryParamsRequestProtoMsg): QueryParamsRequest {
-    return QueryParamsRequest.decode(message.value);
+  fromProtoMsg(message: QueryParamsRequestProtoMsg, useInterfaces: boolean = true): QueryParamsRequest {
+    return QueryParamsRequest.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: QueryParamsRequest): Uint8Array {
     return QueryParamsRequest.encode(message).finish();
@@ -123,6 +133,7 @@ export const QueryParamsRequest = {
     };
   }
 };
+GlobalDecoderRegistry.register(QueryParamsRequest.typeUrl, QueryParamsRequest);
 function createBaseQueryParamsResponse(): QueryParamsResponse {
   return {
     params: Params.fromPartial({})
@@ -130,13 +141,22 @@ function createBaseQueryParamsResponse(): QueryParamsResponse {
 }
 export const QueryParamsResponse = {
   typeUrl: "/pryzm.mint.v1.QueryParamsResponse",
+  is(o: any): o is QueryParamsResponse {
+    return o && (o.$typeUrl === QueryParamsResponse.typeUrl || Params.is(o.params));
+  },
+  isSDK(o: any): o is QueryParamsResponseSDKType {
+    return o && (o.$typeUrl === QueryParamsResponse.typeUrl || Params.isSDK(o.params));
+  },
+  isAmino(o: any): o is QueryParamsResponseAmino {
+    return o && (o.$typeUrl === QueryParamsResponse.typeUrl || Params.isAmino(o.params));
+  },
   encode(message: QueryParamsResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.params !== undefined) {
       Params.encode(message.params, writer.uint32(10).fork()).ldelim();
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): QueryParamsResponse {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): QueryParamsResponse {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryParamsResponse();
@@ -144,7 +164,7 @@ export const QueryParamsResponse = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.params = Params.decode(reader, reader.uint32());
+          message.params = Params.decode(reader, reader.uint32(), useInterfaces);
           break;
         default:
           reader.skipType(tag & 7);
@@ -175,16 +195,16 @@ export const QueryParamsResponse = {
     }
     return message;
   },
-  toAmino(message: QueryParamsResponse): QueryParamsResponseAmino {
+  toAmino(message: QueryParamsResponse, useInterfaces: boolean = true): QueryParamsResponseAmino {
     const obj: any = {};
-    obj.params = message.params ? Params.toAmino(message.params) : undefined;
+    obj.params = message.params ? Params.toAmino(message.params, useInterfaces) : undefined;
     return obj;
   },
   fromAminoMsg(object: QueryParamsResponseAminoMsg): QueryParamsResponse {
     return QueryParamsResponse.fromAmino(object.value);
   },
-  fromProtoMsg(message: QueryParamsResponseProtoMsg): QueryParamsResponse {
-    return QueryParamsResponse.decode(message.value);
+  fromProtoMsg(message: QueryParamsResponseProtoMsg, useInterfaces: boolean = true): QueryParamsResponse {
+    return QueryParamsResponse.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: QueryParamsResponse): Uint8Array {
     return QueryParamsResponse.encode(message).finish();
@@ -196,15 +216,25 @@ export const QueryParamsResponse = {
     };
   }
 };
+GlobalDecoderRegistry.register(QueryParamsResponse.typeUrl, QueryParamsResponse);
 function createBaseQueryMinterRequest(): QueryMinterRequest {
   return {};
 }
 export const QueryMinterRequest = {
   typeUrl: "/pryzm.mint.v1.QueryMinterRequest",
+  is(o: any): o is QueryMinterRequest {
+    return o && o.$typeUrl === QueryMinterRequest.typeUrl;
+  },
+  isSDK(o: any): o is QueryMinterRequestSDKType {
+    return o && o.$typeUrl === QueryMinterRequest.typeUrl;
+  },
+  isAmino(o: any): o is QueryMinterRequestAmino {
+    return o && o.$typeUrl === QueryMinterRequest.typeUrl;
+  },
   encode(_: QueryMinterRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): QueryMinterRequest {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): QueryMinterRequest {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryMinterRequest();
@@ -233,15 +263,15 @@ export const QueryMinterRequest = {
     const message = createBaseQueryMinterRequest();
     return message;
   },
-  toAmino(_: QueryMinterRequest): QueryMinterRequestAmino {
+  toAmino(_: QueryMinterRequest, useInterfaces: boolean = true): QueryMinterRequestAmino {
     const obj: any = {};
     return obj;
   },
   fromAminoMsg(object: QueryMinterRequestAminoMsg): QueryMinterRequest {
     return QueryMinterRequest.fromAmino(object.value);
   },
-  fromProtoMsg(message: QueryMinterRequestProtoMsg): QueryMinterRequest {
-    return QueryMinterRequest.decode(message.value);
+  fromProtoMsg(message: QueryMinterRequestProtoMsg, useInterfaces: boolean = true): QueryMinterRequest {
+    return QueryMinterRequest.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: QueryMinterRequest): Uint8Array {
     return QueryMinterRequest.encode(message).finish();
@@ -253,6 +283,7 @@ export const QueryMinterRequest = {
     };
   }
 };
+GlobalDecoderRegistry.register(QueryMinterRequest.typeUrl, QueryMinterRequest);
 function createBaseQueryMinterResponse(): QueryMinterResponse {
   return {
     minter: Minter.fromPartial({})
@@ -260,13 +291,22 @@ function createBaseQueryMinterResponse(): QueryMinterResponse {
 }
 export const QueryMinterResponse = {
   typeUrl: "/pryzm.mint.v1.QueryMinterResponse",
+  is(o: any): o is QueryMinterResponse {
+    return o && (o.$typeUrl === QueryMinterResponse.typeUrl || Minter.is(o.minter));
+  },
+  isSDK(o: any): o is QueryMinterResponseSDKType {
+    return o && (o.$typeUrl === QueryMinterResponse.typeUrl || Minter.isSDK(o.minter));
+  },
+  isAmino(o: any): o is QueryMinterResponseAmino {
+    return o && (o.$typeUrl === QueryMinterResponse.typeUrl || Minter.isAmino(o.minter));
+  },
   encode(message: QueryMinterResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.minter !== undefined) {
       Minter.encode(message.minter, writer.uint32(10).fork()).ldelim();
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): QueryMinterResponse {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): QueryMinterResponse {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryMinterResponse();
@@ -274,7 +314,7 @@ export const QueryMinterResponse = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.minter = Minter.decode(reader, reader.uint32());
+          message.minter = Minter.decode(reader, reader.uint32(), useInterfaces);
           break;
         default:
           reader.skipType(tag & 7);
@@ -305,16 +345,16 @@ export const QueryMinterResponse = {
     }
     return message;
   },
-  toAmino(message: QueryMinterResponse): QueryMinterResponseAmino {
+  toAmino(message: QueryMinterResponse, useInterfaces: boolean = true): QueryMinterResponseAmino {
     const obj: any = {};
-    obj.minter = message.minter ? Minter.toAmino(message.minter) : undefined;
+    obj.minter = message.minter ? Minter.toAmino(message.minter, useInterfaces) : undefined;
     return obj;
   },
   fromAminoMsg(object: QueryMinterResponseAminoMsg): QueryMinterResponse {
     return QueryMinterResponse.fromAmino(object.value);
   },
-  fromProtoMsg(message: QueryMinterResponseProtoMsg): QueryMinterResponse {
-    return QueryMinterResponse.decode(message.value);
+  fromProtoMsg(message: QueryMinterResponseProtoMsg, useInterfaces: boolean = true): QueryMinterResponse {
+    return QueryMinterResponse.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: QueryMinterResponse): Uint8Array {
     return QueryMinterResponse.encode(message).finish();
@@ -326,3 +366,4 @@ export const QueryMinterResponse = {
     };
   }
 };
+GlobalDecoderRegistry.register(QueryMinterResponse.typeUrl, QueryMinterResponse);

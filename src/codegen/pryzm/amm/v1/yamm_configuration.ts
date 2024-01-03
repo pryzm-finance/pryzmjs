@@ -1,6 +1,7 @@
 import { BinaryReader, BinaryWriter } from "../../../binary";
 import { Decimal } from "@cosmjs/math";
-import { isSet } from "../../../helpers";
+import { isSet, padDecimal } from "../../../helpers";
+import { GlobalDecoderRegistry } from "../../../registry";
 export interface YammConfiguration {
   poolId: bigint;
   lambda?: string;
@@ -71,6 +72,15 @@ function createBaseYammConfiguration(): YammConfiguration {
 }
 export const YammConfiguration = {
   typeUrl: "/pryzm.amm.v1.YammConfiguration",
+  is(o: any): o is YammConfiguration {
+    return o && (o.$typeUrl === YammConfiguration.typeUrl || typeof o.poolId === "bigint");
+  },
+  isSDK(o: any): o is YammConfigurationSDKType {
+    return o && (o.$typeUrl === YammConfiguration.typeUrl || typeof o.pool_id === "bigint");
+  },
+  isAmino(o: any): o is YammConfigurationAmino {
+    return o && (o.$typeUrl === YammConfiguration.typeUrl || typeof o.pool_id === "bigint");
+  },
   encode(message: YammConfiguration, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.poolId !== BigInt(0)) {
       writer.uint32(8).uint64(message.poolId);
@@ -107,7 +117,7 @@ export const YammConfiguration = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): YammConfiguration {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): YammConfiguration {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseYammConfiguration();
@@ -236,26 +246,26 @@ export const YammConfiguration = {
     }
     return message;
   },
-  toAmino(message: YammConfiguration): YammConfigurationAmino {
+  toAmino(message: YammConfiguration, useInterfaces: boolean = true): YammConfigurationAmino {
     const obj: any = {};
-    obj.pool_id = message.poolId ? message.poolId.toString() : "0";
-    obj.lambda = message.lambda;
-    obj.maturity_introduction_interval_millis = message.maturityIntroductionIntervalMillis;
-    obj.maturity_expiration_interval_millis = message.maturityExpirationIntervalMillis;
-    obj.introduction_virtual_balance_scaler = message.introductionVirtualBalanceScaler;
-    obj.expiration_virtual_balance_scaler = message.expirationVirtualBalanceScaler;
-    obj.buy_y_given_in_loan_fee_ratio = message.buyYGivenInLoanFeeRatio;
-    obj.sell_y_given_out_fee_ratio = message.sellYGivenOutFeeRatio;
-    obj.max_alpha = message.maxAlpha;
-    obj.avg_monthly_yield_rate = message.avgMonthlyYieldRate;
-    obj.yield_fee_scaler = message.yieldFeeScaler;
+    obj.pool_id = message.poolId ? message.poolId.toString() : undefined;
+    obj.lambda = padDecimal(message.lambda) === null ? undefined : padDecimal(message.lambda);
+    obj.maturity_introduction_interval_millis = message.maturityIntroductionIntervalMillis === null ? undefined : message.maturityIntroductionIntervalMillis;
+    obj.maturity_expiration_interval_millis = message.maturityExpirationIntervalMillis === null ? undefined : message.maturityExpirationIntervalMillis;
+    obj.introduction_virtual_balance_scaler = padDecimal(message.introductionVirtualBalanceScaler) === null ? undefined : padDecimal(message.introductionVirtualBalanceScaler);
+    obj.expiration_virtual_balance_scaler = padDecimal(message.expirationVirtualBalanceScaler) === null ? undefined : padDecimal(message.expirationVirtualBalanceScaler);
+    obj.buy_y_given_in_loan_fee_ratio = padDecimal(message.buyYGivenInLoanFeeRatio) === null ? undefined : padDecimal(message.buyYGivenInLoanFeeRatio);
+    obj.sell_y_given_out_fee_ratio = padDecimal(message.sellYGivenOutFeeRatio) === null ? undefined : padDecimal(message.sellYGivenOutFeeRatio);
+    obj.max_alpha = padDecimal(message.maxAlpha) === null ? undefined : padDecimal(message.maxAlpha);
+    obj.avg_monthly_yield_rate = padDecimal(message.avgMonthlyYieldRate) === null ? undefined : padDecimal(message.avgMonthlyYieldRate);
+    obj.yield_fee_scaler = padDecimal(message.yieldFeeScaler) === null ? undefined : padDecimal(message.yieldFeeScaler);
     return obj;
   },
   fromAminoMsg(object: YammConfigurationAminoMsg): YammConfiguration {
     return YammConfiguration.fromAmino(object.value);
   },
-  fromProtoMsg(message: YammConfigurationProtoMsg): YammConfiguration {
-    return YammConfiguration.decode(message.value);
+  fromProtoMsg(message: YammConfigurationProtoMsg, useInterfaces: boolean = true): YammConfiguration {
+    return YammConfiguration.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: YammConfiguration): Uint8Array {
     return YammConfiguration.encode(message).finish();
@@ -267,3 +277,4 @@ export const YammConfiguration = {
     };
   }
 };
+GlobalDecoderRegistry.register(YammConfiguration.typeUrl, YammConfiguration);

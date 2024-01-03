@@ -1,5 +1,6 @@
 import { BinaryReader, BinaryWriter } from "../../binary";
 import { isSet } from "../../helpers";
+import { GlobalDecoderRegistry } from "../../registry";
 export interface Validator {
   operatorAddress: string;
   voteCount: bigint;
@@ -44,6 +45,15 @@ function createBaseValidator(): Validator {
 }
 export const Validator = {
   typeUrl: "/pryzmatics.oracle.Validator",
+  is(o: any): o is Validator {
+    return o && (o.$typeUrl === Validator.typeUrl || typeof o.operatorAddress === "string" && typeof o.voteCount === "bigint" && typeof o.expectedVoteCount === "bigint" && typeof o.latestExpectedVoteVoteIntervalCloseBlockHeight === "bigint");
+  },
+  isSDK(o: any): o is ValidatorSDKType {
+    return o && (o.$typeUrl === Validator.typeUrl || typeof o.operator_address === "string" && typeof o.vote_count === "bigint" && typeof o.expected_vote_count === "bigint" && typeof o.latest_expected_vote_vote_interval_close_block_height === "bigint");
+  },
+  isAmino(o: any): o is ValidatorAmino {
+    return o && (o.$typeUrl === Validator.typeUrl || typeof o.operator_address === "string" && typeof o.vote_count === "bigint" && typeof o.expected_vote_count === "bigint" && typeof o.latest_expected_vote_vote_interval_close_block_height === "bigint");
+  },
   encode(message: Validator, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.operatorAddress !== "") {
       writer.uint32(10).string(message.operatorAddress);
@@ -65,7 +75,7 @@ export const Validator = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): Validator {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): Validator {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseValidator();
@@ -149,21 +159,21 @@ export const Validator = {
     }
     return message;
   },
-  toAmino(message: Validator): ValidatorAmino {
+  toAmino(message: Validator, useInterfaces: boolean = true): ValidatorAmino {
     const obj: any = {};
-    obj.operator_address = message.operatorAddress;
+    obj.operator_address = message.operatorAddress === "" ? undefined : message.operatorAddress;
     obj.vote_count = message.voteCount ? message.voteCount.toString() : undefined;
     obj.expected_vote_count = message.expectedVoteCount ? message.expectedVoteCount.toString() : undefined;
-    obj.latest_vote_vote_interval_close_block_height = message.latestVoteVoteIntervalCloseBlockHeight;
+    obj.latest_vote_vote_interval_close_block_height = message.latestVoteVoteIntervalCloseBlockHeight === null ? undefined : message.latestVoteVoteIntervalCloseBlockHeight;
     obj.latest_expected_vote_vote_interval_close_block_height = message.latestExpectedVoteVoteIntervalCloseBlockHeight ? message.latestExpectedVoteVoteIntervalCloseBlockHeight.toString() : undefined;
-    obj.last_jailed_block_height = message.lastJailedBlockHeight;
+    obj.last_jailed_block_height = message.lastJailedBlockHeight === null ? undefined : message.lastJailedBlockHeight;
     return obj;
   },
   fromAminoMsg(object: ValidatorAminoMsg): Validator {
     return Validator.fromAmino(object.value);
   },
-  fromProtoMsg(message: ValidatorProtoMsg): Validator {
-    return Validator.decode(message.value);
+  fromProtoMsg(message: ValidatorProtoMsg, useInterfaces: boolean = true): Validator {
+    return Validator.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: Validator): Uint8Array {
     return Validator.encode(message).finish();
@@ -175,3 +185,4 @@ export const Validator = {
     };
   }
 };
+GlobalDecoderRegistry.register(Validator.typeUrl, Validator);

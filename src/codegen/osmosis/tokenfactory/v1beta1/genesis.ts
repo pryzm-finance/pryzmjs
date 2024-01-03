@@ -2,6 +2,7 @@ import { Params, ParamsAmino, ParamsSDKType } from "./params";
 import { DenomAuthorityMetadata, DenomAuthorityMetadataAmino, DenomAuthorityMetadataSDKType } from "./authorityMetadata";
 import { BinaryReader, BinaryWriter } from "../../../binary";
 import { isSet } from "../../../helpers";
+import { GlobalDecoderRegistry } from "../../../registry";
 /** GenesisState defines the tokenfactory module's genesis state. */
 export interface GenesisState {
   /** params defines the paramaters of the module. */
@@ -70,6 +71,16 @@ function createBaseGenesisState(): GenesisState {
 }
 export const GenesisState = {
   typeUrl: "/osmosis.tokenfactory.v1beta1.GenesisState",
+  aminoType: "osmosis/tokenfactory/genesis-state",
+  is(o: any): o is GenesisState {
+    return o && (o.$typeUrl === GenesisState.typeUrl || Params.is(o.params) && Array.isArray(o.factoryDenoms) && (!o.factoryDenoms.length || GenesisDenom.is(o.factoryDenoms[0])));
+  },
+  isSDK(o: any): o is GenesisStateSDKType {
+    return o && (o.$typeUrl === GenesisState.typeUrl || Params.isSDK(o.params) && Array.isArray(o.factory_denoms) && (!o.factory_denoms.length || GenesisDenom.isSDK(o.factory_denoms[0])));
+  },
+  isAmino(o: any): o is GenesisStateAmino {
+    return o && (o.$typeUrl === GenesisState.typeUrl || Params.isAmino(o.params) && Array.isArray(o.factory_denoms) && (!o.factory_denoms.length || GenesisDenom.isAmino(o.factory_denoms[0])));
+  },
   encode(message: GenesisState, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.params !== undefined) {
       Params.encode(message.params, writer.uint32(10).fork()).ldelim();
@@ -79,7 +90,7 @@ export const GenesisState = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): GenesisState {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): GenesisState {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseGenesisState();
@@ -87,10 +98,10 @@ export const GenesisState = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.params = Params.decode(reader, reader.uint32());
+          message.params = Params.decode(reader, reader.uint32(), useInterfaces);
           break;
         case 2:
-          message.factoryDenoms.push(GenesisDenom.decode(reader, reader.uint32()));
+          message.factoryDenoms.push(GenesisDenom.decode(reader, reader.uint32(), useInterfaces));
           break;
         default:
           reader.skipType(tag & 7);
@@ -129,27 +140,27 @@ export const GenesisState = {
     message.factoryDenoms = object.factory_denoms?.map(e => GenesisDenom.fromAmino(e)) || [];
     return message;
   },
-  toAmino(message: GenesisState): GenesisStateAmino {
+  toAmino(message: GenesisState, useInterfaces: boolean = true): GenesisStateAmino {
     const obj: any = {};
-    obj.params = message.params ? Params.toAmino(message.params) : undefined;
+    obj.params = message.params ? Params.toAmino(message.params, useInterfaces) : undefined;
     if (message.factoryDenoms) {
-      obj.factory_denoms = message.factoryDenoms.map(e => e ? GenesisDenom.toAmino(e) : undefined);
+      obj.factory_denoms = message.factoryDenoms.map(e => e ? GenesisDenom.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.factory_denoms = [];
+      obj.factory_denoms = message.factoryDenoms;
     }
     return obj;
   },
   fromAminoMsg(object: GenesisStateAminoMsg): GenesisState {
     return GenesisState.fromAmino(object.value);
   },
-  toAminoMsg(message: GenesisState): GenesisStateAminoMsg {
+  toAminoMsg(message: GenesisState, useInterfaces: boolean = true): GenesisStateAminoMsg {
     return {
       type: "osmosis/tokenfactory/genesis-state",
-      value: GenesisState.toAmino(message)
+      value: GenesisState.toAmino(message, useInterfaces)
     };
   },
-  fromProtoMsg(message: GenesisStateProtoMsg): GenesisState {
-    return GenesisState.decode(message.value);
+  fromProtoMsg(message: GenesisStateProtoMsg, useInterfaces: boolean = true): GenesisState {
+    return GenesisState.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: GenesisState): Uint8Array {
     return GenesisState.encode(message).finish();
@@ -161,6 +172,8 @@ export const GenesisState = {
     };
   }
 };
+GlobalDecoderRegistry.register(GenesisState.typeUrl, GenesisState);
+GlobalDecoderRegistry.registerAminoProtoMapping(GenesisState.aminoType, GenesisState.typeUrl);
 function createBaseGenesisDenom(): GenesisDenom {
   return {
     denom: "",
@@ -169,6 +182,16 @@ function createBaseGenesisDenom(): GenesisDenom {
 }
 export const GenesisDenom = {
   typeUrl: "/osmosis.tokenfactory.v1beta1.GenesisDenom",
+  aminoType: "osmosis/tokenfactory/genesis-denom",
+  is(o: any): o is GenesisDenom {
+    return o && (o.$typeUrl === GenesisDenom.typeUrl || typeof o.denom === "string" && DenomAuthorityMetadata.is(o.authorityMetadata));
+  },
+  isSDK(o: any): o is GenesisDenomSDKType {
+    return o && (o.$typeUrl === GenesisDenom.typeUrl || typeof o.denom === "string" && DenomAuthorityMetadata.isSDK(o.authority_metadata));
+  },
+  isAmino(o: any): o is GenesisDenomAmino {
+    return o && (o.$typeUrl === GenesisDenom.typeUrl || typeof o.denom === "string" && DenomAuthorityMetadata.isAmino(o.authority_metadata));
+  },
   encode(message: GenesisDenom, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.denom !== "") {
       writer.uint32(10).string(message.denom);
@@ -178,7 +201,7 @@ export const GenesisDenom = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): GenesisDenom {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): GenesisDenom {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseGenesisDenom();
@@ -189,7 +212,7 @@ export const GenesisDenom = {
           message.denom = reader.string();
           break;
         case 2:
-          message.authorityMetadata = DenomAuthorityMetadata.decode(reader, reader.uint32());
+          message.authorityMetadata = DenomAuthorityMetadata.decode(reader, reader.uint32(), useInterfaces);
           break;
         default:
           reader.skipType(tag & 7);
@@ -226,23 +249,23 @@ export const GenesisDenom = {
     }
     return message;
   },
-  toAmino(message: GenesisDenom): GenesisDenomAmino {
+  toAmino(message: GenesisDenom, useInterfaces: boolean = true): GenesisDenomAmino {
     const obj: any = {};
-    obj.denom = message.denom;
-    obj.authority_metadata = message.authorityMetadata ? DenomAuthorityMetadata.toAmino(message.authorityMetadata) : undefined;
+    obj.denom = message.denom === "" ? undefined : message.denom;
+    obj.authority_metadata = message.authorityMetadata ? DenomAuthorityMetadata.toAmino(message.authorityMetadata, useInterfaces) : undefined;
     return obj;
   },
   fromAminoMsg(object: GenesisDenomAminoMsg): GenesisDenom {
     return GenesisDenom.fromAmino(object.value);
   },
-  toAminoMsg(message: GenesisDenom): GenesisDenomAminoMsg {
+  toAminoMsg(message: GenesisDenom, useInterfaces: boolean = true): GenesisDenomAminoMsg {
     return {
       type: "osmosis/tokenfactory/genesis-denom",
-      value: GenesisDenom.toAmino(message)
+      value: GenesisDenom.toAmino(message, useInterfaces)
     };
   },
-  fromProtoMsg(message: GenesisDenomProtoMsg): GenesisDenom {
-    return GenesisDenom.decode(message.value);
+  fromProtoMsg(message: GenesisDenomProtoMsg, useInterfaces: boolean = true): GenesisDenom {
+    return GenesisDenom.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: GenesisDenom): Uint8Array {
     return GenesisDenom.encode(message).finish();
@@ -254,3 +277,5 @@ export const GenesisDenom = {
     };
   }
 };
+GlobalDecoderRegistry.register(GenesisDenom.typeUrl, GenesisDenom);
+GlobalDecoderRegistry.registerAminoProtoMapping(GenesisDenom.aminoType, GenesisDenom.typeUrl);

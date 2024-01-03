@@ -1,4 +1,5 @@
 import { BinaryReader, BinaryWriter } from "../../../binary";
+import { GlobalDecoderRegistry } from "../../../registry";
 export interface QuerySwappableTokensRequest {}
 export interface QuerySwappableTokensRequestProtoMsg {
   typeUrl: "/pryzmatics.server.price.QuerySwappableTokensRequest";
@@ -32,10 +33,19 @@ function createBaseQuerySwappableTokensRequest(): QuerySwappableTokensRequest {
 }
 export const QuerySwappableTokensRequest = {
   typeUrl: "/pryzmatics.server.price.QuerySwappableTokensRequest",
+  is(o: any): o is QuerySwappableTokensRequest {
+    return o && o.$typeUrl === QuerySwappableTokensRequest.typeUrl;
+  },
+  isSDK(o: any): o is QuerySwappableTokensRequestSDKType {
+    return o && o.$typeUrl === QuerySwappableTokensRequest.typeUrl;
+  },
+  isAmino(o: any): o is QuerySwappableTokensRequestAmino {
+    return o && o.$typeUrl === QuerySwappableTokensRequest.typeUrl;
+  },
   encode(_: QuerySwappableTokensRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): QuerySwappableTokensRequest {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): QuerySwappableTokensRequest {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQuerySwappableTokensRequest();
@@ -64,15 +74,15 @@ export const QuerySwappableTokensRequest = {
     const message = createBaseQuerySwappableTokensRequest();
     return message;
   },
-  toAmino(_: QuerySwappableTokensRequest): QuerySwappableTokensRequestAmino {
+  toAmino(_: QuerySwappableTokensRequest, useInterfaces: boolean = true): QuerySwappableTokensRequestAmino {
     const obj: any = {};
     return obj;
   },
   fromAminoMsg(object: QuerySwappableTokensRequestAminoMsg): QuerySwappableTokensRequest {
     return QuerySwappableTokensRequest.fromAmino(object.value);
   },
-  fromProtoMsg(message: QuerySwappableTokensRequestProtoMsg): QuerySwappableTokensRequest {
-    return QuerySwappableTokensRequest.decode(message.value);
+  fromProtoMsg(message: QuerySwappableTokensRequestProtoMsg, useInterfaces: boolean = true): QuerySwappableTokensRequest {
+    return QuerySwappableTokensRequest.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: QuerySwappableTokensRequest): Uint8Array {
     return QuerySwappableTokensRequest.encode(message).finish();
@@ -84,6 +94,7 @@ export const QuerySwappableTokensRequest = {
     };
   }
 };
+GlobalDecoderRegistry.register(QuerySwappableTokensRequest.typeUrl, QuerySwappableTokensRequest);
 function createBaseQuerySwappableTokensResponse(): QuerySwappableTokensResponse {
   return {
     tokens: []
@@ -91,13 +102,22 @@ function createBaseQuerySwappableTokensResponse(): QuerySwappableTokensResponse 
 }
 export const QuerySwappableTokensResponse = {
   typeUrl: "/pryzmatics.server.price.QuerySwappableTokensResponse",
+  is(o: any): o is QuerySwappableTokensResponse {
+    return o && (o.$typeUrl === QuerySwappableTokensResponse.typeUrl || Array.isArray(o.tokens) && (!o.tokens.length || typeof o.tokens[0] === "string"));
+  },
+  isSDK(o: any): o is QuerySwappableTokensResponseSDKType {
+    return o && (o.$typeUrl === QuerySwappableTokensResponse.typeUrl || Array.isArray(o.tokens) && (!o.tokens.length || typeof o.tokens[0] === "string"));
+  },
+  isAmino(o: any): o is QuerySwappableTokensResponseAmino {
+    return o && (o.$typeUrl === QuerySwappableTokensResponse.typeUrl || Array.isArray(o.tokens) && (!o.tokens.length || typeof o.tokens[0] === "string"));
+  },
   encode(message: QuerySwappableTokensResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     for (const v of message.tokens) {
       writer.uint32(10).string(v!);
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): QuerySwappableTokensResponse {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): QuerySwappableTokensResponse {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQuerySwappableTokensResponse();
@@ -138,20 +158,20 @@ export const QuerySwappableTokensResponse = {
     message.tokens = object.tokens?.map(e => e) || [];
     return message;
   },
-  toAmino(message: QuerySwappableTokensResponse): QuerySwappableTokensResponseAmino {
+  toAmino(message: QuerySwappableTokensResponse, useInterfaces: boolean = true): QuerySwappableTokensResponseAmino {
     const obj: any = {};
     if (message.tokens) {
       obj.tokens = message.tokens.map(e => e);
     } else {
-      obj.tokens = [];
+      obj.tokens = message.tokens;
     }
     return obj;
   },
   fromAminoMsg(object: QuerySwappableTokensResponseAminoMsg): QuerySwappableTokensResponse {
     return QuerySwappableTokensResponse.fromAmino(object.value);
   },
-  fromProtoMsg(message: QuerySwappableTokensResponseProtoMsg): QuerySwappableTokensResponse {
-    return QuerySwappableTokensResponse.decode(message.value);
+  fromProtoMsg(message: QuerySwappableTokensResponseProtoMsg, useInterfaces: boolean = true): QuerySwappableTokensResponse {
+    return QuerySwappableTokensResponse.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: QuerySwappableTokensResponse): Uint8Array {
     return QuerySwappableTokensResponse.encode(message).finish();
@@ -163,3 +183,4 @@ export const QuerySwappableTokensResponse = {
     };
   }
 };
+GlobalDecoderRegistry.register(QuerySwappableTokensResponse.typeUrl, QuerySwappableTokensResponse);

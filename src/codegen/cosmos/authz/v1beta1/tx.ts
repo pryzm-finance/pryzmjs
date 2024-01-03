@@ -2,6 +2,7 @@ import { Grant, GrantAmino, GrantSDKType } from "./authz";
 import { Any, AnyProtoMsg, AnyAmino, AnySDKType } from "../../../google/protobuf/any";
 import { BinaryReader, BinaryWriter } from "../../../binary";
 import { isSet, bytesFromBase64, base64FromBytes } from "../../../helpers";
+import { GlobalDecoderRegistry } from "../../../registry";
 /**
  * MsgGrant is a request type for Grant method. It declares authorization to the grantee
  * on behalf of the granter with the provided expiration time.
@@ -182,6 +183,16 @@ function createBaseMsgGrant(): MsgGrant {
 }
 export const MsgGrant = {
   typeUrl: "/cosmos.authz.v1beta1.MsgGrant",
+  aminoType: "cosmos-sdk/MsgGrant",
+  is(o: any): o is MsgGrant {
+    return o && (o.$typeUrl === MsgGrant.typeUrl || typeof o.granter === "string" && typeof o.grantee === "string" && Grant.is(o.grant));
+  },
+  isSDK(o: any): o is MsgGrantSDKType {
+    return o && (o.$typeUrl === MsgGrant.typeUrl || typeof o.granter === "string" && typeof o.grantee === "string" && Grant.isSDK(o.grant));
+  },
+  isAmino(o: any): o is MsgGrantAmino {
+    return o && (o.$typeUrl === MsgGrant.typeUrl || typeof o.granter === "string" && typeof o.grantee === "string" && Grant.isAmino(o.grant));
+  },
   encode(message: MsgGrant, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.granter !== "") {
       writer.uint32(10).string(message.granter);
@@ -194,7 +205,7 @@ export const MsgGrant = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): MsgGrant {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): MsgGrant {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgGrant();
@@ -208,7 +219,7 @@ export const MsgGrant = {
           message.grantee = reader.string();
           break;
         case 3:
-          message.grant = Grant.decode(reader, reader.uint32());
+          message.grant = Grant.decode(reader, reader.uint32(), useInterfaces);
           break;
         default:
           reader.skipType(tag & 7);
@@ -251,24 +262,24 @@ export const MsgGrant = {
     }
     return message;
   },
-  toAmino(message: MsgGrant): MsgGrantAmino {
+  toAmino(message: MsgGrant, useInterfaces: boolean = true): MsgGrantAmino {
     const obj: any = {};
-    obj.granter = message.granter;
-    obj.grantee = message.grantee;
-    obj.grant = message.grant ? Grant.toAmino(message.grant) : Grant.fromPartial({});
+    obj.granter = message.granter === "" ? undefined : message.granter;
+    obj.grantee = message.grantee === "" ? undefined : message.grantee;
+    obj.grant = message.grant ? Grant.toAmino(message.grant, useInterfaces) : undefined;
     return obj;
   },
   fromAminoMsg(object: MsgGrantAminoMsg): MsgGrant {
     return MsgGrant.fromAmino(object.value);
   },
-  toAminoMsg(message: MsgGrant): MsgGrantAminoMsg {
+  toAminoMsg(message: MsgGrant, useInterfaces: boolean = true): MsgGrantAminoMsg {
     return {
       type: "cosmos-sdk/MsgGrant",
-      value: MsgGrant.toAmino(message)
+      value: MsgGrant.toAmino(message, useInterfaces)
     };
   },
-  fromProtoMsg(message: MsgGrantProtoMsg): MsgGrant {
-    return MsgGrant.decode(message.value);
+  fromProtoMsg(message: MsgGrantProtoMsg, useInterfaces: boolean = true): MsgGrant {
+    return MsgGrant.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: MsgGrant): Uint8Array {
     return MsgGrant.encode(message).finish();
@@ -280,6 +291,8 @@ export const MsgGrant = {
     };
   }
 };
+GlobalDecoderRegistry.register(MsgGrant.typeUrl, MsgGrant);
+GlobalDecoderRegistry.registerAminoProtoMapping(MsgGrant.aminoType, MsgGrant.typeUrl);
 function createBaseMsgExecResponse(): MsgExecResponse {
   return {
     results: []
@@ -287,13 +300,23 @@ function createBaseMsgExecResponse(): MsgExecResponse {
 }
 export const MsgExecResponse = {
   typeUrl: "/cosmos.authz.v1beta1.MsgExecResponse",
+  aminoType: "cosmos-sdk/MsgExecResponse",
+  is(o: any): o is MsgExecResponse {
+    return o && (o.$typeUrl === MsgExecResponse.typeUrl || Array.isArray(o.results) && (!o.results.length || o.results[0] instanceof Uint8Array || typeof o.results[0] === "string"));
+  },
+  isSDK(o: any): o is MsgExecResponseSDKType {
+    return o && (o.$typeUrl === MsgExecResponse.typeUrl || Array.isArray(o.results) && (!o.results.length || o.results[0] instanceof Uint8Array || typeof o.results[0] === "string"));
+  },
+  isAmino(o: any): o is MsgExecResponseAmino {
+    return o && (o.$typeUrl === MsgExecResponse.typeUrl || Array.isArray(o.results) && (!o.results.length || o.results[0] instanceof Uint8Array || typeof o.results[0] === "string"));
+  },
   encode(message: MsgExecResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     for (const v of message.results) {
       writer.uint32(10).bytes(v!);
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): MsgExecResponse {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): MsgExecResponse {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgExecResponse();
@@ -334,26 +357,26 @@ export const MsgExecResponse = {
     message.results = object.results?.map(e => bytesFromBase64(e)) || [];
     return message;
   },
-  toAmino(message: MsgExecResponse): MsgExecResponseAmino {
+  toAmino(message: MsgExecResponse, useInterfaces: boolean = true): MsgExecResponseAmino {
     const obj: any = {};
     if (message.results) {
       obj.results = message.results.map(e => base64FromBytes(e));
     } else {
-      obj.results = [];
+      obj.results = message.results;
     }
     return obj;
   },
   fromAminoMsg(object: MsgExecResponseAminoMsg): MsgExecResponse {
     return MsgExecResponse.fromAmino(object.value);
   },
-  toAminoMsg(message: MsgExecResponse): MsgExecResponseAminoMsg {
+  toAminoMsg(message: MsgExecResponse, useInterfaces: boolean = true): MsgExecResponseAminoMsg {
     return {
       type: "cosmos-sdk/MsgExecResponse",
-      value: MsgExecResponse.toAmino(message)
+      value: MsgExecResponse.toAmino(message, useInterfaces)
     };
   },
-  fromProtoMsg(message: MsgExecResponseProtoMsg): MsgExecResponse {
-    return MsgExecResponse.decode(message.value);
+  fromProtoMsg(message: MsgExecResponseProtoMsg, useInterfaces: boolean = true): MsgExecResponse {
+    return MsgExecResponse.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: MsgExecResponse): Uint8Array {
     return MsgExecResponse.encode(message).finish();
@@ -365,6 +388,8 @@ export const MsgExecResponse = {
     };
   }
 };
+GlobalDecoderRegistry.register(MsgExecResponse.typeUrl, MsgExecResponse);
+GlobalDecoderRegistry.registerAminoProtoMapping(MsgExecResponse.aminoType, MsgExecResponse.typeUrl);
 function createBaseMsgExec(): MsgExec {
   return {
     grantee: "",
@@ -373,16 +398,26 @@ function createBaseMsgExec(): MsgExec {
 }
 export const MsgExec = {
   typeUrl: "/cosmos.authz.v1beta1.MsgExec",
+  aminoType: "cosmos-sdk/MsgExec",
+  is(o: any): o is MsgExec {
+    return o && (o.$typeUrl === MsgExec.typeUrl || typeof o.grantee === "string" && Array.isArray(o.msgs) && (!o.msgs.length || Any.is(o.msgs[0])));
+  },
+  isSDK(o: any): o is MsgExecSDKType {
+    return o && (o.$typeUrl === MsgExec.typeUrl || typeof o.grantee === "string" && Array.isArray(o.msgs) && (!o.msgs.length || Any.isSDK(o.msgs[0])));
+  },
+  isAmino(o: any): o is MsgExecAmino {
+    return o && (o.$typeUrl === MsgExec.typeUrl || typeof o.grantee === "string" && Array.isArray(o.msgs) && (!o.msgs.length || Any.isAmino(o.msgs[0])));
+  },
   encode(message: MsgExec, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.grantee !== "") {
       writer.uint32(10).string(message.grantee);
     }
     for (const v of message.msgs) {
-      Any.encode((v! as Any), writer.uint32(18).fork()).ldelim();
+      Any.encode(GlobalDecoderRegistry.wrapAny(v!), writer.uint32(18).fork()).ldelim();
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): MsgExec {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): MsgExec {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgExec();
@@ -393,7 +428,7 @@ export const MsgExec = {
           message.grantee = reader.string();
           break;
         case 2:
-          message.msgs.push(Any.decode(reader, reader.uint32()) as any);
+          message.msgs.push(GlobalDecoderRegistry.unwrapAny(reader));
           break;
         default:
           reader.skipType(tag & 7);
@@ -405,14 +440,14 @@ export const MsgExec = {
   fromJSON(object: any): MsgExec {
     return {
       grantee: isSet(object.grantee) ? String(object.grantee) : "",
-      msgs: Array.isArray(object?.msgs) ? object.msgs.map((e: any) => Any.fromJSONAsAny(e)) : []
+      msgs: Array.isArray(object?.msgs) ? object.msgs.map((e: any) => GlobalDecoderRegistry.fromJSON(e)) : []
     };
   },
   toJSON(message: MsgExec): unknown {
     const obj: any = {};
     message.grantee !== undefined && (obj.grantee = message.grantee);
     if (message.msgs) {
-      obj.msgs = message.msgs.map(e => e ? Any.toJSON(e) : undefined);
+      obj.msgs = message.msgs.map(e => e ? GlobalDecoderRegistry.toJSON(e) : undefined);
     } else {
       obj.msgs = [];
     }
@@ -421,7 +456,7 @@ export const MsgExec = {
   fromPartial(object: Partial<MsgExec>): MsgExec {
     const message = createBaseMsgExec();
     message.grantee = object.grantee ?? "";
-    message.msgs = object.msgs?.map(e => Any.fromPartialAsAny(e)) || [];
+    message.msgs = object.msgs?.map(e => (Any.fromPartialAsAny(e) as any)) || [];
     return message;
   },
   fromAmino(object: MsgExecAmino): MsgExec {
@@ -429,30 +464,30 @@ export const MsgExec = {
     if (object.grantee !== undefined && object.grantee !== null) {
       message.grantee = object.grantee;
     }
-    message.msgs = object.msgs?.map(e => Cosmos_basev1beta1Msg_FromAmino(e)) || [];
+    message.msgs = object.msgs?.map(e => GlobalDecoderRegistry.fromAminoMsg(e)) || [];
     return message;
   },
-  toAmino(message: MsgExec): MsgExecAmino {
+  toAmino(message: MsgExec, useInterfaces: boolean = true): MsgExecAmino {
     const obj: any = {};
-    obj.grantee = message.grantee;
+    obj.grantee = message.grantee === "" ? undefined : message.grantee;
     if (message.msgs) {
-      obj.msgs = message.msgs.map(e => e ? Cosmos_basev1beta1Msg_ToAmino((e as Any)) : undefined);
+      obj.msgs = message.msgs.map(e => e ? GlobalDecoderRegistry.toAminoMsg(e) : undefined);
     } else {
-      obj.msgs = [];
+      obj.msgs = message.msgs;
     }
     return obj;
   },
   fromAminoMsg(object: MsgExecAminoMsg): MsgExec {
     return MsgExec.fromAmino(object.value);
   },
-  toAminoMsg(message: MsgExec): MsgExecAminoMsg {
+  toAminoMsg(message: MsgExec, useInterfaces: boolean = true): MsgExecAminoMsg {
     return {
       type: "cosmos-sdk/MsgExec",
-      value: MsgExec.toAmino(message)
+      value: MsgExec.toAmino(message, useInterfaces)
     };
   },
-  fromProtoMsg(message: MsgExecProtoMsg): MsgExec {
-    return MsgExec.decode(message.value);
+  fromProtoMsg(message: MsgExecProtoMsg, useInterfaces: boolean = true): MsgExec {
+    return MsgExec.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: MsgExec): Uint8Array {
     return MsgExec.encode(message).finish();
@@ -464,15 +499,27 @@ export const MsgExec = {
     };
   }
 };
+GlobalDecoderRegistry.register(MsgExec.typeUrl, MsgExec);
+GlobalDecoderRegistry.registerAminoProtoMapping(MsgExec.aminoType, MsgExec.typeUrl);
 function createBaseMsgGrantResponse(): MsgGrantResponse {
   return {};
 }
 export const MsgGrantResponse = {
   typeUrl: "/cosmos.authz.v1beta1.MsgGrantResponse",
+  aminoType: "cosmos-sdk/MsgGrantResponse",
+  is(o: any): o is MsgGrantResponse {
+    return o && o.$typeUrl === MsgGrantResponse.typeUrl;
+  },
+  isSDK(o: any): o is MsgGrantResponseSDKType {
+    return o && o.$typeUrl === MsgGrantResponse.typeUrl;
+  },
+  isAmino(o: any): o is MsgGrantResponseAmino {
+    return o && o.$typeUrl === MsgGrantResponse.typeUrl;
+  },
   encode(_: MsgGrantResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): MsgGrantResponse {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): MsgGrantResponse {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgGrantResponse();
@@ -501,21 +548,21 @@ export const MsgGrantResponse = {
     const message = createBaseMsgGrantResponse();
     return message;
   },
-  toAmino(_: MsgGrantResponse): MsgGrantResponseAmino {
+  toAmino(_: MsgGrantResponse, useInterfaces: boolean = true): MsgGrantResponseAmino {
     const obj: any = {};
     return obj;
   },
   fromAminoMsg(object: MsgGrantResponseAminoMsg): MsgGrantResponse {
     return MsgGrantResponse.fromAmino(object.value);
   },
-  toAminoMsg(message: MsgGrantResponse): MsgGrantResponseAminoMsg {
+  toAminoMsg(message: MsgGrantResponse, useInterfaces: boolean = true): MsgGrantResponseAminoMsg {
     return {
       type: "cosmos-sdk/MsgGrantResponse",
-      value: MsgGrantResponse.toAmino(message)
+      value: MsgGrantResponse.toAmino(message, useInterfaces)
     };
   },
-  fromProtoMsg(message: MsgGrantResponseProtoMsg): MsgGrantResponse {
-    return MsgGrantResponse.decode(message.value);
+  fromProtoMsg(message: MsgGrantResponseProtoMsg, useInterfaces: boolean = true): MsgGrantResponse {
+    return MsgGrantResponse.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: MsgGrantResponse): Uint8Array {
     return MsgGrantResponse.encode(message).finish();
@@ -527,6 +574,8 @@ export const MsgGrantResponse = {
     };
   }
 };
+GlobalDecoderRegistry.register(MsgGrantResponse.typeUrl, MsgGrantResponse);
+GlobalDecoderRegistry.registerAminoProtoMapping(MsgGrantResponse.aminoType, MsgGrantResponse.typeUrl);
 function createBaseMsgRevoke(): MsgRevoke {
   return {
     granter: "",
@@ -536,6 +585,16 @@ function createBaseMsgRevoke(): MsgRevoke {
 }
 export const MsgRevoke = {
   typeUrl: "/cosmos.authz.v1beta1.MsgRevoke",
+  aminoType: "cosmos-sdk/MsgRevoke",
+  is(o: any): o is MsgRevoke {
+    return o && (o.$typeUrl === MsgRevoke.typeUrl || typeof o.granter === "string" && typeof o.grantee === "string" && typeof o.msgTypeUrl === "string");
+  },
+  isSDK(o: any): o is MsgRevokeSDKType {
+    return o && (o.$typeUrl === MsgRevoke.typeUrl || typeof o.granter === "string" && typeof o.grantee === "string" && typeof o.msg_type_url === "string");
+  },
+  isAmino(o: any): o is MsgRevokeAmino {
+    return o && (o.$typeUrl === MsgRevoke.typeUrl || typeof o.granter === "string" && typeof o.grantee === "string" && typeof o.msg_type_url === "string");
+  },
   encode(message: MsgRevoke, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.granter !== "") {
       writer.uint32(10).string(message.granter);
@@ -548,7 +607,7 @@ export const MsgRevoke = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): MsgRevoke {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): MsgRevoke {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgRevoke();
@@ -605,24 +664,24 @@ export const MsgRevoke = {
     }
     return message;
   },
-  toAmino(message: MsgRevoke): MsgRevokeAmino {
+  toAmino(message: MsgRevoke, useInterfaces: boolean = true): MsgRevokeAmino {
     const obj: any = {};
-    obj.granter = message.granter;
-    obj.grantee = message.grantee;
-    obj.msg_type_url = message.msgTypeUrl;
+    obj.granter = message.granter === "" ? undefined : message.granter;
+    obj.grantee = message.grantee === "" ? undefined : message.grantee;
+    obj.msg_type_url = message.msgTypeUrl === "" ? undefined : message.msgTypeUrl;
     return obj;
   },
   fromAminoMsg(object: MsgRevokeAminoMsg): MsgRevoke {
     return MsgRevoke.fromAmino(object.value);
   },
-  toAminoMsg(message: MsgRevoke): MsgRevokeAminoMsg {
+  toAminoMsg(message: MsgRevoke, useInterfaces: boolean = true): MsgRevokeAminoMsg {
     return {
       type: "cosmos-sdk/MsgRevoke",
-      value: MsgRevoke.toAmino(message)
+      value: MsgRevoke.toAmino(message, useInterfaces)
     };
   },
-  fromProtoMsg(message: MsgRevokeProtoMsg): MsgRevoke {
-    return MsgRevoke.decode(message.value);
+  fromProtoMsg(message: MsgRevokeProtoMsg, useInterfaces: boolean = true): MsgRevoke {
+    return MsgRevoke.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: MsgRevoke): Uint8Array {
     return MsgRevoke.encode(message).finish();
@@ -634,15 +693,27 @@ export const MsgRevoke = {
     };
   }
 };
+GlobalDecoderRegistry.register(MsgRevoke.typeUrl, MsgRevoke);
+GlobalDecoderRegistry.registerAminoProtoMapping(MsgRevoke.aminoType, MsgRevoke.typeUrl);
 function createBaseMsgRevokeResponse(): MsgRevokeResponse {
   return {};
 }
 export const MsgRevokeResponse = {
   typeUrl: "/cosmos.authz.v1beta1.MsgRevokeResponse",
+  aminoType: "cosmos-sdk/MsgRevokeResponse",
+  is(o: any): o is MsgRevokeResponse {
+    return o && o.$typeUrl === MsgRevokeResponse.typeUrl;
+  },
+  isSDK(o: any): o is MsgRevokeResponseSDKType {
+    return o && o.$typeUrl === MsgRevokeResponse.typeUrl;
+  },
+  isAmino(o: any): o is MsgRevokeResponseAmino {
+    return o && o.$typeUrl === MsgRevokeResponse.typeUrl;
+  },
   encode(_: MsgRevokeResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): MsgRevokeResponse {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): MsgRevokeResponse {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgRevokeResponse();
@@ -671,21 +742,21 @@ export const MsgRevokeResponse = {
     const message = createBaseMsgRevokeResponse();
     return message;
   },
-  toAmino(_: MsgRevokeResponse): MsgRevokeResponseAmino {
+  toAmino(_: MsgRevokeResponse, useInterfaces: boolean = true): MsgRevokeResponseAmino {
     const obj: any = {};
     return obj;
   },
   fromAminoMsg(object: MsgRevokeResponseAminoMsg): MsgRevokeResponse {
     return MsgRevokeResponse.fromAmino(object.value);
   },
-  toAminoMsg(message: MsgRevokeResponse): MsgRevokeResponseAminoMsg {
+  toAminoMsg(message: MsgRevokeResponse, useInterfaces: boolean = true): MsgRevokeResponseAminoMsg {
     return {
       type: "cosmos-sdk/MsgRevokeResponse",
-      value: MsgRevokeResponse.toAmino(message)
+      value: MsgRevokeResponse.toAmino(message, useInterfaces)
     };
   },
-  fromProtoMsg(message: MsgRevokeResponseProtoMsg): MsgRevokeResponse {
-    return MsgRevokeResponse.decode(message.value);
+  fromProtoMsg(message: MsgRevokeResponseProtoMsg, useInterfaces: boolean = true): MsgRevokeResponse {
+    return MsgRevokeResponse.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: MsgRevokeResponse): Uint8Array {
     return MsgRevokeResponse.encode(message).finish();
@@ -697,17 +768,5 @@ export const MsgRevokeResponse = {
     };
   }
 };
-export const Cosmos_basev1beta1Msg_InterfaceDecoder = (input: BinaryReader | Uint8Array): Any => {
-  const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
-  const data = Any.decode(reader, reader.uint32());
-  switch (data.typeUrl) {
-    default:
-      return data;
-  }
-};
-export const Cosmos_basev1beta1Msg_FromAmino = (content: AnyAmino) => {
-  return Any.fromAmino(content);
-};
-export const Cosmos_basev1beta1Msg_ToAmino = (content: Any) => {
-  return Any.toAmino(content);
-};
+GlobalDecoderRegistry.register(MsgRevokeResponse.typeUrl, MsgRevokeResponse);
+GlobalDecoderRegistry.registerAminoProtoMapping(MsgRevokeResponse.aminoType, MsgRevokeResponse.typeUrl);

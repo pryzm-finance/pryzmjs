@@ -2,7 +2,8 @@ import { Coin, CoinAmino, CoinSDKType } from "../../cosmos/base/v1beta1/coin";
 import { Timestamp, TimestampSDKType } from "../../google/protobuf/timestamp";
 import { BinaryReader, BinaryWriter } from "../../binary";
 import { Decimal } from "@cosmjs/math";
-import { isSet, fromJsonTimestamp, fromTimestamp } from "../../helpers";
+import { isSet, padDecimal, fromJsonTimestamp, fromTimestamp } from "../../helpers";
+import { GlobalDecoderRegistry } from "../../registry";
 export interface DelegateAllianceEvent {
   allianceSender: string;
   validator: string;
@@ -134,6 +135,15 @@ function createBaseDelegateAllianceEvent(): DelegateAllianceEvent {
 }
 export const DelegateAllianceEvent = {
   typeUrl: "/alliance.alliance.DelegateAllianceEvent",
+  is(o: any): o is DelegateAllianceEvent {
+    return o && (o.$typeUrl === DelegateAllianceEvent.typeUrl || typeof o.allianceSender === "string" && typeof o.validator === "string" && Coin.is(o.coin) && typeof o.newShares === "string");
+  },
+  isSDK(o: any): o is DelegateAllianceEventSDKType {
+    return o && (o.$typeUrl === DelegateAllianceEvent.typeUrl || typeof o.allianceSender === "string" && typeof o.validator === "string" && Coin.isSDK(o.coin) && typeof o.newShares === "string");
+  },
+  isAmino(o: any): o is DelegateAllianceEventAmino {
+    return o && (o.$typeUrl === DelegateAllianceEvent.typeUrl || typeof o.allianceSender === "string" && typeof o.validator === "string" && Coin.isAmino(o.coin) && typeof o.newShares === "string");
+  },
   encode(message: DelegateAllianceEvent, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.allianceSender !== "") {
       writer.uint32(10).string(message.allianceSender);
@@ -149,7 +159,7 @@ export const DelegateAllianceEvent = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): DelegateAllianceEvent {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): DelegateAllianceEvent {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseDelegateAllianceEvent();
@@ -163,7 +173,7 @@ export const DelegateAllianceEvent = {
           message.validator = reader.string();
           break;
         case 3:
-          message.coin = Coin.decode(reader, reader.uint32());
+          message.coin = Coin.decode(reader, reader.uint32(), useInterfaces);
           break;
         case 4:
           message.newShares = Decimal.fromAtomics(reader.string(), 18).toString();
@@ -215,19 +225,19 @@ export const DelegateAllianceEvent = {
     }
     return message;
   },
-  toAmino(message: DelegateAllianceEvent): DelegateAllianceEventAmino {
+  toAmino(message: DelegateAllianceEvent, useInterfaces: boolean = true): DelegateAllianceEventAmino {
     const obj: any = {};
-    obj.allianceSender = message.allianceSender;
-    obj.validator = message.validator;
-    obj.coin = message.coin ? Coin.toAmino(message.coin) : undefined;
-    obj.newShares = message.newShares;
+    obj.allianceSender = message.allianceSender === "" ? undefined : message.allianceSender;
+    obj.validator = message.validator === "" ? undefined : message.validator;
+    obj.coin = message.coin ? Coin.toAmino(message.coin, useInterfaces) : undefined;
+    obj.newShares = padDecimal(message.newShares) === "" ? undefined : padDecimal(message.newShares);
     return obj;
   },
   fromAminoMsg(object: DelegateAllianceEventAminoMsg): DelegateAllianceEvent {
     return DelegateAllianceEvent.fromAmino(object.value);
   },
-  fromProtoMsg(message: DelegateAllianceEventProtoMsg): DelegateAllianceEvent {
-    return DelegateAllianceEvent.decode(message.value);
+  fromProtoMsg(message: DelegateAllianceEventProtoMsg, useInterfaces: boolean = true): DelegateAllianceEvent {
+    return DelegateAllianceEvent.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: DelegateAllianceEvent): Uint8Array {
     return DelegateAllianceEvent.encode(message).finish();
@@ -239,6 +249,7 @@ export const DelegateAllianceEvent = {
     };
   }
 };
+GlobalDecoderRegistry.register(DelegateAllianceEvent.typeUrl, DelegateAllianceEvent);
 function createBaseUndelegateAllianceEvent(): UndelegateAllianceEvent {
   return {
     allianceSender: "",
@@ -249,6 +260,15 @@ function createBaseUndelegateAllianceEvent(): UndelegateAllianceEvent {
 }
 export const UndelegateAllianceEvent = {
   typeUrl: "/alliance.alliance.UndelegateAllianceEvent",
+  is(o: any): o is UndelegateAllianceEvent {
+    return o && (o.$typeUrl === UndelegateAllianceEvent.typeUrl || typeof o.allianceSender === "string" && typeof o.validator === "string" && Coin.is(o.coin) && Timestamp.is(o.completionTime));
+  },
+  isSDK(o: any): o is UndelegateAllianceEventSDKType {
+    return o && (o.$typeUrl === UndelegateAllianceEvent.typeUrl || typeof o.allianceSender === "string" && typeof o.validator === "string" && Coin.isSDK(o.coin) && Timestamp.isSDK(o.completionTime));
+  },
+  isAmino(o: any): o is UndelegateAllianceEventAmino {
+    return o && (o.$typeUrl === UndelegateAllianceEvent.typeUrl || typeof o.allianceSender === "string" && typeof o.validator === "string" && Coin.isAmino(o.coin) && Timestamp.isAmino(o.completionTime));
+  },
   encode(message: UndelegateAllianceEvent, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.allianceSender !== "") {
       writer.uint32(10).string(message.allianceSender);
@@ -264,7 +284,7 @@ export const UndelegateAllianceEvent = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): UndelegateAllianceEvent {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): UndelegateAllianceEvent {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseUndelegateAllianceEvent();
@@ -278,7 +298,7 @@ export const UndelegateAllianceEvent = {
           message.validator = reader.string();
           break;
         case 3:
-          message.coin = Coin.decode(reader, reader.uint32());
+          message.coin = Coin.decode(reader, reader.uint32(), useInterfaces);
           break;
         case 4:
           message.completionTime = Timestamp.decode(reader, reader.uint32());
@@ -330,19 +350,19 @@ export const UndelegateAllianceEvent = {
     }
     return message;
   },
-  toAmino(message: UndelegateAllianceEvent): UndelegateAllianceEventAmino {
+  toAmino(message: UndelegateAllianceEvent, useInterfaces: boolean = true): UndelegateAllianceEventAmino {
     const obj: any = {};
-    obj.allianceSender = message.allianceSender;
-    obj.validator = message.validator;
-    obj.coin = message.coin ? Coin.toAmino(message.coin) : undefined;
-    obj.completionTime = message.completionTime ? Timestamp.toAmino(message.completionTime) : undefined;
+    obj.allianceSender = message.allianceSender === "" ? undefined : message.allianceSender;
+    obj.validator = message.validator === "" ? undefined : message.validator;
+    obj.coin = message.coin ? Coin.toAmino(message.coin, useInterfaces) : undefined;
+    obj.completionTime = message.completionTime ? Timestamp.toAmino(message.completionTime, useInterfaces) : undefined;
     return obj;
   },
   fromAminoMsg(object: UndelegateAllianceEventAminoMsg): UndelegateAllianceEvent {
     return UndelegateAllianceEvent.fromAmino(object.value);
   },
-  fromProtoMsg(message: UndelegateAllianceEventProtoMsg): UndelegateAllianceEvent {
-    return UndelegateAllianceEvent.decode(message.value);
+  fromProtoMsg(message: UndelegateAllianceEventProtoMsg, useInterfaces: boolean = true): UndelegateAllianceEvent {
+    return UndelegateAllianceEvent.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: UndelegateAllianceEvent): Uint8Array {
     return UndelegateAllianceEvent.encode(message).finish();
@@ -354,6 +374,7 @@ export const UndelegateAllianceEvent = {
     };
   }
 };
+GlobalDecoderRegistry.register(UndelegateAllianceEvent.typeUrl, UndelegateAllianceEvent);
 function createBaseRedelegateAllianceEvent(): RedelegateAllianceEvent {
   return {
     allianceSender: "",
@@ -365,6 +386,15 @@ function createBaseRedelegateAllianceEvent(): RedelegateAllianceEvent {
 }
 export const RedelegateAllianceEvent = {
   typeUrl: "/alliance.alliance.RedelegateAllianceEvent",
+  is(o: any): o is RedelegateAllianceEvent {
+    return o && (o.$typeUrl === RedelegateAllianceEvent.typeUrl || typeof o.allianceSender === "string" && typeof o.sourceValidator === "string" && typeof o.destinationValidator === "string" && Coin.is(o.coin) && Timestamp.is(o.completionTime));
+  },
+  isSDK(o: any): o is RedelegateAllianceEventSDKType {
+    return o && (o.$typeUrl === RedelegateAllianceEvent.typeUrl || typeof o.allianceSender === "string" && typeof o.sourceValidator === "string" && typeof o.destinationValidator === "string" && Coin.isSDK(o.coin) && Timestamp.isSDK(o.completionTime));
+  },
+  isAmino(o: any): o is RedelegateAllianceEventAmino {
+    return o && (o.$typeUrl === RedelegateAllianceEvent.typeUrl || typeof o.allianceSender === "string" && typeof o.sourceValidator === "string" && typeof o.destinationValidator === "string" && Coin.isAmino(o.coin) && Timestamp.isAmino(o.completionTime));
+  },
   encode(message: RedelegateAllianceEvent, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.allianceSender !== "") {
       writer.uint32(10).string(message.allianceSender);
@@ -383,7 +413,7 @@ export const RedelegateAllianceEvent = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): RedelegateAllianceEvent {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): RedelegateAllianceEvent {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseRedelegateAllianceEvent();
@@ -400,7 +430,7 @@ export const RedelegateAllianceEvent = {
           message.destinationValidator = reader.string();
           break;
         case 4:
-          message.coin = Coin.decode(reader, reader.uint32());
+          message.coin = Coin.decode(reader, reader.uint32(), useInterfaces);
           break;
         case 5:
           message.completionTime = Timestamp.decode(reader, reader.uint32());
@@ -458,20 +488,20 @@ export const RedelegateAllianceEvent = {
     }
     return message;
   },
-  toAmino(message: RedelegateAllianceEvent): RedelegateAllianceEventAmino {
+  toAmino(message: RedelegateAllianceEvent, useInterfaces: boolean = true): RedelegateAllianceEventAmino {
     const obj: any = {};
-    obj.allianceSender = message.allianceSender;
-    obj.sourceValidator = message.sourceValidator;
-    obj.destinationValidator = message.destinationValidator;
-    obj.coin = message.coin ? Coin.toAmino(message.coin) : undefined;
-    obj.completionTime = message.completionTime ? Timestamp.toAmino(message.completionTime) : undefined;
+    obj.allianceSender = message.allianceSender === "" ? undefined : message.allianceSender;
+    obj.sourceValidator = message.sourceValidator === "" ? undefined : message.sourceValidator;
+    obj.destinationValidator = message.destinationValidator === "" ? undefined : message.destinationValidator;
+    obj.coin = message.coin ? Coin.toAmino(message.coin, useInterfaces) : undefined;
+    obj.completionTime = message.completionTime ? Timestamp.toAmino(message.completionTime, useInterfaces) : undefined;
     return obj;
   },
   fromAminoMsg(object: RedelegateAllianceEventAminoMsg): RedelegateAllianceEvent {
     return RedelegateAllianceEvent.fromAmino(object.value);
   },
-  fromProtoMsg(message: RedelegateAllianceEventProtoMsg): RedelegateAllianceEvent {
-    return RedelegateAllianceEvent.decode(message.value);
+  fromProtoMsg(message: RedelegateAllianceEventProtoMsg, useInterfaces: boolean = true): RedelegateAllianceEvent {
+    return RedelegateAllianceEvent.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: RedelegateAllianceEvent): Uint8Array {
     return RedelegateAllianceEvent.encode(message).finish();
@@ -483,6 +513,7 @@ export const RedelegateAllianceEvent = {
     };
   }
 };
+GlobalDecoderRegistry.register(RedelegateAllianceEvent.typeUrl, RedelegateAllianceEvent);
 function createBaseClaimAllianceRewardsEvent(): ClaimAllianceRewardsEvent {
   return {
     allianceSender: "",
@@ -492,6 +523,15 @@ function createBaseClaimAllianceRewardsEvent(): ClaimAllianceRewardsEvent {
 }
 export const ClaimAllianceRewardsEvent = {
   typeUrl: "/alliance.alliance.ClaimAllianceRewardsEvent",
+  is(o: any): o is ClaimAllianceRewardsEvent {
+    return o && (o.$typeUrl === ClaimAllianceRewardsEvent.typeUrl || typeof o.allianceSender === "string" && typeof o.validator === "string" && Array.isArray(o.coins) && (!o.coins.length || Coin.is(o.coins[0])));
+  },
+  isSDK(o: any): o is ClaimAllianceRewardsEventSDKType {
+    return o && (o.$typeUrl === ClaimAllianceRewardsEvent.typeUrl || typeof o.allianceSender === "string" && typeof o.validator === "string" && Array.isArray(o.coins) && (!o.coins.length || Coin.isSDK(o.coins[0])));
+  },
+  isAmino(o: any): o is ClaimAllianceRewardsEventAmino {
+    return o && (o.$typeUrl === ClaimAllianceRewardsEvent.typeUrl || typeof o.allianceSender === "string" && typeof o.validator === "string" && Array.isArray(o.coins) && (!o.coins.length || Coin.isAmino(o.coins[0])));
+  },
   encode(message: ClaimAllianceRewardsEvent, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.allianceSender !== "") {
       writer.uint32(10).string(message.allianceSender);
@@ -504,7 +544,7 @@ export const ClaimAllianceRewardsEvent = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): ClaimAllianceRewardsEvent {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): ClaimAllianceRewardsEvent {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseClaimAllianceRewardsEvent();
@@ -518,7 +558,7 @@ export const ClaimAllianceRewardsEvent = {
           message.validator = reader.string();
           break;
         case 3:
-          message.coins.push(Coin.decode(reader, reader.uint32()));
+          message.coins.push(Coin.decode(reader, reader.uint32(), useInterfaces));
           break;
         default:
           reader.skipType(tag & 7);
@@ -563,22 +603,22 @@ export const ClaimAllianceRewardsEvent = {
     message.coins = object.coins?.map(e => Coin.fromAmino(e)) || [];
     return message;
   },
-  toAmino(message: ClaimAllianceRewardsEvent): ClaimAllianceRewardsEventAmino {
+  toAmino(message: ClaimAllianceRewardsEvent, useInterfaces: boolean = true): ClaimAllianceRewardsEventAmino {
     const obj: any = {};
-    obj.allianceSender = message.allianceSender;
-    obj.validator = message.validator;
+    obj.allianceSender = message.allianceSender === "" ? undefined : message.allianceSender;
+    obj.validator = message.validator === "" ? undefined : message.validator;
     if (message.coins) {
-      obj.coins = message.coins.map(e => e ? Coin.toAmino(e) : undefined);
+      obj.coins = message.coins.map(e => e ? Coin.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.coins = [];
+      obj.coins = message.coins;
     }
     return obj;
   },
   fromAminoMsg(object: ClaimAllianceRewardsEventAminoMsg): ClaimAllianceRewardsEvent {
     return ClaimAllianceRewardsEvent.fromAmino(object.value);
   },
-  fromProtoMsg(message: ClaimAllianceRewardsEventProtoMsg): ClaimAllianceRewardsEvent {
-    return ClaimAllianceRewardsEvent.decode(message.value);
+  fromProtoMsg(message: ClaimAllianceRewardsEventProtoMsg, useInterfaces: boolean = true): ClaimAllianceRewardsEvent {
+    return ClaimAllianceRewardsEvent.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: ClaimAllianceRewardsEvent): Uint8Array {
     return ClaimAllianceRewardsEvent.encode(message).finish();
@@ -590,6 +630,7 @@ export const ClaimAllianceRewardsEvent = {
     };
   }
 };
+GlobalDecoderRegistry.register(ClaimAllianceRewardsEvent.typeUrl, ClaimAllianceRewardsEvent);
 function createBaseDeductAllianceAssetsEvent(): DeductAllianceAssetsEvent {
   return {
     coins: []
@@ -597,13 +638,22 @@ function createBaseDeductAllianceAssetsEvent(): DeductAllianceAssetsEvent {
 }
 export const DeductAllianceAssetsEvent = {
   typeUrl: "/alliance.alliance.DeductAllianceAssetsEvent",
+  is(o: any): o is DeductAllianceAssetsEvent {
+    return o && (o.$typeUrl === DeductAllianceAssetsEvent.typeUrl || Array.isArray(o.coins) && (!o.coins.length || Coin.is(o.coins[0])));
+  },
+  isSDK(o: any): o is DeductAllianceAssetsEventSDKType {
+    return o && (o.$typeUrl === DeductAllianceAssetsEvent.typeUrl || Array.isArray(o.coins) && (!o.coins.length || Coin.isSDK(o.coins[0])));
+  },
+  isAmino(o: any): o is DeductAllianceAssetsEventAmino {
+    return o && (o.$typeUrl === DeductAllianceAssetsEvent.typeUrl || Array.isArray(o.coins) && (!o.coins.length || Coin.isAmino(o.coins[0])));
+  },
   encode(message: DeductAllianceAssetsEvent, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     for (const v of message.coins) {
       Coin.encode(v!, writer.uint32(10).fork()).ldelim();
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): DeductAllianceAssetsEvent {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): DeductAllianceAssetsEvent {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseDeductAllianceAssetsEvent();
@@ -611,7 +661,7 @@ export const DeductAllianceAssetsEvent = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.coins.push(Coin.decode(reader, reader.uint32()));
+          message.coins.push(Coin.decode(reader, reader.uint32(), useInterfaces));
           break;
         default:
           reader.skipType(tag & 7);
@@ -644,20 +694,20 @@ export const DeductAllianceAssetsEvent = {
     message.coins = object.coins?.map(e => Coin.fromAmino(e)) || [];
     return message;
   },
-  toAmino(message: DeductAllianceAssetsEvent): DeductAllianceAssetsEventAmino {
+  toAmino(message: DeductAllianceAssetsEvent, useInterfaces: boolean = true): DeductAllianceAssetsEventAmino {
     const obj: any = {};
     if (message.coins) {
-      obj.coins = message.coins.map(e => e ? Coin.toAmino(e) : undefined);
+      obj.coins = message.coins.map(e => e ? Coin.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.coins = [];
+      obj.coins = message.coins;
     }
     return obj;
   },
   fromAminoMsg(object: DeductAllianceAssetsEventAminoMsg): DeductAllianceAssetsEvent {
     return DeductAllianceAssetsEvent.fromAmino(object.value);
   },
-  fromProtoMsg(message: DeductAllianceAssetsEventProtoMsg): DeductAllianceAssetsEvent {
-    return DeductAllianceAssetsEvent.decode(message.value);
+  fromProtoMsg(message: DeductAllianceAssetsEventProtoMsg, useInterfaces: boolean = true): DeductAllianceAssetsEvent {
+    return DeductAllianceAssetsEvent.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: DeductAllianceAssetsEvent): Uint8Array {
     return DeductAllianceAssetsEvent.encode(message).finish();
@@ -669,3 +719,4 @@ export const DeductAllianceAssetsEvent = {
     };
   }
 };
+GlobalDecoderRegistry.register(DeductAllianceAssetsEvent.typeUrl, DeductAllianceAssetsEvent);

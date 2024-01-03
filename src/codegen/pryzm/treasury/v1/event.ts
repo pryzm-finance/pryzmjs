@@ -5,6 +5,7 @@ import { FlowTrade, FlowTradeAmino, FlowTradeSDKType } from "./flow_trade";
 import { Timestamp, TimestampSDKType } from "../../../google/protobuf/timestamp";
 import { BinaryReader, BinaryWriter } from "../../../binary";
 import { isSet, fromJsonTimestamp, fromTimestamp } from "../../../helpers";
+import { GlobalDecoderRegistry } from "../../../registry";
 export interface EventSetParams {
   params: Params;
 }
@@ -149,13 +150,22 @@ function createBaseEventSetParams(): EventSetParams {
 }
 export const EventSetParams = {
   typeUrl: "/pryzm.treasury.v1.EventSetParams",
+  is(o: any): o is EventSetParams {
+    return o && (o.$typeUrl === EventSetParams.typeUrl || Params.is(o.params));
+  },
+  isSDK(o: any): o is EventSetParamsSDKType {
+    return o && (o.$typeUrl === EventSetParams.typeUrl || Params.isSDK(o.params));
+  },
+  isAmino(o: any): o is EventSetParamsAmino {
+    return o && (o.$typeUrl === EventSetParams.typeUrl || Params.isAmino(o.params));
+  },
   encode(message: EventSetParams, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.params !== undefined) {
       Params.encode(message.params, writer.uint32(10).fork()).ldelim();
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): EventSetParams {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): EventSetParams {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseEventSetParams();
@@ -163,7 +173,7 @@ export const EventSetParams = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.params = Params.decode(reader, reader.uint32());
+          message.params = Params.decode(reader, reader.uint32(), useInterfaces);
           break;
         default:
           reader.skipType(tag & 7);
@@ -194,16 +204,16 @@ export const EventSetParams = {
     }
     return message;
   },
-  toAmino(message: EventSetParams): EventSetParamsAmino {
+  toAmino(message: EventSetParams, useInterfaces: boolean = true): EventSetParamsAmino {
     const obj: any = {};
-    obj.params = message.params ? Params.toAmino(message.params) : undefined;
+    obj.params = message.params ? Params.toAmino(message.params, useInterfaces) : undefined;
     return obj;
   },
   fromAminoMsg(object: EventSetParamsAminoMsg): EventSetParams {
     return EventSetParams.fromAmino(object.value);
   },
-  fromProtoMsg(message: EventSetParamsProtoMsg): EventSetParams {
-    return EventSetParams.decode(message.value);
+  fromProtoMsg(message: EventSetParamsProtoMsg, useInterfaces: boolean = true): EventSetParams {
+    return EventSetParams.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: EventSetParams): Uint8Array {
     return EventSetParams.encode(message).finish();
@@ -215,6 +225,7 @@ export const EventSetParams = {
     };
   }
 };
+GlobalDecoderRegistry.register(EventSetParams.typeUrl, EventSetParams);
 function createBaseEventTreasuryCollectFee(): EventTreasuryCollectFee {
   return {
     feeType: "",
@@ -224,6 +235,15 @@ function createBaseEventTreasuryCollectFee(): EventTreasuryCollectFee {
 }
 export const EventTreasuryCollectFee = {
   typeUrl: "/pryzm.treasury.v1.EventTreasuryCollectFee",
+  is(o: any): o is EventTreasuryCollectFee {
+    return o && (o.$typeUrl === EventTreasuryCollectFee.typeUrl || typeof o.feeType === "string" && typeof o.amount === "string" && typeof o.from === "string");
+  },
+  isSDK(o: any): o is EventTreasuryCollectFeeSDKType {
+    return o && (o.$typeUrl === EventTreasuryCollectFee.typeUrl || typeof o.fee_type === "string" && typeof o.amount === "string" && typeof o.from === "string");
+  },
+  isAmino(o: any): o is EventTreasuryCollectFeeAmino {
+    return o && (o.$typeUrl === EventTreasuryCollectFee.typeUrl || typeof o.fee_type === "string" && typeof o.amount === "string" && typeof o.from === "string");
+  },
   encode(message: EventTreasuryCollectFee, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.feeType !== "") {
       writer.uint32(10).string(message.feeType);
@@ -236,7 +256,7 @@ export const EventTreasuryCollectFee = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): EventTreasuryCollectFee {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): EventTreasuryCollectFee {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseEventTreasuryCollectFee();
@@ -293,18 +313,18 @@ export const EventTreasuryCollectFee = {
     }
     return message;
   },
-  toAmino(message: EventTreasuryCollectFee): EventTreasuryCollectFeeAmino {
+  toAmino(message: EventTreasuryCollectFee, useInterfaces: boolean = true): EventTreasuryCollectFeeAmino {
     const obj: any = {};
-    obj.fee_type = message.feeType;
-    obj.amount = message.amount;
-    obj.from = message.from;
+    obj.fee_type = message.feeType === "" ? undefined : message.feeType;
+    obj.amount = message.amount === "" ? undefined : message.amount;
+    obj.from = message.from === "" ? undefined : message.from;
     return obj;
   },
   fromAminoMsg(object: EventTreasuryCollectFeeAminoMsg): EventTreasuryCollectFee {
     return EventTreasuryCollectFee.fromAmino(object.value);
   },
-  fromProtoMsg(message: EventTreasuryCollectFeeProtoMsg): EventTreasuryCollectFee {
-    return EventTreasuryCollectFee.decode(message.value);
+  fromProtoMsg(message: EventTreasuryCollectFeeProtoMsg, useInterfaces: boolean = true): EventTreasuryCollectFee {
+    return EventTreasuryCollectFee.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: EventTreasuryCollectFee): Uint8Array {
     return EventTreasuryCollectFee.encode(message).finish();
@@ -316,6 +336,7 @@ export const EventTreasuryCollectFee = {
     };
   }
 };
+GlobalDecoderRegistry.register(EventTreasuryCollectFee.typeUrl, EventTreasuryCollectFee);
 function createBaseEventCreateFlowForAmount(): EventCreateFlowForAmount {
   return {
     flowId: BigInt(0),
@@ -325,6 +346,15 @@ function createBaseEventCreateFlowForAmount(): EventCreateFlowForAmount {
 }
 export const EventCreateFlowForAmount = {
   typeUrl: "/pryzm.treasury.v1.EventCreateFlowForAmount",
+  is(o: any): o is EventCreateFlowForAmount {
+    return o && (o.$typeUrl === EventCreateFlowForAmount.typeUrl || typeof o.flowId === "bigint" && isSet(o.actionType) && Coin.is(o.amount));
+  },
+  isSDK(o: any): o is EventCreateFlowForAmountSDKType {
+    return o && (o.$typeUrl === EventCreateFlowForAmount.typeUrl || typeof o.flow_id === "bigint" && isSet(o.action_type) && Coin.isSDK(o.amount));
+  },
+  isAmino(o: any): o is EventCreateFlowForAmountAmino {
+    return o && (o.$typeUrl === EventCreateFlowForAmount.typeUrl || typeof o.flow_id === "bigint" && isSet(o.action_type) && Coin.isAmino(o.amount));
+  },
   encode(message: EventCreateFlowForAmount, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.flowId !== BigInt(0)) {
       writer.uint32(8).uint64(message.flowId);
@@ -337,7 +367,7 @@ export const EventCreateFlowForAmount = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): EventCreateFlowForAmount {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): EventCreateFlowForAmount {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseEventCreateFlowForAmount();
@@ -351,7 +381,7 @@ export const EventCreateFlowForAmount = {
           message.actionType = (reader.int32() as any);
           break;
         case 3:
-          message.amount = Coin.decode(reader, reader.uint32());
+          message.amount = Coin.decode(reader, reader.uint32(), useInterfaces);
           break;
         default:
           reader.skipType(tag & 7);
@@ -387,25 +417,25 @@ export const EventCreateFlowForAmount = {
       message.flowId = BigInt(object.flow_id);
     }
     if (object.action_type !== undefined && object.action_type !== null) {
-      message.actionType = actionTypeFromJSON(object.action_type);
+      message.actionType = object.action_type;
     }
     if (object.amount !== undefined && object.amount !== null) {
       message.amount = Coin.fromAmino(object.amount);
     }
     return message;
   },
-  toAmino(message: EventCreateFlowForAmount): EventCreateFlowForAmountAmino {
+  toAmino(message: EventCreateFlowForAmount, useInterfaces: boolean = true): EventCreateFlowForAmountAmino {
     const obj: any = {};
     obj.flow_id = message.flowId ? message.flowId.toString() : undefined;
-    obj.action_type = actionTypeToJSON(message.actionType);
-    obj.amount = message.amount ? Coin.toAmino(message.amount) : undefined;
+    obj.action_type = message.actionType === 0 ? undefined : message.actionType;
+    obj.amount = message.amount ? Coin.toAmino(message.amount, useInterfaces) : undefined;
     return obj;
   },
   fromAminoMsg(object: EventCreateFlowForAmountAminoMsg): EventCreateFlowForAmount {
     return EventCreateFlowForAmount.fromAmino(object.value);
   },
-  fromProtoMsg(message: EventCreateFlowForAmountProtoMsg): EventCreateFlowForAmount {
-    return EventCreateFlowForAmount.decode(message.value);
+  fromProtoMsg(message: EventCreateFlowForAmountProtoMsg, useInterfaces: boolean = true): EventCreateFlowForAmount {
+    return EventCreateFlowForAmount.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: EventCreateFlowForAmount): Uint8Array {
     return EventCreateFlowForAmount.encode(message).finish();
@@ -417,6 +447,7 @@ export const EventCreateFlowForAmount = {
     };
   }
 };
+GlobalDecoderRegistry.register(EventCreateFlowForAmount.typeUrl, EventCreateFlowForAmount);
 function createBaseEventExecuteActionForAmount(): EventExecuteActionForAmount {
   return {
     actionType: 0,
@@ -425,6 +456,15 @@ function createBaseEventExecuteActionForAmount(): EventExecuteActionForAmount {
 }
 export const EventExecuteActionForAmount = {
   typeUrl: "/pryzm.treasury.v1.EventExecuteActionForAmount",
+  is(o: any): o is EventExecuteActionForAmount {
+    return o && (o.$typeUrl === EventExecuteActionForAmount.typeUrl || isSet(o.actionType) && Coin.is(o.amount));
+  },
+  isSDK(o: any): o is EventExecuteActionForAmountSDKType {
+    return o && (o.$typeUrl === EventExecuteActionForAmount.typeUrl || isSet(o.action_type) && Coin.isSDK(o.amount));
+  },
+  isAmino(o: any): o is EventExecuteActionForAmountAmino {
+    return o && (o.$typeUrl === EventExecuteActionForAmount.typeUrl || isSet(o.action_type) && Coin.isAmino(o.amount));
+  },
   encode(message: EventExecuteActionForAmount, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.actionType !== 0) {
       writer.uint32(8).int32(message.actionType);
@@ -434,7 +474,7 @@ export const EventExecuteActionForAmount = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): EventExecuteActionForAmount {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): EventExecuteActionForAmount {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseEventExecuteActionForAmount();
@@ -445,7 +485,7 @@ export const EventExecuteActionForAmount = {
           message.actionType = (reader.int32() as any);
           break;
         case 2:
-          message.amount = Coin.decode(reader, reader.uint32());
+          message.amount = Coin.decode(reader, reader.uint32(), useInterfaces);
           break;
         default:
           reader.skipType(tag & 7);
@@ -475,24 +515,24 @@ export const EventExecuteActionForAmount = {
   fromAmino(object: EventExecuteActionForAmountAmino): EventExecuteActionForAmount {
     const message = createBaseEventExecuteActionForAmount();
     if (object.action_type !== undefined && object.action_type !== null) {
-      message.actionType = actionTypeFromJSON(object.action_type);
+      message.actionType = object.action_type;
     }
     if (object.amount !== undefined && object.amount !== null) {
       message.amount = Coin.fromAmino(object.amount);
     }
     return message;
   },
-  toAmino(message: EventExecuteActionForAmount): EventExecuteActionForAmountAmino {
+  toAmino(message: EventExecuteActionForAmount, useInterfaces: boolean = true): EventExecuteActionForAmountAmino {
     const obj: any = {};
-    obj.action_type = actionTypeToJSON(message.actionType);
-    obj.amount = message.amount ? Coin.toAmino(message.amount) : undefined;
+    obj.action_type = message.actionType === 0 ? undefined : message.actionType;
+    obj.amount = message.amount ? Coin.toAmino(message.amount, useInterfaces) : undefined;
     return obj;
   },
   fromAminoMsg(object: EventExecuteActionForAmountAminoMsg): EventExecuteActionForAmount {
     return EventExecuteActionForAmount.fromAmino(object.value);
   },
-  fromProtoMsg(message: EventExecuteActionForAmountProtoMsg): EventExecuteActionForAmount {
-    return EventExecuteActionForAmount.decode(message.value);
+  fromProtoMsg(message: EventExecuteActionForAmountProtoMsg, useInterfaces: boolean = true): EventExecuteActionForAmount {
+    return EventExecuteActionForAmount.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: EventExecuteActionForAmount): Uint8Array {
     return EventExecuteActionForAmount.encode(message).finish();
@@ -504,6 +544,7 @@ export const EventExecuteActionForAmount = {
     };
   }
 };
+GlobalDecoderRegistry.register(EventExecuteActionForAmount.typeUrl, EventExecuteActionForAmount);
 function createBaseEventSetAction(): EventSetAction {
   return {
     action: Action.fromPartial({})
@@ -511,13 +552,22 @@ function createBaseEventSetAction(): EventSetAction {
 }
 export const EventSetAction = {
   typeUrl: "/pryzm.treasury.v1.EventSetAction",
+  is(o: any): o is EventSetAction {
+    return o && (o.$typeUrl === EventSetAction.typeUrl || Action.is(o.action));
+  },
+  isSDK(o: any): o is EventSetActionSDKType {
+    return o && (o.$typeUrl === EventSetAction.typeUrl || Action.isSDK(o.action));
+  },
+  isAmino(o: any): o is EventSetActionAmino {
+    return o && (o.$typeUrl === EventSetAction.typeUrl || Action.isAmino(o.action));
+  },
   encode(message: EventSetAction, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.action !== undefined) {
       Action.encode(message.action, writer.uint32(10).fork()).ldelim();
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): EventSetAction {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): EventSetAction {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseEventSetAction();
@@ -525,7 +575,7 @@ export const EventSetAction = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.action = Action.decode(reader, reader.uint32());
+          message.action = Action.decode(reader, reader.uint32(), useInterfaces);
           break;
         default:
           reader.skipType(tag & 7);
@@ -556,16 +606,16 @@ export const EventSetAction = {
     }
     return message;
   },
-  toAmino(message: EventSetAction): EventSetActionAmino {
+  toAmino(message: EventSetAction, useInterfaces: boolean = true): EventSetActionAmino {
     const obj: any = {};
-    obj.action = message.action ? Action.toAmino(message.action) : undefined;
+    obj.action = message.action ? Action.toAmino(message.action, useInterfaces) : undefined;
     return obj;
   },
   fromAminoMsg(object: EventSetActionAminoMsg): EventSetAction {
     return EventSetAction.fromAmino(object.value);
   },
-  fromProtoMsg(message: EventSetActionProtoMsg): EventSetAction {
-    return EventSetAction.decode(message.value);
+  fromProtoMsg(message: EventSetActionProtoMsg, useInterfaces: boolean = true): EventSetAction {
+    return EventSetAction.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: EventSetAction): Uint8Array {
     return EventSetAction.encode(message).finish();
@@ -577,6 +627,7 @@ export const EventSetAction = {
     };
   }
 };
+GlobalDecoderRegistry.register(EventSetAction.typeUrl, EventSetAction);
 function createBaseEventSetFlowTrade(): EventSetFlowTrade {
   return {
     flowTrade: FlowTrade.fromPartial({})
@@ -584,13 +635,22 @@ function createBaseEventSetFlowTrade(): EventSetFlowTrade {
 }
 export const EventSetFlowTrade = {
   typeUrl: "/pryzm.treasury.v1.EventSetFlowTrade",
+  is(o: any): o is EventSetFlowTrade {
+    return o && (o.$typeUrl === EventSetFlowTrade.typeUrl || FlowTrade.is(o.flowTrade));
+  },
+  isSDK(o: any): o is EventSetFlowTradeSDKType {
+    return o && (o.$typeUrl === EventSetFlowTrade.typeUrl || FlowTrade.isSDK(o.flow_trade));
+  },
+  isAmino(o: any): o is EventSetFlowTradeAmino {
+    return o && (o.$typeUrl === EventSetFlowTrade.typeUrl || FlowTrade.isAmino(o.flow_trade));
+  },
   encode(message: EventSetFlowTrade, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.flowTrade !== undefined) {
       FlowTrade.encode(message.flowTrade, writer.uint32(10).fork()).ldelim();
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): EventSetFlowTrade {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): EventSetFlowTrade {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseEventSetFlowTrade();
@@ -598,7 +658,7 @@ export const EventSetFlowTrade = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.flowTrade = FlowTrade.decode(reader, reader.uint32());
+          message.flowTrade = FlowTrade.decode(reader, reader.uint32(), useInterfaces);
           break;
         default:
           reader.skipType(tag & 7);
@@ -629,16 +689,16 @@ export const EventSetFlowTrade = {
     }
     return message;
   },
-  toAmino(message: EventSetFlowTrade): EventSetFlowTradeAmino {
+  toAmino(message: EventSetFlowTrade, useInterfaces: boolean = true): EventSetFlowTradeAmino {
     const obj: any = {};
-    obj.flow_trade = message.flowTrade ? FlowTrade.toAmino(message.flowTrade) : undefined;
+    obj.flow_trade = message.flowTrade ? FlowTrade.toAmino(message.flowTrade, useInterfaces) : undefined;
     return obj;
   },
   fromAminoMsg(object: EventSetFlowTradeAminoMsg): EventSetFlowTrade {
     return EventSetFlowTrade.fromAmino(object.value);
   },
-  fromProtoMsg(message: EventSetFlowTradeProtoMsg): EventSetFlowTrade {
-    return EventSetFlowTrade.decode(message.value);
+  fromProtoMsg(message: EventSetFlowTradeProtoMsg, useInterfaces: boolean = true): EventSetFlowTrade {
+    return EventSetFlowTrade.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: EventSetFlowTrade): Uint8Array {
     return EventSetFlowTrade.encode(message).finish();
@@ -650,6 +710,7 @@ export const EventSetFlowTrade = {
     };
   }
 };
+GlobalDecoderRegistry.register(EventSetFlowTrade.typeUrl, EventSetFlowTrade);
 function createBaseEventRemoveFlowTrade(): EventRemoveFlowTrade {
   return {
     endTime: Timestamp.fromPartial({}),
@@ -658,6 +719,15 @@ function createBaseEventRemoveFlowTrade(): EventRemoveFlowTrade {
 }
 export const EventRemoveFlowTrade = {
   typeUrl: "/pryzm.treasury.v1.EventRemoveFlowTrade",
+  is(o: any): o is EventRemoveFlowTrade {
+    return o && (o.$typeUrl === EventRemoveFlowTrade.typeUrl || Timestamp.is(o.endTime) && typeof o.flowId === "bigint");
+  },
+  isSDK(o: any): o is EventRemoveFlowTradeSDKType {
+    return o && (o.$typeUrl === EventRemoveFlowTrade.typeUrl || Timestamp.isSDK(o.end_time) && typeof o.flow_id === "bigint");
+  },
+  isAmino(o: any): o is EventRemoveFlowTradeAmino {
+    return o && (o.$typeUrl === EventRemoveFlowTrade.typeUrl || Timestamp.isAmino(o.end_time) && typeof o.flow_id === "bigint");
+  },
   encode(message: EventRemoveFlowTrade, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.endTime !== undefined) {
       Timestamp.encode(message.endTime, writer.uint32(10).fork()).ldelim();
@@ -667,7 +737,7 @@ export const EventRemoveFlowTrade = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): EventRemoveFlowTrade {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): EventRemoveFlowTrade {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseEventRemoveFlowTrade();
@@ -715,17 +785,17 @@ export const EventRemoveFlowTrade = {
     }
     return message;
   },
-  toAmino(message: EventRemoveFlowTrade): EventRemoveFlowTradeAmino {
+  toAmino(message: EventRemoveFlowTrade, useInterfaces: boolean = true): EventRemoveFlowTradeAmino {
     const obj: any = {};
-    obj.end_time = message.endTime ? Timestamp.toAmino(message.endTime) : undefined;
+    obj.end_time = message.endTime ? Timestamp.toAmino(message.endTime, useInterfaces) : undefined;
     obj.flow_id = message.flowId ? message.flowId.toString() : undefined;
     return obj;
   },
   fromAminoMsg(object: EventRemoveFlowTradeAminoMsg): EventRemoveFlowTrade {
     return EventRemoveFlowTrade.fromAmino(object.value);
   },
-  fromProtoMsg(message: EventRemoveFlowTradeProtoMsg): EventRemoveFlowTrade {
-    return EventRemoveFlowTrade.decode(message.value);
+  fromProtoMsg(message: EventRemoveFlowTradeProtoMsg, useInterfaces: boolean = true): EventRemoveFlowTrade {
+    return EventRemoveFlowTrade.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: EventRemoveFlowTrade): Uint8Array {
     return EventRemoveFlowTrade.encode(message).finish();
@@ -737,3 +807,4 @@ export const EventRemoveFlowTrade = {
     };
   }
 };
+GlobalDecoderRegistry.register(EventRemoveFlowTrade.typeUrl, EventRemoveFlowTrade);

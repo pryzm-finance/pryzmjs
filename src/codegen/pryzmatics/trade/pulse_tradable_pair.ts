@@ -1,5 +1,6 @@
 import { BinaryReader, BinaryWriter } from "../../binary";
 import { isSet } from "../../helpers";
+import { GlobalDecoderRegistry } from "../../registry";
 export interface PulseTradablePair {
   tokenIn: string;
   tokenOut: string;
@@ -36,6 +37,15 @@ function createBasePulseTradablePair(): PulseTradablePair {
 }
 export const PulseTradablePair = {
   typeUrl: "/pryzmatics.trade.PulseTradablePair",
+  is(o: any): o is PulseTradablePair {
+    return o && (o.$typeUrl === PulseTradablePair.typeUrl || typeof o.tokenIn === "string" && typeof o.tokenOut === "string" && typeof o.poolId === "bigint" && typeof o.whitelistedRoute === "boolean");
+  },
+  isSDK(o: any): o is PulseTradablePairSDKType {
+    return o && (o.$typeUrl === PulseTradablePair.typeUrl || typeof o.token_in === "string" && typeof o.token_out === "string" && typeof o.pool_id === "bigint" && typeof o.whitelisted_route === "boolean");
+  },
+  isAmino(o: any): o is PulseTradablePairAmino {
+    return o && (o.$typeUrl === PulseTradablePair.typeUrl || typeof o.token_in === "string" && typeof o.token_out === "string" && typeof o.pool_id === "bigint" && typeof o.whitelisted_route === "boolean");
+  },
   encode(message: PulseTradablePair, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.tokenIn !== "") {
       writer.uint32(10).string(message.tokenIn);
@@ -51,7 +61,7 @@ export const PulseTradablePair = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): PulseTradablePair {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): PulseTradablePair {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBasePulseTradablePair();
@@ -117,19 +127,19 @@ export const PulseTradablePair = {
     }
     return message;
   },
-  toAmino(message: PulseTradablePair): PulseTradablePairAmino {
+  toAmino(message: PulseTradablePair, useInterfaces: boolean = true): PulseTradablePairAmino {
     const obj: any = {};
-    obj.token_in = message.tokenIn;
-    obj.token_out = message.tokenOut;
+    obj.token_in = message.tokenIn === "" ? undefined : message.tokenIn;
+    obj.token_out = message.tokenOut === "" ? undefined : message.tokenOut;
     obj.pool_id = message.poolId ? message.poolId.toString() : undefined;
-    obj.whitelisted_route = message.whitelistedRoute;
+    obj.whitelisted_route = message.whitelistedRoute === false ? undefined : message.whitelistedRoute;
     return obj;
   },
   fromAminoMsg(object: PulseTradablePairAminoMsg): PulseTradablePair {
     return PulseTradablePair.fromAmino(object.value);
   },
-  fromProtoMsg(message: PulseTradablePairProtoMsg): PulseTradablePair {
-    return PulseTradablePair.decode(message.value);
+  fromProtoMsg(message: PulseTradablePairProtoMsg, useInterfaces: boolean = true): PulseTradablePair {
+    return PulseTradablePair.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: PulseTradablePair): Uint8Array {
     return PulseTradablePair.encode(message).finish();
@@ -141,3 +151,4 @@ export const PulseTradablePair = {
     };
   }
 };
+GlobalDecoderRegistry.register(PulseTradablePair.typeUrl, PulseTradablePair);

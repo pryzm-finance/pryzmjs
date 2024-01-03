@@ -1,6 +1,7 @@
 import { BinaryReader, BinaryWriter } from "../../../binary";
 import { Decimal } from "@cosmjs/math";
-import { isSet } from "../../../helpers";
+import { isSet, padDecimal } from "../../../helpers";
+import { GlobalDecoderRegistry } from "../../../registry";
 export interface AssetPoolState {
   assetId: string;
   bondedAmount: string;
@@ -62,6 +63,15 @@ function createBaseAssetPoolState(): AssetPoolState {
 }
 export const AssetPoolState = {
   typeUrl: "/pryzm.ystaking.v1.AssetPoolState",
+  is(o: any): o is AssetPoolState {
+    return o && (o.$typeUrl === AssetPoolState.typeUrl || typeof o.assetId === "string" && typeof o.bondedAmount === "string" && typeof o.globalIndex === "string");
+  },
+  isSDK(o: any): o is AssetPoolStateSDKType {
+    return o && (o.$typeUrl === AssetPoolState.typeUrl || typeof o.asset_id === "string" && typeof o.bonded_amount === "string" && typeof o.global_index === "string");
+  },
+  isAmino(o: any): o is AssetPoolStateAmino {
+    return o && (o.$typeUrl === AssetPoolState.typeUrl || typeof o.asset_id === "string" && typeof o.bonded_amount === "string" && typeof o.global_index === "string");
+  },
   encode(message: AssetPoolState, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.assetId !== "") {
       writer.uint32(10).string(message.assetId);
@@ -74,7 +84,7 @@ export const AssetPoolState = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): AssetPoolState {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): AssetPoolState {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseAssetPoolState();
@@ -131,18 +141,18 @@ export const AssetPoolState = {
     }
     return message;
   },
-  toAmino(message: AssetPoolState): AssetPoolStateAmino {
+  toAmino(message: AssetPoolState, useInterfaces: boolean = true): AssetPoolStateAmino {
     const obj: any = {};
-    obj.asset_id = message.assetId;
-    obj.bonded_amount = message.bondedAmount;
-    obj.global_index = message.globalIndex;
+    obj.asset_id = message.assetId === "" ? undefined : message.assetId;
+    obj.bonded_amount = message.bondedAmount === "" ? undefined : message.bondedAmount;
+    obj.global_index = padDecimal(message.globalIndex) === "" ? undefined : padDecimal(message.globalIndex);
     return obj;
   },
   fromAminoMsg(object: AssetPoolStateAminoMsg): AssetPoolState {
     return AssetPoolState.fromAmino(object.value);
   },
-  fromProtoMsg(message: AssetPoolStateProtoMsg): AssetPoolState {
-    return AssetPoolState.decode(message.value);
+  fromProtoMsg(message: AssetPoolStateProtoMsg, useInterfaces: boolean = true): AssetPoolState {
+    return AssetPoolState.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: AssetPoolState): Uint8Array {
     return AssetPoolState.encode(message).finish();
@@ -154,6 +164,7 @@ export const AssetPoolState = {
     };
   }
 };
+GlobalDecoderRegistry.register(AssetPoolState.typeUrl, AssetPoolState);
 function createBaseAssetMaturityPoolState(): AssetMaturityPoolState {
   return {
     assetId: "",
@@ -165,6 +176,15 @@ function createBaseAssetMaturityPoolState(): AssetMaturityPoolState {
 }
 export const AssetMaturityPoolState = {
   typeUrl: "/pryzm.ystaking.v1.AssetMaturityPoolState",
+  is(o: any): o is AssetMaturityPoolState {
+    return o && (o.$typeUrl === AssetMaturityPoolState.typeUrl || typeof o.assetId === "string" && typeof o.maturitySymbol === "string" && typeof o.active === "boolean" && typeof o.bondedAmount === "string");
+  },
+  isSDK(o: any): o is AssetMaturityPoolStateSDKType {
+    return o && (o.$typeUrl === AssetMaturityPoolState.typeUrl || typeof o.asset_id === "string" && typeof o.maturity_symbol === "string" && typeof o.active === "boolean" && typeof o.bonded_amount === "string");
+  },
+  isAmino(o: any): o is AssetMaturityPoolStateAmino {
+    return o && (o.$typeUrl === AssetMaturityPoolState.typeUrl || typeof o.asset_id === "string" && typeof o.maturity_symbol === "string" && typeof o.active === "boolean" && typeof o.bonded_amount === "string");
+  },
   encode(message: AssetMaturityPoolState, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.assetId !== "") {
       writer.uint32(10).string(message.assetId);
@@ -183,7 +203,7 @@ export const AssetMaturityPoolState = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): AssetMaturityPoolState {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): AssetMaturityPoolState {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseAssetMaturityPoolState();
@@ -258,20 +278,20 @@ export const AssetMaturityPoolState = {
     }
     return message;
   },
-  toAmino(message: AssetMaturityPoolState): AssetMaturityPoolStateAmino {
+  toAmino(message: AssetMaturityPoolState, useInterfaces: boolean = true): AssetMaturityPoolStateAmino {
     const obj: any = {};
-    obj.asset_id = message.assetId;
-    obj.maturity_symbol = message.maturitySymbol;
-    obj.active = message.active;
-    obj.bonded_amount = message.bondedAmount;
-    obj.global_index = message.globalIndex;
+    obj.asset_id = message.assetId === "" ? undefined : message.assetId;
+    obj.maturity_symbol = message.maturitySymbol === "" ? undefined : message.maturitySymbol;
+    obj.active = message.active === false ? undefined : message.active;
+    obj.bonded_amount = message.bondedAmount === "" ? undefined : message.bondedAmount;
+    obj.global_index = padDecimal(message.globalIndex) === null ? undefined : padDecimal(message.globalIndex);
     return obj;
   },
   fromAminoMsg(object: AssetMaturityPoolStateAminoMsg): AssetMaturityPoolState {
     return AssetMaturityPoolState.fromAmino(object.value);
   },
-  fromProtoMsg(message: AssetMaturityPoolStateProtoMsg): AssetMaturityPoolState {
-    return AssetMaturityPoolState.decode(message.value);
+  fromProtoMsg(message: AssetMaturityPoolStateProtoMsg, useInterfaces: boolean = true): AssetMaturityPoolState {
+    return AssetMaturityPoolState.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: AssetMaturityPoolState): Uint8Array {
     return AssetMaturityPoolState.encode(message).finish();
@@ -283,3 +303,4 @@ export const AssetMaturityPoolState = {
     };
   }
 };
+GlobalDecoderRegistry.register(AssetMaturityPoolState.typeUrl, AssetMaturityPoolState);

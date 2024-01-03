@@ -1,6 +1,7 @@
 import { BinaryReader, BinaryWriter } from "../../../binary";
 import { Decimal } from "@cosmjs/math";
-import { isSet } from "../../../helpers";
+import { isSet, padDecimal } from "../../../helpers";
+import { GlobalDecoderRegistry } from "../../../registry";
 export interface AssetState {
   assetId: string;
   totalPAmount: string;
@@ -33,6 +34,15 @@ function createBaseAssetState(): AssetState {
 }
 export const AssetState = {
   typeUrl: "/pryzm.refractor.v1.AssetState",
+  is(o: any): o is AssetState {
+    return o && (o.$typeUrl === AssetState.typeUrl || typeof o.assetId === "string" && typeof o.totalPAmount === "string" && typeof o.lastSeenExchangeRate === "string");
+  },
+  isSDK(o: any): o is AssetStateSDKType {
+    return o && (o.$typeUrl === AssetState.typeUrl || typeof o.asset_id === "string" && typeof o.total_p_amount === "string" && typeof o.last_seen_exchange_rate === "string");
+  },
+  isAmino(o: any): o is AssetStateAmino {
+    return o && (o.$typeUrl === AssetState.typeUrl || typeof o.asset_id === "string" && typeof o.total_p_amount === "string" && typeof o.last_seen_exchange_rate === "string");
+  },
   encode(message: AssetState, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.assetId !== "") {
       writer.uint32(10).string(message.assetId);
@@ -45,7 +55,7 @@ export const AssetState = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): AssetState {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): AssetState {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseAssetState();
@@ -102,18 +112,18 @@ export const AssetState = {
     }
     return message;
   },
-  toAmino(message: AssetState): AssetStateAmino {
+  toAmino(message: AssetState, useInterfaces: boolean = true): AssetStateAmino {
     const obj: any = {};
-    obj.asset_id = message.assetId;
-    obj.total_p_amount = message.totalPAmount;
-    obj.last_seen_exchange_rate = message.lastSeenExchangeRate;
+    obj.asset_id = message.assetId === "" ? undefined : message.assetId;
+    obj.total_p_amount = message.totalPAmount === "" ? undefined : message.totalPAmount;
+    obj.last_seen_exchange_rate = padDecimal(message.lastSeenExchangeRate) === "" ? undefined : padDecimal(message.lastSeenExchangeRate);
     return obj;
   },
   fromAminoMsg(object: AssetStateAminoMsg): AssetState {
     return AssetState.fromAmino(object.value);
   },
-  fromProtoMsg(message: AssetStateProtoMsg): AssetState {
-    return AssetState.decode(message.value);
+  fromProtoMsg(message: AssetStateProtoMsg, useInterfaces: boolean = true): AssetState {
+    return AssetState.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: AssetState): Uint8Array {
     return AssetState.encode(message).finish();
@@ -125,3 +135,4 @@ export const AssetState = {
     };
   }
 };
+GlobalDecoderRegistry.register(AssetState.typeUrl, AssetState);

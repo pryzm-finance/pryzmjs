@@ -1,6 +1,7 @@
 import { PoolOperationType, PoolTradeHistory, PoolTradeHistoryAmino, PoolTradeHistorySDKType, poolOperationTypeFromJSON, poolOperationTypeToJSON } from "../../trade/pool_trade_history";
-import { BinaryReader, BinaryWriter } from "../../../binary";
 import { isSet } from "../../../helpers";
+import { BinaryReader, BinaryWriter } from "../../../binary";
+import { GlobalDecoderRegistry } from "../../../registry";
 export interface QueryPoolTradeHistoryRequest {
   poolId?: string;
   firstToken: string;
@@ -54,6 +55,15 @@ function createBaseQueryPoolTradeHistoryRequest(): QueryPoolTradeHistoryRequest 
 }
 export const QueryPoolTradeHistoryRequest = {
   typeUrl: "/pryzmatics.server.trade.QueryPoolTradeHistoryRequest",
+  is(o: any): o is QueryPoolTradeHistoryRequest {
+    return o && (o.$typeUrl === QueryPoolTradeHistoryRequest.typeUrl || typeof o.firstToken === "string" && typeof o.secondToken === "string" && isSet(o.operationType));
+  },
+  isSDK(o: any): o is QueryPoolTradeHistoryRequestSDKType {
+    return o && (o.$typeUrl === QueryPoolTradeHistoryRequest.typeUrl || typeof o.first_token === "string" && typeof o.second_token === "string" && isSet(o.operation_type));
+  },
+  isAmino(o: any): o is QueryPoolTradeHistoryRequestAmino {
+    return o && (o.$typeUrl === QueryPoolTradeHistoryRequest.typeUrl || typeof o.first_token === "string" && typeof o.second_token === "string" && isSet(o.operation_type));
+  },
   encode(message: QueryPoolTradeHistoryRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.poolId !== undefined) {
       writer.uint32(10).string(message.poolId);
@@ -69,7 +79,7 @@ export const QueryPoolTradeHistoryRequest = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): QueryPoolTradeHistoryRequest {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): QueryPoolTradeHistoryRequest {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryPoolTradeHistoryRequest();
@@ -131,23 +141,23 @@ export const QueryPoolTradeHistoryRequest = {
       message.secondToken = object.second_token;
     }
     if (object.operation_type !== undefined && object.operation_type !== null) {
-      message.operationType = poolOperationTypeFromJSON(object.operation_type);
+      message.operationType = object.operation_type;
     }
     return message;
   },
-  toAmino(message: QueryPoolTradeHistoryRequest): QueryPoolTradeHistoryRequestAmino {
+  toAmino(message: QueryPoolTradeHistoryRequest, useInterfaces: boolean = true): QueryPoolTradeHistoryRequestAmino {
     const obj: any = {};
-    obj.pool_id = message.poolId;
-    obj.first_token = message.firstToken;
-    obj.second_token = message.secondToken;
-    obj.operation_type = poolOperationTypeToJSON(message.operationType);
+    obj.pool_id = message.poolId === null ? undefined : message.poolId;
+    obj.first_token = message.firstToken === "" ? undefined : message.firstToken;
+    obj.second_token = message.secondToken === "" ? undefined : message.secondToken;
+    obj.operation_type = message.operationType === 0 ? undefined : message.operationType;
     return obj;
   },
   fromAminoMsg(object: QueryPoolTradeHistoryRequestAminoMsg): QueryPoolTradeHistoryRequest {
     return QueryPoolTradeHistoryRequest.fromAmino(object.value);
   },
-  fromProtoMsg(message: QueryPoolTradeHistoryRequestProtoMsg): QueryPoolTradeHistoryRequest {
-    return QueryPoolTradeHistoryRequest.decode(message.value);
+  fromProtoMsg(message: QueryPoolTradeHistoryRequestProtoMsg, useInterfaces: boolean = true): QueryPoolTradeHistoryRequest {
+    return QueryPoolTradeHistoryRequest.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: QueryPoolTradeHistoryRequest): Uint8Array {
     return QueryPoolTradeHistoryRequest.encode(message).finish();
@@ -159,6 +169,7 @@ export const QueryPoolTradeHistoryRequest = {
     };
   }
 };
+GlobalDecoderRegistry.register(QueryPoolTradeHistoryRequest.typeUrl, QueryPoolTradeHistoryRequest);
 function createBaseQueryPoolTradeHistoryResponse(): QueryPoolTradeHistoryResponse {
   return {
     poolTradeHistoryRecords: []
@@ -166,13 +177,22 @@ function createBaseQueryPoolTradeHistoryResponse(): QueryPoolTradeHistoryRespons
 }
 export const QueryPoolTradeHistoryResponse = {
   typeUrl: "/pryzmatics.server.trade.QueryPoolTradeHistoryResponse",
+  is(o: any): o is QueryPoolTradeHistoryResponse {
+    return o && (o.$typeUrl === QueryPoolTradeHistoryResponse.typeUrl || Array.isArray(o.poolTradeHistoryRecords) && (!o.poolTradeHistoryRecords.length || PoolTradeHistory.is(o.poolTradeHistoryRecords[0])));
+  },
+  isSDK(o: any): o is QueryPoolTradeHistoryResponseSDKType {
+    return o && (o.$typeUrl === QueryPoolTradeHistoryResponse.typeUrl || Array.isArray(o.pool_trade_history_records) && (!o.pool_trade_history_records.length || PoolTradeHistory.isSDK(o.pool_trade_history_records[0])));
+  },
+  isAmino(o: any): o is QueryPoolTradeHistoryResponseAmino {
+    return o && (o.$typeUrl === QueryPoolTradeHistoryResponse.typeUrl || Array.isArray(o.pool_trade_history_records) && (!o.pool_trade_history_records.length || PoolTradeHistory.isAmino(o.pool_trade_history_records[0])));
+  },
   encode(message: QueryPoolTradeHistoryResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     for (const v of message.poolTradeHistoryRecords) {
       PoolTradeHistory.encode(v!, writer.uint32(10).fork()).ldelim();
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): QueryPoolTradeHistoryResponse {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): QueryPoolTradeHistoryResponse {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryPoolTradeHistoryResponse();
@@ -180,7 +200,7 @@ export const QueryPoolTradeHistoryResponse = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.poolTradeHistoryRecords.push(PoolTradeHistory.decode(reader, reader.uint32()));
+          message.poolTradeHistoryRecords.push(PoolTradeHistory.decode(reader, reader.uint32(), useInterfaces));
           break;
         default:
           reader.skipType(tag & 7);
@@ -213,20 +233,20 @@ export const QueryPoolTradeHistoryResponse = {
     message.poolTradeHistoryRecords = object.pool_trade_history_records?.map(e => PoolTradeHistory.fromAmino(e)) || [];
     return message;
   },
-  toAmino(message: QueryPoolTradeHistoryResponse): QueryPoolTradeHistoryResponseAmino {
+  toAmino(message: QueryPoolTradeHistoryResponse, useInterfaces: boolean = true): QueryPoolTradeHistoryResponseAmino {
     const obj: any = {};
     if (message.poolTradeHistoryRecords) {
-      obj.pool_trade_history_records = message.poolTradeHistoryRecords.map(e => e ? PoolTradeHistory.toAmino(e) : undefined);
+      obj.pool_trade_history_records = message.poolTradeHistoryRecords.map(e => e ? PoolTradeHistory.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.pool_trade_history_records = [];
+      obj.pool_trade_history_records = message.poolTradeHistoryRecords;
     }
     return obj;
   },
   fromAminoMsg(object: QueryPoolTradeHistoryResponseAminoMsg): QueryPoolTradeHistoryResponse {
     return QueryPoolTradeHistoryResponse.fromAmino(object.value);
   },
-  fromProtoMsg(message: QueryPoolTradeHistoryResponseProtoMsg): QueryPoolTradeHistoryResponse {
-    return QueryPoolTradeHistoryResponse.decode(message.value);
+  fromProtoMsg(message: QueryPoolTradeHistoryResponseProtoMsg, useInterfaces: boolean = true): QueryPoolTradeHistoryResponse {
+    return QueryPoolTradeHistoryResponse.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: QueryPoolTradeHistoryResponse): Uint8Array {
     return QueryPoolTradeHistoryResponse.encode(message).finish();
@@ -238,3 +258,4 @@ export const QueryPoolTradeHistoryResponse = {
     };
   }
 };
+GlobalDecoderRegistry.register(QueryPoolTradeHistoryResponse.typeUrl, QueryPoolTradeHistoryResponse);

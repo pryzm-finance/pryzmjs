@@ -1,5 +1,6 @@
 import { BinaryReader, BinaryWriter } from "../../../binary";
 import { isSet } from "../../../helpers";
+import { GlobalDecoderRegistry } from "../../../registry";
 /** EventGrant is emitted on Msg/Grant */
 export interface EventGrant {
   /** Msg type URL for which an autorization is granted */
@@ -73,6 +74,16 @@ function createBaseEventGrant(): EventGrant {
 }
 export const EventGrant = {
   typeUrl: "/cosmos.authz.v1beta1.EventGrant",
+  aminoType: "cosmos-sdk/EventGrant",
+  is(o: any): o is EventGrant {
+    return o && (o.$typeUrl === EventGrant.typeUrl || typeof o.msgTypeUrl === "string" && typeof o.granter === "string" && typeof o.grantee === "string");
+  },
+  isSDK(o: any): o is EventGrantSDKType {
+    return o && (o.$typeUrl === EventGrant.typeUrl || typeof o.msg_type_url === "string" && typeof o.granter === "string" && typeof o.grantee === "string");
+  },
+  isAmino(o: any): o is EventGrantAmino {
+    return o && (o.$typeUrl === EventGrant.typeUrl || typeof o.msg_type_url === "string" && typeof o.granter === "string" && typeof o.grantee === "string");
+  },
   encode(message: EventGrant, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.msgTypeUrl !== "") {
       writer.uint32(18).string(message.msgTypeUrl);
@@ -85,7 +96,7 @@ export const EventGrant = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): EventGrant {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): EventGrant {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseEventGrant();
@@ -142,24 +153,24 @@ export const EventGrant = {
     }
     return message;
   },
-  toAmino(message: EventGrant): EventGrantAmino {
+  toAmino(message: EventGrant, useInterfaces: boolean = true): EventGrantAmino {
     const obj: any = {};
-    obj.msg_type_url = message.msgTypeUrl;
-    obj.granter = message.granter;
-    obj.grantee = message.grantee;
+    obj.msg_type_url = message.msgTypeUrl === "" ? undefined : message.msgTypeUrl;
+    obj.granter = message.granter === "" ? undefined : message.granter;
+    obj.grantee = message.grantee === "" ? undefined : message.grantee;
     return obj;
   },
   fromAminoMsg(object: EventGrantAminoMsg): EventGrant {
     return EventGrant.fromAmino(object.value);
   },
-  toAminoMsg(message: EventGrant): EventGrantAminoMsg {
+  toAminoMsg(message: EventGrant, useInterfaces: boolean = true): EventGrantAminoMsg {
     return {
       type: "cosmos-sdk/EventGrant",
-      value: EventGrant.toAmino(message)
+      value: EventGrant.toAmino(message, useInterfaces)
     };
   },
-  fromProtoMsg(message: EventGrantProtoMsg): EventGrant {
-    return EventGrant.decode(message.value);
+  fromProtoMsg(message: EventGrantProtoMsg, useInterfaces: boolean = true): EventGrant {
+    return EventGrant.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: EventGrant): Uint8Array {
     return EventGrant.encode(message).finish();
@@ -171,6 +182,8 @@ export const EventGrant = {
     };
   }
 };
+GlobalDecoderRegistry.register(EventGrant.typeUrl, EventGrant);
+GlobalDecoderRegistry.registerAminoProtoMapping(EventGrant.aminoType, EventGrant.typeUrl);
 function createBaseEventRevoke(): EventRevoke {
   return {
     msgTypeUrl: "",
@@ -180,6 +193,16 @@ function createBaseEventRevoke(): EventRevoke {
 }
 export const EventRevoke = {
   typeUrl: "/cosmos.authz.v1beta1.EventRevoke",
+  aminoType: "cosmos-sdk/EventRevoke",
+  is(o: any): o is EventRevoke {
+    return o && (o.$typeUrl === EventRevoke.typeUrl || typeof o.msgTypeUrl === "string" && typeof o.granter === "string" && typeof o.grantee === "string");
+  },
+  isSDK(o: any): o is EventRevokeSDKType {
+    return o && (o.$typeUrl === EventRevoke.typeUrl || typeof o.msg_type_url === "string" && typeof o.granter === "string" && typeof o.grantee === "string");
+  },
+  isAmino(o: any): o is EventRevokeAmino {
+    return o && (o.$typeUrl === EventRevoke.typeUrl || typeof o.msg_type_url === "string" && typeof o.granter === "string" && typeof o.grantee === "string");
+  },
   encode(message: EventRevoke, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.msgTypeUrl !== "") {
       writer.uint32(18).string(message.msgTypeUrl);
@@ -192,7 +215,7 @@ export const EventRevoke = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): EventRevoke {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): EventRevoke {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseEventRevoke();
@@ -249,24 +272,24 @@ export const EventRevoke = {
     }
     return message;
   },
-  toAmino(message: EventRevoke): EventRevokeAmino {
+  toAmino(message: EventRevoke, useInterfaces: boolean = true): EventRevokeAmino {
     const obj: any = {};
-    obj.msg_type_url = message.msgTypeUrl;
-    obj.granter = message.granter;
-    obj.grantee = message.grantee;
+    obj.msg_type_url = message.msgTypeUrl === "" ? undefined : message.msgTypeUrl;
+    obj.granter = message.granter === "" ? undefined : message.granter;
+    obj.grantee = message.grantee === "" ? undefined : message.grantee;
     return obj;
   },
   fromAminoMsg(object: EventRevokeAminoMsg): EventRevoke {
     return EventRevoke.fromAmino(object.value);
   },
-  toAminoMsg(message: EventRevoke): EventRevokeAminoMsg {
+  toAminoMsg(message: EventRevoke, useInterfaces: boolean = true): EventRevokeAminoMsg {
     return {
       type: "cosmos-sdk/EventRevoke",
-      value: EventRevoke.toAmino(message)
+      value: EventRevoke.toAmino(message, useInterfaces)
     };
   },
-  fromProtoMsg(message: EventRevokeProtoMsg): EventRevoke {
-    return EventRevoke.decode(message.value);
+  fromProtoMsg(message: EventRevokeProtoMsg, useInterfaces: boolean = true): EventRevoke {
+    return EventRevoke.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: EventRevoke): Uint8Array {
     return EventRevoke.encode(message).finish();
@@ -278,3 +301,5 @@ export const EventRevoke = {
     };
   }
 };
+GlobalDecoderRegistry.register(EventRevoke.typeUrl, EventRevoke);
+GlobalDecoderRegistry.registerAminoProtoMapping(EventRevoke.aminoType, EventRevoke.typeUrl);

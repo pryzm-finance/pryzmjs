@@ -1,5 +1,6 @@
 import { BinaryReader, BinaryWriter } from "../../../binary";
 import { isSet } from "../../../helpers";
+import { GlobalDecoderRegistry } from "../../../registry";
 export interface RouteStep {
   poolId: bigint;
   tokenIn: string;
@@ -32,6 +33,15 @@ function createBaseRouteStep(): RouteStep {
 }
 export const RouteStep = {
   typeUrl: "/pryzm.amm.v1.RouteStep",
+  is(o: any): o is RouteStep {
+    return o && (o.$typeUrl === RouteStep.typeUrl || typeof o.poolId === "bigint" && typeof o.tokenIn === "string" && typeof o.tokenOut === "string");
+  },
+  isSDK(o: any): o is RouteStepSDKType {
+    return o && (o.$typeUrl === RouteStep.typeUrl || typeof o.pool_id === "bigint" && typeof o.token_in === "string" && typeof o.token_out === "string");
+  },
+  isAmino(o: any): o is RouteStepAmino {
+    return o && (o.$typeUrl === RouteStep.typeUrl || typeof o.pool_id === "bigint" && typeof o.token_in === "string" && typeof o.token_out === "string");
+  },
   encode(message: RouteStep, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.poolId !== BigInt(0)) {
       writer.uint32(8).uint64(message.poolId);
@@ -44,7 +54,7 @@ export const RouteStep = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): RouteStep {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): RouteStep {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseRouteStep();
@@ -101,18 +111,18 @@ export const RouteStep = {
     }
     return message;
   },
-  toAmino(message: RouteStep): RouteStepAmino {
+  toAmino(message: RouteStep, useInterfaces: boolean = true): RouteStepAmino {
     const obj: any = {};
-    obj.pool_id = message.poolId ? message.poolId.toString() : "0";
-    obj.token_in = message.tokenIn;
-    obj.token_out = message.tokenOut;
+    obj.pool_id = message.poolId ? message.poolId.toString() : undefined;
+    obj.token_in = message.tokenIn === "" ? undefined : message.tokenIn;
+    obj.token_out = message.tokenOut === "" ? undefined : message.tokenOut;
     return obj;
   },
   fromAminoMsg(object: RouteStepAminoMsg): RouteStep {
     return RouteStep.fromAmino(object.value);
   },
-  fromProtoMsg(message: RouteStepProtoMsg): RouteStep {
-    return RouteStep.decode(message.value);
+  fromProtoMsg(message: RouteStepProtoMsg, useInterfaces: boolean = true): RouteStep {
+    return RouteStep.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: RouteStep): Uint8Array {
     return RouteStep.encode(message).finish();
@@ -124,3 +134,4 @@ export const RouteStep = {
     };
   }
 };
+GlobalDecoderRegistry.register(RouteStep.typeUrl, RouteStep);

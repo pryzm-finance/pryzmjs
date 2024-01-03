@@ -4,6 +4,7 @@ import { Undelegation, UndelegationAmino, UndelegationSDKType, ChannelUndelegati
 import { Coin, CoinAmino, CoinSDKType } from "../../../cosmos/base/v1beta1/coin";
 import { BinaryReader, BinaryWriter } from "../../../binary";
 import { isSet } from "../../../helpers";
+import { GlobalDecoderRegistry } from "../../../registry";
 export interface EventSetHostChain {
   hostChain: HostChain;
 }
@@ -227,13 +228,22 @@ function createBaseEventSetHostChain(): EventSetHostChain {
 }
 export const EventSetHostChain = {
   typeUrl: "/pryzm.icstaking.v1.EventSetHostChain",
+  is(o: any): o is EventSetHostChain {
+    return o && (o.$typeUrl === EventSetHostChain.typeUrl || HostChain.is(o.hostChain));
+  },
+  isSDK(o: any): o is EventSetHostChainSDKType {
+    return o && (o.$typeUrl === EventSetHostChain.typeUrl || HostChain.isSDK(o.host_chain));
+  },
+  isAmino(o: any): o is EventSetHostChainAmino {
+    return o && (o.$typeUrl === EventSetHostChain.typeUrl || HostChain.isAmino(o.host_chain));
+  },
   encode(message: EventSetHostChain, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.hostChain !== undefined) {
       HostChain.encode(message.hostChain, writer.uint32(10).fork()).ldelim();
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): EventSetHostChain {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): EventSetHostChain {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseEventSetHostChain();
@@ -241,7 +251,7 @@ export const EventSetHostChain = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.hostChain = HostChain.decode(reader, reader.uint32());
+          message.hostChain = HostChain.decode(reader, reader.uint32(), useInterfaces);
           break;
         default:
           reader.skipType(tag & 7);
@@ -272,16 +282,16 @@ export const EventSetHostChain = {
     }
     return message;
   },
-  toAmino(message: EventSetHostChain): EventSetHostChainAmino {
+  toAmino(message: EventSetHostChain, useInterfaces: boolean = true): EventSetHostChainAmino {
     const obj: any = {};
-    obj.host_chain = message.hostChain ? HostChain.toAmino(message.hostChain) : undefined;
+    obj.host_chain = message.hostChain ? HostChain.toAmino(message.hostChain, useInterfaces) : undefined;
     return obj;
   },
   fromAminoMsg(object: EventSetHostChainAminoMsg): EventSetHostChain {
     return EventSetHostChain.fromAmino(object.value);
   },
-  fromProtoMsg(message: EventSetHostChainProtoMsg): EventSetHostChain {
-    return EventSetHostChain.decode(message.value);
+  fromProtoMsg(message: EventSetHostChainProtoMsg, useInterfaces: boolean = true): EventSetHostChain {
+    return EventSetHostChain.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: EventSetHostChain): Uint8Array {
     return EventSetHostChain.encode(message).finish();
@@ -293,6 +303,7 @@ export const EventSetHostChain = {
     };
   }
 };
+GlobalDecoderRegistry.register(EventSetHostChain.typeUrl, EventSetHostChain);
 function createBaseEventSetHostChainState(): EventSetHostChainState {
   return {
     hostChainState: HostChainState.fromPartial({})
@@ -300,13 +311,22 @@ function createBaseEventSetHostChainState(): EventSetHostChainState {
 }
 export const EventSetHostChainState = {
   typeUrl: "/pryzm.icstaking.v1.EventSetHostChainState",
+  is(o: any): o is EventSetHostChainState {
+    return o && (o.$typeUrl === EventSetHostChainState.typeUrl || HostChainState.is(o.hostChainState));
+  },
+  isSDK(o: any): o is EventSetHostChainStateSDKType {
+    return o && (o.$typeUrl === EventSetHostChainState.typeUrl || HostChainState.isSDK(o.host_chain_state));
+  },
+  isAmino(o: any): o is EventSetHostChainStateAmino {
+    return o && (o.$typeUrl === EventSetHostChainState.typeUrl || HostChainState.isAmino(o.host_chain_state));
+  },
   encode(message: EventSetHostChainState, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.hostChainState !== undefined) {
       HostChainState.encode(message.hostChainState, writer.uint32(10).fork()).ldelim();
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): EventSetHostChainState {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): EventSetHostChainState {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseEventSetHostChainState();
@@ -314,7 +334,7 @@ export const EventSetHostChainState = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.hostChainState = HostChainState.decode(reader, reader.uint32());
+          message.hostChainState = HostChainState.decode(reader, reader.uint32(), useInterfaces);
           break;
         default:
           reader.skipType(tag & 7);
@@ -345,16 +365,16 @@ export const EventSetHostChainState = {
     }
     return message;
   },
-  toAmino(message: EventSetHostChainState): EventSetHostChainStateAmino {
+  toAmino(message: EventSetHostChainState, useInterfaces: boolean = true): EventSetHostChainStateAmino {
     const obj: any = {};
-    obj.host_chain_state = message.hostChainState ? HostChainState.toAmino(message.hostChainState) : undefined;
+    obj.host_chain_state = message.hostChainState ? HostChainState.toAmino(message.hostChainState, useInterfaces) : undefined;
     return obj;
   },
   fromAminoMsg(object: EventSetHostChainStateAminoMsg): EventSetHostChainState {
     return EventSetHostChainState.fromAmino(object.value);
   },
-  fromProtoMsg(message: EventSetHostChainStateProtoMsg): EventSetHostChainState {
-    return EventSetHostChainState.decode(message.value);
+  fromProtoMsg(message: EventSetHostChainStateProtoMsg, useInterfaces: boolean = true): EventSetHostChainState {
+    return EventSetHostChainState.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: EventSetHostChainState): Uint8Array {
     return EventSetHostChainState.encode(message).finish();
@@ -366,6 +386,7 @@ export const EventSetHostChainState = {
     };
   }
 };
+GlobalDecoderRegistry.register(EventSetHostChainState.typeUrl, EventSetHostChainState);
 function createBaseEventSetParams(): EventSetParams {
   return {
     params: Params.fromPartial({})
@@ -373,13 +394,22 @@ function createBaseEventSetParams(): EventSetParams {
 }
 export const EventSetParams = {
   typeUrl: "/pryzm.icstaking.v1.EventSetParams",
+  is(o: any): o is EventSetParams {
+    return o && (o.$typeUrl === EventSetParams.typeUrl || Params.is(o.params));
+  },
+  isSDK(o: any): o is EventSetParamsSDKType {
+    return o && (o.$typeUrl === EventSetParams.typeUrl || Params.isSDK(o.params));
+  },
+  isAmino(o: any): o is EventSetParamsAmino {
+    return o && (o.$typeUrl === EventSetParams.typeUrl || Params.isAmino(o.params));
+  },
   encode(message: EventSetParams, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.params !== undefined) {
       Params.encode(message.params, writer.uint32(10).fork()).ldelim();
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): EventSetParams {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): EventSetParams {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseEventSetParams();
@@ -387,7 +417,7 @@ export const EventSetParams = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.params = Params.decode(reader, reader.uint32());
+          message.params = Params.decode(reader, reader.uint32(), useInterfaces);
           break;
         default:
           reader.skipType(tag & 7);
@@ -418,16 +448,16 @@ export const EventSetParams = {
     }
     return message;
   },
-  toAmino(message: EventSetParams): EventSetParamsAmino {
+  toAmino(message: EventSetParams, useInterfaces: boolean = true): EventSetParamsAmino {
     const obj: any = {};
-    obj.params = message.params ? Params.toAmino(message.params) : undefined;
+    obj.params = message.params ? Params.toAmino(message.params, useInterfaces) : undefined;
     return obj;
   },
   fromAminoMsg(object: EventSetParamsAminoMsg): EventSetParams {
     return EventSetParams.fromAmino(object.value);
   },
-  fromProtoMsg(message: EventSetParamsProtoMsg): EventSetParams {
-    return EventSetParams.decode(message.value);
+  fromProtoMsg(message: EventSetParamsProtoMsg, useInterfaces: boolean = true): EventSetParams {
+    return EventSetParams.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: EventSetParams): Uint8Array {
     return EventSetParams.encode(message).finish();
@@ -439,6 +469,7 @@ export const EventSetParams = {
     };
   }
 };
+GlobalDecoderRegistry.register(EventSetParams.typeUrl, EventSetParams);
 function createBaseEventSetUndelegation(): EventSetUndelegation {
   return {
     undelegation: Undelegation.fromPartial({})
@@ -446,13 +477,22 @@ function createBaseEventSetUndelegation(): EventSetUndelegation {
 }
 export const EventSetUndelegation = {
   typeUrl: "/pryzm.icstaking.v1.EventSetUndelegation",
+  is(o: any): o is EventSetUndelegation {
+    return o && (o.$typeUrl === EventSetUndelegation.typeUrl || Undelegation.is(o.undelegation));
+  },
+  isSDK(o: any): o is EventSetUndelegationSDKType {
+    return o && (o.$typeUrl === EventSetUndelegation.typeUrl || Undelegation.isSDK(o.undelegation));
+  },
+  isAmino(o: any): o is EventSetUndelegationAmino {
+    return o && (o.$typeUrl === EventSetUndelegation.typeUrl || Undelegation.isAmino(o.undelegation));
+  },
   encode(message: EventSetUndelegation, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.undelegation !== undefined) {
       Undelegation.encode(message.undelegation, writer.uint32(10).fork()).ldelim();
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): EventSetUndelegation {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): EventSetUndelegation {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseEventSetUndelegation();
@@ -460,7 +500,7 @@ export const EventSetUndelegation = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.undelegation = Undelegation.decode(reader, reader.uint32());
+          message.undelegation = Undelegation.decode(reader, reader.uint32(), useInterfaces);
           break;
         default:
           reader.skipType(tag & 7);
@@ -491,16 +531,16 @@ export const EventSetUndelegation = {
     }
     return message;
   },
-  toAmino(message: EventSetUndelegation): EventSetUndelegationAmino {
+  toAmino(message: EventSetUndelegation, useInterfaces: boolean = true): EventSetUndelegationAmino {
     const obj: any = {};
-    obj.undelegation = message.undelegation ? Undelegation.toAmino(message.undelegation) : undefined;
+    obj.undelegation = message.undelegation ? Undelegation.toAmino(message.undelegation, useInterfaces) : undefined;
     return obj;
   },
   fromAminoMsg(object: EventSetUndelegationAminoMsg): EventSetUndelegation {
     return EventSetUndelegation.fromAmino(object.value);
   },
-  fromProtoMsg(message: EventSetUndelegationProtoMsg): EventSetUndelegation {
-    return EventSetUndelegation.decode(message.value);
+  fromProtoMsg(message: EventSetUndelegationProtoMsg, useInterfaces: boolean = true): EventSetUndelegation {
+    return EventSetUndelegation.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: EventSetUndelegation): Uint8Array {
     return EventSetUndelegation.encode(message).finish();
@@ -512,6 +552,7 @@ export const EventSetUndelegation = {
     };
   }
 };
+GlobalDecoderRegistry.register(EventSetUndelegation.typeUrl, EventSetUndelegation);
 function createBaseEventSetChannelUndelegation(): EventSetChannelUndelegation {
   return {
     channelUndelegation: ChannelUndelegation.fromPartial({})
@@ -519,13 +560,22 @@ function createBaseEventSetChannelUndelegation(): EventSetChannelUndelegation {
 }
 export const EventSetChannelUndelegation = {
   typeUrl: "/pryzm.icstaking.v1.EventSetChannelUndelegation",
+  is(o: any): o is EventSetChannelUndelegation {
+    return o && (o.$typeUrl === EventSetChannelUndelegation.typeUrl || ChannelUndelegation.is(o.channelUndelegation));
+  },
+  isSDK(o: any): o is EventSetChannelUndelegationSDKType {
+    return o && (o.$typeUrl === EventSetChannelUndelegation.typeUrl || ChannelUndelegation.isSDK(o.channel_undelegation));
+  },
+  isAmino(o: any): o is EventSetChannelUndelegationAmino {
+    return o && (o.$typeUrl === EventSetChannelUndelegation.typeUrl || ChannelUndelegation.isAmino(o.channel_undelegation));
+  },
   encode(message: EventSetChannelUndelegation, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.channelUndelegation !== undefined) {
       ChannelUndelegation.encode(message.channelUndelegation, writer.uint32(10).fork()).ldelim();
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): EventSetChannelUndelegation {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): EventSetChannelUndelegation {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseEventSetChannelUndelegation();
@@ -533,7 +583,7 @@ export const EventSetChannelUndelegation = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.channelUndelegation = ChannelUndelegation.decode(reader, reader.uint32());
+          message.channelUndelegation = ChannelUndelegation.decode(reader, reader.uint32(), useInterfaces);
           break;
         default:
           reader.skipType(tag & 7);
@@ -564,16 +614,16 @@ export const EventSetChannelUndelegation = {
     }
     return message;
   },
-  toAmino(message: EventSetChannelUndelegation): EventSetChannelUndelegationAmino {
+  toAmino(message: EventSetChannelUndelegation, useInterfaces: boolean = true): EventSetChannelUndelegationAmino {
     const obj: any = {};
-    obj.channel_undelegation = message.channelUndelegation ? ChannelUndelegation.toAmino(message.channelUndelegation) : undefined;
+    obj.channel_undelegation = message.channelUndelegation ? ChannelUndelegation.toAmino(message.channelUndelegation, useInterfaces) : undefined;
     return obj;
   },
   fromAminoMsg(object: EventSetChannelUndelegationAminoMsg): EventSetChannelUndelegation {
     return EventSetChannelUndelegation.fromAmino(object.value);
   },
-  fromProtoMsg(message: EventSetChannelUndelegationProtoMsg): EventSetChannelUndelegation {
-    return EventSetChannelUndelegation.decode(message.value);
+  fromProtoMsg(message: EventSetChannelUndelegationProtoMsg, useInterfaces: boolean = true): EventSetChannelUndelegation {
+    return EventSetChannelUndelegation.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: EventSetChannelUndelegation): Uint8Array {
     return EventSetChannelUndelegation.encode(message).finish();
@@ -585,6 +635,7 @@ export const EventSetChannelUndelegation = {
     };
   }
 };
+GlobalDecoderRegistry.register(EventSetChannelUndelegation.typeUrl, EventSetChannelUndelegation);
 function createBaseEventStake(): EventStake {
   return {
     creator: "",
@@ -597,6 +648,15 @@ function createBaseEventStake(): EventStake {
 }
 export const EventStake = {
   typeUrl: "/pryzm.icstaking.v1.EventStake",
+  is(o: any): o is EventStake {
+    return o && (o.$typeUrl === EventStake.typeUrl || typeof o.creator === "string" && typeof o.hostChain === "string" && typeof o.transferChannel === "string" && typeof o.amount === "string" && Coin.is(o.fee) && Coin.is(o.cAmount));
+  },
+  isSDK(o: any): o is EventStakeSDKType {
+    return o && (o.$typeUrl === EventStake.typeUrl || typeof o.creator === "string" && typeof o.host_chain === "string" && typeof o.transfer_channel === "string" && typeof o.amount === "string" && Coin.isSDK(o.fee) && Coin.isSDK(o.c_amount));
+  },
+  isAmino(o: any): o is EventStakeAmino {
+    return o && (o.$typeUrl === EventStake.typeUrl || typeof o.creator === "string" && typeof o.host_chain === "string" && typeof o.transfer_channel === "string" && typeof o.amount === "string" && Coin.isAmino(o.fee) && Coin.isAmino(o.c_amount));
+  },
   encode(message: EventStake, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.creator !== "") {
       writer.uint32(10).string(message.creator);
@@ -618,7 +678,7 @@ export const EventStake = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): EventStake {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): EventStake {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseEventStake();
@@ -638,10 +698,10 @@ export const EventStake = {
           message.amount = reader.string();
           break;
         case 5:
-          message.fee = Coin.decode(reader, reader.uint32());
+          message.fee = Coin.decode(reader, reader.uint32(), useInterfaces);
           break;
         case 6:
-          message.cAmount = Coin.decode(reader, reader.uint32());
+          message.cAmount = Coin.decode(reader, reader.uint32(), useInterfaces);
           break;
         default:
           reader.skipType(tag & 7);
@@ -702,21 +762,21 @@ export const EventStake = {
     }
     return message;
   },
-  toAmino(message: EventStake): EventStakeAmino {
+  toAmino(message: EventStake, useInterfaces: boolean = true): EventStakeAmino {
     const obj: any = {};
-    obj.creator = message.creator;
-    obj.host_chain = message.hostChain;
-    obj.transfer_channel = message.transferChannel;
-    obj.amount = message.amount;
-    obj.fee = message.fee ? Coin.toAmino(message.fee) : undefined;
-    obj.c_amount = message.cAmount ? Coin.toAmino(message.cAmount) : undefined;
+    obj.creator = message.creator === "" ? undefined : message.creator;
+    obj.host_chain = message.hostChain === "" ? undefined : message.hostChain;
+    obj.transfer_channel = message.transferChannel === "" ? undefined : message.transferChannel;
+    obj.amount = message.amount === "" ? undefined : message.amount;
+    obj.fee = message.fee ? Coin.toAmino(message.fee, useInterfaces) : undefined;
+    obj.c_amount = message.cAmount ? Coin.toAmino(message.cAmount, useInterfaces) : undefined;
     return obj;
   },
   fromAminoMsg(object: EventStakeAminoMsg): EventStake {
     return EventStake.fromAmino(object.value);
   },
-  fromProtoMsg(message: EventStakeProtoMsg): EventStake {
-    return EventStake.decode(message.value);
+  fromProtoMsg(message: EventStakeProtoMsg, useInterfaces: boolean = true): EventStake {
+    return EventStake.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: EventStake): Uint8Array {
     return EventStake.encode(message).finish();
@@ -728,6 +788,7 @@ export const EventStake = {
     };
   }
 };
+GlobalDecoderRegistry.register(EventStake.typeUrl, EventStake);
 function createBaseEventUnstake(): EventUnstake {
   return {
     creator: "",
@@ -739,6 +800,15 @@ function createBaseEventUnstake(): EventUnstake {
 }
 export const EventUnstake = {
   typeUrl: "/pryzm.icstaking.v1.EventUnstake",
+  is(o: any): o is EventUnstake {
+    return o && (o.$typeUrl === EventUnstake.typeUrl || typeof o.creator === "string" && typeof o.hostChain === "string" && typeof o.transferChannel === "string" && typeof o.cAmount === "string" && Coin.is(o.uAmount));
+  },
+  isSDK(o: any): o is EventUnstakeSDKType {
+    return o && (o.$typeUrl === EventUnstake.typeUrl || typeof o.creator === "string" && typeof o.host_chain === "string" && typeof o.transfer_channel === "string" && typeof o.c_amount === "string" && Coin.isSDK(o.u_amount));
+  },
+  isAmino(o: any): o is EventUnstakeAmino {
+    return o && (o.$typeUrl === EventUnstake.typeUrl || typeof o.creator === "string" && typeof o.host_chain === "string" && typeof o.transfer_channel === "string" && typeof o.c_amount === "string" && Coin.isAmino(o.u_amount));
+  },
   encode(message: EventUnstake, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.creator !== "") {
       writer.uint32(10).string(message.creator);
@@ -757,7 +827,7 @@ export const EventUnstake = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): EventUnstake {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): EventUnstake {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseEventUnstake();
@@ -777,7 +847,7 @@ export const EventUnstake = {
           message.cAmount = reader.string();
           break;
         case 5:
-          message.uAmount = Coin.decode(reader, reader.uint32());
+          message.uAmount = Coin.decode(reader, reader.uint32(), useInterfaces);
           break;
         default:
           reader.skipType(tag & 7);
@@ -832,20 +902,20 @@ export const EventUnstake = {
     }
     return message;
   },
-  toAmino(message: EventUnstake): EventUnstakeAmino {
+  toAmino(message: EventUnstake, useInterfaces: boolean = true): EventUnstakeAmino {
     const obj: any = {};
-    obj.creator = message.creator;
-    obj.host_chain = message.hostChain;
-    obj.transfer_channel = message.transferChannel;
-    obj.c_amount = message.cAmount;
-    obj.u_amount = message.uAmount ? Coin.toAmino(message.uAmount) : undefined;
+    obj.creator = message.creator === "" ? undefined : message.creator;
+    obj.host_chain = message.hostChain === "" ? undefined : message.hostChain;
+    obj.transfer_channel = message.transferChannel === "" ? undefined : message.transferChannel;
+    obj.c_amount = message.cAmount === "" ? undefined : message.cAmount;
+    obj.u_amount = message.uAmount ? Coin.toAmino(message.uAmount, useInterfaces) : undefined;
     return obj;
   },
   fromAminoMsg(object: EventUnstakeAminoMsg): EventUnstake {
     return EventUnstake.fromAmino(object.value);
   },
-  fromProtoMsg(message: EventUnstakeProtoMsg): EventUnstake {
-    return EventUnstake.decode(message.value);
+  fromProtoMsg(message: EventUnstakeProtoMsg, useInterfaces: boolean = true): EventUnstake {
+    return EventUnstake.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: EventUnstake): Uint8Array {
     return EventUnstake.encode(message).finish();
@@ -857,6 +927,7 @@ export const EventUnstake = {
     };
   }
 };
+GlobalDecoderRegistry.register(EventUnstake.typeUrl, EventUnstake);
 function createBaseEventRedeemUnstaked(): EventRedeemUnstaked {
   return {
     creator: "",
@@ -870,6 +941,15 @@ function createBaseEventRedeemUnstaked(): EventRedeemUnstaked {
 }
 export const EventRedeemUnstaked = {
   typeUrl: "/pryzm.icstaking.v1.EventRedeemUnstaked",
+  is(o: any): o is EventRedeemUnstaked {
+    return o && (o.$typeUrl === EventRedeemUnstaked.typeUrl || typeof o.creator === "string" && typeof o.hostChain === "string" && typeof o.transferChannel === "string" && typeof o.epoch === "bigint" && typeof o.uAmount === "string" && Coin.is(o.amount) && Coin.is(o.fee));
+  },
+  isSDK(o: any): o is EventRedeemUnstakedSDKType {
+    return o && (o.$typeUrl === EventRedeemUnstaked.typeUrl || typeof o.creator === "string" && typeof o.host_chain === "string" && typeof o.transfer_channel === "string" && typeof o.epoch === "bigint" && typeof o.u_amount === "string" && Coin.isSDK(o.amount) && Coin.isSDK(o.fee));
+  },
+  isAmino(o: any): o is EventRedeemUnstakedAmino {
+    return o && (o.$typeUrl === EventRedeemUnstaked.typeUrl || typeof o.creator === "string" && typeof o.host_chain === "string" && typeof o.transfer_channel === "string" && typeof o.epoch === "bigint" && typeof o.u_amount === "string" && Coin.isAmino(o.amount) && Coin.isAmino(o.fee));
+  },
   encode(message: EventRedeemUnstaked, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.creator !== "") {
       writer.uint32(10).string(message.creator);
@@ -894,7 +974,7 @@ export const EventRedeemUnstaked = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): EventRedeemUnstaked {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): EventRedeemUnstaked {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseEventRedeemUnstaked();
@@ -917,10 +997,10 @@ export const EventRedeemUnstaked = {
           message.uAmount = reader.string();
           break;
         case 6:
-          message.amount = Coin.decode(reader, reader.uint32());
+          message.amount = Coin.decode(reader, reader.uint32(), useInterfaces);
           break;
         case 7:
-          message.fee = Coin.decode(reader, reader.uint32());
+          message.fee = Coin.decode(reader, reader.uint32(), useInterfaces);
           break;
         default:
           reader.skipType(tag & 7);
@@ -987,22 +1067,22 @@ export const EventRedeemUnstaked = {
     }
     return message;
   },
-  toAmino(message: EventRedeemUnstaked): EventRedeemUnstakedAmino {
+  toAmino(message: EventRedeemUnstaked, useInterfaces: boolean = true): EventRedeemUnstakedAmino {
     const obj: any = {};
-    obj.creator = message.creator;
-    obj.host_chain = message.hostChain;
-    obj.transfer_channel = message.transferChannel;
+    obj.creator = message.creator === "" ? undefined : message.creator;
+    obj.host_chain = message.hostChain === "" ? undefined : message.hostChain;
+    obj.transfer_channel = message.transferChannel === "" ? undefined : message.transferChannel;
     obj.epoch = message.epoch ? message.epoch.toString() : undefined;
-    obj.u_amount = message.uAmount;
-    obj.amount = message.amount ? Coin.toAmino(message.amount) : undefined;
-    obj.fee = message.fee ? Coin.toAmino(message.fee) : undefined;
+    obj.u_amount = message.uAmount === "" ? undefined : message.uAmount;
+    obj.amount = message.amount ? Coin.toAmino(message.amount, useInterfaces) : undefined;
+    obj.fee = message.fee ? Coin.toAmino(message.fee, useInterfaces) : undefined;
     return obj;
   },
   fromAminoMsg(object: EventRedeemUnstakedAminoMsg): EventRedeemUnstaked {
     return EventRedeemUnstaked.fromAmino(object.value);
   },
-  fromProtoMsg(message: EventRedeemUnstakedProtoMsg): EventRedeemUnstaked {
-    return EventRedeemUnstaked.decode(message.value);
+  fromProtoMsg(message: EventRedeemUnstakedProtoMsg, useInterfaces: boolean = true): EventRedeemUnstaked {
+    return EventRedeemUnstaked.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: EventRedeemUnstaked): Uint8Array {
     return EventRedeemUnstaked.encode(message).finish();
@@ -1014,6 +1094,7 @@ export const EventRedeemUnstaked = {
     };
   }
 };
+GlobalDecoderRegistry.register(EventRedeemUnstaked.typeUrl, EventRedeemUnstaked);
 function createBaseEventInstantUnstake(): EventInstantUnstake {
   return {
     creator: "",
@@ -1027,6 +1108,15 @@ function createBaseEventInstantUnstake(): EventInstantUnstake {
 }
 export const EventInstantUnstake = {
   typeUrl: "/pryzm.icstaking.v1.EventInstantUnstake",
+  is(o: any): o is EventInstantUnstake {
+    return o && (o.$typeUrl === EventInstantUnstake.typeUrl || typeof o.creator === "string" && typeof o.hostChain === "string" && typeof o.transferChannel === "string" && typeof o.minCAmount === "string" && typeof o.maxCAmount === "string" && Coin.is(o.amount) && Coin.is(o.fee));
+  },
+  isSDK(o: any): o is EventInstantUnstakeSDKType {
+    return o && (o.$typeUrl === EventInstantUnstake.typeUrl || typeof o.creator === "string" && typeof o.host_chain === "string" && typeof o.transfer_channel === "string" && typeof o.min_c_amount === "string" && typeof o.max_c_amount === "string" && Coin.isSDK(o.amount) && Coin.isSDK(o.fee));
+  },
+  isAmino(o: any): o is EventInstantUnstakeAmino {
+    return o && (o.$typeUrl === EventInstantUnstake.typeUrl || typeof o.creator === "string" && typeof o.host_chain === "string" && typeof o.transfer_channel === "string" && typeof o.min_c_amount === "string" && typeof o.max_c_amount === "string" && Coin.isAmino(o.amount) && Coin.isAmino(o.fee));
+  },
   encode(message: EventInstantUnstake, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.creator !== "") {
       writer.uint32(10).string(message.creator);
@@ -1051,7 +1141,7 @@ export const EventInstantUnstake = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): EventInstantUnstake {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): EventInstantUnstake {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseEventInstantUnstake();
@@ -1074,10 +1164,10 @@ export const EventInstantUnstake = {
           message.maxCAmount = reader.string();
           break;
         case 6:
-          message.amount = Coin.decode(reader, reader.uint32());
+          message.amount = Coin.decode(reader, reader.uint32(), useInterfaces);
           break;
         case 7:
-          message.fee = Coin.decode(reader, reader.uint32());
+          message.fee = Coin.decode(reader, reader.uint32(), useInterfaces);
           break;
         default:
           reader.skipType(tag & 7);
@@ -1144,22 +1234,22 @@ export const EventInstantUnstake = {
     }
     return message;
   },
-  toAmino(message: EventInstantUnstake): EventInstantUnstakeAmino {
+  toAmino(message: EventInstantUnstake, useInterfaces: boolean = true): EventInstantUnstakeAmino {
     const obj: any = {};
-    obj.creator = message.creator;
-    obj.host_chain = message.hostChain;
-    obj.transfer_channel = message.transferChannel;
-    obj.min_c_amount = message.minCAmount;
-    obj.max_c_amount = message.maxCAmount;
-    obj.amount = message.amount ? Coin.toAmino(message.amount) : undefined;
-    obj.fee = message.fee ? Coin.toAmino(message.fee) : undefined;
+    obj.creator = message.creator === "" ? undefined : message.creator;
+    obj.host_chain = message.hostChain === "" ? undefined : message.hostChain;
+    obj.transfer_channel = message.transferChannel === "" ? undefined : message.transferChannel;
+    obj.min_c_amount = message.minCAmount === "" ? undefined : message.minCAmount;
+    obj.max_c_amount = message.maxCAmount === "" ? undefined : message.maxCAmount;
+    obj.amount = message.amount ? Coin.toAmino(message.amount, useInterfaces) : undefined;
+    obj.fee = message.fee ? Coin.toAmino(message.fee, useInterfaces) : undefined;
     return obj;
   },
   fromAminoMsg(object: EventInstantUnstakeAminoMsg): EventInstantUnstake {
     return EventInstantUnstake.fromAmino(object.value);
   },
-  fromProtoMsg(message: EventInstantUnstakeProtoMsg): EventInstantUnstake {
-    return EventInstantUnstake.decode(message.value);
+  fromProtoMsg(message: EventInstantUnstakeProtoMsg, useInterfaces: boolean = true): EventInstantUnstake {
+    return EventInstantUnstake.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: EventInstantUnstake): Uint8Array {
     return EventInstantUnstake.encode(message).finish();
@@ -1171,3 +1261,4 @@ export const EventInstantUnstake = {
     };
   }
 };
+GlobalDecoderRegistry.register(EventInstantUnstake.typeUrl, EventInstantUnstake);

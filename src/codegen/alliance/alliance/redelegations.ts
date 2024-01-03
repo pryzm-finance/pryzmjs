@@ -1,6 +1,7 @@
 import { Coin, CoinAmino, CoinSDKType } from "../../cosmos/base/v1beta1/coin";
 import { Timestamp, TimestampSDKType } from "../../google/protobuf/timestamp";
 import { BinaryReader, BinaryWriter } from "../../binary";
+import { GlobalDecoderRegistry } from "../../registry";
 import { isSet, fromJsonTimestamp, fromTimestamp } from "../../helpers";
 /** Used internally to keep track of redelegations */
 export interface QueuedRedelegation {
@@ -105,13 +106,22 @@ function createBaseQueuedRedelegation(): QueuedRedelegation {
 }
 export const QueuedRedelegation = {
   typeUrl: "/alliance.alliance.QueuedRedelegation",
+  is(o: any): o is QueuedRedelegation {
+    return o && (o.$typeUrl === QueuedRedelegation.typeUrl || Array.isArray(o.entries) && (!o.entries.length || Redelegation.is(o.entries[0])));
+  },
+  isSDK(o: any): o is QueuedRedelegationSDKType {
+    return o && (o.$typeUrl === QueuedRedelegation.typeUrl || Array.isArray(o.entries) && (!o.entries.length || Redelegation.isSDK(o.entries[0])));
+  },
+  isAmino(o: any): o is QueuedRedelegationAmino {
+    return o && (o.$typeUrl === QueuedRedelegation.typeUrl || Array.isArray(o.entries) && (!o.entries.length || Redelegation.isAmino(o.entries[0])));
+  },
   encode(message: QueuedRedelegation, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     for (const v of message.entries) {
       Redelegation.encode(v!, writer.uint32(10).fork()).ldelim();
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): QueuedRedelegation {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): QueuedRedelegation {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueuedRedelegation();
@@ -119,7 +129,7 @@ export const QueuedRedelegation = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.entries.push(Redelegation.decode(reader, reader.uint32()));
+          message.entries.push(Redelegation.decode(reader, reader.uint32(), useInterfaces));
           break;
         default:
           reader.skipType(tag & 7);
@@ -152,20 +162,20 @@ export const QueuedRedelegation = {
     message.entries = object.entries?.map(e => Redelegation.fromAmino(e)) || [];
     return message;
   },
-  toAmino(message: QueuedRedelegation): QueuedRedelegationAmino {
+  toAmino(message: QueuedRedelegation, useInterfaces: boolean = true): QueuedRedelegationAmino {
     const obj: any = {};
     if (message.entries) {
-      obj.entries = message.entries.map(e => e ? Redelegation.toAmino(e) : undefined);
+      obj.entries = message.entries.map(e => e ? Redelegation.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.entries = [];
+      obj.entries = message.entries;
     }
     return obj;
   },
   fromAminoMsg(object: QueuedRedelegationAminoMsg): QueuedRedelegation {
     return QueuedRedelegation.fromAmino(object.value);
   },
-  fromProtoMsg(message: QueuedRedelegationProtoMsg): QueuedRedelegation {
-    return QueuedRedelegation.decode(message.value);
+  fromProtoMsg(message: QueuedRedelegationProtoMsg, useInterfaces: boolean = true): QueuedRedelegation {
+    return QueuedRedelegation.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: QueuedRedelegation): Uint8Array {
     return QueuedRedelegation.encode(message).finish();
@@ -177,6 +187,7 @@ export const QueuedRedelegation = {
     };
   }
 };
+GlobalDecoderRegistry.register(QueuedRedelegation.typeUrl, QueuedRedelegation);
 function createBaseRedelegation(): Redelegation {
   return {
     delegatorAddress: "",
@@ -187,6 +198,15 @@ function createBaseRedelegation(): Redelegation {
 }
 export const Redelegation = {
   typeUrl: "/alliance.alliance.Redelegation",
+  is(o: any): o is Redelegation {
+    return o && (o.$typeUrl === Redelegation.typeUrl || typeof o.delegatorAddress === "string" && typeof o.srcValidatorAddress === "string" && typeof o.dstValidatorAddress === "string" && Coin.is(o.balance));
+  },
+  isSDK(o: any): o is RedelegationSDKType {
+    return o && (o.$typeUrl === Redelegation.typeUrl || typeof o.delegator_address === "string" && typeof o.src_validator_address === "string" && typeof o.dst_validator_address === "string" && Coin.isSDK(o.balance));
+  },
+  isAmino(o: any): o is RedelegationAmino {
+    return o && (o.$typeUrl === Redelegation.typeUrl || typeof o.delegator_address === "string" && typeof o.src_validator_address === "string" && typeof o.dst_validator_address === "string" && Coin.isAmino(o.balance));
+  },
   encode(message: Redelegation, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.delegatorAddress !== "") {
       writer.uint32(10).string(message.delegatorAddress);
@@ -202,7 +222,7 @@ export const Redelegation = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): Redelegation {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): Redelegation {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseRedelegation();
@@ -219,7 +239,7 @@ export const Redelegation = {
           message.dstValidatorAddress = reader.string();
           break;
         case 4:
-          message.balance = Coin.decode(reader, reader.uint32());
+          message.balance = Coin.decode(reader, reader.uint32(), useInterfaces);
           break;
         default:
           reader.skipType(tag & 7);
@@ -268,19 +288,19 @@ export const Redelegation = {
     }
     return message;
   },
-  toAmino(message: Redelegation): RedelegationAmino {
+  toAmino(message: Redelegation, useInterfaces: boolean = true): RedelegationAmino {
     const obj: any = {};
-    obj.delegator_address = message.delegatorAddress;
-    obj.src_validator_address = message.srcValidatorAddress;
-    obj.dst_validator_address = message.dstValidatorAddress;
-    obj.balance = message.balance ? Coin.toAmino(message.balance) : undefined;
+    obj.delegator_address = message.delegatorAddress === "" ? undefined : message.delegatorAddress;
+    obj.src_validator_address = message.srcValidatorAddress === "" ? undefined : message.srcValidatorAddress;
+    obj.dst_validator_address = message.dstValidatorAddress === "" ? undefined : message.dstValidatorAddress;
+    obj.balance = message.balance ? Coin.toAmino(message.balance, useInterfaces) : undefined;
     return obj;
   },
   fromAminoMsg(object: RedelegationAminoMsg): Redelegation {
     return Redelegation.fromAmino(object.value);
   },
-  fromProtoMsg(message: RedelegationProtoMsg): Redelegation {
-    return Redelegation.decode(message.value);
+  fromProtoMsg(message: RedelegationProtoMsg, useInterfaces: boolean = true): Redelegation {
+    return Redelegation.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: Redelegation): Uint8Array {
     return Redelegation.encode(message).finish();
@@ -292,6 +312,7 @@ export const Redelegation = {
     };
   }
 };
+GlobalDecoderRegistry.register(Redelegation.typeUrl, Redelegation);
 function createBaseRedelegationEntry(): RedelegationEntry {
   return {
     delegatorAddress: "",
@@ -303,6 +324,15 @@ function createBaseRedelegationEntry(): RedelegationEntry {
 }
 export const RedelegationEntry = {
   typeUrl: "/alliance.alliance.RedelegationEntry",
+  is(o: any): o is RedelegationEntry {
+    return o && (o.$typeUrl === RedelegationEntry.typeUrl || typeof o.delegatorAddress === "string" && typeof o.srcValidatorAddress === "string" && typeof o.dstValidatorAddress === "string" && Coin.is(o.balance) && Timestamp.is(o.completionTime));
+  },
+  isSDK(o: any): o is RedelegationEntrySDKType {
+    return o && (o.$typeUrl === RedelegationEntry.typeUrl || typeof o.delegator_address === "string" && typeof o.src_validator_address === "string" && typeof o.dst_validator_address === "string" && Coin.isSDK(o.balance) && Timestamp.isSDK(o.completion_time));
+  },
+  isAmino(o: any): o is RedelegationEntryAmino {
+    return o && (o.$typeUrl === RedelegationEntry.typeUrl || typeof o.delegator_address === "string" && typeof o.src_validator_address === "string" && typeof o.dst_validator_address === "string" && Coin.isAmino(o.balance) && Timestamp.isAmino(o.completion_time));
+  },
   encode(message: RedelegationEntry, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.delegatorAddress !== "") {
       writer.uint32(10).string(message.delegatorAddress);
@@ -321,7 +351,7 @@ export const RedelegationEntry = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): RedelegationEntry {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): RedelegationEntry {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseRedelegationEntry();
@@ -338,7 +368,7 @@ export const RedelegationEntry = {
           message.dstValidatorAddress = reader.string();
           break;
         case 4:
-          message.balance = Coin.decode(reader, reader.uint32());
+          message.balance = Coin.decode(reader, reader.uint32(), useInterfaces);
           break;
         case 5:
           message.completionTime = Timestamp.decode(reader, reader.uint32());
@@ -396,20 +426,20 @@ export const RedelegationEntry = {
     }
     return message;
   },
-  toAmino(message: RedelegationEntry): RedelegationEntryAmino {
+  toAmino(message: RedelegationEntry, useInterfaces: boolean = true): RedelegationEntryAmino {
     const obj: any = {};
-    obj.delegator_address = message.delegatorAddress;
-    obj.src_validator_address = message.srcValidatorAddress;
-    obj.dst_validator_address = message.dstValidatorAddress;
-    obj.balance = message.balance ? Coin.toAmino(message.balance) : undefined;
-    obj.completion_time = message.completionTime ? Timestamp.toAmino(message.completionTime) : undefined;
+    obj.delegator_address = message.delegatorAddress === "" ? undefined : message.delegatorAddress;
+    obj.src_validator_address = message.srcValidatorAddress === "" ? undefined : message.srcValidatorAddress;
+    obj.dst_validator_address = message.dstValidatorAddress === "" ? undefined : message.dstValidatorAddress;
+    obj.balance = message.balance ? Coin.toAmino(message.balance, useInterfaces) : undefined;
+    obj.completion_time = message.completionTime ? Timestamp.toAmino(message.completionTime, useInterfaces) : undefined;
     return obj;
   },
   fromAminoMsg(object: RedelegationEntryAminoMsg): RedelegationEntry {
     return RedelegationEntry.fromAmino(object.value);
   },
-  fromProtoMsg(message: RedelegationEntryProtoMsg): RedelegationEntry {
-    return RedelegationEntry.decode(message.value);
+  fromProtoMsg(message: RedelegationEntryProtoMsg, useInterfaces: boolean = true): RedelegationEntry {
+    return RedelegationEntry.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: RedelegationEntry): Uint8Array {
     return RedelegationEntry.encode(message).finish();
@@ -421,3 +451,4 @@ export const RedelegationEntry = {
     };
   }
 };
+GlobalDecoderRegistry.register(RedelegationEntry.typeUrl, RedelegationEntry);

@@ -1,6 +1,7 @@
 import { BinaryReader, BinaryWriter } from "../../../binary";
 import { Decimal } from "@cosmjs/math";
-import { isSet } from "../../../helpers";
+import { isSet, padDecimal } from "../../../helpers";
+import { GlobalDecoderRegistry } from "../../../registry";
 export interface Order {
   id: bigint;
   creator: string;
@@ -73,6 +74,15 @@ function createBaseOrder(): Order {
 }
 export const Order = {
   typeUrl: "/pryzm.amm.v1.Order",
+  is(o: any): o is Order {
+    return o && (o.$typeUrl === Order.typeUrl || typeof o.id === "bigint" && typeof o.creator === "string" && typeof o.poolId === "bigint" && typeof o.tokenIn === "string" && typeof o.tokenOut === "string" && typeof o.whitelistedRoute === "boolean" && typeof o.allowMatching === "boolean" && typeof o.amountPerStep === "string" && typeof o.remainingAmount === "string" && typeof o.depositedAmount === "string" && typeof o.minMillisInterval === "bigint" && typeof o.maxStepSpotPrice === "string");
+  },
+  isSDK(o: any): o is OrderSDKType {
+    return o && (o.$typeUrl === Order.typeUrl || typeof o.id === "bigint" && typeof o.creator === "string" && typeof o.pool_id === "bigint" && typeof o.token_in === "string" && typeof o.token_out === "string" && typeof o.whitelisted_route === "boolean" && typeof o.allow_matching === "boolean" && typeof o.amount_per_step === "string" && typeof o.remaining_amount === "string" && typeof o.deposited_amount === "string" && typeof o.min_millis_interval === "bigint" && typeof o.max_step_spot_price === "string");
+  },
+  isAmino(o: any): o is OrderAmino {
+    return o && (o.$typeUrl === Order.typeUrl || typeof o.id === "bigint" && typeof o.creator === "string" && typeof o.pool_id === "bigint" && typeof o.token_in === "string" && typeof o.token_out === "string" && typeof o.whitelisted_route === "boolean" && typeof o.allow_matching === "boolean" && typeof o.amount_per_step === "string" && typeof o.remaining_amount === "string" && typeof o.deposited_amount === "string" && typeof o.min_millis_interval === "bigint" && typeof o.max_step_spot_price === "string");
+  },
   encode(message: Order, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.id !== BigInt(0)) {
       writer.uint32(8).uint64(message.id);
@@ -115,7 +125,7 @@ export const Order = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): Order {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): Order {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseOrder();
@@ -262,28 +272,28 @@ export const Order = {
     }
     return message;
   },
-  toAmino(message: Order): OrderAmino {
+  toAmino(message: Order, useInterfaces: boolean = true): OrderAmino {
     const obj: any = {};
     obj.id = message.id ? message.id.toString() : undefined;
-    obj.creator = message.creator;
+    obj.creator = message.creator === "" ? undefined : message.creator;
     obj.pool_id = message.poolId ? message.poolId.toString() : undefined;
-    obj.token_in = message.tokenIn;
-    obj.token_out = message.tokenOut;
-    obj.whitelisted_route = message.whitelistedRoute;
-    obj.allow_matching = message.allowMatching;
-    obj.amount_per_step = message.amountPerStep;
-    obj.remaining_amount = message.remainingAmount;
-    obj.deposited_amount = message.depositedAmount;
+    obj.token_in = message.tokenIn === "" ? undefined : message.tokenIn;
+    obj.token_out = message.tokenOut === "" ? undefined : message.tokenOut;
+    obj.whitelisted_route = message.whitelistedRoute === false ? undefined : message.whitelistedRoute;
+    obj.allow_matching = message.allowMatching === false ? undefined : message.allowMatching;
+    obj.amount_per_step = message.amountPerStep === "" ? undefined : message.amountPerStep;
+    obj.remaining_amount = message.remainingAmount === "" ? undefined : message.remainingAmount;
+    obj.deposited_amount = message.depositedAmount === "" ? undefined : message.depositedAmount;
     obj.min_millis_interval = message.minMillisInterval ? message.minMillisInterval.toString() : undefined;
-    obj.max_step_spot_price = message.maxStepSpotPrice;
-    obj.max_matching_spot_price = message.maxMatchingSpotPrice;
+    obj.max_step_spot_price = padDecimal(message.maxStepSpotPrice) === "" ? undefined : padDecimal(message.maxStepSpotPrice);
+    obj.max_matching_spot_price = padDecimal(message.maxMatchingSpotPrice) === null ? undefined : padDecimal(message.maxMatchingSpotPrice);
     return obj;
   },
   fromAminoMsg(object: OrderAminoMsg): Order {
     return Order.fromAmino(object.value);
   },
-  fromProtoMsg(message: OrderProtoMsg): Order {
-    return Order.decode(message.value);
+  fromProtoMsg(message: OrderProtoMsg, useInterfaces: boolean = true): Order {
+    return Order.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: Order): Uint8Array {
     return Order.encode(message).finish();
@@ -295,3 +305,4 @@ export const Order = {
     };
   }
 };
+GlobalDecoderRegistry.register(Order.typeUrl, Order);

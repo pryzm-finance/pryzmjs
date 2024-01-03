@@ -5,10 +5,10 @@ import { Duration, DurationAmino, DurationSDKType } from "../../../google/protob
 import { Coin, CoinAmino, CoinSDKType } from "../../base/v1beta1/coin";
 import { ValidatorUpdate, ValidatorUpdateAmino, ValidatorUpdateSDKType } from "../../../tendermint/abci/types";
 import { BinaryReader, BinaryWriter } from "../../../binary";
-import { isSet, fromJsonTimestamp, fromTimestamp } from "../../../helpers";
+import { isSet, padDecimal, fromJsonTimestamp, fromTimestamp } from "../../../helpers";
+import { GlobalDecoderRegistry } from "../../../registry";
 import { Decimal } from "@cosmjs/math";
 import { encodePubkey, decodePubkey } from "@cosmjs/proto-signing";
-import { Pubkey } from "@cosmjs/amino";
 /** BondStatus is the status of a validator. */
 export enum BondStatus {
   /** BOND_STATUS_UNSPECIFIED - UNSPECIFIED defines an invalid validator status. */
@@ -947,6 +947,16 @@ function createBaseHistoricalInfo(): HistoricalInfo {
 }
 export const HistoricalInfo = {
   typeUrl: "/cosmos.staking.v1beta1.HistoricalInfo",
+  aminoType: "cosmos-sdk/HistoricalInfo",
+  is(o: any): o is HistoricalInfo {
+    return o && (o.$typeUrl === HistoricalInfo.typeUrl || Header.is(o.header) && Array.isArray(o.valset) && (!o.valset.length || Validator.is(o.valset[0])));
+  },
+  isSDK(o: any): o is HistoricalInfoSDKType {
+    return o && (o.$typeUrl === HistoricalInfo.typeUrl || Header.isSDK(o.header) && Array.isArray(o.valset) && (!o.valset.length || Validator.isSDK(o.valset[0])));
+  },
+  isAmino(o: any): o is HistoricalInfoAmino {
+    return o && (o.$typeUrl === HistoricalInfo.typeUrl || Header.isAmino(o.header) && Array.isArray(o.valset) && (!o.valset.length || Validator.isAmino(o.valset[0])));
+  },
   encode(message: HistoricalInfo, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.header !== undefined) {
       Header.encode(message.header, writer.uint32(10).fork()).ldelim();
@@ -956,7 +966,7 @@ export const HistoricalInfo = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): HistoricalInfo {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): HistoricalInfo {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseHistoricalInfo();
@@ -964,10 +974,10 @@ export const HistoricalInfo = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.header = Header.decode(reader, reader.uint32());
+          message.header = Header.decode(reader, reader.uint32(), useInterfaces);
           break;
         case 2:
-          message.valset.push(Validator.decode(reader, reader.uint32()));
+          message.valset.push(Validator.decode(reader, reader.uint32(), useInterfaces));
           break;
         default:
           reader.skipType(tag & 7);
@@ -1006,27 +1016,27 @@ export const HistoricalInfo = {
     message.valset = object.valset?.map(e => Validator.fromAmino(e)) || [];
     return message;
   },
-  toAmino(message: HistoricalInfo): HistoricalInfoAmino {
+  toAmino(message: HistoricalInfo, useInterfaces: boolean = true): HistoricalInfoAmino {
     const obj: any = {};
-    obj.header = message.header ? Header.toAmino(message.header) : Header.fromPartial({});
+    obj.header = message.header ? Header.toAmino(message.header, useInterfaces) : undefined;
     if (message.valset) {
-      obj.valset = message.valset.map(e => e ? Validator.toAmino(e) : undefined);
+      obj.valset = message.valset.map(e => e ? Validator.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.valset = [];
+      obj.valset = message.valset;
     }
     return obj;
   },
   fromAminoMsg(object: HistoricalInfoAminoMsg): HistoricalInfo {
     return HistoricalInfo.fromAmino(object.value);
   },
-  toAminoMsg(message: HistoricalInfo): HistoricalInfoAminoMsg {
+  toAminoMsg(message: HistoricalInfo, useInterfaces: boolean = true): HistoricalInfoAminoMsg {
     return {
       type: "cosmos-sdk/HistoricalInfo",
-      value: HistoricalInfo.toAmino(message)
+      value: HistoricalInfo.toAmino(message, useInterfaces)
     };
   },
-  fromProtoMsg(message: HistoricalInfoProtoMsg): HistoricalInfo {
-    return HistoricalInfo.decode(message.value);
+  fromProtoMsg(message: HistoricalInfoProtoMsg, useInterfaces: boolean = true): HistoricalInfo {
+    return HistoricalInfo.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: HistoricalInfo): Uint8Array {
     return HistoricalInfo.encode(message).finish();
@@ -1038,6 +1048,8 @@ export const HistoricalInfo = {
     };
   }
 };
+GlobalDecoderRegistry.register(HistoricalInfo.typeUrl, HistoricalInfo);
+GlobalDecoderRegistry.registerAminoProtoMapping(HistoricalInfo.aminoType, HistoricalInfo.typeUrl);
 function createBaseCommissionRates(): CommissionRates {
   return {
     rate: "",
@@ -1047,6 +1059,16 @@ function createBaseCommissionRates(): CommissionRates {
 }
 export const CommissionRates = {
   typeUrl: "/cosmos.staking.v1beta1.CommissionRates",
+  aminoType: "cosmos-sdk/CommissionRates",
+  is(o: any): o is CommissionRates {
+    return o && (o.$typeUrl === CommissionRates.typeUrl || typeof o.rate === "string" && typeof o.maxRate === "string" && typeof o.maxChangeRate === "string");
+  },
+  isSDK(o: any): o is CommissionRatesSDKType {
+    return o && (o.$typeUrl === CommissionRates.typeUrl || typeof o.rate === "string" && typeof o.max_rate === "string" && typeof o.max_change_rate === "string");
+  },
+  isAmino(o: any): o is CommissionRatesAmino {
+    return o && (o.$typeUrl === CommissionRates.typeUrl || typeof o.rate === "string" && typeof o.max_rate === "string" && typeof o.max_change_rate === "string");
+  },
   encode(message: CommissionRates, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.rate !== "") {
       writer.uint32(10).string(Decimal.fromUserInput(message.rate, 18).atomics);
@@ -1059,7 +1081,7 @@ export const CommissionRates = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): CommissionRates {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): CommissionRates {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseCommissionRates();
@@ -1116,24 +1138,24 @@ export const CommissionRates = {
     }
     return message;
   },
-  toAmino(message: CommissionRates): CommissionRatesAmino {
+  toAmino(message: CommissionRates, useInterfaces: boolean = true): CommissionRatesAmino {
     const obj: any = {};
-    obj.rate = message.rate;
-    obj.max_rate = message.maxRate;
-    obj.max_change_rate = message.maxChangeRate;
+    obj.rate = padDecimal(message.rate) === "" ? undefined : padDecimal(message.rate);
+    obj.max_rate = padDecimal(message.maxRate) === "" ? undefined : padDecimal(message.maxRate);
+    obj.max_change_rate = padDecimal(message.maxChangeRate) === "" ? undefined : padDecimal(message.maxChangeRate);
     return obj;
   },
   fromAminoMsg(object: CommissionRatesAminoMsg): CommissionRates {
     return CommissionRates.fromAmino(object.value);
   },
-  toAminoMsg(message: CommissionRates): CommissionRatesAminoMsg {
+  toAminoMsg(message: CommissionRates, useInterfaces: boolean = true): CommissionRatesAminoMsg {
     return {
       type: "cosmos-sdk/CommissionRates",
-      value: CommissionRates.toAmino(message)
+      value: CommissionRates.toAmino(message, useInterfaces)
     };
   },
-  fromProtoMsg(message: CommissionRatesProtoMsg): CommissionRates {
-    return CommissionRates.decode(message.value);
+  fromProtoMsg(message: CommissionRatesProtoMsg, useInterfaces: boolean = true): CommissionRates {
+    return CommissionRates.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: CommissionRates): Uint8Array {
     return CommissionRates.encode(message).finish();
@@ -1145,6 +1167,8 @@ export const CommissionRates = {
     };
   }
 };
+GlobalDecoderRegistry.register(CommissionRates.typeUrl, CommissionRates);
+GlobalDecoderRegistry.registerAminoProtoMapping(CommissionRates.aminoType, CommissionRates.typeUrl);
 function createBaseCommission(): Commission {
   return {
     commissionRates: CommissionRates.fromPartial({}),
@@ -1153,6 +1177,16 @@ function createBaseCommission(): Commission {
 }
 export const Commission = {
   typeUrl: "/cosmos.staking.v1beta1.Commission",
+  aminoType: "cosmos-sdk/Commission",
+  is(o: any): o is Commission {
+    return o && (o.$typeUrl === Commission.typeUrl || CommissionRates.is(o.commissionRates) && Timestamp.is(o.updateTime));
+  },
+  isSDK(o: any): o is CommissionSDKType {
+    return o && (o.$typeUrl === Commission.typeUrl || CommissionRates.isSDK(o.commission_rates) && Timestamp.isSDK(o.update_time));
+  },
+  isAmino(o: any): o is CommissionAmino {
+    return o && (o.$typeUrl === Commission.typeUrl || CommissionRates.isAmino(o.commission_rates) && Timestamp.isAmino(o.update_time));
+  },
   encode(message: Commission, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.commissionRates !== undefined) {
       CommissionRates.encode(message.commissionRates, writer.uint32(10).fork()).ldelim();
@@ -1162,7 +1196,7 @@ export const Commission = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): Commission {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): Commission {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseCommission();
@@ -1170,7 +1204,7 @@ export const Commission = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.commissionRates = CommissionRates.decode(reader, reader.uint32());
+          message.commissionRates = CommissionRates.decode(reader, reader.uint32(), useInterfaces);
           break;
         case 2:
           message.updateTime = Timestamp.decode(reader, reader.uint32());
@@ -1210,23 +1244,23 @@ export const Commission = {
     }
     return message;
   },
-  toAmino(message: Commission): CommissionAmino {
+  toAmino(message: Commission, useInterfaces: boolean = true): CommissionAmino {
     const obj: any = {};
-    obj.commission_rates = message.commissionRates ? CommissionRates.toAmino(message.commissionRates) : CommissionRates.fromPartial({});
-    obj.update_time = message.updateTime ? Timestamp.toAmino(message.updateTime) : Timestamp.fromPartial({});
+    obj.commission_rates = message.commissionRates ? CommissionRates.toAmino(message.commissionRates, useInterfaces) : undefined;
+    obj.update_time = message.updateTime ? Timestamp.toAmino(message.updateTime, useInterfaces) : undefined;
     return obj;
   },
   fromAminoMsg(object: CommissionAminoMsg): Commission {
     return Commission.fromAmino(object.value);
   },
-  toAminoMsg(message: Commission): CommissionAminoMsg {
+  toAminoMsg(message: Commission, useInterfaces: boolean = true): CommissionAminoMsg {
     return {
       type: "cosmos-sdk/Commission",
-      value: Commission.toAmino(message)
+      value: Commission.toAmino(message, useInterfaces)
     };
   },
-  fromProtoMsg(message: CommissionProtoMsg): Commission {
-    return Commission.decode(message.value);
+  fromProtoMsg(message: CommissionProtoMsg, useInterfaces: boolean = true): Commission {
+    return Commission.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: Commission): Uint8Array {
     return Commission.encode(message).finish();
@@ -1238,6 +1272,8 @@ export const Commission = {
     };
   }
 };
+GlobalDecoderRegistry.register(Commission.typeUrl, Commission);
+GlobalDecoderRegistry.registerAminoProtoMapping(Commission.aminoType, Commission.typeUrl);
 function createBaseDescription(): Description {
   return {
     moniker: "",
@@ -1249,6 +1285,16 @@ function createBaseDescription(): Description {
 }
 export const Description = {
   typeUrl: "/cosmos.staking.v1beta1.Description",
+  aminoType: "cosmos-sdk/Description",
+  is(o: any): o is Description {
+    return o && (o.$typeUrl === Description.typeUrl || typeof o.moniker === "string" && typeof o.identity === "string" && typeof o.website === "string" && typeof o.securityContact === "string" && typeof o.details === "string");
+  },
+  isSDK(o: any): o is DescriptionSDKType {
+    return o && (o.$typeUrl === Description.typeUrl || typeof o.moniker === "string" && typeof o.identity === "string" && typeof o.website === "string" && typeof o.security_contact === "string" && typeof o.details === "string");
+  },
+  isAmino(o: any): o is DescriptionAmino {
+    return o && (o.$typeUrl === Description.typeUrl || typeof o.moniker === "string" && typeof o.identity === "string" && typeof o.website === "string" && typeof o.security_contact === "string" && typeof o.details === "string");
+  },
   encode(message: Description, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.moniker !== "") {
       writer.uint32(10).string(message.moniker);
@@ -1267,7 +1313,7 @@ export const Description = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): Description {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): Description {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseDescription();
@@ -1342,26 +1388,26 @@ export const Description = {
     }
     return message;
   },
-  toAmino(message: Description): DescriptionAmino {
+  toAmino(message: Description, useInterfaces: boolean = true): DescriptionAmino {
     const obj: any = {};
-    obj.moniker = message.moniker;
-    obj.identity = message.identity;
-    obj.website = message.website;
-    obj.security_contact = message.securityContact;
-    obj.details = message.details;
+    obj.moniker = message.moniker === "" ? undefined : message.moniker;
+    obj.identity = message.identity === "" ? undefined : message.identity;
+    obj.website = message.website === "" ? undefined : message.website;
+    obj.security_contact = message.securityContact === "" ? undefined : message.securityContact;
+    obj.details = message.details === "" ? undefined : message.details;
     return obj;
   },
   fromAminoMsg(object: DescriptionAminoMsg): Description {
     return Description.fromAmino(object.value);
   },
-  toAminoMsg(message: Description): DescriptionAminoMsg {
+  toAminoMsg(message: Description, useInterfaces: boolean = true): DescriptionAminoMsg {
     return {
       type: "cosmos-sdk/Description",
-      value: Description.toAmino(message)
+      value: Description.toAmino(message, useInterfaces)
     };
   },
-  fromProtoMsg(message: DescriptionProtoMsg): Description {
-    return Description.decode(message.value);
+  fromProtoMsg(message: DescriptionProtoMsg, useInterfaces: boolean = true): Description {
+    return Description.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: Description): Uint8Array {
     return Description.encode(message).finish();
@@ -1373,6 +1419,8 @@ export const Description = {
     };
   }
 };
+GlobalDecoderRegistry.register(Description.typeUrl, Description);
+GlobalDecoderRegistry.registerAminoProtoMapping(Description.aminoType, Description.typeUrl);
 function createBaseValidator(): Validator {
   return {
     operatorAddress: "",
@@ -1392,12 +1440,22 @@ function createBaseValidator(): Validator {
 }
 export const Validator = {
   typeUrl: "/cosmos.staking.v1beta1.Validator",
+  aminoType: "cosmos-sdk/Validator",
+  is(o: any): o is Validator {
+    return o && (o.$typeUrl === Validator.typeUrl || typeof o.operatorAddress === "string" && typeof o.jailed === "boolean" && isSet(o.status) && typeof o.tokens === "string" && typeof o.delegatorShares === "string" && Description.is(o.description) && typeof o.unbondingHeight === "bigint" && Timestamp.is(o.unbondingTime) && Commission.is(o.commission) && typeof o.minSelfDelegation === "string" && typeof o.unbondingOnHoldRefCount === "bigint" && Array.isArray(o.unbondingIds) && (!o.unbondingIds.length || typeof o.unbondingIds[0] === "bigint"));
+  },
+  isSDK(o: any): o is ValidatorSDKType {
+    return o && (o.$typeUrl === Validator.typeUrl || typeof o.operator_address === "string" && typeof o.jailed === "boolean" && isSet(o.status) && typeof o.tokens === "string" && typeof o.delegator_shares === "string" && Description.isSDK(o.description) && typeof o.unbonding_height === "bigint" && Timestamp.isSDK(o.unbonding_time) && Commission.isSDK(o.commission) && typeof o.min_self_delegation === "string" && typeof o.unbonding_on_hold_ref_count === "bigint" && Array.isArray(o.unbonding_ids) && (!o.unbonding_ids.length || typeof o.unbonding_ids[0] === "bigint"));
+  },
+  isAmino(o: any): o is ValidatorAmino {
+    return o && (o.$typeUrl === Validator.typeUrl || typeof o.operator_address === "string" && typeof o.jailed === "boolean" && isSet(o.status) && typeof o.tokens === "string" && typeof o.delegator_shares === "string" && Description.isAmino(o.description) && typeof o.unbonding_height === "bigint" && Timestamp.isAmino(o.unbonding_time) && Commission.isAmino(o.commission) && typeof o.min_self_delegation === "string" && typeof o.unbonding_on_hold_ref_count === "bigint" && Array.isArray(o.unbonding_ids) && (!o.unbonding_ids.length || typeof o.unbonding_ids[0] === "bigint"));
+  },
   encode(message: Validator, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.operatorAddress !== "") {
       writer.uint32(10).string(message.operatorAddress);
     }
     if (message.consensusPubkey !== undefined) {
-      Any.encode((message.consensusPubkey as Any), writer.uint32(18).fork()).ldelim();
+      Any.encode(GlobalDecoderRegistry.wrapAny(message.consensusPubkey), writer.uint32(18).fork()).ldelim();
     }
     if (message.jailed === true) {
       writer.uint32(24).bool(message.jailed);
@@ -1436,7 +1494,7 @@ export const Validator = {
     writer.ldelim();
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): Validator {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): Validator {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseValidator();
@@ -1447,7 +1505,7 @@ export const Validator = {
           message.operatorAddress = reader.string();
           break;
         case 2:
-          message.consensusPubkey = (Cosmos_cryptoPubKey_InterfaceDecoder(reader) as any);
+          message.consensusPubkey = GlobalDecoderRegistry.unwrapAny(reader);
           break;
         case 3:
           message.jailed = reader.bool();
@@ -1462,7 +1520,7 @@ export const Validator = {
           message.delegatorShares = Decimal.fromAtomics(reader.string(), 18).toString();
           break;
         case 7:
-          message.description = Description.decode(reader, reader.uint32());
+          message.description = Description.decode(reader, reader.uint32(), useInterfaces);
           break;
         case 8:
           message.unbondingHeight = reader.int64();
@@ -1471,7 +1529,7 @@ export const Validator = {
           message.unbondingTime = Timestamp.decode(reader, reader.uint32());
           break;
         case 10:
-          message.commission = Commission.decode(reader, reader.uint32());
+          message.commission = Commission.decode(reader, reader.uint32(), useInterfaces);
           break;
         case 11:
           message.minSelfDelegation = reader.string();
@@ -1499,7 +1557,7 @@ export const Validator = {
   fromJSON(object: any): Validator {
     return {
       operatorAddress: isSet(object.operatorAddress) ? String(object.operatorAddress) : "",
-      consensusPubkey: isSet(object.consensusPubkey) ? Any.fromJSONAsAny(object.consensusPubkey) : undefined,
+      consensusPubkey: isSet(object.consensusPubkey) ? GlobalDecoderRegistry.fromJSON(object.consensusPubkey) : undefined,
       jailed: isSet(object.jailed) ? Boolean(object.jailed) : false,
       status: isSet(object.status) ? bondStatusFromJSON(object.status) : -1,
       tokens: isSet(object.tokens) ? String(object.tokens) : "",
@@ -1516,7 +1574,7 @@ export const Validator = {
   toJSON(message: Validator): unknown {
     const obj: any = {};
     message.operatorAddress !== undefined && (obj.operatorAddress = message.operatorAddress);
-    message.consensusPubkey !== undefined && (obj.consensusPubkey = message.consensusPubkey ? Any.toJSON(message.consensusPubkey) : undefined);
+    message.consensusPubkey !== undefined && (obj.consensusPubkey = message.consensusPubkey ? GlobalDecoderRegistry.toJSON(message.consensusPubkey) : undefined);
     message.jailed !== undefined && (obj.jailed = message.jailed);
     message.status !== undefined && (obj.status = bondStatusToJSON(message.status));
     message.tokens !== undefined && (obj.tokens = message.tokens);
@@ -1537,7 +1595,7 @@ export const Validator = {
   fromPartial(object: Partial<Validator>): Validator {
     const message = createBaseValidator();
     message.operatorAddress = object.operatorAddress ?? "";
-    message.consensusPubkey = object.consensusPubkey !== undefined && object.consensusPubkey !== null ? Any.fromPartialAsAny(object.consensusPubkey) : undefined;
+    message.consensusPubkey = object.consensusPubkey !== undefined && object.consensusPubkey !== null ? GlobalDecoderRegistry.fromPartial(object.consensusPubkey) : undefined;
     message.jailed = object.jailed ?? false;
     message.status = object.status ?? 0;
     message.tokens = object.tokens ?? "";
@@ -1563,7 +1621,7 @@ export const Validator = {
       message.jailed = object.jailed;
     }
     if (object.status !== undefined && object.status !== null) {
-      message.status = bondStatusFromJSON(object.status);
+      message.status = object.status;
     }
     if (object.tokens !== undefined && object.tokens !== null) {
       message.tokens = object.tokens;
@@ -1592,38 +1650,38 @@ export const Validator = {
     message.unbondingIds = object.unbonding_ids?.map(e => BigInt(e)) || [];
     return message;
   },
-  toAmino(message: Validator): ValidatorAmino {
+  toAmino(message: Validator, useInterfaces: boolean = true): ValidatorAmino {
     const obj: any = {};
-    obj.operator_address = message.operatorAddress;
+    obj.operator_address = message.operatorAddress === "" ? undefined : message.operatorAddress;
     obj.consensus_pubkey = message.consensusPubkey ? decodePubkey(message.consensusPubkey) : undefined;
-    obj.jailed = message.jailed;
-    obj.status = bondStatusToJSON(message.status);
-    obj.tokens = message.tokens;
-    obj.delegator_shares = message.delegatorShares;
-    obj.description = message.description ? Description.toAmino(message.description) : Description.fromPartial({});
+    obj.jailed = message.jailed === false ? undefined : message.jailed;
+    obj.status = message.status === 0 ? undefined : message.status;
+    obj.tokens = message.tokens === "" ? undefined : message.tokens;
+    obj.delegator_shares = padDecimal(message.delegatorShares) === "" ? undefined : padDecimal(message.delegatorShares);
+    obj.description = message.description ? Description.toAmino(message.description, useInterfaces) : undefined;
     obj.unbonding_height = message.unbondingHeight ? message.unbondingHeight.toString() : undefined;
-    obj.unbonding_time = message.unbondingTime ? Timestamp.toAmino(message.unbondingTime) : Timestamp.fromPartial({});
-    obj.commission = message.commission ? Commission.toAmino(message.commission) : Commission.fromPartial({});
-    obj.min_self_delegation = message.minSelfDelegation;
+    obj.unbonding_time = message.unbondingTime ? Timestamp.toAmino(message.unbondingTime, useInterfaces) : undefined;
+    obj.commission = message.commission ? Commission.toAmino(message.commission, useInterfaces) : undefined;
+    obj.min_self_delegation = message.minSelfDelegation === "" ? undefined : message.minSelfDelegation;
     obj.unbonding_on_hold_ref_count = message.unbondingOnHoldRefCount ? message.unbondingOnHoldRefCount.toString() : undefined;
     if (message.unbondingIds) {
       obj.unbonding_ids = message.unbondingIds.map(e => e.toString());
     } else {
-      obj.unbonding_ids = [];
+      obj.unbonding_ids = message.unbondingIds;
     }
     return obj;
   },
   fromAminoMsg(object: ValidatorAminoMsg): Validator {
     return Validator.fromAmino(object.value);
   },
-  toAminoMsg(message: Validator): ValidatorAminoMsg {
+  toAminoMsg(message: Validator, useInterfaces: boolean = true): ValidatorAminoMsg {
     return {
       type: "cosmos-sdk/Validator",
-      value: Validator.toAmino(message)
+      value: Validator.toAmino(message, useInterfaces)
     };
   },
-  fromProtoMsg(message: ValidatorProtoMsg): Validator {
-    return Validator.decode(message.value);
+  fromProtoMsg(message: ValidatorProtoMsg, useInterfaces: boolean = true): Validator {
+    return Validator.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: Validator): Uint8Array {
     return Validator.encode(message).finish();
@@ -1635,6 +1693,8 @@ export const Validator = {
     };
   }
 };
+GlobalDecoderRegistry.register(Validator.typeUrl, Validator);
+GlobalDecoderRegistry.registerAminoProtoMapping(Validator.aminoType, Validator.typeUrl);
 function createBaseValAddresses(): ValAddresses {
   return {
     addresses: []
@@ -1642,13 +1702,23 @@ function createBaseValAddresses(): ValAddresses {
 }
 export const ValAddresses = {
   typeUrl: "/cosmos.staking.v1beta1.ValAddresses",
+  aminoType: "cosmos-sdk/ValAddresses",
+  is(o: any): o is ValAddresses {
+    return o && (o.$typeUrl === ValAddresses.typeUrl || Array.isArray(o.addresses) && (!o.addresses.length || typeof o.addresses[0] === "string"));
+  },
+  isSDK(o: any): o is ValAddressesSDKType {
+    return o && (o.$typeUrl === ValAddresses.typeUrl || Array.isArray(o.addresses) && (!o.addresses.length || typeof o.addresses[0] === "string"));
+  },
+  isAmino(o: any): o is ValAddressesAmino {
+    return o && (o.$typeUrl === ValAddresses.typeUrl || Array.isArray(o.addresses) && (!o.addresses.length || typeof o.addresses[0] === "string"));
+  },
   encode(message: ValAddresses, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     for (const v of message.addresses) {
       writer.uint32(10).string(v!);
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): ValAddresses {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): ValAddresses {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseValAddresses();
@@ -1689,26 +1759,26 @@ export const ValAddresses = {
     message.addresses = object.addresses?.map(e => e) || [];
     return message;
   },
-  toAmino(message: ValAddresses): ValAddressesAmino {
+  toAmino(message: ValAddresses, useInterfaces: boolean = true): ValAddressesAmino {
     const obj: any = {};
     if (message.addresses) {
       obj.addresses = message.addresses.map(e => e);
     } else {
-      obj.addresses = [];
+      obj.addresses = message.addresses;
     }
     return obj;
   },
   fromAminoMsg(object: ValAddressesAminoMsg): ValAddresses {
     return ValAddresses.fromAmino(object.value);
   },
-  toAminoMsg(message: ValAddresses): ValAddressesAminoMsg {
+  toAminoMsg(message: ValAddresses, useInterfaces: boolean = true): ValAddressesAminoMsg {
     return {
       type: "cosmos-sdk/ValAddresses",
-      value: ValAddresses.toAmino(message)
+      value: ValAddresses.toAmino(message, useInterfaces)
     };
   },
-  fromProtoMsg(message: ValAddressesProtoMsg): ValAddresses {
-    return ValAddresses.decode(message.value);
+  fromProtoMsg(message: ValAddressesProtoMsg, useInterfaces: boolean = true): ValAddresses {
+    return ValAddresses.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: ValAddresses): Uint8Array {
     return ValAddresses.encode(message).finish();
@@ -1720,6 +1790,8 @@ export const ValAddresses = {
     };
   }
 };
+GlobalDecoderRegistry.register(ValAddresses.typeUrl, ValAddresses);
+GlobalDecoderRegistry.registerAminoProtoMapping(ValAddresses.aminoType, ValAddresses.typeUrl);
 function createBaseDVPair(): DVPair {
   return {
     delegatorAddress: "",
@@ -1728,6 +1800,16 @@ function createBaseDVPair(): DVPair {
 }
 export const DVPair = {
   typeUrl: "/cosmos.staking.v1beta1.DVPair",
+  aminoType: "cosmos-sdk/DVPair",
+  is(o: any): o is DVPair {
+    return o && (o.$typeUrl === DVPair.typeUrl || typeof o.delegatorAddress === "string" && typeof o.validatorAddress === "string");
+  },
+  isSDK(o: any): o is DVPairSDKType {
+    return o && (o.$typeUrl === DVPair.typeUrl || typeof o.delegator_address === "string" && typeof o.validator_address === "string");
+  },
+  isAmino(o: any): o is DVPairAmino {
+    return o && (o.$typeUrl === DVPair.typeUrl || typeof o.delegator_address === "string" && typeof o.validator_address === "string");
+  },
   encode(message: DVPair, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.delegatorAddress !== "") {
       writer.uint32(10).string(message.delegatorAddress);
@@ -1737,7 +1819,7 @@ export const DVPair = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): DVPair {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): DVPair {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseDVPair();
@@ -1785,23 +1867,23 @@ export const DVPair = {
     }
     return message;
   },
-  toAmino(message: DVPair): DVPairAmino {
+  toAmino(message: DVPair, useInterfaces: boolean = true): DVPairAmino {
     const obj: any = {};
-    obj.delegator_address = message.delegatorAddress;
-    obj.validator_address = message.validatorAddress;
+    obj.delegator_address = message.delegatorAddress === "" ? undefined : message.delegatorAddress;
+    obj.validator_address = message.validatorAddress === "" ? undefined : message.validatorAddress;
     return obj;
   },
   fromAminoMsg(object: DVPairAminoMsg): DVPair {
     return DVPair.fromAmino(object.value);
   },
-  toAminoMsg(message: DVPair): DVPairAminoMsg {
+  toAminoMsg(message: DVPair, useInterfaces: boolean = true): DVPairAminoMsg {
     return {
       type: "cosmos-sdk/DVPair",
-      value: DVPair.toAmino(message)
+      value: DVPair.toAmino(message, useInterfaces)
     };
   },
-  fromProtoMsg(message: DVPairProtoMsg): DVPair {
-    return DVPair.decode(message.value);
+  fromProtoMsg(message: DVPairProtoMsg, useInterfaces: boolean = true): DVPair {
+    return DVPair.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: DVPair): Uint8Array {
     return DVPair.encode(message).finish();
@@ -1813,6 +1895,8 @@ export const DVPair = {
     };
   }
 };
+GlobalDecoderRegistry.register(DVPair.typeUrl, DVPair);
+GlobalDecoderRegistry.registerAminoProtoMapping(DVPair.aminoType, DVPair.typeUrl);
 function createBaseDVPairs(): DVPairs {
   return {
     pairs: []
@@ -1820,13 +1904,23 @@ function createBaseDVPairs(): DVPairs {
 }
 export const DVPairs = {
   typeUrl: "/cosmos.staking.v1beta1.DVPairs",
+  aminoType: "cosmos-sdk/DVPairs",
+  is(o: any): o is DVPairs {
+    return o && (o.$typeUrl === DVPairs.typeUrl || Array.isArray(o.pairs) && (!o.pairs.length || DVPair.is(o.pairs[0])));
+  },
+  isSDK(o: any): o is DVPairsSDKType {
+    return o && (o.$typeUrl === DVPairs.typeUrl || Array.isArray(o.pairs) && (!o.pairs.length || DVPair.isSDK(o.pairs[0])));
+  },
+  isAmino(o: any): o is DVPairsAmino {
+    return o && (o.$typeUrl === DVPairs.typeUrl || Array.isArray(o.pairs) && (!o.pairs.length || DVPair.isAmino(o.pairs[0])));
+  },
   encode(message: DVPairs, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     for (const v of message.pairs) {
       DVPair.encode(v!, writer.uint32(10).fork()).ldelim();
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): DVPairs {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): DVPairs {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseDVPairs();
@@ -1834,7 +1928,7 @@ export const DVPairs = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.pairs.push(DVPair.decode(reader, reader.uint32()));
+          message.pairs.push(DVPair.decode(reader, reader.uint32(), useInterfaces));
           break;
         default:
           reader.skipType(tag & 7);
@@ -1867,26 +1961,26 @@ export const DVPairs = {
     message.pairs = object.pairs?.map(e => DVPair.fromAmino(e)) || [];
     return message;
   },
-  toAmino(message: DVPairs): DVPairsAmino {
+  toAmino(message: DVPairs, useInterfaces: boolean = true): DVPairsAmino {
     const obj: any = {};
     if (message.pairs) {
-      obj.pairs = message.pairs.map(e => e ? DVPair.toAmino(e) : undefined);
+      obj.pairs = message.pairs.map(e => e ? DVPair.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.pairs = [];
+      obj.pairs = message.pairs;
     }
     return obj;
   },
   fromAminoMsg(object: DVPairsAminoMsg): DVPairs {
     return DVPairs.fromAmino(object.value);
   },
-  toAminoMsg(message: DVPairs): DVPairsAminoMsg {
+  toAminoMsg(message: DVPairs, useInterfaces: boolean = true): DVPairsAminoMsg {
     return {
       type: "cosmos-sdk/DVPairs",
-      value: DVPairs.toAmino(message)
+      value: DVPairs.toAmino(message, useInterfaces)
     };
   },
-  fromProtoMsg(message: DVPairsProtoMsg): DVPairs {
-    return DVPairs.decode(message.value);
+  fromProtoMsg(message: DVPairsProtoMsg, useInterfaces: boolean = true): DVPairs {
+    return DVPairs.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: DVPairs): Uint8Array {
     return DVPairs.encode(message).finish();
@@ -1898,6 +1992,8 @@ export const DVPairs = {
     };
   }
 };
+GlobalDecoderRegistry.register(DVPairs.typeUrl, DVPairs);
+GlobalDecoderRegistry.registerAminoProtoMapping(DVPairs.aminoType, DVPairs.typeUrl);
 function createBaseDVVTriplet(): DVVTriplet {
   return {
     delegatorAddress: "",
@@ -1907,6 +2003,16 @@ function createBaseDVVTriplet(): DVVTriplet {
 }
 export const DVVTriplet = {
   typeUrl: "/cosmos.staking.v1beta1.DVVTriplet",
+  aminoType: "cosmos-sdk/DVVTriplet",
+  is(o: any): o is DVVTriplet {
+    return o && (o.$typeUrl === DVVTriplet.typeUrl || typeof o.delegatorAddress === "string" && typeof o.validatorSrcAddress === "string" && typeof o.validatorDstAddress === "string");
+  },
+  isSDK(o: any): o is DVVTripletSDKType {
+    return o && (o.$typeUrl === DVVTriplet.typeUrl || typeof o.delegator_address === "string" && typeof o.validator_src_address === "string" && typeof o.validator_dst_address === "string");
+  },
+  isAmino(o: any): o is DVVTripletAmino {
+    return o && (o.$typeUrl === DVVTriplet.typeUrl || typeof o.delegator_address === "string" && typeof o.validator_src_address === "string" && typeof o.validator_dst_address === "string");
+  },
   encode(message: DVVTriplet, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.delegatorAddress !== "") {
       writer.uint32(10).string(message.delegatorAddress);
@@ -1919,7 +2025,7 @@ export const DVVTriplet = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): DVVTriplet {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): DVVTriplet {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseDVVTriplet();
@@ -1976,24 +2082,24 @@ export const DVVTriplet = {
     }
     return message;
   },
-  toAmino(message: DVVTriplet): DVVTripletAmino {
+  toAmino(message: DVVTriplet, useInterfaces: boolean = true): DVVTripletAmino {
     const obj: any = {};
-    obj.delegator_address = message.delegatorAddress;
-    obj.validator_src_address = message.validatorSrcAddress;
-    obj.validator_dst_address = message.validatorDstAddress;
+    obj.delegator_address = message.delegatorAddress === "" ? undefined : message.delegatorAddress;
+    obj.validator_src_address = message.validatorSrcAddress === "" ? undefined : message.validatorSrcAddress;
+    obj.validator_dst_address = message.validatorDstAddress === "" ? undefined : message.validatorDstAddress;
     return obj;
   },
   fromAminoMsg(object: DVVTripletAminoMsg): DVVTriplet {
     return DVVTriplet.fromAmino(object.value);
   },
-  toAminoMsg(message: DVVTriplet): DVVTripletAminoMsg {
+  toAminoMsg(message: DVVTriplet, useInterfaces: boolean = true): DVVTripletAminoMsg {
     return {
       type: "cosmos-sdk/DVVTriplet",
-      value: DVVTriplet.toAmino(message)
+      value: DVVTriplet.toAmino(message, useInterfaces)
     };
   },
-  fromProtoMsg(message: DVVTripletProtoMsg): DVVTriplet {
-    return DVVTriplet.decode(message.value);
+  fromProtoMsg(message: DVVTripletProtoMsg, useInterfaces: boolean = true): DVVTriplet {
+    return DVVTriplet.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: DVVTriplet): Uint8Array {
     return DVVTriplet.encode(message).finish();
@@ -2005,6 +2111,8 @@ export const DVVTriplet = {
     };
   }
 };
+GlobalDecoderRegistry.register(DVVTriplet.typeUrl, DVVTriplet);
+GlobalDecoderRegistry.registerAminoProtoMapping(DVVTriplet.aminoType, DVVTriplet.typeUrl);
 function createBaseDVVTriplets(): DVVTriplets {
   return {
     triplets: []
@@ -2012,13 +2120,23 @@ function createBaseDVVTriplets(): DVVTriplets {
 }
 export const DVVTriplets = {
   typeUrl: "/cosmos.staking.v1beta1.DVVTriplets",
+  aminoType: "cosmos-sdk/DVVTriplets",
+  is(o: any): o is DVVTriplets {
+    return o && (o.$typeUrl === DVVTriplets.typeUrl || Array.isArray(o.triplets) && (!o.triplets.length || DVVTriplet.is(o.triplets[0])));
+  },
+  isSDK(o: any): o is DVVTripletsSDKType {
+    return o && (o.$typeUrl === DVVTriplets.typeUrl || Array.isArray(o.triplets) && (!o.triplets.length || DVVTriplet.isSDK(o.triplets[0])));
+  },
+  isAmino(o: any): o is DVVTripletsAmino {
+    return o && (o.$typeUrl === DVVTriplets.typeUrl || Array.isArray(o.triplets) && (!o.triplets.length || DVVTriplet.isAmino(o.triplets[0])));
+  },
   encode(message: DVVTriplets, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     for (const v of message.triplets) {
       DVVTriplet.encode(v!, writer.uint32(10).fork()).ldelim();
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): DVVTriplets {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): DVVTriplets {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseDVVTriplets();
@@ -2026,7 +2144,7 @@ export const DVVTriplets = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.triplets.push(DVVTriplet.decode(reader, reader.uint32()));
+          message.triplets.push(DVVTriplet.decode(reader, reader.uint32(), useInterfaces));
           break;
         default:
           reader.skipType(tag & 7);
@@ -2059,26 +2177,26 @@ export const DVVTriplets = {
     message.triplets = object.triplets?.map(e => DVVTriplet.fromAmino(e)) || [];
     return message;
   },
-  toAmino(message: DVVTriplets): DVVTripletsAmino {
+  toAmino(message: DVVTriplets, useInterfaces: boolean = true): DVVTripletsAmino {
     const obj: any = {};
     if (message.triplets) {
-      obj.triplets = message.triplets.map(e => e ? DVVTriplet.toAmino(e) : undefined);
+      obj.triplets = message.triplets.map(e => e ? DVVTriplet.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.triplets = [];
+      obj.triplets = message.triplets;
     }
     return obj;
   },
   fromAminoMsg(object: DVVTripletsAminoMsg): DVVTriplets {
     return DVVTriplets.fromAmino(object.value);
   },
-  toAminoMsg(message: DVVTriplets): DVVTripletsAminoMsg {
+  toAminoMsg(message: DVVTriplets, useInterfaces: boolean = true): DVVTripletsAminoMsg {
     return {
       type: "cosmos-sdk/DVVTriplets",
-      value: DVVTriplets.toAmino(message)
+      value: DVVTriplets.toAmino(message, useInterfaces)
     };
   },
-  fromProtoMsg(message: DVVTripletsProtoMsg): DVVTriplets {
-    return DVVTriplets.decode(message.value);
+  fromProtoMsg(message: DVVTripletsProtoMsg, useInterfaces: boolean = true): DVVTriplets {
+    return DVVTriplets.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: DVVTriplets): Uint8Array {
     return DVVTriplets.encode(message).finish();
@@ -2090,6 +2208,8 @@ export const DVVTriplets = {
     };
   }
 };
+GlobalDecoderRegistry.register(DVVTriplets.typeUrl, DVVTriplets);
+GlobalDecoderRegistry.registerAminoProtoMapping(DVVTriplets.aminoType, DVVTriplets.typeUrl);
 function createBaseDelegation(): Delegation {
   return {
     delegatorAddress: "",
@@ -2099,6 +2219,16 @@ function createBaseDelegation(): Delegation {
 }
 export const Delegation = {
   typeUrl: "/cosmos.staking.v1beta1.Delegation",
+  aminoType: "cosmos-sdk/Delegation",
+  is(o: any): o is Delegation {
+    return o && (o.$typeUrl === Delegation.typeUrl || typeof o.delegatorAddress === "string" && typeof o.validatorAddress === "string" && typeof o.shares === "string");
+  },
+  isSDK(o: any): o is DelegationSDKType {
+    return o && (o.$typeUrl === Delegation.typeUrl || typeof o.delegator_address === "string" && typeof o.validator_address === "string" && typeof o.shares === "string");
+  },
+  isAmino(o: any): o is DelegationAmino {
+    return o && (o.$typeUrl === Delegation.typeUrl || typeof o.delegator_address === "string" && typeof o.validator_address === "string" && typeof o.shares === "string");
+  },
   encode(message: Delegation, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.delegatorAddress !== "") {
       writer.uint32(10).string(message.delegatorAddress);
@@ -2111,7 +2241,7 @@ export const Delegation = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): Delegation {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): Delegation {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseDelegation();
@@ -2168,24 +2298,24 @@ export const Delegation = {
     }
     return message;
   },
-  toAmino(message: Delegation): DelegationAmino {
+  toAmino(message: Delegation, useInterfaces: boolean = true): DelegationAmino {
     const obj: any = {};
-    obj.delegator_address = message.delegatorAddress;
-    obj.validator_address = message.validatorAddress;
-    obj.shares = message.shares;
+    obj.delegator_address = message.delegatorAddress === "" ? undefined : message.delegatorAddress;
+    obj.validator_address = message.validatorAddress === "" ? undefined : message.validatorAddress;
+    obj.shares = padDecimal(message.shares) === "" ? undefined : padDecimal(message.shares);
     return obj;
   },
   fromAminoMsg(object: DelegationAminoMsg): Delegation {
     return Delegation.fromAmino(object.value);
   },
-  toAminoMsg(message: Delegation): DelegationAminoMsg {
+  toAminoMsg(message: Delegation, useInterfaces: boolean = true): DelegationAminoMsg {
     return {
       type: "cosmos-sdk/Delegation",
-      value: Delegation.toAmino(message)
+      value: Delegation.toAmino(message, useInterfaces)
     };
   },
-  fromProtoMsg(message: DelegationProtoMsg): Delegation {
-    return Delegation.decode(message.value);
+  fromProtoMsg(message: DelegationProtoMsg, useInterfaces: boolean = true): Delegation {
+    return Delegation.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: Delegation): Uint8Array {
     return Delegation.encode(message).finish();
@@ -2197,6 +2327,8 @@ export const Delegation = {
     };
   }
 };
+GlobalDecoderRegistry.register(Delegation.typeUrl, Delegation);
+GlobalDecoderRegistry.registerAminoProtoMapping(Delegation.aminoType, Delegation.typeUrl);
 function createBaseUnbondingDelegation(): UnbondingDelegation {
   return {
     delegatorAddress: "",
@@ -2206,6 +2338,16 @@ function createBaseUnbondingDelegation(): UnbondingDelegation {
 }
 export const UnbondingDelegation = {
   typeUrl: "/cosmos.staking.v1beta1.UnbondingDelegation",
+  aminoType: "cosmos-sdk/UnbondingDelegation",
+  is(o: any): o is UnbondingDelegation {
+    return o && (o.$typeUrl === UnbondingDelegation.typeUrl || typeof o.delegatorAddress === "string" && typeof o.validatorAddress === "string" && Array.isArray(o.entries) && (!o.entries.length || UnbondingDelegationEntry.is(o.entries[0])));
+  },
+  isSDK(o: any): o is UnbondingDelegationSDKType {
+    return o && (o.$typeUrl === UnbondingDelegation.typeUrl || typeof o.delegator_address === "string" && typeof o.validator_address === "string" && Array.isArray(o.entries) && (!o.entries.length || UnbondingDelegationEntry.isSDK(o.entries[0])));
+  },
+  isAmino(o: any): o is UnbondingDelegationAmino {
+    return o && (o.$typeUrl === UnbondingDelegation.typeUrl || typeof o.delegator_address === "string" && typeof o.validator_address === "string" && Array.isArray(o.entries) && (!o.entries.length || UnbondingDelegationEntry.isAmino(o.entries[0])));
+  },
   encode(message: UnbondingDelegation, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.delegatorAddress !== "") {
       writer.uint32(10).string(message.delegatorAddress);
@@ -2218,7 +2360,7 @@ export const UnbondingDelegation = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): UnbondingDelegation {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): UnbondingDelegation {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseUnbondingDelegation();
@@ -2232,7 +2374,7 @@ export const UnbondingDelegation = {
           message.validatorAddress = reader.string();
           break;
         case 3:
-          message.entries.push(UnbondingDelegationEntry.decode(reader, reader.uint32()));
+          message.entries.push(UnbondingDelegationEntry.decode(reader, reader.uint32(), useInterfaces));
           break;
         default:
           reader.skipType(tag & 7);
@@ -2277,28 +2419,28 @@ export const UnbondingDelegation = {
     message.entries = object.entries?.map(e => UnbondingDelegationEntry.fromAmino(e)) || [];
     return message;
   },
-  toAmino(message: UnbondingDelegation): UnbondingDelegationAmino {
+  toAmino(message: UnbondingDelegation, useInterfaces: boolean = true): UnbondingDelegationAmino {
     const obj: any = {};
-    obj.delegator_address = message.delegatorAddress;
-    obj.validator_address = message.validatorAddress;
+    obj.delegator_address = message.delegatorAddress === "" ? undefined : message.delegatorAddress;
+    obj.validator_address = message.validatorAddress === "" ? undefined : message.validatorAddress;
     if (message.entries) {
-      obj.entries = message.entries.map(e => e ? UnbondingDelegationEntry.toAmino(e) : undefined);
+      obj.entries = message.entries.map(e => e ? UnbondingDelegationEntry.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.entries = [];
+      obj.entries = message.entries;
     }
     return obj;
   },
   fromAminoMsg(object: UnbondingDelegationAminoMsg): UnbondingDelegation {
     return UnbondingDelegation.fromAmino(object.value);
   },
-  toAminoMsg(message: UnbondingDelegation): UnbondingDelegationAminoMsg {
+  toAminoMsg(message: UnbondingDelegation, useInterfaces: boolean = true): UnbondingDelegationAminoMsg {
     return {
       type: "cosmos-sdk/UnbondingDelegation",
-      value: UnbondingDelegation.toAmino(message)
+      value: UnbondingDelegation.toAmino(message, useInterfaces)
     };
   },
-  fromProtoMsg(message: UnbondingDelegationProtoMsg): UnbondingDelegation {
-    return UnbondingDelegation.decode(message.value);
+  fromProtoMsg(message: UnbondingDelegationProtoMsg, useInterfaces: boolean = true): UnbondingDelegation {
+    return UnbondingDelegation.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: UnbondingDelegation): Uint8Array {
     return UnbondingDelegation.encode(message).finish();
@@ -2310,6 +2452,8 @@ export const UnbondingDelegation = {
     };
   }
 };
+GlobalDecoderRegistry.register(UnbondingDelegation.typeUrl, UnbondingDelegation);
+GlobalDecoderRegistry.registerAminoProtoMapping(UnbondingDelegation.aminoType, UnbondingDelegation.typeUrl);
 function createBaseUnbondingDelegationEntry(): UnbondingDelegationEntry {
   return {
     creationHeight: BigInt(0),
@@ -2322,6 +2466,16 @@ function createBaseUnbondingDelegationEntry(): UnbondingDelegationEntry {
 }
 export const UnbondingDelegationEntry = {
   typeUrl: "/cosmos.staking.v1beta1.UnbondingDelegationEntry",
+  aminoType: "cosmos-sdk/UnbondingDelegationEntry",
+  is(o: any): o is UnbondingDelegationEntry {
+    return o && (o.$typeUrl === UnbondingDelegationEntry.typeUrl || typeof o.creationHeight === "bigint" && Timestamp.is(o.completionTime) && typeof o.initialBalance === "string" && typeof o.balance === "string" && typeof o.unbondingId === "bigint" && typeof o.unbondingOnHoldRefCount === "bigint");
+  },
+  isSDK(o: any): o is UnbondingDelegationEntrySDKType {
+    return o && (o.$typeUrl === UnbondingDelegationEntry.typeUrl || typeof o.creation_height === "bigint" && Timestamp.isSDK(o.completion_time) && typeof o.initial_balance === "string" && typeof o.balance === "string" && typeof o.unbonding_id === "bigint" && typeof o.unbonding_on_hold_ref_count === "bigint");
+  },
+  isAmino(o: any): o is UnbondingDelegationEntryAmino {
+    return o && (o.$typeUrl === UnbondingDelegationEntry.typeUrl || typeof o.creation_height === "bigint" && Timestamp.isAmino(o.completion_time) && typeof o.initial_balance === "string" && typeof o.balance === "string" && typeof o.unbonding_id === "bigint" && typeof o.unbonding_on_hold_ref_count === "bigint");
+  },
   encode(message: UnbondingDelegationEntry, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.creationHeight !== BigInt(0)) {
       writer.uint32(8).int64(message.creationHeight);
@@ -2343,7 +2497,7 @@ export const UnbondingDelegationEntry = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): UnbondingDelegationEntry {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): UnbondingDelegationEntry {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseUnbondingDelegationEntry();
@@ -2427,12 +2581,12 @@ export const UnbondingDelegationEntry = {
     }
     return message;
   },
-  toAmino(message: UnbondingDelegationEntry): UnbondingDelegationEntryAmino {
+  toAmino(message: UnbondingDelegationEntry, useInterfaces: boolean = true): UnbondingDelegationEntryAmino {
     const obj: any = {};
     obj.creation_height = message.creationHeight ? message.creationHeight.toString() : undefined;
-    obj.completion_time = message.completionTime ? Timestamp.toAmino(message.completionTime) : Timestamp.fromPartial({});
-    obj.initial_balance = message.initialBalance;
-    obj.balance = message.balance;
+    obj.completion_time = message.completionTime ? Timestamp.toAmino(message.completionTime, useInterfaces) : undefined;
+    obj.initial_balance = message.initialBalance === "" ? undefined : message.initialBalance;
+    obj.balance = message.balance === "" ? undefined : message.balance;
     obj.unbonding_id = message.unbondingId ? message.unbondingId.toString() : undefined;
     obj.unbonding_on_hold_ref_count = message.unbondingOnHoldRefCount ? message.unbondingOnHoldRefCount.toString() : undefined;
     return obj;
@@ -2440,14 +2594,14 @@ export const UnbondingDelegationEntry = {
   fromAminoMsg(object: UnbondingDelegationEntryAminoMsg): UnbondingDelegationEntry {
     return UnbondingDelegationEntry.fromAmino(object.value);
   },
-  toAminoMsg(message: UnbondingDelegationEntry): UnbondingDelegationEntryAminoMsg {
+  toAminoMsg(message: UnbondingDelegationEntry, useInterfaces: boolean = true): UnbondingDelegationEntryAminoMsg {
     return {
       type: "cosmos-sdk/UnbondingDelegationEntry",
-      value: UnbondingDelegationEntry.toAmino(message)
+      value: UnbondingDelegationEntry.toAmino(message, useInterfaces)
     };
   },
-  fromProtoMsg(message: UnbondingDelegationEntryProtoMsg): UnbondingDelegationEntry {
-    return UnbondingDelegationEntry.decode(message.value);
+  fromProtoMsg(message: UnbondingDelegationEntryProtoMsg, useInterfaces: boolean = true): UnbondingDelegationEntry {
+    return UnbondingDelegationEntry.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: UnbondingDelegationEntry): Uint8Array {
     return UnbondingDelegationEntry.encode(message).finish();
@@ -2459,6 +2613,8 @@ export const UnbondingDelegationEntry = {
     };
   }
 };
+GlobalDecoderRegistry.register(UnbondingDelegationEntry.typeUrl, UnbondingDelegationEntry);
+GlobalDecoderRegistry.registerAminoProtoMapping(UnbondingDelegationEntry.aminoType, UnbondingDelegationEntry.typeUrl);
 function createBaseRedelegationEntry(): RedelegationEntry {
   return {
     creationHeight: BigInt(0),
@@ -2471,6 +2627,16 @@ function createBaseRedelegationEntry(): RedelegationEntry {
 }
 export const RedelegationEntry = {
   typeUrl: "/cosmos.staking.v1beta1.RedelegationEntry",
+  aminoType: "cosmos-sdk/RedelegationEntry",
+  is(o: any): o is RedelegationEntry {
+    return o && (o.$typeUrl === RedelegationEntry.typeUrl || typeof o.creationHeight === "bigint" && Timestamp.is(o.completionTime) && typeof o.initialBalance === "string" && typeof o.sharesDst === "string" && typeof o.unbondingId === "bigint" && typeof o.unbondingOnHoldRefCount === "bigint");
+  },
+  isSDK(o: any): o is RedelegationEntrySDKType {
+    return o && (o.$typeUrl === RedelegationEntry.typeUrl || typeof o.creation_height === "bigint" && Timestamp.isSDK(o.completion_time) && typeof o.initial_balance === "string" && typeof o.shares_dst === "string" && typeof o.unbonding_id === "bigint" && typeof o.unbonding_on_hold_ref_count === "bigint");
+  },
+  isAmino(o: any): o is RedelegationEntryAmino {
+    return o && (o.$typeUrl === RedelegationEntry.typeUrl || typeof o.creation_height === "bigint" && Timestamp.isAmino(o.completion_time) && typeof o.initial_balance === "string" && typeof o.shares_dst === "string" && typeof o.unbonding_id === "bigint" && typeof o.unbonding_on_hold_ref_count === "bigint");
+  },
   encode(message: RedelegationEntry, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.creationHeight !== BigInt(0)) {
       writer.uint32(8).int64(message.creationHeight);
@@ -2492,7 +2658,7 @@ export const RedelegationEntry = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): RedelegationEntry {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): RedelegationEntry {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseRedelegationEntry();
@@ -2576,12 +2742,12 @@ export const RedelegationEntry = {
     }
     return message;
   },
-  toAmino(message: RedelegationEntry): RedelegationEntryAmino {
+  toAmino(message: RedelegationEntry, useInterfaces: boolean = true): RedelegationEntryAmino {
     const obj: any = {};
     obj.creation_height = message.creationHeight ? message.creationHeight.toString() : undefined;
-    obj.completion_time = message.completionTime ? Timestamp.toAmino(message.completionTime) : Timestamp.fromPartial({});
-    obj.initial_balance = message.initialBalance;
-    obj.shares_dst = message.sharesDst;
+    obj.completion_time = message.completionTime ? Timestamp.toAmino(message.completionTime, useInterfaces) : undefined;
+    obj.initial_balance = message.initialBalance === "" ? undefined : message.initialBalance;
+    obj.shares_dst = padDecimal(message.sharesDst) === "" ? undefined : padDecimal(message.sharesDst);
     obj.unbonding_id = message.unbondingId ? message.unbondingId.toString() : undefined;
     obj.unbonding_on_hold_ref_count = message.unbondingOnHoldRefCount ? message.unbondingOnHoldRefCount.toString() : undefined;
     return obj;
@@ -2589,14 +2755,14 @@ export const RedelegationEntry = {
   fromAminoMsg(object: RedelegationEntryAminoMsg): RedelegationEntry {
     return RedelegationEntry.fromAmino(object.value);
   },
-  toAminoMsg(message: RedelegationEntry): RedelegationEntryAminoMsg {
+  toAminoMsg(message: RedelegationEntry, useInterfaces: boolean = true): RedelegationEntryAminoMsg {
     return {
       type: "cosmos-sdk/RedelegationEntry",
-      value: RedelegationEntry.toAmino(message)
+      value: RedelegationEntry.toAmino(message, useInterfaces)
     };
   },
-  fromProtoMsg(message: RedelegationEntryProtoMsg): RedelegationEntry {
-    return RedelegationEntry.decode(message.value);
+  fromProtoMsg(message: RedelegationEntryProtoMsg, useInterfaces: boolean = true): RedelegationEntry {
+    return RedelegationEntry.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: RedelegationEntry): Uint8Array {
     return RedelegationEntry.encode(message).finish();
@@ -2608,6 +2774,8 @@ export const RedelegationEntry = {
     };
   }
 };
+GlobalDecoderRegistry.register(RedelegationEntry.typeUrl, RedelegationEntry);
+GlobalDecoderRegistry.registerAminoProtoMapping(RedelegationEntry.aminoType, RedelegationEntry.typeUrl);
 function createBaseRedelegation(): Redelegation {
   return {
     delegatorAddress: "",
@@ -2618,6 +2786,16 @@ function createBaseRedelegation(): Redelegation {
 }
 export const Redelegation = {
   typeUrl: "/cosmos.staking.v1beta1.Redelegation",
+  aminoType: "cosmos-sdk/Redelegation",
+  is(o: any): o is Redelegation {
+    return o && (o.$typeUrl === Redelegation.typeUrl || typeof o.delegatorAddress === "string" && typeof o.validatorSrcAddress === "string" && typeof o.validatorDstAddress === "string" && Array.isArray(o.entries) && (!o.entries.length || RedelegationEntry.is(o.entries[0])));
+  },
+  isSDK(o: any): o is RedelegationSDKType {
+    return o && (o.$typeUrl === Redelegation.typeUrl || typeof o.delegator_address === "string" && typeof o.validator_src_address === "string" && typeof o.validator_dst_address === "string" && Array.isArray(o.entries) && (!o.entries.length || RedelegationEntry.isSDK(o.entries[0])));
+  },
+  isAmino(o: any): o is RedelegationAmino {
+    return o && (o.$typeUrl === Redelegation.typeUrl || typeof o.delegator_address === "string" && typeof o.validator_src_address === "string" && typeof o.validator_dst_address === "string" && Array.isArray(o.entries) && (!o.entries.length || RedelegationEntry.isAmino(o.entries[0])));
+  },
   encode(message: Redelegation, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.delegatorAddress !== "") {
       writer.uint32(10).string(message.delegatorAddress);
@@ -2633,7 +2811,7 @@ export const Redelegation = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): Redelegation {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): Redelegation {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseRedelegation();
@@ -2650,7 +2828,7 @@ export const Redelegation = {
           message.validatorDstAddress = reader.string();
           break;
         case 4:
-          message.entries.push(RedelegationEntry.decode(reader, reader.uint32()));
+          message.entries.push(RedelegationEntry.decode(reader, reader.uint32(), useInterfaces));
           break;
         default:
           reader.skipType(tag & 7);
@@ -2701,29 +2879,29 @@ export const Redelegation = {
     message.entries = object.entries?.map(e => RedelegationEntry.fromAmino(e)) || [];
     return message;
   },
-  toAmino(message: Redelegation): RedelegationAmino {
+  toAmino(message: Redelegation, useInterfaces: boolean = true): RedelegationAmino {
     const obj: any = {};
-    obj.delegator_address = message.delegatorAddress;
-    obj.validator_src_address = message.validatorSrcAddress;
-    obj.validator_dst_address = message.validatorDstAddress;
+    obj.delegator_address = message.delegatorAddress === "" ? undefined : message.delegatorAddress;
+    obj.validator_src_address = message.validatorSrcAddress === "" ? undefined : message.validatorSrcAddress;
+    obj.validator_dst_address = message.validatorDstAddress === "" ? undefined : message.validatorDstAddress;
     if (message.entries) {
-      obj.entries = message.entries.map(e => e ? RedelegationEntry.toAmino(e) : undefined);
+      obj.entries = message.entries.map(e => e ? RedelegationEntry.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.entries = [];
+      obj.entries = message.entries;
     }
     return obj;
   },
   fromAminoMsg(object: RedelegationAminoMsg): Redelegation {
     return Redelegation.fromAmino(object.value);
   },
-  toAminoMsg(message: Redelegation): RedelegationAminoMsg {
+  toAminoMsg(message: Redelegation, useInterfaces: boolean = true): RedelegationAminoMsg {
     return {
       type: "cosmos-sdk/Redelegation",
-      value: Redelegation.toAmino(message)
+      value: Redelegation.toAmino(message, useInterfaces)
     };
   },
-  fromProtoMsg(message: RedelegationProtoMsg): Redelegation {
-    return Redelegation.decode(message.value);
+  fromProtoMsg(message: RedelegationProtoMsg, useInterfaces: boolean = true): Redelegation {
+    return Redelegation.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: Redelegation): Uint8Array {
     return Redelegation.encode(message).finish();
@@ -2735,6 +2913,8 @@ export const Redelegation = {
     };
   }
 };
+GlobalDecoderRegistry.register(Redelegation.typeUrl, Redelegation);
+GlobalDecoderRegistry.registerAminoProtoMapping(Redelegation.aminoType, Redelegation.typeUrl);
 function createBaseParams(): Params {
   return {
     unbondingTime: Duration.fromPartial({}),
@@ -2747,6 +2927,16 @@ function createBaseParams(): Params {
 }
 export const Params = {
   typeUrl: "/cosmos.staking.v1beta1.Params",
+  aminoType: "cosmos-sdk/x/staking/Params",
+  is(o: any): o is Params {
+    return o && (o.$typeUrl === Params.typeUrl || Duration.is(o.unbondingTime) && typeof o.maxValidators === "number" && typeof o.maxEntries === "number" && typeof o.historicalEntries === "number" && typeof o.bondDenom === "string" && typeof o.minCommissionRate === "string");
+  },
+  isSDK(o: any): o is ParamsSDKType {
+    return o && (o.$typeUrl === Params.typeUrl || Duration.isSDK(o.unbonding_time) && typeof o.max_validators === "number" && typeof o.max_entries === "number" && typeof o.historical_entries === "number" && typeof o.bond_denom === "string" && typeof o.min_commission_rate === "string");
+  },
+  isAmino(o: any): o is ParamsAmino {
+    return o && (o.$typeUrl === Params.typeUrl || Duration.isAmino(o.unbonding_time) && typeof o.max_validators === "number" && typeof o.max_entries === "number" && typeof o.historical_entries === "number" && typeof o.bond_denom === "string" && typeof o.min_commission_rate === "string");
+  },
   encode(message: Params, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.unbondingTime !== undefined) {
       Duration.encode(message.unbondingTime, writer.uint32(10).fork()).ldelim();
@@ -2768,7 +2958,7 @@ export const Params = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): Params {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): Params {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseParams();
@@ -2776,7 +2966,7 @@ export const Params = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.unbondingTime = Duration.decode(reader, reader.uint32());
+          message.unbondingTime = Duration.decode(reader, reader.uint32(), useInterfaces);
           break;
         case 2:
           message.maxValidators = reader.uint32();
@@ -2852,27 +3042,27 @@ export const Params = {
     }
     return message;
   },
-  toAmino(message: Params): ParamsAmino {
+  toAmino(message: Params, useInterfaces: boolean = true): ParamsAmino {
     const obj: any = {};
-    obj.unbonding_time = message.unbondingTime ? Duration.toAmino(message.unbondingTime) : Duration.fromPartial({});
-    obj.max_validators = message.maxValidators;
-    obj.max_entries = message.maxEntries;
-    obj.historical_entries = message.historicalEntries;
-    obj.bond_denom = message.bondDenom;
-    obj.min_commission_rate = message.minCommissionRate;
+    obj.unbonding_time = message.unbondingTime ? Duration.toAmino(message.unbondingTime, useInterfaces) : undefined;
+    obj.max_validators = message.maxValidators === 0 ? undefined : message.maxValidators;
+    obj.max_entries = message.maxEntries === 0 ? undefined : message.maxEntries;
+    obj.historical_entries = message.historicalEntries === 0 ? undefined : message.historicalEntries;
+    obj.bond_denom = message.bondDenom === "" ? undefined : message.bondDenom;
+    obj.min_commission_rate = padDecimal(message.minCommissionRate) === "" ? undefined : padDecimal(message.minCommissionRate);
     return obj;
   },
   fromAminoMsg(object: ParamsAminoMsg): Params {
     return Params.fromAmino(object.value);
   },
-  toAminoMsg(message: Params): ParamsAminoMsg {
+  toAminoMsg(message: Params, useInterfaces: boolean = true): ParamsAminoMsg {
     return {
       type: "cosmos-sdk/x/staking/Params",
-      value: Params.toAmino(message)
+      value: Params.toAmino(message, useInterfaces)
     };
   },
-  fromProtoMsg(message: ParamsProtoMsg): Params {
-    return Params.decode(message.value);
+  fromProtoMsg(message: ParamsProtoMsg, useInterfaces: boolean = true): Params {
+    return Params.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: Params): Uint8Array {
     return Params.encode(message).finish();
@@ -2884,6 +3074,8 @@ export const Params = {
     };
   }
 };
+GlobalDecoderRegistry.register(Params.typeUrl, Params);
+GlobalDecoderRegistry.registerAminoProtoMapping(Params.aminoType, Params.typeUrl);
 function createBaseDelegationResponse(): DelegationResponse {
   return {
     delegation: Delegation.fromPartial({}),
@@ -2892,6 +3084,16 @@ function createBaseDelegationResponse(): DelegationResponse {
 }
 export const DelegationResponse = {
   typeUrl: "/cosmos.staking.v1beta1.DelegationResponse",
+  aminoType: "cosmos-sdk/DelegationResponse",
+  is(o: any): o is DelegationResponse {
+    return o && (o.$typeUrl === DelegationResponse.typeUrl || Delegation.is(o.delegation) && Coin.is(o.balance));
+  },
+  isSDK(o: any): o is DelegationResponseSDKType {
+    return o && (o.$typeUrl === DelegationResponse.typeUrl || Delegation.isSDK(o.delegation) && Coin.isSDK(o.balance));
+  },
+  isAmino(o: any): o is DelegationResponseAmino {
+    return o && (o.$typeUrl === DelegationResponse.typeUrl || Delegation.isAmino(o.delegation) && Coin.isAmino(o.balance));
+  },
   encode(message: DelegationResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.delegation !== undefined) {
       Delegation.encode(message.delegation, writer.uint32(10).fork()).ldelim();
@@ -2901,7 +3103,7 @@ export const DelegationResponse = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): DelegationResponse {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): DelegationResponse {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseDelegationResponse();
@@ -2909,10 +3111,10 @@ export const DelegationResponse = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.delegation = Delegation.decode(reader, reader.uint32());
+          message.delegation = Delegation.decode(reader, reader.uint32(), useInterfaces);
           break;
         case 2:
-          message.balance = Coin.decode(reader, reader.uint32());
+          message.balance = Coin.decode(reader, reader.uint32(), useInterfaces);
           break;
         default:
           reader.skipType(tag & 7);
@@ -2949,23 +3151,23 @@ export const DelegationResponse = {
     }
     return message;
   },
-  toAmino(message: DelegationResponse): DelegationResponseAmino {
+  toAmino(message: DelegationResponse, useInterfaces: boolean = true): DelegationResponseAmino {
     const obj: any = {};
-    obj.delegation = message.delegation ? Delegation.toAmino(message.delegation) : Delegation.fromPartial({});
-    obj.balance = message.balance ? Coin.toAmino(message.balance) : Coin.fromPartial({});
+    obj.delegation = message.delegation ? Delegation.toAmino(message.delegation, useInterfaces) : undefined;
+    obj.balance = message.balance ? Coin.toAmino(message.balance, useInterfaces) : undefined;
     return obj;
   },
   fromAminoMsg(object: DelegationResponseAminoMsg): DelegationResponse {
     return DelegationResponse.fromAmino(object.value);
   },
-  toAminoMsg(message: DelegationResponse): DelegationResponseAminoMsg {
+  toAminoMsg(message: DelegationResponse, useInterfaces: boolean = true): DelegationResponseAminoMsg {
     return {
       type: "cosmos-sdk/DelegationResponse",
-      value: DelegationResponse.toAmino(message)
+      value: DelegationResponse.toAmino(message, useInterfaces)
     };
   },
-  fromProtoMsg(message: DelegationResponseProtoMsg): DelegationResponse {
-    return DelegationResponse.decode(message.value);
+  fromProtoMsg(message: DelegationResponseProtoMsg, useInterfaces: boolean = true): DelegationResponse {
+    return DelegationResponse.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: DelegationResponse): Uint8Array {
     return DelegationResponse.encode(message).finish();
@@ -2977,6 +3179,8 @@ export const DelegationResponse = {
     };
   }
 };
+GlobalDecoderRegistry.register(DelegationResponse.typeUrl, DelegationResponse);
+GlobalDecoderRegistry.registerAminoProtoMapping(DelegationResponse.aminoType, DelegationResponse.typeUrl);
 function createBaseRedelegationEntryResponse(): RedelegationEntryResponse {
   return {
     redelegationEntry: RedelegationEntry.fromPartial({}),
@@ -2985,6 +3189,16 @@ function createBaseRedelegationEntryResponse(): RedelegationEntryResponse {
 }
 export const RedelegationEntryResponse = {
   typeUrl: "/cosmos.staking.v1beta1.RedelegationEntryResponse",
+  aminoType: "cosmos-sdk/RedelegationEntryResponse",
+  is(o: any): o is RedelegationEntryResponse {
+    return o && (o.$typeUrl === RedelegationEntryResponse.typeUrl || RedelegationEntry.is(o.redelegationEntry) && typeof o.balance === "string");
+  },
+  isSDK(o: any): o is RedelegationEntryResponseSDKType {
+    return o && (o.$typeUrl === RedelegationEntryResponse.typeUrl || RedelegationEntry.isSDK(o.redelegation_entry) && typeof o.balance === "string");
+  },
+  isAmino(o: any): o is RedelegationEntryResponseAmino {
+    return o && (o.$typeUrl === RedelegationEntryResponse.typeUrl || RedelegationEntry.isAmino(o.redelegation_entry) && typeof o.balance === "string");
+  },
   encode(message: RedelegationEntryResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.redelegationEntry !== undefined) {
       RedelegationEntry.encode(message.redelegationEntry, writer.uint32(10).fork()).ldelim();
@@ -2994,7 +3208,7 @@ export const RedelegationEntryResponse = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): RedelegationEntryResponse {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): RedelegationEntryResponse {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseRedelegationEntryResponse();
@@ -3002,7 +3216,7 @@ export const RedelegationEntryResponse = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.redelegationEntry = RedelegationEntry.decode(reader, reader.uint32());
+          message.redelegationEntry = RedelegationEntry.decode(reader, reader.uint32(), useInterfaces);
           break;
         case 4:
           message.balance = reader.string();
@@ -3042,23 +3256,23 @@ export const RedelegationEntryResponse = {
     }
     return message;
   },
-  toAmino(message: RedelegationEntryResponse): RedelegationEntryResponseAmino {
+  toAmino(message: RedelegationEntryResponse, useInterfaces: boolean = true): RedelegationEntryResponseAmino {
     const obj: any = {};
-    obj.redelegation_entry = message.redelegationEntry ? RedelegationEntry.toAmino(message.redelegationEntry) : RedelegationEntry.fromPartial({});
-    obj.balance = message.balance;
+    obj.redelegation_entry = message.redelegationEntry ? RedelegationEntry.toAmino(message.redelegationEntry, useInterfaces) : undefined;
+    obj.balance = message.balance === "" ? undefined : message.balance;
     return obj;
   },
   fromAminoMsg(object: RedelegationEntryResponseAminoMsg): RedelegationEntryResponse {
     return RedelegationEntryResponse.fromAmino(object.value);
   },
-  toAminoMsg(message: RedelegationEntryResponse): RedelegationEntryResponseAminoMsg {
+  toAminoMsg(message: RedelegationEntryResponse, useInterfaces: boolean = true): RedelegationEntryResponseAminoMsg {
     return {
       type: "cosmos-sdk/RedelegationEntryResponse",
-      value: RedelegationEntryResponse.toAmino(message)
+      value: RedelegationEntryResponse.toAmino(message, useInterfaces)
     };
   },
-  fromProtoMsg(message: RedelegationEntryResponseProtoMsg): RedelegationEntryResponse {
-    return RedelegationEntryResponse.decode(message.value);
+  fromProtoMsg(message: RedelegationEntryResponseProtoMsg, useInterfaces: boolean = true): RedelegationEntryResponse {
+    return RedelegationEntryResponse.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: RedelegationEntryResponse): Uint8Array {
     return RedelegationEntryResponse.encode(message).finish();
@@ -3070,6 +3284,8 @@ export const RedelegationEntryResponse = {
     };
   }
 };
+GlobalDecoderRegistry.register(RedelegationEntryResponse.typeUrl, RedelegationEntryResponse);
+GlobalDecoderRegistry.registerAminoProtoMapping(RedelegationEntryResponse.aminoType, RedelegationEntryResponse.typeUrl);
 function createBaseRedelegationResponse(): RedelegationResponse {
   return {
     redelegation: Redelegation.fromPartial({}),
@@ -3078,6 +3294,16 @@ function createBaseRedelegationResponse(): RedelegationResponse {
 }
 export const RedelegationResponse = {
   typeUrl: "/cosmos.staking.v1beta1.RedelegationResponse",
+  aminoType: "cosmos-sdk/RedelegationResponse",
+  is(o: any): o is RedelegationResponse {
+    return o && (o.$typeUrl === RedelegationResponse.typeUrl || Redelegation.is(o.redelegation) && Array.isArray(o.entries) && (!o.entries.length || RedelegationEntryResponse.is(o.entries[0])));
+  },
+  isSDK(o: any): o is RedelegationResponseSDKType {
+    return o && (o.$typeUrl === RedelegationResponse.typeUrl || Redelegation.isSDK(o.redelegation) && Array.isArray(o.entries) && (!o.entries.length || RedelegationEntryResponse.isSDK(o.entries[0])));
+  },
+  isAmino(o: any): o is RedelegationResponseAmino {
+    return o && (o.$typeUrl === RedelegationResponse.typeUrl || Redelegation.isAmino(o.redelegation) && Array.isArray(o.entries) && (!o.entries.length || RedelegationEntryResponse.isAmino(o.entries[0])));
+  },
   encode(message: RedelegationResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.redelegation !== undefined) {
       Redelegation.encode(message.redelegation, writer.uint32(10).fork()).ldelim();
@@ -3087,7 +3313,7 @@ export const RedelegationResponse = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): RedelegationResponse {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): RedelegationResponse {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseRedelegationResponse();
@@ -3095,10 +3321,10 @@ export const RedelegationResponse = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.redelegation = Redelegation.decode(reader, reader.uint32());
+          message.redelegation = Redelegation.decode(reader, reader.uint32(), useInterfaces);
           break;
         case 2:
-          message.entries.push(RedelegationEntryResponse.decode(reader, reader.uint32()));
+          message.entries.push(RedelegationEntryResponse.decode(reader, reader.uint32(), useInterfaces));
           break;
         default:
           reader.skipType(tag & 7);
@@ -3137,27 +3363,27 @@ export const RedelegationResponse = {
     message.entries = object.entries?.map(e => RedelegationEntryResponse.fromAmino(e)) || [];
     return message;
   },
-  toAmino(message: RedelegationResponse): RedelegationResponseAmino {
+  toAmino(message: RedelegationResponse, useInterfaces: boolean = true): RedelegationResponseAmino {
     const obj: any = {};
-    obj.redelegation = message.redelegation ? Redelegation.toAmino(message.redelegation) : Redelegation.fromPartial({});
+    obj.redelegation = message.redelegation ? Redelegation.toAmino(message.redelegation, useInterfaces) : undefined;
     if (message.entries) {
-      obj.entries = message.entries.map(e => e ? RedelegationEntryResponse.toAmino(e) : undefined);
+      obj.entries = message.entries.map(e => e ? RedelegationEntryResponse.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.entries = [];
+      obj.entries = message.entries;
     }
     return obj;
   },
   fromAminoMsg(object: RedelegationResponseAminoMsg): RedelegationResponse {
     return RedelegationResponse.fromAmino(object.value);
   },
-  toAminoMsg(message: RedelegationResponse): RedelegationResponseAminoMsg {
+  toAminoMsg(message: RedelegationResponse, useInterfaces: boolean = true): RedelegationResponseAminoMsg {
     return {
       type: "cosmos-sdk/RedelegationResponse",
-      value: RedelegationResponse.toAmino(message)
+      value: RedelegationResponse.toAmino(message, useInterfaces)
     };
   },
-  fromProtoMsg(message: RedelegationResponseProtoMsg): RedelegationResponse {
-    return RedelegationResponse.decode(message.value);
+  fromProtoMsg(message: RedelegationResponseProtoMsg, useInterfaces: boolean = true): RedelegationResponse {
+    return RedelegationResponse.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: RedelegationResponse): Uint8Array {
     return RedelegationResponse.encode(message).finish();
@@ -3169,6 +3395,8 @@ export const RedelegationResponse = {
     };
   }
 };
+GlobalDecoderRegistry.register(RedelegationResponse.typeUrl, RedelegationResponse);
+GlobalDecoderRegistry.registerAminoProtoMapping(RedelegationResponse.aminoType, RedelegationResponse.typeUrl);
 function createBasePool(): Pool {
   return {
     notBondedTokens: "",
@@ -3177,6 +3405,16 @@ function createBasePool(): Pool {
 }
 export const Pool = {
   typeUrl: "/cosmos.staking.v1beta1.Pool",
+  aminoType: "cosmos-sdk/Pool",
+  is(o: any): o is Pool {
+    return o && (o.$typeUrl === Pool.typeUrl || typeof o.notBondedTokens === "string" && typeof o.bondedTokens === "string");
+  },
+  isSDK(o: any): o is PoolSDKType {
+    return o && (o.$typeUrl === Pool.typeUrl || typeof o.not_bonded_tokens === "string" && typeof o.bonded_tokens === "string");
+  },
+  isAmino(o: any): o is PoolAmino {
+    return o && (o.$typeUrl === Pool.typeUrl || typeof o.not_bonded_tokens === "string" && typeof o.bonded_tokens === "string");
+  },
   encode(message: Pool, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.notBondedTokens !== "") {
       writer.uint32(10).string(message.notBondedTokens);
@@ -3186,7 +3424,7 @@ export const Pool = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): Pool {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): Pool {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBasePool();
@@ -3234,7 +3472,7 @@ export const Pool = {
     }
     return message;
   },
-  toAmino(message: Pool): PoolAmino {
+  toAmino(message: Pool, useInterfaces: boolean = true): PoolAmino {
     const obj: any = {};
     obj.not_bonded_tokens = message.notBondedTokens ?? "";
     obj.bonded_tokens = message.bondedTokens ?? "";
@@ -3243,14 +3481,14 @@ export const Pool = {
   fromAminoMsg(object: PoolAminoMsg): Pool {
     return Pool.fromAmino(object.value);
   },
-  toAminoMsg(message: Pool): PoolAminoMsg {
+  toAminoMsg(message: Pool, useInterfaces: boolean = true): PoolAminoMsg {
     return {
       type: "cosmos-sdk/Pool",
-      value: Pool.toAmino(message)
+      value: Pool.toAmino(message, useInterfaces)
     };
   },
-  fromProtoMsg(message: PoolProtoMsg): Pool {
-    return Pool.decode(message.value);
+  fromProtoMsg(message: PoolProtoMsg, useInterfaces: boolean = true): Pool {
+    return Pool.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: Pool): Uint8Array {
     return Pool.encode(message).finish();
@@ -3262,6 +3500,8 @@ export const Pool = {
     };
   }
 };
+GlobalDecoderRegistry.register(Pool.typeUrl, Pool);
+GlobalDecoderRegistry.registerAminoProtoMapping(Pool.aminoType, Pool.typeUrl);
 function createBaseValidatorUpdates(): ValidatorUpdates {
   return {
     updates: []
@@ -3269,13 +3509,23 @@ function createBaseValidatorUpdates(): ValidatorUpdates {
 }
 export const ValidatorUpdates = {
   typeUrl: "/cosmos.staking.v1beta1.ValidatorUpdates",
+  aminoType: "cosmos-sdk/ValidatorUpdates",
+  is(o: any): o is ValidatorUpdates {
+    return o && (o.$typeUrl === ValidatorUpdates.typeUrl || Array.isArray(o.updates) && (!o.updates.length || ValidatorUpdate.is(o.updates[0])));
+  },
+  isSDK(o: any): o is ValidatorUpdatesSDKType {
+    return o && (o.$typeUrl === ValidatorUpdates.typeUrl || Array.isArray(o.updates) && (!o.updates.length || ValidatorUpdate.isSDK(o.updates[0])));
+  },
+  isAmino(o: any): o is ValidatorUpdatesAmino {
+    return o && (o.$typeUrl === ValidatorUpdates.typeUrl || Array.isArray(o.updates) && (!o.updates.length || ValidatorUpdate.isAmino(o.updates[0])));
+  },
   encode(message: ValidatorUpdates, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     for (const v of message.updates) {
       ValidatorUpdate.encode(v!, writer.uint32(10).fork()).ldelim();
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): ValidatorUpdates {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): ValidatorUpdates {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseValidatorUpdates();
@@ -3283,7 +3533,7 @@ export const ValidatorUpdates = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.updates.push(ValidatorUpdate.decode(reader, reader.uint32()));
+          message.updates.push(ValidatorUpdate.decode(reader, reader.uint32(), useInterfaces));
           break;
         default:
           reader.skipType(tag & 7);
@@ -3316,26 +3566,26 @@ export const ValidatorUpdates = {
     message.updates = object.updates?.map(e => ValidatorUpdate.fromAmino(e)) || [];
     return message;
   },
-  toAmino(message: ValidatorUpdates): ValidatorUpdatesAmino {
+  toAmino(message: ValidatorUpdates, useInterfaces: boolean = true): ValidatorUpdatesAmino {
     const obj: any = {};
     if (message.updates) {
-      obj.updates = message.updates.map(e => e ? ValidatorUpdate.toAmino(e) : undefined);
+      obj.updates = message.updates.map(e => e ? ValidatorUpdate.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.updates = [];
+      obj.updates = message.updates;
     }
     return obj;
   },
   fromAminoMsg(object: ValidatorUpdatesAminoMsg): ValidatorUpdates {
     return ValidatorUpdates.fromAmino(object.value);
   },
-  toAminoMsg(message: ValidatorUpdates): ValidatorUpdatesAminoMsg {
+  toAminoMsg(message: ValidatorUpdates, useInterfaces: boolean = true): ValidatorUpdatesAminoMsg {
     return {
       type: "cosmos-sdk/ValidatorUpdates",
-      value: ValidatorUpdates.toAmino(message)
+      value: ValidatorUpdates.toAmino(message, useInterfaces)
     };
   },
-  fromProtoMsg(message: ValidatorUpdatesProtoMsg): ValidatorUpdates {
-    return ValidatorUpdates.decode(message.value);
+  fromProtoMsg(message: ValidatorUpdatesProtoMsg, useInterfaces: boolean = true): ValidatorUpdates {
+    return ValidatorUpdates.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: ValidatorUpdates): Uint8Array {
     return ValidatorUpdates.encode(message).finish();
@@ -3347,17 +3597,5 @@ export const ValidatorUpdates = {
     };
   }
 };
-export const Cosmos_cryptoPubKey_InterfaceDecoder = (input: BinaryReader | Uint8Array): Any => {
-  const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
-  const data = Any.decode(reader, reader.uint32());
-  switch (data.typeUrl) {
-    default:
-      return data;
-  }
-};
-export const Cosmos_cryptoPubKey_FromAmino = (content: AnyAmino): Any => {
-  return encodePubkey(content);
-};
-export const Cosmos_cryptoPubKey_ToAmino = (content: Any): Pubkey | null => {
-  return decodePubkey(content);
-};
+GlobalDecoderRegistry.register(ValidatorUpdates.typeUrl, ValidatorUpdates);
+GlobalDecoderRegistry.registerAminoProtoMapping(ValidatorUpdates.aminoType, ValidatorUpdates.typeUrl);

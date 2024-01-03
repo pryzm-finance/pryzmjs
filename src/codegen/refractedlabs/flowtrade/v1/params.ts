@@ -2,7 +2,8 @@ import { Coin, CoinAmino, CoinSDKType } from "../../../cosmos/base/v1beta1/coin"
 import { Duration, DurationAmino, DurationSDKType } from "../../../google/protobuf/duration";
 import { BinaryReader, BinaryWriter } from "../../../binary";
 import { Decimal } from "@cosmjs/math";
-import { isSet } from "../../../helpers";
+import { isSet, padDecimal } from "../../../helpers";
+import { GlobalDecoderRegistry } from "../../../registry";
 /** Params defines the parameters for the module. */
 export interface Params {
   /** The deposit amount taken from flow creator and transferred back after the flow ends */
@@ -23,15 +24,15 @@ export interface ParamsProtoMsg {
 /** Params defines the parameters for the module. */
 export interface ParamsAmino {
   /** The deposit amount taken from flow creator and transferred back after the flow ends */
-  flow_creation_deposit?: CoinAmino;
+  flow_creation_deposit: CoinAmino;
   /** The minimum possible duration a flow can have */
-  min_flow_duration?: DurationAmino;
+  min_flow_duration: DurationAmino;
   /** The minimum possible duration from the flow creation time to its start time */
-  min_duration_to_flow_start?: DurationAmino;
+  min_duration_to_flow_start: DurationAmino;
   /** the protocol fee ratio taken from token-out */
-  token_out_fee_ratio?: string;
+  token_out_fee_ratio: string;
   /** the protocol fee ratio taken from token-in */
-  token_in_fee_ratio?: string;
+  token_in_fee_ratio: string;
 }
 export interface ParamsAminoMsg {
   type: "/refractedlabs.flowtrade.v1.Params";
@@ -56,6 +57,15 @@ function createBaseParams(): Params {
 }
 export const Params = {
   typeUrl: "/refractedlabs.flowtrade.v1.Params",
+  is(o: any): o is Params {
+    return o && (o.$typeUrl === Params.typeUrl || Coin.is(o.flowCreationDeposit) && Duration.is(o.minFlowDuration) && Duration.is(o.minDurationToFlowStart) && typeof o.tokenOutFeeRatio === "string" && typeof o.tokenInFeeRatio === "string");
+  },
+  isSDK(o: any): o is ParamsSDKType {
+    return o && (o.$typeUrl === Params.typeUrl || Coin.isSDK(o.flow_creation_deposit) && Duration.isSDK(o.min_flow_duration) && Duration.isSDK(o.min_duration_to_flow_start) && typeof o.token_out_fee_ratio === "string" && typeof o.token_in_fee_ratio === "string");
+  },
+  isAmino(o: any): o is ParamsAmino {
+    return o && (o.$typeUrl === Params.typeUrl || Coin.isAmino(o.flow_creation_deposit) && Duration.isAmino(o.min_flow_duration) && Duration.isAmino(o.min_duration_to_flow_start) && typeof o.token_out_fee_ratio === "string" && typeof o.token_in_fee_ratio === "string");
+  },
   encode(message: Params, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.flowCreationDeposit !== undefined) {
       Coin.encode(message.flowCreationDeposit, writer.uint32(10).fork()).ldelim();
@@ -74,7 +84,7 @@ export const Params = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): Params {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): Params {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseParams();
@@ -82,13 +92,13 @@ export const Params = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.flowCreationDeposit = Coin.decode(reader, reader.uint32());
+          message.flowCreationDeposit = Coin.decode(reader, reader.uint32(), useInterfaces);
           break;
         case 2:
-          message.minFlowDuration = Duration.decode(reader, reader.uint32());
+          message.minFlowDuration = Duration.decode(reader, reader.uint32(), useInterfaces);
           break;
         case 3:
-          message.minDurationToFlowStart = Duration.decode(reader, reader.uint32());
+          message.minDurationToFlowStart = Duration.decode(reader, reader.uint32(), useInterfaces);
           break;
         case 4:
           message.tokenOutFeeRatio = Decimal.fromAtomics(reader.string(), 18).toString();
@@ -149,20 +159,20 @@ export const Params = {
     }
     return message;
   },
-  toAmino(message: Params): ParamsAmino {
+  toAmino(message: Params, useInterfaces: boolean = true): ParamsAmino {
     const obj: any = {};
-    obj.flow_creation_deposit = message.flowCreationDeposit ? Coin.toAmino(message.flowCreationDeposit) : undefined;
-    obj.min_flow_duration = message.minFlowDuration ? Duration.toAmino(message.minFlowDuration) : undefined;
-    obj.min_duration_to_flow_start = message.minDurationToFlowStart ? Duration.toAmino(message.minDurationToFlowStart) : undefined;
-    obj.token_out_fee_ratio = message.tokenOutFeeRatio;
-    obj.token_in_fee_ratio = message.tokenInFeeRatio;
+    obj.flow_creation_deposit = message.flowCreationDeposit ? Coin.toAmino(message.flowCreationDeposit, useInterfaces) : undefined;
+    obj.min_flow_duration = message.minFlowDuration ? Duration.toAmino(message.minFlowDuration, useInterfaces) : undefined;
+    obj.min_duration_to_flow_start = message.minDurationToFlowStart ? Duration.toAmino(message.minDurationToFlowStart, useInterfaces) : undefined;
+    obj.token_out_fee_ratio = padDecimal(message.tokenOutFeeRatio) === "" ? undefined : padDecimal(message.tokenOutFeeRatio);
+    obj.token_in_fee_ratio = padDecimal(message.tokenInFeeRatio) === "" ? undefined : padDecimal(message.tokenInFeeRatio);
     return obj;
   },
   fromAminoMsg(object: ParamsAminoMsg): Params {
     return Params.fromAmino(object.value);
   },
-  fromProtoMsg(message: ParamsProtoMsg): Params {
-    return Params.decode(message.value);
+  fromProtoMsg(message: ParamsProtoMsg, useInterfaces: boolean = true): Params {
+    return Params.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: Params): Uint8Array {
     return Params.encode(message).finish();
@@ -174,3 +184,4 @@ export const Params = {
     };
   }
 };
+GlobalDecoderRegistry.register(Params.typeUrl, Params);

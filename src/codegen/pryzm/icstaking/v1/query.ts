@@ -5,6 +5,7 @@ import { Undelegation, UndelegationAmino, UndelegationSDKType, ChannelUndelegati
 import { Coin, CoinAmino, CoinSDKType } from "../../../cosmos/base/v1beta1/coin";
 import { Timestamp, TimestampSDKType } from "../../../google/protobuf/timestamp";
 import { BinaryReader, BinaryWriter } from "../../../binary";
+import { GlobalDecoderRegistry } from "../../../registry";
 import { isSet, fromJsonTimestamp, fromTimestamp } from "../../../helpers";
 /** QueryParamsRequest is request type for the Query/Params RPC method. */
 export interface QueryParamsRequest {}
@@ -466,10 +467,19 @@ function createBaseQueryParamsRequest(): QueryParamsRequest {
 }
 export const QueryParamsRequest = {
   typeUrl: "/pryzm.icstaking.v1.QueryParamsRequest",
+  is(o: any): o is QueryParamsRequest {
+    return o && o.$typeUrl === QueryParamsRequest.typeUrl;
+  },
+  isSDK(o: any): o is QueryParamsRequestSDKType {
+    return o && o.$typeUrl === QueryParamsRequest.typeUrl;
+  },
+  isAmino(o: any): o is QueryParamsRequestAmino {
+    return o && o.$typeUrl === QueryParamsRequest.typeUrl;
+  },
   encode(_: QueryParamsRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): QueryParamsRequest {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): QueryParamsRequest {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryParamsRequest();
@@ -498,15 +508,15 @@ export const QueryParamsRequest = {
     const message = createBaseQueryParamsRequest();
     return message;
   },
-  toAmino(_: QueryParamsRequest): QueryParamsRequestAmino {
+  toAmino(_: QueryParamsRequest, useInterfaces: boolean = true): QueryParamsRequestAmino {
     const obj: any = {};
     return obj;
   },
   fromAminoMsg(object: QueryParamsRequestAminoMsg): QueryParamsRequest {
     return QueryParamsRequest.fromAmino(object.value);
   },
-  fromProtoMsg(message: QueryParamsRequestProtoMsg): QueryParamsRequest {
-    return QueryParamsRequest.decode(message.value);
+  fromProtoMsg(message: QueryParamsRequestProtoMsg, useInterfaces: boolean = true): QueryParamsRequest {
+    return QueryParamsRequest.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: QueryParamsRequest): Uint8Array {
     return QueryParamsRequest.encode(message).finish();
@@ -518,6 +528,7 @@ export const QueryParamsRequest = {
     };
   }
 };
+GlobalDecoderRegistry.register(QueryParamsRequest.typeUrl, QueryParamsRequest);
 function createBaseQueryParamsResponse(): QueryParamsResponse {
   return {
     params: Params.fromPartial({})
@@ -525,13 +536,22 @@ function createBaseQueryParamsResponse(): QueryParamsResponse {
 }
 export const QueryParamsResponse = {
   typeUrl: "/pryzm.icstaking.v1.QueryParamsResponse",
+  is(o: any): o is QueryParamsResponse {
+    return o && (o.$typeUrl === QueryParamsResponse.typeUrl || Params.is(o.params));
+  },
+  isSDK(o: any): o is QueryParamsResponseSDKType {
+    return o && (o.$typeUrl === QueryParamsResponse.typeUrl || Params.isSDK(o.params));
+  },
+  isAmino(o: any): o is QueryParamsResponseAmino {
+    return o && (o.$typeUrl === QueryParamsResponse.typeUrl || Params.isAmino(o.params));
+  },
   encode(message: QueryParamsResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.params !== undefined) {
       Params.encode(message.params, writer.uint32(10).fork()).ldelim();
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): QueryParamsResponse {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): QueryParamsResponse {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryParamsResponse();
@@ -539,7 +559,7 @@ export const QueryParamsResponse = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.params = Params.decode(reader, reader.uint32());
+          message.params = Params.decode(reader, reader.uint32(), useInterfaces);
           break;
         default:
           reader.skipType(tag & 7);
@@ -570,16 +590,16 @@ export const QueryParamsResponse = {
     }
     return message;
   },
-  toAmino(message: QueryParamsResponse): QueryParamsResponseAmino {
+  toAmino(message: QueryParamsResponse, useInterfaces: boolean = true): QueryParamsResponseAmino {
     const obj: any = {};
-    obj.params = message.params ? Params.toAmino(message.params) : undefined;
+    obj.params = message.params ? Params.toAmino(message.params, useInterfaces) : undefined;
     return obj;
   },
   fromAminoMsg(object: QueryParamsResponseAminoMsg): QueryParamsResponse {
     return QueryParamsResponse.fromAmino(object.value);
   },
-  fromProtoMsg(message: QueryParamsResponseProtoMsg): QueryParamsResponse {
-    return QueryParamsResponse.decode(message.value);
+  fromProtoMsg(message: QueryParamsResponseProtoMsg, useInterfaces: boolean = true): QueryParamsResponse {
+    return QueryParamsResponse.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: QueryParamsResponse): Uint8Array {
     return QueryParamsResponse.encode(message).finish();
@@ -591,6 +611,7 @@ export const QueryParamsResponse = {
     };
   }
 };
+GlobalDecoderRegistry.register(QueryParamsResponse.typeUrl, QueryParamsResponse);
 function createBaseQueryGetHostChainRequest(): QueryGetHostChainRequest {
   return {
     hostChainId: ""
@@ -598,13 +619,22 @@ function createBaseQueryGetHostChainRequest(): QueryGetHostChainRequest {
 }
 export const QueryGetHostChainRequest = {
   typeUrl: "/pryzm.icstaking.v1.QueryGetHostChainRequest",
+  is(o: any): o is QueryGetHostChainRequest {
+    return o && (o.$typeUrl === QueryGetHostChainRequest.typeUrl || typeof o.hostChainId === "string");
+  },
+  isSDK(o: any): o is QueryGetHostChainRequestSDKType {
+    return o && (o.$typeUrl === QueryGetHostChainRequest.typeUrl || typeof o.host_chain_id === "string");
+  },
+  isAmino(o: any): o is QueryGetHostChainRequestAmino {
+    return o && (o.$typeUrl === QueryGetHostChainRequest.typeUrl || typeof o.host_chain_id === "string");
+  },
   encode(message: QueryGetHostChainRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.hostChainId !== "") {
       writer.uint32(10).string(message.hostChainId);
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): QueryGetHostChainRequest {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): QueryGetHostChainRequest {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryGetHostChainRequest();
@@ -643,16 +673,16 @@ export const QueryGetHostChainRequest = {
     }
     return message;
   },
-  toAmino(message: QueryGetHostChainRequest): QueryGetHostChainRequestAmino {
+  toAmino(message: QueryGetHostChainRequest, useInterfaces: boolean = true): QueryGetHostChainRequestAmino {
     const obj: any = {};
-    obj.host_chain_id = message.hostChainId;
+    obj.host_chain_id = message.hostChainId === "" ? undefined : message.hostChainId;
     return obj;
   },
   fromAminoMsg(object: QueryGetHostChainRequestAminoMsg): QueryGetHostChainRequest {
     return QueryGetHostChainRequest.fromAmino(object.value);
   },
-  fromProtoMsg(message: QueryGetHostChainRequestProtoMsg): QueryGetHostChainRequest {
-    return QueryGetHostChainRequest.decode(message.value);
+  fromProtoMsg(message: QueryGetHostChainRequestProtoMsg, useInterfaces: boolean = true): QueryGetHostChainRequest {
+    return QueryGetHostChainRequest.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: QueryGetHostChainRequest): Uint8Array {
     return QueryGetHostChainRequest.encode(message).finish();
@@ -664,6 +694,7 @@ export const QueryGetHostChainRequest = {
     };
   }
 };
+GlobalDecoderRegistry.register(QueryGetHostChainRequest.typeUrl, QueryGetHostChainRequest);
 function createBaseQueryGetHostChainResponse(): QueryGetHostChainResponse {
   return {
     hostChain: HostChain.fromPartial({})
@@ -671,13 +702,22 @@ function createBaseQueryGetHostChainResponse(): QueryGetHostChainResponse {
 }
 export const QueryGetHostChainResponse = {
   typeUrl: "/pryzm.icstaking.v1.QueryGetHostChainResponse",
+  is(o: any): o is QueryGetHostChainResponse {
+    return o && (o.$typeUrl === QueryGetHostChainResponse.typeUrl || HostChain.is(o.hostChain));
+  },
+  isSDK(o: any): o is QueryGetHostChainResponseSDKType {
+    return o && (o.$typeUrl === QueryGetHostChainResponse.typeUrl || HostChain.isSDK(o.host_chain));
+  },
+  isAmino(o: any): o is QueryGetHostChainResponseAmino {
+    return o && (o.$typeUrl === QueryGetHostChainResponse.typeUrl || HostChain.isAmino(o.host_chain));
+  },
   encode(message: QueryGetHostChainResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.hostChain !== undefined) {
       HostChain.encode(message.hostChain, writer.uint32(10).fork()).ldelim();
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): QueryGetHostChainResponse {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): QueryGetHostChainResponse {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryGetHostChainResponse();
@@ -685,7 +725,7 @@ export const QueryGetHostChainResponse = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.hostChain = HostChain.decode(reader, reader.uint32());
+          message.hostChain = HostChain.decode(reader, reader.uint32(), useInterfaces);
           break;
         default:
           reader.skipType(tag & 7);
@@ -716,16 +756,16 @@ export const QueryGetHostChainResponse = {
     }
     return message;
   },
-  toAmino(message: QueryGetHostChainResponse): QueryGetHostChainResponseAmino {
+  toAmino(message: QueryGetHostChainResponse, useInterfaces: boolean = true): QueryGetHostChainResponseAmino {
     const obj: any = {};
-    obj.host_chain = message.hostChain ? HostChain.toAmino(message.hostChain) : undefined;
+    obj.host_chain = message.hostChain ? HostChain.toAmino(message.hostChain, useInterfaces) : undefined;
     return obj;
   },
   fromAminoMsg(object: QueryGetHostChainResponseAminoMsg): QueryGetHostChainResponse {
     return QueryGetHostChainResponse.fromAmino(object.value);
   },
-  fromProtoMsg(message: QueryGetHostChainResponseProtoMsg): QueryGetHostChainResponse {
-    return QueryGetHostChainResponse.decode(message.value);
+  fromProtoMsg(message: QueryGetHostChainResponseProtoMsg, useInterfaces: boolean = true): QueryGetHostChainResponse {
+    return QueryGetHostChainResponse.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: QueryGetHostChainResponse): Uint8Array {
     return QueryGetHostChainResponse.encode(message).finish();
@@ -737,6 +777,7 @@ export const QueryGetHostChainResponse = {
     };
   }
 };
+GlobalDecoderRegistry.register(QueryGetHostChainResponse.typeUrl, QueryGetHostChainResponse);
 function createBaseQueryAllHostChainRequest(): QueryAllHostChainRequest {
   return {
     pagination: undefined
@@ -744,13 +785,22 @@ function createBaseQueryAllHostChainRequest(): QueryAllHostChainRequest {
 }
 export const QueryAllHostChainRequest = {
   typeUrl: "/pryzm.icstaking.v1.QueryAllHostChainRequest",
+  is(o: any): o is QueryAllHostChainRequest {
+    return o && o.$typeUrl === QueryAllHostChainRequest.typeUrl;
+  },
+  isSDK(o: any): o is QueryAllHostChainRequestSDKType {
+    return o && o.$typeUrl === QueryAllHostChainRequest.typeUrl;
+  },
+  isAmino(o: any): o is QueryAllHostChainRequestAmino {
+    return o && o.$typeUrl === QueryAllHostChainRequest.typeUrl;
+  },
   encode(message: QueryAllHostChainRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.pagination !== undefined) {
       PageRequest.encode(message.pagination, writer.uint32(10).fork()).ldelim();
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): QueryAllHostChainRequest {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): QueryAllHostChainRequest {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryAllHostChainRequest();
@@ -758,7 +808,7 @@ export const QueryAllHostChainRequest = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.pagination = PageRequest.decode(reader, reader.uint32());
+          message.pagination = PageRequest.decode(reader, reader.uint32(), useInterfaces);
           break;
         default:
           reader.skipType(tag & 7);
@@ -789,16 +839,16 @@ export const QueryAllHostChainRequest = {
     }
     return message;
   },
-  toAmino(message: QueryAllHostChainRequest): QueryAllHostChainRequestAmino {
+  toAmino(message: QueryAllHostChainRequest, useInterfaces: boolean = true): QueryAllHostChainRequestAmino {
     const obj: any = {};
-    obj.pagination = message.pagination ? PageRequest.toAmino(message.pagination) : undefined;
+    obj.pagination = message.pagination ? PageRequest.toAmino(message.pagination, useInterfaces) : undefined;
     return obj;
   },
   fromAminoMsg(object: QueryAllHostChainRequestAminoMsg): QueryAllHostChainRequest {
     return QueryAllHostChainRequest.fromAmino(object.value);
   },
-  fromProtoMsg(message: QueryAllHostChainRequestProtoMsg): QueryAllHostChainRequest {
-    return QueryAllHostChainRequest.decode(message.value);
+  fromProtoMsg(message: QueryAllHostChainRequestProtoMsg, useInterfaces: boolean = true): QueryAllHostChainRequest {
+    return QueryAllHostChainRequest.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: QueryAllHostChainRequest): Uint8Array {
     return QueryAllHostChainRequest.encode(message).finish();
@@ -810,6 +860,7 @@ export const QueryAllHostChainRequest = {
     };
   }
 };
+GlobalDecoderRegistry.register(QueryAllHostChainRequest.typeUrl, QueryAllHostChainRequest);
 function createBaseQueryAllHostChainResponse(): QueryAllHostChainResponse {
   return {
     hostChain: [],
@@ -818,6 +869,15 @@ function createBaseQueryAllHostChainResponse(): QueryAllHostChainResponse {
 }
 export const QueryAllHostChainResponse = {
   typeUrl: "/pryzm.icstaking.v1.QueryAllHostChainResponse",
+  is(o: any): o is QueryAllHostChainResponse {
+    return o && (o.$typeUrl === QueryAllHostChainResponse.typeUrl || Array.isArray(o.hostChain) && (!o.hostChain.length || HostChain.is(o.hostChain[0])));
+  },
+  isSDK(o: any): o is QueryAllHostChainResponseSDKType {
+    return o && (o.$typeUrl === QueryAllHostChainResponse.typeUrl || Array.isArray(o.host_chain) && (!o.host_chain.length || HostChain.isSDK(o.host_chain[0])));
+  },
+  isAmino(o: any): o is QueryAllHostChainResponseAmino {
+    return o && (o.$typeUrl === QueryAllHostChainResponse.typeUrl || Array.isArray(o.host_chain) && (!o.host_chain.length || HostChain.isAmino(o.host_chain[0])));
+  },
   encode(message: QueryAllHostChainResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     for (const v of message.hostChain) {
       HostChain.encode(v!, writer.uint32(10).fork()).ldelim();
@@ -827,7 +887,7 @@ export const QueryAllHostChainResponse = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): QueryAllHostChainResponse {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): QueryAllHostChainResponse {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryAllHostChainResponse();
@@ -835,10 +895,10 @@ export const QueryAllHostChainResponse = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.hostChain.push(HostChain.decode(reader, reader.uint32()));
+          message.hostChain.push(HostChain.decode(reader, reader.uint32(), useInterfaces));
           break;
         case 2:
-          message.pagination = PageResponse.decode(reader, reader.uint32());
+          message.pagination = PageResponse.decode(reader, reader.uint32(), useInterfaces);
           break;
         default:
           reader.skipType(tag & 7);
@@ -877,21 +937,21 @@ export const QueryAllHostChainResponse = {
     }
     return message;
   },
-  toAmino(message: QueryAllHostChainResponse): QueryAllHostChainResponseAmino {
+  toAmino(message: QueryAllHostChainResponse, useInterfaces: boolean = true): QueryAllHostChainResponseAmino {
     const obj: any = {};
     if (message.hostChain) {
-      obj.host_chain = message.hostChain.map(e => e ? HostChain.toAmino(e) : undefined);
+      obj.host_chain = message.hostChain.map(e => e ? HostChain.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.host_chain = [];
+      obj.host_chain = message.hostChain;
     }
-    obj.pagination = message.pagination ? PageResponse.toAmino(message.pagination) : undefined;
+    obj.pagination = message.pagination ? PageResponse.toAmino(message.pagination, useInterfaces) : undefined;
     return obj;
   },
   fromAminoMsg(object: QueryAllHostChainResponseAminoMsg): QueryAllHostChainResponse {
     return QueryAllHostChainResponse.fromAmino(object.value);
   },
-  fromProtoMsg(message: QueryAllHostChainResponseProtoMsg): QueryAllHostChainResponse {
-    return QueryAllHostChainResponse.decode(message.value);
+  fromProtoMsg(message: QueryAllHostChainResponseProtoMsg, useInterfaces: boolean = true): QueryAllHostChainResponse {
+    return QueryAllHostChainResponse.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: QueryAllHostChainResponse): Uint8Array {
     return QueryAllHostChainResponse.encode(message).finish();
@@ -903,6 +963,7 @@ export const QueryAllHostChainResponse = {
     };
   }
 };
+GlobalDecoderRegistry.register(QueryAllHostChainResponse.typeUrl, QueryAllHostChainResponse);
 function createBaseQueryGetHostChainStateRequest(): QueryGetHostChainStateRequest {
   return {
     hostChainId: ""
@@ -910,13 +971,22 @@ function createBaseQueryGetHostChainStateRequest(): QueryGetHostChainStateReques
 }
 export const QueryGetHostChainStateRequest = {
   typeUrl: "/pryzm.icstaking.v1.QueryGetHostChainStateRequest",
+  is(o: any): o is QueryGetHostChainStateRequest {
+    return o && (o.$typeUrl === QueryGetHostChainStateRequest.typeUrl || typeof o.hostChainId === "string");
+  },
+  isSDK(o: any): o is QueryGetHostChainStateRequestSDKType {
+    return o && (o.$typeUrl === QueryGetHostChainStateRequest.typeUrl || typeof o.host_chain_id === "string");
+  },
+  isAmino(o: any): o is QueryGetHostChainStateRequestAmino {
+    return o && (o.$typeUrl === QueryGetHostChainStateRequest.typeUrl || typeof o.host_chain_id === "string");
+  },
   encode(message: QueryGetHostChainStateRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.hostChainId !== "") {
       writer.uint32(10).string(message.hostChainId);
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): QueryGetHostChainStateRequest {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): QueryGetHostChainStateRequest {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryGetHostChainStateRequest();
@@ -955,16 +1025,16 @@ export const QueryGetHostChainStateRequest = {
     }
     return message;
   },
-  toAmino(message: QueryGetHostChainStateRequest): QueryGetHostChainStateRequestAmino {
+  toAmino(message: QueryGetHostChainStateRequest, useInterfaces: boolean = true): QueryGetHostChainStateRequestAmino {
     const obj: any = {};
-    obj.host_chain_id = message.hostChainId;
+    obj.host_chain_id = message.hostChainId === "" ? undefined : message.hostChainId;
     return obj;
   },
   fromAminoMsg(object: QueryGetHostChainStateRequestAminoMsg): QueryGetHostChainStateRequest {
     return QueryGetHostChainStateRequest.fromAmino(object.value);
   },
-  fromProtoMsg(message: QueryGetHostChainStateRequestProtoMsg): QueryGetHostChainStateRequest {
-    return QueryGetHostChainStateRequest.decode(message.value);
+  fromProtoMsg(message: QueryGetHostChainStateRequestProtoMsg, useInterfaces: boolean = true): QueryGetHostChainStateRequest {
+    return QueryGetHostChainStateRequest.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: QueryGetHostChainStateRequest): Uint8Array {
     return QueryGetHostChainStateRequest.encode(message).finish();
@@ -976,6 +1046,7 @@ export const QueryGetHostChainStateRequest = {
     };
   }
 };
+GlobalDecoderRegistry.register(QueryGetHostChainStateRequest.typeUrl, QueryGetHostChainStateRequest);
 function createBaseQueryGetHostChainStateResponse(): QueryGetHostChainStateResponse {
   return {
     hostChainState: HostChainState.fromPartial({})
@@ -983,13 +1054,22 @@ function createBaseQueryGetHostChainStateResponse(): QueryGetHostChainStateRespo
 }
 export const QueryGetHostChainStateResponse = {
   typeUrl: "/pryzm.icstaking.v1.QueryGetHostChainStateResponse",
+  is(o: any): o is QueryGetHostChainStateResponse {
+    return o && (o.$typeUrl === QueryGetHostChainStateResponse.typeUrl || HostChainState.is(o.hostChainState));
+  },
+  isSDK(o: any): o is QueryGetHostChainStateResponseSDKType {
+    return o && (o.$typeUrl === QueryGetHostChainStateResponse.typeUrl || HostChainState.isSDK(o.host_chain_state));
+  },
+  isAmino(o: any): o is QueryGetHostChainStateResponseAmino {
+    return o && (o.$typeUrl === QueryGetHostChainStateResponse.typeUrl || HostChainState.isAmino(o.host_chain_state));
+  },
   encode(message: QueryGetHostChainStateResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.hostChainState !== undefined) {
       HostChainState.encode(message.hostChainState, writer.uint32(10).fork()).ldelim();
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): QueryGetHostChainStateResponse {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): QueryGetHostChainStateResponse {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryGetHostChainStateResponse();
@@ -997,7 +1077,7 @@ export const QueryGetHostChainStateResponse = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.hostChainState = HostChainState.decode(reader, reader.uint32());
+          message.hostChainState = HostChainState.decode(reader, reader.uint32(), useInterfaces);
           break;
         default:
           reader.skipType(tag & 7);
@@ -1028,16 +1108,16 @@ export const QueryGetHostChainStateResponse = {
     }
     return message;
   },
-  toAmino(message: QueryGetHostChainStateResponse): QueryGetHostChainStateResponseAmino {
+  toAmino(message: QueryGetHostChainStateResponse, useInterfaces: boolean = true): QueryGetHostChainStateResponseAmino {
     const obj: any = {};
-    obj.host_chain_state = message.hostChainState ? HostChainState.toAmino(message.hostChainState) : undefined;
+    obj.host_chain_state = message.hostChainState ? HostChainState.toAmino(message.hostChainState, useInterfaces) : undefined;
     return obj;
   },
   fromAminoMsg(object: QueryGetHostChainStateResponseAminoMsg): QueryGetHostChainStateResponse {
     return QueryGetHostChainStateResponse.fromAmino(object.value);
   },
-  fromProtoMsg(message: QueryGetHostChainStateResponseProtoMsg): QueryGetHostChainStateResponse {
-    return QueryGetHostChainStateResponse.decode(message.value);
+  fromProtoMsg(message: QueryGetHostChainStateResponseProtoMsg, useInterfaces: boolean = true): QueryGetHostChainStateResponse {
+    return QueryGetHostChainStateResponse.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: QueryGetHostChainStateResponse): Uint8Array {
     return QueryGetHostChainStateResponse.encode(message).finish();
@@ -1049,6 +1129,7 @@ export const QueryGetHostChainStateResponse = {
     };
   }
 };
+GlobalDecoderRegistry.register(QueryGetHostChainStateResponse.typeUrl, QueryGetHostChainStateResponse);
 function createBaseQueryAllHostChainStateRequest(): QueryAllHostChainStateRequest {
   return {
     pagination: undefined
@@ -1056,13 +1137,22 @@ function createBaseQueryAllHostChainStateRequest(): QueryAllHostChainStateReques
 }
 export const QueryAllHostChainStateRequest = {
   typeUrl: "/pryzm.icstaking.v1.QueryAllHostChainStateRequest",
+  is(o: any): o is QueryAllHostChainStateRequest {
+    return o && o.$typeUrl === QueryAllHostChainStateRequest.typeUrl;
+  },
+  isSDK(o: any): o is QueryAllHostChainStateRequestSDKType {
+    return o && o.$typeUrl === QueryAllHostChainStateRequest.typeUrl;
+  },
+  isAmino(o: any): o is QueryAllHostChainStateRequestAmino {
+    return o && o.$typeUrl === QueryAllHostChainStateRequest.typeUrl;
+  },
   encode(message: QueryAllHostChainStateRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.pagination !== undefined) {
       PageRequest.encode(message.pagination, writer.uint32(10).fork()).ldelim();
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): QueryAllHostChainStateRequest {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): QueryAllHostChainStateRequest {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryAllHostChainStateRequest();
@@ -1070,7 +1160,7 @@ export const QueryAllHostChainStateRequest = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.pagination = PageRequest.decode(reader, reader.uint32());
+          message.pagination = PageRequest.decode(reader, reader.uint32(), useInterfaces);
           break;
         default:
           reader.skipType(tag & 7);
@@ -1101,16 +1191,16 @@ export const QueryAllHostChainStateRequest = {
     }
     return message;
   },
-  toAmino(message: QueryAllHostChainStateRequest): QueryAllHostChainStateRequestAmino {
+  toAmino(message: QueryAllHostChainStateRequest, useInterfaces: boolean = true): QueryAllHostChainStateRequestAmino {
     const obj: any = {};
-    obj.pagination = message.pagination ? PageRequest.toAmino(message.pagination) : undefined;
+    obj.pagination = message.pagination ? PageRequest.toAmino(message.pagination, useInterfaces) : undefined;
     return obj;
   },
   fromAminoMsg(object: QueryAllHostChainStateRequestAminoMsg): QueryAllHostChainStateRequest {
     return QueryAllHostChainStateRequest.fromAmino(object.value);
   },
-  fromProtoMsg(message: QueryAllHostChainStateRequestProtoMsg): QueryAllHostChainStateRequest {
-    return QueryAllHostChainStateRequest.decode(message.value);
+  fromProtoMsg(message: QueryAllHostChainStateRequestProtoMsg, useInterfaces: boolean = true): QueryAllHostChainStateRequest {
+    return QueryAllHostChainStateRequest.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: QueryAllHostChainStateRequest): Uint8Array {
     return QueryAllHostChainStateRequest.encode(message).finish();
@@ -1122,6 +1212,7 @@ export const QueryAllHostChainStateRequest = {
     };
   }
 };
+GlobalDecoderRegistry.register(QueryAllHostChainStateRequest.typeUrl, QueryAllHostChainStateRequest);
 function createBaseQueryAllHostChainStateResponse(): QueryAllHostChainStateResponse {
   return {
     hostChainState: [],
@@ -1130,6 +1221,15 @@ function createBaseQueryAllHostChainStateResponse(): QueryAllHostChainStateRespo
 }
 export const QueryAllHostChainStateResponse = {
   typeUrl: "/pryzm.icstaking.v1.QueryAllHostChainStateResponse",
+  is(o: any): o is QueryAllHostChainStateResponse {
+    return o && (o.$typeUrl === QueryAllHostChainStateResponse.typeUrl || Array.isArray(o.hostChainState) && (!o.hostChainState.length || HostChainState.is(o.hostChainState[0])));
+  },
+  isSDK(o: any): o is QueryAllHostChainStateResponseSDKType {
+    return o && (o.$typeUrl === QueryAllHostChainStateResponse.typeUrl || Array.isArray(o.host_chain_state) && (!o.host_chain_state.length || HostChainState.isSDK(o.host_chain_state[0])));
+  },
+  isAmino(o: any): o is QueryAllHostChainStateResponseAmino {
+    return o && (o.$typeUrl === QueryAllHostChainStateResponse.typeUrl || Array.isArray(o.host_chain_state) && (!o.host_chain_state.length || HostChainState.isAmino(o.host_chain_state[0])));
+  },
   encode(message: QueryAllHostChainStateResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     for (const v of message.hostChainState) {
       HostChainState.encode(v!, writer.uint32(10).fork()).ldelim();
@@ -1139,7 +1239,7 @@ export const QueryAllHostChainStateResponse = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): QueryAllHostChainStateResponse {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): QueryAllHostChainStateResponse {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryAllHostChainStateResponse();
@@ -1147,10 +1247,10 @@ export const QueryAllHostChainStateResponse = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.hostChainState.push(HostChainState.decode(reader, reader.uint32()));
+          message.hostChainState.push(HostChainState.decode(reader, reader.uint32(), useInterfaces));
           break;
         case 2:
-          message.pagination = PageResponse.decode(reader, reader.uint32());
+          message.pagination = PageResponse.decode(reader, reader.uint32(), useInterfaces);
           break;
         default:
           reader.skipType(tag & 7);
@@ -1189,21 +1289,21 @@ export const QueryAllHostChainStateResponse = {
     }
     return message;
   },
-  toAmino(message: QueryAllHostChainStateResponse): QueryAllHostChainStateResponseAmino {
+  toAmino(message: QueryAllHostChainStateResponse, useInterfaces: boolean = true): QueryAllHostChainStateResponseAmino {
     const obj: any = {};
     if (message.hostChainState) {
-      obj.host_chain_state = message.hostChainState.map(e => e ? HostChainState.toAmino(e) : undefined);
+      obj.host_chain_state = message.hostChainState.map(e => e ? HostChainState.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.host_chain_state = [];
+      obj.host_chain_state = message.hostChainState;
     }
-    obj.pagination = message.pagination ? PageResponse.toAmino(message.pagination) : undefined;
+    obj.pagination = message.pagination ? PageResponse.toAmino(message.pagination, useInterfaces) : undefined;
     return obj;
   },
   fromAminoMsg(object: QueryAllHostChainStateResponseAminoMsg): QueryAllHostChainStateResponse {
     return QueryAllHostChainStateResponse.fromAmino(object.value);
   },
-  fromProtoMsg(message: QueryAllHostChainStateResponseProtoMsg): QueryAllHostChainStateResponse {
-    return QueryAllHostChainStateResponse.decode(message.value);
+  fromProtoMsg(message: QueryAllHostChainStateResponseProtoMsg, useInterfaces: boolean = true): QueryAllHostChainStateResponse {
+    return QueryAllHostChainStateResponse.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: QueryAllHostChainStateResponse): Uint8Array {
     return QueryAllHostChainStateResponse.encode(message).finish();
@@ -1215,6 +1315,7 @@ export const QueryAllHostChainStateResponse = {
     };
   }
 };
+GlobalDecoderRegistry.register(QueryAllHostChainStateResponse.typeUrl, QueryAllHostChainStateResponse);
 function createBaseQueryGetUndelegationRequest(): QueryGetUndelegationRequest {
   return {
     hostChain: "",
@@ -1223,6 +1324,15 @@ function createBaseQueryGetUndelegationRequest(): QueryGetUndelegationRequest {
 }
 export const QueryGetUndelegationRequest = {
   typeUrl: "/pryzm.icstaking.v1.QueryGetUndelegationRequest",
+  is(o: any): o is QueryGetUndelegationRequest {
+    return o && (o.$typeUrl === QueryGetUndelegationRequest.typeUrl || typeof o.hostChain === "string" && typeof o.epoch === "bigint");
+  },
+  isSDK(o: any): o is QueryGetUndelegationRequestSDKType {
+    return o && (o.$typeUrl === QueryGetUndelegationRequest.typeUrl || typeof o.host_chain === "string" && typeof o.epoch === "bigint");
+  },
+  isAmino(o: any): o is QueryGetUndelegationRequestAmino {
+    return o && (o.$typeUrl === QueryGetUndelegationRequest.typeUrl || typeof o.host_chain === "string" && typeof o.epoch === "bigint");
+  },
   encode(message: QueryGetUndelegationRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.hostChain !== "") {
       writer.uint32(10).string(message.hostChain);
@@ -1232,7 +1342,7 @@ export const QueryGetUndelegationRequest = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): QueryGetUndelegationRequest {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): QueryGetUndelegationRequest {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryGetUndelegationRequest();
@@ -1280,17 +1390,17 @@ export const QueryGetUndelegationRequest = {
     }
     return message;
   },
-  toAmino(message: QueryGetUndelegationRequest): QueryGetUndelegationRequestAmino {
+  toAmino(message: QueryGetUndelegationRequest, useInterfaces: boolean = true): QueryGetUndelegationRequestAmino {
     const obj: any = {};
-    obj.host_chain = message.hostChain;
+    obj.host_chain = message.hostChain === "" ? undefined : message.hostChain;
     obj.epoch = message.epoch ? message.epoch.toString() : undefined;
     return obj;
   },
   fromAminoMsg(object: QueryGetUndelegationRequestAminoMsg): QueryGetUndelegationRequest {
     return QueryGetUndelegationRequest.fromAmino(object.value);
   },
-  fromProtoMsg(message: QueryGetUndelegationRequestProtoMsg): QueryGetUndelegationRequest {
-    return QueryGetUndelegationRequest.decode(message.value);
+  fromProtoMsg(message: QueryGetUndelegationRequestProtoMsg, useInterfaces: boolean = true): QueryGetUndelegationRequest {
+    return QueryGetUndelegationRequest.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: QueryGetUndelegationRequest): Uint8Array {
     return QueryGetUndelegationRequest.encode(message).finish();
@@ -1302,6 +1412,7 @@ export const QueryGetUndelegationRequest = {
     };
   }
 };
+GlobalDecoderRegistry.register(QueryGetUndelegationRequest.typeUrl, QueryGetUndelegationRequest);
 function createBaseQueryGetUndelegationResponse(): QueryGetUndelegationResponse {
   return {
     undelegation: Undelegation.fromPartial({})
@@ -1309,13 +1420,22 @@ function createBaseQueryGetUndelegationResponse(): QueryGetUndelegationResponse 
 }
 export const QueryGetUndelegationResponse = {
   typeUrl: "/pryzm.icstaking.v1.QueryGetUndelegationResponse",
+  is(o: any): o is QueryGetUndelegationResponse {
+    return o && (o.$typeUrl === QueryGetUndelegationResponse.typeUrl || Undelegation.is(o.undelegation));
+  },
+  isSDK(o: any): o is QueryGetUndelegationResponseSDKType {
+    return o && (o.$typeUrl === QueryGetUndelegationResponse.typeUrl || Undelegation.isSDK(o.undelegation));
+  },
+  isAmino(o: any): o is QueryGetUndelegationResponseAmino {
+    return o && (o.$typeUrl === QueryGetUndelegationResponse.typeUrl || Undelegation.isAmino(o.undelegation));
+  },
   encode(message: QueryGetUndelegationResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.undelegation !== undefined) {
       Undelegation.encode(message.undelegation, writer.uint32(10).fork()).ldelim();
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): QueryGetUndelegationResponse {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): QueryGetUndelegationResponse {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryGetUndelegationResponse();
@@ -1323,7 +1443,7 @@ export const QueryGetUndelegationResponse = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.undelegation = Undelegation.decode(reader, reader.uint32());
+          message.undelegation = Undelegation.decode(reader, reader.uint32(), useInterfaces);
           break;
         default:
           reader.skipType(tag & 7);
@@ -1354,16 +1474,16 @@ export const QueryGetUndelegationResponse = {
     }
     return message;
   },
-  toAmino(message: QueryGetUndelegationResponse): QueryGetUndelegationResponseAmino {
+  toAmino(message: QueryGetUndelegationResponse, useInterfaces: boolean = true): QueryGetUndelegationResponseAmino {
     const obj: any = {};
-    obj.undelegation = message.undelegation ? Undelegation.toAmino(message.undelegation) : undefined;
+    obj.undelegation = message.undelegation ? Undelegation.toAmino(message.undelegation, useInterfaces) : undefined;
     return obj;
   },
   fromAminoMsg(object: QueryGetUndelegationResponseAminoMsg): QueryGetUndelegationResponse {
     return QueryGetUndelegationResponse.fromAmino(object.value);
   },
-  fromProtoMsg(message: QueryGetUndelegationResponseProtoMsg): QueryGetUndelegationResponse {
-    return QueryGetUndelegationResponse.decode(message.value);
+  fromProtoMsg(message: QueryGetUndelegationResponseProtoMsg, useInterfaces: boolean = true): QueryGetUndelegationResponse {
+    return QueryGetUndelegationResponse.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: QueryGetUndelegationResponse): Uint8Array {
     return QueryGetUndelegationResponse.encode(message).finish();
@@ -1375,6 +1495,7 @@ export const QueryGetUndelegationResponse = {
     };
   }
 };
+GlobalDecoderRegistry.register(QueryGetUndelegationResponse.typeUrl, QueryGetUndelegationResponse);
 function createBaseQueryAllUndelegationRequest(): QueryAllUndelegationRequest {
   return {
     hostChain: "",
@@ -1383,6 +1504,15 @@ function createBaseQueryAllUndelegationRequest(): QueryAllUndelegationRequest {
 }
 export const QueryAllUndelegationRequest = {
   typeUrl: "/pryzm.icstaking.v1.QueryAllUndelegationRequest",
+  is(o: any): o is QueryAllUndelegationRequest {
+    return o && (o.$typeUrl === QueryAllUndelegationRequest.typeUrl || typeof o.hostChain === "string");
+  },
+  isSDK(o: any): o is QueryAllUndelegationRequestSDKType {
+    return o && (o.$typeUrl === QueryAllUndelegationRequest.typeUrl || typeof o.host_chain === "string");
+  },
+  isAmino(o: any): o is QueryAllUndelegationRequestAmino {
+    return o && (o.$typeUrl === QueryAllUndelegationRequest.typeUrl || typeof o.host_chain === "string");
+  },
   encode(message: QueryAllUndelegationRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.hostChain !== "") {
       writer.uint32(10).string(message.hostChain);
@@ -1392,7 +1522,7 @@ export const QueryAllUndelegationRequest = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): QueryAllUndelegationRequest {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): QueryAllUndelegationRequest {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryAllUndelegationRequest();
@@ -1403,7 +1533,7 @@ export const QueryAllUndelegationRequest = {
           message.hostChain = reader.string();
           break;
         case 2:
-          message.pagination = PageRequest.decode(reader, reader.uint32());
+          message.pagination = PageRequest.decode(reader, reader.uint32(), useInterfaces);
           break;
         default:
           reader.skipType(tag & 7);
@@ -1440,17 +1570,17 @@ export const QueryAllUndelegationRequest = {
     }
     return message;
   },
-  toAmino(message: QueryAllUndelegationRequest): QueryAllUndelegationRequestAmino {
+  toAmino(message: QueryAllUndelegationRequest, useInterfaces: boolean = true): QueryAllUndelegationRequestAmino {
     const obj: any = {};
-    obj.host_chain = message.hostChain;
-    obj.pagination = message.pagination ? PageRequest.toAmino(message.pagination) : undefined;
+    obj.host_chain = message.hostChain === "" ? undefined : message.hostChain;
+    obj.pagination = message.pagination ? PageRequest.toAmino(message.pagination, useInterfaces) : undefined;
     return obj;
   },
   fromAminoMsg(object: QueryAllUndelegationRequestAminoMsg): QueryAllUndelegationRequest {
     return QueryAllUndelegationRequest.fromAmino(object.value);
   },
-  fromProtoMsg(message: QueryAllUndelegationRequestProtoMsg): QueryAllUndelegationRequest {
-    return QueryAllUndelegationRequest.decode(message.value);
+  fromProtoMsg(message: QueryAllUndelegationRequestProtoMsg, useInterfaces: boolean = true): QueryAllUndelegationRequest {
+    return QueryAllUndelegationRequest.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: QueryAllUndelegationRequest): Uint8Array {
     return QueryAllUndelegationRequest.encode(message).finish();
@@ -1462,6 +1592,7 @@ export const QueryAllUndelegationRequest = {
     };
   }
 };
+GlobalDecoderRegistry.register(QueryAllUndelegationRequest.typeUrl, QueryAllUndelegationRequest);
 function createBaseQueryAllUndelegationResponse(): QueryAllUndelegationResponse {
   return {
     undelegation: [],
@@ -1470,6 +1601,15 @@ function createBaseQueryAllUndelegationResponse(): QueryAllUndelegationResponse 
 }
 export const QueryAllUndelegationResponse = {
   typeUrl: "/pryzm.icstaking.v1.QueryAllUndelegationResponse",
+  is(o: any): o is QueryAllUndelegationResponse {
+    return o && (o.$typeUrl === QueryAllUndelegationResponse.typeUrl || Array.isArray(o.undelegation) && (!o.undelegation.length || Undelegation.is(o.undelegation[0])));
+  },
+  isSDK(o: any): o is QueryAllUndelegationResponseSDKType {
+    return o && (o.$typeUrl === QueryAllUndelegationResponse.typeUrl || Array.isArray(o.undelegation) && (!o.undelegation.length || Undelegation.isSDK(o.undelegation[0])));
+  },
+  isAmino(o: any): o is QueryAllUndelegationResponseAmino {
+    return o && (o.$typeUrl === QueryAllUndelegationResponse.typeUrl || Array.isArray(o.undelegation) && (!o.undelegation.length || Undelegation.isAmino(o.undelegation[0])));
+  },
   encode(message: QueryAllUndelegationResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     for (const v of message.undelegation) {
       Undelegation.encode(v!, writer.uint32(10).fork()).ldelim();
@@ -1479,7 +1619,7 @@ export const QueryAllUndelegationResponse = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): QueryAllUndelegationResponse {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): QueryAllUndelegationResponse {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryAllUndelegationResponse();
@@ -1487,10 +1627,10 @@ export const QueryAllUndelegationResponse = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.undelegation.push(Undelegation.decode(reader, reader.uint32()));
+          message.undelegation.push(Undelegation.decode(reader, reader.uint32(), useInterfaces));
           break;
         case 2:
-          message.pagination = PageResponse.decode(reader, reader.uint32());
+          message.pagination = PageResponse.decode(reader, reader.uint32(), useInterfaces);
           break;
         default:
           reader.skipType(tag & 7);
@@ -1529,21 +1669,21 @@ export const QueryAllUndelegationResponse = {
     }
     return message;
   },
-  toAmino(message: QueryAllUndelegationResponse): QueryAllUndelegationResponseAmino {
+  toAmino(message: QueryAllUndelegationResponse, useInterfaces: boolean = true): QueryAllUndelegationResponseAmino {
     const obj: any = {};
     if (message.undelegation) {
-      obj.undelegation = message.undelegation.map(e => e ? Undelegation.toAmino(e) : undefined);
+      obj.undelegation = message.undelegation.map(e => e ? Undelegation.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.undelegation = [];
+      obj.undelegation = message.undelegation;
     }
-    obj.pagination = message.pagination ? PageResponse.toAmino(message.pagination) : undefined;
+    obj.pagination = message.pagination ? PageResponse.toAmino(message.pagination, useInterfaces) : undefined;
     return obj;
   },
   fromAminoMsg(object: QueryAllUndelegationResponseAminoMsg): QueryAllUndelegationResponse {
     return QueryAllUndelegationResponse.fromAmino(object.value);
   },
-  fromProtoMsg(message: QueryAllUndelegationResponseProtoMsg): QueryAllUndelegationResponse {
-    return QueryAllUndelegationResponse.decode(message.value);
+  fromProtoMsg(message: QueryAllUndelegationResponseProtoMsg, useInterfaces: boolean = true): QueryAllUndelegationResponse {
+    return QueryAllUndelegationResponse.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: QueryAllUndelegationResponse): Uint8Array {
     return QueryAllUndelegationResponse.encode(message).finish();
@@ -1555,6 +1695,7 @@ export const QueryAllUndelegationResponse = {
     };
   }
 };
+GlobalDecoderRegistry.register(QueryAllUndelegationResponse.typeUrl, QueryAllUndelegationResponse);
 function createBaseQueryIncompleteUndelegationRequest(): QueryIncompleteUndelegationRequest {
   return {
     hostChain: "",
@@ -1563,6 +1704,15 @@ function createBaseQueryIncompleteUndelegationRequest(): QueryIncompleteUndelega
 }
 export const QueryIncompleteUndelegationRequest = {
   typeUrl: "/pryzm.icstaking.v1.QueryIncompleteUndelegationRequest",
+  is(o: any): o is QueryIncompleteUndelegationRequest {
+    return o && (o.$typeUrl === QueryIncompleteUndelegationRequest.typeUrl || typeof o.hostChain === "string");
+  },
+  isSDK(o: any): o is QueryIncompleteUndelegationRequestSDKType {
+    return o && (o.$typeUrl === QueryIncompleteUndelegationRequest.typeUrl || typeof o.host_chain === "string");
+  },
+  isAmino(o: any): o is QueryIncompleteUndelegationRequestAmino {
+    return o && (o.$typeUrl === QueryIncompleteUndelegationRequest.typeUrl || typeof o.host_chain === "string");
+  },
   encode(message: QueryIncompleteUndelegationRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.hostChain !== "") {
       writer.uint32(10).string(message.hostChain);
@@ -1572,7 +1722,7 @@ export const QueryIncompleteUndelegationRequest = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): QueryIncompleteUndelegationRequest {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): QueryIncompleteUndelegationRequest {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryIncompleteUndelegationRequest();
@@ -1583,7 +1733,7 @@ export const QueryIncompleteUndelegationRequest = {
           message.hostChain = reader.string();
           break;
         case 2:
-          message.pagination = PageRequest.decode(reader, reader.uint32());
+          message.pagination = PageRequest.decode(reader, reader.uint32(), useInterfaces);
           break;
         default:
           reader.skipType(tag & 7);
@@ -1620,17 +1770,17 @@ export const QueryIncompleteUndelegationRequest = {
     }
     return message;
   },
-  toAmino(message: QueryIncompleteUndelegationRequest): QueryIncompleteUndelegationRequestAmino {
+  toAmino(message: QueryIncompleteUndelegationRequest, useInterfaces: boolean = true): QueryIncompleteUndelegationRequestAmino {
     const obj: any = {};
-    obj.host_chain = message.hostChain;
-    obj.pagination = message.pagination ? PageRequest.toAmino(message.pagination) : undefined;
+    obj.host_chain = message.hostChain === "" ? undefined : message.hostChain;
+    obj.pagination = message.pagination ? PageRequest.toAmino(message.pagination, useInterfaces) : undefined;
     return obj;
   },
   fromAminoMsg(object: QueryIncompleteUndelegationRequestAminoMsg): QueryIncompleteUndelegationRequest {
     return QueryIncompleteUndelegationRequest.fromAmino(object.value);
   },
-  fromProtoMsg(message: QueryIncompleteUndelegationRequestProtoMsg): QueryIncompleteUndelegationRequest {
-    return QueryIncompleteUndelegationRequest.decode(message.value);
+  fromProtoMsg(message: QueryIncompleteUndelegationRequestProtoMsg, useInterfaces: boolean = true): QueryIncompleteUndelegationRequest {
+    return QueryIncompleteUndelegationRequest.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: QueryIncompleteUndelegationRequest): Uint8Array {
     return QueryIncompleteUndelegationRequest.encode(message).finish();
@@ -1642,6 +1792,7 @@ export const QueryIncompleteUndelegationRequest = {
     };
   }
 };
+GlobalDecoderRegistry.register(QueryIncompleteUndelegationRequest.typeUrl, QueryIncompleteUndelegationRequest);
 function createBaseQueryIncompleteUndelegationResponse(): QueryIncompleteUndelegationResponse {
   return {
     undelegation: [],
@@ -1650,6 +1801,15 @@ function createBaseQueryIncompleteUndelegationResponse(): QueryIncompleteUndeleg
 }
 export const QueryIncompleteUndelegationResponse = {
   typeUrl: "/pryzm.icstaking.v1.QueryIncompleteUndelegationResponse",
+  is(o: any): o is QueryIncompleteUndelegationResponse {
+    return o && (o.$typeUrl === QueryIncompleteUndelegationResponse.typeUrl || Array.isArray(o.undelegation) && (!o.undelegation.length || Undelegation.is(o.undelegation[0])));
+  },
+  isSDK(o: any): o is QueryIncompleteUndelegationResponseSDKType {
+    return o && (o.$typeUrl === QueryIncompleteUndelegationResponse.typeUrl || Array.isArray(o.undelegation) && (!o.undelegation.length || Undelegation.isSDK(o.undelegation[0])));
+  },
+  isAmino(o: any): o is QueryIncompleteUndelegationResponseAmino {
+    return o && (o.$typeUrl === QueryIncompleteUndelegationResponse.typeUrl || Array.isArray(o.undelegation) && (!o.undelegation.length || Undelegation.isAmino(o.undelegation[0])));
+  },
   encode(message: QueryIncompleteUndelegationResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     for (const v of message.undelegation) {
       Undelegation.encode(v!, writer.uint32(10).fork()).ldelim();
@@ -1659,7 +1819,7 @@ export const QueryIncompleteUndelegationResponse = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): QueryIncompleteUndelegationResponse {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): QueryIncompleteUndelegationResponse {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryIncompleteUndelegationResponse();
@@ -1667,10 +1827,10 @@ export const QueryIncompleteUndelegationResponse = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.undelegation.push(Undelegation.decode(reader, reader.uint32()));
+          message.undelegation.push(Undelegation.decode(reader, reader.uint32(), useInterfaces));
           break;
         case 2:
-          message.pagination = PageResponse.decode(reader, reader.uint32());
+          message.pagination = PageResponse.decode(reader, reader.uint32(), useInterfaces);
           break;
         default:
           reader.skipType(tag & 7);
@@ -1709,21 +1869,21 @@ export const QueryIncompleteUndelegationResponse = {
     }
     return message;
   },
-  toAmino(message: QueryIncompleteUndelegationResponse): QueryIncompleteUndelegationResponseAmino {
+  toAmino(message: QueryIncompleteUndelegationResponse, useInterfaces: boolean = true): QueryIncompleteUndelegationResponseAmino {
     const obj: any = {};
     if (message.undelegation) {
-      obj.undelegation = message.undelegation.map(e => e ? Undelegation.toAmino(e) : undefined);
+      obj.undelegation = message.undelegation.map(e => e ? Undelegation.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.undelegation = [];
+      obj.undelegation = message.undelegation;
     }
-    obj.pagination = message.pagination ? PageResponse.toAmino(message.pagination) : undefined;
+    obj.pagination = message.pagination ? PageResponse.toAmino(message.pagination, useInterfaces) : undefined;
     return obj;
   },
   fromAminoMsg(object: QueryIncompleteUndelegationResponseAminoMsg): QueryIncompleteUndelegationResponse {
     return QueryIncompleteUndelegationResponse.fromAmino(object.value);
   },
-  fromProtoMsg(message: QueryIncompleteUndelegationResponseProtoMsg): QueryIncompleteUndelegationResponse {
-    return QueryIncompleteUndelegationResponse.decode(message.value);
+  fromProtoMsg(message: QueryIncompleteUndelegationResponseProtoMsg, useInterfaces: boolean = true): QueryIncompleteUndelegationResponse {
+    return QueryIncompleteUndelegationResponse.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: QueryIncompleteUndelegationResponse): Uint8Array {
     return QueryIncompleteUndelegationResponse.encode(message).finish();
@@ -1735,6 +1895,7 @@ export const QueryIncompleteUndelegationResponse = {
     };
   }
 };
+GlobalDecoderRegistry.register(QueryIncompleteUndelegationResponse.typeUrl, QueryIncompleteUndelegationResponse);
 function createBaseQueryGetChannelUndelegationRequest(): QueryGetChannelUndelegationRequest {
   return {
     hostChain: "",
@@ -1744,6 +1905,15 @@ function createBaseQueryGetChannelUndelegationRequest(): QueryGetChannelUndelega
 }
 export const QueryGetChannelUndelegationRequest = {
   typeUrl: "/pryzm.icstaking.v1.QueryGetChannelUndelegationRequest",
+  is(o: any): o is QueryGetChannelUndelegationRequest {
+    return o && (o.$typeUrl === QueryGetChannelUndelegationRequest.typeUrl || typeof o.hostChain === "string" && typeof o.epoch === "bigint" && typeof o.transferChannel === "string");
+  },
+  isSDK(o: any): o is QueryGetChannelUndelegationRequestSDKType {
+    return o && (o.$typeUrl === QueryGetChannelUndelegationRequest.typeUrl || typeof o.host_chain === "string" && typeof o.epoch === "bigint" && typeof o.transfer_channel === "string");
+  },
+  isAmino(o: any): o is QueryGetChannelUndelegationRequestAmino {
+    return o && (o.$typeUrl === QueryGetChannelUndelegationRequest.typeUrl || typeof o.host_chain === "string" && typeof o.epoch === "bigint" && typeof o.transfer_channel === "string");
+  },
   encode(message: QueryGetChannelUndelegationRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.hostChain !== "") {
       writer.uint32(10).string(message.hostChain);
@@ -1756,7 +1926,7 @@ export const QueryGetChannelUndelegationRequest = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): QueryGetChannelUndelegationRequest {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): QueryGetChannelUndelegationRequest {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryGetChannelUndelegationRequest();
@@ -1813,18 +1983,18 @@ export const QueryGetChannelUndelegationRequest = {
     }
     return message;
   },
-  toAmino(message: QueryGetChannelUndelegationRequest): QueryGetChannelUndelegationRequestAmino {
+  toAmino(message: QueryGetChannelUndelegationRequest, useInterfaces: boolean = true): QueryGetChannelUndelegationRequestAmino {
     const obj: any = {};
-    obj.host_chain = message.hostChain;
+    obj.host_chain = message.hostChain === "" ? undefined : message.hostChain;
     obj.epoch = message.epoch ? message.epoch.toString() : undefined;
-    obj.transfer_channel = message.transferChannel;
+    obj.transfer_channel = message.transferChannel === "" ? undefined : message.transferChannel;
     return obj;
   },
   fromAminoMsg(object: QueryGetChannelUndelegationRequestAminoMsg): QueryGetChannelUndelegationRequest {
     return QueryGetChannelUndelegationRequest.fromAmino(object.value);
   },
-  fromProtoMsg(message: QueryGetChannelUndelegationRequestProtoMsg): QueryGetChannelUndelegationRequest {
-    return QueryGetChannelUndelegationRequest.decode(message.value);
+  fromProtoMsg(message: QueryGetChannelUndelegationRequestProtoMsg, useInterfaces: boolean = true): QueryGetChannelUndelegationRequest {
+    return QueryGetChannelUndelegationRequest.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: QueryGetChannelUndelegationRequest): Uint8Array {
     return QueryGetChannelUndelegationRequest.encode(message).finish();
@@ -1836,6 +2006,7 @@ export const QueryGetChannelUndelegationRequest = {
     };
   }
 };
+GlobalDecoderRegistry.register(QueryGetChannelUndelegationRequest.typeUrl, QueryGetChannelUndelegationRequest);
 function createBaseQueryGetChannelUndelegationResponse(): QueryGetChannelUndelegationResponse {
   return {
     channelUndelegation: ChannelUndelegation.fromPartial({})
@@ -1843,13 +2014,22 @@ function createBaseQueryGetChannelUndelegationResponse(): QueryGetChannelUndeleg
 }
 export const QueryGetChannelUndelegationResponse = {
   typeUrl: "/pryzm.icstaking.v1.QueryGetChannelUndelegationResponse",
+  is(o: any): o is QueryGetChannelUndelegationResponse {
+    return o && (o.$typeUrl === QueryGetChannelUndelegationResponse.typeUrl || ChannelUndelegation.is(o.channelUndelegation));
+  },
+  isSDK(o: any): o is QueryGetChannelUndelegationResponseSDKType {
+    return o && (o.$typeUrl === QueryGetChannelUndelegationResponse.typeUrl || ChannelUndelegation.isSDK(o.channel_undelegation));
+  },
+  isAmino(o: any): o is QueryGetChannelUndelegationResponseAmino {
+    return o && (o.$typeUrl === QueryGetChannelUndelegationResponse.typeUrl || ChannelUndelegation.isAmino(o.channel_undelegation));
+  },
   encode(message: QueryGetChannelUndelegationResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.channelUndelegation !== undefined) {
       ChannelUndelegation.encode(message.channelUndelegation, writer.uint32(10).fork()).ldelim();
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): QueryGetChannelUndelegationResponse {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): QueryGetChannelUndelegationResponse {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryGetChannelUndelegationResponse();
@@ -1857,7 +2037,7 @@ export const QueryGetChannelUndelegationResponse = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.channelUndelegation = ChannelUndelegation.decode(reader, reader.uint32());
+          message.channelUndelegation = ChannelUndelegation.decode(reader, reader.uint32(), useInterfaces);
           break;
         default:
           reader.skipType(tag & 7);
@@ -1888,16 +2068,16 @@ export const QueryGetChannelUndelegationResponse = {
     }
     return message;
   },
-  toAmino(message: QueryGetChannelUndelegationResponse): QueryGetChannelUndelegationResponseAmino {
+  toAmino(message: QueryGetChannelUndelegationResponse, useInterfaces: boolean = true): QueryGetChannelUndelegationResponseAmino {
     const obj: any = {};
-    obj.channel_undelegation = message.channelUndelegation ? ChannelUndelegation.toAmino(message.channelUndelegation) : undefined;
+    obj.channel_undelegation = message.channelUndelegation ? ChannelUndelegation.toAmino(message.channelUndelegation, useInterfaces) : undefined;
     return obj;
   },
   fromAminoMsg(object: QueryGetChannelUndelegationResponseAminoMsg): QueryGetChannelUndelegationResponse {
     return QueryGetChannelUndelegationResponse.fromAmino(object.value);
   },
-  fromProtoMsg(message: QueryGetChannelUndelegationResponseProtoMsg): QueryGetChannelUndelegationResponse {
-    return QueryGetChannelUndelegationResponse.decode(message.value);
+  fromProtoMsg(message: QueryGetChannelUndelegationResponseProtoMsg, useInterfaces: boolean = true): QueryGetChannelUndelegationResponse {
+    return QueryGetChannelUndelegationResponse.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: QueryGetChannelUndelegationResponse): Uint8Array {
     return QueryGetChannelUndelegationResponse.encode(message).finish();
@@ -1909,6 +2089,7 @@ export const QueryGetChannelUndelegationResponse = {
     };
   }
 };
+GlobalDecoderRegistry.register(QueryGetChannelUndelegationResponse.typeUrl, QueryGetChannelUndelegationResponse);
 function createBaseQueryAllChannelUndelegationRequest(): QueryAllChannelUndelegationRequest {
   return {
     hostChain: "",
@@ -1918,6 +2099,15 @@ function createBaseQueryAllChannelUndelegationRequest(): QueryAllChannelUndelega
 }
 export const QueryAllChannelUndelegationRequest = {
   typeUrl: "/pryzm.icstaking.v1.QueryAllChannelUndelegationRequest",
+  is(o: any): o is QueryAllChannelUndelegationRequest {
+    return o && (o.$typeUrl === QueryAllChannelUndelegationRequest.typeUrl || typeof o.hostChain === "string" && typeof o.epoch === "bigint");
+  },
+  isSDK(o: any): o is QueryAllChannelUndelegationRequestSDKType {
+    return o && (o.$typeUrl === QueryAllChannelUndelegationRequest.typeUrl || typeof o.host_chain === "string" && typeof o.epoch === "bigint");
+  },
+  isAmino(o: any): o is QueryAllChannelUndelegationRequestAmino {
+    return o && (o.$typeUrl === QueryAllChannelUndelegationRequest.typeUrl || typeof o.host_chain === "string" && typeof o.epoch === "bigint");
+  },
   encode(message: QueryAllChannelUndelegationRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.hostChain !== "") {
       writer.uint32(10).string(message.hostChain);
@@ -1930,7 +2120,7 @@ export const QueryAllChannelUndelegationRequest = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): QueryAllChannelUndelegationRequest {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): QueryAllChannelUndelegationRequest {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryAllChannelUndelegationRequest();
@@ -1944,7 +2134,7 @@ export const QueryAllChannelUndelegationRequest = {
           message.epoch = reader.uint64();
           break;
         case 3:
-          message.pagination = PageRequest.decode(reader, reader.uint32());
+          message.pagination = PageRequest.decode(reader, reader.uint32(), useInterfaces);
           break;
         default:
           reader.skipType(tag & 7);
@@ -1987,18 +2177,18 @@ export const QueryAllChannelUndelegationRequest = {
     }
     return message;
   },
-  toAmino(message: QueryAllChannelUndelegationRequest): QueryAllChannelUndelegationRequestAmino {
+  toAmino(message: QueryAllChannelUndelegationRequest, useInterfaces: boolean = true): QueryAllChannelUndelegationRequestAmino {
     const obj: any = {};
-    obj.host_chain = message.hostChain;
+    obj.host_chain = message.hostChain === "" ? undefined : message.hostChain;
     obj.epoch = message.epoch ? message.epoch.toString() : undefined;
-    obj.pagination = message.pagination ? PageRequest.toAmino(message.pagination) : undefined;
+    obj.pagination = message.pagination ? PageRequest.toAmino(message.pagination, useInterfaces) : undefined;
     return obj;
   },
   fromAminoMsg(object: QueryAllChannelUndelegationRequestAminoMsg): QueryAllChannelUndelegationRequest {
     return QueryAllChannelUndelegationRequest.fromAmino(object.value);
   },
-  fromProtoMsg(message: QueryAllChannelUndelegationRequestProtoMsg): QueryAllChannelUndelegationRequest {
-    return QueryAllChannelUndelegationRequest.decode(message.value);
+  fromProtoMsg(message: QueryAllChannelUndelegationRequestProtoMsg, useInterfaces: boolean = true): QueryAllChannelUndelegationRequest {
+    return QueryAllChannelUndelegationRequest.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: QueryAllChannelUndelegationRequest): Uint8Array {
     return QueryAllChannelUndelegationRequest.encode(message).finish();
@@ -2010,6 +2200,7 @@ export const QueryAllChannelUndelegationRequest = {
     };
   }
 };
+GlobalDecoderRegistry.register(QueryAllChannelUndelegationRequest.typeUrl, QueryAllChannelUndelegationRequest);
 function createBaseQueryAllChannelUndelegationResponse(): QueryAllChannelUndelegationResponse {
   return {
     channelUndelegation: [],
@@ -2018,6 +2209,15 @@ function createBaseQueryAllChannelUndelegationResponse(): QueryAllChannelUndeleg
 }
 export const QueryAllChannelUndelegationResponse = {
   typeUrl: "/pryzm.icstaking.v1.QueryAllChannelUndelegationResponse",
+  is(o: any): o is QueryAllChannelUndelegationResponse {
+    return o && (o.$typeUrl === QueryAllChannelUndelegationResponse.typeUrl || Array.isArray(o.channelUndelegation) && (!o.channelUndelegation.length || ChannelUndelegation.is(o.channelUndelegation[0])));
+  },
+  isSDK(o: any): o is QueryAllChannelUndelegationResponseSDKType {
+    return o && (o.$typeUrl === QueryAllChannelUndelegationResponse.typeUrl || Array.isArray(o.channel_undelegation) && (!o.channel_undelegation.length || ChannelUndelegation.isSDK(o.channel_undelegation[0])));
+  },
+  isAmino(o: any): o is QueryAllChannelUndelegationResponseAmino {
+    return o && (o.$typeUrl === QueryAllChannelUndelegationResponse.typeUrl || Array.isArray(o.channel_undelegation) && (!o.channel_undelegation.length || ChannelUndelegation.isAmino(o.channel_undelegation[0])));
+  },
   encode(message: QueryAllChannelUndelegationResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     for (const v of message.channelUndelegation) {
       ChannelUndelegation.encode(v!, writer.uint32(10).fork()).ldelim();
@@ -2027,7 +2227,7 @@ export const QueryAllChannelUndelegationResponse = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): QueryAllChannelUndelegationResponse {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): QueryAllChannelUndelegationResponse {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryAllChannelUndelegationResponse();
@@ -2035,10 +2235,10 @@ export const QueryAllChannelUndelegationResponse = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.channelUndelegation.push(ChannelUndelegation.decode(reader, reader.uint32()));
+          message.channelUndelegation.push(ChannelUndelegation.decode(reader, reader.uint32(), useInterfaces));
           break;
         case 2:
-          message.pagination = PageResponse.decode(reader, reader.uint32());
+          message.pagination = PageResponse.decode(reader, reader.uint32(), useInterfaces);
           break;
         default:
           reader.skipType(tag & 7);
@@ -2077,21 +2277,21 @@ export const QueryAllChannelUndelegationResponse = {
     }
     return message;
   },
-  toAmino(message: QueryAllChannelUndelegationResponse): QueryAllChannelUndelegationResponseAmino {
+  toAmino(message: QueryAllChannelUndelegationResponse, useInterfaces: boolean = true): QueryAllChannelUndelegationResponseAmino {
     const obj: any = {};
     if (message.channelUndelegation) {
-      obj.channel_undelegation = message.channelUndelegation.map(e => e ? ChannelUndelegation.toAmino(e) : undefined);
+      obj.channel_undelegation = message.channelUndelegation.map(e => e ? ChannelUndelegation.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.channel_undelegation = [];
+      obj.channel_undelegation = message.channelUndelegation;
     }
-    obj.pagination = message.pagination ? PageResponse.toAmino(message.pagination) : undefined;
+    obj.pagination = message.pagination ? PageResponse.toAmino(message.pagination, useInterfaces) : undefined;
     return obj;
   },
   fromAminoMsg(object: QueryAllChannelUndelegationResponseAminoMsg): QueryAllChannelUndelegationResponse {
     return QueryAllChannelUndelegationResponse.fromAmino(object.value);
   },
-  fromProtoMsg(message: QueryAllChannelUndelegationResponseProtoMsg): QueryAllChannelUndelegationResponse {
-    return QueryAllChannelUndelegationResponse.decode(message.value);
+  fromProtoMsg(message: QueryAllChannelUndelegationResponseProtoMsg, useInterfaces: boolean = true): QueryAllChannelUndelegationResponse {
+    return QueryAllChannelUndelegationResponse.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: QueryAllChannelUndelegationResponse): Uint8Array {
     return QueryAllChannelUndelegationResponse.encode(message).finish();
@@ -2103,6 +2303,7 @@ export const QueryAllChannelUndelegationResponse = {
     };
   }
 };
+GlobalDecoderRegistry.register(QueryAllChannelUndelegationResponse.typeUrl, QueryAllChannelUndelegationResponse);
 function createBaseQueryDelegationQueueBalanceRequest(): QueryDelegationQueueBalanceRequest {
   return {
     hostChain: "",
@@ -2111,6 +2312,15 @@ function createBaseQueryDelegationQueueBalanceRequest(): QueryDelegationQueueBal
 }
 export const QueryDelegationQueueBalanceRequest = {
   typeUrl: "/pryzm.icstaking.v1.QueryDelegationQueueBalanceRequest",
+  is(o: any): o is QueryDelegationQueueBalanceRequest {
+    return o && (o.$typeUrl === QueryDelegationQueueBalanceRequest.typeUrl || typeof o.hostChain === "string" && typeof o.transferChannel === "string");
+  },
+  isSDK(o: any): o is QueryDelegationQueueBalanceRequestSDKType {
+    return o && (o.$typeUrl === QueryDelegationQueueBalanceRequest.typeUrl || typeof o.host_chain === "string" && typeof o.transfer_channel === "string");
+  },
+  isAmino(o: any): o is QueryDelegationQueueBalanceRequestAmino {
+    return o && (o.$typeUrl === QueryDelegationQueueBalanceRequest.typeUrl || typeof o.host_chain === "string" && typeof o.transfer_channel === "string");
+  },
   encode(message: QueryDelegationQueueBalanceRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.hostChain !== "") {
       writer.uint32(10).string(message.hostChain);
@@ -2120,7 +2330,7 @@ export const QueryDelegationQueueBalanceRequest = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): QueryDelegationQueueBalanceRequest {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): QueryDelegationQueueBalanceRequest {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryDelegationQueueBalanceRequest();
@@ -2168,17 +2378,17 @@ export const QueryDelegationQueueBalanceRequest = {
     }
     return message;
   },
-  toAmino(message: QueryDelegationQueueBalanceRequest): QueryDelegationQueueBalanceRequestAmino {
+  toAmino(message: QueryDelegationQueueBalanceRequest, useInterfaces: boolean = true): QueryDelegationQueueBalanceRequestAmino {
     const obj: any = {};
-    obj.host_chain = message.hostChain;
-    obj.transfer_channel = message.transferChannel;
+    obj.host_chain = message.hostChain === "" ? undefined : message.hostChain;
+    obj.transfer_channel = message.transferChannel === "" ? undefined : message.transferChannel;
     return obj;
   },
   fromAminoMsg(object: QueryDelegationQueueBalanceRequestAminoMsg): QueryDelegationQueueBalanceRequest {
     return QueryDelegationQueueBalanceRequest.fromAmino(object.value);
   },
-  fromProtoMsg(message: QueryDelegationQueueBalanceRequestProtoMsg): QueryDelegationQueueBalanceRequest {
-    return QueryDelegationQueueBalanceRequest.decode(message.value);
+  fromProtoMsg(message: QueryDelegationQueueBalanceRequestProtoMsg, useInterfaces: boolean = true): QueryDelegationQueueBalanceRequest {
+    return QueryDelegationQueueBalanceRequest.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: QueryDelegationQueueBalanceRequest): Uint8Array {
     return QueryDelegationQueueBalanceRequest.encode(message).finish();
@@ -2190,6 +2400,7 @@ export const QueryDelegationQueueBalanceRequest = {
     };
   }
 };
+GlobalDecoderRegistry.register(QueryDelegationQueueBalanceRequest.typeUrl, QueryDelegationQueueBalanceRequest);
 function createBaseQueryDelegationQueueBalanceResponse(): QueryDelegationQueueBalanceResponse {
   return {
     balance: Coin.fromPartial({})
@@ -2197,13 +2408,22 @@ function createBaseQueryDelegationQueueBalanceResponse(): QueryDelegationQueueBa
 }
 export const QueryDelegationQueueBalanceResponse = {
   typeUrl: "/pryzm.icstaking.v1.QueryDelegationQueueBalanceResponse",
+  is(o: any): o is QueryDelegationQueueBalanceResponse {
+    return o && (o.$typeUrl === QueryDelegationQueueBalanceResponse.typeUrl || Coin.is(o.balance));
+  },
+  isSDK(o: any): o is QueryDelegationQueueBalanceResponseSDKType {
+    return o && (o.$typeUrl === QueryDelegationQueueBalanceResponse.typeUrl || Coin.isSDK(o.balance));
+  },
+  isAmino(o: any): o is QueryDelegationQueueBalanceResponseAmino {
+    return o && (o.$typeUrl === QueryDelegationQueueBalanceResponse.typeUrl || Coin.isAmino(o.balance));
+  },
   encode(message: QueryDelegationQueueBalanceResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.balance !== undefined) {
       Coin.encode(message.balance, writer.uint32(10).fork()).ldelim();
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): QueryDelegationQueueBalanceResponse {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): QueryDelegationQueueBalanceResponse {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryDelegationQueueBalanceResponse();
@@ -2211,7 +2431,7 @@ export const QueryDelegationQueueBalanceResponse = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.balance = Coin.decode(reader, reader.uint32());
+          message.balance = Coin.decode(reader, reader.uint32(), useInterfaces);
           break;
         default:
           reader.skipType(tag & 7);
@@ -2242,16 +2462,16 @@ export const QueryDelegationQueueBalanceResponse = {
     }
     return message;
   },
-  toAmino(message: QueryDelegationQueueBalanceResponse): QueryDelegationQueueBalanceResponseAmino {
+  toAmino(message: QueryDelegationQueueBalanceResponse, useInterfaces: boolean = true): QueryDelegationQueueBalanceResponseAmino {
     const obj: any = {};
-    obj.balance = message.balance ? Coin.toAmino(message.balance) : undefined;
+    obj.balance = message.balance ? Coin.toAmino(message.balance, useInterfaces) : undefined;
     return obj;
   },
   fromAminoMsg(object: QueryDelegationQueueBalanceResponseAminoMsg): QueryDelegationQueueBalanceResponse {
     return QueryDelegationQueueBalanceResponse.fromAmino(object.value);
   },
-  fromProtoMsg(message: QueryDelegationQueueBalanceResponseProtoMsg): QueryDelegationQueueBalanceResponse {
-    return QueryDelegationQueueBalanceResponse.decode(message.value);
+  fromProtoMsg(message: QueryDelegationQueueBalanceResponseProtoMsg, useInterfaces: boolean = true): QueryDelegationQueueBalanceResponse {
+    return QueryDelegationQueueBalanceResponse.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: QueryDelegationQueueBalanceResponse): Uint8Array {
     return QueryDelegationQueueBalanceResponse.encode(message).finish();
@@ -2263,6 +2483,7 @@ export const QueryDelegationQueueBalanceResponse = {
     };
   }
 };
+GlobalDecoderRegistry.register(QueryDelegationQueueBalanceResponse.typeUrl, QueryDelegationQueueBalanceResponse);
 function createBaseQueryEpochInfoRequest(): QueryEpochInfoRequest {
   return {
     hostChain: ""
@@ -2270,13 +2491,22 @@ function createBaseQueryEpochInfoRequest(): QueryEpochInfoRequest {
 }
 export const QueryEpochInfoRequest = {
   typeUrl: "/pryzm.icstaking.v1.QueryEpochInfoRequest",
+  is(o: any): o is QueryEpochInfoRequest {
+    return o && (o.$typeUrl === QueryEpochInfoRequest.typeUrl || typeof o.hostChain === "string");
+  },
+  isSDK(o: any): o is QueryEpochInfoRequestSDKType {
+    return o && (o.$typeUrl === QueryEpochInfoRequest.typeUrl || typeof o.host_chain === "string");
+  },
+  isAmino(o: any): o is QueryEpochInfoRequestAmino {
+    return o && (o.$typeUrl === QueryEpochInfoRequest.typeUrl || typeof o.host_chain === "string");
+  },
   encode(message: QueryEpochInfoRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.hostChain !== "") {
       writer.uint32(10).string(message.hostChain);
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): QueryEpochInfoRequest {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): QueryEpochInfoRequest {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryEpochInfoRequest();
@@ -2315,16 +2545,16 @@ export const QueryEpochInfoRequest = {
     }
     return message;
   },
-  toAmino(message: QueryEpochInfoRequest): QueryEpochInfoRequestAmino {
+  toAmino(message: QueryEpochInfoRequest, useInterfaces: boolean = true): QueryEpochInfoRequestAmino {
     const obj: any = {};
-    obj.host_chain = message.hostChain;
+    obj.host_chain = message.hostChain === "" ? undefined : message.hostChain;
     return obj;
   },
   fromAminoMsg(object: QueryEpochInfoRequestAminoMsg): QueryEpochInfoRequest {
     return QueryEpochInfoRequest.fromAmino(object.value);
   },
-  fromProtoMsg(message: QueryEpochInfoRequestProtoMsg): QueryEpochInfoRequest {
-    return QueryEpochInfoRequest.decode(message.value);
+  fromProtoMsg(message: QueryEpochInfoRequestProtoMsg, useInterfaces: boolean = true): QueryEpochInfoRequest {
+    return QueryEpochInfoRequest.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: QueryEpochInfoRequest): Uint8Array {
     return QueryEpochInfoRequest.encode(message).finish();
@@ -2336,6 +2566,7 @@ export const QueryEpochInfoRequest = {
     };
   }
 };
+GlobalDecoderRegistry.register(QueryEpochInfoRequest.typeUrl, QueryEpochInfoRequest);
 function createBaseQueryEpochInfoResponse(): QueryEpochInfoResponse {
   return {
     lastDelegationTime: Timestamp.fromPartial({}),
@@ -2345,6 +2576,15 @@ function createBaseQueryEpochInfoResponse(): QueryEpochInfoResponse {
 }
 export const QueryEpochInfoResponse = {
   typeUrl: "/pryzm.icstaking.v1.QueryEpochInfoResponse",
+  is(o: any): o is QueryEpochInfoResponse {
+    return o && (o.$typeUrl === QueryEpochInfoResponse.typeUrl || Timestamp.is(o.lastDelegationTime) && Timestamp.is(o.lastUndelegationTime) && typeof o.currentUndelegationEpoch === "bigint");
+  },
+  isSDK(o: any): o is QueryEpochInfoResponseSDKType {
+    return o && (o.$typeUrl === QueryEpochInfoResponse.typeUrl || Timestamp.isSDK(o.last_delegation_time) && Timestamp.isSDK(o.last_undelegation_time) && typeof o.current_undelegation_epoch === "bigint");
+  },
+  isAmino(o: any): o is QueryEpochInfoResponseAmino {
+    return o && (o.$typeUrl === QueryEpochInfoResponse.typeUrl || Timestamp.isAmino(o.last_delegation_time) && Timestamp.isAmino(o.last_undelegation_time) && typeof o.current_undelegation_epoch === "bigint");
+  },
   encode(message: QueryEpochInfoResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.lastDelegationTime !== undefined) {
       Timestamp.encode(message.lastDelegationTime, writer.uint32(10).fork()).ldelim();
@@ -2357,7 +2597,7 @@ export const QueryEpochInfoResponse = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): QueryEpochInfoResponse {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): QueryEpochInfoResponse {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryEpochInfoResponse();
@@ -2414,18 +2654,18 @@ export const QueryEpochInfoResponse = {
     }
     return message;
   },
-  toAmino(message: QueryEpochInfoResponse): QueryEpochInfoResponseAmino {
+  toAmino(message: QueryEpochInfoResponse, useInterfaces: boolean = true): QueryEpochInfoResponseAmino {
     const obj: any = {};
-    obj.last_delegation_time = message.lastDelegationTime ? Timestamp.toAmino(message.lastDelegationTime) : undefined;
-    obj.last_undelegation_time = message.lastUndelegationTime ? Timestamp.toAmino(message.lastUndelegationTime) : undefined;
+    obj.last_delegation_time = message.lastDelegationTime ? Timestamp.toAmino(message.lastDelegationTime, useInterfaces) : undefined;
+    obj.last_undelegation_time = message.lastUndelegationTime ? Timestamp.toAmino(message.lastUndelegationTime, useInterfaces) : undefined;
     obj.current_undelegation_epoch = message.currentUndelegationEpoch ? message.currentUndelegationEpoch.toString() : undefined;
     return obj;
   },
   fromAminoMsg(object: QueryEpochInfoResponseAminoMsg): QueryEpochInfoResponse {
     return QueryEpochInfoResponse.fromAmino(object.value);
   },
-  fromProtoMsg(message: QueryEpochInfoResponseProtoMsg): QueryEpochInfoResponse {
-    return QueryEpochInfoResponse.decode(message.value);
+  fromProtoMsg(message: QueryEpochInfoResponseProtoMsg, useInterfaces: boolean = true): QueryEpochInfoResponse {
+    return QueryEpochInfoResponse.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: QueryEpochInfoResponse): Uint8Array {
     return QueryEpochInfoResponse.encode(message).finish();
@@ -2437,3 +2677,4 @@ export const QueryEpochInfoResponse = {
     };
   }
 };
+GlobalDecoderRegistry.register(QueryEpochInfoResponse.typeUrl, QueryEpochInfoResponse);

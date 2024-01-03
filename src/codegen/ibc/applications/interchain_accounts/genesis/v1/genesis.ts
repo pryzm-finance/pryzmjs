@@ -6,6 +6,7 @@ import { ParamsAmino as Params2Amino } from "../../host/v1/host";
 import { ParamsSDKType as Params2SDKType } from "../../host/v1/host";
 import { BinaryReader, BinaryWriter } from "../../../../../binary";
 import { isSet } from "../../../../../helpers";
+import { GlobalDecoderRegistry } from "../../../../../registry";
 /** GenesisState defines the interchain accounts genesis state */
 export interface GenesisState {
   controllerGenesisState: ControllerGenesisState;
@@ -159,6 +160,16 @@ function createBaseGenesisState(): GenesisState {
 }
 export const GenesisState = {
   typeUrl: "/ibc.applications.interchain_accounts.genesis.v1.GenesisState",
+  aminoType: "cosmos-sdk/GenesisState",
+  is(o: any): o is GenesisState {
+    return o && (o.$typeUrl === GenesisState.typeUrl || ControllerGenesisState.is(o.controllerGenesisState) && HostGenesisState.is(o.hostGenesisState));
+  },
+  isSDK(o: any): o is GenesisStateSDKType {
+    return o && (o.$typeUrl === GenesisState.typeUrl || ControllerGenesisState.isSDK(o.controller_genesis_state) && HostGenesisState.isSDK(o.host_genesis_state));
+  },
+  isAmino(o: any): o is GenesisStateAmino {
+    return o && (o.$typeUrl === GenesisState.typeUrl || ControllerGenesisState.isAmino(o.controller_genesis_state) && HostGenesisState.isAmino(o.host_genesis_state));
+  },
   encode(message: GenesisState, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.controllerGenesisState !== undefined) {
       ControllerGenesisState.encode(message.controllerGenesisState, writer.uint32(10).fork()).ldelim();
@@ -168,7 +179,7 @@ export const GenesisState = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): GenesisState {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): GenesisState {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseGenesisState();
@@ -176,10 +187,10 @@ export const GenesisState = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.controllerGenesisState = ControllerGenesisState.decode(reader, reader.uint32());
+          message.controllerGenesisState = ControllerGenesisState.decode(reader, reader.uint32(), useInterfaces);
           break;
         case 2:
-          message.hostGenesisState = HostGenesisState.decode(reader, reader.uint32());
+          message.hostGenesisState = HostGenesisState.decode(reader, reader.uint32(), useInterfaces);
           break;
         default:
           reader.skipType(tag & 7);
@@ -216,23 +227,23 @@ export const GenesisState = {
     }
     return message;
   },
-  toAmino(message: GenesisState): GenesisStateAmino {
+  toAmino(message: GenesisState, useInterfaces: boolean = true): GenesisStateAmino {
     const obj: any = {};
-    obj.controller_genesis_state = message.controllerGenesisState ? ControllerGenesisState.toAmino(message.controllerGenesisState) : undefined;
-    obj.host_genesis_state = message.hostGenesisState ? HostGenesisState.toAmino(message.hostGenesisState) : undefined;
+    obj.controller_genesis_state = message.controllerGenesisState ? ControllerGenesisState.toAmino(message.controllerGenesisState, useInterfaces) : undefined;
+    obj.host_genesis_state = message.hostGenesisState ? HostGenesisState.toAmino(message.hostGenesisState, useInterfaces) : undefined;
     return obj;
   },
   fromAminoMsg(object: GenesisStateAminoMsg): GenesisState {
     return GenesisState.fromAmino(object.value);
   },
-  toAminoMsg(message: GenesisState): GenesisStateAminoMsg {
+  toAminoMsg(message: GenesisState, useInterfaces: boolean = true): GenesisStateAminoMsg {
     return {
       type: "cosmos-sdk/GenesisState",
-      value: GenesisState.toAmino(message)
+      value: GenesisState.toAmino(message, useInterfaces)
     };
   },
-  fromProtoMsg(message: GenesisStateProtoMsg): GenesisState {
-    return GenesisState.decode(message.value);
+  fromProtoMsg(message: GenesisStateProtoMsg, useInterfaces: boolean = true): GenesisState {
+    return GenesisState.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: GenesisState): Uint8Array {
     return GenesisState.encode(message).finish();
@@ -244,6 +255,8 @@ export const GenesisState = {
     };
   }
 };
+GlobalDecoderRegistry.register(GenesisState.typeUrl, GenesisState);
+GlobalDecoderRegistry.registerAminoProtoMapping(GenesisState.aminoType, GenesisState.typeUrl);
 function createBaseControllerGenesisState(): ControllerGenesisState {
   return {
     activeChannels: [],
@@ -254,6 +267,16 @@ function createBaseControllerGenesisState(): ControllerGenesisState {
 }
 export const ControllerGenesisState = {
   typeUrl: "/ibc.applications.interchain_accounts.genesis.v1.ControllerGenesisState",
+  aminoType: "cosmos-sdk/ControllerGenesisState",
+  is(o: any): o is ControllerGenesisState {
+    return o && (o.$typeUrl === ControllerGenesisState.typeUrl || Array.isArray(o.activeChannels) && (!o.activeChannels.length || ActiveChannel.is(o.activeChannels[0])) && Array.isArray(o.interchainAccounts) && (!o.interchainAccounts.length || RegisteredInterchainAccount.is(o.interchainAccounts[0])) && Array.isArray(o.ports) && (!o.ports.length || typeof o.ports[0] === "string") && Params1.is(o.params));
+  },
+  isSDK(o: any): o is ControllerGenesisStateSDKType {
+    return o && (o.$typeUrl === ControllerGenesisState.typeUrl || Array.isArray(o.active_channels) && (!o.active_channels.length || ActiveChannel.isSDK(o.active_channels[0])) && Array.isArray(o.interchain_accounts) && (!o.interchain_accounts.length || RegisteredInterchainAccount.isSDK(o.interchain_accounts[0])) && Array.isArray(o.ports) && (!o.ports.length || typeof o.ports[0] === "string") && Params1.isSDK(o.params));
+  },
+  isAmino(o: any): o is ControllerGenesisStateAmino {
+    return o && (o.$typeUrl === ControllerGenesisState.typeUrl || Array.isArray(o.active_channels) && (!o.active_channels.length || ActiveChannel.isAmino(o.active_channels[0])) && Array.isArray(o.interchain_accounts) && (!o.interchain_accounts.length || RegisteredInterchainAccount.isAmino(o.interchain_accounts[0])) && Array.isArray(o.ports) && (!o.ports.length || typeof o.ports[0] === "string") && Params1.isAmino(o.params));
+  },
   encode(message: ControllerGenesisState, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     for (const v of message.activeChannels) {
       ActiveChannel.encode(v!, writer.uint32(10).fork()).ldelim();
@@ -269,7 +292,7 @@ export const ControllerGenesisState = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): ControllerGenesisState {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): ControllerGenesisState {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseControllerGenesisState();
@@ -277,16 +300,16 @@ export const ControllerGenesisState = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.activeChannels.push(ActiveChannel.decode(reader, reader.uint32()));
+          message.activeChannels.push(ActiveChannel.decode(reader, reader.uint32(), useInterfaces));
           break;
         case 2:
-          message.interchainAccounts.push(RegisteredInterchainAccount.decode(reader, reader.uint32()));
+          message.interchainAccounts.push(RegisteredInterchainAccount.decode(reader, reader.uint32(), useInterfaces));
           break;
         case 3:
           message.ports.push(reader.string());
           break;
         case 4:
-          message.params = Params1.decode(reader, reader.uint32());
+          message.params = Params1.decode(reader, reader.uint32(), useInterfaces);
           break;
         default:
           reader.skipType(tag & 7);
@@ -341,37 +364,37 @@ export const ControllerGenesisState = {
     }
     return message;
   },
-  toAmino(message: ControllerGenesisState): ControllerGenesisStateAmino {
+  toAmino(message: ControllerGenesisState, useInterfaces: boolean = true): ControllerGenesisStateAmino {
     const obj: any = {};
     if (message.activeChannels) {
-      obj.active_channels = message.activeChannels.map(e => e ? ActiveChannel.toAmino(e) : undefined);
+      obj.active_channels = message.activeChannels.map(e => e ? ActiveChannel.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.active_channels = [];
+      obj.active_channels = message.activeChannels;
     }
     if (message.interchainAccounts) {
-      obj.interchain_accounts = message.interchainAccounts.map(e => e ? RegisteredInterchainAccount.toAmino(e) : undefined);
+      obj.interchain_accounts = message.interchainAccounts.map(e => e ? RegisteredInterchainAccount.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.interchain_accounts = [];
+      obj.interchain_accounts = message.interchainAccounts;
     }
     if (message.ports) {
       obj.ports = message.ports.map(e => e);
     } else {
-      obj.ports = [];
+      obj.ports = message.ports;
     }
-    obj.params = message.params ? Params1.toAmino(message.params) : undefined;
+    obj.params = message.params ? Params1.toAmino(message.params, useInterfaces) : undefined;
     return obj;
   },
   fromAminoMsg(object: ControllerGenesisStateAminoMsg): ControllerGenesisState {
     return ControllerGenesisState.fromAmino(object.value);
   },
-  toAminoMsg(message: ControllerGenesisState): ControllerGenesisStateAminoMsg {
+  toAminoMsg(message: ControllerGenesisState, useInterfaces: boolean = true): ControllerGenesisStateAminoMsg {
     return {
       type: "cosmos-sdk/ControllerGenesisState",
-      value: ControllerGenesisState.toAmino(message)
+      value: ControllerGenesisState.toAmino(message, useInterfaces)
     };
   },
-  fromProtoMsg(message: ControllerGenesisStateProtoMsg): ControllerGenesisState {
-    return ControllerGenesisState.decode(message.value);
+  fromProtoMsg(message: ControllerGenesisStateProtoMsg, useInterfaces: boolean = true): ControllerGenesisState {
+    return ControllerGenesisState.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: ControllerGenesisState): Uint8Array {
     return ControllerGenesisState.encode(message).finish();
@@ -383,6 +406,8 @@ export const ControllerGenesisState = {
     };
   }
 };
+GlobalDecoderRegistry.register(ControllerGenesisState.typeUrl, ControllerGenesisState);
+GlobalDecoderRegistry.registerAminoProtoMapping(ControllerGenesisState.aminoType, ControllerGenesisState.typeUrl);
 function createBaseHostGenesisState(): HostGenesisState {
   return {
     activeChannels: [],
@@ -393,6 +418,16 @@ function createBaseHostGenesisState(): HostGenesisState {
 }
 export const HostGenesisState = {
   typeUrl: "/ibc.applications.interchain_accounts.genesis.v1.HostGenesisState",
+  aminoType: "cosmos-sdk/HostGenesisState",
+  is(o: any): o is HostGenesisState {
+    return o && (o.$typeUrl === HostGenesisState.typeUrl || Array.isArray(o.activeChannels) && (!o.activeChannels.length || ActiveChannel.is(o.activeChannels[0])) && Array.isArray(o.interchainAccounts) && (!o.interchainAccounts.length || RegisteredInterchainAccount.is(o.interchainAccounts[0])) && typeof o.port === "string" && Params2.is(o.params));
+  },
+  isSDK(o: any): o is HostGenesisStateSDKType {
+    return o && (o.$typeUrl === HostGenesisState.typeUrl || Array.isArray(o.active_channels) && (!o.active_channels.length || ActiveChannel.isSDK(o.active_channels[0])) && Array.isArray(o.interchain_accounts) && (!o.interchain_accounts.length || RegisteredInterchainAccount.isSDK(o.interchain_accounts[0])) && typeof o.port === "string" && Params2.isSDK(o.params));
+  },
+  isAmino(o: any): o is HostGenesisStateAmino {
+    return o && (o.$typeUrl === HostGenesisState.typeUrl || Array.isArray(o.active_channels) && (!o.active_channels.length || ActiveChannel.isAmino(o.active_channels[0])) && Array.isArray(o.interchain_accounts) && (!o.interchain_accounts.length || RegisteredInterchainAccount.isAmino(o.interchain_accounts[0])) && typeof o.port === "string" && Params2.isAmino(o.params));
+  },
   encode(message: HostGenesisState, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     for (const v of message.activeChannels) {
       ActiveChannel.encode(v!, writer.uint32(10).fork()).ldelim();
@@ -408,7 +443,7 @@ export const HostGenesisState = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): HostGenesisState {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): HostGenesisState {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseHostGenesisState();
@@ -416,16 +451,16 @@ export const HostGenesisState = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.activeChannels.push(ActiveChannel.decode(reader, reader.uint32()));
+          message.activeChannels.push(ActiveChannel.decode(reader, reader.uint32(), useInterfaces));
           break;
         case 2:
-          message.interchainAccounts.push(RegisteredInterchainAccount.decode(reader, reader.uint32()));
+          message.interchainAccounts.push(RegisteredInterchainAccount.decode(reader, reader.uint32(), useInterfaces));
           break;
         case 3:
           message.port = reader.string();
           break;
         case 4:
-          message.params = Params2.decode(reader, reader.uint32());
+          message.params = Params2.decode(reader, reader.uint32(), useInterfaces);
           break;
         default:
           reader.skipType(tag & 7);
@@ -478,33 +513,33 @@ export const HostGenesisState = {
     }
     return message;
   },
-  toAmino(message: HostGenesisState): HostGenesisStateAmino {
+  toAmino(message: HostGenesisState, useInterfaces: boolean = true): HostGenesisStateAmino {
     const obj: any = {};
     if (message.activeChannels) {
-      obj.active_channels = message.activeChannels.map(e => e ? ActiveChannel.toAmino(e) : undefined);
+      obj.active_channels = message.activeChannels.map(e => e ? ActiveChannel.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.active_channels = [];
+      obj.active_channels = message.activeChannels;
     }
     if (message.interchainAccounts) {
-      obj.interchain_accounts = message.interchainAccounts.map(e => e ? RegisteredInterchainAccount.toAmino(e) : undefined);
+      obj.interchain_accounts = message.interchainAccounts.map(e => e ? RegisteredInterchainAccount.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.interchain_accounts = [];
+      obj.interchain_accounts = message.interchainAccounts;
     }
-    obj.port = message.port;
-    obj.params = message.params ? Params2.toAmino(message.params) : undefined;
+    obj.port = message.port === "" ? undefined : message.port;
+    obj.params = message.params ? Params2.toAmino(message.params, useInterfaces) : undefined;
     return obj;
   },
   fromAminoMsg(object: HostGenesisStateAminoMsg): HostGenesisState {
     return HostGenesisState.fromAmino(object.value);
   },
-  toAminoMsg(message: HostGenesisState): HostGenesisStateAminoMsg {
+  toAminoMsg(message: HostGenesisState, useInterfaces: boolean = true): HostGenesisStateAminoMsg {
     return {
       type: "cosmos-sdk/HostGenesisState",
-      value: HostGenesisState.toAmino(message)
+      value: HostGenesisState.toAmino(message, useInterfaces)
     };
   },
-  fromProtoMsg(message: HostGenesisStateProtoMsg): HostGenesisState {
-    return HostGenesisState.decode(message.value);
+  fromProtoMsg(message: HostGenesisStateProtoMsg, useInterfaces: boolean = true): HostGenesisState {
+    return HostGenesisState.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: HostGenesisState): Uint8Array {
     return HostGenesisState.encode(message).finish();
@@ -516,6 +551,8 @@ export const HostGenesisState = {
     };
   }
 };
+GlobalDecoderRegistry.register(HostGenesisState.typeUrl, HostGenesisState);
+GlobalDecoderRegistry.registerAminoProtoMapping(HostGenesisState.aminoType, HostGenesisState.typeUrl);
 function createBaseActiveChannel(): ActiveChannel {
   return {
     connectionId: "",
@@ -526,6 +563,16 @@ function createBaseActiveChannel(): ActiveChannel {
 }
 export const ActiveChannel = {
   typeUrl: "/ibc.applications.interchain_accounts.genesis.v1.ActiveChannel",
+  aminoType: "cosmos-sdk/ActiveChannel",
+  is(o: any): o is ActiveChannel {
+    return o && (o.$typeUrl === ActiveChannel.typeUrl || typeof o.connectionId === "string" && typeof o.portId === "string" && typeof o.channelId === "string" && typeof o.isMiddlewareEnabled === "boolean");
+  },
+  isSDK(o: any): o is ActiveChannelSDKType {
+    return o && (o.$typeUrl === ActiveChannel.typeUrl || typeof o.connection_id === "string" && typeof o.port_id === "string" && typeof o.channel_id === "string" && typeof o.is_middleware_enabled === "boolean");
+  },
+  isAmino(o: any): o is ActiveChannelAmino {
+    return o && (o.$typeUrl === ActiveChannel.typeUrl || typeof o.connection_id === "string" && typeof o.port_id === "string" && typeof o.channel_id === "string" && typeof o.is_middleware_enabled === "boolean");
+  },
   encode(message: ActiveChannel, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.connectionId !== "") {
       writer.uint32(10).string(message.connectionId);
@@ -541,7 +588,7 @@ export const ActiveChannel = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): ActiveChannel {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): ActiveChannel {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseActiveChannel();
@@ -607,25 +654,25 @@ export const ActiveChannel = {
     }
     return message;
   },
-  toAmino(message: ActiveChannel): ActiveChannelAmino {
+  toAmino(message: ActiveChannel, useInterfaces: boolean = true): ActiveChannelAmino {
     const obj: any = {};
-    obj.connection_id = message.connectionId;
-    obj.port_id = message.portId;
-    obj.channel_id = message.channelId;
-    obj.is_middleware_enabled = message.isMiddlewareEnabled;
+    obj.connection_id = message.connectionId === "" ? undefined : message.connectionId;
+    obj.port_id = message.portId === "" ? undefined : message.portId;
+    obj.channel_id = message.channelId === "" ? undefined : message.channelId;
+    obj.is_middleware_enabled = message.isMiddlewareEnabled === false ? undefined : message.isMiddlewareEnabled;
     return obj;
   },
   fromAminoMsg(object: ActiveChannelAminoMsg): ActiveChannel {
     return ActiveChannel.fromAmino(object.value);
   },
-  toAminoMsg(message: ActiveChannel): ActiveChannelAminoMsg {
+  toAminoMsg(message: ActiveChannel, useInterfaces: boolean = true): ActiveChannelAminoMsg {
     return {
       type: "cosmos-sdk/ActiveChannel",
-      value: ActiveChannel.toAmino(message)
+      value: ActiveChannel.toAmino(message, useInterfaces)
     };
   },
-  fromProtoMsg(message: ActiveChannelProtoMsg): ActiveChannel {
-    return ActiveChannel.decode(message.value);
+  fromProtoMsg(message: ActiveChannelProtoMsg, useInterfaces: boolean = true): ActiveChannel {
+    return ActiveChannel.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: ActiveChannel): Uint8Array {
     return ActiveChannel.encode(message).finish();
@@ -637,6 +684,8 @@ export const ActiveChannel = {
     };
   }
 };
+GlobalDecoderRegistry.register(ActiveChannel.typeUrl, ActiveChannel);
+GlobalDecoderRegistry.registerAminoProtoMapping(ActiveChannel.aminoType, ActiveChannel.typeUrl);
 function createBaseRegisteredInterchainAccount(): RegisteredInterchainAccount {
   return {
     connectionId: "",
@@ -646,6 +695,16 @@ function createBaseRegisteredInterchainAccount(): RegisteredInterchainAccount {
 }
 export const RegisteredInterchainAccount = {
   typeUrl: "/ibc.applications.interchain_accounts.genesis.v1.RegisteredInterchainAccount",
+  aminoType: "cosmos-sdk/RegisteredInterchainAccount",
+  is(o: any): o is RegisteredInterchainAccount {
+    return o && (o.$typeUrl === RegisteredInterchainAccount.typeUrl || typeof o.connectionId === "string" && typeof o.portId === "string" && typeof o.accountAddress === "string");
+  },
+  isSDK(o: any): o is RegisteredInterchainAccountSDKType {
+    return o && (o.$typeUrl === RegisteredInterchainAccount.typeUrl || typeof o.connection_id === "string" && typeof o.port_id === "string" && typeof o.account_address === "string");
+  },
+  isAmino(o: any): o is RegisteredInterchainAccountAmino {
+    return o && (o.$typeUrl === RegisteredInterchainAccount.typeUrl || typeof o.connection_id === "string" && typeof o.port_id === "string" && typeof o.account_address === "string");
+  },
   encode(message: RegisteredInterchainAccount, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.connectionId !== "") {
       writer.uint32(10).string(message.connectionId);
@@ -658,7 +717,7 @@ export const RegisteredInterchainAccount = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): RegisteredInterchainAccount {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): RegisteredInterchainAccount {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseRegisteredInterchainAccount();
@@ -715,24 +774,24 @@ export const RegisteredInterchainAccount = {
     }
     return message;
   },
-  toAmino(message: RegisteredInterchainAccount): RegisteredInterchainAccountAmino {
+  toAmino(message: RegisteredInterchainAccount, useInterfaces: boolean = true): RegisteredInterchainAccountAmino {
     const obj: any = {};
-    obj.connection_id = message.connectionId;
-    obj.port_id = message.portId;
-    obj.account_address = message.accountAddress;
+    obj.connection_id = message.connectionId === "" ? undefined : message.connectionId;
+    obj.port_id = message.portId === "" ? undefined : message.portId;
+    obj.account_address = message.accountAddress === "" ? undefined : message.accountAddress;
     return obj;
   },
   fromAminoMsg(object: RegisteredInterchainAccountAminoMsg): RegisteredInterchainAccount {
     return RegisteredInterchainAccount.fromAmino(object.value);
   },
-  toAminoMsg(message: RegisteredInterchainAccount): RegisteredInterchainAccountAminoMsg {
+  toAminoMsg(message: RegisteredInterchainAccount, useInterfaces: boolean = true): RegisteredInterchainAccountAminoMsg {
     return {
       type: "cosmos-sdk/RegisteredInterchainAccount",
-      value: RegisteredInterchainAccount.toAmino(message)
+      value: RegisteredInterchainAccount.toAmino(message, useInterfaces)
     };
   },
-  fromProtoMsg(message: RegisteredInterchainAccountProtoMsg): RegisteredInterchainAccount {
-    return RegisteredInterchainAccount.decode(message.value);
+  fromProtoMsg(message: RegisteredInterchainAccountProtoMsg, useInterfaces: boolean = true): RegisteredInterchainAccount {
+    return RegisteredInterchainAccount.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: RegisteredInterchainAccount): Uint8Array {
     return RegisteredInterchainAccount.encode(message).finish();
@@ -744,3 +803,5 @@ export const RegisteredInterchainAccount = {
     };
   }
 };
+GlobalDecoderRegistry.register(RegisteredInterchainAccount.typeUrl, RegisteredInterchainAccount);
+GlobalDecoderRegistry.registerAminoProtoMapping(RegisteredInterchainAccount.aminoType, RegisteredInterchainAccount.typeUrl);

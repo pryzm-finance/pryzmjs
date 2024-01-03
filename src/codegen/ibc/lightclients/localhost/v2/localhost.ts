@@ -1,6 +1,7 @@
 import { Height, HeightAmino, HeightSDKType } from "../../../core/client/v1/client";
 import { BinaryReader, BinaryWriter } from "../../../../binary";
 import { isSet } from "../../../../helpers";
+import { GlobalDecoderRegistry } from "../../../../registry";
 /** ClientState defines the 09-localhost client state */
 export interface ClientState {
   /** the latest block height */
@@ -30,13 +31,23 @@ function createBaseClientState(): ClientState {
 }
 export const ClientState = {
   typeUrl: "/ibc.lightclients.localhost.v2.ClientState",
+  aminoType: "cosmos-sdk/ClientState",
+  is(o: any): o is ClientState {
+    return o && (o.$typeUrl === ClientState.typeUrl || Height.is(o.latestHeight));
+  },
+  isSDK(o: any): o is ClientStateSDKType {
+    return o && (o.$typeUrl === ClientState.typeUrl || Height.isSDK(o.latest_height));
+  },
+  isAmino(o: any): o is ClientStateAmino {
+    return o && (o.$typeUrl === ClientState.typeUrl || Height.isAmino(o.latest_height));
+  },
   encode(message: ClientState, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.latestHeight !== undefined) {
       Height.encode(message.latestHeight, writer.uint32(10).fork()).ldelim();
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): ClientState {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): ClientState {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseClientState();
@@ -44,7 +55,7 @@ export const ClientState = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.latestHeight = Height.decode(reader, reader.uint32());
+          message.latestHeight = Height.decode(reader, reader.uint32(), useInterfaces);
           break;
         default:
           reader.skipType(tag & 7);
@@ -75,22 +86,22 @@ export const ClientState = {
     }
     return message;
   },
-  toAmino(message: ClientState): ClientStateAmino {
+  toAmino(message: ClientState, useInterfaces: boolean = true): ClientStateAmino {
     const obj: any = {};
-    obj.latest_height = message.latestHeight ? Height.toAmino(message.latestHeight) : {};
+    obj.latest_height = message.latestHeight ? Height.toAmino(message.latestHeight, useInterfaces) : {};
     return obj;
   },
   fromAminoMsg(object: ClientStateAminoMsg): ClientState {
     return ClientState.fromAmino(object.value);
   },
-  toAminoMsg(message: ClientState): ClientStateAminoMsg {
+  toAminoMsg(message: ClientState, useInterfaces: boolean = true): ClientStateAminoMsg {
     return {
       type: "cosmos-sdk/ClientState",
-      value: ClientState.toAmino(message)
+      value: ClientState.toAmino(message, useInterfaces)
     };
   },
-  fromProtoMsg(message: ClientStateProtoMsg): ClientState {
-    return ClientState.decode(message.value);
+  fromProtoMsg(message: ClientStateProtoMsg, useInterfaces: boolean = true): ClientState {
+    return ClientState.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: ClientState): Uint8Array {
     return ClientState.encode(message).finish();
@@ -102,3 +113,5 @@ export const ClientState = {
     };
   }
 };
+GlobalDecoderRegistry.register(ClientState.typeUrl, ClientState);
+GlobalDecoderRegistry.registerAminoProtoMapping(ClientState.aminoType, ClientState.typeUrl);

@@ -6,6 +6,7 @@ import { ProposalAmino as Proposal2Amino } from "../../pryzm/pgov/v1/proposal";
 import { ProposalSDKType as Proposal2SDKType } from "../../pryzm/pgov/v1/proposal";
 import { BinaryReader, BinaryWriter } from "../../binary";
 import { isSet } from "../../helpers";
+import { GlobalDecoderRegistry } from "../../registry";
 export interface AssetProposal {
   origProposal: Proposal1;
   pryzmProposal?: Proposal2;
@@ -34,6 +35,15 @@ function createBaseAssetProposal(): AssetProposal {
 }
 export const AssetProposal = {
   typeUrl: "/pryzmatics.pgov.AssetProposal",
+  is(o: any): o is AssetProposal {
+    return o && (o.$typeUrl === AssetProposal.typeUrl || Proposal1.is(o.origProposal));
+  },
+  isSDK(o: any): o is AssetProposalSDKType {
+    return o && (o.$typeUrl === AssetProposal.typeUrl || Proposal1.isSDK(o.orig_proposal));
+  },
+  isAmino(o: any): o is AssetProposalAmino {
+    return o && (o.$typeUrl === AssetProposal.typeUrl || Proposal1.isAmino(o.orig_proposal));
+  },
   encode(message: AssetProposal, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.origProposal !== undefined) {
       Proposal1.encode(message.origProposal, writer.uint32(10).fork()).ldelim();
@@ -43,7 +53,7 @@ export const AssetProposal = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): AssetProposal {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): AssetProposal {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseAssetProposal();
@@ -51,10 +61,10 @@ export const AssetProposal = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.origProposal = Proposal1.decode(reader, reader.uint32());
+          message.origProposal = Proposal1.decode(reader, reader.uint32(), useInterfaces);
           break;
         case 2:
-          message.pryzmProposal = Proposal2.decode(reader, reader.uint32());
+          message.pryzmProposal = Proposal2.decode(reader, reader.uint32(), useInterfaces);
           break;
         default:
           reader.skipType(tag & 7);
@@ -91,17 +101,17 @@ export const AssetProposal = {
     }
     return message;
   },
-  toAmino(message: AssetProposal): AssetProposalAmino {
+  toAmino(message: AssetProposal, useInterfaces: boolean = true): AssetProposalAmino {
     const obj: any = {};
-    obj.orig_proposal = message.origProposal ? Proposal1.toAmino(message.origProposal) : undefined;
-    obj.pryzm_proposal = message.pryzmProposal ? Proposal2.toAmino(message.pryzmProposal) : undefined;
+    obj.orig_proposal = message.origProposal ? Proposal1.toAmino(message.origProposal, useInterfaces) : undefined;
+    obj.pryzm_proposal = message.pryzmProposal ? Proposal2.toAmino(message.pryzmProposal, useInterfaces) : undefined;
     return obj;
   },
   fromAminoMsg(object: AssetProposalAminoMsg): AssetProposal {
     return AssetProposal.fromAmino(object.value);
   },
-  fromProtoMsg(message: AssetProposalProtoMsg): AssetProposal {
-    return AssetProposal.decode(message.value);
+  fromProtoMsg(message: AssetProposalProtoMsg, useInterfaces: boolean = true): AssetProposal {
+    return AssetProposal.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: AssetProposal): Uint8Array {
     return AssetProposal.encode(message).finish();
@@ -113,3 +123,4 @@ export const AssetProposal = {
     };
   }
 };
+GlobalDecoderRegistry.register(AssetProposal.typeUrl, AssetProposal);

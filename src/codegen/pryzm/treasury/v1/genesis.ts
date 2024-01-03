@@ -3,6 +3,7 @@ import { FlowTrade, FlowTradeAmino, FlowTradeSDKType } from "./flow_trade";
 import { Params, ParamsAmino, ParamsSDKType } from "./params";
 import { BinaryReader, BinaryWriter } from "../../../binary";
 import { isSet } from "../../../helpers";
+import { GlobalDecoderRegistry } from "../../../registry";
 /** GenesisState defines the treasury module's genesis state. */
 export interface GenesisState {
   action: Action;
@@ -38,6 +39,15 @@ function createBaseGenesisState(): GenesisState {
 }
 export const GenesisState = {
   typeUrl: "/pryzm.treasury.v1.GenesisState",
+  is(o: any): o is GenesisState {
+    return o && (o.$typeUrl === GenesisState.typeUrl || Action.is(o.action) && Array.isArray(o.flowTradeList) && (!o.flowTradeList.length || FlowTrade.is(o.flowTradeList[0])) && Params.is(o.params));
+  },
+  isSDK(o: any): o is GenesisStateSDKType {
+    return o && (o.$typeUrl === GenesisState.typeUrl || Action.isSDK(o.action) && Array.isArray(o.flow_trade_list) && (!o.flow_trade_list.length || FlowTrade.isSDK(o.flow_trade_list[0])) && Params.isSDK(o.params));
+  },
+  isAmino(o: any): o is GenesisStateAmino {
+    return o && (o.$typeUrl === GenesisState.typeUrl || Action.isAmino(o.action) && Array.isArray(o.flow_trade_list) && (!o.flow_trade_list.length || FlowTrade.isAmino(o.flow_trade_list[0])) && Params.isAmino(o.params));
+  },
   encode(message: GenesisState, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.action !== undefined) {
       Action.encode(message.action, writer.uint32(10).fork()).ldelim();
@@ -50,7 +60,7 @@ export const GenesisState = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): GenesisState {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): GenesisState {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseGenesisState();
@@ -58,13 +68,13 @@ export const GenesisState = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.action = Action.decode(reader, reader.uint32());
+          message.action = Action.decode(reader, reader.uint32(), useInterfaces);
           break;
         case 2:
-          message.flowTradeList.push(FlowTrade.decode(reader, reader.uint32()));
+          message.flowTradeList.push(FlowTrade.decode(reader, reader.uint32(), useInterfaces));
           break;
         case 3:
-          message.params = Params.decode(reader, reader.uint32());
+          message.params = Params.decode(reader, reader.uint32(), useInterfaces);
           break;
         default:
           reader.skipType(tag & 7);
@@ -109,22 +119,22 @@ export const GenesisState = {
     }
     return message;
   },
-  toAmino(message: GenesisState): GenesisStateAmino {
+  toAmino(message: GenesisState, useInterfaces: boolean = true): GenesisStateAmino {
     const obj: any = {};
-    obj.action = message.action ? Action.toAmino(message.action) : undefined;
+    obj.action = message.action ? Action.toAmino(message.action, useInterfaces) : undefined;
     if (message.flowTradeList) {
-      obj.flow_trade_list = message.flowTradeList.map(e => e ? FlowTrade.toAmino(e) : undefined);
+      obj.flow_trade_list = message.flowTradeList.map(e => e ? FlowTrade.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.flow_trade_list = [];
+      obj.flow_trade_list = message.flowTradeList;
     }
-    obj.params = message.params ? Params.toAmino(message.params) : undefined;
+    obj.params = message.params ? Params.toAmino(message.params, useInterfaces) : undefined;
     return obj;
   },
   fromAminoMsg(object: GenesisStateAminoMsg): GenesisState {
     return GenesisState.fromAmino(object.value);
   },
-  fromProtoMsg(message: GenesisStateProtoMsg): GenesisState {
-    return GenesisState.decode(message.value);
+  fromProtoMsg(message: GenesisStateProtoMsg, useInterfaces: boolean = true): GenesisState {
+    return GenesisState.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: GenesisState): Uint8Array {
     return GenesisState.encode(message).finish();
@@ -136,3 +146,4 @@ export const GenesisState = {
     };
   }
 };
+GlobalDecoderRegistry.register(GenesisState.typeUrl, GenesisState);

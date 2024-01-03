@@ -1,6 +1,7 @@
 import { Duration, DurationAmino, DurationSDKType } from "../../google/protobuf/duration";
 import { BinaryReader, BinaryWriter } from "../../binary";
 import { isSet } from "../../helpers";
+import { GlobalDecoderRegistry } from "../../registry";
 /**
  * ConsensusParams contains consensus critical parameters that determine the
  * validity of blocks.
@@ -234,6 +235,15 @@ function createBaseConsensusParams(): ConsensusParams {
 }
 export const ConsensusParams = {
   typeUrl: "/tendermint.types.ConsensusParams",
+  is(o: any): o is ConsensusParams {
+    return o && o.$typeUrl === ConsensusParams.typeUrl;
+  },
+  isSDK(o: any): o is ConsensusParamsSDKType {
+    return o && o.$typeUrl === ConsensusParams.typeUrl;
+  },
+  isAmino(o: any): o is ConsensusParamsAmino {
+    return o && o.$typeUrl === ConsensusParams.typeUrl;
+  },
   encode(message: ConsensusParams, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.block !== undefined) {
       BlockParams.encode(message.block, writer.uint32(10).fork()).ldelim();
@@ -249,7 +259,7 @@ export const ConsensusParams = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): ConsensusParams {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): ConsensusParams {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseConsensusParams();
@@ -257,16 +267,16 @@ export const ConsensusParams = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.block = BlockParams.decode(reader, reader.uint32());
+          message.block = BlockParams.decode(reader, reader.uint32(), useInterfaces);
           break;
         case 2:
-          message.evidence = EvidenceParams.decode(reader, reader.uint32());
+          message.evidence = EvidenceParams.decode(reader, reader.uint32(), useInterfaces);
           break;
         case 3:
-          message.validator = ValidatorParams.decode(reader, reader.uint32());
+          message.validator = ValidatorParams.decode(reader, reader.uint32(), useInterfaces);
           break;
         case 4:
-          message.version = VersionParams.decode(reader, reader.uint32());
+          message.version = VersionParams.decode(reader, reader.uint32(), useInterfaces);
           break;
         default:
           reader.skipType(tag & 7);
@@ -315,19 +325,19 @@ export const ConsensusParams = {
     }
     return message;
   },
-  toAmino(message: ConsensusParams): ConsensusParamsAmino {
+  toAmino(message: ConsensusParams, useInterfaces: boolean = true): ConsensusParamsAmino {
     const obj: any = {};
-    obj.block = message.block ? BlockParams.toAmino(message.block) : undefined;
-    obj.evidence = message.evidence ? EvidenceParams.toAmino(message.evidence) : undefined;
-    obj.validator = message.validator ? ValidatorParams.toAmino(message.validator) : undefined;
-    obj.version = message.version ? VersionParams.toAmino(message.version) : undefined;
+    obj.block = message.block ? BlockParams.toAmino(message.block, useInterfaces) : undefined;
+    obj.evidence = message.evidence ? EvidenceParams.toAmino(message.evidence, useInterfaces) : undefined;
+    obj.validator = message.validator ? ValidatorParams.toAmino(message.validator, useInterfaces) : undefined;
+    obj.version = message.version ? VersionParams.toAmino(message.version, useInterfaces) : undefined;
     return obj;
   },
   fromAminoMsg(object: ConsensusParamsAminoMsg): ConsensusParams {
     return ConsensusParams.fromAmino(object.value);
   },
-  fromProtoMsg(message: ConsensusParamsProtoMsg): ConsensusParams {
-    return ConsensusParams.decode(message.value);
+  fromProtoMsg(message: ConsensusParamsProtoMsg, useInterfaces: boolean = true): ConsensusParams {
+    return ConsensusParams.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: ConsensusParams): Uint8Array {
     return ConsensusParams.encode(message).finish();
@@ -339,6 +349,7 @@ export const ConsensusParams = {
     };
   }
 };
+GlobalDecoderRegistry.register(ConsensusParams.typeUrl, ConsensusParams);
 function createBaseBlockParams(): BlockParams {
   return {
     maxBytes: BigInt(0),
@@ -347,6 +358,15 @@ function createBaseBlockParams(): BlockParams {
 }
 export const BlockParams = {
   typeUrl: "/tendermint.types.BlockParams",
+  is(o: any): o is BlockParams {
+    return o && (o.$typeUrl === BlockParams.typeUrl || typeof o.maxBytes === "bigint" && typeof o.maxGas === "bigint");
+  },
+  isSDK(o: any): o is BlockParamsSDKType {
+    return o && (o.$typeUrl === BlockParams.typeUrl || typeof o.max_bytes === "bigint" && typeof o.max_gas === "bigint");
+  },
+  isAmino(o: any): o is BlockParamsAmino {
+    return o && (o.$typeUrl === BlockParams.typeUrl || typeof o.max_bytes === "bigint" && typeof o.max_gas === "bigint");
+  },
   encode(message: BlockParams, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.maxBytes !== BigInt(0)) {
       writer.uint32(8).int64(message.maxBytes);
@@ -356,7 +376,7 @@ export const BlockParams = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): BlockParams {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): BlockParams {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseBlockParams();
@@ -404,7 +424,7 @@ export const BlockParams = {
     }
     return message;
   },
-  toAmino(message: BlockParams): BlockParamsAmino {
+  toAmino(message: BlockParams, useInterfaces: boolean = true): BlockParamsAmino {
     const obj: any = {};
     obj.max_bytes = message.maxBytes ? message.maxBytes.toString() : undefined;
     obj.max_gas = message.maxGas ? message.maxGas.toString() : undefined;
@@ -413,8 +433,8 @@ export const BlockParams = {
   fromAminoMsg(object: BlockParamsAminoMsg): BlockParams {
     return BlockParams.fromAmino(object.value);
   },
-  fromProtoMsg(message: BlockParamsProtoMsg): BlockParams {
-    return BlockParams.decode(message.value);
+  fromProtoMsg(message: BlockParamsProtoMsg, useInterfaces: boolean = true): BlockParams {
+    return BlockParams.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: BlockParams): Uint8Array {
     return BlockParams.encode(message).finish();
@@ -426,6 +446,7 @@ export const BlockParams = {
     };
   }
 };
+GlobalDecoderRegistry.register(BlockParams.typeUrl, BlockParams);
 function createBaseEvidenceParams(): EvidenceParams {
   return {
     maxAgeNumBlocks: BigInt(0),
@@ -435,6 +456,15 @@ function createBaseEvidenceParams(): EvidenceParams {
 }
 export const EvidenceParams = {
   typeUrl: "/tendermint.types.EvidenceParams",
+  is(o: any): o is EvidenceParams {
+    return o && (o.$typeUrl === EvidenceParams.typeUrl || typeof o.maxAgeNumBlocks === "bigint" && Duration.is(o.maxAgeDuration) && typeof o.maxBytes === "bigint");
+  },
+  isSDK(o: any): o is EvidenceParamsSDKType {
+    return o && (o.$typeUrl === EvidenceParams.typeUrl || typeof o.max_age_num_blocks === "bigint" && Duration.isSDK(o.max_age_duration) && typeof o.max_bytes === "bigint");
+  },
+  isAmino(o: any): o is EvidenceParamsAmino {
+    return o && (o.$typeUrl === EvidenceParams.typeUrl || typeof o.max_age_num_blocks === "bigint" && Duration.isAmino(o.max_age_duration) && typeof o.max_bytes === "bigint");
+  },
   encode(message: EvidenceParams, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.maxAgeNumBlocks !== BigInt(0)) {
       writer.uint32(8).int64(message.maxAgeNumBlocks);
@@ -447,7 +477,7 @@ export const EvidenceParams = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): EvidenceParams {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): EvidenceParams {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseEvidenceParams();
@@ -458,7 +488,7 @@ export const EvidenceParams = {
           message.maxAgeNumBlocks = reader.int64();
           break;
         case 2:
-          message.maxAgeDuration = Duration.decode(reader, reader.uint32());
+          message.maxAgeDuration = Duration.decode(reader, reader.uint32(), useInterfaces);
           break;
         case 3:
           message.maxBytes = reader.int64();
@@ -504,18 +534,18 @@ export const EvidenceParams = {
     }
     return message;
   },
-  toAmino(message: EvidenceParams): EvidenceParamsAmino {
+  toAmino(message: EvidenceParams, useInterfaces: boolean = true): EvidenceParamsAmino {
     const obj: any = {};
     obj.max_age_num_blocks = message.maxAgeNumBlocks ? message.maxAgeNumBlocks.toString() : undefined;
-    obj.max_age_duration = message.maxAgeDuration ? Duration.toAmino(message.maxAgeDuration) : undefined;
+    obj.max_age_duration = message.maxAgeDuration ? Duration.toAmino(message.maxAgeDuration, useInterfaces) : undefined;
     obj.max_bytes = message.maxBytes ? message.maxBytes.toString() : undefined;
     return obj;
   },
   fromAminoMsg(object: EvidenceParamsAminoMsg): EvidenceParams {
     return EvidenceParams.fromAmino(object.value);
   },
-  fromProtoMsg(message: EvidenceParamsProtoMsg): EvidenceParams {
-    return EvidenceParams.decode(message.value);
+  fromProtoMsg(message: EvidenceParamsProtoMsg, useInterfaces: boolean = true): EvidenceParams {
+    return EvidenceParams.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: EvidenceParams): Uint8Array {
     return EvidenceParams.encode(message).finish();
@@ -527,6 +557,7 @@ export const EvidenceParams = {
     };
   }
 };
+GlobalDecoderRegistry.register(EvidenceParams.typeUrl, EvidenceParams);
 function createBaseValidatorParams(): ValidatorParams {
   return {
     pubKeyTypes: []
@@ -534,13 +565,22 @@ function createBaseValidatorParams(): ValidatorParams {
 }
 export const ValidatorParams = {
   typeUrl: "/tendermint.types.ValidatorParams",
+  is(o: any): o is ValidatorParams {
+    return o && (o.$typeUrl === ValidatorParams.typeUrl || Array.isArray(o.pubKeyTypes) && (!o.pubKeyTypes.length || typeof o.pubKeyTypes[0] === "string"));
+  },
+  isSDK(o: any): o is ValidatorParamsSDKType {
+    return o && (o.$typeUrl === ValidatorParams.typeUrl || Array.isArray(o.pub_key_types) && (!o.pub_key_types.length || typeof o.pub_key_types[0] === "string"));
+  },
+  isAmino(o: any): o is ValidatorParamsAmino {
+    return o && (o.$typeUrl === ValidatorParams.typeUrl || Array.isArray(o.pub_key_types) && (!o.pub_key_types.length || typeof o.pub_key_types[0] === "string"));
+  },
   encode(message: ValidatorParams, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     for (const v of message.pubKeyTypes) {
       writer.uint32(10).string(v!);
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): ValidatorParams {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): ValidatorParams {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseValidatorParams();
@@ -581,20 +621,20 @@ export const ValidatorParams = {
     message.pubKeyTypes = object.pub_key_types?.map(e => e) || [];
     return message;
   },
-  toAmino(message: ValidatorParams): ValidatorParamsAmino {
+  toAmino(message: ValidatorParams, useInterfaces: boolean = true): ValidatorParamsAmino {
     const obj: any = {};
     if (message.pubKeyTypes) {
       obj.pub_key_types = message.pubKeyTypes.map(e => e);
     } else {
-      obj.pub_key_types = [];
+      obj.pub_key_types = message.pubKeyTypes;
     }
     return obj;
   },
   fromAminoMsg(object: ValidatorParamsAminoMsg): ValidatorParams {
     return ValidatorParams.fromAmino(object.value);
   },
-  fromProtoMsg(message: ValidatorParamsProtoMsg): ValidatorParams {
-    return ValidatorParams.decode(message.value);
+  fromProtoMsg(message: ValidatorParamsProtoMsg, useInterfaces: boolean = true): ValidatorParams {
+    return ValidatorParams.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: ValidatorParams): Uint8Array {
     return ValidatorParams.encode(message).finish();
@@ -606,6 +646,7 @@ export const ValidatorParams = {
     };
   }
 };
+GlobalDecoderRegistry.register(ValidatorParams.typeUrl, ValidatorParams);
 function createBaseVersionParams(): VersionParams {
   return {
     app: BigInt(0)
@@ -613,13 +654,22 @@ function createBaseVersionParams(): VersionParams {
 }
 export const VersionParams = {
   typeUrl: "/tendermint.types.VersionParams",
+  is(o: any): o is VersionParams {
+    return o && (o.$typeUrl === VersionParams.typeUrl || typeof o.app === "bigint");
+  },
+  isSDK(o: any): o is VersionParamsSDKType {
+    return o && (o.$typeUrl === VersionParams.typeUrl || typeof o.app === "bigint");
+  },
+  isAmino(o: any): o is VersionParamsAmino {
+    return o && (o.$typeUrl === VersionParams.typeUrl || typeof o.app === "bigint");
+  },
   encode(message: VersionParams, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.app !== BigInt(0)) {
       writer.uint32(8).uint64(message.app);
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): VersionParams {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): VersionParams {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseVersionParams();
@@ -658,7 +708,7 @@ export const VersionParams = {
     }
     return message;
   },
-  toAmino(message: VersionParams): VersionParamsAmino {
+  toAmino(message: VersionParams, useInterfaces: boolean = true): VersionParamsAmino {
     const obj: any = {};
     obj.app = message.app ? message.app.toString() : undefined;
     return obj;
@@ -666,8 +716,8 @@ export const VersionParams = {
   fromAminoMsg(object: VersionParamsAminoMsg): VersionParams {
     return VersionParams.fromAmino(object.value);
   },
-  fromProtoMsg(message: VersionParamsProtoMsg): VersionParams {
-    return VersionParams.decode(message.value);
+  fromProtoMsg(message: VersionParamsProtoMsg, useInterfaces: boolean = true): VersionParams {
+    return VersionParams.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: VersionParams): Uint8Array {
     return VersionParams.encode(message).finish();
@@ -679,6 +729,7 @@ export const VersionParams = {
     };
   }
 };
+GlobalDecoderRegistry.register(VersionParams.typeUrl, VersionParams);
 function createBaseHashedParams(): HashedParams {
   return {
     blockMaxBytes: BigInt(0),
@@ -687,6 +738,15 @@ function createBaseHashedParams(): HashedParams {
 }
 export const HashedParams = {
   typeUrl: "/tendermint.types.HashedParams",
+  is(o: any): o is HashedParams {
+    return o && (o.$typeUrl === HashedParams.typeUrl || typeof o.blockMaxBytes === "bigint" && typeof o.blockMaxGas === "bigint");
+  },
+  isSDK(o: any): o is HashedParamsSDKType {
+    return o && (o.$typeUrl === HashedParams.typeUrl || typeof o.block_max_bytes === "bigint" && typeof o.block_max_gas === "bigint");
+  },
+  isAmino(o: any): o is HashedParamsAmino {
+    return o && (o.$typeUrl === HashedParams.typeUrl || typeof o.block_max_bytes === "bigint" && typeof o.block_max_gas === "bigint");
+  },
   encode(message: HashedParams, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.blockMaxBytes !== BigInt(0)) {
       writer.uint32(8).int64(message.blockMaxBytes);
@@ -696,7 +756,7 @@ export const HashedParams = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): HashedParams {
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): HashedParams {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseHashedParams();
@@ -744,7 +804,7 @@ export const HashedParams = {
     }
     return message;
   },
-  toAmino(message: HashedParams): HashedParamsAmino {
+  toAmino(message: HashedParams, useInterfaces: boolean = true): HashedParamsAmino {
     const obj: any = {};
     obj.block_max_bytes = message.blockMaxBytes ? message.blockMaxBytes.toString() : undefined;
     obj.block_max_gas = message.blockMaxGas ? message.blockMaxGas.toString() : undefined;
@@ -753,8 +813,8 @@ export const HashedParams = {
   fromAminoMsg(object: HashedParamsAminoMsg): HashedParams {
     return HashedParams.fromAmino(object.value);
   },
-  fromProtoMsg(message: HashedParamsProtoMsg): HashedParams {
-    return HashedParams.decode(message.value);
+  fromProtoMsg(message: HashedParamsProtoMsg, useInterfaces: boolean = true): HashedParams {
+    return HashedParams.decode(message.value, undefined, useInterfaces);
   },
   toProto(message: HashedParams): Uint8Array {
     return HashedParams.encode(message).finish();
@@ -766,3 +826,4 @@ export const HashedParams = {
     };
   }
 };
+GlobalDecoderRegistry.register(HashedParams.typeUrl, HashedParams);
