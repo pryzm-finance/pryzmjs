@@ -21,7 +21,7 @@ export interface MsgDelegateAmino {
   amount?: CoinAmino;
 }
 export interface MsgDelegateAminoMsg {
-  type: "/alliance.alliance.MsgDelegate";
+  type: "alliance/MsgDelegate";
   value: MsgDelegateAmino;
 }
 export interface MsgDelegateSDKType {
@@ -55,7 +55,7 @@ export interface MsgUndelegateAmino {
   amount?: CoinAmino;
 }
 export interface MsgUndelegateAminoMsg {
-  type: "/alliance.alliance.MsgUndelegate";
+  type: "alliance/MsgUndelegate";
   value: MsgUndelegateAmino;
 }
 export interface MsgUndelegateSDKType {
@@ -91,7 +91,7 @@ export interface MsgRedelegateAmino {
   amount?: CoinAmino;
 }
 export interface MsgRedelegateAminoMsg {
-  type: "/alliance.alliance.MsgRedelegate";
+  type: "alliance/MsgRedelegate";
   value: MsgRedelegateAmino;
 }
 export interface MsgRedelegateSDKType {
@@ -126,7 +126,7 @@ export interface MsgClaimDelegationRewardsAmino {
   denom?: string;
 }
 export interface MsgClaimDelegationRewardsAminoMsg {
-  type: "/alliance.alliance.MsgClaimDelegationRewards";
+  type: "alliance/MsgClaimDelegationRewards";
   value: MsgClaimDelegationRewardsAmino;
 }
 export interface MsgClaimDelegationRewardsSDKType {
@@ -257,6 +257,8 @@ export interface MsgUpdateAlliance {
   takeRate: string;
   rewardChangeRate: string;
   rewardChangeInterval: Duration;
+  /** set a bound of weight range to limit how much reward weights can scale. */
+  rewardWeightRange: RewardWeightRange;
 }
 export interface MsgUpdateAllianceProtoMsg {
   typeUrl: "/alliance.alliance.MsgUpdateAlliance";
@@ -275,6 +277,8 @@ export interface MsgUpdateAllianceAmino {
   take_rate?: string;
   reward_change_rate?: string;
   reward_change_interval?: DurationAmino;
+  /** set a bound of weight range to limit how much reward weights can scale. */
+  reward_weight_range?: RewardWeightRangeAmino;
 }
 export interface MsgUpdateAllianceAminoMsg {
   type: "/alliance.alliance.MsgUpdateAlliance";
@@ -287,6 +291,7 @@ export interface MsgUpdateAllianceSDKType {
   take_rate: string;
   reward_change_rate: string;
   reward_change_interval: DurationSDKType;
+  reward_weight_range: RewardWeightRangeSDKType;
 }
 export interface MsgUpdateAllianceResponse {}
 export interface MsgUpdateAllianceResponseProtoMsg {
@@ -339,6 +344,7 @@ function createBaseMsgDelegate(): MsgDelegate {
 }
 export const MsgDelegate = {
   typeUrl: "/alliance.alliance.MsgDelegate",
+  aminoType: "alliance/MsgDelegate",
   is(o: any): o is MsgDelegate {
     return o && (o.$typeUrl === MsgDelegate.typeUrl || typeof o.delegatorAddress === "string" && typeof o.validatorAddress === "string" && Coin.is(o.amount));
   },
@@ -427,6 +433,12 @@ export const MsgDelegate = {
   fromAminoMsg(object: MsgDelegateAminoMsg): MsgDelegate {
     return MsgDelegate.fromAmino(object.value);
   },
+  toAminoMsg(message: MsgDelegate, useInterfaces: boolean = true): MsgDelegateAminoMsg {
+    return {
+      type: "alliance/MsgDelegate",
+      value: MsgDelegate.toAmino(message, useInterfaces)
+    };
+  },
   fromProtoMsg(message: MsgDelegateProtoMsg, useInterfaces: boolean = true): MsgDelegate {
     return MsgDelegate.decode(message.value, undefined, useInterfaces);
   },
@@ -441,6 +453,7 @@ export const MsgDelegate = {
   }
 };
 GlobalDecoderRegistry.register(MsgDelegate.typeUrl, MsgDelegate);
+GlobalDecoderRegistry.registerAminoProtoMapping(MsgDelegate.aminoType, MsgDelegate.typeUrl);
 function createBaseMsgDelegateResponse(): MsgDelegateResponse {
   return {};
 }
@@ -517,6 +530,7 @@ function createBaseMsgUndelegate(): MsgUndelegate {
 }
 export const MsgUndelegate = {
   typeUrl: "/alliance.alliance.MsgUndelegate",
+  aminoType: "alliance/MsgUndelegate",
   is(o: any): o is MsgUndelegate {
     return o && (o.$typeUrl === MsgUndelegate.typeUrl || typeof o.delegatorAddress === "string" && typeof o.validatorAddress === "string" && Coin.is(o.amount));
   },
@@ -605,6 +619,12 @@ export const MsgUndelegate = {
   fromAminoMsg(object: MsgUndelegateAminoMsg): MsgUndelegate {
     return MsgUndelegate.fromAmino(object.value);
   },
+  toAminoMsg(message: MsgUndelegate, useInterfaces: boolean = true): MsgUndelegateAminoMsg {
+    return {
+      type: "alliance/MsgUndelegate",
+      value: MsgUndelegate.toAmino(message, useInterfaces)
+    };
+  },
   fromProtoMsg(message: MsgUndelegateProtoMsg, useInterfaces: boolean = true): MsgUndelegate {
     return MsgUndelegate.decode(message.value, undefined, useInterfaces);
   },
@@ -619,6 +639,7 @@ export const MsgUndelegate = {
   }
 };
 GlobalDecoderRegistry.register(MsgUndelegate.typeUrl, MsgUndelegate);
+GlobalDecoderRegistry.registerAminoProtoMapping(MsgUndelegate.aminoType, MsgUndelegate.typeUrl);
 function createBaseMsgUndelegateResponse(): MsgUndelegateResponse {
   return {};
 }
@@ -696,6 +717,7 @@ function createBaseMsgRedelegate(): MsgRedelegate {
 }
 export const MsgRedelegate = {
   typeUrl: "/alliance.alliance.MsgRedelegate",
+  aminoType: "alliance/MsgRedelegate",
   is(o: any): o is MsgRedelegate {
     return o && (o.$typeUrl === MsgRedelegate.typeUrl || typeof o.delegatorAddress === "string" && typeof o.validatorSrcAddress === "string" && typeof o.validatorDstAddress === "string" && Coin.is(o.amount));
   },
@@ -797,6 +819,12 @@ export const MsgRedelegate = {
   fromAminoMsg(object: MsgRedelegateAminoMsg): MsgRedelegate {
     return MsgRedelegate.fromAmino(object.value);
   },
+  toAminoMsg(message: MsgRedelegate, useInterfaces: boolean = true): MsgRedelegateAminoMsg {
+    return {
+      type: "alliance/MsgRedelegate",
+      value: MsgRedelegate.toAmino(message, useInterfaces)
+    };
+  },
   fromProtoMsg(message: MsgRedelegateProtoMsg, useInterfaces: boolean = true): MsgRedelegate {
     return MsgRedelegate.decode(message.value, undefined, useInterfaces);
   },
@@ -811,6 +839,7 @@ export const MsgRedelegate = {
   }
 };
 GlobalDecoderRegistry.register(MsgRedelegate.typeUrl, MsgRedelegate);
+GlobalDecoderRegistry.registerAminoProtoMapping(MsgRedelegate.aminoType, MsgRedelegate.typeUrl);
 function createBaseMsgRedelegateResponse(): MsgRedelegateResponse {
   return {};
 }
@@ -887,6 +916,7 @@ function createBaseMsgClaimDelegationRewards(): MsgClaimDelegationRewards {
 }
 export const MsgClaimDelegationRewards = {
   typeUrl: "/alliance.alliance.MsgClaimDelegationRewards",
+  aminoType: "alliance/MsgClaimDelegationRewards",
   is(o: any): o is MsgClaimDelegationRewards {
     return o && (o.$typeUrl === MsgClaimDelegationRewards.typeUrl || typeof o.delegatorAddress === "string" && typeof o.validatorAddress === "string" && typeof o.denom === "string");
   },
@@ -975,6 +1005,12 @@ export const MsgClaimDelegationRewards = {
   fromAminoMsg(object: MsgClaimDelegationRewardsAminoMsg): MsgClaimDelegationRewards {
     return MsgClaimDelegationRewards.fromAmino(object.value);
   },
+  toAminoMsg(message: MsgClaimDelegationRewards, useInterfaces: boolean = true): MsgClaimDelegationRewardsAminoMsg {
+    return {
+      type: "alliance/MsgClaimDelegationRewards",
+      value: MsgClaimDelegationRewards.toAmino(message, useInterfaces)
+    };
+  },
   fromProtoMsg(message: MsgClaimDelegationRewardsProtoMsg, useInterfaces: boolean = true): MsgClaimDelegationRewards {
     return MsgClaimDelegationRewards.decode(message.value, undefined, useInterfaces);
   },
@@ -989,6 +1025,7 @@ export const MsgClaimDelegationRewards = {
   }
 };
 GlobalDecoderRegistry.register(MsgClaimDelegationRewards.typeUrl, MsgClaimDelegationRewards);
+GlobalDecoderRegistry.registerAminoProtoMapping(MsgClaimDelegationRewards.aminoType, MsgClaimDelegationRewards.typeUrl);
 function createBaseMsgClaimDelegationRewardsResponse(): MsgClaimDelegationRewardsResponse {
   return {};
 }
@@ -1461,19 +1498,20 @@ function createBaseMsgUpdateAlliance(): MsgUpdateAlliance {
     rewardWeight: "",
     takeRate: "",
     rewardChangeRate: "",
-    rewardChangeInterval: Duration.fromPartial({})
+    rewardChangeInterval: Duration.fromPartial({}),
+    rewardWeightRange: RewardWeightRange.fromPartial({})
   };
 }
 export const MsgUpdateAlliance = {
   typeUrl: "/alliance.alliance.MsgUpdateAlliance",
   is(o: any): o is MsgUpdateAlliance {
-    return o && (o.$typeUrl === MsgUpdateAlliance.typeUrl || typeof o.authority === "string" && typeof o.denom === "string" && typeof o.rewardWeight === "string" && typeof o.takeRate === "string" && typeof o.rewardChangeRate === "string" && Duration.is(o.rewardChangeInterval));
+    return o && (o.$typeUrl === MsgUpdateAlliance.typeUrl || typeof o.authority === "string" && typeof o.denom === "string" && typeof o.rewardWeight === "string" && typeof o.takeRate === "string" && typeof o.rewardChangeRate === "string" && Duration.is(o.rewardChangeInterval) && RewardWeightRange.is(o.rewardWeightRange));
   },
   isSDK(o: any): o is MsgUpdateAllianceSDKType {
-    return o && (o.$typeUrl === MsgUpdateAlliance.typeUrl || typeof o.authority === "string" && typeof o.denom === "string" && typeof o.reward_weight === "string" && typeof o.take_rate === "string" && typeof o.reward_change_rate === "string" && Duration.isSDK(o.reward_change_interval));
+    return o && (o.$typeUrl === MsgUpdateAlliance.typeUrl || typeof o.authority === "string" && typeof o.denom === "string" && typeof o.reward_weight === "string" && typeof o.take_rate === "string" && typeof o.reward_change_rate === "string" && Duration.isSDK(o.reward_change_interval) && RewardWeightRange.isSDK(o.reward_weight_range));
   },
   isAmino(o: any): o is MsgUpdateAllianceAmino {
-    return o && (o.$typeUrl === MsgUpdateAlliance.typeUrl || typeof o.authority === "string" && typeof o.denom === "string" && typeof o.reward_weight === "string" && typeof o.take_rate === "string" && typeof o.reward_change_rate === "string" && Duration.isAmino(o.reward_change_interval));
+    return o && (o.$typeUrl === MsgUpdateAlliance.typeUrl || typeof o.authority === "string" && typeof o.denom === "string" && typeof o.reward_weight === "string" && typeof o.take_rate === "string" && typeof o.reward_change_rate === "string" && Duration.isAmino(o.reward_change_interval) && RewardWeightRange.isAmino(o.reward_weight_range));
   },
   encode(message: MsgUpdateAlliance, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.authority !== "") {
@@ -1493,6 +1531,9 @@ export const MsgUpdateAlliance = {
     }
     if (message.rewardChangeInterval !== undefined) {
       Duration.encode(message.rewardChangeInterval, writer.uint32(50).fork()).ldelim();
+    }
+    if (message.rewardWeightRange !== undefined) {
+      RewardWeightRange.encode(message.rewardWeightRange, writer.uint32(58).fork()).ldelim();
     }
     return writer;
   },
@@ -1521,6 +1562,9 @@ export const MsgUpdateAlliance = {
         case 6:
           message.rewardChangeInterval = Duration.decode(reader, reader.uint32(), useInterfaces);
           break;
+        case 7:
+          message.rewardWeightRange = RewardWeightRange.decode(reader, reader.uint32(), useInterfaces);
+          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -1535,7 +1579,8 @@ export const MsgUpdateAlliance = {
       rewardWeight: isSet(object.rewardWeight) ? String(object.rewardWeight) : "",
       takeRate: isSet(object.takeRate) ? String(object.takeRate) : "",
       rewardChangeRate: isSet(object.rewardChangeRate) ? String(object.rewardChangeRate) : "",
-      rewardChangeInterval: isSet(object.rewardChangeInterval) ? Duration.fromJSON(object.rewardChangeInterval) : undefined
+      rewardChangeInterval: isSet(object.rewardChangeInterval) ? Duration.fromJSON(object.rewardChangeInterval) : undefined,
+      rewardWeightRange: isSet(object.rewardWeightRange) ? RewardWeightRange.fromJSON(object.rewardWeightRange) : undefined
     };
   },
   toJSON(message: MsgUpdateAlliance): unknown {
@@ -1546,6 +1591,7 @@ export const MsgUpdateAlliance = {
     message.takeRate !== undefined && (obj.takeRate = message.takeRate);
     message.rewardChangeRate !== undefined && (obj.rewardChangeRate = message.rewardChangeRate);
     message.rewardChangeInterval !== undefined && (obj.rewardChangeInterval = message.rewardChangeInterval ? Duration.toJSON(message.rewardChangeInterval) : undefined);
+    message.rewardWeightRange !== undefined && (obj.rewardWeightRange = message.rewardWeightRange ? RewardWeightRange.toJSON(message.rewardWeightRange) : undefined);
     return obj;
   },
   fromPartial(object: Partial<MsgUpdateAlliance>): MsgUpdateAlliance {
@@ -1556,6 +1602,7 @@ export const MsgUpdateAlliance = {
     message.takeRate = object.takeRate ?? "";
     message.rewardChangeRate = object.rewardChangeRate ?? "";
     message.rewardChangeInterval = object.rewardChangeInterval !== undefined && object.rewardChangeInterval !== null ? Duration.fromPartial(object.rewardChangeInterval) : undefined;
+    message.rewardWeightRange = object.rewardWeightRange !== undefined && object.rewardWeightRange !== null ? RewardWeightRange.fromPartial(object.rewardWeightRange) : undefined;
     return message;
   },
   fromAmino(object: MsgUpdateAllianceAmino): MsgUpdateAlliance {
@@ -1578,6 +1625,9 @@ export const MsgUpdateAlliance = {
     if (object.reward_change_interval !== undefined && object.reward_change_interval !== null) {
       message.rewardChangeInterval = Duration.fromAmino(object.reward_change_interval);
     }
+    if (object.reward_weight_range !== undefined && object.reward_weight_range !== null) {
+      message.rewardWeightRange = RewardWeightRange.fromAmino(object.reward_weight_range);
+    }
     return message;
   },
   toAmino(message: MsgUpdateAlliance, useInterfaces: boolean = true): MsgUpdateAllianceAmino {
@@ -1588,6 +1638,7 @@ export const MsgUpdateAlliance = {
     obj.take_rate = padDecimal(message.takeRate) === "" ? undefined : padDecimal(message.takeRate);
     obj.reward_change_rate = padDecimal(message.rewardChangeRate) === "" ? undefined : padDecimal(message.rewardChangeRate);
     obj.reward_change_interval = message.rewardChangeInterval ? Duration.toAmino(message.rewardChangeInterval, useInterfaces) : undefined;
+    obj.reward_weight_range = message.rewardWeightRange ? RewardWeightRange.toAmino(message.rewardWeightRange, useInterfaces) : undefined;
     return obj;
   },
   fromAminoMsg(object: MsgUpdateAllianceAminoMsg): MsgUpdateAlliance {

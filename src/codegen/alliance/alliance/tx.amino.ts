@@ -2,22 +2,22 @@
 import { MsgDelegate, MsgRedelegate, MsgUndelegate, MsgClaimDelegationRewards, MsgUpdateParams, MsgCreateAlliance, MsgUpdateAlliance, MsgDeleteAlliance } from "./tx";
 export const AminoConverter = {
   "/alliance.alliance.MsgDelegate": {
-    aminoType: "/alliance.alliance.MsgDelegate",
+    aminoType: "alliance/MsgDelegate",
     toAmino: MsgDelegate.toAmino,
     fromAmino: MsgDelegate.fromAmino
   },
   "/alliance.alliance.MsgRedelegate": {
-    aminoType: "/alliance.alliance.MsgRedelegate",
+    aminoType: "alliance/MsgRedelegate",
     toAmino: MsgRedelegate.toAmino,
     fromAmino: MsgRedelegate.fromAmino
   },
   "/alliance.alliance.MsgUndelegate": {
-    aminoType: "/alliance.alliance.MsgUndelegate",
+    aminoType: "alliance/MsgUndelegate",
     toAmino: MsgUndelegate.toAmino,
     fromAmino: MsgUndelegate.fromAmino
   },
   "/alliance.alliance.MsgClaimDelegationRewards": {
-    aminoType: "/alliance.alliance.MsgClaimDelegationRewards",
+    aminoType: "alliance/MsgClaimDelegationRewards",
     toAmino: MsgClaimDelegationRewards.toAmino,
     fromAmino: MsgClaimDelegationRewards.fromAmino
   },
