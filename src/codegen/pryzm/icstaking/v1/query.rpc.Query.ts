@@ -2,7 +2,7 @@ import { grpc } from "@improbable-eng/grpc-web";
 import { UnaryMethodDefinitionish } from "../../../grpc-web";
 import { DeepPartial } from "../../../helpers";
 import { BrowserHeaders } from "browser-headers";
-import { QueryParamsRequest, QueryParamsResponse, QueryGetHostChainRequest, QueryGetHostChainResponse, QueryAllHostChainRequest, QueryAllHostChainResponse, QueryGetHostChainStateRequest, QueryGetHostChainStateResponse, QueryAllHostChainStateRequest, QueryAllHostChainStateResponse, QueryGetUndelegationRequest, QueryGetUndelegationResponse, QueryAllUndelegationRequest, QueryAllUndelegationResponse, QueryIncompleteUndelegationRequest, QueryIncompleteUndelegationResponse, QueryGetChannelUndelegationRequest, QueryGetChannelUndelegationResponse, QueryAllChannelUndelegationRequest, QueryAllChannelUndelegationResponse, QueryDelegationQueueBalanceRequest, QueryDelegationQueueBalanceResponse, QueryEpochInfoRequest, QueryEpochInfoResponse } from "./query";
+import { QueryParamsRequest, QueryParamsResponse, QueryGetHostChainRequest, QueryGetHostChainResponse, QueryAllHostChainRequest, QueryAllHostChainResponse, QueryGetHostChainStateRequest, QueryGetHostChainStateResponse, QueryAllHostChainStateRequest, QueryAllHostChainStateResponse, QueryGetUndelegationRequest, QueryGetUndelegationResponse, QueryAllUndelegationRequest, QueryAllUndelegationResponse, QueryIncompleteUndelegationRequest, QueryIncompleteUndelegationResponse, QueryGetChannelUndelegationRequest, QueryGetChannelUndelegationResponse, QueryAllChannelUndelegationRequest, QueryAllChannelUndelegationResponse, QueryDelegationQueueBalanceRequest, QueryDelegationQueueBalanceResponse, QueryEpochInfoRequest, QueryEpochInfoResponse, QueryAllReplyDataRequest, QueryAllReplyDataResponse } from "./query";
 /** Query defines the gRPC querier service. */
 export interface Query {
   /** Parameters queries the parameters of the module. */
@@ -29,6 +29,8 @@ export interface Query {
   delegationQueueBalance(request: DeepPartial<QueryDelegationQueueBalanceRequest>, metadata?: grpc.Metadata): Promise<QueryDelegationQueueBalanceResponse>;
   /** Queries the information about last delegation and undelegation times */
   epochInfo(request: DeepPartial<QueryEpochInfoRequest>, metadata?: grpc.Metadata): Promise<QueryEpochInfoResponse>;
+  /** Queries the list of reply data */
+  replyDataAll(request?: DeepPartial<QueryAllReplyDataRequest>, metadata?: grpc.Metadata): Promise<QueryAllReplyDataResponse>;
 }
 export class QueryClientImpl implements Query {
   private readonly rpc: Rpc;
@@ -46,6 +48,7 @@ export class QueryClientImpl implements Query {
     this.channelUndelegationAll = this.channelUndelegationAll.bind(this);
     this.delegationQueueBalance = this.delegationQueueBalance.bind(this);
     this.epochInfo = this.epochInfo.bind(this);
+    this.replyDataAll = this.replyDataAll.bind(this);
   }
   params(request: DeepPartial<QueryParamsRequest> = {}, metadata?: grpc.Metadata): Promise<QueryParamsResponse> {
     return this.rpc.unary(QueryParamsDesc, QueryParamsRequest.fromPartial(request as any), metadata);
@@ -86,6 +89,11 @@ export class QueryClientImpl implements Query {
   }
   epochInfo(request: DeepPartial<QueryEpochInfoRequest>, metadata?: grpc.Metadata): Promise<QueryEpochInfoResponse> {
     return this.rpc.unary(QueryEpochInfoDesc, QueryEpochInfoRequest.fromPartial(request as any), metadata);
+  }
+  replyDataAll(request: DeepPartial<QueryAllReplyDataRequest> = {
+    pagination: undefined
+  }, metadata?: grpc.Metadata): Promise<QueryAllReplyDataResponse> {
+    return this.rpc.unary(QueryReplyDataAllDesc, QueryAllReplyDataRequest.fromPartial(request as any), metadata);
   }
 }
 export const QueryDesc = {
@@ -336,6 +344,27 @@ export const QueryEpochInfoDesc: UnaryMethodDefinitionish = {
     deserializeBinary(data: Uint8Array) {
       return {
         ...QueryEpochInfoResponse.decode(data),
+        toObject() {
+          return this;
+        }
+      };
+    }
+  } as any)
+};
+export const QueryReplyDataAllDesc: UnaryMethodDefinitionish = {
+  methodName: "ReplyDataAll",
+  service: QueryDesc,
+  requestStream: false,
+  responseStream: false,
+  requestType: ({
+    serializeBinary() {
+      return QueryAllReplyDataRequest.encode(this).finish();
+    }
+  } as any),
+  responseType: ({
+    deserializeBinary(data: Uint8Array) {
+      return {
+        ...QueryAllReplyDataResponse.decode(data),
         toObject() {
           return this;
         }

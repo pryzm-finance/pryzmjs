@@ -8,6 +8,7 @@ import "google/api/annotations.proto";
 import "google/protobuf/timestamp.proto";
 import "pryzm/icstaking/v1/host_chain.proto";
 import "pryzm/icstaking/v1/params.proto";
+import "pryzm/icstaking/v1/reply.proto";
 import "pryzm/icstaking/v1/undelegation.proto";
 // this line is used by starport scaffolding # 1
 
@@ -72,6 +73,11 @@ service Query {
   // Queries the information about last delegation and undelegation times
   rpc EpochInfo(QueryEpochInfoRequest) returns (QueryEpochInfoResponse) {
     option (google.api.http).get = "/pryzm/icstaking/v1/epoch_info/{host_chain}";
+  }
+
+  // Queries the list of reply data
+  rpc ReplyDataAll(QueryAllReplyDataRequest) returns (QueryAllReplyDataResponse) {
+    option (google.api.http).get = "/pryzm/icstaking/v1/reply_data";
   }
 
   // this line is used by starport scaffolding # 2
@@ -193,6 +199,15 @@ message QueryEpochInfoResponse {
     (gogoproto.stdtime) = true
   ];
   uint64 current_undelegation_epoch = 3;
+}
+
+message QueryAllReplyDataRequest {
+  cosmos.base.query.v1beta1.PageRequest pagination = 1 [(gogoproto.nullable) = true];
+}
+
+message QueryAllReplyDataResponse {
+  repeated ReplyData reply_data = 1 [(gogoproto.nullable) = false];
+  cosmos.base.query.v1beta1.PageResponse pagination = 2 [(gogoproto.nullable) = true];
 }
 
 // this line is used by starport scaffolding # 3

@@ -28,6 +28,7 @@ message QueryOrdersRequest {
   string token_in = 3;
   string token_out = 4;
   cosmos.base.query.v1beta1.PageRequest pagination = 5 [(gogoproto.nullable) = true];
+  pryzmatics.trade.QueryOrderStatus status = 6;
 }
 
 message QueryOrdersResponse {

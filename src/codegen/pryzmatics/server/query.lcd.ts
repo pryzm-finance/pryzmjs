@@ -528,6 +528,9 @@ export class LCDQueryClient {
     if (typeof params?.pagination !== "undefined") {
       setPaginationParams(options, params.pagination);
     }
+    if (typeof params?.status !== "undefined") {
+      options.params.status = params.status;
+    }
     const endpoint = `pryzmatics/trade/order`;
     return await this.req.get<QueryOrdersResponseSDKType>(endpoint, options);
   }

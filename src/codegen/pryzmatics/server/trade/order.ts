@@ -1,4 +1,4 @@
-import { Order, OrderAmino, OrderSDKType } from "../../trade/order";
+import { Order, OrderAmino, OrderSDKType, QueryOrderStatus, queryOrderStatusFromJSON, queryOrderStatusToJSON } from "../../trade/order";
 import { PageRequest, PageRequestAmino, PageRequestSDKType, PageResponse, PageResponseAmino, PageResponseSDKType } from "../../../cosmos/base/query/v1beta1/pagination";
 import { BinaryReader, BinaryWriter } from "../../../binary";
 import { isSet } from "../../../helpers";
@@ -43,6 +43,7 @@ export interface QueryOrdersRequest {
   tokenIn: string;
   tokenOut: string;
   pagination?: PageRequest;
+  status: QueryOrderStatus;
 }
 export interface QueryOrdersRequestProtoMsg {
   typeUrl: "/pryzmatics.server.trade.QueryOrdersRequest";
@@ -54,6 +55,7 @@ export interface QueryOrdersRequestAmino {
   token_in?: string;
   token_out?: string;
   pagination?: PageRequestAmino;
+  status?: QueryOrderStatus;
 }
 export interface QueryOrdersRequestAminoMsg {
   type: "/pryzmatics.server.trade.QueryOrdersRequest";
@@ -65,6 +67,7 @@ export interface QueryOrdersRequestSDKType {
   token_in: string;
   token_out: string;
   pagination?: PageRequestSDKType;
+  status: QueryOrderStatus;
 }
 export interface QueryOrdersResponse {
   orders: Order[];
@@ -258,19 +261,20 @@ function createBaseQueryOrdersRequest(): QueryOrdersRequest {
     poolId: undefined,
     tokenIn: "",
     tokenOut: "",
-    pagination: undefined
+    pagination: undefined,
+    status: 0
   };
 }
 export const QueryOrdersRequest = {
   typeUrl: "/pryzmatics.server.trade.QueryOrdersRequest",
   is(o: any): o is QueryOrdersRequest {
-    return o && (o.$typeUrl === QueryOrdersRequest.typeUrl || typeof o.creator === "string" && typeof o.tokenIn === "string" && typeof o.tokenOut === "string");
+    return o && (o.$typeUrl === QueryOrdersRequest.typeUrl || typeof o.creator === "string" && typeof o.tokenIn === "string" && typeof o.tokenOut === "string" && isSet(o.status));
   },
   isSDK(o: any): o is QueryOrdersRequestSDKType {
-    return o && (o.$typeUrl === QueryOrdersRequest.typeUrl || typeof o.creator === "string" && typeof o.token_in === "string" && typeof o.token_out === "string");
+    return o && (o.$typeUrl === QueryOrdersRequest.typeUrl || typeof o.creator === "string" && typeof o.token_in === "string" && typeof o.token_out === "string" && isSet(o.status));
   },
   isAmino(o: any): o is QueryOrdersRequestAmino {
-    return o && (o.$typeUrl === QueryOrdersRequest.typeUrl || typeof o.creator === "string" && typeof o.token_in === "string" && typeof o.token_out === "string");
+    return o && (o.$typeUrl === QueryOrdersRequest.typeUrl || typeof o.creator === "string" && typeof o.token_in === "string" && typeof o.token_out === "string" && isSet(o.status));
   },
   encode(message: QueryOrdersRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.creator !== "") {
@@ -287,6 +291,9 @@ export const QueryOrdersRequest = {
     }
     if (message.pagination !== undefined) {
       PageRequest.encode(message.pagination, writer.uint32(42).fork()).ldelim();
+    }
+    if (message.status !== 0) {
+      writer.uint32(48).int32(message.status);
     }
     return writer;
   },
@@ -312,6 +319,9 @@ export const QueryOrdersRequest = {
         case 5:
           message.pagination = PageRequest.decode(reader, reader.uint32(), useInterfaces);
           break;
+        case 6:
+          message.status = (reader.int32() as any);
+          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -325,7 +335,8 @@ export const QueryOrdersRequest = {
       poolId: isSet(object.poolId) ? String(object.poolId) : undefined,
       tokenIn: isSet(object.tokenIn) ? String(object.tokenIn) : "",
       tokenOut: isSet(object.tokenOut) ? String(object.tokenOut) : "",
-      pagination: isSet(object.pagination) ? PageRequest.fromJSON(object.pagination) : undefined
+      pagination: isSet(object.pagination) ? PageRequest.fromJSON(object.pagination) : undefined,
+      status: isSet(object.status) ? queryOrderStatusFromJSON(object.status) : -1
     };
   },
   toJSON(message: QueryOrdersRequest): unknown {
@@ -335,6 +346,7 @@ export const QueryOrdersRequest = {
     message.tokenIn !== undefined && (obj.tokenIn = message.tokenIn);
     message.tokenOut !== undefined && (obj.tokenOut = message.tokenOut);
     message.pagination !== undefined && (obj.pagination = message.pagination ? PageRequest.toJSON(message.pagination) : undefined);
+    message.status !== undefined && (obj.status = queryOrderStatusToJSON(message.status));
     return obj;
   },
   fromPartial(object: Partial<QueryOrdersRequest>): QueryOrdersRequest {
@@ -344,6 +356,7 @@ export const QueryOrdersRequest = {
     message.tokenIn = object.tokenIn ?? "";
     message.tokenOut = object.tokenOut ?? "";
     message.pagination = object.pagination !== undefined && object.pagination !== null ? PageRequest.fromPartial(object.pagination) : undefined;
+    message.status = object.status ?? 0;
     return message;
   },
   fromAmino(object: QueryOrdersRequestAmino): QueryOrdersRequest {
@@ -363,6 +376,9 @@ export const QueryOrdersRequest = {
     if (object.pagination !== undefined && object.pagination !== null) {
       message.pagination = PageRequest.fromAmino(object.pagination);
     }
+    if (object.status !== undefined && object.status !== null) {
+      message.status = object.status;
+    }
     return message;
   },
   toAmino(message: QueryOrdersRequest, useInterfaces: boolean = true): QueryOrdersRequestAmino {
@@ -372,6 +388,7 @@ export const QueryOrdersRequest = {
     obj.token_in = message.tokenIn === "" ? undefined : message.tokenIn;
     obj.token_out = message.tokenOut === "" ? undefined : message.tokenOut;
     obj.pagination = message.pagination ? PageRequest.toAmino(message.pagination, useInterfaces) : undefined;
+    obj.status = message.status === 0 ? undefined : message.status;
     return obj;
   },
   fromAminoMsg(object: QueryOrdersRequestAminoMsg): QueryOrdersRequest {

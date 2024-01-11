@@ -8,6 +8,28 @@ import "pryzm/amm/v1/order.proto";
 
 option go_package = "github.com/pryzm-finance/pryzmatics/types/trade";
 
+enum OrderStatus {
+  option (gogoproto.goproto_enum_prefix) = false;
+  ORDER_STATUS_UNKNOWN = 0;
+  ORDER_STATUS_SCHEDULE_QUEUE = 1;
+  ORDER_STATUS_EXECUTION_QUEUE = 2;
+  ORDER_STATUS_CANCELED = 3;
+  ORDER_STATUS_FINISHED = 4;
+}
+
+enum QueryOrderStatus {
+  option (gogoproto.goproto_enum_prefix) = false;
+  QUERY_ORDER_STATUS_ANY = 0;
+  QUERY_ORDER_STATUS_SCHEDULE_QUEUE = 1;
+  QUERY_ORDER_STATUS_EXECUTION_QUEUE = 2;
+  QUERY_ORDER_STATUS_CANCELED = 3;
+  QUERY_ORDER_STATUS_FINISHED = 4;
+  // LIVE is SCHEDULE or EXECUTION
+  QUERY_ORDER_STATUS_LIVE = 5;
+  // NOT_LIVE is CANCELED or FINISHED
+  QUERY_ORDER_STATUS_NOT_LIVE = 6;
+}
+
 message Order {
   pryzm.amm.v1.Order amm_order = 1 [(gogoproto.nullable) = false];
   google.protobuf.Timestamp creation_time = 2 [(gogoproto.stdtime) = true, (gogoproto.nullable) = false];
@@ -21,4 +43,12 @@ message Order {
     (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Dec",
     (gogoproto.nullable) = false
   ];
+  string amount_out = 14 [
+    (cosmos_proto.scalar) = "cosmos.Int",
+    (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Int",
+    (gogoproto.nullable) = false
+  ];
+  OrderStatus status = 15;
+  google.protobuf.Timestamp status_time = 16 [(gogoproto.stdtime) = true, (gogoproto.nullable) = false];
+  google.protobuf.Timestamp next_step_time = 17 [(gogoproto.stdtime) = true, (gogoproto.nullable) = true];
 }

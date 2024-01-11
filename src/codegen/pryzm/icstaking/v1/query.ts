@@ -4,6 +4,7 @@ import { HostChain, HostChainAmino, HostChainSDKType, HostChainState, HostChainS
 import { Undelegation, UndelegationAmino, UndelegationSDKType, ChannelUndelegation, ChannelUndelegationAmino, ChannelUndelegationSDKType } from "./undelegation";
 import { Coin, CoinAmino, CoinSDKType } from "../../../cosmos/base/v1beta1/coin";
 import { Timestamp, TimestampSDKType } from "../../../google/protobuf/timestamp";
+import { ReplyData, ReplyDataAmino, ReplyDataSDKType } from "./reply";
 import { BinaryReader, BinaryWriter } from "../../../binary";
 import { GlobalDecoderRegistry } from "../../../registry";
 import { isSet, fromJsonTimestamp, fromTimestamp } from "../../../helpers";
@@ -461,6 +462,43 @@ export interface QueryEpochInfoResponseSDKType {
   last_delegation_time: TimestampSDKType;
   last_undelegation_time: TimestampSDKType;
   current_undelegation_epoch: bigint;
+}
+export interface QueryAllReplyDataRequest {
+  pagination?: PageRequest;
+}
+export interface QueryAllReplyDataRequestProtoMsg {
+  typeUrl: "/pryzm.icstaking.v1.QueryAllReplyDataRequest";
+  value: Uint8Array;
+}
+export interface QueryAllReplyDataRequestAmino {
+  pagination?: PageRequestAmino;
+}
+export interface QueryAllReplyDataRequestAminoMsg {
+  type: "/pryzm.icstaking.v1.QueryAllReplyDataRequest";
+  value: QueryAllReplyDataRequestAmino;
+}
+export interface QueryAllReplyDataRequestSDKType {
+  pagination?: PageRequestSDKType;
+}
+export interface QueryAllReplyDataResponse {
+  replyData: ReplyData[];
+  pagination?: PageResponse;
+}
+export interface QueryAllReplyDataResponseProtoMsg {
+  typeUrl: "/pryzm.icstaking.v1.QueryAllReplyDataResponse";
+  value: Uint8Array;
+}
+export interface QueryAllReplyDataResponseAmino {
+  reply_data?: ReplyDataAmino[];
+  pagination?: PageResponseAmino;
+}
+export interface QueryAllReplyDataResponseAminoMsg {
+  type: "/pryzm.icstaking.v1.QueryAllReplyDataResponse";
+  value: QueryAllReplyDataResponseAmino;
+}
+export interface QueryAllReplyDataResponseSDKType {
+  reply_data: ReplyDataSDKType[];
+  pagination?: PageResponseSDKType;
 }
 function createBaseQueryParamsRequest(): QueryParamsRequest {
   return {};
@@ -2678,3 +2716,189 @@ export const QueryEpochInfoResponse = {
   }
 };
 GlobalDecoderRegistry.register(QueryEpochInfoResponse.typeUrl, QueryEpochInfoResponse);
+function createBaseQueryAllReplyDataRequest(): QueryAllReplyDataRequest {
+  return {
+    pagination: undefined
+  };
+}
+export const QueryAllReplyDataRequest = {
+  typeUrl: "/pryzm.icstaking.v1.QueryAllReplyDataRequest",
+  is(o: any): o is QueryAllReplyDataRequest {
+    return o && o.$typeUrl === QueryAllReplyDataRequest.typeUrl;
+  },
+  isSDK(o: any): o is QueryAllReplyDataRequestSDKType {
+    return o && o.$typeUrl === QueryAllReplyDataRequest.typeUrl;
+  },
+  isAmino(o: any): o is QueryAllReplyDataRequestAmino {
+    return o && o.$typeUrl === QueryAllReplyDataRequest.typeUrl;
+  },
+  encode(message: QueryAllReplyDataRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    if (message.pagination !== undefined) {
+      PageRequest.encode(message.pagination, writer.uint32(10).fork()).ldelim();
+    }
+    return writer;
+  },
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): QueryAllReplyDataRequest {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseQueryAllReplyDataRequest();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.pagination = PageRequest.decode(reader, reader.uint32(), useInterfaces);
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromJSON(object: any): QueryAllReplyDataRequest {
+    return {
+      pagination: isSet(object.pagination) ? PageRequest.fromJSON(object.pagination) : undefined
+    };
+  },
+  toJSON(message: QueryAllReplyDataRequest): unknown {
+    const obj: any = {};
+    message.pagination !== undefined && (obj.pagination = message.pagination ? PageRequest.toJSON(message.pagination) : undefined);
+    return obj;
+  },
+  fromPartial(object: Partial<QueryAllReplyDataRequest>): QueryAllReplyDataRequest {
+    const message = createBaseQueryAllReplyDataRequest();
+    message.pagination = object.pagination !== undefined && object.pagination !== null ? PageRequest.fromPartial(object.pagination) : undefined;
+    return message;
+  },
+  fromAmino(object: QueryAllReplyDataRequestAmino): QueryAllReplyDataRequest {
+    const message = createBaseQueryAllReplyDataRequest();
+    if (object.pagination !== undefined && object.pagination !== null) {
+      message.pagination = PageRequest.fromAmino(object.pagination);
+    }
+    return message;
+  },
+  toAmino(message: QueryAllReplyDataRequest, useInterfaces: boolean = true): QueryAllReplyDataRequestAmino {
+    const obj: any = {};
+    obj.pagination = message.pagination ? PageRequest.toAmino(message.pagination, useInterfaces) : undefined;
+    return obj;
+  },
+  fromAminoMsg(object: QueryAllReplyDataRequestAminoMsg): QueryAllReplyDataRequest {
+    return QueryAllReplyDataRequest.fromAmino(object.value);
+  },
+  fromProtoMsg(message: QueryAllReplyDataRequestProtoMsg, useInterfaces: boolean = true): QueryAllReplyDataRequest {
+    return QueryAllReplyDataRequest.decode(message.value, undefined, useInterfaces);
+  },
+  toProto(message: QueryAllReplyDataRequest): Uint8Array {
+    return QueryAllReplyDataRequest.encode(message).finish();
+  },
+  toProtoMsg(message: QueryAllReplyDataRequest): QueryAllReplyDataRequestProtoMsg {
+    return {
+      typeUrl: "/pryzm.icstaking.v1.QueryAllReplyDataRequest",
+      value: QueryAllReplyDataRequest.encode(message).finish()
+    };
+  }
+};
+GlobalDecoderRegistry.register(QueryAllReplyDataRequest.typeUrl, QueryAllReplyDataRequest);
+function createBaseQueryAllReplyDataResponse(): QueryAllReplyDataResponse {
+  return {
+    replyData: [],
+    pagination: undefined
+  };
+}
+export const QueryAllReplyDataResponse = {
+  typeUrl: "/pryzm.icstaking.v1.QueryAllReplyDataResponse",
+  is(o: any): o is QueryAllReplyDataResponse {
+    return o && (o.$typeUrl === QueryAllReplyDataResponse.typeUrl || Array.isArray(o.replyData) && (!o.replyData.length || ReplyData.is(o.replyData[0])));
+  },
+  isSDK(o: any): o is QueryAllReplyDataResponseSDKType {
+    return o && (o.$typeUrl === QueryAllReplyDataResponse.typeUrl || Array.isArray(o.reply_data) && (!o.reply_data.length || ReplyData.isSDK(o.reply_data[0])));
+  },
+  isAmino(o: any): o is QueryAllReplyDataResponseAmino {
+    return o && (o.$typeUrl === QueryAllReplyDataResponse.typeUrl || Array.isArray(o.reply_data) && (!o.reply_data.length || ReplyData.isAmino(o.reply_data[0])));
+  },
+  encode(message: QueryAllReplyDataResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    for (const v of message.replyData) {
+      ReplyData.encode(v!, writer.uint32(10).fork()).ldelim();
+    }
+    if (message.pagination !== undefined) {
+      PageResponse.encode(message.pagination, writer.uint32(18).fork()).ldelim();
+    }
+    return writer;
+  },
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): QueryAllReplyDataResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseQueryAllReplyDataResponse();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.replyData.push(ReplyData.decode(reader, reader.uint32(), useInterfaces));
+          break;
+        case 2:
+          message.pagination = PageResponse.decode(reader, reader.uint32(), useInterfaces);
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromJSON(object: any): QueryAllReplyDataResponse {
+    return {
+      replyData: Array.isArray(object?.replyData) ? object.replyData.map((e: any) => ReplyData.fromJSON(e)) : [],
+      pagination: isSet(object.pagination) ? PageResponse.fromJSON(object.pagination) : undefined
+    };
+  },
+  toJSON(message: QueryAllReplyDataResponse): unknown {
+    const obj: any = {};
+    if (message.replyData) {
+      obj.replyData = message.replyData.map(e => e ? ReplyData.toJSON(e) : undefined);
+    } else {
+      obj.replyData = [];
+    }
+    message.pagination !== undefined && (obj.pagination = message.pagination ? PageResponse.toJSON(message.pagination) : undefined);
+    return obj;
+  },
+  fromPartial(object: Partial<QueryAllReplyDataResponse>): QueryAllReplyDataResponse {
+    const message = createBaseQueryAllReplyDataResponse();
+    message.replyData = object.replyData?.map(e => ReplyData.fromPartial(e)) || [];
+    message.pagination = object.pagination !== undefined && object.pagination !== null ? PageResponse.fromPartial(object.pagination) : undefined;
+    return message;
+  },
+  fromAmino(object: QueryAllReplyDataResponseAmino): QueryAllReplyDataResponse {
+    const message = createBaseQueryAllReplyDataResponse();
+    message.replyData = object.reply_data?.map(e => ReplyData.fromAmino(e)) || [];
+    if (object.pagination !== undefined && object.pagination !== null) {
+      message.pagination = PageResponse.fromAmino(object.pagination);
+    }
+    return message;
+  },
+  toAmino(message: QueryAllReplyDataResponse, useInterfaces: boolean = true): QueryAllReplyDataResponseAmino {
+    const obj: any = {};
+    if (message.replyData) {
+      obj.reply_data = message.replyData.map(e => e ? ReplyData.toAmino(e, useInterfaces) : undefined);
+    } else {
+      obj.reply_data = message.replyData;
+    }
+    obj.pagination = message.pagination ? PageResponse.toAmino(message.pagination, useInterfaces) : undefined;
+    return obj;
+  },
+  fromAminoMsg(object: QueryAllReplyDataResponseAminoMsg): QueryAllReplyDataResponse {
+    return QueryAllReplyDataResponse.fromAmino(object.value);
+  },
+  fromProtoMsg(message: QueryAllReplyDataResponseProtoMsg, useInterfaces: boolean = true): QueryAllReplyDataResponse {
+    return QueryAllReplyDataResponse.decode(message.value, undefined, useInterfaces);
+  },
+  toProto(message: QueryAllReplyDataResponse): Uint8Array {
+    return QueryAllReplyDataResponse.encode(message).finish();
+  },
+  toProtoMsg(message: QueryAllReplyDataResponse): QueryAllReplyDataResponseProtoMsg {
+    return {
+      typeUrl: "/pryzm.icstaking.v1.QueryAllReplyDataResponse",
+      value: QueryAllReplyDataResponse.encode(message).finish()
+    };
+  }
+};
+GlobalDecoderRegistry.register(QueryAllReplyDataResponse.typeUrl, QueryAllReplyDataResponse);
