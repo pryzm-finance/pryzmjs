@@ -1,12 +1,12 @@
 lockfileVersion: 5.4
 
 specifiers:
-  '@pryzm-finance/pryzmjs': 0.17.5
+  '@pryzm-finance/pryzmjs': 0.17.6
   '@refractedlabs/utils': 0.1.9
   typescript: ^5.1.6
 
 dependencies:
-  '@pryzm-finance/pryzmjs': 0.17.5_google-protobuf@3.21.2
+  '@pryzm-finance/pryzmjs': 0.17.6_google-protobuf@3.21.2
   '@refractedlabs/utils': 0.1.9
 
 devDependencies:
@@ -189,16 +189,16 @@ packages:
       google-protobuf: 3.21.2
     dev: false
 
-  /@keplr-wallet/types/0.12.60:
-    resolution: {integrity: sha512-IM4c0tHU5NF3fJ6Dc/imd6ytmNzRGtfOID+ZmLMXcElaAXKS0S5taofDZVlddSbTuYXeK1gP4nX7LgsB47T5yw==}
+  /@keplr-wallet/types/0.12.61:
+    resolution: {integrity: sha512-IzPsNR7AZJ/JNLII4ESJhbYOaG4TS8XRVTh4uUypkCOLh+Yp6WWbxYd1PUpsm2KJlVa2pszPcroG5p8PI3qdsg==}
     dependencies:
       long: 4.0.0
     dev: false
 
-  /@keplr-wallet/unit/0.12.60:
-    resolution: {integrity: sha512-wM2IROVehDQAdSJXWlfzz04zLOvJagEi12EoRfgsZQR0X4Rcc3QGPLvV9UJYcSeO5v0si1txamDsqjsPtZ7Oew==}
+  /@keplr-wallet/unit/0.12.61:
+    resolution: {integrity: sha512-EjQsvG8TivfNhVSywQOjC+i9rsCd/g5mtXTGTmMEwKcNHI7IuebCKefZiGlB4+4mmcaWrTL8C7ppZXC4e/NgfA==}
     dependencies:
-      '@keplr-wallet/types': 0.12.60
+      '@keplr-wallet/types': 0.12.61
       big-integer: 1.6.52
       utility-types: 3.10.0
     dev: false
@@ -251,14 +251,14 @@ packages:
     resolution: {integrity: sha512-Vvn3zZrhQZkkBE8LSuW3em98c0FwgO4nxzv6OdSxPKJIEKY2bGbHn+mhGIPerzI4twdxaP8/0+06HBpwf345Lw==}
     dev: false
 
-  /@pryzm-finance/pryzmjs/0.17.5_google-protobuf@3.21.2:
-    resolution: {integrity: sha512-8kHZyRE0lmyNScX7h9bpQn97skciIcsEsTLb4D96cubyF0M2zeQxhVcBidPa7TVBH5RJytbnvfA1P4nQQLbHWg==, tarball: download/@pryzm-finance/pryzmjs/0.17.5/9c0777992063d7478d350c2a3f0af153c86825d6}
+  /@pryzm-finance/pryzmjs/0.17.6_google-protobuf@3.21.2:
+    resolution: {integrity: sha512-mw2li+4ChauVqyfVXCtsycmFZRlKZpxHv08ig7FB6pfGZSF2fdmvjO2v5yHEqliSPko8o5MNnrqDa3GjiEO6FA==, tarball: download/@pryzm-finance/pryzmjs/0.17.6/6f0a89c7f6aa9107a8588b0d037c74b213cb5b82}
     dependencies:
       '@cosmjs/amino': 0.32.2
       '@cosmjs/proto-signing': 0.32.2
       '@cosmjs/stargate': 0.32.2
       '@cosmjs/tendermint-rpc': 0.32.2
-      '@keplr-wallet/unit': 0.12.60
+      '@keplr-wallet/unit': 0.12.61
       '@refractedlabs/utils': 0.3.2_google-protobuf@3.21.2
     transitivePeerDependencies:
       - bufferutil
@@ -326,8 +326,8 @@ packages:
     resolution: {integrity: sha512-MqTGEo5bj5t157U6fA/BiDynNkn0YknVdh48CMPkTSpFTVmvao5UQmm7uEF6xBEo7qIMAlY/JSleYaE6VOdpaA==}
     dev: false
 
-  /@types/node/20.11.0:
-    resolution: {integrity: sha512-o9bjXmDNcF7GbM4CNQpmi+TutCgap/K3w1JyKgxAjqx41zp9qlIAVFi0IhCNsJcXolEqLWhbFbEeL0PvYm4pcQ==}
+  /@types/node/20.11.5:
+    resolution: {integrity: sha512-g557vgQjUUfN76MZAN/dt1z3dzcUsimuysco0KeluHgrPdJXkP/XdAURgyO2W9fZWHRtRBiVKzKn8vyOAwlG+w==}
     dependencies:
       undici-types: 5.26.5
     dev: false
@@ -351,7 +351,7 @@ packages:
   /axios/1.6.0:
     resolution: {integrity: sha512-EZ1DYihju9pwVB+jg67ogm+Tmqc6JmhamRN6I4Zt8DfZu5lbcQGw3ozH9lFejSJgs/ibaef3A9PMXPLeefFGJg==}
     dependencies:
-      follow-redirects: 1.15.4
+      follow-redirects: 1.15.5
       form-data: 4.0.0
       proxy-from-env: 1.1.0
     transitivePeerDependencies:
@@ -361,7 +361,7 @@ packages:
   /axios/1.6.5:
     resolution: {integrity: sha512-Ii012v05KEVuUoFWmMW/UQv9aRIc3ZwkWDcM+h5Il8izZCtRVpDUfwpoFf7eOtajT3QiGR4yDUx7lPqHJULgbg==}
     dependencies:
-      follow-redirects: 1.15.4
+      follow-redirects: 1.15.5
       form-data: 4.0.0
       proxy-from-env: 1.1.0
     transitivePeerDependencies:
@@ -508,8 +508,8 @@ packages:
     resolution: {integrity: sha512-GRnmB5gPyJpAhTQdSZTSp9uaPSvl09KoYcMQtsB9rQoOmzs9dH6ffeccH+Z+cv6P68Hu5bC6JjRh4Ah/mHSNRw==}
     dev: false
 
-  /follow-redirects/1.15.4:
-    resolution: {integrity: sha512-Cr4D/5wlrb0z9dgERpUL3LrmPKVDsETIJhaCMeDfuFYcqa5bldGV6wBsAN6X/vxlXQtFBMrXdXxdL8CbDTGniw==}
+  /follow-redirects/1.15.5:
+    resolution: {integrity: sha512-vSFWUON1B+yAw1VN4xMfxgn5fTUiaOzAJCKBwIIgT/+7CuGy9+r+5gITvP62j3RmaD5Ph65UaERdOSRGUzZtgw==}
     engines: {node: '>=4.0'}
     peerDependencies:
       debug: '*'
@@ -745,7 +745,7 @@ packages:
       '@protobufjs/pool': 1.1.0
       '@protobufjs/utf8': 1.1.0
       '@types/long': 4.0.2
-      '@types/node': 20.11.0
+      '@types/node': 20.11.5
       long: 4.0.0
     dev: false
 

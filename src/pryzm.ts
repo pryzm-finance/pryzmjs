@@ -1,6 +1,13 @@
-import { getSigningPryzmClientOptions } from "./codegen"
-import { OfflineSigner } from "@cosmjs/proto-signing";
-import { SigningStargateClient } from "@cosmjs/stargate";
+import {
+    cosmosAminoConverters,
+    cosmosProtoRegistry,
+    ibcAminoConverters,
+    ibcProtoRegistry,
+    pryzmAminoConverters,
+    pryzmProtoRegistry
+} from "./codegen"
+import { OfflineSigner, Registry } from "@cosmjs/proto-signing";
+import { AminoTypes, SigningStargateClient } from "@cosmjs/stargate";
 import { HttpEndpoint } from "@cosmjs/tendermint-rpc";
 import { GasPrice } from "@cosmjs/stargate/build/fee";
 import { defaultPageRequestProvider } from "./index";
@@ -60,10 +67,12 @@ export async function grpcFetchAll<Type>(client: PryzmGrpcWebClient, fetch: (cli
 }
 
 export async function connectWithSigner(endpoint: string | HttpEndpoint, signer: OfflineSigner, broadcastTimeoutMs?: number, gasPrice?: GasPrice, broadcastPollIntervalMs?: number): Promise<SigningStargateClient> {
-    const {
-        registry,
-        aminoTypes
-    } = getSigningPryzmClientOptions();
+    const registry = new Registry([...cosmosProtoRegistry, ...pryzmProtoRegistry, ...ibcProtoRegistry]);
+    const aminoTypes = new AminoTypes({
+        ...cosmosAminoConverters,
+        ...pryzmAminoConverters,
+        ...ibcAminoConverters
+    });
 
     return SigningStargateClient.connectWithSigner(endpoint, signer, {
         registry,

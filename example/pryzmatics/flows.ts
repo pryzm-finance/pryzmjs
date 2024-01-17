@@ -8,6 +8,9 @@ import {
 import { ParticipationType } from "@pryzm-finance/pryzmjs/lib/codegen/pryzmatics/flowtrade/participation_type";
 import { fetchAll } from "@pryzm-finance/pryzmjs/lib";
 import { PageRequest } from "@pryzm-finance/pryzmjs/lib/codegen/cosmos/base/query/v1beta1/pagination";
+import {
+    FlowPositionPairOrderByProperty
+} from "@pryzm-finance/pryzmjs/lib/codegen/pryzmatics/database/flow_position_pair";
 
 async function main() {
     const pryzmaticsClient = await createPryzmaticsClient({ restEndpoint: PRYZMATICS_ENDPOINT })
@@ -26,7 +29,25 @@ async function main() {
         return [result.pagination.next_key, result.flows]
     })
     console.log(JSON.stringify(flows))
-    console.log(flows.length)
+
+    // list of all flows ordered by token in denom
+    flows = await fetchAll(pryzmaticsClient, async (client: PryzmaticsClient, request: PageRequest) => {
+        const result = (await client.pryzmatics.allFlow({
+            creator: "",
+            participant: "",
+            participationType: ParticipationType.PARTICIPATION_TYPE_NO_PARTICIPATION,
+            status: FlowStatus.FLOW_STATUS_ANY,
+            tokenInClaimability: TokenClaimability.TOKEN_CLAIMABILITY_ANY,
+            tokenOutClaimability: TokenClaimability.TOKEN_CLAIMABILITY_ANY,
+            orderBy: {
+                property: FlowPositionPairOrderByProperty.ORDER_BY_PROPERTY_FLOW_TOKEN_IN_DENOM,
+                descending: true
+            },
+            pagination: request
+        }))
+        return [result.pagination.next_key, result.flows]
+    })
+    console.log(JSON.stringify(flows))
 
     // list of flows a user has created and can claim token-in from
     flows = (await pryzmaticsClient.pryzmatics.allFlow({

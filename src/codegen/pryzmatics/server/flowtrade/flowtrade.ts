@@ -1,5 +1,6 @@
 import { Flow, FlowAmino, FlowSDKType } from "../../../refractedlabs/flowtrade/v1/flow";
 import { ParticipationType, participationTypeFromJSON, participationTypeToJSON } from "../../flowtrade/participation_type";
+import { FlowPositionPairOrderBy, FlowPositionPairOrderByAmino, FlowPositionPairOrderBySDKType } from "../../database/flow_position_pair";
 import { PageRequest, PageRequestAmino, PageRequestSDKType, PageResponse, PageResponseAmino, PageResponseSDKType } from "../../../cosmos/base/query/v1beta1/pagination";
 import { FlowPositionPair, FlowPositionPairAmino, FlowPositionPairSDKType } from "../../flowtrade/flow_position_pair";
 import { BinaryReader, BinaryWriter } from "../../../binary";
@@ -122,6 +123,7 @@ export interface QueryAllFlowRequest {
   participant: string;
   participationType: ParticipationType;
   tokenOutClaimability: TokenClaimability;
+  orderBy?: FlowPositionPairOrderBy;
   pagination?: PageRequest;
 }
 export interface QueryAllFlowRequestProtoMsg {
@@ -135,6 +137,7 @@ export interface QueryAllFlowRequestAmino {
   participant?: string;
   participation_type?: ParticipationType;
   token_out_claimability?: TokenClaimability;
+  order_by?: FlowPositionPairOrderByAmino;
   pagination?: PageRequestAmino;
 }
 export interface QueryAllFlowRequestAminoMsg {
@@ -148,6 +151,7 @@ export interface QueryAllFlowRequestSDKType {
   participant: string;
   participation_type: ParticipationType;
   token_out_claimability: TokenClaimability;
+  order_by?: FlowPositionPairOrderBySDKType;
   pagination?: PageRequestSDKType;
 }
 export interface QueryAllFlowResponse {
@@ -344,6 +348,7 @@ function createBaseQueryAllFlowRequest(): QueryAllFlowRequest {
     participant: "",
     participationType: 0,
     tokenOutClaimability: 0,
+    orderBy: undefined,
     pagination: undefined
   };
 }
@@ -377,8 +382,11 @@ export const QueryAllFlowRequest = {
     if (message.tokenOutClaimability !== 0) {
       writer.uint32(48).int32(message.tokenOutClaimability);
     }
+    if (message.orderBy !== undefined) {
+      FlowPositionPairOrderBy.encode(message.orderBy, writer.uint32(58).fork()).ldelim();
+    }
     if (message.pagination !== undefined) {
-      PageRequest.encode(message.pagination, writer.uint32(58).fork()).ldelim();
+      PageRequest.encode(message.pagination, writer.uint32(66).fork()).ldelim();
     }
     return writer;
   },
@@ -408,6 +416,9 @@ export const QueryAllFlowRequest = {
           message.tokenOutClaimability = (reader.int32() as any);
           break;
         case 7:
+          message.orderBy = FlowPositionPairOrderBy.decode(reader, reader.uint32(), useInterfaces);
+          break;
+        case 8:
           message.pagination = PageRequest.decode(reader, reader.uint32(), useInterfaces);
           break;
         default:
@@ -425,6 +436,7 @@ export const QueryAllFlowRequest = {
       participant: isSet(object.participant) ? String(object.participant) : "",
       participationType: isSet(object.participationType) ? participationTypeFromJSON(object.participationType) : -1,
       tokenOutClaimability: isSet(object.tokenOutClaimability) ? tokenClaimabilityFromJSON(object.tokenOutClaimability) : -1,
+      orderBy: isSet(object.orderBy) ? FlowPositionPairOrderBy.fromJSON(object.orderBy) : undefined,
       pagination: isSet(object.pagination) ? PageRequest.fromJSON(object.pagination) : undefined
     };
   },
@@ -436,6 +448,7 @@ export const QueryAllFlowRequest = {
     message.participant !== undefined && (obj.participant = message.participant);
     message.participationType !== undefined && (obj.participationType = participationTypeToJSON(message.participationType));
     message.tokenOutClaimability !== undefined && (obj.tokenOutClaimability = tokenClaimabilityToJSON(message.tokenOutClaimability));
+    message.orderBy !== undefined && (obj.orderBy = message.orderBy ? FlowPositionPairOrderBy.toJSON(message.orderBy) : undefined);
     message.pagination !== undefined && (obj.pagination = message.pagination ? PageRequest.toJSON(message.pagination) : undefined);
     return obj;
   },
@@ -447,6 +460,7 @@ export const QueryAllFlowRequest = {
     message.participant = object.participant ?? "";
     message.participationType = object.participationType ?? 0;
     message.tokenOutClaimability = object.tokenOutClaimability ?? 0;
+    message.orderBy = object.orderBy !== undefined && object.orderBy !== null ? FlowPositionPairOrderBy.fromPartial(object.orderBy) : undefined;
     message.pagination = object.pagination !== undefined && object.pagination !== null ? PageRequest.fromPartial(object.pagination) : undefined;
     return message;
   },
@@ -470,6 +484,9 @@ export const QueryAllFlowRequest = {
     if (object.token_out_claimability !== undefined && object.token_out_claimability !== null) {
       message.tokenOutClaimability = object.token_out_claimability;
     }
+    if (object.order_by !== undefined && object.order_by !== null) {
+      message.orderBy = FlowPositionPairOrderBy.fromAmino(object.order_by);
+    }
     if (object.pagination !== undefined && object.pagination !== null) {
       message.pagination = PageRequest.fromAmino(object.pagination);
     }
@@ -483,6 +500,7 @@ export const QueryAllFlowRequest = {
     obj.participant = message.participant === "" ? undefined : message.participant;
     obj.participation_type = message.participationType === 0 ? undefined : message.participationType;
     obj.token_out_claimability = message.tokenOutClaimability === 0 ? undefined : message.tokenOutClaimability;
+    obj.order_by = message.orderBy ? FlowPositionPairOrderBy.toAmino(message.orderBy, useInterfaces) : undefined;
     obj.pagination = message.pagination ? PageRequest.toAmino(message.pagination, useInterfaces) : undefined;
     return obj;
   },

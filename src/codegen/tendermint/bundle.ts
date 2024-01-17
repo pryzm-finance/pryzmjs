@@ -1,42 +1,42 @@
-import * as _282 from "./abci/types";
-import * as _283 from "./blocksync/types";
-import * as _284 from "./crypto/keys";
-import * as _285 from "./crypto/proof";
-import * as _286 from "./libs/bits/types";
-import * as _287 from "./p2p/types";
-import * as _288 from "./types/block";
-import * as _289 from "./types/evidence";
-import * as _290 from "./types/params";
-import * as _291 from "./types/types";
-import * as _292 from "./types/validator";
-import * as _293 from "./version/types";
+import * as _283 from "./abci/types";
+import * as _284 from "./blocksync/types";
+import * as _285 from "./crypto/keys";
+import * as _286 from "./crypto/proof";
+import * as _287 from "./libs/bits/types";
+import * as _288 from "./p2p/types";
+import * as _289 from "./types/block";
+import * as _290 from "./types/evidence";
+import * as _291 from "./types/params";
+import * as _292 from "./types/types";
+import * as _293 from "./types/validator";
+import * as _294 from "./version/types";
 export namespace tendermint {
   export const abci = {
-    ..._282
-  };
-  export const blocksync = {
     ..._283
   };
+  export const blocksync = {
+    ..._284
+  };
   export const crypto = {
-    ..._284,
-    ..._285
+    ..._285,
+    ..._286
   };
   export namespace libs {
     export const bits = {
-      ..._286
+      ..._287
     };
   }
   export const p2p = {
-    ..._287
+    ..._288
   };
   export const types = {
-    ..._288,
     ..._289,
     ..._290,
     ..._291,
-    ..._292
+    ..._292,
+    ..._293
   };
   export const version = {
-    ..._293
+    ..._294
   };
 }

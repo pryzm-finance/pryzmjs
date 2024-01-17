@@ -12,6 +12,7 @@ export enum OrderStatus {
   ORDER_STATUS_EXECUTION_QUEUE = 2,
   ORDER_STATUS_CANCELED = 3,
   ORDER_STATUS_FINISHED = 4,
+  ORDER_STATUS_DEPOSIT_FAILED = 5,
   UNRECOGNIZED = -1,
 }
 export const OrderStatusSDKType = OrderStatus;
@@ -33,6 +34,9 @@ export function orderStatusFromJSON(object: any): OrderStatus {
     case 4:
     case "ORDER_STATUS_FINISHED":
       return OrderStatus.ORDER_STATUS_FINISHED;
+    case 5:
+    case "ORDER_STATUS_DEPOSIT_FAILED":
+      return OrderStatus.ORDER_STATUS_DEPOSIT_FAILED;
     case -1:
     case "UNRECOGNIZED":
     default:
@@ -51,6 +55,8 @@ export function orderStatusToJSON(object: OrderStatus): string {
       return "ORDER_STATUS_CANCELED";
     case OrderStatus.ORDER_STATUS_FINISHED:
       return "ORDER_STATUS_FINISHED";
+    case OrderStatus.ORDER_STATUS_DEPOSIT_FAILED:
+      return "ORDER_STATUS_DEPOSIT_FAILED";
     case OrderStatus.UNRECOGNIZED:
     default:
       return "UNRECOGNIZED";
@@ -66,6 +72,7 @@ export enum QueryOrderStatus {
   QUERY_ORDER_STATUS_LIVE = 5,
   /** QUERY_ORDER_STATUS_NOT_LIVE - NOT_LIVE is CANCELED or FINISHED */
   QUERY_ORDER_STATUS_NOT_LIVE = 6,
+  QUERY_ORDER_STATUS_DEPOSIT_FAILED = 7,
   UNRECOGNIZED = -1,
 }
 export const QueryOrderStatusSDKType = QueryOrderStatus;
@@ -93,6 +100,9 @@ export function queryOrderStatusFromJSON(object: any): QueryOrderStatus {
     case 6:
     case "QUERY_ORDER_STATUS_NOT_LIVE":
       return QueryOrderStatus.QUERY_ORDER_STATUS_NOT_LIVE;
+    case 7:
+    case "QUERY_ORDER_STATUS_DEPOSIT_FAILED":
+      return QueryOrderStatus.QUERY_ORDER_STATUS_DEPOSIT_FAILED;
     case -1:
     case "UNRECOGNIZED":
     default:
@@ -115,6 +125,8 @@ export function queryOrderStatusToJSON(object: QueryOrderStatus): string {
       return "QUERY_ORDER_STATUS_LIVE";
     case QueryOrderStatus.QUERY_ORDER_STATUS_NOT_LIVE:
       return "QUERY_ORDER_STATUS_NOT_LIVE";
+    case QueryOrderStatus.QUERY_ORDER_STATUS_DEPOSIT_FAILED:
+      return "QUERY_ORDER_STATUS_DEPOSIT_FAILED";
     case QueryOrderStatus.UNRECOGNIZED:
     default:
       return "UNRECOGNIZED";

@@ -1,0 +1,24 @@
+syntax = "proto3";
+package pryzmatics.database;
+
+import "gogoproto/gogo.proto";
+
+option go_package = "github.com/pryzm-finance/pryzmatics/types/database";
+
+enum FlowPositionPairOrderByProperty {
+  option (gogoproto.goproto_enum_prefix) = false;
+  ORDER_BY_PROPERTY_FLOW_ID = 0;
+  ORDER_BY_PROPERTY_FLOW_END_TIME = 1;
+  ORDER_BY_PROPERTY_FLOW_TOKEN_IN_DENOM = 2;
+  ORDER_BY_PROPERTY_FLOW_TOKEN_OUT_DENOM = 3;
+  ORDER_BY_PROPERTY_FLOW_LIVE_PRICE = 4;
+  ORDER_BY_PROPERTY_FLOW_TOKEN_OUT_BALANCE = 5;
+  ORDER_BY_PROPERTY_FLOW_TOTAL_TOKEN_OUT_AMOUNT = 6;
+//  ORDER_BY_PROPERTY_FLOW_DURATION = ?; TODO
+//  ORDER_BY_PROPERTY_CLAIMABLE = ?; TODO
+}
+
+message FlowPositionPairOrderBy {
+  FlowPositionPairOrderByProperty property = 1;
+  bool descending = 2;
+}

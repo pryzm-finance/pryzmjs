@@ -796,6 +796,9 @@ export class LCDQueryClient {
     if (typeof params?.tokenOutClaimability !== "undefined") {
       options.params.token_out_claimability = params.tokenOutClaimability;
     }
+    if (typeof params?.orderBy !== "undefined") {
+      options.params.order_by = params.orderBy;
+    }
     if (typeof params?.pagination !== "undefined") {
       setPaginationParams(options, params.pagination);
     }
