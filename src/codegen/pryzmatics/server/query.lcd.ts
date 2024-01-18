@@ -525,11 +525,14 @@ export class LCDQueryClient {
     if (typeof params?.tokenOut !== "undefined") {
       options.params.token_out = params.tokenOut;
     }
-    if (typeof params?.pagination !== "undefined") {
-      setPaginationParams(options, params.pagination);
-    }
     if (typeof params?.status !== "undefined") {
       options.params.status = params.status;
+    }
+    if (typeof params?.orderBy !== "undefined") {
+      options.params.order_by = params.orderBy;
+    }
+    if (typeof params?.pagination !== "undefined") {
+      setPaginationParams(options, params.pagination);
     }
     const endpoint = `pryzmatics/trade/order`;
     return await this.req.get<QueryOrdersResponseSDKType>(endpoint, options);

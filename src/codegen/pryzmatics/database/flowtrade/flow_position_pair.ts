@@ -1,6 +1,6 @@
-import { isSet } from "../../helpers";
-import { BinaryReader, BinaryWriter } from "../../binary";
-import { GlobalDecoderRegistry } from "../../registry";
+import { isSet } from "../../../helpers";
+import { BinaryReader, BinaryWriter } from "../../../binary";
+import { GlobalDecoderRegistry } from "../../../registry";
 export enum FlowPositionPairOrderByProperty {
   ORDER_BY_PROPERTY_FLOW_ID = 0,
   ORDER_BY_PROPERTY_FLOW_END_TIME = 1,
@@ -68,7 +68,7 @@ export interface FlowPositionPairOrderBy {
   descending: boolean;
 }
 export interface FlowPositionPairOrderByProtoMsg {
-  typeUrl: "/pryzmatics.database.FlowPositionPairOrderBy";
+  typeUrl: "/pryzmatics.database.flowtrade.FlowPositionPairOrderBy";
   value: Uint8Array;
 }
 export interface FlowPositionPairOrderByAmino {
@@ -76,7 +76,7 @@ export interface FlowPositionPairOrderByAmino {
   descending?: boolean;
 }
 export interface FlowPositionPairOrderByAminoMsg {
-  type: "/pryzmatics.database.FlowPositionPairOrderBy";
+  type: "/pryzmatics.database.flowtrade.FlowPositionPairOrderBy";
   value: FlowPositionPairOrderByAmino;
 }
 export interface FlowPositionPairOrderBySDKType {
@@ -90,7 +90,7 @@ function createBaseFlowPositionPairOrderBy(): FlowPositionPairOrderBy {
   };
 }
 export const FlowPositionPairOrderBy = {
-  typeUrl: "/pryzmatics.database.FlowPositionPairOrderBy",
+  typeUrl: "/pryzmatics.database.flowtrade.FlowPositionPairOrderBy",
   is(o: any): o is FlowPositionPairOrderBy {
     return o && (o.$typeUrl === FlowPositionPairOrderBy.typeUrl || isSet(o.property) && typeof o.descending === "boolean");
   },
@@ -174,7 +174,7 @@ export const FlowPositionPairOrderBy = {
   },
   toProtoMsg(message: FlowPositionPairOrderBy): FlowPositionPairOrderByProtoMsg {
     return {
-      typeUrl: "/pryzmatics.database.FlowPositionPairOrderBy",
+      typeUrl: "/pryzmatics.database.flowtrade.FlowPositionPairOrderBy",
       value: FlowPositionPairOrderBy.encode(message).finish()
     };
   }

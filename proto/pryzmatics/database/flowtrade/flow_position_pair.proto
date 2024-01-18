@@ -1,9 +1,9 @@
 syntax = "proto3";
-package pryzmatics.database;
+package pryzmatics.database.flowtrade;
 
 import "gogoproto/gogo.proto";
 
-option go_package = "github.com/pryzm-finance/pryzmatics/types/database";
+option go_package = "github.com/pryzm-finance/pryzmatics/types/database/flowtrade";
 
 enum FlowPositionPairOrderByProperty {
   option (gogoproto.goproto_enum_prefix) = false;

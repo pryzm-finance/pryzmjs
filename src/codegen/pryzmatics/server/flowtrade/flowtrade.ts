@@ -1,6 +1,6 @@
 import { Flow, FlowAmino, FlowSDKType } from "../../../refractedlabs/flowtrade/v1/flow";
 import { ParticipationType, participationTypeFromJSON, participationTypeToJSON } from "../../flowtrade/participation_type";
-import { FlowPositionPairOrderBy, FlowPositionPairOrderByAmino, FlowPositionPairOrderBySDKType } from "../../database/flow_position_pair";
+import { FlowPositionPairOrderBy, FlowPositionPairOrderByAmino, FlowPositionPairOrderBySDKType } from "../../database/flowtrade/flow_position_pair";
 import { PageRequest, PageRequestAmino, PageRequestSDKType, PageResponse, PageResponseAmino, PageResponseSDKType } from "../../../cosmos/base/query/v1beta1/pagination";
 import { FlowPositionPair, FlowPositionPairAmino, FlowPositionPairSDKType } from "../../flowtrade/flow_position_pair";
 import { BinaryReader, BinaryWriter } from "../../../binary";

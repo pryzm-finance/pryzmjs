@@ -10,7 +10,7 @@ import { fetchAll } from "@pryzm-finance/pryzmjs/lib";
 import { PageRequest } from "@pryzm-finance/pryzmjs/lib/codegen/cosmos/base/query/v1beta1/pagination";
 import {
     FlowPositionPairOrderByProperty
-} from "@pryzm-finance/pryzmjs/lib/codegen/pryzmatics/database/flow_position_pair";
+} from "@pryzm-finance/pryzmjs/lib/codegen/pryzmatics/database/flowtrade/flow_position_pair";
 
 async function main() {
     const pryzmaticsClient = await createPryzmaticsClient({ restEndpoint: PRYZMATICS_ENDPOINT })

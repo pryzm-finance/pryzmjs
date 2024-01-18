@@ -7,7 +7,7 @@ import "refractedlabs/flowtrade/v1/flow.proto";
 import "cosmos_proto/cosmos.proto";
 import "pryzmatics/flowtrade/flow_position_pair.proto";
 import "pryzmatics/flowtrade/participation_type.proto";
-import "pryzmatics/database/flow_position_pair.proto";
+import "pryzmatics/database/flowtrade/flow_position_pair.proto";
 
 option go_package = "github.com/pryzm-finance/pryzmatics/server/flowtrade";
 
@@ -40,7 +40,7 @@ message QueryAllFlowRequest {
   string participant = 4;
   pryzmatics.flowtrade.ParticipationType participation_type = 5;
   TokenClaimability token_out_claimability = 6;
-  pryzmatics.database.FlowPositionPairOrderBy order_by = 7 [(gogoproto.nullable) = true];
+  pryzmatics.database.flowtrade.FlowPositionPairOrderBy order_by = 7 [(gogoproto.nullable) = true];
   cosmos.base.query.v1beta1.PageRequest pagination = 8 [(gogoproto.nullable) = true];
 }
 

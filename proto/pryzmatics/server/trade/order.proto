@@ -6,6 +6,7 @@ import "cosmos_proto/cosmos.proto";
 import "pryzmatics/trade/pool_trade_history.proto";
 import "cosmos/base/query/v1beta1/pagination.proto";
 import "pryzmatics/trade/order.proto";
+import "pryzmatics/database/trade/order.proto";
 
 
 option go_package = "github.com/pryzm-finance/pryzmatics/server/trade";
@@ -27,8 +28,9 @@ message QueryOrdersRequest {
   ];
   string token_in = 3;
   string token_out = 4;
-  cosmos.base.query.v1beta1.PageRequest pagination = 5 [(gogoproto.nullable) = true];
-  pryzmatics.trade.QueryOrderStatus status = 6;
+  pryzmatics.trade.QueryOrderStatus status = 5;
+  pryzmatics.database.trade.OrderOrderBy order_by = 6 [(gogoproto.nullable) = true];
+  cosmos.base.query.v1beta1.PageRequest pagination = 7 [(gogoproto.nullable) = true];
 }
 
 message QueryOrdersResponse {

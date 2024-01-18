@@ -1,0 +1,25 @@
+syntax = "proto3";
+package pryzmatics.database.trade;
+
+import "gogoproto/gogo.proto";
+
+option go_package = "github.com/pryzm-finance/pryzmatics/types/database/trade";
+
+enum OrderOrderByProperty {
+  option (gogoproto.goproto_enum_prefix) = false;
+  ORDER_BY_PROPERTY_ID = 0;
+  ORDER_BY_PROPERTY_TOKEN_IN = 1;
+  ORDER_BY_PROPERTY_TOKEN_OUT = 2;
+  ORDER_BY_PROPERTY_REMAINING_AMOUNT = 3;
+  ORDER_BY_PROPERTY_AMOUNT_OUT = 4;
+  ORDER_BY_PROPERTY_PROGRESS = 5;
+  ORDER_BY_PROPERTY_CREATED_TIME = 6;
+  ORDER_BY_PROPERTY_MAX_STEP_SPOT_PRICE = 7;
+  ORDER_BY_PROPERTY_MAX_MATCHING_SPOT_PRICE = 8;
+  ORDER_BY_PROPERTY_DEPOSITED_AMOUNT = 9;
+}
+
+message OrderOrderBy {
+  OrderOrderByProperty property = 1;
+  bool descending = 2;
+}

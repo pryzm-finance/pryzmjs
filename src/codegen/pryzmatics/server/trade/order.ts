@@ -1,4 +1,5 @@
 import { Order, OrderAmino, OrderSDKType, QueryOrderStatus, queryOrderStatusFromJSON, queryOrderStatusToJSON } from "../../trade/order";
+import { OrderOrderBy, OrderOrderByAmino, OrderOrderBySDKType } from "../../database/trade/order";
 import { PageRequest, PageRequestAmino, PageRequestSDKType, PageResponse, PageResponseAmino, PageResponseSDKType } from "../../../cosmos/base/query/v1beta1/pagination";
 import { BinaryReader, BinaryWriter } from "../../../binary";
 import { isSet } from "../../../helpers";
@@ -42,8 +43,9 @@ export interface QueryOrdersRequest {
   poolId?: string;
   tokenIn: string;
   tokenOut: string;
-  pagination?: PageRequest;
   status: QueryOrderStatus;
+  orderBy?: OrderOrderBy;
+  pagination?: PageRequest;
 }
 export interface QueryOrdersRequestProtoMsg {
   typeUrl: "/pryzmatics.server.trade.QueryOrdersRequest";
@@ -54,8 +56,9 @@ export interface QueryOrdersRequestAmino {
   pool_id?: string;
   token_in?: string;
   token_out?: string;
-  pagination?: PageRequestAmino;
   status?: QueryOrderStatus;
+  order_by?: OrderOrderByAmino;
+  pagination?: PageRequestAmino;
 }
 export interface QueryOrdersRequestAminoMsg {
   type: "/pryzmatics.server.trade.QueryOrdersRequest";
@@ -66,8 +69,9 @@ export interface QueryOrdersRequestSDKType {
   pool_id?: string;
   token_in: string;
   token_out: string;
-  pagination?: PageRequestSDKType;
   status: QueryOrderStatus;
+  order_by?: OrderOrderBySDKType;
+  pagination?: PageRequestSDKType;
 }
 export interface QueryOrdersResponse {
   orders: Order[];
@@ -261,8 +265,9 @@ function createBaseQueryOrdersRequest(): QueryOrdersRequest {
     poolId: undefined,
     tokenIn: "",
     tokenOut: "",
-    pagination: undefined,
-    status: 0
+    status: 0,
+    orderBy: undefined,
+    pagination: undefined
   };
 }
 export const QueryOrdersRequest = {
@@ -289,11 +294,14 @@ export const QueryOrdersRequest = {
     if (message.tokenOut !== "") {
       writer.uint32(34).string(message.tokenOut);
     }
-    if (message.pagination !== undefined) {
-      PageRequest.encode(message.pagination, writer.uint32(42).fork()).ldelim();
-    }
     if (message.status !== 0) {
-      writer.uint32(48).int32(message.status);
+      writer.uint32(40).int32(message.status);
+    }
+    if (message.orderBy !== undefined) {
+      OrderOrderBy.encode(message.orderBy, writer.uint32(50).fork()).ldelim();
+    }
+    if (message.pagination !== undefined) {
+      PageRequest.encode(message.pagination, writer.uint32(58).fork()).ldelim();
     }
     return writer;
   },
@@ -317,10 +325,13 @@ export const QueryOrdersRequest = {
           message.tokenOut = reader.string();
           break;
         case 5:
-          message.pagination = PageRequest.decode(reader, reader.uint32(), useInterfaces);
+          message.status = (reader.int32() as any);
           break;
         case 6:
-          message.status = (reader.int32() as any);
+          message.orderBy = OrderOrderBy.decode(reader, reader.uint32(), useInterfaces);
+          break;
+        case 7:
+          message.pagination = PageRequest.decode(reader, reader.uint32(), useInterfaces);
           break;
         default:
           reader.skipType(tag & 7);
@@ -335,8 +346,9 @@ export const QueryOrdersRequest = {
       poolId: isSet(object.poolId) ? String(object.poolId) : undefined,
       tokenIn: isSet(object.tokenIn) ? String(object.tokenIn) : "",
       tokenOut: isSet(object.tokenOut) ? String(object.tokenOut) : "",
-      pagination: isSet(object.pagination) ? PageRequest.fromJSON(object.pagination) : undefined,
-      status: isSet(object.status) ? queryOrderStatusFromJSON(object.status) : -1
+      status: isSet(object.status) ? queryOrderStatusFromJSON(object.status) : -1,
+      orderBy: isSet(object.orderBy) ? OrderOrderBy.fromJSON(object.orderBy) : undefined,
+      pagination: isSet(object.pagination) ? PageRequest.fromJSON(object.pagination) : undefined
     };
   },
   toJSON(message: QueryOrdersRequest): unknown {
@@ -345,8 +357,9 @@ export const QueryOrdersRequest = {
     message.poolId !== undefined && (obj.poolId = message.poolId);
     message.tokenIn !== undefined && (obj.tokenIn = message.tokenIn);
     message.tokenOut !== undefined && (obj.tokenOut = message.tokenOut);
-    message.pagination !== undefined && (obj.pagination = message.pagination ? PageRequest.toJSON(message.pagination) : undefined);
     message.status !== undefined && (obj.status = queryOrderStatusToJSON(message.status));
+    message.orderBy !== undefined && (obj.orderBy = message.orderBy ? OrderOrderBy.toJSON(message.orderBy) : undefined);
+    message.pagination !== undefined && (obj.pagination = message.pagination ? PageRequest.toJSON(message.pagination) : undefined);
     return obj;
   },
   fromPartial(object: Partial<QueryOrdersRequest>): QueryOrdersRequest {
@@ -355,8 +368,9 @@ export const QueryOrdersRequest = {
     message.poolId = object.poolId ?? undefined;
     message.tokenIn = object.tokenIn ?? "";
     message.tokenOut = object.tokenOut ?? "";
-    message.pagination = object.pagination !== undefined && object.pagination !== null ? PageRequest.fromPartial(object.pagination) : undefined;
     message.status = object.status ?? 0;
+    message.orderBy = object.orderBy !== undefined && object.orderBy !== null ? OrderOrderBy.fromPartial(object.orderBy) : undefined;
+    message.pagination = object.pagination !== undefined && object.pagination !== null ? PageRequest.fromPartial(object.pagination) : undefined;
     return message;
   },
   fromAmino(object: QueryOrdersRequestAmino): QueryOrdersRequest {
@@ -373,11 +387,14 @@ export const QueryOrdersRequest = {
     if (object.token_out !== undefined && object.token_out !== null) {
       message.tokenOut = object.token_out;
     }
-    if (object.pagination !== undefined && object.pagination !== null) {
-      message.pagination = PageRequest.fromAmino(object.pagination);
-    }
     if (object.status !== undefined && object.status !== null) {
       message.status = object.status;
+    }
+    if (object.order_by !== undefined && object.order_by !== null) {
+      message.orderBy = OrderOrderBy.fromAmino(object.order_by);
+    }
+    if (object.pagination !== undefined && object.pagination !== null) {
+      message.pagination = PageRequest.fromAmino(object.pagination);
     }
     return message;
   },
@@ -387,8 +404,9 @@ export const QueryOrdersRequest = {
     obj.pool_id = message.poolId === null ? undefined : message.poolId;
     obj.token_in = message.tokenIn === "" ? undefined : message.tokenIn;
     obj.token_out = message.tokenOut === "" ? undefined : message.tokenOut;
-    obj.pagination = message.pagination ? PageRequest.toAmino(message.pagination, useInterfaces) : undefined;
     obj.status = message.status === 0 ? undefined : message.status;
+    obj.order_by = message.orderBy ? OrderOrderBy.toAmino(message.orderBy, useInterfaces) : undefined;
+    obj.pagination = message.pagination ? PageRequest.toAmino(message.pagination, useInterfaces) : undefined;
     return obj;
   },
   fromAminoMsg(object: QueryOrdersRequestAminoMsg): QueryOrdersRequest {
