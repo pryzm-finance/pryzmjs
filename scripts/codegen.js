@@ -152,7 +152,6 @@ async function main() {
     ], [{regex: /[\s\S]*/, subst: `export {}`}])
     correctFiles([
             './src/codegen/alliance/client.ts',
-            './src/codegen/pryzm/client.ts',
             './src/codegen/ibc/client.ts',
             './src/codegen/ibc/core/client/v1/client.ts',
             './src/codegen/osmosis/client.ts'
@@ -166,6 +165,25 @@ async function main() {
             {
                 regex: /const aminoTypes = new AminoTypes\({/gm,
                 subst: `const aminoTypes = new AminoTypes({\n    ...cosmosAminoConverters,`,
+            }
+        ]
+    )
+
+    correctFile('./src/codegen/pryzm/client.ts',
+        [
+            {
+                regex: /import { defaultRegistryTypes, AminoTypes, SigningStargateClient } from "@cosmjs\/stargate";/gm,
+                subst: 'import { AminoTypes, SigningStargateClient } from "@cosmjs/stargate";\n' +
+                    'import { cosmosProtoRegistry as defaultRegistryTypes, cosmosAminoConverters } from "../cosmos/client";\n' +
+                    'import { ibcAminoConverters, ibcProtoRegistry } from "../ibc/client";',
+            },
+            {
+                regex: /const aminoTypes = new AminoTypes\({/gm,
+                subst: `const aminoTypes = new AminoTypes({\n    ...cosmosAminoConverters,\n    ...ibcAminoConverters,`,
+            },
+            {
+                regex: /new Registry\(\[\.\.\.defaultTypes, \.\.\.pryzmProtoRegistry\]\)/gm,
+                subst: `new Registry([...defaultTypes, ...ibcProtoRegistry, ...pryzmProtoRegistry])`
             }
         ]
     )

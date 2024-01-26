@@ -1,12 +1,12 @@
 lockfileVersion: 5.4
 
 specifiers:
-  '@pryzm-finance/pryzmjs': 0.17.8
+  '@pryzm-finance/pryzmjs': 0.17.9
   '@refractedlabs/utils': 0.1.9
   typescript: ^5.1.6
 
 dependencies:
-  '@pryzm-finance/pryzmjs': 0.17.8_google-protobuf@3.21.2
+  '@pryzm-finance/pryzmjs': 0.17.9_google-protobuf@3.21.2
   '@refractedlabs/utils': 0.1.9
 
 devDependencies:
@@ -151,7 +151,7 @@ packages:
       '@cosmjs/socket': 0.32.2
       '@cosmjs/stream': 0.32.2
       '@cosmjs/utils': 0.32.2
-      axios: 1.6.5
+      axios: 1.6.7
       readonly-date: 1.0.0
       xstream: 11.14.0
     transitivePeerDependencies:
@@ -189,18 +189,18 @@ packages:
       google-protobuf: 3.21.2
     dev: false
 
-  /@keplr-wallet/types/0.12.62:
-    resolution: {integrity: sha512-IM6Z5wxYyHUIOiFx3Jc48JmFfYMJTLvFqBpKlsYv+Zozpp99R+qSySzj3BOSi1wUmW3VoIKHLaGFGjIu4iDCzw==}
+  /@keplr-wallet/types/0.12.64:
+    resolution: {integrity: sha512-O349lOSK6PFRH0Odpwea4jRuIRuC3aRTbrmvc9DEbTY3/uyLk88VmDCv3uOtEKG2eTrledF7xMg2PURmZlaoZg==}
     dependencies:
       long: 4.0.0
     dev: false
 
-  /@keplr-wallet/unit/0.12.62:
-    resolution: {integrity: sha512-2cCFkilVREb86sr/EMqcLrv4JfxgEW0fpY+DqzGsIwzZ8f/lmOgMhLlUWkbBUqRLD43iZQFiOMpl1X9KgAwpjg==}
+  /@keplr-wallet/unit/0.12.64:
+    resolution: {integrity: sha512-DqtE/TpNXKyWEl2LlqO8Ry4Pg54Ceq/gWhDjnJOpiHBgAg898bQH5kTWl+e0Ju+7I1hhXiLDij74lvtI5qIaeA==}
     dependencies:
-      '@keplr-wallet/types': 0.12.62
+      '@keplr-wallet/types': 0.12.64
       big-integer: 1.6.52
-      utility-types: 3.10.0
+      utility-types: 3.11.0
     dev: false
 
   /@noble/hashes/1.3.3:
@@ -251,14 +251,14 @@ packages:
     resolution: {integrity: sha512-Vvn3zZrhQZkkBE8LSuW3em98c0FwgO4nxzv6OdSxPKJIEKY2bGbHn+mhGIPerzI4twdxaP8/0+06HBpwf345Lw==}
     dev: false
 
-  /@pryzm-finance/pryzmjs/0.17.8_google-protobuf@3.21.2:
-    resolution: {integrity: sha512-0x+vhplph04FvBZPqsZ4UCUniLTqD0e77UmF8+xcfvxbmA/X0BgkPU/1ml+4lXmb2ychC8RVuVb576omfBv2uA==, tarball: download/@pryzm-finance/pryzmjs/0.17.8/8856b83e42b8ddb53819c8de001a001637319982}
+  /@pryzm-finance/pryzmjs/0.17.9_google-protobuf@3.21.2:
+    resolution: {integrity: sha512-jedwgR7VfshzHoz5XQDXYaiyGQmffJYR/m8cZ5NhcIL12Aebst5YrtJvARpVwgBa8MgZp6ZyNBxFPwUpbxrIjg==, tarball: download/@pryzm-finance/pryzmjs/0.17.9/867b773683e3cd6cb98918c3eb28613f448a01af}
     dependencies:
       '@cosmjs/amino': 0.32.2
       '@cosmjs/proto-signing': 0.32.2
       '@cosmjs/stargate': 0.32.2
       '@cosmjs/tendermint-rpc': 0.32.2
-      '@keplr-wallet/unit': 0.12.62
+      '@keplr-wallet/unit': 0.12.64
       '@refractedlabs/utils': 0.3.2_google-protobuf@3.21.2
     transitivePeerDependencies:
       - bufferutil
@@ -326,8 +326,8 @@ packages:
     resolution: {integrity: sha512-MqTGEo5bj5t157U6fA/BiDynNkn0YknVdh48CMPkTSpFTVmvao5UQmm7uEF6xBEo7qIMAlY/JSleYaE6VOdpaA==}
     dev: false
 
-  /@types/node/20.11.5:
-    resolution: {integrity: sha512-g557vgQjUUfN76MZAN/dt1z3dzcUsimuysco0KeluHgrPdJXkP/XdAURgyO2W9fZWHRtRBiVKzKn8vyOAwlG+w==}
+  /@types/node/20.11.7:
+    resolution: {integrity: sha512-GPmeN1C3XAyV5uybAf4cMLWT9fDWcmQhZVtMFu7OR32WjrqGG+Wnk2V1d0bmtUyE/Zy1QJ9BxyiTih9z8Oks8A==}
     dependencies:
       undici-types: 5.26.5
     dev: false
@@ -358,8 +358,8 @@ packages:
       - debug
     dev: false
 
-  /axios/1.6.5:
-    resolution: {integrity: sha512-Ii012v05KEVuUoFWmMW/UQv9aRIc3ZwkWDcM+h5Il8izZCtRVpDUfwpoFf7eOtajT3QiGR4yDUx7lPqHJULgbg==}
+  /axios/1.6.7:
+    resolution: {integrity: sha512-/hDJGff6/c7u0hDkvkGxR/oy6CbCs8ziCsC7SqmhjfozqiJGc8Z11wrv9z9lYfY4K8l+H9TpjcMDX0xOZmx+RA==}
     dependencies:
       follow-redirects: 1.15.5
       form-data: 4.0.0
@@ -745,7 +745,7 @@ packages:
       '@protobufjs/pool': 1.1.0
       '@protobufjs/utf8': 1.1.0
       '@types/long': 4.0.2
-      '@types/node': 20.11.5
+      '@types/node': 20.11.7
       long: 4.0.0
     dev: false
 
@@ -833,8 +833,8 @@ packages:
     resolution: {integrity: sha512-EPD5q1uXyFxJpCrLnCc1nHnq3gOa6DZBocAIiI2TaSCA7VCJ1UJDMagCzIkXNsUYfD1daK//LTEQ8xiIbrHtcw==}
     dev: false
 
-  /utility-types/3.10.0:
-    resolution: {integrity: sha512-O11mqxmi7wMKCo6HKFt5AhO4BwY3VV68YU07tgxfz8zJTIxr4BpsezN49Ffwy9j3ZpwwJp4fkRwjRzq3uWE6Rg==}
+  /utility-types/3.11.0:
+    resolution: {integrity: sha512-6Z7Ma2aVEWisaL6TvBCy7P8rm2LQoPv6dJ7ecIaIixHcwfbJ0x7mWdbcwlIM5IGQxPZSFYeqRCqlOOeKoJYMkw==}
     engines: {node: '>= 4'}
     dev: false
 
