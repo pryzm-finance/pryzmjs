@@ -5,6 +5,8 @@ import "gogoproto/gogo.proto";
 import "google/api/annotations.proto";
 import "cosmatics/sync_state.proto";
 import "cosmatics/metric.proto";
+import "cosmatics/health_check.proto";
+import "cosmatics/block_sync_failure.proto";
 import "tendermint/types/block.proto";
 import "tendermint/blocksync/types.proto";
 import "cosmos/tx/v1beta1/service.proto";
@@ -31,5 +33,13 @@ service Query {
 
   rpc Metrics(QueryMetricsRequest) returns (QueryMetricsResponse) {
     option (google.api.http).get = "/cosmatics/metric";
+  }
+
+  rpc HealthCheck(QueryHealthCheckRequest) returns (QueryHealthCheckResponse) {
+    option (google.api.http).get = "/cosmatics/health";
+  }
+
+  rpc BlockSyncFailures(QueryBlockSyncFailuresRequest) returns (QueryBlockSyncFailuresResponse) {
+    option (google.api.http).get = "/cosmatics/block_sync_failure";
   }
 }

@@ -5,6 +5,8 @@ import { LCDClient } from "@refractedlabs/cosmology-lcd-fork";
 import { QuerySyncStateRequest, QuerySyncStateResponseSDKType } from "./sync_state";
 import { BlockRequest } from "../tendermint/blocksync/types";
 import { BlockSDKType } from "../tendermint/types/block";
+import { QueryHealthCheckRequest, QueryHealthCheckResponseSDKType } from "./health_check";
+import { QueryBlockSyncFailuresRequest, QueryBlockSyncFailuresResponseSDKType } from "./block_sync_failure";
 export class LCDQueryClient {
   req: LCDClient;
   constructor({
@@ -18,6 +20,8 @@ export class LCDQueryClient {
     this.transaction = this.transaction.bind(this);
     this.transactionByEvent = this.transactionByEvent.bind(this);
     this.metrics = this.metrics.bind(this);
+    this.healthCheck = this.healthCheck.bind(this);
+    this.blockSyncFailures = this.blockSyncFailures.bind(this);
   }
   /* SyncState */
   async syncState(_params: QuerySyncStateRequest = {}): Promise<QuerySyncStateResponseSDKType> {
@@ -85,5 +89,30 @@ export class LCDQueryClient {
     }
     const endpoint = `cosmatics/metric`;
     return await this.req.get<QueryMetricsResponseSDKType>(endpoint, options);
+  }
+  /* HealthCheck */
+  async healthCheck(_params: QueryHealthCheckRequest = {}): Promise<QueryHealthCheckResponseSDKType> {
+    const endpoint = `cosmatics/health`;
+    return await this.req.get<QueryHealthCheckResponseSDKType>(endpoint);
+  }
+  /* BlockSyncFailures */
+  async blockSyncFailures(params: QueryBlockSyncFailuresRequest): Promise<QueryBlockSyncFailuresResponseSDKType> {
+    const options: any = {
+      params: {}
+    };
+    if (typeof params?.fromBlockHeight !== "undefined") {
+      options.params.from_block_height = params.fromBlockHeight;
+    }
+    if (typeof params?.toBlockHeight !== "undefined") {
+      options.params.to_block_height = params.toBlockHeight;
+    }
+    if (typeof params?.fromTime !== "undefined") {
+      options.params.from_time = params.fromTime;
+    }
+    if (typeof params?.toTime !== "undefined") {
+      options.params.to_time = params.toTime;
+    }
+    const endpoint = `cosmatics/block_sync_failure`;
+    return await this.req.get<QueryBlockSyncFailuresResponseSDKType>(endpoint, options);
   }
 }

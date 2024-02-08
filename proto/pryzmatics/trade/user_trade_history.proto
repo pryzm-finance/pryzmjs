@@ -20,31 +20,32 @@ enum OperationType {
 }
 
 message UserTradeHistory {
-  repeated cosmos.base.v1beta1.Coin amounts_in = 1 [
+  uint64 id = 1;
+  repeated cosmos.base.v1beta1.Coin amounts_in = 2 [
     (gogoproto.nullable) = false,
     (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins"
   ];
-  repeated cosmos.base.v1beta1.Coin amounts_out = 2 [
+  repeated cosmos.base.v1beta1.Coin amounts_out = 3 [
     (gogoproto.nullable) = false,
     (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins"
   ];
-  string address = 3;
-  uint64 pool_id = 4;
-  repeated pryzm.amm.v1.SwapStep path = 5 [(gogoproto.nullable) = false];
-  OperationType operation_type = 6;
-  repeated cosmos.base.v1beta1.Coin swap_fee = 7 [
+  string address = 4;
+  uint64 pool_id = 5;
+  repeated pryzm.amm.v1.SwapStep path = 6 [(gogoproto.nullable) = false];
+  OperationType operation_type = 7;
+  repeated cosmos.base.v1beta1.Coin swap_fee = 8 [
     (gogoproto.nullable) = false,
     (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins"
   ];
-  repeated cosmos.base.v1beta1.Coin join_exit_protocol_fee = 8 [
+  repeated cosmos.base.v1beta1.Coin join_exit_protocol_fee = 9 [
     (gogoproto.nullable) = false,
     (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins"
   ];
-  repeated cosmos.base.v1beta1.Coin swap_protocol_fee = 9 [
+  repeated cosmos.base.v1beta1.Coin swap_protocol_fee = 10 [
     (gogoproto.nullable) = false,
     (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins"
   ];
-  google.protobuf.Timestamp block_time = 10 [
+  google.protobuf.Timestamp block_time = 11 [
     (gogoproto.stdtime) = true,
     (gogoproto.nullable) = false
   ];

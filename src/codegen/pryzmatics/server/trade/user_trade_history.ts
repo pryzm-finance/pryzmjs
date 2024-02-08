@@ -1,4 +1,6 @@
 import { OperationType, UserTradeHistory, UserTradeHistoryAmino, UserTradeHistorySDKType, operationTypeFromJSON, operationTypeToJSON } from "../../trade/user_trade_history";
+import { UserTradeHistoryOrderBy, UserTradeHistoryOrderByAmino, UserTradeHistoryOrderBySDKType } from "../../database/trade/user_trade_history";
+import { PageRequest, PageRequestAmino, PageRequestSDKType, PageResponse, PageResponseAmino, PageResponseSDKType } from "../../../cosmos/base/query/v1beta1/pagination";
 import { isSet } from "../../../helpers";
 import { BinaryReader, BinaryWriter } from "../../../binary";
 import { GlobalDecoderRegistry } from "../../../registry";
@@ -7,6 +9,8 @@ export interface QueryUserTradeHistoryRequest {
   secondToken: string;
   address: string;
   operationType: OperationType;
+  orderBy?: UserTradeHistoryOrderBy;
+  pagination?: PageRequest;
 }
 export interface QueryUserTradeHistoryRequestProtoMsg {
   typeUrl: "/pryzmatics.server.trade.QueryUserTradeHistoryRequest";
@@ -17,6 +21,8 @@ export interface QueryUserTradeHistoryRequestAmino {
   second_token?: string;
   address?: string;
   operation_type?: OperationType;
+  order_by?: UserTradeHistoryOrderByAmino;
+  pagination?: PageRequestAmino;
 }
 export interface QueryUserTradeHistoryRequestAminoMsg {
   type: "/pryzmatics.server.trade.QueryUserTradeHistoryRequest";
@@ -27,9 +33,12 @@ export interface QueryUserTradeHistoryRequestSDKType {
   second_token: string;
   address: string;
   operation_type: OperationType;
+  order_by?: UserTradeHistoryOrderBySDKType;
+  pagination?: PageRequestSDKType;
 }
 export interface QueryUserTradeHistoryResponse {
   userTradeHistoryRecords: UserTradeHistory[];
+  pagination?: PageResponse;
 }
 export interface QueryUserTradeHistoryResponseProtoMsg {
   typeUrl: "/pryzmatics.server.trade.QueryUserTradeHistoryResponse";
@@ -37,6 +46,7 @@ export interface QueryUserTradeHistoryResponseProtoMsg {
 }
 export interface QueryUserTradeHistoryResponseAmino {
   user_trade_history_records?: UserTradeHistoryAmino[];
+  pagination?: PageResponseAmino;
 }
 export interface QueryUserTradeHistoryResponseAminoMsg {
   type: "/pryzmatics.server.trade.QueryUserTradeHistoryResponse";
@@ -44,13 +54,16 @@ export interface QueryUserTradeHistoryResponseAminoMsg {
 }
 export interface QueryUserTradeHistoryResponseSDKType {
   user_trade_history_records: UserTradeHistorySDKType[];
+  pagination?: PageResponseSDKType;
 }
 function createBaseQueryUserTradeHistoryRequest(): QueryUserTradeHistoryRequest {
   return {
     firstToken: "",
     secondToken: "",
     address: "",
-    operationType: 0
+    operationType: 0,
+    orderBy: undefined,
+    pagination: undefined
   };
 }
 export const QueryUserTradeHistoryRequest = {
@@ -77,6 +90,12 @@ export const QueryUserTradeHistoryRequest = {
     if (message.operationType !== 0) {
       writer.uint32(32).int32(message.operationType);
     }
+    if (message.orderBy !== undefined) {
+      UserTradeHistoryOrderBy.encode(message.orderBy, writer.uint32(42).fork()).ldelim();
+    }
+    if (message.pagination !== undefined) {
+      PageRequest.encode(message.pagination, writer.uint32(50).fork()).ldelim();
+    }
     return writer;
   },
   decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): QueryUserTradeHistoryRequest {
@@ -98,6 +117,12 @@ export const QueryUserTradeHistoryRequest = {
         case 4:
           message.operationType = (reader.int32() as any);
           break;
+        case 5:
+          message.orderBy = UserTradeHistoryOrderBy.decode(reader, reader.uint32(), useInterfaces);
+          break;
+        case 6:
+          message.pagination = PageRequest.decode(reader, reader.uint32(), useInterfaces);
+          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -110,7 +135,9 @@ export const QueryUserTradeHistoryRequest = {
       firstToken: isSet(object.firstToken) ? String(object.firstToken) : "",
       secondToken: isSet(object.secondToken) ? String(object.secondToken) : "",
       address: isSet(object.address) ? String(object.address) : "",
-      operationType: isSet(object.operationType) ? operationTypeFromJSON(object.operationType) : -1
+      operationType: isSet(object.operationType) ? operationTypeFromJSON(object.operationType) : -1,
+      orderBy: isSet(object.orderBy) ? UserTradeHistoryOrderBy.fromJSON(object.orderBy) : undefined,
+      pagination: isSet(object.pagination) ? PageRequest.fromJSON(object.pagination) : undefined
     };
   },
   toJSON(message: QueryUserTradeHistoryRequest): unknown {
@@ -119,6 +146,8 @@ export const QueryUserTradeHistoryRequest = {
     message.secondToken !== undefined && (obj.secondToken = message.secondToken);
     message.address !== undefined && (obj.address = message.address);
     message.operationType !== undefined && (obj.operationType = operationTypeToJSON(message.operationType));
+    message.orderBy !== undefined && (obj.orderBy = message.orderBy ? UserTradeHistoryOrderBy.toJSON(message.orderBy) : undefined);
+    message.pagination !== undefined && (obj.pagination = message.pagination ? PageRequest.toJSON(message.pagination) : undefined);
     return obj;
   },
   fromPartial(object: Partial<QueryUserTradeHistoryRequest>): QueryUserTradeHistoryRequest {
@@ -127,6 +156,8 @@ export const QueryUserTradeHistoryRequest = {
     message.secondToken = object.secondToken ?? "";
     message.address = object.address ?? "";
     message.operationType = object.operationType ?? 0;
+    message.orderBy = object.orderBy !== undefined && object.orderBy !== null ? UserTradeHistoryOrderBy.fromPartial(object.orderBy) : undefined;
+    message.pagination = object.pagination !== undefined && object.pagination !== null ? PageRequest.fromPartial(object.pagination) : undefined;
     return message;
   },
   fromAmino(object: QueryUserTradeHistoryRequestAmino): QueryUserTradeHistoryRequest {
@@ -143,6 +174,12 @@ export const QueryUserTradeHistoryRequest = {
     if (object.operation_type !== undefined && object.operation_type !== null) {
       message.operationType = object.operation_type;
     }
+    if (object.order_by !== undefined && object.order_by !== null) {
+      message.orderBy = UserTradeHistoryOrderBy.fromAmino(object.order_by);
+    }
+    if (object.pagination !== undefined && object.pagination !== null) {
+      message.pagination = PageRequest.fromAmino(object.pagination);
+    }
     return message;
   },
   toAmino(message: QueryUserTradeHistoryRequest, useInterfaces: boolean = true): QueryUserTradeHistoryRequestAmino {
@@ -151,6 +188,8 @@ export const QueryUserTradeHistoryRequest = {
     obj.second_token = message.secondToken === "" ? undefined : message.secondToken;
     obj.address = message.address === "" ? undefined : message.address;
     obj.operation_type = message.operationType === 0 ? undefined : message.operationType;
+    obj.order_by = message.orderBy ? UserTradeHistoryOrderBy.toAmino(message.orderBy, useInterfaces) : undefined;
+    obj.pagination = message.pagination ? PageRequest.toAmino(message.pagination, useInterfaces) : undefined;
     return obj;
   },
   fromAminoMsg(object: QueryUserTradeHistoryRequestAminoMsg): QueryUserTradeHistoryRequest {
@@ -172,7 +211,8 @@ export const QueryUserTradeHistoryRequest = {
 GlobalDecoderRegistry.register(QueryUserTradeHistoryRequest.typeUrl, QueryUserTradeHistoryRequest);
 function createBaseQueryUserTradeHistoryResponse(): QueryUserTradeHistoryResponse {
   return {
-    userTradeHistoryRecords: []
+    userTradeHistoryRecords: [],
+    pagination: undefined
   };
 }
 export const QueryUserTradeHistoryResponse = {
@@ -190,6 +230,9 @@ export const QueryUserTradeHistoryResponse = {
     for (const v of message.userTradeHistoryRecords) {
       UserTradeHistory.encode(v!, writer.uint32(10).fork()).ldelim();
     }
+    if (message.pagination !== undefined) {
+      PageResponse.encode(message.pagination, writer.uint32(18).fork()).ldelim();
+    }
     return writer;
   },
   decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): QueryUserTradeHistoryResponse {
@@ -202,6 +245,9 @@ export const QueryUserTradeHistoryResponse = {
         case 1:
           message.userTradeHistoryRecords.push(UserTradeHistory.decode(reader, reader.uint32(), useInterfaces));
           break;
+        case 2:
+          message.pagination = PageResponse.decode(reader, reader.uint32(), useInterfaces);
+          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -211,7 +257,8 @@ export const QueryUserTradeHistoryResponse = {
   },
   fromJSON(object: any): QueryUserTradeHistoryResponse {
     return {
-      userTradeHistoryRecords: Array.isArray(object?.userTradeHistoryRecords) ? object.userTradeHistoryRecords.map((e: any) => UserTradeHistory.fromJSON(e)) : []
+      userTradeHistoryRecords: Array.isArray(object?.userTradeHistoryRecords) ? object.userTradeHistoryRecords.map((e: any) => UserTradeHistory.fromJSON(e)) : [],
+      pagination: isSet(object.pagination) ? PageResponse.fromJSON(object.pagination) : undefined
     };
   },
   toJSON(message: QueryUserTradeHistoryResponse): unknown {
@@ -221,16 +268,21 @@ export const QueryUserTradeHistoryResponse = {
     } else {
       obj.userTradeHistoryRecords = [];
     }
+    message.pagination !== undefined && (obj.pagination = message.pagination ? PageResponse.toJSON(message.pagination) : undefined);
     return obj;
   },
   fromPartial(object: Partial<QueryUserTradeHistoryResponse>): QueryUserTradeHistoryResponse {
     const message = createBaseQueryUserTradeHistoryResponse();
     message.userTradeHistoryRecords = object.userTradeHistoryRecords?.map(e => UserTradeHistory.fromPartial(e)) || [];
+    message.pagination = object.pagination !== undefined && object.pagination !== null ? PageResponse.fromPartial(object.pagination) : undefined;
     return message;
   },
   fromAmino(object: QueryUserTradeHistoryResponseAmino): QueryUserTradeHistoryResponse {
     const message = createBaseQueryUserTradeHistoryResponse();
     message.userTradeHistoryRecords = object.user_trade_history_records?.map(e => UserTradeHistory.fromAmino(e)) || [];
+    if (object.pagination !== undefined && object.pagination !== null) {
+      message.pagination = PageResponse.fromAmino(object.pagination);
+    }
     return message;
   },
   toAmino(message: QueryUserTradeHistoryResponse, useInterfaces: boolean = true): QueryUserTradeHistoryResponseAmino {
@@ -240,6 +292,7 @@ export const QueryUserTradeHistoryResponse = {
     } else {
       obj.user_trade_history_records = message.userTradeHistoryRecords;
     }
+    obj.pagination = message.pagination ? PageResponse.toAmino(message.pagination, useInterfaces) : undefined;
     return obj;
   },
   fromAminoMsg(object: QueryUserTradeHistoryResponseAminoMsg): QueryUserTradeHistoryResponse {

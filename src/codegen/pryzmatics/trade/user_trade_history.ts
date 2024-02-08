@@ -55,6 +55,7 @@ export function operationTypeToJSON(object: OperationType): string {
   }
 }
 export interface UserTradeHistory {
+  id: bigint;
   amountsIn: Coin[];
   amountsOut: Coin[];
   address: string;
@@ -71,6 +72,7 @@ export interface UserTradeHistoryProtoMsg {
   value: Uint8Array;
 }
 export interface UserTradeHistoryAmino {
+  id?: string;
   amounts_in?: CoinAmino[];
   amounts_out?: CoinAmino[];
   address?: string;
@@ -87,6 +89,7 @@ export interface UserTradeHistoryAminoMsg {
   value: UserTradeHistoryAmino;
 }
 export interface UserTradeHistorySDKType {
+  id: bigint;
   amounts_in: CoinSDKType[];
   amounts_out: CoinSDKType[];
   address: string;
@@ -100,6 +103,7 @@ export interface UserTradeHistorySDKType {
 }
 function createBaseUserTradeHistory(): UserTradeHistory {
   return {
+    id: BigInt(0),
     amountsIn: [],
     amountsOut: [],
     address: "",
@@ -115,44 +119,47 @@ function createBaseUserTradeHistory(): UserTradeHistory {
 export const UserTradeHistory = {
   typeUrl: "/pryzmatics.trade.UserTradeHistory",
   is(o: any): o is UserTradeHistory {
-    return o && (o.$typeUrl === UserTradeHistory.typeUrl || Array.isArray(o.amountsIn) && (!o.amountsIn.length || Coin.is(o.amountsIn[0])) && Array.isArray(o.amountsOut) && (!o.amountsOut.length || Coin.is(o.amountsOut[0])) && typeof o.address === "string" && typeof o.poolId === "bigint" && Array.isArray(o.path) && (!o.path.length || SwapStep.is(o.path[0])) && isSet(o.operationType) && Array.isArray(o.swapFee) && (!o.swapFee.length || Coin.is(o.swapFee[0])) && Array.isArray(o.joinExitProtocolFee) && (!o.joinExitProtocolFee.length || Coin.is(o.joinExitProtocolFee[0])) && Array.isArray(o.swapProtocolFee) && (!o.swapProtocolFee.length || Coin.is(o.swapProtocolFee[0])) && Timestamp.is(o.blockTime));
+    return o && (o.$typeUrl === UserTradeHistory.typeUrl || typeof o.id === "bigint" && Array.isArray(o.amountsIn) && (!o.amountsIn.length || Coin.is(o.amountsIn[0])) && Array.isArray(o.amountsOut) && (!o.amountsOut.length || Coin.is(o.amountsOut[0])) && typeof o.address === "string" && typeof o.poolId === "bigint" && Array.isArray(o.path) && (!o.path.length || SwapStep.is(o.path[0])) && isSet(o.operationType) && Array.isArray(o.swapFee) && (!o.swapFee.length || Coin.is(o.swapFee[0])) && Array.isArray(o.joinExitProtocolFee) && (!o.joinExitProtocolFee.length || Coin.is(o.joinExitProtocolFee[0])) && Array.isArray(o.swapProtocolFee) && (!o.swapProtocolFee.length || Coin.is(o.swapProtocolFee[0])) && Timestamp.is(o.blockTime));
   },
   isSDK(o: any): o is UserTradeHistorySDKType {
-    return o && (o.$typeUrl === UserTradeHistory.typeUrl || Array.isArray(o.amounts_in) && (!o.amounts_in.length || Coin.isSDK(o.amounts_in[0])) && Array.isArray(o.amounts_out) && (!o.amounts_out.length || Coin.isSDK(o.amounts_out[0])) && typeof o.address === "string" && typeof o.pool_id === "bigint" && Array.isArray(o.path) && (!o.path.length || SwapStep.isSDK(o.path[0])) && isSet(o.operation_type) && Array.isArray(o.swap_fee) && (!o.swap_fee.length || Coin.isSDK(o.swap_fee[0])) && Array.isArray(o.join_exit_protocol_fee) && (!o.join_exit_protocol_fee.length || Coin.isSDK(o.join_exit_protocol_fee[0])) && Array.isArray(o.swap_protocol_fee) && (!o.swap_protocol_fee.length || Coin.isSDK(o.swap_protocol_fee[0])) && Timestamp.isSDK(o.block_time));
+    return o && (o.$typeUrl === UserTradeHistory.typeUrl || typeof o.id === "bigint" && Array.isArray(o.amounts_in) && (!o.amounts_in.length || Coin.isSDK(o.amounts_in[0])) && Array.isArray(o.amounts_out) && (!o.amounts_out.length || Coin.isSDK(o.amounts_out[0])) && typeof o.address === "string" && typeof o.pool_id === "bigint" && Array.isArray(o.path) && (!o.path.length || SwapStep.isSDK(o.path[0])) && isSet(o.operation_type) && Array.isArray(o.swap_fee) && (!o.swap_fee.length || Coin.isSDK(o.swap_fee[0])) && Array.isArray(o.join_exit_protocol_fee) && (!o.join_exit_protocol_fee.length || Coin.isSDK(o.join_exit_protocol_fee[0])) && Array.isArray(o.swap_protocol_fee) && (!o.swap_protocol_fee.length || Coin.isSDK(o.swap_protocol_fee[0])) && Timestamp.isSDK(o.block_time));
   },
   isAmino(o: any): o is UserTradeHistoryAmino {
-    return o && (o.$typeUrl === UserTradeHistory.typeUrl || Array.isArray(o.amounts_in) && (!o.amounts_in.length || Coin.isAmino(o.amounts_in[0])) && Array.isArray(o.amounts_out) && (!o.amounts_out.length || Coin.isAmino(o.amounts_out[0])) && typeof o.address === "string" && typeof o.pool_id === "bigint" && Array.isArray(o.path) && (!o.path.length || SwapStep.isAmino(o.path[0])) && isSet(o.operation_type) && Array.isArray(o.swap_fee) && (!o.swap_fee.length || Coin.isAmino(o.swap_fee[0])) && Array.isArray(o.join_exit_protocol_fee) && (!o.join_exit_protocol_fee.length || Coin.isAmino(o.join_exit_protocol_fee[0])) && Array.isArray(o.swap_protocol_fee) && (!o.swap_protocol_fee.length || Coin.isAmino(o.swap_protocol_fee[0])) && Timestamp.isAmino(o.block_time));
+    return o && (o.$typeUrl === UserTradeHistory.typeUrl || typeof o.id === "bigint" && Array.isArray(o.amounts_in) && (!o.amounts_in.length || Coin.isAmino(o.amounts_in[0])) && Array.isArray(o.amounts_out) && (!o.amounts_out.length || Coin.isAmino(o.amounts_out[0])) && typeof o.address === "string" && typeof o.pool_id === "bigint" && Array.isArray(o.path) && (!o.path.length || SwapStep.isAmino(o.path[0])) && isSet(o.operation_type) && Array.isArray(o.swap_fee) && (!o.swap_fee.length || Coin.isAmino(o.swap_fee[0])) && Array.isArray(o.join_exit_protocol_fee) && (!o.join_exit_protocol_fee.length || Coin.isAmino(o.join_exit_protocol_fee[0])) && Array.isArray(o.swap_protocol_fee) && (!o.swap_protocol_fee.length || Coin.isAmino(o.swap_protocol_fee[0])) && Timestamp.isAmino(o.block_time));
   },
   encode(message: UserTradeHistory, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
-    for (const v of message.amountsIn) {
-      Coin.encode(v!, writer.uint32(10).fork()).ldelim();
+    if (message.id !== BigInt(0)) {
+      writer.uint32(8).uint64(message.id);
     }
-    for (const v of message.amountsOut) {
+    for (const v of message.amountsIn) {
       Coin.encode(v!, writer.uint32(18).fork()).ldelim();
     }
+    for (const v of message.amountsOut) {
+      Coin.encode(v!, writer.uint32(26).fork()).ldelim();
+    }
     if (message.address !== "") {
-      writer.uint32(26).string(message.address);
+      writer.uint32(34).string(message.address);
     }
     if (message.poolId !== BigInt(0)) {
-      writer.uint32(32).uint64(message.poolId);
+      writer.uint32(40).uint64(message.poolId);
     }
     for (const v of message.path) {
-      SwapStep.encode(v!, writer.uint32(42).fork()).ldelim();
+      SwapStep.encode(v!, writer.uint32(50).fork()).ldelim();
     }
     if (message.operationType !== 0) {
-      writer.uint32(48).int32(message.operationType);
+      writer.uint32(56).int32(message.operationType);
     }
     for (const v of message.swapFee) {
-      Coin.encode(v!, writer.uint32(58).fork()).ldelim();
-    }
-    for (const v of message.joinExitProtocolFee) {
       Coin.encode(v!, writer.uint32(66).fork()).ldelim();
     }
-    for (const v of message.swapProtocolFee) {
+    for (const v of message.joinExitProtocolFee) {
       Coin.encode(v!, writer.uint32(74).fork()).ldelim();
     }
+    for (const v of message.swapProtocolFee) {
+      Coin.encode(v!, writer.uint32(82).fork()).ldelim();
+    }
     if (message.blockTime !== undefined) {
-      Timestamp.encode(message.blockTime, writer.uint32(82).fork()).ldelim();
+      Timestamp.encode(message.blockTime, writer.uint32(90).fork()).ldelim();
     }
     return writer;
   },
@@ -164,33 +171,36 @@ export const UserTradeHistory = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.amountsIn.push(Coin.decode(reader, reader.uint32(), useInterfaces));
+          message.id = reader.uint64();
           break;
         case 2:
-          message.amountsOut.push(Coin.decode(reader, reader.uint32(), useInterfaces));
+          message.amountsIn.push(Coin.decode(reader, reader.uint32(), useInterfaces));
           break;
         case 3:
-          message.address = reader.string();
+          message.amountsOut.push(Coin.decode(reader, reader.uint32(), useInterfaces));
           break;
         case 4:
-          message.poolId = reader.uint64();
+          message.address = reader.string();
           break;
         case 5:
-          message.path.push(SwapStep.decode(reader, reader.uint32(), useInterfaces));
+          message.poolId = reader.uint64();
           break;
         case 6:
-          message.operationType = (reader.int32() as any);
+          message.path.push(SwapStep.decode(reader, reader.uint32(), useInterfaces));
           break;
         case 7:
-          message.swapFee.push(Coin.decode(reader, reader.uint32(), useInterfaces));
+          message.operationType = (reader.int32() as any);
           break;
         case 8:
-          message.joinExitProtocolFee.push(Coin.decode(reader, reader.uint32(), useInterfaces));
+          message.swapFee.push(Coin.decode(reader, reader.uint32(), useInterfaces));
           break;
         case 9:
-          message.swapProtocolFee.push(Coin.decode(reader, reader.uint32(), useInterfaces));
+          message.joinExitProtocolFee.push(Coin.decode(reader, reader.uint32(), useInterfaces));
           break;
         case 10:
+          message.swapProtocolFee.push(Coin.decode(reader, reader.uint32(), useInterfaces));
+          break;
+        case 11:
           message.blockTime = Timestamp.decode(reader, reader.uint32());
           break;
         default:
@@ -202,6 +212,7 @@ export const UserTradeHistory = {
   },
   fromJSON(object: any): UserTradeHistory {
     return {
+      id: isSet(object.id) ? BigInt(object.id.toString()) : BigInt(0),
       amountsIn: Array.isArray(object?.amountsIn) ? object.amountsIn.map((e: any) => Coin.fromJSON(e)) : [],
       amountsOut: Array.isArray(object?.amountsOut) ? object.amountsOut.map((e: any) => Coin.fromJSON(e)) : [],
       address: isSet(object.address) ? String(object.address) : "",
@@ -216,6 +227,7 @@ export const UserTradeHistory = {
   },
   toJSON(message: UserTradeHistory): unknown {
     const obj: any = {};
+    message.id !== undefined && (obj.id = (message.id || BigInt(0)).toString());
     if (message.amountsIn) {
       obj.amountsIn = message.amountsIn.map(e => e ? Coin.toJSON(e) : undefined);
     } else {
@@ -254,6 +266,7 @@ export const UserTradeHistory = {
   },
   fromPartial(object: Partial<UserTradeHistory>): UserTradeHistory {
     const message = createBaseUserTradeHistory();
+    message.id = object.id !== undefined && object.id !== null ? BigInt(object.id.toString()) : BigInt(0);
     message.amountsIn = object.amountsIn?.map(e => Coin.fromPartial(e)) || [];
     message.amountsOut = object.amountsOut?.map(e => Coin.fromPartial(e)) || [];
     message.address = object.address ?? "";
@@ -268,6 +281,9 @@ export const UserTradeHistory = {
   },
   fromAmino(object: UserTradeHistoryAmino): UserTradeHistory {
     const message = createBaseUserTradeHistory();
+    if (object.id !== undefined && object.id !== null) {
+      message.id = BigInt(object.id);
+    }
     message.amountsIn = object.amounts_in?.map(e => Coin.fromAmino(e)) || [];
     message.amountsOut = object.amounts_out?.map(e => Coin.fromAmino(e)) || [];
     if (object.address !== undefined && object.address !== null) {
@@ -290,6 +306,7 @@ export const UserTradeHistory = {
   },
   toAmino(message: UserTradeHistory, useInterfaces: boolean = true): UserTradeHistoryAmino {
     const obj: any = {};
+    obj.id = message.id ? message.id.toString() : undefined;
     if (message.amountsIn) {
       obj.amounts_in = message.amountsIn.map(e => e ? Coin.toAmino(e, useInterfaces) : undefined);
     } else {

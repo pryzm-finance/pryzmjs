@@ -3,6 +3,8 @@ package pryzmatics.server.trade;
 
 import "gogoproto/gogo.proto";
 import "pryzmatics/trade/user_trade_history.proto";
+import "pryzmatics/database/trade/user_trade_history.proto";
+import "cosmos/base/query/v1beta1/pagination.proto";
 
 option go_package = "github.com/pryzm-finance/pryzmatics/server/trade";
 
@@ -11,8 +13,11 @@ message QueryUserTradeHistoryRequest {
   string second_token = 2;
   string address = 3;
   pryzmatics.trade.OperationType operation_type = 4;
+  pryzmatics.database.trade.UserTradeHistoryOrderBy order_by = 5 [(gogoproto.nullable) = true];
+  cosmos.base.query.v1beta1.PageRequest pagination = 6 [(gogoproto.nullable) = true];
 }
 
 message QueryUserTradeHistoryResponse {
   repeated pryzmatics.trade.UserTradeHistory user_trade_history_records = 1 [(gogoproto.nullable) = false];
+  cosmos.base.query.v1beta1.PageResponse pagination = 2 [(gogoproto.nullable) = true];
 }

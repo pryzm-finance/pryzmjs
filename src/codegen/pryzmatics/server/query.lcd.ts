@@ -424,6 +424,12 @@ export class LCDQueryClient {
     if (typeof params?.operationType !== "undefined") {
       options.params.operation_type = params.operationType;
     }
+    if (typeof params?.orderBy !== "undefined") {
+      options.params.order_by = params.orderBy;
+    }
+    if (typeof params?.pagination !== "undefined") {
+      setPaginationParams(options, params.pagination);
+    }
     const endpoint = `pryzmatics/trade/user_trade_history`;
     return await this.req.get<QueryUserTradeHistoryResponseSDKType>(endpoint, options);
   }

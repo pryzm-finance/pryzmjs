@@ -1,0 +1,14 @@
+syntax = "proto3";
+package cosmatics;
+
+import "gogoproto/gogo.proto";
+
+option go_package = "github.com/refractedlabs/cosmatics/types";
+
+
+message QueryHealthCheckRequest {
+}
+
+message QueryHealthCheckResponse {
+  int64 block_difference = 1;
+}
