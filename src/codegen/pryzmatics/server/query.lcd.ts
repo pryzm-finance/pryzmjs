@@ -793,6 +793,12 @@ export class LCDQueryClient {
     if (typeof params?.creator !== "undefined") {
       options.params.creator = params.creator;
     }
+    if (typeof params?.tokenInDenom !== "undefined") {
+      options.params.token_in_denom = params.tokenInDenom;
+    }
+    if (typeof params?.tokenOutDenom !== "undefined") {
+      options.params.token_out_denom = params.tokenOutDenom;
+    }
     if (typeof params?.tokenInClaimability !== "undefined") {
       options.params.token_in_claimability = params.tokenInClaimability;
     }

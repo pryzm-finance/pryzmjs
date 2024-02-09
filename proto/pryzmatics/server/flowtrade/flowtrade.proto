@@ -36,12 +36,14 @@ message QueryFlowResponse {
 message QueryAllFlowRequest {
   FlowStatus status = 1;
   string creator = 2;
-  TokenClaimability token_in_claimability = 3;
-  string participant = 4;
-  pryzmatics.flowtrade.ParticipationType participation_type = 5;
-  TokenClaimability token_out_claimability = 6;
-  pryzmatics.database.flowtrade.FlowPositionPairOrderBy order_by = 7 [(gogoproto.nullable) = true];
-  cosmos.base.query.v1beta1.PageRequest pagination = 8 [(gogoproto.nullable) = true];
+  string token_in_denom = 3;
+  string token_out_denom = 4;
+  TokenClaimability token_in_claimability = 5;
+  string participant = 6;
+  pryzmatics.flowtrade.ParticipationType participation_type = 7;
+  TokenClaimability token_out_claimability = 8;
+  pryzmatics.database.flowtrade.FlowPositionPairOrderBy order_by = 9 [(gogoproto.nullable) = true];
+  cosmos.base.query.v1beta1.PageRequest pagination = 10 [(gogoproto.nullable) = true];
 }
 
 message QueryAllFlowResponse {

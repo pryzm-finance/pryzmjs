@@ -119,6 +119,8 @@ export interface QueryFlowResponseSDKType {
 export interface QueryAllFlowRequest {
   status: FlowStatus;
   creator: string;
+  tokenInDenom: string;
+  tokenOutDenom: string;
   tokenInClaimability: TokenClaimability;
   participant: string;
   participationType: ParticipationType;
@@ -133,6 +135,8 @@ export interface QueryAllFlowRequestProtoMsg {
 export interface QueryAllFlowRequestAmino {
   status?: FlowStatus;
   creator?: string;
+  token_in_denom?: string;
+  token_out_denom?: string;
   token_in_claimability?: TokenClaimability;
   participant?: string;
   participation_type?: ParticipationType;
@@ -147,6 +151,8 @@ export interface QueryAllFlowRequestAminoMsg {
 export interface QueryAllFlowRequestSDKType {
   status: FlowStatus;
   creator: string;
+  token_in_denom: string;
+  token_out_denom: string;
   token_in_claimability: TokenClaimability;
   participant: string;
   participation_type: ParticipationType;
@@ -344,6 +350,8 @@ function createBaseQueryAllFlowRequest(): QueryAllFlowRequest {
   return {
     status: 0,
     creator: "",
+    tokenInDenom: "",
+    tokenOutDenom: "",
     tokenInClaimability: 0,
     participant: "",
     participationType: 0,
@@ -355,13 +363,13 @@ function createBaseQueryAllFlowRequest(): QueryAllFlowRequest {
 export const QueryAllFlowRequest = {
   typeUrl: "/pryzmatics.server.flowtrade.QueryAllFlowRequest",
   is(o: any): o is QueryAllFlowRequest {
-    return o && (o.$typeUrl === QueryAllFlowRequest.typeUrl || isSet(o.status) && typeof o.creator === "string" && isSet(o.tokenInClaimability) && typeof o.participant === "string" && isSet(o.participationType) && isSet(o.tokenOutClaimability));
+    return o && (o.$typeUrl === QueryAllFlowRequest.typeUrl || isSet(o.status) && typeof o.creator === "string" && typeof o.tokenInDenom === "string" && typeof o.tokenOutDenom === "string" && isSet(o.tokenInClaimability) && typeof o.participant === "string" && isSet(o.participationType) && isSet(o.tokenOutClaimability));
   },
   isSDK(o: any): o is QueryAllFlowRequestSDKType {
-    return o && (o.$typeUrl === QueryAllFlowRequest.typeUrl || isSet(o.status) && typeof o.creator === "string" && isSet(o.token_in_claimability) && typeof o.participant === "string" && isSet(o.participation_type) && isSet(o.token_out_claimability));
+    return o && (o.$typeUrl === QueryAllFlowRequest.typeUrl || isSet(o.status) && typeof o.creator === "string" && typeof o.token_in_denom === "string" && typeof o.token_out_denom === "string" && isSet(o.token_in_claimability) && typeof o.participant === "string" && isSet(o.participation_type) && isSet(o.token_out_claimability));
   },
   isAmino(o: any): o is QueryAllFlowRequestAmino {
-    return o && (o.$typeUrl === QueryAllFlowRequest.typeUrl || isSet(o.status) && typeof o.creator === "string" && isSet(o.token_in_claimability) && typeof o.participant === "string" && isSet(o.participation_type) && isSet(o.token_out_claimability));
+    return o && (o.$typeUrl === QueryAllFlowRequest.typeUrl || isSet(o.status) && typeof o.creator === "string" && typeof o.token_in_denom === "string" && typeof o.token_out_denom === "string" && isSet(o.token_in_claimability) && typeof o.participant === "string" && isSet(o.participation_type) && isSet(o.token_out_claimability));
   },
   encode(message: QueryAllFlowRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.status !== 0) {
@@ -370,23 +378,29 @@ export const QueryAllFlowRequest = {
     if (message.creator !== "") {
       writer.uint32(18).string(message.creator);
     }
+    if (message.tokenInDenom !== "") {
+      writer.uint32(26).string(message.tokenInDenom);
+    }
+    if (message.tokenOutDenom !== "") {
+      writer.uint32(34).string(message.tokenOutDenom);
+    }
     if (message.tokenInClaimability !== 0) {
-      writer.uint32(24).int32(message.tokenInClaimability);
+      writer.uint32(40).int32(message.tokenInClaimability);
     }
     if (message.participant !== "") {
-      writer.uint32(34).string(message.participant);
+      writer.uint32(50).string(message.participant);
     }
     if (message.participationType !== 0) {
-      writer.uint32(40).int32(message.participationType);
+      writer.uint32(56).int32(message.participationType);
     }
     if (message.tokenOutClaimability !== 0) {
-      writer.uint32(48).int32(message.tokenOutClaimability);
+      writer.uint32(64).int32(message.tokenOutClaimability);
     }
     if (message.orderBy !== undefined) {
-      FlowPositionPairOrderBy.encode(message.orderBy, writer.uint32(58).fork()).ldelim();
+      FlowPositionPairOrderBy.encode(message.orderBy, writer.uint32(74).fork()).ldelim();
     }
     if (message.pagination !== undefined) {
-      PageRequest.encode(message.pagination, writer.uint32(66).fork()).ldelim();
+      PageRequest.encode(message.pagination, writer.uint32(82).fork()).ldelim();
     }
     return writer;
   },
@@ -404,21 +418,27 @@ export const QueryAllFlowRequest = {
           message.creator = reader.string();
           break;
         case 3:
-          message.tokenInClaimability = (reader.int32() as any);
+          message.tokenInDenom = reader.string();
           break;
         case 4:
-          message.participant = reader.string();
+          message.tokenOutDenom = reader.string();
           break;
         case 5:
-          message.participationType = (reader.int32() as any);
+          message.tokenInClaimability = (reader.int32() as any);
           break;
         case 6:
-          message.tokenOutClaimability = (reader.int32() as any);
+          message.participant = reader.string();
           break;
         case 7:
-          message.orderBy = FlowPositionPairOrderBy.decode(reader, reader.uint32(), useInterfaces);
+          message.participationType = (reader.int32() as any);
           break;
         case 8:
+          message.tokenOutClaimability = (reader.int32() as any);
+          break;
+        case 9:
+          message.orderBy = FlowPositionPairOrderBy.decode(reader, reader.uint32(), useInterfaces);
+          break;
+        case 10:
           message.pagination = PageRequest.decode(reader, reader.uint32(), useInterfaces);
           break;
         default:
@@ -432,6 +452,8 @@ export const QueryAllFlowRequest = {
     return {
       status: isSet(object.status) ? flowStatusFromJSON(object.status) : -1,
       creator: isSet(object.creator) ? String(object.creator) : "",
+      tokenInDenom: isSet(object.tokenInDenom) ? String(object.tokenInDenom) : "",
+      tokenOutDenom: isSet(object.tokenOutDenom) ? String(object.tokenOutDenom) : "",
       tokenInClaimability: isSet(object.tokenInClaimability) ? tokenClaimabilityFromJSON(object.tokenInClaimability) : -1,
       participant: isSet(object.participant) ? String(object.participant) : "",
       participationType: isSet(object.participationType) ? participationTypeFromJSON(object.participationType) : -1,
@@ -444,6 +466,8 @@ export const QueryAllFlowRequest = {
     const obj: any = {};
     message.status !== undefined && (obj.status = flowStatusToJSON(message.status));
     message.creator !== undefined && (obj.creator = message.creator);
+    message.tokenInDenom !== undefined && (obj.tokenInDenom = message.tokenInDenom);
+    message.tokenOutDenom !== undefined && (obj.tokenOutDenom = message.tokenOutDenom);
     message.tokenInClaimability !== undefined && (obj.tokenInClaimability = tokenClaimabilityToJSON(message.tokenInClaimability));
     message.participant !== undefined && (obj.participant = message.participant);
     message.participationType !== undefined && (obj.participationType = participationTypeToJSON(message.participationType));
@@ -456,6 +480,8 @@ export const QueryAllFlowRequest = {
     const message = createBaseQueryAllFlowRequest();
     message.status = object.status ?? 0;
     message.creator = object.creator ?? "";
+    message.tokenInDenom = object.tokenInDenom ?? "";
+    message.tokenOutDenom = object.tokenOutDenom ?? "";
     message.tokenInClaimability = object.tokenInClaimability ?? 0;
     message.participant = object.participant ?? "";
     message.participationType = object.participationType ?? 0;
@@ -471,6 +497,12 @@ export const QueryAllFlowRequest = {
     }
     if (object.creator !== undefined && object.creator !== null) {
       message.creator = object.creator;
+    }
+    if (object.token_in_denom !== undefined && object.token_in_denom !== null) {
+      message.tokenInDenom = object.token_in_denom;
+    }
+    if (object.token_out_denom !== undefined && object.token_out_denom !== null) {
+      message.tokenOutDenom = object.token_out_denom;
     }
     if (object.token_in_claimability !== undefined && object.token_in_claimability !== null) {
       message.tokenInClaimability = object.token_in_claimability;
@@ -496,6 +528,8 @@ export const QueryAllFlowRequest = {
     const obj: any = {};
     obj.status = message.status === 0 ? undefined : message.status;
     obj.creator = message.creator === "" ? undefined : message.creator;
+    obj.token_in_denom = message.tokenInDenom === "" ? undefined : message.tokenInDenom;
+    obj.token_out_denom = message.tokenOutDenom === "" ? undefined : message.tokenOutDenom;
     obj.token_in_claimability = message.tokenInClaimability === 0 ? undefined : message.tokenInClaimability;
     obj.participant = message.participant === "" ? undefined : message.participant;
     obj.participation_type = message.participationType === 0 ? undefined : message.participationType;
