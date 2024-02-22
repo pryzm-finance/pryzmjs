@@ -773,11 +773,8 @@ export class LCDQueryClient {
     if (typeof params?.address !== "undefined") {
       options.params.address = params.address;
     }
-    if (typeof params?.recaptchaResponse !== "undefined") {
-      options.params.recaptcha_response = params.recaptchaResponse;
-    }
-    if (typeof params?.recaptchaVersion !== "undefined") {
-      options.params.recaptcha_version = params.recaptchaVersion;
+    if (typeof params?.captchaRequest !== "undefined") {
+      options.params.captcha_request = params.captchaRequest;
     }
     const endpoint = `pryzmatics/faucet/claim`;
     return await this.req.get<QueryClaimResponseSDKType>(endpoint, options);

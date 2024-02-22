@@ -7,6 +7,7 @@
 export * from "./alliance/bundle";
 export * from "./alliance/client";
 export * from "./amino/bundle";
+export * from "./captcha/bundle";
 export * from "./cosmatics/bundle";
 export * from "./cosmos_proto/bundle";
 export * from "./cosmos/bundle";

@@ -1,12 +1,14 @@
 syntax = "proto3";
 package pryzmatics.server.faucet;
 
+import "gogoproto/gogo.proto";
+import "captcha/request.proto";
+
 option go_package = "github.com/pryzm-finance/pryzmatics/server/faucet";
 
 message QueryClaimRequest {
   string address = 1;
-  string recaptcha_response = 2;
-  string recaptcha_version = 3;
+  captcha.CaptchaRequest captcha_request = 2 [(gogoproto.nullable) = true];
 }
 
 message QueryClaimResponse {

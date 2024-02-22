@@ -13,6 +13,8 @@ export interface Asset {
   cPAssetExchangeRate?: string;
   cAssetApy?: string;
   error: string;
+  hostChainId: string;
+  lastYieldBlockHeight?: string;
 }
 export interface AssetProtoMsg {
   typeUrl: "/pryzmatics.asset.Asset";
@@ -29,6 +31,8 @@ export interface AssetAmino {
   c_p_asset_exchange_rate?: string;
   c_asset_apy?: string;
   error?: string;
+  host_chain_id?: string;
+  last_yield_block_height?: string;
 }
 export interface AssetAminoMsg {
   type: "/pryzmatics.asset.Asset";
@@ -45,6 +49,8 @@ export interface AssetSDKType {
   c_p_asset_exchange_rate?: string;
   c_asset_apy?: string;
   error: string;
+  host_chain_id: string;
+  last_yield_block_height?: string;
 }
 function createBaseAsset(): Asset {
   return {
@@ -57,19 +63,21 @@ function createBaseAsset(): Asset {
     exchangeRateBlockHeight: undefined,
     cPAssetExchangeRate: undefined,
     cAssetApy: undefined,
-    error: ""
+    error: "",
+    hostChainId: "",
+    lastYieldBlockHeight: undefined
   };
 }
 export const Asset = {
   typeUrl: "/pryzmatics.asset.Asset",
   is(o: any): o is Asset {
-    return o && (o.$typeUrl === Asset.typeUrl || typeof o.id === "string" && typeof o.tokenDenom === "string" && typeof o.totalRefractedCAsset === "string" && typeof o.totalPAsset === "string" && typeof o.error === "string");
+    return o && (o.$typeUrl === Asset.typeUrl || typeof o.id === "string" && typeof o.tokenDenom === "string" && typeof o.totalRefractedCAsset === "string" && typeof o.totalPAsset === "string" && typeof o.error === "string" && typeof o.hostChainId === "string");
   },
   isSDK(o: any): o is AssetSDKType {
-    return o && (o.$typeUrl === Asset.typeUrl || typeof o.id === "string" && typeof o.token_denom === "string" && typeof o.total_refracted_c_asset === "string" && typeof o.total_p_asset === "string" && typeof o.error === "string");
+    return o && (o.$typeUrl === Asset.typeUrl || typeof o.id === "string" && typeof o.token_denom === "string" && typeof o.total_refracted_c_asset === "string" && typeof o.total_p_asset === "string" && typeof o.error === "string" && typeof o.host_chain_id === "string");
   },
   isAmino(o: any): o is AssetAmino {
-    return o && (o.$typeUrl === Asset.typeUrl || typeof o.id === "string" && typeof o.token_denom === "string" && typeof o.total_refracted_c_asset === "string" && typeof o.total_p_asset === "string" && typeof o.error === "string");
+    return o && (o.$typeUrl === Asset.typeUrl || typeof o.id === "string" && typeof o.token_denom === "string" && typeof o.total_refracted_c_asset === "string" && typeof o.total_p_asset === "string" && typeof o.error === "string" && typeof o.host_chain_id === "string");
   },
   encode(message: Asset, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.id !== "") {
@@ -101,6 +109,12 @@ export const Asset = {
     }
     if (message.error !== "") {
       writer.uint32(82).string(message.error);
+    }
+    if (message.hostChainId !== "") {
+      writer.uint32(90).string(message.hostChainId);
+    }
+    if (message.lastYieldBlockHeight !== undefined) {
+      writer.uint32(98).string(message.lastYieldBlockHeight);
     }
     return writer;
   },
@@ -141,6 +155,12 @@ export const Asset = {
         case 10:
           message.error = reader.string();
           break;
+        case 11:
+          message.hostChainId = reader.string();
+          break;
+        case 12:
+          message.lastYieldBlockHeight = reader.string();
+          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -159,7 +179,9 @@ export const Asset = {
       exchangeRateBlockHeight: isSet(object.exchangeRateBlockHeight) ? String(object.exchangeRateBlockHeight) : undefined,
       cPAssetExchangeRate: isSet(object.cPAssetExchangeRate) ? String(object.cPAssetExchangeRate) : undefined,
       cAssetApy: isSet(object.cAssetApy) ? String(object.cAssetApy) : undefined,
-      error: isSet(object.error) ? String(object.error) : ""
+      error: isSet(object.error) ? String(object.error) : "",
+      hostChainId: isSet(object.hostChainId) ? String(object.hostChainId) : "",
+      lastYieldBlockHeight: isSet(object.lastYieldBlockHeight) ? String(object.lastYieldBlockHeight) : undefined
     };
   },
   toJSON(message: Asset): unknown {
@@ -174,6 +196,8 @@ export const Asset = {
     message.cPAssetExchangeRate !== undefined && (obj.cPAssetExchangeRate = message.cPAssetExchangeRate);
     message.cAssetApy !== undefined && (obj.cAssetApy = message.cAssetApy);
     message.error !== undefined && (obj.error = message.error);
+    message.hostChainId !== undefined && (obj.hostChainId = message.hostChainId);
+    message.lastYieldBlockHeight !== undefined && (obj.lastYieldBlockHeight = message.lastYieldBlockHeight);
     return obj;
   },
   fromPartial(object: Partial<Asset>): Asset {
@@ -188,6 +212,8 @@ export const Asset = {
     message.cPAssetExchangeRate = object.cPAssetExchangeRate ?? undefined;
     message.cAssetApy = object.cAssetApy ?? undefined;
     message.error = object.error ?? "";
+    message.hostChainId = object.hostChainId ?? "";
+    message.lastYieldBlockHeight = object.lastYieldBlockHeight ?? undefined;
     return message;
   },
   fromAmino(object: AssetAmino): Asset {
@@ -222,6 +248,12 @@ export const Asset = {
     if (object.error !== undefined && object.error !== null) {
       message.error = object.error;
     }
+    if (object.host_chain_id !== undefined && object.host_chain_id !== null) {
+      message.hostChainId = object.host_chain_id;
+    }
+    if (object.last_yield_block_height !== undefined && object.last_yield_block_height !== null) {
+      message.lastYieldBlockHeight = object.last_yield_block_height;
+    }
     return message;
   },
   toAmino(message: Asset, useInterfaces: boolean = true): AssetAmino {
@@ -236,6 +268,8 @@ export const Asset = {
     obj.c_p_asset_exchange_rate = padDecimal(message.cPAssetExchangeRate) === null ? undefined : padDecimal(message.cPAssetExchangeRate);
     obj.c_asset_apy = padDecimal(message.cAssetApy) === null ? undefined : padDecimal(message.cAssetApy);
     obj.error = message.error === "" ? undefined : message.error;
+    obj.host_chain_id = message.hostChainId === "" ? undefined : message.hostChainId;
+    obj.last_yield_block_height = message.lastYieldBlockHeight === null ? undefined : message.lastYieldBlockHeight;
     return obj;
   },
   fromAminoMsg(object: AssetAminoMsg): Asset {

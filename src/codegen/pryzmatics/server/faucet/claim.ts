@@ -1,10 +1,10 @@
+import { CaptchaRequest, CaptchaRequestAmino, CaptchaRequestSDKType } from "../../../captcha/request";
 import { BinaryReader, BinaryWriter } from "../../../binary";
 import { isSet } from "../../../helpers";
 import { GlobalDecoderRegistry } from "../../../registry";
 export interface QueryClaimRequest {
   address: string;
-  recaptchaResponse: string;
-  recaptchaVersion: string;
+  captchaRequest?: CaptchaRequest;
 }
 export interface QueryClaimRequestProtoMsg {
   typeUrl: "/pryzmatics.server.faucet.QueryClaimRequest";
@@ -12,8 +12,7 @@ export interface QueryClaimRequestProtoMsg {
 }
 export interface QueryClaimRequestAmino {
   address?: string;
-  recaptcha_response?: string;
-  recaptcha_version?: string;
+  captcha_request?: CaptchaRequestAmino;
 }
 export interface QueryClaimRequestAminoMsg {
   type: "/pryzmatics.server.faucet.QueryClaimRequest";
@@ -21,8 +20,7 @@ export interface QueryClaimRequestAminoMsg {
 }
 export interface QueryClaimRequestSDKType {
   address: string;
-  recaptcha_response: string;
-  recaptcha_version: string;
+  captcha_request?: CaptchaRequestSDKType;
 }
 export interface QueryClaimResponse {}
 export interface QueryClaimResponseProtoMsg {
@@ -38,30 +36,26 @@ export interface QueryClaimResponseSDKType {}
 function createBaseQueryClaimRequest(): QueryClaimRequest {
   return {
     address: "",
-    recaptchaResponse: "",
-    recaptchaVersion: ""
+    captchaRequest: undefined
   };
 }
 export const QueryClaimRequest = {
   typeUrl: "/pryzmatics.server.faucet.QueryClaimRequest",
   is(o: any): o is QueryClaimRequest {
-    return o && (o.$typeUrl === QueryClaimRequest.typeUrl || typeof o.address === "string" && typeof o.recaptchaResponse === "string" && typeof o.recaptchaVersion === "string");
+    return o && (o.$typeUrl === QueryClaimRequest.typeUrl || typeof o.address === "string");
   },
   isSDK(o: any): o is QueryClaimRequestSDKType {
-    return o && (o.$typeUrl === QueryClaimRequest.typeUrl || typeof o.address === "string" && typeof o.recaptcha_response === "string" && typeof o.recaptcha_version === "string");
+    return o && (o.$typeUrl === QueryClaimRequest.typeUrl || typeof o.address === "string");
   },
   isAmino(o: any): o is QueryClaimRequestAmino {
-    return o && (o.$typeUrl === QueryClaimRequest.typeUrl || typeof o.address === "string" && typeof o.recaptcha_response === "string" && typeof o.recaptcha_version === "string");
+    return o && (o.$typeUrl === QueryClaimRequest.typeUrl || typeof o.address === "string");
   },
   encode(message: QueryClaimRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.address !== "") {
       writer.uint32(10).string(message.address);
     }
-    if (message.recaptchaResponse !== "") {
-      writer.uint32(18).string(message.recaptchaResponse);
-    }
-    if (message.recaptchaVersion !== "") {
-      writer.uint32(26).string(message.recaptchaVersion);
+    if (message.captchaRequest !== undefined) {
+      CaptchaRequest.encode(message.captchaRequest, writer.uint32(18).fork()).ldelim();
     }
     return writer;
   },
@@ -76,10 +70,7 @@ export const QueryClaimRequest = {
           message.address = reader.string();
           break;
         case 2:
-          message.recaptchaResponse = reader.string();
-          break;
-        case 3:
-          message.recaptchaVersion = reader.string();
+          message.captchaRequest = CaptchaRequest.decode(reader, reader.uint32(), useInterfaces);
           break;
         default:
           reader.skipType(tag & 7);
@@ -91,22 +82,19 @@ export const QueryClaimRequest = {
   fromJSON(object: any): QueryClaimRequest {
     return {
       address: isSet(object.address) ? String(object.address) : "",
-      recaptchaResponse: isSet(object.recaptchaResponse) ? String(object.recaptchaResponse) : "",
-      recaptchaVersion: isSet(object.recaptchaVersion) ? String(object.recaptchaVersion) : ""
+      captchaRequest: isSet(object.captchaRequest) ? CaptchaRequest.fromJSON(object.captchaRequest) : undefined
     };
   },
   toJSON(message: QueryClaimRequest): unknown {
     const obj: any = {};
     message.address !== undefined && (obj.address = message.address);
-    message.recaptchaResponse !== undefined && (obj.recaptchaResponse = message.recaptchaResponse);
-    message.recaptchaVersion !== undefined && (obj.recaptchaVersion = message.recaptchaVersion);
+    message.captchaRequest !== undefined && (obj.captchaRequest = message.captchaRequest ? CaptchaRequest.toJSON(message.captchaRequest) : undefined);
     return obj;
   },
   fromPartial(object: Partial<QueryClaimRequest>): QueryClaimRequest {
     const message = createBaseQueryClaimRequest();
     message.address = object.address ?? "";
-    message.recaptchaResponse = object.recaptchaResponse ?? "";
-    message.recaptchaVersion = object.recaptchaVersion ?? "";
+    message.captchaRequest = object.captchaRequest !== undefined && object.captchaRequest !== null ? CaptchaRequest.fromPartial(object.captchaRequest) : undefined;
     return message;
   },
   fromAmino(object: QueryClaimRequestAmino): QueryClaimRequest {
@@ -114,19 +102,15 @@ export const QueryClaimRequest = {
     if (object.address !== undefined && object.address !== null) {
       message.address = object.address;
     }
-    if (object.recaptcha_response !== undefined && object.recaptcha_response !== null) {
-      message.recaptchaResponse = object.recaptcha_response;
-    }
-    if (object.recaptcha_version !== undefined && object.recaptcha_version !== null) {
-      message.recaptchaVersion = object.recaptcha_version;
+    if (object.captcha_request !== undefined && object.captcha_request !== null) {
+      message.captchaRequest = CaptchaRequest.fromAmino(object.captcha_request);
     }
     return message;
   },
   toAmino(message: QueryClaimRequest, useInterfaces: boolean = true): QueryClaimRequestAmino {
     const obj: any = {};
     obj.address = message.address === "" ? undefined : message.address;
-    obj.recaptcha_response = message.recaptchaResponse === "" ? undefined : message.recaptchaResponse;
-    obj.recaptcha_version = message.recaptchaVersion === "" ? undefined : message.recaptchaVersion;
+    obj.captcha_request = message.captchaRequest ? CaptchaRequest.toAmino(message.captchaRequest, useInterfaces) : undefined;
     return obj;
   },
   fromAminoMsg(object: QueryClaimRequestAminoMsg): QueryClaimRequest {

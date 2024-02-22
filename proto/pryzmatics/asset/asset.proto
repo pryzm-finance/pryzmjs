@@ -46,4 +46,10 @@ message Asset {
     (gogoproto.nullable) = true
   ];
   string error = 10;
+  string host_chain_id = 11;
+  string last_yield_block_height = 12 [
+    (cosmos_proto.scalar) = "cosmos.Int",
+    (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Int",
+    (gogoproto.nullable) = true
+  ];
 }

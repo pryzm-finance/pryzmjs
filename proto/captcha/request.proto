@@ -1,0 +1,18 @@
+syntax = "proto3";
+package captcha;
+
+import "gogoproto/gogo.proto";
+
+option go_package = "github.com/refractedlabs/captcha/types";
+
+enum CaptchaVersion {
+  option (gogoproto.goproto_enum_prefix) = false;
+  CaptchaVersionV2 = 0;
+  CaptchaVersionV3 = 1;
+  CaptchaVersionH = 2;
+}
+
+message CaptchaRequest {
+  string response = 1;
+  CaptchaVersion version = 2;
+}
