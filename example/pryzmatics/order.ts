@@ -1,6 +1,6 @@
 import { createPryzmaticsClient, fetchAll, PryzmaticsClient } from "@pryzm-finance/pryzmjs";
 import * as console from "console";
-import { PRYZMATICS_ENDPOINT } from "./config";
+import { PRYZMATICS_ENDPOINT } from "./constants";
 import { QueryOrderStatus } from "@pryzm-finance/pryzmjs/lib/codegen/pryzmatics/trade/order";
 import { OrderOrderByProperty } from "@pryzm-finance/pryzmjs/lib/codegen/pryzmatics/database/trade/order";
 import { PageRequest } from "@pryzm-finance/pryzmjs/lib/codegen/cosmos/base/query/v1beta1/pagination";

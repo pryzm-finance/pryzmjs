@@ -1,7 +1,7 @@
 import { createPryzmaticsClient } from "@pryzm-finance/pryzmjs";
 import * as console from "console";
 import { SwapType } from "@pryzm-finance/pryzmjs/lib/codegen/pryzm/amm/v1/operations";
-import { PRYZMATICS_ENDPOINT } from "./config";
+import { PRYZMATICS_ENDPOINT } from "./constants";
 
 async function main() {
     const pryzmaticsClient = await createPryzmaticsClient({ restEndpoint: PRYZMATICS_ENDPOINT })

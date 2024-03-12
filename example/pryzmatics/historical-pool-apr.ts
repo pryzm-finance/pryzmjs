@@ -1,7 +1,7 @@
 import { createPryzmaticsClient } from "@pryzm-finance/pryzmjs";
 import * as console from "console";
 import { TimeResolutionType } from "@pryzm-finance/pryzmjs/lib/codegen/pryzmatics/common/time_resolution";
-import { PRYZMATICS_ENDPOINT } from "./config";
+import { PRYZMATICS_ENDPOINT } from "./constants";
 
 async function main() {
     const pryzmaticsClient = await createPryzmaticsClient({ restEndpoint: PRYZMATICS_ENDPOINT })

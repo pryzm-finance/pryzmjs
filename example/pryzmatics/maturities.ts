@@ -1,6 +1,6 @@
 import { fetchAll } from "@pryzm-finance/pryzmjs/lib";
 import * as console from "console";
-import { PRYZMATICS_ENDPOINT } from "./config";
+import { PRYZMATICS_ENDPOINT } from "./constants";
 import { createPryzmaticsClient } from "@pryzm-finance/pryzmjs";
 
 async function main() {
