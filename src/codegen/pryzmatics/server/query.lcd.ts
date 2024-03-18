@@ -43,6 +43,8 @@ import { QueryUserStakesRequest, QueryUserStakesResponseSDKType } from "./ystaki
 import { QueryClaimRequest, QueryClaimResponseSDKType } from "./faucet/claim";
 import { QueryFlowHistoricalPriceRequest, QueryFlowHistoricalPriceResponseSDKType } from "./flowtrade/flow_historical_price";
 import { QueryConfigRequest, QueryConfigResponseSDKType } from "./common/config";
+import { QueryProposalRequest, QueryProposalResponseSDKType, QueryProposalsRequest, QueryProposalsResponseSDKType } from "./gov/proposal";
+import { QueryProposalVotesRequest, QueryProposalVotesResponseSDKType } from "./gov/vote";
 export class LCDQueryClient {
   req: LCDClient;
   constructor({
@@ -105,6 +107,9 @@ export class LCDQueryClient {
     this.flow = this.flow.bind(this);
     this.flowHistoricalPrice = this.flowHistoricalPrice.bind(this);
     this.config = this.config.bind(this);
+    this.proposal = this.proposal.bind(this);
+    this.proposals = this.proposals.bind(this);
+    this.proposalVotes = this.proposalVotes.bind(this);
   }
   /* Asset */
   async asset(params: QueryAssetRequest): Promise<QueryAssetResponseSDKType> {
@@ -846,5 +851,50 @@ export class LCDQueryClient {
   async config(_params: QueryConfigRequest = {}): Promise<QueryConfigResponseSDKType> {
     const endpoint = `pryzmatics/config`;
     return await this.req.get<QueryConfigResponseSDKType>(endpoint);
+  }
+  /* Proposal */
+  async proposal(params: QueryProposalRequest): Promise<QueryProposalResponseSDKType> {
+    const endpoint = `pryzmatics/gov/proposal/${params.id}`;
+    return await this.req.get<QueryProposalResponseSDKType>(endpoint);
+  }
+  /* Proposals */
+  async proposals(params: QueryProposalsRequest): Promise<QueryProposalsResponseSDKType> {
+    const options: any = {
+      params: {}
+    };
+    if (typeof params?.voter !== "undefined") {
+      options.params.voter = params.voter;
+    }
+    if (typeof params?.proposer !== "undefined") {
+      options.params.proposer = params.proposer;
+    }
+    if (typeof params?.status !== "undefined") {
+      options.params.status = params.status;
+    }
+    if (typeof params?.orderBy !== "undefined") {
+      options.params.order_by = params.orderBy;
+    }
+    if (typeof params?.pagination !== "undefined") {
+      setPaginationParams(options, params.pagination);
+    }
+    const endpoint = `pryzmatics/gov/proposal`;
+    return await this.req.get<QueryProposalsResponseSDKType>(endpoint, options);
+  }
+  /* ProposalVotes */
+  async proposalVotes(params: QueryProposalVotesRequest): Promise<QueryProposalVotesResponseSDKType> {
+    const options: any = {
+      params: {}
+    };
+    if (typeof params?.voter !== "undefined") {
+      options.params.voter = params.voter;
+    }
+    if (typeof params?.orderBy !== "undefined") {
+      options.params.order_by = params.orderBy;
+    }
+    if (typeof params?.pagination !== "undefined") {
+      setPaginationParams(options, params.pagination);
+    }
+    const endpoint = `pryzmatics/gov/vote/${params.proposalId}`;
+    return await this.req.get<QueryProposalVotesResponseSDKType>(endpoint, options);
   }
 }

@@ -5,7 +5,7 @@
     "test": "ts-node pryzmatics/user-trade-history.ts"
   },
   "dependencies": {
-    "@pryzm-finance/pryzmjs": "0.17.14",
+    "@pryzm-finance/pryzmjs": "0.17.15-rc1",
     "@refractedlabs/utils": "0.1.9"
   },
   "devDependencies": {

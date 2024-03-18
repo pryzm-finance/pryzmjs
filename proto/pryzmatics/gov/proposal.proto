@@ -1,0 +1,52 @@
+syntax = "proto3";
+package pryzmatics.gov;
+
+import "gogoproto/gogo.proto";
+import "cosmos_proto/cosmos.proto";
+import "google/protobuf/timestamp.proto";
+import "cosmos/gov/v1/gov.proto";
+import "pryzmatics/gov/tally_result.proto";
+import "cosmos/base/v1beta1/coin.proto";
+
+option go_package = "github.com/pryzm-finance/pryzmatics/types/gov";
+
+enum ProposalStatus {
+  PROPOSAL_STATUS_ANY = 0;
+  // PROPOSAL_STATUS_UNSPECIFIED defines the default proposal status.
+  PROPOSAL_STATUS_UNSPECIFIED = 1;
+  // PROPOSAL_STATUS_DEPOSIT_PERIOD defines a proposal status during the deposit
+  // period.
+  PROPOSAL_STATUS_DEPOSIT_PERIOD = 2;
+  // PROPOSAL_STATUS_VOTING_PERIOD defines a proposal status during the voting
+  // period.
+  PROPOSAL_STATUS_VOTING_PERIOD = 3;
+  // PROPOSAL_STATUS_PASSED defines a proposal status of a proposal that has
+  // passed.
+  PROPOSAL_STATUS_PASSED = 4;
+  // PROPOSAL_STATUS_REJECTED defines a proposal status of a proposal that has
+  // been rejected.
+  PROPOSAL_STATUS_REJECTED = 5;
+  // PROPOSAL_STATUS_FAILED defines a proposal status of a proposal that has
+  // failed.
+  PROPOSAL_STATUS_FAILED = 6;
+  // PROPOSAL_STATUS_DROPPED defines a proposal status of a proposal that has
+  // been dropped from the chain state.
+  PROPOSAL_STATUS_DROPPED = 7;
+}
+
+message Proposal {
+  uint64   id = 1;
+  google.protobuf.Timestamp submit_time = 2 [(gogoproto.stdtime) = true];
+  google.protobuf.Timestamp deposit_end_time = 3 [(gogoproto.stdtime) = true];
+  repeated cosmos.base.v1beta1.Coin total_deposit = 4 [(gogoproto.nullable) = false];
+  google.protobuf.Timestamp         voting_start_time = 5 [(gogoproto.stdtime) = true];
+  google.protobuf.Timestamp         voting_end_time = 6 [(gogoproto.stdtime) = true];
+  string metadata = 7;
+  string title = 8;
+  string summary = 9;
+  string proposer = 10 [(cosmos_proto.scalar) = "cosmos.AddressString"];
+  repeated string proposal_msgs = 11;
+  pryzmatics.gov.TallyResult tally_result = 12 [(gogoproto.nullable) = false];
+  google.protobuf.Timestamp updated_time = 13 [(gogoproto.stdtime) = true, (gogoproto.nullable) = false];
+  ProposalStatus status = 14;
+}

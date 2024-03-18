@@ -59,6 +59,8 @@ import "pryzmatics/server/flowtrade/flow_historical_price.proto";
 
 import "pryzmatics/server/common/config.proto";
 
+import "pryzmatics/server/gov/proposal.proto";
+import "pryzmatics/server/gov/vote.proto";
 
 option go_package = "github.com/pryzm-finance/pryzmatics/server";
 
@@ -278,5 +280,17 @@ service Query {
 
   rpc Config(pryzmatics.server.common.QueryConfigRequest) returns (pryzmatics.server.common.QueryConfigResponse) {
     option (google.api.http).get = "/pryzmatics/config";
+  }
+
+  rpc Proposal(pryzmatics.server.gov.QueryProposalRequest) returns (pryzmatics.server.gov.QueryProposalResponse) {
+    option (google.api.http).get = "/pryzmatics/gov/proposal/{id}";
+  }
+
+  rpc Proposals(pryzmatics.server.gov.QueryProposalsRequest) returns (pryzmatics.server.gov.QueryProposalsResponse) {
+    option (google.api.http).get = "/pryzmatics/gov/proposal";
+  }
+
+  rpc ProposalVotes(pryzmatics.server.gov.QueryProposalVotesRequest) returns (pryzmatics.server.gov.QueryProposalVotesResponse) {
+    option (google.api.http).get = "/pryzmatics/gov/vote/{proposal_id}";
   }
 }

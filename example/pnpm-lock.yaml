@@ -1,12 +1,12 @@
 lockfileVersion: 5.4
 
 specifiers:
-  '@pryzm-finance/pryzmjs': 0.17.14
+  '@pryzm-finance/pryzmjs': 0.17.15-rc1
   '@refractedlabs/utils': 0.1.9
   typescript: ^5.1.6
 
 dependencies:
-  '@pryzm-finance/pryzmjs': 0.17.14_google-protobuf@3.21.2
+  '@pryzm-finance/pryzmjs': 0.17.15-rc1_google-protobuf@3.21.2
   '@refractedlabs/utils': 0.1.9
 
 devDependencies:
@@ -22,7 +22,7 @@ packages:
   /@confio/ics23/0.6.8:
     resolution: {integrity: sha512-wB6uo+3A50m0sW/EWcU64xpV/8wShZ6bMTa7pF8eYsTrSkQA7oLUIJcs/wb8g4y2Oyq701BaGiO6n/ak5WXO1w==}
     dependencies:
-      '@noble/hashes': 1.3.3
+      '@noble/hashes': 1.4.0
       protobufjs: 6.11.4
     dev: false
 
@@ -41,7 +41,7 @@ packages:
       '@cosmjs/encoding': 0.32.3
       '@cosmjs/math': 0.32.3
       '@cosmjs/utils': 0.32.3
-      '@noble/hashes': 1.3.3
+      '@noble/hashes': 1.4.0
       bn.js: 5.2.1
       elliptic: 6.5.5
       libsodium-wrappers-sumo: 0.7.13
@@ -151,7 +151,7 @@ packages:
       '@cosmjs/socket': 0.32.3
       '@cosmjs/stream': 0.32.3
       '@cosmjs/utils': 0.32.3
-      axios: 1.6.7
+      axios: 1.6.8
       readonly-date: 1.0.0
       xstream: 11.14.0
     transitivePeerDependencies:
@@ -189,22 +189,22 @@ packages:
       google-protobuf: 3.21.2
     dev: false
 
-  /@keplr-wallet/types/0.12.72:
-    resolution: {integrity: sha512-gDP+NCPa4seTT1xU9bkIKbMw7N/LPla9/4/amDLIGyFb6OEjfnFkRuReI/cZe/8aEvlkYAKnfB0UMipHobsn5g==}
+  /@keplr-wallet/types/0.12.74:
+    resolution: {integrity: sha512-3xUpXX1nJ/yAewyPc+feXjeJA+HawTVzeDTKlxJGih70N7CbOtdGgl55xQAheUQ5cAA8fJsNjjWxURH5Y1oRtw==}
     dependencies:
       long: 4.0.0
     dev: false
 
-  /@keplr-wallet/unit/0.12.72:
-    resolution: {integrity: sha512-egrh0L/uo6MQrAfVi1V8GQB1eml1ZbfWDiv5gpU6AkeAte4Q1DIe8qkYqeJOJ+KW1TurnxDw9L+9/T/i4Lu8Jg==}
+  /@keplr-wallet/unit/0.12.74:
+    resolution: {integrity: sha512-BYmrfBQvbtMkqnmu9eaF2z5UEMA7zNLyGkUBkhVKP5W6/rcGPfgxWZJnPSY7ak3aGRAeAD+cqPJzFRzSx7J9ng==}
     dependencies:
-      '@keplr-wallet/types': 0.12.72
+      '@keplr-wallet/types': 0.12.74
       big-integer: 1.6.52
       utility-types: 3.11.0
     dev: false
 
-  /@noble/hashes/1.3.3:
-    resolution: {integrity: sha512-V7/fPHgl+jsVPXqqeOzT8egNj2iBIVt+ECeMMG8TdcnTikP3oaBtUVqpT/gYCR68aEBJSF+XbYUxStjbFMqIIA==}
+  /@noble/hashes/1.4.0:
+    resolution: {integrity: sha512-V1JJ1WTRUqHHrOSh597hURcMqVKVGL/ea3kv0gSnEdsEZ0/+VyPghM1lMNGc00z7CIQorSvbKpuJkxvuHbvdbg==}
     engines: {node: '>= 16'}
     dev: false
 
@@ -251,14 +251,14 @@ packages:
     resolution: {integrity: sha512-Vvn3zZrhQZkkBE8LSuW3em98c0FwgO4nxzv6OdSxPKJIEKY2bGbHn+mhGIPerzI4twdxaP8/0+06HBpwf345Lw==}
     dev: false
 
-  /@pryzm-finance/pryzmjs/0.17.14_google-protobuf@3.21.2:
-    resolution: {integrity: sha512-Q/NQnfUOvVquWtxmKdneKdx6ZUjq40xsPw1UT71jhOtd5JxktDZvC8NSV1Vd87OFSfiVL88tTIzZkzVvlMGVTQ==, tarball: download/@pryzm-finance/pryzmjs/0.17.14/4f76af59ed4beac5965ea9a47c86d59391acb223}
+  /@pryzm-finance/pryzmjs/0.17.15-rc1_google-protobuf@3.21.2:
+    resolution: {integrity: sha512-9yXW9W4VKP4Gogj5MqMAqWYq/2iCmZkI5PKfbO0XmQDqWsYAJI9+0No0lXO1Qxzl6bwp4SKDbBCiE7n+BwQrTQ==, tarball: download/@pryzm-finance/pryzmjs/0.17.15-rc1/a5f97372fa466210047e4cfc7f0526a78b3be83a}
     dependencies:
       '@cosmjs/amino': 0.32.2
       '@cosmjs/proto-signing': 0.32.2
       '@cosmjs/stargate': 0.32.2
       '@cosmjs/tendermint-rpc': 0.32.2
-      '@keplr-wallet/unit': 0.12.72
+      '@keplr-wallet/unit': 0.12.74
       '@refractedlabs/utils': 0.3.2_google-protobuf@3.21.2
     transitivePeerDependencies:
       - bufferutil
@@ -326,8 +326,8 @@ packages:
     resolution: {integrity: sha512-MqTGEo5bj5t157U6fA/BiDynNkn0YknVdh48CMPkTSpFTVmvao5UQmm7uEF6xBEo7qIMAlY/JSleYaE6VOdpaA==}
     dev: false
 
-  /@types/node/20.11.26:
-    resolution: {integrity: sha512-YwOMmyhNnAWijOBQweOJnQPl068Oqd4K3OFbTc6AHJwzweUwwWG3GIFY74OKks2PJUDkQPeddOQES9mLn1CTEQ==}
+  /@types/node/20.11.28:
+    resolution: {integrity: sha512-M/GPWVS2wLkSkNHVeLkrF2fD5Lx5UC4PxA0uZcKc6QqbIQUJyW1jVjueJYi1z8n0I5PxYrtpnPnWglE+y9A0KA==}
     dependencies:
       undici-types: 5.26.5
     dev: false
@@ -355,17 +355,17 @@ packages:
   /axios/1.6.0:
     resolution: {integrity: sha512-EZ1DYihju9pwVB+jg67ogm+Tmqc6JmhamRN6I4Zt8DfZu5lbcQGw3ozH9lFejSJgs/ibaef3A9PMXPLeefFGJg==}
     dependencies:
-      follow-redirects: 1.15.5
+      follow-redirects: 1.15.6
       form-data: 4.0.0
       proxy-from-env: 1.1.0
     transitivePeerDependencies:
       - debug
     dev: false
 
-  /axios/1.6.7:
-    resolution: {integrity: sha512-/hDJGff6/c7u0hDkvkGxR/oy6CbCs8ziCsC7SqmhjfozqiJGc8Z11wrv9z9lYfY4K8l+H9TpjcMDX0xOZmx+RA==}
+  /axios/1.6.8:
+    resolution: {integrity: sha512-v/ZHtJDU39mDpyBoFVkETcd/uNdxrWRrg3bKpOKzXFA6Bvqopts6ALSMU3y6ijYxbw2B+wPrIv46egTzJXCLGQ==}
     dependencies:
-      follow-redirects: 1.15.5
+      follow-redirects: 1.15.6
       form-data: 4.0.0
       proxy-from-env: 1.1.0
     transitivePeerDependencies:
@@ -512,8 +512,8 @@ packages:
     resolution: {integrity: sha512-GRnmB5gPyJpAhTQdSZTSp9uaPSvl09KoYcMQtsB9rQoOmzs9dH6ffeccH+Z+cv6P68Hu5bC6JjRh4Ah/mHSNRw==}
     dev: false
 
-  /follow-redirects/1.15.5:
-    resolution: {integrity: sha512-vSFWUON1B+yAw1VN4xMfxgn5fTUiaOzAJCKBwIIgT/+7CuGy9+r+5gITvP62j3RmaD5Ph65UaERdOSRGUzZtgw==}
+  /follow-redirects/1.15.6:
+    resolution: {integrity: sha512-wWN62YITEaOpSK584EZXJafH1AGpO8RVgElfkuXbTOrPX4fIfOyEpW/CsiNd8JdYrAoOvafRTOEnvsO++qCqFA==}
     engines: {node: '>=4.0'}
     peerDependencies:
       debug: '*'
@@ -749,7 +749,7 @@ packages:
       '@protobufjs/pool': 1.1.0
       '@protobufjs/utf8': 1.1.0
       '@types/long': 4.0.2
-      '@types/node': 20.11.26
+      '@types/node': 20.11.28
       long: 4.0.0
     dev: false
 
