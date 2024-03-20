@@ -27,6 +27,8 @@ async function main() {
 
     const proposal = (await pryzmaticsClient.pryzmatics.proposal({ id: 0n })).proposal
     console.log(proposal)
+    const proposal_msg = JSON.parse(proposal.proposal_msgs[0])
+    console.log(proposal_msg)
 }
 
 main().catch(console.error)

@@ -1,12 +1,12 @@
 lockfileVersion: 5.4
 
 specifiers:
-  '@pryzm-finance/pryzmjs': 0.17.15-rc1
+  '@pryzm-finance/pryzmjs': 0.17.15
   '@refractedlabs/utils': 0.1.9
   typescript: ^5.1.6
 
 dependencies:
-  '@pryzm-finance/pryzmjs': 0.17.15-rc1_google-protobuf@3.21.2
+  '@pryzm-finance/pryzmjs': 0.17.15_google-protobuf@3.21.2
   '@refractedlabs/utils': 0.1.9
 
 devDependencies:
@@ -251,8 +251,8 @@ packages:
     resolution: {integrity: sha512-Vvn3zZrhQZkkBE8LSuW3em98c0FwgO4nxzv6OdSxPKJIEKY2bGbHn+mhGIPerzI4twdxaP8/0+06HBpwf345Lw==}
     dev: false
 
-  /@pryzm-finance/pryzmjs/0.17.15-rc1_google-protobuf@3.21.2:
-    resolution: {integrity: sha512-9yXW9W4VKP4Gogj5MqMAqWYq/2iCmZkI5PKfbO0XmQDqWsYAJI9+0No0lXO1Qxzl6bwp4SKDbBCiE7n+BwQrTQ==, tarball: download/@pryzm-finance/pryzmjs/0.17.15-rc1/a5f97372fa466210047e4cfc7f0526a78b3be83a}
+  /@pryzm-finance/pryzmjs/0.17.15_google-protobuf@3.21.2:
+    resolution: {integrity: sha512-WVs+E8KSt/SZ+LXIEvR/PQ0x69tyqiDisPASahRC7REPFSn80dFVeNuu0LPMfpWTACo2gbEBr7JVU1IFrtAGUA==, tarball: download/@pryzm-finance/pryzmjs/0.17.15/faf0853c50dd3b439602a8fc71722829bc14018e}
     dependencies:
       '@cosmjs/amino': 0.32.2
       '@cosmjs/proto-signing': 0.32.2
@@ -326,8 +326,8 @@ packages:
     resolution: {integrity: sha512-MqTGEo5bj5t157U6fA/BiDynNkn0YknVdh48CMPkTSpFTVmvao5UQmm7uEF6xBEo7qIMAlY/JSleYaE6VOdpaA==}
     dev: false
 
-  /@types/node/20.11.28:
-    resolution: {integrity: sha512-M/GPWVS2wLkSkNHVeLkrF2fD5Lx5UC4PxA0uZcKc6QqbIQUJyW1jVjueJYi1z8n0I5PxYrtpnPnWglE+y9A0KA==}
+  /@types/node/20.11.30:
+    resolution: {integrity: sha512-dHM6ZxwlmuZaRmUPfv1p+KrdD1Dci04FbdEm/9wEMouFqxYoFl5aMkt0VMAUtYRQDyYvD41WJLukhq/ha3YuTw==}
     dependencies:
       undici-types: 5.26.5
     dev: false
@@ -749,7 +749,7 @@ packages:
       '@protobufjs/pool': 1.1.0
       '@protobufjs/utf8': 1.1.0
       '@types/long': 4.0.2
-      '@types/node': 20.11.28
+      '@types/node': 20.11.30
       long: 4.0.0
     dev: false
 

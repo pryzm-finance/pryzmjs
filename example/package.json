@@ -1,11 +1,10 @@
 {
   "name": "example",
   "scripts": {
-    "compile": "rm -rf lib && tsc",
-    "test": "ts-node pryzmatics/user-trade-history.ts"
+    "compile": "rm -rf lib && tsc"
   },
   "dependencies": {
-    "@pryzm-finance/pryzmjs": "0.17.15-rc1",
+    "@pryzm-finance/pryzmjs": "0.17.15",
     "@refractedlabs/utils": "0.1.9"
   },
   "devDependencies": {
