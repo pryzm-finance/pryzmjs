@@ -62,6 +62,8 @@ import "pryzmatics/server/common/config.proto";
 import "pryzmatics/server/gov/proposal.proto";
 import "pryzmatics/server/gov/vote.proto";
 
+import "pryzmatics/server/statistics/statistics.proto";
+
 option go_package = "github.com/pryzm-finance/pryzmatics/server";
 
 service Query {
@@ -292,5 +294,9 @@ service Query {
 
   rpc ProposalVotes(pryzmatics.server.gov.QueryProposalVotesRequest) returns (pryzmatics.server.gov.QueryProposalVotesResponse) {
     option (google.api.http).get = "/pryzmatics/gov/vote/{proposal_id}";
+  }
+
+  rpc Statistics(pryzmatics.server.statistics.QueryStatisticsRequest) returns (pryzmatics.server.statistics.QueryStatisticsResponse) {
+    option (google.api.http).get = "/pryzmatics/statistics";
   }
 }

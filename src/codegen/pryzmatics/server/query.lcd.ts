@@ -45,6 +45,7 @@ import { QueryFlowHistoricalPriceRequest, QueryFlowHistoricalPriceResponseSDKTyp
 import { QueryConfigRequest, QueryConfigResponseSDKType } from "./common/config";
 import { QueryProposalRequest, QueryProposalResponseSDKType, QueryProposalsRequest, QueryProposalsResponseSDKType } from "./gov/proposal";
 import { QueryProposalVotesRequest, QueryProposalVotesResponseSDKType } from "./gov/vote";
+import { QueryStatisticsRequest, QueryStatisticsResponseSDKType } from "./statistics/statistics";
 export class LCDQueryClient {
   req: LCDClient;
   constructor({
@@ -110,6 +111,7 @@ export class LCDQueryClient {
     this.proposal = this.proposal.bind(this);
     this.proposals = this.proposals.bind(this);
     this.proposalVotes = this.proposalVotes.bind(this);
+    this.statistics = this.statistics.bind(this);
   }
   /* Asset */
   async asset(params: QueryAssetRequest): Promise<QueryAssetResponseSDKType> {
@@ -896,5 +898,10 @@ export class LCDQueryClient {
     }
     const endpoint = `pryzmatics/gov/vote/${params.proposalId}`;
     return await this.req.get<QueryProposalVotesResponseSDKType>(endpoint, options);
+  }
+  /* Statistics */
+  async statistics(_params: QueryStatisticsRequest = {}): Promise<QueryStatisticsResponseSDKType> {
+    const endpoint = `pryzmatics/statistics`;
+    return await this.req.get<QueryStatisticsResponseSDKType>(endpoint);
   }
 }
