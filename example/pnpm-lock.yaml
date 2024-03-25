@@ -1,12 +1,12 @@
 lockfileVersion: 5.4
 
 specifiers:
-  '@pryzm-finance/pryzmjs': 0.17.17
+  '@pryzm-finance/pryzmjs': 0.17.19
   '@refractedlabs/utils': 0.1.9
   typescript: ^5.1.6
 
 dependencies:
-  '@pryzm-finance/pryzmjs': 0.17.17_google-protobuf@3.21.2
+  '@pryzm-finance/pryzmjs': 0.17.19_google-protobuf@3.21.2
   '@refractedlabs/utils': 0.1.9
 
 devDependencies:
@@ -251,8 +251,8 @@ packages:
     resolution: {integrity: sha512-Vvn3zZrhQZkkBE8LSuW3em98c0FwgO4nxzv6OdSxPKJIEKY2bGbHn+mhGIPerzI4twdxaP8/0+06HBpwf345Lw==}
     dev: false
 
-  /@pryzm-finance/pryzmjs/0.17.17_google-protobuf@3.21.2:
-    resolution: {integrity: sha512-EkrWFAQVbfED4JtazQKOiVFT90pkUB7FmmvzELUAFijiyaFnrM0DKzQLMUOoJViCxSHRUSjkVVZ9BztteyMQ9Q==, tarball: download/@pryzm-finance/pryzmjs/0.17.17/df4cbac013816dc610c321c42bcbb6979f11b08d}
+  /@pryzm-finance/pryzmjs/0.17.19_google-protobuf@3.21.2:
+    resolution: {integrity: sha512-f14+NwG1MGNl/EMY9C6XbZicGphFK6ysum9GKeMhf0fxdh0VWjmz4xUd+5550RHUcqxVtJkmCEiYSq5apfq0QA==, tarball: download/@pryzm-finance/pryzmjs/0.17.19/0317b63ff8f90ffbe24d980652a61c45dd2ff6a7}
     dependencies:
       '@cosmjs/amino': 0.32.2
       '@cosmjs/proto-signing': 0.32.2
@@ -304,9 +304,9 @@ packages:
       browser-headers: 0.4.1
       jackson-js: 1.1.0
       js-yaml: 4.1.0
-      winston: 3.12.0
-      winston-daily-rotate-file: 4.7.1_winston@3.12.0
-      winston-syslog: 2.7.0_winston@3.12.0
+      winston: 3.13.0
+      winston-daily-rotate-file: 4.7.1_winston@3.13.0
+      winston-syslog: 2.7.0_winston@3.13.0
     transitivePeerDependencies:
       - bufferutil
       - debug
@@ -855,7 +855,7 @@ packages:
       winston-transport: 4.6.0
     dev: false
 
-  /winston-daily-rotate-file/4.7.1_winston@3.12.0:
+  /winston-daily-rotate-file/4.7.1_winston@3.13.0:
     resolution: {integrity: sha512-7LGPiYGBPNyGHLn9z33i96zx/bd71pjBn9tqQzO3I4Tayv94WPmBNwKC7CO1wPHdP9uvu+Md/1nr6VSH9h0iaA==}
     engines: {node: '>=8'}
     peerDependencies:
@@ -864,7 +864,7 @@ packages:
       file-stream-rotator: 0.6.1
       object-hash: 2.2.0
       triple-beam: 1.4.1
-      winston: 3.12.0
+      winston: 3.13.0
       winston-transport: 4.6.0
     dev: false
 
@@ -880,14 +880,14 @@ packages:
       unix-dgram: 2.0.6
     dev: false
 
-  /winston-syslog/2.7.0_winston@3.12.0:
+  /winston-syslog/2.7.0_winston@3.13.0:
     resolution: {integrity: sha512-w+V0lHO2W6XqcYlvVi4DrblwJShvQbAaruRvUlMPzH1Z+dYvUvo4ra2hhoF6UNTFmC9LBltcTG05ypYL6S/B8A==}
     engines: {node: '>= 8'}
     peerDependencies:
       winston: ^3.8.2
     dependencies:
       glossy: 0.1.7
-      winston: 3.12.0
+      winston: 3.13.0
     optionalDependencies:
       unix-dgram: 2.0.6
     dev: false
@@ -927,8 +927,8 @@ packages:
       winston-transport: 4.6.0
     dev: false
 
-  /winston/3.12.0:
-    resolution: {integrity: sha512-OwbxKaOlESDi01mC9rkM0dQqQt2I8DAUMRLZ/HpbwvDXm85IryEHgoogy5fziQy38PntgZsLlhAYHz//UPHZ5w==}
+  /winston/3.13.0:
+    resolution: {integrity: sha512-rwidmA1w3SE4j0E5MuIufFhyJPBDG7Nu71RkZor1p2+qHvJSZ9GYDA81AyleQcZbh/+V6HjeBdfnTZJm9rSeQQ==}
     engines: {node: '>= 12.0.0'}
     dependencies:
       '@colors/colors': 1.6.0

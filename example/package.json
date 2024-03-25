@@ -4,7 +4,7 @@
     "compile": "rm -rf lib && tsc"
   },
   "dependencies": {
-    "@pryzm-finance/pryzmjs": "0.17.17",
+    "@pryzm-finance/pryzmjs": "0.17.19",
     "@refractedlabs/utils": "0.1.9"
   },
   "devDependencies": {

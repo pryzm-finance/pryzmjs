@@ -1,8 +1,8 @@
-import { Coin, CoinAmino, CoinSDKType } from "../../../cosmos/base/v1beta1/coin";
+import { TreasuryBalance, TreasuryBalanceAmino, TreasuryBalanceSDKType } from "../../statistics/treasury";
+import { MarketCap, MarketCapAmino, MarketCapSDKType } from "../../statistics/market_cap";
 import { BinaryReader, BinaryWriter } from "../../../binary";
 import { GlobalDecoderRegistry } from "../../../registry";
-import { Decimal } from "@cosmjs/math";
-import { isSet, padDecimal } from "../../../helpers";
+import { isSet } from "../../../helpers";
 export interface QueryStatisticsRequest {}
 export interface QueryStatisticsRequestProtoMsg {
   typeUrl: "/pryzmatics.server.statistics.QueryStatisticsRequest";
@@ -15,8 +15,8 @@ export interface QueryStatisticsRequestAminoMsg {
 }
 export interface QueryStatisticsRequestSDKType {}
 export interface QueryStatisticsResponse {
-  treasuryFeePoolBalances: Coin[];
-  marketCap: string;
+  treasuryBalances: TreasuryBalance[];
+  marketCap: MarketCap;
   totalTxCount: bigint;
 }
 export interface QueryStatisticsResponseProtoMsg {
@@ -24,8 +24,8 @@ export interface QueryStatisticsResponseProtoMsg {
   value: Uint8Array;
 }
 export interface QueryStatisticsResponseAmino {
-  treasury_fee_pool_balances?: CoinAmino[];
-  market_cap?: string;
+  treasury_balances?: TreasuryBalanceAmino[];
+  market_cap?: MarketCapAmino;
   total_tx_count?: string;
 }
 export interface QueryStatisticsResponseAminoMsg {
@@ -33,8 +33,8 @@ export interface QueryStatisticsResponseAminoMsg {
   value: QueryStatisticsResponseAmino;
 }
 export interface QueryStatisticsResponseSDKType {
-  treasury_fee_pool_balances: CoinSDKType[];
-  market_cap: string;
+  treasury_balances: TreasuryBalanceSDKType[];
+  market_cap: MarketCapSDKType;
   total_tx_count: bigint;
 }
 function createBaseQueryStatisticsRequest(): QueryStatisticsRequest {
@@ -106,28 +106,28 @@ export const QueryStatisticsRequest = {
 GlobalDecoderRegistry.register(QueryStatisticsRequest.typeUrl, QueryStatisticsRequest);
 function createBaseQueryStatisticsResponse(): QueryStatisticsResponse {
   return {
-    treasuryFeePoolBalances: [],
-    marketCap: "",
+    treasuryBalances: [],
+    marketCap: MarketCap.fromPartial({}),
     totalTxCount: BigInt(0)
   };
 }
 export const QueryStatisticsResponse = {
   typeUrl: "/pryzmatics.server.statistics.QueryStatisticsResponse",
   is(o: any): o is QueryStatisticsResponse {
-    return o && (o.$typeUrl === QueryStatisticsResponse.typeUrl || Array.isArray(o.treasuryFeePoolBalances) && (!o.treasuryFeePoolBalances.length || Coin.is(o.treasuryFeePoolBalances[0])) && typeof o.marketCap === "string" && typeof o.totalTxCount === "bigint");
+    return o && (o.$typeUrl === QueryStatisticsResponse.typeUrl || Array.isArray(o.treasuryBalances) && (!o.treasuryBalances.length || TreasuryBalance.is(o.treasuryBalances[0])) && MarketCap.is(o.marketCap) && typeof o.totalTxCount === "bigint");
   },
   isSDK(o: any): o is QueryStatisticsResponseSDKType {
-    return o && (o.$typeUrl === QueryStatisticsResponse.typeUrl || Array.isArray(o.treasury_fee_pool_balances) && (!o.treasury_fee_pool_balances.length || Coin.isSDK(o.treasury_fee_pool_balances[0])) && typeof o.market_cap === "string" && typeof o.total_tx_count === "bigint");
+    return o && (o.$typeUrl === QueryStatisticsResponse.typeUrl || Array.isArray(o.treasury_balances) && (!o.treasury_balances.length || TreasuryBalance.isSDK(o.treasury_balances[0])) && MarketCap.isSDK(o.market_cap) && typeof o.total_tx_count === "bigint");
   },
   isAmino(o: any): o is QueryStatisticsResponseAmino {
-    return o && (o.$typeUrl === QueryStatisticsResponse.typeUrl || Array.isArray(o.treasury_fee_pool_balances) && (!o.treasury_fee_pool_balances.length || Coin.isAmino(o.treasury_fee_pool_balances[0])) && typeof o.market_cap === "string" && typeof o.total_tx_count === "bigint");
+    return o && (o.$typeUrl === QueryStatisticsResponse.typeUrl || Array.isArray(o.treasury_balances) && (!o.treasury_balances.length || TreasuryBalance.isAmino(o.treasury_balances[0])) && MarketCap.isAmino(o.market_cap) && typeof o.total_tx_count === "bigint");
   },
   encode(message: QueryStatisticsResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
-    for (const v of message.treasuryFeePoolBalances) {
-      Coin.encode(v!, writer.uint32(10).fork()).ldelim();
+    for (const v of message.treasuryBalances) {
+      TreasuryBalance.encode(v!, writer.uint32(10).fork()).ldelim();
     }
-    if (message.marketCap !== "") {
-      writer.uint32(18).string(Decimal.fromUserInput(message.marketCap, 18).atomics);
+    if (message.marketCap !== undefined) {
+      MarketCap.encode(message.marketCap, writer.uint32(18).fork()).ldelim();
     }
     if (message.totalTxCount !== BigInt(0)) {
       writer.uint32(24).uint64(message.totalTxCount);
@@ -142,10 +142,10 @@ export const QueryStatisticsResponse = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.treasuryFeePoolBalances.push(Coin.decode(reader, reader.uint32(), useInterfaces));
+          message.treasuryBalances.push(TreasuryBalance.decode(reader, reader.uint32(), useInterfaces));
           break;
         case 2:
-          message.marketCap = Decimal.fromAtomics(reader.string(), 18).toString();
+          message.marketCap = MarketCap.decode(reader, reader.uint32(), useInterfaces);
           break;
         case 3:
           message.totalTxCount = reader.uint64();
@@ -159,34 +159,34 @@ export const QueryStatisticsResponse = {
   },
   fromJSON(object: any): QueryStatisticsResponse {
     return {
-      treasuryFeePoolBalances: Array.isArray(object?.treasuryFeePoolBalances) ? object.treasuryFeePoolBalances.map((e: any) => Coin.fromJSON(e)) : [],
-      marketCap: isSet(object.marketCap) ? String(object.marketCap) : "",
+      treasuryBalances: Array.isArray(object?.treasuryBalances) ? object.treasuryBalances.map((e: any) => TreasuryBalance.fromJSON(e)) : [],
+      marketCap: isSet(object.marketCap) ? MarketCap.fromJSON(object.marketCap) : undefined,
       totalTxCount: isSet(object.totalTxCount) ? BigInt(object.totalTxCount.toString()) : BigInt(0)
     };
   },
   toJSON(message: QueryStatisticsResponse): unknown {
     const obj: any = {};
-    if (message.treasuryFeePoolBalances) {
-      obj.treasuryFeePoolBalances = message.treasuryFeePoolBalances.map(e => e ? Coin.toJSON(e) : undefined);
+    if (message.treasuryBalances) {
+      obj.treasuryBalances = message.treasuryBalances.map(e => e ? TreasuryBalance.toJSON(e) : undefined);
     } else {
-      obj.treasuryFeePoolBalances = [];
+      obj.treasuryBalances = [];
     }
-    message.marketCap !== undefined && (obj.marketCap = message.marketCap);
+    message.marketCap !== undefined && (obj.marketCap = message.marketCap ? MarketCap.toJSON(message.marketCap) : undefined);
     message.totalTxCount !== undefined && (obj.totalTxCount = (message.totalTxCount || BigInt(0)).toString());
     return obj;
   },
   fromPartial(object: Partial<QueryStatisticsResponse>): QueryStatisticsResponse {
     const message = createBaseQueryStatisticsResponse();
-    message.treasuryFeePoolBalances = object.treasuryFeePoolBalances?.map(e => Coin.fromPartial(e)) || [];
-    message.marketCap = object.marketCap ?? "";
+    message.treasuryBalances = object.treasuryBalances?.map(e => TreasuryBalance.fromPartial(e)) || [];
+    message.marketCap = object.marketCap !== undefined && object.marketCap !== null ? MarketCap.fromPartial(object.marketCap) : undefined;
     message.totalTxCount = object.totalTxCount !== undefined && object.totalTxCount !== null ? BigInt(object.totalTxCount.toString()) : BigInt(0);
     return message;
   },
   fromAmino(object: QueryStatisticsResponseAmino): QueryStatisticsResponse {
     const message = createBaseQueryStatisticsResponse();
-    message.treasuryFeePoolBalances = object.treasury_fee_pool_balances?.map(e => Coin.fromAmino(e)) || [];
+    message.treasuryBalances = object.treasury_balances?.map(e => TreasuryBalance.fromAmino(e)) || [];
     if (object.market_cap !== undefined && object.market_cap !== null) {
-      message.marketCap = object.market_cap;
+      message.marketCap = MarketCap.fromAmino(object.market_cap);
     }
     if (object.total_tx_count !== undefined && object.total_tx_count !== null) {
       message.totalTxCount = BigInt(object.total_tx_count);
@@ -195,12 +195,12 @@ export const QueryStatisticsResponse = {
   },
   toAmino(message: QueryStatisticsResponse, useInterfaces: boolean = true): QueryStatisticsResponseAmino {
     const obj: any = {};
-    if (message.treasuryFeePoolBalances) {
-      obj.treasury_fee_pool_balances = message.treasuryFeePoolBalances.map(e => e ? Coin.toAmino(e, useInterfaces) : undefined);
+    if (message.treasuryBalances) {
+      obj.treasury_balances = message.treasuryBalances.map(e => e ? TreasuryBalance.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.treasury_fee_pool_balances = message.treasuryFeePoolBalances;
+      obj.treasury_balances = message.treasuryBalances;
     }
-    obj.market_cap = padDecimal(message.marketCap) === "" ? undefined : padDecimal(message.marketCap);
+    obj.market_cap = message.marketCap ? MarketCap.toAmino(message.marketCap, useInterfaces) : undefined;
     obj.total_tx_count = message.totalTxCount ? message.totalTxCount.toString() : undefined;
     return obj;
   },

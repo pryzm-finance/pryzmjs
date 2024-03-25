@@ -4,6 +4,8 @@ package pryzmatics.server.statistics;
 import "gogoproto/gogo.proto";
 import "cosmos_proto/cosmos.proto";
 import "cosmos/base/v1beta1/coin.proto";
+import "pryzmatics/statistics/market_cap.proto";
+import "pryzmatics/statistics/treasury.proto";
 
 
 option go_package = "github.com/pryzm-finance/pryzmatics/server/statistics";
@@ -12,14 +14,7 @@ message QueryStatisticsRequest {
 }
 
 message QueryStatisticsResponse {
-  repeated cosmos.base.v1beta1.Coin treasury_fee_pool_balances = 1 [
-    (gogoproto.nullable) = false,
-    (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins"
-  ];
-  string market_cap = 2 [
-    (cosmos_proto.scalar) = "cosmos.Dec",
-    (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Dec",
-    (gogoproto.nullable) = false
-  ];
+  repeated pryzmatics.statistics.TreasuryBalance treasury_balances = 1 [(gogoproto.nullable) = false];
+  pryzmatics.statistics.MarketCap market_cap = 2 [(gogoproto.nullable) = false];
   uint64 total_tx_count = 3;
 }
