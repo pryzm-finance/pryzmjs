@@ -9,6 +9,9 @@ async function main() {
     console.log(statistics.treasury_balances)
     console.log(statistics.market_cap.fully_diluted)
     console.log(statistics.market_cap.circulating)
+    console.log(statistics.tvl)
+    console.log(statistics.tvl.total)
+    console.log(statistics.tvl.error)
     console.log(statistics.total_tx_count)
 }
 

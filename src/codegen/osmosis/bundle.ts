@@ -5,20 +5,20 @@ import * as _154 from "./tokenfactory/v1beta1/genesis";
 import * as _155 from "./tokenfactory/v1beta1/params";
 import * as _156 from "./tokenfactory/v1beta1/query";
 import * as _157 from "./tokenfactory/v1beta1/tx";
-import * as _413 from "./tokenfactory/v1beta1/tx.amino";
-import * as _414 from "./tokenfactory/v1beta1/tx.registry";
-import * as _415 from "./epochs/v1beta1/query.lcd";
-import * as _416 from "./tokenfactory/v1beta1/query.lcd";
-import * as _417 from "./epochs/v1beta1/query.rpc.Query";
-import * as _418 from "./tokenfactory/v1beta1/query.rpc.Query";
-import * as _419 from "./tokenfactory/v1beta1/tx.rpc.msg";
+import * as _414 from "./tokenfactory/v1beta1/tx.amino";
+import * as _415 from "./tokenfactory/v1beta1/tx.registry";
+import * as _416 from "./epochs/v1beta1/query.lcd";
+import * as _417 from "./tokenfactory/v1beta1/query.lcd";
+import * as _418 from "./epochs/v1beta1/query.rpc.Query";
+import * as _419 from "./tokenfactory/v1beta1/query.rpc.Query";
+import * as _420 from "./tokenfactory/v1beta1/tx.rpc.msg";
 export namespace osmosis {
   export namespace epochs {
     export const v1beta1 = {
       ..._151,
       ..._152,
-      ..._415,
-      ..._417
+      ..._416,
+      ..._418
     };
   }
   export namespace tokenfactory {
@@ -28,11 +28,11 @@ export namespace osmosis {
       ..._155,
       ..._156,
       ..._157,
-      ..._413,
       ..._414,
-      ..._416,
-      ..._418,
-      ..._419
+      ..._415,
+      ..._417,
+      ..._419,
+      ..._420
     };
   }
 }
