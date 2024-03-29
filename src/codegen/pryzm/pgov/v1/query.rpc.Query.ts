@@ -16,7 +16,7 @@ export interface Query {
   /** Queries a Vote by index. */
   vote(request: DeepPartial<QueryGetVoteRequest>, metadata?: grpc.Metadata): Promise<QueryGetVoteResponse>;
   /** Queries a list of Vote items. */
-  voteAll(request?: DeepPartial<QueryAllVoteRequest>, metadata?: grpc.Metadata): Promise<QueryAllVoteResponse>;
+  voteAll(request: DeepPartial<QueryAllVoteRequest>, metadata?: grpc.Metadata): Promise<QueryAllVoteResponse>;
   /** Queries a Proposal by index. */
   proposal(request: DeepPartial<QueryGetProposalRequest>, metadata?: grpc.Metadata): Promise<QueryGetProposalResponse>;
   /** Queries a list of Proposal items. */
@@ -54,9 +54,7 @@ export class QueryClientImpl implements Query {
   vote(request: DeepPartial<QueryGetVoteRequest>, metadata?: grpc.Metadata): Promise<QueryGetVoteResponse> {
     return this.rpc.unary(QueryVoteDesc, QueryGetVoteRequest.fromPartial(request as any), metadata);
   }
-  voteAll(request: DeepPartial<QueryAllVoteRequest> = {
-    pagination: undefined
-  }, metadata?: grpc.Metadata): Promise<QueryAllVoteResponse> {
+  voteAll(request: DeepPartial<QueryAllVoteRequest>, metadata?: grpc.Metadata): Promise<QueryAllVoteResponse> {
     return this.rpc.unary(QueryVoteAllDesc, QueryAllVoteRequest.fromPartial(request as any), metadata);
   }
   proposal(request: DeepPartial<QueryGetProposalRequest>, metadata?: grpc.Metadata): Promise<QueryGetProposalResponse> {

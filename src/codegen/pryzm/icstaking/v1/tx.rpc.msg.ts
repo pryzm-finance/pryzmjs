@@ -2,18 +2,24 @@ import { UnaryMethodDefinitionish } from "../../../grpc-web";
 import { DeepPartial } from "../../../helpers";
 import { grpc } from "@improbable-eng/grpc-web";
 import { BrowserHeaders } from "browser-headers";
-import { MsgUpdateParams, MsgUpdateParamsResponse, MsgRegisterHostChain, MsgRegisterHostChainResponse, MsgUpdateHostChain, MsgUpdateHostChainResponse, MsgStake, MsgStakeResponse, MsgUnstake, MsgUnstakeResponse, MsgRedeemUnstaked, MsgRedeemUnstakedResponse, MsgInstantUnstake, MsgInstantUnstakeResponse, MsgRebalanceDelegations, MsgRebalanceDelegationsResponse, MsgRegisterInterchainAccount, MsgRegisterInterchainAccountResponse } from "./tx";
+import { MsgUpdateParams, MsgUpdateParamsResponse, MsgRegisterHostChain, MsgRegisterHostChainResponse, MsgUpdateHostChain, MsgUpdateHostChainResponse, MsgStake, MsgStakeResponse, MsgStakeLsmShares, MsgStakeLsmSharesResponse, MsgUnstake, MsgUnstakeResponse, MsgRedeemUnstaked, MsgRedeemUnstakedResponse, MsgInstantUnstake, MsgInstantUnstakeResponse, MsgRebalanceDelegations, MsgRebalanceDelegationsResponse, MsgRegisterInterchainAccount, MsgRegisterInterchainAccountResponse, MsgCreateMultiSigConnection, MsgCreateMultiSigConnectionResponse, MsgUpdateMultiSigConnection, MsgUpdateMultiSigConnectionResponse, MsgAcknowledgeMultiSigPacket, MsgAcknowledgeMultiSigPacketResponse, MsgRegisterHostAccounts, MsgRegisterHostAccountsResponse, MsgRetryFailedLsmTransfer, MsgRetryFailedLsmTransferResponse } from "./tx";
 /** Msg defines the Msg service. */
 export interface Msg {
   updateParams(request: DeepPartial<MsgUpdateParams>, metadata?: grpc.Metadata): Promise<MsgUpdateParamsResponse>;
   registerHostChain(request: DeepPartial<MsgRegisterHostChain>, metadata?: grpc.Metadata): Promise<MsgRegisterHostChainResponse>;
   updateHostChain(request: DeepPartial<MsgUpdateHostChain>, metadata?: grpc.Metadata): Promise<MsgUpdateHostChainResponse>;
   stake(request: DeepPartial<MsgStake>, metadata?: grpc.Metadata): Promise<MsgStakeResponse>;
+  stakeLsmShares(request: DeepPartial<MsgStakeLsmShares>, metadata?: grpc.Metadata): Promise<MsgStakeLsmSharesResponse>;
   unstake(request: DeepPartial<MsgUnstake>, metadata?: grpc.Metadata): Promise<MsgUnstakeResponse>;
   redeemUnstaked(request: DeepPartial<MsgRedeemUnstaked>, metadata?: grpc.Metadata): Promise<MsgRedeemUnstakedResponse>;
   instantUnstake(request: DeepPartial<MsgInstantUnstake>, metadata?: grpc.Metadata): Promise<MsgInstantUnstakeResponse>;
   rebalanceDelegations(request: DeepPartial<MsgRebalanceDelegations>, metadata?: grpc.Metadata): Promise<MsgRebalanceDelegationsResponse>;
   registerInterchainAccount(request: DeepPartial<MsgRegisterInterchainAccount>, metadata?: grpc.Metadata): Promise<MsgRegisterInterchainAccountResponse>;
+  createMultiSigConnection(request: DeepPartial<MsgCreateMultiSigConnection>, metadata?: grpc.Metadata): Promise<MsgCreateMultiSigConnectionResponse>;
+  updateMultiSigConnection(request: DeepPartial<MsgUpdateMultiSigConnection>, metadata?: grpc.Metadata): Promise<MsgUpdateMultiSigConnectionResponse>;
+  acknowledgeMultiSigPacket(request: DeepPartial<MsgAcknowledgeMultiSigPacket>, metadata?: grpc.Metadata): Promise<MsgAcknowledgeMultiSigPacketResponse>;
+  registerHostAccounts(request: DeepPartial<MsgRegisterHostAccounts>, metadata?: grpc.Metadata): Promise<MsgRegisterHostAccountsResponse>;
+  retryFailedLsmTransfer(request: DeepPartial<MsgRetryFailedLsmTransfer>, metadata?: grpc.Metadata): Promise<MsgRetryFailedLsmTransferResponse>;
 }
 export class MsgClientImpl implements Msg {
   private readonly rpc: Rpc;
@@ -23,11 +29,17 @@ export class MsgClientImpl implements Msg {
     this.registerHostChain = this.registerHostChain.bind(this);
     this.updateHostChain = this.updateHostChain.bind(this);
     this.stake = this.stake.bind(this);
+    this.stakeLsmShares = this.stakeLsmShares.bind(this);
     this.unstake = this.unstake.bind(this);
     this.redeemUnstaked = this.redeemUnstaked.bind(this);
     this.instantUnstake = this.instantUnstake.bind(this);
     this.rebalanceDelegations = this.rebalanceDelegations.bind(this);
     this.registerInterchainAccount = this.registerInterchainAccount.bind(this);
+    this.createMultiSigConnection = this.createMultiSigConnection.bind(this);
+    this.updateMultiSigConnection = this.updateMultiSigConnection.bind(this);
+    this.acknowledgeMultiSigPacket = this.acknowledgeMultiSigPacket.bind(this);
+    this.registerHostAccounts = this.registerHostAccounts.bind(this);
+    this.retryFailedLsmTransfer = this.retryFailedLsmTransfer.bind(this);
   }
   updateParams(request: DeepPartial<MsgUpdateParams>, metadata?: grpc.Metadata): Promise<MsgUpdateParamsResponse> {
     return this.rpc.unary(MsgUpdateParamsDesc, MsgUpdateParams.fromPartial(request as any), metadata);
@@ -40,6 +52,9 @@ export class MsgClientImpl implements Msg {
   }
   stake(request: DeepPartial<MsgStake>, metadata?: grpc.Metadata): Promise<MsgStakeResponse> {
     return this.rpc.unary(MsgStakeDesc, MsgStake.fromPartial(request as any), metadata);
+  }
+  stakeLsmShares(request: DeepPartial<MsgStakeLsmShares>, metadata?: grpc.Metadata): Promise<MsgStakeLsmSharesResponse> {
+    return this.rpc.unary(MsgStakeLsmSharesDesc, MsgStakeLsmShares.fromPartial(request as any), metadata);
   }
   unstake(request: DeepPartial<MsgUnstake>, metadata?: grpc.Metadata): Promise<MsgUnstakeResponse> {
     return this.rpc.unary(MsgUnstakeDesc, MsgUnstake.fromPartial(request as any), metadata);
@@ -55,6 +70,21 @@ export class MsgClientImpl implements Msg {
   }
   registerInterchainAccount(request: DeepPartial<MsgRegisterInterchainAccount>, metadata?: grpc.Metadata): Promise<MsgRegisterInterchainAccountResponse> {
     return this.rpc.unary(MsgRegisterInterchainAccountDesc, MsgRegisterInterchainAccount.fromPartial(request as any), metadata);
+  }
+  createMultiSigConnection(request: DeepPartial<MsgCreateMultiSigConnection>, metadata?: grpc.Metadata): Promise<MsgCreateMultiSigConnectionResponse> {
+    return this.rpc.unary(MsgCreateMultiSigConnectionDesc, MsgCreateMultiSigConnection.fromPartial(request as any), metadata);
+  }
+  updateMultiSigConnection(request: DeepPartial<MsgUpdateMultiSigConnection>, metadata?: grpc.Metadata): Promise<MsgUpdateMultiSigConnectionResponse> {
+    return this.rpc.unary(MsgUpdateMultiSigConnectionDesc, MsgUpdateMultiSigConnection.fromPartial(request as any), metadata);
+  }
+  acknowledgeMultiSigPacket(request: DeepPartial<MsgAcknowledgeMultiSigPacket>, metadata?: grpc.Metadata): Promise<MsgAcknowledgeMultiSigPacketResponse> {
+    return this.rpc.unary(MsgAcknowledgeMultiSigPacketDesc, MsgAcknowledgeMultiSigPacket.fromPartial(request as any), metadata);
+  }
+  registerHostAccounts(request: DeepPartial<MsgRegisterHostAccounts>, metadata?: grpc.Metadata): Promise<MsgRegisterHostAccountsResponse> {
+    return this.rpc.unary(MsgRegisterHostAccountsDesc, MsgRegisterHostAccounts.fromPartial(request as any), metadata);
+  }
+  retryFailedLsmTransfer(request: DeepPartial<MsgRetryFailedLsmTransfer>, metadata?: grpc.Metadata): Promise<MsgRetryFailedLsmTransferResponse> {
+    return this.rpc.unary(MsgRetryFailedLsmTransferDesc, MsgRetryFailedLsmTransfer.fromPartial(request as any), metadata);
   }
 }
 export const MsgDesc = {
@@ -137,6 +167,27 @@ export const MsgStakeDesc: UnaryMethodDefinitionish = {
     deserializeBinary(data: Uint8Array) {
       return {
         ...MsgStakeResponse.decode(data),
+        toObject() {
+          return this;
+        }
+      };
+    }
+  } as any)
+};
+export const MsgStakeLsmSharesDesc: UnaryMethodDefinitionish = {
+  methodName: "StakeLsmShares",
+  service: MsgDesc,
+  requestStream: false,
+  responseStream: false,
+  requestType: ({
+    serializeBinary() {
+      return MsgStakeLsmShares.encode(this).finish();
+    }
+  } as any),
+  responseType: ({
+    deserializeBinary(data: Uint8Array) {
+      return {
+        ...MsgStakeLsmSharesResponse.decode(data),
         toObject() {
           return this;
         }
@@ -242,6 +293,111 @@ export const MsgRegisterInterchainAccountDesc: UnaryMethodDefinitionish = {
     deserializeBinary(data: Uint8Array) {
       return {
         ...MsgRegisterInterchainAccountResponse.decode(data),
+        toObject() {
+          return this;
+        }
+      };
+    }
+  } as any)
+};
+export const MsgCreateMultiSigConnectionDesc: UnaryMethodDefinitionish = {
+  methodName: "CreateMultiSigConnection",
+  service: MsgDesc,
+  requestStream: false,
+  responseStream: false,
+  requestType: ({
+    serializeBinary() {
+      return MsgCreateMultiSigConnection.encode(this).finish();
+    }
+  } as any),
+  responseType: ({
+    deserializeBinary(data: Uint8Array) {
+      return {
+        ...MsgCreateMultiSigConnectionResponse.decode(data),
+        toObject() {
+          return this;
+        }
+      };
+    }
+  } as any)
+};
+export const MsgUpdateMultiSigConnectionDesc: UnaryMethodDefinitionish = {
+  methodName: "UpdateMultiSigConnection",
+  service: MsgDesc,
+  requestStream: false,
+  responseStream: false,
+  requestType: ({
+    serializeBinary() {
+      return MsgUpdateMultiSigConnection.encode(this).finish();
+    }
+  } as any),
+  responseType: ({
+    deserializeBinary(data: Uint8Array) {
+      return {
+        ...MsgUpdateMultiSigConnectionResponse.decode(data),
+        toObject() {
+          return this;
+        }
+      };
+    }
+  } as any)
+};
+export const MsgAcknowledgeMultiSigPacketDesc: UnaryMethodDefinitionish = {
+  methodName: "AcknowledgeMultiSigPacket",
+  service: MsgDesc,
+  requestStream: false,
+  responseStream: false,
+  requestType: ({
+    serializeBinary() {
+      return MsgAcknowledgeMultiSigPacket.encode(this).finish();
+    }
+  } as any),
+  responseType: ({
+    deserializeBinary(data: Uint8Array) {
+      return {
+        ...MsgAcknowledgeMultiSigPacketResponse.decode(data),
+        toObject() {
+          return this;
+        }
+      };
+    }
+  } as any)
+};
+export const MsgRegisterHostAccountsDesc: UnaryMethodDefinitionish = {
+  methodName: "RegisterHostAccounts",
+  service: MsgDesc,
+  requestStream: false,
+  responseStream: false,
+  requestType: ({
+    serializeBinary() {
+      return MsgRegisterHostAccounts.encode(this).finish();
+    }
+  } as any),
+  responseType: ({
+    deserializeBinary(data: Uint8Array) {
+      return {
+        ...MsgRegisterHostAccountsResponse.decode(data),
+        toObject() {
+          return this;
+        }
+      };
+    }
+  } as any)
+};
+export const MsgRetryFailedLsmTransferDesc: UnaryMethodDefinitionish = {
+  methodName: "RetryFailedLsmTransfer",
+  service: MsgDesc,
+  requestStream: false,
+  responseStream: false,
+  requestType: ({
+    serializeBinary() {
+      return MsgRetryFailedLsmTransfer.encode(this).finish();
+    }
+  } as any),
+  responseType: ({
+    deserializeBinary(data: Uint8Array) {
+      return {
+        ...MsgRetryFailedLsmTransferResponse.decode(data),
         toObject() {
           return this;
         }

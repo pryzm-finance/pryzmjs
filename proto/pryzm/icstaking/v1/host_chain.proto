@@ -11,8 +11,10 @@ option go_package = "github.com/pryzm-finance/pryzm-core/x/icstaking/types/v1";
 
 // The types of available connection protocols
 enum ConnectionType {
-  // interchain account connection using ibc-go ICS-27
-  ICA = 0;
+  option (gogoproto.goproto_enum_prefix) = false;
+  ConnectionType_ICA = 0; // interchain account connection using ibc-go ICS-27
+  ConnectionType_MULTI_SIG = 1; // connecting to the host chain using a trusted multi-sig account
+  ConnectionType_LOOP_BACK = 2; // connection to the Pryzm itself
 }
 
 // The properties of the target chain for staking
@@ -46,12 +48,16 @@ message HostChain {
     (gogoproto.nullable) = false,
     (gogoproto.castrepeated) = "Validators"
   ];
+
+  // If true, Pryzm will allow users to stake using the LSM shares minted on the host chain.
+  bool allow_lsm_shares = 8;
 }
 
 // Types of transfer channels
-// For now it only supports ibc transfer, but transfer bridges support (Axelar, Wormhole, ...) can be added.
 enum TransferChannelType {
-  IBC = 0;
+  option (gogoproto.goproto_enum_prefix) = false;
+  TransferChannelType_IBC = 0; // IBC transfer
+  TransferChannelType_LOOP_BACK = 1; // transfer to Pryzm itself
 }
 
 // Properties of a transfer channel
@@ -81,6 +87,9 @@ message Validator {
     (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Dec",
     (gogoproto.nullable) = false
   ];
+
+  // whether users can stake the lsm shares minted from this validator
+  bool allow_lsm_shares = 3;
 }
 
 // A subset of state on the host chain needed by Pryzm
@@ -122,6 +131,13 @@ message HostChainState {
   // setting state to IDLE happens when an ack/timeout received for an interchain operation,
   // so this is the height of the last received ack from host chain
   ibc.core.client.v1.Height last_idle_state_host_height = 8 [(gogoproto.nullable) = false];
+
+  // The amount of LSM tokens that are in queue to be transferred and redeemed on the host chain
+  string locked_lsm_value = 9 [
+    (cosmos_proto.scalar) = "cosmos.Int",
+    (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Int",
+    (gogoproto.nullable) = false
+  ];
 }
 
 // The interchain accounts
@@ -152,10 +168,29 @@ enum AccountState {
 }
 
 message ValidatorState {
+  // the address of the validator
   string validator_address = 1;
+
+  // the amount of tokens delegated to the validator by PRYZM
   string delegated_amount = 2 [
     (cosmos_proto.scalar) = "cosmos.Int",
     (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Int",
+    (gogoproto.nullable) = false
+  ];
+
+  // total tokens delegated to the validator by all delegators
+  // this is used to calculate the value of the validator's lsm share
+  string total_tokens = 3 [
+    (cosmos_proto.scalar) = "cosmos.Int",
+    (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Int",
+    (gogoproto.nullable) = false
+  ];
+
+  // total shares issued to the validator's delegators
+  // this is used to calculate the value of the validator's lsm share
+  string total_shares = 4 [
+    (cosmos_proto.scalar) = "cosmos.Dec",
+    (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Dec",
     (gogoproto.nullable) = false
   ];
 }
@@ -170,4 +205,5 @@ enum State {
   COMPOUNDING = 6;
   COLLECTING = 7;
   SWEEPING = 8;
+  LSM_REDEEMING = 9;
 }

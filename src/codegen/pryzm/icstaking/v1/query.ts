@@ -5,6 +5,8 @@ import { Undelegation, UndelegationAmino, UndelegationSDKType, ChannelUndelegati
 import { Coin, CoinAmino, CoinSDKType } from "../../../cosmos/base/v1beta1/coin";
 import { Timestamp, TimestampSDKType } from "../../../google/protobuf/timestamp";
 import { ReplyData, ReplyDataAmino, ReplyDataSDKType } from "./reply";
+import { MultiSigConnection, MultiSigConnectionAmino, MultiSigConnectionSDKType, MultiSigPacket, MultiSigPacketAmino, MultiSigPacketSDKType } from "./multisig";
+import { FailedLsmTransfer, FailedLsmTransferAmino, FailedLsmTransferSDKType, RedeemableLsm, RedeemableLsmAmino, RedeemableLsmSDKType } from "./lsm";
 import { BinaryReader, BinaryWriter } from "../../../binary";
 import { GlobalDecoderRegistry } from "../../../registry";
 import { isSet, fromJsonTimestamp, fromTimestamp } from "../../../helpers";
@@ -442,6 +444,8 @@ export interface QueryEpochInfoRequestSDKType {
 }
 export interface QueryEpochInfoResponse {
   lastDelegationTime: Timestamp;
+  lastRedelegationTime: Timestamp;
+  lastLsmRedeemTime: Timestamp;
   lastUndelegationTime: Timestamp;
   currentUndelegationEpoch: bigint;
 }
@@ -451,6 +455,8 @@ export interface QueryEpochInfoResponseProtoMsg {
 }
 export interface QueryEpochInfoResponseAmino {
   last_delegation_time?: string;
+  last_redelegation_time?: string;
+  last_lsm_redeem_time?: string;
   last_undelegation_time?: string;
   current_undelegation_epoch?: string;
 }
@@ -460,6 +466,8 @@ export interface QueryEpochInfoResponseAminoMsg {
 }
 export interface QueryEpochInfoResponseSDKType {
   last_delegation_time: TimestampSDKType;
+  last_redelegation_time: TimestampSDKType;
+  last_lsm_redeem_time: TimestampSDKType;
   last_undelegation_time: TimestampSDKType;
   current_undelegation_epoch: bigint;
 }
@@ -498,6 +506,234 @@ export interface QueryAllReplyDataResponseAminoMsg {
 }
 export interface QueryAllReplyDataResponseSDKType {
   reply_data: ReplyDataSDKType[];
+  pagination?: PageResponseSDKType;
+}
+export interface QueryGetMultiSigConnectionRequest {
+  id: string;
+}
+export interface QueryGetMultiSigConnectionRequestProtoMsg {
+  typeUrl: "/pryzm.icstaking.v1.QueryGetMultiSigConnectionRequest";
+  value: Uint8Array;
+}
+export interface QueryGetMultiSigConnectionRequestAmino {
+  id?: string;
+}
+export interface QueryGetMultiSigConnectionRequestAminoMsg {
+  type: "/pryzm.icstaking.v1.QueryGetMultiSigConnectionRequest";
+  value: QueryGetMultiSigConnectionRequestAmino;
+}
+export interface QueryGetMultiSigConnectionRequestSDKType {
+  id: string;
+}
+export interface QueryGetMultiSigConnectionResponse {
+  multiSigConnection: MultiSigConnection;
+}
+export interface QueryGetMultiSigConnectionResponseProtoMsg {
+  typeUrl: "/pryzm.icstaking.v1.QueryGetMultiSigConnectionResponse";
+  value: Uint8Array;
+}
+export interface QueryGetMultiSigConnectionResponseAmino {
+  multi_sig_connection?: MultiSigConnectionAmino;
+}
+export interface QueryGetMultiSigConnectionResponseAminoMsg {
+  type: "/pryzm.icstaking.v1.QueryGetMultiSigConnectionResponse";
+  value: QueryGetMultiSigConnectionResponseAmino;
+}
+export interface QueryGetMultiSigConnectionResponseSDKType {
+  multi_sig_connection: MultiSigConnectionSDKType;
+}
+export interface QueryAllMultiSigConnectionRequest {
+  pagination?: PageRequest;
+}
+export interface QueryAllMultiSigConnectionRequestProtoMsg {
+  typeUrl: "/pryzm.icstaking.v1.QueryAllMultiSigConnectionRequest";
+  value: Uint8Array;
+}
+export interface QueryAllMultiSigConnectionRequestAmino {
+  pagination?: PageRequestAmino;
+}
+export interface QueryAllMultiSigConnectionRequestAminoMsg {
+  type: "/pryzm.icstaking.v1.QueryAllMultiSigConnectionRequest";
+  value: QueryAllMultiSigConnectionRequestAmino;
+}
+export interface QueryAllMultiSigConnectionRequestSDKType {
+  pagination?: PageRequestSDKType;
+}
+export interface QueryAllMultiSigConnectionResponse {
+  multiSigConnection: MultiSigConnection[];
+  pagination?: PageResponse;
+}
+export interface QueryAllMultiSigConnectionResponseProtoMsg {
+  typeUrl: "/pryzm.icstaking.v1.QueryAllMultiSigConnectionResponse";
+  value: Uint8Array;
+}
+export interface QueryAllMultiSigConnectionResponseAmino {
+  multi_sig_connection?: MultiSigConnectionAmino[];
+  pagination?: PageResponseAmino;
+}
+export interface QueryAllMultiSigConnectionResponseAminoMsg {
+  type: "/pryzm.icstaking.v1.QueryAllMultiSigConnectionResponse";
+  value: QueryAllMultiSigConnectionResponseAmino;
+}
+export interface QueryAllMultiSigConnectionResponseSDKType {
+  multi_sig_connection: MultiSigConnectionSDKType[];
+  pagination?: PageResponseSDKType;
+}
+export interface QueryGetMultiSigPacketRequest {
+  connectionId: string;
+  sequence: bigint;
+}
+export interface QueryGetMultiSigPacketRequestProtoMsg {
+  typeUrl: "/pryzm.icstaking.v1.QueryGetMultiSigPacketRequest";
+  value: Uint8Array;
+}
+export interface QueryGetMultiSigPacketRequestAmino {
+  connection_id?: string;
+  sequence?: string;
+}
+export interface QueryGetMultiSigPacketRequestAminoMsg {
+  type: "/pryzm.icstaking.v1.QueryGetMultiSigPacketRequest";
+  value: QueryGetMultiSigPacketRequestAmino;
+}
+export interface QueryGetMultiSigPacketRequestSDKType {
+  connection_id: string;
+  sequence: bigint;
+}
+export interface QueryGetMultiSigPacketResponse {
+  multiSigPacket: MultiSigPacket;
+}
+export interface QueryGetMultiSigPacketResponseProtoMsg {
+  typeUrl: "/pryzm.icstaking.v1.QueryGetMultiSigPacketResponse";
+  value: Uint8Array;
+}
+export interface QueryGetMultiSigPacketResponseAmino {
+  multi_sig_packet?: MultiSigPacketAmino;
+}
+export interface QueryGetMultiSigPacketResponseAminoMsg {
+  type: "/pryzm.icstaking.v1.QueryGetMultiSigPacketResponse";
+  value: QueryGetMultiSigPacketResponseAmino;
+}
+export interface QueryGetMultiSigPacketResponseSDKType {
+  multi_sig_packet: MultiSigPacketSDKType;
+}
+export interface QueryAllMultiSigPacketRequest {
+  connectionId?: string;
+  pagination?: PageRequest;
+}
+export interface QueryAllMultiSigPacketRequestProtoMsg {
+  typeUrl: "/pryzm.icstaking.v1.QueryAllMultiSigPacketRequest";
+  value: Uint8Array;
+}
+export interface QueryAllMultiSigPacketRequestAmino {
+  connection_id?: string;
+  pagination?: PageRequestAmino;
+}
+export interface QueryAllMultiSigPacketRequestAminoMsg {
+  type: "/pryzm.icstaking.v1.QueryAllMultiSigPacketRequest";
+  value: QueryAllMultiSigPacketRequestAmino;
+}
+export interface QueryAllMultiSigPacketRequestSDKType {
+  connection_id?: string;
+  pagination?: PageRequestSDKType;
+}
+export interface QueryAllMultiSigPacketResponse {
+  multiSigPacket: MultiSigPacket[];
+  pagination?: PageResponse;
+}
+export interface QueryAllMultiSigPacketResponseProtoMsg {
+  typeUrl: "/pryzm.icstaking.v1.QueryAllMultiSigPacketResponse";
+  value: Uint8Array;
+}
+export interface QueryAllMultiSigPacketResponseAmino {
+  multi_sig_packet?: MultiSigPacketAmino[];
+  pagination?: PageResponseAmino;
+}
+export interface QueryAllMultiSigPacketResponseAminoMsg {
+  type: "/pryzm.icstaking.v1.QueryAllMultiSigPacketResponse";
+  value: QueryAllMultiSigPacketResponseAmino;
+}
+export interface QueryAllMultiSigPacketResponseSDKType {
+  multi_sig_packet: MultiSigPacketSDKType[];
+  pagination?: PageResponseSDKType;
+}
+export interface QueryAllFailedLsmTransferRequest {
+  hostChain: string;
+  pagination?: PageRequest;
+}
+export interface QueryAllFailedLsmTransferRequestProtoMsg {
+  typeUrl: "/pryzm.icstaking.v1.QueryAllFailedLsmTransferRequest";
+  value: Uint8Array;
+}
+export interface QueryAllFailedLsmTransferRequestAmino {
+  host_chain?: string;
+  pagination?: PageRequestAmino;
+}
+export interface QueryAllFailedLsmTransferRequestAminoMsg {
+  type: "/pryzm.icstaking.v1.QueryAllFailedLsmTransferRequest";
+  value: QueryAllFailedLsmTransferRequestAmino;
+}
+export interface QueryAllFailedLsmTransferRequestSDKType {
+  host_chain: string;
+  pagination?: PageRequestSDKType;
+}
+export interface QueryAllFailedLsmTransferResponse {
+  failedLsmTransfer: FailedLsmTransfer[];
+  pagination?: PageResponse;
+}
+export interface QueryAllFailedLsmTransferResponseProtoMsg {
+  typeUrl: "/pryzm.icstaking.v1.QueryAllFailedLsmTransferResponse";
+  value: Uint8Array;
+}
+export interface QueryAllFailedLsmTransferResponseAmino {
+  failed_lsm_transfer?: FailedLsmTransferAmino[];
+  pagination?: PageResponseAmino;
+}
+export interface QueryAllFailedLsmTransferResponseAminoMsg {
+  type: "/pryzm.icstaking.v1.QueryAllFailedLsmTransferResponse";
+  value: QueryAllFailedLsmTransferResponseAmino;
+}
+export interface QueryAllFailedLsmTransferResponseSDKType {
+  failed_lsm_transfer: FailedLsmTransferSDKType[];
+  pagination?: PageResponseSDKType;
+}
+export interface QueryAllRedeemableLsmRequest {
+  hostChain: string;
+  pagination?: PageRequest;
+}
+export interface QueryAllRedeemableLsmRequestProtoMsg {
+  typeUrl: "/pryzm.icstaking.v1.QueryAllRedeemableLsmRequest";
+  value: Uint8Array;
+}
+export interface QueryAllRedeemableLsmRequestAmino {
+  host_chain?: string;
+  pagination?: PageRequestAmino;
+}
+export interface QueryAllRedeemableLsmRequestAminoMsg {
+  type: "/pryzm.icstaking.v1.QueryAllRedeemableLsmRequest";
+  value: QueryAllRedeemableLsmRequestAmino;
+}
+export interface QueryAllRedeemableLsmRequestSDKType {
+  host_chain: string;
+  pagination?: PageRequestSDKType;
+}
+export interface QueryAllRedeemableLsmResponse {
+  redeemableLsm: RedeemableLsm[];
+  pagination?: PageResponse;
+}
+export interface QueryAllRedeemableLsmResponseProtoMsg {
+  typeUrl: "/pryzm.icstaking.v1.QueryAllRedeemableLsmResponse";
+  value: Uint8Array;
+}
+export interface QueryAllRedeemableLsmResponseAmino {
+  redeemable_lsm?: RedeemableLsmAmino[];
+  pagination?: PageResponseAmino;
+}
+export interface QueryAllRedeemableLsmResponseAminoMsg {
+  type: "/pryzm.icstaking.v1.QueryAllRedeemableLsmResponse";
+  value: QueryAllRedeemableLsmResponseAmino;
+}
+export interface QueryAllRedeemableLsmResponseSDKType {
+  redeemable_lsm: RedeemableLsmSDKType[];
   pagination?: PageResponseSDKType;
 }
 function createBaseQueryParamsRequest(): QueryParamsRequest {
@@ -2608,6 +2844,8 @@ GlobalDecoderRegistry.register(QueryEpochInfoRequest.typeUrl, QueryEpochInfoRequ
 function createBaseQueryEpochInfoResponse(): QueryEpochInfoResponse {
   return {
     lastDelegationTime: Timestamp.fromPartial({}),
+    lastRedelegationTime: Timestamp.fromPartial({}),
+    lastLsmRedeemTime: Timestamp.fromPartial({}),
     lastUndelegationTime: Timestamp.fromPartial({}),
     currentUndelegationEpoch: BigInt(0)
   };
@@ -2615,23 +2853,29 @@ function createBaseQueryEpochInfoResponse(): QueryEpochInfoResponse {
 export const QueryEpochInfoResponse = {
   typeUrl: "/pryzm.icstaking.v1.QueryEpochInfoResponse",
   is(o: any): o is QueryEpochInfoResponse {
-    return o && (o.$typeUrl === QueryEpochInfoResponse.typeUrl || Timestamp.is(o.lastDelegationTime) && Timestamp.is(o.lastUndelegationTime) && typeof o.currentUndelegationEpoch === "bigint");
+    return o && (o.$typeUrl === QueryEpochInfoResponse.typeUrl || Timestamp.is(o.lastDelegationTime) && Timestamp.is(o.lastRedelegationTime) && Timestamp.is(o.lastLsmRedeemTime) && Timestamp.is(o.lastUndelegationTime) && typeof o.currentUndelegationEpoch === "bigint");
   },
   isSDK(o: any): o is QueryEpochInfoResponseSDKType {
-    return o && (o.$typeUrl === QueryEpochInfoResponse.typeUrl || Timestamp.isSDK(o.last_delegation_time) && Timestamp.isSDK(o.last_undelegation_time) && typeof o.current_undelegation_epoch === "bigint");
+    return o && (o.$typeUrl === QueryEpochInfoResponse.typeUrl || Timestamp.isSDK(o.last_delegation_time) && Timestamp.isSDK(o.last_redelegation_time) && Timestamp.isSDK(o.last_lsm_redeem_time) && Timestamp.isSDK(o.last_undelegation_time) && typeof o.current_undelegation_epoch === "bigint");
   },
   isAmino(o: any): o is QueryEpochInfoResponseAmino {
-    return o && (o.$typeUrl === QueryEpochInfoResponse.typeUrl || Timestamp.isAmino(o.last_delegation_time) && Timestamp.isAmino(o.last_undelegation_time) && typeof o.current_undelegation_epoch === "bigint");
+    return o && (o.$typeUrl === QueryEpochInfoResponse.typeUrl || Timestamp.isAmino(o.last_delegation_time) && Timestamp.isAmino(o.last_redelegation_time) && Timestamp.isAmino(o.last_lsm_redeem_time) && Timestamp.isAmino(o.last_undelegation_time) && typeof o.current_undelegation_epoch === "bigint");
   },
   encode(message: QueryEpochInfoResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.lastDelegationTime !== undefined) {
       Timestamp.encode(message.lastDelegationTime, writer.uint32(10).fork()).ldelim();
     }
+    if (message.lastRedelegationTime !== undefined) {
+      Timestamp.encode(message.lastRedelegationTime, writer.uint32(18).fork()).ldelim();
+    }
+    if (message.lastLsmRedeemTime !== undefined) {
+      Timestamp.encode(message.lastLsmRedeemTime, writer.uint32(26).fork()).ldelim();
+    }
     if (message.lastUndelegationTime !== undefined) {
-      Timestamp.encode(message.lastUndelegationTime, writer.uint32(18).fork()).ldelim();
+      Timestamp.encode(message.lastUndelegationTime, writer.uint32(34).fork()).ldelim();
     }
     if (message.currentUndelegationEpoch !== BigInt(0)) {
-      writer.uint32(24).uint64(message.currentUndelegationEpoch);
+      writer.uint32(40).uint64(message.currentUndelegationEpoch);
     }
     return writer;
   },
@@ -2646,9 +2890,15 @@ export const QueryEpochInfoResponse = {
           message.lastDelegationTime = Timestamp.decode(reader, reader.uint32());
           break;
         case 2:
-          message.lastUndelegationTime = Timestamp.decode(reader, reader.uint32());
+          message.lastRedelegationTime = Timestamp.decode(reader, reader.uint32());
           break;
         case 3:
+          message.lastLsmRedeemTime = Timestamp.decode(reader, reader.uint32());
+          break;
+        case 4:
+          message.lastUndelegationTime = Timestamp.decode(reader, reader.uint32());
+          break;
+        case 5:
           message.currentUndelegationEpoch = reader.uint64();
           break;
         default:
@@ -2661,6 +2911,8 @@ export const QueryEpochInfoResponse = {
   fromJSON(object: any): QueryEpochInfoResponse {
     return {
       lastDelegationTime: isSet(object.lastDelegationTime) ? fromJsonTimestamp(object.lastDelegationTime) : undefined,
+      lastRedelegationTime: isSet(object.lastRedelegationTime) ? fromJsonTimestamp(object.lastRedelegationTime) : undefined,
+      lastLsmRedeemTime: isSet(object.lastLsmRedeemTime) ? fromJsonTimestamp(object.lastLsmRedeemTime) : undefined,
       lastUndelegationTime: isSet(object.lastUndelegationTime) ? fromJsonTimestamp(object.lastUndelegationTime) : undefined,
       currentUndelegationEpoch: isSet(object.currentUndelegationEpoch) ? BigInt(object.currentUndelegationEpoch.toString()) : BigInt(0)
     };
@@ -2668,6 +2920,8 @@ export const QueryEpochInfoResponse = {
   toJSON(message: QueryEpochInfoResponse): unknown {
     const obj: any = {};
     message.lastDelegationTime !== undefined && (obj.lastDelegationTime = fromTimestamp(message.lastDelegationTime).toISOString());
+    message.lastRedelegationTime !== undefined && (obj.lastRedelegationTime = fromTimestamp(message.lastRedelegationTime).toISOString());
+    message.lastLsmRedeemTime !== undefined && (obj.lastLsmRedeemTime = fromTimestamp(message.lastLsmRedeemTime).toISOString());
     message.lastUndelegationTime !== undefined && (obj.lastUndelegationTime = fromTimestamp(message.lastUndelegationTime).toISOString());
     message.currentUndelegationEpoch !== undefined && (obj.currentUndelegationEpoch = (message.currentUndelegationEpoch || BigInt(0)).toString());
     return obj;
@@ -2675,6 +2929,8 @@ export const QueryEpochInfoResponse = {
   fromPartial(object: Partial<QueryEpochInfoResponse>): QueryEpochInfoResponse {
     const message = createBaseQueryEpochInfoResponse();
     message.lastDelegationTime = object.lastDelegationTime !== undefined && object.lastDelegationTime !== null ? Timestamp.fromPartial(object.lastDelegationTime) : undefined;
+    message.lastRedelegationTime = object.lastRedelegationTime !== undefined && object.lastRedelegationTime !== null ? Timestamp.fromPartial(object.lastRedelegationTime) : undefined;
+    message.lastLsmRedeemTime = object.lastLsmRedeemTime !== undefined && object.lastLsmRedeemTime !== null ? Timestamp.fromPartial(object.lastLsmRedeemTime) : undefined;
     message.lastUndelegationTime = object.lastUndelegationTime !== undefined && object.lastUndelegationTime !== null ? Timestamp.fromPartial(object.lastUndelegationTime) : undefined;
     message.currentUndelegationEpoch = object.currentUndelegationEpoch !== undefined && object.currentUndelegationEpoch !== null ? BigInt(object.currentUndelegationEpoch.toString()) : BigInt(0);
     return message;
@@ -2683,6 +2939,12 @@ export const QueryEpochInfoResponse = {
     const message = createBaseQueryEpochInfoResponse();
     if (object.last_delegation_time !== undefined && object.last_delegation_time !== null) {
       message.lastDelegationTime = Timestamp.fromAmino(object.last_delegation_time);
+    }
+    if (object.last_redelegation_time !== undefined && object.last_redelegation_time !== null) {
+      message.lastRedelegationTime = Timestamp.fromAmino(object.last_redelegation_time);
+    }
+    if (object.last_lsm_redeem_time !== undefined && object.last_lsm_redeem_time !== null) {
+      message.lastLsmRedeemTime = Timestamp.fromAmino(object.last_lsm_redeem_time);
     }
     if (object.last_undelegation_time !== undefined && object.last_undelegation_time !== null) {
       message.lastUndelegationTime = Timestamp.fromAmino(object.last_undelegation_time);
@@ -2695,6 +2957,8 @@ export const QueryEpochInfoResponse = {
   toAmino(message: QueryEpochInfoResponse, useInterfaces: boolean = true): QueryEpochInfoResponseAmino {
     const obj: any = {};
     obj.last_delegation_time = message.lastDelegationTime ? Timestamp.toAmino(message.lastDelegationTime, useInterfaces) : undefined;
+    obj.last_redelegation_time = message.lastRedelegationTime ? Timestamp.toAmino(message.lastRedelegationTime, useInterfaces) : undefined;
+    obj.last_lsm_redeem_time = message.lastLsmRedeemTime ? Timestamp.toAmino(message.lastLsmRedeemTime, useInterfaces) : undefined;
     obj.last_undelegation_time = message.lastUndelegationTime ? Timestamp.toAmino(message.lastUndelegationTime, useInterfaces) : undefined;
     obj.current_undelegation_epoch = message.currentUndelegationEpoch ? message.currentUndelegationEpoch.toString() : undefined;
     return obj;
@@ -2902,3 +3166,1135 @@ export const QueryAllReplyDataResponse = {
   }
 };
 GlobalDecoderRegistry.register(QueryAllReplyDataResponse.typeUrl, QueryAllReplyDataResponse);
+function createBaseQueryGetMultiSigConnectionRequest(): QueryGetMultiSigConnectionRequest {
+  return {
+    id: ""
+  };
+}
+export const QueryGetMultiSigConnectionRequest = {
+  typeUrl: "/pryzm.icstaking.v1.QueryGetMultiSigConnectionRequest",
+  is(o: any): o is QueryGetMultiSigConnectionRequest {
+    return o && (o.$typeUrl === QueryGetMultiSigConnectionRequest.typeUrl || typeof o.id === "string");
+  },
+  isSDK(o: any): o is QueryGetMultiSigConnectionRequestSDKType {
+    return o && (o.$typeUrl === QueryGetMultiSigConnectionRequest.typeUrl || typeof o.id === "string");
+  },
+  isAmino(o: any): o is QueryGetMultiSigConnectionRequestAmino {
+    return o && (o.$typeUrl === QueryGetMultiSigConnectionRequest.typeUrl || typeof o.id === "string");
+  },
+  encode(message: QueryGetMultiSigConnectionRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    if (message.id !== "") {
+      writer.uint32(10).string(message.id);
+    }
+    return writer;
+  },
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): QueryGetMultiSigConnectionRequest {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseQueryGetMultiSigConnectionRequest();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.id = reader.string();
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromJSON(object: any): QueryGetMultiSigConnectionRequest {
+    return {
+      id: isSet(object.id) ? String(object.id) : ""
+    };
+  },
+  toJSON(message: QueryGetMultiSigConnectionRequest): unknown {
+    const obj: any = {};
+    message.id !== undefined && (obj.id = message.id);
+    return obj;
+  },
+  fromPartial(object: Partial<QueryGetMultiSigConnectionRequest>): QueryGetMultiSigConnectionRequest {
+    const message = createBaseQueryGetMultiSigConnectionRequest();
+    message.id = object.id ?? "";
+    return message;
+  },
+  fromAmino(object: QueryGetMultiSigConnectionRequestAmino): QueryGetMultiSigConnectionRequest {
+    const message = createBaseQueryGetMultiSigConnectionRequest();
+    if (object.id !== undefined && object.id !== null) {
+      message.id = object.id;
+    }
+    return message;
+  },
+  toAmino(message: QueryGetMultiSigConnectionRequest, useInterfaces: boolean = true): QueryGetMultiSigConnectionRequestAmino {
+    const obj: any = {};
+    obj.id = message.id === "" ? undefined : message.id;
+    return obj;
+  },
+  fromAminoMsg(object: QueryGetMultiSigConnectionRequestAminoMsg): QueryGetMultiSigConnectionRequest {
+    return QueryGetMultiSigConnectionRequest.fromAmino(object.value);
+  },
+  fromProtoMsg(message: QueryGetMultiSigConnectionRequestProtoMsg, useInterfaces: boolean = true): QueryGetMultiSigConnectionRequest {
+    return QueryGetMultiSigConnectionRequest.decode(message.value, undefined, useInterfaces);
+  },
+  toProto(message: QueryGetMultiSigConnectionRequest): Uint8Array {
+    return QueryGetMultiSigConnectionRequest.encode(message).finish();
+  },
+  toProtoMsg(message: QueryGetMultiSigConnectionRequest): QueryGetMultiSigConnectionRequestProtoMsg {
+    return {
+      typeUrl: "/pryzm.icstaking.v1.QueryGetMultiSigConnectionRequest",
+      value: QueryGetMultiSigConnectionRequest.encode(message).finish()
+    };
+  }
+};
+GlobalDecoderRegistry.register(QueryGetMultiSigConnectionRequest.typeUrl, QueryGetMultiSigConnectionRequest);
+function createBaseQueryGetMultiSigConnectionResponse(): QueryGetMultiSigConnectionResponse {
+  return {
+    multiSigConnection: MultiSigConnection.fromPartial({})
+  };
+}
+export const QueryGetMultiSigConnectionResponse = {
+  typeUrl: "/pryzm.icstaking.v1.QueryGetMultiSigConnectionResponse",
+  is(o: any): o is QueryGetMultiSigConnectionResponse {
+    return o && (o.$typeUrl === QueryGetMultiSigConnectionResponse.typeUrl || MultiSigConnection.is(o.multiSigConnection));
+  },
+  isSDK(o: any): o is QueryGetMultiSigConnectionResponseSDKType {
+    return o && (o.$typeUrl === QueryGetMultiSigConnectionResponse.typeUrl || MultiSigConnection.isSDK(o.multi_sig_connection));
+  },
+  isAmino(o: any): o is QueryGetMultiSigConnectionResponseAmino {
+    return o && (o.$typeUrl === QueryGetMultiSigConnectionResponse.typeUrl || MultiSigConnection.isAmino(o.multi_sig_connection));
+  },
+  encode(message: QueryGetMultiSigConnectionResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    if (message.multiSigConnection !== undefined) {
+      MultiSigConnection.encode(message.multiSigConnection, writer.uint32(10).fork()).ldelim();
+    }
+    return writer;
+  },
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): QueryGetMultiSigConnectionResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseQueryGetMultiSigConnectionResponse();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.multiSigConnection = MultiSigConnection.decode(reader, reader.uint32(), useInterfaces);
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromJSON(object: any): QueryGetMultiSigConnectionResponse {
+    return {
+      multiSigConnection: isSet(object.multiSigConnection) ? MultiSigConnection.fromJSON(object.multiSigConnection) : undefined
+    };
+  },
+  toJSON(message: QueryGetMultiSigConnectionResponse): unknown {
+    const obj: any = {};
+    message.multiSigConnection !== undefined && (obj.multiSigConnection = message.multiSigConnection ? MultiSigConnection.toJSON(message.multiSigConnection) : undefined);
+    return obj;
+  },
+  fromPartial(object: Partial<QueryGetMultiSigConnectionResponse>): QueryGetMultiSigConnectionResponse {
+    const message = createBaseQueryGetMultiSigConnectionResponse();
+    message.multiSigConnection = object.multiSigConnection !== undefined && object.multiSigConnection !== null ? MultiSigConnection.fromPartial(object.multiSigConnection) : undefined;
+    return message;
+  },
+  fromAmino(object: QueryGetMultiSigConnectionResponseAmino): QueryGetMultiSigConnectionResponse {
+    const message = createBaseQueryGetMultiSigConnectionResponse();
+    if (object.multi_sig_connection !== undefined && object.multi_sig_connection !== null) {
+      message.multiSigConnection = MultiSigConnection.fromAmino(object.multi_sig_connection);
+    }
+    return message;
+  },
+  toAmino(message: QueryGetMultiSigConnectionResponse, useInterfaces: boolean = true): QueryGetMultiSigConnectionResponseAmino {
+    const obj: any = {};
+    obj.multi_sig_connection = message.multiSigConnection ? MultiSigConnection.toAmino(message.multiSigConnection, useInterfaces) : undefined;
+    return obj;
+  },
+  fromAminoMsg(object: QueryGetMultiSigConnectionResponseAminoMsg): QueryGetMultiSigConnectionResponse {
+    return QueryGetMultiSigConnectionResponse.fromAmino(object.value);
+  },
+  fromProtoMsg(message: QueryGetMultiSigConnectionResponseProtoMsg, useInterfaces: boolean = true): QueryGetMultiSigConnectionResponse {
+    return QueryGetMultiSigConnectionResponse.decode(message.value, undefined, useInterfaces);
+  },
+  toProto(message: QueryGetMultiSigConnectionResponse): Uint8Array {
+    return QueryGetMultiSigConnectionResponse.encode(message).finish();
+  },
+  toProtoMsg(message: QueryGetMultiSigConnectionResponse): QueryGetMultiSigConnectionResponseProtoMsg {
+    return {
+      typeUrl: "/pryzm.icstaking.v1.QueryGetMultiSigConnectionResponse",
+      value: QueryGetMultiSigConnectionResponse.encode(message).finish()
+    };
+  }
+};
+GlobalDecoderRegistry.register(QueryGetMultiSigConnectionResponse.typeUrl, QueryGetMultiSigConnectionResponse);
+function createBaseQueryAllMultiSigConnectionRequest(): QueryAllMultiSigConnectionRequest {
+  return {
+    pagination: undefined
+  };
+}
+export const QueryAllMultiSigConnectionRequest = {
+  typeUrl: "/pryzm.icstaking.v1.QueryAllMultiSigConnectionRequest",
+  is(o: any): o is QueryAllMultiSigConnectionRequest {
+    return o && o.$typeUrl === QueryAllMultiSigConnectionRequest.typeUrl;
+  },
+  isSDK(o: any): o is QueryAllMultiSigConnectionRequestSDKType {
+    return o && o.$typeUrl === QueryAllMultiSigConnectionRequest.typeUrl;
+  },
+  isAmino(o: any): o is QueryAllMultiSigConnectionRequestAmino {
+    return o && o.$typeUrl === QueryAllMultiSigConnectionRequest.typeUrl;
+  },
+  encode(message: QueryAllMultiSigConnectionRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    if (message.pagination !== undefined) {
+      PageRequest.encode(message.pagination, writer.uint32(10).fork()).ldelim();
+    }
+    return writer;
+  },
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): QueryAllMultiSigConnectionRequest {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseQueryAllMultiSigConnectionRequest();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.pagination = PageRequest.decode(reader, reader.uint32(), useInterfaces);
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromJSON(object: any): QueryAllMultiSigConnectionRequest {
+    return {
+      pagination: isSet(object.pagination) ? PageRequest.fromJSON(object.pagination) : undefined
+    };
+  },
+  toJSON(message: QueryAllMultiSigConnectionRequest): unknown {
+    const obj: any = {};
+    message.pagination !== undefined && (obj.pagination = message.pagination ? PageRequest.toJSON(message.pagination) : undefined);
+    return obj;
+  },
+  fromPartial(object: Partial<QueryAllMultiSigConnectionRequest>): QueryAllMultiSigConnectionRequest {
+    const message = createBaseQueryAllMultiSigConnectionRequest();
+    message.pagination = object.pagination !== undefined && object.pagination !== null ? PageRequest.fromPartial(object.pagination) : undefined;
+    return message;
+  },
+  fromAmino(object: QueryAllMultiSigConnectionRequestAmino): QueryAllMultiSigConnectionRequest {
+    const message = createBaseQueryAllMultiSigConnectionRequest();
+    if (object.pagination !== undefined && object.pagination !== null) {
+      message.pagination = PageRequest.fromAmino(object.pagination);
+    }
+    return message;
+  },
+  toAmino(message: QueryAllMultiSigConnectionRequest, useInterfaces: boolean = true): QueryAllMultiSigConnectionRequestAmino {
+    const obj: any = {};
+    obj.pagination = message.pagination ? PageRequest.toAmino(message.pagination, useInterfaces) : undefined;
+    return obj;
+  },
+  fromAminoMsg(object: QueryAllMultiSigConnectionRequestAminoMsg): QueryAllMultiSigConnectionRequest {
+    return QueryAllMultiSigConnectionRequest.fromAmino(object.value);
+  },
+  fromProtoMsg(message: QueryAllMultiSigConnectionRequestProtoMsg, useInterfaces: boolean = true): QueryAllMultiSigConnectionRequest {
+    return QueryAllMultiSigConnectionRequest.decode(message.value, undefined, useInterfaces);
+  },
+  toProto(message: QueryAllMultiSigConnectionRequest): Uint8Array {
+    return QueryAllMultiSigConnectionRequest.encode(message).finish();
+  },
+  toProtoMsg(message: QueryAllMultiSigConnectionRequest): QueryAllMultiSigConnectionRequestProtoMsg {
+    return {
+      typeUrl: "/pryzm.icstaking.v1.QueryAllMultiSigConnectionRequest",
+      value: QueryAllMultiSigConnectionRequest.encode(message).finish()
+    };
+  }
+};
+GlobalDecoderRegistry.register(QueryAllMultiSigConnectionRequest.typeUrl, QueryAllMultiSigConnectionRequest);
+function createBaseQueryAllMultiSigConnectionResponse(): QueryAllMultiSigConnectionResponse {
+  return {
+    multiSigConnection: [],
+    pagination: undefined
+  };
+}
+export const QueryAllMultiSigConnectionResponse = {
+  typeUrl: "/pryzm.icstaking.v1.QueryAllMultiSigConnectionResponse",
+  is(o: any): o is QueryAllMultiSigConnectionResponse {
+    return o && (o.$typeUrl === QueryAllMultiSigConnectionResponse.typeUrl || Array.isArray(o.multiSigConnection) && (!o.multiSigConnection.length || MultiSigConnection.is(o.multiSigConnection[0])));
+  },
+  isSDK(o: any): o is QueryAllMultiSigConnectionResponseSDKType {
+    return o && (o.$typeUrl === QueryAllMultiSigConnectionResponse.typeUrl || Array.isArray(o.multi_sig_connection) && (!o.multi_sig_connection.length || MultiSigConnection.isSDK(o.multi_sig_connection[0])));
+  },
+  isAmino(o: any): o is QueryAllMultiSigConnectionResponseAmino {
+    return o && (o.$typeUrl === QueryAllMultiSigConnectionResponse.typeUrl || Array.isArray(o.multi_sig_connection) && (!o.multi_sig_connection.length || MultiSigConnection.isAmino(o.multi_sig_connection[0])));
+  },
+  encode(message: QueryAllMultiSigConnectionResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    for (const v of message.multiSigConnection) {
+      MultiSigConnection.encode(v!, writer.uint32(10).fork()).ldelim();
+    }
+    if (message.pagination !== undefined) {
+      PageResponse.encode(message.pagination, writer.uint32(18).fork()).ldelim();
+    }
+    return writer;
+  },
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): QueryAllMultiSigConnectionResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseQueryAllMultiSigConnectionResponse();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.multiSigConnection.push(MultiSigConnection.decode(reader, reader.uint32(), useInterfaces));
+          break;
+        case 2:
+          message.pagination = PageResponse.decode(reader, reader.uint32(), useInterfaces);
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromJSON(object: any): QueryAllMultiSigConnectionResponse {
+    return {
+      multiSigConnection: Array.isArray(object?.multiSigConnection) ? object.multiSigConnection.map((e: any) => MultiSigConnection.fromJSON(e)) : [],
+      pagination: isSet(object.pagination) ? PageResponse.fromJSON(object.pagination) : undefined
+    };
+  },
+  toJSON(message: QueryAllMultiSigConnectionResponse): unknown {
+    const obj: any = {};
+    if (message.multiSigConnection) {
+      obj.multiSigConnection = message.multiSigConnection.map(e => e ? MultiSigConnection.toJSON(e) : undefined);
+    } else {
+      obj.multiSigConnection = [];
+    }
+    message.pagination !== undefined && (obj.pagination = message.pagination ? PageResponse.toJSON(message.pagination) : undefined);
+    return obj;
+  },
+  fromPartial(object: Partial<QueryAllMultiSigConnectionResponse>): QueryAllMultiSigConnectionResponse {
+    const message = createBaseQueryAllMultiSigConnectionResponse();
+    message.multiSigConnection = object.multiSigConnection?.map(e => MultiSigConnection.fromPartial(e)) || [];
+    message.pagination = object.pagination !== undefined && object.pagination !== null ? PageResponse.fromPartial(object.pagination) : undefined;
+    return message;
+  },
+  fromAmino(object: QueryAllMultiSigConnectionResponseAmino): QueryAllMultiSigConnectionResponse {
+    const message = createBaseQueryAllMultiSigConnectionResponse();
+    message.multiSigConnection = object.multi_sig_connection?.map(e => MultiSigConnection.fromAmino(e)) || [];
+    if (object.pagination !== undefined && object.pagination !== null) {
+      message.pagination = PageResponse.fromAmino(object.pagination);
+    }
+    return message;
+  },
+  toAmino(message: QueryAllMultiSigConnectionResponse, useInterfaces: boolean = true): QueryAllMultiSigConnectionResponseAmino {
+    const obj: any = {};
+    if (message.multiSigConnection) {
+      obj.multi_sig_connection = message.multiSigConnection.map(e => e ? MultiSigConnection.toAmino(e, useInterfaces) : undefined);
+    } else {
+      obj.multi_sig_connection = message.multiSigConnection;
+    }
+    obj.pagination = message.pagination ? PageResponse.toAmino(message.pagination, useInterfaces) : undefined;
+    return obj;
+  },
+  fromAminoMsg(object: QueryAllMultiSigConnectionResponseAminoMsg): QueryAllMultiSigConnectionResponse {
+    return QueryAllMultiSigConnectionResponse.fromAmino(object.value);
+  },
+  fromProtoMsg(message: QueryAllMultiSigConnectionResponseProtoMsg, useInterfaces: boolean = true): QueryAllMultiSigConnectionResponse {
+    return QueryAllMultiSigConnectionResponse.decode(message.value, undefined, useInterfaces);
+  },
+  toProto(message: QueryAllMultiSigConnectionResponse): Uint8Array {
+    return QueryAllMultiSigConnectionResponse.encode(message).finish();
+  },
+  toProtoMsg(message: QueryAllMultiSigConnectionResponse): QueryAllMultiSigConnectionResponseProtoMsg {
+    return {
+      typeUrl: "/pryzm.icstaking.v1.QueryAllMultiSigConnectionResponse",
+      value: QueryAllMultiSigConnectionResponse.encode(message).finish()
+    };
+  }
+};
+GlobalDecoderRegistry.register(QueryAllMultiSigConnectionResponse.typeUrl, QueryAllMultiSigConnectionResponse);
+function createBaseQueryGetMultiSigPacketRequest(): QueryGetMultiSigPacketRequest {
+  return {
+    connectionId: "",
+    sequence: BigInt(0)
+  };
+}
+export const QueryGetMultiSigPacketRequest = {
+  typeUrl: "/pryzm.icstaking.v1.QueryGetMultiSigPacketRequest",
+  is(o: any): o is QueryGetMultiSigPacketRequest {
+    return o && (o.$typeUrl === QueryGetMultiSigPacketRequest.typeUrl || typeof o.connectionId === "string" && typeof o.sequence === "bigint");
+  },
+  isSDK(o: any): o is QueryGetMultiSigPacketRequestSDKType {
+    return o && (o.$typeUrl === QueryGetMultiSigPacketRequest.typeUrl || typeof o.connection_id === "string" && typeof o.sequence === "bigint");
+  },
+  isAmino(o: any): o is QueryGetMultiSigPacketRequestAmino {
+    return o && (o.$typeUrl === QueryGetMultiSigPacketRequest.typeUrl || typeof o.connection_id === "string" && typeof o.sequence === "bigint");
+  },
+  encode(message: QueryGetMultiSigPacketRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    if (message.connectionId !== "") {
+      writer.uint32(10).string(message.connectionId);
+    }
+    if (message.sequence !== BigInt(0)) {
+      writer.uint32(16).uint64(message.sequence);
+    }
+    return writer;
+  },
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): QueryGetMultiSigPacketRequest {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseQueryGetMultiSigPacketRequest();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.connectionId = reader.string();
+          break;
+        case 2:
+          message.sequence = reader.uint64();
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromJSON(object: any): QueryGetMultiSigPacketRequest {
+    return {
+      connectionId: isSet(object.connectionId) ? String(object.connectionId) : "",
+      sequence: isSet(object.sequence) ? BigInt(object.sequence.toString()) : BigInt(0)
+    };
+  },
+  toJSON(message: QueryGetMultiSigPacketRequest): unknown {
+    const obj: any = {};
+    message.connectionId !== undefined && (obj.connectionId = message.connectionId);
+    message.sequence !== undefined && (obj.sequence = (message.sequence || BigInt(0)).toString());
+    return obj;
+  },
+  fromPartial(object: Partial<QueryGetMultiSigPacketRequest>): QueryGetMultiSigPacketRequest {
+    const message = createBaseQueryGetMultiSigPacketRequest();
+    message.connectionId = object.connectionId ?? "";
+    message.sequence = object.sequence !== undefined && object.sequence !== null ? BigInt(object.sequence.toString()) : BigInt(0);
+    return message;
+  },
+  fromAmino(object: QueryGetMultiSigPacketRequestAmino): QueryGetMultiSigPacketRequest {
+    const message = createBaseQueryGetMultiSigPacketRequest();
+    if (object.connection_id !== undefined && object.connection_id !== null) {
+      message.connectionId = object.connection_id;
+    }
+    if (object.sequence !== undefined && object.sequence !== null) {
+      message.sequence = BigInt(object.sequence);
+    }
+    return message;
+  },
+  toAmino(message: QueryGetMultiSigPacketRequest, useInterfaces: boolean = true): QueryGetMultiSigPacketRequestAmino {
+    const obj: any = {};
+    obj.connection_id = message.connectionId === "" ? undefined : message.connectionId;
+    obj.sequence = message.sequence ? message.sequence.toString() : undefined;
+    return obj;
+  },
+  fromAminoMsg(object: QueryGetMultiSigPacketRequestAminoMsg): QueryGetMultiSigPacketRequest {
+    return QueryGetMultiSigPacketRequest.fromAmino(object.value);
+  },
+  fromProtoMsg(message: QueryGetMultiSigPacketRequestProtoMsg, useInterfaces: boolean = true): QueryGetMultiSigPacketRequest {
+    return QueryGetMultiSigPacketRequest.decode(message.value, undefined, useInterfaces);
+  },
+  toProto(message: QueryGetMultiSigPacketRequest): Uint8Array {
+    return QueryGetMultiSigPacketRequest.encode(message).finish();
+  },
+  toProtoMsg(message: QueryGetMultiSigPacketRequest): QueryGetMultiSigPacketRequestProtoMsg {
+    return {
+      typeUrl: "/pryzm.icstaking.v1.QueryGetMultiSigPacketRequest",
+      value: QueryGetMultiSigPacketRequest.encode(message).finish()
+    };
+  }
+};
+GlobalDecoderRegistry.register(QueryGetMultiSigPacketRequest.typeUrl, QueryGetMultiSigPacketRequest);
+function createBaseQueryGetMultiSigPacketResponse(): QueryGetMultiSigPacketResponse {
+  return {
+    multiSigPacket: MultiSigPacket.fromPartial({})
+  };
+}
+export const QueryGetMultiSigPacketResponse = {
+  typeUrl: "/pryzm.icstaking.v1.QueryGetMultiSigPacketResponse",
+  is(o: any): o is QueryGetMultiSigPacketResponse {
+    return o && (o.$typeUrl === QueryGetMultiSigPacketResponse.typeUrl || MultiSigPacket.is(o.multiSigPacket));
+  },
+  isSDK(o: any): o is QueryGetMultiSigPacketResponseSDKType {
+    return o && (o.$typeUrl === QueryGetMultiSigPacketResponse.typeUrl || MultiSigPacket.isSDK(o.multi_sig_packet));
+  },
+  isAmino(o: any): o is QueryGetMultiSigPacketResponseAmino {
+    return o && (o.$typeUrl === QueryGetMultiSigPacketResponse.typeUrl || MultiSigPacket.isAmino(o.multi_sig_packet));
+  },
+  encode(message: QueryGetMultiSigPacketResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    if (message.multiSigPacket !== undefined) {
+      MultiSigPacket.encode(message.multiSigPacket, writer.uint32(10).fork()).ldelim();
+    }
+    return writer;
+  },
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): QueryGetMultiSigPacketResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseQueryGetMultiSigPacketResponse();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.multiSigPacket = MultiSigPacket.decode(reader, reader.uint32(), useInterfaces);
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromJSON(object: any): QueryGetMultiSigPacketResponse {
+    return {
+      multiSigPacket: isSet(object.multiSigPacket) ? MultiSigPacket.fromJSON(object.multiSigPacket) : undefined
+    };
+  },
+  toJSON(message: QueryGetMultiSigPacketResponse): unknown {
+    const obj: any = {};
+    message.multiSigPacket !== undefined && (obj.multiSigPacket = message.multiSigPacket ? MultiSigPacket.toJSON(message.multiSigPacket) : undefined);
+    return obj;
+  },
+  fromPartial(object: Partial<QueryGetMultiSigPacketResponse>): QueryGetMultiSigPacketResponse {
+    const message = createBaseQueryGetMultiSigPacketResponse();
+    message.multiSigPacket = object.multiSigPacket !== undefined && object.multiSigPacket !== null ? MultiSigPacket.fromPartial(object.multiSigPacket) : undefined;
+    return message;
+  },
+  fromAmino(object: QueryGetMultiSigPacketResponseAmino): QueryGetMultiSigPacketResponse {
+    const message = createBaseQueryGetMultiSigPacketResponse();
+    if (object.multi_sig_packet !== undefined && object.multi_sig_packet !== null) {
+      message.multiSigPacket = MultiSigPacket.fromAmino(object.multi_sig_packet);
+    }
+    return message;
+  },
+  toAmino(message: QueryGetMultiSigPacketResponse, useInterfaces: boolean = true): QueryGetMultiSigPacketResponseAmino {
+    const obj: any = {};
+    obj.multi_sig_packet = message.multiSigPacket ? MultiSigPacket.toAmino(message.multiSigPacket, useInterfaces) : undefined;
+    return obj;
+  },
+  fromAminoMsg(object: QueryGetMultiSigPacketResponseAminoMsg): QueryGetMultiSigPacketResponse {
+    return QueryGetMultiSigPacketResponse.fromAmino(object.value);
+  },
+  fromProtoMsg(message: QueryGetMultiSigPacketResponseProtoMsg, useInterfaces: boolean = true): QueryGetMultiSigPacketResponse {
+    return QueryGetMultiSigPacketResponse.decode(message.value, undefined, useInterfaces);
+  },
+  toProto(message: QueryGetMultiSigPacketResponse): Uint8Array {
+    return QueryGetMultiSigPacketResponse.encode(message).finish();
+  },
+  toProtoMsg(message: QueryGetMultiSigPacketResponse): QueryGetMultiSigPacketResponseProtoMsg {
+    return {
+      typeUrl: "/pryzm.icstaking.v1.QueryGetMultiSigPacketResponse",
+      value: QueryGetMultiSigPacketResponse.encode(message).finish()
+    };
+  }
+};
+GlobalDecoderRegistry.register(QueryGetMultiSigPacketResponse.typeUrl, QueryGetMultiSigPacketResponse);
+function createBaseQueryAllMultiSigPacketRequest(): QueryAllMultiSigPacketRequest {
+  return {
+    connectionId: undefined,
+    pagination: undefined
+  };
+}
+export const QueryAllMultiSigPacketRequest = {
+  typeUrl: "/pryzm.icstaking.v1.QueryAllMultiSigPacketRequest",
+  is(o: any): o is QueryAllMultiSigPacketRequest {
+    return o && o.$typeUrl === QueryAllMultiSigPacketRequest.typeUrl;
+  },
+  isSDK(o: any): o is QueryAllMultiSigPacketRequestSDKType {
+    return o && o.$typeUrl === QueryAllMultiSigPacketRequest.typeUrl;
+  },
+  isAmino(o: any): o is QueryAllMultiSigPacketRequestAmino {
+    return o && o.$typeUrl === QueryAllMultiSigPacketRequest.typeUrl;
+  },
+  encode(message: QueryAllMultiSigPacketRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    if (message.connectionId !== undefined) {
+      writer.uint32(10).string(message.connectionId);
+    }
+    if (message.pagination !== undefined) {
+      PageRequest.encode(message.pagination, writer.uint32(18).fork()).ldelim();
+    }
+    return writer;
+  },
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): QueryAllMultiSigPacketRequest {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseQueryAllMultiSigPacketRequest();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.connectionId = reader.string();
+          break;
+        case 2:
+          message.pagination = PageRequest.decode(reader, reader.uint32(), useInterfaces);
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromJSON(object: any): QueryAllMultiSigPacketRequest {
+    return {
+      connectionId: isSet(object.connectionId) ? String(object.connectionId) : undefined,
+      pagination: isSet(object.pagination) ? PageRequest.fromJSON(object.pagination) : undefined
+    };
+  },
+  toJSON(message: QueryAllMultiSigPacketRequest): unknown {
+    const obj: any = {};
+    message.connectionId !== undefined && (obj.connectionId = message.connectionId);
+    message.pagination !== undefined && (obj.pagination = message.pagination ? PageRequest.toJSON(message.pagination) : undefined);
+    return obj;
+  },
+  fromPartial(object: Partial<QueryAllMultiSigPacketRequest>): QueryAllMultiSigPacketRequest {
+    const message = createBaseQueryAllMultiSigPacketRequest();
+    message.connectionId = object.connectionId ?? undefined;
+    message.pagination = object.pagination !== undefined && object.pagination !== null ? PageRequest.fromPartial(object.pagination) : undefined;
+    return message;
+  },
+  fromAmino(object: QueryAllMultiSigPacketRequestAmino): QueryAllMultiSigPacketRequest {
+    const message = createBaseQueryAllMultiSigPacketRequest();
+    if (object.connection_id !== undefined && object.connection_id !== null) {
+      message.connectionId = object.connection_id;
+    }
+    if (object.pagination !== undefined && object.pagination !== null) {
+      message.pagination = PageRequest.fromAmino(object.pagination);
+    }
+    return message;
+  },
+  toAmino(message: QueryAllMultiSigPacketRequest, useInterfaces: boolean = true): QueryAllMultiSigPacketRequestAmino {
+    const obj: any = {};
+    obj.connection_id = message.connectionId === null ? undefined : message.connectionId;
+    obj.pagination = message.pagination ? PageRequest.toAmino(message.pagination, useInterfaces) : undefined;
+    return obj;
+  },
+  fromAminoMsg(object: QueryAllMultiSigPacketRequestAminoMsg): QueryAllMultiSigPacketRequest {
+    return QueryAllMultiSigPacketRequest.fromAmino(object.value);
+  },
+  fromProtoMsg(message: QueryAllMultiSigPacketRequestProtoMsg, useInterfaces: boolean = true): QueryAllMultiSigPacketRequest {
+    return QueryAllMultiSigPacketRequest.decode(message.value, undefined, useInterfaces);
+  },
+  toProto(message: QueryAllMultiSigPacketRequest): Uint8Array {
+    return QueryAllMultiSigPacketRequest.encode(message).finish();
+  },
+  toProtoMsg(message: QueryAllMultiSigPacketRequest): QueryAllMultiSigPacketRequestProtoMsg {
+    return {
+      typeUrl: "/pryzm.icstaking.v1.QueryAllMultiSigPacketRequest",
+      value: QueryAllMultiSigPacketRequest.encode(message).finish()
+    };
+  }
+};
+GlobalDecoderRegistry.register(QueryAllMultiSigPacketRequest.typeUrl, QueryAllMultiSigPacketRequest);
+function createBaseQueryAllMultiSigPacketResponse(): QueryAllMultiSigPacketResponse {
+  return {
+    multiSigPacket: [],
+    pagination: undefined
+  };
+}
+export const QueryAllMultiSigPacketResponse = {
+  typeUrl: "/pryzm.icstaking.v1.QueryAllMultiSigPacketResponse",
+  is(o: any): o is QueryAllMultiSigPacketResponse {
+    return o && (o.$typeUrl === QueryAllMultiSigPacketResponse.typeUrl || Array.isArray(o.multiSigPacket) && (!o.multiSigPacket.length || MultiSigPacket.is(o.multiSigPacket[0])));
+  },
+  isSDK(o: any): o is QueryAllMultiSigPacketResponseSDKType {
+    return o && (o.$typeUrl === QueryAllMultiSigPacketResponse.typeUrl || Array.isArray(o.multi_sig_packet) && (!o.multi_sig_packet.length || MultiSigPacket.isSDK(o.multi_sig_packet[0])));
+  },
+  isAmino(o: any): o is QueryAllMultiSigPacketResponseAmino {
+    return o && (o.$typeUrl === QueryAllMultiSigPacketResponse.typeUrl || Array.isArray(o.multi_sig_packet) && (!o.multi_sig_packet.length || MultiSigPacket.isAmino(o.multi_sig_packet[0])));
+  },
+  encode(message: QueryAllMultiSigPacketResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    for (const v of message.multiSigPacket) {
+      MultiSigPacket.encode(v!, writer.uint32(10).fork()).ldelim();
+    }
+    if (message.pagination !== undefined) {
+      PageResponse.encode(message.pagination, writer.uint32(18).fork()).ldelim();
+    }
+    return writer;
+  },
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): QueryAllMultiSigPacketResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseQueryAllMultiSigPacketResponse();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.multiSigPacket.push(MultiSigPacket.decode(reader, reader.uint32(), useInterfaces));
+          break;
+        case 2:
+          message.pagination = PageResponse.decode(reader, reader.uint32(), useInterfaces);
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromJSON(object: any): QueryAllMultiSigPacketResponse {
+    return {
+      multiSigPacket: Array.isArray(object?.multiSigPacket) ? object.multiSigPacket.map((e: any) => MultiSigPacket.fromJSON(e)) : [],
+      pagination: isSet(object.pagination) ? PageResponse.fromJSON(object.pagination) : undefined
+    };
+  },
+  toJSON(message: QueryAllMultiSigPacketResponse): unknown {
+    const obj: any = {};
+    if (message.multiSigPacket) {
+      obj.multiSigPacket = message.multiSigPacket.map(e => e ? MultiSigPacket.toJSON(e) : undefined);
+    } else {
+      obj.multiSigPacket = [];
+    }
+    message.pagination !== undefined && (obj.pagination = message.pagination ? PageResponse.toJSON(message.pagination) : undefined);
+    return obj;
+  },
+  fromPartial(object: Partial<QueryAllMultiSigPacketResponse>): QueryAllMultiSigPacketResponse {
+    const message = createBaseQueryAllMultiSigPacketResponse();
+    message.multiSigPacket = object.multiSigPacket?.map(e => MultiSigPacket.fromPartial(e)) || [];
+    message.pagination = object.pagination !== undefined && object.pagination !== null ? PageResponse.fromPartial(object.pagination) : undefined;
+    return message;
+  },
+  fromAmino(object: QueryAllMultiSigPacketResponseAmino): QueryAllMultiSigPacketResponse {
+    const message = createBaseQueryAllMultiSigPacketResponse();
+    message.multiSigPacket = object.multi_sig_packet?.map(e => MultiSigPacket.fromAmino(e)) || [];
+    if (object.pagination !== undefined && object.pagination !== null) {
+      message.pagination = PageResponse.fromAmino(object.pagination);
+    }
+    return message;
+  },
+  toAmino(message: QueryAllMultiSigPacketResponse, useInterfaces: boolean = true): QueryAllMultiSigPacketResponseAmino {
+    const obj: any = {};
+    if (message.multiSigPacket) {
+      obj.multi_sig_packet = message.multiSigPacket.map(e => e ? MultiSigPacket.toAmino(e, useInterfaces) : undefined);
+    } else {
+      obj.multi_sig_packet = message.multiSigPacket;
+    }
+    obj.pagination = message.pagination ? PageResponse.toAmino(message.pagination, useInterfaces) : undefined;
+    return obj;
+  },
+  fromAminoMsg(object: QueryAllMultiSigPacketResponseAminoMsg): QueryAllMultiSigPacketResponse {
+    return QueryAllMultiSigPacketResponse.fromAmino(object.value);
+  },
+  fromProtoMsg(message: QueryAllMultiSigPacketResponseProtoMsg, useInterfaces: boolean = true): QueryAllMultiSigPacketResponse {
+    return QueryAllMultiSigPacketResponse.decode(message.value, undefined, useInterfaces);
+  },
+  toProto(message: QueryAllMultiSigPacketResponse): Uint8Array {
+    return QueryAllMultiSigPacketResponse.encode(message).finish();
+  },
+  toProtoMsg(message: QueryAllMultiSigPacketResponse): QueryAllMultiSigPacketResponseProtoMsg {
+    return {
+      typeUrl: "/pryzm.icstaking.v1.QueryAllMultiSigPacketResponse",
+      value: QueryAllMultiSigPacketResponse.encode(message).finish()
+    };
+  }
+};
+GlobalDecoderRegistry.register(QueryAllMultiSigPacketResponse.typeUrl, QueryAllMultiSigPacketResponse);
+function createBaseQueryAllFailedLsmTransferRequest(): QueryAllFailedLsmTransferRequest {
+  return {
+    hostChain: "",
+    pagination: undefined
+  };
+}
+export const QueryAllFailedLsmTransferRequest = {
+  typeUrl: "/pryzm.icstaking.v1.QueryAllFailedLsmTransferRequest",
+  is(o: any): o is QueryAllFailedLsmTransferRequest {
+    return o && (o.$typeUrl === QueryAllFailedLsmTransferRequest.typeUrl || typeof o.hostChain === "string");
+  },
+  isSDK(o: any): o is QueryAllFailedLsmTransferRequestSDKType {
+    return o && (o.$typeUrl === QueryAllFailedLsmTransferRequest.typeUrl || typeof o.host_chain === "string");
+  },
+  isAmino(o: any): o is QueryAllFailedLsmTransferRequestAmino {
+    return o && (o.$typeUrl === QueryAllFailedLsmTransferRequest.typeUrl || typeof o.host_chain === "string");
+  },
+  encode(message: QueryAllFailedLsmTransferRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    if (message.hostChain !== "") {
+      writer.uint32(10).string(message.hostChain);
+    }
+    if (message.pagination !== undefined) {
+      PageRequest.encode(message.pagination, writer.uint32(18).fork()).ldelim();
+    }
+    return writer;
+  },
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): QueryAllFailedLsmTransferRequest {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseQueryAllFailedLsmTransferRequest();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.hostChain = reader.string();
+          break;
+        case 2:
+          message.pagination = PageRequest.decode(reader, reader.uint32(), useInterfaces);
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromJSON(object: any): QueryAllFailedLsmTransferRequest {
+    return {
+      hostChain: isSet(object.hostChain) ? String(object.hostChain) : "",
+      pagination: isSet(object.pagination) ? PageRequest.fromJSON(object.pagination) : undefined
+    };
+  },
+  toJSON(message: QueryAllFailedLsmTransferRequest): unknown {
+    const obj: any = {};
+    message.hostChain !== undefined && (obj.hostChain = message.hostChain);
+    message.pagination !== undefined && (obj.pagination = message.pagination ? PageRequest.toJSON(message.pagination) : undefined);
+    return obj;
+  },
+  fromPartial(object: Partial<QueryAllFailedLsmTransferRequest>): QueryAllFailedLsmTransferRequest {
+    const message = createBaseQueryAllFailedLsmTransferRequest();
+    message.hostChain = object.hostChain ?? "";
+    message.pagination = object.pagination !== undefined && object.pagination !== null ? PageRequest.fromPartial(object.pagination) : undefined;
+    return message;
+  },
+  fromAmino(object: QueryAllFailedLsmTransferRequestAmino): QueryAllFailedLsmTransferRequest {
+    const message = createBaseQueryAllFailedLsmTransferRequest();
+    if (object.host_chain !== undefined && object.host_chain !== null) {
+      message.hostChain = object.host_chain;
+    }
+    if (object.pagination !== undefined && object.pagination !== null) {
+      message.pagination = PageRequest.fromAmino(object.pagination);
+    }
+    return message;
+  },
+  toAmino(message: QueryAllFailedLsmTransferRequest, useInterfaces: boolean = true): QueryAllFailedLsmTransferRequestAmino {
+    const obj: any = {};
+    obj.host_chain = message.hostChain === "" ? undefined : message.hostChain;
+    obj.pagination = message.pagination ? PageRequest.toAmino(message.pagination, useInterfaces) : undefined;
+    return obj;
+  },
+  fromAminoMsg(object: QueryAllFailedLsmTransferRequestAminoMsg): QueryAllFailedLsmTransferRequest {
+    return QueryAllFailedLsmTransferRequest.fromAmino(object.value);
+  },
+  fromProtoMsg(message: QueryAllFailedLsmTransferRequestProtoMsg, useInterfaces: boolean = true): QueryAllFailedLsmTransferRequest {
+    return QueryAllFailedLsmTransferRequest.decode(message.value, undefined, useInterfaces);
+  },
+  toProto(message: QueryAllFailedLsmTransferRequest): Uint8Array {
+    return QueryAllFailedLsmTransferRequest.encode(message).finish();
+  },
+  toProtoMsg(message: QueryAllFailedLsmTransferRequest): QueryAllFailedLsmTransferRequestProtoMsg {
+    return {
+      typeUrl: "/pryzm.icstaking.v1.QueryAllFailedLsmTransferRequest",
+      value: QueryAllFailedLsmTransferRequest.encode(message).finish()
+    };
+  }
+};
+GlobalDecoderRegistry.register(QueryAllFailedLsmTransferRequest.typeUrl, QueryAllFailedLsmTransferRequest);
+function createBaseQueryAllFailedLsmTransferResponse(): QueryAllFailedLsmTransferResponse {
+  return {
+    failedLsmTransfer: [],
+    pagination: undefined
+  };
+}
+export const QueryAllFailedLsmTransferResponse = {
+  typeUrl: "/pryzm.icstaking.v1.QueryAllFailedLsmTransferResponse",
+  is(o: any): o is QueryAllFailedLsmTransferResponse {
+    return o && (o.$typeUrl === QueryAllFailedLsmTransferResponse.typeUrl || Array.isArray(o.failedLsmTransfer) && (!o.failedLsmTransfer.length || FailedLsmTransfer.is(o.failedLsmTransfer[0])));
+  },
+  isSDK(o: any): o is QueryAllFailedLsmTransferResponseSDKType {
+    return o && (o.$typeUrl === QueryAllFailedLsmTransferResponse.typeUrl || Array.isArray(o.failed_lsm_transfer) && (!o.failed_lsm_transfer.length || FailedLsmTransfer.isSDK(o.failed_lsm_transfer[0])));
+  },
+  isAmino(o: any): o is QueryAllFailedLsmTransferResponseAmino {
+    return o && (o.$typeUrl === QueryAllFailedLsmTransferResponse.typeUrl || Array.isArray(o.failed_lsm_transfer) && (!o.failed_lsm_transfer.length || FailedLsmTransfer.isAmino(o.failed_lsm_transfer[0])));
+  },
+  encode(message: QueryAllFailedLsmTransferResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    for (const v of message.failedLsmTransfer) {
+      FailedLsmTransfer.encode(v!, writer.uint32(10).fork()).ldelim();
+    }
+    if (message.pagination !== undefined) {
+      PageResponse.encode(message.pagination, writer.uint32(18).fork()).ldelim();
+    }
+    return writer;
+  },
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): QueryAllFailedLsmTransferResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseQueryAllFailedLsmTransferResponse();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.failedLsmTransfer.push(FailedLsmTransfer.decode(reader, reader.uint32(), useInterfaces));
+          break;
+        case 2:
+          message.pagination = PageResponse.decode(reader, reader.uint32(), useInterfaces);
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromJSON(object: any): QueryAllFailedLsmTransferResponse {
+    return {
+      failedLsmTransfer: Array.isArray(object?.failedLsmTransfer) ? object.failedLsmTransfer.map((e: any) => FailedLsmTransfer.fromJSON(e)) : [],
+      pagination: isSet(object.pagination) ? PageResponse.fromJSON(object.pagination) : undefined
+    };
+  },
+  toJSON(message: QueryAllFailedLsmTransferResponse): unknown {
+    const obj: any = {};
+    if (message.failedLsmTransfer) {
+      obj.failedLsmTransfer = message.failedLsmTransfer.map(e => e ? FailedLsmTransfer.toJSON(e) : undefined);
+    } else {
+      obj.failedLsmTransfer = [];
+    }
+    message.pagination !== undefined && (obj.pagination = message.pagination ? PageResponse.toJSON(message.pagination) : undefined);
+    return obj;
+  },
+  fromPartial(object: Partial<QueryAllFailedLsmTransferResponse>): QueryAllFailedLsmTransferResponse {
+    const message = createBaseQueryAllFailedLsmTransferResponse();
+    message.failedLsmTransfer = object.failedLsmTransfer?.map(e => FailedLsmTransfer.fromPartial(e)) || [];
+    message.pagination = object.pagination !== undefined && object.pagination !== null ? PageResponse.fromPartial(object.pagination) : undefined;
+    return message;
+  },
+  fromAmino(object: QueryAllFailedLsmTransferResponseAmino): QueryAllFailedLsmTransferResponse {
+    const message = createBaseQueryAllFailedLsmTransferResponse();
+    message.failedLsmTransfer = object.failed_lsm_transfer?.map(e => FailedLsmTransfer.fromAmino(e)) || [];
+    if (object.pagination !== undefined && object.pagination !== null) {
+      message.pagination = PageResponse.fromAmino(object.pagination);
+    }
+    return message;
+  },
+  toAmino(message: QueryAllFailedLsmTransferResponse, useInterfaces: boolean = true): QueryAllFailedLsmTransferResponseAmino {
+    const obj: any = {};
+    if (message.failedLsmTransfer) {
+      obj.failed_lsm_transfer = message.failedLsmTransfer.map(e => e ? FailedLsmTransfer.toAmino(e, useInterfaces) : undefined);
+    } else {
+      obj.failed_lsm_transfer = message.failedLsmTransfer;
+    }
+    obj.pagination = message.pagination ? PageResponse.toAmino(message.pagination, useInterfaces) : undefined;
+    return obj;
+  },
+  fromAminoMsg(object: QueryAllFailedLsmTransferResponseAminoMsg): QueryAllFailedLsmTransferResponse {
+    return QueryAllFailedLsmTransferResponse.fromAmino(object.value);
+  },
+  fromProtoMsg(message: QueryAllFailedLsmTransferResponseProtoMsg, useInterfaces: boolean = true): QueryAllFailedLsmTransferResponse {
+    return QueryAllFailedLsmTransferResponse.decode(message.value, undefined, useInterfaces);
+  },
+  toProto(message: QueryAllFailedLsmTransferResponse): Uint8Array {
+    return QueryAllFailedLsmTransferResponse.encode(message).finish();
+  },
+  toProtoMsg(message: QueryAllFailedLsmTransferResponse): QueryAllFailedLsmTransferResponseProtoMsg {
+    return {
+      typeUrl: "/pryzm.icstaking.v1.QueryAllFailedLsmTransferResponse",
+      value: QueryAllFailedLsmTransferResponse.encode(message).finish()
+    };
+  }
+};
+GlobalDecoderRegistry.register(QueryAllFailedLsmTransferResponse.typeUrl, QueryAllFailedLsmTransferResponse);
+function createBaseQueryAllRedeemableLsmRequest(): QueryAllRedeemableLsmRequest {
+  return {
+    hostChain: "",
+    pagination: undefined
+  };
+}
+export const QueryAllRedeemableLsmRequest = {
+  typeUrl: "/pryzm.icstaking.v1.QueryAllRedeemableLsmRequest",
+  is(o: any): o is QueryAllRedeemableLsmRequest {
+    return o && (o.$typeUrl === QueryAllRedeemableLsmRequest.typeUrl || typeof o.hostChain === "string");
+  },
+  isSDK(o: any): o is QueryAllRedeemableLsmRequestSDKType {
+    return o && (o.$typeUrl === QueryAllRedeemableLsmRequest.typeUrl || typeof o.host_chain === "string");
+  },
+  isAmino(o: any): o is QueryAllRedeemableLsmRequestAmino {
+    return o && (o.$typeUrl === QueryAllRedeemableLsmRequest.typeUrl || typeof o.host_chain === "string");
+  },
+  encode(message: QueryAllRedeemableLsmRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    if (message.hostChain !== "") {
+      writer.uint32(10).string(message.hostChain);
+    }
+    if (message.pagination !== undefined) {
+      PageRequest.encode(message.pagination, writer.uint32(18).fork()).ldelim();
+    }
+    return writer;
+  },
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): QueryAllRedeemableLsmRequest {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseQueryAllRedeemableLsmRequest();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.hostChain = reader.string();
+          break;
+        case 2:
+          message.pagination = PageRequest.decode(reader, reader.uint32(), useInterfaces);
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromJSON(object: any): QueryAllRedeemableLsmRequest {
+    return {
+      hostChain: isSet(object.hostChain) ? String(object.hostChain) : "",
+      pagination: isSet(object.pagination) ? PageRequest.fromJSON(object.pagination) : undefined
+    };
+  },
+  toJSON(message: QueryAllRedeemableLsmRequest): unknown {
+    const obj: any = {};
+    message.hostChain !== undefined && (obj.hostChain = message.hostChain);
+    message.pagination !== undefined && (obj.pagination = message.pagination ? PageRequest.toJSON(message.pagination) : undefined);
+    return obj;
+  },
+  fromPartial(object: Partial<QueryAllRedeemableLsmRequest>): QueryAllRedeemableLsmRequest {
+    const message = createBaseQueryAllRedeemableLsmRequest();
+    message.hostChain = object.hostChain ?? "";
+    message.pagination = object.pagination !== undefined && object.pagination !== null ? PageRequest.fromPartial(object.pagination) : undefined;
+    return message;
+  },
+  fromAmino(object: QueryAllRedeemableLsmRequestAmino): QueryAllRedeemableLsmRequest {
+    const message = createBaseQueryAllRedeemableLsmRequest();
+    if (object.host_chain !== undefined && object.host_chain !== null) {
+      message.hostChain = object.host_chain;
+    }
+    if (object.pagination !== undefined && object.pagination !== null) {
+      message.pagination = PageRequest.fromAmino(object.pagination);
+    }
+    return message;
+  },
+  toAmino(message: QueryAllRedeemableLsmRequest, useInterfaces: boolean = true): QueryAllRedeemableLsmRequestAmino {
+    const obj: any = {};
+    obj.host_chain = message.hostChain === "" ? undefined : message.hostChain;
+    obj.pagination = message.pagination ? PageRequest.toAmino(message.pagination, useInterfaces) : undefined;
+    return obj;
+  },
+  fromAminoMsg(object: QueryAllRedeemableLsmRequestAminoMsg): QueryAllRedeemableLsmRequest {
+    return QueryAllRedeemableLsmRequest.fromAmino(object.value);
+  },
+  fromProtoMsg(message: QueryAllRedeemableLsmRequestProtoMsg, useInterfaces: boolean = true): QueryAllRedeemableLsmRequest {
+    return QueryAllRedeemableLsmRequest.decode(message.value, undefined, useInterfaces);
+  },
+  toProto(message: QueryAllRedeemableLsmRequest): Uint8Array {
+    return QueryAllRedeemableLsmRequest.encode(message).finish();
+  },
+  toProtoMsg(message: QueryAllRedeemableLsmRequest): QueryAllRedeemableLsmRequestProtoMsg {
+    return {
+      typeUrl: "/pryzm.icstaking.v1.QueryAllRedeemableLsmRequest",
+      value: QueryAllRedeemableLsmRequest.encode(message).finish()
+    };
+  }
+};
+GlobalDecoderRegistry.register(QueryAllRedeemableLsmRequest.typeUrl, QueryAllRedeemableLsmRequest);
+function createBaseQueryAllRedeemableLsmResponse(): QueryAllRedeemableLsmResponse {
+  return {
+    redeemableLsm: [],
+    pagination: undefined
+  };
+}
+export const QueryAllRedeemableLsmResponse = {
+  typeUrl: "/pryzm.icstaking.v1.QueryAllRedeemableLsmResponse",
+  is(o: any): o is QueryAllRedeemableLsmResponse {
+    return o && (o.$typeUrl === QueryAllRedeemableLsmResponse.typeUrl || Array.isArray(o.redeemableLsm) && (!o.redeemableLsm.length || RedeemableLsm.is(o.redeemableLsm[0])));
+  },
+  isSDK(o: any): o is QueryAllRedeemableLsmResponseSDKType {
+    return o && (o.$typeUrl === QueryAllRedeemableLsmResponse.typeUrl || Array.isArray(o.redeemable_lsm) && (!o.redeemable_lsm.length || RedeemableLsm.isSDK(o.redeemable_lsm[0])));
+  },
+  isAmino(o: any): o is QueryAllRedeemableLsmResponseAmino {
+    return o && (o.$typeUrl === QueryAllRedeemableLsmResponse.typeUrl || Array.isArray(o.redeemable_lsm) && (!o.redeemable_lsm.length || RedeemableLsm.isAmino(o.redeemable_lsm[0])));
+  },
+  encode(message: QueryAllRedeemableLsmResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    for (const v of message.redeemableLsm) {
+      RedeemableLsm.encode(v!, writer.uint32(10).fork()).ldelim();
+    }
+    if (message.pagination !== undefined) {
+      PageResponse.encode(message.pagination, writer.uint32(18).fork()).ldelim();
+    }
+    return writer;
+  },
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): QueryAllRedeemableLsmResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseQueryAllRedeemableLsmResponse();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.redeemableLsm.push(RedeemableLsm.decode(reader, reader.uint32(), useInterfaces));
+          break;
+        case 2:
+          message.pagination = PageResponse.decode(reader, reader.uint32(), useInterfaces);
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromJSON(object: any): QueryAllRedeemableLsmResponse {
+    return {
+      redeemableLsm: Array.isArray(object?.redeemableLsm) ? object.redeemableLsm.map((e: any) => RedeemableLsm.fromJSON(e)) : [],
+      pagination: isSet(object.pagination) ? PageResponse.fromJSON(object.pagination) : undefined
+    };
+  },
+  toJSON(message: QueryAllRedeemableLsmResponse): unknown {
+    const obj: any = {};
+    if (message.redeemableLsm) {
+      obj.redeemableLsm = message.redeemableLsm.map(e => e ? RedeemableLsm.toJSON(e) : undefined);
+    } else {
+      obj.redeemableLsm = [];
+    }
+    message.pagination !== undefined && (obj.pagination = message.pagination ? PageResponse.toJSON(message.pagination) : undefined);
+    return obj;
+  },
+  fromPartial(object: Partial<QueryAllRedeemableLsmResponse>): QueryAllRedeemableLsmResponse {
+    const message = createBaseQueryAllRedeemableLsmResponse();
+    message.redeemableLsm = object.redeemableLsm?.map(e => RedeemableLsm.fromPartial(e)) || [];
+    message.pagination = object.pagination !== undefined && object.pagination !== null ? PageResponse.fromPartial(object.pagination) : undefined;
+    return message;
+  },
+  fromAmino(object: QueryAllRedeemableLsmResponseAmino): QueryAllRedeemableLsmResponse {
+    const message = createBaseQueryAllRedeemableLsmResponse();
+    message.redeemableLsm = object.redeemable_lsm?.map(e => RedeemableLsm.fromAmino(e)) || [];
+    if (object.pagination !== undefined && object.pagination !== null) {
+      message.pagination = PageResponse.fromAmino(object.pagination);
+    }
+    return message;
+  },
+  toAmino(message: QueryAllRedeemableLsmResponse, useInterfaces: boolean = true): QueryAllRedeemableLsmResponseAmino {
+    const obj: any = {};
+    if (message.redeemableLsm) {
+      obj.redeemable_lsm = message.redeemableLsm.map(e => e ? RedeemableLsm.toAmino(e, useInterfaces) : undefined);
+    } else {
+      obj.redeemable_lsm = message.redeemableLsm;
+    }
+    obj.pagination = message.pagination ? PageResponse.toAmino(message.pagination, useInterfaces) : undefined;
+    return obj;
+  },
+  fromAminoMsg(object: QueryAllRedeemableLsmResponseAminoMsg): QueryAllRedeemableLsmResponse {
+    return QueryAllRedeemableLsmResponse.fromAmino(object.value);
+  },
+  fromProtoMsg(message: QueryAllRedeemableLsmResponseProtoMsg, useInterfaces: boolean = true): QueryAllRedeemableLsmResponse {
+    return QueryAllRedeemableLsmResponse.decode(message.value, undefined, useInterfaces);
+  },
+  toProto(message: QueryAllRedeemableLsmResponse): Uint8Array {
+    return QueryAllRedeemableLsmResponse.encode(message).finish();
+  },
+  toProtoMsg(message: QueryAllRedeemableLsmResponse): QueryAllRedeemableLsmResponseProtoMsg {
+    return {
+      typeUrl: "/pryzm.icstaking.v1.QueryAllRedeemableLsmResponse",
+      value: QueryAllRedeemableLsmResponse.encode(message).finish()
+    };
+  }
+};
+GlobalDecoderRegistry.register(QueryAllRedeemableLsmResponse.typeUrl, QueryAllRedeemableLsmResponse);

@@ -6,8 +6,12 @@ import { GlobalDecoderRegistry } from "../../../registry";
 import { Decimal } from "@cosmjs/math";
 /** The types of available connection protocols */
 export enum ConnectionType {
-  /** ICA - interchain account connection using ibc-go ICS-27 */
-  ICA = 0,
+  /** ConnectionType_ICA - interchain account connection using ibc-go ICS-27 */
+  ConnectionType_ICA = 0,
+  /** ConnectionType_MULTI_SIG - connecting to the host chain using a trusted multi-sig account */
+  ConnectionType_MULTI_SIG = 1,
+  /** ConnectionType_LOOP_BACK - connection to the Pryzm itself */
+  ConnectionType_LOOP_BACK = 2,
   UNRECOGNIZED = -1,
 }
 export const ConnectionTypeSDKType = ConnectionType;
@@ -15,8 +19,14 @@ export const ConnectionTypeAmino = ConnectionType;
 export function connectionTypeFromJSON(object: any): ConnectionType {
   switch (object) {
     case 0:
-    case "ICA":
-      return ConnectionType.ICA;
+    case "ConnectionType_ICA":
+      return ConnectionType.ConnectionType_ICA;
+    case 1:
+    case "ConnectionType_MULTI_SIG":
+      return ConnectionType.ConnectionType_MULTI_SIG;
+    case 2:
+    case "ConnectionType_LOOP_BACK":
+      return ConnectionType.ConnectionType_LOOP_BACK;
     case -1:
     case "UNRECOGNIZED":
     default:
@@ -25,19 +35,23 @@ export function connectionTypeFromJSON(object: any): ConnectionType {
 }
 export function connectionTypeToJSON(object: ConnectionType): string {
   switch (object) {
-    case ConnectionType.ICA:
-      return "ICA";
+    case ConnectionType.ConnectionType_ICA:
+      return "ConnectionType_ICA";
+    case ConnectionType.ConnectionType_MULTI_SIG:
+      return "ConnectionType_MULTI_SIG";
+    case ConnectionType.ConnectionType_LOOP_BACK:
+      return "ConnectionType_LOOP_BACK";
     case ConnectionType.UNRECOGNIZED:
     default:
       return "UNRECOGNIZED";
   }
 }
-/**
- * Types of transfer channels
- * For now it only supports ibc transfer, but transfer bridges support (Axelar, Wormhole, ...) can be added.
- */
+/** Types of transfer channels */
 export enum TransferChannelType {
-  IBC = 0,
+  /** TransferChannelType_IBC - IBC transfer */
+  TransferChannelType_IBC = 0,
+  /** TransferChannelType_LOOP_BACK - transfer to Pryzm itself */
+  TransferChannelType_LOOP_BACK = 1,
   UNRECOGNIZED = -1,
 }
 export const TransferChannelTypeSDKType = TransferChannelType;
@@ -45,8 +59,11 @@ export const TransferChannelTypeAmino = TransferChannelType;
 export function transferChannelTypeFromJSON(object: any): TransferChannelType {
   switch (object) {
     case 0:
-    case "IBC":
-      return TransferChannelType.IBC;
+    case "TransferChannelType_IBC":
+      return TransferChannelType.TransferChannelType_IBC;
+    case 1:
+    case "TransferChannelType_LOOP_BACK":
+      return TransferChannelType.TransferChannelType_LOOP_BACK;
     case -1:
     case "UNRECOGNIZED":
     default:
@@ -55,8 +72,10 @@ export function transferChannelTypeFromJSON(object: any): TransferChannelType {
 }
 export function transferChannelTypeToJSON(object: TransferChannelType): string {
   switch (object) {
-    case TransferChannelType.IBC:
-      return "IBC";
+    case TransferChannelType.TransferChannelType_IBC:
+      return "TransferChannelType_IBC";
+    case TransferChannelType.TransferChannelType_LOOP_BACK:
+      return "TransferChannelType_LOOP_BACK";
     case TransferChannelType.UNRECOGNIZED:
     default:
       return "UNRECOGNIZED";
@@ -110,6 +129,7 @@ export enum State {
   COMPOUNDING = 6,
   COLLECTING = 7,
   SWEEPING = 8,
+  LSM_REDEEMING = 9,
   UNRECOGNIZED = -1,
 }
 export const StateSDKType = State;
@@ -143,6 +163,9 @@ export function stateFromJSON(object: any): State {
     case 8:
     case "SWEEPING":
       return State.SWEEPING;
+    case 9:
+    case "LSM_REDEEMING":
+      return State.LSM_REDEEMING;
     case -1:
     case "UNRECOGNIZED":
     default:
@@ -169,6 +192,8 @@ export function stateToJSON(object: State): string {
       return "COLLECTING";
     case State.SWEEPING:
       return "SWEEPING";
+    case State.LSM_REDEEMING:
+      return "LSM_REDEEMING";
     case State.UNRECOGNIZED:
     default:
       return "UNRECOGNIZED";
@@ -190,6 +215,8 @@ export interface HostChain {
   params: StakingParams;
   /** list of whitelisted validators to which Pryzm sends the staked funds. */
   validators: Validator[];
+  /** If true, Pryzm will allow users to stake using the LSM shares minted on the host chain. */
+  allowLsmShares: boolean;
 }
 export interface HostChainProtoMsg {
   typeUrl: "/pryzm.icstaking.v1.HostChain";
@@ -211,6 +238,8 @@ export interface HostChainAmino {
   params: StakingParamsAmino;
   /** list of whitelisted validators to which Pryzm sends the staked funds. */
   validators?: ValidatorAmino[];
+  /** If true, Pryzm will allow users to stake using the LSM shares minted on the host chain. */
+  allow_lsm_shares?: boolean;
 }
 export interface HostChainAminoMsg {
   type: "/pryzm.icstaking.v1.HostChain";
@@ -225,6 +254,7 @@ export interface HostChainSDKType {
   transfer_channels: TransferChannelSDKType[];
   params: StakingParamsSDKType;
   validators: ValidatorSDKType[];
+  allow_lsm_shares: boolean;
 }
 /** Properties of a transfer channel */
 export interface TransferChannel {
@@ -280,6 +310,8 @@ export interface Validator {
   address: string;
   /** The weight of delegation to the validator. Total weight of all validators per host chain must be equal to 1. */
   weight: string;
+  /** whether users can stake the lsm shares minted from this validator */
+  allowLsmShares: boolean;
 }
 export interface ValidatorProtoMsg {
   typeUrl: "/pryzm.icstaking.v1.Validator";
@@ -290,6 +322,8 @@ export interface ValidatorAmino {
   address?: string;
   /** The weight of delegation to the validator. Total weight of all validators per host chain must be equal to 1. */
   weight?: string;
+  /** whether users can stake the lsm shares minted from this validator */
+  allow_lsm_shares?: boolean;
 }
 export interface ValidatorAminoMsg {
   type: "/pryzm.icstaking.v1.Validator";
@@ -298,6 +332,7 @@ export interface ValidatorAminoMsg {
 export interface ValidatorSDKType {
   address: string;
   weight: string;
+  allow_lsm_shares: boolean;
 }
 /** A subset of state on the host chain needed by Pryzm */
 export interface HostChainState {
@@ -321,6 +356,8 @@ export interface HostChainState {
    * so this is the height of the last received ack from host chain
    */
   lastIdleStateHostHeight: Height;
+  /** The amount of LSM tokens that are in queue to be transferred and redeemed on the host chain */
+  lockedLsmValue: string;
 }
 export interface HostChainStateProtoMsg {
   typeUrl: "/pryzm.icstaking.v1.HostChainState";
@@ -348,6 +385,8 @@ export interface HostChainStateAmino {
    * so this is the height of the last received ack from host chain
    */
   last_idle_state_host_height?: HeightAmino;
+  /** The amount of LSM tokens that are in queue to be transferred and redeemed on the host chain */
+  locked_lsm_value?: string;
 }
 export interface HostChainStateAminoMsg {
   type: "/pryzm.icstaking.v1.HostChainState";
@@ -363,6 +402,7 @@ export interface HostChainStateSDKType {
   exchange_rate: string;
   state: State;
   last_idle_state_host_height: HeightSDKType;
+  locked_lsm_value: string;
 }
 /** The interchain accounts */
 export interface HostAccounts {
@@ -425,16 +465,40 @@ export interface HostAccountSDKType {
   state: AccountState;
 }
 export interface ValidatorState {
+  /** the address of the validator */
   validatorAddress: string;
+  /** the amount of tokens delegated to the validator by PRYZM */
   delegatedAmount: string;
+  /**
+   * total tokens delegated to the validator by all delegators
+   * this is used to calculate the value of the validator's lsm share
+   */
+  totalTokens: string;
+  /**
+   * total shares issued to the validator's delegators
+   * this is used to calculate the value of the validator's lsm share
+   */
+  totalShares: string;
 }
 export interface ValidatorStateProtoMsg {
   typeUrl: "/pryzm.icstaking.v1.ValidatorState";
   value: Uint8Array;
 }
 export interface ValidatorStateAmino {
+  /** the address of the validator */
   validator_address?: string;
+  /** the amount of tokens delegated to the validator by PRYZM */
   delegated_amount?: string;
+  /**
+   * total tokens delegated to the validator by all delegators
+   * this is used to calculate the value of the validator's lsm share
+   */
+  total_tokens?: string;
+  /**
+   * total shares issued to the validator's delegators
+   * this is used to calculate the value of the validator's lsm share
+   */
+  total_shares?: string;
 }
 export interface ValidatorStateAminoMsg {
   type: "/pryzm.icstaking.v1.ValidatorState";
@@ -443,6 +507,8 @@ export interface ValidatorStateAminoMsg {
 export interface ValidatorStateSDKType {
   validator_address: string;
   delegated_amount: string;
+  total_tokens: string;
+  total_shares: string;
 }
 function createBaseHostChain(): HostChain {
   return {
@@ -452,19 +518,20 @@ function createBaseHostChain(): HostChain {
     baseDenom: "",
     transferChannels: [],
     params: StakingParams.fromPartial({}),
-    validators: []
+    validators: [],
+    allowLsmShares: false
   };
 }
 export const HostChain = {
   typeUrl: "/pryzm.icstaking.v1.HostChain",
   is(o: any): o is HostChain {
-    return o && (o.$typeUrl === HostChain.typeUrl || typeof o.id === "string" && isSet(o.connectionType) && typeof o.connectionId === "string" && typeof o.baseDenom === "string" && Array.isArray(o.transferChannels) && (!o.transferChannels.length || TransferChannel.is(o.transferChannels[0])) && StakingParams.is(o.params) && Array.isArray(o.validators) && (!o.validators.length || Validator.is(o.validators[0])));
+    return o && (o.$typeUrl === HostChain.typeUrl || typeof o.id === "string" && isSet(o.connectionType) && typeof o.connectionId === "string" && typeof o.baseDenom === "string" && Array.isArray(o.transferChannels) && (!o.transferChannels.length || TransferChannel.is(o.transferChannels[0])) && StakingParams.is(o.params) && Array.isArray(o.validators) && (!o.validators.length || Validator.is(o.validators[0])) && typeof o.allowLsmShares === "boolean");
   },
   isSDK(o: any): o is HostChainSDKType {
-    return o && (o.$typeUrl === HostChain.typeUrl || typeof o.id === "string" && isSet(o.connection_type) && typeof o.connection_id === "string" && typeof o.base_denom === "string" && Array.isArray(o.transfer_channels) && (!o.transfer_channels.length || TransferChannel.isSDK(o.transfer_channels[0])) && StakingParams.isSDK(o.params) && Array.isArray(o.validators) && (!o.validators.length || Validator.isSDK(o.validators[0])));
+    return o && (o.$typeUrl === HostChain.typeUrl || typeof o.id === "string" && isSet(o.connection_type) && typeof o.connection_id === "string" && typeof o.base_denom === "string" && Array.isArray(o.transfer_channels) && (!o.transfer_channels.length || TransferChannel.isSDK(o.transfer_channels[0])) && StakingParams.isSDK(o.params) && Array.isArray(o.validators) && (!o.validators.length || Validator.isSDK(o.validators[0])) && typeof o.allow_lsm_shares === "boolean");
   },
   isAmino(o: any): o is HostChainAmino {
-    return o && (o.$typeUrl === HostChain.typeUrl || typeof o.id === "string" && isSet(o.connection_type) && typeof o.connection_id === "string" && typeof o.base_denom === "string" && Array.isArray(o.transfer_channels) && (!o.transfer_channels.length || TransferChannel.isAmino(o.transfer_channels[0])) && StakingParams.isAmino(o.params) && Array.isArray(o.validators) && (!o.validators.length || Validator.isAmino(o.validators[0])));
+    return o && (o.$typeUrl === HostChain.typeUrl || typeof o.id === "string" && isSet(o.connection_type) && typeof o.connection_id === "string" && typeof o.base_denom === "string" && Array.isArray(o.transfer_channels) && (!o.transfer_channels.length || TransferChannel.isAmino(o.transfer_channels[0])) && StakingParams.isAmino(o.params) && Array.isArray(o.validators) && (!o.validators.length || Validator.isAmino(o.validators[0])) && typeof o.allow_lsm_shares === "boolean");
   },
   encode(message: HostChain, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.id !== "") {
@@ -487,6 +554,9 @@ export const HostChain = {
     }
     for (const v of message.validators) {
       Validator.encode(v!, writer.uint32(58).fork()).ldelim();
+    }
+    if (message.allowLsmShares === true) {
+      writer.uint32(64).bool(message.allowLsmShares);
     }
     return writer;
   },
@@ -518,6 +588,9 @@ export const HostChain = {
         case 7:
           message.validators.push(Validator.decode(reader, reader.uint32(), useInterfaces));
           break;
+        case 8:
+          message.allowLsmShares = reader.bool();
+          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -533,7 +606,8 @@ export const HostChain = {
       baseDenom: isSet(object.baseDenom) ? String(object.baseDenom) : "",
       transferChannels: Array.isArray(object?.transferChannels) ? object.transferChannels.map((e: any) => TransferChannel.fromJSON(e)) : [],
       params: isSet(object.params) ? StakingParams.fromJSON(object.params) : undefined,
-      validators: Array.isArray(object?.validators) ? object.validators.map((e: any) => Validator.fromJSON(e)) : []
+      validators: Array.isArray(object?.validators) ? object.validators.map((e: any) => Validator.fromJSON(e)) : [],
+      allowLsmShares: isSet(object.allowLsmShares) ? Boolean(object.allowLsmShares) : false
     };
   },
   toJSON(message: HostChain): unknown {
@@ -553,6 +627,7 @@ export const HostChain = {
     } else {
       obj.validators = [];
     }
+    message.allowLsmShares !== undefined && (obj.allowLsmShares = message.allowLsmShares);
     return obj;
   },
   fromPartial(object: Partial<HostChain>): HostChain {
@@ -564,6 +639,7 @@ export const HostChain = {
     message.transferChannels = object.transferChannels?.map(e => TransferChannel.fromPartial(e)) || [];
     message.params = object.params !== undefined && object.params !== null ? StakingParams.fromPartial(object.params) : undefined;
     message.validators = object.validators?.map(e => Validator.fromPartial(e)) || [];
+    message.allowLsmShares = object.allowLsmShares ?? false;
     return message;
   },
   fromAmino(object: HostChainAmino): HostChain {
@@ -585,6 +661,9 @@ export const HostChain = {
       message.params = StakingParams.fromAmino(object.params);
     }
     message.validators = object.validators?.map(e => Validator.fromAmino(e)) || [];
+    if (object.allow_lsm_shares !== undefined && object.allow_lsm_shares !== null) {
+      message.allowLsmShares = object.allow_lsm_shares;
+    }
     return message;
   },
   toAmino(message: HostChain, useInterfaces: boolean = true): HostChainAmino {
@@ -604,6 +683,7 @@ export const HostChain = {
     } else {
       obj.validators = message.validators;
     }
+    obj.allow_lsm_shares = message.allowLsmShares === false ? undefined : message.allowLsmShares;
     return obj;
   },
   fromAminoMsg(object: HostChainAminoMsg): HostChain {
@@ -751,19 +831,20 @@ GlobalDecoderRegistry.register(TransferChannel.typeUrl, TransferChannel);
 function createBaseValidator(): Validator {
   return {
     address: "",
-    weight: ""
+    weight: "",
+    allowLsmShares: false
   };
 }
 export const Validator = {
   typeUrl: "/pryzm.icstaking.v1.Validator",
   is(o: any): o is Validator {
-    return o && (o.$typeUrl === Validator.typeUrl || typeof o.address === "string" && typeof o.weight === "string");
+    return o && (o.$typeUrl === Validator.typeUrl || typeof o.address === "string" && typeof o.weight === "string" && typeof o.allowLsmShares === "boolean");
   },
   isSDK(o: any): o is ValidatorSDKType {
-    return o && (o.$typeUrl === Validator.typeUrl || typeof o.address === "string" && typeof o.weight === "string");
+    return o && (o.$typeUrl === Validator.typeUrl || typeof o.address === "string" && typeof o.weight === "string" && typeof o.allow_lsm_shares === "boolean");
   },
   isAmino(o: any): o is ValidatorAmino {
-    return o && (o.$typeUrl === Validator.typeUrl || typeof o.address === "string" && typeof o.weight === "string");
+    return o && (o.$typeUrl === Validator.typeUrl || typeof o.address === "string" && typeof o.weight === "string" && typeof o.allow_lsm_shares === "boolean");
   },
   encode(message: Validator, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.address !== "") {
@@ -771,6 +852,9 @@ export const Validator = {
     }
     if (message.weight !== "") {
       writer.uint32(18).string(Decimal.fromUserInput(message.weight, 18).atomics);
+    }
+    if (message.allowLsmShares === true) {
+      writer.uint32(24).bool(message.allowLsmShares);
     }
     return writer;
   },
@@ -787,6 +871,9 @@ export const Validator = {
         case 2:
           message.weight = Decimal.fromAtomics(reader.string(), 18).toString();
           break;
+        case 3:
+          message.allowLsmShares = reader.bool();
+          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -797,19 +884,22 @@ export const Validator = {
   fromJSON(object: any): Validator {
     return {
       address: isSet(object.address) ? String(object.address) : "",
-      weight: isSet(object.weight) ? String(object.weight) : ""
+      weight: isSet(object.weight) ? String(object.weight) : "",
+      allowLsmShares: isSet(object.allowLsmShares) ? Boolean(object.allowLsmShares) : false
     };
   },
   toJSON(message: Validator): unknown {
     const obj: any = {};
     message.address !== undefined && (obj.address = message.address);
     message.weight !== undefined && (obj.weight = message.weight);
+    message.allowLsmShares !== undefined && (obj.allowLsmShares = message.allowLsmShares);
     return obj;
   },
   fromPartial(object: Partial<Validator>): Validator {
     const message = createBaseValidator();
     message.address = object.address ?? "";
     message.weight = object.weight ?? "";
+    message.allowLsmShares = object.allowLsmShares ?? false;
     return message;
   },
   fromAmino(object: ValidatorAmino): Validator {
@@ -820,12 +910,16 @@ export const Validator = {
     if (object.weight !== undefined && object.weight !== null) {
       message.weight = object.weight;
     }
+    if (object.allow_lsm_shares !== undefined && object.allow_lsm_shares !== null) {
+      message.allowLsmShares = object.allow_lsm_shares;
+    }
     return message;
   },
   toAmino(message: Validator, useInterfaces: boolean = true): ValidatorAmino {
     const obj: any = {};
     obj.address = message.address === "" ? undefined : message.address;
     obj.weight = padDecimal(message.weight) === "" ? undefined : padDecimal(message.weight);
+    obj.allow_lsm_shares = message.allowLsmShares === false ? undefined : message.allowLsmShares;
     return obj;
   },
   fromAminoMsg(object: ValidatorAminoMsg): Validator {
@@ -854,19 +948,20 @@ function createBaseHostChainState(): HostChainState {
     undelegatedAmountToCollect: "",
     exchangeRate: "",
     state: 0,
-    lastIdleStateHostHeight: Height.fromPartial({})
+    lastIdleStateHostHeight: Height.fromPartial({}),
+    lockedLsmValue: ""
   };
 }
 export const HostChainState = {
   typeUrl: "/pryzm.icstaking.v1.HostChainState",
   is(o: any): o is HostChainState {
-    return o && (o.$typeUrl === HostChainState.typeUrl || typeof o.hostChainId === "string" && HostAccounts.is(o.hostAccounts) && Array.isArray(o.validatorStates) && (!o.validatorStates.length || ValidatorState.is(o.validatorStates[0])) && typeof o.amountToBeDelegated === "string" && typeof o.undelegatedAmountToCollect === "string" && typeof o.exchangeRate === "string" && isSet(o.state) && Height.is(o.lastIdleStateHostHeight));
+    return o && (o.$typeUrl === HostChainState.typeUrl || typeof o.hostChainId === "string" && HostAccounts.is(o.hostAccounts) && Array.isArray(o.validatorStates) && (!o.validatorStates.length || ValidatorState.is(o.validatorStates[0])) && typeof o.amountToBeDelegated === "string" && typeof o.undelegatedAmountToCollect === "string" && typeof o.exchangeRate === "string" && isSet(o.state) && Height.is(o.lastIdleStateHostHeight) && typeof o.lockedLsmValue === "string");
   },
   isSDK(o: any): o is HostChainStateSDKType {
-    return o && (o.$typeUrl === HostChainState.typeUrl || typeof o.host_chain_id === "string" && HostAccounts.isSDK(o.host_accounts) && Array.isArray(o.validator_states) && (!o.validator_states.length || ValidatorState.isSDK(o.validator_states[0])) && typeof o.amount_to_be_delegated === "string" && typeof o.undelegated_amount_to_collect === "string" && typeof o.exchange_rate === "string" && isSet(o.state) && Height.isSDK(o.last_idle_state_host_height));
+    return o && (o.$typeUrl === HostChainState.typeUrl || typeof o.host_chain_id === "string" && HostAccounts.isSDK(o.host_accounts) && Array.isArray(o.validator_states) && (!o.validator_states.length || ValidatorState.isSDK(o.validator_states[0])) && typeof o.amount_to_be_delegated === "string" && typeof o.undelegated_amount_to_collect === "string" && typeof o.exchange_rate === "string" && isSet(o.state) && Height.isSDK(o.last_idle_state_host_height) && typeof o.locked_lsm_value === "string");
   },
   isAmino(o: any): o is HostChainStateAmino {
-    return o && (o.$typeUrl === HostChainState.typeUrl || typeof o.host_chain_id === "string" && HostAccounts.isAmino(o.host_accounts) && Array.isArray(o.validator_states) && (!o.validator_states.length || ValidatorState.isAmino(o.validator_states[0])) && typeof o.amount_to_be_delegated === "string" && typeof o.undelegated_amount_to_collect === "string" && typeof o.exchange_rate === "string" && isSet(o.state) && Height.isAmino(o.last_idle_state_host_height));
+    return o && (o.$typeUrl === HostChainState.typeUrl || typeof o.host_chain_id === "string" && HostAccounts.isAmino(o.host_accounts) && Array.isArray(o.validator_states) && (!o.validator_states.length || ValidatorState.isAmino(o.validator_states[0])) && typeof o.amount_to_be_delegated === "string" && typeof o.undelegated_amount_to_collect === "string" && typeof o.exchange_rate === "string" && isSet(o.state) && Height.isAmino(o.last_idle_state_host_height) && typeof o.locked_lsm_value === "string");
   },
   encode(message: HostChainState, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.hostChainId !== "") {
@@ -892,6 +987,9 @@ export const HostChainState = {
     }
     if (message.lastIdleStateHostHeight !== undefined) {
       Height.encode(message.lastIdleStateHostHeight, writer.uint32(66).fork()).ldelim();
+    }
+    if (message.lockedLsmValue !== "") {
+      writer.uint32(74).string(message.lockedLsmValue);
     }
     return writer;
   },
@@ -926,6 +1024,9 @@ export const HostChainState = {
         case 8:
           message.lastIdleStateHostHeight = Height.decode(reader, reader.uint32(), useInterfaces);
           break;
+        case 9:
+          message.lockedLsmValue = reader.string();
+          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -942,7 +1043,8 @@ export const HostChainState = {
       undelegatedAmountToCollect: isSet(object.undelegatedAmountToCollect) ? String(object.undelegatedAmountToCollect) : "",
       exchangeRate: isSet(object.exchangeRate) ? String(object.exchangeRate) : "",
       state: isSet(object.state) ? stateFromJSON(object.state) : -1,
-      lastIdleStateHostHeight: isSet(object.lastIdleStateHostHeight) ? Height.fromJSON(object.lastIdleStateHostHeight) : undefined
+      lastIdleStateHostHeight: isSet(object.lastIdleStateHostHeight) ? Height.fromJSON(object.lastIdleStateHostHeight) : undefined,
+      lockedLsmValue: isSet(object.lockedLsmValue) ? String(object.lockedLsmValue) : ""
     };
   },
   toJSON(message: HostChainState): unknown {
@@ -959,6 +1061,7 @@ export const HostChainState = {
     message.exchangeRate !== undefined && (obj.exchangeRate = message.exchangeRate);
     message.state !== undefined && (obj.state = stateToJSON(message.state));
     message.lastIdleStateHostHeight !== undefined && (obj.lastIdleStateHostHeight = message.lastIdleStateHostHeight ? Height.toJSON(message.lastIdleStateHostHeight) : undefined);
+    message.lockedLsmValue !== undefined && (obj.lockedLsmValue = message.lockedLsmValue);
     return obj;
   },
   fromPartial(object: Partial<HostChainState>): HostChainState {
@@ -971,6 +1074,7 @@ export const HostChainState = {
     message.exchangeRate = object.exchangeRate ?? "";
     message.state = object.state ?? 0;
     message.lastIdleStateHostHeight = object.lastIdleStateHostHeight !== undefined && object.lastIdleStateHostHeight !== null ? Height.fromPartial(object.lastIdleStateHostHeight) : undefined;
+    message.lockedLsmValue = object.lockedLsmValue ?? "";
     return message;
   },
   fromAmino(object: HostChainStateAmino): HostChainState {
@@ -997,6 +1101,9 @@ export const HostChainState = {
     if (object.last_idle_state_host_height !== undefined && object.last_idle_state_host_height !== null) {
       message.lastIdleStateHostHeight = Height.fromAmino(object.last_idle_state_host_height);
     }
+    if (object.locked_lsm_value !== undefined && object.locked_lsm_value !== null) {
+      message.lockedLsmValue = object.locked_lsm_value;
+    }
     return message;
   },
   toAmino(message: HostChainState, useInterfaces: boolean = true): HostChainStateAmino {
@@ -1013,6 +1120,7 @@ export const HostChainState = {
     obj.exchange_rate = padDecimal(message.exchangeRate) === "" ? undefined : padDecimal(message.exchangeRate);
     obj.state = message.state === 0 ? undefined : message.state;
     obj.last_idle_state_host_height = message.lastIdleStateHostHeight ? Height.toAmino(message.lastIdleStateHostHeight, useInterfaces) : {};
+    obj.locked_lsm_value = message.lockedLsmValue === "" ? undefined : message.lockedLsmValue;
     return obj;
   },
   fromAminoMsg(object: HostChainStateAminoMsg): HostChainState {
@@ -1271,19 +1379,21 @@ GlobalDecoderRegistry.register(HostAccount.typeUrl, HostAccount);
 function createBaseValidatorState(): ValidatorState {
   return {
     validatorAddress: "",
-    delegatedAmount: ""
+    delegatedAmount: "",
+    totalTokens: "",
+    totalShares: ""
   };
 }
 export const ValidatorState = {
   typeUrl: "/pryzm.icstaking.v1.ValidatorState",
   is(o: any): o is ValidatorState {
-    return o && (o.$typeUrl === ValidatorState.typeUrl || typeof o.validatorAddress === "string" && typeof o.delegatedAmount === "string");
+    return o && (o.$typeUrl === ValidatorState.typeUrl || typeof o.validatorAddress === "string" && typeof o.delegatedAmount === "string" && typeof o.totalTokens === "string" && typeof o.totalShares === "string");
   },
   isSDK(o: any): o is ValidatorStateSDKType {
-    return o && (o.$typeUrl === ValidatorState.typeUrl || typeof o.validator_address === "string" && typeof o.delegated_amount === "string");
+    return o && (o.$typeUrl === ValidatorState.typeUrl || typeof o.validator_address === "string" && typeof o.delegated_amount === "string" && typeof o.total_tokens === "string" && typeof o.total_shares === "string");
   },
   isAmino(o: any): o is ValidatorStateAmino {
-    return o && (o.$typeUrl === ValidatorState.typeUrl || typeof o.validator_address === "string" && typeof o.delegated_amount === "string");
+    return o && (o.$typeUrl === ValidatorState.typeUrl || typeof o.validator_address === "string" && typeof o.delegated_amount === "string" && typeof o.total_tokens === "string" && typeof o.total_shares === "string");
   },
   encode(message: ValidatorState, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.validatorAddress !== "") {
@@ -1291,6 +1401,12 @@ export const ValidatorState = {
     }
     if (message.delegatedAmount !== "") {
       writer.uint32(18).string(message.delegatedAmount);
+    }
+    if (message.totalTokens !== "") {
+      writer.uint32(26).string(message.totalTokens);
+    }
+    if (message.totalShares !== "") {
+      writer.uint32(34).string(Decimal.fromUserInput(message.totalShares, 18).atomics);
     }
     return writer;
   },
@@ -1307,6 +1423,12 @@ export const ValidatorState = {
         case 2:
           message.delegatedAmount = reader.string();
           break;
+        case 3:
+          message.totalTokens = reader.string();
+          break;
+        case 4:
+          message.totalShares = Decimal.fromAtomics(reader.string(), 18).toString();
+          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -1317,19 +1439,25 @@ export const ValidatorState = {
   fromJSON(object: any): ValidatorState {
     return {
       validatorAddress: isSet(object.validatorAddress) ? String(object.validatorAddress) : "",
-      delegatedAmount: isSet(object.delegatedAmount) ? String(object.delegatedAmount) : ""
+      delegatedAmount: isSet(object.delegatedAmount) ? String(object.delegatedAmount) : "",
+      totalTokens: isSet(object.totalTokens) ? String(object.totalTokens) : "",
+      totalShares: isSet(object.totalShares) ? String(object.totalShares) : ""
     };
   },
   toJSON(message: ValidatorState): unknown {
     const obj: any = {};
     message.validatorAddress !== undefined && (obj.validatorAddress = message.validatorAddress);
     message.delegatedAmount !== undefined && (obj.delegatedAmount = message.delegatedAmount);
+    message.totalTokens !== undefined && (obj.totalTokens = message.totalTokens);
+    message.totalShares !== undefined && (obj.totalShares = message.totalShares);
     return obj;
   },
   fromPartial(object: Partial<ValidatorState>): ValidatorState {
     const message = createBaseValidatorState();
     message.validatorAddress = object.validatorAddress ?? "";
     message.delegatedAmount = object.delegatedAmount ?? "";
+    message.totalTokens = object.totalTokens ?? "";
+    message.totalShares = object.totalShares ?? "";
     return message;
   },
   fromAmino(object: ValidatorStateAmino): ValidatorState {
@@ -1340,12 +1468,20 @@ export const ValidatorState = {
     if (object.delegated_amount !== undefined && object.delegated_amount !== null) {
       message.delegatedAmount = object.delegated_amount;
     }
+    if (object.total_tokens !== undefined && object.total_tokens !== null) {
+      message.totalTokens = object.total_tokens;
+    }
+    if (object.total_shares !== undefined && object.total_shares !== null) {
+      message.totalShares = object.total_shares;
+    }
     return message;
   },
   toAmino(message: ValidatorState, useInterfaces: boolean = true): ValidatorStateAmino {
     const obj: any = {};
     obj.validator_address = message.validatorAddress === "" ? undefined : message.validatorAddress;
     obj.delegated_amount = message.delegatedAmount === "" ? undefined : message.delegatedAmount;
+    obj.total_tokens = message.totalTokens === "" ? undefined : message.totalTokens;
+    obj.total_shares = padDecimal(message.totalShares) === "" ? undefined : padDecimal(message.totalShares);
     return obj;
   },
   fromAminoMsg(object: ValidatorStateAminoMsg): ValidatorState {

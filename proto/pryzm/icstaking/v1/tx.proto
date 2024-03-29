@@ -6,7 +6,10 @@ import "cosmos/base/v1beta1/coin.proto";
 import "cosmos/msg/v1/msg.proto";
 import "cosmos_proto/cosmos.proto";
 import "gogoproto/gogo.proto";
+import "google/protobuf/wrappers.proto";
+import "ibc/core/client/v1/client.proto";
 import "pryzm/icstaking/v1/host_chain.proto";
+import "pryzm/icstaking/v1/multisig.proto";
 import "pryzm/icstaking/v1/params.proto";
 // this line is used by starport scaffolding # proto/tx/import
 
@@ -20,11 +23,17 @@ service Msg {
   rpc RegisterHostChain(MsgRegisterHostChain) returns (MsgRegisterHostChainResponse);
   rpc UpdateHostChain(MsgUpdateHostChain) returns (MsgUpdateHostChainResponse);
   rpc Stake(MsgStake) returns (MsgStakeResponse);
+  rpc StakeLsmShares(MsgStakeLsmShares) returns (MsgStakeLsmSharesResponse);
   rpc Unstake(MsgUnstake) returns (MsgUnstakeResponse);
   rpc RedeemUnstaked(MsgRedeemUnstaked) returns (MsgRedeemUnstakedResponse);
   rpc InstantUnstake(MsgInstantUnstake) returns (MsgInstantUnstakeResponse);
   rpc RebalanceDelegations(MsgRebalanceDelegations) returns (MsgRebalanceDelegationsResponse);
   rpc RegisterInterchainAccount(MsgRegisterInterchainAccount) returns (MsgRegisterInterchainAccountResponse);
+  rpc CreateMultiSigConnection(MsgCreateMultiSigConnection) returns (MsgCreateMultiSigConnectionResponse);
+  rpc UpdateMultiSigConnection(MsgUpdateMultiSigConnection) returns (MsgUpdateMultiSigConnectionResponse);
+  rpc AcknowledgeMultiSigPacket(MsgAcknowledgeMultiSigPacket) returns (MsgAcknowledgeMultiSigPacketResponse);
+  rpc RegisterHostAccounts(MsgRegisterHostAccounts) returns (MsgRegisterHostAccountsResponse);
+  rpc RetryFailedLsmTransfer(MsgRetryFailedLsmTransfer) returns (MsgRetryFailedLsmTransferResponse);
   // this line is used by starport scaffolding # proto/tx/rpc
 }
 
@@ -69,6 +78,7 @@ message MsgUpdateHostChain {
     (gogoproto.nullable) = true,
     (amino.dont_omitempty) = true
   ];
+  google.protobuf.BoolValue allow_lsm_shares = 5 [(gogoproto.customtype) = "github.com/cosmos/gogoproto/types.BoolValue"];
 }
 
 message MsgUpdateHostChainResponse {}
@@ -89,6 +99,27 @@ message MsgStake {
 }
 
 message MsgStakeResponse {
+  cosmos.base.v1beta1.Coin c_amount = 1 [(gogoproto.nullable) = false];
+  cosmos.base.v1beta1.Coin fee = 2 [(gogoproto.nullable) = false];
+}
+
+message MsgStakeLsmShares {
+  option (cosmos.msg.v1.signer) = "creator";
+  option (amino.name) = "pryzm/icstaking/v1/StakeLsmShares";
+
+  string creator = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
+  string host_chain = 2;
+  string transfer_channel = 3;
+  string lsm_denom = 4;
+  string amount = 5 [
+    (cosmos_proto.scalar) = "cosmos.Int",
+    (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Int",
+    (gogoproto.nullable) = false,
+    (amino.dont_omitempty) = true
+  ];
+}
+
+message MsgStakeLsmSharesResponse {
   cosmos.base.v1beta1.Coin c_amount = 1 [(gogoproto.nullable) = false];
   cosmos.base.v1beta1.Coin fee = 2 [(gogoproto.nullable) = false];
 }
@@ -190,5 +221,65 @@ enum ICARegistrationType {
   // registration of reward account as the withdraw address on the host chain
   REWARD_CLAIMING = 3;
 }
+
+message MsgCreateMultiSigConnection {
+  option (cosmos.msg.v1.signer) = "creator";
+  option (amino.name) = "pryzm/icstaking/v1/CreateMultiSigConn";
+
+  string creator = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
+  string id = 2;
+  string operator = 3 [(cosmos_proto.scalar) = "cosmos.AddressString"];
+}
+
+message MsgCreateMultiSigConnectionResponse {}
+
+message MsgUpdateMultiSigConnection {
+  option (cosmos.msg.v1.signer) = "creator";
+  option (amino.name) = "pryzm/icstaking/v1/UpdateMultiSigConn";
+
+  string creator = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
+  string id = 2;
+  string operator = 3 [(cosmos_proto.scalar) = "cosmos.AddressString"];
+}
+
+message MsgUpdateMultiSigConnectionResponse {}
+
+message MsgAcknowledgeMultiSigPacket {
+  option (cosmos.msg.v1.signer) = "creator";
+  option (amino.name) = "pryzm/icstaking/v1/AckMultiSigPacket";
+
+  string creator = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
+  string connection_id = 2;
+  uint64 sequence = 3;
+  Acknowledgement ack = 4 [(gogoproto.nullable) = false];
+  ibc.core.client.v1.Height height = 5 [(gogoproto.nullable) = false];
+}
+
+message MsgAcknowledgeMultiSigPacketResponse {}
+
+message MsgRegisterHostAccounts {
+  option (cosmos.msg.v1.signer) = "creator";
+  option (amino.name) = "pryzm/icstaking/v1/RegisterHostAccounts";
+
+  string creator = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
+  string host_chain = 2;
+  string delegation_address = 3 [(cosmos_proto.scalar) = "cosmos.AddressString"];
+  string reward_address = 4 [(cosmos_proto.scalar) = "cosmos.AddressString"];
+  string sweep_address = 5 [(cosmos_proto.scalar) = "cosmos.AddressString"];
+}
+
+message MsgRegisterHostAccountsResponse {}
+
+message MsgRetryFailedLsmTransfer {
+  option (cosmos.msg.v1.signer) = "creator";
+  option (amino.name) = "pryzm/icstaking/v1/RetryFailLsmTransfer";
+
+  string creator = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
+  string host_chain = 2;
+  string lsm_denom = 3;
+  string transfer_channel = 4;
+}
+
+message MsgRetryFailedLsmTransferResponse {}
 
 // this line is used by starport scaffolding # proto/tx/message

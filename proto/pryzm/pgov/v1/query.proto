@@ -45,7 +45,7 @@ service Query {
 
   // Queries a list of Vote items.
   rpc VoteAll(QueryAllVoteRequest) returns (QueryAllVoteResponse) {
-    option (google.api.http).get = "/pryzm/pgov/v1/vote";
+    option (google.api.http).get = "/pryzm/pgov/v1/vote/{asset}/{proposal}";
   }
 
   // Queries a Proposal by index.
@@ -118,7 +118,9 @@ message QueryGetVoteResponse {
 }
 
 message QueryAllVoteRequest {
-  cosmos.base.query.v1beta1.PageRequest pagination = 1 [(gogoproto.nullable) = true];
+  string asset = 1;
+  uint64 proposal = 2;
+  cosmos.base.query.v1beta1.PageRequest pagination = 3 [(gogoproto.nullable) = true];
 }
 
 message QueryAllVoteResponse {

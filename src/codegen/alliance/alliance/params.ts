@@ -34,6 +34,7 @@ export interface ParamsSDKType {
 export interface RewardHistory {
   denom: string;
   index: string;
+  alliance: string;
 }
 export interface RewardHistoryProtoMsg {
   typeUrl: "/alliance.alliance.RewardHistory";
@@ -42,6 +43,7 @@ export interface RewardHistoryProtoMsg {
 export interface RewardHistoryAmino {
   denom?: string;
   index?: string;
+  alliance?: string;
 }
 export interface RewardHistoryAminoMsg {
   type: "/alliance.alliance.RewardHistory";
@@ -50,6 +52,7 @@ export interface RewardHistoryAminoMsg {
 export interface RewardHistorySDKType {
   denom: string;
   index: string;
+  alliance: string;
 }
 function createBaseParams(): Params {
   return {
@@ -165,19 +168,20 @@ GlobalDecoderRegistry.register(Params.typeUrl, Params);
 function createBaseRewardHistory(): RewardHistory {
   return {
     denom: "",
-    index: ""
+    index: "",
+    alliance: ""
   };
 }
 export const RewardHistory = {
   typeUrl: "/alliance.alliance.RewardHistory",
   is(o: any): o is RewardHistory {
-    return o && (o.$typeUrl === RewardHistory.typeUrl || typeof o.denom === "string" && typeof o.index === "string");
+    return o && (o.$typeUrl === RewardHistory.typeUrl || typeof o.denom === "string" && typeof o.index === "string" && typeof o.alliance === "string");
   },
   isSDK(o: any): o is RewardHistorySDKType {
-    return o && (o.$typeUrl === RewardHistory.typeUrl || typeof o.denom === "string" && typeof o.index === "string");
+    return o && (o.$typeUrl === RewardHistory.typeUrl || typeof o.denom === "string" && typeof o.index === "string" && typeof o.alliance === "string");
   },
   isAmino(o: any): o is RewardHistoryAmino {
-    return o && (o.$typeUrl === RewardHistory.typeUrl || typeof o.denom === "string" && typeof o.index === "string");
+    return o && (o.$typeUrl === RewardHistory.typeUrl || typeof o.denom === "string" && typeof o.index === "string" && typeof o.alliance === "string");
   },
   encode(message: RewardHistory, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.denom !== "") {
@@ -185,6 +189,9 @@ export const RewardHistory = {
     }
     if (message.index !== "") {
       writer.uint32(18).string(Decimal.fromUserInput(message.index, 18).atomics);
+    }
+    if (message.alliance !== "") {
+      writer.uint32(26).string(message.alliance);
     }
     return writer;
   },
@@ -201,6 +208,9 @@ export const RewardHistory = {
         case 2:
           message.index = Decimal.fromAtomics(reader.string(), 18).toString();
           break;
+        case 3:
+          message.alliance = reader.string();
+          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -211,19 +221,22 @@ export const RewardHistory = {
   fromJSON(object: any): RewardHistory {
     return {
       denom: isSet(object.denom) ? String(object.denom) : "",
-      index: isSet(object.index) ? String(object.index) : ""
+      index: isSet(object.index) ? String(object.index) : "",
+      alliance: isSet(object.alliance) ? String(object.alliance) : ""
     };
   },
   toJSON(message: RewardHistory): unknown {
     const obj: any = {};
     message.denom !== undefined && (obj.denom = message.denom);
     message.index !== undefined && (obj.index = message.index);
+    message.alliance !== undefined && (obj.alliance = message.alliance);
     return obj;
   },
   fromPartial(object: Partial<RewardHistory>): RewardHistory {
     const message = createBaseRewardHistory();
     message.denom = object.denom ?? "";
     message.index = object.index ?? "";
+    message.alliance = object.alliance ?? "";
     return message;
   },
   fromAmino(object: RewardHistoryAmino): RewardHistory {
@@ -234,12 +247,16 @@ export const RewardHistory = {
     if (object.index !== undefined && object.index !== null) {
       message.index = object.index;
     }
+    if (object.alliance !== undefined && object.alliance !== null) {
+      message.alliance = object.alliance;
+    }
     return message;
   },
   toAmino(message: RewardHistory, useInterfaces: boolean = true): RewardHistoryAmino {
     const obj: any = {};
     obj.denom = message.denom === "" ? undefined : message.denom;
     obj.index = padDecimal(message.index) === "" ? undefined : padDecimal(message.index);
+    obj.alliance = message.alliance === "" ? undefined : message.alliance;
     return obj;
   },
   fromAminoMsg(object: RewardHistoryAminoMsg): RewardHistory {

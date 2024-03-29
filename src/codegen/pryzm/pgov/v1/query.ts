@@ -237,6 +237,8 @@ export interface QueryGetVoteResponseSDKType {
   vote: VoteSDKType;
 }
 export interface QueryAllVoteRequest {
+  asset: string;
+  proposal: bigint;
   pagination?: PageRequest;
 }
 export interface QueryAllVoteRequestProtoMsg {
@@ -244,6 +246,8 @@ export interface QueryAllVoteRequestProtoMsg {
   value: Uint8Array;
 }
 export interface QueryAllVoteRequestAmino {
+  asset?: string;
+  proposal?: string;
   pagination?: PageRequestAmino;
 }
 export interface QueryAllVoteRequestAminoMsg {
@@ -251,6 +255,8 @@ export interface QueryAllVoteRequestAminoMsg {
   value: QueryAllVoteRequestAmino;
 }
 export interface QueryAllVoteRequestSDKType {
+  asset: string;
+  proposal: bigint;
   pagination?: PageRequestSDKType;
 }
 export interface QueryAllVoteResponse {
@@ -1456,23 +1462,31 @@ export const QueryGetVoteResponse = {
 GlobalDecoderRegistry.register(QueryGetVoteResponse.typeUrl, QueryGetVoteResponse);
 function createBaseQueryAllVoteRequest(): QueryAllVoteRequest {
   return {
+    asset: "",
+    proposal: BigInt(0),
     pagination: undefined
   };
 }
 export const QueryAllVoteRequest = {
   typeUrl: "/pryzm.pgov.v1.QueryAllVoteRequest",
   is(o: any): o is QueryAllVoteRequest {
-    return o && o.$typeUrl === QueryAllVoteRequest.typeUrl;
+    return o && (o.$typeUrl === QueryAllVoteRequest.typeUrl || typeof o.asset === "string" && typeof o.proposal === "bigint");
   },
   isSDK(o: any): o is QueryAllVoteRequestSDKType {
-    return o && o.$typeUrl === QueryAllVoteRequest.typeUrl;
+    return o && (o.$typeUrl === QueryAllVoteRequest.typeUrl || typeof o.asset === "string" && typeof o.proposal === "bigint");
   },
   isAmino(o: any): o is QueryAllVoteRequestAmino {
-    return o && o.$typeUrl === QueryAllVoteRequest.typeUrl;
+    return o && (o.$typeUrl === QueryAllVoteRequest.typeUrl || typeof o.asset === "string" && typeof o.proposal === "bigint");
   },
   encode(message: QueryAllVoteRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    if (message.asset !== "") {
+      writer.uint32(10).string(message.asset);
+    }
+    if (message.proposal !== BigInt(0)) {
+      writer.uint32(16).uint64(message.proposal);
+    }
     if (message.pagination !== undefined) {
-      PageRequest.encode(message.pagination, writer.uint32(10).fork()).ldelim();
+      PageRequest.encode(message.pagination, writer.uint32(26).fork()).ldelim();
     }
     return writer;
   },
@@ -1484,6 +1498,12 @@ export const QueryAllVoteRequest = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
+          message.asset = reader.string();
+          break;
+        case 2:
+          message.proposal = reader.uint64();
+          break;
+        case 3:
           message.pagination = PageRequest.decode(reader, reader.uint32(), useInterfaces);
           break;
         default:
@@ -1495,21 +1515,33 @@ export const QueryAllVoteRequest = {
   },
   fromJSON(object: any): QueryAllVoteRequest {
     return {
+      asset: isSet(object.asset) ? String(object.asset) : "",
+      proposal: isSet(object.proposal) ? BigInt(object.proposal.toString()) : BigInt(0),
       pagination: isSet(object.pagination) ? PageRequest.fromJSON(object.pagination) : undefined
     };
   },
   toJSON(message: QueryAllVoteRequest): unknown {
     const obj: any = {};
+    message.asset !== undefined && (obj.asset = message.asset);
+    message.proposal !== undefined && (obj.proposal = (message.proposal || BigInt(0)).toString());
     message.pagination !== undefined && (obj.pagination = message.pagination ? PageRequest.toJSON(message.pagination) : undefined);
     return obj;
   },
   fromPartial(object: Partial<QueryAllVoteRequest>): QueryAllVoteRequest {
     const message = createBaseQueryAllVoteRequest();
+    message.asset = object.asset ?? "";
+    message.proposal = object.proposal !== undefined && object.proposal !== null ? BigInt(object.proposal.toString()) : BigInt(0);
     message.pagination = object.pagination !== undefined && object.pagination !== null ? PageRequest.fromPartial(object.pagination) : undefined;
     return message;
   },
   fromAmino(object: QueryAllVoteRequestAmino): QueryAllVoteRequest {
     const message = createBaseQueryAllVoteRequest();
+    if (object.asset !== undefined && object.asset !== null) {
+      message.asset = object.asset;
+    }
+    if (object.proposal !== undefined && object.proposal !== null) {
+      message.proposal = BigInt(object.proposal);
+    }
     if (object.pagination !== undefined && object.pagination !== null) {
       message.pagination = PageRequest.fromAmino(object.pagination);
     }
@@ -1517,6 +1549,8 @@ export const QueryAllVoteRequest = {
   },
   toAmino(message: QueryAllVoteRequest, useInterfaces: boolean = true): QueryAllVoteRequestAmino {
     const obj: any = {};
+    obj.asset = message.asset === "" ? undefined : message.asset;
+    obj.proposal = message.proposal ? message.proposal.toString() : undefined;
     obj.pagination = message.pagination ? PageRequest.toAmino(message.pagination, useInterfaces) : undefined;
     return obj;
   },

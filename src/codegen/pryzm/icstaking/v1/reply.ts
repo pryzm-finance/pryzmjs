@@ -1,4 +1,5 @@
 import { Coin, CoinAmino, CoinSDKType } from "../../../cosmos/base/v1beta1/coin";
+import { RedeemableLsm, RedeemableLsmAmino, RedeemableLsmSDKType } from "./lsm";
 import { BinaryReader, BinaryWriter } from "../../../binary";
 import { isSet, bytesFromBase64, base64FromBytes } from "../../../helpers";
 import { GlobalDecoderRegistry } from "../../../registry";
@@ -6,11 +7,14 @@ import { GlobalDecoderRegistry } from "../../../registry";
 export interface ReplyData {
   /** the identifier of the bridge */
   bridgeId: string;
-  /** the identifier of the sent packet */
+  /** this was the identifier of the sent packet and the key for ReplyData, but from icstaking v3 this field is converted to key string */
+  /** @deprecated */
   packetId: PacketId;
   hostChainId: string;
   /** serialized data shared when handling the packet result */
   data: Uint8Array;
+  /** the identifier of the reply data */
+  key: string;
 }
 export interface ReplyDataProtoMsg {
   typeUrl: "/pryzm.icstaking.v1.ReplyData";
@@ -20,11 +24,14 @@ export interface ReplyDataProtoMsg {
 export interface ReplyDataAmino {
   /** the identifier of the bridge */
   bridge_id?: string;
-  /** the identifier of the sent packet */
+  /** this was the identifier of the sent packet and the key for ReplyData, but from icstaking v3 this field is converted to key string */
+  /** @deprecated */
   packet_id?: PacketIdAmino;
   host_chain_id?: string;
   /** serialized data shared when handling the packet result */
   data?: string;
+  /** the identifier of the reply data */
+  key?: string;
 }
 export interface ReplyDataAminoMsg {
   type: "/pryzm.icstaking.v1.ReplyData";
@@ -33,11 +40,14 @@ export interface ReplyDataAminoMsg {
 /** the stored data for handling the reply of a sent ibc packet */
 export interface ReplyDataSDKType {
   bridge_id: string;
+  /** @deprecated */
   packet_id: PacketIdSDKType;
   host_chain_id: string;
   data: Uint8Array;
+  key: string;
 }
 /** the id for a sent ibc packet */
+/** @deprecated */
 export interface PacketId {
   portId: string;
   channelId: string;
@@ -48,6 +58,7 @@ export interface PacketIdProtoMsg {
   value: Uint8Array;
 }
 /** the id for a sent ibc packet */
+/** @deprecated */
 export interface PacketIdAmino {
   port_id?: string;
   channel_id?: string;
@@ -58,6 +69,7 @@ export interface PacketIdAminoMsg {
   value: PacketIdAmino;
 }
 /** the id for a sent ibc packet */
+/** @deprecated */
 export interface PacketIdSDKType {
   port_id: string;
   channel_id: string;
@@ -120,7 +132,7 @@ export interface DelegateTransferSessionSDKType {
 /** The state of a delegation transfer */
 export interface TransferPacketState {
   /** packet identifier */
-  packetId: string;
+  packetKey: string;
   /** whether the transfer is finalized (either succeeded or failed) */
   finalized: boolean;
 }
@@ -131,7 +143,7 @@ export interface TransferPacketStateProtoMsg {
 /** The state of a delegation transfer */
 export interface TransferPacketStateAmino {
   /** packet identifier */
-  packet_id?: string;
+  packet_key?: string;
   /** whether the transfer is finalized (either succeeded or failed) */
   finalized?: boolean;
 }
@@ -141,7 +153,7 @@ export interface TransferPacketStateAminoMsg {
 }
 /** The state of a delegation transfer */
 export interface TransferPacketStateSDKType {
-  packet_id: string;
+  packet_key: string;
   finalized: boolean;
 }
 /** The reply data for DelegateBridge */
@@ -376,24 +388,79 @@ export interface ChannelSweepSDKType {
   epochs: bigint[];
   amount: string;
 }
+/** Contains info about a single LSM share transfer */
+export interface LsmTransferData {
+  /** which channel is being used to transfer */
+  channel: string;
+  /** the actual denom of the lsm token */
+  denom: string;
+  /** the amount being transferred */
+  amount: string;
+  /** the value of the lsm amount in the terms of host chain's bond token */
+  value: string;
+}
+export interface LsmTransferDataProtoMsg {
+  typeUrl: "/pryzm.icstaking.v1.LsmTransferData";
+  value: Uint8Array;
+}
+/** Contains info about a single LSM share transfer */
+export interface LsmTransferDataAmino {
+  /** which channel is being used to transfer */
+  channel?: string;
+  /** the actual denom of the lsm token */
+  denom?: string;
+  /** the amount being transferred */
+  amount?: string;
+  /** the value of the lsm amount in the terms of host chain's bond token */
+  value?: string;
+}
+export interface LsmTransferDataAminoMsg {
+  type: "/pryzm.icstaking.v1.LsmTransferData";
+  value: LsmTransferDataAmino;
+}
+/** Contains info about a single LSM share transfer */
+export interface LsmTransferDataSDKType {
+  channel: string;
+  denom: string;
+  amount: string;
+  value: string;
+}
+export interface LsmReplyData {
+  redeemableLsmList: RedeemableLsm[];
+}
+export interface LsmReplyDataProtoMsg {
+  typeUrl: "/pryzm.icstaking.v1.LsmReplyData";
+  value: Uint8Array;
+}
+export interface LsmReplyDataAmino {
+  redeemable_lsm_list?: RedeemableLsmAmino[];
+}
+export interface LsmReplyDataAminoMsg {
+  type: "/pryzm.icstaking.v1.LsmReplyData";
+  value: LsmReplyDataAmino;
+}
+export interface LsmReplyDataSDKType {
+  redeemable_lsm_list: RedeemableLsmSDKType[];
+}
 function createBaseReplyData(): ReplyData {
   return {
     bridgeId: "",
     packetId: PacketId.fromPartial({}),
     hostChainId: "",
-    data: new Uint8Array()
+    data: new Uint8Array(),
+    key: ""
   };
 }
 export const ReplyData = {
   typeUrl: "/pryzm.icstaking.v1.ReplyData",
   is(o: any): o is ReplyData {
-    return o && (o.$typeUrl === ReplyData.typeUrl || typeof o.bridgeId === "string" && PacketId.is(o.packetId) && typeof o.hostChainId === "string" && (o.data instanceof Uint8Array || typeof o.data === "string"));
+    return o && (o.$typeUrl === ReplyData.typeUrl || typeof o.bridgeId === "string" && PacketId.is(o.packetId) && typeof o.hostChainId === "string" && (o.data instanceof Uint8Array || typeof o.data === "string") && typeof o.key === "string");
   },
   isSDK(o: any): o is ReplyDataSDKType {
-    return o && (o.$typeUrl === ReplyData.typeUrl || typeof o.bridge_id === "string" && PacketId.isSDK(o.packet_id) && typeof o.host_chain_id === "string" && (o.data instanceof Uint8Array || typeof o.data === "string"));
+    return o && (o.$typeUrl === ReplyData.typeUrl || typeof o.bridge_id === "string" && PacketId.isSDK(o.packet_id) && typeof o.host_chain_id === "string" && (o.data instanceof Uint8Array || typeof o.data === "string") && typeof o.key === "string");
   },
   isAmino(o: any): o is ReplyDataAmino {
-    return o && (o.$typeUrl === ReplyData.typeUrl || typeof o.bridge_id === "string" && PacketId.isAmino(o.packet_id) && typeof o.host_chain_id === "string" && (o.data instanceof Uint8Array || typeof o.data === "string"));
+    return o && (o.$typeUrl === ReplyData.typeUrl || typeof o.bridge_id === "string" && PacketId.isAmino(o.packet_id) && typeof o.host_chain_id === "string" && (o.data instanceof Uint8Array || typeof o.data === "string") && typeof o.key === "string");
   },
   encode(message: ReplyData, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.bridgeId !== "") {
@@ -407,6 +474,9 @@ export const ReplyData = {
     }
     if (message.data.length !== 0) {
       writer.uint32(34).bytes(message.data);
+    }
+    if (message.key !== "") {
+      writer.uint32(42).string(message.key);
     }
     return writer;
   },
@@ -429,6 +499,9 @@ export const ReplyData = {
         case 4:
           message.data = reader.bytes();
           break;
+        case 5:
+          message.key = reader.string();
+          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -441,7 +514,8 @@ export const ReplyData = {
       bridgeId: isSet(object.bridgeId) ? String(object.bridgeId) : "",
       packetId: isSet(object.packetId) ? PacketId.fromJSON(object.packetId) : undefined,
       hostChainId: isSet(object.hostChainId) ? String(object.hostChainId) : "",
-      data: isSet(object.data) ? bytesFromBase64(object.data) : new Uint8Array()
+      data: isSet(object.data) ? bytesFromBase64(object.data) : new Uint8Array(),
+      key: isSet(object.key) ? String(object.key) : ""
     };
   },
   toJSON(message: ReplyData): unknown {
@@ -450,6 +524,7 @@ export const ReplyData = {
     message.packetId !== undefined && (obj.packetId = message.packetId ? PacketId.toJSON(message.packetId) : undefined);
     message.hostChainId !== undefined && (obj.hostChainId = message.hostChainId);
     message.data !== undefined && (obj.data = base64FromBytes(message.data !== undefined ? message.data : new Uint8Array()));
+    message.key !== undefined && (obj.key = message.key);
     return obj;
   },
   fromPartial(object: Partial<ReplyData>): ReplyData {
@@ -458,6 +533,7 @@ export const ReplyData = {
     message.packetId = object.packetId !== undefined && object.packetId !== null ? PacketId.fromPartial(object.packetId) : undefined;
     message.hostChainId = object.hostChainId ?? "";
     message.data = object.data ?? new Uint8Array();
+    message.key = object.key ?? "";
     return message;
   },
   fromAmino(object: ReplyDataAmino): ReplyData {
@@ -474,6 +550,9 @@ export const ReplyData = {
     if (object.data !== undefined && object.data !== null) {
       message.data = bytesFromBase64(object.data);
     }
+    if (object.key !== undefined && object.key !== null) {
+      message.key = object.key;
+    }
     return message;
   },
   toAmino(message: ReplyData, useInterfaces: boolean = true): ReplyDataAmino {
@@ -482,6 +561,7 @@ export const ReplyData = {
     obj.packet_id = message.packetId ? PacketId.toAmino(message.packetId, useInterfaces) : undefined;
     obj.host_chain_id = message.hostChainId === "" ? undefined : message.hostChainId;
     obj.data = message.data ? base64FromBytes(message.data) : undefined;
+    obj.key = message.key === "" ? undefined : message.key;
     return obj;
   },
   fromAminoMsg(object: ReplyDataAminoMsg): ReplyData {
@@ -814,24 +894,24 @@ export const DelegateTransferSession = {
 GlobalDecoderRegistry.register(DelegateTransferSession.typeUrl, DelegateTransferSession);
 function createBaseTransferPacketState(): TransferPacketState {
   return {
-    packetId: "",
+    packetKey: "",
     finalized: false
   };
 }
 export const TransferPacketState = {
   typeUrl: "/pryzm.icstaking.v1.TransferPacketState",
   is(o: any): o is TransferPacketState {
-    return o && (o.$typeUrl === TransferPacketState.typeUrl || typeof o.packetId === "string" && typeof o.finalized === "boolean");
+    return o && (o.$typeUrl === TransferPacketState.typeUrl || typeof o.packetKey === "string" && typeof o.finalized === "boolean");
   },
   isSDK(o: any): o is TransferPacketStateSDKType {
-    return o && (o.$typeUrl === TransferPacketState.typeUrl || typeof o.packet_id === "string" && typeof o.finalized === "boolean");
+    return o && (o.$typeUrl === TransferPacketState.typeUrl || typeof o.packet_key === "string" && typeof o.finalized === "boolean");
   },
   isAmino(o: any): o is TransferPacketStateAmino {
-    return o && (o.$typeUrl === TransferPacketState.typeUrl || typeof o.packet_id === "string" && typeof o.finalized === "boolean");
+    return o && (o.$typeUrl === TransferPacketState.typeUrl || typeof o.packet_key === "string" && typeof o.finalized === "boolean");
   },
   encode(message: TransferPacketState, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
-    if (message.packetId !== "") {
-      writer.uint32(10).string(message.packetId);
+    if (message.packetKey !== "") {
+      writer.uint32(10).string(message.packetKey);
     }
     if (message.finalized === true) {
       writer.uint32(16).bool(message.finalized);
@@ -846,7 +926,7 @@ export const TransferPacketState = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.packetId = reader.string();
+          message.packetKey = reader.string();
           break;
         case 2:
           message.finalized = reader.bool();
@@ -860,26 +940,26 @@ export const TransferPacketState = {
   },
   fromJSON(object: any): TransferPacketState {
     return {
-      packetId: isSet(object.packetId) ? String(object.packetId) : "",
+      packetKey: isSet(object.packetKey) ? String(object.packetKey) : "",
       finalized: isSet(object.finalized) ? Boolean(object.finalized) : false
     };
   },
   toJSON(message: TransferPacketState): unknown {
     const obj: any = {};
-    message.packetId !== undefined && (obj.packetId = message.packetId);
+    message.packetKey !== undefined && (obj.packetKey = message.packetKey);
     message.finalized !== undefined && (obj.finalized = message.finalized);
     return obj;
   },
   fromPartial(object: Partial<TransferPacketState>): TransferPacketState {
     const message = createBaseTransferPacketState();
-    message.packetId = object.packetId ?? "";
+    message.packetKey = object.packetKey ?? "";
     message.finalized = object.finalized ?? false;
     return message;
   },
   fromAmino(object: TransferPacketStateAmino): TransferPacketState {
     const message = createBaseTransferPacketState();
-    if (object.packet_id !== undefined && object.packet_id !== null) {
-      message.packetId = object.packet_id;
+    if (object.packet_key !== undefined && object.packet_key !== null) {
+      message.packetKey = object.packet_key;
     }
     if (object.finalized !== undefined && object.finalized !== null) {
       message.finalized = object.finalized;
@@ -888,7 +968,7 @@ export const TransferPacketState = {
   },
   toAmino(message: TransferPacketState, useInterfaces: boolean = true): TransferPacketStateAmino {
     const obj: any = {};
-    obj.packet_id = message.packetId === "" ? undefined : message.packetId;
+    obj.packet_key = message.packetKey === "" ? undefined : message.packetKey;
     obj.finalized = message.finalized === false ? undefined : message.finalized;
     return obj;
   },
@@ -1919,3 +1999,217 @@ export const ChannelSweep = {
   }
 };
 GlobalDecoderRegistry.register(ChannelSweep.typeUrl, ChannelSweep);
+function createBaseLsmTransferData(): LsmTransferData {
+  return {
+    channel: "",
+    denom: "",
+    amount: "",
+    value: ""
+  };
+}
+export const LsmTransferData = {
+  typeUrl: "/pryzm.icstaking.v1.LsmTransferData",
+  is(o: any): o is LsmTransferData {
+    return o && (o.$typeUrl === LsmTransferData.typeUrl || typeof o.channel === "string" && typeof o.denom === "string" && typeof o.amount === "string" && typeof o.value === "string");
+  },
+  isSDK(o: any): o is LsmTransferDataSDKType {
+    return o && (o.$typeUrl === LsmTransferData.typeUrl || typeof o.channel === "string" && typeof o.denom === "string" && typeof o.amount === "string" && typeof o.value === "string");
+  },
+  isAmino(o: any): o is LsmTransferDataAmino {
+    return o && (o.$typeUrl === LsmTransferData.typeUrl || typeof o.channel === "string" && typeof o.denom === "string" && typeof o.amount === "string" && typeof o.value === "string");
+  },
+  encode(message: LsmTransferData, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    if (message.channel !== "") {
+      writer.uint32(10).string(message.channel);
+    }
+    if (message.denom !== "") {
+      writer.uint32(18).string(message.denom);
+    }
+    if (message.amount !== "") {
+      writer.uint32(26).string(message.amount);
+    }
+    if (message.value !== "") {
+      writer.uint32(34).string(message.value);
+    }
+    return writer;
+  },
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): LsmTransferData {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseLsmTransferData();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.channel = reader.string();
+          break;
+        case 2:
+          message.denom = reader.string();
+          break;
+        case 3:
+          message.amount = reader.string();
+          break;
+        case 4:
+          message.value = reader.string();
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromJSON(object: any): LsmTransferData {
+    return {
+      channel: isSet(object.channel) ? String(object.channel) : "",
+      denom: isSet(object.denom) ? String(object.denom) : "",
+      amount: isSet(object.amount) ? String(object.amount) : "",
+      value: isSet(object.value) ? String(object.value) : ""
+    };
+  },
+  toJSON(message: LsmTransferData): unknown {
+    const obj: any = {};
+    message.channel !== undefined && (obj.channel = message.channel);
+    message.denom !== undefined && (obj.denom = message.denom);
+    message.amount !== undefined && (obj.amount = message.amount);
+    message.value !== undefined && (obj.value = message.value);
+    return obj;
+  },
+  fromPartial(object: Partial<LsmTransferData>): LsmTransferData {
+    const message = createBaseLsmTransferData();
+    message.channel = object.channel ?? "";
+    message.denom = object.denom ?? "";
+    message.amount = object.amount ?? "";
+    message.value = object.value ?? "";
+    return message;
+  },
+  fromAmino(object: LsmTransferDataAmino): LsmTransferData {
+    const message = createBaseLsmTransferData();
+    if (object.channel !== undefined && object.channel !== null) {
+      message.channel = object.channel;
+    }
+    if (object.denom !== undefined && object.denom !== null) {
+      message.denom = object.denom;
+    }
+    if (object.amount !== undefined && object.amount !== null) {
+      message.amount = object.amount;
+    }
+    if (object.value !== undefined && object.value !== null) {
+      message.value = object.value;
+    }
+    return message;
+  },
+  toAmino(message: LsmTransferData, useInterfaces: boolean = true): LsmTransferDataAmino {
+    const obj: any = {};
+    obj.channel = message.channel === "" ? undefined : message.channel;
+    obj.denom = message.denom === "" ? undefined : message.denom;
+    obj.amount = message.amount === "" ? undefined : message.amount;
+    obj.value = message.value === "" ? undefined : message.value;
+    return obj;
+  },
+  fromAminoMsg(object: LsmTransferDataAminoMsg): LsmTransferData {
+    return LsmTransferData.fromAmino(object.value);
+  },
+  fromProtoMsg(message: LsmTransferDataProtoMsg, useInterfaces: boolean = true): LsmTransferData {
+    return LsmTransferData.decode(message.value, undefined, useInterfaces);
+  },
+  toProto(message: LsmTransferData): Uint8Array {
+    return LsmTransferData.encode(message).finish();
+  },
+  toProtoMsg(message: LsmTransferData): LsmTransferDataProtoMsg {
+    return {
+      typeUrl: "/pryzm.icstaking.v1.LsmTransferData",
+      value: LsmTransferData.encode(message).finish()
+    };
+  }
+};
+GlobalDecoderRegistry.register(LsmTransferData.typeUrl, LsmTransferData);
+function createBaseLsmReplyData(): LsmReplyData {
+  return {
+    redeemableLsmList: []
+  };
+}
+export const LsmReplyData = {
+  typeUrl: "/pryzm.icstaking.v1.LsmReplyData",
+  is(o: any): o is LsmReplyData {
+    return o && (o.$typeUrl === LsmReplyData.typeUrl || Array.isArray(o.redeemableLsmList) && (!o.redeemableLsmList.length || RedeemableLsm.is(o.redeemableLsmList[0])));
+  },
+  isSDK(o: any): o is LsmReplyDataSDKType {
+    return o && (o.$typeUrl === LsmReplyData.typeUrl || Array.isArray(o.redeemable_lsm_list) && (!o.redeemable_lsm_list.length || RedeemableLsm.isSDK(o.redeemable_lsm_list[0])));
+  },
+  isAmino(o: any): o is LsmReplyDataAmino {
+    return o && (o.$typeUrl === LsmReplyData.typeUrl || Array.isArray(o.redeemable_lsm_list) && (!o.redeemable_lsm_list.length || RedeemableLsm.isAmino(o.redeemable_lsm_list[0])));
+  },
+  encode(message: LsmReplyData, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    for (const v of message.redeemableLsmList) {
+      RedeemableLsm.encode(v!, writer.uint32(10).fork()).ldelim();
+    }
+    return writer;
+  },
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): LsmReplyData {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseLsmReplyData();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.redeemableLsmList.push(RedeemableLsm.decode(reader, reader.uint32(), useInterfaces));
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromJSON(object: any): LsmReplyData {
+    return {
+      redeemableLsmList: Array.isArray(object?.redeemableLsmList) ? object.redeemableLsmList.map((e: any) => RedeemableLsm.fromJSON(e)) : []
+    };
+  },
+  toJSON(message: LsmReplyData): unknown {
+    const obj: any = {};
+    if (message.redeemableLsmList) {
+      obj.redeemableLsmList = message.redeemableLsmList.map(e => e ? RedeemableLsm.toJSON(e) : undefined);
+    } else {
+      obj.redeemableLsmList = [];
+    }
+    return obj;
+  },
+  fromPartial(object: Partial<LsmReplyData>): LsmReplyData {
+    const message = createBaseLsmReplyData();
+    message.redeemableLsmList = object.redeemableLsmList?.map(e => RedeemableLsm.fromPartial(e)) || [];
+    return message;
+  },
+  fromAmino(object: LsmReplyDataAmino): LsmReplyData {
+    const message = createBaseLsmReplyData();
+    message.redeemableLsmList = object.redeemable_lsm_list?.map(e => RedeemableLsm.fromAmino(e)) || [];
+    return message;
+  },
+  toAmino(message: LsmReplyData, useInterfaces: boolean = true): LsmReplyDataAmino {
+    const obj: any = {};
+    if (message.redeemableLsmList) {
+      obj.redeemable_lsm_list = message.redeemableLsmList.map(e => e ? RedeemableLsm.toAmino(e, useInterfaces) : undefined);
+    } else {
+      obj.redeemable_lsm_list = message.redeemableLsmList;
+    }
+    return obj;
+  },
+  fromAminoMsg(object: LsmReplyDataAminoMsg): LsmReplyData {
+    return LsmReplyData.fromAmino(object.value);
+  },
+  fromProtoMsg(message: LsmReplyDataProtoMsg, useInterfaces: boolean = true): LsmReplyData {
+    return LsmReplyData.decode(message.value, undefined, useInterfaces);
+  },
+  toProto(message: LsmReplyData): Uint8Array {
+    return LsmReplyData.encode(message).finish();
+  },
+  toProtoMsg(message: LsmReplyData): LsmReplyDataProtoMsg {
+    return {
+      typeUrl: "/pryzm.icstaking.v1.LsmReplyData",
+      value: LsmReplyData.encode(message).finish()
+    };
+  }
+};
+GlobalDecoderRegistry.register(LsmReplyData.typeUrl, LsmReplyData);

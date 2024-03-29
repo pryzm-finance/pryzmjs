@@ -2,7 +2,7 @@ import { grpc } from "@improbable-eng/grpc-web";
 import { UnaryMethodDefinitionish } from "../../../grpc-web";
 import { DeepPartial } from "../../../helpers";
 import { BrowserHeaders } from "browser-headers";
-import { QueryParamsRequest, QueryParamsResponse, QueryGetHostChainRequest, QueryGetHostChainResponse, QueryAllHostChainRequest, QueryAllHostChainResponse, QueryGetHostChainStateRequest, QueryGetHostChainStateResponse, QueryAllHostChainStateRequest, QueryAllHostChainStateResponse, QueryGetUndelegationRequest, QueryGetUndelegationResponse, QueryAllUndelegationRequest, QueryAllUndelegationResponse, QueryIncompleteUndelegationRequest, QueryIncompleteUndelegationResponse, QueryGetChannelUndelegationRequest, QueryGetChannelUndelegationResponse, QueryAllChannelUndelegationRequest, QueryAllChannelUndelegationResponse, QueryDelegationQueueBalanceRequest, QueryDelegationQueueBalanceResponse, QueryEpochInfoRequest, QueryEpochInfoResponse, QueryAllReplyDataRequest, QueryAllReplyDataResponse } from "./query";
+import { QueryParamsRequest, QueryParamsResponse, QueryGetHostChainRequest, QueryGetHostChainResponse, QueryAllHostChainRequest, QueryAllHostChainResponse, QueryGetHostChainStateRequest, QueryGetHostChainStateResponse, QueryAllHostChainStateRequest, QueryAllHostChainStateResponse, QueryGetUndelegationRequest, QueryGetUndelegationResponse, QueryAllUndelegationRequest, QueryAllUndelegationResponse, QueryIncompleteUndelegationRequest, QueryIncompleteUndelegationResponse, QueryGetChannelUndelegationRequest, QueryGetChannelUndelegationResponse, QueryAllChannelUndelegationRequest, QueryAllChannelUndelegationResponse, QueryDelegationQueueBalanceRequest, QueryDelegationQueueBalanceResponse, QueryEpochInfoRequest, QueryEpochInfoResponse, QueryAllReplyDataRequest, QueryAllReplyDataResponse, QueryAllRedeemableLsmRequest, QueryAllRedeemableLsmResponse, QueryAllFailedLsmTransferRequest, QueryAllFailedLsmTransferResponse, QueryGetMultiSigConnectionRequest, QueryGetMultiSigConnectionResponse, QueryAllMultiSigConnectionRequest, QueryAllMultiSigConnectionResponse, QueryGetMultiSigPacketRequest, QueryGetMultiSigPacketResponse, QueryAllMultiSigPacketRequest, QueryAllMultiSigPacketResponse } from "./query";
 /** Query defines the gRPC querier service. */
 export interface Query {
   /** Parameters queries the parameters of the module. */
@@ -31,6 +31,18 @@ export interface Query {
   epochInfo(request: DeepPartial<QueryEpochInfoRequest>, metadata?: grpc.Metadata): Promise<QueryEpochInfoResponse>;
   /** Queries the list of reply data */
   replyDataAll(request?: DeepPartial<QueryAllReplyDataRequest>, metadata?: grpc.Metadata): Promise<QueryAllReplyDataResponse>;
+  /** Queries a list of FailedLsmTransfer items. */
+  redeemableLsmAll(request: DeepPartial<QueryAllRedeemableLsmRequest>, metadata?: grpc.Metadata): Promise<QueryAllRedeemableLsmResponse>;
+  /** Queries a list of FailedLsmTransfer items. */
+  failedLsmTransferAll(request: DeepPartial<QueryAllFailedLsmTransferRequest>, metadata?: grpc.Metadata): Promise<QueryAllFailedLsmTransferResponse>;
+  /** Queries a MultiSigConnection by index. */
+  multiSigConnection(request: DeepPartial<QueryGetMultiSigConnectionRequest>, metadata?: grpc.Metadata): Promise<QueryGetMultiSigConnectionResponse>;
+  /** Queries a list of MultiSigConnection items. */
+  multiSigConnectionAll(request?: DeepPartial<QueryAllMultiSigConnectionRequest>, metadata?: grpc.Metadata): Promise<QueryAllMultiSigConnectionResponse>;
+  /** Queries a MultiSigPacket by index. */
+  multiSigPacket(request: DeepPartial<QueryGetMultiSigPacketRequest>, metadata?: grpc.Metadata): Promise<QueryGetMultiSigPacketResponse>;
+  /** Queries a list of MultiSigPacket items. */
+  multiSigPacketAll(request: DeepPartial<QueryAllMultiSigPacketRequest>, metadata?: grpc.Metadata): Promise<QueryAllMultiSigPacketResponse>;
 }
 export class QueryClientImpl implements Query {
   private readonly rpc: Rpc;
@@ -49,6 +61,12 @@ export class QueryClientImpl implements Query {
     this.delegationQueueBalance = this.delegationQueueBalance.bind(this);
     this.epochInfo = this.epochInfo.bind(this);
     this.replyDataAll = this.replyDataAll.bind(this);
+    this.redeemableLsmAll = this.redeemableLsmAll.bind(this);
+    this.failedLsmTransferAll = this.failedLsmTransferAll.bind(this);
+    this.multiSigConnection = this.multiSigConnection.bind(this);
+    this.multiSigConnectionAll = this.multiSigConnectionAll.bind(this);
+    this.multiSigPacket = this.multiSigPacket.bind(this);
+    this.multiSigPacketAll = this.multiSigPacketAll.bind(this);
   }
   params(request: DeepPartial<QueryParamsRequest> = {}, metadata?: grpc.Metadata): Promise<QueryParamsResponse> {
     return this.rpc.unary(QueryParamsDesc, QueryParamsRequest.fromPartial(request as any), metadata);
@@ -94,6 +112,26 @@ export class QueryClientImpl implements Query {
     pagination: undefined
   }, metadata?: grpc.Metadata): Promise<QueryAllReplyDataResponse> {
     return this.rpc.unary(QueryReplyDataAllDesc, QueryAllReplyDataRequest.fromPartial(request as any), metadata);
+  }
+  redeemableLsmAll(request: DeepPartial<QueryAllRedeemableLsmRequest>, metadata?: grpc.Metadata): Promise<QueryAllRedeemableLsmResponse> {
+    return this.rpc.unary(QueryRedeemableLsmAllDesc, QueryAllRedeemableLsmRequest.fromPartial(request as any), metadata);
+  }
+  failedLsmTransferAll(request: DeepPartial<QueryAllFailedLsmTransferRequest>, metadata?: grpc.Metadata): Promise<QueryAllFailedLsmTransferResponse> {
+    return this.rpc.unary(QueryFailedLsmTransferAllDesc, QueryAllFailedLsmTransferRequest.fromPartial(request as any), metadata);
+  }
+  multiSigConnection(request: DeepPartial<QueryGetMultiSigConnectionRequest>, metadata?: grpc.Metadata): Promise<QueryGetMultiSigConnectionResponse> {
+    return this.rpc.unary(QueryMultiSigConnectionDesc, QueryGetMultiSigConnectionRequest.fromPartial(request as any), metadata);
+  }
+  multiSigConnectionAll(request: DeepPartial<QueryAllMultiSigConnectionRequest> = {
+    pagination: undefined
+  }, metadata?: grpc.Metadata): Promise<QueryAllMultiSigConnectionResponse> {
+    return this.rpc.unary(QueryMultiSigConnectionAllDesc, QueryAllMultiSigConnectionRequest.fromPartial(request as any), metadata);
+  }
+  multiSigPacket(request: DeepPartial<QueryGetMultiSigPacketRequest>, metadata?: grpc.Metadata): Promise<QueryGetMultiSigPacketResponse> {
+    return this.rpc.unary(QueryMultiSigPacketDesc, QueryGetMultiSigPacketRequest.fromPartial(request as any), metadata);
+  }
+  multiSigPacketAll(request: DeepPartial<QueryAllMultiSigPacketRequest>, metadata?: grpc.Metadata): Promise<QueryAllMultiSigPacketResponse> {
+    return this.rpc.unary(QueryMultiSigPacketAllDesc, QueryAllMultiSigPacketRequest.fromPartial(request as any), metadata);
   }
 }
 export const QueryDesc = {
@@ -365,6 +403,132 @@ export const QueryReplyDataAllDesc: UnaryMethodDefinitionish = {
     deserializeBinary(data: Uint8Array) {
       return {
         ...QueryAllReplyDataResponse.decode(data),
+        toObject() {
+          return this;
+        }
+      };
+    }
+  } as any)
+};
+export const QueryRedeemableLsmAllDesc: UnaryMethodDefinitionish = {
+  methodName: "RedeemableLsmAll",
+  service: QueryDesc,
+  requestStream: false,
+  responseStream: false,
+  requestType: ({
+    serializeBinary() {
+      return QueryAllRedeemableLsmRequest.encode(this).finish();
+    }
+  } as any),
+  responseType: ({
+    deserializeBinary(data: Uint8Array) {
+      return {
+        ...QueryAllRedeemableLsmResponse.decode(data),
+        toObject() {
+          return this;
+        }
+      };
+    }
+  } as any)
+};
+export const QueryFailedLsmTransferAllDesc: UnaryMethodDefinitionish = {
+  methodName: "FailedLsmTransferAll",
+  service: QueryDesc,
+  requestStream: false,
+  responseStream: false,
+  requestType: ({
+    serializeBinary() {
+      return QueryAllFailedLsmTransferRequest.encode(this).finish();
+    }
+  } as any),
+  responseType: ({
+    deserializeBinary(data: Uint8Array) {
+      return {
+        ...QueryAllFailedLsmTransferResponse.decode(data),
+        toObject() {
+          return this;
+        }
+      };
+    }
+  } as any)
+};
+export const QueryMultiSigConnectionDesc: UnaryMethodDefinitionish = {
+  methodName: "MultiSigConnection",
+  service: QueryDesc,
+  requestStream: false,
+  responseStream: false,
+  requestType: ({
+    serializeBinary() {
+      return QueryGetMultiSigConnectionRequest.encode(this).finish();
+    }
+  } as any),
+  responseType: ({
+    deserializeBinary(data: Uint8Array) {
+      return {
+        ...QueryGetMultiSigConnectionResponse.decode(data),
+        toObject() {
+          return this;
+        }
+      };
+    }
+  } as any)
+};
+export const QueryMultiSigConnectionAllDesc: UnaryMethodDefinitionish = {
+  methodName: "MultiSigConnectionAll",
+  service: QueryDesc,
+  requestStream: false,
+  responseStream: false,
+  requestType: ({
+    serializeBinary() {
+      return QueryAllMultiSigConnectionRequest.encode(this).finish();
+    }
+  } as any),
+  responseType: ({
+    deserializeBinary(data: Uint8Array) {
+      return {
+        ...QueryAllMultiSigConnectionResponse.decode(data),
+        toObject() {
+          return this;
+        }
+      };
+    }
+  } as any)
+};
+export const QueryMultiSigPacketDesc: UnaryMethodDefinitionish = {
+  methodName: "MultiSigPacket",
+  service: QueryDesc,
+  requestStream: false,
+  responseStream: false,
+  requestType: ({
+    serializeBinary() {
+      return QueryGetMultiSigPacketRequest.encode(this).finish();
+    }
+  } as any),
+  responseType: ({
+    deserializeBinary(data: Uint8Array) {
+      return {
+        ...QueryGetMultiSigPacketResponse.decode(data),
+        toObject() {
+          return this;
+        }
+      };
+    }
+  } as any)
+};
+export const QueryMultiSigPacketAllDesc: UnaryMethodDefinitionish = {
+  methodName: "MultiSigPacketAll",
+  service: QueryDesc,
+  requestStream: false,
+  responseStream: false,
+  requestType: ({
+    serializeBinary() {
+      return QueryAllMultiSigPacketRequest.encode(this).finish();
+    }
+  } as any),
+  responseType: ({
+    deserializeBinary(data: Uint8Array) {
+      return {
+        ...QueryAllMultiSigPacketResponse.decode(data),
         toObject() {
           return this;
         }

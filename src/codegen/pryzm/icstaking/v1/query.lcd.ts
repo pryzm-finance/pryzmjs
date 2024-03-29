@@ -1,6 +1,6 @@
 import { setPaginationParams } from "../../../helpers";
 import { LCDClient } from "@refractedlabs/cosmology-lcd-fork";
-import { QueryParamsRequest, QueryParamsResponseSDKType, QueryGetHostChainRequest, QueryGetHostChainResponseSDKType, QueryAllHostChainRequest, QueryAllHostChainResponseSDKType, QueryGetHostChainStateRequest, QueryGetHostChainStateResponseSDKType, QueryAllHostChainStateRequest, QueryAllHostChainStateResponseSDKType, QueryGetUndelegationRequest, QueryGetUndelegationResponseSDKType, QueryAllUndelegationRequest, QueryAllUndelegationResponseSDKType, QueryIncompleteUndelegationRequest, QueryIncompleteUndelegationResponseSDKType, QueryGetChannelUndelegationRequest, QueryGetChannelUndelegationResponseSDKType, QueryAllChannelUndelegationRequest, QueryAllChannelUndelegationResponseSDKType, QueryDelegationQueueBalanceRequest, QueryDelegationQueueBalanceResponseSDKType, QueryEpochInfoRequest, QueryEpochInfoResponseSDKType, QueryAllReplyDataRequest, QueryAllReplyDataResponseSDKType } from "./query";
+import { QueryParamsRequest, QueryParamsResponseSDKType, QueryGetHostChainRequest, QueryGetHostChainResponseSDKType, QueryAllHostChainRequest, QueryAllHostChainResponseSDKType, QueryGetHostChainStateRequest, QueryGetHostChainStateResponseSDKType, QueryAllHostChainStateRequest, QueryAllHostChainStateResponseSDKType, QueryGetUndelegationRequest, QueryGetUndelegationResponseSDKType, QueryAllUndelegationRequest, QueryAllUndelegationResponseSDKType, QueryIncompleteUndelegationRequest, QueryIncompleteUndelegationResponseSDKType, QueryGetChannelUndelegationRequest, QueryGetChannelUndelegationResponseSDKType, QueryAllChannelUndelegationRequest, QueryAllChannelUndelegationResponseSDKType, QueryDelegationQueueBalanceRequest, QueryDelegationQueueBalanceResponseSDKType, QueryEpochInfoRequest, QueryEpochInfoResponseSDKType, QueryAllReplyDataRequest, QueryAllReplyDataResponseSDKType, QueryAllRedeemableLsmRequest, QueryAllRedeemableLsmResponseSDKType, QueryAllFailedLsmTransferRequest, QueryAllFailedLsmTransferResponseSDKType, QueryGetMultiSigConnectionRequest, QueryGetMultiSigConnectionResponseSDKType, QueryAllMultiSigConnectionRequest, QueryAllMultiSigConnectionResponseSDKType, QueryGetMultiSigPacketRequest, QueryGetMultiSigPacketResponseSDKType, QueryAllMultiSigPacketRequest, QueryAllMultiSigPacketResponseSDKType } from "./query";
 export class LCDQueryClient {
   req: LCDClient;
   constructor({
@@ -22,6 +22,12 @@ export class LCDQueryClient {
     this.delegationQueueBalance = this.delegationQueueBalance.bind(this);
     this.epochInfo = this.epochInfo.bind(this);
     this.replyDataAll = this.replyDataAll.bind(this);
+    this.redeemableLsmAll = this.redeemableLsmAll.bind(this);
+    this.failedLsmTransferAll = this.failedLsmTransferAll.bind(this);
+    this.multiSigConnection = this.multiSigConnection.bind(this);
+    this.multiSigConnectionAll = this.multiSigConnectionAll.bind(this);
+    this.multiSigPacket = this.multiSigPacket.bind(this);
+    this.multiSigPacketAll = this.multiSigPacketAll.bind(this);
   }
   /* Parameters queries the parameters of the module. */
   async params(_params: QueryParamsRequest = {}): Promise<QueryParamsResponseSDKType> {
@@ -138,5 +144,70 @@ export class LCDQueryClient {
     }
     const endpoint = `pryzm/icstaking/v1/reply_data`;
     return await this.req.get<QueryAllReplyDataResponseSDKType>(endpoint, options);
+  }
+  /* Queries a list of FailedLsmTransfer items. */
+  async redeemableLsmAll(params: QueryAllRedeemableLsmRequest): Promise<QueryAllRedeemableLsmResponseSDKType> {
+    const options: any = {
+      params: {}
+    };
+    if (typeof params?.hostChain !== "undefined") {
+      options.params.host_chain = params.hostChain;
+    }
+    if (typeof params?.pagination !== "undefined") {
+      setPaginationParams(options, params.pagination);
+    }
+    const endpoint = `pryzm/icstaking/v1/redeemable_lsm`;
+    return await this.req.get<QueryAllRedeemableLsmResponseSDKType>(endpoint, options);
+  }
+  /* Queries a list of FailedLsmTransfer items. */
+  async failedLsmTransferAll(params: QueryAllFailedLsmTransferRequest): Promise<QueryAllFailedLsmTransferResponseSDKType> {
+    const options: any = {
+      params: {}
+    };
+    if (typeof params?.hostChain !== "undefined") {
+      options.params.host_chain = params.hostChain;
+    }
+    if (typeof params?.pagination !== "undefined") {
+      setPaginationParams(options, params.pagination);
+    }
+    const endpoint = `pryzm/icstaking/v1/failed_lsm_transfer`;
+    return await this.req.get<QueryAllFailedLsmTransferResponseSDKType>(endpoint, options);
+  }
+  /* Queries a MultiSigConnection by index. */
+  async multiSigConnection(params: QueryGetMultiSigConnectionRequest): Promise<QueryGetMultiSigConnectionResponseSDKType> {
+    const endpoint = `pryzm/icstaking/v1/multi_sig_connection/${params.id}`;
+    return await this.req.get<QueryGetMultiSigConnectionResponseSDKType>(endpoint);
+  }
+  /* Queries a list of MultiSigConnection items. */
+  async multiSigConnectionAll(params: QueryAllMultiSigConnectionRequest = {
+    pagination: undefined
+  }): Promise<QueryAllMultiSigConnectionResponseSDKType> {
+    const options: any = {
+      params: {}
+    };
+    if (typeof params?.pagination !== "undefined") {
+      setPaginationParams(options, params.pagination);
+    }
+    const endpoint = `pryzm/icstaking/v1/multi_sig_connection`;
+    return await this.req.get<QueryAllMultiSigConnectionResponseSDKType>(endpoint, options);
+  }
+  /* Queries a MultiSigPacket by index. */
+  async multiSigPacket(params: QueryGetMultiSigPacketRequest): Promise<QueryGetMultiSigPacketResponseSDKType> {
+    const endpoint = `pryzm/icstaking/v1/multi_sig_packet/${params.connectionId}/${params.sequence}`;
+    return await this.req.get<QueryGetMultiSigPacketResponseSDKType>(endpoint);
+  }
+  /* Queries a list of MultiSigPacket items. */
+  async multiSigPacketAll(params: QueryAllMultiSigPacketRequest): Promise<QueryAllMultiSigPacketResponseSDKType> {
+    const options: any = {
+      params: {}
+    };
+    if (typeof params?.connectionId !== "undefined") {
+      options.params.connection_id = params.connectionId;
+    }
+    if (typeof params?.pagination !== "undefined") {
+      setPaginationParams(options, params.pagination);
+    }
+    const endpoint = `pryzm/icstaking/v1/multi_sig_packet`;
+    return await this.req.get<QueryAllMultiSigPacketResponseSDKType>(endpoint, options);
   }
 }

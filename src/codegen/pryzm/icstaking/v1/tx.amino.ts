@@ -1,5 +1,5 @@
 //@ts-nocheck
-import { MsgUpdateParams, MsgRegisterHostChain, MsgUpdateHostChain, MsgStake, MsgUnstake, MsgRedeemUnstaked, MsgInstantUnstake, MsgRebalanceDelegations, MsgRegisterInterchainAccount } from "./tx";
+import { MsgUpdateParams, MsgRegisterHostChain, MsgUpdateHostChain, MsgStake, MsgStakeLsmShares, MsgUnstake, MsgRedeemUnstaked, MsgInstantUnstake, MsgRebalanceDelegations, MsgRegisterInterchainAccount, MsgCreateMultiSigConnection, MsgUpdateMultiSigConnection, MsgAcknowledgeMultiSigPacket, MsgRegisterHostAccounts, MsgRetryFailedLsmTransfer } from "./tx";
 export const AminoConverter = {
   "/pryzm.icstaking.v1.MsgUpdateParams": {
     aminoType: "pryzm/icstaking/v1/UpdateParams",
@@ -20,6 +20,11 @@ export const AminoConverter = {
     aminoType: "pryzm/icstaking/v1/Stake",
     toAmino: MsgStake.toAmino,
     fromAmino: MsgStake.fromAmino
+  },
+  "/pryzm.icstaking.v1.MsgStakeLsmShares": {
+    aminoType: "pryzm/icstaking/v1/StakeLsmShares",
+    toAmino: MsgStakeLsmShares.toAmino,
+    fromAmino: MsgStakeLsmShares.fromAmino
   },
   "/pryzm.icstaking.v1.MsgUnstake": {
     aminoType: "pryzm/icstaking/v1/Unstake",
@@ -45,5 +50,30 @@ export const AminoConverter = {
     aminoType: "pryzm/icstaking/v1/RegInterchainAccount",
     toAmino: MsgRegisterInterchainAccount.toAmino,
     fromAmino: MsgRegisterInterchainAccount.fromAmino
+  },
+  "/pryzm.icstaking.v1.MsgCreateMultiSigConnection": {
+    aminoType: "pryzm/icstaking/v1/CreateMultiSigConn",
+    toAmino: MsgCreateMultiSigConnection.toAmino,
+    fromAmino: MsgCreateMultiSigConnection.fromAmino
+  },
+  "/pryzm.icstaking.v1.MsgUpdateMultiSigConnection": {
+    aminoType: "pryzm/icstaking/v1/UpdateMultiSigConn",
+    toAmino: MsgUpdateMultiSigConnection.toAmino,
+    fromAmino: MsgUpdateMultiSigConnection.fromAmino
+  },
+  "/pryzm.icstaking.v1.MsgAcknowledgeMultiSigPacket": {
+    aminoType: "pryzm/icstaking/v1/AckMultiSigPacket",
+    toAmino: MsgAcknowledgeMultiSigPacket.toAmino,
+    fromAmino: MsgAcknowledgeMultiSigPacket.fromAmino
+  },
+  "/pryzm.icstaking.v1.MsgRegisterHostAccounts": {
+    aminoType: "pryzm/icstaking/v1/RegisterHostAccounts",
+    toAmino: MsgRegisterHostAccounts.toAmino,
+    fromAmino: MsgRegisterHostAccounts.fromAmino
+  },
+  "/pryzm.icstaking.v1.MsgRetryFailedLsmTransfer": {
+    aminoType: "pryzm/icstaking/v1/RetryFailLsmTransfer",
+    toAmino: MsgRetryFailedLsmTransfer.toAmino,
+    fromAmino: MsgRetryFailedLsmTransfer.fromAmino
   }
 };

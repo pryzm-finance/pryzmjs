@@ -4,6 +4,8 @@ package pryzm.icstaking.v1;
 import "cosmos/base/v1beta1/coin.proto";
 import "cosmos_proto/cosmos.proto";
 import "gogoproto/gogo.proto";
+import "pryzm/icstaking/v1/host_chain.proto";
+import "pryzm/icstaking/v1/lsm.proto";
 
 option go_package = "github.com/pryzm-finance/pryzm-core/x/icstaking/types/v1";
 
@@ -11,16 +13,26 @@ option go_package = "github.com/pryzm-finance/pryzm-core/x/icstaking/types/v1";
 message ReplyData {
   // the identifier of the bridge
   string bridge_id = 1;
-  // the identifier of the sent packet
-  PacketId packet_id = 2 [(gogoproto.nullable) = false];
+
+  // this was the identifier of the sent packet and the key for ReplyData, but from icstaking v3 this field is converted to key string
+  PacketId packet_id = 2 [
+    (gogoproto.nullable) = false,
+    deprecated = true
+  ];
+
   string host_chain_id = 3;
+
   // serialized data shared when handling the packet result
   bytes data = 4;
+
+  // the identifier of the reply data
+  string key = 5;
 }
 
 // the id for a sent ibc packet
 message PacketId {
   option (gogoproto.goproto_stringer) = false;
+  option deprecated = true;
 
   string port_id = 1;
   string channel_id = 2;
@@ -46,7 +58,7 @@ message DelegateTransferSession {
 // The state of a delegation transfer
 message TransferPacketState {
   // packet identifier
-  string packet_id = 1;
+  string packet_key = 1;
   // whether the transfer is finalized (either succeeded or failed)
   bool finalized = 2;
 }
@@ -140,4 +152,31 @@ message ChannelSweep {
     (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Int",
     (gogoproto.nullable) = false
   ];
+}
+
+// Contains info about a single LSM share transfer
+message LsmTransferData {
+  // which channel is being used to transfer
+  string channel = 1;
+
+  // the actual denom of the lsm token
+  string denom = 2;
+
+  // the amount being transferred
+  string amount = 3 [
+    (cosmos_proto.scalar) = "cosmos.Int",
+    (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Int",
+    (gogoproto.nullable) = false
+  ];
+
+  // the value of the lsm amount in the terms of host chain's bond token
+  string value = 4 [
+    (cosmos_proto.scalar) = "cosmos.Int",
+    (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Int",
+    (gogoproto.nullable) = false
+  ];
+}
+
+message LsmReplyData {
+  repeated RedeemableLsm redeemable_lsm_list = 1 [(gogoproto.nullable) = false];
 }

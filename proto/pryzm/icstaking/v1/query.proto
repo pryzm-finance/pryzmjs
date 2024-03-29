@@ -7,6 +7,8 @@ import "gogoproto/gogo.proto";
 import "google/api/annotations.proto";
 import "google/protobuf/timestamp.proto";
 import "pryzm/icstaking/v1/host_chain.proto";
+import "pryzm/icstaking/v1/lsm.proto";
+import "pryzm/icstaking/v1/multisig.proto";
 import "pryzm/icstaking/v1/params.proto";
 import "pryzm/icstaking/v1/reply.proto";
 import "pryzm/icstaking/v1/undelegation.proto";
@@ -78,6 +80,36 @@ service Query {
   // Queries the list of reply data
   rpc ReplyDataAll(QueryAllReplyDataRequest) returns (QueryAllReplyDataResponse) {
     option (google.api.http).get = "/pryzm/icstaking/v1/reply_data";
+  }
+
+  // Queries a list of FailedLsmTransfer items.
+  rpc RedeemableLsmAll(QueryAllRedeemableLsmRequest) returns (QueryAllRedeemableLsmResponse) {
+    option (google.api.http).get = "/pryzm/icstaking/v1/redeemable_lsm";
+  }
+
+  // Queries a list of FailedLsmTransfer items.
+  rpc FailedLsmTransferAll(QueryAllFailedLsmTransferRequest) returns (QueryAllFailedLsmTransferResponse) {
+    option (google.api.http).get = "/pryzm/icstaking/v1/failed_lsm_transfer";
+  }
+
+  // Queries a MultiSigConnection by index.
+  rpc MultiSigConnection(QueryGetMultiSigConnectionRequest) returns (QueryGetMultiSigConnectionResponse) {
+    option (google.api.http).get = "/pryzm/icstaking/v1/multi_sig_connection/{id}";
+  }
+
+  // Queries a list of MultiSigConnection items.
+  rpc MultiSigConnectionAll(QueryAllMultiSigConnectionRequest) returns (QueryAllMultiSigConnectionResponse) {
+    option (google.api.http).get = "/pryzm/icstaking/v1/multi_sig_connection";
+  }
+
+  // Queries a MultiSigPacket by index.
+  rpc MultiSigPacket(QueryGetMultiSigPacketRequest) returns (QueryGetMultiSigPacketResponse) {
+    option (google.api.http).get = "/pryzm/icstaking/v1/multi_sig_packet/{connection_id}/{sequence}";
+  }
+
+  // Queries a list of MultiSigPacket items.
+  rpc MultiSigPacketAll(QueryAllMultiSigPacketRequest) returns (QueryAllMultiSigPacketResponse) {
+    option (google.api.http).get = "/pryzm/icstaking/v1/multi_sig_packet";
   }
 
   // this line is used by starport scaffolding # 2
@@ -194,11 +226,19 @@ message QueryEpochInfoResponse {
     (gogoproto.nullable) = false,
     (gogoproto.stdtime) = true
   ];
-  google.protobuf.Timestamp last_undelegation_time = 2 [
+  google.protobuf.Timestamp last_redelegation_time = 2 [
     (gogoproto.nullable) = false,
     (gogoproto.stdtime) = true
   ];
-  uint64 current_undelegation_epoch = 3;
+  google.protobuf.Timestamp last_lsm_redeem_time = 3 [
+    (gogoproto.nullable) = false,
+    (gogoproto.stdtime) = true
+  ];
+  google.protobuf.Timestamp last_undelegation_time = 4 [
+    (gogoproto.nullable) = false,
+    (gogoproto.stdtime) = true
+  ];
+  uint64 current_undelegation_epoch = 5;
 }
 
 message QueryAllReplyDataRequest {
@@ -207,6 +247,62 @@ message QueryAllReplyDataRequest {
 
 message QueryAllReplyDataResponse {
   repeated ReplyData reply_data = 1 [(gogoproto.nullable) = false];
+  cosmos.base.query.v1beta1.PageResponse pagination = 2 [(gogoproto.nullable) = true];
+}
+
+message QueryGetMultiSigConnectionRequest {
+  string id = 1;
+}
+
+message QueryGetMultiSigConnectionResponse {
+  MultiSigConnection multi_sig_connection = 1 [(gogoproto.nullable) = false];
+}
+
+message QueryAllMultiSigConnectionRequest {
+  cosmos.base.query.v1beta1.PageRequest pagination = 1 [(gogoproto.nullable) = true];
+}
+
+message QueryAllMultiSigConnectionResponse {
+  repeated MultiSigConnection multi_sig_connection = 1 [(gogoproto.nullable) = false];
+  cosmos.base.query.v1beta1.PageResponse pagination = 2 [(gogoproto.nullable) = true];
+}
+
+message QueryGetMultiSigPacketRequest {
+  string connection_id = 1;
+  uint64 sequence = 2;
+}
+
+message QueryGetMultiSigPacketResponse {
+  MultiSigPacket multi_sig_packet = 1 [(gogoproto.nullable) = false];
+}
+
+message QueryAllMultiSigPacketRequest {
+  string connection_id = 1 [(gogoproto.nullable) = true];
+  cosmos.base.query.v1beta1.PageRequest pagination = 2 [(gogoproto.nullable) = true];
+}
+
+message QueryAllMultiSigPacketResponse {
+  repeated MultiSigPacket multi_sig_packet = 1 [(gogoproto.nullable) = false];
+  cosmos.base.query.v1beta1.PageResponse pagination = 2 [(gogoproto.nullable) = true];
+}
+
+message QueryAllFailedLsmTransferRequest {
+  string host_chain = 1;
+  cosmos.base.query.v1beta1.PageRequest pagination = 2 [(gogoproto.nullable) = true];
+}
+
+message QueryAllFailedLsmTransferResponse {
+  repeated FailedLsmTransfer failed_lsm_transfer = 1 [(gogoproto.nullable) = false];
+  cosmos.base.query.v1beta1.PageResponse pagination = 2 [(gogoproto.nullable) = true];
+}
+
+message QueryAllRedeemableLsmRequest {
+  string host_chain = 1;
+  cosmos.base.query.v1beta1.PageRequest pagination = 2 [(gogoproto.nullable) = true];
+}
+
+message QueryAllRedeemableLsmResponse {
+  repeated RedeemableLsm redeemable_lsm = 1 [(gogoproto.nullable) = false];
   cosmos.base.query.v1beta1.PageResponse pagination = 2 [(gogoproto.nullable) = true];
 }
 

@@ -122,6 +122,41 @@ export interface EventStakeSDKType {
   fee: CoinSDKType;
   c_amount: CoinSDKType;
 }
+export interface EventStakeLsmShares {
+  creator: string;
+  hostChain: string;
+  transferChannel: string;
+  lsmDenom: string;
+  amount: string;
+  fee: Coin;
+  cAmount: Coin;
+}
+export interface EventStakeLsmSharesProtoMsg {
+  typeUrl: "/pryzm.icstaking.v1.EventStakeLsmShares";
+  value: Uint8Array;
+}
+export interface EventStakeLsmSharesAmino {
+  creator?: string;
+  host_chain?: string;
+  transfer_channel?: string;
+  lsm_denom?: string;
+  amount?: string;
+  fee?: CoinAmino;
+  c_amount?: CoinAmino;
+}
+export interface EventStakeLsmSharesAminoMsg {
+  type: "/pryzm.icstaking.v1.EventStakeLsmShares";
+  value: EventStakeLsmSharesAmino;
+}
+export interface EventStakeLsmSharesSDKType {
+  creator: string;
+  host_chain: string;
+  transfer_channel: string;
+  lsm_denom: string;
+  amount: string;
+  fee: CoinSDKType;
+  c_amount: CoinSDKType;
+}
 export interface EventUnstake {
   creator: string;
   hostChain: string;
@@ -789,6 +824,173 @@ export const EventStake = {
   }
 };
 GlobalDecoderRegistry.register(EventStake.typeUrl, EventStake);
+function createBaseEventStakeLsmShares(): EventStakeLsmShares {
+  return {
+    creator: "",
+    hostChain: "",
+    transferChannel: "",
+    lsmDenom: "",
+    amount: "",
+    fee: Coin.fromPartial({}),
+    cAmount: Coin.fromPartial({})
+  };
+}
+export const EventStakeLsmShares = {
+  typeUrl: "/pryzm.icstaking.v1.EventStakeLsmShares",
+  is(o: any): o is EventStakeLsmShares {
+    return o && (o.$typeUrl === EventStakeLsmShares.typeUrl || typeof o.creator === "string" && typeof o.hostChain === "string" && typeof o.transferChannel === "string" && typeof o.lsmDenom === "string" && typeof o.amount === "string" && Coin.is(o.fee) && Coin.is(o.cAmount));
+  },
+  isSDK(o: any): o is EventStakeLsmSharesSDKType {
+    return o && (o.$typeUrl === EventStakeLsmShares.typeUrl || typeof o.creator === "string" && typeof o.host_chain === "string" && typeof o.transfer_channel === "string" && typeof o.lsm_denom === "string" && typeof o.amount === "string" && Coin.isSDK(o.fee) && Coin.isSDK(o.c_amount));
+  },
+  isAmino(o: any): o is EventStakeLsmSharesAmino {
+    return o && (o.$typeUrl === EventStakeLsmShares.typeUrl || typeof o.creator === "string" && typeof o.host_chain === "string" && typeof o.transfer_channel === "string" && typeof o.lsm_denom === "string" && typeof o.amount === "string" && Coin.isAmino(o.fee) && Coin.isAmino(o.c_amount));
+  },
+  encode(message: EventStakeLsmShares, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    if (message.creator !== "") {
+      writer.uint32(10).string(message.creator);
+    }
+    if (message.hostChain !== "") {
+      writer.uint32(18).string(message.hostChain);
+    }
+    if (message.transferChannel !== "") {
+      writer.uint32(26).string(message.transferChannel);
+    }
+    if (message.lsmDenom !== "") {
+      writer.uint32(34).string(message.lsmDenom);
+    }
+    if (message.amount !== "") {
+      writer.uint32(42).string(message.amount);
+    }
+    if (message.fee !== undefined) {
+      Coin.encode(message.fee, writer.uint32(50).fork()).ldelim();
+    }
+    if (message.cAmount !== undefined) {
+      Coin.encode(message.cAmount, writer.uint32(58).fork()).ldelim();
+    }
+    return writer;
+  },
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): EventStakeLsmShares {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseEventStakeLsmShares();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.creator = reader.string();
+          break;
+        case 2:
+          message.hostChain = reader.string();
+          break;
+        case 3:
+          message.transferChannel = reader.string();
+          break;
+        case 4:
+          message.lsmDenom = reader.string();
+          break;
+        case 5:
+          message.amount = reader.string();
+          break;
+        case 6:
+          message.fee = Coin.decode(reader, reader.uint32(), useInterfaces);
+          break;
+        case 7:
+          message.cAmount = Coin.decode(reader, reader.uint32(), useInterfaces);
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromJSON(object: any): EventStakeLsmShares {
+    return {
+      creator: isSet(object.creator) ? String(object.creator) : "",
+      hostChain: isSet(object.hostChain) ? String(object.hostChain) : "",
+      transferChannel: isSet(object.transferChannel) ? String(object.transferChannel) : "",
+      lsmDenom: isSet(object.lsmDenom) ? String(object.lsmDenom) : "",
+      amount: isSet(object.amount) ? String(object.amount) : "",
+      fee: isSet(object.fee) ? Coin.fromJSON(object.fee) : undefined,
+      cAmount: isSet(object.cAmount) ? Coin.fromJSON(object.cAmount) : undefined
+    };
+  },
+  toJSON(message: EventStakeLsmShares): unknown {
+    const obj: any = {};
+    message.creator !== undefined && (obj.creator = message.creator);
+    message.hostChain !== undefined && (obj.hostChain = message.hostChain);
+    message.transferChannel !== undefined && (obj.transferChannel = message.transferChannel);
+    message.lsmDenom !== undefined && (obj.lsmDenom = message.lsmDenom);
+    message.amount !== undefined && (obj.amount = message.amount);
+    message.fee !== undefined && (obj.fee = message.fee ? Coin.toJSON(message.fee) : undefined);
+    message.cAmount !== undefined && (obj.cAmount = message.cAmount ? Coin.toJSON(message.cAmount) : undefined);
+    return obj;
+  },
+  fromPartial(object: Partial<EventStakeLsmShares>): EventStakeLsmShares {
+    const message = createBaseEventStakeLsmShares();
+    message.creator = object.creator ?? "";
+    message.hostChain = object.hostChain ?? "";
+    message.transferChannel = object.transferChannel ?? "";
+    message.lsmDenom = object.lsmDenom ?? "";
+    message.amount = object.amount ?? "";
+    message.fee = object.fee !== undefined && object.fee !== null ? Coin.fromPartial(object.fee) : undefined;
+    message.cAmount = object.cAmount !== undefined && object.cAmount !== null ? Coin.fromPartial(object.cAmount) : undefined;
+    return message;
+  },
+  fromAmino(object: EventStakeLsmSharesAmino): EventStakeLsmShares {
+    const message = createBaseEventStakeLsmShares();
+    if (object.creator !== undefined && object.creator !== null) {
+      message.creator = object.creator;
+    }
+    if (object.host_chain !== undefined && object.host_chain !== null) {
+      message.hostChain = object.host_chain;
+    }
+    if (object.transfer_channel !== undefined && object.transfer_channel !== null) {
+      message.transferChannel = object.transfer_channel;
+    }
+    if (object.lsm_denom !== undefined && object.lsm_denom !== null) {
+      message.lsmDenom = object.lsm_denom;
+    }
+    if (object.amount !== undefined && object.amount !== null) {
+      message.amount = object.amount;
+    }
+    if (object.fee !== undefined && object.fee !== null) {
+      message.fee = Coin.fromAmino(object.fee);
+    }
+    if (object.c_amount !== undefined && object.c_amount !== null) {
+      message.cAmount = Coin.fromAmino(object.c_amount);
+    }
+    return message;
+  },
+  toAmino(message: EventStakeLsmShares, useInterfaces: boolean = true): EventStakeLsmSharesAmino {
+    const obj: any = {};
+    obj.creator = message.creator === "" ? undefined : message.creator;
+    obj.host_chain = message.hostChain === "" ? undefined : message.hostChain;
+    obj.transfer_channel = message.transferChannel === "" ? undefined : message.transferChannel;
+    obj.lsm_denom = message.lsmDenom === "" ? undefined : message.lsmDenom;
+    obj.amount = message.amount === "" ? undefined : message.amount;
+    obj.fee = message.fee ? Coin.toAmino(message.fee, useInterfaces) : undefined;
+    obj.c_amount = message.cAmount ? Coin.toAmino(message.cAmount, useInterfaces) : undefined;
+    return obj;
+  },
+  fromAminoMsg(object: EventStakeLsmSharesAminoMsg): EventStakeLsmShares {
+    return EventStakeLsmShares.fromAmino(object.value);
+  },
+  fromProtoMsg(message: EventStakeLsmSharesProtoMsg, useInterfaces: boolean = true): EventStakeLsmShares {
+    return EventStakeLsmShares.decode(message.value, undefined, useInterfaces);
+  },
+  toProto(message: EventStakeLsmShares): Uint8Array {
+    return EventStakeLsmShares.encode(message).finish();
+  },
+  toProtoMsg(message: EventStakeLsmShares): EventStakeLsmSharesProtoMsg {
+    return {
+      typeUrl: "/pryzm.icstaking.v1.EventStakeLsmShares",
+      value: EventStakeLsmShares.encode(message).finish()
+    };
+  }
+};
+GlobalDecoderRegistry.register(EventStakeLsmShares.typeUrl, EventStakeLsmShares);
 function createBaseEventUnstake(): EventUnstake {
   return {
     creator: "",

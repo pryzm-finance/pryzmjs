@@ -10,6 +10,8 @@ export interface UnbondingDelegation {
   validatorAddress: string;
   /** amount defines the tokens to receive at completion. */
   amount: string;
+  /** alliance denom of the unbonding delegation */
+  denom: string;
 }
 export interface UnbondingDelegationProtoMsg {
   typeUrl: "/alliance.alliance.UnbondingDelegation";
@@ -23,6 +25,8 @@ export interface UnbondingDelegationAmino {
   validator_address?: string;
   /** amount defines the tokens to receive at completion. */
   amount?: string;
+  /** alliance denom of the unbonding delegation */
+  denom?: string;
 }
 export interface UnbondingDelegationAminoMsg {
   type: "/alliance.alliance.UnbondingDelegation";
@@ -33,24 +37,26 @@ export interface UnbondingDelegationSDKType {
   completion_time: TimestampSDKType;
   validator_address: string;
   amount: string;
+  denom: string;
 }
 function createBaseUnbondingDelegation(): UnbondingDelegation {
   return {
     completionTime: Timestamp.fromPartial({}),
     validatorAddress: "",
-    amount: ""
+    amount: "",
+    denom: ""
   };
 }
 export const UnbondingDelegation = {
   typeUrl: "/alliance.alliance.UnbondingDelegation",
   is(o: any): o is UnbondingDelegation {
-    return o && (o.$typeUrl === UnbondingDelegation.typeUrl || Timestamp.is(o.completionTime) && typeof o.validatorAddress === "string" && typeof o.amount === "string");
+    return o && (o.$typeUrl === UnbondingDelegation.typeUrl || Timestamp.is(o.completionTime) && typeof o.validatorAddress === "string" && typeof o.amount === "string" && typeof o.denom === "string");
   },
   isSDK(o: any): o is UnbondingDelegationSDKType {
-    return o && (o.$typeUrl === UnbondingDelegation.typeUrl || Timestamp.isSDK(o.completion_time) && typeof o.validator_address === "string" && typeof o.amount === "string");
+    return o && (o.$typeUrl === UnbondingDelegation.typeUrl || Timestamp.isSDK(o.completion_time) && typeof o.validator_address === "string" && typeof o.amount === "string" && typeof o.denom === "string");
   },
   isAmino(o: any): o is UnbondingDelegationAmino {
-    return o && (o.$typeUrl === UnbondingDelegation.typeUrl || Timestamp.isAmino(o.completion_time) && typeof o.validator_address === "string" && typeof o.amount === "string");
+    return o && (o.$typeUrl === UnbondingDelegation.typeUrl || Timestamp.isAmino(o.completion_time) && typeof o.validator_address === "string" && typeof o.amount === "string" && typeof o.denom === "string");
   },
   encode(message: UnbondingDelegation, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.completionTime !== undefined) {
@@ -61,6 +67,9 @@ export const UnbondingDelegation = {
     }
     if (message.amount !== "") {
       writer.uint32(26).string(message.amount);
+    }
+    if (message.denom !== "") {
+      writer.uint32(34).string(message.denom);
     }
     return writer;
   },
@@ -80,6 +89,9 @@ export const UnbondingDelegation = {
         case 3:
           message.amount = reader.string();
           break;
+        case 4:
+          message.denom = reader.string();
+          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -91,7 +103,8 @@ export const UnbondingDelegation = {
     return {
       completionTime: isSet(object.completionTime) ? fromJsonTimestamp(object.completionTime) : undefined,
       validatorAddress: isSet(object.validatorAddress) ? String(object.validatorAddress) : "",
-      amount: isSet(object.amount) ? String(object.amount) : ""
+      amount: isSet(object.amount) ? String(object.amount) : "",
+      denom: isSet(object.denom) ? String(object.denom) : ""
     };
   },
   toJSON(message: UnbondingDelegation): unknown {
@@ -99,6 +112,7 @@ export const UnbondingDelegation = {
     message.completionTime !== undefined && (obj.completionTime = fromTimestamp(message.completionTime).toISOString());
     message.validatorAddress !== undefined && (obj.validatorAddress = message.validatorAddress);
     message.amount !== undefined && (obj.amount = message.amount);
+    message.denom !== undefined && (obj.denom = message.denom);
     return obj;
   },
   fromPartial(object: Partial<UnbondingDelegation>): UnbondingDelegation {
@@ -106,6 +120,7 @@ export const UnbondingDelegation = {
     message.completionTime = object.completionTime !== undefined && object.completionTime !== null ? Timestamp.fromPartial(object.completionTime) : undefined;
     message.validatorAddress = object.validatorAddress ?? "";
     message.amount = object.amount ?? "";
+    message.denom = object.denom ?? "";
     return message;
   },
   fromAmino(object: UnbondingDelegationAmino): UnbondingDelegation {
@@ -119,6 +134,9 @@ export const UnbondingDelegation = {
     if (object.amount !== undefined && object.amount !== null) {
       message.amount = object.amount;
     }
+    if (object.denom !== undefined && object.denom !== null) {
+      message.denom = object.denom;
+    }
     return message;
   },
   toAmino(message: UnbondingDelegation, useInterfaces: boolean = true): UnbondingDelegationAmino {
@@ -126,6 +144,7 @@ export const UnbondingDelegation = {
     obj.completion_time = message.completionTime ? Timestamp.toAmino(message.completionTime, useInterfaces) : undefined;
     obj.validator_address = message.validatorAddress === "" ? undefined : message.validatorAddress;
     obj.amount = message.amount === "" ? undefined : message.amount;
+    obj.denom = message.denom === "" ? undefined : message.denom;
     return obj;
   },
   fromAminoMsg(object: UnbondingDelegationAminoMsg): UnbondingDelegation {

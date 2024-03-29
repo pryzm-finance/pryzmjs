@@ -1,6 +1,6 @@
 import { Params, ParamsAmino, ParamsSDKType, WeightedVoteOption, WeightedVoteOptionAmino, WeightedVoteOptionSDKType, Proposal, ProposalAmino, ProposalSDKType } from "../../../cosmos/gov/v1/gov";
 import { Coin, CoinAmino, CoinSDKType } from "../../../cosmos/base/v1beta1/coin";
-import { ProofOps, ProofOpsAmino, ProofOpsSDKType } from "../../../tendermint/crypto/proof";
+import { Height, HeightAmino, HeightSDKType } from "../../../ibc/core/client/v1/client";
 import { BinaryReader, BinaryWriter } from "../../../binary";
 import { isSet, bytesFromBase64, base64FromBytes } from "../../../helpers";
 import { GlobalDecoderRegistry } from "../../../registry";
@@ -150,8 +150,8 @@ export interface MsgSubmitProposal {
   creator: string;
   asset: string;
   proposal: Uint8Array;
-  height: bigint;
-  proof?: ProofOps;
+  height: Height;
+  proof: Uint8Array;
 }
 export interface MsgSubmitProposalProtoMsg {
   typeUrl: "/pryzm.pgov.v1.MsgSubmitProposal";
@@ -161,8 +161,8 @@ export interface MsgSubmitProposalAmino {
   creator?: string;
   asset?: string;
   proposal: string;
-  height: string;
-  proof: ProofOpsAmino;
+  height?: HeightAmino;
+  proof?: string;
 }
 export interface MsgSubmitProposalAminoMsg {
   type: "pryzm/pgov/v1/SubmitProposal";
@@ -172,8 +172,8 @@ export interface MsgSubmitProposalSDKType {
   creator: string;
   asset: string;
   proposal: Uint8Array;
-  height: bigint;
-  proof?: ProofOpsSDKType;
+  height: HeightSDKType;
+  proof: Uint8Array;
 }
 export interface MsgSubmitProposalResponse {
   proposal: Proposal;
@@ -997,21 +997,21 @@ function createBaseMsgSubmitProposal(): MsgSubmitProposal {
     creator: "",
     asset: "",
     proposal: new Uint8Array(),
-    height: BigInt(0),
-    proof: undefined
+    height: Height.fromPartial({}),
+    proof: new Uint8Array()
   };
 }
 export const MsgSubmitProposal = {
   typeUrl: "/pryzm.pgov.v1.MsgSubmitProposal",
   aminoType: "pryzm/pgov/v1/SubmitProposal",
   is(o: any): o is MsgSubmitProposal {
-    return o && (o.$typeUrl === MsgSubmitProposal.typeUrl || typeof o.creator === "string" && typeof o.asset === "string" && (o.proposal instanceof Uint8Array || typeof o.proposal === "string") && typeof o.height === "bigint");
+    return o && (o.$typeUrl === MsgSubmitProposal.typeUrl || typeof o.creator === "string" && typeof o.asset === "string" && (o.proposal instanceof Uint8Array || typeof o.proposal === "string") && Height.is(o.height) && (o.proof instanceof Uint8Array || typeof o.proof === "string"));
   },
   isSDK(o: any): o is MsgSubmitProposalSDKType {
-    return o && (o.$typeUrl === MsgSubmitProposal.typeUrl || typeof o.creator === "string" && typeof o.asset === "string" && (o.proposal instanceof Uint8Array || typeof o.proposal === "string") && typeof o.height === "bigint");
+    return o && (o.$typeUrl === MsgSubmitProposal.typeUrl || typeof o.creator === "string" && typeof o.asset === "string" && (o.proposal instanceof Uint8Array || typeof o.proposal === "string") && Height.isSDK(o.height) && (o.proof instanceof Uint8Array || typeof o.proof === "string"));
   },
   isAmino(o: any): o is MsgSubmitProposalAmino {
-    return o && (o.$typeUrl === MsgSubmitProposal.typeUrl || typeof o.creator === "string" && typeof o.asset === "string" && (o.proposal instanceof Uint8Array || typeof o.proposal === "string") && typeof o.height === "bigint");
+    return o && (o.$typeUrl === MsgSubmitProposal.typeUrl || typeof o.creator === "string" && typeof o.asset === "string" && (o.proposal instanceof Uint8Array || typeof o.proposal === "string") && Height.isAmino(o.height) && (o.proof instanceof Uint8Array || typeof o.proof === "string"));
   },
   encode(message: MsgSubmitProposal, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.creator !== "") {
@@ -1023,11 +1023,11 @@ export const MsgSubmitProposal = {
     if (message.proposal.length !== 0) {
       writer.uint32(26).bytes(message.proposal);
     }
-    if (message.height !== BigInt(0)) {
-      writer.uint32(32).uint64(message.height);
+    if (message.height !== undefined) {
+      Height.encode(message.height, writer.uint32(34).fork()).ldelim();
     }
-    if (message.proof !== undefined) {
-      ProofOps.encode(message.proof, writer.uint32(42).fork()).ldelim();
+    if (message.proof.length !== 0) {
+      writer.uint32(42).bytes(message.proof);
     }
     return writer;
   },
@@ -1048,10 +1048,10 @@ export const MsgSubmitProposal = {
           message.proposal = reader.bytes();
           break;
         case 4:
-          message.height = reader.uint64();
+          message.height = Height.decode(reader, reader.uint32(), useInterfaces);
           break;
         case 5:
-          message.proof = ProofOps.decode(reader, reader.uint32(), useInterfaces);
+          message.proof = reader.bytes();
           break;
         default:
           reader.skipType(tag & 7);
@@ -1065,8 +1065,8 @@ export const MsgSubmitProposal = {
       creator: isSet(object.creator) ? String(object.creator) : "",
       asset: isSet(object.asset) ? String(object.asset) : "",
       proposal: isSet(object.proposal) ? bytesFromBase64(object.proposal) : new Uint8Array(),
-      height: isSet(object.height) ? BigInt(object.height.toString()) : BigInt(0),
-      proof: isSet(object.proof) ? ProofOps.fromJSON(object.proof) : undefined
+      height: isSet(object.height) ? Height.fromJSON(object.height) : undefined,
+      proof: isSet(object.proof) ? bytesFromBase64(object.proof) : new Uint8Array()
     };
   },
   toJSON(message: MsgSubmitProposal): unknown {
@@ -1074,8 +1074,8 @@ export const MsgSubmitProposal = {
     message.creator !== undefined && (obj.creator = message.creator);
     message.asset !== undefined && (obj.asset = message.asset);
     message.proposal !== undefined && (obj.proposal = base64FromBytes(message.proposal !== undefined ? message.proposal : new Uint8Array()));
-    message.height !== undefined && (obj.height = (message.height || BigInt(0)).toString());
-    message.proof !== undefined && (obj.proof = message.proof ? ProofOps.toJSON(message.proof) : undefined);
+    message.height !== undefined && (obj.height = message.height ? Height.toJSON(message.height) : undefined);
+    message.proof !== undefined && (obj.proof = base64FromBytes(message.proof !== undefined ? message.proof : new Uint8Array()));
     return obj;
   },
   fromPartial(object: Partial<MsgSubmitProposal>): MsgSubmitProposal {
@@ -1083,8 +1083,8 @@ export const MsgSubmitProposal = {
     message.creator = object.creator ?? "";
     message.asset = object.asset ?? "";
     message.proposal = object.proposal ?? new Uint8Array();
-    message.height = object.height !== undefined && object.height !== null ? BigInt(object.height.toString()) : BigInt(0);
-    message.proof = object.proof !== undefined && object.proof !== null ? ProofOps.fromPartial(object.proof) : undefined;
+    message.height = object.height !== undefined && object.height !== null ? Height.fromPartial(object.height) : undefined;
+    message.proof = object.proof ?? new Uint8Array();
     return message;
   },
   fromAmino(object: MsgSubmitProposalAmino): MsgSubmitProposal {
@@ -1099,10 +1099,10 @@ export const MsgSubmitProposal = {
       message.proposal = bytesFromBase64(object.proposal);
     }
     if (object.height !== undefined && object.height !== null) {
-      message.height = BigInt(object.height);
+      message.height = Height.fromAmino(object.height);
     }
     if (object.proof !== undefined && object.proof !== null) {
-      message.proof = ProofOps.fromAmino(object.proof);
+      message.proof = bytesFromBase64(object.proof);
     }
     return message;
   },
@@ -1111,8 +1111,8 @@ export const MsgSubmitProposal = {
     obj.creator = message.creator === "" ? undefined : message.creator;
     obj.asset = message.asset === "" ? undefined : message.asset;
     obj.proposal = message.proposal ? base64FromBytes(message.proposal) : undefined;
-    obj.height = message.height ? message.height.toString() : undefined;
-    obj.proof = message.proof ? ProofOps.toAmino(message.proof, useInterfaces) : undefined;
+    obj.height = message.height ? Height.toAmino(message.height, useInterfaces) : {};
+    obj.proof = message.proof ? base64FromBytes(message.proof) : undefined;
     return obj;
   },
   fromAminoMsg(object: MsgSubmitProposalAminoMsg): MsgSubmitProposal {

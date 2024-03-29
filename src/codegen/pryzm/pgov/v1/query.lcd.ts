@@ -68,16 +68,14 @@ export class LCDQueryClient {
     return await this.req.get<QueryGetVoteResponseSDKType>(endpoint);
   }
   /* Queries a list of Vote items. */
-  async voteAll(params: QueryAllVoteRequest = {
-    pagination: undefined
-  }): Promise<QueryAllVoteResponseSDKType> {
+  async voteAll(params: QueryAllVoteRequest): Promise<QueryAllVoteResponseSDKType> {
     const options: any = {
       params: {}
     };
     if (typeof params?.pagination !== "undefined") {
       setPaginationParams(options, params.pagination);
     }
-    const endpoint = `pryzm/pgov/v1/vote`;
+    const endpoint = `pryzm/pgov/v1/vote/${params.asset}/${params.proposal}`;
     return await this.req.get<QueryAllVoteResponseSDKType>(endpoint, options);
   }
   /* Queries a Proposal by index. */

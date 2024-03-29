@@ -84,6 +84,8 @@ export interface MsgUpdateAllianceProposal {
   takeRate: string;
   rewardChangeRate: string;
   rewardChangeInterval: Duration;
+  /** set a bound of weight range to limit how much reward weights can scale. */
+  rewardWeightRange: RewardWeightRange;
 }
 export interface MsgUpdateAllianceProposalProtoMsg {
   typeUrl: "/alliance.alliance.MsgUpdateAllianceProposal";
@@ -105,6 +107,8 @@ export interface MsgUpdateAllianceProposalAmino {
   take_rate?: string;
   reward_change_rate?: string;
   reward_change_interval?: DurationAmino;
+  /** set a bound of weight range to limit how much reward weights can scale. */
+  reward_weight_range?: RewardWeightRangeAmino;
 }
 export interface MsgUpdateAllianceProposalAminoMsg {
   type: "/alliance.alliance.MsgUpdateAllianceProposal";
@@ -118,6 +122,7 @@ export interface MsgUpdateAllianceProposalSDKType {
   take_rate: string;
   reward_change_rate: string;
   reward_change_interval: DurationSDKType;
+  reward_weight_range: RewardWeightRangeSDKType;
 }
 export interface MsgDeleteAllianceProposal {
   /** the title of the update proposal */
@@ -335,19 +340,20 @@ function createBaseMsgUpdateAllianceProposal(): MsgUpdateAllianceProposal {
     rewardWeight: "",
     takeRate: "",
     rewardChangeRate: "",
-    rewardChangeInterval: Duration.fromPartial({})
+    rewardChangeInterval: Duration.fromPartial({}),
+    rewardWeightRange: RewardWeightRange.fromPartial({})
   };
 }
 export const MsgUpdateAllianceProposal = {
   typeUrl: "/alliance.alliance.MsgUpdateAllianceProposal",
   is(o: any): o is MsgUpdateAllianceProposal {
-    return o && (o.$typeUrl === MsgUpdateAllianceProposal.typeUrl || typeof o.title === "string" && typeof o.description === "string" && typeof o.denom === "string" && typeof o.rewardWeight === "string" && typeof o.takeRate === "string" && typeof o.rewardChangeRate === "string" && Duration.is(o.rewardChangeInterval));
+    return o && (o.$typeUrl === MsgUpdateAllianceProposal.typeUrl || typeof o.title === "string" && typeof o.description === "string" && typeof o.denom === "string" && typeof o.rewardWeight === "string" && typeof o.takeRate === "string" && typeof o.rewardChangeRate === "string" && Duration.is(o.rewardChangeInterval) && RewardWeightRange.is(o.rewardWeightRange));
   },
   isSDK(o: any): o is MsgUpdateAllianceProposalSDKType {
-    return o && (o.$typeUrl === MsgUpdateAllianceProposal.typeUrl || typeof o.title === "string" && typeof o.description === "string" && typeof o.denom === "string" && typeof o.reward_weight === "string" && typeof o.take_rate === "string" && typeof o.reward_change_rate === "string" && Duration.isSDK(o.reward_change_interval));
+    return o && (o.$typeUrl === MsgUpdateAllianceProposal.typeUrl || typeof o.title === "string" && typeof o.description === "string" && typeof o.denom === "string" && typeof o.reward_weight === "string" && typeof o.take_rate === "string" && typeof o.reward_change_rate === "string" && Duration.isSDK(o.reward_change_interval) && RewardWeightRange.isSDK(o.reward_weight_range));
   },
   isAmino(o: any): o is MsgUpdateAllianceProposalAmino {
-    return o && (o.$typeUrl === MsgUpdateAllianceProposal.typeUrl || typeof o.title === "string" && typeof o.description === "string" && typeof o.denom === "string" && typeof o.reward_weight === "string" && typeof o.take_rate === "string" && typeof o.reward_change_rate === "string" && Duration.isAmino(o.reward_change_interval));
+    return o && (o.$typeUrl === MsgUpdateAllianceProposal.typeUrl || typeof o.title === "string" && typeof o.description === "string" && typeof o.denom === "string" && typeof o.reward_weight === "string" && typeof o.take_rate === "string" && typeof o.reward_change_rate === "string" && Duration.isAmino(o.reward_change_interval) && RewardWeightRange.isAmino(o.reward_weight_range));
   },
   encode(message: MsgUpdateAllianceProposal, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.title !== "") {
@@ -370,6 +376,9 @@ export const MsgUpdateAllianceProposal = {
     }
     if (message.rewardChangeInterval !== undefined) {
       Duration.encode(message.rewardChangeInterval, writer.uint32(58).fork()).ldelim();
+    }
+    if (message.rewardWeightRange !== undefined) {
+      RewardWeightRange.encode(message.rewardWeightRange, writer.uint32(66).fork()).ldelim();
     }
     return writer;
   },
@@ -401,6 +410,9 @@ export const MsgUpdateAllianceProposal = {
         case 7:
           message.rewardChangeInterval = Duration.decode(reader, reader.uint32(), useInterfaces);
           break;
+        case 8:
+          message.rewardWeightRange = RewardWeightRange.decode(reader, reader.uint32(), useInterfaces);
+          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -416,7 +428,8 @@ export const MsgUpdateAllianceProposal = {
       rewardWeight: isSet(object.rewardWeight) ? String(object.rewardWeight) : "",
       takeRate: isSet(object.takeRate) ? String(object.takeRate) : "",
       rewardChangeRate: isSet(object.rewardChangeRate) ? String(object.rewardChangeRate) : "",
-      rewardChangeInterval: isSet(object.rewardChangeInterval) ? Duration.fromJSON(object.rewardChangeInterval) : undefined
+      rewardChangeInterval: isSet(object.rewardChangeInterval) ? Duration.fromJSON(object.rewardChangeInterval) : undefined,
+      rewardWeightRange: isSet(object.rewardWeightRange) ? RewardWeightRange.fromJSON(object.rewardWeightRange) : undefined
     };
   },
   toJSON(message: MsgUpdateAllianceProposal): unknown {
@@ -428,6 +441,7 @@ export const MsgUpdateAllianceProposal = {
     message.takeRate !== undefined && (obj.takeRate = message.takeRate);
     message.rewardChangeRate !== undefined && (obj.rewardChangeRate = message.rewardChangeRate);
     message.rewardChangeInterval !== undefined && (obj.rewardChangeInterval = message.rewardChangeInterval ? Duration.toJSON(message.rewardChangeInterval) : undefined);
+    message.rewardWeightRange !== undefined && (obj.rewardWeightRange = message.rewardWeightRange ? RewardWeightRange.toJSON(message.rewardWeightRange) : undefined);
     return obj;
   },
   fromPartial(object: Partial<MsgUpdateAllianceProposal>): MsgUpdateAllianceProposal {
@@ -439,6 +453,7 @@ export const MsgUpdateAllianceProposal = {
     message.takeRate = object.takeRate ?? "";
     message.rewardChangeRate = object.rewardChangeRate ?? "";
     message.rewardChangeInterval = object.rewardChangeInterval !== undefined && object.rewardChangeInterval !== null ? Duration.fromPartial(object.rewardChangeInterval) : undefined;
+    message.rewardWeightRange = object.rewardWeightRange !== undefined && object.rewardWeightRange !== null ? RewardWeightRange.fromPartial(object.rewardWeightRange) : undefined;
     return message;
   },
   fromAmino(object: MsgUpdateAllianceProposalAmino): MsgUpdateAllianceProposal {
@@ -464,6 +479,9 @@ export const MsgUpdateAllianceProposal = {
     if (object.reward_change_interval !== undefined && object.reward_change_interval !== null) {
       message.rewardChangeInterval = Duration.fromAmino(object.reward_change_interval);
     }
+    if (object.reward_weight_range !== undefined && object.reward_weight_range !== null) {
+      message.rewardWeightRange = RewardWeightRange.fromAmino(object.reward_weight_range);
+    }
     return message;
   },
   toAmino(message: MsgUpdateAllianceProposal, useInterfaces: boolean = true): MsgUpdateAllianceProposalAmino {
@@ -475,6 +493,7 @@ export const MsgUpdateAllianceProposal = {
     obj.take_rate = padDecimal(message.takeRate) === "" ? undefined : padDecimal(message.takeRate);
     obj.reward_change_rate = padDecimal(message.rewardChangeRate) === "" ? undefined : padDecimal(message.rewardChangeRate);
     obj.reward_change_interval = message.rewardChangeInterval ? Duration.toAmino(message.rewardChangeInterval, useInterfaces) : undefined;
+    obj.reward_weight_range = message.rewardWeightRange ? RewardWeightRange.toAmino(message.rewardWeightRange, useInterfaces) : undefined;
     return obj;
   },
   fromAminoMsg(object: MsgUpdateAllianceProposalAminoMsg): MsgUpdateAllianceProposal {
