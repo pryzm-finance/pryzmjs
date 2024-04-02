@@ -13,7 +13,6 @@ import { QueryPriceRequest, QueryPriceResponseSDKType } from "./price/price";
 import { QueryHistoricalPriceRequest, QueryHistoricalPriceResponseSDKType } from "./price/historical_price";
 import { QuerySwappableTokensRequest, QuerySwappableTokensResponseSDKType } from "./price/swappable_tokens";
 import { QueryPriceBoundsRequest, QueryPriceBoundsResponseSDKType } from "./price/price_bounds";
-import { QueryPriceChangeRequest, QueryPriceChangeResponseSDKType } from "./price/price_change";
 import { QueryTradeSimulationRequest, QueryTradeSimulationResponseSDKType } from "./trade/trade_simulation";
 import { QueryJoinAllTokensExactLptSimulationRequest, QueryJoinAllTokensExactLptSimulationResponseSDKType } from "./trade/join_all_tokens_exact_lpt_simulation";
 import { QueryJoinExactTokensSimulationRequest, QueryJoinExactTokensSimulationResponseSDKType } from "./trade/join_exact_tokens_simulation";
@@ -23,7 +22,6 @@ import { QueryExitTokenExactLptSimulationRequest, QueryExitTokenExactLptSimulati
 import { QueryExitExactTokensSimulationRequest, QueryExitExactTokensSimulationResponseSDKType } from "./trade/exit_exact_tokens_simulation";
 import { QueryExitAllTokensExactLptSimulationRequest, QueryExitAllTokensExactLptSimulationResponseSDKType } from "./trade/exit_all_tokens_exact_lpt_simulation";
 import { QueryUserTradeHistoryRequest, QueryUserTradeHistoryResponseSDKType } from "./trade/user_trade_history";
-import { QueryPoolTradeHistoryRequest, QueryPoolTradeHistoryResponseSDKType } from "./trade/pool_trade_history";
 import { QueryTokenTradeVolumeRequest, QueryTokenTradeVolumeResponseSDKType, QueryPoolTradeVolumeRequest, QueryPoolTradeVolumeResponseSDKType, QueryFavoritePairsRequest, QueryFavoritePairsResponseSDKType } from "./trade/trade_volume";
 import { QueryPulseTradablePairsRequest, QueryPulseTradablePairsResponseSDKType } from "./trade/pulse_tradable_pairs";
 import { QueryOrderRequest, QueryOrderResponseSDKType, QueryOrdersRequest, QueryOrdersResponseSDKType } from "./trade/order";
@@ -70,7 +68,6 @@ export class LCDQueryClient {
     this.historicalPrice = this.historicalPrice.bind(this);
     this.swappableTokens = this.swappableTokens.bind(this);
     this.priceBounds = this.priceBounds.bind(this);
-    this.priceChange = this.priceChange.bind(this);
     this.tradeSimulation = this.tradeSimulation.bind(this);
     this.joinAllTokensExactLptSimulation = this.joinAllTokensExactLptSimulation.bind(this);
     this.joinExactTokensSimulation = this.joinExactTokensSimulation.bind(this);
@@ -80,7 +77,6 @@ export class LCDQueryClient {
     this.exitExactTokensSimulation = this.exitExactTokensSimulation.bind(this);
     this.exitAllTokensExactLptSimulation = this.exitAllTokensExactLptSimulation.bind(this);
     this.userTradeHistory = this.userTradeHistory.bind(this);
-    this.poolTradeHistory = this.poolTradeHistory.bind(this);
     this.tokenTradeVolume = this.tokenTradeVolume.bind(this);
     this.poolTradeVolume = this.poolTradeVolume.bind(this);
     this.favoritePairs = this.favoritePairs.bind(this);
@@ -294,20 +290,6 @@ export class LCDQueryClient {
     const endpoint = `pryzmatics/price/bounds/${params.denom}`;
     return await this.req.get<QueryPriceBoundsResponseSDKType>(endpoint, options);
   }
-  /* PriceChange */
-  async priceChange(params: QueryPriceChangeRequest): Promise<QueryPriceChangeResponseSDKType> {
-    const options: any = {
-      params: {}
-    };
-    if (typeof params?.from !== "undefined") {
-      options.params.from = params.from;
-    }
-    if (typeof params?.to !== "undefined") {
-      options.params.to = params.to;
-    }
-    const endpoint = `pryzmatics/price/change/${params.denom}`;
-    return await this.req.get<QueryPriceChangeResponseSDKType>(endpoint, options);
-  }
   /* TradeSimulation */
   async tradeSimulation(params: QueryTradeSimulationRequest): Promise<QueryTradeSimulationResponseSDKType> {
     const options: any = {
@@ -439,26 +421,6 @@ export class LCDQueryClient {
     }
     const endpoint = `pryzmatics/trade/user_trade_history`;
     return await this.req.get<QueryUserTradeHistoryResponseSDKType>(endpoint, options);
-  }
-  /* PoolTradeHistory */
-  async poolTradeHistory(params: QueryPoolTradeHistoryRequest): Promise<QueryPoolTradeHistoryResponseSDKType> {
-    const options: any = {
-      params: {}
-    };
-    if (typeof params?.poolId !== "undefined") {
-      options.params.pool_id = params.poolId;
-    }
-    if (typeof params?.firstToken !== "undefined") {
-      options.params.first_token = params.firstToken;
-    }
-    if (typeof params?.secondToken !== "undefined") {
-      options.params.second_token = params.secondToken;
-    }
-    if (typeof params?.operationType !== "undefined") {
-      options.params.operation_type = params.operationType;
-    }
-    const endpoint = `pryzmatics/trade/pool_trade_history`;
-    return await this.req.get<QueryPoolTradeHistoryResponseSDKType>(endpoint, options);
   }
   /* TokenTradeVolume */
   async tokenTradeVolume(params: QueryTokenTradeVolumeRequest): Promise<QueryTokenTradeVolumeResponseSDKType> {
