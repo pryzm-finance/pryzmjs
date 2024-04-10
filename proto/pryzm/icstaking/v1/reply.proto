@@ -139,6 +139,7 @@ message CollectUndelegatedReplyData {
 message SweepData {
   // a list containing info about the sweep operation through different channel channel
   repeated ChannelSweep channel_sweeps = 1 [(gogoproto.nullable) = false];
+  ChannelSweep fee_sweep = 2 [(gogoproto.nullable) = false];
 }
 
 // Contains info about the sweep operation through a channel
@@ -152,6 +153,8 @@ message ChannelSweep {
     (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Int",
     (gogoproto.nullable) = false
   ];
+  // the timeout timestamp set on the ibc transfer
+  uint64 timeout = 4;
 }
 
 // Contains info about a single LSM share transfer

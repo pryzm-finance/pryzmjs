@@ -45,6 +45,10 @@ message OrderParameters {
     (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Dec",
     (gogoproto.nullable) = false
   ];
+
+  int64 min_order_step_millis_interval = 10;
+
+  int64 max_order_step_millis_interval = 11;
 }
 
 message YammParameters {

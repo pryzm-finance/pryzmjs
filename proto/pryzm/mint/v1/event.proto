@@ -23,3 +23,7 @@ message EventMint {
   DistributionProportions distributed_amounts = 4 [(gogoproto.nullable) = false];
   int64 epoch_number = 5;
 }
+
+message EventSetParams {
+  Params params = 1 [(gogoproto.nullable) = false];
+}

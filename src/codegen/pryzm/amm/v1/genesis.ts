@@ -5,7 +5,7 @@ import { WeightedPoolProperties, WeightedPoolPropertiesAmino, WeightedPoolProper
 import { VirtualBalancePoolToken, VirtualBalancePoolTokenAmino, VirtualBalancePoolTokenSDKType } from "./virtual_balance_pool_token";
 import { YammConfiguration, YammConfigurationAmino, YammConfigurationSDKType } from "./yamm_configuration";
 import { WhitelistedRoute, WhitelistedRouteAmino, WhitelistedRouteSDKType } from "./whitelisted_route";
-import { Order, OrderAmino, OrderSDKType } from "./order";
+import { Order, OrderAmino, OrderSDKType, DisabledOrderPair, DisabledOrderPairAmino, DisabledOrderPairSDKType } from "./order";
 import { ScheduleOrder, ScheduleOrderAmino, ScheduleOrderSDKType } from "./schedule_order";
 import { OraclePricePair, OraclePricePairAmino, OraclePricePairSDKType } from "./oracle_price_pair";
 import { PendingTokenIntroduction, PendingTokenIntroductionAmino, PendingTokenIntroductionSDKType } from "./pending_token_introduction";
@@ -72,6 +72,7 @@ export interface GenesisState {
   vaultPaused: boolean;
   oraclePricePairList: OraclePricePair[];
   pendingTokenIntroductionList: PendingTokenIntroduction[];
+  disabledOrderPairList: DisabledOrderPair[];
 }
 export interface GenesisStateProtoMsg {
   typeUrl: "/pryzm.amm.v1.GenesisState";
@@ -94,6 +95,7 @@ export interface GenesisStateAmino {
   vault_paused?: boolean;
   oracle_price_pair_list?: OraclePricePairAmino[];
   pending_token_introduction_list?: PendingTokenIntroductionAmino[];
+  disabled_order_pair_list?: DisabledOrderPairAmino[];
 }
 export interface GenesisStateAminoMsg {
   type: "/pryzm.amm.v1.GenesisState";
@@ -116,6 +118,7 @@ export interface GenesisStateSDKType {
   vault_paused: boolean;
   oracle_price_pair_list: OraclePricePairSDKType[];
   pending_token_introduction_list: PendingTokenIntroductionSDKType[];
+  disabled_order_pair_list: DisabledOrderPairSDKType[];
 }
 function createBaseGenesisPoolData(): GenesisPoolData {
   return {
@@ -347,19 +350,20 @@ function createBaseGenesisState(): GenesisState {
     scheduleOrderList: [],
     vaultPaused: false,
     oraclePricePairList: [],
-    pendingTokenIntroductionList: []
+    pendingTokenIntroductionList: [],
+    disabledOrderPairList: []
   };
 }
 export const GenesisState = {
   typeUrl: "/pryzm.amm.v1.GenesisState",
   is(o: any): o is GenesisState {
-    return o && (o.$typeUrl === GenesisState.typeUrl || Params.is(o.params) && Array.isArray(o.poolList) && (!o.poolList.length || GenesisPoolData.is(o.poolList[0])) && Array.isArray(o.weightedPoolPropertiesList) && (!o.weightedPoolPropertiesList.length || WeightedPoolProperties.is(o.weightedPoolPropertiesList[0])) && Array.isArray(o.yammPoolAssetIdList) && (!o.yammPoolAssetIdList.length || YammPoolAssetId.is(o.yammPoolAssetIdList[0])) && Array.isArray(o.introducingPoolTokenList) && (!o.introducingPoolTokenList.length || VirtualBalancePoolToken.is(o.introducingPoolTokenList[0])) && Array.isArray(o.expiringPoolTokenList) && (!o.expiringPoolTokenList.length || VirtualBalancePoolToken.is(o.expiringPoolTokenList[0])) && Array.isArray(o.yammConfigurationList) && (!o.yammConfigurationList.length || YammConfiguration.is(o.yammConfigurationList[0])) && Array.isArray(o.whitelistedRouteList) && (!o.whitelistedRouteList.length || WhitelistedRoute.is(o.whitelistedRouteList[0])) && Array.isArray(o.orderList) && (!o.orderList.length || Order.is(o.orderList[0])) && typeof o.orderCount === "bigint" && Array.isArray(o.executableOrderList) && (!o.executableOrderList.length || typeof o.executableOrderList[0] === "bigint") && Array.isArray(o.scheduleOrderList) && (!o.scheduleOrderList.length || ScheduleOrder.is(o.scheduleOrderList[0])) && typeof o.vaultPaused === "boolean" && Array.isArray(o.oraclePricePairList) && (!o.oraclePricePairList.length || OraclePricePair.is(o.oraclePricePairList[0])) && Array.isArray(o.pendingTokenIntroductionList) && (!o.pendingTokenIntroductionList.length || PendingTokenIntroduction.is(o.pendingTokenIntroductionList[0])));
+    return o && (o.$typeUrl === GenesisState.typeUrl || Params.is(o.params) && Array.isArray(o.poolList) && (!o.poolList.length || GenesisPoolData.is(o.poolList[0])) && Array.isArray(o.weightedPoolPropertiesList) && (!o.weightedPoolPropertiesList.length || WeightedPoolProperties.is(o.weightedPoolPropertiesList[0])) && Array.isArray(o.yammPoolAssetIdList) && (!o.yammPoolAssetIdList.length || YammPoolAssetId.is(o.yammPoolAssetIdList[0])) && Array.isArray(o.introducingPoolTokenList) && (!o.introducingPoolTokenList.length || VirtualBalancePoolToken.is(o.introducingPoolTokenList[0])) && Array.isArray(o.expiringPoolTokenList) && (!o.expiringPoolTokenList.length || VirtualBalancePoolToken.is(o.expiringPoolTokenList[0])) && Array.isArray(o.yammConfigurationList) && (!o.yammConfigurationList.length || YammConfiguration.is(o.yammConfigurationList[0])) && Array.isArray(o.whitelistedRouteList) && (!o.whitelistedRouteList.length || WhitelistedRoute.is(o.whitelistedRouteList[0])) && Array.isArray(o.orderList) && (!o.orderList.length || Order.is(o.orderList[0])) && typeof o.orderCount === "bigint" && Array.isArray(o.executableOrderList) && (!o.executableOrderList.length || typeof o.executableOrderList[0] === "bigint") && Array.isArray(o.scheduleOrderList) && (!o.scheduleOrderList.length || ScheduleOrder.is(o.scheduleOrderList[0])) && typeof o.vaultPaused === "boolean" && Array.isArray(o.oraclePricePairList) && (!o.oraclePricePairList.length || OraclePricePair.is(o.oraclePricePairList[0])) && Array.isArray(o.pendingTokenIntroductionList) && (!o.pendingTokenIntroductionList.length || PendingTokenIntroduction.is(o.pendingTokenIntroductionList[0])) && Array.isArray(o.disabledOrderPairList) && (!o.disabledOrderPairList.length || DisabledOrderPair.is(o.disabledOrderPairList[0])));
   },
   isSDK(o: any): o is GenesisStateSDKType {
-    return o && (o.$typeUrl === GenesisState.typeUrl || Params.isSDK(o.params) && Array.isArray(o.pool_list) && (!o.pool_list.length || GenesisPoolData.isSDK(o.pool_list[0])) && Array.isArray(o.weighted_pool_properties_list) && (!o.weighted_pool_properties_list.length || WeightedPoolProperties.isSDK(o.weighted_pool_properties_list[0])) && Array.isArray(o.yamm_pool_asset_id_list) && (!o.yamm_pool_asset_id_list.length || YammPoolAssetId.isSDK(o.yamm_pool_asset_id_list[0])) && Array.isArray(o.introducing_pool_token_list) && (!o.introducing_pool_token_list.length || VirtualBalancePoolToken.isSDK(o.introducing_pool_token_list[0])) && Array.isArray(o.expiring_pool_token_list) && (!o.expiring_pool_token_list.length || VirtualBalancePoolToken.isSDK(o.expiring_pool_token_list[0])) && Array.isArray(o.yamm_configuration_list) && (!o.yamm_configuration_list.length || YammConfiguration.isSDK(o.yamm_configuration_list[0])) && Array.isArray(o.whitelisted_route_list) && (!o.whitelisted_route_list.length || WhitelistedRoute.isSDK(o.whitelisted_route_list[0])) && Array.isArray(o.order_list) && (!o.order_list.length || Order.isSDK(o.order_list[0])) && typeof o.order_count === "bigint" && Array.isArray(o.executable_order_list) && (!o.executable_order_list.length || typeof o.executable_order_list[0] === "bigint") && Array.isArray(o.schedule_order_list) && (!o.schedule_order_list.length || ScheduleOrder.isSDK(o.schedule_order_list[0])) && typeof o.vault_paused === "boolean" && Array.isArray(o.oracle_price_pair_list) && (!o.oracle_price_pair_list.length || OraclePricePair.isSDK(o.oracle_price_pair_list[0])) && Array.isArray(o.pending_token_introduction_list) && (!o.pending_token_introduction_list.length || PendingTokenIntroduction.isSDK(o.pending_token_introduction_list[0])));
+    return o && (o.$typeUrl === GenesisState.typeUrl || Params.isSDK(o.params) && Array.isArray(o.pool_list) && (!o.pool_list.length || GenesisPoolData.isSDK(o.pool_list[0])) && Array.isArray(o.weighted_pool_properties_list) && (!o.weighted_pool_properties_list.length || WeightedPoolProperties.isSDK(o.weighted_pool_properties_list[0])) && Array.isArray(o.yamm_pool_asset_id_list) && (!o.yamm_pool_asset_id_list.length || YammPoolAssetId.isSDK(o.yamm_pool_asset_id_list[0])) && Array.isArray(o.introducing_pool_token_list) && (!o.introducing_pool_token_list.length || VirtualBalancePoolToken.isSDK(o.introducing_pool_token_list[0])) && Array.isArray(o.expiring_pool_token_list) && (!o.expiring_pool_token_list.length || VirtualBalancePoolToken.isSDK(o.expiring_pool_token_list[0])) && Array.isArray(o.yamm_configuration_list) && (!o.yamm_configuration_list.length || YammConfiguration.isSDK(o.yamm_configuration_list[0])) && Array.isArray(o.whitelisted_route_list) && (!o.whitelisted_route_list.length || WhitelistedRoute.isSDK(o.whitelisted_route_list[0])) && Array.isArray(o.order_list) && (!o.order_list.length || Order.isSDK(o.order_list[0])) && typeof o.order_count === "bigint" && Array.isArray(o.executable_order_list) && (!o.executable_order_list.length || typeof o.executable_order_list[0] === "bigint") && Array.isArray(o.schedule_order_list) && (!o.schedule_order_list.length || ScheduleOrder.isSDK(o.schedule_order_list[0])) && typeof o.vault_paused === "boolean" && Array.isArray(o.oracle_price_pair_list) && (!o.oracle_price_pair_list.length || OraclePricePair.isSDK(o.oracle_price_pair_list[0])) && Array.isArray(o.pending_token_introduction_list) && (!o.pending_token_introduction_list.length || PendingTokenIntroduction.isSDK(o.pending_token_introduction_list[0])) && Array.isArray(o.disabled_order_pair_list) && (!o.disabled_order_pair_list.length || DisabledOrderPair.isSDK(o.disabled_order_pair_list[0])));
   },
   isAmino(o: any): o is GenesisStateAmino {
-    return o && (o.$typeUrl === GenesisState.typeUrl || Params.isAmino(o.params) && Array.isArray(o.pool_list) && (!o.pool_list.length || GenesisPoolData.isAmino(o.pool_list[0])) && Array.isArray(o.weighted_pool_properties_list) && (!o.weighted_pool_properties_list.length || WeightedPoolProperties.isAmino(o.weighted_pool_properties_list[0])) && Array.isArray(o.yamm_pool_asset_id_list) && (!o.yamm_pool_asset_id_list.length || YammPoolAssetId.isAmino(o.yamm_pool_asset_id_list[0])) && Array.isArray(o.introducing_pool_token_list) && (!o.introducing_pool_token_list.length || VirtualBalancePoolToken.isAmino(o.introducing_pool_token_list[0])) && Array.isArray(o.expiring_pool_token_list) && (!o.expiring_pool_token_list.length || VirtualBalancePoolToken.isAmino(o.expiring_pool_token_list[0])) && Array.isArray(o.yamm_configuration_list) && (!o.yamm_configuration_list.length || YammConfiguration.isAmino(o.yamm_configuration_list[0])) && Array.isArray(o.whitelisted_route_list) && (!o.whitelisted_route_list.length || WhitelistedRoute.isAmino(o.whitelisted_route_list[0])) && Array.isArray(o.order_list) && (!o.order_list.length || Order.isAmino(o.order_list[0])) && typeof o.order_count === "bigint" && Array.isArray(o.executable_order_list) && (!o.executable_order_list.length || typeof o.executable_order_list[0] === "bigint") && Array.isArray(o.schedule_order_list) && (!o.schedule_order_list.length || ScheduleOrder.isAmino(o.schedule_order_list[0])) && typeof o.vault_paused === "boolean" && Array.isArray(o.oracle_price_pair_list) && (!o.oracle_price_pair_list.length || OraclePricePair.isAmino(o.oracle_price_pair_list[0])) && Array.isArray(o.pending_token_introduction_list) && (!o.pending_token_introduction_list.length || PendingTokenIntroduction.isAmino(o.pending_token_introduction_list[0])));
+    return o && (o.$typeUrl === GenesisState.typeUrl || Params.isAmino(o.params) && Array.isArray(o.pool_list) && (!o.pool_list.length || GenesisPoolData.isAmino(o.pool_list[0])) && Array.isArray(o.weighted_pool_properties_list) && (!o.weighted_pool_properties_list.length || WeightedPoolProperties.isAmino(o.weighted_pool_properties_list[0])) && Array.isArray(o.yamm_pool_asset_id_list) && (!o.yamm_pool_asset_id_list.length || YammPoolAssetId.isAmino(o.yamm_pool_asset_id_list[0])) && Array.isArray(o.introducing_pool_token_list) && (!o.introducing_pool_token_list.length || VirtualBalancePoolToken.isAmino(o.introducing_pool_token_list[0])) && Array.isArray(o.expiring_pool_token_list) && (!o.expiring_pool_token_list.length || VirtualBalancePoolToken.isAmino(o.expiring_pool_token_list[0])) && Array.isArray(o.yamm_configuration_list) && (!o.yamm_configuration_list.length || YammConfiguration.isAmino(o.yamm_configuration_list[0])) && Array.isArray(o.whitelisted_route_list) && (!o.whitelisted_route_list.length || WhitelistedRoute.isAmino(o.whitelisted_route_list[0])) && Array.isArray(o.order_list) && (!o.order_list.length || Order.isAmino(o.order_list[0])) && typeof o.order_count === "bigint" && Array.isArray(o.executable_order_list) && (!o.executable_order_list.length || typeof o.executable_order_list[0] === "bigint") && Array.isArray(o.schedule_order_list) && (!o.schedule_order_list.length || ScheduleOrder.isAmino(o.schedule_order_list[0])) && typeof o.vault_paused === "boolean" && Array.isArray(o.oracle_price_pair_list) && (!o.oracle_price_pair_list.length || OraclePricePair.isAmino(o.oracle_price_pair_list[0])) && Array.isArray(o.pending_token_introduction_list) && (!o.pending_token_introduction_list.length || PendingTokenIntroduction.isAmino(o.pending_token_introduction_list[0])) && Array.isArray(o.disabled_order_pair_list) && (!o.disabled_order_pair_list.length || DisabledOrderPair.isAmino(o.disabled_order_pair_list[0])));
   },
   encode(message: GenesisState, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.params !== undefined) {
@@ -408,6 +412,9 @@ export const GenesisState = {
     }
     for (const v of message.pendingTokenIntroductionList) {
       PendingTokenIntroduction.encode(v!, writer.uint32(122).fork()).ldelim();
+    }
+    for (const v of message.disabledOrderPairList) {
+      DisabledOrderPair.encode(v!, writer.uint32(130).fork()).ldelim();
     }
     return writer;
   },
@@ -470,6 +477,9 @@ export const GenesisState = {
         case 15:
           message.pendingTokenIntroductionList.push(PendingTokenIntroduction.decode(reader, reader.uint32(), useInterfaces));
           break;
+        case 16:
+          message.disabledOrderPairList.push(DisabledOrderPair.decode(reader, reader.uint32(), useInterfaces));
+          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -493,7 +503,8 @@ export const GenesisState = {
       scheduleOrderList: Array.isArray(object?.scheduleOrderList) ? object.scheduleOrderList.map((e: any) => ScheduleOrder.fromJSON(e)) : [],
       vaultPaused: isSet(object.vaultPaused) ? Boolean(object.vaultPaused) : false,
       oraclePricePairList: Array.isArray(object?.oraclePricePairList) ? object.oraclePricePairList.map((e: any) => OraclePricePair.fromJSON(e)) : [],
-      pendingTokenIntroductionList: Array.isArray(object?.pendingTokenIntroductionList) ? object.pendingTokenIntroductionList.map((e: any) => PendingTokenIntroduction.fromJSON(e)) : []
+      pendingTokenIntroductionList: Array.isArray(object?.pendingTokenIntroductionList) ? object.pendingTokenIntroductionList.map((e: any) => PendingTokenIntroduction.fromJSON(e)) : [],
+      disabledOrderPairList: Array.isArray(object?.disabledOrderPairList) ? object.disabledOrderPairList.map((e: any) => DisabledOrderPair.fromJSON(e)) : []
     };
   },
   toJSON(message: GenesisState): unknown {
@@ -561,6 +572,11 @@ export const GenesisState = {
     } else {
       obj.pendingTokenIntroductionList = [];
     }
+    if (message.disabledOrderPairList) {
+      obj.disabledOrderPairList = message.disabledOrderPairList.map(e => e ? DisabledOrderPair.toJSON(e) : undefined);
+    } else {
+      obj.disabledOrderPairList = [];
+    }
     return obj;
   },
   fromPartial(object: Partial<GenesisState>): GenesisState {
@@ -580,6 +596,7 @@ export const GenesisState = {
     message.vaultPaused = object.vaultPaused ?? false;
     message.oraclePricePairList = object.oraclePricePairList?.map(e => OraclePricePair.fromPartial(e)) || [];
     message.pendingTokenIntroductionList = object.pendingTokenIntroductionList?.map(e => PendingTokenIntroduction.fromPartial(e)) || [];
+    message.disabledOrderPairList = object.disabledOrderPairList?.map(e => DisabledOrderPair.fromPartial(e)) || [];
     return message;
   },
   fromAmino(object: GenesisStateAmino): GenesisState {
@@ -605,6 +622,7 @@ export const GenesisState = {
     }
     message.oraclePricePairList = object.oracle_price_pair_list?.map(e => OraclePricePair.fromAmino(e)) || [];
     message.pendingTokenIntroductionList = object.pending_token_introduction_list?.map(e => PendingTokenIntroduction.fromAmino(e)) || [];
+    message.disabledOrderPairList = object.disabled_order_pair_list?.map(e => DisabledOrderPair.fromAmino(e)) || [];
     return message;
   },
   toAmino(message: GenesisState, useInterfaces: boolean = true): GenesisStateAmino {
@@ -671,6 +689,11 @@ export const GenesisState = {
       obj.pending_token_introduction_list = message.pendingTokenIntroductionList.map(e => e ? PendingTokenIntroduction.toAmino(e, useInterfaces) : undefined);
     } else {
       obj.pending_token_introduction_list = message.pendingTokenIntroductionList;
+    }
+    if (message.disabledOrderPairList) {
+      obj.disabled_order_pair_list = message.disabledOrderPairList.map(e => e ? DisabledOrderPair.toAmino(e, useInterfaces) : undefined);
+    } else {
+      obj.disabled_order_pair_list = message.disabledOrderPairList;
     }
     return obj;
   },

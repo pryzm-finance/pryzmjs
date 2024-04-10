@@ -340,6 +340,7 @@ export interface CollectUndelegatedReplyDataSDKType {
 export interface SweepData {
   /** a list containing info about the sweep operation through different channel channel */
   channelSweeps: ChannelSweep[];
+  feeSweep: ChannelSweep;
 }
 export interface SweepDataProtoMsg {
   typeUrl: "/pryzm.icstaking.v1.SweepData";
@@ -349,6 +350,7 @@ export interface SweepDataProtoMsg {
 export interface SweepDataAmino {
   /** a list containing info about the sweep operation through different channel channel */
   channel_sweeps?: ChannelSweepAmino[];
+  fee_sweep?: ChannelSweepAmino;
 }
 export interface SweepDataAminoMsg {
   type: "/pryzm.icstaking.v1.SweepData";
@@ -357,6 +359,7 @@ export interface SweepDataAminoMsg {
 /** The reply data used in SweepBridge */
 export interface SweepDataSDKType {
   channel_sweeps: ChannelSweepSDKType[];
+  fee_sweep: ChannelSweepSDKType;
 }
 /** Contains info about the sweep operation through a channel */
 export interface ChannelSweep {
@@ -365,6 +368,8 @@ export interface ChannelSweep {
   epochs: bigint[];
   /** the amount being swept from the host chain */
   amount: string;
+  /** the timeout timestamp set on the ibc transfer */
+  timeout: bigint;
 }
 export interface ChannelSweepProtoMsg {
   typeUrl: "/pryzm.icstaking.v1.ChannelSweep";
@@ -377,6 +382,8 @@ export interface ChannelSweepAmino {
   epochs?: string[];
   /** the amount being swept from the host chain */
   amount?: string;
+  /** the timeout timestamp set on the ibc transfer */
+  timeout?: string;
 }
 export interface ChannelSweepAminoMsg {
   type: "/pryzm.icstaking.v1.ChannelSweep";
@@ -387,6 +394,7 @@ export interface ChannelSweepSDKType {
   channel: string;
   epochs: bigint[];
   amount: string;
+  timeout: bigint;
 }
 /** Contains info about a single LSM share transfer */
 export interface LsmTransferData {
@@ -1786,23 +1794,27 @@ export const CollectUndelegatedReplyData = {
 GlobalDecoderRegistry.register(CollectUndelegatedReplyData.typeUrl, CollectUndelegatedReplyData);
 function createBaseSweepData(): SweepData {
   return {
-    channelSweeps: []
+    channelSweeps: [],
+    feeSweep: ChannelSweep.fromPartial({})
   };
 }
 export const SweepData = {
   typeUrl: "/pryzm.icstaking.v1.SweepData",
   is(o: any): o is SweepData {
-    return o && (o.$typeUrl === SweepData.typeUrl || Array.isArray(o.channelSweeps) && (!o.channelSweeps.length || ChannelSweep.is(o.channelSweeps[0])));
+    return o && (o.$typeUrl === SweepData.typeUrl || Array.isArray(o.channelSweeps) && (!o.channelSweeps.length || ChannelSweep.is(o.channelSweeps[0])) && ChannelSweep.is(o.feeSweep));
   },
   isSDK(o: any): o is SweepDataSDKType {
-    return o && (o.$typeUrl === SweepData.typeUrl || Array.isArray(o.channel_sweeps) && (!o.channel_sweeps.length || ChannelSweep.isSDK(o.channel_sweeps[0])));
+    return o && (o.$typeUrl === SweepData.typeUrl || Array.isArray(o.channel_sweeps) && (!o.channel_sweeps.length || ChannelSweep.isSDK(o.channel_sweeps[0])) && ChannelSweep.isSDK(o.fee_sweep));
   },
   isAmino(o: any): o is SweepDataAmino {
-    return o && (o.$typeUrl === SweepData.typeUrl || Array.isArray(o.channel_sweeps) && (!o.channel_sweeps.length || ChannelSweep.isAmino(o.channel_sweeps[0])));
+    return o && (o.$typeUrl === SweepData.typeUrl || Array.isArray(o.channel_sweeps) && (!o.channel_sweeps.length || ChannelSweep.isAmino(o.channel_sweeps[0])) && ChannelSweep.isAmino(o.fee_sweep));
   },
   encode(message: SweepData, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     for (const v of message.channelSweeps) {
       ChannelSweep.encode(v!, writer.uint32(10).fork()).ldelim();
+    }
+    if (message.feeSweep !== undefined) {
+      ChannelSweep.encode(message.feeSweep, writer.uint32(18).fork()).ldelim();
     }
     return writer;
   },
@@ -1816,6 +1828,9 @@ export const SweepData = {
         case 1:
           message.channelSweeps.push(ChannelSweep.decode(reader, reader.uint32(), useInterfaces));
           break;
+        case 2:
+          message.feeSweep = ChannelSweep.decode(reader, reader.uint32(), useInterfaces);
+          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -1825,7 +1840,8 @@ export const SweepData = {
   },
   fromJSON(object: any): SweepData {
     return {
-      channelSweeps: Array.isArray(object?.channelSweeps) ? object.channelSweeps.map((e: any) => ChannelSweep.fromJSON(e)) : []
+      channelSweeps: Array.isArray(object?.channelSweeps) ? object.channelSweeps.map((e: any) => ChannelSweep.fromJSON(e)) : [],
+      feeSweep: isSet(object.feeSweep) ? ChannelSweep.fromJSON(object.feeSweep) : undefined
     };
   },
   toJSON(message: SweepData): unknown {
@@ -1835,16 +1851,21 @@ export const SweepData = {
     } else {
       obj.channelSweeps = [];
     }
+    message.feeSweep !== undefined && (obj.feeSweep = message.feeSweep ? ChannelSweep.toJSON(message.feeSweep) : undefined);
     return obj;
   },
   fromPartial(object: Partial<SweepData>): SweepData {
     const message = createBaseSweepData();
     message.channelSweeps = object.channelSweeps?.map(e => ChannelSweep.fromPartial(e)) || [];
+    message.feeSweep = object.feeSweep !== undefined && object.feeSweep !== null ? ChannelSweep.fromPartial(object.feeSweep) : undefined;
     return message;
   },
   fromAmino(object: SweepDataAmino): SweepData {
     const message = createBaseSweepData();
     message.channelSweeps = object.channel_sweeps?.map(e => ChannelSweep.fromAmino(e)) || [];
+    if (object.fee_sweep !== undefined && object.fee_sweep !== null) {
+      message.feeSweep = ChannelSweep.fromAmino(object.fee_sweep);
+    }
     return message;
   },
   toAmino(message: SweepData, useInterfaces: boolean = true): SweepDataAmino {
@@ -1854,6 +1875,7 @@ export const SweepData = {
     } else {
       obj.channel_sweeps = message.channelSweeps;
     }
+    obj.fee_sweep = message.feeSweep ? ChannelSweep.toAmino(message.feeSweep, useInterfaces) : undefined;
     return obj;
   },
   fromAminoMsg(object: SweepDataAminoMsg): SweepData {
@@ -1877,19 +1899,20 @@ function createBaseChannelSweep(): ChannelSweep {
   return {
     channel: "",
     epochs: [],
-    amount: ""
+    amount: "",
+    timeout: BigInt(0)
   };
 }
 export const ChannelSweep = {
   typeUrl: "/pryzm.icstaking.v1.ChannelSweep",
   is(o: any): o is ChannelSweep {
-    return o && (o.$typeUrl === ChannelSweep.typeUrl || typeof o.channel === "string" && Array.isArray(o.epochs) && (!o.epochs.length || typeof o.epochs[0] === "bigint") && typeof o.amount === "string");
+    return o && (o.$typeUrl === ChannelSweep.typeUrl || typeof o.channel === "string" && Array.isArray(o.epochs) && (!o.epochs.length || typeof o.epochs[0] === "bigint") && typeof o.amount === "string" && typeof o.timeout === "bigint");
   },
   isSDK(o: any): o is ChannelSweepSDKType {
-    return o && (o.$typeUrl === ChannelSweep.typeUrl || typeof o.channel === "string" && Array.isArray(o.epochs) && (!o.epochs.length || typeof o.epochs[0] === "bigint") && typeof o.amount === "string");
+    return o && (o.$typeUrl === ChannelSweep.typeUrl || typeof o.channel === "string" && Array.isArray(o.epochs) && (!o.epochs.length || typeof o.epochs[0] === "bigint") && typeof o.amount === "string" && typeof o.timeout === "bigint");
   },
   isAmino(o: any): o is ChannelSweepAmino {
-    return o && (o.$typeUrl === ChannelSweep.typeUrl || typeof o.channel === "string" && Array.isArray(o.epochs) && (!o.epochs.length || typeof o.epochs[0] === "bigint") && typeof o.amount === "string");
+    return o && (o.$typeUrl === ChannelSweep.typeUrl || typeof o.channel === "string" && Array.isArray(o.epochs) && (!o.epochs.length || typeof o.epochs[0] === "bigint") && typeof o.amount === "string" && typeof o.timeout === "bigint");
   },
   encode(message: ChannelSweep, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.channel !== "") {
@@ -1902,6 +1925,9 @@ export const ChannelSweep = {
     writer.ldelim();
     if (message.amount !== "") {
       writer.uint32(26).string(message.amount);
+    }
+    if (message.timeout !== BigInt(0)) {
+      writer.uint32(32).uint64(message.timeout);
     }
     return writer;
   },
@@ -1928,6 +1954,9 @@ export const ChannelSweep = {
         case 3:
           message.amount = reader.string();
           break;
+        case 4:
+          message.timeout = reader.uint64();
+          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -1939,7 +1968,8 @@ export const ChannelSweep = {
     return {
       channel: isSet(object.channel) ? String(object.channel) : "",
       epochs: Array.isArray(object?.epochs) ? object.epochs.map((e: any) => BigInt(e.toString())) : [],
-      amount: isSet(object.amount) ? String(object.amount) : ""
+      amount: isSet(object.amount) ? String(object.amount) : "",
+      timeout: isSet(object.timeout) ? BigInt(object.timeout.toString()) : BigInt(0)
     };
   },
   toJSON(message: ChannelSweep): unknown {
@@ -1951,6 +1981,7 @@ export const ChannelSweep = {
       obj.epochs = [];
     }
     message.amount !== undefined && (obj.amount = message.amount);
+    message.timeout !== undefined && (obj.timeout = (message.timeout || BigInt(0)).toString());
     return obj;
   },
   fromPartial(object: Partial<ChannelSweep>): ChannelSweep {
@@ -1958,6 +1989,7 @@ export const ChannelSweep = {
     message.channel = object.channel ?? "";
     message.epochs = object.epochs?.map(e => BigInt(e.toString())) || [];
     message.amount = object.amount ?? "";
+    message.timeout = object.timeout !== undefined && object.timeout !== null ? BigInt(object.timeout.toString()) : BigInt(0);
     return message;
   },
   fromAmino(object: ChannelSweepAmino): ChannelSweep {
@@ -1968,6 +2000,9 @@ export const ChannelSweep = {
     message.epochs = object.epochs?.map(e => BigInt(e)) || [];
     if (object.amount !== undefined && object.amount !== null) {
       message.amount = object.amount;
+    }
+    if (object.timeout !== undefined && object.timeout !== null) {
+      message.timeout = BigInt(object.timeout);
     }
     return message;
   },
@@ -1980,6 +2015,7 @@ export const ChannelSweep = {
       obj.epochs = message.epochs;
     }
     obj.amount = message.amount === "" ? undefined : message.amount;
+    obj.timeout = message.timeout ? message.timeout.toString() : undefined;
     return obj;
   },
   fromAminoMsg(object: ChannelSweepAminoMsg): ChannelSweep {

@@ -28,6 +28,14 @@ message EventSetPoolCount {
   uint64 pool_count = 1;
 }
 
+message EventSetOrderPairDisabled {
+  // note token_in and token_out are bi-directional
+  // meaning disabling token_in=x,token_out=y is
+  // disabling token_in=y,token_out=x at the same time.
+  DisabledOrderPair pair = 1 [(gogoproto.nullable) = false];
+  bool disabled = 2;
+}
+
 message EventSetLpTokenSupply {
   uint64 pool_id = 1;
   string supply = 2 [

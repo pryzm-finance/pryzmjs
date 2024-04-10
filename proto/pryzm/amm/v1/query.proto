@@ -249,6 +249,15 @@ service Query {
     option (google.api.http).get = "/pryzm/amm/v1/order_step_bounds/{pool_id}/{token_in}/{token_out}/{whitelisted_route}";
   }
 
+  // Queries a list of all disabled order pairs
+  rpc DisabledOrderPairAll(QueryAllDisabledOrderPairRequest) returns (QueryAllDisabledOrderPairResponse) {
+    option (google.api.http).get = "/pryzm/amm/v1/disabled_order_pair";
+  }
+
+  // Queries whether or not a pair is disabled
+  rpc OrderPairDisabled(QueryOrderPairDisabledRequest) returns (QueryOrderPairDisabledResponse) {
+    option (google.api.http).get = "/pryzm/amm/v1/disabled_order_pair/{whitelisted_route}/{pool_id}/{token_in}/{token_out}";
+  }
   // this line is used by starport scaffolding # 2
 }
 
@@ -776,6 +785,26 @@ message QueryOrderStepBoundsResponse {
     (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Int",
     (gogoproto.nullable) = false
   ];
+}
+
+message QueryAllDisabledOrderPairRequest {
+  cosmos.base.query.v1beta1.PageRequest pagination = 1 [(gogoproto.nullable) = true];
+}
+
+message QueryAllDisabledOrderPairResponse {
+  repeated DisabledOrderPair disabled_order_pair = 1 [(gogoproto.nullable) = false];
+  cosmos.base.query.v1beta1.PageResponse pagination = 2 [(gogoproto.nullable) = true];
+}
+
+message QueryOrderPairDisabledRequest {
+  bool whitelisted_route = 1;
+  uint64 pool_id = 2;
+  string token_in = 3;
+  string token_out = 4;
+}
+
+message QueryOrderPairDisabledResponse {
+  bool disabled = 1;
 }
 
 // this line is used by starport scaffolding # 3

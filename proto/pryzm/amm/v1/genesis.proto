@@ -50,5 +50,6 @@ message GenesisState {
   bool vault_paused = 13;
   repeated OraclePricePair oracle_price_pair_list = 14 [(gogoproto.nullable) = false];
   repeated PendingTokenIntroduction pending_token_introduction_list = 15 [(gogoproto.nullable) = false];
+  repeated DisabledOrderPair disabled_order_pair_list = 16 [(gogoproto.nullable) = false];
   // this line is used by starport scaffolding # genesis/proto/state
 }

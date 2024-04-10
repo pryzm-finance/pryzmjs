@@ -1,5 +1,5 @@
 import { Minter, MinterAmino, MinterSDKType } from "./minter";
-import { DistributionProportions, DistributionProportionsAmino, DistributionProportionsSDKType } from "./params";
+import { DistributionProportions, DistributionProportionsAmino, DistributionProportionsSDKType, Params, ParamsAmino, ParamsSDKType } from "./params";
 import { BinaryReader, BinaryWriter } from "../../../binary";
 import { Decimal } from "@cosmjs/math";
 import { isSet, padDecimal } from "../../../helpers";
@@ -32,6 +32,23 @@ export interface EventMintSDKType {
   total_minted: string;
   distributed_amounts: DistributionProportionsSDKType;
   epoch_number: bigint;
+}
+export interface EventSetParams {
+  params: Params;
+}
+export interface EventSetParamsProtoMsg {
+  typeUrl: "/pryzm.mint.v1.EventSetParams";
+  value: Uint8Array;
+}
+export interface EventSetParamsAmino {
+  params?: ParamsAmino;
+}
+export interface EventSetParamsAminoMsg {
+  type: "/pryzm.mint.v1.EventSetParams";
+  value: EventSetParamsAmino;
+}
+export interface EventSetParamsSDKType {
+  params: ParamsSDKType;
 }
 function createBaseEventMint(): EventMint {
   return {
@@ -172,3 +189,86 @@ export const EventMint = {
   }
 };
 GlobalDecoderRegistry.register(EventMint.typeUrl, EventMint);
+function createBaseEventSetParams(): EventSetParams {
+  return {
+    params: Params.fromPartial({})
+  };
+}
+export const EventSetParams = {
+  typeUrl: "/pryzm.mint.v1.EventSetParams",
+  is(o: any): o is EventSetParams {
+    return o && (o.$typeUrl === EventSetParams.typeUrl || Params.is(o.params));
+  },
+  isSDK(o: any): o is EventSetParamsSDKType {
+    return o && (o.$typeUrl === EventSetParams.typeUrl || Params.isSDK(o.params));
+  },
+  isAmino(o: any): o is EventSetParamsAmino {
+    return o && (o.$typeUrl === EventSetParams.typeUrl || Params.isAmino(o.params));
+  },
+  encode(message: EventSetParams, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    if (message.params !== undefined) {
+      Params.encode(message.params, writer.uint32(10).fork()).ldelim();
+    }
+    return writer;
+  },
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): EventSetParams {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseEventSetParams();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.params = Params.decode(reader, reader.uint32(), useInterfaces);
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromJSON(object: any): EventSetParams {
+    return {
+      params: isSet(object.params) ? Params.fromJSON(object.params) : undefined
+    };
+  },
+  toJSON(message: EventSetParams): unknown {
+    const obj: any = {};
+    message.params !== undefined && (obj.params = message.params ? Params.toJSON(message.params) : undefined);
+    return obj;
+  },
+  fromPartial(object: Partial<EventSetParams>): EventSetParams {
+    const message = createBaseEventSetParams();
+    message.params = object.params !== undefined && object.params !== null ? Params.fromPartial(object.params) : undefined;
+    return message;
+  },
+  fromAmino(object: EventSetParamsAmino): EventSetParams {
+    const message = createBaseEventSetParams();
+    if (object.params !== undefined && object.params !== null) {
+      message.params = Params.fromAmino(object.params);
+    }
+    return message;
+  },
+  toAmino(message: EventSetParams, useInterfaces: boolean = true): EventSetParamsAmino {
+    const obj: any = {};
+    obj.params = message.params ? Params.toAmino(message.params, useInterfaces) : undefined;
+    return obj;
+  },
+  fromAminoMsg(object: EventSetParamsAminoMsg): EventSetParams {
+    return EventSetParams.fromAmino(object.value);
+  },
+  fromProtoMsg(message: EventSetParamsProtoMsg, useInterfaces: boolean = true): EventSetParams {
+    return EventSetParams.decode(message.value, undefined, useInterfaces);
+  },
+  toProto(message: EventSetParams): Uint8Array {
+    return EventSetParams.encode(message).finish();
+  },
+  toProtoMsg(message: EventSetParams): EventSetParamsProtoMsg {
+    return {
+      typeUrl: "/pryzm.mint.v1.EventSetParams",
+      value: EventSetParams.encode(message).finish()
+    };
+  }
+};
+GlobalDecoderRegistry.register(EventSetParams.typeUrl, EventSetParams);

@@ -2,7 +2,7 @@ import { UnaryMethodDefinitionish } from "../../../grpc-web";
 import { DeepPartial } from "../../../helpers";
 import { grpc } from "@improbable-eng/grpc-web";
 import { BrowserHeaders } from "browser-headers";
-import { MsgSingleSwap, MsgSingleSwapResponse, MsgJoinAllTokensExactLpt, MsgJoinAllTokensExactLptResponse, MsgJoinTokenExactLpt, MsgJoinTokenExactLptResponse, MsgJoinExactTokens, MsgJoinExactTokensResponse, MsgZeroImpactJoinYamm, MsgZeroImpactJoinYammResponse, MsgExitExactTokens, MsgExitExactTokensResponse, MsgExitTokenExactLpt, MsgExitTokenExactLptResponse, MsgExitAllTokensExactLpt, MsgExitAllTokensExactLptResponse, MsgCreateWeightedPool, MsgCreateWeightedPoolResponse, MsgUpdateSwapFee, MsgUpdateSwapFeeResponse, MsgInitializePool, MsgInitializePoolResponse, MsgUpdateWeights, MsgUpdateWeightsResponse, MsgBatchSwap, MsgBatchSwapResponse, MsgSetYammConfiguration, MsgSetYammConfigurationResponse, MsgWhitelistRoute, MsgWhitelistRouteResponse, MsgSetWhitelistedRouteEnabled, MsgSetWhitelistedRouteEnabledResponse, MsgSubmitOrder, MsgSubmitOrderResponse, MsgCancelOrder, MsgCancelOrderResponse, MsgProposeMatch, MsgProposeMatchResponse, MsgSetCircuitBreakers, MsgSetCircuitBreakersResponse, MsgSetRecoveryMode, MsgSetRecoveryModeResponse, MsgRecoveryExit, MsgRecoveryExitResponse, MsgSetPauseMode, MsgSetPauseModeResponse, MsgSetVaultPauseMode, MsgSetVaultPauseModeResponse, MsgCreateOraclePricePair, MsgCreateOraclePricePairResponse, MsgUpdateOraclePricePair, MsgUpdateOraclePricePairResponse, MsgDeleteOraclePricePair, MsgDeleteOraclePricePairResponse, MsgSetSwapProtocolFee, MsgSetSwapProtocolFeeResponse, MsgSetJoinExitProtocolFee, MsgSetJoinExitProtocolFeeResponse, MsgIntroduceYammLpToWeightedPool, MsgIntroduceYammLpToWeightedPoolResponse, MsgIntroduceAssetBaseTokenToWeightedPool, MsgIntroduceAssetBaseTokenToWeightedPoolResponse, MsgCancelPendingTokenIntroduction, MsgCancelPendingTokenIntroductionResponse, MsgRemoveTokenFromWeightedPool, MsgRemoveTokenFromWeightedPoolResponse, MsgUpdateParams, MsgUpdateParamsResponse, MsgAddMaturityToYamm, MsgAddMaturityToYammResponse, MsgSetInitializationAllowList, MsgSetInitializationAllowListResponse, MsgSetPoolAdmins, MsgSetPoolAdminsResponse, MsgSetPauseAllowList, MsgSetPauseAllowListResponse, MsgSetPauseWindow, MsgSetPauseWindowResponse } from "./tx";
+import { MsgSingleSwap, MsgSingleSwapResponse, MsgJoinAllTokensExactLpt, MsgJoinAllTokensExactLptResponse, MsgJoinTokenExactLpt, MsgJoinTokenExactLptResponse, MsgJoinExactTokens, MsgJoinExactTokensResponse, MsgZeroImpactJoinYamm, MsgZeroImpactJoinYammResponse, MsgExitExactTokens, MsgExitExactTokensResponse, MsgExitTokenExactLpt, MsgExitTokenExactLptResponse, MsgExitAllTokensExactLpt, MsgExitAllTokensExactLptResponse, MsgCreateWeightedPool, MsgCreateWeightedPoolResponse, MsgUpdateSwapFee, MsgUpdateSwapFeeResponse, MsgInitializePool, MsgInitializePoolResponse, MsgUpdateWeights, MsgUpdateWeightsResponse, MsgBatchSwap, MsgBatchSwapResponse, MsgSetYammConfiguration, MsgSetYammConfigurationResponse, MsgWhitelistRoute, MsgWhitelistRouteResponse, MsgSetWhitelistedRouteEnabled, MsgSetWhitelistedRouteEnabledResponse, MsgSubmitOrder, MsgSubmitOrderResponse, MsgCancelOrder, MsgCancelOrderResponse, MsgProposeMatch, MsgProposeMatchResponse, MsgSetCircuitBreakers, MsgSetCircuitBreakersResponse, MsgSetRecoveryMode, MsgSetRecoveryModeResponse, MsgRecoveryExit, MsgRecoveryExitResponse, MsgSetPauseMode, MsgSetPauseModeResponse, MsgSetVaultPauseMode, MsgSetVaultPauseModeResponse, MsgCreateOraclePricePair, MsgCreateOraclePricePairResponse, MsgUpdateOraclePricePair, MsgUpdateOraclePricePairResponse, MsgDeleteOraclePricePair, MsgDeleteOraclePricePairResponse, MsgSetSwapProtocolFee, MsgSetSwapProtocolFeeResponse, MsgSetJoinExitProtocolFee, MsgSetJoinExitProtocolFeeResponse, MsgIntroduceYammLpToWeightedPool, MsgIntroduceYammLpToWeightedPoolResponse, MsgIntroduceAssetBaseTokenToWeightedPool, MsgIntroduceAssetBaseTokenToWeightedPoolResponse, MsgCancelPendingTokenIntroduction, MsgCancelPendingTokenIntroductionResponse, MsgRemoveTokenFromWeightedPool, MsgRemoveTokenFromWeightedPoolResponse, MsgUpdateParams, MsgUpdateParamsResponse, MsgAddMaturityToYamm, MsgAddMaturityToYammResponse, MsgSetInitializationAllowList, MsgSetInitializationAllowListResponse, MsgSetPoolAdmins, MsgSetPoolAdminsResponse, MsgSetPauseAllowList, MsgSetPauseAllowListResponse, MsgSetPauseWindow, MsgSetPauseWindowResponse, MsgSetOrderPairDisabled, MsgSetOrderPairDisabledResponse } from "./tx";
 /** Msg defines the Msg service. */
 export interface Msg {
   singleSwap(request: DeepPartial<MsgSingleSwap>, metadata?: grpc.Metadata): Promise<MsgSingleSwapResponse>;
@@ -44,6 +44,7 @@ export interface Msg {
   setPoolAdmins(request: DeepPartial<MsgSetPoolAdmins>, metadata?: grpc.Metadata): Promise<MsgSetPoolAdminsResponse>;
   setPauseAllowList(request: DeepPartial<MsgSetPauseAllowList>, metadata?: grpc.Metadata): Promise<MsgSetPauseAllowListResponse>;
   setPauseWindow(request: DeepPartial<MsgSetPauseWindow>, metadata?: grpc.Metadata): Promise<MsgSetPauseWindowResponse>;
+  setOrderPairDisabled(request: DeepPartial<MsgSetOrderPairDisabled>, metadata?: grpc.Metadata): Promise<MsgSetOrderPairDisabledResponse>;
 }
 export class MsgClientImpl implements Msg {
   private readonly rpc: Rpc;
@@ -88,6 +89,7 @@ export class MsgClientImpl implements Msg {
     this.setPoolAdmins = this.setPoolAdmins.bind(this);
     this.setPauseAllowList = this.setPauseAllowList.bind(this);
     this.setPauseWindow = this.setPauseWindow.bind(this);
+    this.setOrderPairDisabled = this.setOrderPairDisabled.bind(this);
   }
   singleSwap(request: DeepPartial<MsgSingleSwap>, metadata?: grpc.Metadata): Promise<MsgSingleSwapResponse> {
     return this.rpc.unary(MsgSingleSwapDesc, MsgSingleSwap.fromPartial(request as any), metadata);
@@ -205,6 +207,9 @@ export class MsgClientImpl implements Msg {
   }
   setPauseWindow(request: DeepPartial<MsgSetPauseWindow>, metadata?: grpc.Metadata): Promise<MsgSetPauseWindowResponse> {
     return this.rpc.unary(MsgSetPauseWindowDesc, MsgSetPauseWindow.fromPartial(request as any), metadata);
+  }
+  setOrderPairDisabled(request: DeepPartial<MsgSetOrderPairDisabled>, metadata?: grpc.Metadata): Promise<MsgSetOrderPairDisabledResponse> {
+    return this.rpc.unary(MsgSetOrderPairDisabledDesc, MsgSetOrderPairDisabled.fromPartial(request as any), metadata);
   }
 }
 export const MsgDesc = {
@@ -1022,6 +1027,27 @@ export const MsgSetPauseWindowDesc: UnaryMethodDefinitionish = {
     deserializeBinary(data: Uint8Array) {
       return {
         ...MsgSetPauseWindowResponse.decode(data),
+        toObject() {
+          return this;
+        }
+      };
+    }
+  } as any)
+};
+export const MsgSetOrderPairDisabledDesc: UnaryMethodDefinitionish = {
+  methodName: "SetOrderPairDisabled",
+  service: MsgDesc,
+  requestStream: false,
+  responseStream: false,
+  requestType: ({
+    serializeBinary() {
+      return MsgSetOrderPairDisabled.encode(this).finish();
+    }
+  } as any),
+  responseType: ({
+    deserializeBinary(data: Uint8Array) {
+      return {
+        ...MsgSetOrderPairDisabledResponse.decode(data),
         toObject() {
           return this;
         }

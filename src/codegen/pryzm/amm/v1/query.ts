@@ -10,7 +10,7 @@ import { WeightUpdateTiming, WeightUpdateTimingAmino, WeightUpdateTimingSDKType 
 import { VirtualBalancePoolToken, VirtualBalancePoolTokenAmino, VirtualBalancePoolTokenSDKType } from "./virtual_balance_pool_token";
 import { YammConfiguration, YammConfigurationAmino, YammConfigurationSDKType } from "./yamm_configuration";
 import { WhitelistedRoute, WhitelistedRouteAmino, WhitelistedRouteSDKType } from "./whitelisted_route";
-import { Order, OrderAmino, OrderSDKType } from "./order";
+import { Order, OrderAmino, OrderSDKType, DisabledOrderPair, DisabledOrderPairAmino, DisabledOrderPairSDKType } from "./order";
 import { ScheduleOrder, ScheduleOrderAmino, ScheduleOrderSDKType } from "./schedule_order";
 import { OraclePricePair, OraclePricePairAmino, OraclePricePairSDKType } from "./oracle_price_pair";
 import { PendingTokenIntroduction, PendingTokenIntroductionAmino, PendingTokenIntroductionSDKType } from "./pending_token_introduction";
@@ -1756,6 +1756,86 @@ export interface QueryOrderStepBoundsResponseAminoMsg {
 export interface QueryOrderStepBoundsResponseSDKType {
   min_step: string;
   max_step: string;
+}
+export interface QueryAllDisabledOrderPairRequest {
+  pagination?: PageRequest;
+}
+export interface QueryAllDisabledOrderPairRequestProtoMsg {
+  typeUrl: "/pryzm.amm.v1.QueryAllDisabledOrderPairRequest";
+  value: Uint8Array;
+}
+export interface QueryAllDisabledOrderPairRequestAmino {
+  pagination?: PageRequestAmino;
+}
+export interface QueryAllDisabledOrderPairRequestAminoMsg {
+  type: "/pryzm.amm.v1.QueryAllDisabledOrderPairRequest";
+  value: QueryAllDisabledOrderPairRequestAmino;
+}
+export interface QueryAllDisabledOrderPairRequestSDKType {
+  pagination?: PageRequestSDKType;
+}
+export interface QueryAllDisabledOrderPairResponse {
+  disabledOrderPair: DisabledOrderPair[];
+  pagination?: PageResponse;
+}
+export interface QueryAllDisabledOrderPairResponseProtoMsg {
+  typeUrl: "/pryzm.amm.v1.QueryAllDisabledOrderPairResponse";
+  value: Uint8Array;
+}
+export interface QueryAllDisabledOrderPairResponseAmino {
+  disabled_order_pair?: DisabledOrderPairAmino[];
+  pagination?: PageResponseAmino;
+}
+export interface QueryAllDisabledOrderPairResponseAminoMsg {
+  type: "/pryzm.amm.v1.QueryAllDisabledOrderPairResponse";
+  value: QueryAllDisabledOrderPairResponseAmino;
+}
+export interface QueryAllDisabledOrderPairResponseSDKType {
+  disabled_order_pair: DisabledOrderPairSDKType[];
+  pagination?: PageResponseSDKType;
+}
+export interface QueryOrderPairDisabledRequest {
+  whitelistedRoute: boolean;
+  poolId: bigint;
+  tokenIn: string;
+  tokenOut: string;
+}
+export interface QueryOrderPairDisabledRequestProtoMsg {
+  typeUrl: "/pryzm.amm.v1.QueryOrderPairDisabledRequest";
+  value: Uint8Array;
+}
+export interface QueryOrderPairDisabledRequestAmino {
+  whitelisted_route?: boolean;
+  pool_id?: string;
+  token_in?: string;
+  token_out?: string;
+}
+export interface QueryOrderPairDisabledRequestAminoMsg {
+  type: "/pryzm.amm.v1.QueryOrderPairDisabledRequest";
+  value: QueryOrderPairDisabledRequestAmino;
+}
+export interface QueryOrderPairDisabledRequestSDKType {
+  whitelisted_route: boolean;
+  pool_id: bigint;
+  token_in: string;
+  token_out: string;
+}
+export interface QueryOrderPairDisabledResponse {
+  disabled: boolean;
+}
+export interface QueryOrderPairDisabledResponseProtoMsg {
+  typeUrl: "/pryzm.amm.v1.QueryOrderPairDisabledResponse";
+  value: Uint8Array;
+}
+export interface QueryOrderPairDisabledResponseAmino {
+  disabled?: boolean;
+}
+export interface QueryOrderPairDisabledResponseAminoMsg {
+  type: "/pryzm.amm.v1.QueryOrderPairDisabledResponse";
+  value: QueryOrderPairDisabledResponseAmino;
+}
+export interface QueryOrderPairDisabledResponseSDKType {
+  disabled: boolean;
 }
 function createBaseQueryParamsRequest(): QueryParamsRequest {
   return {};
@@ -10183,3 +10263,397 @@ export const QueryOrderStepBoundsResponse = {
   }
 };
 GlobalDecoderRegistry.register(QueryOrderStepBoundsResponse.typeUrl, QueryOrderStepBoundsResponse);
+function createBaseQueryAllDisabledOrderPairRequest(): QueryAllDisabledOrderPairRequest {
+  return {
+    pagination: undefined
+  };
+}
+export const QueryAllDisabledOrderPairRequest = {
+  typeUrl: "/pryzm.amm.v1.QueryAllDisabledOrderPairRequest",
+  is(o: any): o is QueryAllDisabledOrderPairRequest {
+    return o && o.$typeUrl === QueryAllDisabledOrderPairRequest.typeUrl;
+  },
+  isSDK(o: any): o is QueryAllDisabledOrderPairRequestSDKType {
+    return o && o.$typeUrl === QueryAllDisabledOrderPairRequest.typeUrl;
+  },
+  isAmino(o: any): o is QueryAllDisabledOrderPairRequestAmino {
+    return o && o.$typeUrl === QueryAllDisabledOrderPairRequest.typeUrl;
+  },
+  encode(message: QueryAllDisabledOrderPairRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    if (message.pagination !== undefined) {
+      PageRequest.encode(message.pagination, writer.uint32(10).fork()).ldelim();
+    }
+    return writer;
+  },
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): QueryAllDisabledOrderPairRequest {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseQueryAllDisabledOrderPairRequest();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.pagination = PageRequest.decode(reader, reader.uint32(), useInterfaces);
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromJSON(object: any): QueryAllDisabledOrderPairRequest {
+    return {
+      pagination: isSet(object.pagination) ? PageRequest.fromJSON(object.pagination) : undefined
+    };
+  },
+  toJSON(message: QueryAllDisabledOrderPairRequest): unknown {
+    const obj: any = {};
+    message.pagination !== undefined && (obj.pagination = message.pagination ? PageRequest.toJSON(message.pagination) : undefined);
+    return obj;
+  },
+  fromPartial(object: Partial<QueryAllDisabledOrderPairRequest>): QueryAllDisabledOrderPairRequest {
+    const message = createBaseQueryAllDisabledOrderPairRequest();
+    message.pagination = object.pagination !== undefined && object.pagination !== null ? PageRequest.fromPartial(object.pagination) : undefined;
+    return message;
+  },
+  fromAmino(object: QueryAllDisabledOrderPairRequestAmino): QueryAllDisabledOrderPairRequest {
+    const message = createBaseQueryAllDisabledOrderPairRequest();
+    if (object.pagination !== undefined && object.pagination !== null) {
+      message.pagination = PageRequest.fromAmino(object.pagination);
+    }
+    return message;
+  },
+  toAmino(message: QueryAllDisabledOrderPairRequest, useInterfaces: boolean = true): QueryAllDisabledOrderPairRequestAmino {
+    const obj: any = {};
+    obj.pagination = message.pagination ? PageRequest.toAmino(message.pagination, useInterfaces) : undefined;
+    return obj;
+  },
+  fromAminoMsg(object: QueryAllDisabledOrderPairRequestAminoMsg): QueryAllDisabledOrderPairRequest {
+    return QueryAllDisabledOrderPairRequest.fromAmino(object.value);
+  },
+  fromProtoMsg(message: QueryAllDisabledOrderPairRequestProtoMsg, useInterfaces: boolean = true): QueryAllDisabledOrderPairRequest {
+    return QueryAllDisabledOrderPairRequest.decode(message.value, undefined, useInterfaces);
+  },
+  toProto(message: QueryAllDisabledOrderPairRequest): Uint8Array {
+    return QueryAllDisabledOrderPairRequest.encode(message).finish();
+  },
+  toProtoMsg(message: QueryAllDisabledOrderPairRequest): QueryAllDisabledOrderPairRequestProtoMsg {
+    return {
+      typeUrl: "/pryzm.amm.v1.QueryAllDisabledOrderPairRequest",
+      value: QueryAllDisabledOrderPairRequest.encode(message).finish()
+    };
+  }
+};
+GlobalDecoderRegistry.register(QueryAllDisabledOrderPairRequest.typeUrl, QueryAllDisabledOrderPairRequest);
+function createBaseQueryAllDisabledOrderPairResponse(): QueryAllDisabledOrderPairResponse {
+  return {
+    disabledOrderPair: [],
+    pagination: undefined
+  };
+}
+export const QueryAllDisabledOrderPairResponse = {
+  typeUrl: "/pryzm.amm.v1.QueryAllDisabledOrderPairResponse",
+  is(o: any): o is QueryAllDisabledOrderPairResponse {
+    return o && (o.$typeUrl === QueryAllDisabledOrderPairResponse.typeUrl || Array.isArray(o.disabledOrderPair) && (!o.disabledOrderPair.length || DisabledOrderPair.is(o.disabledOrderPair[0])));
+  },
+  isSDK(o: any): o is QueryAllDisabledOrderPairResponseSDKType {
+    return o && (o.$typeUrl === QueryAllDisabledOrderPairResponse.typeUrl || Array.isArray(o.disabled_order_pair) && (!o.disabled_order_pair.length || DisabledOrderPair.isSDK(o.disabled_order_pair[0])));
+  },
+  isAmino(o: any): o is QueryAllDisabledOrderPairResponseAmino {
+    return o && (o.$typeUrl === QueryAllDisabledOrderPairResponse.typeUrl || Array.isArray(o.disabled_order_pair) && (!o.disabled_order_pair.length || DisabledOrderPair.isAmino(o.disabled_order_pair[0])));
+  },
+  encode(message: QueryAllDisabledOrderPairResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    for (const v of message.disabledOrderPair) {
+      DisabledOrderPair.encode(v!, writer.uint32(10).fork()).ldelim();
+    }
+    if (message.pagination !== undefined) {
+      PageResponse.encode(message.pagination, writer.uint32(18).fork()).ldelim();
+    }
+    return writer;
+  },
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): QueryAllDisabledOrderPairResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseQueryAllDisabledOrderPairResponse();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.disabledOrderPair.push(DisabledOrderPair.decode(reader, reader.uint32(), useInterfaces));
+          break;
+        case 2:
+          message.pagination = PageResponse.decode(reader, reader.uint32(), useInterfaces);
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromJSON(object: any): QueryAllDisabledOrderPairResponse {
+    return {
+      disabledOrderPair: Array.isArray(object?.disabledOrderPair) ? object.disabledOrderPair.map((e: any) => DisabledOrderPair.fromJSON(e)) : [],
+      pagination: isSet(object.pagination) ? PageResponse.fromJSON(object.pagination) : undefined
+    };
+  },
+  toJSON(message: QueryAllDisabledOrderPairResponse): unknown {
+    const obj: any = {};
+    if (message.disabledOrderPair) {
+      obj.disabledOrderPair = message.disabledOrderPair.map(e => e ? DisabledOrderPair.toJSON(e) : undefined);
+    } else {
+      obj.disabledOrderPair = [];
+    }
+    message.pagination !== undefined && (obj.pagination = message.pagination ? PageResponse.toJSON(message.pagination) : undefined);
+    return obj;
+  },
+  fromPartial(object: Partial<QueryAllDisabledOrderPairResponse>): QueryAllDisabledOrderPairResponse {
+    const message = createBaseQueryAllDisabledOrderPairResponse();
+    message.disabledOrderPair = object.disabledOrderPair?.map(e => DisabledOrderPair.fromPartial(e)) || [];
+    message.pagination = object.pagination !== undefined && object.pagination !== null ? PageResponse.fromPartial(object.pagination) : undefined;
+    return message;
+  },
+  fromAmino(object: QueryAllDisabledOrderPairResponseAmino): QueryAllDisabledOrderPairResponse {
+    const message = createBaseQueryAllDisabledOrderPairResponse();
+    message.disabledOrderPair = object.disabled_order_pair?.map(e => DisabledOrderPair.fromAmino(e)) || [];
+    if (object.pagination !== undefined && object.pagination !== null) {
+      message.pagination = PageResponse.fromAmino(object.pagination);
+    }
+    return message;
+  },
+  toAmino(message: QueryAllDisabledOrderPairResponse, useInterfaces: boolean = true): QueryAllDisabledOrderPairResponseAmino {
+    const obj: any = {};
+    if (message.disabledOrderPair) {
+      obj.disabled_order_pair = message.disabledOrderPair.map(e => e ? DisabledOrderPair.toAmino(e, useInterfaces) : undefined);
+    } else {
+      obj.disabled_order_pair = message.disabledOrderPair;
+    }
+    obj.pagination = message.pagination ? PageResponse.toAmino(message.pagination, useInterfaces) : undefined;
+    return obj;
+  },
+  fromAminoMsg(object: QueryAllDisabledOrderPairResponseAminoMsg): QueryAllDisabledOrderPairResponse {
+    return QueryAllDisabledOrderPairResponse.fromAmino(object.value);
+  },
+  fromProtoMsg(message: QueryAllDisabledOrderPairResponseProtoMsg, useInterfaces: boolean = true): QueryAllDisabledOrderPairResponse {
+    return QueryAllDisabledOrderPairResponse.decode(message.value, undefined, useInterfaces);
+  },
+  toProto(message: QueryAllDisabledOrderPairResponse): Uint8Array {
+    return QueryAllDisabledOrderPairResponse.encode(message).finish();
+  },
+  toProtoMsg(message: QueryAllDisabledOrderPairResponse): QueryAllDisabledOrderPairResponseProtoMsg {
+    return {
+      typeUrl: "/pryzm.amm.v1.QueryAllDisabledOrderPairResponse",
+      value: QueryAllDisabledOrderPairResponse.encode(message).finish()
+    };
+  }
+};
+GlobalDecoderRegistry.register(QueryAllDisabledOrderPairResponse.typeUrl, QueryAllDisabledOrderPairResponse);
+function createBaseQueryOrderPairDisabledRequest(): QueryOrderPairDisabledRequest {
+  return {
+    whitelistedRoute: false,
+    poolId: BigInt(0),
+    tokenIn: "",
+    tokenOut: ""
+  };
+}
+export const QueryOrderPairDisabledRequest = {
+  typeUrl: "/pryzm.amm.v1.QueryOrderPairDisabledRequest",
+  is(o: any): o is QueryOrderPairDisabledRequest {
+    return o && (o.$typeUrl === QueryOrderPairDisabledRequest.typeUrl || typeof o.whitelistedRoute === "boolean" && typeof o.poolId === "bigint" && typeof o.tokenIn === "string" && typeof o.tokenOut === "string");
+  },
+  isSDK(o: any): o is QueryOrderPairDisabledRequestSDKType {
+    return o && (o.$typeUrl === QueryOrderPairDisabledRequest.typeUrl || typeof o.whitelisted_route === "boolean" && typeof o.pool_id === "bigint" && typeof o.token_in === "string" && typeof o.token_out === "string");
+  },
+  isAmino(o: any): o is QueryOrderPairDisabledRequestAmino {
+    return o && (o.$typeUrl === QueryOrderPairDisabledRequest.typeUrl || typeof o.whitelisted_route === "boolean" && typeof o.pool_id === "bigint" && typeof o.token_in === "string" && typeof o.token_out === "string");
+  },
+  encode(message: QueryOrderPairDisabledRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    if (message.whitelistedRoute === true) {
+      writer.uint32(8).bool(message.whitelistedRoute);
+    }
+    if (message.poolId !== BigInt(0)) {
+      writer.uint32(16).uint64(message.poolId);
+    }
+    if (message.tokenIn !== "") {
+      writer.uint32(26).string(message.tokenIn);
+    }
+    if (message.tokenOut !== "") {
+      writer.uint32(34).string(message.tokenOut);
+    }
+    return writer;
+  },
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): QueryOrderPairDisabledRequest {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseQueryOrderPairDisabledRequest();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.whitelistedRoute = reader.bool();
+          break;
+        case 2:
+          message.poolId = reader.uint64();
+          break;
+        case 3:
+          message.tokenIn = reader.string();
+          break;
+        case 4:
+          message.tokenOut = reader.string();
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromJSON(object: any): QueryOrderPairDisabledRequest {
+    return {
+      whitelistedRoute: isSet(object.whitelistedRoute) ? Boolean(object.whitelistedRoute) : false,
+      poolId: isSet(object.poolId) ? BigInt(object.poolId.toString()) : BigInt(0),
+      tokenIn: isSet(object.tokenIn) ? String(object.tokenIn) : "",
+      tokenOut: isSet(object.tokenOut) ? String(object.tokenOut) : ""
+    };
+  },
+  toJSON(message: QueryOrderPairDisabledRequest): unknown {
+    const obj: any = {};
+    message.whitelistedRoute !== undefined && (obj.whitelistedRoute = message.whitelistedRoute);
+    message.poolId !== undefined && (obj.poolId = (message.poolId || BigInt(0)).toString());
+    message.tokenIn !== undefined && (obj.tokenIn = message.tokenIn);
+    message.tokenOut !== undefined && (obj.tokenOut = message.tokenOut);
+    return obj;
+  },
+  fromPartial(object: Partial<QueryOrderPairDisabledRequest>): QueryOrderPairDisabledRequest {
+    const message = createBaseQueryOrderPairDisabledRequest();
+    message.whitelistedRoute = object.whitelistedRoute ?? false;
+    message.poolId = object.poolId !== undefined && object.poolId !== null ? BigInt(object.poolId.toString()) : BigInt(0);
+    message.tokenIn = object.tokenIn ?? "";
+    message.tokenOut = object.tokenOut ?? "";
+    return message;
+  },
+  fromAmino(object: QueryOrderPairDisabledRequestAmino): QueryOrderPairDisabledRequest {
+    const message = createBaseQueryOrderPairDisabledRequest();
+    if (object.whitelisted_route !== undefined && object.whitelisted_route !== null) {
+      message.whitelistedRoute = object.whitelisted_route;
+    }
+    if (object.pool_id !== undefined && object.pool_id !== null) {
+      message.poolId = BigInt(object.pool_id);
+    }
+    if (object.token_in !== undefined && object.token_in !== null) {
+      message.tokenIn = object.token_in;
+    }
+    if (object.token_out !== undefined && object.token_out !== null) {
+      message.tokenOut = object.token_out;
+    }
+    return message;
+  },
+  toAmino(message: QueryOrderPairDisabledRequest, useInterfaces: boolean = true): QueryOrderPairDisabledRequestAmino {
+    const obj: any = {};
+    obj.whitelisted_route = message.whitelistedRoute === false ? undefined : message.whitelistedRoute;
+    obj.pool_id = message.poolId ? message.poolId.toString() : undefined;
+    obj.token_in = message.tokenIn === "" ? undefined : message.tokenIn;
+    obj.token_out = message.tokenOut === "" ? undefined : message.tokenOut;
+    return obj;
+  },
+  fromAminoMsg(object: QueryOrderPairDisabledRequestAminoMsg): QueryOrderPairDisabledRequest {
+    return QueryOrderPairDisabledRequest.fromAmino(object.value);
+  },
+  fromProtoMsg(message: QueryOrderPairDisabledRequestProtoMsg, useInterfaces: boolean = true): QueryOrderPairDisabledRequest {
+    return QueryOrderPairDisabledRequest.decode(message.value, undefined, useInterfaces);
+  },
+  toProto(message: QueryOrderPairDisabledRequest): Uint8Array {
+    return QueryOrderPairDisabledRequest.encode(message).finish();
+  },
+  toProtoMsg(message: QueryOrderPairDisabledRequest): QueryOrderPairDisabledRequestProtoMsg {
+    return {
+      typeUrl: "/pryzm.amm.v1.QueryOrderPairDisabledRequest",
+      value: QueryOrderPairDisabledRequest.encode(message).finish()
+    };
+  }
+};
+GlobalDecoderRegistry.register(QueryOrderPairDisabledRequest.typeUrl, QueryOrderPairDisabledRequest);
+function createBaseQueryOrderPairDisabledResponse(): QueryOrderPairDisabledResponse {
+  return {
+    disabled: false
+  };
+}
+export const QueryOrderPairDisabledResponse = {
+  typeUrl: "/pryzm.amm.v1.QueryOrderPairDisabledResponse",
+  is(o: any): o is QueryOrderPairDisabledResponse {
+    return o && (o.$typeUrl === QueryOrderPairDisabledResponse.typeUrl || typeof o.disabled === "boolean");
+  },
+  isSDK(o: any): o is QueryOrderPairDisabledResponseSDKType {
+    return o && (o.$typeUrl === QueryOrderPairDisabledResponse.typeUrl || typeof o.disabled === "boolean");
+  },
+  isAmino(o: any): o is QueryOrderPairDisabledResponseAmino {
+    return o && (o.$typeUrl === QueryOrderPairDisabledResponse.typeUrl || typeof o.disabled === "boolean");
+  },
+  encode(message: QueryOrderPairDisabledResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    if (message.disabled === true) {
+      writer.uint32(8).bool(message.disabled);
+    }
+    return writer;
+  },
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): QueryOrderPairDisabledResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseQueryOrderPairDisabledResponse();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.disabled = reader.bool();
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromJSON(object: any): QueryOrderPairDisabledResponse {
+    return {
+      disabled: isSet(object.disabled) ? Boolean(object.disabled) : false
+    };
+  },
+  toJSON(message: QueryOrderPairDisabledResponse): unknown {
+    const obj: any = {};
+    message.disabled !== undefined && (obj.disabled = message.disabled);
+    return obj;
+  },
+  fromPartial(object: Partial<QueryOrderPairDisabledResponse>): QueryOrderPairDisabledResponse {
+    const message = createBaseQueryOrderPairDisabledResponse();
+    message.disabled = object.disabled ?? false;
+    return message;
+  },
+  fromAmino(object: QueryOrderPairDisabledResponseAmino): QueryOrderPairDisabledResponse {
+    const message = createBaseQueryOrderPairDisabledResponse();
+    if (object.disabled !== undefined && object.disabled !== null) {
+      message.disabled = object.disabled;
+    }
+    return message;
+  },
+  toAmino(message: QueryOrderPairDisabledResponse, useInterfaces: boolean = true): QueryOrderPairDisabledResponseAmino {
+    const obj: any = {};
+    obj.disabled = message.disabled === false ? undefined : message.disabled;
+    return obj;
+  },
+  fromAminoMsg(object: QueryOrderPairDisabledResponseAminoMsg): QueryOrderPairDisabledResponse {
+    return QueryOrderPairDisabledResponse.fromAmino(object.value);
+  },
+  fromProtoMsg(message: QueryOrderPairDisabledResponseProtoMsg, useInterfaces: boolean = true): QueryOrderPairDisabledResponse {
+    return QueryOrderPairDisabledResponse.decode(message.value, undefined, useInterfaces);
+  },
+  toProto(message: QueryOrderPairDisabledResponse): Uint8Array {
+    return QueryOrderPairDisabledResponse.encode(message).finish();
+  },
+  toProtoMsg(message: QueryOrderPairDisabledResponse): QueryOrderPairDisabledResponseProtoMsg {
+    return {
+      typeUrl: "/pryzm.amm.v1.QueryOrderPairDisabledResponse",
+      value: QueryOrderPairDisabledResponse.encode(message).finish()
+    };
+  }
+};
+GlobalDecoderRegistry.register(QueryOrderPairDisabledResponse.typeUrl, QueryOrderPairDisabledResponse);

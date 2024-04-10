@@ -1,10 +1,10 @@
 import { Pool, PoolAmino, PoolSDKType } from "./pool";
+import { DisabledOrderPair, DisabledOrderPairAmino, DisabledOrderPairSDKType, Order, OrderAmino, OrderSDKType } from "./order";
 import { PoolToken, PoolTokenAmino, PoolTokenSDKType } from "./pool_token";
 import { WeightedToken, WeightedTokenAmino, WeightedTokenSDKType } from "./weighted_token";
 import { WeightUpdateTiming, WeightUpdateTimingAmino, WeightUpdateTimingSDKType } from "./weight_update_timing";
 import { WhitelistedRoute, WhitelistedRouteAmino, WhitelistedRouteSDKType } from "./whitelisted_route";
 import { YammConfiguration, YammConfigurationAmino, YammConfigurationSDKType } from "./yamm_configuration";
-import { Order, OrderAmino, OrderSDKType } from "./order";
 import { Coin, CoinAmino, CoinSDKType } from "../../../cosmos/base/v1beta1/coin";
 import { ScheduleOrder, ScheduleOrderAmino, ScheduleOrderSDKType } from "./schedule_order";
 import { VirtualBalancePoolToken, VirtualBalancePoolTokenAmino, VirtualBalancePoolTokenSDKType } from "./virtual_balance_pool_token";
@@ -87,6 +87,36 @@ export interface EventSetPoolCountAminoMsg {
 }
 export interface EventSetPoolCountSDKType {
   pool_count: bigint;
+}
+export interface EventSetOrderPairDisabled {
+  /**
+   * note token_in and token_out are bi-directional
+   * meaning disabling token_in=x,token_out=y is
+   * disabling token_in=y,token_out=x at the same time.
+   */
+  pair: DisabledOrderPair;
+  disabled: boolean;
+}
+export interface EventSetOrderPairDisabledProtoMsg {
+  typeUrl: "/pryzm.amm.v1.EventSetOrderPairDisabled";
+  value: Uint8Array;
+}
+export interface EventSetOrderPairDisabledAmino {
+  /**
+   * note token_in and token_out are bi-directional
+   * meaning disabling token_in=x,token_out=y is
+   * disabling token_in=y,token_out=x at the same time.
+   */
+  pair?: DisabledOrderPairAmino;
+  disabled?: boolean;
+}
+export interface EventSetOrderPairDisabledAminoMsg {
+  type: "/pryzm.amm.v1.EventSetOrderPairDisabled";
+  value: EventSetOrderPairDisabledAmino;
+}
+export interface EventSetOrderPairDisabledSDKType {
+  pair: DisabledOrderPairSDKType;
+  disabled: boolean;
 }
 export interface EventSetLpTokenSupply {
   poolId: bigint;
@@ -1167,6 +1197,103 @@ export const EventSetPoolCount = {
   }
 };
 GlobalDecoderRegistry.register(EventSetPoolCount.typeUrl, EventSetPoolCount);
+function createBaseEventSetOrderPairDisabled(): EventSetOrderPairDisabled {
+  return {
+    pair: DisabledOrderPair.fromPartial({}),
+    disabled: false
+  };
+}
+export const EventSetOrderPairDisabled = {
+  typeUrl: "/pryzm.amm.v1.EventSetOrderPairDisabled",
+  is(o: any): o is EventSetOrderPairDisabled {
+    return o && (o.$typeUrl === EventSetOrderPairDisabled.typeUrl || DisabledOrderPair.is(o.pair) && typeof o.disabled === "boolean");
+  },
+  isSDK(o: any): o is EventSetOrderPairDisabledSDKType {
+    return o && (o.$typeUrl === EventSetOrderPairDisabled.typeUrl || DisabledOrderPair.isSDK(o.pair) && typeof o.disabled === "boolean");
+  },
+  isAmino(o: any): o is EventSetOrderPairDisabledAmino {
+    return o && (o.$typeUrl === EventSetOrderPairDisabled.typeUrl || DisabledOrderPair.isAmino(o.pair) && typeof o.disabled === "boolean");
+  },
+  encode(message: EventSetOrderPairDisabled, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    if (message.pair !== undefined) {
+      DisabledOrderPair.encode(message.pair, writer.uint32(10).fork()).ldelim();
+    }
+    if (message.disabled === true) {
+      writer.uint32(16).bool(message.disabled);
+    }
+    return writer;
+  },
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): EventSetOrderPairDisabled {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseEventSetOrderPairDisabled();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.pair = DisabledOrderPair.decode(reader, reader.uint32(), useInterfaces);
+          break;
+        case 2:
+          message.disabled = reader.bool();
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromJSON(object: any): EventSetOrderPairDisabled {
+    return {
+      pair: isSet(object.pair) ? DisabledOrderPair.fromJSON(object.pair) : undefined,
+      disabled: isSet(object.disabled) ? Boolean(object.disabled) : false
+    };
+  },
+  toJSON(message: EventSetOrderPairDisabled): unknown {
+    const obj: any = {};
+    message.pair !== undefined && (obj.pair = message.pair ? DisabledOrderPair.toJSON(message.pair) : undefined);
+    message.disabled !== undefined && (obj.disabled = message.disabled);
+    return obj;
+  },
+  fromPartial(object: Partial<EventSetOrderPairDisabled>): EventSetOrderPairDisabled {
+    const message = createBaseEventSetOrderPairDisabled();
+    message.pair = object.pair !== undefined && object.pair !== null ? DisabledOrderPair.fromPartial(object.pair) : undefined;
+    message.disabled = object.disabled ?? false;
+    return message;
+  },
+  fromAmino(object: EventSetOrderPairDisabledAmino): EventSetOrderPairDisabled {
+    const message = createBaseEventSetOrderPairDisabled();
+    if (object.pair !== undefined && object.pair !== null) {
+      message.pair = DisabledOrderPair.fromAmino(object.pair);
+    }
+    if (object.disabled !== undefined && object.disabled !== null) {
+      message.disabled = object.disabled;
+    }
+    return message;
+  },
+  toAmino(message: EventSetOrderPairDisabled, useInterfaces: boolean = true): EventSetOrderPairDisabledAmino {
+    const obj: any = {};
+    obj.pair = message.pair ? DisabledOrderPair.toAmino(message.pair, useInterfaces) : undefined;
+    obj.disabled = message.disabled === false ? undefined : message.disabled;
+    return obj;
+  },
+  fromAminoMsg(object: EventSetOrderPairDisabledAminoMsg): EventSetOrderPairDisabled {
+    return EventSetOrderPairDisabled.fromAmino(object.value);
+  },
+  fromProtoMsg(message: EventSetOrderPairDisabledProtoMsg, useInterfaces: boolean = true): EventSetOrderPairDisabled {
+    return EventSetOrderPairDisabled.decode(message.value, undefined, useInterfaces);
+  },
+  toProto(message: EventSetOrderPairDisabled): Uint8Array {
+    return EventSetOrderPairDisabled.encode(message).finish();
+  },
+  toProtoMsg(message: EventSetOrderPairDisabled): EventSetOrderPairDisabledProtoMsg {
+    return {
+      typeUrl: "/pryzm.amm.v1.EventSetOrderPairDisabled",
+      value: EventSetOrderPairDisabled.encode(message).finish()
+    };
+  }
+};
+GlobalDecoderRegistry.register(EventSetOrderPairDisabled.typeUrl, EventSetOrderPairDisabled);
 function createBaseEventSetLpTokenSupply(): EventSetLpTokenSupply {
   return {
     poolId: BigInt(0),

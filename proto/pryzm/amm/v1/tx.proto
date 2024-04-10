@@ -62,6 +62,7 @@ service Msg {
   rpc SetPoolAdmins(MsgSetPoolAdmins) returns (MsgSetPoolAdminsResponse);
   rpc SetPauseAllowList(MsgSetPauseAllowList) returns (MsgSetPauseAllowListResponse);
   rpc SetPauseWindow(MsgSetPauseWindow) returns (MsgSetPauseWindowResponse);
+  rpc SetOrderPairDisabled(MsgSetOrderPairDisabled) returns (MsgSetOrderPairDisabledResponse);
   // this line is used by starport scaffolding # proto/tx/rpc
 }
 
@@ -326,6 +327,10 @@ message MsgCreateWeightedPool {
   repeated CreateWeightedPoolToken tokens = 6 [(gogoproto.nullable) = false];
   // if not empty, only these addresses can initialize the pool
   repeated string initialization_allow_list = 12 [(amino.dont_omitempty) = true];
+  // if the creator is admin, they can create pools owned by governance
+  // NOTE: when public pool creation is not allowed, admin must set this to true
+  // NOTE: governance can leave this to false, as it already is the creator of the msg
+  bool force_gov_owner = 13;
 }
 
 message MsgCreateWeightedPoolResponse {
@@ -798,4 +803,15 @@ message MsgSetPauseWindow {
 }
 
 message MsgSetPauseWindowResponse {}
+
+message MsgSetOrderPairDisabled {
+  option (cosmos.msg.v1.signer) = "authority";
+  option (amino.name) = "pryzm/amm/v1/SetOrderPairDisabled";
+
+  string authority = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
+  DisabledOrderPair pair = 2 [(gogoproto.nullable) = false];
+  bool disabled = 3;
+}
+
+message MsgSetOrderPairDisabledResponse {}
 // this line is used by starport scaffolding # proto/tx/message

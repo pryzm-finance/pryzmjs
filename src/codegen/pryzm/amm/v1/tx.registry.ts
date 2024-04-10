@@ -1,7 +1,7 @@
 //@ts-nocheck
 import { GeneratedType, Registry } from "@cosmjs/proto-signing";
-import { MsgSingleSwap, MsgJoinAllTokensExactLpt, MsgJoinTokenExactLpt, MsgJoinExactTokens, MsgZeroImpactJoinYamm, MsgExitExactTokens, MsgExitTokenExactLpt, MsgExitAllTokensExactLpt, MsgCreateWeightedPool, MsgUpdateSwapFee, MsgInitializePool, MsgUpdateWeights, MsgBatchSwap, MsgSetYammConfiguration, MsgWhitelistRoute, MsgSetWhitelistedRouteEnabled, MsgSubmitOrder, MsgCancelOrder, MsgProposeMatch, MsgSetCircuitBreakers, MsgSetRecoveryMode, MsgRecoveryExit, MsgSetPauseMode, MsgSetVaultPauseMode, MsgCreateOraclePricePair, MsgUpdateOraclePricePair, MsgDeleteOraclePricePair, MsgSetSwapProtocolFee, MsgSetJoinExitProtocolFee, MsgIntroduceYammLpToWeightedPool, MsgIntroduceAssetBaseTokenToWeightedPool, MsgCancelPendingTokenIntroduction, MsgRemoveTokenFromWeightedPool, MsgUpdateParams, MsgAddMaturityToYamm, MsgSetInitializationAllowList, MsgSetPoolAdmins, MsgSetPauseAllowList, MsgSetPauseWindow } from "./tx";
-export const registry: ReadonlyArray<[string, GeneratedType]> = [["/pryzm.amm.v1.MsgSingleSwap", MsgSingleSwap], ["/pryzm.amm.v1.MsgJoinAllTokensExactLpt", MsgJoinAllTokensExactLpt], ["/pryzm.amm.v1.MsgJoinTokenExactLpt", MsgJoinTokenExactLpt], ["/pryzm.amm.v1.MsgJoinExactTokens", MsgJoinExactTokens], ["/pryzm.amm.v1.MsgZeroImpactJoinYamm", MsgZeroImpactJoinYamm], ["/pryzm.amm.v1.MsgExitExactTokens", MsgExitExactTokens], ["/pryzm.amm.v1.MsgExitTokenExactLpt", MsgExitTokenExactLpt], ["/pryzm.amm.v1.MsgExitAllTokensExactLpt", MsgExitAllTokensExactLpt], ["/pryzm.amm.v1.MsgCreateWeightedPool", MsgCreateWeightedPool], ["/pryzm.amm.v1.MsgUpdateSwapFee", MsgUpdateSwapFee], ["/pryzm.amm.v1.MsgInitializePool", MsgInitializePool], ["/pryzm.amm.v1.MsgUpdateWeights", MsgUpdateWeights], ["/pryzm.amm.v1.MsgBatchSwap", MsgBatchSwap], ["/pryzm.amm.v1.MsgSetYammConfiguration", MsgSetYammConfiguration], ["/pryzm.amm.v1.MsgWhitelistRoute", MsgWhitelistRoute], ["/pryzm.amm.v1.MsgSetWhitelistedRouteEnabled", MsgSetWhitelistedRouteEnabled], ["/pryzm.amm.v1.MsgSubmitOrder", MsgSubmitOrder], ["/pryzm.amm.v1.MsgCancelOrder", MsgCancelOrder], ["/pryzm.amm.v1.MsgProposeMatch", MsgProposeMatch], ["/pryzm.amm.v1.MsgSetCircuitBreakers", MsgSetCircuitBreakers], ["/pryzm.amm.v1.MsgSetRecoveryMode", MsgSetRecoveryMode], ["/pryzm.amm.v1.MsgRecoveryExit", MsgRecoveryExit], ["/pryzm.amm.v1.MsgSetPauseMode", MsgSetPauseMode], ["/pryzm.amm.v1.MsgSetVaultPauseMode", MsgSetVaultPauseMode], ["/pryzm.amm.v1.MsgCreateOraclePricePair", MsgCreateOraclePricePair], ["/pryzm.amm.v1.MsgUpdateOraclePricePair", MsgUpdateOraclePricePair], ["/pryzm.amm.v1.MsgDeleteOraclePricePair", MsgDeleteOraclePricePair], ["/pryzm.amm.v1.MsgSetSwapProtocolFee", MsgSetSwapProtocolFee], ["/pryzm.amm.v1.MsgSetJoinExitProtocolFee", MsgSetJoinExitProtocolFee], ["/pryzm.amm.v1.MsgIntroduceYammLpToWeightedPool", MsgIntroduceYammLpToWeightedPool], ["/pryzm.amm.v1.MsgIntroduceAssetBaseTokenToWeightedPool", MsgIntroduceAssetBaseTokenToWeightedPool], ["/pryzm.amm.v1.MsgCancelPendingTokenIntroduction", MsgCancelPendingTokenIntroduction], ["/pryzm.amm.v1.MsgRemoveTokenFromWeightedPool", MsgRemoveTokenFromWeightedPool], ["/pryzm.amm.v1.MsgUpdateParams", MsgUpdateParams], ["/pryzm.amm.v1.MsgAddMaturityToYamm", MsgAddMaturityToYamm], ["/pryzm.amm.v1.MsgSetInitializationAllowList", MsgSetInitializationAllowList], ["/pryzm.amm.v1.MsgSetPoolAdmins", MsgSetPoolAdmins], ["/pryzm.amm.v1.MsgSetPauseAllowList", MsgSetPauseAllowList], ["/pryzm.amm.v1.MsgSetPauseWindow", MsgSetPauseWindow]];
+import { MsgSingleSwap, MsgJoinAllTokensExactLpt, MsgJoinTokenExactLpt, MsgJoinExactTokens, MsgZeroImpactJoinYamm, MsgExitExactTokens, MsgExitTokenExactLpt, MsgExitAllTokensExactLpt, MsgCreateWeightedPool, MsgUpdateSwapFee, MsgInitializePool, MsgUpdateWeights, MsgBatchSwap, MsgSetYammConfiguration, MsgWhitelistRoute, MsgSetWhitelistedRouteEnabled, MsgSubmitOrder, MsgCancelOrder, MsgProposeMatch, MsgSetCircuitBreakers, MsgSetRecoveryMode, MsgRecoveryExit, MsgSetPauseMode, MsgSetVaultPauseMode, MsgCreateOraclePricePair, MsgUpdateOraclePricePair, MsgDeleteOraclePricePair, MsgSetSwapProtocolFee, MsgSetJoinExitProtocolFee, MsgIntroduceYammLpToWeightedPool, MsgIntroduceAssetBaseTokenToWeightedPool, MsgCancelPendingTokenIntroduction, MsgRemoveTokenFromWeightedPool, MsgUpdateParams, MsgAddMaturityToYamm, MsgSetInitializationAllowList, MsgSetPoolAdmins, MsgSetPauseAllowList, MsgSetPauseWindow, MsgSetOrderPairDisabled } from "./tx";
+export const registry: ReadonlyArray<[string, GeneratedType]> = [["/pryzm.amm.v1.MsgSingleSwap", MsgSingleSwap], ["/pryzm.amm.v1.MsgJoinAllTokensExactLpt", MsgJoinAllTokensExactLpt], ["/pryzm.amm.v1.MsgJoinTokenExactLpt", MsgJoinTokenExactLpt], ["/pryzm.amm.v1.MsgJoinExactTokens", MsgJoinExactTokens], ["/pryzm.amm.v1.MsgZeroImpactJoinYamm", MsgZeroImpactJoinYamm], ["/pryzm.amm.v1.MsgExitExactTokens", MsgExitExactTokens], ["/pryzm.amm.v1.MsgExitTokenExactLpt", MsgExitTokenExactLpt], ["/pryzm.amm.v1.MsgExitAllTokensExactLpt", MsgExitAllTokensExactLpt], ["/pryzm.amm.v1.MsgCreateWeightedPool", MsgCreateWeightedPool], ["/pryzm.amm.v1.MsgUpdateSwapFee", MsgUpdateSwapFee], ["/pryzm.amm.v1.MsgInitializePool", MsgInitializePool], ["/pryzm.amm.v1.MsgUpdateWeights", MsgUpdateWeights], ["/pryzm.amm.v1.MsgBatchSwap", MsgBatchSwap], ["/pryzm.amm.v1.MsgSetYammConfiguration", MsgSetYammConfiguration], ["/pryzm.amm.v1.MsgWhitelistRoute", MsgWhitelistRoute], ["/pryzm.amm.v1.MsgSetWhitelistedRouteEnabled", MsgSetWhitelistedRouteEnabled], ["/pryzm.amm.v1.MsgSubmitOrder", MsgSubmitOrder], ["/pryzm.amm.v1.MsgCancelOrder", MsgCancelOrder], ["/pryzm.amm.v1.MsgProposeMatch", MsgProposeMatch], ["/pryzm.amm.v1.MsgSetCircuitBreakers", MsgSetCircuitBreakers], ["/pryzm.amm.v1.MsgSetRecoveryMode", MsgSetRecoveryMode], ["/pryzm.amm.v1.MsgRecoveryExit", MsgRecoveryExit], ["/pryzm.amm.v1.MsgSetPauseMode", MsgSetPauseMode], ["/pryzm.amm.v1.MsgSetVaultPauseMode", MsgSetVaultPauseMode], ["/pryzm.amm.v1.MsgCreateOraclePricePair", MsgCreateOraclePricePair], ["/pryzm.amm.v1.MsgUpdateOraclePricePair", MsgUpdateOraclePricePair], ["/pryzm.amm.v1.MsgDeleteOraclePricePair", MsgDeleteOraclePricePair], ["/pryzm.amm.v1.MsgSetSwapProtocolFee", MsgSetSwapProtocolFee], ["/pryzm.amm.v1.MsgSetJoinExitProtocolFee", MsgSetJoinExitProtocolFee], ["/pryzm.amm.v1.MsgIntroduceYammLpToWeightedPool", MsgIntroduceYammLpToWeightedPool], ["/pryzm.amm.v1.MsgIntroduceAssetBaseTokenToWeightedPool", MsgIntroduceAssetBaseTokenToWeightedPool], ["/pryzm.amm.v1.MsgCancelPendingTokenIntroduction", MsgCancelPendingTokenIntroduction], ["/pryzm.amm.v1.MsgRemoveTokenFromWeightedPool", MsgRemoveTokenFromWeightedPool], ["/pryzm.amm.v1.MsgUpdateParams", MsgUpdateParams], ["/pryzm.amm.v1.MsgAddMaturityToYamm", MsgAddMaturityToYamm], ["/pryzm.amm.v1.MsgSetInitializationAllowList", MsgSetInitializationAllowList], ["/pryzm.amm.v1.MsgSetPoolAdmins", MsgSetPoolAdmins], ["/pryzm.amm.v1.MsgSetPauseAllowList", MsgSetPauseAllowList], ["/pryzm.amm.v1.MsgSetPauseWindow", MsgSetPauseWindow], ["/pryzm.amm.v1.MsgSetOrderPairDisabled", MsgSetOrderPairDisabled]];
 export const load = (protoRegistry: Registry) => {
   registry.forEach(([typeUrl, mod]) => {
     protoRegistry.register(typeUrl, mod);
@@ -242,6 +242,12 @@ export const MessageComposer = {
         typeUrl: "/pryzm.amm.v1.MsgSetPauseWindow",
         value: MsgSetPauseWindow.encode(value).finish()
       };
+    },
+    setOrderPairDisabled(value: MsgSetOrderPairDisabled) {
+      return {
+        typeUrl: "/pryzm.amm.v1.MsgSetOrderPairDisabled",
+        value: MsgSetOrderPairDisabled.encode(value).finish()
+      };
     }
   },
   withTypeUrl: {
@@ -476,6 +482,12 @@ export const MessageComposer = {
     setPauseWindow(value: MsgSetPauseWindow) {
       return {
         typeUrl: "/pryzm.amm.v1.MsgSetPauseWindow",
+        value
+      };
+    },
+    setOrderPairDisabled(value: MsgSetOrderPairDisabled) {
+      return {
+        typeUrl: "/pryzm.amm.v1.MsgSetOrderPairDisabled",
         value
       };
     }
@@ -714,6 +726,12 @@ export const MessageComposer = {
         typeUrl: "/pryzm.amm.v1.MsgSetPauseWindow",
         value: MsgSetPauseWindow.toJSON(value)
       };
+    },
+    setOrderPairDisabled(value: MsgSetOrderPairDisabled) {
+      return {
+        typeUrl: "/pryzm.amm.v1.MsgSetOrderPairDisabled",
+        value: MsgSetOrderPairDisabled.toJSON(value)
+      };
     }
   },
   fromJSON: {
@@ -950,6 +968,12 @@ export const MessageComposer = {
         typeUrl: "/pryzm.amm.v1.MsgSetPauseWindow",
         value: MsgSetPauseWindow.fromJSON(value)
       };
+    },
+    setOrderPairDisabled(value: any) {
+      return {
+        typeUrl: "/pryzm.amm.v1.MsgSetOrderPairDisabled",
+        value: MsgSetOrderPairDisabled.fromJSON(value)
+      };
     }
   },
   fromPartial: {
@@ -1185,6 +1209,12 @@ export const MessageComposer = {
       return {
         typeUrl: "/pryzm.amm.v1.MsgSetPauseWindow",
         value: MsgSetPauseWindow.fromPartial(value)
+      };
+    },
+    setOrderPairDisabled(value: MsgSetOrderPairDisabled) {
+      return {
+        typeUrl: "/pryzm.amm.v1.MsgSetOrderPairDisabled",
+        value: MsgSetOrderPairDisabled.fromPartial(value)
       };
     }
   }

@@ -358,6 +358,8 @@ export interface HostChainState {
   lastIdleStateHostHeight: Height;
   /** The amount of LSM tokens that are in queue to be transferred and redeemed on the host chain */
   lockedLsmValue: string;
+  /** The amount of fee taken from rewards that is collected and waiting to be transferred from host chain to treasury */
+  collectedFee: string;
 }
 export interface HostChainStateProtoMsg {
   typeUrl: "/pryzm.icstaking.v1.HostChainState";
@@ -387,6 +389,8 @@ export interface HostChainStateAmino {
   last_idle_state_host_height?: HeightAmino;
   /** The amount of LSM tokens that are in queue to be transferred and redeemed on the host chain */
   locked_lsm_value?: string;
+  /** The amount of fee taken from rewards that is collected and waiting to be transferred from host chain to treasury */
+  collected_fee?: string;
 }
 export interface HostChainStateAminoMsg {
   type: "/pryzm.icstaking.v1.HostChainState";
@@ -403,6 +407,7 @@ export interface HostChainStateSDKType {
   state: State;
   last_idle_state_host_height: HeightSDKType;
   locked_lsm_value: string;
+  collected_fee: string;
 }
 /** The interchain accounts */
 export interface HostAccounts {
@@ -949,19 +954,20 @@ function createBaseHostChainState(): HostChainState {
     exchangeRate: "",
     state: 0,
     lastIdleStateHostHeight: Height.fromPartial({}),
-    lockedLsmValue: ""
+    lockedLsmValue: "",
+    collectedFee: ""
   };
 }
 export const HostChainState = {
   typeUrl: "/pryzm.icstaking.v1.HostChainState",
   is(o: any): o is HostChainState {
-    return o && (o.$typeUrl === HostChainState.typeUrl || typeof o.hostChainId === "string" && HostAccounts.is(o.hostAccounts) && Array.isArray(o.validatorStates) && (!o.validatorStates.length || ValidatorState.is(o.validatorStates[0])) && typeof o.amountToBeDelegated === "string" && typeof o.undelegatedAmountToCollect === "string" && typeof o.exchangeRate === "string" && isSet(o.state) && Height.is(o.lastIdleStateHostHeight) && typeof o.lockedLsmValue === "string");
+    return o && (o.$typeUrl === HostChainState.typeUrl || typeof o.hostChainId === "string" && HostAccounts.is(o.hostAccounts) && Array.isArray(o.validatorStates) && (!o.validatorStates.length || ValidatorState.is(o.validatorStates[0])) && typeof o.amountToBeDelegated === "string" && typeof o.undelegatedAmountToCollect === "string" && typeof o.exchangeRate === "string" && isSet(o.state) && Height.is(o.lastIdleStateHostHeight) && typeof o.lockedLsmValue === "string" && typeof o.collectedFee === "string");
   },
   isSDK(o: any): o is HostChainStateSDKType {
-    return o && (o.$typeUrl === HostChainState.typeUrl || typeof o.host_chain_id === "string" && HostAccounts.isSDK(o.host_accounts) && Array.isArray(o.validator_states) && (!o.validator_states.length || ValidatorState.isSDK(o.validator_states[0])) && typeof o.amount_to_be_delegated === "string" && typeof o.undelegated_amount_to_collect === "string" && typeof o.exchange_rate === "string" && isSet(o.state) && Height.isSDK(o.last_idle_state_host_height) && typeof o.locked_lsm_value === "string");
+    return o && (o.$typeUrl === HostChainState.typeUrl || typeof o.host_chain_id === "string" && HostAccounts.isSDK(o.host_accounts) && Array.isArray(o.validator_states) && (!o.validator_states.length || ValidatorState.isSDK(o.validator_states[0])) && typeof o.amount_to_be_delegated === "string" && typeof o.undelegated_amount_to_collect === "string" && typeof o.exchange_rate === "string" && isSet(o.state) && Height.isSDK(o.last_idle_state_host_height) && typeof o.locked_lsm_value === "string" && typeof o.collected_fee === "string");
   },
   isAmino(o: any): o is HostChainStateAmino {
-    return o && (o.$typeUrl === HostChainState.typeUrl || typeof o.host_chain_id === "string" && HostAccounts.isAmino(o.host_accounts) && Array.isArray(o.validator_states) && (!o.validator_states.length || ValidatorState.isAmino(o.validator_states[0])) && typeof o.amount_to_be_delegated === "string" && typeof o.undelegated_amount_to_collect === "string" && typeof o.exchange_rate === "string" && isSet(o.state) && Height.isAmino(o.last_idle_state_host_height) && typeof o.locked_lsm_value === "string");
+    return o && (o.$typeUrl === HostChainState.typeUrl || typeof o.host_chain_id === "string" && HostAccounts.isAmino(o.host_accounts) && Array.isArray(o.validator_states) && (!o.validator_states.length || ValidatorState.isAmino(o.validator_states[0])) && typeof o.amount_to_be_delegated === "string" && typeof o.undelegated_amount_to_collect === "string" && typeof o.exchange_rate === "string" && isSet(o.state) && Height.isAmino(o.last_idle_state_host_height) && typeof o.locked_lsm_value === "string" && typeof o.collected_fee === "string");
   },
   encode(message: HostChainState, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.hostChainId !== "") {
@@ -990,6 +996,9 @@ export const HostChainState = {
     }
     if (message.lockedLsmValue !== "") {
       writer.uint32(74).string(message.lockedLsmValue);
+    }
+    if (message.collectedFee !== "") {
+      writer.uint32(82).string(message.collectedFee);
     }
     return writer;
   },
@@ -1027,6 +1036,9 @@ export const HostChainState = {
         case 9:
           message.lockedLsmValue = reader.string();
           break;
+        case 10:
+          message.collectedFee = reader.string();
+          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -1044,7 +1056,8 @@ export const HostChainState = {
       exchangeRate: isSet(object.exchangeRate) ? String(object.exchangeRate) : "",
       state: isSet(object.state) ? stateFromJSON(object.state) : -1,
       lastIdleStateHostHeight: isSet(object.lastIdleStateHostHeight) ? Height.fromJSON(object.lastIdleStateHostHeight) : undefined,
-      lockedLsmValue: isSet(object.lockedLsmValue) ? String(object.lockedLsmValue) : ""
+      lockedLsmValue: isSet(object.lockedLsmValue) ? String(object.lockedLsmValue) : "",
+      collectedFee: isSet(object.collectedFee) ? String(object.collectedFee) : ""
     };
   },
   toJSON(message: HostChainState): unknown {
@@ -1062,6 +1075,7 @@ export const HostChainState = {
     message.state !== undefined && (obj.state = stateToJSON(message.state));
     message.lastIdleStateHostHeight !== undefined && (obj.lastIdleStateHostHeight = message.lastIdleStateHostHeight ? Height.toJSON(message.lastIdleStateHostHeight) : undefined);
     message.lockedLsmValue !== undefined && (obj.lockedLsmValue = message.lockedLsmValue);
+    message.collectedFee !== undefined && (obj.collectedFee = message.collectedFee);
     return obj;
   },
   fromPartial(object: Partial<HostChainState>): HostChainState {
@@ -1075,6 +1089,7 @@ export const HostChainState = {
     message.state = object.state ?? 0;
     message.lastIdleStateHostHeight = object.lastIdleStateHostHeight !== undefined && object.lastIdleStateHostHeight !== null ? Height.fromPartial(object.lastIdleStateHostHeight) : undefined;
     message.lockedLsmValue = object.lockedLsmValue ?? "";
+    message.collectedFee = object.collectedFee ?? "";
     return message;
   },
   fromAmino(object: HostChainStateAmino): HostChainState {
@@ -1104,6 +1119,9 @@ export const HostChainState = {
     if (object.locked_lsm_value !== undefined && object.locked_lsm_value !== null) {
       message.lockedLsmValue = object.locked_lsm_value;
     }
+    if (object.collected_fee !== undefined && object.collected_fee !== null) {
+      message.collectedFee = object.collected_fee;
+    }
     return message;
   },
   toAmino(message: HostChainState, useInterfaces: boolean = true): HostChainStateAmino {
@@ -1121,6 +1139,7 @@ export const HostChainState = {
     obj.state = message.state === 0 ? undefined : message.state;
     obj.last_idle_state_host_height = message.lastIdleStateHostHeight ? Height.toAmino(message.lastIdleStateHostHeight, useInterfaces) : {};
     obj.locked_lsm_value = message.lockedLsmValue === "" ? undefined : message.lockedLsmValue;
+    obj.collected_fee = message.collectedFee === "" ? undefined : message.collectedFee;
     return obj;
   },
   fromAminoMsg(object: HostChainStateAminoMsg): HostChainState {

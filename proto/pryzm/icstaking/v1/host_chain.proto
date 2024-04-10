@@ -138,6 +138,13 @@ message HostChainState {
     (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Int",
     (gogoproto.nullable) = false
   ];
+
+  // The amount of fee taken from rewards that is collected and waiting to be transferred from host chain to treasury
+  string collected_fee = 10 [
+    (cosmos_proto.scalar) = "cosmos.Int",
+    (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Int",
+    (gogoproto.nullable) = false
+  ];
 }
 
 // The interchain accounts

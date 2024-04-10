@@ -8,7 +8,7 @@ import { TokenCircuitBreakerSettings, TokenCircuitBreakerSettingsAmino, TokenCir
 import { OraclePricePair, OraclePricePairAmino, OraclePricePairSDKType } from "./oracle_price_pair";
 import { GeneralPoolParameters, GeneralPoolParametersAmino, GeneralPoolParametersSDKType, YammParameters, YammParametersAmino, YammParametersSDKType, OrderParameters, OrderParametersAmino, OrderParametersSDKType, AuthorizationParameters, AuthorizationParametersAmino, AuthorizationParametersSDKType } from "./params";
 import { PoolPauseWindow, PoolPauseWindowAmino, PoolPauseWindowSDKType } from "./pool";
-import { Order, OrderAmino, OrderSDKType } from "./order";
+import { DisabledOrderPair, DisabledOrderPairAmino, DisabledOrderPairSDKType, Order, OrderAmino, OrderSDKType } from "./order";
 import { BinaryReader, BinaryWriter } from "../../../binary";
 import { isSet, padDecimal } from "../../../helpers";
 import { GlobalDecoderRegistry } from "../../../registry";
@@ -468,6 +468,12 @@ export interface MsgCreateWeightedPool {
   tokens: CreateWeightedPoolToken[];
   /** if not empty, only these addresses can initialize the pool */
   initializationAllowList: string[];
+  /**
+   * if the creator is admin, they can create pools owned by governance
+   * NOTE: when public pool creation is not allowed, admin must set this to true
+   * NOTE: governance can leave this to false, as it already is the creator of the msg
+   */
+  forceGovOwner: boolean;
 }
 export interface MsgCreateWeightedPoolProtoMsg {
   typeUrl: "/pryzm.amm.v1.MsgCreateWeightedPool";
@@ -482,6 +488,12 @@ export interface MsgCreateWeightedPoolAmino {
   tokens?: CreateWeightedPoolTokenAmino[];
   /** if not empty, only these addresses can initialize the pool */
   initialization_allow_list: string[];
+  /**
+   * if the creator is admin, they can create pools owned by governance
+   * NOTE: when public pool creation is not allowed, admin must set this to true
+   * NOTE: governance can leave this to false, as it already is the creator of the msg
+   */
+  force_gov_owner?: boolean;
 }
 export interface MsgCreateWeightedPoolAminoMsg {
   type: "pryzm/amm/v1/CreateWeightedPool";
@@ -495,6 +507,7 @@ export interface MsgCreateWeightedPoolSDKType {
   pause_buffer_duration_millis: bigint;
   tokens: CreateWeightedPoolTokenSDKType[];
   initialization_allow_list: string[];
+  force_gov_owner: boolean;
 }
 export interface MsgCreateWeightedPoolResponse {
   poolId: bigint;
@@ -1646,6 +1659,40 @@ export interface MsgSetPauseWindowResponseAminoMsg {
   value: MsgSetPauseWindowResponseAmino;
 }
 export interface MsgSetPauseWindowResponseSDKType {}
+export interface MsgSetOrderPairDisabled {
+  authority: string;
+  pair: DisabledOrderPair;
+  disabled: boolean;
+}
+export interface MsgSetOrderPairDisabledProtoMsg {
+  typeUrl: "/pryzm.amm.v1.MsgSetOrderPairDisabled";
+  value: Uint8Array;
+}
+export interface MsgSetOrderPairDisabledAmino {
+  authority?: string;
+  pair?: DisabledOrderPairAmino;
+  disabled?: boolean;
+}
+export interface MsgSetOrderPairDisabledAminoMsg {
+  type: "pryzm/amm/v1/SetOrderPairDisabled";
+  value: MsgSetOrderPairDisabledAmino;
+}
+export interface MsgSetOrderPairDisabledSDKType {
+  authority: string;
+  pair: DisabledOrderPairSDKType;
+  disabled: boolean;
+}
+export interface MsgSetOrderPairDisabledResponse {}
+export interface MsgSetOrderPairDisabledResponseProtoMsg {
+  typeUrl: "/pryzm.amm.v1.MsgSetOrderPairDisabledResponse";
+  value: Uint8Array;
+}
+export interface MsgSetOrderPairDisabledResponseAmino {}
+export interface MsgSetOrderPairDisabledResponseAminoMsg {
+  type: "/pryzm.amm.v1.MsgSetOrderPairDisabledResponse";
+  value: MsgSetOrderPairDisabledResponseAmino;
+}
+export interface MsgSetOrderPairDisabledResponseSDKType {}
 function createBaseMsgSingleSwap(): MsgSingleSwap {
   return {
     creator: "",
@@ -3905,20 +3952,21 @@ function createBaseMsgCreateWeightedPool(): MsgCreateWeightedPool {
     pauseWindowDurationMillis: BigInt(0),
     pauseBufferDurationMillis: BigInt(0),
     tokens: [],
-    initializationAllowList: []
+    initializationAllowList: [],
+    forceGovOwner: false
   };
 }
 export const MsgCreateWeightedPool = {
   typeUrl: "/pryzm.amm.v1.MsgCreateWeightedPool",
   aminoType: "pryzm/amm/v1/CreateWeightedPool",
   is(o: any): o is MsgCreateWeightedPool {
-    return o && (o.$typeUrl === MsgCreateWeightedPool.typeUrl || typeof o.creator === "string" && typeof o.name === "string" && typeof o.swapFeeRatio === "string" && typeof o.pauseWindowDurationMillis === "bigint" && typeof o.pauseBufferDurationMillis === "bigint" && Array.isArray(o.tokens) && (!o.tokens.length || CreateWeightedPoolToken.is(o.tokens[0])) && Array.isArray(o.initializationAllowList) && (!o.initializationAllowList.length || typeof o.initializationAllowList[0] === "string"));
+    return o && (o.$typeUrl === MsgCreateWeightedPool.typeUrl || typeof o.creator === "string" && typeof o.name === "string" && typeof o.swapFeeRatio === "string" && typeof o.pauseWindowDurationMillis === "bigint" && typeof o.pauseBufferDurationMillis === "bigint" && Array.isArray(o.tokens) && (!o.tokens.length || CreateWeightedPoolToken.is(o.tokens[0])) && Array.isArray(o.initializationAllowList) && (!o.initializationAllowList.length || typeof o.initializationAllowList[0] === "string") && typeof o.forceGovOwner === "boolean");
   },
   isSDK(o: any): o is MsgCreateWeightedPoolSDKType {
-    return o && (o.$typeUrl === MsgCreateWeightedPool.typeUrl || typeof o.creator === "string" && typeof o.name === "string" && typeof o.swap_fee_ratio === "string" && typeof o.pause_window_duration_millis === "bigint" && typeof o.pause_buffer_duration_millis === "bigint" && Array.isArray(o.tokens) && (!o.tokens.length || CreateWeightedPoolToken.isSDK(o.tokens[0])) && Array.isArray(o.initialization_allow_list) && (!o.initialization_allow_list.length || typeof o.initialization_allow_list[0] === "string"));
+    return o && (o.$typeUrl === MsgCreateWeightedPool.typeUrl || typeof o.creator === "string" && typeof o.name === "string" && typeof o.swap_fee_ratio === "string" && typeof o.pause_window_duration_millis === "bigint" && typeof o.pause_buffer_duration_millis === "bigint" && Array.isArray(o.tokens) && (!o.tokens.length || CreateWeightedPoolToken.isSDK(o.tokens[0])) && Array.isArray(o.initialization_allow_list) && (!o.initialization_allow_list.length || typeof o.initialization_allow_list[0] === "string") && typeof o.force_gov_owner === "boolean");
   },
   isAmino(o: any): o is MsgCreateWeightedPoolAmino {
-    return o && (o.$typeUrl === MsgCreateWeightedPool.typeUrl || typeof o.creator === "string" && typeof o.name === "string" && typeof o.swap_fee_ratio === "string" && typeof o.pause_window_duration_millis === "bigint" && typeof o.pause_buffer_duration_millis === "bigint" && Array.isArray(o.tokens) && (!o.tokens.length || CreateWeightedPoolToken.isAmino(o.tokens[0])) && Array.isArray(o.initialization_allow_list) && (!o.initialization_allow_list.length || typeof o.initialization_allow_list[0] === "string"));
+    return o && (o.$typeUrl === MsgCreateWeightedPool.typeUrl || typeof o.creator === "string" && typeof o.name === "string" && typeof o.swap_fee_ratio === "string" && typeof o.pause_window_duration_millis === "bigint" && typeof o.pause_buffer_duration_millis === "bigint" && Array.isArray(o.tokens) && (!o.tokens.length || CreateWeightedPoolToken.isAmino(o.tokens[0])) && Array.isArray(o.initialization_allow_list) && (!o.initialization_allow_list.length || typeof o.initialization_allow_list[0] === "string") && typeof o.force_gov_owner === "boolean");
   },
   encode(message: MsgCreateWeightedPool, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.creator !== "") {
@@ -3941,6 +3989,9 @@ export const MsgCreateWeightedPool = {
     }
     for (const v of message.initializationAllowList) {
       writer.uint32(98).string(v!);
+    }
+    if (message.forceGovOwner === true) {
+      writer.uint32(104).bool(message.forceGovOwner);
     }
     return writer;
   },
@@ -3972,6 +4023,9 @@ export const MsgCreateWeightedPool = {
         case 12:
           message.initializationAllowList.push(reader.string());
           break;
+        case 13:
+          message.forceGovOwner = reader.bool();
+          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -3987,7 +4041,8 @@ export const MsgCreateWeightedPool = {
       pauseWindowDurationMillis: isSet(object.pauseWindowDurationMillis) ? BigInt(object.pauseWindowDurationMillis.toString()) : BigInt(0),
       pauseBufferDurationMillis: isSet(object.pauseBufferDurationMillis) ? BigInt(object.pauseBufferDurationMillis.toString()) : BigInt(0),
       tokens: Array.isArray(object?.tokens) ? object.tokens.map((e: any) => CreateWeightedPoolToken.fromJSON(e)) : [],
-      initializationAllowList: Array.isArray(object?.initializationAllowList) ? object.initializationAllowList.map((e: any) => String(e)) : []
+      initializationAllowList: Array.isArray(object?.initializationAllowList) ? object.initializationAllowList.map((e: any) => String(e)) : [],
+      forceGovOwner: isSet(object.forceGovOwner) ? Boolean(object.forceGovOwner) : false
     };
   },
   toJSON(message: MsgCreateWeightedPool): unknown {
@@ -4007,6 +4062,7 @@ export const MsgCreateWeightedPool = {
     } else {
       obj.initializationAllowList = [];
     }
+    message.forceGovOwner !== undefined && (obj.forceGovOwner = message.forceGovOwner);
     return obj;
   },
   fromPartial(object: Partial<MsgCreateWeightedPool>): MsgCreateWeightedPool {
@@ -4018,6 +4074,7 @@ export const MsgCreateWeightedPool = {
     message.pauseBufferDurationMillis = object.pauseBufferDurationMillis !== undefined && object.pauseBufferDurationMillis !== null ? BigInt(object.pauseBufferDurationMillis.toString()) : BigInt(0);
     message.tokens = object.tokens?.map(e => CreateWeightedPoolToken.fromPartial(e)) || [];
     message.initializationAllowList = object.initializationAllowList?.map(e => e) || [];
+    message.forceGovOwner = object.forceGovOwner ?? false;
     return message;
   },
   fromAmino(object: MsgCreateWeightedPoolAmino): MsgCreateWeightedPool {
@@ -4039,6 +4096,9 @@ export const MsgCreateWeightedPool = {
     }
     message.tokens = object.tokens?.map(e => CreateWeightedPoolToken.fromAmino(e)) || [];
     message.initializationAllowList = object.initialization_allow_list?.map(e => e) || [];
+    if (object.force_gov_owner !== undefined && object.force_gov_owner !== null) {
+      message.forceGovOwner = object.force_gov_owner;
+    }
     return message;
   },
   toAmino(message: MsgCreateWeightedPool, useInterfaces: boolean = true): MsgCreateWeightedPoolAmino {
@@ -4058,6 +4118,7 @@ export const MsgCreateWeightedPool = {
     } else {
       obj.initialization_allow_list = message.initializationAllowList;
     }
+    obj.force_gov_owner = message.forceGovOwner === false ? undefined : message.forceGovOwner;
     return obj;
   },
   fromAminoMsg(object: MsgCreateWeightedPoolAminoMsg): MsgCreateWeightedPool {
@@ -10257,3 +10318,189 @@ export const MsgSetPauseWindowResponse = {
   }
 };
 GlobalDecoderRegistry.register(MsgSetPauseWindowResponse.typeUrl, MsgSetPauseWindowResponse);
+function createBaseMsgSetOrderPairDisabled(): MsgSetOrderPairDisabled {
+  return {
+    authority: "",
+    pair: DisabledOrderPair.fromPartial({}),
+    disabled: false
+  };
+}
+export const MsgSetOrderPairDisabled = {
+  typeUrl: "/pryzm.amm.v1.MsgSetOrderPairDisabled",
+  aminoType: "pryzm/amm/v1/SetOrderPairDisabled",
+  is(o: any): o is MsgSetOrderPairDisabled {
+    return o && (o.$typeUrl === MsgSetOrderPairDisabled.typeUrl || typeof o.authority === "string" && DisabledOrderPair.is(o.pair) && typeof o.disabled === "boolean");
+  },
+  isSDK(o: any): o is MsgSetOrderPairDisabledSDKType {
+    return o && (o.$typeUrl === MsgSetOrderPairDisabled.typeUrl || typeof o.authority === "string" && DisabledOrderPair.isSDK(o.pair) && typeof o.disabled === "boolean");
+  },
+  isAmino(o: any): o is MsgSetOrderPairDisabledAmino {
+    return o && (o.$typeUrl === MsgSetOrderPairDisabled.typeUrl || typeof o.authority === "string" && DisabledOrderPair.isAmino(o.pair) && typeof o.disabled === "boolean");
+  },
+  encode(message: MsgSetOrderPairDisabled, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    if (message.authority !== "") {
+      writer.uint32(10).string(message.authority);
+    }
+    if (message.pair !== undefined) {
+      DisabledOrderPair.encode(message.pair, writer.uint32(18).fork()).ldelim();
+    }
+    if (message.disabled === true) {
+      writer.uint32(24).bool(message.disabled);
+    }
+    return writer;
+  },
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): MsgSetOrderPairDisabled {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseMsgSetOrderPairDisabled();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.authority = reader.string();
+          break;
+        case 2:
+          message.pair = DisabledOrderPair.decode(reader, reader.uint32(), useInterfaces);
+          break;
+        case 3:
+          message.disabled = reader.bool();
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromJSON(object: any): MsgSetOrderPairDisabled {
+    return {
+      authority: isSet(object.authority) ? String(object.authority) : "",
+      pair: isSet(object.pair) ? DisabledOrderPair.fromJSON(object.pair) : undefined,
+      disabled: isSet(object.disabled) ? Boolean(object.disabled) : false
+    };
+  },
+  toJSON(message: MsgSetOrderPairDisabled): unknown {
+    const obj: any = {};
+    message.authority !== undefined && (obj.authority = message.authority);
+    message.pair !== undefined && (obj.pair = message.pair ? DisabledOrderPair.toJSON(message.pair) : undefined);
+    message.disabled !== undefined && (obj.disabled = message.disabled);
+    return obj;
+  },
+  fromPartial(object: Partial<MsgSetOrderPairDisabled>): MsgSetOrderPairDisabled {
+    const message = createBaseMsgSetOrderPairDisabled();
+    message.authority = object.authority ?? "";
+    message.pair = object.pair !== undefined && object.pair !== null ? DisabledOrderPair.fromPartial(object.pair) : undefined;
+    message.disabled = object.disabled ?? false;
+    return message;
+  },
+  fromAmino(object: MsgSetOrderPairDisabledAmino): MsgSetOrderPairDisabled {
+    const message = createBaseMsgSetOrderPairDisabled();
+    if (object.authority !== undefined && object.authority !== null) {
+      message.authority = object.authority;
+    }
+    if (object.pair !== undefined && object.pair !== null) {
+      message.pair = DisabledOrderPair.fromAmino(object.pair);
+    }
+    if (object.disabled !== undefined && object.disabled !== null) {
+      message.disabled = object.disabled;
+    }
+    return message;
+  },
+  toAmino(message: MsgSetOrderPairDisabled, useInterfaces: boolean = true): MsgSetOrderPairDisabledAmino {
+    const obj: any = {};
+    obj.authority = message.authority === "" ? undefined : message.authority;
+    obj.pair = message.pair ? DisabledOrderPair.toAmino(message.pair, useInterfaces) : undefined;
+    obj.disabled = message.disabled === false ? undefined : message.disabled;
+    return obj;
+  },
+  fromAminoMsg(object: MsgSetOrderPairDisabledAminoMsg): MsgSetOrderPairDisabled {
+    return MsgSetOrderPairDisabled.fromAmino(object.value);
+  },
+  toAminoMsg(message: MsgSetOrderPairDisabled, useInterfaces: boolean = true): MsgSetOrderPairDisabledAminoMsg {
+    return {
+      type: "pryzm/amm/v1/SetOrderPairDisabled",
+      value: MsgSetOrderPairDisabled.toAmino(message, useInterfaces)
+    };
+  },
+  fromProtoMsg(message: MsgSetOrderPairDisabledProtoMsg, useInterfaces: boolean = true): MsgSetOrderPairDisabled {
+    return MsgSetOrderPairDisabled.decode(message.value, undefined, useInterfaces);
+  },
+  toProto(message: MsgSetOrderPairDisabled): Uint8Array {
+    return MsgSetOrderPairDisabled.encode(message).finish();
+  },
+  toProtoMsg(message: MsgSetOrderPairDisabled): MsgSetOrderPairDisabledProtoMsg {
+    return {
+      typeUrl: "/pryzm.amm.v1.MsgSetOrderPairDisabled",
+      value: MsgSetOrderPairDisabled.encode(message).finish()
+    };
+  }
+};
+GlobalDecoderRegistry.register(MsgSetOrderPairDisabled.typeUrl, MsgSetOrderPairDisabled);
+GlobalDecoderRegistry.registerAminoProtoMapping(MsgSetOrderPairDisabled.aminoType, MsgSetOrderPairDisabled.typeUrl);
+function createBaseMsgSetOrderPairDisabledResponse(): MsgSetOrderPairDisabledResponse {
+  return {};
+}
+export const MsgSetOrderPairDisabledResponse = {
+  typeUrl: "/pryzm.amm.v1.MsgSetOrderPairDisabledResponse",
+  is(o: any): o is MsgSetOrderPairDisabledResponse {
+    return o && o.$typeUrl === MsgSetOrderPairDisabledResponse.typeUrl;
+  },
+  isSDK(o: any): o is MsgSetOrderPairDisabledResponseSDKType {
+    return o && o.$typeUrl === MsgSetOrderPairDisabledResponse.typeUrl;
+  },
+  isAmino(o: any): o is MsgSetOrderPairDisabledResponseAmino {
+    return o && o.$typeUrl === MsgSetOrderPairDisabledResponse.typeUrl;
+  },
+  encode(_: MsgSetOrderPairDisabledResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    return writer;
+  },
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): MsgSetOrderPairDisabledResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseMsgSetOrderPairDisabledResponse();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromJSON(_: any): MsgSetOrderPairDisabledResponse {
+    return {};
+  },
+  toJSON(_: MsgSetOrderPairDisabledResponse): unknown {
+    const obj: any = {};
+    return obj;
+  },
+  fromPartial(_: Partial<MsgSetOrderPairDisabledResponse>): MsgSetOrderPairDisabledResponse {
+    const message = createBaseMsgSetOrderPairDisabledResponse();
+    return message;
+  },
+  fromAmino(_: MsgSetOrderPairDisabledResponseAmino): MsgSetOrderPairDisabledResponse {
+    const message = createBaseMsgSetOrderPairDisabledResponse();
+    return message;
+  },
+  toAmino(_: MsgSetOrderPairDisabledResponse, useInterfaces: boolean = true): MsgSetOrderPairDisabledResponseAmino {
+    const obj: any = {};
+    return obj;
+  },
+  fromAminoMsg(object: MsgSetOrderPairDisabledResponseAminoMsg): MsgSetOrderPairDisabledResponse {
+    return MsgSetOrderPairDisabledResponse.fromAmino(object.value);
+  },
+  fromProtoMsg(message: MsgSetOrderPairDisabledResponseProtoMsg, useInterfaces: boolean = true): MsgSetOrderPairDisabledResponse {
+    return MsgSetOrderPairDisabledResponse.decode(message.value, undefined, useInterfaces);
+  },
+  toProto(message: MsgSetOrderPairDisabledResponse): Uint8Array {
+    return MsgSetOrderPairDisabledResponse.encode(message).finish();
+  },
+  toProtoMsg(message: MsgSetOrderPairDisabledResponse): MsgSetOrderPairDisabledResponseProtoMsg {
+    return {
+      typeUrl: "/pryzm.amm.v1.MsgSetOrderPairDisabledResponse",
+      value: MsgSetOrderPairDisabledResponse.encode(message).finish()
+    };
+  }
+};
+GlobalDecoderRegistry.register(MsgSetOrderPairDisabledResponse.typeUrl, MsgSetOrderPairDisabledResponse);

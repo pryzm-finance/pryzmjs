@@ -55,6 +55,32 @@ export interface OrderSDKType {
   max_step_spot_price: string;
   max_matching_spot_price?: string;
 }
+export interface DisabledOrderPair {
+  whitelistedRoute: boolean;
+  poolId: bigint;
+  tokenIn: string;
+  tokenOut: string;
+}
+export interface DisabledOrderPairProtoMsg {
+  typeUrl: "/pryzm.amm.v1.DisabledOrderPair";
+  value: Uint8Array;
+}
+export interface DisabledOrderPairAmino {
+  whitelisted_route?: boolean;
+  pool_id?: string;
+  token_in?: string;
+  token_out?: string;
+}
+export interface DisabledOrderPairAminoMsg {
+  type: "/pryzm.amm.v1.DisabledOrderPair";
+  value: DisabledOrderPairAmino;
+}
+export interface DisabledOrderPairSDKType {
+  whitelisted_route: boolean;
+  pool_id: bigint;
+  token_in: string;
+  token_out: string;
+}
 function createBaseOrder(): Order {
   return {
     id: BigInt(0),
@@ -306,3 +332,128 @@ export const Order = {
   }
 };
 GlobalDecoderRegistry.register(Order.typeUrl, Order);
+function createBaseDisabledOrderPair(): DisabledOrderPair {
+  return {
+    whitelistedRoute: false,
+    poolId: BigInt(0),
+    tokenIn: "",
+    tokenOut: ""
+  };
+}
+export const DisabledOrderPair = {
+  typeUrl: "/pryzm.amm.v1.DisabledOrderPair",
+  is(o: any): o is DisabledOrderPair {
+    return o && (o.$typeUrl === DisabledOrderPair.typeUrl || typeof o.whitelistedRoute === "boolean" && typeof o.poolId === "bigint" && typeof o.tokenIn === "string" && typeof o.tokenOut === "string");
+  },
+  isSDK(o: any): o is DisabledOrderPairSDKType {
+    return o && (o.$typeUrl === DisabledOrderPair.typeUrl || typeof o.whitelisted_route === "boolean" && typeof o.pool_id === "bigint" && typeof o.token_in === "string" && typeof o.token_out === "string");
+  },
+  isAmino(o: any): o is DisabledOrderPairAmino {
+    return o && (o.$typeUrl === DisabledOrderPair.typeUrl || typeof o.whitelisted_route === "boolean" && typeof o.pool_id === "bigint" && typeof o.token_in === "string" && typeof o.token_out === "string");
+  },
+  encode(message: DisabledOrderPair, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    if (message.whitelistedRoute === true) {
+      writer.uint32(8).bool(message.whitelistedRoute);
+    }
+    if (message.poolId !== BigInt(0)) {
+      writer.uint32(16).uint64(message.poolId);
+    }
+    if (message.tokenIn !== "") {
+      writer.uint32(26).string(message.tokenIn);
+    }
+    if (message.tokenOut !== "") {
+      writer.uint32(34).string(message.tokenOut);
+    }
+    return writer;
+  },
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): DisabledOrderPair {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseDisabledOrderPair();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.whitelistedRoute = reader.bool();
+          break;
+        case 2:
+          message.poolId = reader.uint64();
+          break;
+        case 3:
+          message.tokenIn = reader.string();
+          break;
+        case 4:
+          message.tokenOut = reader.string();
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromJSON(object: any): DisabledOrderPair {
+    return {
+      whitelistedRoute: isSet(object.whitelistedRoute) ? Boolean(object.whitelistedRoute) : false,
+      poolId: isSet(object.poolId) ? BigInt(object.poolId.toString()) : BigInt(0),
+      tokenIn: isSet(object.tokenIn) ? String(object.tokenIn) : "",
+      tokenOut: isSet(object.tokenOut) ? String(object.tokenOut) : ""
+    };
+  },
+  toJSON(message: DisabledOrderPair): unknown {
+    const obj: any = {};
+    message.whitelistedRoute !== undefined && (obj.whitelistedRoute = message.whitelistedRoute);
+    message.poolId !== undefined && (obj.poolId = (message.poolId || BigInt(0)).toString());
+    message.tokenIn !== undefined && (obj.tokenIn = message.tokenIn);
+    message.tokenOut !== undefined && (obj.tokenOut = message.tokenOut);
+    return obj;
+  },
+  fromPartial(object: Partial<DisabledOrderPair>): DisabledOrderPair {
+    const message = createBaseDisabledOrderPair();
+    message.whitelistedRoute = object.whitelistedRoute ?? false;
+    message.poolId = object.poolId !== undefined && object.poolId !== null ? BigInt(object.poolId.toString()) : BigInt(0);
+    message.tokenIn = object.tokenIn ?? "";
+    message.tokenOut = object.tokenOut ?? "";
+    return message;
+  },
+  fromAmino(object: DisabledOrderPairAmino): DisabledOrderPair {
+    const message = createBaseDisabledOrderPair();
+    if (object.whitelisted_route !== undefined && object.whitelisted_route !== null) {
+      message.whitelistedRoute = object.whitelisted_route;
+    }
+    if (object.pool_id !== undefined && object.pool_id !== null) {
+      message.poolId = BigInt(object.pool_id);
+    }
+    if (object.token_in !== undefined && object.token_in !== null) {
+      message.tokenIn = object.token_in;
+    }
+    if (object.token_out !== undefined && object.token_out !== null) {
+      message.tokenOut = object.token_out;
+    }
+    return message;
+  },
+  toAmino(message: DisabledOrderPair, useInterfaces: boolean = true): DisabledOrderPairAmino {
+    const obj: any = {};
+    obj.whitelisted_route = message.whitelistedRoute === false ? undefined : message.whitelistedRoute;
+    obj.pool_id = message.poolId ? message.poolId.toString() : undefined;
+    obj.token_in = message.tokenIn === "" ? undefined : message.tokenIn;
+    obj.token_out = message.tokenOut === "" ? undefined : message.tokenOut;
+    return obj;
+  },
+  fromAminoMsg(object: DisabledOrderPairAminoMsg): DisabledOrderPair {
+    return DisabledOrderPair.fromAmino(object.value);
+  },
+  fromProtoMsg(message: DisabledOrderPairProtoMsg, useInterfaces: boolean = true): DisabledOrderPair {
+    return DisabledOrderPair.decode(message.value, undefined, useInterfaces);
+  },
+  toProto(message: DisabledOrderPair): Uint8Array {
+    return DisabledOrderPair.encode(message).finish();
+  },
+  toProtoMsg(message: DisabledOrderPair): DisabledOrderPairProtoMsg {
+    return {
+      typeUrl: "/pryzm.amm.v1.DisabledOrderPair",
+      value: DisabledOrderPair.encode(message).finish()
+    };
+  }
+};
+GlobalDecoderRegistry.register(DisabledOrderPair.typeUrl, DisabledOrderPair);
