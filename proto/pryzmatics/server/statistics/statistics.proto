@@ -16,7 +16,27 @@ message QueryStatisticsRequest {
 
 message QueryStatisticsResponse {
   repeated pryzmatics.statistics.TreasuryBalance treasury_balances = 1 [(gogoproto.nullable) = false];
-  pryzmatics.statistics.MarketCap market_cap = 2 [(gogoproto.nullable) = false];
-  pryzmatics.statistics.TVL tvl = 3 [(gogoproto.nullable) = false];
-  uint64 total_tx_count = 4;
+  string annualised_treasury = 2 [
+    (cosmos_proto.scalar) = "cosmos.Dec",
+    (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Dec",
+    (gogoproto.nullable) = false
+  ];
+  pryzmatics.statistics.MarketCap market_cap = 3 [(gogoproto.nullable) = false];
+  pryzmatics.statistics.TVL tvl = 4 [(gogoproto.nullable) = false];
+  uint64 total_tx_count = 5;
+  string total_trade_volume = 6 [
+    (cosmos_proto.scalar) = "cosmos.Dec",
+    (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Dec",
+    (gogoproto.nullable) = false
+  ];
+  string liquidity = 7 [
+    (cosmos_proto.scalar) = "cosmos.Dec",
+    (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Dec",
+    (gogoproto.nullable) = false
+  ];
+  uint64 wallets_count = 8;
+  uint64 delegators_count = 9;
+  uint64 staking_delegators_count = 10;
+  uint64 alliance_delegators_count = 11;
+  string error = 12;
 }

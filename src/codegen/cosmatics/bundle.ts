@@ -3,14 +3,14 @@ import * as _13 from "./health_check";
 import * as _14 from "./metric";
 import * as _15 from "./query";
 import * as _16 from "./sync_state";
-import * as _325 from "./query.lcd";
-import * as _326 from "./query.rpc.Query";
+import * as _326 from "./query.lcd";
+import * as _327 from "./query.rpc.Query";
 export const cosmatics = {
   ..._12,
   ..._13,
   ..._14,
   ..._15,
   ..._16,
-  ..._325,
-  ..._326
+  ..._326,
+  ..._327
 };
