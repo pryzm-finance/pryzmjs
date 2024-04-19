@@ -74,7 +74,7 @@ export interface Config_ChainIdsEntrySDKType {
 }
 export interface Config {
   productionMode: boolean;
-  stableCoinDenoms: string[];
+  stableCoins: StableCoinConfig[];
   favoritePairsMaxCount: number;
   metricCalculationIntervalBlocks: number;
   enableFakePriceGenerator: boolean;
@@ -98,7 +98,7 @@ export interface ConfigProtoMsg {
 }
 export interface ConfigAmino {
   production_mode?: boolean;
-  stable_coin_denoms?: string[];
+  stable_coins?: StableCoinConfigAmino[];
   favorite_pairs_max_count?: number;
   metric_calculation_interval_blocks?: number;
   enableFakePriceGenerator?: boolean;
@@ -122,7 +122,7 @@ export interface ConfigAminoMsg {
 }
 export interface ConfigSDKType {
   production_mode: boolean;
-  stable_coin_denoms: string[];
+  stable_coins: StableCoinConfigSDKType[];
   favorite_pairs_max_count: number;
   metric_calculation_interval_blocks: number;
   enableFakePriceGenerator: boolean;
@@ -379,6 +379,26 @@ export interface FaucetCaptchaConfigSDKType {
   v3_score: number;
   h_hostname: string[];
   h_score: number;
+}
+export interface StableCoinConfig {
+  denom: string;
+  decimals: number;
+}
+export interface StableCoinConfigProtoMsg {
+  typeUrl: "/pryzmatics.server.common.StableCoinConfig";
+  value: Uint8Array;
+}
+export interface StableCoinConfigAmino {
+  denom?: string;
+  decimals?: number;
+}
+export interface StableCoinConfigAminoMsg {
+  type: "/pryzmatics.server.common.StableCoinConfig";
+  value: StableCoinConfigAmino;
+}
+export interface StableCoinConfigSDKType {
+  denom: string;
+  decimals: number;
 }
 function createBaseQueryConfigRequest(): QueryConfigRequest {
   return {};
@@ -707,7 +727,7 @@ export const Config_ChainIdsEntry = {
 function createBaseConfig(): Config {
   return {
     productionMode: false,
-    stableCoinDenoms: [],
+    stableCoins: [],
     favoritePairsMaxCount: 0,
     metricCalculationIntervalBlocks: 0,
     enableFakePriceGenerator: false,
@@ -725,20 +745,20 @@ function createBaseConfig(): Config {
 export const Config = {
   typeUrl: "/pryzmatics.server.common.Config",
   is(o: any): o is Config {
-    return o && (o.$typeUrl === Config.typeUrl || typeof o.productionMode === "boolean" && Array.isArray(o.stableCoinDenoms) && (!o.stableCoinDenoms.length || typeof o.stableCoinDenoms[0] === "string") && typeof o.favoritePairsMaxCount === "number" && typeof o.metricCalculationIntervalBlocks === "number" && typeof o.enableFakePriceGenerator === "boolean" && isSet(o.rpcEndpoints) && isSet(o.chainIds) && DatabaseConfig.is(o.databaseConfig) && ChainConfig.is(o.chainConfig) && LoggerConfig.is(o.loggerConfig) && IndexerConfig.is(o.indexerConfig) && ProfilerConfig.is(o.profilerConfig) && YieldReturnConfig.is(o.yieldReturnConfig) && FaucetConfig.is(o.faucetConfig));
+    return o && (o.$typeUrl === Config.typeUrl || typeof o.productionMode === "boolean" && Array.isArray(o.stableCoins) && (!o.stableCoins.length || StableCoinConfig.is(o.stableCoins[0])) && typeof o.favoritePairsMaxCount === "number" && typeof o.metricCalculationIntervalBlocks === "number" && typeof o.enableFakePriceGenerator === "boolean" && isSet(o.rpcEndpoints) && isSet(o.chainIds) && DatabaseConfig.is(o.databaseConfig) && ChainConfig.is(o.chainConfig) && LoggerConfig.is(o.loggerConfig) && IndexerConfig.is(o.indexerConfig) && ProfilerConfig.is(o.profilerConfig) && YieldReturnConfig.is(o.yieldReturnConfig) && FaucetConfig.is(o.faucetConfig));
   },
   isSDK(o: any): o is ConfigSDKType {
-    return o && (o.$typeUrl === Config.typeUrl || typeof o.production_mode === "boolean" && Array.isArray(o.stable_coin_denoms) && (!o.stable_coin_denoms.length || typeof o.stable_coin_denoms[0] === "string") && typeof o.favorite_pairs_max_count === "number" && typeof o.metric_calculation_interval_blocks === "number" && typeof o.enableFakePriceGenerator === "boolean" && isSet(o.rpc_endpoints) && isSet(o.chain_ids) && DatabaseConfig.isSDK(o.database_config) && ChainConfig.isSDK(o.chain_config) && LoggerConfig.isSDK(o.logger_config) && IndexerConfig.isSDK(o.indexer_config) && ProfilerConfig.isSDK(o.profiler_config) && YieldReturnConfig.isSDK(o.yield_return_config) && FaucetConfig.isSDK(o.faucet_config));
+    return o && (o.$typeUrl === Config.typeUrl || typeof o.production_mode === "boolean" && Array.isArray(o.stable_coins) && (!o.stable_coins.length || StableCoinConfig.isSDK(o.stable_coins[0])) && typeof o.favorite_pairs_max_count === "number" && typeof o.metric_calculation_interval_blocks === "number" && typeof o.enableFakePriceGenerator === "boolean" && isSet(o.rpc_endpoints) && isSet(o.chain_ids) && DatabaseConfig.isSDK(o.database_config) && ChainConfig.isSDK(o.chain_config) && LoggerConfig.isSDK(o.logger_config) && IndexerConfig.isSDK(o.indexer_config) && ProfilerConfig.isSDK(o.profiler_config) && YieldReturnConfig.isSDK(o.yield_return_config) && FaucetConfig.isSDK(o.faucet_config));
   },
   isAmino(o: any): o is ConfigAmino {
-    return o && (o.$typeUrl === Config.typeUrl || typeof o.production_mode === "boolean" && Array.isArray(o.stable_coin_denoms) && (!o.stable_coin_denoms.length || typeof o.stable_coin_denoms[0] === "string") && typeof o.favorite_pairs_max_count === "number" && typeof o.metric_calculation_interval_blocks === "number" && typeof o.enableFakePriceGenerator === "boolean" && isSet(o.rpc_endpoints) && isSet(o.chain_ids) && DatabaseConfig.isAmino(o.database_config) && ChainConfig.isAmino(o.chain_config) && LoggerConfig.isAmino(o.logger_config) && IndexerConfig.isAmino(o.indexer_config) && ProfilerConfig.isAmino(o.profiler_config) && YieldReturnConfig.isAmino(o.yield_return_config) && FaucetConfig.isAmino(o.faucet_config));
+    return o && (o.$typeUrl === Config.typeUrl || typeof o.production_mode === "boolean" && Array.isArray(o.stable_coins) && (!o.stable_coins.length || StableCoinConfig.isAmino(o.stable_coins[0])) && typeof o.favorite_pairs_max_count === "number" && typeof o.metric_calculation_interval_blocks === "number" && typeof o.enableFakePriceGenerator === "boolean" && isSet(o.rpc_endpoints) && isSet(o.chain_ids) && DatabaseConfig.isAmino(o.database_config) && ChainConfig.isAmino(o.chain_config) && LoggerConfig.isAmino(o.logger_config) && IndexerConfig.isAmino(o.indexer_config) && ProfilerConfig.isAmino(o.profiler_config) && YieldReturnConfig.isAmino(o.yield_return_config) && FaucetConfig.isAmino(o.faucet_config));
   },
   encode(message: Config, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.productionMode === true) {
       writer.uint32(8).bool(message.productionMode);
     }
-    for (const v of message.stableCoinDenoms) {
-      writer.uint32(18).string(v!);
+    for (const v of message.stableCoins) {
+      StableCoinConfig.encode(v!, writer.uint32(18).fork()).ldelim();
     }
     if (message.favoritePairsMaxCount !== 0) {
       writer.uint32(24).int32(message.favoritePairsMaxCount);
@@ -795,7 +815,7 @@ export const Config = {
           message.productionMode = reader.bool();
           break;
         case 2:
-          message.stableCoinDenoms.push(reader.string());
+          message.stableCoins.push(StableCoinConfig.decode(reader, reader.uint32(), useInterfaces));
           break;
         case 3:
           message.favoritePairsMaxCount = reader.int32();
@@ -849,7 +869,7 @@ export const Config = {
   fromJSON(object: any): Config {
     return {
       productionMode: isSet(object.productionMode) ? Boolean(object.productionMode) : false,
-      stableCoinDenoms: Array.isArray(object?.stableCoinDenoms) ? object.stableCoinDenoms.map((e: any) => String(e)) : [],
+      stableCoins: Array.isArray(object?.stableCoins) ? object.stableCoins.map((e: any) => StableCoinConfig.fromJSON(e)) : [],
       favoritePairsMaxCount: isSet(object.favoritePairsMaxCount) ? Number(object.favoritePairsMaxCount) : 0,
       metricCalculationIntervalBlocks: isSet(object.metricCalculationIntervalBlocks) ? Number(object.metricCalculationIntervalBlocks) : 0,
       enableFakePriceGenerator: isSet(object.enableFakePriceGenerator) ? Boolean(object.enableFakePriceGenerator) : false,
@@ -877,10 +897,10 @@ export const Config = {
   toJSON(message: Config): unknown {
     const obj: any = {};
     message.productionMode !== undefined && (obj.productionMode = message.productionMode);
-    if (message.stableCoinDenoms) {
-      obj.stableCoinDenoms = message.stableCoinDenoms.map(e => e);
+    if (message.stableCoins) {
+      obj.stableCoins = message.stableCoins.map(e => e ? StableCoinConfig.toJSON(e) : undefined);
     } else {
-      obj.stableCoinDenoms = [];
+      obj.stableCoins = [];
     }
     message.favoritePairsMaxCount !== undefined && (obj.favoritePairsMaxCount = Math.round(message.favoritePairsMaxCount));
     message.metricCalculationIntervalBlocks !== undefined && (obj.metricCalculationIntervalBlocks = Math.round(message.metricCalculationIntervalBlocks));
@@ -909,7 +929,7 @@ export const Config = {
   fromPartial(object: Partial<Config>): Config {
     const message = createBaseConfig();
     message.productionMode = object.productionMode ?? false;
-    message.stableCoinDenoms = object.stableCoinDenoms?.map(e => e) || [];
+    message.stableCoins = object.stableCoins?.map(e => StableCoinConfig.fromPartial(e)) || [];
     message.favoritePairsMaxCount = object.favoritePairsMaxCount ?? 0;
     message.metricCalculationIntervalBlocks = object.metricCalculationIntervalBlocks ?? 0;
     message.enableFakePriceGenerator = object.enableFakePriceGenerator ?? false;
@@ -943,7 +963,7 @@ export const Config = {
     if (object.production_mode !== undefined && object.production_mode !== null) {
       message.productionMode = object.production_mode;
     }
-    message.stableCoinDenoms = object.stable_coin_denoms?.map(e => e) || [];
+    message.stableCoins = object.stable_coins?.map(e => StableCoinConfig.fromAmino(e)) || [];
     if (object.favorite_pairs_max_count !== undefined && object.favorite_pairs_max_count !== null) {
       message.favoritePairsMaxCount = object.favorite_pairs_max_count;
     }
@@ -995,10 +1015,10 @@ export const Config = {
   toAmino(message: Config, useInterfaces: boolean = true): ConfigAmino {
     const obj: any = {};
     obj.production_mode = message.productionMode === false ? undefined : message.productionMode;
-    if (message.stableCoinDenoms) {
-      obj.stable_coin_denoms = message.stableCoinDenoms.map(e => e);
+    if (message.stableCoins) {
+      obj.stable_coins = message.stableCoins.map(e => e ? StableCoinConfig.toAmino(e, useInterfaces) : undefined);
     } else {
-      obj.stable_coin_denoms = message.stableCoinDenoms;
+      obj.stable_coins = message.stableCoins;
     }
     obj.favorite_pairs_max_count = message.favoritePairsMaxCount === 0 ? undefined : message.favoritePairsMaxCount;
     obj.metric_calculation_interval_blocks = message.metricCalculationIntervalBlocks === 0 ? undefined : message.metricCalculationIntervalBlocks;
@@ -2218,3 +2238,100 @@ export const FaucetCaptchaConfig = {
   }
 };
 GlobalDecoderRegistry.register(FaucetCaptchaConfig.typeUrl, FaucetCaptchaConfig);
+function createBaseStableCoinConfig(): StableCoinConfig {
+  return {
+    denom: "",
+    decimals: 0
+  };
+}
+export const StableCoinConfig = {
+  typeUrl: "/pryzmatics.server.common.StableCoinConfig",
+  is(o: any): o is StableCoinConfig {
+    return o && (o.$typeUrl === StableCoinConfig.typeUrl || typeof o.denom === "string" && typeof o.decimals === "number");
+  },
+  isSDK(o: any): o is StableCoinConfigSDKType {
+    return o && (o.$typeUrl === StableCoinConfig.typeUrl || typeof o.denom === "string" && typeof o.decimals === "number");
+  },
+  isAmino(o: any): o is StableCoinConfigAmino {
+    return o && (o.$typeUrl === StableCoinConfig.typeUrl || typeof o.denom === "string" && typeof o.decimals === "number");
+  },
+  encode(message: StableCoinConfig, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    if (message.denom !== "") {
+      writer.uint32(10).string(message.denom);
+    }
+    if (message.decimals !== 0) {
+      writer.uint32(16).uint32(message.decimals);
+    }
+    return writer;
+  },
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): StableCoinConfig {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseStableCoinConfig();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.denom = reader.string();
+          break;
+        case 2:
+          message.decimals = reader.uint32();
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromJSON(object: any): StableCoinConfig {
+    return {
+      denom: isSet(object.denom) ? String(object.denom) : "",
+      decimals: isSet(object.decimals) ? Number(object.decimals) : 0
+    };
+  },
+  toJSON(message: StableCoinConfig): unknown {
+    const obj: any = {};
+    message.denom !== undefined && (obj.denom = message.denom);
+    message.decimals !== undefined && (obj.decimals = Math.round(message.decimals));
+    return obj;
+  },
+  fromPartial(object: Partial<StableCoinConfig>): StableCoinConfig {
+    const message = createBaseStableCoinConfig();
+    message.denom = object.denom ?? "";
+    message.decimals = object.decimals ?? 0;
+    return message;
+  },
+  fromAmino(object: StableCoinConfigAmino): StableCoinConfig {
+    const message = createBaseStableCoinConfig();
+    if (object.denom !== undefined && object.denom !== null) {
+      message.denom = object.denom;
+    }
+    if (object.decimals !== undefined && object.decimals !== null) {
+      message.decimals = object.decimals;
+    }
+    return message;
+  },
+  toAmino(message: StableCoinConfig, useInterfaces: boolean = true): StableCoinConfigAmino {
+    const obj: any = {};
+    obj.denom = message.denom === "" ? undefined : message.denom;
+    obj.decimals = message.decimals === 0 ? undefined : message.decimals;
+    return obj;
+  },
+  fromAminoMsg(object: StableCoinConfigAminoMsg): StableCoinConfig {
+    return StableCoinConfig.fromAmino(object.value);
+  },
+  fromProtoMsg(message: StableCoinConfigProtoMsg, useInterfaces: boolean = true): StableCoinConfig {
+    return StableCoinConfig.decode(message.value, undefined, useInterfaces);
+  },
+  toProto(message: StableCoinConfig): Uint8Array {
+    return StableCoinConfig.encode(message).finish();
+  },
+  toProtoMsg(message: StableCoinConfig): StableCoinConfigProtoMsg {
+    return {
+      typeUrl: "/pryzmatics.server.common.StableCoinConfig",
+      value: StableCoinConfig.encode(message).finish()
+    };
+  }
+};
+GlobalDecoderRegistry.register(StableCoinConfig.typeUrl, StableCoinConfig);

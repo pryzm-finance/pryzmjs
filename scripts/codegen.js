@@ -175,15 +175,16 @@ async function main() {
                 regex: /import { defaultRegistryTypes, AminoTypes, SigningStargateClient } from "@cosmjs\/stargate";/gm,
                 subst: 'import { AminoTypes, SigningStargateClient } from "@cosmjs/stargate";\n' +
                     'import { cosmosProtoRegistry as defaultRegistryTypes, cosmosAminoConverters } from "../cosmos/client";\n' +
-                    'import { ibcAminoConverters, ibcProtoRegistry } from "../ibc/client";',
+                    'import { ibcAminoConverters, ibcProtoRegistry } from "../ibc/client";\n' +
+                    'import { allianceAminoConverters, allianceProtoRegistry } from "../alliance/client";'
             },
             {
                 regex: /const aminoTypes = new AminoTypes\({/gm,
-                subst: `const aminoTypes = new AminoTypes({\n    ...cosmosAminoConverters,\n    ...ibcAminoConverters,`,
+                subst: `const aminoTypes = new AminoTypes({\n    ...cosmosAminoConverters,\n    ...ibcAminoConverters,\n    ...allianceAminoConverters,`,
             },
             {
                 regex: /new Registry\(\[\.\.\.defaultTypes, \.\.\.pryzmProtoRegistry\]\)/gm,
-                subst: `new Registry([...defaultTypes, ...ibcProtoRegistry, ...pryzmProtoRegistry])`
+                subst: `new Registry([...defaultTypes, ...ibcProtoRegistry, ...pryzmProtoRegistry, ...allianceProtoRegistry])`
             }
         ]
     )

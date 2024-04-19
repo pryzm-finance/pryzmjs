@@ -5,7 +5,6 @@ import { isSet, fromJsonTimestamp, fromTimestamp, padDecimal } from "../../helpe
 import { GlobalDecoderRegistry } from "../../registry";
 export interface TokenPrice {
   denom: string;
-  quote: string;
   blockTime: Timestamp;
   price: string;
 }
@@ -15,7 +14,6 @@ export interface TokenPriceProtoMsg {
 }
 export interface TokenPriceAmino {
   denom?: string;
-  quote?: string;
   block_time?: string;
   price?: string;
 }
@@ -25,14 +23,12 @@ export interface TokenPriceAminoMsg {
 }
 export interface TokenPriceSDKType {
   denom: string;
-  quote: string;
   block_time: TimestampSDKType;
   price: string;
 }
 function createBaseTokenPrice(): TokenPrice {
   return {
     denom: "",
-    quote: "",
     blockTime: Timestamp.fromPartial({}),
     price: ""
   };
@@ -40,26 +36,23 @@ function createBaseTokenPrice(): TokenPrice {
 export const TokenPrice = {
   typeUrl: "/pryzmatics.price.TokenPrice",
   is(o: any): o is TokenPrice {
-    return o && (o.$typeUrl === TokenPrice.typeUrl || typeof o.denom === "string" && typeof o.quote === "string" && Timestamp.is(o.blockTime) && typeof o.price === "string");
+    return o && (o.$typeUrl === TokenPrice.typeUrl || typeof o.denom === "string" && Timestamp.is(o.blockTime) && typeof o.price === "string");
   },
   isSDK(o: any): o is TokenPriceSDKType {
-    return o && (o.$typeUrl === TokenPrice.typeUrl || typeof o.denom === "string" && typeof o.quote === "string" && Timestamp.isSDK(o.block_time) && typeof o.price === "string");
+    return o && (o.$typeUrl === TokenPrice.typeUrl || typeof o.denom === "string" && Timestamp.isSDK(o.block_time) && typeof o.price === "string");
   },
   isAmino(o: any): o is TokenPriceAmino {
-    return o && (o.$typeUrl === TokenPrice.typeUrl || typeof o.denom === "string" && typeof o.quote === "string" && Timestamp.isAmino(o.block_time) && typeof o.price === "string");
+    return o && (o.$typeUrl === TokenPrice.typeUrl || typeof o.denom === "string" && Timestamp.isAmino(o.block_time) && typeof o.price === "string");
   },
   encode(message: TokenPrice, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.denom !== "") {
       writer.uint32(10).string(message.denom);
     }
-    if (message.quote !== "") {
-      writer.uint32(18).string(message.quote);
-    }
     if (message.blockTime !== undefined) {
-      Timestamp.encode(message.blockTime, writer.uint32(26).fork()).ldelim();
+      Timestamp.encode(message.blockTime, writer.uint32(18).fork()).ldelim();
     }
     if (message.price !== "") {
-      writer.uint32(34).string(Decimal.fromUserInput(message.price, 18).atomics);
+      writer.uint32(26).string(Decimal.fromUserInput(message.price, 18).atomics);
     }
     return writer;
   },
@@ -74,12 +67,9 @@ export const TokenPrice = {
           message.denom = reader.string();
           break;
         case 2:
-          message.quote = reader.string();
-          break;
-        case 3:
           message.blockTime = Timestamp.decode(reader, reader.uint32());
           break;
-        case 4:
+        case 3:
           message.price = Decimal.fromAtomics(reader.string(), 18).toString();
           break;
         default:
@@ -92,7 +82,6 @@ export const TokenPrice = {
   fromJSON(object: any): TokenPrice {
     return {
       denom: isSet(object.denom) ? String(object.denom) : "",
-      quote: isSet(object.quote) ? String(object.quote) : "",
       blockTime: isSet(object.blockTime) ? fromJsonTimestamp(object.blockTime) : undefined,
       price: isSet(object.price) ? String(object.price) : ""
     };
@@ -100,7 +89,6 @@ export const TokenPrice = {
   toJSON(message: TokenPrice): unknown {
     const obj: any = {};
     message.denom !== undefined && (obj.denom = message.denom);
-    message.quote !== undefined && (obj.quote = message.quote);
     message.blockTime !== undefined && (obj.blockTime = fromTimestamp(message.blockTime).toISOString());
     message.price !== undefined && (obj.price = message.price);
     return obj;
@@ -108,7 +96,6 @@ export const TokenPrice = {
   fromPartial(object: Partial<TokenPrice>): TokenPrice {
     const message = createBaseTokenPrice();
     message.denom = object.denom ?? "";
-    message.quote = object.quote ?? "";
     message.blockTime = object.blockTime !== undefined && object.blockTime !== null ? Timestamp.fromPartial(object.blockTime) : undefined;
     message.price = object.price ?? "";
     return message;
@@ -117,9 +104,6 @@ export const TokenPrice = {
     const message = createBaseTokenPrice();
     if (object.denom !== undefined && object.denom !== null) {
       message.denom = object.denom;
-    }
-    if (object.quote !== undefined && object.quote !== null) {
-      message.quote = object.quote;
     }
     if (object.block_time !== undefined && object.block_time !== null) {
       message.blockTime = Timestamp.fromAmino(object.block_time);
@@ -132,7 +116,6 @@ export const TokenPrice = {
   toAmino(message: TokenPrice, useInterfaces: boolean = true): TokenPriceAmino {
     const obj: any = {};
     obj.denom = message.denom === "" ? undefined : message.denom;
-    obj.quote = message.quote === "" ? undefined : message.quote;
     obj.block_time = message.blockTime ? Timestamp.toAmino(message.blockTime, useInterfaces) : undefined;
     obj.price = padDecimal(message.price) === "" ? undefined : padDecimal(message.price);
     return obj;

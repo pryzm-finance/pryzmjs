@@ -12,7 +12,7 @@ async function main() {
         from: `${Date.parse('2023-07-27 11:59:33.619 GMT')}`,
         to: `${Date.parse('2023-07-27 12:10:04.045 GMT')}`,
         timeResolutionType: TimeResolutionType.TIME_RESOLUTION_TYPE_MINUTE,
-        timeResolutionValue: 1
+        timeResolutionValue: 5
     })).historical_prices
     console.log(prices)
 
@@ -22,7 +22,7 @@ async function main() {
         from: `${Date.parse('2023-07-27 11:59:33.619 GMT')}`,
         to: `${Date.parse('2023-07-27 12:10:04.045 GMT')}`,
         timeResolutionType: TimeResolutionType.TIME_RESOLUTION_TYPE_MINUTE,
-        timeResolutionValue: 1
+        timeResolutionValue: 5
     })).historical_prices
     console.log(prices)
 }

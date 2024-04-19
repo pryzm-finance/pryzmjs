@@ -15,7 +15,7 @@ message QueryConfigResponse {
 
 message Config {
   bool production_mode = 1;
-  repeated string stable_coin_denoms = 2;
+  repeated StableCoinConfig stable_coins = 2 [(gogoproto.nullable) = false];
   int32 favorite_pairs_max_count = 3;
   uint32 metric_calculation_interval_blocks = 4;
   bool enableFakePriceGenerator = 5;
@@ -93,4 +93,9 @@ message FaucetCaptchaConfig {
   double v3_score = 5;
   repeated string h_hostname = 6;
   double h_score = 7;
+}
+
+message StableCoinConfig {
+  string denom = 1;
+  uint32 decimals = 2;
 }
