@@ -29,10 +29,8 @@ export interface QueryJoinTokenExactLptSimulationRequestSDKType {
 export interface QueryJoinTokenExactLptSimulationResponse {
   amountIn: Coin;
   amountOut: Coin;
-  protocolFee: Coin;
-  protocolFeeLpTerms: Coin;
-  swapFee: Coin;
-  swapFeeLpTerms: Coin;
+  feeAmount: Coin;
+  feePercentage: string;
   priceImpact: string;
 }
 export interface QueryJoinTokenExactLptSimulationResponseProtoMsg {
@@ -42,10 +40,8 @@ export interface QueryJoinTokenExactLptSimulationResponseProtoMsg {
 export interface QueryJoinTokenExactLptSimulationResponseAmino {
   amount_in?: CoinAmino;
   amount_out?: CoinAmino;
-  protocol_fee?: CoinAmino;
-  protocol_fee_lp_terms?: CoinAmino;
-  swap_fee?: CoinAmino;
-  swap_fee_lp_terms?: CoinAmino;
+  fee_amount?: CoinAmino;
+  fee_percentage?: string;
   price_impact?: string;
 }
 export interface QueryJoinTokenExactLptSimulationResponseAminoMsg {
@@ -55,10 +51,8 @@ export interface QueryJoinTokenExactLptSimulationResponseAminoMsg {
 export interface QueryJoinTokenExactLptSimulationResponseSDKType {
   amount_in: CoinSDKType;
   amount_out: CoinSDKType;
-  protocol_fee: CoinSDKType;
-  protocol_fee_lp_terms: CoinSDKType;
-  swap_fee: CoinSDKType;
-  swap_fee_lp_terms: CoinSDKType;
+  fee_amount: CoinSDKType;
+  fee_percentage: string;
   price_impact: string;
 }
 function createBaseQueryJoinTokenExactLptSimulationRequest(): QueryJoinTokenExactLptSimulationRequest {
@@ -176,23 +170,21 @@ function createBaseQueryJoinTokenExactLptSimulationResponse(): QueryJoinTokenExa
   return {
     amountIn: Coin.fromPartial({}),
     amountOut: Coin.fromPartial({}),
-    protocolFee: Coin.fromPartial({}),
-    protocolFeeLpTerms: Coin.fromPartial({}),
-    swapFee: Coin.fromPartial({}),
-    swapFeeLpTerms: Coin.fromPartial({}),
+    feeAmount: Coin.fromPartial({}),
+    feePercentage: "",
     priceImpact: ""
   };
 }
 export const QueryJoinTokenExactLptSimulationResponse = {
   typeUrl: "/pryzmatics.server.trade.QueryJoinTokenExactLptSimulationResponse",
   is(o: any): o is QueryJoinTokenExactLptSimulationResponse {
-    return o && (o.$typeUrl === QueryJoinTokenExactLptSimulationResponse.typeUrl || Coin.is(o.amountIn) && Coin.is(o.amountOut) && Coin.is(o.protocolFee) && Coin.is(o.protocolFeeLpTerms) && Coin.is(o.swapFee) && Coin.is(o.swapFeeLpTerms) && typeof o.priceImpact === "string");
+    return o && (o.$typeUrl === QueryJoinTokenExactLptSimulationResponse.typeUrl || Coin.is(o.amountIn) && Coin.is(o.amountOut) && Coin.is(o.feeAmount) && typeof o.feePercentage === "string" && typeof o.priceImpact === "string");
   },
   isSDK(o: any): o is QueryJoinTokenExactLptSimulationResponseSDKType {
-    return o && (o.$typeUrl === QueryJoinTokenExactLptSimulationResponse.typeUrl || Coin.isSDK(o.amount_in) && Coin.isSDK(o.amount_out) && Coin.isSDK(o.protocol_fee) && Coin.isSDK(o.protocol_fee_lp_terms) && Coin.isSDK(o.swap_fee) && Coin.isSDK(o.swap_fee_lp_terms) && typeof o.price_impact === "string");
+    return o && (o.$typeUrl === QueryJoinTokenExactLptSimulationResponse.typeUrl || Coin.isSDK(o.amount_in) && Coin.isSDK(o.amount_out) && Coin.isSDK(o.fee_amount) && typeof o.fee_percentage === "string" && typeof o.price_impact === "string");
   },
   isAmino(o: any): o is QueryJoinTokenExactLptSimulationResponseAmino {
-    return o && (o.$typeUrl === QueryJoinTokenExactLptSimulationResponse.typeUrl || Coin.isAmino(o.amount_in) && Coin.isAmino(o.amount_out) && Coin.isAmino(o.protocol_fee) && Coin.isAmino(o.protocol_fee_lp_terms) && Coin.isAmino(o.swap_fee) && Coin.isAmino(o.swap_fee_lp_terms) && typeof o.price_impact === "string");
+    return o && (o.$typeUrl === QueryJoinTokenExactLptSimulationResponse.typeUrl || Coin.isAmino(o.amount_in) && Coin.isAmino(o.amount_out) && Coin.isAmino(o.fee_amount) && typeof o.fee_percentage === "string" && typeof o.price_impact === "string");
   },
   encode(message: QueryJoinTokenExactLptSimulationResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.amountIn !== undefined) {
@@ -201,20 +193,14 @@ export const QueryJoinTokenExactLptSimulationResponse = {
     if (message.amountOut !== undefined) {
       Coin.encode(message.amountOut, writer.uint32(18).fork()).ldelim();
     }
-    if (message.protocolFee !== undefined) {
-      Coin.encode(message.protocolFee, writer.uint32(26).fork()).ldelim();
+    if (message.feeAmount !== undefined) {
+      Coin.encode(message.feeAmount, writer.uint32(26).fork()).ldelim();
     }
-    if (message.protocolFeeLpTerms !== undefined) {
-      Coin.encode(message.protocolFeeLpTerms, writer.uint32(34).fork()).ldelim();
-    }
-    if (message.swapFee !== undefined) {
-      Coin.encode(message.swapFee, writer.uint32(42).fork()).ldelim();
-    }
-    if (message.swapFeeLpTerms !== undefined) {
-      Coin.encode(message.swapFeeLpTerms, writer.uint32(50).fork()).ldelim();
+    if (message.feePercentage !== "") {
+      writer.uint32(34).string(Decimal.fromUserInput(message.feePercentage, 18).atomics);
     }
     if (message.priceImpact !== "") {
-      writer.uint32(58).string(Decimal.fromUserInput(message.priceImpact, 18).atomics);
+      writer.uint32(42).string(Decimal.fromUserInput(message.priceImpact, 18).atomics);
     }
     return writer;
   },
@@ -232,18 +218,12 @@ export const QueryJoinTokenExactLptSimulationResponse = {
           message.amountOut = Coin.decode(reader, reader.uint32(), useInterfaces);
           break;
         case 3:
-          message.protocolFee = Coin.decode(reader, reader.uint32(), useInterfaces);
+          message.feeAmount = Coin.decode(reader, reader.uint32(), useInterfaces);
           break;
         case 4:
-          message.protocolFeeLpTerms = Coin.decode(reader, reader.uint32(), useInterfaces);
+          message.feePercentage = Decimal.fromAtomics(reader.string(), 18).toString();
           break;
         case 5:
-          message.swapFee = Coin.decode(reader, reader.uint32(), useInterfaces);
-          break;
-        case 6:
-          message.swapFeeLpTerms = Coin.decode(reader, reader.uint32(), useInterfaces);
-          break;
-        case 7:
           message.priceImpact = Decimal.fromAtomics(reader.string(), 18).toString();
           break;
         default:
@@ -257,10 +237,8 @@ export const QueryJoinTokenExactLptSimulationResponse = {
     return {
       amountIn: isSet(object.amountIn) ? Coin.fromJSON(object.amountIn) : undefined,
       amountOut: isSet(object.amountOut) ? Coin.fromJSON(object.amountOut) : undefined,
-      protocolFee: isSet(object.protocolFee) ? Coin.fromJSON(object.protocolFee) : undefined,
-      protocolFeeLpTerms: isSet(object.protocolFeeLpTerms) ? Coin.fromJSON(object.protocolFeeLpTerms) : undefined,
-      swapFee: isSet(object.swapFee) ? Coin.fromJSON(object.swapFee) : undefined,
-      swapFeeLpTerms: isSet(object.swapFeeLpTerms) ? Coin.fromJSON(object.swapFeeLpTerms) : undefined,
+      feeAmount: isSet(object.feeAmount) ? Coin.fromJSON(object.feeAmount) : undefined,
+      feePercentage: isSet(object.feePercentage) ? String(object.feePercentage) : "",
       priceImpact: isSet(object.priceImpact) ? String(object.priceImpact) : ""
     };
   },
@@ -268,10 +246,8 @@ export const QueryJoinTokenExactLptSimulationResponse = {
     const obj: any = {};
     message.amountIn !== undefined && (obj.amountIn = message.amountIn ? Coin.toJSON(message.amountIn) : undefined);
     message.amountOut !== undefined && (obj.amountOut = message.amountOut ? Coin.toJSON(message.amountOut) : undefined);
-    message.protocolFee !== undefined && (obj.protocolFee = message.protocolFee ? Coin.toJSON(message.protocolFee) : undefined);
-    message.protocolFeeLpTerms !== undefined && (obj.protocolFeeLpTerms = message.protocolFeeLpTerms ? Coin.toJSON(message.protocolFeeLpTerms) : undefined);
-    message.swapFee !== undefined && (obj.swapFee = message.swapFee ? Coin.toJSON(message.swapFee) : undefined);
-    message.swapFeeLpTerms !== undefined && (obj.swapFeeLpTerms = message.swapFeeLpTerms ? Coin.toJSON(message.swapFeeLpTerms) : undefined);
+    message.feeAmount !== undefined && (obj.feeAmount = message.feeAmount ? Coin.toJSON(message.feeAmount) : undefined);
+    message.feePercentage !== undefined && (obj.feePercentage = message.feePercentage);
     message.priceImpact !== undefined && (obj.priceImpact = message.priceImpact);
     return obj;
   },
@@ -279,10 +255,8 @@ export const QueryJoinTokenExactLptSimulationResponse = {
     const message = createBaseQueryJoinTokenExactLptSimulationResponse();
     message.amountIn = object.amountIn !== undefined && object.amountIn !== null ? Coin.fromPartial(object.amountIn) : undefined;
     message.amountOut = object.amountOut !== undefined && object.amountOut !== null ? Coin.fromPartial(object.amountOut) : undefined;
-    message.protocolFee = object.protocolFee !== undefined && object.protocolFee !== null ? Coin.fromPartial(object.protocolFee) : undefined;
-    message.protocolFeeLpTerms = object.protocolFeeLpTerms !== undefined && object.protocolFeeLpTerms !== null ? Coin.fromPartial(object.protocolFeeLpTerms) : undefined;
-    message.swapFee = object.swapFee !== undefined && object.swapFee !== null ? Coin.fromPartial(object.swapFee) : undefined;
-    message.swapFeeLpTerms = object.swapFeeLpTerms !== undefined && object.swapFeeLpTerms !== null ? Coin.fromPartial(object.swapFeeLpTerms) : undefined;
+    message.feeAmount = object.feeAmount !== undefined && object.feeAmount !== null ? Coin.fromPartial(object.feeAmount) : undefined;
+    message.feePercentage = object.feePercentage ?? "";
     message.priceImpact = object.priceImpact ?? "";
     return message;
   },
@@ -294,17 +268,11 @@ export const QueryJoinTokenExactLptSimulationResponse = {
     if (object.amount_out !== undefined && object.amount_out !== null) {
       message.amountOut = Coin.fromAmino(object.amount_out);
     }
-    if (object.protocol_fee !== undefined && object.protocol_fee !== null) {
-      message.protocolFee = Coin.fromAmino(object.protocol_fee);
+    if (object.fee_amount !== undefined && object.fee_amount !== null) {
+      message.feeAmount = Coin.fromAmino(object.fee_amount);
     }
-    if (object.protocol_fee_lp_terms !== undefined && object.protocol_fee_lp_terms !== null) {
-      message.protocolFeeLpTerms = Coin.fromAmino(object.protocol_fee_lp_terms);
-    }
-    if (object.swap_fee !== undefined && object.swap_fee !== null) {
-      message.swapFee = Coin.fromAmino(object.swap_fee);
-    }
-    if (object.swap_fee_lp_terms !== undefined && object.swap_fee_lp_terms !== null) {
-      message.swapFeeLpTerms = Coin.fromAmino(object.swap_fee_lp_terms);
+    if (object.fee_percentage !== undefined && object.fee_percentage !== null) {
+      message.feePercentage = object.fee_percentage;
     }
     if (object.price_impact !== undefined && object.price_impact !== null) {
       message.priceImpact = object.price_impact;
@@ -315,10 +283,8 @@ export const QueryJoinTokenExactLptSimulationResponse = {
     const obj: any = {};
     obj.amount_in = message.amountIn ? Coin.toAmino(message.amountIn, useInterfaces) : undefined;
     obj.amount_out = message.amountOut ? Coin.toAmino(message.amountOut, useInterfaces) : undefined;
-    obj.protocol_fee = message.protocolFee ? Coin.toAmino(message.protocolFee, useInterfaces) : undefined;
-    obj.protocol_fee_lp_terms = message.protocolFeeLpTerms ? Coin.toAmino(message.protocolFeeLpTerms, useInterfaces) : undefined;
-    obj.swap_fee = message.swapFee ? Coin.toAmino(message.swapFee, useInterfaces) : undefined;
-    obj.swap_fee_lp_terms = message.swapFeeLpTerms ? Coin.toAmino(message.swapFeeLpTerms, useInterfaces) : undefined;
+    obj.fee_amount = message.feeAmount ? Coin.toAmino(message.feeAmount, useInterfaces) : undefined;
+    obj.fee_percentage = padDecimal(message.feePercentage) === "" ? undefined : padDecimal(message.feePercentage);
     obj.price_impact = padDecimal(message.priceImpact) === "" ? undefined : padDecimal(message.priceImpact);
     return obj;
   },

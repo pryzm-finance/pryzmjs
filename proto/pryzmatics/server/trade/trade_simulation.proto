@@ -30,8 +30,12 @@ message QueryTradeSimulationResponse {
   ];
   cosmos.base.v1beta1.Coin amount_in = 2 [(gogoproto.nullable) = false];
   cosmos.base.v1beta1.Coin amount_out = 3 [(gogoproto.nullable) = false];
-  repeated cosmos.base.v1beta1.Coin fee = 4 [(gogoproto.nullable) = false];
-  cosmos.base.v1beta1.Coin feeTokenInTerms = 5 [(gogoproto.nullable) = false];
+  cosmos.base.v1beta1.Coin fee_amount = 4 [(gogoproto.nullable) = false];
+  string fee_percentage = 5 [
+    (cosmos_proto.scalar) = "cosmos.Dec",
+    (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Dec",
+    (gogoproto.nullable) = false
+  ];
   string effective_price = 6 [
     (cosmos_proto.scalar) = "cosmos.Dec",
     (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Dec",
@@ -43,4 +47,5 @@ message QueryTradeSimulationResponse {
     (gogoproto.nullable) = false
   ];
   repeated pryzm.amm.v1.SwapStep swap_steps = 8 [(gogoproto.nullable) = false];
+  string error = 9;
 }

@@ -1,0 +1,11 @@
+syntax = "proto3";
+package pryzmatics.trade;
+
+import "gogoproto/gogo.proto";
+import "pryzm/amm/v1/operations.proto";
+
+option go_package = "github.com/pryzm-finance/pryzmatics/types/trade";
+
+message SwapSteps {
+  repeated pryzm.amm.v1.SwapStep steps = 1 [(gogoproto.nullable) = false];
+}

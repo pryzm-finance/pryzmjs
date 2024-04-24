@@ -1,12 +1,12 @@
 lockfileVersion: 5.4
 
 specifiers:
-  '@pryzm-finance/pryzmjs': 0.18.3
+  '@pryzm-finance/pryzmjs': 0.18.4-rc1
   '@refractedlabs/utils': 0.1.9
   typescript: ^5.1.6
 
 dependencies:
-  '@pryzm-finance/pryzmjs': 0.18.3_google-protobuf@3.21.2
+  '@pryzm-finance/pryzmjs': 0.18.4-rc1_google-protobuf@3.21.2
   '@refractedlabs/utils': 0.1.9
 
 devDependencies:
@@ -189,16 +189,16 @@ packages:
       google-protobuf: 3.21.2
     dev: false
 
-  /@keplr-wallet/types/0.12.82:
-    resolution: {integrity: sha512-cNjkSvIHpWQEaM0cS9eQRJWTdwL55J9LQtRyCfOaB8bSEsFwBOvwcb2vpwMjLCJ3t0zkQ6VirOjvZWPutydpMQ==}
+  /@keplr-wallet/types/0.12.83:
+    resolution: {integrity: sha512-fb+Ns52EXZ+iJXwfGAJLn4MLkALuIhVv+V0ed/twzv0LqJlPYvQTeW5e/ZFRO/1UBE3T56vLQdqwvvxbuBFeUQ==}
     dependencies:
       long: 4.0.0
     dev: false
 
-  /@keplr-wallet/unit/0.12.82:
-    resolution: {integrity: sha512-J3+ac0dp0jyaaZvypD08Vtfk2+nPmekDBTXshoYijksMG0sBXkqziR1KIGRSGcXklFEBbVX7U25riWnIMf6a2A==}
+  /@keplr-wallet/unit/0.12.83:
+    resolution: {integrity: sha512-Ca/bayFn8mzqpw0FLXiA6u7izf2XVrIovOjGhStMbvbXpaTZ0fmAGSqLnSoJvFAHFbCU0KGEENwzir9ficr8mw==}
     dependencies:
-      '@keplr-wallet/types': 0.12.82
+      '@keplr-wallet/types': 0.12.83
       big-integer: 1.6.52
       utility-types: 3.11.0
     dev: false
@@ -251,14 +251,14 @@ packages:
     resolution: {integrity: sha512-Vvn3zZrhQZkkBE8LSuW3em98c0FwgO4nxzv6OdSxPKJIEKY2bGbHn+mhGIPerzI4twdxaP8/0+06HBpwf345Lw==}
     dev: false
 
-  /@pryzm-finance/pryzmjs/0.18.3_google-protobuf@3.21.2:
-    resolution: {integrity: sha512-DiSh9QY4KClEQl10sccwwjlQvHHGwi35RD+8/5tbWeMS4KAu8SYtK5bPSsKbvi76JCu2sMP8EfbWDUuY3bKdOw==, tarball: download/@pryzm-finance/pryzmjs/0.18.3/f4fd5e6a581ccd102419ea83f1d1eca88b7519df}
+  /@pryzm-finance/pryzmjs/0.18.4-rc1_google-protobuf@3.21.2:
+    resolution: {integrity: sha512-xlC9PXwtUSOIVTKTgk3X1tww1pcMrpKWFe/IQU7Z3kEKwakjRNkKmGhVCiTWwYOJ4W/zanxj/W85zGxVLBXikA==, tarball: download/@pryzm-finance/pryzmjs/0.18.4-rc1/37be2f4ff42c4a5b6220969e2b90e3b695960ab8}
     dependencies:
       '@cosmjs/amino': 0.32.2
       '@cosmjs/proto-signing': 0.32.2
       '@cosmjs/stargate': 0.32.2
       '@cosmjs/tendermint-rpc': 0.32.2
-      '@keplr-wallet/unit': 0.12.82
+      '@keplr-wallet/unit': 0.12.83
       '@refractedlabs/utils': 0.3.2_google-protobuf@3.21.2
     transitivePeerDependencies:
       - bufferutil

@@ -38,11 +38,12 @@ export interface QueryTradeSimulationResponse {
   priceTokenInTokenOutTerms: string;
   amountIn: Coin;
   amountOut: Coin;
-  fee: Coin[];
-  feeTokenInTerms: Coin;
+  feeAmount: Coin;
+  feePercentage: string;
   effectivePrice: string;
   priceImpact: string;
   swapSteps: SwapStep[];
+  error: string;
 }
 export interface QueryTradeSimulationResponseProtoMsg {
   typeUrl: "/pryzmatics.server.trade.QueryTradeSimulationResponse";
@@ -52,11 +53,12 @@ export interface QueryTradeSimulationResponseAmino {
   price_token_in_token_out_terms?: string;
   amount_in?: CoinAmino;
   amount_out?: CoinAmino;
-  fee?: CoinAmino[];
-  feeTokenInTerms?: CoinAmino;
+  fee_amount?: CoinAmino;
+  fee_percentage?: string;
   effective_price?: string;
   price_impact?: string;
   swap_steps?: SwapStepAmino[];
+  error?: string;
 }
 export interface QueryTradeSimulationResponseAminoMsg {
   type: "/pryzmatics.server.trade.QueryTradeSimulationResponse";
@@ -66,11 +68,12 @@ export interface QueryTradeSimulationResponseSDKType {
   price_token_in_token_out_terms: string;
   amount_in: CoinSDKType;
   amount_out: CoinSDKType;
-  fee: CoinSDKType[];
-  feeTokenInTerms: CoinSDKType;
+  fee_amount: CoinSDKType;
+  fee_percentage: string;
   effective_price: string;
   price_impact: string;
   swap_steps: SwapStepSDKType[];
+  error: string;
 }
 function createBaseQueryTradeSimulationRequest(): QueryTradeSimulationRequest {
   return {
@@ -222,23 +225,24 @@ function createBaseQueryTradeSimulationResponse(): QueryTradeSimulationResponse 
     priceTokenInTokenOutTerms: "",
     amountIn: Coin.fromPartial({}),
     amountOut: Coin.fromPartial({}),
-    fee: [],
-    feeTokenInTerms: Coin.fromPartial({}),
+    feeAmount: Coin.fromPartial({}),
+    feePercentage: "",
     effectivePrice: "",
     priceImpact: "",
-    swapSteps: []
+    swapSteps: [],
+    error: ""
   };
 }
 export const QueryTradeSimulationResponse = {
   typeUrl: "/pryzmatics.server.trade.QueryTradeSimulationResponse",
   is(o: any): o is QueryTradeSimulationResponse {
-    return o && (o.$typeUrl === QueryTradeSimulationResponse.typeUrl || typeof o.priceTokenInTokenOutTerms === "string" && Coin.is(o.amountIn) && Coin.is(o.amountOut) && Array.isArray(o.fee) && (!o.fee.length || Coin.is(o.fee[0])) && Coin.is(o.feeTokenInTerms) && typeof o.effectivePrice === "string" && typeof o.priceImpact === "string" && Array.isArray(o.swapSteps) && (!o.swapSteps.length || SwapStep.is(o.swapSteps[0])));
+    return o && (o.$typeUrl === QueryTradeSimulationResponse.typeUrl || typeof o.priceTokenInTokenOutTerms === "string" && Coin.is(o.amountIn) && Coin.is(o.amountOut) && Coin.is(o.feeAmount) && typeof o.feePercentage === "string" && typeof o.effectivePrice === "string" && typeof o.priceImpact === "string" && Array.isArray(o.swapSteps) && (!o.swapSteps.length || SwapStep.is(o.swapSteps[0])) && typeof o.error === "string");
   },
   isSDK(o: any): o is QueryTradeSimulationResponseSDKType {
-    return o && (o.$typeUrl === QueryTradeSimulationResponse.typeUrl || typeof o.price_token_in_token_out_terms === "string" && Coin.isSDK(o.amount_in) && Coin.isSDK(o.amount_out) && Array.isArray(o.fee) && (!o.fee.length || Coin.isSDK(o.fee[0])) && Coin.isSDK(o.feeTokenInTerms) && typeof o.effective_price === "string" && typeof o.price_impact === "string" && Array.isArray(o.swap_steps) && (!o.swap_steps.length || SwapStep.isSDK(o.swap_steps[0])));
+    return o && (o.$typeUrl === QueryTradeSimulationResponse.typeUrl || typeof o.price_token_in_token_out_terms === "string" && Coin.isSDK(o.amount_in) && Coin.isSDK(o.amount_out) && Coin.isSDK(o.fee_amount) && typeof o.fee_percentage === "string" && typeof o.effective_price === "string" && typeof o.price_impact === "string" && Array.isArray(o.swap_steps) && (!o.swap_steps.length || SwapStep.isSDK(o.swap_steps[0])) && typeof o.error === "string");
   },
   isAmino(o: any): o is QueryTradeSimulationResponseAmino {
-    return o && (o.$typeUrl === QueryTradeSimulationResponse.typeUrl || typeof o.price_token_in_token_out_terms === "string" && Coin.isAmino(o.amount_in) && Coin.isAmino(o.amount_out) && Array.isArray(o.fee) && (!o.fee.length || Coin.isAmino(o.fee[0])) && Coin.isAmino(o.feeTokenInTerms) && typeof o.effective_price === "string" && typeof o.price_impact === "string" && Array.isArray(o.swap_steps) && (!o.swap_steps.length || SwapStep.isAmino(o.swap_steps[0])));
+    return o && (o.$typeUrl === QueryTradeSimulationResponse.typeUrl || typeof o.price_token_in_token_out_terms === "string" && Coin.isAmino(o.amount_in) && Coin.isAmino(o.amount_out) && Coin.isAmino(o.fee_amount) && typeof o.fee_percentage === "string" && typeof o.effective_price === "string" && typeof o.price_impact === "string" && Array.isArray(o.swap_steps) && (!o.swap_steps.length || SwapStep.isAmino(o.swap_steps[0])) && typeof o.error === "string");
   },
   encode(message: QueryTradeSimulationResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.priceTokenInTokenOutTerms !== "") {
@@ -250,11 +254,11 @@ export const QueryTradeSimulationResponse = {
     if (message.amountOut !== undefined) {
       Coin.encode(message.amountOut, writer.uint32(26).fork()).ldelim();
     }
-    for (const v of message.fee) {
-      Coin.encode(v!, writer.uint32(34).fork()).ldelim();
+    if (message.feeAmount !== undefined) {
+      Coin.encode(message.feeAmount, writer.uint32(34).fork()).ldelim();
     }
-    if (message.feeTokenInTerms !== undefined) {
-      Coin.encode(message.feeTokenInTerms, writer.uint32(42).fork()).ldelim();
+    if (message.feePercentage !== "") {
+      writer.uint32(42).string(Decimal.fromUserInput(message.feePercentage, 18).atomics);
     }
     if (message.effectivePrice !== "") {
       writer.uint32(50).string(Decimal.fromUserInput(message.effectivePrice, 18).atomics);
@@ -264,6 +268,9 @@ export const QueryTradeSimulationResponse = {
     }
     for (const v of message.swapSteps) {
       SwapStep.encode(v!, writer.uint32(66).fork()).ldelim();
+    }
+    if (message.error !== "") {
+      writer.uint32(74).string(message.error);
     }
     return writer;
   },
@@ -284,10 +291,10 @@ export const QueryTradeSimulationResponse = {
           message.amountOut = Coin.decode(reader, reader.uint32(), useInterfaces);
           break;
         case 4:
-          message.fee.push(Coin.decode(reader, reader.uint32(), useInterfaces));
+          message.feeAmount = Coin.decode(reader, reader.uint32(), useInterfaces);
           break;
         case 5:
-          message.feeTokenInTerms = Coin.decode(reader, reader.uint32(), useInterfaces);
+          message.feePercentage = Decimal.fromAtomics(reader.string(), 18).toString();
           break;
         case 6:
           message.effectivePrice = Decimal.fromAtomics(reader.string(), 18).toString();
@@ -297,6 +304,9 @@ export const QueryTradeSimulationResponse = {
           break;
         case 8:
           message.swapSteps.push(SwapStep.decode(reader, reader.uint32(), useInterfaces));
+          break;
+        case 9:
+          message.error = reader.string();
           break;
         default:
           reader.skipType(tag & 7);
@@ -310,11 +320,12 @@ export const QueryTradeSimulationResponse = {
       priceTokenInTokenOutTerms: isSet(object.priceTokenInTokenOutTerms) ? String(object.priceTokenInTokenOutTerms) : "",
       amountIn: isSet(object.amountIn) ? Coin.fromJSON(object.amountIn) : undefined,
       amountOut: isSet(object.amountOut) ? Coin.fromJSON(object.amountOut) : undefined,
-      fee: Array.isArray(object?.fee) ? object.fee.map((e: any) => Coin.fromJSON(e)) : [],
-      feeTokenInTerms: isSet(object.feeTokenInTerms) ? Coin.fromJSON(object.feeTokenInTerms) : undefined,
+      feeAmount: isSet(object.feeAmount) ? Coin.fromJSON(object.feeAmount) : undefined,
+      feePercentage: isSet(object.feePercentage) ? String(object.feePercentage) : "",
       effectivePrice: isSet(object.effectivePrice) ? String(object.effectivePrice) : "",
       priceImpact: isSet(object.priceImpact) ? String(object.priceImpact) : "",
-      swapSteps: Array.isArray(object?.swapSteps) ? object.swapSteps.map((e: any) => SwapStep.fromJSON(e)) : []
+      swapSteps: Array.isArray(object?.swapSteps) ? object.swapSteps.map((e: any) => SwapStep.fromJSON(e)) : [],
+      error: isSet(object.error) ? String(object.error) : ""
     };
   },
   toJSON(message: QueryTradeSimulationResponse): unknown {
@@ -322,12 +333,8 @@ export const QueryTradeSimulationResponse = {
     message.priceTokenInTokenOutTerms !== undefined && (obj.priceTokenInTokenOutTerms = message.priceTokenInTokenOutTerms);
     message.amountIn !== undefined && (obj.amountIn = message.amountIn ? Coin.toJSON(message.amountIn) : undefined);
     message.amountOut !== undefined && (obj.amountOut = message.amountOut ? Coin.toJSON(message.amountOut) : undefined);
-    if (message.fee) {
-      obj.fee = message.fee.map(e => e ? Coin.toJSON(e) : undefined);
-    } else {
-      obj.fee = [];
-    }
-    message.feeTokenInTerms !== undefined && (obj.feeTokenInTerms = message.feeTokenInTerms ? Coin.toJSON(message.feeTokenInTerms) : undefined);
+    message.feeAmount !== undefined && (obj.feeAmount = message.feeAmount ? Coin.toJSON(message.feeAmount) : undefined);
+    message.feePercentage !== undefined && (obj.feePercentage = message.feePercentage);
     message.effectivePrice !== undefined && (obj.effectivePrice = message.effectivePrice);
     message.priceImpact !== undefined && (obj.priceImpact = message.priceImpact);
     if (message.swapSteps) {
@@ -335,6 +342,7 @@ export const QueryTradeSimulationResponse = {
     } else {
       obj.swapSteps = [];
     }
+    message.error !== undefined && (obj.error = message.error);
     return obj;
   },
   fromPartial(object: Partial<QueryTradeSimulationResponse>): QueryTradeSimulationResponse {
@@ -342,11 +350,12 @@ export const QueryTradeSimulationResponse = {
     message.priceTokenInTokenOutTerms = object.priceTokenInTokenOutTerms ?? "";
     message.amountIn = object.amountIn !== undefined && object.amountIn !== null ? Coin.fromPartial(object.amountIn) : undefined;
     message.amountOut = object.amountOut !== undefined && object.amountOut !== null ? Coin.fromPartial(object.amountOut) : undefined;
-    message.fee = object.fee?.map(e => Coin.fromPartial(e)) || [];
-    message.feeTokenInTerms = object.feeTokenInTerms !== undefined && object.feeTokenInTerms !== null ? Coin.fromPartial(object.feeTokenInTerms) : undefined;
+    message.feeAmount = object.feeAmount !== undefined && object.feeAmount !== null ? Coin.fromPartial(object.feeAmount) : undefined;
+    message.feePercentage = object.feePercentage ?? "";
     message.effectivePrice = object.effectivePrice ?? "";
     message.priceImpact = object.priceImpact ?? "";
     message.swapSteps = object.swapSteps?.map(e => SwapStep.fromPartial(e)) || [];
+    message.error = object.error ?? "";
     return message;
   },
   fromAmino(object: QueryTradeSimulationResponseAmino): QueryTradeSimulationResponse {
@@ -360,9 +369,11 @@ export const QueryTradeSimulationResponse = {
     if (object.amount_out !== undefined && object.amount_out !== null) {
       message.amountOut = Coin.fromAmino(object.amount_out);
     }
-    message.fee = object.fee?.map(e => Coin.fromAmino(e)) || [];
-    if (object.feeTokenInTerms !== undefined && object.feeTokenInTerms !== null) {
-      message.feeTokenInTerms = Coin.fromAmino(object.feeTokenInTerms);
+    if (object.fee_amount !== undefined && object.fee_amount !== null) {
+      message.feeAmount = Coin.fromAmino(object.fee_amount);
+    }
+    if (object.fee_percentage !== undefined && object.fee_percentage !== null) {
+      message.feePercentage = object.fee_percentage;
     }
     if (object.effective_price !== undefined && object.effective_price !== null) {
       message.effectivePrice = object.effective_price;
@@ -371,6 +382,9 @@ export const QueryTradeSimulationResponse = {
       message.priceImpact = object.price_impact;
     }
     message.swapSteps = object.swap_steps?.map(e => SwapStep.fromAmino(e)) || [];
+    if (object.error !== undefined && object.error !== null) {
+      message.error = object.error;
+    }
     return message;
   },
   toAmino(message: QueryTradeSimulationResponse, useInterfaces: boolean = true): QueryTradeSimulationResponseAmino {
@@ -378,12 +392,8 @@ export const QueryTradeSimulationResponse = {
     obj.price_token_in_token_out_terms = padDecimal(message.priceTokenInTokenOutTerms) === "" ? undefined : padDecimal(message.priceTokenInTokenOutTerms);
     obj.amount_in = message.amountIn ? Coin.toAmino(message.amountIn, useInterfaces) : undefined;
     obj.amount_out = message.amountOut ? Coin.toAmino(message.amountOut, useInterfaces) : undefined;
-    if (message.fee) {
-      obj.fee = message.fee.map(e => e ? Coin.toAmino(e, useInterfaces) : undefined);
-    } else {
-      obj.fee = message.fee;
-    }
-    obj.feeTokenInTerms = message.feeTokenInTerms ? Coin.toAmino(message.feeTokenInTerms, useInterfaces) : undefined;
+    obj.fee_amount = message.feeAmount ? Coin.toAmino(message.feeAmount, useInterfaces) : undefined;
+    obj.fee_percentage = padDecimal(message.feePercentage) === "" ? undefined : padDecimal(message.feePercentage);
     obj.effective_price = padDecimal(message.effectivePrice) === "" ? undefined : padDecimal(message.effectivePrice);
     obj.price_impact = padDecimal(message.priceImpact) === "" ? undefined : padDecimal(message.priceImpact);
     if (message.swapSteps) {
@@ -391,6 +401,7 @@ export const QueryTradeSimulationResponse = {
     } else {
       obj.swap_steps = message.swapSteps;
     }
+    obj.error = message.error === "" ? undefined : message.error;
     return obj;
   },
   fromAminoMsg(object: QueryTradeSimulationResponseAminoMsg): QueryTradeSimulationResponse {

@@ -26,8 +26,8 @@ export interface QueryJoinAllTokensExactLptSimulationRequestSDKType {
 export interface QueryJoinAllTokensExactLptSimulationResponse {
   amountsIn: Coin[];
   amountOut: Coin;
-  protocolFee: Coin[];
-  protocolFeeLpTerms: Coin;
+  feeAmount: Coin;
+  feePercentage: string;
   priceImpact: string;
 }
 export interface QueryJoinAllTokensExactLptSimulationResponseProtoMsg {
@@ -37,8 +37,8 @@ export interface QueryJoinAllTokensExactLptSimulationResponseProtoMsg {
 export interface QueryJoinAllTokensExactLptSimulationResponseAmino {
   amounts_in?: CoinAmino[];
   amount_out?: CoinAmino;
-  protocol_fee?: CoinAmino[];
-  protocol_fee_lp_terms?: CoinAmino;
+  fee_amount?: CoinAmino;
+  fee_percentage?: string;
   price_impact?: string;
 }
 export interface QueryJoinAllTokensExactLptSimulationResponseAminoMsg {
@@ -48,8 +48,8 @@ export interface QueryJoinAllTokensExactLptSimulationResponseAminoMsg {
 export interface QueryJoinAllTokensExactLptSimulationResponseSDKType {
   amounts_in: CoinSDKType[];
   amount_out: CoinSDKType;
-  protocol_fee: CoinSDKType[];
-  protocol_fee_lp_terms: CoinSDKType;
+  fee_amount: CoinSDKType;
+  fee_percentage: string;
   price_impact: string;
 }
 function createBaseQueryJoinAllTokensExactLptSimulationRequest(): QueryJoinAllTokensExactLptSimulationRequest {
@@ -153,21 +153,21 @@ function createBaseQueryJoinAllTokensExactLptSimulationResponse(): QueryJoinAllT
   return {
     amountsIn: [],
     amountOut: Coin.fromPartial({}),
-    protocolFee: [],
-    protocolFeeLpTerms: Coin.fromPartial({}),
+    feeAmount: Coin.fromPartial({}),
+    feePercentage: "",
     priceImpact: ""
   };
 }
 export const QueryJoinAllTokensExactLptSimulationResponse = {
   typeUrl: "/pryzmatics.server.trade.QueryJoinAllTokensExactLptSimulationResponse",
   is(o: any): o is QueryJoinAllTokensExactLptSimulationResponse {
-    return o && (o.$typeUrl === QueryJoinAllTokensExactLptSimulationResponse.typeUrl || Array.isArray(o.amountsIn) && (!o.amountsIn.length || Coin.is(o.amountsIn[0])) && Coin.is(o.amountOut) && Array.isArray(o.protocolFee) && (!o.protocolFee.length || Coin.is(o.protocolFee[0])) && Coin.is(o.protocolFeeLpTerms) && typeof o.priceImpact === "string");
+    return o && (o.$typeUrl === QueryJoinAllTokensExactLptSimulationResponse.typeUrl || Array.isArray(o.amountsIn) && (!o.amountsIn.length || Coin.is(o.amountsIn[0])) && Coin.is(o.amountOut) && Coin.is(o.feeAmount) && typeof o.feePercentage === "string" && typeof o.priceImpact === "string");
   },
   isSDK(o: any): o is QueryJoinAllTokensExactLptSimulationResponseSDKType {
-    return o && (o.$typeUrl === QueryJoinAllTokensExactLptSimulationResponse.typeUrl || Array.isArray(o.amounts_in) && (!o.amounts_in.length || Coin.isSDK(o.amounts_in[0])) && Coin.isSDK(o.amount_out) && Array.isArray(o.protocol_fee) && (!o.protocol_fee.length || Coin.isSDK(o.protocol_fee[0])) && Coin.isSDK(o.protocol_fee_lp_terms) && typeof o.price_impact === "string");
+    return o && (o.$typeUrl === QueryJoinAllTokensExactLptSimulationResponse.typeUrl || Array.isArray(o.amounts_in) && (!o.amounts_in.length || Coin.isSDK(o.amounts_in[0])) && Coin.isSDK(o.amount_out) && Coin.isSDK(o.fee_amount) && typeof o.fee_percentage === "string" && typeof o.price_impact === "string");
   },
   isAmino(o: any): o is QueryJoinAllTokensExactLptSimulationResponseAmino {
-    return o && (o.$typeUrl === QueryJoinAllTokensExactLptSimulationResponse.typeUrl || Array.isArray(o.amounts_in) && (!o.amounts_in.length || Coin.isAmino(o.amounts_in[0])) && Coin.isAmino(o.amount_out) && Array.isArray(o.protocol_fee) && (!o.protocol_fee.length || Coin.isAmino(o.protocol_fee[0])) && Coin.isAmino(o.protocol_fee_lp_terms) && typeof o.price_impact === "string");
+    return o && (o.$typeUrl === QueryJoinAllTokensExactLptSimulationResponse.typeUrl || Array.isArray(o.amounts_in) && (!o.amounts_in.length || Coin.isAmino(o.amounts_in[0])) && Coin.isAmino(o.amount_out) && Coin.isAmino(o.fee_amount) && typeof o.fee_percentage === "string" && typeof o.price_impact === "string");
   },
   encode(message: QueryJoinAllTokensExactLptSimulationResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     for (const v of message.amountsIn) {
@@ -176,11 +176,11 @@ export const QueryJoinAllTokensExactLptSimulationResponse = {
     if (message.amountOut !== undefined) {
       Coin.encode(message.amountOut, writer.uint32(18).fork()).ldelim();
     }
-    for (const v of message.protocolFee) {
-      Coin.encode(v!, writer.uint32(26).fork()).ldelim();
+    if (message.feeAmount !== undefined) {
+      Coin.encode(message.feeAmount, writer.uint32(26).fork()).ldelim();
     }
-    if (message.protocolFeeLpTerms !== undefined) {
-      Coin.encode(message.protocolFeeLpTerms, writer.uint32(34).fork()).ldelim();
+    if (message.feePercentage !== "") {
+      writer.uint32(34).string(Decimal.fromUserInput(message.feePercentage, 18).atomics);
     }
     if (message.priceImpact !== "") {
       writer.uint32(42).string(Decimal.fromUserInput(message.priceImpact, 18).atomics);
@@ -201,10 +201,10 @@ export const QueryJoinAllTokensExactLptSimulationResponse = {
           message.amountOut = Coin.decode(reader, reader.uint32(), useInterfaces);
           break;
         case 3:
-          message.protocolFee.push(Coin.decode(reader, reader.uint32(), useInterfaces));
+          message.feeAmount = Coin.decode(reader, reader.uint32(), useInterfaces);
           break;
         case 4:
-          message.protocolFeeLpTerms = Coin.decode(reader, reader.uint32(), useInterfaces);
+          message.feePercentage = Decimal.fromAtomics(reader.string(), 18).toString();
           break;
         case 5:
           message.priceImpact = Decimal.fromAtomics(reader.string(), 18).toString();
@@ -220,8 +220,8 @@ export const QueryJoinAllTokensExactLptSimulationResponse = {
     return {
       amountsIn: Array.isArray(object?.amountsIn) ? object.amountsIn.map((e: any) => Coin.fromJSON(e)) : [],
       amountOut: isSet(object.amountOut) ? Coin.fromJSON(object.amountOut) : undefined,
-      protocolFee: Array.isArray(object?.protocolFee) ? object.protocolFee.map((e: any) => Coin.fromJSON(e)) : [],
-      protocolFeeLpTerms: isSet(object.protocolFeeLpTerms) ? Coin.fromJSON(object.protocolFeeLpTerms) : undefined,
+      feeAmount: isSet(object.feeAmount) ? Coin.fromJSON(object.feeAmount) : undefined,
+      feePercentage: isSet(object.feePercentage) ? String(object.feePercentage) : "",
       priceImpact: isSet(object.priceImpact) ? String(object.priceImpact) : ""
     };
   },
@@ -233,12 +233,8 @@ export const QueryJoinAllTokensExactLptSimulationResponse = {
       obj.amountsIn = [];
     }
     message.amountOut !== undefined && (obj.amountOut = message.amountOut ? Coin.toJSON(message.amountOut) : undefined);
-    if (message.protocolFee) {
-      obj.protocolFee = message.protocolFee.map(e => e ? Coin.toJSON(e) : undefined);
-    } else {
-      obj.protocolFee = [];
-    }
-    message.protocolFeeLpTerms !== undefined && (obj.protocolFeeLpTerms = message.protocolFeeLpTerms ? Coin.toJSON(message.protocolFeeLpTerms) : undefined);
+    message.feeAmount !== undefined && (obj.feeAmount = message.feeAmount ? Coin.toJSON(message.feeAmount) : undefined);
+    message.feePercentage !== undefined && (obj.feePercentage = message.feePercentage);
     message.priceImpact !== undefined && (obj.priceImpact = message.priceImpact);
     return obj;
   },
@@ -246,8 +242,8 @@ export const QueryJoinAllTokensExactLptSimulationResponse = {
     const message = createBaseQueryJoinAllTokensExactLptSimulationResponse();
     message.amountsIn = object.amountsIn?.map(e => Coin.fromPartial(e)) || [];
     message.amountOut = object.amountOut !== undefined && object.amountOut !== null ? Coin.fromPartial(object.amountOut) : undefined;
-    message.protocolFee = object.protocolFee?.map(e => Coin.fromPartial(e)) || [];
-    message.protocolFeeLpTerms = object.protocolFeeLpTerms !== undefined && object.protocolFeeLpTerms !== null ? Coin.fromPartial(object.protocolFeeLpTerms) : undefined;
+    message.feeAmount = object.feeAmount !== undefined && object.feeAmount !== null ? Coin.fromPartial(object.feeAmount) : undefined;
+    message.feePercentage = object.feePercentage ?? "";
     message.priceImpact = object.priceImpact ?? "";
     return message;
   },
@@ -257,9 +253,11 @@ export const QueryJoinAllTokensExactLptSimulationResponse = {
     if (object.amount_out !== undefined && object.amount_out !== null) {
       message.amountOut = Coin.fromAmino(object.amount_out);
     }
-    message.protocolFee = object.protocol_fee?.map(e => Coin.fromAmino(e)) || [];
-    if (object.protocol_fee_lp_terms !== undefined && object.protocol_fee_lp_terms !== null) {
-      message.protocolFeeLpTerms = Coin.fromAmino(object.protocol_fee_lp_terms);
+    if (object.fee_amount !== undefined && object.fee_amount !== null) {
+      message.feeAmount = Coin.fromAmino(object.fee_amount);
+    }
+    if (object.fee_percentage !== undefined && object.fee_percentage !== null) {
+      message.feePercentage = object.fee_percentage;
     }
     if (object.price_impact !== undefined && object.price_impact !== null) {
       message.priceImpact = object.price_impact;
@@ -274,12 +272,8 @@ export const QueryJoinAllTokensExactLptSimulationResponse = {
       obj.amounts_in = message.amountsIn;
     }
     obj.amount_out = message.amountOut ? Coin.toAmino(message.amountOut, useInterfaces) : undefined;
-    if (message.protocolFee) {
-      obj.protocol_fee = message.protocolFee.map(e => e ? Coin.toAmino(e, useInterfaces) : undefined);
-    } else {
-      obj.protocol_fee = message.protocolFee;
-    }
-    obj.protocol_fee_lp_terms = message.protocolFeeLpTerms ? Coin.toAmino(message.protocolFeeLpTerms, useInterfaces) : undefined;
+    obj.fee_amount = message.feeAmount ? Coin.toAmino(message.feeAmount, useInterfaces) : undefined;
+    obj.fee_percentage = padDecimal(message.feePercentage) === "" ? undefined : padDecimal(message.feePercentage);
     obj.price_impact = padDecimal(message.priceImpact) === "" ? undefined : padDecimal(message.priceImpact);
     return obj;
   },

@@ -1,0 +1,11 @@
+syntax = "proto3";
+package pryzmatics.icstaking;
+
+import "gogoproto/gogo.proto";
+import "pryzm/icstaking/v1/host_chain.proto";
+
+option go_package = "github.com/pryzm-finance/pryzmatics/types/icstaking";
+
+message Validators {
+  repeated pryzm.icstaking.v1.Validator validators = 1 [(gogoproto.nullable) = false];
+}
