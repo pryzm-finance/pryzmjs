@@ -2,7 +2,7 @@ import { UnaryMethodDefinitionish } from "../../../grpc-web";
 import { DeepPartial } from "../../../helpers";
 import { grpc } from "@improbable-eng/grpc-web";
 import { BrowserHeaders } from "browser-headers";
-import { MsgCreateValidator, MsgCreateValidatorResponse, MsgEditValidator, MsgEditValidatorResponse, MsgDelegate, MsgDelegateResponse, MsgBeginRedelegate, MsgBeginRedelegateResponse, MsgUndelegate, MsgUndelegateResponse, MsgCancelUnbondingDelegation, MsgCancelUnbondingDelegationResponse, MsgUpdateParams, MsgUpdateParamsResponse } from "./tx";
+import { MsgCreateValidator, MsgCreateValidatorResponse, MsgEditValidator, MsgEditValidatorResponse, MsgDelegate, MsgDelegateResponse, MsgBeginRedelegate, MsgBeginRedelegateResponse, MsgUndelegate, MsgUndelegateResponse, MsgCancelUnbondingDelegation, MsgCancelUnbondingDelegationResponse, MsgUpdateParams, MsgUpdateParamsResponse, MsgTokenizeShares, MsgTokenizeSharesResponse, MsgRedeemTokensForShares, MsgRedeemTokensForSharesResponse, MsgTransferTokenizeShareRecord, MsgTransferTokenizeShareRecordResponse, MsgDisableTokenizeShares, MsgDisableTokenizeSharesResponse, MsgEnableTokenizeShares, MsgEnableTokenizeSharesResponse } from "./tx";
 /** Msg defines the staking Msg service. */
 export interface Msg {
   /** CreateValidator defines a method for creating a new validator. */
@@ -37,6 +37,25 @@ export interface Msg {
    * Since: cosmos-sdk 0.47
    */
   updateParams(request: DeepPartial<MsgUpdateParams>, metadata?: grpc.Metadata): Promise<MsgUpdateParamsResponse>;
+  /** TokenizeShares defines a method for tokenizing shares from a validator. */
+  tokenizeShares(request: DeepPartial<MsgTokenizeShares>, metadata?: grpc.Metadata): Promise<MsgTokenizeSharesResponse>;
+  /**
+   * RedeemTokensForShares defines a method for redeeming tokens from a validator for
+   * shares.
+   */
+  redeemTokensForShares(request: DeepPartial<MsgRedeemTokensForShares>, metadata?: grpc.Metadata): Promise<MsgRedeemTokensForSharesResponse>;
+  /**
+   * TransferTokenizeShareRecord defines a method to transfer ownership of
+   * TokenizeShareRecord
+   */
+  transferTokenizeShareRecord(request: DeepPartial<MsgTransferTokenizeShareRecord>, metadata?: grpc.Metadata): Promise<MsgTransferTokenizeShareRecordResponse>;
+  /** DisableTokenizeShares defines a method to prevent the tokenization of an addresses stake */
+  disableTokenizeShares(request: DeepPartial<MsgDisableTokenizeShares>, metadata?: grpc.Metadata): Promise<MsgDisableTokenizeSharesResponse>;
+  /**
+   * EnableTokenizeShares defines a method to re-enable the tokenization of an addresseses stake
+   * after it has been disabled
+   */
+  enableTokenizeShares(request: DeepPartial<MsgEnableTokenizeShares>, metadata?: grpc.Metadata): Promise<MsgEnableTokenizeSharesResponse>;
 }
 export class MsgClientImpl implements Msg {
   private readonly rpc: Rpc;
@@ -49,6 +68,11 @@ export class MsgClientImpl implements Msg {
     this.undelegate = this.undelegate.bind(this);
     this.cancelUnbondingDelegation = this.cancelUnbondingDelegation.bind(this);
     this.updateParams = this.updateParams.bind(this);
+    this.tokenizeShares = this.tokenizeShares.bind(this);
+    this.redeemTokensForShares = this.redeemTokensForShares.bind(this);
+    this.transferTokenizeShareRecord = this.transferTokenizeShareRecord.bind(this);
+    this.disableTokenizeShares = this.disableTokenizeShares.bind(this);
+    this.enableTokenizeShares = this.enableTokenizeShares.bind(this);
   }
   createValidator(request: DeepPartial<MsgCreateValidator>, metadata?: grpc.Metadata): Promise<MsgCreateValidatorResponse> {
     return this.rpc.unary(MsgCreateValidatorDesc, MsgCreateValidator.fromPartial(request as any), metadata);
@@ -70,6 +94,21 @@ export class MsgClientImpl implements Msg {
   }
   updateParams(request: DeepPartial<MsgUpdateParams>, metadata?: grpc.Metadata): Promise<MsgUpdateParamsResponse> {
     return this.rpc.unary(MsgUpdateParamsDesc, MsgUpdateParams.fromPartial(request as any), metadata);
+  }
+  tokenizeShares(request: DeepPartial<MsgTokenizeShares>, metadata?: grpc.Metadata): Promise<MsgTokenizeSharesResponse> {
+    return this.rpc.unary(MsgTokenizeSharesDesc, MsgTokenizeShares.fromPartial(request as any), metadata);
+  }
+  redeemTokensForShares(request: DeepPartial<MsgRedeemTokensForShares>, metadata?: grpc.Metadata): Promise<MsgRedeemTokensForSharesResponse> {
+    return this.rpc.unary(MsgRedeemTokensForSharesDesc, MsgRedeemTokensForShares.fromPartial(request as any), metadata);
+  }
+  transferTokenizeShareRecord(request: DeepPartial<MsgTransferTokenizeShareRecord>, metadata?: grpc.Metadata): Promise<MsgTransferTokenizeShareRecordResponse> {
+    return this.rpc.unary(MsgTransferTokenizeShareRecordDesc, MsgTransferTokenizeShareRecord.fromPartial(request as any), metadata);
+  }
+  disableTokenizeShares(request: DeepPartial<MsgDisableTokenizeShares>, metadata?: grpc.Metadata): Promise<MsgDisableTokenizeSharesResponse> {
+    return this.rpc.unary(MsgDisableTokenizeSharesDesc, MsgDisableTokenizeShares.fromPartial(request as any), metadata);
+  }
+  enableTokenizeShares(request: DeepPartial<MsgEnableTokenizeShares>, metadata?: grpc.Metadata): Promise<MsgEnableTokenizeSharesResponse> {
+    return this.rpc.unary(MsgEnableTokenizeSharesDesc, MsgEnableTokenizeShares.fromPartial(request as any), metadata);
   }
 }
 export const MsgDesc = {
@@ -215,6 +254,111 @@ export const MsgUpdateParamsDesc: UnaryMethodDefinitionish = {
     deserializeBinary(data: Uint8Array) {
       return {
         ...MsgUpdateParamsResponse.decode(data),
+        toObject() {
+          return this;
+        }
+      };
+    }
+  } as any)
+};
+export const MsgTokenizeSharesDesc: UnaryMethodDefinitionish = {
+  methodName: "TokenizeShares",
+  service: MsgDesc,
+  requestStream: false,
+  responseStream: false,
+  requestType: ({
+    serializeBinary() {
+      return MsgTokenizeShares.encode(this).finish();
+    }
+  } as any),
+  responseType: ({
+    deserializeBinary(data: Uint8Array) {
+      return {
+        ...MsgTokenizeSharesResponse.decode(data),
+        toObject() {
+          return this;
+        }
+      };
+    }
+  } as any)
+};
+export const MsgRedeemTokensForSharesDesc: UnaryMethodDefinitionish = {
+  methodName: "RedeemTokensForShares",
+  service: MsgDesc,
+  requestStream: false,
+  responseStream: false,
+  requestType: ({
+    serializeBinary() {
+      return MsgRedeemTokensForShares.encode(this).finish();
+    }
+  } as any),
+  responseType: ({
+    deserializeBinary(data: Uint8Array) {
+      return {
+        ...MsgRedeemTokensForSharesResponse.decode(data),
+        toObject() {
+          return this;
+        }
+      };
+    }
+  } as any)
+};
+export const MsgTransferTokenizeShareRecordDesc: UnaryMethodDefinitionish = {
+  methodName: "TransferTokenizeShareRecord",
+  service: MsgDesc,
+  requestStream: false,
+  responseStream: false,
+  requestType: ({
+    serializeBinary() {
+      return MsgTransferTokenizeShareRecord.encode(this).finish();
+    }
+  } as any),
+  responseType: ({
+    deserializeBinary(data: Uint8Array) {
+      return {
+        ...MsgTransferTokenizeShareRecordResponse.decode(data),
+        toObject() {
+          return this;
+        }
+      };
+    }
+  } as any)
+};
+export const MsgDisableTokenizeSharesDesc: UnaryMethodDefinitionish = {
+  methodName: "DisableTokenizeShares",
+  service: MsgDesc,
+  requestStream: false,
+  responseStream: false,
+  requestType: ({
+    serializeBinary() {
+      return MsgDisableTokenizeShares.encode(this).finish();
+    }
+  } as any),
+  responseType: ({
+    deserializeBinary(data: Uint8Array) {
+      return {
+        ...MsgDisableTokenizeSharesResponse.decode(data),
+        toObject() {
+          return this;
+        }
+      };
+    }
+  } as any)
+};
+export const MsgEnableTokenizeSharesDesc: UnaryMethodDefinitionish = {
+  methodName: "EnableTokenizeShares",
+  service: MsgDesc,
+  requestStream: false,
+  responseStream: false,
+  requestType: ({
+    serializeBinary() {
+      return MsgEnableTokenizeShares.encode(this).finish();
+    }
+  } as any),
+  responseType: ({
+    deserializeBinary(data: Uint8Array) {
+      return {
+        ...MsgEnableTokenizeSharesResponse.decode(data),
         toObject() {
           return this;
         }
