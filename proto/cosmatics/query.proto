@@ -7,6 +7,7 @@ import "cosmatics/sync_state.proto";
 import "cosmatics/metric.proto";
 import "cosmatics/health_check.proto";
 import "cosmatics/block_sync_failure.proto";
+import "cosmatics/post_process_failure.proto";
 import "tendermint/types/block.proto";
 import "tendermint/blocksync/types.proto";
 import "cosmos/tx/v1beta1/service.proto";
@@ -41,5 +42,9 @@ service Query {
 
   rpc BlockSyncFailures(QueryBlockSyncFailuresRequest) returns (QueryBlockSyncFailuresResponse) {
     option (google.api.http).get = "/cosmatics/block_sync_failure";
+  }
+
+  rpc PostProcessFailures(QueryPostProcessFailuresRequest) returns (QueryPostProcessFailuresResponse) {
+    option (google.api.http).get = "/cosmatics/post_process_failure";
   }
 }

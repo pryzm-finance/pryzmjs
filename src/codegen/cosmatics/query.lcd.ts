@@ -7,6 +7,7 @@ import { BlockRequest } from "../tendermint/blocksync/types";
 import { BlockSDKType } from "../tendermint/types/block";
 import { QueryHealthCheckRequest, QueryHealthCheckResponseSDKType } from "./health_check";
 import { QueryBlockSyncFailuresRequest, QueryBlockSyncFailuresResponseSDKType } from "./block_sync_failure";
+import { QueryPostProcessFailuresRequest, QueryPostProcessFailuresResponseSDKType } from "./post_process_failure";
 export class LCDQueryClient {
   req: LCDClient;
   constructor({
@@ -22,6 +23,7 @@ export class LCDQueryClient {
     this.metrics = this.metrics.bind(this);
     this.healthCheck = this.healthCheck.bind(this);
     this.blockSyncFailures = this.blockSyncFailures.bind(this);
+    this.postProcessFailures = this.postProcessFailures.bind(this);
   }
   /* SyncState */
   async syncState(_params: QuerySyncStateRequest = {}): Promise<QuerySyncStateResponseSDKType> {
@@ -114,5 +116,28 @@ export class LCDQueryClient {
     }
     const endpoint = `cosmatics/block_sync_failure`;
     return await this.req.get<QueryBlockSyncFailuresResponseSDKType>(endpoint, options);
+  }
+  /* PostProcessFailures */
+  async postProcessFailures(params: QueryPostProcessFailuresRequest): Promise<QueryPostProcessFailuresResponseSDKType> {
+    const options: any = {
+      params: {}
+    };
+    if (typeof params?.postProcessorId !== "undefined") {
+      options.params.post_processor_id = params.postProcessorId;
+    }
+    if (typeof params?.fromBlockHeight !== "undefined") {
+      options.params.from_block_height = params.fromBlockHeight;
+    }
+    if (typeof params?.toBlockHeight !== "undefined") {
+      options.params.to_block_height = params.toBlockHeight;
+    }
+    if (typeof params?.fromTime !== "undefined") {
+      options.params.from_time = params.fromTime;
+    }
+    if (typeof params?.toTime !== "undefined") {
+      options.params.to_time = params.toTime;
+    }
+    const endpoint = `cosmatics/post_process_failure`;
+    return await this.req.get<QueryPostProcessFailuresResponseSDKType>(endpoint, options);
   }
 }
