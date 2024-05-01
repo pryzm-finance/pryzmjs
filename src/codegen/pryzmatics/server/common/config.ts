@@ -72,6 +72,26 @@ export interface Config_ChainIdsEntrySDKType {
   key: string;
   value: string;
 }
+export interface Config_AssetUnderlyingTokenDenomEntry {
+  key: string;
+  value: string;
+}
+export interface Config_AssetUnderlyingTokenDenomEntryProtoMsg {
+  typeUrl: string;
+  value: Uint8Array;
+}
+export interface Config_AssetUnderlyingTokenDenomEntryAmino {
+  key?: string;
+  value?: string;
+}
+export interface Config_AssetUnderlyingTokenDenomEntryAminoMsg {
+  type: string;
+  value: Config_AssetUnderlyingTokenDenomEntryAmino;
+}
+export interface Config_AssetUnderlyingTokenDenomEntrySDKType {
+  key: string;
+  value: string;
+}
 export interface Config {
   productionMode: boolean;
   stableCoins: StableCoinConfig[];
@@ -91,6 +111,9 @@ export interface Config {
   profilerConfig: ProfilerConfig;
   yieldReturnConfig: YieldReturnConfig;
   faucetConfig: FaucetConfig;
+  assetUnderlyingTokenDenom: {
+    [key: string]: string;
+  };
 }
 export interface ConfigProtoMsg {
   typeUrl: "/pryzmatics.server.common.Config";
@@ -115,6 +138,9 @@ export interface ConfigAmino {
   profiler_config?: ProfilerConfigAmino;
   yield_return_config?: YieldReturnConfigAmino;
   faucet_config?: FaucetConfigAmino;
+  asset_underlying_token_denom?: {
+    [key: string]: string;
+  };
 }
 export interface ConfigAminoMsg {
   type: "/pryzmatics.server.common.Config";
@@ -139,6 +165,9 @@ export interface ConfigSDKType {
   profiler_config: ProfilerConfigSDKType;
   yield_return_config: YieldReturnConfigSDKType;
   faucet_config: FaucetConfigSDKType;
+  asset_underlying_token_denom: {
+    [key: string]: string;
+  };
 }
 export interface DatabaseConfig {
   poolMinConns: number;
@@ -724,6 +753,86 @@ export const Config_ChainIdsEntry = {
     return Config_ChainIdsEntry.encode(message).finish();
   }
 };
+function createBaseConfig_AssetUnderlyingTokenDenomEntry(): Config_AssetUnderlyingTokenDenomEntry {
+  return {
+    key: "",
+    value: ""
+  };
+}
+export const Config_AssetUnderlyingTokenDenomEntry = {
+  encode(message: Config_AssetUnderlyingTokenDenomEntry, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    if (message.key !== "") {
+      writer.uint32(10).string(message.key);
+    }
+    if (message.value !== "") {
+      writer.uint32(18).string(message.value);
+    }
+    return writer;
+  },
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): Config_AssetUnderlyingTokenDenomEntry {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseConfig_AssetUnderlyingTokenDenomEntry();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.key = reader.string();
+          break;
+        case 2:
+          message.value = reader.string();
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromJSON(object: any): Config_AssetUnderlyingTokenDenomEntry {
+    return {
+      key: isSet(object.key) ? String(object.key) : "",
+      value: isSet(object.value) ? String(object.value) : ""
+    };
+  },
+  toJSON(message: Config_AssetUnderlyingTokenDenomEntry): unknown {
+    const obj: any = {};
+    message.key !== undefined && (obj.key = message.key);
+    message.value !== undefined && (obj.value = message.value);
+    return obj;
+  },
+  fromPartial(object: Partial<Config_AssetUnderlyingTokenDenomEntry>): Config_AssetUnderlyingTokenDenomEntry {
+    const message = createBaseConfig_AssetUnderlyingTokenDenomEntry();
+    message.key = object.key ?? "";
+    message.value = object.value ?? "";
+    return message;
+  },
+  fromAmino(object: Config_AssetUnderlyingTokenDenomEntryAmino): Config_AssetUnderlyingTokenDenomEntry {
+    const message = createBaseConfig_AssetUnderlyingTokenDenomEntry();
+    if (object.key !== undefined && object.key !== null) {
+      message.key = object.key;
+    }
+    if (object.value !== undefined && object.value !== null) {
+      message.value = object.value;
+    }
+    return message;
+  },
+  toAmino(message: Config_AssetUnderlyingTokenDenomEntry, useInterfaces: boolean = true): Config_AssetUnderlyingTokenDenomEntryAmino {
+    const obj: any = {};
+    obj.key = message.key === "" ? undefined : message.key;
+    obj.value = message.value === "" ? undefined : message.value;
+    return obj;
+  },
+  fromAminoMsg(object: Config_AssetUnderlyingTokenDenomEntryAminoMsg): Config_AssetUnderlyingTokenDenomEntry {
+    return Config_AssetUnderlyingTokenDenomEntry.fromAmino(object.value);
+  },
+  fromProtoMsg(message: Config_AssetUnderlyingTokenDenomEntryProtoMsg, useInterfaces: boolean = true): Config_AssetUnderlyingTokenDenomEntry {
+    return Config_AssetUnderlyingTokenDenomEntry.decode(message.value, undefined, useInterfaces);
+  },
+  toProto(message: Config_AssetUnderlyingTokenDenomEntry): Uint8Array {
+    return Config_AssetUnderlyingTokenDenomEntry.encode(message).finish();
+  }
+};
 function createBaseConfig(): Config {
   return {
     productionMode: false,
@@ -739,19 +848,20 @@ function createBaseConfig(): Config {
     indexerConfig: IndexerConfig.fromPartial({}),
     profilerConfig: ProfilerConfig.fromPartial({}),
     yieldReturnConfig: YieldReturnConfig.fromPartial({}),
-    faucetConfig: FaucetConfig.fromPartial({})
+    faucetConfig: FaucetConfig.fromPartial({}),
+    assetUnderlyingTokenDenom: {}
   };
 }
 export const Config = {
   typeUrl: "/pryzmatics.server.common.Config",
   is(o: any): o is Config {
-    return o && (o.$typeUrl === Config.typeUrl || typeof o.productionMode === "boolean" && Array.isArray(o.stableCoins) && (!o.stableCoins.length || StableCoinConfig.is(o.stableCoins[0])) && typeof o.favoritePairsMaxCount === "number" && typeof o.metricCalculationIntervalBlocks === "number" && typeof o.enableFakePriceGenerator === "boolean" && isSet(o.rpcEndpoints) && isSet(o.chainIds) && DatabaseConfig.is(o.databaseConfig) && ChainConfig.is(o.chainConfig) && LoggerConfig.is(o.loggerConfig) && IndexerConfig.is(o.indexerConfig) && ProfilerConfig.is(o.profilerConfig) && YieldReturnConfig.is(o.yieldReturnConfig) && FaucetConfig.is(o.faucetConfig));
+    return o && (o.$typeUrl === Config.typeUrl || typeof o.productionMode === "boolean" && Array.isArray(o.stableCoins) && (!o.stableCoins.length || StableCoinConfig.is(o.stableCoins[0])) && typeof o.favoritePairsMaxCount === "number" && typeof o.metricCalculationIntervalBlocks === "number" && typeof o.enableFakePriceGenerator === "boolean" && isSet(o.rpcEndpoints) && isSet(o.chainIds) && DatabaseConfig.is(o.databaseConfig) && ChainConfig.is(o.chainConfig) && LoggerConfig.is(o.loggerConfig) && IndexerConfig.is(o.indexerConfig) && ProfilerConfig.is(o.profilerConfig) && YieldReturnConfig.is(o.yieldReturnConfig) && FaucetConfig.is(o.faucetConfig) && isSet(o.assetUnderlyingTokenDenom));
   },
   isSDK(o: any): o is ConfigSDKType {
-    return o && (o.$typeUrl === Config.typeUrl || typeof o.production_mode === "boolean" && Array.isArray(o.stable_coins) && (!o.stable_coins.length || StableCoinConfig.isSDK(o.stable_coins[0])) && typeof o.favorite_pairs_max_count === "number" && typeof o.metric_calculation_interval_blocks === "number" && typeof o.enableFakePriceGenerator === "boolean" && isSet(o.rpc_endpoints) && isSet(o.chain_ids) && DatabaseConfig.isSDK(o.database_config) && ChainConfig.isSDK(o.chain_config) && LoggerConfig.isSDK(o.logger_config) && IndexerConfig.isSDK(o.indexer_config) && ProfilerConfig.isSDK(o.profiler_config) && YieldReturnConfig.isSDK(o.yield_return_config) && FaucetConfig.isSDK(o.faucet_config));
+    return o && (o.$typeUrl === Config.typeUrl || typeof o.production_mode === "boolean" && Array.isArray(o.stable_coins) && (!o.stable_coins.length || StableCoinConfig.isSDK(o.stable_coins[0])) && typeof o.favorite_pairs_max_count === "number" && typeof o.metric_calculation_interval_blocks === "number" && typeof o.enableFakePriceGenerator === "boolean" && isSet(o.rpc_endpoints) && isSet(o.chain_ids) && DatabaseConfig.isSDK(o.database_config) && ChainConfig.isSDK(o.chain_config) && LoggerConfig.isSDK(o.logger_config) && IndexerConfig.isSDK(o.indexer_config) && ProfilerConfig.isSDK(o.profiler_config) && YieldReturnConfig.isSDK(o.yield_return_config) && FaucetConfig.isSDK(o.faucet_config) && isSet(o.asset_underlying_token_denom));
   },
   isAmino(o: any): o is ConfigAmino {
-    return o && (o.$typeUrl === Config.typeUrl || typeof o.production_mode === "boolean" && Array.isArray(o.stable_coins) && (!o.stable_coins.length || StableCoinConfig.isAmino(o.stable_coins[0])) && typeof o.favorite_pairs_max_count === "number" && typeof o.metric_calculation_interval_blocks === "number" && typeof o.enableFakePriceGenerator === "boolean" && isSet(o.rpc_endpoints) && isSet(o.chain_ids) && DatabaseConfig.isAmino(o.database_config) && ChainConfig.isAmino(o.chain_config) && LoggerConfig.isAmino(o.logger_config) && IndexerConfig.isAmino(o.indexer_config) && ProfilerConfig.isAmino(o.profiler_config) && YieldReturnConfig.isAmino(o.yield_return_config) && FaucetConfig.isAmino(o.faucet_config));
+    return o && (o.$typeUrl === Config.typeUrl || typeof o.production_mode === "boolean" && Array.isArray(o.stable_coins) && (!o.stable_coins.length || StableCoinConfig.isAmino(o.stable_coins[0])) && typeof o.favorite_pairs_max_count === "number" && typeof o.metric_calculation_interval_blocks === "number" && typeof o.enableFakePriceGenerator === "boolean" && isSet(o.rpc_endpoints) && isSet(o.chain_ids) && DatabaseConfig.isAmino(o.database_config) && ChainConfig.isAmino(o.chain_config) && LoggerConfig.isAmino(o.logger_config) && IndexerConfig.isAmino(o.indexer_config) && ProfilerConfig.isAmino(o.profiler_config) && YieldReturnConfig.isAmino(o.yield_return_config) && FaucetConfig.isAmino(o.faucet_config) && isSet(o.asset_underlying_token_denom));
   },
   encode(message: Config, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.productionMode === true) {
@@ -802,6 +912,12 @@ export const Config = {
     if (message.faucetConfig !== undefined) {
       FaucetConfig.encode(message.faucetConfig, writer.uint32(114).fork()).ldelim();
     }
+    Object.entries(message.assetUnderlyingTokenDenom).forEach(([key, value]) => {
+      Config_AssetUnderlyingTokenDenomEntry.encode({
+        key: (key as any),
+        value
+      }, writer.uint32(122).fork()).ldelim();
+    });
     return writer;
   },
   decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): Config {
@@ -859,6 +975,12 @@ export const Config = {
         case 14:
           message.faucetConfig = FaucetConfig.decode(reader, reader.uint32(), useInterfaces);
           break;
+        case 15:
+          const entry15 = Config_AssetUnderlyingTokenDenomEntry.decode(reader, reader.uint32());
+          if (entry15.value !== undefined) {
+            message.assetUnderlyingTokenDenom[entry15.key] = entry15.value;
+          }
+          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -891,7 +1013,13 @@ export const Config = {
       indexerConfig: isSet(object.indexerConfig) ? IndexerConfig.fromJSON(object.indexerConfig) : undefined,
       profilerConfig: isSet(object.profilerConfig) ? ProfilerConfig.fromJSON(object.profilerConfig) : undefined,
       yieldReturnConfig: isSet(object.yieldReturnConfig) ? YieldReturnConfig.fromJSON(object.yieldReturnConfig) : undefined,
-      faucetConfig: isSet(object.faucetConfig) ? FaucetConfig.fromJSON(object.faucetConfig) : undefined
+      faucetConfig: isSet(object.faucetConfig) ? FaucetConfig.fromJSON(object.faucetConfig) : undefined,
+      assetUnderlyingTokenDenom: isObject(object.assetUnderlyingTokenDenom) ? Object.entries(object.assetUnderlyingTokenDenom).reduce<{
+        [key: string]: string;
+      }>((acc, [key, value]) => {
+        acc[key] = String(value);
+        return acc;
+      }, {}) : {}
     };
   },
   toJSON(message: Config): unknown {
@@ -924,6 +1052,12 @@ export const Config = {
     message.profilerConfig !== undefined && (obj.profilerConfig = message.profilerConfig ? ProfilerConfig.toJSON(message.profilerConfig) : undefined);
     message.yieldReturnConfig !== undefined && (obj.yieldReturnConfig = message.yieldReturnConfig ? YieldReturnConfig.toJSON(message.yieldReturnConfig) : undefined);
     message.faucetConfig !== undefined && (obj.faucetConfig = message.faucetConfig ? FaucetConfig.toJSON(message.faucetConfig) : undefined);
+    obj.assetUnderlyingTokenDenom = {};
+    if (message.assetUnderlyingTokenDenom) {
+      Object.entries(message.assetUnderlyingTokenDenom).forEach(([k, v]) => {
+        obj.assetUnderlyingTokenDenom[k] = v;
+      });
+    }
     return obj;
   },
   fromPartial(object: Partial<Config>): Config {
@@ -956,6 +1090,14 @@ export const Config = {
     message.profilerConfig = object.profilerConfig !== undefined && object.profilerConfig !== null ? ProfilerConfig.fromPartial(object.profilerConfig) : undefined;
     message.yieldReturnConfig = object.yieldReturnConfig !== undefined && object.yieldReturnConfig !== null ? YieldReturnConfig.fromPartial(object.yieldReturnConfig) : undefined;
     message.faucetConfig = object.faucetConfig !== undefined && object.faucetConfig !== null ? FaucetConfig.fromPartial(object.faucetConfig) : undefined;
+    message.assetUnderlyingTokenDenom = Object.entries(object.assetUnderlyingTokenDenom ?? {}).reduce<{
+      [key: string]: string;
+    }>((acc, [key, value]) => {
+      if (value !== undefined) {
+        acc[key] = String(value);
+      }
+      return acc;
+    }, {});
     return message;
   },
   fromAmino(object: ConfigAmino): Config {
@@ -1010,6 +1152,14 @@ export const Config = {
     if (object.faucet_config !== undefined && object.faucet_config !== null) {
       message.faucetConfig = FaucetConfig.fromAmino(object.faucet_config);
     }
+    message.assetUnderlyingTokenDenom = Object.entries(object.asset_underlying_token_denom ?? {}).reduce<{
+      [key: string]: string;
+    }>((acc, [key, value]) => {
+      if (value !== undefined) {
+        acc[key] = String(value);
+      }
+      return acc;
+    }, {});
     return message;
   },
   toAmino(message: Config, useInterfaces: boolean = true): ConfigAmino {
@@ -1042,6 +1192,12 @@ export const Config = {
     obj.profiler_config = message.profilerConfig ? ProfilerConfig.toAmino(message.profilerConfig, useInterfaces) : undefined;
     obj.yield_return_config = message.yieldReturnConfig ? YieldReturnConfig.toAmino(message.yieldReturnConfig, useInterfaces) : undefined;
     obj.faucet_config = message.faucetConfig ? FaucetConfig.toAmino(message.faucetConfig, useInterfaces) : undefined;
+    obj.asset_underlying_token_denom = {};
+    if (message.assetUnderlyingTokenDenom) {
+      Object.entries(message.assetUnderlyingTokenDenom).forEach(([k, v]) => {
+        obj.asset_underlying_token_denom[k] = v;
+      });
+    }
     return obj;
   },
   fromAminoMsg(object: ConfigAminoMsg): Config {

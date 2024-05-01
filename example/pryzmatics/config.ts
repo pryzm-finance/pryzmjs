@@ -11,6 +11,7 @@ async function main() {
     const appConfig = serverConfig.config
     console.log(appConfig)
     console.log(appConfig.faucet_config)
+    console.log(appConfig.asset_underlying_token_denom)
 }
 
 main().catch(console.error)

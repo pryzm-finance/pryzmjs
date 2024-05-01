@@ -12,6 +12,7 @@ export interface TokenYield {
   allianceApr?: string;
   yStakingYield?: string;
   yRoi?: string;
+  stakingYield?: string;
   error: string;
 }
 export interface TokenYieldProtoMsg {
@@ -27,6 +28,7 @@ export interface TokenYieldAmino {
   alliance_apr?: string;
   y_staking_yield?: string;
   y_roi?: string;
+  staking_yield?: string;
   error?: string;
 }
 export interface TokenYieldAminoMsg {
@@ -42,6 +44,7 @@ export interface TokenYieldSDKType {
   alliance_apr?: string;
   y_staking_yield?: string;
   y_roi?: string;
+  staking_yield?: string;
   error: string;
 }
 function createBaseTokenYield(): TokenYield {
@@ -54,6 +57,7 @@ function createBaseTokenYield(): TokenYield {
     allianceApr: undefined,
     yStakingYield: undefined,
     yRoi: undefined,
+    stakingYield: undefined,
     error: ""
   };
 }
@@ -93,8 +97,11 @@ export const TokenYield = {
     if (message.yRoi !== undefined) {
       writer.uint32(66).string(Decimal.fromUserInput(message.yRoi, 18).atomics);
     }
+    if (message.stakingYield !== undefined) {
+      writer.uint32(74).string(Decimal.fromUserInput(message.stakingYield, 18).atomics);
+    }
     if (message.error !== "") {
-      writer.uint32(74).string(message.error);
+      writer.uint32(82).string(message.error);
     }
     return writer;
   },
@@ -130,6 +137,9 @@ export const TokenYield = {
           message.yRoi = Decimal.fromAtomics(reader.string(), 18).toString();
           break;
         case 9:
+          message.stakingYield = Decimal.fromAtomics(reader.string(), 18).toString();
+          break;
+        case 10:
           message.error = reader.string();
           break;
         default:
@@ -149,6 +159,7 @@ export const TokenYield = {
       allianceApr: isSet(object.allianceApr) ? String(object.allianceApr) : undefined,
       yStakingYield: isSet(object.yStakingYield) ? String(object.yStakingYield) : undefined,
       yRoi: isSet(object.yRoi) ? String(object.yRoi) : undefined,
+      stakingYield: isSet(object.stakingYield) ? String(object.stakingYield) : undefined,
       error: isSet(object.error) ? String(object.error) : ""
     };
   },
@@ -162,6 +173,7 @@ export const TokenYield = {
     message.allianceApr !== undefined && (obj.allianceApr = message.allianceApr);
     message.yStakingYield !== undefined && (obj.yStakingYield = message.yStakingYield);
     message.yRoi !== undefined && (obj.yRoi = message.yRoi);
+    message.stakingYield !== undefined && (obj.stakingYield = message.stakingYield);
     message.error !== undefined && (obj.error = message.error);
     return obj;
   },
@@ -175,6 +187,7 @@ export const TokenYield = {
     message.allianceApr = object.allianceApr ?? undefined;
     message.yStakingYield = object.yStakingYield ?? undefined;
     message.yRoi = object.yRoi ?? undefined;
+    message.stakingYield = object.stakingYield ?? undefined;
     message.error = object.error ?? "";
     return message;
   },
@@ -204,6 +217,9 @@ export const TokenYield = {
     if (object.y_roi !== undefined && object.y_roi !== null) {
       message.yRoi = object.y_roi;
     }
+    if (object.staking_yield !== undefined && object.staking_yield !== null) {
+      message.stakingYield = object.staking_yield;
+    }
     if (object.error !== undefined && object.error !== null) {
       message.error = object.error;
     }
@@ -219,6 +235,7 @@ export const TokenYield = {
     obj.alliance_apr = padDecimal(message.allianceApr) === null ? undefined : padDecimal(message.allianceApr);
     obj.y_staking_yield = padDecimal(message.yStakingYield) === null ? undefined : padDecimal(message.yStakingYield);
     obj.y_roi = padDecimal(message.yRoi) === null ? undefined : padDecimal(message.yRoi);
+    obj.staking_yield = padDecimal(message.stakingYield) === null ? undefined : padDecimal(message.stakingYield);
     obj.error = message.error === "" ? undefined : message.error;
     return obj;
   },

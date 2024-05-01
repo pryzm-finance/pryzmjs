@@ -28,6 +28,7 @@ message Config {
   ProfilerConfig profiler_config = 12 [(gogoproto.nullable) = false];
   YieldReturnConfig yield_return_config = 13 [(gogoproto.nullable) = false];
   FaucetConfig faucet_config = 14 [(gogoproto.nullable) = false];
+  map<string, string> asset_underlying_token_denom = 15;
 }
 
 message DatabaseConfig {
