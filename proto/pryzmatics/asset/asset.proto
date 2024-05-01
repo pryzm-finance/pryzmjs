@@ -4,43 +4,40 @@ package pryzmatics.asset;
 import "gogoproto/gogo.proto";
 import "google/protobuf/timestamp.proto";
 import "cosmos_proto/cosmos.proto";
+import "pryzmatics/pool/token.proto";
 
 option go_package = "github.com/pryzm-finance/pryzmatics/types/asset";
 
 message Asset {
   string id = 1;
-  string token_denom = 2;
-  string total_refracted_c_asset = 3 [
+  pryzmatics.pool.Token c_asset_token = 2 [(gogoproto.nullable) = false];
+  pryzmatics.pool.Token underlying_asset_token = 3 [(gogoproto.nullable) = true];
+  string total_refracted_c_asset = 4 [
     (cosmos_proto.scalar) = "cosmos.Int",
     (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Int",
     (gogoproto.nullable) = false
   ];
-  string total_p_asset = 4 [
+  string total_p_asset = 5 [
     (cosmos_proto.scalar) = "cosmos.Int",
     (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Int",
     (gogoproto.nullable) = false
   ];
-  string pool_id = 5 [
+  string pool_id = 6 [
     (cosmos_proto.scalar) = "cosmos.Int",
     (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Int",
     (gogoproto.nullable) = true
   ];
-  string exchange_rate = 6 [
+  string exchange_rate = 7 [
     (cosmos_proto.scalar) = "cosmos.Dec",
     (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Dec",
     (gogoproto.nullable) = true
   ];
-  string exchange_rate_block_height = 7 [
+  string exchange_rate_block_height = 8 [
     (cosmos_proto.scalar) = "cosmos.Int",
     (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Int",
     (gogoproto.nullable) = true
   ];
-  string c_p_asset_exchange_rate = 8 [
-    (cosmos_proto.scalar) = "cosmos.Dec",
-    (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Dec",
-    (gogoproto.nullable) = true
-  ];
-  string c_asset_apy = 9 [
+  string c_p_asset_exchange_rate = 9 [
     (cosmos_proto.scalar) = "cosmos.Dec",
     (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Dec",
     (gogoproto.nullable) = true
