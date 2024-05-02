@@ -1,9 +1,58 @@
 import { VoteIntervalReport, VoteIntervalReportAmino, VoteIntervalReportSDKType } from "../../oracle/vote_interval_report";
-import { BinaryReader, BinaryWriter } from "../../../binary";
 import { isSet } from "../../../helpers";
+import { BinaryReader, BinaryWriter } from "../../../binary";
 import { GlobalDecoderRegistry } from "../../../registry";
+export enum PayloadModule {
+  PAYLOAD_MODULE_ANY = 0,
+  PAYLOAD_MODULE_ASSETS = 1,
+  PAYLOAD_MODULE_ICSTAKING = 2,
+  PAYLOAD_MODULE_AMM = 3,
+  UNRECOGNIZED = -1,
+}
+export const PayloadModuleSDKType = PayloadModule;
+export const PayloadModuleAmino = PayloadModule;
+export function payloadModuleFromJSON(object: any): PayloadModule {
+  switch (object) {
+    case 0:
+    case "PAYLOAD_MODULE_ANY":
+      return PayloadModule.PAYLOAD_MODULE_ANY;
+    case 1:
+    case "PAYLOAD_MODULE_ASSETS":
+      return PayloadModule.PAYLOAD_MODULE_ASSETS;
+    case 2:
+    case "PAYLOAD_MODULE_ICSTAKING":
+      return PayloadModule.PAYLOAD_MODULE_ICSTAKING;
+    case 3:
+    case "PAYLOAD_MODULE_AMM":
+      return PayloadModule.PAYLOAD_MODULE_AMM;
+    case -1:
+    case "UNRECOGNIZED":
+    default:
+      return PayloadModule.UNRECOGNIZED;
+  }
+}
+export function payloadModuleToJSON(object: PayloadModule): string {
+  switch (object) {
+    case PayloadModule.PAYLOAD_MODULE_ANY:
+      return "PAYLOAD_MODULE_ANY";
+    case PayloadModule.PAYLOAD_MODULE_ASSETS:
+      return "PAYLOAD_MODULE_ASSETS";
+    case PayloadModule.PAYLOAD_MODULE_ICSTAKING:
+      return "PAYLOAD_MODULE_ICSTAKING";
+    case PayloadModule.PAYLOAD_MODULE_AMM:
+      return "PAYLOAD_MODULE_AMM";
+    case PayloadModule.UNRECOGNIZED:
+    default:
+      return "UNRECOGNIZED";
+  }
+}
 export interface QueryVoteIntervalReportRequest {
   voteIntervalCloseBlockHeight: bigint;
+  /** comma-separated list of validators to filter by */
+  validators: string;
+  namespace: string;
+  module: PayloadModule;
+  csv: boolean;
 }
 export interface QueryVoteIntervalReportRequestProtoMsg {
   typeUrl: "/pryzmatics.server.oracle.QueryVoteIntervalReportRequest";
@@ -11,6 +60,11 @@ export interface QueryVoteIntervalReportRequestProtoMsg {
 }
 export interface QueryVoteIntervalReportRequestAmino {
   vote_interval_close_block_height?: string;
+  /** comma-separated list of validators to filter by */
+  validators?: string;
+  namespace?: string;
+  module?: PayloadModule;
+  csv?: boolean;
 }
 export interface QueryVoteIntervalReportRequestAminoMsg {
   type: "/pryzmatics.server.oracle.QueryVoteIntervalReportRequest";
@@ -18,6 +72,10 @@ export interface QueryVoteIntervalReportRequestAminoMsg {
 }
 export interface QueryVoteIntervalReportRequestSDKType {
   vote_interval_close_block_height: bigint;
+  validators: string;
+  namespace: string;
+  module: PayloadModule;
+  csv: boolean;
 }
 export interface QueryVoteIntervalReportResponse {
   voteIntervalReport?: VoteIntervalReport;
@@ -44,23 +102,39 @@ export interface QueryVoteIntervalReportResponseSDKType {
 }
 function createBaseQueryVoteIntervalReportRequest(): QueryVoteIntervalReportRequest {
   return {
-    voteIntervalCloseBlockHeight: BigInt(0)
+    voteIntervalCloseBlockHeight: BigInt(0),
+    validators: "",
+    namespace: "",
+    module: 0,
+    csv: false
   };
 }
 export const QueryVoteIntervalReportRequest = {
   typeUrl: "/pryzmatics.server.oracle.QueryVoteIntervalReportRequest",
   is(o: any): o is QueryVoteIntervalReportRequest {
-    return o && (o.$typeUrl === QueryVoteIntervalReportRequest.typeUrl || typeof o.voteIntervalCloseBlockHeight === "bigint");
+    return o && (o.$typeUrl === QueryVoteIntervalReportRequest.typeUrl || typeof o.voteIntervalCloseBlockHeight === "bigint" && typeof o.validators === "string" && typeof o.namespace === "string" && isSet(o.module) && typeof o.csv === "boolean");
   },
   isSDK(o: any): o is QueryVoteIntervalReportRequestSDKType {
-    return o && (o.$typeUrl === QueryVoteIntervalReportRequest.typeUrl || typeof o.vote_interval_close_block_height === "bigint");
+    return o && (o.$typeUrl === QueryVoteIntervalReportRequest.typeUrl || typeof o.vote_interval_close_block_height === "bigint" && typeof o.validators === "string" && typeof o.namespace === "string" && isSet(o.module) && typeof o.csv === "boolean");
   },
   isAmino(o: any): o is QueryVoteIntervalReportRequestAmino {
-    return o && (o.$typeUrl === QueryVoteIntervalReportRequest.typeUrl || typeof o.vote_interval_close_block_height === "bigint");
+    return o && (o.$typeUrl === QueryVoteIntervalReportRequest.typeUrl || typeof o.vote_interval_close_block_height === "bigint" && typeof o.validators === "string" && typeof o.namespace === "string" && isSet(o.module) && typeof o.csv === "boolean");
   },
   encode(message: QueryVoteIntervalReportRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.voteIntervalCloseBlockHeight !== BigInt(0)) {
       writer.uint32(8).int64(message.voteIntervalCloseBlockHeight);
+    }
+    if (message.validators !== "") {
+      writer.uint32(18).string(message.validators);
+    }
+    if (message.namespace !== "") {
+      writer.uint32(26).string(message.namespace);
+    }
+    if (message.module !== 0) {
+      writer.uint32(32).int32(message.module);
+    }
+    if (message.csv === true) {
+      writer.uint32(40).bool(message.csv);
     }
     return writer;
   },
@@ -74,6 +148,18 @@ export const QueryVoteIntervalReportRequest = {
         case 1:
           message.voteIntervalCloseBlockHeight = reader.int64();
           break;
+        case 2:
+          message.validators = reader.string();
+          break;
+        case 3:
+          message.namespace = reader.string();
+          break;
+        case 4:
+          message.module = (reader.int32() as any);
+          break;
+        case 5:
+          message.csv = reader.bool();
+          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -83,17 +169,29 @@ export const QueryVoteIntervalReportRequest = {
   },
   fromJSON(object: any): QueryVoteIntervalReportRequest {
     return {
-      voteIntervalCloseBlockHeight: isSet(object.voteIntervalCloseBlockHeight) ? BigInt(object.voteIntervalCloseBlockHeight.toString()) : BigInt(0)
+      voteIntervalCloseBlockHeight: isSet(object.voteIntervalCloseBlockHeight) ? BigInt(object.voteIntervalCloseBlockHeight.toString()) : BigInt(0),
+      validators: isSet(object.validators) ? String(object.validators) : "",
+      namespace: isSet(object.namespace) ? String(object.namespace) : "",
+      module: isSet(object.module) ? payloadModuleFromJSON(object.module) : -1,
+      csv: isSet(object.csv) ? Boolean(object.csv) : false
     };
   },
   toJSON(message: QueryVoteIntervalReportRequest): unknown {
     const obj: any = {};
     message.voteIntervalCloseBlockHeight !== undefined && (obj.voteIntervalCloseBlockHeight = (message.voteIntervalCloseBlockHeight || BigInt(0)).toString());
+    message.validators !== undefined && (obj.validators = message.validators);
+    message.namespace !== undefined && (obj.namespace = message.namespace);
+    message.module !== undefined && (obj.module = payloadModuleToJSON(message.module));
+    message.csv !== undefined && (obj.csv = message.csv);
     return obj;
   },
   fromPartial(object: Partial<QueryVoteIntervalReportRequest>): QueryVoteIntervalReportRequest {
     const message = createBaseQueryVoteIntervalReportRequest();
     message.voteIntervalCloseBlockHeight = object.voteIntervalCloseBlockHeight !== undefined && object.voteIntervalCloseBlockHeight !== null ? BigInt(object.voteIntervalCloseBlockHeight.toString()) : BigInt(0);
+    message.validators = object.validators ?? "";
+    message.namespace = object.namespace ?? "";
+    message.module = object.module ?? 0;
+    message.csv = object.csv ?? false;
     return message;
   },
   fromAmino(object: QueryVoteIntervalReportRequestAmino): QueryVoteIntervalReportRequest {
@@ -101,11 +199,27 @@ export const QueryVoteIntervalReportRequest = {
     if (object.vote_interval_close_block_height !== undefined && object.vote_interval_close_block_height !== null) {
       message.voteIntervalCloseBlockHeight = BigInt(object.vote_interval_close_block_height);
     }
+    if (object.validators !== undefined && object.validators !== null) {
+      message.validators = object.validators;
+    }
+    if (object.namespace !== undefined && object.namespace !== null) {
+      message.namespace = object.namespace;
+    }
+    if (object.module !== undefined && object.module !== null) {
+      message.module = object.module;
+    }
+    if (object.csv !== undefined && object.csv !== null) {
+      message.csv = object.csv;
+    }
     return message;
   },
   toAmino(message: QueryVoteIntervalReportRequest, useInterfaces: boolean = true): QueryVoteIntervalReportRequestAmino {
     const obj: any = {};
     obj.vote_interval_close_block_height = message.voteIntervalCloseBlockHeight ? message.voteIntervalCloseBlockHeight.toString() : undefined;
+    obj.validators = message.validators === "" ? undefined : message.validators;
+    obj.namespace = message.namespace === "" ? undefined : message.namespace;
+    obj.module = message.module === 0 ? undefined : message.module;
+    obj.csv = message.csv === false ? undefined : message.csv;
     return obj;
   },
   fromAminoMsg(object: QueryVoteIntervalReportRequestAminoMsg): QueryVoteIntervalReportRequest {

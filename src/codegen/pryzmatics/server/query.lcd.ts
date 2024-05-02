@@ -1,3 +1,4 @@
+import { QueryVoteIntervalReportRequest, QueryVoteIntervalReportResponseSDKType } from "./oracle/vote_interval_report";
 import { QueryAllFlowRequest, QueryAllFlowResponseSDKType, QueryFlowRequest, QueryFlowResponseSDKType } from "./flowtrade/flowtrade";
 import { setPaginationParams } from "../../helpers";
 import { LCDClient } from "@refractedlabs/cosmology-lcd-fork";
@@ -36,7 +37,6 @@ import { QueryPreVotesRequest, QueryPreVotesResponseSDKType } from "./oracle/pre
 import { QueryVotesRequest, QueryVotesResponseSDKType } from "./oracle/vote";
 import { QueryVotePayloadsRequest, QueryVotePayloadsResponseSDKType } from "./oracle/vote_payload";
 import { QueryBallotVoteResultsRequest, QueryBallotVoteResultsResponseSDKType } from "./oracle/ballot_vote_result";
-import { QueryVoteIntervalReportRequest, QueryVoteIntervalReportResponseSDKType } from "./oracle/vote_interval_report";
 import { QueryUserStakesRequest, QueryUserStakesResponseSDKType } from "./ystaking/user_stake";
 import { QueryClaimRequest, QueryClaimResponseSDKType } from "./faucet/claim";
 import { QueryFlowHistoricalPriceRequest, QueryFlowHistoricalPriceResponseSDKType } from "./flowtrade/flow_historical_price";
@@ -717,8 +717,23 @@ export class LCDQueryClient {
   }
   /* VoteIntervalReport */
   async voteIntervalReport(params: QueryVoteIntervalReportRequest): Promise<QueryVoteIntervalReportResponseSDKType> {
+    const options: any = {
+      params: {}
+    };
+    if (typeof params?.validators !== "undefined") {
+      options.params.validators = params.validators;
+    }
+    if (typeof params?.namespace !== "undefined") {
+      options.params.namespace = params.namespace;
+    }
+    if (typeof params?.module !== "undefined") {
+      options.params.module = params.module;
+    }
+    if (typeof params?.csv !== "undefined") {
+      options.params.csv = params.csv;
+    }
     const endpoint = `pryzmatics/oracle/vote_interval_report/${params.voteIntervalCloseBlockHeight}`;
-    return await this.req.get<QueryVoteIntervalReportResponseSDKType>(endpoint);
+    return await this.req.get<QueryVoteIntervalReportResponseSDKType>(endpoint, options);
   }
   /* UserStakes */
   async userStakes(params: QueryUserStakesRequest): Promise<QueryUserStakesResponseSDKType> {

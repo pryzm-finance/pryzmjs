@@ -7,8 +7,20 @@ import "pryzmatics/oracle/vote_interval_report.proto";
 
 option go_package = "github.com/pryzm-finance/pryzmatics/server/oracle";
 
+enum PayloadModule {
+  option (gogoproto.goproto_enum_prefix) = false;
+  PAYLOAD_MODULE_ANY = 0;
+  PAYLOAD_MODULE_ASSETS = 1;
+  PAYLOAD_MODULE_ICSTAKING = 2;
+  PAYLOAD_MODULE_AMM = 3;
+}
+
 message QueryVoteIntervalReportRequest {
   int64 vote_interval_close_block_height = 1;
+  string validators = 2; // comma-separated list of validators to filter by
+  string namespace = 3;
+  PayloadModule module = 4;
+  bool csv = 5;
 }
 
 message QueryVoteIntervalReportResponse {

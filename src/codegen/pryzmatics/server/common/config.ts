@@ -259,6 +259,8 @@ export interface LoggerConfigSDKType {
 export interface IndexerConfig {
   disable: boolean;
   disableSyncForDebug: boolean;
+  startBlock: bigint;
+  pauseAtBlock: bigint;
 }
 export interface IndexerConfigProtoMsg {
   typeUrl: "/pryzmatics.server.common.IndexerConfig";
@@ -267,6 +269,8 @@ export interface IndexerConfigProtoMsg {
 export interface IndexerConfigAmino {
   disable?: boolean;
   disable_sync_for_debug?: boolean;
+  start_block?: string;
+  pause_at_block?: string;
 }
 export interface IndexerConfigAminoMsg {
   type: "/pryzmatics.server.common.IndexerConfig";
@@ -275,6 +279,8 @@ export interface IndexerConfigAminoMsg {
 export interface IndexerConfigSDKType {
   disable: boolean;
   disable_sync_for_debug: boolean;
+  start_block: bigint;
+  pause_at_block: bigint;
 }
 export interface ProfilerConfig {
   cpuEnabled: boolean;
@@ -1637,19 +1643,21 @@ GlobalDecoderRegistry.register(LoggerConfig.typeUrl, LoggerConfig);
 function createBaseIndexerConfig(): IndexerConfig {
   return {
     disable: false,
-    disableSyncForDebug: false
+    disableSyncForDebug: false,
+    startBlock: BigInt(0),
+    pauseAtBlock: BigInt(0)
   };
 }
 export const IndexerConfig = {
   typeUrl: "/pryzmatics.server.common.IndexerConfig",
   is(o: any): o is IndexerConfig {
-    return o && (o.$typeUrl === IndexerConfig.typeUrl || typeof o.disable === "boolean" && typeof o.disableSyncForDebug === "boolean");
+    return o && (o.$typeUrl === IndexerConfig.typeUrl || typeof o.disable === "boolean" && typeof o.disableSyncForDebug === "boolean" && typeof o.startBlock === "bigint" && typeof o.pauseAtBlock === "bigint");
   },
   isSDK(o: any): o is IndexerConfigSDKType {
-    return o && (o.$typeUrl === IndexerConfig.typeUrl || typeof o.disable === "boolean" && typeof o.disable_sync_for_debug === "boolean");
+    return o && (o.$typeUrl === IndexerConfig.typeUrl || typeof o.disable === "boolean" && typeof o.disable_sync_for_debug === "boolean" && typeof o.start_block === "bigint" && typeof o.pause_at_block === "bigint");
   },
   isAmino(o: any): o is IndexerConfigAmino {
-    return o && (o.$typeUrl === IndexerConfig.typeUrl || typeof o.disable === "boolean" && typeof o.disable_sync_for_debug === "boolean");
+    return o && (o.$typeUrl === IndexerConfig.typeUrl || typeof o.disable === "boolean" && typeof o.disable_sync_for_debug === "boolean" && typeof o.start_block === "bigint" && typeof o.pause_at_block === "bigint");
   },
   encode(message: IndexerConfig, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.disable === true) {
@@ -1657,6 +1665,12 @@ export const IndexerConfig = {
     }
     if (message.disableSyncForDebug === true) {
       writer.uint32(16).bool(message.disableSyncForDebug);
+    }
+    if (message.startBlock !== BigInt(0)) {
+      writer.uint32(24).int64(message.startBlock);
+    }
+    if (message.pauseAtBlock !== BigInt(0)) {
+      writer.uint32(32).int64(message.pauseAtBlock);
     }
     return writer;
   },
@@ -1673,6 +1687,12 @@ export const IndexerConfig = {
         case 2:
           message.disableSyncForDebug = reader.bool();
           break;
+        case 3:
+          message.startBlock = reader.int64();
+          break;
+        case 4:
+          message.pauseAtBlock = reader.int64();
+          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -1683,19 +1703,25 @@ export const IndexerConfig = {
   fromJSON(object: any): IndexerConfig {
     return {
       disable: isSet(object.disable) ? Boolean(object.disable) : false,
-      disableSyncForDebug: isSet(object.disableSyncForDebug) ? Boolean(object.disableSyncForDebug) : false
+      disableSyncForDebug: isSet(object.disableSyncForDebug) ? Boolean(object.disableSyncForDebug) : false,
+      startBlock: isSet(object.startBlock) ? BigInt(object.startBlock.toString()) : BigInt(0),
+      pauseAtBlock: isSet(object.pauseAtBlock) ? BigInt(object.pauseAtBlock.toString()) : BigInt(0)
     };
   },
   toJSON(message: IndexerConfig): unknown {
     const obj: any = {};
     message.disable !== undefined && (obj.disable = message.disable);
     message.disableSyncForDebug !== undefined && (obj.disableSyncForDebug = message.disableSyncForDebug);
+    message.startBlock !== undefined && (obj.startBlock = (message.startBlock || BigInt(0)).toString());
+    message.pauseAtBlock !== undefined && (obj.pauseAtBlock = (message.pauseAtBlock || BigInt(0)).toString());
     return obj;
   },
   fromPartial(object: Partial<IndexerConfig>): IndexerConfig {
     const message = createBaseIndexerConfig();
     message.disable = object.disable ?? false;
     message.disableSyncForDebug = object.disableSyncForDebug ?? false;
+    message.startBlock = object.startBlock !== undefined && object.startBlock !== null ? BigInt(object.startBlock.toString()) : BigInt(0);
+    message.pauseAtBlock = object.pauseAtBlock !== undefined && object.pauseAtBlock !== null ? BigInt(object.pauseAtBlock.toString()) : BigInt(0);
     return message;
   },
   fromAmino(object: IndexerConfigAmino): IndexerConfig {
@@ -1706,12 +1732,20 @@ export const IndexerConfig = {
     if (object.disable_sync_for_debug !== undefined && object.disable_sync_for_debug !== null) {
       message.disableSyncForDebug = object.disable_sync_for_debug;
     }
+    if (object.start_block !== undefined && object.start_block !== null) {
+      message.startBlock = BigInt(object.start_block);
+    }
+    if (object.pause_at_block !== undefined && object.pause_at_block !== null) {
+      message.pauseAtBlock = BigInt(object.pause_at_block);
+    }
     return message;
   },
   toAmino(message: IndexerConfig, useInterfaces: boolean = true): IndexerConfigAmino {
     const obj: any = {};
     obj.disable = message.disable === false ? undefined : message.disable;
     obj.disable_sync_for_debug = message.disableSyncForDebug === false ? undefined : message.disableSyncForDebug;
+    obj.start_block = message.startBlock ? message.startBlock.toString() : undefined;
+    obj.pause_at_block = message.pauseAtBlock ? message.pauseAtBlock.toString() : undefined;
     return obj;
   },
   fromAminoMsg(object: IndexerConfigAminoMsg): IndexerConfig {

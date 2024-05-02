@@ -58,6 +58,8 @@ message LoggerConfig {
 message IndexerConfig {
   bool disable = 1;
   bool disable_sync_for_debug = 2;
+  int64 start_block = 3;
+  int64 pause_at_block = 4;
 }
 
 message ProfilerConfig {
