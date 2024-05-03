@@ -116,7 +116,7 @@ export const FlowTrade = {
   toAmino(message: FlowTrade, useInterfaces: boolean = true): FlowTradeAmino {
     const obj: any = {};
     obj.end_time = message.endTime ? Timestamp.toAmino(message.endTime, useInterfaces) : undefined;
-    obj.flow_id = message.flowId ? message.flowId.toString() : undefined;
+    obj.flow_id = message.flowId !== BigInt(0) ? message.flowId.toString() : undefined;
     obj.action_type = message.actionType === 0 ? undefined : message.actionType;
     return obj;
   },

@@ -426,7 +426,7 @@ export const EventCreateFlowForAmount = {
   },
   toAmino(message: EventCreateFlowForAmount, useInterfaces: boolean = true): EventCreateFlowForAmountAmino {
     const obj: any = {};
-    obj.flow_id = message.flowId ? message.flowId.toString() : undefined;
+    obj.flow_id = message.flowId !== BigInt(0) ? message.flowId.toString() : undefined;
     obj.action_type = message.actionType === 0 ? undefined : message.actionType;
     obj.amount = message.amount ? Coin.toAmino(message.amount, useInterfaces) : undefined;
     return obj;
@@ -788,7 +788,7 @@ export const EventRemoveFlowTrade = {
   toAmino(message: EventRemoveFlowTrade, useInterfaces: boolean = true): EventRemoveFlowTradeAmino {
     const obj: any = {};
     obj.end_time = message.endTime ? Timestamp.toAmino(message.endTime, useInterfaces) : undefined;
-    obj.flow_id = message.flowId ? message.flowId.toString() : undefined;
+    obj.flow_id = message.flowId !== BigInt(0) ? message.flowId.toString() : undefined;
     return obj;
   },
   fromAminoMsg(object: EventRemoveFlowTradeAminoMsg): EventRemoveFlowTrade {

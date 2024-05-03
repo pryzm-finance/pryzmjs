@@ -492,7 +492,7 @@ export const QueryProposalRequest = {
   },
   toAmino(message: QueryProposalRequest, useInterfaces: boolean = true): QueryProposalRequestAmino {
     const obj: any = {};
-    obj.proposal_id = message.proposalId ? message.proposalId.toString() : undefined;
+    obj.proposal_id = message.proposalId !== BigInt(0) ? message.proposalId.toString() : undefined;
     return obj;
   },
   fromAminoMsg(object: QueryProposalRequestAminoMsg): QueryProposalRequest {
@@ -583,7 +583,7 @@ export const QueryProposalResponse = {
   },
   toAmino(message: QueryProposalResponse, useInterfaces: boolean = true): QueryProposalResponseAmino {
     const obj: any = {};
-    obj.proposal = message.proposal ? Proposal.toAmino(message.proposal, useInterfaces) : undefined;
+    obj.proposal = message.proposal ? Proposal.toAmino(message.proposal, useInterfaces) : Proposal.toAmino(Proposal.fromPartial({}));
     return obj;
   },
   fromAminoMsg(object: QueryProposalResponseAminoMsg): QueryProposalResponse {
@@ -931,7 +931,7 @@ export const QueryVoteRequest = {
   },
   toAmino(message: QueryVoteRequest, useInterfaces: boolean = true): QueryVoteRequestAmino {
     const obj: any = {};
-    obj.proposal_id = message.proposalId ? message.proposalId.toString() : undefined;
+    obj.proposal_id = message.proposalId !== BigInt(0) ? message.proposalId.toString() : undefined;
     obj.voter = message.voter === "" ? undefined : message.voter;
     return obj;
   },
@@ -1023,7 +1023,7 @@ export const QueryVoteResponse = {
   },
   toAmino(message: QueryVoteResponse, useInterfaces: boolean = true): QueryVoteResponseAmino {
     const obj: any = {};
-    obj.vote = message.vote ? Vote.toAmino(message.vote, useInterfaces) : undefined;
+    obj.vote = message.vote ? Vote.toAmino(message.vote, useInterfaces) : Vote.toAmino(Vote.fromPartial({}));
     return obj;
   },
   fromAminoMsg(object: QueryVoteResponseAminoMsg): QueryVoteResponse {
@@ -1127,7 +1127,7 @@ export const QueryVotesRequest = {
   },
   toAmino(message: QueryVotesRequest, useInterfaces: boolean = true): QueryVotesRequestAmino {
     const obj: any = {};
-    obj.proposal_id = message.proposalId ? message.proposalId.toString() : undefined;
+    obj.proposal_id = message.proposalId !== BigInt(0) ? message.proposalId.toString() : undefined;
     obj.pagination = message.pagination ? PageRequest.toAmino(message.pagination, useInterfaces) : undefined;
     return obj;
   },
@@ -1447,9 +1447,9 @@ export const QueryParamsResponse = {
   },
   toAmino(message: QueryParamsResponse, useInterfaces: boolean = true): QueryParamsResponseAmino {
     const obj: any = {};
-    obj.voting_params = message.votingParams ? VotingParams.toAmino(message.votingParams, useInterfaces) : undefined;
-    obj.deposit_params = message.depositParams ? DepositParams.toAmino(message.depositParams, useInterfaces) : undefined;
-    obj.tally_params = message.tallyParams ? TallyParams.toAmino(message.tallyParams, useInterfaces) : undefined;
+    obj.voting_params = message.votingParams ? VotingParams.toAmino(message.votingParams, useInterfaces) : VotingParams.toAmino(VotingParams.fromPartial({}));
+    obj.deposit_params = message.depositParams ? DepositParams.toAmino(message.depositParams, useInterfaces) : DepositParams.toAmino(DepositParams.fromPartial({}));
+    obj.tally_params = message.tallyParams ? TallyParams.toAmino(message.tallyParams, useInterfaces) : TallyParams.toAmino(TallyParams.fromPartial({}));
     return obj;
   },
   fromAminoMsg(object: QueryParamsResponseAminoMsg): QueryParamsResponse {
@@ -1553,7 +1553,7 @@ export const QueryDepositRequest = {
   },
   toAmino(message: QueryDepositRequest, useInterfaces: boolean = true): QueryDepositRequestAmino {
     const obj: any = {};
-    obj.proposal_id = message.proposalId ? message.proposalId.toString() : undefined;
+    obj.proposal_id = message.proposalId !== BigInt(0) ? message.proposalId.toString() : undefined;
     obj.depositor = message.depositor === "" ? undefined : message.depositor;
     return obj;
   },
@@ -1645,7 +1645,7 @@ export const QueryDepositResponse = {
   },
   toAmino(message: QueryDepositResponse, useInterfaces: boolean = true): QueryDepositResponseAmino {
     const obj: any = {};
-    obj.deposit = message.deposit ? Deposit.toAmino(message.deposit, useInterfaces) : undefined;
+    obj.deposit = message.deposit ? Deposit.toAmino(message.deposit, useInterfaces) : Deposit.toAmino(Deposit.fromPartial({}));
     return obj;
   },
   fromAminoMsg(object: QueryDepositResponseAminoMsg): QueryDepositResponse {
@@ -1749,7 +1749,7 @@ export const QueryDepositsRequest = {
   },
   toAmino(message: QueryDepositsRequest, useInterfaces: boolean = true): QueryDepositsRequestAmino {
     const obj: any = {};
-    obj.proposal_id = message.proposalId ? message.proposalId.toString() : undefined;
+    obj.proposal_id = message.proposalId !== BigInt(0) ? message.proposalId.toString() : undefined;
     obj.pagination = message.pagination ? PageRequest.toAmino(message.pagination, useInterfaces) : undefined;
     return obj;
   },
@@ -1952,7 +1952,7 @@ export const QueryTallyResultRequest = {
   },
   toAmino(message: QueryTallyResultRequest, useInterfaces: boolean = true): QueryTallyResultRequestAmino {
     const obj: any = {};
-    obj.proposal_id = message.proposalId ? message.proposalId.toString() : undefined;
+    obj.proposal_id = message.proposalId !== BigInt(0) ? message.proposalId.toString() : undefined;
     return obj;
   },
   fromAminoMsg(object: QueryTallyResultRequestAminoMsg): QueryTallyResultRequest {
@@ -2043,7 +2043,7 @@ export const QueryTallyResultResponse = {
   },
   toAmino(message: QueryTallyResultResponse, useInterfaces: boolean = true): QueryTallyResultResponseAmino {
     const obj: any = {};
-    obj.tally = message.tally ? TallyResult.toAmino(message.tally, useInterfaces) : undefined;
+    obj.tally = message.tally ? TallyResult.toAmino(message.tally, useInterfaces) : TallyResult.toAmino(TallyResult.fromPartial({}));
     return obj;
   },
   fromAminoMsg(object: QueryTallyResultResponseAminoMsg): QueryTallyResultResponse {

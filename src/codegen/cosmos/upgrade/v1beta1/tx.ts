@@ -205,7 +205,7 @@ export const MsgSoftwareUpgrade = {
   toAmino(message: MsgSoftwareUpgrade, useInterfaces: boolean = true): MsgSoftwareUpgradeAmino {
     const obj: any = {};
     obj.authority = message.authority === "" ? undefined : message.authority;
-    obj.plan = message.plan ? Plan.toAmino(message.plan, useInterfaces) : undefined;
+    obj.plan = message.plan ? Plan.toAmino(message.plan, useInterfaces) : Plan.toAmino(Plan.fromPartial({}));
     return obj;
   },
   fromAminoMsg(object: MsgSoftwareUpgradeAminoMsg): MsgSoftwareUpgrade {

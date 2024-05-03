@@ -1,6 +1,6 @@
 import { BinaryReader, BinaryWriter } from "../../../binary";
 import { Decimal } from "@cosmjs/math";
-import { isSet, padDecimal } from "../../../helpers";
+import { isSet } from "../../../helpers";
 import { GlobalDecoderRegistry } from "../../../registry";
 export interface TokenWeight {
   denom: string;
@@ -99,7 +99,7 @@ export const TokenWeight = {
   toAmino(message: TokenWeight, useInterfaces: boolean = true): TokenWeightAmino {
     const obj: any = {};
     obj.denom = message.denom === "" ? undefined : message.denom;
-    obj.normalized_weight = padDecimal(message.normalizedWeight) === "" ? undefined : padDecimal(message.normalizedWeight);
+    obj.normalized_weight = message.normalizedWeight === "" ? undefined : message.normalizedWeight;
     return obj;
   },
   fromAminoMsg(object: TokenWeightAminoMsg): TokenWeight {

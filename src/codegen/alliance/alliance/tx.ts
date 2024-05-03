@@ -3,7 +3,7 @@ import { Params, ParamsAmino, ParamsSDKType } from "./params";
 import { Duration, DurationAmino, DurationSDKType } from "../../google/protobuf/duration";
 import { RewardWeightRange, RewardWeightRangeAmino, RewardWeightRangeSDKType } from "./alliance";
 import { BinaryReader, BinaryWriter } from "../../binary";
-import { isSet, padDecimal } from "../../helpers";
+import { isSet } from "../../helpers";
 import { GlobalDecoderRegistry } from "../../registry";
 import { Decimal } from "@cosmjs/math";
 export interface MsgDelegate {
@@ -1400,9 +1400,9 @@ export const MsgCreateAlliance = {
     const obj: any = {};
     obj.authority = message.authority === "" ? undefined : message.authority;
     obj.denom = message.denom === "" ? undefined : message.denom;
-    obj.reward_weight = padDecimal(message.rewardWeight) === "" ? undefined : padDecimal(message.rewardWeight);
-    obj.take_rate = padDecimal(message.takeRate) === "" ? undefined : padDecimal(message.takeRate);
-    obj.reward_change_rate = padDecimal(message.rewardChangeRate) === "" ? undefined : padDecimal(message.rewardChangeRate);
+    obj.reward_weight = message.rewardWeight === "" ? undefined : message.rewardWeight;
+    obj.take_rate = message.takeRate === "" ? undefined : message.takeRate;
+    obj.reward_change_rate = message.rewardChangeRate === "" ? undefined : message.rewardChangeRate;
     obj.reward_change_interval = message.rewardChangeInterval ? Duration.toAmino(message.rewardChangeInterval, useInterfaces) : undefined;
     obj.reward_weight_range = message.rewardWeightRange ? RewardWeightRange.toAmino(message.rewardWeightRange, useInterfaces) : undefined;
     return obj;
@@ -1634,9 +1634,9 @@ export const MsgUpdateAlliance = {
     const obj: any = {};
     obj.authority = message.authority === "" ? undefined : message.authority;
     obj.denom = message.denom === "" ? undefined : message.denom;
-    obj.reward_weight = padDecimal(message.rewardWeight) === "" ? undefined : padDecimal(message.rewardWeight);
-    obj.take_rate = padDecimal(message.takeRate) === "" ? undefined : padDecimal(message.takeRate);
-    obj.reward_change_rate = padDecimal(message.rewardChangeRate) === "" ? undefined : padDecimal(message.rewardChangeRate);
+    obj.reward_weight = message.rewardWeight === "" ? undefined : message.rewardWeight;
+    obj.take_rate = message.takeRate === "" ? undefined : message.takeRate;
+    obj.reward_change_rate = message.rewardChangeRate === "" ? undefined : message.rewardChangeRate;
     obj.reward_change_interval = message.rewardChangeInterval ? Duration.toAmino(message.rewardChangeInterval, useInterfaces) : undefined;
     obj.reward_weight_range = message.rewardWeightRange ? RewardWeightRange.toAmino(message.rewardWeightRange, useInterfaces) : undefined;
     return obj;

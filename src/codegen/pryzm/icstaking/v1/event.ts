@@ -1274,7 +1274,7 @@ export const EventRedeemUnstaked = {
     obj.creator = message.creator === "" ? undefined : message.creator;
     obj.host_chain = message.hostChain === "" ? undefined : message.hostChain;
     obj.transfer_channel = message.transferChannel === "" ? undefined : message.transferChannel;
-    obj.epoch = message.epoch ? message.epoch.toString() : undefined;
+    obj.epoch = message.epoch !== BigInt(0) ? message.epoch.toString() : undefined;
     obj.u_amount = message.uAmount === "" ? undefined : message.uAmount;
     obj.amount = message.amount ? Coin.toAmino(message.amount, useInterfaces) : undefined;
     obj.fee = message.fee ? Coin.toAmino(message.fee, useInterfaces) : undefined;

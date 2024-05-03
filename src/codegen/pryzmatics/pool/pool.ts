@@ -2,7 +2,7 @@ import { PoolType, poolTypeFromJSON, poolTypeToJSON } from "../../pryzm/amm/v1/p
 import { PoolApr, PoolAprAmino, PoolAprSDKType } from "./pool_apr";
 import { BinaryReader, BinaryWriter } from "../../binary";
 import { Decimal } from "@cosmjs/math";
-import { isSet, padDecimal } from "../../helpers";
+import { isSet } from "../../helpers";
 import { GlobalDecoderRegistry } from "../../registry";
 export interface PoolMetrics {
   tradeVolume24h: string;
@@ -244,15 +244,15 @@ export const PoolMetrics = {
   },
   toAmino(message: PoolMetrics, useInterfaces: boolean = true): PoolMetricsAmino {
     const obj: any = {};
-    obj.trade_volume_24h = padDecimal(message.tradeVolume24h) === "" ? undefined : padDecimal(message.tradeVolume24h);
-    obj.trade_volume_7d = padDecimal(message.tradeVolume7d) === "" ? undefined : padDecimal(message.tradeVolume7d);
-    obj.trade_volume_30d = padDecimal(message.tradeVolume30d) === "" ? undefined : padDecimal(message.tradeVolume30d);
-    obj.swap_fee_volume_24h = padDecimal(message.swapFeeVolume24h) === "" ? undefined : padDecimal(message.swapFeeVolume24h);
-    obj.swap_fee_volume_7d = padDecimal(message.swapFeeVolume7d) === "" ? undefined : padDecimal(message.swapFeeVolume7d);
-    obj.swap_fee_volume_30d = padDecimal(message.swapFeeVolume30d) === "" ? undefined : padDecimal(message.swapFeeVolume30d);
-    obj.join_exit_swap_fee_volume_24h = padDecimal(message.joinExitSwapFeeVolume24h) === "" ? undefined : padDecimal(message.joinExitSwapFeeVolume24h);
-    obj.join_exit_swap_fee_volume_7d = padDecimal(message.joinExitSwapFeeVolume7d) === "" ? undefined : padDecimal(message.joinExitSwapFeeVolume7d);
-    obj.join_exit_swap_fee_volume_30d = padDecimal(message.joinExitSwapFeeVolume30d) === "" ? undefined : padDecimal(message.joinExitSwapFeeVolume30d);
+    obj.trade_volume_24h = message.tradeVolume24h === "" ? undefined : message.tradeVolume24h;
+    obj.trade_volume_7d = message.tradeVolume7d === "" ? undefined : message.tradeVolume7d;
+    obj.trade_volume_30d = message.tradeVolume30d === "" ? undefined : message.tradeVolume30d;
+    obj.swap_fee_volume_24h = message.swapFeeVolume24h === "" ? undefined : message.swapFeeVolume24h;
+    obj.swap_fee_volume_7d = message.swapFeeVolume7d === "" ? undefined : message.swapFeeVolume7d;
+    obj.swap_fee_volume_30d = message.swapFeeVolume30d === "" ? undefined : message.swapFeeVolume30d;
+    obj.join_exit_swap_fee_volume_24h = message.joinExitSwapFeeVolume24h === "" ? undefined : message.joinExitSwapFeeVolume24h;
+    obj.join_exit_swap_fee_volume_7d = message.joinExitSwapFeeVolume7d === "" ? undefined : message.joinExitSwapFeeVolume7d;
+    obj.join_exit_swap_fee_volume_30d = message.joinExitSwapFeeVolume30d === "" ? undefined : message.joinExitSwapFeeVolume30d;
     return obj;
   },
   fromAminoMsg(object: PoolMetricsAminoMsg): PoolMetrics {
@@ -400,7 +400,7 @@ export const Pool = {
   },
   toAmino(message: Pool, useInterfaces: boolean = true): PoolAmino {
     const obj: any = {};
-    obj.id = message.id ? message.id.toString() : undefined;
+    obj.id = message.id !== BigInt(0) ? message.id.toString() : undefined;
     obj.name = message.name === "" ? undefined : message.name;
     obj.pool_type = message.poolType === 0 ? undefined : message.poolType;
     obj.lp_denom = message.lpDenom === "" ? undefined : message.lpDenom;

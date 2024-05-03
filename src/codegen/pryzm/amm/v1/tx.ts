@@ -10,7 +10,7 @@ import { GeneralPoolParameters, GeneralPoolParametersAmino, GeneralPoolParameter
 import { PoolPauseWindow, PoolPauseWindowAmino, PoolPauseWindowSDKType } from "./pool";
 import { DisabledOrderPair, DisabledOrderPairAmino, DisabledOrderPairSDKType, Order, OrderAmino, OrderSDKType } from "./order";
 import { BinaryReader, BinaryWriter } from "../../../binary";
-import { isSet, padDecimal } from "../../../helpers";
+import { isSet } from "../../../helpers";
 import { GlobalDecoderRegistry } from "../../../registry";
 import { Decimal } from "@cosmjs/math";
 export interface MsgSingleSwap {
@@ -1797,7 +1797,7 @@ export const MsgSingleSwap = {
   toAmino(message: MsgSingleSwap, useInterfaces: boolean = true): MsgSingleSwapAmino {
     const obj: any = {};
     obj.creator = message.creator === "" ? undefined : message.creator;
-    obj.swap = message.swap ? Swap.toAmino(message.swap, useInterfaces) : undefined;
+    obj.swap = message.swap ? Swap.toAmino(message.swap, useInterfaces) : Swap.toAmino(Swap.fromPartial({}));
     obj.max_amount_in = message.maxAmountIn === null ? undefined : message.maxAmountIn;
     obj.min_amount_out = message.minAmountOut === null ? undefined : message.minAmountOut;
     return obj;
@@ -2057,7 +2057,7 @@ export const MsgJoinAllTokensExactLpt = {
   toAmino(message: MsgJoinAllTokensExactLpt, useInterfaces: boolean = true): MsgJoinAllTokensExactLptAmino {
     const obj: any = {};
     obj.creator = message.creator === "" ? undefined : message.creator;
-    obj.pool_id = message.poolId ? message.poolId.toString() : undefined;
+    obj.pool_id = message.poolId ? message.poolId.toString() : "0";
     obj.lpt_out = message.lptOut === "" ? undefined : message.lptOut;
     if (message.maxAmountsIn) {
       obj.max_amounts_in = message.maxAmountsIn.map(e => e ? Coin.toAmino(e, useInterfaces) : undefined);
@@ -2330,7 +2330,7 @@ export const MsgJoinTokenExactLpt = {
   toAmino(message: MsgJoinTokenExactLpt, useInterfaces: boolean = true): MsgJoinTokenExactLptAmino {
     const obj: any = {};
     obj.creator = message.creator === "" ? undefined : message.creator;
-    obj.pool_id = message.poolId ? message.poolId.toString() : undefined;
+    obj.pool_id = message.poolId ? message.poolId.toString() : "0";
     obj.lpt_out = message.lptOut === "" ? undefined : message.lptOut;
     obj.token_in = message.tokenIn === "" ? undefined : message.tokenIn;
     obj.max_amount_in = message.maxAmountIn === null ? undefined : message.maxAmountIn;
@@ -2591,7 +2591,7 @@ export const MsgJoinExactTokens = {
   toAmino(message: MsgJoinExactTokens, useInterfaces: boolean = true): MsgJoinExactTokensAmino {
     const obj: any = {};
     obj.creator = message.creator === "" ? undefined : message.creator;
-    obj.pool_id = message.poolId ? message.poolId.toString() : undefined;
+    obj.pool_id = message.poolId ? message.poolId.toString() : "0";
     if (message.amountsIn) {
       obj.amounts_in = message.amountsIn.map(e => e ? Coin.toAmino(e, useInterfaces) : undefined);
     } else {
@@ -3149,7 +3149,7 @@ export const MsgExitExactTokens = {
   toAmino(message: MsgExitExactTokens, useInterfaces: boolean = true): MsgExitExactTokensAmino {
     const obj: any = {};
     obj.creator = message.creator === "" ? undefined : message.creator;
-    obj.pool_id = message.poolId ? message.poolId.toString() : undefined;
+    obj.pool_id = message.poolId ? message.poolId.toString() : "0";
     if (message.amountsOut) {
       obj.amounts_out = message.amountsOut.map(e => e ? Coin.toAmino(e, useInterfaces) : undefined);
     } else {
@@ -3436,7 +3436,7 @@ export const MsgExitTokenExactLpt = {
   toAmino(message: MsgExitTokenExactLpt, useInterfaces: boolean = true): MsgExitTokenExactLptAmino {
     const obj: any = {};
     obj.creator = message.creator === "" ? undefined : message.creator;
-    obj.pool_id = message.poolId ? message.poolId.toString() : undefined;
+    obj.pool_id = message.poolId ? message.poolId.toString() : "0";
     obj.lpt_in = message.lptIn === "" ? undefined : message.lptIn;
     obj.token_out = message.tokenOut === "" ? undefined : message.tokenOut;
     obj.min_amount_out = message.minAmountOut === null ? undefined : message.minAmountOut;
@@ -3697,7 +3697,7 @@ export const MsgExitAllTokensExactLpt = {
   toAmino(message: MsgExitAllTokensExactLpt, useInterfaces: boolean = true): MsgExitAllTokensExactLptAmino {
     const obj: any = {};
     obj.creator = message.creator === "" ? undefined : message.creator;
-    obj.pool_id = message.poolId ? message.poolId.toString() : undefined;
+    obj.pool_id = message.poolId ? message.poolId.toString() : "0";
     obj.lpt_in = message.lptIn === "" ? undefined : message.lptIn;
     if (message.minAmountsOut) {
       obj.min_amounts_out = message.minAmountsOut.map(e => e ? Coin.toAmino(e, useInterfaces) : undefined);
@@ -3924,7 +3924,7 @@ export const CreateWeightedPoolToken = {
   toAmino(message: CreateWeightedPoolToken, useInterfaces: boolean = true): CreateWeightedPoolTokenAmino {
     const obj: any = {};
     obj.denom = message.denom === "" ? undefined : message.denom;
-    obj.normalized_weight = padDecimal(message.normalizedWeight) === "" ? undefined : padDecimal(message.normalizedWeight);
+    obj.normalized_weight = message.normalizedWeight === "" ? undefined : message.normalizedWeight;
     return obj;
   },
   fromAminoMsg(object: CreateWeightedPoolTokenAminoMsg): CreateWeightedPoolToken {
@@ -4105,9 +4105,9 @@ export const MsgCreateWeightedPool = {
     const obj: any = {};
     obj.creator = message.creator === "" ? undefined : message.creator;
     obj.name = message.name === "" ? undefined : message.name;
-    obj.swap_fee_ratio = padDecimal(message.swapFeeRatio) === "" ? undefined : padDecimal(message.swapFeeRatio);
-    obj.pause_window_duration_millis = message.pauseWindowDurationMillis ? message.pauseWindowDurationMillis.toString() : undefined;
-    obj.pause_buffer_duration_millis = message.pauseBufferDurationMillis ? message.pauseBufferDurationMillis.toString() : undefined;
+    obj.swap_fee_ratio = message.swapFeeRatio === "" ? undefined : message.swapFeeRatio;
+    obj.pause_window_duration_millis = message.pauseWindowDurationMillis ? message.pauseWindowDurationMillis.toString() : "0";
+    obj.pause_buffer_duration_millis = message.pauseBufferDurationMillis ? message.pauseBufferDurationMillis.toString() : "0";
     if (message.tokens) {
       obj.tokens = message.tokens.map(e => e ? CreateWeightedPoolToken.toAmino(e, useInterfaces) : undefined);
     } else {
@@ -4208,7 +4208,7 @@ export const MsgCreateWeightedPoolResponse = {
   },
   toAmino(message: MsgCreateWeightedPoolResponse, useInterfaces: boolean = true): MsgCreateWeightedPoolResponseAmino {
     const obj: any = {};
-    obj.pool_id = message.poolId ? message.poolId.toString() : undefined;
+    obj.pool_id = message.poolId !== BigInt(0) ? message.poolId.toString() : undefined;
     return obj;
   },
   fromAminoMsg(object: MsgCreateWeightedPoolResponseAminoMsg): MsgCreateWeightedPoolResponse {
@@ -4319,8 +4319,8 @@ export const MsgUpdateSwapFee = {
   toAmino(message: MsgUpdateSwapFee, useInterfaces: boolean = true): MsgUpdateSwapFeeAmino {
     const obj: any = {};
     obj.creator = message.creator === "" ? undefined : message.creator;
-    obj.pool_id = message.poolId ? message.poolId.toString() : undefined;
-    obj.swap_fee_ratio = padDecimal(message.swapFeeRatio) === "" ? undefined : padDecimal(message.swapFeeRatio);
+    obj.pool_id = message.poolId ? message.poolId.toString() : "0";
+    obj.swap_fee_ratio = message.swapFeeRatio === "" ? undefined : message.swapFeeRatio;
     return obj;
   },
   fromAminoMsg(object: MsgUpdateSwapFeeAminoMsg): MsgUpdateSwapFee {
@@ -4507,7 +4507,7 @@ export const MsgInitializePool = {
   toAmino(message: MsgInitializePool, useInterfaces: boolean = true): MsgInitializePoolAmino {
     const obj: any = {};
     obj.creator = message.creator === "" ? undefined : message.creator;
-    obj.pool_id = message.poolId ? message.poolId.toString() : undefined;
+    obj.pool_id = message.poolId ? message.poolId.toString() : "0";
     if (message.amountsIn) {
       obj.amounts_in = message.amountsIn.map(e => e ? Coin.toAmino(e, useInterfaces) : undefined);
     } else {
@@ -4781,14 +4781,14 @@ export const MsgUpdateWeights = {
   toAmino(message: MsgUpdateWeights, useInterfaces: boolean = true): MsgUpdateWeightsAmino {
     const obj: any = {};
     obj.creator = message.creator === "" ? undefined : message.creator;
-    obj.pool_id = message.poolId ? message.poolId.toString() : undefined;
+    obj.pool_id = message.poolId ? message.poolId.toString() : "0";
     if (message.tokenWeights) {
       obj.token_weights = message.tokenWeights.map(e => e ? TokenWeight.toAmino(e, useInterfaces) : undefined);
     } else {
       obj.token_weights = message.tokenWeights;
     }
-    obj.start_time_unix_millis = message.startTimeUnixMillis ? message.startTimeUnixMillis.toString() : undefined;
-    obj.end_time_unix_millis = message.endTimeUnixMillis ? message.endTimeUnixMillis.toString() : undefined;
+    obj.start_time_unix_millis = message.startTimeUnixMillis ? message.startTimeUnixMillis.toString() : "0";
+    obj.end_time_unix_millis = message.endTimeUnixMillis ? message.endTimeUnixMillis.toString() : "0";
     return obj;
   },
   fromAminoMsg(object: MsgUpdateWeightsAminoMsg): MsgUpdateWeights {
@@ -5005,7 +5005,7 @@ export const MsgBatchSwap = {
   toAmino(message: MsgBatchSwap, useInterfaces: boolean = true): MsgBatchSwapAmino {
     const obj: any = {};
     obj.creator = message.creator === "" ? undefined : message.creator;
-    obj.swap_type = message.swapType === 0 ? undefined : message.swapType;
+    obj.swap_type = message.swapType ?? 0;
     if (message.steps) {
       obj.steps = message.steps.map(e => e ? SwapStep.toAmino(e, useInterfaces) : undefined);
     } else {
@@ -5294,7 +5294,7 @@ export const MsgSetYammConfiguration = {
   toAmino(message: MsgSetYammConfiguration, useInterfaces: boolean = true): MsgSetYammConfigurationAmino {
     const obj: any = {};
     obj.creator = message.creator === "" ? undefined : message.creator;
-    obj.configuration = message.configuration ? YammConfiguration.toAmino(message.configuration, useInterfaces) : undefined;
+    obj.configuration = message.configuration ? YammConfiguration.toAmino(message.configuration, useInterfaces) : YammConfiguration.toAmino(YammConfiguration.fromPartial({}));
     return obj;
   },
   fromAminoMsg(object: MsgSetYammConfigurationAminoMsg): MsgSetYammConfiguration {
@@ -5466,7 +5466,7 @@ export const MsgWhitelistRoute = {
   toAmino(message: MsgWhitelistRoute, useInterfaces: boolean = true): MsgWhitelistRouteAmino {
     const obj: any = {};
     obj.authority = message.authority === "" ? undefined : message.authority;
-    obj.whitelisted_route = message.whitelistedRoute ? WhitelistedRoute.toAmino(message.whitelistedRoute, useInterfaces) : undefined;
+    obj.whitelisted_route = message.whitelistedRoute ? WhitelistedRoute.toAmino(message.whitelistedRoute, useInterfaces) : WhitelistedRoute.toAmino(WhitelistedRoute.fromPartial({}));
     return obj;
   },
   fromAminoMsg(object: MsgWhitelistRouteAminoMsg): MsgWhitelistRoute {
@@ -5666,7 +5666,7 @@ export const MsgSetWhitelistedRouteEnabled = {
     obj.authority = message.authority === "" ? undefined : message.authority;
     obj.token_in = message.tokenIn === "" ? undefined : message.tokenIn;
     obj.token_out = message.tokenOut === "" ? undefined : message.tokenOut;
-    obj.enabled = message.enabled === false ? undefined : message.enabled;
+    obj.enabled = message.enabled ?? false;
     return obj;
   },
   fromAminoMsg(object: MsgSetWhitelistedRouteEnabledAminoMsg): MsgSetWhitelistedRouteEnabled {
@@ -5955,16 +5955,16 @@ export const MsgSubmitOrder = {
   toAmino(message: MsgSubmitOrder, useInterfaces: boolean = true): MsgSubmitOrderAmino {
     const obj: any = {};
     obj.creator = message.creator === "" ? undefined : message.creator;
-    obj.pool_id = message.poolId ? message.poolId.toString() : undefined;
+    obj.pool_id = message.poolId ? message.poolId.toString() : "0";
     obj.token_in = message.tokenIn === "" ? undefined : message.tokenIn;
     obj.token_out = message.tokenOut === "" ? undefined : message.tokenOut;
-    obj.whitelisted_route = message.whitelistedRoute === false ? undefined : message.whitelistedRoute;
-    obj.allow_matching = message.allowMatching === false ? undefined : message.allowMatching;
+    obj.whitelisted_route = message.whitelistedRoute ?? false;
+    obj.allow_matching = message.allowMatching ?? false;
     obj.amount_per_step = message.amountPerStep === "" ? undefined : message.amountPerStep;
     obj.total_amount = message.totalAmount === "" ? undefined : message.totalAmount;
-    obj.millis_interval = message.millisInterval ? message.millisInterval.toString() : undefined;
-    obj.max_step_spot_price = padDecimal(message.maxStepSpotPrice) === "" ? undefined : padDecimal(message.maxStepSpotPrice);
-    obj.max_matching_spot_price = padDecimal(message.maxMatchingSpotPrice) === null ? undefined : padDecimal(message.maxMatchingSpotPrice);
+    obj.millis_interval = message.millisInterval ? message.millisInterval.toString() : "0";
+    obj.max_step_spot_price = message.maxStepSpotPrice === "" ? undefined : message.maxStepSpotPrice;
+    obj.max_matching_spot_price = message.maxMatchingSpotPrice === null ? undefined : message.maxMatchingSpotPrice;
     return obj;
   },
   fromAminoMsg(object: MsgSubmitOrderAminoMsg): MsgSubmitOrder {
@@ -6152,7 +6152,7 @@ export const MsgCancelOrder = {
   toAmino(message: MsgCancelOrder, useInterfaces: boolean = true): MsgCancelOrderAmino {
     const obj: any = {};
     obj.creator = message.creator === "" ? undefined : message.creator;
-    obj.id = message.id ? message.id.toString() : undefined;
+    obj.id = message.id ? message.id.toString() : "0";
     return obj;
   },
   fromAminoMsg(object: MsgCancelOrderAminoMsg): MsgCancelOrder {
@@ -6555,7 +6555,7 @@ export const MsgSetCircuitBreakers = {
   toAmino(message: MsgSetCircuitBreakers, useInterfaces: boolean = true): MsgSetCircuitBreakersAmino {
     const obj: any = {};
     obj.creator = message.creator === "" ? undefined : message.creator;
-    obj.pool_id = message.poolId ? message.poolId.toString() : undefined;
+    obj.pool_id = message.poolId ? message.poolId.toString() : "0";
     if (message.tokenCircuitBreakers) {
       obj.token_circuit_breakers = message.tokenCircuitBreakers.map(e => e ? TokenCircuitBreakerSettings.toAmino(e, useInterfaces) : undefined);
     } else {
@@ -6745,8 +6745,8 @@ export const MsgSetRecoveryMode = {
   toAmino(message: MsgSetRecoveryMode, useInterfaces: boolean = true): MsgSetRecoveryModeAmino {
     const obj: any = {};
     obj.authority = message.authority === "" ? undefined : message.authority;
-    obj.pool_id = message.poolId ? message.poolId.toString() : undefined;
-    obj.recovery_mode = message.recoveryMode === false ? undefined : message.recoveryMode;
+    obj.pool_id = message.poolId ? message.poolId.toString() : "0";
+    obj.recovery_mode = message.recoveryMode ?? false;
     return obj;
   },
   fromAminoMsg(object: MsgSetRecoveryModeAminoMsg): MsgSetRecoveryMode {
@@ -6946,7 +6946,7 @@ export const MsgRecoveryExit = {
   toAmino(message: MsgRecoveryExit, useInterfaces: boolean = true): MsgRecoveryExitAmino {
     const obj: any = {};
     obj.creator = message.creator === "" ? undefined : message.creator;
-    obj.pool_id = message.poolId ? message.poolId.toString() : undefined;
+    obj.pool_id = message.poolId ? message.poolId.toString() : "0";
     obj.lpt_in = message.lptIn === "" ? undefined : message.lptIn;
     if (message.minAmountsOut) {
       obj.min_amounts_out = message.minAmountsOut.map(e => e ? Coin.toAmino(e, useInterfaces) : undefined);
@@ -7173,8 +7173,8 @@ export const MsgSetPauseMode = {
   toAmino(message: MsgSetPauseMode, useInterfaces: boolean = true): MsgSetPauseModeAmino {
     const obj: any = {};
     obj.creator = message.creator === "" ? undefined : message.creator;
-    obj.pool_id = message.poolId ? message.poolId.toString() : undefined;
-    obj.pause_mode = message.pauseMode === false ? undefined : message.pauseMode;
+    obj.pool_id = message.poolId ? message.poolId.toString() : "0";
+    obj.pause_mode = message.pauseMode ?? false;
     return obj;
   },
   fromAminoMsg(object: MsgSetPauseModeAminoMsg): MsgSetPauseMode {
@@ -7346,7 +7346,7 @@ export const MsgSetVaultPauseMode = {
   toAmino(message: MsgSetVaultPauseMode, useInterfaces: boolean = true): MsgSetVaultPauseModeAmino {
     const obj: any = {};
     obj.authority = message.authority === "" ? undefined : message.authority;
-    obj.pause_mode = message.pauseMode === false ? undefined : message.pauseMode;
+    obj.pause_mode = message.pauseMode ?? false;
     return obj;
   },
   fromAminoMsg(object: MsgSetVaultPauseModeAminoMsg): MsgSetVaultPauseMode {
@@ -7518,7 +7518,7 @@ export const MsgCreateOraclePricePair = {
   toAmino(message: MsgCreateOraclePricePair, useInterfaces: boolean = true): MsgCreateOraclePricePairAmino {
     const obj: any = {};
     obj.authority = message.authority === "" ? undefined : message.authority;
-    obj.oracle_price_pair = message.oraclePricePair ? OraclePricePair.toAmino(message.oraclePricePair, useInterfaces) : undefined;
+    obj.oracle_price_pair = message.oraclePricePair ? OraclePricePair.toAmino(message.oraclePricePair, useInterfaces) : OraclePricePair.toAmino(OraclePricePair.fromPartial({}));
     return obj;
   },
   fromAminoMsg(object: MsgCreateOraclePricePairAminoMsg): MsgCreateOraclePricePair {
@@ -7690,7 +7690,7 @@ export const MsgUpdateOraclePricePair = {
   toAmino(message: MsgUpdateOraclePricePair, useInterfaces: boolean = true): MsgUpdateOraclePricePairAmino {
     const obj: any = {};
     obj.authority = message.authority === "" ? undefined : message.authority;
-    obj.oracle_price_pair = message.oraclePricePair ? OraclePricePair.toAmino(message.oraclePricePair, useInterfaces) : undefined;
+    obj.oracle_price_pair = message.oraclePricePair ? OraclePricePair.toAmino(message.oraclePricePair, useInterfaces) : OraclePricePair.toAmino(OraclePricePair.fromPartial({}));
     return obj;
   },
   fromAminoMsg(object: MsgUpdateOraclePricePairAminoMsg): MsgUpdateOraclePricePair {
@@ -8047,8 +8047,8 @@ export const MsgSetSwapProtocolFee = {
   toAmino(message: MsgSetSwapProtocolFee, useInterfaces: boolean = true): MsgSetSwapProtocolFeeAmino {
     const obj: any = {};
     obj.authority = message.authority === "" ? undefined : message.authority;
-    obj.pool_id = message.poolId ? message.poolId.toString() : undefined;
-    obj.swap_protocol_fee = padDecimal(message.swapProtocolFee) === null ? undefined : padDecimal(message.swapProtocolFee);
+    obj.pool_id = message.poolId ? message.poolId.toString() : "0";
+    obj.swap_protocol_fee = message.swapProtocolFee === null ? undefined : message.swapProtocolFee;
     return obj;
   },
   fromAminoMsg(object: MsgSetSwapProtocolFeeAminoMsg): MsgSetSwapProtocolFee {
@@ -8233,8 +8233,8 @@ export const MsgSetJoinExitProtocolFee = {
   toAmino(message: MsgSetJoinExitProtocolFee, useInterfaces: boolean = true): MsgSetJoinExitProtocolFeeAmino {
     const obj: any = {};
     obj.authority = message.authority === "" ? undefined : message.authority;
-    obj.pool_id = message.poolId ? message.poolId.toString() : undefined;
-    obj.join_exit_protocol_fee = padDecimal(message.joinExitProtocolFee) === null ? undefined : padDecimal(message.joinExitProtocolFee);
+    obj.pool_id = message.poolId ? message.poolId.toString() : "0";
+    obj.join_exit_protocol_fee = message.joinExitProtocolFee === null ? undefined : message.joinExitProtocolFee;
     return obj;
   },
   fromAminoMsg(object: MsgSetJoinExitProtocolFeeAminoMsg): MsgSetJoinExitProtocolFee {
@@ -8445,10 +8445,10 @@ export const MsgIntroduceYammLpToWeightedPool = {
   toAmino(message: MsgIntroduceYammLpToWeightedPool, useInterfaces: boolean = true): MsgIntroduceYammLpToWeightedPoolAmino {
     const obj: any = {};
     obj.creator = message.creator === "" ? undefined : message.creator;
-    obj.weighted_pool_id = message.weightedPoolId ? message.weightedPoolId.toString() : undefined;
-    obj.yamm_pool_id = message.yammPoolId ? message.yammPoolId.toString() : undefined;
-    obj.token_normalized_weight = padDecimal(message.tokenNormalizedWeight) === "" ? undefined : padDecimal(message.tokenNormalizedWeight);
-    obj.virtual_balance_interval_millis = message.virtualBalanceIntervalMillis ? message.virtualBalanceIntervalMillis.toString() : undefined;
+    obj.weighted_pool_id = message.weightedPoolId ? message.weightedPoolId.toString() : "0";
+    obj.yamm_pool_id = message.yammPoolId ? message.yammPoolId.toString() : "0";
+    obj.token_normalized_weight = message.tokenNormalizedWeight === "" ? undefined : message.tokenNormalizedWeight;
+    obj.virtual_balance_interval_millis = message.virtualBalanceIntervalMillis ? message.virtualBalanceIntervalMillis.toString() : "0";
     return obj;
   },
   fromAminoMsg(object: MsgIntroduceYammLpToWeightedPoolAminoMsg): MsgIntroduceYammLpToWeightedPool {
@@ -8672,11 +8672,11 @@ export const MsgIntroduceAssetBaseTokenToWeightedPool = {
   toAmino(message: MsgIntroduceAssetBaseTokenToWeightedPool, useInterfaces: boolean = true): MsgIntroduceAssetBaseTokenToWeightedPoolAmino {
     const obj: any = {};
     obj.creator = message.creator === "" ? undefined : message.creator;
-    obj.weighted_pool_id = message.weightedPoolId ? message.weightedPoolId.toString() : undefined;
+    obj.weighted_pool_id = message.weightedPoolId ? message.weightedPoolId.toString() : "0";
     obj.token_denom = message.tokenDenom === "" ? undefined : message.tokenDenom;
     obj.asset_id = message.assetId === "" ? undefined : message.assetId;
-    obj.token_normalized_weight = padDecimal(message.tokenNormalizedWeight) === "" ? undefined : padDecimal(message.tokenNormalizedWeight);
-    obj.virtual_balance_interval_millis = message.virtualBalanceIntervalMillis ? message.virtualBalanceIntervalMillis.toString() : undefined;
+    obj.token_normalized_weight = message.tokenNormalizedWeight === "" ? undefined : message.tokenNormalizedWeight;
+    obj.virtual_balance_interval_millis = message.virtualBalanceIntervalMillis ? message.virtualBalanceIntervalMillis.toString() : "0";
     return obj;
   },
   fromAminoMsg(object: MsgIntroduceAssetBaseTokenToWeightedPoolAminoMsg): MsgIntroduceAssetBaseTokenToWeightedPool {
@@ -8862,7 +8862,7 @@ export const MsgCancelPendingTokenIntroduction = {
     const obj: any = {};
     obj.creator = message.creator === "" ? undefined : message.creator;
     obj.asset_id = message.assetId === "" ? undefined : message.assetId;
-    obj.target_pool_id = message.targetPoolId ? message.targetPoolId.toString() : undefined;
+    obj.target_pool_id = message.targetPoolId ? message.targetPoolId.toString() : "0";
     return obj;
   },
   fromAminoMsg(object: MsgCancelPendingTokenIntroductionAminoMsg): MsgCancelPendingTokenIntroduction {
@@ -9060,9 +9060,9 @@ export const MsgRemoveTokenFromWeightedPool = {
   toAmino(message: MsgRemoveTokenFromWeightedPool, useInterfaces: boolean = true): MsgRemoveTokenFromWeightedPoolAmino {
     const obj: any = {};
     obj.creator = message.creator === "" ? undefined : message.creator;
-    obj.pool_id = message.poolId ? message.poolId.toString() : undefined;
+    obj.pool_id = message.poolId ? message.poolId.toString() : "0";
     obj.token_denom = message.tokenDenom === "" ? undefined : message.tokenDenom;
-    obj.virtual_balance_interval_millis = message.virtualBalanceIntervalMillis ? message.virtualBalanceIntervalMillis.toString() : undefined;
+    obj.virtual_balance_interval_millis = message.virtualBalanceIntervalMillis ? message.virtualBalanceIntervalMillis.toString() : "0";
     return obj;
   },
   fromAminoMsg(object: MsgRemoveTokenFromWeightedPoolAminoMsg): MsgRemoveTokenFromWeightedPool {
@@ -9649,7 +9649,7 @@ export const MsgSetInitializationAllowList = {
   toAmino(message: MsgSetInitializationAllowList, useInterfaces: boolean = true): MsgSetInitializationAllowListAmino {
     const obj: any = {};
     obj.creator = message.creator === "" ? undefined : message.creator;
-    obj.pool_id = message.poolId ? message.poolId.toString() : undefined;
+    obj.pool_id = message.poolId ? message.poolId.toString() : "0";
     if (message.initializationAllowList) {
       obj.initialization_allow_list = message.initializationAllowList.map(e => e);
     } else {
@@ -9841,7 +9841,7 @@ export const MsgSetPoolAdmins = {
   toAmino(message: MsgSetPoolAdmins, useInterfaces: boolean = true): MsgSetPoolAdminsAmino {
     const obj: any = {};
     obj.creator = message.creator === "" ? undefined : message.creator;
-    obj.pool_id = message.poolId ? message.poolId.toString() : undefined;
+    obj.pool_id = message.poolId ? message.poolId.toString() : "0";
     if (message.admins) {
       obj.admins = message.admins.map(e => e);
     } else {
@@ -10033,7 +10033,7 @@ export const MsgSetPauseAllowList = {
   toAmino(message: MsgSetPauseAllowList, useInterfaces: boolean = true): MsgSetPauseAllowListAmino {
     const obj: any = {};
     obj.creator = message.creator === "" ? undefined : message.creator;
-    obj.pool_id = message.poolId ? message.poolId.toString() : undefined;
+    obj.pool_id = message.poolId ? message.poolId.toString() : "0";
     if (message.pauseAllowList) {
       obj.pause_allow_list = message.pauseAllowList.map(e => e);
     } else {
@@ -10223,8 +10223,8 @@ export const MsgSetPauseWindow = {
   toAmino(message: MsgSetPauseWindow, useInterfaces: boolean = true): MsgSetPauseWindowAmino {
     const obj: any = {};
     obj.authority = message.authority === "" ? undefined : message.authority;
-    obj.pool_id = message.poolId ? message.poolId.toString() : undefined;
-    obj.pause_window = message.pauseWindow ? PoolPauseWindow.toAmino(message.pauseWindow, useInterfaces) : undefined;
+    obj.pool_id = message.poolId ? message.poolId.toString() : "0";
+    obj.pause_window = message.pauseWindow ? PoolPauseWindow.toAmino(message.pauseWindow, useInterfaces) : PoolPauseWindow.toAmino(PoolPauseWindow.fromPartial({}));
     return obj;
   },
   fromAminoMsg(object: MsgSetPauseWindowAminoMsg): MsgSetPauseWindow {

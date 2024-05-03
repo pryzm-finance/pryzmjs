@@ -146,9 +146,9 @@ export const VoteInterval = {
   },
   toAmino(message: VoteInterval, useInterfaces: boolean = true): VoteIntervalAmino {
     const obj: any = {};
-    obj.id = message.id ? message.id.toString() : undefined;
-    obj.vote_period = message.votePeriod ? message.votePeriod.toString() : undefined;
-    obj.close_block_height = message.closeBlockHeight ? message.closeBlockHeight.toString() : undefined;
+    obj.id = message.id !== BigInt(0) ? message.id.toString() : undefined;
+    obj.vote_period = message.votePeriod !== BigInt(0) ? message.votePeriod.toString() : undefined;
+    obj.close_block_height = message.closeBlockHeight !== BigInt(0) ? message.closeBlockHeight.toString() : undefined;
     obj.close_block_time = message.closeBlockTime ? Timestamp.toAmino(message.closeBlockTime, useInterfaces) : undefined;
     obj.slash_window_close_block_height = message.slashWindowCloseBlockHeight === null ? undefined : message.slashWindowCloseBlockHeight;
     return obj;

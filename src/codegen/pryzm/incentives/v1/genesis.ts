@@ -174,7 +174,7 @@ export const GenesisState = {
     } else {
       obj.unbonding_list = message.unbondingList;
     }
-    obj.unbonding_count = message.unbondingCount ? message.unbondingCount.toString() : undefined;
+    obj.unbonding_count = message.unbondingCount !== BigInt(0) ? message.unbondingCount.toString() : undefined;
     return obj;
   },
   fromAminoMsg(object: GenesisStateAminoMsg): GenesisState {

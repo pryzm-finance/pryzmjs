@@ -2,7 +2,7 @@ import { PoolType, poolTypeFromJSON, poolTypeToJSON } from "../../pryzm/amm/v1/p
 import { PoolApr, PoolAprAmino, PoolAprSDKType } from "./pool_apr";
 import { PoolMetrics, PoolMetricsAmino, PoolMetricsSDKType } from "./pool";
 import { PoolToken, PoolTokenAmino, PoolTokenSDKType } from "./pool_token";
-import { isSet, padDecimal } from "../../helpers";
+import { isSet } from "../../helpers";
 import { BinaryReader, BinaryWriter } from "../../binary";
 import { Decimal } from "@cosmjs/math";
 import { GlobalDecoderRegistry } from "../../registry";
@@ -232,13 +232,13 @@ export const ExtendedPool = {
   },
   toAmino(message: ExtendedPool, useInterfaces: boolean = true): ExtendedPoolAmino {
     const obj: any = {};
-    obj.id = message.id ? message.id.toString() : undefined;
+    obj.id = message.id !== BigInt(0) ? message.id.toString() : undefined;
     obj.name = message.name === "" ? undefined : message.name;
     obj.pool_type = message.poolType === 0 ? undefined : message.poolType;
     obj.lp_denom = message.lpDenom === "" ? undefined : message.lpDenom;
     obj.lp_supply = message.lpSupply === "" ? undefined : message.lpSupply;
-    obj.lp_price = padDecimal(message.lpPrice) === null ? undefined : padDecimal(message.lpPrice);
-    obj.total_liquidity = padDecimal(message.totalLiquidity) === null ? undefined : padDecimal(message.totalLiquidity);
+    obj.lp_price = message.lpPrice === null ? undefined : message.lpPrice;
+    obj.total_liquidity = message.totalLiquidity === null ? undefined : message.totalLiquidity;
     obj.apr = message.apr ? PoolApr.toAmino(message.apr, useInterfaces) : undefined;
     obj.metrics = message.metrics ? PoolMetrics.toAmino(message.metrics, useInterfaces) : undefined;
     if (message.tokens) {

@@ -424,8 +424,8 @@ export const PeriodicAllowance = {
   },
   toAmino(message: PeriodicAllowance, useInterfaces: boolean = true): PeriodicAllowanceAmino {
     const obj: any = {};
-    obj.basic = message.basic ? BasicAllowance.toAmino(message.basic, useInterfaces) : undefined;
-    obj.period = message.period ? Duration.toAmino(message.period, useInterfaces) : undefined;
+    obj.basic = message.basic ? BasicAllowance.toAmino(message.basic, useInterfaces) : BasicAllowance.toAmino(BasicAllowance.fromPartial({}));
+    obj.period = message.period ? Duration.toAmino(message.period, useInterfaces) : Duration.toAmino(Duration.fromPartial({}));
     if (message.periodSpendLimit) {
       obj.period_spend_limit = message.periodSpendLimit.map(e => e ? Coin.toAmino(e, useInterfaces) : undefined);
     } else {
@@ -436,7 +436,7 @@ export const PeriodicAllowance = {
     } else {
       obj.period_can_spend = message.periodCanSpend;
     }
-    obj.period_reset = message.periodReset ? Timestamp.toAmino(message.periodReset, useInterfaces) : undefined;
+    obj.period_reset = message.periodReset ? Timestamp.toAmino(message.periodReset, useInterfaces) : Timestamp.toAmino(Timestamp.fromPartial({}));
     return obj;
   },
   fromAminoMsg(object: PeriodicAllowanceAminoMsg): PeriodicAllowance {

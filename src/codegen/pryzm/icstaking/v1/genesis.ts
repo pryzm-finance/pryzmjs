@@ -338,7 +338,7 @@ export const GenesisState = {
     } else {
       obj.loop_back_packet_list = message.loopBackPacketList;
     }
-    obj.loop_back_packet_last_id = message.loopBackPacketLastId ? message.loopBackPacketLastId.toString() : undefined;
+    obj.loop_back_packet_last_id = message.loopBackPacketLastId !== BigInt(0) ? message.loopBackPacketLastId.toString() : undefined;
     return obj;
   },
   fromAminoMsg(object: GenesisStateAminoMsg): GenesisState {

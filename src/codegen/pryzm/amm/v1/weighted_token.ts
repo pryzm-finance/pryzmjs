@@ -1,6 +1,6 @@
 import { WeightUpdateTiming, WeightUpdateTimingAmino, WeightUpdateTimingSDKType } from "./weight_update_timing";
 import { BinaryReader, BinaryWriter } from "../../../binary";
-import { isSet, padDecimal } from "../../../helpers";
+import { isSet } from "../../../helpers";
 import { GlobalDecoderRegistry } from "../../../registry";
 import { Decimal } from "@cosmjs/math";
 export interface WeightedPoolProperties {
@@ -143,7 +143,7 @@ export const WeightedPoolProperties = {
   },
   toAmino(message: WeightedPoolProperties, useInterfaces: boolean = true): WeightedPoolPropertiesAmino {
     const obj: any = {};
-    obj.pool_id = message.poolId ? message.poolId.toString() : undefined;
+    obj.pool_id = message.poolId !== BigInt(0) ? message.poolId.toString() : undefined;
     obj.weight_update_timing = message.weightUpdateTiming ? WeightUpdateTiming.toAmino(message.weightUpdateTiming, useInterfaces) : undefined;
     if (message.tokenList) {
       obj.token_list = message.tokenList.map(e => e ? WeightedToken.toAmino(e, useInterfaces) : undefined);
@@ -271,10 +271,10 @@ export const WeightedToken = {
   },
   toAmino(message: WeightedToken, useInterfaces: boolean = true): WeightedTokenAmino {
     const obj: any = {};
-    obj.pool_id = message.poolId ? message.poolId.toString() : undefined;
+    obj.pool_id = message.poolId !== BigInt(0) ? message.poolId.toString() : undefined;
     obj.denom = message.denom === "" ? undefined : message.denom;
-    obj.normalized_start_weight = padDecimal(message.normalizedStartWeight) === "" ? undefined : padDecimal(message.normalizedStartWeight);
-    obj.normalized_end_weight = padDecimal(message.normalizedEndWeight) === "" ? undefined : padDecimal(message.normalizedEndWeight);
+    obj.normalized_start_weight = message.normalizedStartWeight === "" ? undefined : message.normalizedStartWeight;
+    obj.normalized_end_weight = message.normalizedEndWeight === "" ? undefined : message.normalizedEndWeight;
     return obj;
   },
   fromAminoMsg(object: WeightedTokenAminoMsg): WeightedToken {

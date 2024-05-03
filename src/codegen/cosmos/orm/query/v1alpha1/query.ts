@@ -465,7 +465,7 @@ export const GetResponse = {
   },
   fromJSON(object: any): GetResponse {
     return {
-      result: isSet(object.result) ? Any.fromJSONAsAny(object.result) : undefined
+      result: isSet(object.result) ? Any.fromJSON(object.result) : undefined
     };
   },
   toJSON(message: GetResponse): unknown {
@@ -475,7 +475,7 @@ export const GetResponse = {
   },
   fromPartial(object: Partial<GetResponse>): GetResponse {
     const message = createBaseGetResponse();
-    message.result = object.result !== undefined && object.result !== null ? Any.fromPartialAsAny(object.result) : undefined;
+    message.result = object.result !== undefined && object.result !== null ? Any.fromPartial(object.result) : undefined;
     return message;
   },
   fromAmino(object: GetResponseAmino): GetResponse {
@@ -924,7 +924,7 @@ export const ListResponse = {
   },
   fromJSON(object: any): ListResponse {
     return {
-      results: Array.isArray(object?.results) ? object.results.map((e: any) => Any.fromJSONAsAny(e)) : [],
+      results: Array.isArray(object?.results) ? object.results.map((e: any) => Any.fromJSON(e)) : [],
       pagination: isSet(object.pagination) ? PageResponse.fromJSON(object.pagination) : undefined
     };
   },
@@ -940,7 +940,7 @@ export const ListResponse = {
   },
   fromPartial(object: Partial<ListResponse>): ListResponse {
     const message = createBaseListResponse();
-    message.results = object.results?.map(e => Any.fromPartialAsAny(e)) || [];
+    message.results = object.results?.map(e => Any.fromPartial(e)) || [];
     message.pagination = object.pagination !== undefined && object.pagination !== null ? PageResponse.fromPartial(object.pagination) : undefined;
     return message;
   },
@@ -1145,8 +1145,8 @@ export const IndexValue = {
   },
   toAmino(message: IndexValue, useInterfaces: boolean = true): IndexValueAmino {
     const obj: any = {};
-    obj.uint = message.uint ? message.uint.toString() : undefined;
-    obj.int = message.int ? message.int.toString() : undefined;
+    obj.uint = message.uint !== BigInt(0) ? message.uint.toString() : undefined;
+    obj.int = message.int !== BigInt(0) ? message.int.toString() : undefined;
     obj.str = message.str === null ? undefined : message.str;
     obj.bytes = message.bytes ? base64FromBytes(message.bytes) : undefined;
     obj.enum = message.enum === null ? undefined : message.enum;

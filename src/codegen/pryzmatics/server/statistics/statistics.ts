@@ -4,7 +4,7 @@ import { TVL, TVLAmino, TVLSDKType } from "../../statistics/tvl";
 import { BinaryReader, BinaryWriter } from "../../../binary";
 import { GlobalDecoderRegistry } from "../../../registry";
 import { Decimal } from "@cosmjs/math";
-import { isSet, padDecimal } from "../../../helpers";
+import { isSet } from "../../../helpers";
 export interface QueryStatisticsRequest {}
 export interface QueryStatisticsRequestProtoMsg {
   typeUrl: "/pryzmatics.server.statistics.QueryStatisticsRequest";
@@ -346,16 +346,16 @@ export const QueryStatisticsResponse = {
     } else {
       obj.treasury_balances = message.treasuryBalances;
     }
-    obj.annualised_treasury = padDecimal(message.annualisedTreasury) === "" ? undefined : padDecimal(message.annualisedTreasury);
+    obj.annualised_treasury = message.annualisedTreasury === "" ? undefined : message.annualisedTreasury;
     obj.market_cap = message.marketCap ? MarketCap.toAmino(message.marketCap, useInterfaces) : undefined;
     obj.tvl = message.tvl ? TVL.toAmino(message.tvl, useInterfaces) : undefined;
-    obj.total_tx_count = message.totalTxCount ? message.totalTxCount.toString() : undefined;
-    obj.total_trade_volume = padDecimal(message.totalTradeVolume) === "" ? undefined : padDecimal(message.totalTradeVolume);
-    obj.liquidity = padDecimal(message.liquidity) === "" ? undefined : padDecimal(message.liquidity);
-    obj.wallets_count = message.walletsCount ? message.walletsCount.toString() : undefined;
-    obj.delegators_count = message.delegatorsCount ? message.delegatorsCount.toString() : undefined;
-    obj.staking_delegators_count = message.stakingDelegatorsCount ? message.stakingDelegatorsCount.toString() : undefined;
-    obj.alliance_delegators_count = message.allianceDelegatorsCount ? message.allianceDelegatorsCount.toString() : undefined;
+    obj.total_tx_count = message.totalTxCount !== BigInt(0) ? message.totalTxCount.toString() : undefined;
+    obj.total_trade_volume = message.totalTradeVolume === "" ? undefined : message.totalTradeVolume;
+    obj.liquidity = message.liquidity === "" ? undefined : message.liquidity;
+    obj.wallets_count = message.walletsCount !== BigInt(0) ? message.walletsCount.toString() : undefined;
+    obj.delegators_count = message.delegatorsCount !== BigInt(0) ? message.delegatorsCount.toString() : undefined;
+    obj.staking_delegators_count = message.stakingDelegatorsCount !== BigInt(0) ? message.stakingDelegatorsCount.toString() : undefined;
+    obj.alliance_delegators_count = message.allianceDelegatorsCount !== BigInt(0) ? message.allianceDelegatorsCount.toString() : undefined;
     obj.error = message.error === "" ? undefined : message.error;
     return obj;
   },

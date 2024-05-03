@@ -1,6 +1,6 @@
 import { TokenType, tokenTypeFromJSON, tokenTypeToJSON } from "./token";
 import { PoolType, poolTypeFromJSON, poolTypeToJSON } from "../../pryzm/amm/v1/pool";
-import { isSet, padDecimal } from "../../helpers";
+import { isSet } from "../../helpers";
 import { BinaryReader, BinaryWriter } from "../../binary";
 import { Decimal } from "@cosmjs/math";
 import { GlobalDecoderRegistry } from "../../registry";
@@ -214,12 +214,12 @@ export const PoolToken = {
     const obj: any = {};
     obj.denom = message.denom === "" ? undefined : message.denom;
     obj.type = message.type === 0 ? undefined : message.type;
-    obj.pool_id = message.poolId ? message.poolId.toString() : undefined;
+    obj.pool_id = message.poolId !== BigInt(0) ? message.poolId.toString() : undefined;
     obj.pool_type = message.poolType === 0 ? undefined : message.poolType;
     obj.pool_lp_denom = message.poolLpDenom === "" ? undefined : message.poolLpDenom;
     obj.balance = message.balance === "" ? undefined : message.balance;
-    obj.weight = padDecimal(message.weight) === "" ? undefined : padDecimal(message.weight);
-    obj.price_lp_terms = padDecimal(message.priceLpTerms) === null ? undefined : padDecimal(message.priceLpTerms);
+    obj.weight = message.weight === "" ? undefined : message.weight;
+    obj.price_lp_terms = message.priceLpTerms === null ? undefined : message.priceLpTerms;
     obj.virtual = message.virtual === false ? undefined : message.virtual;
     return obj;
   },

@@ -85,7 +85,7 @@ export const Params = {
   },
   toAmino(message: Params, useInterfaces: boolean = true): ParamsAmino {
     const obj: any = {};
-    obj.unbonding_period = message.unbondingPeriod ? Duration.toAmino(message.unbondingPeriod, useInterfaces) : undefined;
+    obj.unbonding_period = message.unbondingPeriod ? Duration.toAmino(message.unbondingPeriod, useInterfaces) : Duration.toAmino(Duration.fromPartial({}));
     return obj;
   },
   fromAminoMsg(object: ParamsAminoMsg): Params {

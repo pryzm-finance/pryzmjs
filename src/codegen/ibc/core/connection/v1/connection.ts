@@ -475,7 +475,7 @@ export const ConnectionEnd = {
     }
     obj.state = message.state === 0 ? undefined : message.state;
     obj.counterparty = message.counterparty ? Counterparty.toAmino(message.counterparty, useInterfaces) : undefined;
-    obj.delay_period = message.delayPeriod ? message.delayPeriod.toString() : undefined;
+    obj.delay_period = message.delayPeriod !== BigInt(0) ? message.delayPeriod.toString() : undefined;
     return obj;
   },
   fromAminoMsg(object: ConnectionEndAminoMsg): ConnectionEnd {
@@ -642,7 +642,7 @@ export const IdentifiedConnection = {
     }
     obj.state = message.state === 0 ? undefined : message.state;
     obj.counterparty = message.counterparty ? Counterparty.toAmino(message.counterparty, useInterfaces) : undefined;
-    obj.delay_period = message.delayPeriod ? message.delayPeriod.toString() : undefined;
+    obj.delay_period = message.delayPeriod !== BigInt(0) ? message.delayPeriod.toString() : undefined;
     return obj;
   },
   fromAminoMsg(object: IdentifiedConnectionAminoMsg): IdentifiedConnection {
@@ -1171,7 +1171,7 @@ export const Params = {
   },
   toAmino(message: Params, useInterfaces: boolean = true): ParamsAmino {
     const obj: any = {};
-    obj.max_expected_time_per_block = message.maxExpectedTimePerBlock ? message.maxExpectedTimePerBlock.toString() : undefined;
+    obj.max_expected_time_per_block = message.maxExpectedTimePerBlock !== BigInt(0) ? message.maxExpectedTimePerBlock.toString() : undefined;
     return obj;
   },
   fromAminoMsg(object: ParamsAminoMsg): Params {

@@ -2,7 +2,7 @@ import { Duration, DurationAmino, DurationSDKType } from "../../../google/protob
 import { Timestamp, TimestampSDKType } from "../../../google/protobuf/timestamp";
 import { BinaryReader, BinaryWriter } from "../../../binary";
 import { Decimal } from "@cosmjs/math";
-import { isSet, padDecimal, fromJsonTimestamp, fromTimestamp } from "../../../helpers";
+import { isSet, fromJsonTimestamp, fromTimestamp } from "../../../helpers";
 import { GlobalDecoderRegistry } from "../../../registry";
 /** FeeType enumerates the valid types for feeType. */
 export enum ActionType {
@@ -269,11 +269,11 @@ export const ActionFlowTradeSettings = {
   },
   toAmino(message: ActionFlowTradeSettings, useInterfaces: boolean = true): ActionFlowTradeSettingsAmino {
     const obj: any = {};
-    obj.start_delay = message.startDelay ? Duration.toAmino(message.startDelay, useInterfaces) : undefined;
-    obj.duration = message.duration ? Duration.toAmino(message.duration, useInterfaces) : undefined;
-    obj.dist_interval = message.distInterval ? Duration.toAmino(message.distInterval, useInterfaces) : undefined;
-    obj.limit_price = padDecimal(message.limitPrice) === "" ? undefined : padDecimal(message.limitPrice);
-    obj.exit_window_duration = message.exitWindowDuration ? Duration.toAmino(message.exitWindowDuration, useInterfaces) : undefined;
+    obj.start_delay = message.startDelay ? Duration.toAmino(message.startDelay, useInterfaces) : Duration.toAmino(Duration.fromPartial({}));
+    obj.duration = message.duration ? Duration.toAmino(message.duration, useInterfaces) : Duration.toAmino(Duration.fromPartial({}));
+    obj.dist_interval = message.distInterval ? Duration.toAmino(message.distInterval, useInterfaces) : Duration.toAmino(Duration.fromPartial({}));
+    obj.limit_price = message.limitPrice === "" ? undefined : message.limitPrice;
+    obj.exit_window_duration = message.exitWindowDuration ? Duration.toAmino(message.exitWindowDuration, useInterfaces) : Duration.toAmino(Duration.fromPartial({}));
     return obj;
   },
   fromAminoMsg(object: ActionFlowTradeSettingsAminoMsg): ActionFlowTradeSettings {
@@ -423,7 +423,7 @@ export const Action = {
   },
   toAmino(message: Action, useInterfaces: boolean = true): ActionAmino {
     const obj: any = {};
-    obj.action_type = message.actionType === 0 ? undefined : message.actionType;
+    obj.action_type = message.actionType ?? 0;
     obj.occurrence = message.occurrence ? Timestamp.toAmino(message.occurrence, useInterfaces) : undefined;
     obj.expiration = message.expiration ? Timestamp.toAmino(message.expiration, useInterfaces) : undefined;
     obj.period = message.period ? Duration.toAmino(message.period, useInterfaces) : undefined;

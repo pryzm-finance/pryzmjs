@@ -435,7 +435,7 @@ export const MsgConnectionOpenInit = {
     obj.client_id = message.clientId === "" ? undefined : message.clientId;
     obj.counterparty = message.counterparty ? Counterparty.toAmino(message.counterparty, useInterfaces) : undefined;
     obj.version = message.version ? Version.toAmino(message.version, useInterfaces) : undefined;
-    obj.delay_period = message.delayPeriod ? message.delayPeriod.toString() : undefined;
+    obj.delay_period = message.delayPeriod !== BigInt(0) ? message.delayPeriod.toString() : undefined;
     obj.signer = message.signer === "" ? undefined : message.signer;
     return obj;
   },
@@ -666,7 +666,7 @@ export const MsgConnectionOpenTry = {
     return {
       clientId: isSet(object.clientId) ? String(object.clientId) : "",
       previousConnectionId: isSet(object.previousConnectionId) ? String(object.previousConnectionId) : "",
-      clientState: isSet(object.clientState) ? Any.fromJSONAsAny(object.clientState) : undefined,
+      clientState: isSet(object.clientState) ? Any.fromJSON(object.clientState) : undefined,
       counterparty: isSet(object.counterparty) ? Counterparty.fromJSON(object.counterparty) : undefined,
       delayPeriod: isSet(object.delayPeriod) ? BigInt(object.delayPeriod.toString()) : BigInt(0),
       counterpartyVersions: Array.isArray(object?.counterpartyVersions) ? object.counterpartyVersions.map((e: any) => Version.fromJSON(e)) : [],
@@ -704,7 +704,7 @@ export const MsgConnectionOpenTry = {
     const message = createBaseMsgConnectionOpenTry();
     message.clientId = object.clientId ?? "";
     message.previousConnectionId = object.previousConnectionId ?? "";
-    message.clientState = object.clientState !== undefined && object.clientState !== null ? Any.fromPartialAsAny(object.clientState) : undefined;
+    message.clientState = object.clientState !== undefined && object.clientState !== null ? Any.fromPartial(object.clientState) : undefined;
     message.counterparty = object.counterparty !== undefined && object.counterparty !== null ? Counterparty.fromPartial(object.counterparty) : undefined;
     message.delayPeriod = object.delayPeriod !== undefined && object.delayPeriod !== null ? BigInt(object.delayPeriod.toString()) : BigInt(0);
     message.counterpartyVersions = object.counterpartyVersions?.map(e => Version.fromPartial(e)) || [];
@@ -764,7 +764,7 @@ export const MsgConnectionOpenTry = {
     obj.previous_connection_id = message.previousConnectionId === "" ? undefined : message.previousConnectionId;
     obj.client_state = message.clientState ? Any.toAmino(message.clientState, useInterfaces) : undefined;
     obj.counterparty = message.counterparty ? Counterparty.toAmino(message.counterparty, useInterfaces) : undefined;
-    obj.delay_period = message.delayPeriod ? message.delayPeriod.toString() : undefined;
+    obj.delay_period = message.delayPeriod !== BigInt(0) ? message.delayPeriod.toString() : undefined;
     if (message.counterpartyVersions) {
       obj.counterparty_versions = message.counterpartyVersions.map(e => e ? Version.toAmino(e, useInterfaces) : undefined);
     } else {
@@ -993,7 +993,7 @@ export const MsgConnectionOpenAck = {
       connectionId: isSet(object.connectionId) ? String(object.connectionId) : "",
       counterpartyConnectionId: isSet(object.counterpartyConnectionId) ? String(object.counterpartyConnectionId) : "",
       version: isSet(object.version) ? Version.fromJSON(object.version) : undefined,
-      clientState: isSet(object.clientState) ? Any.fromJSONAsAny(object.clientState) : undefined,
+      clientState: isSet(object.clientState) ? Any.fromJSON(object.clientState) : undefined,
       proofHeight: isSet(object.proofHeight) ? Height.fromJSON(object.proofHeight) : undefined,
       proofTry: isSet(object.proofTry) ? bytesFromBase64(object.proofTry) : new Uint8Array(),
       proofClient: isSet(object.proofClient) ? bytesFromBase64(object.proofClient) : new Uint8Array(),
@@ -1023,7 +1023,7 @@ export const MsgConnectionOpenAck = {
     message.connectionId = object.connectionId ?? "";
     message.counterpartyConnectionId = object.counterpartyConnectionId ?? "";
     message.version = object.version !== undefined && object.version !== null ? Version.fromPartial(object.version) : undefined;
-    message.clientState = object.clientState !== undefined && object.clientState !== null ? Any.fromPartialAsAny(object.clientState) : undefined;
+    message.clientState = object.clientState !== undefined && object.clientState !== null ? Any.fromPartial(object.clientState) : undefined;
     message.proofHeight = object.proofHeight !== undefined && object.proofHeight !== null ? Height.fromPartial(object.proofHeight) : undefined;
     message.proofTry = object.proofTry ?? new Uint8Array();
     message.proofClient = object.proofClient ?? new Uint8Array();

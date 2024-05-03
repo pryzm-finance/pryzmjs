@@ -680,7 +680,7 @@ export const PacketId = {
     const obj: any = {};
     obj.port_id = message.portId === "" ? undefined : message.portId;
     obj.channel_id = message.channelId === "" ? undefined : message.channelId;
-    obj.sequence = message.sequence ? message.sequence.toString() : undefined;
+    obj.sequence = message.sequence !== BigInt(0) ? message.sequence.toString() : undefined;
     return obj;
   },
   fromAminoMsg(object: PacketIdAminoMsg): PacketId {
@@ -2015,7 +2015,7 @@ export const ChannelSweep = {
       obj.epochs = message.epochs;
     }
     obj.amount = message.amount === "" ? undefined : message.amount;
-    obj.timeout = message.timeout ? message.timeout.toString() : undefined;
+    obj.timeout = message.timeout !== BigInt(0) ? message.timeout.toString() : undefined;
     return obj;
   },
   fromAminoMsg(object: ChannelSweepAminoMsg): ChannelSweep {

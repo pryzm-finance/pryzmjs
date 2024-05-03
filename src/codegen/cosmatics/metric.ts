@@ -268,7 +268,7 @@ export const Metric = {
     obj.id = message.id === "" ? undefined : message.id;
     obj.type = message.type === 0 ? undefined : message.type;
     obj.block_time = message.blockTime ? Timestamp.toAmino(message.blockTime, useInterfaces) : undefined;
-    obj.block_height = message.blockHeight ? message.blockHeight.toString() : undefined;
+    obj.block_height = message.blockHeight !== BigInt(0) ? message.blockHeight.toString() : undefined;
     obj.time = message.time ? Timestamp.toAmino(message.time, useInterfaces) : undefined;
     obj.value = message.value === 0 ? undefined : message.value;
     return obj;

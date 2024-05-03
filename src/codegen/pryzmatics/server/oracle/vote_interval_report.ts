@@ -215,7 +215,7 @@ export const QueryVoteIntervalReportRequest = {
   },
   toAmino(message: QueryVoteIntervalReportRequest, useInterfaces: boolean = true): QueryVoteIntervalReportRequestAmino {
     const obj: any = {};
-    obj.vote_interval_close_block_height = message.voteIntervalCloseBlockHeight ? message.voteIntervalCloseBlockHeight.toString() : undefined;
+    obj.vote_interval_close_block_height = message.voteIntervalCloseBlockHeight !== BigInt(0) ? message.voteIntervalCloseBlockHeight.toString() : undefined;
     obj.validators = message.validators === "" ? undefined : message.validators;
     obj.namespace = message.namespace === "" ? undefined : message.namespace;
     obj.module = message.module === 0 ? undefined : message.module;

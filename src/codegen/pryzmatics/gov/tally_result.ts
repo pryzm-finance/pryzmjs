@@ -1,7 +1,7 @@
 import { Timestamp, TimestampSDKType } from "../../google/protobuf/timestamp";
 import { BinaryReader, BinaryWriter } from "../../binary";
 import { Decimal } from "@cosmjs/math";
-import { isSet, fromJsonTimestamp, fromTimestamp, padDecimal } from "../../helpers";
+import { isSet, fromJsonTimestamp, fromTimestamp } from "../../helpers";
 import { GlobalDecoderRegistry } from "../../registry";
 export interface TallyResult {
   yesCount: string;
@@ -167,7 +167,7 @@ export const TallyResult = {
     obj.abstain_count = message.abstainCount === "" ? undefined : message.abstainCount;
     obj.no_count = message.noCount === "" ? undefined : message.noCount;
     obj.no_with_veto_count = message.noWithVetoCount === "" ? undefined : message.noWithVetoCount;
-    obj.voting_power_percentage = padDecimal(message.votingPowerPercentage) === "" ? undefined : padDecimal(message.votingPowerPercentage);
+    obj.voting_power_percentage = message.votingPowerPercentage === "" ? undefined : message.votingPowerPercentage;
     obj.updated_time = message.updatedTime ? Timestamp.toAmino(message.updatedTime, useInterfaces) : undefined;
     return obj;
   },

@@ -4,7 +4,7 @@ import { HostChainAmino as HostChain1Amino } from "../../pryzm/icstaking/v1/host
 import { HostChainSDKType as HostChain1SDKType } from "../../pryzm/icstaking/v1/host_chain";
 import { BinaryReader, BinaryWriter } from "../../binary";
 import { Decimal } from "@cosmjs/math";
-import { isSet, padDecimal } from "../../helpers";
+import { isSet } from "../../helpers";
 import { GlobalDecoderRegistry } from "../../registry";
 export interface HostChain {
   hostChain: HostChain1;
@@ -168,8 +168,8 @@ export const HostChain = {
     const obj: any = {};
     obj.host_chain = message.hostChain ? HostChain1.toAmino(message.hostChain, useInterfaces) : undefined;
     obj.host_chain_state = message.hostChainState ? HostChainState.toAmino(message.hostChainState, useInterfaces) : undefined;
-    obj.c_asset_market_cap = padDecimal(message.cAssetMarketCap) === null ? undefined : padDecimal(message.cAssetMarketCap);
-    obj.c_asset_apy = padDecimal(message.cAssetApy) === null ? undefined : padDecimal(message.cAssetApy);
+    obj.c_asset_market_cap = message.cAssetMarketCap === null ? undefined : message.cAssetMarketCap;
+    obj.c_asset_apy = message.cAssetApy === null ? undefined : message.cAssetApy;
     obj.asset_in_vault = message.assetInVault === "" ? undefined : message.assetInVault;
     obj.error = message.error === "" ? undefined : message.error;
     return obj;

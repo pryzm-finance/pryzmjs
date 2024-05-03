@@ -159,7 +159,7 @@ export const QueryHealthCheckResponse = {
   },
   toAmino(message: QueryHealthCheckResponse, useInterfaces: boolean = true): QueryHealthCheckResponseAmino {
     const obj: any = {};
-    obj.block_difference = message.blockDifference ? message.blockDifference.toString() : undefined;
+    obj.block_difference = message.blockDifference !== BigInt(0) ? message.blockDifference.toString() : undefined;
     return obj;
   },
   fromAminoMsg(object: QueryHealthCheckResponseAminoMsg): QueryHealthCheckResponse {

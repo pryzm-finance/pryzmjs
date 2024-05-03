@@ -1,5 +1,5 @@
 import { BinaryReader, BinaryWriter } from "../../../binary";
-import { isSet, padDecimal } from "../../../helpers";
+import { isSet } from "../../../helpers";
 import { GlobalDecoderRegistry } from "../../../registry";
 import { Decimal } from "@cosmjs/math";
 /** PoolType enumerates the valid types for pool_type. */
@@ -207,8 +207,8 @@ export const PoolPauseWindow = {
   },
   toAmino(message: PoolPauseWindow, useInterfaces: boolean = true): PoolPauseWindowAmino {
     const obj: any = {};
-    obj.pause_window_end_unix_millis = message.pauseWindowEndUnixMillis ? message.pauseWindowEndUnixMillis.toString() : undefined;
-    obj.buffer_period_end_unix_millis = message.bufferPeriodEndUnixMillis ? message.bufferPeriodEndUnixMillis.toString() : undefined;
+    obj.pause_window_end_unix_millis = message.pauseWindowEndUnixMillis ? message.pauseWindowEndUnixMillis.toString() : "0";
+    obj.buffer_period_end_unix_millis = message.bufferPeriodEndUnixMillis ? message.bufferPeriodEndUnixMillis.toString() : "0";
     return obj;
   },
   fromAminoMsg(object: PoolPauseWindowAminoMsg): PoolPauseWindow {
@@ -466,17 +466,17 @@ export const Pool = {
   },
   toAmino(message: Pool, useInterfaces: boolean = true): PoolAmino {
     const obj: any = {};
-    obj.id = message.id ? message.id.toString() : undefined;
+    obj.id = message.id !== BigInt(0) ? message.id.toString() : undefined;
     obj.name = message.name === "" ? undefined : message.name;
-    obj.swap_fee_ratio = padDecimal(message.swapFeeRatio) === "" ? undefined : padDecimal(message.swapFeeRatio);
+    obj.swap_fee_ratio = message.swapFeeRatio === "" ? undefined : message.swapFeeRatio;
     obj.pool_type = message.poolType === 0 ? undefined : message.poolType;
     obj.creator = message.creator === "" ? undefined : message.creator;
     obj.recovery_mode = message.recoveryMode === false ? undefined : message.recoveryMode;
     obj.paused_by_gov = message.pausedByGov === false ? undefined : message.pausedByGov;
     obj.paused_by_owner = message.pausedByOwner === false ? undefined : message.pausedByOwner;
     obj.owner_pause_window_timing = message.ownerPauseWindowTiming ? PoolPauseWindow.toAmino(message.ownerPauseWindowTiming, useInterfaces) : undefined;
-    obj.swap_protocol_fee_ratio = padDecimal(message.swapProtocolFeeRatio) === null ? undefined : padDecimal(message.swapProtocolFeeRatio);
-    obj.join_exit_protocol_fee_ratio = padDecimal(message.joinExitProtocolFeeRatio) === null ? undefined : padDecimal(message.joinExitProtocolFeeRatio);
+    obj.swap_protocol_fee_ratio = message.swapProtocolFeeRatio === null ? undefined : message.swapProtocolFeeRatio;
+    obj.join_exit_protocol_fee_ratio = message.joinExitProtocolFeeRatio === null ? undefined : message.joinExitProtocolFeeRatio;
     if (message.initializationAllowList) {
       obj.initialization_allow_list = message.initializationAllowList.map(e => e);
     } else {

@@ -113,7 +113,7 @@ export const RouteStep = {
   },
   toAmino(message: RouteStep, useInterfaces: boolean = true): RouteStepAmino {
     const obj: any = {};
-    obj.pool_id = message.poolId ? message.poolId.toString() : undefined;
+    obj.pool_id = message.poolId ? message.poolId.toString() : "0";
     obj.token_in = message.tokenIn === "" ? undefined : message.tokenIn;
     obj.token_out = message.tokenOut === "" ? undefined : message.tokenOut;
     return obj;

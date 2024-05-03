@@ -1,7 +1,7 @@
 import { Timestamp, TimestampSDKType } from "../../google/protobuf/timestamp";
 import { BinaryReader, BinaryWriter } from "../../binary";
 import { Decimal } from "@cosmjs/math";
-import { isSet, fromJsonTimestamp, fromTimestamp, padDecimal } from "../../helpers";
+import { isSet, fromJsonTimestamp, fromTimestamp } from "../../helpers";
 import { GlobalDecoderRegistry } from "../../registry";
 export interface HistoricalTokenYield {
   time: Timestamp;
@@ -100,7 +100,7 @@ export const HistoricalTokenYield = {
   toAmino(message: HistoricalTokenYield, useInterfaces: boolean = true): HistoricalTokenYieldAmino {
     const obj: any = {};
     obj.time = message.time ? Timestamp.toAmino(message.time, useInterfaces) : undefined;
-    obj.yield = padDecimal(message.yield) === null ? undefined : padDecimal(message.yield);
+    obj.yield = message.yield === null ? undefined : message.yield;
     return obj;
   },
   fromAminoMsg(object: HistoricalTokenYieldAminoMsg): HistoricalTokenYield {

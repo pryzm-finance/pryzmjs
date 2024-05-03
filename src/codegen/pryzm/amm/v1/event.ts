@@ -13,7 +13,7 @@ import { OraclePricePair, OraclePricePairAmino, OraclePricePairSDKType } from ".
 import { PendingTokenIntroduction, PendingTokenIntroductionAmino, PendingTokenIntroductionSDKType } from "./pending_token_introduction";
 import { Params, ParamsAmino, ParamsSDKType } from "./params";
 import { BinaryReader, BinaryWriter } from "../../../binary";
-import { isSet, padDecimal } from "../../../helpers";
+import { isSet } from "../../../helpers";
 import { GlobalDecoderRegistry } from "../../../registry";
 import { Decimal } from "@cosmjs/math";
 export enum RemoveOrderReason {
@@ -1177,7 +1177,7 @@ export const EventSetPoolCount = {
   },
   toAmino(message: EventSetPoolCount, useInterfaces: boolean = true): EventSetPoolCountAmino {
     const obj: any = {};
-    obj.pool_count = message.poolCount ? message.poolCount.toString() : undefined;
+    obj.pool_count = message.poolCount !== BigInt(0) ? message.poolCount.toString() : undefined;
     return obj;
   },
   fromAminoMsg(object: EventSetPoolCountAminoMsg): EventSetPoolCount {
@@ -1370,7 +1370,7 @@ export const EventSetLpTokenSupply = {
   },
   toAmino(message: EventSetLpTokenSupply, useInterfaces: boolean = true): EventSetLpTokenSupplyAmino {
     const obj: any = {};
-    obj.pool_id = message.poolId ? message.poolId.toString() : undefined;
+    obj.pool_id = message.poolId !== BigInt(0) ? message.poolId.toString() : undefined;
     obj.supply = message.supply === "" ? undefined : message.supply;
     return obj;
   },
@@ -1550,7 +1550,7 @@ export const EventRemovePoolToken = {
   },
   toAmino(message: EventRemovePoolToken, useInterfaces: boolean = true): EventRemovePoolTokenAmino {
     const obj: any = {};
-    obj.pool_id = message.poolId ? message.poolId.toString() : undefined;
+    obj.pool_id = message.poolId !== BigInt(0) ? message.poolId.toString() : undefined;
     obj.denom = message.denom === "" ? undefined : message.denom;
     return obj;
   },
@@ -1730,7 +1730,7 @@ export const EventRemoveWeightedToken = {
   },
   toAmino(message: EventRemoveWeightedToken, useInterfaces: boolean = true): EventRemoveWeightedTokenAmino {
     const obj: any = {};
-    obj.pool_id = message.poolId ? message.poolId.toString() : undefined;
+    obj.pool_id = message.poolId !== BigInt(0) ? message.poolId.toString() : undefined;
     obj.denom = message.denom === "" ? undefined : message.denom;
     return obj;
   },
@@ -2146,7 +2146,7 @@ export const EventSetOrderCount = {
   },
   toAmino(message: EventSetOrderCount, useInterfaces: boolean = true): EventSetOrderCountAmino {
     const obj: any = {};
-    obj.order_count = message.orderCount ? message.orderCount.toString() : undefined;
+    obj.order_count = message.orderCount !== BigInt(0) ? message.orderCount.toString() : undefined;
     return obj;
   },
   fromAminoMsg(object: EventSetOrderCountAminoMsg): EventSetOrderCount {
@@ -2242,7 +2242,7 @@ export const EventRemoveOrder = {
   },
   toAmino(message: EventRemoveOrder, useInterfaces: boolean = true): EventRemoveOrderAmino {
     const obj: any = {};
-    obj.id = message.id ? message.id.toString() : undefined;
+    obj.id = message.id !== BigInt(0) ? message.id.toString() : undefined;
     obj.reason = message.reason === 0 ? undefined : message.reason;
     return obj;
   },
@@ -2339,7 +2339,7 @@ export const EventCancelOrder = {
   },
   toAmino(message: EventCancelOrder, useInterfaces: boolean = true): EventCancelOrderAmino {
     const obj: any = {};
-    obj.id = message.id ? message.id.toString() : undefined;
+    obj.id = message.id !== BigInt(0) ? message.id.toString() : undefined;
     obj.withdrawn_amount = message.withdrawnAmount ? Coin.toAmino(message.withdrawnAmount, useInterfaces) : undefined;
     return obj;
   },
@@ -2519,8 +2519,8 @@ export const EventRemoveScheduleOrder = {
   },
   toAmino(message: EventRemoveScheduleOrder, useInterfaces: boolean = true): EventRemoveScheduleOrderAmino {
     const obj: any = {};
-    obj.order_id = message.orderId ? message.orderId.toString() : undefined;
-    obj.time_millis = message.timeMillis ? message.timeMillis.toString() : undefined;
+    obj.order_id = message.orderId !== BigInt(0) ? message.orderId.toString() : undefined;
+    obj.time_millis = message.timeMillis !== BigInt(0) ? message.timeMillis.toString() : undefined;
     return obj;
   },
   fromAminoMsg(object: EventRemoveScheduleOrderAminoMsg): EventRemoveScheduleOrder {
@@ -2603,7 +2603,7 @@ export const EventSetExecutableOrder = {
   },
   toAmino(message: EventSetExecutableOrder, useInterfaces: boolean = true): EventSetExecutableOrderAmino {
     const obj: any = {};
-    obj.order_id = message.orderId ? message.orderId.toString() : undefined;
+    obj.order_id = message.orderId !== BigInt(0) ? message.orderId.toString() : undefined;
     return obj;
   },
   fromAminoMsg(object: EventSetExecutableOrderAminoMsg): EventSetExecutableOrder {
@@ -2686,7 +2686,7 @@ export const EventRemoveExecutableOrder = {
   },
   toAmino(message: EventRemoveExecutableOrder, useInterfaces: boolean = true): EventRemoveExecutableOrderAmino {
     const obj: any = {};
-    obj.order_id = message.orderId ? message.orderId.toString() : undefined;
+    obj.order_id = message.orderId !== BigInt(0) ? message.orderId.toString() : undefined;
     return obj;
   },
   fromAminoMsg(object: EventRemoveExecutableOrderAminoMsg): EventRemoveExecutableOrder {
@@ -2865,7 +2865,7 @@ export const EventRemoveIntroducingPoolToken = {
   },
   toAmino(message: EventRemoveIntroducingPoolToken, useInterfaces: boolean = true): EventRemoveIntroducingPoolTokenAmino {
     const obj: any = {};
-    obj.pool_id = message.poolId ? message.poolId.toString() : undefined;
+    obj.pool_id = message.poolId !== BigInt(0) ? message.poolId.toString() : undefined;
     obj.denom = message.denom === "" ? undefined : message.denom;
     return obj;
   },
@@ -3045,7 +3045,7 @@ export const EventRemoveExpiringPoolToken = {
   },
   toAmino(message: EventRemoveExpiringPoolToken, useInterfaces: boolean = true): EventRemoveExpiringPoolTokenAmino {
     const obj: any = {};
-    obj.pool_id = message.poolId ? message.poolId.toString() : undefined;
+    obj.pool_id = message.poolId !== BigInt(0) ? message.poolId.toString() : undefined;
     obj.denom = message.denom === "" ? undefined : message.denom;
     return obj;
   },
@@ -3142,7 +3142,7 @@ export const EventSetYammPoolForAssetId = {
   },
   toAmino(message: EventSetYammPoolForAssetId, useInterfaces: boolean = true): EventSetYammPoolForAssetIdAmino {
     const obj: any = {};
-    obj.pool_id = message.poolId ? message.poolId.toString() : undefined;
+    obj.pool_id = message.poolId !== BigInt(0) ? message.poolId.toString() : undefined;
     obj.asset_id = message.assetId === "" ? undefined : message.assetId;
     return obj;
   },
@@ -3348,7 +3348,7 @@ export const EventExecuteOrder = {
   },
   toAmino(message: EventExecuteOrder, useInterfaces: boolean = true): EventExecuteOrderAmino {
     const obj: any = {};
-    obj.order_id = message.orderId ? message.orderId.toString() : undefined;
+    obj.order_id = message.orderId !== BigInt(0) ? message.orderId.toString() : undefined;
     obj.trade_amount = message.tradeAmount === "" ? undefined : message.tradeAmount;
     obj.match_amount = message.matchAmount === "" ? undefined : message.matchAmount;
     obj.output_amount = message.outputAmount === "" ? undefined : message.outputAmount;
@@ -3607,12 +3607,12 @@ export const EventExecuteOrdersForPair = {
   },
   toAmino(message: EventExecuteOrdersForPair, useInterfaces: boolean = true): EventExecuteOrdersForPairAmino {
     const obj: any = {};
-    obj.pool_id = message.poolId ? message.poolId.toString() : undefined;
+    obj.pool_id = message.poolId !== BigInt(0) ? message.poolId.toString() : undefined;
     obj.token_in = message.tokenIn === "" ? undefined : message.tokenIn;
     obj.token_out = message.tokenOut === "" ? undefined : message.tokenOut;
     obj.whitelisted_route = message.whitelistedRoute === false ? undefined : message.whitelistedRoute;
-    obj.buy_price = padDecimal(message.buyPrice) === "" ? undefined : padDecimal(message.buyPrice);
-    obj.sell_price = padDecimal(message.sellPrice) === "" ? undefined : padDecimal(message.sellPrice);
+    obj.buy_price = message.buyPrice === "" ? undefined : message.buyPrice;
+    obj.sell_price = message.sellPrice === "" ? undefined : message.sellPrice;
     if (message.buyOrders) {
       obj.buy_orders = message.buyOrders.map(e => e ? EventExecuteOrder.toAmino(e, useInterfaces) : undefined);
     } else {
@@ -3737,7 +3737,7 @@ export const EventExecuteMatchProposalOrder = {
   },
   toAmino(message: EventExecuteMatchProposalOrder, useInterfaces: boolean = true): EventExecuteMatchProposalOrderAmino {
     const obj: any = {};
-    obj.order_id = message.orderId ? message.orderId.toString() : undefined;
+    obj.order_id = message.orderId !== BigInt(0) ? message.orderId.toString() : undefined;
     obj.match_amount = message.matchAmount === "" ? undefined : message.matchAmount;
     obj.output_amount = message.outputAmount === "" ? undefined : message.outputAmount;
     return obj;
@@ -3943,12 +3943,12 @@ export const EventExecuteMatchProposalPair = {
   },
   toAmino(message: EventExecuteMatchProposalPair, useInterfaces: boolean = true): EventExecuteMatchProposalPairAmino {
     const obj: any = {};
-    obj.pool_id = message.poolId ? message.poolId.toString() : undefined;
+    obj.pool_id = message.poolId !== BigInt(0) ? message.poolId.toString() : undefined;
     obj.token_in = message.tokenIn === "" ? undefined : message.tokenIn;
     obj.token_out = message.tokenOut === "" ? undefined : message.tokenOut;
     obj.whitelisted_route = message.whitelistedRoute === false ? undefined : message.whitelistedRoute;
-    obj.buy_price = padDecimal(message.buyPrice) === "" ? undefined : padDecimal(message.buyPrice);
-    obj.sell_price = padDecimal(message.sellPrice) === "" ? undefined : padDecimal(message.sellPrice);
+    obj.buy_price = message.buyPrice === "" ? undefined : message.buyPrice;
+    obj.sell_price = message.sellPrice === "" ? undefined : message.sellPrice;
     if (message.buyOrders) {
       obj.buy_orders = message.buyOrders.map(e => e ? EventExecuteMatchProposalOrder.toAmino(e, useInterfaces) : undefined);
     } else {
@@ -4179,7 +4179,7 @@ export const EventExitPool = {
   },
   toAmino(message: EventExitPool, useInterfaces: boolean = true): EventExitPoolAmino {
     const obj: any = {};
-    obj.pool_id = message.poolId ? message.poolId.toString() : undefined;
+    obj.pool_id = message.poolId !== BigInt(0) ? message.poolId.toString() : undefined;
     obj.summary = message.summary ? ExitSummary.toAmino(message.summary, useInterfaces) : undefined;
     return obj;
   },
@@ -4276,7 +4276,7 @@ export const EventJoinPool = {
   },
   toAmino(message: EventJoinPool, useInterfaces: boolean = true): EventJoinPoolAmino {
     const obj: any = {};
-    obj.pool_id = message.poolId ? message.poolId.toString() : undefined;
+    obj.pool_id = message.poolId !== BigInt(0) ? message.poolId.toString() : undefined;
     obj.summary = message.summary ? JoinSummary.toAmino(message.summary, useInterfaces) : undefined;
     return obj;
   },
@@ -4373,7 +4373,7 @@ export const EventSwap = {
   },
   toAmino(message: EventSwap, useInterfaces: boolean = true): EventSwapAmino {
     const obj: any = {};
-    obj.pool_id = message.poolId ? message.poolId.toString() : undefined;
+    obj.pool_id = message.poolId !== BigInt(0) ? message.poolId.toString() : undefined;
     obj.summary = message.summary ? SwapSummary.toAmino(message.summary, useInterfaces) : undefined;
     return obj;
   },
@@ -4540,7 +4540,7 @@ export const EventExitPoolRequest = {
   toAmino(message: EventExitPoolRequest, useInterfaces: boolean = true): EventExitPoolRequestAmino {
     const obj: any = {};
     obj.creator = message.creator === "" ? undefined : message.creator;
-    obj.pool_id = message.poolId ? message.poolId.toString() : undefined;
+    obj.pool_id = message.poolId !== BigInt(0) ? message.poolId.toString() : undefined;
     obj.lpt_in = message.lptIn ? Coin.toAmino(message.lptIn, useInterfaces) : undefined;
     if (message.amountsOut) {
       obj.amounts_out = message.amountsOut.map(e => e ? Coin.toAmino(e, useInterfaces) : undefined);
@@ -4721,7 +4721,7 @@ export const EventJoinPoolRequest = {
   toAmino(message: EventJoinPoolRequest, useInterfaces: boolean = true): EventJoinPoolRequestAmino {
     const obj: any = {};
     obj.creator = message.creator === "" ? undefined : message.creator;
-    obj.pool_id = message.poolId ? message.poolId.toString() : undefined;
+    obj.pool_id = message.poolId !== BigInt(0) ? message.poolId.toString() : undefined;
     obj.lpt_out = message.lptOut ? Coin.toAmino(message.lptOut, useInterfaces) : undefined;
     if (message.amountsIn) {
       obj.amounts_in = message.amountsIn.map(e => e ? Coin.toAmino(e, useInterfaces) : undefined);
@@ -4900,7 +4900,7 @@ export const EventSingleSwapRequest = {
   toAmino(message: EventSingleSwapRequest, useInterfaces: boolean = true): EventSingleSwapRequestAmino {
     const obj: any = {};
     obj.creator = message.creator === "" ? undefined : message.creator;
-    obj.pool_id = message.poolId ? message.poolId.toString() : undefined;
+    obj.pool_id = message.poolId !== BigInt(0) ? message.poolId.toString() : undefined;
     obj.amount_out = message.amountOut ? Coin.toAmino(message.amountOut, useInterfaces) : undefined;
     obj.amount_in = message.amountIn ? Coin.toAmino(message.amountIn, useInterfaces) : undefined;
     obj.protocol_fee = message.protocolFee ? Coin.toAmino(message.protocolFee, useInterfaces) : undefined;
@@ -5355,7 +5355,7 @@ export const EventYAssetSwap = {
   },
   toAmino(message: EventYAssetSwap, useInterfaces: boolean = true): EventYAssetSwapAmino {
     const obj: any = {};
-    obj.pool_id = message.poolId ? message.poolId.toString() : undefined;
+    obj.pool_id = message.poolId !== BigInt(0) ? message.poolId.toString() : undefined;
     obj.summary = message.summary ? SwapSummary.toAmino(message.summary, useInterfaces) : undefined;
     obj.refractor_action = message.refractorAction ? EventYAssetSwapRefractorAction.toAmino(message.refractorAction, useInterfaces) : undefined;
     obj.fee = message.fee ? Coin.toAmino(message.fee, useInterfaces) : undefined;
@@ -5704,7 +5704,7 @@ export const EventRemovePendingTokenIntroduction = {
   toAmino(message: EventRemovePendingTokenIntroduction, useInterfaces: boolean = true): EventRemovePendingTokenIntroductionAmino {
     const obj: any = {};
     obj.asset_id = message.assetId === "" ? undefined : message.assetId;
-    obj.target_pool_id = message.targetPoolId ? message.targetPoolId.toString() : undefined;
+    obj.target_pool_id = message.targetPoolId !== BigInt(0) ? message.targetPoolId.toString() : undefined;
     return obj;
   },
   fromAminoMsg(object: EventRemovePendingTokenIntroductionAminoMsg): EventRemovePendingTokenIntroduction {

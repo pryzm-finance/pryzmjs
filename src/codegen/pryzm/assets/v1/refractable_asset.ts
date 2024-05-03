@@ -1,5 +1,5 @@
 import { BinaryReader, BinaryWriter } from "../../../binary";
-import { isSet, padDecimal } from "../../../helpers";
+import { isSet } from "../../../helpers";
 import { GlobalDecoderRegistry } from "../../../registry";
 import { Decimal } from "@cosmjs/math";
 /** The properties of a supported asset */
@@ -236,10 +236,10 @@ export const RefractableAsset = {
     const obj: any = {};
     obj.id = message.id === "" ? undefined : message.id;
     obj.token_denom = message.tokenDenom === "" ? undefined : message.tokenDenom;
-    obj.host_chain_id = message.hostChainId === "" ? undefined : message.hostChainId;
-    obj.disabled = message.disabled === false ? undefined : message.disabled;
-    obj.maturity_params = message.maturityParams ? MaturityParams.toAmino(message.maturityParams, useInterfaces) : undefined;
-    obj.fee_ratios = message.feeRatios ? FeeRatios.toAmino(message.feeRatios, useInterfaces) : undefined;
+    obj.host_chain_id = message.hostChainId ?? "";
+    obj.disabled = message.disabled ?? false;
+    obj.maturity_params = message.maturityParams ? MaturityParams.toAmino(message.maturityParams, useInterfaces) : MaturityParams.toAmino(MaturityParams.fromPartial({}));
+    obj.fee_ratios = message.feeRatios ? FeeRatios.toAmino(message.feeRatios, useInterfaces) : FeeRatios.toAmino(FeeRatios.fromPartial({}));
     return obj;
   },
   fromAminoMsg(object: RefractableAssetAminoMsg): RefractableAsset {
@@ -335,8 +335,8 @@ export const MaturityParams = {
   },
   toAmino(message: MaturityParams, useInterfaces: boolean = true): MaturityParamsAmino {
     const obj: any = {};
-    obj.levels_per_year = message.levelsPerYear === 0 ? undefined : message.levelsPerYear;
-    obj.years = message.years === 0 ? undefined : message.years;
+    obj.levels_per_year = message.levelsPerYear ?? 0;
+    obj.years = message.years ?? 0;
     return obj;
   },
   fromAminoMsg(object: MaturityParamsAminoMsg): MaturityParams {
@@ -471,11 +471,11 @@ export const FeeRatios = {
   },
   toAmino(message: FeeRatios, useInterfaces: boolean = true): FeeRatiosAmino {
     const obj: any = {};
-    obj.yield = padDecimal(message.yield) === null ? undefined : padDecimal(message.yield);
-    obj.refractor_refract = padDecimal(message.refractorRefract) === null ? undefined : padDecimal(message.refractorRefract);
-    obj.refractor_merge = padDecimal(message.refractorMerge) === null ? undefined : padDecimal(message.refractorMerge);
-    obj.refractor_redeem = padDecimal(message.refractorRedeem) === null ? undefined : padDecimal(message.refractorRedeem);
-    obj.y_staking_claim_reward = padDecimal(message.yStakingClaimReward) === null ? undefined : padDecimal(message.yStakingClaimReward);
+    obj.yield = message.yield === null ? undefined : message.yield;
+    obj.refractor_refract = message.refractorRefract === null ? undefined : message.refractorRefract;
+    obj.refractor_merge = message.refractorMerge === null ? undefined : message.refractorMerge;
+    obj.refractor_redeem = message.refractorRedeem === null ? undefined : message.refractorRedeem;
+    obj.y_staking_claim_reward = message.yStakingClaimReward === null ? undefined : message.yStakingClaimReward;
     return obj;
   },
   fromAminoMsg(object: FeeRatiosAminoMsg): FeeRatios {

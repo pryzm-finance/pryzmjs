@@ -149,7 +149,7 @@ export const QueryPoolTokenRequest = {
   },
   toAmino(message: QueryPoolTokenRequest, useInterfaces: boolean = true): QueryPoolTokenRequestAmino {
     const obj: any = {};
-    obj.pool_id = message.poolId ? message.poolId.toString() : undefined;
+    obj.pool_id = message.poolId !== BigInt(0) ? message.poolId.toString() : undefined;
     obj.denom = message.denom === "" ? undefined : message.denom;
     return obj;
   },
@@ -316,7 +316,7 @@ export const QueryAllPoolTokenRequest = {
   },
   toAmino(message: QueryAllPoolTokenRequest, useInterfaces: boolean = true): QueryAllPoolTokenRequestAmino {
     const obj: any = {};
-    obj.pool_id = message.poolId ? message.poolId.toString() : undefined;
+    obj.pool_id = message.poolId !== BigInt(0) ? message.poolId.toString() : undefined;
     return obj;
   },
   fromAminoMsg(object: QueryAllPoolTokenRequestAminoMsg): QueryAllPoolTokenRequest {

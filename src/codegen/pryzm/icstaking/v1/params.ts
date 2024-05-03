@@ -1,6 +1,6 @@
 import { Duration, DurationAmino, DurationSDKType } from "../../../google/protobuf/duration";
 import { BinaryReader, BinaryWriter } from "../../../binary";
-import { isSet, padDecimal } from "../../../helpers";
+import { isSet } from "../../../helpers";
 import { GlobalDecoderRegistry } from "../../../registry";
 import { Decimal } from "@cosmjs/math";
 /** Params defines the parameters for the module. */
@@ -233,7 +233,7 @@ export const Params = {
   },
   toAmino(message: Params, useInterfaces: boolean = true): ParamsAmino {
     const obj: any = {};
-    obj.staking_params = message.stakingParams ? StakingParams.toAmino(message.stakingParams, useInterfaces) : undefined;
+    obj.staking_params = message.stakingParams ? StakingParams.toAmino(message.stakingParams, useInterfaces) : StakingParams.toAmino(StakingParams.fromPartial({}));
     if (message.admins) {
       obj.admins = message.admins.map(e => e);
     } else {
@@ -386,12 +386,12 @@ export const StakingParams = {
   },
   toAmino(message: StakingParams, useInterfaces: boolean = true): StakingParamsAmino {
     const obj: any = {};
-    obj.fee_ratios = message.feeRatios ? FeeRatios.toAmino(message.feeRatios, useInterfaces) : undefined;
+    obj.fee_ratios = message.feeRatios ? FeeRatios.toAmino(message.feeRatios, useInterfaces) : FeeRatios.toAmino(FeeRatios.fromPartial({}));
     obj.delegation_interval = message.delegationInterval ? Duration.toAmino(message.delegationInterval, useInterfaces) : undefined;
     obj.undelegation_interval = message.undelegationInterval ? Duration.toAmino(message.undelegationInterval, useInterfaces) : undefined;
     obj.ibc_transfer_timeout = message.ibcTransferTimeout ? Duration.toAmino(message.ibcTransferTimeout, useInterfaces) : undefined;
     obj.ica_timeout = message.icaTimeout ? Duration.toAmino(message.icaTimeout, useInterfaces) : undefined;
-    obj.rebalance_params = message.rebalanceParams ? RebalanceParams.toAmino(message.rebalanceParams, useInterfaces) : undefined;
+    obj.rebalance_params = message.rebalanceParams ? RebalanceParams.toAmino(message.rebalanceParams, useInterfaces) : RebalanceParams.toAmino(RebalanceParams.fromPartial({}));
     return obj;
   },
   fromAminoMsg(object: StakingParamsAminoMsg): StakingParams {
@@ -513,10 +513,10 @@ export const FeeRatios = {
   },
   toAmino(message: FeeRatios, useInterfaces: boolean = true): FeeRatiosAmino {
     const obj: any = {};
-    obj.yield = padDecimal(message.yield) === null ? undefined : padDecimal(message.yield);
-    obj.staking = padDecimal(message.staking) === null ? undefined : padDecimal(message.staking);
-    obj.unstaking = padDecimal(message.unstaking) === null ? undefined : padDecimal(message.unstaking);
-    obj.instant_unstaking = padDecimal(message.instantUnstaking) === null ? undefined : padDecimal(message.instantUnstaking);
+    obj.yield = message.yield === null ? undefined : message.yield;
+    obj.staking = message.staking === null ? undefined : message.staking;
+    obj.unstaking = message.unstaking === null ? undefined : message.unstaking;
+    obj.instant_unstaking = message.instantUnstaking === null ? undefined : message.instantUnstaking;
     return obj;
   },
   fromAminoMsg(object: FeeRatiosAminoMsg): FeeRatios {
@@ -638,8 +638,8 @@ export const RebalanceParams = {
   },
   toAmino(message: RebalanceParams, useInterfaces: boolean = true): RebalanceParamsAmino {
     const obj: any = {};
-    obj.max_msgs = message.maxMsgs === 0 ? undefined : message.maxMsgs;
-    obj.rebalance_threshold = padDecimal(message.rebalanceThreshold) === null ? undefined : padDecimal(message.rebalanceThreshold);
+    obj.max_msgs = message.maxMsgs ?? 0;
+    obj.rebalance_threshold = message.rebalanceThreshold === null ? undefined : message.rebalanceThreshold;
     obj.min_rebalance_amount = message.minRebalanceAmount === null ? undefined : message.minRebalanceAmount;
     obj.min_rebalance_interval = message.minRebalanceInterval ? Duration.toAmino(message.minRebalanceInterval, useInterfaces) : undefined;
     return obj;

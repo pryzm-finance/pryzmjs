@@ -750,7 +750,7 @@ export const ClientState = {
   },
   toAmino(message: ClientState, useInterfaces: boolean = true): ClientStateAmino {
     const obj: any = {};
-    obj.sequence = message.sequence ? message.sequence.toString() : undefined;
+    obj.sequence = message.sequence !== BigInt(0) ? message.sequence.toString() : undefined;
     obj.is_frozen = message.isFrozen === false ? undefined : message.isFrozen;
     obj.consensus_state = message.consensusState ? ConsensusState.toAmino(message.consensusState, useInterfaces) : undefined;
     obj.allow_update_after_proposal = message.allowUpdateAfterProposal === false ? undefined : message.allowUpdateAfterProposal;
@@ -836,7 +836,7 @@ export const ConsensusState = {
   },
   fromJSON(object: any): ConsensusState {
     return {
-      publicKey: isSet(object.publicKey) ? Any.fromJSONAsAny(object.publicKey) : undefined,
+      publicKey: isSet(object.publicKey) ? Any.fromJSON(object.publicKey) : undefined,
       diversifier: isSet(object.diversifier) ? String(object.diversifier) : "",
       timestamp: isSet(object.timestamp) ? BigInt(object.timestamp.toString()) : BigInt(0)
     };
@@ -850,7 +850,7 @@ export const ConsensusState = {
   },
   fromPartial(object: Partial<ConsensusState>): ConsensusState {
     const message = createBaseConsensusState();
-    message.publicKey = object.publicKey !== undefined && object.publicKey !== null ? Any.fromPartialAsAny(object.publicKey) : undefined;
+    message.publicKey = object.publicKey !== undefined && object.publicKey !== null ? Any.fromPartial(object.publicKey) : undefined;
     message.diversifier = object.diversifier ?? "";
     message.timestamp = object.timestamp !== undefined && object.timestamp !== null ? BigInt(object.timestamp.toString()) : BigInt(0);
     return message;
@@ -872,7 +872,7 @@ export const ConsensusState = {
     const obj: any = {};
     obj.public_key = message.publicKey ? Any.toAmino(message.publicKey, useInterfaces) : undefined;
     obj.diversifier = message.diversifier === "" ? undefined : message.diversifier;
-    obj.timestamp = message.timestamp ? message.timestamp.toString() : undefined;
+    obj.timestamp = message.timestamp !== BigInt(0) ? message.timestamp.toString() : undefined;
     return obj;
   },
   fromAminoMsg(object: ConsensusStateAminoMsg): ConsensusState {
@@ -972,7 +972,7 @@ export const Header = {
       sequence: isSet(object.sequence) ? BigInt(object.sequence.toString()) : BigInt(0),
       timestamp: isSet(object.timestamp) ? BigInt(object.timestamp.toString()) : BigInt(0),
       signature: isSet(object.signature) ? bytesFromBase64(object.signature) : new Uint8Array(),
-      newPublicKey: isSet(object.newPublicKey) ? Any.fromJSONAsAny(object.newPublicKey) : undefined,
+      newPublicKey: isSet(object.newPublicKey) ? Any.fromJSON(object.newPublicKey) : undefined,
       newDiversifier: isSet(object.newDiversifier) ? String(object.newDiversifier) : ""
     };
   },
@@ -990,7 +990,7 @@ export const Header = {
     message.sequence = object.sequence !== undefined && object.sequence !== null ? BigInt(object.sequence.toString()) : BigInt(0);
     message.timestamp = object.timestamp !== undefined && object.timestamp !== null ? BigInt(object.timestamp.toString()) : BigInt(0);
     message.signature = object.signature ?? new Uint8Array();
-    message.newPublicKey = object.newPublicKey !== undefined && object.newPublicKey !== null ? Any.fromPartialAsAny(object.newPublicKey) : undefined;
+    message.newPublicKey = object.newPublicKey !== undefined && object.newPublicKey !== null ? Any.fromPartial(object.newPublicKey) : undefined;
     message.newDiversifier = object.newDiversifier ?? "";
     return message;
   },
@@ -1015,8 +1015,8 @@ export const Header = {
   },
   toAmino(message: Header, useInterfaces: boolean = true): HeaderAmino {
     const obj: any = {};
-    obj.sequence = message.sequence ? message.sequence.toString() : undefined;
-    obj.timestamp = message.timestamp ? message.timestamp.toString() : undefined;
+    obj.sequence = message.sequence !== BigInt(0) ? message.sequence.toString() : undefined;
+    obj.timestamp = message.timestamp !== BigInt(0) ? message.timestamp.toString() : undefined;
     obj.signature = message.signature ? base64FromBytes(message.signature) : undefined;
     obj.new_public_key = message.newPublicKey ? Any.toAmino(message.newPublicKey, useInterfaces) : undefined;
     obj.new_diversifier = message.newDiversifier === "" ? undefined : message.newDiversifier;
@@ -1150,7 +1150,7 @@ export const Misbehaviour = {
   toAmino(message: Misbehaviour, useInterfaces: boolean = true): MisbehaviourAmino {
     const obj: any = {};
     obj.client_id = message.clientId === "" ? undefined : message.clientId;
-    obj.sequence = message.sequence ? message.sequence.toString() : undefined;
+    obj.sequence = message.sequence !== BigInt(0) ? message.sequence.toString() : undefined;
     obj.signature_one = message.signatureOne ? SignatureAndData.toAmino(message.signatureOne, useInterfaces) : undefined;
     obj.signature_two = message.signatureTwo ? SignatureAndData.toAmino(message.signatureTwo, useInterfaces) : undefined;
     return obj;
@@ -1285,7 +1285,7 @@ export const SignatureAndData = {
     obj.signature = message.signature ? base64FromBytes(message.signature) : undefined;
     obj.data_type = message.dataType === 0 ? undefined : message.dataType;
     obj.data = message.data ? base64FromBytes(message.data) : undefined;
-    obj.timestamp = message.timestamp ? message.timestamp.toString() : undefined;
+    obj.timestamp = message.timestamp !== BigInt(0) ? message.timestamp.toString() : undefined;
     return obj;
   },
   fromAminoMsg(object: SignatureAndDataAminoMsg): SignatureAndData {
@@ -1390,7 +1390,7 @@ export const TimestampedSignatureData = {
   toAmino(message: TimestampedSignatureData, useInterfaces: boolean = true): TimestampedSignatureDataAmino {
     const obj: any = {};
     obj.signature_data = message.signatureData ? base64FromBytes(message.signatureData) : undefined;
-    obj.timestamp = message.timestamp ? message.timestamp.toString() : undefined;
+    obj.timestamp = message.timestamp !== BigInt(0) ? message.timestamp.toString() : undefined;
     return obj;
   },
   fromAminoMsg(object: TimestampedSignatureDataAminoMsg): TimestampedSignatureData {
@@ -1533,8 +1533,8 @@ export const SignBytes = {
   },
   toAmino(message: SignBytes, useInterfaces: boolean = true): SignBytesAmino {
     const obj: any = {};
-    obj.sequence = message.sequence ? message.sequence.toString() : undefined;
-    obj.timestamp = message.timestamp ? message.timestamp.toString() : undefined;
+    obj.sequence = message.sequence !== BigInt(0) ? message.sequence.toString() : undefined;
+    obj.timestamp = message.timestamp !== BigInt(0) ? message.timestamp.toString() : undefined;
     obj.diversifier = message.diversifier === "" ? undefined : message.diversifier;
     obj.data_type = message.dataType === 0 ? undefined : message.dataType;
     obj.data = message.data ? base64FromBytes(message.data) : undefined;
@@ -1613,7 +1613,7 @@ export const HeaderData = {
   },
   fromJSON(object: any): HeaderData {
     return {
-      newPubKey: isSet(object.newPubKey) ? Any.fromJSONAsAny(object.newPubKey) : undefined,
+      newPubKey: isSet(object.newPubKey) ? Any.fromJSON(object.newPubKey) : undefined,
       newDiversifier: isSet(object.newDiversifier) ? String(object.newDiversifier) : ""
     };
   },
@@ -1625,7 +1625,7 @@ export const HeaderData = {
   },
   fromPartial(object: Partial<HeaderData>): HeaderData {
     const message = createBaseHeaderData();
-    message.newPubKey = object.newPubKey !== undefined && object.newPubKey !== null ? Any.fromPartialAsAny(object.newPubKey) : undefined;
+    message.newPubKey = object.newPubKey !== undefined && object.newPubKey !== null ? Any.fromPartial(object.newPubKey) : undefined;
     message.newDiversifier = object.newDiversifier ?? "";
     return message;
   },
@@ -1719,7 +1719,7 @@ export const ClientStateData = {
   fromJSON(object: any): ClientStateData {
     return {
       path: isSet(object.path) ? bytesFromBase64(object.path) : new Uint8Array(),
-      clientState: isSet(object.clientState) ? Any.fromJSONAsAny(object.clientState) : undefined
+      clientState: isSet(object.clientState) ? Any.fromJSON(object.clientState) : undefined
     };
   },
   toJSON(message: ClientStateData): unknown {
@@ -1731,7 +1731,7 @@ export const ClientStateData = {
   fromPartial(object: Partial<ClientStateData>): ClientStateData {
     const message = createBaseClientStateData();
     message.path = object.path ?? new Uint8Array();
-    message.clientState = object.clientState !== undefined && object.clientState !== null ? Any.fromPartialAsAny(object.clientState) : undefined;
+    message.clientState = object.clientState !== undefined && object.clientState !== null ? Any.fromPartial(object.clientState) : undefined;
     return message;
   },
   fromAmino(object: ClientStateDataAmino): ClientStateData {
@@ -1824,7 +1824,7 @@ export const ConsensusStateData = {
   fromJSON(object: any): ConsensusStateData {
     return {
       path: isSet(object.path) ? bytesFromBase64(object.path) : new Uint8Array(),
-      consensusState: isSet(object.consensusState) ? Any.fromJSONAsAny(object.consensusState) : undefined
+      consensusState: isSet(object.consensusState) ? Any.fromJSON(object.consensusState) : undefined
     };
   },
   toJSON(message: ConsensusStateData): unknown {
@@ -1836,7 +1836,7 @@ export const ConsensusStateData = {
   fromPartial(object: Partial<ConsensusStateData>): ConsensusStateData {
     const message = createBaseConsensusStateData();
     message.path = object.path ?? new Uint8Array();
-    message.consensusState = object.consensusState !== undefined && object.consensusState !== null ? Any.fromPartialAsAny(object.consensusState) : undefined;
+    message.consensusState = object.consensusState !== undefined && object.consensusState !== null ? Any.fromPartial(object.consensusState) : undefined;
     return message;
   },
   fromAmino(object: ConsensusStateDataAmino): ConsensusStateData {
@@ -2468,7 +2468,7 @@ export const NextSequenceRecvData = {
   toAmino(message: NextSequenceRecvData, useInterfaces: boolean = true): NextSequenceRecvDataAmino {
     const obj: any = {};
     obj.path = message.path ? base64FromBytes(message.path) : undefined;
-    obj.next_seq_recv = message.nextSeqRecv ? message.nextSeqRecv.toString() : undefined;
+    obj.next_seq_recv = message.nextSeqRecv !== BigInt(0) ? message.nextSeqRecv.toString() : undefined;
     return obj;
   },
   fromAminoMsg(object: NextSequenceRecvDataAminoMsg): NextSequenceRecvData {

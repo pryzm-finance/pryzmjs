@@ -1,7 +1,7 @@
 import { Coin, CoinAmino, CoinSDKType } from "../../../cosmos/base/v1beta1/coin";
 import { BinaryReader, BinaryWriter } from "../../../binary";
 import { Decimal } from "@cosmjs/math";
-import { isSet, padDecimal } from "../../../helpers";
+import { isSet } from "../../../helpers";
 import { GlobalDecoderRegistry } from "../../../registry";
 export interface BondRewardToken {
   denom: string;
@@ -140,7 +140,7 @@ export const BondRewardToken = {
     const obj: any = {};
     obj.denom = message.denom === "" ? undefined : message.denom;
     obj.pending_amount = message.pendingAmount === "" ? undefined : message.pendingAmount;
-    obj.user_index = padDecimal(message.userIndex) === "" ? undefined : padDecimal(message.userIndex);
+    obj.user_index = message.userIndex === "" ? undefined : message.userIndex;
     return obj;
   },
   fromAminoMsg(object: BondRewardTokenAminoMsg): BondRewardToken {

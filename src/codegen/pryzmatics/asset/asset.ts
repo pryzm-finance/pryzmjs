@@ -1,7 +1,7 @@
 import { Token, TokenAmino, TokenSDKType } from "../pool/token";
 import { BinaryReader, BinaryWriter } from "../../binary";
 import { Decimal } from "@cosmjs/math";
-import { isSet, padDecimal } from "../../helpers";
+import { isSet } from "../../helpers";
 import { GlobalDecoderRegistry } from "../../registry";
 export interface Asset {
   id: string;
@@ -265,9 +265,9 @@ export const Asset = {
     obj.total_refracted_c_asset = message.totalRefractedCAsset === "" ? undefined : message.totalRefractedCAsset;
     obj.total_p_asset = message.totalPAsset === "" ? undefined : message.totalPAsset;
     obj.pool_id = message.poolId === null ? undefined : message.poolId;
-    obj.exchange_rate = padDecimal(message.exchangeRate) === null ? undefined : padDecimal(message.exchangeRate);
+    obj.exchange_rate = message.exchangeRate === null ? undefined : message.exchangeRate;
     obj.exchange_rate_block_height = message.exchangeRateBlockHeight === null ? undefined : message.exchangeRateBlockHeight;
-    obj.c_p_asset_exchange_rate = padDecimal(message.cPAssetExchangeRate) === null ? undefined : padDecimal(message.cPAssetExchangeRate);
+    obj.c_p_asset_exchange_rate = message.cPAssetExchangeRate === null ? undefined : message.cPAssetExchangeRate;
     obj.error = message.error === "" ? undefined : message.error;
     obj.host_chain_id = message.hostChainId === "" ? undefined : message.hostChainId;
     obj.last_yield_block_height = message.lastYieldBlockHeight === null ? undefined : message.lastYieldBlockHeight;

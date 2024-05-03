@@ -162,9 +162,9 @@ export const ValidatorSlashWindowSummary = {
   toAmino(message: ValidatorSlashWindowSummary, useInterfaces: boolean = true): ValidatorSlashWindowSummaryAmino {
     const obj: any = {};
     obj.validator = message.validator === "" ? undefined : message.validator;
-    obj.slash_window_close_block_height = message.slashWindowCloseBlockHeight ? message.slashWindowCloseBlockHeight.toString() : undefined;
-    obj.validator_power = message.validatorPower ? message.validatorPower.toString() : undefined;
-    obj.miss_counter = message.missCounter ? message.missCounter.toString() : undefined;
+    obj.slash_window_close_block_height = message.slashWindowCloseBlockHeight !== BigInt(0) ? message.slashWindowCloseBlockHeight.toString() : undefined;
+    obj.validator_power = message.validatorPower !== BigInt(0) ? message.validatorPower.toString() : undefined;
+    obj.miss_counter = message.missCounter !== BigInt(0) ? message.missCounter.toString() : undefined;
     obj.jailed = message.jailed === false ? undefined : message.jailed;
     obj.slash_amount = message.slashAmount === "" ? undefined : message.slashAmount;
     return obj;

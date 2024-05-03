@@ -162,10 +162,10 @@ export const Validator = {
   toAmino(message: Validator, useInterfaces: boolean = true): ValidatorAmino {
     const obj: any = {};
     obj.operator_address = message.operatorAddress === "" ? undefined : message.operatorAddress;
-    obj.vote_count = message.voteCount ? message.voteCount.toString() : undefined;
-    obj.expected_vote_count = message.expectedVoteCount ? message.expectedVoteCount.toString() : undefined;
+    obj.vote_count = message.voteCount !== BigInt(0) ? message.voteCount.toString() : undefined;
+    obj.expected_vote_count = message.expectedVoteCount !== BigInt(0) ? message.expectedVoteCount.toString() : undefined;
     obj.latest_vote_vote_interval_close_block_height = message.latestVoteVoteIntervalCloseBlockHeight === null ? undefined : message.latestVoteVoteIntervalCloseBlockHeight;
-    obj.latest_expected_vote_vote_interval_close_block_height = message.latestExpectedVoteVoteIntervalCloseBlockHeight ? message.latestExpectedVoteVoteIntervalCloseBlockHeight.toString() : undefined;
+    obj.latest_expected_vote_vote_interval_close_block_height = message.latestExpectedVoteVoteIntervalCloseBlockHeight !== BigInt(0) ? message.latestExpectedVoteVoteIntervalCloseBlockHeight.toString() : undefined;
     obj.last_jailed_block_height = message.lastJailedBlockHeight === null ? undefined : message.lastJailedBlockHeight;
     return obj;
   },

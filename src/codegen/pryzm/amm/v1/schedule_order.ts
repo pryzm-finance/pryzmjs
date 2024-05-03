@@ -97,8 +97,8 @@ export const ScheduleOrder = {
   },
   toAmino(message: ScheduleOrder, useInterfaces: boolean = true): ScheduleOrderAmino {
     const obj: any = {};
-    obj.time_millis = message.timeMillis ? message.timeMillis.toString() : undefined;
-    obj.order_id = message.orderId ? message.orderId.toString() : undefined;
+    obj.time_millis = message.timeMillis !== BigInt(0) ? message.timeMillis.toString() : undefined;
+    obj.order_id = message.orderId !== BigInt(0) ? message.orderId.toString() : undefined;
     return obj;
   },
   fromAminoMsg(object: ScheduleOrderAminoMsg): ScheduleOrder {

@@ -219,7 +219,7 @@ export const GenesisState = {
   },
   toAmino(message: GenesisState, useInterfaces: boolean = true): GenesisStateAmino {
     const obj: any = {};
-    obj.params = message.params ? Params.toAmino(message.params, useInterfaces) : undefined;
+    obj.params = message.params ? Params.toAmino(message.params, useInterfaces) : Params.toAmino(Params.fromPartial({}));
     if (message.balances) {
       obj.balances = message.balances.map(e => e ? Balance.toAmino(e, useInterfaces) : undefined);
     } else {

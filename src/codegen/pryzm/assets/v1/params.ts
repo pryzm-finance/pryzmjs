@@ -105,7 +105,7 @@ export const Params = {
   },
   toAmino(message: Params, useInterfaces: boolean = true): ParamsAmino {
     const obj: any = {};
-    obj.default_fee_ratios = message.defaultFeeRatios ? FeeRatios.toAmino(message.defaultFeeRatios, useInterfaces) : undefined;
+    obj.default_fee_ratios = message.defaultFeeRatios ? FeeRatios.toAmino(message.defaultFeeRatios, useInterfaces) : FeeRatios.toAmino(FeeRatios.fromPartial({}));
     if (message.admins) {
       obj.admins = message.admins.map(e => e);
     } else {

@@ -5,7 +5,7 @@ import { Duration, DurationAmino, DurationSDKType } from "../../../google/protob
 import { Coin, CoinAmino, CoinSDKType } from "../../base/v1beta1/coin";
 import { ValidatorUpdate, ValidatorUpdateAmino, ValidatorUpdateSDKType } from "../../../tendermint/abci/types";
 import { BinaryReader, BinaryWriter } from "../../../binary";
-import { isSet, padDecimal, fromJsonTimestamp, fromTimestamp } from "../../../helpers";
+import { isSet, fromJsonTimestamp, fromTimestamp } from "../../../helpers";
 import { GlobalDecoderRegistry } from "../../../registry";
 import { Decimal } from "@cosmjs/math";
 import { encodePubkey, decodePubkey } from "@cosmjs/proto-signing";
@@ -1018,7 +1018,7 @@ export const HistoricalInfo = {
   },
   toAmino(message: HistoricalInfo, useInterfaces: boolean = true): HistoricalInfoAmino {
     const obj: any = {};
-    obj.header = message.header ? Header.toAmino(message.header, useInterfaces) : undefined;
+    obj.header = message.header ? Header.toAmino(message.header, useInterfaces) : Header.toAmino(Header.fromPartial({}));
     if (message.valset) {
       obj.valset = message.valset.map(e => e ? Validator.toAmino(e, useInterfaces) : undefined);
     } else {
@@ -1140,9 +1140,9 @@ export const CommissionRates = {
   },
   toAmino(message: CommissionRates, useInterfaces: boolean = true): CommissionRatesAmino {
     const obj: any = {};
-    obj.rate = padDecimal(message.rate) === "" ? undefined : padDecimal(message.rate);
-    obj.max_rate = padDecimal(message.maxRate) === "" ? undefined : padDecimal(message.maxRate);
-    obj.max_change_rate = padDecimal(message.maxChangeRate) === "" ? undefined : padDecimal(message.maxChangeRate);
+    obj.rate = message.rate === "" ? undefined : message.rate;
+    obj.max_rate = message.maxRate === "" ? undefined : message.maxRate;
+    obj.max_change_rate = message.maxChangeRate === "" ? undefined : message.maxChangeRate;
     return obj;
   },
   fromAminoMsg(object: CommissionRatesAminoMsg): CommissionRates {
@@ -1246,8 +1246,8 @@ export const Commission = {
   },
   toAmino(message: Commission, useInterfaces: boolean = true): CommissionAmino {
     const obj: any = {};
-    obj.commission_rates = message.commissionRates ? CommissionRates.toAmino(message.commissionRates, useInterfaces) : undefined;
-    obj.update_time = message.updateTime ? Timestamp.toAmino(message.updateTime, useInterfaces) : undefined;
+    obj.commission_rates = message.commissionRates ? CommissionRates.toAmino(message.commissionRates, useInterfaces) : CommissionRates.toAmino(CommissionRates.fromPartial({}));
+    obj.update_time = message.updateTime ? Timestamp.toAmino(message.updateTime, useInterfaces) : Timestamp.toAmino(Timestamp.fromPartial({}));
     return obj;
   },
   fromAminoMsg(object: CommissionAminoMsg): Commission {
@@ -1657,13 +1657,13 @@ export const Validator = {
     obj.jailed = message.jailed === false ? undefined : message.jailed;
     obj.status = message.status === 0 ? undefined : message.status;
     obj.tokens = message.tokens === "" ? undefined : message.tokens;
-    obj.delegator_shares = padDecimal(message.delegatorShares) === "" ? undefined : padDecimal(message.delegatorShares);
-    obj.description = message.description ? Description.toAmino(message.description, useInterfaces) : undefined;
-    obj.unbonding_height = message.unbondingHeight ? message.unbondingHeight.toString() : undefined;
-    obj.unbonding_time = message.unbondingTime ? Timestamp.toAmino(message.unbondingTime, useInterfaces) : undefined;
-    obj.commission = message.commission ? Commission.toAmino(message.commission, useInterfaces) : undefined;
+    obj.delegator_shares = message.delegatorShares === "" ? undefined : message.delegatorShares;
+    obj.description = message.description ? Description.toAmino(message.description, useInterfaces) : Description.toAmino(Description.fromPartial({}));
+    obj.unbonding_height = message.unbondingHeight !== BigInt(0) ? message.unbondingHeight.toString() : undefined;
+    obj.unbonding_time = message.unbondingTime ? Timestamp.toAmino(message.unbondingTime, useInterfaces) : Timestamp.toAmino(Timestamp.fromPartial({}));
+    obj.commission = message.commission ? Commission.toAmino(message.commission, useInterfaces) : Commission.toAmino(Commission.fromPartial({}));
     obj.min_self_delegation = message.minSelfDelegation === "" ? undefined : message.minSelfDelegation;
-    obj.unbonding_on_hold_ref_count = message.unbondingOnHoldRefCount ? message.unbondingOnHoldRefCount.toString() : undefined;
+    obj.unbonding_on_hold_ref_count = message.unbondingOnHoldRefCount !== BigInt(0) ? message.unbondingOnHoldRefCount.toString() : undefined;
     if (message.unbondingIds) {
       obj.unbonding_ids = message.unbondingIds.map(e => e.toString());
     } else {
@@ -2302,7 +2302,7 @@ export const Delegation = {
     const obj: any = {};
     obj.delegator_address = message.delegatorAddress === "" ? undefined : message.delegatorAddress;
     obj.validator_address = message.validatorAddress === "" ? undefined : message.validatorAddress;
-    obj.shares = padDecimal(message.shares) === "" ? undefined : padDecimal(message.shares);
+    obj.shares = message.shares === "" ? undefined : message.shares;
     return obj;
   },
   fromAminoMsg(object: DelegationAminoMsg): Delegation {
@@ -2583,12 +2583,12 @@ export const UnbondingDelegationEntry = {
   },
   toAmino(message: UnbondingDelegationEntry, useInterfaces: boolean = true): UnbondingDelegationEntryAmino {
     const obj: any = {};
-    obj.creation_height = message.creationHeight ? message.creationHeight.toString() : undefined;
-    obj.completion_time = message.completionTime ? Timestamp.toAmino(message.completionTime, useInterfaces) : undefined;
+    obj.creation_height = message.creationHeight !== BigInt(0) ? message.creationHeight.toString() : undefined;
+    obj.completion_time = message.completionTime ? Timestamp.toAmino(message.completionTime, useInterfaces) : Timestamp.toAmino(Timestamp.fromPartial({}));
     obj.initial_balance = message.initialBalance === "" ? undefined : message.initialBalance;
     obj.balance = message.balance === "" ? undefined : message.balance;
-    obj.unbonding_id = message.unbondingId ? message.unbondingId.toString() : undefined;
-    obj.unbonding_on_hold_ref_count = message.unbondingOnHoldRefCount ? message.unbondingOnHoldRefCount.toString() : undefined;
+    obj.unbonding_id = message.unbondingId !== BigInt(0) ? message.unbondingId.toString() : undefined;
+    obj.unbonding_on_hold_ref_count = message.unbondingOnHoldRefCount !== BigInt(0) ? message.unbondingOnHoldRefCount.toString() : undefined;
     return obj;
   },
   fromAminoMsg(object: UnbondingDelegationEntryAminoMsg): UnbondingDelegationEntry {
@@ -2744,12 +2744,12 @@ export const RedelegationEntry = {
   },
   toAmino(message: RedelegationEntry, useInterfaces: boolean = true): RedelegationEntryAmino {
     const obj: any = {};
-    obj.creation_height = message.creationHeight ? message.creationHeight.toString() : undefined;
-    obj.completion_time = message.completionTime ? Timestamp.toAmino(message.completionTime, useInterfaces) : undefined;
+    obj.creation_height = message.creationHeight !== BigInt(0) ? message.creationHeight.toString() : undefined;
+    obj.completion_time = message.completionTime ? Timestamp.toAmino(message.completionTime, useInterfaces) : Timestamp.toAmino(Timestamp.fromPartial({}));
     obj.initial_balance = message.initialBalance === "" ? undefined : message.initialBalance;
-    obj.shares_dst = padDecimal(message.sharesDst) === "" ? undefined : padDecimal(message.sharesDst);
-    obj.unbonding_id = message.unbondingId ? message.unbondingId.toString() : undefined;
-    obj.unbonding_on_hold_ref_count = message.unbondingOnHoldRefCount ? message.unbondingOnHoldRefCount.toString() : undefined;
+    obj.shares_dst = message.sharesDst === "" ? undefined : message.sharesDst;
+    obj.unbonding_id = message.unbondingId !== BigInt(0) ? message.unbondingId.toString() : undefined;
+    obj.unbonding_on_hold_ref_count = message.unbondingOnHoldRefCount !== BigInt(0) ? message.unbondingOnHoldRefCount.toString() : undefined;
     return obj;
   },
   fromAminoMsg(object: RedelegationEntryAminoMsg): RedelegationEntry {
@@ -3044,12 +3044,12 @@ export const Params = {
   },
   toAmino(message: Params, useInterfaces: boolean = true): ParamsAmino {
     const obj: any = {};
-    obj.unbonding_time = message.unbondingTime ? Duration.toAmino(message.unbondingTime, useInterfaces) : undefined;
+    obj.unbonding_time = message.unbondingTime ? Duration.toAmino(message.unbondingTime, useInterfaces) : Duration.toAmino(Duration.fromPartial({}));
     obj.max_validators = message.maxValidators === 0 ? undefined : message.maxValidators;
     obj.max_entries = message.maxEntries === 0 ? undefined : message.maxEntries;
     obj.historical_entries = message.historicalEntries === 0 ? undefined : message.historicalEntries;
     obj.bond_denom = message.bondDenom === "" ? undefined : message.bondDenom;
-    obj.min_commission_rate = padDecimal(message.minCommissionRate) === "" ? undefined : padDecimal(message.minCommissionRate);
+    obj.min_commission_rate = message.minCommissionRate === "" ? undefined : message.minCommissionRate;
     return obj;
   },
   fromAminoMsg(object: ParamsAminoMsg): Params {
@@ -3153,8 +3153,8 @@ export const DelegationResponse = {
   },
   toAmino(message: DelegationResponse, useInterfaces: boolean = true): DelegationResponseAmino {
     const obj: any = {};
-    obj.delegation = message.delegation ? Delegation.toAmino(message.delegation, useInterfaces) : undefined;
-    obj.balance = message.balance ? Coin.toAmino(message.balance, useInterfaces) : undefined;
+    obj.delegation = message.delegation ? Delegation.toAmino(message.delegation, useInterfaces) : Delegation.toAmino(Delegation.fromPartial({}));
+    obj.balance = message.balance ? Coin.toAmino(message.balance, useInterfaces) : Coin.toAmino(Coin.fromPartial({}));
     return obj;
   },
   fromAminoMsg(object: DelegationResponseAminoMsg): DelegationResponse {
@@ -3258,7 +3258,7 @@ export const RedelegationEntryResponse = {
   },
   toAmino(message: RedelegationEntryResponse, useInterfaces: boolean = true): RedelegationEntryResponseAmino {
     const obj: any = {};
-    obj.redelegation_entry = message.redelegationEntry ? RedelegationEntry.toAmino(message.redelegationEntry, useInterfaces) : undefined;
+    obj.redelegation_entry = message.redelegationEntry ? RedelegationEntry.toAmino(message.redelegationEntry, useInterfaces) : RedelegationEntry.toAmino(RedelegationEntry.fromPartial({}));
     obj.balance = message.balance === "" ? undefined : message.balance;
     return obj;
   },
@@ -3365,7 +3365,7 @@ export const RedelegationResponse = {
   },
   toAmino(message: RedelegationResponse, useInterfaces: boolean = true): RedelegationResponseAmino {
     const obj: any = {};
-    obj.redelegation = message.redelegation ? Redelegation.toAmino(message.redelegation, useInterfaces) : undefined;
+    obj.redelegation = message.redelegation ? Redelegation.toAmino(message.redelegation, useInterfaces) : Redelegation.toAmino(Redelegation.fromPartial({}));
     if (message.entries) {
       obj.entries = message.entries.map(e => e ? RedelegationEntryResponse.toAmino(e, useInterfaces) : undefined);
     } else {

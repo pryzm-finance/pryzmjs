@@ -156,7 +156,7 @@ export const QueryOrderRequest = {
   },
   toAmino(message: QueryOrderRequest, useInterfaces: boolean = true): QueryOrderRequestAmino {
     const obj: any = {};
-    obj.id = message.id ? message.id.toString() : undefined;
+    obj.id = message.id !== BigInt(0) ? message.id.toString() : undefined;
     return obj;
   },
   fromAminoMsg(object: QueryOrderRequestAminoMsg): QueryOrderRequest {

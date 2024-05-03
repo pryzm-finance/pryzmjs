@@ -1,6 +1,6 @@
 import { BinaryReader, BinaryWriter } from "../../binary";
 import { Decimal } from "@cosmjs/math";
-import { isSet, padDecimal } from "../../helpers";
+import { isSet } from "../../helpers";
 import { GlobalDecoderRegistry } from "../../registry";
 export interface TreasuryBalance {
   denom: string;
@@ -116,7 +116,7 @@ export const TreasuryBalance = {
     const obj: any = {};
     obj.denom = message.denom === "" ? undefined : message.denom;
     obj.balance = message.balance === "" ? undefined : message.balance;
-    obj.balance_stable_coin_terms = padDecimal(message.balanceStableCoinTerms) === "" ? undefined : padDecimal(message.balanceStableCoinTerms);
+    obj.balance_stable_coin_terms = message.balanceStableCoinTerms === "" ? undefined : message.balanceStableCoinTerms;
     return obj;
   },
   fromAminoMsg(object: TreasuryBalanceAminoMsg): TreasuryBalance {

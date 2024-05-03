@@ -755,7 +755,7 @@ export const QueryClientStateResponse = {
   },
   fromJSON(object: any): QueryClientStateResponse {
     return {
-      clientState: isSet(object.clientState) ? Any.fromJSONAsAny(object.clientState) : undefined,
+      clientState: isSet(object.clientState) ? Any.fromJSON(object.clientState) : undefined,
       proof: isSet(object.proof) ? bytesFromBase64(object.proof) : new Uint8Array(),
       proofHeight: isSet(object.proofHeight) ? Height.fromJSON(object.proofHeight) : undefined
     };
@@ -769,7 +769,7 @@ export const QueryClientStateResponse = {
   },
   fromPartial(object: Partial<QueryClientStateResponse>): QueryClientStateResponse {
     const message = createBaseQueryClientStateResponse();
-    message.clientState = object.clientState !== undefined && object.clientState !== null ? Any.fromPartialAsAny(object.clientState) : undefined;
+    message.clientState = object.clientState !== undefined && object.clientState !== null ? Any.fromPartial(object.clientState) : undefined;
     message.proof = object.proof ?? new Uint8Array();
     message.proofHeight = object.proofHeight !== undefined && object.proofHeight !== null ? Height.fromPartial(object.proofHeight) : undefined;
     return message;
@@ -1124,8 +1124,8 @@ export const QueryConsensusStateRequest = {
   toAmino(message: QueryConsensusStateRequest, useInterfaces: boolean = true): QueryConsensusStateRequestAmino {
     const obj: any = {};
     obj.client_id = message.clientId === "" ? undefined : message.clientId;
-    obj.revision_number = message.revisionNumber ? message.revisionNumber.toString() : undefined;
-    obj.revision_height = message.revisionHeight ? message.revisionHeight.toString() : undefined;
+    obj.revision_number = message.revisionNumber !== BigInt(0) ? message.revisionNumber.toString() : undefined;
+    obj.revision_height = message.revisionHeight !== BigInt(0) ? message.revisionHeight.toString() : undefined;
     obj.latest_height = message.latestHeight === false ? undefined : message.latestHeight;
     return obj;
   },
@@ -1209,7 +1209,7 @@ export const QueryConsensusStateResponse = {
   },
   fromJSON(object: any): QueryConsensusStateResponse {
     return {
-      consensusState: isSet(object.consensusState) ? Any.fromJSONAsAny(object.consensusState) : undefined,
+      consensusState: isSet(object.consensusState) ? Any.fromJSON(object.consensusState) : undefined,
       proof: isSet(object.proof) ? bytesFromBase64(object.proof) : new Uint8Array(),
       proofHeight: isSet(object.proofHeight) ? Height.fromJSON(object.proofHeight) : undefined
     };
@@ -1223,7 +1223,7 @@ export const QueryConsensusStateResponse = {
   },
   fromPartial(object: Partial<QueryConsensusStateResponse>): QueryConsensusStateResponse {
     const message = createBaseQueryConsensusStateResponse();
-    message.consensusState = object.consensusState !== undefined && object.consensusState !== null ? Any.fromPartialAsAny(object.consensusState) : undefined;
+    message.consensusState = object.consensusState !== undefined && object.consensusState !== null ? Any.fromPartial(object.consensusState) : undefined;
     message.proof = object.proof ?? new Uint8Array();
     message.proofHeight = object.proofHeight !== undefined && object.proofHeight !== null ? Height.fromPartial(object.proofHeight) : undefined;
     return message;
@@ -2169,7 +2169,7 @@ export const QueryUpgradedClientStateResponse = {
   },
   fromJSON(object: any): QueryUpgradedClientStateResponse {
     return {
-      upgradedClientState: isSet(object.upgradedClientState) ? Any.fromJSONAsAny(object.upgradedClientState) : undefined
+      upgradedClientState: isSet(object.upgradedClientState) ? Any.fromJSON(object.upgradedClientState) : undefined
     };
   },
   toJSON(message: QueryUpgradedClientStateResponse): unknown {
@@ -2179,7 +2179,7 @@ export const QueryUpgradedClientStateResponse = {
   },
   fromPartial(object: Partial<QueryUpgradedClientStateResponse>): QueryUpgradedClientStateResponse {
     const message = createBaseQueryUpgradedClientStateResponse();
-    message.upgradedClientState = object.upgradedClientState !== undefined && object.upgradedClientState !== null ? Any.fromPartialAsAny(object.upgradedClientState) : undefined;
+    message.upgradedClientState = object.upgradedClientState !== undefined && object.upgradedClientState !== null ? Any.fromPartial(object.upgradedClientState) : undefined;
     return message;
   },
   fromAmino(object: QueryUpgradedClientStateResponseAmino): QueryUpgradedClientStateResponse {
@@ -2335,7 +2335,7 @@ export const QueryUpgradedConsensusStateResponse = {
   },
   fromJSON(object: any): QueryUpgradedConsensusStateResponse {
     return {
-      upgradedConsensusState: isSet(object.upgradedConsensusState) ? Any.fromJSONAsAny(object.upgradedConsensusState) : undefined
+      upgradedConsensusState: isSet(object.upgradedConsensusState) ? Any.fromJSON(object.upgradedConsensusState) : undefined
     };
   },
   toJSON(message: QueryUpgradedConsensusStateResponse): unknown {
@@ -2345,7 +2345,7 @@ export const QueryUpgradedConsensusStateResponse = {
   },
   fromPartial(object: Partial<QueryUpgradedConsensusStateResponse>): QueryUpgradedConsensusStateResponse {
     const message = createBaseQueryUpgradedConsensusStateResponse();
-    message.upgradedConsensusState = object.upgradedConsensusState !== undefined && object.upgradedConsensusState !== null ? Any.fromPartialAsAny(object.upgradedConsensusState) : undefined;
+    message.upgradedConsensusState = object.upgradedConsensusState !== undefined && object.upgradedConsensusState !== null ? Any.fromPartial(object.upgradedConsensusState) : undefined;
     return message;
   },
   fromAmino(object: QueryUpgradedConsensusStateResponseAmino): QueryUpgradedConsensusStateResponse {

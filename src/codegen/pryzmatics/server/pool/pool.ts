@@ -137,7 +137,7 @@ export const QueryPoolRequest = {
   },
   toAmino(message: QueryPoolRequest, useInterfaces: boolean = true): QueryPoolRequestAmino {
     const obj: any = {};
-    obj.pool_id = message.poolId ? message.poolId.toString() : undefined;
+    obj.pool_id = message.poolId !== BigInt(0) ? message.poolId.toString() : undefined;
     return obj;
   },
   fromAminoMsg(object: QueryPoolRequestAminoMsg): QueryPoolRequest {

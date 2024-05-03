@@ -266,7 +266,7 @@ export const PoolTradeHistory = {
     } else {
       obj.tokens_out = message.tokensOut;
     }
-    obj.pool_id = message.poolId ? message.poolId.toString() : undefined;
+    obj.pool_id = message.poolId !== BigInt(0) ? message.poolId.toString() : undefined;
     obj.operation_type = message.operationType === 0 ? undefined : message.operationType;
     if (message.swapFee) {
       obj.swap_fee = message.swapFee.map(e => e ? Coin.toAmino(e, useInterfaces) : undefined);

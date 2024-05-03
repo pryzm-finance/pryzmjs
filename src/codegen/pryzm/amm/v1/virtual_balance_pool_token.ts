@@ -1,6 +1,6 @@
 import { BinaryReader, BinaryWriter } from "../../../binary";
 import { Decimal } from "@cosmjs/math";
-import { isSet, padDecimal } from "../../../helpers";
+import { isSet } from "../../../helpers";
 import { GlobalDecoderRegistry } from "../../../registry";
 export interface VirtualBalancePoolToken {
   poolId: bigint;
@@ -146,11 +146,11 @@ export const VirtualBalancePoolToken = {
   },
   toAmino(message: VirtualBalancePoolToken, useInterfaces: boolean = true): VirtualBalancePoolTokenAmino {
     const obj: any = {};
-    obj.pool_id = message.poolId ? message.poolId.toString() : undefined;
+    obj.pool_id = message.poolId !== BigInt(0) ? message.poolId.toString() : undefined;
     obj.denom = message.denom === "" ? undefined : message.denom;
-    obj.target_virtual_balance = padDecimal(message.targetVirtualBalance) === "" ? undefined : padDecimal(message.targetVirtualBalance);
-    obj.start_unix_millis = message.startUnixMillis ? message.startUnixMillis.toString() : undefined;
-    obj.end_unix_millis = message.endUnixMillis ? message.endUnixMillis.toString() : undefined;
+    obj.target_virtual_balance = message.targetVirtualBalance === "" ? undefined : message.targetVirtualBalance;
+    obj.start_unix_millis = message.startUnixMillis !== BigInt(0) ? message.startUnixMillis.toString() : undefined;
+    obj.end_unix_millis = message.endUnixMillis !== BigInt(0) ? message.endUnixMillis.toString() : undefined;
     return obj;
   },
   fromAminoMsg(object: VirtualBalancePoolTokenAminoMsg): VirtualBalancePoolToken {

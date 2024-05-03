@@ -164,7 +164,7 @@ export const QueryFlowHistoricalPriceRequest = {
   },
   toAmino(message: QueryFlowHistoricalPriceRequest, useInterfaces: boolean = true): QueryFlowHistoricalPriceRequestAmino {
     const obj: any = {};
-    obj.flow_id = message.flowId ? message.flowId.toString() : undefined;
+    obj.flow_id = message.flowId !== BigInt(0) ? message.flowId.toString() : undefined;
     obj.time_resolution_type = message.timeResolutionType === 0 ? undefined : message.timeResolutionType;
     obj.time_resolution_value = message.timeResolutionValue === 0 ? undefined : message.timeResolutionValue;
     obj.from = message.from === "" ? undefined : message.from;

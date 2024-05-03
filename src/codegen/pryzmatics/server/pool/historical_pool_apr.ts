@@ -164,7 +164,7 @@ export const QueryHistoricalPoolAprRequest = {
   },
   toAmino(message: QueryHistoricalPoolAprRequest, useInterfaces: boolean = true): QueryHistoricalPoolAprRequestAmino {
     const obj: any = {};
-    obj.pool_id = message.poolId ? message.poolId.toString() : undefined;
+    obj.pool_id = message.poolId !== BigInt(0) ? message.poolId.toString() : undefined;
     obj.time_resolution_type = message.timeResolutionType === 0 ? undefined : message.timeResolutionType;
     obj.time_resolution_value = message.timeResolutionValue === 0 ? undefined : message.timeResolutionValue;
     obj.from = message.from === "" ? undefined : message.from;

@@ -2,7 +2,7 @@ import { Coin, CoinAmino, CoinSDKType } from "../../../cosmos/base/v1beta1/coin"
 import { Duration, DurationAmino, DurationSDKType } from "../../../google/protobuf/duration";
 import { BinaryReader, BinaryWriter } from "../../../binary";
 import { Decimal } from "@cosmjs/math";
-import { isSet, padDecimal } from "../../../helpers";
+import { isSet } from "../../../helpers";
 import { GlobalDecoderRegistry } from "../../../registry";
 /** Params defines the parameters for the module. */
 export interface Params {
@@ -161,11 +161,11 @@ export const Params = {
   },
   toAmino(message: Params, useInterfaces: boolean = true): ParamsAmino {
     const obj: any = {};
-    obj.flow_creation_deposit = message.flowCreationDeposit ? Coin.toAmino(message.flowCreationDeposit, useInterfaces) : undefined;
-    obj.min_flow_duration = message.minFlowDuration ? Duration.toAmino(message.minFlowDuration, useInterfaces) : undefined;
-    obj.min_duration_to_flow_start = message.minDurationToFlowStart ? Duration.toAmino(message.minDurationToFlowStart, useInterfaces) : undefined;
-    obj.token_out_fee_ratio = padDecimal(message.tokenOutFeeRatio) === "" ? undefined : padDecimal(message.tokenOutFeeRatio);
-    obj.token_in_fee_ratio = padDecimal(message.tokenInFeeRatio) === "" ? undefined : padDecimal(message.tokenInFeeRatio);
+    obj.flow_creation_deposit = message.flowCreationDeposit ? Coin.toAmino(message.flowCreationDeposit, useInterfaces) : Coin.toAmino(Coin.fromPartial({}));
+    obj.min_flow_duration = message.minFlowDuration ? Duration.toAmino(message.minFlowDuration, useInterfaces) : Duration.toAmino(Duration.fromPartial({}));
+    obj.min_duration_to_flow_start = message.minDurationToFlowStart ? Duration.toAmino(message.minDurationToFlowStart, useInterfaces) : Duration.toAmino(Duration.fromPartial({}));
+    obj.token_out_fee_ratio = message.tokenOutFeeRatio ?? "";
+    obj.token_in_fee_ratio = message.tokenInFeeRatio ?? "";
     return obj;
   },
   fromAminoMsg(object: ParamsAminoMsg): Params {

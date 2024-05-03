@@ -1,6 +1,6 @@
 import { BinaryReader, BinaryWriter } from "../../../binary";
 import { Decimal } from "@cosmjs/math";
-import { isSet, padDecimal } from "../../../helpers";
+import { isSet } from "../../../helpers";
 import { GlobalDecoderRegistry } from "../../../registry";
 export interface AssetState {
   assetId: string;
@@ -116,7 +116,7 @@ export const AssetState = {
     const obj: any = {};
     obj.asset_id = message.assetId === "" ? undefined : message.assetId;
     obj.total_p_amount = message.totalPAmount === "" ? undefined : message.totalPAmount;
-    obj.last_seen_exchange_rate = padDecimal(message.lastSeenExchangeRate) === "" ? undefined : padDecimal(message.lastSeenExchangeRate);
+    obj.last_seen_exchange_rate = message.lastSeenExchangeRate === "" ? undefined : message.lastSeenExchangeRate;
     return obj;
   },
   fromAminoMsg(object: AssetStateAminoMsg): AssetState {

@@ -2,7 +2,7 @@ import { Minter, MinterAmino, MinterSDKType } from "./minter";
 import { DistributionProportions, DistributionProportionsAmino, DistributionProportionsSDKType, Params, ParamsAmino, ParamsSDKType } from "./params";
 import { BinaryReader, BinaryWriter } from "../../../binary";
 import { Decimal } from "@cosmjs/math";
-import { isSet, padDecimal } from "../../../helpers";
+import { isSet } from "../../../helpers";
 import { GlobalDecoderRegistry } from "../../../registry";
 export interface EventMint {
   minter: Minter;
@@ -166,10 +166,10 @@ export const EventMint = {
   toAmino(message: EventMint, useInterfaces: boolean = true): EventMintAmino {
     const obj: any = {};
     obj.minter = message.minter ? Minter.toAmino(message.minter, useInterfaces) : undefined;
-    obj.bonded_ratio = padDecimal(message.bondedRatio) === "" ? undefined : padDecimal(message.bondedRatio);
+    obj.bonded_ratio = message.bondedRatio === "" ? undefined : message.bondedRatio;
     obj.total_minted = message.totalMinted === "" ? undefined : message.totalMinted;
     obj.distributed_amounts = message.distributedAmounts ? DistributionProportions.toAmino(message.distributedAmounts, useInterfaces) : undefined;
-    obj.epoch_number = message.epochNumber ? message.epochNumber.toString() : undefined;
+    obj.epoch_number = message.epochNumber !== BigInt(0) ? message.epochNumber.toString() : undefined;
     return obj;
   },
   fromAminoMsg(object: EventMintAminoMsg): EventMint {

@@ -131,7 +131,7 @@ export const PulseTradablePair = {
     const obj: any = {};
     obj.token_in = message.tokenIn === "" ? undefined : message.tokenIn;
     obj.token_out = message.tokenOut === "" ? undefined : message.tokenOut;
-    obj.pool_id = message.poolId ? message.poolId.toString() : undefined;
+    obj.pool_id = message.poolId !== BigInt(0) ? message.poolId.toString() : undefined;
     obj.whitelisted_route = message.whitelistedRoute === false ? undefined : message.whitelistedRoute;
     return obj;
   },

@@ -1,6 +1,6 @@
 import { Coin, CoinAmino, CoinSDKType } from "../../../cosmos/base/v1beta1/coin";
 import { BinaryReader, BinaryWriter } from "../../../binary";
-import { isSet, padDecimal } from "../../../helpers";
+import { isSet } from "../../../helpers";
 import { GlobalDecoderRegistry } from "../../../registry";
 import { Decimal } from "@cosmjs/math";
 export interface QueryExitExactTokensSimulationRequest {
@@ -130,7 +130,7 @@ export const QueryExitExactTokensSimulationRequest = {
   },
   toAmino(message: QueryExitExactTokensSimulationRequest, useInterfaces: boolean = true): QueryExitExactTokensSimulationRequestAmino {
     const obj: any = {};
-    obj.pool_id = message.poolId ? message.poolId.toString() : undefined;
+    obj.pool_id = message.poolId !== BigInt(0) ? message.poolId.toString() : undefined;
     if (message.amountsOut) {
       obj.amounts_out = message.amountsOut.map(e => e ? Coin.toAmino(e, useInterfaces) : undefined);
     } else {
@@ -279,8 +279,8 @@ export const QueryExitExactTokensSimulationResponse = {
       obj.amounts_out = message.amountsOut;
     }
     obj.fee_amount = message.feeAmount ? Coin.toAmino(message.feeAmount, useInterfaces) : undefined;
-    obj.fee_percentage = padDecimal(message.feePercentage) === "" ? undefined : padDecimal(message.feePercentage);
-    obj.price_impact = padDecimal(message.priceImpact) === "" ? undefined : padDecimal(message.priceImpact);
+    obj.fee_percentage = message.feePercentage === "" ? undefined : message.feePercentage;
+    obj.price_impact = message.priceImpact === "" ? undefined : message.priceImpact;
     return obj;
   },
   fromAminoMsg(object: QueryExitExactTokensSimulationResponseAminoMsg): QueryExitExactTokensSimulationResponse {

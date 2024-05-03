@@ -1223,7 +1223,7 @@ export const QueryValidatorResponse = {
   },
   toAmino(message: QueryValidatorResponse, useInterfaces: boolean = true): QueryValidatorResponseAmino {
     const obj: any = {};
-    obj.validator = message.validator ? Validator.toAmino(message.validator, useInterfaces) : undefined;
+    obj.validator = message.validator ? Validator.toAmino(message.validator, useInterfaces) : Validator.toAmino(Validator.fromPartial({}));
     return obj;
   },
   fromAminoMsg(object: QueryValidatorResponseAminoMsg): QueryValidatorResponse {
@@ -2047,7 +2047,7 @@ export const QueryUnbondingDelegationResponse = {
   },
   toAmino(message: QueryUnbondingDelegationResponse, useInterfaces: boolean = true): QueryUnbondingDelegationResponseAmino {
     const obj: any = {};
-    obj.unbond = message.unbond ? UnbondingDelegation.toAmino(message.unbond, useInterfaces) : undefined;
+    obj.unbond = message.unbond ? UnbondingDelegation.toAmino(message.unbond, useInterfaces) : UnbondingDelegation.toAmino(UnbondingDelegation.fromPartial({}));
     return obj;
   },
   fromAminoMsg(object: QueryUnbondingDelegationResponseAminoMsg): QueryUnbondingDelegationResponse {
@@ -3135,7 +3135,7 @@ export const QueryDelegatorValidatorResponse = {
   },
   toAmino(message: QueryDelegatorValidatorResponse, useInterfaces: boolean = true): QueryDelegatorValidatorResponseAmino {
     const obj: any = {};
-    obj.validator = message.validator ? Validator.toAmino(message.validator, useInterfaces) : undefined;
+    obj.validator = message.validator ? Validator.toAmino(message.validator, useInterfaces) : Validator.toAmino(Validator.fromPartial({}));
     return obj;
   },
   fromAminoMsg(object: QueryDelegatorValidatorResponseAminoMsg): QueryDelegatorValidatorResponse {
@@ -3226,7 +3226,7 @@ export const QueryHistoricalInfoRequest = {
   },
   toAmino(message: QueryHistoricalInfoRequest, useInterfaces: boolean = true): QueryHistoricalInfoRequestAmino {
     const obj: any = {};
-    obj.height = message.height ? message.height.toString() : undefined;
+    obj.height = message.height !== BigInt(0) ? message.height.toString() : undefined;
     return obj;
   },
   fromAminoMsg(object: QueryHistoricalInfoRequestAminoMsg): QueryHistoricalInfoRequest {
@@ -3483,7 +3483,7 @@ export const QueryPoolResponse = {
   },
   toAmino(message: QueryPoolResponse, useInterfaces: boolean = true): QueryPoolResponseAmino {
     const obj: any = {};
-    obj.pool = message.pool ? Pool.toAmino(message.pool, useInterfaces) : undefined;
+    obj.pool = message.pool ? Pool.toAmino(message.pool, useInterfaces) : Pool.toAmino(Pool.fromPartial({}));
     return obj;
   },
   fromAminoMsg(object: QueryPoolResponseAminoMsg): QueryPoolResponse {
@@ -3649,7 +3649,7 @@ export const QueryParamsResponse = {
   },
   toAmino(message: QueryParamsResponse, useInterfaces: boolean = true): QueryParamsResponseAmino {
     const obj: any = {};
-    obj.params = message.params ? Params.toAmino(message.params, useInterfaces) : undefined;
+    obj.params = message.params ? Params.toAmino(message.params, useInterfaces) : Params.toAmino(Params.fromPartial({}));
     return obj;
   },
   fromAminoMsg(object: QueryParamsResponseAminoMsg): QueryParamsResponse {

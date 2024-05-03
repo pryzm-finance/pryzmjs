@@ -322,7 +322,7 @@ export const QueryParamsResponse = {
   },
   toAmino(message: QueryParamsResponse, useInterfaces: boolean = true): QueryParamsResponseAmino {
     const obj: any = {};
-    obj.param = message.param ? ParamChange.toAmino(message.param, useInterfaces) : undefined;
+    obj.param = message.param ? ParamChange.toAmino(message.param, useInterfaces) : ParamChange.toAmino(ParamChange.fromPartial({}));
     return obj;
   },
   fromAminoMsg(object: QueryParamsResponseAminoMsg): QueryParamsResponse {

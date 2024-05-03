@@ -224,7 +224,7 @@ export const Proposal = {
   },
   toAmino(message: Proposal, useInterfaces: boolean = true): ProposalAmino {
     const obj: any = {};
-    obj.proposal_id = message.proposalId ? message.proposalId.toString() : undefined;
+    obj.proposal_id = message.proposalId !== BigInt(0) ? message.proposalId.toString() : undefined;
     obj.asset = message.asset === "" ? undefined : message.asset;
     obj.start_time = message.startTime ? Timestamp.toAmino(message.startTime, useInterfaces) : undefined;
     obj.end_time = message.endTime ? Timestamp.toAmino(message.endTime, useInterfaces) : undefined;

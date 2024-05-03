@@ -771,7 +771,7 @@ export const QueryAccountsResponse = {
   },
   fromPartial(object: Partial<QueryAccountsResponse>): QueryAccountsResponse {
     const message = createBaseQueryAccountsResponse();
-    message.accounts = object.accounts?.map(e => (Any.fromPartialAsAny(e) as any)) || [];
+    message.accounts = object.accounts?.map(e => (GlobalDecoderRegistry.fromPartial(e) as any)) || [];
     message.pagination = object.pagination !== undefined && object.pagination !== null ? PageResponse.fromPartial(object.pagination) : undefined;
     return message;
   },
@@ -1296,7 +1296,7 @@ export const QueryModuleAccountsResponse = {
   },
   fromPartial(object: Partial<QueryModuleAccountsResponse>): QueryModuleAccountsResponse {
     const message = createBaseQueryModuleAccountsResponse();
-    message.accounts = object.accounts?.map(e => (Any.fromPartialAsAny(e) as any)) || [];
+    message.accounts = object.accounts?.map(e => (GlobalDecoderRegistry.fromPartial(e) as any)) || [];
     return message;
   },
   fromAmino(object: QueryModuleAccountsResponseAmino): QueryModuleAccountsResponse {
@@ -2126,8 +2126,8 @@ export const QueryAccountAddressByIDRequest = {
   },
   toAmino(message: QueryAccountAddressByIDRequest, useInterfaces: boolean = true): QueryAccountAddressByIDRequestAmino {
     const obj: any = {};
-    obj.id = message.id ? message.id.toString() : undefined;
-    obj.account_id = message.accountId ? message.accountId.toString() : undefined;
+    obj.id = message.id !== BigInt(0) ? message.id.toString() : undefined;
+    obj.account_id = message.accountId !== BigInt(0) ? message.accountId.toString() : undefined;
     return obj;
   },
   fromAminoMsg(object: QueryAccountAddressByIDRequestAminoMsg): QueryAccountAddressByIDRequest {

@@ -1,6 +1,6 @@
 import { BinaryReader, BinaryWriter } from "../../../binary";
 import { Decimal } from "@cosmjs/math";
-import { isSet, padDecimal } from "../../../helpers";
+import { isSet } from "../../../helpers";
 import { GlobalDecoderRegistry } from "../../../registry";
 export interface Position {
   /** the flow for which this position is created */
@@ -252,15 +252,15 @@ export const Position = {
   },
   toAmino(message: Position, useInterfaces: boolean = true): PositionAmino {
     const obj: any = {};
-    obj.flow = message.flow ? message.flow.toString() : undefined;
+    obj.flow = message.flow !== BigInt(0) ? message.flow.toString() : undefined;
     obj.owner = message.owner === "" ? undefined : message.owner;
     obj.operator = message.operator === "" ? undefined : message.operator;
-    obj.dist_index = padDecimal(message.distIndex) === "" ? undefined : padDecimal(message.distIndex);
+    obj.dist_index = message.distIndex === "" ? undefined : message.distIndex;
     obj.token_in_balance = message.tokenInBalance === "" ? undefined : message.tokenInBalance;
     obj.spent_token_in = message.spentTokenIn === "" ? undefined : message.spentTokenIn;
     obj.shares = message.shares === "" ? undefined : message.shares;
     obj.purchased_token_out = message.purchasedTokenOut === "" ? undefined : message.purchasedTokenOut;
-    obj.pending_purchase = padDecimal(message.pendingPurchase) === "" ? undefined : padDecimal(message.pendingPurchase);
+    obj.pending_purchase = message.pendingPurchase === "" ? undefined : message.pendingPurchase;
     obj.claimed_amount = message.claimedAmount === "" ? undefined : message.claimedAmount;
     return obj;
   },

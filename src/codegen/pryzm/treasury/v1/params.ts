@@ -1,6 +1,6 @@
 import { BinaryReader, BinaryWriter } from "../../../binary";
 import { Decimal } from "@cosmjs/math";
-import { isSet, padDecimal } from "../../../helpers";
+import { isSet } from "../../../helpers";
 import { GlobalDecoderRegistry } from "../../../registry";
 /** Params defines the parameters for the module. */
 export interface Params {
@@ -85,7 +85,7 @@ export const Params = {
   },
   toAmino(message: Params, useInterfaces: boolean = true): ParamsAmino {
     const obj: any = {};
-    obj.gas_fee_take_ratio = padDecimal(message.gasFeeTakeRatio) === "" ? undefined : padDecimal(message.gasFeeTakeRatio);
+    obj.gas_fee_take_ratio = message.gasFeeTakeRatio === "" ? undefined : message.gasFeeTakeRatio;
     return obj;
   },
   fromAminoMsg(object: ParamsAminoMsg): Params {

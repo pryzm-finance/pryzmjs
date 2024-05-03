@@ -1,6 +1,6 @@
 import { BinaryReader, BinaryWriter } from "../../../binary";
 import { Decimal } from "@cosmjs/math";
-import { isSet, padDecimal } from "../../../helpers";
+import { isSet } from "../../../helpers";
 import { GlobalDecoderRegistry } from "../../../registry";
 export interface UserStakeState {
   address: string;
@@ -166,7 +166,7 @@ export const UserStakeState = {
     obj.asset_id = message.assetId === "" ? undefined : message.assetId;
     obj.maturity_symbol = message.maturitySymbol === "" ? undefined : message.maturitySymbol;
     obj.bonded_amount = message.bondedAmount === "" ? undefined : message.bondedAmount;
-    obj.user_index = padDecimal(message.userIndex) === "" ? undefined : padDecimal(message.userIndex);
+    obj.user_index = message.userIndex === "" ? undefined : message.userIndex;
     obj.pending_reward = message.pendingReward === "" ? undefined : message.pendingReward;
     return obj;
   },

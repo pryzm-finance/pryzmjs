@@ -1209,7 +1209,7 @@ export const QueryGetUnbondingRequest = {
   },
   toAmino(message: QueryGetUnbondingRequest, useInterfaces: boolean = true): QueryGetUnbondingRequestAmino {
     const obj: any = {};
-    obj.id = message.id ? message.id.toString() : undefined;
+    obj.id = message.id !== BigInt(0) ? message.id.toString() : undefined;
     return obj;
   },
   fromAminoMsg(object: QueryGetUnbondingRequestAminoMsg): QueryGetUnbondingRequest {

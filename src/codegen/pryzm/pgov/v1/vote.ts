@@ -136,7 +136,7 @@ export const Vote = {
   toAmino(message: Vote, useInterfaces: boolean = true): VoteAmino {
     const obj: any = {};
     obj.asset = message.asset === "" ? undefined : message.asset;
-    obj.proposal = message.proposal ? message.proposal.toString() : undefined;
+    obj.proposal = message.proposal !== BigInt(0) ? message.proposal.toString() : undefined;
     obj.voter = message.voter === "" ? undefined : message.voter;
     if (message.options) {
       obj.options = message.options.map(e => e ? WeightedVoteOption.toAmino(e, useInterfaces) : undefined);

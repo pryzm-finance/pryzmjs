@@ -313,7 +313,7 @@ export const YammPoolAssetId = {
   },
   toAmino(message: YammPoolAssetId, useInterfaces: boolean = true): YammPoolAssetIdAmino {
     const obj: any = {};
-    obj.pool_id = message.poolId ? message.poolId.toString() : undefined;
+    obj.pool_id = message.poolId !== BigInt(0) ? message.poolId.toString() : undefined;
     obj.asset_id = message.assetId === "" ? undefined : message.assetId;
     return obj;
   },
@@ -668,7 +668,7 @@ export const GenesisState = {
     } else {
       obj.order_list = message.orderList;
     }
-    obj.order_count = message.orderCount ? message.orderCount.toString() : undefined;
+    obj.order_count = message.orderCount !== BigInt(0) ? message.orderCount.toString() : undefined;
     if (message.executableOrderList) {
       obj.executable_order_list = message.executableOrderList.map(e => e.toString());
     } else {

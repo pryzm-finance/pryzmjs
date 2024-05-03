@@ -1,7 +1,7 @@
 import { Timestamp, TimestampSDKType } from "../../google/protobuf/timestamp";
 import { BinaryReader, BinaryWriter } from "../../binary";
 import { Decimal } from "@cosmjs/math";
-import { isSet, fromJsonTimestamp, fromTimestamp, padDecimal } from "../../helpers";
+import { isSet, fromJsonTimestamp, fromTimestamp } from "../../helpers";
 import { GlobalDecoderRegistry } from "../../registry";
 export interface PoolApr {
   poolId: bigint;
@@ -195,13 +195,13 @@ export const PoolApr = {
   },
   toAmino(message: PoolApr, useInterfaces: boolean = true): PoolAprAmino {
     const obj: any = {};
-    obj.pool_id = message.poolId ? message.poolId.toString() : undefined;
+    obj.pool_id = message.poolId !== BigInt(0) ? message.poolId.toString() : undefined;
     obj.time = message.time ? Timestamp.toAmino(message.time, useInterfaces) : undefined;
-    obj.apr = padDecimal(message.apr) === null ? undefined : padDecimal(message.apr);
-    obj.swap_fee_apr = padDecimal(message.swapFeeApr) === null ? undefined : padDecimal(message.swapFeeApr);
-    obj.token_yield = padDecimal(message.tokenYield) === null ? undefined : padDecimal(message.tokenYield);
-    obj.incentives_apr = padDecimal(message.incentivesApr) === null ? undefined : padDecimal(message.incentivesApr);
-    obj.alliance_apr = padDecimal(message.allianceApr) === null ? undefined : padDecimal(message.allianceApr);
+    obj.apr = message.apr === null ? undefined : message.apr;
+    obj.swap_fee_apr = message.swapFeeApr === null ? undefined : message.swapFeeApr;
+    obj.token_yield = message.tokenYield === null ? undefined : message.tokenYield;
+    obj.incentives_apr = message.incentivesApr === null ? undefined : message.incentivesApr;
+    obj.alliance_apr = message.allianceApr === null ? undefined : message.allianceApr;
     obj.error = message.error === "" ? undefined : message.error;
     return obj;
   },

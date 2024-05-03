@@ -113,9 +113,9 @@ export const WeightUpdateTiming = {
   },
   toAmino(message: WeightUpdateTiming, useInterfaces: boolean = true): WeightUpdateTimingAmino {
     const obj: any = {};
-    obj.pool_id = message.poolId ? message.poolId.toString() : undefined;
-    obj.start_unix_millis = message.startUnixMillis ? message.startUnixMillis.toString() : undefined;
-    obj.end_unix_millis = message.endUnixMillis ? message.endUnixMillis.toString() : undefined;
+    obj.pool_id = message.poolId !== BigInt(0) ? message.poolId.toString() : undefined;
+    obj.start_unix_millis = message.startUnixMillis !== BigInt(0) ? message.startUnixMillis.toString() : undefined;
+    obj.end_unix_millis = message.endUnixMillis !== BigInt(0) ? message.endUnixMillis.toString() : undefined;
     return obj;
   },
   fromAminoMsg(object: WeightUpdateTimingAminoMsg): WeightUpdateTiming {

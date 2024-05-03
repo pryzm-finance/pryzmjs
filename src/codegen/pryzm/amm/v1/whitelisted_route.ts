@@ -105,7 +105,7 @@ export const WhitelistedRoute = {
     } else {
       obj.steps = message.steps;
     }
-    obj.enabled = message.enabled === false ? undefined : message.enabled;
+    obj.enabled = message.enabled ?? false;
     return obj;
   },
   fromAminoMsg(object: WhitelistedRouteAminoMsg): WhitelistedRoute {

@@ -1,5 +1,5 @@
 import { BinaryReader, BinaryWriter } from "../../../binary";
-import { isSet, padDecimal } from "../../../helpers";
+import { isSet } from "../../../helpers";
 import { GlobalDecoderRegistry } from "../../../registry";
 import { Decimal } from "@cosmjs/math";
 export interface TokenCircuitBreakerSettings {
@@ -231,9 +231,9 @@ export const CircuitBreakerSettings = {
   },
   toAmino(message: CircuitBreakerSettings, useInterfaces: boolean = true): CircuitBreakerSettingsAmino {
     const obj: any = {};
-    obj.reference_lpt_price = padDecimal(message.referenceLptPrice) === "" ? undefined : padDecimal(message.referenceLptPrice);
-    obj.lower_bound = padDecimal(message.lowerBound) === "" ? undefined : padDecimal(message.lowerBound);
-    obj.upper_bound = padDecimal(message.upperBound) === "" ? undefined : padDecimal(message.upperBound);
+    obj.reference_lpt_price = message.referenceLptPrice === "" ? undefined : message.referenceLptPrice;
+    obj.lower_bound = message.lowerBound === "" ? undefined : message.lowerBound;
+    obj.upper_bound = message.upperBound === "" ? undefined : message.upperBound;
     return obj;
   },
   fromAminoMsg(object: CircuitBreakerSettingsAminoMsg): CircuitBreakerSettings {

@@ -901,7 +901,7 @@ export const EventVoteTransmit = {
   },
   toAmino(message: EventVoteTransmit, useInterfaces: boolean = true): EventVoteTransmitAmino {
     const obj: any = {};
-    obj.proposal_id = message.proposalId ? message.proposalId.toString() : undefined;
+    obj.proposal_id = message.proposalId !== BigInt(0) ? message.proposalId.toString() : undefined;
     obj.asset = message.asset === "" ? undefined : message.asset;
     return obj;
   },
@@ -1011,7 +1011,7 @@ export const EventVoteTransmitFailure = {
   },
   toAmino(message: EventVoteTransmitFailure, useInterfaces: boolean = true): EventVoteTransmitFailureAmino {
     const obj: any = {};
-    obj.proposal_id = message.proposalId ? message.proposalId.toString() : undefined;
+    obj.proposal_id = message.proposalId !== BigInt(0) ? message.proposalId.toString() : undefined;
     obj.asset = message.asset === "" ? undefined : message.asset;
     obj.error = message.error === "" ? undefined : message.error;
     return obj;
@@ -1109,7 +1109,7 @@ export const EventVoteAckSuccess = {
   },
   toAmino(message: EventVoteAckSuccess, useInterfaces: boolean = true): EventVoteAckSuccessAmino {
     const obj: any = {};
-    obj.proposal_id = message.proposalId ? message.proposalId.toString() : undefined;
+    obj.proposal_id = message.proposalId !== BigInt(0) ? message.proposalId.toString() : undefined;
     obj.asset = message.asset === "" ? undefined : message.asset;
     return obj;
   },
@@ -1219,7 +1219,7 @@ export const EventVoteAckFailure = {
   },
   toAmino(message: EventVoteAckFailure, useInterfaces: boolean = true): EventVoteAckFailureAmino {
     const obj: any = {};
-    obj.proposal_id = message.proposalId ? message.proposalId.toString() : undefined;
+    obj.proposal_id = message.proposalId !== BigInt(0) ? message.proposalId.toString() : undefined;
     obj.asset = message.asset === "" ? undefined : message.asset;
     obj.error = message.error === "" ? undefined : message.error;
     return obj;
@@ -1317,7 +1317,7 @@ export const EventVoteTimeout = {
   },
   toAmino(message: EventVoteTimeout, useInterfaces: boolean = true): EventVoteTimeoutAmino {
     const obj: any = {};
-    obj.proposal_id = message.proposalId ? message.proposalId.toString() : undefined;
+    obj.proposal_id = message.proposalId !== BigInt(0) ? message.proposalId.toString() : undefined;
     obj.asset = message.asset === "" ? undefined : message.asset;
     return obj;
   },

@@ -3,7 +3,7 @@ import { Duration, DurationAmino, DurationSDKType } from "../../google/protobuf/
 import { RewardHistory, RewardHistoryAmino, RewardHistorySDKType } from "./params";
 import { BinaryReader, BinaryWriter } from "../../binary";
 import { Decimal } from "@cosmjs/math";
-import { isSet, padDecimal, fromJsonTimestamp, fromTimestamp } from "../../helpers";
+import { isSet, fromJsonTimestamp, fromTimestamp } from "../../helpers";
 import { GlobalDecoderRegistry } from "../../registry";
 export interface RewardWeightRange {
   min: string;
@@ -195,8 +195,8 @@ export const RewardWeightRange = {
   },
   toAmino(message: RewardWeightRange, useInterfaces: boolean = true): RewardWeightRangeAmino {
     const obj: any = {};
-    obj.min = padDecimal(message.min) === "" ? undefined : padDecimal(message.min);
-    obj.max = padDecimal(message.max) === "" ? undefined : padDecimal(message.max);
+    obj.min = message.min === "" ? undefined : message.min;
+    obj.max = message.max === "" ? undefined : message.max;
     return obj;
   },
   fromAminoMsg(object: RewardWeightRangeAminoMsg): RewardWeightRange {
@@ -410,12 +410,12 @@ export const AllianceAsset = {
   toAmino(message: AllianceAsset, useInterfaces: boolean = true): AllianceAssetAmino {
     const obj: any = {};
     obj.denom = message.denom === "" ? undefined : message.denom;
-    obj.reward_weight = padDecimal(message.rewardWeight) === "" ? undefined : padDecimal(message.rewardWeight);
-    obj.take_rate = padDecimal(message.takeRate) === "" ? undefined : padDecimal(message.takeRate);
+    obj.reward_weight = message.rewardWeight === "" ? undefined : message.rewardWeight;
+    obj.take_rate = message.takeRate === "" ? undefined : message.takeRate;
     obj.total_tokens = message.totalTokens === "" ? undefined : message.totalTokens;
-    obj.total_validator_shares = padDecimal(message.totalValidatorShares) === "" ? undefined : padDecimal(message.totalValidatorShares);
+    obj.total_validator_shares = message.totalValidatorShares === "" ? undefined : message.totalValidatorShares;
     obj.reward_start_time = message.rewardStartTime ? Timestamp.toAmino(message.rewardStartTime, useInterfaces) : undefined;
-    obj.reward_change_rate = padDecimal(message.rewardChangeRate) === "" ? undefined : padDecimal(message.rewardChangeRate);
+    obj.reward_change_rate = message.rewardChangeRate === "" ? undefined : message.rewardChangeRate;
     obj.reward_change_interval = message.rewardChangeInterval ? Duration.toAmino(message.rewardChangeInterval, useInterfaces) : undefined;
     obj.last_reward_change_time = message.lastRewardChangeTime ? Timestamp.toAmino(message.lastRewardChangeTime, useInterfaces) : undefined;
     obj.reward_weight_range = message.rewardWeightRange ? RewardWeightRange.toAmino(message.rewardWeightRange, useInterfaces) : undefined;
@@ -517,7 +517,7 @@ export const RewardWeightChangeSnapshot = {
   },
   toAmino(message: RewardWeightChangeSnapshot, useInterfaces: boolean = true): RewardWeightChangeSnapshotAmino {
     const obj: any = {};
-    obj.prev_reward_weight = padDecimal(message.prevRewardWeight) === "" ? undefined : padDecimal(message.prevRewardWeight);
+    obj.prev_reward_weight = message.prevRewardWeight === "" ? undefined : message.prevRewardWeight;
     if (message.rewardHistories) {
       obj.reward_histories = message.rewardHistories.map(e => e ? RewardHistory.toAmino(e, useInterfaces) : undefined);
     } else {

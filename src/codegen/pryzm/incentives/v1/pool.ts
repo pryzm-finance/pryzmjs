@@ -1,7 +1,7 @@
 import { Coin, CoinAmino, CoinSDKType } from "../../../cosmos/base/v1beta1/coin";
 import { BinaryReader, BinaryWriter } from "../../../binary";
 import { Decimal } from "@cosmjs/math";
-import { isSet, padDecimal } from "../../../helpers";
+import { isSet } from "../../../helpers";
 import { GlobalDecoderRegistry } from "../../../registry";
 export interface PoolRewardToken {
   denom: string;
@@ -153,8 +153,8 @@ export const PoolRewardToken = {
     const obj: any = {};
     obj.denom = message.denom === "" ? undefined : message.denom;
     obj.amount = message.amount === "" ? undefined : message.amount;
-    obj.global_index = padDecimal(message.globalIndex) === "" ? undefined : padDecimal(message.globalIndex);
-    obj.weight = padDecimal(message.weight) === "" ? undefined : padDecimal(message.weight);
+    obj.global_index = message.globalIndex === "" ? undefined : message.globalIndex;
+    obj.weight = message.weight === "" ? undefined : message.weight;
     return obj;
   },
   fromAminoMsg(object: PoolRewardTokenAminoMsg): PoolRewardToken {

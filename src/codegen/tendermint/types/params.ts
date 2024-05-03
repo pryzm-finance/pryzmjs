@@ -426,8 +426,8 @@ export const BlockParams = {
   },
   toAmino(message: BlockParams, useInterfaces: boolean = true): BlockParamsAmino {
     const obj: any = {};
-    obj.max_bytes = message.maxBytes ? message.maxBytes.toString() : undefined;
-    obj.max_gas = message.maxGas ? message.maxGas.toString() : undefined;
+    obj.max_bytes = message.maxBytes !== BigInt(0) ? message.maxBytes.toString() : undefined;
+    obj.max_gas = message.maxGas !== BigInt(0) ? message.maxGas.toString() : undefined;
     return obj;
   },
   fromAminoMsg(object: BlockParamsAminoMsg): BlockParams {
@@ -536,9 +536,9 @@ export const EvidenceParams = {
   },
   toAmino(message: EvidenceParams, useInterfaces: boolean = true): EvidenceParamsAmino {
     const obj: any = {};
-    obj.max_age_num_blocks = message.maxAgeNumBlocks ? message.maxAgeNumBlocks.toString() : undefined;
+    obj.max_age_num_blocks = message.maxAgeNumBlocks !== BigInt(0) ? message.maxAgeNumBlocks.toString() : undefined;
     obj.max_age_duration = message.maxAgeDuration ? Duration.toAmino(message.maxAgeDuration, useInterfaces) : undefined;
-    obj.max_bytes = message.maxBytes ? message.maxBytes.toString() : undefined;
+    obj.max_bytes = message.maxBytes !== BigInt(0) ? message.maxBytes.toString() : undefined;
     return obj;
   },
   fromAminoMsg(object: EvidenceParamsAminoMsg): EvidenceParams {
@@ -710,7 +710,7 @@ export const VersionParams = {
   },
   toAmino(message: VersionParams, useInterfaces: boolean = true): VersionParamsAmino {
     const obj: any = {};
-    obj.app = message.app ? message.app.toString() : undefined;
+    obj.app = message.app !== BigInt(0) ? message.app.toString() : undefined;
     return obj;
   },
   fromAminoMsg(object: VersionParamsAminoMsg): VersionParams {
@@ -806,8 +806,8 @@ export const HashedParams = {
   },
   toAmino(message: HashedParams, useInterfaces: boolean = true): HashedParamsAmino {
     const obj: any = {};
-    obj.block_max_bytes = message.blockMaxBytes ? message.blockMaxBytes.toString() : undefined;
-    obj.block_max_gas = message.blockMaxGas ? message.blockMaxGas.toString() : undefined;
+    obj.block_max_bytes = message.blockMaxBytes !== BigInt(0) ? message.blockMaxBytes.toString() : undefined;
+    obj.block_max_gas = message.blockMaxGas !== BigInt(0) ? message.blockMaxGas.toString() : undefined;
     return obj;
   },
   fromAminoMsg(object: HashedParamsAminoMsg): HashedParams {

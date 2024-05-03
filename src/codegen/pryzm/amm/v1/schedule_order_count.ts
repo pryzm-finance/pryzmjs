@@ -145,11 +145,11 @@ export const ExecutableOrderCount = {
   },
   toAmino(message: ExecutableOrderCount, useInterfaces: boolean = true): ExecutableOrderCountAmino {
     const obj: any = {};
-    obj.pool_id = message.poolId ? message.poolId.toString() : undefined;
+    obj.pool_id = message.poolId !== BigInt(0) ? message.poolId.toString() : undefined;
     obj.token_in = message.tokenIn === "" ? undefined : message.tokenIn;
     obj.token_out = message.tokenOut === "" ? undefined : message.tokenOut;
     obj.whitelisted_route = message.whitelistedRoute === false ? undefined : message.whitelistedRoute;
-    obj.count = message.count ? message.count.toString() : undefined;
+    obj.count = message.count !== BigInt(0) ? message.count.toString() : undefined;
     return obj;
   },
   fromAminoMsg(object: ExecutableOrderCountAminoMsg): ExecutableOrderCount {

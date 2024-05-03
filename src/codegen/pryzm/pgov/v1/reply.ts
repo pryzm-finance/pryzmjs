@@ -104,7 +104,7 @@ export const VoteReplyData = {
   },
   toAmino(message: VoteReplyData, useInterfaces: boolean = true): VoteReplyDataAmino {
     const obj: any = {};
-    obj.proposal_id = message.proposalId ? message.proposalId.toString() : undefined;
+    obj.proposal_id = message.proposalId !== BigInt(0) ? message.proposalId.toString() : undefined;
     obj.asset = message.asset === "" ? undefined : message.asset;
     return obj;
   },

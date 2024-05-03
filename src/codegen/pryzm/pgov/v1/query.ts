@@ -1356,7 +1356,7 @@ export const QueryGetVoteRequest = {
   toAmino(message: QueryGetVoteRequest, useInterfaces: boolean = true): QueryGetVoteRequestAmino {
     const obj: any = {};
     obj.asset = message.asset === "" ? undefined : message.asset;
-    obj.proposal = message.proposal ? message.proposal.toString() : undefined;
+    obj.proposal = message.proposal !== BigInt(0) ? message.proposal.toString() : undefined;
     obj.voter = message.voter === "" ? undefined : message.voter;
     return obj;
   },
@@ -1550,7 +1550,7 @@ export const QueryAllVoteRequest = {
   toAmino(message: QueryAllVoteRequest, useInterfaces: boolean = true): QueryAllVoteRequestAmino {
     const obj: any = {};
     obj.asset = message.asset === "" ? undefined : message.asset;
-    obj.proposal = message.proposal ? message.proposal.toString() : undefined;
+    obj.proposal = message.proposal !== BigInt(0) ? message.proposal.toString() : undefined;
     obj.pagination = message.pagination ? PageRequest.toAmino(message.pagination, useInterfaces) : undefined;
     return obj;
   },
@@ -1751,7 +1751,7 @@ export const QueryGetProposalRequest = {
   toAmino(message: QueryGetProposalRequest, useInterfaces: boolean = true): QueryGetProposalRequestAmino {
     const obj: any = {};
     obj.asset = message.asset === "" ? undefined : message.asset;
-    obj.proposal_id = message.proposalId ? message.proposalId.toString() : undefined;
+    obj.proposal_id = message.proposalId !== BigInt(0) ? message.proposalId.toString() : undefined;
     return obj;
   },
   fromAminoMsg(object: QueryGetProposalRequestAminoMsg): QueryGetProposalRequest {

@@ -169,7 +169,7 @@ export const BlockSyncFailure = {
   },
   toAmino(message: BlockSyncFailure, useInterfaces: boolean = true): BlockSyncFailureAmino {
     const obj: any = {};
-    obj.block_height = message.blockHeight ? message.blockHeight.toString() : undefined;
+    obj.block_height = message.blockHeight !== BigInt(0) ? message.blockHeight.toString() : undefined;
     obj.created_at = message.createdAt ? Timestamp.toAmino(message.createdAt, useInterfaces) : undefined;
     obj.reason = message.reason === "" ? undefined : message.reason;
     return obj;
