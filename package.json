@@ -1,6 +1,6 @@
 {
   "name": "@pryzm-finance/pryzmjs",
-  "version": "0.18.9",
+  "version": "0.19.0",
   "description": "Javascript SDK for Pryzm",
   "author": "amin <amin@refractedlabs.com>",
   "homepage": "https://github.com/pryzm-finance/pryzmjs#readme",
@@ -24,19 +24,23 @@
     "type": "git",
     "url": "https://github.com/pryzm-finance/pryzmjs"
   },
+  "dependencies": {
+    "@cosmjs/math": "0.32.2",
+    "@cosmjs/proto-signing": "0.32.2",
+    "@cosmjs/stargate": "0.32.2",
+    "@cosmjs/tendermint-rpc": "0.32.2",
+    "@improbable-eng/grpc-web": "0.15.0",
+    "@improbable-eng/grpc-web-node-http-transport": "0.15.0",
+    "@keplr-wallet/unit": "^0.12.53",
+    "@refractedlabs/cosmology-lcd-fork": "0.13.3",
+    "@refractedlabs/utils": "0.4.0",
+    "browser-headers": "0.4.1"
+  },
   "devDependencies": {
     "@refractedlabs/telescope": "1.4.1-rc24",
     "@types/node": "^20.10.5",
     "rimraf": "^5.0.5",
     "ts-node": "^10.9.2",
     "typescript": "^5.3.3"
-  },
-  "dependencies": {
-    "@keplr-wallet/unit": "^0.12.53",
-    "@cosmjs/amino": "0.32.2",
-    "@cosmjs/proto-signing": "0.32.2",
-    "@cosmjs/stargate": "0.32.2",
-    "@cosmjs/tendermint-rpc": "0.32.2",
-    "@refractedlabs/utils": "0.3.2"
   }
 }
