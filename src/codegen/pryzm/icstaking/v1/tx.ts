@@ -532,6 +532,7 @@ export interface MsgAcknowledgeMultiSigPacket {
   sequence: bigint;
   ack: Acknowledgement;
   height: Height;
+  txHash: string;
 }
 export interface MsgAcknowledgeMultiSigPacketProtoMsg {
   typeUrl: "/pryzm.icstaking.v1.MsgAcknowledgeMultiSigPacket";
@@ -543,6 +544,7 @@ export interface MsgAcknowledgeMultiSigPacketAmino {
   sequence?: string;
   ack?: AcknowledgementAmino;
   height?: HeightAmino;
+  tx_hash?: string;
 }
 export interface MsgAcknowledgeMultiSigPacketAminoMsg {
   type: "pryzm/icstaking/v1/AckMultiSigPacket";
@@ -554,6 +556,7 @@ export interface MsgAcknowledgeMultiSigPacketSDKType {
   sequence: bigint;
   ack: AcknowledgementSDKType;
   height: HeightSDKType;
+  tx_hash: string;
 }
 export interface MsgAcknowledgeMultiSigPacketResponse {}
 export interface MsgAcknowledgeMultiSigPacketResponseProtoMsg {
@@ -3121,20 +3124,21 @@ function createBaseMsgAcknowledgeMultiSigPacket(): MsgAcknowledgeMultiSigPacket 
     connectionId: "",
     sequence: BigInt(0),
     ack: Acknowledgement.fromPartial({}),
-    height: Height.fromPartial({})
+    height: Height.fromPartial({}),
+    txHash: ""
   };
 }
 export const MsgAcknowledgeMultiSigPacket = {
   typeUrl: "/pryzm.icstaking.v1.MsgAcknowledgeMultiSigPacket",
   aminoType: "pryzm/icstaking/v1/AckMultiSigPacket",
   is(o: any): o is MsgAcknowledgeMultiSigPacket {
-    return o && (o.$typeUrl === MsgAcknowledgeMultiSigPacket.typeUrl || typeof o.creator === "string" && typeof o.connectionId === "string" && typeof o.sequence === "bigint" && Acknowledgement.is(o.ack) && Height.is(o.height));
+    return o && (o.$typeUrl === MsgAcknowledgeMultiSigPacket.typeUrl || typeof o.creator === "string" && typeof o.connectionId === "string" && typeof o.sequence === "bigint" && Acknowledgement.is(o.ack) && Height.is(o.height) && typeof o.txHash === "string");
   },
   isSDK(o: any): o is MsgAcknowledgeMultiSigPacketSDKType {
-    return o && (o.$typeUrl === MsgAcknowledgeMultiSigPacket.typeUrl || typeof o.creator === "string" && typeof o.connection_id === "string" && typeof o.sequence === "bigint" && Acknowledgement.isSDK(o.ack) && Height.isSDK(o.height));
+    return o && (o.$typeUrl === MsgAcknowledgeMultiSigPacket.typeUrl || typeof o.creator === "string" && typeof o.connection_id === "string" && typeof o.sequence === "bigint" && Acknowledgement.isSDK(o.ack) && Height.isSDK(o.height) && typeof o.tx_hash === "string");
   },
   isAmino(o: any): o is MsgAcknowledgeMultiSigPacketAmino {
-    return o && (o.$typeUrl === MsgAcknowledgeMultiSigPacket.typeUrl || typeof o.creator === "string" && typeof o.connection_id === "string" && typeof o.sequence === "bigint" && Acknowledgement.isAmino(o.ack) && Height.isAmino(o.height));
+    return o && (o.$typeUrl === MsgAcknowledgeMultiSigPacket.typeUrl || typeof o.creator === "string" && typeof o.connection_id === "string" && typeof o.sequence === "bigint" && Acknowledgement.isAmino(o.ack) && Height.isAmino(o.height) && typeof o.tx_hash === "string");
   },
   encode(message: MsgAcknowledgeMultiSigPacket, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.creator !== "") {
@@ -3151,6 +3155,9 @@ export const MsgAcknowledgeMultiSigPacket = {
     }
     if (message.height !== undefined) {
       Height.encode(message.height, writer.uint32(42).fork()).ldelim();
+    }
+    if (message.txHash !== "") {
+      writer.uint32(50).string(message.txHash);
     }
     return writer;
   },
@@ -3176,6 +3183,9 @@ export const MsgAcknowledgeMultiSigPacket = {
         case 5:
           message.height = Height.decode(reader, reader.uint32(), useInterfaces);
           break;
+        case 6:
+          message.txHash = reader.string();
+          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -3189,7 +3199,8 @@ export const MsgAcknowledgeMultiSigPacket = {
       connectionId: isSet(object.connectionId) ? String(object.connectionId) : "",
       sequence: isSet(object.sequence) ? BigInt(object.sequence.toString()) : BigInt(0),
       ack: isSet(object.ack) ? Acknowledgement.fromJSON(object.ack) : undefined,
-      height: isSet(object.height) ? Height.fromJSON(object.height) : undefined
+      height: isSet(object.height) ? Height.fromJSON(object.height) : undefined,
+      txHash: isSet(object.txHash) ? String(object.txHash) : ""
     };
   },
   toJSON(message: MsgAcknowledgeMultiSigPacket): unknown {
@@ -3199,6 +3210,7 @@ export const MsgAcknowledgeMultiSigPacket = {
     message.sequence !== undefined && (obj.sequence = (message.sequence || BigInt(0)).toString());
     message.ack !== undefined && (obj.ack = message.ack ? Acknowledgement.toJSON(message.ack) : undefined);
     message.height !== undefined && (obj.height = message.height ? Height.toJSON(message.height) : undefined);
+    message.txHash !== undefined && (obj.txHash = message.txHash);
     return obj;
   },
   fromPartial(object: Partial<MsgAcknowledgeMultiSigPacket>): MsgAcknowledgeMultiSigPacket {
@@ -3208,6 +3220,7 @@ export const MsgAcknowledgeMultiSigPacket = {
     message.sequence = object.sequence !== undefined && object.sequence !== null ? BigInt(object.sequence.toString()) : BigInt(0);
     message.ack = object.ack !== undefined && object.ack !== null ? Acknowledgement.fromPartial(object.ack) : undefined;
     message.height = object.height !== undefined && object.height !== null ? Height.fromPartial(object.height) : undefined;
+    message.txHash = object.txHash ?? "";
     return message;
   },
   fromAmino(object: MsgAcknowledgeMultiSigPacketAmino): MsgAcknowledgeMultiSigPacket {
@@ -3227,6 +3240,9 @@ export const MsgAcknowledgeMultiSigPacket = {
     if (object.height !== undefined && object.height !== null) {
       message.height = Height.fromAmino(object.height);
     }
+    if (object.tx_hash !== undefined && object.tx_hash !== null) {
+      message.txHash = object.tx_hash;
+    }
     return message;
   },
   toAmino(message: MsgAcknowledgeMultiSigPacket, useInterfaces: boolean = true): MsgAcknowledgeMultiSigPacketAmino {
@@ -3236,6 +3252,7 @@ export const MsgAcknowledgeMultiSigPacket = {
     obj.sequence = message.sequence !== BigInt(0) ? message.sequence.toString() : undefined;
     obj.ack = message.ack ? Acknowledgement.toAmino(message.ack, useInterfaces) : undefined;
     obj.height = message.height ? Height.toAmino(message.height, useInterfaces) : {};
+    obj.tx_hash = message.txHash === "" ? undefined : message.txHash;
     return obj;
   },
   fromAminoMsg(object: MsgAcknowledgeMultiSigPacketAminoMsg): MsgAcknowledgeMultiSigPacket {

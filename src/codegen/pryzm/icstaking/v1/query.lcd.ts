@@ -1,6 +1,6 @@
 import { setPaginationParams } from "../../../helpers";
 import { LCDClient } from "@refractedlabs/cosmology-lcd-fork";
-import { QueryParamsRequest, QueryParamsResponseSDKType, QueryGetHostChainRequest, QueryGetHostChainResponseSDKType, QueryAllHostChainRequest, QueryAllHostChainResponseSDKType, QueryGetHostChainStateRequest, QueryGetHostChainStateResponseSDKType, QueryAllHostChainStateRequest, QueryAllHostChainStateResponseSDKType, QueryGetUndelegationRequest, QueryGetUndelegationResponseSDKType, QueryAllUndelegationRequest, QueryAllUndelegationResponseSDKType, QueryIncompleteUndelegationRequest, QueryIncompleteUndelegationResponseSDKType, QueryGetChannelUndelegationRequest, QueryGetChannelUndelegationResponseSDKType, QueryAllChannelUndelegationRequest, QueryAllChannelUndelegationResponseSDKType, QueryDelegationQueueBalanceRequest, QueryDelegationQueueBalanceResponseSDKType, QueryEpochInfoRequest, QueryEpochInfoResponseSDKType, QueryAllReplyDataRequest, QueryAllReplyDataResponseSDKType, QueryAllRedeemableLsmRequest, QueryAllRedeemableLsmResponseSDKType, QueryAllFailedLsmTransferRequest, QueryAllFailedLsmTransferResponseSDKType, QueryGetMultiSigConnectionRequest, QueryGetMultiSigConnectionResponseSDKType, QueryAllMultiSigConnectionRequest, QueryAllMultiSigConnectionResponseSDKType, QueryGetMultiSigPacketRequest, QueryGetMultiSigPacketResponseSDKType, QueryAllMultiSigPacketRequest, QueryAllMultiSigPacketResponseSDKType } from "./query";
+import { QueryParamsRequest, QueryParamsResponseSDKType, QueryGetHostChainRequest, QueryGetHostChainResponseSDKType, QueryAllHostChainRequest, QueryAllHostChainResponseSDKType, QueryGetHostChainStateRequest, QueryGetHostChainStateResponseSDKType, QueryAllHostChainStateRequest, QueryAllHostChainStateResponseSDKType, QueryGetUndelegationRequest, QueryGetUndelegationResponseSDKType, QueryAllUndelegationRequest, QueryAllUndelegationResponseSDKType, QueryIncompleteUndelegationRequest, QueryIncompleteUndelegationResponseSDKType, QueryGetChannelUndelegationRequest, QueryGetChannelUndelegationResponseSDKType, QueryAllChannelUndelegationRequest, QueryAllChannelUndelegationResponseSDKType, QueryDelegationQueueBalanceRequest, QueryDelegationQueueBalanceResponseSDKType, QueryEpochInfoRequest, QueryEpochInfoResponseSDKType, QueryAllReplyDataRequest, QueryAllReplyDataResponseSDKType, QueryAllRedeemableLsmRequest, QueryAllRedeemableLsmResponseSDKType, QueryAllFailedLsmTransferRequest, QueryAllFailedLsmTransferResponseSDKType, QueryGetMultiSigConnectionRequest, QueryGetMultiSigConnectionResponseSDKType, QueryAllMultiSigConnectionRequest, QueryAllMultiSigConnectionResponseSDKType, QueryGetMultiSigPacketRequest, QueryGetMultiSigPacketResponseSDKType, QueryAllMultiSigPacketRequest, QueryAllMultiSigPacketResponseSDKType, QueryAllSweepTransferRequest, QueryAllSweepTransferResponseSDKType } from "./query";
 export class LCDQueryClient {
   req: LCDClient;
   constructor({
@@ -28,6 +28,7 @@ export class LCDQueryClient {
     this.multiSigConnectionAll = this.multiSigConnectionAll.bind(this);
     this.multiSigPacket = this.multiSigPacket.bind(this);
     this.multiSigPacketAll = this.multiSigPacketAll.bind(this);
+    this.sweepTransferAll = this.sweepTransferAll.bind(this);
   }
   /* Parameters queries the parameters of the module. */
   async params(_params: QueryParamsRequest = {}): Promise<QueryParamsResponseSDKType> {
@@ -209,5 +210,18 @@ export class LCDQueryClient {
     }
     const endpoint = `pryzm/icstaking/v1/multi_sig_packet`;
     return await this.req.get<QueryAllMultiSigPacketResponseSDKType>(endpoint, options);
+  }
+  /* Queries the list of sweep transfer */
+  async sweepTransferAll(params: QueryAllSweepTransferRequest = {
+    pagination: undefined
+  }): Promise<QueryAllSweepTransferResponseSDKType> {
+    const options: any = {
+      params: {}
+    };
+    if (typeof params?.pagination !== "undefined") {
+      setPaginationParams(options, params.pagination);
+    }
+    const endpoint = `pryzm/icstaking/v1/sweep_transfer`;
+    return await this.req.get<QueryAllSweepTransferResponseSDKType>(endpoint, options);
   }
 }

@@ -4,7 +4,9 @@ package pryzm.icstaking.v1;
 import "cosmos/base/v1beta1/coin.proto";
 import "cosmos_proto/cosmos.proto";
 import "gogoproto/gogo.proto";
+import "ibc/core/client/v1/client.proto";
 import "pryzm/icstaking/v1/host_chain.proto";
+import "pryzm/icstaking/v1/multisig.proto";
 import "pryzm/icstaking/v1/params.proto";
 import "pryzm/icstaking/v1/undelegation.proto";
 
@@ -99,4 +101,20 @@ message EventInstantUnstake {
   ];
   cosmos.base.v1beta1.Coin amount = 6 [(gogoproto.nullable) = false];
   cosmos.base.v1beta1.Coin fee = 7 [(gogoproto.nullable) = false];
+}
+
+message EventSetMultiSigConnection {
+  MultiSigConnection connection = 1 [(gogoproto.nullable) = false];
+}
+
+message EventSetMultiSigPacket {
+  MultiSigPacket packet = 1 [(gogoproto.nullable) = false];
+}
+
+message EventAcknowledgeMultiSigPacket {
+  string connection_id = 1;
+  uint64 sequence = 2;
+  Acknowledgement ack = 3 [(gogoproto.nullable) = false];
+  ibc.core.client.v1.Height height = 4 [(gogoproto.nullable) = false];
+  string tx_hash = 5;
 }

@@ -49,9 +49,15 @@ export interface RefractableAssetSDKType {
 }
 /** The parameters based on which new maturities are introduced */
 export interface MaturityParams {
-  /** The number of maturities per year: can be 1, 2, 4, 12 */
+  /**
+   * The number of maturities per year: can be 0, 1, 2, 4, 12
+   * note: levels_per_year should be zero, if and only if years is 0 (which means no automatic maturity creation)
+   */
   levelsPerYear: number;
-  /** The number of years in advance that maturities are made available for */
+  /**
+   * The number of years in advance that maturities are made available for
+   * note: years should be zero, if and only if levels_per_year is 0 (which means no automatic maturity creation)
+   */
   years: number;
 }
 export interface MaturityParamsProtoMsg {
@@ -60,9 +66,15 @@ export interface MaturityParamsProtoMsg {
 }
 /** The parameters based on which new maturities are introduced */
 export interface MaturityParamsAmino {
-  /** The number of maturities per year: can be 1, 2, 4, 12 */
+  /**
+   * The number of maturities per year: can be 0, 1, 2, 4, 12
+   * note: levels_per_year should be zero, if and only if years is 0 (which means no automatic maturity creation)
+   */
   levels_per_year: number;
-  /** The number of years in advance that maturities are made available for */
+  /**
+   * The number of years in advance that maturities are made available for
+   * note: years should be zero, if and only if levels_per_year is 0 (which means no automatic maturity creation)
+   */
   years: number;
 }
 export interface MaturityParamsAminoMsg {

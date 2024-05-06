@@ -2,7 +2,7 @@ import { UnaryMethodDefinitionish } from "../../../grpc-web";
 import { DeepPartial } from "../../../helpers";
 import { grpc } from "@improbable-eng/grpc-web";
 import { BrowserHeaders } from "browser-headers";
-import { MsgUpdateParams, MsgUpdateParamsResponse, MsgRegisterAsset, MsgRegisterAssetResponse, MsgDisableAsset, MsgDisableAssetResponse, MsgUpdateMaturityParams, MsgUpdateMaturityParamsResponse, MsgUpdateFeeRatios, MsgUpdateFeeRatiosResponse } from "./tx";
+import { MsgUpdateParams, MsgUpdateParamsResponse, MsgRegisterAsset, MsgRegisterAssetResponse, MsgDisableAsset, MsgDisableAssetResponse, MsgUpdateMaturityParams, MsgUpdateMaturityParamsResponse, MsgUpdateFeeRatios, MsgUpdateFeeRatiosResponse, MsgIntroduceMaturityLevel, MsgIntroduceMaturityLevelResponse } from "./tx";
 /** Msg defines the Msg service. */
 export interface Msg {
   updateParams(request: DeepPartial<MsgUpdateParams>, metadata?: grpc.Metadata): Promise<MsgUpdateParamsResponse>;
@@ -10,6 +10,7 @@ export interface Msg {
   disableAsset(request: DeepPartial<MsgDisableAsset>, metadata?: grpc.Metadata): Promise<MsgDisableAssetResponse>;
   updateMaturityParams(request: DeepPartial<MsgUpdateMaturityParams>, metadata?: grpc.Metadata): Promise<MsgUpdateMaturityParamsResponse>;
   updateFeeRatios(request: DeepPartial<MsgUpdateFeeRatios>, metadata?: grpc.Metadata): Promise<MsgUpdateFeeRatiosResponse>;
+  introduceMaturityLevel(request: DeepPartial<MsgIntroduceMaturityLevel>, metadata?: grpc.Metadata): Promise<MsgIntroduceMaturityLevelResponse>;
 }
 export class MsgClientImpl implements Msg {
   private readonly rpc: Rpc;
@@ -20,6 +21,7 @@ export class MsgClientImpl implements Msg {
     this.disableAsset = this.disableAsset.bind(this);
     this.updateMaturityParams = this.updateMaturityParams.bind(this);
     this.updateFeeRatios = this.updateFeeRatios.bind(this);
+    this.introduceMaturityLevel = this.introduceMaturityLevel.bind(this);
   }
   updateParams(request: DeepPartial<MsgUpdateParams>, metadata?: grpc.Metadata): Promise<MsgUpdateParamsResponse> {
     return this.rpc.unary(MsgUpdateParamsDesc, MsgUpdateParams.fromPartial(request as any), metadata);
@@ -35,6 +37,9 @@ export class MsgClientImpl implements Msg {
   }
   updateFeeRatios(request: DeepPartial<MsgUpdateFeeRatios>, metadata?: grpc.Metadata): Promise<MsgUpdateFeeRatiosResponse> {
     return this.rpc.unary(MsgUpdateFeeRatiosDesc, MsgUpdateFeeRatios.fromPartial(request as any), metadata);
+  }
+  introduceMaturityLevel(request: DeepPartial<MsgIntroduceMaturityLevel>, metadata?: grpc.Metadata): Promise<MsgIntroduceMaturityLevelResponse> {
+    return this.rpc.unary(MsgIntroduceMaturityLevelDesc, MsgIntroduceMaturityLevel.fromPartial(request as any), metadata);
   }
 }
 export const MsgDesc = {
@@ -138,6 +143,27 @@ export const MsgUpdateFeeRatiosDesc: UnaryMethodDefinitionish = {
     deserializeBinary(data: Uint8Array) {
       return {
         ...MsgUpdateFeeRatiosResponse.decode(data),
+        toObject() {
+          return this;
+        }
+      };
+    }
+  } as any)
+};
+export const MsgIntroduceMaturityLevelDesc: UnaryMethodDefinitionish = {
+  methodName: "IntroduceMaturityLevel",
+  service: MsgDesc,
+  requestStream: false,
+  responseStream: false,
+  requestType: ({
+    serializeBinary() {
+      return MsgIntroduceMaturityLevel.encode(this).finish();
+    }
+  } as any),
+  responseType: ({
+    deserializeBinary(data: Uint8Array) {
+      return {
+        ...MsgIntroduceMaturityLevelResponse.decode(data),
         toObject() {
           return this;
         }

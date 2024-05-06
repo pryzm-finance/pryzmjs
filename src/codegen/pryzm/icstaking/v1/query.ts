@@ -7,6 +7,7 @@ import { Timestamp, TimestampSDKType } from "../../../google/protobuf/timestamp"
 import { ReplyData, ReplyDataAmino, ReplyDataSDKType } from "./reply";
 import { MultiSigConnection, MultiSigConnectionAmino, MultiSigConnectionSDKType, MultiSigPacket, MultiSigPacketAmino, MultiSigPacketSDKType } from "./multisig";
 import { FailedLsmTransfer, FailedLsmTransferAmino, FailedLsmTransferSDKType, RedeemableLsm, RedeemableLsmAmino, RedeemableLsmSDKType } from "./lsm";
+import { SweepTransfer, SweepTransferAmino, SweepTransferSDKType } from "./sweep";
 import { BinaryReader, BinaryWriter } from "../../../binary";
 import { GlobalDecoderRegistry } from "../../../registry";
 import { isSet, fromJsonTimestamp, fromTimestamp } from "../../../helpers";
@@ -734,6 +735,43 @@ export interface QueryAllRedeemableLsmResponseAminoMsg {
 }
 export interface QueryAllRedeemableLsmResponseSDKType {
   redeemable_lsm: RedeemableLsmSDKType[];
+  pagination?: PageResponseSDKType;
+}
+export interface QueryAllSweepTransferRequest {
+  pagination?: PageRequest;
+}
+export interface QueryAllSweepTransferRequestProtoMsg {
+  typeUrl: "/pryzm.icstaking.v1.QueryAllSweepTransferRequest";
+  value: Uint8Array;
+}
+export interface QueryAllSweepTransferRequestAmino {
+  pagination?: PageRequestAmino;
+}
+export interface QueryAllSweepTransferRequestAminoMsg {
+  type: "/pryzm.icstaking.v1.QueryAllSweepTransferRequest";
+  value: QueryAllSweepTransferRequestAmino;
+}
+export interface QueryAllSweepTransferRequestSDKType {
+  pagination?: PageRequestSDKType;
+}
+export interface QueryAllSweepTransferResponse {
+  sweepTransfer: SweepTransfer[];
+  pagination?: PageResponse;
+}
+export interface QueryAllSweepTransferResponseProtoMsg {
+  typeUrl: "/pryzm.icstaking.v1.QueryAllSweepTransferResponse";
+  value: Uint8Array;
+}
+export interface QueryAllSweepTransferResponseAmino {
+  sweep_transfer?: SweepTransferAmino[];
+  pagination?: PageResponseAmino;
+}
+export interface QueryAllSweepTransferResponseAminoMsg {
+  type: "/pryzm.icstaking.v1.QueryAllSweepTransferResponse";
+  value: QueryAllSweepTransferResponseAmino;
+}
+export interface QueryAllSweepTransferResponseSDKType {
+  sweep_transfer: SweepTransferSDKType[];
   pagination?: PageResponseSDKType;
 }
 function createBaseQueryParamsRequest(): QueryParamsRequest {
@@ -4298,3 +4336,189 @@ export const QueryAllRedeemableLsmResponse = {
   }
 };
 GlobalDecoderRegistry.register(QueryAllRedeemableLsmResponse.typeUrl, QueryAllRedeemableLsmResponse);
+function createBaseQueryAllSweepTransferRequest(): QueryAllSweepTransferRequest {
+  return {
+    pagination: undefined
+  };
+}
+export const QueryAllSweepTransferRequest = {
+  typeUrl: "/pryzm.icstaking.v1.QueryAllSweepTransferRequest",
+  is(o: any): o is QueryAllSweepTransferRequest {
+    return o && o.$typeUrl === QueryAllSweepTransferRequest.typeUrl;
+  },
+  isSDK(o: any): o is QueryAllSweepTransferRequestSDKType {
+    return o && o.$typeUrl === QueryAllSweepTransferRequest.typeUrl;
+  },
+  isAmino(o: any): o is QueryAllSweepTransferRequestAmino {
+    return o && o.$typeUrl === QueryAllSweepTransferRequest.typeUrl;
+  },
+  encode(message: QueryAllSweepTransferRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    if (message.pagination !== undefined) {
+      PageRequest.encode(message.pagination, writer.uint32(10).fork()).ldelim();
+    }
+    return writer;
+  },
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): QueryAllSweepTransferRequest {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseQueryAllSweepTransferRequest();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.pagination = PageRequest.decode(reader, reader.uint32(), useInterfaces);
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromJSON(object: any): QueryAllSweepTransferRequest {
+    return {
+      pagination: isSet(object.pagination) ? PageRequest.fromJSON(object.pagination) : undefined
+    };
+  },
+  toJSON(message: QueryAllSweepTransferRequest): unknown {
+    const obj: any = {};
+    message.pagination !== undefined && (obj.pagination = message.pagination ? PageRequest.toJSON(message.pagination) : undefined);
+    return obj;
+  },
+  fromPartial(object: Partial<QueryAllSweepTransferRequest>): QueryAllSweepTransferRequest {
+    const message = createBaseQueryAllSweepTransferRequest();
+    message.pagination = object.pagination !== undefined && object.pagination !== null ? PageRequest.fromPartial(object.pagination) : undefined;
+    return message;
+  },
+  fromAmino(object: QueryAllSweepTransferRequestAmino): QueryAllSweepTransferRequest {
+    const message = createBaseQueryAllSweepTransferRequest();
+    if (object.pagination !== undefined && object.pagination !== null) {
+      message.pagination = PageRequest.fromAmino(object.pagination);
+    }
+    return message;
+  },
+  toAmino(message: QueryAllSweepTransferRequest, useInterfaces: boolean = true): QueryAllSweepTransferRequestAmino {
+    const obj: any = {};
+    obj.pagination = message.pagination ? PageRequest.toAmino(message.pagination, useInterfaces) : undefined;
+    return obj;
+  },
+  fromAminoMsg(object: QueryAllSweepTransferRequestAminoMsg): QueryAllSweepTransferRequest {
+    return QueryAllSweepTransferRequest.fromAmino(object.value);
+  },
+  fromProtoMsg(message: QueryAllSweepTransferRequestProtoMsg, useInterfaces: boolean = true): QueryAllSweepTransferRequest {
+    return QueryAllSweepTransferRequest.decode(message.value, undefined, useInterfaces);
+  },
+  toProto(message: QueryAllSweepTransferRequest): Uint8Array {
+    return QueryAllSweepTransferRequest.encode(message).finish();
+  },
+  toProtoMsg(message: QueryAllSweepTransferRequest): QueryAllSweepTransferRequestProtoMsg {
+    return {
+      typeUrl: "/pryzm.icstaking.v1.QueryAllSweepTransferRequest",
+      value: QueryAllSweepTransferRequest.encode(message).finish()
+    };
+  }
+};
+GlobalDecoderRegistry.register(QueryAllSweepTransferRequest.typeUrl, QueryAllSweepTransferRequest);
+function createBaseQueryAllSweepTransferResponse(): QueryAllSweepTransferResponse {
+  return {
+    sweepTransfer: [],
+    pagination: undefined
+  };
+}
+export const QueryAllSweepTransferResponse = {
+  typeUrl: "/pryzm.icstaking.v1.QueryAllSweepTransferResponse",
+  is(o: any): o is QueryAllSweepTransferResponse {
+    return o && (o.$typeUrl === QueryAllSweepTransferResponse.typeUrl || Array.isArray(o.sweepTransfer) && (!o.sweepTransfer.length || SweepTransfer.is(o.sweepTransfer[0])));
+  },
+  isSDK(o: any): o is QueryAllSweepTransferResponseSDKType {
+    return o && (o.$typeUrl === QueryAllSweepTransferResponse.typeUrl || Array.isArray(o.sweep_transfer) && (!o.sweep_transfer.length || SweepTransfer.isSDK(o.sweep_transfer[0])));
+  },
+  isAmino(o: any): o is QueryAllSweepTransferResponseAmino {
+    return o && (o.$typeUrl === QueryAllSweepTransferResponse.typeUrl || Array.isArray(o.sweep_transfer) && (!o.sweep_transfer.length || SweepTransfer.isAmino(o.sweep_transfer[0])));
+  },
+  encode(message: QueryAllSweepTransferResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    for (const v of message.sweepTransfer) {
+      SweepTransfer.encode(v!, writer.uint32(10).fork()).ldelim();
+    }
+    if (message.pagination !== undefined) {
+      PageResponse.encode(message.pagination, writer.uint32(18).fork()).ldelim();
+    }
+    return writer;
+  },
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): QueryAllSweepTransferResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseQueryAllSweepTransferResponse();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.sweepTransfer.push(SweepTransfer.decode(reader, reader.uint32(), useInterfaces));
+          break;
+        case 2:
+          message.pagination = PageResponse.decode(reader, reader.uint32(), useInterfaces);
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromJSON(object: any): QueryAllSweepTransferResponse {
+    return {
+      sweepTransfer: Array.isArray(object?.sweepTransfer) ? object.sweepTransfer.map((e: any) => SweepTransfer.fromJSON(e)) : [],
+      pagination: isSet(object.pagination) ? PageResponse.fromJSON(object.pagination) : undefined
+    };
+  },
+  toJSON(message: QueryAllSweepTransferResponse): unknown {
+    const obj: any = {};
+    if (message.sweepTransfer) {
+      obj.sweepTransfer = message.sweepTransfer.map(e => e ? SweepTransfer.toJSON(e) : undefined);
+    } else {
+      obj.sweepTransfer = [];
+    }
+    message.pagination !== undefined && (obj.pagination = message.pagination ? PageResponse.toJSON(message.pagination) : undefined);
+    return obj;
+  },
+  fromPartial(object: Partial<QueryAllSweepTransferResponse>): QueryAllSweepTransferResponse {
+    const message = createBaseQueryAllSweepTransferResponse();
+    message.sweepTransfer = object.sweepTransfer?.map(e => SweepTransfer.fromPartial(e)) || [];
+    message.pagination = object.pagination !== undefined && object.pagination !== null ? PageResponse.fromPartial(object.pagination) : undefined;
+    return message;
+  },
+  fromAmino(object: QueryAllSweepTransferResponseAmino): QueryAllSweepTransferResponse {
+    const message = createBaseQueryAllSweepTransferResponse();
+    message.sweepTransfer = object.sweep_transfer?.map(e => SweepTransfer.fromAmino(e)) || [];
+    if (object.pagination !== undefined && object.pagination !== null) {
+      message.pagination = PageResponse.fromAmino(object.pagination);
+    }
+    return message;
+  },
+  toAmino(message: QueryAllSweepTransferResponse, useInterfaces: boolean = true): QueryAllSweepTransferResponseAmino {
+    const obj: any = {};
+    if (message.sweepTransfer) {
+      obj.sweep_transfer = message.sweepTransfer.map(e => e ? SweepTransfer.toAmino(e, useInterfaces) : undefined);
+    } else {
+      obj.sweep_transfer = message.sweepTransfer;
+    }
+    obj.pagination = message.pagination ? PageResponse.toAmino(message.pagination, useInterfaces) : undefined;
+    return obj;
+  },
+  fromAminoMsg(object: QueryAllSweepTransferResponseAminoMsg): QueryAllSweepTransferResponse {
+    return QueryAllSweepTransferResponse.fromAmino(object.value);
+  },
+  fromProtoMsg(message: QueryAllSweepTransferResponseProtoMsg, useInterfaces: boolean = true): QueryAllSweepTransferResponse {
+    return QueryAllSweepTransferResponse.decode(message.value, undefined, useInterfaces);
+  },
+  toProto(message: QueryAllSweepTransferResponse): Uint8Array {
+    return QueryAllSweepTransferResponse.encode(message).finish();
+  },
+  toProtoMsg(message: QueryAllSweepTransferResponse): QueryAllSweepTransferResponseProtoMsg {
+    return {
+      typeUrl: "/pryzm.icstaking.v1.QueryAllSweepTransferResponse",
+      value: QueryAllSweepTransferResponse.encode(message).finish()
+    };
+  }
+};
+GlobalDecoderRegistry.register(QueryAllSweepTransferResponse.typeUrl, QueryAllSweepTransferResponse);

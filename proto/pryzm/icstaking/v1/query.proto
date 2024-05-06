@@ -11,6 +11,7 @@ import "pryzm/icstaking/v1/lsm.proto";
 import "pryzm/icstaking/v1/multisig.proto";
 import "pryzm/icstaking/v1/params.proto";
 import "pryzm/icstaking/v1/reply.proto";
+import "pryzm/icstaking/v1/sweep.proto";
 import "pryzm/icstaking/v1/undelegation.proto";
 // this line is used by starport scaffolding # 1
 
@@ -110,6 +111,11 @@ service Query {
   // Queries a list of MultiSigPacket items.
   rpc MultiSigPacketAll(QueryAllMultiSigPacketRequest) returns (QueryAllMultiSigPacketResponse) {
     option (google.api.http).get = "/pryzm/icstaking/v1/multi_sig_packet";
+  }
+
+  // Queries the list of sweep transfer
+  rpc SweepTransferAll(QueryAllSweepTransferRequest) returns (QueryAllSweepTransferResponse) {
+    option (google.api.http).get = "/pryzm/icstaking/v1/sweep_transfer";
   }
 
   // this line is used by starport scaffolding # 2
@@ -303,6 +309,15 @@ message QueryAllRedeemableLsmRequest {
 
 message QueryAllRedeemableLsmResponse {
   repeated RedeemableLsm redeemable_lsm = 1 [(gogoproto.nullable) = false];
+  cosmos.base.query.v1beta1.PageResponse pagination = 2 [(gogoproto.nullable) = true];
+}
+
+message QueryAllSweepTransferRequest {
+  cosmos.base.query.v1beta1.PageRequest pagination = 1 [(gogoproto.nullable) = true];
+}
+
+message QueryAllSweepTransferResponse {
+  repeated SweepTransfer sweep_transfer = 1 [(gogoproto.nullable) = false];
   cosmos.base.query.v1beta1.PageResponse pagination = 2 [(gogoproto.nullable) = true];
 }
 

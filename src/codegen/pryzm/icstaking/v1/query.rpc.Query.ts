@@ -2,7 +2,7 @@ import { grpc } from "@improbable-eng/grpc-web";
 import { UnaryMethodDefinitionish } from "../../../grpc-web";
 import { DeepPartial } from "../../../helpers";
 import { BrowserHeaders } from "browser-headers";
-import { QueryParamsRequest, QueryParamsResponse, QueryGetHostChainRequest, QueryGetHostChainResponse, QueryAllHostChainRequest, QueryAllHostChainResponse, QueryGetHostChainStateRequest, QueryGetHostChainStateResponse, QueryAllHostChainStateRequest, QueryAllHostChainStateResponse, QueryGetUndelegationRequest, QueryGetUndelegationResponse, QueryAllUndelegationRequest, QueryAllUndelegationResponse, QueryIncompleteUndelegationRequest, QueryIncompleteUndelegationResponse, QueryGetChannelUndelegationRequest, QueryGetChannelUndelegationResponse, QueryAllChannelUndelegationRequest, QueryAllChannelUndelegationResponse, QueryDelegationQueueBalanceRequest, QueryDelegationQueueBalanceResponse, QueryEpochInfoRequest, QueryEpochInfoResponse, QueryAllReplyDataRequest, QueryAllReplyDataResponse, QueryAllRedeemableLsmRequest, QueryAllRedeemableLsmResponse, QueryAllFailedLsmTransferRequest, QueryAllFailedLsmTransferResponse, QueryGetMultiSigConnectionRequest, QueryGetMultiSigConnectionResponse, QueryAllMultiSigConnectionRequest, QueryAllMultiSigConnectionResponse, QueryGetMultiSigPacketRequest, QueryGetMultiSigPacketResponse, QueryAllMultiSigPacketRequest, QueryAllMultiSigPacketResponse } from "./query";
+import { QueryParamsRequest, QueryParamsResponse, QueryGetHostChainRequest, QueryGetHostChainResponse, QueryAllHostChainRequest, QueryAllHostChainResponse, QueryGetHostChainStateRequest, QueryGetHostChainStateResponse, QueryAllHostChainStateRequest, QueryAllHostChainStateResponse, QueryGetUndelegationRequest, QueryGetUndelegationResponse, QueryAllUndelegationRequest, QueryAllUndelegationResponse, QueryIncompleteUndelegationRequest, QueryIncompleteUndelegationResponse, QueryGetChannelUndelegationRequest, QueryGetChannelUndelegationResponse, QueryAllChannelUndelegationRequest, QueryAllChannelUndelegationResponse, QueryDelegationQueueBalanceRequest, QueryDelegationQueueBalanceResponse, QueryEpochInfoRequest, QueryEpochInfoResponse, QueryAllReplyDataRequest, QueryAllReplyDataResponse, QueryAllRedeemableLsmRequest, QueryAllRedeemableLsmResponse, QueryAllFailedLsmTransferRequest, QueryAllFailedLsmTransferResponse, QueryGetMultiSigConnectionRequest, QueryGetMultiSigConnectionResponse, QueryAllMultiSigConnectionRequest, QueryAllMultiSigConnectionResponse, QueryGetMultiSigPacketRequest, QueryGetMultiSigPacketResponse, QueryAllMultiSigPacketRequest, QueryAllMultiSigPacketResponse, QueryAllSweepTransferRequest, QueryAllSweepTransferResponse } from "./query";
 /** Query defines the gRPC querier service. */
 export interface Query {
   /** Parameters queries the parameters of the module. */
@@ -43,6 +43,8 @@ export interface Query {
   multiSigPacket(request: DeepPartial<QueryGetMultiSigPacketRequest>, metadata?: grpc.Metadata): Promise<QueryGetMultiSigPacketResponse>;
   /** Queries a list of MultiSigPacket items. */
   multiSigPacketAll(request: DeepPartial<QueryAllMultiSigPacketRequest>, metadata?: grpc.Metadata): Promise<QueryAllMultiSigPacketResponse>;
+  /** Queries the list of sweep transfer */
+  sweepTransferAll(request?: DeepPartial<QueryAllSweepTransferRequest>, metadata?: grpc.Metadata): Promise<QueryAllSweepTransferResponse>;
 }
 export class QueryClientImpl implements Query {
   private readonly rpc: Rpc;
@@ -67,6 +69,7 @@ export class QueryClientImpl implements Query {
     this.multiSigConnectionAll = this.multiSigConnectionAll.bind(this);
     this.multiSigPacket = this.multiSigPacket.bind(this);
     this.multiSigPacketAll = this.multiSigPacketAll.bind(this);
+    this.sweepTransferAll = this.sweepTransferAll.bind(this);
   }
   params(request: DeepPartial<QueryParamsRequest> = {}, metadata?: grpc.Metadata): Promise<QueryParamsResponse> {
     return this.rpc.unary(QueryParamsDesc, QueryParamsRequest.fromPartial(request as any), metadata);
@@ -132,6 +135,11 @@ export class QueryClientImpl implements Query {
   }
   multiSigPacketAll(request: DeepPartial<QueryAllMultiSigPacketRequest>, metadata?: grpc.Metadata): Promise<QueryAllMultiSigPacketResponse> {
     return this.rpc.unary(QueryMultiSigPacketAllDesc, QueryAllMultiSigPacketRequest.fromPartial(request as any), metadata);
+  }
+  sweepTransferAll(request: DeepPartial<QueryAllSweepTransferRequest> = {
+    pagination: undefined
+  }, metadata?: grpc.Metadata): Promise<QueryAllSweepTransferResponse> {
+    return this.rpc.unary(QuerySweepTransferAllDesc, QueryAllSweepTransferRequest.fromPartial(request as any), metadata);
   }
 }
 export const QueryDesc = {
@@ -529,6 +537,27 @@ export const QueryMultiSigPacketAllDesc: UnaryMethodDefinitionish = {
     deserializeBinary(data: Uint8Array) {
       return {
         ...QueryAllMultiSigPacketResponse.decode(data),
+        toObject() {
+          return this;
+        }
+      };
+    }
+  } as any)
+};
+export const QuerySweepTransferAllDesc: UnaryMethodDefinitionish = {
+  methodName: "SweepTransferAll",
+  service: QueryDesc,
+  requestStream: false,
+  responseStream: false,
+  requestType: ({
+    serializeBinary() {
+      return QueryAllSweepTransferRequest.encode(this).finish();
+    }
+  } as any),
+  responseType: ({
+    deserializeBinary(data: Uint8Array) {
+      return {
+        ...QueryAllSweepTransferResponse.decode(data),
         toObject() {
           return this;
         }

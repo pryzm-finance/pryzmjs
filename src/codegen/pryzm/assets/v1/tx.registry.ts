@@ -1,7 +1,7 @@
 //@ts-nocheck
 import { GeneratedType, Registry } from "@cosmjs/proto-signing";
-import { MsgUpdateParams, MsgRegisterAsset, MsgDisableAsset, MsgUpdateMaturityParams, MsgUpdateFeeRatios } from "./tx";
-export const registry: ReadonlyArray<[string, GeneratedType]> = [["/pryzm.assets.v1.MsgUpdateParams", MsgUpdateParams], ["/pryzm.assets.v1.MsgRegisterAsset", MsgRegisterAsset], ["/pryzm.assets.v1.MsgDisableAsset", MsgDisableAsset], ["/pryzm.assets.v1.MsgUpdateMaturityParams", MsgUpdateMaturityParams], ["/pryzm.assets.v1.MsgUpdateFeeRatios", MsgUpdateFeeRatios]];
+import { MsgUpdateParams, MsgRegisterAsset, MsgDisableAsset, MsgUpdateMaturityParams, MsgUpdateFeeRatios, MsgIntroduceMaturityLevel } from "./tx";
+export const registry: ReadonlyArray<[string, GeneratedType]> = [["/pryzm.assets.v1.MsgUpdateParams", MsgUpdateParams], ["/pryzm.assets.v1.MsgRegisterAsset", MsgRegisterAsset], ["/pryzm.assets.v1.MsgDisableAsset", MsgDisableAsset], ["/pryzm.assets.v1.MsgUpdateMaturityParams", MsgUpdateMaturityParams], ["/pryzm.assets.v1.MsgUpdateFeeRatios", MsgUpdateFeeRatios], ["/pryzm.assets.v1.MsgIntroduceMaturityLevel", MsgIntroduceMaturityLevel]];
 export const load = (protoRegistry: Registry) => {
   registry.forEach(([typeUrl, mod]) => {
     protoRegistry.register(typeUrl, mod);
@@ -38,6 +38,12 @@ export const MessageComposer = {
         typeUrl: "/pryzm.assets.v1.MsgUpdateFeeRatios",
         value: MsgUpdateFeeRatios.encode(value).finish()
       };
+    },
+    introduceMaturityLevel(value: MsgIntroduceMaturityLevel) {
+      return {
+        typeUrl: "/pryzm.assets.v1.MsgIntroduceMaturityLevel",
+        value: MsgIntroduceMaturityLevel.encode(value).finish()
+      };
     }
   },
   withTypeUrl: {
@@ -68,6 +74,12 @@ export const MessageComposer = {
     updateFeeRatios(value: MsgUpdateFeeRatios) {
       return {
         typeUrl: "/pryzm.assets.v1.MsgUpdateFeeRatios",
+        value
+      };
+    },
+    introduceMaturityLevel(value: MsgIntroduceMaturityLevel) {
+      return {
+        typeUrl: "/pryzm.assets.v1.MsgIntroduceMaturityLevel",
         value
       };
     }
@@ -102,6 +114,12 @@ export const MessageComposer = {
         typeUrl: "/pryzm.assets.v1.MsgUpdateFeeRatios",
         value: MsgUpdateFeeRatios.toJSON(value)
       };
+    },
+    introduceMaturityLevel(value: MsgIntroduceMaturityLevel) {
+      return {
+        typeUrl: "/pryzm.assets.v1.MsgIntroduceMaturityLevel",
+        value: MsgIntroduceMaturityLevel.toJSON(value)
+      };
     }
   },
   fromJSON: {
@@ -134,6 +152,12 @@ export const MessageComposer = {
         typeUrl: "/pryzm.assets.v1.MsgUpdateFeeRatios",
         value: MsgUpdateFeeRatios.fromJSON(value)
       };
+    },
+    introduceMaturityLevel(value: any) {
+      return {
+        typeUrl: "/pryzm.assets.v1.MsgIntroduceMaturityLevel",
+        value: MsgIntroduceMaturityLevel.fromJSON(value)
+      };
     }
   },
   fromPartial: {
@@ -165,6 +189,12 @@ export const MessageComposer = {
       return {
         typeUrl: "/pryzm.assets.v1.MsgUpdateFeeRatios",
         value: MsgUpdateFeeRatios.fromPartial(value)
+      };
+    },
+    introduceMaturityLevel(value: MsgIntroduceMaturityLevel) {
+      return {
+        typeUrl: "/pryzm.assets.v1.MsgIntroduceMaturityLevel",
+        value: MsgIntroduceMaturityLevel.fromPartial(value)
       };
     }
   }

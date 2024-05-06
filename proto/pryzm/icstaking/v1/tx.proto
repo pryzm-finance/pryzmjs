@@ -253,6 +253,7 @@ message MsgAcknowledgeMultiSigPacket {
   uint64 sequence = 3;
   Acknowledgement ack = 4 [(gogoproto.nullable) = false];
   ibc.core.client.v1.Height height = 5 [(gogoproto.nullable) = false];
+  string tx_hash = 6;
 }
 
 message MsgAcknowledgeMultiSigPacketResponse {}

@@ -1,5 +1,5 @@
 //@ts-nocheck
-import { MsgUpdateParams, MsgRegisterAsset, MsgDisableAsset, MsgUpdateMaturityParams, MsgUpdateFeeRatios } from "./tx";
+import { MsgUpdateParams, MsgRegisterAsset, MsgDisableAsset, MsgUpdateMaturityParams, MsgUpdateFeeRatios, MsgIntroduceMaturityLevel } from "./tx";
 export const AminoConverter = {
   "/pryzm.assets.v1.MsgUpdateParams": {
     aminoType: "pryzm/assets/v1/UpdateParams",
@@ -25,5 +25,10 @@ export const AminoConverter = {
     aminoType: "pryzm/assets/v1/UpdateFeeRatios",
     toAmino: MsgUpdateFeeRatios.toAmino,
     fromAmino: MsgUpdateFeeRatios.fromAmino
+  },
+  "/pryzm.assets.v1.MsgIntroduceMaturityLevel": {
+    aminoType: "pryzm/assets/v1/IntroduceMaturityLevel",
+    toAmino: MsgIntroduceMaturityLevel.toAmino,
+    fromAmino: MsgIntroduceMaturityLevel.fromAmino
   }
 };

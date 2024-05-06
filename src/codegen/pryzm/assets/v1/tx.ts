@@ -1,5 +1,6 @@
 import { Params, ParamsAmino, ParamsSDKType } from "./params";
 import { RefractableAsset, RefractableAssetAmino, RefractableAssetSDKType, MaturityParams, MaturityParamsAmino, MaturityParamsSDKType, FeeRatios, FeeRatiosAmino, FeeRatiosSDKType } from "./refractable_asset";
+import { MaturityLevel, MaturityLevelAmino, MaturityLevelSDKType } from "./maturity_level";
 import { BinaryReader, BinaryWriter } from "../../../binary";
 import { isSet } from "../../../helpers";
 import { GlobalDecoderRegistry } from "../../../registry";
@@ -164,6 +165,46 @@ export interface MsgUpdateParamsResponseAminoMsg {
   value: MsgUpdateParamsResponseAmino;
 }
 export interface MsgUpdateParamsResponseSDKType {}
+export interface MsgIntroduceMaturityLevel {
+  creator: string;
+  assetId: string;
+  symbol: string;
+}
+export interface MsgIntroduceMaturityLevelProtoMsg {
+  typeUrl: "/pryzm.assets.v1.MsgIntroduceMaturityLevel";
+  value: Uint8Array;
+}
+export interface MsgIntroduceMaturityLevelAmino {
+  creator?: string;
+  asset_id?: string;
+  symbol?: string;
+}
+export interface MsgIntroduceMaturityLevelAminoMsg {
+  type: "pryzm/assets/v1/IntroduceMaturityLevel";
+  value: MsgIntroduceMaturityLevelAmino;
+}
+export interface MsgIntroduceMaturityLevelSDKType {
+  creator: string;
+  asset_id: string;
+  symbol: string;
+}
+export interface MsgIntroduceMaturityLevelResponse {
+  maturityLevel: MaturityLevel;
+}
+export interface MsgIntroduceMaturityLevelResponseProtoMsg {
+  typeUrl: "/pryzm.assets.v1.MsgIntroduceMaturityLevelResponse";
+  value: Uint8Array;
+}
+export interface MsgIntroduceMaturityLevelResponseAmino {
+  maturity_level?: MaturityLevelAmino;
+}
+export interface MsgIntroduceMaturityLevelResponseAminoMsg {
+  type: "/pryzm.assets.v1.MsgIntroduceMaturityLevelResponse";
+  value: MsgIntroduceMaturityLevelResponseAmino;
+}
+export interface MsgIntroduceMaturityLevelResponseSDKType {
+  maturity_level: MaturityLevelSDKType;
+}
 function createBaseMsgRegisterAsset(): MsgRegisterAsset {
   return {
     creator: "",
@@ -1052,3 +1093,205 @@ export const MsgUpdateParamsResponse = {
   }
 };
 GlobalDecoderRegistry.register(MsgUpdateParamsResponse.typeUrl, MsgUpdateParamsResponse);
+function createBaseMsgIntroduceMaturityLevel(): MsgIntroduceMaturityLevel {
+  return {
+    creator: "",
+    assetId: "",
+    symbol: ""
+  };
+}
+export const MsgIntroduceMaturityLevel = {
+  typeUrl: "/pryzm.assets.v1.MsgIntroduceMaturityLevel",
+  aminoType: "pryzm/assets/v1/IntroduceMaturityLevel",
+  is(o: any): o is MsgIntroduceMaturityLevel {
+    return o && (o.$typeUrl === MsgIntroduceMaturityLevel.typeUrl || typeof o.creator === "string" && typeof o.assetId === "string" && typeof o.symbol === "string");
+  },
+  isSDK(o: any): o is MsgIntroduceMaturityLevelSDKType {
+    return o && (o.$typeUrl === MsgIntroduceMaturityLevel.typeUrl || typeof o.creator === "string" && typeof o.asset_id === "string" && typeof o.symbol === "string");
+  },
+  isAmino(o: any): o is MsgIntroduceMaturityLevelAmino {
+    return o && (o.$typeUrl === MsgIntroduceMaturityLevel.typeUrl || typeof o.creator === "string" && typeof o.asset_id === "string" && typeof o.symbol === "string");
+  },
+  encode(message: MsgIntroduceMaturityLevel, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    if (message.creator !== "") {
+      writer.uint32(10).string(message.creator);
+    }
+    if (message.assetId !== "") {
+      writer.uint32(18).string(message.assetId);
+    }
+    if (message.symbol !== "") {
+      writer.uint32(26).string(message.symbol);
+    }
+    return writer;
+  },
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): MsgIntroduceMaturityLevel {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseMsgIntroduceMaturityLevel();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.creator = reader.string();
+          break;
+        case 2:
+          message.assetId = reader.string();
+          break;
+        case 3:
+          message.symbol = reader.string();
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromJSON(object: any): MsgIntroduceMaturityLevel {
+    return {
+      creator: isSet(object.creator) ? String(object.creator) : "",
+      assetId: isSet(object.assetId) ? String(object.assetId) : "",
+      symbol: isSet(object.symbol) ? String(object.symbol) : ""
+    };
+  },
+  toJSON(message: MsgIntroduceMaturityLevel): unknown {
+    const obj: any = {};
+    message.creator !== undefined && (obj.creator = message.creator);
+    message.assetId !== undefined && (obj.assetId = message.assetId);
+    message.symbol !== undefined && (obj.symbol = message.symbol);
+    return obj;
+  },
+  fromPartial(object: Partial<MsgIntroduceMaturityLevel>): MsgIntroduceMaturityLevel {
+    const message = createBaseMsgIntroduceMaturityLevel();
+    message.creator = object.creator ?? "";
+    message.assetId = object.assetId ?? "";
+    message.symbol = object.symbol ?? "";
+    return message;
+  },
+  fromAmino(object: MsgIntroduceMaturityLevelAmino): MsgIntroduceMaturityLevel {
+    const message = createBaseMsgIntroduceMaturityLevel();
+    if (object.creator !== undefined && object.creator !== null) {
+      message.creator = object.creator;
+    }
+    if (object.asset_id !== undefined && object.asset_id !== null) {
+      message.assetId = object.asset_id;
+    }
+    if (object.symbol !== undefined && object.symbol !== null) {
+      message.symbol = object.symbol;
+    }
+    return message;
+  },
+  toAmino(message: MsgIntroduceMaturityLevel, useInterfaces: boolean = true): MsgIntroduceMaturityLevelAmino {
+    const obj: any = {};
+    obj.creator = message.creator === "" ? undefined : message.creator;
+    obj.asset_id = message.assetId === "" ? undefined : message.assetId;
+    obj.symbol = message.symbol === "" ? undefined : message.symbol;
+    return obj;
+  },
+  fromAminoMsg(object: MsgIntroduceMaturityLevelAminoMsg): MsgIntroduceMaturityLevel {
+    return MsgIntroduceMaturityLevel.fromAmino(object.value);
+  },
+  toAminoMsg(message: MsgIntroduceMaturityLevel, useInterfaces: boolean = true): MsgIntroduceMaturityLevelAminoMsg {
+    return {
+      type: "pryzm/assets/v1/IntroduceMaturityLevel",
+      value: MsgIntroduceMaturityLevel.toAmino(message, useInterfaces)
+    };
+  },
+  fromProtoMsg(message: MsgIntroduceMaturityLevelProtoMsg, useInterfaces: boolean = true): MsgIntroduceMaturityLevel {
+    return MsgIntroduceMaturityLevel.decode(message.value, undefined, useInterfaces);
+  },
+  toProto(message: MsgIntroduceMaturityLevel): Uint8Array {
+    return MsgIntroduceMaturityLevel.encode(message).finish();
+  },
+  toProtoMsg(message: MsgIntroduceMaturityLevel): MsgIntroduceMaturityLevelProtoMsg {
+    return {
+      typeUrl: "/pryzm.assets.v1.MsgIntroduceMaturityLevel",
+      value: MsgIntroduceMaturityLevel.encode(message).finish()
+    };
+  }
+};
+GlobalDecoderRegistry.register(MsgIntroduceMaturityLevel.typeUrl, MsgIntroduceMaturityLevel);
+GlobalDecoderRegistry.registerAminoProtoMapping(MsgIntroduceMaturityLevel.aminoType, MsgIntroduceMaturityLevel.typeUrl);
+function createBaseMsgIntroduceMaturityLevelResponse(): MsgIntroduceMaturityLevelResponse {
+  return {
+    maturityLevel: MaturityLevel.fromPartial({})
+  };
+}
+export const MsgIntroduceMaturityLevelResponse = {
+  typeUrl: "/pryzm.assets.v1.MsgIntroduceMaturityLevelResponse",
+  is(o: any): o is MsgIntroduceMaturityLevelResponse {
+    return o && (o.$typeUrl === MsgIntroduceMaturityLevelResponse.typeUrl || MaturityLevel.is(o.maturityLevel));
+  },
+  isSDK(o: any): o is MsgIntroduceMaturityLevelResponseSDKType {
+    return o && (o.$typeUrl === MsgIntroduceMaturityLevelResponse.typeUrl || MaturityLevel.isSDK(o.maturity_level));
+  },
+  isAmino(o: any): o is MsgIntroduceMaturityLevelResponseAmino {
+    return o && (o.$typeUrl === MsgIntroduceMaturityLevelResponse.typeUrl || MaturityLevel.isAmino(o.maturity_level));
+  },
+  encode(message: MsgIntroduceMaturityLevelResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    if (message.maturityLevel !== undefined) {
+      MaturityLevel.encode(message.maturityLevel, writer.uint32(10).fork()).ldelim();
+    }
+    return writer;
+  },
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): MsgIntroduceMaturityLevelResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseMsgIntroduceMaturityLevelResponse();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.maturityLevel = MaturityLevel.decode(reader, reader.uint32(), useInterfaces);
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromJSON(object: any): MsgIntroduceMaturityLevelResponse {
+    return {
+      maturityLevel: isSet(object.maturityLevel) ? MaturityLevel.fromJSON(object.maturityLevel) : undefined
+    };
+  },
+  toJSON(message: MsgIntroduceMaturityLevelResponse): unknown {
+    const obj: any = {};
+    message.maturityLevel !== undefined && (obj.maturityLevel = message.maturityLevel ? MaturityLevel.toJSON(message.maturityLevel) : undefined);
+    return obj;
+  },
+  fromPartial(object: Partial<MsgIntroduceMaturityLevelResponse>): MsgIntroduceMaturityLevelResponse {
+    const message = createBaseMsgIntroduceMaturityLevelResponse();
+    message.maturityLevel = object.maturityLevel !== undefined && object.maturityLevel !== null ? MaturityLevel.fromPartial(object.maturityLevel) : undefined;
+    return message;
+  },
+  fromAmino(object: MsgIntroduceMaturityLevelResponseAmino): MsgIntroduceMaturityLevelResponse {
+    const message = createBaseMsgIntroduceMaturityLevelResponse();
+    if (object.maturity_level !== undefined && object.maturity_level !== null) {
+      message.maturityLevel = MaturityLevel.fromAmino(object.maturity_level);
+    }
+    return message;
+  },
+  toAmino(message: MsgIntroduceMaturityLevelResponse, useInterfaces: boolean = true): MsgIntroduceMaturityLevelResponseAmino {
+    const obj: any = {};
+    obj.maturity_level = message.maturityLevel ? MaturityLevel.toAmino(message.maturityLevel, useInterfaces) : undefined;
+    return obj;
+  },
+  fromAminoMsg(object: MsgIntroduceMaturityLevelResponseAminoMsg): MsgIntroduceMaturityLevelResponse {
+    return MsgIntroduceMaturityLevelResponse.fromAmino(object.value);
+  },
+  fromProtoMsg(message: MsgIntroduceMaturityLevelResponseProtoMsg, useInterfaces: boolean = true): MsgIntroduceMaturityLevelResponse {
+    return MsgIntroduceMaturityLevelResponse.decode(message.value, undefined, useInterfaces);
+  },
+  toProto(message: MsgIntroduceMaturityLevelResponse): Uint8Array {
+    return MsgIntroduceMaturityLevelResponse.encode(message).finish();
+  },
+  toProtoMsg(message: MsgIntroduceMaturityLevelResponse): MsgIntroduceMaturityLevelResponseProtoMsg {
+    return {
+      typeUrl: "/pryzm.assets.v1.MsgIntroduceMaturityLevelResponse",
+      value: MsgIntroduceMaturityLevelResponse.encode(message).finish()
+    };
+  }
+};
+GlobalDecoderRegistry.register(MsgIntroduceMaturityLevelResponse.typeUrl, MsgIntroduceMaturityLevelResponse);

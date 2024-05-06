@@ -1,7 +1,8 @@
 import { HostChain, HostChainAmino, HostChainSDKType, HostChainState, HostChainStateAmino, HostChainStateSDKType } from "./host_chain";
-import { Params, ParamsAmino, ParamsSDKType } from "./params";
+import { Params, ParamsAmino, ParamsSDKType, Height, HeightAmino, HeightSDKType } from "../../../ibc/core/client/v1/client";
 import { Undelegation, UndelegationAmino, UndelegationSDKType, ChannelUndelegation, ChannelUndelegationAmino, ChannelUndelegationSDKType } from "./undelegation";
 import { Coin, CoinAmino, CoinSDKType } from "../../../cosmos/base/v1beta1/coin";
+import { MultiSigConnection, MultiSigConnectionAmino, MultiSigConnectionSDKType, MultiSigPacket, MultiSigPacketAmino, MultiSigPacketSDKType, Acknowledgement, AcknowledgementAmino, AcknowledgementSDKType } from "./multisig";
 import { BinaryReader, BinaryWriter } from "../../../binary";
 import { isSet } from "../../../helpers";
 import { GlobalDecoderRegistry } from "../../../registry";
@@ -255,6 +256,69 @@ export interface EventInstantUnstakeSDKType {
   max_c_amount: string;
   amount: CoinSDKType;
   fee: CoinSDKType;
+}
+export interface EventSetMultiSigConnection {
+  connection: MultiSigConnection;
+}
+export interface EventSetMultiSigConnectionProtoMsg {
+  typeUrl: "/pryzm.icstaking.v1.EventSetMultiSigConnection";
+  value: Uint8Array;
+}
+export interface EventSetMultiSigConnectionAmino {
+  connection?: MultiSigConnectionAmino;
+}
+export interface EventSetMultiSigConnectionAminoMsg {
+  type: "/pryzm.icstaking.v1.EventSetMultiSigConnection";
+  value: EventSetMultiSigConnectionAmino;
+}
+export interface EventSetMultiSigConnectionSDKType {
+  connection: MultiSigConnectionSDKType;
+}
+export interface EventSetMultiSigPacket {
+  packet: MultiSigPacket;
+}
+export interface EventSetMultiSigPacketProtoMsg {
+  typeUrl: "/pryzm.icstaking.v1.EventSetMultiSigPacket";
+  value: Uint8Array;
+}
+export interface EventSetMultiSigPacketAmino {
+  packet?: MultiSigPacketAmino;
+}
+export interface EventSetMultiSigPacketAminoMsg {
+  type: "/pryzm.icstaking.v1.EventSetMultiSigPacket";
+  value: EventSetMultiSigPacketAmino;
+}
+export interface EventSetMultiSigPacketSDKType {
+  packet: MultiSigPacketSDKType;
+}
+export interface EventAcknowledgeMultiSigPacket {
+  connectionId: string;
+  sequence: bigint;
+  ack: Acknowledgement;
+  height: Height;
+  txHash: string;
+}
+export interface EventAcknowledgeMultiSigPacketProtoMsg {
+  typeUrl: "/pryzm.icstaking.v1.EventAcknowledgeMultiSigPacket";
+  value: Uint8Array;
+}
+export interface EventAcknowledgeMultiSigPacketAmino {
+  connection_id?: string;
+  sequence?: string;
+  ack?: AcknowledgementAmino;
+  height?: HeightAmino;
+  tx_hash?: string;
+}
+export interface EventAcknowledgeMultiSigPacketAminoMsg {
+  type: "/pryzm.icstaking.v1.EventAcknowledgeMultiSigPacket";
+  value: EventAcknowledgeMultiSigPacketAmino;
+}
+export interface EventAcknowledgeMultiSigPacketSDKType {
+  connection_id: string;
+  sequence: bigint;
+  ack: AcknowledgementSDKType;
+  height: HeightSDKType;
+  tx_hash: string;
 }
 function createBaseEventSetHostChain(): EventSetHostChain {
   return {
@@ -1464,3 +1528,308 @@ export const EventInstantUnstake = {
   }
 };
 GlobalDecoderRegistry.register(EventInstantUnstake.typeUrl, EventInstantUnstake);
+function createBaseEventSetMultiSigConnection(): EventSetMultiSigConnection {
+  return {
+    connection: MultiSigConnection.fromPartial({})
+  };
+}
+export const EventSetMultiSigConnection = {
+  typeUrl: "/pryzm.icstaking.v1.EventSetMultiSigConnection",
+  is(o: any): o is EventSetMultiSigConnection {
+    return o && (o.$typeUrl === EventSetMultiSigConnection.typeUrl || MultiSigConnection.is(o.connection));
+  },
+  isSDK(o: any): o is EventSetMultiSigConnectionSDKType {
+    return o && (o.$typeUrl === EventSetMultiSigConnection.typeUrl || MultiSigConnection.isSDK(o.connection));
+  },
+  isAmino(o: any): o is EventSetMultiSigConnectionAmino {
+    return o && (o.$typeUrl === EventSetMultiSigConnection.typeUrl || MultiSigConnection.isAmino(o.connection));
+  },
+  encode(message: EventSetMultiSigConnection, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    if (message.connection !== undefined) {
+      MultiSigConnection.encode(message.connection, writer.uint32(10).fork()).ldelim();
+    }
+    return writer;
+  },
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): EventSetMultiSigConnection {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseEventSetMultiSigConnection();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.connection = MultiSigConnection.decode(reader, reader.uint32(), useInterfaces);
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromJSON(object: any): EventSetMultiSigConnection {
+    return {
+      connection: isSet(object.connection) ? MultiSigConnection.fromJSON(object.connection) : undefined
+    };
+  },
+  toJSON(message: EventSetMultiSigConnection): unknown {
+    const obj: any = {};
+    message.connection !== undefined && (obj.connection = message.connection ? MultiSigConnection.toJSON(message.connection) : undefined);
+    return obj;
+  },
+  fromPartial(object: Partial<EventSetMultiSigConnection>): EventSetMultiSigConnection {
+    const message = createBaseEventSetMultiSigConnection();
+    message.connection = object.connection !== undefined && object.connection !== null ? MultiSigConnection.fromPartial(object.connection) : undefined;
+    return message;
+  },
+  fromAmino(object: EventSetMultiSigConnectionAmino): EventSetMultiSigConnection {
+    const message = createBaseEventSetMultiSigConnection();
+    if (object.connection !== undefined && object.connection !== null) {
+      message.connection = MultiSigConnection.fromAmino(object.connection);
+    }
+    return message;
+  },
+  toAmino(message: EventSetMultiSigConnection, useInterfaces: boolean = true): EventSetMultiSigConnectionAmino {
+    const obj: any = {};
+    obj.connection = message.connection ? MultiSigConnection.toAmino(message.connection, useInterfaces) : undefined;
+    return obj;
+  },
+  fromAminoMsg(object: EventSetMultiSigConnectionAminoMsg): EventSetMultiSigConnection {
+    return EventSetMultiSigConnection.fromAmino(object.value);
+  },
+  fromProtoMsg(message: EventSetMultiSigConnectionProtoMsg, useInterfaces: boolean = true): EventSetMultiSigConnection {
+    return EventSetMultiSigConnection.decode(message.value, undefined, useInterfaces);
+  },
+  toProto(message: EventSetMultiSigConnection): Uint8Array {
+    return EventSetMultiSigConnection.encode(message).finish();
+  },
+  toProtoMsg(message: EventSetMultiSigConnection): EventSetMultiSigConnectionProtoMsg {
+    return {
+      typeUrl: "/pryzm.icstaking.v1.EventSetMultiSigConnection",
+      value: EventSetMultiSigConnection.encode(message).finish()
+    };
+  }
+};
+GlobalDecoderRegistry.register(EventSetMultiSigConnection.typeUrl, EventSetMultiSigConnection);
+function createBaseEventSetMultiSigPacket(): EventSetMultiSigPacket {
+  return {
+    packet: MultiSigPacket.fromPartial({})
+  };
+}
+export const EventSetMultiSigPacket = {
+  typeUrl: "/pryzm.icstaking.v1.EventSetMultiSigPacket",
+  is(o: any): o is EventSetMultiSigPacket {
+    return o && (o.$typeUrl === EventSetMultiSigPacket.typeUrl || MultiSigPacket.is(o.packet));
+  },
+  isSDK(o: any): o is EventSetMultiSigPacketSDKType {
+    return o && (o.$typeUrl === EventSetMultiSigPacket.typeUrl || MultiSigPacket.isSDK(o.packet));
+  },
+  isAmino(o: any): o is EventSetMultiSigPacketAmino {
+    return o && (o.$typeUrl === EventSetMultiSigPacket.typeUrl || MultiSigPacket.isAmino(o.packet));
+  },
+  encode(message: EventSetMultiSigPacket, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    if (message.packet !== undefined) {
+      MultiSigPacket.encode(message.packet, writer.uint32(10).fork()).ldelim();
+    }
+    return writer;
+  },
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): EventSetMultiSigPacket {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseEventSetMultiSigPacket();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.packet = MultiSigPacket.decode(reader, reader.uint32(), useInterfaces);
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromJSON(object: any): EventSetMultiSigPacket {
+    return {
+      packet: isSet(object.packet) ? MultiSigPacket.fromJSON(object.packet) : undefined
+    };
+  },
+  toJSON(message: EventSetMultiSigPacket): unknown {
+    const obj: any = {};
+    message.packet !== undefined && (obj.packet = message.packet ? MultiSigPacket.toJSON(message.packet) : undefined);
+    return obj;
+  },
+  fromPartial(object: Partial<EventSetMultiSigPacket>): EventSetMultiSigPacket {
+    const message = createBaseEventSetMultiSigPacket();
+    message.packet = object.packet !== undefined && object.packet !== null ? MultiSigPacket.fromPartial(object.packet) : undefined;
+    return message;
+  },
+  fromAmino(object: EventSetMultiSigPacketAmino): EventSetMultiSigPacket {
+    const message = createBaseEventSetMultiSigPacket();
+    if (object.packet !== undefined && object.packet !== null) {
+      message.packet = MultiSigPacket.fromAmino(object.packet);
+    }
+    return message;
+  },
+  toAmino(message: EventSetMultiSigPacket, useInterfaces: boolean = true): EventSetMultiSigPacketAmino {
+    const obj: any = {};
+    obj.packet = message.packet ? MultiSigPacket.toAmino(message.packet, useInterfaces) : undefined;
+    return obj;
+  },
+  fromAminoMsg(object: EventSetMultiSigPacketAminoMsg): EventSetMultiSigPacket {
+    return EventSetMultiSigPacket.fromAmino(object.value);
+  },
+  fromProtoMsg(message: EventSetMultiSigPacketProtoMsg, useInterfaces: boolean = true): EventSetMultiSigPacket {
+    return EventSetMultiSigPacket.decode(message.value, undefined, useInterfaces);
+  },
+  toProto(message: EventSetMultiSigPacket): Uint8Array {
+    return EventSetMultiSigPacket.encode(message).finish();
+  },
+  toProtoMsg(message: EventSetMultiSigPacket): EventSetMultiSigPacketProtoMsg {
+    return {
+      typeUrl: "/pryzm.icstaking.v1.EventSetMultiSigPacket",
+      value: EventSetMultiSigPacket.encode(message).finish()
+    };
+  }
+};
+GlobalDecoderRegistry.register(EventSetMultiSigPacket.typeUrl, EventSetMultiSigPacket);
+function createBaseEventAcknowledgeMultiSigPacket(): EventAcknowledgeMultiSigPacket {
+  return {
+    connectionId: "",
+    sequence: BigInt(0),
+    ack: Acknowledgement.fromPartial({}),
+    height: Height.fromPartial({}),
+    txHash: ""
+  };
+}
+export const EventAcknowledgeMultiSigPacket = {
+  typeUrl: "/pryzm.icstaking.v1.EventAcknowledgeMultiSigPacket",
+  is(o: any): o is EventAcknowledgeMultiSigPacket {
+    return o && (o.$typeUrl === EventAcknowledgeMultiSigPacket.typeUrl || typeof o.connectionId === "string" && typeof o.sequence === "bigint" && Acknowledgement.is(o.ack) && Height.is(o.height) && typeof o.txHash === "string");
+  },
+  isSDK(o: any): o is EventAcknowledgeMultiSigPacketSDKType {
+    return o && (o.$typeUrl === EventAcknowledgeMultiSigPacket.typeUrl || typeof o.connection_id === "string" && typeof o.sequence === "bigint" && Acknowledgement.isSDK(o.ack) && Height.isSDK(o.height) && typeof o.tx_hash === "string");
+  },
+  isAmino(o: any): o is EventAcknowledgeMultiSigPacketAmino {
+    return o && (o.$typeUrl === EventAcknowledgeMultiSigPacket.typeUrl || typeof o.connection_id === "string" && typeof o.sequence === "bigint" && Acknowledgement.isAmino(o.ack) && Height.isAmino(o.height) && typeof o.tx_hash === "string");
+  },
+  encode(message: EventAcknowledgeMultiSigPacket, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    if (message.connectionId !== "") {
+      writer.uint32(10).string(message.connectionId);
+    }
+    if (message.sequence !== BigInt(0)) {
+      writer.uint32(16).uint64(message.sequence);
+    }
+    if (message.ack !== undefined) {
+      Acknowledgement.encode(message.ack, writer.uint32(26).fork()).ldelim();
+    }
+    if (message.height !== undefined) {
+      Height.encode(message.height, writer.uint32(34).fork()).ldelim();
+    }
+    if (message.txHash !== "") {
+      writer.uint32(42).string(message.txHash);
+    }
+    return writer;
+  },
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): EventAcknowledgeMultiSigPacket {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseEventAcknowledgeMultiSigPacket();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.connectionId = reader.string();
+          break;
+        case 2:
+          message.sequence = reader.uint64();
+          break;
+        case 3:
+          message.ack = Acknowledgement.decode(reader, reader.uint32(), useInterfaces);
+          break;
+        case 4:
+          message.height = Height.decode(reader, reader.uint32(), useInterfaces);
+          break;
+        case 5:
+          message.txHash = reader.string();
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromJSON(object: any): EventAcknowledgeMultiSigPacket {
+    return {
+      connectionId: isSet(object.connectionId) ? String(object.connectionId) : "",
+      sequence: isSet(object.sequence) ? BigInt(object.sequence.toString()) : BigInt(0),
+      ack: isSet(object.ack) ? Acknowledgement.fromJSON(object.ack) : undefined,
+      height: isSet(object.height) ? Height.fromJSON(object.height) : undefined,
+      txHash: isSet(object.txHash) ? String(object.txHash) : ""
+    };
+  },
+  toJSON(message: EventAcknowledgeMultiSigPacket): unknown {
+    const obj: any = {};
+    message.connectionId !== undefined && (obj.connectionId = message.connectionId);
+    message.sequence !== undefined && (obj.sequence = (message.sequence || BigInt(0)).toString());
+    message.ack !== undefined && (obj.ack = message.ack ? Acknowledgement.toJSON(message.ack) : undefined);
+    message.height !== undefined && (obj.height = message.height ? Height.toJSON(message.height) : undefined);
+    message.txHash !== undefined && (obj.txHash = message.txHash);
+    return obj;
+  },
+  fromPartial(object: Partial<EventAcknowledgeMultiSigPacket>): EventAcknowledgeMultiSigPacket {
+    const message = createBaseEventAcknowledgeMultiSigPacket();
+    message.connectionId = object.connectionId ?? "";
+    message.sequence = object.sequence !== undefined && object.sequence !== null ? BigInt(object.sequence.toString()) : BigInt(0);
+    message.ack = object.ack !== undefined && object.ack !== null ? Acknowledgement.fromPartial(object.ack) : undefined;
+    message.height = object.height !== undefined && object.height !== null ? Height.fromPartial(object.height) : undefined;
+    message.txHash = object.txHash ?? "";
+    return message;
+  },
+  fromAmino(object: EventAcknowledgeMultiSigPacketAmino): EventAcknowledgeMultiSigPacket {
+    const message = createBaseEventAcknowledgeMultiSigPacket();
+    if (object.connection_id !== undefined && object.connection_id !== null) {
+      message.connectionId = object.connection_id;
+    }
+    if (object.sequence !== undefined && object.sequence !== null) {
+      message.sequence = BigInt(object.sequence);
+    }
+    if (object.ack !== undefined && object.ack !== null) {
+      message.ack = Acknowledgement.fromAmino(object.ack);
+    }
+    if (object.height !== undefined && object.height !== null) {
+      message.height = Height.fromAmino(object.height);
+    }
+    if (object.tx_hash !== undefined && object.tx_hash !== null) {
+      message.txHash = object.tx_hash;
+    }
+    return message;
+  },
+  toAmino(message: EventAcknowledgeMultiSigPacket, useInterfaces: boolean = true): EventAcknowledgeMultiSigPacketAmino {
+    const obj: any = {};
+    obj.connection_id = message.connectionId === "" ? undefined : message.connectionId;
+    obj.sequence = message.sequence !== BigInt(0) ? message.sequence.toString() : undefined;
+    obj.ack = message.ack ? Acknowledgement.toAmino(message.ack, useInterfaces) : undefined;
+    obj.height = message.height ? Height.toAmino(message.height, useInterfaces) : {};
+    obj.tx_hash = message.txHash === "" ? undefined : message.txHash;
+    return obj;
+  },
+  fromAminoMsg(object: EventAcknowledgeMultiSigPacketAminoMsg): EventAcknowledgeMultiSigPacket {
+    return EventAcknowledgeMultiSigPacket.fromAmino(object.value);
+  },
+  fromProtoMsg(message: EventAcknowledgeMultiSigPacketProtoMsg, useInterfaces: boolean = true): EventAcknowledgeMultiSigPacket {
+    return EventAcknowledgeMultiSigPacket.decode(message.value, undefined, useInterfaces);
+  },
+  toProto(message: EventAcknowledgeMultiSigPacket): Uint8Array {
+    return EventAcknowledgeMultiSigPacket.encode(message).finish();
+  },
+  toProtoMsg(message: EventAcknowledgeMultiSigPacket): EventAcknowledgeMultiSigPacketProtoMsg {
+    return {
+      typeUrl: "/pryzm.icstaking.v1.EventAcknowledgeMultiSigPacket",
+      value: EventAcknowledgeMultiSigPacket.encode(message).finish()
+    };
+  }
+};
+GlobalDecoderRegistry.register(EventAcknowledgeMultiSigPacket.typeUrl, EventAcknowledgeMultiSigPacket);

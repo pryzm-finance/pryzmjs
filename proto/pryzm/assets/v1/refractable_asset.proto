@@ -35,10 +35,12 @@ message RefractableAsset {
 
 // The parameters based on which new maturities are introduced
 message MaturityParams {
-  // The number of maturities per year: can be 1, 2, 4, 12
+  // The number of maturities per year: can be 0, 1, 2, 4, 12
+  // note: levels_per_year should be zero, if and only if years is 0 (which means no automatic maturity creation)
   int32 levels_per_year = 1 [(amino.dont_omitempty) = true];
 
   // The number of years in advance that maturities are made available for
+  // note: years should be zero, if and only if levels_per_year is 0 (which means no automatic maturity creation)
   int32 years = 2 [(amino.dont_omitempty) = true];
 }
 
