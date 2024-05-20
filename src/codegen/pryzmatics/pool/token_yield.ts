@@ -1,7 +1,7 @@
 import { Timestamp, TimestampSDKType } from "../../google/protobuf/timestamp";
 import { BinaryReader, BinaryWriter } from "../../binary";
 import { Decimal } from "@cosmjs/math";
-import { isSet, fromJsonTimestamp, fromTimestamp } from "../../helpers";
+import { isSet, fromJsonTimestamp, fromTimestamp, padDecimal } from "../../helpers";
 import { GlobalDecoderRegistry } from "../../registry";
 export interface TokenYield {
   tokenDenom: string;
@@ -229,13 +229,13 @@ export const TokenYield = {
     const obj: any = {};
     obj.token_denom = message.tokenDenom === "" ? undefined : message.tokenDenom;
     obj.time = message.time ? Timestamp.toAmino(message.time, useInterfaces) : undefined;
-    obj.total_yield = message.totalYield === null ? undefined : message.totalYield;
-    obj.internal_yield = message.internalYield === null ? undefined : message.internalYield;
-    obj.incentives_apr = message.incentivesApr === null ? undefined : message.incentivesApr;
-    obj.alliance_apr = message.allianceApr === null ? undefined : message.allianceApr;
-    obj.y_staking_yield = message.yStakingYield === null ? undefined : message.yStakingYield;
-    obj.y_roi = message.yRoi === null ? undefined : message.yRoi;
-    obj.staking_yield = message.stakingYield === null ? undefined : message.stakingYield;
+    obj.total_yield = padDecimal(message.totalYield) === null ? undefined : padDecimal(message.totalYield);
+    obj.internal_yield = padDecimal(message.internalYield) === null ? undefined : padDecimal(message.internalYield);
+    obj.incentives_apr = padDecimal(message.incentivesApr) === null ? undefined : padDecimal(message.incentivesApr);
+    obj.alliance_apr = padDecimal(message.allianceApr) === null ? undefined : padDecimal(message.allianceApr);
+    obj.y_staking_yield = padDecimal(message.yStakingYield) === null ? undefined : padDecimal(message.yStakingYield);
+    obj.y_roi = padDecimal(message.yRoi) === null ? undefined : padDecimal(message.yRoi);
+    obj.staking_yield = padDecimal(message.stakingYield) === null ? undefined : padDecimal(message.stakingYield);
     obj.error = message.error === "" ? undefined : message.error;
     return obj;
   },

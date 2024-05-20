@@ -267,7 +267,7 @@ export const MsgTransfer = {
     obj.sender = message.sender === "" ? undefined : message.sender;
     obj.receiver = message.receiver === "" ? undefined : message.receiver;
     obj.timeout_height = message.timeoutHeight ? Height.toAmino(message.timeoutHeight, useInterfaces) : {};
-    obj.timeout_timestamp = message.timeoutTimestamp !== BigInt(0) ? message.timeoutTimestamp.toString() : undefined;
+    obj.timeout_timestamp = message.timeoutTimestamp ? message.timeoutTimestamp.toString() : undefined;
     obj.memo = message.memo === "" ? undefined : message.memo;
     return obj;
   },
@@ -359,7 +359,7 @@ export const MsgTransferResponse = {
   },
   toAmino(message: MsgTransferResponse, useInterfaces: boolean = true): MsgTransferResponseAmino {
     const obj: any = {};
-    obj.sequence = message.sequence !== BigInt(0) ? message.sequence.toString() : undefined;
+    obj.sequence = message.sequence ? message.sequence.toString() : undefined;
     return obj;
   },
   fromAminoMsg(object: MsgTransferResponseAminoMsg): MsgTransferResponse {

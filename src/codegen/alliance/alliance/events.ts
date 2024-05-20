@@ -2,7 +2,7 @@ import { Coin, CoinAmino, CoinSDKType } from "../../cosmos/base/v1beta1/coin";
 import { Timestamp, TimestampSDKType } from "../../google/protobuf/timestamp";
 import { BinaryReader, BinaryWriter } from "../../binary";
 import { Decimal } from "@cosmjs/math";
-import { isSet, fromJsonTimestamp, fromTimestamp } from "../../helpers";
+import { isSet, padDecimal, fromJsonTimestamp, fromTimestamp } from "../../helpers";
 import { GlobalDecoderRegistry } from "../../registry";
 export interface DelegateAllianceEvent {
   allianceSender: string;
@@ -230,7 +230,7 @@ export const DelegateAllianceEvent = {
     obj.allianceSender = message.allianceSender === "" ? undefined : message.allianceSender;
     obj.validator = message.validator === "" ? undefined : message.validator;
     obj.coin = message.coin ? Coin.toAmino(message.coin, useInterfaces) : undefined;
-    obj.newShares = message.newShares === "" ? undefined : message.newShares;
+    obj.newShares = padDecimal(message.newShares) === "" ? undefined : padDecimal(message.newShares);
     return obj;
   },
   fromAminoMsg(object: DelegateAllianceEventAminoMsg): DelegateAllianceEvent {

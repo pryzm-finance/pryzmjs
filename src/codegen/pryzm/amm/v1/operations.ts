@@ -380,9 +380,9 @@ export const Swap = {
   },
   toAmino(message: Swap, useInterfaces: boolean = true): SwapAmino {
     const obj: any = {};
-    obj.pool_id = message.poolId ? message.poolId.toString() : "0";
+    obj.pool_id = message.poolId ? message.poolId.toString() : undefined;
     obj.amount = message.amount === "" ? undefined : message.amount;
-    obj.swap_type = message.swapType ?? 0;
+    obj.swap_type = message.swapType === 0 ? undefined : message.swapType;
     obj.token_in = message.tokenIn === "" ? undefined : message.tokenIn;
     obj.token_out = message.tokenOut === "" ? undefined : message.tokenOut;
     return obj;
@@ -506,7 +506,7 @@ export const SwapStep = {
   },
   toAmino(message: SwapStep, useInterfaces: boolean = true): SwapStepAmino {
     const obj: any = {};
-    obj.pool_id = message.poolId ? message.poolId.toString() : "0";
+    obj.pool_id = message.poolId ? message.poolId.toString() : undefined;
     obj.amount = message.amount === null ? undefined : message.amount;
     obj.token_in = message.tokenIn === "" ? undefined : message.tokenIn;
     obj.token_out = message.tokenOut === "" ? undefined : message.tokenOut;

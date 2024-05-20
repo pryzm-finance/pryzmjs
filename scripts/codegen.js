@@ -1,5 +1,5 @@
 const {join} = require('path');
-const telescope = require('@cosmology/telescope').default;
+const telescope = require('@refractedlabs/telescope').default;
 const rimraf = require('rimraf').rimrafSync;
 const {AMINO_MAP} = require('./aminos');
 const {correctFile, correctFiles, correctDir} = require('@refractedlabs/utils/lib/file');
@@ -19,7 +19,7 @@ async function main() {
                 ],
                 patterns: ['**/*amino.ts', '**/*registry.ts']
             },
-            interfaces: {
+            interfaces:{
                 enabled: true,
                 useGlobalDecoderRegistry: true,
                 useUseInterfacesParams: true,
@@ -107,65 +107,87 @@ async function main() {
             }
         }
     })
-
-    correctFiles([
-        './src/codegen/alliance/client.ts',
-        './src/codegen/ibc/client.ts',
-        './src/codegen/ibc/core/client/v1/client.ts',
-        './src/codegen/osmosis/client.ts'
-    ], [
-        {
-            regex: /import { defaultRegistryTypes, AminoTypes, SigningStargateClient } from "@cosmjs\/stargate";/gm,
-            subst: 'import { AminoTypes, SigningStargateClient } from "@cosmjs/stargate";\n' +
-                'import { cosmosProtoRegistry as defaultRegistryTypes, cosmosAminoConverters } from "../cosmos/client";',
-        },
-        {
-            regex: /const aminoTypes = new AminoTypes\({/gm,
-            subst: `const aminoTypes = new AminoTypes({\n    ...cosmosAminoConverters,`,
-        }
-    ])
-
-    correctFile('./src/codegen/pryzm/client.ts', [
-        {
-            regex: /import { defaultRegistryTypes, AminoTypes, SigningStargateClient } from "@cosmjs\/stargate";/gm,
-            subst: 'import { AminoTypes, SigningStargateClient } from "@cosmjs/stargate";\n' +
-                'import { cosmosProtoRegistry as defaultRegistryTypes, cosmosAminoConverters } from "../cosmos/client";\n' +
-                'import { ibcAminoConverters, ibcProtoRegistry } from "../ibc/client";\n' +
-                'import { allianceAminoConverters, allianceProtoRegistry } from "../alliance/client";'
-        },
-        {
-            regex: /const aminoTypes = new AminoTypes\({/gm,
-            subst: `const aminoTypes = new AminoTypes({\n    ...cosmosAminoConverters,\n    ...ibcAminoConverters,\n    ...allianceAminoConverters,`,
-        },
-        {
-            regex: /new Registry\(\[\.\.\.defaultTypes, \.\.\.pryzmProtoRegistry\]\)/gm,
-            subst: `new Registry([...defaultTypes, ...ibcProtoRegistry, ...pryzmProtoRegistry, ...allianceProtoRegistry])`
-        }
-    ])
-
-    correctFiles([
-        './src/codegen/pryzm/rpc.query.ts',
-        './src/codegen/pryzm/rpc.tx.ts'
-    ], [{
-        regex: /import\("..\/cosmos\/app\/v1alpha1\/query.rpc.Query"\)/gm,
-        subst: `await import("../../default.grpc.impl")`
-    }])
-
     correctDir('./src/codegen', [
+        {
+            regex: /import { LCDClient } from "@cosmology\/lcd"/gm,
+            subst: `import { LCDClient } from "@refractedlabs/cosmology-lcd-fork"`,
+        },
+        {
+            regex: /decode\(reader, reader\.uint32\(\), true\)/gm,
+            subst: `decode(reader, reader.uint32())`
+        },
+        {
+            regex: /decode\(data\.value, undefined, true\)/gm,
+            subst: `decode(data.value, undefined)`
+        },
         {
             regex: /\.fromPartial\(request\)/gm,
             subst: `.fromPartial(request as any)`
         },
         {
-            regex: /import { LCDClient } from "@cosmology\/lcd"/gm,
-            subst: `import { LCDClient } from "@refractedlabs/cosmology-lcd-fork"`,
+            regex: /\(Any\(reader\) as Any\)/gm,
+            subst: 'Any.decode(reader, reader.uint32()) as any'
         },
+        {
+            regex: /Any\.fromJSON\(/gm,
+            subst: `Any.fromJSONAsAny(`
+        },
+        {
+            regex: /Any\.fromPartial\(/gm,
+            subst: `Any.fromPartialAsAny(`
+        },
+        {
+            regex: /_InterfaceDecoder\(reader\) as Any\)/gm,
+            subst: `_InterfaceDecoder(reader) as any)`
+        },
+        // {
+        //     regex: /const Cosmos_cryptoPubKey_FromAmino = \(content: AnyAmino\) =>/gm,
+        //     subst: `const Cosmos_cryptoPubKey_FromAmino = (content: AnyAmino): Any =>`
+        // }
     ]);
 
     correctFiles([
         './src/codegen/cosmatics/query.rpc.Query.ts',
         './src/codegen/pryzmatics/server/query.rpc.Query.ts'
     ], [{regex: /[\s\S]*/, subst: `export {}`}])
+    correctFiles([
+            './src/codegen/alliance/client.ts',
+            './src/codegen/ibc/client.ts',
+            './src/codegen/ibc/core/client/v1/client.ts',
+            './src/codegen/osmosis/client.ts'
+        ],
+        [
+            {
+                regex: /import { defaultRegistryTypes, AminoTypes, SigningStargateClient } from "@cosmjs\/stargate";/gm,
+                subst: 'import { AminoTypes, SigningStargateClient } from "@cosmjs/stargate";\n' +
+                    'import { cosmosProtoRegistry as defaultRegistryTypes, cosmosAminoConverters } from "../cosmos/client";',
+            },
+            {
+                regex: /const aminoTypes = new AminoTypes\({/gm,
+                subst: `const aminoTypes = new AminoTypes({\n    ...cosmosAminoConverters,`,
+            }
+        ]
+    )
+
+    correctFile('./src/codegen/pryzm/client.ts',
+        [
+            {
+                regex: /import { defaultRegistryTypes, AminoTypes, SigningStargateClient } from "@cosmjs\/stargate";/gm,
+                subst: 'import { AminoTypes, SigningStargateClient } from "@cosmjs/stargate";\n' +
+                    'import { cosmosProtoRegistry as defaultRegistryTypes, cosmosAminoConverters } from "../cosmos/client";\n' +
+                    'import { ibcAminoConverters, ibcProtoRegistry } from "../ibc/client";\n' +
+                    'import { allianceAminoConverters, allianceProtoRegistry } from "../alliance/client";'
+            },
+            {
+                regex: /const aminoTypes = new AminoTypes\({/gm,
+                subst: `const aminoTypes = new AminoTypes({\n    ...cosmosAminoConverters,\n    ...ibcAminoConverters,\n    ...allianceAminoConverters,`,
+            },
+            {
+                regex: /new Registry\(\[\.\.\.defaultTypes, \.\.\.pryzmProtoRegistry\]\)/gm,
+                subst: `new Registry([...defaultTypes, ...ibcProtoRegistry, ...pryzmProtoRegistry, ...allianceProtoRegistry])`
+            }
+        ]
+    )
 
     correctFile('./src/codegen/pryzmatics/lcd.ts', [
         {
@@ -176,6 +198,19 @@ async function main() {
             regex: /pryzmatics: {\s*server: new \(await import\("\.\/server\/query.lcd"\)\)\.LCDQueryClient\({\s*requestClient\s*}\)\s*}/gm,
             subst: `pryzmatics: new (await import("./server/query.lcd")).LCDQueryClient({ requestClient })`
         }])
+
+    correctFile('./src/codegen/helpers.ts', [{
+        regex: /bundle.\n\*\//gm,
+        subst: `bundle.\n*/\nimport { PageRequest } from "./cosmos/base/query/v1beta1/pagination";`
+    }, {
+        regex: /\n\nexport interface PageRequest {\s*key: Uint8Array;\s*offset: bigint;\s*limit: bigint;\s*countTotal: boolean;\s*reverse: boolean;\s*}/gm,
+        subst: ''
+    }])
+
+    correctFile('./src/codegen/google/protobuf/any.ts', [{
+        regex: /export const Any = {\n  typeUrl: "\/google\.protobuf\.Any",/gm,
+        subst: `export const Any = {\n  typeUrl: "/google.protobuf.Any",\n  fromJSONAsAny(object: any): any { return Any.fromJSON(object) },\n  fromPartialAsAny(object: any): any { return Any.fromPartial(object) },`,
+    }])
 
     correctFile('./src/codegen/pryzmatics/server/query.lcd.ts', [{
         regex: /pryzmatics\.server\.\S+?\./gm,
@@ -190,12 +225,12 @@ async function main() {
         subst: ``
     }])
 
-    correctFile('./src/codegen/helpers.ts', [{
-        regex: /bundle.\n\*\//gm,
-        subst: `bundle.\n*/\nimport { PageRequest } from "./cosmos/base/query/v1beta1/pagination";`
-    }, {
-        regex: /\n\nexport interface PageRequest {\s*key: Uint8Array;\s*offset: bigint;\s*limit: bigint;\s*countTotal: boolean;\s*reverse: boolean;\s*}/gm,
-        subst: ''
+    correctFiles([
+        './src/codegen/pryzm/rpc.query.ts',
+        './src/codegen/pryzm/rpc.tx.ts'
+    ], [{
+        regex: /import\("..\/cosmos\/app\/v1alpha1\/query.rpc.Query"\)/gm,
+        subst: `await import("../../default.grpc.impl")`
     }])
 
     console.log('✨ all done!');

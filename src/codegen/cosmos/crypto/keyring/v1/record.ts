@@ -205,7 +205,7 @@ export const Record = {
   fromJSON(object: any): Record {
     return {
       name: isSet(object.name) ? String(object.name) : "",
-      pubKey: isSet(object.pubKey) ? Any.fromJSON(object.pubKey) : undefined,
+      pubKey: isSet(object.pubKey) ? Any.fromJSONAsAny(object.pubKey) : undefined,
       local: isSet(object.local) ? Record_Local.fromJSON(object.local) : undefined,
       ledger: isSet(object.ledger) ? Record_Ledger.fromJSON(object.ledger) : undefined,
       multi: isSet(object.multi) ? Record_Multi.fromJSON(object.multi) : undefined,
@@ -225,7 +225,7 @@ export const Record = {
   fromPartial(object: Partial<Record>): Record {
     const message = createBaseRecord();
     message.name = object.name ?? "";
-    message.pubKey = object.pubKey !== undefined && object.pubKey !== null ? Any.fromPartial(object.pubKey) : undefined;
+    message.pubKey = object.pubKey !== undefined && object.pubKey !== null ? Any.fromPartialAsAny(object.pubKey) : undefined;
     message.local = object.local !== undefined && object.local !== null ? Record_Local.fromPartial(object.local) : undefined;
     message.ledger = object.ledger !== undefined && object.ledger !== null ? Record_Ledger.fromPartial(object.ledger) : undefined;
     message.multi = object.multi !== undefined && object.multi !== null ? Record_Multi.fromPartial(object.multi) : undefined;
@@ -330,7 +330,7 @@ export const Record_Local = {
   },
   fromJSON(object: any): Record_Local {
     return {
-      privKey: isSet(object.privKey) ? Any.fromJSON(object.privKey) : undefined
+      privKey: isSet(object.privKey) ? Any.fromJSONAsAny(object.privKey) : undefined
     };
   },
   toJSON(message: Record_Local): unknown {
@@ -340,7 +340,7 @@ export const Record_Local = {
   },
   fromPartial(object: Partial<Record_Local>): Record_Local {
     const message = createBaseRecord_Local();
-    message.privKey = object.privKey !== undefined && object.privKey !== null ? Any.fromPartial(object.privKey) : undefined;
+    message.privKey = object.privKey !== undefined && object.privKey !== null ? Any.fromPartialAsAny(object.privKey) : undefined;
     return message;
   },
   fromAmino(object: Record_LocalAmino): Record_Local {

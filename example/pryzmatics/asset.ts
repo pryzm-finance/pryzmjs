@@ -5,6 +5,17 @@ import { PRYZMATICS_ENDPOINT } from "./constants";
 async function main() {
     const pryzmaticsClient = await createPryzmaticsClient({ restEndpoint: PRYZMATICS_ENDPOINT })
 
+    const m = await pryzmaticsClient.cosmatics.metrics({
+        fromBlockHeight: "",
+        fromTime: "",
+        metricId: "",
+        metricType: undefined,
+        pagination: undefined,
+        toBlockHeight: "",
+        toTime: ""
+    })
+
+    return
     const asset = (await pryzmaticsClient.pryzmatics.asset({
         assetId: "uatom"
     })).asset

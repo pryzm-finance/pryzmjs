@@ -165,10 +165,10 @@ export const ValidatorVoteIntervalSummary = {
   toAmino(message: ValidatorVoteIntervalSummary, useInterfaces: boolean = true): ValidatorVoteIntervalSummaryAmino {
     const obj: any = {};
     obj.validator = message.validator === "" ? undefined : message.validator;
-    obj.vote_interval_close_block_height = message.voteIntervalCloseBlockHeight !== BigInt(0) ? message.voteIntervalCloseBlockHeight.toString() : undefined;
-    obj.validator_power = message.validatorPower !== BigInt(0) ? message.validatorPower.toString() : undefined;
-    obj.vote_interval_miss_counter = message.voteIntervalMissCounter !== BigInt(0) ? message.voteIntervalMissCounter.toString() : undefined;
-    obj.slash_window_miss_counter = message.slashWindowMissCounter !== BigInt(0) ? message.slashWindowMissCounter.toString() : undefined;
+    obj.vote_interval_close_block_height = message.voteIntervalCloseBlockHeight ? message.voteIntervalCloseBlockHeight.toString() : undefined;
+    obj.validator_power = message.validatorPower ? message.validatorPower.toString() : undefined;
+    obj.vote_interval_miss_counter = message.voteIntervalMissCounter ? message.voteIntervalMissCounter.toString() : undefined;
+    obj.slash_window_miss_counter = message.slashWindowMissCounter ? message.slashWindowMissCounter.toString() : undefined;
     if (message.rewards) {
       obj.rewards = message.rewards.map(e => e ? Coin.toAmino(e, useInterfaces) : undefined);
     } else {

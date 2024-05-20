@@ -506,7 +506,7 @@ export const GenesisState = {
     } else {
       obj.loop_back_packet_list = message.loopBackPacketList;
     }
-    obj.loop_back_packet_last_id = message.loopBackPacketLastId !== BigInt(0) ? message.loopBackPacketLastId.toString() : undefined;
+    obj.loop_back_packet_last_id = message.loopBackPacketLastId ? message.loopBackPacketLastId.toString() : undefined;
     if (message.lastDelegationTimeList) {
       obj.last_delegation_time_list = message.lastDelegationTimeList.map(e => e ? HostChainEpochTime.toAmino(e, useInterfaces) : undefined);
     } else {
@@ -735,7 +735,7 @@ export const HostChainUndelegationEpoch = {
   toAmino(message: HostChainUndelegationEpoch, useInterfaces: boolean = true): HostChainUndelegationEpochAmino {
     const obj: any = {};
     obj.host_chain_id = message.hostChainId === "" ? undefined : message.hostChainId;
-    obj.undelegation_epoch = message.undelegationEpoch !== BigInt(0) ? message.undelegationEpoch.toString() : undefined;
+    obj.undelegation_epoch = message.undelegationEpoch ? message.undelegationEpoch.toString() : undefined;
     return obj;
   },
   fromAminoMsg(object: HostChainUndelegationEpochAminoMsg): HostChainUndelegationEpoch {

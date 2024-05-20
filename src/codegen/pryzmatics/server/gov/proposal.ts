@@ -150,7 +150,7 @@ export const QueryProposalRequest = {
   },
   toAmino(message: QueryProposalRequest, useInterfaces: boolean = true): QueryProposalRequestAmino {
     const obj: any = {};
-    obj.id = message.id !== BigInt(0) ? message.id.toString() : undefined;
+    obj.id = message.id ? message.id.toString() : undefined;
     return obj;
   },
   fromAminoMsg(object: QueryProposalRequestAminoMsg): QueryProposalRequest {

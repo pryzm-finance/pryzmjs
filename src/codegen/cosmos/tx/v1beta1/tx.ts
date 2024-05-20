@@ -1128,7 +1128,7 @@ export const SignDoc = {
     obj.body_bytes = message.bodyBytes ? base64FromBytes(message.bodyBytes) : undefined;
     obj.auth_info_bytes = message.authInfoBytes ? base64FromBytes(message.authInfoBytes) : undefined;
     obj.chain_id = message.chainId === "" ? undefined : message.chainId;
-    obj.account_number = message.accountNumber !== BigInt(0) ? message.accountNumber.toString() : undefined;
+    obj.account_number = message.accountNumber ? message.accountNumber.toString() : undefined;
     return obj;
   },
   fromAminoMsg(object: SignDocAminoMsg): SignDoc {
@@ -1233,7 +1233,7 @@ export const SignDocDirectAux = {
   fromJSON(object: any): SignDocDirectAux {
     return {
       bodyBytes: isSet(object.bodyBytes) ? bytesFromBase64(object.bodyBytes) : new Uint8Array(),
-      publicKey: isSet(object.publicKey) ? Any.fromJSON(object.publicKey) : undefined,
+      publicKey: isSet(object.publicKey) ? Any.fromJSONAsAny(object.publicKey) : undefined,
       chainId: isSet(object.chainId) ? String(object.chainId) : "",
       accountNumber: isSet(object.accountNumber) ? BigInt(object.accountNumber.toString()) : BigInt(0),
       sequence: isSet(object.sequence) ? BigInt(object.sequence.toString()) : BigInt(0),
@@ -1253,7 +1253,7 @@ export const SignDocDirectAux = {
   fromPartial(object: Partial<SignDocDirectAux>): SignDocDirectAux {
     const message = createBaseSignDocDirectAux();
     message.bodyBytes = object.bodyBytes ?? new Uint8Array();
-    message.publicKey = object.publicKey !== undefined && object.publicKey !== null ? Any.fromPartial(object.publicKey) : undefined;
+    message.publicKey = object.publicKey !== undefined && object.publicKey !== null ? Any.fromPartialAsAny(object.publicKey) : undefined;
     message.chainId = object.chainId ?? "";
     message.accountNumber = object.accountNumber !== undefined && object.accountNumber !== null ? BigInt(object.accountNumber.toString()) : BigInt(0);
     message.sequence = object.sequence !== undefined && object.sequence !== null ? BigInt(object.sequence.toString()) : BigInt(0);
@@ -1287,8 +1287,8 @@ export const SignDocDirectAux = {
     obj.body_bytes = message.bodyBytes ? base64FromBytes(message.bodyBytes) : undefined;
     obj.public_key = message.publicKey ? Any.toAmino(message.publicKey, useInterfaces) : undefined;
     obj.chain_id = message.chainId === "" ? undefined : message.chainId;
-    obj.account_number = message.accountNumber !== BigInt(0) ? message.accountNumber.toString() : undefined;
-    obj.sequence = message.sequence !== BigInt(0) ? message.sequence.toString() : undefined;
+    obj.account_number = message.accountNumber ? message.accountNumber.toString() : undefined;
+    obj.sequence = message.sequence ? message.sequence.toString() : undefined;
     obj.tip = message.tip ? Tip.toAmino(message.tip, useInterfaces) : undefined;
     return obj;
   },
@@ -1386,11 +1386,11 @@ export const TxBody = {
   },
   fromJSON(object: any): TxBody {
     return {
-      messages: Array.isArray(object?.messages) ? object.messages.map((e: any) => Any.fromJSON(e)) : [],
+      messages: Array.isArray(object?.messages) ? object.messages.map((e: any) => Any.fromJSONAsAny(e)) : [],
       memo: isSet(object.memo) ? String(object.memo) : "",
       timeoutHeight: isSet(object.timeoutHeight) ? BigInt(object.timeoutHeight.toString()) : BigInt(0),
-      extensionOptions: Array.isArray(object?.extensionOptions) ? object.extensionOptions.map((e: any) => Any.fromJSON(e)) : [],
-      nonCriticalExtensionOptions: Array.isArray(object?.nonCriticalExtensionOptions) ? object.nonCriticalExtensionOptions.map((e: any) => Any.fromJSON(e)) : []
+      extensionOptions: Array.isArray(object?.extensionOptions) ? object.extensionOptions.map((e: any) => Any.fromJSONAsAny(e)) : [],
+      nonCriticalExtensionOptions: Array.isArray(object?.nonCriticalExtensionOptions) ? object.nonCriticalExtensionOptions.map((e: any) => Any.fromJSONAsAny(e)) : []
     };
   },
   toJSON(message: TxBody): unknown {
@@ -1416,11 +1416,11 @@ export const TxBody = {
   },
   fromPartial(object: Partial<TxBody>): TxBody {
     const message = createBaseTxBody();
-    message.messages = object.messages?.map(e => Any.fromPartial(e)) || [];
+    message.messages = object.messages?.map(e => Any.fromPartialAsAny(e)) || [];
     message.memo = object.memo ?? "";
     message.timeoutHeight = object.timeoutHeight !== undefined && object.timeoutHeight !== null ? BigInt(object.timeoutHeight.toString()) : BigInt(0);
-    message.extensionOptions = object.extensionOptions?.map(e => Any.fromPartial(e)) || [];
-    message.nonCriticalExtensionOptions = object.nonCriticalExtensionOptions?.map(e => Any.fromPartial(e)) || [];
+    message.extensionOptions = object.extensionOptions?.map(e => Any.fromPartialAsAny(e)) || [];
+    message.nonCriticalExtensionOptions = object.nonCriticalExtensionOptions?.map(e => Any.fromPartialAsAny(e)) || [];
     return message;
   },
   fromAmino(object: TxBodyAmino): TxBody {
@@ -1444,7 +1444,7 @@ export const TxBody = {
       obj.messages = message.messages;
     }
     obj.memo = message.memo === "" ? undefined : message.memo;
-    obj.timeout_height = message.timeoutHeight !== BigInt(0) ? message.timeoutHeight.toString() : undefined;
+    obj.timeout_height = message.timeoutHeight ? message.timeoutHeight.toString() : undefined;
     if (message.extensionOptions) {
       obj.extension_options = message.extensionOptions.map(e => e ? Any.toAmino(e, useInterfaces) : undefined);
     } else {
@@ -1662,7 +1662,7 @@ export const SignerInfo = {
   },
   fromJSON(object: any): SignerInfo {
     return {
-      publicKey: isSet(object.publicKey) ? Any.fromJSON(object.publicKey) : undefined,
+      publicKey: isSet(object.publicKey) ? Any.fromJSONAsAny(object.publicKey) : undefined,
       modeInfo: isSet(object.modeInfo) ? ModeInfo.fromJSON(object.modeInfo) : undefined,
       sequence: isSet(object.sequence) ? BigInt(object.sequence.toString()) : BigInt(0)
     };
@@ -1676,7 +1676,7 @@ export const SignerInfo = {
   },
   fromPartial(object: Partial<SignerInfo>): SignerInfo {
     const message = createBaseSignerInfo();
-    message.publicKey = object.publicKey !== undefined && object.publicKey !== null ? Any.fromPartial(object.publicKey) : undefined;
+    message.publicKey = object.publicKey !== undefined && object.publicKey !== null ? Any.fromPartialAsAny(object.publicKey) : undefined;
     message.modeInfo = object.modeInfo !== undefined && object.modeInfo !== null ? ModeInfo.fromPartial(object.modeInfo) : undefined;
     message.sequence = object.sequence !== undefined && object.sequence !== null ? BigInt(object.sequence.toString()) : BigInt(0);
     return message;
@@ -1698,7 +1698,7 @@ export const SignerInfo = {
     const obj: any = {};
     obj.public_key = message.publicKey ? Any.toAmino(message.publicKey, useInterfaces) : undefined;
     obj.mode_info = message.modeInfo ? ModeInfo.toAmino(message.modeInfo, useInterfaces) : undefined;
-    obj.sequence = message.sequence !== BigInt(0) ? message.sequence.toString() : undefined;
+    obj.sequence = message.sequence ? message.sequence.toString() : undefined;
     return obj;
   },
   fromAminoMsg(object: SignerInfoAminoMsg): SignerInfo {
@@ -2142,7 +2142,7 @@ export const Fee = {
     } else {
       obj.amount = message.amount;
     }
-    obj.gas_limit = message.gasLimit !== BigInt(0) ? message.gasLimit.toString() : undefined;
+    obj.gas_limit = message.gasLimit ? message.gasLimit.toString() : undefined;
     obj.payer = message.payer === "" ? undefined : message.payer;
     obj.granter = message.granter === "" ? undefined : message.granter;
     return obj;

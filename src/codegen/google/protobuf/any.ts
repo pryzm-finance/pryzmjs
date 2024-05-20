@@ -82,7 +82,7 @@ import { isSet, bytesFromBase64, base64FromBytes } from "../../helpers";
  *     }
  */
 export interface Any {
-  $typeUrl?: "/google.protobuf.Any" | string;
+  $typeUrl?: "/google.protobuf.Any";
   /**
    * A URL/resource name that uniquely identifies the type of the serialized
    * protocol buffer message. This string must contain at least
@@ -321,7 +321,7 @@ export interface AnyAminoMsg {
  *     }
  */
 export interface AnySDKType {
-  $typeUrl?: "/google.protobuf.Any" | string;
+  $typeUrl?: "/google.protobuf.Any";
   type_url: string;
   value: Uint8Array;
 }
@@ -334,6 +334,8 @@ function createBaseAny(): Any {
 }
 export const Any = {
   typeUrl: "/google.protobuf.Any",
+  fromJSONAsAny(object: any): any { return Any.fromJSON(object) },
+  fromPartialAsAny(object: any): any { return Any.fromPartial(object) },
   is(o: any): o is Any {
     return o && (o.$typeUrl === Any.typeUrl || typeof o.typeUrl === "string" && (o.value instanceof Uint8Array || typeof o.value === "string"));
   },

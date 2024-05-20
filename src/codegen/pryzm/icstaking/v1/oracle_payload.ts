@@ -203,7 +203,7 @@ export const OraclePayload = {
     obj.delegation_account_balance = message.delegationAccountBalance === "" ? undefined : message.delegationAccountBalance;
     obj.reward_account_balance = message.rewardAccountBalance === "" ? undefined : message.rewardAccountBalance;
     obj.sweep_account_balance = message.sweepAccountBalance === "" ? undefined : message.sweepAccountBalance;
-    obj.last_completed_undelegation_epoch = message.lastCompletedUndelegationEpoch !== BigInt(0) ? message.lastCompletedUndelegationEpoch.toString() : undefined;
+    obj.last_completed_undelegation_epoch = message.lastCompletedUndelegationEpoch ? message.lastCompletedUndelegationEpoch.toString() : undefined;
     return obj;
   },
   fromAminoMsg(object: OraclePayloadAminoMsg): OraclePayload {

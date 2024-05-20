@@ -195,7 +195,7 @@ export const Coin = {
   toAmino(message: Coin, useInterfaces: boolean = true): CoinAmino {
     const obj: any = {};
     obj.denom = message.denom === "" ? undefined : message.denom;
-    obj.amount = message.amount ?? "";
+    obj.amount = message.amount === "" ? undefined : message.amount;
     return obj;
   },
   fromAminoMsg(object: CoinAminoMsg): Coin {

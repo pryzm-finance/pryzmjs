@@ -266,7 +266,7 @@ export const MsgGrant = {
     const obj: any = {};
     obj.granter = message.granter === "" ? undefined : message.granter;
     obj.grantee = message.grantee === "" ? undefined : message.grantee;
-    obj.grant = message.grant ? Grant.toAmino(message.grant, useInterfaces) : Grant.toAmino(Grant.fromPartial({}));
+    obj.grant = message.grant ? Grant.toAmino(message.grant, useInterfaces) : undefined;
     return obj;
   },
   fromAminoMsg(object: MsgGrantAminoMsg): MsgGrant {
@@ -456,7 +456,7 @@ export const MsgExec = {
   fromPartial(object: Partial<MsgExec>): MsgExec {
     const message = createBaseMsgExec();
     message.grantee = object.grantee ?? "";
-    message.msgs = object.msgs?.map(e => (GlobalDecoderRegistry.fromPartial(e) as any)) || [];
+    message.msgs = object.msgs?.map(e => (Any.fromPartialAsAny(e) as any)) || [];
     return message;
   },
   fromAmino(object: MsgExecAmino): MsgExec {

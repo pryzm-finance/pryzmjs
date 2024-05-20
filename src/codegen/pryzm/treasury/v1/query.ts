@@ -503,7 +503,7 @@ export const QueryGetFlowTradeRequest = {
   },
   toAmino(message: QueryGetFlowTradeRequest, useInterfaces: boolean = true): QueryGetFlowTradeRequestAmino {
     const obj: any = {};
-    obj.flow_id = message.flowId !== BigInt(0) ? message.flowId.toString() : undefined;
+    obj.flow_id = message.flowId ? message.flowId.toString() : undefined;
     return obj;
   },
   fromAminoMsg(object: QueryGetFlowTradeRequestAminoMsg): QueryGetFlowTradeRequest {

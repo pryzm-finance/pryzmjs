@@ -164,7 +164,7 @@ export const LoopBackPacket = {
   },
   toAmino(message: LoopBackPacket, useInterfaces: boolean = true): LoopBackPacketAmino {
     const obj: any = {};
-    obj.id = message.id !== BigInt(0) ? message.id.toString() : undefined;
+    obj.id = message.id ? message.id.toString() : undefined;
     obj.transfer = message.transfer ? LoopBackTransfer.toAmino(message.transfer, useInterfaces) : undefined;
     obj.msgs = message.msgs ? LoopBackMsgs.toAmino(message.msgs, useInterfaces) : undefined;
     return obj;
@@ -227,7 +227,7 @@ export const LoopBackMsgs = {
   },
   fromJSON(object: any): LoopBackMsgs {
     return {
-      messages: Array.isArray(object?.messages) ? object.messages.map((e: any) => Any.fromJSON(e)) : []
+      messages: Array.isArray(object?.messages) ? object.messages.map((e: any) => Any.fromJSONAsAny(e)) : []
     };
   },
   toJSON(message: LoopBackMsgs): unknown {
@@ -241,7 +241,7 @@ export const LoopBackMsgs = {
   },
   fromPartial(object: Partial<LoopBackMsgs>): LoopBackMsgs {
     const message = createBaseLoopBackMsgs();
-    message.messages = object.messages?.map(e => Any.fromPartial(e)) || [];
+    message.messages = object.messages?.map(e => Any.fromPartialAsAny(e)) || [];
     return message;
   },
   fromAmino(object: LoopBackMsgsAmino): LoopBackMsgs {

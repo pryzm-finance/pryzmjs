@@ -1,7 +1,7 @@
 import { Height, HeightAmino, HeightSDKType } from "../../../ibc/core/client/v1/client";
 import { Pair, PairAmino, PairSDKType } from "./oracle_price_pair";
 import { BinaryReader, BinaryWriter } from "../../../binary";
-import { isSet } from "../../../helpers";
+import { isSet, padDecimal } from "../../../helpers";
 import { GlobalDecoderRegistry } from "../../../registry";
 import { Decimal } from "@cosmjs/math";
 export interface OraclePayloadDataSourceBlockHeight {
@@ -261,7 +261,7 @@ export const OraclePayload = {
     } else {
       obj.data_source_block_heights = message.dataSourceBlockHeights;
     }
-    obj.price = message.price === "" ? undefined : message.price;
+    obj.price = padDecimal(message.price) === "" ? undefined : padDecimal(message.price);
     if (message.pairs) {
       obj.pairs = message.pairs.map(e => e ? Pair.toAmino(e, useInterfaces) : undefined);
     } else {

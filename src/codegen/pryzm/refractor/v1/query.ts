@@ -1,6 +1,6 @@
 import { AssetState, AssetStateAmino, AssetStateSDKType } from "./asset_state";
 import { BinaryReader, BinaryWriter } from "../../../binary";
-import { isSet } from "../../../helpers";
+import { isSet, padDecimal } from "../../../helpers";
 import { GlobalDecoderRegistry } from "../../../registry";
 import { Decimal } from "@cosmjs/math";
 export interface QueryGetAssetStateRequest {
@@ -383,7 +383,7 @@ export const QueryGetCPExchangeRateResponse = {
   },
   toAmino(message: QueryGetCPExchangeRateResponse, useInterfaces: boolean = true): QueryGetCPExchangeRateResponseAmino {
     const obj: any = {};
-    obj.exchange_rate = message.exchangeRate === "" ? undefined : message.exchangeRate;
+    obj.exchange_rate = padDecimal(message.exchangeRate) === "" ? undefined : padDecimal(message.exchangeRate);
     return obj;
   },
   fromAminoMsg(object: QueryGetCPExchangeRateResponseAminoMsg): QueryGetCPExchangeRateResponse {

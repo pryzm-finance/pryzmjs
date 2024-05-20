@@ -214,9 +214,9 @@ export const BallotVoteResult = {
     const obj: any = {};
     obj.namespace = message.namespace === "" ? undefined : message.namespace;
     obj.module = message.module === "" ? undefined : message.module;
-    obj.vote_interval_close_block_height = message.voteIntervalCloseBlockHeight !== BigInt(0) ? message.voteIntervalCloseBlockHeight.toString() : undefined;
+    obj.vote_interval_close_block_height = message.voteIntervalCloseBlockHeight ? message.voteIntervalCloseBlockHeight.toString() : undefined;
     obj.quorum_reached = message.quorumReached === false ? undefined : message.quorumReached;
-    obj.ballot_power = message.ballotPower !== BigInt(0) ? message.ballotPower.toString() : undefined;
+    obj.ballot_power = message.ballotPower ? message.ballotPower.toString() : undefined;
     obj.majority_achieved = message.majorityAchieved === false ? undefined : message.majorityAchieved;
     obj.majority_vote_type = message.majorityVoteType === 0 ? undefined : message.majorityVoteType;
     obj.majority_vote_payload = message.majorityVotePayload === "" ? undefined : message.majorityVotePayload;

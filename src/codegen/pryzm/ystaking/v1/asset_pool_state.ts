@@ -1,6 +1,6 @@
 import { BinaryReader, BinaryWriter } from "../../../binary";
 import { Decimal } from "@cosmjs/math";
-import { isSet } from "../../../helpers";
+import { isSet, padDecimal } from "../../../helpers";
 import { GlobalDecoderRegistry } from "../../../registry";
 export interface AssetPoolState {
   assetId: string;
@@ -145,7 +145,7 @@ export const AssetPoolState = {
     const obj: any = {};
     obj.asset_id = message.assetId === "" ? undefined : message.assetId;
     obj.bonded_amount = message.bondedAmount === "" ? undefined : message.bondedAmount;
-    obj.global_index = message.globalIndex === "" ? undefined : message.globalIndex;
+    obj.global_index = padDecimal(message.globalIndex) === "" ? undefined : padDecimal(message.globalIndex);
     return obj;
   },
   fromAminoMsg(object: AssetPoolStateAminoMsg): AssetPoolState {
@@ -284,7 +284,7 @@ export const AssetMaturityPoolState = {
     obj.maturity_symbol = message.maturitySymbol === "" ? undefined : message.maturitySymbol;
     obj.active = message.active === false ? undefined : message.active;
     obj.bonded_amount = message.bondedAmount === "" ? undefined : message.bondedAmount;
-    obj.global_index = message.globalIndex === null ? undefined : message.globalIndex;
+    obj.global_index = padDecimal(message.globalIndex) === null ? undefined : padDecimal(message.globalIndex);
     return obj;
   },
   fromAminoMsg(object: AssetMaturityPoolStateAminoMsg): AssetMaturityPoolState {

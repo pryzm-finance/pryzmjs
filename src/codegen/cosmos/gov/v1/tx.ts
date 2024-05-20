@@ -457,7 +457,7 @@ export const MsgSubmitProposal = {
   },
   fromJSON(object: any): MsgSubmitProposal {
     return {
-      messages: Array.isArray(object?.messages) ? object.messages.map((e: any) => Any.fromJSON(e)) : [],
+      messages: Array.isArray(object?.messages) ? object.messages.map((e: any) => Any.fromJSONAsAny(e)) : [],
       initialDeposit: Array.isArray(object?.initialDeposit) ? object.initialDeposit.map((e: any) => Coin.fromJSON(e)) : [],
       proposer: isSet(object.proposer) ? String(object.proposer) : "",
       metadata: isSet(object.metadata) ? String(object.metadata) : "",
@@ -485,7 +485,7 @@ export const MsgSubmitProposal = {
   },
   fromPartial(object: Partial<MsgSubmitProposal>): MsgSubmitProposal {
     const message = createBaseMsgSubmitProposal();
-    message.messages = object.messages?.map(e => Any.fromPartial(e)) || [];
+    message.messages = object.messages?.map(e => Any.fromPartialAsAny(e)) || [];
     message.initialDeposit = object.initialDeposit?.map(e => Coin.fromPartial(e)) || [];
     message.proposer = object.proposer ?? "";
     message.metadata = object.metadata ?? "";
@@ -617,7 +617,7 @@ export const MsgSubmitProposalResponse = {
   },
   toAmino(message: MsgSubmitProposalResponse, useInterfaces: boolean = true): MsgSubmitProposalResponseAmino {
     const obj: any = {};
-    obj.proposal_id = message.proposalId !== BigInt(0) ? message.proposalId.toString() : undefined;
+    obj.proposal_id = message.proposalId ? message.proposalId.toString() : undefined;
     return obj;
   },
   fromAminoMsg(object: MsgSubmitProposalResponseAminoMsg): MsgSubmitProposalResponse {
@@ -1524,7 +1524,7 @@ export const MsgUpdateParams = {
   toAmino(message: MsgUpdateParams, useInterfaces: boolean = true): MsgUpdateParamsAmino {
     const obj: any = {};
     obj.authority = message.authority === "" ? undefined : message.authority;
-    obj.params = message.params ? Params.toAmino(message.params, useInterfaces) : Params.toAmino(Params.fromPartial({}));
+    obj.params = message.params ? Params.toAmino(message.params, useInterfaces) : undefined;
     return obj;
   },
   fromAminoMsg(object: MsgUpdateParamsAminoMsg): MsgUpdateParams {

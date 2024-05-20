@@ -1,7 +1,7 @@
 import { Timestamp, TimestampSDKType } from "../../google/protobuf/timestamp";
 import { BinaryReader, BinaryWriter } from "../../binary";
 import { Decimal } from "@cosmjs/math";
-import { isSet, fromJsonTimestamp, fromTimestamp } from "../../helpers";
+import { isSet, fromJsonTimestamp, fromTimestamp, padDecimal } from "../../helpers";
 import { GlobalDecoderRegistry } from "../../registry";
 export interface ProposalVote {
   id: bigint;
@@ -195,14 +195,14 @@ export const ProposalVote = {
   },
   toAmino(message: ProposalVote, useInterfaces: boolean = true): ProposalVoteAmino {
     const obj: any = {};
-    obj.id = message.id !== BigInt(0) ? message.id.toString() : undefined;
+    obj.id = message.id ? message.id.toString() : undefined;
     obj.voter = message.voter === "" ? undefined : message.voter;
-    obj.proposal_id = message.proposalId !== BigInt(0) ? message.proposalId.toString() : undefined;
+    obj.proposal_id = message.proposalId ? message.proposalId.toString() : undefined;
     obj.block_time = message.blockTime ? Timestamp.toAmino(message.blockTime, useInterfaces) : undefined;
-    obj.yes_option_weight = message.yesOptionWeight === "" ? undefined : message.yesOptionWeight;
-    obj.abstain_option_weight = message.abstainOptionWeight === "" ? undefined : message.abstainOptionWeight;
-    obj.no_option_weight = message.noOptionWeight === "" ? undefined : message.noOptionWeight;
-    obj.no_with_veto_option_weight = message.noWithVetoOptionWeight === "" ? undefined : message.noWithVetoOptionWeight;
+    obj.yes_option_weight = padDecimal(message.yesOptionWeight) === "" ? undefined : padDecimal(message.yesOptionWeight);
+    obj.abstain_option_weight = padDecimal(message.abstainOptionWeight) === "" ? undefined : padDecimal(message.abstainOptionWeight);
+    obj.no_option_weight = padDecimal(message.noOptionWeight) === "" ? undefined : padDecimal(message.noOptionWeight);
+    obj.no_with_veto_option_weight = padDecimal(message.noWithVetoOptionWeight) === "" ? undefined : padDecimal(message.noWithVetoOptionWeight);
     return obj;
   },
   fromAminoMsg(object: ProposalVoteAminoMsg): ProposalVote {

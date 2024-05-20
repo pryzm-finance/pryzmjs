@@ -306,7 +306,7 @@ export const UserTradeHistory = {
   },
   toAmino(message: UserTradeHistory, useInterfaces: boolean = true): UserTradeHistoryAmino {
     const obj: any = {};
-    obj.id = message.id !== BigInt(0) ? message.id.toString() : undefined;
+    obj.id = message.id ? message.id.toString() : undefined;
     if (message.amountsIn) {
       obj.amounts_in = message.amountsIn.map(e => e ? Coin.toAmino(e, useInterfaces) : undefined);
     } else {
@@ -318,7 +318,7 @@ export const UserTradeHistory = {
       obj.amounts_out = message.amountsOut;
     }
     obj.address = message.address === "" ? undefined : message.address;
-    obj.pool_id = message.poolId !== BigInt(0) ? message.poolId.toString() : undefined;
+    obj.pool_id = message.poolId ? message.poolId.toString() : undefined;
     if (message.path) {
       obj.path = message.path.map(e => e ? SwapStep.toAmino(e, useInterfaces) : undefined);
     } else {

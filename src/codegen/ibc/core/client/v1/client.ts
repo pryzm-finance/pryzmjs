@@ -367,7 +367,7 @@ export const IdentifiedClientState = {
   fromJSON(object: any): IdentifiedClientState {
     return {
       clientId: isSet(object.clientId) ? String(object.clientId) : "",
-      clientState: isSet(object.clientState) ? Any.fromJSON(object.clientState) : undefined
+      clientState: isSet(object.clientState) ? Any.fromJSONAsAny(object.clientState) : undefined
     };
   },
   toJSON(message: IdentifiedClientState): unknown {
@@ -379,7 +379,7 @@ export const IdentifiedClientState = {
   fromPartial(object: Partial<IdentifiedClientState>): IdentifiedClientState {
     const message = createBaseIdentifiedClientState();
     message.clientId = object.clientId ?? "";
-    message.clientState = object.clientState !== undefined && object.clientState !== null ? Any.fromPartial(object.clientState) : undefined;
+    message.clientState = object.clientState !== undefined && object.clientState !== null ? Any.fromPartialAsAny(object.clientState) : undefined;
     return message;
   },
   fromAmino(object: IdentifiedClientStateAmino): IdentifiedClientState {
@@ -472,7 +472,7 @@ export const ConsensusStateWithHeight = {
   fromJSON(object: any): ConsensusStateWithHeight {
     return {
       height: isSet(object.height) ? Height.fromJSON(object.height) : undefined,
-      consensusState: isSet(object.consensusState) ? Any.fromJSON(object.consensusState) : undefined
+      consensusState: isSet(object.consensusState) ? Any.fromJSONAsAny(object.consensusState) : undefined
     };
   },
   toJSON(message: ConsensusStateWithHeight): unknown {
@@ -484,7 +484,7 @@ export const ConsensusStateWithHeight = {
   fromPartial(object: Partial<ConsensusStateWithHeight>): ConsensusStateWithHeight {
     const message = createBaseConsensusStateWithHeight();
     message.height = object.height !== undefined && object.height !== null ? Height.fromPartial(object.height) : undefined;
-    message.consensusState = object.consensusState !== undefined && object.consensusState !== null ? Any.fromPartial(object.consensusState) : undefined;
+    message.consensusState = object.consensusState !== undefined && object.consensusState !== null ? Any.fromPartialAsAny(object.consensusState) : undefined;
     return message;
   },
   fromAmino(object: ConsensusStateWithHeightAmino): ConsensusStateWithHeight {
@@ -839,7 +839,7 @@ export const UpgradeProposal = {
       title: isSet(object.title) ? String(object.title) : "",
       description: isSet(object.description) ? String(object.description) : "",
       plan: isSet(object.plan) ? Plan.fromJSON(object.plan) : undefined,
-      upgradedClientState: isSet(object.upgradedClientState) ? Any.fromJSON(object.upgradedClientState) : undefined
+      upgradedClientState: isSet(object.upgradedClientState) ? Any.fromJSONAsAny(object.upgradedClientState) : undefined
     };
   },
   toJSON(message: UpgradeProposal): unknown {
@@ -855,7 +855,7 @@ export const UpgradeProposal = {
     message.title = object.title ?? "";
     message.description = object.description ?? "";
     message.plan = object.plan !== undefined && object.plan !== null ? Plan.fromPartial(object.plan) : undefined;
-    message.upgradedClientState = object.upgradedClientState !== undefined && object.upgradedClientState !== null ? Any.fromPartial(object.upgradedClientState) : undefined;
+    message.upgradedClientState = object.upgradedClientState !== undefined && object.upgradedClientState !== null ? Any.fromPartialAsAny(object.upgradedClientState) : undefined;
     return message;
   },
   fromAmino(object: UpgradeProposalAmino): UpgradeProposal {
@@ -979,8 +979,8 @@ export const Height = {
   },
   toAmino(message: Height, useInterfaces: boolean = true): HeightAmino {
     const obj: any = {};
-    obj.revision_number = message.revisionNumber !== BigInt(0) ? message.revisionNumber.toString() : undefined;
-    obj.revision_height = message.revisionHeight !== BigInt(0) ? message.revisionHeight.toString() : undefined;
+    obj.revision_number = message.revisionNumber ? message.revisionNumber.toString() : undefined;
+    obj.revision_height = message.revisionHeight ? message.revisionHeight.toString() : undefined;
     return obj;
   },
   fromAminoMsg(object: HeightAminoMsg): Height {

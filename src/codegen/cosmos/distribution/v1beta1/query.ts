@@ -749,7 +749,7 @@ export const QueryParamsResponse = {
   },
   toAmino(message: QueryParamsResponse, useInterfaces: boolean = true): QueryParamsResponseAmino {
     const obj: any = {};
-    obj.params = message.params ? Params.toAmino(message.params, useInterfaces) : Params.toAmino(Params.fromPartial({}));
+    obj.params = message.params ? Params.toAmino(message.params, useInterfaces) : undefined;
     return obj;
   },
   fromAminoMsg(object: QueryParamsResponseAminoMsg): QueryParamsResponse {
@@ -1153,7 +1153,7 @@ export const QueryValidatorOutstandingRewardsResponse = {
   },
   toAmino(message: QueryValidatorOutstandingRewardsResponse, useInterfaces: boolean = true): QueryValidatorOutstandingRewardsResponseAmino {
     const obj: any = {};
-    obj.rewards = message.rewards ? ValidatorOutstandingRewards.toAmino(message.rewards, useInterfaces) : ValidatorOutstandingRewards.toAmino(ValidatorOutstandingRewards.fromPartial({}));
+    obj.rewards = message.rewards ? ValidatorOutstandingRewards.toAmino(message.rewards, useInterfaces) : undefined;
     return obj;
   },
   fromAminoMsg(object: QueryValidatorOutstandingRewardsResponseAminoMsg): QueryValidatorOutstandingRewardsResponse {
@@ -1335,7 +1335,7 @@ export const QueryValidatorCommissionResponse = {
   },
   toAmino(message: QueryValidatorCommissionResponse, useInterfaces: boolean = true): QueryValidatorCommissionResponseAmino {
     const obj: any = {};
-    obj.commission = message.commission ? ValidatorAccumulatedCommission.toAmino(message.commission, useInterfaces) : ValidatorAccumulatedCommission.toAmino(ValidatorAccumulatedCommission.fromPartial({}));
+    obj.commission = message.commission ? ValidatorAccumulatedCommission.toAmino(message.commission, useInterfaces) : undefined;
     return obj;
   },
   fromAminoMsg(object: QueryValidatorCommissionResponseAminoMsg): QueryValidatorCommissionResponse {
@@ -1466,8 +1466,8 @@ export const QueryValidatorSlashesRequest = {
   toAmino(message: QueryValidatorSlashesRequest, useInterfaces: boolean = true): QueryValidatorSlashesRequestAmino {
     const obj: any = {};
     obj.validator_address = message.validatorAddress === "" ? undefined : message.validatorAddress;
-    obj.starting_height = message.startingHeight !== BigInt(0) ? message.startingHeight.toString() : undefined;
-    obj.ending_height = message.endingHeight !== BigInt(0) ? message.endingHeight.toString() : undefined;
+    obj.starting_height = message.startingHeight ? message.startingHeight.toString() : undefined;
+    obj.ending_height = message.endingHeight ? message.endingHeight.toString() : undefined;
     obj.pagination = message.pagination ? PageRequest.toAmino(message.pagination, useInterfaces) : undefined;
     return obj;
   },

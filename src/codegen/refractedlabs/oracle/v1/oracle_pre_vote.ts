@@ -115,7 +115,7 @@ export const OraclePreVote = {
     const obj: any = {};
     obj.validator = message.validator === "" ? undefined : message.validator;
     obj.hash = message.hash === "" ? undefined : message.hash;
-    obj.submit_block = message.submitBlock !== BigInt(0) ? message.submitBlock.toString() : undefined;
+    obj.submit_block = message.submitBlock ? message.submitBlock.toString() : undefined;
     return obj;
   },
   fromAminoMsg(object: OraclePreVoteAminoMsg): OraclePreVote {

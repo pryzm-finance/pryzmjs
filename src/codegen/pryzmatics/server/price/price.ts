@@ -1,5 +1,5 @@
 import { BinaryReader, BinaryWriter } from "../../../binary";
-import { isSet } from "../../../helpers";
+import { isSet, padDecimal } from "../../../helpers";
 import { GlobalDecoderRegistry } from "../../../registry";
 import { Decimal } from "@cosmjs/math";
 export interface QueryPriceRequest {
@@ -199,7 +199,7 @@ export const QueryPriceResponse = {
   },
   toAmino(message: QueryPriceResponse, useInterfaces: boolean = true): QueryPriceResponseAmino {
     const obj: any = {};
-    obj.price = message.price === "" ? undefined : message.price;
+    obj.price = padDecimal(message.price) === "" ? undefined : padDecimal(message.price);
     return obj;
   },
   fromAminoMsg(object: QueryPriceResponseAminoMsg): QueryPriceResponse {

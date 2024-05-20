@@ -304,7 +304,7 @@ export const MsgUpdateParams = {
   toAmino(message: MsgUpdateParams, useInterfaces: boolean = true): MsgUpdateParamsAmino {
     const obj: any = {};
     obj.authority = message.authority === "" ? undefined : message.authority;
-    obj.params = message.params ? Params.toAmino(message.params, useInterfaces) : Params.toAmino(Params.fromPartial({}));
+    obj.params = message.params ? Params.toAmino(message.params, useInterfaces) : undefined;
     return obj;
   },
   fromAminoMsg(object: MsgUpdateParamsAminoMsg): MsgUpdateParams {
@@ -893,7 +893,7 @@ export const MsgSubmitVote = {
     const obj: any = {};
     obj.voter = message.voter === "" ? undefined : message.voter;
     obj.asset = message.asset === "" ? undefined : message.asset;
-    obj.proposal = message.proposal ? message.proposal.toString() : "0";
+    obj.proposal = message.proposal ? message.proposal.toString() : undefined;
     if (message.options) {
       obj.options = message.options.map(e => e ? WeightedVoteOption.toAmino(e, useInterfaces) : undefined);
     } else {
@@ -1110,7 +1110,7 @@ export const MsgSubmitProposal = {
     const obj: any = {};
     obj.creator = message.creator === "" ? undefined : message.creator;
     obj.asset = message.asset === "" ? undefined : message.asset;
-    obj.proposal = message.proposal ? base64FromBytes(message.proposal) : "";
+    obj.proposal = message.proposal ? base64FromBytes(message.proposal) : undefined;
     obj.height = message.height ? Height.toAmino(message.height, useInterfaces) : {};
     obj.proof = message.proof ? base64FromBytes(message.proof) : undefined;
     return obj;
@@ -1314,7 +1314,7 @@ export const MsgRetryVoteTransmit = {
     const obj: any = {};
     obj.creator = message.creator === "" ? undefined : message.creator;
     obj.asset = message.asset === "" ? undefined : message.asset;
-    obj.proposal = message.proposal ? message.proposal.toString() : "0";
+    obj.proposal = message.proposal ? message.proposal.toString() : undefined;
     return obj;
   },
   fromAminoMsg(object: MsgRetryVoteTransmitAminoMsg): MsgRetryVoteTransmit {

@@ -87,7 +87,7 @@ export const Params = {
   },
   toAmino(message: Params, useInterfaces: boolean = true): ParamsAmino {
     const obj: any = {};
-    obj.voting_result_submission_window = message.votingResultSubmissionWindow ? Duration.toAmino(message.votingResultSubmissionWindow, useInterfaces) : Duration.toAmino(Duration.fromPartial({}));
+    obj.voting_result_submission_window = message.votingResultSubmissionWindow ? Duration.toAmino(message.votingResultSubmissionWindow, useInterfaces) : undefined;
     return obj;
   },
   fromAminoMsg(object: ParamsAminoMsg): Params {

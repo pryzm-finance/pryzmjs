@@ -1,6 +1,6 @@
 import { FavoritePair, FavoritePairAmino, FavoritePairSDKType } from "../../trade/trade_volume";
 import { BinaryReader, BinaryWriter } from "../../../binary";
-import { isSet } from "../../../helpers";
+import { isSet, padDecimal } from "../../../helpers";
 import { GlobalDecoderRegistry } from "../../../registry";
 import { Decimal } from "@cosmjs/math";
 export interface QueryPoolTradeVolumeRequest {
@@ -218,7 +218,7 @@ export const QueryPoolTradeVolumeRequest = {
   },
   toAmino(message: QueryPoolTradeVolumeRequest, useInterfaces: boolean = true): QueryPoolTradeVolumeRequestAmino {
     const obj: any = {};
-    obj.pool_id = message.poolId !== BigInt(0) ? message.poolId.toString() : undefined;
+    obj.pool_id = message.poolId ? message.poolId.toString() : undefined;
     obj.from = message.from === "" ? undefined : message.from;
     obj.to = message.to === "" ? undefined : message.to;
     return obj;
@@ -329,9 +329,9 @@ export const QueryPoolTradeVolumeResponse = {
   },
   toAmino(message: QueryPoolTradeVolumeResponse, useInterfaces: boolean = true): QueryPoolTradeVolumeResponseAmino {
     const obj: any = {};
-    obj.volume = message.volume === "" ? undefined : message.volume;
-    obj.swap_fee_volume = message.swapFeeVolume === "" ? undefined : message.swapFeeVolume;
-    obj.join_exit_swap_fee_volume = message.joinExitSwapFeeVolume === "" ? undefined : message.joinExitSwapFeeVolume;
+    obj.volume = padDecimal(message.volume) === "" ? undefined : padDecimal(message.volume);
+    obj.swap_fee_volume = padDecimal(message.swapFeeVolume) === "" ? undefined : padDecimal(message.swapFeeVolume);
+    obj.join_exit_swap_fee_volume = padDecimal(message.joinExitSwapFeeVolume) === "" ? undefined : padDecimal(message.joinExitSwapFeeVolume);
     return obj;
   },
   fromAminoMsg(object: QueryPoolTradeVolumeResponseAminoMsg): QueryPoolTradeVolumeResponse {
@@ -539,7 +539,7 @@ export const QueryTokenTradeVolumeResponse = {
   },
   toAmino(message: QueryTokenTradeVolumeResponse, useInterfaces: boolean = true): QueryTokenTradeVolumeResponseAmino {
     const obj: any = {};
-    obj.volume = message.volume === "" ? undefined : message.volume;
+    obj.volume = padDecimal(message.volume) === "" ? undefined : padDecimal(message.volume);
     return obj;
   },
   fromAminoMsg(object: QueryTokenTradeVolumeResponseAminoMsg): QueryTokenTradeVolumeResponse {

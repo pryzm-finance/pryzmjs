@@ -84,7 +84,7 @@ export const BlockRequest = {
   },
   toAmino(message: BlockRequest, useInterfaces: boolean = true): BlockRequestAmino {
     const obj: any = {};
-    obj.height = message.height !== BigInt(0) ? message.height.toString() : undefined;
+    obj.height = message.height ? message.height.toString() : undefined;
     return obj;
   },
   fromAminoMsg(object: BlockRequestAminoMsg): BlockRequest {

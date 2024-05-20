@@ -1,7 +1,7 @@
 import { TokenYield, TokenYieldAmino, TokenYieldSDKType } from "./token_yield";
 import { BinaryReader, BinaryWriter } from "../../binary";
 import { Decimal } from "@cosmjs/math";
-import { isSet } from "../../helpers";
+import { isSet, padDecimal } from "../../helpers";
 import { GlobalDecoderRegistry } from "../../registry";
 export enum TokenType {
   TOKEN_TYPE_ANY = 0,
@@ -283,14 +283,14 @@ export const TokenMetrics = {
   },
   toAmino(message: TokenMetrics, useInterfaces: boolean = true): TokenMetricsAmino {
     const obj: any = {};
-    obj.price_change_percentage_24h = message.priceChangePercentage24h === null ? undefined : message.priceChangePercentage24h;
-    obj.price_change_percentage_7d = message.priceChangePercentage7d === null ? undefined : message.priceChangePercentage7d;
-    obj.price_change_percentage_30d = message.priceChangePercentage30d === null ? undefined : message.priceChangePercentage30d;
-    obj.trade_volume_24h = message.tradeVolume24h === "" ? undefined : message.tradeVolume24h;
-    obj.trade_volume_7d = message.tradeVolume7d === "" ? undefined : message.tradeVolume7d;
-    obj.trade_volume_30d = message.tradeVolume30d === "" ? undefined : message.tradeVolume30d;
-    obj.price_52w_low = message.price52wLow === null ? undefined : message.price52wLow;
-    obj.price_52w_high = message.price52wHigh === null ? undefined : message.price52wHigh;
+    obj.price_change_percentage_24h = padDecimal(message.priceChangePercentage24h) === null ? undefined : padDecimal(message.priceChangePercentage24h);
+    obj.price_change_percentage_7d = padDecimal(message.priceChangePercentage7d) === null ? undefined : padDecimal(message.priceChangePercentage7d);
+    obj.price_change_percentage_30d = padDecimal(message.priceChangePercentage30d) === null ? undefined : padDecimal(message.priceChangePercentage30d);
+    obj.trade_volume_24h = padDecimal(message.tradeVolume24h) === "" ? undefined : padDecimal(message.tradeVolume24h);
+    obj.trade_volume_7d = padDecimal(message.tradeVolume7d) === "" ? undefined : padDecimal(message.tradeVolume7d);
+    obj.trade_volume_30d = padDecimal(message.tradeVolume30d) === "" ? undefined : padDecimal(message.tradeVolume30d);
+    obj.price_52w_low = padDecimal(message.price52wLow) === null ? undefined : padDecimal(message.price52wLow);
+    obj.price_52w_high = padDecimal(message.price52wHigh) === null ? undefined : padDecimal(message.price52wHigh);
     return obj;
   },
   fromAminoMsg(object: TokenMetricsAminoMsg): TokenMetrics {
@@ -441,7 +441,7 @@ export const Token = {
     obj.denom = message.denom === "" ? undefined : message.denom;
     obj.type = message.type === 0 ? undefined : message.type;
     obj.yield = message.yield ? TokenYield.toAmino(message.yield, useInterfaces) : undefined;
-    obj.price = message.price === null ? undefined : message.price;
+    obj.price = padDecimal(message.price) === null ? undefined : padDecimal(message.price);
     obj.metrics = message.metrics ? TokenMetrics.toAmino(message.metrics, useInterfaces) : undefined;
     obj.error = message.error === "" ? undefined : message.error;
     return obj;

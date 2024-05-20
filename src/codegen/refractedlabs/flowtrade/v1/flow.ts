@@ -1,7 +1,7 @@
 import { Timestamp, TimestampSDKType } from "../../../google/protobuf/timestamp";
 import { Duration, DurationAmino, DurationSDKType } from "../../../google/protobuf/duration";
 import { Coin, CoinAmino, CoinSDKType } from "../../../cosmos/base/v1beta1/coin";
-import { isSet, fromJsonTimestamp, fromTimestamp } from "../../../helpers";
+import { isSet, fromJsonTimestamp, fromTimestamp, padDecimal } from "../../../helpers";
 import { BinaryReader, BinaryWriter } from "../../../binary";
 import { Decimal } from "@cosmjs/math";
 import { GlobalDecoderRegistry } from "../../../registry";
@@ -833,7 +833,7 @@ export const Flow = {
   },
   toAmino(message: Flow, useInterfaces: boolean = true): FlowAmino {
     const obj: any = {};
-    obj.id = message.id !== BigInt(0) ? message.id.toString() : undefined;
+    obj.id = message.id ? message.id.toString() : undefined;
     obj.creator = message.creator === "" ? undefined : message.creator;
     obj.flow_info = message.flowInfo ? FlowInfo.toAmino(message.flowInfo, useInterfaces) : undefined;
     obj.start_time = message.startTime ? Timestamp.toAmino(message.startTime, useInterfaces) : undefined;
@@ -847,21 +847,21 @@ export const Flow = {
     obj.stoppable = message.stoppable === false ? undefined : message.stoppable;
     obj.allow_immediate_token_out_claim_if_stopped = message.allowImmediateTokenOutClaimIfStopped === false ? undefined : message.allowImmediateTokenOutClaimIfStopped;
     obj.allow_immediate_token_in_claim_if_stopped = message.allowImmediateTokenInClaimIfStopped === false ? undefined : message.allowImmediateTokenInClaimIfStopped;
-    obj.dist_index = message.distIndex === "" ? undefined : message.distIndex;
+    obj.dist_index = padDecimal(message.distIndex) === "" ? undefined : padDecimal(message.distIndex);
     obj.last_dist_update = message.lastDistUpdate ? Timestamp.toAmino(message.lastDistUpdate, useInterfaces) : undefined;
     obj.token_out_balance = message.tokenOutBalance === "" ? undefined : message.tokenOutBalance;
     obj.token_in_balance = message.tokenInBalance === "" ? undefined : message.tokenInBalance;
     obj.spent_token_in = message.spentTokenIn === "" ? undefined : message.spentTokenIn;
     obj.total_shares = message.totalShares === "" ? undefined : message.totalShares;
-    obj.live_price = message.livePrice === "" ? undefined : message.livePrice;
+    obj.live_price = padDecimal(message.livePrice) === "" ? undefined : padDecimal(message.livePrice);
     obj.status = message.status === 0 ? undefined : message.status;
     obj.creation_deposit = message.creationDeposit ? Coin.toAmino(message.creationDeposit, useInterfaces) : undefined;
-    obj.token_out_fee_ratio = message.tokenOutFeeRatio === "" ? undefined : message.tokenOutFeeRatio;
-    obj.token_in_fee_ratio = message.tokenInFeeRatio === "" ? undefined : message.tokenInFeeRatio;
+    obj.token_out_fee_ratio = padDecimal(message.tokenOutFeeRatio) === "" ? undefined : padDecimal(message.tokenOutFeeRatio);
+    obj.token_in_fee_ratio = padDecimal(message.tokenInFeeRatio) === "" ? undefined : padDecimal(message.tokenInFeeRatio);
     obj.automatic_treasury_collection = message.automaticTreasuryCollection === false ? undefined : message.automaticTreasuryCollection;
     obj.claimed_token_in = message.claimedTokenIn === "" ? undefined : message.claimedTokenIn;
     obj.checked_out = message.checkedOut === false ? undefined : message.checkedOut;
-    obj.limit_price = message.limitPrice === "" ? undefined : message.limitPrice;
+    obj.limit_price = padDecimal(message.limitPrice) === "" ? undefined : padDecimal(message.limitPrice);
     obj.exit_window_duration = message.exitWindowDuration ? Duration.toAmino(message.exitWindowDuration, useInterfaces) : undefined;
     return obj;
   },
@@ -971,9 +971,9 @@ export const FlowInfo = {
   },
   toAmino(message: FlowInfo, useInterfaces: boolean = true): FlowInfoAmino {
     const obj: any = {};
-    obj.name = message.name ?? "";
-    obj.description = message.description ?? "";
-    obj.url = message.url ?? "";
+    obj.name = message.name === "" ? undefined : message.name;
+    obj.description = message.description === "" ? undefined : message.description;
+    obj.url = message.url === "" ? undefined : message.url;
     return obj;
   },
   fromAminoMsg(object: FlowInfoAminoMsg): FlowInfo {
@@ -1225,20 +1225,20 @@ export const FlowCreationRequest = {
   },
   toAmino(message: FlowCreationRequest, useInterfaces: boolean = true): FlowCreationRequestAmino {
     const obj: any = {};
-    obj.flow_info = message.flowInfo ? FlowInfo.toAmino(message.flowInfo, useInterfaces) : FlowInfo.toAmino(FlowInfo.fromPartial({}));
-    obj.start_time = message.startTime ? Timestamp.toAmino(message.startTime, useInterfaces) : Timestamp.toAmino(Timestamp.fromPartial({}));
-    obj.end_time = message.endTime ? Timestamp.toAmino(message.endTime, useInterfaces) : Timestamp.toAmino(Timestamp.fromPartial({}));
-    obj.dist_interval = message.distInterval ? Duration.toAmino(message.distInterval, useInterfaces) : Duration.toAmino(Duration.fromPartial({}));
-    obj.treasury_address = message.treasuryAddress ?? "";
-    obj.tokens_out = message.tokensOut ? Coin.toAmino(message.tokensOut, useInterfaces) : Coin.toAmino(Coin.fromPartial({}));
+    obj.flow_info = message.flowInfo ? FlowInfo.toAmino(message.flowInfo, useInterfaces) : undefined;
+    obj.start_time = message.startTime ? Timestamp.toAmino(message.startTime, useInterfaces) : undefined;
+    obj.end_time = message.endTime ? Timestamp.toAmino(message.endTime, useInterfaces) : undefined;
+    obj.dist_interval = message.distInterval ? Duration.toAmino(message.distInterval, useInterfaces) : undefined;
+    obj.treasury_address = message.treasuryAddress === "" ? undefined : message.treasuryAddress;
+    obj.tokens_out = message.tokensOut ? Coin.toAmino(message.tokensOut, useInterfaces) : undefined;
     obj.token_in_denom = message.tokenInDenom === "" ? undefined : message.tokenInDenom;
-    obj.token_out_claimable_after = message.tokenOutClaimableAfter ? Timestamp.toAmino(message.tokenOutClaimableAfter, useInterfaces) : Timestamp.toAmino(Timestamp.fromPartial({}));
-    obj.token_in_claimable_after = message.tokenInClaimableAfter ? Timestamp.toAmino(message.tokenInClaimableAfter, useInterfaces) : Timestamp.toAmino(Timestamp.fromPartial({}));
-    obj.stoppable = message.stoppable ?? false;
-    obj.allow_immediate_token_out_claim_if_stopped = message.allowImmediateTokenOutClaimIfStopped ?? false;
-    obj.allow_immediate_token_in_claim_if_stopped = message.allowImmediateTokenInClaimIfStopped ?? false;
-    obj.limit_price = message.limitPrice ?? "";
-    obj.exit_window_duration = message.exitWindowDuration ? Duration.toAmino(message.exitWindowDuration, useInterfaces) : Duration.toAmino(Duration.fromPartial({}));
+    obj.token_out_claimable_after = message.tokenOutClaimableAfter ? Timestamp.toAmino(message.tokenOutClaimableAfter, useInterfaces) : undefined;
+    obj.token_in_claimable_after = message.tokenInClaimableAfter ? Timestamp.toAmino(message.tokenInClaimableAfter, useInterfaces) : undefined;
+    obj.stoppable = message.stoppable === false ? undefined : message.stoppable;
+    obj.allow_immediate_token_out_claim_if_stopped = message.allowImmediateTokenOutClaimIfStopped === false ? undefined : message.allowImmediateTokenOutClaimIfStopped;
+    obj.allow_immediate_token_in_claim_if_stopped = message.allowImmediateTokenInClaimIfStopped === false ? undefined : message.allowImmediateTokenInClaimIfStopped;
+    obj.limit_price = padDecimal(message.limitPrice) === "" ? undefined : padDecimal(message.limitPrice);
+    obj.exit_window_duration = message.exitWindowDuration ? Duration.toAmino(message.exitWindowDuration, useInterfaces) : undefined;
     return obj;
   },
   fromAminoMsg(object: FlowCreationRequestAminoMsg): FlowCreationRequest {

@@ -1,6 +1,6 @@
 import { BinaryReader, BinaryWriter } from "../../../binary";
 import { Decimal } from "@cosmjs/math";
-import { isSet } from "../../../helpers";
+import { isSet, padDecimal } from "../../../helpers";
 import { GlobalDecoderRegistry } from "../../../registry";
 export interface CircuitBreaker {
   referenceLptPrice: string;
@@ -208,12 +208,12 @@ export const CircuitBreaker = {
   },
   toAmino(message: CircuitBreaker, useInterfaces: boolean = true): CircuitBreakerAmino {
     const obj: any = {};
-    obj.reference_lpt_price = message.referenceLptPrice === "" ? undefined : message.referenceLptPrice;
-    obj.lower_bound = message.lowerBound === "" ? undefined : message.lowerBound;
-    obj.upper_bound = message.upperBound === "" ? undefined : message.upperBound;
-    obj.reference_normalized_weight = message.referenceNormalizedWeight === "" ? undefined : message.referenceNormalizedWeight;
-    obj.adjusted_upper_bound = message.adjustedUpperBound === "" ? undefined : message.adjustedUpperBound;
-    obj.adjusted_lower_bound = message.adjustedLowerBound === "" ? undefined : message.adjustedLowerBound;
+    obj.reference_lpt_price = padDecimal(message.referenceLptPrice) === "" ? undefined : padDecimal(message.referenceLptPrice);
+    obj.lower_bound = padDecimal(message.lowerBound) === "" ? undefined : padDecimal(message.lowerBound);
+    obj.upper_bound = padDecimal(message.upperBound) === "" ? undefined : padDecimal(message.upperBound);
+    obj.reference_normalized_weight = padDecimal(message.referenceNormalizedWeight) === "" ? undefined : padDecimal(message.referenceNormalizedWeight);
+    obj.adjusted_upper_bound = padDecimal(message.adjustedUpperBound) === "" ? undefined : padDecimal(message.adjustedUpperBound);
+    obj.adjusted_lower_bound = padDecimal(message.adjustedLowerBound) === "" ? undefined : padDecimal(message.adjustedLowerBound);
     return obj;
   },
   fromAminoMsg(object: CircuitBreakerAminoMsg): CircuitBreaker {
@@ -335,7 +335,7 @@ export const PoolToken = {
   },
   toAmino(message: PoolToken, useInterfaces: boolean = true): PoolTokenAmino {
     const obj: any = {};
-    obj.pool_id = message.poolId !== BigInt(0) ? message.poolId.toString() : undefined;
+    obj.pool_id = message.poolId ? message.poolId.toString() : undefined;
     obj.denom = message.denom === "" ? undefined : message.denom;
     obj.balance = message.balance === "" ? undefined : message.balance;
     obj.circuit_breaker = message.circuitBreaker ? CircuitBreaker.toAmino(message.circuitBreaker, useInterfaces) : undefined;

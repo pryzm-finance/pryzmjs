@@ -724,7 +724,7 @@ export const MsgUpdateParams = {
   toAmino(message: MsgUpdateParams, useInterfaces: boolean = true): MsgUpdateParamsAmino {
     const obj: any = {};
     obj.authority = message.authority === "" ? undefined : message.authority;
-    obj.params = message.params ? Params.toAmino(message.params, useInterfaces) : Params.toAmino(Params.fromPartial({}));
+    obj.params = message.params ? Params.toAmino(message.params, useInterfaces) : undefined;
     return obj;
   },
   fromAminoMsg(object: MsgUpdateParamsAminoMsg): MsgUpdateParams {
@@ -896,7 +896,7 @@ export const MsgRegisterHostChain = {
   toAmino(message: MsgRegisterHostChain, useInterfaces: boolean = true): MsgRegisterHostChainAmino {
     const obj: any = {};
     obj.creator = message.creator === "" ? undefined : message.creator;
-    obj.host_chain = message.hostChain ? HostChain.toAmino(message.hostChain, useInterfaces) : HostChain.toAmino(HostChain.fromPartial({}));
+    obj.host_chain = message.hostChain ? HostChain.toAmino(message.hostChain, useInterfaces) : undefined;
     return obj;
   },
   fromAminoMsg(object: MsgRegisterHostChainAminoMsg): MsgRegisterHostChain {
@@ -1115,7 +1115,7 @@ export const MsgUpdateHostChain = {
     } else {
       obj.validators = message.validators;
     }
-    obj.params = message.params ? StakingParams.toAmino(message.params, useInterfaces) : StakingParams.toAmino(StakingParams.fromPartial({}));
+    obj.params = message.params ? StakingParams.toAmino(message.params, useInterfaces) : undefined;
     obj.allow_lsm_shares = message.allowLsmShares ? BoolValue.toAmino(message.allowLsmShares, useInterfaces) : undefined;
     return obj;
   },
@@ -1316,7 +1316,7 @@ export const MsgStake = {
     obj.creator = message.creator === "" ? undefined : message.creator;
     obj.host_chain = message.hostChain === "" ? undefined : message.hostChain;
     obj.transfer_channel = message.transferChannel === "" ? undefined : message.transferChannel;
-    obj.amount = message.amount ?? "";
+    obj.amount = message.amount === "" ? undefined : message.amount;
     return obj;
   },
   fromAminoMsg(object: MsgStakeAminoMsg): MsgStake {
@@ -1560,7 +1560,7 @@ export const MsgStakeLsmShares = {
     obj.host_chain = message.hostChain === "" ? undefined : message.hostChain;
     obj.transfer_channel = message.transferChannel === "" ? undefined : message.transferChannel;
     obj.lsm_denom = message.lsmDenom === "" ? undefined : message.lsmDenom;
-    obj.amount = message.amount ?? "";
+    obj.amount = message.amount === "" ? undefined : message.amount;
     return obj;
   },
   fromAminoMsg(object: MsgStakeLsmSharesAminoMsg): MsgStakeLsmShares {
@@ -1790,7 +1790,7 @@ export const MsgUnstake = {
     obj.creator = message.creator === "" ? undefined : message.creator;
     obj.host_chain = message.hostChain === "" ? undefined : message.hostChain;
     obj.transfer_channel = message.transferChannel === "" ? undefined : message.transferChannel;
-    obj.c_amount = message.cAmount ?? "";
+    obj.c_amount = message.cAmount === "" ? undefined : message.cAmount;
     return obj;
   },
   fromAminoMsg(object: MsgUnstakeAminoMsg): MsgUnstake {
@@ -2019,8 +2019,8 @@ export const MsgRedeemUnstaked = {
     obj.creator = message.creator === "" ? undefined : message.creator;
     obj.host_chain = message.hostChain === "" ? undefined : message.hostChain;
     obj.transfer_channel = message.transferChannel === "" ? undefined : message.transferChannel;
-    obj.u_amount = message.uAmount ?? "";
-    obj.epoch = message.epoch ? message.epoch.toString() : "0";
+    obj.u_amount = message.uAmount === "" ? undefined : message.uAmount;
+    obj.epoch = message.epoch ? message.epoch.toString() : undefined;
     return obj;
   },
   fromAminoMsg(object: MsgRedeemUnstakedAminoMsg): MsgRedeemUnstaked {
@@ -2263,8 +2263,8 @@ export const MsgInstantUnstake = {
     obj.creator = message.creator === "" ? undefined : message.creator;
     obj.host_chain = message.hostChain === "" ? undefined : message.hostChain;
     obj.transfer_channel = message.transferChannel === "" ? undefined : message.transferChannel;
-    obj.min_c_amount = message.minCAmount ?? "";
-    obj.max_c_amount = message.maxCAmount ?? "";
+    obj.min_c_amount = message.minCAmount === "" ? undefined : message.minCAmount;
+    obj.max_c_amount = message.maxCAmount === "" ? undefined : message.maxCAmount;
     return obj;
   },
   fromAminoMsg(object: MsgInstantUnstakeAminoMsg): MsgInstantUnstake {
@@ -2652,7 +2652,7 @@ export const MsgRegisterInterchainAccount = {
     const obj: any = {};
     obj.creator = message.creator === "" ? undefined : message.creator;
     obj.host_chain = message.hostChain === "" ? undefined : message.hostChain;
-    obj.registration_type = message.registrationType ?? 0;
+    obj.registration_type = message.registrationType === 0 ? undefined : message.registrationType;
     return obj;
   },
   fromAminoMsg(object: MsgRegisterInterchainAccountAminoMsg): MsgRegisterInterchainAccount {
@@ -3249,7 +3249,7 @@ export const MsgAcknowledgeMultiSigPacket = {
     const obj: any = {};
     obj.creator = message.creator === "" ? undefined : message.creator;
     obj.connection_id = message.connectionId === "" ? undefined : message.connectionId;
-    obj.sequence = message.sequence !== BigInt(0) ? message.sequence.toString() : undefined;
+    obj.sequence = message.sequence ? message.sequence.toString() : undefined;
     obj.ack = message.ack ? Acknowledgement.toAmino(message.ack, useInterfaces) : undefined;
     obj.height = message.height ? Height.toAmino(message.height, useInterfaces) : {};
     obj.tx_hash = message.txHash === "" ? undefined : message.txHash;

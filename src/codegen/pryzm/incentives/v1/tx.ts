@@ -3,7 +3,7 @@ import { Coin, CoinAmino, CoinSDKType } from "../../../cosmos/base/v1beta1/coin"
 import { Bond, BondAmino, BondSDKType } from "./bond";
 import { Unbonding, UnbondingAmino, UnbondingSDKType } from "./unbonding";
 import { BinaryReader, BinaryWriter } from "../../../binary";
-import { isSet } from "../../../helpers";
+import { isSet, padDecimal } from "../../../helpers";
 import { GlobalDecoderRegistry } from "../../../registry";
 import { Decimal } from "@cosmjs/math";
 export interface MsgUpdateParams {
@@ -482,7 +482,7 @@ export const MsgUpdateParams = {
   toAmino(message: MsgUpdateParams, useInterfaces: boolean = true): MsgUpdateParamsAmino {
     const obj: any = {};
     obj.authority = message.authority === "" ? undefined : message.authority;
-    obj.params = message.params ? Params.toAmino(message.params, useInterfaces) : Params.toAmino(Params.fromPartial({}));
+    obj.params = message.params ? Params.toAmino(message.params, useInterfaces) : undefined;
     return obj;
   },
   fromAminoMsg(object: MsgUpdateParamsAminoMsg): MsgUpdateParams {
@@ -653,7 +653,7 @@ export const WeightedRewardToken = {
   toAmino(message: WeightedRewardToken, useInterfaces: boolean = true): WeightedRewardTokenAmino {
     const obj: any = {};
     obj.denom = message.denom === "" ? undefined : message.denom;
-    obj.weight = message.weight === "" ? undefined : message.weight;
+    obj.weight = padDecimal(message.weight) === "" ? undefined : padDecimal(message.weight);
     return obj;
   },
   fromAminoMsg(object: WeightedRewardTokenAminoMsg): WeightedRewardToken {
@@ -1545,7 +1545,7 @@ export const MsgUnbond = {
     obj.amount = message.amount ? Coin.toAmino(message.amount, useInterfaces) : undefined;
     obj.unbond_treasury = message.unbondTreasury === "" ? undefined : message.unbondTreasury;
     obj.reward_treasury = message.rewardTreasury === "" ? undefined : message.rewardTreasury;
-    obj.auto_claim = message.autoClaim ?? false;
+    obj.auto_claim = message.autoClaim === false ? undefined : message.autoClaim;
     return obj;
   },
   fromAminoMsg(object: MsgUnbondAminoMsg): MsgUnbond {
@@ -1961,7 +1961,7 @@ export const MsgClaimUnbonding = {
   toAmino(message: MsgClaimUnbonding, useInterfaces: boolean = true): MsgClaimUnbondingAmino {
     const obj: any = {};
     obj.creator = message.creator === "" ? undefined : message.creator;
-    obj.unbonding_id = message.unbondingId ? message.unbondingId.toString() : "0";
+    obj.unbonding_id = message.unbondingId ? message.unbondingId.toString() : undefined;
     return obj;
   },
   fromAminoMsg(object: MsgClaimUnbondingAminoMsg): MsgClaimUnbonding {
@@ -2162,7 +2162,7 @@ export const MsgCancelUnbonding = {
   toAmino(message: MsgCancelUnbonding, useInterfaces: boolean = true): MsgCancelUnbondingAmino {
     const obj: any = {};
     obj.creator = message.creator === "" ? undefined : message.creator;
-    obj.unbonding_id = message.unbondingId ? message.unbondingId.toString() : "0";
+    obj.unbonding_id = message.unbondingId ? message.unbondingId.toString() : undefined;
     obj.amount = message.amount ? Coin.toAmino(message.amount, useInterfaces) : undefined;
     return obj;
   },

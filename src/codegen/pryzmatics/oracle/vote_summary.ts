@@ -97,8 +97,8 @@ export const VoteSummary = {
   },
   toAmino(message: VoteSummary, useInterfaces: boolean = true): VoteSummaryAmino {
     const obj: any = {};
-    obj.total_vote_periods = message.totalVotePeriods !== BigInt(0) ? message.totalVotePeriods.toString() : undefined;
-    obj.total_slash_windows = message.totalSlashWindows !== BigInt(0) ? message.totalSlashWindows.toString() : undefined;
+    obj.total_vote_periods = message.totalVotePeriods ? message.totalVotePeriods.toString() : undefined;
+    obj.total_slash_windows = message.totalSlashWindows ? message.totalSlashWindows.toString() : undefined;
     return obj;
   },
   fromAminoMsg(object: VoteSummaryAminoMsg): VoteSummary {

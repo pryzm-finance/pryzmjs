@@ -152,7 +152,7 @@ export const MsgUpdateParams = {
   toAmino(message: MsgUpdateParams, useInterfaces: boolean = true): MsgUpdateParamsAmino {
     const obj: any = {};
     obj.authority = message.authority === "" ? undefined : message.authority;
-    obj.params = message.params ? Params.toAmino(message.params, useInterfaces) : Params.toAmino(Params.fromPartial({}));
+    obj.params = message.params ? Params.toAmino(message.params, useInterfaces) : undefined;
     return obj;
   },
   fromAminoMsg(object: MsgUpdateParamsAminoMsg): MsgUpdateParams {
@@ -365,8 +365,8 @@ export const MsgDappAccountSpend = {
   toAmino(message: MsgDappAccountSpend, useInterfaces: boolean = true): MsgDappAccountSpendAmino {
     const obj: any = {};
     obj.authority = message.authority === "" ? undefined : message.authority;
-    obj.title = message.title ?? "";
-    obj.description = message.description ?? "";
+    obj.title = message.title === "" ? undefined : message.title;
+    obj.description = message.description === "" ? undefined : message.description;
     obj.recipient = message.recipient === "" ? undefined : message.recipient;
     if (message.amount) {
       obj.amount = message.amount.map(e => e ? Coin.toAmino(e, useInterfaces) : undefined);

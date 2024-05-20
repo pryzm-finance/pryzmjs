@@ -145,7 +145,7 @@ export const GenesisState = {
     } else {
       obj.flow_list = message.flowList;
     }
-    obj.flow_count = message.flowCount !== BigInt(0) ? message.flowCount.toString() : undefined;
+    obj.flow_count = message.flowCount ? message.flowCount.toString() : undefined;
     if (message.positionList) {
       obj.position_list = message.positionList.map(e => e ? Position.toAmino(e, useInterfaces) : undefined);
     } else {

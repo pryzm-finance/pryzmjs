@@ -1,6 +1,6 @@
 import { BinaryReader, BinaryWriter } from "../../../binary";
 import { Decimal } from "@cosmjs/math";
-import { isSet } from "../../../helpers";
+import { isSet, padDecimal } from "../../../helpers";
 import { GlobalDecoderRegistry } from "../../../registry";
 export interface PendingTokenIntroduction {
   assetId: string;
@@ -147,10 +147,10 @@ export const PendingTokenIntroduction = {
   toAmino(message: PendingTokenIntroduction, useInterfaces: boolean = true): PendingTokenIntroductionAmino {
     const obj: any = {};
     obj.asset_id = message.assetId === "" ? undefined : message.assetId;
-    obj.target_pool_id = message.targetPoolId !== BigInt(0) ? message.targetPoolId.toString() : undefined;
+    obj.target_pool_id = message.targetPoolId ? message.targetPoolId.toString() : undefined;
     obj.token_denom = message.tokenDenom === "" ? undefined : message.tokenDenom;
-    obj.token_normalized_weight = message.tokenNormalizedWeight === "" ? undefined : message.tokenNormalizedWeight;
-    obj.virtual_balance_interval_millis = message.virtualBalanceIntervalMillis !== BigInt(0) ? message.virtualBalanceIntervalMillis.toString() : undefined;
+    obj.token_normalized_weight = padDecimal(message.tokenNormalizedWeight) === "" ? undefined : padDecimal(message.tokenNormalizedWeight);
+    obj.virtual_balance_interval_millis = message.virtualBalanceIntervalMillis ? message.virtualBalanceIntervalMillis.toString() : undefined;
     return obj;
   },
   fromAminoMsg(object: PendingTokenIntroductionAminoMsg): PendingTokenIntroduction {

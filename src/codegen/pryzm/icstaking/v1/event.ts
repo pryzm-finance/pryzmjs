@@ -1338,7 +1338,7 @@ export const EventRedeemUnstaked = {
     obj.creator = message.creator === "" ? undefined : message.creator;
     obj.host_chain = message.hostChain === "" ? undefined : message.hostChain;
     obj.transfer_channel = message.transferChannel === "" ? undefined : message.transferChannel;
-    obj.epoch = message.epoch !== BigInt(0) ? message.epoch.toString() : undefined;
+    obj.epoch = message.epoch ? message.epoch.toString() : undefined;
     obj.u_amount = message.uAmount === "" ? undefined : message.uAmount;
     obj.amount = message.amount ? Coin.toAmino(message.amount, useInterfaces) : undefined;
     obj.fee = message.fee ? Coin.toAmino(message.fee, useInterfaces) : undefined;
@@ -1810,7 +1810,7 @@ export const EventAcknowledgeMultiSigPacket = {
   toAmino(message: EventAcknowledgeMultiSigPacket, useInterfaces: boolean = true): EventAcknowledgeMultiSigPacketAmino {
     const obj: any = {};
     obj.connection_id = message.connectionId === "" ? undefined : message.connectionId;
-    obj.sequence = message.sequence !== BigInt(0) ? message.sequence.toString() : undefined;
+    obj.sequence = message.sequence ? message.sequence.toString() : undefined;
     obj.ack = message.ack ? Acknowledgement.toAmino(message.ack, useInterfaces) : undefined;
     obj.height = message.height ? Height.toAmino(message.height, useInterfaces) : {};
     obj.tx_hash = message.txHash === "" ? undefined : message.txHash;

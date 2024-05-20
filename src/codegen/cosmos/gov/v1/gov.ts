@@ -797,7 +797,7 @@ export const Deposit = {
   },
   toAmino(message: Deposit, useInterfaces: boolean = true): DepositAmino {
     const obj: any = {};
-    obj.proposal_id = message.proposalId !== BigInt(0) ? message.proposalId.toString() : undefined;
+    obj.proposal_id = message.proposalId ? message.proposalId.toString() : undefined;
     obj.depositor = message.depositor === "" ? undefined : message.depositor;
     if (message.amount) {
       obj.amount = message.amount.map(e => e ? Coin.toAmino(e, useInterfaces) : undefined);
@@ -957,7 +957,7 @@ export const Proposal = {
   fromJSON(object: any): Proposal {
     return {
       id: isSet(object.id) ? BigInt(object.id.toString()) : BigInt(0),
-      messages: Array.isArray(object?.messages) ? object.messages.map((e: any) => Any.fromJSON(e)) : [],
+      messages: Array.isArray(object?.messages) ? object.messages.map((e: any) => Any.fromJSONAsAny(e)) : [],
       status: isSet(object.status) ? proposalStatusFromJSON(object.status) : -1,
       finalTallyResult: isSet(object.finalTallyResult) ? TallyResult.fromJSON(object.finalTallyResult) : undefined,
       submitTime: isSet(object.submitTime) ? fromJsonTimestamp(object.submitTime) : undefined,
@@ -999,7 +999,7 @@ export const Proposal = {
   fromPartial(object: Partial<Proposal>): Proposal {
     const message = createBaseProposal();
     message.id = object.id !== undefined && object.id !== null ? BigInt(object.id.toString()) : BigInt(0);
-    message.messages = object.messages?.map(e => Any.fromPartial(e)) || [];
+    message.messages = object.messages?.map(e => Any.fromPartialAsAny(e)) || [];
     message.status = object.status ?? 0;
     message.finalTallyResult = object.finalTallyResult !== undefined && object.finalTallyResult !== null ? TallyResult.fromPartial(object.finalTallyResult) : undefined;
     message.submitTime = object.submitTime !== undefined && object.submitTime !== null ? Timestamp.fromPartial(object.submitTime) : undefined;
@@ -1054,7 +1054,7 @@ export const Proposal = {
   },
   toAmino(message: Proposal, useInterfaces: boolean = true): ProposalAmino {
     const obj: any = {};
-    obj.id = message.id !== BigInt(0) ? message.id.toString() : undefined;
+    obj.id = message.id ? message.id.toString() : undefined;
     if (message.messages) {
       obj.messages = message.messages.map(e => e ? Any.toAmino(e, useInterfaces) : undefined);
     } else {
@@ -1339,7 +1339,7 @@ export const Vote = {
   },
   toAmino(message: Vote, useInterfaces: boolean = true): VoteAmino {
     const obj: any = {};
-    obj.proposal_id = message.proposalId !== BigInt(0) ? message.proposalId.toString() : undefined;
+    obj.proposal_id = message.proposalId ? message.proposalId.toString() : undefined;
     obj.voter = message.voter === "" ? undefined : message.voter;
     if (message.options) {
       obj.options = message.options.map(e => e ? WeightedVoteOption.toAmino(e, useInterfaces) : undefined);

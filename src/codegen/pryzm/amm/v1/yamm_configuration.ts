@@ -1,6 +1,6 @@
 import { BinaryReader, BinaryWriter } from "../../../binary";
 import { Decimal } from "@cosmjs/math";
-import { isSet } from "../../../helpers";
+import { isSet, padDecimal } from "../../../helpers";
 import { GlobalDecoderRegistry } from "../../../registry";
 export interface YammConfiguration {
   poolId: bigint;
@@ -248,17 +248,17 @@ export const YammConfiguration = {
   },
   toAmino(message: YammConfiguration, useInterfaces: boolean = true): YammConfigurationAmino {
     const obj: any = {};
-    obj.pool_id = message.poolId ? message.poolId.toString() : "0";
-    obj.lambda = message.lambda === null ? undefined : message.lambda;
+    obj.pool_id = message.poolId ? message.poolId.toString() : undefined;
+    obj.lambda = padDecimal(message.lambda) === null ? undefined : padDecimal(message.lambda);
     obj.maturity_introduction_interval_millis = message.maturityIntroductionIntervalMillis === null ? undefined : message.maturityIntroductionIntervalMillis;
     obj.maturity_expiration_interval_millis = message.maturityExpirationIntervalMillis === null ? undefined : message.maturityExpirationIntervalMillis;
-    obj.introduction_virtual_balance_scaler = message.introductionVirtualBalanceScaler === null ? undefined : message.introductionVirtualBalanceScaler;
-    obj.expiration_virtual_balance_scaler = message.expirationVirtualBalanceScaler === null ? undefined : message.expirationVirtualBalanceScaler;
-    obj.buy_y_given_in_loan_fee_ratio = message.buyYGivenInLoanFeeRatio === null ? undefined : message.buyYGivenInLoanFeeRatio;
-    obj.sell_y_given_out_fee_ratio = message.sellYGivenOutFeeRatio === null ? undefined : message.sellYGivenOutFeeRatio;
-    obj.max_alpha = message.maxAlpha === null ? undefined : message.maxAlpha;
-    obj.avg_monthly_yield_rate = message.avgMonthlyYieldRate === null ? undefined : message.avgMonthlyYieldRate;
-    obj.yield_fee_scaler = message.yieldFeeScaler === null ? undefined : message.yieldFeeScaler;
+    obj.introduction_virtual_balance_scaler = padDecimal(message.introductionVirtualBalanceScaler) === null ? undefined : padDecimal(message.introductionVirtualBalanceScaler);
+    obj.expiration_virtual_balance_scaler = padDecimal(message.expirationVirtualBalanceScaler) === null ? undefined : padDecimal(message.expirationVirtualBalanceScaler);
+    obj.buy_y_given_in_loan_fee_ratio = padDecimal(message.buyYGivenInLoanFeeRatio) === null ? undefined : padDecimal(message.buyYGivenInLoanFeeRatio);
+    obj.sell_y_given_out_fee_ratio = padDecimal(message.sellYGivenOutFeeRatio) === null ? undefined : padDecimal(message.sellYGivenOutFeeRatio);
+    obj.max_alpha = padDecimal(message.maxAlpha) === null ? undefined : padDecimal(message.maxAlpha);
+    obj.avg_monthly_yield_rate = padDecimal(message.avgMonthlyYieldRate) === null ? undefined : padDecimal(message.avgMonthlyYieldRate);
+    obj.yield_fee_scaler = padDecimal(message.yieldFeeScaler) === null ? undefined : padDecimal(message.yieldFeeScaler);
     return obj;
   },
   fromAminoMsg(object: YammConfigurationAminoMsg): YammConfiguration {

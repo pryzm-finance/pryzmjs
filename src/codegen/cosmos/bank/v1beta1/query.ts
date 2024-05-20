@@ -1941,7 +1941,7 @@ export const QuerySupplyOfResponse = {
   },
   toAmino(message: QuerySupplyOfResponse, useInterfaces: boolean = true): QuerySupplyOfResponseAmino {
     const obj: any = {};
-    obj.amount = message.amount ? Coin.toAmino(message.amount, useInterfaces) : Coin.toAmino(Coin.fromPartial({}));
+    obj.amount = message.amount ? Coin.toAmino(message.amount, useInterfaces) : undefined;
     return obj;
   },
   fromAminoMsg(object: QuerySupplyOfResponseAminoMsg): QuerySupplyOfResponse {
@@ -2107,7 +2107,7 @@ export const QueryParamsResponse = {
   },
   toAmino(message: QueryParamsResponse, useInterfaces: boolean = true): QueryParamsResponseAmino {
     const obj: any = {};
-    obj.params = message.params ? Params.toAmino(message.params, useInterfaces) : Params.toAmino(Params.fromPartial({}));
+    obj.params = message.params ? Params.toAmino(message.params, useInterfaces) : undefined;
     return obj;
   },
   fromAminoMsg(object: QueryParamsResponseAminoMsg): QueryParamsResponse {
@@ -2491,7 +2491,7 @@ export const QueryDenomMetadataResponse = {
   },
   toAmino(message: QueryDenomMetadataResponse, useInterfaces: boolean = true): QueryDenomMetadataResponseAmino {
     const obj: any = {};
-    obj.metadata = message.metadata ? Metadata.toAmino(message.metadata, useInterfaces) : Metadata.toAmino(Metadata.fromPartial({}));
+    obj.metadata = message.metadata ? Metadata.toAmino(message.metadata, useInterfaces) : undefined;
     return obj;
   },
   fromAminoMsg(object: QueryDenomMetadataResponseAminoMsg): QueryDenomMetadataResponse {
@@ -2701,7 +2701,7 @@ export const DenomOwner = {
   toAmino(message: DenomOwner, useInterfaces: boolean = true): DenomOwnerAmino {
     const obj: any = {};
     obj.address = message.address === "" ? undefined : message.address;
-    obj.balance = message.balance ? Coin.toAmino(message.balance, useInterfaces) : Coin.toAmino(Coin.fromPartial({}));
+    obj.balance = message.balance ? Coin.toAmino(message.balance, useInterfaces) : undefined;
     return obj;
   },
   fromAminoMsg(object: DenomOwnerAminoMsg): DenomOwner {

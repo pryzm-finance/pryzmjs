@@ -126,7 +126,7 @@ export const SyncState = {
   },
   toAmino(message: SyncState, useInterfaces: boolean = true): SyncStateAmino {
     const obj: any = {};
-    obj.block_height = message.blockHeight !== BigInt(0) ? message.blockHeight.toString() : undefined;
+    obj.block_height = message.blockHeight ? message.blockHeight.toString() : undefined;
     obj.block_time = message.blockTime ? Timestamp.toAmino(message.blockTime, useInterfaces) : undefined;
     return obj;
   },

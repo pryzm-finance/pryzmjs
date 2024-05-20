@@ -1,6 +1,6 @@
 import { BinaryReader, BinaryWriter } from "../../binary";
 import { Decimal } from "@cosmjs/math";
-import { isSet } from "../../helpers";
+import { isSet, padDecimal } from "../../helpers";
 import { GlobalDecoderRegistry } from "../../registry";
 export interface FavoritePair {
   tokenIn: string;
@@ -116,7 +116,7 @@ export const FavoritePair = {
     const obj: any = {};
     obj.token_in = message.tokenIn === "" ? undefined : message.tokenIn;
     obj.token_out = message.tokenOut === "" ? undefined : message.tokenOut;
-    obj.volume = message.volume === "" ? undefined : message.volume;
+    obj.volume = padDecimal(message.volume) === "" ? undefined : padDecimal(message.volume);
     return obj;
   },
   fromAminoMsg(object: FavoritePairAminoMsg): FavoritePair {

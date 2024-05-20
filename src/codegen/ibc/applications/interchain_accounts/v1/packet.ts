@@ -247,7 +247,7 @@ export const CosmosTx = {
   },
   fromJSON(object: any): CosmosTx {
     return {
-      messages: Array.isArray(object?.messages) ? object.messages.map((e: any) => Any.fromJSON(e)) : []
+      messages: Array.isArray(object?.messages) ? object.messages.map((e: any) => Any.fromJSONAsAny(e)) : []
     };
   },
   toJSON(message: CosmosTx): unknown {
@@ -261,7 +261,7 @@ export const CosmosTx = {
   },
   fromPartial(object: Partial<CosmosTx>): CosmosTx {
     const message = createBaseCosmosTx();
-    message.messages = object.messages?.map(e => Any.fromPartial(e)) || [];
+    message.messages = object.messages?.map(e => Any.fromPartialAsAny(e)) || [];
     return message;
   },
   fromAmino(object: CosmosTxAmino): CosmosTx {

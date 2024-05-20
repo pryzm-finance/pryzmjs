@@ -1,7 +1,7 @@
 import { Height, HeightAmino, HeightSDKType } from "../../../ibc/core/client/v1/client";
 import { BinaryReader, BinaryWriter } from "../../../binary";
 import { Decimal } from "@cosmjs/math";
-import { isSet } from "../../../helpers";
+import { isSet, padDecimal } from "../../../helpers";
 import { GlobalDecoderRegistry } from "../../../registry";
 /** OraclePayload defines the structure of oracle vote payload */
 export interface OraclePayload {
@@ -103,7 +103,7 @@ export const OraclePayload = {
   toAmino(message: OraclePayload, useInterfaces: boolean = true): OraclePayloadAmino {
     const obj: any = {};
     obj.block_height = message.blockHeight ? Height.toAmino(message.blockHeight, useInterfaces) : {};
-    obj.exchange_rate = message.exchangeRate === "" ? undefined : message.exchangeRate;
+    obj.exchange_rate = padDecimal(message.exchangeRate) === "" ? undefined : padDecimal(message.exchangeRate);
     return obj;
   },
   fromAminoMsg(object: OraclePayloadAminoMsg): OraclePayload {

@@ -6,7 +6,7 @@ import { CommunityPoolSpendProposal, CommunityPoolSpendProposalProtoMsg, Communi
 import { ParameterChangeProposal, ParameterChangeProposalProtoMsg, ParameterChangeProposalSDKType } from "../../params/v1beta1/params";
 import { SoftwareUpgradeProposal, SoftwareUpgradeProposalProtoMsg, SoftwareUpgradeProposalSDKType, CancelSoftwareUpgradeProposal, CancelSoftwareUpgradeProposalProtoMsg, CancelSoftwareUpgradeProposalSDKType } from "../../upgrade/v1beta1/upgrade";
 import { ClientUpdateProposal, ClientUpdateProposalProtoMsg, ClientUpdateProposalSDKType, UpgradeProposal, UpgradeProposalProtoMsg, UpgradeProposalSDKType } from "../../../ibc/core/client/v1/client";
-import { isSet, fromJsonTimestamp, fromTimestamp, bytesFromBase64, base64FromBytes } from "../../../helpers";
+import { isSet, padDecimal, fromJsonTimestamp, fromTimestamp, bytesFromBase64, base64FromBytes } from "../../../helpers";
 import { BinaryReader, BinaryWriter } from "../../../binary";
 import { Decimal } from "@cosmjs/math";
 import { GlobalDecoderRegistry } from "../../../registry";
@@ -614,7 +614,7 @@ export const WeightedVoteOption = {
   toAmino(message: WeightedVoteOption, useInterfaces: boolean = true): WeightedVoteOptionAmino {
     const obj: any = {};
     obj.option = message.option === 0 ? undefined : message.option;
-    obj.weight = message.weight === "" ? undefined : message.weight;
+    obj.weight = padDecimal(message.weight) === "" ? undefined : padDecimal(message.weight);
     return obj;
   },
   fromAminoMsg(object: WeightedVoteOptionAminoMsg): WeightedVoteOption {
@@ -839,7 +839,7 @@ export const Deposit = {
   },
   toAmino(message: Deposit, useInterfaces: boolean = true): DepositAmino {
     const obj: any = {};
-    obj.proposal_id = message.proposalId !== BigInt(0) ? message.proposalId.toString() : undefined;
+    obj.proposal_id = message.proposalId ? message.proposalId.toString() : undefined;
     obj.depositor = message.depositor === "" ? undefined : message.depositor;
     if (message.amount) {
       obj.amount = message.amount.map(e => e ? Coin.toAmino(e, useInterfaces) : undefined);
@@ -1042,19 +1042,19 @@ export const Proposal = {
   },
   toAmino(message: Proposal, useInterfaces: boolean = true): ProposalAmino {
     const obj: any = {};
-    obj.proposal_id = message.proposalId !== BigInt(0) ? message.proposalId.toString() : undefined;
+    obj.proposal_id = message.proposalId ? message.proposalId.toString() : undefined;
     obj.content = message.content ? GlobalDecoderRegistry.toAminoMsg(message.content) : undefined;
     obj.status = message.status === 0 ? undefined : message.status;
-    obj.final_tally_result = message.finalTallyResult ? TallyResult.toAmino(message.finalTallyResult, useInterfaces) : TallyResult.toAmino(TallyResult.fromPartial({}));
-    obj.submit_time = message.submitTime ? Timestamp.toAmino(message.submitTime, useInterfaces) : Timestamp.toAmino(Timestamp.fromPartial({}));
-    obj.deposit_end_time = message.depositEndTime ? Timestamp.toAmino(message.depositEndTime, useInterfaces) : Timestamp.toAmino(Timestamp.fromPartial({}));
+    obj.final_tally_result = message.finalTallyResult ? TallyResult.toAmino(message.finalTallyResult, useInterfaces) : undefined;
+    obj.submit_time = message.submitTime ? Timestamp.toAmino(message.submitTime, useInterfaces) : undefined;
+    obj.deposit_end_time = message.depositEndTime ? Timestamp.toAmino(message.depositEndTime, useInterfaces) : undefined;
     if (message.totalDeposit) {
       obj.total_deposit = message.totalDeposit.map(e => e ? Coin.toAmino(e, useInterfaces) : undefined);
     } else {
       obj.total_deposit = message.totalDeposit;
     }
-    obj.voting_start_time = message.votingStartTime ? Timestamp.toAmino(message.votingStartTime, useInterfaces) : Timestamp.toAmino(Timestamp.fromPartial({}));
-    obj.voting_end_time = message.votingEndTime ? Timestamp.toAmino(message.votingEndTime, useInterfaces) : Timestamp.toAmino(Timestamp.fromPartial({}));
+    obj.voting_start_time = message.votingStartTime ? Timestamp.toAmino(message.votingStartTime, useInterfaces) : undefined;
+    obj.voting_end_time = message.votingEndTime ? Timestamp.toAmino(message.votingEndTime, useInterfaces) : undefined;
     return obj;
   },
   fromAminoMsg(object: ProposalAminoMsg): Proposal {

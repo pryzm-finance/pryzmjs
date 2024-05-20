@@ -215,7 +215,7 @@ export const BaseAccount = {
   fromJSON(object: any): BaseAccount {
     return {
       address: isSet(object.address) ? String(object.address) : "",
-      pubKey: isSet(object.pubKey) ? Any.fromJSON(object.pubKey) : undefined,
+      pubKey: isSet(object.pubKey) ? Any.fromJSONAsAny(object.pubKey) : undefined,
       accountNumber: isSet(object.accountNumber) ? BigInt(object.accountNumber.toString()) : BigInt(0),
       sequence: isSet(object.sequence) ? BigInt(object.sequence.toString()) : BigInt(0)
     };
@@ -231,7 +231,7 @@ export const BaseAccount = {
   fromPartial(object: Partial<BaseAccount>): BaseAccount {
     const message = createBaseBaseAccount();
     message.address = object.address ?? "";
-    message.pubKey = object.pubKey !== undefined && object.pubKey !== null ? Any.fromPartial(object.pubKey) : undefined;
+    message.pubKey = object.pubKey !== undefined && object.pubKey !== null ? Any.fromPartialAsAny(object.pubKey) : undefined;
     message.accountNumber = object.accountNumber !== undefined && object.accountNumber !== null ? BigInt(object.accountNumber.toString()) : BigInt(0);
     message.sequence = object.sequence !== undefined && object.sequence !== null ? BigInt(object.sequence.toString()) : BigInt(0);
     return message;
@@ -256,8 +256,8 @@ export const BaseAccount = {
     const obj: any = {};
     obj.address = message.address === "" ? undefined : message.address;
     obj.pub_key = message.pubKey ? Any.toAmino(message.pubKey, useInterfaces) : undefined;
-    obj.account_number = message.accountNumber !== BigInt(0) ? message.accountNumber.toString() : undefined;
-    obj.sequence = message.sequence !== BigInt(0) ? message.sequence.toString() : undefined;
+    obj.account_number = message.accountNumber ? message.accountNumber.toString() : undefined;
+    obj.sequence = message.sequence ? message.sequence.toString() : undefined;
     return obj;
   },
   fromAminoMsg(object: BaseAccountAminoMsg): BaseAccount {
@@ -637,11 +637,11 @@ export const Params = {
   },
   toAmino(message: Params, useInterfaces: boolean = true): ParamsAmino {
     const obj: any = {};
-    obj.max_memo_characters = message.maxMemoCharacters !== BigInt(0) ? message.maxMemoCharacters.toString() : undefined;
-    obj.tx_sig_limit = message.txSigLimit !== BigInt(0) ? message.txSigLimit.toString() : undefined;
-    obj.tx_size_cost_per_byte = message.txSizeCostPerByte !== BigInt(0) ? message.txSizeCostPerByte.toString() : undefined;
-    obj.sig_verify_cost_ed25519 = message.sigVerifyCostEd25519 !== BigInt(0) ? message.sigVerifyCostEd25519.toString() : undefined;
-    obj.sig_verify_cost_secp256k1 = message.sigVerifyCostSecp256k1 !== BigInt(0) ? message.sigVerifyCostSecp256k1.toString() : undefined;
+    obj.max_memo_characters = message.maxMemoCharacters ? message.maxMemoCharacters.toString() : undefined;
+    obj.tx_sig_limit = message.txSigLimit ? message.txSigLimit.toString() : undefined;
+    obj.tx_size_cost_per_byte = message.txSizeCostPerByte ? message.txSizeCostPerByte.toString() : undefined;
+    obj.sig_verify_cost_ed25519 = message.sigVerifyCostEd25519 ? message.sigVerifyCostEd25519.toString() : undefined;
+    obj.sig_verify_cost_secp256k1 = message.sigVerifyCostSecp256k1 ? message.sigVerifyCostSecp256k1.toString() : undefined;
     return obj;
   },
   fromAminoMsg(object: ParamsAminoMsg): Params {

@@ -188,7 +188,7 @@ export const PostProcessFailure = {
   },
   toAmino(message: PostProcessFailure, useInterfaces: boolean = true): PostProcessFailureAmino {
     const obj: any = {};
-    obj.block_height = message.blockHeight !== BigInt(0) ? message.blockHeight.toString() : undefined;
+    obj.block_height = message.blockHeight ? message.blockHeight.toString() : undefined;
     obj.post_processor_id = message.postProcessorId === "" ? undefined : message.postProcessorId;
     obj.created_at = message.createdAt ? Timestamp.toAmino(message.createdAt, useInterfaces) : undefined;
     obj.reason = message.reason === "" ? undefined : message.reason;

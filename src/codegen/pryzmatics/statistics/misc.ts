@@ -1,7 +1,7 @@
 import { Timestamp, TimestampSDKType } from "../../google/protobuf/timestamp";
 import { BinaryReader, BinaryWriter } from "../../binary";
 import { Decimal } from "@cosmjs/math";
-import { isSet, fromJsonTimestamp, fromTimestamp } from "../../helpers";
+import { isSet, fromJsonTimestamp, fromTimestamp, padDecimal } from "../../helpers";
 import { GlobalDecoderRegistry } from "../../registry";
 export interface Misc {
   blockTime: Timestamp;
@@ -148,9 +148,9 @@ export const Misc = {
   toAmino(message: Misc, useInterfaces: boolean = true): MiscAmino {
     const obj: any = {};
     obj.block_time = message.blockTime ? Timestamp.toAmino(message.blockTime, useInterfaces) : undefined;
-    obj.liquidity = message.liquidity === "" ? undefined : message.liquidity;
-    obj.wallets_count = message.walletsCount !== BigInt(0) ? message.walletsCount.toString() : undefined;
-    obj.total_tx_count = message.totalTxCount !== BigInt(0) ? message.totalTxCount.toString() : undefined;
+    obj.liquidity = padDecimal(message.liquidity) === "" ? undefined : padDecimal(message.liquidity);
+    obj.wallets_count = message.walletsCount ? message.walletsCount.toString() : undefined;
+    obj.total_tx_count = message.totalTxCount ? message.totalTxCount.toString() : undefined;
     obj.error = message.error === "" ? undefined : message.error;
     return obj;
   },

@@ -1,6 +1,6 @@
 import { BinaryReader, BinaryWriter } from "../../../binary";
 import { Decimal } from "@cosmjs/math";
-import { isSet } from "../../../helpers";
+import { isSet, padDecimal } from "../../../helpers";
 import { GlobalDecoderRegistry } from "../../../registry";
 export interface Order {
   id: bigint;
@@ -300,9 +300,9 @@ export const Order = {
   },
   toAmino(message: Order, useInterfaces: boolean = true): OrderAmino {
     const obj: any = {};
-    obj.id = message.id !== BigInt(0) ? message.id.toString() : undefined;
+    obj.id = message.id ? message.id.toString() : undefined;
     obj.creator = message.creator === "" ? undefined : message.creator;
-    obj.pool_id = message.poolId !== BigInt(0) ? message.poolId.toString() : undefined;
+    obj.pool_id = message.poolId ? message.poolId.toString() : undefined;
     obj.token_in = message.tokenIn === "" ? undefined : message.tokenIn;
     obj.token_out = message.tokenOut === "" ? undefined : message.tokenOut;
     obj.whitelisted_route = message.whitelistedRoute === false ? undefined : message.whitelistedRoute;
@@ -310,9 +310,9 @@ export const Order = {
     obj.amount_per_step = message.amountPerStep === "" ? undefined : message.amountPerStep;
     obj.remaining_amount = message.remainingAmount === "" ? undefined : message.remainingAmount;
     obj.deposited_amount = message.depositedAmount === "" ? undefined : message.depositedAmount;
-    obj.min_millis_interval = message.minMillisInterval !== BigInt(0) ? message.minMillisInterval.toString() : undefined;
-    obj.max_step_spot_price = message.maxStepSpotPrice === "" ? undefined : message.maxStepSpotPrice;
-    obj.max_matching_spot_price = message.maxMatchingSpotPrice === null ? undefined : message.maxMatchingSpotPrice;
+    obj.min_millis_interval = message.minMillisInterval ? message.minMillisInterval.toString() : undefined;
+    obj.max_step_spot_price = padDecimal(message.maxStepSpotPrice) === "" ? undefined : padDecimal(message.maxStepSpotPrice);
+    obj.max_matching_spot_price = padDecimal(message.maxMatchingSpotPrice) === null ? undefined : padDecimal(message.maxMatchingSpotPrice);
     return obj;
   },
   fromAminoMsg(object: OrderAminoMsg): Order {
@@ -435,7 +435,7 @@ export const DisabledOrderPair = {
   toAmino(message: DisabledOrderPair, useInterfaces: boolean = true): DisabledOrderPairAmino {
     const obj: any = {};
     obj.whitelisted_route = message.whitelistedRoute === false ? undefined : message.whitelistedRoute;
-    obj.pool_id = message.poolId !== BigInt(0) ? message.poolId.toString() : undefined;
+    obj.pool_id = message.poolId ? message.poolId.toString() : undefined;
     obj.token_in = message.tokenIn === "" ? undefined : message.tokenIn;
     obj.token_out = message.tokenOut === "" ? undefined : message.tokenOut;
     return obj;

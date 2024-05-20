@@ -87,7 +87,7 @@ export const LegacyAminoPubKey = {
   fromJSON(object: any): LegacyAminoPubKey {
     return {
       threshold: isSet(object.threshold) ? Number(object.threshold) : 0,
-      publicKeys: Array.isArray(object?.publicKeys) ? object.publicKeys.map((e: any) => Any.fromJSON(e)) : []
+      publicKeys: Array.isArray(object?.publicKeys) ? object.publicKeys.map((e: any) => Any.fromJSONAsAny(e)) : []
     };
   },
   toJSON(message: LegacyAminoPubKey): unknown {
@@ -103,7 +103,7 @@ export const LegacyAminoPubKey = {
   fromPartial(object: Partial<LegacyAminoPubKey>): LegacyAminoPubKey {
     const message = createBaseLegacyAminoPubKey();
     message.threshold = object.threshold ?? 0;
-    message.publicKeys = object.publicKeys?.map(e => Any.fromPartial(e)) || [];
+    message.publicKeys = object.publicKeys?.map(e => Any.fromPartialAsAny(e)) || [];
     return message;
   },
   fromAmino(object: LegacyAminoPubKeyAmino): LegacyAminoPubKey {

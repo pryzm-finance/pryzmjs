@@ -603,7 +603,7 @@ export const ValidatorAccumulatedCommissionRecord = {
   toAmino(message: ValidatorAccumulatedCommissionRecord, useInterfaces: boolean = true): ValidatorAccumulatedCommissionRecordAmino {
     const obj: any = {};
     obj.validator_address = message.validatorAddress === "" ? undefined : message.validatorAddress;
-    obj.accumulated = message.accumulated ? ValidatorAccumulatedCommission.toAmino(message.accumulated, useInterfaces) : ValidatorAccumulatedCommission.toAmino(ValidatorAccumulatedCommission.fromPartial({}));
+    obj.accumulated = message.accumulated ? ValidatorAccumulatedCommission.toAmino(message.accumulated, useInterfaces) : undefined;
     return obj;
   },
   fromAminoMsg(object: ValidatorAccumulatedCommissionRecordAminoMsg): ValidatorAccumulatedCommissionRecord {
@@ -721,8 +721,8 @@ export const ValidatorHistoricalRewardsRecord = {
   toAmino(message: ValidatorHistoricalRewardsRecord, useInterfaces: boolean = true): ValidatorHistoricalRewardsRecordAmino {
     const obj: any = {};
     obj.validator_address = message.validatorAddress === "" ? undefined : message.validatorAddress;
-    obj.period = message.period !== BigInt(0) ? message.period.toString() : undefined;
-    obj.rewards = message.rewards ? ValidatorHistoricalRewards.toAmino(message.rewards, useInterfaces) : ValidatorHistoricalRewards.toAmino(ValidatorHistoricalRewards.fromPartial({}));
+    obj.period = message.period ? message.period.toString() : undefined;
+    obj.rewards = message.rewards ? ValidatorHistoricalRewards.toAmino(message.rewards, useInterfaces) : undefined;
     return obj;
   },
   fromAminoMsg(object: ValidatorHistoricalRewardsRecordAminoMsg): ValidatorHistoricalRewardsRecord {
@@ -827,7 +827,7 @@ export const ValidatorCurrentRewardsRecord = {
   toAmino(message: ValidatorCurrentRewardsRecord, useInterfaces: boolean = true): ValidatorCurrentRewardsRecordAmino {
     const obj: any = {};
     obj.validator_address = message.validatorAddress === "" ? undefined : message.validatorAddress;
-    obj.rewards = message.rewards ? ValidatorCurrentRewards.toAmino(message.rewards, useInterfaces) : ValidatorCurrentRewards.toAmino(ValidatorCurrentRewards.fromPartial({}));
+    obj.rewards = message.rewards ? ValidatorCurrentRewards.toAmino(message.rewards, useInterfaces) : undefined;
     return obj;
   },
   fromAminoMsg(object: ValidatorCurrentRewardsRecordAminoMsg): ValidatorCurrentRewardsRecord {
@@ -946,7 +946,7 @@ export const DelegatorStartingInfoRecord = {
     const obj: any = {};
     obj.delegator_address = message.delegatorAddress === "" ? undefined : message.delegatorAddress;
     obj.validator_address = message.validatorAddress === "" ? undefined : message.validatorAddress;
-    obj.starting_info = message.startingInfo ? DelegatorStartingInfo.toAmino(message.startingInfo, useInterfaces) : DelegatorStartingInfo.toAmino(DelegatorStartingInfo.fromPartial({}));
+    obj.starting_info = message.startingInfo ? DelegatorStartingInfo.toAmino(message.startingInfo, useInterfaces) : undefined;
     return obj;
   },
   fromAminoMsg(object: DelegatorStartingInfoRecordAminoMsg): DelegatorStartingInfoRecord {
@@ -1077,9 +1077,9 @@ export const ValidatorSlashEventRecord = {
   toAmino(message: ValidatorSlashEventRecord, useInterfaces: boolean = true): ValidatorSlashEventRecordAmino {
     const obj: any = {};
     obj.validator_address = message.validatorAddress === "" ? undefined : message.validatorAddress;
-    obj.height = message.height !== BigInt(0) ? message.height.toString() : undefined;
-    obj.period = message.period !== BigInt(0) ? message.period.toString() : undefined;
-    obj.validator_slash_event = message.validatorSlashEvent ? ValidatorSlashEvent.toAmino(message.validatorSlashEvent, useInterfaces) : ValidatorSlashEvent.toAmino(ValidatorSlashEvent.fromPartial({}));
+    obj.height = message.height ? message.height.toString() : undefined;
+    obj.period = message.period ? message.period.toString() : undefined;
+    obj.validator_slash_event = message.validatorSlashEvent ? ValidatorSlashEvent.toAmino(message.validatorSlashEvent, useInterfaces) : undefined;
     return obj;
   },
   fromAminoMsg(object: ValidatorSlashEventRecordAminoMsg): ValidatorSlashEventRecord {
@@ -1301,8 +1301,8 @@ export const GenesisState = {
   },
   toAmino(message: GenesisState, useInterfaces: boolean = true): GenesisStateAmino {
     const obj: any = {};
-    obj.params = message.params ? Params.toAmino(message.params, useInterfaces) : Params.toAmino(Params.fromPartial({}));
-    obj.fee_pool = message.feePool ? FeePool.toAmino(message.feePool, useInterfaces) : FeePool.toAmino(FeePool.fromPartial({}));
+    obj.params = message.params ? Params.toAmino(message.params, useInterfaces) : undefined;
+    obj.fee_pool = message.feePool ? FeePool.toAmino(message.feePool, useInterfaces) : undefined;
     if (message.delegatorWithdrawInfos) {
       obj.delegator_withdraw_infos = message.delegatorWithdrawInfos.map(e => e ? DelegatorWithdrawInfo.toAmino(e, useInterfaces) : undefined);
     } else {

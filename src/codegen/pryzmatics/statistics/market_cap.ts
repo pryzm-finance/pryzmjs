@@ -1,6 +1,6 @@
 import { BinaryReader, BinaryWriter } from "../../binary";
 import { Decimal } from "@cosmjs/math";
-import { isSet } from "../../helpers";
+import { isSet, padDecimal } from "../../helpers";
 import { GlobalDecoderRegistry } from "../../registry";
 export interface MarketCap {
   fullyDiluted: string;
@@ -98,8 +98,8 @@ export const MarketCap = {
   },
   toAmino(message: MarketCap, useInterfaces: boolean = true): MarketCapAmino {
     const obj: any = {};
-    obj.fully_diluted = message.fullyDiluted === "" ? undefined : message.fullyDiluted;
-    obj.circulating = message.circulating === "" ? undefined : message.circulating;
+    obj.fully_diluted = padDecimal(message.fullyDiluted) === "" ? undefined : padDecimal(message.fullyDiluted);
+    obj.circulating = padDecimal(message.circulating) === "" ? undefined : padDecimal(message.circulating);
     return obj;
   },
   fromAminoMsg(object: MarketCapAminoMsg): MarketCap {

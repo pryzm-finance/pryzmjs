@@ -1,7 +1,7 @@
 import { Timestamp, TimestampSDKType } from "../../google/protobuf/timestamp";
 import { BinaryReader, BinaryWriter } from "../../binary";
 import { Decimal } from "@cosmjs/math";
-import { isSet, fromJsonTimestamp, fromTimestamp } from "../../helpers";
+import { isSet, fromJsonTimestamp, fromTimestamp, padDecimal } from "../../helpers";
 import { GlobalDecoderRegistry } from "../../registry";
 export interface FlowHistoricalPrice {
   time: Timestamp;
@@ -164,11 +164,11 @@ export const FlowHistoricalPrice = {
   toAmino(message: FlowHistoricalPrice, useInterfaces: boolean = true): FlowHistoricalPriceAmino {
     const obj: any = {};
     obj.time = message.time ? Timestamp.toAmino(message.time, useInterfaces) : undefined;
-    obj.low = message.low === null ? undefined : message.low;
-    obj.high = message.high === null ? undefined : message.high;
-    obj.avg = message.avg === null ? undefined : message.avg;
-    obj.open = message.open === null ? undefined : message.open;
-    obj.close = message.close === null ? undefined : message.close;
+    obj.low = padDecimal(message.low) === null ? undefined : padDecimal(message.low);
+    obj.high = padDecimal(message.high) === null ? undefined : padDecimal(message.high);
+    obj.avg = padDecimal(message.avg) === null ? undefined : padDecimal(message.avg);
+    obj.open = padDecimal(message.open) === null ? undefined : padDecimal(message.open);
+    obj.close = padDecimal(message.close) === null ? undefined : padDecimal(message.close);
     return obj;
   },
   fromAminoMsg(object: FlowHistoricalPriceAminoMsg): FlowHistoricalPrice {

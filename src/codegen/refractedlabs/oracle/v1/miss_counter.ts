@@ -98,7 +98,7 @@ export const MissCounter = {
   toAmino(message: MissCounter, useInterfaces: boolean = true): MissCounterAmino {
     const obj: any = {};
     obj.validator = message.validator === "" ? undefined : message.validator;
-    obj.counter = message.counter !== BigInt(0) ? message.counter.toString() : undefined;
+    obj.counter = message.counter ? message.counter.toString() : undefined;
     return obj;
   },
   fromAminoMsg(object: MissCounterAminoMsg): MissCounter {

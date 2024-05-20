@@ -1744,8 +1744,8 @@ export const IndexerConfig = {
     const obj: any = {};
     obj.disable = message.disable === false ? undefined : message.disable;
     obj.disable_sync_for_debug = message.disableSyncForDebug === false ? undefined : message.disableSyncForDebug;
-    obj.start_block = message.startBlock !== BigInt(0) ? message.startBlock.toString() : undefined;
-    obj.pause_at_block = message.pauseAtBlock !== BigInt(0) ? message.pauseAtBlock.toString() : undefined;
+    obj.start_block = message.startBlock ? message.startBlock.toString() : undefined;
+    obj.pause_at_block = message.pauseAtBlock ? message.pauseAtBlock.toString() : undefined;
     return obj;
   },
   fromAminoMsg(object: IndexerConfigAminoMsg): IndexerConfig {
@@ -2216,8 +2216,8 @@ export const FaucetChainConfig = {
     obj.id = message.id === "" ? undefined : message.id;
     obj.acc_prefix = message.accPrefix === "" ? undefined : message.accPrefix;
     obj.tx_fee_denom = message.txFeeDenom === "" ? undefined : message.txFeeDenom;
-    obj.tx_fee_amount = message.txFeeAmount !== BigInt(0) ? message.txFeeAmount.toString() : undefined;
-    obj.tx_gas_limit = message.txGasLimit !== BigInt(0) ? message.txGasLimit.toString() : undefined;
+    obj.tx_fee_amount = message.txFeeAmount ? message.txFeeAmount.toString() : undefined;
+    obj.tx_gas_limit = message.txGasLimit ? message.txGasLimit.toString() : undefined;
     return obj;
   },
   fromAminoMsg(object: FaucetChainConfigAminoMsg): FaucetChainConfig {

@@ -276,7 +276,7 @@ export const QueryParamsResponse = {
   },
   toAmino(message: QueryParamsResponse, useInterfaces: boolean = true): QueryParamsResponseAmino {
     const obj: any = {};
-    obj.params = message.params ? Params.toAmino(message.params, useInterfaces) : Params.toAmino(Params.fromPartial({}));
+    obj.params = message.params ? Params.toAmino(message.params, useInterfaces) : undefined;
     return obj;
   },
   fromAminoMsg(object: QueryParamsResponseAminoMsg): QueryParamsResponse {
@@ -442,7 +442,7 @@ export const QueryInflationResponse = {
   },
   toAmino(message: QueryInflationResponse, useInterfaces: boolean = true): QueryInflationResponseAmino {
     const obj: any = {};
-    obj.inflation = message.inflation ? base64FromBytes(message.inflation) : "";
+    obj.inflation = message.inflation ? base64FromBytes(message.inflation) : undefined;
     return obj;
   },
   fromAminoMsg(object: QueryInflationResponseAminoMsg): QueryInflationResponse {
@@ -608,7 +608,7 @@ export const QueryAnnualProvisionsResponse = {
   },
   toAmino(message: QueryAnnualProvisionsResponse, useInterfaces: boolean = true): QueryAnnualProvisionsResponseAmino {
     const obj: any = {};
-    obj.annual_provisions = message.annualProvisions ? base64FromBytes(message.annualProvisions) : "";
+    obj.annual_provisions = message.annualProvisions ? base64FromBytes(message.annualProvisions) : undefined;
     return obj;
   },
   fromAminoMsg(object: QueryAnnualProvisionsResponseAminoMsg): QueryAnnualProvisionsResponse {

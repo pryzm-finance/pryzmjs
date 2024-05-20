@@ -1200,7 +1200,7 @@ export const Option = {
   fromJSON(object: any): Option {
     return {
       name: isSet(object.name) ? String(object.name) : "",
-      value: isSet(object.value) ? Any.fromJSON(object.value) : undefined
+      value: isSet(object.value) ? Any.fromJSONAsAny(object.value) : undefined
     };
   },
   toJSON(message: Option): unknown {
@@ -1212,7 +1212,7 @@ export const Option = {
   fromPartial(object: Partial<Option>): Option {
     const message = createBaseOption();
     message.name = object.name ?? "";
-    message.value = object.value !== undefined && object.value !== null ? Any.fromPartial(object.value) : undefined;
+    message.value = object.value !== undefined && object.value !== null ? Any.fromPartialAsAny(object.value) : undefined;
     return message;
   },
   fromAmino(object: OptionAmino): Option {

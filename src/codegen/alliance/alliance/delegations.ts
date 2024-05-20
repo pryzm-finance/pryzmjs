@@ -2,7 +2,7 @@ import { RewardHistory, RewardHistoryAmino, RewardHistorySDKType } from "./param
 import { Coin, CoinAmino, CoinSDKType, DecCoin, DecCoinAmino, DecCoinSDKType } from "../../cosmos/base/v1beta1/coin";
 import { BinaryReader, BinaryWriter } from "../../binary";
 import { Decimal } from "@cosmjs/math";
-import { isSet } from "../../helpers";
+import { isSet, padDecimal } from "../../helpers";
 import { GlobalDecoderRegistry } from "../../registry";
 export interface Delegation {
   /** delegator_address is the bech32-encoded address of the delegator. */
@@ -240,13 +240,13 @@ export const Delegation = {
     obj.delegator_address = message.delegatorAddress === "" ? undefined : message.delegatorAddress;
     obj.validator_address = message.validatorAddress === "" ? undefined : message.validatorAddress;
     obj.denom = message.denom === "" ? undefined : message.denom;
-    obj.shares = message.shares === "" ? undefined : message.shares;
+    obj.shares = padDecimal(message.shares) === "" ? undefined : padDecimal(message.shares);
     if (message.rewardHistory) {
       obj.reward_history = message.rewardHistory.map(e => e ? RewardHistory.toAmino(e, useInterfaces) : undefined);
     } else {
       obj.reward_history = message.rewardHistory;
     }
-    obj.last_reward_claim_height = message.lastRewardClaimHeight !== BigInt(0) ? message.lastRewardClaimHeight.toString() : undefined;
+    obj.last_reward_claim_height = message.lastRewardClaimHeight ? message.lastRewardClaimHeight.toString() : undefined;
     return obj;
   },
   fromAminoMsg(object: DelegationAminoMsg): Delegation {

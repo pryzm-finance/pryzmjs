@@ -1,6 +1,6 @@
 import { BinaryReader, BinaryWriter } from "../../../binary";
 import { Decimal } from "@cosmjs/math";
-import { isSet } from "../../../helpers";
+import { isSet, padDecimal } from "../../../helpers";
 import { GlobalDecoderRegistry } from "../../../registry";
 /** Minter represents the minting state. */
 export interface Minter {
@@ -103,8 +103,8 @@ export const Minter = {
   },
   toAmino(message: Minter, useInterfaces: boolean = true): MinterAmino {
     const obj: any = {};
-    obj.inflation = message.inflation === "" ? undefined : message.inflation;
-    obj.annual_provisions = message.annualProvisions === "" ? undefined : message.annualProvisions;
+    obj.inflation = padDecimal(message.inflation) === "" ? undefined : padDecimal(message.inflation);
+    obj.annual_provisions = padDecimal(message.annualProvisions) === "" ? undefined : padDecimal(message.annualProvisions);
     return obj;
   },
   fromAminoMsg(object: MinterAminoMsg): Minter {

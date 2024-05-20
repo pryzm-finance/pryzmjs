@@ -1,7 +1,7 @@
 import { Timestamp, TimestampSDKType } from "../../google/protobuf/timestamp";
 import { BinaryReader, BinaryWriter } from "../../binary";
 import { Decimal } from "@cosmjs/math";
-import { isSet, fromJsonTimestamp, fromTimestamp } from "../../helpers";
+import { isSet, fromJsonTimestamp, fromTimestamp, padDecimal } from "../../helpers";
 import { GlobalDecoderRegistry } from "../../registry";
 export interface TokenPrice {
   denom: string;
@@ -117,7 +117,7 @@ export const TokenPrice = {
     const obj: any = {};
     obj.denom = message.denom === "" ? undefined : message.denom;
     obj.block_time = message.blockTime ? Timestamp.toAmino(message.blockTime, useInterfaces) : undefined;
-    obj.price = message.price === "" ? undefined : message.price;
+    obj.price = padDecimal(message.price) === "" ? undefined : padDecimal(message.price);
     return obj;
   },
   fromAminoMsg(object: TokenPriceAminoMsg): TokenPrice {

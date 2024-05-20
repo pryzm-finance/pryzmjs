@@ -1,7 +1,7 @@
 import { Timestamp, TimestampSDKType } from "../../../google/protobuf/timestamp";
 import { BinaryReader, BinaryWriter } from "../../../binary";
 import { Decimal } from "@cosmjs/math";
-import { isSet, fromJsonTimestamp, fromTimestamp } from "../../../helpers";
+import { isSet, fromJsonTimestamp, fromTimestamp, padDecimal } from "../../../helpers";
 import { GlobalDecoderRegistry } from "../../../registry";
 /** Information about an undelegation in a specific epoch */
 export interface Undelegation {
@@ -263,8 +263,8 @@ export const Undelegation = {
   toAmino(message: Undelegation, useInterfaces: boolean = true): UndelegationAmino {
     const obj: any = {};
     obj.host_chain = message.hostChain === "" ? undefined : message.hostChain;
-    obj.epoch = message.epoch !== BigInt(0) ? message.epoch.toString() : undefined;
-    obj.exchange_rate = message.exchangeRate === "" ? undefined : message.exchangeRate;
+    obj.epoch = message.epoch ? message.epoch.toString() : undefined;
+    obj.exchange_rate = padDecimal(message.exchangeRate) === "" ? undefined : padDecimal(message.exchangeRate);
     obj.started = message.started === false ? undefined : message.started;
     obj.completed = message.completed === false ? undefined : message.completed;
     obj.completion_time = message.completionTime ? Timestamp.toAmino(message.completionTime, useInterfaces) : undefined;
@@ -481,7 +481,7 @@ export const ChannelUndelegation = {
   toAmino(message: ChannelUndelegation, useInterfaces: boolean = true): ChannelUndelegationAmino {
     const obj: any = {};
     obj.host_chain = message.hostChain === "" ? undefined : message.hostChain;
-    obj.epoch = message.epoch !== BigInt(0) ? message.epoch.toString() : undefined;
+    obj.epoch = message.epoch ? message.epoch.toString() : undefined;
     obj.transfer_channel = message.transferChannel === "" ? undefined : message.transferChannel;
     obj.total_c_amount = message.totalCAmount === "" ? undefined : message.totalCAmount;
     obj.undelegated_c_amount = message.undelegatedCAmount === "" ? undefined : message.undelegatedCAmount;

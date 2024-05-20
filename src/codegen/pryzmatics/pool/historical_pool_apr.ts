@@ -1,7 +1,7 @@
 import { Timestamp, TimestampSDKType } from "../../google/protobuf/timestamp";
 import { BinaryReader, BinaryWriter } from "../../binary";
 import { Decimal } from "@cosmjs/math";
-import { isSet, fromJsonTimestamp, fromTimestamp } from "../../helpers";
+import { isSet, fromJsonTimestamp, fromTimestamp, padDecimal } from "../../helpers";
 import { GlobalDecoderRegistry } from "../../registry";
 export interface HistoricalPoolApr {
   time: Timestamp;
@@ -164,11 +164,11 @@ export const HistoricalPoolApr = {
   toAmino(message: HistoricalPoolApr, useInterfaces: boolean = true): HistoricalPoolAprAmino {
     const obj: any = {};
     obj.time = message.time ? Timestamp.toAmino(message.time, useInterfaces) : undefined;
-    obj.apr = message.apr === null ? undefined : message.apr;
-    obj.swap_fee_apr = message.swapFeeApr === null ? undefined : message.swapFeeApr;
-    obj.token_yield = message.tokenYield === null ? undefined : message.tokenYield;
-    obj.incentives_apr = message.incentivesApr === null ? undefined : message.incentivesApr;
-    obj.alliance_apr = message.allianceApr === null ? undefined : message.allianceApr;
+    obj.apr = padDecimal(message.apr) === null ? undefined : padDecimal(message.apr);
+    obj.swap_fee_apr = padDecimal(message.swapFeeApr) === null ? undefined : padDecimal(message.swapFeeApr);
+    obj.token_yield = padDecimal(message.tokenYield) === null ? undefined : padDecimal(message.tokenYield);
+    obj.incentives_apr = padDecimal(message.incentivesApr) === null ? undefined : padDecimal(message.incentivesApr);
+    obj.alliance_apr = padDecimal(message.allianceApr) === null ? undefined : padDecimal(message.allianceApr);
     return obj;
   },
   fromAminoMsg(object: HistoricalPoolAprAminoMsg): HistoricalPoolApr {

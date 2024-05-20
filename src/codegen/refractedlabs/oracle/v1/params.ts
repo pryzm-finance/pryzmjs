@@ -1,6 +1,6 @@
 import { BinaryReader, BinaryWriter } from "../../../binary";
 import { Decimal } from "@cosmjs/math";
-import { isSet } from "../../../helpers";
+import { isSet, padDecimal } from "../../../helpers";
 import { GlobalDecoderRegistry } from "../../../registry";
 /** Params defines the parameters for the module. */
 export interface Params {
@@ -199,14 +199,14 @@ export const Params = {
   },
   toAmino(message: Params, useInterfaces: boolean = true): ParamsAmino {
     const obj: any = {};
-    obj.vote_period = message.votePeriod ? message.votePeriod.toString() : "0";
-    obj.quorum = message.quorum ?? "";
-    obj.vote_threshold = message.voteThreshold ?? "";
-    obj.slash_fraction = message.slashFraction ?? "";
-    obj.slash_window = message.slashWindow !== BigInt(0) ? message.slashWindow.toString() : undefined;
-    obj.max_miss_rate_per_slash_window = message.maxMissRatePerSlashWindow ?? "";
-    obj.max_miss_rate_per_vote_period = message.maxMissRatePerVotePeriod ?? "";
-    obj.fee_collector_reward_ratio = message.feeCollectorRewardRatio ?? "";
+    obj.vote_period = message.votePeriod ? message.votePeriod.toString() : undefined;
+    obj.quorum = padDecimal(message.quorum) === "" ? undefined : padDecimal(message.quorum);
+    obj.vote_threshold = padDecimal(message.voteThreshold) === "" ? undefined : padDecimal(message.voteThreshold);
+    obj.slash_fraction = padDecimal(message.slashFraction) === "" ? undefined : padDecimal(message.slashFraction);
+    obj.slash_window = message.slashWindow ? message.slashWindow.toString() : undefined;
+    obj.max_miss_rate_per_slash_window = padDecimal(message.maxMissRatePerSlashWindow) === "" ? undefined : padDecimal(message.maxMissRatePerSlashWindow);
+    obj.max_miss_rate_per_vote_period = padDecimal(message.maxMissRatePerVotePeriod) === "" ? undefined : padDecimal(message.maxMissRatePerVotePeriod);
+    obj.fee_collector_reward_ratio = padDecimal(message.feeCollectorRewardRatio) === "" ? undefined : padDecimal(message.feeCollectorRewardRatio);
     return obj;
   },
   fromAminoMsg(object: ParamsAminoMsg): Params {

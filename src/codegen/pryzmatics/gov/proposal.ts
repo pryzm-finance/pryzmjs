@@ -389,7 +389,7 @@ export const Proposal = {
   },
   toAmino(message: Proposal, useInterfaces: boolean = true): ProposalAmino {
     const obj: any = {};
-    obj.id = message.id !== BigInt(0) ? message.id.toString() : undefined;
+    obj.id = message.id ? message.id.toString() : undefined;
     obj.submit_time = message.submitTime ? Timestamp.toAmino(message.submitTime, useInterfaces) : undefined;
     obj.deposit_end_time = message.depositEndTime ? Timestamp.toAmino(message.depositEndTime, useInterfaces) : undefined;
     if (message.totalDeposit) {

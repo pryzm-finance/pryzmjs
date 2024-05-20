@@ -1705,7 +1705,7 @@ export const QueryGetUndelegationRequest = {
   toAmino(message: QueryGetUndelegationRequest, useInterfaces: boolean = true): QueryGetUndelegationRequestAmino {
     const obj: any = {};
     obj.host_chain = message.hostChain === "" ? undefined : message.hostChain;
-    obj.epoch = message.epoch !== BigInt(0) ? message.epoch.toString() : undefined;
+    obj.epoch = message.epoch ? message.epoch.toString() : undefined;
     return obj;
   },
   fromAminoMsg(object: QueryGetUndelegationRequestAminoMsg): QueryGetUndelegationRequest {
@@ -2298,7 +2298,7 @@ export const QueryGetChannelUndelegationRequest = {
   toAmino(message: QueryGetChannelUndelegationRequest, useInterfaces: boolean = true): QueryGetChannelUndelegationRequestAmino {
     const obj: any = {};
     obj.host_chain = message.hostChain === "" ? undefined : message.hostChain;
-    obj.epoch = message.epoch !== BigInt(0) ? message.epoch.toString() : undefined;
+    obj.epoch = message.epoch ? message.epoch.toString() : undefined;
     obj.transfer_channel = message.transferChannel === "" ? undefined : message.transferChannel;
     return obj;
   },
@@ -2492,7 +2492,7 @@ export const QueryAllChannelUndelegationRequest = {
   toAmino(message: QueryAllChannelUndelegationRequest, useInterfaces: boolean = true): QueryAllChannelUndelegationRequestAmino {
     const obj: any = {};
     obj.host_chain = message.hostChain === "" ? undefined : message.hostChain;
-    obj.epoch = message.epoch !== BigInt(0) ? message.epoch.toString() : undefined;
+    obj.epoch = message.epoch ? message.epoch.toString() : undefined;
     obj.pagination = message.pagination ? PageRequest.toAmino(message.pagination, useInterfaces) : undefined;
     return obj;
   },
@@ -2998,7 +2998,7 @@ export const QueryEpochInfoResponse = {
     obj.last_redelegation_time = message.lastRedelegationTime ? Timestamp.toAmino(message.lastRedelegationTime, useInterfaces) : undefined;
     obj.last_lsm_redeem_time = message.lastLsmRedeemTime ? Timestamp.toAmino(message.lastLsmRedeemTime, useInterfaces) : undefined;
     obj.last_undelegation_time = message.lastUndelegationTime ? Timestamp.toAmino(message.lastUndelegationTime, useInterfaces) : undefined;
-    obj.current_undelegation_epoch = message.currentUndelegationEpoch !== BigInt(0) ? message.currentUndelegationEpoch.toString() : undefined;
+    obj.current_undelegation_epoch = message.currentUndelegationEpoch ? message.currentUndelegationEpoch.toString() : undefined;
     return obj;
   },
   fromAminoMsg(object: QueryEpochInfoResponseAminoMsg): QueryEpochInfoResponse {
@@ -3633,7 +3633,7 @@ export const QueryGetMultiSigPacketRequest = {
   toAmino(message: QueryGetMultiSigPacketRequest, useInterfaces: boolean = true): QueryGetMultiSigPacketRequestAmino {
     const obj: any = {};
     obj.connection_id = message.connectionId === "" ? undefined : message.connectionId;
-    obj.sequence = message.sequence !== BigInt(0) ? message.sequence.toString() : undefined;
+    obj.sequence = message.sequence ? message.sequence.toString() : undefined;
     return obj;
   },
   fromAminoMsg(object: QueryGetMultiSigPacketRequestAminoMsg): QueryGetMultiSigPacketRequest {

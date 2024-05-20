@@ -1,7 +1,7 @@
 import { Timestamp, TimestampSDKType } from "../../google/protobuf/timestamp";
 import { BinaryReader, BinaryWriter } from "../../binary";
 import { Decimal } from "@cosmjs/math";
-import { isSet, fromJsonTimestamp, fromTimestamp } from "../../helpers";
+import { isSet, fromJsonTimestamp, fromTimestamp, padDecimal } from "../../helpers";
 import { GlobalDecoderRegistry } from "../../registry";
 export interface TVL {
   blockTime: Timestamp;
@@ -228,14 +228,14 @@ export const TVL = {
   toAmino(message: TVL, useInterfaces: boolean = true): TVLAmino {
     const obj: any = {};
     obj.block_time = message.blockTime ? Timestamp.toAmino(message.blockTime, useInterfaces) : undefined;
-    obj.c_asset = message.cAsset === "" ? undefined : message.cAsset;
-    obj.amm = message.amm === "" ? undefined : message.amm;
-    obj.staking = message.staking === "" ? undefined : message.staking;
-    obj.alliance = message.alliance === "" ? undefined : message.alliance;
-    obj.incentives = message.incentives === "" ? undefined : message.incentives;
-    obj.treasury = message.treasury === "" ? undefined : message.treasury;
-    obj.fee_collector = message.feeCollector === "" ? undefined : message.feeCollector;
-    obj.total = message.total === "" ? undefined : message.total;
+    obj.c_asset = padDecimal(message.cAsset) === "" ? undefined : padDecimal(message.cAsset);
+    obj.amm = padDecimal(message.amm) === "" ? undefined : padDecimal(message.amm);
+    obj.staking = padDecimal(message.staking) === "" ? undefined : padDecimal(message.staking);
+    obj.alliance = padDecimal(message.alliance) === "" ? undefined : padDecimal(message.alliance);
+    obj.incentives = padDecimal(message.incentives) === "" ? undefined : padDecimal(message.incentives);
+    obj.treasury = padDecimal(message.treasury) === "" ? undefined : padDecimal(message.treasury);
+    obj.fee_collector = padDecimal(message.feeCollector) === "" ? undefined : padDecimal(message.feeCollector);
+    obj.total = padDecimal(message.total) === "" ? undefined : padDecimal(message.total);
     obj.error = message.error === "" ? undefined : message.error;
     return obj;
   },

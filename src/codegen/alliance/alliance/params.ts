@@ -1,7 +1,7 @@
 import { Duration, DurationAmino, DurationSDKType } from "../../google/protobuf/duration";
 import { Timestamp, TimestampSDKType } from "../../google/protobuf/timestamp";
 import { BinaryReader, BinaryWriter } from "../../binary";
-import { isSet, fromJsonTimestamp, fromTimestamp } from "../../helpers";
+import { isSet, fromJsonTimestamp, fromTimestamp, padDecimal } from "../../helpers";
 import { GlobalDecoderRegistry } from "../../registry";
 import { Decimal } from "@cosmjs/math";
 export interface Params {
@@ -255,7 +255,7 @@ export const RewardHistory = {
   toAmino(message: RewardHistory, useInterfaces: boolean = true): RewardHistoryAmino {
     const obj: any = {};
     obj.denom = message.denom === "" ? undefined : message.denom;
-    obj.index = message.index === "" ? undefined : message.index;
+    obj.index = padDecimal(message.index) === "" ? undefined : padDecimal(message.index);
     obj.alliance = message.alliance === "" ? undefined : message.alliance;
     return obj;
   },

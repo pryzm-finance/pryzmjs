@@ -2,7 +2,7 @@ import { Order as Order1 } from "../../pryzm/amm/v1/order";
 import { OrderAmino as Order1Amino } from "../../pryzm/amm/v1/order";
 import { OrderSDKType as Order1SDKType } from "../../pryzm/amm/v1/order";
 import { Timestamp, TimestampSDKType } from "../../google/protobuf/timestamp";
-import { isSet, fromJsonTimestamp, fromTimestamp } from "../../helpers";
+import { isSet, fromJsonTimestamp, fromTimestamp, padDecimal } from "../../helpers";
 import { BinaryReader, BinaryWriter } from "../../binary";
 import { Decimal } from "@cosmjs/math";
 import { GlobalDecoderRegistry } from "../../registry";
@@ -327,7 +327,7 @@ export const Order = {
     obj.amm_order = message.ammOrder ? Order1.toAmino(message.ammOrder, useInterfaces) : undefined;
     obj.creation_time = message.creationTime ? Timestamp.toAmino(message.creationTime, useInterfaces) : undefined;
     obj.total_amount = message.totalAmount === "" ? undefined : message.totalAmount;
-    obj.progress = message.progress === "" ? undefined : message.progress;
+    obj.progress = padDecimal(message.progress) === "" ? undefined : padDecimal(message.progress);
     obj.amount_out = message.amountOut === "" ? undefined : message.amountOut;
     obj.status = message.status === 0 ? undefined : message.status;
     obj.status_time = message.statusTime ? Timestamp.toAmino(message.statusTime, useInterfaces) : undefined;

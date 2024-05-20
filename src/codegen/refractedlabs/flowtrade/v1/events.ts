@@ -480,7 +480,7 @@ export const EventFlowEnded = {
   },
   toAmino(message: EventFlowEnded, useInterfaces: boolean = true): EventFlowEndedAmino {
     const obj: any = {};
-    obj.flow_id = message.flowId !== BigInt(0) ? message.flowId.toString() : undefined;
+    obj.flow_id = message.flowId ? message.flowId.toString() : undefined;
     return obj;
   },
   fromAminoMsg(object: EventFlowEndedAminoMsg): EventFlowEnded {
@@ -563,7 +563,7 @@ export const EventFlowStopped = {
   },
   toAmino(message: EventFlowStopped, useInterfaces: boolean = true): EventFlowStoppedAmino {
     const obj: any = {};
-    obj.flow_id = message.flowId !== BigInt(0) ? message.flowId.toString() : undefined;
+    obj.flow_id = message.flowId ? message.flowId.toString() : undefined;
     return obj;
   },
   fromAminoMsg(object: EventFlowStoppedAminoMsg): EventFlowStopped {
@@ -672,7 +672,7 @@ export const EventFlowCheckedOut = {
   },
   toAmino(message: EventFlowCheckedOut, useInterfaces: boolean = true): EventFlowCheckedOutAmino {
     const obj: any = {};
-    obj.flow_id = message.flowId !== BigInt(0) ? message.flowId.toString() : undefined;
+    obj.flow_id = message.flowId ? message.flowId.toString() : undefined;
     obj.returned_deposit = message.returnedDeposit ? Coin.toAmino(message.returnedDeposit, useInterfaces) : undefined;
     obj.returned_token_out = message.returnedTokenOut ? Coin.toAmino(message.returnedTokenOut, useInterfaces) : undefined;
     return obj;
@@ -796,7 +796,7 @@ export const EventFlowTokenInClaimed = {
   },
   toAmino(message: EventFlowTokenInClaimed, useInterfaces: boolean = true): EventFlowTokenInClaimedAmino {
     const obj: any = {};
-    obj.flow_id = message.flowId !== BigInt(0) ? message.flowId.toString() : undefined;
+    obj.flow_id = message.flowId ? message.flowId.toString() : undefined;
     obj.amount = message.amount ? Coin.toAmino(message.amount, useInterfaces) : undefined;
     obj.fee = message.fee ? Coin.toAmino(message.fee, useInterfaces) : undefined;
     obj.treasury = message.treasury === "" ? undefined : message.treasury;
@@ -921,7 +921,7 @@ export const EventFlowTokenOutClaimed = {
   },
   toAmino(message: EventFlowTokenOutClaimed, useInterfaces: boolean = true): EventFlowTokenOutClaimedAmino {
     const obj: any = {};
-    obj.flow_id = message.flowId !== BigInt(0) ? message.flowId.toString() : undefined;
+    obj.flow_id = message.flowId ? message.flowId.toString() : undefined;
     obj.owner = message.owner === "" ? undefined : message.owner;
     obj.amount = message.amount ? Coin.toAmino(message.amount, useInterfaces) : undefined;
     obj.fee = message.fee ? Coin.toAmino(message.fee, useInterfaces) : undefined;
@@ -1033,7 +1033,7 @@ export const EventJoinFlow = {
   },
   toAmino(message: EventJoinFlow, useInterfaces: boolean = true): EventJoinFlowAmino {
     const obj: any = {};
-    obj.flow_id = message.flowId !== BigInt(0) ? message.flowId.toString() : undefined;
+    obj.flow_id = message.flowId ? message.flowId.toString() : undefined;
     obj.address = message.address === "" ? undefined : message.address;
     obj.amount = message.amount ? Coin.toAmino(message.amount, useInterfaces) : undefined;
     return obj;
@@ -1144,7 +1144,7 @@ export const EventExitFlow = {
   },
   toAmino(message: EventExitFlow, useInterfaces: boolean = true): EventExitFlowAmino {
     const obj: any = {};
-    obj.flow_id = message.flowId !== BigInt(0) ? message.flowId.toString() : undefined;
+    obj.flow_id = message.flowId ? message.flowId.toString() : undefined;
     obj.address = message.address === "" ? undefined : message.address;
     obj.amount = message.amount ? Coin.toAmino(message.amount, useInterfaces) : undefined;
     return obj;
@@ -1255,7 +1255,7 @@ export const EventSetOperator = {
   },
   toAmino(message: EventSetOperator, useInterfaces: boolean = true): EventSetOperatorAmino {
     const obj: any = {};
-    obj.flow_id = message.flowId !== BigInt(0) ? message.flowId.toString() : undefined;
+    obj.flow_id = message.flowId ? message.flowId.toString() : undefined;
     obj.owner = message.owner === "" ? undefined : message.owner;
     obj.operator = message.operator === "" ? undefined : message.operator;
     return obj;

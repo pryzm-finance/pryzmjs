@@ -203,7 +203,7 @@ export const MultiSigConnection = {
     const obj: any = {};
     obj.id = message.id === "" ? undefined : message.id;
     obj.operator = message.operator === "" ? undefined : message.operator;
-    obj.last_sequence = message.lastSequence !== BigInt(0) ? message.lastSequence.toString() : undefined;
+    obj.last_sequence = message.lastSequence ? message.lastSequence.toString() : undefined;
     obj.latest_host_height = message.latestHostHeight ? Height.toAmino(message.latestHostHeight, useInterfaces) : {};
     return obj;
   },
@@ -281,7 +281,7 @@ export const MultiSigPacket = {
     return {
       connectionId: isSet(object.connectionId) ? String(object.connectionId) : "",
       sequence: isSet(object.sequence) ? BigInt(object.sequence.toString()) : BigInt(0),
-      messages: Array.isArray(object?.messages) ? object.messages.map((e: any) => Any.fromJSON(e)) : []
+      messages: Array.isArray(object?.messages) ? object.messages.map((e: any) => Any.fromJSONAsAny(e)) : []
     };
   },
   toJSON(message: MultiSigPacket): unknown {
@@ -299,7 +299,7 @@ export const MultiSigPacket = {
     const message = createBaseMultiSigPacket();
     message.connectionId = object.connectionId ?? "";
     message.sequence = object.sequence !== undefined && object.sequence !== null ? BigInt(object.sequence.toString()) : BigInt(0);
-    message.messages = object.messages?.map(e => Any.fromPartial(e)) || [];
+    message.messages = object.messages?.map(e => Any.fromPartialAsAny(e)) || [];
     return message;
   },
   fromAmino(object: MultiSigPacketAmino): MultiSigPacket {
@@ -316,7 +316,7 @@ export const MultiSigPacket = {
   toAmino(message: MultiSigPacket, useInterfaces: boolean = true): MultiSigPacketAmino {
     const obj: any = {};
     obj.connection_id = message.connectionId === "" ? undefined : message.connectionId;
-    obj.sequence = message.sequence !== BigInt(0) ? message.sequence.toString() : undefined;
+    obj.sequence = message.sequence ? message.sequence.toString() : undefined;
     if (message.messages) {
       obj.messages = message.messages.map(e => e ? Any.toAmino(e, useInterfaces) : undefined);
     } else {

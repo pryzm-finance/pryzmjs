@@ -358,7 +358,7 @@ export const QueryProposalSubmissionMsgsRequest = {
   toAmino(message: QueryProposalSubmissionMsgsRequest, useInterfaces: boolean = true): QueryProposalSubmissionMsgsRequestAmino {
     const obj: any = {};
     obj.asset_id = message.assetId === "" ? undefined : message.assetId;
-    obj.proposal_id = message.proposalId !== BigInt(0) ? message.proposalId.toString() : undefined;
+    obj.proposal_id = message.proposalId ? message.proposalId.toString() : undefined;
     obj.creator = message.creator === "" ? undefined : message.creator;
     return obj;
   },

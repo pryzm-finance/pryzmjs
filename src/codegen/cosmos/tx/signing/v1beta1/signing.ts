@@ -415,7 +415,7 @@ export const SignatureDescriptor = {
   },
   fromJSON(object: any): SignatureDescriptor {
     return {
-      publicKey: isSet(object.publicKey) ? Any.fromJSON(object.publicKey) : undefined,
+      publicKey: isSet(object.publicKey) ? Any.fromJSONAsAny(object.publicKey) : undefined,
       data: isSet(object.data) ? SignatureDescriptor_Data.fromJSON(object.data) : undefined,
       sequence: isSet(object.sequence) ? BigInt(object.sequence.toString()) : BigInt(0)
     };
@@ -429,7 +429,7 @@ export const SignatureDescriptor = {
   },
   fromPartial(object: Partial<SignatureDescriptor>): SignatureDescriptor {
     const message = createBaseSignatureDescriptor();
-    message.publicKey = object.publicKey !== undefined && object.publicKey !== null ? Any.fromPartial(object.publicKey) : undefined;
+    message.publicKey = object.publicKey !== undefined && object.publicKey !== null ? Any.fromPartialAsAny(object.publicKey) : undefined;
     message.data = object.data !== undefined && object.data !== null ? SignatureDescriptor_Data.fromPartial(object.data) : undefined;
     message.sequence = object.sequence !== undefined && object.sequence !== null ? BigInt(object.sequence.toString()) : BigInt(0);
     return message;
@@ -451,7 +451,7 @@ export const SignatureDescriptor = {
     const obj: any = {};
     obj.public_key = message.publicKey ? Any.toAmino(message.publicKey, useInterfaces) : undefined;
     obj.data = message.data ? SignatureDescriptor_Data.toAmino(message.data, useInterfaces) : undefined;
-    obj.sequence = message.sequence !== BigInt(0) ? message.sequence.toString() : undefined;
+    obj.sequence = message.sequence ? message.sequence.toString() : undefined;
     return obj;
   },
   fromAminoMsg(object: SignatureDescriptorAminoMsg): SignatureDescriptor {

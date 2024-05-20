@@ -1,6 +1,6 @@
 import { StakingParams, StakingParamsAmino, StakingParamsSDKType } from "./params";
 import { Height, HeightAmino, HeightSDKType } from "../../../ibc/core/client/v1/client";
-import { isSet } from "../../../helpers";
+import { isSet, padDecimal } from "../../../helpers";
 import { BinaryReader, BinaryWriter } from "../../../binary";
 import { GlobalDecoderRegistry } from "../../../registry";
 import { Decimal } from "@cosmjs/math";
@@ -682,7 +682,7 @@ export const HostChain = {
     } else {
       obj.transfer_channels = message.transferChannels;
     }
-    obj.params = message.params ? StakingParams.toAmino(message.params, useInterfaces) : StakingParams.toAmino(StakingParams.fromPartial({}));
+    obj.params = message.params ? StakingParams.toAmino(message.params, useInterfaces) : undefined;
     if (message.validators) {
       obj.validators = message.validators.map(e => e ? Validator.toAmino(e, useInterfaces) : undefined);
     } else {
@@ -923,7 +923,7 @@ export const Validator = {
   toAmino(message: Validator, useInterfaces: boolean = true): ValidatorAmino {
     const obj: any = {};
     obj.address = message.address === "" ? undefined : message.address;
-    obj.weight = message.weight === "" ? undefined : message.weight;
+    obj.weight = padDecimal(message.weight) === "" ? undefined : padDecimal(message.weight);
     obj.allow_lsm_shares = message.allowLsmShares === false ? undefined : message.allowLsmShares;
     return obj;
   },
@@ -1135,7 +1135,7 @@ export const HostChainState = {
     }
     obj.amount_to_be_delegated = message.amountToBeDelegated === "" ? undefined : message.amountToBeDelegated;
     obj.undelegated_amount_to_collect = message.undelegatedAmountToCollect === "" ? undefined : message.undelegatedAmountToCollect;
-    obj.exchange_rate = message.exchangeRate === "" ? undefined : message.exchangeRate;
+    obj.exchange_rate = padDecimal(message.exchangeRate) === "" ? undefined : padDecimal(message.exchangeRate);
     obj.state = message.state === 0 ? undefined : message.state;
     obj.last_idle_state_host_height = message.lastIdleStateHostHeight ? Height.toAmino(message.lastIdleStateHostHeight, useInterfaces) : {};
     obj.locked_lsm_value = message.lockedLsmValue === "" ? undefined : message.lockedLsmValue;
@@ -1500,7 +1500,7 @@ export const ValidatorState = {
     obj.validator_address = message.validatorAddress === "" ? undefined : message.validatorAddress;
     obj.delegated_amount = message.delegatedAmount === "" ? undefined : message.delegatedAmount;
     obj.total_tokens = message.totalTokens === "" ? undefined : message.totalTokens;
-    obj.total_shares = message.totalShares === "" ? undefined : message.totalShares;
+    obj.total_shares = padDecimal(message.totalShares) === "" ? undefined : padDecimal(message.totalShares);
     return obj;
   },
   fromAminoMsg(object: ValidatorStateAminoMsg): ValidatorState {

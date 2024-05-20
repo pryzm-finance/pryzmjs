@@ -1,7 +1,7 @@
 import { SwapType, SwapStep, SwapStepAmino, SwapStepSDKType, swapTypeFromJSON, swapTypeToJSON } from "../../../pryzm/amm/v1/operations";
 import { RouteStep, RouteStepAmino, RouteStepSDKType } from "../../../pryzm/amm/v1/route_step";
 import { Coin, CoinAmino, CoinSDKType } from "../../../cosmos/base/v1beta1/coin";
-import { isSet } from "../../../helpers";
+import { isSet, padDecimal } from "../../../helpers";
 import { BinaryReader, BinaryWriter } from "../../../binary";
 import { GlobalDecoderRegistry } from "../../../registry";
 import { Decimal } from "@cosmjs/math";
@@ -389,13 +389,13 @@ export const QueryTradeSimulationResponse = {
   },
   toAmino(message: QueryTradeSimulationResponse, useInterfaces: boolean = true): QueryTradeSimulationResponseAmino {
     const obj: any = {};
-    obj.price_token_in_token_out_terms = message.priceTokenInTokenOutTerms === "" ? undefined : message.priceTokenInTokenOutTerms;
+    obj.price_token_in_token_out_terms = padDecimal(message.priceTokenInTokenOutTerms) === "" ? undefined : padDecimal(message.priceTokenInTokenOutTerms);
     obj.amount_in = message.amountIn ? Coin.toAmino(message.amountIn, useInterfaces) : undefined;
     obj.amount_out = message.amountOut ? Coin.toAmino(message.amountOut, useInterfaces) : undefined;
     obj.fee_amount = message.feeAmount ? Coin.toAmino(message.feeAmount, useInterfaces) : undefined;
-    obj.fee_percentage = message.feePercentage === "" ? undefined : message.feePercentage;
-    obj.effective_price = message.effectivePrice === "" ? undefined : message.effectivePrice;
-    obj.price_impact = message.priceImpact === "" ? undefined : message.priceImpact;
+    obj.fee_percentage = padDecimal(message.feePercentage) === "" ? undefined : padDecimal(message.feePercentage);
+    obj.effective_price = padDecimal(message.effectivePrice) === "" ? undefined : padDecimal(message.effectivePrice);
+    obj.price_impact = padDecimal(message.priceImpact) === "" ? undefined : padDecimal(message.priceImpact);
     if (message.swapSteps) {
       obj.swap_steps = message.swapSteps.map(e => e ? SwapStep.toAmino(e, useInterfaces) : undefined);
     } else {

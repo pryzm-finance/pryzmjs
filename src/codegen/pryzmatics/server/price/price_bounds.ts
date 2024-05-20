@@ -1,5 +1,5 @@
 import { BinaryReader, BinaryWriter } from "../../../binary";
-import { isSet } from "../../../helpers";
+import { isSet, padDecimal } from "../../../helpers";
 import { GlobalDecoderRegistry } from "../../../registry";
 import { Decimal } from "@cosmjs/math";
 export interface QueryPriceBoundsRequest {
@@ -232,8 +232,8 @@ export const QueryPriceBoundsResponse = {
   },
   toAmino(message: QueryPriceBoundsResponse, useInterfaces: boolean = true): QueryPriceBoundsResponseAmino {
     const obj: any = {};
-    obj.min = message.min === null ? undefined : message.min;
-    obj.max = message.max === null ? undefined : message.max;
+    obj.min = padDecimal(message.min) === null ? undefined : padDecimal(message.min);
+    obj.max = padDecimal(message.max) === null ? undefined : padDecimal(message.max);
     return obj;
   },
   fromAminoMsg(object: QueryPriceBoundsResponseAminoMsg): QueryPriceBoundsResponse {

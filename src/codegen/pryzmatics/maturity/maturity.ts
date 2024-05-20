@@ -1,7 +1,7 @@
 import { Timestamp, TimestampSDKType } from "../../google/protobuf/timestamp";
 import { BinaryReader, BinaryWriter } from "../../binary";
 import { Decimal } from "@cosmjs/math";
-import { isSet, fromJsonTimestamp, fromTimestamp } from "../../helpers";
+import { isSet, fromJsonTimestamp, fromTimestamp, padDecimal } from "../../helpers";
 import { GlobalDecoderRegistry } from "../../registry";
 export interface Maturity {
   assetId: string;
@@ -280,13 +280,13 @@ export const Maturity = {
     obj.active = message.active === false ? undefined : message.active;
     obj.introduction_time = message.introductionTime ? Timestamp.toAmino(message.introductionTime, useInterfaces) : undefined;
     obj.expiration_time = message.expirationTime ? Timestamp.toAmino(message.expirationTime, useInterfaces) : undefined;
-    obj.block_height = message.blockHeight !== BigInt(0) ? message.blockHeight.toString() : undefined;
+    obj.block_height = message.blockHeight ? message.blockHeight.toString() : undefined;
     obj.block_time = message.blockTime ? Timestamp.toAmino(message.blockTime, useInterfaces) : undefined;
-    obj.roi = message.roi === null ? undefined : message.roi;
-    obj.y_apy = message.yApy === null ? undefined : message.yApy;
-    obj.p_apy = message.pApy === null ? undefined : message.pApy;
-    obj.y_price = message.yPrice === null ? undefined : message.yPrice;
-    obj.p_price = message.pPrice === null ? undefined : message.pPrice;
+    obj.roi = padDecimal(message.roi) === null ? undefined : padDecimal(message.roi);
+    obj.y_apy = padDecimal(message.yApy) === null ? undefined : padDecimal(message.yApy);
+    obj.p_apy = padDecimal(message.pApy) === null ? undefined : padDecimal(message.pApy);
+    obj.y_price = padDecimal(message.yPrice) === null ? undefined : padDecimal(message.yPrice);
+    obj.p_price = padDecimal(message.pPrice) === null ? undefined : padDecimal(message.pPrice);
     obj.error = message.error === "" ? undefined : message.error;
     return obj;
   },

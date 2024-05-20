@@ -948,7 +948,7 @@ export const Member = {
     obj.address = message.address === "" ? undefined : message.address;
     obj.weight = message.weight === "" ? undefined : message.weight;
     obj.metadata = message.metadata === "" ? undefined : message.metadata;
-    obj.added_at = message.addedAt ? Timestamp.toAmino(message.addedAt, useInterfaces) : Timestamp.toAmino(Timestamp.fromPartial({}));
+    obj.added_at = message.addedAt ? Timestamp.toAmino(message.addedAt, useInterfaces) : undefined;
     return obj;
   },
   fromAminoMsg(object: MemberAminoMsg): Member {
@@ -1383,8 +1383,8 @@ export const DecisionPolicyWindows = {
   },
   toAmino(message: DecisionPolicyWindows, useInterfaces: boolean = true): DecisionPolicyWindowsAmino {
     const obj: any = {};
-    obj.voting_period = message.votingPeriod ? Duration.toAmino(message.votingPeriod, useInterfaces) : Duration.toAmino(Duration.fromPartial({}));
-    obj.min_execution_period = message.minExecutionPeriod ? Duration.toAmino(message.minExecutionPeriod, useInterfaces) : Duration.toAmino(Duration.fromPartial({}));
+    obj.voting_period = message.votingPeriod ? Duration.toAmino(message.votingPeriod, useInterfaces) : undefined;
+    obj.min_execution_period = message.minExecutionPeriod ? Duration.toAmino(message.minExecutionPeriod, useInterfaces) : undefined;
     return obj;
   },
   fromAminoMsg(object: DecisionPolicyWindowsAminoMsg): DecisionPolicyWindows {
@@ -1540,12 +1540,12 @@ export const GroupInfo = {
   },
   toAmino(message: GroupInfo, useInterfaces: boolean = true): GroupInfoAmino {
     const obj: any = {};
-    obj.id = message.id !== BigInt(0) ? message.id.toString() : undefined;
+    obj.id = message.id ? message.id.toString() : undefined;
     obj.admin = message.admin === "" ? undefined : message.admin;
     obj.metadata = message.metadata === "" ? undefined : message.metadata;
-    obj.version = message.version !== BigInt(0) ? message.version.toString() : undefined;
+    obj.version = message.version ? message.version.toString() : undefined;
     obj.total_weight = message.totalWeight === "" ? undefined : message.totalWeight;
-    obj.created_at = message.createdAt ? Timestamp.toAmino(message.createdAt, useInterfaces) : Timestamp.toAmino(Timestamp.fromPartial({}));
+    obj.created_at = message.createdAt ? Timestamp.toAmino(message.createdAt, useInterfaces) : undefined;
     return obj;
   },
   fromAminoMsg(object: GroupInfoAminoMsg): GroupInfo {
@@ -1649,7 +1649,7 @@ export const GroupMember = {
   },
   toAmino(message: GroupMember, useInterfaces: boolean = true): GroupMemberAmino {
     const obj: any = {};
-    obj.group_id = message.groupId !== BigInt(0) ? message.groupId.toString() : undefined;
+    obj.group_id = message.groupId ? message.groupId.toString() : undefined;
     obj.member = message.member ? Member.toAmino(message.member, useInterfaces) : undefined;
     return obj;
   },
@@ -1820,12 +1820,12 @@ export const GroupPolicyInfo = {
   toAmino(message: GroupPolicyInfo, useInterfaces: boolean = true): GroupPolicyInfoAmino {
     const obj: any = {};
     obj.address = message.address === "" ? undefined : message.address;
-    obj.group_id = message.groupId !== BigInt(0) ? message.groupId.toString() : undefined;
+    obj.group_id = message.groupId ? message.groupId.toString() : undefined;
     obj.admin = message.admin === "" ? undefined : message.admin;
     obj.metadata = message.metadata === "" ? undefined : message.metadata;
-    obj.version = message.version !== BigInt(0) ? message.version.toString() : undefined;
+    obj.version = message.version ? message.version.toString() : undefined;
     obj.decision_policy = message.decisionPolicy ? GlobalDecoderRegistry.toAminoMsg(message.decisionPolicy) : undefined;
-    obj.created_at = message.createdAt ? Timestamp.toAmino(message.createdAt, useInterfaces) : Timestamp.toAmino(Timestamp.fromPartial({}));
+    obj.created_at = message.createdAt ? Timestamp.toAmino(message.createdAt, useInterfaces) : undefined;
     return obj;
   },
   fromAminoMsg(object: GroupPolicyInfoAminoMsg): GroupPolicyInfo {
@@ -1996,7 +1996,7 @@ export const Proposal = {
       finalTallyResult: isSet(object.finalTallyResult) ? TallyResult.fromJSON(object.finalTallyResult) : undefined,
       votingPeriodEnd: isSet(object.votingPeriodEnd) ? fromJsonTimestamp(object.votingPeriodEnd) : undefined,
       executorResult: isSet(object.executorResult) ? proposalExecutorResultFromJSON(object.executorResult) : -1,
-      messages: Array.isArray(object?.messages) ? object.messages.map((e: any) => Any.fromJSON(e)) : [],
+      messages: Array.isArray(object?.messages) ? object.messages.map((e: any) => Any.fromJSONAsAny(e)) : [],
       title: isSet(object.title) ? String(object.title) : "",
       summary: isSet(object.summary) ? String(object.summary) : ""
     };
@@ -2040,7 +2040,7 @@ export const Proposal = {
     message.finalTallyResult = object.finalTallyResult !== undefined && object.finalTallyResult !== null ? TallyResult.fromPartial(object.finalTallyResult) : undefined;
     message.votingPeriodEnd = object.votingPeriodEnd !== undefined && object.votingPeriodEnd !== null ? Timestamp.fromPartial(object.votingPeriodEnd) : undefined;
     message.executorResult = object.executorResult ?? 0;
-    message.messages = object.messages?.map(e => Any.fromPartial(e)) || [];
+    message.messages = object.messages?.map(e => Any.fromPartialAsAny(e)) || [];
     message.title = object.title ?? "";
     message.summary = object.summary ?? "";
     return message;
@@ -2089,7 +2089,7 @@ export const Proposal = {
   },
   toAmino(message: Proposal, useInterfaces: boolean = true): ProposalAmino {
     const obj: any = {};
-    obj.id = message.id !== BigInt(0) ? message.id.toString() : undefined;
+    obj.id = message.id ? message.id.toString() : undefined;
     obj.group_policy_address = message.groupPolicyAddress === "" ? undefined : message.groupPolicyAddress;
     obj.metadata = message.metadata === "" ? undefined : message.metadata;
     if (message.proposers) {
@@ -2097,12 +2097,12 @@ export const Proposal = {
     } else {
       obj.proposers = message.proposers;
     }
-    obj.submit_time = message.submitTime ? Timestamp.toAmino(message.submitTime, useInterfaces) : Timestamp.toAmino(Timestamp.fromPartial({}));
-    obj.group_version = message.groupVersion !== BigInt(0) ? message.groupVersion.toString() : undefined;
-    obj.group_policy_version = message.groupPolicyVersion !== BigInt(0) ? message.groupPolicyVersion.toString() : undefined;
+    obj.submit_time = message.submitTime ? Timestamp.toAmino(message.submitTime, useInterfaces) : undefined;
+    obj.group_version = message.groupVersion ? message.groupVersion.toString() : undefined;
+    obj.group_policy_version = message.groupPolicyVersion ? message.groupPolicyVersion.toString() : undefined;
     obj.status = message.status === 0 ? undefined : message.status;
-    obj.final_tally_result = message.finalTallyResult ? TallyResult.toAmino(message.finalTallyResult, useInterfaces) : TallyResult.toAmino(TallyResult.fromPartial({}));
-    obj.voting_period_end = message.votingPeriodEnd ? Timestamp.toAmino(message.votingPeriodEnd, useInterfaces) : Timestamp.toAmino(Timestamp.fromPartial({}));
+    obj.final_tally_result = message.finalTallyResult ? TallyResult.toAmino(message.finalTallyResult, useInterfaces) : undefined;
+    obj.voting_period_end = message.votingPeriodEnd ? Timestamp.toAmino(message.votingPeriodEnd, useInterfaces) : undefined;
     obj.executor_result = message.executorResult === 0 ? undefined : message.executorResult;
     if (message.messages) {
       obj.messages = message.messages.map(e => e ? Any.toAmino(e, useInterfaces) : undefined);
@@ -2386,11 +2386,11 @@ export const Vote = {
   },
   toAmino(message: Vote, useInterfaces: boolean = true): VoteAmino {
     const obj: any = {};
-    obj.proposal_id = message.proposalId !== BigInt(0) ? message.proposalId.toString() : undefined;
+    obj.proposal_id = message.proposalId ? message.proposalId.toString() : undefined;
     obj.voter = message.voter === "" ? undefined : message.voter;
     obj.option = message.option === 0 ? undefined : message.option;
     obj.metadata = message.metadata === "" ? undefined : message.metadata;
-    obj.submit_time = message.submitTime ? Timestamp.toAmino(message.submitTime, useInterfaces) : Timestamp.toAmino(Timestamp.fromPartial({}));
+    obj.submit_time = message.submitTime ? Timestamp.toAmino(message.submitTime, useInterfaces) : undefined;
     return obj;
   },
   fromAminoMsg(object: VoteAminoMsg): Vote {

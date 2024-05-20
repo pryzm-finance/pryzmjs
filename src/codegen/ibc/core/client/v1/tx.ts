@@ -317,8 +317,8 @@ export const MsgCreateClient = {
   },
   fromJSON(object: any): MsgCreateClient {
     return {
-      clientState: isSet(object.clientState) ? Any.fromJSON(object.clientState) : undefined,
-      consensusState: isSet(object.consensusState) ? Any.fromJSON(object.consensusState) : undefined,
+      clientState: isSet(object.clientState) ? Any.fromJSONAsAny(object.clientState) : undefined,
+      consensusState: isSet(object.consensusState) ? Any.fromJSONAsAny(object.consensusState) : undefined,
       signer: isSet(object.signer) ? String(object.signer) : ""
     };
   },
@@ -331,8 +331,8 @@ export const MsgCreateClient = {
   },
   fromPartial(object: Partial<MsgCreateClient>): MsgCreateClient {
     const message = createBaseMsgCreateClient();
-    message.clientState = object.clientState !== undefined && object.clientState !== null ? Any.fromPartial(object.clientState) : undefined;
-    message.consensusState = object.consensusState !== undefined && object.consensusState !== null ? Any.fromPartial(object.consensusState) : undefined;
+    message.clientState = object.clientState !== undefined && object.clientState !== null ? Any.fromPartialAsAny(object.clientState) : undefined;
+    message.consensusState = object.consensusState !== undefined && object.consensusState !== null ? Any.fromPartialAsAny(object.consensusState) : undefined;
     message.signer = object.signer ?? "";
     return message;
   },
@@ -512,7 +512,7 @@ export const MsgUpdateClient = {
   fromJSON(object: any): MsgUpdateClient {
     return {
       clientId: isSet(object.clientId) ? String(object.clientId) : "",
-      clientMessage: isSet(object.clientMessage) ? Any.fromJSON(object.clientMessage) : undefined,
+      clientMessage: isSet(object.clientMessage) ? Any.fromJSONAsAny(object.clientMessage) : undefined,
       signer: isSet(object.signer) ? String(object.signer) : ""
     };
   },
@@ -526,7 +526,7 @@ export const MsgUpdateClient = {
   fromPartial(object: Partial<MsgUpdateClient>): MsgUpdateClient {
     const message = createBaseMsgUpdateClient();
     message.clientId = object.clientId ?? "";
-    message.clientMessage = object.clientMessage !== undefined && object.clientMessage !== null ? Any.fromPartial(object.clientMessage) : undefined;
+    message.clientMessage = object.clientMessage !== undefined && object.clientMessage !== null ? Any.fromPartialAsAny(object.clientMessage) : undefined;
     message.signer = object.signer ?? "";
     return message;
   },
@@ -727,8 +727,8 @@ export const MsgUpgradeClient = {
   fromJSON(object: any): MsgUpgradeClient {
     return {
       clientId: isSet(object.clientId) ? String(object.clientId) : "",
-      clientState: isSet(object.clientState) ? Any.fromJSON(object.clientState) : undefined,
-      consensusState: isSet(object.consensusState) ? Any.fromJSON(object.consensusState) : undefined,
+      clientState: isSet(object.clientState) ? Any.fromJSONAsAny(object.clientState) : undefined,
+      consensusState: isSet(object.consensusState) ? Any.fromJSONAsAny(object.consensusState) : undefined,
       proofUpgradeClient: isSet(object.proofUpgradeClient) ? bytesFromBase64(object.proofUpgradeClient) : new Uint8Array(),
       proofUpgradeConsensusState: isSet(object.proofUpgradeConsensusState) ? bytesFromBase64(object.proofUpgradeConsensusState) : new Uint8Array(),
       signer: isSet(object.signer) ? String(object.signer) : ""
@@ -747,8 +747,8 @@ export const MsgUpgradeClient = {
   fromPartial(object: Partial<MsgUpgradeClient>): MsgUpgradeClient {
     const message = createBaseMsgUpgradeClient();
     message.clientId = object.clientId ?? "";
-    message.clientState = object.clientState !== undefined && object.clientState !== null ? Any.fromPartial(object.clientState) : undefined;
-    message.consensusState = object.consensusState !== undefined && object.consensusState !== null ? Any.fromPartial(object.consensusState) : undefined;
+    message.clientState = object.clientState !== undefined && object.clientState !== null ? Any.fromPartialAsAny(object.clientState) : undefined;
+    message.consensusState = object.consensusState !== undefined && object.consensusState !== null ? Any.fromPartialAsAny(object.consensusState) : undefined;
     message.proofUpgradeClient = object.proofUpgradeClient ?? new Uint8Array();
     message.proofUpgradeConsensusState = object.proofUpgradeConsensusState ?? new Uint8Array();
     message.signer = object.signer ?? "";
@@ -942,7 +942,7 @@ export const MsgSubmitMisbehaviour = {
   fromJSON(object: any): MsgSubmitMisbehaviour {
     return {
       clientId: isSet(object.clientId) ? String(object.clientId) : "",
-      misbehaviour: isSet(object.misbehaviour) ? Any.fromJSON(object.misbehaviour) : undefined,
+      misbehaviour: isSet(object.misbehaviour) ? Any.fromJSONAsAny(object.misbehaviour) : undefined,
       signer: isSet(object.signer) ? String(object.signer) : ""
     };
   },
@@ -956,7 +956,7 @@ export const MsgSubmitMisbehaviour = {
   fromPartial(object: Partial<MsgSubmitMisbehaviour>): MsgSubmitMisbehaviour {
     const message = createBaseMsgSubmitMisbehaviour();
     message.clientId = object.clientId ?? "";
-    message.misbehaviour = object.misbehaviour !== undefined && object.misbehaviour !== null ? Any.fromPartial(object.misbehaviour) : undefined;
+    message.misbehaviour = object.misbehaviour !== undefined && object.misbehaviour !== null ? Any.fromPartialAsAny(object.misbehaviour) : undefined;
     message.signer = object.signer ?? "";
     return message;
   },

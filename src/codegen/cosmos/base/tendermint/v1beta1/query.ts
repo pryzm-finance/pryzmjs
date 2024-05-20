@@ -628,7 +628,7 @@ export const GetValidatorSetByHeightRequest = {
   },
   toAmino(message: GetValidatorSetByHeightRequest, useInterfaces: boolean = true): GetValidatorSetByHeightRequestAmino {
     const obj: any = {};
-    obj.height = message.height !== BigInt(0) ? message.height.toString() : undefined;
+    obj.height = message.height ? message.height.toString() : undefined;
     obj.pagination = message.pagination ? PageRequest.toAmino(message.pagination, useInterfaces) : undefined;
     return obj;
   },
@@ -748,7 +748,7 @@ export const GetValidatorSetByHeightResponse = {
   },
   toAmino(message: GetValidatorSetByHeightResponse, useInterfaces: boolean = true): GetValidatorSetByHeightResponseAmino {
     const obj: any = {};
-    obj.block_height = message.blockHeight !== BigInt(0) ? message.blockHeight.toString() : undefined;
+    obj.block_height = message.blockHeight ? message.blockHeight.toString() : undefined;
     if (message.validators) {
       obj.validators = message.validators.map(e => e ? Validator.toAmino(e, useInterfaces) : undefined);
     } else {
@@ -964,7 +964,7 @@ export const GetLatestValidatorSetResponse = {
   },
   toAmino(message: GetLatestValidatorSetResponse, useInterfaces: boolean = true): GetLatestValidatorSetResponseAmino {
     const obj: any = {};
-    obj.block_height = message.blockHeight !== BigInt(0) ? message.blockHeight.toString() : undefined;
+    obj.block_height = message.blockHeight ? message.blockHeight.toString() : undefined;
     if (message.validators) {
       obj.validators = message.validators.map(e => e ? Validator.toAmino(e, useInterfaces) : undefined);
     } else {
@@ -1061,7 +1061,7 @@ export const Validator = {
   fromJSON(object: any): Validator {
     return {
       address: isSet(object.address) ? String(object.address) : "",
-      pubKey: isSet(object.pubKey) ? Any.fromJSON(object.pubKey) : undefined,
+      pubKey: isSet(object.pubKey) ? Any.fromJSONAsAny(object.pubKey) : undefined,
       votingPower: isSet(object.votingPower) ? BigInt(object.votingPower.toString()) : BigInt(0),
       proposerPriority: isSet(object.proposerPriority) ? BigInt(object.proposerPriority.toString()) : BigInt(0)
     };
@@ -1077,7 +1077,7 @@ export const Validator = {
   fromPartial(object: Partial<Validator>): Validator {
     const message = createBaseValidator();
     message.address = object.address ?? "";
-    message.pubKey = object.pubKey !== undefined && object.pubKey !== null ? Any.fromPartial(object.pubKey) : undefined;
+    message.pubKey = object.pubKey !== undefined && object.pubKey !== null ? Any.fromPartialAsAny(object.pubKey) : undefined;
     message.votingPower = object.votingPower !== undefined && object.votingPower !== null ? BigInt(object.votingPower.toString()) : BigInt(0);
     message.proposerPriority = object.proposerPriority !== undefined && object.proposerPriority !== null ? BigInt(object.proposerPriority.toString()) : BigInt(0);
     return message;
@@ -1102,8 +1102,8 @@ export const Validator = {
     const obj: any = {};
     obj.address = message.address === "" ? undefined : message.address;
     obj.pub_key = message.pubKey ? Any.toAmino(message.pubKey, useInterfaces) : undefined;
-    obj.voting_power = message.votingPower !== BigInt(0) ? message.votingPower.toString() : undefined;
-    obj.proposer_priority = message.proposerPriority !== BigInt(0) ? message.proposerPriority.toString() : undefined;
+    obj.voting_power = message.votingPower ? message.votingPower.toString() : undefined;
+    obj.proposer_priority = message.proposerPriority ? message.proposerPriority.toString() : undefined;
     return obj;
   },
   fromAminoMsg(object: ValidatorAminoMsg): Validator {
@@ -1194,7 +1194,7 @@ export const GetBlockByHeightRequest = {
   },
   toAmino(message: GetBlockByHeightRequest, useInterfaces: boolean = true): GetBlockByHeightRequestAmino {
     const obj: any = {};
-    obj.height = message.height !== BigInt(0) ? message.height.toString() : undefined;
+    obj.height = message.height ? message.height.toString() : undefined;
     return obj;
   },
   fromAminoMsg(object: GetBlockByHeightRequestAminoMsg): GetBlockByHeightRequest {
@@ -2299,7 +2299,7 @@ export const ABCIQueryRequest = {
     const obj: any = {};
     obj.data = message.data ? base64FromBytes(message.data) : undefined;
     obj.path = message.path === "" ? undefined : message.path;
-    obj.height = message.height !== BigInt(0) ? message.height.toString() : undefined;
+    obj.height = message.height ? message.height.toString() : undefined;
     obj.prove = message.prove === false ? undefined : message.prove;
     return obj;
   },
@@ -2498,11 +2498,11 @@ export const ABCIQueryResponse = {
     obj.code = message.code === 0 ? undefined : message.code;
     obj.log = message.log === "" ? undefined : message.log;
     obj.info = message.info === "" ? undefined : message.info;
-    obj.index = message.index !== BigInt(0) ? message.index.toString() : undefined;
+    obj.index = message.index ? message.index.toString() : undefined;
     obj.key = message.key ? base64FromBytes(message.key) : undefined;
     obj.value = message.value ? base64FromBytes(message.value) : undefined;
     obj.proof_ops = message.proofOps ? ProofOps.toAmino(message.proofOps, useInterfaces) : undefined;
-    obj.height = message.height !== BigInt(0) ? message.height.toString() : undefined;
+    obj.height = message.height ? message.height.toString() : undefined;
     obj.codespace = message.codespace === "" ? undefined : message.codespace;
     return obj;
   },

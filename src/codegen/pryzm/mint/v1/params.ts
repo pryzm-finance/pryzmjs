@@ -1,6 +1,6 @@
 import { BinaryReader, BinaryWriter } from "../../../binary";
 import { Decimal } from "@cosmjs/math";
-import { isSet } from "../../../helpers";
+import { isSet, padDecimal } from "../../../helpers";
 import { GlobalDecoderRegistry } from "../../../registry";
 export interface DistributionProportions {
   /**
@@ -307,13 +307,13 @@ export const DistributionProportions = {
   },
   toAmino(message: DistributionProportions, useInterfaces: boolean = true): DistributionProportionsAmino {
     const obj: any = {};
-    obj.staking = message.staking === "" ? undefined : message.staking;
-    obj.pool_incentives = message.poolIncentives === "" ? undefined : message.poolIncentives;
-    obj.operations_and_development = message.operationsAndDevelopment === "" ? undefined : message.operationsAndDevelopment;
-    obj.dapp = message.dapp === "" ? undefined : message.dapp;
-    obj.oracle = message.oracle === "" ? undefined : message.oracle;
-    obj.treasury = message.treasury === "" ? undefined : message.treasury;
-    obj.community = message.community === "" ? undefined : message.community;
+    obj.staking = padDecimal(message.staking) === "" ? undefined : padDecimal(message.staking);
+    obj.pool_incentives = padDecimal(message.poolIncentives) === "" ? undefined : padDecimal(message.poolIncentives);
+    obj.operations_and_development = padDecimal(message.operationsAndDevelopment) === "" ? undefined : padDecimal(message.operationsAndDevelopment);
+    obj.dapp = padDecimal(message.dapp) === "" ? undefined : padDecimal(message.dapp);
+    obj.oracle = padDecimal(message.oracle) === "" ? undefined : padDecimal(message.oracle);
+    obj.treasury = padDecimal(message.treasury) === "" ? undefined : padDecimal(message.treasury);
+    obj.community = padDecimal(message.community) === "" ? undefined : padDecimal(message.community);
     return obj;
   },
   fromAminoMsg(object: DistributionProportionsAminoMsg): DistributionProportions {
@@ -514,14 +514,14 @@ export const Params = {
   toAmino(message: Params, useInterfaces: boolean = true): ParamsAmino {
     const obj: any = {};
     obj.mint_denom = message.mintDenom === "" ? undefined : message.mintDenom;
-    obj.inflation_rate_change = message.inflationRateChange === "" ? undefined : message.inflationRateChange;
-    obj.inflation_max = message.inflationMax === "" ? undefined : message.inflationMax;
-    obj.inflation_min = message.inflationMin === "" ? undefined : message.inflationMin;
-    obj.goal_bonded = message.goalBonded === "" ? undefined : message.goalBonded;
+    obj.inflation_rate_change = padDecimal(message.inflationRateChange) === "" ? undefined : padDecimal(message.inflationRateChange);
+    obj.inflation_max = padDecimal(message.inflationMax) === "" ? undefined : padDecimal(message.inflationMax);
+    obj.inflation_min = padDecimal(message.inflationMin) === "" ? undefined : padDecimal(message.inflationMin);
+    obj.goal_bonded = padDecimal(message.goalBonded) === "" ? undefined : padDecimal(message.goalBonded);
     obj.epoch_identifier = message.epochIdentifier === "" ? undefined : message.epochIdentifier;
-    obj.minting_rewards_distribution_start_epoch = message.mintingRewardsDistributionStartEpoch ? message.mintingRewardsDistributionStartEpoch.toString() : "0";
+    obj.minting_rewards_distribution_start_epoch = message.mintingRewardsDistributionStartEpoch ? message.mintingRewardsDistributionStartEpoch.toString() : undefined;
     obj.distribution_proportions = message.distributionProportions ? DistributionProportions.toAmino(message.distributionProportions, useInterfaces) : undefined;
-    obj.genesis_epoch_provisions = message.genesisEpochProvisions === "" ? undefined : message.genesisEpochProvisions;
+    obj.genesis_epoch_provisions = padDecimal(message.genesisEpochProvisions) === "" ? undefined : padDecimal(message.genesisEpochProvisions);
     obj.operations_and_development_account_address = message.operationsAndDevelopmentAccountAddress === "" ? undefined : message.operationsAndDevelopmentAccountAddress;
     return obj;
   },

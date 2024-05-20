@@ -138,7 +138,7 @@ export interface ABCIMessageLogProtoMsg {
 }
 /** ABCIMessageLog defines a structure containing an indexed tx ABCI message log. */
 export interface ABCIMessageLogAmino {
-  msg_index: number;
+  msg_index?: number;
   log?: string;
   /**
    * Events contains a slice of Event objects that were emitted during some
@@ -608,7 +608,7 @@ export const TxResponse = {
       info: isSet(object.info) ? String(object.info) : "",
       gasWanted: isSet(object.gasWanted) ? BigInt(object.gasWanted.toString()) : BigInt(0),
       gasUsed: isSet(object.gasUsed) ? BigInt(object.gasUsed.toString()) : BigInt(0),
-      tx: isSet(object.tx) ? Any.fromJSON(object.tx) : undefined,
+      tx: isSet(object.tx) ? Any.fromJSONAsAny(object.tx) : undefined,
       timestamp: isSet(object.timestamp) ? String(object.timestamp) : "",
       events: Array.isArray(object?.events) ? object.events.map((e: any) => Event.fromJSON(e)) : []
     };
@@ -650,7 +650,7 @@ export const TxResponse = {
     message.info = object.info ?? "";
     message.gasWanted = object.gasWanted !== undefined && object.gasWanted !== null ? BigInt(object.gasWanted.toString()) : BigInt(0);
     message.gasUsed = object.gasUsed !== undefined && object.gasUsed !== null ? BigInt(object.gasUsed.toString()) : BigInt(0);
-    message.tx = object.tx !== undefined && object.tx !== null ? Any.fromPartial(object.tx) : undefined;
+    message.tx = object.tx !== undefined && object.tx !== null ? Any.fromPartialAsAny(object.tx) : undefined;
     message.timestamp = object.timestamp ?? "";
     message.events = object.events?.map(e => Event.fromPartial(e)) || [];
     return message;
@@ -696,7 +696,7 @@ export const TxResponse = {
   },
   toAmino(message: TxResponse, useInterfaces: boolean = true): TxResponseAmino {
     const obj: any = {};
-    obj.height = message.height !== BigInt(0) ? message.height.toString() : undefined;
+    obj.height = message.height ? message.height.toString() : undefined;
     obj.txhash = message.txhash === "" ? undefined : message.txhash;
     obj.codespace = message.codespace === "" ? undefined : message.codespace;
     obj.code = message.code === 0 ? undefined : message.code;
@@ -708,8 +708,8 @@ export const TxResponse = {
       obj.logs = message.logs;
     }
     obj.info = message.info === "" ? undefined : message.info;
-    obj.gas_wanted = message.gasWanted !== BigInt(0) ? message.gasWanted.toString() : undefined;
-    obj.gas_used = message.gasUsed !== BigInt(0) ? message.gasUsed.toString() : undefined;
+    obj.gas_wanted = message.gasWanted ? message.gasWanted.toString() : undefined;
+    obj.gas_used = message.gasUsed ? message.gasUsed.toString() : undefined;
     obj.tx = message.tx ? Any.toAmino(message.tx, useInterfaces) : undefined;
     obj.timestamp = message.timestamp === "" ? undefined : message.timestamp;
     if (message.events) {
@@ -1161,8 +1161,8 @@ export const GasInfo = {
   },
   toAmino(message: GasInfo, useInterfaces: boolean = true): GasInfoAmino {
     const obj: any = {};
-    obj.gas_wanted = message.gasWanted !== BigInt(0) ? message.gasWanted.toString() : undefined;
-    obj.gas_used = message.gasUsed !== BigInt(0) ? message.gasUsed.toString() : undefined;
+    obj.gas_wanted = message.gasWanted ? message.gasWanted.toString() : undefined;
+    obj.gas_used = message.gasUsed ? message.gasUsed.toString() : undefined;
     return obj;
   },
   fromAminoMsg(object: GasInfoAminoMsg): GasInfo {
@@ -1255,7 +1255,7 @@ export const Result = {
       data: isSet(object.data) ? bytesFromBase64(object.data) : new Uint8Array(),
       log: isSet(object.log) ? String(object.log) : "",
       events: Array.isArray(object?.events) ? object.events.map((e: any) => Event.fromJSON(e)) : [],
-      msgResponses: Array.isArray(object?.msgResponses) ? object.msgResponses.map((e: any) => Any.fromJSON(e)) : []
+      msgResponses: Array.isArray(object?.msgResponses) ? object.msgResponses.map((e: any) => Any.fromJSONAsAny(e)) : []
     };
   },
   toJSON(message: Result): unknown {
@@ -1279,7 +1279,7 @@ export const Result = {
     message.data = object.data ?? new Uint8Array();
     message.log = object.log ?? "";
     message.events = object.events?.map(e => Event.fromPartial(e)) || [];
-    message.msgResponses = object.msgResponses?.map(e => Any.fromPartial(e)) || [];
+    message.msgResponses = object.msgResponses?.map(e => Any.fromPartialAsAny(e)) || [];
     return message;
   },
   fromAmino(object: ResultAmino): Result {
@@ -1594,7 +1594,7 @@ export const TxMsgData = {
   fromJSON(object: any): TxMsgData {
     return {
       data: Array.isArray(object?.data) ? object.data.map((e: any) => MsgData.fromJSON(e)) : [],
-      msgResponses: Array.isArray(object?.msgResponses) ? object.msgResponses.map((e: any) => Any.fromJSON(e)) : []
+      msgResponses: Array.isArray(object?.msgResponses) ? object.msgResponses.map((e: any) => Any.fromJSONAsAny(e)) : []
     };
   },
   toJSON(message: TxMsgData): unknown {
@@ -1614,7 +1614,7 @@ export const TxMsgData = {
   fromPartial(object: Partial<TxMsgData>): TxMsgData {
     const message = createBaseTxMsgData();
     message.data = object.data?.map(e => MsgData.fromPartial(e)) || [];
-    message.msgResponses = object.msgResponses?.map(e => Any.fromPartial(e)) || [];
+    message.msgResponses = object.msgResponses?.map(e => Any.fromPartialAsAny(e)) || [];
     return message;
   },
   fromAmino(object: TxMsgDataAmino): TxMsgData {
@@ -1792,11 +1792,11 @@ export const SearchTxsResult = {
   },
   toAmino(message: SearchTxsResult, useInterfaces: boolean = true): SearchTxsResultAmino {
     const obj: any = {};
-    obj.total_count = message.totalCount !== BigInt(0) ? message.totalCount.toString() : undefined;
-    obj.count = message.count !== BigInt(0) ? message.count.toString() : undefined;
-    obj.page_number = message.pageNumber !== BigInt(0) ? message.pageNumber.toString() : undefined;
-    obj.page_total = message.pageTotal !== BigInt(0) ? message.pageTotal.toString() : undefined;
-    obj.limit = message.limit !== BigInt(0) ? message.limit.toString() : undefined;
+    obj.total_count = message.totalCount ? message.totalCount.toString() : undefined;
+    obj.count = message.count ? message.count.toString() : undefined;
+    obj.page_number = message.pageNumber ? message.pageNumber.toString() : undefined;
+    obj.page_total = message.pageTotal ? message.pageTotal.toString() : undefined;
+    obj.limit = message.limit ? message.limit.toString() : undefined;
     if (message.txs) {
       obj.txs = message.txs.map(e => e ? TxResponse.toAmino(e, useInterfaces) : undefined);
     } else {

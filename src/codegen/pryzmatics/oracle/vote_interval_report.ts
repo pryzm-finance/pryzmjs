@@ -346,7 +346,7 @@ export const ValidatorVoteIntervalReport = {
     obj.validator = message.validator === "" ? undefined : message.validator;
     obj.pre_voted = message.preVoted === false ? undefined : message.preVoted;
     obj.voted = message.voted === false ? undefined : message.voted;
-    obj.miss_counter = message.missCounter !== BigInt(0) ? message.missCounter.toString() : undefined;
+    obj.miss_counter = message.missCounter ? message.missCounter.toString() : undefined;
     if (message.rewards) {
       obj.rewards = message.rewards.map(e => e ? Coin.toAmino(e, useInterfaces) : undefined);
     } else {

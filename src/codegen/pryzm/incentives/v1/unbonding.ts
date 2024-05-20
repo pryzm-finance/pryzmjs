@@ -163,7 +163,7 @@ export const Unbonding = {
   },
   toAmino(message: Unbonding, useInterfaces: boolean = true): UnbondingAmino {
     const obj: any = {};
-    obj.id = message.id !== BigInt(0) ? message.id.toString() : undefined;
+    obj.id = message.id ? message.id.toString() : undefined;
     obj.completion_time = message.completionTime ? Timestamp.toAmino(message.completionTime, useInterfaces) : undefined;
     obj.address = message.address === "" ? undefined : message.address;
     obj.treasury_address = message.treasuryAddress === "" ? undefined : message.treasuryAddress;

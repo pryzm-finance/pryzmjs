@@ -283,7 +283,7 @@ export const MsgRegisterAsset = {
   toAmino(message: MsgRegisterAsset, useInterfaces: boolean = true): MsgRegisterAssetAmino {
     const obj: any = {};
     obj.creator = message.creator === "" ? undefined : message.creator;
-    obj.asset = message.asset ? RefractableAsset.toAmino(message.asset, useInterfaces) : RefractableAsset.toAmino(RefractableAsset.fromPartial({}));
+    obj.asset = message.asset ? RefractableAsset.toAmino(message.asset, useInterfaces) : undefined;
     return obj;
   },
   fromAminoMsg(object: MsgRegisterAssetAminoMsg): MsgRegisterAsset {
@@ -641,7 +641,7 @@ export const MsgUpdateMaturityParams = {
     const obj: any = {};
     obj.authority = message.authority === "" ? undefined : message.authority;
     obj.asset_id = message.assetId === "" ? undefined : message.assetId;
-    obj.params = message.params ? MaturityParams.toAmino(message.params, useInterfaces) : MaturityParams.toAmino(MaturityParams.fromPartial({}));
+    obj.params = message.params ? MaturityParams.toAmino(message.params, useInterfaces) : undefined;
     return obj;
   },
   fromAminoMsg(object: MsgUpdateMaturityParamsAminoMsg): MsgUpdateMaturityParams {
@@ -827,7 +827,7 @@ export const MsgUpdateFeeRatios = {
     const obj: any = {};
     obj.authority = message.authority === "" ? undefined : message.authority;
     obj.asset_id = message.assetId === "" ? undefined : message.assetId;
-    obj.fee_ratios = message.feeRatios ? FeeRatios.toAmino(message.feeRatios, useInterfaces) : FeeRatios.toAmino(FeeRatios.fromPartial({}));
+    obj.fee_ratios = message.feeRatios ? FeeRatios.toAmino(message.feeRatios, useInterfaces) : undefined;
     return obj;
   },
   fromAminoMsg(object: MsgUpdateFeeRatiosAminoMsg): MsgUpdateFeeRatios {
@@ -999,7 +999,7 @@ export const MsgUpdateParams = {
   toAmino(message: MsgUpdateParams, useInterfaces: boolean = true): MsgUpdateParamsAmino {
     const obj: any = {};
     obj.authority = message.authority === "" ? undefined : message.authority;
-    obj.params = message.params ? Params.toAmino(message.params, useInterfaces) : Params.toAmino(Params.fromPartial({}));
+    obj.params = message.params ? Params.toAmino(message.params, useInterfaces) : undefined;
     return obj;
   },
   fromAminoMsg(object: MsgUpdateParamsAminoMsg): MsgUpdateParams {

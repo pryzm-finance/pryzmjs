@@ -720,7 +720,7 @@ export const BallotVoteResult = {
     obj.namespace = message.namespace === "" ? undefined : message.namespace;
     obj.module = message.module === "" ? undefined : message.module;
     obj.quorum_reached = message.quorumReached === false ? undefined : message.quorumReached;
-    obj.ballot_power = message.ballotPower !== BigInt(0) ? message.ballotPower.toString() : undefined;
+    obj.ballot_power = message.ballotPower ? message.ballotPower.toString() : undefined;
     obj.majority_achieved = message.majorityAchieved === false ? undefined : message.majorityAchieved;
     obj.majority_vote_type = message.majorityVoteType === 0 ? undefined : message.majorityVoteType;
     obj.majority_vote_payload = message.majorityVotePayload === "" ? undefined : message.majorityVotePayload;
@@ -875,10 +875,10 @@ export const ValidatorVoteIntervalSummary = {
   toAmino(message: ValidatorVoteIntervalSummary, useInterfaces: boolean = true): ValidatorVoteIntervalSummaryAmino {
     const obj: any = {};
     obj.validator = message.validator === "" ? undefined : message.validator;
-    obj.validator_power = message.validatorPower !== BigInt(0) ? message.validatorPower.toString() : undefined;
+    obj.validator_power = message.validatorPower ? message.validatorPower.toString() : undefined;
     obj.voted = message.voted === false ? undefined : message.voted;
-    obj.vote_interval_miss_counter = message.voteIntervalMissCounter !== BigInt(0) ? message.voteIntervalMissCounter.toString() : undefined;
-    obj.slash_window_miss_counter = message.slashWindowMissCounter !== BigInt(0) ? message.slashWindowMissCounter.toString() : undefined;
+    obj.vote_interval_miss_counter = message.voteIntervalMissCounter ? message.voteIntervalMissCounter.toString() : undefined;
+    obj.slash_window_miss_counter = message.slashWindowMissCounter ? message.slashWindowMissCounter.toString() : undefined;
     if (message.rewards) {
       obj.rewards = message.rewards.map(e => e ? Coin.toAmino(e, useInterfaces) : undefined);
     } else {
@@ -1035,15 +1035,15 @@ export const EventVoteIntervalEnds = {
   },
   toAmino(message: EventVoteIntervalEnds, useInterfaces: boolean = true): EventVoteIntervalEndsAmino {
     const obj: any = {};
-    obj.time_millis = message.timeMillis !== BigInt(0) ? message.timeMillis.toString() : undefined;
-    obj.block_height = message.blockHeight !== BigInt(0) ? message.blockHeight.toString() : undefined;
-    obj.vote_period = message.votePeriod !== BigInt(0) ? message.votePeriod.toString() : undefined;
+    obj.time_millis = message.timeMillis ? message.timeMillis.toString() : undefined;
+    obj.block_height = message.blockHeight ? message.blockHeight.toString() : undefined;
+    obj.vote_period = message.votePeriod ? message.votePeriod.toString() : undefined;
     if (message.validatorSummaries) {
       obj.validator_summaries = message.validatorSummaries.map(e => e ? ValidatorVoteIntervalSummary.toAmino(e, useInterfaces) : undefined);
     } else {
       obj.validator_summaries = message.validatorSummaries;
     }
-    obj.previous_vote_interval_end_time_millis = message.previousVoteIntervalEndTimeMillis !== BigInt(0) ? message.previousVoteIntervalEndTimeMillis.toString() : undefined;
+    obj.previous_vote_interval_end_time_millis = message.previousVoteIntervalEndTimeMillis ? message.previousVoteIntervalEndTimeMillis.toString() : undefined;
     if (message.ballotVoteResults) {
       obj.ballot_vote_results = message.ballotVoteResults.map(e => e ? BallotVoteResult.toAmino(e, useInterfaces) : undefined);
     } else {
@@ -1184,8 +1184,8 @@ export const ValidatorSlashWindowSummary = {
   toAmino(message: ValidatorSlashWindowSummary, useInterfaces: boolean = true): ValidatorSlashWindowSummaryAmino {
     const obj: any = {};
     obj.validator = message.validator === "" ? undefined : message.validator;
-    obj.validator_power = message.validatorPower !== BigInt(0) ? message.validatorPower.toString() : undefined;
-    obj.miss_counter = message.missCounter !== BigInt(0) ? message.missCounter.toString() : undefined;
+    obj.validator_power = message.validatorPower ? message.validatorPower.toString() : undefined;
+    obj.miss_counter = message.missCounter ? message.missCounter.toString() : undefined;
     obj.jailed = message.jailed === false ? undefined : message.jailed;
     obj.slash_amount = message.slashAmount === "" ? undefined : message.slashAmount;
     return obj;
@@ -1285,7 +1285,7 @@ export const EventSlashWindowEnds = {
   },
   toAmino(message: EventSlashWindowEnds, useInterfaces: boolean = true): EventSlashWindowEndsAmino {
     const obj: any = {};
-    obj.slash_window = message.slashWindow !== BigInt(0) ? message.slashWindow.toString() : undefined;
+    obj.slash_window = message.slashWindow ? message.slashWindow.toString() : undefined;
     if (message.validatorSummaries) {
       obj.validator_summaries = message.validatorSummaries.map(e => e ? ValidatorSlashWindowSummary.toAmino(e, useInterfaces) : undefined);
     } else {

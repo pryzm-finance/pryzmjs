@@ -261,8 +261,8 @@ export const GenesisState = {
   },
   toAmino(message: GenesisState, useInterfaces: boolean = true): GenesisStateAmino {
     const obj: any = {};
-    obj.params = message.params ? Params.toAmino(message.params, useInterfaces) : Params.toAmino(Params.fromPartial({}));
-    obj.last_total_power = message.lastTotalPower ? base64FromBytes(message.lastTotalPower) : "";
+    obj.params = message.params ? Params.toAmino(message.params, useInterfaces) : undefined;
+    obj.last_total_power = message.lastTotalPower ? base64FromBytes(message.lastTotalPower) : undefined;
     if (message.lastValidatorPowers) {
       obj.last_validator_powers = message.lastValidatorPowers.map(e => e ? LastValidatorPower.toAmino(e, useInterfaces) : undefined);
     } else {
@@ -393,7 +393,7 @@ export const LastValidatorPower = {
   toAmino(message: LastValidatorPower, useInterfaces: boolean = true): LastValidatorPowerAmino {
     const obj: any = {};
     obj.address = message.address === "" ? undefined : message.address;
-    obj.power = message.power !== BigInt(0) ? message.power.toString() : undefined;
+    obj.power = message.power ? message.power.toString() : undefined;
     return obj;
   },
   fromAminoMsg(object: LastValidatorPowerAminoMsg): LastValidatorPower {

@@ -202,7 +202,7 @@ export const GenesisState = {
   },
   toAmino(message: GenesisState, useInterfaces: boolean = true): GenesisStateAmino {
     const obj: any = {};
-    obj.starting_proposal_id = message.startingProposalId !== BigInt(0) ? message.startingProposalId.toString() : undefined;
+    obj.starting_proposal_id = message.startingProposalId ? message.startingProposalId.toString() : undefined;
     if (message.deposits) {
       obj.deposits = message.deposits.map(e => e ? Deposit.toAmino(e, useInterfaces) : undefined);
     } else {
@@ -218,9 +218,9 @@ export const GenesisState = {
     } else {
       obj.proposals = message.proposals;
     }
-    obj.deposit_params = message.depositParams ? DepositParams.toAmino(message.depositParams, useInterfaces) : DepositParams.toAmino(DepositParams.fromPartial({}));
-    obj.voting_params = message.votingParams ? VotingParams.toAmino(message.votingParams, useInterfaces) : VotingParams.toAmino(VotingParams.fromPartial({}));
-    obj.tally_params = message.tallyParams ? TallyParams.toAmino(message.tallyParams, useInterfaces) : TallyParams.toAmino(TallyParams.fromPartial({}));
+    obj.deposit_params = message.depositParams ? DepositParams.toAmino(message.depositParams, useInterfaces) : undefined;
+    obj.voting_params = message.votingParams ? VotingParams.toAmino(message.votingParams, useInterfaces) : undefined;
+    obj.tally_params = message.tallyParams ? TallyParams.toAmino(message.tallyParams, useInterfaces) : undefined;
     return obj;
   },
   fromAminoMsg(object: GenesisStateAminoMsg): GenesisState {

@@ -385,9 +385,9 @@ export const OraclePricePair = {
     const obj: any = {};
     obj.asset_id = message.assetId === "" ? undefined : message.assetId;
     obj.quote_token = message.quoteToken === "" ? undefined : message.quoteToken;
-    obj.twap_duration_millis = message.twapDurationMillis ? message.twapDurationMillis.toString() : "0";
-    obj.twap_algorithm = message.twapAlgorithm ?? 0;
-    obj.disabled = message.disabled ?? false;
+    obj.twap_duration_millis = message.twapDurationMillis ? message.twapDurationMillis.toString() : undefined;
+    obj.twap_algorithm = message.twapAlgorithm === 0 ? undefined : message.twapAlgorithm;
+    obj.disabled = message.disabled === false ? undefined : message.disabled;
     if (message.pairs) {
       obj.pairs = message.pairs.map(e => e ? Pair.toAmino(e, useInterfaces) : undefined);
     } else {

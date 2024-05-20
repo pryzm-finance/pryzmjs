@@ -162,10 +162,10 @@ export const PreVote = {
   },
   toAmino(message: PreVote, useInterfaces: boolean = true): PreVoteAmino {
     const obj: any = {};
-    obj.id = message.id !== BigInt(0) ? message.id.toString() : undefined;
+    obj.id = message.id ? message.id.toString() : undefined;
     obj.feeder = message.feeder === "" ? undefined : message.feeder;
     obj.validator = message.validator === "" ? undefined : message.validator;
-    obj.block_height = message.blockHeight !== BigInt(0) ? message.blockHeight.toString() : undefined;
+    obj.block_height = message.blockHeight ? message.blockHeight.toString() : undefined;
     obj.block_time = message.blockTime ? Timestamp.toAmino(message.blockTime, useInterfaces) : undefined;
     obj.vote_interval_close_block_height = message.voteIntervalCloseBlockHeight === null ? undefined : message.voteIntervalCloseBlockHeight;
     return obj;

@@ -1,6 +1,6 @@
 import { BinaryReader, BinaryWriter } from "../../../binary";
 import { Decimal } from "@cosmjs/math";
-import { isSet } from "../../../helpers";
+import { isSet, padDecimal } from "../../../helpers";
 import { GlobalDecoderRegistry } from "../../../registry";
 export interface OrderParameters {
   stepMatchingFeeRatio: string;
@@ -394,17 +394,17 @@ export const OrderParameters = {
   },
   toAmino(message: OrderParameters, useInterfaces: boolean = true): OrderParametersAmino {
     const obj: any = {};
-    obj.step_matching_fee_ratio = message.stepMatchingFeeRatio === "" ? undefined : message.stepMatchingFeeRatio;
-    obj.step_swap_fee_ratio = message.stepSwapFeeRatio === "" ? undefined : message.stepSwapFeeRatio;
-    obj.matching_protocol_fee_ratio = message.matchingProtocolFeeRatio === "" ? undefined : message.matchingProtocolFeeRatio;
-    obj.matching_solver_fee_ratio = message.matchingSolverFeeRatio === "" ? undefined : message.matchingSolverFeeRatio;
-    obj.max_orders_per_block = message.maxOrdersPerBlock ?? 0;
-    obj.max_schedule_per_block = message.maxSchedulePerBlock ?? 0;
-    obj.max_exec_order_trade_ratio = message.maxExecOrderTradeRatio === "" ? undefined : message.maxExecOrderTradeRatio;
-    obj.max_order_step_ratio = message.maxOrderStepRatio === "" ? undefined : message.maxOrderStepRatio;
-    obj.min_order_step_ratio = message.minOrderStepRatio === "" ? undefined : message.minOrderStepRatio;
-    obj.min_order_step_millis_interval = message.minOrderStepMillisInterval !== BigInt(0) ? message.minOrderStepMillisInterval.toString() : undefined;
-    obj.max_order_step_millis_interval = message.maxOrderStepMillisInterval !== BigInt(0) ? message.maxOrderStepMillisInterval.toString() : undefined;
+    obj.step_matching_fee_ratio = padDecimal(message.stepMatchingFeeRatio) === "" ? undefined : padDecimal(message.stepMatchingFeeRatio);
+    obj.step_swap_fee_ratio = padDecimal(message.stepSwapFeeRatio) === "" ? undefined : padDecimal(message.stepSwapFeeRatio);
+    obj.matching_protocol_fee_ratio = padDecimal(message.matchingProtocolFeeRatio) === "" ? undefined : padDecimal(message.matchingProtocolFeeRatio);
+    obj.matching_solver_fee_ratio = padDecimal(message.matchingSolverFeeRatio) === "" ? undefined : padDecimal(message.matchingSolverFeeRatio);
+    obj.max_orders_per_block = message.maxOrdersPerBlock === 0 ? undefined : message.maxOrdersPerBlock;
+    obj.max_schedule_per_block = message.maxSchedulePerBlock === 0 ? undefined : message.maxSchedulePerBlock;
+    obj.max_exec_order_trade_ratio = padDecimal(message.maxExecOrderTradeRatio) === "" ? undefined : padDecimal(message.maxExecOrderTradeRatio);
+    obj.max_order_step_ratio = padDecimal(message.maxOrderStepRatio) === "" ? undefined : padDecimal(message.maxOrderStepRatio);
+    obj.min_order_step_ratio = padDecimal(message.minOrderStepRatio) === "" ? undefined : padDecimal(message.minOrderStepRatio);
+    obj.min_order_step_millis_interval = message.minOrderStepMillisInterval ? message.minOrderStepMillisInterval.toString() : undefined;
+    obj.max_order_step_millis_interval = message.maxOrderStepMillisInterval ? message.maxOrderStepMillisInterval.toString() : undefined;
     return obj;
   },
   fromAminoMsg(object: OrderParametersAminoMsg): OrderParameters {
@@ -649,21 +649,21 @@ export const YammParameters = {
   },
   toAmino(message: YammParameters, useInterfaces: boolean = true): YammParametersAmino {
     const obj: any = {};
-    obj.lambda = message.lambda === "" ? undefined : message.lambda;
-    obj.maturity_introduction_interval_millis = message.maturityIntroductionIntervalMillis ? message.maturityIntroductionIntervalMillis.toString() : "0";
-    obj.maturity_expiration_interval_millis = message.maturityExpirationIntervalMillis ? message.maturityExpirationIntervalMillis.toString() : "0";
-    obj.introduction_virtual_balance_scaler = message.introductionVirtualBalanceScaler === "" ? undefined : message.introductionVirtualBalanceScaler;
-    obj.expiration_virtual_balance_scaler = message.expirationVirtualBalanceScaler === "" ? undefined : message.expirationVirtualBalanceScaler;
-    obj.buy_y_given_in_loan_fee_ratio = message.buyYGivenInLoanFeeRatio === "" ? undefined : message.buyYGivenInLoanFeeRatio;
-    obj.sell_y_given_out_fee_ratio = message.sellYGivenOutFeeRatio === "" ? undefined : message.sellYGivenOutFeeRatio;
-    obj.max_alpha = message.maxAlpha === "" ? undefined : message.maxAlpha;
+    obj.lambda = padDecimal(message.lambda) === "" ? undefined : padDecimal(message.lambda);
+    obj.maturity_introduction_interval_millis = message.maturityIntroductionIntervalMillis ? message.maturityIntroductionIntervalMillis.toString() : undefined;
+    obj.maturity_expiration_interval_millis = message.maturityExpirationIntervalMillis ? message.maturityExpirationIntervalMillis.toString() : undefined;
+    obj.introduction_virtual_balance_scaler = padDecimal(message.introductionVirtualBalanceScaler) === "" ? undefined : padDecimal(message.introductionVirtualBalanceScaler);
+    obj.expiration_virtual_balance_scaler = padDecimal(message.expirationVirtualBalanceScaler) === "" ? undefined : padDecimal(message.expirationVirtualBalanceScaler);
+    obj.buy_y_given_in_loan_fee_ratio = padDecimal(message.buyYGivenInLoanFeeRatio) === "" ? undefined : padDecimal(message.buyYGivenInLoanFeeRatio);
+    obj.sell_y_given_out_fee_ratio = padDecimal(message.sellYGivenOutFeeRatio) === "" ? undefined : padDecimal(message.sellYGivenOutFeeRatio);
+    obj.max_alpha = padDecimal(message.maxAlpha) === "" ? undefined : padDecimal(message.maxAlpha);
     if (message.defaultInitializationAllowList) {
       obj.default_initialization_allow_list = message.defaultInitializationAllowList.map(e => e);
     } else {
       obj.default_initialization_allow_list = message.defaultInitializationAllowList;
     }
-    obj.avg_monthly_yield_rate = message.avgMonthlyYieldRate === "" ? undefined : message.avgMonthlyYieldRate;
-    obj.yield_fee_scaler = message.yieldFeeScaler === "" ? undefined : message.yieldFeeScaler;
+    obj.avg_monthly_yield_rate = padDecimal(message.avgMonthlyYieldRate) === "" ? undefined : padDecimal(message.avgMonthlyYieldRate);
+    obj.yield_fee_scaler = padDecimal(message.yieldFeeScaler) === "" ? undefined : padDecimal(message.yieldFeeScaler);
     if (message.defaultAdmins) {
       obj.default_admins = message.defaultAdmins.map(e => e);
     } else {
@@ -795,10 +795,10 @@ export const GeneralPoolParameters = {
   },
   toAmino(message: GeneralPoolParameters, useInterfaces: boolean = true): GeneralPoolParametersAmino {
     const obj: any = {};
-    obj.allow_public_pool_creation = message.allowPublicPoolCreation ?? false;
-    obj.default_swap_fee_ratio = message.defaultSwapFeeRatio === "" ? undefined : message.defaultSwapFeeRatio;
-    obj.swap_protocol_fee_ratio = message.swapProtocolFeeRatio === "" ? undefined : message.swapProtocolFeeRatio;
-    obj.join_exit_protocol_fee_ratio = message.joinExitProtocolFeeRatio === "" ? undefined : message.joinExitProtocolFeeRatio;
+    obj.allow_public_pool_creation = message.allowPublicPoolCreation === false ? undefined : message.allowPublicPoolCreation;
+    obj.default_swap_fee_ratio = padDecimal(message.defaultSwapFeeRatio) === "" ? undefined : padDecimal(message.defaultSwapFeeRatio);
+    obj.swap_protocol_fee_ratio = padDecimal(message.swapProtocolFeeRatio) === "" ? undefined : padDecimal(message.swapProtocolFeeRatio);
+    obj.join_exit_protocol_fee_ratio = padDecimal(message.joinExitProtocolFeeRatio) === "" ? undefined : padDecimal(message.joinExitProtocolFeeRatio);
     return obj;
   },
   fromAminoMsg(object: GeneralPoolParametersAminoMsg): GeneralPoolParameters {

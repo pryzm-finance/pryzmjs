@@ -152,7 +152,7 @@ export const QueryProposalVotesRequest = {
   },
   toAmino(message: QueryProposalVotesRequest, useInterfaces: boolean = true): QueryProposalVotesRequestAmino {
     const obj: any = {};
-    obj.proposal_id = message.proposalId !== BigInt(0) ? message.proposalId.toString() : undefined;
+    obj.proposal_id = message.proposalId ? message.proposalId.toString() : undefined;
     obj.voter = message.voter === "" ? undefined : message.voter;
     obj.order_by = message.orderBy ? ProposalVoteOrderBy.toAmino(message.orderBy, useInterfaces) : undefined;
     obj.pagination = message.pagination ? PageRequest.toAmino(message.pagination, useInterfaces) : undefined;

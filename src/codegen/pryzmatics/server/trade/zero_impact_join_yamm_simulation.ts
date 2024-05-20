@@ -1,6 +1,6 @@
 import { Coin, CoinAmino, CoinSDKType } from "../../../cosmos/base/v1beta1/coin";
 import { BinaryReader, BinaryWriter } from "../../../binary";
-import { isSet } from "../../../helpers";
+import { isSet, padDecimal } from "../../../helpers";
 import { GlobalDecoderRegistry } from "../../../registry";
 import { Decimal } from "@cosmjs/math";
 export interface QueryZeroImpactJoinYammSimulationRequest {
@@ -257,7 +257,7 @@ export const QueryZeroImpactJoinYammSimulationResponse = {
       obj.y_out = message.yOut;
     }
     obj.fee_amount = message.feeAmount ? Coin.toAmino(message.feeAmount, useInterfaces) : undefined;
-    obj.fee_percentage = message.feePercentage === "" ? undefined : message.feePercentage;
+    obj.fee_percentage = padDecimal(message.feePercentage) === "" ? undefined : padDecimal(message.feePercentage);
     return obj;
   },
   fromAminoMsg(object: QueryZeroImpactJoinYammSimulationResponseAminoMsg): QueryZeroImpactJoinYammSimulationResponse {

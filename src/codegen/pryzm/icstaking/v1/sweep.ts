@@ -187,7 +187,7 @@ export const SweepTransfer = {
   },
   toAmino(message: SweepTransfer, useInterfaces: boolean = true): SweepTransferAmino {
     const obj: any = {};
-    obj.timeout = message.timeout !== BigInt(0) ? message.timeout.toString() : undefined;
+    obj.timeout = message.timeout ? message.timeout.toString() : undefined;
     obj.host_chain = message.hostChain === "" ? undefined : message.hostChain;
     obj.channel = message.channel === "" ? undefined : message.channel;
     obj.fee = message.fee === false ? undefined : message.fee;

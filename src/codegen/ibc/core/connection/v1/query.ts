@@ -1356,8 +1356,8 @@ export const QueryConnectionConsensusStateRequest = {
   toAmino(message: QueryConnectionConsensusStateRequest, useInterfaces: boolean = true): QueryConnectionConsensusStateRequestAmino {
     const obj: any = {};
     obj.connection_id = message.connectionId === "" ? undefined : message.connectionId;
-    obj.revision_number = message.revisionNumber !== BigInt(0) ? message.revisionNumber.toString() : undefined;
-    obj.revision_height = message.revisionHeight !== BigInt(0) ? message.revisionHeight.toString() : undefined;
+    obj.revision_number = message.revisionNumber ? message.revisionNumber.toString() : undefined;
+    obj.revision_height = message.revisionHeight ? message.revisionHeight.toString() : undefined;
     return obj;
   },
   fromAminoMsg(object: QueryConnectionConsensusStateRequestAminoMsg): QueryConnectionConsensusStateRequest {
@@ -1447,7 +1447,7 @@ export const QueryConnectionConsensusStateResponse = {
   },
   fromJSON(object: any): QueryConnectionConsensusStateResponse {
     return {
-      consensusState: isSet(object.consensusState) ? Any.fromJSON(object.consensusState) : undefined,
+      consensusState: isSet(object.consensusState) ? Any.fromJSONAsAny(object.consensusState) : undefined,
       clientId: isSet(object.clientId) ? String(object.clientId) : "",
       proof: isSet(object.proof) ? bytesFromBase64(object.proof) : new Uint8Array(),
       proofHeight: isSet(object.proofHeight) ? Height.fromJSON(object.proofHeight) : undefined
@@ -1463,7 +1463,7 @@ export const QueryConnectionConsensusStateResponse = {
   },
   fromPartial(object: Partial<QueryConnectionConsensusStateResponse>): QueryConnectionConsensusStateResponse {
     const message = createBaseQueryConnectionConsensusStateResponse();
-    message.consensusState = object.consensusState !== undefined && object.consensusState !== null ? Any.fromPartial(object.consensusState) : undefined;
+    message.consensusState = object.consensusState !== undefined && object.consensusState !== null ? Any.fromPartialAsAny(object.consensusState) : undefined;
     message.clientId = object.clientId ?? "";
     message.proof = object.proof ?? new Uint8Array();
     message.proofHeight = object.proofHeight !== undefined && object.proofHeight !== null ? Height.fromPartial(object.proofHeight) : undefined;

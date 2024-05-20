@@ -183,8 +183,8 @@ export const PairMatchProposal = {
   },
   toAmino(message: PairMatchProposal, useInterfaces: boolean = true): PairMatchProposalAmino {
     const obj: any = {};
-    obj.pool_id = message.poolId ? message.poolId.toString() : "0";
-    obj.whitelisted_route = message.whitelistedRoute ?? false;
+    obj.pool_id = message.poolId ? message.poolId.toString() : undefined;
+    obj.whitelisted_route = message.whitelistedRoute === false ? undefined : message.whitelistedRoute;
     obj.token_in = message.tokenIn === "" ? undefined : message.tokenIn;
     obj.token_out = message.tokenOut === "" ? undefined : message.tokenOut;
     if (message.buyOrders) {

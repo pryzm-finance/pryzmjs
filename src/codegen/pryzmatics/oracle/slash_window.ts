@@ -130,9 +130,9 @@ export const SlashWindow = {
   },
   toAmino(message: SlashWindow, useInterfaces: boolean = true): SlashWindowAmino {
     const obj: any = {};
-    obj.id = message.id !== BigInt(0) ? message.id.toString() : undefined;
-    obj.slash_window = message.slashWindow !== BigInt(0) ? message.slashWindow.toString() : undefined;
-    obj.close_block_height = message.closeBlockHeight !== BigInt(0) ? message.closeBlockHeight.toString() : undefined;
+    obj.id = message.id ? message.id.toString() : undefined;
+    obj.slash_window = message.slashWindow ? message.slashWindow.toString() : undefined;
+    obj.close_block_height = message.closeBlockHeight ? message.closeBlockHeight.toString() : undefined;
     obj.close_block_time = message.closeBlockTime ? Timestamp.toAmino(message.closeBlockTime, useInterfaces) : undefined;
     return obj;
   },

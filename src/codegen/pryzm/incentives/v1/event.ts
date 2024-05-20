@@ -738,7 +738,7 @@ export const EventRemoveUnbonding = {
   },
   toAmino(message: EventRemoveUnbonding, useInterfaces: boolean = true): EventRemoveUnbondingAmino {
     const obj: any = {};
-    obj.id = message.id !== BigInt(0) ? message.id.toString() : undefined;
+    obj.id = message.id ? message.id.toString() : undefined;
     return obj;
   },
   fromAminoMsg(object: EventRemoveUnbondingAminoMsg): EventRemoveUnbonding {
@@ -1208,7 +1208,7 @@ export const EventClaimUnbonding = {
   },
   toAmino(message: EventClaimUnbonding, useInterfaces: boolean = true): EventClaimUnbondingAmino {
     const obj: any = {};
-    obj.id = message.id !== BigInt(0) ? message.id.toString() : undefined;
+    obj.id = message.id ? message.id.toString() : undefined;
     return obj;
   },
   fromAminoMsg(object: EventClaimUnbondingAminoMsg): EventClaimUnbonding {
@@ -1304,7 +1304,7 @@ export const EventCancelUnbonding = {
   },
   toAmino(message: EventCancelUnbonding, useInterfaces: boolean = true): EventCancelUnbondingAmino {
     const obj: any = {};
-    obj.id = message.id !== BigInt(0) ? message.id.toString() : undefined;
+    obj.id = message.id ? message.id.toString() : undefined;
     obj.amount = message.amount ? Coin.toAmino(message.amount, useInterfaces) : undefined;
     return obj;
   },
