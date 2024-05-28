@@ -10,7 +10,7 @@ import { QueryPoolRequest, QueryPoolResponseSDKType, QueryPoolsRequest, QueryPoo
 import { QueryTokenRequest, QueryTokenResponseSDKType, QueryTokensRequest, QueryTokensResponseSDKType } from "./pool/token";
 import { QueryHistoricalTokenYieldRequest, QueryHistoricalTokenYieldResponseSDKType } from "./pool/historical_token_yield";
 import { QueryHistoricalPoolAprRequest, QueryHistoricalPoolAprResponseSDKType } from "./pool/historical_pool_apr";
-import { QueryPriceRequest, QueryPriceResponseSDKType } from "./price/price";
+import { QueryPriceRequest, QueryPriceResponseSDKType, QueryPricesRequest, QueryPricesResponseSDKType } from "./price/price";
 import { QueryHistoricalPriceRequest, QueryHistoricalPriceResponseSDKType } from "./price/historical_price";
 import { QuerySwappableTokensRequest, QuerySwappableTokensResponseSDKType } from "./price/swappable_tokens";
 import { QueryPriceBoundsRequest, QueryPriceBoundsResponseSDKType } from "./price/price_bounds";
@@ -65,6 +65,7 @@ export class LCDQueryClient {
     this.historicalTokenYield = this.historicalTokenYield.bind(this);
     this.historicalPoolApr = this.historicalPoolApr.bind(this);
     this.tokenPrice = this.tokenPrice.bind(this);
+    this.tokenPrices = this.tokenPrices.bind(this);
     this.historicalPrice = this.historicalPrice.bind(this);
     this.swappableTokens = this.swappableTokens.bind(this);
     this.priceBounds = this.priceBounds.bind(this);
@@ -247,6 +248,17 @@ export class LCDQueryClient {
     }
     const endpoint = `pryzmatics/price/${params.tokenIn}`;
     return await this.req.get<QueryPriceResponseSDKType>(endpoint, options);
+  }
+  /* TokenPrices */
+  async tokenPrices(params: QueryPricesRequest): Promise<QueryPricesResponseSDKType> {
+    const options: any = {
+      params: {}
+    };
+    if (typeof params?.pagination !== "undefined") {
+      setPaginationParams(options, params.pagination);
+    }
+    const endpoint = `pryzmatics/prices/${params.blockHeight}`;
+    return await this.req.get<QueryPricesResponseSDKType>(endpoint, options);
   }
   /* HistoricalPrice */
   async historicalPrice(params: QueryHistoricalPriceRequest): Promise<QueryHistoricalPriceResponseSDKType> {
