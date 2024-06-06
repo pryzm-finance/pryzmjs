@@ -24,8 +24,8 @@ import { QueryExitExactTokensSimulationRequest, QueryExitExactTokensSimulationRe
 import { QueryExitAllTokensExactLptSimulationRequest, QueryExitAllTokensExactLptSimulationResponseSDKType } from "./trade/exit_all_tokens_exact_lpt_simulation";
 import { QueryUserTradeHistoryRequest, QueryUserTradeHistoryResponseSDKType } from "./trade/user_trade_history";
 import { QueryTokenTradeVolumeRequest, QueryTokenTradeVolumeResponseSDKType, QueryPoolTradeVolumeRequest, QueryPoolTradeVolumeResponseSDKType, QueryFavoritePairsRequest, QueryFavoritePairsResponseSDKType } from "./trade/trade_volume";
-import { QueryPulseTradablePairsRequest, QueryPulseTradablePairsResponseSDKType } from "./trade/pulse_tradable_pairs";
-import { QueryOrderRequest, QueryOrderResponseSDKType, QueryOrdersRequest, QueryOrdersResponseSDKType } from "./trade/order";
+import { QueryPulseTradablePairsRequest, QueryPulseTradablePairsResponseSDKType, QueryPulseTradablePairPriceRequest, QueryPulseTradablePairPriceResponseSDKType } from "./trade/pulse_tradable_pairs";
+import { QueryOrderRequest, QueryOrderResponseSDKType, QueryOrdersRequest, QueryOrdersResponseSDKType, QueryMatchableOrderCountsRequest, QueryMatchableOrderCountsResponseSDKType, QueryMatchableOrdersForPairRequest, QueryMatchableOrdersForPairResponseSDKType } from "./trade/order";
 import { QueryHostChainUnbondingTimeRequest, QueryHostChainUnbondingTimeResponseSDKType, QueryHostChainRequest, QueryHostChainResponseSDKType, QueryHostChainsRequest, QueryHostChainsResponseSDKType } from "./icstaking/host_chain";
 import { QueryValidatorRequest, QueryValidatorResponseSDKType, QueryValidatorsRequest, QueryValidatorsResponseSDKType } from "./oracle/validator";
 import { QueryVoteIntervalsRequest, QueryVoteIntervalsResponseSDKType } from "./oracle/vote_interval";
@@ -82,8 +82,11 @@ export class LCDQueryClient {
     this.poolTradeVolume = this.poolTradeVolume.bind(this);
     this.favoritePairs = this.favoritePairs.bind(this);
     this.pulseTradablePairs = this.pulseTradablePairs.bind(this);
+    this.pulseTradablePairPrice = this.pulseTradablePairPrice.bind(this);
     this.order = this.order.bind(this);
     this.orders = this.orders.bind(this);
+    this.matchableOrderCounts = this.matchableOrderCounts.bind(this);
+    this.matchableOrdersForPair = this.matchableOrdersForPair.bind(this);
     this.hostChainUnbondingTime = this.hostChainUnbondingTime.bind(this);
     this.hostChain = this.hostChain.bind(this);
     this.hostChains = this.hostChains.bind(this);
@@ -490,6 +493,11 @@ export class LCDQueryClient {
     const endpoint = `pryzmatics/trade/pulse_tradable_pairs/${params.denom}`;
     return await this.req.get<QueryPulseTradablePairsResponseSDKType>(endpoint, options);
   }
+  /* PulseTradablePairPrice */
+  async pulseTradablePairPrice(params: QueryPulseTradablePairPriceRequest): Promise<QueryPulseTradablePairPriceResponseSDKType> {
+    const endpoint = `pryzmatics/trade/pulse_tradable_pair_price/${params.tokenIn}/${params.tokenOut}/${params.poolId}/${params.whitelistedRoute}`;
+    return await this.req.get<QueryPulseTradablePairPriceResponseSDKType>(endpoint);
+  }
   /* Order */
   async order(params: QueryOrderRequest): Promise<QueryOrderResponseSDKType> {
     const endpoint = `pryzmatics/trade/order/${params.id}`;
@@ -523,6 +531,37 @@ export class LCDQueryClient {
     }
     const endpoint = `pryzmatics/trade/order`;
     return await this.req.get<QueryOrdersResponseSDKType>(endpoint, options);
+  }
+  /* MatchableOrderCounts */
+  async matchableOrderCounts(params: QueryMatchableOrderCountsRequest): Promise<QueryMatchableOrderCountsResponseSDKType> {
+    const options: any = {
+      params: {}
+    };
+    if (typeof params?.minBuy !== "undefined") {
+      options.params.min_buy = params.minBuy;
+    }
+    if (typeof params?.minSell !== "undefined") {
+      options.params.min_sell = params.minSell;
+    }
+    if (typeof params?.pagination !== "undefined") {
+      setPaginationParams(options, params.pagination);
+    }
+    const endpoint = `pryzmatics/trade/matchable_order_counts`;
+    return await this.req.get<QueryMatchableOrderCountsResponseSDKType>(endpoint, options);
+  }
+  /* MatchableOrdersForPair */
+  async matchableOrdersForPair(params: QueryMatchableOrdersForPairRequest): Promise<QueryMatchableOrdersForPairResponseSDKType> {
+    const options: any = {
+      params: {}
+    };
+    if (typeof params?.maxBuyPrice !== "undefined") {
+      options.params.max_buy_price = params.maxBuyPrice;
+    }
+    if (typeof params?.maxSellPrice !== "undefined") {
+      options.params.max_sell_price = params.maxSellPrice;
+    }
+    const endpoint = `pryzmatics/trade/matchable_orders_for_pair/${params.tokenIn}/${params.tokenOut}/${params.poolId}/${params.whitelistedRoute}`;
+    return await this.req.get<QueryMatchableOrdersForPairResponseSDKType>(endpoint, options);
   }
   /* HostChainUnbondingTime */
   async hostChainUnbondingTime(params: QueryHostChainUnbondingTimeRequest): Promise<QueryHostChainUnbondingTimeResponseSDKType> {

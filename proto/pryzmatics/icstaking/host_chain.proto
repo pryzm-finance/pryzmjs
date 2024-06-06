@@ -10,20 +10,21 @@ option go_package = "github.com/pryzm-finance/pryzmatics/types/icstaking";
 message HostChain {
   pryzm.icstaking.v1.HostChain host_chain = 1 [(gogoproto.nullable) = false];
   pryzm.icstaking.v1.HostChainState host_chain_state = 2 [(gogoproto.nullable) = false];
-  string c_asset_market_cap = 3 [
+  string delegation_recommended_validator = 3;
+  string c_asset_market_cap = 4 [
     (cosmos_proto.scalar) = "cosmos.Dec",
     (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Dec",
     (gogoproto.nullable) = true
   ];
-  string c_asset_apy = 4 [
+  string c_asset_apy = 5 [
     (cosmos_proto.scalar) = "cosmos.Dec",
     (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Dec",
     (gogoproto.nullable) = true
   ];
-  string asset_in_vault = 5 [
+  string asset_in_vault = 6 [
     (cosmos_proto.scalar) = "cosmos.Int",
     (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Int",
     (gogoproto.nullable) = false
   ];
-  string error = 6;
+  string error = 7;
 }

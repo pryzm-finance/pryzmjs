@@ -19,10 +19,8 @@ import "pryzmatics/server/pool/historical_pool_apr.proto";
 import "pryzmatics/server/price/historical_price.proto";
 import "pryzmatics/server/price/price.proto";
 import "pryzmatics/server/price/price_bounds.proto";
-import "pryzmatics/server/price/price_change.proto";
 import "pryzmatics/server/price/swappable_tokens.proto";
 
-import "pryzmatics/server/trade/pool_trade_history.proto";
 import "pryzmatics/server/trade/pulse_tradable_pairs.proto";
 import "pryzmatics/server/trade/trade_simulation.proto";
 import "pryzmatics/server/trade/join_all_tokens_exact_lpt_simulation.proto";
@@ -196,12 +194,24 @@ service Query {
     option (google.api.http).get = "/pryzmatics/trade/pulse_tradable_pairs/{denom}";
   }
 
+  rpc PulseTradablePairPrice(pryzmatics.server.trade.QueryPulseTradablePairPriceRequest) returns (pryzmatics.server.trade.QueryPulseTradablePairPriceResponse) {
+    option (google.api.http).get = "/pryzmatics/trade/pulse_tradable_pair_price/{token_in}/{token_out}/{pool_id}/{whitelisted_route}";
+  }
+
   rpc Order(pryzmatics.server.trade.QueryOrderRequest) returns (pryzmatics.server.trade.QueryOrderResponse) {
     option (google.api.http).get = "/pryzmatics/trade/order/{id}";
   }
 
   rpc Orders(pryzmatics.server.trade.QueryOrdersRequest) returns (pryzmatics.server.trade.QueryOrdersResponse) {
     option (google.api.http).get = "/pryzmatics/trade/order";
+  }
+
+  rpc MatchableOrderCounts(pryzmatics.server.trade.QueryMatchableOrderCountsRequest) returns (pryzmatics.server.trade.QueryMatchableOrderCountsResponse) {
+    option (google.api.http).get = "/pryzmatics/trade/matchable_order_counts";
+  }
+
+  rpc MatchableOrdersForPair(pryzmatics.server.trade.QueryMatchableOrdersForPairRequest) returns (pryzmatics.server.trade.QueryMatchableOrdersForPairResponse) {
+    option (google.api.http).get = "/pryzmatics/trade/matchable_orders_for_pair/{token_in}/{token_out}/{pool_id}/{whitelisted_route}";
   }
 
   rpc HostChainUnbondingTime(pryzmatics.server.icstaking.QueryHostChainUnbondingTimeRequest) returns (pryzmatics.server.icstaking.QueryHostChainUnbondingTimeResponse) {

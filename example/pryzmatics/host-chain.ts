@@ -53,7 +53,8 @@ async function main() {
       "c_asset_market_cap": "136034843845.872860370000000000",
       "c_asset_apy": null,
       "asset_in_vault": "90000000000",
-      "error": "cannot compute cAsset apy; compoundingFrequency must not be zero"
+      "error": "cannot compute cAsset apy; compoundingFrequency must not be zero",
+      "delegation_recommended_validator": "cosmosvaloper1jyfu9v3s3x3rws7zv86wqw66g4enswyl36xdwm"
     }
     * */
 }

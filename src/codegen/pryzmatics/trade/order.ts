@@ -170,6 +170,119 @@ export interface OrderSDKType {
   status_time: TimestampSDKType;
   next_step_time?: TimestampSDKType;
 }
+export interface MatchableOrderCount {
+  poolId: bigint;
+  tokenIn: string;
+  tokenOut: string;
+  whitelistedRoute: boolean;
+  buyCount: bigint;
+  sellCount: bigint;
+}
+export interface MatchableOrderCountProtoMsg {
+  typeUrl: "/pryzmatics.trade.MatchableOrderCount";
+  value: Uint8Array;
+}
+export interface MatchableOrderCountAmino {
+  pool_id?: string;
+  token_in?: string;
+  token_out?: string;
+  whitelisted_route?: boolean;
+  buy_count?: string;
+  sell_count?: string;
+}
+export interface MatchableOrderCountAminoMsg {
+  type: "/pryzmatics.trade.MatchableOrderCount";
+  value: MatchableOrderCountAmino;
+}
+export interface MatchableOrderCountSDKType {
+  pool_id: bigint;
+  token_in: string;
+  token_out: string;
+  whitelisted_route: boolean;
+  buy_count: bigint;
+  sell_count: bigint;
+}
+export interface OrderCreatorBalance {
+  creator: string;
+  denom: string;
+  balance?: string;
+  /**
+   * counts the number of matchable orders selling this token,
+   * when this count gets to zero, we remove the data from database
+   */
+  orderCount: bigint;
+}
+export interface OrderCreatorBalanceProtoMsg {
+  typeUrl: "/pryzmatics.trade.OrderCreatorBalance";
+  value: Uint8Array;
+}
+export interface OrderCreatorBalanceAmino {
+  creator?: string;
+  denom?: string;
+  balance?: string;
+  /**
+   * counts the number of matchable orders selling this token,
+   * when this count gets to zero, we remove the data from database
+   */
+  order_count?: string;
+}
+export interface OrderCreatorBalanceAminoMsg {
+  type: "/pryzmatics.trade.OrderCreatorBalance";
+  value: OrderCreatorBalanceAmino;
+}
+export interface OrderCreatorBalanceSDKType {
+  creator: string;
+  denom: string;
+  balance?: string;
+  order_count: bigint;
+}
+export interface MatchableOrder {
+  id: bigint;
+  creator: string;
+  poolId: bigint;
+  tokenIn: string;
+  tokenOut: string;
+  whitelistedRoute: boolean;
+  depositedAmount: string;
+  remainingAmount: string;
+  balance: string;
+  maxMatchingSpotPrice?: string;
+  status: OrderStatus;
+}
+export interface MatchableOrderProtoMsg {
+  typeUrl: "/pryzmatics.trade.MatchableOrder";
+  value: Uint8Array;
+}
+export interface MatchableOrderAmino {
+  id?: string;
+  creator?: string;
+  pool_id?: string;
+  token_in?: string;
+  token_out?: string;
+  whitelisted_route?: boolean;
+  deposited_amount?: string;
+  remaining_amount?: string;
+  balance?: string;
+  max_matching_spot_price?: string;
+  status?: OrderStatus;
+}
+export interface MatchableOrderAminoMsg {
+  type: "/pryzmatics.trade.MatchableOrder";
+  value: MatchableOrderAmino;
+}
+export interface MatchableOrderSDKType {
+  id: bigint;
+  creator: string;
+  pool_id: bigint;
+  token_in: string;
+  token_out: string;
+  whitelisted_route: boolean;
+  deposited_amount: string;
+  remaining_amount: string;
+  balance: string;
+  max_matching_spot_price?: string;
+  status: OrderStatus;
+}
 function createBaseOrder(): Order {
   return {
     ammOrder: Order1.fromPartial({}),
@@ -351,3 +464,504 @@ export const Order = {
   }
 };
 GlobalDecoderRegistry.register(Order.typeUrl, Order);
+function createBaseMatchableOrderCount(): MatchableOrderCount {
+  return {
+    poolId: BigInt(0),
+    tokenIn: "",
+    tokenOut: "",
+    whitelistedRoute: false,
+    buyCount: BigInt(0),
+    sellCount: BigInt(0)
+  };
+}
+export const MatchableOrderCount = {
+  typeUrl: "/pryzmatics.trade.MatchableOrderCount",
+  is(o: any): o is MatchableOrderCount {
+    return o && (o.$typeUrl === MatchableOrderCount.typeUrl || typeof o.poolId === "bigint" && typeof o.tokenIn === "string" && typeof o.tokenOut === "string" && typeof o.whitelistedRoute === "boolean" && typeof o.buyCount === "bigint" && typeof o.sellCount === "bigint");
+  },
+  isSDK(o: any): o is MatchableOrderCountSDKType {
+    return o && (o.$typeUrl === MatchableOrderCount.typeUrl || typeof o.pool_id === "bigint" && typeof o.token_in === "string" && typeof o.token_out === "string" && typeof o.whitelisted_route === "boolean" && typeof o.buy_count === "bigint" && typeof o.sell_count === "bigint");
+  },
+  isAmino(o: any): o is MatchableOrderCountAmino {
+    return o && (o.$typeUrl === MatchableOrderCount.typeUrl || typeof o.pool_id === "bigint" && typeof o.token_in === "string" && typeof o.token_out === "string" && typeof o.whitelisted_route === "boolean" && typeof o.buy_count === "bigint" && typeof o.sell_count === "bigint");
+  },
+  encode(message: MatchableOrderCount, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    if (message.poolId !== BigInt(0)) {
+      writer.uint32(8).uint64(message.poolId);
+    }
+    if (message.tokenIn !== "") {
+      writer.uint32(18).string(message.tokenIn);
+    }
+    if (message.tokenOut !== "") {
+      writer.uint32(26).string(message.tokenOut);
+    }
+    if (message.whitelistedRoute === true) {
+      writer.uint32(32).bool(message.whitelistedRoute);
+    }
+    if (message.buyCount !== BigInt(0)) {
+      writer.uint32(40).uint64(message.buyCount);
+    }
+    if (message.sellCount !== BigInt(0)) {
+      writer.uint32(48).uint64(message.sellCount);
+    }
+    return writer;
+  },
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): MatchableOrderCount {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseMatchableOrderCount();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.poolId = reader.uint64();
+          break;
+        case 2:
+          message.tokenIn = reader.string();
+          break;
+        case 3:
+          message.tokenOut = reader.string();
+          break;
+        case 4:
+          message.whitelistedRoute = reader.bool();
+          break;
+        case 5:
+          message.buyCount = reader.uint64();
+          break;
+        case 6:
+          message.sellCount = reader.uint64();
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromJSON(object: any): MatchableOrderCount {
+    return {
+      poolId: isSet(object.poolId) ? BigInt(object.poolId.toString()) : BigInt(0),
+      tokenIn: isSet(object.tokenIn) ? String(object.tokenIn) : "",
+      tokenOut: isSet(object.tokenOut) ? String(object.tokenOut) : "",
+      whitelistedRoute: isSet(object.whitelistedRoute) ? Boolean(object.whitelistedRoute) : false,
+      buyCount: isSet(object.buyCount) ? BigInt(object.buyCount.toString()) : BigInt(0),
+      sellCount: isSet(object.sellCount) ? BigInt(object.sellCount.toString()) : BigInt(0)
+    };
+  },
+  toJSON(message: MatchableOrderCount): unknown {
+    const obj: any = {};
+    message.poolId !== undefined && (obj.poolId = (message.poolId || BigInt(0)).toString());
+    message.tokenIn !== undefined && (obj.tokenIn = message.tokenIn);
+    message.tokenOut !== undefined && (obj.tokenOut = message.tokenOut);
+    message.whitelistedRoute !== undefined && (obj.whitelistedRoute = message.whitelistedRoute);
+    message.buyCount !== undefined && (obj.buyCount = (message.buyCount || BigInt(0)).toString());
+    message.sellCount !== undefined && (obj.sellCount = (message.sellCount || BigInt(0)).toString());
+    return obj;
+  },
+  fromPartial(object: Partial<MatchableOrderCount>): MatchableOrderCount {
+    const message = createBaseMatchableOrderCount();
+    message.poolId = object.poolId !== undefined && object.poolId !== null ? BigInt(object.poolId.toString()) : BigInt(0);
+    message.tokenIn = object.tokenIn ?? "";
+    message.tokenOut = object.tokenOut ?? "";
+    message.whitelistedRoute = object.whitelistedRoute ?? false;
+    message.buyCount = object.buyCount !== undefined && object.buyCount !== null ? BigInt(object.buyCount.toString()) : BigInt(0);
+    message.sellCount = object.sellCount !== undefined && object.sellCount !== null ? BigInt(object.sellCount.toString()) : BigInt(0);
+    return message;
+  },
+  fromAmino(object: MatchableOrderCountAmino): MatchableOrderCount {
+    const message = createBaseMatchableOrderCount();
+    if (object.pool_id !== undefined && object.pool_id !== null) {
+      message.poolId = BigInt(object.pool_id);
+    }
+    if (object.token_in !== undefined && object.token_in !== null) {
+      message.tokenIn = object.token_in;
+    }
+    if (object.token_out !== undefined && object.token_out !== null) {
+      message.tokenOut = object.token_out;
+    }
+    if (object.whitelisted_route !== undefined && object.whitelisted_route !== null) {
+      message.whitelistedRoute = object.whitelisted_route;
+    }
+    if (object.buy_count !== undefined && object.buy_count !== null) {
+      message.buyCount = BigInt(object.buy_count);
+    }
+    if (object.sell_count !== undefined && object.sell_count !== null) {
+      message.sellCount = BigInt(object.sell_count);
+    }
+    return message;
+  },
+  toAmino(message: MatchableOrderCount, useInterfaces: boolean = true): MatchableOrderCountAmino {
+    const obj: any = {};
+    obj.pool_id = message.poolId ? message.poolId.toString() : undefined;
+    obj.token_in = message.tokenIn === "" ? undefined : message.tokenIn;
+    obj.token_out = message.tokenOut === "" ? undefined : message.tokenOut;
+    obj.whitelisted_route = message.whitelistedRoute === false ? undefined : message.whitelistedRoute;
+    obj.buy_count = message.buyCount ? message.buyCount.toString() : undefined;
+    obj.sell_count = message.sellCount ? message.sellCount.toString() : undefined;
+    return obj;
+  },
+  fromAminoMsg(object: MatchableOrderCountAminoMsg): MatchableOrderCount {
+    return MatchableOrderCount.fromAmino(object.value);
+  },
+  fromProtoMsg(message: MatchableOrderCountProtoMsg, useInterfaces: boolean = true): MatchableOrderCount {
+    return MatchableOrderCount.decode(message.value, undefined, useInterfaces);
+  },
+  toProto(message: MatchableOrderCount): Uint8Array {
+    return MatchableOrderCount.encode(message).finish();
+  },
+  toProtoMsg(message: MatchableOrderCount): MatchableOrderCountProtoMsg {
+    return {
+      typeUrl: "/pryzmatics.trade.MatchableOrderCount",
+      value: MatchableOrderCount.encode(message).finish()
+    };
+  }
+};
+GlobalDecoderRegistry.register(MatchableOrderCount.typeUrl, MatchableOrderCount);
+function createBaseOrderCreatorBalance(): OrderCreatorBalance {
+  return {
+    creator: "",
+    denom: "",
+    balance: undefined,
+    orderCount: BigInt(0)
+  };
+}
+export const OrderCreatorBalance = {
+  typeUrl: "/pryzmatics.trade.OrderCreatorBalance",
+  is(o: any): o is OrderCreatorBalance {
+    return o && (o.$typeUrl === OrderCreatorBalance.typeUrl || typeof o.creator === "string" && typeof o.denom === "string" && typeof o.orderCount === "bigint");
+  },
+  isSDK(o: any): o is OrderCreatorBalanceSDKType {
+    return o && (o.$typeUrl === OrderCreatorBalance.typeUrl || typeof o.creator === "string" && typeof o.denom === "string" && typeof o.order_count === "bigint");
+  },
+  isAmino(o: any): o is OrderCreatorBalanceAmino {
+    return o && (o.$typeUrl === OrderCreatorBalance.typeUrl || typeof o.creator === "string" && typeof o.denom === "string" && typeof o.order_count === "bigint");
+  },
+  encode(message: OrderCreatorBalance, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    if (message.creator !== "") {
+      writer.uint32(10).string(message.creator);
+    }
+    if (message.denom !== "") {
+      writer.uint32(18).string(message.denom);
+    }
+    if (message.balance !== undefined) {
+      writer.uint32(26).string(message.balance);
+    }
+    if (message.orderCount !== BigInt(0)) {
+      writer.uint32(32).uint64(message.orderCount);
+    }
+    return writer;
+  },
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): OrderCreatorBalance {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseOrderCreatorBalance();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.creator = reader.string();
+          break;
+        case 2:
+          message.denom = reader.string();
+          break;
+        case 3:
+          message.balance = reader.string();
+          break;
+        case 4:
+          message.orderCount = reader.uint64();
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromJSON(object: any): OrderCreatorBalance {
+    return {
+      creator: isSet(object.creator) ? String(object.creator) : "",
+      denom: isSet(object.denom) ? String(object.denom) : "",
+      balance: isSet(object.balance) ? String(object.balance) : undefined,
+      orderCount: isSet(object.orderCount) ? BigInt(object.orderCount.toString()) : BigInt(0)
+    };
+  },
+  toJSON(message: OrderCreatorBalance): unknown {
+    const obj: any = {};
+    message.creator !== undefined && (obj.creator = message.creator);
+    message.denom !== undefined && (obj.denom = message.denom);
+    message.balance !== undefined && (obj.balance = message.balance);
+    message.orderCount !== undefined && (obj.orderCount = (message.orderCount || BigInt(0)).toString());
+    return obj;
+  },
+  fromPartial(object: Partial<OrderCreatorBalance>): OrderCreatorBalance {
+    const message = createBaseOrderCreatorBalance();
+    message.creator = object.creator ?? "";
+    message.denom = object.denom ?? "";
+    message.balance = object.balance ?? undefined;
+    message.orderCount = object.orderCount !== undefined && object.orderCount !== null ? BigInt(object.orderCount.toString()) : BigInt(0);
+    return message;
+  },
+  fromAmino(object: OrderCreatorBalanceAmino): OrderCreatorBalance {
+    const message = createBaseOrderCreatorBalance();
+    if (object.creator !== undefined && object.creator !== null) {
+      message.creator = object.creator;
+    }
+    if (object.denom !== undefined && object.denom !== null) {
+      message.denom = object.denom;
+    }
+    if (object.balance !== undefined && object.balance !== null) {
+      message.balance = object.balance;
+    }
+    if (object.order_count !== undefined && object.order_count !== null) {
+      message.orderCount = BigInt(object.order_count);
+    }
+    return message;
+  },
+  toAmino(message: OrderCreatorBalance, useInterfaces: boolean = true): OrderCreatorBalanceAmino {
+    const obj: any = {};
+    obj.creator = message.creator === "" ? undefined : message.creator;
+    obj.denom = message.denom === "" ? undefined : message.denom;
+    obj.balance = message.balance === null ? undefined : message.balance;
+    obj.order_count = message.orderCount ? message.orderCount.toString() : undefined;
+    return obj;
+  },
+  fromAminoMsg(object: OrderCreatorBalanceAminoMsg): OrderCreatorBalance {
+    return OrderCreatorBalance.fromAmino(object.value);
+  },
+  fromProtoMsg(message: OrderCreatorBalanceProtoMsg, useInterfaces: boolean = true): OrderCreatorBalance {
+    return OrderCreatorBalance.decode(message.value, undefined, useInterfaces);
+  },
+  toProto(message: OrderCreatorBalance): Uint8Array {
+    return OrderCreatorBalance.encode(message).finish();
+  },
+  toProtoMsg(message: OrderCreatorBalance): OrderCreatorBalanceProtoMsg {
+    return {
+      typeUrl: "/pryzmatics.trade.OrderCreatorBalance",
+      value: OrderCreatorBalance.encode(message).finish()
+    };
+  }
+};
+GlobalDecoderRegistry.register(OrderCreatorBalance.typeUrl, OrderCreatorBalance);
+function createBaseMatchableOrder(): MatchableOrder {
+  return {
+    id: BigInt(0),
+    creator: "",
+    poolId: BigInt(0),
+    tokenIn: "",
+    tokenOut: "",
+    whitelistedRoute: false,
+    depositedAmount: "",
+    remainingAmount: "",
+    balance: "",
+    maxMatchingSpotPrice: undefined,
+    status: 0
+  };
+}
+export const MatchableOrder = {
+  typeUrl: "/pryzmatics.trade.MatchableOrder",
+  is(o: any): o is MatchableOrder {
+    return o && (o.$typeUrl === MatchableOrder.typeUrl || typeof o.id === "bigint" && typeof o.creator === "string" && typeof o.poolId === "bigint" && typeof o.tokenIn === "string" && typeof o.tokenOut === "string" && typeof o.whitelistedRoute === "boolean" && typeof o.depositedAmount === "string" && typeof o.remainingAmount === "string" && typeof o.balance === "string" && isSet(o.status));
+  },
+  isSDK(o: any): o is MatchableOrderSDKType {
+    return o && (o.$typeUrl === MatchableOrder.typeUrl || typeof o.id === "bigint" && typeof o.creator === "string" && typeof o.pool_id === "bigint" && typeof o.token_in === "string" && typeof o.token_out === "string" && typeof o.whitelisted_route === "boolean" && typeof o.deposited_amount === "string" && typeof o.remaining_amount === "string" && typeof o.balance === "string" && isSet(o.status));
+  },
+  isAmino(o: any): o is MatchableOrderAmino {
+    return o && (o.$typeUrl === MatchableOrder.typeUrl || typeof o.id === "bigint" && typeof o.creator === "string" && typeof o.pool_id === "bigint" && typeof o.token_in === "string" && typeof o.token_out === "string" && typeof o.whitelisted_route === "boolean" && typeof o.deposited_amount === "string" && typeof o.remaining_amount === "string" && typeof o.balance === "string" && isSet(o.status));
+  },
+  encode(message: MatchableOrder, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    if (message.id !== BigInt(0)) {
+      writer.uint32(8).uint64(message.id);
+    }
+    if (message.creator !== "") {
+      writer.uint32(18).string(message.creator);
+    }
+    if (message.poolId !== BigInt(0)) {
+      writer.uint32(24).uint64(message.poolId);
+    }
+    if (message.tokenIn !== "") {
+      writer.uint32(34).string(message.tokenIn);
+    }
+    if (message.tokenOut !== "") {
+      writer.uint32(42).string(message.tokenOut);
+    }
+    if (message.whitelistedRoute === true) {
+      writer.uint32(48).bool(message.whitelistedRoute);
+    }
+    if (message.depositedAmount !== "") {
+      writer.uint32(58).string(message.depositedAmount);
+    }
+    if (message.remainingAmount !== "") {
+      writer.uint32(66).string(message.remainingAmount);
+    }
+    if (message.balance !== "") {
+      writer.uint32(74).string(message.balance);
+    }
+    if (message.maxMatchingSpotPrice !== undefined) {
+      writer.uint32(82).string(Decimal.fromUserInput(message.maxMatchingSpotPrice, 18).atomics);
+    }
+    if (message.status !== 0) {
+      writer.uint32(88).int32(message.status);
+    }
+    return writer;
+  },
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): MatchableOrder {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseMatchableOrder();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.id = reader.uint64();
+          break;
+        case 2:
+          message.creator = reader.string();
+          break;
+        case 3:
+          message.poolId = reader.uint64();
+          break;
+        case 4:
+          message.tokenIn = reader.string();
+          break;
+        case 5:
+          message.tokenOut = reader.string();
+          break;
+        case 6:
+          message.whitelistedRoute = reader.bool();
+          break;
+        case 7:
+          message.depositedAmount = reader.string();
+          break;
+        case 8:
+          message.remainingAmount = reader.string();
+          break;
+        case 9:
+          message.balance = reader.string();
+          break;
+        case 10:
+          message.maxMatchingSpotPrice = Decimal.fromAtomics(reader.string(), 18).toString();
+          break;
+        case 11:
+          message.status = (reader.int32() as any);
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromJSON(object: any): MatchableOrder {
+    return {
+      id: isSet(object.id) ? BigInt(object.id.toString()) : BigInt(0),
+      creator: isSet(object.creator) ? String(object.creator) : "",
+      poolId: isSet(object.poolId) ? BigInt(object.poolId.toString()) : BigInt(0),
+      tokenIn: isSet(object.tokenIn) ? String(object.tokenIn) : "",
+      tokenOut: isSet(object.tokenOut) ? String(object.tokenOut) : "",
+      whitelistedRoute: isSet(object.whitelistedRoute) ? Boolean(object.whitelistedRoute) : false,
+      depositedAmount: isSet(object.depositedAmount) ? String(object.depositedAmount) : "",
+      remainingAmount: isSet(object.remainingAmount) ? String(object.remainingAmount) : "",
+      balance: isSet(object.balance) ? String(object.balance) : "",
+      maxMatchingSpotPrice: isSet(object.maxMatchingSpotPrice) ? String(object.maxMatchingSpotPrice) : undefined,
+      status: isSet(object.status) ? orderStatusFromJSON(object.status) : -1
+    };
+  },
+  toJSON(message: MatchableOrder): unknown {
+    const obj: any = {};
+    message.id !== undefined && (obj.id = (message.id || BigInt(0)).toString());
+    message.creator !== undefined && (obj.creator = message.creator);
+    message.poolId !== undefined && (obj.poolId = (message.poolId || BigInt(0)).toString());
+    message.tokenIn !== undefined && (obj.tokenIn = message.tokenIn);
+    message.tokenOut !== undefined && (obj.tokenOut = message.tokenOut);
+    message.whitelistedRoute !== undefined && (obj.whitelistedRoute = message.whitelistedRoute);
+    message.depositedAmount !== undefined && (obj.depositedAmount = message.depositedAmount);
+    message.remainingAmount !== undefined && (obj.remainingAmount = message.remainingAmount);
+    message.balance !== undefined && (obj.balance = message.balance);
+    message.maxMatchingSpotPrice !== undefined && (obj.maxMatchingSpotPrice = message.maxMatchingSpotPrice);
+    message.status !== undefined && (obj.status = orderStatusToJSON(message.status));
+    return obj;
+  },
+  fromPartial(object: Partial<MatchableOrder>): MatchableOrder {
+    const message = createBaseMatchableOrder();
+    message.id = object.id !== undefined && object.id !== null ? BigInt(object.id.toString()) : BigInt(0);
+    message.creator = object.creator ?? "";
+    message.poolId = object.poolId !== undefined && object.poolId !== null ? BigInt(object.poolId.toString()) : BigInt(0);
+    message.tokenIn = object.tokenIn ?? "";
+    message.tokenOut = object.tokenOut ?? "";
+    message.whitelistedRoute = object.whitelistedRoute ?? false;
+    message.depositedAmount = object.depositedAmount ?? "";
+    message.remainingAmount = object.remainingAmount ?? "";
+    message.balance = object.balance ?? "";
+    message.maxMatchingSpotPrice = object.maxMatchingSpotPrice ?? undefined;
+    message.status = object.status ?? 0;
+    return message;
+  },
+  fromAmino(object: MatchableOrderAmino): MatchableOrder {
+    const message = createBaseMatchableOrder();
+    if (object.id !== undefined && object.id !== null) {
+      message.id = BigInt(object.id);
+    }
+    if (object.creator !== undefined && object.creator !== null) {
+      message.creator = object.creator;
+    }
+    if (object.pool_id !== undefined && object.pool_id !== null) {
+      message.poolId = BigInt(object.pool_id);
+    }
+    if (object.token_in !== undefined && object.token_in !== null) {
+      message.tokenIn = object.token_in;
+    }
+    if (object.token_out !== undefined && object.token_out !== null) {
+      message.tokenOut = object.token_out;
+    }
+    if (object.whitelisted_route !== undefined && object.whitelisted_route !== null) {
+      message.whitelistedRoute = object.whitelisted_route;
+    }
+    if (object.deposited_amount !== undefined && object.deposited_amount !== null) {
+      message.depositedAmount = object.deposited_amount;
+    }
+    if (object.remaining_amount !== undefined && object.remaining_amount !== null) {
+      message.remainingAmount = object.remaining_amount;
+    }
+    if (object.balance !== undefined && object.balance !== null) {
+      message.balance = object.balance;
+    }
+    if (object.max_matching_spot_price !== undefined && object.max_matching_spot_price !== null) {
+      message.maxMatchingSpotPrice = object.max_matching_spot_price;
+    }
+    if (object.status !== undefined && object.status !== null) {
+      message.status = object.status;
+    }
+    return message;
+  },
+  toAmino(message: MatchableOrder, useInterfaces: boolean = true): MatchableOrderAmino {
+    const obj: any = {};
+    obj.id = message.id ? message.id.toString() : undefined;
+    obj.creator = message.creator === "" ? undefined : message.creator;
+    obj.pool_id = message.poolId ? message.poolId.toString() : undefined;
+    obj.token_in = message.tokenIn === "" ? undefined : message.tokenIn;
+    obj.token_out = message.tokenOut === "" ? undefined : message.tokenOut;
+    obj.whitelisted_route = message.whitelistedRoute === false ? undefined : message.whitelistedRoute;
+    obj.deposited_amount = message.depositedAmount === "" ? undefined : message.depositedAmount;
+    obj.remaining_amount = message.remainingAmount === "" ? undefined : message.remainingAmount;
+    obj.balance = message.balance === "" ? undefined : message.balance;
+    obj.max_matching_spot_price = padDecimal(message.maxMatchingSpotPrice) === null ? undefined : padDecimal(message.maxMatchingSpotPrice);
+    obj.status = message.status === 0 ? undefined : message.status;
+    return obj;
+  },
+  fromAminoMsg(object: MatchableOrderAminoMsg): MatchableOrder {
+    return MatchableOrder.fromAmino(object.value);
+  },
+  fromProtoMsg(message: MatchableOrderProtoMsg, useInterfaces: boolean = true): MatchableOrder {
+    return MatchableOrder.decode(message.value, undefined, useInterfaces);
+  },
+  toProto(message: MatchableOrder): Uint8Array {
+    return MatchableOrder.encode(message).finish();
+  },
+  toProtoMsg(message: MatchableOrder): MatchableOrderProtoMsg {
+    return {
+      typeUrl: "/pryzmatics.trade.MatchableOrder",
+      value: MatchableOrder.encode(message).finish()
+    };
+  }
+};
+GlobalDecoderRegistry.register(MatchableOrder.typeUrl, MatchableOrder);

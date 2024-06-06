@@ -9,6 +9,7 @@ import { GlobalDecoderRegistry } from "../../registry";
 export interface HostChain {
   hostChain: HostChain1;
   hostChainState: HostChainState;
+  delegationRecommendedValidator: string;
   cAssetMarketCap?: string;
   cAssetApy?: string;
   assetInVault: string;
@@ -21,6 +22,7 @@ export interface HostChainProtoMsg {
 export interface HostChainAmino {
   host_chain?: HostChain1Amino;
   host_chain_state?: HostChainStateAmino;
+  delegation_recommended_validator?: string;
   c_asset_market_cap?: string;
   c_asset_apy?: string;
   asset_in_vault?: string;
@@ -33,6 +35,7 @@ export interface HostChainAminoMsg {
 export interface HostChainSDKType {
   host_chain: HostChain1SDKType;
   host_chain_state: HostChainStateSDKType;
+  delegation_recommended_validator: string;
   c_asset_market_cap?: string;
   c_asset_apy?: string;
   asset_in_vault: string;
@@ -42,6 +45,7 @@ function createBaseHostChain(): HostChain {
   return {
     hostChain: HostChain1.fromPartial({}),
     hostChainState: HostChainState.fromPartial({}),
+    delegationRecommendedValidator: "",
     cAssetMarketCap: undefined,
     cAssetApy: undefined,
     assetInVault: "",
@@ -51,13 +55,13 @@ function createBaseHostChain(): HostChain {
 export const HostChain = {
   typeUrl: "/pryzmatics.icstaking.HostChain",
   is(o: any): o is HostChain {
-    return o && (o.$typeUrl === HostChain.typeUrl || HostChain1.is(o.hostChain) && HostChainState.is(o.hostChainState) && typeof o.assetInVault === "string" && typeof o.error === "string");
+    return o && (o.$typeUrl === HostChain.typeUrl || HostChain1.is(o.hostChain) && HostChainState.is(o.hostChainState) && typeof o.delegationRecommendedValidator === "string" && typeof o.assetInVault === "string" && typeof o.error === "string");
   },
   isSDK(o: any): o is HostChainSDKType {
-    return o && (o.$typeUrl === HostChain.typeUrl || HostChain1.isSDK(o.host_chain) && HostChainState.isSDK(o.host_chain_state) && typeof o.asset_in_vault === "string" && typeof o.error === "string");
+    return o && (o.$typeUrl === HostChain.typeUrl || HostChain1.isSDK(o.host_chain) && HostChainState.isSDK(o.host_chain_state) && typeof o.delegation_recommended_validator === "string" && typeof o.asset_in_vault === "string" && typeof o.error === "string");
   },
   isAmino(o: any): o is HostChainAmino {
-    return o && (o.$typeUrl === HostChain.typeUrl || HostChain1.isAmino(o.host_chain) && HostChainState.isAmino(o.host_chain_state) && typeof o.asset_in_vault === "string" && typeof o.error === "string");
+    return o && (o.$typeUrl === HostChain.typeUrl || HostChain1.isAmino(o.host_chain) && HostChainState.isAmino(o.host_chain_state) && typeof o.delegation_recommended_validator === "string" && typeof o.asset_in_vault === "string" && typeof o.error === "string");
   },
   encode(message: HostChain, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.hostChain !== undefined) {
@@ -66,17 +70,20 @@ export const HostChain = {
     if (message.hostChainState !== undefined) {
       HostChainState.encode(message.hostChainState, writer.uint32(18).fork()).ldelim();
     }
+    if (message.delegationRecommendedValidator !== "") {
+      writer.uint32(26).string(message.delegationRecommendedValidator);
+    }
     if (message.cAssetMarketCap !== undefined) {
-      writer.uint32(26).string(Decimal.fromUserInput(message.cAssetMarketCap, 18).atomics);
+      writer.uint32(34).string(Decimal.fromUserInput(message.cAssetMarketCap, 18).atomics);
     }
     if (message.cAssetApy !== undefined) {
-      writer.uint32(34).string(Decimal.fromUserInput(message.cAssetApy, 18).atomics);
+      writer.uint32(42).string(Decimal.fromUserInput(message.cAssetApy, 18).atomics);
     }
     if (message.assetInVault !== "") {
-      writer.uint32(42).string(message.assetInVault);
+      writer.uint32(50).string(message.assetInVault);
     }
     if (message.error !== "") {
-      writer.uint32(50).string(message.error);
+      writer.uint32(58).string(message.error);
     }
     return writer;
   },
@@ -94,15 +101,18 @@ export const HostChain = {
           message.hostChainState = HostChainState.decode(reader, reader.uint32(), useInterfaces);
           break;
         case 3:
-          message.cAssetMarketCap = Decimal.fromAtomics(reader.string(), 18).toString();
+          message.delegationRecommendedValidator = reader.string();
           break;
         case 4:
-          message.cAssetApy = Decimal.fromAtomics(reader.string(), 18).toString();
+          message.cAssetMarketCap = Decimal.fromAtomics(reader.string(), 18).toString();
           break;
         case 5:
-          message.assetInVault = reader.string();
+          message.cAssetApy = Decimal.fromAtomics(reader.string(), 18).toString();
           break;
         case 6:
+          message.assetInVault = reader.string();
+          break;
+        case 7:
           message.error = reader.string();
           break;
         default:
@@ -116,6 +126,7 @@ export const HostChain = {
     return {
       hostChain: isSet(object.hostChain) ? HostChain1.fromJSON(object.hostChain) : undefined,
       hostChainState: isSet(object.hostChainState) ? HostChainState.fromJSON(object.hostChainState) : undefined,
+      delegationRecommendedValidator: isSet(object.delegationRecommendedValidator) ? String(object.delegationRecommendedValidator) : "",
       cAssetMarketCap: isSet(object.cAssetMarketCap) ? String(object.cAssetMarketCap) : undefined,
       cAssetApy: isSet(object.cAssetApy) ? String(object.cAssetApy) : undefined,
       assetInVault: isSet(object.assetInVault) ? String(object.assetInVault) : "",
@@ -126,6 +137,7 @@ export const HostChain = {
     const obj: any = {};
     message.hostChain !== undefined && (obj.hostChain = message.hostChain ? HostChain1.toJSON(message.hostChain) : undefined);
     message.hostChainState !== undefined && (obj.hostChainState = message.hostChainState ? HostChainState.toJSON(message.hostChainState) : undefined);
+    message.delegationRecommendedValidator !== undefined && (obj.delegationRecommendedValidator = message.delegationRecommendedValidator);
     message.cAssetMarketCap !== undefined && (obj.cAssetMarketCap = message.cAssetMarketCap);
     message.cAssetApy !== undefined && (obj.cAssetApy = message.cAssetApy);
     message.assetInVault !== undefined && (obj.assetInVault = message.assetInVault);
@@ -136,6 +148,7 @@ export const HostChain = {
     const message = createBaseHostChain();
     message.hostChain = object.hostChain !== undefined && object.hostChain !== null ? HostChain1.fromPartial(object.hostChain) : undefined;
     message.hostChainState = object.hostChainState !== undefined && object.hostChainState !== null ? HostChainState.fromPartial(object.hostChainState) : undefined;
+    message.delegationRecommendedValidator = object.delegationRecommendedValidator ?? "";
     message.cAssetMarketCap = object.cAssetMarketCap ?? undefined;
     message.cAssetApy = object.cAssetApy ?? undefined;
     message.assetInVault = object.assetInVault ?? "";
@@ -149,6 +162,9 @@ export const HostChain = {
     }
     if (object.host_chain_state !== undefined && object.host_chain_state !== null) {
       message.hostChainState = HostChainState.fromAmino(object.host_chain_state);
+    }
+    if (object.delegation_recommended_validator !== undefined && object.delegation_recommended_validator !== null) {
+      message.delegationRecommendedValidator = object.delegation_recommended_validator;
     }
     if (object.c_asset_market_cap !== undefined && object.c_asset_market_cap !== null) {
       message.cAssetMarketCap = object.c_asset_market_cap;
@@ -168,6 +184,7 @@ export const HostChain = {
     const obj: any = {};
     obj.host_chain = message.hostChain ? HostChain1.toAmino(message.hostChain, useInterfaces) : undefined;
     obj.host_chain_state = message.hostChainState ? HostChainState.toAmino(message.hostChainState, useInterfaces) : undefined;
+    obj.delegation_recommended_validator = message.delegationRecommendedValidator === "" ? undefined : message.delegationRecommendedValidator;
     obj.c_asset_market_cap = padDecimal(message.cAssetMarketCap) === null ? undefined : padDecimal(message.cAssetMarketCap);
     obj.c_asset_apy = padDecimal(message.cAssetApy) === null ? undefined : padDecimal(message.cAssetApy);
     obj.asset_in_vault = message.assetInVault === "" ? undefined : message.assetInVault;

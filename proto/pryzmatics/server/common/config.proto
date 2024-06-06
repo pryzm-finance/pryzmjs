@@ -28,7 +28,7 @@ message Config {
   ProfilerConfig profiler_config = 12 [(gogoproto.nullable) = false];
   YieldReturnConfig yield_return_config = 13 [(gogoproto.nullable) = false];
   FaucetConfig faucet_config = 14 [(gogoproto.nullable) = false];
-  map<string, string> asset_underlying_token_denom = 15;
+  map<string, AssetConfig> assets = 15 [(gogoproto.nullable) = false];
 }
 
 message DatabaseConfig {
@@ -101,4 +101,9 @@ message FaucetCaptchaConfig {
 message StableCoinConfig {
   string denom = 1;
   uint32 decimals = 2;
+}
+
+message AssetConfig {
+  string underlyingTokenDenom = 1;
+  int64 grossExchangeRateMinDataCount = 2;
 }

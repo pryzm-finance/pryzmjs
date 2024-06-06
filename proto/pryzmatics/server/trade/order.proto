@@ -37,3 +37,36 @@ message QueryOrdersResponse {
   repeated pryzmatics.trade.Order orders = 1 [(gogoproto.nullable) = false];
   cosmos.base.query.v1beta1.PageResponse pagination = 2 [(gogoproto.nullable) = true];
 }
+
+message QueryMatchableOrderCountsRequest {
+  uint64 min_buy = 1;
+  uint64 min_sell = 2;
+  cosmos.base.query.v1beta1.PageRequest pagination = 3 [(gogoproto.nullable) = true];
+}
+
+message QueryMatchableOrderCountsResponse {
+  repeated pryzmatics.trade.MatchableOrderCount counts = 1 [(gogoproto.nullable) = false];
+  cosmos.base.query.v1beta1.PageResponse pagination = 2 [(gogoproto.nullable) = true];
+}
+
+message QueryMatchableOrdersForPairRequest {
+  string token_in = 1;
+  string token_out = 2;
+  uint64 pool_id = 3;
+  bool whitelisted_route = 4;
+  string max_buy_price = 5 [
+    (cosmos_proto.scalar) = "cosmos.Dec",
+    (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Dec",
+    (gogoproto.nullable) = false
+  ];
+  string max_sell_price = 6 [
+    (cosmos_proto.scalar) = "cosmos.Dec",
+    (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Dec",
+    (gogoproto.nullable) = false
+  ];
+}
+
+message QueryMatchableOrdersForPairResponse {
+  repeated pryzmatics.trade.MatchableOrder buy_orders = 1 [(gogoproto.nullable) = false];
+  repeated pryzmatics.trade.MatchableOrder sell_orders = 2 [(gogoproto.nullable) = false];
+}
