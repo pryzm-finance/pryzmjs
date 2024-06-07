@@ -70,6 +70,10 @@ export interface YammParameters {
   defaultAdmins: string[];
   /** this will be set to newly created yamm pools */
   defaultPauseAllowList: string[];
+  /** this will be set to newly created yamm pools */
+  defaultPauseWindowDurationMillis: bigint;
+  /** this will be set to newly created yamm pools */
+  defaultPauseBufferDurationMillis: bigint;
 }
 export interface YammParametersProtoMsg {
   typeUrl: "/pryzm.amm.v1.YammParameters";
@@ -96,6 +100,10 @@ export interface YammParametersAmino {
   default_admins: string[];
   /** this will be set to newly created yamm pools */
   default_pause_allow_list: string[];
+  /** this will be set to newly created yamm pools */
+  default_pause_window_duration_millis: string;
+  /** this will be set to newly created yamm pools */
+  default_pause_buffer_duration_millis: string;
 }
 export interface YammParametersAminoMsg {
   type: "/pryzm.amm.v1.YammParameters";
@@ -115,6 +123,8 @@ export interface YammParametersSDKType {
   yield_fee_scaler: string;
   default_admins: string[];
   default_pause_allow_list: string[];
+  default_pause_window_duration_millis: bigint;
+  default_pause_buffer_duration_millis: bigint;
 }
 export interface GeneralPoolParameters {
   allowPublicPoolCreation: boolean;
@@ -172,12 +182,72 @@ export interface AuthorizationParametersSDKType {
   admin_list: string[];
   pause_allow_list: string[];
 }
+export interface GasParameters {
+  /** gas for swapping in a pool */
+  vaultSwap: bigint;
+  /** gas for initializing a pool */
+  vaultInitializePool: bigint;
+  /** gas for join pool */
+  vaultJoin: bigint;
+  /** gas for exit pool */
+  vaultExit: bigint;
+  /** gas for recovery exit */
+  vaultRecoveryExit: bigint;
+  /** gas for each step of batch swap */
+  vaultBatchSwapStep: bigint;
+  /** gas for creating a new weighted pool */
+  createWeightedPool: bigint;
+  /** gas for submitting a new order */
+  submitOrder: bigint;
+  /** gas for each order in match proposal */
+  proposalMatchOrder: bigint;
+}
+export interface GasParametersProtoMsg {
+  typeUrl: "/pryzm.amm.v1.GasParameters";
+  value: Uint8Array;
+}
+export interface GasParametersAmino {
+  /** gas for swapping in a pool */
+  vault_swap?: string;
+  /** gas for initializing a pool */
+  vault_initialize_pool?: string;
+  /** gas for join pool */
+  vault_join?: string;
+  /** gas for exit pool */
+  vault_exit?: string;
+  /** gas for recovery exit */
+  vault_recovery_exit?: string;
+  /** gas for each step of batch swap */
+  vault_batch_swap_step?: string;
+  /** gas for creating a new weighted pool */
+  create_weighted_pool?: string;
+  /** gas for submitting a new order */
+  submit_order?: string;
+  /** gas for each order in match proposal */
+  proposal_match_order?: string;
+}
+export interface GasParametersAminoMsg {
+  type: "/pryzm.amm.v1.GasParameters";
+  value: GasParametersAmino;
+}
+export interface GasParametersSDKType {
+  vault_swap: bigint;
+  vault_initialize_pool: bigint;
+  vault_join: bigint;
+  vault_exit: bigint;
+  vault_recovery_exit: bigint;
+  vault_batch_swap_step: bigint;
+  create_weighted_pool: bigint;
+  submit_order: bigint;
+  proposal_match_order: bigint;
+}
 /** Params defines the parameters for the module. */
 export interface Params {
   generalPoolParameters: GeneralPoolParameters;
   yammParameters: YammParameters;
   orderParameters: OrderParameters;
   authorizationParameters: AuthorizationParameters;
+  gasParameters: GasParameters;
 }
 export interface ParamsProtoMsg {
   typeUrl: "/pryzm.amm.v1.Params";
@@ -189,6 +259,7 @@ export interface ParamsAmino {
   yamm_parameters?: YammParametersAmino;
   order_parameters?: OrderParametersAmino;
   authorization_parameters?: AuthorizationParametersAmino;
+  gas_parameters?: GasParametersAmino;
 }
 export interface ParamsAminoMsg {
   type: "/pryzm.amm.v1.Params";
@@ -200,6 +271,7 @@ export interface ParamsSDKType {
   yamm_parameters: YammParametersSDKType;
   order_parameters: OrderParametersSDKType;
   authorization_parameters: AuthorizationParametersSDKType;
+  gas_parameters: GasParametersSDKType;
 }
 function createBaseOrderParameters(): OrderParameters {
   return {
@@ -438,19 +510,21 @@ function createBaseYammParameters(): YammParameters {
     avgMonthlyYieldRate: "",
     yieldFeeScaler: "",
     defaultAdmins: [],
-    defaultPauseAllowList: []
+    defaultPauseAllowList: [],
+    defaultPauseWindowDurationMillis: BigInt(0),
+    defaultPauseBufferDurationMillis: BigInt(0)
   };
 }
 export const YammParameters = {
   typeUrl: "/pryzm.amm.v1.YammParameters",
   is(o: any): o is YammParameters {
-    return o && (o.$typeUrl === YammParameters.typeUrl || typeof o.lambda === "string" && typeof o.maturityIntroductionIntervalMillis === "bigint" && typeof o.maturityExpirationIntervalMillis === "bigint" && typeof o.introductionVirtualBalanceScaler === "string" && typeof o.expirationVirtualBalanceScaler === "string" && typeof o.buyYGivenInLoanFeeRatio === "string" && typeof o.sellYGivenOutFeeRatio === "string" && typeof o.maxAlpha === "string" && Array.isArray(o.defaultInitializationAllowList) && (!o.defaultInitializationAllowList.length || typeof o.defaultInitializationAllowList[0] === "string") && typeof o.avgMonthlyYieldRate === "string" && typeof o.yieldFeeScaler === "string" && Array.isArray(o.defaultAdmins) && (!o.defaultAdmins.length || typeof o.defaultAdmins[0] === "string") && Array.isArray(o.defaultPauseAllowList) && (!o.defaultPauseAllowList.length || typeof o.defaultPauseAllowList[0] === "string"));
+    return o && (o.$typeUrl === YammParameters.typeUrl || typeof o.lambda === "string" && typeof o.maturityIntroductionIntervalMillis === "bigint" && typeof o.maturityExpirationIntervalMillis === "bigint" && typeof o.introductionVirtualBalanceScaler === "string" && typeof o.expirationVirtualBalanceScaler === "string" && typeof o.buyYGivenInLoanFeeRatio === "string" && typeof o.sellYGivenOutFeeRatio === "string" && typeof o.maxAlpha === "string" && Array.isArray(o.defaultInitializationAllowList) && (!o.defaultInitializationAllowList.length || typeof o.defaultInitializationAllowList[0] === "string") && typeof o.avgMonthlyYieldRate === "string" && typeof o.yieldFeeScaler === "string" && Array.isArray(o.defaultAdmins) && (!o.defaultAdmins.length || typeof o.defaultAdmins[0] === "string") && Array.isArray(o.defaultPauseAllowList) && (!o.defaultPauseAllowList.length || typeof o.defaultPauseAllowList[0] === "string") && typeof o.defaultPauseWindowDurationMillis === "bigint" && typeof o.defaultPauseBufferDurationMillis === "bigint");
   },
   isSDK(o: any): o is YammParametersSDKType {
-    return o && (o.$typeUrl === YammParameters.typeUrl || typeof o.lambda === "string" && typeof o.maturity_introduction_interval_millis === "bigint" && typeof o.maturity_expiration_interval_millis === "bigint" && typeof o.introduction_virtual_balance_scaler === "string" && typeof o.expiration_virtual_balance_scaler === "string" && typeof o.buy_y_given_in_loan_fee_ratio === "string" && typeof o.sell_y_given_out_fee_ratio === "string" && typeof o.max_alpha === "string" && Array.isArray(o.default_initialization_allow_list) && (!o.default_initialization_allow_list.length || typeof o.default_initialization_allow_list[0] === "string") && typeof o.avg_monthly_yield_rate === "string" && typeof o.yield_fee_scaler === "string" && Array.isArray(o.default_admins) && (!o.default_admins.length || typeof o.default_admins[0] === "string") && Array.isArray(o.default_pause_allow_list) && (!o.default_pause_allow_list.length || typeof o.default_pause_allow_list[0] === "string"));
+    return o && (o.$typeUrl === YammParameters.typeUrl || typeof o.lambda === "string" && typeof o.maturity_introduction_interval_millis === "bigint" && typeof o.maturity_expiration_interval_millis === "bigint" && typeof o.introduction_virtual_balance_scaler === "string" && typeof o.expiration_virtual_balance_scaler === "string" && typeof o.buy_y_given_in_loan_fee_ratio === "string" && typeof o.sell_y_given_out_fee_ratio === "string" && typeof o.max_alpha === "string" && Array.isArray(o.default_initialization_allow_list) && (!o.default_initialization_allow_list.length || typeof o.default_initialization_allow_list[0] === "string") && typeof o.avg_monthly_yield_rate === "string" && typeof o.yield_fee_scaler === "string" && Array.isArray(o.default_admins) && (!o.default_admins.length || typeof o.default_admins[0] === "string") && Array.isArray(o.default_pause_allow_list) && (!o.default_pause_allow_list.length || typeof o.default_pause_allow_list[0] === "string") && typeof o.default_pause_window_duration_millis === "bigint" && typeof o.default_pause_buffer_duration_millis === "bigint");
   },
   isAmino(o: any): o is YammParametersAmino {
-    return o && (o.$typeUrl === YammParameters.typeUrl || typeof o.lambda === "string" && typeof o.maturity_introduction_interval_millis === "bigint" && typeof o.maturity_expiration_interval_millis === "bigint" && typeof o.introduction_virtual_balance_scaler === "string" && typeof o.expiration_virtual_balance_scaler === "string" && typeof o.buy_y_given_in_loan_fee_ratio === "string" && typeof o.sell_y_given_out_fee_ratio === "string" && typeof o.max_alpha === "string" && Array.isArray(o.default_initialization_allow_list) && (!o.default_initialization_allow_list.length || typeof o.default_initialization_allow_list[0] === "string") && typeof o.avg_monthly_yield_rate === "string" && typeof o.yield_fee_scaler === "string" && Array.isArray(o.default_admins) && (!o.default_admins.length || typeof o.default_admins[0] === "string") && Array.isArray(o.default_pause_allow_list) && (!o.default_pause_allow_list.length || typeof o.default_pause_allow_list[0] === "string"));
+    return o && (o.$typeUrl === YammParameters.typeUrl || typeof o.lambda === "string" && typeof o.maturity_introduction_interval_millis === "bigint" && typeof o.maturity_expiration_interval_millis === "bigint" && typeof o.introduction_virtual_balance_scaler === "string" && typeof o.expiration_virtual_balance_scaler === "string" && typeof o.buy_y_given_in_loan_fee_ratio === "string" && typeof o.sell_y_given_out_fee_ratio === "string" && typeof o.max_alpha === "string" && Array.isArray(o.default_initialization_allow_list) && (!o.default_initialization_allow_list.length || typeof o.default_initialization_allow_list[0] === "string") && typeof o.avg_monthly_yield_rate === "string" && typeof o.yield_fee_scaler === "string" && Array.isArray(o.default_admins) && (!o.default_admins.length || typeof o.default_admins[0] === "string") && Array.isArray(o.default_pause_allow_list) && (!o.default_pause_allow_list.length || typeof o.default_pause_allow_list[0] === "string") && typeof o.default_pause_window_duration_millis === "bigint" && typeof o.default_pause_buffer_duration_millis === "bigint");
   },
   encode(message: YammParameters, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.lambda !== "") {
@@ -491,6 +565,12 @@ export const YammParameters = {
     }
     for (const v of message.defaultPauseAllowList) {
       writer.uint32(106).string(v!);
+    }
+    if (message.defaultPauseWindowDurationMillis !== BigInt(0)) {
+      writer.uint32(112).int64(message.defaultPauseWindowDurationMillis);
+    }
+    if (message.defaultPauseBufferDurationMillis !== BigInt(0)) {
+      writer.uint32(120).int64(message.defaultPauseBufferDurationMillis);
     }
     return writer;
   },
@@ -540,6 +620,12 @@ export const YammParameters = {
         case 13:
           message.defaultPauseAllowList.push(reader.string());
           break;
+        case 14:
+          message.defaultPauseWindowDurationMillis = reader.int64();
+          break;
+        case 15:
+          message.defaultPauseBufferDurationMillis = reader.int64();
+          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -561,7 +647,9 @@ export const YammParameters = {
       avgMonthlyYieldRate: isSet(object.avgMonthlyYieldRate) ? String(object.avgMonthlyYieldRate) : "",
       yieldFeeScaler: isSet(object.yieldFeeScaler) ? String(object.yieldFeeScaler) : "",
       defaultAdmins: Array.isArray(object?.defaultAdmins) ? object.defaultAdmins.map((e: any) => String(e)) : [],
-      defaultPauseAllowList: Array.isArray(object?.defaultPauseAllowList) ? object.defaultPauseAllowList.map((e: any) => String(e)) : []
+      defaultPauseAllowList: Array.isArray(object?.defaultPauseAllowList) ? object.defaultPauseAllowList.map((e: any) => String(e)) : [],
+      defaultPauseWindowDurationMillis: isSet(object.defaultPauseWindowDurationMillis) ? BigInt(object.defaultPauseWindowDurationMillis.toString()) : BigInt(0),
+      defaultPauseBufferDurationMillis: isSet(object.defaultPauseBufferDurationMillis) ? BigInt(object.defaultPauseBufferDurationMillis.toString()) : BigInt(0)
     };
   },
   toJSON(message: YammParameters): unknown {
@@ -591,6 +679,8 @@ export const YammParameters = {
     } else {
       obj.defaultPauseAllowList = [];
     }
+    message.defaultPauseWindowDurationMillis !== undefined && (obj.defaultPauseWindowDurationMillis = (message.defaultPauseWindowDurationMillis || BigInt(0)).toString());
+    message.defaultPauseBufferDurationMillis !== undefined && (obj.defaultPauseBufferDurationMillis = (message.defaultPauseBufferDurationMillis || BigInt(0)).toString());
     return obj;
   },
   fromPartial(object: Partial<YammParameters>): YammParameters {
@@ -608,6 +698,8 @@ export const YammParameters = {
     message.yieldFeeScaler = object.yieldFeeScaler ?? "";
     message.defaultAdmins = object.defaultAdmins?.map(e => e) || [];
     message.defaultPauseAllowList = object.defaultPauseAllowList?.map(e => e) || [];
+    message.defaultPauseWindowDurationMillis = object.defaultPauseWindowDurationMillis !== undefined && object.defaultPauseWindowDurationMillis !== null ? BigInt(object.defaultPauseWindowDurationMillis.toString()) : BigInt(0);
+    message.defaultPauseBufferDurationMillis = object.defaultPauseBufferDurationMillis !== undefined && object.defaultPauseBufferDurationMillis !== null ? BigInt(object.defaultPauseBufferDurationMillis.toString()) : BigInt(0);
     return message;
   },
   fromAmino(object: YammParametersAmino): YammParameters {
@@ -645,6 +737,12 @@ export const YammParameters = {
     }
     message.defaultAdmins = object.default_admins?.map(e => e) || [];
     message.defaultPauseAllowList = object.default_pause_allow_list?.map(e => e) || [];
+    if (object.default_pause_window_duration_millis !== undefined && object.default_pause_window_duration_millis !== null) {
+      message.defaultPauseWindowDurationMillis = BigInt(object.default_pause_window_duration_millis);
+    }
+    if (object.default_pause_buffer_duration_millis !== undefined && object.default_pause_buffer_duration_millis !== null) {
+      message.defaultPauseBufferDurationMillis = BigInt(object.default_pause_buffer_duration_millis);
+    }
     return message;
   },
   toAmino(message: YammParameters, useInterfaces: boolean = true): YammParametersAmino {
@@ -674,6 +772,8 @@ export const YammParameters = {
     } else {
       obj.default_pause_allow_list = message.defaultPauseAllowList;
     }
+    obj.default_pause_window_duration_millis = message.defaultPauseWindowDurationMillis ? message.defaultPauseWindowDurationMillis.toString() : undefined;
+    obj.default_pause_buffer_duration_millis = message.defaultPauseBufferDurationMillis ? message.defaultPauseBufferDurationMillis.toString() : undefined;
     return obj;
   },
   fromAminoMsg(object: YammParametersAminoMsg): YammParameters {
@@ -927,24 +1027,220 @@ export const AuthorizationParameters = {
   }
 };
 GlobalDecoderRegistry.register(AuthorizationParameters.typeUrl, AuthorizationParameters);
+function createBaseGasParameters(): GasParameters {
+  return {
+    vaultSwap: BigInt(0),
+    vaultInitializePool: BigInt(0),
+    vaultJoin: BigInt(0),
+    vaultExit: BigInt(0),
+    vaultRecoveryExit: BigInt(0),
+    vaultBatchSwapStep: BigInt(0),
+    createWeightedPool: BigInt(0),
+    submitOrder: BigInt(0),
+    proposalMatchOrder: BigInt(0)
+  };
+}
+export const GasParameters = {
+  typeUrl: "/pryzm.amm.v1.GasParameters",
+  is(o: any): o is GasParameters {
+    return o && (o.$typeUrl === GasParameters.typeUrl || typeof o.vaultSwap === "bigint" && typeof o.vaultInitializePool === "bigint" && typeof o.vaultJoin === "bigint" && typeof o.vaultExit === "bigint" && typeof o.vaultRecoveryExit === "bigint" && typeof o.vaultBatchSwapStep === "bigint" && typeof o.createWeightedPool === "bigint" && typeof o.submitOrder === "bigint" && typeof o.proposalMatchOrder === "bigint");
+  },
+  isSDK(o: any): o is GasParametersSDKType {
+    return o && (o.$typeUrl === GasParameters.typeUrl || typeof o.vault_swap === "bigint" && typeof o.vault_initialize_pool === "bigint" && typeof o.vault_join === "bigint" && typeof o.vault_exit === "bigint" && typeof o.vault_recovery_exit === "bigint" && typeof o.vault_batch_swap_step === "bigint" && typeof o.create_weighted_pool === "bigint" && typeof o.submit_order === "bigint" && typeof o.proposal_match_order === "bigint");
+  },
+  isAmino(o: any): o is GasParametersAmino {
+    return o && (o.$typeUrl === GasParameters.typeUrl || typeof o.vault_swap === "bigint" && typeof o.vault_initialize_pool === "bigint" && typeof o.vault_join === "bigint" && typeof o.vault_exit === "bigint" && typeof o.vault_recovery_exit === "bigint" && typeof o.vault_batch_swap_step === "bigint" && typeof o.create_weighted_pool === "bigint" && typeof o.submit_order === "bigint" && typeof o.proposal_match_order === "bigint");
+  },
+  encode(message: GasParameters, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    if (message.vaultSwap !== BigInt(0)) {
+      writer.uint32(8).uint64(message.vaultSwap);
+    }
+    if (message.vaultInitializePool !== BigInt(0)) {
+      writer.uint32(16).uint64(message.vaultInitializePool);
+    }
+    if (message.vaultJoin !== BigInt(0)) {
+      writer.uint32(24).uint64(message.vaultJoin);
+    }
+    if (message.vaultExit !== BigInt(0)) {
+      writer.uint32(32).uint64(message.vaultExit);
+    }
+    if (message.vaultRecoveryExit !== BigInt(0)) {
+      writer.uint32(40).uint64(message.vaultRecoveryExit);
+    }
+    if (message.vaultBatchSwapStep !== BigInt(0)) {
+      writer.uint32(48).uint64(message.vaultBatchSwapStep);
+    }
+    if (message.createWeightedPool !== BigInt(0)) {
+      writer.uint32(56).uint64(message.createWeightedPool);
+    }
+    if (message.submitOrder !== BigInt(0)) {
+      writer.uint32(64).uint64(message.submitOrder);
+    }
+    if (message.proposalMatchOrder !== BigInt(0)) {
+      writer.uint32(72).uint64(message.proposalMatchOrder);
+    }
+    return writer;
+  },
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): GasParameters {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseGasParameters();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.vaultSwap = reader.uint64();
+          break;
+        case 2:
+          message.vaultInitializePool = reader.uint64();
+          break;
+        case 3:
+          message.vaultJoin = reader.uint64();
+          break;
+        case 4:
+          message.vaultExit = reader.uint64();
+          break;
+        case 5:
+          message.vaultRecoveryExit = reader.uint64();
+          break;
+        case 6:
+          message.vaultBatchSwapStep = reader.uint64();
+          break;
+        case 7:
+          message.createWeightedPool = reader.uint64();
+          break;
+        case 8:
+          message.submitOrder = reader.uint64();
+          break;
+        case 9:
+          message.proposalMatchOrder = reader.uint64();
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromJSON(object: any): GasParameters {
+    return {
+      vaultSwap: isSet(object.vaultSwap) ? BigInt(object.vaultSwap.toString()) : BigInt(0),
+      vaultInitializePool: isSet(object.vaultInitializePool) ? BigInt(object.vaultInitializePool.toString()) : BigInt(0),
+      vaultJoin: isSet(object.vaultJoin) ? BigInt(object.vaultJoin.toString()) : BigInt(0),
+      vaultExit: isSet(object.vaultExit) ? BigInt(object.vaultExit.toString()) : BigInt(0),
+      vaultRecoveryExit: isSet(object.vaultRecoveryExit) ? BigInt(object.vaultRecoveryExit.toString()) : BigInt(0),
+      vaultBatchSwapStep: isSet(object.vaultBatchSwapStep) ? BigInt(object.vaultBatchSwapStep.toString()) : BigInt(0),
+      createWeightedPool: isSet(object.createWeightedPool) ? BigInt(object.createWeightedPool.toString()) : BigInt(0),
+      submitOrder: isSet(object.submitOrder) ? BigInt(object.submitOrder.toString()) : BigInt(0),
+      proposalMatchOrder: isSet(object.proposalMatchOrder) ? BigInt(object.proposalMatchOrder.toString()) : BigInt(0)
+    };
+  },
+  toJSON(message: GasParameters): unknown {
+    const obj: any = {};
+    message.vaultSwap !== undefined && (obj.vaultSwap = (message.vaultSwap || BigInt(0)).toString());
+    message.vaultInitializePool !== undefined && (obj.vaultInitializePool = (message.vaultInitializePool || BigInt(0)).toString());
+    message.vaultJoin !== undefined && (obj.vaultJoin = (message.vaultJoin || BigInt(0)).toString());
+    message.vaultExit !== undefined && (obj.vaultExit = (message.vaultExit || BigInt(0)).toString());
+    message.vaultRecoveryExit !== undefined && (obj.vaultRecoveryExit = (message.vaultRecoveryExit || BigInt(0)).toString());
+    message.vaultBatchSwapStep !== undefined && (obj.vaultBatchSwapStep = (message.vaultBatchSwapStep || BigInt(0)).toString());
+    message.createWeightedPool !== undefined && (obj.createWeightedPool = (message.createWeightedPool || BigInt(0)).toString());
+    message.submitOrder !== undefined && (obj.submitOrder = (message.submitOrder || BigInt(0)).toString());
+    message.proposalMatchOrder !== undefined && (obj.proposalMatchOrder = (message.proposalMatchOrder || BigInt(0)).toString());
+    return obj;
+  },
+  fromPartial(object: Partial<GasParameters>): GasParameters {
+    const message = createBaseGasParameters();
+    message.vaultSwap = object.vaultSwap !== undefined && object.vaultSwap !== null ? BigInt(object.vaultSwap.toString()) : BigInt(0);
+    message.vaultInitializePool = object.vaultInitializePool !== undefined && object.vaultInitializePool !== null ? BigInt(object.vaultInitializePool.toString()) : BigInt(0);
+    message.vaultJoin = object.vaultJoin !== undefined && object.vaultJoin !== null ? BigInt(object.vaultJoin.toString()) : BigInt(0);
+    message.vaultExit = object.vaultExit !== undefined && object.vaultExit !== null ? BigInt(object.vaultExit.toString()) : BigInt(0);
+    message.vaultRecoveryExit = object.vaultRecoveryExit !== undefined && object.vaultRecoveryExit !== null ? BigInt(object.vaultRecoveryExit.toString()) : BigInt(0);
+    message.vaultBatchSwapStep = object.vaultBatchSwapStep !== undefined && object.vaultBatchSwapStep !== null ? BigInt(object.vaultBatchSwapStep.toString()) : BigInt(0);
+    message.createWeightedPool = object.createWeightedPool !== undefined && object.createWeightedPool !== null ? BigInt(object.createWeightedPool.toString()) : BigInt(0);
+    message.submitOrder = object.submitOrder !== undefined && object.submitOrder !== null ? BigInt(object.submitOrder.toString()) : BigInt(0);
+    message.proposalMatchOrder = object.proposalMatchOrder !== undefined && object.proposalMatchOrder !== null ? BigInt(object.proposalMatchOrder.toString()) : BigInt(0);
+    return message;
+  },
+  fromAmino(object: GasParametersAmino): GasParameters {
+    const message = createBaseGasParameters();
+    if (object.vault_swap !== undefined && object.vault_swap !== null) {
+      message.vaultSwap = BigInt(object.vault_swap);
+    }
+    if (object.vault_initialize_pool !== undefined && object.vault_initialize_pool !== null) {
+      message.vaultInitializePool = BigInt(object.vault_initialize_pool);
+    }
+    if (object.vault_join !== undefined && object.vault_join !== null) {
+      message.vaultJoin = BigInt(object.vault_join);
+    }
+    if (object.vault_exit !== undefined && object.vault_exit !== null) {
+      message.vaultExit = BigInt(object.vault_exit);
+    }
+    if (object.vault_recovery_exit !== undefined && object.vault_recovery_exit !== null) {
+      message.vaultRecoveryExit = BigInt(object.vault_recovery_exit);
+    }
+    if (object.vault_batch_swap_step !== undefined && object.vault_batch_swap_step !== null) {
+      message.vaultBatchSwapStep = BigInt(object.vault_batch_swap_step);
+    }
+    if (object.create_weighted_pool !== undefined && object.create_weighted_pool !== null) {
+      message.createWeightedPool = BigInt(object.create_weighted_pool);
+    }
+    if (object.submit_order !== undefined && object.submit_order !== null) {
+      message.submitOrder = BigInt(object.submit_order);
+    }
+    if (object.proposal_match_order !== undefined && object.proposal_match_order !== null) {
+      message.proposalMatchOrder = BigInt(object.proposal_match_order);
+    }
+    return message;
+  },
+  toAmino(message: GasParameters, useInterfaces: boolean = true): GasParametersAmino {
+    const obj: any = {};
+    obj.vault_swap = message.vaultSwap ? message.vaultSwap.toString() : undefined;
+    obj.vault_initialize_pool = message.vaultInitializePool ? message.vaultInitializePool.toString() : undefined;
+    obj.vault_join = message.vaultJoin ? message.vaultJoin.toString() : undefined;
+    obj.vault_exit = message.vaultExit ? message.vaultExit.toString() : undefined;
+    obj.vault_recovery_exit = message.vaultRecoveryExit ? message.vaultRecoveryExit.toString() : undefined;
+    obj.vault_batch_swap_step = message.vaultBatchSwapStep ? message.vaultBatchSwapStep.toString() : undefined;
+    obj.create_weighted_pool = message.createWeightedPool ? message.createWeightedPool.toString() : undefined;
+    obj.submit_order = message.submitOrder ? message.submitOrder.toString() : undefined;
+    obj.proposal_match_order = message.proposalMatchOrder ? message.proposalMatchOrder.toString() : undefined;
+    return obj;
+  },
+  fromAminoMsg(object: GasParametersAminoMsg): GasParameters {
+    return GasParameters.fromAmino(object.value);
+  },
+  fromProtoMsg(message: GasParametersProtoMsg, useInterfaces: boolean = true): GasParameters {
+    return GasParameters.decode(message.value, undefined, useInterfaces);
+  },
+  toProto(message: GasParameters): Uint8Array {
+    return GasParameters.encode(message).finish();
+  },
+  toProtoMsg(message: GasParameters): GasParametersProtoMsg {
+    return {
+      typeUrl: "/pryzm.amm.v1.GasParameters",
+      value: GasParameters.encode(message).finish()
+    };
+  }
+};
+GlobalDecoderRegistry.register(GasParameters.typeUrl, GasParameters);
 function createBaseParams(): Params {
   return {
     generalPoolParameters: GeneralPoolParameters.fromPartial({}),
     yammParameters: YammParameters.fromPartial({}),
     orderParameters: OrderParameters.fromPartial({}),
-    authorizationParameters: AuthorizationParameters.fromPartial({})
+    authorizationParameters: AuthorizationParameters.fromPartial({}),
+    gasParameters: GasParameters.fromPartial({})
   };
 }
 export const Params = {
   typeUrl: "/pryzm.amm.v1.Params",
   is(o: any): o is Params {
-    return o && (o.$typeUrl === Params.typeUrl || GeneralPoolParameters.is(o.generalPoolParameters) && YammParameters.is(o.yammParameters) && OrderParameters.is(o.orderParameters) && AuthorizationParameters.is(o.authorizationParameters));
+    return o && (o.$typeUrl === Params.typeUrl || GeneralPoolParameters.is(o.generalPoolParameters) && YammParameters.is(o.yammParameters) && OrderParameters.is(o.orderParameters) && AuthorizationParameters.is(o.authorizationParameters) && GasParameters.is(o.gasParameters));
   },
   isSDK(o: any): o is ParamsSDKType {
-    return o && (o.$typeUrl === Params.typeUrl || GeneralPoolParameters.isSDK(o.general_pool_parameters) && YammParameters.isSDK(o.yamm_parameters) && OrderParameters.isSDK(o.order_parameters) && AuthorizationParameters.isSDK(o.authorization_parameters));
+    return o && (o.$typeUrl === Params.typeUrl || GeneralPoolParameters.isSDK(o.general_pool_parameters) && YammParameters.isSDK(o.yamm_parameters) && OrderParameters.isSDK(o.order_parameters) && AuthorizationParameters.isSDK(o.authorization_parameters) && GasParameters.isSDK(o.gas_parameters));
   },
   isAmino(o: any): o is ParamsAmino {
-    return o && (o.$typeUrl === Params.typeUrl || GeneralPoolParameters.isAmino(o.general_pool_parameters) && YammParameters.isAmino(o.yamm_parameters) && OrderParameters.isAmino(o.order_parameters) && AuthorizationParameters.isAmino(o.authorization_parameters));
+    return o && (o.$typeUrl === Params.typeUrl || GeneralPoolParameters.isAmino(o.general_pool_parameters) && YammParameters.isAmino(o.yamm_parameters) && OrderParameters.isAmino(o.order_parameters) && AuthorizationParameters.isAmino(o.authorization_parameters) && GasParameters.isAmino(o.gas_parameters));
   },
   encode(message: Params, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.generalPoolParameters !== undefined) {
@@ -958,6 +1254,9 @@ export const Params = {
     }
     if (message.authorizationParameters !== undefined) {
       AuthorizationParameters.encode(message.authorizationParameters, writer.uint32(34).fork()).ldelim();
+    }
+    if (message.gasParameters !== undefined) {
+      GasParameters.encode(message.gasParameters, writer.uint32(42).fork()).ldelim();
     }
     return writer;
   },
@@ -980,6 +1279,9 @@ export const Params = {
         case 4:
           message.authorizationParameters = AuthorizationParameters.decode(reader, reader.uint32(), useInterfaces);
           break;
+        case 5:
+          message.gasParameters = GasParameters.decode(reader, reader.uint32(), useInterfaces);
+          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -992,7 +1294,8 @@ export const Params = {
       generalPoolParameters: isSet(object.generalPoolParameters) ? GeneralPoolParameters.fromJSON(object.generalPoolParameters) : undefined,
       yammParameters: isSet(object.yammParameters) ? YammParameters.fromJSON(object.yammParameters) : undefined,
       orderParameters: isSet(object.orderParameters) ? OrderParameters.fromJSON(object.orderParameters) : undefined,
-      authorizationParameters: isSet(object.authorizationParameters) ? AuthorizationParameters.fromJSON(object.authorizationParameters) : undefined
+      authorizationParameters: isSet(object.authorizationParameters) ? AuthorizationParameters.fromJSON(object.authorizationParameters) : undefined,
+      gasParameters: isSet(object.gasParameters) ? GasParameters.fromJSON(object.gasParameters) : undefined
     };
   },
   toJSON(message: Params): unknown {
@@ -1001,6 +1304,7 @@ export const Params = {
     message.yammParameters !== undefined && (obj.yammParameters = message.yammParameters ? YammParameters.toJSON(message.yammParameters) : undefined);
     message.orderParameters !== undefined && (obj.orderParameters = message.orderParameters ? OrderParameters.toJSON(message.orderParameters) : undefined);
     message.authorizationParameters !== undefined && (obj.authorizationParameters = message.authorizationParameters ? AuthorizationParameters.toJSON(message.authorizationParameters) : undefined);
+    message.gasParameters !== undefined && (obj.gasParameters = message.gasParameters ? GasParameters.toJSON(message.gasParameters) : undefined);
     return obj;
   },
   fromPartial(object: Partial<Params>): Params {
@@ -1009,6 +1313,7 @@ export const Params = {
     message.yammParameters = object.yammParameters !== undefined && object.yammParameters !== null ? YammParameters.fromPartial(object.yammParameters) : undefined;
     message.orderParameters = object.orderParameters !== undefined && object.orderParameters !== null ? OrderParameters.fromPartial(object.orderParameters) : undefined;
     message.authorizationParameters = object.authorizationParameters !== undefined && object.authorizationParameters !== null ? AuthorizationParameters.fromPartial(object.authorizationParameters) : undefined;
+    message.gasParameters = object.gasParameters !== undefined && object.gasParameters !== null ? GasParameters.fromPartial(object.gasParameters) : undefined;
     return message;
   },
   fromAmino(object: ParamsAmino): Params {
@@ -1025,6 +1330,9 @@ export const Params = {
     if (object.authorization_parameters !== undefined && object.authorization_parameters !== null) {
       message.authorizationParameters = AuthorizationParameters.fromAmino(object.authorization_parameters);
     }
+    if (object.gas_parameters !== undefined && object.gas_parameters !== null) {
+      message.gasParameters = GasParameters.fromAmino(object.gas_parameters);
+    }
     return message;
   },
   toAmino(message: Params, useInterfaces: boolean = true): ParamsAmino {
@@ -1033,6 +1341,7 @@ export const Params = {
     obj.yamm_parameters = message.yammParameters ? YammParameters.toAmino(message.yammParameters, useInterfaces) : undefined;
     obj.order_parameters = message.orderParameters ? OrderParameters.toAmino(message.orderParameters, useInterfaces) : undefined;
     obj.authorization_parameters = message.authorizationParameters ? AuthorizationParameters.toAmino(message.authorizationParameters, useInterfaces) : undefined;
+    obj.gas_parameters = message.gasParameters ? GasParameters.toAmino(message.gasParameters, useInterfaces) : undefined;
     return obj;
   },
   fromAminoMsg(object: ParamsAminoMsg): Params {

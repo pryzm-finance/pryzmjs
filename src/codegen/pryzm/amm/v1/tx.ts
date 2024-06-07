@@ -6,7 +6,7 @@ import { WhitelistedRoute, WhitelistedRouteAmino, WhitelistedRouteSDKType } from
 import { PairMatchProposal, PairMatchProposalAmino, PairMatchProposalSDKType } from "./pair_match_proposal";
 import { TokenCircuitBreakerSettings, TokenCircuitBreakerSettingsAmino, TokenCircuitBreakerSettingsSDKType } from "./token_circuit_breaker_settings";
 import { OraclePricePair, OraclePricePairAmino, OraclePricePairSDKType } from "./oracle_price_pair";
-import { GeneralPoolParameters, GeneralPoolParametersAmino, GeneralPoolParametersSDKType, YammParameters, YammParametersAmino, YammParametersSDKType, OrderParameters, OrderParametersAmino, OrderParametersSDKType, AuthorizationParameters, AuthorizationParametersAmino, AuthorizationParametersSDKType } from "./params";
+import { GeneralPoolParameters, GeneralPoolParametersAmino, GeneralPoolParametersSDKType, YammParameters, YammParametersAmino, YammParametersSDKType, OrderParameters, OrderParametersAmino, OrderParametersSDKType, AuthorizationParameters, AuthorizationParametersAmino, AuthorizationParametersSDKType, GasParameters, GasParametersAmino, GasParametersSDKType } from "./params";
 import { PoolPauseWindow, PoolPauseWindowAmino, PoolPauseWindowSDKType } from "./pool";
 import { DisabledOrderPair, DisabledOrderPairAmino, DisabledOrderPairSDKType, Order, OrderAmino, OrderSDKType } from "./order";
 import { BinaryReader, BinaryWriter } from "../../../binary";
@@ -474,6 +474,8 @@ export interface MsgCreateWeightedPool {
    * NOTE: governance can leave this to false, as it already is the creator of the msg
    */
   forceGovOwner: boolean;
+  admins: string[];
+  pauseAllowList: string[];
 }
 export interface MsgCreateWeightedPoolProtoMsg {
   typeUrl: "/pryzm.amm.v1.MsgCreateWeightedPool";
@@ -494,6 +496,8 @@ export interface MsgCreateWeightedPoolAmino {
    * NOTE: governance can leave this to false, as it already is the creator of the msg
    */
   force_gov_owner?: boolean;
+  admins: string[];
+  pause_allow_list: string[];
 }
 export interface MsgCreateWeightedPoolAminoMsg {
   type: "pryzm/amm/v1/CreateWeightedPool";
@@ -508,6 +512,8 @@ export interface MsgCreateWeightedPoolSDKType {
   tokens: CreateWeightedPoolTokenSDKType[];
   initialization_allow_list: string[];
   force_gov_owner: boolean;
+  admins: string[];
+  pause_allow_list: string[];
 }
 export interface MsgCreateWeightedPoolResponse {
   poolId: bigint;
@@ -1455,6 +1461,7 @@ export interface MsgUpdateParams {
   yammParameters?: YammParameters;
   orderParameters?: OrderParameters;
   authorizationParameters?: AuthorizationParameters;
+  gasParameters?: GasParameters;
 }
 export interface MsgUpdateParamsProtoMsg {
   typeUrl: "/pryzm.amm.v1.MsgUpdateParams";
@@ -1466,6 +1473,7 @@ export interface MsgUpdateParamsAmino {
   yamm_parameters?: YammParametersAmino;
   order_parameters?: OrderParametersAmino;
   authorization_parameters?: AuthorizationParametersAmino;
+  gas_parameters?: GasParametersAmino;
 }
 export interface MsgUpdateParamsAminoMsg {
   type: "pryzm/amm/v1/UpdateParams";
@@ -1477,6 +1485,7 @@ export interface MsgUpdateParamsSDKType {
   yamm_parameters?: YammParametersSDKType;
   order_parameters?: OrderParametersSDKType;
   authorization_parameters?: AuthorizationParametersSDKType;
+  gas_parameters?: GasParametersSDKType;
 }
 export interface MsgUpdateParamsResponse {}
 export interface MsgUpdateParamsResponseProtoMsg {
@@ -3953,20 +3962,22 @@ function createBaseMsgCreateWeightedPool(): MsgCreateWeightedPool {
     pauseBufferDurationMillis: BigInt(0),
     tokens: [],
     initializationAllowList: [],
-    forceGovOwner: false
+    forceGovOwner: false,
+    admins: [],
+    pauseAllowList: []
   };
 }
 export const MsgCreateWeightedPool = {
   typeUrl: "/pryzm.amm.v1.MsgCreateWeightedPool",
   aminoType: "pryzm/amm/v1/CreateWeightedPool",
   is(o: any): o is MsgCreateWeightedPool {
-    return o && (o.$typeUrl === MsgCreateWeightedPool.typeUrl || typeof o.creator === "string" && typeof o.name === "string" && typeof o.swapFeeRatio === "string" && typeof o.pauseWindowDurationMillis === "bigint" && typeof o.pauseBufferDurationMillis === "bigint" && Array.isArray(o.tokens) && (!o.tokens.length || CreateWeightedPoolToken.is(o.tokens[0])) && Array.isArray(o.initializationAllowList) && (!o.initializationAllowList.length || typeof o.initializationAllowList[0] === "string") && typeof o.forceGovOwner === "boolean");
+    return o && (o.$typeUrl === MsgCreateWeightedPool.typeUrl || typeof o.creator === "string" && typeof o.name === "string" && typeof o.swapFeeRatio === "string" && typeof o.pauseWindowDurationMillis === "bigint" && typeof o.pauseBufferDurationMillis === "bigint" && Array.isArray(o.tokens) && (!o.tokens.length || CreateWeightedPoolToken.is(o.tokens[0])) && Array.isArray(o.initializationAllowList) && (!o.initializationAllowList.length || typeof o.initializationAllowList[0] === "string") && typeof o.forceGovOwner === "boolean" && Array.isArray(o.admins) && (!o.admins.length || typeof o.admins[0] === "string") && Array.isArray(o.pauseAllowList) && (!o.pauseAllowList.length || typeof o.pauseAllowList[0] === "string"));
   },
   isSDK(o: any): o is MsgCreateWeightedPoolSDKType {
-    return o && (o.$typeUrl === MsgCreateWeightedPool.typeUrl || typeof o.creator === "string" && typeof o.name === "string" && typeof o.swap_fee_ratio === "string" && typeof o.pause_window_duration_millis === "bigint" && typeof o.pause_buffer_duration_millis === "bigint" && Array.isArray(o.tokens) && (!o.tokens.length || CreateWeightedPoolToken.isSDK(o.tokens[0])) && Array.isArray(o.initialization_allow_list) && (!o.initialization_allow_list.length || typeof o.initialization_allow_list[0] === "string") && typeof o.force_gov_owner === "boolean");
+    return o && (o.$typeUrl === MsgCreateWeightedPool.typeUrl || typeof o.creator === "string" && typeof o.name === "string" && typeof o.swap_fee_ratio === "string" && typeof o.pause_window_duration_millis === "bigint" && typeof o.pause_buffer_duration_millis === "bigint" && Array.isArray(o.tokens) && (!o.tokens.length || CreateWeightedPoolToken.isSDK(o.tokens[0])) && Array.isArray(o.initialization_allow_list) && (!o.initialization_allow_list.length || typeof o.initialization_allow_list[0] === "string") && typeof o.force_gov_owner === "boolean" && Array.isArray(o.admins) && (!o.admins.length || typeof o.admins[0] === "string") && Array.isArray(o.pause_allow_list) && (!o.pause_allow_list.length || typeof o.pause_allow_list[0] === "string"));
   },
   isAmino(o: any): o is MsgCreateWeightedPoolAmino {
-    return o && (o.$typeUrl === MsgCreateWeightedPool.typeUrl || typeof o.creator === "string" && typeof o.name === "string" && typeof o.swap_fee_ratio === "string" && typeof o.pause_window_duration_millis === "bigint" && typeof o.pause_buffer_duration_millis === "bigint" && Array.isArray(o.tokens) && (!o.tokens.length || CreateWeightedPoolToken.isAmino(o.tokens[0])) && Array.isArray(o.initialization_allow_list) && (!o.initialization_allow_list.length || typeof o.initialization_allow_list[0] === "string") && typeof o.force_gov_owner === "boolean");
+    return o && (o.$typeUrl === MsgCreateWeightedPool.typeUrl || typeof o.creator === "string" && typeof o.name === "string" && typeof o.swap_fee_ratio === "string" && typeof o.pause_window_duration_millis === "bigint" && typeof o.pause_buffer_duration_millis === "bigint" && Array.isArray(o.tokens) && (!o.tokens.length || CreateWeightedPoolToken.isAmino(o.tokens[0])) && Array.isArray(o.initialization_allow_list) && (!o.initialization_allow_list.length || typeof o.initialization_allow_list[0] === "string") && typeof o.force_gov_owner === "boolean" && Array.isArray(o.admins) && (!o.admins.length || typeof o.admins[0] === "string") && Array.isArray(o.pause_allow_list) && (!o.pause_allow_list.length || typeof o.pause_allow_list[0] === "string"));
   },
   encode(message: MsgCreateWeightedPool, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.creator !== "") {
@@ -3992,6 +4003,12 @@ export const MsgCreateWeightedPool = {
     }
     if (message.forceGovOwner === true) {
       writer.uint32(104).bool(message.forceGovOwner);
+    }
+    for (const v of message.admins) {
+      writer.uint32(114).string(v!);
+    }
+    for (const v of message.pauseAllowList) {
+      writer.uint32(122).string(v!);
     }
     return writer;
   },
@@ -4026,6 +4043,12 @@ export const MsgCreateWeightedPool = {
         case 13:
           message.forceGovOwner = reader.bool();
           break;
+        case 14:
+          message.admins.push(reader.string());
+          break;
+        case 15:
+          message.pauseAllowList.push(reader.string());
+          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -4042,7 +4065,9 @@ export const MsgCreateWeightedPool = {
       pauseBufferDurationMillis: isSet(object.pauseBufferDurationMillis) ? BigInt(object.pauseBufferDurationMillis.toString()) : BigInt(0),
       tokens: Array.isArray(object?.tokens) ? object.tokens.map((e: any) => CreateWeightedPoolToken.fromJSON(e)) : [],
       initializationAllowList: Array.isArray(object?.initializationAllowList) ? object.initializationAllowList.map((e: any) => String(e)) : [],
-      forceGovOwner: isSet(object.forceGovOwner) ? Boolean(object.forceGovOwner) : false
+      forceGovOwner: isSet(object.forceGovOwner) ? Boolean(object.forceGovOwner) : false,
+      admins: Array.isArray(object?.admins) ? object.admins.map((e: any) => String(e)) : [],
+      pauseAllowList: Array.isArray(object?.pauseAllowList) ? object.pauseAllowList.map((e: any) => String(e)) : []
     };
   },
   toJSON(message: MsgCreateWeightedPool): unknown {
@@ -4063,6 +4088,16 @@ export const MsgCreateWeightedPool = {
       obj.initializationAllowList = [];
     }
     message.forceGovOwner !== undefined && (obj.forceGovOwner = message.forceGovOwner);
+    if (message.admins) {
+      obj.admins = message.admins.map(e => e);
+    } else {
+      obj.admins = [];
+    }
+    if (message.pauseAllowList) {
+      obj.pauseAllowList = message.pauseAllowList.map(e => e);
+    } else {
+      obj.pauseAllowList = [];
+    }
     return obj;
   },
   fromPartial(object: Partial<MsgCreateWeightedPool>): MsgCreateWeightedPool {
@@ -4075,6 +4110,8 @@ export const MsgCreateWeightedPool = {
     message.tokens = object.tokens?.map(e => CreateWeightedPoolToken.fromPartial(e)) || [];
     message.initializationAllowList = object.initializationAllowList?.map(e => e) || [];
     message.forceGovOwner = object.forceGovOwner ?? false;
+    message.admins = object.admins?.map(e => e) || [];
+    message.pauseAllowList = object.pauseAllowList?.map(e => e) || [];
     return message;
   },
   fromAmino(object: MsgCreateWeightedPoolAmino): MsgCreateWeightedPool {
@@ -4099,6 +4136,8 @@ export const MsgCreateWeightedPool = {
     if (object.force_gov_owner !== undefined && object.force_gov_owner !== null) {
       message.forceGovOwner = object.force_gov_owner;
     }
+    message.admins = object.admins?.map(e => e) || [];
+    message.pauseAllowList = object.pause_allow_list?.map(e => e) || [];
     return message;
   },
   toAmino(message: MsgCreateWeightedPool, useInterfaces: boolean = true): MsgCreateWeightedPoolAmino {
@@ -4119,6 +4158,16 @@ export const MsgCreateWeightedPool = {
       obj.initialization_allow_list = message.initializationAllowList;
     }
     obj.force_gov_owner = message.forceGovOwner === false ? undefined : message.forceGovOwner;
+    if (message.admins) {
+      obj.admins = message.admins.map(e => e);
+    } else {
+      obj.admins = message.admins;
+    }
+    if (message.pauseAllowList) {
+      obj.pause_allow_list = message.pauseAllowList.map(e => e);
+    } else {
+      obj.pause_allow_list = message.pauseAllowList;
+    }
     return obj;
   },
   fromAminoMsg(object: MsgCreateWeightedPoolAminoMsg): MsgCreateWeightedPool {
@@ -9162,7 +9211,8 @@ function createBaseMsgUpdateParams(): MsgUpdateParams {
     generalPoolParameters: undefined,
     yammParameters: undefined,
     orderParameters: undefined,
-    authorizationParameters: undefined
+    authorizationParameters: undefined,
+    gasParameters: undefined
   };
 }
 export const MsgUpdateParams = {
@@ -9193,6 +9243,9 @@ export const MsgUpdateParams = {
     if (message.authorizationParameters !== undefined) {
       AuthorizationParameters.encode(message.authorizationParameters, writer.uint32(42).fork()).ldelim();
     }
+    if (message.gasParameters !== undefined) {
+      GasParameters.encode(message.gasParameters, writer.uint32(50).fork()).ldelim();
+    }
     return writer;
   },
   decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): MsgUpdateParams {
@@ -9217,6 +9270,9 @@ export const MsgUpdateParams = {
         case 5:
           message.authorizationParameters = AuthorizationParameters.decode(reader, reader.uint32(), useInterfaces);
           break;
+        case 6:
+          message.gasParameters = GasParameters.decode(reader, reader.uint32(), useInterfaces);
+          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -9230,7 +9286,8 @@ export const MsgUpdateParams = {
       generalPoolParameters: isSet(object.generalPoolParameters) ? GeneralPoolParameters.fromJSON(object.generalPoolParameters) : undefined,
       yammParameters: isSet(object.yammParameters) ? YammParameters.fromJSON(object.yammParameters) : undefined,
       orderParameters: isSet(object.orderParameters) ? OrderParameters.fromJSON(object.orderParameters) : undefined,
-      authorizationParameters: isSet(object.authorizationParameters) ? AuthorizationParameters.fromJSON(object.authorizationParameters) : undefined
+      authorizationParameters: isSet(object.authorizationParameters) ? AuthorizationParameters.fromJSON(object.authorizationParameters) : undefined,
+      gasParameters: isSet(object.gasParameters) ? GasParameters.fromJSON(object.gasParameters) : undefined
     };
   },
   toJSON(message: MsgUpdateParams): unknown {
@@ -9240,6 +9297,7 @@ export const MsgUpdateParams = {
     message.yammParameters !== undefined && (obj.yammParameters = message.yammParameters ? YammParameters.toJSON(message.yammParameters) : undefined);
     message.orderParameters !== undefined && (obj.orderParameters = message.orderParameters ? OrderParameters.toJSON(message.orderParameters) : undefined);
     message.authorizationParameters !== undefined && (obj.authorizationParameters = message.authorizationParameters ? AuthorizationParameters.toJSON(message.authorizationParameters) : undefined);
+    message.gasParameters !== undefined && (obj.gasParameters = message.gasParameters ? GasParameters.toJSON(message.gasParameters) : undefined);
     return obj;
   },
   fromPartial(object: Partial<MsgUpdateParams>): MsgUpdateParams {
@@ -9249,6 +9307,7 @@ export const MsgUpdateParams = {
     message.yammParameters = object.yammParameters !== undefined && object.yammParameters !== null ? YammParameters.fromPartial(object.yammParameters) : undefined;
     message.orderParameters = object.orderParameters !== undefined && object.orderParameters !== null ? OrderParameters.fromPartial(object.orderParameters) : undefined;
     message.authorizationParameters = object.authorizationParameters !== undefined && object.authorizationParameters !== null ? AuthorizationParameters.fromPartial(object.authorizationParameters) : undefined;
+    message.gasParameters = object.gasParameters !== undefined && object.gasParameters !== null ? GasParameters.fromPartial(object.gasParameters) : undefined;
     return message;
   },
   fromAmino(object: MsgUpdateParamsAmino): MsgUpdateParams {
@@ -9268,6 +9327,9 @@ export const MsgUpdateParams = {
     if (object.authorization_parameters !== undefined && object.authorization_parameters !== null) {
       message.authorizationParameters = AuthorizationParameters.fromAmino(object.authorization_parameters);
     }
+    if (object.gas_parameters !== undefined && object.gas_parameters !== null) {
+      message.gasParameters = GasParameters.fromAmino(object.gas_parameters);
+    }
     return message;
   },
   toAmino(message: MsgUpdateParams, useInterfaces: boolean = true): MsgUpdateParamsAmino {
@@ -9277,6 +9339,7 @@ export const MsgUpdateParams = {
     obj.yamm_parameters = message.yammParameters ? YammParameters.toAmino(message.yammParameters, useInterfaces) : undefined;
     obj.order_parameters = message.orderParameters ? OrderParameters.toAmino(message.orderParameters, useInterfaces) : undefined;
     obj.authorization_parameters = message.authorizationParameters ? AuthorizationParameters.toAmino(message.authorizationParameters, useInterfaces) : undefined;
+    obj.gas_parameters = message.gasParameters ? GasParameters.toAmino(message.gasParameters, useInterfaces) : undefined;
     return obj;
   },
   fromAminoMsg(object: MsgUpdateParamsAminoMsg): MsgUpdateParams {

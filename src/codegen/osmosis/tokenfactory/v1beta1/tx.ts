@@ -111,7 +111,7 @@ export interface MsgMintProtoMsg {
 export interface MsgMintAmino {
   sender?: string;
   amount?: CoinAmino;
-  mintToAddress?: string;
+  mintToAddress: string;
 }
 export interface MsgMintAminoMsg {
   type: "osmosis/tokenfactory/mint";
@@ -163,7 +163,7 @@ export interface MsgBurnProtoMsg {
 export interface MsgBurnAmino {
   sender?: string;
   amount?: CoinAmino;
-  burnFromAddress?: string;
+  burnFromAddress: string;
 }
 export interface MsgBurnAminoMsg {
   type: "osmosis/tokenfactory/burn";

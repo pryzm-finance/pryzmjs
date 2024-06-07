@@ -46,6 +46,8 @@ export interface StakingParams {
   /** the time-out value being set on ica messages */
   icaTimeout?: Duration;
   rebalanceParams: RebalanceParams;
+  /** the interval in which PRYZM sends LSM redeem messages to the host chain */
+  lsmRedeemInterval?: Duration;
 }
 export interface StakingParamsProtoMsg {
   typeUrl: "/pryzm.icstaking.v1.StakingParams";
@@ -67,6 +69,8 @@ export interface StakingParamsAmino {
   /** the time-out value being set on ica messages */
   ica_timeout?: DurationAmino;
   rebalance_params: RebalanceParamsAmino;
+  /** the interval in which PRYZM sends LSM redeem messages to the host chain */
+  lsm_redeem_interval?: DurationAmino;
 }
 export interface StakingParamsAminoMsg {
   type: "/pryzm.icstaking.v1.StakingParams";
@@ -80,6 +84,7 @@ export interface StakingParamsSDKType {
   ibc_transfer_timeout?: DurationSDKType;
   ica_timeout?: DurationSDKType;
   rebalance_params: RebalanceParamsSDKType;
+  lsm_redeem_interval?: DurationSDKType;
 }
 /** FeeRatios defines the fee ratio operations supported by icstaking */
 export interface FeeRatios {
@@ -265,7 +270,8 @@ function createBaseStakingParams(): StakingParams {
     undelegationInterval: undefined,
     ibcTransferTimeout: undefined,
     icaTimeout: undefined,
-    rebalanceParams: RebalanceParams.fromPartial({})
+    rebalanceParams: RebalanceParams.fromPartial({}),
+    lsmRedeemInterval: undefined
   };
 }
 export const StakingParams = {
@@ -298,6 +304,9 @@ export const StakingParams = {
     if (message.rebalanceParams !== undefined) {
       RebalanceParams.encode(message.rebalanceParams, writer.uint32(50).fork()).ldelim();
     }
+    if (message.lsmRedeemInterval !== undefined) {
+      Duration.encode(message.lsmRedeemInterval, writer.uint32(58).fork()).ldelim();
+    }
     return writer;
   },
   decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): StakingParams {
@@ -325,6 +334,9 @@ export const StakingParams = {
         case 6:
           message.rebalanceParams = RebalanceParams.decode(reader, reader.uint32(), useInterfaces);
           break;
+        case 7:
+          message.lsmRedeemInterval = Duration.decode(reader, reader.uint32(), useInterfaces);
+          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -339,7 +351,8 @@ export const StakingParams = {
       undelegationInterval: isSet(object.undelegationInterval) ? Duration.fromJSON(object.undelegationInterval) : undefined,
       ibcTransferTimeout: isSet(object.ibcTransferTimeout) ? Duration.fromJSON(object.ibcTransferTimeout) : undefined,
       icaTimeout: isSet(object.icaTimeout) ? Duration.fromJSON(object.icaTimeout) : undefined,
-      rebalanceParams: isSet(object.rebalanceParams) ? RebalanceParams.fromJSON(object.rebalanceParams) : undefined
+      rebalanceParams: isSet(object.rebalanceParams) ? RebalanceParams.fromJSON(object.rebalanceParams) : undefined,
+      lsmRedeemInterval: isSet(object.lsmRedeemInterval) ? Duration.fromJSON(object.lsmRedeemInterval) : undefined
     };
   },
   toJSON(message: StakingParams): unknown {
@@ -350,6 +363,7 @@ export const StakingParams = {
     message.ibcTransferTimeout !== undefined && (obj.ibcTransferTimeout = message.ibcTransferTimeout ? Duration.toJSON(message.ibcTransferTimeout) : undefined);
     message.icaTimeout !== undefined && (obj.icaTimeout = message.icaTimeout ? Duration.toJSON(message.icaTimeout) : undefined);
     message.rebalanceParams !== undefined && (obj.rebalanceParams = message.rebalanceParams ? RebalanceParams.toJSON(message.rebalanceParams) : undefined);
+    message.lsmRedeemInterval !== undefined && (obj.lsmRedeemInterval = message.lsmRedeemInterval ? Duration.toJSON(message.lsmRedeemInterval) : undefined);
     return obj;
   },
   fromPartial(object: Partial<StakingParams>): StakingParams {
@@ -360,6 +374,7 @@ export const StakingParams = {
     message.ibcTransferTimeout = object.ibcTransferTimeout !== undefined && object.ibcTransferTimeout !== null ? Duration.fromPartial(object.ibcTransferTimeout) : undefined;
     message.icaTimeout = object.icaTimeout !== undefined && object.icaTimeout !== null ? Duration.fromPartial(object.icaTimeout) : undefined;
     message.rebalanceParams = object.rebalanceParams !== undefined && object.rebalanceParams !== null ? RebalanceParams.fromPartial(object.rebalanceParams) : undefined;
+    message.lsmRedeemInterval = object.lsmRedeemInterval !== undefined && object.lsmRedeemInterval !== null ? Duration.fromPartial(object.lsmRedeemInterval) : undefined;
     return message;
   },
   fromAmino(object: StakingParamsAmino): StakingParams {
@@ -382,6 +397,9 @@ export const StakingParams = {
     if (object.rebalance_params !== undefined && object.rebalance_params !== null) {
       message.rebalanceParams = RebalanceParams.fromAmino(object.rebalance_params);
     }
+    if (object.lsm_redeem_interval !== undefined && object.lsm_redeem_interval !== null) {
+      message.lsmRedeemInterval = Duration.fromAmino(object.lsm_redeem_interval);
+    }
     return message;
   },
   toAmino(message: StakingParams, useInterfaces: boolean = true): StakingParamsAmino {
@@ -392,6 +410,7 @@ export const StakingParams = {
     obj.ibc_transfer_timeout = message.ibcTransferTimeout ? Duration.toAmino(message.ibcTransferTimeout, useInterfaces) : undefined;
     obj.ica_timeout = message.icaTimeout ? Duration.toAmino(message.icaTimeout, useInterfaces) : undefined;
     obj.rebalance_params = message.rebalanceParams ? RebalanceParams.toAmino(message.rebalanceParams, useInterfaces) : undefined;
+    obj.lsm_redeem_interval = message.lsmRedeemInterval ? Duration.toAmino(message.lsmRedeemInterval, useInterfaces) : undefined;
     return obj;
   },
   fromAminoMsg(object: StakingParamsAminoMsg): StakingParams {

@@ -1,7 +1,6 @@
 syntax = "proto3";
 package cosmatics;
 
-import "gogoproto/gogo.proto";
 import "google/api/annotations.proto";
 import "cosmatics/sync_state.proto";
 import "cosmatics/metric.proto";

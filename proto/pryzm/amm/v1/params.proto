@@ -4,6 +4,7 @@ package pryzm.amm.v1;
 import "amino/amino.proto";
 import "cosmos_proto/cosmos.proto";
 import "gogoproto/gogo.proto";
+import "pryzm/amm/v1/pool.proto";
 
 option go_package = "github.com/pryzm-finance/pryzm-core/x/amm/types/v1";
 
@@ -112,6 +113,10 @@ message YammParameters {
   repeated string default_admins = 12 [(amino.dont_omitempty) = true];
   // this will be set to newly created yamm pools
   repeated string default_pause_allow_list = 13 [(amino.dont_omitempty) = true];
+  // this will be set to newly created yamm pools
+  int64 default_pause_window_duration_millis = 14 [(amino.dont_omitempty) = true];
+  // this will be set to newly created yamm pools
+  int64 default_pause_buffer_duration_millis = 15 [(amino.dont_omitempty) = true];
 }
 
 message GeneralPoolParameters {
@@ -141,10 +146,32 @@ message AuthorizationParameters {
   repeated string pause_allow_list = 2 [(amino.dont_omitempty) = true];
 }
 
+message GasParameters{
+  // gas for swapping in a pool
+  uint64 vault_swap = 1;
+  // gas for initializing a pool
+  uint64 vault_initialize_pool = 2;
+  // gas for join pool
+  uint64 vault_join = 3;
+  // gas for exit pool
+  uint64 vault_exit = 4;
+  // gas for recovery exit
+  uint64 vault_recovery_exit = 5;
+  // gas for each step of batch swap
+  uint64 vault_batch_swap_step = 6;
+  // gas for creating a new weighted pool
+  uint64 create_weighted_pool = 7;
+  // gas for submitting a new order
+  uint64 submit_order = 8;
+  // gas for each order in match proposal
+  uint64 proposal_match_order = 9;
+}
+
 // Params defines the parameters for the module.
 message Params {
   GeneralPoolParameters general_pool_parameters = 1 [(gogoproto.nullable) = false];
   YammParameters yamm_parameters = 2 [(gogoproto.nullable) = false];
   OrderParameters order_parameters = 3 [(gogoproto.nullable) = false];
   AuthorizationParameters authorization_parameters = 4 [(gogoproto.nullable) = false];
+  GasParameters gas_parameters = 5 [(gogoproto.nullable) = false];
 }

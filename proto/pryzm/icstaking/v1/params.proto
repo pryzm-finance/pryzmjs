@@ -55,6 +55,12 @@ message StakingParams {
     (gogoproto.nullable) = false,
     (amino.dont_omitempty) = true
   ];
+
+  // the interval in which PRYZM sends LSM redeem messages to the host chain
+  google.protobuf.Duration lsm_redeem_interval = 7 [
+    (gogoproto.stdduration) = true,
+    (gogoproto.nullable) = true
+  ];
 }
 
 // FeeRatios defines the fee ratio operations supported by icstaking

@@ -331,6 +331,8 @@ message MsgCreateWeightedPool {
   // NOTE: when public pool creation is not allowed, admin must set this to true
   // NOTE: governance can leave this to false, as it already is the creator of the msg
   bool force_gov_owner = 13;
+  repeated string admins = 14 [(amino.dont_omitempty) = true];
+  repeated string pause_allow_list = 15 [(amino.dont_omitempty) = true];
 }
 
 message MsgCreateWeightedPoolResponse {
@@ -742,6 +744,7 @@ message MsgUpdateParams {
   YammParameters yamm_parameters = 3 [(gogoproto.nullable) = true];
   OrderParameters order_parameters = 4 [(gogoproto.nullable) = true];
   AuthorizationParameters authorization_parameters = 5 [(gogoproto.nullable) = true];
+  GasParameters gas_parameters = 6 [(gogoproto.nullable) = true];
 }
 
 message MsgUpdateParamsResponse {}
