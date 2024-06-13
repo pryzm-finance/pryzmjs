@@ -3,7 +3,7 @@ lockfileVersion: 5.4
 specifiers:
   '@cosmjs/proto-signing': 0.32.2
   '@cosmjs/stargate': 0.32.2
-  '@pryzm-finance/pryzmjs': 0.20.0
+  '@pryzm-finance/pryzmjs': 0.20.1
   '@refractedlabs/utils': 0.4.0
   axios: 1.6.0
   cosmjs-types: 0.9.0
@@ -12,7 +12,7 @@ specifiers:
 dependencies:
   '@cosmjs/proto-signing': 0.32.2
   '@cosmjs/stargate': 0.32.2
-  '@pryzm-finance/pryzmjs': 0.20.0_google-protobuf@3.21.2
+  '@pryzm-finance/pryzmjs': 0.20.1_google-protobuf@3.21.2
   '@refractedlabs/utils': 0.4.0
   axios: 1.6.0
   cosmjs-types: 0.9.0
@@ -224,16 +224,16 @@ packages:
       google-protobuf: 3.21.2
     dev: false
 
-  /@keplr-wallet/types/0.12.100:
-    resolution: {integrity: sha512-yFjySqthWWFv+dKqXCu7waZvIQCkvNGcVJGax2ddjFC6B+hQ9hfB7IKTH3TUOFztac7zb/DgYArKBskeYQUvUA==}
+  /@keplr-wallet/types/0.12.102:
+    resolution: {integrity: sha512-q7qD5SmyU06zqi1tGIdiVJNBLFY20aGHY669i2i5ZnaF5XzcSBJiwazFY3GRPttXerkJjfOIk0IaxwO9Oz3Hbw==}
     dependencies:
       long: 4.0.0
     dev: false
 
-  /@keplr-wallet/unit/0.12.100:
-    resolution: {integrity: sha512-MspLUa3Dg4wPi22u2jV7aL+JLi1WrTzHKw/Ry75q8ZceattV0Lz0oQ9WtYaPJu6YOe6xCYym731gYMdDIFcbtw==}
+  /@keplr-wallet/unit/0.12.102:
+    resolution: {integrity: sha512-PI6hapu8qLiZzjlQM4opGsZm3NTl1qjy9zQ9dI20kRSLhYEuoWVNrCDDUp8ydeRBrykY+umQNXe9kYsrGlLl1w==}
     dependencies:
-      '@keplr-wallet/types': 0.12.100
+      '@keplr-wallet/types': 0.12.102
       big-integer: 1.6.52
       utility-types: 3.11.0
     dev: false
@@ -286,8 +286,8 @@ packages:
     resolution: {integrity: sha512-Vvn3zZrhQZkkBE8LSuW3em98c0FwgO4nxzv6OdSxPKJIEKY2bGbHn+mhGIPerzI4twdxaP8/0+06HBpwf345Lw==}
     dev: false
 
-  /@pryzm-finance/pryzmjs/0.20.0_google-protobuf@3.21.2:
-    resolution: {integrity: sha512-leB6kdfMnfgeOrXop+ifCfRpjoOBHZRHdbfPYhgcCEh2b3Wn/iCnKyh9ZbsYAevMREXUu6m4bmCbf8Yuuvd6iQ==, tarball: download/@pryzm-finance/pryzmjs/0.20.0/a537b134390c97dfa40bd0a66830d0ab3558d335}
+  /@pryzm-finance/pryzmjs/0.20.1_google-protobuf@3.21.2:
+    resolution: {integrity: sha512-erHWyDAW5W1FWmOFz7qiJ+raVtKAkPxViysz4zYI1PRnL45JAhC9EvlM5AvVFeQReRnuD1LNYv6MQYiJQtyFhQ==, tarball: download/@pryzm-finance/pryzmjs/0.20.1/977a065abc351bb7e4380b2f7c1f1b31be30ef2f}
     dependencies:
       '@cosmjs/math': 0.32.2
       '@cosmjs/proto-signing': 0.32.2
@@ -295,7 +295,7 @@ packages:
       '@cosmjs/tendermint-rpc': 0.32.2
       '@improbable-eng/grpc-web': 0.15.0_google-protobuf@3.21.2
       '@improbable-eng/grpc-web-node-http-transport': 0.15.0_fng5pv4qmdetiqq66m6yjkaacu
-      '@keplr-wallet/unit': 0.12.100
+      '@keplr-wallet/unit': 0.12.102
       '@refractedlabs/cosmology-lcd-fork': 0.13.3
       '@refractedlabs/utils': 0.4.0
       browser-headers: 0.4.1

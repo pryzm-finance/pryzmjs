@@ -7,6 +7,7 @@ import "cosmos/base/v1beta1/coin.proto";
 import "pryzmatics/statistics/market_cap.proto";
 import "pryzmatics/statistics/treasury.proto";
 import "pryzmatics/statistics/tvl.proto";
+import "pryzmatics/trade/operation_volume.proto";
 
 
 option go_package = "github.com/pryzm-finance/pryzmatics/server/statistics";
@@ -29,14 +30,15 @@ message QueryStatisticsResponse {
     (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Dec",
     (gogoproto.nullable) = false
   ];
-  string liquidity = 7 [
+  pryzmatics.trade.OperationVolume volume_24h = 7 [(gogoproto.nullable) = false];
+  string liquidity = 8 [
     (cosmos_proto.scalar) = "cosmos.Dec",
     (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Dec",
     (gogoproto.nullable) = false
   ];
-  uint64 wallets_count = 8;
-  uint64 delegators_count = 9;
-  uint64 staking_delegators_count = 10;
-  uint64 alliance_delegators_count = 11;
-  string error = 12;
+  uint64 wallets_count = 9;
+  uint64 delegators_count = 10;
+  uint64 staking_delegators_count = 11;
+  uint64 alliance_delegators_count = 12;
+  string error = 13;
 }

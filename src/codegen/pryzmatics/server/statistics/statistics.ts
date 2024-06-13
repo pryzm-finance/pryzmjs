@@ -1,6 +1,7 @@
 import { TreasuryBalance, TreasuryBalanceAmino, TreasuryBalanceSDKType } from "../../statistics/treasury";
 import { MarketCap, MarketCapAmino, MarketCapSDKType } from "../../statistics/market_cap";
 import { TVL, TVLAmino, TVLSDKType } from "../../statistics/tvl";
+import { OperationVolume, OperationVolumeAmino, OperationVolumeSDKType } from "../../trade/operation_volume";
 import { BinaryReader, BinaryWriter } from "../../../binary";
 import { GlobalDecoderRegistry } from "../../../registry";
 import { Decimal } from "@cosmjs/math";
@@ -23,6 +24,7 @@ export interface QueryStatisticsResponse {
   tvl: TVL;
   totalTxCount: bigint;
   totalTradeVolume: string;
+  volume24h: OperationVolume;
   liquidity: string;
   walletsCount: bigint;
   delegatorsCount: bigint;
@@ -41,6 +43,7 @@ export interface QueryStatisticsResponseAmino {
   tvl?: TVLAmino;
   total_tx_count?: string;
   total_trade_volume?: string;
+  volume_24h?: OperationVolumeAmino;
   liquidity?: string;
   wallets_count?: string;
   delegators_count?: string;
@@ -59,6 +62,7 @@ export interface QueryStatisticsResponseSDKType {
   tvl: TVLSDKType;
   total_tx_count: bigint;
   total_trade_volume: string;
+  volume_24h: OperationVolumeSDKType;
   liquidity: string;
   wallets_count: bigint;
   delegators_count: bigint;
@@ -141,6 +145,7 @@ function createBaseQueryStatisticsResponse(): QueryStatisticsResponse {
     tvl: TVL.fromPartial({}),
     totalTxCount: BigInt(0),
     totalTradeVolume: "",
+    volume24h: OperationVolume.fromPartial({}),
     liquidity: "",
     walletsCount: BigInt(0),
     delegatorsCount: BigInt(0),
@@ -152,13 +157,13 @@ function createBaseQueryStatisticsResponse(): QueryStatisticsResponse {
 export const QueryStatisticsResponse = {
   typeUrl: "/pryzmatics.server.statistics.QueryStatisticsResponse",
   is(o: any): o is QueryStatisticsResponse {
-    return o && (o.$typeUrl === QueryStatisticsResponse.typeUrl || Array.isArray(o.treasuryBalances) && (!o.treasuryBalances.length || TreasuryBalance.is(o.treasuryBalances[0])) && typeof o.annualisedTreasury === "string" && MarketCap.is(o.marketCap) && TVL.is(o.tvl) && typeof o.totalTxCount === "bigint" && typeof o.totalTradeVolume === "string" && typeof o.liquidity === "string" && typeof o.walletsCount === "bigint" && typeof o.delegatorsCount === "bigint" && typeof o.stakingDelegatorsCount === "bigint" && typeof o.allianceDelegatorsCount === "bigint" && typeof o.error === "string");
+    return o && (o.$typeUrl === QueryStatisticsResponse.typeUrl || Array.isArray(o.treasuryBalances) && (!o.treasuryBalances.length || TreasuryBalance.is(o.treasuryBalances[0])) && typeof o.annualisedTreasury === "string" && MarketCap.is(o.marketCap) && TVL.is(o.tvl) && typeof o.totalTxCount === "bigint" && typeof o.totalTradeVolume === "string" && OperationVolume.is(o.volume24h) && typeof o.liquidity === "string" && typeof o.walletsCount === "bigint" && typeof o.delegatorsCount === "bigint" && typeof o.stakingDelegatorsCount === "bigint" && typeof o.allianceDelegatorsCount === "bigint" && typeof o.error === "string");
   },
   isSDK(o: any): o is QueryStatisticsResponseSDKType {
-    return o && (o.$typeUrl === QueryStatisticsResponse.typeUrl || Array.isArray(o.treasury_balances) && (!o.treasury_balances.length || TreasuryBalance.isSDK(o.treasury_balances[0])) && typeof o.annualised_treasury === "string" && MarketCap.isSDK(o.market_cap) && TVL.isSDK(o.tvl) && typeof o.total_tx_count === "bigint" && typeof o.total_trade_volume === "string" && typeof o.liquidity === "string" && typeof o.wallets_count === "bigint" && typeof o.delegators_count === "bigint" && typeof o.staking_delegators_count === "bigint" && typeof o.alliance_delegators_count === "bigint" && typeof o.error === "string");
+    return o && (o.$typeUrl === QueryStatisticsResponse.typeUrl || Array.isArray(o.treasury_balances) && (!o.treasury_balances.length || TreasuryBalance.isSDK(o.treasury_balances[0])) && typeof o.annualised_treasury === "string" && MarketCap.isSDK(o.market_cap) && TVL.isSDK(o.tvl) && typeof o.total_tx_count === "bigint" && typeof o.total_trade_volume === "string" && OperationVolume.isSDK(o.volume_24h) && typeof o.liquidity === "string" && typeof o.wallets_count === "bigint" && typeof o.delegators_count === "bigint" && typeof o.staking_delegators_count === "bigint" && typeof o.alliance_delegators_count === "bigint" && typeof o.error === "string");
   },
   isAmino(o: any): o is QueryStatisticsResponseAmino {
-    return o && (o.$typeUrl === QueryStatisticsResponse.typeUrl || Array.isArray(o.treasury_balances) && (!o.treasury_balances.length || TreasuryBalance.isAmino(o.treasury_balances[0])) && typeof o.annualised_treasury === "string" && MarketCap.isAmino(o.market_cap) && TVL.isAmino(o.tvl) && typeof o.total_tx_count === "bigint" && typeof o.total_trade_volume === "string" && typeof o.liquidity === "string" && typeof o.wallets_count === "bigint" && typeof o.delegators_count === "bigint" && typeof o.staking_delegators_count === "bigint" && typeof o.alliance_delegators_count === "bigint" && typeof o.error === "string");
+    return o && (o.$typeUrl === QueryStatisticsResponse.typeUrl || Array.isArray(o.treasury_balances) && (!o.treasury_balances.length || TreasuryBalance.isAmino(o.treasury_balances[0])) && typeof o.annualised_treasury === "string" && MarketCap.isAmino(o.market_cap) && TVL.isAmino(o.tvl) && typeof o.total_tx_count === "bigint" && typeof o.total_trade_volume === "string" && OperationVolume.isAmino(o.volume_24h) && typeof o.liquidity === "string" && typeof o.wallets_count === "bigint" && typeof o.delegators_count === "bigint" && typeof o.staking_delegators_count === "bigint" && typeof o.alliance_delegators_count === "bigint" && typeof o.error === "string");
   },
   encode(message: QueryStatisticsResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     for (const v of message.treasuryBalances) {
@@ -179,23 +184,26 @@ export const QueryStatisticsResponse = {
     if (message.totalTradeVolume !== "") {
       writer.uint32(50).string(Decimal.fromUserInput(message.totalTradeVolume, 18).atomics);
     }
+    if (message.volume24h !== undefined) {
+      OperationVolume.encode(message.volume24h, writer.uint32(58).fork()).ldelim();
+    }
     if (message.liquidity !== "") {
-      writer.uint32(58).string(Decimal.fromUserInput(message.liquidity, 18).atomics);
+      writer.uint32(66).string(Decimal.fromUserInput(message.liquidity, 18).atomics);
     }
     if (message.walletsCount !== BigInt(0)) {
-      writer.uint32(64).uint64(message.walletsCount);
+      writer.uint32(72).uint64(message.walletsCount);
     }
     if (message.delegatorsCount !== BigInt(0)) {
-      writer.uint32(72).uint64(message.delegatorsCount);
+      writer.uint32(80).uint64(message.delegatorsCount);
     }
     if (message.stakingDelegatorsCount !== BigInt(0)) {
-      writer.uint32(80).uint64(message.stakingDelegatorsCount);
+      writer.uint32(88).uint64(message.stakingDelegatorsCount);
     }
     if (message.allianceDelegatorsCount !== BigInt(0)) {
-      writer.uint32(88).uint64(message.allianceDelegatorsCount);
+      writer.uint32(96).uint64(message.allianceDelegatorsCount);
     }
     if (message.error !== "") {
-      writer.uint32(98).string(message.error);
+      writer.uint32(106).string(message.error);
     }
     return writer;
   },
@@ -225,21 +233,24 @@ export const QueryStatisticsResponse = {
           message.totalTradeVolume = Decimal.fromAtomics(reader.string(), 18).toString();
           break;
         case 7:
-          message.liquidity = Decimal.fromAtomics(reader.string(), 18).toString();
+          message.volume24h = OperationVolume.decode(reader, reader.uint32(), useInterfaces);
           break;
         case 8:
-          message.walletsCount = reader.uint64();
+          message.liquidity = Decimal.fromAtomics(reader.string(), 18).toString();
           break;
         case 9:
-          message.delegatorsCount = reader.uint64();
+          message.walletsCount = reader.uint64();
           break;
         case 10:
-          message.stakingDelegatorsCount = reader.uint64();
+          message.delegatorsCount = reader.uint64();
           break;
         case 11:
-          message.allianceDelegatorsCount = reader.uint64();
+          message.stakingDelegatorsCount = reader.uint64();
           break;
         case 12:
+          message.allianceDelegatorsCount = reader.uint64();
+          break;
+        case 13:
           message.error = reader.string();
           break;
         default:
@@ -257,6 +268,7 @@ export const QueryStatisticsResponse = {
       tvl: isSet(object.tvl) ? TVL.fromJSON(object.tvl) : undefined,
       totalTxCount: isSet(object.totalTxCount) ? BigInt(object.totalTxCount.toString()) : BigInt(0),
       totalTradeVolume: isSet(object.totalTradeVolume) ? String(object.totalTradeVolume) : "",
+      volume24h: isSet(object.volume24h) ? OperationVolume.fromJSON(object.volume24h) : undefined,
       liquidity: isSet(object.liquidity) ? String(object.liquidity) : "",
       walletsCount: isSet(object.walletsCount) ? BigInt(object.walletsCount.toString()) : BigInt(0),
       delegatorsCount: isSet(object.delegatorsCount) ? BigInt(object.delegatorsCount.toString()) : BigInt(0),
@@ -277,6 +289,7 @@ export const QueryStatisticsResponse = {
     message.tvl !== undefined && (obj.tvl = message.tvl ? TVL.toJSON(message.tvl) : undefined);
     message.totalTxCount !== undefined && (obj.totalTxCount = (message.totalTxCount || BigInt(0)).toString());
     message.totalTradeVolume !== undefined && (obj.totalTradeVolume = message.totalTradeVolume);
+    message.volume24h !== undefined && (obj.volume24h = message.volume24h ? OperationVolume.toJSON(message.volume24h) : undefined);
     message.liquidity !== undefined && (obj.liquidity = message.liquidity);
     message.walletsCount !== undefined && (obj.walletsCount = (message.walletsCount || BigInt(0)).toString());
     message.delegatorsCount !== undefined && (obj.delegatorsCount = (message.delegatorsCount || BigInt(0)).toString());
@@ -293,6 +306,7 @@ export const QueryStatisticsResponse = {
     message.tvl = object.tvl !== undefined && object.tvl !== null ? TVL.fromPartial(object.tvl) : undefined;
     message.totalTxCount = object.totalTxCount !== undefined && object.totalTxCount !== null ? BigInt(object.totalTxCount.toString()) : BigInt(0);
     message.totalTradeVolume = object.totalTradeVolume ?? "";
+    message.volume24h = object.volume24h !== undefined && object.volume24h !== null ? OperationVolume.fromPartial(object.volume24h) : undefined;
     message.liquidity = object.liquidity ?? "";
     message.walletsCount = object.walletsCount !== undefined && object.walletsCount !== null ? BigInt(object.walletsCount.toString()) : BigInt(0);
     message.delegatorsCount = object.delegatorsCount !== undefined && object.delegatorsCount !== null ? BigInt(object.delegatorsCount.toString()) : BigInt(0);
@@ -318,6 +332,9 @@ export const QueryStatisticsResponse = {
     }
     if (object.total_trade_volume !== undefined && object.total_trade_volume !== null) {
       message.totalTradeVolume = object.total_trade_volume;
+    }
+    if (object.volume_24h !== undefined && object.volume_24h !== null) {
+      message.volume24h = OperationVolume.fromAmino(object.volume_24h);
     }
     if (object.liquidity !== undefined && object.liquidity !== null) {
       message.liquidity = object.liquidity;
@@ -351,6 +368,7 @@ export const QueryStatisticsResponse = {
     obj.tvl = message.tvl ? TVL.toAmino(message.tvl, useInterfaces) : undefined;
     obj.total_tx_count = message.totalTxCount ? message.totalTxCount.toString() : undefined;
     obj.total_trade_volume = padDecimal(message.totalTradeVolume) === "" ? undefined : padDecimal(message.totalTradeVolume);
+    obj.volume_24h = message.volume24h ? OperationVolume.toAmino(message.volume24h, useInterfaces) : undefined;
     obj.liquidity = padDecimal(message.liquidity) === "" ? undefined : padDecimal(message.liquidity);
     obj.wallets_count = message.walletsCount ? message.walletsCount.toString() : undefined;
     obj.delegators_count = message.delegatorsCount ? message.delegatorsCount.toString() : undefined;

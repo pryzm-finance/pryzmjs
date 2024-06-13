@@ -15,6 +15,7 @@ import { QueryHistoricalPriceRequest, QueryHistoricalPriceResponseSDKType } from
 import { QuerySwappableTokensRequest, QuerySwappableTokensResponseSDKType } from "./price/swappable_tokens";
 import { QueryPriceBoundsRequest, QueryPriceBoundsResponseSDKType } from "./price/price_bounds";
 import { QueryTradeSimulationRequest, QueryTradeSimulationResponseSDKType } from "./trade/trade_simulation";
+import { QuerySwapStepsRequest, QuerySwapStepsResponseSDKType } from "./trade/swap_steps";
 import { QueryJoinAllTokensExactLptSimulationRequest, QueryJoinAllTokensExactLptSimulationResponseSDKType } from "./trade/join_all_tokens_exact_lpt_simulation";
 import { QueryJoinExactTokensSimulationRequest, QueryJoinExactTokensSimulationResponseSDKType } from "./trade/join_exact_tokens_simulation";
 import { QueryJoinTokenExactLptSimulationRequest, QueryJoinTokenExactLptSimulationResponseSDKType } from "./trade/join_token_exact_lpt_simulation";
@@ -70,6 +71,7 @@ export class LCDQueryClient {
     this.swappableTokens = this.swappableTokens.bind(this);
     this.priceBounds = this.priceBounds.bind(this);
     this.tradeSimulation = this.tradeSimulation.bind(this);
+    this.swapSteps = this.swapSteps.bind(this);
     this.joinAllTokensExactLptSimulation = this.joinAllTokensExactLptSimulation.bind(this);
     this.joinExactTokensSimulation = this.joinExactTokensSimulation.bind(this);
     this.joinTokenExactLptSimulation = this.joinTokenExactLptSimulation.bind(this);
@@ -328,6 +330,23 @@ export class LCDQueryClient {
     const endpoint = `pryzmatics/trade/simulation`;
     return await this.req.get<QueryTradeSimulationResponseSDKType>(endpoint, options);
   }
+  /* SwapSteps */
+  async swapSteps(params: QuerySwapStepsRequest): Promise<QuerySwapStepsResponseSDKType> {
+    const options: any = {
+      params: {}
+    };
+    if (typeof params?.swapType !== "undefined") {
+      options.params.swap_type = params.swapType;
+    }
+    if (typeof params?.tokenIn !== "undefined") {
+      options.params.token_in = params.tokenIn;
+    }
+    if (typeof params?.tokenOut !== "undefined") {
+      options.params.token_out = params.tokenOut;
+    }
+    const endpoint = `pryzmatics/trade/swap_steps`;
+    return await this.req.get<QuerySwapStepsResponseSDKType>(endpoint, options);
+  }
   /* JoinAllTokensExactLptSimulation */
   async joinAllTokensExactLptSimulation(params: QueryJoinAllTokensExactLptSimulationRequest): Promise<QueryJoinAllTokensExactLptSimulationResponseSDKType> {
     const options: any = {
@@ -554,11 +573,11 @@ export class LCDQueryClient {
     const options: any = {
       params: {}
     };
-    if (typeof params?.maxBuyPrice !== "undefined") {
-      options.params.max_buy_price = params.maxBuyPrice;
+    if (typeof params?.minBuyPrice !== "undefined") {
+      options.params.min_buy_price = params.minBuyPrice;
     }
-    if (typeof params?.maxSellPrice !== "undefined") {
-      options.params.max_sell_price = params.maxSellPrice;
+    if (typeof params?.minSellPrice !== "undefined") {
+      options.params.min_sell_price = params.minSellPrice;
     }
     const endpoint = `pryzmatics/trade/matchable_orders_for_pair/${params.tokenIn}/${params.tokenOut}/${params.poolId}/${params.whitelistedRoute}`;
     return await this.req.get<QueryMatchableOrdersForPairResponseSDKType>(endpoint, options);

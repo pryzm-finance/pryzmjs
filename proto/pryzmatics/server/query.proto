@@ -23,6 +23,7 @@ import "pryzmatics/server/price/swappable_tokens.proto";
 
 import "pryzmatics/server/trade/pulse_tradable_pairs.proto";
 import "pryzmatics/server/trade/trade_simulation.proto";
+import "pryzmatics/server/trade/swap_steps.proto";
 import "pryzmatics/server/trade/join_all_tokens_exact_lpt_simulation.proto";
 import "pryzmatics/server/trade/join_exact_tokens_simulation.proto";
 import "pryzmatics/server/trade/join_token_exact_lpt_simulation.proto";
@@ -140,6 +141,10 @@ service Query {
 
   rpc TradeSimulation(pryzmatics.server.trade.QueryTradeSimulationRequest) returns (pryzmatics.server.trade.QueryTradeSimulationResponse) {
     option (google.api.http).get = "/pryzmatics/trade/simulation";
+  }
+
+  rpc SwapSteps(pryzmatics.server.trade.QuerySwapStepsRequest) returns (pryzmatics.server.trade.QuerySwapStepsResponse) {
+    option (google.api.http).get = "/pryzmatics/trade/swap_steps";
   }
 
   rpc JoinAllTokensExactLptSimulation(pryzmatics.server.trade.QueryJoinAllTokensExactLptSimulationRequest) returns (pryzmatics.server.trade.QueryJoinAllTokensExactLptSimulationResponse) {

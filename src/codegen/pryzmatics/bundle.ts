@@ -42,17 +42,18 @@ import * as _291 from "./statistics/market_cap";
 import * as _292 from "./statistics/misc";
 import * as _293 from "./statistics/treasury";
 import * as _294 from "./statistics/tvl";
-import * as _295 from "./trade/order";
-import * as _296 from "./trade/pool_trade_history";
-import * as _297 from "./trade/pulse_tradable_pair";
-import * as _298 from "./trade/route_steps";
-import * as _299 from "./trade/swap_steps";
-import * as _300 from "./trade/token_amounts";
-import * as _301 from "./trade/trade_volume";
-import * as _302 from "./trade/user_trade_history";
-import * as _303 from "./ystaking/user_stake";
-import * as _486 from "./server/query.lcd";
-import * as _487 from "./server/query.rpc.Query";
+import * as _295 from "./trade/operation_volume";
+import * as _296 from "./trade/order";
+import * as _297 from "./trade/pool_trade_history";
+import * as _298 from "./trade/pulse_tradable_pair";
+import * as _299 from "./trade/route_steps";
+import * as _300 from "./trade/swap_steps";
+import * as _301 from "./trade/token_amounts";
+import * as _302 from "./trade/trade_volume";
+import * as _303 from "./trade/user_trade_history";
+import * as _304 from "./ystaking/user_stake";
+import * as _487 from "./server/query.lcd";
+import * as _488 from "./server/query.rpc.Query";
 export namespace pryzmatics {
   export const asset = {
     ..._251
@@ -123,8 +124,8 @@ export namespace pryzmatics {
   };
   export const server = {
     ..._290,
-    ..._486,
-    ..._487
+    ..._487,
+    ..._488
   };
   export const statistics = {
     ..._291,
@@ -140,9 +141,10 @@ export namespace pryzmatics {
     ..._299,
     ..._300,
     ..._301,
-    ..._302
+    ..._302,
+    ..._303
   };
   export const ystaking = {
-    ..._303
+    ..._304
   };
 }

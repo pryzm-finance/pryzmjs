@@ -54,12 +54,12 @@ message QueryMatchableOrdersForPairRequest {
   string token_out = 2;
   uint64 pool_id = 3;
   bool whitelisted_route = 4;
-  string max_buy_price = 5 [
+  string min_buy_price = 5 [
     (cosmos_proto.scalar) = "cosmos.Dec",
     (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Dec",
     (gogoproto.nullable) = false
   ];
-  string max_sell_price = 6 [
+  string min_sell_price = 6 [
     (cosmos_proto.scalar) = "cosmos.Dec",
     (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Dec",
     (gogoproto.nullable) = false

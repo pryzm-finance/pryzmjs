@@ -142,8 +142,8 @@ export interface QueryMatchableOrdersForPairRequest {
   tokenOut: string;
   poolId: bigint;
   whitelistedRoute: boolean;
-  maxBuyPrice: string;
-  maxSellPrice: string;
+  minBuyPrice: string;
+  minSellPrice: string;
 }
 export interface QueryMatchableOrdersForPairRequestProtoMsg {
   typeUrl: "/pryzmatics.server.trade.QueryMatchableOrdersForPairRequest";
@@ -154,8 +154,8 @@ export interface QueryMatchableOrdersForPairRequestAmino {
   token_out?: string;
   pool_id?: string;
   whitelisted_route?: boolean;
-  max_buy_price?: string;
-  max_sell_price?: string;
+  min_buy_price?: string;
+  min_sell_price?: string;
 }
 export interface QueryMatchableOrdersForPairRequestAminoMsg {
   type: "/pryzmatics.server.trade.QueryMatchableOrdersForPairRequest";
@@ -166,8 +166,8 @@ export interface QueryMatchableOrdersForPairRequestSDKType {
   token_out: string;
   pool_id: bigint;
   whitelisted_route: boolean;
-  max_buy_price: string;
-  max_sell_price: string;
+  min_buy_price: string;
+  min_sell_price: string;
 }
 export interface QueryMatchableOrdersForPairResponse {
   buyOrders: MatchableOrder[];
@@ -845,20 +845,20 @@ function createBaseQueryMatchableOrdersForPairRequest(): QueryMatchableOrdersFor
     tokenOut: "",
     poolId: BigInt(0),
     whitelistedRoute: false,
-    maxBuyPrice: "",
-    maxSellPrice: ""
+    minBuyPrice: "",
+    minSellPrice: ""
   };
 }
 export const QueryMatchableOrdersForPairRequest = {
   typeUrl: "/pryzmatics.server.trade.QueryMatchableOrdersForPairRequest",
   is(o: any): o is QueryMatchableOrdersForPairRequest {
-    return o && (o.$typeUrl === QueryMatchableOrdersForPairRequest.typeUrl || typeof o.tokenIn === "string" && typeof o.tokenOut === "string" && typeof o.poolId === "bigint" && typeof o.whitelistedRoute === "boolean" && typeof o.maxBuyPrice === "string" && typeof o.maxSellPrice === "string");
+    return o && (o.$typeUrl === QueryMatchableOrdersForPairRequest.typeUrl || typeof o.tokenIn === "string" && typeof o.tokenOut === "string" && typeof o.poolId === "bigint" && typeof o.whitelistedRoute === "boolean" && typeof o.minBuyPrice === "string" && typeof o.minSellPrice === "string");
   },
   isSDK(o: any): o is QueryMatchableOrdersForPairRequestSDKType {
-    return o && (o.$typeUrl === QueryMatchableOrdersForPairRequest.typeUrl || typeof o.token_in === "string" && typeof o.token_out === "string" && typeof o.pool_id === "bigint" && typeof o.whitelisted_route === "boolean" && typeof o.max_buy_price === "string" && typeof o.max_sell_price === "string");
+    return o && (o.$typeUrl === QueryMatchableOrdersForPairRequest.typeUrl || typeof o.token_in === "string" && typeof o.token_out === "string" && typeof o.pool_id === "bigint" && typeof o.whitelisted_route === "boolean" && typeof o.min_buy_price === "string" && typeof o.min_sell_price === "string");
   },
   isAmino(o: any): o is QueryMatchableOrdersForPairRequestAmino {
-    return o && (o.$typeUrl === QueryMatchableOrdersForPairRequest.typeUrl || typeof o.token_in === "string" && typeof o.token_out === "string" && typeof o.pool_id === "bigint" && typeof o.whitelisted_route === "boolean" && typeof o.max_buy_price === "string" && typeof o.max_sell_price === "string");
+    return o && (o.$typeUrl === QueryMatchableOrdersForPairRequest.typeUrl || typeof o.token_in === "string" && typeof o.token_out === "string" && typeof o.pool_id === "bigint" && typeof o.whitelisted_route === "boolean" && typeof o.min_buy_price === "string" && typeof o.min_sell_price === "string");
   },
   encode(message: QueryMatchableOrdersForPairRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.tokenIn !== "") {
@@ -873,11 +873,11 @@ export const QueryMatchableOrdersForPairRequest = {
     if (message.whitelistedRoute === true) {
       writer.uint32(32).bool(message.whitelistedRoute);
     }
-    if (message.maxBuyPrice !== "") {
-      writer.uint32(42).string(Decimal.fromUserInput(message.maxBuyPrice, 18).atomics);
+    if (message.minBuyPrice !== "") {
+      writer.uint32(42).string(Decimal.fromUserInput(message.minBuyPrice, 18).atomics);
     }
-    if (message.maxSellPrice !== "") {
-      writer.uint32(50).string(Decimal.fromUserInput(message.maxSellPrice, 18).atomics);
+    if (message.minSellPrice !== "") {
+      writer.uint32(50).string(Decimal.fromUserInput(message.minSellPrice, 18).atomics);
     }
     return writer;
   },
@@ -901,10 +901,10 @@ export const QueryMatchableOrdersForPairRequest = {
           message.whitelistedRoute = reader.bool();
           break;
         case 5:
-          message.maxBuyPrice = Decimal.fromAtomics(reader.string(), 18).toString();
+          message.minBuyPrice = Decimal.fromAtomics(reader.string(), 18).toString();
           break;
         case 6:
-          message.maxSellPrice = Decimal.fromAtomics(reader.string(), 18).toString();
+          message.minSellPrice = Decimal.fromAtomics(reader.string(), 18).toString();
           break;
         default:
           reader.skipType(tag & 7);
@@ -919,8 +919,8 @@ export const QueryMatchableOrdersForPairRequest = {
       tokenOut: isSet(object.tokenOut) ? String(object.tokenOut) : "",
       poolId: isSet(object.poolId) ? BigInt(object.poolId.toString()) : BigInt(0),
       whitelistedRoute: isSet(object.whitelistedRoute) ? Boolean(object.whitelistedRoute) : false,
-      maxBuyPrice: isSet(object.maxBuyPrice) ? String(object.maxBuyPrice) : "",
-      maxSellPrice: isSet(object.maxSellPrice) ? String(object.maxSellPrice) : ""
+      minBuyPrice: isSet(object.minBuyPrice) ? String(object.minBuyPrice) : "",
+      minSellPrice: isSet(object.minSellPrice) ? String(object.minSellPrice) : ""
     };
   },
   toJSON(message: QueryMatchableOrdersForPairRequest): unknown {
@@ -929,8 +929,8 @@ export const QueryMatchableOrdersForPairRequest = {
     message.tokenOut !== undefined && (obj.tokenOut = message.tokenOut);
     message.poolId !== undefined && (obj.poolId = (message.poolId || BigInt(0)).toString());
     message.whitelistedRoute !== undefined && (obj.whitelistedRoute = message.whitelistedRoute);
-    message.maxBuyPrice !== undefined && (obj.maxBuyPrice = message.maxBuyPrice);
-    message.maxSellPrice !== undefined && (obj.maxSellPrice = message.maxSellPrice);
+    message.minBuyPrice !== undefined && (obj.minBuyPrice = message.minBuyPrice);
+    message.minSellPrice !== undefined && (obj.minSellPrice = message.minSellPrice);
     return obj;
   },
   fromPartial(object: Partial<QueryMatchableOrdersForPairRequest>): QueryMatchableOrdersForPairRequest {
@@ -939,8 +939,8 @@ export const QueryMatchableOrdersForPairRequest = {
     message.tokenOut = object.tokenOut ?? "";
     message.poolId = object.poolId !== undefined && object.poolId !== null ? BigInt(object.poolId.toString()) : BigInt(0);
     message.whitelistedRoute = object.whitelistedRoute ?? false;
-    message.maxBuyPrice = object.maxBuyPrice ?? "";
-    message.maxSellPrice = object.maxSellPrice ?? "";
+    message.minBuyPrice = object.minBuyPrice ?? "";
+    message.minSellPrice = object.minSellPrice ?? "";
     return message;
   },
   fromAmino(object: QueryMatchableOrdersForPairRequestAmino): QueryMatchableOrdersForPairRequest {
@@ -957,11 +957,11 @@ export const QueryMatchableOrdersForPairRequest = {
     if (object.whitelisted_route !== undefined && object.whitelisted_route !== null) {
       message.whitelistedRoute = object.whitelisted_route;
     }
-    if (object.max_buy_price !== undefined && object.max_buy_price !== null) {
-      message.maxBuyPrice = object.max_buy_price;
+    if (object.min_buy_price !== undefined && object.min_buy_price !== null) {
+      message.minBuyPrice = object.min_buy_price;
     }
-    if (object.max_sell_price !== undefined && object.max_sell_price !== null) {
-      message.maxSellPrice = object.max_sell_price;
+    if (object.min_sell_price !== undefined && object.min_sell_price !== null) {
+      message.minSellPrice = object.min_sell_price;
     }
     return message;
   },
@@ -971,8 +971,8 @@ export const QueryMatchableOrdersForPairRequest = {
     obj.token_out = message.tokenOut === "" ? undefined : message.tokenOut;
     obj.pool_id = message.poolId ? message.poolId.toString() : undefined;
     obj.whitelisted_route = message.whitelistedRoute === false ? undefined : message.whitelistedRoute;
-    obj.max_buy_price = padDecimal(message.maxBuyPrice) === "" ? undefined : padDecimal(message.maxBuyPrice);
-    obj.max_sell_price = padDecimal(message.maxSellPrice) === "" ? undefined : padDecimal(message.maxSellPrice);
+    obj.min_buy_price = padDecimal(message.minBuyPrice) === "" ? undefined : padDecimal(message.minBuyPrice);
+    obj.min_sell_price = padDecimal(message.minSellPrice) === "" ? undefined : padDecimal(message.minSellPrice);
     return obj;
   },
   fromAminoMsg(object: QueryMatchableOrdersForPairRequestAminoMsg): QueryMatchableOrdersForPairRequest {

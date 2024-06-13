@@ -1,0 +1,20 @@
+syntax = "proto3";
+package pryzmatics.server.trade;
+
+import "gogoproto/gogo.proto";
+import "cosmos_proto/cosmos.proto";
+import "pryzm/amm/v1/operations.proto";
+import "pryzm/amm/v1/route_step.proto";
+
+
+option go_package = "github.com/pryzm-finance/pryzmatics/server/trade";
+
+message QuerySwapStepsRequest {
+  pryzm.amm.v1.SwapType swap_type = 1;
+  string token_in = 2;
+  string token_out = 3;
+}
+
+message QuerySwapStepsResponse {
+  repeated pryzm.amm.v1.SwapStep swap_steps = 1 [(gogoproto.nullable) = false];
+}

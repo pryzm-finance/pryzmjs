@@ -1,9 +1,6 @@
 import * as console from "console";
 import { createPryzmaticsClient } from "@pryzm-finance/pryzmjs";
 import { PRYZMATICS_ENDPOINT } from "./constants";
-import { TreasuryBalanceAmino } from "../../src/codegen/pryzmatics/statistics/treasury";
-import { MarketCapAmino } from "../../src/codegen/pryzmatics/statistics/market_cap";
-import { TVLAmino } from "../../src/codegen/pryzmatics/statistics/tvl";
 
 
 async function main() {
@@ -18,6 +15,11 @@ async function main() {
     console.log(statistics.tvl.error)
     console.log(statistics.total_tx_count)
     console.log(statistics.total_trade_volume)
+    console.log(statistics.volume_24h.trade_volume)
+    console.log(statistics.volume_24h.swap_fee_volume)
+    console.log(statistics.volume_24h.join_exit_swap_fee_volume)
+    console.log(statistics.volume_24h.swap_protocol_fee_volume)
+    console.log(statistics.volume_24h.join_exit_protocol_fee_volume)
     console.log(statistics.liquidity)
     console.log(statistics.wallets_count)
     console.log(statistics.delegators_count)

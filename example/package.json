@@ -6,7 +6,7 @@
   "dependencies": {
     "@cosmjs/proto-signing": "0.32.2",
     "@cosmjs/stargate": "0.32.2",
-    "@pryzm-finance/pryzmjs": "0.20.0",
+    "@pryzm-finance/pryzmjs": "0.20.1",
     "@refractedlabs/utils": "0.4.0",
     "axios": "1.6.0",
     "cosmjs-types": "0.9.0"
