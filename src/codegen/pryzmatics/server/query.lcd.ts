@@ -180,8 +180,8 @@ export class LCDQueryClient {
     const options: any = {
       params: {}
     };
-    if (typeof params?.tokenOut !== "undefined") {
-      options.params.token_out = params.tokenOut;
+    if (typeof params?.tokenIn !== "undefined") {
+      options.params.token_in = params.tokenIn;
     }
     const endpoint = `pryzmatics/token/${params.denom}`;
     return await this.req.get<QueryTokenResponseSDKType>(endpoint, options);
@@ -194,8 +194,8 @@ export class LCDQueryClient {
     if (typeof params?.tokenType !== "undefined") {
       options.params.token_type = params.tokenType;
     }
-    if (typeof params?.tokenOut !== "undefined") {
-      options.params.token_out = params.tokenOut;
+    if (typeof params?.tokenIn !== "undefined") {
+      options.params.token_in = params.tokenIn;
     }
     if (typeof params?.pagination !== "undefined") {
       setPaginationParams(options, params.pagination);
@@ -248,10 +248,10 @@ export class LCDQueryClient {
     const options: any = {
       params: {}
     };
-    if (typeof params?.tokenOut !== "undefined") {
-      options.params.token_out = params.tokenOut;
+    if (typeof params?.tokenIn !== "undefined") {
+      options.params.token_in = params.tokenIn;
     }
-    const endpoint = `pryzmatics/price/${params.tokenIn}`;
+    const endpoint = `pryzmatics/price/${params.tokenOut}`;
     return await this.req.get<QueryPriceResponseSDKType>(endpoint, options);
   }
   /* TokenPrices */

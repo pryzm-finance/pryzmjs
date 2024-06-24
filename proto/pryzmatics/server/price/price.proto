@@ -9,8 +9,8 @@ import "cosmos/base/query/v1beta1/pagination.proto";
 option go_package = "github.com/pryzm-finance/pryzmatics/server/price";
 
 message QueryPriceRequest {
-  string token_in = 1;
-  string token_out = 2;
+  string token_out = 1;
+  string token_in = 2;
 }
 
 message QueryPriceResponse {

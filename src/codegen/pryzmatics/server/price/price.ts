@@ -5,24 +5,24 @@ import { isSet, padDecimal } from "../../../helpers";
 import { GlobalDecoderRegistry } from "../../../registry";
 import { Decimal } from "@cosmjs/math";
 export interface QueryPriceRequest {
-  tokenIn: string;
   tokenOut: string;
+  tokenIn: string;
 }
 export interface QueryPriceRequestProtoMsg {
   typeUrl: "/pryzmatics.server.price.QueryPriceRequest";
   value: Uint8Array;
 }
 export interface QueryPriceRequestAmino {
-  token_in?: string;
   token_out?: string;
+  token_in?: string;
 }
 export interface QueryPriceRequestAminoMsg {
   type: "/pryzmatics.server.price.QueryPriceRequest";
   value: QueryPriceRequestAmino;
 }
 export interface QueryPriceRequestSDKType {
-  token_in: string;
   token_out: string;
+  token_in: string;
 }
 export interface QueryPriceResponse {
   price: string;
@@ -83,27 +83,27 @@ export interface QueryPricesResponseSDKType {
 }
 function createBaseQueryPriceRequest(): QueryPriceRequest {
   return {
-    tokenIn: "",
-    tokenOut: ""
+    tokenOut: "",
+    tokenIn: ""
   };
 }
 export const QueryPriceRequest = {
   typeUrl: "/pryzmatics.server.price.QueryPriceRequest",
   is(o: any): o is QueryPriceRequest {
-    return o && (o.$typeUrl === QueryPriceRequest.typeUrl || typeof o.tokenIn === "string" && typeof o.tokenOut === "string");
+    return o && (o.$typeUrl === QueryPriceRequest.typeUrl || typeof o.tokenOut === "string" && typeof o.tokenIn === "string");
   },
   isSDK(o: any): o is QueryPriceRequestSDKType {
-    return o && (o.$typeUrl === QueryPriceRequest.typeUrl || typeof o.token_in === "string" && typeof o.token_out === "string");
+    return o && (o.$typeUrl === QueryPriceRequest.typeUrl || typeof o.token_out === "string" && typeof o.token_in === "string");
   },
   isAmino(o: any): o is QueryPriceRequestAmino {
-    return o && (o.$typeUrl === QueryPriceRequest.typeUrl || typeof o.token_in === "string" && typeof o.token_out === "string");
+    return o && (o.$typeUrl === QueryPriceRequest.typeUrl || typeof o.token_out === "string" && typeof o.token_in === "string");
   },
   encode(message: QueryPriceRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
-    if (message.tokenIn !== "") {
-      writer.uint32(10).string(message.tokenIn);
-    }
     if (message.tokenOut !== "") {
-      writer.uint32(18).string(message.tokenOut);
+      writer.uint32(10).string(message.tokenOut);
+    }
+    if (message.tokenIn !== "") {
+      writer.uint32(18).string(message.tokenIn);
     }
     return writer;
   },
@@ -115,10 +115,10 @@ export const QueryPriceRequest = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.tokenIn = reader.string();
+          message.tokenOut = reader.string();
           break;
         case 2:
-          message.tokenOut = reader.string();
+          message.tokenIn = reader.string();
           break;
         default:
           reader.skipType(tag & 7);
@@ -129,36 +129,36 @@ export const QueryPriceRequest = {
   },
   fromJSON(object: any): QueryPriceRequest {
     return {
-      tokenIn: isSet(object.tokenIn) ? String(object.tokenIn) : "",
-      tokenOut: isSet(object.tokenOut) ? String(object.tokenOut) : ""
+      tokenOut: isSet(object.tokenOut) ? String(object.tokenOut) : "",
+      tokenIn: isSet(object.tokenIn) ? String(object.tokenIn) : ""
     };
   },
   toJSON(message: QueryPriceRequest): unknown {
     const obj: any = {};
-    message.tokenIn !== undefined && (obj.tokenIn = message.tokenIn);
     message.tokenOut !== undefined && (obj.tokenOut = message.tokenOut);
+    message.tokenIn !== undefined && (obj.tokenIn = message.tokenIn);
     return obj;
   },
   fromPartial(object: Partial<QueryPriceRequest>): QueryPriceRequest {
     const message = createBaseQueryPriceRequest();
-    message.tokenIn = object.tokenIn ?? "";
     message.tokenOut = object.tokenOut ?? "";
+    message.tokenIn = object.tokenIn ?? "";
     return message;
   },
   fromAmino(object: QueryPriceRequestAmino): QueryPriceRequest {
     const message = createBaseQueryPriceRequest();
-    if (object.token_in !== undefined && object.token_in !== null) {
-      message.tokenIn = object.token_in;
-    }
     if (object.token_out !== undefined && object.token_out !== null) {
       message.tokenOut = object.token_out;
+    }
+    if (object.token_in !== undefined && object.token_in !== null) {
+      message.tokenIn = object.token_in;
     }
     return message;
   },
   toAmino(message: QueryPriceRequest, useInterfaces: boolean = true): QueryPriceRequestAmino {
     const obj: any = {};
-    obj.token_in = message.tokenIn === "" ? undefined : message.tokenIn;
     obj.token_out = message.tokenOut === "" ? undefined : message.tokenOut;
+    obj.token_in = message.tokenIn === "" ? undefined : message.tokenIn;
     return obj;
   },
   fromAminoMsg(object: QueryPriceRequestAminoMsg): QueryPriceRequest {

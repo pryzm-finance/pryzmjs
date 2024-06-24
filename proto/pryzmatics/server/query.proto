@@ -116,7 +116,7 @@ service Query {
   }
 
   rpc TokenPrice(pryzmatics.server.price.QueryPriceRequest) returns (pryzmatics.server.price.QueryPriceResponse) {
-    option (google.api.http).get = "/pryzmatics/price/{token_in}";
+    option (google.api.http).get = "/pryzmatics/price/{token_out}";
   }
 
   rpc TokenPrices(pryzmatics.server.price.QueryPricesRequest) returns (pryzmatics.server.price.QueryPricesResponse) {

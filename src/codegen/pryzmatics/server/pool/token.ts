@@ -5,7 +5,7 @@ import { isSet } from "../../../helpers";
 import { GlobalDecoderRegistry } from "../../../registry";
 export interface QueryTokenRequest {
   denom: string;
-  tokenOut: string;
+  tokenIn: string;
 }
 export interface QueryTokenRequestProtoMsg {
   typeUrl: "/pryzmatics.server.pool.QueryTokenRequest";
@@ -13,7 +13,7 @@ export interface QueryTokenRequestProtoMsg {
 }
 export interface QueryTokenRequestAmino {
   denom?: string;
-  token_out?: string;
+  token_in?: string;
 }
 export interface QueryTokenRequestAminoMsg {
   type: "/pryzmatics.server.pool.QueryTokenRequest";
@@ -21,7 +21,7 @@ export interface QueryTokenRequestAminoMsg {
 }
 export interface QueryTokenRequestSDKType {
   denom: string;
-  token_out: string;
+  token_in: string;
 }
 export interface QueryTokenResponse {
   token: Token;
@@ -42,7 +42,7 @@ export interface QueryTokenResponseSDKType {
 }
 export interface QueryTokensRequest {
   tokenType: TokenType;
-  tokenOut: string;
+  tokenIn: string;
   pagination?: PageRequest;
 }
 export interface QueryTokensRequestProtoMsg {
@@ -51,7 +51,7 @@ export interface QueryTokensRequestProtoMsg {
 }
 export interface QueryTokensRequestAmino {
   token_type?: TokenType;
-  token_out?: string;
+  token_in?: string;
   pagination?: PageRequestAmino;
 }
 export interface QueryTokensRequestAminoMsg {
@@ -60,7 +60,7 @@ export interface QueryTokensRequestAminoMsg {
 }
 export interface QueryTokensRequestSDKType {
   token_type: TokenType;
-  token_out: string;
+  token_in: string;
   pagination?: PageRequestSDKType;
 }
 export interface QueryTokensResponse {
@@ -86,26 +86,26 @@ export interface QueryTokensResponseSDKType {
 function createBaseQueryTokenRequest(): QueryTokenRequest {
   return {
     denom: "",
-    tokenOut: ""
+    tokenIn: ""
   };
 }
 export const QueryTokenRequest = {
   typeUrl: "/pryzmatics.server.pool.QueryTokenRequest",
   is(o: any): o is QueryTokenRequest {
-    return o && (o.$typeUrl === QueryTokenRequest.typeUrl || typeof o.denom === "string" && typeof o.tokenOut === "string");
+    return o && (o.$typeUrl === QueryTokenRequest.typeUrl || typeof o.denom === "string" && typeof o.tokenIn === "string");
   },
   isSDK(o: any): o is QueryTokenRequestSDKType {
-    return o && (o.$typeUrl === QueryTokenRequest.typeUrl || typeof o.denom === "string" && typeof o.token_out === "string");
+    return o && (o.$typeUrl === QueryTokenRequest.typeUrl || typeof o.denom === "string" && typeof o.token_in === "string");
   },
   isAmino(o: any): o is QueryTokenRequestAmino {
-    return o && (o.$typeUrl === QueryTokenRequest.typeUrl || typeof o.denom === "string" && typeof o.token_out === "string");
+    return o && (o.$typeUrl === QueryTokenRequest.typeUrl || typeof o.denom === "string" && typeof o.token_in === "string");
   },
   encode(message: QueryTokenRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.denom !== "") {
       writer.uint32(10).string(message.denom);
     }
-    if (message.tokenOut !== "") {
-      writer.uint32(18).string(message.tokenOut);
+    if (message.tokenIn !== "") {
+      writer.uint32(18).string(message.tokenIn);
     }
     return writer;
   },
@@ -120,7 +120,7 @@ export const QueryTokenRequest = {
           message.denom = reader.string();
           break;
         case 2:
-          message.tokenOut = reader.string();
+          message.tokenIn = reader.string();
           break;
         default:
           reader.skipType(tag & 7);
@@ -132,19 +132,19 @@ export const QueryTokenRequest = {
   fromJSON(object: any): QueryTokenRequest {
     return {
       denom: isSet(object.denom) ? String(object.denom) : "",
-      tokenOut: isSet(object.tokenOut) ? String(object.tokenOut) : ""
+      tokenIn: isSet(object.tokenIn) ? String(object.tokenIn) : ""
     };
   },
   toJSON(message: QueryTokenRequest): unknown {
     const obj: any = {};
     message.denom !== undefined && (obj.denom = message.denom);
-    message.tokenOut !== undefined && (obj.tokenOut = message.tokenOut);
+    message.tokenIn !== undefined && (obj.tokenIn = message.tokenIn);
     return obj;
   },
   fromPartial(object: Partial<QueryTokenRequest>): QueryTokenRequest {
     const message = createBaseQueryTokenRequest();
     message.denom = object.denom ?? "";
-    message.tokenOut = object.tokenOut ?? "";
+    message.tokenIn = object.tokenIn ?? "";
     return message;
   },
   fromAmino(object: QueryTokenRequestAmino): QueryTokenRequest {
@@ -152,15 +152,15 @@ export const QueryTokenRequest = {
     if (object.denom !== undefined && object.denom !== null) {
       message.denom = object.denom;
     }
-    if (object.token_out !== undefined && object.token_out !== null) {
-      message.tokenOut = object.token_out;
+    if (object.token_in !== undefined && object.token_in !== null) {
+      message.tokenIn = object.token_in;
     }
     return message;
   },
   toAmino(message: QueryTokenRequest, useInterfaces: boolean = true): QueryTokenRequestAmino {
     const obj: any = {};
     obj.denom = message.denom === "" ? undefined : message.denom;
-    obj.token_out = message.tokenOut === "" ? undefined : message.tokenOut;
+    obj.token_in = message.tokenIn === "" ? undefined : message.tokenIn;
     return obj;
   },
   fromAminoMsg(object: QueryTokenRequestAminoMsg): QueryTokenRequest {
@@ -266,27 +266,27 @@ GlobalDecoderRegistry.register(QueryTokenResponse.typeUrl, QueryTokenResponse);
 function createBaseQueryTokensRequest(): QueryTokensRequest {
   return {
     tokenType: 0,
-    tokenOut: "",
+    tokenIn: "",
     pagination: undefined
   };
 }
 export const QueryTokensRequest = {
   typeUrl: "/pryzmatics.server.pool.QueryTokensRequest",
   is(o: any): o is QueryTokensRequest {
-    return o && (o.$typeUrl === QueryTokensRequest.typeUrl || isSet(o.tokenType) && typeof o.tokenOut === "string");
+    return o && (o.$typeUrl === QueryTokensRequest.typeUrl || isSet(o.tokenType) && typeof o.tokenIn === "string");
   },
   isSDK(o: any): o is QueryTokensRequestSDKType {
-    return o && (o.$typeUrl === QueryTokensRequest.typeUrl || isSet(o.token_type) && typeof o.token_out === "string");
+    return o && (o.$typeUrl === QueryTokensRequest.typeUrl || isSet(o.token_type) && typeof o.token_in === "string");
   },
   isAmino(o: any): o is QueryTokensRequestAmino {
-    return o && (o.$typeUrl === QueryTokensRequest.typeUrl || isSet(o.token_type) && typeof o.token_out === "string");
+    return o && (o.$typeUrl === QueryTokensRequest.typeUrl || isSet(o.token_type) && typeof o.token_in === "string");
   },
   encode(message: QueryTokensRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.tokenType !== 0) {
       writer.uint32(8).int32(message.tokenType);
     }
-    if (message.tokenOut !== "") {
-      writer.uint32(18).string(message.tokenOut);
+    if (message.tokenIn !== "") {
+      writer.uint32(18).string(message.tokenIn);
     }
     if (message.pagination !== undefined) {
       PageRequest.encode(message.pagination, writer.uint32(26).fork()).ldelim();
@@ -304,7 +304,7 @@ export const QueryTokensRequest = {
           message.tokenType = (reader.int32() as any);
           break;
         case 2:
-          message.tokenOut = reader.string();
+          message.tokenIn = reader.string();
           break;
         case 3:
           message.pagination = PageRequest.decode(reader, reader.uint32(), useInterfaces);
@@ -319,21 +319,21 @@ export const QueryTokensRequest = {
   fromJSON(object: any): QueryTokensRequest {
     return {
       tokenType: isSet(object.tokenType) ? tokenTypeFromJSON(object.tokenType) : -1,
-      tokenOut: isSet(object.tokenOut) ? String(object.tokenOut) : "",
+      tokenIn: isSet(object.tokenIn) ? String(object.tokenIn) : "",
       pagination: isSet(object.pagination) ? PageRequest.fromJSON(object.pagination) : undefined
     };
   },
   toJSON(message: QueryTokensRequest): unknown {
     const obj: any = {};
     message.tokenType !== undefined && (obj.tokenType = tokenTypeToJSON(message.tokenType));
-    message.tokenOut !== undefined && (obj.tokenOut = message.tokenOut);
+    message.tokenIn !== undefined && (obj.tokenIn = message.tokenIn);
     message.pagination !== undefined && (obj.pagination = message.pagination ? PageRequest.toJSON(message.pagination) : undefined);
     return obj;
   },
   fromPartial(object: Partial<QueryTokensRequest>): QueryTokensRequest {
     const message = createBaseQueryTokensRequest();
     message.tokenType = object.tokenType ?? 0;
-    message.tokenOut = object.tokenOut ?? "";
+    message.tokenIn = object.tokenIn ?? "";
     message.pagination = object.pagination !== undefined && object.pagination !== null ? PageRequest.fromPartial(object.pagination) : undefined;
     return message;
   },
@@ -342,8 +342,8 @@ export const QueryTokensRequest = {
     if (object.token_type !== undefined && object.token_type !== null) {
       message.tokenType = object.token_type;
     }
-    if (object.token_out !== undefined && object.token_out !== null) {
-      message.tokenOut = object.token_out;
+    if (object.token_in !== undefined && object.token_in !== null) {
+      message.tokenIn = object.token_in;
     }
     if (object.pagination !== undefined && object.pagination !== null) {
       message.pagination = PageRequest.fromAmino(object.pagination);
@@ -353,7 +353,7 @@ export const QueryTokensRequest = {
   toAmino(message: QueryTokensRequest, useInterfaces: boolean = true): QueryTokensRequestAmino {
     const obj: any = {};
     obj.token_type = message.tokenType === 0 ? undefined : message.tokenType;
-    obj.token_out = message.tokenOut === "" ? undefined : message.tokenOut;
+    obj.token_in = message.tokenIn === "" ? undefined : message.tokenIn;
     obj.pagination = message.pagination ? PageRequest.toAmino(message.pagination, useInterfaces) : undefined;
     return obj;
   },

@@ -7,7 +7,7 @@ async function main() {
 
     const token = (await pryzmaticsClient.pryzmatics.token({
         denom: "p:eth:30Jun2024",
-        tokenOut: ""
+        tokenIn: ""
     })).token
     console.log(token)
 
