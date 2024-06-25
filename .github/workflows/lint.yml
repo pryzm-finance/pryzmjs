@@ -42,7 +42,7 @@ jobs:
       # MegaLinter
       - name: MegaLinter
 
-        uses: oxsecurity/megalinter@v7
+        uses: oxsecurity/megalinter/flavors/javascript@v7.12.0
 
         id: ml
 
@@ -130,4 +130,3 @@ jobs:
           commit_message: "[MegaLinter] Apply linters fixes"
           commit_user_name: megalinter-bot
           commit_user_email: nicolas.vuillamy@ox.security
-
