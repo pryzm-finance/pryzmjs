@@ -8,11 +8,11 @@ import * as _6 from "./alliance/query";
 import * as _7 from "./alliance/redelegations";
 import * as _8 from "./alliance/tx";
 import * as _9 from "./alliance/unbonding";
-import * as _329 from "./alliance/tx.amino";
-import * as _330 from "./alliance/tx.registry";
-import * as _331 from "./alliance/query.lcd";
-import * as _332 from "./alliance/query.rpc.Query";
-import * as _333 from "./alliance/tx.rpc.msg";
+import * as _330 from "./alliance/tx.amino";
+import * as _331 from "./alliance/tx.registry";
+import * as _332 from "./alliance/query.lcd";
+import * as _333 from "./alliance/query.rpc.Query";
+import * as _334 from "./alliance/tx.rpc.msg";
 export namespace alliance {
   export const alliance = {
     ..._0,
@@ -25,10 +25,10 @@ export namespace alliance {
     ..._7,
     ..._8,
     ..._9,
-    ..._329,
     ..._330,
     ..._331,
     ..._332,
-    ..._333
+    ..._333,
+    ..._334
   };
 }

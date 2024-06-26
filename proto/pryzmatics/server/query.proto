@@ -48,6 +48,7 @@ import "pryzmatics/server/oracle/vote.proto";
 import "pryzmatics/server/oracle/vote_payload.proto";
 import "pryzmatics/server/oracle/ballot_vote_result.proto";
 import "pryzmatics/server/oracle/vote_interval_report.proto";
+import "pryzmatics/server/oracle/slash_window_analysis.proto";
 
 import "pryzmatics/server/ystaking/user_stake.proto";
 
@@ -277,6 +278,10 @@ service Query {
 
   rpc VoteIntervalReport(pryzmatics.server.oracle.QueryVoteIntervalReportRequest) returns (pryzmatics.server.oracle.QueryVoteIntervalReportResponse) {
     option (google.api.http).get = "/pryzmatics/oracle/vote_interval_report/{vote_interval_close_block_height}";
+  }
+
+  rpc OracleAnalysis(pryzmatics.server.oracle.QuerySlashWindowAnalysisRequest) returns (pryzmatics.server.oracle.QuerySlashWindowAnalysisResponse) {
+    option (google.api.http).get = "/pryzmatics/oracle/slash_window_analysis";
   }
 
   rpc UserStakes(pryzmatics.server.ystaking.QueryUserStakesRequest) returns (pryzmatics.server.ystaking.QueryUserStakesResponse) {

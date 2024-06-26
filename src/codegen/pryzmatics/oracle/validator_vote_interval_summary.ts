@@ -1,7 +1,57 @@
 import { Coin, CoinAmino, CoinSDKType } from "../../cosmos/base/v1beta1/coin";
-import { BinaryReader, BinaryWriter } from "../../binary";
 import { isSet } from "../../helpers";
+import { BinaryReader, BinaryWriter } from "../../binary";
 import { GlobalDecoderRegistry } from "../../registry";
+export enum VoteIntervalMissCounterStatus {
+  NONE = 0,
+  NO_PRE_VOTE_NOR_VOTE = 1,
+  NO_VOTE = 2,
+  EMPTY_VOTE = 3,
+  NON_EMPTY_VOTE = 4,
+  UNRECOGNIZED = -1,
+}
+export const VoteIntervalMissCounterStatusSDKType = VoteIntervalMissCounterStatus;
+export const VoteIntervalMissCounterStatusAmino = VoteIntervalMissCounterStatus;
+export function voteIntervalMissCounterStatusFromJSON(object: any): VoteIntervalMissCounterStatus {
+  switch (object) {
+    case 0:
+    case "NONE":
+      return VoteIntervalMissCounterStatus.NONE;
+    case 1:
+    case "NO_PRE_VOTE_NOR_VOTE":
+      return VoteIntervalMissCounterStatus.NO_PRE_VOTE_NOR_VOTE;
+    case 2:
+    case "NO_VOTE":
+      return VoteIntervalMissCounterStatus.NO_VOTE;
+    case 3:
+    case "EMPTY_VOTE":
+      return VoteIntervalMissCounterStatus.EMPTY_VOTE;
+    case 4:
+    case "NON_EMPTY_VOTE":
+      return VoteIntervalMissCounterStatus.NON_EMPTY_VOTE;
+    case -1:
+    case "UNRECOGNIZED":
+    default:
+      return VoteIntervalMissCounterStatus.UNRECOGNIZED;
+  }
+}
+export function voteIntervalMissCounterStatusToJSON(object: VoteIntervalMissCounterStatus): string {
+  switch (object) {
+    case VoteIntervalMissCounterStatus.NONE:
+      return "NONE";
+    case VoteIntervalMissCounterStatus.NO_PRE_VOTE_NOR_VOTE:
+      return "NO_PRE_VOTE_NOR_VOTE";
+    case VoteIntervalMissCounterStatus.NO_VOTE:
+      return "NO_VOTE";
+    case VoteIntervalMissCounterStatus.EMPTY_VOTE:
+      return "EMPTY_VOTE";
+    case VoteIntervalMissCounterStatus.NON_EMPTY_VOTE:
+      return "NON_EMPTY_VOTE";
+    case VoteIntervalMissCounterStatus.UNRECOGNIZED:
+    default:
+      return "UNRECOGNIZED";
+  }
+}
 export interface ValidatorVoteIntervalSummary {
   validator: string;
   voteIntervalCloseBlockHeight: bigint;
@@ -9,6 +59,7 @@ export interface ValidatorVoteIntervalSummary {
   voteIntervalMissCounter: bigint;
   slashWindowMissCounter: bigint;
   rewards: Coin[];
+  voteIntervalMissCounterStatus: VoteIntervalMissCounterStatus;
 }
 export interface ValidatorVoteIntervalSummaryProtoMsg {
   typeUrl: "/pryzmatics.oracle.ValidatorVoteIntervalSummary";
@@ -21,6 +72,7 @@ export interface ValidatorVoteIntervalSummaryAmino {
   vote_interval_miss_counter?: string;
   slash_window_miss_counter?: string;
   rewards?: CoinAmino[];
+  vote_interval_miss_counter_status?: VoteIntervalMissCounterStatus;
 }
 export interface ValidatorVoteIntervalSummaryAminoMsg {
   type: "/pryzmatics.oracle.ValidatorVoteIntervalSummary";
@@ -33,6 +85,7 @@ export interface ValidatorVoteIntervalSummarySDKType {
   vote_interval_miss_counter: bigint;
   slash_window_miss_counter: bigint;
   rewards: CoinSDKType[];
+  vote_interval_miss_counter_status: VoteIntervalMissCounterStatus;
 }
 function createBaseValidatorVoteIntervalSummary(): ValidatorVoteIntervalSummary {
   return {
@@ -41,19 +94,20 @@ function createBaseValidatorVoteIntervalSummary(): ValidatorVoteIntervalSummary 
     validatorPower: BigInt(0),
     voteIntervalMissCounter: BigInt(0),
     slashWindowMissCounter: BigInt(0),
-    rewards: []
+    rewards: [],
+    voteIntervalMissCounterStatus: 0
   };
 }
 export const ValidatorVoteIntervalSummary = {
   typeUrl: "/pryzmatics.oracle.ValidatorVoteIntervalSummary",
   is(o: any): o is ValidatorVoteIntervalSummary {
-    return o && (o.$typeUrl === ValidatorVoteIntervalSummary.typeUrl || typeof o.validator === "string" && typeof o.voteIntervalCloseBlockHeight === "bigint" && typeof o.validatorPower === "bigint" && typeof o.voteIntervalMissCounter === "bigint" && typeof o.slashWindowMissCounter === "bigint" && Array.isArray(o.rewards) && (!o.rewards.length || Coin.is(o.rewards[0])));
+    return o && (o.$typeUrl === ValidatorVoteIntervalSummary.typeUrl || typeof o.validator === "string" && typeof o.voteIntervalCloseBlockHeight === "bigint" && typeof o.validatorPower === "bigint" && typeof o.voteIntervalMissCounter === "bigint" && typeof o.slashWindowMissCounter === "bigint" && Array.isArray(o.rewards) && (!o.rewards.length || Coin.is(o.rewards[0])) && isSet(o.voteIntervalMissCounterStatus));
   },
   isSDK(o: any): o is ValidatorVoteIntervalSummarySDKType {
-    return o && (o.$typeUrl === ValidatorVoteIntervalSummary.typeUrl || typeof o.validator === "string" && typeof o.vote_interval_close_block_height === "bigint" && typeof o.validator_power === "bigint" && typeof o.vote_interval_miss_counter === "bigint" && typeof o.slash_window_miss_counter === "bigint" && Array.isArray(o.rewards) && (!o.rewards.length || Coin.isSDK(o.rewards[0])));
+    return o && (o.$typeUrl === ValidatorVoteIntervalSummary.typeUrl || typeof o.validator === "string" && typeof o.vote_interval_close_block_height === "bigint" && typeof o.validator_power === "bigint" && typeof o.vote_interval_miss_counter === "bigint" && typeof o.slash_window_miss_counter === "bigint" && Array.isArray(o.rewards) && (!o.rewards.length || Coin.isSDK(o.rewards[0])) && isSet(o.vote_interval_miss_counter_status));
   },
   isAmino(o: any): o is ValidatorVoteIntervalSummaryAmino {
-    return o && (o.$typeUrl === ValidatorVoteIntervalSummary.typeUrl || typeof o.validator === "string" && typeof o.vote_interval_close_block_height === "bigint" && typeof o.validator_power === "bigint" && typeof o.vote_interval_miss_counter === "bigint" && typeof o.slash_window_miss_counter === "bigint" && Array.isArray(o.rewards) && (!o.rewards.length || Coin.isAmino(o.rewards[0])));
+    return o && (o.$typeUrl === ValidatorVoteIntervalSummary.typeUrl || typeof o.validator === "string" && typeof o.vote_interval_close_block_height === "bigint" && typeof o.validator_power === "bigint" && typeof o.vote_interval_miss_counter === "bigint" && typeof o.slash_window_miss_counter === "bigint" && Array.isArray(o.rewards) && (!o.rewards.length || Coin.isAmino(o.rewards[0])) && isSet(o.vote_interval_miss_counter_status));
   },
   encode(message: ValidatorVoteIntervalSummary, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.validator !== "") {
@@ -73,6 +127,9 @@ export const ValidatorVoteIntervalSummary = {
     }
     for (const v of message.rewards) {
       Coin.encode(v!, writer.uint32(50).fork()).ldelim();
+    }
+    if (message.voteIntervalMissCounterStatus !== 0) {
+      writer.uint32(56).int32(message.voteIntervalMissCounterStatus);
     }
     return writer;
   },
@@ -101,6 +158,9 @@ export const ValidatorVoteIntervalSummary = {
         case 6:
           message.rewards.push(Coin.decode(reader, reader.uint32(), useInterfaces));
           break;
+        case 7:
+          message.voteIntervalMissCounterStatus = (reader.int32() as any);
+          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -115,7 +175,8 @@ export const ValidatorVoteIntervalSummary = {
       validatorPower: isSet(object.validatorPower) ? BigInt(object.validatorPower.toString()) : BigInt(0),
       voteIntervalMissCounter: isSet(object.voteIntervalMissCounter) ? BigInt(object.voteIntervalMissCounter.toString()) : BigInt(0),
       slashWindowMissCounter: isSet(object.slashWindowMissCounter) ? BigInt(object.slashWindowMissCounter.toString()) : BigInt(0),
-      rewards: Array.isArray(object?.rewards) ? object.rewards.map((e: any) => Coin.fromJSON(e)) : []
+      rewards: Array.isArray(object?.rewards) ? object.rewards.map((e: any) => Coin.fromJSON(e)) : [],
+      voteIntervalMissCounterStatus: isSet(object.voteIntervalMissCounterStatus) ? voteIntervalMissCounterStatusFromJSON(object.voteIntervalMissCounterStatus) : -1
     };
   },
   toJSON(message: ValidatorVoteIntervalSummary): unknown {
@@ -130,6 +191,7 @@ export const ValidatorVoteIntervalSummary = {
     } else {
       obj.rewards = [];
     }
+    message.voteIntervalMissCounterStatus !== undefined && (obj.voteIntervalMissCounterStatus = voteIntervalMissCounterStatusToJSON(message.voteIntervalMissCounterStatus));
     return obj;
   },
   fromPartial(object: Partial<ValidatorVoteIntervalSummary>): ValidatorVoteIntervalSummary {
@@ -140,6 +202,7 @@ export const ValidatorVoteIntervalSummary = {
     message.voteIntervalMissCounter = object.voteIntervalMissCounter !== undefined && object.voteIntervalMissCounter !== null ? BigInt(object.voteIntervalMissCounter.toString()) : BigInt(0);
     message.slashWindowMissCounter = object.slashWindowMissCounter !== undefined && object.slashWindowMissCounter !== null ? BigInt(object.slashWindowMissCounter.toString()) : BigInt(0);
     message.rewards = object.rewards?.map(e => Coin.fromPartial(e)) || [];
+    message.voteIntervalMissCounterStatus = object.voteIntervalMissCounterStatus ?? 0;
     return message;
   },
   fromAmino(object: ValidatorVoteIntervalSummaryAmino): ValidatorVoteIntervalSummary {
@@ -160,6 +223,9 @@ export const ValidatorVoteIntervalSummary = {
       message.slashWindowMissCounter = BigInt(object.slash_window_miss_counter);
     }
     message.rewards = object.rewards?.map(e => Coin.fromAmino(e)) || [];
+    if (object.vote_interval_miss_counter_status !== undefined && object.vote_interval_miss_counter_status !== null) {
+      message.voteIntervalMissCounterStatus = object.vote_interval_miss_counter_status;
+    }
     return message;
   },
   toAmino(message: ValidatorVoteIntervalSummary, useInterfaces: boolean = true): ValidatorVoteIntervalSummaryAmino {
@@ -174,6 +240,7 @@ export const ValidatorVoteIntervalSummary = {
     } else {
       obj.rewards = message.rewards;
     }
+    obj.vote_interval_miss_counter_status = message.voteIntervalMissCounterStatus === 0 ? undefined : message.voteIntervalMissCounterStatus;
     return obj;
   },
   fromAminoMsg(object: ValidatorVoteIntervalSummaryAminoMsg): ValidatorVoteIntervalSummary {

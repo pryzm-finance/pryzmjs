@@ -7,6 +7,15 @@ import "cosmos/base/v1beta1/coin.proto";
 
 option go_package = "github.com/pryzm-finance/pryzmatics/types/oracle";
 
+enum VoteIntervalMissCounterStatus {
+  NONE = 0;
+  NO_PRE_VOTE_NOR_VOTE = 1;
+  NO_VOTE = 2;
+  EMPTY_VOTE = 3;
+  NON_EMPTY_VOTE = 4;
+}
+
+
 message ValidatorVoteIntervalSummary {
   string validator = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
   int64 vote_interval_close_block_height = 2;
@@ -17,4 +26,5 @@ message ValidatorVoteIntervalSummary {
     (gogoproto.nullable) = false,
     (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins"
   ];
+  VoteIntervalMissCounterStatus vote_interval_miss_counter_status = 7;
 }
