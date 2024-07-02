@@ -1,0 +1,20 @@
+syntax = "proto3";
+package pryzmatics.server.trade;
+
+import "gogoproto/gogo.proto";
+import "cosmos_proto/cosmos.proto";
+import "pryzmatics/trade/directly_connected_token_pair.proto";
+import "cosmos/base/query/v1beta1/pagination.proto";
+
+
+option go_package = "github.com/pryzm-finance/pryzmatics/server/trade";
+
+
+message QueryDirectlyConnectedTokenPairsRequest {
+  cosmos.base.query.v1beta1.PageRequest pagination = 1 [(gogoproto.nullable) = true];
+}
+
+message QueryDirectlyConnectedTokenPairsResponse {
+  repeated pryzmatics.trade.DirectlyConnectedTokenPair pairs = 1 [(gogoproto.nullable) = false];
+  cosmos.base.query.v1beta1.PageResponse pagination = 2 [(gogoproto.nullable) = true];
+}

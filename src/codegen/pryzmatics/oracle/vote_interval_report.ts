@@ -33,6 +33,8 @@ export interface VotePayloadReportSDKType {
 }
 export interface ValidatorVoteIntervalReport {
   validator: string;
+  moniker: string;
+  power: bigint;
   preVoted: boolean;
   voted: boolean;
   missCounter: bigint;
@@ -45,6 +47,8 @@ export interface ValidatorVoteIntervalReportProtoMsg {
 }
 export interface ValidatorVoteIntervalReportAmino {
   validator?: string;
+  moniker?: string;
+  power?: string;
   pre_voted?: boolean;
   voted?: boolean;
   miss_counter?: string;
@@ -57,6 +61,8 @@ export interface ValidatorVoteIntervalReportAminoMsg {
 }
 export interface ValidatorVoteIntervalReportSDKType {
   validator: string;
+  moniker: string;
+  power: bigint;
   pre_voted: boolean;
   voted: boolean;
   miss_counter: bigint;
@@ -214,6 +220,8 @@ GlobalDecoderRegistry.register(VotePayloadReport.typeUrl, VotePayloadReport);
 function createBaseValidatorVoteIntervalReport(): ValidatorVoteIntervalReport {
   return {
     validator: "",
+    moniker: "",
+    power: BigInt(0),
     preVoted: false,
     voted: false,
     missCounter: BigInt(0),
@@ -224,32 +232,38 @@ function createBaseValidatorVoteIntervalReport(): ValidatorVoteIntervalReport {
 export const ValidatorVoteIntervalReport = {
   typeUrl: "/pryzmatics.oracle.ValidatorVoteIntervalReport",
   is(o: any): o is ValidatorVoteIntervalReport {
-    return o && (o.$typeUrl === ValidatorVoteIntervalReport.typeUrl || typeof o.validator === "string" && typeof o.preVoted === "boolean" && typeof o.voted === "boolean" && typeof o.missCounter === "bigint" && Array.isArray(o.rewards) && (!o.rewards.length || Coin.is(o.rewards[0])) && Array.isArray(o.payloads) && (!o.payloads.length || VotePayloadReport.is(o.payloads[0])));
+    return o && (o.$typeUrl === ValidatorVoteIntervalReport.typeUrl || typeof o.validator === "string" && typeof o.moniker === "string" && typeof o.power === "bigint" && typeof o.preVoted === "boolean" && typeof o.voted === "boolean" && typeof o.missCounter === "bigint" && Array.isArray(o.rewards) && (!o.rewards.length || Coin.is(o.rewards[0])) && Array.isArray(o.payloads) && (!o.payloads.length || VotePayloadReport.is(o.payloads[0])));
   },
   isSDK(o: any): o is ValidatorVoteIntervalReportSDKType {
-    return o && (o.$typeUrl === ValidatorVoteIntervalReport.typeUrl || typeof o.validator === "string" && typeof o.pre_voted === "boolean" && typeof o.voted === "boolean" && typeof o.miss_counter === "bigint" && Array.isArray(o.rewards) && (!o.rewards.length || Coin.isSDK(o.rewards[0])) && Array.isArray(o.payloads) && (!o.payloads.length || VotePayloadReport.isSDK(o.payloads[0])));
+    return o && (o.$typeUrl === ValidatorVoteIntervalReport.typeUrl || typeof o.validator === "string" && typeof o.moniker === "string" && typeof o.power === "bigint" && typeof o.pre_voted === "boolean" && typeof o.voted === "boolean" && typeof o.miss_counter === "bigint" && Array.isArray(o.rewards) && (!o.rewards.length || Coin.isSDK(o.rewards[0])) && Array.isArray(o.payloads) && (!o.payloads.length || VotePayloadReport.isSDK(o.payloads[0])));
   },
   isAmino(o: any): o is ValidatorVoteIntervalReportAmino {
-    return o && (o.$typeUrl === ValidatorVoteIntervalReport.typeUrl || typeof o.validator === "string" && typeof o.pre_voted === "boolean" && typeof o.voted === "boolean" && typeof o.miss_counter === "bigint" && Array.isArray(o.rewards) && (!o.rewards.length || Coin.isAmino(o.rewards[0])) && Array.isArray(o.payloads) && (!o.payloads.length || VotePayloadReport.isAmino(o.payloads[0])));
+    return o && (o.$typeUrl === ValidatorVoteIntervalReport.typeUrl || typeof o.validator === "string" && typeof o.moniker === "string" && typeof o.power === "bigint" && typeof o.pre_voted === "boolean" && typeof o.voted === "boolean" && typeof o.miss_counter === "bigint" && Array.isArray(o.rewards) && (!o.rewards.length || Coin.isAmino(o.rewards[0])) && Array.isArray(o.payloads) && (!o.payloads.length || VotePayloadReport.isAmino(o.payloads[0])));
   },
   encode(message: ValidatorVoteIntervalReport, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.validator !== "") {
       writer.uint32(10).string(message.validator);
     }
+    if (message.moniker !== "") {
+      writer.uint32(18).string(message.moniker);
+    }
+    if (message.power !== BigInt(0)) {
+      writer.uint32(24).int64(message.power);
+    }
     if (message.preVoted === true) {
-      writer.uint32(16).bool(message.preVoted);
+      writer.uint32(32).bool(message.preVoted);
     }
     if (message.voted === true) {
-      writer.uint32(24).bool(message.voted);
+      writer.uint32(40).bool(message.voted);
     }
     if (message.missCounter !== BigInt(0)) {
-      writer.uint32(32).int64(message.missCounter);
+      writer.uint32(48).int64(message.missCounter);
     }
     for (const v of message.rewards) {
-      Coin.encode(v!, writer.uint32(42).fork()).ldelim();
+      Coin.encode(v!, writer.uint32(58).fork()).ldelim();
     }
     for (const v of message.payloads) {
-      VotePayloadReport.encode(v!, writer.uint32(50).fork()).ldelim();
+      VotePayloadReport.encode(v!, writer.uint32(66).fork()).ldelim();
     }
     return writer;
   },
@@ -264,18 +278,24 @@ export const ValidatorVoteIntervalReport = {
           message.validator = reader.string();
           break;
         case 2:
-          message.preVoted = reader.bool();
+          message.moniker = reader.string();
           break;
         case 3:
-          message.voted = reader.bool();
+          message.power = reader.int64();
           break;
         case 4:
-          message.missCounter = reader.int64();
+          message.preVoted = reader.bool();
           break;
         case 5:
-          message.rewards.push(Coin.decode(reader, reader.uint32(), useInterfaces));
+          message.voted = reader.bool();
           break;
         case 6:
+          message.missCounter = reader.int64();
+          break;
+        case 7:
+          message.rewards.push(Coin.decode(reader, reader.uint32(), useInterfaces));
+          break;
+        case 8:
           message.payloads.push(VotePayloadReport.decode(reader, reader.uint32(), useInterfaces));
           break;
         default:
@@ -288,6 +308,8 @@ export const ValidatorVoteIntervalReport = {
   fromJSON(object: any): ValidatorVoteIntervalReport {
     return {
       validator: isSet(object.validator) ? String(object.validator) : "",
+      moniker: isSet(object.moniker) ? String(object.moniker) : "",
+      power: isSet(object.power) ? BigInt(object.power.toString()) : BigInt(0),
       preVoted: isSet(object.preVoted) ? Boolean(object.preVoted) : false,
       voted: isSet(object.voted) ? Boolean(object.voted) : false,
       missCounter: isSet(object.missCounter) ? BigInt(object.missCounter.toString()) : BigInt(0),
@@ -298,6 +320,8 @@ export const ValidatorVoteIntervalReport = {
   toJSON(message: ValidatorVoteIntervalReport): unknown {
     const obj: any = {};
     message.validator !== undefined && (obj.validator = message.validator);
+    message.moniker !== undefined && (obj.moniker = message.moniker);
+    message.power !== undefined && (obj.power = (message.power || BigInt(0)).toString());
     message.preVoted !== undefined && (obj.preVoted = message.preVoted);
     message.voted !== undefined && (obj.voted = message.voted);
     message.missCounter !== undefined && (obj.missCounter = (message.missCounter || BigInt(0)).toString());
@@ -316,6 +340,8 @@ export const ValidatorVoteIntervalReport = {
   fromPartial(object: Partial<ValidatorVoteIntervalReport>): ValidatorVoteIntervalReport {
     const message = createBaseValidatorVoteIntervalReport();
     message.validator = object.validator ?? "";
+    message.moniker = object.moniker ?? "";
+    message.power = object.power !== undefined && object.power !== null ? BigInt(object.power.toString()) : BigInt(0);
     message.preVoted = object.preVoted ?? false;
     message.voted = object.voted ?? false;
     message.missCounter = object.missCounter !== undefined && object.missCounter !== null ? BigInt(object.missCounter.toString()) : BigInt(0);
@@ -327,6 +353,12 @@ export const ValidatorVoteIntervalReport = {
     const message = createBaseValidatorVoteIntervalReport();
     if (object.validator !== undefined && object.validator !== null) {
       message.validator = object.validator;
+    }
+    if (object.moniker !== undefined && object.moniker !== null) {
+      message.moniker = object.moniker;
+    }
+    if (object.power !== undefined && object.power !== null) {
+      message.power = BigInt(object.power);
     }
     if (object.pre_voted !== undefined && object.pre_voted !== null) {
       message.preVoted = object.pre_voted;
@@ -344,6 +376,8 @@ export const ValidatorVoteIntervalReport = {
   toAmino(message: ValidatorVoteIntervalReport, useInterfaces: boolean = true): ValidatorVoteIntervalReportAmino {
     const obj: any = {};
     obj.validator = message.validator === "" ? undefined : message.validator;
+    obj.moniker = message.moniker === "" ? undefined : message.moniker;
+    obj.power = message.power ? message.power.toString() : undefined;
     obj.pre_voted = message.preVoted === false ? undefined : message.preVoted;
     obj.voted = message.voted === false ? undefined : message.voted;
     obj.miss_counter = message.missCounter ? message.missCounter.toString() : undefined;

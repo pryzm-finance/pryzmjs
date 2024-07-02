@@ -1,0 +1,10 @@
+syntax = "proto3";
+package pryzmatics.trade;
+
+option go_package = "github.com/pryzm-finance/pryzmatics/types/trade";
+
+message DirectlyConnectedTokenPair {
+  string token_a = 1;
+  string token_b = 2;
+  string pool = 3;
+}

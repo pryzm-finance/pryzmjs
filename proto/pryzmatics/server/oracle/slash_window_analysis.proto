@@ -1,0 +1,19 @@
+syntax = "proto3";
+package pryzmatics.server.oracle;
+
+import "gogoproto/gogo.proto";
+import "cosmos_proto/cosmos.proto";
+import "pryzmatics/oracle/slash_window_analysis.proto";
+import "cosmos/base/query/v1beta1/pagination.proto";
+import "refractedlabs/oracle/v1/params.proto";
+
+
+option go_package = "github.com/pryzm-finance/pryzmatics/server/oracle";
+
+message QuerySlashWindowAnalysisRequest {
+}
+
+message QuerySlashWindowAnalysisResponse {
+  refractedlabs.oracle.v1.Params oracle_params = 1 [(gogoproto.nullable) = false];
+  pryzmatics.oracle.SlashWindowAnalysis current_slash_window = 2 [(gogoproto.nullable) = true];
+}

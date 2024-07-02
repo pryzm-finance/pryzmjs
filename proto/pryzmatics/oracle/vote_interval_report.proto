@@ -21,14 +21,16 @@ message VotePayloadReport {
 
 message ValidatorVoteIntervalReport {
   string validator = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
-  bool pre_voted = 2;
-  bool voted = 3;
-  int64 miss_counter = 4;
-  repeated cosmos.base.v1beta1.Coin rewards = 5 [
+  string moniker = 2;
+  int64 power = 3;
+  bool pre_voted = 4;
+  bool voted = 5;
+  int64 miss_counter = 6;
+  repeated cosmos.base.v1beta1.Coin rewards = 7 [
     (gogoproto.nullable) = false,
     (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins"
   ];
-  repeated VotePayloadReport payloads = 6 [(gogoproto.nullable) = false];
+  repeated VotePayloadReport payloads = 8 [(gogoproto.nullable) = false];
 }
 
 message VoteIntervalReport {
