@@ -20,10 +20,11 @@ enum MetricType {
 message Metric {
   string id = 1;
   MetricType type = 2;
-  google.protobuf.Timestamp block_time = 3 [(gogoproto.stdtime) = true, (gogoproto.nullable) = false];
-  int64 block_height = 4;
-  google.protobuf.Timestamp time = 5 [(gogoproto.stdtime) = true, (gogoproto.nullable) = false];
-  double value = 6;
+  repeated string tags = 3;
+  google.protobuf.Timestamp block_time = 4 [(gogoproto.stdtime) = true, (gogoproto.nullable) = false];
+  int64 block_height = 5;
+  google.protobuf.Timestamp time = 6 [(gogoproto.stdtime) = true, (gogoproto.nullable) = false];
+  double value = 7;
 }
 
 message QueryMetricsRequest {

@@ -2,11 +2,13 @@ import { grpc } from "@improbable-eng/grpc-web";
 import { UnaryMethodDefinitionish } from "../../../grpc-web";
 import { DeepPartial } from "../../../helpers";
 import { BrowserHeaders } from "browser-headers";
-import { QueryGetAssetStateRequest, QueryGetAssetStateResponse, QueryGetCPExchangeRateRequest, QueryGetCPExchangeRateResponse } from "./query";
+import { QueryGetAssetStateRequest, QueryGetAssetStateResponse, QueryGetCPExchangeRateRequest, QueryGetCPExchangeRateResponse, QuerySimulateRefractRequest, QuerySimulateRefractResponse, QuerySimulateRedeemRequest, QuerySimulateRedeemResponse } from "./query";
 /** Query defines the gRPC querier service. */
 export interface Query {
   assetState(request: DeepPartial<QueryGetAssetStateRequest>, metadata?: grpc.Metadata): Promise<QueryGetAssetStateResponse>;
   cPExchangeRate(request: DeepPartial<QueryGetCPExchangeRateRequest>, metadata?: grpc.Metadata): Promise<QueryGetCPExchangeRateResponse>;
+  simulateRefract(request: DeepPartial<QuerySimulateRefractRequest>, metadata?: grpc.Metadata): Promise<QuerySimulateRefractResponse>;
+  simulateRedeem(request: DeepPartial<QuerySimulateRedeemRequest>, metadata?: grpc.Metadata): Promise<QuerySimulateRedeemResponse>;
 }
 export class QueryClientImpl implements Query {
   private readonly rpc: Rpc;
@@ -14,12 +16,20 @@ export class QueryClientImpl implements Query {
     this.rpc = rpc;
     this.assetState = this.assetState.bind(this);
     this.cPExchangeRate = this.cPExchangeRate.bind(this);
+    this.simulateRefract = this.simulateRefract.bind(this);
+    this.simulateRedeem = this.simulateRedeem.bind(this);
   }
   assetState(request: DeepPartial<QueryGetAssetStateRequest>, metadata?: grpc.Metadata): Promise<QueryGetAssetStateResponse> {
     return this.rpc.unary(QueryAssetStateDesc, QueryGetAssetStateRequest.fromPartial(request as any), metadata);
   }
   cPExchangeRate(request: DeepPartial<QueryGetCPExchangeRateRequest>, metadata?: grpc.Metadata): Promise<QueryGetCPExchangeRateResponse> {
     return this.rpc.unary(QueryCPExchangeRateDesc, QueryGetCPExchangeRateRequest.fromPartial(request as any), metadata);
+  }
+  simulateRefract(request: DeepPartial<QuerySimulateRefractRequest>, metadata?: grpc.Metadata): Promise<QuerySimulateRefractResponse> {
+    return this.rpc.unary(QuerySimulateRefractDesc, QuerySimulateRefractRequest.fromPartial(request as any), metadata);
+  }
+  simulateRedeem(request: DeepPartial<QuerySimulateRedeemRequest>, metadata?: grpc.Metadata): Promise<QuerySimulateRedeemResponse> {
+    return this.rpc.unary(QuerySimulateRedeemDesc, QuerySimulateRedeemRequest.fromPartial(request as any), metadata);
   }
 }
 export const QueryDesc = {
@@ -60,6 +70,48 @@ export const QueryCPExchangeRateDesc: UnaryMethodDefinitionish = {
     deserializeBinary(data: Uint8Array) {
       return {
         ...QueryGetCPExchangeRateResponse.decode(data),
+        toObject() {
+          return this;
+        }
+      };
+    }
+  } as any)
+};
+export const QuerySimulateRefractDesc: UnaryMethodDefinitionish = {
+  methodName: "SimulateRefract",
+  service: QueryDesc,
+  requestStream: false,
+  responseStream: false,
+  requestType: ({
+    serializeBinary() {
+      return QuerySimulateRefractRequest.encode(this).finish();
+    }
+  } as any),
+  responseType: ({
+    deserializeBinary(data: Uint8Array) {
+      return {
+        ...QuerySimulateRefractResponse.decode(data),
+        toObject() {
+          return this;
+        }
+      };
+    }
+  } as any)
+};
+export const QuerySimulateRedeemDesc: UnaryMethodDefinitionish = {
+  methodName: "SimulateRedeem",
+  service: QueryDesc,
+  requestStream: false,
+  responseStream: false,
+  requestType: ({
+    serializeBinary() {
+      return QuerySimulateRedeemRequest.encode(this).finish();
+    }
+  } as any),
+  responseType: ({
+    deserializeBinary(data: Uint8Array) {
+      return {
+        ...QuerySimulateRedeemResponse.decode(data),
         toObject() {
           return this;
         }

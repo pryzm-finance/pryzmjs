@@ -56,6 +56,7 @@ export function metricTypeToJSON(object: MetricType): string {
 export interface Metric {
   id: string;
   type: MetricType;
+  tags: string[];
   blockTime: Timestamp;
   blockHeight: bigint;
   time: Timestamp;
@@ -68,6 +69,7 @@ export interface MetricProtoMsg {
 export interface MetricAmino {
   id?: string;
   type?: MetricType;
+  tags?: string[];
   block_time?: string;
   block_height?: string;
   time?: string;
@@ -80,6 +82,7 @@ export interface MetricAminoMsg {
 export interface MetricSDKType {
   id: string;
   type: MetricType;
+  tags: string[];
   block_time: TimestampSDKType;
   block_height: bigint;
   time: TimestampSDKType;
@@ -141,6 +144,7 @@ function createBaseMetric(): Metric {
   return {
     id: "",
     type: 0,
+    tags: [],
     blockTime: Timestamp.fromPartial({}),
     blockHeight: BigInt(0),
     time: Timestamp.fromPartial({}),
@@ -150,13 +154,13 @@ function createBaseMetric(): Metric {
 export const Metric = {
   typeUrl: "/cosmatics.Metric",
   is(o: any): o is Metric {
-    return o && (o.$typeUrl === Metric.typeUrl || typeof o.id === "string" && isSet(o.type) && Timestamp.is(o.blockTime) && typeof o.blockHeight === "bigint" && Timestamp.is(o.time) && typeof o.value === "number");
+    return o && (o.$typeUrl === Metric.typeUrl || typeof o.id === "string" && isSet(o.type) && Array.isArray(o.tags) && (!o.tags.length || typeof o.tags[0] === "string") && Timestamp.is(o.blockTime) && typeof o.blockHeight === "bigint" && Timestamp.is(o.time) && typeof o.value === "number");
   },
   isSDK(o: any): o is MetricSDKType {
-    return o && (o.$typeUrl === Metric.typeUrl || typeof o.id === "string" && isSet(o.type) && Timestamp.isSDK(o.block_time) && typeof o.block_height === "bigint" && Timestamp.isSDK(o.time) && typeof o.value === "number");
+    return o && (o.$typeUrl === Metric.typeUrl || typeof o.id === "string" && isSet(o.type) && Array.isArray(o.tags) && (!o.tags.length || typeof o.tags[0] === "string") && Timestamp.isSDK(o.block_time) && typeof o.block_height === "bigint" && Timestamp.isSDK(o.time) && typeof o.value === "number");
   },
   isAmino(o: any): o is MetricAmino {
-    return o && (o.$typeUrl === Metric.typeUrl || typeof o.id === "string" && isSet(o.type) && Timestamp.isAmino(o.block_time) && typeof o.block_height === "bigint" && Timestamp.isAmino(o.time) && typeof o.value === "number");
+    return o && (o.$typeUrl === Metric.typeUrl || typeof o.id === "string" && isSet(o.type) && Array.isArray(o.tags) && (!o.tags.length || typeof o.tags[0] === "string") && Timestamp.isAmino(o.block_time) && typeof o.block_height === "bigint" && Timestamp.isAmino(o.time) && typeof o.value === "number");
   },
   encode(message: Metric, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.id !== "") {
@@ -165,17 +169,20 @@ export const Metric = {
     if (message.type !== 0) {
       writer.uint32(16).int32(message.type);
     }
+    for (const v of message.tags) {
+      writer.uint32(26).string(v!);
+    }
     if (message.blockTime !== undefined) {
-      Timestamp.encode(message.blockTime, writer.uint32(26).fork()).ldelim();
+      Timestamp.encode(message.blockTime, writer.uint32(34).fork()).ldelim();
     }
     if (message.blockHeight !== BigInt(0)) {
-      writer.uint32(32).int64(message.blockHeight);
+      writer.uint32(40).int64(message.blockHeight);
     }
     if (message.time !== undefined) {
-      Timestamp.encode(message.time, writer.uint32(42).fork()).ldelim();
+      Timestamp.encode(message.time, writer.uint32(50).fork()).ldelim();
     }
     if (message.value !== 0) {
-      writer.uint32(49).double(message.value);
+      writer.uint32(57).double(message.value);
     }
     return writer;
   },
@@ -193,15 +200,18 @@ export const Metric = {
           message.type = (reader.int32() as any);
           break;
         case 3:
-          message.blockTime = Timestamp.decode(reader, reader.uint32());
+          message.tags.push(reader.string());
           break;
         case 4:
-          message.blockHeight = reader.int64();
+          message.blockTime = Timestamp.decode(reader, reader.uint32());
           break;
         case 5:
-          message.time = Timestamp.decode(reader, reader.uint32());
+          message.blockHeight = reader.int64();
           break;
         case 6:
+          message.time = Timestamp.decode(reader, reader.uint32());
+          break;
+        case 7:
           message.value = reader.double();
           break;
         default:
@@ -215,6 +225,7 @@ export const Metric = {
     return {
       id: isSet(object.id) ? String(object.id) : "",
       type: isSet(object.type) ? metricTypeFromJSON(object.type) : -1,
+      tags: Array.isArray(object?.tags) ? object.tags.map((e: any) => String(e)) : [],
       blockTime: isSet(object.blockTime) ? fromJsonTimestamp(object.blockTime) : undefined,
       blockHeight: isSet(object.blockHeight) ? BigInt(object.blockHeight.toString()) : BigInt(0),
       time: isSet(object.time) ? fromJsonTimestamp(object.time) : undefined,
@@ -225,6 +236,11 @@ export const Metric = {
     const obj: any = {};
     message.id !== undefined && (obj.id = message.id);
     message.type !== undefined && (obj.type = metricTypeToJSON(message.type));
+    if (message.tags) {
+      obj.tags = message.tags.map(e => e);
+    } else {
+      obj.tags = [];
+    }
     message.blockTime !== undefined && (obj.blockTime = fromTimestamp(message.blockTime).toISOString());
     message.blockHeight !== undefined && (obj.blockHeight = (message.blockHeight || BigInt(0)).toString());
     message.time !== undefined && (obj.time = fromTimestamp(message.time).toISOString());
@@ -235,6 +251,7 @@ export const Metric = {
     const message = createBaseMetric();
     message.id = object.id ?? "";
     message.type = object.type ?? 0;
+    message.tags = object.tags?.map(e => e) || [];
     message.blockTime = object.blockTime !== undefined && object.blockTime !== null ? Timestamp.fromPartial(object.blockTime) : undefined;
     message.blockHeight = object.blockHeight !== undefined && object.blockHeight !== null ? BigInt(object.blockHeight.toString()) : BigInt(0);
     message.time = object.time !== undefined && object.time !== null ? Timestamp.fromPartial(object.time) : undefined;
@@ -249,6 +266,7 @@ export const Metric = {
     if (object.type !== undefined && object.type !== null) {
       message.type = object.type;
     }
+    message.tags = object.tags?.map(e => e) || [];
     if (object.block_time !== undefined && object.block_time !== null) {
       message.blockTime = Timestamp.fromAmino(object.block_time);
     }
@@ -267,6 +285,11 @@ export const Metric = {
     const obj: any = {};
     obj.id = message.id === "" ? undefined : message.id;
     obj.type = message.type === 0 ? undefined : message.type;
+    if (message.tags) {
+      obj.tags = message.tags.map(e => e);
+    } else {
+      obj.tags = message.tags;
+    }
     obj.block_time = message.blockTime ? Timestamp.toAmino(message.blockTime, useInterfaces) : undefined;
     obj.block_height = message.blockHeight ? message.blockHeight.toString() : undefined;
     obj.time = message.time ? Timestamp.toAmino(message.time, useInterfaces) : undefined;

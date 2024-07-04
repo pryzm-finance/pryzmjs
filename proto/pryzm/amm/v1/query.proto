@@ -42,6 +42,10 @@ service Query {
     option (google.api.http).get = "/pryzm/amm/v1/pool_token";
   }
 
+  rpc PoolTokenAllForPool(QueryAllPoolTokenForPoolRequest) returns (QueryAllPoolTokenForPoolResponse) {
+    option (google.api.http).get = "/pryzm/amm/v1/pool_token_for_pool";
+  }
+
   // Queries a list of TokenWeights
   // computing normalized weights requires reading all tokens from the context
   // and computing weight for all of them. And the number of tokens in a pool is not expected to
@@ -287,6 +291,14 @@ message QueryAllPoolTokenRequest {
 message QueryAllPoolTokenResponse {
   repeated PoolToken pool_token = 1 [(gogoproto.nullable) = false];
   cosmos.base.query.v1beta1.PageResponse pagination = 2 [(gogoproto.nullable) = true];
+}
+
+message QueryAllPoolTokenForPoolRequest {
+  uint64 pool_id = 1;
+}
+
+message QueryAllPoolTokenForPoolResponse {
+  repeated PoolToken pool_token = 1 [(gogoproto.nullable) = false];
 }
 
 // computing normalized weights requires reading all tokens from the context

@@ -3,6 +3,7 @@ package pryzm.icstaking.v1;
 
 import "cosmos/base/query/v1beta1/pagination.proto";
 import "cosmos/base/v1beta1/coin.proto";
+import "cosmos_proto/cosmos.proto";
 import "gogoproto/gogo.proto";
 import "google/api/annotations.proto";
 import "google/protobuf/timestamp.proto";
@@ -116,6 +117,11 @@ service Query {
   // Queries the list of sweep transfer
   rpc SweepTransferAll(QueryAllSweepTransferRequest) returns (QueryAllSweepTransferResponse) {
     option (google.api.http).get = "/pryzm/icstaking/v1/sweep_transfer";
+  }
+
+  // Simulates the stake message
+  rpc SimulateStake(QuerySimulateStakeRequest) returns (QuerySimulateStakeResponse) {
+    option (google.api.http).get = "/pryzm/icstaking/v1/simulate_stake";
   }
 
   // this line is used by starport scaffolding # 2
@@ -319,6 +325,30 @@ message QueryAllSweepTransferRequest {
 message QueryAllSweepTransferResponse {
   repeated SweepTransfer sweep_transfer = 1 [(gogoproto.nullable) = false];
   cosmos.base.query.v1beta1.PageResponse pagination = 2 [(gogoproto.nullable) = true];
+}
+
+message QuerySimulateStakeRequest {
+  string host_chain = 1;
+  string transfer_channel = 2;
+  // amount_in is the amount of tokens to stake. if this field is set, amount_out must be nil
+  string amount_in = 3 [
+    (cosmos_proto.scalar) = "cosmos.Int",
+    (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Int"
+  ];
+  // amount_out is the amount of cAsset tokens to receive. if this field is set, amount_in must be nil
+  string amount_out = 4 [
+    (cosmos_proto.scalar) = "cosmos.Int",
+    (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Int"
+  ];
+}
+
+message QuerySimulateStakeResponse {
+  // the amount of tokens being staked
+  cosmos.base.v1beta1.Coin amount_in = 1;
+  // the amount of cAssets tokens being received
+  cosmos.base.v1beta1.Coin amount_out = 2;
+  // the amount of fee deducted from the amount_in before stake
+  cosmos.base.v1beta1.Coin fee_amount = 3 [(gogoproto.nullable) = false];
 }
 
 // this line is used by starport scaffolding # 3

@@ -46,4 +46,14 @@ message Params {
     (gogoproto.nullable) = false,
     (amino.dont_omitempty) = true
   ];
+
+  GasParameters gas_parameters = 6 [(gogoproto.nullable) = false];
+}
+
+// Parameters for consuming gas on certain operations
+message GasParameters {
+  // gas for creating a new flow
+  uint64 flow_create = 1;
+  // gas for stopping a flow
+  uint64 flow_stop = 2;
 }

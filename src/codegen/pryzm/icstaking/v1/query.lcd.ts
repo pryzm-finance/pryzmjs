@@ -1,6 +1,6 @@
 import { setPaginationParams } from "../../../helpers";
 import { LCDClient } from "@refractedlabs/cosmology-lcd-fork";
-import { QueryParamsRequest, QueryParamsResponseSDKType, QueryGetHostChainRequest, QueryGetHostChainResponseSDKType, QueryAllHostChainRequest, QueryAllHostChainResponseSDKType, QueryGetHostChainStateRequest, QueryGetHostChainStateResponseSDKType, QueryAllHostChainStateRequest, QueryAllHostChainStateResponseSDKType, QueryGetUndelegationRequest, QueryGetUndelegationResponseSDKType, QueryAllUndelegationRequest, QueryAllUndelegationResponseSDKType, QueryIncompleteUndelegationRequest, QueryIncompleteUndelegationResponseSDKType, QueryGetChannelUndelegationRequest, QueryGetChannelUndelegationResponseSDKType, QueryAllChannelUndelegationRequest, QueryAllChannelUndelegationResponseSDKType, QueryDelegationQueueBalanceRequest, QueryDelegationQueueBalanceResponseSDKType, QueryEpochInfoRequest, QueryEpochInfoResponseSDKType, QueryAllReplyDataRequest, QueryAllReplyDataResponseSDKType, QueryAllRedeemableLsmRequest, QueryAllRedeemableLsmResponseSDKType, QueryAllFailedLsmTransferRequest, QueryAllFailedLsmTransferResponseSDKType, QueryGetMultiSigConnectionRequest, QueryGetMultiSigConnectionResponseSDKType, QueryAllMultiSigConnectionRequest, QueryAllMultiSigConnectionResponseSDKType, QueryGetMultiSigPacketRequest, QueryGetMultiSigPacketResponseSDKType, QueryAllMultiSigPacketRequest, QueryAllMultiSigPacketResponseSDKType, QueryAllSweepTransferRequest, QueryAllSweepTransferResponseSDKType } from "./query";
+import { QueryParamsRequest, QueryParamsResponseSDKType, QueryGetHostChainRequest, QueryGetHostChainResponseSDKType, QueryAllHostChainRequest, QueryAllHostChainResponseSDKType, QueryGetHostChainStateRequest, QueryGetHostChainStateResponseSDKType, QueryAllHostChainStateRequest, QueryAllHostChainStateResponseSDKType, QueryGetUndelegationRequest, QueryGetUndelegationResponseSDKType, QueryAllUndelegationRequest, QueryAllUndelegationResponseSDKType, QueryIncompleteUndelegationRequest, QueryIncompleteUndelegationResponseSDKType, QueryGetChannelUndelegationRequest, QueryGetChannelUndelegationResponseSDKType, QueryAllChannelUndelegationRequest, QueryAllChannelUndelegationResponseSDKType, QueryDelegationQueueBalanceRequest, QueryDelegationQueueBalanceResponseSDKType, QueryEpochInfoRequest, QueryEpochInfoResponseSDKType, QueryAllReplyDataRequest, QueryAllReplyDataResponseSDKType, QueryAllRedeemableLsmRequest, QueryAllRedeemableLsmResponseSDKType, QueryAllFailedLsmTransferRequest, QueryAllFailedLsmTransferResponseSDKType, QueryGetMultiSigConnectionRequest, QueryGetMultiSigConnectionResponseSDKType, QueryAllMultiSigConnectionRequest, QueryAllMultiSigConnectionResponseSDKType, QueryGetMultiSigPacketRequest, QueryGetMultiSigPacketResponseSDKType, QueryAllMultiSigPacketRequest, QueryAllMultiSigPacketResponseSDKType, QueryAllSweepTransferRequest, QueryAllSweepTransferResponseSDKType, QuerySimulateStakeRequest, QuerySimulateStakeResponseSDKType } from "./query";
 export class LCDQueryClient {
   req: LCDClient;
   constructor({
@@ -29,6 +29,7 @@ export class LCDQueryClient {
     this.multiSigPacket = this.multiSigPacket.bind(this);
     this.multiSigPacketAll = this.multiSigPacketAll.bind(this);
     this.sweepTransferAll = this.sweepTransferAll.bind(this);
+    this.simulateStake = this.simulateStake.bind(this);
   }
   /* Parameters queries the parameters of the module. */
   async params(_params: QueryParamsRequest = {}): Promise<QueryParamsResponseSDKType> {
@@ -223,5 +224,25 @@ export class LCDQueryClient {
     }
     const endpoint = `pryzm/icstaking/v1/sweep_transfer`;
     return await this.req.get<QueryAllSweepTransferResponseSDKType>(endpoint, options);
+  }
+  /* Simulates the stake message */
+  async simulateStake(params: QuerySimulateStakeRequest): Promise<QuerySimulateStakeResponseSDKType> {
+    const options: any = {
+      params: {}
+    };
+    if (typeof params?.hostChain !== "undefined") {
+      options.params.host_chain = params.hostChain;
+    }
+    if (typeof params?.transferChannel !== "undefined") {
+      options.params.transfer_channel = params.transferChannel;
+    }
+    if (typeof params?.amountIn !== "undefined") {
+      options.params.amount_in = params.amountIn;
+    }
+    if (typeof params?.amountOut !== "undefined") {
+      options.params.amount_out = params.amountOut;
+    }
+    const endpoint = `pryzm/icstaking/v1/simulate_stake`;
+    return await this.req.get<QuerySimulateStakeResponseSDKType>(endpoint, options);
   }
 }

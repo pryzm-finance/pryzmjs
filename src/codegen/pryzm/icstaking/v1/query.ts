@@ -774,6 +774,65 @@ export interface QueryAllSweepTransferResponseSDKType {
   sweep_transfer: SweepTransferSDKType[];
   pagination?: PageResponseSDKType;
 }
+export interface QuerySimulateStakeRequest {
+  hostChain: string;
+  transferChannel: string;
+  /** amount_in is the amount of tokens to stake. if this field is set, amount_out must be nil */
+  amountIn: string;
+  /** amount_out is the amount of cAsset tokens to receive. if this field is set, amount_in must be nil */
+  amountOut: string;
+}
+export interface QuerySimulateStakeRequestProtoMsg {
+  typeUrl: "/pryzm.icstaking.v1.QuerySimulateStakeRequest";
+  value: Uint8Array;
+}
+export interface QuerySimulateStakeRequestAmino {
+  host_chain?: string;
+  transfer_channel?: string;
+  /** amount_in is the amount of tokens to stake. if this field is set, amount_out must be nil */
+  amount_in?: string;
+  /** amount_out is the amount of cAsset tokens to receive. if this field is set, amount_in must be nil */
+  amount_out?: string;
+}
+export interface QuerySimulateStakeRequestAminoMsg {
+  type: "/pryzm.icstaking.v1.QuerySimulateStakeRequest";
+  value: QuerySimulateStakeRequestAmino;
+}
+export interface QuerySimulateStakeRequestSDKType {
+  host_chain: string;
+  transfer_channel: string;
+  amount_in: string;
+  amount_out: string;
+}
+export interface QuerySimulateStakeResponse {
+  /** the amount of tokens being staked */
+  amountIn?: Coin;
+  /** the amount of cAssets tokens being received */
+  amountOut?: Coin;
+  /** the amount of fee deducted from the amount_in before stake */
+  feeAmount: Coin;
+}
+export interface QuerySimulateStakeResponseProtoMsg {
+  typeUrl: "/pryzm.icstaking.v1.QuerySimulateStakeResponse";
+  value: Uint8Array;
+}
+export interface QuerySimulateStakeResponseAmino {
+  /** the amount of tokens being staked */
+  amount_in?: CoinAmino;
+  /** the amount of cAssets tokens being received */
+  amount_out?: CoinAmino;
+  /** the amount of fee deducted from the amount_in before stake */
+  fee_amount?: CoinAmino;
+}
+export interface QuerySimulateStakeResponseAminoMsg {
+  type: "/pryzm.icstaking.v1.QuerySimulateStakeResponse";
+  value: QuerySimulateStakeResponseAmino;
+}
+export interface QuerySimulateStakeResponseSDKType {
+  amount_in?: CoinSDKType;
+  amount_out?: CoinSDKType;
+  fee_amount: CoinSDKType;
+}
 function createBaseQueryParamsRequest(): QueryParamsRequest {
   return {};
 }
@@ -4522,3 +4581,239 @@ export const QueryAllSweepTransferResponse = {
   }
 };
 GlobalDecoderRegistry.register(QueryAllSweepTransferResponse.typeUrl, QueryAllSweepTransferResponse);
+function createBaseQuerySimulateStakeRequest(): QuerySimulateStakeRequest {
+  return {
+    hostChain: "",
+    transferChannel: "",
+    amountIn: "",
+    amountOut: ""
+  };
+}
+export const QuerySimulateStakeRequest = {
+  typeUrl: "/pryzm.icstaking.v1.QuerySimulateStakeRequest",
+  is(o: any): o is QuerySimulateStakeRequest {
+    return o && (o.$typeUrl === QuerySimulateStakeRequest.typeUrl || typeof o.hostChain === "string" && typeof o.transferChannel === "string" && typeof o.amountIn === "string" && typeof o.amountOut === "string");
+  },
+  isSDK(o: any): o is QuerySimulateStakeRequestSDKType {
+    return o && (o.$typeUrl === QuerySimulateStakeRequest.typeUrl || typeof o.host_chain === "string" && typeof o.transfer_channel === "string" && typeof o.amount_in === "string" && typeof o.amount_out === "string");
+  },
+  isAmino(o: any): o is QuerySimulateStakeRequestAmino {
+    return o && (o.$typeUrl === QuerySimulateStakeRequest.typeUrl || typeof o.host_chain === "string" && typeof o.transfer_channel === "string" && typeof o.amount_in === "string" && typeof o.amount_out === "string");
+  },
+  encode(message: QuerySimulateStakeRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    if (message.hostChain !== "") {
+      writer.uint32(10).string(message.hostChain);
+    }
+    if (message.transferChannel !== "") {
+      writer.uint32(18).string(message.transferChannel);
+    }
+    if (message.amountIn !== "") {
+      writer.uint32(26).string(message.amountIn);
+    }
+    if (message.amountOut !== "") {
+      writer.uint32(34).string(message.amountOut);
+    }
+    return writer;
+  },
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): QuerySimulateStakeRequest {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseQuerySimulateStakeRequest();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.hostChain = reader.string();
+          break;
+        case 2:
+          message.transferChannel = reader.string();
+          break;
+        case 3:
+          message.amountIn = reader.string();
+          break;
+        case 4:
+          message.amountOut = reader.string();
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromJSON(object: any): QuerySimulateStakeRequest {
+    return {
+      hostChain: isSet(object.hostChain) ? String(object.hostChain) : "",
+      transferChannel: isSet(object.transferChannel) ? String(object.transferChannel) : "",
+      amountIn: isSet(object.amountIn) ? String(object.amountIn) : "",
+      amountOut: isSet(object.amountOut) ? String(object.amountOut) : ""
+    };
+  },
+  toJSON(message: QuerySimulateStakeRequest): unknown {
+    const obj: any = {};
+    message.hostChain !== undefined && (obj.hostChain = message.hostChain);
+    message.transferChannel !== undefined && (obj.transferChannel = message.transferChannel);
+    message.amountIn !== undefined && (obj.amountIn = message.amountIn);
+    message.amountOut !== undefined && (obj.amountOut = message.amountOut);
+    return obj;
+  },
+  fromPartial(object: Partial<QuerySimulateStakeRequest>): QuerySimulateStakeRequest {
+    const message = createBaseQuerySimulateStakeRequest();
+    message.hostChain = object.hostChain ?? "";
+    message.transferChannel = object.transferChannel ?? "";
+    message.amountIn = object.amountIn ?? "";
+    message.amountOut = object.amountOut ?? "";
+    return message;
+  },
+  fromAmino(object: QuerySimulateStakeRequestAmino): QuerySimulateStakeRequest {
+    const message = createBaseQuerySimulateStakeRequest();
+    if (object.host_chain !== undefined && object.host_chain !== null) {
+      message.hostChain = object.host_chain;
+    }
+    if (object.transfer_channel !== undefined && object.transfer_channel !== null) {
+      message.transferChannel = object.transfer_channel;
+    }
+    if (object.amount_in !== undefined && object.amount_in !== null) {
+      message.amountIn = object.amount_in;
+    }
+    if (object.amount_out !== undefined && object.amount_out !== null) {
+      message.amountOut = object.amount_out;
+    }
+    return message;
+  },
+  toAmino(message: QuerySimulateStakeRequest, useInterfaces: boolean = true): QuerySimulateStakeRequestAmino {
+    const obj: any = {};
+    obj.host_chain = message.hostChain === "" ? undefined : message.hostChain;
+    obj.transfer_channel = message.transferChannel === "" ? undefined : message.transferChannel;
+    obj.amount_in = message.amountIn === "" ? undefined : message.amountIn;
+    obj.amount_out = message.amountOut === "" ? undefined : message.amountOut;
+    return obj;
+  },
+  fromAminoMsg(object: QuerySimulateStakeRequestAminoMsg): QuerySimulateStakeRequest {
+    return QuerySimulateStakeRequest.fromAmino(object.value);
+  },
+  fromProtoMsg(message: QuerySimulateStakeRequestProtoMsg, useInterfaces: boolean = true): QuerySimulateStakeRequest {
+    return QuerySimulateStakeRequest.decode(message.value, undefined, useInterfaces);
+  },
+  toProto(message: QuerySimulateStakeRequest): Uint8Array {
+    return QuerySimulateStakeRequest.encode(message).finish();
+  },
+  toProtoMsg(message: QuerySimulateStakeRequest): QuerySimulateStakeRequestProtoMsg {
+    return {
+      typeUrl: "/pryzm.icstaking.v1.QuerySimulateStakeRequest",
+      value: QuerySimulateStakeRequest.encode(message).finish()
+    };
+  }
+};
+GlobalDecoderRegistry.register(QuerySimulateStakeRequest.typeUrl, QuerySimulateStakeRequest);
+function createBaseQuerySimulateStakeResponse(): QuerySimulateStakeResponse {
+  return {
+    amountIn: undefined,
+    amountOut: undefined,
+    feeAmount: Coin.fromPartial({})
+  };
+}
+export const QuerySimulateStakeResponse = {
+  typeUrl: "/pryzm.icstaking.v1.QuerySimulateStakeResponse",
+  is(o: any): o is QuerySimulateStakeResponse {
+    return o && (o.$typeUrl === QuerySimulateStakeResponse.typeUrl || Coin.is(o.feeAmount));
+  },
+  isSDK(o: any): o is QuerySimulateStakeResponseSDKType {
+    return o && (o.$typeUrl === QuerySimulateStakeResponse.typeUrl || Coin.isSDK(o.fee_amount));
+  },
+  isAmino(o: any): o is QuerySimulateStakeResponseAmino {
+    return o && (o.$typeUrl === QuerySimulateStakeResponse.typeUrl || Coin.isAmino(o.fee_amount));
+  },
+  encode(message: QuerySimulateStakeResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    if (message.amountIn !== undefined) {
+      Coin.encode(message.amountIn, writer.uint32(10).fork()).ldelim();
+    }
+    if (message.amountOut !== undefined) {
+      Coin.encode(message.amountOut, writer.uint32(18).fork()).ldelim();
+    }
+    if (message.feeAmount !== undefined) {
+      Coin.encode(message.feeAmount, writer.uint32(26).fork()).ldelim();
+    }
+    return writer;
+  },
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): QuerySimulateStakeResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseQuerySimulateStakeResponse();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.amountIn = Coin.decode(reader, reader.uint32(), useInterfaces);
+          break;
+        case 2:
+          message.amountOut = Coin.decode(reader, reader.uint32(), useInterfaces);
+          break;
+        case 3:
+          message.feeAmount = Coin.decode(reader, reader.uint32(), useInterfaces);
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromJSON(object: any): QuerySimulateStakeResponse {
+    return {
+      amountIn: isSet(object.amountIn) ? Coin.fromJSON(object.amountIn) : undefined,
+      amountOut: isSet(object.amountOut) ? Coin.fromJSON(object.amountOut) : undefined,
+      feeAmount: isSet(object.feeAmount) ? Coin.fromJSON(object.feeAmount) : undefined
+    };
+  },
+  toJSON(message: QuerySimulateStakeResponse): unknown {
+    const obj: any = {};
+    message.amountIn !== undefined && (obj.amountIn = message.amountIn ? Coin.toJSON(message.amountIn) : undefined);
+    message.amountOut !== undefined && (obj.amountOut = message.amountOut ? Coin.toJSON(message.amountOut) : undefined);
+    message.feeAmount !== undefined && (obj.feeAmount = message.feeAmount ? Coin.toJSON(message.feeAmount) : undefined);
+    return obj;
+  },
+  fromPartial(object: Partial<QuerySimulateStakeResponse>): QuerySimulateStakeResponse {
+    const message = createBaseQuerySimulateStakeResponse();
+    message.amountIn = object.amountIn !== undefined && object.amountIn !== null ? Coin.fromPartial(object.amountIn) : undefined;
+    message.amountOut = object.amountOut !== undefined && object.amountOut !== null ? Coin.fromPartial(object.amountOut) : undefined;
+    message.feeAmount = object.feeAmount !== undefined && object.feeAmount !== null ? Coin.fromPartial(object.feeAmount) : undefined;
+    return message;
+  },
+  fromAmino(object: QuerySimulateStakeResponseAmino): QuerySimulateStakeResponse {
+    const message = createBaseQuerySimulateStakeResponse();
+    if (object.amount_in !== undefined && object.amount_in !== null) {
+      message.amountIn = Coin.fromAmino(object.amount_in);
+    }
+    if (object.amount_out !== undefined && object.amount_out !== null) {
+      message.amountOut = Coin.fromAmino(object.amount_out);
+    }
+    if (object.fee_amount !== undefined && object.fee_amount !== null) {
+      message.feeAmount = Coin.fromAmino(object.fee_amount);
+    }
+    return message;
+  },
+  toAmino(message: QuerySimulateStakeResponse, useInterfaces: boolean = true): QuerySimulateStakeResponseAmino {
+    const obj: any = {};
+    obj.amount_in = message.amountIn ? Coin.toAmino(message.amountIn, useInterfaces) : undefined;
+    obj.amount_out = message.amountOut ? Coin.toAmino(message.amountOut, useInterfaces) : undefined;
+    obj.fee_amount = message.feeAmount ? Coin.toAmino(message.feeAmount, useInterfaces) : undefined;
+    return obj;
+  },
+  fromAminoMsg(object: QuerySimulateStakeResponseAminoMsg): QuerySimulateStakeResponse {
+    return QuerySimulateStakeResponse.fromAmino(object.value);
+  },
+  fromProtoMsg(message: QuerySimulateStakeResponseProtoMsg, useInterfaces: boolean = true): QuerySimulateStakeResponse {
+    return QuerySimulateStakeResponse.decode(message.value, undefined, useInterfaces);
+  },
+  toProto(message: QuerySimulateStakeResponse): Uint8Array {
+    return QuerySimulateStakeResponse.encode(message).finish();
+  },
+  toProtoMsg(message: QuerySimulateStakeResponse): QuerySimulateStakeResponseProtoMsg {
+    return {
+      typeUrl: "/pryzm.icstaking.v1.QuerySimulateStakeResponse",
+      value: QuerySimulateStakeResponse.encode(message).finish()
+    };
+  }
+};
+GlobalDecoderRegistry.register(QuerySimulateStakeResponse.typeUrl, QuerySimulateStakeResponse);
