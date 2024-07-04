@@ -135,6 +135,9 @@ export class LCDQueryClient {
     if (typeof params?.active !== "undefined") {
       options.params.active = params.active;
     }
+    if (typeof params?.orderBy !== "undefined") {
+      options.params.order_by = params.orderBy;
+    }
     if (typeof params?.pagination !== "undefined") {
       setPaginationParams(options, params.pagination);
     }

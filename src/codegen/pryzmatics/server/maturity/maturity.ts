@@ -1,3 +1,4 @@
+import { MaturityOrderBy, MaturityOrderByAmino, MaturityOrderBySDKType } from "../../database/maturity/maturity";
 import { PageRequest, PageRequestAmino, PageRequestSDKType, PageResponse, PageResponseAmino, PageResponseSDKType } from "../../../cosmos/base/query/v1beta1/pagination";
 import { Maturity, MaturityAmino, MaturitySDKType } from "../../maturity/maturity";
 import { BinaryReader, BinaryWriter } from "../../../binary";
@@ -6,6 +7,7 @@ import { GlobalDecoderRegistry } from "../../../registry";
 export interface QueryAllMaturitiesRequest {
   assetId: string;
   active: string;
+  orderBy?: MaturityOrderBy;
   pagination?: PageRequest;
 }
 export interface QueryAllMaturitiesRequestProtoMsg {
@@ -15,6 +17,7 @@ export interface QueryAllMaturitiesRequestProtoMsg {
 export interface QueryAllMaturitiesRequestAmino {
   asset_id?: string;
   active?: string;
+  order_by?: MaturityOrderByAmino;
   pagination?: PageRequestAmino;
 }
 export interface QueryAllMaturitiesRequestAminoMsg {
@@ -24,6 +27,7 @@ export interface QueryAllMaturitiesRequestAminoMsg {
 export interface QueryAllMaturitiesRequestSDKType {
   asset_id: string;
   active: string;
+  order_by?: MaturityOrderBySDKType;
   pagination?: PageRequestSDKType;
 }
 export interface QueryAllMaturitiesResponse {
@@ -50,6 +54,7 @@ function createBaseQueryAllMaturitiesRequest(): QueryAllMaturitiesRequest {
   return {
     assetId: "",
     active: "",
+    orderBy: undefined,
     pagination: undefined
   };
 }
@@ -71,8 +76,11 @@ export const QueryAllMaturitiesRequest = {
     if (message.active !== "") {
       writer.uint32(18).string(message.active);
     }
+    if (message.orderBy !== undefined) {
+      MaturityOrderBy.encode(message.orderBy, writer.uint32(26).fork()).ldelim();
+    }
     if (message.pagination !== undefined) {
-      PageRequest.encode(message.pagination, writer.uint32(26).fork()).ldelim();
+      PageRequest.encode(message.pagination, writer.uint32(34).fork()).ldelim();
     }
     return writer;
   },
@@ -90,6 +98,9 @@ export const QueryAllMaturitiesRequest = {
           message.active = reader.string();
           break;
         case 3:
+          message.orderBy = MaturityOrderBy.decode(reader, reader.uint32(), useInterfaces);
+          break;
+        case 4:
           message.pagination = PageRequest.decode(reader, reader.uint32(), useInterfaces);
           break;
         default:
@@ -103,6 +114,7 @@ export const QueryAllMaturitiesRequest = {
     return {
       assetId: isSet(object.assetId) ? String(object.assetId) : "",
       active: isSet(object.active) ? String(object.active) : "",
+      orderBy: isSet(object.orderBy) ? MaturityOrderBy.fromJSON(object.orderBy) : undefined,
       pagination: isSet(object.pagination) ? PageRequest.fromJSON(object.pagination) : undefined
     };
   },
@@ -110,6 +122,7 @@ export const QueryAllMaturitiesRequest = {
     const obj: any = {};
     message.assetId !== undefined && (obj.assetId = message.assetId);
     message.active !== undefined && (obj.active = message.active);
+    message.orderBy !== undefined && (obj.orderBy = message.orderBy ? MaturityOrderBy.toJSON(message.orderBy) : undefined);
     message.pagination !== undefined && (obj.pagination = message.pagination ? PageRequest.toJSON(message.pagination) : undefined);
     return obj;
   },
@@ -117,6 +130,7 @@ export const QueryAllMaturitiesRequest = {
     const message = createBaseQueryAllMaturitiesRequest();
     message.assetId = object.assetId ?? "";
     message.active = object.active ?? "";
+    message.orderBy = object.orderBy !== undefined && object.orderBy !== null ? MaturityOrderBy.fromPartial(object.orderBy) : undefined;
     message.pagination = object.pagination !== undefined && object.pagination !== null ? PageRequest.fromPartial(object.pagination) : undefined;
     return message;
   },
@@ -128,6 +142,9 @@ export const QueryAllMaturitiesRequest = {
     if (object.active !== undefined && object.active !== null) {
       message.active = object.active;
     }
+    if (object.order_by !== undefined && object.order_by !== null) {
+      message.orderBy = MaturityOrderBy.fromAmino(object.order_by);
+    }
     if (object.pagination !== undefined && object.pagination !== null) {
       message.pagination = PageRequest.fromAmino(object.pagination);
     }
@@ -137,6 +154,7 @@ export const QueryAllMaturitiesRequest = {
     const obj: any = {};
     obj.asset_id = message.assetId === "" ? undefined : message.assetId;
     obj.active = message.active === "" ? undefined : message.active;
+    obj.order_by = message.orderBy ? MaturityOrderBy.toAmino(message.orderBy, useInterfaces) : undefined;
     obj.pagination = message.pagination ? PageRequest.toAmino(message.pagination, useInterfaces) : undefined;
     return obj;
   },

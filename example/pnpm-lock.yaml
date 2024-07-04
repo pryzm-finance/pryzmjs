@@ -3,7 +3,7 @@ lockfileVersion: 5.4
 specifiers:
   '@cosmjs/proto-signing': 0.32.2
   '@cosmjs/stargate': 0.32.2
-  '@pryzm-finance/pryzmjs': 0.20.4
+  '@pryzm-finance/pryzmjs': 0.20.5
   '@refractedlabs/utils': 0.4.0
   axios: 1.6.0
   cosmjs-types: 0.9.0
@@ -12,7 +12,7 @@ specifiers:
 dependencies:
   '@cosmjs/proto-signing': 0.32.2
   '@cosmjs/stargate': 0.32.2
-  '@pryzm-finance/pryzmjs': 0.20.4_google-protobuf@3.21.2
+  '@pryzm-finance/pryzmjs': 0.20.5_google-protobuf@3.21.2
   '@refractedlabs/utils': 0.4.0
   axios: 1.6.0
   cosmjs-types: 0.9.0
@@ -341,8 +341,8 @@ packages:
     resolution: {integrity: sha512-Vvn3zZrhQZkkBE8LSuW3em98c0FwgO4nxzv6OdSxPKJIEKY2bGbHn+mhGIPerzI4twdxaP8/0+06HBpwf345Lw==}
     dev: false
 
-  /@pryzm-finance/pryzmjs/0.20.4_google-protobuf@3.21.2:
-    resolution: {integrity: sha512-0yqtKJB7EaZw9D65N407Pp9BjzWLw6ZoeX6V3i85bL9NYBSMS2CUTtv8JQh/20e0LhH9FAdsdpqgl3FsFhbseg==, tarball: download/@pryzm-finance/pryzmjs/0.20.4/0e7a86b518e240c05dd80bb7a77d1480aa27e855}
+  /@pryzm-finance/pryzmjs/0.20.5_google-protobuf@3.21.2:
+    resolution: {integrity: sha512-+e+MWmQSK4ScTkFsbT6THX8bwHIZc3shHUu7QMoDR8+eXeN7jiAewvWIEtTDryGNu3hx0zWCiDRSYtMHGwUjTg==, tarball: download/@pryzm-finance/pryzmjs/0.20.5/1ff542540561adcc61e9e41c297f616182ad09fc}
     dependencies:
       '@cosmjs/math': 0.32.2
       '@cosmjs/proto-signing': 0.32.2

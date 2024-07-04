@@ -4,6 +4,7 @@ import { Decimal } from "@cosmjs/math";
 import { isSet, fromJsonTimestamp, fromTimestamp, padDecimal } from "../../helpers";
 import { GlobalDecoderRegistry } from "../../registry";
 export interface Maturity {
+  id: bigint;
   assetId: string;
   symbol: string;
   active: boolean;
@@ -23,6 +24,7 @@ export interface MaturityProtoMsg {
   value: Uint8Array;
 }
 export interface MaturityAmino {
+  id?: string;
   asset_id?: string;
   symbol?: string;
   active?: boolean;
@@ -42,6 +44,7 @@ export interface MaturityAminoMsg {
   value: MaturityAmino;
 }
 export interface MaturitySDKType {
+  id: bigint;
   asset_id: string;
   symbol: string;
   active: boolean;
@@ -58,6 +61,7 @@ export interface MaturitySDKType {
 }
 function createBaseMaturity(): Maturity {
   return {
+    id: BigInt(0),
     assetId: "",
     symbol: "",
     active: false,
@@ -76,53 +80,56 @@ function createBaseMaturity(): Maturity {
 export const Maturity = {
   typeUrl: "/pryzmatics.maturity.Maturity",
   is(o: any): o is Maturity {
-    return o && (o.$typeUrl === Maturity.typeUrl || typeof o.assetId === "string" && typeof o.symbol === "string" && typeof o.active === "boolean" && Timestamp.is(o.introductionTime) && Timestamp.is(o.expirationTime) && typeof o.blockHeight === "bigint" && Timestamp.is(o.blockTime) && typeof o.error === "string");
+    return o && (o.$typeUrl === Maturity.typeUrl || typeof o.id === "bigint" && typeof o.assetId === "string" && typeof o.symbol === "string" && typeof o.active === "boolean" && Timestamp.is(o.introductionTime) && Timestamp.is(o.expirationTime) && typeof o.blockHeight === "bigint" && Timestamp.is(o.blockTime) && typeof o.error === "string");
   },
   isSDK(o: any): o is MaturitySDKType {
-    return o && (o.$typeUrl === Maturity.typeUrl || typeof o.asset_id === "string" && typeof o.symbol === "string" && typeof o.active === "boolean" && Timestamp.isSDK(o.introduction_time) && Timestamp.isSDK(o.expiration_time) && typeof o.block_height === "bigint" && Timestamp.isSDK(o.block_time) && typeof o.error === "string");
+    return o && (o.$typeUrl === Maturity.typeUrl || typeof o.id === "bigint" && typeof o.asset_id === "string" && typeof o.symbol === "string" && typeof o.active === "boolean" && Timestamp.isSDK(o.introduction_time) && Timestamp.isSDK(o.expiration_time) && typeof o.block_height === "bigint" && Timestamp.isSDK(o.block_time) && typeof o.error === "string");
   },
   isAmino(o: any): o is MaturityAmino {
-    return o && (o.$typeUrl === Maturity.typeUrl || typeof o.asset_id === "string" && typeof o.symbol === "string" && typeof o.active === "boolean" && Timestamp.isAmino(o.introduction_time) && Timestamp.isAmino(o.expiration_time) && typeof o.block_height === "bigint" && Timestamp.isAmino(o.block_time) && typeof o.error === "string");
+    return o && (o.$typeUrl === Maturity.typeUrl || typeof o.id === "bigint" && typeof o.asset_id === "string" && typeof o.symbol === "string" && typeof o.active === "boolean" && Timestamp.isAmino(o.introduction_time) && Timestamp.isAmino(o.expiration_time) && typeof o.block_height === "bigint" && Timestamp.isAmino(o.block_time) && typeof o.error === "string");
   },
   encode(message: Maturity, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    if (message.id !== BigInt(0)) {
+      writer.uint32(8).int64(message.id);
+    }
     if (message.assetId !== "") {
-      writer.uint32(10).string(message.assetId);
+      writer.uint32(18).string(message.assetId);
     }
     if (message.symbol !== "") {
-      writer.uint32(18).string(message.symbol);
+      writer.uint32(26).string(message.symbol);
     }
     if (message.active === true) {
-      writer.uint32(24).bool(message.active);
+      writer.uint32(32).bool(message.active);
     }
     if (message.introductionTime !== undefined) {
-      Timestamp.encode(message.introductionTime, writer.uint32(34).fork()).ldelim();
+      Timestamp.encode(message.introductionTime, writer.uint32(42).fork()).ldelim();
     }
     if (message.expirationTime !== undefined) {
-      Timestamp.encode(message.expirationTime, writer.uint32(42).fork()).ldelim();
+      Timestamp.encode(message.expirationTime, writer.uint32(50).fork()).ldelim();
     }
     if (message.blockHeight !== BigInt(0)) {
-      writer.uint32(48).int64(message.blockHeight);
+      writer.uint32(56).int64(message.blockHeight);
     }
     if (message.blockTime !== undefined) {
-      Timestamp.encode(message.blockTime, writer.uint32(58).fork()).ldelim();
+      Timestamp.encode(message.blockTime, writer.uint32(66).fork()).ldelim();
     }
     if (message.roi !== undefined) {
-      writer.uint32(66).string(Decimal.fromUserInput(message.roi, 18).atomics);
+      writer.uint32(74).string(Decimal.fromUserInput(message.roi, 18).atomics);
     }
     if (message.yApy !== undefined) {
-      writer.uint32(74).string(Decimal.fromUserInput(message.yApy, 18).atomics);
+      writer.uint32(82).string(Decimal.fromUserInput(message.yApy, 18).atomics);
     }
     if (message.pApy !== undefined) {
-      writer.uint32(82).string(Decimal.fromUserInput(message.pApy, 18).atomics);
+      writer.uint32(90).string(Decimal.fromUserInput(message.pApy, 18).atomics);
     }
     if (message.yPrice !== undefined) {
-      writer.uint32(90).string(Decimal.fromUserInput(message.yPrice, 18).atomics);
+      writer.uint32(98).string(Decimal.fromUserInput(message.yPrice, 18).atomics);
     }
     if (message.pPrice !== undefined) {
-      writer.uint32(98).string(Decimal.fromUserInput(message.pPrice, 18).atomics);
+      writer.uint32(106).string(Decimal.fromUserInput(message.pPrice, 18).atomics);
     }
     if (message.error !== "") {
-      writer.uint32(106).string(message.error);
+      writer.uint32(114).string(message.error);
     }
     return writer;
   },
@@ -134,42 +141,45 @@ export const Maturity = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.assetId = reader.string();
+          message.id = reader.int64();
           break;
         case 2:
-          message.symbol = reader.string();
+          message.assetId = reader.string();
           break;
         case 3:
-          message.active = reader.bool();
+          message.symbol = reader.string();
           break;
         case 4:
-          message.introductionTime = Timestamp.decode(reader, reader.uint32());
+          message.active = reader.bool();
           break;
         case 5:
-          message.expirationTime = Timestamp.decode(reader, reader.uint32());
+          message.introductionTime = Timestamp.decode(reader, reader.uint32());
           break;
         case 6:
-          message.blockHeight = reader.int64();
+          message.expirationTime = Timestamp.decode(reader, reader.uint32());
           break;
         case 7:
-          message.blockTime = Timestamp.decode(reader, reader.uint32());
+          message.blockHeight = reader.int64();
           break;
         case 8:
-          message.roi = Decimal.fromAtomics(reader.string(), 18).toString();
+          message.blockTime = Timestamp.decode(reader, reader.uint32());
           break;
         case 9:
-          message.yApy = Decimal.fromAtomics(reader.string(), 18).toString();
+          message.roi = Decimal.fromAtomics(reader.string(), 18).toString();
           break;
         case 10:
-          message.pApy = Decimal.fromAtomics(reader.string(), 18).toString();
+          message.yApy = Decimal.fromAtomics(reader.string(), 18).toString();
           break;
         case 11:
-          message.yPrice = Decimal.fromAtomics(reader.string(), 18).toString();
+          message.pApy = Decimal.fromAtomics(reader.string(), 18).toString();
           break;
         case 12:
-          message.pPrice = Decimal.fromAtomics(reader.string(), 18).toString();
+          message.yPrice = Decimal.fromAtomics(reader.string(), 18).toString();
           break;
         case 13:
+          message.pPrice = Decimal.fromAtomics(reader.string(), 18).toString();
+          break;
+        case 14:
           message.error = reader.string();
           break;
         default:
@@ -181,6 +191,7 @@ export const Maturity = {
   },
   fromJSON(object: any): Maturity {
     return {
+      id: isSet(object.id) ? BigInt(object.id.toString()) : BigInt(0),
       assetId: isSet(object.assetId) ? String(object.assetId) : "",
       symbol: isSet(object.symbol) ? String(object.symbol) : "",
       active: isSet(object.active) ? Boolean(object.active) : false,
@@ -198,6 +209,7 @@ export const Maturity = {
   },
   toJSON(message: Maturity): unknown {
     const obj: any = {};
+    message.id !== undefined && (obj.id = (message.id || BigInt(0)).toString());
     message.assetId !== undefined && (obj.assetId = message.assetId);
     message.symbol !== undefined && (obj.symbol = message.symbol);
     message.active !== undefined && (obj.active = message.active);
@@ -215,6 +227,7 @@ export const Maturity = {
   },
   fromPartial(object: Partial<Maturity>): Maturity {
     const message = createBaseMaturity();
+    message.id = object.id !== undefined && object.id !== null ? BigInt(object.id.toString()) : BigInt(0);
     message.assetId = object.assetId ?? "";
     message.symbol = object.symbol ?? "";
     message.active = object.active ?? false;
@@ -232,6 +245,9 @@ export const Maturity = {
   },
   fromAmino(object: MaturityAmino): Maturity {
     const message = createBaseMaturity();
+    if (object.id !== undefined && object.id !== null) {
+      message.id = BigInt(object.id);
+    }
     if (object.asset_id !== undefined && object.asset_id !== null) {
       message.assetId = object.asset_id;
     }
@@ -275,6 +291,7 @@ export const Maturity = {
   },
   toAmino(message: Maturity, useInterfaces: boolean = true): MaturityAmino {
     const obj: any = {};
+    obj.id = message.id ? message.id.toString() : undefined;
     obj.asset_id = message.assetId === "" ? undefined : message.assetId;
     obj.symbol = message.symbol === "" ? undefined : message.symbol;
     obj.active = message.active === false ? undefined : message.active;
