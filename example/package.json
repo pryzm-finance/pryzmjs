@@ -4,9 +4,9 @@
     "compile": "rm -rf lib && tsc"
   },
   "dependencies": {
-    "@cosmjs/proto-signing": "0.32.2",
-    "@cosmjs/stargate": "0.32.2",
-    "@pryzm-finance/pryzmjs": "0.20.5",
+    "@cosmjs/proto-signing": "0.32.4",
+    "@cosmjs/stargate": "0.32.4",
+    "@pryzm-finance/pryzmjs": "0.20.6",
     "@refractedlabs/utils": "0.4.0",
     "axios": "1.6.0",
     "cosmjs-types": "0.9.0"
