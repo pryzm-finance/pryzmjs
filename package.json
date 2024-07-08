@@ -1,6 +1,6 @@
 {
   "name": "@pryzm-finance/pryzmjs",
-  "version": "0.21.1",
+  "version": "0.21.2",
   "description": "Javascript SDK for Pryzm",
   "author": "amin <amin@refractedlabs.com>",
   "homepage": "https://github.com/pryzm-finance/pryzmjs#readme",
@@ -33,7 +33,7 @@
     "@improbable-eng/grpc-web-node-http-transport": "0.15.0",
     "@keplr-wallet/unit": "^0.12.53",
     "@refractedlabs/cosmology-lcd-fork": "0.13.3",
-    "@refractedlabs/utils": "0.4.0",
+    "@refractedlabs/utils": "0.4.1",
     "browser-headers": "0.4.1"
   },
   "devDependencies": {

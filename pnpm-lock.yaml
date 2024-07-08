@@ -10,7 +10,7 @@ specifiers:
   '@keplr-wallet/unit': ^0.12.53
   '@refractedlabs/cosmology-lcd-fork': 0.13.3
   '@refractedlabs/telescope': 1.4.1-rc24
-  '@refractedlabs/utils': 0.4.0
+  '@refractedlabs/utils': 0.4.1
   '@types/node': ^20.10.5
   browser-headers: 0.4.1
   rimraf: ^5.0.5
@@ -26,7 +26,7 @@ dependencies:
   '@improbable-eng/grpc-web-node-http-transport': 0.15.0_fng5pv4qmdetiqq66m6yjkaacu
   '@keplr-wallet/unit': 0.12.89
   '@refractedlabs/cosmology-lcd-fork': 0.13.3
-  '@refractedlabs/utils': 0.4.0
+  '@refractedlabs/utils': 0.4.1
   browser-headers: 0.4.1
 
 devDependencies:
@@ -1384,7 +1384,7 @@ packages:
   /@cosmjs/json-rpc/0.32.2:
     resolution: {integrity: sha512-lan2lOgmz4yVE/HR8eCOSiII/1OudIulk8836koyIDCsPEpt6eKBuctnAD168vABGArKccLAo7Mr2gy9nrKrOQ==}
     dependencies:
-      '@cosmjs/stream': 0.32.3
+      '@cosmjs/stream': 0.32.4
       xstream: 11.14.0
     dev: false
 
@@ -1415,9 +1415,9 @@ packages:
   /@cosmjs/socket/0.32.2:
     resolution: {integrity: sha512-Qc8jaw4uSBJm09UwPgkqe3g9TBFx4ZR9HkXpwT6Z9I+6kbLerXPR0Gy3NSJFSUgxIfTpO8O1yqoWAyf0Ay17Mw==}
     dependencies:
-      '@cosmjs/stream': 0.32.3
-      isomorphic-ws: 4.0.1_ws@7.5.9
-      ws: 7.5.9
+      '@cosmjs/stream': 0.32.4
+      isomorphic-ws: 4.0.1_ws@7.5.10
+      ws: 7.5.10
       xstream: 11.14.0
     transitivePeerDependencies:
       - bufferutil
@@ -1453,12 +1453,6 @@ packages:
       - bufferutil
       - debug
       - utf-8-validate
-    dev: false
-
-  /@cosmjs/stream/0.32.3:
-    resolution: {integrity: sha512-J2zVWDojkynYifAUcRmVczzmp6STEpyiAARq0rSsviqjreGIfspfuws/8rmkPa6qQBZvpQOBQCm2HyZZwYplIw==}
-    dependencies:
-      xstream: 11.14.0
     dev: false
 
   /@cosmjs/stream/0.32.4:
@@ -1850,8 +1844,8 @@ packages:
       - supports-color
     dev: true
 
-  /@refractedlabs/utils/0.4.0:
-    resolution: {integrity: sha512-GK6aOIZSSRF3pzPBY4Xtel69qd6QtIJRPNzMiI/oxEVhCOLXLkH7O/GfCntuifzP1h1DuHZbl0kE7WvBHt0eyQ==, tarball: download/@refractedlabs/utils/0.4.0/1f9b1d93b02889114520f1fdb0ce7b4e93a030ad}
+  /@refractedlabs/utils/0.4.1:
+    resolution: {integrity: sha512-YgJrQZONhL0XhiIPj5CJV+L5jZwrofFIVNUjVFmddrDoQk6vLoEO6rNCpj9K3erf0P45fhv7upuMCf3T7Ix5pg==, tarball: download/@refractedlabs/utils/0.4.1/6a555b25ef9c305b4318c7066a270016bdc982b5}
     dependencies:
       '@cosmjs/encoding': 0.32.2
       '@cosmjs/json-rpc': 0.32.2
@@ -2987,14 +2981,6 @@ packages:
       ws: 7.5.10
     dev: false
 
-  /isomorphic-ws/4.0.1_ws@7.5.9:
-    resolution: {integrity: sha512-BhBvN2MBpWTaSHdWRb/bwdZJ1WaehQ2L1KngkCkfLUGF0mAWAT1sQUQacEmQ0jXkFw/czDXPNQSL5u2/Krsz1w==}
-    peerDependencies:
-      ws: '*'
-    dependencies:
-      ws: 7.5.9
-    dev: false
-
   /istanbul-lib-coverage/3.2.2:
     resolution: {integrity: sha512-O8dpsF+r0WV/8MNRKfnmrtCWhuKjxrq2w+jpzBL5UZKTi2LeVWnWOmWRxFlesJONmc+wLAGvKQZEOanko0LFTg==}
     engines: {node: '>=8'}
@@ -3319,8 +3305,8 @@ packages:
       thenify-all: 1.6.0
     dev: true
 
-  /nan/2.19.0:
-    resolution: {integrity: sha512-nO1xXxfh/RWNxfd/XPfbIfFk5vgLsAxUR9y5O0cHMJu/AW9U95JLXqthYHjEp+8gQ5p96K9jUp8nbVOxCdRbtw==}
+  /nan/2.20.0:
+    resolution: {integrity: sha512-bk3gXBZDGILuuo/6sKtr0DQmSThYHLtNCdSdXk9YkxD/jK6X2vmCyyXBBxyqZ4XcnzTyYEAThfX3DCEnLf6igw==}
     dev: false
     optional: true
 
@@ -3918,7 +3904,7 @@ packages:
     requiresBuild: true
     dependencies:
       bindings: 1.5.0
-      nan: 2.19.0
+      nan: 2.20.0
     dev: false
     optional: true
 
@@ -4061,19 +4047,6 @@ packages:
 
   /ws/7.5.10:
     resolution: {integrity: sha512-+dbF1tHwZpXcbOJdVOkzLDxZP1ailvSxM6ZweXTegylPny803bFhA+vqBYw4s31NSAk4S2Qz+AKXK9a4wkdjcQ==}
-    engines: {node: '>=8.3.0'}
-    peerDependencies:
-      bufferutil: ^4.0.1
-      utf-8-validate: ^5.0.2
-    peerDependenciesMeta:
-      bufferutil:
-        optional: true
-      utf-8-validate:
-        optional: true
-    dev: false
-
-  /ws/7.5.9:
-    resolution: {integrity: sha512-F+P9Jil7UiSKSkppIiD94dN07AwvFixvLIj1Og1Rl9GGMuNipJnV9JzjD6XuqmAeiswGvUmNLjr5cFuXwNS77Q==}
     engines: {node: '>=8.3.0'}
     peerDependencies:
       bufferutil: ^4.0.1
