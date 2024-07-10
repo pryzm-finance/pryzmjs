@@ -93,7 +93,6 @@ async function main() {
                 enabled: true,
                 scopedIsExclusive: true,
                 scoped: [
-                    {dir: 'pryzmatics', packages: ['cosmatics', 'pryzmatics.*']},
                     {dir: 'pryzm', packages: ['alliance.*', 'cosmos.*', 'ibc.*', 'osmosis.*', 'pryzm.*']},
                 ],
             },
@@ -147,10 +146,6 @@ async function main() {
     ]);
 
     correctFiles([
-        './src/codegen/cosmatics/query.rpc.Query.ts',
-        './src/codegen/pryzmatics/server/query.rpc.Query.ts'
-    ], [{regex: /[\s\S]*/, subst: `export {}`}])
-    correctFiles([
             './src/codegen/alliance/client.ts',
             './src/codegen/ibc/client.ts',
             './src/codegen/ibc/core/client/v1/client.ts',
@@ -189,16 +184,6 @@ async function main() {
         ]
     )
 
-    correctFile('./src/codegen/pryzmatics/lcd.ts', [
-        {
-            regex: 'export const createLCDClient',
-            subst: `export const createClient`,
-        },
-        {
-            regex: /pryzmatics: {\s*server: new \(await import\("\.\/server\/query.lcd"\)\)\.LCDQueryClient\({\s*requestClient\s*}\)\s*}/gm,
-            subst: `pryzmatics: new (await import("./server/query.lcd")).LCDQueryClient({ requestClient })`
-        }])
-
     correctFile('./src/codegen/helpers.ts', [{
         regex: /bundle.\n\*\//gm,
         subst: `bundle.\n*/\nimport { PageRequest } from "./cosmos/base/query/v1beta1/pagination";`
@@ -210,19 +195,6 @@ async function main() {
     correctFile('./src/codegen/google/protobuf/any.ts', [{
         regex: /export const Any = {\n  typeUrl: "\/google\.protobuf\.Any",/gm,
         subst: `export const Any = {\n  typeUrl: "/google.protobuf.Any",\n  fromJSONAsAny(object: any): any { return Any.fromJSON(object) },\n  fromPartialAsAny(object: any): any { return Any.fromPartial(object) },`,
-    }])
-
-    correctFile('./src/codegen/pryzmatics/server/query.lcd.ts', [{
-        regex: /pryzmatics\.server\.\S+?\./gm,
-        subst: ``
-    }])
-
-    correctFile('./src/codegen/cosmatics/query.lcd.ts', [{
-        regex: /cosmos\.tx\.v1beta1\./gm,
-        subst: ``
-    }, {
-        regex: /tendermint\.\S+?\./gm,
-        subst: ``
     }])
 
     correctFiles([

@@ -3,7 +3,7 @@ lockfileVersion: 5.4
 specifiers:
   '@cosmjs/proto-signing': 0.32.4
   '@cosmjs/stargate': 0.32.4
-  '@pryzm-finance/pryzmjs': 0.21.1
+  '@pryzm-finance/pryzmjs': 0.21.3
   '@refractedlabs/utils': 0.4.0
   axios: 1.6.0
   cosmjs-types: 0.9.0
@@ -12,7 +12,7 @@ specifiers:
 dependencies:
   '@cosmjs/proto-signing': 0.32.4
   '@cosmjs/stargate': 0.32.4
-  '@pryzm-finance/pryzmjs': 0.21.1_google-protobuf@3.21.2
+  '@pryzm-finance/pryzmjs': 0.21.3_google-protobuf@3.21.2
   '@refractedlabs/utils': 0.4.0
   axios: 1.6.0
   cosmjs-types: 0.9.0
@@ -267,8 +267,8 @@ packages:
     resolution: {integrity: sha512-Vvn3zZrhQZkkBE8LSuW3em98c0FwgO4nxzv6OdSxPKJIEKY2bGbHn+mhGIPerzI4twdxaP8/0+06HBpwf345Lw==}
     dev: false
 
-  /@pryzm-finance/pryzmjs/0.21.1_google-protobuf@3.21.2:
-    resolution: {integrity: sha512-88sVofArcWPwXVM+4A3JCAkqdG6kYUQZQbsaQcCJdZAYYZSM+3KhbHTcmBBw0X2JIlERYsHCo5E3/VhqLBL7Lw==, tarball: download/@pryzm-finance/pryzmjs/0.21.1/e9eeb605463b038cd403568c8f90560c2d3bd620}
+  /@pryzm-finance/pryzmjs/0.21.3_google-protobuf@3.21.2:
+    resolution: {integrity: sha512-xjp7Qyt9O60zdSYRqZQ5mwpiaeaEchofuuJyZDdLm8U/8EZ800exPMYF4tqV6e9H7TDySESvXeIjZX8YFTPn/w==, tarball: download/@pryzm-finance/pryzmjs/0.21.3/10c6e0e0a90b16c2e2f2d0a21b17800dc2e5fd87}
     dependencies:
       '@cosmjs/math': 0.32.4
       '@cosmjs/proto-signing': 0.32.4
@@ -278,7 +278,7 @@ packages:
       '@improbable-eng/grpc-web-node-http-transport': 0.15.0_fng5pv4qmdetiqq66m6yjkaacu
       '@keplr-wallet/unit': 0.12.108
       '@refractedlabs/cosmology-lcd-fork': 0.13.3
-      '@refractedlabs/utils': 0.4.0
+      '@refractedlabs/utils': 0.4.1
       browser-headers: 0.4.1
     transitivePeerDependencies:
       - bufferutil
@@ -297,6 +297,24 @@ packages:
 
   /@refractedlabs/utils/0.4.0:
     resolution: {integrity: sha512-GK6aOIZSSRF3pzPBY4Xtel69qd6QtIJRPNzMiI/oxEVhCOLXLkH7O/GfCntuifzP1h1DuHZbl0kE7WvBHt0eyQ==, tarball: download/@refractedlabs/utils/0.4.0/1f9b1d93b02889114520f1fdb0ce7b4e93a030ad}
+    dependencies:
+      '@cosmjs/encoding': 0.32.2
+      '@cosmjs/json-rpc': 0.32.2
+      '@cosmjs/socket': 0.32.2
+      '@protobufjs/eventemitter': 1.1.0
+      jackson-js: 1.1.0
+      js-yaml: 4.1.0
+      winston: 3.13.0
+      winston-daily-rotate-file: 4.7.1_winston@3.13.0
+      winston-syslog: 2.7.0_winston@3.13.0
+      xstream: 11.14.0
+    transitivePeerDependencies:
+      - bufferutil
+      - utf-8-validate
+    dev: false
+
+  /@refractedlabs/utils/0.4.1:
+    resolution: {integrity: sha512-YgJrQZONhL0XhiIPj5CJV+L5jZwrofFIVNUjVFmddrDoQk6vLoEO6rNCpj9K3erf0P45fhv7upuMCf3T7Ix5pg==, tarball: download/@refractedlabs/utils/0.4.1/6a555b25ef9c305b4318c7066a270016bdc982b5}
     dependencies:
       '@cosmjs/encoding': 0.32.2
       '@cosmjs/json-rpc': 0.32.2

@@ -1,38 +1,38 @@
-import * as _159 from "./epochs/v1beta1/genesis";
-import * as _160 from "./epochs/v1beta1/query";
-import * as _161 from "./tokenfactory/v1beta1/authorityMetadata";
-import * as _162 from "./tokenfactory/v1beta1/genesis";
-import * as _163 from "./tokenfactory/v1beta1/params";
-import * as _164 from "./tokenfactory/v1beta1/query";
-import * as _165 from "./tokenfactory/v1beta1/tx";
-import * as _438 from "./tokenfactory/v1beta1/tx.amino";
-import * as _439 from "./tokenfactory/v1beta1/tx.registry";
-import * as _440 from "./epochs/v1beta1/query.lcd";
-import * as _441 from "./tokenfactory/v1beta1/query.lcd";
-import * as _442 from "./epochs/v1beta1/query.rpc.Query";
-import * as _443 from "./tokenfactory/v1beta1/query.rpc.Query";
-import * as _444 from "./tokenfactory/v1beta1/tx.rpc.msg";
+import * as _153 from "./epochs/v1beta1/genesis";
+import * as _154 from "./epochs/v1beta1/query";
+import * as _155 from "./tokenfactory/v1beta1/authorityMetadata";
+import * as _156 from "./tokenfactory/v1beta1/genesis";
+import * as _157 from "./tokenfactory/v1beta1/params";
+import * as _158 from "./tokenfactory/v1beta1/query";
+import * as _159 from "./tokenfactory/v1beta1/tx";
+import * as _373 from "./tokenfactory/v1beta1/tx.amino";
+import * as _374 from "./tokenfactory/v1beta1/tx.registry";
+import * as _375 from "./epochs/v1beta1/query.lcd";
+import * as _376 from "./tokenfactory/v1beta1/query.lcd";
+import * as _377 from "./epochs/v1beta1/query.rpc.Query";
+import * as _378 from "./tokenfactory/v1beta1/query.rpc.Query";
+import * as _379 from "./tokenfactory/v1beta1/tx.rpc.msg";
 export namespace osmosis {
   export namespace epochs {
     export const v1beta1 = {
-      ..._159,
-      ..._160,
-      ..._440,
-      ..._442
+      ..._153,
+      ..._154,
+      ..._375,
+      ..._377
     };
   }
   export namespace tokenfactory {
     export const v1beta1 = {
-      ..._161,
-      ..._162,
-      ..._163,
-      ..._164,
-      ..._165,
-      ..._438,
-      ..._439,
-      ..._441,
-      ..._443,
-      ..._444
+      ..._155,
+      ..._156,
+      ..._157,
+      ..._158,
+      ..._159,
+      ..._373,
+      ..._374,
+      ..._376,
+      ..._378,
+      ..._379
     };
   }
 }

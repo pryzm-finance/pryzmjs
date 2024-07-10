@@ -3,7 +3,6 @@ import { PageRequest } from "./codegen/cosmos/base/query/v1beta1/pagination";
 
 export * from './codegen';
 export * from './pryzm'
-export * from './pryzmatics'
 
 // workaround for bigint serialization issue (axios, JSON.stringify, ...)
 (BigInt.prototype as any).toJSON = function () {

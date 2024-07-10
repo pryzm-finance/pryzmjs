@@ -60,16 +60,6 @@ const client = await alliance.ClientFactory.createLCDClient({restEndpoint: LCD_E
 const params = await client.alliance.params()
 ```
 
-## PryzmaticsClient
-
-```tsx
-import { pryzmatics } from "@pryzm-finance/pryzmjs";
-
-const pryzmaticsClient = await pryzmatics.ClientFactory.createClient({restEndpoint: PRISMATICS_ENDPOINT})
-
-const syncInfo = (await pryzmaticsClient.pryzmatics.syncInfo()).sync_info
-```
-
 ## Composing Messages
 
 ```tsx
