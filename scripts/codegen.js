@@ -2,7 +2,7 @@ const {join} = require('path');
 const telescope = require('@refractedlabs/telescope').default;
 const rimraf = require('rimraf').rimrafSync;
 const {AMINO_MAP} = require('./aminos');
-const {correctFile, correctFiles, correctDir} = require('@refractedlabs/utils/lib/file');
+const {correctFile, correctFiles, correctDir} = require('@refractedlabs/internal-js-utils/lib/file');
 
 async function main() {
     const protoDirs = [join(__dirname, '/../proto')];
