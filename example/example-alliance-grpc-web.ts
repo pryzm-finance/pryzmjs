@@ -1,8 +1,9 @@
 import * as console from "console";
 import { createPryzmGrpcWebClient, grpcFetchAll } from "@pryzm-finance/pryzmjs";
+import { GRPC_ENDPOINT } from "./consts";
 
 async function main() {
-    const client = await createPryzmGrpcWebClient({ endpoint: "http://0.0.0.0:9091" })
+    const client = await createPryzmGrpcWebClient({ endpoint: GRPC_ENDPOINT })
 
     const params = (await client.alliance.alliance.params({})).params
     console.log(params)

@@ -1,12 +1,13 @@
 import { cosmos, getSigningPryzmClient } from "@pryzm-finance/pryzmjs"
 import { DirectSecp256k1HdWallet } from "@cosmjs/proto-signing";
+import { RPC_ENDPOINT } from "./consts";
 
 async function main() {
     const mnemonic = "short ocean antique emerge glory lock army wine guard sketch hotel remove music demand romance raven roof survey tired thank vessel cliff choose apology";
     const signer = await DirectSecp256k1HdWallet.fromMnemonic(mnemonic, {prefix: "pryzm"});
     const address = (await signer.getAccounts())[0].address
     const signingClient = await getSigningPryzmClient({
-        rpcEndpoint: "http://0.0.0.0:26657",
+        rpcEndpoint: RPC_ENDPOINT,
         signer
     })
 
