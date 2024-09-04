@@ -218,6 +218,8 @@ message EventExecuteOrdersForPair {
 }
 
 message EventExecuteMatchProposalOrder {
+  // Note that if virtual=true, order_id is set to zero and should be ignored,
+  // otherwise we still might have order_id=0 referring to an actual order
   uint64 order_id = 1;
   string match_amount = 3 [
     (cosmos_proto.scalar) = "cosmos.Int",
@@ -229,6 +231,7 @@ message EventExecuteMatchProposalOrder {
     (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Int",
     (gogoproto.nullable) = false
   ];
+  bool virtual = 5;
 }
 
 message EventExecuteMatchProposalPair {

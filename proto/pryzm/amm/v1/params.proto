@@ -50,6 +50,8 @@ message OrderParameters {
   int64 min_order_step_millis_interval = 10;
 
   int64 max_order_step_millis_interval = 11;
+  int32 max_pairs_per_block = 12;
+  int32 max_orders_per_pair = 13;
 }
 
 message YammParameters {
@@ -146,7 +148,7 @@ message AuthorizationParameters {
   repeated string pause_allow_list = 2 [(amino.dont_omitempty) = true];
 }
 
-message GasParameters{
+message GasParameters {
   // gas for swapping in a pool
   uint64 vault_swap = 1;
   // gas for initializing a pool

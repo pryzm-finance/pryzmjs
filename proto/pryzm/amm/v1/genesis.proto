@@ -51,5 +51,6 @@ message GenesisState {
   repeated OraclePricePair oracle_price_pair_list = 14 [(gogoproto.nullable) = false];
   repeated PendingTokenIntroduction pending_token_introduction_list = 15 [(gogoproto.nullable) = false];
   repeated DisabledOrderPair disabled_order_pair_list = 16 [(gogoproto.nullable) = false];
+  bytes next_executable_order_key = 17;
   // this line is used by starport scaffolding # genesis/proto/state
 }

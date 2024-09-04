@@ -1,6 +1,6 @@
 import { setPaginationParams } from "../../../helpers";
 import { LCDClient } from "@refractedlabs/cosmology-lcd-fork";
-import { QueryParamsRequest, QueryParamsResponseSDKType, QueryGetStakedPAssetRequest, QueryGetStakedPAssetResponseSDKType, QueryAllStakedPAssetRequest, QueryAllStakedPAssetResponseSDKType, QueryGetTotalStakedPAssetRequest, QueryGetTotalStakedPAssetResponseSDKType, QueryAllTotalStakedPAssetRequest, QueryAllTotalStakedPAssetResponseSDKType, QueryGetVoteRequest, QueryGetVoteResponseSDKType, QueryAllVoteRequest, QueryAllVoteResponseSDKType, QueryGetProposalRequest, QueryGetProposalResponseSDKType, QueryAllProposalRequest, QueryAllProposalResponseSDKType } from "./query";
+import { QueryParamsRequest, QueryParamsResponseSDKType, QueryGetStakedPAssetRequest, QueryGetStakedPAssetResponseSDKType, QueryAllStakedPAssetRequest, QueryAllStakedPAssetResponseSDKType, QueryGetTotalStakedPAssetRequest, QueryGetTotalStakedPAssetResponseSDKType, QueryAllTotalStakedPAssetRequest, QueryAllTotalStakedPAssetResponseSDKType, QueryGetVoteRequest, QueryGetVoteResponseSDKType, QueryAllVoteRequest, QueryAllVoteResponseSDKType, QueryGetProposalRequest, QueryGetProposalResponseSDKType, QueryAllProposalRequest, QueryAllProposalResponseSDKType, QueryTallyResultRequest, QueryTallyResultResponseSDKType } from "./query";
 export class LCDQueryClient {
   req: LCDClient;
   constructor({
@@ -18,6 +18,7 @@ export class LCDQueryClient {
     this.voteAll = this.voteAll.bind(this);
     this.proposal = this.proposal.bind(this);
     this.proposalAll = this.proposalAll.bind(this);
+    this.tallyResult = this.tallyResult.bind(this);
   }
   /* Parameters queries the parameters of the module. */
   async params(_params: QueryParamsRequest = {}): Promise<QueryParamsResponseSDKType> {
@@ -96,5 +97,10 @@ export class LCDQueryClient {
     }
     const endpoint = `pryzm/pgov/v1/proposal`;
     return await this.req.get<QueryAllProposalResponseSDKType>(endpoint, options);
+  }
+  /* Queries a list of Proposal items. */
+  async tallyResult(params: QueryTallyResultRequest): Promise<QueryTallyResultResponseSDKType> {
+    const endpoint = `pryzm/pgov/v1/tally_result/${params.asset}/${params.proposal}`;
+    return await this.req.get<QueryTallyResultResponseSDKType>(endpoint);
   }
 }
