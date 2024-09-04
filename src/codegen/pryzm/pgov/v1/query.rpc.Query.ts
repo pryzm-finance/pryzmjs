@@ -2,7 +2,7 @@ import { grpc } from "@improbable-eng/grpc-web";
 import { UnaryMethodDefinitionish } from "../../../grpc-web";
 import { DeepPartial } from "../../../helpers";
 import { BrowserHeaders } from "browser-headers";
-import { QueryParamsRequest, QueryParamsResponse, QueryGetStakedPAssetRequest, QueryGetStakedPAssetResponse, QueryAllStakedPAssetRequest, QueryAllStakedPAssetResponse, QueryGetTotalStakedPAssetRequest, QueryGetTotalStakedPAssetResponse, QueryAllTotalStakedPAssetRequest, QueryAllTotalStakedPAssetResponse, QueryGetVoteRequest, QueryGetVoteResponse, QueryAllVoteRequest, QueryAllVoteResponse, QueryGetProposalRequest, QueryGetProposalResponse, QueryAllProposalRequest, QueryAllProposalResponse } from "./query";
+import { QueryParamsRequest, QueryParamsResponse, QueryGetStakedPAssetRequest, QueryGetStakedPAssetResponse, QueryAllStakedPAssetRequest, QueryAllStakedPAssetResponse, QueryGetTotalStakedPAssetRequest, QueryGetTotalStakedPAssetResponse, QueryAllTotalStakedPAssetRequest, QueryAllTotalStakedPAssetResponse, QueryGetVoteRequest, QueryGetVoteResponse, QueryAllVoteRequest, QueryAllVoteResponse, QueryGetProposalRequest, QueryGetProposalResponse, QueryAllProposalRequest, QueryAllProposalResponse, QueryTallyResultRequest, QueryTallyResultResponse } from "./query";
 /** Query defines the gRPC querier service. */
 export interface Query {
   /** Parameters queries the parameters of the module. */
@@ -21,6 +21,8 @@ export interface Query {
   proposal(request: DeepPartial<QueryGetProposalRequest>, metadata?: grpc.Metadata): Promise<QueryGetProposalResponse>;
   /** Queries a list of Proposal items. */
   proposalAll(request: DeepPartial<QueryAllProposalRequest>, metadata?: grpc.Metadata): Promise<QueryAllProposalResponse>;
+  /** Queries a list of Proposal items. */
+  tallyResult(request: DeepPartial<QueryTallyResultRequest>, metadata?: grpc.Metadata): Promise<QueryTallyResultResponse>;
 }
 export class QueryClientImpl implements Query {
   private readonly rpc: Rpc;
@@ -35,6 +37,7 @@ export class QueryClientImpl implements Query {
     this.voteAll = this.voteAll.bind(this);
     this.proposal = this.proposal.bind(this);
     this.proposalAll = this.proposalAll.bind(this);
+    this.tallyResult = this.tallyResult.bind(this);
   }
   params(request: DeepPartial<QueryParamsRequest> = {}, metadata?: grpc.Metadata): Promise<QueryParamsResponse> {
     return this.rpc.unary(QueryParamsDesc, QueryParamsRequest.fromPartial(request as any), metadata);
@@ -62,6 +65,9 @@ export class QueryClientImpl implements Query {
   }
   proposalAll(request: DeepPartial<QueryAllProposalRequest>, metadata?: grpc.Metadata): Promise<QueryAllProposalResponse> {
     return this.rpc.unary(QueryProposalAllDesc, QueryAllProposalRequest.fromPartial(request as any), metadata);
+  }
+  tallyResult(request: DeepPartial<QueryTallyResultRequest>, metadata?: grpc.Metadata): Promise<QueryTallyResultResponse> {
+    return this.rpc.unary(QueryTallyResultDesc, QueryTallyResultRequest.fromPartial(request as any), metadata);
   }
 }
 export const QueryDesc = {
@@ -249,6 +255,27 @@ export const QueryProposalAllDesc: UnaryMethodDefinitionish = {
     deserializeBinary(data: Uint8Array) {
       return {
         ...QueryAllProposalResponse.decode(data),
+        toObject() {
+          return this;
+        }
+      };
+    }
+  } as any)
+};
+export const QueryTallyResultDesc: UnaryMethodDefinitionish = {
+  methodName: "TallyResult",
+  service: QueryDesc,
+  requestStream: false,
+  responseStream: false,
+  requestType: ({
+    serializeBinary() {
+      return QueryTallyResultRequest.encode(this).finish();
+    }
+  } as any),
+  responseType: ({
+    deserializeBinary(data: Uint8Array) {
+      return {
+        ...QueryTallyResultResponse.decode(data),
         toObject() {
           return this;
         }

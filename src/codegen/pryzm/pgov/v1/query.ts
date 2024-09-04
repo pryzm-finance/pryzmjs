@@ -1,8 +1,6 @@
 import { PageRequest, PageRequestAmino, PageRequestSDKType, PageResponse, PageResponseAmino, PageResponseSDKType } from "../../../cosmos/base/query/v1beta1/pagination";
-import { Params, ParamsAmino, ParamsSDKType } from "./params";
+import { Params, ParamsAmino, ParamsSDKType, Vote, VoteAmino, VoteSDKType, Proposal, ProposalAmino, ProposalSDKType, WeightedVoteOption, WeightedVoteOptionAmino, WeightedVoteOptionSDKType } from "../../../cosmos/gov/v1/gov";
 import { StakedPAsset, StakedPAssetAmino, StakedPAssetSDKType, TotalStakedPAsset, TotalStakedPAssetAmino, TotalStakedPAssetSDKType } from "./staked_p_asset";
-import { Vote, VoteAmino, VoteSDKType } from "./vote";
-import { Proposal, ProposalAmino, ProposalSDKType } from "./proposal";
 import { BinaryReader, BinaryWriter } from "../../../binary";
 import { GlobalDecoderRegistry } from "../../../registry";
 import { isSet } from "../../../helpers";
@@ -355,6 +353,43 @@ export interface QueryAllProposalResponseAminoMsg {
 export interface QueryAllProposalResponseSDKType {
   proposal: ProposalSDKType[];
   pagination?: PageResponseSDKType;
+}
+export interface QueryTallyResultRequest {
+  asset: string;
+  proposal: bigint;
+}
+export interface QueryTallyResultRequestProtoMsg {
+  typeUrl: "/pryzm.pgov.v1.QueryTallyResultRequest";
+  value: Uint8Array;
+}
+export interface QueryTallyResultRequestAmino {
+  asset?: string;
+  proposal?: string;
+}
+export interface QueryTallyResultRequestAminoMsg {
+  type: "/pryzm.pgov.v1.QueryTallyResultRequest";
+  value: QueryTallyResultRequestAmino;
+}
+export interface QueryTallyResultRequestSDKType {
+  asset: string;
+  proposal: bigint;
+}
+export interface QueryTallyResultResponse {
+  options: WeightedVoteOption[];
+}
+export interface QueryTallyResultResponseProtoMsg {
+  typeUrl: "/pryzm.pgov.v1.QueryTallyResultResponse";
+  value: Uint8Array;
+}
+export interface QueryTallyResultResponseAmino {
+  options?: WeightedVoteOptionAmino[];
+}
+export interface QueryTallyResultResponseAminoMsg {
+  type: "/pryzm.pgov.v1.QueryTallyResultResponse";
+  value: QueryTallyResultResponseAmino;
+}
+export interface QueryTallyResultResponseSDKType {
+  options: WeightedVoteOptionSDKType[];
 }
 function createBaseQueryParamsRequest(): QueryParamsRequest {
   return {};
@@ -2054,3 +2089,189 @@ export const QueryAllProposalResponse = {
   }
 };
 GlobalDecoderRegistry.register(QueryAllProposalResponse.typeUrl, QueryAllProposalResponse);
+function createBaseQueryTallyResultRequest(): QueryTallyResultRequest {
+  return {
+    asset: "",
+    proposal: BigInt(0)
+  };
+}
+export const QueryTallyResultRequest = {
+  typeUrl: "/pryzm.pgov.v1.QueryTallyResultRequest",
+  is(o: any): o is QueryTallyResultRequest {
+    return o && (o.$typeUrl === QueryTallyResultRequest.typeUrl || typeof o.asset === "string" && typeof o.proposal === "bigint");
+  },
+  isSDK(o: any): o is QueryTallyResultRequestSDKType {
+    return o && (o.$typeUrl === QueryTallyResultRequest.typeUrl || typeof o.asset === "string" && typeof o.proposal === "bigint");
+  },
+  isAmino(o: any): o is QueryTallyResultRequestAmino {
+    return o && (o.$typeUrl === QueryTallyResultRequest.typeUrl || typeof o.asset === "string" && typeof o.proposal === "bigint");
+  },
+  encode(message: QueryTallyResultRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    if (message.asset !== "") {
+      writer.uint32(10).string(message.asset);
+    }
+    if (message.proposal !== BigInt(0)) {
+      writer.uint32(16).uint64(message.proposal);
+    }
+    return writer;
+  },
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): QueryTallyResultRequest {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseQueryTallyResultRequest();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.asset = reader.string();
+          break;
+        case 2:
+          message.proposal = reader.uint64();
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromJSON(object: any): QueryTallyResultRequest {
+    return {
+      asset: isSet(object.asset) ? String(object.asset) : "",
+      proposal: isSet(object.proposal) ? BigInt(object.proposal.toString()) : BigInt(0)
+    };
+  },
+  toJSON(message: QueryTallyResultRequest): unknown {
+    const obj: any = {};
+    message.asset !== undefined && (obj.asset = message.asset);
+    message.proposal !== undefined && (obj.proposal = (message.proposal || BigInt(0)).toString());
+    return obj;
+  },
+  fromPartial(object: Partial<QueryTallyResultRequest>): QueryTallyResultRequest {
+    const message = createBaseQueryTallyResultRequest();
+    message.asset = object.asset ?? "";
+    message.proposal = object.proposal !== undefined && object.proposal !== null ? BigInt(object.proposal.toString()) : BigInt(0);
+    return message;
+  },
+  fromAmino(object: QueryTallyResultRequestAmino): QueryTallyResultRequest {
+    const message = createBaseQueryTallyResultRequest();
+    if (object.asset !== undefined && object.asset !== null) {
+      message.asset = object.asset;
+    }
+    if (object.proposal !== undefined && object.proposal !== null) {
+      message.proposal = BigInt(object.proposal);
+    }
+    return message;
+  },
+  toAmino(message: QueryTallyResultRequest, useInterfaces: boolean = true): QueryTallyResultRequestAmino {
+    const obj: any = {};
+    obj.asset = message.asset === "" ? undefined : message.asset;
+    obj.proposal = message.proposal ? message.proposal.toString() : undefined;
+    return obj;
+  },
+  fromAminoMsg(object: QueryTallyResultRequestAminoMsg): QueryTallyResultRequest {
+    return QueryTallyResultRequest.fromAmino(object.value);
+  },
+  fromProtoMsg(message: QueryTallyResultRequestProtoMsg, useInterfaces: boolean = true): QueryTallyResultRequest {
+    return QueryTallyResultRequest.decode(message.value, undefined, useInterfaces);
+  },
+  toProto(message: QueryTallyResultRequest): Uint8Array {
+    return QueryTallyResultRequest.encode(message).finish();
+  },
+  toProtoMsg(message: QueryTallyResultRequest): QueryTallyResultRequestProtoMsg {
+    return {
+      typeUrl: "/pryzm.pgov.v1.QueryTallyResultRequest",
+      value: QueryTallyResultRequest.encode(message).finish()
+    };
+  }
+};
+GlobalDecoderRegistry.register(QueryTallyResultRequest.typeUrl, QueryTallyResultRequest);
+function createBaseQueryTallyResultResponse(): QueryTallyResultResponse {
+  return {
+    options: []
+  };
+}
+export const QueryTallyResultResponse = {
+  typeUrl: "/pryzm.pgov.v1.QueryTallyResultResponse",
+  is(o: any): o is QueryTallyResultResponse {
+    return o && (o.$typeUrl === QueryTallyResultResponse.typeUrl || Array.isArray(o.options) && (!o.options.length || WeightedVoteOption.is(o.options[0])));
+  },
+  isSDK(o: any): o is QueryTallyResultResponseSDKType {
+    return o && (o.$typeUrl === QueryTallyResultResponse.typeUrl || Array.isArray(o.options) && (!o.options.length || WeightedVoteOption.isSDK(o.options[0])));
+  },
+  isAmino(o: any): o is QueryTallyResultResponseAmino {
+    return o && (o.$typeUrl === QueryTallyResultResponse.typeUrl || Array.isArray(o.options) && (!o.options.length || WeightedVoteOption.isAmino(o.options[0])));
+  },
+  encode(message: QueryTallyResultResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    for (const v of message.options) {
+      WeightedVoteOption.encode(v!, writer.uint32(10).fork()).ldelim();
+    }
+    return writer;
+  },
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): QueryTallyResultResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseQueryTallyResultResponse();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.options.push(WeightedVoteOption.decode(reader, reader.uint32(), useInterfaces));
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromJSON(object: any): QueryTallyResultResponse {
+    return {
+      options: Array.isArray(object?.options) ? object.options.map((e: any) => WeightedVoteOption.fromJSON(e)) : []
+    };
+  },
+  toJSON(message: QueryTallyResultResponse): unknown {
+    const obj: any = {};
+    if (message.options) {
+      obj.options = message.options.map(e => e ? WeightedVoteOption.toJSON(e) : undefined);
+    } else {
+      obj.options = [];
+    }
+    return obj;
+  },
+  fromPartial(object: Partial<QueryTallyResultResponse>): QueryTallyResultResponse {
+    const message = createBaseQueryTallyResultResponse();
+    message.options = object.options?.map(e => WeightedVoteOption.fromPartial(e)) || [];
+    return message;
+  },
+  fromAmino(object: QueryTallyResultResponseAmino): QueryTallyResultResponse {
+    const message = createBaseQueryTallyResultResponse();
+    message.options = object.options?.map(e => WeightedVoteOption.fromAmino(e)) || [];
+    return message;
+  },
+  toAmino(message: QueryTallyResultResponse, useInterfaces: boolean = true): QueryTallyResultResponseAmino {
+    const obj: any = {};
+    if (message.options) {
+      obj.options = message.options.map(e => e ? WeightedVoteOption.toAmino(e, useInterfaces) : undefined);
+    } else {
+      obj.options = message.options;
+    }
+    return obj;
+  },
+  fromAminoMsg(object: QueryTallyResultResponseAminoMsg): QueryTallyResultResponse {
+    return QueryTallyResultResponse.fromAmino(object.value);
+  },
+  fromProtoMsg(message: QueryTallyResultResponseProtoMsg, useInterfaces: boolean = true): QueryTallyResultResponse {
+    return QueryTallyResultResponse.decode(message.value, undefined, useInterfaces);
+  },
+  toProto(message: QueryTallyResultResponse): Uint8Array {
+    return QueryTallyResultResponse.encode(message).finish();
+  },
+  toProtoMsg(message: QueryTallyResultResponse): QueryTallyResultResponseProtoMsg {
+    return {
+      typeUrl: "/pryzm.pgov.v1.QueryTallyResultResponse",
+      value: QueryTallyResultResponse.encode(message).finish()
+    };
+  }
+};
+GlobalDecoderRegistry.register(QueryTallyResultResponse.typeUrl, QueryTallyResultResponse);

@@ -2,6 +2,7 @@ syntax = "proto3";
 package pryzm.pgov.v1;
 
 import "cosmos/base/query/v1beta1/pagination.proto";
+import "cosmos/gov/v1/gov.proto";
 import "cosmos_proto/cosmos.proto";
 import "gogoproto/gogo.proto";
 import "google/api/annotations.proto";
@@ -56,6 +57,11 @@ service Query {
   // Queries a list of Proposal items.
   rpc ProposalAll(QueryAllProposalRequest) returns (QueryAllProposalResponse) {
     option (google.api.http).get = "/pryzm/pgov/v1/proposal";
+  }
+
+  // Queries a list of Proposal items.
+  rpc TallyResult(QueryTallyResultRequest) returns (QueryTallyResultResponse) {
+    option (google.api.http).get = "/pryzm/pgov/v1/tally_result/{asset}/{proposal}";
   }
   // this line is used by starport scaffolding # 2
 }
@@ -145,6 +151,15 @@ message QueryAllProposalRequest {
 message QueryAllProposalResponse {
   repeated Proposal proposal = 1 [(gogoproto.nullable) = false];
   cosmos.base.query.v1beta1.PageResponse pagination = 2 [(gogoproto.nullable) = true];
+}
+
+message QueryTallyResultRequest {
+  string asset = 1;
+  uint64 proposal = 2;
+}
+
+message QueryTallyResultResponse {
+  repeated cosmos.gov.v1.WeightedVoteOption options = 1 [(gogoproto.nullable) = false];
 }
 
 // this line is used by starport scaffolding # 3

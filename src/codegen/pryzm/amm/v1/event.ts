@@ -602,18 +602,28 @@ export interface EventExecuteOrdersForPairSDKType {
   buy_trade_output: string;
 }
 export interface EventExecuteMatchProposalOrder {
+  /**
+   * Note that if virtual=true, order_id is set to zero and should be ignored,
+   * otherwise we still might have order_id=0 referring to an actual order
+   */
   orderId: bigint;
   matchAmount: string;
   outputAmount: string;
+  virtual: boolean;
 }
 export interface EventExecuteMatchProposalOrderProtoMsg {
   typeUrl: "/pryzm.amm.v1.EventExecuteMatchProposalOrder";
   value: Uint8Array;
 }
 export interface EventExecuteMatchProposalOrderAmino {
+  /**
+   * Note that if virtual=true, order_id is set to zero and should be ignored,
+   * otherwise we still might have order_id=0 referring to an actual order
+   */
   order_id?: string;
   match_amount?: string;
   output_amount?: string;
+  virtual?: boolean;
 }
 export interface EventExecuteMatchProposalOrderAminoMsg {
   type: "/pryzm.amm.v1.EventExecuteMatchProposalOrder";
@@ -623,6 +633,7 @@ export interface EventExecuteMatchProposalOrderSDKType {
   order_id: bigint;
   match_amount: string;
   output_amount: string;
+  virtual: boolean;
 }
 export interface EventExecuteMatchProposalPair {
   poolId: bigint;
@@ -3652,19 +3663,20 @@ function createBaseEventExecuteMatchProposalOrder(): EventExecuteMatchProposalOr
   return {
     orderId: BigInt(0),
     matchAmount: "",
-    outputAmount: ""
+    outputAmount: "",
+    virtual: false
   };
 }
 export const EventExecuteMatchProposalOrder = {
   typeUrl: "/pryzm.amm.v1.EventExecuteMatchProposalOrder",
   is(o: any): o is EventExecuteMatchProposalOrder {
-    return o && (o.$typeUrl === EventExecuteMatchProposalOrder.typeUrl || typeof o.orderId === "bigint" && typeof o.matchAmount === "string" && typeof o.outputAmount === "string");
+    return o && (o.$typeUrl === EventExecuteMatchProposalOrder.typeUrl || typeof o.orderId === "bigint" && typeof o.matchAmount === "string" && typeof o.outputAmount === "string" && typeof o.virtual === "boolean");
   },
   isSDK(o: any): o is EventExecuteMatchProposalOrderSDKType {
-    return o && (o.$typeUrl === EventExecuteMatchProposalOrder.typeUrl || typeof o.order_id === "bigint" && typeof o.match_amount === "string" && typeof o.output_amount === "string");
+    return o && (o.$typeUrl === EventExecuteMatchProposalOrder.typeUrl || typeof o.order_id === "bigint" && typeof o.match_amount === "string" && typeof o.output_amount === "string" && typeof o.virtual === "boolean");
   },
   isAmino(o: any): o is EventExecuteMatchProposalOrderAmino {
-    return o && (o.$typeUrl === EventExecuteMatchProposalOrder.typeUrl || typeof o.order_id === "bigint" && typeof o.match_amount === "string" && typeof o.output_amount === "string");
+    return o && (o.$typeUrl === EventExecuteMatchProposalOrder.typeUrl || typeof o.order_id === "bigint" && typeof o.match_amount === "string" && typeof o.output_amount === "string" && typeof o.virtual === "boolean");
   },
   encode(message: EventExecuteMatchProposalOrder, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.orderId !== BigInt(0)) {
@@ -3675,6 +3687,9 @@ export const EventExecuteMatchProposalOrder = {
     }
     if (message.outputAmount !== "") {
       writer.uint32(34).string(message.outputAmount);
+    }
+    if (message.virtual === true) {
+      writer.uint32(40).bool(message.virtual);
     }
     return writer;
   },
@@ -3694,6 +3709,9 @@ export const EventExecuteMatchProposalOrder = {
         case 4:
           message.outputAmount = reader.string();
           break;
+        case 5:
+          message.virtual = reader.bool();
+          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -3705,7 +3723,8 @@ export const EventExecuteMatchProposalOrder = {
     return {
       orderId: isSet(object.orderId) ? BigInt(object.orderId.toString()) : BigInt(0),
       matchAmount: isSet(object.matchAmount) ? String(object.matchAmount) : "",
-      outputAmount: isSet(object.outputAmount) ? String(object.outputAmount) : ""
+      outputAmount: isSet(object.outputAmount) ? String(object.outputAmount) : "",
+      virtual: isSet(object.virtual) ? Boolean(object.virtual) : false
     };
   },
   toJSON(message: EventExecuteMatchProposalOrder): unknown {
@@ -3713,6 +3732,7 @@ export const EventExecuteMatchProposalOrder = {
     message.orderId !== undefined && (obj.orderId = (message.orderId || BigInt(0)).toString());
     message.matchAmount !== undefined && (obj.matchAmount = message.matchAmount);
     message.outputAmount !== undefined && (obj.outputAmount = message.outputAmount);
+    message.virtual !== undefined && (obj.virtual = message.virtual);
     return obj;
   },
   fromPartial(object: Partial<EventExecuteMatchProposalOrder>): EventExecuteMatchProposalOrder {
@@ -3720,6 +3740,7 @@ export const EventExecuteMatchProposalOrder = {
     message.orderId = object.orderId !== undefined && object.orderId !== null ? BigInt(object.orderId.toString()) : BigInt(0);
     message.matchAmount = object.matchAmount ?? "";
     message.outputAmount = object.outputAmount ?? "";
+    message.virtual = object.virtual ?? false;
     return message;
   },
   fromAmino(object: EventExecuteMatchProposalOrderAmino): EventExecuteMatchProposalOrder {
@@ -3733,6 +3754,9 @@ export const EventExecuteMatchProposalOrder = {
     if (object.output_amount !== undefined && object.output_amount !== null) {
       message.outputAmount = object.output_amount;
     }
+    if (object.virtual !== undefined && object.virtual !== null) {
+      message.virtual = object.virtual;
+    }
     return message;
   },
   toAmino(message: EventExecuteMatchProposalOrder, useInterfaces: boolean = true): EventExecuteMatchProposalOrderAmino {
@@ -3740,6 +3764,7 @@ export const EventExecuteMatchProposalOrder = {
     obj.order_id = message.orderId ? message.orderId.toString() : undefined;
     obj.match_amount = message.matchAmount === "" ? undefined : message.matchAmount;
     obj.output_amount = message.outputAmount === "" ? undefined : message.outputAmount;
+    obj.virtual = message.virtual === false ? undefined : message.virtual;
     return obj;
   },
   fromAminoMsg(object: EventExecuteMatchProposalOrderAminoMsg): EventExecuteMatchProposalOrder {

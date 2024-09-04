@@ -14,6 +14,8 @@ export interface OrderParameters {
   minOrderStepRatio: string;
   minOrderStepMillisInterval: bigint;
   maxOrderStepMillisInterval: bigint;
+  maxPairsPerBlock: number;
+  maxOrdersPerPair: number;
 }
 export interface OrderParametersProtoMsg {
   typeUrl: "/pryzm.amm.v1.OrderParameters";
@@ -31,6 +33,8 @@ export interface OrderParametersAmino {
   min_order_step_ratio?: string;
   min_order_step_millis_interval?: string;
   max_order_step_millis_interval?: string;
+  max_pairs_per_block?: number;
+  max_orders_per_pair?: number;
 }
 export interface OrderParametersAminoMsg {
   type: "/pryzm.amm.v1.OrderParameters";
@@ -48,6 +52,8 @@ export interface OrderParametersSDKType {
   min_order_step_ratio: string;
   min_order_step_millis_interval: bigint;
   max_order_step_millis_interval: bigint;
+  max_pairs_per_block: number;
+  max_orders_per_pair: number;
 }
 export interface YammParameters {
   lambda: string;
@@ -285,19 +291,21 @@ function createBaseOrderParameters(): OrderParameters {
     maxOrderStepRatio: "",
     minOrderStepRatio: "",
     minOrderStepMillisInterval: BigInt(0),
-    maxOrderStepMillisInterval: BigInt(0)
+    maxOrderStepMillisInterval: BigInt(0),
+    maxPairsPerBlock: 0,
+    maxOrdersPerPair: 0
   };
 }
 export const OrderParameters = {
   typeUrl: "/pryzm.amm.v1.OrderParameters",
   is(o: any): o is OrderParameters {
-    return o && (o.$typeUrl === OrderParameters.typeUrl || typeof o.stepMatchingFeeRatio === "string" && typeof o.stepSwapFeeRatio === "string" && typeof o.matchingProtocolFeeRatio === "string" && typeof o.matchingSolverFeeRatio === "string" && typeof o.maxOrdersPerBlock === "number" && typeof o.maxSchedulePerBlock === "number" && typeof o.maxExecOrderTradeRatio === "string" && typeof o.maxOrderStepRatio === "string" && typeof o.minOrderStepRatio === "string" && typeof o.minOrderStepMillisInterval === "bigint" && typeof o.maxOrderStepMillisInterval === "bigint");
+    return o && (o.$typeUrl === OrderParameters.typeUrl || typeof o.stepMatchingFeeRatio === "string" && typeof o.stepSwapFeeRatio === "string" && typeof o.matchingProtocolFeeRatio === "string" && typeof o.matchingSolverFeeRatio === "string" && typeof o.maxOrdersPerBlock === "number" && typeof o.maxSchedulePerBlock === "number" && typeof o.maxExecOrderTradeRatio === "string" && typeof o.maxOrderStepRatio === "string" && typeof o.minOrderStepRatio === "string" && typeof o.minOrderStepMillisInterval === "bigint" && typeof o.maxOrderStepMillisInterval === "bigint" && typeof o.maxPairsPerBlock === "number" && typeof o.maxOrdersPerPair === "number");
   },
   isSDK(o: any): o is OrderParametersSDKType {
-    return o && (o.$typeUrl === OrderParameters.typeUrl || typeof o.step_matching_fee_ratio === "string" && typeof o.step_swap_fee_ratio === "string" && typeof o.matching_protocol_fee_ratio === "string" && typeof o.matching_solver_fee_ratio === "string" && typeof o.max_orders_per_block === "number" && typeof o.max_schedule_per_block === "number" && typeof o.max_exec_order_trade_ratio === "string" && typeof o.max_order_step_ratio === "string" && typeof o.min_order_step_ratio === "string" && typeof o.min_order_step_millis_interval === "bigint" && typeof o.max_order_step_millis_interval === "bigint");
+    return o && (o.$typeUrl === OrderParameters.typeUrl || typeof o.step_matching_fee_ratio === "string" && typeof o.step_swap_fee_ratio === "string" && typeof o.matching_protocol_fee_ratio === "string" && typeof o.matching_solver_fee_ratio === "string" && typeof o.max_orders_per_block === "number" && typeof o.max_schedule_per_block === "number" && typeof o.max_exec_order_trade_ratio === "string" && typeof o.max_order_step_ratio === "string" && typeof o.min_order_step_ratio === "string" && typeof o.min_order_step_millis_interval === "bigint" && typeof o.max_order_step_millis_interval === "bigint" && typeof o.max_pairs_per_block === "number" && typeof o.max_orders_per_pair === "number");
   },
   isAmino(o: any): o is OrderParametersAmino {
-    return o && (o.$typeUrl === OrderParameters.typeUrl || typeof o.step_matching_fee_ratio === "string" && typeof o.step_swap_fee_ratio === "string" && typeof o.matching_protocol_fee_ratio === "string" && typeof o.matching_solver_fee_ratio === "string" && typeof o.max_orders_per_block === "number" && typeof o.max_schedule_per_block === "number" && typeof o.max_exec_order_trade_ratio === "string" && typeof o.max_order_step_ratio === "string" && typeof o.min_order_step_ratio === "string" && typeof o.min_order_step_millis_interval === "bigint" && typeof o.max_order_step_millis_interval === "bigint");
+    return o && (o.$typeUrl === OrderParameters.typeUrl || typeof o.step_matching_fee_ratio === "string" && typeof o.step_swap_fee_ratio === "string" && typeof o.matching_protocol_fee_ratio === "string" && typeof o.matching_solver_fee_ratio === "string" && typeof o.max_orders_per_block === "number" && typeof o.max_schedule_per_block === "number" && typeof o.max_exec_order_trade_ratio === "string" && typeof o.max_order_step_ratio === "string" && typeof o.min_order_step_ratio === "string" && typeof o.min_order_step_millis_interval === "bigint" && typeof o.max_order_step_millis_interval === "bigint" && typeof o.max_pairs_per_block === "number" && typeof o.max_orders_per_pair === "number");
   },
   encode(message: OrderParameters, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.stepMatchingFeeRatio !== "") {
@@ -332,6 +340,12 @@ export const OrderParameters = {
     }
     if (message.maxOrderStepMillisInterval !== BigInt(0)) {
       writer.uint32(88).int64(message.maxOrderStepMillisInterval);
+    }
+    if (message.maxPairsPerBlock !== 0) {
+      writer.uint32(96).int32(message.maxPairsPerBlock);
+    }
+    if (message.maxOrdersPerPair !== 0) {
+      writer.uint32(104).int32(message.maxOrdersPerPair);
     }
     return writer;
   },
@@ -375,6 +389,12 @@ export const OrderParameters = {
         case 11:
           message.maxOrderStepMillisInterval = reader.int64();
           break;
+        case 12:
+          message.maxPairsPerBlock = reader.int32();
+          break;
+        case 13:
+          message.maxOrdersPerPair = reader.int32();
+          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -394,7 +414,9 @@ export const OrderParameters = {
       maxOrderStepRatio: isSet(object.maxOrderStepRatio) ? String(object.maxOrderStepRatio) : "",
       minOrderStepRatio: isSet(object.minOrderStepRatio) ? String(object.minOrderStepRatio) : "",
       minOrderStepMillisInterval: isSet(object.minOrderStepMillisInterval) ? BigInt(object.minOrderStepMillisInterval.toString()) : BigInt(0),
-      maxOrderStepMillisInterval: isSet(object.maxOrderStepMillisInterval) ? BigInt(object.maxOrderStepMillisInterval.toString()) : BigInt(0)
+      maxOrderStepMillisInterval: isSet(object.maxOrderStepMillisInterval) ? BigInt(object.maxOrderStepMillisInterval.toString()) : BigInt(0),
+      maxPairsPerBlock: isSet(object.maxPairsPerBlock) ? Number(object.maxPairsPerBlock) : 0,
+      maxOrdersPerPair: isSet(object.maxOrdersPerPair) ? Number(object.maxOrdersPerPair) : 0
     };
   },
   toJSON(message: OrderParameters): unknown {
@@ -410,6 +432,8 @@ export const OrderParameters = {
     message.minOrderStepRatio !== undefined && (obj.minOrderStepRatio = message.minOrderStepRatio);
     message.minOrderStepMillisInterval !== undefined && (obj.minOrderStepMillisInterval = (message.minOrderStepMillisInterval || BigInt(0)).toString());
     message.maxOrderStepMillisInterval !== undefined && (obj.maxOrderStepMillisInterval = (message.maxOrderStepMillisInterval || BigInt(0)).toString());
+    message.maxPairsPerBlock !== undefined && (obj.maxPairsPerBlock = Math.round(message.maxPairsPerBlock));
+    message.maxOrdersPerPair !== undefined && (obj.maxOrdersPerPair = Math.round(message.maxOrdersPerPair));
     return obj;
   },
   fromPartial(object: Partial<OrderParameters>): OrderParameters {
@@ -425,6 +449,8 @@ export const OrderParameters = {
     message.minOrderStepRatio = object.minOrderStepRatio ?? "";
     message.minOrderStepMillisInterval = object.minOrderStepMillisInterval !== undefined && object.minOrderStepMillisInterval !== null ? BigInt(object.minOrderStepMillisInterval.toString()) : BigInt(0);
     message.maxOrderStepMillisInterval = object.maxOrderStepMillisInterval !== undefined && object.maxOrderStepMillisInterval !== null ? BigInt(object.maxOrderStepMillisInterval.toString()) : BigInt(0);
+    message.maxPairsPerBlock = object.maxPairsPerBlock ?? 0;
+    message.maxOrdersPerPair = object.maxOrdersPerPair ?? 0;
     return message;
   },
   fromAmino(object: OrderParametersAmino): OrderParameters {
@@ -462,6 +488,12 @@ export const OrderParameters = {
     if (object.max_order_step_millis_interval !== undefined && object.max_order_step_millis_interval !== null) {
       message.maxOrderStepMillisInterval = BigInt(object.max_order_step_millis_interval);
     }
+    if (object.max_pairs_per_block !== undefined && object.max_pairs_per_block !== null) {
+      message.maxPairsPerBlock = object.max_pairs_per_block;
+    }
+    if (object.max_orders_per_pair !== undefined && object.max_orders_per_pair !== null) {
+      message.maxOrdersPerPair = object.max_orders_per_pair;
+    }
     return message;
   },
   toAmino(message: OrderParameters, useInterfaces: boolean = true): OrderParametersAmino {
@@ -477,6 +509,8 @@ export const OrderParameters = {
     obj.min_order_step_ratio = padDecimal(message.minOrderStepRatio) === "" ? undefined : padDecimal(message.minOrderStepRatio);
     obj.min_order_step_millis_interval = message.minOrderStepMillisInterval ? message.minOrderStepMillisInterval.toString() : undefined;
     obj.max_order_step_millis_interval = message.maxOrderStepMillisInterval ? message.maxOrderStepMillisInterval.toString() : undefined;
+    obj.max_pairs_per_block = message.maxPairsPerBlock === 0 ? undefined : message.maxPairsPerBlock;
+    obj.max_orders_per_pair = message.maxOrdersPerPair === 0 ? undefined : message.maxOrdersPerPair;
     return obj;
   },
   fromAminoMsg(object: OrderParametersAminoMsg): OrderParameters {
