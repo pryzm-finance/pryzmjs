@@ -1,4 +1,4 @@
-import { LCDClient } from "@refractedlabs/cosmology-lcd-fork";
+import { LCDClient } from "@cosmology/lcd";
 import { QueryParamsRequest, QueryParamsResponseSDKType } from "./query";
 export class LCDQueryClient {
   req: LCDClient;

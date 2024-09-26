@@ -1,5 +1,5 @@
 import { setPaginationParams } from "../../../helpers";
-import { LCDClient } from "@refractedlabs/cosmology-lcd-fork";
+import { LCDClient } from "@cosmology/lcd";
 import { QueryBondedAmountRequest, QueryBondedAmountResponseSDKType, QueryRewardRequest, QueryRewardResponseSDKType, QueryGetUserStakeStateRequest, QueryGetUserStakeStateResponseSDKType, QueryAllUserStakeStateRequest, QueryAllUserStakeStateResponseSDKType, QueryGetAssetPoolStateRequest, QueryGetAssetPoolStateResponseSDKType, QueryAllAssetPoolStateRequest, QueryAllAssetPoolStateResponseSDKType, QueryGetAssetMaturityPoolStateRequest, QueryGetAssetMaturityPoolStateResponseSDKType, QueryAllAssetMaturityPoolStateRequest, QueryAllAssetMaturityPoolStateResponseSDKType } from "./query";
 export class LCDQueryClient {
   req: LCDClient;

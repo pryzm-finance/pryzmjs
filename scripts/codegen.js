@@ -108,10 +108,6 @@ async function main() {
     })
     correctDir('./src/codegen', [
         {
-            regex: /import { LCDClient } from "@cosmology\/lcd"/gm,
-            subst: `import { LCDClient } from "@refractedlabs/cosmology-lcd-fork"`,
-        },
-        {
             regex: /decode\(reader, reader\.uint32\(\), true\)/gm,
             subst: `decode(reader, reader.uint32())`
         },

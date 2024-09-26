@@ -1,11 +1,12 @@
-import { LCDClient } from "@refractedlabs/cosmology-lcd-fork";
+import { LCDClient } from "@cosmology/lcd";
 export const createLCDClient = async ({
   restEndpoint
 }: {
   restEndpoint: string;
 }) => {
   const requestClient = new LCDClient({
-    restEndpoint
+    restEndpoint,
+    timeout: getTimeout()
   });
   return {
     alliance: {
@@ -194,3 +195,8 @@ export const createLCDClient = async ({
     }
   };
 };
+
+function getTimeout(): number {
+  const timeout = Number(process.env["AXIOS_TIMEOUT"]);
+  return Number.isNaN(timeout) ? 10000 : timeout;
+}
