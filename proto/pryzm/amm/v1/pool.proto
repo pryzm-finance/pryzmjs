@@ -19,12 +19,23 @@ message PoolPauseWindow {
   int64 buffer_period_end_unix_millis = 2 [(amino.dont_omitempty) = true];
 }
 
+message SwapFeeUpdateParams {
+  string end = 1 [
+    (cosmos_proto.scalar) = "cosmos.Dec",
+    (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Dec",
+    (gogoproto.nullable) = false
+  ];
+  int64 start_unix_millis = 2;
+  int64 end_unix_millis = 3;
+}
+
 message Pool {
   uint64 id = 1;
   string name = 2;
   // this is the constant swap fee ratio, for dynamic swap fees other pools might have other parameters.
-  // for example, check yamm configuration
-  string swap_fee_ratio = 3 [
+  // for example, check yamm configuration.
+  // if update params is nil, this is the actual swap fee, o.w. you need to apply gradual update between this start and the end in params.
+  string start_swap_fee_ratio = 3 [
     (cosmos_proto.scalar) = "cosmos.Dec",
     (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Dec",
     (gogoproto.nullable) = false
@@ -52,4 +63,5 @@ message Pool {
   // updating the admins list and pausing the pool
   repeated string admins = 13;
   repeated string pause_allow_list = 14;
+  SwapFeeUpdateParams swap_fee_update_params = 15 [(gogoproto.nullable) = true];
 }

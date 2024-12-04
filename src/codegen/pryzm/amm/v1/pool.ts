@@ -55,14 +55,38 @@ export interface PoolPauseWindowSDKType {
   pause_window_end_unix_millis: bigint;
   buffer_period_end_unix_millis: bigint;
 }
+export interface SwapFeeUpdateParams {
+  end: string;
+  startUnixMillis: bigint;
+  endUnixMillis: bigint;
+}
+export interface SwapFeeUpdateParamsProtoMsg {
+  typeUrl: "/pryzm.amm.v1.SwapFeeUpdateParams";
+  value: Uint8Array;
+}
+export interface SwapFeeUpdateParamsAmino {
+  end?: string;
+  start_unix_millis?: string;
+  end_unix_millis?: string;
+}
+export interface SwapFeeUpdateParamsAminoMsg {
+  type: "/pryzm.amm.v1.SwapFeeUpdateParams";
+  value: SwapFeeUpdateParamsAmino;
+}
+export interface SwapFeeUpdateParamsSDKType {
+  end: string;
+  start_unix_millis: bigint;
+  end_unix_millis: bigint;
+}
 export interface Pool {
   id: bigint;
   name: string;
   /**
    * this is the constant swap fee ratio, for dynamic swap fees other pools might have other parameters.
-   * for example, check yamm configuration
+   * for example, check yamm configuration.
+   * if update params is nil, this is the actual swap fee, o.w. you need to apply gradual update between this start and the end in params.
    */
-  swapFeeRatio: string;
+  startSwapFeeRatio: string;
   poolType: PoolType;
   creator: string;
   recoveryMode: boolean;
@@ -80,6 +104,7 @@ export interface Pool {
    */
   admins: string[];
   pauseAllowList: string[];
+  swapFeeUpdateParams?: SwapFeeUpdateParams;
 }
 export interface PoolProtoMsg {
   typeUrl: "/pryzm.amm.v1.Pool";
@@ -90,9 +115,10 @@ export interface PoolAmino {
   name?: string;
   /**
    * this is the constant swap fee ratio, for dynamic swap fees other pools might have other parameters.
-   * for example, check yamm configuration
+   * for example, check yamm configuration.
+   * if update params is nil, this is the actual swap fee, o.w. you need to apply gradual update between this start and the end in params.
    */
-  swap_fee_ratio?: string;
+  start_swap_fee_ratio?: string;
   pool_type?: PoolType;
   creator?: string;
   recovery_mode?: boolean;
@@ -110,6 +136,7 @@ export interface PoolAmino {
    */
   admins?: string[];
   pause_allow_list?: string[];
+  swap_fee_update_params?: SwapFeeUpdateParamsAmino;
 }
 export interface PoolAminoMsg {
   type: "/pryzm.amm.v1.Pool";
@@ -118,7 +145,7 @@ export interface PoolAminoMsg {
 export interface PoolSDKType {
   id: bigint;
   name: string;
-  swap_fee_ratio: string;
+  start_swap_fee_ratio: string;
   pool_type: PoolType;
   creator: string;
   recovery_mode: boolean;
@@ -130,6 +157,7 @@ export interface PoolSDKType {
   initialization_allow_list: string[];
   admins: string[];
   pause_allow_list: string[];
+  swap_fee_update_params?: SwapFeeUpdateParamsSDKType;
 }
 function createBasePoolPauseWindow(): PoolPauseWindow {
   return {
@@ -228,11 +256,122 @@ export const PoolPauseWindow = {
   }
 };
 GlobalDecoderRegistry.register(PoolPauseWindow.typeUrl, PoolPauseWindow);
+function createBaseSwapFeeUpdateParams(): SwapFeeUpdateParams {
+  return {
+    end: "",
+    startUnixMillis: BigInt(0),
+    endUnixMillis: BigInt(0)
+  };
+}
+export const SwapFeeUpdateParams = {
+  typeUrl: "/pryzm.amm.v1.SwapFeeUpdateParams",
+  is(o: any): o is SwapFeeUpdateParams {
+    return o && (o.$typeUrl === SwapFeeUpdateParams.typeUrl || typeof o.end === "string" && typeof o.startUnixMillis === "bigint" && typeof o.endUnixMillis === "bigint");
+  },
+  isSDK(o: any): o is SwapFeeUpdateParamsSDKType {
+    return o && (o.$typeUrl === SwapFeeUpdateParams.typeUrl || typeof o.end === "string" && typeof o.start_unix_millis === "bigint" && typeof o.end_unix_millis === "bigint");
+  },
+  isAmino(o: any): o is SwapFeeUpdateParamsAmino {
+    return o && (o.$typeUrl === SwapFeeUpdateParams.typeUrl || typeof o.end === "string" && typeof o.start_unix_millis === "bigint" && typeof o.end_unix_millis === "bigint");
+  },
+  encode(message: SwapFeeUpdateParams, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    if (message.end !== "") {
+      writer.uint32(10).string(Decimal.fromUserInput(message.end, 18).atomics);
+    }
+    if (message.startUnixMillis !== BigInt(0)) {
+      writer.uint32(16).int64(message.startUnixMillis);
+    }
+    if (message.endUnixMillis !== BigInt(0)) {
+      writer.uint32(24).int64(message.endUnixMillis);
+    }
+    return writer;
+  },
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): SwapFeeUpdateParams {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseSwapFeeUpdateParams();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.end = Decimal.fromAtomics(reader.string(), 18).toString();
+          break;
+        case 2:
+          message.startUnixMillis = reader.int64();
+          break;
+        case 3:
+          message.endUnixMillis = reader.int64();
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromJSON(object: any): SwapFeeUpdateParams {
+    return {
+      end: isSet(object.end) ? String(object.end) : "",
+      startUnixMillis: isSet(object.startUnixMillis) ? BigInt(object.startUnixMillis.toString()) : BigInt(0),
+      endUnixMillis: isSet(object.endUnixMillis) ? BigInt(object.endUnixMillis.toString()) : BigInt(0)
+    };
+  },
+  toJSON(message: SwapFeeUpdateParams): unknown {
+    const obj: any = {};
+    message.end !== undefined && (obj.end = message.end);
+    message.startUnixMillis !== undefined && (obj.startUnixMillis = (message.startUnixMillis || BigInt(0)).toString());
+    message.endUnixMillis !== undefined && (obj.endUnixMillis = (message.endUnixMillis || BigInt(0)).toString());
+    return obj;
+  },
+  fromPartial(object: Partial<SwapFeeUpdateParams>): SwapFeeUpdateParams {
+    const message = createBaseSwapFeeUpdateParams();
+    message.end = object.end ?? "";
+    message.startUnixMillis = object.startUnixMillis !== undefined && object.startUnixMillis !== null ? BigInt(object.startUnixMillis.toString()) : BigInt(0);
+    message.endUnixMillis = object.endUnixMillis !== undefined && object.endUnixMillis !== null ? BigInt(object.endUnixMillis.toString()) : BigInt(0);
+    return message;
+  },
+  fromAmino(object: SwapFeeUpdateParamsAmino): SwapFeeUpdateParams {
+    const message = createBaseSwapFeeUpdateParams();
+    if (object.end !== undefined && object.end !== null) {
+      message.end = object.end;
+    }
+    if (object.start_unix_millis !== undefined && object.start_unix_millis !== null) {
+      message.startUnixMillis = BigInt(object.start_unix_millis);
+    }
+    if (object.end_unix_millis !== undefined && object.end_unix_millis !== null) {
+      message.endUnixMillis = BigInt(object.end_unix_millis);
+    }
+    return message;
+  },
+  toAmino(message: SwapFeeUpdateParams, useInterfaces: boolean = true): SwapFeeUpdateParamsAmino {
+    const obj: any = {};
+    obj.end = padDecimal(message.end) === "" ? undefined : padDecimal(message.end);
+    obj.start_unix_millis = message.startUnixMillis ? message.startUnixMillis.toString() : undefined;
+    obj.end_unix_millis = message.endUnixMillis ? message.endUnixMillis.toString() : undefined;
+    return obj;
+  },
+  fromAminoMsg(object: SwapFeeUpdateParamsAminoMsg): SwapFeeUpdateParams {
+    return SwapFeeUpdateParams.fromAmino(object.value);
+  },
+  fromProtoMsg(message: SwapFeeUpdateParamsProtoMsg, useInterfaces: boolean = true): SwapFeeUpdateParams {
+    return SwapFeeUpdateParams.decode(message.value, undefined, useInterfaces);
+  },
+  toProto(message: SwapFeeUpdateParams): Uint8Array {
+    return SwapFeeUpdateParams.encode(message).finish();
+  },
+  toProtoMsg(message: SwapFeeUpdateParams): SwapFeeUpdateParamsProtoMsg {
+    return {
+      typeUrl: "/pryzm.amm.v1.SwapFeeUpdateParams",
+      value: SwapFeeUpdateParams.encode(message).finish()
+    };
+  }
+};
+GlobalDecoderRegistry.register(SwapFeeUpdateParams.typeUrl, SwapFeeUpdateParams);
 function createBasePool(): Pool {
   return {
     id: BigInt(0),
     name: "",
-    swapFeeRatio: "",
+    startSwapFeeRatio: "",
     poolType: 0,
     creator: "",
     recoveryMode: false,
@@ -243,19 +382,20 @@ function createBasePool(): Pool {
     joinExitProtocolFeeRatio: undefined,
     initializationAllowList: [],
     admins: [],
-    pauseAllowList: []
+    pauseAllowList: [],
+    swapFeeUpdateParams: undefined
   };
 }
 export const Pool = {
   typeUrl: "/pryzm.amm.v1.Pool",
   is(o: any): o is Pool {
-    return o && (o.$typeUrl === Pool.typeUrl || typeof o.id === "bigint" && typeof o.name === "string" && typeof o.swapFeeRatio === "string" && isSet(o.poolType) && typeof o.creator === "string" && typeof o.recoveryMode === "boolean" && typeof o.pausedByGov === "boolean" && typeof o.pausedByOwner === "boolean" && Array.isArray(o.initializationAllowList) && (!o.initializationAllowList.length || typeof o.initializationAllowList[0] === "string") && Array.isArray(o.admins) && (!o.admins.length || typeof o.admins[0] === "string") && Array.isArray(o.pauseAllowList) && (!o.pauseAllowList.length || typeof o.pauseAllowList[0] === "string"));
+    return o && (o.$typeUrl === Pool.typeUrl || typeof o.id === "bigint" && typeof o.name === "string" && typeof o.startSwapFeeRatio === "string" && isSet(o.poolType) && typeof o.creator === "string" && typeof o.recoveryMode === "boolean" && typeof o.pausedByGov === "boolean" && typeof o.pausedByOwner === "boolean" && Array.isArray(o.initializationAllowList) && (!o.initializationAllowList.length || typeof o.initializationAllowList[0] === "string") && Array.isArray(o.admins) && (!o.admins.length || typeof o.admins[0] === "string") && Array.isArray(o.pauseAllowList) && (!o.pauseAllowList.length || typeof o.pauseAllowList[0] === "string"));
   },
   isSDK(o: any): o is PoolSDKType {
-    return o && (o.$typeUrl === Pool.typeUrl || typeof o.id === "bigint" && typeof o.name === "string" && typeof o.swap_fee_ratio === "string" && isSet(o.pool_type) && typeof o.creator === "string" && typeof o.recovery_mode === "boolean" && typeof o.paused_by_gov === "boolean" && typeof o.paused_by_owner === "boolean" && Array.isArray(o.initialization_allow_list) && (!o.initialization_allow_list.length || typeof o.initialization_allow_list[0] === "string") && Array.isArray(o.admins) && (!o.admins.length || typeof o.admins[0] === "string") && Array.isArray(o.pause_allow_list) && (!o.pause_allow_list.length || typeof o.pause_allow_list[0] === "string"));
+    return o && (o.$typeUrl === Pool.typeUrl || typeof o.id === "bigint" && typeof o.name === "string" && typeof o.start_swap_fee_ratio === "string" && isSet(o.pool_type) && typeof o.creator === "string" && typeof o.recovery_mode === "boolean" && typeof o.paused_by_gov === "boolean" && typeof o.paused_by_owner === "boolean" && Array.isArray(o.initialization_allow_list) && (!o.initialization_allow_list.length || typeof o.initialization_allow_list[0] === "string") && Array.isArray(o.admins) && (!o.admins.length || typeof o.admins[0] === "string") && Array.isArray(o.pause_allow_list) && (!o.pause_allow_list.length || typeof o.pause_allow_list[0] === "string"));
   },
   isAmino(o: any): o is PoolAmino {
-    return o && (o.$typeUrl === Pool.typeUrl || typeof o.id === "bigint" && typeof o.name === "string" && typeof o.swap_fee_ratio === "string" && isSet(o.pool_type) && typeof o.creator === "string" && typeof o.recovery_mode === "boolean" && typeof o.paused_by_gov === "boolean" && typeof o.paused_by_owner === "boolean" && Array.isArray(o.initialization_allow_list) && (!o.initialization_allow_list.length || typeof o.initialization_allow_list[0] === "string") && Array.isArray(o.admins) && (!o.admins.length || typeof o.admins[0] === "string") && Array.isArray(o.pause_allow_list) && (!o.pause_allow_list.length || typeof o.pause_allow_list[0] === "string"));
+    return o && (o.$typeUrl === Pool.typeUrl || typeof o.id === "bigint" && typeof o.name === "string" && typeof o.start_swap_fee_ratio === "string" && isSet(o.pool_type) && typeof o.creator === "string" && typeof o.recovery_mode === "boolean" && typeof o.paused_by_gov === "boolean" && typeof o.paused_by_owner === "boolean" && Array.isArray(o.initialization_allow_list) && (!o.initialization_allow_list.length || typeof o.initialization_allow_list[0] === "string") && Array.isArray(o.admins) && (!o.admins.length || typeof o.admins[0] === "string") && Array.isArray(o.pause_allow_list) && (!o.pause_allow_list.length || typeof o.pause_allow_list[0] === "string"));
   },
   encode(message: Pool, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.id !== BigInt(0)) {
@@ -264,8 +404,8 @@ export const Pool = {
     if (message.name !== "") {
       writer.uint32(18).string(message.name);
     }
-    if (message.swapFeeRatio !== "") {
-      writer.uint32(26).string(Decimal.fromUserInput(message.swapFeeRatio, 18).atomics);
+    if (message.startSwapFeeRatio !== "") {
+      writer.uint32(26).string(Decimal.fromUserInput(message.startSwapFeeRatio, 18).atomics);
     }
     if (message.poolType !== 0) {
       writer.uint32(32).int32(message.poolType);
@@ -300,6 +440,9 @@ export const Pool = {
     for (const v of message.pauseAllowList) {
       writer.uint32(114).string(v!);
     }
+    if (message.swapFeeUpdateParams !== undefined) {
+      SwapFeeUpdateParams.encode(message.swapFeeUpdateParams, writer.uint32(122).fork()).ldelim();
+    }
     return writer;
   },
   decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): Pool {
@@ -316,7 +459,7 @@ export const Pool = {
           message.name = reader.string();
           break;
         case 3:
-          message.swapFeeRatio = Decimal.fromAtomics(reader.string(), 18).toString();
+          message.startSwapFeeRatio = Decimal.fromAtomics(reader.string(), 18).toString();
           break;
         case 4:
           message.poolType = (reader.int32() as any);
@@ -351,6 +494,9 @@ export const Pool = {
         case 14:
           message.pauseAllowList.push(reader.string());
           break;
+        case 15:
+          message.swapFeeUpdateParams = SwapFeeUpdateParams.decode(reader, reader.uint32(), useInterfaces);
+          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -362,7 +508,7 @@ export const Pool = {
     return {
       id: isSet(object.id) ? BigInt(object.id.toString()) : BigInt(0),
       name: isSet(object.name) ? String(object.name) : "",
-      swapFeeRatio: isSet(object.swapFeeRatio) ? String(object.swapFeeRatio) : "",
+      startSwapFeeRatio: isSet(object.startSwapFeeRatio) ? String(object.startSwapFeeRatio) : "",
       poolType: isSet(object.poolType) ? poolTypeFromJSON(object.poolType) : -1,
       creator: isSet(object.creator) ? String(object.creator) : "",
       recoveryMode: isSet(object.recoveryMode) ? Boolean(object.recoveryMode) : false,
@@ -373,14 +519,15 @@ export const Pool = {
       joinExitProtocolFeeRatio: isSet(object.joinExitProtocolFeeRatio) ? String(object.joinExitProtocolFeeRatio) : undefined,
       initializationAllowList: Array.isArray(object?.initializationAllowList) ? object.initializationAllowList.map((e: any) => String(e)) : [],
       admins: Array.isArray(object?.admins) ? object.admins.map((e: any) => String(e)) : [],
-      pauseAllowList: Array.isArray(object?.pauseAllowList) ? object.pauseAllowList.map((e: any) => String(e)) : []
+      pauseAllowList: Array.isArray(object?.pauseAllowList) ? object.pauseAllowList.map((e: any) => String(e)) : [],
+      swapFeeUpdateParams: isSet(object.swapFeeUpdateParams) ? SwapFeeUpdateParams.fromJSON(object.swapFeeUpdateParams) : undefined
     };
   },
   toJSON(message: Pool): unknown {
     const obj: any = {};
     message.id !== undefined && (obj.id = (message.id || BigInt(0)).toString());
     message.name !== undefined && (obj.name = message.name);
-    message.swapFeeRatio !== undefined && (obj.swapFeeRatio = message.swapFeeRatio);
+    message.startSwapFeeRatio !== undefined && (obj.startSwapFeeRatio = message.startSwapFeeRatio);
     message.poolType !== undefined && (obj.poolType = poolTypeToJSON(message.poolType));
     message.creator !== undefined && (obj.creator = message.creator);
     message.recoveryMode !== undefined && (obj.recoveryMode = message.recoveryMode);
@@ -404,13 +551,14 @@ export const Pool = {
     } else {
       obj.pauseAllowList = [];
     }
+    message.swapFeeUpdateParams !== undefined && (obj.swapFeeUpdateParams = message.swapFeeUpdateParams ? SwapFeeUpdateParams.toJSON(message.swapFeeUpdateParams) : undefined);
     return obj;
   },
   fromPartial(object: Partial<Pool>): Pool {
     const message = createBasePool();
     message.id = object.id !== undefined && object.id !== null ? BigInt(object.id.toString()) : BigInt(0);
     message.name = object.name ?? "";
-    message.swapFeeRatio = object.swapFeeRatio ?? "";
+    message.startSwapFeeRatio = object.startSwapFeeRatio ?? "";
     message.poolType = object.poolType ?? 0;
     message.creator = object.creator ?? "";
     message.recoveryMode = object.recoveryMode ?? false;
@@ -422,6 +570,7 @@ export const Pool = {
     message.initializationAllowList = object.initializationAllowList?.map(e => e) || [];
     message.admins = object.admins?.map(e => e) || [];
     message.pauseAllowList = object.pauseAllowList?.map(e => e) || [];
+    message.swapFeeUpdateParams = object.swapFeeUpdateParams !== undefined && object.swapFeeUpdateParams !== null ? SwapFeeUpdateParams.fromPartial(object.swapFeeUpdateParams) : undefined;
     return message;
   },
   fromAmino(object: PoolAmino): Pool {
@@ -432,8 +581,8 @@ export const Pool = {
     if (object.name !== undefined && object.name !== null) {
       message.name = object.name;
     }
-    if (object.swap_fee_ratio !== undefined && object.swap_fee_ratio !== null) {
-      message.swapFeeRatio = object.swap_fee_ratio;
+    if (object.start_swap_fee_ratio !== undefined && object.start_swap_fee_ratio !== null) {
+      message.startSwapFeeRatio = object.start_swap_fee_ratio;
     }
     if (object.pool_type !== undefined && object.pool_type !== null) {
       message.poolType = object.pool_type;
@@ -462,13 +611,16 @@ export const Pool = {
     message.initializationAllowList = object.initialization_allow_list?.map(e => e) || [];
     message.admins = object.admins?.map(e => e) || [];
     message.pauseAllowList = object.pause_allow_list?.map(e => e) || [];
+    if (object.swap_fee_update_params !== undefined && object.swap_fee_update_params !== null) {
+      message.swapFeeUpdateParams = SwapFeeUpdateParams.fromAmino(object.swap_fee_update_params);
+    }
     return message;
   },
   toAmino(message: Pool, useInterfaces: boolean = true): PoolAmino {
     const obj: any = {};
     obj.id = message.id ? message.id.toString() : undefined;
     obj.name = message.name === "" ? undefined : message.name;
-    obj.swap_fee_ratio = padDecimal(message.swapFeeRatio) === "" ? undefined : padDecimal(message.swapFeeRatio);
+    obj.start_swap_fee_ratio = padDecimal(message.startSwapFeeRatio) === "" ? undefined : padDecimal(message.startSwapFeeRatio);
     obj.pool_type = message.poolType === 0 ? undefined : message.poolType;
     obj.creator = message.creator === "" ? undefined : message.creator;
     obj.recovery_mode = message.recoveryMode === false ? undefined : message.recoveryMode;
@@ -492,6 +644,7 @@ export const Pool = {
     } else {
       obj.pause_allow_list = message.pauseAllowList;
     }
+    obj.swap_fee_update_params = message.swapFeeUpdateParams ? SwapFeeUpdateParams.toAmino(message.swapFeeUpdateParams, useInterfaces) : undefined;
     return obj;
   },
   fromAminoMsg(object: PoolAminoMsg): Pool {

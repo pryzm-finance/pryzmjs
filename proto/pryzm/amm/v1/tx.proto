@@ -317,7 +317,8 @@ message MsgCreateWeightedPool {
 
   string creator = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
   string name = 2;
-  string swap_fee_ratio = 3 [
+  // if update params is nil, this is the actual swap fee, o.w. you need to apply gradual update between this start and the end in params.
+  string start_swap_fee_ratio = 3 [
     (cosmos_proto.scalar) = "cosmos.Dec",
     (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Dec",
     (gogoproto.nullable) = false
@@ -333,6 +334,7 @@ message MsgCreateWeightedPool {
   bool force_gov_owner = 13;
   repeated string admins = 14 [(amino.dont_omitempty) = true];
   repeated string pause_allow_list = 15 [(amino.dont_omitempty) = true];
+  SwapFeeUpdateParams swap_fee_update_params = 16 [(gogoproto.nullable) = true];
 }
 
 message MsgCreateWeightedPoolResponse {
@@ -345,11 +347,13 @@ message MsgUpdateSwapFee {
 
   string creator = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
   uint64 pool_id = 2 [(amino.dont_omitempty) = true];
-  string swap_fee_ratio = 3 [
+  // if update params is nil, this is the actual swap fee, o.w. you need to apply gradual update between this start and the end in params.
+  string start_swap_fee_ratio = 3 [
     (cosmos_proto.scalar) = "cosmos.Dec",
     (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Dec",
     (gogoproto.nullable) = false
   ];
+  SwapFeeUpdateParams gradual_update_params = 4 [(gogoproto.nullable) = true];
 }
 
 message MsgUpdateSwapFeeResponse {}
