@@ -33,9 +33,7 @@ message MsgProposeMatch {
     (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins"
   ];
   // is not casted to coins, to allow for zero limits
-  repeated cosmos.base.v1beta1.Coin max_amounts_in = 4 [
-    (gogoproto.nullable) = false
-  ];
+  repeated cosmos.base.v1beta1.Coin max_amounts_in = 4 [(gogoproto.nullable) = false];
 }
 
 message MsgProposeMatchResponse {

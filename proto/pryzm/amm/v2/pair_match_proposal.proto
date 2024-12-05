@@ -8,7 +8,6 @@ import "gogoproto/gogo.proto";
 
 option go_package = "github.com/pryzm-finance/pryzm-core/x/amm/types/v2";
 
-
 message ProposalOrder {
   uint64 id = 1; // should be set to zero for virtual orders
   string max_amount_in = 2 [

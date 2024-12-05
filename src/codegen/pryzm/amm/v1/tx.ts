@@ -1,5 +1,6 @@
 import { Swap, SwapAmino, SwapSDKType, SwapType, SwapStep, SwapStepAmino, SwapStepSDKType, swapTypeFromJSON, swapTypeToJSON } from "./operations";
 import { Coin, CoinAmino, CoinSDKType } from "../../../cosmos/base/v1beta1/coin";
+import { SwapFeeUpdateParams, SwapFeeUpdateParamsAmino, SwapFeeUpdateParamsSDKType, PoolPauseWindow, PoolPauseWindowAmino, PoolPauseWindowSDKType } from "./pool";
 import { TokenWeight, TokenWeightAmino, TokenWeightSDKType } from "./token_weight";
 import { YammConfiguration, YammConfigurationAmino, YammConfigurationSDKType } from "./yamm_configuration";
 import { WhitelistedRoute, WhitelistedRouteAmino, WhitelistedRouteSDKType } from "./whitelisted_route";
@@ -7,7 +8,6 @@ import { PairMatchProposal, PairMatchProposalAmino, PairMatchProposalSDKType } f
 import { TokenCircuitBreakerSettings, TokenCircuitBreakerSettingsAmino, TokenCircuitBreakerSettingsSDKType } from "./token_circuit_breaker_settings";
 import { OraclePricePair, OraclePricePairAmino, OraclePricePairSDKType } from "./oracle_price_pair";
 import { GeneralPoolParameters, GeneralPoolParametersAmino, GeneralPoolParametersSDKType, YammParameters, YammParametersAmino, YammParametersSDKType, OrderParameters, OrderParametersAmino, OrderParametersSDKType, AuthorizationParameters, AuthorizationParametersAmino, AuthorizationParametersSDKType, GasParameters, GasParametersAmino, GasParametersSDKType } from "./params";
-import { PoolPauseWindow, PoolPauseWindowAmino, PoolPauseWindowSDKType } from "./pool";
 import { DisabledOrderPair, DisabledOrderPairAmino, DisabledOrderPairSDKType, Order, OrderAmino, OrderSDKType } from "./order";
 import { BinaryReader, BinaryWriter } from "../../../binary";
 import { isSet, padDecimal } from "../../../helpers";
@@ -462,7 +462,8 @@ export interface CreateWeightedPoolTokenSDKType {
 export interface MsgCreateWeightedPool {
   creator: string;
   name: string;
-  swapFeeRatio: string;
+  /** if update params is nil, this is the actual swap fee, o.w. you need to apply gradual update between this start and the end in params. */
+  startSwapFeeRatio: string;
   pauseWindowDurationMillis: bigint;
   pauseBufferDurationMillis: bigint;
   tokens: CreateWeightedPoolToken[];
@@ -476,6 +477,7 @@ export interface MsgCreateWeightedPool {
   forceGovOwner: boolean;
   admins: string[];
   pauseAllowList: string[];
+  swapFeeUpdateParams?: SwapFeeUpdateParams;
 }
 export interface MsgCreateWeightedPoolProtoMsg {
   typeUrl: "/pryzm.amm.v1.MsgCreateWeightedPool";
@@ -484,7 +486,8 @@ export interface MsgCreateWeightedPoolProtoMsg {
 export interface MsgCreateWeightedPoolAmino {
   creator?: string;
   name?: string;
-  swap_fee_ratio?: string;
+  /** if update params is nil, this is the actual swap fee, o.w. you need to apply gradual update between this start and the end in params. */
+  start_swap_fee_ratio?: string;
   pause_window_duration_millis: string;
   pause_buffer_duration_millis: string;
   tokens?: CreateWeightedPoolTokenAmino[];
@@ -498,6 +501,7 @@ export interface MsgCreateWeightedPoolAmino {
   force_gov_owner?: boolean;
   admins: string[];
   pause_allow_list: string[];
+  swap_fee_update_params?: SwapFeeUpdateParamsAmino;
 }
 export interface MsgCreateWeightedPoolAminoMsg {
   type: "pryzm/amm/v1/CreateWeightedPool";
@@ -506,7 +510,7 @@ export interface MsgCreateWeightedPoolAminoMsg {
 export interface MsgCreateWeightedPoolSDKType {
   creator: string;
   name: string;
-  swap_fee_ratio: string;
+  start_swap_fee_ratio: string;
   pause_window_duration_millis: bigint;
   pause_buffer_duration_millis: bigint;
   tokens: CreateWeightedPoolTokenSDKType[];
@@ -514,6 +518,7 @@ export interface MsgCreateWeightedPoolSDKType {
   force_gov_owner: boolean;
   admins: string[];
   pause_allow_list: string[];
+  swap_fee_update_params?: SwapFeeUpdateParamsSDKType;
 }
 export interface MsgCreateWeightedPoolResponse {
   poolId: bigint;
@@ -535,7 +540,9 @@ export interface MsgCreateWeightedPoolResponseSDKType {
 export interface MsgUpdateSwapFee {
   creator: string;
   poolId: bigint;
-  swapFeeRatio: string;
+  /** if update params is nil, this is the actual swap fee, o.w. you need to apply gradual update between this start and the end in params. */
+  startSwapFeeRatio: string;
+  gradualUpdateParams?: SwapFeeUpdateParams;
 }
 export interface MsgUpdateSwapFeeProtoMsg {
   typeUrl: "/pryzm.amm.v1.MsgUpdateSwapFee";
@@ -544,7 +551,9 @@ export interface MsgUpdateSwapFeeProtoMsg {
 export interface MsgUpdateSwapFeeAmino {
   creator?: string;
   pool_id: string;
-  swap_fee_ratio?: string;
+  /** if update params is nil, this is the actual swap fee, o.w. you need to apply gradual update between this start and the end in params. */
+  start_swap_fee_ratio?: string;
+  gradual_update_params?: SwapFeeUpdateParamsAmino;
 }
 export interface MsgUpdateSwapFeeAminoMsg {
   type: "pryzm/amm/v1/UpdateSwapFee";
@@ -553,7 +562,8 @@ export interface MsgUpdateSwapFeeAminoMsg {
 export interface MsgUpdateSwapFeeSDKType {
   creator: string;
   pool_id: bigint;
-  swap_fee_ratio: string;
+  start_swap_fee_ratio: string;
+  gradual_update_params?: SwapFeeUpdateParamsSDKType;
 }
 export interface MsgUpdateSwapFeeResponse {}
 export interface MsgUpdateSwapFeeResponseProtoMsg {
@@ -3957,27 +3967,28 @@ function createBaseMsgCreateWeightedPool(): MsgCreateWeightedPool {
   return {
     creator: "",
     name: "",
-    swapFeeRatio: "",
+    startSwapFeeRatio: "",
     pauseWindowDurationMillis: BigInt(0),
     pauseBufferDurationMillis: BigInt(0),
     tokens: [],
     initializationAllowList: [],
     forceGovOwner: false,
     admins: [],
-    pauseAllowList: []
+    pauseAllowList: [],
+    swapFeeUpdateParams: undefined
   };
 }
 export const MsgCreateWeightedPool = {
   typeUrl: "/pryzm.amm.v1.MsgCreateWeightedPool",
   aminoType: "pryzm/amm/v1/CreateWeightedPool",
   is(o: any): o is MsgCreateWeightedPool {
-    return o && (o.$typeUrl === MsgCreateWeightedPool.typeUrl || typeof o.creator === "string" && typeof o.name === "string" && typeof o.swapFeeRatio === "string" && typeof o.pauseWindowDurationMillis === "bigint" && typeof o.pauseBufferDurationMillis === "bigint" && Array.isArray(o.tokens) && (!o.tokens.length || CreateWeightedPoolToken.is(o.tokens[0])) && Array.isArray(o.initializationAllowList) && (!o.initializationAllowList.length || typeof o.initializationAllowList[0] === "string") && typeof o.forceGovOwner === "boolean" && Array.isArray(o.admins) && (!o.admins.length || typeof o.admins[0] === "string") && Array.isArray(o.pauseAllowList) && (!o.pauseAllowList.length || typeof o.pauseAllowList[0] === "string"));
+    return o && (o.$typeUrl === MsgCreateWeightedPool.typeUrl || typeof o.creator === "string" && typeof o.name === "string" && typeof o.startSwapFeeRatio === "string" && typeof o.pauseWindowDurationMillis === "bigint" && typeof o.pauseBufferDurationMillis === "bigint" && Array.isArray(o.tokens) && (!o.tokens.length || CreateWeightedPoolToken.is(o.tokens[0])) && Array.isArray(o.initializationAllowList) && (!o.initializationAllowList.length || typeof o.initializationAllowList[0] === "string") && typeof o.forceGovOwner === "boolean" && Array.isArray(o.admins) && (!o.admins.length || typeof o.admins[0] === "string") && Array.isArray(o.pauseAllowList) && (!o.pauseAllowList.length || typeof o.pauseAllowList[0] === "string"));
   },
   isSDK(o: any): o is MsgCreateWeightedPoolSDKType {
-    return o && (o.$typeUrl === MsgCreateWeightedPool.typeUrl || typeof o.creator === "string" && typeof o.name === "string" && typeof o.swap_fee_ratio === "string" && typeof o.pause_window_duration_millis === "bigint" && typeof o.pause_buffer_duration_millis === "bigint" && Array.isArray(o.tokens) && (!o.tokens.length || CreateWeightedPoolToken.isSDK(o.tokens[0])) && Array.isArray(o.initialization_allow_list) && (!o.initialization_allow_list.length || typeof o.initialization_allow_list[0] === "string") && typeof o.force_gov_owner === "boolean" && Array.isArray(o.admins) && (!o.admins.length || typeof o.admins[0] === "string") && Array.isArray(o.pause_allow_list) && (!o.pause_allow_list.length || typeof o.pause_allow_list[0] === "string"));
+    return o && (o.$typeUrl === MsgCreateWeightedPool.typeUrl || typeof o.creator === "string" && typeof o.name === "string" && typeof o.start_swap_fee_ratio === "string" && typeof o.pause_window_duration_millis === "bigint" && typeof o.pause_buffer_duration_millis === "bigint" && Array.isArray(o.tokens) && (!o.tokens.length || CreateWeightedPoolToken.isSDK(o.tokens[0])) && Array.isArray(o.initialization_allow_list) && (!o.initialization_allow_list.length || typeof o.initialization_allow_list[0] === "string") && typeof o.force_gov_owner === "boolean" && Array.isArray(o.admins) && (!o.admins.length || typeof o.admins[0] === "string") && Array.isArray(o.pause_allow_list) && (!o.pause_allow_list.length || typeof o.pause_allow_list[0] === "string"));
   },
   isAmino(o: any): o is MsgCreateWeightedPoolAmino {
-    return o && (o.$typeUrl === MsgCreateWeightedPool.typeUrl || typeof o.creator === "string" && typeof o.name === "string" && typeof o.swap_fee_ratio === "string" && typeof o.pause_window_duration_millis === "bigint" && typeof o.pause_buffer_duration_millis === "bigint" && Array.isArray(o.tokens) && (!o.tokens.length || CreateWeightedPoolToken.isAmino(o.tokens[0])) && Array.isArray(o.initialization_allow_list) && (!o.initialization_allow_list.length || typeof o.initialization_allow_list[0] === "string") && typeof o.force_gov_owner === "boolean" && Array.isArray(o.admins) && (!o.admins.length || typeof o.admins[0] === "string") && Array.isArray(o.pause_allow_list) && (!o.pause_allow_list.length || typeof o.pause_allow_list[0] === "string"));
+    return o && (o.$typeUrl === MsgCreateWeightedPool.typeUrl || typeof o.creator === "string" && typeof o.name === "string" && typeof o.start_swap_fee_ratio === "string" && typeof o.pause_window_duration_millis === "bigint" && typeof o.pause_buffer_duration_millis === "bigint" && Array.isArray(o.tokens) && (!o.tokens.length || CreateWeightedPoolToken.isAmino(o.tokens[0])) && Array.isArray(o.initialization_allow_list) && (!o.initialization_allow_list.length || typeof o.initialization_allow_list[0] === "string") && typeof o.force_gov_owner === "boolean" && Array.isArray(o.admins) && (!o.admins.length || typeof o.admins[0] === "string") && Array.isArray(o.pause_allow_list) && (!o.pause_allow_list.length || typeof o.pause_allow_list[0] === "string"));
   },
   encode(message: MsgCreateWeightedPool, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.creator !== "") {
@@ -3986,8 +3997,8 @@ export const MsgCreateWeightedPool = {
     if (message.name !== "") {
       writer.uint32(18).string(message.name);
     }
-    if (message.swapFeeRatio !== "") {
-      writer.uint32(26).string(Decimal.fromUserInput(message.swapFeeRatio, 18).atomics);
+    if (message.startSwapFeeRatio !== "") {
+      writer.uint32(26).string(Decimal.fromUserInput(message.startSwapFeeRatio, 18).atomics);
     }
     if (message.pauseWindowDurationMillis !== BigInt(0)) {
       writer.uint32(32).int64(message.pauseWindowDurationMillis);
@@ -4010,6 +4021,9 @@ export const MsgCreateWeightedPool = {
     for (const v of message.pauseAllowList) {
       writer.uint32(122).string(v!);
     }
+    if (message.swapFeeUpdateParams !== undefined) {
+      SwapFeeUpdateParams.encode(message.swapFeeUpdateParams, writer.uint32(130).fork()).ldelim();
+    }
     return writer;
   },
   decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): MsgCreateWeightedPool {
@@ -4026,7 +4040,7 @@ export const MsgCreateWeightedPool = {
           message.name = reader.string();
           break;
         case 3:
-          message.swapFeeRatio = Decimal.fromAtomics(reader.string(), 18).toString();
+          message.startSwapFeeRatio = Decimal.fromAtomics(reader.string(), 18).toString();
           break;
         case 4:
           message.pauseWindowDurationMillis = reader.int64();
@@ -4049,6 +4063,9 @@ export const MsgCreateWeightedPool = {
         case 15:
           message.pauseAllowList.push(reader.string());
           break;
+        case 16:
+          message.swapFeeUpdateParams = SwapFeeUpdateParams.decode(reader, reader.uint32(), useInterfaces);
+          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -4060,21 +4077,22 @@ export const MsgCreateWeightedPool = {
     return {
       creator: isSet(object.creator) ? String(object.creator) : "",
       name: isSet(object.name) ? String(object.name) : "",
-      swapFeeRatio: isSet(object.swapFeeRatio) ? String(object.swapFeeRatio) : "",
+      startSwapFeeRatio: isSet(object.startSwapFeeRatio) ? String(object.startSwapFeeRatio) : "",
       pauseWindowDurationMillis: isSet(object.pauseWindowDurationMillis) ? BigInt(object.pauseWindowDurationMillis.toString()) : BigInt(0),
       pauseBufferDurationMillis: isSet(object.pauseBufferDurationMillis) ? BigInt(object.pauseBufferDurationMillis.toString()) : BigInt(0),
       tokens: Array.isArray(object?.tokens) ? object.tokens.map((e: any) => CreateWeightedPoolToken.fromJSON(e)) : [],
       initializationAllowList: Array.isArray(object?.initializationAllowList) ? object.initializationAllowList.map((e: any) => String(e)) : [],
       forceGovOwner: isSet(object.forceGovOwner) ? Boolean(object.forceGovOwner) : false,
       admins: Array.isArray(object?.admins) ? object.admins.map((e: any) => String(e)) : [],
-      pauseAllowList: Array.isArray(object?.pauseAllowList) ? object.pauseAllowList.map((e: any) => String(e)) : []
+      pauseAllowList: Array.isArray(object?.pauseAllowList) ? object.pauseAllowList.map((e: any) => String(e)) : [],
+      swapFeeUpdateParams: isSet(object.swapFeeUpdateParams) ? SwapFeeUpdateParams.fromJSON(object.swapFeeUpdateParams) : undefined
     };
   },
   toJSON(message: MsgCreateWeightedPool): unknown {
     const obj: any = {};
     message.creator !== undefined && (obj.creator = message.creator);
     message.name !== undefined && (obj.name = message.name);
-    message.swapFeeRatio !== undefined && (obj.swapFeeRatio = message.swapFeeRatio);
+    message.startSwapFeeRatio !== undefined && (obj.startSwapFeeRatio = message.startSwapFeeRatio);
     message.pauseWindowDurationMillis !== undefined && (obj.pauseWindowDurationMillis = (message.pauseWindowDurationMillis || BigInt(0)).toString());
     message.pauseBufferDurationMillis !== undefined && (obj.pauseBufferDurationMillis = (message.pauseBufferDurationMillis || BigInt(0)).toString());
     if (message.tokens) {
@@ -4098,13 +4116,14 @@ export const MsgCreateWeightedPool = {
     } else {
       obj.pauseAllowList = [];
     }
+    message.swapFeeUpdateParams !== undefined && (obj.swapFeeUpdateParams = message.swapFeeUpdateParams ? SwapFeeUpdateParams.toJSON(message.swapFeeUpdateParams) : undefined);
     return obj;
   },
   fromPartial(object: Partial<MsgCreateWeightedPool>): MsgCreateWeightedPool {
     const message = createBaseMsgCreateWeightedPool();
     message.creator = object.creator ?? "";
     message.name = object.name ?? "";
-    message.swapFeeRatio = object.swapFeeRatio ?? "";
+    message.startSwapFeeRatio = object.startSwapFeeRatio ?? "";
     message.pauseWindowDurationMillis = object.pauseWindowDurationMillis !== undefined && object.pauseWindowDurationMillis !== null ? BigInt(object.pauseWindowDurationMillis.toString()) : BigInt(0);
     message.pauseBufferDurationMillis = object.pauseBufferDurationMillis !== undefined && object.pauseBufferDurationMillis !== null ? BigInt(object.pauseBufferDurationMillis.toString()) : BigInt(0);
     message.tokens = object.tokens?.map(e => CreateWeightedPoolToken.fromPartial(e)) || [];
@@ -4112,6 +4131,7 @@ export const MsgCreateWeightedPool = {
     message.forceGovOwner = object.forceGovOwner ?? false;
     message.admins = object.admins?.map(e => e) || [];
     message.pauseAllowList = object.pauseAllowList?.map(e => e) || [];
+    message.swapFeeUpdateParams = object.swapFeeUpdateParams !== undefined && object.swapFeeUpdateParams !== null ? SwapFeeUpdateParams.fromPartial(object.swapFeeUpdateParams) : undefined;
     return message;
   },
   fromAmino(object: MsgCreateWeightedPoolAmino): MsgCreateWeightedPool {
@@ -4122,8 +4142,8 @@ export const MsgCreateWeightedPool = {
     if (object.name !== undefined && object.name !== null) {
       message.name = object.name;
     }
-    if (object.swap_fee_ratio !== undefined && object.swap_fee_ratio !== null) {
-      message.swapFeeRatio = object.swap_fee_ratio;
+    if (object.start_swap_fee_ratio !== undefined && object.start_swap_fee_ratio !== null) {
+      message.startSwapFeeRatio = object.start_swap_fee_ratio;
     }
     if (object.pause_window_duration_millis !== undefined && object.pause_window_duration_millis !== null) {
       message.pauseWindowDurationMillis = BigInt(object.pause_window_duration_millis);
@@ -4138,13 +4158,16 @@ export const MsgCreateWeightedPool = {
     }
     message.admins = object.admins?.map(e => e) || [];
     message.pauseAllowList = object.pause_allow_list?.map(e => e) || [];
+    if (object.swap_fee_update_params !== undefined && object.swap_fee_update_params !== null) {
+      message.swapFeeUpdateParams = SwapFeeUpdateParams.fromAmino(object.swap_fee_update_params);
+    }
     return message;
   },
   toAmino(message: MsgCreateWeightedPool, useInterfaces: boolean = true): MsgCreateWeightedPoolAmino {
     const obj: any = {};
     obj.creator = message.creator === "" ? undefined : message.creator;
     obj.name = message.name === "" ? undefined : message.name;
-    obj.swap_fee_ratio = padDecimal(message.swapFeeRatio) === "" ? undefined : padDecimal(message.swapFeeRatio);
+    obj.start_swap_fee_ratio = padDecimal(message.startSwapFeeRatio) === "" ? undefined : padDecimal(message.startSwapFeeRatio);
     obj.pause_window_duration_millis = message.pauseWindowDurationMillis ? message.pauseWindowDurationMillis.toString() : undefined;
     obj.pause_buffer_duration_millis = message.pauseBufferDurationMillis ? message.pauseBufferDurationMillis.toString() : undefined;
     if (message.tokens) {
@@ -4168,6 +4191,7 @@ export const MsgCreateWeightedPool = {
     } else {
       obj.pause_allow_list = message.pauseAllowList;
     }
+    obj.swap_fee_update_params = message.swapFeeUpdateParams ? SwapFeeUpdateParams.toAmino(message.swapFeeUpdateParams, useInterfaces) : undefined;
     return obj;
   },
   fromAminoMsg(object: MsgCreateWeightedPoolAminoMsg): MsgCreateWeightedPool {
@@ -4281,20 +4305,21 @@ function createBaseMsgUpdateSwapFee(): MsgUpdateSwapFee {
   return {
     creator: "",
     poolId: BigInt(0),
-    swapFeeRatio: ""
+    startSwapFeeRatio: "",
+    gradualUpdateParams: undefined
   };
 }
 export const MsgUpdateSwapFee = {
   typeUrl: "/pryzm.amm.v1.MsgUpdateSwapFee",
   aminoType: "pryzm/amm/v1/UpdateSwapFee",
   is(o: any): o is MsgUpdateSwapFee {
-    return o && (o.$typeUrl === MsgUpdateSwapFee.typeUrl || typeof o.creator === "string" && typeof o.poolId === "bigint" && typeof o.swapFeeRatio === "string");
+    return o && (o.$typeUrl === MsgUpdateSwapFee.typeUrl || typeof o.creator === "string" && typeof o.poolId === "bigint" && typeof o.startSwapFeeRatio === "string");
   },
   isSDK(o: any): o is MsgUpdateSwapFeeSDKType {
-    return o && (o.$typeUrl === MsgUpdateSwapFee.typeUrl || typeof o.creator === "string" && typeof o.pool_id === "bigint" && typeof o.swap_fee_ratio === "string");
+    return o && (o.$typeUrl === MsgUpdateSwapFee.typeUrl || typeof o.creator === "string" && typeof o.pool_id === "bigint" && typeof o.start_swap_fee_ratio === "string");
   },
   isAmino(o: any): o is MsgUpdateSwapFeeAmino {
-    return o && (o.$typeUrl === MsgUpdateSwapFee.typeUrl || typeof o.creator === "string" && typeof o.pool_id === "bigint" && typeof o.swap_fee_ratio === "string");
+    return o && (o.$typeUrl === MsgUpdateSwapFee.typeUrl || typeof o.creator === "string" && typeof o.pool_id === "bigint" && typeof o.start_swap_fee_ratio === "string");
   },
   encode(message: MsgUpdateSwapFee, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.creator !== "") {
@@ -4303,8 +4328,11 @@ export const MsgUpdateSwapFee = {
     if (message.poolId !== BigInt(0)) {
       writer.uint32(16).uint64(message.poolId);
     }
-    if (message.swapFeeRatio !== "") {
-      writer.uint32(26).string(Decimal.fromUserInput(message.swapFeeRatio, 18).atomics);
+    if (message.startSwapFeeRatio !== "") {
+      writer.uint32(26).string(Decimal.fromUserInput(message.startSwapFeeRatio, 18).atomics);
+    }
+    if (message.gradualUpdateParams !== undefined) {
+      SwapFeeUpdateParams.encode(message.gradualUpdateParams, writer.uint32(34).fork()).ldelim();
     }
     return writer;
   },
@@ -4322,7 +4350,10 @@ export const MsgUpdateSwapFee = {
           message.poolId = reader.uint64();
           break;
         case 3:
-          message.swapFeeRatio = Decimal.fromAtomics(reader.string(), 18).toString();
+          message.startSwapFeeRatio = Decimal.fromAtomics(reader.string(), 18).toString();
+          break;
+        case 4:
+          message.gradualUpdateParams = SwapFeeUpdateParams.decode(reader, reader.uint32(), useInterfaces);
           break;
         default:
           reader.skipType(tag & 7);
@@ -4335,21 +4366,24 @@ export const MsgUpdateSwapFee = {
     return {
       creator: isSet(object.creator) ? String(object.creator) : "",
       poolId: isSet(object.poolId) ? BigInt(object.poolId.toString()) : BigInt(0),
-      swapFeeRatio: isSet(object.swapFeeRatio) ? String(object.swapFeeRatio) : ""
+      startSwapFeeRatio: isSet(object.startSwapFeeRatio) ? String(object.startSwapFeeRatio) : "",
+      gradualUpdateParams: isSet(object.gradualUpdateParams) ? SwapFeeUpdateParams.fromJSON(object.gradualUpdateParams) : undefined
     };
   },
   toJSON(message: MsgUpdateSwapFee): unknown {
     const obj: any = {};
     message.creator !== undefined && (obj.creator = message.creator);
     message.poolId !== undefined && (obj.poolId = (message.poolId || BigInt(0)).toString());
-    message.swapFeeRatio !== undefined && (obj.swapFeeRatio = message.swapFeeRatio);
+    message.startSwapFeeRatio !== undefined && (obj.startSwapFeeRatio = message.startSwapFeeRatio);
+    message.gradualUpdateParams !== undefined && (obj.gradualUpdateParams = message.gradualUpdateParams ? SwapFeeUpdateParams.toJSON(message.gradualUpdateParams) : undefined);
     return obj;
   },
   fromPartial(object: Partial<MsgUpdateSwapFee>): MsgUpdateSwapFee {
     const message = createBaseMsgUpdateSwapFee();
     message.creator = object.creator ?? "";
     message.poolId = object.poolId !== undefined && object.poolId !== null ? BigInt(object.poolId.toString()) : BigInt(0);
-    message.swapFeeRatio = object.swapFeeRatio ?? "";
+    message.startSwapFeeRatio = object.startSwapFeeRatio ?? "";
+    message.gradualUpdateParams = object.gradualUpdateParams !== undefined && object.gradualUpdateParams !== null ? SwapFeeUpdateParams.fromPartial(object.gradualUpdateParams) : undefined;
     return message;
   },
   fromAmino(object: MsgUpdateSwapFeeAmino): MsgUpdateSwapFee {
@@ -4360,8 +4394,11 @@ export const MsgUpdateSwapFee = {
     if (object.pool_id !== undefined && object.pool_id !== null) {
       message.poolId = BigInt(object.pool_id);
     }
-    if (object.swap_fee_ratio !== undefined && object.swap_fee_ratio !== null) {
-      message.swapFeeRatio = object.swap_fee_ratio;
+    if (object.start_swap_fee_ratio !== undefined && object.start_swap_fee_ratio !== null) {
+      message.startSwapFeeRatio = object.start_swap_fee_ratio;
+    }
+    if (object.gradual_update_params !== undefined && object.gradual_update_params !== null) {
+      message.gradualUpdateParams = SwapFeeUpdateParams.fromAmino(object.gradual_update_params);
     }
     return message;
   },
@@ -4369,7 +4406,8 @@ export const MsgUpdateSwapFee = {
     const obj: any = {};
     obj.creator = message.creator === "" ? undefined : message.creator;
     obj.pool_id = message.poolId ? message.poolId.toString() : undefined;
-    obj.swap_fee_ratio = padDecimal(message.swapFeeRatio) === "" ? undefined : padDecimal(message.swapFeeRatio);
+    obj.start_swap_fee_ratio = padDecimal(message.startSwapFeeRatio) === "" ? undefined : padDecimal(message.startSwapFeeRatio);
+    obj.gradual_update_params = message.gradualUpdateParams ? SwapFeeUpdateParams.toAmino(message.gradualUpdateParams, useInterfaces) : undefined;
     return obj;
   },
   fromAminoMsg(object: MsgUpdateSwapFeeAminoMsg): MsgUpdateSwapFee {
