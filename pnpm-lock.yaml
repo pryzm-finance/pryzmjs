@@ -20,6 +20,9 @@ importers:
       '@cosmjs/tendermint-rpc':
         specifier: 0.32.4
         version: 0.32.4
+      '@cosmology/lcd':
+        specifier: ^0.14.0
+        version: 0.14.0
       '@improbable-eng/grpc-web':
         specifier: 0.15.0
         version: 0.15.0(google-protobuf@3.21.2)
@@ -29,9 +32,6 @@ importers:
       '@keplr-wallet/unit':
         specifier: ^0.12.53
         version: 0.12.108
-      '@refractedlabs/cosmology-lcd-fork':
-        specifier: 0.13.7
-        version: 0.13.7
       '@refractedlabs/internal-js-utils':
         specifier: 0.6.5
         version: 0.6.5
@@ -733,15 +733,18 @@ packages:
   '@cosmjs/utils@0.32.4':
     resolution: {integrity: sha512-D1Yc+Zy8oL/hkUkFUL/bwxvuDBzRGpc4cF7/SkdhxX4iHpSLgdOuTt1mhCh9+kl6NQREy9t7SYZ6xeW5gFe60w==}
 
+  '@cosmology/lcd@0.14.0':
+    resolution: {integrity: sha512-qy/q56NWpoQfyUX3nl80YjxKMf70QKKQ1Rh9EqJO9OMysj48UeLPcxEWwv0jfOBzPsCX/Jj8Ha6Sb1McFVSk9g==}
+
   '@cosmology/protobufjs@6.11.6':
     resolution: {integrity: sha512-k1opGC9CTX5vD2447pUqLmleVv0Kb8RasBUxkZHudVOvuXs2qAAGONmMIEGRCROKTodhTY9fdTnGU2lCZqAwNw==}
     hasBin: true
 
-  '@cosmology/types@1.8.1':
-    resolution: {integrity: sha512-M/4HZZu0mNwwzK7ITa5A4biVKGVk8EtaQJlHuuctygKvjKcvmmAglna754o9CdkfPEyUXBzYnLU6q7UIFgcO+g==}
+  '@cosmology/types@1.9.0':
+    resolution: {integrity: sha512-+I9fyxge41HXlcVCS8uVE6xdqkOekO2fJTTWODZWSaA01HZI77ggvlvSJK1XrlEwNqnBAlnrn5q7yw+zEzIuJw==}
 
-  '@cosmology/utils@1.8.1':
-    resolution: {integrity: sha512-PrZffk81GQ0pJHH7kRJi9PZVt4qWa/9V3mbUyc3vXIWqeAk1bQ+5O5MLKirtRj4cEM3zt5WnDUISPCrt4VIQkA==}
+  '@cosmology/utils@1.8.3':
+    resolution: {integrity: sha512-l5YUehiRfua3EoncMm8iREbcynl7fF0QrmDJi6yQTPIocayr57fbKuAXl5HWLyfPG7Qn//qp9EMoHn4CQyQjXA==}
 
   '@cosmwasm/ts-codegen@0.34.0':
     resolution: {integrity: sha512-Mt/aYj0be9GnA51Arysqr9L8KQNWUJJHoJvtru7hkHmukPSewZDilwHCOJAaehk5gjsP7LFey2o2KEdfzkANhA==}
@@ -866,9 +869,6 @@ packages:
 
   '@refractedlabs/ast@1.4.1-rc23':
     resolution: {integrity: sha512-iyUEVHI+rWuhaMFV7Tzt7Kxo8XDoy41MfT7/HXZnX1krEcTsHTe+WYUs2PALYswOosstLkbSrRQFmOJbPBcVPg==}
-
-  '@refractedlabs/cosmology-lcd-fork@0.13.7':
-    resolution: {integrity: sha512-5DEQy8DHzSIsTfl+amlISteWCWmAokWC1pJkMit8H16Mx1ycaDfSrvREHHJlB5bfOkTkc3YHMmd8e8izihEHng==}
 
   '@refractedlabs/internal-js-utils@0.6.5':
     resolution: {integrity: sha512-6H20Wt+PXvecWxWCs3yKjuEpAvFlwHV7BQTwLcC37nOWQnKTdHFevLYleBcITAJBeyss6T8XxLrt2GnMn9CoCA==}
@@ -1018,11 +1018,11 @@ packages:
   asynckit@0.4.0:
     resolution: {integrity: sha512-Oei9OH4tRh0YqU3GxhX79dM/mwVgvbZJaSNaRk+bshkj0S5cfHcgYakreBjrHwatXKbz+IoIdYLxrKim2MjW0Q==}
 
-  axios@1.6.0:
-    resolution: {integrity: sha512-EZ1DYihju9pwVB+jg67ogm+Tmqc6JmhamRN6I4Zt8DfZu5lbcQGw3ozH9lFejSJgs/ibaef3A9PMXPLeefFGJg==}
-
   axios@1.7.2:
     resolution: {integrity: sha512-2A8QhOMrbomlDuiLeK9XibIBzuHeRcqqNOHp0Cyp5EoJ1IFDh+XZH3A6BkXtv0K4gFGCI0Y4BM7B1wOEi0Rmgw==}
+
+  axios@1.7.4:
+    resolution: {integrity: sha512-DukmaFRnY6AzAALSH4J2M3k6PkaC+MfaAGdEERRWcC9q3/TWQwLpHR8ZRLKTdQ3aBDL64EdluRDjJqKw+BPZEw==}
 
   babel-plugin-istanbul@6.1.1:
     resolution: {integrity: sha512-Y1IQok9821cC9onCx5otgFfRm7Lm+I+wwxOx738M/WLPZ9Q42m4IG5W0FNX8WLL2gYMZo3JkuXIH2DOpWM+qwA==}
@@ -2203,8 +2203,8 @@ snapshots:
       '@babel/helpers': 7.24.7
       '@babel/parser': 7.24.7
       '@babel/template': 7.24.7
-      '@babel/traverse': 7.23.6
-      '@babel/types': 7.23.6
+      '@babel/traverse': 7.24.7
+      '@babel/types': 7.24.7
       convert-source-map: 1.9.0
       debug: 4.3.5
       gensync: 1.0.0-beta.2
@@ -2215,7 +2215,7 @@ snapshots:
 
   '@babel/generator@7.18.12':
     dependencies:
-      '@babel/types': 7.23.6
+      '@babel/types': 7.24.7
       '@jridgewell/gen-mapping': 0.3.5
       jsesc: 2.5.2
 
@@ -2388,11 +2388,11 @@ snapshots:
 
   '@babel/parser@7.18.11':
     dependencies:
-      '@babel/types': 7.23.6
+      '@babel/types': 7.24.7
 
   '@babel/parser@7.24.7':
     dependencies:
-      '@babel/types': 7.23.6
+      '@babel/types': 7.24.7
 
   '@babel/plugin-bugfix-safari-id-destructuring-collision-in-function-expression@7.24.7(@babel/core@7.18.10)':
     dependencies:
@@ -2925,7 +2925,7 @@ snapshots:
       '@babel/plugin-transform-unicode-escapes': 7.24.7(@babel/core@7.18.10)
       '@babel/plugin-transform-unicode-regex': 7.24.7(@babel/core@7.18.10)
       '@babel/preset-modules': 0.1.6(@babel/core@7.18.10)
-      '@babel/types': 7.23.6
+      '@babel/types': 7.24.7
       babel-plugin-polyfill-corejs2: 0.3.3(@babel/core@7.18.10)
       babel-plugin-polyfill-corejs3: 0.5.3(@babel/core@7.18.10)
       babel-plugin-polyfill-regenerator: 0.4.1(@babel/core@7.18.10)
@@ -2940,7 +2940,7 @@ snapshots:
       '@babel/helper-plugin-utils': 7.24.7
       '@babel/plugin-proposal-unicode-property-regex': 7.18.6(@babel/core@7.18.10)
       '@babel/plugin-transform-dotall-regex': 7.24.7(@babel/core@7.18.10)
-      '@babel/types': 7.23.6
+      '@babel/types': 7.24.7
       esutils: 2.0.3
 
   '@babel/preset-typescript@7.24.7(@babel/core@7.18.10)':
@@ -2975,7 +2975,7 @@ snapshots:
       '@babel/helper-hoist-variables': 7.24.7
       '@babel/helper-split-export-declaration': 7.24.7
       '@babel/parser': 7.24.7
-      '@babel/types': 7.23.6
+      '@babel/types': 7.24.7
       debug: 4.3.5
       globals: 11.12.0
     transitivePeerDependencies:
@@ -2990,7 +2990,7 @@ snapshots:
       '@babel/helper-hoist-variables': 7.24.7
       '@babel/helper-split-export-declaration': 7.24.7
       '@babel/parser': 7.24.7
-      '@babel/types': 7.23.6
+      '@babel/types': 7.24.7
       debug: 4.3.5
       globals: 11.12.0
     transitivePeerDependencies:
@@ -3148,6 +3148,12 @@ snapshots:
 
   '@cosmjs/utils@0.32.4': {}
 
+  '@cosmology/lcd@0.14.0':
+    dependencies:
+      axios: 1.7.4
+    transitivePeerDependencies:
+      - debug
+
   '@cosmology/protobufjs@6.11.6':
     dependencies:
       '@protobufjs/aspromise': 1.1.2
@@ -3164,14 +3170,14 @@ snapshots:
       '@types/node': 20.14.10
       long: 4.0.0
 
-  '@cosmology/types@1.8.1':
+  '@cosmology/types@1.9.0':
     dependencies:
       case: 1.6.3
       fast-json-patch: 3.1.1
 
-  '@cosmology/utils@1.8.1':
+  '@cosmology/utils@1.8.3':
     dependencies:
-      '@cosmology/types': 1.8.1
+      '@cosmology/types': 1.9.0
       dotty: 0.1.2
 
   '@cosmwasm/ts-codegen@0.34.0':
@@ -3366,16 +3372,10 @@ snapshots:
     dependencies:
       '@babel/parser': 7.24.7
       '@babel/types': 7.23.6
-      '@cosmology/types': 1.8.1
-      '@cosmology/utils': 1.8.1
+      '@cosmology/types': 1.9.0
+      '@cosmology/utils': 1.8.3
       case: 1.6.3
       dotty: 0.1.2
-
-  '@refractedlabs/cosmology-lcd-fork@0.13.7':
-    dependencies:
-      axios: 1.6.0
-    transitivePeerDependencies:
-      - debug
 
   '@refractedlabs/internal-js-utils@0.6.5':
     dependencies:
@@ -3396,8 +3396,8 @@ snapshots:
   '@refractedlabs/proto-parser@1.4.1-rc1':
     dependencies:
       '@cosmology/protobufjs': 6.11.6
-      '@cosmology/types': 1.8.1
-      '@cosmology/utils': 1.8.1
+      '@cosmology/types': 1.9.0
+      '@cosmology/utils': 1.8.3
       dotty: 0.1.2
       glob: 8.0.3
       minimatch: 5.1.0
@@ -3409,8 +3409,8 @@ snapshots:
       '@babel/parser': 7.24.7
       '@babel/traverse': 7.23.6
       '@babel/types': 7.23.6
-      '@cosmology/types': 1.8.1
-      '@cosmology/utils': 1.8.1
+      '@cosmology/types': 1.9.0
+      '@cosmology/utils': 1.8.3
       '@cosmwasm/ts-codegen': 0.34.0
       '@keplr-wallet/unit': 0.12.108
       '@refractedlabs/ast': 1.4.1-rc23
@@ -3540,7 +3540,7 @@ snapshots:
 
   asynckit@0.4.0: {}
 
-  axios@1.6.0:
+  axios@1.7.2:
     dependencies:
       follow-redirects: 1.15.6
       form-data: 4.0.0
@@ -3548,7 +3548,7 @@ snapshots:
     transitivePeerDependencies:
       - debug
 
-  axios@1.7.2:
+  axios@1.7.4:
     dependencies:
       follow-redirects: 1.15.6
       form-data: 4.0.0

@@ -1,4 +1,4 @@
-import { LCDClient } from "@refractedlabs/cosmology-lcd-fork";
+import { LCDClient } from "@cosmology/lcd";
 import { QueryGetAssetStateRequest, QueryGetAssetStateResponseSDKType, QueryGetCPExchangeRateRequest, QueryGetCPExchangeRateResponseSDKType, QuerySimulateRefractRequest, QuerySimulateRefractResponseSDKType, QuerySimulateRedeemRequest, QuerySimulateRedeemResponseSDKType } from "./query";
 export class LCDQueryClient {
   req: LCDClient;
