@@ -1,4 +1,4 @@
-import { PairMatchProposal, PairMatchProposalAmino, PairMatchProposalSDKType } from "./pair_match_proposal";
+import { PairMatchProposal, PairMatchProposalAmino, PairMatchProposalSDKType, MatchedPairSummary, MatchedPairSummaryAmino, MatchedPairSummarySDKType } from "../v1/pair_match_proposal";
 import { Coin, CoinAmino, CoinSDKType } from "../../../cosmos/base/v1beta1/coin";
 import { BinaryReader, BinaryWriter } from "../../../binary";
 import { isSet } from "../../../helpers";
@@ -41,6 +41,7 @@ export interface MsgProposeMatchSDKType {
 }
 export interface MsgProposeMatchResponse {
   proposerReward: Coin[];
+  matchedPairs: MatchedPairSummary[];
 }
 export interface MsgProposeMatchResponseProtoMsg {
   typeUrl: "/pryzm.amm.v2.MsgProposeMatchResponse";
@@ -48,6 +49,7 @@ export interface MsgProposeMatchResponseProtoMsg {
 }
 export interface MsgProposeMatchResponseAmino {
   proposer_reward?: CoinAmino[];
+  matched_pairs?: MatchedPairSummaryAmino[];
 }
 export interface MsgProposeMatchResponseAminoMsg {
   type: "/pryzm.amm.v2.MsgProposeMatchResponse";
@@ -55,6 +57,7 @@ export interface MsgProposeMatchResponseAminoMsg {
 }
 export interface MsgProposeMatchResponseSDKType {
   proposer_reward: CoinSDKType[];
+  matched_pairs: MatchedPairSummarySDKType[];
 }
 function createBaseMsgProposeMatch(): MsgProposeMatch {
   return {
@@ -209,23 +212,27 @@ GlobalDecoderRegistry.register(MsgProposeMatch.typeUrl, MsgProposeMatch);
 GlobalDecoderRegistry.registerAminoProtoMapping(MsgProposeMatch.aminoType, MsgProposeMatch.typeUrl);
 function createBaseMsgProposeMatchResponse(): MsgProposeMatchResponse {
   return {
-    proposerReward: []
+    proposerReward: [],
+    matchedPairs: []
   };
 }
 export const MsgProposeMatchResponse = {
   typeUrl: "/pryzm.amm.v2.MsgProposeMatchResponse",
   is(o: any): o is MsgProposeMatchResponse {
-    return o && (o.$typeUrl === MsgProposeMatchResponse.typeUrl || Array.isArray(o.proposerReward) && (!o.proposerReward.length || Coin.is(o.proposerReward[0])));
+    return o && (o.$typeUrl === MsgProposeMatchResponse.typeUrl || Array.isArray(o.proposerReward) && (!o.proposerReward.length || Coin.is(o.proposerReward[0])) && Array.isArray(o.matchedPairs) && (!o.matchedPairs.length || MatchedPairSummary.is(o.matchedPairs[0])));
   },
   isSDK(o: any): o is MsgProposeMatchResponseSDKType {
-    return o && (o.$typeUrl === MsgProposeMatchResponse.typeUrl || Array.isArray(o.proposer_reward) && (!o.proposer_reward.length || Coin.isSDK(o.proposer_reward[0])));
+    return o && (o.$typeUrl === MsgProposeMatchResponse.typeUrl || Array.isArray(o.proposer_reward) && (!o.proposer_reward.length || Coin.isSDK(o.proposer_reward[0])) && Array.isArray(o.matched_pairs) && (!o.matched_pairs.length || MatchedPairSummary.isSDK(o.matched_pairs[0])));
   },
   isAmino(o: any): o is MsgProposeMatchResponseAmino {
-    return o && (o.$typeUrl === MsgProposeMatchResponse.typeUrl || Array.isArray(o.proposer_reward) && (!o.proposer_reward.length || Coin.isAmino(o.proposer_reward[0])));
+    return o && (o.$typeUrl === MsgProposeMatchResponse.typeUrl || Array.isArray(o.proposer_reward) && (!o.proposer_reward.length || Coin.isAmino(o.proposer_reward[0])) && Array.isArray(o.matched_pairs) && (!o.matched_pairs.length || MatchedPairSummary.isAmino(o.matched_pairs[0])));
   },
   encode(message: MsgProposeMatchResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     for (const v of message.proposerReward) {
       Coin.encode(v!, writer.uint32(10).fork()).ldelim();
+    }
+    for (const v of message.matchedPairs) {
+      MatchedPairSummary.encode(v!, writer.uint32(18).fork()).ldelim();
     }
     return writer;
   },
@@ -239,6 +246,9 @@ export const MsgProposeMatchResponse = {
         case 1:
           message.proposerReward.push(Coin.decode(reader, reader.uint32(), useInterfaces));
           break;
+        case 2:
+          message.matchedPairs.push(MatchedPairSummary.decode(reader, reader.uint32(), useInterfaces));
+          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -248,7 +258,8 @@ export const MsgProposeMatchResponse = {
   },
   fromJSON(object: any): MsgProposeMatchResponse {
     return {
-      proposerReward: Array.isArray(object?.proposerReward) ? object.proposerReward.map((e: any) => Coin.fromJSON(e)) : []
+      proposerReward: Array.isArray(object?.proposerReward) ? object.proposerReward.map((e: any) => Coin.fromJSON(e)) : [],
+      matchedPairs: Array.isArray(object?.matchedPairs) ? object.matchedPairs.map((e: any) => MatchedPairSummary.fromJSON(e)) : []
     };
   },
   toJSON(message: MsgProposeMatchResponse): unknown {
@@ -258,16 +269,23 @@ export const MsgProposeMatchResponse = {
     } else {
       obj.proposerReward = [];
     }
+    if (message.matchedPairs) {
+      obj.matchedPairs = message.matchedPairs.map(e => e ? MatchedPairSummary.toJSON(e) : undefined);
+    } else {
+      obj.matchedPairs = [];
+    }
     return obj;
   },
   fromPartial(object: Partial<MsgProposeMatchResponse>): MsgProposeMatchResponse {
     const message = createBaseMsgProposeMatchResponse();
     message.proposerReward = object.proposerReward?.map(e => Coin.fromPartial(e)) || [];
+    message.matchedPairs = object.matchedPairs?.map(e => MatchedPairSummary.fromPartial(e)) || [];
     return message;
   },
   fromAmino(object: MsgProposeMatchResponseAmino): MsgProposeMatchResponse {
     const message = createBaseMsgProposeMatchResponse();
     message.proposerReward = object.proposer_reward?.map(e => Coin.fromAmino(e)) || [];
+    message.matchedPairs = object.matched_pairs?.map(e => MatchedPairSummary.fromAmino(e)) || [];
     return message;
   },
   toAmino(message: MsgProposeMatchResponse, useInterfaces: boolean = true): MsgProposeMatchResponseAmino {
@@ -276,6 +294,11 @@ export const MsgProposeMatchResponse = {
       obj.proposer_reward = message.proposerReward.map(e => e ? Coin.toAmino(e, useInterfaces) : undefined);
     } else {
       obj.proposer_reward = message.proposerReward;
+    }
+    if (message.matchedPairs) {
+      obj.matched_pairs = message.matchedPairs.map(e => e ? MatchedPairSummary.toAmino(e, useInterfaces) : undefined);
+    } else {
+      obj.matched_pairs = message.matchedPairs;
     }
     return obj;
   },

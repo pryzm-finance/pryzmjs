@@ -6,6 +6,7 @@ import "cosmos/base/v1beta1/coin.proto";
 import "cosmos/msg/v1/msg.proto";
 import "cosmos_proto/cosmos.proto";
 import "gogoproto/gogo.proto";
+import "pryzm/amm/v1/pair_match_proposal.proto";
 import "pryzm/amm/v2/pair_match_proposal.proto";
 
 option go_package = "github.com/pryzm-finance/pryzm-core/x/amm/types/v2";
@@ -41,4 +42,5 @@ message MsgProposeMatchResponse {
     (gogoproto.nullable) = false,
     (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins"
   ];
+  repeated pryzm.amm.v1.MatchedPairSummary matched_pairs = 2 [(gogoproto.nullable) = false];
 }

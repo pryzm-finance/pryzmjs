@@ -542,6 +542,7 @@ message MsgProposeMatchResponse {
     (gogoproto.nullable) = false,
     (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins"
   ];
+  repeated MatchedPairSummary matched_pairs = 2 [(gogoproto.nullable) = false];
 }
 
 message MsgSetCircuitBreakers {

@@ -8,6 +8,7 @@ import { YammConfiguration, YammConfigurationAmino, YammConfigurationSDKType } f
 import { Coin, CoinAmino, CoinSDKType } from "../../../cosmos/base/v1beta1/coin";
 import { ScheduleOrder, ScheduleOrderAmino, ScheduleOrderSDKType } from "./schedule_order";
 import { VirtualBalancePoolToken, VirtualBalancePoolTokenAmino, VirtualBalancePoolTokenSDKType } from "./virtual_balance_pool_token";
+import { MatchedPairSummary, MatchedPairSummaryAmino, MatchedPairSummarySDKType } from "./pair_match_proposal";
 import { ExitSummary, ExitSummaryAmino, ExitSummarySDKType, JoinSummary, JoinSummaryAmino, JoinSummarySDKType, SwapSummary, SwapSummaryAmino, SwapSummarySDKType, ExitType, JoinType, SwapType, SwapStep, SwapStepAmino, SwapStepSDKType, exitTypeFromJSON, exitTypeToJSON, joinTypeFromJSON, joinTypeToJSON, swapTypeFromJSON, swapTypeToJSON } from "./operations";
 import { OraclePricePair, OraclePricePairAmino, OraclePricePairSDKType } from "./oracle_price_pair";
 import { PendingTokenIntroduction, PendingTokenIntroductionAmino, PendingTokenIntroductionSDKType } from "./pending_token_introduction";
@@ -601,87 +602,9 @@ export interface EventExecuteOrdersForPairSDKType {
   sell_trade_output: string;
   buy_trade_output: string;
 }
-export interface EventExecuteMatchProposalOrder {
-  /**
-   * Note that if virtual=true, order_id is set to zero and should be ignored,
-   * otherwise we still might have order_id=0 referring to an actual order
-   */
-  orderId: bigint;
-  matchAmount: string;
-  outputAmount: string;
-  virtual: boolean;
-}
-export interface EventExecuteMatchProposalOrderProtoMsg {
-  typeUrl: "/pryzm.amm.v1.EventExecuteMatchProposalOrder";
-  value: Uint8Array;
-}
-export interface EventExecuteMatchProposalOrderAmino {
-  /**
-   * Note that if virtual=true, order_id is set to zero and should be ignored,
-   * otherwise we still might have order_id=0 referring to an actual order
-   */
-  order_id?: string;
-  match_amount?: string;
-  output_amount?: string;
-  virtual?: boolean;
-}
-export interface EventExecuteMatchProposalOrderAminoMsg {
-  type: "/pryzm.amm.v1.EventExecuteMatchProposalOrder";
-  value: EventExecuteMatchProposalOrderAmino;
-}
-export interface EventExecuteMatchProposalOrderSDKType {
-  order_id: bigint;
-  match_amount: string;
-  output_amount: string;
-  virtual: boolean;
-}
-export interface EventExecuteMatchProposalPair {
-  poolId: bigint;
-  tokenIn: string;
-  tokenOut: string;
-  whitelistedRoute: boolean;
-  buyPrice: string;
-  sellPrice: string;
-  buyOrders: EventExecuteMatchProposalOrder[];
-  sellOrders: EventExecuteMatchProposalOrder[];
-  buyMatchAmount: string;
-  sellMatchAmount: string;
-}
-export interface EventExecuteMatchProposalPairProtoMsg {
-  typeUrl: "/pryzm.amm.v1.EventExecuteMatchProposalPair";
-  value: Uint8Array;
-}
-export interface EventExecuteMatchProposalPairAmino {
-  pool_id?: string;
-  token_in?: string;
-  token_out?: string;
-  whitelisted_route?: boolean;
-  buy_price?: string;
-  sell_price?: string;
-  buy_orders?: EventExecuteMatchProposalOrderAmino[];
-  sell_orders?: EventExecuteMatchProposalOrderAmino[];
-  buy_match_amount?: string;
-  sell_match_amount?: string;
-}
-export interface EventExecuteMatchProposalPairAminoMsg {
-  type: "/pryzm.amm.v1.EventExecuteMatchProposalPair";
-  value: EventExecuteMatchProposalPairAmino;
-}
-export interface EventExecuteMatchProposalPairSDKType {
-  pool_id: bigint;
-  token_in: string;
-  token_out: string;
-  whitelisted_route: boolean;
-  buy_price: string;
-  sell_price: string;
-  buy_orders: EventExecuteMatchProposalOrderSDKType[];
-  sell_orders: EventExecuteMatchProposalOrderSDKType[];
-  buy_match_amount: string;
-  sell_match_amount: string;
-}
 export interface EventExecuteMatchProposal {
   proposer: string;
-  pairs: EventExecuteMatchProposalPair[];
+  pairs: MatchedPairSummary[];
   proposerReward: Coin[];
 }
 export interface EventExecuteMatchProposalProtoMsg {
@@ -690,7 +613,7 @@ export interface EventExecuteMatchProposalProtoMsg {
 }
 export interface EventExecuteMatchProposalAmino {
   proposer?: string;
-  pairs?: EventExecuteMatchProposalPairAmino[];
+  pairs?: MatchedPairSummaryAmino[];
   proposer_reward?: CoinAmino[];
 }
 export interface EventExecuteMatchProposalAminoMsg {
@@ -699,7 +622,7 @@ export interface EventExecuteMatchProposalAminoMsg {
 }
 export interface EventExecuteMatchProposalSDKType {
   proposer: string;
-  pairs: EventExecuteMatchProposalPairSDKType[];
+  pairs: MatchedPairSummarySDKType[];
   proposer_reward: CoinSDKType[];
 }
 export interface EventExitPool {
@@ -3659,352 +3582,6 @@ export const EventExecuteOrdersForPair = {
   }
 };
 GlobalDecoderRegistry.register(EventExecuteOrdersForPair.typeUrl, EventExecuteOrdersForPair);
-function createBaseEventExecuteMatchProposalOrder(): EventExecuteMatchProposalOrder {
-  return {
-    orderId: BigInt(0),
-    matchAmount: "",
-    outputAmount: "",
-    virtual: false
-  };
-}
-export const EventExecuteMatchProposalOrder = {
-  typeUrl: "/pryzm.amm.v1.EventExecuteMatchProposalOrder",
-  is(o: any): o is EventExecuteMatchProposalOrder {
-    return o && (o.$typeUrl === EventExecuteMatchProposalOrder.typeUrl || typeof o.orderId === "bigint" && typeof o.matchAmount === "string" && typeof o.outputAmount === "string" && typeof o.virtual === "boolean");
-  },
-  isSDK(o: any): o is EventExecuteMatchProposalOrderSDKType {
-    return o && (o.$typeUrl === EventExecuteMatchProposalOrder.typeUrl || typeof o.order_id === "bigint" && typeof o.match_amount === "string" && typeof o.output_amount === "string" && typeof o.virtual === "boolean");
-  },
-  isAmino(o: any): o is EventExecuteMatchProposalOrderAmino {
-    return o && (o.$typeUrl === EventExecuteMatchProposalOrder.typeUrl || typeof o.order_id === "bigint" && typeof o.match_amount === "string" && typeof o.output_amount === "string" && typeof o.virtual === "boolean");
-  },
-  encode(message: EventExecuteMatchProposalOrder, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
-    if (message.orderId !== BigInt(0)) {
-      writer.uint32(8).uint64(message.orderId);
-    }
-    if (message.matchAmount !== "") {
-      writer.uint32(26).string(message.matchAmount);
-    }
-    if (message.outputAmount !== "") {
-      writer.uint32(34).string(message.outputAmount);
-    }
-    if (message.virtual === true) {
-      writer.uint32(40).bool(message.virtual);
-    }
-    return writer;
-  },
-  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): EventExecuteMatchProposalOrder {
-    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
-    let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseEventExecuteMatchProposalOrder();
-    while (reader.pos < end) {
-      const tag = reader.uint32();
-      switch (tag >>> 3) {
-        case 1:
-          message.orderId = reader.uint64();
-          break;
-        case 3:
-          message.matchAmount = reader.string();
-          break;
-        case 4:
-          message.outputAmount = reader.string();
-          break;
-        case 5:
-          message.virtual = reader.bool();
-          break;
-        default:
-          reader.skipType(tag & 7);
-          break;
-      }
-    }
-    return message;
-  },
-  fromJSON(object: any): EventExecuteMatchProposalOrder {
-    return {
-      orderId: isSet(object.orderId) ? BigInt(object.orderId.toString()) : BigInt(0),
-      matchAmount: isSet(object.matchAmount) ? String(object.matchAmount) : "",
-      outputAmount: isSet(object.outputAmount) ? String(object.outputAmount) : "",
-      virtual: isSet(object.virtual) ? Boolean(object.virtual) : false
-    };
-  },
-  toJSON(message: EventExecuteMatchProposalOrder): unknown {
-    const obj: any = {};
-    message.orderId !== undefined && (obj.orderId = (message.orderId || BigInt(0)).toString());
-    message.matchAmount !== undefined && (obj.matchAmount = message.matchAmount);
-    message.outputAmount !== undefined && (obj.outputAmount = message.outputAmount);
-    message.virtual !== undefined && (obj.virtual = message.virtual);
-    return obj;
-  },
-  fromPartial(object: Partial<EventExecuteMatchProposalOrder>): EventExecuteMatchProposalOrder {
-    const message = createBaseEventExecuteMatchProposalOrder();
-    message.orderId = object.orderId !== undefined && object.orderId !== null ? BigInt(object.orderId.toString()) : BigInt(0);
-    message.matchAmount = object.matchAmount ?? "";
-    message.outputAmount = object.outputAmount ?? "";
-    message.virtual = object.virtual ?? false;
-    return message;
-  },
-  fromAmino(object: EventExecuteMatchProposalOrderAmino): EventExecuteMatchProposalOrder {
-    const message = createBaseEventExecuteMatchProposalOrder();
-    if (object.order_id !== undefined && object.order_id !== null) {
-      message.orderId = BigInt(object.order_id);
-    }
-    if (object.match_amount !== undefined && object.match_amount !== null) {
-      message.matchAmount = object.match_amount;
-    }
-    if (object.output_amount !== undefined && object.output_amount !== null) {
-      message.outputAmount = object.output_amount;
-    }
-    if (object.virtual !== undefined && object.virtual !== null) {
-      message.virtual = object.virtual;
-    }
-    return message;
-  },
-  toAmino(message: EventExecuteMatchProposalOrder, useInterfaces: boolean = true): EventExecuteMatchProposalOrderAmino {
-    const obj: any = {};
-    obj.order_id = message.orderId ? message.orderId.toString() : undefined;
-    obj.match_amount = message.matchAmount === "" ? undefined : message.matchAmount;
-    obj.output_amount = message.outputAmount === "" ? undefined : message.outputAmount;
-    obj.virtual = message.virtual === false ? undefined : message.virtual;
-    return obj;
-  },
-  fromAminoMsg(object: EventExecuteMatchProposalOrderAminoMsg): EventExecuteMatchProposalOrder {
-    return EventExecuteMatchProposalOrder.fromAmino(object.value);
-  },
-  fromProtoMsg(message: EventExecuteMatchProposalOrderProtoMsg, useInterfaces: boolean = true): EventExecuteMatchProposalOrder {
-    return EventExecuteMatchProposalOrder.decode(message.value, undefined, useInterfaces);
-  },
-  toProto(message: EventExecuteMatchProposalOrder): Uint8Array {
-    return EventExecuteMatchProposalOrder.encode(message).finish();
-  },
-  toProtoMsg(message: EventExecuteMatchProposalOrder): EventExecuteMatchProposalOrderProtoMsg {
-    return {
-      typeUrl: "/pryzm.amm.v1.EventExecuteMatchProposalOrder",
-      value: EventExecuteMatchProposalOrder.encode(message).finish()
-    };
-  }
-};
-GlobalDecoderRegistry.register(EventExecuteMatchProposalOrder.typeUrl, EventExecuteMatchProposalOrder);
-function createBaseEventExecuteMatchProposalPair(): EventExecuteMatchProposalPair {
-  return {
-    poolId: BigInt(0),
-    tokenIn: "",
-    tokenOut: "",
-    whitelistedRoute: false,
-    buyPrice: "",
-    sellPrice: "",
-    buyOrders: [],
-    sellOrders: [],
-    buyMatchAmount: "",
-    sellMatchAmount: ""
-  };
-}
-export const EventExecuteMatchProposalPair = {
-  typeUrl: "/pryzm.amm.v1.EventExecuteMatchProposalPair",
-  is(o: any): o is EventExecuteMatchProposalPair {
-    return o && (o.$typeUrl === EventExecuteMatchProposalPair.typeUrl || typeof o.poolId === "bigint" && typeof o.tokenIn === "string" && typeof o.tokenOut === "string" && typeof o.whitelistedRoute === "boolean" && typeof o.buyPrice === "string" && typeof o.sellPrice === "string" && Array.isArray(o.buyOrders) && (!o.buyOrders.length || EventExecuteMatchProposalOrder.is(o.buyOrders[0])) && Array.isArray(o.sellOrders) && (!o.sellOrders.length || EventExecuteMatchProposalOrder.is(o.sellOrders[0])) && typeof o.buyMatchAmount === "string" && typeof o.sellMatchAmount === "string");
-  },
-  isSDK(o: any): o is EventExecuteMatchProposalPairSDKType {
-    return o && (o.$typeUrl === EventExecuteMatchProposalPair.typeUrl || typeof o.pool_id === "bigint" && typeof o.token_in === "string" && typeof o.token_out === "string" && typeof o.whitelisted_route === "boolean" && typeof o.buy_price === "string" && typeof o.sell_price === "string" && Array.isArray(o.buy_orders) && (!o.buy_orders.length || EventExecuteMatchProposalOrder.isSDK(o.buy_orders[0])) && Array.isArray(o.sell_orders) && (!o.sell_orders.length || EventExecuteMatchProposalOrder.isSDK(o.sell_orders[0])) && typeof o.buy_match_amount === "string" && typeof o.sell_match_amount === "string");
-  },
-  isAmino(o: any): o is EventExecuteMatchProposalPairAmino {
-    return o && (o.$typeUrl === EventExecuteMatchProposalPair.typeUrl || typeof o.pool_id === "bigint" && typeof o.token_in === "string" && typeof o.token_out === "string" && typeof o.whitelisted_route === "boolean" && typeof o.buy_price === "string" && typeof o.sell_price === "string" && Array.isArray(o.buy_orders) && (!o.buy_orders.length || EventExecuteMatchProposalOrder.isAmino(o.buy_orders[0])) && Array.isArray(o.sell_orders) && (!o.sell_orders.length || EventExecuteMatchProposalOrder.isAmino(o.sell_orders[0])) && typeof o.buy_match_amount === "string" && typeof o.sell_match_amount === "string");
-  },
-  encode(message: EventExecuteMatchProposalPair, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
-    if (message.poolId !== BigInt(0)) {
-      writer.uint32(8).uint64(message.poolId);
-    }
-    if (message.tokenIn !== "") {
-      writer.uint32(18).string(message.tokenIn);
-    }
-    if (message.tokenOut !== "") {
-      writer.uint32(26).string(message.tokenOut);
-    }
-    if (message.whitelistedRoute === true) {
-      writer.uint32(32).bool(message.whitelistedRoute);
-    }
-    if (message.buyPrice !== "") {
-      writer.uint32(42).string(Decimal.fromUserInput(message.buyPrice, 18).atomics);
-    }
-    if (message.sellPrice !== "") {
-      writer.uint32(50).string(Decimal.fromUserInput(message.sellPrice, 18).atomics);
-    }
-    for (const v of message.buyOrders) {
-      EventExecuteMatchProposalOrder.encode(v!, writer.uint32(58).fork()).ldelim();
-    }
-    for (const v of message.sellOrders) {
-      EventExecuteMatchProposalOrder.encode(v!, writer.uint32(66).fork()).ldelim();
-    }
-    if (message.buyMatchAmount !== "") {
-      writer.uint32(74).string(message.buyMatchAmount);
-    }
-    if (message.sellMatchAmount !== "") {
-      writer.uint32(82).string(message.sellMatchAmount);
-    }
-    return writer;
-  },
-  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): EventExecuteMatchProposalPair {
-    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
-    let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseEventExecuteMatchProposalPair();
-    while (reader.pos < end) {
-      const tag = reader.uint32();
-      switch (tag >>> 3) {
-        case 1:
-          message.poolId = reader.uint64();
-          break;
-        case 2:
-          message.tokenIn = reader.string();
-          break;
-        case 3:
-          message.tokenOut = reader.string();
-          break;
-        case 4:
-          message.whitelistedRoute = reader.bool();
-          break;
-        case 5:
-          message.buyPrice = Decimal.fromAtomics(reader.string(), 18).toString();
-          break;
-        case 6:
-          message.sellPrice = Decimal.fromAtomics(reader.string(), 18).toString();
-          break;
-        case 7:
-          message.buyOrders.push(EventExecuteMatchProposalOrder.decode(reader, reader.uint32(), useInterfaces));
-          break;
-        case 8:
-          message.sellOrders.push(EventExecuteMatchProposalOrder.decode(reader, reader.uint32(), useInterfaces));
-          break;
-        case 9:
-          message.buyMatchAmount = reader.string();
-          break;
-        case 10:
-          message.sellMatchAmount = reader.string();
-          break;
-        default:
-          reader.skipType(tag & 7);
-          break;
-      }
-    }
-    return message;
-  },
-  fromJSON(object: any): EventExecuteMatchProposalPair {
-    return {
-      poolId: isSet(object.poolId) ? BigInt(object.poolId.toString()) : BigInt(0),
-      tokenIn: isSet(object.tokenIn) ? String(object.tokenIn) : "",
-      tokenOut: isSet(object.tokenOut) ? String(object.tokenOut) : "",
-      whitelistedRoute: isSet(object.whitelistedRoute) ? Boolean(object.whitelistedRoute) : false,
-      buyPrice: isSet(object.buyPrice) ? String(object.buyPrice) : "",
-      sellPrice: isSet(object.sellPrice) ? String(object.sellPrice) : "",
-      buyOrders: Array.isArray(object?.buyOrders) ? object.buyOrders.map((e: any) => EventExecuteMatchProposalOrder.fromJSON(e)) : [],
-      sellOrders: Array.isArray(object?.sellOrders) ? object.sellOrders.map((e: any) => EventExecuteMatchProposalOrder.fromJSON(e)) : [],
-      buyMatchAmount: isSet(object.buyMatchAmount) ? String(object.buyMatchAmount) : "",
-      sellMatchAmount: isSet(object.sellMatchAmount) ? String(object.sellMatchAmount) : ""
-    };
-  },
-  toJSON(message: EventExecuteMatchProposalPair): unknown {
-    const obj: any = {};
-    message.poolId !== undefined && (obj.poolId = (message.poolId || BigInt(0)).toString());
-    message.tokenIn !== undefined && (obj.tokenIn = message.tokenIn);
-    message.tokenOut !== undefined && (obj.tokenOut = message.tokenOut);
-    message.whitelistedRoute !== undefined && (obj.whitelistedRoute = message.whitelistedRoute);
-    message.buyPrice !== undefined && (obj.buyPrice = message.buyPrice);
-    message.sellPrice !== undefined && (obj.sellPrice = message.sellPrice);
-    if (message.buyOrders) {
-      obj.buyOrders = message.buyOrders.map(e => e ? EventExecuteMatchProposalOrder.toJSON(e) : undefined);
-    } else {
-      obj.buyOrders = [];
-    }
-    if (message.sellOrders) {
-      obj.sellOrders = message.sellOrders.map(e => e ? EventExecuteMatchProposalOrder.toJSON(e) : undefined);
-    } else {
-      obj.sellOrders = [];
-    }
-    message.buyMatchAmount !== undefined && (obj.buyMatchAmount = message.buyMatchAmount);
-    message.sellMatchAmount !== undefined && (obj.sellMatchAmount = message.sellMatchAmount);
-    return obj;
-  },
-  fromPartial(object: Partial<EventExecuteMatchProposalPair>): EventExecuteMatchProposalPair {
-    const message = createBaseEventExecuteMatchProposalPair();
-    message.poolId = object.poolId !== undefined && object.poolId !== null ? BigInt(object.poolId.toString()) : BigInt(0);
-    message.tokenIn = object.tokenIn ?? "";
-    message.tokenOut = object.tokenOut ?? "";
-    message.whitelistedRoute = object.whitelistedRoute ?? false;
-    message.buyPrice = object.buyPrice ?? "";
-    message.sellPrice = object.sellPrice ?? "";
-    message.buyOrders = object.buyOrders?.map(e => EventExecuteMatchProposalOrder.fromPartial(e)) || [];
-    message.sellOrders = object.sellOrders?.map(e => EventExecuteMatchProposalOrder.fromPartial(e)) || [];
-    message.buyMatchAmount = object.buyMatchAmount ?? "";
-    message.sellMatchAmount = object.sellMatchAmount ?? "";
-    return message;
-  },
-  fromAmino(object: EventExecuteMatchProposalPairAmino): EventExecuteMatchProposalPair {
-    const message = createBaseEventExecuteMatchProposalPair();
-    if (object.pool_id !== undefined && object.pool_id !== null) {
-      message.poolId = BigInt(object.pool_id);
-    }
-    if (object.token_in !== undefined && object.token_in !== null) {
-      message.tokenIn = object.token_in;
-    }
-    if (object.token_out !== undefined && object.token_out !== null) {
-      message.tokenOut = object.token_out;
-    }
-    if (object.whitelisted_route !== undefined && object.whitelisted_route !== null) {
-      message.whitelistedRoute = object.whitelisted_route;
-    }
-    if (object.buy_price !== undefined && object.buy_price !== null) {
-      message.buyPrice = object.buy_price;
-    }
-    if (object.sell_price !== undefined && object.sell_price !== null) {
-      message.sellPrice = object.sell_price;
-    }
-    message.buyOrders = object.buy_orders?.map(e => EventExecuteMatchProposalOrder.fromAmino(e)) || [];
-    message.sellOrders = object.sell_orders?.map(e => EventExecuteMatchProposalOrder.fromAmino(e)) || [];
-    if (object.buy_match_amount !== undefined && object.buy_match_amount !== null) {
-      message.buyMatchAmount = object.buy_match_amount;
-    }
-    if (object.sell_match_amount !== undefined && object.sell_match_amount !== null) {
-      message.sellMatchAmount = object.sell_match_amount;
-    }
-    return message;
-  },
-  toAmino(message: EventExecuteMatchProposalPair, useInterfaces: boolean = true): EventExecuteMatchProposalPairAmino {
-    const obj: any = {};
-    obj.pool_id = message.poolId ? message.poolId.toString() : undefined;
-    obj.token_in = message.tokenIn === "" ? undefined : message.tokenIn;
-    obj.token_out = message.tokenOut === "" ? undefined : message.tokenOut;
-    obj.whitelisted_route = message.whitelistedRoute === false ? undefined : message.whitelistedRoute;
-    obj.buy_price = padDecimal(message.buyPrice) === "" ? undefined : padDecimal(message.buyPrice);
-    obj.sell_price = padDecimal(message.sellPrice) === "" ? undefined : padDecimal(message.sellPrice);
-    if (message.buyOrders) {
-      obj.buy_orders = message.buyOrders.map(e => e ? EventExecuteMatchProposalOrder.toAmino(e, useInterfaces) : undefined);
-    } else {
-      obj.buy_orders = message.buyOrders;
-    }
-    if (message.sellOrders) {
-      obj.sell_orders = message.sellOrders.map(e => e ? EventExecuteMatchProposalOrder.toAmino(e, useInterfaces) : undefined);
-    } else {
-      obj.sell_orders = message.sellOrders;
-    }
-    obj.buy_match_amount = message.buyMatchAmount === "" ? undefined : message.buyMatchAmount;
-    obj.sell_match_amount = message.sellMatchAmount === "" ? undefined : message.sellMatchAmount;
-    return obj;
-  },
-  fromAminoMsg(object: EventExecuteMatchProposalPairAminoMsg): EventExecuteMatchProposalPair {
-    return EventExecuteMatchProposalPair.fromAmino(object.value);
-  },
-  fromProtoMsg(message: EventExecuteMatchProposalPairProtoMsg, useInterfaces: boolean = true): EventExecuteMatchProposalPair {
-    return EventExecuteMatchProposalPair.decode(message.value, undefined, useInterfaces);
-  },
-  toProto(message: EventExecuteMatchProposalPair): Uint8Array {
-    return EventExecuteMatchProposalPair.encode(message).finish();
-  },
-  toProtoMsg(message: EventExecuteMatchProposalPair): EventExecuteMatchProposalPairProtoMsg {
-    return {
-      typeUrl: "/pryzm.amm.v1.EventExecuteMatchProposalPair",
-      value: EventExecuteMatchProposalPair.encode(message).finish()
-    };
-  }
-};
-GlobalDecoderRegistry.register(EventExecuteMatchProposalPair.typeUrl, EventExecuteMatchProposalPair);
 function createBaseEventExecuteMatchProposal(): EventExecuteMatchProposal {
   return {
     proposer: "",
@@ -4015,20 +3592,20 @@ function createBaseEventExecuteMatchProposal(): EventExecuteMatchProposal {
 export const EventExecuteMatchProposal = {
   typeUrl: "/pryzm.amm.v1.EventExecuteMatchProposal",
   is(o: any): o is EventExecuteMatchProposal {
-    return o && (o.$typeUrl === EventExecuteMatchProposal.typeUrl || typeof o.proposer === "string" && Array.isArray(o.pairs) && (!o.pairs.length || EventExecuteMatchProposalPair.is(o.pairs[0])) && Array.isArray(o.proposerReward) && (!o.proposerReward.length || Coin.is(o.proposerReward[0])));
+    return o && (o.$typeUrl === EventExecuteMatchProposal.typeUrl || typeof o.proposer === "string" && Array.isArray(o.pairs) && (!o.pairs.length || MatchedPairSummary.is(o.pairs[0])) && Array.isArray(o.proposerReward) && (!o.proposerReward.length || Coin.is(o.proposerReward[0])));
   },
   isSDK(o: any): o is EventExecuteMatchProposalSDKType {
-    return o && (o.$typeUrl === EventExecuteMatchProposal.typeUrl || typeof o.proposer === "string" && Array.isArray(o.pairs) && (!o.pairs.length || EventExecuteMatchProposalPair.isSDK(o.pairs[0])) && Array.isArray(o.proposer_reward) && (!o.proposer_reward.length || Coin.isSDK(o.proposer_reward[0])));
+    return o && (o.$typeUrl === EventExecuteMatchProposal.typeUrl || typeof o.proposer === "string" && Array.isArray(o.pairs) && (!o.pairs.length || MatchedPairSummary.isSDK(o.pairs[0])) && Array.isArray(o.proposer_reward) && (!o.proposer_reward.length || Coin.isSDK(o.proposer_reward[0])));
   },
   isAmino(o: any): o is EventExecuteMatchProposalAmino {
-    return o && (o.$typeUrl === EventExecuteMatchProposal.typeUrl || typeof o.proposer === "string" && Array.isArray(o.pairs) && (!o.pairs.length || EventExecuteMatchProposalPair.isAmino(o.pairs[0])) && Array.isArray(o.proposer_reward) && (!o.proposer_reward.length || Coin.isAmino(o.proposer_reward[0])));
+    return o && (o.$typeUrl === EventExecuteMatchProposal.typeUrl || typeof o.proposer === "string" && Array.isArray(o.pairs) && (!o.pairs.length || MatchedPairSummary.isAmino(o.pairs[0])) && Array.isArray(o.proposer_reward) && (!o.proposer_reward.length || Coin.isAmino(o.proposer_reward[0])));
   },
   encode(message: EventExecuteMatchProposal, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.proposer !== "") {
       writer.uint32(10).string(message.proposer);
     }
     for (const v of message.pairs) {
-      EventExecuteMatchProposalPair.encode(v!, writer.uint32(18).fork()).ldelim();
+      MatchedPairSummary.encode(v!, writer.uint32(18).fork()).ldelim();
     }
     for (const v of message.proposerReward) {
       Coin.encode(v!, writer.uint32(26).fork()).ldelim();
@@ -4046,7 +3623,7 @@ export const EventExecuteMatchProposal = {
           message.proposer = reader.string();
           break;
         case 2:
-          message.pairs.push(EventExecuteMatchProposalPair.decode(reader, reader.uint32(), useInterfaces));
+          message.pairs.push(MatchedPairSummary.decode(reader, reader.uint32(), useInterfaces));
           break;
         case 3:
           message.proposerReward.push(Coin.decode(reader, reader.uint32(), useInterfaces));
@@ -4061,7 +3638,7 @@ export const EventExecuteMatchProposal = {
   fromJSON(object: any): EventExecuteMatchProposal {
     return {
       proposer: isSet(object.proposer) ? String(object.proposer) : "",
-      pairs: Array.isArray(object?.pairs) ? object.pairs.map((e: any) => EventExecuteMatchProposalPair.fromJSON(e)) : [],
+      pairs: Array.isArray(object?.pairs) ? object.pairs.map((e: any) => MatchedPairSummary.fromJSON(e)) : [],
       proposerReward: Array.isArray(object?.proposerReward) ? object.proposerReward.map((e: any) => Coin.fromJSON(e)) : []
     };
   },
@@ -4069,7 +3646,7 @@ export const EventExecuteMatchProposal = {
     const obj: any = {};
     message.proposer !== undefined && (obj.proposer = message.proposer);
     if (message.pairs) {
-      obj.pairs = message.pairs.map(e => e ? EventExecuteMatchProposalPair.toJSON(e) : undefined);
+      obj.pairs = message.pairs.map(e => e ? MatchedPairSummary.toJSON(e) : undefined);
     } else {
       obj.pairs = [];
     }
@@ -4083,7 +3660,7 @@ export const EventExecuteMatchProposal = {
   fromPartial(object: Partial<EventExecuteMatchProposal>): EventExecuteMatchProposal {
     const message = createBaseEventExecuteMatchProposal();
     message.proposer = object.proposer ?? "";
-    message.pairs = object.pairs?.map(e => EventExecuteMatchProposalPair.fromPartial(e)) || [];
+    message.pairs = object.pairs?.map(e => MatchedPairSummary.fromPartial(e)) || [];
     message.proposerReward = object.proposerReward?.map(e => Coin.fromPartial(e)) || [];
     return message;
   },
@@ -4092,7 +3669,7 @@ export const EventExecuteMatchProposal = {
     if (object.proposer !== undefined && object.proposer !== null) {
       message.proposer = object.proposer;
     }
-    message.pairs = object.pairs?.map(e => EventExecuteMatchProposalPair.fromAmino(e)) || [];
+    message.pairs = object.pairs?.map(e => MatchedPairSummary.fromAmino(e)) || [];
     message.proposerReward = object.proposer_reward?.map(e => Coin.fromAmino(e)) || [];
     return message;
   },
@@ -4100,7 +3677,7 @@ export const EventExecuteMatchProposal = {
     const obj: any = {};
     obj.proposer = message.proposer === "" ? undefined : message.proposer;
     if (message.pairs) {
-      obj.pairs = message.pairs.map(e => e ? EventExecuteMatchProposalPair.toAmino(e, useInterfaces) : undefined);
+      obj.pairs = message.pairs.map(e => e ? MatchedPairSummary.toAmino(e, useInterfaces) : undefined);
     } else {
       obj.pairs = message.pairs;
     }
