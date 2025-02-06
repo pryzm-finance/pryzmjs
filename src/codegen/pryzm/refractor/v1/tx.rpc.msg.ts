@@ -2,11 +2,13 @@ import { UnaryMethodDefinitionish } from "../../../grpc-web";
 import { DeepPartial } from "../../../helpers";
 import { grpc } from "@improbable-eng/grpc-web";
 import { BrowserHeaders } from "browser-headers";
-import { MsgRefract, MsgRefractResponse, MsgRedeem, MsgRedeemResponse } from "./tx";
+import { MsgRefract, MsgRefractResponse, MsgRedeem, MsgRedeemResponse, MsgUpdateParams, MsgUpdateParamsResponse, MsgDepositCAsset, MsgDepositCAssetResponse } from "./tx";
 /** Msg defines the Msg service. */
 export interface Msg {
   refract(request: DeepPartial<MsgRefract>, metadata?: grpc.Metadata): Promise<MsgRefractResponse>;
   redeem(request: DeepPartial<MsgRedeem>, metadata?: grpc.Metadata): Promise<MsgRedeemResponse>;
+  updateParams(request: DeepPartial<MsgUpdateParams>, metadata?: grpc.Metadata): Promise<MsgUpdateParamsResponse>;
+  depositCAsset(request: DeepPartial<MsgDepositCAsset>, metadata?: grpc.Metadata): Promise<MsgDepositCAssetResponse>;
 }
 export class MsgClientImpl implements Msg {
   private readonly rpc: Rpc;
@@ -14,12 +16,20 @@ export class MsgClientImpl implements Msg {
     this.rpc = rpc;
     this.refract = this.refract.bind(this);
     this.redeem = this.redeem.bind(this);
+    this.updateParams = this.updateParams.bind(this);
+    this.depositCAsset = this.depositCAsset.bind(this);
   }
   refract(request: DeepPartial<MsgRefract>, metadata?: grpc.Metadata): Promise<MsgRefractResponse> {
     return this.rpc.unary(MsgRefractDesc, MsgRefract.fromPartial(request as any), metadata);
   }
   redeem(request: DeepPartial<MsgRedeem>, metadata?: grpc.Metadata): Promise<MsgRedeemResponse> {
     return this.rpc.unary(MsgRedeemDesc, MsgRedeem.fromPartial(request as any), metadata);
+  }
+  updateParams(request: DeepPartial<MsgUpdateParams>, metadata?: grpc.Metadata): Promise<MsgUpdateParamsResponse> {
+    return this.rpc.unary(MsgUpdateParamsDesc, MsgUpdateParams.fromPartial(request as any), metadata);
+  }
+  depositCAsset(request: DeepPartial<MsgDepositCAsset>, metadata?: grpc.Metadata): Promise<MsgDepositCAssetResponse> {
+    return this.rpc.unary(MsgDepositCAssetDesc, MsgDepositCAsset.fromPartial(request as any), metadata);
   }
 }
 export const MsgDesc = {
@@ -60,6 +70,48 @@ export const MsgRedeemDesc: UnaryMethodDefinitionish = {
     deserializeBinary(data: Uint8Array) {
       return {
         ...MsgRedeemResponse.decode(data),
+        toObject() {
+          return this;
+        }
+      };
+    }
+  } as any)
+};
+export const MsgUpdateParamsDesc: UnaryMethodDefinitionish = {
+  methodName: "UpdateParams",
+  service: MsgDesc,
+  requestStream: false,
+  responseStream: false,
+  requestType: ({
+    serializeBinary() {
+      return MsgUpdateParams.encode(this).finish();
+    }
+  } as any),
+  responseType: ({
+    deserializeBinary(data: Uint8Array) {
+      return {
+        ...MsgUpdateParamsResponse.decode(data),
+        toObject() {
+          return this;
+        }
+      };
+    }
+  } as any)
+};
+export const MsgDepositCAssetDesc: UnaryMethodDefinitionish = {
+  methodName: "DepositCAsset",
+  service: MsgDesc,
+  requestStream: false,
+  responseStream: false,
+  requestType: ({
+    serializeBinary() {
+      return MsgDepositCAsset.encode(this).finish();
+    }
+  } as any),
+  responseType: ({
+    deserializeBinary(data: Uint8Array) {
+      return {
+        ...MsgDepositCAssetResponse.decode(data),
         toObject() {
           return this;
         }

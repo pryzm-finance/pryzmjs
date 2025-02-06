@@ -2,13 +2,14 @@ import { grpc } from "@improbable-eng/grpc-web";
 import { UnaryMethodDefinitionish } from "../../../grpc-web";
 import { DeepPartial } from "../../../helpers";
 import { BrowserHeaders } from "browser-headers";
-import { QueryGetAssetStateRequest, QueryGetAssetStateResponse, QueryGetCPExchangeRateRequest, QueryGetCPExchangeRateResponse, QuerySimulateRefractRequest, QuerySimulateRefractResponse, QuerySimulateRedeemRequest, QuerySimulateRedeemResponse } from "./query";
+import { QueryGetAssetStateRequest, QueryGetAssetStateResponse, QueryGetCPExchangeRateRequest, QueryGetCPExchangeRateResponse, QuerySimulateRefractRequest, QuerySimulateRefractResponse, QuerySimulateRedeemRequest, QuerySimulateRedeemResponse, QueryParamsRequest, QueryParamsResponse } from "./query";
 /** Query defines the gRPC querier service. */
 export interface Query {
   assetState(request: DeepPartial<QueryGetAssetStateRequest>, metadata?: grpc.Metadata): Promise<QueryGetAssetStateResponse>;
   cPExchangeRate(request: DeepPartial<QueryGetCPExchangeRateRequest>, metadata?: grpc.Metadata): Promise<QueryGetCPExchangeRateResponse>;
   simulateRefract(request: DeepPartial<QuerySimulateRefractRequest>, metadata?: grpc.Metadata): Promise<QuerySimulateRefractResponse>;
   simulateRedeem(request: DeepPartial<QuerySimulateRedeemRequest>, metadata?: grpc.Metadata): Promise<QuerySimulateRedeemResponse>;
+  params(request?: DeepPartial<QueryParamsRequest>, metadata?: grpc.Metadata): Promise<QueryParamsResponse>;
 }
 export class QueryClientImpl implements Query {
   private readonly rpc: Rpc;
@@ -18,6 +19,7 @@ export class QueryClientImpl implements Query {
     this.cPExchangeRate = this.cPExchangeRate.bind(this);
     this.simulateRefract = this.simulateRefract.bind(this);
     this.simulateRedeem = this.simulateRedeem.bind(this);
+    this.params = this.params.bind(this);
   }
   assetState(request: DeepPartial<QueryGetAssetStateRequest>, metadata?: grpc.Metadata): Promise<QueryGetAssetStateResponse> {
     return this.rpc.unary(QueryAssetStateDesc, QueryGetAssetStateRequest.fromPartial(request as any), metadata);
@@ -30,6 +32,9 @@ export class QueryClientImpl implements Query {
   }
   simulateRedeem(request: DeepPartial<QuerySimulateRedeemRequest>, metadata?: grpc.Metadata): Promise<QuerySimulateRedeemResponse> {
     return this.rpc.unary(QuerySimulateRedeemDesc, QuerySimulateRedeemRequest.fromPartial(request as any), metadata);
+  }
+  params(request: DeepPartial<QueryParamsRequest> = {}, metadata?: grpc.Metadata): Promise<QueryParamsResponse> {
+    return this.rpc.unary(QueryParamsDesc, QueryParamsRequest.fromPartial(request as any), metadata);
   }
 }
 export const QueryDesc = {
@@ -112,6 +117,27 @@ export const QuerySimulateRedeemDesc: UnaryMethodDefinitionish = {
     deserializeBinary(data: Uint8Array) {
       return {
         ...QuerySimulateRedeemResponse.decode(data),
+        toObject() {
+          return this;
+        }
+      };
+    }
+  } as any)
+};
+export const QueryParamsDesc: UnaryMethodDefinitionish = {
+  methodName: "Params",
+  service: QueryDesc,
+  requestStream: false,
+  responseStream: false,
+  requestType: ({
+    serializeBinary() {
+      return QueryParamsRequest.encode(this).finish();
+    }
+  } as any),
+  responseType: ({
+    deserializeBinary(data: Uint8Array) {
+      return {
+        ...QueryParamsResponse.decode(data),
         toObject() {
           return this;
         }

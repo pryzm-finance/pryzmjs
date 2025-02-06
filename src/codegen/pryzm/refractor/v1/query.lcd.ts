@@ -1,5 +1,5 @@
 import { LCDClient } from "@refractedlabs/cosmology-lcd-fork";
-import { QueryGetAssetStateRequest, QueryGetAssetStateResponseSDKType, QueryGetCPExchangeRateRequest, QueryGetCPExchangeRateResponseSDKType, QuerySimulateRefractRequest, QuerySimulateRefractResponseSDKType, QuerySimulateRedeemRequest, QuerySimulateRedeemResponseSDKType } from "./query";
+import { QueryGetAssetStateRequest, QueryGetAssetStateResponseSDKType, QueryGetCPExchangeRateRequest, QueryGetCPExchangeRateResponseSDKType, QuerySimulateRefractRequest, QuerySimulateRefractResponseSDKType, QuerySimulateRedeemRequest, QuerySimulateRedeemResponseSDKType, QueryParamsRequest, QueryParamsResponseSDKType } from "./query";
 export class LCDQueryClient {
   req: LCDClient;
   constructor({
@@ -12,6 +12,7 @@ export class LCDQueryClient {
     this.cPExchangeRate = this.cPExchangeRate.bind(this);
     this.simulateRefract = this.simulateRefract.bind(this);
     this.simulateRedeem = this.simulateRedeem.bind(this);
+    this.params = this.params.bind(this);
   }
   /* AssetState */
   async assetState(params: QueryGetAssetStateRequest): Promise<QueryGetAssetStateResponseSDKType> {
@@ -50,5 +51,10 @@ export class LCDQueryClient {
     }
     const endpoint = `pryzm/refractor/v1/simulate_redeem`;
     return await this.req.get<QuerySimulateRedeemResponseSDKType>(endpoint, options);
+  }
+  /* Params */
+  async params(_params: QueryParamsRequest = {}): Promise<QueryParamsResponseSDKType> {
+    const endpoint = `pryzm/refractor/v1/params`;
+    return await this.req.get<QueryParamsResponseSDKType>(endpoint);
   }
 }

@@ -1,4 +1,5 @@
 import { Coin, CoinAmino, CoinSDKType } from "../../../cosmos/base/v1beta1/coin";
+import { Params, ParamsAmino, ParamsSDKType } from "./params";
 import { BinaryReader, BinaryWriter } from "../../../binary";
 import { isSet } from "../../../helpers";
 import { GlobalDecoderRegistry } from "../../../registry";
@@ -91,6 +92,68 @@ export interface MsgRedeemResponseSDKType {
   c_amount: CoinSDKType;
   fee: CoinSDKType;
 }
+export interface MsgUpdateParams {
+  authority: string;
+  params: Params;
+}
+export interface MsgUpdateParamsProtoMsg {
+  typeUrl: "/pryzm.refractor.v1.MsgUpdateParams";
+  value: Uint8Array;
+}
+export interface MsgUpdateParamsAmino {
+  authority?: string;
+  params: ParamsAmino;
+}
+export interface MsgUpdateParamsAminoMsg {
+  type: "pryzm/refractor/v1/UpdateParams";
+  value: MsgUpdateParamsAmino;
+}
+export interface MsgUpdateParamsSDKType {
+  authority: string;
+  params: ParamsSDKType;
+}
+export interface MsgUpdateParamsResponse {}
+export interface MsgUpdateParamsResponseProtoMsg {
+  typeUrl: "/pryzm.refractor.v1.MsgUpdateParamsResponse";
+  value: Uint8Array;
+}
+export interface MsgUpdateParamsResponseAmino {}
+export interface MsgUpdateParamsResponseAminoMsg {
+  type: "/pryzm.refractor.v1.MsgUpdateParamsResponse";
+  value: MsgUpdateParamsResponseAmino;
+}
+export interface MsgUpdateParamsResponseSDKType {}
+export interface MsgDepositCAsset {
+  creator: string;
+  cAmount: Coin[];
+}
+export interface MsgDepositCAssetProtoMsg {
+  typeUrl: "/pryzm.refractor.v1.MsgDepositCAsset";
+  value: Uint8Array;
+}
+export interface MsgDepositCAssetAmino {
+  creator?: string;
+  c_amount?: CoinAmino[];
+}
+export interface MsgDepositCAssetAminoMsg {
+  type: "pryzm/refractor/v1/DepositCAsset";
+  value: MsgDepositCAssetAmino;
+}
+export interface MsgDepositCAssetSDKType {
+  creator: string;
+  c_amount: CoinSDKType[];
+}
+export interface MsgDepositCAssetResponse {}
+export interface MsgDepositCAssetResponseProtoMsg {
+  typeUrl: "/pryzm.refractor.v1.MsgDepositCAssetResponse";
+  value: Uint8Array;
+}
+export interface MsgDepositCAssetResponseAmino {}
+export interface MsgDepositCAssetResponseAminoMsg {
+  type: "/pryzm.refractor.v1.MsgDepositCAssetResponse";
+  value: MsgDepositCAssetResponseAmino;
+}
+export interface MsgDepositCAssetResponseSDKType {}
 function createBaseMsgRefract(): MsgRefract {
   return {
     creator: "",
@@ -537,3 +600,353 @@ export const MsgRedeemResponse = {
   }
 };
 GlobalDecoderRegistry.register(MsgRedeemResponse.typeUrl, MsgRedeemResponse);
+function createBaseMsgUpdateParams(): MsgUpdateParams {
+  return {
+    authority: "",
+    params: Params.fromPartial({})
+  };
+}
+export const MsgUpdateParams = {
+  typeUrl: "/pryzm.refractor.v1.MsgUpdateParams",
+  aminoType: "pryzm/refractor/v1/UpdateParams",
+  is(o: any): o is MsgUpdateParams {
+    return o && (o.$typeUrl === MsgUpdateParams.typeUrl || typeof o.authority === "string" && Params.is(o.params));
+  },
+  isSDK(o: any): o is MsgUpdateParamsSDKType {
+    return o && (o.$typeUrl === MsgUpdateParams.typeUrl || typeof o.authority === "string" && Params.isSDK(o.params));
+  },
+  isAmino(o: any): o is MsgUpdateParamsAmino {
+    return o && (o.$typeUrl === MsgUpdateParams.typeUrl || typeof o.authority === "string" && Params.isAmino(o.params));
+  },
+  encode(message: MsgUpdateParams, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    if (message.authority !== "") {
+      writer.uint32(10).string(message.authority);
+    }
+    if (message.params !== undefined) {
+      Params.encode(message.params, writer.uint32(18).fork()).ldelim();
+    }
+    return writer;
+  },
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): MsgUpdateParams {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseMsgUpdateParams();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.authority = reader.string();
+          break;
+        case 2:
+          message.params = Params.decode(reader, reader.uint32(), useInterfaces);
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromJSON(object: any): MsgUpdateParams {
+    return {
+      authority: isSet(object.authority) ? String(object.authority) : "",
+      params: isSet(object.params) ? Params.fromJSON(object.params) : undefined
+    };
+  },
+  toJSON(message: MsgUpdateParams): unknown {
+    const obj: any = {};
+    message.authority !== undefined && (obj.authority = message.authority);
+    message.params !== undefined && (obj.params = message.params ? Params.toJSON(message.params) : undefined);
+    return obj;
+  },
+  fromPartial(object: Partial<MsgUpdateParams>): MsgUpdateParams {
+    const message = createBaseMsgUpdateParams();
+    message.authority = object.authority ?? "";
+    message.params = object.params !== undefined && object.params !== null ? Params.fromPartial(object.params) : undefined;
+    return message;
+  },
+  fromAmino(object: MsgUpdateParamsAmino): MsgUpdateParams {
+    const message = createBaseMsgUpdateParams();
+    if (object.authority !== undefined && object.authority !== null) {
+      message.authority = object.authority;
+    }
+    if (object.params !== undefined && object.params !== null) {
+      message.params = Params.fromAmino(object.params);
+    }
+    return message;
+  },
+  toAmino(message: MsgUpdateParams, useInterfaces: boolean = true): MsgUpdateParamsAmino {
+    const obj: any = {};
+    obj.authority = message.authority === "" ? undefined : message.authority;
+    obj.params = message.params ? Params.toAmino(message.params, useInterfaces) : undefined;
+    return obj;
+  },
+  fromAminoMsg(object: MsgUpdateParamsAminoMsg): MsgUpdateParams {
+    return MsgUpdateParams.fromAmino(object.value);
+  },
+  toAminoMsg(message: MsgUpdateParams, useInterfaces: boolean = true): MsgUpdateParamsAminoMsg {
+    return {
+      type: "pryzm/refractor/v1/UpdateParams",
+      value: MsgUpdateParams.toAmino(message, useInterfaces)
+    };
+  },
+  fromProtoMsg(message: MsgUpdateParamsProtoMsg, useInterfaces: boolean = true): MsgUpdateParams {
+    return MsgUpdateParams.decode(message.value, undefined, useInterfaces);
+  },
+  toProto(message: MsgUpdateParams): Uint8Array {
+    return MsgUpdateParams.encode(message).finish();
+  },
+  toProtoMsg(message: MsgUpdateParams): MsgUpdateParamsProtoMsg {
+    return {
+      typeUrl: "/pryzm.refractor.v1.MsgUpdateParams",
+      value: MsgUpdateParams.encode(message).finish()
+    };
+  }
+};
+GlobalDecoderRegistry.register(MsgUpdateParams.typeUrl, MsgUpdateParams);
+GlobalDecoderRegistry.registerAminoProtoMapping(MsgUpdateParams.aminoType, MsgUpdateParams.typeUrl);
+function createBaseMsgUpdateParamsResponse(): MsgUpdateParamsResponse {
+  return {};
+}
+export const MsgUpdateParamsResponse = {
+  typeUrl: "/pryzm.refractor.v1.MsgUpdateParamsResponse",
+  is(o: any): o is MsgUpdateParamsResponse {
+    return o && o.$typeUrl === MsgUpdateParamsResponse.typeUrl;
+  },
+  isSDK(o: any): o is MsgUpdateParamsResponseSDKType {
+    return o && o.$typeUrl === MsgUpdateParamsResponse.typeUrl;
+  },
+  isAmino(o: any): o is MsgUpdateParamsResponseAmino {
+    return o && o.$typeUrl === MsgUpdateParamsResponse.typeUrl;
+  },
+  encode(_: MsgUpdateParamsResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    return writer;
+  },
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): MsgUpdateParamsResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseMsgUpdateParamsResponse();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromJSON(_: any): MsgUpdateParamsResponse {
+    return {};
+  },
+  toJSON(_: MsgUpdateParamsResponse): unknown {
+    const obj: any = {};
+    return obj;
+  },
+  fromPartial(_: Partial<MsgUpdateParamsResponse>): MsgUpdateParamsResponse {
+    const message = createBaseMsgUpdateParamsResponse();
+    return message;
+  },
+  fromAmino(_: MsgUpdateParamsResponseAmino): MsgUpdateParamsResponse {
+    const message = createBaseMsgUpdateParamsResponse();
+    return message;
+  },
+  toAmino(_: MsgUpdateParamsResponse, useInterfaces: boolean = true): MsgUpdateParamsResponseAmino {
+    const obj: any = {};
+    return obj;
+  },
+  fromAminoMsg(object: MsgUpdateParamsResponseAminoMsg): MsgUpdateParamsResponse {
+    return MsgUpdateParamsResponse.fromAmino(object.value);
+  },
+  fromProtoMsg(message: MsgUpdateParamsResponseProtoMsg, useInterfaces: boolean = true): MsgUpdateParamsResponse {
+    return MsgUpdateParamsResponse.decode(message.value, undefined, useInterfaces);
+  },
+  toProto(message: MsgUpdateParamsResponse): Uint8Array {
+    return MsgUpdateParamsResponse.encode(message).finish();
+  },
+  toProtoMsg(message: MsgUpdateParamsResponse): MsgUpdateParamsResponseProtoMsg {
+    return {
+      typeUrl: "/pryzm.refractor.v1.MsgUpdateParamsResponse",
+      value: MsgUpdateParamsResponse.encode(message).finish()
+    };
+  }
+};
+GlobalDecoderRegistry.register(MsgUpdateParamsResponse.typeUrl, MsgUpdateParamsResponse);
+function createBaseMsgDepositCAsset(): MsgDepositCAsset {
+  return {
+    creator: "",
+    cAmount: []
+  };
+}
+export const MsgDepositCAsset = {
+  typeUrl: "/pryzm.refractor.v1.MsgDepositCAsset",
+  aminoType: "pryzm/refractor/v1/DepositCAsset",
+  is(o: any): o is MsgDepositCAsset {
+    return o && (o.$typeUrl === MsgDepositCAsset.typeUrl || typeof o.creator === "string" && Array.isArray(o.cAmount) && (!o.cAmount.length || Coin.is(o.cAmount[0])));
+  },
+  isSDK(o: any): o is MsgDepositCAssetSDKType {
+    return o && (o.$typeUrl === MsgDepositCAsset.typeUrl || typeof o.creator === "string" && Array.isArray(o.c_amount) && (!o.c_amount.length || Coin.isSDK(o.c_amount[0])));
+  },
+  isAmino(o: any): o is MsgDepositCAssetAmino {
+    return o && (o.$typeUrl === MsgDepositCAsset.typeUrl || typeof o.creator === "string" && Array.isArray(o.c_amount) && (!o.c_amount.length || Coin.isAmino(o.c_amount[0])));
+  },
+  encode(message: MsgDepositCAsset, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    if (message.creator !== "") {
+      writer.uint32(10).string(message.creator);
+    }
+    for (const v of message.cAmount) {
+      Coin.encode(v!, writer.uint32(18).fork()).ldelim();
+    }
+    return writer;
+  },
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): MsgDepositCAsset {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseMsgDepositCAsset();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.creator = reader.string();
+          break;
+        case 2:
+          message.cAmount.push(Coin.decode(reader, reader.uint32(), useInterfaces));
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromJSON(object: any): MsgDepositCAsset {
+    return {
+      creator: isSet(object.creator) ? String(object.creator) : "",
+      cAmount: Array.isArray(object?.cAmount) ? object.cAmount.map((e: any) => Coin.fromJSON(e)) : []
+    };
+  },
+  toJSON(message: MsgDepositCAsset): unknown {
+    const obj: any = {};
+    message.creator !== undefined && (obj.creator = message.creator);
+    if (message.cAmount) {
+      obj.cAmount = message.cAmount.map(e => e ? Coin.toJSON(e) : undefined);
+    } else {
+      obj.cAmount = [];
+    }
+    return obj;
+  },
+  fromPartial(object: Partial<MsgDepositCAsset>): MsgDepositCAsset {
+    const message = createBaseMsgDepositCAsset();
+    message.creator = object.creator ?? "";
+    message.cAmount = object.cAmount?.map(e => Coin.fromPartial(e)) || [];
+    return message;
+  },
+  fromAmino(object: MsgDepositCAssetAmino): MsgDepositCAsset {
+    const message = createBaseMsgDepositCAsset();
+    if (object.creator !== undefined && object.creator !== null) {
+      message.creator = object.creator;
+    }
+    message.cAmount = object.c_amount?.map(e => Coin.fromAmino(e)) || [];
+    return message;
+  },
+  toAmino(message: MsgDepositCAsset, useInterfaces: boolean = true): MsgDepositCAssetAmino {
+    const obj: any = {};
+    obj.creator = message.creator === "" ? undefined : message.creator;
+    if (message.cAmount) {
+      obj.c_amount = message.cAmount.map(e => e ? Coin.toAmino(e, useInterfaces) : undefined);
+    } else {
+      obj.c_amount = message.cAmount;
+    }
+    return obj;
+  },
+  fromAminoMsg(object: MsgDepositCAssetAminoMsg): MsgDepositCAsset {
+    return MsgDepositCAsset.fromAmino(object.value);
+  },
+  toAminoMsg(message: MsgDepositCAsset, useInterfaces: boolean = true): MsgDepositCAssetAminoMsg {
+    return {
+      type: "pryzm/refractor/v1/DepositCAsset",
+      value: MsgDepositCAsset.toAmino(message, useInterfaces)
+    };
+  },
+  fromProtoMsg(message: MsgDepositCAssetProtoMsg, useInterfaces: boolean = true): MsgDepositCAsset {
+    return MsgDepositCAsset.decode(message.value, undefined, useInterfaces);
+  },
+  toProto(message: MsgDepositCAsset): Uint8Array {
+    return MsgDepositCAsset.encode(message).finish();
+  },
+  toProtoMsg(message: MsgDepositCAsset): MsgDepositCAssetProtoMsg {
+    return {
+      typeUrl: "/pryzm.refractor.v1.MsgDepositCAsset",
+      value: MsgDepositCAsset.encode(message).finish()
+    };
+  }
+};
+GlobalDecoderRegistry.register(MsgDepositCAsset.typeUrl, MsgDepositCAsset);
+GlobalDecoderRegistry.registerAminoProtoMapping(MsgDepositCAsset.aminoType, MsgDepositCAsset.typeUrl);
+function createBaseMsgDepositCAssetResponse(): MsgDepositCAssetResponse {
+  return {};
+}
+export const MsgDepositCAssetResponse = {
+  typeUrl: "/pryzm.refractor.v1.MsgDepositCAssetResponse",
+  is(o: any): o is MsgDepositCAssetResponse {
+    return o && o.$typeUrl === MsgDepositCAssetResponse.typeUrl;
+  },
+  isSDK(o: any): o is MsgDepositCAssetResponseSDKType {
+    return o && o.$typeUrl === MsgDepositCAssetResponse.typeUrl;
+  },
+  isAmino(o: any): o is MsgDepositCAssetResponseAmino {
+    return o && o.$typeUrl === MsgDepositCAssetResponse.typeUrl;
+  },
+  encode(_: MsgDepositCAssetResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    return writer;
+  },
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): MsgDepositCAssetResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseMsgDepositCAssetResponse();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromJSON(_: any): MsgDepositCAssetResponse {
+    return {};
+  },
+  toJSON(_: MsgDepositCAssetResponse): unknown {
+    const obj: any = {};
+    return obj;
+  },
+  fromPartial(_: Partial<MsgDepositCAssetResponse>): MsgDepositCAssetResponse {
+    const message = createBaseMsgDepositCAssetResponse();
+    return message;
+  },
+  fromAmino(_: MsgDepositCAssetResponseAmino): MsgDepositCAssetResponse {
+    const message = createBaseMsgDepositCAssetResponse();
+    return message;
+  },
+  toAmino(_: MsgDepositCAssetResponse, useInterfaces: boolean = true): MsgDepositCAssetResponseAmino {
+    const obj: any = {};
+    return obj;
+  },
+  fromAminoMsg(object: MsgDepositCAssetResponseAminoMsg): MsgDepositCAssetResponse {
+    return MsgDepositCAssetResponse.fromAmino(object.value);
+  },
+  fromProtoMsg(message: MsgDepositCAssetResponseProtoMsg, useInterfaces: boolean = true): MsgDepositCAssetResponse {
+    return MsgDepositCAssetResponse.decode(message.value, undefined, useInterfaces);
+  },
+  toProto(message: MsgDepositCAssetResponse): Uint8Array {
+    return MsgDepositCAssetResponse.encode(message).finish();
+  },
+  toProtoMsg(message: MsgDepositCAssetResponse): MsgDepositCAssetResponseProtoMsg {
+    return {
+      typeUrl: "/pryzm.refractor.v1.MsgDepositCAssetResponse",
+      value: MsgDepositCAssetResponse.encode(message).finish()
+    };
+  }
+};
+GlobalDecoderRegistry.register(MsgDepositCAssetResponse.typeUrl, MsgDepositCAssetResponse);

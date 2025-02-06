@@ -7,6 +7,7 @@ import "cosmos_proto/cosmos.proto";
 import "gogoproto/gogo.proto";
 import "google/api/annotations.proto";
 import "pryzm/refractor/v1/asset_state.proto";
+import "pryzm/refractor/v1/params.proto";
 // this line is used by starport scaffolding # 1
 
 option go_package = "github.com/pryzm-finance/pryzm-core/x/refractor/types/v1";
@@ -27,6 +28,10 @@ service Query {
 
   rpc SimulateRedeem(QuerySimulateRedeemRequest) returns (QuerySimulateRedeemResponse) {
     option (google.api.http).get = "/pryzm/refractor/v1/simulate_redeem";
+  }
+
+  rpc Params(QueryParamsRequest) returns (QueryParamsResponse) {
+    option (google.api.http).get = "/pryzm/refractor/v1/params";
   }
   // this line is used by starport scaffolding # 2
 }
@@ -70,6 +75,12 @@ message QuerySimulateRedeemRequest {
 message QuerySimulateRedeemResponse {
   cosmos.base.v1beta1.Coin c_amount = 1 [(gogoproto.nullable) = false];
   cosmos.base.v1beta1.Coin fee = 2 [(gogoproto.nullable) = false];
+}
+
+message QueryParamsRequest {}
+
+message QueryParamsResponse {
+  Params params = 1 [(gogoproto.nullable) = false];
 }
 
 // this line is used by starport scaffolding # 3
